@@ -1,70 +1,65 @@
 {
  "rule_id": "E7",
- "hash": "7602d3d244d4e35b",
+ "hash": "baba6745420ae025",
  "groups": [
   {
    "rows": [
-    "EG-07ef537d"
+    "EG-0dd22664"
    ],
-   "why": "Only row for TO_CITY (TO-BE meta popup); no other row covers this column."
-  },
-  {
-   "rows": [
-    "EG-2d888670"
-   ],
-   "why": "FROM_CITY, but no row state is given and it also checks that the value stays out of the save body even if the server rejects it; it can't be cleanly matched to the COLUMN rows that split new and existing rows, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-3d8f40d9"
-   ],
-   "why": "Only row for TO_COUNTRY; no other row covers this column."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-5ff85dbd"
    ],
-   "why": "Targets a different popup (DistributionRoutePopup) and column (ROUTE_ID), and its expected result is only the bad input, with no revert or block stated."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-629685d3"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-b3f3fbc7"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-f6fc1fb7"
    ],
-   "why": "FROM_COUNTRY (SCM0002_CitybyCountry popup), but no row state is given and it checks for server-side rejection in the save body, so it isn't the same as the COLUMN rows split by row state."
+   "why": "단독"
   },
   {
    "rows": [
     "V-44abc14a"
    ],
-   "why": "FROM_CITY on a new row; it differs from the existing-row case and from the RULE_SCREEN row, which has no state, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-8620369a"
    ],
-   "why": "FROM_CITY on an existing row; the row state differs from the new-row case."
+   "why": "단독"
   },
   {
    "rows": [
     "V-b1368a09"
    ],
-   "why": "FROM_COUNTRY on a new row; it differs from the existing-row case and from the RULE_SCREEN row, which has no state, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c0969c18"
    ],
-   "why": "FROM_COUNTRY on an existing row; the row state differs from the new-row case."
-  },
-  {
-   "rows": [
-    "V-76ae80db"
-   ],
-   "why": "A general confirmed rule that names no specific column, so it can't be matched to any one column's check."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:40:59",
- "cost": 0.059200100000000005
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 05:18:03",
+ "cost": 0,
+ "open": 0
 }

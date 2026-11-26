@@ -79,6 +79,15 @@ def asis_targets(sp):
     return ins, upd - ins
 
 
+def row_account(row, key_acc, default, default_t0=None):
+    """T640: 백업 행의 키 값이 정리 SQL 키별 계정 줄과 같으면 그 계정(저장 시각이 있으면 시각도) · 없으면 기본(머리글·삭제 조건·설정) 계정
+    key_acc = [(키 dict, 계정[, 저장 시각 datetime|None])] · default_t0 를 주면 (계정, 시각) 반환"""
+    for keys, acc, *rest in key_acc:
+        if keys and all(str(row.get(k, '')).strip() == str(v).strip() for k, v in keys.items()):
+            return (acc, (rest[0] if rest and rest[0] else default_t0)) if default_t0 is not None else acc
+    return (default, default_t0) if default_t0 is not None else default
+
+
 def judge_trace(trace, save_sps, targets_of):
     """2026-11-18(SCP0111 F7·F8 미검증): 기존 행 수정형 저장 — restore_touched 키 없는 복원이 되돌리기 전에 남긴 save_trace.json 으로 판정
     F8 = 변경 행 감사 칸 판정(judge_audit: 생성 칸 불변 · 값이 바뀌면 수정 칸 갱신) — FAIL 1건이라도 있으면 FAIL · PASS 만이면 PASS
@@ -137,6 +146,12 @@ def selftest():
     for n, (f8, f7), want in cases:
         got = (f8['verdict'], f7['verdict']); ok = got == want; bad += 0 if ok else 1
         print(f"{'OK ' if ok else 'NG '} {n} → {got}(기대 {want})")
+    ka = [({'ROUTE_ID': '11172'}, 'jooyong026')]
+    for n, got, want in [('키별 계정', row_account({'ROUTE_ID': '11172'}, ka, 'minyonglee1'), 'jooyong026'),
+                         ('키 다름 → 기본', row_account({'ROUTE_ID': '9'}, ka, 'minyonglee1'), 'minyonglee1'),
+                         ('키 줄 없음 → 기본', row_account({'ROUTE_ID': '11172'}, [], 'u'), 'u')]:
+        ok = got == want; bad += 0 if ok else 1; cases.append(n)
+        print(f"{'OK ' if ok else 'NG '} {n} → {got}(기대 {want})")
     print(f'{len(cases) - bad}/{len(cases)}')
     return 1 if bad else 0
 
@@ -157,6 +172,9 @@ def main():
         return
     # 가장 최근 '백업 1건 이상' 정리 실행
     for sp in reversed(sqls):
+        # 2026-11-25 T640: dry-run·ROLLBACK 정리 기록(COMMIT 줄 없음)도 백업 CSV 를 남긴다 — 실제로 지우지 않은 기록이라 판정 원천에서 뺀다
+        if not re.search(r'(?im)^\s*commit\s*;', open(sp, encoding='utf-8', errors='ignore').read()):
+            continue
         ts = os.path.basename(sp)[8:-4]
         backs = {os.path.basename(b)[len(ts) + 1:-4]: read_csv(b) for b in glob.glob(os.path.join(os.path.dirname(sp), f'{ts}_*.csv'))}
         if any(backs.values()):
@@ -170,15 +188,27 @@ def main():
         return
     head = open(sp, encoding='utf-8', errors='ignore').read()
     user = (re.search(r'계정 (\S+)', head) or [None, ''])[1]
+    # 2026-11-25 T640(SCP0005 F8 9행 'jooyong026 ≠ 저장 계정 minyonglee1'): 권한 계정 시험(authcrud)이 저장한 행을 기본 계정으로 비교했다.
+    #   ① 키별 계정 줄(cleanup_marker keyset '-- 저장 키 {…} · 계정 X') ② 손 정리 SQL 은 삭제 조건 CREATED_BY = 'X'(정리한 사람이 저장 계정으로 묶은 값) ③ 머리글 계정 ④ e2e.config 기본 계정 순
+    key_acc = [(json.loads(k), a, datetime.datetime.strptime(ts, '%Y-%m-%d %H:%M:%S') if ts else None)
+               for k, a, ts in re.findall(r'-- 저장 키 (\{[^\n]*?\}) · 계정 (\S+?)(?: · 저장 시각 (\d{4}-\d\d-\d\d \d\d:\d\d:\d\d))?$', head, re.M)]
+    acc_src = '정리 SQL 머리글' if user else ''
+    if not user:
+        cb = sorted(set(re.findall(r"(?i)\bCREATED_BY\s*=\s*'([^']+)'", head)))
+        if len(cb) == 1:
+            user, acc_src = cb[0], '정리 SQL 삭제 조건 CREATED_BY'
     if not user:  # 정리 SQL 머리글에 계정이 없으면 E2E 기본 계정 — 빈 값과 비교하면 정상 계정이 '불일치' 로 나온다(2026-11-02 SCP0028 허위 F8)
         try:
             user = json.load(open(os.path.join(ROOT, 'tools', 'E2E', 'e2e.config.json'), encoding='utf-8-sig')).get('defaultAccount', '')
         except (OSError, ValueError):
             user = ''
+        acc_src = 'e2e.config 기본 계정' if user else ''
     t0 = re.search(r"TO_DATE\('(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)'", head)
     t0 = datetime.datetime.strptime(t0.group(1), '%Y-%m-%d %H:%M:%S') if t0 else None
     spec = json.load(open(os.path.join(HERE, 'cleanup_spec.json'), encoding='utf-8')).get(mid, {})
-    root_t = (spec.get('root') or {}).get('table') or next((t for t, v in backs.items() if v), '')
+    # T640: keyset 정의는 root 가 없다 — 첫 대상 표(대표 표)에 백업 행이 있으면 그 표를 루트로(연쇄 이력 표가 먼저 잡히지 않게)
+    _t1 = (spec.get('tables') or [''])[0]
+    root_t = (spec.get('root') or {}).get('table') or (_t1 if backs.get(_t1) else '') or next((t for t, v in backs.items() if v), '')
     root = backs.get(root_t) or []
     res['run'] = {'cleanup_sql': os.path.relpath(sp, ROOT), 'account': user, 'saved_at': t0.strftime('%Y-%m-%d %H:%M:%S') if t0 else '',
                   'tables': {t: len(v) for t, v in backs.items()}}
@@ -192,19 +222,22 @@ def main():
     else:
         bad = []
         for r in root:
+            exp, rt0 = row_account(r, key_acc, user, t0 or False)
+            rt0 = rt0 or None
             for c in ('CREATED_BY', 'LAST_UPDATED_BY'):
-                if c in r and (r[c] or '').lower() != user.lower():
-                    bad.append(f"{c}='{r[c]}' ≠ 저장 계정 '{user}'")
+                if c in r and (r[c] or '').lower() != exp.lower():
+                    bad.append(f"{c}='{r[c]}' ≠ 저장 계정 '{exp}'")
             for c in ('CREATION_DATE', 'LAST_UPDATE_DATE'):
                 if c in r:
                     try:
                         v = datetime.datetime.strptime(r[c][:19], '%Y-%m-%d %H:%M:%S')
-                        if t0 and abs((v - t0).total_seconds()) > 600:
-                            bad.append(f"{c}={r[c]} ≠ 저장 시각 {t0:%Y-%m-%d %H:%M}")
+                        if rt0 and abs((v - rt0).total_seconds()) > 600:
+                            bad.append(f"{c}={r[c]} ≠ 저장 시각 {rt0:%Y-%m-%d %H:%M}")
                     except ValueError:
                         bad.append(f"{c}='{r[c]}' 날짜 아님/공란")
         vals = ' · '.join(f"{c}={root[0].get(c, '')}" for c in AUDIT if c in root[0])
-        res['F8'] = {'verdict': 'FAIL' if bad else 'PASS', 'note': ('; '.join(dict.fromkeys(bad)) if bad else f"감사 컬럼 = 저장 계정·저장 시각 ({vals})") + f" · {root_t} {len(root)}행"}
+        res['F8'] = {'verdict': 'FAIL' if bad else 'PASS', 'note': ('; '.join(dict.fromkeys(bad)) if bad else f"감사 컬럼 = 저장 계정·저장 시각 ({vals})") + f" · {root_t} {len(root)}행"
+                     + f" · 저장 계정 출처 {'키별 계정 줄 ' + str(len(key_acc)) + '건 · ' if key_acc else ''}{acc_src}"}
     # F7
     sys.path.insert(0, HERE); from asis_live import live_golden, asis_of
     asis = asis_of(mid, sys.argv[sys.argv.index('--asis') + 1] if '--asis' in sys.argv else '')

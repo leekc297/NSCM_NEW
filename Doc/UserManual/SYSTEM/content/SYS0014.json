@@ -1,0 +1,112 @@
+{
+ "definition": "권한 Group 별 사용자와 Group, 사용자별 Division 을 등록하고 관리하는 화면",
+ "overview": [
+  "권한 그룹에 사용자를 넣고, 그룹 사용자별로 허용할 Division 을 지정하는 관리자 화면임",
+  "왼쪽 Group Info, 오른쪽 User Info, 아래 Division 그리드와 사용자 찾기 팝업, Division 찾기 팝업으로 구성됨. 조회 조건 영역 없음",
+  "Group Info 에서 그룹 선택 → User Info 에서 Insert 로 사용자 추가 → 사용자 선택 → Division 에서 Insert 로 Division 추가 → Save 순서로 작업함",
+  "Group Info 그룹은 Group(SYS0007)에서 등록한 그룹이고, 여기서 넣은 사용자 그룹은 User(SYS0002) Assign Group 팝업에 나옴"
+ ],
+ "pages": [
+  {
+   "title": "Group User",
+   "keyPoint": "Division 은 Group Info 와 User Info 에서 행을 고른 상태에서만 Insert 됨. 같은 Group 에 같은 User ID 는 1건만 둠.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.607,
+     "y": 0.13
+    },
+    {
+     "no": 2,
+     "x": 0.193,
+     "y": 0.17
+    },
+    {
+     "no": 3,
+     "x": 0.4,
+     "y": 0.17
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 커서가 있는 그리드(Group Info, User Info, Division)에 적용됨",
+      "Save 할 때 바뀐 행이 없으면 \"변경 사항이 없습니다.\", 저장되면 \"성공적으로 저장되었습니다.\" 메시지가 뜸",
+      "Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "Group Info 그리드",
+     "lines": [
+      "Group ID, Group Name 목록",
+      "행을 고르면 그 Group 에 속한 사용자가 User Info 그리드에 나옴"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "User Info 그리드",
+     "lines": [
+      "고른 Group 의 사용자 목록. User ID 는 필수(제목 앞 빨간 점)",
+      "Insert: Group 을 먼저 골라야 함. 고르지 않으면 \"먼저 Group 을 선택해 주십시오.\" 메시지가 뜸",
+      "Insert 하면 사용자 찾기 팝업이 열리고 여러 명을 골라 한 번에 추가할 수 있음",
+      "User Name, English Name, Dept Name, Create By, Create Date, Last Update By, Last Update Date: 입력 불가",
+      "행을 고르면 그 사용자의 Division 이 아래 Division 그리드에 나옴"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Group User",
+   "keyPoint": "Division 은 Group Info 와 User Info 에서 행을 고른 상태에서만 Insert 됨. 같은 Group 에 같은 User ID 는 1건만 둠.",
+   "markers": [
+    {
+     "no": 4,
+     "x": 0.398,
+     "y": 0.742
+    }
+   ],
+   "sections": [
+    {
+     "no": 4,
+     "title": "Division 그리드",
+     "lines": [
+      "고른 Group, User 에 허용한 Division 목록. Name 은 필수(제목 앞 빨간 점)",
+      "Insert: Group 과 User 를 먼저 골라야 함. 고르지 않으면 \"먼저 Group 과 User 를 선택해 주십시오.\" 메시지가 뜸",
+      "Insert 하면 Division 찾기 팝업이 열림. Name (Code) 에 값을 넣고 Search 하면 CODE, NAME 목록이 나오고 OK 로 추가, Close 로 닫음"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0014",
+ "uiName": "Group User",
+ "menuPath": "SYSTEM> Admin> Group User",
+ "captures": [
+  "captures/SYS0014.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0014/"
+ ],
+ "buttons": [
+  "Division:DELETE",
+  "Division:INSERT",
+  "Division:SEARCH",
+  "DivisionPopup:SEARCH",
+  "GroupInfo:DELETE",
+  "GroupInfo:INSERT",
+  "GroupInfo:SAVE",
+  "GroupInfo:SEARCH",
+  "UserInfo:DELETE",
+  "UserInfo:INSERT",
+  "UserInfo:SEARCH",
+  "customer:SEARCH",
+  "division:SEARCH",
+  "main:SAVE",
+  "main:SEARCH",
+  "plant:SEARCH",
+  "userInfo:SEARCH"
+ ]
+}

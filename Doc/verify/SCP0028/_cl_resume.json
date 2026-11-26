@@ -1,0 +1,21 @@
+{
+ "v": 1,
+ "sig": "{\"delta\": true, \"id\": \"SCP0028\", \"no_docs\": true, \"recheck\": false}",
+ "started": "2026-11-25 02:30:55",
+ "rv_done": false,
+ "updated": 1795541457.816909,
+ "updated_at": "2026-11-25 02:30:57",
+ "sc": {
+  "menu_id": "SCP0028",
+  "at": "2026-11-25 02:30:55",
+  "baseline_at": "2026-11-25 02:15:44",
+  "last_full": "2026-11-25 02:15:44",
+  "changed": 7,
+  "added": 0,
+  "removed": 0,
+  "db_error": "",
+  "changed_tests": 1,
+  "mode": "full",
+  "why": "직전 미검증 행 71행(규칙 9개) · FAIL·판정필요 72행은 그 행을 판정하는 검사기·소스가 바뀌지 않으면 1차 결과 유지 · 규칙 대응을 코드로 못 찾는 시험 1개 바뀜: 문서 시나리오"
+ }
+}

@@ -1,16 +1,16 @@
 {
  "id": "SCP0028",
- "run_dir": "Doc/asislive/SCP0028/run_20261120_093014",
- "live_at": "2026-11-20 09:30:14.688",
+ "run_dir": "Doc/asislive/SCP0028/run_20261125_015421",
+ "live_at": "2026-11-25 01:54:21.267",
  "user": "jaeuk.shin",
  "find": {
   "signaled": true,
-  "time_status": "DB : 3.199s, UI : 0.133s",
+  "time_status": "DB : 4.064s, UI : 0.088s",
   "total": "Total : 1,735",
   "how": "status"
  },
  "mixed_risk": false,
- "live_calls": 15,
+ "live_calls": 16,
  "live_sp_distinct": 9,
  "static_vs_live": {
   "SP:FRAMEWORK": 7,
@@ -24,8 +24,7 @@
  },
  "diff_gap": {
   "BOTH": 1,
-  "NONE": 2,
-  "DIFF_ONLY": 1
+  "NONE": 2
  },
  "param_hints": 0,
  "limits": [

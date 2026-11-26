@@ -1,0 +1,51 @@
+{
+ "id": "SCP0028",
+ "started": "2026-11-21 01:45:20.381",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-21 01:45:41.490",
+   "in_menu": false,
+   "ok": false,
+   "error": "InvalidOperationException: ProgramID not in this user's menu: SCP0028",
+   "done": "2026-11-21 01:45:41.494"
+  }
+ ],
+ "status": "FAIL",
+ "gate": {
+  "opened": false,
+  "grid_headers": false,
+  "grid_rows": false,
+  "shots": 0,
+  "calls": 0,
+  "calls_with_params": 0
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "user_id": "WJDF",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : Guest []",
+  "menu_count": 5
+ },
+ "dialogs": [],
+ "counts": {
+  "controls": 0,
+  "layout_items": 0,
+  "grids": 0,
+  "sheets": 0,
+  "header_cols": 0,
+  "data_rows": 0,
+  "grid_rows": 0,
+  "calls_total": 9,
+  "calls_screen": 0,
+  "calls_find": 0,
+  "dialogs": 0
+ },
+ "why": "화면 열기 실패: InvalidOperationException: ProgramID not in this user's menu: SCP0028",
+ "ended": "2026-11-21 01:45:42.739",
+ "exit": 2
+}

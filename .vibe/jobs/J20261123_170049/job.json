@@ -1,0 +1,61 @@
+{
+  "id": "J20261123_170049",
+  "itemLabel": "📘 사용자 매뉴얼 (모듈별 PPT: 양식 샘플 + 최신 UI 캡처)",
+  "kind": "chain",
+  "status": "done",
+  "mode": "par",
+  "maxPar": 3,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "unit": "module",
+  "inputs": {
+    "author": "조재훈",
+    "date": "2026.11.23",
+    "version": "Ver 1.0",
+    "sample": "c:\\Users\\LG\\Downloads\\SCM_IM_사용자매뉴얼_DM_v1.0.pptx",
+    "captures": [
+      "c:\\Users\\LG\\Downloads\\LGES-Next 화면 정의서 20260930 v1.0.pptx"
+    ]
+  },
+  "createdAt": "2026-11-23T17:00:49+09:00",
+  "startedAt": "2026-11-23T17:00:49+09:00",
+  "endedAt": "2026-11-23T17:13:38+09:00",
+  "note": "",
+  "screens": [
+    {
+      "id": "DM",
+      "status": "done",
+      "step": "",
+      "actor": "",
+      "sec": 769,
+      "summary": "체인 완료: 4단계 중 OK 4 · 769s",
+      "why": "",
+      "md": "Doc\\gen\\DM\\FULLRUN.md",
+      "startedAt": "2026-11-23T17:00:49+09:00",
+      "endedAt": "2026-11-23T17:13:38+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": null,
+      "actorNote": "실행 주체: Script 3단계 · AI Agent 1회",
+      "log": ".vibe\\jobs\\J20261123_170049\\DM.log"
+    },
+    {
+      "id": "SYSTEM",
+      "status": "done",
+      "step": "",
+      "actor": "",
+      "sec": 477,
+      "summary": "체인 완료: 4단계 중 OK 4 · 477s",
+      "why": "",
+      "md": "Doc\\gen\\SYSTEM\\FULLRUN.md",
+      "startedAt": "2026-11-23T17:02:49+09:00",
+      "endedAt": "2026-11-23T17:10:46+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": null,
+      "actorNote": "실행 주체: Script 3단계 · AI Agent 1회",
+      "log": ".vibe\\jobs\\J20261123_170049\\SYSTEM.log"
+    }
+  ],
+  "resumable": 0
+}

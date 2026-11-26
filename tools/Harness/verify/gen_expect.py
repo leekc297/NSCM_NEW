@@ -320,7 +320,13 @@ def p_combo(S):
     for r in combos:
         col = r['column_name'].upper()
         s = src.get(col)
-        if s:
+        # T552(2026-11-25 SCP0005 C1 2행): AS-IS 콤보 ID(combo_src LookupCommon + 메타 ATTRIBUTE1 LT_TYPE)와 TO-BE 콤보 ID(SCM_MST_SHEET_COLUMNS.CELL_COMBO_DATA_TYPE LtType·TransportModeCode)가 달라
+        #   gridcands '@combo:LookupCommon' 이 TO-BE 요청(comboId LtType)을 못 찾아 '응답 없음(수집 48·72건)' ERROR. TO-BE 그리드는 cellCboDataTp(= TO-BE 메타 값)로 부른다(columnMapping.ts:211)
+        #   → TO-BE sheet_columns 에 cell_combo_data_type 이 있으면 그 값을 서버 콤보 ID 로 쓴다(열이 없으면 종전 AS-IS 코드 · export 에 열 추가 필요)
+        tcid = (r.get('cell_combo_data_type') or '').strip()
+        if s and tcid and tcid != s['code']:
+            out.append(row(S, 'P07', 'C1', f'{col} 셀 콤보 후보 = 서버 콤보 {tcid}', f'{S.prefix(r)}search;insert;gridcands:{col}=@combo:{tcid}', f"TO-BE sheet_columns CELL_COMBO_DATA_TYPE {tcid} · AS-IS combo_src {s['code']} {s['ref'][:60]}"))
+        elif s:
             out.append(row(S, 'P07', 'C1', f'{col} 셀 콤보 후보 = 서버 콤보 {s["code"]}', f'{S.prefix(r)}search;insert;gridcands:{col}=@combo:{s["code"]}', f"combo_src {s['ref'][:80]}"))
         else:
             out.append(row(S, 'P07', 'C1', f'{col} 셀 콤보 후보 있음', f'{S.prefix(r)}search;insert;gridcands:{col}~.', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']} (combo_src 없음 → 후보 존재만)"))
@@ -334,22 +340,31 @@ def p_combo(S):
     return out, why
 
 
+def sheet_key(name):
+    """시트 이름 비교용(대소문자 · 공백 · 밑줄 무시)"""
+    return re.sub(r'[\s_]+', '', str(name or '')).lower()
+
+
 def p_decimal(S):
     if not S.cell_rules:
         return [], ['cell_rules.csv 없음(소수 자릿수 사실 없음)']
-    dec = {}
+    # 2026-11-26 개선안 20261126142231_SELF_3(R238): 소수 자릿수를 (정규화한 시트, 컬럼)으로 모음. 편집 칸 시트에 그 컬럼 행이 없을 때만 컬럼 이름 첫 행으로 대체
+    dec, dec_col = {}, {}
     for c in S.cell_rules:
         try:
             n = int(c.get('decimals') or 0)
         except ValueError:
             n = 0
         if n > 0:
-            dec.setdefault(c['column'].upper(), (n, c))
+            dec.setdefault((sheet_key(c.get('sheet')), c['column'].upper()), (n, c))
+            dec_col.setdefault(c['column'].upper(), (n, c))
+    ruled = {(sheet_key(c.get('sheet')), (c.get('column') or '').upper()) for c in S.cell_rules}
     out = []
     for r in S.edit_cols(False):
-        col = r['column_name'].upper()
-        if col in dec and ctype_kind(r) == 'number':
-            n, c = dec[col]
+        col = r['column_name'].upper(); k = (sheet_key(r.get('sheet_name')), col)
+        hit = dec.get(k) if k in ruled else dec_col.get(col)   # 그 시트 규칙 행이 있으면 그 값만(자릿수 0 이면 대상 아님)
+        if hit and ctype_kind(r) == 'number':
+            n, c = hit
             v = '0.' + '123456789'[:n - 1] + '5' if n > 1 else '0.5'
             out.append(row(S, 'P11', 'F6', f'{col} 소수 {n}자리 저장 요청 유지', f"{S.prefix(r)}search;type:{col}={v};save;savehas:{re.escape(v)}", f"cell_rules {c['sheet']}.{c['column']} decimals={n} · {c['ref'][:60]}"))
     return out, ([] if out else ['기존 행 편집 숫자 칸 중 소수 자릿수 > 0 없음'])
@@ -630,17 +645,71 @@ def p_modins(S):
     if not ed:
         return [], ['기존 행 편집 글자 칸 없음']
     req = [r for r in S.edit_cols(True) if (r.get('input_tp_cd') or '').strip() in ('M', 'IM')]
+    # T551(2026-11-25 SCP0005 F2 1행): INPUT_TP_CD M/IM 만 필수로 세어 SCP0005(편집 칸 전부 O)가 '필수 0칸' → L/T Type 을 비운 채 Save → TO-BE 필수 안내로 저장 멈춤(AS-IS 와 같음) FAIL.
+    #   AS-IS 저장이 DataUtil.checkRequiredOfSpread 를 부르면 헤더 라벨에 '*' 가 있는 칸이 필수다(DataUtil.cs:43~60 col.Label.IndexOf('*') · SCP0005 cs:653)
+    #   → 그 화면은 신규 행 편집 칸 중 라벨에 '*' 가 있는 칸도 채운다. 팝업 칸(FPTextModal)은 키 입력 대신 팝업 첫 행 선택(popcell)
+    star = any(a.get('kind') == 'VALIDATE' and 'checkRequiredOfSpread' in (a.get('target') or '') for a in S.actions)
+    reqbasis, star_cols = '', set()
+    if star:
+        have = {r['column_name'].upper() for r in req}
+        cm = S.colmodel()  # 라벨은 편집 행(O/M/IO/IM)의 것 — 같은 칸의 표시 전용 시트 행(route 'Port')은 '*' 가 없다
+        add = [r for r in S.edit_cols(True) if r['column_name'].upper() not in have
+               and any('*' in (x.get('column_label_name') or '') for x in cm[r['column_name'].upper()]['rows'] if (x.get('input_tp_cd') or '').strip() in ('O', 'M', 'IO', 'IM'))]
+        req += add
+        star_cols = {r['column_name'].upper() for r in add}
+        reqbasis = f" (AS-IS checkRequiredOfSpread · 라벨 '*' {len(add)}칸)" if add else ''
     fill = []
     for r in req:
         k = ctype_kind(r)
         col = r['column_name'].upper()
-        fill.append(f'type:{col}=@cand:1' if k == 'combo' else f'type:{col}=1' if k == 'number' else f'type:{col}=20991231' if k == 'date' else f'type:{col}=E2E_SCN_I')
+        fill.append(f'type:{col}=@cand:1' if k == 'combo' else f'type:{col}=1' if k == 'number' else f'type:{col}=20991231' if k == 'date' else f'popcell:{col}=' if k == 'popup' and col in star_cols else f'type:{col}=E2E_SCN_I')
     e = ed[0]['column_name'].upper()
     st = f'{S.prefix()}search;type:{e}=E2E_SCN;insert;' + ';'.join(fill) + (';' if fill else '') + f'save;savehas:{ROWSTATE_RE}[^,]{{0,8}}M;savehas:{ROWSTATE_RE}[^,]{{0,8}}I'
-    return [row(S, 'P23', 'F2', '기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I', st, f"sheet_columns 편집 {e} · 필수 {len(req)}칸")], []
+    return [row(S, 'P23', 'F2', '기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I', st, f"sheet_columns 편집 {e} · 필수 {len(req)}칸{reqbasis}")], []
 
 
 COLREF = re.compile(r'DefColumns\.(\w+)')
+
+
+ECOL = re.compile(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.(\w+)\s*\)')
+
+
+def _src_inner_if(S, a):
+    """대입 문장을 직접 감싼 블록의 if 조건 원문(AS-IS 소스) — 못 찾으면 ''. guard 는 조각마다 잘려('…') 안쪽 조건 칸이 빠진다"""
+    p = os.path.join(ROOT, 'GSCM', (a.get('file') or '').replace('\\', os.sep))
+    try:
+        ln = int(a.get('line') or 0)
+        L = open(p, encoding='utf-8-sig', errors='replace').read().splitlines()
+    except (OSError, ValueError):
+        return ''
+    depth = 0
+    for i in range(min(ln, len(L)) - 2, max(-1, ln - 400), -1):
+        s = re.sub(r'//.*$', '', L[i])
+        for j in range(len(s) - 1, -1, -1):
+            if s[j] == '}':
+                depth += 1
+            elif s[j] == '{':
+                if depth:
+                    depth -= 1
+                    continue
+                head = s[:j]
+                k = i
+                while not re.search(r'\bif\s*\(', head) and k > 0 and i - k < 8 and not re.search(r'[;{}]\s*$', re.sub(r'//.*$', '', L[k - 1])):
+                    k -= 1
+                    head = re.sub(r'//.*$', '', L[k]) + ' ' + head
+                return head if re.search(r'\bif\s*\(', head) else ''
+    return ''
+
+
+def _inner_cols(S, a):
+    """연쇄 원천 칸 = 대입을 직접 감싼(가장 안쪽) 'e.Column ==' 분기의 칸만. 바깥 if·'else of'(부정) 조각은 원천이 아니다"""
+    src = _src_inner_if(S, a)
+    xs = [x.upper() for x in ECOL.findall(src)]
+    if xs:
+        return xs, 'src'
+    segs = [g.strip() for g in (a.get('guard') or '').split('▸')]
+    inner = [g for g in segs if ECOL.search(g) and not g.startswith('else of')]
+    return ([x.upper() for x in ECOL.findall(inner[-1])] if inner else []), 'guard'
 
 
 def p_popfill(S):
@@ -650,12 +719,15 @@ def p_popfill(S):
     for a in S.actions:
         if 'DoubleClick' not in a['method'] or a['kind'] != 'GRID_SET' or 'e.Row' not in a['raw']:
             continue
-        xs = [x.upper() for x in re.findall(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(DefColumns\.(\w+)\)', a['guard'])]
+        # T550(2026-11-25 SCP0005 C3 2행): 종전엔 guard 전체의 'e.Column ==' 칸을 원천으로 모아, 바깥 if(cs:1112~1116 FROM·TO 네 칸)와
+        #   잘린 안쪽 조각 때문에 TO 분기 대입(cs:1158 TO_COUNTRY)을 FROM_CITY·FROM_COUNTRY 팝업과 짝지었다(측정 = AS-IS 와 같은 동작인데 FAIL).
+        #   원천 = 대입을 직접 감싼 if 조건(소스 원문 · 없으면 guard 의 마지막 'else of' 아닌 조각) · 별칭 제외 = 원천 칸 자신과 숫자 접미만 다른 칸(ITEM_ID ↔ ITEM_ID40)
+        xs, _how = _inner_cols(S, a)
         if not xs or not re.search(r'SetText|SetValue', a['raw']):
             continue
         y = COLREF.search(a['raw'])
-        for x in xs:  # e.Column == ITEM_ID || e.Column == ITEM_ID40 — 같은 팝업의 칸 별칭 전부
-            if y and y.group(1).upper() not in xs:
+        for x in xs:  # e.Column == ITEM_ID || e.Column == ITEM_ID40 — 같은 팝업의 칸 별칭
+            if y and re.sub(r'\d+$', '', y.group(1).upper()) != re.sub(r'\d+$', '', x):
                 pops[x].add(y.group(1).upper())
                 ref.setdefault(x, f"{a['method']}:{a['line']}")
     newcols = {r['column_name'].upper(): r for r in S.edit_cols(True)}

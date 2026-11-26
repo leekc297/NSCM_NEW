@@ -217,17 +217,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.spdMain | CellClick | SpdMain_CellClick | InitializeComponent:122 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:123 |
-| this.spdMain | ComboSelChange | SpdMain_ComboSelChange | InitializeComponent:124 |
-| this.dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitializeComponent:237 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:333 |
-| this.btnPlanInfo | Click | btnPlanInfo_Click | InitializeComponent:653 |
-| this.chkStatus | CheckedChanged | chkStatus_CheckedChanged | InitializeComponent:727 |
-| this.btnFind | Click | btnFind_Click | InitializeComponent:766 |
-| this | Activated | FP00591_Plan_Control_Integration_Activated | InitializeComponent:879 |
-| this | Deactivate | FP00591_Plan_Control_Integration_Deactivate | InitializeComponent:880 |
-| this | FormClosing | FP00591_Plan_Control_Integration_FormClosing | InitializeComponent:881 |
 | this | Load | Form_Load | .ctor:187 |
 | cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:208 |
 | cboSite | SelectedIndexChanged | CboSite_SelectedIndexChanged | InitEvent:209 |
@@ -239,28 +228,39 @@
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:335 |
 | rbOpt1 | CheckedChanged | rbOpt1_Click | MeasureSetForm_Load:90 |
 | rbOpt2 | CheckedChanged | rbOpt2_Click | MeasureSetForm_Load:91 |
+| this.spdMain | CellClick | SpdMain_CellClick | InitializeComponent:122 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:123 |
+| this.spdMain | ComboSelChange | SpdMain_ComboSelChange | InitializeComponent:124 |
+| this.dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitializeComponent:237 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:333 |
+| this.btnPlanInfo | Click | btnPlanInfo_Click | InitializeComponent:653 |
+| this.chkStatus | CheckedChanged | chkStatus_CheckedChanged | InitializeComponent:727 |
+| this.btnFind | Click | btnFind_Click | InitializeComponent:766 |
+| this | Activated | FP00591_Plan_Control_Integration_Activated | InitializeComponent:879 |
+| this | Deactivate | FP00591_Plan_Control_Integration_Deactivate | InitializeComponent:880 |
+| this | FormClosing | FP00591_Plan_Control_Integration_FormClosing | InitializeComponent:881 |
 
 ## 6. 컨트롤 (43개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 | LayoutControlItem | 9 | lblSql, layoutControlItem8, lblSite, layoutControlItem2, layoutControlItem9, layoutControlItem1, layoutControlItem6, layoutControlItem7, layoutControlItem3 |
-| UsrLabel | 6 | usrLabel2, usrLabel1, usrlblFixDate1, usrLabel1, usrLabel2, usrLabel3 |
-| UsrButton | 4 | btnSql, btnPlanInfo, btnFind, btnRun |
+| UsrLabel | 6 | usrlblFixDate1, usrLabel1, usrLabel2, usrLabel3, usrLabel2, usrLabel1 |
+| UsrButton | 4 | btnRun, btnSql, btnPlanInfo, btnFind |
 | TextBox | 3 | txt_cellDesc, txt_formDesc, txt_elecDesc |
+| Panel | 2 | panel1, StockPanel |
+| RadioButton | 2 | rbOpt2, rbOpt1 |
 | FpSpread | 2 | spdMain, spdSub |
 | SheetView | 2 | spdMain_Sheet1, spdSub_Sheet1 |
 | UsrLayoutControl | 2 | usrLayoutControl1, usrLayoutControl3 |
 | UsrCombo | 2 | cboPlanGroup, cboSite |
 | LayoutControlGroup | 2 | layoutControlGroup1, layoutControlGroup3 |
-| Panel | 2 | StockPanel, panel1 |
-| RadioButton | 2 | rbOpt2, rbOpt1 |
+| DateTimePicker | 1 | dtpFixDate1 |
 | UsrDatePicker2 | 1 | dtpPlanDate |
 | ImageList | 1 | imageList1 |
 | EmptySpaceItem | 1 | emptySpaceItem7 |
 | UsrCheckBox | 1 | chkStatus |
 | Splitter | 1 | splitter1 |
 | UsrConditionPanel | 1 | usrConditionPanel1 |
-| DateTimePicker | 1 | dtpFixDate1 |
 
 ## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |

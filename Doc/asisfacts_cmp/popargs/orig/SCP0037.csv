@@ -1,0 +1,29 @@
+﻿menu_id,side,pair,asis_ref,asis_method,asis_popup,asis_param,asis_arg,asis_source,concept,tobe_ref,tobe_modal,tobe_key,tobe_value,host_label,screen_field,verdict,note
+SCP0037,ASIS,P1,SCP0037_OperationLT.cs:683 SCP0037_OperationLT.SpdMain_CellClick,SpdMain_CellClick,SCM0002_ItembyPlantSitePopup,_bMultiSelect,false,false,bmultiselect,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx:293,ItemByPlantSiteModal,,,,,NA,AS-IS 고정값 false — 연동 대상 아님
+SCP0037,ASIS,P1,SCP0037_OperationLT.cs:683 SCP0037_OperationLT.SpdMain_CellClick,SpdMain_CellClick,SCM0002_ItembyPlantSitePopup,_assignChk,"""N""","""N""",assignchk,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx:293,ItemByPlantSiteModal,,,,,NA,"AS-IS 고정값 ""N"" — 연동 대상 아님"
+SCP0037,ASIS,P1,SCP0037_OperationLT.cs:683 SCP0037_OperationLT.SpdMain_CellClick,SpdMain_CellClick,SCM0002_ItembyPlantSitePopup,_DivisionID,division,UIUtils.GetAllDivisionCheckedElectrode(cboDivision),division,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx:293,ItemByPlantSiteModal,divisionId,"s(
+            (GridUtils.getRow(gridRef.current, clickedRow) as Record<string, unknown> | undefined)
+              ?.DI",,,PASS,"AS-IS UIUtils.GetAllDivisionCheckedElectrode(cboDivision) → TO-BE divisionId=s(
+            (GridUtils.getRow(gridRef.current, clickedRow (값 연동)"
+SCP0037,ASIS,P1,SCP0037_OperationLT.cs:683 SCP0037_OperationLT.SpdMain_CellClick,SpdMain_CellClick,SCM0002_ItembyPlantSitePopup,_ScmSiteId,sScmSite,sScmSite,scmsite,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx:293,ItemByPlantSiteModal,scmSiteId,"s(
+            (GridUtils.getRow(gridRef.current, clickedRow) as Record<string, unknown> | undefined)
+              ?.SC",,,PASS,"AS-IS sScmSite → TO-BE scmSiteId=s(
+            (GridUtils.getRow(gridRef.current, clickedRow (값 연동)"
+SCP0037,ASIS,P1,SCP0037_OperationLT.cs:683 SCP0037_OperationLT.SpdMain_CellClick,SpdMain_CellClick,SCM0002_ItembyPlantSitePopup,_ItemID,sItemId,sItemId,item,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx:293,ItemByPlantSiteModal,itemId,'',,itemId,FAIL,연동 누락: Material(itemId='') — AS-IS 는 sItemId 값을 팝업 인자 _ItemID 로 전달하는데 TO-BE 는 고정값 전달
+SCP0037,ASIS,P2,SCP0037_OperationLT.cs:835 SCP0037_OperationLT.btnItemId_Click,btnItemId_Click,SCM0002_MaterialByDivisionPopup,multiSelect,true,true,multiselect,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,,,Material,,NA,AS-IS 고정값 true — 연동 대상 아님
+SCP0037,ASIS,P2,SCP0037_OperationLT.cs:835 SCP0037_OperationLT.btnItemId_Click,btnItemId_Click,SCM0002_MaterialByDivisionPopup,division,division,UIUtils.GetAllDivisionCheckedElectrode(cboDivision),division,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,divisionId,sc.divisionIds[0] ?? '',Material,,PASS,AS-IS UIUtils.GetAllDivisionCheckedElectrode(cboDivision) → TO-BE divisionId=sc.divisionIds[0] ?? '' (값 연동)
+SCP0037,ASIS,P2,SCP0037_OperationLT.cs:835 SCP0037_OperationLT.btnItemId_Click,btnItemId_Click,SCM0002_MaterialByDivisionPopup,operation_group,"""""","""""",operationgroup,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,operationGroup,'',Material,,NA,"AS-IS 고정값 """" — 연동 대상 아님"
+SCP0037,ASIS,P2,SCP0037_OperationLT.cs:835 SCP0037_OperationLT.btnItemId_Click,btnItemId_Click,SCM0002_MaterialByDivisionPopup,itemId,sItemId,txtItemId.Text,item,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,itemId,sc.itemId,Material,,PASS,AS-IS txtItemId.Text → TO-BE itemId=sc.itemId (값 연동)
+SCP0037,ASIS,P2,SCP0037_OperationLT.cs:835 SCP0037_OperationLT.btnItemId_Click,btnItemId_Click,SCM0002_MaterialByDivisionPopup,scp_module_type,"this.Name.Substring(0, 7)","this.Name.Substring(0, 7)",thisnamesubstring07,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,scpModuleType,MENU_ID,Material,,PASS,"AS-IS this.Name.Substring(0, 7)(= 화면 ID SCP0037) → TO-BE scpModuleType=MENU_ID (같은 값 — 화면 ID 상수)"
+SCP0037,TOBE,P2,,,,,,,division,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,preSearchParams.divisionId,sc.divisionIds[0] ?? '',Material,divisionIds,PASS,divisionId ← sc.divisionIds[0] ?? '' (값 연동)
+SCP0037,TOBE,P2,,,,,,,scpmoduletype,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,preSearchParams.scpModuleType,MENU_ID,Material,,PASS,고정 조건 scpModuleType=MENU_ID — 화면에 같은 개념의 조회조건 없음
+SCP0037,TOBE,P2,,,,,,,operationgroup,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,preSearchParams.operationGroup,'',Material,,PASS,고정 조건 operationGroup='' — 화면에 같은 개념의 조회조건 없음
+SCP0037,TOBE,P2,,,,,,,item,nscm-fe/features/supply/src/pages/operation-lt/OperationLT.tsx:198,MaterialByDivisionModal,preSearchParams.itemId,sc.itemId,Material,itemId,PASS,itemId ← sc.itemId (값 연동)
+SCP0037,TOBE,P1,,,,,,,division,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx:293,ItemByPlantSiteModal,preSearchParams.divisionId,"s(
+            (GridUtils.getRow(gridRef.current, clickedRow) as Record<string, unknown> | undefined)
+              ?.DI",,divisionIds,PASS,"divisionId ← s(
+            (GridUtils.getRow(gridRef.current, clickedRow (값 연동)"
+SCP0037,TOBE,P1,,,,,,,scmsite,nscm-fe/features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx:293,ItemByPlantSiteModal,preSearchParams.scmSiteId,"s(
+            (GridUtils.getRow(gridRef.current, clickedRow) as Record<string, unknown> | undefined)
+              ?.SC",,,PASS,"scmSiteId ← s(
+            (GridUtils.getRow(gridRef.current, clickedRow (값 연동)"

@@ -1,0 +1,894 @@
+{
+ "screen": "SCP0099",
+ "calls": [
+  {
+   "cls": "SCP0099_CreatePlanPopup",
+   "method": "BtnNew_Click",
+   "asis_ref": "SCP0099_Business_Plan_LongTerm.cs:914",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnNew",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Create Plan",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "cboDivision.ControlValues",
+   "period_args": [],
+   "args": [
+    {
+     "param": "pDivId",
+     "kind": "CONTROL",
+     "arg": "cboDivision.ControlValues"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0099_Business_Plan_LongTerm.cs:916",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0099_PlanCopyPopup",
+   "method": "btnCopy_Click",
+   "asis_ref": "SCP0099_Business_Plan_LongTerm.cs:1211",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnCopy",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Copy",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "cboDivision.ControlValues",
+   "period_args": [],
+   "args": [
+    {
+     "param": "pDivId",
+     "kind": "CONTROL",
+     "arg": "cboDivision.ControlValues"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0099_Business_Plan_LongTerm.cs:1213",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0099_ExcelUploadPopup",
+   "method": "btnExcelUpload_Click",
+   "asis_ref": "SCP0099_Business_Plan_LongTerm.cs:1160",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnExcelUpload",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Upload",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "\"SCP0099\""
+    },
+    {
+     "param": "#2",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    },
+    {
+     "param": "#3",
+     "kind": "CONTROL",
+     "arg": "cboDivision.ControlValues"
+    },
+    {
+     "param": "#4",
+     "kind": "CONTROL",
+     "arg": "cboPlan.SelectedValue.ToString()"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0099_Business_Plan_LongTerm.cs:1161",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0099_PlanInfoPopup",
+   "method": "btnPlanInfo_Click",
+   "asis_ref": "SCP0099_Business_Plan_LongTerm.cs:1100",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnPlanInfo",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Plan Info",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "cboDivision.ControlValues",
+   "period_args": [],
+   "args": [
+    {
+     "param": "pDivId",
+     "kind": "CONTROL",
+     "arg": "cboDivision.ControlValues"
+    },
+    {
+     "param": "pDiVTxt",
+     "kind": "CONTROL",
+     "arg": "cboDivision.Text"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0099_Business_Plan_LongTerm.cs:1101",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCP0099_CreatePlanPopup": {
+   "cls": "SCP0099_CreatePlanPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_CreatePlanPopup.cs",
+   "title": "Create Plan",
+   "conds": [
+    {
+     "name": "drpPeriodMonth",
+     "type": "UsrMonthRangePicker",
+     "label": "Plan Horizon",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0099_CreatePlanPopup.Designer.cs:39",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbSaleVer",
+     "type": "UsrCombo",
+     "label": "Sale Ver",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0099_CreatePlanPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboDivision",
+     "type": "UsrCombo",
+     "label": "Division*",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0099_CreatePlanPopup.Designer.cs:42",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0099_GET_VERSION_INFO",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_GET_VERSION_INFO.sql",
+     "order_known": true,
+     "order_keys": "VERSION_NO DESC",
+     "order_line": "31",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id"
+     ],
+     "method": "InitControls",
+     "ref": "SCP0099_CreatePlanPopup.cs:107",
+     "save": false
+    },
+    {
+     "sp": "SCP0099_SAVE_LONGTERM_PLAN",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_SAVE_LONGTERM_PLAN.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_sale_ver",
+      "p_plan_start_date",
+      "p_plan_end_date",
+      "p_plan_desc",
+      "p_user_id",
+      "v_creation_date",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_err_code",
+      "v_err_message",
+      "V_PLAN_ID",
+      "V_YYYY",
+      "V_YY",
+      "V_WEEK",
+      "SEQ",
+      "MAXTMP",
+      "V_TMPSEQ"
+     ],
+     "method": "SaveData",
+     "ref": "SCP0099_CreatePlanPopup.cs:160",
+     "save": true
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:182",
+     "method": "SaveData",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (result.Tables[0].Rows[0][\"result_code\"].ToString() == \"S\")"
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:191",
+     "method": "SaveData",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:203",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "if (buttonItem.UserType == ButtonListType.Save) { SaveData(); } else if (buttonItem.UserType == ButtonListType.Close) { this.Close(); }",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:207",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "if (buttonItem.UserType == ButtonListType.Close) { this.Close(); }",
+     "guard": "else of (buttonItem.UserType == ButtonListType.Save)"
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:209",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "else of (buttonItem.UserType == ButtonListType.Save) ▸ if (buttonItem.UserType == ButtonListType.Close)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00002\", new object[] { \"Plan Horizon\" })",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { result.Tables[0].Rows[0][\"result_cnt\"].ToString() })",
+    "MessageHelper.GMessageBox(\"MSG00284\", null)"
+   ],
+   "period_use": [
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:100",
+     "method": "InitControls",
+     "raw": "drpPeriodMonth.MonthText1 = DateTime.Now.AddYears(1).ToString(\"yyyy\") + \"01\"",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:102",
+     "method": "InitControls",
+     "raw": "drpPeriodMonth.MonthText2 = DateTime.Now.AddYears(1).ToString(\"yyyy\") + \"12\"",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:152",
+     "method": "SaveData",
+     "raw": "if (drpPeriodMonth.MonthText1 == \"\" || drpPeriodMonth.MonthText2 == \"\") { MessageHelper.GMessageBox(\"MSG00002\", new object[] { \"Plan Horizon\" }); //{0} 값은 필수 입력",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:168",
+     "method": "SaveData",
+     "raw": "request.Parameters[\"p_plan_start_date\"] = drpPeriodMonth.MonthText1.Replace(\"-\", \"\")",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_CreatePlanPopup.cs:169",
+     "method": "SaveData",
+     "raw": "request.Parameters[\"p_plan_end_date\"] = drpPeriodMonth.MonthText2.Replace(\"-\", \"\")",
+     "guard": ""
+    }
+   ],
+   "from": "factpack"
+  },
+  "SCP0099_PlanCopyPopup": {
+   "cls": "SCP0099_PlanCopyPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_PlanCopyPopup.cs",
+   "title": "Plan Copy",
+   "conds": [
+    {
+     "name": "cboPlan",
+     "type": "UsrCombo",
+     "label": "Plan",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0099_PlanCopyPopup.Designer.cs:37",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboDivision",
+     "type": "UsrCombo",
+     "label": "Division*",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0099_PlanCopyPopup.Designer.cs:38",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboPlanDate",
+     "type": "UsrCombo",
+     "label": "Plan-date*",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0099_PlanCopyPopup.Designer.cs:39",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboPlanType",
+     "type": "UsrCombo",
+     "label": "Plan-type*",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0099_PlanCopyPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboPlanSeq",
+     "type": "UsrCombo",
+     "label": "Seq*",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0099_PlanCopyPopup.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnCopy",
+     "text": "Copy",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0099_GET_VERSION_INFO",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_GET_VERSION_INFO.sql",
+     "order_known": true,
+     "order_keys": "VERSION_NO DESC",
+     "order_line": "31",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id"
+     ],
+     "method": "InitControls",
+     "ref": "SCP0099_PlanCopyPopup.cs:162",
+     "save": false
+    },
+    {
+     "sp": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_SAVE_LONGTERM_PLAN_COPY.sql",
+     "order_known": true,
+     "order_keys": "DW.ORG_DEMAND_ID",
+     "order_line": "575",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_plan_start_yyyymmdd",
+      "p_plan_type",
+      "p_plan_seq",
+      "p_plan_id",
+      "p_user_id",
+      "v_scp_plan_id",
+      "v_eng_plan_id",
+      "v_master_id",
+      "v_START_YYYYMM",
+      "v_END_YYYYMM",
+      "v_prod_result_cnt",
+      "v_rtf_result_cnt",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_batch_user",
+      "v_start_time",
+      "v_exec_time"
+     ],
+     "method": "btnCopy_Click",
+     "ref": "SCP0099_PlanCopyPopup.cs:244",
+     "save": true
+    },
+    {
+     "sp": "SCP0099_GET_LONGTERM_PLAN",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_GET_LONGTERM_PLAN.sql",
+     "order_known": true,
+     "order_keys": "PLAN_ID DESC",
+     "order_line": "56",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_valid_yn",
+      "p_PLAN_ID"
+     ],
+     "method": "setCboPlan",
+     "ref": "SCP0099_PlanCopyPopup.cs:89",
+     "save": false
+    },
+    {
+     "sp": "SCP0099_GET_LONGTERM_PLAN_DATE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_GET_LONGTERM_PLAN_DATE.sql",
+     "order_known": true,
+     "order_keys": "A.plan_start_yyyymmdd DESC",
+     "order_line": "44",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id"
+     ],
+     "method": "setPlanDate",
+     "ref": "SCP0099_PlanCopyPopup.cs:115",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0099_PlanCopyPopup.cs:263",
+     "method": "btnCopy_Click",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (MessageHelper.GMessageBox(\"MSG00077\", new object[] { \"\" }) == DialogResult.Yes) ▸ if (result.Tables[0].Rows[0][\"resu"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00086\", new object[] { \"Plan Date\" })",
+    "MessageHelper.GMessageBox(\"MSG00086\", new object[] { \"Plan Seq\" })",
+    "MessageHelper.GMessageBox(\"MSG00077\", new object[] { \"\" })",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { result.Tables[0].Rows[0][\"result_cnt\"].ToString() })",
+    "MessageHelper.GMessageBox(\"MSG00284\", null)"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  },
+  "SCP0099_ExcelUploadPopup": {
+   "cls": "SCP0099_ExcelUploadPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_ExcelUploadPopup.cs",
+   "title": "Plan Upload",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "SCP0099_Business_Plan_LongTerm",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SaveProd",
+     "ref": "SCP0099_ExcelUploadPopup.cs:1034",
+     "save": false
+    },
+    {
+     "sp": "SCP0099_ExcelUploadPopup",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SaveProd",
+     "ref": "SCP0099_ExcelUploadPopup.cs:1034",
+     "save": false
+    },
+    {
+     "sp": "SCP0099_Business_Plan_LongTerm",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SaveRTF",
+     "ref": "SCP0099_ExcelUploadPopup.cs:1131",
+     "save": false
+    },
+    {
+     "sp": "SCP0099_ExcelUploadPopup",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SaveRTF",
+     "ref": "SCP0099_ExcelUploadPopup.cs:1131",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:620",
+     "method": "Excel_TempUpload",
+     "raw": "if (sprdDetail.Sheets[0].RowCount > 0) { ValidChk_Prod(); si3 = this.GetSheetInfo(sprdDetail.Name, 0); si3.LockColumn(0, si3.GetMaxColumnIndex(), true); }",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:624",
+     "method": "Excel_TempUpload",
+     "raw": "si3.LockColumn(0, si3.GetMaxColumnIndex(), true)",
+     "guard": "try ▸ if (sprdDetail.Sheets[0].RowCount > 0)"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:627",
+     "method": "Excel_TempUpload",
+     "raw": "if (sprdDetail.Sheets[1].RowCount > 0) { ValidChk_RTF(); si3 = this.GetSheetInfo(sprdDetail.Name, 1); si3.LockColumn(0, si3.GetMaxColumnIndex(), true); }",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:631",
+     "method": "Excel_TempUpload",
+     "raw": "si3.LockColumn(0, si3.GetMaxColumnIndex(), true)",
+     "guard": "try ▸ if (sprdDetail.Sheets[1].RowCount > 0)"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:122",
+     "method": "InitSheet",
+     "raw": "si.LockColumn(0, si.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:130",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[0].BackColor = Color.LightGray",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:131",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[2].BackColor = Color.LightGray",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:132",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[4].BackColor = Color.LightGray",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:756",
+     "method": "ValidChk_Prod",
+     "raw": "if (intError > 0) { sprdDetail.Sheets[0].Rows[i].BackColor = ErrorColor; intRowError++; }",
+     "guard": "try ▸ for (i < sprdDetail.Sheets[0].RowCount)"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:758",
+     "method": "ValidChk_Prod",
+     "raw": "sprdDetail.Sheets[0].Rows[i].BackColor = ErrorColor",
+     "guard": "try ▸ for (i < sprdDetail.Sheets[0].RowCount) ▸ if (intError > 0)"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:887",
+     "method": "ValidChk_RTF",
+     "raw": "if (intError > 0) { sprdDetail.Sheets[1].Rows[i].BackColor = ErrorColor; intRowError++; }",
+     "guard": "try ▸ for (i < sprdDetail.Sheets[1].RowCount)"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:186",
+     "method": "GetExcelFileName",
+     "raw": "openFile.Filter = \"Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|xls files (*.xls)|*.xls|xlsx files (*.xlsx)|*.xlsx|All files (*.*)|*.*\"",
+     "guard": "try"
+    }
+   ],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:661",
+     "method": "OnClose_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:1041",
+     "method": "SaveProd",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "try ▸ if (result.Rows[0][\"result_code\"].ToString() == \"S\")"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:1138",
+     "method": "SaveRTF",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "try ▸ if (result.Rows[0][\"result_code\"].ToString() == \"S\")"
+    },
+    {
+     "ref": "SCP0099_ExcelUploadPopup.cs:954",
+     "method": "btnOK_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageBox.Show(\"CMsg.CommonMsg(CRM-00028)\", this.SheetName, MessageBoxButtons.OK, MessageBoxIcon.Information)",
+    "MessageBox.Show(\"CMsg.CommonMsg(CRM-00028)\", this.SheetName, MessageBoxButtons.OK, MessageBoxIcon.Information)",
+    "MessageHelper.GMessageBox(\"MSG00386\")",
+    "MessageHelper.GMessageBox(\"MSG00055\")",
+    "MessageBox.Show(ex.Message, ex.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)",
+    "MessageHelper.GMessageBox(\"MSG00195\")",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { \"PRODUCTION : \" + result.Rows[0][\"result_cnt\"].ToString() })",
+    "MessageHelper.GMessageBox(\"MSG00284\", null)",
+    "MessageBox.Show(ex.Message, ex.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { \"RTF : \" + result.Rows[0][\"result_cnt\"].ToString() })",
+    "MessageHelper.GMessageBox(\"MSG00284\", null)",
+    "MessageBox.Show(ex.Message, ex.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  },
+  "SCP0099_PlanInfoPopup": {
+   "cls": "SCP0099_PlanInfoPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_PlanInfoPopup.cs",
+   "title": "Plan Info",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "btnRelease",
+     "text": "Release",
+     "visible": true
+    },
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0099_DEL_LONGTERM_PLAN",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_DEL_LONGTERM_PLAN.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "v_plan_id",
+      "p_user_id",
+      "v_creation_date",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_err_code",
+      "v_err_message",
+      "ROWCNT"
+     ],
+     "method": "DelPlan",
+     "ref": "SCP0099_PlanInfoPopup.cs:224",
+     "save": true
+    },
+    {
+     "sp": "SCP0099_GET_LONGTERM_PLAN",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_GET_LONGTERM_PLAN.sql",
+     "order_known": true,
+     "order_keys": "PLAN_ID DESC",
+     "order_line": "56",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_valid_yn",
+      "p_PLAN_ID"
+     ],
+     "method": "FindData",
+     "ref": "SCP0099_PlanInfoPopup.cs:171",
+     "save": false
+    },
+    {
+     "sp": "SCP0099_DEL_LONGTERM_PLAN",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_DEL_LONGTERM_PLAN.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "v_plan_id",
+      "p_user_id",
+      "v_creation_date",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_err_code",
+      "v_err_message",
+      "ROWCNT"
+     ],
+     "method": "OKButtonClick",
+     "ref": "SCP0099_PlanInfoPopup.cs:300",
+     "save": true
+    },
+    {
+     "sp": "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0099_SAVE_LONGTERM_PLAN_RELEASE.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "v_plan_id",
+      "p_user_id",
+      "v_creation_date",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_err_code",
+      "v_err_message",
+      "ROWCNT",
+      "CUR_PLAN_ID",
+      "TMP_PLAN_ID",
+      "SEQ",
+      "MAXTMP",
+      "V_TMPSEQ",
+      "V_PADDINGVAL"
+     ],
+     "method": "ReleasePlan",
+     "ref": "SCP0099_PlanInfoPopup.cs:383",
+     "save": true
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0099_PlanInfoPopup.cs:418",
+     "method": "SCP0099_PlanInfoPopup_FormClosing",
+     "raw": "if(isEdit) this.DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_PlanInfoPopup.cs:418",
+     "method": "SCP0099_PlanInfoPopup_FormClosing",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (isEdit)"
+    },
+    {
+     "ref": "SCP0099_PlanInfoPopup.cs:198",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch(buttonItem.UserType) { case ButtonListType.Delete: //DelPlan();//단건처리 OKButtonClick();//체크박스 멀티 처리 break; case ButtonListType.Close: this.Close(); break;",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0099_PlanInfoPopup.cs:204",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00071\")",
+    "MessageHelper.GMessageBox(\"MSG00016\")",
+    "MessageHelper.GMessageBox(\"MSG00031\")",
+    "MessageHelper.GMessageBox(\"MSG00284\", null)",
+    "MessageHelper.GMessageBox(\"MSG00086\", new object[] { \"Released plans cannot be deleted\" })",
+    "MessageHelper.GMessageBox(\"MSG00021\")",
+    "MessageHelper.GMessageBox(\"MSG00016\")",
+    "MessageHelper.GMessageBox(\"MSG00031\")",
+    "MessageHelper.GMessageBox(\"MSG00284\", null)",
+    "MessageHelper.GMessageBox(\"MSG00021\")",
+    "MessageHelper.GMessageBox(\"MSG00015\")",
+    "MessageHelper.GMessageBox(\"MSG00020\")"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

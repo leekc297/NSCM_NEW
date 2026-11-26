@@ -1,0 +1,104 @@
+{
+  "id": "20261123204530_SELF_2",
+  "at": "2026-11-23T20:45:30+09:00",
+  "ms": 1795434330249,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/rules/n_search_cond.md|crn와n행cr이정본밖에서본문까지정의됨",
+  "title": "사용자 지시 R38 같은 문제: tools/VibeManager/rules/40_SEARCH_COND.md:23 CR-092 와 22행 CR 이 정본 밖에서 본문까지 정의됨",
+  "evidence": "규칙 R38 \"TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함\" (원래 지시 2026-11-11 14:28 \"1. 'AS-IS 와 달라도 오류 아님'인지 'TO-BE 개발 규칙' 의 경우 별도의 MD 파일로 일괄 관리할 수 있도록 보완 요청 (현재의 MD 파일에 분산되어 있으면 취합해서 관리 요청) 2. M1 진행해주세요. 3. 2개 항목은 차후 결정 예정.\") · tools/VibeManager/rules/40_SEARCH_COND.md:23 | **명칭 변경 룰(TO-BE 룰 · CR-092, 2026-10-30 사용자 지시)** | **SCP·SSP 의 'Valid' 는 조회조건·그리드·팝업 그리드 모두 'Active' 로 일괄 변경.**",
+  "targets": [
+    "tools/VibeManager/rules/40_SEARCH_COND.md"
+  ],
+  "before_after": "본문을 정본 TOBE_RULES_DIFF.md 의 CR 번호 참조로 바꾸고 이 파일에는 조회조건 기준표 내용만 남김",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/rules/40_SEARCH_COND.md.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T07:08:20+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T07:11:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0708"
+    },
+    {
+      "at": "2026-11-24T07:11:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T07:23:59+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T07:23:59+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK  파일 74/74  PASS 1161  FAIL 0  213.9s'(at 2026-11-23T22:12:36.404Z) → 반영 뒤 'ALL OK  파일 74/74  PASS 1161  FAIL 0  216.8s'(at 2026-11-23T22:16:30.739Z) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T07-11-59_claude_orch.log",
+      "sec": 505,
+      "costUsd": 0.9828130999999999,
+      "files": [
+        "tools/VibeManager/rules/40_SEARCH_COND.md"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함 규칙을 tools/VibeManager/rules/40_SEARCH_COND.md 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R38|tools/VibeManager/rules/40_SEARCH_COND.md",
+  "needsApproval": "룰 문서 tools/VibeManager/rules/40_SEARCH_COND.md",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795471700395,
+  "autoFp": "887bdaec4b",
+  "applyStartMs": 1795471919845,
+  "verifyJudge": {
+    "at": "2026-11-24T07:20:27+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0708",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795472639110,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 실행. 반영 전 ALL OK 파일 74/74 PASS 1161 FAIL 0(2026-11-23T22:12:36Z) → 반영 뒤 ALL OK 파일 74/74 PASS 1161 FAIL 0(2026-11-23T22:16:30Z). 웹뷰 파일 아님. t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/rules/40_SEARCH_COND.md"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK  파일 74/74  PASS 1161  FAIL 0  213.9s'(at 2026-11-23T22:12:36.404Z) → 반영 뒤 'ALL OK  파일 74/74  PASS 1161  FAIL 0  216.8s'(at 2026-11-23T22:16:30.739Z)",
+    "note": "40_SEARCH_COND.md 22행(CR-071, CR-098 본문)과 23행(CR-092 본문)을 정본 Doc/_rules_consolidation/TOBE_RULES_DIFF.md CR 번호 참조로 바꿈. 정본 행 확인: CR-071 16행, CR-098 26행, CR-092 403행. build_search_cond.py 에 CR-0 숫자 패턴, 'TO-BE 룰' 문구 0건이라 재생성 때 덮이지 않음. 추가 확인 후보: 5행 '룰 10_RULES_KEEP E11' 참조, orch-userrule.js 의 R38 감지 문구(미확인)"
+  },
+  "snap": "prop_20261123204530_SELF_2"
+}

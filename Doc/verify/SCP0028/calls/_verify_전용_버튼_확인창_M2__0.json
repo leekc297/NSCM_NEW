@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SCP0028",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"transMode\":\"\",\"itemId\":\"\",\"valid\":\"\"}",
+  "status": 200,
+  "rows": 1991,
+  "dur": 241,
+  "at": "2026-11-24T18:02:36.989Z",
+  "user": "heeyoung123",
+  "test": "전용 버튼 확인창(M2)"
+ },
+ {
+  "menu": "SCP0028",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0028/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"transMode\":\"\",\"itemId\":\"\",\"valid\":\"\"}",
+  "status": 200,
+  "rows": 1991,
+  "dur": 307,
+  "at": "2026-11-24T18:02:41.907Z",
+  "user": "heeyoung123",
+  "test": "전용 버튼 확인창(M2)"
+ }
+]

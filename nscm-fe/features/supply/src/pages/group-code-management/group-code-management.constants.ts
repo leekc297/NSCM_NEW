@@ -100,7 +100,7 @@ export const MSG = {
   // PIC 가 SSP Planner(SCP0050 CAPA PIC) 권한 없는 사용자일 때 (R-PIC-CHECK). {0}=User ID.
   //   메시지 본문에 'User ID : {0}' 포함 — 호출부에서 {0} 를 입력 User ID 로 치환.
   PIC_NO_PERMISSION: 'MSG01261',
-  NO_CHANGE: 'MSG00133', // 변경 없음 (V-NOCHANGE)
+  NO_CHANGE: 'MSG00004', // 변경 없음 (V-NOCHANGE, AS-IS MSG00133 → TO-BE MSG00004)
 } as const;
 
 // BASIC_END_CUSTOMER(81*) 최대 길이 검증 (V-ENDCUST-LEN).

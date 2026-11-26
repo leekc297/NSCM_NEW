@@ -1,6 +1,8 @@
+import ArrowLeft from '@mui/icons-material/ArrowLeft';
+import ArrowRight from '@mui/icons-material/ArrowRight';
+import CloseIcon from '@mui/icons-material/Close';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { IcArrowLeft, IcCloseTemp } from '@foundation/assets';
 import { resolveMenuLabel } from '@foundation/models';
 import { clsx } from '@shared/clsx';
 
@@ -97,7 +99,10 @@ export const MDITabs = () => {
               <span className={styles.tabContent}>{resolveMenuLabel(t, tab)}</span>
               {tab.closable && (
                 <div className={styles.closeBtn}>
-                  <IcCloseTemp height={14} onClick={e => handleTabClose(e, index)} />
+                  <CloseIcon
+                    sx={{ fontSize: 14, cursor: 'pointer' }}
+                    onClick={e => handleTabClose(e, index)}
+                  />
                 </div>
               )}
             </button>
@@ -113,9 +118,7 @@ export const MDITabs = () => {
           disabled={!canScrollLeft}
           aria-label='Scroll tabs left'
         >
-          {/* 주의: IcArrowLeft 는 이름과 달리 오른쪽(›)을 가리킨다(SVG 에 rotate(180) 적용됨).
-              왼쪽(‹)으로 쓰려면 다시 180° 뒤집어야 한다. */}
-          <IcArrowLeft height={14} className={styles.flip} />
+          <ArrowLeft sx={{ fontSize: 20 }} />
         </button>
         <button
           type='button'
@@ -124,7 +127,7 @@ export const MDITabs = () => {
           disabled={!canScrollRight}
           aria-label='Scroll tabs right'
         >
-          <IcArrowLeft height={14} />
+          <ArrowRight sx={{ fontSize: 20 }} />
         </button>
         <button type='button' className={styles.actionBtn} onClick={closeOtherTabs}>
           {t('LBL00364', '_다른 탭 닫기')}

@@ -23,9 +23,9 @@ def split_script(text, defines):
                 j = line.find('*/')
                 if j < 0: continue
                 line = line[j + 2:]; in_comment = False
-            line = re.sub(r'/\*.*?\*/', '', line)
+            line = re.sub(r'/\*(?!\+).*?\*/', '', line)  # 2026-11-23 /*+ 힌트 */ 는 남김(지우면 실행 계획이 달라짐)
             k = line.find('/*')
-            if k >= 0 and "'" not in line[:k]:
+            if k >= 0 and "'" not in line[:k] and not line[k:].startswith('/*+'):
                 line = line[:k]; in_comment = True
             if not line.strip(): continue
         s = line.strip()
@@ -72,7 +72,7 @@ def main():
         head = re.sub(r'\s+', ' ', sql)[:90]
         try:
             cur.execute(sql)
-            if re.match(r'^\s*SELECT', sql, re.I):
+            if re.match(r'^\s*(SELECT|WITH)\b', sql, re.I):  # 2026-11-23 WITH 조회도 결과를 가져옴(종전 OK 만 찍고 실행 결과 미확인)
                 rows = cur.fetchmany(50); cols = [d[0] for d in cur.description]
                 print(f"[{i}] SELECT → {len(rows)}행"); print('     ' + ' | '.join(cols))
                 for r in rows: print('     ' + ' | '.join('' if v is None else str(v) for v in r))

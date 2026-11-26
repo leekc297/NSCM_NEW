@@ -1,0 +1,273 @@
+{
+ "menu_id": "SCP0096",
+ "at": "2026-11-25 19:17:56",
+ "window_utc": [
+  "",
+  "9999"
+ ],
+ "rows": {
+  "rows": 1675,
+  "by_source": {
+   "GENERAL": 683,
+   "TRACE": 343,
+   "RULE_SCREEN": 325,
+   "CONFIRMED": 107,
+   "ASIS_DIFF": 84,
+   "DEFECT": 48,
+   "SEARCH": 29,
+   "COLUMN": 28,
+   "ASIS": 14,
+   "SP": 8,
+   "MSG": 6
+  },
+  "groups": 31,
+  "group_rows": 65,
+  "members": 34,
+  "same_verdict_groups": 30,
+  "mixed_verdict_groups": 1,
+  "source_mix": {
+   "CONFIRMED + DEFECT": 24,
+   "ASIS + TRACE": 7
+  },
+  "general_rows": 683,
+  "examples": [
+   [
+    [
+     "V-5403aadf",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-a78a213f",
+     "TRACE",
+     "PASS"
+    ],
+    [
+     "T-0f8f235c",
+     "TRACE",
+     "PASS"
+    ]
+   ],
+   [
+    [
+     "V-ee57bb7a",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-4b1ff7b8",
+     "TRACE",
+     "PASS"
+    ],
+    [
+     "T-bd7523c3",
+     "TRACE",
+     "PASS"
+    ]
+   ],
+   [
+    [
+     "V-5971c412",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-8a26aa12",
+     "TRACE",
+     "PASS"
+    ]
+   ],
+   [
+    [
+     "V-b0948ec4",
+     "ASIS",
+     "NA"
+    ],
+    [
+     "T-9c917175",
+     "TRACE",
+     "NA"
+    ],
+    [
+     "T-678dd19d",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-03bcbbd8",
+     "ASIS",
+     "NA"
+    ],
+    [
+     "T-99688823",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-58504ac4",
+     "ASIS",
+     "NA"
+    ],
+    [
+     "T-ad2476cd",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-9e29a0e2",
+     "ASIS",
+     "FAIL"
+    ],
+    [
+     "T-8f523386",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-3a9cbaea",
+     "DEFECT",
+     "PASS"
+    ],
+    [
+     "V-5ae33225",
+     "CONFIRMED",
+     "PASS"
+    ]
+   ]
+  ]
+ },
+ "tests": {
+  "tests": 825,
+  "total_min": 307.4,
+  "login_wait_over5s_min": 4.6,
+  "fixed_min": 130.2,
+  "body_min": 172.6,
+  "wait_min": 197.6,
+  "read_tests": 0,
+  "write_tests": 0,
+  "by_file": {
+   "_snap.spec.ts": 36,
+   "_trace.spec.ts": 154,
+   "_verify.spec.ts": 548,
+   "eg_auth.spec.ts": 87
+  }
+ },
+ "calls": {
+  "calls": 650,
+  "distinct": 21,
+  "repeats": 629,
+  "repeat_server_sec": 94.9,
+  "top": [
+   {
+    "what": "dayRange/SEARCH",
+    "n": 229,
+    "tests": 63,
+    "avg_ms": 106
+   },
+   {
+    "what": "calendar/SEARCH",
+    "n": 188,
+    "tests": 52,
+    "avg_ms": 131
+   },
+   {
+    "what": "Shipment Working Day OSP/SEARCH",
+    "n": 155,
+    "tests": 52,
+    "avg_ms": 207
+   },
+   {
+    "what": "Shipment Working Day OSP/SEARCH",
+    "n": 18,
+    "tests": 4,
+    "avg_ms": 496
+   },
+   {
+    "what": "dayRange/SEARCH",
+    "n": 17,
+    "tests": 4,
+    "avg_ms": 98
+   },
+   {
+    "what": "dayRange/SEARCH",
+    "n": 14,
+    "tests": 6,
+    "avg_ms": 93
+   }
+  ]
+ },
+ "features": {
+  "팝업": {
+   "tests": 54,
+   "min": 5.4,
+   "titles": [
+    [
+     "_snap.spec.ts",
+     "@snap 조회조건 팝업 정적 aria"
+    ],
+    [
+     "_trace.spec.ts",
+     "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼"
+    ],
+    [
+     "_trace.spec.ts",
+     "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2"
+    ],
+    [
+     "_trace.spec.ts",
+     "W4 M4 팝업 선택값 반영 = AS-IS"
+    ],
+    [
+     "_verify.spec.ts",
+     "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+    ],
+    [
+     "_verify.spec.ts",
+     "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+    ]
+   ]
+  },
+  "저장": {
+   "tests": 65,
+   "min": 43.5,
+   "titles": [
+    [
+     "_trace.spec.ts",
+     "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+    ],
+    [
+     "_verify.spec.ts",
+     "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+    ],
+    [
+     "_verify.spec.ts",
+     "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+    ],
+    [
+     "_verify.spec.ts",
+     "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)"
+    ],
+    [
+     "_verify.spec.ts",
+     "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+    ],
+    [
+     "_verify.spec.ts",
+     "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)"
+    ],
+    [
+     "eg_auth.spec.ts",
+     "개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만"
+    ]
+   ]
+  }
+ }
+}

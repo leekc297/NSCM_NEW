@@ -4,6 +4,7 @@ import { MaterialByDivisionModal, MeasureSelectModal } from 'features/master/src
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcMeasureSelect } from '@foundation/assets';
+import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
 import { GridUtils, type EditTracker } from '@foundation/utils';
@@ -137,6 +138,17 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
       void useMessageStore.getState().setAlert({
         type: 'alert',
         content: t(MSG.PERIOD_ORDER, '_The start date can not be later than the end date.'),
+      });
+      return false;
+    }
+    // 최대 조회기간 — to >= from + 1년 + 7일이면 차단(AS-IS DateUtil.Check_PeriodDate .cs:217-223,
+    //   MSG00172 -> TO-BE MSG01187, 인자 '371' = AS-IS 하드코딩 364+7).
+    const fmt = (v: string) => `${v.slice(0, 4)}-${v.slice(4, 6)}-${v.slice(6, 8)}`;
+    const maxEndExclusive = dayjs(fmt(sc.fromYyyymmdd)).add(1, 'year').add(7, 'day');
+    if (!dayjs(fmt(sc.toYyyymmdd)).isBefore(maxEndExclusive)) {
+      void useMessageStore.getState().setAlert({
+        type: 'alert',
+        content: t(MSG.MAX_PERIOD, '_Maximum Period is From Date + {0}.').replace('{0}', '371'),
       });
       return false;
     }

@@ -1,0 +1,16 @@
+﻿row_id,result,note
+V-ba8f9817,결정,"DAYS_MON 콤보 후보 고정 Y·N(combo_src STATIC YesOrNo · combo_sql YesOrNo DUAL). DB 11-25 03:0x DAYS_MON 값 Y·N·NULL만, CHECK 제약 없음. 비활성 상태 없는 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-5804ccc8,결정,"DAYS_TUE 콤보 후보 고정 Y·N(combo_src STATIC YesOrNo · combo_sql YesOrNo DUAL). DB 11-25 03:0x DAYS_TUE 값 Y·N·NULL만, CHECK 제약 없음. 비활성 상태 없는 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-5a4e9648,결정,"DAYS_WED 콤보 후보 고정 Y·N(combo_src STATIC YesOrNo · combo_sql YesOrNo DUAL). DB 11-25 03:0x DAYS_WED 값 Y·N·NULL만, CHECK 제약 없음. 비활성 상태 없는 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-7ac42873,결정,"DAYS_THU 콤보 후보 고정 Y·N(combo_src STATIC YesOrNo · combo_sql YesOrNo DUAL). DB 11-25 03:0x DAYS_THU 값 Y·N·NULL만, CHECK 제약 없음. 비활성 상태 없는 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-753a87af,결정,"DAYS_FRI 콤보 후보 고정 Y·N(combo_src STATIC YesOrNo · combo_sql YesOrNo DUAL). DB 11-25 03:0x DAYS_FRI 값 Y·N·NULL만, CHECK 제약 없음. 비활성 상태 없는 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-cb7ed54f,결정,"DAYS_SAT 콤보 후보 고정 Y·N(combo_src STATIC YesOrNo · combo_sql YesOrNo DUAL). DB 11-25 03:0x DAYS_SAT 값 Y·N·NULL만, CHECK 제약 없음. 비활성 상태 없는 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-3d0ea655,결정,"DAYS_SUN 콤보 후보 고정 Y·N(combo_src STATIC YesOrNo · combo_sql YesOrNo DUAL). DB 11-25 03:0x DAYS_SUN 값 Y·N·NULL만, CHECK 제약 없음. 비활성 상태 없는 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-d8ff8497,결정,"VALID_YN 후보 고정 Y·N(combo_src STATIC YesOrNo). DB 11-25 VALID_YN Y 8051·N 25, 밖 값 0. 고정 목록에 P32 적용 여부 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786"
+V-6f2db8d3,결정,TRANSPORT_MODE 원천 SCM_ADM_LOOKUP_MASTER_DETAIL TRANSPORT_MODE_CODE 5건 전부 VALID_YN=Y. DB 8076행(조회 8076행 전부 읽음) 값 AIR·FRY·RAI·SEA·TRK 전부 후보 안. 비활성 코드 없어 전제 못 만듦. 처리 방식 결정 필요. 생성 gen_expect.py:339 · 해석 _verify.spec.ts:2786
+V-1f03b82a,미처리,"AS-IS 콤보 LookupCommon(ATTRIBUTE1 LT_TYPE), TO-BE comboId LtType(DB CELL_COMBO_DATA_TYPE). gen_expect.py:323~330 TO-BE 콤보 ID 우선. 타 파일 필요: export_tobe_meta.py:28 sheet_columns 에 CELL_COMBO_DATA_TYPE 열 추가"
+V-2e931168,미처리,"AS-IS 콤보 LookupCommon(ATTRIBUTE1 TRANSPORT_MODE_CODE), TO-BE comboId TransportModeCode. gen_expect.py:323~330 반영(열 있으면 사용). 타 파일 필요: export_tobe_meta.py:28 CELL_COMBO_DATA_TYPE 열 추가 뒤 @combo:TransportModeCode 실측"
+V-3aecb21a,보완,원인 gen_expect.py p_modins 필수=INPUT_TP_CD M/IM 만(SCP0005 전부 O → 0칸). AS-IS cs:653 checkRequiredOfSpread = 라벨 '*' 칸 필수(DataUtil.cs:43~60). gen_expect.py:639~657 '*' 15칸 채움. 다음 판정 실측(M·I 저장 요청) · 미측정
+V-e4a3ef56,보완,원인 p_popfill 이 guard 전체 e.Column 칸(바깥 if cs:1112~1116)을 원천으로 묶음. gen_expect.py:665~720 대입을 감싼 안쪽 if(cs:1150·1156) 칸만 원천. 이 행 없어지고 FROM_CITY → FROM_CITY_NAME·FROM_COUNTRY 행 생성 · 미측정
+V-9beff6f2,보완,원인 같음(p_popfill 바깥 if 묶음). gen_expect.py:665~720 수정. 이 행 없어지고 FROM_COUNTRY → FROM_CITY·FROM_CITY_NAME 행 생성(11-25 재검 측정 FROM 세 칸 채움) · 미측정
+V-eab82e73,미처리,"생성 ledger.py:728 condition=guard[:600] 이 안쪽 분기(cs:1025 e.Column==LT_VOYAGE, guard 625자)를 자름 → _verify.spec.ts:205 resolveSrc 가 바깥 if 첫 칸 LT_ARRIVAL_INLAND 를 원천으로 잡음. 타 파일 필요(L ledger.py 또는 V resolveSrc)"

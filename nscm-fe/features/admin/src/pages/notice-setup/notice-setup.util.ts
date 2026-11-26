@@ -12,6 +12,7 @@ const ALLOWED_NOTICE_TAGS = new Set([
   'h2',
   'h3',
   'i',
+  'img',
   'li',
   'ol',
   'p',
@@ -63,6 +64,37 @@ export const createEmptyNotice = (): NoticeSetupRow => ({
   ACTION: '',
 });
 
+export const getSafeNoticeImageSource = (fileId?: string | null) => {
+  const value = fileId?.trim() ?? '';
+  if (!value) return '';
+
+  const baseUrl = String(API_CONFIG.BASE_URL ?? '').replace(/\/$/, '');
+  return `${baseUrl}/file/image/${encodeURIComponent(value)}`;
+};
+
+// 첨부파일 다운로드 URL. 엔드포인트가 Content-Disposition: attachment 로 내려주므로 <a> 로 바로 받는다.
+export const getAttachmentDownloadUrl = (fileId?: string | null) => {
+  const value = fileId?.trim() ?? '';
+  if (!value) return '';
+
+  const baseUrl = String(API_CONFIG.BASE_URL ?? '').replace(/\/$/, '');
+  return `${baseUrl}/file/download/${encodeURIComponent(value)}`;
+};
+
+// byte 크기를 사람이 읽는 단위로 표기한다.
+export const formatFileSize = (bytes?: number) => {
+  const value = typeof bytes === 'number' && bytes > 0 ? bytes : 0;
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let size = value;
+  let unitIndex = 0;
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex += 1;
+  }
+  const rounded = unitIndex === 0 ? size : Math.round(size * 10) / 10;
+  return `${rounded} ${units[unitIndex]}`;
+};
+
 export const sanitizeNoticeHtml = (html?: string | null) => {
   if (!html) return '';
   if (!globalThis.document) return html;
@@ -89,7 +121,15 @@ export const sanitizeNoticeHtml = (html?: string | null) => {
         tagName === 'span' &&
         ALLOWED_NOTICE_STYLE_ATTRIBUTES.has(attribute.name.toLowerCase()) &&
         ALLOWED_NOTICE_STYLE_VALUES.has(attribute.value);
-      if (!isAllowedLinkAttribute && !isAllowedFormatAttribute && !isAllowedStyleAttribute) {
+      const isAllowedImageAttribute =
+        tagName === 'img' &&
+        ['data-notice-image', 'alt'].includes(attribute.name.toLowerCase());
+      if (
+        !isAllowedLinkAttribute &&
+        !isAllowedFormatAttribute &&
+        !isAllowedStyleAttribute &&
+        !isAllowedImageAttribute
+      ) {
         element.removeAttribute(attribute.name);
       }
     });
@@ -99,6 +139,16 @@ export const sanitizeNoticeHtml = (html?: string | null) => {
       if (!isSafeLink(href)) element.removeAttribute('href');
       element.setAttribute('target', '_blank');
       element.setAttribute('rel', 'noreferrer noopener');
+    }
+
+    if (tagName === 'img') {
+      const fileId = element.getAttribute('data-notice-image')?.trim() ?? '';
+      // src 는 HTML 값을 신뢰하지 않고 fileId 로만 재조립한다(XSS/외부 URL 차단).
+      if (!fileId) {
+        element.remove();
+        return;
+      }
+      element.setAttribute('src', getSafeNoticeImageSource(fileId));
     }
   });
 
@@ -113,10 +163,16 @@ export const getNoticePlainText = (html?: string | null) => {
   return container.textContent ?? '';
 };
 
-export const getSafeNoticeImageSource = (fileId?: string | null) => {
-  const value = fileId?.trim() ?? '';
-  if (!value) return '';
+export const getClipboardImageFile = (clipboardData: DataTransfer | null): File | null => {
+  if (!clipboardData) return null;
+  const files = Array.from(clipboardData.files ?? []);
+  return files.find(file => file.type.startsWith('image/')) ?? null;
+};
 
-  const baseUrl = String(API_CONFIG.BASE_URL ?? '').replace(/\/$/, '');
-  return `${baseUrl}/file/image/${encodeURIComponent(value)}`;
+export const createNoticeImageElement = (fileId: string, fileName?: string): HTMLImageElement => {
+  const img = globalThis.document.createElement('img');
+  img.setAttribute('data-notice-image', fileId);
+  if (fileName) img.setAttribute('alt', fileName);
+  img.setAttribute('src', getSafeNoticeImageSource(fileId));
+  return img;
 };

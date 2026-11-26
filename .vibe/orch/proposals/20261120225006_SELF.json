@@ -1,0 +1,113 @@
+{
+  "id": "20261120225006_SELF",
+  "at": "2026-11-20T22:50:06+09:00",
+  "ms": 1795182606374,
+  "source": "self",
+  "status": "applied",
+  "sig": "재발판정 반영완료뒤제외 원인분류다름제외",
+  "title": "재발 판정 정정: U21 재발은 뒤에 반영 완료된 안 제외, S8 재발은 원인 분류가 다른 사건 제외",
+  "evidence": "orch-usercheck.js:406-412 는 반영 실패 기록(fails)의 마지막 시각 뒤 같은 sig 사건을 모두 재발로 셈. 그 뒤 반영 완료 기록은 보지 않음. 20261119205920_INC 는 11-19 21:52 반영 실패 뒤 23:20 반영 완료(proposals/20261119205920_INC.json:72). 20261119220749_SELF 는 22:18 반영 실패 뒤 22:33 반영 완료(proposals/20261119220749_SELF.json:75). orch-selfcheck.js:189 S8 은 x.rule === src.rule && x.sig === src.sig 만 비교함. 원래 사건 20261119_205710_R5_ALL agent.cause_class = env(:44, Playwright 리포터 출력 시점). 재발로 센 20261120_201206_R5_SCP0028 은 cause_class engine(diff_verify #47 AS-IS 세션 55 997초 대기, trace_quiet_sec 9328). 에이전트 levelWhy 에 '같은 원인 재발 2건 조건 미충족'이라고 적혀 있음. 반증 시도: 원인이 같다면 재발 사건에서도 추적 파일이 늘어야 함. 실제 trace_quiet_sec 9328(155분 무변경)이라 다른 원인임",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js"
+  ],
+  "before_after": "orch-usercheck.js:411 again = 마지막 반영 실패 뒤 같은 sig 사건 → again = 마지막 반영 실패 뒤, 그리고 그 안의 다음 '반영 완료' 기록 전에 생긴 같은 sig 사건만(반영 완료 뒤 재발은 S8 몫). orch-selfcheck.js:189 again = 같은 rule·sig 사건 → 같은 rule·sig 사건에서 원래 사건과 재발 사건의 agent.cause_class 가 둘 다 있고 서로 다른 사건을 뺌(둘 중 하나라도 없으면 종전대로 셈). 시험: t_orch_usercheck.js 에 '반영 실패 21:52 → 반영 완료 23:20 → 다음 날 같은 sig 사건 = U21 recur 0건', '반영 완료 없음 = 종전대로 1건' 표본 추가. t_orch_selfcheck.js 에 'cause_class env → engine = S8 0건', 'cause_class 같음 = S8 1건', 'cause_class 없음 = S8 1건' 표본 추가",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager 와 node tools/VibeManager/test/t_orch_selfcheck.js tools/VibeManager 가 ALL PASS. 반영 뒤 다음 자가진단 result.json 에 S8|20261119205920_INC, S13|U21|recur|20261120_201206_R5_SCP0028, S13|U21|recur|20261120_002620_R12_ALL_3, S13|U21|recur|20261120_114124_R12_ALL_2 key 가 없음",
+  "rollback": "두 소스와 두 시험 파일을 반영 전 백업으로 되돌림",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 판정 결함 사례 4건(U21 recur 3건: 20261120_002620_R12_ALL_3, 20261120_114124_R12_ALL_2, 20261120_201206_R5_SCP0028 · S8|20261119205920_INC 1건). 이 판정 결과로 R12 사건 2건(20261120_202031_R12_ALL, _2)이 더 생겨 U3 열린 사건에 들어감. 같은 원인 오판 2건 이상 조건 충족",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T22:50:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T22:54:02+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 822, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self2250"
+    },
+    {
+      "at": "2026-11-20T22:54:04+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T22:58:44+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T22:58:44+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 22:55 실행. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager 출력 'PASS U21 반영 실패 → 반영 완료 → 같은 sig 사건 = recur 0건', 'PASS U21 반영 완료 없음 = 종전대로 recur 1건', 마지막 줄 'ALL PASS'. node tools/VibeManager/test/t_orch_selfcheck.js tools/VibeManager 출력 'PASS S8: cause_class env → engine =  · 변경 10개 파일 · 대상 목록 밖 변경 6개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/combo_runtime.json, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, Doc/verify/SCP0028/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json, tools/VibeManager/design/wb_glass_applied_preview.html",
+      "log": ".vibe\\logs\\2026-11-20T22-54-04_claude_orch.log",
+      "sec": 72,
+      "costUsd": 0.9602342,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/combo_runtime.json",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_selfcheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "Doc/verify/SCP0028/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json",
+        "tools/VibeManager/design/wb_glass_applied_preview.html"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:28+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-21T01:59:17+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U21|recur|20261120_201206_R5_SCP0028, S13|U21|recur|20261120_002620_R12_ALL_3, S13|U21|recur|20261120_114124_R12_ALL_2, S8|20261119205920_INC",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795182621100,
+  "autoFp": "7900ccbf6c",
+  "applyStartMs": 1795182844797,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self2250",
+  "needsReload": true,
+  "appliedMs": 1795183124681,
+  "synced": [
+    "orch-selfcheck.js",
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/test/t_orch_usercheck.js",
+      "tools/VibeManager/test/t_orch_selfcheck.js"
+    ],
+    "verify_result": "2026-11-20 22:55 실행. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager 출력 'PASS U21 반영 실패 → 반영 완료 → 같은 sig 사건 = recur 0건', 'PASS U21 반영 완료 없음 = 종전대로 recur 1건', 마지막 줄 'ALL PASS'. node tools/VibeManager/test/t_orch_selfcheck.js tools/VibeManager 출력 'PASS S8: cause_class env → engine = 0건', 'PASS S8: cause_class 같음 = 1건', 'PASS S8: cause_class 없음 = 1건(종전대로)', 마지막 줄 'ALL PASS'. 다음 자가진단 result.json 의 S8|20261119205920_INC, S13|U21|recur 3건 key 부재 확인은 VMO 설치본 복사와 자가진단 실행 뒤에만 볼 수 있어 미확인",
+    "note": "U21: 반영 실패 뒤 같은 개선안의 첫 '반영 완료' 기록 시각 전 사건만 recur 로 셈(orch-usercheck.js applyFailRepeat). S8: diffCause 함수 추가, 원래 사건과 재발 사건의 agent.cause_class 가 둘 다 있고 다르면 재발에서 뺌. 하나라도 없으면 종전대로 셈. 새 표본이 고치기 전 코드에서 실패하는지는 돌리지 않음. 설치 폴더와 CHANGELOG 는 손대지 않음. 작업 모드와 hook 차단 없음"
+  },
+  "snap": "prop_20261120225006_SELF",
+  "effectiveMs": 1795193957740,
+  "effectiveAt": "2026-11-21T01:59:17+09:00"
+}

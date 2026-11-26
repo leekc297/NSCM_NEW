@@ -1,0 +1,136 @@
+{
+  "id": "20261124021155_SELF_5",
+  "at": "2026-11-24T02:11:55+09:00",
+  "ms": 1795453915757,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|vmologs탭이belogfelogtask를하위탭으로하나씩만보임nbe",
+  "title": "사용자 지시 R94 같은 문제: tools/VibeManager/orchestra.js:499 VMO Logs 탭이 BE Log, FE Log, Task를 하위 탭으로 하나씩만 보임. :500 belogB, felogB, taskB가 display:none",
+  "evidence": "규칙 R94 \"같은 종류 로그를 보이는 탭은 한 탭 안에 세로로 나누고 경계를 끌어 크기를 조절할 수 있게 함\" (원래 지시 2026-11-17 15:01 \"workbench의 Log, Task Log 2개 Tabpage 를 하나로 합쳐주세요. Log Tabpage 아래에 Task Log, FE Log, BE Log 3개가 세로배치 되도록 해주세요. 그리고 3개의 Log 는 Split Bar 을 두어서 사이즈를 조절할 수 있도록 해주세요.\") · tools/VibeManager/orchestra.js:499 <div class=\"lsub\"><span class=\"lst\" role=\"tablist\"><button class=\"ls on\" role=\"tab\" data-ls=\"be\">☕ BE Log",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "workbench.js의 .lsplit 방식(:1666~1668)처럼 세 로그를 세로로 쌓고 사이에 row-resize 분할 막대 2개를 둠. ls 탭 전환 코드는 지우고 각 창의 최신 이동 단추를 유지함",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T08:57:10+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T09:00:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0857"
+    },
+    {
+      "at": "2026-11-25T09:00:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T09:16:38+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T09:16:38+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-25 09:07:16 node --check CHECK_OK, t_webview_syntax ALL PASS(19건) / 09:12:06 run_all 'ALL OK 파일 84/84 PASS 1374 FAIL 0 277.3s'(반영 전 00:01:19Z 'ALL OK 파일 84/84 PASS 1374 FAIL 0 226.6s') / Logs 탭 생성 HTML 측정: 반영 전 하위 탭 3개 중 로그 칸 2개 display:none → 반영 뒤 lsplit 2, lsec 3, display:none 0, data-late · 변경 22개 파일 · 대상 목록 밖 변경 21개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_CRUD_필수_공란_실제_저장_시도_E3_필수_채워_실제_저장_재조회_값_보존_정리_F1_F2_F4_F6__0.json, Doc/verify/SCP0005/combo_runtime.json, Doc/verify/SCP0005/e2e/shots/index_verify.json, Doc/verify/SCP0005/e2e_results.json, Doc/verify/SCP0005/e2e_test_kind.jsonl",
+      "log": ".vibe\\logs\\2026-11-25T09-01-00_claude_orch.log",
+      "sec": 686,
+      "costUsd": 1.3374072000000004,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_verify_CRUD_필수_공란_실제_저장_시도_E3_필수_채워_실제_저장_재조회_값_보존_정리_F1_F2_F4_F6__0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/orchestra.js",
+        "Doc/e2e/_run.acct.39216.json",
+        "Doc/e2e/_run.acct.46904.json",
+        "Doc/verify/SCP0005/calls/_verify_고정_컬럼_H12_동적_헤더_A9_로딩_표시_H11_팝업_Enter_G10_특수_버튼_M2__0.json",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_090408_33324/_trace-검증엔진-SCP0005-trace--d7cc0-AS-IS-버튼-→-팝업-→-OK-→-후속-메서드-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_090408_33324/_trace-검증엔진-SCP0005-trace-A6-조회-결과-행-순서-AS-IS-ORDER-BY-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_090408_33324/_verify-정합검증-SCP0005-verif-6bab0-11-·팝업-Enter-G10-·특수-버튼-M2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_090408_33324/_verify-정합검증-SCP0005-verify-Division별-조회-오류·콤보-이름-F4·A2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_090408_33324/_verify-정합검증-SCP0005-verify-실적-구간-색-H2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_090408_33324/_verify-정합검증-SCP0005-verify-월-Bucket-합계-F1--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_090408_33324/_verify-정합검증-SCP0005-verify-재조회-하위-시트-초기화-A4--chromium.webm",
+        "Doc/verify/SCP0005/e2e/results_read12.json",
+        "Doc/verify/SCP0005/e2e/shots/verify_고정_컬럼_H12_동적_헤더_A9_로딩_표시_H11_팝업_Enter_G10_특수_버튼_M2.png",
+        "Doc/verify/SCP0005/touched_rows.json"
+      ]
+    },
+    {
+      "at": "2026-11-25T09:28:44+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T09:27:55+09:00"
+    }
+  ],
+  "plain": {
+    "what": "같은 종류 로그를 보이는 탭은 한 탭 안에 세로로 나누고 경계를 끌어 크기를 조절할 수 있게 함 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R94|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795564630139,
+  "autoFp": "b8de99779f",
+  "applyStartMs": 1795564859945,
+  "verifyJudge": {
+    "at": "2026-11-25T09:12:32+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0857",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795565798704,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js 통과(반영 전 통과 → 반영 뒤 CHECK_OK) · node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 226.6s' → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 277.3s' · node tools/VibeManager/test/t_webview_syntax.js 반영 전 ALL PASS 19 → 반영 뒤 ALL PASS 19('orchestra: Log 하위 탭 BE · FE · Task Log', '스크립트가 찾는 id 가 HTML 에 있음' 포함)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "2026-11-25 09:07:16 node --check CHECK_OK, t_webview_syntax ALL PASS(19건) / 09:12:06 run_all 'ALL OK 파일 84/84 PASS 1374 FAIL 0 277.3s'(반영 전 00:01:19Z 'ALL OK 파일 84/84 PASS 1374 FAIL 0 226.6s') / Logs 탭 생성 HTML 측정: 반영 전 하위 탭 3개 중 로그 칸 2개 display:none → 반영 뒤 lsplit 2, lsec 3, display:none 0, data-latest 3, data-srv 4, role=tab 0",
+    "note": "Logs 탭: .lstack 안에 lsBe, lsFe, lsTask 세로 3단, 사이 .lsplit 2개(pointer 끌기, 최소 48px, localStorage vmoLsz 저장, 두 번 누르면 같은 크기). showSub, subBox, sub 변수, .ls 탭 클릭 처리 삭제. 칸마다 최신 이동(data-latest), 지우기(data-clear) 단추. BE, FE 가동, 중지 단추는 칸 제목줄로 이동(data-srv, data-act), paintSrvBtns 는 be, fe 각각 처리. 새 로그 알림 점은 Logs 탭이 아닐 때 칸 제목에 표시하고 탭을 열면 지움. 쓰지 않게 된 .ls CSS 줄은 남김. 창을 다시 로드한 뒤 끌기 동작 확인은 하지 않음."
+  },
+  "snap": "prop_20261124021155_SELF_5",
+  "effectiveMs": 1795566475935,
+  "effectiveAt": "2026-11-25T09:27:55+09:00"
+}

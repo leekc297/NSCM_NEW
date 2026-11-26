@@ -1,52 +1,73 @@
 {
  "menu_id": "SCP0005",
- "at": "2026-11-20 10:07:42",
- "round": 2,
+ "at": "2026-11-26 02:40:02",
+ "round": 1,
  "ledger": "Doc\\verify\\SCP0005\\verify_ledger.csv",
  "before": {
-  "total": 88,
+  "total": 25,
   "by_actor": {
-   "집계": 88
+   "엔진": 14,
+   "사람": 2,
+   "판단": 4,
+   "집계": 5
   },
   "by_class": {
-   "집계": 88
+   "검사기공백": 14,
+   "실저장필요": 1,
+   "판단": 4,
+   "집계": 5,
+   "스냅샷승인": 1
+  },
+  "actionable": 18,
+  "ai_review": 0,
+  "human": 2,
+  "aggregate": 5,
+  "blocked": 0,
+  "guide": 0,
+  "decide": 0
+ },
+ "after": {
+  "total": 4,
+  "by_actor": {
+   "집계": 4
+  },
+  "by_class": {
+   "집계": 4
   },
   "actionable": 0,
   "ai_review": 0,
   "human": 0,
-  "aggregate": 88,
+  "aggregate": 4,
   "blocked": 0,
-  "guide": 0
+  "guide": 0,
+  "decide": 0,
+  "recommended": 21
  },
- "after": {
-  "total": 88,
-  "by_actor": {
-   "집계": 88
-  },
-  "by_class": {
-   "집계": 88
-  },
-  "actionable": 182,
-  "ai_review": 182,
-  "human": 0,
-  "aggregate": 88,
-  "blocked": 0,
-  "guide": 0
+ "worklist": {
+  "base": "2026-11-26 01:12:49",
+  "created": "2026-11-26 02:40:02",
+  "round": 0,
+  "closed_seen": 0,
+  "menu_id": "SCP0005",
+  "at": "2026-11-26 02:40:02",
+  "total": 4,
+  "open": 0,
+  "open_ai": 0,
+  "by_kind": {},
+  "closed": 0
  },
- "actionable": 182,
+ "actionable": 0,
  "human": 0,
  "rerun": null,
- "unverified_sheet": 716,
- "ledger_mtime": 1795133170.264,
- "prev_actionable": 182,
- "continue": 1,
+ "unverified_sheet": 454,
+ "ledger_mtime": 1795628402.571,
+ "prev_actionable": 0,
+ "continue": 0,
  "stalled": false,
  "resolved_actionable": [],
  "new_actionable": [],
- "pending_recheck": {
-  "fixed_at": "2026-11-20 10:07",
-  "ledger_at": "2026-11-20 09:06",
-  "note": "미검증 해소 보완 2026-11-20 10:07 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
- },
+ "pending_recheck": null,
+ "prev_fix_failed": 0,
+ "deferred_ai": 0,
  "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
 }

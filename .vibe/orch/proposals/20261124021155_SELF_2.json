@@ -1,0 +1,83 @@
+{
+  "id": "20261124021155_SELF_2",
+  "at": "2026-11-24T02:11:55+09:00",
+  "ms": 1795453915286,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/decisions.py|판정필요묶음이름과확인방법n에연쇄가쓰임",
+  "title": "사용자 지시 R90 같은 문제: tools/Harness/verify/decisions.py:56 판정 필요 묶음 이름과 확인 방법(:51, :56, :57, :58, :130, :131)에 '연쇄'가 쓰임",
+  "evidence": "규칙 R90 \"CheckList 분류어와 설명은 현업에서 부르는 이름(CASCADE, GRID COLUMN 등)을 쓰고 번역어를 만들지 않음\" (원래 지시 2026-11-17 14:25 \"연쇄는 빼고 CASCADE로 해주세요.\") · tools/Harness/verify/decisions.py:56 (r'연쇄 원천 컬럼 해석 불가|연쇄 원천 해석 불가|원천/대상 해석 불가', '연쇄 원천 해석 불가 — AS-IS 분기 수동 확인'),",
+  "targets": [
+    "tools/Harness/verify/decisions.py"
+  ],
+  "before_after": "두 번째 값(묶음 이름)과 HOW 사전의 키, 값을 'CASCADE'로 바꿈. 첫 번째 정규식은 옛 증거 문장도 잡도록 '연쇄|CASCADE'로 둠. HOW 키와 묶음 이름은 같은 문자열로 맞춤",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/decisions.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T16:04:20+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T16:08:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    },
+    {
+      "at": "2026-11-25T17:19:25+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T17:23:36+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1413, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1719"
+    },
+    {
+      "at": "2026-11-25T17:23:41+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T18:14:38+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 1개(decisions.py AI 편집 4건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:40:37+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/decisions.py:51,56,57,58,164,165 연쇄 → CASCADE(묶음 이름·HOW 키·값 같은 문자열), :56 정규식 (연쇄|CASCADE). py_compile OK, 옛·새 증거 문장 모두 CASCADE 묶음으로 분류 확인. 2026-11-26 15:40:37"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 분류어와 설명은 현업에서 부르는 이름(CASCADE, GRID COLUMN 등)을 쓰고 번역어를 만들지 않음 규칙을 tools/Harness/verify/decisions.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R90|tools/Harness/verify/decisions.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": false,
+  "autoTries": 1,
+  "autoMs": 1795594764208,
+  "autoFp": "0e4a6092d1",
+  "applyStartMs": 1795595021580,
+  "interrupted": true,
+  "claimedBy": "S-A",
+  "appliedMs": 1795675237126
+}

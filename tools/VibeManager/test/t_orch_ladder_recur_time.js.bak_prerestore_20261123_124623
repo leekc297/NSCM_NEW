@@ -1,0 +1,95 @@
+// 진단 사다리 L3 사용자 지적 재발 = 반영 효력 뒤 생긴 항목만(개선안 20261120184003_SELF) 시험
+//   2026-11-20 실제 기록으로 재현: ui.json miss 25건 · 개선안 20261120131343_SELF_2(U8, needsReload) · activations.jsonl · U21 recur 사건 2건 · 개선안 20261120172524_SELF(U21)
+//   경로 = orch-usercheck check()(감지기 ms · 같은 key 최신 남김 · state.json itemMs) → 자가진단 결과처럼 ms 를 뺀 S13 항목 → orch-ladder scan()
+//   사용: node test/t_orch_ladder_recur_time.js <VibeManager 폴더>
+const path = require('path'); const fs = require('fs'); const os = require('os');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+const NOW = 1795172198701; // 2026-11-20 19:56:38 자가진단 result.json ms
+const T = s => Date.parse(s);
+// 실제 기록(2026-11-20 .vibe/orch/usercheck/ui.json miss [ms, tab, gapMs, received, total])
+const MISS = [[1795139029264, 'inc', 69091, 112, 114], [1795139029281, 'inc', 69091, 113, 114], [1795139029302, 'inc', 69091, 114, 114], [1795139758067, 'inc', 794664, 115, 115], [1795139840689, 'inc', 82128, 116, 117], [1795139840764, 'inc', 82128, 117, 117], [1795140707952, 'inc', 556732, 118, 119], [1795140707975, 'inc', 556732, 119, 119], [1795140960760, 'inc', 248888, 120, 120], [1795141579731, 'inc', 147195, 121, 123], [1795141579753, 'inc', 147195, 122, 123], [1795141579782, 'inc', 147195, 123, 123], [1795142484738, 'inc', 481533, 124, 126], [1795142484759, 'inc', 481533, 125, 126], [1795142484775, 'inc', 481533, 126, 126], [1795143357322, 'inc', 872618, 127, 127], [1795144226223, 'inc', 1742100, 128, 128], [1795144505221, 'inc', 2021094, 129, 129], [1795147052464, 'inc', 2446144, 130, 130], [1795147594542, 'inc', 3089205, 131, 131], [1795147837273, 'inc', 243138, 132, 132], [1795147880748, 'inc', 286398, 133, 133], [1795148440512, 'inc', 410394, 134, 134], [1795149292294, 'inc', 1267871, 135, 135], [1795149615889, 'inc', 1589000, 136, 136]];
+// 실제 activations.jsonl(창 로드 ms) 일부 + 잠금 정리 줄(kind 있음 = 로드 아님)
+const ACTS = [1795140527976, 1795142622914, 1795150528179, 1795151567000, 1795152243962, 1795154229226, 1795158694757, 1795160285160, 1795165099422, 1795165413194, 1795167272493, 1795167988810, 1795168613996, 1795169834991];
+const U8_FIX = { id: '20261120131343_SELF_2', status: 'applied', title: 'U8 표시 누락 보완', selfKey: 'S13|U8|inc', check: 'S13', needsReload: true, appliedMs: 1795148842813, history: [], targets: ['tools/VibeManager/orchestra.js'] };
+const U21_FIX = { id: '20261120172524_SELF', status: 'applied', title: 'U21 감지기 추가', selfKey: 'S13|U21', check: 'S13', needsReload: true, appliedMs: 1795163670380, history: [], targets: ['tools/VibeManager/orch-usercheck.js'] };
+const U21_FAILED = { id: '20261119220749_SELF', status: 'apply-failed', title: 'S3 설치본 차이 보완', selfKey: 'S3|orch-selfcheck.js', history: [{ at: '2026-11-19T22:18:00+09:00', what: '반영 실패. 게이트' }], targets: ['tools/VibeManager/orch-selfcheck.js'] };
+const EV = [
+  { type: 'incident', id: '20261120_002620_R12_ALL_3', rule: 'R12', sig: 'R12|S3|orch-selfcheck.js', ms: T('2026-11-20T00:26:20+09:00'), title: 'VM 자가진단 S3 설치본 차이' },
+  { type: 'incident', id: '20261120_114124_R12_ALL_2', rule: 'R12', sig: 'R12|S3|orch-selfcheck.js', ms: T('2026-11-20T11:41:24+09:00'), title: 'VM 자가진단 S3 설치본 차이' },
+];
+
+function setup(tag, miss, props, acts, o = {}) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), `ladrt-${tag}-`)); const vibeDir = path.join(root, '.vibe'); const vmd = path.join(root, 'vm');
+  const W = (rel, v) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, typeof v === 'string' ? v : JSON.stringify(v)); return f; };
+  W('tools/Harness/harness.json', { orch: { selfDiagGapMin: 60, selfLightMin: 10 } });
+  W('vm/user_checks.json', { items: [{ id: 'U8', detector: 'uiShown', params: { gapMin: 10 }, status: 'active', quote: 'VMO 화면 표시' }, { id: 'U21', detector: 'applyFailRepeat', params: {}, status: 'active', quote: '반영 실패 반복' }].concat(o.ledger || []) });
+  for (const [rel, v] of Object.entries(o.files || {})) W(rel, v);
+  W('.vibe/orch/usercheck/ui.json', { miss: miss.map(([ms, tab, gapMs, received, total]) => ({ ms, tab, gapMs, received, total, shownAt: '', srcAt: '', srcId: '' })) });
+  W('.vibe/orch/activations.jsonl', acts.map(ms => JSON.stringify({ at: '', ms, pid: 1 })).concat([JSON.stringify({ at: '', kind: 'lock.stopclean', what: '중지 뒤 잠금 정리' })]).join('\n') + '\n');
+  // ① usercheck: 고정 시각으로 감지기 실행
+  delete require.cache[require.resolve(path.join(dir, 'orch-usercheck'))];
+  const uc = require(path.join(dir, 'orch-usercheck'));
+  const mods = { 'orch-watch': { list: () => [] }, 'orch-improve': { list: () => props, meta: () => null }, 'orch-state': { snapshot: () => ({ chains: [] }) }, 'orch-selfcheck': { autoEligible: () => ({ ok: false }) }, 'orch-history': { redact: s => s } };
+  if (o.mods) Object.assign(mods, o.mods);
+  uc.init({ paths: () => ({ root, vibeDir }), vmDir: vmd, mods, events: () => (o.ev || EV), sessionDirs: [] });
+  const realNow = Date.now; Date.now = () => NOW; let r; try { r = uc.check(); } finally { Date.now = realNow; }
+  // ② 자가진단 결과처럼 ms 를 뺀 항목(orch-selfcheck.js s13 이 uid, quote 만 붙임)
+  const items = r.items.map(it => ({ level: it.level, what: `${it.uid} ${it.what}`, detail: it.detail, key: it.key, uid: it.uid, quote: it.quote }));
+  W('.vibe/orch/selfcheck/result.json', { at: '', ms: NOW, checks: { S13: { items, ms: NOW } } });
+  delete require.cache[require.resolve(path.join(dir, 'orch-ladder'))];
+  const L = require(path.join(dir, 'orch-ladder'));
+  L.init({ paths: () => ({ root, vibeDir }), improve: { list: () => props }, ledger: { ready: () => true, init() { }, stats: () => null } });
+  const st = JSON.parse(fs.readFileSync(path.join(vibeDir, 'orch', 'usercheck', 'state.json'), 'utf8'));
+  return { r, items, cands: L.scan(), st, root, vibeDir, L };
+}
+const keysOf = c => c.map(x => x.key);
+
+// ① 실제 기록: U8 miss 마지막 13:40:15 = 반영 13:27 뒤, 창 로드 13:55:28 전 → 후보 0건
+const a = setup('a', MISS, [U8_FIX, U21_FIX, U21_FAILED], ACTS);
+const u8 = a.r.items.filter(it => it.key === 'S13|U8|inc');
+chk('① U8 감지기 항목 1건(같은 key) · ms = 가장 최신 miss 1795149615889(13:40:15)', u8.length === 1 && u8[0].ms === 1795149615889, JSON.stringify(u8.map(x => x.ms)));
+chk('① state.json itemMs[S13|U8|inc] = 1795149615889', a.st.itemMs && a.st.itemMs['S13|U8|inc'] === 1795149615889);
+chk('① 반영 시각(appliedMs 1795148842813) 뒤 항목이라 종전 규칙이면 재발로 셈', 1795149615889 > U8_FIX.appliedMs);
+chk('① L3|usercheck|U8 후보 0건(효력 = 창 로드 13:55:28 1795150528179)', !keysOf(a.cands).includes('L3|usercheck|U8'), keysOf(a.cands).join(','));
+// ② U21 recur 2건(00:26, 11:41) · 반영 17:34 → 후보 0건
+const u21 = a.r.items.filter(it => /^S13\|U21\|recur\|/.test(it.key));
+chk('② U21 recur 항목 2건 · ms = 사건 ms(00:26, 11:41)', u21.length === 2 && u21.every(it => it.ms === T('2026-11-20T00:26:20+09:00') || it.ms === T('2026-11-20T11:41:24+09:00')), JSON.stringify(u21.map(x => x.ms)));
+chk('② L3|usercheck|U21 후보 0건', !keysOf(a.cands).includes('L3|usercheck|U21'));
+// ③ 효력 시각 뒤 miss 1건(14:03:20) → U8 후보 1건
+const b = setup('b', MISS.concat([[1795151000000, 'inc', 700000, 137, 138]]), [U8_FIX, U21_FIX, U21_FAILED], ACTS);
+const bc = b.cands.filter(x => x.key === 'L3|usercheck|U8');
+chk('③ 효력 뒤 miss 1건 → L3|usercheck|U8 후보 1건', bc.length === 1, bc.map(x => x.why).join(' / '));
+chk('③ 같은 key 묶기 = 최신 ms 1795151000000 남김', b.st.itemMs['S13|U8|inc'] === 1795151000000);
+// ④ needsReload 인데 반영 뒤 창 로드 기록 없음 = 효력 전 → 제외
+const c = setup('c', MISS.concat([[1795151000000, 'inc', 700000, 137, 138]]), [Object.assign({}, U8_FIX, { appliedMs: 1795150900000 })], ACTS.filter(m => m < 1795150900000));
+chk('④ 창 로드 기록 없음 → U8 후보 0건', !keysOf(c.cands).includes('L3|usercheck|U8'));
+// ⑤ needsReload 아님 = appliedMs 가 효력 시각
+const d = setup('d', MISS, [Object.assign({}, U8_FIX, { needsReload: false })], ACTS);
+chk('⑤ needsReload 아님 · 항목 13:40:15 > appliedMs 13:27 → U8 후보 1건', keysOf(d.cands).includes('L3|usercheck|U8'));
+const e = setup('e', MISS, [Object.assign({}, U8_FIX, { needsReload: false, appliedMs: 1795149700000 })], ACTS);
+chk('⑤ needsReload 아님 · 항목 13:40:15 < appliedMs 13:41:40 → U8 후보 0건', !keysOf(e.cands).includes('L3|usercheck|U8'));
+// 개선안 20261121000234_VISION(개념 재정립): 재발 = 반영 효력 뒤 실제로 일어난 증상 사건(fail, 사건 ms)만. 판정 근거 부족 warn, ms 없는 증상 = L1 판정 근거 없음
+const U13L = [{ id: 'U13', detector: 'reloadResumeMissing', params: {}, status: 'active', quote: '창 다시 로드 뒤 작업 재개' }];
+const U13_FIX = { id: '20261120184524_SELF', status: 'applied', title: 'U13 판정 기준 중단 사건', selfKey: 'S13|U13|old', check: 'S13', needsReload: false, appliedMs: NOW - 3 * 3600000, history: [], targets: ['tools/VibeManager/orch-usercheck.js'] };
+const OLD_JOBS = { '.vibe/jobs/J20261120_003352/job.json': { id: 'J20261120_003352', status: 'interrupted', note: 'VS Code 종료로 중단됨', screens: [{ id: 'SCP0028', status: 'wait' }] }, '.vibe/jobs/J20261120_054831/job.json': { id: 'J20261120_054831', status: 'interrupted', screens: [{ id: 'SSP0014', status: 'wait' }] }, '.vibe/jobs/J20261120_060728/job.json': { id: 'J20261120_060728', status: 'interrupted', screens: [{ id: 'SCP0005', status: 'wait' }] } };
+// ⑥ 실제 상황 재현: 옛 중단 작업 3건(중단 사건 줄 없음) = warn 'S13|U13|old' 1건 · 효력 뒤 증상 사건 0건
+const f = setup('f', [], [U13_FIX], ACTS, { ledger: U13L, files: OLD_JOBS, ev: [], mods: { 'job-runner': {} } });
+const fOld = f.r.items.filter(it => it.key === 'S13|U13|old');
+chk('⑥ U13 옛 기록 warn 1건 kind basis · state.json itemMs 에 없음', fOld.length === 1 && fOld[0].level === 'warn' && fOld[0].kind === 'basis' && !('S13|U13|old' in f.st.itemMs), JSON.stringify([fOld.map(x => x.kind), f.st.itemMs]));
+chk('⑥ L3|usercheck|U13 · L4|struct|usercheck|U13 후보 0건', !keysOf(f.cands).includes('L3|usercheck|U13') && !keysOf(f.cands).includes('L4|struct|usercheck|U13'), keysOf(f.cands).join(','));
+chk('⑥ L1|nobasis|U13 1건(판정 근거 부족 warn)', f.cands.filter(x => x.key === 'L1|nobasis|U13' && x.level === 'L1').length === 1, keysOf(f.cands).join(','));
+{ const up = f.L.update(f.cands); chk('⑥ L1 묶음은 AI 진단 대상(fresh) 아님', !up.fresh.some(b => b.level === 'L1') && up.ladder.bundles['L1|nobasis|U13'] && up.ladder.bundles['L1|nobasis|U13'].status === 'open'); }
+// ⑦ 효력 뒤 실제 중단: chain.end(aborted) 40분 전, 30분 넘게 같은 화면 재실행 없음 = 증상 fail(ms 중단 시각) → L3 1건
+const cut = NOW - 40 * 60000;
+const g = setup('g', [], [U13_FIX], ACTS, { ledger: U13L, files: { '.vibe/jobs/J13/job.json': { id: 'J13', status: 'interrupted', screens: [{ id: 'SSP0014', status: 'wait' }] } }, ev: [{ type: 'chain.end', aborted: true, ok: false, job: 'J13', screen: 'SSP0014', wb: 'J13:SSP0014', runId: 'SSP0014_13', ms: cut }], mods: { 'job-runner': {} } });
+const gf = g.r.items.filter(it => it.uid === 'U13' && it.level === 'fail');
+chk('⑦ U13 증상 fail 1건 kind symptom · ms = 중단 시각 · state.json itemMs 같은 값', gf.length === 1 && gf[0].kind === 'symptom' && gf[0].ms === cut && g.st.itemMs[gf[0].key] === cut, JSON.stringify(gf.map(x => [x.key, x.kind, x.ms])));
+chk('⑦ L3|usercheck|U13 후보 1건 · L1 없음', g.cands.filter(x => x.key === 'L3|usercheck|U13').length === 1 && !keysOf(g.cands).includes('L1|nobasis|U13'), keysOf(g.cands).join(','));
+// ⑧ 사건 ms 없는 증상 항목(fail, 감지기가 ms 를 안 남김) = 재발 0건 · '판정 근거 없음' 1건
+fs.writeFileSync(path.join(g.vibeDir, 'orch', 'selfcheck', 'result.json'), JSON.stringify({ ms: NOW, checks: { S13: { ms: NOW, items: [{ level: 'fail', what: 'U13 증상 시각 없음', detail: '', key: 'S13|U13|noms', uid: 'U13' }] } } }));
+fs.writeFileSync(path.join(g.vibeDir, 'orch', 'usercheck', 'state.json'), JSON.stringify({ itemMs: {}, itemKind: { 'S13|U13|noms': 'symptom' } }));
+const h = g.L.scan();
+chk('⑧ ms 없는 증상 = L3|usercheck|U13 0건', !keysOf(h).includes('L3|usercheck|U13'), keysOf(h).join(','));
+chk('⑧ L1|nobasis|U13 1건 · 사유 사건 시각 없음', h.filter(x => x.key === 'L1|nobasis|U13').length === 1 && /사건 시각\(ms\) 없음/.test(h.find(x => x.key === 'L1|nobasis|U13').evidence[0].why), JSON.stringify(h.map(x => x.key)));
+console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

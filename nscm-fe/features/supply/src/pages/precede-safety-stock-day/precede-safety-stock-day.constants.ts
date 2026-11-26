@@ -112,6 +112,7 @@ export const MSG = {
   DATE_RANGE_INVALID: 'MSG01230',
   TYPE_APPLY_DAY_NEGATIVE: 'MSG00085',
   ITEM_NOT_FOUND: 'MSG00458',
+  // AS-IS "수정한 내용이 없습니다."(변경 없이 Save) = TO-BE 등록 MSG00004(DB 실측 KO/EN 일치).
+  //   종전 MSG_NO_CHANGE 는 미등록 코드라 fallback 리터럴이 노출돼 제거(테스트 No.8).
   NO_CHANGE_SAVE: 'MSG00004',
-  NO_CHANGE: 'MSG_NO_CHANGE',
 } as const;

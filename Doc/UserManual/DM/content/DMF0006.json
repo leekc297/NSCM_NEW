@@ -1,0 +1,82 @@
+{
+ "definition": "Sales Site 별 고객 프로젝트(Customer PJT), 고객 모델(Customer Model)을 Model 과 연결하고 Pack, Module, Cell 환산 수량을 관리하는 화면",
+ "overview": [
+  "고객이 쓰는 Customer PJT, Customer Model 을 사내 Model 과 연결하고 Pack, Module, Cell 환산 수량(Convert Qty)을 관리하는 기준정보 화면임",
+  "위쪽 조회 조건과 Customer Model Mapping 그리드 1개로 구성됨. 프로젝트 찾기, 모델 찾기 팝업이 있음",
+  "Insert → Team, End Customer, Sales Site 선택 → Customer PJT, Customer Model 입력 → 모델 찾기 팝업에서 Model 선택 → Model Type 에 맞는 Convert Qty 입력 → Save 순서로 작업함",
+  "Sales Site 는 Sales Site 화면에 등록한 거점 중에서 고름"
+ ],
+ "pages": [
+  {
+   "title": "Customer Model Mapping",
+   "keyPoint": "Div, Sales Site, Customer PJT, Customer Model 조합은 대소문자 구분 없이 1건만 저장됨. Model Type 에 맞는 Convert Qty 칸에 입력함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.14,
+     "y": 0.155
+    },
+    {
+     "no": 2,
+     "x": 0.6,
+     "y": 0.248
+    },
+    {
+     "no": 3,
+     "x": 0.18,
+     "y": 0.248
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Team 은 Div, End Customer 는 Div 와 Team, Sales Site 는 End Customer 기준 목록이 콤보에 나옴",
+      "Project: Div 40 에서는 입력 불가. 돋보기를 누르면 프로젝트 찾기 팝업이 열림",
+      "Model/Nickname: 돋보기를 누르면 모델 찾기 팝업이 열림",
+      "Customer PJT, Customer Model: 직접 입력함"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8): 새 행의 Div 는 조회 조건 Div 값으로 채워짐",
+      "Save(F7): 신규 행의 Div, Sales Site, Customer PJT, Customer Model 이 기존 행과 같으면 \"동일한 [Division], [Sales Site], [Customer PJT], [Customer MODEL]이(가) 존재합니다.\" 메시지가 뜨고 저장이 멈춤",
+      "중복 비교 때 대소문자는 구분하지 않음",
+      "저장 중 오류가 나면 \"저장 중 오류가 발생했습니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Customer Model Mapping 그리드",
+     "lines": [
+      "필수 입력: Sales Site, Customer PJT, Customer Model, Model, Active(제목 앞 빨간 점)",
+      "Team, End Customer, Sales Site 는 앞 칸을 바꾸면 뒤 칸 값이 지워짐",
+      "Model: 칸 오른쪽 아이콘을 누르면 모델 찾기 팝업이 열리고, 고른 값으로 Model Type, Model Name 이 채워짐",
+      "Convert Qty(Pack), Convert Qty(Module), Convert Qty(Cell): Model Type 값([AP]Pack, [AM]Module, [AC]Cell)에 따라 입력할 수 있는 칸이 정해짐",
+      "Convert Qty 에 음수를 넣으면 0 으로 바뀜",
+      "Active: Y 또는 N"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0006",
+ "uiName": "Customer Model Mapping",
+ "menuPath": "DM> Demand Master> Customer Model Mapping",
+ "captures": [
+  "captures/DMF0006.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0006/",
+  "Doc/asisfacts/screens/DMF0006/"
+ ],
+ "buttons": [
+  "customerModelMapping:DELETE",
+  "customerModelMapping:INSERT",
+  "customerModelMapping:SAVE",
+  "customerModelMapping:SEARCH"
+ ]
+}

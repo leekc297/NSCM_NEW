@@ -1,0 +1,123 @@
+# -*- coding: utf-8 -*-
+"""엔진 갭 전용 검사기 실행(2026-11-01) — 팝업(eg_popup)·Division·권한(eg_auth). run_verify 가 화면 잠금을 쥔 채로 부른다(--tier all|slow)
+
+  python tools/Harness/verify/eg_chain.py <MENU_ID> [--asis <AS-IS ID>]
+  결과 = Doc/verify/<ID>/eg/popup · Doc/verify/<ID>/eg/auth → eg_ingest.py 가 원장·판정으로 반입
+  두 검사기 모두 VERIFY_NO_SAVE=1 — 저장 요청은 서버로 가지 않는다. 실패해도 나머지 체인은 계속(행 없음 = 미측정으로 보임)
+"""
+import argparse, json, os, shutil, subprocess, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..')); E2E = os.path.join(ROOT, 'tools', 'E2E')
+TIMEOUT_S = 2400  # 측정 실측: DMF0005 eg_auth 17.4분(10-31 r5) · 넘으면 그 검사기만 끊고 ERROR 없이 행 없음으로 남긴다
+
+
+def run(cmd, env=None, cwd=ROOT, timeout=None):
+    try:
+        return subprocess.run(cmd, env=env, cwd=cwd, timeout=timeout).returncode
+    except subprocess.TimeoutExpired:
+        print(f'[eg_chain] 시간 제한 {timeout}s 초과: {" ".join(cmd[:6])}', flush=True)
+        return 124
+
+
+def fresh(path):
+    # 지난 결과가 이번 판정에 섞이지 않게 — 폴더 안 결과 파일만 비운다
+    os.makedirs(path, exist_ok=True)
+    for n in ('popup_results.json', 'popup_rowsets.json', 'popup_source.csv', 'popup_accounts.csv', 'e2e.json', 'eg_combos.json', 'eg_combo_judge.json', 'results.json'):
+        p = os.path.join(path, n)
+        if os.path.exists(p):
+            os.remove(p)
+
+
+def all_read(mid, files):
+    """2026-11-20 D1: 지난 차례 실행 기록(e2e_test_kind.jsonl · lib/writeguard.ts)에서 이 스펙들의 시험이 1개 이상 있고 전부 서버 상태를 바꾸지 않았는가"""
+    seen = {}
+    try:
+        for ln in open(os.path.join(ROOT, 'Doc', 'verify', mid, 'e2e_test_kind.jsonl'), encoding='utf-8'):
+            try:
+                x = json.loads(ln)
+            except ValueError:
+                continue
+            if x.get('file') in files and x.get('phase') == 'serial':
+                seen[(x['file'], x.get('title', ''))] = bool(x.get('write'))
+            elif x.get('file') in files and x.get('blocked'):
+                seen[(x['file'], x.get('title', ''))] = True
+    except OSError:
+        return False, '시험 종류 기록 없음'
+    got = {f for f, _ in seen}
+    if got != set(files):
+        return False, f"기록 없는 스펙 {sorted(set(files) - got)}"
+    w = [t for (f, t), v in seen.items() if v]
+    return (not w), (f'쓰기 시험 {len(w)}개: ' + ' | '.join(w[:3])) if w else f'시험 {len(seen)}개 모두 읽기'
+
+
+def main():
+    ap = argparse.ArgumentParser(); ap.add_argument('menu'); ap.add_argument('--asis', default=''); ap.add_argument('--serial', action='store_true')
+    ap.add_argument('--calls', default='', help='2026-11-25 행 단위 해소: 팝업 호출 번호(쉼표)만 다시 잼. 다른 팝업 결과는 그대로 두고 호출 번호 단위로 합침. 권한 검사기는 돌지 않음(--auth 로 같이)')
+    ap.add_argument('--auth', action='store_true'); a = ap.parse_args()
+    mid = a.menu.upper(); asis = (a.asis or mid).upper(); py = sys.executable; cli = os.path.join('node_modules', '@playwright', 'test', 'cli.js')
+    base = dict(os.environ, VERIFY_ID=mid, VERIFY_NO_SAVE='1', CL_SELFTEST_BASE='1', EG_CHAIN='1')  # 2026-11-20 T443 EG_CHAIN: 호출 기록(calls/*.json) 남김
+    pd = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'popup'); ad = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'auth')
+    rc = {}
+
+    sel = [x.strip() for x in a.calls.split(',') if x.strip().isdigit()]
+    keep = {}
+    def popup():
+        if sel:   # 고른 호출만: 지난 결과 중 다른 호출 것은 보관했다가 합침
+            for n in ('popup_results.json', 'popup_rowsets.json'):
+                try:
+                    keep[n] = [x for x in json.load(open(os.path.join(pd, n), encoding='utf-8')) if str(x.get('call')) not in sel]
+                except (OSError, ValueError):
+                    keep[n] = []
+        fresh(pd)
+        run([py, '-I', os.path.join(HERE, 'facts_popup.py'), asis]); run([py, '-I', os.path.join(HERE, 'facts_popup_meta.py'), mid])
+        # 2026-11-13 점검: 팝업 호출이 없는 화면은 eg_popup 스펙이 테스트를 하나도 만들지 않아 Playwright 가 'Error: No tests found.' rc 1 로 끝났다
+        #   (11-13 SCP0084·SCP0122·SSP0005 — calls 0). 오류가 아니라 '대상 없음' 이므로 --pass-with-no-tests 로 넘기고 아래에서 사유를 한 줄로 알린다.
+        rc['p'] = run(['node', cli, 'test', 'eg_popup', '--workers', '1', '--retries', '0', '--pass-with-no-tests', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
+                      env=dict(base, EG_META='1', CL_RESULTS=os.path.join(pd, 'e2e.json'), E2E_RESULTS=pd, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(pd, 'results.json'), **({'EG_CALLS': ','.join(sel)} if sel else {})))
+        for n, old in keep.items():
+            try:
+                new = json.load(open(os.path.join(pd, n), encoding='utf-8'))
+            except (OSError, ValueError):
+                new = []
+            json.dump(old + new, open(os.path.join(pd, n), 'w', encoding='utf-8'), ensure_ascii=False)
+            print(f'[eg_chain] {n}: 고른 호출 {",".join(sel)} 새 결과 {len(new)} + 다른 호출 지난 결과 {len(old)}', flush=True)
+        if os.path.exists(os.path.join(pd, 'popup_rowsets.json')):
+            run([py, '-I', os.path.join(HERE, 'facts_popup_golden.py'), pd, mid])
+
+    def auth():
+        fresh(ad)
+        run([py, '-I', os.path.join(HERE, 'facts_auth.py'), mid])
+        rc['a'] = run(['node', cli, 'test', 'eg_auth', '--workers', '1', '--retries', '0', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
+                      env=dict(base, CL_RESULTS=os.path.join(ad, 'e2e.json'), E2E_RESULTS=ad, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(ad, 'results.json')))
+        if os.path.exists(os.path.join(ad, 'eg_combos.json')):
+            run([py, '-I', os.path.join(HERE, 'facts_auth_combo.py'), mid, ad])
+
+    # 2026-11-20 D1(사용자 지시 '간섭이 없는 범위에서 동시 수행'): 팝업 검사기와 권한 검사기는 결과 폴더·입력 사실이 따로다. 지난 차례 실행에서 두 스펙의 시험이 모두
+    #   서버 상태를 바꾸지 않았으면(e2e_test_kind.jsonl) 동시에 돈다. 기록이 없거나 쓰기 시험이 있으면 종전처럼 차례로(이번 실행이 기록을 남김). 끄기 = --serial · harness.json e2eReadPar 1
+    try:
+        par_cfg = int(json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig')).get('e2eReadPar') or 3)
+    except (OSError, ValueError, TypeError):
+        par_cfg = 3
+    ok, why = all_read(mid, ['eg_popup.spec.ts', 'eg_auth.spec.ts']) if (par_cfg > 1 and not a.serial) else (False, '설정으로 끔')
+    if sel and not a.auth:
+        import time as _t; t0 = _t.time(); popup()
+        print(f"[eg_chain] {mid} 팝업 호출 {','.join(sel)} 만 · rc={rc.get('p')} · {round((_t.time() - t0) / 60, 1)}분", flush=True)
+        return 0
+    import time as _t; t0 = _t.time()
+    if ok:
+        import threading
+        print(f'[eg_chain] {mid} 팝업·권한 검사기 동시 실행 — {why}', flush=True)
+        th = [threading.Thread(target=popup), threading.Thread(target=auth)]
+        for t in th: t.start()
+        for t in th: t.join()
+    else:
+        print(f'[eg_chain] {mid} 팝업·권한 검사기 차례 실행 — {why}', flush=True)
+        popup(); auth()
+    if not os.path.exists(os.path.join(pd, 'popup_results.json')):
+        print(f'[eg_chain] {mid} 팝업 검사 결과(popup_results.json) 없음 — 팝업 테스트가 만들어지지 않았거나(팝업 호출 0) 실행 전에 끝남 · 팝업 행은 미측정으로 남는다', flush=True)
+    print(f"[eg_chain] {mid} 팝업 rc={rc.get('p')} · 권한 rc={rc.get('a')} · {'동시' if ok else '차례'} {round((_t.time() - t0) / 60, 1)}분", flush=True)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

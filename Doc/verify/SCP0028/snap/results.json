@@ -9,7 +9,7 @@
   "diff": "",
   "lines": 0,
   "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\조회조건_Div_40.aria.yml 와 일치 · 조회영역 aria(24줄 · formItem 공통 조상) · 시각 순서 7칸",
-  "at": "2026-11-20T06:04:20.127Z"
+  "at": "2026-11-24T17:59:47.294Z"
  },
  {
   "key": "버튼_Div_40",
@@ -20,8 +20,8 @@
   "received": "Doc\\verify\\SCP0028\\snap\\received\\버튼_Div_40.aria.yml",
   "diff": "",
   "lines": 0,
-  "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(13줄) · 보이는 버튼 KOR,이 이민용,Home,SSP Lot Size,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),입력,Delete,Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Toggle Calendar,Toggle Time List",
-  "at": "2026-11-20T06:04:20.224Z"
+  "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\버튼_Div_40.aria.yml 와 일치 · 버튼 바 aria(13줄) · 보이는 버튼 KOR,최 최상민,Home,SSP Lot Size,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),입력,Delete,Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel,Toggle Calendar,Toggle Time List",
+  "at": "2026-11-24T17:59:47.379Z"
  },
  {
   "key": "헤더_Shipment_Lot_Size",
@@ -33,30 +33,30 @@
   "diff": "",
   "lines": 0,
   "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\헤더_Shipment_Lot_Size.txt 와 일치 · 헤더 1행 · 칸 15",
-  "at": "2026-11-20T06:04:27.840Z"
+  "at": "2026-11-24T17:57:12.445Z"
  },
  {
   "key": "화면샷_1920",
   "kind": "화면샷",
   "scope": "1920",
-  "status": "MATCH",
+  "status": "DIFF",
   "golden": "Doc\\verify\\SCP0028\\snap\\golden\\화면샷_1920.png",
-  "received": "",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read13\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read13\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 12379 pixels (ratio 0.03 of all image pixels) are different. Snapshot: SCP0028\\snap\\golden · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read13\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
   "at": ""
  },
  {
   "key": "화면샷_1366",
   "kind": "화면샷",
   "scope": "1366",
-  "status": "MATCH",
+  "status": "DIFF",
   "golden": "Doc\\verify\\SCP0028\\snap\\golden\\화면샷_1366.png",
-  "received": "",
-  "diff": "",
-  "lines": 0,
-  "detail": "골든 화면샷과 일치(maxDiffPixelRatio 0.002)",
+  "received": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read13\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "diff": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read13\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
+  "lines": 1,
+  "detail": "화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 9445 pixels (ratio 0.03 of all image pixels) are different. Snapshot: SCP0028\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read13\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium",
   "at": ""
  },
  {
@@ -69,6 +69,6 @@
   "diff": "Doc\\verify\\SCP0028\\snap\\diff\\팝업_Model.txt",
   "lines": 29,
   "detail": "골든 Doc\\verify\\SCP0028\\snap\\golden\\팝업_Model.aria.yml 와 29줄 다름(Doc\\verify\\SCP0028\\snap\\diff\\팝업_Model.txt) — 첫 차이: - [골든 22]           - checkbox \"Deselect All Rows\" [checked=mixed] · 팝업 aria(59줄)",
-  "at": "2026-11-20T06:04:35.461Z"
+  "at": "2026-11-24T17:57:21.195Z"
  }
 ]

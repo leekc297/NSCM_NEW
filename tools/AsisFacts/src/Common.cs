@@ -50,6 +50,10 @@ public sealed class Config
     public SinkConfig sinks { get; set; } = new();
     /// <summary>코드로 Grid 컬럼/헤더/시트를 정의하는 API (하드코딩 Grid 추출 대상)</summary>
     public List<string> gridApiPatterns { get; set; } = new();
+    /// <summary>2026-11-25 Roslyn 의미 분석 범위: 화면ID 접두(예: DMF) · 항상 포함할 경로 접두(공통 프레임워크) · 요청 객체 타입명</summary>
+    public List<string> semanticScreens { get; set; } = new();
+    public List<string> semanticAlwaysPaths { get; set; } = new();
+    public List<string> semanticRequestTypes { get; set; } = new() { "FoxDataRequest" };
 
     public static Config Load(string path)
     {

@@ -1,0 +1,26 @@
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+// 잠금 행(AS-IS IS_LOCK='Y')은 체크돼 있어도 선택 하이라이트 없이 기본 배경으로 둔다.
+.gridWrapper :global(.wj-cells .wj-cell.wj-state-multi-selected).lockedRow {
+  background: #fff !important;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
+}

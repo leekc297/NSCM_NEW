@@ -150,5 +150,132 @@
     "min": 0.4
    }
   ]
+ },
+ {
+  "run_at": "2026-11-25 00:56:02",
+  "wall_min": 81.8,
+  "stage_sum_min": 56.8,
+  "unattributed_min": 25.0,
+  "e2e_tests": 120,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 2.1,
+   "facts": 13.6,
+   "static": 0.8,
+   "eg": 15.5,
+   "diff": 18.2,
+   "post": 6.7
+  },
+  "top": [
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "01:37:26",
+    "min": 15.5
+   },
+   {
+    "stage": "facts",
+    "tool": "criteria_build.py",
+    "start": "01:04:09",
+    "min": 12.9
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "01:59:53",
+    "min": 11.3
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "01:54:04",
+    "min": 5.8
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "02:13:58",
+    "min": 3.4
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "00:57:29",
+    "min": 2.0
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "02:12:47",
+    "min": 1.2
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "01:53:00",
+    "min": 1.0
+   },
+   {
+    "stage": "facts",
+    "tool": "facts_combovalues.py",
+    "start": "01:03:27",
+    "min": 0.6
+   },
+   {
+    "stage": "post",
+    "tool": "master_sweep.py",
+    "start": "02:11:28",
+    "min": 0.4
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 02:17:56",
+  "wall_min": 1.6,
+  "stage_sum_min": 1.4,
+  "unattributed_min": 0.2,
+  "e2e_tests": 0,
+  "e2e_retries": 0,
+  "stage_min": {
+   "docs": 1.4
+  },
+  "top": [
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "02:18:17",
+    "min": 0.9
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "02:19:14",
+    "min": 0.2
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "02:18:07",
+    "min": 0.2
+   },
+   {
+    "stage": "docs",
+    "tool": "regress.py",
+    "start": "02:19:28",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "precision.py",
+    "start": "02:19:30",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "checker_regress.py",
+    "start": "02:19:30",
+    "min": 0.0
+   }
+  ]
  }
 ]

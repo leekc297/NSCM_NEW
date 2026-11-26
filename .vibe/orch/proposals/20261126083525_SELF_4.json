@@ -1,0 +1,45 @@
+{
+  "id": "20261126083525_SELF_4",
+  "at": "2026-11-26T08:35:25+09:00",
+  "ms": 1795649725853,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/unverified_resolve.py|미검증해소중행단위재측정rowrun의시작종료소요가파일에남지않음runn",
+  "title": "사용자 지시 R234 같은 문제: tools/Harness/verify/unverified_resolve.py:486 미검증 해소 중 행 단위 재측정(row_run)의 시작, 종료, 소요가 파일에 남지 않음. run()(462~464행)은 시간을 재지 않고, row_run.py ",
+  "evidence": "규칙 R234 \"CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림\" (원래 지시 2026-11-26 08:13 \"vm 에서 실행한 scp0005 의 checklist 작업에 전체 5시간34분 소요되었습니다. 현재 scp0005에 대한 checklist 건수현황 알려주세요. 그리고 5시간34분이 소요된 부분에 대해서 전체 세션별로 시간을 분리해서 많이 시간이 소요된 부분을 분석해서 개선할 수 있도록\") · tools/Harness/verify/unverified_resolve.py:486 rc = run([py, os.path.join(HERE, 'row_run.py'), mid, ','.join(t['row_id'] for t in auto)])",
+  "targets": [
+    "tools/Harness/verify/unverified_resolve.py"
+  ],
+  "before_after": "unverified_resolve.run() 과 row_run.run() 에서 시작 시각과 소요를 _timing.csv 에 stage='해소:row_run' 으로 덧붙임. row_run main 의 전체 소요(189~268행 t0)도 같은 파일에 기록함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/unverified_resolve.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:00:46+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/unverified_resolve.py:462 timing_add, run(mid, stage) 추가, row_run 호출마다 _timing.csv 에 stage='해소:row_run'(시작, 소요, rc) 행과 '[시간]' 줄. row_run.py 안 run()·main 전체 소요 기록은 맡은 파일 밖이라 고치지 않음(row_run 전체 소요는 이 행이 덮음). py_compile OK, selftest OK, 임시 폴더 기록 1행 확인. 2026-11-26 16:00:46"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림 규칙을 tools/Harness/verify/unverified_resolve.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R234|tools/Harness/verify/unverified_resolve.py",
+  "kind": "fix",
+  "claimedBy": "S-A",
+  "waitNote": "",
+  "appliedMs": 1795676446818
+}

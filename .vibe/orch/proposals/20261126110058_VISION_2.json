@@ -1,0 +1,43 @@
+{
+  "id": "20261126110058_VISION_2",
+  "at": "2026-11-26T11:00:58+09:00",
+  "ms": 1795658458810,
+  "source": "vision",
+  "status": "applied",
+  "sig": "usercheck|un|diag line counted",
+  "title": "반영 실패 방치 판정(U11)이 '반영 실패 진단' 기록을 실패로 세는 결함 수정, 진단 stop 안은 사람 판단 대기로 분리",
+  "evidence": "orch-usercheck.js:146 fails = history.what 이 /^반영 실패/ 인 줄. 20261123181708_SELF.json 60행 '반영 실패 진단: 자동으로 풀 수 없음' at 22:09:38 = repair.at 22:09:38. 148행 ra > last 가 같은 시각이라 false 이고 fail 로 남음. 20261124012049_SELF_3.json 442행도 같음(07:32:01). 두 안 모두 repair.decision stop(사람 판단 필요)",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "'반영 실패' 로 시작하는 모든 이력을 실패 시각으로 셈, stop 안도 방치 fail → 실패 시각은 '반영 실패.' 줄만 세고('반영 실패 진단' 제외), repair 가 마지막 실패 이후(같은 시각 포함)면 건너뜀. decision stop 안은 fail 대신 '사람 판단 대기' warn 1줄로 묶어 보임",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js 에 표본 2건 추가(진단 줄과 repair.at 같은 시각 = U11 아님, stop 안 = warn). 반영 전 result.json U11 fail 2항목(20261124012049_SELF_3, 20261123181708_SELF) → 반영 뒤 같은 원장 상태에서 U11 fail 0항목, 사람 판단 대기 warn 1항목(2건)",
+  "rollback": "tools/VibeManager/orch-usercheck.js.bak_<날짜>_self<시각> 복원, VMO Fixes 탭 되돌리기",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "감지기 결함 1건. 재현 = 20261124012049_SELF_3, 20261123181708_SELF 2건이 같은 원인으로 27시간, 61시간 계속 fail(result.json 1025, 1033행)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-D2",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:46:47+09:00",
+      "by": "S-D2",
+      "what": "반영 완료(세션 직접 보완) · orch-usercheck.js:185-196 실패 시각에서 '반영 실패 진단' 줄 제외, repair.at 같은 시각 포함, stop 안 = 사람 판단 대기 warn · 시험 표본 2건 ALL PASS 2026-11-26 15:45:26 · 실제 원장 U11 반영 전 fail 2건 → 반영 뒤 fail 0건, warn 1줄(2건) 15:46:00"
+    }
+  ],
+  "plain": {
+    "what": "VMO 가 이미 진단을 마친 반영 실패 안을 '방치'로 되풀이해 올리지 않고, 사람이 정할 안 2건을 따로 보임",
+    "risk": "진단 뒤 새로 실패한 안을 빠뜨리면 방치 알림이 안 뜸. 시험 표본으로 이 경우를 확인함",
+    "undo": "VMO Fixes 탭에서 되돌리면 종전 판정으로 돌아감"
+  },
+  "kind": "detector",
+  "claimedBy": "S-D2",
+  "waitNote": "",
+  "appliedMs": 1795675607778
+}

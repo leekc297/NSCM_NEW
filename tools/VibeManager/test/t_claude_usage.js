@@ -27,12 +27,35 @@ chk('orchestra.js 에 aiWk 있음', !!m);
 const aiWk = new Function('KO', `${m[0]}; return aiWk;`)(true);
 let w = aiWk({ ai: r });
 chk('표시 63% · 색 기본', w.pct === 63 && w.cls === '', JSON.stringify(w));
-chk('재설정 · 기준 · 5시간 표시', /재설정 11-24 23:00/.test(w.sub) && /기준 /.test(w.sub) && /5시간 20%/.test(w.sub), w.sub);
+chk('아래 줄 = 재설정 · 기준 만(2026-11-24 사용자), 5시간은 title', /^재설정 11-24 23:00 · 기준 \d+-\d+ \d+:\d+$/.test(w.sub) && /5시간 20%/.test(w.title), w.sub + ' | ' + w.title);
 chk('80% 이상 = 주의', aiWk({ ai: { weekly: { pct: 82, resetsAt: 0, status: 'allowed' }, windows: [] } }).cls === 'warn');
 chk('95% 이상 = 위험', aiWk({ ai: { weekly: { pct: 96, resetsAt: 0, status: 'allowed' }, windows: [] } }).cls === 'bad');
 chk('status allowed 아님 = 위험', aiWk({ ai: { weekly: { pct: 50, resetsAt: 0, status: 'rejected' }, windows: [] } }).cls === 'bad');
 chk('자료 없음 = null(미측정 표시)', aiWk({}) === null && aiWk({ ai: null }) === null);
 const st = fs.readFileSync(path.join(dir, 'orch-state.js'), 'utf8');
 chk('부하 자료에 ai 포함', /ai: aiUsage\(\)/.test(st));
+// 2026-11-24 사용자: 1분 주기 다시 읽기 + 확인 시각 표시
+chk('다시 읽기 주기 = 1분(60000ms)', U.RELOAD_MS === 60000, String(U.RELOAD_MS));
+chk('값에 확인 시각(checkedAt) 있음', r && typeof r.checkedAt === 'number' && Math.abs(r.checkedAt - Date.now()) < 60000);
+chk('확인 시각 = title(아래 줄에는 없음)', /확인 /.test(aiWk({ ai: r }).title) && !/확인 /.test(aiWk({ ai: r }).sub), aiWk({ ai: r }).sub);
+// 2026-11-24 사용자(B): 사용량 조회 원천
+const api = U.fromApi({ five_hour: null, seven_day: { utilization: 98.0, resets_at: '2026-11-24T14:00:00+00:00' }, limits: [{ kind: 'weekly_all', percent: 98, severity: 'critical', resets_at: '2026-11-24T14:00:00+00:00' }, { kind: 'weekly_scoped', percent: 57, scope: { model: { display_name: 'Fable' } }, resets_at: '2026-11-24T14:00:00+00:00' }] }, Date.now());
+chk('조회 응답 → 주간 98%, 재설정 ms, 모델별 창, 원천 api', api && api.weekly.pct === 98 && api.weekly.resetsAt === Date.parse('2026-11-24T14:00:00+00:00') && api.windows.some(w => w.type === 'Fable 주간' && w.pct === 57) && api.source === 'api', JSON.stringify(api));
+chk('주간 값 없는 응답 = null', U.fromApi({ seven_day: null }, 1) === null);
+fs.mkdirSync(path.join(vibe, 'orch'), { recursive: true });
+fs.writeFileSync(path.join(vibe, 'orch', 'ai_usage.json'), JSON.stringify(Object.assign({}, api, { checkedAt: Date.now() - 30000 })));
+let r2 = U.read(vibe); chk('조회 결과 3분 안 = 조회 값 우선(실행 기록보다)', r2 && r2.source === 'api' && r2.weekly.pct === 98, JSON.stringify(r2 && r2.source));
+const U2 = (() => { delete require.cache[require.resolve(path.join(dir, 'claude-usage'))]; return require(path.join(dir, 'claude-usage')); })();
+fs.writeFileSync(path.join(vibe, 'orch', 'ai_usage.json'), JSON.stringify(Object.assign({}, api, { checkedAt: Date.now() - 1000000 })));
+r2 = U2.read(vibe); chk('조회 결과 15분 지남 + 실행 기록이 더 새로움 = 실행 기록 값', r2 && r2.source !== 'api' && r2.weekly.pct === 63, JSON.stringify(r2 && [r2.source, r2.weekly.pct]));
+// 2026-11-24 사용자: 최신 조회 실패 = 마지막 정상 조회 값 유지(실행 기록이 더 새로울 때만 실행 기록)
+const old = path.join(logs); for (const n of fs.readdirSync(logs)) { const f = path.join(logs, n); const t = (Date.now() - 3600 * 1000) / 1000; fs.utimesSync(f, t, t); }
+fs.writeFileSync(path.join(vibe, 'orch', 'ai_usage.json'), JSON.stringify(Object.assign({}, api, { checkedAt: Date.now() - 1000000 })));
+const U3 = (() => { delete require.cache[require.resolve(path.join(dir, 'claude-usage'))]; return require(path.join(dir, 'claude-usage')); })();
+r2 = U3.read(vibe); chk('조회 값 15분 지남 + 실행 기록이 더 오래됨 = 마지막 정상 조회 값 유지(stale 표시)', r2 && r2.source === 'api' && r2.weekly.pct === 98 && r2.stale === true, JSON.stringify(r2 && [r2.source, r2.weekly.pct, r2.stale]));
+chk('화면 설명 = 마지막 정상 조회 값', /마지막 정상 조회 값/.test(aiWk({ ai: r2 }).title));
+chk('주기: 성공 10분(1분 = HTTP 429), 실패 10분, stale 15분', U.OK_MS === 600000 && U.BACKOFF_MS === 600000 && U.FRESH_MS === 900000);
+U.start(vibe); chk('시험 폴더(임시)에서는 실제 조회 타이머 안 띄움', U.apiState().nextMs === 0);
+const ow = aiWk({ ai: Object.assign({}, api, { checkedAt: Date.now() }) }); chk('사용량 조회 원천 = title(아래 줄 = 재설정 · 기준)', /사용량 조회/.test(ow.title) && /10분 주기/.test(ow.title) && !/사용량 조회|Fable/.test(ow.sub), ow.sub);
 try { fs.rmSync(vibe, { recursive: true, force: true }); } catch { }
 console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

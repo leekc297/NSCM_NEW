@@ -1,0 +1,110 @@
+{
+  "id": "20261124064957_SELF_3",
+  "at": "2026-11-24T06:49:57+09:00",
+  "ms": 1795470597538,
+  "source": "self",
+  "status": "superseded",
+  "sig": "userrule|rn|tools/vibemanager/orch dict.js|dictionary원천에userrulesjson이없어사용자지시규칙코드rn",
+  "title": "사용자 지시 R154 같은 문제: tools/VibeManager/orch-dict.js:87 Dictionary 원천에 user_rules.json 이 없어 사용자 지시 규칙 코드(R140~ 등)의 뜻이 사전에 없고, 감시 규칙 R1~R15 와 번호가 겹",
+  "evidence": "규칙 R154 \"VM, VMO 가 화면에 보이는 규칙, 감지기 약자(R#, D#, U# 등)는 Dictionary 탭에 뜻을 모아 두고 새 코드를 추가할 때 같이 갱신함\" (원래 지시 2026-11-20 10:15 \"VMO 에 Dicitionary Tabpage을 만들어서 VM, VMO 가 사용하는 각 규칙의 약자를 전체 정리해주세요. R1, R2 가 무엇을 의미하는지? D1, D2가 무엇을 의미하는지 전체 코드에 대해서 설명자료를 tabpage 로 추가요청 합니다. 그리고 Design 은 깔끔하고\") · tools/VibeManager/orch-dict.js:87 const L = readJson(path.join(p.root, 'tools', 'VibeManager', 'user_checks.json'), { items: [] });",
+  "targets": [
+    "tools/VibeManager/orch-dict.js"
+  ],
+  "before_after": "build() 에 user_rules.json items 를 읽는 묶음(id, 유형, 규칙 1줄)을 추가하고 감시 규칙 R# 과 다른 번호 체계임을 묶음 제목에 적음",
+  "verify": "node --check tools/VibeManager/orch-dict.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-dict.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T06:39:43+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T06:43:37+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0639"
+    },
+    {
+      "at": "2026-11-26T06:43:41+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T06:56:11+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 게이트에서 새로 어긋난 항목 1건: S11 orch-dict.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/orch-dict.js.style.csv) · 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1 · 대상 파일 1개 복원(orch-dict.js AI 편집 2건만 되돌림(반영 전과 같음))",
+      "log": ".vibe\\logs\\2026-11-26T06-43-41_claude_orch.log",
+      "sec": 517,
+      "costUsd": 0.8464829,
+      "files": [
+        "tools/VibeManager/orch-dict.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T06:57:40+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261126065740_SELF 로 다시 올림(자동 반영). 원인 반영본 tools/VibeManager/orch-dict.js L90 의 사용자 지시 규칙 묶음 출처 문구 'tools/VibeManager/user_rules.json · orch-userrule.js · 자가진단 S13' 이 가운뎃점 나열로 문장 규칙 위반 1건이 됨(.vibe/orch/selfcheck/doc_style_gate/orch-dict.js.style.csv 2행, 게이트 2026-11-26 06:56:11 기록 0 → 1). 게이트는 대상 VM .js 의 위반 수가 늘면 실패 처리함(tools/VibeManager/orch-selfcheck.js:395~414). 구문 검사, 시험 87/87(PASS 1422), 정의 정합은 통과함"
+    }
+  ],
+  "plain": {
+    "what": "VM, VMO 가 화면에 보이는 규칙, 감지기 약자(R#, D#, U# 등)는 Dictionary 탭에 뜻을 모아 두고 새 코드를 추가할 때 같이 갱신함 규칙을 tools/VibeManager/orch-dict.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R154|tools/VibeManager/orch-dict.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795642782941,
+  "autoFp": "a205cbd23f",
+  "applyStartMs": 1795643021486,
+  "verifyJudge": {
+    "at": "2026-11-26T06:52:21+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orch-dict.js 반영 전 출력 없음 → 반영 뒤 출력 없음. node tools/VibeManager/test/run_all.js 반영 전 'ALL OK  파일 87/87  PASS 1422  FAIL 0  228.8s' → 반영 뒤 'ALL OK  파일 87/87  PASS 1422  FAIL 0  228s'(t_orch_dict.js PASS 6, t_webview_syntax.js PASS 19 포함). 웹뷰 파일 아님, t_webview_syntax 는 run_all 안에서 PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-dict.js"
+    ],
+    "verify_result": "반영 전 2026-11-25T21:44:12Z(run_all RESULT at): node --check 오류 없음, run_all 87/87 PASS 1422 FAIL 0 → 반영 뒤 2026-11-26 06:52:02(date): node --check 오류 없음, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228s'. 자기 시험 build() 결과 UR 묶음 '사용자 지시 규칙(233개, 감시 규칙 R# 과 다른 번호 체계)' 233건, 첫 항목 R1 '화면 모양(색, 테마, 정렬, 글자 잘림)', 마지막 R233",
+    "note": "build() 에 user_rules.json items 묶음(id UR: 번호, 유형 이름(categories.name), 규칙 1줄, 등록 일시·상태)을 추가하고 제목에 감시 규칙 R# 과 다른 번호 체계라고 적음. 파일 머리 원천 목록에 user_rules.json 추가. .bak, 설치 폴더, CHANGELOG 는 건드리지 않음. 걸린 시간 약 9분, 오래 걸린 단계 = run_all 2회(각 228초)"
+  },
+  "gate": {
+    "ok": false,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1",
+    "newBad": [
+      "S11 orch-dict.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/orch-dict.js.style.csv)"
+    ]
+  },
+  "repair": {
+    "at": "2026-11-26T06:57:40+09:00",
+    "decision": "revise",
+    "cause": "반영본 tools/VibeManager/orch-dict.js L90 의 사용자 지시 규칙 묶음 출처 문구 'tools/VibeManager/user_rules.json · orch-userrule.js · 자가진단 S13' 이 가운뎃점 나열로 문장 규칙 위반 1건이 됨(.vibe/orch/selfcheck/doc_style_gate/orch-dict.js.style.csv 2행, 게이트 2026-11-26 06:56:11 기록 0 → 1). 게이트는 대상 VM .js 의 위반 수가 늘면 실패 처리함(tools/VibeManager/orch-selfcheck.js:395~414). 구문 검사, 시험 87/87(PASS 1422), 정의 정합은 통과함",
+    "reason": "",
+    "log": ".vibe\\logs\\2026-11-26T06-56-44_claude_orch.log",
+    "costUsd": 0.7447232,
+    "sec": 55
+  },
+  "supersededBy": "20261126065740_SELF"
+}

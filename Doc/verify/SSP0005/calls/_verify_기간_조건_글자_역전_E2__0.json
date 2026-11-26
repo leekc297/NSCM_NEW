@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 102,
+  "at": "2026-11-24T16:54:31.089Z",
+  "user": "seongwon.j",
+  "test": "기간 조건 글자·역전(E2)"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 104,
+  "at": "2026-11-24T16:54:31.229Z",
+  "user": "seongwon.j",
+  "test": "기간 조건 글자·역전(E2)"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 105,
+  "at": "2026-11-24T16:54:37.070Z",
+  "user": "seongwon.j",
+  "test": "기간 조건 글자·역전(E2)"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 130,
+  "at": "2026-11-24T16:54:37.239Z",
+  "user": "seongwon.j",
+  "test": "기간 조건 글자·역전(E2)"
+ }
+]

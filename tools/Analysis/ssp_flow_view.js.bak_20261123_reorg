@@ -1,0 +1,106 @@
+/* SSP 흐름 뷰어 — 그림 보기 틀(2026-11-11 인식성 보완)
+   · 모든 Mermaid 그림을 처음에 화면에 맞춰 보여 준다(전체가 한눈에) · 도구줄: 전체 보기 / 폭 맞춤 / 100% / － ＋ / 크게 보기
+   · Ctrl+휠 = 확대·축소 · 빈 곳을 끌면 이동 · 노드에 마우스를 올리면 이어진 선과 상대 노드만 강조
+   · 상태는 pre.mermaid 의 data-w · data-h · data-s 에만 둔다 → 상세 창에 복제된 그림도 그대로 동작(이벤트 위임) */
+(function () {
+  'use strict';
+  var MIN = 0.15, MAX = 3, READ = 0.55;          // READ = 글자를 읽을 수 있는 최소 배율(전체 보기 기본값 판단)
+  function pre(el) { return el && el.closest ? el.closest('pre.mermaid.mv') : null; }
+  function port(p) { return p.querySelector('.mv-port'); }
+  function apply(p, s, cx, cy) {
+    var w = +p.dataset.w, h = +p.dataset.h, po = port(p), svg = po.querySelector('svg'), old = +p.dataset.s || 1;
+    s = Math.max(MIN, Math.min(MAX, s));
+    var fx = (cx == null ? po.clientWidth / 2 : cx), fy = (cy == null ? po.clientHeight / 2 : cy);
+    var ux = (po.scrollLeft + fx) / old, uy = (po.scrollTop + fy) / old;
+    svg.style.width = Math.round(w * s) + 'px'; svg.style.height = Math.round(h * s) + 'px'; p.dataset.s = s;
+    po.scrollLeft = ux * s - fx; po.scrollTop = uy * s - fy;
+    var pct = p.querySelector('.mv-pct'); if (pct) pct.textContent = Math.round(s * 100) + '%';
+  }
+  function fitW(p) { var po = port(p); return Math.min(1, (po.clientWidth - 18) / +p.dataset.w); }
+  function fitAll(p) { var po = port(p), mh = p.classList.contains('full') ? po.clientHeight : window.innerHeight * 0.84; return Math.min(1, (po.clientWidth - 18) / +p.dataset.w, (mh - 18) / +p.dataset.h); }
+  function auto(p) { var a = fitAll(p); return a >= READ ? a : Math.max(fitW(p), 0.3); }   // 전체가 읽을 만한 크기로 들어오면 전체, 아니면 폭 맞춤(세로는 스크롤)
+  function wrapOne(p) {
+    if (p.classList.contains('mv')) return; var svg = p.querySelector('svg'); if (!svg) return;
+    var vb = svg.viewBox && svg.viewBox.baseVal, r = svg.getBoundingClientRect();
+    var w = (vb && vb.width) || r.width, h = (vb && vb.height) || r.height; if (!w || !h) return;
+    p.dataset.w = w; p.dataset.h = h; p.dataset.s = 1;
+    var bar = document.createElement('div'); bar.className = 'mv-bar';
+    bar.innerHTML = '<button data-mv="all" title="그림 전체가 보이게">전체 보기</button><button data-mv="w" title="가로 폭에 맞춤">폭 맞춤</button><button data-mv="1">100%</button><button data-mv="-" title="축소">－</button><button data-mv="+" title="확대">＋</button><span class="mv-pct"></span><button data-mv="full" title="화면 전체로 크게 보기(Esc 로 닫기)">⛶ 크게 보기</button><span class="mv-tip">Ctrl+휠 확대·축소 · 끌어서 이동 · 노드에 마우스를 올리면 이어진 선만 강조</span>';
+    var po = document.createElement('div'); po.className = 'mv-port';
+    svg.removeAttribute('width'); svg.removeAttribute('height'); svg.style.maxWidth = 'none';
+    while (p.firstChild) po.appendChild(p.firstChild);
+    p.appendChild(bar); p.appendChild(po); p.classList.add('mv');
+    apply(p, auto(p)); po.scrollLeft = 0; po.scrollTop = 0;
+  }
+  function refit(root) { Array.prototype.forEach.call((root || document).querySelectorAll('pre.mermaid.mv'), function (p) { if (port(p).clientWidth > 0 && !p.dataset.user) { apply(p, auto(p)); port(p).scrollLeft = 0; port(p).scrollTop = 0; } }); }
+  // 도구줄
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-mv]') : null; if (!b) return; var p = pre(b); if (!p) return;
+    e.preventDefault(); e.stopPropagation(); var a = b.getAttribute('data-mv'), s = +p.dataset.s; p.dataset.user = '1';
+    if (a === 'all') { apply(p, fitAll(p)); } else if (a === 'w') { apply(p, fitW(p)); port(p).scrollLeft = 0; } else if (a === '1') apply(p, 1);
+    else if (a === '+') apply(p, s * 1.25); else if (a === '-') apply(p, s / 1.25);
+    else if (a === 'full') { var on = p.classList.toggle('full'); b.textContent = on ? '✕ 닫기' : '⛶ 크게 보기'; document.body.style.overflow = document.querySelector('pre.mermaid.mv.full') ? 'hidden' : ''; apply(p, on ? fitAll(p) : auto(p)); if (!on) delete p.dataset.user; }
+  }, true);
+  document.addEventListener('keydown', function (e) { if (e.key !== 'Escape') return; var f = document.querySelector('pre.mermaid.mv.full'); if (f) { e.stopPropagation(); f.querySelector('[data-mv="full"]').click(); } }, true);
+  // Ctrl+휠
+  document.addEventListener('wheel', function (e) {
+    if (!e.ctrlKey) return; var po = e.target.closest ? e.target.closest('.mv-port') : null; if (!po) return; var p = pre(po);
+    e.preventDefault(); var r = po.getBoundingClientRect(); p.dataset.user = '1';
+    apply(p, (+p.dataset.s) * (e.deltaY < 0 ? 1.15 : 1 / 1.15), e.clientX - r.left, e.clientY - r.top);
+  }, { passive: false, capture: true });
+  // 끌어서 이동(4px 이상 움직였으면 그 클릭은 무시 — 노드 클릭과 구분)
+  var drag = null, moved = false;
+  document.addEventListener('mousedown', function (e) { var po = e.target.closest ? e.target.closest('.mv-port') : null; if (!po || e.button !== 0) return; drag = { po: po, x: e.clientX, y: e.clientY, l: po.scrollLeft, t: po.scrollTop }; moved = false; }, true);
+  document.addEventListener('mousemove', function (e) {
+    if (!drag) return; var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!moved && Math.abs(dx) + Math.abs(dy) < 5) return; moved = true; drag.po.classList.add('drag'); drag.po.scrollLeft = drag.l - dx; drag.po.scrollTop = drag.t - dy; e.preventDefault();
+  }, true);
+  document.addEventListener('mouseup', function () { if (drag) drag.po.classList.remove('drag'); drag = null; setTimeout(function () { moved = false; }, 0); }, true);
+  document.addEventListener('click', function (e) { if (moved && e.target.closest && e.target.closest('.mv-port')) { e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+  // 연결선 강조
+  function nid(g) { var m = (g.id || '').match(/^flowchart-(.+)-\d+$/); return m ? m[1] : null; }
+  function clear(svg) { svg.classList.remove('hl'); Array.prototype.forEach.call(svg.querySelectorAll('.hon,.hme'), function (x) { x.classList.remove('hon'); x.classList.remove('hme'); }); }
+  var cur = null;
+  document.addEventListener('mouseover', function (e) {
+    var g = e.target.closest ? e.target.closest('pre.mermaid g.node') : null; if (g === cur) return;
+    if (cur) { var s0 = cur.ownerSVGElement; if (s0) clear(s0); } cur = g; if (!g) return;
+    var id = nid(g), svg = g.ownerSVGElement; if (!id || !svg) return; var near = {}; near[id] = 1; var n = 0;
+    Array.prototype.forEach.call(svg.querySelectorAll('.edgePaths path, path.flowchart-link'), function (p) {
+      var cl = p.getAttribute('class') || '', a = (cl.match(/(?:^|\s)LS-(\S+)/) || [])[1], b = (cl.match(/(?:^|\s)LE-(\S+)/) || [])[1];
+      if (a !== id && b !== id) return; n++; p.classList.add('hon'); near[a] = 1; near[b] = 1;
+      var grp = p.parentNode, idx = Array.prototype.indexOf.call(grp.children, p), labs = grp.parentNode && grp.parentNode.querySelector(':scope > .edgeLabels');
+      if (labs && labs.children[idx]) labs.children[idx].classList.add('hon');
+    });
+    if (!n) return;
+    Array.prototype.forEach.call(svg.querySelectorAll('g.node'), function (x) { var i = nid(x); if (i && near[i]) x.classList.add('hon'); });
+    g.classList.add('hme'); svg.classList.add('hl');
+  }, true);
+  var rt = null; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { refit(); }, 200); });
+  /* 2026-11-16 읽기 보완: 탭 버튼 고정 높이(--navh) · 탭마다 목차(절 제목 h3) · 긴 표(본문 15행 초과)는 스크롤 상자 + 머리글 고정 */
+  function navH() { var n = document.querySelector('nav'); if (n) document.documentElement.style.setProperty('--navh', n.offsetHeight + 'px'); }
+  function tocs() {
+    Array.prototype.forEach.call(document.querySelectorAll('section.tab'), function (sec, si) {
+      if (sec.querySelector('.toc')) return;
+      var hs = Array.prototype.filter.call(sec.querySelectorAll('h3'), function (h) { return !h.closest('.scr'); });
+      if (hs.length < 2) return;
+      var box = document.createElement('div'); box.className = 'toc'; box.innerHTML = '<b>목차</b>';
+      hs.forEach(function (h, i) {
+        if (!h.id) h.id = 'S' + si + '_' + i;
+        var a = document.createElement('a'); a.href = '#' + h.id; a.textContent = h.textContent.replace(/\s*[—·(].*$/, '').slice(0, 40) || h.textContent.slice(0, 40); a.title = h.textContent;
+        a.addEventListener('click', function (e) { e.preventDefault(); h.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+        box.appendChild(a);
+      });
+      var h2s = sec.querySelectorAll('h2'), at = h2s[h2s.length - 1] || sec.firstChild;
+      at.parentNode.insertBefore(box, at.nextSibling);
+    });
+  }
+  function longTables() {
+    Array.prototype.forEach.call(document.querySelectorAll('section.tab table'), function (t) {
+      if (t.parentNode.classList.contains('tbl-scroll') || !t.tBodies[0] || t.tBodies[0].rows.length <= 15) return;
+      var w = document.createElement('div'); w.className = 'tbl-scroll'; t.parentNode.insertBefore(w, t); w.appendChild(t);
+      var c = document.createElement('div'); c.className = 'tbl-cap'; c.textContent = t.tBodies[0].rows.length + '행 · 표 안에서 스크롤'; w.parentNode.insertBefore(c, w);
+    });
+  }
+  window.addEventListener('resize', navH);
+  window.SSPView = { init: function () { navH(); tocs(); longTables(); Array.prototype.forEach.call(document.querySelectorAll('pre.mermaid'), wrapOne); }, refit: refit, apply: apply };
+})();

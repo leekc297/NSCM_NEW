@@ -1,0 +1,34 @@
+{
+  "id": "20261123_214751_R12_ALL",
+  "at": "2026-11-23T21:47:51+09:00",
+  "ms": 1795438071958,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_orch_selfcheck.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_orch_selfcheck.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 31 · FAIL 1 · FAIL 위반 1건 넣은 가짜 개선안 = 게이트 S11 새로 어긋남 · 반영 실패 · a.js 되돌림 [\"apply-failed\",null,[\"반영 시작\",\"반영 실패. 문장 규칙 새 위반 1건(tools/VibeManager/rules/50_DOC_STYLE.md): tools/VibeManager/a.js 위반 0 → 1(새 표현 기호 · 를 저장함 — / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_orch_selfcheck.js",
+    "file": "t_orch_selfcheck.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T21:55:15+09:00",
+      "by": "VMO",
+      "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    },
+    {
+      "at": "2026-11-23T21:59:32+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

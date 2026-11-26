@@ -180,13 +180,13 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return false;
     }
-    // MSG00164 — 기간 상한 2년 (.cs L583~590: Value1.AddYears(2) < Value2 — 문구(3년)/조건(2년)
-    //   불일치는 AS-IS 자체 상태 1:1 보존)
+    // MSG01505 — 기간 상한 2년 (.cs L420: Value1.AddYears(2) < Value2). 문구도 2년으로 맞췄다
+    //   (AS-IS 는 '3년' 문구 MSG00164 를 띄워 조건과 어긋났음 — 2026-11-22 개선 요청).
     const limit = `${Number(searchParams.startYyyymmdd.slice(0, 4)) + 2}${searchParams.startYyyymmdd.slice(4)}`;
     if (Number(searchParams.endYyyymmdd) > Number(limit)) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.PERIOD_MAX, '_Please enter a period within 3 years.'),
+        content: t(MSG.PERIOD_MAX, '_Please enter a period within 2 years.'),
       });
       return false;
     }

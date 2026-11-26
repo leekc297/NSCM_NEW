@@ -1,0 +1,120 @@
+{
+  "id": "20261124003230_SELF_3",
+  "at": "2026-11-24T00:32:30+09:00",
+  "ms": 1795447950454,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/steps.json|골든테스트는sngoldgengoldencasescsv생성다음에sngold",
+  "title": "사용자 지시 R78 같은 문제: tools/VibeManager/steps.json:2383 골든 테스트는 S4.goldgen(golden_cases.csv 생성) 다음에 S4.golden(golden.py:568 에서 golden_cases.csv 읽음",
+  "evidence": "규칙 R78 \"차례로 실행해야 하는 여러 단계 메뉴는 메뉴 1개로 묶고, 그 메뉴를 실행하면 전체 과정을 끝까지 수행함\" (원래 지시 2026-11-14 01:16 \"VM AS-IS 실측 부터 AS-IS 실측 묶음 까지를 하나의 AS-IS 실측 하나의 메뉴로 생성하고 AS-IS 실측 메뉴 실행하면 전체 과정을 수행할 수 있도록 해주세요. 사용자는 상세 프로세스를 각각 수행할 수 없습니다.\") · tools/VibeManager/steps.json:2383 \"id\": \"S4.goldgen\",",
+  "targets": [
+    "tools/VibeManager/steps.json"
+  ],
+  "before_after": "quick.json UI 그룹에 kind 'chain' 메뉴 '🥇 골든 테스트'를 추가함. 단계 = S4.goldgen(ifMissing golden_cases.csv) → S4.golden → S4.goldopen. 화면ID 입력은 체인 시작 때 1번만 받음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/steps.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T05:52:46+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T05:57:12+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self0552"
+    },
+    {
+      "at": "2026-11-25T05:57:19+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T06:10:22+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T06:10:22+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1367 FAIL 0' 2026-11-24T20:57:58Z → 반영 뒤 'ALL OK 파일 84/84 PASS 1367 FAIL 0' 2026-11-24T21:02:28Z. node -e 확인 출력 'golden 1 dupChainIds 0 steps S4.goldgen:true,S4.golden:true,S4.goldopen:true' · 변경 15개 파일 · 대상 목록 밖 변경 15개: Doc/e2e/specs/_trace.spec.ts, Doc/e2e/specs/_verify.spec.ts, Doc/verify/SCP0005/_unverified_decisions.md, Doc/verify/SCP0005/_unverified_plan.md, Doc/verify/_checker_defects.md, Doc/verify/_parallel/E02/facts/SCP0005.json",
+      "log": ".vibe\\logs\\2026-11-25T05-57-19_claude_orch.log",
+      "sec": 552,
+      "costUsd": 1.1218683999999999,
+      "files": [
+        "Doc/e2e/specs/_trace.spec.ts",
+        "Doc/e2e/specs/_verify.spec.ts",
+        "Doc/verify/SCP0005/_unverified_decisions.md",
+        "Doc/verify/SCP0005/_unverified_plan.md",
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_parallel/E02/facts/SCP0005.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/facts_popup.py",
+        "tools/Harness/verify/i18n_lang_check.py",
+        "tools/Harness/verify/sort_ci_check.py",
+        "tools/Harness/verify/unverified_classes.csv",
+        "tools/VibeManager/quick.json",
+        "tools/E2E/lib/m1upload.selftest.js",
+        "tools/E2E/lib/m1upload.ts",
+        "tools/Harness/verify/xlsx_rows.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "차례로 실행해야 하는 여러 단계 메뉴는 메뉴 1개로 묶고, 그 메뉴를 실행하면 전체 과정을 끝까지 수행함 규칙을 tools/VibeManager/steps.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R78|tools/VibeManager/steps.json",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795553565716,
+  "autoFp": "87e63bf7c4",
+  "applyStartMs": 1795553839186,
+  "verifyJudge": {
+    "at": "2026-11-25T06:06:34+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self0552",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795554622425,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 84/84 PASS 1367 FAIL 0 238.6s'(2026-11-24T20:57:58Z) → 반영 뒤 'ALL OK 파일 84/84 PASS 1367 FAIL 0 223.7s'(2026-11-24T21:02:28Z). 같은 실행의 t_webview_syntax.js PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1367 FAIL 0' 2026-11-24T20:57:58Z → 반영 뒤 'ALL OK 파일 84/84 PASS 1367 FAIL 0' 2026-11-24T21:02:28Z. node -e 확인 출력 'golden 1 dupChainIds 0 steps S4.goldgen:true,S4.golden:true,S4.goldopen:true'",
+    "note": "quick.json UI 그룹 '📋 TestResultList' 다음에 chain 메뉴 '🥇 골든 테스트'(chainId golden, needsId) 추가함. 단계 = S4.goldgen(ifMissing Doc/golden/golden_cases.csv 에 ${id} 행 없을 때만) → S4.golden → S4.goldopen. targets 는 steps.json 이나 chain 메뉴 정의 위치가 quick.json 이라 before_after 대로 quick.json 만 Edit 로 고침. steps.json 변경 없음. 창 다시 로드 뒤 메뉴 실행 확인은 미실행."
+  },
+  "snap": "prop_20261124003230_SELF_3"
+}

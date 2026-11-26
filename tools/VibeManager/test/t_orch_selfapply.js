@@ -65,7 +65,7 @@ const baks = (d, re) => fs.readdirSync(d).filter(f => re.test(f));
   const E = (title, targets, self) => sc.autoEligible({ self: self !== false, title, targets });
   chk('자동 대상 판정: VM 코드 = 자동(출처 무관)', E('a 값 변경', ['tools/VibeManager/a.js', 'tools/VibeManager/test/t_a.js']).kind === 'code' && E('검사기 수정', ['tools/Harness/verify/x.py']).ok === true && E('사건에서 나온 안', ['tools/VibeManager/a.js'], false).kind === 'code');
   chk('자동 대상 판정: 생성물 삭제 = 자동(delete)', E('서버 로그 2개 삭제', ['.vibe/logs/x.log']).kind === 'delete' && E('옛 백업 파일 삭제', ['tools/VibeManager/a.js.bak_20261030']).kind === 'delete' && E('스냅샷 폴더 삭제', ['.vibe/orch/snap/prop_1/']).kind === 'delete');
-  chk('자동 대상 판정: 코드 파일 삭제 · 설정 · 룰 · hook · 범위 밖 · 대상 없음 = 승인 필요', /생성물 아님/.test(E('a.js 파일 삭제', ['tools/VibeManager/a.js']).why) && /설정 파일/.test(E('상한 변경', ['tools/Harness/harness.json']).why) && /룰 문서/.test(E('룰', ['tools/VibeManager/rules/10.md']).why) && /hook/.test(E('h', ['tools/Harness/hooks/x.ps1']).why) && /자동 범위 밖/.test(E('fe', ['nscm-fe/a.ts']).why) && E('x', []).ok === false, JSON.stringify([E('a.js 파일 삭제', ['tools/VibeManager/a.js']), E('fe', ['nscm-fe/a.ts'])]));
+  chk('자동 대상 판정: 코드 파일 삭제 · 설정 · 실행 hook · 범위 밖 · 대상 없음 = 승인 필요, 룰 문서 = 자동(2026-11-23 21:4x)', E('a.js 파일 삭제', ['tools/VibeManager/a.js']).ok === true && /설정 파일/.test(E('상한 변경', ['tools/Harness/harness.json']).why) && E('룰', ['tools/VibeManager/rules/10.md']).ok === true && /hook/.test(E('h', ['tools/Harness/hooks/x.ps1']).why) && E('fe', ['nscm-fe/a.ts']).ok === true /* 2026-11-26 사용자 지시(승인 가이드 완화): FE·BE 는 작업 모드를 따름 — 이 시험 설정 repairScope DB_FE = 자동(DB_ONLY 승인은 t_checkerscan.js) */ && E('x', []).ok === false, JSON.stringify([E('a.js 파일 삭제', ['tools/VibeManager/a.js']), E('fe', ['nscm-fe/a.ts'])]));
   const oldLog = path.join(vibeDir, 'logs', 'old.log'); const newLog = path.join(vibeDir, 'logs', 'new.log'); fs.mkdirSync(path.dirname(oldLog), { recursive: true }); fs.writeFileSync(oldLog, 'x'.repeat(1000)); fs.writeFileSync(newLog, 'y'.repeat(500));
   const days = n => new Date(Date.now() - n * 86400000); fs.utimesSync(oldLog, days(8), days(8));
   const c1 = im.add({ title: '서버 로그 2개 삭제', evidence: 'S10', targets: ['.vibe/logs/old.log', '.vibe/logs/new.log'], sig: 'del-logs' }, 'self');
@@ -136,7 +136,7 @@ const baks = (d, re) => fs.readdirSync(d).filter(f => re.test(f));
   { const g1 = im.add({ title: '끊긴 안 시작 전', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'stale-before' }, 'self'); { const x = im.get(g1.id); x.status = 'approved'; x.autoTried = true; x.history.push({ at: '2026-11-20T00:30:17+09:00', by: 'VMO 자동', what: '승인' }); im.save(x); }
     const g2 = im.add({ title: '끊긴 안 반영 중', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'stale-during' }, 'self'); { const x = im.get(g2.id); x.status = 'applying'; x.history.push({ at: '2026-11-20T00:30:17+09:00', by: 'VMO 자동', what: '승인' }, { at: '2026-11-20T00:31:00+09:00', by: 'VMO', what: '반영 시작' }); im.save(x); }
     const n = sc.recoverStale(); const a1 = im.get(g1.id), a2 = im.get(g2.id);
-    chk('끊긴 반영 정리: 시작 전 = 다시 대기 · 반영 중 = 반영 실패(중단됨)', n === 2 && a1.status === 'pending' && a1.autoTried === false && a2.status === 'apply-failed' && a2.interrupted === true && /다시 시작됨/.test(a2.history.slice(-1)[0].what), JSON.stringify([n, a1.status, a2.status]));
+    chk('끊긴 반영 정리: 시작 전 = 다시 대기 · 반영 중 = 되돌리고 다시 대기(2026-11-20 실패로 세지 않음)', n === 2 && a1.status === 'pending' && a1.autoTried === false && a2.status === 'pending' && a2.interrupted === true && /다시 시작됨/.test(a2.history.slice(-1)[0].what) && /실패로 세지 않음/.test(a2.history.slice(-1)[0].what), JSON.stringify([n, a1.status, a2.status]));
     for (const x of [a1, a2]) { x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); } }
   // ⑩ 체인 실행 중(2026-11-20): VM 코드 안은 계속 반영 · 실행 중인 작업이 읽는 검증 도구 대상 안은 보류하고 사유를 남김 · 체인이 끝나면 보류 표시를 지움
   { const snap0 = st.snapshot; st.snapshot = () => Object.assign(snap0(), { chains: [{ id: 'fake' }] });
@@ -147,6 +147,22 @@ const baks = (d, re) => fs.readdirSync(d).filter(f => re.test(f));
     const au2 = await sc.autoApplyNext(false); chk('체인 실행 중: 보류 안만 남으면 건너뜀 사유 반환', au2.skipped === sc.HOLD_NOTE && au2.waiting === 1, JSON.stringify(au2));
     chk('대상 판정: Harness, E2E, Docs, CommonSync = 보류 대상 · VibeManager = 아님', sc.touchesRunTools({ targets: ['tools\\E2E\\lib\\nscm.ts'] }) && sc.touchesRunTools({ targets: ['./tools/Docs/doc_style.py'] }) && !sc.touchesRunTools({ targets: ['tools/VibeManager/a.js'] }));
     st.snapshot = snap0; { const x = im.get(h1.id); x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); } }
+  // ⑪ 반영 차례 장부(2026-11-23 개선안 20261123145412_VISION): 자리를 잡은 뒤에만 게이트 · 막힌 맨 앞 안은 줄 뒤로 · repairOf 안이 같은 원인 실패 안보다 앞
+  { for (const x of im.list()) if (x.status === 'pending' || x.status === 'apply-failed') { x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); }
+    const g0 = sc.gate; let gateN = 0; sc.gate = async o => { gateN++; return g0(o); };
+    const q1 = im.add({ title: 'a.js 차례 시험 1', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'order-first' }, 'self'); await new Promise(x => setTimeout(x, 5));
+    const q2 = im.add({ title: 'a.js 차례 시험 2', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'order-second' }, 'self');
+    const tok = agent.reserve('다른 조치'); setMode('good'); const n0 = callsN(); const b1 = await sc.autoApplyNext(false); const x1 = im.get(q1.id);
+    chk('에이전트가 바쁠 때 = 게이트 호출 0회 · Claude 호출 0회 · 시도로 세지 않음', !!tok && b1.busy === true && b1.id === q1.id && gateN === 0 && callsN() === n0 && x1.status === 'pending' && !x1.autoTried && !x1.gated && !x1.autoTries, JSON.stringify([b1, gateN, x1.autoTries]));
+    agent.release(tok); const a2 = await sc.autoApplyNext(false);
+    chk('맨 앞 안이 보류되면 다음 주기에 다음 안을 고름', a2.id === q2.id && a2.ok === true && im.get(q2.id).status === 'applied' && gateN === 2, JSON.stringify([a2, gateN]));
+    { const x = im.get(q1.id); x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); }
+    const of = im.add({ title: 'a.js 원래 안(실패)', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'order-orig' }, 'self'); { const x = im.get(of.id); x.status = 'superseded'; x.gate = { ok: false, newBad: ['S2 t_a.js'] }; im.save(x); }
+    const sf = im.add({ title: 'a.js 같은 원인 실패 안', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'order-same' }, 'self'); { const x = im.get(sf.id); x.gate = { ok: false, newBad: ['S2 t_a.js'] }; im.save(x); } // 장부에 뒤로 보낸 기록 없이도(등록이 더 이른데도) repairOf 안이 앞
+    await new Promise(x => setTimeout(x, 5)); const rf = im.add({ title: 'a.js 원인 고친 안', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'order-fix' }, 'self'); { const x = im.get(rf.id); x.repairOf = of.id; im.save(x); }
+    const ord = sc.applyOrder([im.get(sf.id), im.get(rf.id)]).map(x => x.id); setMode('good7'); const a3 = await sc.autoApplyNext(false);
+    chk('repairOf 안이 원래 안과 같은 원인으로 실패한 안보다 먼저 나옴(등록은 늦어도)', ord[0] === rf.id && ord[1] === sf.id && a3.id === rf.id && a3.ok === true, JSON.stringify([ord, a3]));
+    sc.gate = g0; { const x = im.get(sf.id); x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); } }
   sc.dispose(); im.dispose(); agent.dispose(); watch.dispose(); st.dispose(); await new Promise(x => setTimeout(x, 150)); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error('ERROR', e); process.exit(2); });

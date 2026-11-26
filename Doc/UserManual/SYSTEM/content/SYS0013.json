@@ -1,0 +1,119 @@
+{
+ "definition": "업무 담당자가 쓰는 조회용 SQL(Dynamic Query)을 등록하고, 컬럼과 조건을 정해 결과를 조회하는 화면",
+ "overview": [
+  "업무 담당자가 반복해서 보는 조회용 SQL 을 Query 로 등록하고, 조건 값을 넣어 결과를 조회하는 관리자 화면임",
+  "위쪽 조회 조건, Query 목록이 있는 Register 탭, Columns, Condition, SQL, Result 영역이 있는 View 탭, SQL Query 팝업으로 구성됨",
+  "등록은 Register 탭 Insert → View 칸 아이콘으로 SQL Query 팝업 열기 → SQL 입력 후 Confirm → Columns, Condition 입력 → Save 순서로 함",
+  "조회는 Register 탭에서 Query 선택 → View 탭에서 Condition 값 입력 → Execute 순서로 함"
+ ],
+ "pages": [
+  {
+   "title": "Dynamic Query List",
+   "keyPoint": "SQL 은 SQL Query 팝업의 Confirm 으로 구문을 확인한 뒤 저장함. Query 를 Delete 하면 그 Query 의 Columns, Condition 도 같이 지워짐.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.133,
+     "y": 0.141
+    },
+    {
+     "no": 2,
+     "x": 0.737,
+     "y": 0.192
+    },
+    {
+     "no": 3,
+     "x": 0.156,
+     "y": 0.192
+    },
+    {
+     "no": 4,
+     "x": 0.166,
+     "y": 0.269
+    },
+    {
+     "no": 5,
+     "x": 0.18,
+     "y": 0.229
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Report Name, Description: 글자를 직접 입력함",
+      "Role: Query 를 쓰는 권한 그룹. 처음 값은 ALL"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 커서가 있는 그리드에 적용됨",
+      "Query 를 고르지 않고 Delete 하면 \"Query 를 선택하세요.\" 메시지가 뜸",
+      "Save 를 누르면 \"{0} 행을 저장하시겠습니까?\" 확인 창이 뜨고, 필수 칸이 비어 있으면 \"필수 입력란을 입력해 주세요.\" 메시지가 뜸",
+      "저장이 안 되면 \"저장에 실패하였습니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Register 탭 그리드",
+     "lines": [
+      "등록된 Query 목록. 캡처는 27건",
+      "필수 입력: Report Name, Valid(제목 앞 빨간 점)",
+      "Description, Role: Query 설명과 사용 권한 그룹",
+      "Created By, Created Date, Upated By, Upated Date: 등록자와 수정자, 일시",
+      "새 행의 Query 번호는 저장 때 채워짐"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "View 열과 SQL Query 팝업",
+     "lines": [
+      "View 칸 아이콘을 누르면 SQL Query 팝업이 열림",
+      "팝업 위쪽에 Report Name, Description, Role 을 입력하고 SQL 칸에 SQL 문을 적음",
+      "Confirm: SQL 을 실행하지 않고 구문만 확인함. 맞으면 \"SQL구문이 확인되었습니다.\", 틀리면 \"SQL 구문이 틀렸습니다.\" 메시지가 뜸",
+      "Columns: 결과에 보일 컬럼. 집계 방법은 SUM, MAX, MIN, COUNT 중 고르고 비워 두면 묶음 기준 컬럼이 됨",
+      "Condition: SQL 안 @이름, :이름 자리에 넣을 조건 값. Save 로 저장하고 Cancel 로 닫음"
+     ]
+    },
+    {
+     "no": 5,
+     "title": "View 탭",
+     "lines": [
+      "Register 탭에서 고른 Query 의 Report Name, Description, Role 이 입력 불가로 나옴",
+      "Columns, Condition, SQL, Result 영역으로 나뉨",
+      "Condition 값을 넣고 Execute 를 누르면 조건이 SQL 에 들어가 Result 에 결과가 나옴",
+      "Query 를 고르지 않고 Execute 하면 \"실행할 Query 를 선택하세요.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0013",
+ "uiName": "Dynamic Query List",
+ "menuPath": "SYSTEM> Admin> Dynamic Query List",
+ "captures": [
+  "captures/SYS0013.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0013/"
+ ],
+ "buttons": [
+  "columns:DELETE",
+  "columns:INSERT",
+  "columns:SAVE",
+  "columns:SEARCH",
+  "history:SEARCH",
+  "main:DELETE",
+  "main:INSERT",
+  "main:SAVE",
+  "main:SEARCH",
+  "parameters:DELETE",
+  "parameters:INSERT",
+  "parameters:SAVE",
+  "parameters:SEARCH",
+  "result:EXECUTE"
+ ]
+}

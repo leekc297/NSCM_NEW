@@ -54,6 +54,11 @@
         "tools/VibeManager/test/t_chain_loop.js",
         "tools/VibeManager/test/t_orch_inc_time.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:31+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T13:55:28+09:00"
     }
   ],
   "plain": {
@@ -94,5 +99,7 @@
     "verify_result": "node tools/VibeManager/test/t_orch_inc_time.js → PASS 8건, ALL PASS(조치 없는 사건 incLast 1795139754000) / node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → PASS 19건, ALL PASS / 시각 2026-11-20 13:24:20(Get-Date, 시험 실행 직전)",
     "note": "workbench.js postIncidents 위치는 개선안의 2600에서 밀린 2629행임. .bak, 설치 폴더, CHANGELOG.md 손대지 않음. 작업 모드와 hook 차단 없음."
   },
-  "snap": "prop_20261120131343_SELF_2"
+  "snap": "prop_20261120131343_SELF_2",
+  "effectiveMs": 1795150528179,
+  "effectiveAt": "2026-11-20T13:55:28+09:00"
 }

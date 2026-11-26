@@ -1,0 +1,116 @@
+{
+  "id": "20261124230634_SELF",
+  "at": "2026-11-24T23:06:34+09:00",
+  "ms": 1795529194690,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|aiusagestale",
+  "title": "사용자 지적 감지기 추가 U27 aiUsageStale: AI 주간 한도가 VM 기록 발생 때만 갱신되어 VMO 감시 중 오래된 값이 보임",
+  "evidence": "사용자 지적(2026-11-24T16:43:27+09:00) \"VM 기록은 수시로 발생 되지만 VMO 의 모니터링은 지속적으로 발생 시킵니다. AI 주간한도 가져오는 기준을 변경하는 것도 하나의 방법 입니다.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 aiUsageStale 없음 → 추가. 판정: VMO 가동 중 now - lastOk 가 갱신 주기의 2배(최대 20분)를 넘거나 lastTry 가 lastOk 보다 늦고 err 가 비어 있지 않음 · 읽을 기록: .vibe/orch/ai_usage_state.json 의 lastTry, lastOk, err, nextMs. user_checks.json U27 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T10:32:10+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T10:36:34+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1433, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 · 백업 태그 20261126_self1032"
+    },
+    {
+      "at": "2026-11-26T10:36:41+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T10:42:42+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1441, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 → 1 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-usercheck.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T10:42:42+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager. 반영 전 ALL PASS(U27 표본 0건) → 반영 뒤 ALL PASS(U27 표본 8건 PASS), 2026-11-26 10:38:09 · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-26T10-36-41_claude_orch.log",
+      "sec": 99,
+      "costUsd": 1.3620127,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:03+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U27",
+  "kind": "detector",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795656730427,
+  "autoFp": "5fcc434f83",
+  "applyStartMs": 1795657001056,
+  "verifyJudge": {
+    "at": "2026-11-26T10:38:26+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1441, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 → 1"
+  },
+  "selfTag": "20261126_self1032",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-usercheck.js"
+  ],
+  "appliedMs": 1795657362826,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS. U27 표본 8건 PASS: 파일 없음 경고, 3분 아님, 25분 실패(기준 20분), 주기 3분 7분 실패(기준 6분), HTTP 429 실패, err 빔 12분 아님, 프로세스 없음 판정 안 함, 원장 active"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager. 반영 전 ALL PASS(U27 표본 0건) → 반영 뒤 ALL PASS(U27 표본 8건 PASS), 2026-11-26 10:38:09",
+    "note": "DETECTORS 에 aiUsageStale 추가. 판정 = now - lastOk > min(주기 x 2, 20분) 또는 lastTry > lastOk 이고 err 있음 → fail. 주기 = nextMs - lastTry, 없으면 10분. 기록 파일 없음 = warn. 기록 pid 없음 = 판정 안 함. U27 status pending-detector → active. U28 도 같은 감지기를 쓰지만 승인 범위 밖이라 pending-detector 로 둠. 시험 파일 머리 주석의 감지기 개수(18종)는 고치지 않음."
+  },
+  "snap": "prop_20261124230634_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

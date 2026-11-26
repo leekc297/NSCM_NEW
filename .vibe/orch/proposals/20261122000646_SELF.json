@@ -1,0 +1,120 @@
+{
+  "id": "20261122000646_SELF",
+  "at": "2026-11-22T00:06:46+09:00",
+  "ms": 1795273606154,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|edits|workbench.js|stop end owner",
+  "title": "실행 끝 기록 단일화: 중지 길 7곳이 endRun(runId, by, why) 하나를 부르고, 읽는 쪽은 runId 로 맞춤",
+  "evidence": "workbench.js:134~143, :676, :2836, :3065, :3662, job-runner.js:236, :247, :286, :334, chain-runner.js:75, orch-improve.js:78~84, orch-usercheck.js:124, :160, orch-watch.js:109, :220~264. events.jsonl user.stop 37줄 중 runId 4줄. CHANGELOG.md:36, :238, :377, :450, :770, :779, :827, :894, :909, :948 · 진단 사다리 묶음 L3|edits|workbench.js",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/chain-runner.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_run_end.js"
+  ],
+  "before_after": "변경 전: 중지 길마다 stopReq, stopBy, user.stop, chain.end 를 따로 기록하고 일부를 빠뜨림. user.stop 에 runId 가 없어 읽는 쪽 3곳이 60초, 5초, 10분 시각 차이로 실행을 추정함. 변경 후: workbench.js 에 endRun(runId, { by, why, sync }) 를 둠. 이 함수가 stopReq 지정, 프로세스 종료(sync 선택), user.stop 1줄(runId, job, screen, by, why), 그 runId 의 chain.end 에 stopped, stopBy 기록을 한 번에 함. 중지 길 7곳(중지 단추, stopInst, 창 닫기, abortRunningChains, job-runner stop, stopScreen, requeueScreen, dispose)은 이 함수만 부름. by 기본값 '중지 단추'를 없애고, by 없이 부르면 errlog 에 남김. orch-watch, orch-improve, orch-usercheck 는 runId 로 먼저 맞추고, runId 없는 옛 기록에만 지금 시각 차이 추정을 씀.",
+  "verify": "test/t_run_end.js 신규: 사례 9건을 events 줄 재현으로 넣음(창 다시 로드, 작업 목록 중지, 작업 번호 없는 체인 종료, 중지 뒤 단계 시작, 재개 체인과 옛 중지 기록, 창 닫기, stopInst). 각 길에서 user.stop 1줄에 runId 와 by 가 맞고, chain.end stopped 가 기록되고, R11, R14, R5 사건 0건, digest stoppedBy 분류가 맞는지 확인함. 기존 t_chain_abort.js, t_chain_userstop.js, t_orch_stopleak, t_reap_orphans.js, t_orch_watch.js, t_orch_improve.js, t_orch_usercheck.js 통과. node test/run_all.js FAIL 0. 현재 events.jsonl 사본으로 im.digest(7)을 다시 내어 stoppedBy 수가 변경 전과 같거나 '중지 단추' 오분류만 줄었는지 대조. t_webview_syntax.js 통과.",
+  "rollback": "VMO 창 개선안 탭의 되돌리기 버튼, 또는 반영 때 VMO 가 만든 대상 파일 .bak_ 사본 복원",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 원인(중지 사유 기록 주인 없음)의 결함 9건이 11-20 05:20 ~ 11-21 10:52 에 고친 뒤 다시 남. 수정 지점은 workbench.js 5곳, job-runner.js 2곳, orch-improve.js, orch-watch.js, orch-heal.js",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-22T00:29:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-22T00:32:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 886, FAIL 0), 정의 정합 통과 · 백업 태그 20261122_self0029"
+    },
+    {
+      "at": "2026-11-22T00:32:58+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-22T00:48:28+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 936, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 6개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-22T00:48:28+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-22 00:37:50 node --check 대상 6개 SYNTAX_OK. 00:38:01 node test/run_all.js . --only t_chain_abort,t_chain_userstop,t_orch_stopleak,t_reap_orphans,t_orch_watch,t_orch_improve,t_orch_usercheck,t_orch_userstop,t_wb_stopmark,t_chain_runner,t_job_runner,t_webview_syntax 결과 '파일 12/12 PASS 311 FAIL 0' · 변경 7개 파일",
+      "log": ".vibe\\logs\\2026-11-22T00-32-58_claude_orch.log",
+      "sec": 723,
+      "costUsd": 4.581629200000001,
+      "files": [
+        "tools/VibeManager/chain-runner.js",
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/workbench.js",
+        "tools/VibeManager/test/t_run_end.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:25+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "작업을 멈추는 방법 일곱 가지가 '누가 왜 멈췄는지'를 같은 한 곳에 같은 방식으로 적게 됨",
+    "risk": "잘못되면 멈춘 작업이 실패로 집계되거나, 멈춘 뒤 다음 단계가 이어서 돌 수 있음",
+    "undo": "VMO 개선안 탭의 되돌리기 단추로 바꾸기 전 파일로 돌림"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795274971938,
+  "autoFp": "181562fdc4",
+  "applyStartMs": 1795275178327,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 936, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261122_self0029",
+  "needsReload": true,
+  "appliedMs": 1795276108327,
+  "synced": [
+    "chain-runner.js",
+    "job-runner.js",
+    "orch-improve.js",
+    "orch-usercheck.js",
+    "orch-watch.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/chain-runner.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_run_end.js"
+    ],
+    "verify_result": "2026-11-22 00:37:50 node --check 대상 6개 SYNTAX_OK. 00:38:01 node test/run_all.js . --only t_chain_abort,t_chain_userstop,t_orch_stopleak,t_reap_orphans,t_orch_watch,t_orch_improve,t_orch_usercheck,t_orch_userstop,t_wb_stopmark,t_chain_runner,t_job_runner,t_webview_syntax 결과 '파일 12/12 PASS 311 FAIL 0'. 00:40:25 node test/t_run_end.js . 결과 'ALL PASS'(사례 10건과 체인 없는 창 1건: user.stop 1줄 runId·by 일치, chain.end stopped·stopBy, R11·R1·R2·R5 사건 0건, R14 = 사례 ④ 1건, digest stoppedBy 분류 window·button·vmo·other 일치). 같은 시험을 변경 전 코드(.bak_20261122_self0029 6개)로 돌리면 FAIL 10줄 뒤 예외로 멈춤. 00:41:07~00:44:31 node test/run_all.js . 결과 'ALL OK 파일 64/64 PASS 936 FAIL 0 204.1s', node test/t_webview_syntax.js . 결과 'ALL PASS'. events.jsonl 사본 digest(7) 변경 전: chains {window 10, button 2, vmo 1, other 5, stopped 18}, steps {window 3, other 5, stopped 8}. 변경 후 같은 값, perChain 같음 true. 사본 user.stop 37줄 중 runId 있는 줄 0줄.",
+    "note": "작업 모드 DB_ONLY는 FE·BE만 막아 tools/VibeManager 수정은 막히지 않음. 설치 폴더와 CHANGELOG.md는 건드리지 않음. t_run_end.js 사례 ②는 실제 ChainRunner로 job-runner.stop과 같은 인자를 넘겨 확인했고, job-runner.stop 함수를 직접 부르지 않음. 동작이 바뀐 곳: 작업 목록 중지 by '작업 목록 중지'(digest button), 창 닫기 by '창 닫기'(digest window), VMW 화면 중지 by는 요청자 이름(digest other). 체인 밖 AI 호출 기록(single)은 종전대로 사건을 남기지 않음(noEvent). 비교용 임시 파일은 %TEMP%/runend_cmp, %TEMP%/vmold_runend에 있음. 개선안 근거의 'runId 4줄'과 사본 측정 0줄이 다른 원인은 미확인."
+  },
+  "snap": "prop_20261122000646_SELF",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

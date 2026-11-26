@@ -39,6 +39,7 @@ interface Props {
 
 const EDITABLE = EDITABLE_COLUMNS as readonly string[];
 const DATE_COLS = [DATE_START_COLUMN, DATE_FINISH_COLUMN];
+const QTY_COLUMN = 'QTY';
 
 // 달력에 실재하는 날짜인지 판정(YYYYMMDD 8자리). Date UTC 왕복으로 월·일 범위를 검증한다
 //   — '20112222'(월22/일22)는 false. Formation/project-route 선례와 동일 구현(dayjs 플러그인 불요).
@@ -134,6 +135,38 @@ export const PackHoldStockGrid = ({
       g.cellEditEnded?.removeHandler(onEnded);
     };
   }, [gridRef, rows, isReversed, onReversed, onInvalidDate]);
+
+  // QTY 자릿수 키인 차단 — AS-IS FarPoint 숫자셀은 상한(14자리) 초과 숫자가 타이핑 중에 막힌다.
+  //   TO-BE InputNumber 는 max 를 확정 시점에만 판정하므로, 편집기 입력칸에 beforeinput 가드를 걸어
+  //   입력 결과의 정수부 자릿수가 메타(DATA_MAX_LENGTH - scale)를 넘으면 그 입력을 막는다(사용자 지시 2026-11-23).
+  const qtyIntDigits = useMemo(() => {
+    const meta = staticColumns.find(c => c.colNm === QTY_COLUMN);
+    return meta?.dataMaxLength ? Math.max(1, meta.dataMaxLength - (meta.scale ?? 0)) : undefined;
+  }, [staticColumns]);
+
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g || !qtyIntDigits) return;
+    const guard = (e: InputEvent) => {
+      const input = e.target as HTMLInputElement;
+      const data = e.data ?? e.dataTransfer?.getData('text') ?? null;
+      if (data == null) return; // 삭제 등 글자를 넣지 않는 입력
+      const v = input.value;
+      const next = v.slice(0, input.selectionStart ?? v.length) + data + v.slice(input.selectionEnd ?? v.length);
+      if (next.split('.')[0].replace(/\D/g, '').length > qtyIntDigits) e.preventDefault();
+    };
+    let editor: HTMLInputElement | null = null;
+    const onPrepare = (sender: FlexGrid, e: CellRangeEventArgs) => {
+      if (sender.columns[e.col]?.binding !== QTY_COLUMN || !sender.activeEditor) return;
+      editor = sender.activeEditor;
+      editor.addEventListener('beforeinput', guard); // 같은 참조라 중복 등록되지 않는다
+    };
+    g.prepareCellForEdit.addHandler(onPrepare);
+    return () => {
+      g.prepareCellForEdit?.removeHandler(onPrepare);
+      editor?.removeEventListener('beforeinput', guard);
+    };
+  }, [gridRef, qtyIntDigits]);
 
   // R4 표기 보조 — 저장 재검증 실패행 LightPink. AS-IS BackColor(cs BackColor=LightPink).
   //   DataGrid 는 formatItem prop 미노출이라 셀 DOM 에 직접 세팅(scp-bom/long-term-stock 선례).

@@ -1,0 +1,50 @@
+{
+ "proposal": {
+  "id": "20261124012049_SELF_3",
+  "title": "사용자 지시 R83 같은 문제: tools/VibeManager/steps.json:1785 폴더 열기 단계 경로와 1547, 1783, 2344, 2366, 2380줄 안내 문구에 폴더 이름을 직접 적음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/VibeManager/steps.json:1785 \"path\": \"${root}/Doc/UI_CHECKLIST\",",
+  "targets": [
+   "tools/VibeManager/steps.json"
+  ],
+  "before_after": "path를 ${checklistDir} 같은 치환 변수로 바꾸고 steps 로더가 harness.json 값으로 채움. 안내 문구도 같은 변수를 씀",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "sig": "userrule|rn|tools/vibemanager/steps.json|폴더열기단계경로와n줄안내문구에폴더이름을",
+  "check": "S13",
+  "selfKey": "S13|R83|tools/VibeManager/steps.json"
+ },
+ "result": {
+  "applied": true,
+  "already_applied": false,
+  "verified": true,
+  "verify_items": [
+   {
+    "n": 1,
+    "result": "pass",
+    "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 84/84 PASS 1367 FAIL 0 230s'(2026-11-24T22:12:15Z) → 반영 뒤 'ALL OK 파일 84/84 PASS 1367 FAIL 0 225.6s'(2026-11-24T22:20:15Z). 웹뷰 파일 수정 없음. run_all 안의 t_webview_syntax.js PASS 19, t_wb_load.js LOAD_OK"
+   }
+  ],
+  "changed_files": [
+   "tools/VibeManager/steps.json",
+   "tools/VibeManager/extension.js"
+  ],
+  "verify_result": "node tools/VibeManager/test/run_all.js 반영 전 84/84 PASS 1367 FAIL 0(2026-11-24T22:12:15Z) → 반영 뒤 84/84 PASS 1367 FAIL 0(2026-11-24T22:20:15Z). node -e steps.json 파싱 'json ok UI_CHECKLIST 남은 건수 0 checklistDir 건수 2'",
+  "note": "steps.json S8.folder 경로 ${root}/Doc/UI_CHECKLIST → ${checklistDir}, 제목과 1675줄 설명의 (Doc/UI_CHECKLIST) → (설정한 CheckList 폴더), 맨 위 변수 목록에 ${checklistDir} 추가. 개선안 변경 내용의 '로더가 harness.json 값으로 채움'을 맞추려고 extension.js pathsCompute()에 checklistDir 1줄 추가(harness.json paths.checklistDir 또는 checklistDir, 없으면 Doc/UI_CHECKLIST). 단계 제목과 설명은 변수가 치환되지 않아 안내 문구에 변수를 넣지 않음. 개선안의 1547, 2344, 2366, 2380줄은 현재 파일에 폴더 이름이 없음. 추가 확인 후보: workbench.js 3389줄과 3801줄의 폴더 열기 처리는 root와 id만 넘김. S8.folder가 이 경로로도 실행되는지 미확인"
+ },
+ "gate": {
+  "ok": false,
+  "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 실패 1",
+  "newBad": [
+   "S4 inventory_check VM_JSON: 단계 10 · 작업 145 · 메뉴 항목 81 · 체인 13 · 깨진 참조 1 - S8.folder path 없음: ${checklistDir}"
+  ]
+ },
+ "history": [
+  "07:07:46 VMO 자동(게이트 통과 조건): 승인",
+  "07:11:35 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self0707",
+  "07:11:37 VMO: 반영 시작",
+  "07:28:13 VMO: 반영 실패. 게이트에서 새로 어긋난 항목 1건: S4 inventory_check VM_JSON: 단계 10 · 작업 145 · 메뉴 항목 81 · 체인 13 · 깨진 참조 1 - S8.folder path 없음: ${checklistDir} · 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 실패 1 · 대상 파일 1개 복원(steps.json AI 편집 3건만 되돌림(반영 전과 같음)) · 대상 밖 변경 Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json, Doc/verify/SCP0005/calls/_verify_언어_전환_문구_덤프_I2__0.json, Doc/verify/SCP0005/combo_runtime.json, Doc/verify/SCP0005/e2e/results.json, Doc/verify/SCP0005/e2e/shots/index_verify.json 는 AI 가 고치지 않아 그대로 남음",
+  "07:28:13 VMO: 대상 밖 새 파일 1개 치움(이름 끝 .bak_failed_20261124012049_SELF_3): tools/VibeManager/extension.js"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261124012049_SELF_3"
+}

@@ -1,0 +1,349 @@
+{
+ "at": "2026-11-24 16:34",
+ "facts": {
+  "vm.version": {
+   "v": "2.0.1",
+   "unit": "",
+   "label": "VM 버전",
+   "src": "tools/VibeManager/package.json"
+  },
+  "menu.groups": {
+   "v": 5,
+   "unit": "개",
+   "label": "메뉴 묶음",
+   "src": "tools/VibeManager/quick.json"
+  },
+  "menu.items": {
+   "v": 80,
+   "unit": "개",
+   "label": "메뉴 항목",
+   "src": "tools/VibeManager/quick.json"
+  },
+  "vmw.jobs": {
+   "v": 14,
+   "unit": "개",
+   "label": "VMW 업무 종류",
+   "src": "tools/VibeManager/quick.json"
+  },
+  "vm.steps": {
+   "v": 143,
+   "unit": "개",
+   "label": "실행 단계 정의",
+   "src": "tools/VibeManager/steps.json"
+  },
+  "vm.modules": {
+   "v": 36,
+   "unit": "개",
+   "label": "VM 코드 모듈",
+   "src": "tools/VibeManager/*.js"
+  },
+  "vm.tests": {
+   "v": 84,
+   "unit": "개",
+   "label": "VM 자동 시험",
+   "src": "tools/VibeManager/test"
+  },
+  "rule.hooks": {
+   "v": 156,
+   "unit": "개",
+   "label": "작업 규칙 hook 문서",
+   "src": "Doc/_rules_v2/hooks"
+  },
+  "rule.exec": {
+   "v": 10,
+   "unit": "개",
+   "label": "실행 hook(자동 차단)",
+   "src": ".claude/hooks"
+  },
+  "rule.tobe": {
+   "v": 357,
+   "unit": "건",
+   "label": "TO-BE 룰",
+   "src": "tools/Harness/rules/tobe_rule_registry.csv"
+  },
+  "rule.user": {
+   "v": 193,
+   "unit": "건",
+   "label": "사용자 지적 규칙(VMO)",
+   "src": "tools/VibeManager/user_rules.json"
+  },
+  "out.checklist_screens": {
+   "v": 31,
+   "unit": "개",
+   "label": "CheckList 작성 화면",
+   "src": "Doc/UI_CHECKLIST"
+  },
+  "out.analysis": {
+   "v": 185,
+   "unit": "개",
+   "label": "화면분석서 파일",
+   "src": "Doc/화면분석서"
+  },
+  "out.design": {
+   "v": 54,
+   "unit": "개",
+   "label": "화면설계서 파일",
+   "src": "Doc/화면설계서"
+  },
+  "out.user_manual": {
+   "v": 2,
+   "unit": "개",
+   "label": "사용자 매뉴얼",
+   "src": "Doc/UserManual"
+  },
+  "out.ops_manual": {
+   "v": 1,
+   "unit": "개",
+   "label": "운영자 매뉴얼",
+   "src": "Doc/OpsManual"
+  },
+  "vmo.events": {
+   "v": 4096,
+   "unit": "건",
+   "label": "VMO 감시 사건 기록",
+   "src": ".vibe/orch/events.jsonl"
+  },
+  "vmo.incidents": {
+   "v": 279,
+   "unit": "건",
+   "label": "VMO 사건",
+   "src": ".vibe/orch/incidents"
+  },
+  "vmo.proposals": {
+   "v": 269,
+   "unit": "건",
+   "label": "VMO 개선안",
+   "src": ".vibe/orch/proposals"
+  },
+  "vmo.applied": {
+   "v": 147,
+   "unit": "건",
+   "label": "VMO 개선안 반영",
+   "src": ".vibe/orch/proposals"
+  },
+  "scope.screens": {
+   "v": 137,
+   "unit": "개",
+   "label": "전환 대상 화면(사용 메뉴)",
+   "src": "사내 TO-BE SCM_ADM_MNU_M"
+  },
+  "vmw.runs": {
+   "v": 5,
+   "unit": "건",
+   "label": "VMW 작업 실행",
+   "src": ".vibe/jobs"
+  },
+  "goal.vibe_low": {
+   "v": 60,
+   "unit": "%",
+   "label": "일반 바이브 코딩 산출물 수준(하한)",
+   "src": "사용자 목표(2026-11-24)",
+   "kind": "goal"
+  },
+  "goal.vibe_high": {
+   "v": 70,
+   "unit": "%",
+   "label": "일반 바이브 코딩 산출물 수준(상한)",
+   "src": "사용자 목표(2026-11-24)",
+   "kind": "goal"
+  },
+  "goal.vm": {
+   "v": 95,
+   "unit": "%",
+   "label": "VM 목표 산출물 수준",
+   "src": "사용자 목표(2026-11-24)",
+   "kind": "goal"
+  },
+  "assume.md_per_screen": {
+   "v": 10,
+   "unit": "MD",
+   "label": "가정: 화면당 수작업 개발 공수",
+   "src": "VMW 입력(가정값)",
+   "kind": "assume"
+  },
+  "assume.months": {
+   "v": 12,
+   "unit": "개월",
+   "label": "가정: 투입 기간",
+   "src": "VMW 입력(가정값)",
+   "kind": "assume"
+  },
+  "assume.workdays": {
+   "v": 20,
+   "unit": "일",
+   "label": "가정: 월 근무일",
+   "src": "VMW 입력(가정값)",
+   "kind": "assume"
+  },
+  "est.manual_md": {
+   "v": 1370,
+   "unit": "MD",
+   "label": "수작업 개발 공수",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.vm_md": {
+   "v": 68.5,
+   "unit": "MD",
+   "label": "VM 사람 보정 공수",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.saved_md": {
+   "v": 1301.5,
+   "unit": "MD",
+   "label": "줄어드는 공수",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.person_md": {
+   "v": 240,
+   "unit": "MD",
+   "label": "개발자 1명 투입 기간 공수",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.replace": {
+   "v": 5.4,
+   "unit": "명",
+   "label": "대체 가능 개발자(수작업 대비)",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.vibe_lo_md": {
+   "v": 411,
+   "unit": "MD",
+   "label": "바이브 코딩 사람 보정 공수(하한)",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.vibe_hi_md": {
+   "v": 548,
+   "unit": "MD",
+   "label": "바이브 코딩 사람 보정 공수(상한)",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.replace_vs_vibe_lo": {
+   "v": 1.4,
+   "unit": "명",
+   "label": "추가 대체 개발자(바이브 코딩 대비, 하한)",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  },
+  "est.replace_vs_vibe_hi": {
+   "v": 2.0,
+   "unit": "명",
+   "label": "추가 대체 개발자(바이브 코딩 대비, 상한)",
+   "src": "예상 계산(측정 화면 수 × 가정 공수 × 목표 수준)",
+   "kind": "est"
+  }
+ },
+ "menus": [
+  {
+   "group": "UI 분석·생성·보완 (ID 필요)",
+   "items": [
+    "AS-IS 파싱·분석 (Fact Pack)",
+    "AS-IS 실측",
+    "CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+    "CheckList 수정분 재점검 (지난 실행 뒤 바뀐 소스 범위만 → CheckList·ActionItemList)",
+    "미검증 해소",
+    "TestResultList (CheckList 결과 → 그룹별 테스트 내역·결과 Excel · 캡처 포함)",
+    "문서 생성 (분석서·설계서·테스트 → MD + Excel)",
+    "사용자 매뉴얼 (모듈별 PPT: 양식 샘플 + 최신 UI 캡처)",
+    "사용자 매뉴얼 내용 보완 (check 실패 항목)",
+    "운영자 매뉴얼 (모듈별 PPT: 양식 구조 + 분석 자료 흐름과 운영 절차)",
+    "운영자 매뉴얼 내용 보완 (check 실패 항목)",
+    "VM 소개 자료 (대상 선택 · PPT, Google Slides, PDF, HTML)",
+    "VM 소개 자료 내용 보완 (check 실패 항목)",
+    "ID 하나로 전체 (파싱→실측→분석→생성→CheckList→오류분 자동보완→재판정→TestResultList→문서)",
+    "새 화면 (from AS-IS) → 개발부터 테스트까지",
+    "새 화면 (from 설계서) → 개발부터 테스트까지",
+    "클라우드 이관 패키지(수정본)",
+    "클라우드 이관 패키지(전체)",
+    "클라우드 이관 완료 표시",
+    "META 미리보기",
+    "META 커밋",
+    "되돌리기(PKG,META,MENU)",
+    "수동 보완",
+    "자동 보완",
+    "자동보완 (CheckList → 오류분 보완 → 재판정 반복 → 문서)",
+    "PKG 변환 (AS-IS>>TO-BE)",
+    "PKG 보완",
+    "META 생성 및 보완"
+   ]
+  },
+  {
+   "group": "Overview & Reports",
+   "items": [
+    "Workbench",
+    "새 창 (멀티)",
+    "VMW (업무 작업 · 화면 여러 개 일괄)",
+    "VMO (기능, 감시)",
+    "전환 흐름 대시보드",
+    "FLOW 진척",
+    "Revision (일자별/화면별 · 수정 전후 비교)",
+    "Task History (메뉴·프롬프트 실행 내역)",
+    "새 Claude 터미널",
+    "계정 확인",
+    "대조표",
+    "E2E 리포트",
+    "이관 룰셋",
+    "조회조건 기준 (SCP·SSP)",
+    "대조표 검증 커버리지 (전 화면)",
+    "Agent 게이트 집계",
+    "산출물 폴더 (Doc/asisfacts)"
+   ]
+  },
+  {
+   "group": "Server(Start/Finish)",
+   "items": [
+    "BE & FE Finish & Start",
+    "BE & FE Start",
+    "BE Start",
+    "FE Start",
+    "BE & FE Finish",
+    "BE Finish",
+    "FE Finish",
+    "Open Browser(NSCM)",
+    "AS-IS IIS & Launcher Start",
+    "AS-IS IIS Start",
+    "AS-IS Launcher"
+   ]
+  },
+  {
+   "group": "Git(Upload/Download)",
+   "items": [
+    "Source Download & Merge",
+    "Source Download & Merge(BE)",
+    "Source Upload(UI)",
+    "Source Update Status",
+    "다국어 JSON 재생성"
+   ]
+  },
+  {
+   "group": "환경설정",
+   "items": [
+    "DB 접속 (.env.asis)",
+    "AS-IS (asisfacts.json)",
+    "TO-BE (tobefacts.json)",
+    "하네스 (harness.json)",
+    "작업 모드 (DB MODE / UI/DB MODE)",
+    "AI 검토 (켜기 / 끄기)",
+    "VMO 보완 뒤 재수행 (재수행 / 수행 없음)",
+    "AS-IS 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",
+    "TO-BE 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",
+    "E2E (e2e.config.json)",
+    "환경 요약 (env.json)",
+    "DB 접속 확인 (probe)",
+    "환경 점검 (node·python·claude …)",
+    "환경 노트",
+    "단계 정의 (steps.json)",
+    "VS Code 설정 (vibeManager)",
+    "실행 기록 (runs.log)",
+    "Source Backup",
+    "E2E 사용자 관리 (users.json)"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,117 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+ITEM_ID,Y,Y,Y,,,,,,MES Stock
+NICK_NAME,Y,Y,Y,,,,,,MES Stock
+OQC_INSP_REQUEST,Y,Y,Y,,,,,,MES Stock
+BEFORE_OQC,Y,Y,Y,,,,,,MES Stock
+OQC_NG,Y,Y,Y,,,,,,MES Stock
+QMS_MES_HOLD,Y,Y,Y,,,,,,MES Stock
+OQC_COMPLETE,Y,Y,Y,,,,,,MES Stock
+TOTAL,Y,Y,Y,,,,,,MES Stock
+AVAILABLE_STOCK,Y,Y,Y,,,,,,MES Stock
+DIVISION_ID,,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,MES Stock
+REQUESTOR,,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,MES Stock
+MODEL_USER,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,MES Stock
+REMARKS3,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,MES Stock
+BOXID,Y,Y,Y,,,,,,MES Stock Detail
+PRODID,Y,Y,Y,,,,,,MES Stock Detail
+PRJT_NAME,Y,Y,Y,,,,,,MES Stock Detail
+AVAILABLE_YN,Y,Y,Y,,,,,,MES Stock Detail
+OQC_INSP_RESULT,Y,Y,Y,,,,,,MES Stock Detail
+LOTID,Y,Y,Y,,,,,,MES Stock Detail
+LOT_QTY,Y,Y,Y,,,,,,MES Stock Detail
+PROD_VALID_DATE,Y,Y,Y,,,,,,MES Stock Detail
+EXP_INSP_VALID_DATE,Y,Y,Y,,,,,,MES Stock Detail
+MES_HOLD_YN,Y,Y,Y,,,,,,MES Stock Detail
+QMS_HOLD_YN,Y,Y,Y,,,,,,MES Stock Detail
+MES_UNHOLD_SCHD_DATE,Y,Y,Y,,,,,,MES Stock Detail
+QMS_UNHOLD_SCHD_DATE,Y,Y,Y,,,,,,MES Stock Detail
+DIVISION_ID,,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,MES Stock Detail
+REQUESTOR,,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,MES Stock Detail
+MODEL_USER,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,MES Stock Detail
+REMARKS3,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,MES Stock Detail
+DIVISION_ID,Y,NONE,N,,,,,,Shipment Plan
+FROM_SITE,N,NONE,N,,,,,,Shipment Plan
+FROM_SITE_DESCRIPTION,Y,NONE,N,,,,,,Shipment Plan
+ITEM_ID,Y,NONE,N,,,,,,Shipment Plan
+NICK_NAME,Y,NONE,N,,,,,,Shipment Plan
+BOH_TYPE,Y,NONE,N,,,,,,Shipment Plan
+BOH_QTY,Y,NONE,N,,,,,,Shipment Plan
+PSI,Y,NONE,N,,,,,,Shipment Plan
+BACK_COLOR,N,NONE,N,,,,,,Shipment Plan
+CONFIRM_DAY,N,NONE,N,,,,,,Shipment Plan
+LOT_YN,N,NONE,N,,,,,,Shipment Plan
+MEASURE_NAME,Y,NONE,N,,,,,,Shipment Plan
+MEASURE,N,NONE,N,,,,,,Shipment Plan
+<DYNAMIC:LOOP>,,NONE,COND,,"RULES:[{""g"": ""AUTH && COL(MEASURE)==\""SHIP_PLAN\"" && RAW(siMain.ActiveSheet.ColumnHeader.Cells[2, j].Value.ToString() != \""SUM\"")"", ""lock"": ""N"", ""ref"": ""EditButton:2399""}, {""g"": ""AUTH && COL(MEASURE)==\""SHIP_PLAN\"" && !(RAW(siMain.ActiveSheet.ColumnHeader.Cells[2, j].Value.ToString() != \""SUM\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:2404""}]",,기존행 SSP0021_ShipmentPlan:2399 LockRange | 기존행 SSP0021_ShipmentPlan:2404 LockRange,,Shipment Plan
+DIVISION_ID,Y,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,Shipment Result
+TYPE,Y,Y,Y,,,,,,Shipment Result
+ERP_SO_NO,Y,Y,Y,,,,,,Shipment Result
+CONFIRM_ID,Y,Y,Y,,,,,,Shipment Result
+PROJECT_CODE,Y,Y,Y,,,,,,Shipment Result
+ITEM_ID,Y,Y,Y,,,,,,Shipment Result
+NICK_NAME,Y,Y,Y,,,,,,Shipment Result
+FROM_SITE,Y,Y,Y,,,,,,Shipment Result
+TO_SITE,Y,Y,Y,,,,,,Shipment Result
+END_CUSTOMER,Y,Y,Y,,,,,,Shipment Result
+QTY,Y,Y,Y,,,,,,Shipment Result
+CHILD_QTY,Y,Y,Y,,,,,,Shipment Result
+YYYYMMDD,Y,Y,Y,,,,,,Shipment Result
+TRANSPORT_MODE,Y,Y,Y,,,,,,Shipment Result
+INCOTERMS,Y,Y,Y,,,,,,Shipment Result
+ETD_DATE,Y,Y,Y,,,,,,Shipment Result
+ETA_DATE,Y,Y,Y,,,,,,Shipment Result
+SHIP_TYPE,Y,Y,Y,,,,,,Shipment Result
+REQUESTOR,,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,Shipment Result
+MODEL_USER,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,Shipment Result
+REMARKS3,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,Shipment Result
+DIVISION_ID,Y,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,Stock Location Detail
+COMPANY_ID,Y,Y,Y,,,,,,Stock Location Detail
+CUTOFF_DATE,Y,Y,Y,,,,,,Stock Location Detail
+FROM_SITE,Y,Y,Y,,,,,,Stock Location Detail
+PLANT_ID,Y,Y,Y,,,,,,Stock Location Detail
+ITEM_ID,Y,Y,Y,,,,,,Stock Location Detail
+NICK_NAME,Y,Y,Y,,,,,,Stock Location Detail
+STOCK_TYPE,Y,Y,Y,,,,,,Stock Location Detail
+STORAGE_ID,Y,Y,Y,,,,,,Stock Location Detail
+STORAGE_DESCRIPTION,Y,Y,Y,,,,,,Stock Location Detail
+TOTAL_QTY,Y,Y,Y,,,,,,Stock Location Detail
+AVAILABLE_QTY,Y,Y,Y,,,,,,Stock Location Detail
+DEFECT_QTY,Y,Y,Y,,,,,,Stock Location Detail
+MOVING_QTY,Y,Y,Y,,,,,,Stock Location Detail
+QTY_UOM,Y,Y,Y,,,,,,Stock Location Detail
+WIPHOLD_YN,Y,Y,Y,,,,,,Stock Location Detail
+HOLDING_DATE,Y,Y,Y,,,,,,Stock Location Detail
+AVAILABLE_DATE,Y,Y,Y,,,,,,Stock Location Detail
+OUTSOURCING_FLAG,Y,Y,Y,,,,,,Stock Location Detail
+OUTSOURCING_FACTORY,Y,Y,Y,,,,,,Stock Location Detail
+REQUESTOR,,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,Stock Location Detail
+MODEL_USER,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,Stock Location Detail
+REMARKS3,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,Stock Location Detail
+DIVISION_ID,Y,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,oWMS Detail
+PLANT_ID,Y,Y,Y,,,,,,oWMS Detail
+STORAGE_ID,Y,Y,Y,,,,,,oWMS Detail
+ITEM_ID,Y,Y,Y,,,,,,oWMS Detail
+NICK_NAME,Y,Y,Y,,,,,,oWMS Detail
+STOCK_STATUS,Y,Y,Y,,,,,,oWMS Detail
+GRADE,Y,Y,Y,,,,,,oWMS Detail
+CAPA_GRADE,Y,Y,Y,,,,,,oWMS Detail
+SOC,Y,Y,Y,,,,,,oWMS Detail
+LOT_ID,Y,Y,Y,,,,,,oWMS Detail
+PALLET_ID,Y,Y,Y,,,,,,oWMS Detail
+STOCK_QTY,Y,Y,Y,,,,,,oWMS Detail
+AVAILABLE_QTY,Y,Y,Y,,,,,,oWMS Detail
+UNDECIDED_QTY,Y,Y,Y,,,,,,oWMS Detail
+ALLOCATION_QTY,Y,Y,Y,,,,,,oWMS Detail
+HOLD_QTY,Y,Y,Y,,,,,,oWMS Detail
+PACKING_QTY,Y,Y,Y,,,,,,oWMS Detail
+MOVING_QTY,Y,Y,Y,,,,,,oWMS Detail
+RECEIVING_QTY,Y,Y,Y,,,,,,oWMS Detail
+EXPIRATION_QTY,Y,Y,Y,,,,,,oWMS Detail
+LONG_TERM_QTY,Y,Y,Y,,,,,,oWMS Detail
+PACKING_STATUS,Y,Y,Y,,,,,,oWMS Detail
+CUSTOMER_CODE,Y,Y,Y,,,,,,oWMS Detail
+CUSTOMER_NAME,Y,Y,Y,,,,,,oWMS Detail
+LOT_ISSUE_DATE,Y,Y,Y,,,,,,oWMS Detail
+REQUESTOR,,N,Y,잠금 (InsertRow:2344),,,신규행 SSP0021_ShipmentPlan:2344 LockRange,,oWMS Detail
+MODEL_USER,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,oWMS Detail
+REMARKS3,,N,Y,잠금 (InsertRow:2346),,,신규행 SSP0021_ShipmentPlan:2346 LockRange,,oWMS Detail

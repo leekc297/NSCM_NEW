@@ -1,0 +1,16 @@
+.inputWithSearch {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+  }
+  & button {
+    position: absolute;
+    right: -40px;
+  }
+}
+
+@media screen and (max-width: 1919px) {
+  .input {
+    width: 85% !important;
+  }
+}

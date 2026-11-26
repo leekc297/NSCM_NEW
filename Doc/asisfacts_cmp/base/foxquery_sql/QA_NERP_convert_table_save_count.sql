@@ -1,0 +1,1 @@
+﻿update znerp_dev_item_schedule set expect_cnt = @CNT where SEQ = @SEQ

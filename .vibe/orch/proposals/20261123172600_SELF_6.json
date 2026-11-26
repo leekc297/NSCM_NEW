@@ -1,0 +1,114 @@
+{
+  "id": "20261123172600_SELF_6",
+  "at": "2026-11-23T17:26:00+09:00",
+  "ms": 1795422360868,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/jobs.js|vmw상단줄head에작업조작아이콘단추n개가나란히있음",
+  "title": "사용자 지시 R6 같은 문제: tools/VibeManager/jobs.js:289 VMW 상단 줄(.head)에 작업 조작 아이콘 단추 6개가 나란히 있음",
+  "evidence": "규칙 R6 \"상단 줄에 같은 종류 기능 단추가 4개 넘게 늘어서면 아이콘 1개와 아래로 펼치는 목록으로 묶음(목록 = 아이콘 + 기능명, 바깥 클릭과 Esc 로 닫힘)\" (원래 지시 2026-11-23 13:20 \"아이콘을 옆으로 나열하면 보기는 좋은데, 공간을 많이 차지하니, 하나의 아이콘만 표기하고 클릭하면 밑으로 펼쳐지도록 해서 선택할 수 있도록 해주세요.\") · tools/VibeManager/jobs.js:289 <button class=\"ico\" id=\"bPause\" disabled ...>⏸</button><button class=\"ico\" id=\"bStop\" disabled ...>⏹</button><button class=\"ico\" id=\"bRetry\" ...>↻</button><button class=\"ico\" id=\"bResume\" ...>⏵</butto",
+  "targets": [
+    "tools/VibeManager/jobs.js"
+  ],
+  "before_after": "아이콘 단추 1개와 아래로 펼치는 목록(아이콘 + 기능명)으로 묶음. orchestra.js vmiBtn 처럼 바깥 클릭과 Esc 로 닫히게 하고, 목록 항목마다 지금의 disabled 상태를 그대로 반영함",
+  "verify": "node --check tools/VibeManager/jobs.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/jobs.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T00:33:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T00:36:52+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self0033"
+    },
+    {
+      "at": "2026-11-24T00:36:54+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T00:49:03+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 jobs.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-24T00:49:03+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-24 00:37:14 반영 전: node --check CHECK_OK, run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.6s', t_webview_syntax.js 'ALL PASS'(PASS 19). 2026-11-24 00:41:31~00:45:09 반영 뒤: node --check CHECK_OK, run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.1s'(t_jobs_focus PASS 8, t_jobs_recent PASS 4, t_ · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T00-36-54_claude_orch.log",
+      "sec": 513,
+      "costUsd": 0.8404636,
+      "files": [
+        "tools/VibeManager/jobs.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:36+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "상단 줄에 같은 종류 기능 단추가 4개 넘게 늘어서면 아이콘 1개와 아래로 펼치는 목록으로 묶음(목록 = 아이콘 + 기능명, 바깥 클릭과 Esc 로 닫힘) 규칙을 tools/VibeManager/jobs.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R6|tools/VibeManager/jobs.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795447995790,
+  "autoFp": "7a799e544b",
+  "applyStartMs": 1795448214513,
+  "verifyJudge": {
+    "at": "2026-11-24T00:45:29+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self0033",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "jobs.js"
+  ],
+  "appliedMs": 1795448943726,
+  "synced": [
+    "jobs.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/jobs.js: 반영 전 CHECK_OK → 반영 뒤 CHECK_OK. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.6s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.1s'. node tools/VibeManager/test/t_webview_syntax.js: 반영 전 PASS 19 ALL PASS → 반영 뒤 PASS 19 ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/jobs.js"
+    ],
+    "verify_result": "2026-11-24 00:37:14 반영 전: node --check CHECK_OK, run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.6s', t_webview_syntax.js 'ALL PASS'(PASS 19). 2026-11-24 00:41:31~00:45:09 반영 뒤: node --check CHECK_OK, run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.1s'(t_jobs_focus PASS 8, t_jobs_recent PASS 4, t_webview_syntax PASS 19), t_webview_syntax.js 'ALL PASS'(PASS 19)",
+    "note": "jobs.js 319행(개선안 표기 289행)의 상단 줄 단추 6개(bPause, bStop, bRetry, bResume, bSum, bDel)를 아이콘 단추 jamBtn(⏯▾) 1개와 펼침 목록 jamMenu(아이콘 + 기능명)로 묶음. 단추 id 를 유지해 기존 disabled 갱신(385·389행)과 onclick 을 그대로 씀. 바깥 클릭, Esc, 화살표 이동은 orchestra.js vmiBtn 과 같은 방식. .head 에 position:relative, z-index:5 를 더함. 창 다시 로드 뒤 실화면 확인은 미확인. 걸린 시간 8분(00:37:14~00:45:09), 오래 걸린 단계 run_all.js 2회(212.6s, 213.1s)."
+  },
+  "snap": "prop_20261123172600_SELF_6",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

@@ -19,7 +19,7 @@ for ($i = 0; $i -lt $args.Count; $i++) {
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $cfg = Join-Path $here "asisfacts.json"
 $exe = Join-Path $here "_bin\AsisFacts.dll"
-dotnet build (Join-Path $here "AsisFacts.csproj") -c Release -o (Join-Path $here "_bin") | Select-String "error|Build succeeded"
+dotnet build (Join-Path $here "AsisFacts.csproj") -c Release -o (Join-Path $here "_bin") -p:UseSharedCompilation=false | Select-String "error|Build succeeded"
 if ($LASTEXITCODE -ne 0) { Write-Host "빌드 실패" -ForegroundColor Red; exit 1 }
 if ($Ids.Count -eq 0) { Write-Host "화면ID 를 지정하세요"; exit 1 }
 & dotnet $exe agent @Ids --driver $Driver --model $Model --phase $Phase --config $cfg

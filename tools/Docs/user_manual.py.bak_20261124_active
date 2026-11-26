@@ -1,0 +1,1045 @@
+# -*- coding: utf-8 -*-
+r"""
+user_manual: 모듈별 사용자 매뉴얼 PPTX 생성 (VMW 업무 '📘 사용자 매뉴얼', 2026-11-23 사용자 지시)
+
+  모듈 = 사용자 메뉴 1단계 묶음. DM = Demand, SCP = Supply, SSP = Shipping, SYSTEM = Authority + Admin.
+         Report 메뉴 화면은 화면 ID 앞글자로 모듈에 붙임(DMF, DMD = DM, SCP = SCP, SSP = SSP, SYS = SYSTEM).
+  입력 = Doc/UserManual/<모듈>/_inputs.json (VMW 가 업무를 만들 때 씀)
+         { author, date, version, sample(양식 PPTX), captures(최신 UI 캡처 PPTX, DOCX, ZIP, 폴더) }
+
+  python tools/Docs/user_manual.py prep  --module DM   # 메뉴 트리(사내 DB) · 캡처 추출 · 화면별 초안(content/<ID>.json, 있으면 유지)
+  python tools/Docs/user_manual.py check --module DM   # 내용이 다 채워졌는가(빠진 화면 목록 · 종료코드 3)
+  python tools/Docs/user_manual.py build --module DM   # 양식 PPTX 로 매뉴얼 생성 · 결과 검사(종료코드 0 = 통과)
+
+  산출물 = Doc/UserManual/<모듈>/SCM_IM_사용자매뉴얼_<모듈>_v<버전>.pptx
+"""
+import argparse, copy, datetime, io, json, os, re, sys, zipfile
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+MODULES = {
+    'DM': {'tops': ['Demand'], 'report': ('DMF', 'DMD')},
+    'SCP': {'tops': ['Supply'], 'report': ('SCP',)},
+    'SSP': {'tops': ['Shipping'], 'report': ('SSP',)},
+    'SYSTEM': {'tops': ['Authority', 'Admin'], 'report': ('SYS',)},
+}
+MOD_ORDER = ['DM', 'SCP', 'SSP', 'SYSTEM']  # 2026-11-23 사용자: 2개 이상 고르면 문서 1개, 이 순서
+
+
+def mods_of(key):
+    """'DM_SYSTEM' 같은 묶음 키 → ['DM', 'SYSTEM'](MOD_ORDER 순) · 모르는 모듈이면 종료"""
+    ms = [m for m in str(key).upper().replace('+', '_').replace(',', '_').split('_') if m]
+    bad = [m for m in ms if m not in MODULES]
+    if bad or not ms:
+        raise SystemExit(f'모듈 아님: {", ".join(bad) or key} (DM, SCP, SSP, SYSTEM 또는 DM_SYSTEM 처럼 묶음)')
+    return [m for m in MOD_ORDER if m in ms]
+
+
+def mod_key(key):
+    return '_'.join(mods_of(key))
+
+
+SPECIAL = ['_LAYOUT', '_COMMON']          # 화면 레이아웃 · 공통기능 장표(샘플 5, 6장)
+CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
+EMU_CM = 360000
+
+
+def out(*a):
+    print(*a, flush=True)
+
+
+def mdir(mod):
+    return os.path.join(ROOT, 'Doc', 'UserManual', mod)
+
+
+def rj(f, d=None):
+    try:
+        with open(f, encoding='utf-8-sig') as fh:
+            return json.load(fh)
+    except Exception:
+        return d
+
+
+def wj(f, o):
+    os.makedirs(os.path.dirname(f), exist_ok=True)
+    with open(f, 'w', encoding='utf-8') as fh:
+        json.dump(o, fh, ensure_ascii=False, indent=1)
+
+
+def inputs_of(mod):
+    inp = rj(os.path.join(mdir(mod), '_inputs.json'), None)
+    if not inp:
+        raise SystemExit(f'입력 없음: Doc/UserManual/{mod}/_inputs.json (VMW 사용자 매뉴얼 업무로 시작)')
+    for k in ('author', 'date', 'version', 'sample', 'captures'):
+        if not (inp.get(k) if isinstance(inp.get(k), list) else str(inp.get(k) or '').strip()):
+            raise SystemExit(f'입력 빠짐: {k} (Doc/UserManual/{mod}/_inputs.json)')
+    # 2026-11-23 사용자: 캡처 파일 여러 개 선택 가능 → captures = 경로 목록(예전 문자열 1개도 받음)
+    caps = inp['captures'] if isinstance(inp['captures'], list) else [inp['captures']]
+    inp['captures'] = [str(c).strip() for c in caps if str(c).strip()]
+    if not inp['captures']:
+        raise SystemExit(f'입력 빠짐: captures (Doc/UserManual/{mod}/_inputs.json)')
+    for f in [inp['sample']] + inp['captures']:
+        if not os.path.exists(f):
+            raise SystemExit(f'파일 없음: {f}')
+    inp['date'] = win_date(inp['date'])  # 2026-11-23 Windows 일자 형식
+    return inp
+
+
+def win_date_pattern():
+    """Windows 짧은 날짜 형식(HKCU\Control Panel\International sShortDate). 못 읽으면 yyyy-MM-dd"""
+    try:
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r'Control Panel\International') as k:
+            return str(winreg.QueryValueEx(k, 'sShortDate')[0] or 'yyyy-MM-dd')
+    except Exception:
+        return 'yyyy-MM-dd'
+
+
+def win_date(v):
+    """2026-11-23 사용자: VM 의 일자 = Windows 일자 형식. '2026.11.23', '2026-11-23' 같은 값 → 그 형식(못 읽는 값은 그대로)"""
+    m = re.match(r'^\s*(\d{4})[-./](\d{1,2})[-./](\d{1,2})', str(v or ''))
+    if not m:
+        return str(v or '')
+    y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3)); P = win_date_pattern(); out = ''; i = 0
+    while i < len(P):
+        if P[i] == "'":
+            j = P.find("'", i + 1); j = len(P) if j < 0 else j; out += P[i + 1:j]; i = j + 1; continue
+        for t, val in (('yyyy', str(y)), ('yy', f'{y % 100:02d}'), ('MM', f'{mo:02d}'), ('M', str(mo)), ('dd', f'{d:02d}'), ('d', str(d))):
+            if P.startswith(t, i):
+                out += val; i += len(t); break
+        else:
+            out += P[i]; i += 1
+    return out
+
+
+def ver_tag(v):
+    m = re.search(r'(\d+(?:\.\d+)*)', str(v))
+    return m.group(1) if m else re.sub(r'\W+', '', str(v)) or '1.0'
+
+
+def norm(s):
+    return re.sub(r'[^0-9a-z가-힣]', '', str(s or '').lower())
+
+
+# ───────────────────────── 메뉴 트리(사내 DB) ─────────────────────────
+def menu_tree(mod):
+    from dbconn import connect
+    cfg = MODULES[mod]
+    q = """select connect_by_root m.mnu_id top, m.mnu_id, m.uppr_mnu_id, m.mnu_lv_no, m.mnu_tp_cd, m.mnu_url, m.sort_ord,
+                  (select msg_nm from scm_adm_msg_m g where g.msg_id = m.mnu_msg_id and g.lang_cd = 'KO' and rownum = 1) ko,
+                  (select msg_nm from scm_adm_msg_m g where g.msg_id = m.mnu_msg_id and g.lang_cd = 'EN' and rownum = 1) en,
+                  m.mnu_desc
+             from scm_adm_mnu_m m
+            where m.use_yn = 'Y'
+            start with m.uppr_mnu_id is null connect by prior m.mnu_id = m.uppr_mnu_id
+            order siblings by m.sort_ord"""
+    with connect('tobe') as cx:
+        cx.call_timeout = 60000
+        cur = cx.cursor(); cur.execute(q); rows = cur.fetchall()
+        btn = {}
+        try:
+            cur.execute("""select b.mnu_id, b.sht_nm, b.mnu_btn_cd from scm_adm_mnu_btn_mpg_m b where nvl(b.use_yn,'Y') = 'Y' order by b.mnu_id, b.sht_nm, b.mnu_btn_cd""")
+            for mid, sht, cd in cur.fetchall():
+                btn.setdefault(mid, []).append(f'{sht}:{cd}')
+        except Exception as e:
+            out(f'버튼 매핑 조회 실패(계속): {str(e)[:120]}')
+    name = {r[1]: (r[8] or r[7] or r[9] or r[1]) for r in rows}
+    groups, order = {}, []
+    for top, mid, up, lv, tp, url, so, ko, en, desc in rows:
+        if lv != 3 or tp != 'SCREEN':
+            continue
+        pre = (re.match(r'[A-Z]+', mid) or [''])[0]
+        if top in cfg['tops']:
+            pass
+        elif top == 'Report' and pre in cfg['report']:
+            pass
+        else:
+            continue
+        g = name.get(up, up)
+        key = f'{top}>{up}'
+        if key not in groups:
+            groups[key] = {'top': name.get(top, top), 'topId': top, 'group': g, 'screens': []}; order.append(key)
+        groups[key]['screens'].append({'id': mid, 'name': en or ko or mid, 'ko': ko or '', 'en': en or '', 'url': url or '',
+                                       'menuPath': f'{mod}> {g}> {en or ko or mid}', 'buttons': btn.get(mid, []), 'sort': len(groups[key]['screens'])})
+    return [groups[k] for k in order]
+
+
+# ───────────────────────── 캡처 추출 ─────────────────────────
+def pic_shapes(slide):
+    out_ = []
+    for sh in slide.shapes:
+        if sh.shape_type == 13:
+            out_.append(sh)
+        elif sh.shape_type == 6:  # 그룹 안 그림
+            for s2 in sh.shapes:
+                if s2.shape_type == 13:
+                    out_.append(s2)
+    return sorted(out_, key=lambda s: -(int(s.width or 0) * int(s.height or 0)))
+
+
+def slide_title(slide):
+    try:
+        if slide.shapes.title is not None and slide.shapes.title.text.strip():
+            return slide.shapes.title.text.strip()
+    except Exception:
+        pass
+    for sh in slide.shapes:
+        if sh.has_text_frame and sh.text_frame.text.strip():
+            return sh.text_frame.text.strip().split('\n')[0]
+    return ''
+
+
+def captures_from_pptx(path):
+    """반환: { 'index': {코드: page}, 'names': {코드: 프로그램명}, 'slides': [ {no, title, pics:[(blob, ext, w, h)]} ] }"""
+    from pptx import Presentation
+    prs = Presentation(path)
+    index, names, slides = {}, {}, []
+    for no, s in enumerate(prs.slides, 1):
+        for sh in s.shapes:
+            if not sh.has_table:
+                continue
+            rows = [[c.text.strip() for c in r.cells] for r in sh.table.rows]
+            if not rows:
+                continue
+            head = [norm(x) for x in rows[0]]
+            ci = next((i for i, h in enumerate(head) if '프로그램코드' in h or h in ('화면id', 'uiid', 'id')), None)
+            pi = next((i for i, h in enumerate(head) if h in ('page', '페이지', 'p')), None)
+            ni = next((i for i, h in enumerate(head) if '프로그램명' in h or h in ('화면명', 'name')), None)
+            if ci is None or pi is None:
+                continue
+            for r in rows[1:]:
+                code = (r[ci] if ci < len(r) else '').strip().upper()
+                pg = re.sub(r'\D', '', r[pi] if pi < len(r) else '')
+                if re.match(r'^[A-Z]{2,4}\d{4}', code) and pg:
+                    index[code] = int(pg)
+                    if ni is not None and ni < len(r):
+                        names[code] = r[ni].strip()
+        pics = []
+        for p in pic_shapes(s):
+            try:
+                pics.append((p.image.blob, p.image.ext, p.image.size[0], p.image.size[1]))
+            except Exception:
+                pass
+        slides.append({'no': no, 'title': slide_title(s), 'pics': pics})
+    return {'index': index, 'names': names, 'slides': slides}
+
+
+def captures_from_docx(path):
+    import docx
+    d = docx.Document(path)
+    rels = {r.rId: r for r in d.part.rels.values() if 'image' in r.reltype}
+    slides, title, no = [], '', 0
+    for para in d.paragraphs:
+        t = para.text.strip()
+        blips = para._p.findall('.//{http://schemas.openxmlformats.org/drawingml/2006/main}blip')
+        if t and not blips:
+            title = t
+        for b in blips:
+            rid = b.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
+            if rid in rels:
+                part = rels[rid].target_part; no += 1
+                slides.append({'no': no, 'title': title, 'pics': [(part.blob, part.partname.ext, 0, 0)]})
+    return {'index': {}, 'names': {}, 'slides': slides}
+
+
+def captures_from_files(path):
+    files = []
+    if os.path.isdir(path):
+        for base, _, fs in os.walk(path):
+            files += [(os.path.join(base, f), None) for f in fs]
+    elif zipfile.is_zipfile(path):
+        z = zipfile.ZipFile(path)
+        files = [(n, z) for n in z.namelist()]
+    else:
+        files = [(path, None)]
+    slides = []
+    for i, (f, z) in enumerate(sorted(files, key=lambda x: x[0]), 1):
+        ext = os.path.splitext(f)[1].lower().lstrip('.')
+        if ext not in ('png', 'jpg', 'jpeg', 'gif', 'bmp'):
+            continue
+        blob = z.read(f) if z else open(f, 'rb').read()
+        slides.append({'no': i, 'title': os.path.splitext(os.path.basename(f))[0], 'pics': [(blob, ext, 0, 0)]})
+    return {'index': {}, 'names': {}, 'slides': slides}
+
+
+def load_captures(path):
+    ext = os.path.splitext(path)[1].lower()
+    if ext == '.pptx':
+        return captures_from_pptx(path)
+    if ext == '.docx':
+        return captures_from_docx(path)
+    return captures_from_files(path)
+
+
+def match_capture(cap, sc):
+    """화면 1개에 맞는 캡처 장표 찾기. 반환 (slide, how)"""
+    sid = sc['id'].upper()
+    keys = {norm(sc['en']), norm(sc['ko']), norm(sc['name']), norm(cap['names'].get(sid, ''))} - {''}
+    by_no = {s['no']: s for s in cap['slides']}
+    pg = cap['index'].get(sid)
+    if pg and pg in by_no and by_no[pg]['pics']:
+        s = by_no[pg]
+        if not keys or norm(s['title']) in keys or any(k and (k in norm(s['title']) or norm(s['title']) in k) for k in keys):
+            return s, f'목록 표 Page {pg}'
+        for d in (1, -1, 2, -2):  # 표 Page 가 장표 번호와 한두 장 어긋난 경우
+            s2 = by_no.get(pg + d)
+            if s2 and s2['pics'] and norm(s2['title']) in keys:
+                return s2, f'목록 표 Page {pg} → 제목 일치 {pg + d}'
+        return s, f'목록 표 Page {pg}(제목 다름: {s["title"][:30]})'
+    for s in cap['slides']:
+        if s['pics'] and (sid in s['title'].upper() or norm(s['title']) in keys):
+            return s, f'제목 일치 {s["no"]}'
+    return None, ''
+
+
+def legacy_texts(sample_path):
+    """양식 샘플의 화면 장표 글(제목 → 설명, Key Point, UI 정의). 같은 화면이면 AI 가 참고"""
+    from pptx import Presentation
+    res = {}
+    try:
+        prs = Presentation(sample_path)
+    except Exception:
+        return res
+    for s in prs.slides:
+        t = slide_title(s); info = {'title': t, 'definition': '', 'desc': '', 'keyPoint': ''}
+        for sh in s.shapes:
+            if sh.has_table:
+                rows = [[c.text.strip() for c in r.cells] for r in sh.table.rows]
+                for r in rows:
+                    if r and r[0].replace(' ', '') == 'UI정의' and len(r) > 1:
+                        info['definition'] = r[1]
+                    if r and r[0].replace(' ', '').lower() == 'keypoint' and len(r) > 1:
+                        info['keyPoint'] = r[1]
+            elif sh.has_text_frame and sh.text_frame.text.strip().startswith('●'):
+                info['desc'] = sh.text_frame.text.strip()
+        if info['desc']:
+            res.setdefault(norm(t), info)
+    return res
+
+
+PREFIX_MOD = (('DMF', 'DM'), ('DMD', 'DM'), ('SCP', 'SCP'), ('SSP', 'SSP'), ('SYS', 'SYSTEM'))
+
+
+def module_of(code, info):
+    """화면 ID → 모듈. 사용자 메뉴 1단계가 정본, Report 와 메뉴에 없는 화면은 화면 ID 앞글자"""
+    if info:
+        for m, cfg in MODULES.items():
+            if info['top'] in cfg['tops']:
+                return m
+    for pre, m in PREFIX_MOD:
+        if code.upper().startswith(pre):
+            return m
+    return ''
+
+
+def db_screens():
+    """사용자 메뉴의 화면 전부: id → {top, topName, group, name, ko, en, buttons, sort, mod}"""
+    res = {}
+    for mod in MODULES:
+        for g in menu_tree(mod):
+            for sc in g['screens']:
+                res.setdefault(sc['id'], dict(sc, top=g['topId'], topName=g['top'], group=g['group'], mod=mod))
+    return res
+
+
+def cmd_prep(a):
+    mod = mod_key(a.module); mods = mods_of(mod); inp = inputs_of(mod); d = mdir(mod)
+    t0 = datetime.datetime.now()
+    info = db_screens()
+    mine = [x for x in info.values() if x['mod'] in mods]
+    out(f'== 사용자 메뉴(사내 DB): 전체 화면 {len(info)}개, {mod} {len(mine)}개 ({(datetime.datetime.now() - t0).total_seconds():.1f}s)')
+    caps = []
+    for fi, f in enumerate(inp['captures'], 1):
+        c = load_captures(f); caps.append(c)
+        for sl in c['slides']:
+            sl['file'] = fi
+        out(f'== 캡처 파일 {fi}/{len(inp["captures"])} {os.path.basename(f)}: 장표 {len(c["slides"])}개, 목록 표 {len(c["index"])}건')
+    # 2026-11-23 사용자: 샘플 매뉴얼은 양식만 씀. 내용, 화면 목록, 메뉴 순서, 메뉴 구성 = 최신 UI 캡처 파일 기준.
+    #   화면 목록과 순서 = 캡처 파일 '화면 목록 및 ID' 표(프로그램 코드, Page) 순, 화면 이름 = 그 표의 프로그램 명(없으면 장표 제목)
+    #   2단 묶음 이름 = 사용자 메뉴(DB), 메뉴에 없는 화면 = '기타' 묶음, 목록 표가 없는 캡처 파일 = 메뉴 화면 이름과 장표 제목을 맞춤
+    os.makedirs(os.path.join(d, 'captures'), exist_ok=True); os.makedirs(os.path.join(d, 'content'), exist_ok=True)
+    entries = []  # ((파일 순서, 장표 번호), code, slide, how, name) · 같은 화면이 여러 파일에 있으면 앞 파일
+    seen = set()
+    for fi, cap in enumerate(caps, 1):
+        part = []
+        if cap['index']:
+            for code, pg in sorted(cap['index'].items(), key=lambda x: x[1]):
+                if code in seen or module_of(code, info.get(code)) not in mods:
+                    continue
+                sc = info.get(code) or {'id': code, 'name': cap['names'].get(code, code), 'en': '', 'ko': ''}
+                s, how = match_capture(cap, dict(sc, id=code))
+                if s:
+                    part.append(((fi, s['no']), code, s, f'파일 {fi} {how}' if len(caps) > 1 else how, cap['names'].get(code) or s['title'] or sc['name']))
+        else:
+            for sc in sorted(mine, key=lambda x: x.get('sort', 0)):
+                if sc['id'] in seen:
+                    continue
+                s, how = match_capture(cap, sc)
+                if s:
+                    part.append(((fi, s['no']), sc['id'], s, f'파일 {fi} {how}' if len(caps) > 1 else how, s['title'] or sc['name']))
+        for e in part:
+            seen.add(e[1])
+        entries += part
+    # 화면 장표 순서 = 모듈 순서(DM, SCP, SSP, SYSTEM) → 같은 모듈 안에서 캡처 파일 순서
+    entries.sort(key=lambda x: (mods.index(module_of(x[1], info.get(x[1]))), x[0]))
+    if not entries:
+        raise SystemExit(f'캡처 파일에서 {mod} 화면을 찾지 못함(목록 표 프로그램 코드, 장표 제목 확인)')
+    plan = {'module': mod, 'groups': [], 'captureFile': inp['captures'], 'sample': inp['sample'], 'at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),
+            }
+    # 2026-11-23 사용자: UI 목록, 장표 순서 = 캡처 파일. 메뉴 계층도, 메뉴 경로 = 사내 DB 메뉴 구성(묶음, SORT_ORD)
+    #   캡처에 있으나 사내 메뉴에 없는 화면 = 계층도 끝 '메뉴 미등록' 묶음
+    UNREG = '메뉴 미등록'
+    scr = {}
+    for (fno, no), code, s, how, name in entries:
+        di = info.get(code) or {}
+        grp = di.get('group') or UNREG
+        files = []
+        for k, (blob, ext, w, h) in enumerate(s['pics'][:4], 1):
+            fn = f'{code}{"" if k == 1 else "_" + str(k)}.{ext}'
+            with open(os.path.join(d, 'captures', fn), 'wb') as fh:
+                fh.write(blob)
+            files.append(f'captures/{fn}')
+        mp = f'{module_of(code, di) or mod}> {grp}> {name}'
+        scr[code] = {'id': code, 'name': name, 'menuPath': mp, 'captures': files, 'captureFrom': how, 'captureFile': fno, 'captureSlide': no,
+                     'inMenu': bool(di), 'buttons': di.get('buttons', [])}
+        cf = os.path.join(d, 'content', f'{code}.json')
+        draft = rj(cf, None) or {}
+        if not draft.get('pages') and len(mods) > 1:  # 묶음 문서: 모듈별로 이미 쓴 내용이 있으면 가져옴(AI 다시 쓰지 않음)
+            for m in mods:
+                old = rj(os.path.join(mdir(m), 'content', f'{code}.json'), None)
+                if old and old.get('pages'):
+                    draft.update({k: old[k] for k in ('definition', 'pages', 'keyPoint') if k in old}); draft['reusedFrom'] = m; break
+        draft.pop('legacy', None)
+        draft.update({'id': code, 'uiName': name, 'menuPath': mp, 'captures': files,
+                      'facts': [f for f in [f'Doc/tobefacts/screens/{code}/', f'Doc/asisfacts/screens/{code}/', f'Doc/gen/{code}/'] if os.path.isdir(os.path.join(ROOT, f))],
+                      'buttons': di.get('buttons', [])})
+        draft.setdefault('definition', ''); draft.setdefault('pages', [])
+        wj(cf, draft)
+    plan['order'] = [e[1] for e in entries]
+    plan['orderRule'] = '화면 장표 = 최신 UI 캡처 파일 화면 목록 순서, 계층도 = 사내 메뉴(SCM_ADM_MNU_M) 묶음과 SORT_ORD'
+    for m in mods:  # 계층도 = 모듈 순서 → 사내 메뉴 묶음, SORT_ORD
+        for g in menu_tree(m):
+            ss = [scr[x['id']] for x in g['screens'] if x['id'] in scr]
+            if ss:
+                plan['groups'].append({'top': g['top'], 'group': g['group'], 'screens': ss})
+    for m in mods:
+        un = [scr[c] for c in plan['order'] if not scr[c]['inMenu'] and module_of(c, None) == m]
+        if un:
+            plan['groups'].append({'top': m, 'group': UNREG, 'screens': un})
+    for sp in SPECIAL:
+        cf = os.path.join(d, 'content', f'{sp}.json')
+        if not os.path.exists(cf) and len(mods) > 1:  # 묶음 문서: 모듈별 Layout, 공통기능 가져옴(캡처 그림도 복사)
+            for m in mods:
+                old = rj(os.path.join(mdir(m), 'content', f'{sp}.json'), None)
+                if old and (old.get('pages') or old.get('labels')):
+                    for cp_ in old.get('captures') or []:
+                        src_ = os.path.join(mdir(m), cp_)
+                        if os.path.exists(src_) and not os.path.exists(os.path.join(d, cp_)):
+                            os.makedirs(os.path.dirname(os.path.join(d, cp_)), exist_ok=True)
+                            with open(src_, 'rb') as fi_, open(os.path.join(d, cp_), 'wb') as fo_:
+                                fo_.write(fi_.read())
+                    old['reusedFrom'] = m; wj(cf, old); break
+        if not os.path.exists(cf):
+            wj(cf, {'id': sp, 'uiName': 'Next SCM Layout' if sp == '_LAYOUT' else '공통기능', 'menuPath': f'{mod}> 공통', 'captures': [], 'definition': '', 'pages': [],
+                    'note': '_LAYOUT = 화면 구성 영역 이름표(labels), _COMMON = 공통 버튼과 기능(sections, markers). 캡처는 화면 캡처 중 하나를 고름(captures 에 경로)'})
+    got = {e[1] for e in entries}
+    plan['notInCapture'] = [{'id': x['id'], 'name': x['name'], 'group': x['group']} for x in mine if x['id'] not in got]
+    plan['notInMenu'] = [e[1] for e in entries if e[1] not in info]
+    for x in plan['notInCapture']:  # 이전 실행에서 만든 빈 초안 정리
+        f = os.path.join(d, 'content', f'{x["id"]}.json')
+        if os.path.exists(f) and not (rj(f, {}) or {}).get('pages'):
+            os.remove(f)
+    wj(os.path.join(d, 'plan.json'), plan)
+    out(f'== 매뉴얼 대상 {len(entries)}개(장표 = 캡처 파일 순서), 계층도 묶음(사내 메뉴) {len(plan["groups"])}개: ' + ', '.join(f'{g["group"]} {len(g["screens"])}' for g in plan['groups']))
+    if plan['notInCapture']:
+        out(f'== 사용자 메뉴에 있으나 캡처 파일에 없어 뺀 화면 {len(plan["notInCapture"])}: {", ".join(x["id"] for x in plan["notInCapture"])}')
+    if plan['notInMenu']:
+        out(f'== 캡처 파일에 있으나 사용자 메뉴에 없는 화면 {len(plan["notInMenu"])}(계층도 메뉴 미등록 묶음): {", ".join(plan["notInMenu"])}')
+    out(f'== 초안: Doc/UserManual/{mod}/content/*.json (기존 내용 유지), 계획: Doc/UserManual/{mod}/plan.json')
+    return 0
+
+
+# ───────────────────────── 내용 검사 ─────────────────────────
+def check_content(c, has_cap):
+    why = []
+    if c['id'] == '_LAYOUT':
+        if not c.get('captures'):
+            why.append('captures 없음')
+        if not c.get('labels'):
+            why.append('labels 없음')
+        han = [lb.get('text', '') for lb in c.get('labels') or [] if re.search('[가-힣]', str(lb.get('text', '')))]
+        if han:  # 2026-11-23 사용자: Layout 영역 표기 = 영문
+            why.append(f'labels 영문 아님: {", ".join(han)}')
+        return why
+    if not str(c.get('definition') or '').strip():
+        why.append('definition 비어 있음')
+    if c['id'] != '_COMMON' and not ov_lines(c.get('overview') or ((c.get('pages') or [{}])[0].get('overview'))):
+        why.append('overview(조회 조건 앞 화면 설명 2~4줄) 없음')
+    pages = c.get('pages') or []
+    if not pages:
+        why.append('pages 없음')
+    for i, pg in enumerate(pages, 1):
+        secs = pg.get('sections') or []
+        if not secs:
+            why.append(f'page {i} sections 없음')
+        # 2026-11-23 사용자: Key Point 는 중요하거나 예외가 있을 때만. 평범하면 비워 둠 → 없어도 검사 실패 아님
+        for m in pg.get('markers') or []:
+            if not (0 <= float(m.get('x', -1)) <= 1 and 0 <= float(m.get('y', -1)) <= 1):
+                why.append(f'page {i} marker {m.get("no")} 위치 범위 밖(0~1)')
+        if has_cap and secs and not pg.get('markers'):
+            why.append(f'page {i} markers 없음(캡처 있음)')
+    return why
+
+
+def texts_of(c):
+    """매뉴얼에 들어가는 문장(UI 정의, 소제목, 설명 줄, Key Point, 이름표)"""
+    t = [c.get('definition', ''), c.get('keyPoint', '')] + ov_lines(c.get('overview'))
+    for pg in c.get('pages') or []:
+        t.append(pg.get('keyPoint', ''))
+        for s in pg.get('sections') or []:
+            t.append(s.get('title', '')); t += [str(x) for x in s.get('lines') or []]
+    t += [lb.get('text', '') for lb in c.get('labels') or []]
+    return [x for x in t if str(x).strip()]
+
+
+def style_hits(c):
+    """문장 규칙(tools/VibeManager/rules/50_DOC_STYLE.md) 위반 → ['종류 «걸린 표현»']"""
+    try:
+        sys.path.insert(0, os.path.join(ROOT, 'tools', 'Docs')); import doc_style
+    except Exception as e:
+        return [f'문장 규칙 검사 실행 안 됨: {e}']
+    hits = []
+    for s in texts_of(c):
+        for kind, frag, hint in doc_style.check_text(str(s)):
+            hits.append(f'문장 규칙 {kind} «{frag}» → {hint}')
+    return hits
+
+
+def cmd_check(a):
+    mod = mod_key(a.module); d = mdir(mod); plan = rj(os.path.join(d, 'plan.json'))
+    if not plan:
+        out('plan.json 없음(prep 먼저)'); return 2
+    bad = []
+    ids = list(plan.get('order') or [s['id'] for g in plan['groups'] for s in g['screens']]) + SPECIAL
+    for sid in ids:
+        c = rj(os.path.join(d, 'content', f'{sid}.json'), None)
+        if not c:
+            bad.append((sid, ['content 파일 없음'])); continue
+        w = check_content(c, bool(c.get('captures'))) + style_hits(c)
+        if w:
+            bad.append((sid, w))
+    out(f'== 내용 검사: {len(ids) - len(bad)}/{len(ids)} 채움')
+    for sid, w in bad:
+        out(f'[FAIL] {sid}: {", ".join(w)}')
+    return 3 if bad else 0
+
+
+# ───────────────────────── PPTX 생성 ─────────────────────────
+from pptx.oxml.ns import qn  # noqa: E402
+
+RID = qn('r:id'); REMBED = qn('r:embed'); RLINK = qn('r:link')
+
+
+def dup_slide(prs, src):
+    """src 장표를 끝에 복제(그림 관계 유지 · 다른 장표로 가는 링크는 제거)"""
+    new = prs.slides.add_slide(src.slide_layout)
+    for sh in list(new.shapes):
+        sh._element.getparent().remove(sh._element)
+    rmap = {}
+    for rid, rel in src.part.rels.items():
+        if rel.is_external:
+            continue
+        if 'image' in rel.reltype or 'media' in rel.reltype:
+            rmap[rid] = new.part.relate_to(rel.target_part, rel.reltype)
+    for el in src.shapes._spTree.iterchildren():
+        tag = el.tag.split('}')[-1]
+        if tag in ('nvGrpSpPr', 'grpSpPr'):
+            continue
+        e2 = copy.deepcopy(el)
+        for node in e2.iter():
+            for attr in (REMBED, RLINK, RID):
+                v = node.get(attr)
+                if v is None:
+                    continue
+                if v in rmap:
+                    node.set(attr, rmap[v])
+                elif node.tag.endswith('hlinkClick') or node.tag.endswith('hlinkHover'):
+                    node.attrib.pop(attr, None)
+                else:
+                    node.attrib.pop(attr, None)
+        new.shapes._spTree.append(e2)
+    return new
+
+
+def drop_slides(prs, keep_from):
+    sld = prs.slides._sldIdLst
+    for s in list(sld)[:keep_from]:
+        rid = s.get(RID); prs.part.drop_rel(rid); sld.remove(s)
+
+
+def set_text_keep(shape_or_cell, text):
+    """첫 문단 첫 글자 서식으로 글을 바꿈(줄바꿈 = 문단)"""
+    tf = shape_or_cell.text_frame
+    ps = tf.paragraphs
+    p0 = ps[0]._p
+    r0 = p0.find(qn('a:r'))
+    rpr = copy.deepcopy(r0.find(qn('a:rPr'))) if r0 is not None and r0.find(qn('a:rPr')) is not None else None
+    ppr = copy.deepcopy(p0.find(qn('a:pPr'))) if p0.find(qn('a:pPr')) is not None else None
+    end = p0.find(qn('a:endParaRPr'))
+    body = p0.getparent()
+    for p in list(body.findall(qn('a:p'))):
+        body.remove(p)
+    for line in str(text).split('\n'):
+        body.append(make_para(ppr, rpr, line, end))
+
+
+def make_para(ppr, rpr, text, end=None):
+    from lxml import etree
+    p = etree.SubElement(etree.Element('dummy'), qn('a:p'))
+    p = copy.deepcopy(p);
+    if ppr is not None:
+        p.append(copy.deepcopy(ppr))
+    if text != '':
+        r = etree.SubElement(p, qn('a:r'))
+        if rpr is not None:
+            r.append(copy.deepcopy(rpr))
+        t = etree.SubElement(r, qn('a:t')); t.text = text
+    elif end is not None:
+        p.append(copy.deepcopy(end))
+    return p
+
+
+def para_styles(shape):
+    """설명 상자 문단 서식 3종: 제목(●), 소제목(①), 본문(-)"""
+    sty = {}
+    for p in shape.text_frame.paragraphs:
+        t = p.text.strip()
+        k = 'title' if t.startswith('●') else 'sec' if t[:1] in CIRCLED else 'line' if t.startswith('-') else None
+        if k and k not in sty:
+            r0 = p._p.find(qn('a:r'))
+            rpr = r0.find(qn('a:rPr')) if r0 is not None else None
+            if rpr is None:  # 글자 서식이 없는 문단은 견본으로 쓰지 않음(샘플 ② 문단 = 서식 없음 → 화면에 안 보임)
+                continue
+            sty[k] = (copy.deepcopy(p._p.find(qn('a:pPr'))) if p._p.find(qn('a:pPr')) is not None else None, copy.deepcopy(rpr))
+    base = sty.get('line') or sty.get('sec') or sty.get('title') or (None, None)
+    for k in ('title', 'sec', 'line'):
+        sty.setdefault(k, base)
+    return sty
+
+
+def fill_desc(shape, title, sections, overview=None):
+    sty = para_styles(shape)
+    body = shape.text_frame._txBody
+    end = None
+    for p in body.findall(qn('a:p')):
+        e = p.find(qn('a:endParaRPr'))
+        if e is not None and end is None:
+            end = e
+        body.remove(p)
+    body.append(make_para(*sty['title'], f'● {title}'))
+    # 2026-11-23 사용자: 조회 조건 설명 전에 화면 설명(overview)이 먼저
+    for ln in ov_lines(overview):
+        body.append(make_para(*sty['line'], ln))
+    for s in sections:
+        body.append(make_para(*sty['line'], '', end))
+        no = int(s.get('no') or 0)
+        mark = CIRCLED[no - 1] if 1 <= no <= len(CIRCLED) else f'({no})'
+        body.append(make_para(*sty['sec'], f'{mark} {s.get("title", "")}'.strip()))
+        for ln in s.get('lines') or []:
+            ln = str(ln).strip()
+            body.append(make_para(*sty['line'], ln if ln.startswith('-') else f' - {ln}'))
+
+
+def table_set(tbl, r, c, text):
+    try:
+        set_text_keep(tbl.cell(r, c), text)
+    except Exception:
+        pass
+
+
+def find_shapes(slide):
+    f = {'title': None, 'head': None, 'key': None, 'desc': None, 'frame': None, 'pic': None, 'ellipse': None, 'others': []}
+    for sh in slide.shapes:
+        if sh.is_placeholder and sh.placeholder_format.type == 1:
+            f['title'] = sh
+        elif sh.has_table:
+            first = sh.table.cell(0, 0).text.strip().replace(' ', '').lower()
+            if first == '메뉴':
+                f['head'] = sh
+            elif first == 'keypoint':
+                f['key'] = sh
+        elif sh.shape_type == 13:
+            if f['pic'] is None or sh.width * sh.height > f['pic'].width * f['pic'].height:
+                if f['pic'] is not None:
+                    f['others'].append(f['pic'])
+                f['pic'] = sh
+            else:
+                f['others'].append(sh)
+        elif sh.has_text_frame and sh.text_frame.text.strip().startswith('●'):
+            f['desc'] = sh
+        elif sh.name.startswith('타원') or (sh.has_text_frame and re.fullmatch(r'[0-9A-Z]', sh.text_frame.text.strip() or '#') and sh.width < 1.0 * EMU_CM):
+            if f['ellipse'] is None:
+                f['ellipse'] = sh
+            else:
+                f['others'].append(sh)
+        elif sh.shape_type == 1 and not sh.text_frame.text.strip() if sh.has_text_frame else False:
+            f['others'].append(sh)
+    # 그림 테두리 = 그림을 감싸는 가장 큰 빈 사각형
+    best = None
+    for sh in list(f['others']):
+        if sh.shape_type == 1 and sh.has_text_frame and not sh.text_frame.text.strip() and f['pic'] is not None:
+            if sh.left <= f['pic'].left + EMU_CM and sh.left + sh.width >= f['pic'].left + f['pic'].width - EMU_CM and sh.height > 5 * EMU_CM:
+                if best is None or sh.width * sh.height > best.width * best.height:
+                    best = sh
+    if best is not None:
+        f['others'].remove(best); f['frame'] = best
+    return f
+
+
+def place_picture(slide, pic, frame, img_path):
+    from PIL import Image
+    with Image.open(img_path) as im:
+        w, h = im.size
+    box = frame if frame is not None else pic
+    bx, by, bw, bh = box.left, box.top, box.width, box.height
+    pad = int(0.1 * EMU_CM)
+    bw2, bh2 = bw - 2 * pad, bh - 2 * pad
+    sc = min(bw2 / w, bh2 / h)
+    nw, nh = int(w * sc), int(h * sc)
+    _, rid = slide.part.get_or_add_image_part(img_path)
+    blip = pic._element.find('.//' + qn('a:blip'))
+    blip.set(REMBED, rid)
+    pic.left, pic.top, pic.width, pic.height = bx + (bw - nw) // 2, by + (bh - nh) // 2, nw, nh
+    sp = pic._element.find('.//' + qn('a:srcRect'))
+    if sp is not None:
+        sp.getparent().remove(sp)
+    return pic
+
+
+def add_marker(slide, tmpl, pic, m):
+    e = copy.deepcopy(tmpl._element)
+    slide.shapes._spTree.append(e)
+    sh = slide.shapes[-1]
+    size = tmpl.width
+    sh.left = int(pic.left + float(m['x']) * pic.width - size / 2)
+    sh.top = int(pic.top + float(m['y']) * pic.height - size / 2)
+    set_text_keep(sh, str(m.get('no', '')))
+    return sh
+
+
+def wrap_lines(text, width_chars):
+    n = 0
+    for ln in str(text).split('\n'):
+        w = sum(2 if ord(ch) > 0x1100 else 1 for ch in ln)
+        n += max(1, -(-w // width_chars))
+    return n
+
+
+def ov_lines(ov):
+    """화면 설명 → 줄 목록(문자열이면 줄바꿈으로 나눔)"""
+    if not ov:
+        return []
+    return [str(x).strip() for x in (ov if isinstance(ov, list) else str(ov).split('\n')) if str(x).strip()]
+
+
+def split_page(page, max_lines=30, width_chars=56):
+    """설명이 길면 섹션 단위로 다음 장표로 나눔(마커도 섹션 번호를 따라감)"""
+    secs = page.get('sections') or []
+    ov_used = sum(wrap_lines(l, width_chars) for l in ov_lines(page.get('overview')))  # 화면 설명은 첫 장에만
+    chunks, cur, used = [], [], 2 + ov_used
+    for s in secs:
+        need = 2 + sum(wrap_lines(l, width_chars) for l in (s.get('lines') or []))
+        if cur and used + need > max_lines:
+            chunks.append(cur); cur, used = [], 2
+        cur.append(s); used += need
+    if cur:
+        chunks.append(cur)
+    if len(chunks) <= 1:
+        return [page]
+    res = []
+    for k, ch in enumerate(chunks):
+        nos = {int(s.get('no') or 0) for s in ch}
+        res.append(dict(page, sections=ch, overview=page.get('overview') if k == 0 else None, markers=[m for m in (page.get('markers') or []) if int(m.get('no') or 0) in nos]))
+    return res
+
+
+def base_title(t):
+    """제목 끝 '(1/2)' 같은 장 번호를 뗌. 번호는 생성기가 화면별 전체 장 수로 한 번만 붙임(2026-11-23 '(1/2) (1/2)' 중복)"""
+    return re.sub(r'(\s*\(\d+\s*/\s*\d+\))+\s*$', '', str(t or '')).strip()
+
+
+def render_screen(prs, tmpl, c, page, title, inp, d, part_no=None):
+    s = dup_slide(prs, tmpl)
+    f = find_shapes(s)
+    for sh in f['others']:
+        sh._element.getparent().remove(sh._element)
+    if f['title'] is not None:
+        set_text_keep(f['title'], title + (f' ({part_no})' if part_no else ''))
+    if f['head'] is not None:
+        t = f['head'].table
+        table_set(t, 0, 1, c.get('menuPath', '')); table_set(t, 0, 3, inp['author']); table_set(t, 0, 5, inp['version'])
+        table_set(t, 1, 1, c.get('uiName', title)); table_set(t, 1, 3, inp['date'])
+        table_set(t, 2, 1, c.get('definition', ''))
+    if f['key'] is not None:
+        table_set(f['key'].table, 0, 1, page.get('keyPoint') or c.get('keyPoint') or '')
+    if f['desc'] is not None:
+        fill_desc(f['desc'], base_title(page.get('title') or title), page.get('sections') or [], page.get('overview'))
+    cap = page.get('capture') or ((c.get('captures') or [None])[0])
+    ell = f['ellipse']
+    if cap and f['pic'] is not None and os.path.exists(os.path.join(d, cap)):
+        pic = place_picture(s, f['pic'], f['frame'], os.path.join(d, cap))
+        if ell is not None:
+            for m in page.get('markers') or []:
+                add_marker(s, ell, pic, m)
+    elif f['pic'] is not None:
+        f['pic']._element.getparent().remove(f['pic']._element)
+        if f['frame'] is not None and f['frame'].has_text_frame:
+            set_text_keep(f['frame'], '최신 UI 캡처 없음')
+    if ell is not None:
+        ell._element.getparent().remove(ell._element)
+    return s
+
+
+LABEL_EN = {'상단 메뉴': 'Top Menu', '모듈 메뉴': 'Module Menu', '왼쪽 메뉴': 'Menu Tree', '메뉴 트리': 'Menu Tree', '화면 탭': 'Screen Tab', '화면 제목': 'Screen Title',
+            '화면 이름, 메뉴 경로': 'Title & Breadcrumb', '메뉴 위치, Search Area': 'Breadcrumb & Search Area', '메뉴 경로': 'Breadcrumb', '조회 조건': 'Search Condition',
+            '버튼': 'Buttons', '공통 버튼': 'Common Buttons', '위 그리드': 'Data Grid', '그리드': 'Data Grid', '아래 그리드': 'Detail Grid', '아래 탭, 그리드': 'Detail Tab & Grid', '즐겨찾기': 'Favorite'}
+
+
+def label_en(t):
+    """Layout 이름표 = 영문(2026-11-23 사용자). 한글이면 자주 쓰는 이름 표로 바꿈(검사 단계가 한글을 실패로 잡아 AI 가 고침)"""
+    t = str(t or '').strip()
+    return LABEL_EN.get(t, t)
+
+
+def fit_font(shape, pt):
+    """이름표 글자 크기를 pt 로 고정하고 줄바꿈을 끔(상자 크기는 글자 길이로 이미 맞춤)"""
+    tf = shape.text_frame; tf.word_wrap = False
+    for p_ in tf.paragraphs:
+        for r_ in p_.runs:
+            r_.font.size = int(pt * 12700)
+
+
+def render_layout(prs, tmpl, c, d):
+    s = dup_slide(prs, tmpl)
+    pic = next((sh for sh in s.shapes if sh.shape_type == 13), None)
+    labels = [sh for sh in s.shapes if sh.shape_type == 1 and sh.has_text_frame and sh.text_frame.text.strip()]
+    lab_t = labels[0] if labels else None
+    for sh in s.shapes:
+        if sh.is_placeholder and sh.placeholder_format.type == 1:
+            set_text_keep(sh, c.get('uiName') or 'Next SCM Layout')
+    cap = (c.get('captures') or [None])[0]
+    if pic is not None and cap and os.path.exists(os.path.join(d, cap)):
+        pic = place_picture(s, pic, pic, os.path.join(d, cap))
+        if lab_t is not None:
+            # 2026-11-23 사용자: 이름표 글이 상자를 넘음 → 상자 크기 = 글자 길이(AI 의 w, h 는 쓰지 않음, x, y = 이름표 왼쪽 위), 글자 크기 고정, 줄바꿈 없음, 그림 안에 둠
+            placed = []
+            for lb in c.get('labels') or []:
+                text = label_en(lb.get('text', ''))
+                e = copy.deepcopy(lab_t._element); s.shapes._spTree.append(e); sh = s.shapes[-1]
+                units = sum(2 if ord(ch) > 0x1100 else 1 for ch in text)
+                pt = 11; w = int((units * pt * 0.62 + 16) * 12700); h = int((pt * 1.9) * 12700)
+                sh.width, sh.height = w, h
+                sh.left = int(min(max(pic.left, pic.left + float(lb.get('x', 0)) * pic.width), pic.left + pic.width - w))
+                sh.top = int(min(max(pic.top, pic.top + float(lb.get('y', 0)) * pic.height), pic.top + pic.height - h))
+                for _ in range(20):  # 앞 이름표와 겹치면 아래로 비킴(그림 안)
+                    hit = next((r for r in placed if sh.left < r[0] + r[2] and r[0] < sh.left + w and sh.top < r[1] + r[3] and r[1] < sh.top + h), None)
+                    if hit is None:
+                        break
+                    sh.top = hit[1] + hit[3] + int(2 * 12700)
+                    if sh.top + h > pic.top + pic.height:
+                        sh.top = int(pic.top); sh.left = min(int(hit[0] + hit[2] + 4 * 12700), int(pic.left + pic.width - w))
+                placed.append((sh.left, sh.top, w, h))
+                set_text_keep(sh, text); fit_font(sh, pt)
+    for sh in labels:
+        sh._element.getparent().remove(sh._element)
+    return s
+
+
+def render_hierarchy(prs, tmpl, plan, first_slide_of, mod):
+    """메뉴 계층도: 1단(모듈 메뉴) → 2단(묶음) → 화면 상자 + 바로가기. 화면이 많으면 여러 장"""
+    f = {'lv1': None, 'lv2': None, 'leaf': None, 'link': None, 'line': None}
+    for sh in tmpl.shapes:
+        if sh.shape_type == 1 and sh.has_text_frame and sh.text_frame.text.strip():
+            w = sh.width / EMU_CM
+            if f['leaf'] is None and w > 4: f['leaf'] = sh
+            elif f['lv1'] is None and 2 < w < 4: f['lv1'] = sh
+            elif f['lv2'] is None and 2 < w < 4: f['lv2'] = sh
+        elif sh.name.startswith('실행 단추') and f['link'] is None:
+            f['link'] = sh
+        elif sh.shape_type == 9 and f['line'] is None:
+            f['line'] = sh
+    if not (f['lv1'] and f['lv2'] and f['leaf']):
+        return []
+    step = int(0.68 * EMU_CM); y0 = f['leaf'].top; ymax = int(17.6 * EMU_CM)
+    rows_per = max(1, (ymax - y0) // step)
+    items = []  # (top, group, screen)
+    for g in plan['groups']:
+        for sc in g['screens']:
+            items.append((g['top'], g['group'], sc))
+    pages = [items[i:i + rows_per * 2] for i in range(0, len(items), rows_per * 2)]
+    slides = []
+    for pi, pg in enumerate(pages, 1):
+        s = dup_slide(prs, tmpl)
+        for sh in list(s.shapes):
+            if not (sh.is_placeholder and sh.placeholder_format.type == 1):
+                sh._element.getparent().remove(sh._element)
+            else:
+                set_text_keep(sh, 'Menu Hierarchy' + (f' ({pi}/{len(pages)})' if len(pages) > 1 else ''))
+        cols = [pg[:rows_per], pg[rows_per:]]
+        for ci, col in enumerate(cols):
+            if not col:
+                continue
+            xoff = int(ci * 13.2 * EMU_CM)
+            y = y0; last = (None, None)
+            for top, grp, sc in col:
+                if (top, grp) != last:
+                    for key, text in (('lv1', top if (top, None) != (last[0], None) else ''), ('lv2', grp)):
+                        if not text:
+                            continue
+                        e = copy.deepcopy(f[key]._element); s.shapes._spTree.append(e); b = s.shapes[-1]
+                        b.left = f[key].left + xoff if key == 'lv1' else f[key].left + xoff; b.top = y
+                        if key == 'lv1':
+                            b.left = int(f['lv1'].left * 0.4) + xoff; b.width = int(2.3 * EMU_CM)
+                        else:
+                            b.left = int(f['lv1'].left * 0.4) + xoff + int(2.5 * EMU_CM); b.width = int(2.6 * EMU_CM)
+                        set_text_keep(b, text)
+                    last = (top, grp)
+                e = copy.deepcopy(f['leaf']._element); s.shapes._spTree.append(e); b = s.shapes[-1]
+                b.left = int(f['lv1'].left * 0.4) + xoff + int(5.3 * EMU_CM); b.top = y; b.width = int(6.6 * EMU_CM)
+                set_text_keep(b, f'{sc["name"]} ({sc["id"]})')
+                tgt = first_slide_of.get(sc['id'])
+                if tgt is not None:
+                    b.click_action.target_slide = tgt
+                    if f['link'] is not None:
+                        e2 = copy.deepcopy(f['link']._element); s.shapes._spTree.append(e2); l2 = s.shapes[-1]
+                        l2.left = b.left + b.width + int(0.1 * EMU_CM); l2.top = y
+                        for node in l2._element.iter():
+                            if node.tag.endswith('hlinkClick'):
+                                node.getparent().remove(node)
+                        l2.click_action.target_slide = tgt
+                y += step
+        slides.append(s)
+    return slides
+
+
+def cmd_build(a):
+    from pptx import Presentation
+    mod = mod_key(a.module); mods = mods_of(mod); d = mdir(mod); inp = inputs_of(mod); plan = rj(os.path.join(d, 'plan.json'))
+    if not plan:
+        out('plan.json 없음(prep 먼저)'); return 2
+    if a.require_complete and cmd_check(a) != 0:
+        out('내용이 다 채워지지 않아 만들지 않음(check 결과)'); return 3
+    prs = Presentation(inp['sample'])
+    src = list(prs.slides); n0 = len(src)
+    tm = {'cover': src[0], 'rev': None, 'hier': None, 'section': None, 'layout': None, 'common': None, 'screen': None}
+    for s in src:
+        t = norm(slide_title(s)); f = find_shapes(s)
+        if tm['rev'] is None and '개정이력' in ''.join(norm(sh.text_frame.text) for sh in s.shapes if sh.has_text_frame):
+            tm['rev'] = s
+        elif tm['hier'] is None and 'menuhierarchy' in t:
+            tm['hier'] = s
+        elif tm['section'] is None and '사용자화면설명' in t:
+            tm['section'] = s
+        elif tm['layout'] is None and t.endswith('layout'):
+            tm['layout'] = s
+        elif tm['common'] is None and '공통기능' in t:
+            tm['common'] = s
+        elif tm['screen'] is None and f['head'] is not None and f['pic'] is not None and f['desc'] is not None:
+            tm['screen'] = s
+    if tm['screen'] is None:
+        out('[FAIL] 양식에서 화면 장표(메뉴 표 + 그림 + ● 설명)를 찾지 못함'); return 2
+    # 표지
+    cov = dup_slide(prs, tm['cover'])
+    for sh in cov.shapes:
+        if sh.has_text_frame:
+            t = sh.text_frame.text
+            if '매뉴얼' in t:
+                set_text_keep(sh, re.sub(r'SCM\.\w+', f'SCM.{", ".join(mods)}', t.split('매뉴얼')[0]).rstrip() + f' 매뉴얼 {inp["version"]}')
+            elif re.search(r'\d{4}[.\-]\d{1,2}[.\-]\d{1,2}', t):
+                set_text_keep(sh, re.sub(r'\d{4}[.\-]\d{1,2}[.\-]\d{1,2}', inp['date'], t))
+    # 개정이력
+    if tm['rev'] is not None:
+        rv = dup_slide(prs, tm['rev'])
+        for sh in rv.shapes:
+            if sh.has_table:
+                t = sh.table
+                vals = [ver_tag(inp['version']), inp['date'], '최초 작성(Next SCM 최신 UI 기준)', inp['author'], '']
+                for c, v in enumerate(vals[:len(t.columns)]):
+                    table_set(t, 1, c, v)
+                for r in range(2, len(t.rows)):
+                    for c in range(len(t.columns)):
+                        table_set(t, r, c, '')
+    hier_pos = len(prs.slides)  # 계층도는 화면 장표를 만든 뒤 이 자리로 옮김
+    if tm['section'] is not None:
+        dup_slide(prs, tm['section'])
+    content = lambda sid: rj(os.path.join(d, 'content', f'{sid}.json'), {}) or {}
+    lay = content('_LAYOUT')
+    if tm['layout'] is not None and lay.get('captures'):
+        render_layout(prs, tm['layout'], lay, d)
+    com = content('_COMMON')
+    if com.get('pages'):
+        callp = []  # 2026-11-23 사용자: 공통기능도 넘치면 다음 장
+        for pg in com['pages']:
+            callp += split_page(pg)
+        for i, pg in enumerate(callp, 1):
+            render_screen(prs, tm['screen'], com, pg, base_title(pg.get('title') or com.get('uiName') or '공통기능'), inp, d, f'{i}/{len(callp)}' if len(callp) > 1 else None)
+    first = {}; nscreen = 0; problems = []
+    byid = {sc['id']: sc for g in plan['groups'] for sc in g['screens']}
+    for sid in (plan.get('order') or list(byid)):
+        if True:
+            sc = byid[sid]
+            c = content(sc['id'])
+            pages = c.get('pages') or [{'title': sc['name'], 'sections': [], 'markers': []}]
+            if not c.get('pages'):
+                problems.append(f'{sc["id"]} 내용 없음')
+            allp = []
+            for k, pg in enumerate(pages):
+                if k == 0 and not pg.get('overview') and c.get('overview'):
+                    pg = dict(pg, overview=c['overview'])
+                allp += split_page(pg if k == 0 else dict(pg, overview=None))
+            for i, pg in enumerate(allp, 1):
+                sl = render_screen(prs, tm['screen'], c, pg, base_title(pg.get('title') or c.get('uiName') or sc['name']), inp, d, f'{i}/{len(allp)}' if len(allp) > 1 else None)
+                first.setdefault(sc['id'], sl); nscreen += 1
+    hs = render_hierarchy(prs, tm['hier'], plan, first, mod) if tm['hier'] is not None else []
+    sld = prs.slides._sldIdLst  # 계층도(맨 뒤에 만듦)를 표지, 개정이력 뒤로 옮김
+    moved = list(sld)[len(sld) - len(hs):] if hs else []
+    for k, el in enumerate(moved):
+        sld.remove(el); sld.insert(hier_pos + k, el)
+    drop_slides(prs, n0)
+    prs.core_properties.author = inp['author']; prs.core_properties.title = f'SCM.{", ".join(mods)} 사용자 매뉴얼 {inp["version"]}'
+    fn = os.path.join(d, f'SCM_IM_사용자매뉴얼_{mod}_v{ver_tag(inp["version"])}.pptx')
+    try:
+        prs.save(fn)
+    except PermissionError:  # 2026-11-23: PowerPoint 에서 열어 둔 파일은 덮어쓸 수 없음
+        out(f'[FAIL] 파일이 열려 있어 저장하지 못함: {os.path.relpath(fn, ROOT)} · PowerPoint 에서 닫고 다시 실행')
+        return 4
+    total = sum(len(g['screens']) for g in plan['groups'])
+    out(f'== 생성: {os.path.relpath(fn, ROOT)} · 장표 {len(prs.slides)}장(계층도 {len(hs)}, 화면 {nscreen}) · 화면 {total}개')
+    # 결과 검사
+    chk = Presentation(fn); txt = ' '.join(sh.text_frame.text for s in chk.slides for sh in s.shapes if sh.has_text_frame)
+    tbl = ' '.join(c.text for s in chk.slides for sh in s.shapes if sh.has_table for r in sh.table.rows for c in r.cells)
+    if inp['author'] not in tbl:
+        problems.append('작성자가 장표 표에 없음')
+    if inp['version'] not in tbl:
+        problems.append('Version 이 장표 표에 없음')
+    nm = [g for g in plan['groups'] for sc in g['screens'] if sc['id'] not in first]
+    if nm:
+        problems.append(f'장표 없는 화면 {len(nm)}개')
+    for p in problems:
+        out(f'[FAIL] {p}')
+    if plan.get('notInCapture'):
+        out(f'[INFO] 캡처 파일에 없어 뺀 메뉴 화면 {len(plan["notInCapture"])}: {", ".join(x["id"] for x in plan["notInCapture"])}')
+    return 3 if problems else 0
+
+
+def main():
+    ap = argparse.ArgumentParser(description='모듈별 사용자 매뉴얼 PPTX')
+    ap.add_argument('cmd', choices=['prep', 'check', 'build'])
+    ap.add_argument('--module', required=True, help='DM, SCP, SSP, SYSTEM 또는 묶음 DM_SYSTEM(순서 무관, 문서는 DM, SCP, SSP, SYSTEM 순)')
+    ap.add_argument('--require-complete', action='store_true', help='build: 내용 검사 통과 때만 생성')
+    a = ap.parse_args()
+    return {'prep': cmd_prep, 'check': cmd_check, 'build': cmd_build}[a.cmd](a)
+
+
+if __name__ == '__main__':
+    sys.exit(main() or 0)

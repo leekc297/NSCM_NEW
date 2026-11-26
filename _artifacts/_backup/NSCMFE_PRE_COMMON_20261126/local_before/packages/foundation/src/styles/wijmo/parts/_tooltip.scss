@@ -1,0 +1,68 @@
+@use '../misc/font-sizes' as *;
+@use '../misc/mixins' as *;
+@use '../misc/variables' as *;
+
+.grid_summary_popup {
+  display: flex;
+  flex-direction: row;
+  width: 210px;
+  height: 70px;
+  background-color: #fff;
+  border: 1px solid;
+
+  .grid_summary_popup_area {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    font-weight: 500;
+    font-size: $wj-tooltip-font-size;
+    font-family:
+      'Spoqa Han Sans Neo', '맑은 고딕', 'malgun gothic', 'AppleGothicNeoSD',
+      'Apple SD 산돌고딕 Neo', 'Microsoft NeoGothic', 'Droid sans', sans-serif;
+
+    .grid_summary_popup_title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-left: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 80px;
+    }
+
+    .grid_summary_popup_cnt {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 130px;
+    }
+
+    .grid_summary_popup_avg {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #b00020;
+      width: 130px;
+    }
+
+    .grid_summary_popup_sum {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #b00020;
+      width: 130px;
+    }
+  }
+}

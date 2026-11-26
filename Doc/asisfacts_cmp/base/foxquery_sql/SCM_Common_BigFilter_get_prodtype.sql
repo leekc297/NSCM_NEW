@@ -1,0 +1,9 @@
+﻿SELECT DISTINCT DIVISION_ID, CODE, NAME, ACTIVE_FLAG
+FROM (
+                 SELECT  A.SEGMENT1 AS DIVISION_ID,  A.ATTRIBUTE2 AS CODE, A.ATTRIBUTE2 AS NAME, A.ACTIVE_FLAG
+                 FROM    SCM_SYS_LOOKUP_VALUE A WITH(NOLOCK)                         
+                 WHERE   A.LOOKUP_TYPE_CODE = 'DIVISION_DEMAND_TYPE'               
+                 AND     A.ACTIVE_FLAG = 'Y'                
+				 UNION ALL SELECT '-' AS DIVISION_ID, 'M/C' AS CODE, 'M/C' AS NAME, 'Y' AS ACTIVE_FLAG 
+         
+				 ) A

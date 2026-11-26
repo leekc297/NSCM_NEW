@@ -1,0 +1,46 @@
+{
+  "id": "20261125000242_VISION",
+  "at": "2026-11-25T00:02:42+09:00",
+  "ms": 1795532562171,
+  "source": "vision",
+  "status": "planned",
+  "sig": "concept checklisttime purpose verdict after effect firstdoc",
+  "title": "개념 재정립: CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기)",
+  "evidence": "ladder 묶음 L4|purpose|CheckList화면1개10분길어야30분안에 근거 4건 시각. 20261123000419_VISION history '반영 완료 · 검증 통과' 2026-11-23T15:58:21. events.jsonl:2001 SCP0028 chain.end(11-21 01:55) 뒤 체인 줄 3048~4125 10건 = usermanual 6, opsmanual 2, asislive 2(CheckList 0). orch-ladder.js:97-100 L4-1 효력 거름 없음, 77행 effMsOf 는 L3(87~94행)와 L3→L4(116~121행)만 사용. orch-vision.js:51 checklistTiming = run_timing.json 마지막 줄, 75행 판정 맞음/어긋남/미확인. 같은 목적 승인 대기 20261124000457_VISION(L4-2 효력 거름) · 진단 사다리 묶음 L4|purpose|CheckList화면1개10분길어야30분안에 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-vision.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_vision.js",
+    ".vibe/orch/vision/plans.json"
+  ],
+  "before_after": "지금: Overall Review 가 run_timing.json 마지막 줄과 7일 digest 로 CheckList 시간 목적을 판정하고, L4-1 은 효력 시각과 관계없이 어긋남 3회 연속이면 개념 재정립을 다시 부름. → 새: 같은 목적 L4 안 효력 뒤 끝난 CheckList 체인의 1판 소요(firstDocMin)로만 판정하고, 효력 뒤 실행이 0건이면 미확인 '실측 대기'로 두며, L4-1 은 효력 뒤 판정만 셈. 20261124000457_VISION 은 이 원장 단계 3으로 흡수함",
+  "verify": "1) node tools/VibeManager/test/t_orch_ladder.js: 이번 묶음 근거 4건 + 효력 2026-11-23T15:58:21 표본에서 L4|purpose|CheckList화면1개10분길어야30분안에 0건, 효력 뒤 어긋남 3건 표본에서 1건. 2) node tools/VibeManager/test/t_orch_vision.js: 지시문에 규칙 1-2 줄 있음, events.jsonl:2001 형식 표본에서 checklistEffect.runsAfter 0건이고 판정 지시가 '미확인 실측 대기'. 3) 20261124000457_VISION 표본(U2, U24, U25)에서 L4|useraxis|checklistTime 0건. 4) node tools/VibeManager/test/run_all.js 전체 PASS. 5) 관찰(사용자 실행): 다음 CheckList 1회 뒤 Overall Review evidence 에 firstDocMin 과 runId 가 나옴",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 단계 원장 끔. 단계마다 반영 백업과 .bak_<날짜>_concept 사본으로 orch-ladder.js, orch-vision.js, orchestra.js, 시험 파일 복원. VMO 개선안 탭 되돌리기. plans.json 원장 삭제는 개선안 원본에 영향 없음",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "Overall Review 같은 목적 '어긋남' 4회 연속(11-20 11:58, 11-21 12:03, 11-22 14:05, 11-23 14:54) ≥ l4MisalignRuns 3. 같은 목적 L4 안 2건(20261121120359_VISION, 20261123000419_VISION)을 반영한 뒤에도 묶음이 참으로 남아 L4 조건에 해당함. 근거 4건 모두 20261123000419_VISION 효력(11-23 15:58:21) 전이고, 효력 뒤 CheckList 체인 0건임",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T12:30:15+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "L4 단계 원장으로 진행(단계 6개, 단계마다 하위 안 반영). 원장 .vibe/orch/vision/plans.json"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 가 30분 안에 끝나는지를 바뀐 방식으로 실제 돌린 결과로만 판단함. 바뀐 뒤 한 번도 돌리지 않았으면 '실측 대기'로 표시하고, 같은 문제를 매일 다시 진단하지 않음",
+    "risk": "다른 목적의 개선안을 같은 목적으로 잘못 묶으면 늦음 판정이 가려짐. CheckList 를 오래 돌리지 않으면 판정이 '실측 대기'로 오래 남음",
+    "undo": "환경설정 orch.l4PlanEnabled 를 끄거나 개선안 탭에서 되돌리기를 누르면 지금 판정 방식으로 돌아감"
+  },
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795663815233,
+  "autoFp": "91cbefde44",
+  "plan": "20261125000242_VISION"
+}

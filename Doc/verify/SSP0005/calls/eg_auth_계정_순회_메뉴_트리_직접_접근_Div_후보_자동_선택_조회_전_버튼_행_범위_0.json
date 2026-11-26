@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 124,
+  "at": "2026-11-24T18:18:42.905Z",
+  "user": "kijung03.kim",
+  "test": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 119,
+  "at": "2026-11-24T18:18:43.052Z",
+  "user": "kijung03.kim",
+  "test": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 108,
+  "at": "2026-11-24T18:18:49.456Z",
+  "user": "kijung03.kim",
+  "test": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 108,
+  "at": "2026-11-24T18:18:49.599Z",
+  "user": "kijung03.kim",
+  "test": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 97,
+  "at": "2026-11-24T18:18:51.704Z",
+  "user": "kijung03.kim",
+  "test": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 133,
+  "at": "2026-11-24T18:18:51.860Z",
+  "user": "kijung03.kim",
+  "test": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위"
+ }
+]

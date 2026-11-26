@@ -1,6 +1,6 @@
 {
  "mode": "keyless",
- "at": "2026-11-20 12:15:57",
+ "at": "2026-11-25 01:20:01",
  "account": "minyonglee1",
  "tables_scanned": [
   "SCP_MST_SHIPMENT_LOT_SIZE",
@@ -12,15 +12,15 @@
  "created": {},
  "audit": [
   {
-   "target": "SCP_MST_SHIPMENT_LOT_SIZE|AAAcsnAAFAAKGEPAAB",
+   "target": "SCP_MST_SHIPMENT_LOT_SIZE|AAAjrcAAHAAPtfXAAG",
    "result": "PASS",
    "why": "SCP_MST_SHIPMENT_LOT_SIZE 생성 칸 불변 · 수정 칸 정상"
   },
   {
-   "target": "SCP_MST_SHIPMENT_LOT_SIZE|AAAcsnAAFAAKGEPAAC",
+   "target": "SCP_MST_SHIPMENT_LOT_SIZE|AAAjrcAAHAAPtfXAAI",
    "result": "PASS",
    "why": "SCP_MST_SHIPMENT_LOT_SIZE 생성 칸 불변 · 수정 칸 정상"
   }
  ],
- "generated": "2026-11-20 12:58:21"
+ "generated": "2026-11-25 02:03:54"
 }

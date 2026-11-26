@@ -116,12 +116,24 @@ export const MSG = {
   CONFIRM_RESEARCH_UNSAVED: 'MSG00703',
   // 저장 오류 공통 fallback — SP 원문 메시지 부재 시. 실측 존재.
   SAVE_ERROR: 'MSG00618',
+  // 저장 SP 기타 예외('F') — AS-IS SaveData cs 956 MSG00042("시스템 오류입니다...") → TO-BE MSG01075
+  //   (동일 EN 문구 역조회 재매핑, DB 실측 2026-11-23). ORA 원문을 사용자에게 노출하지 않는다.
+  SYSTEM_ERROR: 'MSG01075',
   // TR_MODE(BOD) 팝업 전제 ITEM_ID(Model) 미입력 경고 — AS-IS cs 1322-1323 `MSG00098`
   //   ("먼저 {0}을(를) 선택하십시오", {0}=Model). AS-IS MSG00098 은 TO-BE SCM_ADM_MSG_M 미존재(실측 0행)이나,
   //   동일 텍스트 코드 `MSG01126`(KO "먼저 {0}을(를) 선택하십시오." / EN "First, select {0}.") 로 재매핑(DB 실측 2026-10-16).
   //   {0} 는 호출부에서 Model 라벨로 치환한다. (이전 MSG00002 임시대체는 실제 "저장 성공" 대사라 오류였음)
   ITEM_REQUIRED_FOR_BOD: 'MSG01126',
+  // Frozen 구간 수정 저장 차단의 임시 본문 — "수정할 수 없는 플랜입니다."(KO/EN/CN 실측 2026-11-24).
+  //   전용 문구(아래 FROZEN_PERIOD_MSG)가 등록되기 전까지 이 본문 + frozen 상세 줄로 안내한다.
+  PLAN_NOT_EDITABLE: 'MSG01196',
 } as const;
+
+// [TODO] MSG 등록 요청 중(2026-11-24, 테스트 이슈 #236) — KO "프로즌 구간({0})은 수정할 수 없습니다."
+//   SCM_ADM_MSG_M 에 같은 뜻의 문구가 없어(MSG01238 은 "설정된 확정기간이 없어…" 로 의미 상이) 담당자에게
+//   등록을 요청했다. 번호를 받으면 여기에 넣는다 — null 인 동안은 MSG.PLAN_NOT_EDITABLE + 상세 줄로 표시.
+//   {0} = "From Plant ~ frozen 마지막 일자" 목록.
+export const FROZEN_PERIOD_MSG: string | null = null;
 
 // i18n 라벨 코드 — BOD 팝업 표시용(실측 코드, shipping SSP0045 와 동일 대사).
 //   자유 형식 키 금지(convert-core §2.4) — SCM_ADM_MSG_M/LABEL 실존 코드만.

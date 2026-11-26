@@ -46,13 +46,13 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.chkAll | CheckStateChanged | chkAll_CheckStateChanged | InitializeComponent:298 |
 | this | Load | Form_Load | .ctor:104 |
 | btnDelegatee | Click | BtnDelegatee_Click | InitEvent:224 |
 | btnSave | Click | BtnSave_Click | InitEvent:225 |
 | btnUnSet | Click | BtnUnSet_Click | InitEvent:226 |
 | spdMain | SheetTabClick | SpdMain_SheetTabClick | InitEvent:228 |
 | spdMain | CellClick | SpdMain_CellClick | InitEvent:229 |
+| this.chkAll | CheckStateChanged | chkAll_CheckStateChanged | InitializeComponent:298 |
 
 ## 6. 컨트롤 (30개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |

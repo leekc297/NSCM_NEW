@@ -1,0 +1,35 @@
+{
+  "id": "DMF0082",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0082] · Doc/gen/DMF0082/CHECK.md · Doc/gen/DMF0082/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0082/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-24T10:56:51+09:00",
+  "end": "2026-11-24T10:59:42+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\forecast-price",
+      "files": 44
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0082",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "AS-IS 소스와 DB 내용을 찾아서 기준월을 전달할 때 현재월 +3 개월을 기준으로 전달해서 수정불가로 처리되는 내용이 동일하게 존재하는지 확인해주세요. ",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "afterMode": "end",
+  "afterAt": "2026-11-24T10:59:42+09:00",
+  "changed": []
+}

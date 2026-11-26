@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 2224,
-  "at": "2026-11-20T00:43:02.420Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1580,
+  "at": "2026-11-25T16:25:57.131Z",
+  "user": "brightboy",
   "test": "편집 모드 구분(D1)"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 820,
-  "at": "2026-11-20T00:43:04.970Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 668,
+  "at": "2026-11-25T16:26:00.007Z",
+  "user": "brightboy",
   "test": "편집 모드 구분(D1)"
  },
  {
@@ -33,9 +33,9 @@
   "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 114,
-  "at": "2026-11-20T00:43:07.797Z",
-  "user": "minyonglee1",
+  "dur": 102,
+  "at": "2026-11-25T16:26:01.706Z",
+  "user": "brightboy",
   "test": "편집 모드 구분(D1)"
  },
  {
@@ -46,9 +46,9 @@
   "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 106,
-  "at": "2026-11-20T00:43:13.215Z",
-  "user": "minyonglee1",
+  "dur": 117,
+  "at": "2026-11-25T16:26:04.931Z",
+  "user": "brightboy",
   "test": "편집 모드 구분(D1)"
  }
 ]

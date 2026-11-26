@@ -1,0 +1,571 @@
+{
+"DMF0003": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] AS_FROM_SITE 셀 콤보 후보 = 서버 콤보 AS_FROM_SITE|cond:Div=81;search;insert;gridcands:AS_FROM_SITE=@combo:AS_FROM_SITE",
+"P07|[자동] DOM_EXP 셀 콤보 후보 = 서버 콤보 DOM_EXP|cond:Div=40;search;insert;gridcands:DOM_EXP=@combo:DOM_EXP",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 = 서버 콤보 EndCustomerByDivisionDept|cond:Div=81;search;insert;gridcands:END_CUSTOMER=@combo:EndCustomerByDivisionDept",
+"P07|[자동] END_CUSTOMER40 셀 콤보 후보 = 서버 콤보 EndCustomerByDivision40|cond:Div=40;search;insert;gridcands:END_CUSTOMER40=@combo:EndCustomerByDivision40",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 = 서버 콤보 FCST_TYPE_NOT_ETC|cond:Div=40;search;insert;gridcands:FCST_TYPE=@combo:FCST_TYPE_NOT_ETC",
+"P07|[자동] INCOTERMS 셀 콤보 후보 = 서버 콤보 INCOTERMS|cond:Div=40;search;insert;gridcands:INCOTERMS=@combo:INCOTERMS",
+"P07|[자동] MEASURE 셀 콤보 후보 = 서버 콤보 MktFcstEditMeasure|cond:Div=40;search;insert;gridcands:MEASURE=@combo:MktFcstEditMeasure",
+"P07|[자동] PLANT_SITE_ID 셀 콤보 후보 = 서버 콤보 FromSiteByDivision|cond:Div=81;search;insert;gridcands:PLANT_SITE_ID=@combo:FromSiteByDivision",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 = 서버 콤보 SiteByEndCustomer|cond:Div=81;search;insert;gridcands:SCM_SITE_ID=@combo:SiteByEndCustomer",
+"P07|[자동] SCM_SITE_ID40 셀 콤보 후보 = 서버 콤보 SiteByEndCustomer|cond:Div=40;search;insert;gridcands:SCM_SITE_ID40=@combo:SiteByEndCustomer"
+]
+},
+"DMF0004": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] COMPANY_ID 셀 콤보 후보 있음|search;insert;gridcands:COMPANY_ID~.",
+"P07|[자동] D_FRI 셀 콤보 후보 있음|search;insert;gridcands:D_FRI~.",
+"P07|[자동] D_MON 셀 콤보 후보 있음|search;insert;gridcands:D_MON~.",
+"P07|[자동] D_SAT 셀 콤보 후보 있음|search;insert;gridcands:D_SAT~.",
+"P07|[자동] D_SUN 셀 콤보 후보 있음|search;insert;gridcands:D_SUN~.",
+"P07|[자동] D_THU 셀 콤보 후보 있음|search;insert;gridcands:D_THU~.",
+"P07|[자동] D_TUE 셀 콤보 후보 있음|search;insert;gridcands:D_TUE~.",
+"P07|[자동] D_WED 셀 콤보 후보 있음|search;insert;gridcands:D_WED~.",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 있음|search;insert;gridcands:END_CUSTOMER~.",
+"P07|[자동] INCOTERMS 셀 콤보 후보 있음|search;insert;gridcands:INCOTERMS~.",
+"P07|[자동] REP_YN 셀 콤보 후보 있음|search;insert;gridcands:REP_YN~.",
+"P07|[자동] SHIP_PLAN_AUTO 셀 콤보 후보 있음|search;insert;gridcands:SHIP_PLAN_AUTO~.",
+"P07|[자동] SOLDTO_CUSTOMER 셀 콤보 후보 있음|search;insert;gridcands:SOLDTO_CUSTOMER~.",
+"P07|[자동] VALID_YN 셀 콤보 후보 있음|search;insert;gridcands:VALID_YN~.",
+"P07|[자동] VMI_YN 셀 콤보 후보 있음|search;insert;gridcands:VMI_YN~."
+]
+},
+"DMF0005": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] APPLICATION 셀 콤보 후보 = 서버 콤보 APPLICATION|cond:Div=40;search;insert;gridcands:APPLICATION=@combo:APPLICATION",
+"P07|[자동] ATTRIBUTE1 셀 콤보 후보 = 서버 콤보 SoldToCustReport|cond:Div=40;search;insert;gridcands:ATTRIBUTE1=@combo:SoldToCustReport",
+"P07|[자동] ATTRIBUTE2 셀 콤보 후보 = 서버 콤보 EndCustReport|cond:Div=40;search;insert;gridcands:ATTRIBUTE2=@combo:EndCustReport",
+"P07|[자동] ATTRIBUTE6 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:ATTRIBUTE6~.",
+"P07|[자동] ATTRIBUTE9 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:ATTRIBUTE9~.",
+"P07|[자동] CUST_GROUP 셀 콤보 후보 = 서버 콤보 CUST_GROUP|cond:Div=40;search;insert;gridcands:CUST_GROUP=@combo:CUST_GROUP",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 = 서버 콤보 EndCustomerByDivisionDeptAuth|cond:Div=40;search;insert;gridcands:END_CUSTOMER=@combo:EndCustomerByDivisionDeptAuth",
+"P07|[자동] PARTIAL_PLAN_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|cond:Div=82;search;insert;gridcands:PARTIAL_PLAN_YN=@combo:YesOrNo",
+"P07|[자동] PROJECT_INFO 셀 콤보 후보 = 서버 콤보 PROJECT_MODEL_MAPPING|cond:Div=40;search;insert;gridcands:PROJECT_INFO=@combo:PROJECT_MODEL_MAPPING",
+"P07|[자동] SALES_COMPANY 셀 콤보 후보 = 서버 콤보 CompanySalesSite|cond:Div=40;search;insert;gridcands:SALES_COMPANY=@combo:CompanySalesSite",
+"P07|[자동] SALES_PLANT 셀 콤보 후보 = 서버 콤보 SALES_PLANT|cond:Div=40;search;insert;gridcands:SALES_PLANT=@combo:SALES_PLANT",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 = 서버 콤보 SiteByEndCustomerAuth|cond:Div=40;search;insert;gridcands:SCM_SITE_ID=@combo:SiteByEndCustomerAuth",
+"P07|[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|cond:Div=40;search;insert;gridcands:VALID_YN=@combo:YesOrNo"
+]
+},
+"DMF0006": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] DEPT_ID 셀 콤보 후보 있음|search;insert;gridcands:DEPT_ID~.",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 있음|search;insert;gridcands:END_CUSTOMER~.",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 있음|search;insert;gridcands:SCM_SITE_ID~.",
+"P07|[자동] VALID_YN 셀 콤보 후보 있음|search;insert;gridcands:VALID_YN~."
+]
+},
+"DMF0008": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0014": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0020": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] CURRENCY 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:CURRENCY~.",
+"P07|[자동] DEPT_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DEPT_ID~.",
+"P07|[자동] DOM_EXP 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DOM_EXP~.",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:END_CUSTOMER~.",
+"P07|[자동] END_CUSTOMER40 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:END_CUSTOMER40~.",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:FCST_TYPE~.",
+"P07|[자동] INCOTERMS 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:INCOTERMS~.",
+"P07|[자동] PLANT_SITE_ID 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:PLANT_SITE_ID~.",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:SCM_SITE_ID~."
+]
+},
+"DMF0021": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] CELL_PROD_SITE_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:CELL_PROD_SITE_ID~.",
+"P07|[자동] CURRENCY 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:CURRENCY~.",
+"P07|[자동] DIVISION_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DIVISION_ID~.",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:END_CUSTOMER~.",
+"P07|[자동] END_CUSTOMER40 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:END_CUSTOMER40~.",
+"P07|[자동] MEASURE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:MEASURE~.",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:SCM_SITE_ID~."
+]
+},
+"DMF0035": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0040": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0042": {
+"p_popfill": [
+"P24|[자동] ITEM_ID40 팝업 선택 → ITEM_NAME 채움|cond:Div=40;search;insert;popcell:ITEM_ID40=;cell:~,ITEM_NAME=~\\S"
+],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] CELL_PROD_SITE 셀 콤보 후보 = 서버 콤보 DM_CELL_PROD_SITE|cond:Div=40;search;insert;gridcands:CELL_PROD_SITE=@combo:DM_CELL_PROD_SITE",
+"P07|[자동] CURRENCY 셀 콤보 후보 = 서버 콤보 CURRENCY_LIST|cond:Div=40;search;insert;gridcands:CURRENCY=@combo:CURRENCY_LIST",
+"P07|[자동] DEPT_ID40 셀 콤보 후보 = 서버 콤보 TeambyDivisionAuth|cond:Div=40;search;insert;gridcands:DEPT_ID40=@combo:TeambyDivisionAuth",
+"P07|[자동] END_CUSTOMER40 셀 콤보 후보 = 서버 콤보 EndCustomerByDivision40|cond:Div=40;search;insert;gridcands:END_CUSTOMER40=@combo:EndCustomerByDivision40",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 = 서버 콤보 DM_LOOKUP_DIV|cond:Div=40;search;insert;gridcands:FCST_TYPE=@combo:DM_LOOKUP_DIV",
+"P07|[자동] INCOTERMS 셀 콤보 후보 = 서버 콤보 incotermsEdit|cond:Div=40;search;insert;gridcands:INCOTERMS=@combo:incotermsEdit",
+"P07|[자동] SCM_SITE_ID40 셀 콤보 후보 = 서버 콤보 SiteByEndCustomer|cond:Div=40;search;insert;gridcands:SCM_SITE_ID40=@combo:SiteByEndCustomer"
+]
+},
+"DMF0043": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|cond:Div=40;search;type:VERSION_NM=E2E_SCN;insert;type:YYYY=1;type:VERSION_NM=E2E_SCN_I;type:VALID_YN=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] VALID_YN 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:VALID_YN~."
+]
+},
+"DMF0044": {
+"p_popfill": [
+"P24|[자동] ITEM_ID 팝업 선택 → NICK_NAME 채움|cond:Div=40;search;insert;popcell:ITEM_ID=;cell:~,NICK_NAME=~\\S"
+],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] APPLICATION_GR 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:APPLICATION_GR~.",
+"P07|[자동] BIZ_TYPE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:BIZ_TYPE~.",
+"P07|[자동] CELL_MODEL_INFO 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:CELL_MODEL_INFO~.",
+"P07|[자동] COMPANY_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:COMPANY_ID~.",
+"P07|[자동] COUNTRY_CODE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:COUNTRY_CODE~.",
+"P07|[자동] CURRENCY 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:CURRENCY~.",
+"P07|[자동] DEPARTMENT_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DEPARTMENT_ID~.",
+"P07|[자동] DEPT_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DEPT_ID~.",
+"P07|[자동] DIVISION_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DIVISION_ID~.",
+"P07|[자동] END_CUST_REPORT 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:END_CUST_REPORT~.",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:FCST_TYPE~.",
+"P07|[자동] ITEM_USE 셀 콤보 후보 있음|cond:Div=82;search;insert;gridcands:ITEM_USE~.",
+"P07|[자동] SOLDTO_CUST_REPORT 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:SOLDTO_CUST_REPORT~.",
+"P07|[자동] UNIT_CURRENCY 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:UNIT_CURRENCY~."
+]
+},
+"DMF0045": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0048": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] COMPANY_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:COMPANY_ID~.",
+"P07|[자동] DIVISION_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DIVISION_ID~.",
+"P07|[자동] DOM_EXP 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DOM_EXP~.",
+"P07|[자동] END_CUSTOMER40 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:END_CUSTOMER40~.",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:FCST_TYPE~.",
+"P07|[자동] INCOTERMS 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:INCOTERMS~.",
+"P07|[자동] MEASURE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:MEASURE~.",
+"P07|[자동] PLANT_SITE_ID 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:PLANT_SITE_ID~.",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:SCM_SITE_ID~."
+]
+},
+"DMF0049": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|cond:Div=40;search;type:CUST_REPORT=E2E_SCN;insert;type:DEPARTMENT_ID=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] APPLICATION 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:APPLICATION~.",
+"P07|[자동] APPLICATION_GR 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:APPLICATION_GR~.",
+"P07|[자동] BIZ_TYPE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:BIZ_TYPE~.",
+"P07|[자동] CELL_MODEL_INFO 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:CELL_MODEL_INFO~.",
+"P07|[자동] COMPANY_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:COMPANY_ID~.",
+"P07|[자동] COUNTRY_CODE 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:COUNTRY_CODE~.",
+"P07|[자동] CURRENCY 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:CURRENCY~.",
+"P07|[자동] DEPARTMENT_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DEPARTMENT_ID~.",
+"P07|[자동] DEPT_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:DEPT_ID~.",
+"P07|[자동] END_CUST_REPORT 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:END_CUST_REPORT~.",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:FCST_TYPE~.",
+"P07|[자동] ITEM_ID 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:ITEM_ID~.",
+"P07|[자동] ITEM_USE 셀 콤보 후보 있음|cond:Div=82;search;insert;gridcands:ITEM_USE~.",
+"P07|[자동] PRODUCT_DETAILS 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:PRODUCT_DETAILS~.",
+"P07|[자동] PRODUCT_GROUP 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:PRODUCT_GROUP~.",
+"P07|[자동] SOLDTO_CUST_REPORT 셀 콤보 후보 있음|cond:Div=40;search;insert;gridcands:SOLDTO_CUST_REPORT~."
+]
+},
+"DMF0053": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0068": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0072": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:DC_LEVEL=E2E_SCN;insert;type:FCST_TYPE=@cand:1;type:COMPANY_ID=@cand:1;type:END_CUSTOMER=@cand:1;type:SOLDTO_CODE=E2E_SCN_I;type:SHIPTO_CODE=E2E_SCN_I;type:SCM_SITE_ID=@cand:1;type:PROJECT_CODE=E2E_SCN_I;type:INCOTERMS=@cand:1;type:DOM_EXP=@cand:1;type:ITEM_ID=E2E_SCN_I;type:MAPPING_ITEM_ID=E2E_SCN_I;type:VALID_START_DATE=20991231;type:VALID_END_DATE=20991231;type:ACTIVE_YN=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] ACTIVE_YN 셀 콤보 후보 있음|search;insert;gridcands:ACTIVE_YN~.",
+"P07|[자동] COMPANY_ID 셀 콤보 후보 있음|search;insert;gridcands:COMPANY_ID~.",
+"P07|[자동] DOM_EXP 셀 콤보 후보 있음|search;insert;gridcands:DOM_EXP~.",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 있음|search;insert;gridcands:END_CUSTOMER~.",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:FCST_TYPE~.",
+"P07|[자동] INCOTERMS 셀 콤보 후보 있음|search;insert;gridcands:INCOTERMS~.",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 있음|search;insert;gridcands:SCM_SITE_ID~."
+]
+},
+"DMF0074": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"DMF0082": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] AS_FROM_SITE 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:AS_FROM_SITE~.",
+"P07|[자동] BIZ_TYPE 셀 콤보 후보 있음|cond:Div=81;search;insert;gridcands:BIZ_TYPE~.",
+"P07|[자동] CELL_PROD_SITE_ID 셀 콤보 후보 = 서버 콤보 CELL_PROD_SITE_ID|cond:Div=40;search;insert;gridcands:CELL_PROD_SITE_ID=@combo:CELL_PROD_SITE_ID",
+"P07|[자동] CURRENCY 셀 콤보 후보 = 서버 콤보 CURRENCY_LIST|cond:Div=40;search;insert;gridcands:CURRENCY=@combo:CURRENCY_LIST",
+"P07|[자동] DOM_EXP 셀 콤보 후보 = 서버 콤보 DOM_EXP|cond:Div=40;search;insert;gridcands:DOM_EXP=@combo:DOM_EXP",
+"P07|[자동] END_CUSTOMER 셀 콤보 후보 = 서버 콤보 EndCustomerByDivision40|cond:Div=40;search;insert;gridcands:END_CUSTOMER=@combo:EndCustomerByDivision40",
+"P07|[자동] FCST_TYPE 셀 콤보 후보 = 서버 콤보 FCST_TYPE_NOT_ETC|cond:Div=40;search;insert;gridcands:FCST_TYPE=@combo:FCST_TYPE_NOT_ETC",
+"P07|[자동] INCOTERMS 셀 콤보 후보 = 서버 콤보 INCOTERMS|cond:Div=40;search;insert;gridcands:INCOTERMS=@combo:INCOTERMS",
+"P07|[자동] MEASURE 셀 콤보 후보 = 서버 콤보 FCST_PRICE_EDIT_MEASURE|cond:Div=40;search;insert;gridcands:MEASURE=@combo:FCST_PRICE_EDIT_MEASURE",
+"P07|[자동] PLANT_SITE_ID 셀 콤보 후보 = 서버 콤보 FromSiteByDivision|cond:Div=81;search;insert;gridcands:PLANT_SITE_ID=@combo:FromSiteByDivision",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 = 서버 콤보 SiteByEndCustomer|cond:Div=40;search;insert;gridcands:SCM_SITE_ID=@combo:SiteByEndCustomer"
+]
+},
+"SCM0007": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:SMS_GROUP_NAME=E2E_SCN;insert;type:SMS_GROUP_NAME=E2E_SCN_I;type:SMS_PHONE=E2E_SCN_I;type:MODULE_CODE=@cand:1;type:CATEGORY_DESC=E2E_SCN_I;type:ACTIVE_FLAG=@cand:1;type:CYCLE_CLASS_CODE=@cand:1;type:DETAIL_CLASS_CODE=@cand:1;type:SEND_TIME_TEXT=@cand:1;type:LANGUAGE_CODE=@cand:1;type:MESSAGE_CONTENT=E2E_SCN_I;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] ACTIVE_FLAG 셀 콤보 후보 있음|search;insert;gridcands:ACTIVE_FLAG~.",
+"P07|[자동] CYCLE_CLASS_CODE 셀 콤보 후보 있음|search;insert;gridcands:CYCLE_CLASS_CODE~.",
+"P07|[자동] DETAIL_CLASS_CODE 셀 콤보 후보 있음|search;insert;gridcands:DETAIL_CLASS_CODE~.",
+"P07|[자동] LANGUAGE_CODE 셀 콤보 후보 있음|search;insert;gridcands:LANGUAGE_CODE~.",
+"P07|[자동] MODULE_CODE 셀 콤보 후보 있음|search;insert;gridcands:MODULE_CODE~.",
+"P07|[자동] SEND_TIME_TEXT 셀 콤보 후보 있음|search;insert;gridcands:SEND_TIME_TEXT~."
+]
+},
+"SCP0005": {
+"p_popfill": [
+"P24|[자동] FROM_CITY 팝업 선택 → FROM_CITY_NAME, FROM_COUNTRY 채움|search;insert;popcell:FROM_CITY=;cell:~,FROM_CITY_NAME=~\\S;cell:~,FROM_COUNTRY=~\\S",
+"P24|[자동] FROM_COUNTRY 팝업 선택 → FROM_CITY, FROM_CITY_NAME 채움|search;insert;popcell:FROM_COUNTRY=;cell:~,FROM_CITY=~\\S;cell:~,FROM_CITY_NAME=~\\S",
+"P24|[자동] TO_CITY 팝업 선택 → TO_CITY_NAME, TO_COUNTRY 채움|search;insert;popcell:TO_CITY=;cell:~,TO_CITY_NAME=~\\S;cell:~,TO_COUNTRY=~\\S",
+"P24|[자동] TO_COUNTRY 팝업 선택 → TO_CITY, TO_CITY_NAME 채움|search;insert;popcell:TO_COUNTRY=;cell:~,TO_CITY=~\\S;cell:~,TO_CITY_NAME=~\\S"
+],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:D_PORT_NAME=E2E_SCN;insert;type:LT_TYPE=@cand:1;popcell:FROM_COUNTRY=;popcell:FROM_CITY=;type:TRANSPORT_MODE=@cand:1;type:PRIORITY=1;type:D_PORT_NAME=E2E_SCN_I;type:D_COUNTRY=E2E_SCN_I;type:D_PORT_CODE=E2E_SCN_I;type:A_PORT_NAME=E2E_SCN_I;type:A_COUNTRY=E2E_SCN_I;type:A_PORT_CODE=E2E_SCN_I;type:SHIPPING_COMPANY=E2E_SCN_I;popcell:TO_COUNTRY=;popcell:TO_CITY=;type:VALID_YN=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] DAYS_FRI 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:DAYS_FRI=@combo:YesOrNo",
+"P07|[자동] DAYS_MON 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:DAYS_MON=@combo:YesOrNo",
+"P07|[자동] DAYS_SAT 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:DAYS_SAT=@combo:YesOrNo",
+"P07|[자동] DAYS_SUN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:DAYS_SUN=@combo:YesOrNo",
+"P07|[자동] DAYS_THU 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:DAYS_THU=@combo:YesOrNo",
+"P07|[자동] DAYS_TUE 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:DAYS_TUE=@combo:YesOrNo",
+"P07|[자동] DAYS_WED 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:DAYS_WED=@combo:YesOrNo",
+"P07|[자동] LT_TYPE 셀 콤보 후보 = 서버 콤보 LookupCommon|search;insert;gridcands:LT_TYPE=@combo:LookupCommon",
+"P07|[자동] TRANSPORT_MODE 셀 콤보 후보 = 서버 콤보 LookupCommon|search;insert;gridcands:TRANSPORT_MODE=@combo:LookupCommon",
+"P07|[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:VALID_YN=@combo:YesOrNo"
+]
+},
+"SCP0007": {
+"p_popfill": [
+"P24|[자동] ROUTE_ID 팝업 선택 → BOD_VALID, DAYS_FRI, DAYS_MON, DAYS_SAT, DAYS_SUN, DAYS_THU, DAYS_TUE, DAYS_WED, DIS_TOTAL_LEAD_TIME, LT_TYPE, PRIORITY, ROUTE_VALID, TRANSPORT_MODE 채움|search;insert;popcell:ROUTE_ID=;cell:~,BOD_VALID=~\\S;cell:~,DAYS_FRI=~\\S;cell:~,DAYS_MON=~\\S;cell:~,DAYS_SAT=~\\S;cell:~,DAYS_SUN=~\\S;cell:~,DAYS_THU=~\\S;cell:~,DAYS_TUE=~\\S;cell:~,DAYS_WED=~\\S;cell:~,DIS_TOTAL_LEAD_TIME=~\\S;cell:~,LT_TYPE=~\\S;cell:~,PRIORITY=~\\S;cell:~,ROUTE_VALID=~\\S;cell:~,TRANSPORT_MODE=~\\S"
+],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:REMARKS=E2E_SCN;insert;type:DIVISION_ID=@cand:1;type:FROM_SITE_CODE=@cand:1;type:TO_SITE_CODE=@cand:1;type:INCOTERMS=@cand:1;type:INCOTERMS_SSP=@cand:1;type:PRIORITY=1;popcell:ROUTE_ID=;type:FROM_YYYYMMDD=20991231;type:TO_YYYYMMDD=20991231;type:BOD_VALID=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] BOD_VALID 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:BOD_VALID=@combo:YesOrNo",
+"P07|[자동] DIVISION_ID 셀 콤보 후보 = 서버 콤보 Division|search;insert;gridcands:DIVISION_ID=@combo:Division",
+"P07|[자동] FROM_SITE_CODE 셀 콤보 후보 = 서버 콤보 FromSiteByDivision1|search;insert;gridcands:FROM_SITE_CODE=@combo:FromSiteByDivision1",
+"P07|[자동] INCOTERMS 셀 콤보 후보 = 서버 콤보 incotermsEdit|search;insert;gridcands:INCOTERMS=@combo:incotermsEdit",
+"P07|[자동] INCOTERMS_SSP 셀 콤보 후보 = 서버 콤보 incotermsEdit|search;insert;gridcands:INCOTERMS_SSP=@combo:incotermsEdit",
+"P07|[자동] TO_SITE_CODE 셀 콤보 후보 = 서버 콤보 ToSiteBOD1|search;insert;gridcands:TO_SITE_CODE=@combo:ToSiteBOD1",
+"P07|[자동] VMI_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:VMI_YN=@combo:YesOrNo"
+]
+},
+"SCP0016": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SCP0020": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:NICK_NAME=E2E_SCN;insert;type:LINE_ID=@cand:1;type:PRIORITY=1;type:YIELD=1;type:DAILY_CAPACITY=1;type:TACT_TIME=1;type:TACT_TIME_START_DATE=20991231;type:TACT_TIME_END_DATE=20991231;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] LINE_ID 셀 콤보 후보 = 서버 콤보 LineByPlantPacker|search;insert;gridcands:LINE_ID=@combo:LineByPlantPacker",
+"P07|[자동] USE_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:USE_YN=@combo:YesOrNo"
+]
+},
+"SCP0028": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] SPLIT_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:SPLIT_YN=@combo:YesOrNo",
+"P07|[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:VALID_YN=@combo:YesOrNo"
+]
+},
+"SCP0033": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] DEPARTURE_DAY 셀 콤보 후보 = 서버 콤보 LookupCommon|search;insert;gridcands:DEPARTURE_DAY=@combo:LookupCommon",
+"P07|[자동] DIVISION_ID 셀 콤보 후보 = 서버 콤보 Division|search;insert;gridcands:DIVISION_ID=@combo:Division",
+"P07|[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:VALID_YN=@combo:YesOrNo"
+]
+},
+"SCP0037": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] INV_FLAG 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:INV_FLAG=@combo:YesOrNo",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 = 서버 콤보 PlantSiteByDivision|search;insert;gridcands:SCM_SITE_ID=@combo:PlantSiteByDivision"
+]
+},
+"SCP0041": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SCP0084": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SCP0096": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SCP0100": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SCP0104": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:LANE_QTY=E2E_SCN;insert;type:DIVISION_ID=E2E_SCN_I;type:SITE_ID=E2E_SCN_I;type:COMPANY_ID=E2E_SCN_I;type:PLANT_ID=E2E_SCN_I;type:FACTORY_ID=E2E_SCN_I;type:LINE_ID=E2E_SCN_I;type:NICK_NAME=E2E_SCN_I;type:OPERATION_ID=E2E_SCN_I;type:ITEM_ID=E2E_SCN_I;type:ELTR_LN_TP_CD=E2E_SCN_I;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:VALID_YN=@combo:YesOrNo"
+]
+},
+"SCP0108": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SCP0111": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SCP0122": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] OPMZ_ACTV_NAME 셀 콤보 후보 = 서버 콤보 ActivityCode|search;insert;gridcands:OPMZ_ACTV_NAME=@combo:ActivityCode"
+]
+},
+"SCP0127": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:VALUE_DESCRIPTION=E2E_SCN;insert;type:VALUE_TYPE=@cand:1;type:OPMZ_PLAN_GR_ID=@cand:1;type:SCM_SITE_ID=@cand:1;type:ITEM_ID=E2E_SCN_I;type:STAGE=@cand:1;type:FROM_YYYYMMDD=20991231;type:TO_YYYYMMDD=20991231;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] OPMZ_PLAN_GR_ID 셀 콤보 후보 있음|search;insert;gridcands:OPMZ_PLAN_GR_ID~.",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 있음|search;insert;gridcands:SCM_SITE_ID~.",
+"P07|[자동] STAGE 셀 콤보 후보 있음|search;insert;gridcands:STAGE~.",
+"P07|[자동] VALID_YN 셀 콤보 후보 있음|search;insert;gridcands:VALID_YN~.",
+"P07|[자동] VALUE_TYPE 셀 콤보 후보 있음|search;insert;gridcands:VALUE_TYPE~."
+]
+},
+"SCP0131": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:VALUE_DESCRIPTION=E2E_SCN;insert;type:OPMZ_PLAN_GR_ID=@cand:1;type:SCM_SITE_ID=@cand:1;type:ITEM_ID=E2E_SCN_I;type:FROM_YYYYMMDD=20991231;type:TO_YYYYMMDD=20991231;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] OPMZ_PLAN_GR_ID 셀 콤보 후보 있음|search;insert;gridcands:OPMZ_PLAN_GR_ID~.",
+"P07|[자동] SCM_SITE_ID 셀 콤보 후보 있음|search;insert;gridcands:SCM_SITE_ID~.",
+"P07|[자동] VALID_YN 셀 콤보 후보 있음|search;insert;gridcands:VALID_YN~."
+]
+},
+"SSP0003": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SSP0005": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SSP0014": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:VALID_YN=@combo:YesOrNo"
+]
+},
+"SSP0015": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SSP0020": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SSP0021": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SSP0023": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SSP0024": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:REMARKS=E2E_SCN;insert;type:DIVISION_ID=@cand:1;type:PLANT_SITE_ID=@cand:1;type:MATERIAL_ID=E2E_SCN_I;type:POST_OPER=@cand:1;type:PACKAGE_TYPE_CODE=@cand:1;type:STEELCRATE_PER_CUT=1;type:BOX_PER_CUT=1;type:STEELRACK_PER_CUT=1;type:DOM_EXP_TYPE_CODE=@cand:1;type:BUILDING=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] BUILDING 셀 콤보 후보 = 서버 콤보 BuildingForShipMasterElec|search;insert;gridcands:BUILDING=@combo:BuildingForShipMasterElec",
+"P07|[자동] DIVISION_ID 셀 콤보 후보 있음|search;insert;gridcands:DIVISION_ID~.",
+"P07|[자동] DOM_EXP_TYPE_CODE 셀 콤보 후보 = 서버 콤보 DomExpTypeCode|search;insert;gridcands:DOM_EXP_TYPE_CODE=@combo:DomExpTypeCode",
+"P07|[자동] PACKAGE_TYPE_CODE 셀 콤보 후보 = 서버 콤보 ElectrodePackageType|search;insert;gridcands:PACKAGE_TYPE_CODE=@combo:ElectrodePackageType",
+"P07|[자동] PLANT_SITE_ID 셀 콤보 후보 = 서버 콤보 PlantSiteByFactoryEEOperation|search;insert;gridcands:PLANT_SITE_ID=@combo:PlantSiteByFactoryEEOperation",
+"P07|[자동] POST_OPER 셀 콤보 후보 = 서버 콤보 ElectrodePostOperCode|search;insert;gridcands:POST_OPER=@combo:ElectrodePostOperCode"
+]
+},
+"SSP0025": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] DIVISION_ID 셀 콤보 후보 = 서버 콤보 MyDivision|search;insert;gridcands:DIVISION_ID=@combo:MyDivision",
+"P07|[자동] SITE_DESCRIPTION 셀 콤보 후보 = 서버 콤보 PlantCell|search;insert;gridcands:SITE_DESCRIPTION=@combo:PlantCell",
+"P07|[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo|search;insert;gridcands:VALID_YN=@combo:YesOrNo"
+]
+},
+"SSP0060": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SSP0200": {
+"p_popfill": [
+"P24|[자동] ITEM_ID 팝업 선택 → NICK_NAME 채움|search;insert;popcell:ITEM_ID=;cell:~,NICK_NAME=~\\S"
+],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:TRANSPORT_MODE=E2E_SCN;insert;type:FCST_TYPE=@cand:1;type:ITEM_ID=E2E_SCN_I;type:FROM_SITE_DESCRIPTION=E2E_SCN_I;type:TO_SITE_DESCRIPTION=E2E_SCN_I;type:INCOTERMS=@cand:1;type:SHIPMENT_DATE=20991231;type:SHIPMENT_CONFIRM_QTY=1;type:NEW_SHIPMENT_DATE=20991231;type:NEW_SHIPMENT_CONFIRM_QTY=1;type:PROJECT_CODE=E2E_SCN_I;type:END_CUSTOMER=E2E_SCN_I;type:TRANSPORT_MODE=E2E_SCN_I;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] FCST_TYPE 셀 콤보 후보 = 서버 콤보 LookupCommon|search;insert;gridcands:FCST_TYPE=@combo:LookupCommon",
+"P07|[자동] INCOTERMS 셀 콤보 후보 = 서버 콤보 Incoterms|search;insert;gridcands:INCOTERMS=@combo:Incoterms"
+]
+},
+"SYS0002": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] LANG_CD 셀 콤보 후보 있음|search;insert;gridcands:LANG_CD~.",
+"P07|[자동] PERM_KEP_CNC_YN 셀 콤보 후보 있음|search;insert;gridcands:PERM_KEP_CNC_YN~.",
+"P07|[자동] TMZ_CD 셀 콤보 후보 있음|search;insert;gridcands:TMZ_CD~.",
+"P07|[자동] USE_YN 셀 콤보 후보 있음|search;insert;gridcands:USE_YN~."
+]
+},
+"SYS0003": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:MNU_DESC=E2E_SCN;insert;type:MNU_ID=E2E_SCN_I;type:MNU_MSG_NM=E2E_SCN_I;type:MNU_URL=E2E_SCN_I;type:SORT_ORD=E2E_SCN_I;type:USE_YN=@cand:1;type:ROUTE_PATH=E2E_SCN_I;type:MNU_TP_CD=@cand:1;type:UNIT_TP_CD=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] MNU_TP_CD 셀 콤보 후보 있음|search;insert;gridcands:MNU_TP_CD~.",
+"P07|[자동] N01_ATR_CTN 셀 콤보 후보 있음|search;insert;gridcands:N01_ATR_CTN~.",
+"P07|[자동] UNIT_TP_CD 셀 콤보 후보 있음|search;insert;gridcands:UNIT_TP_CD~.",
+"P07|[자동] USE_YN 셀 콤보 후보 있음|search;insert;gridcands:USE_YN~."
+]
+},
+"SYS0006": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:API_MSG_DESC=E2E_SCN;insert;type:API_ID=E2E_SCN_I;type:API_MSG_NM=E2E_SCN_I;type:API_MSG_DESC=E2E_SCN_I;type:API_TP_CD=@cand:1;type:API_URL=@cand:1;type:USE_YN=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] API_TP_CD 셀 콤보 후보 있음|search;insert;gridcands:API_TP_CD~.",
+"P07|[자동] API_URL 셀 콤보 후보 있음|search;insert;gridcands:API_URL~.",
+"P07|[자동] USE_YN 셀 콤보 후보 있음|search;insert;gridcands:USE_YN~."
+]
+},
+"SYS0010": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:SEGMENT1=E2E_SCN;insert;type:LOOKUP_TYPE=E2E_SCN_I;type:VALID_YN=@cand:1;type:LOOKUP_GROUP=@cand:1;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] LOOKUP_GROUP 셀 콤보 후보 있음|search;insert;gridcands:LOOKUP_GROUP~.",
+"P07|[자동] VALID_YN 셀 콤보 후보 있음|search;insert;gridcands:VALID_YN~."
+]
+},
+"SYS0014": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": [
+"P07|[자동] UNIT_ID 셀 콤보 후보 있음|search;insert;gridcands:UNIT_ID~."
+]
+},
+"SYS0015": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:PROGRAM_NAME=E2E_SCN;insert;type:PROGRAM_ID=E2E_SCN_I;type:PROGRAM_NAME=E2E_SCN_I;type:PROGRAM_PATH=E2E_SCN_I;type:CLASS_NAME=E2E_SCN_I;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": []
+},
+"SYS0016": {
+"p_popfill": [],
+"p_modins": [],
+"p_combo": []
+},
+"SYS0017": {
+"p_popfill": [],
+"p_modins": [
+"P23|[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I|search;type:CATEGORY_DESC=E2E_SCN;insert;type:MODULE_CODE=@cand:1;type:CATEGORY_DESC=E2E_SCN_I;type:CYCLE_CLASS_CODE=@cand:1;type:LANGUAGE_CODE=@cand:1;type:MAIL_TITLE=E2E_SCN_I;type:MESSAGE_CONTENT=E2E_SCN_I;save;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}M;savehas:(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)[^,]{0,8}I"
+],
+"p_combo": [
+"P07|[자동] ACTIVE_FLAG 셀 콤보 후보 있음|search;insert;gridcands:ACTIVE_FLAG~.",
+"P07|[자동] CYCLE_CLASS_CODE 셀 콤보 후보 있음|search;insert;gridcands:CYCLE_CLASS_CODE~.",
+"P07|[자동] DETAIL_CLASS_CODE 셀 콤보 후보 있음|search;insert;gridcands:DETAIL_CLASS_CODE~.",
+"P07|[자동] LANGUAGE_CODE 셀 콤보 후보 있음|search;insert;gridcands:LANGUAGE_CODE~.",
+"P07|[자동] MODULE_CODE 셀 콤보 후보 있음|search;insert;gridcands:MODULE_CODE~.",
+"P07|[자동] SEND_MIN_TIME_TEXT 셀 콤보 후보 있음|search;insert;gridcands:SEND_MIN_TIME_TEXT~.",
+"P07|[자동] SEND_TIME_TEXT 셀 콤보 후보 있음|search;insert;gridcands:SEND_TIME_TEXT~."
+]
+}
+}

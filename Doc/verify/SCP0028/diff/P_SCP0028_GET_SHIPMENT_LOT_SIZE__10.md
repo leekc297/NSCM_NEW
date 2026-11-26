@@ -1,13 +1,26 @@
 # SCP0028 · SCP0028_GET_SHIPMENT_LOT_SIZE ↔ PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE
 
-- 실행 2026-11-20 12:55:29 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
-- **판정 PASS** — 공통 1940행 전 컬럼 일치 · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+OPERATION_GROUP_ID+from_site+from_site_description+to_site+to_site_description+ITEM_ID+NICK_NAME+trans_mode_name+trans_mode_code+VALID_YN+SPLIT_YN · golden 집합 판정 PASS
-- 호출 #10 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 1941 · 원천 Doc\verify\SCP0028\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
-- TO-BE 인자(FE 본문): `{"divisionId": "81", "operationGroup": "", "fromSite": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P", "toSite": "", "transMode": "", "itemId": "", "valid": ""}`
-- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
-- AS-IS 인자(번역): `{"p_division_id": "81", "p_operation_group": "", "p_from_site": "AU000062_81-P,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,AC00-A,EG01_81-W,MI00_81-W,MI00-A,MI00-E,MI00-P,MI02-A,MI02-E,MI03_81-W,MI03-P,MT00-A,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00_81-W,WA00-A,WA00-E,WA00-P", "p_to_site": "", "p_trans_mode": "", "p_item_id": "", "p_valid": ""}`
+- 실행 2026-11-25 01:47:58 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- **판정 PASS** — 공통 670행 전 컬럼 일치 · 단독행 AS-IS 0 / TO-BE 20 · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+OPERATION_GROUP_ID+from_site+from_site_description+to_site+to_site_description+ITEM_ID+NICK_NAME+trans_mode_name+trans_mode_code+VALID_YN+SPLIT_YN · golden 집합 판정 DIFF
+- 호출 #10 sheet=main btn=SEARCH user=brightboy FE 응답 행 691 · 원천 Doc\verify\SCP0028\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
+- TO-BE 인자(FE 본문): `{"divisionId": "81", "operationGroup": "A", "fromSite": "", "toSite": "", "transMode": "", "itemId": "", "valid": ""}`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "brightboy"}`
+- AS-IS 인자(번역): `{"p_division_id": "81", "p_operation_group": "A", "p_from_site": "", "p_to_site": "", "p_trans_mode": "", "p_item_id": "", "p_valid": ""}`
 
-### 결과셋 1  As-is 1940행 ↔ To-Be O_RC1 1940행
-- 일치
-- 데이터 기준: 공통 1940행 · AS-IS 전용 0행 · TO-BE 전용 0행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
-- 실제 순서(공통·유일 1940행의 상대 순서): 일치
+### 결과셋 1  As-is 670행 ↔ To-Be O_RC1 690행
+- 행수 불일치 670 ↔ 690
+- 값 차이: As-is 전용 0행 / To-Be 전용 20행 (공통 컬럼 18)
+| 측 | DIVISION_ID | OPERATION_GROUP_ID | from_site | from_site_description | to_site | to_site_description | ITEM_ID | NICK_NAME | trans_mode_name | trans_mode_code | LOT_SIZE | INCREMENT |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | AIR | AIR |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | FERRY | FRY |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | RAIL | RAI |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | SEA | SEA | 24840 | 2484 |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | TRUCK | TRK |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | AIR | AIR |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | FERRY | FRY |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | RAIL | RAI |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | SEA | SEA | 0 | 0 |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | TRUCK | TRK |  |  |
+- 데이터 기준: 공통 670행 · AS-IS 전용 0행 · TO-BE 전용 20행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
+- 실제 순서(공통·유일 670행의 상대 순서): 일치

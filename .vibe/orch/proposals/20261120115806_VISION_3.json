@@ -3,7 +3,7 @@
   "at": "2026-11-20T11:58:06+09:00",
   "ms": 1795143486192,
   "source": "vision",
-  "status": "approved",
+  "status": "applied",
   "sig": "selfcheck sn sync before incident",
   "title": "설치본 차이(S3)는 자동 동기화를 먼저 하고 남은 차이만 사건으로 올림",
   "evidence": "digest7d 사건 126건 중 R12 51건, R12:resolved 50. topRepeats R12|S3|CHANGELOG.md 8건, R12|S3|orchestra.js 3건, R12|S3|orch-selfcheck.js 3건. orch-selfcheck.js:279 syncIncidents(res, ids) 뒤 283~284줄 syncInstalled 와 syncIncidents(res, ['S3'])",
@@ -26,6 +26,57 @@
       "at": "2026-11-20T15:19:12+09:00",
       "by": "VMO 자동(게이트 통과 조건)",
       "what": "승인"
+    },
+    {
+      "at": "2026-11-20T15:22:02+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 27개 파일 통과, 시험 51/52개 파일 통과(PASS 641, FAIL 1), 정의 정합 통과 · 반영 전부터 어긋난 항목 1건 · 백업 태그 20261120_self1519"
+    },
+    {
+      "at": "2026-11-20T15:22:05+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T15:31:02+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 661, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T15:31:02+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 15:23:13 node test/t_orch_selfcheck.js: PASS 26, FAIL 0, ALL PASS. 추가 2건 PASS: '동기화 조건 충족 → 동기화 먼저 · S3 통과 · R12 S3 사건 0건'(copied a.js), '동기화 조건 미충족(S2 실패) → 동기화 안 함 · R12 S3 사건 1건'. 15:23:18~15:26:34 node test/run_all.js: 파일 52/53, PASS 660, FAIL 1. t_orch_selfcheck.js ok. 실패 1건 t_job_re · 변경 21개 파일 · 대상 목록 밖 변경 19개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/a1_live.json, Doc/verify/SCP0028/e2e/shots/index_verify.json, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/test/t_job_resume.js",
+      "log": ".vibe\\logs\\2026-11-20T15-22-05_claude_orch.log",
+      "sec": 333,
+      "costUsd": 1.1765337,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/a1_live.json",
+        "Doc/verify/SCP0028/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_job_resume.js",
+        "tools/VibeManager/test/t_orch_selfcheck.js",
+        "tools/VibeManager/test/t_resume_inner.js",
+        "Doc/verify/SCP0028/calls/_grid_main.json",
+        "Doc/verify/SCP0028/calls/_verify_Division_컬럼_A5__0.json",
+        "Doc/verify/SCP0028/calls/_verify_레이아웃_조회_묶음_H4_N1_G1_L2__0.json",
+        "Doc/verify/SCP0028/calls/_verify_병합_셀_입력_Delete_원값_복원_H3_F5_D1_F3__0.json",
+        "Doc/verify/SCP0028/calls/_verify_실전송_건수_A1__0.json",
+        "Doc/verify/SCP0028/calls/_verify_언어_전환_문구_덤프_I2__0.json",
+        "Doc/verify/SCP0028/calls/_verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보__0.json",
+        "Doc/verify/SCP0028/calls/_verify_조회_전_합계_기간_이상값_정렬_Copy_A10_N1_K1__0.json",
+        "Doc/verify/SCP0028/calls/_verify_텍스트_부분_삭제_Insert_행_Div_변경_E6_D1__0.json",
+        "Doc/verify/SCP0028/calls/_verify_필터_항목_연속_조회_본문_K1_G6__0.json",
+        "Doc/verify/SCP0028/calls/_verify_합계_값_A3__0.json",
+        "Doc/verify/SCP0028/e2e/shots/verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보.png"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:31+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T16:11:34+09:00"
     }
   ],
   "plain": {
@@ -40,5 +91,28 @@
   "autoTried": true,
   "autoTries": 1,
   "autoMs": 1795155552640,
-  "autoFp": "3134ce2392"
+  "autoFp": "3134ce2392",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 661, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1519",
+  "needsReload": true,
+  "appliedMs": 1795156262210,
+  "synced": [
+    "orch-selfcheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/test/t_orch_selfcheck.js"
+    ],
+    "verify_result": "2026-11-20 15:23:13 node test/t_orch_selfcheck.js: PASS 26, FAIL 0, ALL PASS. 추가 2건 PASS: '동기화 조건 충족 → 동기화 먼저 · S3 통과 · R12 S3 사건 0건'(copied a.js), '동기화 조건 미충족(S2 실패) → 동기화 안 함 · R12 S3 사건 1건'. 15:23:18~15:26:34 node test/run_all.js: 파일 52/53, PASS 660, FAIL 1. t_orch_selfcheck.js ok. 실패 1건 t_job_resume.js '로그에 작업 재개 줄'은 orch-selfcheck 를 참조하지 않음. 다른 작업 resumeR1 이 job-runner.js 15:18, t_job_resume.js 15:27 에 수정 중이었음. 15:27:15 node test/t_job_resume.js 재실행 ALL PASS. run_all.js 전체 재실행 안 함",
+    "note": "run() 에서 자동 동기화 판단을 syncIncidents 앞으로 옮김. 조건 충족 시 syncInstalled 실행 후 S3 재측정, 그 뒤 summary 계산, result.json 저장, history 기록, syncIncidents 호출. 동기화 뒤 syncIncidents(res, ['S3']) 재호출 줄 삭제. 조건 미충족 또는 동기화 뒤 차이가 남으면 종전대로 R12 사건 올림. 설치 폴더, CHANGELOG.md, .bak 은 건드리지 않음"
+  },
+  "snap": "prop_20261120115806_VISION_3",
+  "effectiveMs": 1795158694757,
+  "effectiveAt": "2026-11-20T16:11:34+09:00"
 }

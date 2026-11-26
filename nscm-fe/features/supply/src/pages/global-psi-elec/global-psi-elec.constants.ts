@@ -116,6 +116,8 @@ export const MSG = {
   NO_DIVISION_AUTH: 'MSG00097',
   // 기간 역전(종료일 < 시작일) 차단 — MSG01135(EN)='The start date can not be later than the end date.'(ora.py 실측).
   PERIOD_ORDER: 'MSG01135',
+  // 최대 조회기간 초과 — MSG01187(EN)='Maximum Period is From Date + {0}.'(ora.py 실측). AS-IS MSG00172 대응.
+  MAX_PERIOD: 'MSG01187',
   // Plan Type 안내 문구 — 조회조건 하단. plan_type(MA/FN)별 산출물 설명. 사용자 지시 2026-10-15: 선행 라벨을
   //   Report Type → Plan Type 으로 변경(필드명 Plan Type 과 일치). EN/KO locale MSG01399 동시 수정.
   REPORT_TYPE_GUIDE: 'MSG01399',

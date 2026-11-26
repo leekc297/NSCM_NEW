@@ -24,6 +24,8 @@ export interface PeriodAxisRow {
   DATE_SHORT1_NAME: string;
   WEEK_COL_KEY: string;
   MONTH_COL_KEY: string;
+  // 동적 컬럼 너비(px) — 프로시저가 주면 최우선(2026-11-22 동적 컬럼 너비 프로시저 관리). 없으면 화면 기본값.
+  COLUMN_WIDTH?: string | number;
 }
 
 // main · priceBatch / EXCHANGE_RATE 결과 (DM_MST_EXCHANGE_RATE 읽기 전용).

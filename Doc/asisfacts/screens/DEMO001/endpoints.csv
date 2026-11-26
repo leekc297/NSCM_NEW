@@ -1,1 +1,5 @@
 ﻿"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"only","20.RFC\SAPRFC\Program.cs","Program","GET_IFSEQNO","421","prop","fox","SELECT NEXT VALUE FOR {p:p_sequence_name};","","TEMPLATE","","","","파라미터 의존 — 호출 지점(derived)에서 해석됨"
+"only","20.RFC\SAPRFC\Program.cs","Program","excuteQury","478","prop","fox","{?new StringBuilder()}","","UNRESOLVED","","","",""
+"only","20.RFC\SAPRFC\Program.cs","Program","excuteQury","495","prop","fox","{?new StringBuilder()}","","UNRESOLVED","","","",""
+"only","20.RFC\SAPRFC\Program.cs","Program","XIF_ERP","598","derived","fox","SELECT NEXT VALUE FOR {?arg:p_sequence_name};","","UNRESOLVED","","","Program.GET_IFSEQNO","pattern no match"

@@ -1,0 +1,143 @@
+# -*- coding: utf-8 -*-
+"""검증쿼리(사전점검) — DBeaver 에서 그대로 실행되는 형태로 변환(2026-11-24 사용자 지시)
+  Oracle : 바인드 변수(:NAME) 를 없애고 맨 위 한 줄 `WITH PRM AS (SELECT '값' AS P_NAME FROM DUAL)` 에 값을 직접 적는다
+  MSSQL  : DECLARE 를 없앤다(DBeaver 가 문장을 ; 로 끊어 보내면 변수를 못 찾음). 같은 방식의 WITH PRM 한 줄
+  본문   : 「FROM 테이블 / WHERE」 한 덩어리의 조건은 값 줄(PRM)과 조인해 PRM.P_NAME 으로 참조(빠름), 그 밖의 자리는 (SELECT P_NAME FROM PRM)
+           2026-11-24 ZIOUI1 실측 — 뷰 SCM_DNM_STOCK_V : 직접 값 10.4초 · 조인 9.5초 · 서브쿼리 90초 초과 / VQ-47 서브쿼리 97.3초
+  금지   : SQL*Plus 명령(SET · PROMPT · DEFINE · & 치환 · 단독 /), 빈 줄(DBeaver 문장 구분), 끝 세미콜론, ? 문자, :이름 형태, @변수, DECLARE"""
+import re, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from vq_new import VQ
+from vq_asis import ASIS
+
+DESC = {'TEST_DATE': '시험일', 'PLAN_START': '계획 시작일', 'ITEM_ID': '품목', 'FROM_YYYYMMDD': '출하일 시작', 'TO_YYYYMMDD': '출하일 종료', 'KEYWORD': '문구 일부'}
+T = '20261123'; T1 = '20261122'   # 시트에 적는 기본값 = 시험일 예시 · 시험일 - 1
+# 계획 시작일 기본값 : 40 · 전극 = 시험일, 81·82 · Packer · 통합 스냅샷 = 시험일 - 1
+PLAN_DEFAULT = {'VQ-45': T, 'VQ-46': T, 'VQ-52': T, 'VQ-53': T, 'VQ-31': T, 'VQ-48': T1, 'VQ-49': T1, 'VQ-50': T1, 'VQ-51': T1, 'VQ-55': T1}
+PLAN_NOTE = {T: '계획 시작일 = 시험일', T1: '계획 시작일 = 시험일 - 1'}
+BASE = {'TEST_DATE': T, 'ITEM_ID': 'MCCM349215A1-111', 'FROM_YYYYMMDD': T, 'TO_YYYYMMDD': '20261231', 'KEYWORD': 'CUTOFF'}
+
+# ── 손으로 쓴 본문 : VQ-41(집계 SELECT 에 서브쿼리를 두면 ORA-00937 → 안쪽은 집계만, 바깥에서 기준일 계산) ──
+_ST = [("'81·82 · 40'", 'SSP_DNM_OWMS_STOCK', "'전일'", 1, "CUTOFF_DATE = TO_CHAR(TO_DATE(:TEST_DATE, 'YYYYMMDD') - 1, 'YYYYMMDD')"),
+       ("'81·82'", 'SSP_DNM_GMES_STOCK_81_82', "'당일'", 0, 'YYYYMMDD = :TEST_DATE'),
+       ("'전극'", 'SSP_DNM_GMES_STOCK_EE', "'당일'", 0, 'YYYYMMDD = :TEST_DATE'),
+       ("'전극'", 'SSP_DNM_IWMS_STOCK_EE', "'당일'", 0, 'YYYYMMDD = :TEST_DATE'),
+       ("'전극'", 'SSP_DNM_OWMS_STOCK_EE', "'당일'", 0, 'YYYYMMDD = :TEST_DATE'),
+       ("'40'", 'SSP_DNM_GMES_STOCK_40', "'당일'", 0, 'YYYYMMDD = :TEST_DATE'),
+       ("'40'", 'SSP_DNM_STOCK_C', "'전일'", 1, "CUTOFF_DATE = TO_DATE(:TEST_DATE, 'YYYYMMDD') - 1"),
+       ("'Packer'", 'SCM_DNM_SCS_STOCK', "'전일(수신분)'", 1, "CUTOFF_DATE = TO_CHAR(TO_DATE(:TEST_DATE, 'YYYYMMDD') - 1, 'YYYYMMDD')"),
+       ("'Packer'", 'SCM_DNM_SCS_STOCK', "'시험일 - 3(산출 기초재고)'", 3, "CUTOFF_DATE = TO_CHAR(TO_DATE(:TEST_DATE, 'YYYYMMDD') - 3, 'YYYYMMDD')")]
+
+
+def _vq41(ms):
+    br = []
+    for k, (unit, tab, rule, off, cond) in enumerate(_ST):
+        if ms:
+            cond = (cond.replace("TO_CHAR(TO_DATE(:TEST_DATE, 'YYYYMMDD') - 1, 'YYYYMMDD')", '@D1').replace("TO_CHAR(TO_DATE(:TEST_DATE, 'YYYYMMDD') - 3, 'YYYYMMDD')", '@D3')
+                    .replace("TO_DATE(:TEST_DATE, 'YYYYMMDD') - 1", 'CONVERT(DATETIME, @D1, 112)').replace(':TEST_DATE', '@TEST_DATE'))
+            unit, rule = 'N' + unit, 'N' + rule
+        als = (' AS UNIT', ' AS TABLE_NAME', ' AS DATA_DATE_RULE', ' AS DAY_OFFSET', ' AS ROW_CNT', ' AS LAST_CREATED') if k == 0 else ('',) * 6
+        br.append(f"SELECT {unit}{als[0]}, '{tab}'{als[1]}, {rule}{als[2]}, {off}{als[3]}, COUNT(*){als[4]}, MAX(CREATION_DATE){als[5]}\n"
+                  f"          FROM {tab}{' WITH (NOLOCK)' if ms else ''} WHERE {cond}")
+    inner = '\n         UNION ALL\n        '.join(br)
+    date = ("CONVERT(CHAR(8), DATEADD(DAY, -X.DAY_OFFSET, CONVERT(DATE, @TEST_DATE, 112)), 112)" if ms else "TO_CHAR(TO_DATE(:TEST_DATE, 'YYYYMMDD') - X.DAY_OFFSET, 'YYYYMMDD')")
+    return ("SELECT X.UNIT\n     , X.TABLE_NAME\n     , X.DATA_DATE_RULE\n     , " + date + " AS DATA_DATE\n     , X.ROW_CNT\n     , X.LAST_CREATED\n"
+            "  FROM (" + inner + ") X")
+
+
+OVERRIDE_ORA = {'VQ-41': _vq41(False)}
+OVERRIDE_MS = {'VQ-41': ("DECLARE @TEST_DATE CHAR(8) = '20261123';\n"
+                         "DECLARE @D1 CHAR(8) = CONVERT(CHAR(8), DATEADD(DAY, -1, CONVERT(DATE, @TEST_DATE, 112)), 112);\n"
+                         "DECLARE @D3 CHAR(8) = CONVERT(CHAR(8), DATEADD(DAY, -3, CONVERT(DATE, @TEST_DATE, 112)), 112);\n" + _vq41(True))}
+
+
+def _join_blocks(sql, var_rx, ms):
+    """「FROM 테이블(별칭) / WHERE …」 덩어리의 조건에 변수가 있으면 값 줄(PRM)을 조인하고 조건의 변수를 PRM.P_NAME 으로 바꾼다.
+    덩어리 끝 = 괄호 깊이가 음수가 되는 곳 또는 깊이 0 에서 GROUP BY · UNION ALL · ORDER BY 줄"""
+    frm = re.compile(r'\n( *)FROM ([A-Z0-9_]+)( [A-Z][A-Z0-9]?)?( WITH \(NOLOCK\))?\n( *)WHERE ')
+    out = []; pos = 0
+    while True:
+        m = frm.search(sql, pos)
+        if not m: break
+        i = m.end(); depth = 0; end = len(sql)
+        while i < len(sql):
+            ch = sql[i]
+            if ch == '(': depth += 1
+            elif ch == ')':
+                depth -= 1
+                if depth < 0: end = i; break
+            elif ch == '\n' and depth == 0 and re.match(r'\n *(GROUP BY|UNION ALL|ORDER BY)\b', sql[i:i + 40]): end = i; break
+            i += 1
+        block = sql[m.end():end]
+        if re.search(var_rx, block):
+            ind = m.group(1)
+            join = f'\n{ind} CROSS JOIN PRM' if ms else f'\n{ind}   , PRM'
+            head = f'\n{ind}FROM {m.group(2)}{m.group(3) or ""}{m.group(4) or ""}' + join + f'\n{m.group(5)}WHERE '
+            out.append(sql[pos:m.start()] + head + re.sub(var_rx, lambda x: 'PRM.P_' + x.group(1), block))
+        else:
+            out.append(sql[pos:end])
+        pos = end
+    out.append(sql[pos:])
+    return ''.join(out)
+
+
+def defaults(vid, names):
+    return {n: (PLAN_DEFAULT[vid] if n == 'PLAN_START' else BASE[n]) for n in names}
+
+
+def note(vid, names):
+    parts = [(PLAN_NOTE.get(PLAN_DEFAULT.get(vid), DESC[n]) if n == 'PLAN_START' else DESC[n]) for n in names]
+    return ' · '.join(parts) + '. 이 줄의 값만 바꿔 실행'
+
+
+def oracle(vid, sql, vals=None):
+    sql = OVERRIDE_ORA.get(vid, sql)
+    rx = r':([A-Z][A-Z0-9_]*)'
+    names = list(dict.fromkeys(re.findall(rx, sql)))
+    if not names: return sql
+    vals = {**defaults(vid, names), **(vals or {})}
+    head = 'WITH PRM AS (SELECT ' + ', '.join(f"'{vals[n]}' AS P_{n}" for n in names) + f' FROM DUAL)   /* {note(vid, names)} */'
+    body = _join_blocks('\n' + sql, rx, False)[1:]
+    body = re.sub(rx, lambda m: f'(SELECT P_{m.group(1)} FROM PRM)', body)
+    return head + '\n' + body
+
+
+def mssql(vid, sql, vals=None):
+    sql = OVERRIDE_MS.get(vid, sql)
+    prim = []; deriv = []; body = []
+    for ln in sql.split('\n'):
+        m = re.match(r"DECLARE @(\w+) \w+(?:\(\d+\))? = (.+?);", ln)
+        if m: (prim if m.group(2).startswith("'") else deriv).append((m.group(1), m.group(2)))
+        elif ln.strip().startswith('OPTION (RECOMPILE)'): continue
+        else: body.append(ln)
+    names = [n for n, _ in prim]
+    vals = {**defaults(vid, names), **(vals or {})}
+    if deriv:
+        head = ('WITH PRM0 AS (SELECT ' + ', '.join(f"'{vals[n]}' AS P_{n}" for n in names) + f')   /* {note(vid, names)} */\n'
+                '   , PRM AS (SELECT ' + ', '.join([f'P_{n}' for n in names] + [re.sub(r'@(\w+)', r'P_\1', e) + f' AS P_{n}' for n, e in deriv]) + ' FROM PRM0)')
+    else:
+        head = 'WITH PRM AS (SELECT ' + ', '.join(f"'{vals[n]}' AS P_{n}" for n in names) + f')   /* {note(vid, names)} */'
+    rx = r'@([A-Z][A-Z0-9_]*)'
+    out = _join_blocks('\n' + '\n'.join(body), rx, True)[1:]
+    out = re.sub(rx, lambda m: f'(SELECT P_{m.group(1)} FROM PRM)', out)
+    return head + '\n' + out
+
+
+BAD = [(r'(?m)^\s*(SET|PROMPT|DEFINE|UNDEFINE)\s', 'SQL*Plus 명령'), (r'(?m)^&\w', '& 치환'), (r'(?m)^/\s*$', '단독 /'), (r'(?m)^\s*$', '빈 줄'), (r';\s*$', '끝 세미콜론'),
+       (r'\?', '? 문자'), (r':[A-Za-z_가-힣]', ':이름 형태'), (r'@[A-Za-z_]', '@변수'), (r'(?m)^\s*DECLARE\b', 'DECLARE'), (r'\t', '탭 문자')]
+
+
+def lint(sql):
+    """DBeaver 실행을 막는 형태 검사 — 걸린 항목 이름 목록"""
+    return [nm for rx, nm in BAD if re.search(rx, sql)]
+
+
+def build(v9_tobe=None, test=False):
+    """[[ID, 분류, 확인 내용, 대상 테이블, 확인 포인트, TO-BE SQL, AS-IS SQL]] — test=True 면 TO-BE 를 자료가 있는 일자 값으로"""
+    rows = []
+    for i, cat, what, tabs, point, sql, binds in VQ:
+        rows.append([i, cat, what, tabs, point, oracle(i, sql, binds if test else None), mssql(i, ASIS[i][0]) if i in ASIS else '-'])
+    for i, cat, what, tabs, point, tv in (v9_tobe or []):   # 기존 VQ-27 · VQ-31 (AS-IS 대조용으로 다시 적음)
+        tv_vals = ({'PLAN_START': '20261009'} if i == 'VQ-31' else {'FROM_YYYYMMDD': '20261001'}) if test else None
+        rows.append([i, cat, what + f' (검증쿼리 시트 {i} 와 같은 쿼리 · AS-IS 대조용)', tabs, point, oracle(i, tv, tv_vals), mssql(i, ASIS[i][0])])
+    return rows

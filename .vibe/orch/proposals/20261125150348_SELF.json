@@ -1,0 +1,45 @@
+{
+  "id": "20261125150348_SELF",
+  "at": "2026-11-25T15:03:48+09:00",
+  "ms": 1795586628582,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/analysis/perf_check/perf_check.py|ln의gvactivesessionhistory조회범위가n분고정이고끝시",
+  "title": "사용자 지시 R226 같은 문제: tools/Analysis/perf_check/perf_check.py:182 L8 의 GV$ACTIVE_SESSION_HISTORY 조회 범위가 180분 고정이고 끝 시각이 없음. 시간 조건(186줄 A.SAMPLE_TIME >= (SEL",
+  "evidence": "규칙 R226 \"생성기가 사용자에게 주는 점검 쿼리는 V$, ASH, DBA_HIST 같은 큰 뷰를 시간 범위 조건과 인덱스 범위로 먼저 줄여 읽고, 5초 넘는 블록은 제공 전 EXPLAIN PLAN 이나 사내 DB 실행으로 소요를 확인함\" (원래 지시 2026-11-25 13:44 \"제공 해준 쿼리의 L8 이 너무 오래 수행되고 있네요...\") · tools/Analysis/perf_check/perf_check.py:182 S['L8'] = (\"WITH PRM AS (SELECT 180 AS P_FROM_MIN FROM DUAL)   /* START 로그가 없을 때 조회 시작(분 전). 이 줄의 값만 바꿔 실행 */\\n, %s\\n, %s\\n\"",
+  "targets": [
+    "tools/Analysis/perf_check/perf_check.py"
+  ],
+  "before_after": "P_FROM_MIN 기본값을 30분 이하로 줄이고 SAMPLE_TIME BETWEEN 시작 AND SYSTIMESTAMP 를 WHERE 첫 조건에 두며, 시작 시각은 생성 때 SYSTIMESTAMP 리터럴로 넣음. SQL_LINE 은 Q.SQL_ID IN (SELECT SQL_ID FROM ASH) 와 Q.LAST_ACTIVE_TIME >= 시작 조건으로 줄임. U6, U7 에 S.LAST_ACTIVE_TIME >= SYSDATE - P_DAYS 조건을 넣음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Analysis/perf_check/perf_check.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:41:08+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · tools/Analysis/perf_check/perf_check.py:239~255 L8 P_FROM_MIN 180→30, ASH WHERE 첫 조건 SAMPLE_TIME BETWEEN 시작 AND SYSTIMESTAMP + 생성 시각 리터럴 하한, SQL_LINE 을 ASH SQL_ID·LAST_ACTIVE_TIME 로 좁힘 · 526, 530 U6, U7 에 LAST_ACTIVE_TIME >= SYSDATE - P_DAYS · py_compile OK, batch_statements L8 출력 확인, t_perf_job.js ALL PASS · 사내 DB 실행 미확인 · 2026-11-26 15:41"
+    }
+  ],
+  "plain": {
+    "what": "생성기가 사용자에게 주는 점검 쿼리는 V$, ASH, DBA_HIST 같은 큰 뷰를 시간 범위 조건과 인덱스 범위로 먼저 줄여 읽고, 5초 넘는 블록은 제공 전 EXPLAIN PLAN 이나 사내 DB 실행으로 소요를 확인함 규칙을 tools/Analysis/perf_check/perf_check.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R226|tools/Analysis/perf_check/perf_check.py",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675268693
+}

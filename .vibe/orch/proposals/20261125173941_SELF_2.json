@@ -1,0 +1,45 @@
+{
+  "id": "20261125173941_SELF_2",
+  "at": "2026-11-25T17:39:41+09:00",
+  "ms": 1795595981460,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/asisfacts_cmp/compare.py|basesem대조가dmf화면만세서scpsspfpcommon모듈의문법분석대",
+  "title": "사용자 지시 R228 같은 문제: Doc/asisfacts_cmp/compare.py:10 base·sem 대조가 DMF 화면만 세서 SCP, SSP, FP, Common 모듈의 문법 분석 대비 의미 분석 건수 대조가 없음(줄 2 설명문도 'DM 화면'",
+  "evidence": "규칙 R228 \"AS-IS 파서는 Roslyn 의미 분석으로 호출 대상과 값을 해석하고 DM 외 모듈(SCP, SSP, FP, Common)에도 같은 방식을 적용함\" (원래 지시 2026-11-25 16:36 \"Roslyn 의미 분석으로 DM 파서 보완해주세요\") · Doc/asisfacts_cmp/compare.py:10 return [r for r in rows if r['screen_id'].startswith('DMF') and r['active'] == '1' and r['commented'] != '1']",
+  "targets": [
+    "Doc/asisfacts_cmp/compare.py"
+  ],
+  "before_after": "화면 접두 필터를 빼고 모듈(DM, SCP, SSP, FP, Common = 화면ID 없음)별로 묶어 status 건수·사라진 매칭·새 매칭을 모듈마다 출력함. 설명문을 전 모듈로 고침",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/asisfacts_cmp/compare.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:48:16+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · Doc/asisfacts_cmp/compare.py 전체: 기본 = 화면 접두 필터 없음(ALL), 모듈 DM, SCP, SSP, FP, SCM, Common(화면ID 없음), 기타별로 status 건수, 사라진 매칭, 새 매칭, 미해결을 출력하고 끝에 모듈별 요약 표 · 설명문을 전 모듈로 고침 · 첫 인자 접두 목록 호출(apply_scp_ssp*.py) 호환 · py_compile OK, 'compare.py ALL sem' 실행해 7개 모듈 요약 출력 확인, 'compare.py DMF sem' 결과가 수정 전과 같음(base 7184, sem 3716, 사라짐 1150, 새 매칭 0) · 2026-11-26 15:48"
+    }
+  ],
+  "plain": {
+    "what": "AS-IS 파서는 Roslyn 의미 분석으로 호출 대상과 값을 해석하고 DM 외 모듈(SCP, SSP, FP, Common)에도 같은 방식을 적용함 규칙을 Doc/asisfacts_cmp/compare.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R228|Doc/asisfacts_cmp/compare.py",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675696448
+}

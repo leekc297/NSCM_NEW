@@ -181,3 +181,774 @@
 {"run":"20261120090620","phase":"serial","file":"_verify.spec.ts","title":"Sum 체크박스(A3)","write":true,"blocked":false,"urls":["/api/admin/lookup"],"at":"2026-11-20T00:43:30.434Z"}
 {"run":"20261120090620","phase":"serial","file":"_verify.spec.ts","title":"숫자 표시 형식(H8)","write":true,"blocked":false,"urls":["/api/admin/lookup"],"at":"2026-11-20T00:43:34.577Z"}
 {"run":"20261120090620","phase":"serial","file":"_verify.spec.ts","title":"문서 표시 문구(H5)","write":true,"blocked":false,"urls":["/api/admin/lookup"],"at":"2026-11-20T00:43:38.039Z"}
+{"run":"20261125005703","phase":"serial","file":"_open.spec.ts","title":"화면 열기 1회","write":false,"blocked":false,"urls":[],"at":"2026-11-24T15:57:26.285Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"필터 항목·연속 조회 본문(K1·G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:24:32.846Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"동적 칸 정렬·방향키 응답(K1·L1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:24:49.313Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"필터 유지 재조회(K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:25:04.398Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:26:35.976Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"Division 컬럼(A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:26:56.862Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:27:03.199Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:27:07.127Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:27:56.975Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:27:58.037Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:29:07.321Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:29:45.291Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:29:45.330Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:29:51.994Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W9 대조표 미구현 행 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:30:20.694Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:30:34.132Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:30:38.598Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:31:21.380Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:31:52.826Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:31:53.018Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:13.416Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:22.475Z"}
+{"run":"20261125005659","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 팝업 정적 aria","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:30.477Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"W4 D3 행 조건부 잠금 = AS-IS lock_rules","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:31.596Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"조회조건 겹침(H4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:35.369Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:43.777Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:45.029Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"레이아웃·조회 묶음(H4·N1·G1·L2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:32:54.172Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:01.057Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"D6 Insert 위치·상태 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:01.378Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:14.563Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"편집 모드 구분(D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:21.971Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"실전송 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:30.409Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"합계 값(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:41.496Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"셀 편집 표시·값 유지(A2·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:45.531Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"Insert 행 Division(D4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:54.922Z"}
+{"run":"20261125005659","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 패널·버튼 바 aria ×Div","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:33:55.779Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"선택 조회 복수·단일·전체 왕복(G2·B6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:08.647Z"}
+{"run":"20261125005659","phase":"read","file":"_snap.spec.ts","title":"@snap 그리드 헤더 텍스트(모델) ×시트","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:09.194Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"기간 조건 글자·역전(E2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:12.200Z"}
+{"run":"20261125005659","phase":"read","file":"_snap.spec.ts","title":"@snap 화면샷 패널+헤더 띠 1920/1366","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:24.644Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"Division별 조회 오류·콤보 이름(F4·A2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:25.089Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:26.656Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"G6 조회조건 초기값 = AS-IS 로드 문장","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:39.032Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"버튼 경로 메시지·모달 조건(E4·B3·B4·G4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:39.317Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:49.991Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"전용 버튼 확인창(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:52.920Z"}
+{"run":"20261125005659","phase":"read","file":"_trace.spec.ts","title":"G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:54.184Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"이름·ID 조건 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:34:58.290Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"기간 동적 컬럼(A8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:00.432Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"Sum 체크박스(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:04.184Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"셀 연쇄 초기화(C2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:05.670Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:08.685Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"컬럼 설정 필수 컬럼(K2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:10.308Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"조회조건 초기값·Division 변경 뒤 Version(G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:22.195Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"Excel 다운로드 내용(H7)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:25.509Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"Team 값 덤프(B8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:34.238Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:37.613Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:38.247Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"숫자 표시 형식(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:42.293Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"문서 표시 문구(H5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:46.155Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"0 표시 규칙(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:49.945Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"문서 조건별 버튼·컬럼 노출(K4·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:53.294Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:35:56.961Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:00.746Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:03.650Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"그리드 표시 묶음(N1·H8·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:11.869Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:21.394Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:25.474Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:28.851Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:39.171Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:36:51.107Z"}
+{"run":"20261125005659","phase":"read","file":"_verify.spec.ts","title":"문서 시나리오","write":true,"blocked":true,"urls":["/api/user/session/lang-cd"],"at":"2026-11-24T16:38:56.249Z"}
+{"run":"20261125005659","phase":"serial","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-24T16:39:09.403Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T16:40:14.299Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T16:41:51.665Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T16:42:58.015Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"신규행 검증(E3 컬럼별 필수·E4 키 중복)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T16:43:48.243Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T16:48:29.878Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-24T16:48:57.968Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-24T16:49:38.516Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"언어 전환 문구 덤프(I2)","write":true,"blocked":false,"urls":["/api/user/session/lang-cd"],"at":"2026-11-24T16:50:09.409Z"}
+{"run":"20261125005659","phase":"serial","file":"_verify.spec.ts","title":"문서 시나리오","write":true,"blocked":false,"urls":["/api/user/session/lang-cd"],"at":"2026-11-24T17:06:44.432Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:07:16.163Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:07:24.375Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:07:32.913Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:08:28.096Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:08:46.541Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:08:59.797Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:09:22.386Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:09:45.152Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:10:01.319Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:10:54.633Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:11:12.385Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:11:24.756Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:12:17.349Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:12:35.386Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:12:48.484Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:13:45.228Z"}
+{"run":"2026-11-24T17:07:07.799Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:14:13.268Z"}
+{"run":"2026-11-24T17:14:23.036Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:14:37.588Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:14:57.459Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:16:21.508Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:16:29.581Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:16:52.686Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:16:55.743Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:17:05.106Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:17:08.183Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:17:17.367Z"}
+{"run":"2026-11-24T17:14:49.333Z","phase":"serial","file":"eg_auth.spec.ts","title":"무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면","write":false,"blocked":false,"urls":[],"at":"2026-11-24T17:17:27.984Z"}
+{"run":"20261125032922","phase":"serial","file":"_open.spec.ts","title":"화면 열기 1회","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:29:41.707Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:04.154Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:04.790Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"필터 항목·연속 조회 본문(K1·G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:10.287Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:19.748Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W9 대조표 미구현 행 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:23.550Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:24.966Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:31.004Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:46.079Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-24T18:59:47.000Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:00:03.755Z"}
+{"run":"20261125032917","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 패널·버튼 바 aria ×Div","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:00:24.373Z"}
+{"run":"20261125032917","phase":"read","file":"_snap.spec.ts","title":"@snap 그리드 헤더 텍스트(모델) ×시트","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:00:33.186Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"G6 조회조건 초기값 = AS-IS 로드 문장","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:00:42.876Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:00:53.138Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"조회조건 초기값·Division 변경 뒤 Version(G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:01:01.558Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"Team 값 덤프(B8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:01:10.035Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"Division별 조회 오류·콤보 이름(F4·A2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:01:18.900Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"버튼 경로 메시지·모달 조건(E4·B3·B4·G4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:01:28.451Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"전용 버튼 확인창(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:01:37.007Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"그리드 표시 묶음(N1·H8·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:01:45.425Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:01:53.947Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:03.925Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"기간 동적 컬럼(A8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:07.014Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"셀 연쇄 초기화(C2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:10.120Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"컬럼 설정 필수 컬럼(K2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:13.690Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:17.527Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"숫자 표시 형식(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:22.066Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"동적 칸 정렬·방향키 응답(K1·L1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:25.772Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"문서 표시 문구(H5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:26.384Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:27.164Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"0 표시 규칙(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:31.668Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"Division 컬럼(A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:31.806Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"문서 조건별 버튼·컬럼 노출(K4·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:36.578Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:36.836Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:40.320Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:44.490Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:45.373Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:51.505Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:54.200Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:02:58.622Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:03:02.288Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:03:03.502Z"}
+{"run":"20261125032917","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 팝업 정적 aria","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:03:05.581Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:03:12.025Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W4 D3 행 조건부 잠금 = AS-IS lock_rules","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:03:16.884Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"필터 유지 재조회(K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:05:48.924Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"Insert 행 Division(D4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:05:49.597Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:06:00.015Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"조회조건 겹침(H4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:06:02.656Z"}
+{"run":"20261125032917","phase":"read","file":"_snap.spec.ts","title":"@snap 화면샷 패널+헤더 띠 1920/1366","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:06:20.610Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:06:40.534Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:07:01.656Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:07:16.311Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"편집 모드 구분(D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:09:05.925Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"레이아웃·조회 묶음(H4·N1·G1·L2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:09:19.968Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:09:26.731Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:09:33.250Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:10:11.614Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"셀 편집 표시·값 유지(A2·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:12:24.442Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:12:43.581Z"}
+{"run":"20261125032917","phase":"read","file":"_trace.spec.ts","title":"D6 Insert 위치·상태 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:12:47.940Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:13:29.003Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"선택 조회 복수·단일·전체 왕복(G2·B6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:15:39.919Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"실전송 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:15:59.448Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:16:51.993Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"Excel 다운로드 내용(H7)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:18:53.318Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"합계 값(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:19:09.060Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:22:09.730Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:22:23.451Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"기간 조건 글자·역전(E2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:25:36.574Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"이름·ID 조건 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:28:40.184Z"}
+{"run":"20261125032917","phase":"read","file":"_verify.spec.ts","title":"Sum 체크박스(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:31:46.867Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T19:32:42.214Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T19:33:53.929Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T19:34:41.744Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"신규행 검증(E3 컬럼별 필수·E4 키 중복)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T19:35:20.384Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T19:39:19.036Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-24T19:39:45.515Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-24T19:40:24.811Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"언어 전환 문구 덤프(I2)","write":true,"blocked":false,"urls":["/api/user/session/lang-cd"],"at":"2026-11-24T19:40:50.956Z"}
+{"run":"20261125032917","phase":"serial","file":"_verify.spec.ts","title":"문서 시나리오","write":true,"blocked":false,"urls":["/api/user/session/lang-cd","/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T19:56:14.948Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:56:32.970Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:56:46.645Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:57:38.929Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:57:52.052Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:57:59.636Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:58:23.634Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:58:27.008Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:58:32.284Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:58:36.117Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:58:39.307Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:58:48.258Z"}
+{"run":"2026-11-24T19:56:25.017Z","phase":"serial","file":"eg_auth.spec.ts","title":"무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:58:58.641Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:59:26.151Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T19:59:52.403Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:00:04.948Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:00:26.866Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:00:49.088Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:01:11.149Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:02:03.992Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:02:29.830Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:02:44.795Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:03:37.013Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:04:03.095Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:04:15.502Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:05:07.285Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:05:33.368Z"}
+{"run":"2026-11-24T19:56:21.987Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T20:05:45.997Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"실전송 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:45:21.024Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:45:40.834Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:47:26.233Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:47:26.753Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:47:37.591Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:47:46.213Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:47:58.147Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:47:59.508Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:48:08.448Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"셀 편집 표시·값 유지(A2·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:48:15.240Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"이름·ID 조건 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:48:25.426Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:48:31.115Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:48:49.123Z"}
+{"run":"20261125061230","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 팝업 정적 aria","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:48:55.353Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:49:06.571Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"동적 칸 정렬·방향키 응답(K1·L1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:49:07.329Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:49:43.397Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"W9 대조표 미구현 행 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:49:46.345Z"}
+{"run":"20261125061230","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 패널·버튼 바 aria ×Div","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:05.219Z"}
+{"run":"20261125061230","phase":"read","file":"_snap.spec.ts","title":"@snap 그리드 헤더 텍스트(모델) ×시트","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:13.740Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:24.347Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:27.352Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"버튼 경로 메시지·모달 조건(E4·B3·B4·G4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:37.248Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:40.350Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:43.144Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:50:46.219Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:51:02.826Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:51:03.775Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:51:13.800Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:51:16.956Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:51:26.253Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"레이아웃·조회 묶음(H4·N1·G1·L2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:51:37.109Z"}
+{"run":"20261125061230","phase":"read","file":"_snap.spec.ts","title":"@snap 화면샷 패널+헤더 띠 1920/1366","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:52:21.276Z"}
+{"run":"20261125061230","phase":"read","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:54:02.840Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"선택 조회 복수·단일·전체 왕복(G2·B6)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:54:52.097Z"}
+{"run":"20261125061230","phase":"read","file":"_verify.spec.ts","title":"조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T21:55:32.614Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T21:56:31.743Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T22:03:46.626Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T22:04:34.596Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"신규행 검증(E3 컬럼별 필수·E4 키 중복)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T22:05:13.254Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-24T22:09:12.620Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-24T22:09:38.940Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-24T22:12:09.478Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"언어 전환 문구 덤프(I2)","write":true,"blocked":false,"urls":["/api/user/session/lang-cd"],"at":"2026-11-24T22:12:36.314Z"}
+{"run":"20261125061230","phase":"serial","file":"_verify.spec.ts","title":"문서 시나리오","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:15:52.371Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:16:11.830Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:16:24.033Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:17:18.255Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:17:30.089Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:17:37.934Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:18:00.645Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:18:03.661Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:18:10.723Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:18:12.552Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:18:15.800Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:18:25.030Z"}
+{"run":"2026-11-24T22:16:03.677Z","phase":"serial","file":"eg_auth.spec.ts","title":"무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:18:35.514Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:19:04.496Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:19:30.004Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:19:42.448Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:20:04.746Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:20:27.274Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:20:42.744Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:21:35.780Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:22:01.434Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:22:13.786Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:23:06.312Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:23:32.165Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:23:44.624Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:24:38.282Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:25:04.582Z"}
+{"run":"2026-11-24T22:16:00.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T22:25:17.460Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:39:49.278Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:39:58.411Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"문서 시나리오","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:40:35.758Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:41:23.712Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:41:31.030Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:41:33.145Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:41:38.078Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:41:44.412Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:42:07.726Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:42:09.821Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:42:34.612Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:42:54.059Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:42:58.569Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:45:10.234Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:45:20.745Z"}
+{"run":"20261125081611","phase":"read","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:48:25.064Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"Division별 조회 오류·콤보 이름(F4·A2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:51:39.554Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:54:43.397Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-24T23:57:46.927Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T00:00:50.550Z"}
+{"run":"20261125081611","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T00:04:07.720Z"}
+{"run":"20261125081611","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T00:05:12.683Z"}
+{"run":"20261125081611","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T00:16:32.032Z"}
+{"run":"20261125081611","phase":"serial","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T00:17:41.601Z"}
+{"run":"20261125081611","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T00:18:12.972Z"}
+{"run":"20261125081611","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T00:20:48.570Z"}
+{"run":"RR20261125163730","phase":"serial","file":"_verify.spec.ts","title":"조회조건 겹침(H4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T07:37:56.225Z"}
+{"run":"RR20261125163730","phase":"serial","file":"_verify.spec.ts","title":"레이아웃·조회 묶음(H4·N1·G1·L2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T07:37:59.115Z"}
+{"run":"RR20261125163730","phase":"serial","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T07:38:01.877Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T08:05:24.437Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:06:06.761Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:06:44.539Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:06:52.952Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:07:12.973Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:07:17.396Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:07:22.438Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:07:26.559Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:07:30.508Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:07:34.367Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:08:50.624Z"}
+{"run":"RR20261125170349","phase":"serial","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:09:00.974Z"}
+{"run":"2026-11-25T08:43:39.053Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T08:44:02.960Z"}
+{"run":"RR20261125183533","phase":"serial","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T09:36:55.678Z"}
+{"run":"RR20261125183827","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T09:38:52.939Z"}
+{"run":"RR20261125183827","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T09:47:19.538Z"}
+{"run":"RR20261125183827","phase":"serial","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T09:47:24.955Z"}
+{"run":"RR20261125183827","phase":"serial","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T09:47:28.054Z"}
+{"run":"RR20261125184854","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T09:49:12.720Z"}
+{"run":"RR20261125184854","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T09:49:40.720Z"}
+{"run":"RR20261125184854","phase":"serial","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T09:49:48.902Z"}
+{"run":"RR20261125185634","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T09:57:20.547Z"}
+{"run":"20261125192112","phase":"serial","file":"_open.spec.ts","title":"화면 열기 1회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:21:30.111Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:39:56.858Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:01.683Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"필터 항목·연속 조회 본문(K1·G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:07.950Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"동적 칸 정렬·방향키 응답(K1·L1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:21.699Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"필터 유지 재조회(K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:40.056Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"W4 D3 행 조건부 잠금 = AS-IS lock_rules","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:40.757Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:43.362Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:52.271Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"Division 컬럼(A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:40:54.171Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:41:06.892Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:41:17.084Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"실전송 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:41:30.727Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:41:38.329Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"Insert 행 Division(D4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:41:52.182Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"이름·ID 조건 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:41:57.774Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:42:20.561Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"합계 값(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:42:27.657Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"Sum 체크박스(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:42:31.242Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:43:08.475Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:43:14.194Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:43:26.650Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"D6 Insert 위치·상태 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:43:47.028Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:43:53.790Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:43:56.749Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"선택 조회 복수·단일·전체 왕복(G2·B6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:06.760Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:15.815Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:25.366Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:27.894Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:37.991Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"기간 조건 글자·역전(E2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:42.050Z"}
+{"run":"20261125192107","phase":"read","file":"_snap.spec.ts","title":"@snap 화면샷 패널+헤더 띠 1920/1366","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:47.097Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"편집 모드 구분(D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:57.860Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:44:59.914Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:45:04.147Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"Division별 조회 오류·콤보 이름(F4·A2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:45:14.526Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"Excel 다운로드 내용(H7)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:45:17.358Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:46:05.443Z"}
+{"run":"20261125192107","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 패널·버튼 바 aria ×Div","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:46:13.778Z"}
+{"run":"20261125192107","phase":"read","file":"_snap.spec.ts","title":"@snap 그리드 헤더 텍스트(모델) ×시트","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:46:24.283Z"}
+{"run":"20261125192107","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 팝업 정적 aria","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:46:42.975Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"G6 조회조건 초기값 = AS-IS 로드 문장","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:46:55.533Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"W9 대조표 미구현 행 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:47:00.820Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:47:15.927Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:47:37.776Z"}
+{"run":"20261125192107","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:48:10.939Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:48:37.273Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"기간 동적 컬럼(A8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:48:41.345Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"조회조건 겹침(H4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T10:48:53.813Z"}
+{"run":"20261125192107","phase":"read","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":true,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T10:49:22.007Z"}
+{"run":"20261125201303","phase":"serial","file":"_open.spec.ts","title":"화면 열기 1회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T11:13:13.443Z"}
+{"run":"20261125210738","phase":"serial","file":"_open.spec.ts","title":"화면 열기 1회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:07:57.657Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"필터 항목·연속 조회 본문(K1·G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:22:46.425Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"동적 칸 정렬·방향키 응답(K1·L1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:23:03.141Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"필터 유지 재조회(K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:23:24.699Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:23:31.318Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:23:47.184Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"Division 컬럼(A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:24:00.070Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:24:21.038Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:26:13.821Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:26:18.787Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:26:23.473Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:26:44.418Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:27:49.793Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:27:55.094Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:28:06.536Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:28:20.549Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:28:40.532Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:28:40.877Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:28:46.473Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:28:57.375Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"W4 D3 행 조건부 잠금 = AS-IS lock_rules","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:29:04.257Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:29:18.498Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:29:28.028Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:29:33.326Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:29:33.840Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:00.239Z"}
+{"run":"20261125210734","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 팝업 정적 aria","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:02.794Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"Insert 행 Division(D4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:16.385Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:18.530Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"D6 Insert 위치·상태 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:26.479Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:47.227Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"셀 편집 표시·값 유지(A2·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:52.761Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:30:59.214Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"선택 조회 복수·단일·전체 왕복(G2·B6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:31:14.014Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"Excel 다운로드 내용(H7)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:31:46.468Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:32:07.425Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":true,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T12:32:14.914Z"}
+{"run":"20261125210734","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 패널·버튼 바 aria ×Div","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:32:26.117Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:32:27.826Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"실전송 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:32:32.770Z"}
+{"run":"20261125210734","phase":"read","file":"_snap.spec.ts","title":"@snap 그리드 헤더 텍스트(모델) ×시트","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:32:39.302Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"조회조건 겹침(H4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:32:44.953Z"}
+{"run":"20261125210734","phase":"read","file":"_snap.spec.ts","title":"@snap 화면샷 패널+헤더 띠 1920/1366","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:32:53.987Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:03.020Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"G6 조회조건 초기값 = AS-IS 로드 문장","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:06.426Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:20.691Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"레이아웃·조회 묶음(H4·N1·G1·L2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:22.152Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"합계 값(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:33.277Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"W9 대조표 미구현 행 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:38.089Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"기간 조건 글자·역전(E2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:39.495Z"}
+{"run":"20261125210734","phase":"read","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:43.149Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"조회조건 초기값·Division 변경 뒤 Version(G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:45.533Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"기간 동적 컬럼(A8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:48.285Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"셀 연쇄 초기화(C2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:53.705Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"컬럼 설정 필수 컬럼(K2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:33:59.535Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"Team 값 덤프(B8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:00.209Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"편집 모드 구분(D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:02.792Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"숫자 표시 형식(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:04.413Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"이름·ID 조건 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:08.836Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"문서 표시 문구(H5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:09.762Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"0 표시 규칙(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:15.816Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"Division별 조회 오류·콤보 이름(F4·A2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:16.167Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"문서 조건별 버튼·컬럼 노출(K4·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:20.560Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:21.056Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:25.138Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:29.189Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"버튼 경로 메시지·모달 조건(E4·B3·B4·G4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:32.178Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:33.969Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"전용 버튼 확인창(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:44.650Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"Sum 체크박스(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:34:49.538Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"그리드 표시 묶음(N1·H8·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:35:02.198Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:35:03.747Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:35:14.158Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:35:25.706Z"}
+{"run":"20261125210734","phase":"read","file":"_verify.spec.ts","title":"문서 시나리오","write":false,"blocked":false,"urls":[],"at":"2026-11-25T12:41:25.276Z"}
+{"run":"20261125210734","phase":"serial","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T12:43:30.953Z"}
+{"run":"20261125210734","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T12:44:34.276Z"}
+{"run":"20261125210734","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T12:53:23.425Z"}
+{"run":"20261125210734","phase":"serial","file":"_verify.spec.ts","title":"신규행 검증(E3 컬럼별 필수·E4 키 중복)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T12:54:08.104Z"}
+{"run":"20261125210734","phase":"serial","file":"_verify.spec.ts","title":"입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T12:58:00.531Z"}
+{"run":"20261125210734","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T12:58:29.234Z"}
+{"run":"20261125210734","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T12:59:37.442Z"}
+{"run":"20261125210734","phase":"serial","file":"_verify.spec.ts","title":"언어 전환 문구 덤프(I2)","write":true,"blocked":false,"urls":["/api/user/session/lang-cd"],"at":"2026-11-25T13:00:07.892Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:00:49.846Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:01:05.564Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:01:59.653Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:02:23.399Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:02:32.377Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:02:55.057Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:03:00.425Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:03:04.191Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:03:14.906Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:03:18.597Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:03:28.959Z"}
+{"run":"2026-11-25T13:00:40.112Z","phase":"serial","file":"eg_auth.spec.ts","title":"무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:03:41.240Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:03:51.746Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:04:19.174Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:04:32.471Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:04:55.574Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:05:19.170Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:05:34.728Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:06:28.485Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:06:56.356Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:07:09.770Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:08:03.406Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:08:31.992Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:08:45.826Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:09:40.185Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:10:07.893Z"}
+{"run":"2026-11-25T13:00:40.104Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:10:21.387Z"}
+{"run":"RR20261125225755","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:58:03.976Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:58:21.277Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:58:32.540Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:58:41.522Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:59:36.036Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:59:52.713Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T13:59:54.285Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:00:02.890Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:00:27.476Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:00:30.877Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:00:39.993Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:00:43.172Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:00:45.596Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:00:52.583Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:01:05.177Z"}
+{"run":"2026-11-25T13:58:11.982Z","phase":"serial","file":"eg_auth.spec.ts","title":"무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:01:05.324Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:01:59.229Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:02:25.782Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:02:38.343Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:03:00.824Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:03:23.478Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:03:39.038Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:04:31.531Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:04:57.645Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:05:10.176Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:06:03.734Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:06:30.847Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:06:45.074Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:07:39.504Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:08:05.690Z"}
+{"run":"2026-11-25T13:58:08.494Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:08:18.209Z"}
+{"run":"RR20261125231038","phase":"serial","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:10:56.065Z"}
+{"run":"RR20261125231038","phase":"serial","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:10:58.619Z"}
+{"run":"RR20261125231038","phase":"serial","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T14:12:12.253Z"}
+{"run":"RR20261125231038","phase":"serial","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:12:33.220Z"}
+{"run":"RR20261125231038","phase":"serial","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T14:15:47.793Z"}
+{"run":"RR20261125231038","phase":"serial","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:16:22.470Z"}
+{"run":"RR20261125231038","phase":"serial","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:16:25.155Z"}
+{"run":"RR20261125232134","phase":"serial","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T14:23:02.205Z"}
+{"run":"2026-11-25T14:33:05.989Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:34:00.089Z"}
+{"run":"2026-11-25T14:33:05.989Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:34:26.429Z"}
+{"run":"2026-11-25T14:33:05.989Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:34:39.698Z"}
+{"run":"20261125233842","phase":"serial","file":"_open.spec.ts","title":"화면 열기 1회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:38:50.253Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:47:52.484Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"필터 항목·연속 조회 본문(K1·G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:47:54.427Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"W4 D3 행 조건부 잠금 = AS-IS lock_rules","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:47:54.775Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:48:08.092Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"동적 칸 정렬·방향키 응답(K1·L1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:48:11.995Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:48:26.009Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"필터 유지 재조회(K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:48:28.250Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:48:30.906Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:48:35.508Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"조회조건 겹침(H4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:48:43.789Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"레이아웃·조회 묶음(H4·N1·G1·L2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:49:01.269Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"Excel 다운로드 내용(H7)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:49:23.636Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:49:52.337Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:50:10.792Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:50:19.991Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:50:44.335Z"}
+{"run":"20261125233838","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 팝업 정적 aria","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:00.650Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:13.955Z"}
+{"run":"20261125233838","phase":"read","file":"_snap.spec.ts","title":"@snap 화면샷 패널+헤더 띠 1920/1366","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:15.646Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:27.589Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:29.662Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"Insert 행 Division(D4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:40.887Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"D6 Insert 위치·상태 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:56.880Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:56.950Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"편집 모드 구분(D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:51:59.561Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"Division 컬럼(A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:08.679Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:12.188Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"셀 편집 표시·값 유지(A2·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:33.524Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"실전송 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:33.548Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:35.617Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"합계 값(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:46.196Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:52.444Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"선택 조회 복수·단일·전체 왕복(G2·B6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:52:55.866Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:05.689Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:15.180Z"}
+{"run":"20261125233838","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 패널·버튼 바 aria ×Div","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:19.101Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"기간 조건 글자·역전(E2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:20.924Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"이름·ID 조건 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:25.512Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"Sum 체크박스(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:28.914Z"}
+{"run":"20261125233838","phase":"read","file":"_snap.spec.ts","title":"@snap 그리드 헤더 텍스트(모델) ×시트","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:30.104Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"기간 동적 컬럼(A8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:35.952Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:39.856Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"문서 조건별 버튼·컬럼 노출(K4·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:43.270Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"G6 조회조건 초기값 = AS-IS 로드 문장","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:43.384Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:47.077Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:47.349Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:53:51.246Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:05.578Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:09.049Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"W9 대조표 미구현 행 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:12.520Z"}
+{"run":"20261125233838","phase":"read","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:16.038Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"셀 연쇄 초기화(C2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:20.177Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"컬럼 설정 필수 컬럼(K2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:23.686Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"조회조건 초기값·Division 변경 뒤 Version(G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:33.007Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"Team 값 덤프(B8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:42.848Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"Division별 조회 오류·콤보 이름(F4·A2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:55:52.856Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"버튼 경로 메시지·모달 조건(E4·B3·B4·G4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:03.395Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":true,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T14:56:12.082Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"전용 버튼 확인창(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:13.860Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"숫자 표시 형식(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:17.874Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"문서 표시 문구(H5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:21.192Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"0 표시 규칙(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:24.768Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"그리드 표시 묶음(N1·H8·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:34.763Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:43.745Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:47.432Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:56:56.853Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:57:07.744Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:57:09.273Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:57:21.031Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:57:24.365Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:57:57.803Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성","write":false,"blocked":false,"urls":[],"at":"2026-11-25T14:58:23.008Z"}
+{"run":"20261125233838","phase":"read","file":"_verify.spec.ts","title":"문서 시나리오","write":true,"blocked":true,"urls":["/api/user/session/lang-cd"],"at":"2026-11-25T15:02:18.046Z"}
+{"run":"20261125233838","phase":"serial","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T15:04:09.335Z"}
+{"run":"20261125233838","phase":"serial","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T15:07:18.584Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T15:08:09.982Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T15:15:35.256Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"신규행 검증(E3 컬럼별 필수·E4 키 중복)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T15:16:15.997Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T15:19:39.017Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T15:20:06.082Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T15:21:07.538Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"언어 전환 문구 덤프(I2)","write":true,"blocked":false,"urls":["/api/user/session/lang-cd"],"at":"2026-11-25T15:21:34.188Z"}
+{"run":"20261125233838","phase":"serial","file":"_verify.spec.ts","title":"문서 시나리오","write":true,"blocked":false,"urls":["/api/user/session/lang-cd","/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T15:36:21.484Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:36:49.700Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:37:02.445Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:37:17.498Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:38:10.800Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:38:14.486Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:38:22.669Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:38:27.604Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:38:46.813Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:38:49.935Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:38:58.869Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:39:02.205Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:39:11.149Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:39:19.564Z"}
+{"run":"2026-11-25T15:36:41.348Z","phase":"serial","file":"eg_auth.spec.ts","title":"무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:39:21.768Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:39:35.297Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:40:27.904Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:40:53.877Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:41:06.574Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:41:28.934Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:41:51.540Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:42:07.294Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:43:00.342Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:43:29.220Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:43:42.469Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:44:37.590Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:45:04.170Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:45:16.753Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:46:09.763Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:46:36.148Z"}
+{"run":"2026-11-25T15:36:37.784Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T15:46:48.639Z"}
+{"run":"20261126011253","phase":"serial","file":"_open.spec.ts","title":"화면 열기 1회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:13:05.481Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"필터 항목·연속 조회 본문(K1·G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:21:39.400Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"동적 칸 정렬·방향키 응답(K1·L1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:21:53.342Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:00.432Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"W4d 잔여 판정필요 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:07.850Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:11.421Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"필터 유지 재조회(K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:11.773Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"W4b H3·F5·F3·M3·J1·H4","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:21.202Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:29.345Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:29.947Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:34.527Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:36.354Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"조회조건 겹침(H4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:40.818Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"Division 컬럼(A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:41.318Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"W4 M4 팝업 선택값 반영 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:22:42.183Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"레이아웃·조회 묶음(H4·N1·G1·L2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:00.459Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:17.978Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:22.280Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"셀 편집 표시·값 유지(A2·F6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:24.317Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:34.800Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"월 Bucket 합계(F1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:39.098Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:46.097Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"조회조건 콤보 후보 품질(B1·B2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:49.762Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:23:58.662Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"W4 D3 행 조건부 잠금 = AS-IS lock_rules","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:11.156Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:13.531Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:14.441Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"D6 Insert 위치·상태 = AS-IS","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:26.152Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:29.630Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:36.081Z"}
+{"run":"20261126011249","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 팝업 정적 aria","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:38.867Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"Insert 행 Division(D4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:41.068Z"}
+{"run":"20261126011249","phase":"read","file":"_snap.spec.ts","title":"@snap 화면샷 패널+헤더 띠 1920/1366","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:51.459Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"선택 조회 복수·단일·전체 왕복(G2·B6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:24:58.972Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:01.300Z"}
+{"run":"20261126011249","phase":"read","file":"_snap.spec.ts","title":"@snap 그리드 헤더 텍스트(모델) ×시트","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:03.211Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"A6 조회 결과 행 순서 = AS-IS ORDER BY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:06.143Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"G6 조회조건 초기값 = AS-IS 로드 문장","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:15.551Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:17.058Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"Excel 다운로드 내용(H7)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:19.667Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"실전송 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:20.434Z"}
+{"run":"20261126011249","phase":"read","file":"_snap.spec.ts","title":"@snap 조회조건 패널·버튼 바 aria ×Div","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:26.869Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:30.789Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"W9 대조표 미구현 행 실측","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:32.721Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"합계 값(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:33.980Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:37.774Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:38.070Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"기간 동적 컬럼(A8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:41.999Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"조회조건 초기값·Division 변경 뒤 Version(G6)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:42.545Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"셀 연쇄 초기화(C2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:45.478Z"}
+{"run":"20261126011249","phase":"read","file":"_trace.spec.ts","title":"W4c 정밀 판정 — 판정필요 해소","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:46.683Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"컬럼 설정 필수 컬럼(K2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:49.348Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"기간 조건 글자·역전(E2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:50.104Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"실적 구간 색(H2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:53.017Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"Team 값 덤프(B8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:53.367Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"숫자 표시 형식(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:25:56.850Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"문서 표시 문구(H5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:00.241Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"0 표시 규칙(H8)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:03.594Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"Division별 조회 오류·콤보 이름(F4·A2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:04.083Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"문서 조건별 버튼·컬럼 노출(K4·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:07.253Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"편집 모드 구분(D1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:07.684Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"재조회 하위 시트 초기화(A4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:11.164Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"이름·ID 조건 건수(A1)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:11.790Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"Sum 체크박스(A3)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:15.722Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"버튼 경로 메시지·모달 조건(E4·B3·B4·G4)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:15.823Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:21.158Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:24.610Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"전용 버튼 확인창(M2)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:25.546Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:28.337Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"그리드 표시 묶음(N1·H8·A5)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:34.915Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:43.616Z"}
+{"run":"20261126011249","phase":"read","file":"_verify.spec.ts","title":"조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T16:26:52.548Z"}
+{"run":"20261126011249","phase":"serial","file":"_trace.spec.ts","title":"W4 E4 업무 검증 메시지 = AS-IS(저장 차단)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T16:28:26.943Z"}
+{"run":"20261126011249","phase":"serial","file":"_trace.spec.ts","title":"H2 조건부 배경색 = AS-IS 행 조건(color_rules)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T16:31:35.711Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T16:32:30.270Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T16:39:53.447Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"신규행 검증(E3 컬럼별 필수·E4 키 중복)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T16:40:33.167Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)","write":true,"blocked":false,"urls":["/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T16:43:56.617Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"Excel 2단계 차단(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T16:44:23.032Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"Excel 양식·업로드(M1)","write":true,"blocked":false,"urls":["/api/SCP0005/Distribution%20Route/UPLOAD/excel-upload"],"at":"2026-11-25T16:45:24.075Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"언어 전환 문구 덤프(I2)","write":true,"blocked":false,"urls":["/api/user/session/lang-cd"],"at":"2026-11-25T16:45:50.933Z"}
+{"run":"20261126011249","phase":"serial","file":"_verify.spec.ts","title":"문서 시나리오","write":true,"blocked":false,"urls":["/api/user/session/lang-cd","/api/SCP0005/route/SAVE/call-proc"],"at":"2026-11-25T17:00:49.071Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:01:16.288Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:01:32.334Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:01:46.955Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:02:38.432Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:02:40.404Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:02:46.749Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:02:56.459Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:03:10.662Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:03:14.117Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:03:23.248Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:03:26.438Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:03:35.559Z"}
+{"run":"2026-11-25T17:01:07.095Z","phase":"serial","file":"eg_auth.spec.ts","title":"무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:03:46.124Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:03:50.204Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CORNERS SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:04:06.619Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:04:59.674Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:05:25.714Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #3 SCM0002_CitybyCountry CELL:FROM_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:05:37.990Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:06:00.425Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:06:23.122Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #4 SCP0005_DistributionRoutePopup CELL:ROUTE_ID","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:06:38.159Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:07:32.120Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:07:58.089Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:08:10.181Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:09:04.179Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:09:30.311Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:09:42.996Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup MAIN SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:10:36.148Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:11:02.102Z"}
+{"run":"2026-11-25T17:01:07.099Z","phase":"serial","file":"eg_popup.spec.ts","title":"@eg-popup CELL SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY","write":false,"blocked":false,"urls":[],"at":"2026-11-25T17:11:14.439Z"}

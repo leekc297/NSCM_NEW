@@ -61,11 +61,19 @@ export const sameBundle = (a: ModelGroupRow, b: ModelGroupRow): boolean => {
   return originBundleKeyOf(a) === originBundleKeyOf(b);
 };
 
-// 고른 Model 목록(쉼표) → Model Group 목록 (앞 12자리, 중복 제거, 고른 순서 유지).
+// Model 코드 → Model Group: 첫 '-' 앞까지, '-' 가 없으면 앞 12자리.
+//   '-' 가 맨 앞이면 앞부분이 빈 값이라 '-' 없는 경우와 같이 앞 12자리로 본다.
+export const modelGroupOf = (itemId: string): string => {
+  const id = itemId.trim();
+  const dash = id.indexOf('-');
+  return dash > 0 ? id.slice(0, dash) : id.slice(0, MDL_GR_LENGTH);
+};
+
+// 고른 Model 목록(쉼표) → Model Group 목록 (modelGroupOf, 중복 제거, 고른 순서 유지).
 export const modelGroupsOf = (itemIds: string | undefined): string[] => {
   const result: string[] = [];
   for (const id of (itemIds ?? '').split(',')) {
-    const mdlGr = id.trim().slice(0, MDL_GR_LENGTH);
+    const mdlGr = modelGroupOf(id);
     if (mdlGr && !result.includes(mdlGr)) result.push(mdlGr);
   }
   return result;
@@ -114,23 +122,6 @@ export const isPastPeriodKey = (key: string, monday: string): boolean => {
   return tag < monday;
 };
 
-// LOC 행에 조회 기간의 이번 주 이후 가격이 있는지 — 기존 묶음의 Currency 를 바꿀 수 있는 조건이다.
-//   Currency 변경은 화면이 보내는 주만 새 통화가 된다(프로시저 3-0, 2026-11-12 변경). 보낼 이번 주 이후 주가 없으면
-//   바꿀 것이 없고, 지난 주로 보내면 지난 주에 새 통화 행이 생긴다(사용자 결정 2026-11-12: 이런 묶음은 화면에서 막는다).
-//   Y 묶음은 0 이 아닌 값이 있어야 한다(Y 의 0 = 삭제라 보내면 지워진다). N 묶음은 0 도 저장된 값이라 센다.
-//   조회 결과는 주 칸 · 월 칸을 함께 내려주므로 Bucket 과 무관하게 주 칸으로 본다.
-export const hasFutureLocPrice = (
-  loc: ModelGroupRow | undefined,
-  monday: string,
-  allowZero = false
-): boolean =>
-  !!loc &&
-  Object.keys(loc).some(key => {
-    if (!WEEK_KEY_RE.test(key) || isPastPeriodKey(key, monday)) return false;
-    const value = numberOf(loc[key]);
-    return value !== null && (allowZero || value !== 0);
-  });
-
 // 조회 기간 기본값 — 원천 DMF0020 과 같은 이번 달 1일 ~ 5개월 뒤 말일 (설계서 [개요] I15 "미정 (원천: …)").
 export const defaultPeriod = (): { from: string; to: string } => {
   const first = dayjs().startOf('month');
@@ -146,6 +137,18 @@ export const periodKeysOf = (rows: readonly PeriodAxisRow[] | undefined): string
     if (MONTH_KEY_RE.test(r.MONTH_COL_KEY ?? '')) set.add(r.MONTH_COL_KEY);
   }
   return [...set].sort();
+};
+
+// 시간축 행 → 동적 컬럼 너비(px). 프로시저 COLUMN_WIDTH 중 첫 양수 값, 없으면 undefined(화면 기본 너비 사용).
+//   2026-11-22 동적 컬럼 너비를 프로시저에서 관리하기로 함 — 프로시저는 모든 행에 같은 너비를 준다.
+export const periodColumnWidthOf = (
+  rows: readonly PeriodAxisRow[] | undefined
+): number | undefined => {
+  for (const r of rows ?? []) {
+    const n = Number(String(r.COLUMN_WIDTH ?? '').trim());
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return undefined;
 };
 
 // 시간축 행 → 연월별 주 시작일 목록. 월 칸 값을 그 달의 실제 주로 펼쳐 저장할 때 쓴다(설계서 M_ R58).

@@ -1,0 +1,45 @@
+{
+  "id": "20261125190534_SELF",
+  "at": "2026-11-25T19:05:34+09:00",
+  "ms": 1795601134242,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/asisfacts_cmp/apply_and_zip.py|결과zipasisfacts바로아래파일foxquerysqlscreens을만",
+  "title": "사용자 지시 R229 같은 문제: Doc/asisfacts_cmp/apply_and_zip.py:44 결과 ZIP(asisfacts 바로 아래 파일, foxquery_sql/, screens/)을 만드는 zip_parser_outputs(15줄 zipfile.Zi",
+  "evidence": "규칙 R229 \"산출물을 ZIP 으로 묶는 생성기는 ZIP 최상위 README.md 와 폴더마다 그 폴더 내용을 설명하는 README 를 함께 넣음\" (원래 지시 2026-11-25 17:49 \"압축 시 README.md 파일 생성해서 각각의 폴더에 대한 설명 붙여 주세요\") · Doc/asisfacts_cmp/apply_and_zip.py:44 z = os.path.join(ROOT, 'Doc', f'AS-IS_파서결과_공통_화면별_{STAMP}.zip')",
+  "targets": [
+    "Doc/asisfacts_cmp/apply_and_zip.py"
+  ],
+  "before_after": "final_zip.py 21~28줄처럼 ZipFile 을 연 직후 Doc/asisfacts_cmp/readme 의 README.md, asisfacts_README.md, foxquery_sql_README.md, screens_README.md 를 README.md, asisfacts/README.md, asisfacts/foxquery_sql/README.md, asisfacts/screens/README.md 로 z.writestr 하도록 넣음. 넣는 폴더(INCLUDE_DIRS)와 README 목록을 같이 관리함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/asisfacts_cmp/apply_and_zip.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:48:56+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · Doc/asisfacts_cmp/apply_and_zip.py:12~33 README_ROOT, README_OF(INCLUDE_DIRS 와 같이 관리, 빠지면 실행 전 [FAIL]) + readmes(), 39~40 ZipFile 연 직후 README.md, asisfacts/README.md, asisfacts/foxquery_sql/README.md, asisfacts/screens/README.md 를 writestr · 최상위 README 머리에 이 ZIP 범위 1줄 · py_compile OK, 임시 폴더 3파일로 zip_parser_outputs 실행해 README 4개 + 3파일 = 7개 확인(백업·run.ps1 단계는 실행 안 함) · 2026-11-26 15:49"
+    }
+  ],
+  "plain": {
+    "what": "산출물을 ZIP 으로 묶는 생성기는 ZIP 최상위 README.md 와 폴더마다 그 폴더 내용을 설명하는 README 를 함께 넣음 규칙을 Doc/asisfacts_cmp/apply_and_zip.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R229|Doc/asisfacts_cmp/apply_and_zip.py",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675736813
+}

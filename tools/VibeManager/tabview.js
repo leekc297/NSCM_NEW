@@ -1,4 +1,5 @@
 'use strict';
+const dfmt = require('./date-fmt'); // 2026-11-23 사용자: VM 일자 = Windows 일자 형식
 // Vibe_Manager 1.9.0 — Workbench 내부 탭 뷰어(열기 류를 새 창/에디터 대신 Workbench 탭으로)
 //   md → 렌더링 · csv → 표 · json/sql/ts/js/log/txt… → 코드 보기(줄번호) · 폴더 → 목록 · 두 텍스트 → 줄 단위 diff
 //   제외(외부 프로그램): xlsx/docx/pdf/zip 등 바이너리 → OS 기본 프로그램, http(s) → 브라우저
@@ -91,7 +92,7 @@ function folderView(dir) {
   let ents = []; try { ents = fs.readdirSync(dir, { withFileTypes: true }); } catch (e) { return `<div class="hint">읽기 실패: ${esc(e.message)}</div>`; }
   const rows = ents.filter(e => !e.name.startsWith('.git')).map(e => { const full = path.join(dir, e.name); let st = null; try { st = fs.statSync(full); } catch { } return { name: e.name, dir: e.isDirectory(), size: st ? st.size : 0, mtime: st ? st.mtime : null, full }; }).sort((a, b) => (a.dir === b.dir ? a.name.localeCompare(b.name) : a.dir ? -1 : 1));
   const fmtSize = n => n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`;
-  const fmtT = d => d ? new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16).replace('T', ' ') : '';
+  const fmtT = d => d ? dfmt.fmtDT(d) : ''; // 2026-11-23 Windows 일자 형식
   const icon = r => r.dir ? '📁' : /\.md$/i.test(r.name) ? '📝' : /\.csv$/i.test(r.name) ? '📊' : /\.(xlsx|xlsm)$/i.test(r.name) ? '📗' : /\.(sql|pks|pkb)$/i.test(r.name) ? '🗄️' : /\.(json)$/i.test(r.name) ? '🧾' : IMG_RE.test(r.name) ? '🖼️' : '📄';
   const parent = path.dirname(dir);
   return `<div class="folderw"><div class="csvn">${rows.length}개 · <a data-open="${esc(parent)}">⬆ 상위 폴더</a></div><table class="csvt folder"><thead><tr><th></th><th>이름</th><th>크기</th><th>수정</th></tr></thead><tbody>${rows.map(r => `<tr><td>${icon(r)}</td><td><a data-open="${esc(r.full)}">${esc(r.name)}</a></td><td class="num">${r.dir ? '' : fmtSize(r.size)}</td><td class="mono">${fmtT(r.mtime)}</td></tr>`).join('')}</tbody></table></div>`;

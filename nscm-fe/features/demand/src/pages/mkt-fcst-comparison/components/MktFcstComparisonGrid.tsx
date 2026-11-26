@@ -440,9 +440,11 @@ export const MktFcstComparisonGrid = ({
     if (g.columnFooters.rows.length === 0) {
       g.columnFooters.rows.push(new GroupRow());
     }
+    // 합계는 Wijmo 집계(Aggregate.Sum)를 쓰지 않고 formatItem 이 직접 계산한다 — Difference 행을 빼야 해서다.
+    //   종전(AS-IS SumIgnoreHidden 1:1)은 열 전체를 더해 버전 수량 + Difference 가 합산돼 2배로 왜곡됐다
+    //   (A + B + (B - A) = 2B). 2026-11-22 개선 요청(B안)으로 Difference 행을 합계에서 제외한다.
     g.columns.forEach(col => {
-      const b = col.binding ?? '';
-      col.aggregate = kindOf(b) ? Aggregate.Sum : Aggregate.None;
+      col.aggregate = Aggregate.None;
     });
     // UM-11 — footer 는 bucket 무관 항상 표시(데이터 있을 때) (AS-IS InitSpread() 말미 InitSpreadFooterSum — ONLY_WEEKLY 포함)
     // footer 좌측 라벨 'Sum' (AS-IS ColumnFooter.Cells[0,1]="Sum")
@@ -496,18 +498,45 @@ export const MktFcstComparisonGrid = ({
     };
     g.hostElement?.addEventListener('dblclick', onDblClick);
 
+    // footer 합계 캐시 — 기간 컬럼별 합(binding → 합계). Difference 행 제외, 필터로 숨긴 행 제외(AS-IS
+    //   SumIgnoreHidden 의 "숨김 제외" 는 유지). 보기(필터·정렬·데이터)가 바뀔 때마다 비우고 다음 그리기에서 다시 센다.
+    let footerSums: Map<string, number> | null = null;
+    const footerSumsOf = (sender: FlexGrid): Map<string, number> => {
+      if (footerSums) return footerSums;
+      const sumBindings = sender.columns
+        .map(c => c.binding ?? '')
+        .filter(b => !!kindOf(b));
+      const sums = new Map<string, number>();
+      for (let i = 0; i < sender.rows.length; i++) {
+        const row = sender.rows[i];
+        if (!row.visible) continue;
+        const item = row.dataItem as ComparisonRow | undefined;
+        if (!item || String(item.MEASURE ?? '') === 'Difference') continue;
+        for (const b of sumBindings) {
+          const n = toGridNumber(item[b]);
+          if (n !== null) sums.set(b, (sums.get(b) ?? 0) + n);
+        }
+      }
+      footerSums = sums;
+      return sums;
+    };
+    const resetFooterSums = () => {
+      footerSums = null;
+    };
+    g.updatedView.addHandler(resetFooterSums);
+
     // formatItem — Difference 파랑 / SAT·SUN 헤더 글자색 (실적 회색은 PI 119 로 미적용)
     const formatHandler = (
       sender: FlexGrid,
       e: { panel: GridPanel; row: number; col: number; cell: HTMLElement }
     ) => {
       const binding = sender.columns[e.col]?.binding ?? '';
-      // UM-11/12 — footer 합계 = 클라이언트 Aggregate.Sum(=AS-IS SumIgnoreHidden) / 서식 {0:#,##0.###} / LightGray
+      // UM-11/12 — footer 합계 = Difference 제외 직접 합(2026-11-22 B안) / 서식 {0:#,##0.###} / LightGray
       if (e.panel.cellType === CellType.ColumnFooter) {
         e.cell.style.backgroundColor = '#d3d3d3';
         if (kindOf(binding)) {
-          const n = toGridNumber(e.panel.getCellData(e.row, e.col, false));
-          if (n !== null) e.cell.textContent = Globalize.format(n, FOOTER_FORMAT);
+          const n = footerSumsOf(sender).get(binding);
+          e.cell.textContent = n === undefined ? '' : Globalize.format(n, FOOTER_FORMAT);
         }
         return;
       }
@@ -541,6 +570,7 @@ export const MktFcstComparisonGrid = ({
     return () => {
       g.hostElement?.removeEventListener('dblclick', onDblClick);
       g.formatItem.removeHandler(formatHandler);
+      g.updatedView.removeHandler(resetFooterSums);
     };
   }, [gridRef, dynColMetas, gridRows]);
 

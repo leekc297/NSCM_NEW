@@ -18,7 +18,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -65,7 +65,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -127,21 +135,27 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 51010,
+                  "duration": 57248,
                   "errors": [],
                   "stdout": [
                     {
                       "text": "[F4 진단-목록] egp checked=1/10 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 11 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 9 · filter=function items=9 src=383\n"
+                      "text": "[F4 진단] egp 값 목록 11 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 9 · filter=function items=9 src=393\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T03:48:02.208Z",
+                  "startTime": "2026-11-24T16:41:35.102Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-53821-tLotSizePopup-BTN-btnDelete-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -149,7 +163,7 @@
           ],
           "id": "85feec5f8d5a0014d343-82709bc5fbb8e2cb1e2d",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -170,14 +184,27 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 37153,
+                  "duration": 89470,
                   "errors": [],
-                  "stdout": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/2 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 3 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 598 · filter=function items=598 src=966\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T03:48:55.531Z",
+                  "startTime": "2026-11-24T16:42:35.802Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-4d8b8-ntLotSizePopup-BTN-btnInput-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -185,7 +212,7 @@
           ],
           "id": "85feec5f8d5a0014d343-77c984d52d4906990d35",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -206,21 +233,27 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 35272,
+                  "duration": 39509,
                   "errors": [],
                   "stdout": [
                     {
                       "text": "[F4 진단-목록] egp checked=1/11 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 12 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1848 · filter=function items=1848 src=9616\n"
+                      "text": "[F4 진단] egp 값 목록 12 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1871 · filter=function items=1871 src=9752\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T03:49:34.811Z",
+                  "startTime": "2026-11-24T16:44:09.118Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-6bc4f-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -228,7 +261,7 @@
           ],
           "id": "85feec5f8d5a0014d343-9a437d8e0cf9850a2a04",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -249,14 +282,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 77987,
+                  "duration": 82489,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T03:50:12.210Z",
+                  "startTime": "2026-11-24T16:44:51.482Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SC-c4e89-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -264,7 +303,7 @@
           ],
           "id": "85feec5f8d5a0014d343-e2e56b3b6a86d6717fde",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -285,14 +324,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11522,
+                  "duration": 14852,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T03:51:32.337Z",
+                  "startTime": "2026-11-24T16:46:17.933Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts\\eg_popup--eg-popup-CORNERS-f0c01-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -300,12 +345,12 @@
           ],
           "id": "85feec5f8d5a0014d343-40bba1058edd3e1f6259",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
           "title": "@eg-popup TEXT SCP0028 #2 SCM0002_ItembyDivisionPopup COND:btnItemId",
-          "ok": true,
+          "ok": false,
           "tags": [
             "eg-popup"
           ],
@@ -320,23 +365,62 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 10562,
-                  "errors": [],
-                  "stdout": [],
+                  "status": "failed",
+                  "duration": 21044,
+                  "error": {
+                    "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\popup_results.json'",
+                    "stack": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\popup_results.json'\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:51:6)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:984:19",
+                    "location": {
+                      "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                      "column": 27,
+                      "line": 16
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[36mconst\u001b[39m wrapped \u001b[33m=\u001b[39m \u001b[36mfunction\u001b[39m (\u001b[36mthis\u001b[39m\u001b[33m:\u001b[39m unknown\u001b[33m,\u001b[39m \u001b[33m...\u001b[39ma\u001b[33m:\u001b[39m unknown[]) {\n \u001b[90m 15 |\u001b[39m       \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m \u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m         \u001b[36mtry\u001b[39m { \u001b[36mreturn\u001b[39m orig\u001b[33m.\u001b[39mapply(\u001b[36mthis\u001b[39m\u001b[33m,\u001b[39m a)\u001b[33m;\u001b[39m } \u001b[36mcatch\u001b[39m (e) {\n \u001b[90m    |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m           \u001b[36mconst\u001b[39m code \u001b[33m=\u001b[39m \u001b[33mString\u001b[39m((e \u001b[36mas\u001b[39m { code\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m string })\u001b[33m.\u001b[39mcode \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m>=\u001b[39m \u001b[35m8\u001b[39m \u001b[33m||\u001b[39m \u001b[33m!\u001b[39m\u001b[33mRETRY_CODES\u001b[39m\u001b[33m.\u001b[39mhas(code)) \u001b[36mthrow\u001b[39m e\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m) console\u001b[33m.\u001b[39mlog(\u001b[32m`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                        "column": 27,
+                        "line": 16
+                      },
+                      "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\popup_results.json'\n\n   at ..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n  14 |     const wrapped = function (this: unknown, ...a: unknown[]) {\n  15 |       for (let i = 0; ; i++) {\n> 16 |         try { return orig.apply(this, a); } catch (e) {\n     |                           ^\n  17 |           const code = String((e as { code?: string }).code || '');\n  18 |           if (i >= 8 || !RETRY_CODES.has(code)) throw e;\n  19 |           if (i === 0) console.log(`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`);\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:51:6)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:984:19"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\popup_results.json — UNKNOWN\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T03:51:46.024Z",
+                  "startTime": "2026-11-24T16:46:37.899Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts\\eg_popup--eg-popup-TEXT-SC-43b88-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\popup\\artifacts\\eg_popup--eg-popup-TEXT-SC-43b88-ivisionPopup-COND-btnItemId-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                    "column": 27,
+                    "line": 16
+                  }
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "85feec5f8d5a0014d343-8b672d71e3d24a4f8ec4",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         }
       ]
@@ -344,11 +428,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-20T03:48:01.641Z",
-    "duration": 237260.082,
-    "expected": 6,
+    "startTime": "2026-11-24T16:41:34.470Z",
+    "duration": 328568.85799999995,
+    "expected": 5,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

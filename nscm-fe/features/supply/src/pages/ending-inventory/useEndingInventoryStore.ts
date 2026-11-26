@@ -26,6 +26,8 @@ interface State {
   // Division 권한 게이트(R1, cs:188) — MyDivision 결과 0건. Form 이 콤보 조회로 판정해 기록,
   //   page 가 조회 액션(SubTitle search hotkey) 차단에 사용(usrLayoutControl2 Enabled=false 대응).
   noDivisionAuth: boolean;
+  // 권한 Division 코드(Form 이 Division 콤보 로드 후 세팅) — setFilters 가 'ALL' 을 이 코드 열거로 펼쳐 조회한다.
+  authDivisions: string[];
 }
 
 interface Action {
@@ -38,6 +40,7 @@ interface Action {
   clearFilters: () => void;
   toggleHeaderViewDetail: () => void;
   setNoDivisionAuth: (value: boolean) => void;
+  setAuthDivisions: (codes: string[]) => void;
   fetchStaticColumns: () => Promise<void>;
 }
 
@@ -60,6 +63,7 @@ const initState: State = {
   staticColumns: [],
   isHeaderViewDetail: false, // 초기 상세 숨김(cs:198)
   noDivisionAuth: false, // 콤보 미조회 상태 기본 허용(divisions undefined 동안 조회 미차단)
+  authDivisions: [],
 };
 
 export const useEndingInventoryStore = createPersistedStoreWithTab<State & Action>(
@@ -122,8 +126,17 @@ export const useEndingInventoryStore = createPersistedStoreWithTab<State & Actio
     setFilters: () =>
       set(state => {
         const c = get().searchParams;
+        // Division ALL(또는 빈 선택)은 권한 Division 코드 열거로 펼친다(Inventory Trend 동일).
+        //   AS-IS(cs:413)는 3-arg GetCheckedListValue(..., true) 로 빈값을 보내고 SP 에 사용자 권한 필터가 없어
+        //   권한 밖 사업부까지 조회됐다 — 제한 계정 누수라 권한 범위로 막는다. 전 권한 계정은 SP 가
+        //   '81,40,82,81_GM' 를 NULL(무필터)로 바꾸므로 결과 동일.
+        const picked = c.divisionId
+          .split(',')
+          .map(s => s.trim())
+          .filter(x => x !== '' && x.toUpperCase() !== 'ALL');
+        const divisionId = picked.length > 0 ? picked.join(',') : get().authDivisions.join(',');
         const common = {
-          divisionId: c.divisionId, // p_division_id
+          divisionId, // p_division_id
           plantId: c.plantId, // p_plant_id
           itemId: c.itemId, // p_item_id
           // p_item_type / p_profit_center — SP 는 'ALL' 을 코드로 비교해 0행이 되므로 전체(ALL)는 빈값(조건 없음)으로 보낸다.
@@ -148,6 +161,10 @@ export const useEndingInventoryStore = createPersistedStoreWithTab<State & Actio
     setNoDivisionAuth: value =>
       set(state => {
         state.noDivisionAuth = value;
+      }),
+    setAuthDivisions: codes =>
+      set(state => {
+        if (state.authDivisions.join(',') !== codes.join(',')) state.authDivisions = codes;
       }),
     // 컬럼 메타 동적 fetch — SCM_MST_SHEET_COLUMNS(admin) 변경 즉시 반영(ui-category hook, 하드코딩 금지).
     //   월·일 모드 공통 단일 컬럼셋('Ending Inventory Main').

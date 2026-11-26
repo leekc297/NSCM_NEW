@@ -1,0 +1,83 @@
+{
+ "definition": "화면 버튼이 부르는 API 를 API ID 단위로 등록하고 API 유형과 호출 프로그램 이름을 관리하는 화면",
+ "overview": [
+  "화면 버튼이 실행할 DB 프로그램을 API ID 단위로 등록하고 API Type, Call API, 사용 여부를 관리하는 화면임",
+  "위쪽 조회 조건과 API 목록 그리드 1개로 구성됨",
+  "API Type, API ID 로 조회 → Insert(F8) 로 행 추가 또는 기존 행 수정 → Save(F7) 순으로 작업함",
+  "등록한 API 는 Menu Button 화면에서 화면, 그리드, 버튼 조합에 연결되고 Menu Button 그리드 API Name 칸에 API ID 가 같이 나옴"
+ ],
+ "pages": [
+  {
+   "title": "API Management",
+   "keyPoint": "API ID 는 Menu Button 화면에서 메뉴 버튼에 연결되는 키임. Call API 나 Active 를 바꾸면 연결된 화면 버튼 동작이 바뀌므로 저장 전 Menu Button 화면 연결을 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.135,
+     "y": 0.142
+    },
+    {
+     "no": 2,
+     "x": 0.607,
+     "y": 0.203
+    },
+    {
+     "no": 3,
+     "x": 0.16,
+     "y": 0.203
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "API Type: 기본값 ALL. 콤보 값은 Lookup 의 API_TP_CD 코드(PROC, PROC_SELECT, PROC_SAVE, POST 등)",
+      "API ID: 직접 입력. 입력 후 칸을 벗어나면 조회 조건에 반영됨",
+      "Active: 기본값 Y. Y 또는 N 으로 사용 여부를 거름",
+      "Search(F5) 를 누르면 목록과 총 건수(예: 총 543 건)가 나옴"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8): 그리드에 빈 행을 추가함",
+      "Delete(F9): 선택한 행을 삭제 대상으로 표시하고 Save(F7) 로 반영함",
+      "Save(F7): 추가, 수정, 삭제한 행을 저장함",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "API 목록 그리드",
+     "lines": [
+      "필수 입력: API ID, API Name, API Description, API Type, Call API, Active(제목 앞 빨간 점)",
+      "API ID: 화면ID_시트_버튼 형식으로 씀(예: DMF0021_main_SAVE). 기존 행은 흰 칸으로 입력 불가",
+      "API Name, API Description: 담당자가 알아볼 이름과 설명. 노란 칸으로 수정 가능",
+      "API Type: 조회 프로그램은 PROC_SELECT, 저장 프로그램은 PROC_SAVE 처럼 호출 유형을 고름",
+      "Call API: 버튼이 실행할 DB 프로그램 이름(예: PKG_DMF0021.P_DMF0021_SAVE_DM_PLN_SALES_PLAN)",
+      "Created By, Creation Date, Updated By, Update Date: 저장할 때 채워지며 입력 불가"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "SYSTEM",
+ "id": "SYS0006",
+ "uiName": "API Setting",
+ "menuPath": "SYSTEM> System> API Setting",
+ "captures": [
+  "captures/SYS0006.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0006/"
+ ],
+ "buttons": [
+  "aaaa:SEARCH",
+  "apiList:DELETE",
+  "apiList:INSERT",
+  "apiList:SAVE",
+  "apiList:SEARCH"
+ ]
+}

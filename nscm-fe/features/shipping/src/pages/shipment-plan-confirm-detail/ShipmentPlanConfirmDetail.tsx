@@ -4,6 +4,7 @@ import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcGridColumnSetup } from '@foundation/assets';
+import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { ColumnLayoutModal, MainTitle, SubTitle, saveTitleSet, toColumnLayoutSettings } from '@shared/components';
@@ -127,6 +128,29 @@ export const ShipmentPlanConfirmDetail = ({ tabId, title }: PageProps<MENU_ID>) 
       void setAlert({
         type: 'alert',
         content: t(MSG.REQUIRED_PERIOD, '__Please enter the required fields.'),
+      });
+      return;
+    }
+    // Period 범위 검증 — AS-IS checkRequiredOfSearch 통과 후 DateUtil.Check_PeriodDate(cs:394) 재현.
+    //   날짜는 YYYYMMDD → ISO 조립 후 dayjs 파싱(customParseFormat 미등록, 자매 waterfall 관용구 동일).
+    const toIso = (s: string) => `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
+    const fromDate = dayjs(toIso(sc.fromYyyymmdd));
+    const toDate = dayjs(toIso(sc.toYyyymmdd));
+    // 시작일 > 종료일 — AS-IS nDate1 > nDate2 → MSG00108(TO-BE MSG01135).
+    if (toDate.isBefore(fromDate)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.INVALID_PERIOD, '__The start date can not be later than the end date.'),
+      });
+      return;
+    }
+    // 최대 조회기간 — AS-IS GetDateAdd(from,1,'Y')+GetDateAdd(_,7,'D') = from + 1년 + 7일.
+    //   종료일이 그 이상이면(nDate2 >= nDate1After1Year) 차단, 메시지 인자는 AS-IS 하드코딩 '371'(364+7).
+    const maxEndExclusive = fromDate.add(1, 'year').add(7, 'day');
+    if (!toDate.isBefore(maxEndExclusive)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.MAX_PERIOD, '__Maximum Period is From Date + {0}.').replace('{0}', '371'),
       });
       return;
     }

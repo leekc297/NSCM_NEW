@@ -1,5 +1,5 @@
 {
- "at": "2026-11-20T03:14:21.604Z",
+ "at": "2026-11-24T18:09:37.162Z",
  "search": {
   "Valid": {
    "label": "Active",
@@ -47,7 +47,6 @@
    "label": "From Site",
    "opts": [
     "SELECT ALL",
-    "AU000062_81-P",
     "HQ05-W",
     "HQ07-A",
     "HQ07-E",
@@ -56,7 +55,6 @@
     "HQ11-E",
     "HQ11-P",
     "KR02239900_81-P",
-    "AC00-A",
     "EG01_81-W",
     "MI00_81-W",
     "MI00-A",
@@ -66,7 +64,6 @@
     "MI02-E",
     "MI03_81-W",
     "MI03-P",
-    "MT00-A",
     "NA00-A",
     "NA00-E",
     "NA00-P",
@@ -99,8 +96,6 @@
    "opts": [
     "SELECT ALL",
     "EG00",
-    "AC00-A",
-    "AU000062_81-P",
     "EG01_81-W",
     "HQ05-W",
     "HQ07-A",
@@ -118,7 +113,6 @@
     "MI02-E",
     "MI03-P",
     "MI03_81-W",
-    "MT00-A",
     "NA00-A",
     "NA00-E",
     "NA00-P",
@@ -136,9 +130,6 @@
     "ATL_GB_POO",
     "AW_DE_LEJ",
     "Aeonus_KR_GUN",
-    "Alte_AB_TES",
-    "Alte_AE_AAN",
-    "Alte_AE_ABU",
     "Alte_KR_SEL",
     "Alte_US_SFJ",
     "Ampere Electricity_FR_BAT",
@@ -148,7 +139,6 @@
     "Ampherr_TR_TUZ",
     "Arpiem_RO_OTP",
     "Audi CKD_DE_ING",
-    "Audi_AJ_TES",
     "Audi_DE_ING",
     "Audi_DE_KAS",
     "Audi_DE_NEM",
@@ -300,7 +290,6 @@
     "GM_US_MOI",
     "GM_US_OMQ",
     "GM_US_QBU",
-    "GM_US_WAM",
     "GM_US_YPS",
     "GM_WA_CA_OSH",
     "GM_WA_DE_MIH",
@@ -423,6 +412,7 @@
     "Nivalis(OTS)_US_WIX",
     "Nordresa_CA_LAV",
     "Nysa Motor_PL_WRO",
+    "OM_PL_LUL",
     "Octave_BE_ECH",
     "PSA AS_FR_VEL",
     "PSA_DE_EIS",
@@ -506,9 +496,11 @@
     "Skyworth_CN_XUZ",
     "Solaris_PL_OWA",
     "Spear Power Systems_US_GVW",
+    "Sungwoo Hightech_KR_ASA",
     "Sungwoo Hightech_KR_PUS",
     "Suzhou Anjin_CN_SZH",
     "TW sys_KR_TJN",
+    "TY_CZ_PRG",
     "TY_JP_7KA",
     "TY_JP_FUK",
     "TY_US_IGX",
@@ -591,34 +583,127 @@
  },
  "grid": {},
  "rr": {
-  "search": "20261120120742",
-  "combos": "20261120120742"
+  "search": "20261125023110",
+  "combos": "20261125023110"
  },
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SCP0028\"}",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'TRANSPORT_MODE_CODE'\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
-   "n": 3,
+   "n": 5,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "P",
-     "v": "Pack"
+     "c": "AIR",
+     "v": "AIR"
     },
     {
-     "c": "A",
-     "v": "Cell"
+     "c": "FRY",
+     "v": "FERRY"
     },
     {
-     "c": "E",
-     "v": "Electrode"
+     "c": "TRK",
+     "v": "TRUCK"
+    },
+    {
+     "c": "SEA",
+     "v": "SEA"
+    },
+    {
+     "c": "RAI",
+     "v": "RAIL"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0028\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CREATED_BY",
+    "ATTRIBUTE3",
+    "ATTRIBUTE10",
+    "LAST_UPDATED_BY",
+    "ATTRIBUTE2",
+    "ATTRIBUTE1",
+    "DAILY_PLAN_PERIOD",
+    "CREATION_DATE",
+    "ATTRIBUTE9",
+    "ATTRIBUTE8",
+    "LAST_UPDATE_DATE",
+    "ATTRIBUTE7",
+    "ATTRIBUTE6",
+    "ATTRIBUTE5",
+    "NAME",
+    "ATTRIBUTE4",
+    "CODE",
+    "VALID_YN"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "EE Electrode"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "EE_UC Electrode(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "EE_HM Electrode(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "EE_ST Electrode(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD Electrode(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG Electrode(HG)"
+    }
+   ],
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
@@ -639,22 +724,18 @@
      "v": "N"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"FromSiteByDivision\",\"mnuId\":\"SCP0028\",\"divisionId\":\"''\"}",
    "status": 200,
-   "n": 107,
+   "n": 98,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
-    {
-     "c": "AU000062_81-P",
-     "v": "AU000062_81-P"
-    },
     {
      "c": "CN00254300_40-P",
      "v": "CN00254300_40-P"
@@ -666,14 +747,6 @@
     {
      "c": "CN02072800_40-P",
      "v": "CN02072800_40-P"
-    },
-    {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
-     "c": "AT00-A",
-     "v": "AT00-A"
     },
     {
      "c": "AZ00-A",
@@ -772,12 +845,12 @@
      "v": "KR40408500_40-P"
     },
     {
-     "c": "PL01279700_40-P",
-     "v": "PL01279700_40-P"
-    },
-    {
      "c": "VN00188600_40-P",
      "v": "VN00188600_40-P"
+    },
+    {
+     "c": "PL01279700_40-P",
+     "v": "PL01279700_40-P"
     },
     {
      "c": "TW00177500_40-P",
@@ -816,12 +889,52 @@
      "v": "KR02239900_81-P"
     },
     {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
      "c": "EG01_81-W",
      "v": "EG01_81-W"
+    },
+    {
+     "c": "HG00-A",
+     "v": "HG00-A"
+    },
+    {
+     "c": "HG00-E",
+     "v": "HG00-E"
+    },
+    {
+     "c": "HM00-A",
+     "v": "HM00-A"
+    },
+    {
+     "c": "HM00-E",
+     "v": "HM00-E"
+    },
+    {
+     "c": "ST00-A",
+     "v": "ST00-A"
+    },
+    {
+     "c": "ST00-E",
+     "v": "ST00-E"
+    },
+    {
+     "c": "ST00-P",
+     "v": "ST00-P"
+    },
+    {
+     "c": "GM00-A",
+     "v": "GM00-A"
+    },
+    {
+     "c": "GM00-E",
+     "v": "GM00-E"
+    },
+    {
+     "c": "GM01-A",
+     "v": "GM01-A"
+    },
+    {
+     "c": "GM01-E",
+     "v": "GM01-E"
     },
     {
      "c": "MI00_81-W",
@@ -856,10 +969,6 @@
      "v": "MI03-P"
     },
     {
-     "c": "MT00-A",
-     "v": "MT00-A"
-    },
-    {
      "c": "NA00-A",
      "v": "NA00-A"
     },
@@ -882,58 +991,6 @@
     {
      "c": "NB01-P",
      "v": "NB01-P"
-    },
-    {
-     "c": "HG00-A",
-     "v": "HG00-A"
-    },
-    {
-     "c": "HG00-E",
-     "v": "HG00-E"
-    },
-    {
-     "c": "HM00-A",
-     "v": "HM00-A"
-    },
-    {
-     "c": "HM00-E",
-     "v": "HM00-E"
-    },
-    {
-     "c": "ST00-A",
-     "v": "ST00-A"
-    },
-    {
-     "c": "ST00-E",
-     "v": "ST00-E"
-    },
-    {
-     "c": "ST00-P",
-     "v": "ST00-P"
-    },
-    {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
-     "c": "GM00-A",
-     "v": "GM00-A"
-    },
-    {
-     "c": "GM00-E",
-     "v": "GM00-E"
-    },
-    {
-     "c": "GM01-A",
-     "v": "GM01-A"
-    },
-    {
-     "c": "GM01-E",
-     "v": "GM01-E"
-    },
-    {
-     "c": "GT00-A",
-     "v": "GT00-A"
     },
     {
      "c": "WA00_81-W",
@@ -964,10 +1021,6 @@
      "v": "HD00-P"
     },
     {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
      "c": "CN00249500-P",
      "v": "CN00249500-P"
     },
@@ -978,18 +1031,6 @@
     {
      "c": "EG01_82-W",
      "v": "EG01_82-W"
-    },
-    {
-     "c": "HQ05_82-W",
-     "v": "HQ05_82-W"
-    },
-    {
-     "c": "HQ08-A",
-     "v": "HQ08-A"
-    },
-    {
-     "c": "MH00-A",
-     "v": "MH00-A"
     },
     {
      "c": "MI01-A",
@@ -1012,6 +1053,14 @@
      "v": "NB02-A"
     },
     {
+     "c": "HQ05_82-W",
+     "v": "HQ05_82-W"
+    },
+    {
+     "c": "HQ08-A",
+     "v": "HQ08-A"
+    },
+    {
      "c": "KR00697200_82-P",
      "v": "KR00697200_82-P"
     },
@@ -1026,14 +1075,6 @@
     {
      "c": "KR32625300_82-P",
      "v": "KR32625300_82-P"
-    },
-    {
-     "c": "NJ02_82-W",
-     "v": "NJ02_82-W"
-    },
-    {
-     "c": "NJ02-A",
-     "v": "NJ02-A"
     },
     {
      "c": "VP_GM01-A",
@@ -1064,6 +1105,14 @@
      "v": "WA01-E"
     },
     {
+     "c": "NJ02_82-W",
+     "v": "NJ02_82-W"
+    },
+    {
+     "c": "NJ02-A",
+     "v": "NJ02-A"
+    },
+    {
      "c": "PL01279700_82-P",
      "v": "PL01279700_82-P"
     },
@@ -1080,125 +1129,41 @@
      "v": "US02562600_82-P"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'TRANSPORT_MODE_CODE'\",\"mnuId\":\"SCP0028\"}",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
-   "n": 5,
+   "n": 3,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "AIR",
-     "v": "AIR"
+     "c": "P",
+     "v": "Pack"
     },
     {
-     "c": "FRY",
-     "v": "FERRY"
+     "c": "A",
+     "v": "Cell"
     },
     {
-     "c": "TRK",
-     "v": "TRUCK"
-    },
-    {
-     "c": "SEA",
-     "v": "SEA"
-    },
-    {
-     "c": "RAI",
-     "v": "RAIL"
+     "c": "E",
+     "v": "Electrode"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
-   "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0028\"}",
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 14,
-   "keys": [
-    "CREATED_BY",
-    "ATTRIBUTE3",
-    "ATTRIBUTE10",
-    "LAST_UPDATED_BY",
-    "ATTRIBUTE2",
-    "ATTRIBUTE1",
-    "DAILY_PLAN_PERIOD",
-    "CREATION_DATE",
-    "ATTRIBUTE9",
-    "ATTRIBUTE8",
-    "LAST_UPDATE_DATE",
-    "ATTRIBUTE7",
-    "ATTRIBUTE6",
-    "ATTRIBUTE5",
-    "NAME",
-    "ATTRIBUTE4",
-    "CODE",
-    "VALID_YN"
-   ],
-   "rows": [
-    {
-     "c": "81",
-     "v": "81 Automotive Battery"
-    },
-    {
-     "c": "40",
-     "v": "40 Mobility & IT Battery"
-    },
-    {
-     "c": "82",
-     "v": "82 ESS Battery"
-    },
-    {
-     "c": "EE",
-     "v": "EE Electrode"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC Automotive Battery(UC)"
-    },
-    {
-     "c": "EE_UC",
-     "v": "EE_UC Electrode(UC)"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM Automotive Battery(HM)"
-    },
-    {
-     "c": "EE_HM",
-     "v": "EE_HM Electrode(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST Automotive Battery(ST)"
-    },
-    {
-     "c": "EE_ST",
-     "v": "EE_ST Electrode(ST)"
-    },
-    {
-     "c": "81_HD",
-     "v": "81_HD Automotive Battery(HD)"
-    },
-    {
-     "c": "EE_HD",
-     "v": "EE_HD Electrode(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "81_HG Automotive Battery(HG)"
-    },
-    {
-     "c": "EE_HG",
-     "v": "EE_HG Electrode(HG)"
-    }
-   ],
-   "user": "minyonglee1"
+   "n": 0,
+   "keys": [],
+   "rows": [],
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
@@ -1219,16 +1184,7 @@
      "v": "N"
     }
    ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"LookupCommon\",\"mnuId\":\"SCP0028\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 0,
-   "keys": [],
-   "rows": [],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
@@ -1297,7 +1253,7 @@
      "v": "Electrode(UC)"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
@@ -1316,14 +1272,6 @@
     {
      "c": "IL00",
      "v": "IL00"
-    },
-    {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
-     "c": "AT00-A",
-     "v": "AT00-A"
     },
     {
      "c": "AZ00-A",
@@ -1460,22 +1408,6 @@
     {
      "c": "ACE KR_KR_IKS",
      "v": "ACE KR_KR_IKS"
-    },
-    {
-     "c": "AJ상사_AB_TES",
-     "v": "AJ상사_AB_TES"
-    },
-    {
-     "c": "AJ상사_AC_TES",
-     "v": "AJ상사_AC_TES"
-    },
-    {
-     "c": "AJ상사_AE_AAN",
-     "v": "AJ상사_AE_AAN"
-    },
-    {
-     "c": "AJ상사_AE_ABU",
-     "v": "AJ상사_AE_ABU"
     },
     {
      "c": "AJ상사_JP_OSA",
@@ -1620,14 +1552,6 @@
     {
      "c": "Ananda_CN_WUX",
      "v": "Ananda_CN_WUX"
-    },
-    {
-     "c": "Anjin_AA_TES",
-     "v": "Anjin_AA_TES"
-    },
-    {
-     "c": "Anjin_AK_TES",
-     "v": "Anjin_AK_TES"
     },
     {
      "c": "Anjin_CN_SHA",
@@ -2910,6 +2834,10 @@
      "v": "Ford_US_DEO"
     },
     {
+     "c": "Ford_US_LGB",
+     "v": "Ford_US_LGB"
+    },
+    {
      "c": "Ford_US_LVI",
      "v": "Ford_US_LVI"
     },
@@ -3138,12 +3066,20 @@
      "v": "Global Powersource_IN_MUB"
     },
     {
+     "c": "Globe Tools_CN_SZH",
+     "v": "Globe Tools_CN_SZH"
+    },
+    {
      "c": "Globe Tools_VN_HAP",
      "v": "Globe Tools_VN_HAP"
     },
     {
      "c": "Globetools_CN_CZX",
      "v": "Globetools_CN_CZX"
+    },
+    {
+     "c": "Globetools_CN_SZH",
+     "v": "Globetools_CN_SZH"
     },
     {
      "c": "Globetools_VN_HAP",
@@ -3156,6 +3092,10 @@
     {
      "c": "Goertek Inc._VN_BNH",
      "v": "Goertek Inc._VN_BNH"
+    },
+    {
+     "c": "Gogoro_CN_SZH",
+     "v": "Gogoro_CN_SZH"
     },
     {
      "c": "Gogoro_TW_TYN",
@@ -3434,8 +3374,16 @@
      "v": "HUAYOU_CN_KUS"
     },
     {
+     "c": "HUAYOU_CN_MAW",
+     "v": "HUAYOU_CN_MAW"
+    },
+    {
      "c": "HUAYOU_CN_NKG",
      "v": "HUAYOU_CN_NKG"
+    },
+    {
+     "c": "HUAYOU_CN_TXZ",
+     "v": "HUAYOU_CN_TXZ"
     },
     {
      "c": "HUAYOU_HK_HKG",
@@ -3678,12 +3626,20 @@
      "v": "IBS_FR_BKR"
     },
     {
+     "c": "IM-Re_CN_LTN",
+     "v": "IM-Re_CN_LTN"
+    },
+    {
      "c": "IM-Re_CN_NGG",
      "v": "IM-Re_CN_NGG"
     },
     {
      "c": "IM_CN_KUS",
      "v": "IM_CN_KUS"
+    },
+    {
+     "c": "IM_CN_LTN",
+     "v": "IM_CN_LTN"
     },
     {
      "c": "IM_CN_NGG",
@@ -3740,6 +3696,10 @@
     {
      "c": "INFAC_KR_JCH",
      "v": "INFAC_KR_JCH"
+    },
+    {
+     "c": "INFAC_PL_BIB",
+     "v": "INFAC_PL_BIB"
     },
     {
      "c": "ITM_CN_DOZ",
@@ -3804,6 +3764,10 @@
     {
      "c": "Innov_CN_SZH",
      "v": "Innov_CN_SZH"
+    },
+    {
+     "c": "Instagrid_DE_LUG",
+     "v": "Instagrid_DE_LUG"
     },
     {
      "c": "Intilion_CN_LIY",
@@ -4546,6 +4510,10 @@
      "v": "MAZDA_US_HSV"
     },
     {
+     "c": "MBAG_DE_BER",
+     "v": "MBAG_DE_BER"
+    },
+    {
      "c": "MBAG_DE_SDN",
      "v": "MBAG_DE_SDN"
     },
@@ -4814,6 +4782,10 @@
      "v": "Nexcon_CN_NJG"
     },
     {
+     "c": "Nexcon_CN_NJN",
+     "v": "Nexcon_CN_NJN"
+    },
+    {
      "c": "Nexcon_CN_NKG",
      "v": "Nexcon_CN_NKG"
     },
@@ -4914,8 +4886,20 @@
      "v": "OLA Electric_IN_BLR"
     },
     {
+     "c": "OP Mobility_CN_KUS",
+     "v": "OP Mobility_CN_KUS"
+    },
+    {
+     "c": "OP Mobility_CN_WUH",
+     "v": "OP Mobility_CN_WUH"
+    },
+    {
      "c": "OP Mobility_FR_QVQ",
      "v": "OP Mobility_FR_QVQ"
+    },
+    {
+     "c": "OP Mobility_JP_ZAE",
+     "v": "OP Mobility_JP_ZAE"
     },
     {
      "c": "OP Mobility_US_EKI",
@@ -6210,6 +6194,10 @@
      "v": "Voltabox AG_DE_DEK"
     },
     {
+     "c": "Volvo Cars_SE_GOT",
+     "v": "Volvo Cars_SE_GOT"
+    },
+    {
      "c": "Volvo_SE_GOT",
      "v": "Volvo_SE_GOT"
     },
@@ -6718,14 +6706,6 @@
      "v": "EG00"
     },
     {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
-     "c": "AU000062_81-P",
-     "v": "AU000062_81-P"
-    },
-    {
      "c": "EG01_81-W",
      "v": "EG01_81-W"
     },
@@ -6792,10 +6772,6 @@
     {
      "c": "MI03_81-W",
      "v": "MI03_81-W"
-    },
-    {
-     "c": "MT00-A",
-     "v": "MT00-A"
     },
     {
      "c": "NA00-A",
@@ -6866,18 +6842,6 @@
      "v": "Aeonus_KR_GUN"
     },
     {
-     "c": "Alte_AB_TES",
-     "v": "Alte_AB_TES"
-    },
-    {
-     "c": "Alte_AE_AAN",
-     "v": "Alte_AE_AAN"
-    },
-    {
-     "c": "Alte_AE_ABU",
-     "v": "Alte_AE_ABU"
-    },
-    {
      "c": "Alte_KR_SEL",
      "v": "Alte_KR_SEL"
     },
@@ -6912,10 +6876,6 @@
     {
      "c": "Audi CKD_DE_ING",
      "v": "Audi CKD_DE_ING"
-    },
-    {
-     "c": "Audi_AJ_TES",
-     "v": "Audi_AJ_TES"
     },
     {
      "c": "Audi_DE_ING",
@@ -7522,10 +7482,6 @@
      "v": "GM_US_QBU"
     },
     {
-     "c": "GM_US_WAM",
-     "v": "GM_US_WAM"
-    },
-    {
      "c": "GM_US_YPS",
      "v": "GM_US_YPS"
     },
@@ -8014,6 +7970,10 @@
      "v": "Nysa Motor_PL_WRO"
     },
     {
+     "c": "OM_PL_LUL",
+     "v": "OM_PL_LUL"
+    },
+    {
      "c": "Octave_BE_ECH",
      "v": "Octave_BE_ECH"
     },
@@ -8346,6 +8306,10 @@
      "v": "Spear Power Systems_US_GVW"
     },
     {
+     "c": "Sungwoo Hightech_KR_ASA",
+     "v": "Sungwoo Hightech_KR_ASA"
+    },
+    {
      "c": "Sungwoo Hightech_KR_PUS",
      "v": "Sungwoo Hightech_KR_PUS"
     },
@@ -8356,6 +8320,10 @@
     {
      "c": "TW sys_KR_TJN",
      "v": "TW sys_KR_TJN"
+    },
+    {
+     "c": "TY_CZ_PRG",
+     "v": "TY_CZ_PRG"
     },
     {
      "c": "TY_JP_7KA",
@@ -8906,10 +8874,6 @@
      "v": "LGE_US_TYM"
     },
     {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
      "c": "GM00-A",
      "v": "GM00-A"
     },
@@ -8924,18 +8888,6 @@
     {
      "c": "GM01-E",
      "v": "GM01-E"
-    },
-    {
-     "c": "GT00-A",
-     "v": "GT00-A"
-    },
-    {
-     "c": "ESS_AB_TES",
-     "v": "ESS_AB_TES"
-    },
-    {
-     "c": "ESS_AP_TES",
-     "v": "ESS_AP_TES"
     },
     {
      "c": "ESS_US_HLM",
@@ -8994,10 +8946,6 @@
      "v": "MI00"
     },
     {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
      "c": "CN00249500-P",
      "v": "CN00249500-P"
     },
@@ -9032,10 +8980,6 @@
     {
      "c": "KR32625300_82-P",
      "v": "KR32625300_82-P"
-    },
-    {
-     "c": "MH00-A",
-     "v": "MH00-A"
     },
     {
      "c": "MI01-A",
@@ -9158,22 +9102,6 @@
      "v": "ABB USA_US_NYC"
     },
     {
-     "c": "ABB_AA_TES",
-     "v": "ABB_AA_TES"
-    },
-    {
-     "c": "ABB_AB_TES",
-     "v": "ABB_AB_TES"
-    },
-    {
-     "c": "ABB_AC_TES",
-     "v": "ABB_AC_TES"
-    },
-    {
-     "c": "ABB_AV_TES",
-     "v": "ABB_AV_TES"
-    },
-    {
      "c": "ABB_BE_JUM",
      "v": "ABB_BE_JUM"
     },
@@ -9188,14 +9116,6 @@
     {
      "c": "ABB_US_RIC",
      "v": "ABB_US_RIC"
-    },
-    {
-     "c": "AEE Solar_AE_AAN",
-     "v": "AEE Solar_AE_AAN"
-    },
-    {
-     "c": "AEE Solar_AE_ABU",
-     "v": "AEE Solar_AE_ABU"
     },
     {
      "c": "AEE Solar_US_SAC",
@@ -9290,6 +9210,10 @@
      "v": "AWS_US_JAN"
     },
     {
+     "c": "AWS_US_NDF",
+     "v": "AWS_US_NDF"
+    },
+    {
      "c": "AWS_US_PHX",
      "v": "AWS_US_PHX"
     },
@@ -9356,6 +9280,10 @@
     {
      "c": "BS Hanyang_KR_KWA",
      "v": "BS Hanyang_KR_KWA"
+    },
+    {
+     "c": "BTI_US_QAS",
+     "v": "BTI_US_QAS"
     },
     {
      "c": "BYUCKSAN POWER_KR_JYG",
@@ -9496,6 +9424,10 @@
     {
      "c": "Cen_ES_CCS",
      "v": "Cen_ES_CCS"
+    },
+    {
+     "c": "Cherry_US_FAT",
+     "v": "Cherry_US_FAT"
     },
     {
      "c": "Chint_CN_SHA",
@@ -9806,6 +9738,10 @@
      "v": "E2Z_KR_CHA"
     },
     {
+     "c": "E3DC_DE_HAM",
+     "v": "E3DC_DE_HAM"
+    },
+    {
      "c": "E3DC_DE_OSN",
      "v": "E3DC_DE_OSN"
     },
@@ -10012,6 +9948,10 @@
     {
      "c": "Eneon_CA_MKH",
      "v": "Eneon_CA_MKH"
+    },
+    {
+     "c": "Eneon_US_ZFT",
+     "v": "Eneon_US_ZFT"
     },
     {
      "c": "Energix_PL_WRO",
@@ -11142,6 +11082,10 @@
      "v": "Material in Motion_US_UCG"
     },
     {
+     "c": "Meadowlark_US_SJU",
+     "v": "Meadowlark_US_SJU"
+    },
+    {
      "c": "Melfosur_CL_SCL",
      "v": "Melfosur_CL_SCL"
     },
@@ -11462,6 +11406,10 @@
      "v": "OCI Power_US_TXA"
     },
     {
+     "c": "OCI Power_US_TXT",
+     "v": "OCI Power_US_TXT"
+    },
+    {
      "c": "OMRON_JP_KM1",
      "v": "OMRON_JP_KM1"
     },
@@ -11552,6 +11500,10 @@
     {
      "c": "Peopleworks_KR_KUM",
      "v": "Peopleworks_KR_KUM"
+    },
+    {
+     "c": "Peopleworks_US_MTR",
+     "v": "Peopleworks_US_MTR"
     },
     {
      "c": "Power-Tech_AU_NWD",
@@ -11824,6 +11776,10 @@
     {
      "c": "Smart solar_JP_TKX",
      "v": "Smart solar_JP_TKX"
+    },
+    {
+     "c": "Smart_EE_VLG",
+     "v": "Smart_EE_VLG"
     },
     {
      "c": "Socomec_FR_HTN",
@@ -12202,22 +12158,18 @@
      "v": "이엔테크_KR_KWJ"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"FromSiteByDivision\",\"mnuId\":\"SCP0028\",\"divisionId\":\"'81'\"}",
    "status": 200,
-   "n": 30,
+   "n": 27,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
-    {
-     "c": "AU000062_81-P",
-     "v": "AU000062_81-P"
-    },
     {
      "c": "HQ05-W",
      "v": "HQ05-W"
@@ -12249,10 +12201,6 @@
     {
      "c": "KR02239900_81-P",
      "v": "KR02239900_81-P"
-    },
-    {
-     "c": "AC00-A",
-     "v": "AC00-A"
     },
     {
      "c": "EG01_81-W",
@@ -12289,10 +12237,6 @@
     {
      "c": "MI03-P",
      "v": "MI03-P"
-    },
-    {
-     "c": "MT00-A",
-     "v": "MT00-A"
     },
     {
      "c": "NA00-A",
@@ -12335,13 +12279,13 @@
      "v": "WA00-P"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"ToSiteByDivision\",\"divisionId\":\"'81'\",\"mnuId\":\"SCP0028\"}",
    "status": 200,
-   "n": 486,
+   "n": 481,
    "keys": [
     "CODE",
     "NAME"
@@ -12350,14 +12294,6 @@
     {
      "c": "EG00",
      "v": "EG00"
-    },
-    {
-     "c": "AC00-A",
-     "v": "AC00-A"
-    },
-    {
-     "c": "AU000062_81-P",
-     "v": "AU000062_81-P"
     },
     {
      "c": "EG01_81-W",
@@ -12426,10 +12362,6 @@
     {
      "c": "MI03_81-W",
      "v": "MI03_81-W"
-    },
-    {
-     "c": "MT00-A",
-     "v": "MT00-A"
     },
     {
      "c": "NA00-A",
@@ -12500,18 +12432,6 @@
      "v": "Aeonus_KR_GUN"
     },
     {
-     "c": "Alte_AB_TES",
-     "v": "Alte_AB_TES"
-    },
-    {
-     "c": "Alte_AE_AAN",
-     "v": "Alte_AE_AAN"
-    },
-    {
-     "c": "Alte_AE_ABU",
-     "v": "Alte_AE_ABU"
-    },
-    {
      "c": "Alte_KR_SEL",
      "v": "Alte_KR_SEL"
     },
@@ -12546,10 +12466,6 @@
     {
      "c": "Audi CKD_DE_ING",
      "v": "Audi CKD_DE_ING"
-    },
-    {
-     "c": "Audi_AJ_TES",
-     "v": "Audi_AJ_TES"
     },
     {
      "c": "Audi_DE_ING",
@@ -13156,10 +13072,6 @@
      "v": "GM_US_QBU"
     },
     {
-     "c": "GM_US_WAM",
-     "v": "GM_US_WAM"
-    },
-    {
      "c": "GM_US_YPS",
      "v": "GM_US_YPS"
     },
@@ -13648,6 +13560,10 @@
      "v": "Nysa Motor_PL_WRO"
     },
     {
+     "c": "OM_PL_LUL",
+     "v": "OM_PL_LUL"
+    },
+    {
      "c": "Octave_BE_ECH",
      "v": "Octave_BE_ECH"
     },
@@ -13980,6 +13896,10 @@
      "v": "Spear Power Systems_US_GVW"
     },
     {
+     "c": "Sungwoo Hightech_KR_ASA",
+     "v": "Sungwoo Hightech_KR_ASA"
+    },
+    {
      "c": "Sungwoo Hightech_KR_PUS",
      "v": "Sungwoo Hightech_KR_PUS"
     },
@@ -13990,6 +13910,10 @@
     {
      "c": "TW sys_KR_TJN",
      "v": "TW sys_KR_TJN"
+    },
+    {
+     "c": "TY_CZ_PRG",
+     "v": "TY_CZ_PRG"
     },
     {
      "c": "TY_JP_7KA",
@@ -14292,7 +14216,7 @@
      "v": "kokam_KR_NSN"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
@@ -14317,7 +14241,7 @@
      "v": "Electrode"
     }
    ],
-   "user": "minyonglee1"
+   "user": "donghoon.lee"
   }
  ]
 }

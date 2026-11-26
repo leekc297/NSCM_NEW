@@ -31,7 +31,7 @@ import { keepMergeManager, ModelGroupMergeManager } from '../utils/sales-price-m
 import { convertLocPrice, type ExchangeRateMap } from '../utils/sales-price-model-group.util';
 import { isPastPeriodKey, isPeriodKey } from '../utils/sales-price-model-group.util';
 import { cellOf, numberOf, sameBundle } from '../utils/sales-price-model-group.util';
-import { hasFutureLocPrice, originBundleKeyOf } from '../utils/sales-price-model-group.util';
+import { originBundleKeyOf } from '../utils/sales-price-model-group.util';
 
 import styles from './SalesPriceModelGroupGrid.module.scss';
 
@@ -42,6 +42,8 @@ interface Props {
   data: ModelGroupRow[];
   staticColumns: RawFlexGridColumnConfig[];
   periodKeys: string[];
+  // 동적 컬럼 너비(px) — 시간축 SP COLUMN_WIDTH 최우선. 미지정이면 buildPeriodColumns 기본값(90).
+  periodColumnWidth?: number;
   bucketType: BUCKET_TYPE;
   divisionId: string;
   monday: string;
@@ -65,6 +67,7 @@ export const SalesPriceModelGroupGrid = ({
   data,
   staticColumns,
   periodKeys,
+  periodColumnWidth,
   bucketType,
   divisionId,
   monday,
@@ -121,8 +124,9 @@ export const SalesPriceModelGroupGrid = ({
     [periodKeys, data, bucketType]
   );
   const periodColumns = useMemo(
-    () => buildPeriodColumns(periodBindings, bucketType),
-    [periodBindings, bucketType]
+    // 너비 미지정(undefined)이면 buildPeriodColumns 기본 매개변수(90)가 적용된다.
+    () => buildPeriodColumns(periodBindings, bucketType, periodColumnWidth),
+    [periodBindings, bucketType, periodColumnWidth]
   );
   // 셀 콤보의 @divisionId (TeambyDivision 등). 행 값으로 좁히는 조건은 컬럼 메타 ATTRIBUTE2 가 맡는다.
   const comboParams = useMemo(() => ({ divisionId: `'${divisionId}'` }), [divisionId]);
@@ -138,7 +142,11 @@ export const SalesPriceModelGroupGrid = ({
       !isPastPeriodKey(binding, monday) &&
       cellOf(row, 'PRC_RPSN') === PRC_RPSN.YES;
 
-    // 기존 묶음의 Currency 를 바꿀 수 있는가 — 이번 주 이후 LOC 가격이 있는 묶음만(util hasFutureLocPrice 주석).
+    // 기존 묶음의 Currency 를 바꿀 수 있는가 — 묶음의 현재 Price Master Representative 가 Y 일 때만(판가와 같은 기준).
+    //   Y = 통화 · 판가 변경 가능, N = 둘 다 변경 불가 (2026-11-23 개발 서버 요청. 종전 "이번 주 이후 값이 있는 묶음만"
+    //   조건은 폐기 — Y 면 값이 없어도 연다. 0 만 남긴 채 통화만 바꿔 저장하면 save 의 NO_PRICE(MSG00328) 검사가 막는다).
+    //   Y 에서 통화를 바꾼 뒤 N 으로 돌려도 바꾼 통화는 되돌리지 않는다(사용자 결정 2026-11-23) — 저장은 utils/save 의
+    //   N 묶음 통화 변경 경로(writeCurrencyWeeksN)가 맡는다.
     const canChangeCurrency = (row: ModelGroupRow): boolean => {
       const key = originBundleKeyOf(row);
       const cached = currencyChangeableRef.current.get(key);
@@ -146,7 +154,7 @@ export const SalesPriceModelGroupGrid = ({
       const loc = (g.collectionView?.items ?? []).find(
         item => cellOf(item, 'MEASURE') === MEASURE_CODE.LOC && sameBundle(item, row)
       );
-      const result = hasFutureLocPrice(loc, monday, cellOf(loc, 'PRC_RPSN') !== PRC_RPSN.YES);
+      const result = cellOf(loc, 'PRC_RPSN') === PRC_RPSN.YES;
       currencyChangeableRef.current.set(key, result);
       return result;
     };
@@ -166,7 +174,7 @@ export const SalesPriceModelGroupGrid = ({
         toggleClass(e.cell, 'wj-cell-editable', false);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
       }
-      // 기존 묶음 Currency — 바꿀 수 없는 묶음(이번 주 이후 가격 없음)은 입력 칸으로 칠하지 않는다.
+      // 기존 묶음 Currency — 바꿀 수 없는 묶음(Price Master Representative N)은 입력 칸으로 칠하지 않는다.
       if (binding === 'CURRENCY' && row && !isInsertRow(row) && !canChangeCurrency(row)) {
         toggleClass(e.cell, 'wj-cell-editable', false);
       }

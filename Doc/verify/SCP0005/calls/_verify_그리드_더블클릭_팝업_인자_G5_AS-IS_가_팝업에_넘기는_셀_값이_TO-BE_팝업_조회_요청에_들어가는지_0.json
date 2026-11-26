@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 2090,
-  "at": "2026-11-20T00:24:52.639Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1621,
+  "at": "2026-11-25T16:24:43.005Z",
+  "user": "bindy122678",
   "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 728,
-  "at": "2026-11-20T00:24:54.739Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 685,
+  "at": "2026-11-25T16:24:45.517Z",
+  "user": "bindy122678",
   "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
  },
  {
@@ -32,10 +32,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 1907,
-  "at": "2026-11-20T00:25:04.086Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 2034,
+  "at": "2026-11-25T16:24:55.037Z",
+  "user": "bindy122678",
   "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
  },
  {
@@ -43,12 +43,12 @@
   "sheet": "route",
   "btn": "SEARCH_CITY",
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
-  "postData": "{\"country\":\"\",\"city\":\"AATES\",\"cityName\":\"\"}",
+  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 123,
-  "at": "2026-11-20T00:25:05.461Z",
-  "user": "minyonglee1",
+  "dur": 104,
+  "at": "2026-11-25T16:24:56.832Z",
+  "user": "bindy122678",
   "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
  },
  {
@@ -58,10 +58,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 1923,
-  "at": "2026-11-20T00:25:07.934Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1812,
+  "at": "2026-11-25T16:24:59.111Z",
+  "user": "bindy122678",
   "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
  },
  {
@@ -69,12 +69,12 @@
   "sheet": "route",
   "btn": "SEARCH_CITY",
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
-  "postData": "{\"country\":\"\",\"city\":\"AATES\",\"cityName\":\"\"}",
+  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 172,
-  "at": "2026-11-20T00:25:09.784Z",
-  "user": "minyonglee1",
+  "dur": 99,
+  "at": "2026-11-25T16:25:00.753Z",
+  "user": "bindy122678",
   "test": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
  }
 ]

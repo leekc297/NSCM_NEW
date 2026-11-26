@@ -56,6 +56,11 @@
         "Doc/verify/SCP0028/calls/_verify_텍스트_부분_삭제_Insert_행_Div_변경_E6_D1__0.json",
         "tools/VibeManager/test/t_claude_usage.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:30+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T14:57:09+09:00"
     }
   ],
   "plain": {
@@ -91,5 +96,7 @@
     "verify_result": "2026-11-20 14:52:42 실행. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet → 위반 211건(반영 전 244건, 33건 감소, 기호 233→201, 틀 1→0). node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → ALL PASS",
     "note": "개선안 목표 210건과 1건 차이. 근거에 장식 기호 19건이라고 적혀 있지만 나열된 위치는 18건이라 고칠 대상 합계가 33건이고, 나열된 위치 33건은 전부 고쳤음. 다른 작업이 먼저 고쳐 CSV 줄 번호가 현재 파일보다 2줄 앞서 있어(CSV L592 = 현재 L594) 문구로 위치를 찾아 고쳤음. 바꾼 문구를 읽는 JS 코드 없음 확인(테스트에는 검사 이름으로만 같은 글자가 있음). 같은 범위의 L1017·L1044·L1052 '— SKIP', L1108 '→ 단계 CANCEL', L1160, L1361 등은 개선안 목록에 없어 고치지 않음. ✖ ▶ 🛠️ 🩹 ⏸ ⏭ 는 그대로 둠."
   },
-  "snap": "prop_20261120143326_SELF_3"
+  "snap": "prop_20261120143326_SELF_3",
+  "effectiveMs": 1795154229226,
+  "effectiveAt": "2026-11-20T14:57:09+09:00"
 }

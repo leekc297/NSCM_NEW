@@ -1,0 +1,106 @@
+{
+  "id": "20261121001943_SELF",
+  "at": "2026-11-21T00:19:43+09:00",
+  "ms": 1795187983145,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|uisource|producer missing|un un un rn",
+  "title": "감지기 판정 자료의 보내는 쪽 연결과 게이트 생산자 검사 추가(U14, U16, U23 공통), 검증에서 창 다시 로드 확인 분리",
+  "evidence": "orch-usercheck.js:210,253,266,445,465,520~524 · orchestra.js:641,681,733 · jobs.js:316~345 · workbench.js:3142 · t_orch_usercheck.js:165~169,272~274 · 직전 반영 실패 20261121000456_SELF: ①~③ 통과, ④ 창 다시 로드 미실행으로 verified=false(orch-improve.js:217,250) (반영 실패한 20261121000456_SELF 를 고친 안 · 원인 검증 항목 ④(창 다시 로드 뒤 작업 재개 1회, ui.json jobs·wb·scr 키 생성)는 반영 단계에서 실행할 수 없음. 설치 폴더 복사는 반영 뒤 VMO가 함(tools/VibeManager/orch-improve.js:217, .claude/agents/vm-orchestra.md:105). 반영한 Claude가 verified=false로 냄(result.note, 2026-11-21 00:17). orch-improve.js:250 이 verified!==true 를 실패로 처리해 00:17:53 대상 4개 파일 복원. ①~③은 00:16:40~00:17:22 통과 기록 있음. gate=null 이라 반영 뒤 게이트 미실행)",
+  "targets": [
+    "tools/VibeManager/jobs.js",
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "변경 전: VMW(jobs.js)와 WORKBENCH 웹뷰는 목록을 그려도 보고하지 않음. jobs.js 패널 핸들러가 noteUi 를 부르지 않음. 시험은 noteUi 를 직접 불러 통과함. 변경 후: VMW 웹뷰가 작업 카드를 그린 뒤 orch:uiStat {tab:'job', received, jobIds} 와 {tab:'scr', received, blank} 를 보내고 jobs.js 핸들러가 noteUi 로 넘김. jobIds 는 카드로 그린 작업만 넣고 최근 작업 선택 목록은 넣지 않음. WORKBENCH 웹뷰가 체인 진행을 그린 뒤 {tab:'wb', received, runIds} 를 보내고 workbench.js 핸들러가 noteUi 로 넘김. orch-usercheck.js 에 UI_SOURCES = {resumedJobShown:'job', screenNameMissing:'scr', workbenchResumeProgress:'wb'} 를 둠. noteUi wb 는 창별 덮어쓰기 대신 3분 안 보고의 runId 를 합침(seen 필드). t_orch_usercheck.js 에 원장 active 감지기마다 tab 송출이 jobs.js, workbench.js, orchestra.js 웹뷰 소스에 있는지 보는 정적 검사와, 송출 줄을 지운 사본 3종이 FAIL 하는 시험을 추가함",
+  "verify": "① node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS. 생산자 검사 PASS 5줄('screenNameMissing → 웹뷰 송출 tab scr', 'resumedJobShown → tab job', 'workbenchResumeProgress → tab wb', 'jobs.js 핸들러 orch:uiStat → noteUi', 'workbench.js 핸들러 orch:uiStat → noteUi'), '생산자 검사 송출 줄 지운 사본 = 3종 FAIL' PASS ② node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → ALL PASS ③ 임시 스크립트로 events.jsonl:1579(user.stop 20:44:16), 1589(job.start 20:46:18)와 jobs.js·workbench.js 소스의 보고 생성 줄 실행 → U16 보고 없음 warn 1 fail 0, J20261120_191752 카드 그림 warn 0 fail 0, 다른 작업 카드 fail 1. U23 runId SCP0028_1795175178967(events.jsonl:1591) → 보고 없음 fail 1, 보드 그림 warn 0 fail 0, 다른 runId 만 그림 fail 1. 창 다시 로드 뒤 ui.json jobs·wb·scr 키 생성 확인은 반영 단계에서 실행할 수 없음. VMO 설치 폴더 복사 뒤 CHANGELOG 미확인 항목으로 남기며 이 verify 에 넣지 않음",
+  "rollback": "백업 태그의 jobs.js, workbench.js, orch-usercheck.js, t_orch_usercheck.js 4개 파일을 반영 전 내용으로 되돌림. 설치 폴더에 복사했으면 같은 4개 파일을 다시 복사함",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T00:49:43+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T00:53:10+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 853, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self0049"
+    },
+    {
+      "at": "2026-11-21T00:53:12+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T01:00:56+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 3개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T01:00:56+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. ① 2026-11-21 00:56:04 node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(PASS 129줄). 생산자 검사 줄: 'PASS resumedJobShown → 웹뷰 송출 tab job 원장 active true · 송출 파일 jobs.js', 'PASS screenNameMissing → 웹뷰 송출 tab scr … jobs.js', 'PASS workbenchResumeProgress → 웹뷰 송출 tab wb … workbench · 변경 4개 파일",
+      "log": ".vibe\\logs\\2026-11-21T00-53-14_claude_orch.log",
+      "sec": 248,
+      "costUsd": 2.7410061999999997,
+      "files": [
+        "tools/VibeManager/jobs.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:27+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-21T01:59:17+09:00"
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261121000456_SELF",
+  "repairRoot": "20261121000456_SELF",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795189783157,
+  "autoFp": "34c255e834",
+  "applyStartMs": 1795189992582,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self0049",
+  "needsReload": true,
+  "appliedMs": 1795190456802,
+  "synced": [
+    "jobs.js",
+    "orch-usercheck.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/jobs.js",
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "① 2026-11-21 00:56:04 node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(PASS 129줄). 생산자 검사 줄: 'PASS resumedJobShown → 웹뷰 송출 tab job 원장 active true · 송출 파일 jobs.js', 'PASS screenNameMissing → 웹뷰 송출 tab scr … jobs.js', 'PASS workbenchResumeProgress → 웹뷰 송출 tab wb … workbench.js', 'PASS jobs.js 핸들러 orch:uiStat → noteUi', 'PASS workbench.js 핸들러 orch:uiStat → noteUi', 'PASS 생산자 검사 송출 줄 지운 사본 = 3종 FAIL [job:resumedJobShown, scr:screenNameMissing, wb:workbenchResumeProgress]', 'PASS noteUi wb 창 2개 보고 합침(seen)', 'PASS noteUi wb 3분 지난 runId 뺌'. ② 2026-11-21 00:56:10 node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager → ALL PASS(jobs·workbench·orchestra ko/en 구문, 같은 이름 함수 없음). ③ 2026-11-21 00:56:55 임시 스크립트(저장소 밖 %TEMP%/v3chk/v3.js)로 events.jsonl:1579 user.stop 2026-11-20T20:44:16 J20261120_191752, 1589 job.start 20:46:18, 1591 chain.start SCP0028_1795175178967과 jobs.js 'uiStat(\\'job\\',{received:drawn.length…' 줄, workbench.js 'function wbStat()' 줄을 실행함 → U16 보고 없음 {warn 1, fail 0} · J20261120_191752 카드 그림 {warn 0, fail 0} · 다른 작업 카드 {fail 1 'VMW 목록에 재개 작업 없음 J20261120_191752'} · U23 보고 없음 {fail 1 'WORKBENCH 재개 진행 표시 보고 없음 SCP0028'} · 보드 그림 {warn 0, fail 0} · 다른 runId 만 그림 {fail 1 'WORKBENCH 에 재개 진행 없음 SCP0028'}. 창 다시 로드 뒤 ui.json jobs·wb·scr 키 생성은 개선안대로 이 verify에 넣지 않음(미확인)",
+    "note": "workbench.js 핸들러 case 'orch:uiStat'(3142줄)은 이미 있어 고치지 않음. jobs.js 핸들러는 orch-usercheck가 init 전이면 api.paths로 init한 뒤 noteUi를 부름. VMW 화면 목록 송출(scr)은 필터와 상관없이 목록 원본(screens) 전체 기준이고, 이름이 비었거나 ID와 같은 화면을 blank로 보냄. 저장소 hook과 작업 모드(DB_ONLY)는 tools/VibeManager 수정을 막지 않음. 임시 스크립트 %TEMP%/v3chk/v3.js는 작업 폴더 밖이라 삭제 승인이 필요해 남아 있음. 설치 폴더 복사, CHANGELOG, 게이트는 VMO 몫이라 손대지 않음"
+  },
+  "snap": "prop_20261121001943_SELF",
+  "effectiveMs": 1795193957740,
+  "effectiveAt": "2026-11-21T01:59:17+09:00"
+}

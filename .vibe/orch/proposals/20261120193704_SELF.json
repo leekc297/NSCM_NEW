@@ -1,0 +1,98 @@
+{
+  "id": "20261120193704_SELF",
+  "at": "2026-11-20T19:37:04+09:00",
+  "ms": 1795171024532,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|workbenchresumeprogress",
+  "title": "사용자 지적 감지기 추가 U23 workbenchResumeProgress: VMW 에서 작업 재개 뒤 WORKBENCH 에 진행 상태가 보이지 않음",
+  "evidence": "사용자 지적(2026-11-20T19:03:55+09:00) \"VMW 에서 작업재개 했는데 WORKBENCH 에서 진행상태가 보이지 않습니다. 확인 요청 합니다.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 workbenchResumeProgress 없음 → 추가. 판정: resumedFrom 이 있는 재개 chain_progress 기록이 chain.start 뒤 staleMin(5분) 동안 cur, sub.prog, updatedMs 가 바뀌지 않는데 같은 job 의 .vibe/jobs/<job>/<screen>.log 크기는 늘면 FAIL. WORKBENCH 가 재개 runId 를 그렸다는 보고(ui.json wb.runIds)가 없어도 FAIL · 읽을 기록: .vibe/orch/chain_progress/*.json(runId, resumedFrom, cur, sub.prog, updatedMs), .vibe/jobs/<job>/<screen>.log 크기, events.jsonl type=chain.start, .vibe/orch/usercheck/ui.json(WORKBENCH 보고 필드 신설 필요). user_checks.json U23 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T20:30:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T20:34:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 812, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self2030"
+    },
+    {
+      "at": "2026-11-20T20:34:02+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T20:40:14+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 822, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T20:40:14+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 20:36:24 실행: node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → 마지막 줄 'ALL PASS', FAIL 줄 0건. U23 표본 9건과 noteUi wb 1건 PASS: 'PASS U23 첫 점검 = 멈춤 기준만 · WORKBENCH 보고 없음 = 실패', 'PASS U23 진행 기록 6분 그대로 + 작업 로그 늘어남 = 실패', 'PASS U23 작업 로그 그대로 = 멈춤 아님', 'PASS U23 진행 기록 갱신(cur, sub. · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-20T20-34-03_claude_orch.log",
+      "sec": 157,
+      "costUsd": 1.6181222000000002,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:28+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T20:45:03+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U23",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795174231581,
+  "autoFp": "49145a8693",
+  "applyStartMs": 1795174442412,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 822, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self2030",
+  "needsReload": true,
+  "appliedMs": 1795174814173,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "2026-11-20 20:36:24 실행: node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → 마지막 줄 'ALL PASS', FAIL 줄 0건. U23 표본 9건과 noteUi wb 1건 PASS: 'PASS U23 첫 점검 = 멈춤 기준만 · WORKBENCH 보고 없음 = 실패', 'PASS U23 진행 기록 6분 그대로 + 작업 로그 늘어남 = 실패', 'PASS U23 작업 로그 그대로 = 멈춤 아님', 'PASS U23 진행 기록 갱신(cur, sub.prog, updatedMs 바뀜) = 멈춤 아님', 'PASS noteUi wb 보고 기록(형식 아닌 runId 제외)', 'PASS U23 보고에 재개 runId 없음 = 실패', 'PASS U23 보고에 재개 runId 있음 = 표시 실패 아님', 'PASS U23 재개 1분(2분 안) = 판정 안 함', 'PASS U23 재개 아닌 기록(resumedFrom 없음) = 대상 아님', 'PASS U23 끊긴 기록(interruptedAt) = 대상 아님'. 20:35:58 첫 실행에서 'FAIL U23 작업 로그 그대로 = 멈춤 아님' 1건이 나와 로그 크기 기준을 점검마다 갱신하도록 고친 뒤 재실행함",
+    "note": "DETECTORS.workbenchResumeProgress 추가. 판정 2가지: ① resumedFrom 이 있고 interruptedAt 이 없는 chain_progress 기록의 cur, sub.prog, updatedMs 가 staleMin(5분) 넘게 같은데 지난 점검 뒤 .vibe/jobs/<job>/<screen>.log 가 늘면 fail(key S13|U23|stale|<runId>), ② chain.start(없으면 t0) 뒤 graceMin(2분)이 지났는데 그 뒤 받은 ui.json wb 보고가 없거나 wb.runIds 에 재개 runId 가 없으면 fail(key S13|U23|wb|<runId>). noteUi tab 'wb'(runIds, received → ui.json wb) 신설. user_checks.json U23 status active, params staleMin 5, graceMin 2. 웹뷰가 noteUi tab 'wb' 보고를 보내는 코드는 workbench.js 에 아직 없음(승인 대상 밖이라 수정 안 함). 송출을 넣기 전까지 실행 중인 재개 체인마다 ② '보고 없음' fail 이 남. workbench.js 웹뷰 보고 송출 후속 개선안 필요"
+  },
+  "snap": "prop_20261120193704_SELF",
+  "effectiveMs": 1795175103931,
+  "effectiveAt": "2026-11-20T20:45:03+09:00"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "SCP0005",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0005] · Doc/gen/SCP0005/CHECK.md · Doc/gen/SCP0005/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/SCP0005/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-25T20:15:19+09:00",
+  "end": "2026-11-25T20:19:16+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\shipping\\src\\pages\\distribution-route",
+      "files": 18
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0005",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0005",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "전체행과 대상 건수가 달라진 이유가 무엇인가요?",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T20-15-19_claude_wb1.log"
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-11-25T20:19:16+09:00",
+  "changed": []
+}

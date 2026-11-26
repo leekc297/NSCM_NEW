@@ -1,0 +1,45 @@
+{
+  "id": "20261126083525_SELF_3",
+  "at": "2026-11-26T08:35:25+09:00",
+  "ms": 1795649725634,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/checklist_run.py|작업kk하위단계수정분범위결정측정미검증분류docs문서생성를runn행s",
+  "title": "사용자 지시 R234 같은 문제: tools/Harness/verify/checklist_run.py:408 '[작업 k/K]' 하위 단계(수정분 범위 결정, 측정, 미검증 분류, --docs 문서 생성)를 run()(32~34행, subprocess.call 만 함)으",
+  "evidence": "규칙 R234 \"CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림\" (원래 지시 2026-11-26 08:13 \"vm 에서 실행한 scp0005 의 checklist 작업에 전체 5시간34분 소요되었습니다. 현재 scp0005에 대한 checklist 건수현황 알려주세요. 그리고 5시간34분이 소요된 부분에 대해서 전체 세션별로 시간을 분리해서 많이 시간이 소요된 부분을 분석해서 개선할 수 있도록\") · tools/Harness/verify/checklist_run.py:408 print(f'[작업 {jobs}/{jobs}] 미검증 분류(unverified_resolve)', flush=True)",
+  "targets": [
+    "tools/Harness/verify/checklist_run.py"
+  ],
+  "before_after": "run()과 run_rv() 에서 시작 시각과 소요를 재어 Doc/verify/<ID>/_timing.csv 에 stage='checklist:<하위 단계>' 행으로 덧붙이고, 출력에 '[시간] 하위 단계 · 시작 · N초' 줄을 남김",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/checklist_run.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:00:12+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/checklist_run.py:37 tm_add, :54 run(sub) 추가. run_rv(측정 --only/전체), delta_scope(수정분 범위 결정), unverified_resolve(미검증 분류), --docs(문서 생성) 하위 단계마다 Doc/verify/<ID>/_timing.csv 에 stage='checklist:<하위 단계>' 행과 '[시간]' 줄. py_compile OK, 임시 폴더 tm_add 시험 2행 기록 확인, CheckList 실행은 금지라 미실행. 2026-11-26 16:00:12"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림 규칙을 tools/Harness/verify/checklist_run.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R234|tools/Harness/verify/checklist_run.py",
+  "kind": "fix",
+  "claimedBy": "S-A",
+  "waitNote": "",
+  "appliedMs": 1795676412307
+}

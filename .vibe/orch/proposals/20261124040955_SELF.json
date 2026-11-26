@@ -1,0 +1,115 @@
+{
+  "id": "20261124040955_SELF",
+  "at": "2026-11-24T04:09:55+09:00",
+  "ms": 1795460995304,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orch agent.js|vmo에이전트호출이workbench선택모델대신vscode설정값을씀",
+  "title": "사용자 지시 R130 같은 문제: tools/VibeManager/orch-agent.js:193 VMO 에이전트 호출이 Workbench 선택 모델 대신 VS Code 설정값을 씀",
+  "evidence": "규칙 R130 \"VM 이 띄우는 AI 호출(CheckList AI 검토, VMO 진단 등)은 모델을 따로 고정하지 않고 WORKBENCH 에서 고른 모델을 씀\" (원래 지시 2026-11-19 16:49 \"WORKBENCH 가 사용하고 있는 MODEL 그대로 사용하도록 해주세요.\") · tools/VibeManager/orch-agent.js:193 if (p.claudeModel) args.push('--model', p.claudeModel);",
+  "targets": [
+    "tools/VibeManager/orch-agent.js"
+  ],
+  "before_after": "workbench.js 가 활성 창 모델을 내보내는 함수(예 currentModel())를 두고, 그 값이 있으면 그것을 쓰고 없으면 p.claudeModel 을 씀",
+  "verify": "node --check tools/VibeManager/orch-agent.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-agent.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T03:19:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T03:23:17+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0319"
+    },
+    {
+      "at": "2026-11-26T03:23:21+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T03:36:16+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-agent.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T03:36:16+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 → 반영 뒤. node --check orch-agent.js: 오류 0 → 오류 0. run_all.js: 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.9s'(2026-11-26 03:24 시작) → 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228s'(2026-11-26 03:32:07). 자기 시험(가짜 workbench): 활성 창 SCP0005 모델 claude-opus-5-5 → 'claude-opus-5-5', 창 모델 빈 값 → '', 활성 창 없음 → '', curr · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T03-23-21_claude_orch.log",
+      "sec": 542,
+      "costUsd": 0.8951063999999999,
+      "files": [
+        "tools/VibeManager/orch-agent.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:11+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM 이 띄우는 AI 호출(CheckList AI 검토, VMO 진단 등)은 모델을 따로 고정하지 않고 WORKBENCH 에서 고른 모델을 씀 규칙을 tools/VibeManager/orch-agent.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R130|tools/VibeManager/orch-agent.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795630760845,
+  "autoFp": "f7c0eabe19",
+  "applyStartMs": 1795631001068,
+  "verifyJudge": {
+    "at": "2026-11-26T03:32:27+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0319",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-agent.js"
+  ],
+  "appliedMs": 1795631776948,
+  "synced": [
+    "orch-agent.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orch-agent.js 출력 없음(종료 0) · node tools/VibeManager/test/run_all.js 'ALL OK  파일 87/87  PASS 1422  FAIL 0  228s' · 웹뷰 파일 아님(t_webview_syntax.js 는 run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js"
+    ],
+    "verify_result": "반영 전 → 반영 뒤. node --check orch-agent.js: 오류 0 → 오류 0. run_all.js: 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.9s'(2026-11-26 03:24 시작) → 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228s'(2026-11-26 03:32:07). 자기 시험(가짜 workbench): 활성 창 SCP0005 모델 claude-opus-5-5 → 'claude-opus-5-5', 창 모델 빈 값 → '', 활성 창 없음 → '', currentModel() 있음 → 'claude-sonnet-5-5'",
+    "note": "runClaude 의 --model 인자와 claude.start 의 model 칸 = wbModel() || p.claudeModel. wbModel() = workbench.currentModel() → currentId() 와 같은 ID 창의 getState().model 순서. workbench.js 는 승인 범위(targets) 밖이라 currentModel() 을 추가하지 않음. 추가되면 그 값을 먼저 씀. VS Code 밖에서 vscode 모듈을 못 불러오면 오류 기록에 남기지 않고 설정값을 씀. 실제 창에서 모델이 넘어가는지는 창을 다시 로드해야 확인됨(claude.start 기록의 model 칸)."
+  },
+  "snap": "prop_20261124040955_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

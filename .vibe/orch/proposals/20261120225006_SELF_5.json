@@ -1,0 +1,47 @@
+{
+  "id": "20261120225006_SELF_5",
+  "at": "2026-11-20T22:50:06+09:00",
+  "ms": 1795182606741,
+  "source": "self",
+  "status": "applied",
+  "sig": "be 일자로그 삭제 n n n",
+  "title": "BE 로컬 일자 로그 3개 삭제(nscm.20261110.log, nscm.20261112.log, nscm.20261113.log 합계 30.6GB)",
+  "evidence": "2026-11-20 22:47 Get-ChildItem nscm-be/logs 실측 결과: nscm.20261112.log 23,138,853,697 byte(수정 11-12 23:59:59), nscm.20261113.log 8,264,072,059 byte(11-13 17:28:20), nscm.20261110.log 1,540,930,370 byte(11-10 21:54:06). 셋 다 마지막 수정 뒤 7일 지남. git ls-files nscm-be/logs 0건(추적 안 함). known 의 'BE 기동 로그 2개 삭제'(20261120143327_SELF_2)는 .vibe/logs/be_bootrun_* 대상이라 겹치지 않음",
+  "targets": [
+    "nscm-be/logs/nscm.20261110.log",
+    "nscm-be/logs/nscm.20261112.log",
+    "nscm-be/logs/nscm.20261113.log"
+  ],
+  "before_after": "nscm-be/logs 3개 파일 32,943,856,126 byte 있음 → 없음. 지우기 전 목록과 크기를 .vibe/orch/selfcheck/delete_log.jsonl 에 남김",
+  "verify": "삭제 뒤 Test-Path 3개 모두 False, 다음 S10 점검에 세 key 없음",
+  "rollback": "되돌릴 수 없음(서버 기록 파일). 지우기 전 목록만 delete_log.jsonl 에 남음",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "용량 정리, 대상 파일과 크기 확인",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T11:51:48+09:00",
+      "by": "VMO 자동(생성물 삭제 기준)",
+      "what": "삭제 3개 32,943,856,126바이트: nscm-be/logs/nscm.20261110.log(1,540,930,370바이트, 마지막 수정 2026-11-10T21:54), nscm-be/logs/nscm.20261112.log(23,138,853,697바이트, 마지막 수정 2026-11-12T23:59), nscm-be/logs/nscm.20261113.log(8,264,072,059바이트, 마지막 수정 2026-11-13T17:28)"
+    },
+    {
+      "at": "2026-11-23T11:51:48+09:00",
+      "by": "VMO",
+      "what": "반영 완료, 생성물 삭제 3개(되돌릴 수 없음). 기록 .vibe/orch/selfcheck/delete_log.jsonl"
+    }
+  ],
+  "plain": {
+    "what": "11월 10일, 12일, 13일 BE 서버 기록 파일 3개(30.6GB)를 지워 디스크 공간을 비웁니다.",
+    "risk": "그 3일 동안의 서버 오류 기록을 다시 볼 수 없습니다.",
+    "undo": "지운 파일은 되살릴 수 없습니다. 필요하면 승인하지 않고 그대로 두면 됩니다."
+  },
+  "self": true,
+  "check": "S10",
+  "selfKey": "S10|belog|nscm.20261112.log, S10|belog|nscm.20261113.log, S10|belog|nscm.20261110.log",
+  "needsApproval": "",
+  "auto": true,
+  "autoMs": 1795402308108,
+  "appliedMs": 1795402308108
+}

@@ -5,6 +5,8 @@ Read\-only\.,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditBut
 You\s*can\s*not\s*edit\s*the\s*old\s*Plan\.,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00170
 SSP\s*Planner\s*권한이\s*없는\s*사용자\s*입니다\s*\.\s*\s*User\s*ID\s*:,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00251
 This\s*user\s*does\s*not\s*have\s*permission\s*to\s*the\s*SSP\s*Planner\.\s*\s*User\s*ID\s*:,CR-103,AS-IS 편집(Edit) 버튼 경로의 안내 메시지(EditButton 진입점에서만 닿고 Save 진입점에서 닿지 않는 메시지,ALL,confirmed,원장:MSG 코드,MSG00251
+Period\s*선택이\s*잘못되었습니다\.,CR-113,월 범위 조회조건 기간 역전(시작 > 끝),ALL,confirmed,원장:MSG 코드,MSG00344
+Please\s*check\s*the\s*Period\.,CR-113,월 범위 조회조건 기간 역전(시작 > 끝),ALL,confirmed,원장:MSG 코드,MSG00344
 필수\s*입력\s*컬럼이\s*없습니다,DD-003,Project Code 컬럼(PROJECT_CODE) 필수 검사 MSG00429 · 필수 컬럼 조회 결과 포함,DMF0003,candidate,원장:MSG 코드,MSG00429
 There\s*are\s*no\s*mandatory\s*input\s*columns,DD-003,Project Code 컬럼(PROJECT_CODE) 필수 검사 MSG00429 · 필수 컬럼 조회 결과 포함,DMF0003,candidate,원장:MSG 코드,MSG00429
 INSERT\s*모드에서는\s*저장\s*후\s*Bucket\s*변경이\s*가능합니다\.,DD-006,조회조건 Bucket 콤보(BUCKET) 변경 시 Insert 행 존재 검사 MSG00227,DMF0003,candidate,원장:MSG 코드,MSG00227

@@ -1,0 +1,54 @@
+﻿SELECT  A.INSTANCE_ID, A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION_ID, A.LINE_ID
+			      , A.TOP_ITEM_ID, A.ITEM_ID
+			      , A.ELECTRODE_TYPE, A.EQUIPMENT_ID, A.MARKET, A.PRODUCTION_TYPE
+			      , CONVERT(VARCHAR,A.PLAN_DATE,112) AS PLAN_DATE
+			      , CONVERT(VARCHAR,A.PLAN_DATE,112) AS BUCKET_FROM
+			      , CONVERT(VARCHAR,A.PLAN_DATE,112) AS BUCKET_TO
+			      , A.MEMO
+			      , A.UPDATE_ID AS CREATOR
+			      , CONVERT(VARCHAR,A.UPDATE_TIME,120) AS CREATION
+			      , A.MEMO_TYPE
+			      ,A.ATTR1
+			      ,A.ATTR2
+			      ,A.ATTR3
+			      ,A.ATTR4
+			      ,A.ATTR5
+				  ,T.UI_DESC AS ATTR1_TXT
+			FROM    FP_AMEND_MEMO_M A WITH(NOLOCK)
+			LEFT OUTER JOIN
+(SELECT SEGMENT1     AS INSTANCE_ID                      		
+                         , SEGMENT2     AS UI_PARAM                         		
+                         --, SEGMENT3     AS UI_DEF                         	  	         													
+                         --, SEGMENT4     AS UI_COLOR                        											
+                         , SEGMENT5     AS MEA_VALUE                       
+						 , ACTIVE_FLAG AS ACTIVE_FLAG
+                         --, ATTRIBUTE1   AS TYPE                            
+                         , ATTRIBUTE2   AS UI_DESC                            
+						 --,LOOKUP_TYPE_CODE
+                       FROM   	SCM_SYS_LOOKUP_VALUE B                  
+                       WHERE  	B.LOOKUP_TYPE_CODE = 'UI_AMEND_COLOR' 
+                       AND 	B.ACTIVE_FLAG = 'Y') AS T                
+ON A.INSTANCE_ID = T.INSTANCE_ID
+AND A.ATTR1 = UI_PARAM
+			
+			
+			WHERE   1=1
+      AND (ISNULL(@INSTANCE_ID,'')='' OR A.INSTANCE_ID = @INSTANCE_ID)
+			AND (ISNULL(@COMPANY_ID,'')='' OR A.COMPANY_ID = @COMPANY_ID)
+			AND (ISNULL(@DIVISION_ID,'')='' OR A.DIVISION_ID = @DIVISION_ID)
+			AND (ISNULL(@SITE_ID,'')='' OR A.SITE_ID = @SITE_ID)
+			AND (ISNULL(@PLANT_ID,'')='' OR A.PLANT_ID = @PLANT_ID)
+			AND (ISNULL(@FACTORY_ID,'')='' OR A.FACTORY_ID = @FACTORY_ID)
+			AND (ISNULL(@OPERATION_ID,'')='' OR A.OPERATION_ID = @OPERATION_ID)
+			AND (ISNULL(@LINE_ID,'')='' OR A.LINE_ID = @LINE_ID)
+			AND (ISNULL(@TOP_ITEM_ID,'')='' OR A.TOP_ITEM_ID = @TOP_ITEM_ID)
+			AND (ISNULL(@ITEM_ID,'')='' OR A.ITEM_ID = @ITEM_ID)
+			--AND (ISNULL(@ELECTRODE_TYPE,'')='' OR A.ELECTRODE_TYPE = @ELECTRODE_TYPE)
+			--AND (ISNULL(@EQUIPMENT_ID,'')='' OR A.EQUIPMENT_ID = @EQUIPMENT_ID)
+			--AND (ISNULL(@MARKET,'')='' OR A.MARKET = @MARKET)
+			AND (ISNULL(@PRODUCTION_TYPE,'')='' OR A.PRODUCTION_TYPE = @PRODUCTION_TYPE)
+			AND (ISNULL(@PLAN_DATE,'')='' OR CONVERT(VARCHAR,A.PLAN_DATE,112) = @PLAN_DATE)
+			AND (
+        (ISNULL(@MEMO_TYPE,'')<>'' AND A.MEMO_TYPE = @MEMO_TYPE)
+			OR (ISNULL(@MEMO_TYPE,'')='' AND A.MEMO_TYPE = 'DPP')) 
+			AND	A.MEMO IS NOT NULL

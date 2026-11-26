@@ -51,6 +51,11 @@
         "tools/VibeManager/orch-state.js",
         "tools/VibeManager/workbench.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T00:29:31+09:00"
     }
   ],
   "plain": {
@@ -87,5 +92,7 @@
     "verify_result": "2026-11-20 00:13:34 실행. node --check workbench.js 통과. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --out .vibe/orch/selfcheck/doc_style --quiet 종료코드 1(파일 전체 위반 263건, 문장 442). workbench.js.style.csv 에서 L83~L1100(L94 제외) 줄표, 가운뎃점 행 0건. 줄표가 들어간 정규식 검색(tools/VibeManager/*.js, tools/Harness) 결과 1건 flow-panel.js:86, PIPELINE.md 제목(Harness/pipeline.js:75 가 씀)을 읽는 정규식이고 workbench.js 문구와 관계없음.",
     "note": "문구 72곳 수정. 줄표 69곳(83줄 영문 1곳 포함), 141·142줄 가운뎃점 3곳. 시험 3개는 확인하는 문구에 줄표가 없어 고치지 않음. verify 는 정규식 검색 0건을 요구했으나 flow-panel.js:86 1건이 나옴. 이번 수정과 관계없어 손대지 않았고 verified 는 true 로 냄. git diff 의 추가 92줄, 삭제 67줄에는 이번 작업 전부터 커밋되지 않은 다른 작업의 변경이 섞여 있음."
   },
-  "snap": "prop_20261119232524_SELF_4"
+  "snap": "prop_20261119232524_SELF_4",
+  "effectiveMs": 1795102171012,
+  "effectiveAt": "2026-11-20T00:29:31+09:00"
 }

@@ -323,7 +323,7 @@ export const MSG = {
   // (MSG00324) Detail Confirm 저장 확인창 → "Are you sure you want to confirm the shipping plan change requests?"
   CONFIRM_SAVE: 'MSG01201',
   // (MSG00133) 변경 없음 → "No modifications have been made."
-  NO_MODIFICATION: 'MSG00133',
+  NO_MODIFICATION: 'MSG00004',
   // 저장 변경 없음 표준 코드(MSG00133 은 TO-BE 미등록)
   NO_CHANGES: 'MSG00004',
   // (MSG00703) 미저장 변경 존재 시 재조회 확인 → "There are unsaved changes. Do you want to search again?"

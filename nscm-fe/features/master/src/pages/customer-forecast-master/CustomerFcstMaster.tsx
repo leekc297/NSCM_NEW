@@ -20,7 +20,7 @@ import { useMessageStore } from '@shared/stores';
 import { CustomerFcstMasterFcstGrid } from './componenets/CustomerFcstMasterFcstGrid';
 import { CustomerFcstMasterForm } from './componenets/CustomerFcstMasterForm';
 import { MENU_ID, SHEET_NAME } from './customer-fcst-master.constants';
-import { hasUniqueViolation } from './customer-fcst-master.uniqueCheck';
+import { findUniqueViolation } from './customer-fcst-master.uniqueCheck';
 import { useCustomerFcstMasterStore } from './useCustomerFcstMasterStore';
 
 export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -135,10 +135,15 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     saveWithValidation(dirtyRows, staticColumn, rows => {
       // 같은 구간 Y 중복·신규 행 키 중복은 셀 편집 때만 검사돼, 날짜 칸이 전부 Y 로 들어가는 신규 행은
       //   그대로 저장됐다(갭분석 F-03). 필수값 검사를 통과한 뒤 저장 요청 전에 한 번 더 막는다.
-      if (hasUniqueViolation(gridRows, dirtyRows)) {
+      //   키 중복(같은 데이터를 다시 고름)은 MSG01427, 같은 구간 Y 중복은 MSG00136 으로 나눠 안내한다.
+      const violation = findUniqueViolation(gridRows, dirtyRows);
+      if (violation) {
         void useMessageStore.getState().setAlert({
           type: 'alert',
-          content: t('MSG00136', '_동일 구간에 하나의 Y만 가능합니다.'),
+          content:
+            violation === 'rowKey'
+              ? t('MSG01427', '_중복된 항목이 있습니다.')
+              : t('MSG00136', '_동일 구간에 하나의 Y만 가능합니다.'),
         });
         return;
       }

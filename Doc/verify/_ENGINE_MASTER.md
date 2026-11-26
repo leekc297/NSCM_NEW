@@ -644,6 +644,32 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 - 11-13 13:22 정기 확인(이어가기): 끝 22/25 — SSP0023 09:51:05~11:29:34(1315→1317 · 증명됨 217→232 · 조치 필요 45→58) · SSP0024 11:29:36~13:01:34(747→783 · 354→354 · 8→12 · 통과 97 · 실패 0) · SSP0021 08:24:34~13:09:22(1172→1202 · 234→253 · 95→119 · 통과 99 · 실패 9 · E2E 239.9분). 도는 중 SSP0025(4/8 · 실패 2 = 저장 세부·저장 경로) · SSP0060(4/8). 남음 SSP0200. E2E 를 돈 21개 합: 검사 단위 12,693→12,912 · 증명됨 3,730→4,007(+277) · 조치 필요 546→590.
 - 주기 2 대상 추가: (o) **스펙 예외 2건(SSP0021)** `_verify.spec.ts:252` afterEach — 로그인 픽스처가 시간 초과로 없을 때(nscm = null) `requiredNotes` 를 읽다 TypeError(11-06 코드 · 이번 보완과 무관). null 보호 필요 (p) SSP0021 실패 9건 · 테스트 시간 초과 문구 7줄 · '[ensureRows] 시도 → 0행' 20회 — 0행 조회와 실패의 대응, 그 사이 데이터 변화 여부 확인 (q) 조치 필요 증가 화면 분류: SSP0021 95→119 · SSP0023 45→58 · SCP0111 11→23 · DMF0005 90→110 · SSP0014 2→7 · SSP0024 8→12 · SCP0037 5→8.
 
+## 2026-11-26 10:53 CheckList 같은 측정 묶음 중복 정리(사용자 지시 'SCP0005 CheckList 2,000건 넘음, 중복 제거 보완')
+- 신규 tools/Harness/verify/dedup_same_measure.py: 규칙·결과·증거 전문·TO-BE 위치가 같은 행 중 대상이 같은 행(팝업 호출 위치, 저장 감사 표본 키만 다름)과 요구 행(GENERAL, CONFIRMED, DEFECT)을 대표 1행으로. 해당없음, 미검증, 결과 다름, 사용자판정·의견·Remark 있는 행은 묶지 않음. selftest 11/11
+- make_verify_docs.py: 집계 행 정리 뒤 호출, 묶인 행은 '중복 정리' 시트로(원장은 그대로)
+- SCP0005 v13 원장으로 시험 생성(출력 scratchpad, 10:41): 검증 전체 2,138 → 1,955(PASS 1,214 → 1,031, FAIL 47 · 판정필요 25 · 미검증 3 · 해당없음 849 그대로), 중복 정리 시트 62 → 245행. 시험 생성으로 바뀐 Doc/verify/SCP0005 파일 4개 복원
+- 남긴 같은 증거 묶음 42개 185행 = 대상이 다른 확인(계정 그룹×Division 버튼 권한 J2·K4, 컬럼별 H1·C6 등)
+- 시험: engine_selfcheck PASS(selftest PY 69), inventory_check PASS(등록부 갱신, set_harness_flag.py 함께 등록). 백업 make_verify_docs.py.bak_20261126_samemeasure
+- 영향: 다음 CheckList 문서 생성부터 적용(사용자 실행)
+- 11:17 추가(사용자 '해당없음 849건 → 옮겨줘'): make_verify_docs 가 해당없음(NA) 행을 '해당없음' 시트로 옮김(근거 '증거(실측)' 열 그대로). '검증 전체' = 판정이 난 행. SCP0005 시험 생성: 검증 전체 1,955 → 1,106, 해당없음 시트 849. 요약 집계·tools/Docs/screen_status.py 건수는 두 시트 합(1,955, 해당없음 849 그대로). 백업 make_verify_docs.py·screen_status.py .bak_20261126_nasheet
+- 11:24 추가(사용자 '그리드에 없음 해당없음 행도 맞는지 확인'): SCP0005 13행 모두 오판. 12행 = 컬럼 이름 잘림(T649), 1행 = 셀 읽기 시점(T650). AS-IS 메타·AS-IS 실측(11-26 02:26 grids.json visible True)·TO-BE 그리드 컬럼 목록(calls/_grid_main.json 01:25) 모두 4컬럼 있음. 고침: _verify.spec.ts binding · judge.py 3곳 · probe.cellClasses 재시도 · H2 못 읽음 = ERROR. 백업 .bak_20261126_binding
+- 11:29 추가(사용자 '다른 화면도 확인 → 넣어줘'): 22화면 2,418행 분류표 Doc/verify/_na_grid_audit.csv(오판 376 · 맞음 48 · 근거 없음 1,994 = 11-14~11-19 측정분, 재측정 필요). judge.py 판정 끝에 grid_absent_guard.py(T651) 연결, 다음 판정부터 같은 실행 실측과 어긋나는 '그리드에 없음' 해당없음 = ERROR. 지금 원장 기준 17화면 189행 해당. 백업 judge.py.bak_20261126_absentguard
+- 11:40 추가(사용자 '나머지 187행도 원인 확인'): 187 = 376-189 계산 오류, 실제 미적용 204행. grid_absent_guard 보강(A5 NA·판정필요라도 'TO-BE 표시=Y' 근거 사용, 대상이 문장인 행은 근거 속 컬럼) → 적용 189 → 217행, 오판 376 중 200행. 남은 176 = 컬럼 이름 잘림 12(SCP0005, T649 고침) · 시트 표기 없는 실측과 다중 시트 컬럼 130(어느 시트인지 못 정함) · 팝업 셀 등 실측 근거 없음 33(1차 분류 과대) · 그리드 목록에만 있음 1(SCP0041)
+- 11:43 추가(사용자 '시트 기록 고쳐줘 · 묻지 말고 계속 보완'): T652 측정 맥락 mctx.sheet(spec·nscm.ts·smoke-extra) + grid_absent_guard 시트 구분·다른 시트 측정 ERROR · T653 run_verify STAGES post 48 · make_test_report 대조 문구(원장 전체 = 검증 전체 + 해당없음 + 중복 정리 + 집계). 백업 .bak_20261126_sheet · _stages · _label
+- 11:55 추가(사용자 '팝업 셀 33행 Division 순회 · 회신 없이 계속 보완'): T654 G5·eg_popup 팝업 셀 Division 순회 · T655 DefColumns 한 글자 잘림 방지(spec 14곳·ledger 2·facts_popup 1). 백업 .bak_20261126_g5div · _defcol
+- 13:25 추가(사용자 '다른 보완 대상도 계속'): T656 칸 이름 잘림 잔존분(mapping_trace 11곳·ledger 1곳·_trace H8·_verify E3). _verify_next 폴더는 예전 복사본이라 그대로 둠. 백업 .bak_20261126_defcol2 · 추적표 반영은 다음 CheckList 부터(미측정)
+- 13:38 추가(사용자 '다른 보완 대상도 계속'): T657 미검증 W7 문구 누적 방지(judge.py). 확인만 한 항목: DMF0005 D3 '조건 계산 불가' 275행 = 11-14 측정분 · 지금 평가기로 조건식 14종 실패 0(재측정으로 해소) · 다중 시트 화면 '편집 기대 없음' 10화면 455행 = facts_lockrules 가 메인 시트만 편집 기대를 만듦(시트별 확장은 잠금 문장 시트 확정 규칙 설계 필요 · 미착수). 백업 .bak_20261126_w7dup
+- 14:13 추가(사용자 '다중 시트 편집 기대도 시트별로 보완'): T658 facts_lockrules 시트별 편집 기대(edit_expect_sheets.csv) · ledger.py ee_for 시트별 조회·시트 이름 대응. 10화면 D1 '편집 기대 없음' 1,676→226(원장 생성 비교, 원장 원본 복원) · 남은 226 = AS-IS 가 AddSheet 하지 않은 시트(SSP0015 MES Stock Detail 48·시트 이름 없는 대상 22 · SSP0021·SSP0060 Hold stock 계열 80 · SCP0020 Tact Time 46 · DMF0005 28 · SSP0060 Shipment Plan Detail 2)·TO-BE 신설 칸. 10화면 사실 파일은 새로 만든 판(edit_expect_sheets.csv 포함)으로 둠 · 원장 반영은 다음 CheckList
+- 14:18 추가(사용자 '다른 보완 대상도 계속'): T659 _trace.spec 재지 못한 행 5종 NA → 미검증(ERROR) · E4 위반 입력 생성기 확장(칸 직접 읽기 · 원문 대입 변수 · Parse). 다음 CheckList 에서 해당없음 약 656행이 미검증 또는 판정으로 옮겨감(그중 E4 96행은 위반 입력 생성 가능 · 판정 결과 미측정). 백업 _trace.spec.ts.bak_20261126_na2err · _e4gen
+- 14:28 추가(사용자 '다른 보완 대상도 계속 · 묻지 말고'): T660 재지 못한 행 NA → 미검증 잔여 정리(mapping_trace NOPATH 집계 · judge 5곳 · _verify E3 화면 단위 · _trace 2곳 · popup_args 1곳). 다음 CheckList 에서 현재 원장 기준 해당없음 약 301행이 미검증으로 옮겨감(판정 미측정). 백업 .bak_20261126_na2err2 · _judgena · _nopath
+- 14:37 추가(사용자 '다른 보완 대상도 계속'): T661 _verify 그리드 프로브 시트 확정(T203 sheetid) 적용 — 다른 시트 그리드에서 재던 칸은 측정 경로 누락으로 드러냄. 남은 과제: SSP 상세 시트 진입(메인 기간 칸 더블클릭 드릴) 사실 sheet_nav.json 생성기 없음(SCP0104 수작업 1건만). 백업 _verify.spec.ts.bak_20261126_sheetgrid
+- 14:47 추가(사용자 'sheet_nav 생성기도 만들어서 상세 시트 진입 보완'): T662 sheet_nav_gen.py 신설 · E2E 드릴 진입(smoke-extra drillSheet) · run_verify facts 연결. 생성 4화면 20시트. 남은 것: 실화면 진입 확인(다음 CheckList) · AS-IS 상세 시트 중 더블클릭 외 경로(버튼·상세 그리드 더블클릭·조회 메서드 안 ChangeSheet)로 열리는 시트는 생성 대상 아님(SSP0015 Hold stock Detail·W/H stock Detail·Shipment Request Detail·WH In Plan Detail·Shipment Result 등). 백업 smoke-extra.ts·_verify.spec.ts .bak_20261126_drill · run_verify.py .bak_20261126_sheetnav
+- 15:17 추가(사용자 '다른 보완 대상도 계속'): T663 상세 시트 진입 사실 확장(중첩 드릴 tab · 탭+상세 조회 tabsearch · pretab · 드릴의 드릴) · 6화면 34시트. 실패 시 종전 탭 이름 클릭으로 재시도. 백업 smoke-extra.ts.bak_20261126_t663 · sheet_nav_gen.py.bak_20261126_t663
+- 15:26 추가(사용자 '다른 보완 대상도 계속'): T664 편집 모드 전 칸 잠금 기본값. 사실 파일(edit_expect·lock_rules·color_rules·edit_expect_sheets)을 편집 기대가 있는 전 화면에서 지금 코드로 다시 만듦(전판 scratch ee_before 백업). 남은 UNKNOWN 786칸 = 루프 변수 칸 지정 잠금(LockRange(i, j, i, j, …) · ColumnHeader.Cells 조건) 해석 불가 — DMF0003·DMF0042·DMF0044·DMF0082·SCP0104·SSP0021·SSP0023. 백업 facts_lockrules.py.bak_20261126_t664
+- 15:46 추가(사용자 '루프 변수 잠금 786칸도 해석'): T665 facts_lockrules 루프·위치 해석 · 기존행 UNKNOWN 786→181 · 신규행 251→45. 편집 기대가 있는 전 화면 사실 파일을 새 코드로 다시 만듦(전판 scratch loop_before0·loop_before). 남은 9건 = DMF0082 SetLockFlag·foreach 목록 · SCP0104 _fixed_column_name(isPageSOP 별 값). 백업 facts_lockrules.py.bak_20261126_t665
+- 15:52 추가(VM 기능개선2 세션이 맡긴 VMO 개선안 11건 · 사용자 '병렬 보완'): 반영 8건 — run_verify diff 단계 sheet_data_cond 호출(153055_SELF_4) · judge 읽기 전용 그리드에 시트별 기대 합침(142231_SELF · SCP0100 읽기 전용에서 빠짐) · judge T114 텍스트 셀 (시트, 칸) 키(142231_SELF_2) · _trace 0행 판정필요·FAIL → ERROR + ensureRows(130850_SELF·_2·_3) · _verify G5·G1 ensureRows·0행 ERROR(130851_SELF) · grid_absent_guard 문구 확대(115652_SELF_4). 되돌림 3건 — 153055_SELF(결함 유형 직접 일치 없음 NA→ERROR · 약 4천 행 · 2026-10-29 사용자 결정과 충돌 = 사용자 결정 필요) · 153056_SELF(SCP0104 수작업 139행 중 자동 일치 신규행 41행뿐 · 페이지 조건 isPageSOP 평가 필요) · 153056_SELF_2(site_types 생성기 신설 · DB 조회 설계 필요). engine_selfcheck PASS(15:51). 백업 judge.py·_trace.spec.ts·_verify.spec.ts·grid_absent_guard.py .bak_20261126_vmo · run_verify.py .bak_20261126_sdc
+- 15:56 추가(사용자 '다른 보완 대상도 계속'): T666 연쇄 원천 칸 AS-IS 잠금 = NA(SCP0037 39행). 같은 유형 약 420행(SSP0015·SSP0021·SSP0023·SSP0060·SSP0200·DMF0005)은 AS-IS 편집 가능·조건부 — 11-14~15 측정분이 상세 시트 칸을 메인 그리드에서 잰 것(T661·T662 로 다음 실행부터 시트 진입 후 측정). 백업 judge.py.bak_20261126_t666
+
 ## 2026-11-13 13:3x (VM 세션) — CheckList '설명' 열 새 형식 · 덧붙임
 - 사용자 지시(11-13): "설명은 먼저 어떤 부분이 오류인지를 정의하고, 하단에 설명 — 정확한 대상·증상, AS-IS 에는 어떻게 되어 있는데 TO-BE 에는 어떻게 되어 있어 다른지를 쉽게".
 - 신규 `tools/Harness/verify/plain_detail.py`(문구 전용 · 판정 불변) + `make_verify_docs.py` 연결(`_explain` → `lrow` '설명' 열 · import 실패·예외 시 종전 한 줄 설명). 백업 `make_verify_docs.py.bak_20261113_plain`.
@@ -1699,3 +1725,152 @@ AS-IS WinForms 를 이 PC 에서 실제로 구동해(호스트 `tools/AsisLive/h
 - 확인: engine_selfcheck PASS(13:44:10). 실제 E2E 동작 미측정(다음 CheckList)
 - 다른 화면 영향: T480 해당없음 240건(종전 PASS 9건 결정 R3-D7) · T485 DM-52 행 58화면 36 → 8 · T487 SCP0005 AI 반영 3행 빠짐 · 공용 팝업 17개 단추 Close 먼저(CR-005, 결정 R3-D1)
 - 백업 *.bak_20261120_scp28u3(mapping_trace 는 _scp28u3b)
+
+## 2026-11-20 16:55 체인 5단계 부분 재측정 범위 = 두 범위 합치기(사용자 결정)
+- 비교 실측(16:48 · 6화면 · 파일 쓰기 없음): --recheck(미검증 처리 대상 규칙) SCP0028 규칙 10·408행 · SSP0014 8·214행 · SCP0005 34·1,148행 · SSP0005 38·686행 · SCP0111 2·80행 · SCP0096 0 / --delta 는 SCP0028 만 부분(규칙 15), 나머지 5화면 전체(바뀐 내용 183,791~201,199자 > 9만 자 한도 3 · 기준선 없음 2)
+- 원인: 검사기 파일(tools/Harness/verify *.py · tools/E2E lib·fixtures *.ts) 변경을 AI 판단 입력에 넣어 한도를 넘김
+- delta_scope.py: 검사기 파일 변경은 AI 입력에서 빼고 코드로(engine_scope) — 파이썬 도구는 --only 실행에서도 facts·static·post 단계가 전부 다시 돌아 규칙 추가 없음, eg·diff·E2E 4종 단계 도구가 바뀌면 그 단계 추가 / E2E 라이브러리는 바뀐 최상위 함수·상수(changed_names · 가져오기·형·주석 변경 제외 · 바뀐 상수를 쓰는 함수 포함)를 쓰는 시험(_verify·_trace)의 규칙, eg 스펙이 쓰면 eg 단계, _snap 이 쓰면 스냅샷 규칙 / '절반 이상' 판단은 화면 소스 항목만
+- checklist_run.py --delta: 수정분 범위가 부분·없음이면 recheck_plan(미검증 처리 대상 규칙·단계)을 합침 · VERIFY_STAGE_RULES 전달 · 전체 = 기준선 없음 · 화면 소스 넓은 변경 · AI 설명 실패만
+- 재측정(16:53 · AI 호출 없이 코드 범위): 오늘 기준선(08:24·09:53) 대비로는 SCP0028 규칙 84/98 · SSP0014 86/98 · SCP0005 99/99 · SSP0005 99/98 — 시험 틀 test()(tools/E2E/fixtures/test.ts)이 바뀌어 모든 시험에 영향이 가는 변경이라 넓게 잡힘(맞는 판단). 체인 반복 회차는 직전 측정 뒤 기준선이 새로 저장돼 그 회차에 바뀐 파일만 대상(실제 체인 실행 미측정)
+- 확인: delta_scope --selftest ALL PASS · engine_selfcheck PASS(16:55:30 · 16:54 첫 실행은 다른 세션이 고치던 tools/DbConn/golden.py 때문에 실패)
+- 백업 delta_scope.py.bak_20261120_merge · checklist_run.py.bak_20261120_merge
+
+- 2026-11-20 16:5x SCP0028 미검증 라운드 4: T510 팝업 알림 Confirm 닫기·eg_popup 0행 필수 칸 채우기, T511 가짜 응답 표본 .prev·F4 저장 판단 sp_pair 종류, T512 H2 빈 값 키보드 지움, T513 행 데이터 키로 조회조건 대응 칸, T514 golden 팝업 체크 행 인자. engine_selfcheck PASS. 기록 Doc/verify/SCP0028/_unverified_work.md
+
+## 2026-11-20 17:14 수정분 범위 — 검사 스펙 머리말 변경도 코드로(사용자 지시)
+- 계기: SCP0028 체인 5단계(16:57:45) [수정분 범위] full · AI 판단 '화면 전반' — 바뀐 항목이 검사 스펙 머리말(_verify·_trace·_snap·eg_popup) 4개
+- delta_scope.py: test:<스펙>:(머리말) = 검사기 변경. 바뀐 최상위 함수·상수를 쓰는 그 스펙 시험의 규칙 · eg 스펙 = eg 단계 + EG 규칙 · _snap = 스냅샷 규칙 · _open = 사전 단계가 늘 다시 돎. AI 판단 입력에서 뺌
+  이전 머리말 = 내용 저장소(기준선 저장 때 머리말도 보관하게 remember 확장) → 없으면 검사기 보완 준비 사본(.vibe/orch/snap/engine_*)에서 같은 지문 → 없으면 그 스펙 시험 전부
+- 재측정(17:00 · SCP0028 이번 회차 변경 · AI 호출 없음): mode partial(종전 full) · AI 판단 항목 0 · 규칙 84/98 · 1,696/1,839행. 넓은 이유 = 시험 틀 test()(tools/E2E/fixtures/test.ts) 변경 · _verify 머리말 이전 내용 없음(첫 회 · 다음 기준선부터 보관)
+- 확인: delta_scope --selftest ALL PASS · engine_selfcheck PASS(17:01:28) · 백업 delta_scope.py.bak_20261120_head · 지금 도는 5단계는 이미 전체로 정해져 다음 회차부터 적용
+
+## 2026-11-20 17:25 E2E 동시 실행이 한 번도 안 되던 결함 — 읽기 목록에 조회·메뉴 접속 기록 추가(사용자 지시 'E2E 검증엔진 시간 단축')
+- 실측: 오늘 SCP0028 실행 5회 모두 '읽기 시험 0개(시험 81개) → 차례 실행' · e2e_test_kind.jsonl 직전 차례 실행 기록 SCP0028 97/97 · SSP0014 118/118 · SCP0005 108/108 쓰기 분류
+- 원인: tools/E2E/lib/writeguard.ts READ_API 에 /api/admin/lookup(조회만 · LookupController.java:52 → selectList)과 /api/admin/log/menu-access(화면 첫 열기 접속 기록 1건 · LogController.java:80)가 없어 화면을 열기만 해도 쓰기 시험
+- 고침: READ_API 에 admin/lookup(-muti) · admin/log/menu-access 추가. e2e_shard.kinds() 가 기록된 쓰기 주소를 지금 READ_API(writeguard.ts 에서 읽음)로 다시 판정 → 다음 실행부터 바로 반영(저장 call-proc 은 기록 판정 그대로)
+- 재판정 결과(17:2x): SCP0028 읽기 90 · 쓰기 7 / SSP0014 읽기 115 · 쓰기 3 / SCP0005 읽기 100 · 쓰기 8 · 읽기 시험은 작업자 3개(harness.json e2eReadPar) 동시, 쓰기 시험은 차례
+- 확인: e2e_shard --selftest ALL PASS · engine_selfcheck PASS(17:25:08) · 단축 시간은 다음 실행 E2E 단계 시간으로 비교(미측정) · 지금 도는 SCP0028 5단계는 이미 차례 실행으로 시작
+- 백업 writeguard.ts.bak_20261120_read · e2e_shard.py.bak_20261120_read
+
+## 2026-11-25 20:42 검사 하네스 추출기 의미 분석 연결(사용자 지시 '나머지 추출기 7개도 의미 분석 연결')
+- 연결: facts_defcols(충돌 Def* 이름 행 단위 확정, 남는 혼합 이름 1,548 → 834 · 충돌 725 → 11), popup_args_check(팝업 인자 원천, 32화면 FAIL 79 → 76 · PASS 391 → 399), facts_popup(팝업 FoxDataRequest(변수) SP 이름, 110곳 중 82곳 확정 · SP 칸 1,756 → 1,876)
+- 되돌림(효과 0): gen_param_map(sp_pair·param_map 변화 0), facts_lockrules(RAW 241 → 241)
+- 연결 안 함: facts_gridcols(런타임 값), facts_cellrules(못 찾음 0), facts_sortrules(SQL 문자열·LINQ)
+- 공용: asis_sem.fox_endpoints 신설. 끔/켬 대조 스크립트 Doc/asisfacts_cmp/popargs_onoff.py, popfacts_onoff.py(대조 뒤 운영 산출물 원복)
+- 시험: popup_args_check 16/16, facts_defcols 10/10, asis_sem --live ALL PASS, inventory_check REGISTRY OK. engine_selfcheck FAIL 1건 = tools/E2E/lib/nscm.ts:210 제어 문자 0x08(20:36 다른 세션 수정, 이번 작업 파일 아님). inventory_check HOOK_COUNT·HOOK_CATALOG·ROUTER_REFS FAIL = 20:31 신규 hook plan-complete-before-test.md 미등재(다른 세션)
+- 백업: popup_args_check.py·facts_popup.py·gen_param_map.py·facts_defcols.py .bak_20261125_sem
+- 영향: 다음 CheckList 실행부터 팝업 인자·팝업 사실·Def 정규화 결과가 바뀜(미측정)
+
+## 2026-11-25 19:26 AS-IS 파서(AsisFacts) Roslyn 의미 분석 · DM·SCP·SSP 반영 · 검사 하네스 의미 분석 조회(asis_sem)
+- AsisFacts `src/Semantic.cs` 신설: csproj 별 CSharpCompilation(빌드 없음)으로 호출 대상 특정·값 보완·값별 조건. 범위 asisfacts.json semanticScreens DMF·SCP·SSP + semanticAlwaysPaths 01.Framework- 운영 출력 Doc/asisfacts 재생성(18:53, run.ps1 회귀시험·교차검증 불일치 0·Pack 445화면). 전후(의미 분석 끔 vs 켬, 활성 호출): DM BIZ_MATCH 3,167→869 · WRAPS 1,166→0 · UNRESOLVED 8→1 / SCP·SSP BIZ_MATCH 3,809→1,021 · WRAPS 1,686→184 · UNRESOLVED 18→2 · MATCH 변화 0
+- 사라진 행 = 이름만 같은 메서드로 잇던 가짜 연결(PseudoDataClient, Data_FP vs Data.CallBizCommonData, DataSql vs DataNoSql). 실제 호출 누락 0 확인
+- 백업: Doc/asisfacts_backup_20261125_1749_before_semantic.zip, Doc/asisfacts_backup_20261125_1831_before_semantic.zip
+- 검사 하네스: asis_sem.py 신설(AsisFacts resolve value·defs·target 일괄 조회 + 캐시). facts_combosrc.py 연결 — 같은 입력 끔/켬 34화면 콤보 원천 미해결 65→61. facts_lockrules.py 는 효과 0(RAW 241→241)이라 되돌림
+- 시험: asis_sem --selftest --live PASS, engine_selfcheck full PASS, inventory_check REGISTRY PASS(asis_sem 등록)
+- 영향: CheckList 검사 엔진이 읽는 Doc/asisfacts 가 바뀜(영향 측정은 다음 CheckList 실행). DM·SCP·SSP 밖 화면에도 호출 대상 특정·CommandText 수집이 적용됨(대조 안 함)
+
+## 2026-11-20 23:52 CheckList 1회차 미검증 미해소 원인 · 부분 재측정 지연 원인 보완 (SCP0028 J20261120_191752 실측)
+- 1회차 분류 21:52 미검증 30행 → 2회차 분류 23:38 미검증 12행 + AI 검토 2행. 남은 14행 원인 4가지
+  - 세션 결정 목록 R4-D1(Model 팝업 COM0013 교체 룰) 3행 T-2c20a3fc, T-fad117f6, EG-ac06e957: 분류기가 _unverified_decisions.md 를 읽지 않아 담당 엔진(처리 대상)으로 남음
+  - 그 SP 요소 ERROR 1개를 따라가는 집계 6행(T-f4dca6bb, T-98554096, T-14732ce2, T-e57376d2, T-80e70b77, T-f7a95dc6)
+  - AS-IS 시간초과 4행: 차등 검증 #47 → #48 로 다른 호출이 시간초과, 행 ID 바뀜. 담당 사람이라 권장안 적용 안 됨
+  - V-8e065123(To Site G1): 1회차 검사기 수정 T521 이 재측정에서 효과 없음(원판정 FAIL). 2회차 세션이 T527 로 수정 중
+- 보완: unverified_resolve.py read_decisions·decision_rows(결정 목록 행, 다른 인자 PASS 근거가 있는 AS-IS 시간초과, 결정 행만 따라가는 집계 → 담당 결정), counts() AI 검토 행은 담당 엔진일 때만 처리 대상. decide_apply.py 결정 행 = 결정의 권장안으로 판정필요, AI 검토 행은 원장 그대로
+- 현재 자료 모의 적용: 미검증 12행 → 0행, 처리 대상 4 → 1(V-8e065123)
+- 부분 재측정 지연: 1단계 e2e 28.0분(읽기 작업자 동시 최대 5) · 5단계 e2e 47.3분('Running 76 tests using 1 worker'). run_verify.py 가 --only 이면 e2e_shard 를 건너뜀 → --only 도 나눠 실행. 그 밖 eg 9.3분·diff 11.2분은 1단계와 같은 수준(수정분 범위 규칙 71개)
+- 시험: unverified_resolve·decide_apply·e2e_shard selftest PASS, engine_selfcheck full PASS(23:52), --only grep 목록 읽기 확인(SCP0028 G1·A5 2개, 읽기 기록 2개)
+
+## 2026-11-20 18:00 E2E 읽기 시험 작업자 최대 10 · 계정별 병렬 · 부하 조절 · 녹화 위치 링크(사용자 지시)
+- 지시: '읽기 시험은 작업자 10개를 설정하고 부하에 따라 조정 · 10명의 아이디가 없으면 있는 아이디만큼을 최대치' · '연관된 기능은 하나의 아이디로, 연관되지 않은 기능은 각각의 아이디로 병렬' · '몇개의 계정을 각각의 개인화 설정으로 인지하면 문제되지 않음' · 'AS-IS, TO-BE 녹화완료되면 위치 알려주세요'
+- e2e_shard.py: 작업자 최대 = min(harness.json e2eReadPar 10, 쓸 수 있는 계정, 묶음 수). 작업자 1 = 기본 계정, 나머지 = users.json adminPool(40명, 18:00 확인 user_group_user.csv ADMIN 40/40) 중 다른 시험 계정 뺀 35명에서 잠금(Doc/e2e/_run.langacct.<USER>.lock, 언어 시험과 같은 잠금)으로 잡음. 끝나면 반납
+- 연관 기능 묶음 = 같은 스펙 파일 + 제목 첫 규칙 번호. 한 묶음은 한 실행(한 계정) 안에서만 돎. 지난 기록 기준 SCP0028 읽기 90 → 묶음 78(가장 긴 10.0분), SSP0014 115 → 101(28.7분), SCP0005 100 → 89(45.5분)
+- 부하 조절: 작업자를 하나씩 늘림. CPU < 80% · 여유 메모리 >= 3072MB(e2e.config.json, CheckList 입장 기준과 같은 값)일 때만, 늘린 뒤 20초(e2eReadRampSec) 대기. 기준을 넘으면 끝난 자리를 다시 채우지 않음
+- 녹화 위치: video_keep.js(TO-BE)와 asis_view.py(AS-IS)가 '@@LINK 🎬 … 녹화|경로' 출력 → VM 작업창 링크. 나눠 실행은 e2e_shard 가 모아 결과 폴더 링크 1개
+- 확인: e2e_shard --selftest ALL PASS(계정 잡기·반납·묶음·일 나누기 시험 추가) · asis_view --selftest OK · engine_selfcheck PASS(18:00:13). 실제 동시 작업자 수, 다중 계정 로그인, 단축 시간은 다음 CheckList 실행에서 확인(미측정)
+- 백업 e2e_shard.py.bak_20261120_acct · harness.json.bak_20261120_par10 · asis_view.py.bak_20261120_link · video_keep.js.bak_20261120_link
+
+## 2026-11-20 22:15 SCP0028 미검증 해소 라운드 5(T520~T526)
+- 대상: CheckList 21:51 원장 미검증 30(엔진 4 · 자동 4 · 집계 22) + AI 검토 5행. 표 Doc/verify/SCP0028/_unverified_plan.md, 결정 _unverified_decisions.md
+- T520 mapping_trace.py 조건 줄이기가 ENTRY asisVisible 을 4컬럼으로 자름 → 손실 없는 압축·asisVisCut, _trace.spec A5 visOf
+- T521 condcol.ts 라벨 갈래 컬럼 우선(To Site → TO_SITE) · T522 popupprobe.ts orderCheck 기호 남긴 비교 · T523 eg_popup 단추 순서 증거
+- T524 diff_verify.py AS-IS 시간 초과 표시 + unverified_classes.csv 15행(사람) · T525 _trace.spec 팝업 필수 칸 다음 후보 · T526 h2RuntimeEdit 지우기 경로 + 분류표 16행
+- 확인: popk3.selftest 48/48, unverified_resolve selftest OK, 원장 사본 to_ledger, engine_selfcheck PASS(22:12:53)
+
+## 2026-11-20 23:47 SCP0028 미검증 해소 라운드 6(T527)
+- 대상: CheckList 23:38 원장 미검증 12(엔진 2 · 사람 4 · 집계 6) + AI 검토 2행
+- T527 condcol.ts chooseCondCol: 라벨 갈래 코드 칸에 값이 있으면 겹침 0 이어도 그 칸(To Site → TO_SITE, FROM_SITE 로 넘어가지 않음) · _trace.spec G1 증거에 대조 칸 근거
+- 확인: popk3.selftest 52/52, engine_selfcheck PASS(23:46:26). 남은 행은 결정 R4-D1(3 + 집계 6), R5-D2(4)
+
+## 2026-11-21 01:00 SCP0028 미검증 해소 라운드 7(T528)
+- 대상: CheckList 00:52 원장 미검증 0 + AI 검토 2행(V-4633ca25 H11, EG-ac06e957 결정)
+- T528 llm_review.py: H11 행 AS-IS 인용 줄에 FoxAsyncProxy(ShowProgress 안 끔 · 기본 True 리플렉션 실측)·ProgressForm 이 있으면 'AS-IS 진행 표시 없음' 근거 PASS·NA 반영 막음
+- 확인: llm_review selftest OK, engine_selfcheck PASS(00:59:51). 결정 R7-D1(저장 중 로딩 룰 충돌: SCP0084 사용자 판정 vs DMF0003·DMF0021 품질 반영)
+
+## 2026-11-25 02:3x SCP0028 미검증 해소 라운드 1(T529~T531)
+- 대상: CheckList 02:10:34 원장 ERROR 71(처리 65 + 집계 6) + AI 검토 2
+- T529 gen_param_map.py popup_class_sps · facts_sortrules.py popup_sps: 화면이 new 로 연 다른 프로젝트 팝업 클래스의 FoxDataRequest SP 를 차등 짝·정렬 규칙 대상에 넣음(SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP, 차등 60행 + A6 1행)
+- T530 langacct.ts·nscm.ts·_verify.spec.ts: 계정 지정 시나리오 언어 단계 = 같은 계정 실행만 대기(_run.acct.<pid>.json 로그인 기록, 계정 잠금 중 같은 계정 로그인 대기 최대 180초)
+- T531 judge.py: 검증엔진 무판정 단계에서 적용성 N 행 제외
+- 확인: 함수 시험, facts_sortrules selftest 3/3, engine_selfcheck PASS(TSC 0). 결정 R4-D1, R7-D1 이월
+
+## 2026-11-25 02:5x SSP0014 미검증 해소 라운드 1(T532~T537)
+- 대상: CheckList 02:17:55 원장 ERROR 127(처리 122 + 사람 1 + 집계 4) + AI 검토 17
+- T532 pkg_asis_map.py: 본문 PROCEDURE 선언부 Program ID 를 차등 짝 근거로 추가. sp_pair.csv SSP0014 3행 재생성(GET·SAVE pkgsrc 복구)
+- T533 diff_ingest.py: 차등 ORDER 를 sort_check NA(양쪽 ORDER BY 없음 · CR-075 ③)에 맞춤. sort_check.py 문구
+- T534 rowlink.ts(신규)·saveprobe.ts·crud.ts: 저장 시험 행 식별에서 연동 이름 칸(USER_NAME 등) 제외, 원복 뒤 근접 일치 보조
+- T535 judge.py: G9 AS-IS 단일 비교 판정에 T497 G2 행 포함, 짝 없는 GET SP 원문도 근거로 사용
+- T536 a1_live.py: user_id 인자가 LIKE 검색어(TITLESET_USER 참조 없음)면 같은 사용자 재실행 NA
+- T537 combo_oracle.py: AS-IS 하드코딩 콤보 항목 철자 2자 이내 차이를 같은 코드로 대응
+- 확인: selftest(pkg_asis_map 12/12, diff_ingest 8/8, a1_live 21/21, combo_oracle 13/13, sort_check 10/10, rowlink 9/9), engine_selfcheck PASS(TSC 0). 결정 D1, D2, D7, D10, D11
+
+## 2026-11-25 06:1x SCP0005 미검증 해소 라운드 4(T540~T586)
+- 대상: CheckList 05:25 원장 처리 대상 92(AI 검토 34) + 사람 1 · 집계 21. 표 Doc/verify/SCP0005/_unverified_plan.md(93행), 결정 _unverified_decisions.md(R4-D1~D14), 기록 _unverified_work.md
+- 고침 75행: 사실 추출 T540~T542 · 골든·정렬 T545~T549 · _trace.spec T550~T554, T586 · 저장 왕복 T555~T559 · _verify.spec·condcol·i18n T560~T569, T580~T584 · 팝업·원장·판정 T570~T579, T585
+- 결정 18행: 이력 팝업 선행 결함 5, 진입 시나리오 1, 스냅샷 1, 붙여넣기 AS-IS 기대값 9, 실저장 1, 업로드 인자 1
+- 확인: engine_selfcheck PASS(06:10:19). 실제 E2E 동작 미측정(다음 CheckList)
+- 다른 화면 영향(미측정): cell_rules 시트별 행(DMF0004·DMF0020·DMF0005 비교만), 원장 행 ID 변경(SCP0005 30행), 키 동률 순서 차이 PASS, 정렬 키 부분 질의 추적, ExcelUploadForm2 사용 화면 E02 facts in_pack
+- 백업 *.bak_20261125_scp05u4
+
+## 2026-11-25 08:1x 미검증 해소 지연 보완(Claude Code, 사용자 플랜 승인)
+- 근거(SCP0005 J20261125_005600): 1단계 분류 엔진 52·집계 21·판단 8·사람 1, 자동 0 · 🧪 1회차 고침 75행 → 해소 확인 뒤 판정 51(PASS 31·NA 10·FAIL 7·판정필요 3), 미검증 12, ID 바뀜 12 · 해소 확인 재측정 93.1분(pre 15.8·e2e 43.9·eg 9.4·diff 13.2·post 6.9).
+- unverified_resolve.py: id_bridge(row_keys.json, 출처·규칙·대상 키) · same_target_decisions(결정 행과 대상이 같은 측정 불가 행 → 결정) · prev_fix_failed(직전 조치표 고침인데 남은 행 prev_fail=Y) · --settle(새 AI 검토 행 → 담당 다음측정).
+- checklist_run.py: plan_rows · settle_env(VERIFY_SETTLE, VERIFY_SUITE_KINDS, VERIFY_SETTLE_FACT) · --settle 이 unverified_resolve --settle 호출.
+- run_verify.py: VERIFY_SETTLE 때 AS-IS 런처 실측 3개 생략(원장 행 없음), E2E 4종 그 종류만·한 실행 1회, llm_facts 는 FACT 행 있을 때만 · 단계별 실제 경과 출력.
+- row_probe.py(신규): 고른 행의 규칙만 재측정, 행별 해소/미해소. 🧪 [4] 가 묶음마다 부름.
+- 미구현: 데이터전제 행 1단계 재측정(같은 조건 재측정은 같은 결과) · eg 단계 팝업 한정 · diff 단계 SP 한정.
+
+## 2026-11-25 08:1x SCP0005 미검증 해소 라운드 5(체인 회차 3 · T590~T609)
+- 대상: CheckList 07:45 원장 처리 대상 20 + 결정 1. 해소 확인 재측정 run 20261125061230 증거로 라운드 4 미해소 14행의 다른 원인 확인
+- 보완: 닫힌 토스트 글자 제외(T590), H2 부정·빈 칸 전제(T591), 본 조회 시트 학습(T593), 저장 세부 단계 정리·지역 변수 검증 추적·묶음 필수(T595~T599), 단추 끝 낱말·조건 아이콘 갈음(T600), 업로드 응답 MESSAGE_TEXT·덮어쓰기 순서·M1 기록(T601, T602), F5 확인창(T603), A6 팝업 SP 정렬 상속(T605~T608), setListBox ALL(T607)
+- 확인: engine_selfcheck PASS(08:12). 실제 E2E 동작 미측정
+- 다른 화면 영향(미측정): 알림 수집 공용 변경, 0 값·빈값 PASS 조건에 문구 대조, SCP0028·SSP0003 combo_src ALL 행
+
+## 2026-11-25 17:04 행 단위 해소 구현(Claude Code, 사용자 승인 플랜 '컨셉 재정립')
+- row_run.py(신규): 고른 행만 재측정. 행 → 시험 = e2e_results.json test 필드(없으면 judge.test_ownership). 스펙 VERIFY_ROWS 로 그 행만 판정·기록. 반입 = mapping_trace → eg_ingest → e2e_suite_ingest → judge(최대 3회). --regress = 이번 해소에서 돈 시험만 행 제한 없이 1회.
+- _verify.spec.ts, _trace.spec.ts: ROWS_ONLY(VERIFY_ROWS) 필터, results.push 에 test(시험 제목) 기록.
+- unverified_resolve.py: 해소 원장(worklist_sync, worklist_update, TRY_MAX 2), rerun() = row_run.
+- checklist_run.py: --wl-round(회차 점검, continue), --gate(해소 원장 열린 행 0).
+- judge.py: AI 판정 검토 반입 기본 끔(llmJudgeApply). SCP0005 첫 적용에서 AI 반입 6행 되돌림 + 집계·상속 24행 따라 바뀜.
+- 실측: row_run SCP0005 2행(V-28e296d5, V-4768e1ea) 1.7분, 판정 PASS → PASS 일치.
+
+## 2026-11-25 18:03 행 단위 해소 속도 보완 3건(Claude Code, 사용자 지시)
+- 저장 시험: nscm.ts save() T611 · SCP0005 crud 1회 202초 → 96초, row_run ES 행 1개 9.4분 → 5.6분(판정 FAIL 같음). 계정별 좁히기는 넣지 않음(e2e_suite 요약이 다른 계정 행을 덮을 위험).
+- 팝업 검사: eg_chain.py --calls(고른 팝업 호출만 · popup_results/popup_rowsets 호출 번호 단위 합침) · row_run 이 EG 행 target 으로 호출 번호를 찾음(SCP0005 EG 394행 중 258행) · 호출 1개 34초(종전 전체 9.4분), 결과 318 = 새 21 + 지난 297.
+- 차등 검증: diff_verify.py --procs(고른 SP 호출만 · 다른 호출 diff_summary 행 유지) · row_run 이 AD 행 target 의 SP 로 고름 · 18.1초, 판정 PASS 같음.
+
+## 2026-11-25 19:1x SCP0005 미검증 해소 라운드 6(행 단위 · T612, T620, T630~T639)
+- 대상: 해소 원장 열림 10행(검사기 9, 데이터전제 1). 표 Doc/verify/SCP0005/_unverified_plan.md, 기록 _unverified_work.md 라운드 6, 결정 _unverified_decisions.md R6-D1~D3
+- 보완: K3 콤보 편집기 목록 가림(T630) · 행만 다시 잴 때 시험 첫 줄 조건(T631) · CR-095 Excel Form 판정 연결(T632) · 업로드 창 OK 단추(T633) · row_run 판정 주인 바뀐 행(T634) · 2행 저장 형제 행 제외(T635) · 묶음 필수 칸 찾기(T636) · 업로드 시험 파일 안 중복(T637) · 응답 오류 행 동점 짝짓기(T638) · row_run 정적 묶음, judge G5 재판정·합치기(T639) · 콤보 정적 ALL(T612, 하위 에이전트) · 업로드 팝업 시트 이름 인자(T620, 하위 에이전트)
+- row_run 결과: 닫힘 8행(통과 6, 판정필요 1, 해당없음 1), 결정 1행(V-219edc76 시도 2회), 신규 행 저장 1행은 _unverified_work.md 라운드 6 참조
+- 다른 화면 영향(미측정): K3 셀 좌표, 2행 저장 짝 고르기, M1 업로드 파일 구성·짝짓기, judge G5 항목 합치기, row_run 정적 묶음 2개 추가
+- 백업 *.bak_20261125_scp05u6
+
+## 2026-11-25 20:28 검사 대상 중복 제거 D0·D1·D5(Claude Code, 사용자 승인 플랜)
+- D0 dup_audit.py(신규): 화면별 중복 실태표(검사 행 같은 확인 묶음 · 시험 로그인/열기/조회 · 반복 호출 · 같은 기능 시험) → Doc/verify/<ID>/dup_audit.md
+- D1 dedup_pre.py(신규): 같은 확인 키(규칙·대상 객체·근거 위치(AS-IS 코드 줄·결함 번호)·조건 종류) + dedup_screen LLM 묶음 → dup_groups.csv. 지난 판정이 다른 묶음·측정 행 없는 묶음은 합치지 않음(dup_held.csv). run_verify 가 판정 반입 뒤 만들고 다음 측정의 _verify·_trace 가 구성원 행을 재지 않음(VERIFY_DUP=0 끄기), judge 가 구성원 = 대표 판정. SCP0005 70묶음 · 구성원 88행 · 보류 13
+- D5 make_verify_docs.py: dup_groups 구성원도 '중복 정리' 시트 · 집계 행(GENERAL '규칙 X 판정 N행 중')은 '집계' 시트
+- 미확인: D1 적용 뒤 SCP0005 전체 측정의 판정 대조와 시간(사용자가 다시 측정) · D2~D4 미착수
+
+### 2026-11-25 23:37 SCP0005 미검증 해소 라운드 7 (T640~T648)
+- 고친 검사기: save_audit.py, judge.py(F8 EG 행 제외 · 테두리 클릭 상속), eg_ingest.py(SAC 묶음), cleanup_marker.py·ledger_guard.py(키별 계정·마커 정리), crud.ts(DB 정리 위임), btnpopup.ts(응답 표본 쌓기), _trace.spec.ts(표본·서버 문구 원문 비교), eg_popup.spec.ts(BTN 전 영역·btnLocator·PICK_OK 다시 읽기), golden.py(빈값 동치), row_run.py(golden 실행), 새 proc_errmsg.py
+- row_run 결과: 처리 대상 21행 닫힘(통과 18, FAIL 3 = 저장 중복 문구 결정 R7-D1). 기록 Doc/verify/SCP0005/_unverified_work.md 라운드 7

@@ -10,12 +10,16 @@ export enum SHEETS {
   MAIN = 'main',
   PRICE_BATCH = 'priceBatch',
   TITLE_SET = 'titleSet',
+  // Exchange Rate 팝업 — 조회 · User Define 저장 모두 PKG_DMF0020_01 프로시저를 그대로 연결한다(2026-11-23 등록,
+  //   _artifacts/_deploy_packages/DMF0083_EXCHANGE_POPUP_20261123). 저장 프로시저가 Model Group 판가도 다시 계산한다.
+  EXCHANGE = 'exchange',
 }
 
 export const RESPONSE_SET = {
   MAIN: 'o_rc1',
   PRICE_BATCH: 'o_rc1',
   TITLE_SET: 'o_rc1',
+  EXCHANGE: 'o_rc1',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
@@ -48,9 +52,10 @@ export const PRC_RPSN = {
   NO: 'N',
 } as const;
 
-// Model Group = 모델 코드 앞 12자리 (설계서 [개요] C6 · table MDL_GR 주석).
+// Model Group = 모델 코드의 첫 '-' 앞까지, '-' 가 없으면 앞 12자리 (2026-11-23 요청으로 변경, 종전 앞 12자리).
 //   공용 ITEM 팝업(COM0008)은 MDL_GR 을 돌려주지 않아 고른 Model 에서 잘라 쓴다.
-//   개발 DB 실측(2026-11-06): SCM_MST_SITE_ITEM 82 사업부 49,268행 전부 MDL_GR = SUBSTR(ITEM_ID, 1, 12).
+//   개발 DB 실측(2026-11-23): SCM_MST_SITE_ITEM 82 사업부 49,349행 전부 이 규칙과 MDL_GR 일치
+//   (앞 12자리 규칙은 499행 불일치, 예: ECP0390F1-01 → MDL_GR ECP0390F1).
 //   저장 시 PKG_DMF0083 2-11 검증이 Project · Sales Site 에 실제 있는 Model Group 인지 다시 본다.
 export const MDL_GR_LENGTH = 12;
 

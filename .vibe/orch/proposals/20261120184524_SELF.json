@@ -1,0 +1,100 @@
+{
+  "id": "20261120184524_SELF",
+  "at": "2026-11-20T18:45:24+09:00",
+  "ms": 1795167924903,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|usercheck|un|cut event base",
+  "title": "U13 판정을 원래 중단 사건 기준으로 다시 세움: 중단 = chain.end aborted, user.stop vscode.dispose 의 runId·ms · 재개 가능 = VMW 단추 조건과 같게 · 재실행 = 같은 화면의 다른 작업 실행도 인정 · 키 = 중단 runId",
+  "evidence": "orch-usercheck.js:148-166 · jobs.js:247 · job-runner.js:72, :315 · events.jsonl:970-976, :981-983, :1030, :1058-1059, :1087-1090, :1142-1145, :1309-1310, :1370-1372 · incidents/20261120_145830_R5_ALL.json · CHANGELOG.md:343, :375 · 진단 사다리 묶음 L3|usercheck|U13",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "변경 전: 중단 시각 = job.json 수정 시각 또는 user.stop, R5 경과 = 사건이 올라온 시각, 재개 표시 = chain_progress 또는 resumable, 재실행 = 같은 job 만, 키 = job id 또는 R5 사건 번호. 변경 후: 중단 = events.jsonl chain.end(aborted) 또는 user.stop(why vscode.dispose)의 runId, job, screen, ms. 24시간 창과 경과 시간은 이 ms 로만 셈. job.json 수정 시각과 interruptedAt 은 판정에 쓰지 않음. 재개 가능 = jobs.js:247 과 같은 조건(실행 중 아님, 남은 화면 있음). 감지기는 단추 조건 함수를 job-runner 에서 받아 씀. 단계 재개 표시(chain_progress)는 fail 조건에서 빼고 detail 에 '단계 처음부터' 로만 적음. 재실행 = 중단 뒤 같은 화면의 chain.start(작업 번호 무관) 또는 job.start. 사용자가 작업이나 재개 기록을 지웠으면 판정 안 함. 키 = S13|U13|<중단 runId>. 중단 사건 줄이 없는 옛 기록(재개 기록 기능 이전)은 fail 대신 warn 'U13 판정 근거 없음(중단 사건 줄 없음)' 1건으로 묶음.",
+  "verify": "재현 시험 t_orch_usercheck.js 에 이번 묶음의 실제 기록을 넣습니다. .vibe/jobs J20261120_003352, 054831, 060728, 115055 job.json 원문, events.jsonl:861-864, 970-976 과 J20261120_140047 job.start, chain.start 줄, incidents R5 20261120_142504, 145830, 180433 원문을 시험 폴더에 복사하고 감지기를 돌립니다. 기대값: fail 0건, 옛 기록 warn 1건. 양성 표본: 11:31 이후 chain.end aborted 가 있고 남은 화면이 있고 30분 넘게 같은 화면 실행이 없으면 fail 1건. 같은 중단으로 R5 사건이 2건 올라와도 fail 키 1개. 다음으로 node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager ALL PASS, 전체 시험(44개 파일) FAIL 0. 반영 뒤 창 다시 로드 2회를 했을 때 S13|U13 새 사건 0건인지 events.jsonl 로 확인합니다.",
+  "rollback": "VMO 개선안 탭 되돌리기, 또는 orch-usercheck.js.bak_<태그>, t_orch_usercheck.js.bak_<태그> 복원(설치 폴더는 같은 태그)",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 사용자 지적 감지기 U13 이 반영(20261120114810_SELF, 11:55) 뒤 다시 걸렸습니다(재발 6건, 같은 서명 반복 S13|U13|mark|J20261120_003352 3회 13:56 · 14:28 · 18:14). 사례 6건의 공통 원인은 감지기가 판정 근거로 쓰는 시각·키·재개 정의 설계입니다.",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T20:04:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T20:08:02+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 797, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self2004"
+    },
+    {
+      "at": "2026-11-20T20:08:04+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T20:19:45+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 805, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T20:19:45+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 20:12:20 node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(92건). 'PASS U13 실제 기록(11-20 묶음) = fail 0건, 옛 기록 warn 1건(003352, 054831, 060728)' · 'PASS U13 실제 기록에서 14:00:47 재실행 줄 빼면 J20261120_115055 중단 = fail 1건(key 중단 runId)' · 'PASS U13 중단 40분째 같은 화면 실행 없음 = fail  · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-20T20-08-05_claude_orch.log",
+      "sec": 492,
+      "costUsd": 2.6959995999999995,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:28+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T20:45:03+09:00"
+    }
+  ],
+  "plain": {
+    "what": "'작업 재개 안 됨' 점검이 창 다시 로드로 실제 끊긴 기록과 그 뒤 같은 화면을 다시 돌렸는지만 봅니다. 재개 기능이 생기기 전 기록이나 다른 작업으로 다시 돌린 화면은 오류로 올리지 않습니다.",
+    "risk": "재개 기록이 실제로 안 남은 결함이 있어도 단추가 켜져 있으면 U13 에서 오류로 잡히지 않습니다. 이 부분은 개선안 2의 삭제 사유 기록과 U18 이 맡습니다.",
+    "undo": "개선안 탭 되돌리기 버튼 또는 .bak 파일 복원"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795172671257,
+  "autoFp": "0435c98b23",
+  "applyStartMs": 1795172884614,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 805, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self2004",
+  "needsReload": true,
+  "appliedMs": 1795173585334,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "2026-11-20 20:12:20 node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(92건). 'PASS U13 실제 기록(11-20 묶음) = fail 0건, 옛 기록 warn 1건(003352, 054831, 060728)' · 'PASS U13 실제 기록에서 14:00:47 재실행 줄 빼면 J20261120_115055 중단 = fail 1건(key 중단 runId)' · 'PASS U13 중단 40분째 같은 화면 실행 없음 = fail 1건 · R5 2건이어도 key S13|U13|SSP0014_13 1개 · 단계 처음부터 표시'. 2026-11-20 20:12:26 node tools/VibeManager/test/run_all.js tools/VibeManager → 'ALL OK  파일 60/60  PASS 805  FAIL 0  202.2s'(개선안의 44개 아님, 실제 60개). 2026-11-20 20:15:57 실제 저장소 기록 읽기 전용 감지기 실행(사건 줄 1545줄) → 'fail 0 warn 1', warn S13|U13|old 중단 작업 3건 J20261120_003352, J20261120_054831, J20261120_060728. 창 다시 로드 2회 뒤 S13|U13 새 사건 0건 확인 = 미실행(VS Code 창 조작 필요, VMO 반영 뒤 events.jsonl 로 확인)",
+    "note": "job-runner.js 는 승인 범위(targets) 밖이라 canResume 을 추가하지 않음. 감지기는 job-runner 에 canResume 이 있으면 그것을 쓰고, 없으면 jobs.js:247 과 같은 조건(running/pausing 아님, wait/busy 화면 있음, interrupted/done 의 run/admit 은 wait 로 봄)으로 판정함. R5 사건은 U13 판정에 쓰지 않음."
+  },
+  "snap": "prop_20261120184524_SELF",
+  "effectiveMs": 1795175103931,
+  "effectiveAt": "2026-11-20T20:45:03+09:00"
+}

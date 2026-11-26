@@ -24,6 +24,39 @@ export interface SaveResult {
   message?: string;
 }
 
+// 커서 이름·칸 이름은 서버가 대소문자를 바꿔 내려줄 수 있어 대소문자 구분 없이 찾는다(자매 SCP0132 동형).
+const pickIgnoreCase = (obj: unknown, ...keys: string[]): unknown => {
+  if (!obj || typeof obj !== 'object') return undefined;
+  const entries = Object.entries(obj as Record<string, unknown>);
+  for (const key of keys) {
+    const hit = entries.find(([k]) => k.toUpperCase() === key.toUpperCase());
+    if (hit) return hit[1];
+  }
+  return undefined;
+};
+
+const firstRow = (cursor: unknown): unknown => (Array.isArray(cursor) ? cursor[0] : undefined);
+
+// 저장 프로그램의 업무 거부 판정 — 일부 SAVE SP(날짜 중복 등)는 예외를 자체 CATCH·ROLLBACK 하고 응답
+//   envelope 는 code:"0"/message:"success" 그대로 둔 채 결과 커서에만 실패를 담는다(O_RC1 RESULT_CODE='F'
+//   또는 O_RESULT_CURSOR RESULT_CODE≠'0'). envelope code 만 보면 성공 토스트가 떠 "거부됐는데 저장된
+//   것처럼" 보인다(AS-IS SaveData 는 결과 S 가 아니면 문구 표시·재조회 안 함, .cs:855~871).
+//   direct-post-saverequest-false-success-inner-cursor 메모리·자매 SCP0132 constraintOfShipmentQtySaveRequest 동형.
+const rejectedMessage = (result: unknown): string | undefined => {
+  const head = firstRow(pickIgnoreCase(result, 'O_RESULT_CURSOR'));
+  const headCode = safeString(pickIgnoreCase(head, 'RESULT_CODE')).trim();
+  const rc1 = firstRow(pickIgnoreCase(result, 'O_RC1'));
+  const rc1Code = safeString(pickIgnoreCase(rc1, 'RESULT_CODE')).trim();
+  if ((headCode === '' || headCode === '0') && (rc1Code === '' || rc1Code === 'S')) {
+    return undefined;
+  }
+  const message =
+    safeString(pickIgnoreCase(head, 'RESULT_MESSAGE')).trim() ||
+    safeString(pickIgnoreCase(rc1, 'RESULT_CNT')).trim();
+  // 사용자 정의 오류 머리(ORA-20xxx: )는 떼어 업무 문구만 보인다. 그 밖의 오류는 그대로 둔다.
+  return message.replace(/^ORA-20\d{3}:\s*/, '').trim() || 'Error';
+};
+
 // SAVE SP 의 pre-image 복합키 8컬럼(UPDATE/DELETE WHERE) ↔ 그리드 UPPERCASE 컬럼명.
 //   SCP_OPMZ_SAFETY_STOCK PK = DIVISION_ID/SCM_SITE_ID/OPMZ_PLAN_GR_ID/STAGE/ITEM_ID/VALUE_TYPE/
 //   FROM_YYYYMMDD/TO_YYYYMMDD(safetyStockSaveValidation.ts §중복체크 실측과 일치).
@@ -106,11 +139,15 @@ export const submitSafetyStockSave = async <T extends WijmoRowItem>(
       `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
       payload
     );
-    // false-success 차단 — 인터셉터가 500 도 resolve 하고, SP 실패는 result.code != 0 로만 온다.
+    // false-success 1차 차단 — 인터셉터가 500 도 resolve 하고, SP 가 예외를 re-raise 하면 result.code != 0.
     if (res.status >= 400 || Number(res.data?.code)) {
       const reason = (res.data as { message?: string })?.message?.trim();
       return { ok: false, message: reason };
     }
+    // false-success 2차 차단 — SP 가 예외를 자체 CATCH·ROLLBACK 하면 envelope code 는 0 이라 결과 커서
+    //   RESULT_CODE 로만 거부가 드러난다(날짜 중복 등). 이게 없으면 거부가 성공 토스트로 오표시된다.
+    const rejected = rejectedMessage((res.data as { result?: unknown })?.result);
+    if (rejected) return { ok: false, message: rejected };
     return { ok: true };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : undefined };

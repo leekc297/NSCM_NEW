@@ -1,0 +1,35 @@
+{
+  "id": "DMF0082",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0082] · Doc/gen/DMF0082/CHECK.md · Doc/gen/DMF0082/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0082/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-24T11:32:57+09:00",
+  "end": "2026-11-24T11:46:04+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\forecast-price",
+      "files": 44
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0082",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "40 DIVISION 에 대해서는 MONTHLY 일때 당월 +3개월 을 기준월로, \n81, 81 JV  일때는 당월부터 편집 가능 하도록 변경하고자 합니다. \nPKG 변경 진행해주세요. ",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "afterMode": "end",
+  "afterAt": "2026-11-24T11:46:04+09:00",
+  "changed": []
+}

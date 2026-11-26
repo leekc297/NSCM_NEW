@@ -1,0 +1,392 @@
+{
+ "screen": "SCP0064",
+ "calls": [
+  {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "method": "BtnItem_Id_Click",
+   "asis_ref": "SCP0064_GlobalPSI_JV.cs:979",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnItem_Id",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "true",
+   "div_arg": "division",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "division"
+    },
+    {
+     "param": "_ScmSiteId",
+     "kind": "LITERAL",
+     "arg": "sScmSite"
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "LITERAL",
+     "arg": "sProject"
+    },
+    {
+     "param": "_ItemID",
+     "kind": "CONTROL",
+     "arg": "sItemId"
+    }
+   ],
+   "results": [
+    "item"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0064_GlobalPSI_JV.cs:980",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0064_GlobalPSI_JV.cs:983",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "method": "btnMeasure_Click",
+   "asis_ref": "SCP0064_GlobalPSI_JV.cs:895",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnMeasure",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SCP0031\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "EXPR",
+     "arg": "SpdSheet.shtMain"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0064_GlobalPSI_JV.cs:896",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCM0002_ItembyDivisionPopup": {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+   "title": "Model by DivisionPopup",
+   "conds": [
+    {
+     "name": "txtItemID",
+     "type": "UsrMultiLineEditor",
+     "label": "Model",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:164",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbScmSite",
+     "type": "UsrCheckedList",
+     "label": "Site",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:166",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProject",
+     "type": "UsrMultiLineEditor",
+     "label": "Project",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:165",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME",
+     "order_line": "64",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_project_code",
+      "p_scm_site_id",
+      "p_item_id"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:242",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:384",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_SITE_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_SITE_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "A.SITE_DESCRIPTION",
+     "order_line": "45",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer"
+     ],
+     "method": "GetDivisionbyScmSite",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:398",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:264",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:278",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:302",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:305",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:319",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCM0002_TitleSetForm_Popup": {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "115",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:287",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:235",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:253",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:167",
+     "method": "SetFixColumnStatus",
+     "raw": "svSource.Cells[r, c].BackColor = Color.WhiteSmoke;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:254",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:232",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:250",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:676",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:679",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

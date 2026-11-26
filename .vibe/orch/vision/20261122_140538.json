@@ -1,0 +1,89 @@
+{
+ "at": "2026-11-22T14:05:38+09:00",
+ "summary": "11-21 01:55 뒤 CheckList 체인 종료 기록이 0건입니다(events.jsonl 2465줄 중 마지막 chain.end 2001줄). 그래서 속도 목적은 11-21 측정값 기준으로 3회 연속 어긋남이고, 같은 목적의 개념 재정립안이 승인 대기 중이라 새로 올리지 않았습니다. 새로 올린 안은 2건입니다. 하나는 진단 사다리가 구조 개선 전 근거로 L4 를 여는 결함 수정이고, 다른 하나는 3회 연속 어긋난 문장 규칙의 개념 재정립입니다.",
+ "purposes": [
+  {
+   "purpose": "CheckList 화면 1개 10분, 길어야 30분 안에 끝남",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md, user_checks.json U2, U25",
+   "verdict": "어긋남",
+   "evidence": "digest7d S8.checklistRun 26건 중앙값 1862.6초(31.0분), p90 12908.3초. checklistTiming SSP0005 209.3분, SCP0005 136.7분, SSP0014 74.8분. 마지막 완료 체인은 events.jsonl:2001 SCP0028 ms_run 18571542(309.5분, 11-21 01:55)이고 그 뒤 체인 종료 0건이라 새 측정 없음. vision/20261120_115806.json, 20261121_120359.json 이 같은 목적을 어긋남으로 판정해 이번이 3회 연속. 같은 목적의 개념 재정립안 '개념 재정립: CheckList 재측정 단위'가 승인 대기 중이라 중복 안을 올리지 않음"
+  },
+  {
+   "purpose": "속도 개선은 판정 결과가 같은 대체 방법만 씀",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md",
+   "verdict": "미확인",
+   "evidence": "11-21 뒤 CheckList 실행 0건. 부분 재측정과 전체 측정을 대조한 ledger_diff.py 결과는 이번 점검에서 미확인"
+  },
+  {
+   "purpose": "단계 오류면 다음 단계를 띄우지 않음",
+   "source": "user_checks.json U19",
+   "verdict": "미확인",
+   "evidence": "11-21 판정(vision/20261121_120359.json)은 맞음. 그 뒤 체인 실행 0건이라 이번 기간 새 근거 없음"
+  },
+  {
+   "purpose": "버그, 시스템 개선안(fix)은 권장안으로 자동 반영하고 core 만 승인",
+   "source": "memory/feedback_vmo_approval_core_only_20261120.md",
+   "verdict": "어긋남",
+   "evidence": "proposals/20261121000933_SELF.json impact fix, 대상 tools/VibeManager 코드 3개, 11-21 00:09 등록 뒤 11-22 14:02 까지 pending, needsApproval '파일 삭제(생성물 아님)', autoTried 없음. 판정을 고친 코드(orch-selfcheck.js:394-399, CHANGELOG 11-21 12:16)는 저장소에 있음. activations.jsonl 마지막 로드는 2026-11-21 01:59:17 이라 실행 중인 VM 은 고치기 전 판정을 씀. 같은 원인의 안 20261122130655_REVIEW_2(core)가 승인 대기 중"
+  },
+  {
+   "purpose": "VMO 자가 보완 반영이 실행 중인 VM 에 효력을 냄",
+   "source": "memory/feedback_vmo_self_repair_auto_20261119.md",
+   "verdict": "어긋남",
+   "evidence": "changes24h 20건이 2026-11-21 02:11~2026-11-22 13:50 반영이고, 마지막 VM 활성화는 11-21 01:59:17(activations.jsonl 마지막 줄)임. 20건 전부 창 다시 로드 전이라 실행 코드에 들어가지 않음. 같은 내용 안 20261122130655_REVIEW_2 승인 대기"
+  },
+  {
+   "purpose": "진단 사다리가 구조 개선 뒤 실제로 다시 난 것만 L4 로 올림",
+   "source": "plans/vm-ui-snug-mountain.md 2.2 'L3 → L4: 같은 묶음의 구조 개선안이 반영 완료됐는데 structWatchDays 안 같은 묶음 조건이 다시 참'",
+   "verdict": "어긋남",
+   "evidence": "ladder.json:522-551 L4|struct|applyfail|doc_style.py firstAt 11-22 00:21:31 은 L3 묶음 resolvedAt(:115)과 같은 초이고, 근거 2건은 11-19 23:44, 23:54 실패(구조 개선 전)임. ladder.json:553-575 L4|struct|edits|workbench.js firstAt 00:48:32 는 L3 resolvedAt(:35)과 같은 초이고, 근거는 '2026-11-16 부터' 7일 변경 수임. orch-ladder.js:77-78 이 근거 시각과 효력 시각을 비교하지 않음. 두 구조 개선안은 창 다시 로드 전이라 효력 전임"
+  },
+  {
+   "purpose": "같은 목적 사용자 지적이 7일 3건 이상이면 L4 로 올림",
+   "source": "plans/vm-ui-snug-mountain.md 2.2, memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "어긋남",
+   "evidence": "orch-ladder.js:72-74 가 u.detector 이름으로 묶음. 같은 내용 안 '진단 사다리 L4 사용자 지적 축을 감지기 이름 대신 목적 키로 묶음' 승인 대기"
+  },
+  {
+   "purpose": "창 다시 로드 뒤 VMW, Workbench 작업을 끊긴 단계부터 재개",
+   "source": "user_checks.json U13, U16, U18, U23",
+   "verdict": "어긋남",
+   "evidence": "digest7d checklist 체인 22건 중 ok 1, stopped 18, noEnd 11. 같은 내용 안 20261121000933_SELF_2(core) 승인 대기"
+  },
+  {
+   "purpose": "VMO 가 10분 간격으로 열린 문제를 진단, 조치함",
+   "source": "user_checks.json U3, U7",
+   "verdict": "어긋남",
+   "evidence": "selfcheck S13 fail 'U3 조치 기록 없는 열린 사건 1건'. S7 미해결 사건 5건이 42~52시간째 열려 있음(20261120_094237_R3_SSP0005 등). 같은 목적 개념 재정립안 20261120183740_VISION 승인 대기"
+  },
+  {
+   "purpose": "화면 진입 실패를 감지, 원인 확인, 해결, 다시 실행까지 사람 없이 닫음",
+   "source": "memory/feedback_vmo_self_heal_restart_20261120.md, user_checks.json U4",
+   "verdict": "미확인",
+   "evidence": "digest7d incidents byRule 에 R13 0건"
+  },
+  {
+   "purpose": "VMO 보완 뒤 재수행(작업, 화면마다 2번까지)",
+   "source": "memory/feedback_vmo_rerun_after_fix_20261120.md",
+   "verdict": "미확인",
+   "evidence": "이번 점검에서 rerun 요청과 결과 기록을 대조하지 않음. 11-21 뒤 체인 실행 0건"
+  },
+  {
+   "purpose": "VM 고정 문구가 문장 규칙을 지킴",
+   "source": "memory/feedback_sentence_rule_3_20261113.md",
+   "verdict": "어긋남",
+   "evidence": "S11 위반 수: 11-20 308건(vision/20261120_115806.json:75) → 11-21 166건(vision/20261121_120359.json) → 11-22 142건(selfcheck S11 workbench.js). 3회 연속 어긋남이라 L4. 같은 모듈 재정리 기록: CHANGELOG.md:554(11-20 14:12 orch-agent, orch-usercheck, orch-vision) 뒤 :197(19:27 orch-vision, orch-usercheck), :148(23:08 orch-agent)"
+  },
+  {
+   "purpose": "하루 1회 Overall Review 수행",
+   "source": "memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "맞음",
+   "evidence": "vision/meta.json lastAt 2026-11-21T12:03:59, 이번 점검 2026-11-22 14:02(date 실행값)"
+  }
+ ],
+ "proposals": [
+  "20261122140537_VISION",
+  "20261122140538_VISION"
+ ],
+ "log": ".vibe\\logs\\2026-11-22T14-01-44_claude_orch.log"
+}

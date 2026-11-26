@@ -1,0 +1,105 @@
+{
+  "id": "20261120225006_SELF_3",
+  "at": "2026-11-20T22:50:06+09:00",
+  "ms": 1795182606558,
+  "source": "self",
+  "status": "applied",
+  "sig": "작은모듈n개 문구 agent improve ladder",
+  "title": "작은 모듈 3개 고정 문구 정리(orch-agent 1, orch-improve 1, orch-ladder 2)",
+  "evidence": "orch-agent.js:161 SKILL_NOTE '(L1 사소 · L2 결함 · L3 구조 · L4 개념)' 가운뎃점 나열. orch-improve.js:214 '검증 명령을 실제로 돌리고' 수식어. orch-ladder.js:97 '\"파일:줄 · 사건 · 장부 줄\"' 가운뎃점 나열. orch-ladder.js:101 '사례 하나를 막는 안이 아니라 사례들이 공유하는' 'A가 아니라 B' 틀. test 폴더에서 이 문구를 쓰는 시험 0건(grep 확인)",
+  "targets": [
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-ladder.js"
+  ],
+  "before_after": "orch-agent.js:161 '(L1 사소 · L2 결함 · L3 구조 · L4 개념)' → '(L1 사소, L2 결함, L3 구조, L4 개념)' / orch-improve.js:214 '검증 명령을 실제로 돌리고' → '검증 명령을 돌리고' / orch-ladder.js:97 '파일:줄 · 사건 · 장부 줄' → '파일:줄, 사건, 장부 줄' / orch-ladder.js:101 '사례 하나를 막는 안이 아니라 사례들이 공유하는 공통 원인(설계)을 찾아 없애는 구조 개선안을 1~2건 낸다.' → '사례들이 공유하는 공통 원인(설계)을 찾아 없애는 구조 개선안을 1~2건 낸다. 사례 하나만 막는 안은 내지 않는다.'",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/orch-agent.js tools/VibeManager/orch-improve.js tools/VibeManager/orch-ladder.js --quiet 출력에서 세 파일 위반 0",
+  "rollback": "세 파일을 반영 전 백업으로 되돌림",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "문구 위반 4건, 근거 파일:줄",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T23:00:22+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T23:03:52+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self2300"
+    },
+    {
+      "at": "2026-11-20T23:03:55+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T23:08:07+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 3개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T23:08:07+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. python tools/Docs/doc_style.py tools/VibeManager/orch-agent.js tools/VibeManager/orch-improve.js tools/VibeManager/orch-ladder.js --quiet 실행. 출력 'orch-agent.js | 문장 80 | 위반 0 |', 'orch-improve.js | 문장 105 | 위반 0 |', 'orch-ladder.js | 문장 33 | 위반 0 |'. 시각 2026-11-20 23:04:27(date 실행값) · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-20T23-03-55_claude_orch.log",
+      "sec": 40,
+      "costUsd": 0.5095934,
+      "files": [
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-ladder.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:28+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-21T01:59:17+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|orch-agent.js, S11|orch-improve.js, S11|orch-ladder.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795183222668,
+  "autoFp": "a40b26f92c",
+  "applyStartMs": 1795183435296,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self2300",
+  "needsReload": true,
+  "appliedMs": 1795183687190,
+  "synced": [
+    "orch-agent.js",
+    "orch-improve.js",
+    "orch-ladder.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-ladder.js"
+    ],
+    "verify_result": "python tools/Docs/doc_style.py tools/VibeManager/orch-agent.js tools/VibeManager/orch-improve.js tools/VibeManager/orch-ladder.js --quiet 실행. 출력 'orch-agent.js | 문장 80 | 위반 0 |', 'orch-improve.js | 문장 105 | 위반 0 |', 'orch-ladder.js | 문장 33 | 위반 0 |'. 시각 2026-11-20 23:04:27(date 실행값)",
+    "note": "Edit 4건으로 승인 범위 4곳만 고침. 백업, 설치 폴더, CHANGELOG 수정 없음. 작업 모드 hook 차단 없음."
+  },
+  "snap": "prop_20261120225006_SELF_3",
+  "effectiveMs": 1795193957740,
+  "effectiveAt": "2026-11-21T01:59:17+09:00"
+}

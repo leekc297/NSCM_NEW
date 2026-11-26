@@ -1,0 +1,108 @@
+{
+  "id": "20261121120359_VISION_3",
+  "at": "2026-11-21T12:03:59+09:00",
+  "ms": 1795230239798,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ln|ladder|useraxis by purpose",
+  "title": "진단 사다리 L4 사용자 지적 축을 감지기 이름 대신 목적 키로 묶음",
+  "evidence": "plans/vm-ui-snug-mountain.md 2.2 원문 '사용자 지적 중 같은 목적 축(입력 문구의 목적 키) 7일 3건 이상'. orch-ladder.js:69-71 은 u.detector 로 묶음. user_checks.json U2 chainTarget, U24 unverifiedResolveIncomplete, U25 partialRemeasureSlow, U13 reloadResumeMissing, U16 U17 resumedJobShown, U18 resumeRestartFromStart, U23 workbenchResumeProgress. ladder.json L4 useraxis 묶음은 vmoCadence 1개뿐",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "같은 감지기를 쓰는 지적 3건 이상일 때만 L4 → user_checks.json 항목에 목적 키(purpose)를 두고 같은 목적 키 지적 7일 3건 이상이면 L4. 목적 키가 없는 항목은 감지기 이름을 목적 키로 씀",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. t_orch_ladder.js 에 U2, U24, U25(목적 키 checklistTime)와 U13, U16, U17, U18, U23(목적 키 reloadResume) 표본을 넣어 L4|useraxis|checklistTime, L4|useraxis|reloadResume 2개 묶음이 나오는지 확인",
+  "rollback": "orch-ladder.js, orch-usercheck.js 를 반영 전 판으로 되돌리고 user_checks.json 의 purpose 필드는 남겨도 동작 영향 없음",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "같은 원인(축 = 감지기 이름)으로 L4 를 놓친 묶음 2개: CheckList 소요 U2, U24, U25(감지기 3종), 창 다시 로드 재개 U13, U16, U17, U18, U23(감지기 4종). 사다리 올림 기준 변경이라 core",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T15:29:12+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T15:32:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 33개 파일 통과, 시험 66/68개 파일 통과(PASS 1022, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1529"
+    },
+    {
+      "at": "2026-11-23T15:32:55+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T15:45:43+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 33개 파일 통과, 시험 66/68개 파일 통과(PASS 1029, FAIL 7), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-23T15:45:43+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. ① node tools/VibeManager/test/run_all.js (반영 전 2026-11-23 15:33 이후 실행 → 반영 뒤 15:41 종료): 'SOME FAIL 파일 66/68 PASS 1022 FAIL 7' → 'SOME FAIL 파일 66/68 PASS 1029 FAIL 7'. 실패 파일은 전후 같은 2개(FAIL t_orch_usercheck.js PASS 133 · FAIL t_orch_worklist.js PASS 1 sc.worklistCycle is not a function)이고 사전 고지 항목임. 새 · 변경 7개 파일 · 대상 목록 밖 변경 3개: tools/Harness/gate_baseline.tsv, Doc/verify/_common/CLOUD_USER_USAGE_HISTORY_20261123.sql, tools/Analysis/ssp_it_precheck/vq_asis.py",
+      "log": ".vibe\\logs\\2026-11-23T15-32-56_claude_orch.log",
+      "sec": 555,
+      "costUsd": 2.8231159999999997,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_ladder.js",
+        "tools/VibeManager/user_checks.json",
+        "Doc/verify/_common/CLOUD_USER_USAGE_HISTORY_20261123.sql",
+        "tools/Analysis/ssp_it_precheck/vq_asis.py"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:26+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T15:48:13+09:00"
+    }
+  ],
+  "plain": {
+    "what": "같은 불편을 다른 표현으로 여러 번 지적했을 때 VMO 가 '방식 자체를 다시 봐야 한다'는 안을 스스로 올림",
+    "risk": "목적 키를 넓게 잡으면 개념 재정립 승인 요청이 늘어남",
+    "undo": "진단 사다리 파일 2개를 반영 전 판으로 되돌림"
+  },
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795415351975,
+  "autoFp": "11ec9540df",
+  "applyStartMs": 1795415575585,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 33개 파일 통과, 시험 66/68개 파일 통과(PASS 1029, FAIL 7), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1529",
+  "needsReload": true,
+  "appliedMs": 1795416343548,
+  "synced": [
+    "orch-ladder.js",
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "① node tools/VibeManager/test/run_all.js (반영 전 2026-11-23 15:33 이후 실행 → 반영 뒤 15:41 종료): 'SOME FAIL 파일 66/68 PASS 1022 FAIL 7' → 'SOME FAIL 파일 66/68 PASS 1029 FAIL 7'. 실패 파일은 전후 같은 2개(FAIL t_orch_usercheck.js PASS 133 · FAIL t_orch_worklist.js PASS 1 sc.worklistCycle is not a function)이고 사전 고지 항목임. 새 실패 0건. ② node tools/VibeManager/test/t_orch_ladder.js: 반영 전 'ALL PASS'(29건, useraxis 묶음 = L4|useraxis|vmoCadence 1개) → 새 시험만 넣고 구현 전 'SOME FAIL'(FAIL 4건: 목적 키 checklistTime, 목적 키 reloadResume, 목적 키 묶음 3개만, 올림 사유) → 반영 뒤 'ALL PASS', run_all 줄 'OK t_orch_ladder.js PASS 36'. 출력 인용 'PASS 목적 키 checklistTime: 감지기가 다른 U2 U24 U25 = L4|useraxis|checklistTime 3건(7일 밖 U52 제외)', 'PASS 목적 키 reloadResume: U13 U16 U17 U18 U23 = L4|useraxis|reloadResume 5건', 'PASS 목적 키 없는 항목 = 감지기 이름이 목적 키(vmoCadence 3건 유지)'. ③ 실원장 tools/VibeManager/user_checks.json 으로 scan() 읽기 실행(15:41): 'L4|useraxis|checklistTime 3건 U2 U24 U25', 'L4|useraxis|vmoCadence 3건 U3 U5 U7', 'L4|useraxis|reloadResume 5건 U13 U16 U17 U18 U23'.",
+    "note": "작업 모드 DB_ONLY(tools/Harness/harness.json:15), 저장소 hook 차단 없음. 묶음 근거 what 에 감지기 이름을 붙였고 올림 사유 문구를 '같은 감지기 지적'에서 '같은 목적 키 지적'으로 바꿈. 학습 프롬프트에 [목적 키] 목록과 purpose 출력 칸을 더함. 학습기 purposeFor 는 t_orch_ladder.js 에서 함수 단위로만 시험했고 learn() 전체 경로 시험은 승인 범위 밖인 t_orch_usercheck.js 에 있어 더하지 않음. 실원장 기준 다음 사다리 점검에서 L4 묶음 2개(checklistTime, reloadResume)가 새로 열려 개념 재정립 진단 대상이 됨(하루 상한 ladderMaxPerDay 적용). 반영 전 기준값을 재느라 .vibe 에 만든 임시 출력 파일 4개는 삭제함."
+  },
+  "snap": "prop_20261121120359_VISION_3",
+  "effectiveMs": 1795416493363,
+  "effectiveAt": "2026-11-23T15:48:13+09:00"
+}

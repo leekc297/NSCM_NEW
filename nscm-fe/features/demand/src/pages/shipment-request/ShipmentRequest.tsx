@@ -1,5 +1,6 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import dayjs from 'dayjs';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
@@ -24,7 +25,7 @@ import { applyBohFrontFill } from './utils/shipment-request.bohFrontFill';
 import { canOpenBodPopup } from './utils/shipment-request.editLock';
 import { buildSavePayload, buildUnfoldRows } from './utils/shipment-request.save';
 import { SEARCH_COMBO } from './utils/shipment-request.searchCombos';
-import { useShipmentRequestValidation } from './utils/shipment-request.validate';
+import { findFrozenCells, useShipmentRequestValidation } from './utils/shipment-request.validate';
 
 // AS-IS DMF0045_ShipmentRequest (Demand > Demand Plan > Shipment Request / 출하요청 —
 //   GSCM.DM.Plan.UIL 2,305줄 정본 1:1).
@@ -366,6 +367,31 @@ export const ShipmentRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     const vr = validation.validateSaveRows(pendingRows, saveRows, sc.divisionId);
     if (!vr.ok) return;
 
+    // (1-b) frozen 구간 가드(#236) — 저장 대상 D_ 셀이 마감 구간이면 SP 호출 전 차단하고 원인을 밝힌다.
+    //   기준은 셀 잠금과 같다: 그리드 D_ 컬럼 오름차순(SHIP_FROZEN 선두 개수) / 신규행 오늘+10일.
+    const grid = gridRef.current;
+    const dOrderedDayBindings = (grid?.columns ?? [])
+      .map(c => c.binding ?? '')
+      .filter(b => /^D_\d{8}$/.test(b))
+      .sort();
+    const insertFrozenCutoffYmd = dayjs().add(10, 'day').format('YYYYMMDD');
+    const frozenCells = findFrozenCells({
+      insertedRows: pendingRows,
+      editedChanges: changedMap,
+      dOrderedDayBindings,
+      insertFrozenCutoffYmd,
+    });
+    if (
+      !validation.validateFrozenCells(frozenCells, dOrderedDayBindings, insertFrozenCutoffYmd).ok
+    ) {
+      // 첫 위반 셀로 이동 — 어느 셀이 frozen 인지 바로 보이게 한다.
+      const first = frozenCells[0];
+      const rowIdx = grid ? grid.rows.findIndex(r => r.dataItem === first.row) : -1;
+      const colIdx = grid ? grid.columns.findIndex(c => c.binding === first.binding) : -1;
+      if (grid && rowIdx >= 0 && colIdx >= 0) grid.select(rowIdx, colIdx);
+      return;
+    }
+
     const payload = buildSavePayload(saveRows);
     if (!payload) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
@@ -376,6 +402,18 @@ export const ShipmentRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     try {
       const res = await callSaveShipmentRequest(activeSheet, payload);
       if (!res.ok) {
+        // SP 기타 예외('F') — AS-IS MSG00042 파리티(TO-BE MSG01075). ORA 원문은 콘솔에만 남긴다.
+        if (res.systemError) {
+          console.error('[DMF0045] save SP error:', res.addMessage);
+          void setAlert({
+            type: 'alert',
+            content: t(
+              MSG.SYSTEM_ERROR,
+              '_System error. Capture the screen and pass it on to the system manager.'
+            ),
+          });
+          return;
+        }
         // SP 반환 '^' 토큰 처리 — 코드 검출 시 MSG_M 변환 후 {0} 치환, 미검출 시 SP 원문(fallback).
         const reason = res.msgCode
           ? formatSaveErrorText(t(res.msgCode, res.msgCode), res.addMessage, res.msgCode)

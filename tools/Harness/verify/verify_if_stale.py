@@ -32,6 +32,17 @@ def ts(t):
     return datetime.datetime.fromtimestamp(t).strftime('%m-%d %H:%M:%S') if t else '-'
 
 
+def checklist_dir():
+    """개선안 20261124012048_SELF(R83): CheckList 폴더 = harness.json paths.checklistDir 1곳(make_verify_docs 와 같은 값) · 없으면 Doc/UI_CHECKLIST"""
+    try:
+        with open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            hp = (json.load(f) or {}).get('paths')
+    except (OSError, ValueError):
+        hp = None
+    d = (hp.get('checklistDir') if isinstance(hp, dict) else None) or 'Doc/UI_CHECKLIST'
+    return os.path.normpath(d if os.path.isabs(d) else os.path.join(ROOT, d))
+
+
 def asis_of(mid):
     """AS-IS 화면 ID(run_verify.asis_of 와 같은 map_screen.csv) · 없으면 같은 ID"""
     import csv
@@ -69,7 +80,7 @@ def file_changes(mid, done_at):
     sv = os.path.join(vd, 'static_verdicts.csv')
     if os.path.exists(sv) and os.path.getmtime(sv) > done_at:
         why.append(f'정적 판정 변경 {ts(os.path.getmtime(sv))} > CheckList {ts(done_at)}')
-    xs = glob.glob(os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', f'{mid}_*_CheckList_v*.xlsx'))
+    xs = glob.glob(os.path.join(checklist_dir(), f'{mid}_*_CheckList_v*.xlsx'))
     if xs:
         xm = max(os.path.getmtime(x) for x in xs)
         if xm > done_at + 120:  # 문서 생성 직후 저장 여유 2분

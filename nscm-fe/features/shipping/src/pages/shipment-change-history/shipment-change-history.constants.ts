@@ -113,8 +113,10 @@ export const MSG = {
   NO_DIVISION_AUTH: 'MSG00667', // "No authority assigned." (권한 division 0건)
   INVALID_PERIOD: 'MSG00108', // 기간 역전 — KO "조회 기간이 잘못되었습니다 (시작일 > 종료일)." 등 3개 언어 등록
   // 최대 조회기간 초과(Check_PeriodDate, DateUtil.cs:174-178) — To >= From+1년+7일이면 차단.
-  //   "Maximum Period is From Date + {0}." / "최대 조회일은 From Date + {0} 입니다." (DB 등록 KO/EN/CN, USE_YN='Y').
-  MAX_PERIOD: 'MSG00172',
+  //   "Maximum Period is From Date + {0}." / "최대 조회일은 From Date + {0} 입니다."
+  //   AS-IS 번호 MSG00172 는 TO-BE SCM_ADM_MSG_M 미등록(실측 0건)이라 `_` fallback 이 노출됐다
+  //   → 문구가 KO/EN/CN 전건 USE_YN='Y' 로 등록된 MSG01187 로 교체(실측 2026-11-20).
+  MAX_PERIOD: 'MSG01187',
 } as const;
 
 // 최대 조회기간 메시지 {0} 치환값 — AS-IS DateUtil.cs:177 이 하드코딩 (364+7).ToString() = '371' 을 넘긴다.

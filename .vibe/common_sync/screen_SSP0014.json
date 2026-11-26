@@ -1,14 +1,14 @@
 {
  "ok": true,
  "mode": "dry-run",
- "stamp": "20261120_083827",
+ "stamp": "20261125_025637",
  "areas_sel": "fe",
  "be_login": [],
- "tip": "dff38330f424e7af2231c43d4029a0ea69e3fc1a",
- "tip_info": "dff38330f 2026-11-19 19:31 BeomJu fix(DMF0082): prict batch input 팝업에서 이전 조회 사업부의 헤더가 남아서 보이는 현상 수정",
- "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+ "tip": "7507d22d3508b22a6322be747349f99b1b0d10ab",
+ "tip_info": "7507d22d3 2026-11-24 17:28 BeomJu fix: 11/24 수정사항 적용",
+ "base": "2e27252dba3f3f64e74dff86c485f39285b7439d",
  "ancestor": true,
- "commits": 32,
+ "commits": 11,
  "changed": 0,
  "counts": {
   "동일": 13
@@ -23,7 +23,7 @@
  "pending": 0,
  "areas": {
   "fe": {
-   "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+   "base": "2e27252dba3f3f64e74dff86c485f39285b7439d",
    "changed": 0,
    "actions": {
     "none": 13
@@ -35,5 +35,5 @@
  },
  "overwrite_local": true,
  "local_only": 0,
- "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261120_083827.md"
+ "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261125_025637.md"
 }

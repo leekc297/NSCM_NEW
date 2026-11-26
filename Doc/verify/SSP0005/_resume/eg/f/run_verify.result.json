@@ -1,0 +1,123 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-20T09:36:54+09:00",
+ "producer": "run_verify",
+ "id": "SSP0005",
+ "skip_e2e": false,
+ "started": "2026-11-20 06:07:32",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "T-57fe96b8",
+   "class": "E4",
+   "msg": "MSG00135",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 버튼 모달 @11-20 09:29"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-db2a4710",
+   "class": "E4",
+   "msg": "MSG00135",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 버튼 모달 @11-20 09:29"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f612087f",
+   "class": "X-ROW",
+   "msg": "SSP0005_ShipmentWorkingDay.BtnInput_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-be9ce0aa",
+   "class": "X-ROW",
+   "msg": "SSP0005_ShipmentWorkingDay.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-70e65c81",
+   "class": "X-ROW",
+   "msg": "SSP0005_ShipmentWorkingDay.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 D1, E3, F1, F2, F6, H2 — Doc/verify/SSP0005/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 1539,
+  "PASS": 370,
+  "FAIL": 5,
+  "판정필요": 20,
+  "미검증": 278,
+  "해당없음": 866,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 697,
+   "없음(미검증)": 278,
+   "없음(판정 대기)": 20,
+   "사람": 3,
+   "AI 작성·인용 확인": 25,
+   "기계(상속·집계)": 504,
+   "출처 미기록": 12
+  },
+  "fail_listed": 5,
+  "coverage": {
+   "rules": 90,
+   "measured": 266,
+   "not_run_error": 184,
+   "na": 301,
+   "suspect_na100": [
+    "D1",
+    "E3",
+    "F1",
+    "F2",
+    "F6",
+    "H2"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/UI_CHECKLIST/SSP0005_ShipmentWorkingDay_CheckList_v7.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SSP0005_ShipmentWorkingDay_ActionItemList_v7.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SSP0005/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 D1, E3, F1, F2, F6, H2 — Doc/verify/SSP0005/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+}

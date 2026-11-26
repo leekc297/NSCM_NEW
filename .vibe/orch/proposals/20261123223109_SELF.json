@@ -1,0 +1,111 @@
+{
+  "id": "20261123223109_SELF",
+  "at": "2026-11-23T22:31:09+09:00",
+  "ms": 1795440669103,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/asis_live_rows.py|양쪽모두조회에성공했는데키가겹치지않거나n행건수차이가소량기준을넘으면n행r",
+  "title": "사용자 지시 R40 같은 문제: tools/Harness/verify/asis_live_rows.py:44 양쪽 모두 조회에 성공했는데 키가 겹치지 않거나(44행) 건수 차이가 소량 기준을 넘으면(48행 return 'FAIL', ... 건수 차이) FAIL 로 판정함",
+  "evidence": "규칙 R40 \"검사기는 AS-IS, TO-BE DB 데이터 차이로 생기는 조회 값 차이를 판정필요로 두고 조회 실패, 조회 불가만 오류로 판정함\" (원래 지시 2026-11-11 16:49 \"재고수량은 AS-IS 와 TO-BE 의 DB 데이터 차이로 ㅂ라생할 수 있으니 판정필요 항목으로 이관하고 넘어가주세요. 아예 조회가 되지 않는 문제가 발생한다던지 하는것만 오류 항목으로 도출하면 될 것 같아요.\") · tools/Harness/verify/asis_live_rows.py:44 if common is not None and common == 0 and a > 0 and t > 0: return 'FAIL', base + ' — 양쪽 모두 데이터가 있지만 같은 키가 하나도 없음(아예 다른 데이터 · 조치 필요)' + keys",
+  "targets": [
+    "tools/Harness/verify/asis_live_rows.py"
+  ],
+  "before_after": "44행과 48행을 'REVIEW'(판정필요)로 바꾸고 근거에 'AS-IS, TO-BE DB 데이터 차이' 를 적음. FAIL 은 조회 실패, 조회 불가(43행 TO-BE 0행 포함 여부는 조회 오류 기록으로 구분)만 남김. classify 자체 시험에 변이 사례를 추가함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/asis_live_rows.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T10:49:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T10:53:12+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1253, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self1049"
+    },
+    {
+      "at": "2026-11-24T10:53:14+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T11:04:58+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 78/78개 파일 통과(PASS 1264, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T11:04:58+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js 반영 전 77/77 PASS 1253 FAIL 0 (01:53:39Z) → 반영 뒤 77/77 PASS 1253 FAIL 0 (01:57:31Z). 추가 확인 python -u tools/Harness/verify/asis_live_rows.py --selftest 'selftest 6/6' (공통 키 0 = REVIEW, 소량 기준 초과 1000↔500 = REVIEW, TO-BE 0행 = FAIL) · 변경 8개 파일 · 대상 목록 밖 변경 7개: tools/Harness/gate_baseline.tsv, tools/Harness/harness.json, tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-selfcheck.js, Doc/verify/DMF0082/_scratch/asis_m3_check.py",
+      "log": ".vibe\\logs\\2026-11-24T10-53-14_claude_orch.log",
+      "sec": 485,
+      "costUsd": 0.7567233,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/harness.json",
+        "tools/Harness/verify/asis_live_rows.py",
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "Doc/verify/DMF0082/_scratch/asis_m3_check.py",
+        "tools/VibeManager/test/t_orch_ailimit.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "검사기는 AS-IS, TO-BE DB 데이터 차이로 생기는 조회 값 차이를 판정필요로 두고 조회 실패, 조회 불가만 오류로 판정함 규칙을 tools/Harness/verify/asis_live_rows.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R40|tools/Harness/verify/asis_live_rows.py",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795484972143,
+  "autoFp": "a3ae08b8ba",
+  "applyStartMs": 1795485194567,
+  "verifyJudge": {
+    "at": "2026-11-24T11:01:21+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 78/78개 파일 통과(PASS 1264, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self1049",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795485898097,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 77/77 PASS 1253 FAIL 0 212.1s'(2026-11-24T01:53:39Z) → 반영 뒤 'ALL OK 파일 77/77 PASS 1253 FAIL 0 214.5s'(2026-11-24T01:57:31Z). 웹뷰 파일 수정 없음, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/asis_live_rows.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js 반영 전 77/77 PASS 1253 FAIL 0 (01:53:39Z) → 반영 뒤 77/77 PASS 1253 FAIL 0 (01:57:31Z). 추가 확인 python -u tools/Harness/verify/asis_live_rows.py --selftest 'selftest 6/6' (공통 키 0 = REVIEW, 소량 기준 초과 1000↔500 = REVIEW, TO-BE 0행 = FAIL)",
+    "note": "44행(공통 키 0), 48행(소량 기준 초과) FAIL → REVIEW, 사유에 'AS-IS, TO-BE DB 데이터 차이' 기재. 43행 TO-BE 0행 FAIL 유지(조회 불가). classify 에 조회 오류 기록 입력이 없어 0행과 조회 오류 구분은 미반영, 추가 확인 후보 asis_live_cond.one 의 TO-BE 조회 오류 필드. 자체 시험 없음 → --selftest 신설(변이 사례 2건 포함 6건). 소요 약 8분, 오래 걸린 단계 run_all.js 2회(212.1s, 214.5s)"
+  },
+  "snap": "prop_20261123223109_SELF"
+}

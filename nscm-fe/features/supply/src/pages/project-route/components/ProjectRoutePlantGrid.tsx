@@ -235,6 +235,8 @@ export const ProjectRoutePlantGrid = ({
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
+      // cascade(연동 편집) 화면 — undo 시 cellEditEnded 재발화로 연동 셀까지 복원(순수 집계/파생, clear·부작용 없음 확인).
+      reapplyEditOnUndo
       itemsSource={data}
       staticColumns={staticColumns}
       // CELL_TYPE CA* 이면 그리드 자체를 잠근다. 붙여넣기(setClipString)는 beginningEdit 를 거치지 않는다.

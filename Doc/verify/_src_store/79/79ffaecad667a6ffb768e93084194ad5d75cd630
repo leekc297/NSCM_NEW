@@ -1,0 +1,334 @@
+# -*- coding: utf-8 -*-
+"""화면 실전송 인자로 AS-IS 조회 SP 실행 → 건수·키 대조(2026-11-01 엔진 갭 EG006)
+
+  python tools/Harness/verify/a1_live.py <MENU_ID>
+    입력 Doc/verify/<ID>/a1_live.json(_verify @verify '실전송 건수(A1)' 가 저장) · 출력 Doc/verify/<ID>/a1_live.csv(eg_ingest 가 A1 행으로 반입)
+
+  종전 golden 은 고정 기본값 인자 1벌이라 사용자 조건과 달랐다. 여기서는 화면이 보낸 값을 인자로 쓴다.
+  실행 대상 = 이름에 _GET_ 이 있는 SP 만(읽기). 저장 SP 는 절대 실행하지 않는다.
+  판정: 행 수·키 집합 같음 = PASS · TO-BE 0행 + AS-IS >0행 = FAIL · 그 밖 차이 = 판정필요(원천 DB 시점 차이 가능 — 고정 건수 FAIL 금지) · 실행 불가 = ERROR
+  한계: 인자 대응은 이름 개념 일치만(미대응 = golden 기본값, note 에 기록) · 키 대조는 양쪽 공통 컬럼 중 문자 컬럼만
+"""
+import csv, json, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..')); DOC = os.path.join(ROOT, 'Doc')
+sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+from dbconn import connect  # noqa: E402
+from popup_args_check import concept  # noqa: E402
+
+FIELDS = ['menu_id', 'sheet', 'asis_sp', 'verdict', 'asis_rows', 'tobe_rows', 'detail', 'note']
+
+
+def rd(p):
+    if not os.path.exists(p): return []
+    with open(p, encoding='utf-8-sig', newline='') as f: return list(csv.DictReader(f))
+
+
+def dict_of(body):
+    try: j = json.loads(body)
+    except ValueError: return {}
+    found = {}
+
+    def walk(v):
+        if isinstance(v, dict):
+            for k, x in v.items():
+                if isinstance(x, (dict, list)): walk(x)
+                else: found[concept(k)] = '' if x is None else str(x)
+        elif isinstance(v, list):
+            for x in v: walk(x)
+    walk(j); return found
+
+
+def nk(s): return re.sub(r'[^a-z0-9]', '', str(s).lower())
+
+
+def judge_shape(acols, arows, tcols, tr):
+    """EG003·EG037 행 구성 — Measure 별 행 수·같은 (키,Measure) 중복·키당 Measure 수. 같은 인자로 얻은 두 결과의 공통 컬럼만 쓴다
+    반환 (verdict, detail) · Measure 컬럼 없으면 None · FAIL = AS-IS 에 있는 Measure 가 TO-BE 0행 / AS-IS 한 행인 (키,Measure) 가 TO-BE 여러 행"""
+    common = [(a, t) for a in acols for t in tcols if nk(a) == nk(t)]
+    mc = next(((a, t) for a, t in common if re.fullmatch(r'(?i)measure(_?(nm|name|cd|code|id))?', a)), None)
+    if not mc or not arows or not tr:
+        return None
+    ai = {a: i for i, a in enumerate(acols)}
+    S = lambda v: '' if v is None else str(v).strip()
+    ca, ct = {}, {}
+    for r in arows: ca[S(r[ai[mc[0]]])] = ca.get(S(r[ai[mc[0]]]), 0) + 1
+    for r in tr: ct[S(r.get(mc[1]))] = ct.get(S(r.get(mc[1])), 0) + 1
+    if not set(ca) & set(ct):
+        return 'REVIEW', f"[행 구성] Measure 표기가 양쪽에서 겹치지 않음 — AS-IS {sorted(ca)[:5]} · TO-BE {sorted(ct)[:5]}"
+    keys = [(a, t) for a, t in common if (a, t) != mc and not re.search('(?i)CREAT|UPDATE|LAST_|_BY$|_DATE$|QTY|AMT|PRICE|SEQ|^W_?\\d|^M_?\\d|^D_?\\d|^\\d', a)
+            and any(re.search(r'[A-Za-z가-힣]', S(r.get(t))) for r in tr[:200])][:8]
+    gone = sorted(m for m in ca if m not in ct)
+    diff = [f'{m} {ca[m]}↔{ct[m]}' for m in sorted(set(ca) & set(ct)) if ca[m] != ct[m]]
+    extra = sorted(m for m in ct if m not in ca)
+    if not keys:
+        return ('FAIL' if gone else 'REVIEW' if diff or extra else 'PASS'), f"[행 구성] Measure {len(ct)}종 · 빠짐 {gone[:5]} · 행 수 차이 {diff[:4]} · TO-BE 전용 {extra[:5]} · 키 대조 없음"
+    da, dt = {}, {}; pa, pt = {}, {}
+    for r in arows:
+        k = tuple(S(r[ai[a]]) for a, _ in keys); m = S(r[ai[mc[0]]]); da[(k, m)] = da.get((k, m), 0) + 1; pa.setdefault(k, set()).add(m)
+    for r in tr:
+        k = tuple(S(r.get(t)) for _, t in keys); m = S(r.get(mc[1])); dt[(k, m)] = dt.get((k, m), 0) + 1; pt.setdefault(k, set()).add(m)
+    dup_a = sum(1 for v in da.values() if v > 1); dup_t = [km for km, v in dt.items() if v > 1]
+    dist = lambda p: sorted({len(v) for v in p.values()})
+    head = f"[행 구성] 키 {[a for a, _ in keys]} · 키당 Measure 수 AS-IS {dist(pa)[:6]} TO-BE {dist(pt)[:6]} · 중복 (키,Measure) AS-IS {dup_a} TO-BE {len(dup_t)}"
+    if gone:
+        return 'FAIL', f'{head} · AS-IS 있는 Measure TO-BE 0행 {gone[:5]}'
+    if dup_t and not dup_a and len(arows) * 2 >= len(tr):  # AS-IS 행이 훨씬 적으면 '중복 없음'이 근거가 못 된다(2026-11-03 DMF0003 6행↔1738행)
+        return 'FAIL', f'{head} · 한 행이어야 할 (키,Measure) 가 여러 행: {[km[1] + "/" + "/".join(km[0][:2]) for km in dup_t[:3]]}'
+    if diff or extra or dist(pa) != dist(pt) or dup_a != len(dup_t):
+        return 'REVIEW', f'{head} · 행 수 차이 {diff[:4]} · TO-BE 전용 {extra[:5]}'
+    return 'PASS', f'{head} · Measure {len(ct)}종 행 수 일치'
+
+
+def judge_time(a_sec, t_sec, a_rows, t_rows):
+    """같은 인자 조회 시간(EG417) — TO-BE 가 10초를 넘고 AS-IS 의 3배를 넘으면 확인 대상 · DB 서버·데이터가 달라 FAIL 로 올리지 않는다"""
+    if t_sec > 10 and t_sec > a_sec * 3:
+        return 'ERROR', f'[확인 대상] 조회 시간 TO-BE {t_sec:.1f}초({t_rows}행) · AS-IS {a_sec:.1f}초({a_rows}행) — 3배 초과'
+    return 'PASS', f'조회 시간 TO-BE {t_sec:.1f}초({t_rows}행) · AS-IS {a_sec:.1f}초({a_rows}행)'
+
+
+_T464 = "\t,@p_user_id\t\t\t\tNVARCHAR(MAX)\nAS\n  AND ( ( @p_user_id   IS NULL OR @p_user_id ='')  OR (a.USER_ID like '%' + @p_user_id + '%') or (u.UserName like '%' + @p_user_id + '%')\n   OR (a.PART_LEADER like '%' + @p_user_id + '%') )"
+
+
+def selftest():
+    A = ['SITE', 'MEASURE', 'QTY']; T = ['SITE', 'MEASURE', 'QTY']
+    ar = [('X', 'RTF', 1), ('X', 'KRW', 2), ('Y', 'RTF', 3), ('Y', 'KRW', 4)]
+    tr = [{'SITE': s, 'MEASURE': m, 'QTY': q} for s, m, q in ar]
+    cases = [
+        ('같은 구성', judge_shape(A, ar, T, tr)[0], 'PASS'),
+        ('Measure 빠짐', judge_shape(A, ar, T, [r for r in tr if r['MEASURE'] == 'RTF'])[0], 'FAIL'),
+        ('한 행→두 행', judge_shape(A, ar, T, tr + [{'SITE': 'X', 'MEASURE': 'RTF', 'QTY': 9}])[0], 'FAIL'),
+        ('AS-IS 도 두 행', judge_shape(A, ar + [('X', 'RTF', 5)], T, tr + [{'SITE': 'X', 'MEASURE': 'RTF', 'QTY': 5}])[0], 'PASS'),
+        ('TO-BE 전용 Measure', judge_shape(A, ar, T, tr + [{'SITE': 'X', 'MEASURE': 'USD', 'QTY': 1}])[0], 'REVIEW'),
+        ('표기 안 겹침', judge_shape(A, ar, T, [{'SITE': 'X', 'MEASURE': 'R', 'QTY': 1}])[0], 'REVIEW'),
+        ('빈 값 전체', norm_all("IF @p_x = '' SELECT", {'p_x': 'ALL'})['p_x'], ''),
+        ('ALL 전체', norm_all("IF @p_x <> 'ALL' SELECT", {'p_x': ''})['p_x'], 'ALL'),
+        ('둘 다 있으면 그대로', norm_all("@p_x = '' OR @p_x = 'ALL'", {'p_x': 'ALL'})['p_x'], 'ALL'),
+        ('실값 유지', norm_all("IF @p_x = ''", {'p_x': 'A1'})['p_x'], 'A1'),
+        ('AS-IS 표본 적음', judge_shape(A, ar[:1], T, tr * 2)[0], 'REVIEW'),
+        ('시간 정상', judge_time(5, 6, 1, 1)[0], 'PASS'),
+        ('시간 초과', judge_time(5, 30, 1, 1)[0], 'ERROR'),
+        ('짧으면 배수 무시', judge_time(1, 9, 1, 1)[0], 'PASS'),
+        ('Measure 컬럼 없음', judge_shape(['SITE'], [('X',)], ['SITE'], [{'SITE': 'X'}]), None),
+        ('AS-IS 0행', judge_shape(A, [], T, tr), None),
+        ('사용자 인자 없음 = 같은 사용자 대상 아님', same_user_rows(None, None, 'X', {'sheet': 'S'}, {'asis_sp': 'X_GET_Y'}, 'P', {'p_division_id': '40'})[0]['verdict'], 'NA'),
+        ('T464 검색어 user_id(LIKE·빈 값 검사만) = NA', same_user_rows(None, None, 'X', {'sheet': 'S'}, {'asis_sp': 'X_GET_Y'}, 'P', {'p_user_id': ''}, _T464)[0]['verdict'], 'NA'),
+        ('T464 변이: TITLESET_USER 참조 = 검색어 아님', bool(user_param_is_search_term(_T464 + ' JOIN SCM_MST_TITLESET_USER T ON T.USER_ID = @p_user_id', {'p_user_id': ''})), False),
+        ('T464 변이: = 비교(로그인 사용자) = 검색어 아님', bool(user_param_is_search_term("@p_user_id NVARCHAR(MAX)\nWHERE a.CREATED_BY = @p_user_id", {'p_user_id': ''})), False),
+        ('T464 변이: 원문 없음 = 검색어 아님', bool(user_param_is_search_term('', {'p_user_id': ''})), False),
+    ]
+    ok = 0
+    for n, g, w in cases:
+        if g == w: ok += 1
+        else: print('FAIL', n, g, w)
+    print(f'{ok}/{len(cases)}')
+    return 0 if ok == len(cases) else 1
+
+
+def run_asis(cx, sp, params):
+    # golden.py 를 import 하면 스크립트 전체가 실행된다(2026-11-01 골든 대조·요약 파일 재생성 사고) — 조회 1건만 직접 실행
+    if not re.search(r'_GET_', sp, re.I): raise ValueError(f'조회 SP 아님: {sp}')
+    cur = cx.cursor(); ps = list(params.items())
+    cur.execute(f"EXEC dbo.[{sp}] " + ', '.join(f'@{k}=?' for k, _ in ps), [v for _, v in ps]) if ps else cur.execute(f"EXEC dbo.[{sp}]")
+    sets = []
+    while True:
+        if cur.description:
+            sets.append(([d[0] for d in cur.description], cur.fetchmany(200000)))
+        if not cur.nextset(): break
+    return sets
+
+
+def norm_all(sp_text, ps):
+    """인자별 '전체' 값을 AS-IS SP 본문에서 읽어 맞춘다 — 같은 SP 안에서도 @p_project_code = '' · @p_site = 'ALL' 로 다르다(2026-11-03 DMF0003 ALL 전달 0행)"""
+    out = dict(ps)
+    for k, v in ps.items():
+        if v not in ('ALL', ''):
+            continue
+        n = re.escape(k.lstrip('@'))
+        blank = re.search(rf"(?i)@{n}\s*(=|<>|!=)\s*N?''", sp_text); al = re.search(rf"(?i)@{n}\s*(=|<>|!=)\s*N?'ALL'", sp_text)
+        if blank and not al: out[k] = ''
+        elif al and not blank: out[k] = 'ALL'
+    return out
+
+
+def run_tobe(tcx, proc, params):
+    """TO-BE 조회 PROC 직접 실행(이름에 _GET_ 있는 것만) — 인자 이름은 개념 일치. golden.py 는 import 하면 스크립트가 돌아서 쓰지 않는다"""
+    import oracledb
+    if not re.search(r'_GET_', proc, re.I): raise ValueError(f'조회 PROC 아님: {proc}')
+    cur = tcx.cursor(); pkg, _, name = proc.rpartition('.')
+    cur.execute("""SELECT ARGUMENT_NAME, IN_OUT, DATA_TYPE FROM ALL_ARGUMENTS WHERE OWNER='SCM_MGR' AND OBJECT_NAME=:n AND NVL(PACKAGE_NAME,'~')=NVL(:p,'~')
+                   AND DATA_LEVEL=0 AND ARGUMENT_NAME IS NOT NULL ORDER BY POSITION""", n=name.upper(), p=(pkg.upper() or None))
+    lp = {nk(k): v for k, v in params.items()}; call, outs = [], []
+    for argn, inout, dt in cur.fetchall():
+        if 'OUT' in inout and dt == 'REF CURSOR':
+            v = cur.var(oracledb.DB_TYPE_CURSOR); outs.append((argn, v)); call.append(v)
+        else:
+            call.append(lp.get(nk(argn), lp.get(nk(re.sub(r'(?i)^p_', '', argn)))))
+    cur.callproc(proc, call)
+    for argn, v in outs:
+        rc = v.getvalue()
+        if rc is None or re.search('RESULT_CUR', argn, re.I): continue
+        cols = [d[0] for d in rc.description]
+        if len(cols) > 1:
+            return cols, [dict(zip(cols, r)) for r in rc.fetchmany(200000)]
+    return [], []
+
+
+def pick_users(acur, tcur, program, top=5):
+    """양쪽 DB 에 Measure 칸 설정(M)이 모두 있는 AS-IS 실사용자, 설정 많은 순 — 시험 계정은 AS-IS 에 없어 SP 가 0행을 낸다(2026-11-03 DMF0003)"""
+    acur.execute("SELECT USER_ID, COUNT(*) FROM dbo.SCM_MST_TITLESET_USER WITH(NOLOCK) WHERE PROGRAM_ID = ? AND USER_INQUIRY_COLUMN_TYPE_CODE = 'M' GROUP BY USER_ID", program)
+    a = {str(r[0]): r[1] for r in acur.fetchall()}
+    tcur.execute("SELECT USER_ID, COUNT(*) FROM SCM_MST_TITLESET_USER WHERE PROGRAM_ID = :p AND USER_INQUIRY_COLUMN_TYPE_CODE = 'M' GROUP BY USER_ID", p=program)
+    t = {str(r[0]): r[1] for r in tcur.fetchall()}
+    return sorted(set(a) & set(t), key=lambda u: (-min(a[u], t[u]), u))[:top]
+
+
+def user_param_is_search_term(sp_text, ps):
+    """T464(2026-11-25 SSP0014 EG-29c0f2b6 · AI 검토 검사기오판): 이름에 user_id 가 든 인자가 로그인 사용자가 아니라 조회조건 검색어인지.
+    AS-IS SP 원문이 사용자별 칸 설정(SCM_MST_TITLESET_USER)을 참조하지 않고, 그 인자를 쓰는 곳이 선언·빈 값 검사·LIKE 비교뿐이면 검색어 → 반환 = 근거 문구('' = 아님)"""
+    t = re.sub(r'(?s)/\*.*?\*/', ' ', sp_text or ''); t = re.sub(r'--[^\n]*', '', t)  # 주석(예시 EXEC 문 등)은 쓰임으로 세지 않는다
+    if not t.strip() or re.search(r'(?i)TITLESET_USER', t):
+        return ''
+    ups = [k for k in ps if re.search('(?i)created_by|user_id', k)]
+    if not ups:
+        return ''
+    ev = []
+    for k in ups:
+        n = re.escape(k.lstrip('@'))
+        uses = [m.start() for m in re.finditer(rf'(?i)@{n}\b', t)]
+        if not uses:
+            return ''
+        kinds = set()
+        for i in uses:
+            e = t.find('\n', i)
+            ln = t[t.rfind('\n', 0, i) + 1: e if e >= 0 else len(t)]
+            seg = t[max(0, i - 40): i + len(k) + 40]
+            decl = re.match(rf'(?i)^,?\s*@{n}\s+\w+', ln.strip()) and not re.search(r'(?i)\b(AND|OR|WHERE|LIKE)\b|=', ln)
+            empty = re.search(rf"(?i)@{n}\s+IS\s+NULL|@{n}\s*=\s*N?''", seg)
+            like = re.search(rf"(?i)LIKE\s+N?'%'\s*\+\s*@{n}\b", seg)
+            if not (decl or empty or like):
+                return ''
+            kinds.add('LIKE' if like else '빈 값 검사' if empty else '선언')
+        ev.append(f"{k}({'·'.join(sorted(kinds))})" if kinds != {'선언'} else f"{k}(선언만 · 본문에서 안 씀)")
+    return f"AS-IS SP 원문(주석 제외): 인자 {ev} · SCM_MST_TITLESET_USER 참조 없음 → 로그인 사용자 칸 아님(LIKE 검색어 또는 미사용)"
+
+
+def same_user_rows(cx, tcx, mid, base, g, proc, ps, sp_text=None):
+    """AS-IS 0행일 때 같은 실사용자·같은 인자로 양쪽을 실행해 건수·Measure 행 구성을 대조"""
+    # 2026-11-19 미검증 해소(SCP0096 EG-938ba32f): 조회 SP 인자에 사용자 칸이 없으면 결과가 사용자별 칸 설정과 무관하다, 같은 사용자 재실행 대상 아님(SP 인자 근거 NA).
+    #   건수 차이 판정은 주 행(판정필요)이 맡는다. 사용자 인자가 있는데 양쪽 설정 사용자가 없을 때만 측정 경로 없음(ERROR)
+    if not any(re.search('(?i)created_by|user_id', k) for k in ps):
+        return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'NA', 'asis_rows': 0,
+                 'detail': f"조회 SP 인자 {sorted(ps)} 에 사용자 칸 없음, 결과가 사용자 칸 설정과 무관해 같은 사용자 재실행 대상 아님(건수 차이는 주 행에서 판정)", 'note': ''}]
+    srch = user_param_is_search_term(sp_text, ps)  # T464
+    if srch:
+        return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'NA', 'asis_rows': 0,
+                 'detail': f"{srch} — 결과가 사용자 칸 설정과 무관해 같은 사용자 재실행 대상 아님(건수 차이는 주 행에서 판정)", 'note': ''}]
+    users = pick_users(cx.cursor(), tcx.cursor(), mid)
+    if not users:
+        return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'ERROR', 'asis_rows': 0, 'detail': '[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음', 'note': ''}]
+    import time
+    user, up, sets = users[0], ps, []; a_sec = 0.0
+    cur = cx.cursor(); cur.execute(f"SELECT OBJECT_DEFINITION(OBJECT_ID('dbo.{g['asis_sp']}'))"); sp_text = cur.fetchone()[0] or ''
+    for user in users:
+        up = {k: (user if re.search('(?i)created_by|user_id', k) else 'ADMIN' if re.search('(?i)user_group', k) else v) for k, v in ps.items()}
+        t0 = time.time(); sets = run_asis(cx, g['asis_sp'], norm_all(sp_text, up)); a_sec = time.time() - t0
+        if any(len(x[1]) and len(x[0]) > 1 for x in sets):
+            break
+    acols, arows = next((x for x in sets if len(x[0]) > 1), ([], []))
+    t0 = time.time(); tcols, trows = run_tobe(tcx, proc, up); t_sec = time.time() - t0
+    nt = f'사용자 {user}(ADMIN) · 양쪽 직접 실행'
+    v0 = 'PASS' if len(arows) == len(trows) else 'FAIL' if arows and not trows else 'REVIEW'
+    out = [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': v0, 'asis_rows': len(arows), 'tobe_rows': len(trows), 'detail': f'AS-IS {len(arows)}행 · TO-BE {len(trows)}행', 'note': nt}]
+    rt, wt = judge_time(a_sec, t_sec, len(arows), len(trows))
+    out.append({**base, 'sheet': f"{base['sheet']}|조회시간", 'asis_sp': g['asis_sp'], 'verdict': rt, 'asis_rows': len(arows), 'tobe_rows': len(trows), 'detail': wt, 'note': nt})
+    shp = judge_shape(acols, arows, tcols, trows)
+    if shp:
+        out.append({**base, 'sheet': f"{base['sheet']}|행구성", 'asis_sp': g['asis_sp'], 'verdict': shp[0], 'asis_rows': len(arows), 'tobe_rows': len(trows), 'detail': shp[1], 'note': nt})
+    return out
+
+
+def main():
+    mid = sys.argv[1].upper(); vd = os.path.join(DOC, 'verify', mid); ip = os.path.join(vd, 'a1_live.json'); op = os.path.join(vd, 'a1_live.csv')
+    if not os.path.exists(ip):
+        print(f'{mid}: a1_live.json 없음 — 실행 생략'); return 0
+    d = json.load(open(ip, encoding='utf-8')); out = []
+    pm = [r for r in rd(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if (r.get('menu_id') or '').upper() == mid]
+    gc = rd(os.path.join(DOC, 'golden', 'golden_cases.csv'))
+    cx = None
+    for c in d.get('calls', []):
+        base = {'menu_id': mid, 'sheet': c.get('sheet', ''), 'tobe_rows': d.get('rows', 0)}
+        proc = next((r.get('proc') for r in pm if (r.get('sheet') or '').lower() == str(c.get('sheet')).lower() and (r.get('btn') or '').upper() == str(c.get('btn')).upper()), '')
+        g = next((x for x in gc if x.get('tobe_proc') == proc and proc), None)
+        if not g or not re.search(r'_GET_', g.get('asis_sp') or '', re.I):
+            out.append({**base, 'asis_sp': (g or {}).get('asis_sp', ''), 'verdict': 'ERROR', 'asis_rows': '', 'detail': f"[측정 경로 없음] {c.get('sheet')}/{c.get('btn')} PROC '{proc}' 에 대응하는 AS-IS 조회 SP 없음(golden_cases)", 'note': ''}); continue
+        try: dflt = json.loads(g.get('params') or '{}')
+        except ValueError: dflt = {}
+        args = dict_of(c.get('body') or ''); ps = {}; miss = []
+        for pn, v in dflt.items():
+            k = concept(re.sub(r'(?i)^(p_|v_)', '', pn))
+            if k in args: ps[pn] = args[k]
+            else: ps[pn] = v; miss.append(pn)
+        try:
+            if cx is None:
+                cx = connect('asis')
+            _c = cx.cursor(); _c.execute(f"SELECT OBJECT_DEFINITION(OBJECT_ID('dbo.{g['asis_sp']}'))"); _t = _c.fetchone()[0] or ''
+            sets = run_asis(cx, g['asis_sp'], norm_all(_t, ps))
+            # golden 기본값이 조건을 좁혀 0행이면(화면이 안 보낸 인자) 빈값·'ALL' 로 다시 — 조건 없는 조회와 맞춘다(2026-11-01 DMF0004)
+            for alt in ('', 'ALL'):
+                if miss and not any(len(x[1]) for x in sets):
+                    sets = run_asis(cx, g['asis_sp'], {k: (alt if k in miss and not re.search(r'(?i)user|created|dept', k) else v) for k, v in ps.items()}); note_alt = alt
+        except Exception as e:  # noqa: BLE001 — 실행 실패는 판정 재료가 없다는 뜻
+            out.append({**base, 'asis_sp': g['asis_sp'], 'verdict': 'ERROR', 'asis_rows': '', 'detail': f'[측정 경로 없음] AS-IS 실행 실패 {str(e)[:160]}', 'note': f'미대응 인자 {miss}'}); continue
+        data = next((s for s in sets if len(s[0]) > 1), sets[0] if sets else ([], [])); acols, arows = data
+        n_a, n_t = len(arows), int(d.get('rows') or 0)
+        tcols = d.get('cols') or []; tr = d.get('sample') or []; common = [(a, t) for a in acols for t in tcols if nk(a) == nk(t)]
+        ai = {a: i for i, a in enumerate(acols)}; keyd = ''; txt = []
+        if common and tr and len(tr) >= n_t:
+            txt = [(a, t) for a, t in common if any(re.search(r'[A-Za-z가-힣]', str(row.get(t) or '')) for row in tr[:200]) and not re.search('(?i)CREAT|UPDATE|LAST_|_BY$|_DATE$', a)][:8]
+            if txt:
+                sa = {tuple(str(r[ai[a]] or '').strip() for a, _ in txt) for r in arows}; st = {tuple(str(row.get(t) or '').strip() for _, t in txt) for row in tr}
+                keyd = f"키 {[a for a, _ in txt]} AS-IS 전용 {len(sa - st)} · TO-BE 전용 {len(st - sa)}"
+        # EG036 값 대조 — 같은 키의 숫자 공통 컬럼(계산·환산·합계 결과). 키가 한 행으로 정해질 때만 비교
+        vald = ''
+        if common and tr and len(tr) >= n_t and txt:
+            def num(v):
+                t = str(v if v is not None else '').replace(',', '').strip()
+                try: return float(t) if t != '' else None
+                except ValueError: return None
+            kt = [t for _, t in txt]; ka = [a for a, _ in txt]
+            ma, mt = {}, {}
+            for r in arows: ma.setdefault(tuple(str(r[ai[a]] or '').strip() for a in ka), []).append(r)
+            for row in tr: mt.setdefault(tuple(str(row.get(t) or '').strip() for t in kt), []).append(row)
+            numc = [(a, t) for a, t in common if a not in ka and any(num(row.get(t)) is not None for row in tr[:200])]
+            bad = {}; cmp_n = 0
+            for k in set(ma) & set(mt):
+                if len(ma[k]) != 1 or len(mt[k]) != 1: continue
+                for a, t in numc:
+                    x, y = num(ma[k][0][ai[a]]), num(mt[k][0].get(t))
+                    if x is None and y is None: continue
+                    cmp_n += 1
+                    if abs((x or 0) - (y or 0)) > 0.01: bad.setdefault(a, []).append(f'{x}↔{y}')
+            if numc:
+                vald = f"값 대조 {cmp_n}칸(숫자 컬럼 {len(numc)}) · 불일치 컬럼 {len(bad)}" + (' · ' + ' · '.join(f"{c} {len(v)}건 예 {v[0]}" for c, v in list(bad.items())[:4]) if bad else '')
+        same_keys = (keyd == '' or (' AS-IS 전용 0 ' in keyd and keyd.endswith('TO-BE 전용 0'))) and ' 불일치 컬럼 0' in (vald or ' 불일치 컬럼 0')
+        verdict = 'PASS' if n_a == n_t and same_keys else 'FAIL' if n_t == 0 and n_a > 0 else 'REVIEW'
+        if n_a != n_t and n_t > 0:  # 시험 계정은 AS-IS 설정이 없어 건수가 안 맞는다 — 양쪽 실사용자로 다시(2026-11-03)
+            try:
+                with connect('tobe') as tcx:
+                    out += same_user_rows(cx, tcx, mid, {**base, 'sheet': c.get('sheet', '')}, g, proc, ps, _t)
+            except Exception as e:  # noqa: BLE001
+                out.append({**base, 'sheet': f"{c.get('sheet', '')}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'ERROR', 'asis_rows': '', 'detail': f'[측정 경로 없음] 직접 실행 실패 {str(e)[:160]}', 'note': ''})
+        elif tr and len(tr) >= n_t:  # EG003·EG037 Measure 행 구성(표본이 전 행일 때만)
+            shp = judge_shape(acols, arows, tcols, tr)
+            if shp:
+                out.append({**base, 'sheet': f"{c.get('sheet', '')}|행구성", 'asis_sp': g['asis_sp'], 'verdict': shp[0], 'asis_rows': n_a, 'detail': shp[1], 'note': ''})
+        out.append({**base, 'asis_sp': g['asis_sp'], 'verdict': verdict, 'asis_rows': n_a, 'detail': f'AS-IS {n_a}행 · TO-BE {n_t}행 · {keyd or "키 대조 없음"}{" · " + vald if vald else ""}', 'note': f'미대응 인자 {miss}' if miss else ''})
+    with open(op, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=FIELDS); w.writeheader(); w.writerows(out)
+    for r in out: print(mid, r['sheet'], r['asis_sp'], r['verdict'], r['detail'][:160], r['note'][:80])
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(selftest() if len(sys.argv) > 1 and sys.argv[1] == '--selftest' else main())

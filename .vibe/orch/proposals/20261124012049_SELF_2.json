@@ -1,0 +1,131 @@
+{
+  "id": "20261124012049_SELF_2",
+  "at": "2026-11-24T01:20:49+09:00",
+  "ms": 1795450849193,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/extension.js|산출물목록이시험excel폴더를직접적음",
+  "title": "사용자 지시 R83 같은 문제: tools/VibeManager/extension.js:497 산출물 목록이 시험 Excel 폴더를 직접 적음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/VibeManager/extension.js:497 ['UI 테스트 Excel', path.join(r, 'Doc', 'UI_TEST(SCP&SSP)'), new RegExp(`_${ID}\\(.*\\.xlsx$`)]",
+  "targets": [
+    "tools/VibeManager/extension.js"
+  ],
+  "before_after": "docPaths(root).uiTest로 바꿈",
+  "verify": "node --check tools/VibeManager/extension.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/extension.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T06:50:47+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T06:54:48+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0650"
+    },
+    {
+      "at": "2026-11-25T06:54:51+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T07:07:17+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 extension.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T07:07:17+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-25 06:59:07: node --check 통과, run_all ALL OK 84/84 PASS 1367 FAIL 0 → 반영 뒤 2026-11-25 07:03:06: node --check 통과, run_all ALL OK 84/84 PASS 1367 FAIL 0 · 변경 17개 파일 · 대상 목록 밖 변경 16개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_CRUD_필수_공란_실제_저장_시도_E3_필수_채워_실제_저장_재조회_값_보존_정리_F1_F2_F4_F6__0.json, Doc/verify/SCP0005/calls/_verify_조회_전_버튼_전제조건_D4_화면_진입_다국어_I2__0.json, Doc/verify/SCP0005/combo_runtime.json, Doc/verify/SCP0005/e2e_results.json, Doc/verify/SCP0005/e2e_test_kind.jsonl",
+      "log": ".vibe\\logs\\2026-11-25T06-54-51_claude_orch.log",
+      "sec": 514,
+      "costUsd": 0.6582898000000004,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_verify_CRUD_필수_공란_실제_저장_시도_E3_필수_채워_실제_저장_재조회_값_보존_정리_F1_F2_F4_F6__0.json",
+        "Doc/verify/SCP0005/calls/_verify_조회_전_버튼_전제조건_D4_화면_진입_다국어_I2__0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "tools/VibeManager/extension.js",
+        "Doc/e2e/_run.acct.11796.json",
+        "Doc/e2e/_run.acct.43236.json",
+        "Doc/verify/SCP0005/calls/_verify_선택_조회_복수_단일_전체_왕복_G2_B6__0.json",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_065452_43136/_verify-정합검증-SCP0005-verify-레이아웃·조회-묶음-H4·N1·G1·L2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_065452_43136/_verify-정합검증-SCP0005-verify-선택-조회-복수·단일·전체-왕복-G2·B6--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read14/video/20261125_065533_44768/_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read14/video/20261125_065533_44768/_verify-정합검증-SCP0005-verify-조회-전-버튼-전제조건-D4-·-화면-진입-다국어-I2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/results_read12.json",
+        "Doc/verify/SCP0005/e2e/results_read14.json",
+        "Doc/verify/SCP0005/touched_rows.json"
+      ]
+    },
+    {
+      "at": "2026-11-25T09:28:47+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T09:27:55+09:00"
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/VibeManager/extension.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/VibeManager/extension.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795557047379,
+  "autoFp": "15c7dd8ee4",
+  "applyStartMs": 1795557291325,
+  "verifyJudge": {
+    "at": "2026-11-25T07:03:27+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0650",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "extension.js"
+  ],
+  "appliedMs": 1795558037808,
+  "synced": [
+    "extension.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/extension.js 오류 없음(반영 전, 반영 뒤) · node tools/VibeManager/test/run_all.js 'ALL OK  파일 84/84  PASS 1367  FAIL 0  227.3s' → 'ALL OK  파일 84/84  PASS 1367  FAIL 0  229.1s' · 웹뷰 파일 아님(t_webview_syntax.js 는 run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/extension.js"
+    ],
+    "verify_result": "반영 전 2026-11-25 06:59:07: node --check 통과, run_all ALL OK 84/84 PASS 1367 FAIL 0 → 반영 뒤 2026-11-25 07:03:06: node --check 통과, run_all ALL OK 84/84 PASS 1367 FAIL 0",
+    "note": "대상 줄은 497행이 아니고 509행임. 'UI 테스트 Excel' 폴더를 workbench.docPaths(r).uiTest || path.join(r, 'Doc', 'UI_TEST(SCP&SSP)') 로 바꿈. workbench.js:266 docPaths() 는 checklist 값만 돌려주고 uiTest 값이 없음. workbench.js 는 승인 대상(targets) 밖이라 고치지 않았고, 화면에 나오는 폴더는 반영 전과 같음. harness.json 에 UI 테스트 Excel 폴더 항목 없음. 후속 개선안 후보: workbench.js docPaths() 에 uiTest 추가(harness.json 경로 항목, 기본 Doc/UI_TEST(SCP&SSP)) 뒤 extension.js:509 의 예전 경로 삭제."
+  },
+  "snap": "prop_20261124012049_SELF_2",
+  "effectiveMs": 1795566475935,
+  "effectiveAt": "2026-11-25T09:27:55+09:00"
+}

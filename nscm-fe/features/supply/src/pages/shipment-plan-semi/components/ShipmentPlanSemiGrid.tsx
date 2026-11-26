@@ -14,6 +14,7 @@ import { buildColumns } from '../utils/shipment-plan-semi.buildColumns';
 import { distributeWeeklyToDailyBindings } from '../utils/shipment-plan-semi.deptDayDistribute';
 import { dynColKindOf, isMainCellEditable, isQtyInRange, pickField, type MainEditContext } from '../utils/shipment-plan-semi.editLock';
 import { type HeaderKey, ShipmentPlanSemiHeaderMergeManager } from '../utils/shipment-plan-semi.headerMerge';
+import { canOpenBodPopup } from '../utils/shipment-plan-semi.insert';
 
 // 헤더 전체 높이 캡 — tier 수(2~3단: 월/주/일)와 무관하게 총 높이를 이 값으로 고정하고 각 헤더 행에 분배한다
 //   (SCP0013 ProductionPlanLineGrid 와 동일). 없으면 공용 매핑이 tier 마다 고정 높이를 박아 3단일 때 헤더가 커진다.
@@ -44,6 +45,7 @@ interface Props {
   planEditable: boolean; // GET SP o_rc2 IS_EDITABLE='Y' — plan-level 편집가능 게이트(과거주 플랜 전면 잠금)
   chkSum: boolean;
   onFocus: () => void;
+  onBodCellClick?: (row: Record<string, unknown>) => void; // BOD Master 팝업 열기(TRANSPORT_MODE/T0_SITE_DESCRIPTION 셀 클릭)
 }
 
 const s = (v: unknown): string => (typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '');
@@ -76,6 +78,7 @@ export const ShipmentPlanSemiGrid = ({
   planEditable,
   chkSum,
   onFocus,
+  onBodCellClick,
 }: Props) => {
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;
@@ -171,9 +174,22 @@ export const ShipmentPlanSemiGrid = ({
     return map;
   }, [dynColMetas]);
 
+  // 정수 입력제한 — AS-IS 버킷컬럼 SetReNumerCellType(SCP0010 .cs:503·508, DecimalPlaces=0)으로 동적
+  //   D_/W_/M_ 전건이 소수점 0자리(정수 전용)다. 자매 shipment-plan-fg 와 동일하게 numberRules prop 으로 건다
+  //   (동적 컬럼 config 에 integerOnly 를 실으면 wijmo Column 생성이 깨진다).
+  const numberRules = useMemo(() => {
+    const rules: Record<string, { integerOnly: true }> = {};
+    dynColMetas.forEach(m => {
+      rules[m.binding] = { integerOnly: true };
+    });
+    return rules;
+  }, [dynColMetas]);
+
   // Bucket x chkSum -> visible 토글(design 03 §2.4) — SCP0009 와 달리 chkAll 예외 없음(§0.2, 죽은 코드).
   const isDynVisible = (kind: 'D' | 'W' | 'M'): boolean => {
-    if (bucketType === BUCKET_TYPE.DAILY) return kind === 'D' || (kind === 'M' && chkSum);
+    // Daily + Sum = 주(W_)·월(M_) 합계 모두 노출(자매 shipment-plan-fg 동일). 종전엔 M_ 만 켜서
+    //   주 단위 SUM 이 안 나오던 버그.
+    if (bucketType === BUCKET_TYPE.DAILY) return kind === 'D' || chkSum;
     if (bucketType === BUCKET_TYPE.WEEKLY) return kind === 'W' || (kind === 'M' && chkSum);
     return kind === 'M'; // Monthly — M_ 만
   };
@@ -347,6 +363,8 @@ export const ShipmentPlanSemiGrid = ({
     weekOrMonthStart: editRepDate,
     weekBindingsAsc,
   };
+  const onBodCellClickRef = useRef(onBodCellClick);
+  onBodCellClickRef.current = onBodCellClick;
 
   useEffect(() => {
     const g = gridRef.current;
@@ -456,6 +474,12 @@ export const ShipmentPlanSemiGrid = ({
       //   판정은 beginningEdit 게이트와 동일한 isMainCellEditable 이라 "노란 셀 = 실제 입력 가능" 일치.
       const editable = !!dataItem && isMainCellEditable(binding, dataItem, editCtxRef.current);
       e.cell.classList.toggle('wj-cell-editable', editable);
+      // SHIP_PLAN_AMEND 행 D_ 입력밴드 회색(AS-IS Set_FPOperationColor .cs:1131-1174, design 03 R-G).
+      //   AS-IS 는 잠금과 무관하게 D_ 전부 회색이나, 편집가능 셀은 공용 노란색을 우선한다(사용자 결정 2026-11-23).
+      //   셀 DOM 재사용 대비 미해당 데이터 셀은 해제한다.
+      if (e.panel?.cellType === CellType.Cell) {
+        e.cell.style.backgroundColor = isAmendRow && binding.startsWith('D_') && !editable ? 'rgb(234,234,234)' : '';
+      }
     };
     g.formatItem.addHandler(formatItemHandler as never);
 
@@ -466,8 +490,26 @@ export const ShipmentPlanSemiGrid = ({
     });
     g.invalidate(true);
 
+    // TRANSPORT_MODE / T0_SITE_DESCRIPTION 셀 클릭 -> BOD Master 팝업(AS-IS SpdMain_CellClick .cs:4683-4706).
+    //   Plan 편집가능 + Bucket != Monthly(_isInsert) + 수정되지 않은 행(AS-IS 행 action I/M/D/A 제외)일 때만.
+    //   잠긴 Plan Type(FN/TE)은 부모가 본다.
+    const clickHandler = (ev: MouseEvent) => {
+      const ht = g.hitTest(ev);
+      if (ht.cellType !== CellType.Cell) return;
+      const binding = g.columns[ht.col]?.binding ?? '';
+      const row = g.rows[ht.row]?.dataItem as Record<string, unknown> | undefined;
+      if (!row || !onBodCellClickRef.current) return;
+      const ctx = editCtxRef.current;
+      if (!ctx.planEditable || ctx.bucketType === BUCKET_TYPE.MONTHLY) return;
+      if (editTrackerRef.current?.getOriginalValues().has(row as WijmoRowItem)) return;
+      if (!canOpenBodPopup(row, binding)) return;
+      onBodCellClickRef.current(row);
+    };
+    g.hostElement.addEventListener('click', clickHandler);
+
     return () => {
       try {
+        g.hostElement?.removeEventListener('click', clickHandler);
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.cellEditEnded?.removeHandler(cellEditEndedHandler);
         g.pastedCell?.removeHandler(cellEditEndedHandler);
@@ -545,6 +587,7 @@ export const ShipmentPlanSemiGrid = ({
         itemsSource={displayRows as unknown as WijmoRowItem[]}
         staticColumns={staticColumns}
         dynamicColumns={dynamicColumns as unknown as FlexGridColumnConfig[]}
+        numberRules={numberRules}
         allowMerging={AllowMerging.All}
         initialized={handleGridInitialized}
         gotFocus={onFocus}

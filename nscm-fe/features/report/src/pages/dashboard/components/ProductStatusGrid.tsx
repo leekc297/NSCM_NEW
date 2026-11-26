@@ -1,9 +1,18 @@
 import { CellType, FlexGrid, HeadersVisibility, SelectionMode } from '@mescius/wijmo.grid';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import type { ActionTone, ProductStatusRow, StatusDot } from '../demand-as-dashboard.mock';
-import { PRODUCT_STATUS_ROWS } from '../demand-as-dashboard.mock';
+import { useTabProcQuery } from '@shared/hooks';
+
+import { MENU_ID, SHEETS } from '../demand-as-dashboard.constants';
+import type { DashboardBaseFilters } from '../demand-as-dashboard.filters';
+import { LBL } from '../demand-as-dashboard.labels';
+import { ACTION_LABEL_CODE, ACTION_LABEL_FALLBACK } from '../demand-as-dashboard.rules';
+import type { ActionTone, ProductStatusRow, StatusDot } from '../demand-as-dashboard.types';
 import styles from '../DemandAsDashboard.module.scss';
+import { useDashboardColumnLabels } from '../useDashboardColumnLabels';
+
+import { mapProductStatus } from './productStatusGrid.map';
 
 const ACTION_CLASS: Record<ActionTone, string> = {
   keep: styles.actionKeep,
@@ -16,28 +25,66 @@ const DOT_CLASS: Record<StatusDot, string> = {
   red: styles.dotRed,
 };
 
-export const ProductStatusGrid = () => {
+interface ProductStatusGridProps {
+  tabId: string;
+  filters: DashboardBaseFilters;
+}
+
+export const ProductStatusGrid = ({ tabId, filters }: ProductStatusGridProps) => {
   const hostRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+  const { labels, header } = useDashboardColumnLabels(SHEETS.PRODUCT_STATUS);
+
+  const { data } = useTabProcQuery<MENU_ID, typeof SHEETS.PRODUCT_STATUS>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.PRODUCT_STATUS,
+    tabId,
+    filters,
+    enabled: !!filters,
+  });
+
+  const mapped = useMemo(() => mapProductStatus(data?.o_rc1 ?? []), [data]);
+
+  // 권고 Action 라벨은 FE 하드코딩이 아니라 actionCode → i18n 메시지로 해석한다(언어 변경 시 재해석).
+  //   미등록 상태면 fallback('_생산 필요' 등)이 보인다. 코드 등록 SQL: design/05_register_msg.sql.
+  const rows = useMemo<ProductStatusRow[]>(
+    () =>
+      mapped.map(r => ({
+        product: r.product,
+        oem: r.oem,
+        bizType: r.bizType,
+        stock: r.stock,
+        cover: r.cover,
+        shortageMonth: r.shortageMonth,
+        actionTone: r.actionTone,
+        status: r.status,
+        action: r.actionCode
+          ? t(ACTION_LABEL_CODE[r.actionCode], ACTION_LABEL_FALLBACK[r.actionCode])
+          : '-',
+      })),
+    [mapped, t]
+  );
 
   useEffect(() => {
     if (!hostRef.current) return undefined;
     const grid = new FlexGrid(hostRef.current, {
-      itemsSource: PRODUCT_STATUS_ROWS,
+      itemsSource: rows,
       isReadOnly: true,
       selectionMode: SelectionMode.None,
       headersVisibility: HeadersVisibility.Column,
       allowSorting: false,
       autoGenerateColumns: false,
-      // Inventory Cover 헤더가 길어 star 가중치로 넓게, 짧은 컬럼은 좁게 배분(패널 폭에 맞춰 스케일).
+      // 헤더 텍스트는 컬럼 메타(COLUMN_LABEL_NAME)에서 — binding·width·align 은 커스텀 유지.
+      //   Inventory Cover 헤더가 길어 star 가중치로 넓게, 짧은 컬럼은 좁게 배분(패널 폭에 맞춰 스케일).
       columns: [
-        { header: '제품', binding: 'product', width: '0.8*', align: 'center' },
-        { header: 'OEM', binding: 'oem', width: '0.8*', align: 'center' },
-        { header: 'Biz Type', binding: 'bizType', width: '0.9*', align: 'center' },
-        { header: '현재 재고 (EA)', binding: 'stock', width: '1.1*', align: 'right' },
-        { header: 'Inventory Cover (개월)', binding: 'cover', width: '1.9*', align: 'center' },
-        { header: '예상 부족월', binding: 'shortageMonth', width: '1*', align: 'center' },
-        { header: '권고 Action', binding: 'action', width: '1.1*', align: 'center' },
-        { header: '상태', binding: 'status', width: 56, align: 'center' },
+        { header: header('PRODUCT', '_제품'), binding: 'product', width: '0.8*', align: 'center' },
+        { header: header('OEM', '_OEM'), binding: 'oem', width: '0.8*', align: 'center' },
+        { header: header('BIZTYPE', '_Biz Type'), binding: 'bizType', width: '0.9*', align: 'center' },
+        { header: header('STOCK', '_현재 재고 (EA)'), binding: 'stock', width: '1.1*', align: 'right' },
+        { header: header('COVER', '_Inventory Cover (개월)'), binding: 'cover', width: '1.9*', align: 'center' },
+        { header: header('SHORTAGEMONTH', '_예상 부족월'), binding: 'shortageMonth', width: '1*', align: 'center' },
+        { header: header('ACTION', '_권고 Action'), binding: 'action', width: '1.1*', align: 'center' },
+        { header: header('STATUS', '_상태'), binding: 'status', width: 56, align: 'center' },
       ],
     });
 
@@ -86,19 +133,19 @@ export const ProductStatusGrid = () => {
       observer.disconnect();
       grid.dispose();
     };
-  }, []);
+  }, [rows, labels]);
 
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
-        <span className={styles.panelTitle}>제품별 현황</span>
+        <span className={styles.panelTitle}>{t(...LBL.productStatusTitle)}</span>
       </div>
       <div className={styles.panelBody}>
         <div className={styles.gridHost} ref={hostRef} />
       </div>
       <div className={styles.gridFoot}>
-        <span>※ Inventory Cover = 현재 재고 / 월평균 수요(예측)</span>
-        <span className={styles.moreLink}>더보기 ›</span>
+        <span>※ {t(...LBL.productStatusFootNote)}</span>
+        <span className={styles.moreLink}>{t(...LBL.more)} ›</span>
       </div>
     </div>
   );

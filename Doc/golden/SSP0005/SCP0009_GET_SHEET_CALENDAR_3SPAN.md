@@ -1,6 +1,6 @@
 # SSP0005 · SCP0009_GET_SHEET_CALENDAR_3SPAN ↔ PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN
 
-- 실행: 2026-11-20 10:02:18
+- 실행: 2026-11-25 01:17:43
 - 파라미터: `{"p_start_yyyymmdd": "20261120", "p_end_yyyymmdd": "20271114"}`
 - 종류: GET
 - 빈 인자 p_start_yyyymmdd, p_end_yyyymmdd = 차등 검증 호출 #2 실측 AS-IS 인자(2026-11-20 08:53:29)

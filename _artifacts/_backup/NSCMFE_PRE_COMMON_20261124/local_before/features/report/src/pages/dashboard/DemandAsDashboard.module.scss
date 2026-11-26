@@ -1,0 +1,598 @@
+// DMD0001 Demand AS Dashboard — 무스크롤 고정 레이아웃 + 카드/패널/Heat Map 스타일.
+//   루트는 height:100% + overflow:hidden. 행은 고정(header/kpi/footer) + 가변(mid/charts/bottom).
+
+$border: #e3e8ef;
+$panel-bg: #ffffff;
+$page-bg: #f4f6fa;
+$title: #1f2a44;
+$muted: #8a94a6;
+
+.root {
+  // 부모(.viewInner)가 flex column 이라 flex:1 1 0 으로 남은 높이를 전부 채운다.
+  //   height:100% 만으로는 퍼센트 기준 높이가 풀리지 않아 1fr 행이 축소되지 않고 콘텐츠
+  //   높이만큼 쌓여(=뷰포트 초과) 아래가 잘렸다. flex 로 확정 높이를 받아 무스크롤 고정.
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 0.9fr) auto;
+  gap: 8px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: $page-bg;
+  // 공통 타이포 토큰 채택(2026-11-16): 화면 고유 px 대신 foundation _typography 토큰으로 통일한다.
+  //   본문/제목 base(14) · 보조 텍스트 sm(12) · 큰 수치 2xl(24). 폰트 패밀리는 전역 body 상속.
+  font-size: $font-size-base;
+  color: #2b3345;
+}
+
+// ----- 공통 패널 -----
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: $panel-bg;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  flex: 0 0 auto;
+}
+
+.panelTitle {
+  font-size: $font-size-base;
+  font-weight: 700;
+  color: $title;
+
+  small {
+    font-weight: 500;
+    font-size: $font-size-sm;
+    color: $muted;
+    margin-left: 4px;
+  }
+}
+
+.panelBody {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+// ----- 검색조건 바 -----
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  background: $panel-bg;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  label {
+    font-size: $font-size-base;
+    color: $muted;
+    white-space: nowrap;
+  }
+
+  // 표준 조회조건 콤보(CustomDropdown) 호스트 — 네이티브 select 를 대체한다.
+  //   폭만 고정하고 높이/테두리/화살표는 표준 컴포넌트 기본값을 그대로 쓴다(표준 밀도 정합).
+  .control {
+    width: 132px;
+
+    :global(.MuiFormControl-root) {
+      width: 100%;
+    }
+  }
+}
+
+.updated {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 1px solid $border;
+  color: $muted;
+  font-size: $font-size-sm;
+
+  strong {
+    color: #2b3345;
+    font-weight: 600;
+  }
+}
+
+// ----- KPI 요약 -----
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: $panel-bg;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 18px 24px;
+  box-sizing: border-box;
+}
+
+// 라벨(상단, 가운데 정렬)
+.kpiLabel {
+  font-size: $font-size-sm;
+  font-weight: 700;
+  color: #3a4357;
+  text-align: center;
+}
+
+// 아이콘은 왼쪽에 고정(absolute), 값(숫자+단위)은 카드 전체 폭 기준 중앙 정렬 → 제목 바로 밑에 중앙 정렬.
+.kpiMain {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  flex: 1 1 auto;
+}
+
+.kpiIcon {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  flex: 0 0 auto;
+
+  svg {
+    font-size: 34px;
+  }
+}
+
+.kpiValue {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  // 왼쪽 아이콘(absolute)과 겹치지 않게 값(숫자+단위)을 카드 중앙에서 오른쪽으로 더 민다.
+  transform: translateX(16px);
+
+  b {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+    color: $title;
+  }
+
+  span {
+    font-size: $font-size-base;
+    color: $muted;
+  }
+}
+
+.kpiDelta {
+  position: relative;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $muted;
+
+  em {
+    font-style: normal;
+    font-weight: 600;
+  }
+}
+
+// '전월대비' 라벨은 왼쪽(아이콘 아래)에 고정, 증감 값(em)만 카드 중앙 정렬.
+.kpiDeltaLabel {
+  position: absolute;
+  left: 0;
+}
+
+// KPI accent 색 (아이콘 배경/글자 + delta 방향색).
+// 아이콘·증감 텍스트가 공유하는 accent 색(단일 소스).
+$accent-blue: #1565c0;
+$accent-green: #2e7d32;
+$accent-red: #d32f2f;
+$accent-orange: #ed6c02;
+$accent-teal: #0d9488;
+$accent-indigo: #3949ab;
+
+.accentBlue { color: $accent-blue; background: #e8f1fd; }
+.accentGreen { color: $accent-green; background: #e7f5ea; }
+.accentRed { color: $accent-red; background: #fdecec; }
+.accentOrange { color: $accent-orange; background: #fff2e3; }
+.accentTeal { color: $accent-teal; background: #e3f6f4; }
+.accentIndigo { color: $accent-indigo; background: #e9ebfa; }
+
+// 아이콘 색만(배경 없이) — 상단 라벨·증감 텍스트가 같은 카드 아이콘 색을 공유한다.
+.accentTextBlue { color: $accent-blue; }
+.accentTextGreen { color: $accent-green; }
+.accentTextRed { color: $accent-red; }
+.accentTextOrange { color: $accent-orange; }
+.accentTextTeal { color: $accent-teal; }
+.accentTextIndigo { color: $accent-indigo; }
+
+// ----- 중단 2열 (제품별 현황 / Heat Map) -----
+.midRow {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 8px;
+  min-height: 0;
+}
+
+// ----- 차트 3열 / 하단 3열 -----
+.chartsRow,
+.bottomRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  min-height: 0;
+}
+
+.chartHost {
+  position: absolute;
+  inset: 0;
+  // wijmo 차트 텍스트(축 라벨·범례)는 명시 폰트가 없어 .root 의 base(14px)를 상속해 다른 영역보다
+  //   크게 보인다. 대시보드 보조 텍스트 기준 sm(12px)로 맞춘다.
+  font-size: $font-size-sm;
+
+  // 전역 wijmo 테마(_chart.scss)가 .wj-flexchart 에 height:400px + padding/margin/border 를
+  //   고정으로 건다. wijmo 는 호스트 div '자신'에 wj-flexchart 클래스를 붙이므로(자식 아님)
+  //   같은 요소를 가리키는 compound 셀렉터로 높이를 100%(=패널 높이)로 덮고 여백/테두리 제거.
+  &:global(.wj-flexchart) {
+    height: 100%;
+    margin: 0;
+    padding: 4px 2px;
+    border: none;
+  }
+}
+
+// 차트 상단 제품 드롭다운
+.chartTool {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  label { font-size: $font-size-sm; color: $muted; }
+
+  select {
+    height: 24px;
+    border: 1px solid $border;
+    border-radius: 5px;
+    padding: 0 6px;
+    font-size: $font-size-sm;
+    background: #fff;
+  }
+}
+
+// ----- 제품별 현황 / Excess FlexGrid 호스트 -----
+.gridHost {
+  position: absolute;
+  inset: 0;
+
+  // Wijmo 셀 패널 폭/높이가 컨트롤 content-box 보다 sub-px 작아, 우/하단에서 컨트롤 자체
+  //   테두리와 마지막 셀 테두리가 어긋나 이중선으로 보인다(비정수 배율에서 특히). 우/하단
+  //   컨트롤 테두리를 제거하고 셀 테두리를 바깥선으로 써 단선으로 만든다(상/좌는 유지).
+  &:global(.wj-content) {
+    border-right: none;
+    border-bottom: none;
+  }
+
+  // 긴 컬럼 헤더가 잘리지 않게 줄바꿈 허용(헤더 행 높이는 코드에서 키운다).
+  :global(.wj-header) {
+    white-space: normal;
+    line-height: 1.2;
+  }
+}
+
+.gridHostRel {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+}
+
+.gridFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex: 0 0 auto;
+  margin-top: 6px;
+  font-size: $font-size-sm;
+  color: $muted;
+}
+
+// 재고 전망 '예상 부족 시작' 콜아웃 (차트 위 오버레이).
+.shortageBadge {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  white-space: pre-line;
+  text-align: center;
+  font-size: $font-size-sm;
+  font-weight: 700;
+  color: #d32f2f;
+  background: #fdf1f1;
+  border: 1px solid #f3c9c9;
+  border-radius: 6px;
+  padding: 4px 8px;
+  line-height: 1.3;
+  pointer-events: none;
+}
+
+.actionBadge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: $font-size-sm;
+  font-weight: 700;
+}
+.actionKeep { color: #2e7d32; background: #e7f5ea; }
+.actionReview { color: #ed6c02; background: #fff2e3; }
+.actionProduce { color: #d32f2f; background: #fdecec; }
+
+.statusDot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.dotGreen { background: #2e9e4b; }
+.dotOrange { background: #f0a21b; }
+.dotRed { background: #e53935; }
+
+.moreLink {
+  font-size: $font-size-sm;
+  color: #5b6478;
+  cursor: default;
+}
+
+// ----- 리스크 Heat Map -----
+.heatLegend {
+  display: flex;
+  gap: 10px;
+  font-size: $font-size-sm;
+  color: $muted;
+
+  span { display: inline-flex; align-items: center; gap: 4px; }
+  i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+}
+
+.heatTable {
+  width: 100%;
+  height: 100%; // 행이 적어도 패널 높이를 꽉 채운다(행이 균등 분배되어 아래 여백 제거).
+  border-collapse: collapse;
+  font-size: $font-size-sm;
+
+  th, td {
+    border: 1px solid $border;
+    text-align: center;
+    // 전역 reset 이 td 에 vertical-align:baseline 을 걸어, height:100% 로 늘어난 키 큰 행에서
+    //   제품명이 세로 중앙에 오지 않는다. middle 로 되돌려 세로 중앙 정렬.
+    vertical-align: middle;
+    padding: 6px 4px;
+  }
+  th {
+    background: #f7f9fc;
+    color: #4a5468;
+    font-weight: 600;
+  }
+  td:first-child, th:first-child {
+    font-weight: 700;
+    color: $title;
+    background: #fbfcfe;
+  }
+}
+
+.riskCell {
+  position: relative;
+}
+.riskLow { background: #eaf7ec; }
+.riskMedium { background: #fff6e4; }
+.riskHigh { background: #fdeeee; }
+
+.riskDot {
+  // .riskCell(position:relative) 기준 절대 중앙 정렬 — 셀 padding/baseline 영향 없이 가로세로 정중앙.
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+// ----- Excess 위험 금액 박스 -----
+.excessWrap {
+  // mapeWrap 과 동일 — panelBody 높이 불확정 문제 회피를 위해 absolute inset:0 으로 채운다.
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1.6fr 0.5fr; // 예상 폐기 위험 금액 박스 폭 추가 축소(약 -50px)
+  grid-template-rows: minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+}
+
+.riskBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  background: #fdf1f1;
+  border: 1px solid #f6d6d6;
+  border-radius: 8px;
+  padding: 10px;
+
+  .riskBoxLabel { font-size: $font-size-sm; color: #b4524f; line-height: 1.4; }
+  .riskBoxValue { font-size: $font-size-2xl; font-weight: 800; color: #d32f2f; }
+  .riskBoxUnit { font-size: $font-size-sm; color: #b4524f; }
+}
+
+// ----- MAPE -----
+.mapeWrap {
+  // panelBody(flex item)는 높이가 "불확정"이라 일반 흐름 자식의 height:100% 가 콘텐츠(~26px)로
+  //   붕괴한다(라인 차트는 absolute 라 영향 없었음). absolute inset:0 으로 패널을 확정 높이로 채운다.
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 0.5fr 1.6fr; // 전체 평균 박스 폭 축소(약 70%)
+  grid-template-rows: minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+.mapeAvg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: #f4f7fb;
+  border: 1px solid $border;
+  border-radius: 8px;
+
+  .mapeAvgLabel { font-size: $font-size-sm; color: $muted; }
+  .mapeAvgValue { font-size: $font-size-2xl; font-weight: 800; color: #1565c0; }
+}
+
+// MAPE 가로 막대(HTML) — 제품별 1행. 컨테이너 높이에 맞춰 flex 로 균등 분배.
+.mapeBars {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  min-width: 0;
+  padding-right: 6px;
+
+  // x 시작선(막대 0 지점 = 라벨 46px + gap 8px) 옅은 회색 세로 축선.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 54px;
+    width: 2px;
+    background: #e3e8ef;
+  }
+}
+.mapeBarRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mapeBarLabel {
+  flex: 0 0 46px;
+  font-size: $font-size-sm;
+  color: #4a5468;
+}
+.mapeBarTrack {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 13px;
+  background: #eef2f7;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.mapeBarFill {
+  width: 0;
+  height: 100%;
+  background: #1565c0;
+  border-radius: 3px;
+}
+.mapeBarPct {
+  flex: 0 0 38px;
+  text-align: right;
+  font-size: $font-size-sm;
+  font-weight: 700;
+  color: #2b3345;
+}
+
+// ----- Forecast Logic & Info -----
+.logicWrap {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+.logicList {
+  margin: 0;
+  // display:flex 라 네이티브 list-marker 가 사라지므로 li::before 로 점을 직접 그린다.
+  padding-left: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  list-style: none;
+
+  li {
+    position: relative;
+    padding-left: 12px;
+    font-size: $font-size-sm;
+    color: #3a4357;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5em;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+  }
+}
+.infoTable {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $border;
+  border-radius: 6px;
+  overflow: hidden;
+  align-self: center;
+
+  .infoRow {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    font-size: $font-size-sm;
+
+    & + .infoRow { border-top: 1px solid $border; }
+  }
+  .infoKey {
+    background: #f7f9fc;
+    color: #5877b4;
+    padding: 6px 8px;
+    font-weight: 600;
+    border-right: 1px solid $border;
+  }
+  .infoVal { padding: 6px 8px; color: #2b3345; }
+}
+
+// ----- 푸터 -----
+.footer {
+  font-size: $font-size-sm;
+  color: $muted;
+  padding: 2px 2px 0;
+}

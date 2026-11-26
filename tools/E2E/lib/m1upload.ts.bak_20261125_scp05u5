@@ -1,0 +1,106 @@
+// 2026-11-25 T584(SCP0005 M1 V-219edc76 '[측정 코드 없음] … 양식·검증 시나리오 미구현'): Excel Upload 검증 메시지(행 상태) AS-IS ↔ TO-BE 대조.
+//   AS-IS 공용 업로드 창(ExcelUploadForm2.cs)의 Validation_Check_<화면ID> 원문에서 행 상태 문구('Error-…')와 그 조건을 읽어 오류 종류별 행을 만든다.
+//   기준 행 = 화면 조회 결과의 기존 행 1개(양식 머리글 ↔ 그리드 칸 순서 대응). 저장(적재)은 하지 않는다: 검증 단계 응답의 행 상태만 읽는다.
+//   순수 함수만 둔다(m1upload.selftest.js).
+
+export type M1Kind = { status: string; kind: 'required' | 'allEmpty' | 'lookup' | 'dbdup' | 'filedup'; vars: string[]; line: number };
+export type M1Parse = { fn: string; kinds: M1Kind[]; varIdx: Record<string, number>; idVar: string; skipped: string[]; why: string };
+
+/** 함수 본문(주석 제거) · 상태 문구별 조건 분류. varIdx = 변수 → 양식 칸 번호(업로드 그리드 칸 - 1 · 0번 칸 = 상태) */
+export function parseUploadKinds(cs: string, programId: string): M1Parse {
+  const fn = `Validation_Check_${programId}`;
+  const out: M1Parse = { fn, kinds: [], varIdx: {}, idVar: '', skipped: [], why: '' };
+  const at = cs.search(new RegExp(`\\b(private|public|protected)\\s+\\w+\\s+${fn}\\s*\\(`));
+  if (at < 0) { out.why = `AS-IS ${fn} 없음`; return out; }
+  const rest = cs.slice(at); const endRel = rest.slice(10).search(/\n\s{8}(private|public|protected)\s/); const raw = endRel < 0 ? rest : rest.slice(0, endRel + 10);
+  const lineOf = (i: number) => cs.slice(0, at + i).split('\n').length;
+  // 주석 안 상태 문구(실행 안 됨) = 대상 아님으로 따로 기록
+  for (const m of raw.matchAll(/\/\*[\s\S]*?\*\//g)) for (const s of m[0].matchAll(/Value\s*=\s*"([^"]*Error[^"]*)"/g)) if (!out.skipped.includes(s[1])) out.skipped.push(s[1]);
+  const body = raw.replace(/\/\*[\s\S]*?\*\//g, m => m.replace(/[^\n]/g, ' ')).replace(/\/\/[^\n]*/g, m => ' '.repeat(m.length));
+  for (const m of body.matchAll(/(str\w+)\s*=\s*\w+\.Sheets\[0\]\.Cells\[i,\s*(\d+)\]\.Value/g)) out.varIdx[m[1]] = Number(m[2]) - 1;
+  const idm = /if\s*\(\s*(str\w+)\s*==\s*""\s*\)\s*\{?\s*\1\s*=\s*"0"/.exec(body); if (idm) out.idVar = idm[1];
+  const condBefore = (pos: number): string => {
+    const k = body.lastIndexOf('if (', pos); if (k < 0) return '';
+    let d = 0; for (let j = k + 3; j < body.length; j++) { if (body[j] === '(') d++; else if (body[j] === ')') { d--; if (d === 0) return body.slice(k, j + 1); } }
+    return body.slice(k, pos);
+  };
+  const seen = new Set<string>();
+  for (const m of body.matchAll(/Cells\[i,\s*0\]\.Value\s*=\s*"(Error[^"]*)"/g)) {
+    const st = m[1]; if (seen.has(st)) continue;
+    const c = condBefore(m.index || 0); const line = lineOf(m.index || 0);
+    let k: M1Kind | null = null;
+    if (/Cells\[j,/.test(c)) k = { status: st, kind: 'filedup', vars: [...c.matchAll(/(str\w+)\s*==\s*\w+\.Sheets\[0\]\.Cells\[j,/g)].map(z => z[1]), line };
+    else if (/Dup\w*Cnt\s*!=\s*0/i.test(c)) k = { status: st, kind: 'dbdup', vars: [], line };
+    else if (/\.Select\(/.test(c) && /Length\s*==\s*0/.test(c)) k = { status: st, kind: 'lookup', vars: [...c.matchAll(/'"\s*\+\s*(str\w+)/g)].map(z => z[1]), line };
+    else if (/(str\w+)\s*==\s*""/.test(c)) { const vs = [...c.matchAll(/(str\w+)\s*==\s*""/g)].map(z => z[1]); k = { status: st, kind: /&&/.test(c) && !/\|\|/.test(c) ? 'allEmpty' : 'required', vars: vs, line }; }
+    if (k) { out.kinds.push(k); seen.add(st); }
+  }
+  if (!out.kinds.length) out.why = `${fn} 안 상태 문구 조건 해석 0건`;
+  return out;
+}
+
+/** 양식 머리글 ↔ 그리드 칸(순서대로) 대응. 같은 자리에서 머리글이 같거나 양식 머리글이 그리드 머리글로 끝나면 일치('From Country*' ↔ 'Country*') · 80% 이상 일치면 자리 대응 */
+export function mapFormToGrid(form: string[], grid: { b: string; header: string }[]): { map: string[]; agree: number; diff: string[]; ok: boolean } {
+  const n = (t: string) => String(t || '').replace(/\*/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  const diff: string[] = []; let agree = 0; const map: string[] = [];
+  form.forEach((f, i) => { const g = grid[i]; map.push(g ? g.b : ''); if (g && (n(f) === n(g.header) || n(f).endsWith(' ' + n(g.header)))) agree++; else diff.push(`${i}:'${f}'↔'${g ? g.header : '-'}'`); });
+  return { map, agree, diff, ok: form.length > 0 && form.length <= grid.length && agree >= Math.ceil(form.length * 0.8) };
+}
+
+export type M1Row = { status: string; kind: string; cells: string[]; how: string };
+
+/** 기준 행(base · 양식 칸 순서 값)에서 오류 종류별 행을 만든다. 첫 행 = 대조군(바꾸지 않음 · 기대 'Success') */
+export function buildM1Rows(base: string[], ps: M1Parse): { rows: M1Row[]; notBuilt: string[] } {
+  const rows: M1Row[] = [{ status: 'Success', kind: 'control', cells: [...base], how: '기준 행 그대로' }]; const notBuilt: string[] = [];
+  const ix = (v: string) => (v in ps.varIdx ? ps.varIdx[v] : -1);
+  const lookVars = new Set(ps.kinds.filter(k => k.kind === 'lookup').flatMap(k => k.vars));
+  const emptyVars = new Set(ps.kinds.filter(k => k.kind === 'allEmpty').flatMap(k => k.vars));
+  for (const k of ps.kinds) {
+    const cells = [...base];
+    if (k.kind === 'required' || k.kind === 'allEmpty') {
+      const vs = k.kind === 'required' ? k.vars.filter(v => v !== ps.idVar).slice(0, 1) : k.vars; const is = vs.map(ix);
+      if (!is.length || is.some(i => i < 0)) { notBuilt.push(`${k.status}: 변수 칸 위치 못 찾음(${vs.join(',')})`); continue; }
+      for (const i of is) cells[i] = ''; rows.push({ status: k.status, kind: k.kind, cells, how: `${vs.join(',')} 비움` });
+    } else if (k.kind === 'lookup') {
+      const i = ix(k.vars[0] || ''); if (i < 0) { notBuilt.push(`${k.status}: 조회 대상 변수 칸 위치 못 찾음(${k.vars.join(',')})`); continue; }
+      cells[i] = 'ZZ'; rows.push({ status: k.status, kind: k.kind, cells, how: `${k.vars[0]} = 'ZZ'(기준 정보에 없는 값)` });
+    } else if (k.kind === 'dbdup') {
+      const i = ix(ps.idVar); if (i < 0) { notBuilt.push(`${k.status}: 행 식별 변수(빈 값이면 "0") 칸 못 찾음`); continue; }
+      cells[i] = ''; rows.push({ status: k.status, kind: k.kind, cells, how: `${ps.idVar} 비움(신규 행) · 나머지 = 기존 행과 같은 값` });
+    } else if (k.kind === 'filedup') {
+      const free = k.vars.filter(v => v !== ps.idVar && !lookVars.has(v) && !emptyVars.has(v) && ix(v) >= 0);
+      const v = free[free.length - 1]; if (!v) { notBuilt.push(`${k.status}: 바꿀 자유 칸 없음(비교 변수 ${k.vars.join(',')})`); continue; }
+      cells[ix(v)] = 'E2EDUP'; rows.push({ status: k.status, kind: k.kind, cells, how: `${v} = 'E2EDUP' 같은 행 2개(1/2)` }); rows.push({ status: k.status, kind: k.kind, cells: [...cells], how: `${v} = 'E2EDUP' 같은 행 2개(2/2)` });
+    }
+  }
+  return { rows, notBuilt };
+}
+
+/** 응답 본문에서 행 상태 배열(값이 Success·Error… 인 문자 칸을 가진 객체 배열)을 찾는다 */
+export function statusesOf(json: unknown): string[] | null {
+  let best: string[] | null = null;
+  const walk = (o: unknown, d: number): void => {
+    if (d > 6 || o == null) return;
+    if (Array.isArray(o)) {
+      const objs = o.filter(x => x && typeof x === 'object' && !Array.isArray(x)) as Record<string, unknown>[];
+      if (objs.length && objs.length === o.length) {
+        const keys = Object.keys(objs[0]); const k = keys.find(kk => objs.every(x => typeof x[kk] === 'string' && /^(Success|Error\b[^\n]*)$/i.test(String(x[kk]).trim())));
+        if (k && (!best || objs.length > best.length)) best = objs.map(x => String(x[k]).trim());
+      }
+      for (const x of o) walk(x, d + 1); return;
+    }
+    if (typeof o === 'object') for (const v of Object.values(o as Record<string, unknown>)) walk(v, d + 1);
+  };
+  walk(json, 0); return best;
+}
+
+/** 종류별 기대 상태(AS-IS 문구) ↔ TO-BE 응답 행 상태 */
+export function judgeM1(rows: M1Row[], got: string[] | null, notBuilt: string[], skipped: string[]): { result: 'PASS' | 'FAIL' | 'ERROR'; why: string } {
+  const tail = `${notBuilt.length ? ` · 못 만든 종류 ${notBuilt.join(' / ')}` : ''}${skipped.length ? ` · AS-IS 주석 처리 상태(실행 안 됨 · 대상 아님) ${skipped.join(', ')}` : ''}`;
+  if (!got) return { result: 'ERROR', why: `[측정 경로 없음] 업로드 응답에서 행 상태 배열 못 찾음${tail}` };
+  if (got.length !== rows.length) return { result: 'ERROR', why: `[측정 실패] 올린 행 ${rows.length} ≠ 응답 행 상태 ${got.length}(${got.slice(0, 12).join(', ')})${tail}` };
+  if (got[0] !== 'Success') return { result: 'ERROR', why: `[측정 전제 실패] 대조군(기준 행 그대로) 상태 '${got[0]}' ≠ 'Success': 기준 행이 이미 오류라 종류별 비교 불가${tail}` };
+  const bad = rows.map((r, i) => ({ r, g: got[i] })).filter(z => z.r.kind !== 'control' && z.g !== z.r.status);
+  const list = rows.slice(1).map((r, i) => `${r.status}(${r.how}) → '${got[i + 1]}'`).join(' · ');
+  return { result: bad.length ? 'FAIL' : 'PASS', why: `${bad.length ? `AS-IS 행 상태와 다름 ${bad.length}건: ${bad.map(z => `기대 '${z.r.status}' 실제 '${z.g}'`).join(', ')} · ` : ''}대조군 Success · ${list}${tail}` };
+}

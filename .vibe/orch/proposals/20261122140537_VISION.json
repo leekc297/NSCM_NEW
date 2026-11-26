@@ -1,0 +1,97 @@
+{
+  "id": "20261122140537_VISION",
+  "at": "2026-11-22T14:05:37+09:00",
+  "ms": 1795323937927,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ladder|lnstruct|evidence after eff",
+  "title": "진단 사다리 L3 → L4 올림에서 구조 개선안 효력 시각 뒤에 생긴 근거만 셈",
+  "evidence": "orch-ladder.js:77-78 은 연결된 구조 개선안의 appliedMs 뒤 structWatchDays(3일) 안에 묶음이 참이면 L4 로 올림. 근거 항목 시각을 보지 않고 needsReload 효력(effMsOf, :61)도 쓰지 않음. 사용자 지적 묶음(L3-5, :64-66)만 효력 뒤 항목을 셈. 사례 1: ladder.json:522 firstAt 11-22 00:21:31 = :115 resolvedAt, 근거 11-19 23:44, 23:54 반영 실패. 사례 2: :553 firstAt 00:48:32 = :35 resolvedAt, 근거 S9 '2026-11-16 부터' 7일 변경 78건. 두 구조 개선안 반영 뒤 창 로드 0회(activations.jsonl 마지막 11-21 01:59:17). 반증 시도: 효력 뒤 새 반영 실패나 새 결함 재발이 있으면 L4 가 맞음. proposals 에서 11-22 00:21 뒤 doc_style.py 대상 '반영 실패.' 기록은 digest applyFailed 0건으로 없음",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "변경 전: 구조 개선안 반영 뒤 3일 안에 묶음이 참이면 근거 시각과 상관없이 L4 로 올림. 변경 후: 효력 시각(effMsOf, needsReload 면 반영 뒤 첫 창 로드)을 구하고 근거 항목 중 효력 뒤 시각인 것만 남김. recur, applyfail, false 는 항목 시각으로 거르고, edits 는 효력 뒤 결함 수정 기록 수로 거름. 남은 근거가 L3 기준 수 미만이면 L4 로 올리지 않고 '효력 전' 또는 '효력 뒤 재발 없음'으로 둠",
+  "verify": "반영 전 측정: ladder.json 열린 L4|struct 묶음 2건(doc_style.py, workbench.js). t_orch_ladder.js 에 실사건 표본 2건을 넣음. ① 근거 시각이 구조 개선안 효력 전인 applyfail 묶음은 L4|struct 키가 나오지 않음. ② 효력 뒤 반영 실패 2건을 더하면 L4|struct 키가 나옴. ③ needsReload 안이고 반영 뒤 창 로드가 없으면 L4 키가 나오지 않음. node tools/VibeManager/test/t_orch_ladder.js 에서 새 시험 3건 PASS. 반영 뒤 창 로드와 자가진단 1회 뒤 열린 L4|struct 묶음 2 → 0(효력 뒤 재발 근거가 없을 때)",
+  "rollback": "orch-ladder.js, t_orch_ladder.js 를 반영 전 bak 사본으로 되돌리고 VMO 개선안 탭에서 되돌리기",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 원인으로 거짓 L4 가 열린 사례 2건(ladder.json L4|struct|applyfail|doc_style.py, L4|struct|edits|workbench.js). 두 건 다 L3 해결 시각과 같은 초에 L4 가 열렸고 근거는 구조 개선 전 기록임",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-22T14:06:37+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-22T14:10:07+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 943, FAIL 0), 정의 정합 통과 · 백업 태그 20261122_self1406"
+    },
+    {
+      "at": "2026-11-22T14:10:11+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-22T14:15:40+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 947, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-22T14:15:40+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-22 14:11:54 node tools/VibeManager/test/t_orch_ladder.js: 'PASS ① 근거 시각이 구조 개선안 효력 전인 반영 실패 묶음 = L4|struct 안 나옴 [L3|applyfail|doc_style2.py, ... 구조 개선안 SV1 효력(11-22 11:11) 뒤 재발 없음(효력 뒤 근거 0건 < 2), L4 올림 보류]', 'PASS ② 효력 뒤 반영 실패 2건을 더하면 L4|struct 나옴 [L4|struct|applyfail|doc_style2.py,3]', 'PA · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-22T14-10-12_claude_orch.log",
+      "sec": 122,
+      "costUsd": 1.0959965999999999,
+      "files": [
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/test/t_orch_ladder.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:22+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "구조를 고친 직후 고치기 전 기록만으로 '개념부터 다시 세워야 한다'는 경보가 뜨는 일을 막습니다. 고친 내용이 실제로 적용된 뒤 새로 난 문제만 세어 개념 재정립 단계로 올립니다.",
+    "risk": "효력 시각을 늦게 잡으면 실제 재발을 늦게 올릴 수 있습니다. 창 다시 로드가 오래 없으면 그동안은 L4 로 올라가지 않습니다. L3 단계 보고는 그대로 남습니다.",
+    "undo": "VMO 창 개선안 탭의 되돌리기 단추, 또는 두 파일을 bak 사본으로 복사"
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795323997052,
+  "autoFp": "18d07da61d",
+  "applyStartMs": 1795324211872,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 947, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261122_self1406",
+  "needsReload": true,
+  "appliedMs": 1795324540361,
+  "synced": [
+    "orch-ladder.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "2026-11-22 14:11:54 node tools/VibeManager/test/t_orch_ladder.js: 'PASS ① 근거 시각이 구조 개선안 효력 전인 반영 실패 묶음 = L4|struct 안 나옴 [L3|applyfail|doc_style2.py, ... 구조 개선안 SV1 효력(11-22 11:11) 뒤 재발 없음(효력 뒤 근거 0건 < 2), L4 올림 보류]', 'PASS ② 효력 뒤 반영 실패 2건을 더하면 L4|struct 나옴 [L4|struct|applyfail|doc_style2.py,3]', 'PASS ③ needsReload 안이고 반영 뒤 창 로드 없음 = L4 안 나옴 [... 구조 개선안 SV2 반영(11-22 11:11) 효력 전(반영 뒤 창 로드 없음), L4 올림 보류]', 'PASS ③-보조 반영 뒤 창 로드가 생기고 그 뒤 반영 실패 2건 = L4|struct 나옴', 'PASS 구조 개선 반영 뒤 같은 묶음 재발 = L4 로 올림', 'ALL PASS'. 14:11:49 첫 실행은 ① FAIL(시험 정규식이 '효력(시각) 뒤' 문구와 불일치, why 값은 기대대로), 정규식 수정 뒤 ALL PASS. 반영 전 측정(.vibe/orch/ladder.json): 'open L4|struct 2 L4|struct|applyfail|doc_style.py,L4|struct|edits|workbench.js'. 2 → 0 확인은 창 다시 로드와 자가진단 1회 뒤라 미확인",
+    "note": "작업 모드 DB_ONLY 이나 tools/VibeManager 는 FE·BE 아님, hook 차단 없음. 근거 시각: S8 = it.ms, 없으면 재발한 개선안 반영 시각(floorMs), S14 = f.ms 또는 f.at, 반영 실패 = history at. edits = orch-history stats().byFile[file].days 에서 효력일 다음 날부터 합산(일 단위라 효력 당일 변경은 세지 않음). usercheck 기준 수 1. 기존 '구조 개선 반영 뒤 재발' 시험은 S8 항목에 ms(now-60000)를 넣어 효력 뒤 재발로 맞춤. .bak, CHANGELOG, 설치 폴더 건드리지 않음"
+  },
+  "snap": "prop_20261122140537_VISION",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

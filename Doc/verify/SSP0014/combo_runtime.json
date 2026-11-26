@@ -1,5 +1,5 @@
 {
- "at": "2026-11-19T23:49:19.159Z",
+ "at": "2026-11-24T18:05:34.747Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -36,8 +36,6 @@
    "label": "From Site",
    "opts": [
     "SELECT ALL",
-    "AZ Mobile Assy-Cell",
-    "AZ Mobile Assy-Cell",
     "AZ Mobile Assy-Cell",
     "AZ Mobile Elec-Electrode",
     "C-TECH_CN_CQ",
@@ -87,22 +85,13 @@
  },
  "grid": {},
  "rr": {
-  "search": "20261120084325",
-  "combos": "20261120084325"
+  "search": "20261125025635",
+  "combos": "20261125025635"
  },
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"''\",\"mnuId\":\"SSP0014\"}",
-   "status": 200,
-   "n": 0,
-   "keys": [],
-   "rows": [],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 0,
    "keys": [],
@@ -128,6 +117,15 @@
      "v": "N"
     }
    ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 0,
+   "keys": [],
+   "rows": [],
    "user": "minyonglee1"
   },
   {
@@ -267,22 +265,39 @@
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 32,
+   "n": 3,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "AC00-A",
-     "v": "AZ Mobile Assy-Cell"
+     "c": "P",
+     "v": "Pack"
     },
     {
-     "c": "AT00-A",
-     "v": "AZ Mobile Assy-Cell"
+     "c": "A",
+     "v": "Cell"
     },
+    {
+     "c": "E",
+     "v": "Electrode"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"PlantSiteByDivision\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"lookupType\":\"'OPERATION_GROUP'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 30,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
     {
      "c": "AZ00-A",
      "v": "AZ Mobile Assy-Cell"
@@ -410,20 +425,12 @@
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"PlantSiteByDivision\",\"divisionId\":\"'40'\",\"mnuId\":\"SSP0014\"}",
    "status": 200,
-   "n": 32,
+   "n": 30,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
-    {
-     "c": "AC00-A",
-     "v": "AZ Mobile Assy-Cell"
-    },
-    {
-     "c": "AT00-A",
-     "v": "AZ Mobile Assy-Cell"
-    },
     {
      "c": "AZ00-A",
      "v": "AZ Mobile Assy-Cell"
@@ -550,31 +557,6 @@
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
    "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"'40'\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 3,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "P",
-     "v": "Pack"
-    },
-    {
-     "c": "A",
-     "v": "Cell"
-    },
-    {
-     "c": "E",
-     "v": "Electrode"
-    }
-   ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPERATION_GROUP'\",\"mnuId\":\"SSP0014\",\"divisionId\":\"''\",\"validYn\":\"'Y'\"}",
    "status": 200,
    "n": 3,
    "keys": [

@@ -62,6 +62,9 @@ const progFiles = () => { try { return fs.readdirSync(path.join(vibeDir, 'orch',
   chk('끊긴 체인 = 진행 기록 남음', progFiles().length === 1, progFiles().join(','));
   const list = wbm.resumable(p, { screen: 'res0001' });
   chk('재개 목록 1건 · 2단계부터 · 1단계 결과 OK 보관', list.length === 1 && list[0].resumeFrom === 2 && list[0].res[0] && list[0].res[0].status === 'OK' && !!list[0].interruptedAt, JSON.stringify(list.map(x => ({ from: x.resumeFrom, res: x.res, at: x.interruptedAt }))));
+  // 개선안 20261120184524_SELF_2: 재개 기록 쓰기·지우기 사건
+  const evOf = (type, runId, why) => events().filter(e => e.type === type && e.runId === runId && (why == null || e.why === why));
+  { const c = evOf('progress.cut', list[0].runId); chk('다시 로드 뒤 progress.cut 1줄(runId · 화면 · job · 2단계부터)', c.length === 1 && c[0].screen === 'RES0001' && c[0].job === 'J9' && c[0].resumeFrom === 2, JSON.stringify(c)); }
   chk('재개 목록 거르기: job·화면', wbm.resumable(p, { job: 'J9' }).length === 1 && wbm.resumable(p, { screen: 'OTHER1' }).length === 0 && wbm.resumable(p, { noJob: true }).length === 0);
   W('fast.flag', '1');
   const r2 = new ChainRunner(api, { id: 'res0001', jobId: 'J9', autoAnswer: false, onLog: () => { }, onStep: () => { }, onNote: () => { } });
@@ -70,6 +73,14 @@ const progFiles = () => { try { return fs.readdirSync(path.join(vibeDir, 'orch',
   chk('1단계 다시 실행 안 함(1회), 3단계 실행(1회)', cnt('a') === 1 && cnt('c') === 1, `a=${cnt('a')} c=${cnt('c')}`);
   chk('재개 결과에 1단계 = 이전 실행 결과 표시', (b.steps || [])[0] && /이전 실행 결과\(재개\)/.test(b.steps[0].note || ''), JSON.stringify((b.steps || [])[0]));
   chk('재개 체인 정상 종료 = 기록 모두 삭제', progFiles().length === 0, progFiles().join(','));
+  // 2026-11-20 재개 표시: chain.resume 사건 = 전체 단계 수 + 앞 단계 이전 실행 결과 · VMO 상태가 앞 단계를 이전 결과로 채움
+  const rsv = events().filter(e => e.type === 'chain.resume').pop();
+  chk('재개 사건: 전체 3단계 · 2단계부터 · 1단계 이전 결과 OK', rsv && rsv.steps === 3 && rsv.resumeFrom === 2 && rsv.carried.length === 1 && rsv.carried[0].no === 1 && rsv.carried[0].status === 'OK' && rsv.resumedFrom === list[0].runId, JSON.stringify(rsv && { s: rsv.steps, f: rsv.resumeFrom, c: rsv.carried }));
+  { const d = evOf('progress.drop', list[0].runId); chk('재개 시작 뒤 progress.drop why resume 1줄(끊긴 runId)', d.length === 1 && d[0].why === 'resume' && d[0].job === 'J9', JSON.stringify(d)); }
+  { const d = evOf('progress.drop', rsv && rsv.runId); chk('재개 체인 정상 종료 뒤 progress.drop why normalEnd 1줄', d.length === 1 && d[0].why === 'normalEnd', JSON.stringify(d)); }
+  { const ost = require(path.join(dir, 'orch-state')); const cs = events().filter(e => e.type === 'chain.start' && e.runId === rsv.runId).pop(); ost.apply(Object.assign({}, cs, { type: 'chain.start' })); ost.apply(rsv);
+    const ch = ost.snapshot().chains.find(c => c.runId === rsv.runId);
+    chk('VMO 상태: 전체 3단계 · 1단계 = 이전 실행 결과(carried) · 재개 2단계부터 · 이번 실행 끝난 단계 0', ch && ch.total === 3 && ch.done.length === 1 && ch.done[0].carried === true && ch.resumeFrom === 2 && ch.doneNew === 0, JSON.stringify(ch && { t: ch.total, d: ch.done, f: ch.resumeFrom })); }
   // 사용자 중지 = 기록 삭제
   fs.unlinkSync(path.join(root, 'fast.flag'));
   const r3 = new ChainRunner(api, { id: 'res0002', jobId: '', autoAnswer: false, onLog: () => { }, onStep: () => { }, onNote: () => { } });
@@ -84,6 +95,33 @@ const progFiles = () => { try { return fs.readdirSync(path.join(vibeDir, 'orch',
   const c5 = await r5.run(chain2, { resume: rec });
   chk('체인 정의가 바뀜 = 재개 거부(BLOCKED · 사유)', c5.status === 'BLOCKED' && /체인 정의/.test(c5.summary || ''), JSON.stringify({ s: c5.status, sum: c5.summary }));
   chk('거부되면 기록은 남음', wbm.resumable(p, { screen: 'res0003' }).length === 1);
+  // 사용자 삭제(Workbench resumeDrop): 처리기가 why userDrop 으로 지움 · 지운 뒤 사건 1줄 · 없는 기록은 사건 없음
+  { const src = fs.readFileSync(path.join(dir, 'workbench.js'), 'utf8'); const blk = (src.split("case 'resumeDrop'")[1] || '').split('case ')[0];
+    chk("resumeDrop 처리기 = progDel(p, rec.runId, 'userDrop')", /progDel\(p, rec\.runId, 'userDrop'\)/.test(blk)); }
+  const del = wbm._progDel(p, rec.runId, 'userDrop'); const again = wbm._progDel(p, rec.runId, 'userDrop');
+  { const d = evOf('progress.drop', rec.runId, 'userDrop'); chk('resumeDrop 뒤 progress.drop why userDrop 1줄 · 기록 없음', del === true && again === false && d.length === 1 && wbm.resumable(p, { screen: 'res0003' }).length === 0, JSON.stringify(d)); }
+  // 개선안 20261125000907_VISION 재개 원장 ①: 11-23 18:46 재현(events.jsonl progress.cut runId WB1_1795427182442_ai, screen '').
+  //   화면 ID 없는 체인 밖 AI 대화가 창 다시 로드로 끊김 → 원장에 화면 ID 빈 기록이 생기지 않고, screen '' 인 progress.cut 사건도 없어야 함
+  { const rid = 'WB1_1795427182442_ai'; const lc = wbm._liveChains;
+    const prog = { runId: rid, screen: '', chainId: 'claude', label: 'AI 대화 · 18:46 재현', kind: 'claude', single: true, wb: 1, job: '', t0: Date.now(), steps: 1, sig: 'claude', res: [], shown: [0], cur: 0, curActor: 'claude', ownerPid: process.pid, updatedMs: Date.now(), sub: { session: '' } };
+    const w0 = typeof wbm._progWrite === 'function' ? wbm._progWrite(p, Object.assign({}, prog)) : null;
+    lc.set(rid, { p, evCh: { wb: 1, screen: '', job: '' }, t0: Date.now(), prog, single: true, wb: null }); wbm.abortRunningChains('시험: 18:46 재현 창 다시 로드');
+    const blank = progFiles().map(n => { try { return JSON.parse(fs.readFileSync(path.join(vibeDir, 'orch', 'chain_progress', n), 'utf8')); } catch { return {}; } }).filter(r => !String(r.screen || '').trim());
+    const cutBlank = events().filter(e => e.type === 'progress.cut' && !String(e.screen || '').trim());
+    chk('18:46 재현: 화면 ID 빈 원장 기록 0건 · 쓰기 거부', blank.length === 0 && !fs.existsSync(path.join(vibeDir, 'orch', 'chain_progress', `${rid}.json`)) && w0 === false, `blank ${blank.length} · write ${w0}`);
+    chk("18:46 재현: screen '' progress.cut 사건 0줄 · 거부 사건 progress.refuse 기록", cutBlank.length === 0 && events().some(e => e.type === 'progress.refuse' && e.runId === rid), `cut '' ${cutBlank.length}`);
+    // 옛 형식 기록(화면 ID 빈 값)이 원장에 남아 있어도 세 창 조회에 나오지 않음
+    fs.mkdirSync(path.join(vibeDir, 'orch', 'chain_progress'), { recursive: true }); fs.writeFileSync(path.join(vibeDir, 'orch', 'chain_progress', `${rid}.json`), JSON.stringify(Object.assign({}, prog, { interruptedAt: '2026-11-23T18:46:32+09:00', resumeFrom: 1, updatedMs: Date.now() })));
+    chk('옛 빈 화면 기록 = 원장 조회 제외(VMO 에만 보이던 18:46 형태)', typeof wbm.ledgerView === 'function' && !wbm.ledgerView(p, 'vmo').some(r => r.runId === rid) && !wbm.resumable(p).some(r => r.runId === rid));
+    try { fs.unlinkSync(path.join(vibeDir, 'orch', 'chain_progress', `${rid}.json`)); } catch { } }
+  // 원장 상태 필드: 끊긴 기록 = state cut, 실행 중 = running
+  { const r6 = new ChainRunner(api, { id: 'res0006', jobId: 'J6', autoAnswer: false, onLog: () => { }, onStep: () => { }, onNote: () => { } });
+    const p6 = r6.run(chain); await new Promise(r => setTimeout(r, 1200));
+    const live = progFiles().map(n => JSON.parse(fs.readFileSync(path.join(vibeDir, 'orch', 'chain_progress', n), 'utf8'))).find(r => r.screen === 'RES0006');
+    setTimeout(() => { r6.stop(); wbm.abortRunningChains('시험'); }, 300); await p6;
+    const cut = wbm.ledgerView ? wbm.ledgerView(p, 'vmo').find(r => r.screen === 'RES0006') : null;
+    chk('원장 상태: 실행 중 running → 끊김 cut', !!live && live.state === 'running' && !!cut && cut.state === 'cut', JSON.stringify({ live: live && live.state, cut: cut && cut.state }));
+    if (cut) wbm._progDel(p, cut.runId, 'userDrop'); try { r6.dispose(); } catch { } }
   [r1, r2, r3, r4, r5].forEach(r => { try { r.dispose(); } catch { } });
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

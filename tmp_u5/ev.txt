@@ -1,0 +1,30 @@
+===== V-27f100cb
+copy PASS: 선택 0,1,0,1 · 0행 LT_TYPE 표시값 'AVERAGE' · Ctrl+C 클립보드 'AVERAGE'(일치) · 우클릭 Copy 'AVERAGE'(일치) | ctrl ERROR: 실행 실패: Error: 셀 좌표 확인 실패(2행 · LT_TYPE): wj-listbox-item | hdr PASS: 헤더(LT_TYPE) 클릭 → 선택 행 0~8075/8076 · 열 1~1(시험 열 1) — 열 전체 선택 | hide PASS: 헤더(FROM_CITY_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 필수 컬럼 LT_TYPE 은 Hide Column 비활성(숨김 금지 규칙) | f5 PASS: F5 → 조회 요청 시작 95ms · 응답 75
+PREV:
+===== V-26d2974c
+LT_TYPE 저장 1회 — r360 행 식별 0건 ⚠ 수동 원복 확인(원값 'MAX') · r361 행 식별 0건 ⚠ 수동 원복 확인(원값 'AVERAGE') · 저장 오류 저장에 실패 · 행 식별 = ROUTE_ID '7305' · ROUTE_ID '7303'(문자 칸 식별 값 같음 · T598)
+PREV:
+===== V-052d2add
+[화면 초기(선택 없음=ALL)] AS-IS 3건 vs TO-BE 2건 · 차이 1건 설명 불가: ALL: 설명 불가(원천 마스터 테이블 해석 실패) · AS-IS만 1 ['ALL'] · TO-BE만 0 [] · 원천 STATIC YesOrNo @InitControls (SCP0005_DistributionRoute.cs:204 ← SCP0005_DistributionRoute) · 표현 CODE → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)
+PREV:
+===== V-a6bb7234
+AS-IS ExcelUploadForm2 호출 인자 ↔ TO-BE ExcelUploadModal (nscm-fe/features/shipping/src/pages/distribution-route/DistributionRoute.tsx:325) · 인자 있는 생성 문장 SCP0005_DistributionRoute.cs:376 에 원장 행 없음 → 같은 메서드 팝업 문장 행에 실음(T577) — [판정필요] #2: AS-IS 는 this.spdMain.ActiveSheet.SheetName 를 팝업 인자 #2 로 전달 · TO-BE ExcelUploadModal 사용처에 같은 개념 인자 미전달(팝업 교체·조건 축소 여부 사람 확인 W7) | [NA] #1: AS-IS 고정값 "SCP0005" — 연동 대상 
+PREV:
+===== V-f426f87d
+[팝업] 팝업 3개: PASS 조건 'From City' 아이콘('Region Popup') Ctrl+클릭 0행·2행 → 선택 시도1 [[2,2],[0,0]] · selectionMode=6 · 비연속 다중 선택 / PASS 조건 'To City' 아이콘('Region Popup') Ctrl+클릭 0행·2행 → 선택 시도1 [[2,2],[0,0]] · selectionMode=6 · 비연속 다중 선택 / NA 버튼 'Upload'(AS-IS btnEaxel_Upload_Click)('Excel Upload') 팝업에 그리드 없음 · 행 문구 팝업 이름 'Version' 은 이 화면 팝업(TO-BE Region Popup, Region Popup, Excel Upload · AS-IS ExcelUploadFo
+PREV:
+===== V-7ccb8dd4
+[팝업] 팝업 3개: PASS 조건 'From City' 아이콘('Region Popup') Ctrl+클릭 0행·2행 → 선택 시도1 [[2,2],[0,0]] · selectionMode=6 · 비연속 다중 선택 / PASS 조건 'To City' 아이콘('Region Popup') Ctrl+클릭 0행·2행 → 선택 시도1 [[2,2],[0,0]] · selectionMode=6 · 비연속 다중 선택 / NA 버튼 'Upload'(AS-IS btnEaxel_Upload_Click)('Excel Upload') 팝업에 그리드 없음 / PASS 조건 'From City' 아이콘('Region Popup') Shift+클릭·드래그 0행→2행 → Shift [[0,2]] · 드래그 [[0,2]] · 연속 선택 / 
+PREV:
+===== V-219edc76
+업로드 검증 행 상태 AS-IS(ExcelUploadForm2.cs Validation_Check_SCP0005) 대조: [측정 경로 없음] 업로드 응답에서 행 상태 배열 못 찾음(업로드 응답 없음(90초)) · AS-IS 주석 처리 상태(실행 안 됨 · 대상 아님) Priority Error · 기준 행 r0 · 적재·저장 요청 가로챔 0건(서버 미전송)
+PREV:
+===== V-612b1d63
+[팝업] 팝업 3개: PASS 조건 'From City' 아이콘('Region Popup') Ctrl+클릭 0행·2행 → 선택 시도1 [[2,2],[0,0]] · selectionMode=6 · 비연속 다중 선택 / PASS 조건 'To City' 아이콘('Region Popup') Ctrl+클릭 0행·2행 → 선택 시도1 [[2,2],[0,0]] · selectionMode=6 · 비연속 다중 선택 / NA 버튼 'Upload'(AS-IS btnEaxel_Upload_Click)('Excel Upload') 팝업에 그리드 없음 / PASS 조건 'From City' 아이콘('Region Popup') Shift+클릭·드래그 0행→2행 → Shift [[0,2]] · 드래그 [[0,2]] · 연속 선택 / 
+PREV:
+===== V-a32c8abf
+[측정 코드 없음] Excel Upload 버튼 있음 [KOR | 이 이민용 | Home | Distribution Route | Scroll tabs left | Scroll tabs right | Close others | Close All | Full screen | Open | Search(F5) | Excel Form | Excel Upload | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Dropdown | Toggle Calendar | Toggle Time List] — 오류 종류별 업로드 파일 생성·업로드 응답 행 상태 대조 미구현
+PREV:
+===== ES-836708a8
+[측정 전제 미충족: 시험 행 저장 요청 없음(saveCalls=0)] 화면 검증·필수 칸에 막혔을 수 있음 · mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=Y updated=N cleaned=Y restored=Y saveCalls=0 errors=SAVE: [Working Days] 값은 필수 입력 항목입니다. · 필수 칸 채움(T166): LT_TYPE(미사용 후보 없음 → 첫 후보), LT_TYPE=AVERAGE, FROM_COUNTRY=CA, FROM_CITY=CAWND, TRANSPORT_MODE=FERRY, PRIORITY=3, D_COUNTRY · 오류: Error: [jooyong026] 허용 계정 마커 행
+PREV:

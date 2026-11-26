@@ -403,6 +403,8 @@ export const DemandManagerGrid = ({
       //   화면이 뒤늦게 만든 필터의 clear 만 남아 행 추가 때마다 필터가 풀린다.
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
+      // cascade(연동 편집) 화면 — undo 시 cellEditEnded 재발화로 연동 셀까지 복원(순수 집계/파생, clear·부작용 없음 확인).
+      reapplyEditOnUndo
       staticColumns={mainStaticColumns}
       dynamicColumns={mainDynamicColumns}
       itemsSource={rows}

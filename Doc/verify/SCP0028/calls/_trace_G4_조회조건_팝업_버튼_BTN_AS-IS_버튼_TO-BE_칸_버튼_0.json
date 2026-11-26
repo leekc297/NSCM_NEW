@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SCP0028\"}",
   "status": 200,
-  "rows": 9617,
-  "dur": 817,
-  "at": "2026-11-20T06:10:35.570Z",
-  "user": "minyonglee1",
+  "rows": 9753,
+  "dur": 895,
+  "at": "2026-11-24T18:05:51.925Z",
+  "user": "bindy122678",
   "test": "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0028/popup/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"itemId\":\"\",\"actionFlag\":\"D\"}",
   "status": 200,
-  "rows": 384,
-  "dur": 126,
-  "at": "2026-11-20T06:10:36.729Z",
-  "user": "minyonglee1",
+  "rows": 394,
+  "dur": 881,
+  "at": "2026-11-24T18:05:54.301Z",
+  "user": "bindy122678",
   "test": "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼"
  }
 ]

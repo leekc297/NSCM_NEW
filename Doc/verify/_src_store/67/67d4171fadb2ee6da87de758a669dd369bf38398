@@ -1,0 +1,1274 @@
+#!/usr/bin/env python3
+"""gen_expect.py <ID>... | --all [--report] — 화면 사실 → 자동 기대 행 (W8-2, 2026-11-04 사용자 지시)
+
+  목적: 손 기대 파일 12종(Doc/verify/*.csv)은 문서가 지적한 화면에만 행이 있어 새 화면에서는 그 결함 유형이 측정되지 않는다.
+        이 생성기는 같은 유형을 화면 사실(AS-IS actions·props·controls·cell_clear·cell_rules · TO-BE sheet_columns·btn_auth·msg_master)로
+        찾아 같은 형식의 행을 만든다 → Doc/verify/<ID>/auto_expect/<파일명> (+ _gen_report.json = 패턴별 생성·미발동 사유).
+  원칙: 감·예측 금지 — 행마다 basis(사실 파일:줄·근거)를 남긴다. 사실이 없으면 만들지 않고 사유를 보고서에 남긴다(조용한 0 금지).
+        자동 행은 실저장(realsave)·DB 쓰기 단계를 쓰지 않는다(저장 요청은 시나리오 실행기가 가로챈다).
+        손 행과 같은 패턴 키(expect_rows.key_of)는 소비 시점에 손 행이 이긴다.
+  패턴 목록(PATTERNS) 은 손 시나리오 87행(2026-11-04)을 유형화한 것이다 — 재현율 = gen_expect_recall.py.
+"""
+import argparse
+import csv
+import datetime
+import json
+import os
+import re
+import sys
+from collections import Counter, defaultdict
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+# 2026-11-06 T70(SCP0122 F1·E4 허위 FAIL): 저장 요청 본문의 행 상태 필드 이름은 화면마다 다르다 — 'CRUD' 고정이면 activeFlag:"D" 를 못 봐 FAIL.
+#   이름 = TO-BE 저장 PROC 인자 실측(proc_params.csv 11-06): ACTIVEFLAG 105 · CRUD_TYPE 6 · CRUDTYPE 2 · ACTIONTYPE 3 — 본문은 camelCase/원래 이름 둘 다 가능
+ROWSTATE_RE = '(CRUD_TYPE|CRUDTYPE|crudType|CRUD|activeFlag|ACTIVE_FLAG|ACTIVEFLAG|actionType|ACTION_TYPE|ACTIONTYPE)'
+sys.path.insert(0, HERE)
+import expect_rows as ER  # noqa: E402
+from asis_variant import is_main  # 2026-11-09 T172: variant 'only' 화면(SSP 등 180) = 현행 — 판정 단일 원천
+from asis_delete import new_only, delete_stmts  # 2026-11-09 T173: AS-IS Delete 신규 행 전용 판정 단일 원천(CALL_LOCAL 추적)
+
+ROOT = ER.ROOT
+ASIS = os.path.join(ROOT, 'Doc', 'asisfacts')
+TOBE = os.path.join(ROOT, 'Doc', 'tobefacts', 'db')
+SCN_COLS = ['menu_id', 'name', 'steps', 'msg_re', 'no_save', 'no_editor', 'rule', 'source', 'user'] + ER.AUTO_COLS
+
+
+def rcsv(p):
+    return ER.read_csv(p)[0]
+
+
+# ── 공용 사실(한 번만 읽음) ─────────────────────────────────────────────
+_G = {}
+
+
+def glob_facts():
+    if _G:
+        return _G
+    _G['sheet'] = defaultdict(list)
+    for r in rcsv(os.path.join(TOBE, 'sheet_columns.csv')):
+        if r['program_id'] and r['program_id'] != '--':
+            _G['sheet'][r['program_id']].append(r)
+    _G['btn'] = defaultdict(set)
+    _G['btn_gr'] = defaultdict(lambda: defaultdict(set))  # mnu_id → user_gr_id → {버튼 코드}(use_yn=Y)
+    for r in rcsv(os.path.join(TOBE, 'btn_auth.csv')):
+        if r.get('use_yn', 'Y') == 'Y':
+            _G['btn'][r['mnu_id']].add((r['sht_nm'].lower(), r['mnu_btn_cd'].upper()))
+            _G['btn_gr'][r['mnu_id']][r['user_gr_id']].add(r['mnu_btn_cd'].upper())
+    _G['user_gr'] = defaultdict(set)  # user_id → {user_gr_id}
+    for r in rcsv(os.path.join(TOBE, 'user_group_user.csv')):
+        if r.get('use_yn', 'Y') == 'Y':
+            _G['user_gr'][r['user_id']].add(r['user_gr_id'])
+    tob = defaultdict(dict)
+    for r in rcsv(os.path.join(TOBE, 'msg_master.csv')):
+        if r['msg_id'].upper().startswith('MSG') and r.get('use_yn', 'Y') == 'Y':
+            tob[r['msg_id'].upper()][r['lang_cd'].upper()] = r['msg_nm']
+    _G['tobe_msg'] = tob
+    asis = {}
+    for r in rcsv(os.path.join(ASIS, 'db', 'meta', 'dbo.TB_FX_MessageInfo.csv')):
+        asis[(r.get('MessageID') or '').upper()] = {'KO': r.get('Ko', ''), 'EN': r.get('En', '')}
+    _G['asis_msg'] = asis
+    norm = lambda s: re.sub(r"[\s.,!?。！？:;'\"`·~\-_()\[\]]", '', re.sub(r'\{\s*\d+\s*\}', '{n}', s or '')).lower()
+    _G['norm'] = norm
+    byko, byen = defaultdict(list), defaultdict(list)
+    for i, t in tob.items():
+        if t.get('KO'):
+            byko[norm(t['KO'])].append(i)
+        if t.get('EN'):
+            byen[norm(t['EN'])].append(i)
+    _G['byko'], _G['byen'] = byko, byen
+    ov = {}
+    for r in rcsv(os.path.join(ER.V, 'scenario_env_override.csv')):
+        ov[r['menu_id']] = r
+    _G['env_override'] = ov
+    return _G
+
+
+def msg_texts(asis_id):
+    """AS-IS 메시지 ID → (TO-BE 문구들 우선, 없으면 AS-IS 문구들) · 문구로 TO-BE ID 를 찾는다(msgmap 규칙 — ID 그대로 쓰지 않음)"""
+    G = glob_facts()
+    a = G['asis_msg'].get(asis_id.upper())
+    if not a:
+        return [], f'AS-IS 메시지 {asis_id} 원장 없음'
+    cand = G['byko'].get(G['norm'](a['KO'])) or G['byen'].get(G['norm'](a['EN'])) or []
+    if cand:
+        t = G['tobe_msg'][sorted(cand)[0]]
+        return [x for x in (t.get('KO'), t.get('EN')) if x], f'{asis_id}→{sorted(cand)[0]}(문구 일치)'
+    return [x for x in (a['KO'], a['EN']) if x], f'{asis_id}(TO-BE 같은 문구 없음 → AS-IS 문구)'
+
+
+def text_re(texts):
+    """문구 → 정규식(자리표시자 사이 가장 긴 조각 · 4자 이상) — 언어별 OR"""
+    parts = []
+    for t in texts:
+        frags = [f.strip(' .') for f in re.split(r'\{\s*\d+\s*\}|\n', t or '')]
+        frags = [f for f in frags if len(f) >= 4]
+        if frags:
+            parts.append(re.escape(max(frags, key=len))[:60])
+    return '|'.join(dict.fromkeys(parts))
+
+
+# ── 화면 사실 ────────────────────────────────────────────────────────────
+def asis_of(mid):
+    """TO-BE ID → AS-IS ID — run_verify.asis_of 와 같은 규칙(map_screen.csv tobe_id → asis_id · 없으면 같은 ID)
+       2026-11-04: 종전엔 Doc/asisfacts/screens/<TO-BE ID> 를 읽어 SYS 19화면(SYS0002 ↔ GSCM_USERINFO 등)이 AS-IS 사실 없이 생성됐다"""
+    G = glob_facts()
+    if 'asis_map' not in G:
+        G['asis_map'] = {}
+        for r in rcsv(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')):
+            G['asis_map'].setdefault((r.get('tobe_id') or '').upper(), (r.get('asis_id') or '').upper())
+    return G['asis_map'].get(mid.upper()) or mid
+
+
+class Screen:
+    def __init__(self, mid, asis=None):
+        self.id = mid
+        G = glob_facts()
+        self.asis = (asis or asis_of(mid)).upper()
+        d = os.path.join(ASIS, 'screens', self.asis)
+        self.dir = d
+        self.has_asis = os.path.exists(os.path.join(d, 'actions.csv'))
+        self.actions = rcsv(os.path.join(d, 'actions.csv'))
+        self.props = rcsv(os.path.join(d, 'props.csv'))
+        self.controls = rcsv(os.path.join(d, 'controls.csv'))
+        self.cell_clear = rcsv(os.path.join(d, 'cell_clear.csv'))
+        self.cell_rules = rcsv(os.path.join(d, 'cell_rules.csv'))
+        self.combo_src = rcsv(os.path.join(d, 'combo_src.csv'))
+        self.cols = [r for r in G['sheet'].get(mid, []) if r.get('valid_yn', 'Y') == 'Y' and r.get('visible_flag', 'Y') == 'Y']
+        self.btns = G['btn'].get(mid, set())
+        self.btn_codes = {b for _, b in self.btns}
+        # 레이아웃 라벨: 항목 Control=this.X → 항목 Text · 버튼 자체 Text
+        ctl_item, txt = {}, {}
+        for p in self.props:
+            if not is_main(p, self.dir):
+                continue
+            if p['prop'] == 'Control':
+                ctl_item[p['value'].replace('this.', '').strip()] = p['target']
+            elif p['prop'] == 'Text':
+                txt.setdefault(p['target'], p['value'].strip().strip('"'))
+        self.label = {c: txt.get(it, '') for c, it in ctl_item.items()}
+        self.text = txt
+        self.ctype = {}
+        for c in self.controls:
+            if is_main(c, self.dir):
+                self.ctype.setdefault(c['name'], c['type'].split('.')[-1])
+        self.env = self._env()
+        # 2026-11-20 T493(SCP0028 V-a1923fff H10 '편집 중 Input → MSG00680' · insert 뒤 신규 0행 · 편집기 null): AS-IS Insert 진입점 본문이 비어(InsertRow 빈 구현) 신규 행이 생기지 않는 화면은
+        #   '편집 중' 상태를 Insert 로 만들 수 없다 → 기존 행 칸 입력(edit 단계)으로 만든다. 규칙 = newrow.ts asisInsertNoop · judge._asis_insert_noop(CALL_LOCAL·RETURN·BRANCH·LOCAL 외 문장 0)
+        _ins = {e.get('method') for e in rcsv(os.path.join(d, 'actions_entries.csv')) if re.search('insert', e.get('entry') or '', re.I)}
+        self.insert_noop = bool(_ins) and bool(self.actions) and not any(a.get('method') in _ins and a.get('kind') not in ('CALL_LOCAL', 'RETURN', 'BRANCH', 'LOCAL') for a in self.actions)
+
+    def _env(self):
+        G = glob_facts()
+        ov = G['env_override'].get(self.id)
+        if ov:
+            return {'division': ov.get('division', ''), 'user': ov.get('user', ''), 'basis': f"override {ov.get('source', '')}"}
+        c = Counter(r['division_id'].strip() for r in self.cols if re.fullmatch(r'40|81|82', (r.get('division_id') or '').strip()))
+        if not c:
+            return {'division': '', 'user': '', 'basis': 'sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건'}
+        d, n = c.most_common(1)[0]
+        return {'division': d, 'user': '', 'basis': f'sheet_columns 단일 Division 칸 최다 {d}({n}칸 · 분포 {dict(c)})'}
+
+    # TO-BE 칸 분류(INPUT_TP_CD: S 표시 · O/M 편집(M 필수) · IO/IM 신규 행만(IM 필수))
+    #   2026-11-04 실측: 같은 칸이 공통 시트(Production = S)와 Division 시트(production_81 = M)에 따로 있다 → 칸 이름으로 모은 뒤
+    #   편집 판정은 '어느 행이든 편집 코드', Division 은 편집 행의 시트 접미(_40/_81/_82) 또는 division_id 목록에서 고른다.
+    def colmodel(self):
+        if hasattr(self, '_cm'):
+            return self._cm
+        cm = {}
+        for r in self.cols:
+            k = r['column_name'].upper()
+            m = cm.setdefault(k, {'col': k, 'rows': [], 'tp': set(), 'divs': set(), 'alldiv': False, 'ctrl': ''})
+            m['rows'].append(r)
+            tp = (r.get('input_tp_cd') or '').strip()
+            m['tp'].add(tp)
+            if tp in ('O', 'M', 'IO', 'IM'):
+                sm = re.search(r'_(40|81|82)$', r['sheet_name'])
+                dl = [x.strip() for x in (r.get('division_id') or '').split(',') if re.fullmatch(r'40|81|82', x.strip())]
+                if sm:
+                    m['divs'].add(sm.group(1))
+                elif dl:
+                    m['divs'] |= set(dl)
+                else:
+                    m['alldiv'] = True
+            t = (r.get('cell_control_object_type_code') or '').strip()
+            if t and (not m['ctrl'] or tp in ('O', 'M', 'IO', 'IM')):
+                m['ctrl'] = t
+                m['src'] = r
+        for m in cm.values():
+            m.setdefault('src', m['rows'][0])
+        self._cm = cm
+        return cm
+
+    def edit_cols(self, new_row, required=False):
+        ok = (('M', 'IM') if new_row else ('M',)) if required else (('O', 'M', 'IO', 'IM') if new_row else ('O', 'M'))
+        out = []
+        for m in self.colmodel().values():
+            if m['tp'] & set(ok):
+                r = dict(m['src'])
+                r['column_name'] = m['col']
+                r['cell_control_object_type_code'] = m['ctrl']
+                r['input_tp_cd'] = '/'.join(sorted(m['tp'] & set(ok)))
+                r['_divs'] = m['divs']
+                r['_alldiv'] = m['alldiv']
+                out.append(r)
+        return out
+
+    def has_div_cond(self):
+        return any(re.fullmatch(r'div(ision)?', ER._norm_label(v)) for v in self.label.values()) or any(r['column_name'].upper() == 'DIVISION_ID' for r in self.cols)
+
+    def div_for(self, r=None):
+        """칸이 편집되는 Division — 화면 기본(env)이 그 칸에 해당하면 그것, 아니면 칸의 첫 Division(81·82·40 순)"""
+        d = self.env['division']
+        if r is None or r.get('_alldiv') or not r.get('_divs'):
+            return d
+        if d in r['_divs']:
+            return d
+        return next(x for x in ('81', '82', '40') if x in r['_divs'])
+
+    def prefix(self, r=None):
+        """시나리오 공통 머리 — Division 조건(조회조건에 Division 이 있을 때)"""
+        d = self.div_for(r)
+        return f'cond:Div={d};' if d and self.has_div_cond() else ''
+
+
+DATE_NAME = re.compile(r'(^|_)(DATE|DT|YYYYMMDD)($|_)', re.I)
+
+
+def ctype_kind(r):
+    t = (r.get('cell_control_object_type_code') or '').strip()
+    if 'Combo' in t:
+        return 'combo'
+    if 'Date' in t:
+        return 'date'
+    # 날짜를 숫자 글자(yyyymmdd)로 받는 칸 — DMF0072 VALID_START_DATE = FPNumberText(2026-11-04 실측)
+    # 2026-11-17(SCP0104 SOP_ELTR.LAST_UPDATE_DATE P22 허위 FAIL): 감사 컬럼(시스템이 채우는 생성·수정 일시)은 사용자가 입력하는 날짜 칸이 아니다
+    if re.match(r'^(LAST_UPDATE|CREATION|CREATE|UPDATE|LAST_UPDATED|CREATED|MODIFY|MODIFIED)_?(DATE|DT|DTTM|TIME)$', (r.get('column_name') or '').upper()):
+        return 'text'
+    if DATE_NAME.search(r.get('column_name') or '') and t in ('FPNumberText', 'FPText', 'FPTextBox', 'FPNumber', 'FPDateText'):
+        return 'date'
+    if 'Number' in t or t == 'FPPercent':
+        return 'number'
+    if 'Modal' in t:
+        return 'popup'
+    if 'CheckBox' in t:
+        return 'check'
+    return 'text'
+
+
+# ── 패턴 ────────────────────────────────────────────────────────────────
+def row(S, pid, rule, name, steps, basis, msg_re='', no_save='', no_editor='', user=None):
+    r = {'menu_id': S.id, 'name': f'[자동] {name}', 'steps': steps, 'msg_re': msg_re, 'no_save': no_save, 'no_editor': no_editor,
+         'rule': rule, 'source': f'자동 생성 {pid} · {basis}', 'user': S.env['user'] if user is None else user, 'pattern_id': pid, 'basis': basis}
+    ks = sorted(ER.scenario_keys(r))
+    r['key'] = ' + '.join(ks)
+    return r
+
+
+def p_lang(S):
+    out, why = [], []
+    if 'SAVE' in S.btn_codes:
+        out.append(row(S, 'P01', 'I1', 'KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림', f'{S.prefix()}lang:KO;search;save', 'btn_auth SAVE', msg_re='[가-힣].*(수정|변경|없습니다)', no_save='Y'))
+    else:
+        why.append('SAVE 버튼 없음')
+    if 'SEARCH' in S.btn_codes:
+        out.append(row(S, 'P02', 'I1', 'CN 언어 조회 건수 총/건 표기', f'{S.prefix()}lang:CN;search;pagetext:(总|共|合计)\\s*[\\d,]+\\s*(条|行|件|个)', 'btn_auth SEARCH'))
+        out.append(row(S, 'P03', 'H10', '조회 중 Loading 토스트 없음', f'{S.prefix()}noload', 'btn_auth SEARCH'))
+    else:
+        why.append('SEARCH 버튼 없음')
+    return out, why
+
+
+def p_formdl(S):
+    hit = [t for c, t in S.text.items() if re.search(r'excel\s*form', t, re.I)]
+    if hit or 'FORM_DATA' in S.btn_codes:
+        return [row(S, 'P04', 'M1', 'Excel Form 동작(CR-095)', f'{S.prefix()}formdl', f"AS-IS 버튼 '{hit[0]}'" if hit else 'btn_auth FORM_DATA')], []
+    return [], ['Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA)']
+
+
+def p_insertat(S):
+    if 'INSERT' in S.btn_codes:
+        return [row(S, 'P05', 'D6', '선택 행 위로 Insert', f'{S.prefix()}search;insertat:3', 'btn_auth INSERT · D6 확정 요구(O2)')], []
+    return [], ['INSERT 버튼 없음']
+
+
+def p_delete(S):
+    if 'DELETE' not in S.btn_codes:
+        return [], ['DELETE 버튼 없음']
+    emp = _empty_override(S, 'DeleteButton')
+    if emp:
+        # 2026-11-05 SCP0111 허위 FAIL — AS-IS DeleteButton 재정의 본문이 비어 Delete 가 아무 동작 안 함(SCP0111_IntegrationPSI.cs:536)
+        return [], [f'AS-IS DeleteButton 재정의 본문 비어 있음({emp}) → Delete 동작 없음 · D 저장 대상 아님']
+    # 2026-11-09 T173(SSP0025 4번 허위 FAIL): DeleteButton → this.Delete() 위임 · sv.Rows.Remove · DeleteRow 를 종전 판정(DeleteButton 안 '.Delete' DATA_OP 만)이 놓쳤다
+    #   → asis_delete.new_only 단일 원천(CALL_LOCAL 추적 · 호출 경로 guard 결합 · 'else of' 조각 제외)
+    dels = [a for a, _ in delete_stmts(S.actions)]
+    only_new, ref = new_only(S.actions)
+    if only_new:
+        return [], [f"AS-IS 삭제가 신규 행만({ref} guard == StringI/FlagI) → 기존 행 D 저장 대상 아님"]
+    b = f"btn_auth DELETE · AS-IS DeleteButton {dels[0]['line']}" if dels else 'btn_auth DELETE(AS-IS 삭제 문장 미확인)'
+    return [row(S, 'P06', 'F1', '기존 행 Delete → D 저장 요청', f'{S.prefix()}search;delrow;save;savehas:{ROWSTATE_RE}[^,]{{0,8}}D', b)], []
+
+
+def p_combo(S):
+    out, why = [], []
+    combos = [r for r in S.edit_cols(True) if ctype_kind(r) == 'combo']
+    if not combos:
+        return [], ['신규 행 편집 콤보 칸 없음(sheet_columns FPComboBox · INPUT_TP_CD O/M/IO/IM)']
+    src = {}
+    for c in S.combo_src:
+        if c.get('target_kind') == 'GRID' and c.get('code'):
+            src.setdefault(c['target'].upper(), c)
+    for r in combos:
+        col = r['column_name'].upper()
+        s = src.get(col)
+        if s:
+            out.append(row(S, 'P07', 'C1', f'{col} 셀 콤보 후보 = 서버 콤보 {s["code"]}', f'{S.prefix(r)}search;insert;gridcands:{col}=@combo:{s["code"]}', f"combo_src {s['ref'][:80]}"))
+        else:
+            out.append(row(S, 'P07', 'C1', f'{col} 셀 콤보 후보 있음', f'{S.prefix(r)}search;insert;gridcands:{col}~.', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']} (combo_src 없음 → 후보 존재만)"))
+        out.append(row(S, 'P08', 'F3', f'{col} 신규 행 콤보 붙여넣기 — 후보 값 반영', f'{S.prefix(r)}search;insert;paste:{col}=@cand:1;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']}"))
+        out.append(row(S, 'P09', 'F3', f'{col} 신규 행 콤보 붙여넣기 — 후보 밖 값 거부', f'{S.prefix(r)}search;insert;paste:{col}=ZZ_E2E_NOT_IN_LIST;cell:~,{col}=~^(?!ZZ_E2E_NOT_IN_LIST$)', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']}"))
+        out.append(row(S, 'P10', 'F3', f'{col} 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)', f'{S.prefix(r)}search;insert;type:{col}=@cand:1;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']}"))
+        # 2026-11-09(SCP0131 사용자 보고 'Copy & Paste 시 Plan Group 붙이기 안됨' 이 조치 필요 누락): 실제 사용자 경로 = 기존 행 셀 Copy → 신규 행 붙여넣기.
+        #   P31 = 신규 행 후보 안 값을 가진 기존 행 셀 Copy → 반영돼야 함 · P32 = 후보 밖 값(비활성 마스터 등) 행 셀 Copy → 결과를 드러내 사용자 판정(AS-IS 후보 SQL 도 VALID_YN='Y' · cs 붙여넣기 이름 조회 실패 시 예외)
+        out.append(row(S, 'P31', 'F3', f'{col} 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영', f'{S.prefix(r)}search;insert;paste:{col}=@copy:in;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']} · 사용자 경로 Copy&Paste"))
+        out.append(row(S, 'P32', 'F3', f'{col} 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사', f'{S.prefix(r)}search;insert;paste:{col}=@copy:out;cell:~,{col}=~\\S', f"sheet_columns {r['sheet_name']}.{col} FPComboBox {r['input_tp_cd']} · 사용자 경로 Copy&Paste(원본 값이 이 행 후보 밖)"))
+    return out, why
+
+
+def p_decimal(S):
+    if not S.cell_rules:
+        return [], ['cell_rules.csv 없음(소수 자릿수 사실 없음)']
+    dec = {}
+    for c in S.cell_rules:
+        try:
+            n = int(c.get('decimals') or 0)
+        except ValueError:
+            n = 0
+        if n > 0:
+            dec.setdefault(c['column'].upper(), (n, c))
+    out = []
+    for r in S.edit_cols(False):
+        col = r['column_name'].upper()
+        if col in dec and ctype_kind(r) == 'number':
+            n, c = dec[col]
+            v = '0.' + '123456789'[:n - 1] + '5' if n > 1 else '0.5'
+            out.append(row(S, 'P11', 'F6', f'{col} 소수 {n}자리 저장 요청 유지', f"{S.prefix(r)}search;type:{col}={v};save;savehas:{re.escape(v)}", f"cell_rules {c['sheet']}.{c['column']} decimals={n} · {c['ref'][:60]}"))
+    return out, ([] if out else ['기존 행 편집 숫자 칸 중 소수 자릿수 > 0 없음'])
+
+
+def p_reqfp(S):
+    ed = S.edit_cols(False)
+    if 'SAVE' not in S.btn_codes:
+        return [], ['SAVE 없음']
+    pick = next((r for r in ed if ctype_kind(r) == 'number'), None) or next((r for r in ed if ctype_kind(r) == 'text'), None)
+    if not pick and dyn_families(S) and 'SAVE' in S.btn_codes:
+        # 수량이 동적 기간 칸에만 있는 화면(DMF0003 MKT_FCST_RP) — 편집 가능 첫 동적 칸(@DYN)
+        return [row(S, 'P12', 'E4', '기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음', f'{S.prefix()}search;type:@DYN=7;btn:Save;nomsgre:필수|required|mandatory', f'AS-IS 동적 칸 {dict(dyn_families(S))} · 필수 오탐 유형(DM-215)')], []
+    if not pick:
+        return [], ['기존 행 편집 숫자·글자 칸 없음']
+    col = pick['column_name'].upper()
+    v = '1' if ctype_kind(pick) == 'number' else 'E2E'
+    return [row(S, 'P12', 'E4', f'기존 행 {col} 수정 저장 → 입력된 필수 칸 오탐 없음', f'{S.prefix(pick)}search;type:{col}={v}@~edit;btn:Save;nomsgre:필수|required|mandatory', f"sheet_columns {pick['sheet_name']}.{col} {pick['input_tp_cd']} · 필수 오탐 유형(DM-215)")], []
+
+
+def p_blank_save(S):
+    if 'INSERT' not in S.btn_codes or 'SAVE' not in S.btn_codes:
+        return [], ['INSERT·SAVE 버튼 둘 다 있어야 함']
+    req = [r for r in S.edit_cols(True) if (r.get('input_tp_cd') or '').strip() in ('M', 'IM')]
+    msgs = []
+    for a in S.actions:
+        # 2026-11-05 SCP0111 — 바깥 guard(nowGroupID IsNullOrEmpty)까지 보면 중복·성공 문구가 섞임 → 가장 안쪽 조건만
+        inner = (a['guard'] or '').split(' ▸ ')[-1]
+        if a['kind'] == 'MESSAGE' and re.search(r'Save', a['method']) and re.search(r'==\s*(string\.Empty|"")|IsNullOrEmpty|Trim\(\)\s*==\s*""', inner):
+            m = re.search(r'"(MSG\d+)"', a['value'])
+            if m:
+                msgs.append((m.group(1), a))
+    if not req and not msgs:
+        return [], ['필수 칸(M/IM) 없음 · AS-IS 저장 빈값 검사 없음']
+    texts, basis = [], []
+    for mid, a in msgs[:20]:
+        t, b = msg_texts(mid)
+        t = [x for x in t if not re.search(r'저장되었습니다|saved|하시겠습니까|\?\s*$', x, re.I)]  # 성공·확인 문구는 '거부 안내'가 아님
+        if not t:
+            continue
+        texts += t
+        basis.append(f"{a['method']}:{a['line']} {b}")
+    mre = '|'.join(x for x in [text_re(texts), '필수|required|mandatory'] if x)
+    b = ('AS-IS ' + ' · '.join(dict.fromkeys(basis))[:200]) if basis else f"sheet_columns 필수 {len(req)}칸({', '.join(r['column_name'] for r in req[:5])})"
+    return [row(S, 'P13', 'E3', '빈 신규 행 저장 → 필수 안내·저장 요청 0', f'{S.prefix()}search0;insert;save', b, msg_re=mre, no_save='Y')], []
+
+
+HANDLER_SKIP = re.compile(r'^(SaveData|InsertButton|DeleteButton|InsertRow|Save|FindData|SearchButton|Form_Load|InitControls)', re.I)
+
+
+def p_dirty(S):
+    out, why = [], []
+    seen = set()
+    for a in S.actions:
+        if a['kind'] != 'MESSAGE' or not re.search(r'==\s*CAppSetting\.(FlagI|StringI)', a['guard']):
+            continue
+        meth = a['method']
+        if HANDLER_SKIP.search(meth) or '_' not in meth:
+            continue
+        ctl = meth.split('_', 1)[0]
+        typ = S.ctype.get(ctl, '')
+        m = re.search(r'"(MSG\d+)"', a['value'])
+        if not m:
+            continue
+        texts, b = msg_texts(m.group(1))
+        mre = text_re(texts)
+        if not mre:
+            why.append(f'{meth}:{a["line"]} 메시지 문구 없음')
+            continue
+        if re.search(r'Combo|Radio|CheckedList|Check', typ):
+            lab = S.label.get(ctl) or S.text.get(ctl, '')
+            if not lab:
+                why.append(f'{ctl} 라벨 못 찾음')
+                continue
+            k = ('C4', lab)
+            if k in seen:
+                continue
+            seen.add(k)
+            out.append(row(S, 'P14', 'C4', f'신규 행 있을 때 {lab} 변경 차단', f'{S.prefix()}search;insert;cond:{lab}=@other', f"AS-IS {meth}:{a['line']} guard FlagI → {b}", msg_re=mre))
+        elif re.search(r'Button', typ):
+            lab = S.text.get(ctl, '')
+            if not lab:
+                why.append(f'{ctl} 버튼 글자 못 찾음')
+                continue
+            k = ('H10', lab)
+            if k in seen:
+                continue
+            seen.add(k)
+            out.append(row(S, 'P15', 'H10', f'신규 행 있을 때 {lab} 차단 안내', f'{S.prefix()}search;insert;btn:{re.escape(lab)}', f"AS-IS {meth}:{a['line']} guard FlagI → {b}", msg_re=mre))
+        else:
+            why.append(f'{meth}:{a["line"]} 컨트롤 형식 미확인({ctl}={typ or "없음"})')
+    # DM-52 일반 규칙(문서 general_rule=Y): 편집 중 데이터가 있을 때 다른 기능 실행 → 모든 화면 단일 코드 MSG00680
+    #   2026-11-20 T485(SCP0028 V-c346a4a2 H10 '편집 중 Input → MSG00680' · AS-IS btnInput_Click cs:260-274 검사 없이 팝업 열기):
+    #   CR-022 원문 = '다른 기능 실행을 막는 메시지는 단일 코드(MSG00680)를 사용한다' · 원 결함 DM-52 = DMF0082 편집 모드(IsLock) 차단 메시지 2종(MSG00142·MSG00408) 혼재 → 단일화.
+    #   규칙은 차단 메시지의 코드만 정한다. 차단이 없던 버튼에 차단을 추가하라는 규칙이 아니다 →
+    #   AS-IS 버튼 Click 핸들러(events.csv · 없으면 <버튼>_Click · CALL_LOCAL 2단계)에 편집 중 검사 MESSAGE 가 있는 버튼만 생성한다.
+    t680 = glob_facts()['tobe_msg'].get('MSG00680', {})
+    m680 = text_re([x for x in (t680.get('KO'), t680.get('EN')) if x])
+    common = re.compile(r'^(search|save|insert|delete|excel|edit|close|ok|cancel|확인|취소|닫기|조회|저장|추가|삭제|reset.*|column.*|measure.*|excel\s*(form|upload|download).*|upload|download|apply|select|선택|\.\.\.)$', re.I)
+    edit_guard = re.compile(r'IsLock\s*\(|CAppSetting\.(FlagI|StringI|FlagU|StringU)\b|IsChang|HasChang|Changed\b|Modif|Dirty|IsEdit|EditMode|RowState', re.I)
+    edit_text = re.compile(r'edit\s*mode|unsaved|not\s+saved|변경\s*중|수정\s*(중|모드)|편집\s*중|저장하지\s*않|저장\s*또는\s*취소|미저장', re.I)
+    events = rcsv(os.path.join(S.dir, 'events.csv'))
+    by_meth = defaultdict(list)
+    for a in S.actions:
+        by_meth[a['method']].append(a)
+
+    def _edit_guard_line(ctl):
+        hs = {e['handler'] for e in events if re.sub(r'^this\.', '', e.get('target') or '') == ctl and e.get('event') == 'Click' and e.get('handler')}
+        hs.add(f'{ctl}_Click')
+        todo, done = [(h, 0) for h in hs], set()
+        while todo:
+            h, dep = todo.pop()
+            if h in done:
+                continue
+            done.add(h)
+            for a in by_meth.get(h, []):
+                if a['kind'] == 'MESSAGE':
+                    mm = re.search(r'"(MSG\d+)"', a['value'])
+                    txt = ' '.join(msg_texts(mm.group(1))[0]) if mm else a['value']
+                    # '수정모드가 아니므로'(MSG00135) 처럼 편집 모드가 아닐 때 막는 문구는 편집 중 차단이 아님
+                    if re.search(r'아니|아닌|not\s+in\s+(edit|modify)', txt or '', re.I):
+                        continue
+                    if edit_guard.search(a.get('guard') or '') or edit_text.search(txt or ''):
+                        return f"{h}:{a['line']}"
+                elif a['kind'] == 'CALL_LOCAL' and dep < 2 and a.get('target'):
+                    todo.append((a['target'], dep + 1))
+        return ''
+    for c, typ in S.ctype.items():
+        if not re.search(r'Button', typ):
+            continue
+        lab = S.text.get(c, '').strip()
+        if not lab or common.match(lab) or ('H10', lab) in seen or len(lab) > 30:
+            continue
+        gl = _edit_guard_line(c)
+        if not gl:
+            why.append(f'DM-52 제외: AS-IS 버튼 {c}({lab}) Click 핸들러에 편집 중 차단 메시지 없음(CR-022 = 차단 메시지 코드 규칙)')
+            continue
+        seen.add(('H10', lab))
+        out.append(row(S, 'P15', 'H10', f'편집 중 {lab} 실행 → MSG00680(DM-52 일반 규칙)', f"{S.prefix()}search;{'edit' if getattr(S, 'insert_noop', False) else 'insert'};btn:{re.escape(lab)}", f'DM-52 general_rule · AS-IS 버튼 {c} Text {lab!r} · 편집 중 차단 {gl}', msg_re=m680 or 'unsaved changes|저장하지 않은|저장 또는 취소|미저장'))
+    if not out and not why:
+        why.append('AS-IS 이벤트 핸들러에 신규 행(FlagI/StringI) 검사 메시지 없음 · 기능 버튼 없음')
+    return out, why
+
+
+def p_clear(S):
+    out, why = [], []
+    if not S.cell_clear:
+        return [], ['cell_clear.csv 없음']
+    by = defaultdict(list)
+    for c in S.cell_clear:
+        if '%' in (c.get('cond') or ''):
+            by[(c['src_col'].upper(), c['cond'])].append(c)
+    for (src, cond), cs in by.items():
+        den = None
+        for c in cs:
+            if c['tgt_col'].upper() != src and re.search(c['tgt_col'], cond, re.I):
+                den = c['tgt_col'].upper()
+        den = den or cs[0]['tgt_col'].upper()
+        tg = [c['tgt_col'].upper() for c in cs]
+        refill = [c['tgt_col'].upper() for c in cs if c.get('refilled') == 'Y']
+        msgs = [a for a in S.actions if a['kind'] == 'MESSAGE' and a['method'] == cs[0]['ref'].split('.')[-1] and '%' in a['guard']]
+        texts = []
+        for a in msgs[:3]:
+            mm = re.search(r'"(MSG\d+)"', a['value'])
+            if mm:
+                texts += msg_texts(mm.group(1))[0]
+        mre = text_re(texts) or '정수|integer'
+        cells = ';'.join(f'cell:~,{t}=' for t in [src] + tg)
+        out.append(row(S, 'P16', 'C3', f'{src} ÷ {den} 정수 아님 → 안내·칸 비움', f'{S.prefix()}search;type:{src}=7@{den}=^(2|3|4|5|6)(\\.0+)?$;{cells}', f"cell_clear {cs[0]['ref'][:80]} cond {cond[:60]}", msg_re=mre))
+        if refill:
+            out.append(row(S, 'P17', 'C3', f'{src} ÷ {den} 나누어떨어짐 → 몫 표시', f'{S.prefix()}search;type:{src}=6@{den}=^(1|2|3|6)(\\.0+)?$;cell:~,{refill[0]}=~^(6|3|2|1)(\\.0+)?$', f"cell_clear refilled {refill[0]} · {cs[0]['ref'][:80]}"))
+    return out, (why if out else why + ['나머지(%) 조건 셀 비움 없음'])
+
+
+DYN_RE = re.compile(r'IndexOf\("([WMD])_"\)|"([WMD])_"\s*\+')
+
+
+def dyn_families(S):
+    fam = Counter()
+    for a in S.actions:
+        for m in DYN_RE.finditer(a['guard'] + ' ' + a['value'] + ' ' + a['raw']):
+            fam[m.group(1) or m.group(2)] += 1
+    return fam
+
+
+def _w_hidden(S):
+    """W_ 접두 검사 가드 아래 Visible 대입이 전부 false 면 '숨김 대입 N건' 문자열, 아니면 ''(보이게 하는 대입·Visible 대입 없음 = 표시 가능)"""
+    vis = []
+    for a in S.actions:
+        g = a['guard'] or ''
+        if '"W_"' not in g:
+            continue
+        inner = g.split(' ▸ ')[-1]
+        if inner.startswith('else of') or '"W_"' not in inner:
+            continue  # else 가지 = W_ 아님
+        m = re.search(r'\.Visible\s*=\s*(true|false)', a['raw'] or '')
+        if m:
+            vis.append(m.group(1))
+    return f"Visible=false {len(vis)}건" if vis and all(v == 'false' for v in vis) else ''
+
+
+def p_dyn(S):
+    fam = dyn_families(S)
+    if not fam:
+        return [], ['AS-IS 동적 기간 칸(W_/M_/D_ 접두 검사) 없음']
+    out, why = [], []
+    bucket = next((v for v in S.label.values() if re.search(r'bucket', v, re.I)), '')
+    w_hidden = _w_hidden(S)
+    if 'W' in fam and w_hidden:
+        why.append(f'AS-IS W_ 칸 = 숨김 대입만({w_hidden}) — 주간 칸 미표시 화면(2026-11-05 SCP0111 H2 ERROR)')
+    if 'W' in fam and not w_hidden:
+        pre = f'{S.prefix()}' + (f'cond:{bucket}=Weekly;' if bucket else '')
+        out.append(row(S, 'P18', 'H2', '당주 구분선(rail) = 이번 주(Weekly)', f'{pre}search;rail:W@mon', f'AS-IS W_ 칸 접두 검사 {fam["W"]}건' + (f' · 조회조건 {bucket}' if bucket else '')))
+    if 'SAVE' in S.btn_codes:
+        out.append(row(S, 'P19', 'D2', '값 있는 편집 구간 수량 셀 편집', f'{S.prefix()}search;type:@DYNVAL=123;cell:~,@LAST=123', f'AS-IS 동적 칸 {dict(fam)} · SAVE'))
+    return out, why
+
+
+def p_toggle(S):
+    out, why = [], []
+    for c, lab in S.label.items():
+        if not lab or not re.search(r'Combo|Radio', S.ctype.get(c, '')):
+            continue
+        hs = [a for a in S.actions if a['method'].startswith(c + '_') and re.search(r'SetSpreadColumn|InitSpread|SetSheet', a['target'] + a['value'])]
+        if hs:
+            out.append(row(S, 'P20', 'F4', f'{lab} 반복 전환 조회 SQL 오류 0', f'{S.prefix()}cond:{lab}=@other;search;cond:{lab}=@other;search;cond:{lab}=@other;search', f"AS-IS {hs[0]['method']}:{hs[0]['line']} 컬럼 재구성"))
+    return out, (why if out else ['컬럼을 다시 만드는 조회조건(SetSpreadColumn 호출 핸들러) 없음'])
+
+
+def search_cond_rows(mid):
+    p = os.path.join(ROOT, 'tools', 'Harness', 'rules', 'search_cond.csv')
+    return [r for r in rcsv(p) if r.get('menu_id') == mid and r.get('primary', 'Y') == 'Y'] if os.path.exists(p) else []
+
+
+def p_iscombo(S):
+    sc = search_cond_rows(S.id)
+    if sc:
+        # 2026-11-05 SCP0111 ERROR — AS-IS 라벨('Division*')로 찾으면 TO-BE('Div')와 달라 측정 불가 · Period 는 TO-BE 달력(콤보 아님)
+        #   SCP·SSP = 조회조건 기준표(CR-071) TO-BE 이름 · 유형 '선택' · 사용(USE)만
+        # 2026-11-10 T201(SSP0003 2번 허위 FAIL): 기준표 'Reason Detail 선택' 이지만 AS-IS txtReasonDetail 은 ReadOnly 표시 칸(Designer.cs:957 · 비고 '자동입력 표시') —
+        #   사용자가 고르는 조회조건이 아니다. AS-IS 원문 ReadOnly 컨트롤(props.csv)에 대응하는 기준표 행은 뺀다(T192 E3 와 같은 원칙)
+        ro = set()
+        try:
+            with open(os.path.join(S.dir, 'props.csv'), encoding='utf-8-sig', newline='') as f:
+                ro = {r['target'] for r in csv.DictReader(f) if r.get('variant') != 'legacy' and r.get('prop') == 'ReadOnly' and (r.get('value') or '').strip().lower() == 'true'}
+        except OSError:
+            pass
+        nrm_l = lambda t: re.sub(r'[\s*.:]', '', t or '').lower()
+        ro_labels = {nrm_l(lab) for c, lab in S.label.items() if c in ro}
+        dropped = [r['tobe_name'].strip() for r in sc if nrm_l(r.get('asis_name')) in ro_labels or nrm_l(r.get('tobe_name')) in ro_labels]
+        labs = list(dict.fromkeys(r['tobe_name'].strip() for r in sc if r.get('usage') == 'USE' and r.get('tobe_type1') == '선택' and r.get('tobe_name', '').strip() and r['tobe_name'].strip() not in dropped))
+        if not labs:
+            return [], ['조회조건 기준표에 TO-BE 선택(콤보) 조건 없음' + (f' (AS-IS ReadOnly 표시 칸 제외 {dropped})' if dropped else '')]
+        return [row(S, 'P21', 'B1', f'조회조건 콤보 {len(labs)}종 = 콤보', ';'.join(f'iscombo:{re.escape(l)}' for l in labs), f"조회조건 기준표(search_cond.csv) TO-BE 선택 {', '.join(labs[:6])}")], []
+    labs = []
+    for c, lab in S.label.items():
+        lab = re.sub(r'\s*\*\s*$', '', (lab or '').strip())  # 필수 표시 '*' 제외(CR-077)
+        if re.search(r'[A-Za-z가-힣]', lab) and re.search(r'UsrCombo|ComboBox|CheckedList', S.ctype.get(c, '')):
+            labs.append(lab)
+    labs = list(dict.fromkeys(labs))
+    if not labs:
+        return [], ['AS-IS 조회 콤보(UsrCombo·CheckedList) 라벨 없음']
+    return [row(S, 'P21', 'B1', f'조회조건 콤보 {len(labs)}종 = 콤보', ';'.join(f'iscombo:{re.escape(l)}' for l in labs), f"AS-IS controls 콤보 {', '.join(labs[:6])}")], []
+
+
+def p_baddate(S):
+    if 'INSERT' not in S.btn_codes or 'SAVE' not in S.btn_codes:
+        return [], ['INSERT·SAVE 버튼 둘 다 있어야 함']
+    ds = [r for r in S.edit_cols(True) if ctype_kind(r) == 'date']
+    out = [row(S, 'P22', 'E2', f'{r["column_name"].upper()} 없는 날짜 저장 차단', f'{S.prefix(r)}insert;type:{r["column_name"].upper()}=20241399;save', f"sheet_columns {r['sheet_name']}.{r['column_name']} {r['cell_control_object_type_code']} {r['input_tp_cd']}", msg_re='유효|valid|날짜|date', no_save='Y') for r in ds]
+    return out, ([] if out else ['신규 행 편집 날짜 칸 없음'])
+
+
+def p_modins(S):
+    if 'INSERT' not in S.btn_codes or 'SAVE' not in S.btn_codes:
+        return [], ['INSERT·SAVE 버튼 둘 다 있어야 함']
+    ed = [r for r in S.edit_cols(False) if ctype_kind(r) == 'text']
+    if not ed:
+        return [], ['기존 행 편집 글자 칸 없음']
+    req = [r for r in S.edit_cols(True) if (r.get('input_tp_cd') or '').strip() in ('M', 'IM')]
+    fill = []
+    for r in req:
+        k = ctype_kind(r)
+        col = r['column_name'].upper()
+        fill.append(f'type:{col}=@cand:1' if k == 'combo' else f'type:{col}=1' if k == 'number' else f'type:{col}=20991231' if k == 'date' else f'type:{col}=E2E_SCN_I')
+    e = ed[0]['column_name'].upper()
+    st = f'{S.prefix()}search;type:{e}=E2E_SCN;insert;' + ';'.join(fill) + (';' if fill else '') + f'save;savehas:{ROWSTATE_RE}[^,]{{0,8}}M;savehas:{ROWSTATE_RE}[^,]{{0,8}}I'
+    return [row(S, 'P23', 'F2', '기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I', st, f"sheet_columns 편집 {e} · 필수 {len(req)}칸")], []
+
+
+COLREF = re.compile(r'DefColumns\.(\w+)')
+
+
+def p_popfill(S):
+    """팝업 셀 연쇄 채움(C3/D1) — AS-IS CellDoubleClick: e.Column==X 아래 POPUP → SetText/SetValue(e.Row, Y) · X 팝업 선택 뒤 Y 칸 값 있음"""
+    pops = defaultdict(set)
+    ref = {}
+    for a in S.actions:
+        if 'DoubleClick' not in a['method'] or a['kind'] != 'GRID_SET' or 'e.Row' not in a['raw']:
+            continue
+        xs = [x.upper() for x in re.findall(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(DefColumns\.(\w+)\)', a['guard'])]
+        if not xs or not re.search(r'SetText|SetValue', a['raw']):
+            continue
+        y = COLREF.search(a['raw'])
+        for x in xs:  # e.Column == ITEM_ID || e.Column == ITEM_ID40 — 같은 팝업의 칸 별칭 전부
+            if y and y.group(1).upper() not in xs:
+                pops[x].add(y.group(1).upper())
+                ref.setdefault(x, f"{a['method']}:{a['line']}")
+    newcols = {r['column_name'].upper(): r for r in S.edit_cols(True)}
+    out = []
+    for x, ys in sorted(pops.items()):
+        if x not in newcols:
+            continue
+        vis = [y for y in sorted(ys) if y in S.colmodel()]
+        if not vis:
+            continue
+        cells = ';'.join(f'cell:~,{y}=~\\S' for y in vis)
+        out.append(row(S, 'P24', 'C3', f'{x} 팝업 선택 → {", ".join(vis)} 채움', f'{S.prefix(newcols[x])}search;insert;popcell:{x}=;{cells}', f'AS-IS {ref[x]} 팝업 뒤 SetText {", ".join(vis)}'))
+    return out, ([] if out else ['AS-IS 더블클릭 팝업 뒤 다른 칸 채움 없음(또는 신규 행 편집 칸 아님)'])
+
+
+def p_samekey(S):
+    """같은 키 묶음 동반 갱신(F3/F5) — AS-IS *_Changed: e.Column==X ▸ for 행 ▸ if (k1==n1 && k2==n2) ▸ SetValue(i, X, v)"""
+    local = {}
+    for a in S.actions:
+        if a['kind'] == 'LOCAL':
+            m = re.search(r'(\w+)\s*=\s*\w+\.Get(?:Text|Value)\([^,]+,\s*\w+\.GetColumnIndex\(DefColumns\.(\w+)\)', a['raw'])
+            if m:
+                local[(a['method'], m.group(1))] = m.group(2).upper()
+    out, seen = [], set()
+    for a in S.actions:
+        if a['kind'] != 'GRID_SET' or 'Changed' not in a['method']:
+            continue
+        g = re.search(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(DefColumns\.(\w+)\)\)\s*▸\s*for \(.*?\)\s*▸\s*if \((.+)\)\s*$', a['guard'])
+        y = COLREF.search(a['raw'])
+        if not g or not y or y.group(1).upper() != g.group(1).upper():
+            continue
+        x = g.group(1).upper()
+        keys = [local.get((a['method'], v)) for v in re.findall(r'(\w+)\s*==', g.group(2))]
+        keys = [k for k in keys if k]
+        if not keys or x in seen or x not in {r['column_name'].upper() for r in S.edit_cols(False)}:
+            continue
+        seen.add(x)
+        r = next(r for r in S.edit_cols(False) if r['column_name'].upper() == x)
+        kk = ','.join(dict.fromkeys(['DIVISION_ID'] + keys if 'DIVISION_ID' in S.colmodel() else keys))
+        out.append(row(S, 'P25', 'F3', f'{x} 입력 → 같은 {"·".join(keys)} 행 동반 갱신', f'{S.prefix(r)}search;gridcols:{x};samekey:{x}=9@{kk}', f"AS-IS {a['method']}:{a['line']} for 행 · if({g.group(2)[:60]}) SetValue {x}"))
+    return out, ([] if out else ['AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음'])
+
+
+# ── Division 조건 노출(doc_ui_expect 형식 · 2026-11-04 W8-2 ③) ─────────────────────────────
+#   원천: AS-IS grid_code.csv set:Visible/VisibleColumns/SetColumnVisible/SetVisibleSheetColumn 의 conditions(부모 조건 사슬 ' ⟫ ' · else 쪽 = 'else!(…)')
+#         · props.csv 버튼 Visible + 원문 감싼 if/else. Division 술어만 참·거짓으로 계산하고, 다른 술어(시트명·라디오·반복문)가 섞이면 만들지 않는다(사유).
+#   판정 위험: col_hidden 은 머리글 글자로 찾으므로 라벨이 틀리면 허위 PASS → 같은 칸이 다른 Division 에서 '보임' 짝이 있을 때만 숨김 행을 만든다.
+DIV_VAR = re.compile(r'[A-Za-z_][\w.]*(?:\(\))?(?:\.ToString\(\))?', re.I)
+DOCUI_COLS = ['menu_id', 'cond', 'kind', 'name', 'source'] + ER.AUTO_COLS
+VIS_API = ('set:Visible', 'VisibleColumns', 'SetColumnVisible', 'SetVisibleSheetColumn')
+
+
+def base_divisions():
+    G = glob_facts()
+    if 'divs' not in G:
+        G['divs'] = [r['division_id'] for r in rcsv(os.path.join(TOBE, 'division.csv')) if r.get('valid_yn', 'Y') == 'Y' and '_' not in r['division_id']]
+    return G['divs']
+
+
+def _div_atom_value(atom, d):
+    """Division 술어 하나 → True/False · Division 아닌 술어면 None"""
+    a = atom.strip()
+    neg = False
+    while a.startswith('!') and not a.startswith('!='):
+        neg, a = not neg, a[1:].strip()
+    while a.startswith('(') and a.endswith(')') and a.count('(') == a.count(')'):
+        a = a[1:-1].strip()
+    m = re.fullmatch(r'(.+?)\s*==\s*false', a)
+    if m:
+        neg, a = not neg, m.group(1).strip()
+    m = re.fullmatch(r'(.+?)\s*!=\s*null', a)
+    if m:
+        return not neg  # null 검사 = 화면이 떠 있으면 참
+    v = None
+    m = re.fullmatch(r'(.+?)\s*(==|!=)\s*"([^"]*)"', a)
+    if m and re.search(r'div', m.group(1), re.I):
+        lhs, op, lit = m.groups()
+        dd = d[:2] if 'Substring(0, 2)' in lhs or 'Substring(0,2)' in lhs else d
+        v = (dd == lit) if op == '==' else (dd != lit)
+    m2 = re.fullmatch(r'(.+?)\.(Equals|Contains|StartsWith)\("([^"]*)"\)', a)
+    if v is None and m2 and re.search(r'div', m2.group(1), re.I):
+        lhs, fn, lit = m2.groups()
+        dd = d[:2] if 'Substring(0, 2)' in lhs or 'Substring(0,2)' in lhs else d
+        v = (dd == lit) if fn == 'Equals' else (lit in dd) if fn == 'Contains' else dd.startswith(lit)
+    if v is None:
+        return None
+    return (not v) if neg else v
+
+
+def div_pred(expr, d):
+    """조건식(&&·|| 결합) → True/False · Division 아닌 술어가 있으면 None"""
+    out = []
+    for tok in re.split(r'(\&\&|\|\|)', expr):
+        if tok in ('&&', '||'):
+            out.append(' and ' if tok == '&&' else ' or ')
+            continue
+        t = tok.strip()
+        # 괄호 균형 맞추기(바깥 괄호 벗기기 · 원자 안 괄호는 유지)
+        lead = ''
+        while t.startswith('(') and t.count('(') > t.count(')'):
+            lead, t = lead + '(', t[1:].strip()
+        trail = ''
+        while t.endswith(')') and t.count(')') > t.count('('):
+            trail, t = trail + ')', t[:-1].strip()
+        v = _div_atom_value(t, d)
+        if v is None:
+            return None
+        out.append(f'{lead}{v}{trail}')
+    try:
+        return bool(eval(''.join(out), {'__builtins__': {}}, {}))
+    except Exception:
+        return None
+
+
+def chain_value(cond, d):
+    """부모 조건 사슬 ' ⟫ ' 전체가 Division d 에서 참인지 · 하나라도 Division 아닌 술어면 None(사유)"""
+    if not cond:
+        return True, ''
+    for part in cond.split(' ⟫ '):
+        part = part.strip()
+        if part.startswith('else!('):
+            e, neg = part[len('else!('):-1], True
+        elif part.startswith('if('):
+            e, neg = part[3:-1], False
+        else:
+            return None, f'조건 {part[:40]} (if/else 아님)'
+        v = div_pred(e, d)
+        if v is None:
+            return None, f'Division 아닌 술어 {e[:50]}'
+        if neg:
+            v = not v
+        if not v:
+            return False, ''
+    return True, ''
+
+
+def _defcols(S):
+    """DefColumns 상수 → 칸 이름(AS-IS 원문 const string X = "Y") · 화면 파일 전부"""
+    if hasattr(S, '_dc'):
+        return S._dc
+    dc = {}
+    for f in {r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and is_main(r, S.dir)} if os.path.exists(os.path.join(S.dir, 'files.csv')) else set():
+        L = asis_src(f)
+        for ln in L or []:
+            m = re.search(r'(?:const\s+string|static\s+(?:readonly\s+)?string)\s+(\w+)\s*=\s*"([^"]+)"', ln)
+            if m:
+                dc.setdefault(m.group(1), m.group(2))
+    S._dc = dc
+    return dc
+
+
+def _empty_override(S, name):
+    """AS-IS 화면 파일(current)에 'override void <name>()' 이 있고 본문에 문장이 없으면 '파일:줄' — 주석·빈 줄만 있는 본문"""
+    for f in sorted({r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and is_main(r, S.dir)} if os.path.exists(os.path.join(S.dir, 'files.csv')) else set()):
+        L = asis_src(f) or []
+        for i, ln in enumerate(L):
+            if re.search(r'override\s+void\s+' + name + r'\s*\(\s*\)', ln) and not ln.strip().startswith('//'):
+                body, depth, started = [], 0, False
+                for x in L[i:]:
+                    code = re.sub(r'//.*', '', x)
+                    for ch in code:
+                        if ch == '{':
+                            depth += 1
+                            started = True
+                        elif ch == '}':
+                            depth -= 1
+                    body.append(code)
+                    if started and depth <= 0:
+                        break
+                inner = re.sub(r'/\*.*?\*/', '', ' '.join(body), flags=re.S)
+                inner = inner[inner.find('{') + 1: inner.rfind('}')] if '{' in inner else inner
+                if not inner.strip():
+                    return f"{os.path.basename(f)}:{i + 1}"
+                return ''
+    return ''
+
+
+_SRC = {}
+
+
+def asis_src(f):
+    if f not in _SRC:
+        p = os.path.join(ROOT, 'GSCM', f.replace('\\', os.sep))
+        try:
+            with open(p, encoding='utf-8-sig', errors='replace') as h:
+                _SRC[f] = h.read().split('\n')
+        except OSError:
+            _SRC[f] = None
+    return _SRC[f]
+
+
+def tobe_label(S, col):
+    """TO-BE sheet_columns 머리글(visible 여부 무관 · 같은 칸 이름의 라벨이 하나일 때만)"""
+    G = glob_facts()
+    ls = {(r.get('column_label_name') or '').strip() for r in G['sheet'].get(S.id, []) if r['column_name'].upper() == col.upper() and r.get('valid_yn', 'Y') == 'Y'}
+    ls.discard('')
+    return (next(iter(ls)), '') if len(ls) == 1 else ('', f'TO-BE 라벨 {len(ls)}종' if ls else 'TO-BE sheet_columns 칸 없음')
+
+
+def p_colvis(S):
+    """P26 — AS-IS Division 조건 칸 보임/숨김 → doc_ui col_shown/col_hidden(Division 하나씩) · DM-47 AS FROM SITE · DM-239 · DM-243 유형"""
+    why = []
+    p = os.path.join(S.dir, 'grid_code.csv')
+    if not os.path.exists(p):
+        return [], ['AS-IS grid_code.csv 없음']
+    dc = None
+    U = base_divisions()
+    ev = defaultdict(lambda: defaultdict(list))  # col → div → [(member,line,visible)]
+    has_div, incomplete = set(), {}
+    # 같은 칸의 대입은 조건 유무와 무관하게 전부 본다(2026-11-04 SCP0070 TYPE — 라디오 조건 줄을 빼고 남은 줄로만 정하면 근거 불완전):
+    #   조건 없음 = 모든 Division · Division 술어만 = 계산 · 다른 술어 섞임 = 그 칸 전체 제외(incomplete)
+    for r in rcsv(p):
+        if not is_main(r, S.dir) or r['api'] not in VIS_API:
+            continue
+        cond = r.get('conditions') or ''
+        raw = r.get('raw') or ''
+        vis = re.findall(r'\b(true|false)\b', raw)
+        if not vis:
+            why.append(f"{r['line']} 표시 값 없음({raw[:40]})")
+            continue
+        col = (r.get('columns') or '').strip()
+        if not col:
+            m = re.search(r'DefColumns\.(\w+)', raw)
+            if m:
+                dc = dc if dc is not None else _defcols(S)
+                col = dc.get(m.group(1), '')
+                if not col:
+                    why.append(f"{r['line']} DefColumns.{m.group(1)} 상수 원문 없음")
+                    continue
+        if not col or ',' in col:
+            if re.search(r'div', cond, re.I):
+                why.append(f"{r['line']} 칸 이름 미확정({col or raw[:40]})")
+            continue
+        C = col.upper()
+        if re.search(r'div', cond, re.I):
+            has_div.add(C)
+        hits = []
+        for d in U:
+            v, w = chain_value(cond, d)
+            if v is None:
+                incomplete.setdefault(C, f"{r['member']}:{r['line']} {w}")
+                break
+            if v:
+                hits.append(d)
+        else:
+            for d in hits:
+                ev[C][d].append((r['member'], int(r['line']), vis[-1] == 'true'))
+    out = []
+    for C, w in sorted(incomplete.items()):
+        if C in has_div:
+            why.append(f'{C} 제외 — 같은 칸 대입에 Division 아닌 술어({w})')
+    for col, bd in sorted(ev.items()):
+        if col not in has_div or col in incomplete:
+            continue
+        state, clash = {}, ''
+        for d, lst in bd.items():
+            per_member = {}
+            for mem, ln, v in sorted(lst, key=lambda x: x[1]):
+                per_member[mem] = v  # 같은 핸들러 안 = 마지막 줄이 이김
+            vs = set(per_member.values())
+            if len(vs) > 1:
+                clash = f'Division {d} 핸들러 간 상충 {per_member}(실행 순서 근거 없음)'
+                break
+            state[d] = vs.pop()
+        if clash:
+            why.append(f'{col} 제외 — {clash}')
+            continue
+        if True not in state.values() or False not in state.values():
+            why.append(f'{col} 보임·숨김 짝 없음 {state} → 라벨 확인 불가(숨김 단독 행은 허위 PASS 위험)')
+            continue
+        lab, w = tobe_label(S, col)
+        if not lab:
+            why.append(f'{col} {w}')
+            continue
+        for want, kind in ((True, 'col_shown'), (False, 'col_hidden')):
+            d = next(x for x in U if state.get(x) is want)  # division.csv 순서(40·81·82·EE) 첫 값 — EE 는 그 상태가 EE 뿐일 때만
+            basis = f"grid_code {col} Division {d} {'보임' if want else '숨김'} · 전체 {dict(sorted(state.items()))}"
+            out.append({'_file': 'doc_ui_expect.csv', 'menu_id': S.id, 'cond': f'Div={d}', 'kind': kind, 'name': lab, 'source': f'자동 생성 P26 · {basis}',
+                        'pattern_id': 'P26', 'basis': basis, 'key': f"K4|docui|{kind}|{ER._norm_label(lab)}"})
+    return out, (why if not out else why[:20])
+
+
+BTN_CODE_ALIAS = {'excelform': ('EXCEL_FORM', 'TEMPLATE', 'EXCEL_TEMPLATE'), 'upload': ('EXCEL_UPLOAD', 'UPLOAD'), 'excelupload': ('EXCEL_UPLOAD', 'UPLOAD')}
+
+
+def _enclosing(L, ln):
+    """원문 ln(1부터) 을 감싼 블록 머리 사슬(안→밖) — 'if(...)' · 'else!(…)' 형식"""
+    out, depth, i = [], 0, ln - 2
+    while i >= 0 and len(out) < 6:
+        t = re.sub(r'//.*', '', L[i])
+        depth += t.count('}') - t.count('{')
+        if depth < 0:
+            hdr = t.split('{')[0].strip() or re.sub(r'//.*', '', L[i - 1]).strip()
+            if hdr.startswith('if'):
+                out.append('if(' + hdr[hdr.index('(') + 1:hdr.rindex(')')] + ')')
+            elif hdr.startswith('else'):
+                # 짝 if 찾기: 위로 '}' 직전 블록의 머리
+                j, dep = i - 1, 0
+                while j >= 0:
+                    tj = re.sub(r'//.*', '', L[j])
+                    dep += tj.count('}') - tj.count('{')
+                    if dep < 0 or (dep == 0 and re.match(r'\s*if\s*\(', tj)):
+                        break
+                    j -= 1
+                hj = re.sub(r'//.*', '', L[j]).strip() if j >= 0 else ''
+                if not hj.startswith('if'):
+                    return None
+                out.append('else!(' + hj[hj.index('(') + 1:hj.rindex(')')] + ')')
+            else:
+                break  # 메서드 머리
+            depth = 0
+        i -= 1
+    return ' ⟫ '.join(reversed(out))
+
+
+def p_btnvis(S):
+    """P27 — AS-IS 버튼 Visible 의 Division 조건 → doc_ui btn_shown/btn_hidden · TO-BE 원장(btn_auth)에 같은 버튼 코드가 있을 때만"""
+    why, ev = [], defaultdict(lambda: defaultdict(set))
+    U = base_divisions()
+    for p in S.props:
+        if not is_main(p, S.dir) or p['prop'] != 'Visible' or 'Designer' in p['file'] or not re.match(r'(btn|ubtn)', p['target'], re.I):
+            continue
+        L = asis_src(p['file'])
+        if not L:
+            why.append(f"{p['target']} 원문 없음")
+            continue
+        ch = _enclosing(L, int(p['line']))
+        if not ch or not re.search(r'div', ch, re.I):
+            continue
+        vis = re.findall(r'\b(true|false)\b', p['value'])
+        if not vis:
+            continue
+        for d in U:
+            v, w = chain_value(ch, d)
+            if v is None:
+                why.append(f"{p['target']} {w}")
+                break
+            if v:
+                ev[p['target']][d].add(vis[-1] == 'true')
+    out = []
+    for b, bd in ev.items():
+        st = {d: next(iter(s)) for d, s in bd.items() if len(s) == 1}
+        txt = S.text.get(b, '')
+        codes = BTN_CODE_ALIAS.get(ER._norm_label(txt), (re.sub(r'\W+', '_', txt.upper()).strip('_'),))
+        hit = [c for c in codes if c in S.btn_codes]
+        if not hit:
+            why.append(f"{b}('{txt}') TO-BE btn_auth 코드 {codes} 없음 → 제거·미구현 판단은 removed_buttons/CheckList K4(생성기 판단 안 함)")
+            continue
+        for want, kind in ((True, 'btn_shown'), (False, 'btn_hidden')):
+            d = next((x for x in U if st.get(x) is want), None)
+            if d:
+                basis = f'props {b} Visible · 원문 조건 · Division {d} · 전체 {st}'
+                out.append({'_file': 'doc_ui_expect.csv', 'menu_id': S.id, 'cond': f'Div={d}', 'kind': kind, 'name': txt, 'source': f'자동 생성 P27 · {basis}',
+                            'pattern_id': 'P27', 'basis': basis, 'key': f"K4|docui|{kind}|{ER._norm_label(txt)}"})
+    return out, why[:20]
+
+
+def p_divroundtrip(S):
+    """P30 — AS-IS 메타(SCM_MST_SHEET_COLUMNS.DIVISION_ID)가 일부 Division 에만 둔 칸 → Div A→B→A 전환 뒤 칸 노출(colvis) · DM-P60(DMF0021 K2) 유형
+       칸 선택: DEFAULT_FLAG=Y 이고 (필수 M/IM 우선 → 사용자 숨김 불가 USER_SELECTABLE_FLAG=N) · TO-BE sheet_columns 에 같은 칸 · 화면당 1칸(실행 시간)
+       Division 고정 화면(scenario_env_override) 제외 · 0행이어도 칸은 그려지므로 search0"""
+    if glob_facts()['env_override'].get(S.id):
+        return [], [f"Division 고정 화면(override {glob_facts()['env_override'][S.id].get('division', '')}) — 전환 시험 불가"]
+    p = os.path.join(S.dir, 'dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv')
+    if not os.path.exists(p):
+        return [], ['AS-IS 메타 SCM_MST_SHEET_COLUMNS 없음(코드로 그리는 화면)']
+    if not S.has_div_cond():
+        return [], ['조회조건에 Division 없음']
+    pre = lambda d: [x.strip()[:2] for x in (d or '').split(',') if x.strip()]
+    rows = [r for r in rcsv(p) if (r.get('PROGRAM_ID') or '').upper() == S.asis and r.get('VALID_YN') == 'Y' and r.get('VISIBLE_FLAG') == 'Y']
+    U = [d for d in base_divisions() if any(d in pre(r['DIVISION_ID']) for r in rows)]
+    # 주 그리드 = AS-IS 메타 칸이 가장 많은 시트(colvis 는 현재 그리드만 본다 — 저장용·하위 시트 칸을 고르면 허위 FAIL · 2026-11-04 DMF0082 'Sales Price Save All')
+    sc = Counter(r['SHEET_NAME'] for r in rows)
+    main = sc.most_common(1)[0][0] if sc else ''
+    rows = [r for r in rows if r['SHEET_NAME'] == main]
+    # 칸 고르기 = TO-BE 플래그(시험 계정 개인화로 숨겨지지 않는 칸 — TO-BE user_selectable N) · 기대(어느 Division 에 있나) = AS-IS 메타
+    #   2026-11-04 DMF0021 END_CUSTOMER40: AS-IS S·선택 가능 / TO-BE IM·선택 불가 — AS-IS 플래그로 고르면 빠졌다
+    tobe = defaultdict(list)
+    for t0 in glob_facts()['sheet'].get(S.id, []):
+        if t0.get('valid_yn', 'Y') == 'Y':
+            tobe[t0['column_name'].upper()].append(t0)
+    cand = []
+    for r in rows:
+        ds = sorted(set(pre(r['DIVISION_ID'])), key=lambda x: U.index(x) if x in U else 9)
+        out_ds = [d for d in U if d not in ds]
+        tb = tobe.get(r['COLUMN_NAME'].upper(), [])
+        if not ds or not out_ds or r.get('DEFAULT_FLAG') != 'Y' or not tb:
+            continue
+        if not any(x.get('user_selectable_flag') == 'N' and x.get('default_flag', 'Y') == 'Y' for x in tb):
+            continue
+        req = any((x.get('input_tp_cd') or '').strip() in ('M', 'IM') for x in tb)
+        rank = (0 if req else 1) + (2 if r['COLUMN_NAME'].upper().endswith('_ID') or r['COLUMN_NAME'].upper() == 'DIVISION_ID' else 0)
+        if True:
+            cand.append((rank, int(r.get('SORT_ORDER_NO') or 0), r, ds[0], out_ds[0]))
+    if not cand:
+        return [], [f'일부 Division 칸 중 AS-IS 기본 표시 · TO-BE 숨김 불가 칸 없음(화면 Division {U})']
+    rank, _, r, a, b = sorted(cand, key=lambda x: (x[0], x[1]))[0]
+    col = r['COLUMN_NAME'].upper()
+    basis = f"AS-IS 메타 {r['SHEET_NAME']}.{col} DIVISION_ID={r['DIVISION_ID'][:40]} · TO-BE {'필수·' if rank in (0, 2) else ''}숨김 불가 · 주 시트 {main}({sc[main]}칸) · 후보 {len(cand)}칸 중 1"
+    steps = f'cond:Div={a};search0;colvis:{col}=Y;cond:Div={b};search0;colvis:{col}=N;cond:Div={a};search0;colvis:{col}=Y'
+    return [row(S, 'P30', 'K2', f'Division {a}→{b}→{a} 전환 뒤 {col} 노출 = AS-IS 메타', steps, basis)], []
+
+
+SUM_COLS = ['menu_id', 'mode', 'label', 'cond', 'source', 'other'] + ER.AUTO_COLS
+
+
+def p_sumtoggle(S):
+    """P28 — AS-IS Sum 체크박스 = 재조회 없이 합계(기간 묶음 M_/W_) 칸 보임 토글 → sum_toggle toggle (GAP-338 DMF0048 유형)
+       조건: chkSum 'Sum' · CheckedChanged 핸들러 · flow 에 그 핸들러 서버 경로 없음 · 원문 '.Visible = chkSum.Checked' · AS-IS 첫 상태 해제
+       (실행기는 한 번 클릭해 칸이 늘어야 PASS — 첫 상태가 체크면 방향이 반대라 만들지 않는다)"""
+    t = S.text.get('chkSum', '').strip()
+    if not t or ER._norm_label(t) != 'sum':
+        return [], ['AS-IS chkSum(Sum) 없음']
+    ev = rcsv(os.path.join(S.dir, 'events.csv'))
+    if not any(e.get('target', '').endswith('chkSum') and e.get('event') == 'CheckedChanged' for e in ev):
+        return [], ['chkSum CheckedChanged 핸들러 없음']
+    fl = rcsv(os.path.join(S.dir, 'flow.csv'))
+    if any('chkSum' in (f.get('entry') or '') for f in fl):
+        return [], ['chkSum 핸들러에 서버 경로 있음(flow) → 재조회형 — immediate 판단은 문서 몫']
+    files = {r['file'] for r in rcsv(os.path.join(S.dir, 'files.csv')) if r.get('file', '').endswith('.cs') and is_main(r, S.dir)}
+    uses, sets_true_designer, sets_false_code, bucket = [], False, False, False
+    for f in files:
+        L = asis_src(f) or []
+        for i, ln in enumerate(L, 1):
+            code = re.sub(r'//.*', '', ln)
+            if re.search(r'\.Visible\s*=\s*chkSum\.Checked\b', code):
+                ch = _enclosing(L, i) or ''
+                uses.append(f'{os.path.basename(f)}:{i}')
+                bucket = bucket or 'BucketType' in ch
+            m = re.search(r'chkSum\.(?:Checked\s*=\s*(true|false)|CheckState\s*=\s*[\w.]*\.(Checked|Unchecked))', code)
+            if m:
+                on = (m.group(1) == 'true') or (m.group(2) == 'Checked')
+                if 'Designer' in f:
+                    sets_true_designer = sets_true_designer or on
+                elif not on:
+                    sets_false_code = True
+    if not uses:
+        return [], ["원문 '.Visible = chkSum.Checked' 없음 → 합계 칸 토글 아님"]
+    if sets_true_designer and not sets_false_code:
+        return [], ['AS-IS 첫 상태 = 체크(Designer true · 코드 해제 없음) → 실행기 토글 방향 반대 · 만들지 않음']
+    cond = ''
+    if bucket:
+        bl = next((v for c, v in S.label.items() if 'bucket' in c.lower() and v), '')
+        if not bl:
+            return [], [f'합계 칸 조건이 BucketType({uses[0]})인데 화면 Bucket 조회조건 라벨 없음']
+        cond = f'{bl.strip().rstrip("*").strip()}=Weekly'
+    basis = f"원문 Visible = chkSum.Checked {len(uses)}곳({', '.join(uses[:3])}) · 서버 경로 없음 · 첫 상태 해제{' · Bucket 분기(Daily 외 = M_ 합계)' if bucket else ''}"
+    return [{'_file': 'sum_toggle_expect.csv', 'menu_id': S.id, 'mode': 'toggle', 'label': t, 'cond': cond, 'source': f'자동 생성 P28 · {basis}', 'other': '',
+             'pattern_id': 'P28', 'basis': basis, 'key': f'G7|sum|{ER._norm_label(t)}'}], []
+
+
+DEFAULT_ACCOUNT = os.environ.get('E2E_ACCOUNT') or 'minyonglee1'  # E2E 기본 로그인(fixture·eg_auth.spec.ts:412 와 동일)
+
+
+def need_buttons(steps):
+    """시나리오 단계가 누르는 데이터 변경 버튼 코드"""
+    st = [x.strip() for x in (steps or '').split(';') if x.strip()]
+    kinds = [x.split(':', 1)[0] for x in st]
+    need = set()
+    if 'insert' in kinds or 'insertat' in kinds:
+        need.add('INSERT')
+    if 'save' in kinds or any(x.lower().startswith('btn:save') for x in st):
+        need.add('SAVE')
+    if 'delrow' in kinds:
+        need.add('DELETE')
+    return need
+
+
+def row_groups(r):
+    """행의 계정 그룹 — user 열 'Div=40;DM Admin' 의 그룹 · 없으면 기본 계정 소속 그룹 합집합(화면 버튼 노출 기준 CR-070)"""
+    G = glob_facts()
+    grp = [x.strip() for x in (r.get('user') or '').split(';') if x.strip() and not re.match(r'^Div\s*=', x.strip(), re.I)]
+    if grp:
+        return set(grp), f"user 열 {'·'.join(grp)}"
+    return set(G['user_gr'].get(DEFAULT_ACCOUNT, set())), f'기본 계정 {DEFAULT_ACCOUNT}'
+
+
+def auth_filter(S, rows):
+    G = glob_facts()
+    keep, drop = [], []
+    for r in rows:
+        if r.get('_file', 'scenario_expect.csv') != 'scenario_expect.csv':
+            keep.append(r)
+            continue
+        need = need_buttons(r.get('steps'))
+        if not need:
+            keep.append(r)
+            continue
+        grs, who = row_groups(r)
+        # 그룹 ID 대소문자 무시(행 user 'DM Admin' ↔ btn_auth 'DM ADMIN' — 2026-11-05 DMF0042·0044·0049 176행 허위 제외)
+        gl = {g.lower() for g in grs}
+        have = set().union(*[v for k, v in G['btn_gr'][S.id].items() if k.lower() in gl]) if gl else set()
+        miss = need - have
+        if miss:
+            drop.append(f"{r['pattern_id']} {r['name'][:40]} — {who} 그룹에 {'·'.join(sorted(miss))} 권한 없음(btn_auth use_yn=Y)")
+        else:
+            keep.append(r)
+    return keep, drop
+
+
+PATTERNS = [p_lang, p_formdl, p_insertat, p_delete, p_combo, p_decimal, p_reqfp, p_blank_save, p_dirty, p_clear, p_dyn, p_toggle, p_iscombo, p_baddate, p_modins, p_popfill, p_samekey, p_colvis, p_btnvis, p_sumtoggle, p_divroundtrip]
+# 패턴 목록(W8-3 · 2026-11-05) — doc_patterns.py(문서 행 연결)·pattern_coverage.py(화면 적용표)의 단일 출처
+#   applies = 행을 만드는 사실 조건(각 p_* 함수의 생성 안 함 사유와 같은 조건) · 공통: Insert·Save·Delete 단계 행은 계정 그룹 btn_auth use_yn=Y 일 때만(auth_filter)
+PATTERN_INFO = {
+    'P01': ('p_lang', 'I1', 'KO 언어 · 무변경 저장 → KO 알림', 'TO-BE btn_auth SAVE'),
+    'P02': ('p_lang', 'I1', 'CN 언어 조회 건수 총/건 표기(CR-063)', 'TO-BE btn_auth SEARCH'),
+    'P03': ('p_lang', 'H10', '조회 중 Loading 토스트 없음', 'TO-BE btn_auth SEARCH'),
+    'P04': ('p_formdl', 'M1', 'Excel Form 동작(CR-095)', "AS-IS 버튼 글자 'Excel Form' 또는 btn_auth FORM_DATA"),
+    'P05': ('p_insertat', 'D6', '선택 행 위로 Insert(CR-015)', 'TO-BE btn_auth INSERT'),
+    'P06': ('p_delete', 'F1', '기존 행 Delete → D 저장 요청', 'btn_auth DELETE · AS-IS DeleteButton 본문 있음 · 삭제가 신규 행 전용(guard == StringI) 아님'),
+    'P07': ('p_combo', 'C1', '신규 행 셀 콤보 후보', 'sheet_columns 신규 행 편집(INPUT_TP_CD O/M/IO/IM) FPComboBox 칸'),
+    'P08': ('p_combo', 'F3', '신규 행 콤보 붙여넣기 — 후보 값 반영', 'P07 과 같음'),
+    'P09': ('p_combo', 'F3', '신규 행 콤보 붙여넣기 — 후보 밖 값 거부', 'P07 과 같음'),
+    'P10': ('p_combo', 'F3', '신규 행 콤보 직접 입력 — 후보 값 반영', 'P07 과 같음'),
+    'P31': ('p_combo', 'F3', '기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영(2026-11-09 SCP0131)', 'P07 과 같음 · 후보 안 값을 가진 기존 행'),
+    'P32': ('p_combo', 'F3', '기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값 행에서 복사(2026-11-09 SCP0131)', 'P07 과 같음 · 후보 밖 값(비활성 마스터 등)을 가진 기존 행'),
+    'P11': ('p_decimal', 'F6', '소수 자릿수 저장 요청 유지', 'AS-IS cell_rules decimals>0 · 기존 행 편집 숫자 칸'),
+    'P12': ('p_reqfp', 'E4', '기존 행 수정 저장 → 필수 칸 오탐 없음(DM-215)', 'btn_auth SAVE · 기존 행 편집 숫자/글자 칸(없으면 AS-IS 동적 기간 칸)'),
+    'P13': ('p_blank_save', 'E3', '빈 신규 행 저장 → 필수 안내·저장 요청 0', 'btn_auth INSERT·SAVE · 필수 칸(M/IM) 또는 AS-IS 저장 메서드의 빈값 검사 메시지(가장 안쪽 조건 · 성공/확인 문구 제외)'),
+    'P14': ('p_dirty', 'C4', '신규 행 있을 때 조회조건 변경 차단', 'AS-IS 이벤트 핸들러 MESSAGE 의 guard == FlagI/StringI · 조회조건 컨트롤'),
+    'P15': ('p_dirty', 'H10', '신규 행·편집 중 기능 버튼 차단 안내(DM-52)', 'AS-IS 이벤트 핸들러 MESSAGE 의 guard == FlagI/StringI · 버튼 컨트롤(또는 기능 버튼 중 AS-IS Click 핸들러에 편집 중 차단 메시지가 있는 버튼 · CR-022 · T485)'),
+    'P16': ('p_clear', 'C3', '나머지(%) 조건 → 안내·칸 비움', 'AS-IS cell_clear cond 에 % (정수 배수 검사)'),
+    'P17': ('p_clear', 'C3', '나누어떨어짐 → 몫 표시', 'P16 · cell_clear refilled=Y'),
+    'P18': ('p_dyn', 'H2', '당주 구분선 = 이번 주', 'AS-IS W_ 접두 동적 칸 검사'),
+    'P19': ('p_dyn', 'D2', '값 있는 편집 구간 수량 셀 편집', 'AS-IS W_/M_/D_ 접두 동적 칸 검사 · btn_auth SAVE'),
+    'P20': ('p_toggle', 'F4', '컬럼 재구성 조회조건 반복 전환 SQL 오류 0', 'AS-IS Combo/Radio 조회조건 핸들러가 SetSpreadColumn/InitSpread/SetSheet 호출'),
+    'P21': ('p_iscombo', 'B1', '조회조건 콤보 = 콤보', 'SCP·SSP = 조회조건 기준표 TO-BE 선택 조건 / 그 외 AS-IS UsrCombo·CheckedList 라벨'),
+    'P22': ('p_baddate', 'E2', '없는 날짜 저장 차단', 'btn_auth INSERT·SAVE · 신규 행 편집 날짜 칸'),
+    'P23': ('p_modins', 'F2', '기존 행 수정 + 신규 행 동시 저장 → M·I', 'btn_auth INSERT·SAVE · 기존 행 편집 글자 칸'),
+    'P24': ('p_popfill', 'C3', '팝업 셀 선택 → 연쇄 칸 채움', 'AS-IS CellDoubleClick e.Column==X 아래 POPUP → SetText/SetValue(e.Row, Y)'),
+    'P25': ('p_samekey', 'F3', '같은 키 묶음 동반 갱신', 'AS-IS *_Changed e.Column==X ▸ for 행 ▸ 키 일치 ▸ SetValue(i, X, v)'),
+    'P26': ('p_colvis', 'K4', '칸 보임/숨김 = AS-IS Division 조건', 'AS-IS grid_code Visible 계열 · 조건 사슬이 Division 술어만 · 보임·숨김 짝 · TO-BE 라벨 1종'),
+    'P27': ('p_btnvis', 'K4', '버튼 보임/숨김 = AS-IS Division 조건', 'AS-IS 버튼 Visible Division 조건 · TO-BE btn_auth 에 같은 버튼 코드'),
+    'P28': ('p_sumtoggle', 'G7', 'Sum 체크 = 재조회 없이 합계 칸 토글', 'AS-IS chkSum CheckedChanged · 서버 경로 없음 · .Visible = chkSum.Checked · 첫 상태 미체크'),
+    'P30': ('p_divroundtrip', 'K2', 'Division 왕복 전환 뒤 칸 노출 = AS-IS 메타', 'AS-IS SCM_MST_SHEET_COLUMNS 일부 Division 칸 · 조회조건 Division · Division 고정 화면 아님'),
+}
+FILE_COLS = {'scenario_expect.csv': SCN_COLS, 'doc_ui_expect.csv': DOCUI_COLS, 'sum_toggle_expect.csv': SUM_COLS}
+
+
+def generate(mid, asis=None):
+    S = Screen(mid, asis)
+    rows, rep = [], {'id': mid, 'asis': S.asis, 'at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'has_asis': S.has_asis, 'tobe_cols': len(S.cols), 'buttons': sorted(S.btn_codes), 'env': S.env, 'patterns': {}}
+    for fn in PATTERNS:
+        try:
+            out, why = fn(S)
+        except Exception as e:  # 패턴 하나의 사실 형식 문제로 전체가 멈추지 않게 — 사유는 보고서에
+            out, why = [], [f'예외 {type(e).__name__}: {e}']
+        rows += out
+        rep['patterns'][fn.__name__] = {'rows': len(out), 'why_not': why}
+    # 2026-11-05 사용자 지시: 시험 계정에 그 버튼 권한(btn_auth use_yn=Y)이 실제로 있는 행만 — Insert·Save·Delete 단계 행
+    #   실측 05:44: Insert 단계 자동 행 814 중 70(11화면 · P07~P10·P14·P15)이 INSERT=Y 그룹 0 인 화면에 생성돼 '버튼 없음' ERROR 원인
+    rows, rep['auth_drop'] = auth_filter(S, rows)
+    # 이름 중복 방지(시나리오 대상 = '<ID> 시나리오 <name>')
+    seen = Counter()
+    for r in rows:
+        if r.get('_file', 'scenario_expect.csv') != 'scenario_expect.csv':
+            continue  # doc_ui 등은 name 이 화면 글자 대조값 — 접미 금지(대상 이름은 kind·name·cond 로 이미 유일)
+        seen[r['name']] += 1
+        if seen[r['name']] > 1:
+            r['name'] += f' #{seen[r["name"]]}'
+    od = os.path.join(ER.V, mid, 'auto_expect')
+    os.makedirs(os.path.join(od, '_all'), exist_ok=True)
+    # _all = 전체(재현율 측정용) · 본 파일 = 손 행과 키가 전부 겹치는 행을 뺀 소비용(spec 은 손 행 + 이 파일을 이어 붙이기만 한다)
+    #   파일별(2026-11-04 W8-2 ③): 행의 _file(없으면 scenario_expect.csv) · 행이 0 이어도 머리글만 있는 파일을 써서 지난 생성본을 지운다
+    used_tot = 0
+    rep['files'] = {}
+    for fname, cols in FILE_COLS.items():
+        frows = [r for r in rows if r.get('_file', 'scenario_expect.csv') == fname]
+        hk = set()
+        for h in ER.hand_rows(fname, mid):
+            hk |= ER.keys_of(fname, h)
+        use = [r for r in frows if not ({x for x in r['key'].split(' + ') if x} and {x for x in r['key'].split(' + ') if x} <= hk)]
+        used_tot += len(use)
+        rep['files'][fname] = {'rows': len(frows), 'used': len(use)}
+        for path, rs in ((os.path.join(od, '_all', fname), frows), (os.path.join(od, fname), use)):
+            if not rs and not os.path.exists(path) and fname != 'scenario_expect.csv':
+                continue
+            with open(path, 'w', encoding='utf-8-sig', newline='') as f:
+                w = csv.DictWriter(f, fieldnames=cols)
+                w.writeheader()
+                for r in rs:
+                    w.writerow({k: r.get(k, '') for k in cols})
+    rep['rows'] = len(rows)
+    rep['rows_used'] = used_tot
+    rep['dup_of_hand'] = len(rows) - used_tot
+    with open(os.path.join(od, '_gen_report.json'), 'w', encoding='utf-8') as f:
+        json.dump(rep, f, ensure_ascii=False, indent=1)
+    return rows, rep
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('ids', nargs='*')
+    ap.add_argument('--all', action='store_true', help='손 기대 행이 있는 화면 + 원장 있는 화면 전부')
+    ap.add_argument('--asis', default='', help='AS-IS ID(화면 1개일 때 · 없으면 map_screen.csv)')
+    a = ap.parse_args()
+    ids = list(a.ids)
+    if a.all:
+        hs = set()
+        for n in ER.EXPECT_FILES:
+            hs |= {r['menu_id'] for r in ER.read_csv(os.path.join(ER.V, n))[0] if r.get('menu_id')}
+        hs |= {d for d in os.listdir(ER.V) if os.path.exists(os.path.join(ER.V, d, 'verify_ledger.csv'))}
+        ids = sorted(hs)
+    if not ids:
+        ap.error('화면 ID 또는 --all')
+    tot = 0
+    for mid in ids:
+        rows, rep = generate(mid, a.asis if a.asis and len(ids) == 1 else None)
+        tot += len(rows)
+        pc = Counter(r['pattern_id'] for r in rows)
+        print(f"{mid}: 자동 행 {len(rows)} {dict(sorted(pc.items()))} · env {rep['env']['division'] or '-'}({rep['env']['basis'][:50]})")
+    print(f'합계 {tot}행 · 화면 {len(ids)}')
+
+
+if __name__ == '__main__':
+    main()

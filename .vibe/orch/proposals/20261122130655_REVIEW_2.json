@@ -1,0 +1,177 @@
+{
+  "id": "20261122130655_REVIEW_2",
+  "at": "2026-11-22T13:06:55+09:00",
+  "ms": 1795320415321,
+  "source": "review",
+  "status": "applied",
+  "sig": "apply|reload timing|hotreload",
+  "title": "반영한 VM 코드의 적용 시점: VMO 점검 기능 고친 내용은 창 로드 없이 바로 읽고, 화면·체인 코드는 실행 중 체인 0개일 때만 창 로드 알림",
+  "evidence": "activations.jsonl 11-20 13:55:28 ~ 20:45:03 창 로드 12회. 같은 구간 events.jsonl chain.end checklist aborted true, why 'VM 창 종료로 중단' 7건(SCP0028, 줄 972·1014·1036·1094·1340·1389·1581), ms_run 합계 18,182,035ms(18,182초). 11-21 01:59:17 뒤 창 로드 0회, 창 로드가 있어야 적용되는 반영 11건(selfcheck.sync .js). 창 로드를 한 이유는 미확인. orch-ladder.js:54·61 은 needsReload 반영의 효력을 다음 창 로드로 계산하므로 창 로드 전까지 재발 판정도 멈춤. 저장소 코드에서 require.cache 를 지우는 곳은 test 밖에 없음(Grep 결과). 상태를 쥐지 않는 모듈 목록은 미확인이라 반영 때 확인 필요",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/extension.js",
+    "tools/Harness/harness.json"
+  ],
+  "before_after": "반영 뒤 VM .js 가 바뀌면 모두 창 다시 로드 뒤 적용(실행 중 체인과 상관없이 알림) → 상태를 쥐지 않는 분석 모듈(후보: orch-improve, orch-ladder, orch-vision, orch-history)은 반영 게이트 통과 직후 VM 안에서 다시 읽어 바로 적용하고, workbench·chain-runner·job-runner 처럼 실행을 쥔 파일은 실행 중 체인 0개가 된 때 창 로드 알림 1회. 설정 orch.hotReload(기본 true) 추가",
+  "verify": "새 시험 tools/VibeManager/test/t_orch_hotreload.js: 임시 분석 모듈 내용 변경 → 다시 읽은 뒤 새 함수 결과 반환, 실행 중 체인 1개 표본에서 창 로드 알림 0회, 0개가 된 뒤 1회. node tools/VibeManager/test/run_all.js 전체 PASS. 반영 전 기준값: 반영 뒤 창 로드 대기 11건, 창 로드 원인 체인 중단 18,182초 → 반영 뒤 7일 집계에서 분석 모듈 반영의 대기 0건",
+  "rollback": "harness.json orch.hotReload false 로 종전 동작, 또는 개선안 탭 되돌리기로 대상 파일 복원",
+  "impact": "core",
+  "level": "L2",
+  "levelWhy": "자동 반영과 적용 방식을 바꾸는 안이라 core. 같은 원인 사례 2묶음(11-20 창 로드 12회와 체인 중단 7건, 11-21 01:59 뒤 35시간 창 로드 0회와 대기 반영 11건). 창 로드를 한 원인은 미확인이라 L3 로 올리지 않음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T17:26:28+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T17:30:13+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 35개 파일 통과, 시험 69/71개 파일 통과(PASS 1083, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1726"
+    },
+    {
+      "at": "2026-11-23T17:30:15+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T17:37:59+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 4개(orch-improve.js AI 편집 4건만 되돌림(반영 전과 같음) / orch-selfcheck.js AI 편집 4건만 되돌림(반영 전과 같음) / extension.js AI 편집 1건만 되돌림(반영 전과 같음) / harness.json AI 편집 1건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-23T17:48:10+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T17:51:42+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 35개 파일 통과, 시험 69/72개 파일 통과(PASS 1086, FAIL 3), 정의 정합 통과 · 반영 전부터 어긋난 항목 3건 · 백업 태그 20261123_self1748"
+    },
+    {
+      "at": "2026-11-23T17:51:44+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T17:59:36+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 4개(orch-improve.js AI 편집 4건만 되돌림(반영 전과 같음) / orch-selfcheck.js AI 편집 8건만 되돌림(반영 전과 같음) / extension.js AI 편집 1건만 되돌림(반영 전과 같음) / harness.json AI 편집 1건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-23T18:23:40+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T18:27:22+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 70/72개 파일 통과(PASS 1108, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1823"
+    },
+    {
+      "at": "2026-11-23T18:27:26+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T18:33:01+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 70/72개 파일 통과(PASS 1108, FAIL 2), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-23T18:33:01+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v3 반영 전 기준값: 반영 뒤 창 로드 대기 11건, 창 로드 원인 체인 중단 18,182초 → 반영 뒤 7일 집계에서 분석 모듈 반영의 대기 0건 (반영 뒤 7일 집계가 필요함(시간 경과). 2026-11-23 18:29:03 측정 값: 반영 완료 개선안 )"
+    },
+    {
+      "at": "2026-11-23T18:33:01+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건, 실행 못 함 1건, 게이트 판정 1건. 2026-11-23 18:28:57 node --check orch-improve.js, extension.js 통과, harness.json JSON 파싱 OK. t_orch_hotreload.js 반영 전 ALL PASS 20 → 반영 뒤 ALL PASS 20. 창 로드 대기 측정(18:29:03) 0건 → 7일 집계는 반영 뒤 확인 · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-23T18-27-27_claude_orch.log",
+      "sec": 112,
+      "costUsd": 1.1875456999999998,
+      "files": [
+        "tools/Harness/harness.json",
+        "tools/VibeManager/extension.js",
+        "tools/VibeManager/orch-improve.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:24+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T18:46:46+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VMO 점검 기능을 고친 내용은 창을 다시 열지 않아도 바로 적용되고, 화면 실행 쪽 고친 내용은 돌고 있는 CheckList 가 없을 때만 창을 다시 열라는 알림이 뜹니다.",
+    "risk": "바로 적용한 점검 기능이 이전 기록과 맞지 않으면 VMO 탭의 집계나 진단 결과가 틀리게 보이거나 감시가 멈춥니다.",
+    "undo": "환경설정에서 바로 적용을 끄면 이전처럼 창을 다시 연 뒤에 적용되고, 개선안 탭의 되돌리기로 고친 내용을 지울 수 있습니다."
+  },
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795425819506,
+  "autoFp": "748ca1d21c",
+  "applyStartMs": 1795426046826,
+  "interrupted": true,
+  "waitNote": "",
+  "postChecks": [
+    {
+      "n": 3,
+      "text": "반영 전 기준값: 반영 뒤 창 로드 대기 11건, 창 로드 원인 체인 중단 18,182초 → 반영 뒤 7일 집계에서 분석 모듈 반영의 대기 0건",
+      "why": "반영 뒤 7일 집계가 필요함(시간 경과). 2026-11-23 18:29:03 측정 값: 반영 완료 개선안 99건 중 창 로드 대기 0건, 마지막 창 로드 2026-11-23 17:59:34. 기준값 11건은 11-22 개선안 작성 때 값",
+      "status": "open",
+      "at": "2026-11-23T18:29:24+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-23T18:29:24+09:00",
+    "verified": true,
+    "text": "실행 통과 1건, 실행 못 함 1건, 게이트 판정 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 70/72개 파일 통과(PASS 1108, FAIL 2), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1823",
+  "needsReload": true,
+  "appliedMs": 1795426381633,
+  "synced": [
+    "extension.js",
+    "orch-improve.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_hotreload.js tools/VibeManager: 반영 전 ALL PASS 20 → 반영 뒤 ALL PASS 20. 다시 읽은 뒤 val()=2(새 함수), 실행 중 체인 1개 알림 0회, 0개가 된 뒤 알림 1회, hotReload false 는 종전 동작"
+      },
+      {
+        "n": 3,
+        "result": "blocked",
+        "note": "반영 뒤 7일 집계가 필요함(시간 경과). 2026-11-23 18:29:03 측정 값: 반영 완료 개선안 99건 중 창 로드 대기 0건, 마지막 창 로드 2026-11-23 17:59:34. 기준값 11건은 11-22 개선안 작성 때 값"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/extension.js",
+      "tools/Harness/harness.json"
+    ],
+    "verify_result": "2026-11-23 18:28:57 node --check orch-improve.js, extension.js 통과, harness.json JSON 파싱 OK. t_orch_hotreload.js 반영 전 ALL PASS 20 → 반영 뒤 ALL PASS 20. 창 로드 대기 측정(18:29:03) 0건 → 7일 집계는 반영 뒤 확인",
+    "note": "orch-selfcheck.js(hotReload, makeReloadGate, applySynced, HOT_MODULES 6개, DEF hotReload true)와 test/t_orch_hotreload.js 는 작업 시작 때 이미 들어가 있어 고치지 않음. 이번 변경: orch-improve.js 반영 게이트 통과 뒤와 되돌리기 뒤 sc.applySynced 호출, needsReload = 창 로드 대상 파일 있을 때만, cur.hotLoaded·cur.reloadFiles 기록. extension.js orch-selfcheck.init 에 busy(workbench._liveChains.size), subscribeChainEnd(orch-events chain.end + 단일 질문 실행용 60초 확인), notifyReload(Reload Window 알림) 연결. harness.json orch.hotReload true 추가. orch-improve, orch-vision, orch-history 는 모듈 안에 상태(listeners, timer)를 쥐어 창 로드 대상으로 둠"
+  },
+  "snap": "prop_20261122130655_REVIEW_2",
+  "effectiveMs": 1795427206507,
+  "effectiveAt": "2026-11-23T18:46:46+09:00"
+}

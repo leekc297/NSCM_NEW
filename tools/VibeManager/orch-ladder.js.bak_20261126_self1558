@@ -1,0 +1,434 @@
+// orch-ladder.js — VMO 진단 사다리(2026-11-20 플랜 K2·K3): L1 사소 → L2 결함 → L3 구조 → L4 개념 재정립
+//   사용자 지시: "VM 솔루션에 대하여 자가진단을 사소한 것부터 목적 달성을 위하여 필요 시 개념재정립 까지를 스스로 할 수 있도록"
+//   L1·L2 는 기존 자가진단(S1~S14)·사건(R1~R15)·자가 복구·에이전트가 맡는다. 이 모듈은 아래 단계 조치로 풀리지 않은 것을 묶어 윗단계로 올린다.
+//   ① scan(): 측정값만으로 묶음 후보를 만든다(재발 S8 · 반복 수정 S9 · 오판 S14/장부 · 반영 실패 · 사용자 지적 재발 · 목적 어긋남 연속 · 같은 축 사용자 지적)
+//   ② 원장 .vibe/orch/ladder.json: 묶음 key, 단계, 근거, 진단 이력, 연결 개선안. 같은 묶음은 하루 1번만 진단, 하루 전체 진단 수 상한 ladderMaxPerDay
+//   ③ L3 구조 진단(AI 읽기 전용, Skill vmo-diagnosis-ladder · systematic-debugging) → 구조 개선안(level L3)
+//      L4 개념 재정립(AI 읽기 전용, Skill vmo-concept-review) → 문서 .vibe/orch/vision/concept_<날짜>_<key>.md + 개선안 1건(core, level L4)
+'use strict';
+const dfmt = require('./date-fmt'); // 2026-11-23 사용자: VM 일자 = Windows 일자 형식
+const fs = require('fs'); const path = require('path');
+let errlog = { note() { return null; } }; try { errlog = require('./orch-errlog'); } catch { /* 오류 기록 모듈 없음 */ }
+let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
+const DEF = { ladderEnabled: true, l3RepeatMin: 2, l3FileEditsMin: 4, l3FileTop: 3, l3FalseMin: 2, l3ApplyFailMin: 2, structWatchDays: 3, l4MisalignRuns: 3, l4UserAxisMin: 3, ladderMaxPerDay: 0, ladderDayGapHours: 24 }; // ladderMaxPerDay 0 = 하루 진단 수 상한 없음(R140)
+const READ_TOOLS = 'Skill,Read,Glob,Grep,Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *),Bash(git status*),Bash(git diff*),Bash(git log*)';
+const DAY = 86400000;
+let getPaths = null; let D = {};
+const P = () => getPaths();
+const orchDir = () => path.join(P().vibeDir, 'orch');
+const ledgerFile = () => path.join(orchDir(), 'ladder.json');
+const nowLocal = ms => (orchEv ? orchEv.nowLocal(ms) : new Date(ms || Date.now()).toISOString());
+const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 1), 'utf8'); return true; } catch (e) { errlog.note('orch-ladder', 'writeJson', e); return false; } };
+/** events.jsonl 끝 maxBytes 를 읽어 JSON 줄 목록(개선안 20261124000457_VISION: L4-2 효력 뒤 CheckList 실측) */
+function readEventsTail(maxBytes) { const f = path.join(orchDir(), 'events.jsonl'); const out = []; try { const st = fs.statSync(f); const n = Math.min(st.size, maxBytes); const fd = fs.openSync(f, 'r'); const buf = Buffer.alloc(n); try { fs.readSync(fd, buf, 0, n, st.size - n); } finally { fs.closeSync(fd); } const lines = buf.toString('utf8').split(/\r?\n/); if (n < st.size) lines.shift(); for (const ln of lines) { if (!ln.trim()) continue; try { out.push(JSON.parse(ln)); } catch { /* 깨진 줄 */ } } } catch { /* 기록 없음 */ } return out; }
+const mod = n => { if (D[n]) return D[n]; try { return require(`./${n}`); } catch (e) { errlog.note('orch-ladder', `require ${n}`, e); return null; } };
+function cfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); return Object.assign({}, DEF, (h && h.orch) || {}); }
+function init(o) { if (o.paths) getPaths = o.paths; for (const k of ['improve', 'agent', 'ledger', 'history', 'selfcheck', 'worklist']) if (o[k]) D[k] = o[k]; }
+const ready = () => !!getPaths;
+const normPurpose = s => String(s || '').replace(/\s+/g, '').replace(/[(),.·:'"`]/g, '').slice(0, 24);
+/** 사용자 지적 항목의 목적 키: purpose → 없으면 감지기 이름 → 둘 다 없으면 빈 값(orch-usercheck.purposeOf 와 같은 규칙) */
+const purposeKey = u => String((u && (u.purpose || u.detector)) || '').trim();
+const fileOf = t =>String(t || '').replace(/\\/g, '/').split('/').pop();
+// 개선안 20261123122722_SELF: 개선안 종류. targets 가 orch-usercheck.js, user_checks.json, test 뿐이면(또는 sig sn|newdet) detector, 그 밖은 fix
+//   등록 때 orch-improve.js add() 가 kind 를 저장함. kind 없는 옛 개선안은 여기서 targets 로 판정함. detector 는 감시 시작점이고 L3 재발 판정에 세지 않음
+const DET_TARGET = t => { const s = String(t || '').replace(/\\/g, '/'); return /(^|\/)orch-usercheck\.js$/.test(s) || /(^|\/)user_checks\.json$/.test(s) || /(^|\/)test\//.test(s); };
+function proposalKind(p) { if (!p) return 'fix'; if (p.kind === 'detector' || p.kind === 'fix') return p.kind; if (/^sn\|newdet(\||$)/.test(String(p.sig || ''))) return 'detector'; const t = (p.targets || []).filter(Boolean); return t.length > 0 && t.every(DET_TARGET) ? 'detector' : 'fix'; }
+
+/** 묶음 후보. 반환 [{ key, level, kind, title, evidence: [...], why }] */
+function scan() {
+  const c = cfg(); const out = []; const now = Date.now();
+  const res = readJson(path.join(orchDir(), 'selfcheck', 'result.json'), { checks: {} });
+  const imp = D.improve || mod('orch-improve'); const props = imp && imp.list ? imp.list() : [];
+  const byId = id => props.find(p => p.id === id);
+  // L3-1 재발(S8): 반영 완료 뒤 같은 사건·점검이 다시 남. 대상 파일 영역으로 묶음
+  const s8 = ((res.checks.S8 || {}).items || []); const area = {};
+  // 개선안 20261122140537_VISION: 근거마다 시각(ms)을 붙여 L3 → L4 올림에서 구조 개선안 효력 뒤 근거만 센다
+  //   S8 항목 시각 = it.ms → 없으면 재발한 개선안의 반영 시각(재발은 그 반영 뒤에만 잡힘)
+  const s8At = it => Number(it.ms) || 0;
+  for (const it of s8) { const pr = byId(it.proposal || String(it.key || '').split('|')[1]); const f = pr && (pr.targets || [])[0] ? fileOf(pr.targets[0]) : 'unknown'; (area[f] || (area[f] = [])).push({ src: 'S8', what: it.what, detail: it.detail, proposal: pr && pr.id, ms: s8At(it), floorMs: pr ? (Number(pr.appliedMs) || Date.parse(String(((pr.history || []).filter(h => /반영 완료/.test(h.what || '')).pop() || {}).at || '').replace(' ', 'T')) || 0) : 0 }); }
+  for (const [f, ev] of Object.entries(area)) if (ev.length >= c.l3RepeatMin) out.push({ key: `L3|recur|${f}`, level: 'L3', kind: 'recur', title: `${f} 영역 개선안 반영 뒤 재발 ${ev.length}건`, evidence: ev, why: `재발 ${ev.length}건 ≥ ${c.l3RepeatMin}` });
+  // L3-2 반복 수정(S9): 상위 l3FileTop 개 파일만
+  //   개선안 20261122000646_SELF_2: 올림 건수 = 결함 수정 절(defect) 7일 건수. 이력 집계(.vibe/orch/history/stats.json repeatFiles)의 defect 를 쓰고, 없으면 S9 항목 건수
+  //   요청(request), 문구(style) 건수는 근거와 제목에 표시만 함
+  const rf = {}; for (const r of ((readJson(path.join(orchDir(), 'history', 'stats.json'), null) || {}).repeatFiles || [])) if (r && r.file) rf[r.file] = r;
+  const s9 = ((res.checks.S9 || {}).items || []).filter(it => /^S9\|file\|/.test(it.key || '')).map(it => { const file = String(it.key).split('|')[2]; const r = rf[file]; const hasKind = r && Number.isFinite(Number(r.defect));
+    return { file, n: hasKind ? Number(r.defect) : (Number((/(\d+)건/.exec(it.what || '') || [])[1]) || 0), req: hasKind ? Number(r.request) || 0 : null, sty: hasKind ? Number(r.style) || 0 : null, what: it.what, detail: it.detail }; }).filter(x => x.n >= c.l3FileEditsMin).sort((a, b) => b.n - a.n).slice(0, c.l3FileTop);
+  for (const x of s9) { const extra = x.req == null ? '' : ` · 요청 ${x.req}건, 문구 ${x.sty}건(표시만)`;
+    out.push({ key: `L3|edits|${x.file}`, level: 'L3', kind: 'edits', file: x.file, title: `${x.file} 7일 결함 수정 ${x.n}건${extra}`, evidence: [{ src: 'S9', what: x.what, detail: x.detail, defect: x.n, request: x.req, style: x.sty }], why: `결함 수정 ${x.n}건 ≥ ${c.l3FileEditsMin}(상위 ${c.l3FileTop}개)${extra}` }); }
+  // L3-3 오판(개입 장부)
+  const lg = D.ledger || mod('orch-ledger'); let st = null; try { if (lg && !lg.ready()) lg.init({ paths: getPaths }); st = lg ? lg.stats(7) : null; } catch { st = null; }
+  if (st) { const byRule = {}; for (const f of st.falses || []) (byRule[f.rule] || (byRule[f.rule] = [])).push({ src: 'S14', what: `${f.at} ${f.rule} ${f.kind} ${f.screen || ''}`, detail: f.why, entry: f.id, ms: Number(f.ms) || Date.parse(String(f.at || '').replace(' ', 'T')) || 0 }); for (const [r, ev] of Object.entries(byRule)) if (ev.length >= c.l3FalseMin) out.push({ key: `L3|false|${r}`, level: 'L3', kind: 'false', title: `${r} 개입 오판 ${ev.length}건`, evidence: ev, why: `오판 ${ev.length}건 ≥ ${c.l3FalseMin}` }); }
+  // L3-4 반영 실패(같은 첫 대상 파일, 7일)
+  const ENV_FAIL = /다시 시작됨|창 다시 로드|VS Code 종료|VS Code 가 닫힘|환경 문제/; // 2026-11-20 실측: 끊긴 반영·환경 원인 실패를 세면 묶음이 넓어짐
+  // 개선안 20261122000421_SELF_2: 고친 안으로 대체(superseded)된 안은 supersededBy 를 따라간 마지막 안이 반영 완료면 건너뜀
+  const lastOf = p => { let q = p; const seen = new Set(); while (q && q.status === 'superseded' && q.supersededBy && !seen.has(q.id)) { seen.add(q.id); q = byId(q.supersededBy); } return q; };
+  const doneByChain = p => { if (p.status !== 'superseded') return false; const q = lastOf(p); return !!q && q !== p && q.status === 'applied'; };
+  const fails = {}; for (const p of props) { if (p.status === 'applied' || doneByChain(p)) continue; for (const h of p.history || []) { const t = Date.parse(h.at); if (!Number.isFinite(t) || now - t > 7 * DAY || !/^반영 실패\./.test(String(h.what || '')) || ENV_FAIL.test(String(h.what || ''))) continue; const f = fileOf((p.targets || [])[0] || 'unknown'); (fails[f] || (fails[f] = [])).push({ src: 'apply', what: `${p.id} ${String(p.title).slice(0, 60)}`, detail: String(h.what).slice(0, 300), proposal: p.id, ms: t }); } }
+  for (const [f, ev] of Object.entries(fails)) if (ev.length >= c.l3ApplyFailMin) out.push({ key: `L3|applyfail|${f}`, level: 'L3', kind: 'applyfail', title: `${f} 대상 개선안 반영 실패 ${ev.length}건(7일)`, evidence: ev, why: `반영 실패 ${ev.length}건 ≥ ${c.l3ApplyFailMin}` });
+  // L3-5 사용자 지적 재발: S13 에 지금 걸린 지적 중, 같은 지적 감지기를 대상으로 반영 완료된 개선안이 있음
+  //   개선안 20261120184003_SELF: 개선안마다 효력 시각(effMs)을 정하고, 항목이 생긴 시각(ms)이 effMs 뒤인 것만 재발로 셈
+  //   effMs = needsReload 이면 appliedMs 뒤 첫 창 로드(activations.jsonl ms) · 로드 기록 없음 = 효력 전(제외) · 아니면 appliedMs
+  //   항목 ms = it.ms → 감지기 상태(usercheck/state.json itemMs[key]) → S13 점검 시각 → 자가진단 시각
+  const s13c = res.checks.S13 || {}; const s13 = (s13c.items || []);
+  const ucMs = (readJson(path.join(orchDir(), 'usercheck', 'state.json'), {}) || {}).itemMs || {};
+  const acts = []; try { for (const ln of fs.readFileSync(path.join(orchDir(), 'activations.jsonl'), 'utf8').split('\n')) { if (!ln.trim()) continue; let a; try { a = JSON.parse(ln); } catch { continue; } if (a && !a.kind && Number(a.ms) > 0) acts.push(Number(a.ms)); } } catch { /* 로드 기록 없음 */ }
+  acts.sort((a, b) => a - b);
+  const appliedMsOf = p => Number(p.appliedMs) || Date.parse(String(((p.history || []).filter(h => /반영 완료/.test(h.what || '')).pop() || {}).at || '').replace(' ', 'T')) || 0;
+  //   개선안 20261123000946_VISION: 효력 시각은 orch-improve.js effectiveMsOf(공용, 개선안의 effectiveMs 기록 포함)로 정한다. 그 함수가 없을 때만 아래 계산
+  const effMsOf = p => { if (imp && typeof imp.effectiveMsOf === 'function') return imp.effectiveMsOf(p, acts); const a = appliedMsOf(p); if (!p.needsReload) return a; const r = acts.find(m => m > a); return r || null; };
+  const hmL = ms => dfmt.fmtDT(ms);
+  const itemMs = it => Number(it.ms) || Number(ucMs[it.key]) || Number(s13c.ms) || Number(res.ms) || now;
+  //   개선안 20261121000456_SELF_2: 재발은 level fail 항목만 셈. key 에 norep, nomenu, err 가 붙은 warn(판정 자료 없음)은 감지기별 nodata 묶음(L2)으로 따로 모음
+  //   nodata 가 그 감지기 반영 개선안 효력 뒤 l3ApplyFailMin 건 이상이면 L3 로 올림(반영 실패 묶음과 같은 기준 수)
+  const NODATA_KEY = /\|(norep|nomenu|err)(\||$)/; const nodata = {};
+  //   개선안 20261123122722_SELF: L3-5 는 kind fix 개선안만 셈(proposalKind)
+  const isDet = p => proposalKind(p) === 'detector';
+  for (const it of s13) { const uid = it.uid || String(it.key || '').split('|')[1]; if (!uid) continue; const applied = props.filter(p => p.status === 'applied' && String(p.selfKey || '').includes(`|${uid}|`) || (p.status === 'applied' && String(p.selfKey || '').endsWith(`|${uid}`)));
+    const ims = itemMs(it);
+    if (it.level !== 'fail') { if (it.level === 'warn' && NODATA_KEY.test(String(it.key || ''))) { const n = nodata[uid] || (nodata[uid] = { ev: [], after: 0, eff: [] }); n.ev.push({ src: 'S13', what: it.what, detail: it.detail, key: it.key, ms: ims }); const fx = applied.filter(p => { const e = effMsOf(p); return e != null && ims > e; }); if (fx.length) { n.after++; for (const p of fx) if (!n.eff.includes(p)) n.eff.push(p); } } continue; }
+    //   개선안 20261123112024_SELF: 감지기 추가·수정 개선안(sig sn|newdet · targets 가 감지기 파일뿐)은 동작을 고치지 않았으므로 fixed 에서 뺌
+    //   감지기 개선안만 효력이 난 뒤 걸린 항목 = L2|usercheck-first '첫 감지(동작 수정 없음)'(원장 기록만, AI 진단 안 함)
+    const effective = applied.filter(p => { const e = effMsOf(p); return e != null && ims > e; });
+    const fixed = effective.filter(p => !isDet(p)); const dets = effective.filter(isDet);
+    const ev0 = { src: 'S13', what: it.what, detail: it.detail, ms: ims, key: it.key };
+    if (fixed.length) out.push({ key: `L3|usercheck|${uid}`, level: 'L3', kind: 'usercheck', title: `사용자 지적 ${uid} 이 고친 뒤 다시 걸림`, evidence: [ev0].concat(fixed.slice(0, 3).map(p => ({ src: 'applied', what: `${p.id} ${String(p.title).slice(0, 60)} 효력 ${hmL(effMsOf(p))}`, proposal: p.id }))), why: `반영 완료 ${fixed.length}건 효력(${hmL(effMsOf(fixed[0]))}) 뒤 ${hmL(ims)} 재발${dets.length ? ` · 감지기 개선안 ${dets.length}건 제외` : ''}` });
+    else if (dets.length) out.push({ key: `L2|usercheck-first|${uid}`, level: 'L2', kind: 'usercheck-first', title: `사용자 지적 ${uid} 첫 감지(동작 수정 없음)`, evidence: [ev0].concat(dets.slice(0, 3).map(p => ({ src: 'detector', what: `${p.id} ${String(p.title).slice(0, 60)} 효력 ${hmL(effMsOf(p))}`, proposal: p.id }))), why: `감지기 개선안 ${dets.length}건 효력(${hmL(effMsOf(dets[0]))}) 뒤 ${hmL(ims)} 첫 감지 · 동작 수정 개선안 반영 없음` }); }
+  for (const [uid, n] of Object.entries(nodata)) { const up = n.after >= c.l3ApplyFailMin; const lv = up ? 'L3' : 'L2';
+    out.push({ key: `${lv}|nodata|${uid}`, level: lv, kind: 'nodata', title: `사용자 지적 ${uid} 감지기 판정 자료 없음 ${n.ev.length}건`, evidence: n.ev.slice(0, 12).concat(n.eff.slice(0, 3).map(p => ({ src: 'applied', what: `${p.id} ${String(p.title).slice(0, 60)} 효력 ${hmL(effMsOf(p))}`, proposal: p.id }))), why: up ? `반영 개선안 효력 뒤 판정 못 함 ${n.after}건 ≥ ${c.l3ApplyFailMin}(감지기 자료 결함 반복)` : `판정 못 함 ${n.ev.length}건 · 반영 개선안 효력 뒤 ${n.after}건 < ${c.l3ApplyFailMin}(감지기 자료 결함, 재발로 세지 않음)` }); }
+  // L4-1 같은 목적 '어긋남' 연속(Overall Review 기록)
+  //   개선안 20261126131312_SELF(L4 원장 20261125000616_VISION 단계 1): 같은 목적 키로 반영된 L4 안이 있으면 그 효력 시각 전 판정은 빼고 셈(세지도 끊지도 않음)
+  //   같은 목적 L4 안 = level L4, applied, (묶음 key 의 목적 키가 같음 | purpose 필드가 같음 | plans.json 같은 목적 원장의 proposal, related, absorbed). 여럿이면 가장 늦은 효력 시각
+  //   효력 시각이 없으면(반영 뒤 창 로드 없음) 종전 연속이 기준 이상일 때 status wait '효력 대기'. 끄기 harness.json orch.l4PurposeEffFilter false
+  const vdir = path.join(orchDir(), 'vision'); let runs = []; try { runs = fs.readdirSync(vdir).filter(n => /^\d{8}_\d{6}\.json$/.test(n)).sort().slice(-12).map(n => { const r = readJson(path.join(vdir, n), null); if (!r) return null; const m = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/.exec(n); const t = Date.parse(String(r.at || '').replace(' ', 'T')); return { r, ms: Number.isFinite(t) ? t : (m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]).getTime() : 0) }; }).filter(Boolean); } catch { runs = []; }
+  if (runs.length) { const label = {}; for (const { r } of runs) for (const pp of r.purposes || []) { const k = normPurpose(pp.purpose); if (k) label[k] = pp.purpose; }
+    const ppOf = (r, k) => (r.purposes || []).find(pp => normPurpose(pp.purpose) === k) || null;
+    const plansAll = (() => { try { return Object.values(readPlans().plans || {}); } catch { return []; } })();
+    const purposeProps = k => { const ids = new Set(); for (const pl of plansAll) if (pl && (pl.axis === k || (pl.keys || []).includes(`L4|purpose|${k}`))) for (const id of [pl.proposal].concat(pl.related || [], pl.absorbed || [])) if (id) ids.add(id);
+      return props.filter(p => p && p.status === 'applied' && p.level === 'L4' && (axisOfKey(keyOfProposal(p)) === k || (p.purpose && normPurpose(p.purpose) === k) || ids.has(p.id))); };
+    const streakOf = (k, eff) => { let n = 0; let excl = 0; let used = []; for (const x of runs) { const pp = ppOf(x.r, k); if (eff != null && !(x.ms > eff)) { if (pp) excl++; continue; } if (pp && pp.verdict === '어긋남') { n++; used.push(x); } else { n = 0; used = []; } } return { n, excl, used }; };
+    const filterOn = c.l4PurposeEffFilter !== false;
+    for (const k of Object.keys(label)) {
+      const lab = String(label[k]).slice(0, 50); const evOf = used => used.map(x => ({ src: 'vision', what: x.r.at, detail: (ppOf(x.r, k) || {}).evidence || '', ms: x.ms }));
+      const linked = filterOn ? purposeProps(k) : [];
+      if (!linked.length) { const s = streakOf(k, null); if (s.n >= c.l4MisalignRuns) out.push({ key: `L4|purpose|${k}`, level: 'L4', kind: 'purpose', title: `목적 '${lab}' 어긋남 ${s.n}회 연속`, evidence: evOf(s.used), why: `어긋남 ${s.n}회 연속 ≥ ${c.l4MisalignRuns}` }); continue; }
+      const effs = linked.map(p => ({ p, e: effMsOf(p) })); const live = effs.filter(x => x.e != null).sort((a, b) => b.e - a.e)[0];
+      const link = effs.slice(0, 3).map(x => ({ src: 'applied', what: `${x.p.id} ${String(x.p.title).slice(0, 60)} 효력 ${x.e != null ? hmL(x.e) : '전(반영 뒤 창 로드 없음)'}`, proposal: x.p.id }));
+      if (!live) { const s = streakOf(k, null); if (s.n >= c.l4MisalignRuns) out.push({ key: `L4|purpose|${k}`, level: 'L4', kind: 'purpose', wait: true, waitLabel: '효력 대기: 같은 목적 L4 안 반영 뒤 창 다시 로드 필요', title: `목적 '${lab}' 어긋남 ${s.n}회 연속, 효력 대기`, evidence: evOf(s.used).concat(link), why: `같은 목적 L4 안 효력 전, 효력 전 판정 ${streakOf(k, Infinity).excl}건 제외, L4 진단 보류` }); continue; }
+      const s = streakOf(k, live.e);
+      if (s.n >= c.l4MisalignRuns) out.push({ key: `L4|purpose|${k}`, level: 'L4', kind: 'purpose', title: `목적 '${lab}' 효력 뒤 어긋남 ${s.n}회 연속`, evidence: evOf(s.used).concat(link), why: `같은 목적 L4 안 ${live.p.id} 효력(${hmL(live.e)}) 뒤 어긋남 ${s.n}회 연속 ≥ ${c.l4MisalignRuns}, 효력 전 판정 ${s.excl}건 제외` }); } }
+  // L4-2 같은 축 사용자 지적(같은 목적 키 지적이 7일에 l4UserAxisMin 건 이상)
+  //   개선안 20261121120359_VISION_3: 축 = user_checks.json 항목의 목적 키(purpose). 목적 키가 없는 항목은 감지기 이름이 목적 키. 둘 다 없으면 묶지 않음
+  //   개선안 20261124000457_VISION(문서 .vibe/orch/vision/concept_20261124_L4_useraxis_checklistTime.md): 같은 목적 키로 반영된 L4 개선안이 있으면 그 효력 시각 뒤 근거만 셈
+  //   같은 목적 개선안 = level L4 · applied · (묶음 key 의 목적 키가 같음 | sig 토큰에 목적 키 | purpose 필드가 같음). 여럿이면 가장 늦은 효력 시각
+  //   근거 = 효력 뒤 지적(l4UserAxisMin 건 이상) + 효력 뒤 CheckList chain.end 중 1판(첫 문서 단계, 없으면 체인 전체) > checklistTargetMin(l4RunOverMin 건 이상, 감지기 chainTarget 항목이 있는 축만)
+  //   효력 뒤 근거 미달 + 효력 뒤 실행 0건 = '실측 대기'(status wait, L4 진단 안 함) · 효력 뒤 실행이 있고 근거 미달 = 묶음 없음 · 효력 전 = '효력 대기'(wait)
+  const uc = readJson(path.join(P().root, 'tools', 'VibeManager', 'user_checks.json'), { items: [] }); const axis = {}; const axisDet = {};
+  for (const u of uc.items || []) { const t = Date.parse(String(u.at || '').replace(' ', 'T')); const ax = purposeKey(u); if (!ax || !Number.isFinite(t) || now - t > 7 * DAY) continue; (axis[ax] || (axis[ax] = [])).push({ src: 'user', what: `${u.id} ${u.at}${u.detector ? ` ${u.detector}` : ''}`, detail: String(u.quote || '').slice(0, 300), ms: t }); }
+  for (const u of uc.items || []) { const ax = purposeKey(u); if (ax && u.detector) (axisDet[ax] || (axisDet[ax] = new Set())).add(u.detector); }
+  const axisProps = ax => { const lo = String(ax).toLowerCase(); return props.filter(p => p && p.status === 'applied' && p.level === 'L4' && (axisOfKey(keyOfProposal(p)) === ax || p.purpose === ax || String(p.sig || '').toLowerCase().split(/[|\s]+/).includes(lo))); };
+  let clRuns = null; const clRunsOf = () => { if (clRuns) return clRuns; clRuns = []; const evs = readEventsTail(6 * 1024 * 1024); const tgt = (Number(c.checklistTargetMin) || 30) * 60000;
+    const isDoc = s => (s.stepKey ? /:--docs(:|$)/.test(s.stepKey) : (s.task === 'S8.checklistRun' && /문서/.test(s.name || '')));
+    const docEnd = {}; for (const s of evs) if (s.type === 'step.end' && s.runId && /^(OK|WARN)$/.test(s.status || '') && isDoc(s) && (docEnd[s.runId] == null || s.ms < docEnd[s.runId])) docEnd[s.runId] = s.ms;
+    for (const e of evs) { if (e.type !== 'chain.end' || !(/^checklist/i.test(e.chain || '') || /CheckList/i.test(e.chainLabel || e.label || ''))) continue; const t0 = (Number(e.ms) || 0) - (Number(e.ms_run) || 0); const fd = e.runId && docEnd[e.runId] != null ? docEnd[e.runId] - t0 : null; const span = fd != null ? fd : Number(e.ms_run) || 0;
+      clRuns.push({ ms: Number(e.ms) || 0, screen: e.screen || '', runId: e.runId || '', firstDocMin: fd != null ? Math.round(fd / 60000) : null, chainMin: Math.round((Number(e.ms_run) || 0) / 60000), over: span > tgt, tgtMin: Math.round(tgt / 60000) }); }
+    return clRuns; };
+  for (const [d, ev] of Object.entries(axis)) {
+    if (ev.length < c.l4UserAxisMin) continue; // 종전 기준(7일 지적 건수) 미달 = 묶음 후보 아님
+    const linked = axisProps(d); const effs = linked.map(p => ({ p, e: effMsOf(p) }));
+    if (!linked.length) { out.push({ key: `L4|useraxis|${d}`, level: 'L4', kind: 'useraxis', title: `같은 축 사용자 지적 ${ev.length}건(${d}, 7일)`, evidence: ev, why: `같은 목적 키 지적 ${ev.length}건 ≥ ${c.l4UserAxisMin} · 같은 목적 반영 개선안 없음` }); continue; }
+    const live = effs.filter(x => x.e != null).sort((a, b) => b.e - a.e)[0];
+    const link = effs.map(x => ({ src: 'applied', what: `${x.p.id} ${String(x.p.title).slice(0, 60)} 효력 ${x.e != null ? hmL(x.e) : '전(반영 뒤 창 로드 없음)'}`, proposal: x.p.id }));
+    if (!live) { out.push({ key: `L4|useraxis|${d}`, level: 'L4', kind: 'useraxis', wait: true, waitLabel: '효력 대기: 같은 목적 개선안 반영 뒤 창 다시 로드 필요', title: `같은 축 사용자 지적 ${ev.length}건(${d}) · 효력 대기`, evidence: ev.concat(link), why: `같은 목적 개선안 ${linked.map(p => p.id).join(', ')} 효력 전 · L4 진단 보류` }); continue; }
+    const eff = live.e; const userAfter = ev.filter(e => e.ms > eff);
+    const runDet = axisDet[d] && axisDet[d].has('chainTarget'); const runs = runDet ? clRunsOf().filter(r => r.ms > eff) : []; const over = runs.filter(r => r.over);
+    const runEv = over.map(r => ({ src: 'run', what: `CheckList ${r.screen} ${r.firstDocMin != null ? `1판 ${r.firstDocMin}분` : `1판 없음 · 체인 전체 ${r.chainMin}분`}(목표 ${r.tgtMin}분) ${hmL(r.ms)}`, detail: `runId ${r.runId} · 체인 전체 ${r.chainMin}분`, ms: r.ms }));
+    const overMin = Number(c.l4RunOverMin) || 1; const base = `같은 목적 개선안 ${live.p.id} 효력(${hmL(eff)}) 뒤 지적 ${userAfter.length}건(기준 ${c.l4UserAxisMin}) · 효력 뒤 실행 ${runDet ? `${runs.length}건 중 1판 초과 ${over.length}건(기준 ${overMin})` : '대상 아님'} · 효력 전 지적 ${ev.length - userAfter.length}건 제외`;
+    if (userAfter.length >= c.l4UserAxisMin || (runDet && over.length >= overMin)) { out.push({ key: `L4|useraxis|${d}`, level: 'L4', kind: 'useraxis', title: `같은 축 효력 뒤 근거 지적 ${userAfter.length}건 · 1판 초과 ${over.length}건(${d})`, evidence: userAfter.concat(runEv, link.slice(0, 3)), why: base }); continue; }
+    if (runDet && !runs.length) out.push({ key: `L4|useraxis|${d}`, level: 'L4', kind: 'useraxis', wait: true, waitLabel: '실측 대기: 다음 CheckList 1회 필요', title: `같은 축 사용자 지적 ${ev.length}건(${d}) · 실측 대기`, evidence: ev.concat(link.slice(0, 3)), why: `${base} · 효력 뒤 CheckList 실행 0건 = 실측 대기, L4 진단 안 함` });
+  }
+  // L3 → L4: 구조 개선안이 반영 완료됐는데 structWatchDays 안에 같은 묶음이 다시 참
+  const lad = readLadder();
+  //   개선안 20261122140537_VISION: 효력 시각(effMsOf · needsReload 면 반영 뒤 첫 창 로드) 뒤에 생긴 근거만 센다
+  //   recur · applyfail · false · usercheck = 근거 항목 시각(ms) · edits = 효력일 다음 날부터의 변경 기록 수(orch-history byFile.days, 일 단위)
+  //   효력 뒤 근거가 L3 기준 수 미만이면 L3 로 두고 why 에 '효력 전' 또는 '효력 뒤 재발 없음'을 남긴다
+  const minOf = k => ({ recur: c.l3RepeatMin, applyfail: c.l3ApplyFailMin, nodata: c.l3ApplyFailMin, false: c.l3FalseMin, edits: c.l3FileEditsMin }[k] || 1);
+  const evAfter = (e, eff) => (Number(e.ms) > eff) || (!Number(e.ms) && Number(e.floorMs) > eff);
+  let byFileDays = null; const editsAfter = (f, eff) => { if (byFileDays == null) { byFileDays = {}; try { const h = D.history || mod('orch-history'); const st = h && h.stats ? h.stats() : null; byFileDays = (st && st.byFile) || {}; } catch { byFileDays = {}; } } const v = byFileDays[f]; if (!v || !v.days) return 0; const d0 = nowLocal(eff).slice(0, 10); /* 개선안 20261122000646_SELF_2: 결함 절 일자별 건수(kindDays.defect)가 있으면 그것만 셈 */ const dd = (v.kindDays && v.kindDays.defect) || v.days; return Object.entries(dd).reduce((n, [d, k]) => (d > d0 ? n + (Number(k) || 0) : n), 0); };
+  for (const b of out.filter(x => x.level === 'L3')) { const prev = lad.bundles[b.key]; const linked = prev && (prev.runs || []).map(r => r.proposal).filter(Boolean).map(byId).filter(p => p && p.status === 'applied'); const ap = linked && linked.length ? linked[linked.length - 1] : null; const apMs = ap ? appliedMsOf(ap) : 0;
+    if (!(ap && apMs)) continue;
+    const eff = effMsOf(ap); const min = minOf(b.kind);
+    if (eff == null) { b.why = `${b.why} · 구조 개선안 ${ap.id} 반영(${hmL(apMs)}) 효력 전(반영 뒤 창 로드 없음), L4 올림 보류`; continue; }
+    if (now - eff > c.structWatchDays * DAY) continue; // 개선안 20261123000946_VISION: 관찰 기간 structWatchDays 는 효력 시각부터 셈(종전 = 반영 시각부터)
+    const evNew = b.kind === 'edits' ? null : b.evidence.filter(e => evAfter(e, eff)); const nAfter = b.kind === 'edits' ? editsAfter(b.file || String(b.key).split('|')[2], eff) : evNew.length;
+    if (nAfter < min) { b.why = `${b.why} · 구조 개선안 ${ap.id} 효력(${hmL(eff)}) 뒤 재발 없음(효력 뒤 근거 ${nAfter}건 < ${min}), L4 올림 보류`; continue; }
+    b.level = 'L4'; b.key = b.key.replace(/^L3\|/, 'L4|struct|'); b.why = `구조 개선안 ${ap.id} 효력(${hmL(eff)}) 뒤 ${c.structWatchDays}일 안에 같은 묶음 다시 참 · 효력 뒤 근거 ${nAfter}건 ≥ ${min} · ${b.why}`; b.evidence = (evNew || b.evidence).concat([{ src: 'struct', what: `${ap.id} ${String(ap.title).slice(0, 60)} 효력 ${hmL(eff)}`, proposal: ap.id }]); }
+  // 같은 key 합치기(같은 지적이 S13 항목 여러 개로 걸린 경우 등)
+  const merged = {}; for (const b of out) { const m = merged[b.key]; if (!m) merged[b.key] = b; else { m.evidence = m.evidence.concat(b.evidence).slice(0, 20); } }
+  return Object.values(merged);
+}
+/** 하루 상한 안 진단 순서: L4 → 재발 · 오판 · 사용자 지적 재발 · 반영 실패 → 반복 수정(기능 개발도 세어져 결함 신호가 약함) */
+const KIND_ORDER = { purpose: 0, useraxis: 0, struct: 0, recur: 1, false: 1, usercheck: 2, applyfail: 3, nodata: 3, edits: 9 };
+const rank = b => (b.level === 'L4' ? 0 : 10) + (KIND_ORDER[b.kind] != null ? KIND_ORDER[b.kind] : 5);
+
+function readLadder() { const l = readJson(ledgerFile(), null); return l && l.bundles ? l : { bundles: {}, day: '', dayRuns: 0 }; }
+/** 원장 갱신: 후보를 넣고, 사라진 묶음은 resolved. 반환 { ladder, fresh(진단할 묶음) } */
+function update(cands) {
+  const c = cfg(); const lad = readLadder(); const now = Date.now(); const keys = new Set(cands.map(x => x.key)); const fresh = [];
+  for (const cd of cands) {
+    const b = lad.bundles[cd.key] || (lad.bundles[cd.key] = { key: cd.key, firstAt: nowLocal(now), runs: [] });
+    Object.assign(b, { level: cd.level, kind: cd.kind, title: cd.title, why: cd.why, evidence: cd.evidence.slice(0, 12), lastSeenAt: nowLocal(now), lastSeenMs: now, status: 'open' });
+    delete b.statusLabel; delete b.goneAt; delete b.goneFiles; delete b.waitAt;
+    // 개선안 20261124000457_VISION: 효력 뒤 근거 미달 묶음 = status wait · '실측 대기'/'효력 대기' 표시 · 진단 대상(fresh) 아님
+    if (cd.wait) { b.status = 'wait'; b.statusLabel = cd.waitLabel || '실측 대기'; b.waitAt = nowLocal(now); continue; }
+    const last = (b.runs || []).slice(-1)[0]; if (!last || now - (last.ms || 0) >= c.ladderDayGapHours * 3600000) fresh.push(b);
+  }
+  //   개선안 20261123112024_SELF: 사라진 묶음의 S13 근거 파일(.vibe/jobs/<job>/<화면>.log)이 없으면 resolved 대신 '근거 삭제'(status gone)
+  const ucm = mod('orch-usercheck'); const vd = P().vibeDir;
+  const goneOf = b => { if (!ucm || typeof ucm.evidenceGone !== 'function') return []; return (b.evidence || []).filter(e => e && e.src === 'S13' && e.key && ucm.evidenceGone(e.key, vd)).map(e => path.relative(P().root, ucm.evidenceFile(e.key, vd)).replace(/\\/g, '/')); };
+  for (const b of Object.values(lad.bundles)) if ((b.status === 'open' || b.status === 'wait') && !keys.has(b.key)) { const g = goneOf(b); if (g.length) { b.status = 'gone'; b.statusLabel = '근거 삭제'; b.goneAt = nowLocal(now); b.goneFiles = g.slice(0, 5); } else { b.status = 'resolved'; b.resolvedAt = nowLocal(now); } }
+  writeJson(ledgerFile(), lad); return { ladder: lad, fresh };
+}
+
+const OUT_FMT = '{ "summary": "3문장 이내", "causes": [ { "cause": "", "evidence": "파일:줄, 사건, 장부 줄", "refuted": "반증 시도와 결과" } ], "proposals": [ { "title": "", "impact": "core|fix", "level": "L3|L4", "levelWhy": "", "evidence": "", "targets": [""], "before_after": "", "verify": "", "rollback": "", "sig": "", "plain": { "what": "", "risk": "", "undo": "" } } ] }';
+function structPrompt(b) {
+  return ['.claude/agents/vm-orchestra.md 의 지킬 것과 "진단 사다리" 절을 따른다. 이번 일은 L3 구조 진단이다. 파일을 고치지 않는다(읽기만).',
+    'Skill 도구로 vmo-diagnosis-ladder 를 불러 L3 구조 진단 방법을 따른다. 원인 찾기는 systematic-debugging 을 불러 근본 원인 단계를 따른다.',
+    '아래 묶음은 같은 종류 결함이 되풀이된 것이다. 사례들이 공유하는 공통 원인(설계)을 찾아 없애는 구조 개선안을 1~2건 낸다. 사례 하나만 막는 안은 내지 않는다. 공통 원인 후보마다 반증 시도를 적는다.',
+    '근거는 소스 파일:줄, .vibe/orch/events.jsonl, .vibe/orch/incidents, .vibe/orch/interventions.jsonl, tools/VibeManager/CHANGELOG.md 에서 이번에 읽은 것만 쓴다. 못 확인했으면 미확인.',
+    require('./orch-improve').IMPACT_RULE, require('./orch-improve').VERIFY_RULE, '마지막 출력은 JSON 코드 블록 1개다.', '```json', OUT_FMT, '```', '', '[묶음]', JSON.stringify(b, null, 1)].join('\n');
+}
+function conceptPrompt(b) {
+  const docs = (() => { try { const v = mod('orch-vision'); return v && v.purposeDocs ? v.purposeDocs().map(d => `--- ${d.src}\n${String(d.text).slice(0, 12000)}`).join('\n') : ''; } catch { return ''; } })();
+  return ['.claude/agents/vm-orchestra.md 의 지킬 것과 "진단 사다리" 절을 따른다. 이번 일은 L4 개념 재정립이다. 파일을 고치지 않는다(읽기만).',
+    'Skill 도구로 vmo-concept-review 를 불러 그 순서(목적 다시 읽기 → 지금 개념 → 어긋난 근거 → 대안 개념 2개 이상 → 권장안 → 전환 → 반증)를 따른다. 단계 판정 근거는 vmo-diagnosis-ladder 를 따른다.',
+    '결과는 두 가지다. ① 개념 재정립 문서(마크다운, vmo-concept-review 의 결과 문서 형식)를 JSON 의 "doc" 에 문자열로. ② 개선안 1건(impact core, level L4, 제목 "개념 재정립: …").',
+    '마지막 출력은 JSON 코드 블록 1개다.', '```json', '{ "summary": "3문장 이내", "doc": "# 개념 재정립: …", "proposal": ' + OUT_FMT.replace(/^.*"proposals": \[ /, '').replace(/ \] \}$/, '') + ' }', '```', '', '[묶음]', JSON.stringify(b, null, 1), '', '[목적 문서]', docs].join('\n');
+}
+
+/** 묶음 1건 진단(AI 1회 · 읽기 전용). 반환 { ok, proposals:[id], doc } */
+async function diagnose(b) {
+  const agent = D.agent || mod('orch-agent'); const imp = D.improve || mod('orch-improve'); if (!agent || !imp) return { ok: false, why: '모듈 없음' };
+  const l4 = b.level === 'L4'; const prompt = l4 ? conceptPrompt(b) : structPrompt(b);
+  const r = await agent.withLock(`ladder_${b.key}`, async () => { agent.say('start', { id: 'ladder', text: `진단 사다리 ${b.level}: ${b.title}` }); return agent.runClaude(prompt, { label: `진단 사다리 ${b.level} ${b.title}`.slice(0, 120), permissionMode: 'default', allowedTools: READ_TOOLS }); });
+  if (r && r.busy) return { ok: false, busy: true };
+  const out = agent.lastJsonBlock(r.text); const ids = []; let docRel = '';
+  if (!r.ok || !out) { agent.say('end', { id: 'ladder', ok: false, text: `진단 사다리 ${b.level} 실패: ${!r.ok ? `exit ${r.code}` : '결과 JSON 없음'}` }); return { ok: false, why: !r.ok ? `exit ${r.code}` : '결과 JSON 없음', log: r.log }; }
+  if (l4 && out.doc) { const d = new Date(); const t = x => String(x).padStart(2, '0'); const f = path.join(orchDir(), 'vision', `concept_${d.getFullYear()}${t(d.getMonth() + 1)}${t(d.getDate())}_${b.key.replace(/[^\w.-]+/g, '_').slice(0, 60)}.md`); try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, String(out.doc), 'utf8'); docRel = path.relative(P().root, f).replace(/\\/g, '/'); } catch (e) { errlog.note('orch-ladder', 'doc', e); } }
+  const list = l4 ? (out.proposal ? [out.proposal] : []) : (Array.isArray(out.proposals) ? out.proposals.slice(0, 2) : []);
+  for (const o of list) {
+    if (!o || !o.title) continue; const o2 = Object.assign({}, o, { level: l4 ? 'L4' : 'L3', levelWhy: o.levelWhy || b.why, evidence: `${o.evidence || ''} · 진단 사다리 묶음 ${b.key}${docRel ? ` · 문서 ${docRel}` : ''}`.slice(0, 2000) });
+    if (l4) o2.impact = 'core'; // 개념 재정립 = 항상 사용자 승인
+    const a = imp.add(o2, l4 ? 'vision' : 'self'); if (a && a.id) ids.push(a.id);
+    // 개선안 20261124000718_VISION: 같은 축(대상 파일 겹침) 원장이 열려 있으면 새 L4 안은 원장 단계로 흡수
+    if (l4 && a && a.id && planOn()) { try { const all = readPlans(); const pl = openPlanFor({ key: b.key, proposals: [a.id], targets: o2.targets }, all); if (pl && absorbInto(pl, imp.get(a.id), imp)) writeJson(plansFile(), all); } catch (e) { errlog.note('orch-ladder', 'planAbsorb', e); } }
+  }
+  const lad = readLadder(); const bb = lad.bundles[b.key]; if (bb) { (bb.runs || (bb.runs = [])).push({ at: nowLocal(), ms: Date.now(), level: b.level, proposal: ids[0] || '', proposals: ids, doc: docRel, summary: String(out.summary || '').slice(0, 400), log: r.log }); writeJson(ledgerFile(), lad); }
+  if (orchEv) { try { orchEv.emit('ladder.diag', { key: b.key, level: b.level, proposals: ids, doc: docRel }); } catch { /* 기록만 */ } }
+  agent.say('end', { id: 'ladder', ok: true, text: `진단 사다리 ${b.level}: ${b.title} · 개선안 ${ids.length}건${docRel ? ` · 문서 ${docRel}` : ''}` });
+  return { ok: true, proposals: ids, doc: docRel };
+}
+
+// 개선안 20261123000946_VISION: 판정 코드(올림 조건과 재발 판정)가 설치본보다 오래됐으면(창 다시 로드 전) L3·L4 AI 진단을 보류한다.
+//   staleFiles = orch-improve.js codeInfo(설치본 수정 시각 > 이 VM 의 창 로드 시각). 창 로드 없이 다시 읽은 모듈(orch-selfcheck hotLoaded 시각 ≥ 수정 시각)은 뺀다
+const JUDGE_FILES = ['orch-ladder.js', 'orch-selfcheck.js'];
+function judgeStale() {
+  const imp = D.improve || mod('orch-improve'); if (!imp || typeof imp.codeInfo !== 'function') return [];
+  let ci = null; try { ci = imp.codeInfo(); } catch (e) { errlog.note('orch-ladder', 'codeInfo', e); return []; }
+  let hot = {}; try { const sc = D.selfcheck || mod('orch-selfcheck'); hot = (sc && sc.hotLoaded && sc.hotLoaded()) || {}; } catch { hot = {}; }
+  return ((ci && ci.staleFiles) || []).filter(x => x && JUDGE_FILES.includes(x.file) && !(Number(x.mtimeMs) > 0 && Number(hot[x.file]) >= Number(x.mtimeMs))).map(x => x.file);
+}
+/** 자가진단 tick 에서 부름: 후보 → 원장 → 진단(하루 상한 안에서 L4 먼저). 반환 { cands, ran: [...], skipped, held } */
+async function tick(opts) {
+  const res = { cands: 0, ran: [], skipped: 0, held: 0 };
+  try {
+    if (!ready()) return res; const c = cfg(); if (c.ladderEnabled === false || c.enabled === false) return res;
+    { const imp = D.improve || mod('orch-improve'); try { if (imp && typeof imp.markEffective === 'function') imp.markEffective(); } catch (e) { errlog.note('orch-ladder', 'markEffective', e); } } // 효력 시작 기록(effectiveMs)
+    const cands = scan(); res.cands = cands.length; const { ladder, fresh } = update(cands);
+    const today = nowLocal().slice(0, 10); if (ladder.day !== today) { ladder.day = today; ladder.dayRuns = 0; }
+    const stale = judgeStale(); { const l0 = readLadder(); if (stale.length) l0.hold = { at: nowLocal(), files: stale }; else delete l0.hold; writeJson(ledgerFile(), l0); }
+    if (stale.length) res.holdWhy = `판정 코드 창 로드 대기(${stale.join(', ')}). L3·L4 AI 진단 보류`;
+    // 개선안 20261124000718_VISION: L4 단계 원장 진행 → 남은 단계 열린 일(시한 넘김 = 다음 행동 1회) → 같은 축 원장이 열린 L4 묶음은 진단 대신 진행만 기록
+    let plans = null; res.planned = [];
+    if (planOn()) {
+      try { res.plan = planProgress(); } catch (e) { errlog.note('orch-ladder', 'planProgress', e); }
+      try { const wl = D.worklist || mod('orch-worklist'); if (wl && typeof wl.planTick === 'function') { if (!wl.ready()) wl.init({ paths: getPaths }); res.planDue = wl.planTick({ ladder: module.exports }); } } catch (e) { errlog.note('orch-ladder', 'planTick', e); }
+      plans = readPlans();
+    }
+    const order = fresh.sort((a, b) => rank(a) - rank(b));
+    for (const b of order) {
+      if (b.status === 'wait') continue; // 개선안 20261124000457_VISION: 실측 대기·효력 대기 묶음은 진단 안 함
+      if (b.level === 'L2') continue; // 개선안 20261121000456_SELF_2: L2(nodata) 는 원장에만 기록, 구조 진단은 L3 로 올라간 뒤
+      if (b.level === 'L4' && plans) { const pl = openPlanFor({ key: b.key, proposals: (b.runs || []).map(r => r.proposal).filter(Boolean) }, plans);
+        if (pl) { res.planned.push({ key: b.key, plan: pl.id }); try { const l3 = readLadder(); const bb = l3.bundles[b.key]; if (bb) { bb.plan = pl.id; bb.planAt = nowLocal(); bb.statusLabel = `L4 원장 ${pl.id} 진행 중(진단 안 함)`; writeJson(ledgerFile(), l3); } const ap = readPlans(); const pp = ap.plans[pl.id]; if (pp) { if (!(pp.keys || []).includes(b.key)) (pp.keys || (pp.keys = [])).push(b.key); pp.lastSeenAt = nowLocal(); writeJson(plansFile(), ap); } } catch (e) { errlog.note('orch-ladder', 'planNote', e); } continue; } }
+      if (stale.length) { res.held++; continue; } // 판정 코드 로드 대기: AI 호출 없음, 하루 진단 수(dayRuns) 그대로
+      if (!(opts && opts.manual) && c.ladderMaxPerDay > 0 && ladder.dayRuns >= c.ladderMaxPerDay) { res.skipped++; continue; }
+      if (opts && opts.noRun) { res.skipped++; continue; }
+      const r = await diagnose(b); if (r.busy) { res.skipped++; continue; }
+      ladder.dayRuns++; const l2 = readLadder(); l2.day = ladder.day; l2.dayRuns = ladder.dayRuns; writeJson(ledgerFile(), l2); res.ran.push({ key: b.key, level: b.level, ok: r.ok, proposals: r.proposals || [] });
+    }
+  } catch (e) { errlog.note('orch-ladder', 'tick', e); }
+  return res;
+}
+/** 화면용 요약 */
+function summary() { if (!ready()) return { open: {}, bundles: [] }; const lad = readLadder(); const open = { L3: 0, L4: 0 }; const list = Object.values(lad.bundles).sort((a, b) => (b.lastSeenMs || 0) - (a.lastSeenMs || 0)); for (const b of list) if (b.status === 'open') open[b.level] = (open[b.level] || 0) + 1;
+  // 개선안 20261123000946_VISION: 화면에 창 로드 대기(효력 전 반영 완료) 건수와 가장 오래된 반영 시각, 판정 코드 로드 대기 보류 표시
+  let reload = null; try { const imp = D.improve || mod('orch-improve'); if (imp && typeof imp.reloadWait === 'function') { const w = imp.reloadWait(); reload = { n: w.n, oldestAt: w.oldestAt }; } } catch (e) { errlog.note('orch-ladder', 'reloadWait', e); }
+  let plans = []; try { plans = planSummary(); } catch (e) { errlog.note('orch-ladder', 'planSummary', e); } // 개선안 20261124000718_VISION: L4 단계 원장 표시
+  return { open, day: lad.day, dayRuns: lad.dayRuns || 0, reload, hold: lad.hold || null, plans, bundles: list.slice(0, 30).map(b => ({ key: b.key, level: b.level, title: b.title, why: b.why, status: b.status, statusLabel: b.statusLabel || '', lastSeenAt: b.lastSeenAt, runs: (b.runs || []).length, lastRun: (b.runs || []).slice(-1)[0] || null })) }; }
+
+// ── L4 단계 원장(개선안 20261124000718_VISION · 문서 .vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md) ──
+//   종전: 승인된 L4 안은 개선안 1건으로 한 번에 반영했다. 실패해 범위를 줄이면 나머지는 담당 없이 남았고(20261123121302_SELF '다음 조각으로 미룸'),
+//         진단 사다리는 같은 축을 하루 1번 다시 진단했다(L4|useraxis|vmoCadence runs 3건, 같은 축 20261124000237_VISION 이 묶음 key 만 달리해 올라옴).
+//   지금: 승인된 L4 안 = 원장 1건(.vibe/orch/vision/plans.json). 단계 = 개념 문서 전환 절의 '- 단계 N:' 줄. 단계마다 하위 안 1건(fix, 자동 반영 대상)을 만들고,
+//         '관찰' 단계는 앞 단계 효력 뒤 observeHours 시간 관찰 열린 일로 둔다. 남은 단계는 orch-worklist 열린 일(담당 VMO, 시한 worklistDueMin)이다.
+//         같은 축(묶음 key, 연결 개선안, 대상 파일 겹침)의 원장이 열려 있으면 tick 은 새 L4 진단 대신 원장 진행만 갱신한다. 같은 축 L4 안이 승인 대기면 원장 단계로 흡수한다.
+//   끄기: harness.json orch.l4PlanEnabled false = 종전 방식(L4 안 1건 한 번 반영)
+const PLAN_DEF = { l4PlanEnabled: true, observeHours: 24, worklistDueMin: 60 };
+const plansFile = () => path.join(orchDir(), 'vision', 'plans.json');
+function readPlans() { const v = readJson(plansFile(), null); return v && v.plans ? v : { plans: {} }; }
+const planOn = () => cfg().l4PlanEnabled !== false;
+const pcfg = () => Object.assign({}, PLAN_DEF, cfg());
+const normT = t => String(t || '').replace(/\\/g, '/').replace(/\s*\(신규\)\s*$/, '').trim().replace(/^\.\//, '');
+const axisOfKey = k => { const m = /^L4\|(?:useraxis|purpose)\|(.+)$/.exec(String(k || '')); return m ? m[1] : ''; };
+const keyOfProposal = p => { const m = /진단 사다리 묶음 (\S+)/.exec(String((p && p.evidence) || '')); return m ? m[1] : ''; };
+const docOfProposal = p => { const m = /문서 (\.vibe\/orch\/vision\/\S+?\.md)/.exec(String((p && p.evidence) || '')); return m ? m[1] : ''; };
+/** 대상 파일 겹침: 여러 안이 함께 고치는 공용 파일(harness.json, orchestra.js, 시험, plans.json)을 빼고 공통 3개 이상이고 작은 쪽의 절반 이상 */
+const COMMON_T = t => /plans\.json$|(^|\/)harness\.json$|(^|\/)orchestra\.js$|(^|\/)test\//.test(t);
+function overlap(a, b) { const A = new Set((a || []).map(normT).filter(t => !COMMON_T(t))); const B = (b || []).map(normT).filter(t => !COMMON_T(t)); const n = B.filter(t => A.has(t)).length; return n >= 3 && n >= Math.ceil(Math.min(A.size, B.length) / 2); }
+/** 개념 문서 전환 절의 '- 단계 N: 내용. 확인 = …' 줄 → [{ n, text, change, check, observe }] */
+function parseSteps(text) {
+  const out = [];
+  for (const ln of String(text || '').split(/\r?\n/)) { const m = /^\s*[-*]\s*단계\s*(\d+)\s*(?:\(([^)]*)\))?\s*[:：]\s*(.+)$/.exec(ln); if (!m) continue; const body = m[3].trim(); const i = body.search(/확인\s*=/);
+    out.push({ n: Number(m[1]), text: body.slice(0, 1200), change: (i >= 0 ? body.slice(0, i) : body).replace(/[.\s]+$/, '').slice(0, 800), check: i >= 0 ? body.slice(i).replace(/^확인\s*=\s*/, '').slice(0, 800) : '', observe: /^관찰/.test(body) || /관찰/.test(m[2] || '') }); }
+  return out.sort((a, b) => a.n - b.n);
+}
+const lastOfP = (imp, p) => { let q = p; const seen = new Set(); while (q && q.status === 'superseded' && q.supersededBy && !seen.has(q.id)) { seen.add(q.id); const nx = imp.get(q.supersededBy); if (!nx) break; q = nx; } return q; };
+function planLog(pl, what, n) { (pl.history || (pl.history = [])).push({ at: nowLocal(), what: String(what).slice(0, 400), step: n || undefined }); if (pl.history.length > 80) pl.history = pl.history.slice(-80); }
+/** 같은 축 열린 원장. b = { key, proposals?, targets? } */
+function openPlanFor(b, plans) {
+  const ps = Object.values((plans || readPlans()).plans).filter(p => p.status === 'open' && !(p.steps || []).some(s => s.status === 'observe-fail'));
+  const ax = axisOfKey(b.key);
+  return ps.find(p => (b.key && (p.keys || []).includes(b.key)) || (ax && p.axis && ax === p.axis) || (b.proposals || []).some(id => id && (id === p.proposal || (p.absorbed || []).includes(id) || (p.related || []).includes(id))) || (b.targets && overlap(p.targets, b.targets))) || null;
+}
+/** 원장 단계로 흡수: 승인 대기 L4 안 → superseded(supersededBy = 원장 안) · 단계 글에 안 id 가 있으면 그 단계, 없으면 새 단계 */
+function absorbInto(pl, p, imp) {
+  if (!p || p.id === pl.proposal || (pl.absorbed || []).includes(p.id)) return false;
+  const open = (pl.steps || []).filter(s => !/^(applied|done)$/.test(s.status || ''));
+  let st = open.find(s => String(s.change || '').includes(p.id)) || open.find(s => s.text.includes(p.id)); // 변경 글에 안 id 가 있는 남은 단계 먼저(확인 글에만 id 가 나오는 단계 제외)
+  if (!st) { const n = (pl.steps || []).reduce((m, s) => Math.max(m, s.n), 0) + 1; const obs = (pl.steps || []).filter(s => s.observe); st = { n, text: `${p.id} 내용: ${String(p.before_after || p.title).slice(0, 600)}`, change: String(p.before_after || p.title).slice(0, 800), check: String(p.verify || '').slice(0, 800), observe: false, status: 'todo' }; if (obs.length) { pl.steps.splice(pl.steps.indexOf(obs[0]), 0, st); } else pl.steps.push(st); }
+  st.absorbed = p.id; if (!st.check && p.verify) st.check = String(p.verify).slice(0, 800);
+  st.targets = Array.from(new Set((st.targets || []).concat((p.targets || []).map(normT))));
+  (pl.absorbed || (pl.absorbed = [])).push(p.id); const k = keyOfProposal(p); if (k && !(pl.keys || []).includes(k)) (pl.keys || (pl.keys = [])).push(k);
+  const cur = imp.get(p.id); if (cur && /^(pending|apply-failed|approved)$/.test(cur.status)) { cur.status = 'superseded'; cur.supersededBy = pl.proposal; cur.absorbedInto = pl.id; delete cur.approvedWait; (cur.history = cur.history || []).push({ at: nowLocal(), by: 'VMO', what: `L4 단계 원장 ${pl.id} 단계 ${st.n} 으로 흡수(같은 축 원장 열림). 이 안은 따로 반영하지 않음` }); imp.save(cur); }
+  planLog(pl, `${p.id} 흡수 → 단계 ${st.n}`, st.n); return true;
+}
+/** 승인된 L4 안 → 원장. 반환 plan | null(단계를 못 읽음 = 종전 방식). opt = { doneSteps:[n], keepStatus, by } */
+function planFromProposal(id, opt) {
+  const o = opt || {}; const imp = D.improve || mod('orch-improve'); if (!imp) return null; const pr = imp.get(id); if (!pr || pr.level !== 'L4') return null;
+  const all = readPlans(); const had = Object.values(all.plans).find(p => p.proposal === id || (p.absorbed || []).includes(id)); if (had) return had;
+  const key = keyOfProposal(pr); const same = openPlanFor({ key, proposals: [id], targets: pr.targets }, all);
+  if (same) { absorbInto(same, pr, imp); writeJson(plansFile(), all); return same; }
+  const doc = docOfProposal(pr); let steps = []; try { if (doc) steps = parseSteps(fs.readFileSync(path.join(P().root, doc), 'utf8')); } catch (e) { errlog.note('orch-ladder', 'planDoc', e); }
+  if (!steps.length) return null;
+  const now = Date.now(); const lad = readLadder(); const related = [];
+  for (const b of Object.values(lad.bundles)) if (b.key === key) for (const r of b.runs || []) for (const x of (r.proposals && r.proposals.length ? r.proposals : [r.proposal])) if (x && x !== id && !related.includes(x)) related.push(x);
+  const pl = { id, proposal: id, title: String(pr.title || '').slice(0, 200), axis: axisOfKey(key), keys: key ? [key] : [], doc, targets: (pr.targets || []).map(normT), rollback: pr.rollback || '', status: 'open', at: nowLocal(now), ms: now, by: o.by || '', related, absorbed: [], history: [],
+    steps: steps.map(s => Object.assign(s, { status: (o.doneSteps || []).includes(s.n) ? 'applied' : 'todo', proposal: (o.doneSteps || []).includes(s.n) ? id : '' })) };
+  planLog(pl, `원장 생성(단계 ${pl.steps.length}개${(o.doneSteps || []).length ? `, 단계 ${o.doneSteps.join(', ')} 은 ${id} 반영으로 끝` : ''})`);
+  for (const p of imp.list()) { if (!p || p.id === id || p.level !== 'L4' || !/^(pending|apply-failed)$/.test(p.status || '')) continue; const k = keyOfProposal(p); if ((k && (k === key || (pl.axis && axisOfKey(k) === pl.axis))) || overlap(pl.targets, p.targets)) absorbInto(pl, p, imp); }
+  all.plans[id] = pl; writeJson(plansFile(), all);
+  if (!o.keepStatus) { const cur = imp.get(id); if (cur) { cur.status = 'planned'; cur.plan = id; delete cur.approvedWait; (cur.history = cur.history || []).push({ at: nowLocal(now), by: o.by || 'VMO', what: `L4 단계 원장으로 진행(단계 ${pl.steps.length}개, 단계마다 하위 안 반영). 원장 .vibe/orch/vision/plans.json` }); imp.save(cur); } }
+  if (orchEv) { try { orchEv.emit('ladder.plan', { id, steps: pl.steps.length, absorbed: pl.absorbed }); } catch { /* 기록만 */ } }
+  return pl;
+}
+/** 단계 대상 파일: 원장 대상 중 단계 글에 파일 이름(또는 orch- 뺀 이름)이 나오는 것 + 단계 글의 시험 파일 + 흡수한 안 대상. 없으면 원장 대상 전부 */
+function stepTargets(pl, st) {
+  const t = `${st.change} ${st.check}`; const out = new Set(st.targets || []);
+  for (const x of pl.targets || []) { if (/plans\.json$/.test(x)) continue; const f = fileOf(x); const stem = f.replace(/^orch-/, '').replace(/\.(js|json|py|md)$/, ''); if (t.includes(f) || (stem.length >= 5 && t.includes(stem))) out.add(x); }
+  for (const m of t.match(/t_[a-z0-9_]+\.js/gi) || []) out.add(`tools/VibeManager/test/${m}`);
+  return out.size ? Array.from(out) : (pl.targets || []).filter(x => !/plans\.json$/.test(x));
+}
+const sigOf = (pl, n) => `l4plan ${String(pl.id).replace(/\d/g, d => 'abcdefghij'[d])} step ${'abcdefghijklmnopqrstuvwxyz'[n % 26]}`; // normSig 가 숫자를 n 으로 바꿔 단계끼리 겹치지 않게 글자로
+/** 다음 행동 1회: 단계 하위 안 생성. 반환 { ok, id, why } */
+function planAction(planId, n, by, mem) {
+  const imp = D.improve || mod('orch-improve'); if (!imp) return { ok: false, why: '모듈 없음' };
+  const all = mem || readPlans(); const pl = all.plans[planId]; const st = pl && (pl.steps || []).find(s => s.n === n); if (!st) return { ok: false, why: '단계 없음' };
+  if (st.observe) return { ok: false, why: '관찰 단계는 하위 안 없음' };
+  if (st.proposal) { const live = lastOfP(imp, imp.get(st.proposal)); if (live && !/^(rejected)$/.test(live.status)) return { ok: false, why: `하위 안 ${live.id} ${live.status}` }; }
+  const abs = st.absorbed ? imp.get(st.absorbed) : null;
+  const o = { title: `${String(pl.title).replace(/^개념 재정립:\s*/, '').slice(0, 90)} · 단계 ${n}`, impact: 'fix', level: 'L3', levelWhy: `L4 단계 원장 ${pl.id} 단계 ${n}`, check: 'L4plan', selfKey: `L4plan|${pl.id}|${n}`,
+    evidence: `L4 단계 원장 ${pl.id} 단계 ${n}/${pl.steps.length} · 문서 ${pl.doc}${st.absorbed ? ` · 흡수한 안 ${st.absorbed}` : ''}`, targets: stepTargets(pl, st),
+    before_after: `${st.change}${abs ? ` · 흡수한 안 ${abs.id} 변경: ${String(abs.before_after || '').slice(0, 900)}` : ''} · 상세 = ${pl.doc} 전환 절 단계 ${n}`.slice(0, 2000), verify: st.check, rollback: pl.rollback || `.bak 백업 태그로 단계 ${n} 대상 파일 복원`, sig: sigOf(pl, n) };
+  const a = imp.add(o, 'self'); const id = a && (a.id || a.dup); if (!id) return { ok: false, why: '하위 안 등록 실패' };
+  const cur = imp.get(id); if (a.dup && cur && cur.status === 'rejected') { st.proposal = id; st.status = 'blocked'; planLog(pl, `단계 ${n} 하위 안 ${id} 반려 상태. 사용자 판단`, n); if (!mem) writeJson(plansFile(), all); return { ok: false, why: `하위 안 ${id} 반려됨` }; }
+  if (cur && !cur.plan) { cur.plan = pl.id; cur.planStep = n; imp.save(cur); }
+  st.proposal = id; st.status = 'proposed'; st.proposedAt = nowLocal(); planLog(pl, `${by || 'VMO'}: 단계 ${n} 하위 안 ${id}${a.dup ? '(같은 안 있음)' : ''} 등록`, n); if (!mem) writeJson(plansFile(), all);
+  return { ok: true, id };
+}
+/** 관찰 판정: 단계 글의 점검 key(예 S13|U3|idleInc)로 result.json fail 항목 중 관찰 시작 뒤 것을 센다 */
+function observeCount(st) {
+  const res = readJson(path.join(orchDir(), 'selfcheck', 'result.json'), { checks: {} }); const toks = `${st.text} ${st.check}`.match(/S\d+\|[A-Za-z0-9]+\|[A-Za-z0-9]+/g) || [];
+  if (!toks.length) return null; let n = 0;
+  for (const c of Object.values(res.checks || {})) for (const it of (c && c.items) || []) { const ms = Number(it.ms) || Number(c.ms) || Number(res.ms) || 0; if (it.level === 'fail' && toks.some(t => String(it.key || '').startsWith(t)) && ms >= (st.startMs || 0)) n++; }
+  return n;
+}
+/** 원장 진행 갱신(tick 마다). 하위 안 상태 반영 → 준비된 단계 하위 안 생성 · 관찰 단계 시작과 판정 → 끝난 원장 닫음. 반환 { plans, created:[id], observed:[...] } */
+function planProgress(now) {
+  const out = { plans: 0, created: [], observed: [], done: [] }; if (!planOn()) return out;
+  const imp = D.improve || mod('orch-improve'); if (!imp) return out; const c = pcfg(); now = now || Date.now();
+  const all = readPlans(); let dirty = false;
+  for (const pl of Object.values(all.plans)) {
+    if (pl.status !== 'open') continue; out.plans++;
+    for (const st of pl.steps || []) {
+      if (st.observe || !st.proposal || st.proposal === pl.proposal) continue; const p = lastOfP(imp, imp.get(st.proposal)); if (!p) continue;
+      const nx = p.status === 'applied' ? 'applied' : p.status === 'rejected' ? 'blocked' : p.status === 'apply-failed' ? 'failing' : 'proposed';
+      if (nx === 'applied' && !st.effMs) { const e = typeof imp.effectiveMsOf === 'function' ? imp.effectiveMsOf(p) : Number(p.appliedMs) || null; if (e) st.effMs = e; }
+      if (st.status !== nx) { st.status = nx; planLog(pl, `단계 ${st.n} ${nx}(${p.id} ${p.status})`, st.n); dirty = true; }
+    }
+    // 준비된 단계: 앞 단계가 모두 applied|done 인 첫 todo
+    const idx = (pl.steps || []).findIndex(s => !/^(applied|done)$/.test(s.status));
+    const st = idx >= 0 ? pl.steps[idx] : null;
+    if (!st) { pl.status = 'done'; pl.doneAt = nowLocal(now); planLog(pl, '전 단계 끝. 원장 닫음'); out.done.push(pl.id); dirty = true; const cur = imp.get(pl.proposal); if (cur && cur.status === 'planned') { cur.status = 'applied'; cur.appliedMs = now; (cur.history = cur.history || []).push({ at: nowLocal(now), by: 'VMO', what: `L4 단계 원장 전 단계 끝(${pl.steps.length}개). 반영 완료` }); imp.save(cur); } continue; }
+    if (!st.readyMs) { st.readyMs = now; dirty = true; }
+    if (st.status === 'todo' && st.observe) {
+      const prevEff = pl.steps.slice(0, idx).map(s => Number(s.effMs) || 0); const ok = pl.steps.slice(0, idx).every(s => s.proposal === pl.proposal || Number(s.effMs) > 0);
+      if (ok) { st.status = 'observing'; st.startMs = Math.max(now, ...prevEff); st.hours = c.observeHours; st.endMs = st.startMs + c.observeHours * 3600000; planLog(pl, `단계 ${st.n} 관찰 시작(${c.observeHours}시간, ${nowLocal(st.endMs).slice(0, 16)} 까지)`, st.n); dirty = true; }
+    } else if (st.status === 'todo') {
+      const r = planAction(pl.id, st.n, 'VMO 원장 진행', all); if (r.ok) out.created.push(r.id); dirty = true;
+    } else if (st.status === 'observing' && now >= (st.endMs || 0)) {
+      const n = observeCount(st); st.observed = { at: nowLocal(now), n }; st.status = n === 0 ? 'done' : n == null ? 'done' : 'observe-fail';
+      planLog(pl, `단계 ${st.n} 관찰 판정: ${n == null ? '판정할 점검 key 없음(관찰 기간 끝)' : `fail ${n}건`}${n > 0 ? ' → 다음 L4 진단 허용' : ''}`, st.n); out.observed.push({ plan: pl.id, n: st.n, fail: n }); dirty = true;
+    }
+  }
+  if (dirty) { const fresh = readPlans(); for (const [k, v] of Object.entries(all.plans)) fresh.plans[k] = v; writeJson(plansFile(), fresh); }
+  return out;
+}
+/** 열린 원장의 남은 단계(열린 일 장부용). 반환 [{ plan, n, text, status, proposal, readyMs, dueMs, startMs, endMs, observe, wait, next }] */
+function planSteps(now) {
+  if (!planOn() || !ready()) return []; const imp = D.improve || mod('orch-improve'); const c = pcfg(); now = now || Date.now(); const out = [];
+  for (const pl of Object.values(readPlans().plans)) {
+    if (pl.status !== 'open') continue; let first = true;
+    for (const st of pl.steps || []) {
+      if (/^(applied|done)$/.test(st.status)) continue;
+      let wait = '', next = st.observe ? '관찰 판정' : '하위 안 생성', due = (Number(st.readyMs) || Number(pl.ms) || now) + c.worklistDueMin * 60000;
+      if (!first) wait = '앞 단계 진행 중';
+      else if (st.status === 'observing') { due = Number(st.endMs) || due; wait = now < due ? `관찰 중(${nowLocal(due).slice(0, 16)} 까지)` : ''; }
+      else if (st.status === 'observe-fail') wait = `관찰 실패(${(st.observed || {}).n}건), 다음 L4 진단 대상`;
+      else if (st.proposal && imp) { const p = lastOfP(imp, imp.get(st.proposal)); if (p && p.status !== 'rejected') wait = `하위 안 ${p.id} ${p.status}`; else if (p) next = '하위 안 다시 생성(반려됨)'; }
+      out.push({ plan: pl.id, n: st.n, title: `${String(pl.title).slice(0, 70)} · 단계 ${st.n}/${pl.steps.length}`, text: st.text, status: st.status, proposal: st.proposal || '', readyMs: Number(st.readyMs) || 0, dueMs: due, observe: !!st.observe, wait, next });
+      first = false;
+    }
+  }
+  return out;
+}
+/** 열린 일 장부가 시한을 넘긴 단계에 부르는 다음 행동 1회 */
+function planDue(planId, n) {
+  const all = readPlans(); const pl = all.plans[planId]; const st = pl && (pl.steps || []).find(s => s.n === n); if (!st) return { ok: false, why: '단계 없음' };
+  if (st.observe) { const r = planProgress(); return { ok: true, why: `관찰 판정 ${JSON.stringify(r.observed)}` }; }
+  return planAction(planId, n, '열린 일 장부(시한 넘김)');
+}
+function planSummary() { if (!ready()) return []; return Object.values(readPlans().plans).sort((a, b) => (b.ms || 0) - (a.ms || 0)).slice(0, 6).map(p => ({ id: p.id, title: p.title, status: p.status, steps: (p.steps || []).length, done: (p.steps || []).filter(s => /^(applied|done)$/.test(s.status)).length, cur: ((p.steps || []).find(s => !/^(applied|done)$/.test(s.status)) || {}).n || null, curStatus: ((p.steps || []).find(s => !/^(applied|done)$/.test(s.status)) || {}).status || '', absorbed: p.absorbed || [] })); }
+
+module.exports = { improveRef: () => D.improve || null, init, ready, scan, update, tick, diagnose, summary, readLadder, structPrompt, conceptPrompt, DEF, normPurpose, purposeKey, proposalKind,
+  PLAN_DEF, readPlans, planFromProposal, planProgress, planSteps, planAction, planDue, planSummary, parseSteps, openPlanFor, overlap };

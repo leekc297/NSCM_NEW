@@ -1,0 +1,85 @@
+{
+ "at": "2026-11-21T12:03:59+09:00",
+ "summary": "SCP0028 CheckList 정상 종료 1건이 309.5분 걸렸고, 이 중 부분 재측정 3회가 196.6분임. 재측정 단위가 미해결 행의 규칙 전체여서 1회차 부분 재측정이 전체 E2E 81개 중 76개를 다시 돌림. 자동 반영 대상 fix 안 1건이 제목 낱말 판정 결함으로 11시간 50분째 대기 중이고, 진단 사다리는 감지기 이름으로만 축을 묶어 같은 목적 지적 3건을 L4 로 올리지 못함.",
+ "purposes": [
+  {
+   "purpose": "CheckList 화면 1개 10분, 길어야 30분 안에 끝남",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md, user_checks.json U2, U25",
+   "verdict": "어긋남",
+   "evidence": "events.jsonl:2001 SCP0028 체인 J20261120_191752 ms_run 18571542(309.5분, 11-21 01:55 종료). 단계: 1차 측정 3954초, Claude 보완 3회 1435+554+521초, 부분 재측정 3회 4887+3854+3053초(196.6분). selfcheck S13 U2 'SCP0028 310분(목표 30분)'. 직전 Overall Review(vision/meta.json 11-20 11:58)도 같은 목적 어긋남"
+  },
+  {
+   "purpose": "속도 개선은 판정 결과가 같은 대체 방법만 씀",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md",
+   "verdict": "미확인",
+   "evidence": "부분 재측정 결과와 전체 재측정 결과를 대조한 ledger_diff.py 기록은 이번 점검에서 미확인. tools/Harness/verify/ledger_diff.py 파일은 있음"
+  },
+  {
+   "purpose": "부분 재측정은 바뀐 범위만 다시 재서 1차 전체 측정보다 짧음",
+   "source": "user_checks.json U25, quick.json:173 단계 제목 '보완으로 바뀐 검사기와 남은 미해결 규칙만'",
+   "verdict": "어긋남",
+   "evidence": "Doc/verify/SCP0028/_test_timing.jsonl: 전체 측정 run 2026-11-20T06:04:13Z 시험 81개 43.7분, 1회차 부분 재측정 run 13:25:40Z 시험 76개 42.6분. run_timing.json 부분 재측정 3회 wall 81.3, 64.1, 50.7분, 1차 측정 65.8분. delta_scope.py:115-117 이 FAIL, 판정필요, 미검증 행의 규칙 전체를 넣음(11-21 01:01 판정 79행, 규칙 13개, 단계 diff, eg)"
+  },
+  {
+   "purpose": "단계 오류면 다음 단계를 띄우지 않음",
+   "source": "user_checks.json U19",
+   "verdict": "맞음",
+   "evidence": "events.jsonl:1473(11-20 19:06) S8.checklistRun CANCEL, failNo 1, claudeSkipped 1. events.jsonl:248~501 FAIL 체인 11건 모두 failNo 1, 뒤 단계 실행 0"
+  },
+  {
+   "purpose": "버그, 시스템 개선안(fix)은 권장안으로 자동 반영하고 core 만 승인",
+   "source": "memory/feedback_vmo_approval_core_only_20261120.md",
+   "verdict": "어긋남",
+   "evidence": "proposals/20261121000933_SELF.json impact fix, 대상 tools/VibeManager 코드 3개, 11-21 00:09 등록 뒤 11:59 까지 pending, needsApproval '파일 삭제(생성물 아님)'. 원인 orch-selfcheck.js:389 isDeleteTitle 이 제목에 '삭제'와 '로그'가 있으면 삭제 안으로 봄, :397 에서 승인으로 돌림. 제목 '…근거 로그가 지워져 … 근거 삭제로 표시'"
+  },
+  {
+   "purpose": "사용자 지적을 감시하고, 같은 목적 지적이 7일 3건 이상이면 개념 재정립(L4)으로 올림",
+   "source": "plans/vm-ui-snug-mountain.md 2.2 '사용자 지적 중 같은 목적 축(입력 문구의 목적 키) 7일 3건 이상', memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "어긋남",
+   "evidence": "orch-ladder.js:69-71 이 u.detector 이름으로 축을 묶음. CheckList 소요 지적 U2(chainTarget), U24(unverifiedResolveIncomplete), U25(partialRemeasureSlow) 3건과 창 다시 로드 재개 지적 U13, U16, U17, U18, U23 5건이 감지기가 달라 L4 묶음 없음. ladder.json L4 묶음은 vmoCadence, struct U8, struct U13 뿐"
+  },
+  {
+   "purpose": "창 다시 로드 뒤 VMW, Workbench 작업을 끊긴 단계부터 재개",
+   "source": "user_checks.json U13, U16, U18, U23, memory/project_vmw_resume_20261120",
+   "verdict": "어긋남",
+   "evidence": "events.jsonl:972, 1014, 1036, 1094, 1340, 1389, 1581 chain.end why 'VM 창 종료로 중단' 7건. digest7d checklist 체인 22건 중 ok 1, stopped 18. 같은 내용 승인 대기안 20261121000933_SELF_2 있음"
+  },
+  {
+   "purpose": "VMO 가 10분 간격으로 열린 문제를 진단, 조치함",
+   "source": "user_checks.json U3, U7",
+   "verdict": "어긋남",
+   "evidence": "selfcheck S13 'U3 조치 기록 없는 열린 사건 6건' fail, S7 미해결 사건 25~26시간 4건. 같은 목적 개념 재정립안 20261120183740_VISION 승인 대기"
+  },
+  {
+   "purpose": "화면 진입 실패를 감지, 원인 확인, 해결, 다시 실행까지 사람 없이 닫음",
+   "source": "memory/feedback_vmo_self_heal_restart_20261120.md, user_checks.json U4",
+   "verdict": "미확인",
+   "evidence": "digest7d incidents byRule 에 R13 0건. 7일 안 발생 사례가 없어 동작 미확인"
+  },
+  {
+   "purpose": "수치, 소요 시간은 실측만 기록하고 보고함",
+   "source": "memory/feedback_no_guess_answers.md",
+   "verdict": "어긋남",
+   "evidence": "run_timing.json 11-21 01:01 부분 재측정 wall 50.7분, 단계 합 31.6분으로 19.1분 기록 없음. 11-20 20:46 실행 wall 65.8분, 단계 합 34.8분, e2e 단계 기록 없음. delta_scope.py:396-398 이 delta_scope.json 을 덮어써 1회차, 2회차 부분 재측정의 범위 판정이 남지 않음"
+  },
+  {
+   "purpose": "VM 고정 문구가 문장 규칙을 지킴",
+   "source": "memory/feedback_sentence_rule_3_20261113.md",
+   "verdict": "어긋남",
+   "evidence": "selfcheck S11 workbench.js 문장 규칙 위반 166건. changes24h 11-20 23:20 3차 정리 21건 뒤에도 남음"
+  },
+  {
+   "purpose": "하루 1회 Overall Review 수행",
+   "source": "memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "맞음",
+   "evidence": "vision/meta.json lastAt 2026-11-20T11:58:06, 이번 점검 11-21 11:59. 간격 24시간"
+  }
+ ],
+ "proposals": [
+  "20261121120359_VISION",
+  "20261121120359_VISION_2",
+  "20261121120359_VISION_3",
+  "20261121120359_VISION_4"
+ ],
+ "log": ".vibe\\logs\\2026-11-21T11-59-19_claude_orch.log"
+}

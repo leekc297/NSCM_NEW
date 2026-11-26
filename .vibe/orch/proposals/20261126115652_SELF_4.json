@@ -1,0 +1,45 @@
+{
+  "id": "20261126115652_SELF_4",
+  "at": "2026-11-26T11:56:52+09:00",
+  "ms": 1795661812668,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/judge.py|칸을찾지못함칸없음tobe팝업에없음notfoundfail을해당없음으로바꿀때",
+  "title": "사용자 지시 R236 같은 문제: tools/Harness/verify/judge.py:3240 '칸을 찾지 못함', '칸 없음', 'TO-BE 팝업에 없음', 'not found' FAIL 을 해당없음으로 바꿀 때 같은 실행에서 같은 시트, 컬럼, 팝업을 ",
+  "evidence": "규칙 R236 \"검사기는 해당없음 근거와 같은 실행의 다른 실측(표시=Y, E2E PASS·FAIL)이 같은 시트, 같은 컬럼에서 어긋나면 해당없음 대신 미검증으로 둠\" (원래 지시 2026-11-26 11:26 \"네, 넣어줘\") · tools/Harness/verify/judge.py:3240 if RX_ABSENT.search(ev):",
+  "targets": [
+    "tools/Harness/verify/judge.py"
+  ],
+  "before_after": "바꾸기 전에 grid_absent_guard 의 key_of, norm_key 와 같은 키로 실측 행을 찾음. 실측 행이 있으면 NA 대신 ERROR 로 두고 '[측정 모순]' 근거를 붙임. 또는 grid_absent_guard.RX_ABSENT 를 이 RX_ABSENT 문구 전체로 넓힘",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/judge.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:52:05+09:00",
+      "by": "4ec206",
+      "what": "반영 완료(세션 직접 보완) · grid_absent_guard.RX_ABSENT 를 judge RX_ABSENT 문구 전체로 넓힘(ABSENT_NA 로 바뀐 행도 같은 실행 실측과 대조 → 측정 모순이면 ERROR) · selftest ALL PASS · 지금 원장 적용 시 변화 217행(넓히기 전과 같음 = 예방) · engine_selfcheck PASS(TSC 0) 2026-11-26 15:51"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 해당없음 근거와 같은 실행의 다른 실측(표시=Y, E2E PASS·FAIL)이 같은 시트, 같은 컬럼에서 어긋나면 해당없음 대신 미검증으로 둠 규칙을 tools/Harness/verify/judge.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R236|tools/Harness/verify/judge.py",
+  "kind": "fix",
+  "claimedBy": "4ec206",
+  "waitNote": "",
+  "appliedMs": 1795675925844
+}

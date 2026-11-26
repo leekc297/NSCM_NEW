@@ -1,0 +1,115 @@
+{
+  "id": "20261123223110_SELF",
+  "at": "2026-11-23T22:31:10+09:00",
+  "ms": 1795440670075,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/extension.js|대시보드제목줄버전이vn고정이고packagejsonversionn과다",
+  "title": "사용자 지시 R56 같은 문제: tools/VibeManager/extension.js:642 대시보드 제목줄 버전이 v1.0 고정이고 package.json version 2.0.1 과 다름",
+  "evidence": "규칙 R56 \"웹뷰 제목줄은 도구 이름과 버전을 보이고 내용 없는 덧붙임 문구를 넣지 않음\" (원래 지시 2026-11-11 20:51 \"Vibe Manger 뒤에 버전을 보여주세요.. \": 전체 메뉴\" 는 삭제\") · tools/VibeManager/extension.js:642 <p class=\"sub\">Vibe_Manager v1.0, 루트 <code>${esc(p.root)}</code>",
+  "targets": [
+    "tools/VibeManager/extension.js"
+  ],
+  "before_after": "require('./package.json').version 을 읽어 'Vibe Manager ' + version 으로 표시함",
+  "verify": "node --check tools/VibeManager/extension.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/extension.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T00:42:39+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T00:46:27+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0042"
+    },
+    {
+      "at": "2026-11-25T00:46:29+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T00:58:39+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 extension.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T00:58:39+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-25 00:46:51: node --check 통과, package.json version 2.0.1, run_all 'ALL OK 파일 83/83 PASS 1349 FAIL 0 220.9s', 제목줄 'Vibe_Manager v1.0' → 반영 뒤 2026-11-25 00:54:23: node --check 통과, run_all 'ALL OK 파일 83/83 PASS 1349 FAIL 0 220.5s', 제목줄 'Vibe Manager ${esc(require('./package.json').version) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T00-46-31_claude_orch.log",
+      "sec": 488,
+      "costUsd": 0.5953373,
+      "files": [
+        "tools/VibeManager/extension.js"
+      ]
+    },
+    {
+      "at": "2026-11-25T03:24:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T03:23:43+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰 제목줄은 도구 이름과 버전을 보이고 내용 없는 덧붙임 문구를 넣지 않음 규칙을 tools/VibeManager/extension.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R56|tools/VibeManager/extension.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795534958985,
+  "autoFp": "f07a29e753",
+  "applyStartMs": 1795535189929,
+  "verifyJudge": {
+    "at": "2026-11-25T00:54:41+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0042",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "extension.js"
+  ],
+  "appliedMs": 1795535919304,
+  "synced": [
+    "extension.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/extension.js 오류 없음(반영 전, 반영 뒤) · node tools/VibeManager/test/run_all.js 반영 전 'ALL OK  파일 83/83  PASS 1349  FAIL 0  220.9s' → 반영 뒤 'ALL OK  파일 83/83  PASS 1349  FAIL 0  220.5s' · t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/extension.js"
+    ],
+    "verify_result": "반영 전 2026-11-25 00:46:51: node --check 통과, package.json version 2.0.1, run_all 'ALL OK 파일 83/83 PASS 1349 FAIL 0 220.9s', 제목줄 'Vibe_Manager v1.0' → 반영 뒤 2026-11-25 00:54:23: node --check 통과, run_all 'ALL OK 파일 83/83 PASS 1349 FAIL 0 220.5s', 제목줄 'Vibe Manager ${esc(require('./package.json').version)}' = 'Vibe Manager 2.0.1'",
+    "note": "extension.js:643 1줄만 Edit 함. 1행 주석 'Vibe_Manager v1.0' 은 화면 표시가 아니고 targets 범위 밖이라 그대로 둠(추가 확인 후보). 측정용 임시 파일 test/_runall_before.txt, _runall_after.txt 는 삭제함. 걸린 시간 약 7분 30초, 오래 걸린 단계 run_all 2회(각 220초)"
+  },
+  "snap": "prop_20261123223110_SELF",
+  "effectiveMs": 1795544623686,
+  "effectiveAt": "2026-11-25T03:23:43+09:00"
+}

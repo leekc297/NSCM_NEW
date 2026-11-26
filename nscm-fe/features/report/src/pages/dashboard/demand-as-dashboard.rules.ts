@@ -1,30 +1,35 @@
 // DMD0001 AS 수요예측 대시보드 — 확정된 산출 규칙(순수 함수·상수).
 //   출처: .atlas/uploads/AS수요예측 대시보드 논의_20261105.xlsx > Main 시트 '결정사항'.
-//   목업 샘플값(demand-as-dashboard.mock.ts)과 분리한다 — 실제 데이터를 붙일 때 이 규칙을 그대로 쓴다.
+//   각 위젯의 <widget>.map.ts 가 프로시저 결과를 변환할 때 이 규칙을 그대로 쓴다.
 //   (각 규칙의 R## 은 Main 시트 원본 행번호)
 
 export type ActionTone = 'keep' | 'review' | 'produce';
 export type StatusDot = 'green' | 'orange' | 'red';
 
-export interface ActionResult {
-  action: string;
-  actionTone: ActionTone;
-  status: StatusDot; // 상태 신호등 (Main R19 — 권고 Action 에 종속)
-}
-
-// 권고 Action 분류 코드 — 비즈니스 분류(임계값 정책)는 백엔드가 소유해 이 코드로 내려준다.
-//   (사용자 결정 2026-11-16: 임계값이 KPI '예상 부족 품목'·Heat Map 등과 공유되므로 한 곳에서 소유)
+// 권고 Action 분류 코드 — 비즈니스 분류(임계값 정책)는 백엔드가 소유해 이 코드(ACTION_CODE)로 내려준다.
 export type ActionCode = 'PRODUCE' | 'KEEP' | 'REVIEW';
 
-/**
- * actionCode → 표시(라벨·톤·상태 신호등). 비즈니스 분류는 백엔드, 표시 매핑만 FE 가 소유한다.
- *   PRODUCE 생산 필요(red) · KEEP 유지(green) · REVIEW 감산 검토(orange).
- * 상태(신호등)는 actionCode 에서 파생하므로 백엔드가 따로 보낼 필요 없다 (Main R19).
- */
-export const ACTION_BY_CODE: Record<ActionCode, ActionResult> = {
-  PRODUCE: { action: '생산 필요', actionTone: 'produce', status: 'red' },
-  KEEP: { action: '유지', actionTone: 'keep', status: 'green' },
-  REVIEW: { action: '감산 검토', actionTone: 'review', status: 'orange' },
+// actionCode → 표시(톤·상태 신호등). 색/신호등은 순수 표시라 FE 가 코드 기준으로 매핑한다
+//   (사용자 결정 2026-11-23: 색·아이콘·신호등만 FE 매핑 허용). PRODUCE red · KEEP green · REVIEW orange.
+export const ACTION_PRESENTATION: Record<ActionCode, { actionTone: ActionTone; status: StatusDot }> = {
+  PRODUCE: { actionTone: 'produce', status: 'red' },
+  KEEP: { actionTone: 'keep', status: 'green' },
+  REVIEW: { actionTone: 'review', status: 'orange' },
+};
+
+// actionCode → 라벨 메시지 코드(i18n). 라벨 텍스트는 FE 하드코딩이 아니라 SCM_ADM_MSG_M 에서 해석한다
+//   (사용자 결정 2026-11-23). 코드 등록 SQL: .atlas/gscm-design/DMD0001/design/05_register_msg.sql.
+export const ACTION_LABEL_CODE: Record<ActionCode, string> = {
+  PRODUCE: 'LBL01279',
+  KEEP: 'LBL01280',
+  REVIEW: 'LBL01281',
+};
+
+// t() 2인자 fallback(MSG-03 '_' 접두 — 미등록 상태 식별용). 등록 전까지 화면에 이 문구가 보인다.
+export const ACTION_LABEL_FALLBACK: Record<ActionCode, string> = {
+  PRODUCE: '_생산 필요',
+  KEEP: '_유지',
+  REVIEW: '_감산 검토',
 };
 
 /**
@@ -38,12 +43,17 @@ export const deriveActionCode = (coverMonths: number): ActionCode => {
   return 'REVIEW';
 };
 
-/** 폴백용 — actionCode 가 없을 때 Cover 로 표시를 산출한다. */
-export const deriveAction = (coverMonths: number | null | undefined): ActionResult => {
-  if (coverMonths == null || Number.isNaN(coverMonths)) {
-    return { action: '-', actionTone: 'keep', status: 'green' }; // 데이터 없음
-  }
-  return ACTION_BY_CODE[deriveActionCode(coverMonths)];
+/**
+ * 표시할 actionCode 를 확정한다. ACTION_CODE(SP 분류)가 유효하면 그대로, 없으면 Cover 로 파생,
+ *   둘 다 없으면 null(데이터 없음). 라벨 텍스트는 호출부가 i18n 으로 해석한다.
+ */
+export const resolveActionCode = (
+  rawCode: string,
+  coverMonths: number | null
+): ActionCode | null => {
+  if (rawCode === 'PRODUCE' || rawCode === 'KEEP' || rawCode === 'REVIEW') return rawCode;
+  if (coverMonths != null && !Number.isNaN(coverMonths)) return deriveActionCode(coverMonths);
+  return null;
 };
 
 /**

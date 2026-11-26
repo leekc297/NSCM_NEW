@@ -1,0 +1,113 @@
+{
+  "id": "20261125125004_SELF",
+  "at": "2026-11-25T12:50:04+09:00",
+  "ms": 1795578604905,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/통합테스트_ssp/ssp_lookup_이관_n_백업_oracle_n.sql|머리주석에dbeaver실행방법문장단위ctrlenter또는스크립트실행alt",
+  "title": "사용자 지시 R225 같은 문제: Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql:3 머리 주석에 DBeaver 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)이 없음",
+  "evidence": "규칙 R225 \"사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음\" (원래 지시 2026-11-25 11:42 \"Cannot execute more than one query in one tab. Try to use multiple tabs for simultaneous query execution.\") · Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql:3 -- 순서 : [B1] · [B2] 백업 테이블 생성 → [B3] 건수 확인 → 2/4 파일(MSSQL) 실행",
+  "targets": [
+    "Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql"
+  ],
+  "before_after": "4행 아래에 '-- 실행 : DBeaver 에서 문장 하나씩(커서를 문장 안에 두고 Ctrl+Enter) 또는 파일 전체 Alt+X' 줄을 넣음. 문장 끝 ';' 와 빈 줄은 그대로 둠",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T16:12:38+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T16:12:38+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-25T16:21:07+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-25T16:25:02+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1621"
+    },
+    {
+      "at": "2026-11-25T16:25:05+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T16:59:52+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 기록 실패"
+    },
+    {
+      "at": "2026-11-25T16:59:52+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js : 반영 전 'ALL OK 파일 86/86 PASS 1406 FAIL 0 241.4s'(RESULT at 2026-11-25T07:25:21Z) → 반영 뒤 'ALL OK 파일 86/86 PASS 1406 FAIL 0 234.5s'(2026-11-25 16:33:35 확인). 대상 파일 Ctrl+Enter, Alt+X 검색 : 반영 전 0건 → 반영 뒤 5행 '-- 실행 : DBeaver 에서 문장 하나씩(커서를 문장 안에 두고 Ctrl+Enter) 또는 파일 전 · 변경 5개 파일 · 대상 목록 밖 변경 4개: Doc/verify/_checker_defects.md, Doc/verify/_engine_selfcheck.json, tools/E2E/lib/langacct.ts, tools/Harness/gate_baseline.tsv",
+      "log": ".vibe\\logs\\2026-11-25T16-25-05_claude_orch.log",
+      "sec": 522,
+      "costUsd": 1.1987093999999998,
+      "files": [
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/E2E/lib/langacct.ts",
+        "tools/Harness/gate_baseline.tsv",
+        "Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음 규칙을 Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R225|Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql",
+  "kind": "fix",
+  "needsApproval": "DB 객체 Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql",
+  "applyStartMs": 1795591505588,
+  "verifyJudge": {
+    "at": "2026-11-25T16:33:50+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1621",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795593592229,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 86/86 PASS 1406 FAIL 0 241.4s' → 반영 뒤 'ALL OK 파일 86/86 PASS 1406 FAIL 0 234.5s'. 대상이 SQL 파일이라 t_webview_syntax.js 단독 실행은 조건 밖, run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js : 반영 전 'ALL OK 파일 86/86 PASS 1406 FAIL 0 241.4s'(RESULT at 2026-11-25T07:25:21Z) → 반영 뒤 'ALL OK 파일 86/86 PASS 1406 FAIL 0 234.5s'(2026-11-25 16:33:35 확인). 대상 파일 Ctrl+Enter, Alt+X 검색 : 반영 전 0건 → 반영 뒤 5행 '-- 실행 : DBeaver 에서 문장 하나씩(커서를 문장 안에 두고 Ctrl+Enter) 또는 파일 전체 Alt+X'",
+    "note": "4행 아래(5행)에 1줄 추가. 문장 끝 ';' 와 빈 줄 변경 없음. 백업, 설치 폴더, CHANGELOG.md 는 건드리지 않음. 테스트 로그 = .vibe/orch/self_125004_before.log, .vibe/orch/self_125004_after.log"
+  },
+  "snap": "prop_20261125125004_SELF"
+}

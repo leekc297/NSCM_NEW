@@ -16,6 +16,7 @@ const ALLOWED_NOTICE_TAGS = new Set([
   'h2',
   'h3',
   'i',
+  'img',
   'li',
   'ol',
   'p',
@@ -35,6 +36,14 @@ const isSafeLink = (href: string) => {
   } catch {
     return false;
   }
+};
+
+export const getSafeNoticeImageSource = (fileId?: string | null) => {
+  const value = fileId?.trim() ?? '';
+  if (!value) return '';
+
+  const baseUrl = String(API_CONFIG.BASE_URL ?? '').replace(/\/$/, '');
+  return `${baseUrl}/file/image/${encodeURIComponent(value)}`;
 };
 
 export const sanitizeNoticeHtml = (html?: string | null) => {
@@ -59,7 +68,10 @@ export const sanitizeNoticeHtml = (html?: string | null) => {
         tagName === 'span' &&
         attribute.name.toLowerCase() === 'data-notice-format' &&
         ALLOWED_NOTICE_FORMATS.has(attribute.value);
-      if (!isAllowedLinkAttribute && !isAllowedFormatAttribute) {
+      const isAllowedImageAttribute =
+        tagName === 'img' &&
+        ['data-notice-image', 'alt'].includes(attribute.name.toLowerCase());
+      if (!isAllowedLinkAttribute && !isAllowedFormatAttribute && !isAllowedImageAttribute) {
         element.removeAttribute(attribute.name);
       }
     });
@@ -69,6 +81,16 @@ export const sanitizeNoticeHtml = (html?: string | null) => {
       if (!isSafeLink(href)) element.removeAttribute('href');
       element.setAttribute('target', '_blank');
       element.setAttribute('rel', 'noreferrer noopener');
+    }
+
+    if (tagName === 'img') {
+      const fileId = element.getAttribute('data-notice-image')?.trim() ?? '';
+      // src 는 HTML 값을 신뢰하지 않고 fileId 로만 재조립한다(XSS/외부 URL 차단).
+      if (!fileId) {
+        element.remove();
+        return;
+      }
+      element.setAttribute('src', getSafeNoticeImageSource(fileId));
     }
   });
 
@@ -92,12 +114,4 @@ export const getNoticeTextPreview = (html?: string | null) => {
   const template = globalThis.document.createElement('template');
   template.innerHTML = html;
   return (template.content.textContent ?? '').replace(/\s+/g, ' ').trim();
-};
-
-export const getSafeNoticeImageSource = (fileId?: string | null) => {
-  const value = fileId?.trim() ?? '';
-  if (!value) return '';
-
-  const baseUrl = String(API_CONFIG.BASE_URL ?? '').replace(/\/$/, '');
-  return `${baseUrl}/file/image/${encodeURIComponent(value)}`;
 };

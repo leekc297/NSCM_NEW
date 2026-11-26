@@ -53,6 +53,15 @@ def judge(asis, tobe_groups, tobe_btn, tobe_menu_btns, empty=None):
         else:
             gaps.append(f"{g} SAVE 기대 미정(C·U·D 값 다름 또는 ExtendedACL 있음 · CanSave 원문 없음)")
         for lab, b, want, letter in exp:
+            # T557(2026-11-25 SCP0005 J4 2행): TO-BE 룰 CR-093·CR-084(편집 버튼 없음 · 조회 즉시 상시 편집 · tobe_rule_registry.csv 85·94행) — EDIT 버튼이 메뉴에 없으면
+            #   AS-IS U(CanUpdate) 허용은 TO-BE 에서 셀 편집 뒤 SAVE 로만 반영된다 → U 허용 그룹은 SAVE 허용과 대조한다. U 불가 그룹은 SAVE 가 C·D 로도 열리므로 대조하지 않는다(종전대로 제외)
+            if b == 'EDIT' and b not in tobe_menu_btns and want and 'SAVE' in tobe_menu_btns:
+                got = have.get('SAVE') == 'Y'
+                if got:
+                    notes.append(f"{g} {lab}: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치")
+                else:
+                    fails.append(f"{g} {lab}: AS-IS 허용 ↔ TO-BE 편집 버튼 없음(CR-093) · SAVE 불가라 수정 반영 못 함")
+                continue
             if b not in tobe_menu_btns:
                 if want and letter in empty:
                     notes.append(f"{g} {lab}: AS-IS {empty[letter]} 본문 없음(버튼 동작 없음) · TO-BE 메뉴 {b} 버튼 없음, 비교 제외")
@@ -129,7 +138,10 @@ def selftest():
              ('TO-BE 만 그룹', judge({'A': full}, {'A', 'V'}, ok_btn, mb)[0], 'FAIL'),
              ('버튼 다름', judge({'A': full, 'V': view}, {'A', 'V'}, {**ok_btn, 'V': {**ok_btn['V'], 'INSERT': 'Y'}}, mb)[0], 'FAIL'),
              ('SAVE 기대 미정', judge({'A': {**full, 'D': False}}, {'A'}, {'A': {**ok_btn['A'], 'DELETE': 'N'}}, mb)[0], 'PARTIAL'),
-             ('메뉴 버튼 정의 없음', judge({'A': full}, {'A'}, ok_btn, mb - {'EDIT'})[0], 'PARTIAL'),
+             ('메뉴 버튼 정의 없음', judge({'A': full}, {'A'}, ok_btn, mb - {'DELETE'})[0], 'PARTIAL'),
+             ('T557 EDIT 없음 · U 허용 = SAVE 허용', judge({'A': full}, {'A'}, ok_btn, mb - {'EDIT'})[0], 'PASS'),
+             ('T557 EDIT 없음 · U 허용 · SAVE 불가', judge({'A': {**full, 'C': False, 'D': False}}, {'A'}, {'A': {**ok_btn['A'], 'INSERT': 'N', 'DELETE': 'N', 'SAVE': 'N'}}, mb - {'EDIT'})[0], 'FAIL'),
+             ('T557 EDIT·SAVE 없음 = 미측정', judge({'A': full}, {'A'}, ok_btn, mb - {'EDIT', 'SAVE'})[0], 'PARTIAL'),
              ('불가 버튼 정의 없음은 통과', judge({'V': view}, {'V'}, ok_btn, mb - {'EDIT'})[0], 'PASS'),
              ('AS-IS 빈 버튼 · TO-BE 버튼 없음', judge({'A': full}, {'A'}, ok_btn, mb - {'INSERT', 'DELETE'}, {'C': 'x.cs:1 InsertButton', 'D': 'x.cs:2 DeleteButton'})[0], 'PASS'),
              ('AS-IS 빈 버튼 아님 · TO-BE 버튼 없음', judge({'A': full}, {'A'}, ok_btn, mb - {'INSERT'}, {'D': 'x.cs:2 DeleteButton'})[0], 'PARTIAL'),

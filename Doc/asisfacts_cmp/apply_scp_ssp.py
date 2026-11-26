@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+"""2026-11-25 Roslyn 의미 분석 반영: 운영 출력(Doc/asisfacts) 백업 → run.ps1 -SkipBuild → 새 결과 ZIP
+   ZIP 범위 = AsisFacts 소스 파서 결과(공통: Doc/asisfacts 바로 아래 파일 + foxquery_sql/, 화면별: screens/)
+   제외 = DB 추출 단계(db/), _fpdb/, datasets/, agent/, _review/, framework/ — 파서 결과가 아닌 다른 단계 산출물"""
+import os, subprocess, sys, time, zipfile
+ROOT = r'C:\Projects\NSCM'
+OUT = os.path.join(ROOT, 'Doc', 'asisfacts')
+TOOL = os.path.join(ROOT, 'tools', 'AsisFacts')
+STAMP = time.strftime('%Y%m%d_%H%M')  # 2026-11-25 SCP·SSP 반영: ZIP 대신 대조
+INCLUDE_DIRS = ['foxquery_sql', 'screens']
+
+
+def zip_parser_outputs(dest):
+    n = 0
+    with zipfile.ZipFile(dest, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+        for f in sorted(os.listdir(OUT)):
+            p = os.path.join(OUT, f)
+            if os.path.isfile(p):
+                z.write(p, 'asisfacts/' + f); n += 1
+        for d in INCLUDE_DIRS:
+            for base, _, files in os.walk(os.path.join(OUT, d)):
+                for f in files:
+                    p = os.path.join(base, f)
+                    z.write(p, 'asisfacts/' + os.path.relpath(p, OUT).replace(os.sep, '/')); n += 1
+    return n
+
+
+def say(s):
+    print(time.strftime('%H:%M:%S'), s, flush=True)
+
+
+say('1) 백업 시작')
+bk = os.path.join(ROOT, 'Doc', f'asisfacts_backup_{STAMP}_before_semantic.zip')
+say(f'   백업 {zip_parser_outputs(bk)}개 파일 → {bk} ({os.path.getsize(bk) // 1048576}MB)')
+say('2) run.ps1 -SkipBuild')
+r = subprocess.run(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', os.path.join(TOOL, 'run.ps1'), '-SkipBuild'], cwd=TOOL,
+                   capture_output=True, text=True, encoding='utf-8', errors='replace')
+open(os.path.join(ROOT, 'Doc', 'asisfacts_cmp', f'run_ps1_{STAMP}.log'), 'w', encoding='utf-8').write(r.stdout + '\n' + r.stderr)
+say(f'   run.ps1 rc={r.returncode}')
+print('\n'.join((r.stdout or '').splitlines()[-15:]))
+if r.returncode != 0:
+    say('run.ps1 실패 — ZIP 만들지 않음'); sys.exit(1)
+say('3) 대조(의미 분석 끔 기준 vs 운영)')
+import shutil
+for pfx in ('DMF', 'SCP,SSP'):
+    rr = subprocess.run([sys.executable, os.path.join(ROOT, 'Doc', 'asisfacts_cmp', 'compare.py'), pfx, '../asisfacts'], capture_output=True, text=True, encoding='utf-8', errors='replace')
+    print(chr(10).join(l for l in rr.stdout.splitlines() if not l.startswith('  + ') and not l.startswith('  - '))[:6000])
+say('끝')

@@ -1,4 +1,4 @@
-# SSP 프로세스 흐름(Process Flow) — 2026-11-16 18:43 생성
+# SSP 프로세스 흐름(Process Flow) — 2026-11-23 13:44 생성
 
 - **업무 프로세스(운영 순서)의 기준 = `SSP_REF_PROCESS.md`**(PI SSP CUTOFF Process 22 Seq · 통합테스트 흐름 단계(V2 2026-11-12) — 사용자 제공 기존 분석 자료). 이 문서는 SP 본문에서 뽑은 **데이터 의존**을 보여 주며 운영 순서를 대신하지 않는다
 - 근거: 화면 A 가 쓰는(W) 테이블을 화면 B 가 읽으면(R) A → B 선행(데이터 의존) · 공통 마스터·로그 표는 제외 · 메뉴 그룹 = TO-BE menu.csv(Shipping Master / Shipping Schedule) · AS-IS 전용 화면은 별도 묶음
@@ -61,8 +61,8 @@ flowchart LR
   ST_Change -->|20| ST_ChangeConfirm
   ST_Confirm -->|19| ST_Plan
   ST_ChangeConfirm -->|18| ST_Request
-  ST_Change -->|16| ST_Confirm
   ST_Request -->|16| ST_Plan
+  ST_Change -->|16| ST_Confirm
   ST_Plan -->|14| ST_Analysis
   ST_ChangeConfirm -->|12| ST_Confirm
   ST_Confirm -->|12| ST_Change
@@ -74,8 +74,8 @@ flowchart LR
   ST_Master -->|6| ST_Confirm
   ST_Request -->|5| ST_ChangeConfirm
   ST_Request -->|5| ST_Confirm
-  ST_ChangeConfirm -.->|4| ST_Analysis
   ST_Change -.->|4| ST_Analysis
+  ST_ChangeConfirm -.->|4| ST_Analysis
   ST_Master -.->|3| ST_Analysis
   ST_Confirm -.->|2| ST_Analysis
   ST_Change -.->|1| ST_Master
@@ -501,8 +501,12 @@ flowchart LR
 
 - Master 단계 화면(기준정보 · 거의 모든 화면이 읽음)은 한 노드로 접음 · AS-IS 전용 화면을 거치는 의존은 제외 · 라벨 = 매개 테이블 수(쓰는 화면 → 읽기만 하는 화면 · 단방향 전달) · 여러 TO-BE 화면이 함께 쓰는 허브 표는 그림 아래 표 · 화면정의서 재작성 순서 검토용
 
+<div class="spf-svg"><div class="tbl-wrap"><table class="mx"><thead><tr><th rowspan="2">쓰는 화면</th><th class="mx-g mx-g0" colspan="14">읽기만 하는 화면</th></tr><tr><th class="mx-g0">DMF0045<small>Shipment Request</small></th><th class="mx-g0">SSP0026<small>Shipment Request</small></th><th class="mx-g0">SSP0022<small>Shipment Request</small></th><th class="mx-g0">SSP0045<small>Shipment Request</small></th><th class="mx-g0">SSP0015<small>Shipment Plan(Mo</small></th><th class="mx-g0">SSP0023<small>Shipment Plan(El</small></th><th class="mx-g0">SSP0021<small>Shipment Plan(Au</small></th><th class="mx-g0">SSP0012<small>Shipment Plan De</small></th><th class="mx-g0">SSP0060<small>Shipment Plan(Au</small></th><th class="mx-g0">SSP0019<small>Shipment Change </small></th><th class="mx-g0">SSP0200<small>Shipment Change </small></th><th class="mx-g0">SSP0201<small>Shipment Change </small></th><th class="mx-g0">SSP0003<small>Shipment Change </small></th><th class="mx-g0">SSP0202<small>Shipment Change </small></th></tr></thead><tbody><tr><th class="mx-e">Master 화면 8<small>SCP0005, SCP0028, SCP0033, SSP0005, SSP0014, SSP0020, SSP002</small></th><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE"><b class="mx-w">1</b></td><td class="mx-c" title="SSP_MST_MODEL_USER, SSP_MST_SHIP_CALENDAR"><b class="mx-w">2</b></td><td class="mx-c" title="SSP_MST_DELEGATE, SSP_MST_MODEL_USER_EE, SSP_MST_SHIP_CALENDAR, SSP_MST_SHIP_MASTER_EE"><b class="mx-w">4</b></td><td class="mx-0"></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE, SSP_MST_DELEGATE, SSP_MST_MODEL_USER, SSP_MST_MODEL_USER_EE"><b class="mx-w">4</b></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE, SSP_MST_DELEGATE, SSP_MST_MODEL_USER, SSP_MST_MODEL_USER_EE, SSP_MST_SHIP_CALENDAR"><b class="mx-w">5</b></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE, SCP_MST_SHIPMENT_LOT_SIZE, SSP_MST_DELEGATE, SSP_MST_MODEL_USER, SSP_MST_MODEL_USER_EE"><b class="mx-w">5</b></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE"><b class="mx-w">1</b></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE, SCP_MST_SHIPMENT_LOT_SIZE, SSP_MST_DELEGATE, SSP_MST_MODEL_USER, SSP_MST_MODEL_USER_EE"><b class="mx-w">5</b></td><td class="mx-c" title="SSP_MST_MODEL_USER"><b class="mx-w">1</b></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE, SSP_MST_DELEGATE, SSP_MST_MODEL_USER"><b class="mx-w">3</b></td><td class="mx-c" title="SSP_MST_DELEGATE, SSP_MST_MODEL_USER"><b class="mx-w">2</b></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE, SSP_MST_DELEGATE, SSP_MST_MODEL_USER"><b class="mx-w">3</b></td><td class="mx-c" title="SCP_MST_DISTRIBUTION_ROUTE, SSP_MST_DELEGATE, SSP_MST_MODEL_USER"><b class="mx-w">3</b></td></tr><tr><th class="mx-e" data-k="DMF0045">DMF0045<small>Shipment Request(Auto &amp; ESS)</small></th><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0026">SSP0026<small>Shipment Request(Mobility &amp; IT)</small></th><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ, SSP_ANL_SHIP_REQ_P"><b class="mx-w">2</b></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0022">SSP0022<small>Shipment Request(Electrode)</small></th><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_SHIP_REQ_EE"><b class="mx-w">1</b></td><td class="mx-c" title="SSP_ANL_SHIP_REQ_EE"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_SHIP_REQ_EE"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_SHIP_REQ_EE"><b class="mx-w">1</b></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0045">SSP0045<small>Shipment Request SEMI</small></th><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="DM_PLN_SHIPMENT_REQ"><b class="mx-w">1</b></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0015">SSP0015<small>Shipment Plan(Mobility &amp; IT)</small></th><td class="mx-c" title="DM_PLN_MKT_FCST"><b class="mx-w">1</b></td><td class="mx-c" title="SSP_ANL_SHIP_PLAN_40"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_SHIP_PLAN_40"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_HOLD_STOCK"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_HOLD_STOCK"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0023">SSP0023<small>Shipment Plan(Electrode)</small></th><td class="mx-c" title="DM_PLN_MKT_FCST"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_SHIP_PLAN_EE"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0021">SSP0021<small>Shipment Plan(Auto &amp; ESS)</small></th><td class="mx-c" title="DM_PLN_MKT_FCST"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0060">SSP0060<small>Shipment Plan(Auto &amp; ESS)-WA_UC</small></th><td class="mx-c" title="DM_PLN_MKT_FCST"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0200">SSP0200<small>Shipment Change Request</small></th><td class="mx-c" title="DM_PLN_MKT_FCST"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0003">SSP0003<small>Shipment Change Request Confirm</small></th><td class="mx-c" title="DM_PLN_MKT_FCST"><b class="mx-w">1</b></td><td class="mx-c" title="SSP_ANL_SHIP_PLAN_40"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-c" title="SSP_ANL_SHIP_PLAN_40"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td></tr><tr><th class="mx-e" data-k="SSP0202">SSP0202<small>Shipment Change Request Confirm(Packer)</small></th><td class="mx-c" title="DM_PLN_MKT_FCST"><b class="mx-w">1</b></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td><td class="mx-0"></td></tr></tbody></table></div><div class="bd-cap">칸의 숫자 = 왼쪽 화면이 쓰고 위쪽 화면이 읽기만 하는 테이블 수. 칸에 마우스를 올리면 테이블 이름이 보입니다. 화면 ID 를 누르면 그 화면의 상세가 열립니다. 쓰는 TO-BE 화면이 4개 이상인 허브 표는 아래 표에 있습니다. 같은 내용의 그래프는 아래 「그래프로 보기」.</div></div>
+
+<div class="spf-fold" data-label="그래프로 보기(같은 내용)"></div>
+
 ```mermaid
-flowchart LR
+flowchart TB
   classDef Master fill:#e3f2fd,stroke:#777
   classDef Request fill:#fff3e0,stroke:#777
   classDef Plan fill:#e8f5e9,stroke:#777
@@ -527,8 +531,8 @@ flowchart LR
   SSP0202["SSP0202<br/>Shipment Change Request Confir"]:::ChangeConfirm
   SSP0017["SSP0017<br/>Inventory Raw(Mobility &amp; I"]:::Analysis
   MST -->|5| SSP0023
-  MST -->|5| SSP0021
   MST -->|5| SSP0060
+  MST -->|5| SSP0021
   MST -->|4| SSP0015
   MST -->|4| SSP0022
   MST -->|3| SSP0003
@@ -537,35 +541,35 @@ flowchart LR
   SSP0026 -->|2| SSP0015
   MST -->|2| SSP0026
   MST -->|2| SSP0201
-  SSP0003 -->|1| DMF0045
-  SSP0023 -->|1| DMF0045
-  SSP0060 -->|1| DMF0045
-  SSP0202 -->|1| DMF0045
-  SSP0021 -->|1| DMF0045
-  SSP0200 -->|1| DMF0045
-  SSP0015 -->|1| DMF0045
-  SSP0026 -->|1| SSP0003
-  SSP0026 -->|1| SSP0060
-  SSP0026 -->|1| SSP0021
-  DMF0045 -->|1| SSP0003
+  DMF0045 -->|1| SSP0021
   DMF0045 -->|1| SSP0060
   DMF0045 -->|1| SSP0015
-  DMF0045 -->|1| SSP0021
-  SSP0045 -->|1| SSP0003
+  DMF0045 -->|1| SSP0003
+  SSP0045 -->|1| SSP0021
   SSP0045 -->|1| SSP0060
   SSP0045 -->|1| SSP0015
-  SSP0045 -->|1| SSP0021
+  SSP0045 -->|1| SSP0003
+  SSP0026 -->|1| SSP0021
+  SSP0026 -->|1| SSP0060
+  SSP0026 -->|1| SSP0003
+  SSP0023 -->|1| DMF0045
+  SSP0003 -->|1| DMF0045
+  SSP0202 -->|1| DMF0045
+  SSP0060 -->|1| DMF0045
+  SSP0200 -->|1| DMF0045
+  SSP0015 -->|1| DMF0045
+  SSP0021 -->|1| DMF0045
   MST -->|1| DMF0045
   MST -->|1| SSP0012
   MST -->|1| SSP0019
-  SSP0022 -->|1| SSP0003
   SSP0022 -->|1| SSP0060
   SSP0022 -->|1| SSP0023
   SSP0022 -->|1| SSP0021
-  SSP0003 -->|1| SSP0026
-  SSP0003 -->|1| SSP0045
-  SSP0015 -->|1| SSP0026
+  SSP0022 -->|1| SSP0003
   SSP0015 -->|1| SSP0045
+  SSP0015 -->|1| SSP0026
+  SSP0003 -->|1| SSP0045
+  SSP0003 -->|1| SSP0026
   SSP0015 -->|1| SSP0060
   SSP0015 -->|1| SSP0021
   SSP0023 -->|1| SSP0022

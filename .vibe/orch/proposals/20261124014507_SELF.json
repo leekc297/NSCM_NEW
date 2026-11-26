@@ -1,0 +1,118 @@
+{
+  "id": "20261124014507_SELF",
+  "at": "2026-11-24T01:45:07+09:00",
+  "ms": 1795452307657,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/make_verify_docs.py|저장외행설명에actionsummarycsvwhere칸조회조건항목탭그리드컬",
+  "title": "사용자 지시 R84 같은 문제: tools/Harness/verify/make_verify_docs.py:701 저장 외 행 설명에 action_summary.csv where 칸(조회조건 항목, 탭, 그리드, 컬럼)이 실리지 않음. 오류명에 위치가 없으면 대상 위치 없는 ",
+  "evidence": "규칙 R84 \"CheckList 오류 행 설명은 간결한 오류명, 대상 위치(조회조건 항목 또는 탭, 그리드, 컬럼), AS-IS 표기·동작, TO-BE 표기·동작, GAP 순서로 씀\" (원래 지시 2026-11-17 09:34 \"SCP0104 에 대해서 사용자의견 추가하였습니다. DB 객체에 대해서는 보완 해주세요. 중복제거도 해주세요. 그리고 설명 부분을 조금 더 쉽게 정리해주면 좋을 것 같아요. 먼저, 오류명에 대해서 1차 정의 (현재보다 조금 더 간결하게) 그리고 오류가 정확하게 어떤 항목인지, 조회조건이\") · tools/Harness/verify/make_verify_docs.py:701 lines = ['[' + tg + '] ' + s['title'].strip().lstrip('○● ').strip(), ' - AS-IS : ' + (s.get('asis') or '').strip(), ' - TO-BE : ' + (s.get('tobe') or '').strip(), ' - GAP : ' + (s.get('gap') or '').st",
+  "targets": [
+    "tools/Harness/verify/make_verify_docs.py"
+  ],
+  "before_after": "11-18 지시대로 위치 줄은 따로 두지 않음. title 에 where 값이 없으면 머리 줄을 '[tg] title (where)' 로 붙임. 순서 오류명, 위치, AS-IS, TO-BE, GAP 유지",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/make_verify_docs.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T14:02:33+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T14:07:09+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 85/85개 파일 통과(PASS 1387, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1402"
+    },
+    {
+      "at": "2026-11-25T14:07:14+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T14:16:43+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 85/85개 파일 통과(PASS 1387, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T14:16:43+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js 2026-11-25T05:07:45.184Z(KST 14:07:45). 반영 전 미측정(권한 차단) → 반영 뒤 ALL OK 85/85 PASS 1387 FAIL 0. 추가로 python -m py_compile make_verify_docs.py 오류 출력 없음 · 변경 14개 파일 · 대상 목록 밖 변경 13개: Doc/verify/_TWO_SCREENS_DECISIONS.md, tools/Harness/gate_baseline.tsv, tools/VibeManager/WORKLOG.md, Doc/PERF_점검/UI/DMF0045/UI_속도점검_DMF0045_20261125_1411.sql, Doc/PERF_점검/UI/DMF0045/UI_속도점검_DMF0045_20261125_1411_검증.txt, Doc/PERF_점검/UI/DMF0045/_statements.json",
+      "log": ".vibe\\logs\\2026-11-25T14-07-15_claude_orch.log",
+      "sec": 307,
+      "costUsd": 0.6111462,
+      "files": [
+        "Doc/verify/_TWO_SCREENS_DECISIONS.md",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/make_verify_docs.py",
+        "tools/VibeManager/WORKLOG.md",
+        "Doc/PERF_점검/UI/DMF0045/UI_속도점검_DMF0045_20261125_1411.sql",
+        "Doc/PERF_점검/UI/DMF0045/UI_속도점검_DMF0045_20261125_1411_검증.txt",
+        "Doc/PERF_점검/UI/DMF0045/_statements.json",
+        "Doc/PERF_점검/UI/SCP0007/UI_속도점검_SCP0007_20261125_1411.sql",
+        "Doc/PERF_점검/UI/SCP0007/_statements.json",
+        "Doc/verify/BF0000/status.html",
+        "Doc/verify/BF0000/status.json",
+        "Doc/verify/DMF0045/cloud_perf/DMF0045_CLOUD_ANALYSIS_20261125.md",
+        "Doc/verify/DMF0045/cloud_perf/DMF0045_CLOUD_BOH_CHECK_20261125.sql",
+        "tools/Analysis/perf_check/perf_check.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 오류 행 설명은 간결한 오류명, 대상 위치(조회조건 항목 또는 탭, 그리드, 컬럼), AS-IS 표기·동작, TO-BE 표기·동작, GAP 순서로 씀 규칙을 tools/Harness/verify/make_verify_docs.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R84|tools/Harness/verify/make_verify_docs.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795582952416,
+  "autoFp": "f649e7ec1c",
+  "applyStartMs": 1795583234840,
+  "verifyJudge": {
+    "at": "2026-11-25T14:12:26+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 85/85개 파일 통과(PASS 1387, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1402",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795583803544,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "반영 뒤 node tools/VibeManager/test/run_all.js 실행: ALL OK 파일 85/85 PASS 1387 FAIL 0 258.2s. t_webview_syntax.js 는 run_all 안에서 PASS 19. 반영 전 실행은 셸 권한 검사 차단으로 미측정"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/make_verify_docs.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js 2026-11-25T05:07:45.184Z(KST 14:07:45). 반영 전 미측정(권한 차단) → 반영 뒤 ALL OK 85/85 PASS 1387 FAIL 0. 추가로 python -m py_compile make_verify_docs.py 오류 출력 없음",
+    "note": "_summary_text 저장 외 분기(717-720행): where 값이 title 에 없으면 머리 줄을 '● [tg] title (where)' 로 붙임. 위치 줄 추가 없음, 저장 행 형식 변경 없음. 반영 전 run_all 실행은 PowerShell, Bash 권한 검사(리디렉션, 복합 명령 차단)로 막혀 반영 전 값 미측정"
+  },
+  "snap": "prop_20261124014507_SELF"
+}

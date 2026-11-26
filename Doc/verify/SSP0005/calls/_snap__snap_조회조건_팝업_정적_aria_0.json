@@ -7,9 +7,9 @@
   "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 86,
-  "at": "2026-11-20T01:04:55.672Z",
-  "user": "minyonglee1",
+  "dur": 100,
+  "at": "2026-11-24T16:51:36.734Z",
+  "user": "seongwon.j",
   "test": "@snap 조회조건 팝업 정적 aria"
  },
  {
@@ -17,12 +17,12 @@
   "sheet": "calendar",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
-  "postData": "{\"startYyyymmdd\":\"20261120\",\"endYyyymmdd\":\"20271114\"}",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
   "status": 200,
-  "rows": 435,
-  "dur": 99,
-  "at": "2026-11-20T01:04:55.806Z",
-  "user": "minyonglee1",
+  "rows": 437,
+  "dur": 349,
+  "at": "2026-11-24T16:51:37.134Z",
+  "user": "seongwon.j",
   "test": "@snap 조회조건 팝업 정적 aria"
  }
 ]

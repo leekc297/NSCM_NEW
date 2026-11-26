@@ -1,53 +1,41 @@
 {
  "rule_id": "F8",
- "hash": "193e5f1fe906b13e",
+ "hash": "d4f4a837737e2631",
  "groups": [
   {
    "rows": [
-    "V-093e76aa",
-    "V-5dfa263a"
+    "EG-b14d4f80"
    ],
-   "why": "두 행 모두 기존 행을 수정 저장할 때 같은 감사 컬럼을 보고, Created는 그대로이고 Updated(LAST_UPDATE_DATE, LAST_UPDATED_BY=저장 계정)만 바뀌는지 확인하므로 기대 결과가 같다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-dd92edb2"
    ],
-   "why": "특정 키 행(40/CN003256_40-A/MIF489266C11-I03)의 저장 직전과 저장 뒤 값을 비교하는 행으로, 대상 행이 정해져 있어 다른 행과 묶지 않는다."
-  },
-  {
-   "rows": [
-    "EG-ea70c15d"
-   ],
-   "why": "대상 행(40/AZ00-A/MCMM9314U0A1-018)이 EG-dd92edb2와 다르므로 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-5dba8d06"
-   ],
-   "why": "신규 저장 행에서 CREATED_BY·LAST_UPDATED_BY가 저장 계정이고 두 날짜가 저장 시각인지 확인하는 행으로, 기존 행 수정(Created 불변)과 상태와 기대 결과가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-0f12b7d4"
    ],
-   "why": "감사 칸이 아니라 이력 테이블 행의 공통 컬럼 값이 대상이어서 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-10cb14ab"
+    "V-5dba8d06"
    ],
-   "why": "Reject 후 재요청한 건의 Reject Reason 공란과 Request Date 계산을 확인하는 행으로, 요소와 조건이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-38a9dd70"
+    "V-5dfa263a"
    ],
-   "why": "Auth Request 시점에 Approval Date가 생기지 않는지 확인하는 행으로, 요소와 조건이 다르다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:14:23",
- "cost": 0.0555421
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:35",
+ "cost": 0,
+ "open": 0
 }

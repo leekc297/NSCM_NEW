@@ -1,0 +1,45 @@
+{
+  "id": "20261126083526_SELF",
+  "at": "2026-11-26T08:35:26+09:00",
+  "ms": 1795649726113,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orch usercheck.js|목표초과화면의소요상위구간을runtimingjson마지막기록runverif",
+  "title": "사용자 지시 R234 같은 문제: tools/VibeManager/orch-usercheck.js:69 목표 초과 화면의 소요 상위 구간을 run_timing.json 마지막 기록(run_verify 도구 시간)에서만 뽑음. 같은 runId 의 step.end ms",
+  "evidence": "규칙 R234 \"CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림\" (원래 지시 2026-11-26 08:13 \"vm 에서 실행한 scp0005 의 checklist 작업에 전체 5시간34분 소요되었습니다. 현재 scp0005에 대한 checklist 건수현황 알려주세요. 그리고 5시간34분이 소요된 부분에 대해서 전체 세션별로 시간을 분리해서 많이 시간이 소요된 부분을 분석해서 개선할 수 있도록\") · tools/VibeManager/orch-usercheck.js:69 const top = last && Array.isArray(last.top) ? last.top.slice(0, 3).map(t => `${t.stage} ${t.tool} ${t.min}분`).join(', ') : '구간 소요표 없음';",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js"
+  ],
+  "before_after": "events.jsonl 에서 e.runId 의 step.end, step.sub, claude.end 소요를 모으고 run_at 이 체인 구간 안에 있는 run_timing.json 만 합쳐 상위 구간을 정함. 구간이 없으면 '미측정'으로 표시함",
+  "verify": "node --check tools/VibeManager/orch-usercheck.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-usercheck.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-D2",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:46:47+09:00",
+      "by": "S-D2",
+      "what": "반영 완료(세션 직접 보완) · orch-usercheck.js:77-97 소요 상위 구간 = 같은 runId step.end, step.sub, claude.end + 체인 구간 안 run_timing.json 전부, 없으면 미측정 · t_orch_usercheck.js ALL PASS 186건 2026-11-26 15:45:26 · 실제 원장 SCP0005 상위 구간 단계 6 93.5분, 단계 1 89.9분, 단계 7 88.1분(15:45:52)"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림 규칙을 tools/VibeManager/orch-usercheck.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R234|tools/VibeManager/orch-usercheck.js",
+  "kind": "detector",
+  "claimedBy": "S-D2",
+  "waitNote": "",
+  "appliedMs": 1795675607467
+}

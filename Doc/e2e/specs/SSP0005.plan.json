@@ -275,13 +275,13 @@
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
+      "EXCEL",
       "DELETE",
-      "SAVE",
-      "EDIT",
-      "INSERT",
-      "GET_SCP_PERIOD",
       "SEARCH",
-      "EXCEL"
+      "EDIT",
+      "SAVE",
+      "INSERT",
+      "GET_SCP_PERIOD"
     ],
     "CAPA Planner": [
       "INSERT",
@@ -292,112 +292,112 @@
       "DELETE"
     ],
     "DM ADMIN": [
-      "GET_SCP_PERIOD",
+      "DELETE",
       "EXCEL",
-      "SEARCH",
-      "SAVE",
+      "GET_SCP_PERIOD",
       "INSERT",
-      "DELETE"
+      "SAVE",
+      "SEARCH"
     ],
     "DM Planner": [
+      "SEARCH",
       "GET_SCP_PERIOD",
       "EXCEL",
-      "SAVE",
-      "DELETE",
       "INSERT",
-      "SEARCH"
+      "DELETE",
+      "SAVE"
     ],
     "DM Viewer": [
-      "DELETE",
       "INSERT",
-      "SAVE",
-      "EXCEL",
       "GET_SCP_PERIOD",
-      "SEARCH"
-    ],
-    "FP Planner": [
+      "SAVE",
       "EXCEL",
       "SEARCH",
-      "SAVE",
-      "GET_SCP_PERIOD",
-      "INSERT",
       "DELETE"
     ],
-    "FP Viewer": [
-      "DELETE",
+    "FP Planner": [
       "INSERT",
+      "DELETE",
+      "SEARCH",
+      "EXCEL",
+      "SAVE",
+      "GET_SCP_PERIOD"
+    ],
+    "FP Viewer": [
       "EXCEL",
       "GET_SCP_PERIOD",
       "SEARCH",
+      "DELETE",
+      "INSERT",
       "SAVE"
     ],
     "SCM PI Admin": [
-      "SEARCH",
-      "INSERT",
-      "GET_SCP_PERIOD",
       "EXCEL",
-      "EDIT",
-      "DELETE",
-      "SAVE"
-    ],
-    "SCM Viewer": [
-      "DELETE",
+      "GET_SCP_PERIOD",
       "INSERT",
       "SAVE",
+      "SEARCH",
+      "DELETE",
+      "EDIT"
+    ],
+    "SCM Viewer": [
+      "SAVE",
+      "DELETE",
+      "INSERT",
       "EXCEL",
       "GET_SCP_PERIOD",
       "SEARCH"
     ],
     "SCP Planner": [
-      "INSERT",
       "SAVE",
       "DELETE",
-      "GET_SCP_PERIOD",
       "SEARCH",
-      "EXCEL"
+      "GET_SCP_PERIOD",
+      "EXCEL",
+      "INSERT"
     ],
     "SCP Tester": [
-      "SAVE",
-      "DELETE",
-      "INSERT",
-      "SEARCH",
-      "EXCEL",
-      "GET_SCP_PERIOD"
-    ],
-    "SSP ADMIN": [
-      "EXCEL",
-      "DELETE",
-      "INSERT",
       "SEARCH",
       "GET_SCP_PERIOD",
-      "SAVE"
+      "EXCEL",
+      "SAVE",
+      "DELETE",
+      "INSERT"
+    ],
+    "SSP ADMIN": [
+      "SEARCH",
+      "GET_SCP_PERIOD",
+      "EXCEL",
+      "DELETE",
+      "SAVE",
+      "INSERT"
     ],
     "SSP Planner": [
+      "DELETE",
       "EDIT",
       "GET_SCP_PERIOD",
       "INSERT",
-      "DELETE",
-      "EXCEL",
+      "SAVE",
       "SEARCH",
-      "SAVE"
+      "EXCEL"
     ],
     "SSP Viewer": [
-      "DELETE",
       "INSERT",
       "SEARCH",
       "GET_SCP_PERIOD",
       "EXCEL",
+      "DELETE",
       "SAVE"
     ]
   },
   "menuBtnCodes": [
+    "EXCEL",
     "DELETE",
-    "SAVE",
-    "EDIT",
-    "INSERT",
-    "GET_SCP_PERIOD",
     "SEARCH",
-    "EXCEL"
+    "EDIT",
+    "SAVE",
+    "INSERT",
+    "GET_SCP_PERIOD"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

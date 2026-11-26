@@ -39,10 +39,10 @@ export const isNewRow = (row: Row): boolean => s(row.CRUD_TYPE) === CRUD_TYPE.IN
 //   - 권한 없음(isEditMode=false): 신규행이 아니면 전체 잠금(gridSignal#7 LockColumn 0~Max).
 //   - 권한 있음(isEditMode=true) 또는 신규행: ALWAYS_LOCKED_COLUMNS(신규행은
 //     NEW_ROW_LOCKED_COLUMNS, PRE_KEY_VALUES 제외 — design 03 §1 #23 각주)만 항상 잠금, 나머지는
-//     EDITABLE_COLUMNS 화이트리스트로 편집 허용. ITEM_ID 는 팝업 전용(더블클릭) — 인라인 편집 금지.
+//     EDITABLE_COLUMNS 화이트리스트로 편집 허용. ITEM_ID(헤더 Model)는 키 입력과 더블클릭 팝업을 함께
+//     허용한다 — 고객 테스트 요청(2026-11-23), 메타 FPTextModal(08_fix_item_model_keyin.sql), 자매 SCP0127/0128/0131 동형.
 export const isCellEditable = (binding: string, row: Row, isEditMode: boolean): boolean => {
   if (!(EDITABLE_COLUMNS as readonly string[]).includes(binding)) return false;
-  if (binding === 'ITEM_ID') return false;
   const newRow = isNewRow(row);
   if (!isEditMode && !newRow) return false;
   const lockedRange = newRow

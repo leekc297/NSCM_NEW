@@ -25,6 +25,39 @@ export interface SaveResult {
   message?: string;
 }
 
+// 커서/칸 이름은 서버가 대소문자를 바꿔 내려줄 수 있어 대소문자 구분 없이 찾는다(SCP0132 저장 판정과 동일).
+const pickIgnoreCase = (obj: unknown, ...keys: string[]): unknown => {
+  if (!obj || typeof obj !== 'object') return undefined;
+  const entries = Object.entries(obj as Record<string, unknown>);
+  for (const key of keys) {
+    const hit = entries.find(([k]) => k.toUpperCase() === key.toUpperCase());
+    if (hit) return hit[1];
+  }
+  return undefined;
+};
+
+const firstRow = (cursor: unknown): unknown => (Array.isArray(cursor) ? cursor[0] : undefined);
+
+// SP 의 업무 거부 판정 — PKG_SCP0127.P_SCP0127_SAVE 는 예외를 밖으로 던지지 않고 EXCEPTION WHEN OTHERS
+//   에서 잡아(BODY:515~541 실측) 결과 커서에 담아 "정상 종료"한다. 그래서 HTTP code 는 성공이고
+//   O_RC1.RESULT_CODE='F' / O_RESULT_CURSOR.RESULT_CODE='1' + SQLERRM 로만 실패가 온다 —
+//   종전엔 res.data.code 만 봐서 ORA-20010(MSG00458 모델무효·중복 등)에도 "성공적으로 저장되었습니다"
+//   토스트가 떴다(사용자 신고 2026-11-03·2026-11-24). 성공은 '0'/'S', 실패는 그 외.
+//   메시지는 SQLERRM 이라 'ORA-20xxx: ' 머리를 떼어 업무 문구(MSG00458 'MODEL:…')만 보인다.
+const rejectedMessage = (result: unknown): string | undefined => {
+  const head = firstRow(pickIgnoreCase(result, 'O_RESULT_CURSOR'));
+  const headCode = safeString(pickIgnoreCase(head, 'RESULT_CODE')).trim();
+  const rc1 = firstRow(pickIgnoreCase(result, 'O_RC1'));
+  const rc1Code = safeString(pickIgnoreCase(rc1, 'RESULT_CODE')).trim();
+  if ((headCode === '' || headCode === '0') && (rc1Code === '' || rc1Code === 'S')) {
+    return undefined;
+  }
+  const message =
+    safeString(pickIgnoreCase(head, 'RESULT_MESSAGE')).trim() ||
+    safeString(pickIgnoreCase(rc1, 'RESULT_CNT')).trim();
+  return message.replace(/^ORA-20\d{3}:\s*/, '').trim() || 'Error';
+};
+
 // SAVE SP 의 pre-image 복합키 8컬럼(UPDATE/DELETE WHERE) ↔ 그리드 UPPERCASE 컬럼명.
 //   SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY PK = DIVISION_ID/OPMZ_PLAN_GR_ID/SCM_SITE_ID/STAGE/VALUE_TYPE/
 //   ITEM_ID/FROM_YYYYMMDD/TO_YYYYMMDD(SP 본문 WHERE 실측).
@@ -109,11 +142,14 @@ export const submitPrecedeSafetyStockDaySave = async <T extends WijmoRowItem>(
       `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
       payload
     );
-    // false-success 차단 — 인터셉터가 500 도 resolve 하고, SP 실패는 result.code != 0 로만 온다.
+    // false-success 차단 — 인터셉터가 500 도 resolve 하므로 먼저 전송계층 실패(HTTP/code)를 거른다.
     if (res.status >= 400 || Number(res.data?.code)) {
       const reason = (res.data as { message?: string })?.message?.trim();
       return { ok: false, message: reason };
     }
+    // SP 가 예외를 삼키고 결과 커서에 담아 "정상 종료"하므로(BODY:515~541) 결과 커서의 RESULT_CODE 를 본다.
+    const rejected = rejectedMessage((res.data as { result?: unknown })?.result);
+    if (rejected) return { ok: false, message: rejected };
     return { ok: true };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : undefined };

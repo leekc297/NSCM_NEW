@@ -1,0 +1,198 @@
+{
+  "id": "20261124012049_SELF_4",
+  "at": "2026-11-24T01:20:49+09:00",
+  "ms": 1795450849467,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|n줄ai지시문에폴더이름을직접적음",
+  "title": "사용자 지시 R83 같은 문제: tools/VibeManager/quick.json:1378 1378, 1390줄 AI 지시문에 폴더 이름을 직접 적음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/VibeManager/quick.json:1378 Doc/verify/${id}/fixlist.csv(= Doc/UI_CHECKLIST/${id}_*_ActionItemList_v<최신>.xlsx 의 기계용 사본",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "${checklistDir} 치환 변수로 바꾸고 quick 프롬프트 조립 때 harness.json 값으로 채움",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T07:34:58+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T07:38:47+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 35개 파일 통과, 시험 82/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 실패 28 · 반영 전부터 어긋난 항목 7건 · 백업 태그 20261125_self0735"
+    },
+    {
+      "at": "2026-11-25T07:38:50+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T07:52:31+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 35개 파일 통과, 시험 82/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 실패 28 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T07:52:31+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-25 07:39:40 반영 전 run_all.js: SOME FAIL 파일 82/84 PASS 1361 FAIL 0 → 2026-11-25 07:48:14 반영 뒤 run_all.js: SOME FAIL 파일 82/84 PASS 1361 FAIL 0(같은 2파일, 반영 전부터 실패), t_webview_syntax.js ALL PASS. 치환 확인: 지시문 2건(🛠️ 수동 보완, 🧯 자동 보완)에 ${checklistDir} 있음, SCP0104 로 조립하면 'Doc/UI_CHECKLIST/SCP0104_*_Act · 변경 82개 파일 · 대상 목록 밖 변경 81개: Doc/gen/SCP0005/FULLRUN.md, Doc/verify/SCP0005/_dedup/rule_A1.json, Doc/verify/SCP0005/_dedup/rule_A5.json, Doc/verify/SCP0005/_dedup/rule_A6.json, Doc/verify/SCP0005/_dedup/rule_A7.json, Doc/verify/SCP0005/_dedup/rule_B3.json",
+      "log": ".vibe\\logs\\2026-11-25T07-38-52_claude_orch.log",
+      "sec": 582,
+      "costUsd": 1.3855422999999998,
+      "files": [
+        "Doc/gen/SCP0005/FULLRUN.md",
+        "Doc/verify/SCP0005/_dedup/rule_A1.json",
+        "Doc/verify/SCP0005/_dedup/rule_A5.json",
+        "Doc/verify/SCP0005/_dedup/rule_A6.json",
+        "Doc/verify/SCP0005/_dedup/rule_A7.json",
+        "Doc/verify/SCP0005/_dedup/rule_B3.json",
+        "Doc/verify/SCP0005/_dedup/rule_B4.json",
+        "Doc/verify/SCP0005/_dedup/rule_D5.json",
+        "Doc/verify/SCP0005/_dedup/rule_E1.json",
+        "Doc/verify/SCP0005/_dedup/rule_E2.json",
+        "Doc/verify/SCP0005/_dedup/rule_E5.json",
+        "Doc/verify/SCP0005/_dedup/rule_F4.json",
+        "Doc/verify/SCP0005/_dedup/rule_F8.json",
+        "Doc/verify/SCP0005/_dedup/rule_G4.json",
+        "Doc/verify/SCP0005/_dedup/rule_G5.json",
+        "Doc/verify/SCP0005/_dedup/rule_H4.json",
+        "Doc/verify/SCP0005/_dedup/rule_H6.json",
+        "Doc/verify/SCP0005/_dedup/rule_H8.json",
+        "Doc/verify/SCP0005/_dedup/rule_M1.json",
+        "Doc/verify/SCP0005/_dedup/rule_X-ROW.json",
+        "Doc/verify/SCP0005/_timing.csv",
+        "Doc/verify/SCP0005/combo_live.csv",
+        "Doc/verify/SCP0005/coverage.csv",
+        "Doc/verify/SCP0005/coverage.json",
+        "Doc/verify/SCP0005/dedup_screen.csv",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/i18n_lang.csv",
+        "Doc/verify/SCP0005/llm_cache.json",
+        "Doc/verify/SCP0005/llm_review.csv",
+        "Doc/verify/SCP0005/llm_review.json",
+        "Doc/verify/SCP0005/llm_review.md",
+        "Doc/verify/SCP0005/llm_review_base.json",
+        "Doc/verify/SCP0005/llm_rowcache.json",
+        "Doc/verify/SCP0005/llm_usage.csv",
+        "Doc/verify/SCP0005/mapping_trace.csv",
+        "Doc/verify/SCP0005/mapping_trace.md",
+        "Doc/verify/SCP0005/mapping_trace_checks.csv",
+        "Doc/verify/SCP0005/mapping_trace_instances.csv",
+        "Doc/verify/SCP0005/mapping_trace_summary.json",
+        "Doc/verify/SCP0005/master_sweep.csv",
+        "Doc/verify/SCP0005/run_timing.json",
+        "Doc/verify/SCP0005/run_verify.result.json",
+        "Doc/verify/SCP0005/sort_ci.csv",
+        "Doc/verify/SCP0005/source_baseline.json",
+        "Doc/verify/SCP0005/unverified_history.csv",
+        "Doc/verify/SCP0005/unverified_state.json",
+        "Doc/verify/SCP0005/unverified_triage.csv",
+        "Doc/verify/SCP0005/unverified_triage.json",
+        "Doc/verify/SCP0005/unverified_triage.md",
+        "Doc/verify/SCP0005/verify_ledger.csv",
+        "Doc/verify/SCP0005/work_ledger.csv",
+        "Doc/verify/SCP0005/work_ledger.md",
+        "Doc/verify/SCP0005/work_ledger_summary.json",
+        "Doc/verify/_app_level_results.csv",
+        "Doc/verify/_llm_effect.csv",
+        "Doc/verify/_llm_usage.csv",
+        "tools/VibeManager/quick.json",
+        "tools/VibeManager/workbench.js",
+        "Doc/verify/SCP0005/ai_recommend.csv",
+        "Doc/verify/SCP0005/ai_recommend_base.json",
+        "Doc/verify/SCP0005/llm_effect.csv",
+        "Doc/verify/SCP0005/unverified_settle.json",
+        "Doc/verify/_engine_fix.lock",
+        "Doc/verify/_src_store/19/19f3152aa9a05b2e8ff3a646a1b6e4ac740b7fc4",
+        "Doc/verify/_src_store/1e/1ea403908f1be041cb9a1a6c1faeb576f29b2845",
+        "Doc/verify/_src_store/29/2967c4e9963f47d9b417ca3152de0cee39c35c81",
+        "Doc/verify/_src_store/2e/2ece764223259c1ff69bc1bd9788675c7532bc09",
+        "Doc/verify/_src_store/2f/2f9bd40c1099ce40265211ab1640154809f42f40",
+        "Doc/verify/_src_store/36/36c241b28e48311c1a875ac6ee42e221351eb011",
+        "Doc/verify/_src_store/76/762260c376c99811230fe80cee64d7515ae3d5e1",
+        "Doc/verify/_src_store/7d/7d009fe8e613ebb4d81b03de9e909329015e92a0",
+        "Doc/verify/_src_store/83/83b6bfb2b51bdf3267d7636687acf9e85bcaefc3",
+        "Doc/verify/_src_store/84/841013f40c126d1eedb41d90ce76d260ea2e0189",
+        "Doc/verify/_src_store/91/91606e735f772c0ac06bb28fb7010a6bd6ee3019",
+        "Doc/verify/_src_store/ac/ac9622267cd846ab4def7be2e63e62ce078e43d0",
+        "Doc/verify/_src_store/c0/c0a760b99706cdf9c9a8342f06a2198e4ae3e0fc",
+        "Doc/verify/_src_store/c1/c152ef1ba9abb44e9bc002033e4674f2f8f66a0c",
+        "Doc/verify/_src_store/d7/d787ae31789ef2ddceeaa2dbbce7fb22a3b5cb6c",
+        "Doc/verify/_src_store/e7/e763e3f9c11abec1f7a5ca688332bd128a2f3d96",
+        "Doc/verify/_src_store/ee/ee0886ca29ee46ebac4498675ce2ac63f4e10a93",
+        "Doc/verify/_src_store/f7/f773163ba22a0ad59ea86551acd870ccde33ed5d",
+        "Doc/verify/_src_store/f9/f9840e4b04b482986e478fa12402f53785aca612"
+      ]
+    },
+    {
+      "at": "2026-11-25T09:28:47+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T09:27:55+09:00"
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795559698020,
+  "autoFp": "381bccec30",
+  "applyStartMs": 1795559930305,
+  "verifyJudge": {
+    "at": "2026-11-25T07:48:36+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 35개 파일 통과, 시험 82/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 실패 28"
+  },
+  "selfTag": "20261125_self0735",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795560751874,
+  "synced": [
+    "workbench.js",
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js: 반영 전 '파일 82/84 PASS 1361 FAIL 0 227s' → 반영 뒤 '파일 82/84 PASS 1361 FAIL 0 229.6s'. 실패 2파일 t_chain_abort.js(exit 1, Node.js v24.22.2), t_wb_load.js(LOAD_FAIL extension.js)는 반영 전부터 실패. node tools/VibeManager/test/t_webview_syntax.js 반영 뒤 'ALL PASS'(19건)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json",
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-25 07:39:40 반영 전 run_all.js: SOME FAIL 파일 82/84 PASS 1361 FAIL 0 → 2026-11-25 07:48:14 반영 뒤 run_all.js: SOME FAIL 파일 82/84 PASS 1361 FAIL 0(같은 2파일, 반영 전부터 실패), t_webview_syntax.js ALL PASS. 치환 확인: 지시문 2건(🛠️ 수동 보완, 🧯 자동 보완)에 ${checklistDir} 있음, SCP0104 로 조립하면 'Doc/UI_CHECKLIST/SCP0104_*_ActionItemList_v<최신>' 이 나옴, ${checklistDir} 남음 false, UI_CHECKLIST 를 직접 적은 지시문 0건",
+    "note": "quick.json 1748, 1760줄(개선안 표기 1378, 1390) 지시문의 'Doc/UI_CHECKLIST/' → '${checklistDir}/'. workbench.js: substQ 가 vars 에 checklistDir 이 없고 root 가 있으면 checklistRel(root) 로 채움. checklistRel 은 기존 docPaths(harness.json paths.checklistDir 또는 checklistDir, 값이 없으면 Doc/UI_CHECKLIST)를 씀. prompt-panel.js subst 는 Claude 항목이 106줄에서 워크벤치로 넘어가 112줄까지 오지 않아 고치지 않음. 추가 확인 후보: quick.json outputs 경로 12곳(131, 132, 271, 272, 930, 931, 1200, 1201, 1465, 1466, 1780, 1781줄)에 Doc/UI_CHECKLIST 를 직접 적음. job-runner.js 233줄이 ${id} 만 치환하므로 함께 고쳐야 함. AI 지시문이 아니어서 이번 범위에서 뺌"
+  },
+  "snap": "prop_20261124012049_SELF_4",
+  "effectiveMs": 1795566475935,
+  "effectiveAt": "2026-11-25T09:27:55+09:00"
+}

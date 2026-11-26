@@ -1,0 +1,1 @@
+SELECT j.name job, j.enabled, st.step_id, st.step_name, LEFT(REPLACE(REPLACE(st.command,CHAR(13),' '),CHAR(10),' '),200) cmd FROM msdb.dbo.sysjobs j JOIN msdb.dbo.sysjobsteps st ON st.job_id=j.job_id WHERE st.command LIKE '%MKT_FCST_SALES_RESULT%' OR st.command LIKE '%PR_DM_DNM_SALES_RESULT%' OR j.name LIKE '%SALES_RESULT%' ORDER BY 1,3

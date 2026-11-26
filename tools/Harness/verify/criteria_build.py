@@ -53,6 +53,17 @@ def P(*a):
     return os.path.join(ROOT, *a)
 
 
+def checklist_dir():
+    """개선안 20261124012048_SELF_2(R83): CheckList 폴더 = harness.json paths.checklistDir 1곳(make_verify_docs·verify_if_stale 와 같은 값) · 없으면 Doc/UI_CHECKLIST"""
+    try:
+        with open(P('tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            hp = (json.load(f) or {}).get('paths')
+    except (OSError, ValueError):
+        hp = None
+    d = (hp.get('checklistDir') if isinstance(hp, dict) else None) or 'Doc/UI_CHECKLIST'
+    return os.path.normpath(d if os.path.isabs(d) else os.path.join(ROOT, d))
+
+
 def read_csv(p):
     try:
         with open(p, encoding='utf-8-sig', newline='') as f:
@@ -525,7 +536,8 @@ def user_overrides(mid):
     od = P('Doc', 'verify', mid, 'criteria'); up = os.path.join(od, 'criteria_user.csv')
     have = {x['crit_id']: x for x in read_csv(up)}
     import glob
-    files = sorted({f for pat in (P('Doc', 'UI_CHECKLIST', f'{mid}_*_CheckList_v*.xlsx'), P('Doc', 'UI_CHECKLIST', 'old', f'{mid}_*_CheckList_v*.xlsx'))
+    cl = checklist_dir()
+    files = sorted({f for pat in (os.path.join(cl, f'{mid}_*_CheckList_v*.xlsx'), os.path.join(cl, 'old', f'{mid}_*_CheckList_v*.xlsx'))
                     for f in glob.glob(pat) if not os.path.basename(f).startswith('~$')}, key=os.path.getmtime)
     seen = {x.get('file') for x in have.values()}
     changed = False

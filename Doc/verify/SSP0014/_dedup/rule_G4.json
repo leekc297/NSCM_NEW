@@ -1,323 +1,197 @@
 {
  "rule_id": "G4",
- "hash": "61ea61cfb7742db1",
+ "hash": "ce6643c0aa429c02",
  "groups": [
-  {
-   "rows": [
-    "V-4579c974",
-    "V-9aa5df79"
-   ],
-   "why": "대상(조회조건 명칭·순서와 대응 컬럼명)과 기대 문장이 똑같고 출처만 CONFIRMED와 GENERAL로 다르다."
-  },
   {
    "rows": [
     "EG-14089817"
    ],
-   "why": "UserInfoPopup 조건 라벨을 USER_ID 셀에서 열어 확인하는 행이다. 여는 셀이 다르면 다른 요소로 보고 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "EG-e374de38"
-   ],
-   "why": "UserInfoPopup 조건 라벨을 MAIL_USER1 셀에서 열어 확인하며, 여는 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-f5b6ec2a"
-   ],
-   "why": "UserInfoPopup 조건 라벨을 MAIL_USER2 셀에서 열어 확인하며, 여는 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-f421a512"
-   ],
-   "why": "UserInfoPopup 조건 라벨을 MAIL_USER3 셀에서 열어 확인하며, 여는 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-ff4e5bbc"
-   ],
-   "why": "UserInfoPopup 조건 라벨을 MAIL_USER4 셀에서 열어 확인하며, 여는 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-78d83b3e"
-   ],
-   "why": "UserInfoPopup 조건 라벨을 MAIL_USER5 셀에서 열어 확인하며, 여는 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-8aa19c25"
-   ],
-   "why": "UserInfoPopup 조건 라벨을 PART_LEADER 셀에서 열어 확인하며, 여는 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-f1e1feb6"
-   ],
-   "why": "UserInfoPopup 조건 라벨을 TEAM_LEADER 셀에서 열어 확인하며, 여는 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-4d1c5833"
-   ],
-   "why": "USER_ID 셀에서 연 UserInfoPopup 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-34a22e84"
-   ],
-   "why": "MAIL_USER1 셀에서 연 팝업 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-abd5cd31"
-   ],
-   "why": "MAIL_USER2 셀에서 연 팝업 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-3b16168f"
-   ],
-   "why": "MAIL_USER3 셀에서 연 팝업 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-38155c4c"
-   ],
-   "why": "MAIL_USER4 셀에서 연 팝업 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-5ed25769"
-   ],
-   "why": "MAIL_USER5 셀에서 연 팝업 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-9315f966"
-   ],
-   "why": "PART_LEADER 셀에서 연 팝업 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-c483aa3e"
-   ],
-   "why": "TEAM_LEADER 셀에서 연 팝업 조건이 입력 가능한지 확인하며, 셀이 다르므로 단독이다."
-  },
-  {
-   "rows": [
-    "EG-780f38de"
-   ],
-   "why": "다른 팝업(SCM0002_ItembyDivisionPopup)의 조건 라벨을 확인하므로 단독이다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-1aa6e0ca"
    ],
-   "why": "EG271 규칙의 Div·GROUP 분기를 확인한다. EG275와 문장은 같아도 규칙이 달라 단독으로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-34a22e84"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-3b16168f"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-4b64fd2f"
    ],
-   "why": "EG275 규칙의 Div·GROUP 분기를 확인한다. EG271과 규칙이 달라 단독으로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-4d1c5833"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-5ed25769"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-780f38de"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-78d83b3e"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-8aa19c25"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-9315f966"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-abd5cd31"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-c483aa3e"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-cb284d59"
    ],
-   "why": "Year와 Version의 초기값을 함께 다루는 규칙 문장으로, 다른 행과 기대가 다르다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-e374de38"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-f1e1feb6"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-f421a512"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-f5b6ec2a"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "ES-fbeca924"
    ],
-   "why": "조회조건 라벨 전체를 E2E smoke로 펼쳐 확인하는 행으로, 확인 방법이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-15987db0"
    ],
-   "why": "대조표 추적 행(D00-1-003 usrConditionPanel1)으로 성질이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-2bf7ac08"
    ],
-   "why": "대조표 추적 행(UC-06 콤마 구분 다중 입력)으로 성질이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-760b6bc7"
    ],
-   "why": "대조표 추적 행(SetDivisionAuthCheck)으로 성질이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-bc8bfe56"
    ],
-   "why": "대조표 추적 행(btnItemId 버튼)으로 성질이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-f29960d8"
    ],
-   "why": "대조표 추적 행(D00-1-001 usrLayoutControl2)으로 성질이 달라 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-012c3ce8"
-   ],
-   "why": "SearchCondition 공통 컴포넌트의 너비·정렬이라는 고유 기대를 확인한다."
-  },
-  {
-   "rows": [
-    "V-0274c0d7"
-   ],
-   "why": "팝업 Model 조건 입력과 End Customer 셀병합이라는 고유 기대를 확인한다."
-  },
-  {
-   "rows": [
-    "V-0981a6a6"
-   ],
-   "why": "Div 40에서 Project 조건이 표시되고 비활성인지 확인하는 고유 행이다."
-  },
-  {
-   "rows": [
-    "V-11eba802"
-   ],
-   "why": "Cust Group 조건과 Div 전환을 확인하며, 조회 전·후 상태가 함께 들어간 고유 행이다."
-  },
-  {
-   "rows": [
-    "V-20223cea"
-   ],
-   "why": "Ver. 기본 빈값을 확인한다. Year 기본값과는 요소와 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-21bcaaa6"
    ],
-   "why": "From Site 조건(순서 3)의 표준 일치 여부를 확인한다."
-  },
-  {
-   "rows": [
-    "V-2465219e"
-   ],
-   "why": "Module 다중선택과 Sub Module 미표시를 확인하는 고유 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-4f3576e3"
    ],
-   "why": "이 화면의 돋보기 위치를 확인한다. Version 돋보기 행은 대상 조건이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-5b295952"
    ],
-   "why": "Model/Nickname 조건(순서 5)의 표준 일치 여부를 확인한다."
-  },
-  {
-   "rows": [
-    "V-6f9ddc0f"
-   ],
-   "why": "Version 조건 폭 축소만 기대한다. 팝업 폭까지 포함하는 V-e3792330과는 기대가 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-7d11c40f"
-   ],
-   "why": "Version을 선택한 뒤의 표시값을 확인하므로 상태와 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-99533221"
    ],
-   "why": "Operation group 조건(순서 2)의 표준 일치 여부를 확인한다."
-  },
-  {
-   "rows": [
-    "V-ae3baab9"
-   ],
-   "why": "Year 기본값이 현재연도인지 확인하는 고유 행이다."
-  },
-  {
-   "rows": [
-    "V-ba72bbec"
-   ],
-   "why": "Ver.Cutoff 팝업의 조건 배치와 크기를 확인하는 고유 행이다."
-  },
-  {
-   "rows": [
-    "V-bd62c433"
-   ],
-   "why": "Version 조건 돋보기 위치를 확인하며, 대상 조건이 특정되어 있어 단독이다."
-  },
-  {
-   "rows": [
-    "V-beaef009"
-   ],
-   "why": "Module 콤보와 Insert 상태 등 여러 고유 기대를 확인한다."
-  },
-  {
-   "rows": [
-    "V-c2cc5b7e"
-   ],
-   "why": "Sum 행 라벨과 체크박스 비노출을 확인하는 고유 행이다."
-  },
-  {
-   "rows": [
-    "V-ca8a8f10"
-   ],
-   "why": "Plan Type 조건이 Div 우측에 있는지 확인하는 고유 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-dbb8ca08"
    ],
-   "why": "Div 조건(순서 1)의 표준 일치 여부를 확인한다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-decd18f7"
    ],
-   "why": "메인 User ID(Name) 조건(순서 6)의 표준 일치 여부를 확인하며, 팝업 조건과는 다른 요소다."
-  },
-  {
-   "rows": [
-    "V-e3792330"
-   ],
-   "why": "Version 조건 축소에 팝업 Description 폭 확대까지 기대하므로 V-6f9ddc0f와 기대가 다르다."
-  },
-  {
-   "rows": [
-    "V-ee0e9f87"
-   ],
-   "why": "ESS(82)에서 Plant Site가 비활성인지 확인하는 고유 행이다."
-  },
-  {
-   "rows": [
-    "V-f6be18fa"
-   ],
-   "why": "화면을 열 때 Division이 권한 기준으로 자동 선택되는지 확인하는 고유 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-fe02566e"
    ],
-   "why": "Active 조건(순서 4)의 표준 일치 여부를 확인한다."
-  },
-  {
-   "rows": [
-    "V-ff3dfb86"
-   ],
-   "why": "aria 스냅샷의 기간 칸 형상을 비교하는 행으로, 확인 방법이 다르다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 09:41:05",
- "cost": 0.1800379
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:35",
+ "cost": 0,
+ "open": 0
 }

@@ -49,6 +49,9 @@ def crud_verdict(ann, errors, status):
     if RX_EXC.search(both):
         return 'ERROR', f"[측정 전제 미충족: 실행 예외] 저장 기능 판정 못 함 · {ann[:300]} · 오류: {errs[:300]}"
     parts = [p.strip() for p in re.split(r'\|\||<br>|\n', errs) if p.strip()]
+    # 2026-11-25 T559(SCP0005 ES-88905017): 저장 요청 0건 + 시험이 필수 칸을 못 채운 표시(crud.ts T558) = 측정 전제 미충족(ERROR) · 다른 단언 오류가 섞여도 FAIL 로 적지 않음
+    if d.get('saveCalls') in ('0', None) and '[시험 입력 미충족]' in both:
+        return 'ERROR', f"[측정 전제 미충족: 시험 필수 칸 입력 실패 · 저장 요청 없음(saveCalls={d.get('saveCalls', '?')})] · {ann[:300]} · 오류: {errs[:300]}"
     if (d.get('saveCalls') in ('0', None) or d.get('saved') == 'N') and (not parts or all(RX_MARKER.search(p) for p in parts)):
         return 'ERROR', f"[측정 전제 미충족: 시험 행 저장 요청 없음(saveCalls={d.get('saveCalls', '?')})] 화면 검증·필수 칸에 막혔을 수 있음 · {ann[:300]} · 오류: {errs[:300]}"
     return 'FAIL', f"저장 왕복 실패 · {ann[:300]} · 오류: {errs[:400]}"

@@ -1,0 +1,22 @@
+{
+  "id": "20261123_140326_R12_ALL_3",
+  "at": "2026-11-23T14:03:26+09:00",
+  "ms": 1795410206505,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U3 조치 기록 없는 열린 사건 1건",
+  "screen": "",
+  "sig": "R12|S13|U3|idleInc",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261123_115110_R12_ALL R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 12건 (132분)",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U3|idleInc",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "open",
+  "notice": false,
+  "actions": []
+}

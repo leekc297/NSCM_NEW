@@ -1,0 +1,35 @@
+﻿BEGIN
+        UPDATE SY_XIF_ERP_PRODUCTION_PLAN_S
+        SET    SY_XIF_ERP_PRODUCTION_PLAN_S.TRANSFER_FLAG = 'N'
+        WHERE  @USER_ID=@USER_ID
+        AND FP_PLAN_ID IN (@PLAN_LT)
+        ;
+        
+        UPDATE SY_XIF_MES_WO_S
+        SET    SY_XIF_MES_WO_S.IF_FLAG = 'N'
+        WHERE  @USER_ID=@USER_ID
+        AND PLAN_ID IN (@PLAN_LT)
+
+        ;
+        
+        UPDATE SY_XIF_MES_DAILY_PP_S
+        SET    SY_XIF_MES_DAILY_PP_S.IF_FLAG = 'N'
+        WHERE  @USER_ID=@USER_ID
+        AND PLAN_ID IN (@PLAN_LT)
+        ;
+        
+        UPDATE SCM_FP_PLAN_DETAIL_H
+        SET    MES_TRANSFER_FLAG = 'Y'
+              ,MES_TRANSFER_TIME = GETDATE()
+        WHERE  PLAN_DATE     = @PLAN_DATE
+        AND PLAN_ID IN (@PLAN_LT)
+        ;
+        
+        UPDATE SCM_FP_PLAN_GROUP_DETAIL_H
+        SET    MES_TRANSFER_FLAG = 'Y'
+              ,MES_TRANSFER_TIME = GETDATE()
+        WHERE  PLAN_DATE     = @PLAN_DATE
+        AND PLAN_ID IN (@PLAN_LT)
+        ;
+        
+      END;

@@ -1,7 +1,10 @@
+import { Aggregate } from '@mescius/wijmo';
 import type { GridPanel } from '@mescius/wijmo.grid';
 import {
+  type Column,
   type FlexGrid,
   AllowMerging,
+  GroupRow,
   CellRange,
   CellType,
   DataMap,
@@ -130,7 +133,9 @@ import {
   bucketBitsOfDay,
   divideByDate,
   divideByMonth,
+  divideByMonthAfterActual,
   divideByWeek,
+  isActualAwareMonthSplit,
   isDistributedMeasure,
   isInsertRow,
   isNonEditableCell,
@@ -165,7 +170,17 @@ interface DynColMeta {
   small: string; // 2단 = 주차 (SMALL_CLASS_LABEL_NAME)
   leaf: string; // 3단 = 일자 (COLUMN_LABEL_NAME)
   sort: number;
+  /** SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+  width?: number;
 }
+
+// 동적(기간) 컬럼 너비 = 프로시저(GET_SPREAD_TITLE) COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+const DYN_COL_DEFAULT_WIDTH = 90;
+const spColumnWidth = (raw: string | number | null | undefined): number | undefined => {
+  const n = Number(String(raw ?? '').trim());
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
 
 /** 콤보 행의 임의 컬럼을 안전하게 문자열화 (원시값만 채택 — 객체는 빈 문자열로 관대 통과). */
 const comboCellStr = (v: unknown): string =>
@@ -850,6 +865,7 @@ export const ForecastPriceGrid = ({
           small: String(r.SMALL_CLASS_LABEL_NAME ?? ''),
           leaf: String(r.COLUMN_LABEL_NAME ?? ''),
           sort: Number(r.SORT_ORDER_NO ?? 0),
+          width: spColumnWidth(r.COLUMN_WIDTH),
         }))
         .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
@@ -945,7 +961,7 @@ export const ForecastPriceGrid = ({
         // 3단 leaf = 일자('06') / 2단 leaf = 주차 라벨('W28') 또는 월 'SUM'
         header: hasDaily ? (m.kind === 'D' ? m.leaf || 'SUM' : 'SUM') : subKey,
         align: 'right',
-        width: 90,
+        width: m.width ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,
@@ -1463,6 +1479,10 @@ export const ForecastPriceGrid = ({
     };
 
     // 편집 종료 — 월/주/일 배분 (AS-IS spdMain_EditChange 분배 로직 1:1, GridUtils 재사용).
+    // 행 사업부 (신규행 등 DIVISION_ID 가 비면 조회조건 사업부).
+    const divisionOf = (dataItem: WijmoRowItem): string =>
+      String(dataItem['DIVISION_ID'] ?? '').trim() || searchParams.divisionId;
+
     const cellEditHandler = (sender: FlexGrid, e: { row: number; col: number; data?: unknown }) => {
       const binding = sender.columns[e.col]?.binding;
       const dataItem = sender.rows[e.row]?.dataItem as WijmoRowItem | undefined;
@@ -1548,7 +1568,18 @@ export const ForecastPriceGrid = ({
       }
       // 배분 대상 = LOC 를 뺀 수량 메저 전부 (isDistributedMeasure — AS-IS `sMeasure != "LOC"`). LOC=일괄할당.
       if (isDistributedMeasure(measure)) {
-        if (binding.startsWith('M_'))
+        // 81 계열은 실적 차감형 Monthly 배분 (2026-11-24 현업 요청, AS-IS DMF0003 방식).
+        if (binding.startsWith('M_') && isActualAwareMonthSplit(divisionOf(dataItem)))
+          divideByMonthAfterActual(
+            binding,
+            dataItem,
+            val,
+            monthMap.current,
+            weekMap.current,
+            tracker,
+            defaultBucketRef.current
+          );
+        else if (binding.startsWith('M_'))
           divideByMonth(
             binding,
             dataItem,
@@ -1725,7 +1756,17 @@ export const ForecastPriceGrid = ({
             dataItem[binding] = 0;
             const measure = dataItem['MEASURE'];
             if (isDistributedMeasure(measure)) {
-              if (binding.startsWith('M_'))
+              if (binding.startsWith('M_') && isActualAwareMonthSplit(divisionOf(dataItem)))
+                divideByMonthAfterActual(
+                  binding,
+                  dataItem,
+                  0,
+                  monthMap.current,
+                  weekMap.current,
+                  tracker,
+                  defaultBucketRef.current
+                );
+              else if (binding.startsWith('M_'))
                 divideByMonth(
                   binding,
                   dataItem,
@@ -2046,6 +2087,55 @@ export const ForecastPriceGrid = ({
       }
     };
   }, [sumYn, summaryBindings, drillBindings, dynBindings, dynamicColumns, gridRef]);
+
+  // 하단 합계 줄 (2026-11-24 요청 - Demand Plan Waterfall · Sales Monitoring 과 같은 방식).
+  //   기간 칸(M_/W_/D_)만 Aggregate.Sum, 첫 번째 보이는 정적 칸에 라벨 'Sum'. 메저 구분 없이 보이는 행을 모두
+  //   더한다(요청자 확인 - 메저는 필터로 걸러 본다). 집계는 CollectionView 가 필터 적용 뷰로 계산하므로 필터로
+  //   숨긴 행은 빠지고, 셀 수정 뒤 다시 그릴 때 새 값으로 계산된다. 조회 결과가 없으면 footer 를 뺀다.
+  //   공용 DataGrid 가 컬럼을 다시 만들면 aggregate 가 사라질 수 있어 updatedLayout 마다 다시 건다
+  //   (바뀐 것이 없으면 invalidate 하지 않는다 - 재진입 루프 방지).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    if (data.length === 0) {
+      if (g.columnFooters.rows.length > 0) g.columnFooters.rows.clear();
+      return;
+    }
+    const isPeriodBinding = (binding: string): boolean => /^[MWD]_/.test(binding);
+    let labeledCol: Column | null = null;
+    const applyFooter = () => {
+      let changed = false;
+      if (g.columnFooters.rows.length === 0) {
+        g.columnFooters.rows.push(new GroupRow());
+        changed = true;
+      }
+      for (let i = 0; i < g.columns.length; i++) {
+        const col = g.columns[i];
+        const want = isPeriodBinding(col.binding ?? '') ? Aggregate.Sum : Aggregate.None;
+        if (col.aggregate !== want) {
+          col.aggregate = want;
+          changed = true;
+        }
+      }
+      const labelIdx = g.columns.findIndex(c => c.isVisible && !isPeriodBinding(c.binding ?? ''));
+      const labelCol = labelIdx >= 0 ? g.columns[labelIdx] : null;
+      if (labelCol && labelCol !== labeledCol) {
+        g.columnFooters.setCellData(0, labelIdx, 'Sum', false, false);
+        labeledCol = labelCol;
+        changed = true;
+      }
+      if (changed) g.invalidate(true);
+    };
+    g.updatedLayout.addHandler(applyFooter);
+    applyFooter();
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyFooter);
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [data, gridStaticColumns, dynamicColumns, gridRef]);
 
   return (
     <DataGrid<ForecastPriceRow>

@@ -1,0 +1,14 @@
+{"t":1795562064077,"m":{"type":"out","stream":"task","text":"▶ 검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/engine_gate.py SCP0005 --check\n","cls":"cmd"}}
+{"t":1795562126586,"m":{"type":"out","stream":"task","text":"[OK] 검사기 변경 18개 · 엔진 게이트 통과: Doc/e2e/specs/_trace.spec.ts, Doc/e2e/specs/_verify.spec.ts, tools/E2E/lib/crud.ts, tools/E2E/lib/excelcheck.ts, tools/E2E/lib/m1upload.ts, tools/E2E/lib/popk3run.ts, tools/E2E/lib/rowlink.ts, tools/E2E/lib/saveerr.ts\n","cls":""}}
+{"t":1795562126599,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T08-14-24_SCP0005_8________________--mark______________________________--check________________engine_selfcheck__________________________Doc_verify__engine_changes.jsonl_.log\n","cls":"ok"}}
+{"t":1795562126737,"m":{"type":"fb","state":"step","id":2,"no":9,"status":"OK","code":0,"sec":63,"repairs":0}}
+{"t":1795562126739,"m":{"type":"out","stream":"task","text":"✅ [9/9] 5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) · 2회차 · 미검증 23건 · 처리 대상 20건 — OK (exit 0) · 63s\n","cls":"ok"}}
+{"t":1795562126741,"m":{"type":"fb","state":"add","id":2,"step":{"no":10,"name":"6. 해소 확인 재측정 (이번 회차 처리 대상 행의 규칙만 · 전체로 넓히지 않음 → 재분류 · 남으면 3~6 다시) · 2회차 · 미검증 23건 · 처리 대상 20건","kind":"task","optional":true}}}
+{"t":1795562126742,"m":{"type":"out","stream":"task","text":"\n── [10/10] 6. 해소 확인 재측정 (이번 회차 처리 대상 행의 규칙만 · 전체로 넓히지 않음 → 재분류 · 남으면 3~6 다시) · 2회차 · 미검증 23건 · 처리 대상 20건\n","cls":"cmd"}}
+{"t":1795562126742,"m":{"type":"fb","state":"step","id":2,"no":10,"status":"RUN"}}
+{"t":1795562127412,"m":{"type":"out","stream":"task","text":"🔌 선행 확인: BE 8080 · FE 5173 기동 중(LISTEN)\n","cls":"ok"}}
+{"t":1795562127413,"m":{"type":"chat","role":"meta","text":"🔌 E2E 선행: BE·FE 기동 확인"}}
+{"t":1795562127421,"m":{"type":"out","stream":"task","text":"▶ 미검증 해소 확인 — 🧪 보완 뒤 처리 대상 행의 규칙만 다시 측정(run_verify --only, 전체로 넓히지 않음) → 재분류 · 잴 수 없으면 반복 끝 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005 --settle --no-docs\n","cls":"cmd"}}
+{"t":1795562128152,"m":{"type":"out","stream":"task","text":"[작업 1/2] 해소 확인 재측정(처리 대상 행의 규칙만 · 전체로 넓히지 않음)\n","cls":""}}
+{"t":1795562128152,"m":{"type":"out","stream":"task","text":"[INFO] 처리 대상 12행 · 규칙 8개 · 함께 돌 단계 E2E 4종: A4,A6,F1,F4,G5,H2,K3,M1 · E2E 4종 authcrud,crud · 사실 검토 포함\n","cls":""}}
+{"t":1795562128153,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SCP0005 --only A4,A6,F1,F4,G5,H2,K3,M1 (VERIFY_DELTA_STAGES=suite)\n","cls":""}}

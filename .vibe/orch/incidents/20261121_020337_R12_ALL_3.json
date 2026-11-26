@@ -1,0 +1,29 @@
+{
+  "id": "20261121_020337_R12_ALL_3",
+  "at": "2026-11-21T02:03:37+09:00",
+  "ms": 1795194217144,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U25 부분 재측정이 1차보다 오래 걸림 SCP0028 81.5분 ≥ 65.9분",
+  "screen": "",
+  "sig": "R12|S13|U25|SCP0028|20261120_221655_S8.checklistDelta",
+  "count": 1,
+  "repeat": null,
+  "detail": "1차 20261120_204620_S8.checklistRun 11-20 20:46~11-20 21:52 65.9분 · 부분 재측정 20261120_221655_S8.checklistDelta 11-20 22:16~11-20 23:38 81.5분(J20261120_191752) · 대상 행 수 기록 없음(delta_scope.json 시각 불일치, 다음 실행이 덮어씀) · 더 걸린 구간(run_timing.json 1차 → 재측정): e2e 0→47.1분, diff 10.3→11분, pre 1.5→1.7분, eg 9.1→9.2분 · 재측정 상위 e2e playwright _verify _trace _snap 43.9분, eg eg_chain.py 9.2분",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U25|SCP0028|20261120_221655_S8.checklistDelta",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T20:55:37+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

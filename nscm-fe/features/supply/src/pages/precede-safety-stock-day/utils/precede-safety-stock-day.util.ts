@@ -72,6 +72,30 @@ export const matchSiteByDivision = (siteDivisionId: unknown, selectedDivision: s
   return sid === (EE_SUB_DIVISION_MAP[selectedDivision] ?? selectedDivision);
 };
 
+/**
+ * 다중 콤보에서 "전 항목 선택"을 'ALL' sentinel 로 되돌린다 — AS-IS 파리티(테스트 No.3).
+ *
+ * 공용 CustomDropdown 은 사용자 확정 요구(2026-10-23)로 SELECT ALL 을 'ALL' 로 뭉개지 않고 선택값을
+ * 그대로 열거해 내보낸다. 그런데 AS-IS SCP0127 은 "SELECT ALL = SCM Site 전체 조회(비운 것과 같음)"
+ * 이고, GET SP(PKG_SCP0127.P_SCP0127_GET BODY:196~199)도 scmSiteId 가 'ALL'/NULL 일 때만 무필터다 —
+ * 열거된 코드들을 그대로 보내면 `IN(그 코드들)`로 좁혀져 비운 경우(534)보다 적게(9) 나왔다. 공용
+ * 컴포넌트는 못 바꾸므로(전 화면 영향), 이 화면이 조회 직전 값을 보정한다: 선택 코드 집합이 현재
+ * 옵션 전체를 덮으면 'ALL' 로 치환해 무필터 조회가 되게 한다(부분 선택은 그대로 둔다).
+ *
+ * 보정 시점은 store setFilters(조회 직전)다 — onChange 가 아니다. onChange 에서 뭉개면 콤보 value 가
+ * 'ALL' 이 되어 체크가 전부 풀린 것처럼 보였다(사용자 신고). searchParams 에는 Plan Group 처럼 열거값을
+ * 그대로 두어 체크 표시를 유지하고, filters(SP 요청)로 나갈 때만 'ALL' 로 뭉갠다.
+ */
+export const normalizeAllSelectedToAll = (value: string, optionCodes: string[]): string => {
+  const selected = (value ?? '')
+    .split(',')
+    .map(code => code.trim())
+    .filter(code => code !== '' && code.toUpperCase() !== 'ALL');
+  if (optionCodes.length === 0 || selected.length < optionCodes.length) return value;
+  const selectedSet = new Set(selected);
+  return optionCodes.every(code => selectedSet.has(code)) ? 'ALL' : value;
+};
+
 /** 'ALL' / 빈 값을 sentinel 로 걸러 콤마 코드 배열만 남긴다 — cascade-combo-filter.md §2.2. */
 const toSelectedCodes = (value: string): string[] =>
   (value ?? '')

@@ -1,0 +1,48 @@
+{
+ "proposal": {
+  "id": "20261124064957_SELF_3",
+  "title": "사용자 지시 R154 같은 문제: tools/VibeManager/orch-dict.js:87 Dictionary 원천에 user_rules.json 이 없어 사용자 지시 규칙 코드(R140~ 등)의 뜻이 사전에 없고, 감시 규칙 R1~R15 와 번호가 겹",
+  "evidence": "규칙 R154 \"VM, VMO 가 화면에 보이는 규칙, 감지기 약자(R#, D#, U# 등)는 Dictionary 탭에 뜻을 모아 두고 새 코드를 추가할 때 같이 갱신함\" (원래 지시 2026-11-20 10:15 \"VMO 에 Dicitionary Tabpage을 만들어서 VM, VMO 가 사용하는 각 규칙의 약자를 전체 정리해주세요. R1, R2 가 무엇을 의미하는지? D1, D2가 무엇을 의미하는지 전체 코드에 대해서 설명자료를 tabpage 로 추가요청 합니다. 그리고 Design 은 깔끔하고\") · tools/VibeManager/orch-dict.js:87 const L = readJson(path.join(p.root, 'tools', 'VibeManager', 'user_checks.json'), { items: [] });",
+  "targets": [
+   "tools/VibeManager/orch-dict.js"
+  ],
+  "before_after": "build() 에 user_rules.json items 를 읽는 묶음(id, 유형, 규칙 1줄)을 추가하고 감시 규칙 R# 과 다른 번호 체계임을 묶음 제목에 적음",
+  "verify": "node --check tools/VibeManager/orch-dict.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "sig": "userrule|rn|tools/vibemanager/orch dict.js|dictionary원천에userrulesjson이없어사용자지시규칙코드rn",
+  "check": "S13",
+  "selfKey": "S13|R154|tools/VibeManager/orch-dict.js"
+ },
+ "result": {
+  "applied": true,
+  "already_applied": false,
+  "verified": true,
+  "verify_items": [
+   {
+    "n": 1,
+    "result": "pass",
+    "note": "node --check tools/VibeManager/orch-dict.js 반영 전 출력 없음 → 반영 뒤 출력 없음. node tools/VibeManager/test/run_all.js 반영 전 'ALL OK  파일 87/87  PASS 1422  FAIL 0  228.8s' → 반영 뒤 'ALL OK  파일 87/87  PASS 1422  FAIL 0  228s'(t_orch_dict.js PASS 6, t_webview_syntax.js PASS 19 포함). 웹뷰 파일 아님, t_webview_syntax 는 run_all 안에서 PASS"
+   }
+  ],
+  "changed_files": [
+   "tools/VibeManager/orch-dict.js"
+  ],
+  "verify_result": "반영 전 2026-11-25T21:44:12Z(run_all RESULT at): node --check 오류 없음, run_all 87/87 PASS 1422 FAIL 0 → 반영 뒤 2026-11-26 06:52:02(date): node --check 오류 없음, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228s'. 자기 시험 build() 결과 UR 묶음 '사용자 지시 규칙(233개, 감시 규칙 R# 과 다른 번호 체계)' 233건, 첫 항목 R1 '화면 모양(색, 테마, 정렬, 글자 잘림)', 마지막 R233",
+  "note": "build() 에 user_rules.json items 묶음(id UR: 번호, 유형 이름(categories.name), 규칙 1줄, 등록 일시·상태)을 추가하고 제목에 감시 규칙 R# 과 다른 번호 체계라고 적음. 파일 머리 원천 목록에 user_rules.json 추가. .bak, 설치 폴더, CHANGELOG 는 건드리지 않음. 걸린 시간 약 9분, 오래 걸린 단계 = run_all 2회(각 228초)"
+ },
+ "gate": {
+  "ok": false,
+  "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1",
+  "newBad": [
+   "S11 orch-dict.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/orch-dict.js.style.csv)"
+  ]
+ },
+ "history": [
+  "06:39:43 VMO 자동(게이트 통과 조건): 승인",
+  "06:43:37 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0639",
+  "06:43:41 VMO: 반영 시작",
+  "06:56:11 VMO: 반영 실패. 게이트에서 새로 어긋난 항목 1건: S11 orch-dict.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/orch-dict.js.style.csv) · 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1 · 대상 파일 1개 복원(orch-dict.js AI 편집 2건만 되돌림(반영 전과 같음))"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261124064957_SELF_3"
+}

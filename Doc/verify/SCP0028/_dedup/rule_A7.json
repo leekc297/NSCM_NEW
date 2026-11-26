@@ -1,232 +1,268 @@
 {
  "rule_id": "A7",
- "hash": "39cfe6ea6262277e",
+ "hash": "d6243d9e2873af98",
  "groups": [
   {
    "rows": [
     "AD-a8d58ff3"
    ],
-   "why": "호출 #1 main 조회, 기본 조건(divisionId 81, 나머지 공란)의 공통행 값 비교는 다른 행과 조건이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-7efe56a3"
-   ],
-   "why": "호출 #2 main 조회, divisionId 40 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-e8e1fd1b"
-   ],
-   "why": "호출 #4 main 조회, valid=Y 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-e88e6cb7"
-   ],
-   "why": "호출 #5 main 조회, valid=N 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-a57667af"
-   ],
-   "why": "호출 #6 main 조회, divisionId 82 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-b7f35300"
-   ],
-   "why": "호출 #7 main 조회, operationGroup=P 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-15417ce8"
-   ],
-   "why": "호출 #8 main 조회, operationGroup=A 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-969177a5"
-   ],
-   "why": "호출 #9 main 조회, fromSite 단일값 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-11ab971b"
-   ],
-   "why": "호출 #10 main 조회, fromSite 다중값 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-5ad26b5f"
-   ],
-   "why": "호출 #11 main 조회, transMode=AIR 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-2ceb212b"
-   ],
-   "why": "호출 #12 main 조회, transMode 전체 다중값 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-26c48730"
-   ],
-   "why": "호출 #13 main 조회, toSite 단일값 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-a78da743"
-   ],
-   "why": "호출 #14 main 조회, toSite 다중값 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-c6b8b7b9"
-   ],
-   "why": "호출 #15 main 조회, divisionId 81_UC 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-86c8e05f"
-   ],
-   "why": "호출 #16 main 조회, divisionId 81_HM 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-4ccd4e88"
-   ],
-   "why": "호출 #17 main 조회, divisionId 81_ST 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-67a2549b"
-   ],
-   "why": "호출 #18 main 조회, divisionId 81_HD 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-a7590165"
-   ],
-   "why": "호출 #19 main 조회, divisionId 81_HG 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-bf9240c6"
-   ],
-   "why": "호출 #20 main 조회, transMode=AIR,FRY 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-973a1a5f"
-   ],
-   "why": "호출 #21 main 조회, itemId 대문자 정확값 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-7fce1600"
-   ],
-   "why": "호출 #22 main 조회, itemId 소문자 입력 조건으로 대소문자 처리를 따로 확인하므로 #21과 묶지 않는다."
-  },
-  {
-   "rows": [
-    "AD-df394103"
-   ],
-   "why": "호출 #23 main 조회, itemId 부분 문자열 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-bfa0da1e"
-   ],
-   "why": "호출 #24 main 조회, itemId 다중값 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-4fe005ee"
-   ],
-   "why": "호출 #25 main 조회, itemId=E2E 조건이라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-138fc411"
-   ],
-   "why": "호출 #40 main 조회, itemId AAEF1001I-A1-000 조건이라 단독으로 둔다."
+   "why": "호출 #1 main 기본 조회(사업부 81, 나머지 조건 공란)로 인자가 같은 다른 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "AD-1eb9cb71"
    ],
-   "why": "호출 #3 팝업 조회, 기본 조건(actionFlag D)이라 단독으로 둔다."
+   "why": "호출 #3 popup 조회(actionFlag D, 조건 공란)로 인자가 같은 다른 행이 없다."
   },
   {
    "rows": [
-    "AD-5593c547"
+    "AD-5079c1a8"
    ],
-   "why": "호출 #27 팝업 조회, itemId 대문자 정확값 조건이라 단독으로 둔다."
+   "why": "호출 #4 popup 조회(fromSite HQ05-W, actionFlag I)로 인자가 같은 다른 행이 없다."
   },
   {
    "rows": [
-    "AD-689db7a8"
+    "AD-e88e6cb7"
    ],
-   "why": "호출 #28 팝업 조회, itemId 부분 문자열 조건이라 단독으로 둔다."
+   "why": "호출 #5 main 조회(사업부 40)로 사업부 조건이 다른 행과 다르다."
   },
   {
    "rows": [
-    "AD-c6ed9f10"
+    "AD-a57667af"
    ],
-   "why": "호출 #29 팝업 조회, itemId 소문자 입력 조건이라 #27과 묶지 않는다."
+   "why": "호출 #6 main 조회(valid Y)로 valid 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-b7f35300"
+   ],
+   "why": "호출 #7 main 조회(valid N)로 valid 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-15417ce8"
+   ],
+   "why": "호출 #8 main 조회(사업부 82)로 사업부 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-969177a5"
+   ],
+   "why": "호출 #9 main 조회(operationGroup P)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-11ab971b"
+   ],
+   "why": "호출 #10 main 조회(operationGroup A)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-5ad26b5f"
+   ],
+   "why": "호출 #11 main 조회(fromSite MI03-P)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-2ceb212b"
+   ],
+   "why": "호출 #12 main 조회(fromSite 다중값)로 조건이 고유하고, 인자가 잘려 있어 다른 행과 같다고 확인할 수 없다."
+  },
+  {
+   "rows": [
+    "AD-26c48730"
+   ],
+   "why": "호출 #13 main 조회(transMode AIR)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-a78da743"
+   ],
+   "why": "호출 #14 main 조회(transMode 5종 다중값)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-c6b8b7b9"
+   ],
+   "why": "호출 #15 main 조회(toSite HKI_KR_WJU)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-86c8e05f"
+   ],
+   "why": "호출 #16 main 조회(toSite 다중값)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-4ccd4e88"
+   ],
+   "why": "호출 #17 main 조회(사업부 81_UC)로 사업부 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-67a2549b"
+   ],
+   "why": "호출 #18 main 조회(사업부 81_HM)로 사업부 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-a7590165"
+   ],
+   "why": "호출 #19 main 조회(사업부 81_ST)로 사업부 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-bf9240c6"
+   ],
+   "why": "호출 #20 main 조회(사업부 81_HD)로 사업부 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-973a1a5f"
+   ],
+   "why": "호출 #21 main 조회(사업부 81_HG)로 사업부 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-df394103"
+   ],
+   "why": "호출 #23 main 조회(itemId APCAN0981A)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-bfa0da1e"
+   ],
+   "why": "호출 #24 main 조회(transMode AIR,FRY)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-4fe005ee"
+   ],
+   "why": "호출 #25 main 조회(itemId 대문자 ACPP1015U-B1-001)로, 소문자 조회와는 대소문자 처리를 확인하는 다른 조건이다."
+  },
+  {
+   "rows": [
+    "AD-ac6f799d"
+   ],
+   "why": "호출 #26 main 조회(itemId 소문자)로 대소문자 처리를 확인하는 고유한 조건이다."
+  },
+  {
+   "rows": [
+    "AD-73dcb10b"
+   ],
+   "why": "호출 #27 main 조회(itemId 부분값 CPP1015U-B1-00)로 부분일치를 확인하는 고유한 조건이다."
+  },
+  {
+   "rows": [
+    "AD-f4bf26b0"
+   ],
+   "why": "호출 #28 main 조회(itemId 다중값)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-9177a9cf"
+   ],
+   "why": "호출 #29 main 조회(itemId E2E)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-1c7fd9d9"
+   ],
+   "why": "호출 #47 main 조회(itemId AAEF1001I-A1-000)로 조건이 고유하다."
   },
   {
    "rows": [
     "AD-eca4c0ee"
    ],
-   "why": "호출 #30 팝업 조회, itemId 다중값 조건이라 단독으로 둔다."
+   "why": "호출 #30 popup 조회(itemId APVCC517H-A4, actionFlag D)로 조건이 고유하다."
   },
   {
    "rows": [
     "AD-9e43972e"
    ],
-   "why": "호출 #31 팝업 조회, fromSite 단일값 조건이라 단독으로 둔다."
+   "why": "호출 #31 popup 조회(itemId 부분값, actionFlag D)로 조건이 고유하다."
   },
   {
    "rows": [
     "AD-88332dd0"
    ],
-   "why": "호출 #32 팝업 조회, fromSite 다중값 조건이다. #33·#34와 앞부분은 같지만 잘린 뒤쪽 인자가 다를 수 있어 묶지 않는다."
+   "why": "호출 #32 popup 조회(itemId 소문자, actionFlag D)로 대소문자 처리를 확인하는 고유한 조건이다."
   },
   {
    "rows": [
     "AD-7f5c41f3"
    ],
-   "why": "호출 #33 팝업 조회, fromSite 다중값 조건이다. 결과 행 수(0행)도 #32·#34와 달라 조건이 다른 것으로 보고 단독으로 둔다."
+   "why": "호출 #33 popup 조회(itemId 다중값, actionFlag D)로 조건이 고유하다."
   },
   {
    "rows": [
     "AD-f377f227"
    ],
-   "why": "호출 #34 팝업 조회, fromSite 다중값 조건이다. 결과 행 수(342행)도 #32·#33과 달라 단독으로 둔다."
+   "why": "호출 #34 popup 조회(fromSite HQ05-W, actionFlag D)로, 같은 fromSite의 I 조회(#4)와 actionFlag가 다르다."
   },
   {
    "rows": [
     "AD-44898b71"
    ],
-   "why": "호출 #35 팝업 조회, operationGroup=P와 fromSite 다중값 조건이라 단독으로 둔다."
+   "why": "호출 #35 popup 조회(fromSite 다중값)로 인자가 잘려 있어 #36·#37과 같은지 확인할 수 없으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-51dde9b2"
+   ],
+   "why": "호출 #36 popup 조회로 인자가 잘려 있어 #35·#37과 같은지 확인할 수 없으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-7031951d"
+   ],
+   "why": "호출 #37 popup 조회로 인자가 잘려 있어 #35·#36과 같은지 확인할 수 없으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-0d4ddf6c"
+   ],
+   "why": "호출 #38 popup 조회(operationGroup P, fromSite 다중값)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-42fb59be"
+   ],
+   "why": "호출 #39 popup 조회(itemId APVCC519H-A1, actionFlag I)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-d8901eb3"
+   ],
+   "why": "호출 #40 popup 조회(itemId 부분값, actionFlag I)로 조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-ce275074"
+   ],
+   "why": "호출 #41 popup 조회(itemId 소문자, actionFlag I)로 대소문자 처리를 확인하는 고유한 조건이다."
+  },
+  {
+   "rows": [
+    "AD-28da6f65"
+   ],
+   "why": "호출 #42 popup 조회(itemId 다중값, actionFlag I)로 조건이 고유하다."
   },
   {
    "rows": [
     "V-ee003a13"
    ],
-   "why": "SCP0028_GET_SHIPMENT_LOT_SIZE 전체의 공란 컬럼 0 검사를 포함하는 SP 규칙이라, 특정 호출만 보는 행과 기대 결과가 달라 단독으로 둔다."
+   "why": "SCP0028_GET_SHIPMENT_LOT_SIZE 전체에 거는 일반 규칙이라 조건이 특정 호출과 같다고 확정할 수 없어 단독으로 둔다."
   },
   {
    "rows": [
     "V-8da88867"
    ],
-   "why": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT 프로시저 대상이고 같은 대상의 다른 행이 없어 단독으로 둔다."
+   "why": "다른 프로시저(SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT)가 대상이고, 이 프로시저와 짝지어진 호출 행이 없어 단독으로 둔다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 13:00:24",
- "cost": 0.220744
+ "at": "2026-11-25 02:06:37",
+ "cost": 0.2552428
 }

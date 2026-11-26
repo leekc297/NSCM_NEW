@@ -1,67 +1,65 @@
 {
  "menu_id": "SCP0028",
- "at": "2026-11-20 13:44:23",
- "round": 2,
+ "at": "2026-11-25 02:29:52",
+ "round": 1,
  "ledger": "Doc\\verify\\SCP0028\\verify_ledger.csv",
  "before": {
-  "total": 87,
+  "total": 71,
   "by_actor": {
-   "엔진": 19,
-   "집계": 66,
-   "판단": 2
+   "엔진": 64,
+   "집계": 6,
+   "판단": 1
   },
   "by_class": {
-   "검사기공백": 17,
-   "미분류": 1,
-   "데이터전제": 1,
-   "집계": 66,
-   "판단": 2
+   "검사기공백": 4,
+   "집계": 6,
+   "차등짝": 60,
+   "판단": 1
   },
-  "actionable": 21,
+  "actionable": 65,
   "ai_review": 0,
   "human": 0,
-  "aggregate": 66,
+  "aggregate": 6,
   "blocked": 0,
   "guide": 0,
   "decide": 0
  },
  "after": {
-  "total": 87,
+  "total": 71,
   "by_actor": {
-   "엔진": 19,
-   "집계": 66,
-   "결정": 2
+   "엔진": 64,
+   "집계": 6,
+   "결정": 1
   },
   "by_class": {
-   "검사기공백": 17,
-   "미분류": 1,
-   "데이터전제": 1,
-   "집계": 66,
-   "판단": 2
+   "검사기공백": 4,
+   "집계": 6,
+   "차등짝": 60,
+   "판단": 1
   },
-  "actionable": 39,
-  "ai_review": 20,
+  "actionable": 66,
+  "ai_review": 2,
   "human": 0,
-  "aggregate": 66,
+  "aggregate": 6,
   "blocked": 0,
   "guide": 0,
-  "decide": 2,
+  "decide": 1,
   "recommended": 0
  },
- "actionable": 39,
+ "actionable": 66,
  "human": 0,
  "rerun": null,
- "unverified_sheet": 474,
- "ledger_mtime": 1795147653.753,
- "prev_actionable": 39,
+ "unverified_sheet": 461,
+ "ledger_mtime": 1795540234.426,
+ "prev_actionable": 66,
  "continue": 1,
  "stalled": false,
  "resolved_actionable": [],
  "new_actionable": [],
  "pending_recheck": {
-  "fixed_at": "2026-11-20 13:44",
-  "ledger_at": "2026-11-20 13:07",
-  "note": "미검증 해소 보완 2026-11-20 13:44 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+  "fixed_at": "2026-11-25 02:29",
+  "ledger_at": "2026-11-25 02:10",
+  "note": "미검증 해소 보완 2026-11-25 02:29 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
  },
  "note": "미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행"
 }

@@ -1,0 +1,43 @@
+{
+  "id": "20261125000616_VISION",
+  "at": "2026-11-25T00:06:16+09:00",
+  "ms": 1795532776274,
+  "source": "vision",
+  "status": "planned",
+  "sig": "ln|purpose|vm고정문구가문장규칙을지킴|vn allpaths effect",
+  "title": "개념 재정립: VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈)",
+  "evidence": "proposals/20261123000643_VISION.json 확인 3(반영 뒤 36개 파일 위반 0). selfcheck/result.json checks.S11 11-24 23:28 위반 3(workbench.js 기호 2, orch-usercheck.js 수식어 1). workbench.js.bak_20261124_cloudreveal(11:58) 0건, bak_20261124_replay(21:14) L602, L745 '☁️' 1건씩. orch-usercheck.js.bak_20261124_ccwork(08:54) 0건, 지금 L705 '실제로' 1건. CHANGELOG.md:94, :28, :197(11-24 Claude Code 세션 수정). .claude/settings.json 에 doc_style 없음, S13 20261123181708_SELF 'hook 등록 제외'. orch-selfcheck.js:394-423 styleGate = VMO 반영만. orch-ladder.js:99-100 목적 연속 = 효력 필터 없음(:108-121 struct 만 있음). ladder.json 묶음 evidence 4건 모두 11-23 19:12 전, vision/meta.json lastAt 11-23 14:54. plans.json 원장 = 20261124000718_VISION 1건 · 진단 사다리 묶음 L4|purpose|VM고정문구가문장규칙을지킴 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_VM_.md",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-vision.js",
+    ".vibe/orch/vision/plans.json",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    ".claude/hooks/check-vm-doc-style(신규 실행 hook, 승인)",
+    ".claude/settings.json(hook 등록, 승인)"
+  ],
+  "before_after": "지금: VMO 가 반영하는 코드만 쓰는 시점에 문장 위반을 막고, 목적 판정과 L4 올림은 1차 재정립 효력 전 판정까지 섞어 셈. 새 개념: VMO 반영과 Claude Code 세션 두 쓰기 경로 모두 쓰는 시점에 검사하고, hook 이 없는 경로로 들어온 위반은 S11 이 L1 정리로 24시간 안에 닫고, 목적 어긋남은 반영된 L4 안의 효력 뒤 판정만 셈.",
+  "verify": "1) t_orch_ladder.js: 반영 L4 효력 전 판정 4건이면 묶음을 안 올리고, 효력 뒤 어긋남 3건이면 올림. PASS 확인. 2) S11 신규분 3건으로 L1 정리 개선안 1건 생성, 반영 뒤 doc_style.py tools/VibeManager/*.js 위반 0, test/run_all.js ALL PASS, t_webview_syntax.js PASS. 3) hook: '—' 넣은 Edit 1건에서 경고 출력, 위반 없는 Edit 에서는 출력 없음. 4) 다음 Overall Review 이 목적 근거에 효력 시각, 잔량, 정리 소요 시간이 있음.",
+  "rollback": "단계마다 .bak_<날짜>_concept 백업과 VMO 개선안 탭 되돌리기를 씀. hook 은 .claude/settings.json 등록 줄을 삭제함. 효력 필터와 L1 정리는 harness.json orch 설정 키를 false 로 둠. plans.json 항목 삭제는 개선안 원본에 영향 없음.",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "목적 'VM 고정 문구가 문장 규칙을 지킴' Overall Review 어긋남 4회 연속(11-20, 11-21, 11-22, 11-23 14:54) ≥ l4MisalignRuns 3. 1차 L4 안(20261123000643_VISION, 11-23 19:12 반영) 뒤 위반이 0건에서 3건으로 늘어남(11-24 23:28 S11). 그 3건은 1차 안이 반증 조건으로 적은 '게이트를 거치지 않는 경로'로 들어옴",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T00:55:14+09:00",
+      "by": "사용자",
+      "what": "L4 단계 원장으로 진행(단계 4개, 단계마다 하위 안 반영). 원장 .vibe/orch/vision/plans.json"
+    }
+  ],
+  "plain": {
+    "what": "VM 화면과 알림 문구에 문장 규칙 위반이 다시 생기지 않게 막는 곳을 VMO 자동 보완 한 곳에서 Claude Code 작업까지 넓힘. 그래도 들어온 위반은 하루 안에 자동으로 고침. 이미 반영된 개선이 효과를 내기 전 기록으로 같은 문제를 다시 올리지 않음.",
+    "risk": "Claude Code 작업 중 VM 파일을 고칠 때 경고 문구가 더 나옴. 자동 정리가 메뉴 이름 같은 원문 인용을 잘못 고칠 수 있음. 1차 분류 규칙(메뉴 이름, 표지)을 그대로 써서 줄임.",
+    "undo": "VMO 개선안 탭에서 되돌리기를 누르거나, 설정 파일에서 hook 등록 줄을 지우고 harness.json 해당 설정을 끄면 지금 방식으로 돌아감."
+  },
+  "kind": "fix",
+  "needsApproval": "자동 범위 밖 .claude/hooks/check-vm-doc-style(신규 실행 hook, 승인)",
+  "plan": "20261125000616_VISION"
+}

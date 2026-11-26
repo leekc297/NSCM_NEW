@@ -126,6 +126,8 @@ def keyset_cleanup(mid, spec, user, dry):
         try:
             for e in entries:
                 since = datetime.datetime.fromisoformat(e['saved_before']) - datetime.timedelta(minutes=1)
+                # 2026-11-25 T640: 키마다 저장한 계정(crud.ts 정리 위임 · 권한 계정 시험)을 남긴다 — save_audit F8 이 키별 기대 계정으로 읽는다
+                log.append(f"-- 저장 키 {json.dumps(e['keys'], ensure_ascii=False)} · 계정 {e.get('account') or user} · 저장 시각 {since + datetime.timedelta(minutes=1):%Y-%m-%d %H:%M:%S}")
                 kw = ' AND '.join(f'{k} = :{k}' for k in e['keys'])
                 for t in spec['tables']:
                     cur.execute("SELECT COUNT(*) FROM ALL_TAB_COLUMNS WHERE OWNER='SCM_MGR' AND TABLE_NAME=:t AND COLUMN_NAME='CREATION_DATE'", t=t)
@@ -150,6 +152,29 @@ def keyset_cleanup(mid, spec, user, dry):
                         if cur.rowcount != len(rows):
                             raise RuntimeError(f'{t}: 백업 {len(rows)}건 ≠ 삭제 {cur.rowcount}건')
                     total += len(rows)
+                    # 2026-11-25 T640: 키가 다른 연쇄 행(예 SCP0005 이력 표 신규 저장 행 ROUTE_ID 0) — 마커 칸 값 + 저장 계정 + 저장 시각 이후 생성 행만(표에 세 칸이 다 있을 때)
+                    mk = e.get('marker') or {}
+                    if mk.get('col') and mk.get('value') and has_cd:
+                        cur.execute("SELECT COUNT(*) FROM ALL_TAB_COLUMNS WHERE OWNER='SCM_MGR' AND TABLE_NAME=:t AND COLUMN_NAME IN (:c, 'CREATED_BY')", t=t, c=mk['col'])
+                        if cur.fetchone()[0] == 2:
+                            mw = f"{mk['col']} LIKE :mk || '%' AND CREATED_BY = :acc AND CREATION_DATE >= :since"
+                            mb = {'mk': mk['value'], 'acc': e.get('account') or user, 'since': since}
+                            cur.execute(f'SELECT * FROM {t} WHERE {mw}', mb)
+                            mcols = [d[0] for d in cur.description]; mrows = cur.fetchall()
+                            if mrows:
+                                bp = os.path.join(out_dir, f'{stamp}_{t}.csv')
+                                new = not os.path.exists(bp)
+                                with open(bp, 'a', encoding='utf-8-sig', newline='') as f:
+                                    wr = csv.writer(f)
+                                    if new:
+                                        wr.writerow(mcols)
+                                    wr.writerows(mrows)
+                            log.append(f"DELETE FROM {t} WHERE {mk['col']} LIKE '{mk['value']}%' AND CREATED_BY = '{mb['acc']}' AND CREATION_DATE >= TO_DATE('{since:%Y-%m-%d %H:%M:%S}','YYYY-MM-DD HH24:MI:SS');  -- 마커 백업 {len(mrows)}건")
+                            if mrows and not dry:
+                                cur.execute(f'DELETE FROM {t} WHERE {mw}', mb)
+                                if cur.rowcount != len(mrows):
+                                    raise RuntimeError(f'{t}: 마커 백업 {len(mrows)}건 ≠ 삭제 {cur.rowcount}건')
+                            total += len(mrows)
                 for sn in e.get('snapshots', []):
                     sw = ' AND '.join(f'{k} = :{k}' for k in sn['keys'])
                     for row in sn['rows']:

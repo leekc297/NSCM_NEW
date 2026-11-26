@@ -33,10 +33,6 @@ interface Props {
   onFocus: () => void;
 }
 
-// 편집가능 셀 배경(#95 grid-cell-backcolor-standard, design 03 §5-10). 잠금셀은 기본색.
-//   Wijmo 셀 DOM 직접 스타일(inline React style 아님 — 공용 그리드 formatItem 패턴).
-const EDITABLE_CELL_BG = '#FFFDE7';
-
 // AS-IS spdMain "Shipment Semi Dept Day" (단일 그리드 11열). 조회직후 전잠금, Edit/Insert=지정칸(editLock).
 //   셀 콤보(OPERATION_GROUP/DEPARTURE_DAY=LookupCommon, VALID_YN=YesOrNo)는 공용 DataGrid 가 admin 메타로 자동 배선.
 //   신규행 DIVISION_ID 콤보(MyDivisionInEE)는 columns.ts 가 주입(공용 DataGrid 드롭다운). 단 공용 콤보는
@@ -69,7 +65,9 @@ export const ShipmentSemiDeptDayGrid = ({
     const g = gridRef.current;
     if (!g) return;
 
-    // 편집가능 셀 배경 강조(#95) — 셀 DOM 재사용 대비 항상 재설정(조건 미해당 시 해제).
+    // 기존행 DIVISION_ID 셀 코드 표시(아래) 전용 formatItem.
+    //   편집가능 셀 노란 배경 강조는 공용 .wj-cell-editable(INPUT_TP_CD 메타 IM/O 기준, 표준색 #fff8cd)이
+    //   담당한다 — 비표준 커스텀 배경칠 제거(#95 grid-cell-backcolor-standard). editLock 은 편집 게이트에만 쓴다.
     const formatItemHandler = (
       sender: FlexGridType,
       e: { panel: unknown; row: number; col: number; cell: HTMLElement }
@@ -77,8 +75,6 @@ export const ShipmentSemiDeptDayGrid = ({
       if (e.panel !== sender.cells) return;
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
-      e.cell.style.backgroundColor =
-        row && isCellEditable(binding, row, editModeRef.current) ? EDITABLE_CELL_BG : '';
       // 기존행 DIVISION_ID 셀 표시는 코드(81,40)로 — AS-IS(cs:224) 기존행 코드 표시 파리티. 공용 콤보 dataMap 이
       //   코드->NAME("81 이름")으로 매핑한 텍스트를 formatItem(렌더 마지막 훅)에서 코드 원본으로 덮는다.
       //   주의: 신규행('I')은 건드리지 않는다 — textContent 를 덮으면 콤보 드롭다운 렌더가 깨진다(선택 UX 유지).
@@ -150,7 +146,9 @@ export const ShipmentSemiDeptDayGrid = ({
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
-      isReadOnly={false}
+      // SAVE 권한 없으면 그리드 읽기전용 → 공용 .wj-cell-editable(편집 하이라이트)도 권한을 존중한다.
+      //   권한 있으면 INPUT_TP_CD 메타(IM 신규행만 / O 항상)로 편집셀이 자동 판정·강조된다.
+      isReadOnly={!isEditMode}
       itemsSource={rows as unknown as WijmoRowItem[]}
       staticColumns={columns}
       comboParams={comboParams}

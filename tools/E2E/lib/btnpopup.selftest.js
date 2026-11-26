@@ -46,5 +46,11 @@ const cases = [
   ['다른 연산 섞임 = null', X.runtimeEditAtoms('RAW(action == CAppSetting.FlagM) || COL(A)=="1"'), null],
   ['상태 원자 없음 = null', X.runtimeEditAtoms('COL(A)=="1"'), null],
 ];
+// T642 표본 쌓기: 1회차 원천에서 쌓고 2회차 원천이 비어도 파일에서 돌려줌 · 가짜 표지 본문은 쌓지 않음
+{ const os = require('os'); const f = path.join(os.tmpdir(), `resp_samples_${process.pid}.json`); try { fs.unlinkSync(f); } catch { /* 없음 */ }
+  const a = X.persistRespSamples(['x · route/SAVE:200 응답={"code":"0","result":{"O":[{"CODE":"0"}]}} | y', 'main/SAVE:200 응답={"MSG":"[9] E2E-FAKE-1"}'], f);
+  const b = X.persistRespSamples([], f);
+  cases.push(['표본 쌓기 1회차', a.length, 1], ['표본 2회차 파일에서', X.respSample(b, 'route', 'SAVE') ? 'Y' : 'N', 'Y'], ['가짜 본문 제외', X.respSample(b, 'main', 'SAVE'), null]);
+  try { fs.unlinkSync(f); } catch { /* 없음 */ } }
 let bad = 0; for (const [n, got, want] of cases) { const ok = JSON.stringify(got) === JSON.stringify(want); if (!ok) bad++; console.log(`${ok ? 'OK ' : 'NG '} ${n}${ok ? '' : ` → ${JSON.stringify(got)} (기대 ${JSON.stringify(want)})`}`); }
 console.log(`${cases.length - bad}/${cases.length}`); process.exit(bad ? 1 : 0);

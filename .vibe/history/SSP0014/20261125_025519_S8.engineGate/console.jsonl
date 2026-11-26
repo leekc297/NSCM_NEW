@@ -1,0 +1,16 @@
+{"t":1795542919227,"m":{"type":"out","stream":"task","text":"▶ 검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/engine_gate.py SSP0014 --check\n","cls":"cmd"}}
+{"t":1795542977805,"m":{"type":"out","stream":"task","text":"[OK] 검사기 변경 11개 · 엔진 게이트 통과: tools/E2E/lib/crud.ts, tools/E2E/lib/saveprobe.ts, tools/Harness/rules/param_map.csv, tools/Harness/rules/sp_pair.csv, tools/Harness/verify/a1_live.py, tools/Harness/verify/combo_oracle.py, tools/Harness/verify/diff_ingest.py, tools/Harness/verify/judge.py\n","cls":""}}
+{"t":1795542977807,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T02-55-19_SSP0014_13________________--mark______________________________--check________________engine_selfcheck__________________________Doc_verify__engine_changes.jsonl_.log\n","cls":"ok"}}
+{"t":1795542977937,"m":{"type":"fb","state":"step","id":4,"no":5,"status":"OK","code":0,"sec":59,"repairs":0}}
+{"t":1795542977943,"m":{"type":"out","stream":"task","text":"✅ [5/5] 5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) · 미검증 127건 · 처리 대상 139건 — OK (exit 0) · 59s\n","cls":"ok"}}
+{"t":1795542977946,"m":{"type":"fb","state":"add","id":4,"step":{"no":6,"name":"6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 127건 · 처리 대상 139건","kind":"task","optional":true}}}
+{"t":1795542977946,"m":{"type":"out","stream":"task","text":"\n── [6/6] 6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 127건 · 처리 대상 139건\n","cls":"cmd"}}
+{"t":1795542977947,"m":{"type":"fb","state":"step","id":4,"no":6,"status":"RUN"}}
+{"t":1795542979072,"m":{"type":"out","stream":"task","text":"🔌 선행 확인: BE 8080 · FE 5173 기동 중(LISTEN)\n","cls":"ok"}}
+{"t":1795542979073,"m":{"type":"chat","role":"meta","text":"🔌 E2E 선행: BE·FE 기동 확인"}}
+{"t":1795542979082,"m":{"type":"out","stream":"task","text":"▶ CheckList 수정분 재점검 — 지난 실행 뒤 바뀐 소스(FE 화면·공용, PROC, 메타, 검사기) 범위만 다시 측정(delta_scope: 기준선 대조 + AI 판단, 직전 미해결 행 규칙 포함) → 미검증 분류 · 기준선 없음·넓은 변경이면 전체 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SSP0014 --delta --no-docs\n","cls":"cmd"}}
+{"t":1795542989171,"m":{"type":"out","stream":"task","text":"[작업 1/3] 수정분 범위 결정(delta_scope · 소스 기준선 대조 + AI 판단)\n","cls":""}}
+{"t":1795542989173,"m":{"type":"out","stream":"task","text":"[수정분 범위] full · 직전 미검증 행 127행(규칙 13개) · FAIL·판정필요 64행은 그 행을 판정하는 검사기·소스가 바뀌지 않으면 1차 결과 유지 · 규칙 대응을 코드로 못 찾는 시험 1개 바뀜: 문서 시나리오\n","cls":""}}
+{"t":1795542989175,"m":{"type":"out","stream":"task","text":"[INFO] 수정분 재점검 → 전체기능 재점검으로 실행: 직전 미검증 행 127행(규칙 13개) · FAIL·판정필요 64행은 그 행을 판정하는 검사기·소스가 바뀌지 않으면 1차 결과 유지 · 규칙 대응을 코드로 못 찾는 시험 1개 바뀜: 문서 시나리오\n","cls":""}}
+{"t":1795542989175,"m":{"type":"out","stream":"task","text":"[작업 2/3] CheckList 전체(run_verify)\n","cls":""}}
+{"t":1795542989175,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SSP0014\n","cls":""}}

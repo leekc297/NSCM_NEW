@@ -1,0 +1,170 @@
+{
+ "id": "SCP0028",
+ "window": [
+  "2026-11-20 23:27:52.081",
+  "2026-11-20 23:28:02.969"
+ ],
+ "source": "DbProfile_*.log (GSCM/_asis_local/04.WSL)",
+ "note": "시간 구간으로 자름 — 같은 시간대에 다른 AS-IS 사용자가 있으면 섞일 수 있음",
+ "mixed_risk": false,
+ "other_launchers": [],
+ "calls": [
+  {
+   "at": "2026-11-20 23:27:55.448",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMUserAuthenctication",
+   "sp": "UP_FX_GetGSCMUserAuthenctication",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetUserAuthenctication",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 24.25,
+   "params": {
+    "UserID": "WJDF"
+   },
+   "inline": "EXEC UP_FX_GetGSCMUserAuthenctication @UserID='WJDF'",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:55.524",
+   "service": "GSCM.DataService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMGuestUserAuthenctication",
+   "sp": "UP_FX_GetGSCMGuestUserAuthenctication",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 7.13,
+   "params": {
+    "UserID": "WJDF"
+   },
+   "inline": "EXEC UP_FX_GetGSCMGuestUserAuthenctication @UserID='WJDF'",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:55.992",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMGuestUserAuthenctication",
+   "sp": "UP_FX_GetGSCMGuestUserAuthenctication",
+   "caller": "GSCM.App.Common.DLL.UserInfo::GetUserGuestAuthenctication",
+   "exec_type": "ExecuteDataSet",
+   "rows": 1,
+   "rows_kind": "DataSet rows",
+   "ms": 8.26,
+   "params": {
+    "UserID": "WJDF"
+   },
+   "inline": "EXEC UP_FX_GetGSCMGuestUserAuthenctication @UserID='WJDF'",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:56.015",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_SaveUserConnect",
+   "sp": "UP_FX_SaveUserConnect",
+   "caller": "GSCM.App.Common.DLL.UserInfo::SaveUserConnect",
+   "exec_type": "ExecuteNonQuery",
+   "rows": -1,
+   "rows_kind": "Affected rows",
+   "ms": 7.73,
+   "params": {
+    "UserID": "ikNOCbrfZf/AQyIKpfEiZg==",
+    "CnntCode": "0103001",
+    "SN": "LEE-03",
+    "PushKey": "",
+    "CnntIP": "100.113.200.36"
+   },
+   "inline": "EXEC UP_FX_SaveUserConnect @UserID='ikNOCbrfZf/AQyIKpfEiZg==', @CnntCode='0103001', @SN='LEE-03', @PushKey='', @CnntIP='100.113.200.36'",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:56.093",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetMessageInfoList",
+   "sp": "UP_FX_GetMessageInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 470,
+   "rows_kind": "DataSet rows",
+   "ms": 26.44,
+   "params": {
+    "Search": null
+   },
+   "inline": "EXEC UP_FX_GetMessageInfoList @Search=NULL",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:56.177",
+   "service": "GSCM.SystemMgmt.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetTermInfoList",
+   "sp": "UP_FX_GetTermInfoList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 665,
+   "rows_kind": "DataSet rows",
+   "ms": 16.41,
+   "params": {
+    "Search": null
+   },
+   "inline": "EXEC UP_FX_GetTermInfoList @Search=NULL",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:57.282",
+   "service": "GSCM.DataService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetFavoriteList",
+   "sp": "UP_FX_GetFavoriteList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 8.94,
+   "params": {
+    "GroupID": "Guest",
+    "UserID": "Guest"
+   },
+   "inline": "EXEC UP_FX_GetFavoriteList @GroupID='Guest', @UserID='Guest'",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:57.428",
+   "service": "GSCM.DataService.WSL",
+   "foxquery_id": "MenuContainer.UP_FX_GetGSCMAuthenticationMenuList",
+   "sp": "UP_FX_GetGSCMAuthenticationMenuList",
+   "caller": "",
+   "exec_type": "ExecuteDataSet",
+   "rows": 5,
+   "rows_kind": "DataSet rows",
+   "ms": 101.71,
+   "params": {
+    "UserID": "Guest",
+    "GroupID": "Guest",
+    "ProgramId": ""
+   },
+   "inline": "EXEC UP_FX_GetGSCMAuthenticationMenuList @UserID='Guest', @GroupID='Guest', @ProgramId=''",
+   "phase": "login"
+  },
+  {
+   "at": "2026-11-20 23:27:58.694",
+   "service": "GSCM.BizService.WSL",
+   "foxquery_id": "SystemManager.UP_FX_GetCommonDataList",
+   "sp": "UP_FX_GetCommonDataList",
+   "caller": "GSCM.App.Common.DLL.CommonData::GetCommonDataList",
+   "exec_type": "ExecuteDataSet",
+   "rows": 0,
+   "rows_kind": "DataSet rows",
+   "ms": 4.24,
+   "params": {
+    "Code": "MyGroupID",
+    "Param1": "Guest",
+    "Param2": "",
+    "Param3": "",
+    "Param4": "",
+    "Param5": "",
+    "TimeZone": "AS054"
+   },
+   "inline": "EXEC UP_FX_GetCommonDataList @Code='MyGroupID', @Param1='Guest', @Param2='', @Param3='', @Param4='', @Param5='', @TimeZone='AS054'",
+   "phase": "login"
+  }
+ ]
+}

@@ -77,10 +77,14 @@ def other_launchers():
 
 class Host:
     def __init__(self, cmddir):
-        self.cmddir = cmddir; self.seq = 0; self.proc = None
+        self.cmddir = cmddir; self.seq = 0; self.proc = None; self.view = None
     def start(self):
         os.makedirs(self.cmddir, exist_ok=True)
         self.proc = subprocess.Popen([HOST_EXE, "--cmddir", self.cmddir], cwd=LAUNCH_DIR)
+        try:  # 2026-11-20 사용자 지시: 실측 화면 방식(창 없이 실행·창 띄우기·녹화) — harness.json asisLiveView · tools/AsisLive/asis_view.py
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import asis_view; self.view = asis_view.start(self.proc.pid, self.cmddir)
+        except Exception as e:
+            print('[WARN] 실측 화면 방식 적용 실패(창 띄우기로 진행): %s' % e, flush=True); self.view = None
         t0 = time.time()
         while time.time() - t0 < 30:
             if os.path.isfile(os.path.join(self.cmddir, "_ready.txt")): return True
@@ -110,6 +114,13 @@ class Host:
             self.send("quit", timeout=10)
             try: self.proc.wait(10)
             except subprocess.TimeoutExpired: self.proc.kill()
+        if self.view:
+            try:
+                r = self.view.stop(); self.view = None
+                print('[AS-IS 실측 화면] 방식 %s · 투명 처리한 창 %s%s' % (r.get('mode'), r.get('moved'), (' · 녹화 ' + os.path.relpath(r['gif'], ROOT)) if r.get('gif') else ''), flush=True)
+                if r.get('why'): print('[WARN] 실측 화면 방식: %s' % r['why'], flush=True)
+            except Exception as e:
+                print('[WARN] 실측 화면 방식 마무리 실패: %s' % e, flush=True)
 
 # ───────────────────────── DbProfile 로그 → 호출 목록 ─────────────────────────
 ENTRY = re.compile(r"^I (\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d+) \[TheOne\.Data\.DbProfile\]", re.M)
@@ -227,13 +238,25 @@ def env_ready():
     if not build_host(): return 3, "호스트 준비 실패", base
     return 0, "", base
 
+MIN_MENU = 50  # 정상 실측 계정 메뉴 = 273개(2026-11-20 jaeuk.shin), Guest = 5개(2026-11-24 WJDF)
+
+
+def live_user():
+    """실측 로그인 계정 = tools/Harness/harness.json asisLiveUser(없으면 jaeuk.shin: 2026-11-20 실측 정상 계정, 메뉴 273개)"""
+    try:
+        h = json.load(open(os.path.join(ROOT, "tools", "Harness", "harness.json"), encoding="utf-8-sig"))
+        return str(h.get("asisLiveUser") or "jaeuk.shin").strip()
+    except Exception:
+        return "jaeuk.shin"
+
 def start_session(cmddir):
     """호스트 기동 → 로그인 → 메인 대기 → 최대화. 반환 (host|None, info, why)"""
     host = Host(cmddir); info = {}
     if not host.start(): return None, info, "호스트 기동 실패"
-    r = host.send("login", timeout=90)
+    want = live_user()
+    r = host.send("login", timeout=90, user=want)
     if not r.get("ok"): host.stop(); return None, info, "로그인 창 처리 실패: " + str(r.get("error"))
-    info["user_id"] = r.get("userId")
+    info["user_id"] = r.get("userId"); info["prev_user_id"] = r.get("prevUserId")
     r = host.send("wait_main", timeout=240)
     if not r.get("ok"): host.stop(); return None, info, "메인 화면 대기 실패: " + str(r.get("error"))
     info["main"] = {k: r.get(k) for k in ("title", "user", "menu_count")}
@@ -243,7 +266,12 @@ def start_session(cmddir):
         time.sleep(3); n = len(host.send("menu", timeout=60).get("items") or [])
     info["main"]["menu_count"] = n
     if n == 0: host.stop(); return None, info, "메뉴 목록이 비어 있음(메뉴 조회 실패·권한 없음) — 화면을 열 수 없음"
+    # 2026-11-24 18:45 사고: 계정 WJDF 가 Guest 로 로그인(메뉴 5개, 정상 계정 273개) → 실측 대상 0개. Guest 이거나 메뉴가 기준보다 적으면 원인을 적고 멈춘다
+    who = str((info["main"] or {}).get("user") or "")
+    if re.search(r"Login\s*:\s*Guest", who, re.I) or n < MIN_MENU:
+        host.stop(); return None, info, "로그인 계정 %s = AS-IS %s(메뉴 %d개, 기준 %d개 이상). harness.json asisLiveUser 를 AS-IS 권한 계정으로 지정" % (info.get("user_id"), "Guest" if "Guest" in who else "권한 부족", n, MIN_MENU)
     host.send("maximize", timeout=30)
+    if host.view: host.view.after_maximize()   # 창 없이 실행 = 최대화한 메인 창도 화면 밖으로
     return host, info, ""
 
 _DBX = {"cx": None, "host": None}
@@ -350,9 +378,19 @@ def measure(host, sid, run_dir, a, run, scenario=None, close_after=False, prefil
             rec("shot_find", host.send("shot", timeout=60, path=os.path.join(shots, sid + "_02_find.png")))
         run["t_open"], run["t_find"] = ts(t_open), ts(t_find)
     run["dialogs"] = host.send("dialogs", timeout=20, **{"from": dlg0}).get("dialogs", [])
+    def _sweep(step):                                      # 11-24 R71: 값 기록 뒤 런처가 띄운 팝업·경고창을 닫는다
+        try: sw = host.send("sweep", timeout=150)
+        except Exception as ex: sw = {"ok": False, "error": str(ex)[:200]}
+        run["steps"].append(dict(step=step, ok=sw.get("ok"), left=sw.get("left"), dialogs_open=sw.get("dialogs_open"), closed=len(sw.get("closed") or []), error=sw.get("error")))
+        run.setdefault("popups_closed", []).extend(sw.get("closed") or [])
+        return sw
+    _sweep("sweep")
     if close_after:
         rc = rec("close_screen", host.send("close_screen", timeout=60))
         if rc.get("open_screens") not in (0, None): run["close_left"] = rc.get("open_screens")
+        sw = _sweep("sweep_after_close")
+        if not sw.get("ok") or (sw.get("left") or 0) > 0 or (sw.get("dialogs_open") or 0) > 0:
+            run["close_left"] = run.get("close_left") or {"left": sw.get("left"), "dialogs_open": sw.get("dialogs_open"), "error": sw.get("error")}
     return code, status, why
 
 def collect(sid, run_dir, run, t0, t1, a, code, status, why):

@@ -1,0 +1,45 @@
+{
+  "id": "20261125173941_SELF",
+  "at": "2026-11-25T17:39:41+09:00",
+  "ms": 1795595981103,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/asisfacts/asisfacts.json|의미분석범위가dmf화면뿐이라scpscpfsspfpfpcdm숫자형화면과화면",
+  "title": "사용자 지시 R228 같은 문제: tools/AsisFacts/asisfacts.json:8 의미 분석 범위가 DMF 화면뿐이라 SCP·SCPF·SSP·FP·FPC·DM 숫자형 화면과 화면ID 없는 공통 소스(03.BIZ\\GSCM.Common, 06.UI",
+  "evidence": "규칙 R228 \"AS-IS 파서는 Roslyn 의미 분석으로 호출 대상과 값을 해석하고 DM 외 모듈(SCP, SSP, FP, Common)에도 같은 방식을 적용함\" (원래 지시 2026-11-25 16:36 \"Roslyn 의미 분석으로 DM 파서 보완해주세요\") · tools/AsisFacts/asisfacts.json:8 \"semanticScreens\": [ \"DMF\" ],",
+  "targets": [
+    "tools/AsisFacts/asisfacts.json"
+  ],
+  "before_after": "semanticScreens 를 screenIdPatterns 의 접두 전체(DMF, DM, SCPF, SCP, SSP, SCM, FPC, FP 등)로 넓히고 semanticAlwaysPaths 에 03.BIZ\\, 06.UIL\\ 공통 경로를 추가함. 변경 뒤 scan 을 다시 실행해 _run.log 에 모듈별 의미 분석 시도·개선 건수가 찍히는지 확인함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/AsisFacts/asisfacts.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:13:44+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · tools/AsisFacts/asisfacts.json:8 semanticScreens 를 screenIdPatterns 접두 17개(DMF, SCPF, DM, SCP, SSP, SCM, FPC, FP, NSD, NMM, NPP, NLE, NEIF, GSD, FDM, FM, MM)로, 9행 semanticAlwaysPaths 에 03.BIZ\\, 06.UIL\\ 추가 · scan 을 임시 폴더(--out scratchpad)로 실행 15:47:28~16:13:28 rc=0: semantic projects 316, sink tried 116, improved 89, call args tried 174185, improved 18067, 1492.3s(종전 Doc/asisfacts/_run.log projects 200, sink tried 27, improved 14, call args improved 9186) · semantic_report.csv 116행 모듈별 DM 13, SCP 9, SSP 5, FP 58, SCM 3, Common 22, Framework 6 · _run.log 에 모듈별 건수 줄은 없음(Semantic.cs 757행 수정 필요, 대상 밖) · Doc/asisfacts 운영 출력은 다시 만들지 않음 · 2026-11-26 16:14"
+    }
+  ],
+  "plain": {
+    "what": "AS-IS 파서는 Roslyn 의미 분석으로 호출 대상과 값을 해석하고 DM 외 모듈(SCP, SSP, FP, Common)에도 같은 방식을 적용함 규칙을 tools/AsisFacts/asisfacts.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R228|tools/AsisFacts/asisfacts.json",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795677224759
+}

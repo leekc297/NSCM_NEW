@@ -96,11 +96,14 @@
   }
   function longTables() {
     Array.prototype.forEach.call(document.querySelectorAll('section.tab table'), function (t) {
-      if (t.parentNode.classList.contains('tbl-scroll') || !t.tBodies[0] || t.tBodies[0].rows.length <= 15) return;
+      if (t.parentNode.classList.contains('tbl-scroll') || t.parentNode.classList.contains('tbl-wrap') || !t.tBodies[0]) return;
+      if (t.tBodies[0].rows.length <= 15) { var w0 = document.createElement('div'); w0.className = 'tbl-wrap'; t.parentNode.insertBefore(w0, t); w0.appendChild(t); return; }   // 2026-11-23 폭이 넓은 표가 화면을 밀지 않게
       var w = document.createElement('div'); w.className = 'tbl-scroll'; t.parentNode.insertBefore(w, t); w.appendChild(t);
       var c = document.createElement('div'); c.className = 'tbl-cap'; c.textContent = t.tBodies[0].rows.length + '행 · 표 안에서 스크롤'; w.parentNode.insertBefore(c, w);
+      var f = document.createElement('input'); f.type = 'search'; f.className = 'tbl-filter'; f.placeholder = '이 표에서 행 찾기'; c.appendChild(f);   // 2026-11-23 표 행 거르기
+      var cnt = document.createElement('span'); cnt.className = 'tbl-cnt'; c.appendChild(cnt);
+      f.addEventListener('input', function () { var q = f.value.trim().toLowerCase(), n = 0; Array.prototype.forEach.call(t.tBodies[0].rows, function (r) { var hit = !q || r.textContent.toLowerCase().indexOf(q) >= 0; r.classList.toggle('fout', !hit); if (hit) n++; }); cnt.textContent = q ? ' ' + n + '행 일치' : ''; });
     });
   }
-  window.addEventListener('resize', navH);
-  window.SSPView = { init: function () { navH(); tocs(); longTables(); Array.prototype.forEach.call(document.querySelectorAll('pre.mermaid'), wrapOne); }, refit: refit, apply: apply };
+  window.SSPView = { init: function () { longTables(); Array.prototype.forEach.call(document.querySelectorAll('pre.mermaid'), wrapOne); }, refit: refit, apply: apply };
 })();

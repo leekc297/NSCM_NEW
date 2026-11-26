@@ -1,0 +1,280 @@
+{
+ "screen": "SCP0105",
+ "calls": [
+  {
+   "cls": "CellFormatConditionType",
+   "method": "SetSheetNumericColumnFormatASSEMBLY",
+   "asis_ref": "SCP0105_CAPA_Speed_Plan.cs:1717",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "SetSheetNumericColumnFormatASSEMBLY",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "10"
+    },
+    {
+     "param": "#2",
+     "kind": "LITERAL",
+     "arg": "10"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": []
+  },
+  {
+   "cls": "CellFormatConditionType",
+   "method": "SetSheetNumericColumnFormatELTR",
+   "asis_ref": "SCP0105_CAPA_Speed_Plan.cs:1756",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "SetSheetNumericColumnFormatELTR",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "10"
+    },
+    {
+     "param": "#2",
+     "kind": "LITERAL",
+     "arg": "10"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": []
+  },
+  {
+   "cls": "SCM002_CAPAColumnPopup",
+   "method": "btnColumn_Click",
+   "asis_ref": "SCP0105_CAPA_Speed_Plan.cs:3168",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnColumn",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SCP0105\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "EXPR",
+     "arg": "this._division_type_name"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "true"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0105_CAPA_Speed_Plan.cs:3173",
+     "raw": "BeforeFindData()"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SCP0105_CAPA_Speed_Plan.cs:3169",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "CellFormatConditionType": {
+   "cls": "CellFormatConditionType",
+   "in_pack": false,
+   "from": "none"
+  },
+  "SCM002_CAPAColumnPopup": {
+   "cls": "SCM002_CAPAColumnPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Common.UIL/Popup/SCM002_CAPAColumnPopup.cs",
+   "title": "User Column Setting",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "115",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "SCM002_CAPAColumnPopup.cs:281",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:195",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:208",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:230",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:244",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:126",
+     "method": "SetFixColumnStatus",
+     "raw": "svSource.Cells[r, c].BackColor = Color.WhiteSmoke;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:231",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:245",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:334",
+     "method": "SetTitleSet",
+     "raw": "si.SetBGColor(r, si.GetColumnIndex(\"COLUMN_NAME\"), r, spdBase.ActiveSheet.ColumnCount - 1, mColor);",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:339",
+     "method": "SetTitleSet",
+     "raw": "si.SetBGColor(r, si.GetColumnIndex(\"COLUMN_NAME\"), r, spdBase.ActiveSheet.ColumnCount - 1, mColor);",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:192",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:205",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:227",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center, false);",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:241",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center, false);",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:785",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:786",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:789",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.Cancel;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM002_CAPAColumnPopup.cs:790",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

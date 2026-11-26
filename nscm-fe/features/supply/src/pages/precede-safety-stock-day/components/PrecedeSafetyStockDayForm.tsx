@@ -48,6 +48,7 @@ export const PrecedeSafetyStockDayForm = ({ tabId }: PrecedeSafetyStockDayFormPr
   const searchParams = usePrecedeSafetyStockDayStore(state => state.searchParams);
   const setSearchParams = usePrecedeSafetyStockDayStore(state => state.setSearchParams);
   const setDivision = usePrecedeSafetyStockDayStore(state => state.setDivision);
+  const setSiteOptionCodes = usePrecedeSafetyStockDayStore(state => state.setSiteOptionCodes);
   const setFilters = usePrecedeSafetyStockDayStore(state => state.setFilters);
   const fetchStaticColumns = usePrecedeSafetyStockDayStore(state => state.fetchStaticColumns);
   const openSearchArea = usePrecedeSafetyStockDayStore(state => state.isOpenSearchArea);
@@ -91,6 +92,12 @@ export const PrecedeSafetyStockDayForm = ({ tabId }: PrecedeSafetyStockDayFormPr
         .map(item => ({ label: item.NAME, value: item.CODE })),
     [initData, searchParams.divisionId]
   );
+
+  // Division cascade 로 바뀌는 Site 옵션 코드를 store 에 동기화 — setFilters 가 "전 사이트 선택 = 'ALL'
+  //   (무필터)" 보정 기준으로 쓴다(검색 버튼·단축키 두 경로 모두 store setFilters 를 거친다).
+  useEffect(() => {
+    setSiteOptionCodes(siteOptions.map(o => o.value));
+  }, [siteOptions, setSiteOptionCodes]);
 
   // Stage(o_rc3, OPMZ_STAGE_CD: SEGMENT1=DIVISION_ID/SEGMENT3=CODE/ATTRIBUTE1=NAME) — 선택 Division
   //   cascade. AS-IS RefreshStageByDivision 은 DIVISION_ID = division(원값, EE 특수분기 없음). 단일선택.
@@ -164,8 +171,14 @@ export const PrecedeSafetyStockDayForm = ({ tabId }: PrecedeSafetyStockDayFormPr
                   <CustomDropdown
                     multiple
                     allOption
+                    // 선택값을 한 번에 비우는 clear(X) 아이콘 노출(전체/부분 선택 후 전사이트='ALL'(무필터)로 복귀).
+                    //   CustomDropdown 은 이 prop 을 DropdownField 로 그대로 전달한다(디자인시스템 기본값 false).
+                    useClearIcon
                     value={searchParams.scmSiteId}
                     options={siteOptions}
+                    // Plan Group 과 동형 — SELECT ALL 도 선택값을 그대로 열거해 담아 체크 표시를 유지한다
+                    //   (종전엔 여기서 'ALL' 로 뭉개 콤보가 전체 해제처럼 비어 보였다). "전 사이트 = 'ALL'
+                    //   (무필터)" AS-IS 파리티 보정은 조회 직전 store setFilters 로 옮겼다(테스트 No.3).
                     onChange={(_, option) => setSearchParams({ scmSiteId: option })}
                   />
                 )}
@@ -214,6 +227,8 @@ export const PrecedeSafetyStockDayForm = ({ tabId }: PrecedeSafetyStockDayFormPr
                   <CustomDropdown
                     multiple
                     allOption
+                    // Site 콤보와 동형 — 선택값을 한 번에 비우는 clear(X) 아이콘 노출.
+                    useClearIcon
                     value={searchParams.planGroupId}
                     options={buildDivisionFilteredOptions(
                       planGroups,

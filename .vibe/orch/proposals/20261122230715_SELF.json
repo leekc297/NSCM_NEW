@@ -1,0 +1,100 @@
+{
+  "id": "20261122230715_SELF",
+  "at": "2026-11-22T23:07:15+09:00",
+  "ms": 1795356435913,
+  "source": "self",
+  "status": "applied",
+  "sig": "un idle self ref",
+  "title": "U3 조치 없는 열린 사건 판정에서 U3 자신이 올린 R12 사건 제외",
+  "evidence": "diag_in.json S13 항목 detail 의 근거 사건 = 20261120_132034_R12_ALL 자신(3463분). .vibe/orch/incidents/20261120_132034_R12_ALL.json sig 'R12|S13|U3|idleInc', actions [] (처음 근거는 20261120_111147_R12_ALL_2). .vibe/orch/selfcheck/raised.json:2 'S13|U3|idleInc' → 이 사건. orch-usercheck.js:68 idle 거르기에 자기 sig 제외 없음. orch-agent.js:298 은 agentRules 에 없는 규칙을 조치 기록 없이 건너뜀. harness.json:42 agentRules 에 R12 없음. orch-selfcheck.js:294 는 항목이 사라져야 사건을 닫음. 이 셋이 맞물려 U3 항목과 R12 사건이 서로를 유지함. events.jsonl:930 뒤 이 사건 조치 기록 0건",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "orch-usercheck.js:68 idle = 열림, notice 없음, actions 0, 경과 > gap 인 사건 전부 → 같은 조건에 i.sig !== 'R12|S13|U3|idleInc' 추가. 시험: DETECTORS.vmoCadence 에 (가) sig 'R12|S13|U3|idleInc' 열린 사건 1건(3시간 경과) 이면 S13|U3|idleInc 항목 0건, (나) 같은 조건의 다른 sig R12 사건 1건이면 1건",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js → 추가 시험 2건 PASS. 창 다시 로드 뒤 다음 자가진단에서 .vibe/orch/selfcheck/result.json S13 items 에 S13|U3|idleInc 없음. 사건 20261120_132034_R12_ALL status resolved, actions 마지막 줄 '다시 점검한 결과 S13 항목에서 사라짐'",
+  "rollback": "orch-usercheck.js:68 조건 원래대로, 추가 시험 2건 삭제",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "오판 1건. 사건 20261120_132034_R12_ALL 이 자기 자신을 근거로 58시간째 열려 있음. 같은 원인 재발 사례 2건 이상 없음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-22T23:07:44+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-22T23:11:19+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 947, FAIL 0), 정의 정합 통과 · 백업 태그 20261122_self2307"
+    },
+    {
+      "at": "2026-11-22T23:11:21+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-22T23:15:27+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 949, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-22T23:15:27+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-22 23:11:52 node tools/VibeManager/test/t_orch_usercheck.js 실행. 추가 시험 출력 'PASS U3 자기 sig R12 사건 3시간 = S13|U3|idleInc 항목 0건', 'PASS U3 다른 sig R12 사건 3시간 = 항목 1건'. 기존 U3 4건 PASS, 마지막 줄 'ALL PASS' · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-22T23-11-21_claude_orch.log",
+      "sec": 39,
+      "costUsd": 0.6937597,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:22+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U3|idleInc",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795356463849,
+  "autoFp": "b7f4cff30c",
+  "applyStartMs": 1795356681525,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 949, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261122_self2307",
+  "needsReload": true,
+  "appliedMs": 1795356927264,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "2026-11-22 23:11:52 node tools/VibeManager/test/t_orch_usercheck.js 실행. 추가 시험 출력 'PASS U3 자기 sig R12 사건 3시간 = S13|U3|idleInc 항목 0건', 'PASS U3 다른 sig R12 사건 3시간 = 항목 1건'. 기존 U3 4건 PASS, 마지막 줄 'ALL PASS'",
+    "note": "orch-usercheck.js:68~69 idle 조건에 i.sig !== 'R12|S13|U3|idleInc' 추가. 시험 2건은 U3 블록 뒤에 추가함. verify 중 창 다시 로드 뒤 확인 2건(result.json S13 items, 사건 20261120_132034_R12_ALL resolved)은 다음 자가진단 몫이라 미확인. 코드를 되돌린 상태의 FAIL 확인은 실행하지 않음"
+  },
+  "snap": "prop_20261122230715_SELF",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

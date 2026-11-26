@@ -1,0 +1,512 @@
+# -*- coding: utf-8 -*-
+"""운영자 매뉴얼 그림, 표 그리기(2026-11-24 사용자 지적 반영). ops_manual.py 가 부름.
+
+  사용자 지적(11-24 13:3x): 표 머리글 초록 배경 최악, 머리글 가운데, 긴 글 왼쪽, 짧은 글 가운데, 열 너비 최적화.
+  흐름 선이 상자를 덮고 이름표가 선에 겹쳐 안 보임. 업무 개요 글 나열 대신 SmartArt 같은 그림. 메뉴 구조, 인터페이스 구성도는 다른 모양.
+  python-pptx 는 SmartArt 개체를 만들 수 없어 같은 모양을 도형으로 그림(세로 블록 목록, 기본 프로세스, 계층 구조, 수신/송신 흐름).
+
+  표 = style_table. 흐름 = flow(직선 사슬은 프로세스형, 그 밖은 층 배치), tree(계층 구조), lanes(인터페이스), blocks(세로 블록 목록)
+  공통 규칙: 연결선은 상자 옆 연결점에 붙임(선이 상자를 덮지 않음), 선 위에 글을 쓰지 않음(번호 원 + 아래 범례), 상자 이름은 한 줄(글자 크기 맞춤)
+"""
+import re
+from pptx.util import Pt, Emu
+from pptx.dml.color import RGBColor
+from pptx.enum.shapes import MSO_SHAPE, MSO_CONNECTOR
+from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.oxml.ns import qn
+from lxml import etree
+
+NAVY = RGBColor(0x1F, 0x38, 0x64); NAVY2 = RGBColor(0x2E, 0x54, 0x8C); LIGHT = RGBColor(0xEE, 0xF3, 0xFA); LINE = RGBColor(0x8E, 0xA9, 0xC8)
+GREY = RGBColor(0xBF, 0xBF, 0xBF); TXT = RGBColor(0x26, 0x26, 0x26); WHITE = RGBColor(0xFF, 0xFF, 0xFF); SUB = RGBColor(0x40, 0x40, 0x40)
+EDGE = RGBColor(0x4A, 0x6F, 0xA5); ACC = RGBColor(0xC5, 0x5A, 0x11)
+CIRC = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
+
+
+def tw(text, pt):
+    """글 폭 추정(EMU): 한글, 전각 = 1, 영문, 숫자 = 0.55 글자폭"""
+    w = sum(1.0 if ord(ch) > 0x2E80 else 0.56 for ch in str(text))
+    return int(w * pt * 12700)
+
+
+def fit_pt(text, width, hi=12, lo=7):
+    for pt in range(hi, lo - 1, -1):
+        if tw(text, pt) <= width - 120000:
+            return pt
+    return lo
+
+
+def run_fmt(r, pt, bold=False, color=TXT):
+    r.font.size = Pt(pt); r.font.bold = bold; r.font.color.rgb = color
+
+
+def box(slide, shape, x, y, w, h, fill=LIGHT, line=LINE, lw=1.0):
+    s = slide.shapes.add_shape(shape, int(x), int(y), int(w), int(h))
+    if fill is None:
+        s.fill.background()
+    else:
+        s.fill.solid(); s.fill.fore_color.rgb = fill
+    if line is None:
+        s.line.fill.background()
+    else:
+        s.line.color.rgb = line; s.line.width = Pt(lw)
+    s.shadow.inherit = False
+    tf = s.text_frame; tf.word_wrap = True
+    for m in ('margin_left', 'margin_right'):
+        setattr(tf, m, 50000)
+    tf.margin_top = tf.margin_bottom = 20000
+    return s
+
+
+def put(shape, lines, align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE):
+    """lines = [(글, pt, bold, 색)]"""
+    tf = shape.text_frame; tf.vertical_anchor = anchor
+    for i, (t, pt, b, c) in enumerate(lines):
+        p = tf.paragraphs[0] if i == 0 else tf.add_paragraph(); p.alignment = align
+        r = p.add_run(); r.text = str(t); run_fmt(r, pt, b, c)
+
+
+def text(slide, x, y, w, h, t, pt=9, bold=False, color=TXT, align=PP_ALIGN.LEFT):
+    tb = slide.shapes.add_textbox(int(x), int(y), int(w), int(h)); tf = tb.text_frame; tf.word_wrap = True
+    tf.margin_left = tf.margin_right = 30000; tf.margin_top = tf.margin_bottom = 10000
+    lines = t if isinstance(t, list) else [t]
+    for i, ln in enumerate(lines):
+        p = tf.paragraphs[0] if i == 0 else tf.add_paragraph(); p.alignment = align
+        r = p.add_run(); r.text = str(ln); run_fmt(r, pt, bold, color)
+    return tb
+
+
+def arrow_end(conn):
+    ln = conn.line._get_or_add_ln()
+    for old in ln.findall(qn('a:tailEnd')):
+        ln.remove(old)
+    etree.SubElement(ln, qn('a:tailEnd')).set('type', 'triangle')
+
+
+def connect(slide, a, ai, b, bi, color=EDGE, kind=MSO_CONNECTOR.ELBOW, width=1.25):
+    """a 상자 ai 연결점 → b 상자 bi 연결점(둥근 사각형: 0 위, 1 왼쪽, 2 아래, 3 오른쪽). 연결선이 상자에 붙어 선이 상자를 덮지 않음"""
+    c = slide.shapes.add_connector(kind, 0, 0, 1, 1)
+    c.begin_connect(a, ai); c.end_connect(b, bi)
+    c.line.color.rgb = color; c.line.width = Pt(width); arrow_end(c)
+    return c
+
+
+def poly(slide, pts, color=EDGE, width=1.25):
+    """지정 경로 꺾은선 + 끝 화살표(상자 위아래, 열 사이 빈 칸으로 돌아감. 2026-11-24 사용자 지적: 선이 상자 윤곽선과 겹치거나 상자 가운데를 지남)"""
+    fb = slide.shapes.build_freeform(int(pts[0][0]), int(pts[0][1]), scale=1.0)
+    fb.add_line_segments([(int(x), int(y)) for x, y in pts[1:]], close=False)
+    sh = fb.convert_to_shape(); sh.fill.background(); sh.line.color.rgb = color; sh.line.width = Pt(width); sh.shadow.inherit = False
+    arrow_end(sh)
+    return sh
+
+
+def badge(slide, x, y, n, d=200000):
+    s = box(slide, MSO_SHAPE.OVAL, x - d // 2, y - d // 2, d, d, fill=WHITE, line=ACC, lw=1.0)
+    s.text_frame.margin_left = s.text_frame.margin_right = s.text_frame.margin_top = s.text_frame.margin_bottom = 0
+    put(s, [(str(n), 7, True, ACC)])
+    return s
+
+
+def path_point(pts, f):
+    """꺾은선 pts 의 전체 길이 f 비율 지점"""
+    seg = [(pts[i], pts[i + 1], abs(pts[i + 1][0] - pts[i][0]) + abs(pts[i + 1][1] - pts[i][1])) for i in range(len(pts) - 1)]
+    tot = sum(x[2] for x in seg) or 1; t = tot * f
+    for a, b, L in seg:
+        if t <= L and L:
+            k = t / L
+            return int(a[0] + (b[0] - a[0]) * k), int(a[1] + (b[1] - a[1]) * k)
+        t -= L
+    return pts[-1]
+
+
+def badge_on(slide, pts, n, used, boxes, d=200000):
+    """2026-11-24 사용자 지적(번호 1, 6, 8, 10만 보임 = 같은 자리에 겹쳐 그림) → 선 위 후보 자리 중 다른 번호 원, 상자와 겹치지 않는 첫 자리"""
+    cands = [0.5, 0.35, 0.65, 0.25, 0.75, 0.45, 0.55, 0.15, 0.85, 0.3, 0.7, 0.2, 0.8, 0.1, 0.9]
+    best = None
+    for f in cands:
+        x, y = path_point(pts, f)
+        if any(abs(x - ux) < d * 1.1 and abs(y - uy) < d * 1.1 for ux, uy in used):
+            continue
+        if any(bx - d // 2 < x < bx + bw + d // 2 and by - d // 2 < y < by + bh + d // 2 for bx, by, bw, bh in boxes):
+            continue
+        best = (x, y); break
+    if best is None:  # 자리가 없으면 마지막 번호 원 오른쪽으로 비켜 둠
+        x, y = path_point(pts, 0.5)
+        while any(abs(x - ux) < d * 1.1 and abs(y - uy) < d * 1.1 for ux, uy in used):
+            x += int(d * 1.15)
+        best = (x, y)
+    used.append(best)
+    return badge(slide, best[0], best[1], n, d)
+
+
+def legend(slide, x, y, w, h, items, pt=8):
+    """번호 범례(선 위에 쓰던 테이블 이름) · items = [(번호, 글)]"""
+    if not items:
+        return
+    lines = [f'{CIRC[n - 1] if n <= len(CIRC) else n} {t}' for n, t in items]
+    text(slide, x, y, w, h, lines, pt, False, SUB)
+
+
+# ───────────────────────── 표 ─────────────────────────
+def _cell_fill(cell, rgb):
+    cell.fill.solid(); cell.fill.fore_color.rgb = rgb
+
+
+def _cell_border(cell, rgb='BFBFBF', w=6350):
+    tcPr = cell._tc.get_or_add_tcPr()
+    for tag in ('a:lnL', 'a:lnR', 'a:lnT', 'a:lnB'):
+        for old in tcPr.findall(qn(tag)):
+            tcPr.remove(old)
+        ln = etree.SubElement(tcPr, qn(tag), w=str(w))
+        sf = etree.SubElement(ln, qn('a:solidFill')); etree.SubElement(sf, qn('a:srgbClr'), val=rgb)
+    # lnL..lnB 는 solidFill 앞에 와야 함(스키마 순서)
+    fills = [e for e in tcPr if e.tag in (qn('a:solidFill'), qn('a:noFill'))]
+    for f in fills:
+        tcPr.remove(f); tcPr.append(f)
+
+
+def col_widths(cols, rows, total, pt=9):
+    """열 너비 = 글 길이(머리글, 칸 90% 분위) 비례. 최소 = 머리글 폭, 최대 = 전체의 45%"""
+    n = max(1, len(cols)); need = []; fixed = []
+    for j in range(n):
+        vals = [str(r[j]) for r in rows if j < len(r)]
+        head = tw(cols[j], pt) * 1.1 + 160000  # 머리글(굵게) 한 줄
+        if is_short(j, cols, rows):  # 짧은 열 = 가장 긴 값이 한 줄에 들어가는 폭(고정)
+            need.append(max(head, max([tw(v, pt) for v in vals] or [0]) + 160000)); fixed.append(True)
+        else:
+            ws_ = sorted(tw(v, pt) for v in vals) or [0]
+            p90 = ws_[int(len(ws_) * 0.9) - 1] if len(ws_) > 1 else ws_[0]
+            need.append(max(head, min(p90 * 0.6 + 120000, total * 0.45))); fixed.append(False)
+    fx = sum(w for w, f in zip(need, fixed) if f); fl = sum(w for w, f in zip(need, fixed) if not f)
+    if fl and fx < total * 0.6:  # 긴 열이 남는 폭을 나눠 가짐
+        k = (total - fx) / fl; need = [w if f else w * k for w, f in zip(need, fixed)]
+    s = sum(need) or 1
+    ws = [int(total * x / s) for x in need]
+    ws[-1] += total - sum(ws)
+    return ws
+
+
+def is_short(j, cols, rows):
+    """짧은 글 열(단계, 건수, 시각, 코드 등) = 가운데 정렬"""
+    vals = [str(r[j]) for r in rows if j < len(r) and str(r[j]).strip()]
+    return not vals or max(tw(v, 10) for v in vals) <= tw('가' * 9, 10)  # 한글 9자 폭 이하(영문, 숫자는 약 16자)
+
+
+def style_table(t, cols, rows, total_w, pt=9, head=None):
+    """머리글 = 양식 표 머리글 색(head = (배경 RGB, 글 RGB), 없으면 남색, 흰 글), 굵게, 가운데. 본문 = 흰 배경, 회색 선, 짧은 열 가운데, 긴 열 왼쪽. 열 너비 최적화
+       2026-11-24 사용자: 머리글 초록은 AS-IS 양식 색이라 유지"""
+    hb, hc = head or (NAVY, WHITE)
+    ws = col_widths(cols, rows, total_w, pt)
+    for j, w in enumerate(ws[:len(t.columns)]):
+        t.columns[j].width = Emu(w)
+    short = [is_short(j, cols, rows) for j in range(len(cols))]
+    tp = t._tbl.find(qn('a:tblPr'))
+    if tp is not None:
+        for k in ('bandRow', 'firstRow', 'bandCol', 'firstCol', 'lastRow', 'lastCol'):
+            tp.set(k, '0')
+        st = tp.find(qn('a:tableStyleId'))
+        if st is not None:
+            tp.remove(st)
+    for i, row in enumerate(t.rows):
+        for j, cell in enumerate(row.cells):
+            _cell_fill(cell, hb if i == 0 else WHITE); _cell_border(cell)
+            cell.vertical_anchor = MSO_ANCHOR.MIDDLE
+            cell.margin_left = cell.margin_right = 45000; cell.margin_top = cell.margin_bottom = 20000
+            for p in cell.text_frame.paragraphs:
+                p.alignment = PP_ALIGN.CENTER if i == 0 or (j < len(short) and short[j]) else PP_ALIGN.LEFT
+                for r in p.runs:
+                    run_fmt(r, pt, i == 0, hc if i == 0 else TXT)
+
+
+# ───────────────────────── 흐름 ─────────────────────────
+def template_head(table):
+    """양식 표 머리글 칸 색(배경 RGB, 글 RGB). 못 읽으면 None"""
+    try:
+        c = table.cell(0, 0); sf = c._tc.find(qn('a:tcPr')).find(qn('a:solidFill')).find(qn('a:srgbClr'))
+        bg = RGBColor.from_string(sf.get('val'))
+        fg = None
+        for p in c.text_frame.paragraphs:
+            for r in p.runs:
+                try:
+                    fg = r.font.color.rgb
+                except Exception:
+                    fg = None
+                if fg is not None:
+                    break
+        return bg, (fg or TXT)
+    except Exception:
+        return None
+
+
+def draw_pmap(slide, area, procs):
+    """전체 프로세스 맵(SmartArt 프로세스 + 줄): 위 = 프로세스 갈매기(순서), 아래 줄 = 관련 화면, 배치 잡, 실행 시각, 결과 테이블"""
+    x0, y0, W, H = area; n = max(1, len(procs)); lw = int(W * 0.11); gap = 30000
+    cw = (W - lw - gap * (n - 1)) // n; ch = 480000; tip = int(ch * 0.28)
+    pt = min([fit_pt(p['name'], cw - 2 * tip - 40000, 12, 7) for p in procs] or [10])
+    lanes = [('관련 화면', 'screens'), ('배치 잡', 'jobs'), ('실행 시각', 'times'), ('결과 테이블', 'tables')]
+    lh = (H - ch - 100000 - gap * (len(lanes) - 1)) // len(lanes)
+    for i, p in enumerate(procs):
+        x = x0 + lw + i * (cw + gap)
+        s = box(slide, MSO_SHAPE.CHEVRON if i else MSO_SHAPE.PENTAGON, x, y0, cw, ch, fill=NAVY if i % 2 == 0 else NAVY2, line=None)
+        s.adjustments[0] = 0.28; s.text_frame.margin_left = s.text_frame.margin_right = 0
+        put(s, [(p['name'], pt, True, WHITE)])
+    for k, (lab, key) in enumerate(lanes):
+        y = y0 + ch + 100000 + k * (lh + gap)
+        lb = box(slide, MSO_SHAPE.RECTANGLE, x0, y, lw - 40000, lh, fill=NAVY, line=None)
+        put(lb, [(lab, fit_pt(lab, lw - 40000, 10, 7), True, WHITE)])
+        for i, p in enumerate(procs):
+            x = x0 + lw + i * (cw + gap)
+            c = box(slide, MSO_SHAPE.RECTANGLE, x, y, cw, lh, fill=LIGHT if k % 2 == 0 else WHITE, line=LINE, lw=0.5)
+            vals = p.get(key) or []
+            body = vals if isinstance(vals, list) else [str(vals)]
+            put(c, [(str(v), 7, False, TXT) for v in body[:6]] + ([(f'외 {len(body) - 6}개', 7, False, SUB)] if len(body) > 6 else []), PP_ALIGN.LEFT, MSO_ANCHOR.TOP)
+
+
+def is_chain(nodes, edges):
+    ids = [n['id'] for n in nodes]
+    if len(ids) < 2 or len(ids) > 7 or len(edges) != len(ids) - 1:
+        return False
+    nxt = {e['from']: e['to'] for e in edges}
+    return all(nxt.get(ids[i]) == ids[i + 1] for i in range(len(ids) - 1))
+
+
+def draw_process(slide, area, nodes, edges, notes=None):
+    """기본 프로세스형(SmartArt): 갈매기 모양 단계(이름 한 줄) + 단계 아래 설명 상자. 단계 사이 테이블 = 설명 상자 끝 줄"""
+    x0, y0, W, H = area; n = len(nodes); gap = 40000
+    cw = (W - gap * (n - 1)) // n; ch = 560000
+    labels = [str(nd.get('label') or nd['id']) for nd in nodes]
+    tip = int(ch * 0.28); pt = min(fit_pt(l, cw - 2 * tip - 60000, 13, 8) for l in labels)  # 갈매기 끝 = 높이 28%, 안쪽 폭에 한 줄
+    nxt = {e['from']: e for e in edges}
+    max_h = H - ch - 120000 - (360000 if notes else 0)
+    est = []
+    for nd in nodes:  # 설명 상자 높이 = 가장 긴 설명 줄 수(9pt, 줄 높이 약 165000)
+        sub = str(nd.get('sub') or ''); e = nxt.get(nd['id'])
+        lines_n = max(1, -(-tw(sub, 9) // max(1, cw - 160000))) + (max(1, -(-tw(e['label'], 8) // max(1, cw - 160000))) if e and e.get('label') else 0)
+        est.append(lines_n)
+    detail_h = min(max_h, max(500000, max(est) * 170000 + 160000))
+    y0 = y0 + max(0, (H - (360000 if notes else 0) - (ch + 120000 + detail_h)) // 2 - 200000)  # 세로 가운데(조금 위)
+    for i, nd in enumerate(nodes):
+        x = x0 + i * (cw + gap)
+        s = box(slide, MSO_SHAPE.CHEVRON if i else MSO_SHAPE.PENTAGON, x, y0, cw, ch, fill=NAVY if i % 2 == 0 else NAVY2, line=None)
+        s.adjustments[0] = 0.28
+        s.text_frame.margin_left = s.text_frame.margin_right = 0
+        put(s, [(labels[i], pt, True, WHITE)])
+        e = nxt.get(nd['id'])
+        lines = [(str(nd.get('sub') or ''), 9, False, TXT)]
+        if e and e.get('label'):
+            lines.append((f'→ {e["label"]}', 8, False, ACC))
+        d = box(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x + 30000, y0 + ch + 120000, cw - 60000, detail_h, fill=LIGHT, line=LINE)
+        put(d, lines, PP_ALIGN.LEFT, MSO_ANCHOR.TOP)
+    if notes:
+        text(slide, x0, area[1] + H - 340000, W, 340000, ['· ' + str(x) for x in notes[:4]], 9, False, SUB)
+
+
+def layers_of(nodes, edges):
+    ids = [n['id'] for n in nodes]; pos = {k: i for i, k in enumerate(ids)}
+    fwd = [e for e in edges if e['from'] in pos and e['to'] in pos and e['from'] != e['to'] and pos[e['from']] < pos[e['to']]]  # 앞 → 뒤 연결만 층 계산(되돌아가는 연결 제외)
+    layer = {k: 0 for k in ids}
+    for k in ids:
+        for e in fwd:
+            if e['to'] == k:
+                layer[k] = max(layer[k], layer[e['from']] + 1)
+    return layer
+
+
+def draw_layered(slide, area, nodes, edges, notes=None, per_row=7):
+    """층 배치: 들어오는 연결 기준 층 = 열(왼쪽 → 오른쪽), 열이 per_row 넘으면 다음 줄. 같은 층 노드 = 세로로 쌓음.
+       연결선 = 상자 옆 연결점(같은 줄: 오른쪽 → 왼쪽, 다음 줄: 아래 → 위, 되돌아감: 아래 → 아래). 선 위 글 없음: 번호 원 + 아래 범례"""
+    x0, y0, W, H = area
+    layer = layers_of(nodes, edges); nl = max(layer.values()) + 1 if layer else 1
+    rows_n = (nl + per_row - 1) // per_row; cols_n = min(nl, per_row)
+    lg_items = [e for e in edges if e.get('label')]
+    n_lg = len(lg_items) + len(notes or []); n_lg = (n_lg + 1) // 2 if n_lg > 6 else n_lg
+    lg_h = min(1400000, 140000 * n_lg + 40000) if (lg_items or notes) else 0
+    HH = H - lg_h - 60000
+    cw = W // cols_n; rh = HH // rows_n
+    by_layer = {}
+    for n in nodes:
+        by_layer.setdefault(layer[n['id']], []).append(n)
+    bw = int(cw * 0.8); shapes = {}; place = {}; name = {n['id']: str(n.get('label') or n['id']) for n in nodes}
+    pt_all = min([fit_pt(v, bw, 11, 8) for v in name.values()] or [10])  # 상자 이름 글자 크기 한 가지
+    for L, ns in by_layer.items():
+        r, c = divmod(L, per_row)
+        k = len(ns); bh = min(820000, int((rh - 500000) / k) - 80000)  # 위아래 경로(건너뛰는 연결, 되돌아감) 자리 250000 씩
+        for i, nd in enumerate(ns):
+            bx = x0 + c * cw + (cw - bw) // 2; by = y0 + r * rh + (rh - k * (bh + 80000)) // 2 + i * (bh + 80000)
+            lab = str(nd.get('label') or nd['id']); pt = pt_all
+            s = box(slide, MSO_SHAPE.ROUNDED_RECTANGLE, bx, by, bw, bh)
+            put(s, [(lab, pt, True, NAVY)] + ([(str(nd['sub'])[:90], 7, False, SUB)] if nd.get('sub') else []))
+            shapes[nd['id']] = s; place[nd['id']] = (r, c, bx, by, bw, bh)
+    # 연결선 경로(2026-11-24 사용자 지적 반영)
+    #   바로 옆 열 = 오른쪽 가운데 → 왼쪽 가운데 직선(같은 높이) 또는 연결점 꺾은선
+    #   건너뛰는 열 = 사이 열 상자들 맨 위보다 위 통로(연결마다 다른 높이) → 받는 상자가 열 맨 위면 위로 들어감, 아니면 왼쪽 빈 칸으로 내려가 왼쪽으로 들어감
+    #   되돌아감 = 사이 열 상자들 맨 아래보다 아래 통로 → 같은 규칙으로 아래 또는 왼쪽으로 들어감
+    num = 0; leg = []; up_k = 0; dn_k = 0; lane_gap = 110000; side_k = {}; dn_row = {}; used = []
+    boxes = [(v[2], v[3], v[4], v[5]) for v in place.values()]
+    col_boxes = {}
+    for k_, (r_, c_, bx_, by_, bw_, bh_) in place.items():
+        col_boxes.setdefault((r_, c_), []).append((by_, by_ + bh_, k_))
+
+    def top_of(r_, c_):
+        return min(v[0] for v in col_boxes[(r_, c_)])
+
+    def bot_of(r_, c_):
+        return max(v[1] for v in col_boxes[(r_, c_)])
+    for e in edges:
+        if e.get('from') not in shapes or e.get('to') not in shapes or e['from'] == e['to']:
+            continue
+        ra, ca, ax, ay, aw, ah = place[e['from']]; rb, cb, bx, by, bw2, bh2 = place[e['to']]
+        pts = None
+        if ra == rb and cb == ca + 1:
+            if abs((ay + ah // 2) - (by + bh2 // 2)) < 20000:
+                pts = [(ax + aw, ay + ah // 2), (bx, by + bh2 // 2)]
+            else:  # 열 사이 빈 칸 가운데에서 꺾음(상자 윤곽선을 따라가지 않게)
+                gx = (ax + aw + bx) // 2
+                pts = [(ax + aw, ay + ah // 2), (gx, ay + ah // 2), (gx, by + bh2 // 2), (bx, by + bh2 // 2)]
+            poly(slide, pts)
+        elif ra == rb and cb > ca + 1:
+            cols = [(ra, c) for c in range(ca, cb + 1) if (ra, c) in col_boxes]
+            # 2026-11-24 사용자 지적(선이 같은 열 위 상자를 지나감): 보내는 상자가 열 맨 위 = 위 통로, 열 맨 아래 = 아래 통로, 가운데 = 오른쪽 빈 칸으로 나와 위 통로
+            below = ay != top_of(ra, ca) and ay + ah == bot_of(ra, ca)
+            if below:
+                yl = max(bot_of(*c) for c in cols) + 160000 + dn_k * lane_gap; dn_k += 1
+                sx = ax + aw // 2 + (dn_k % 3 - 1) * 90000; start = [(sx, ay + ah), (sx, yl)]
+                into_end = by + bh2 == bot_of(rb, cb); ty = by + bh2
+            else:
+                yl = min(top_of(*c) for c in cols) - 160000 - up_k * lane_gap; up_k += 1
+                sx = ax + aw // 2 + (up_k % 3 - 1) * 90000
+                if ay == top_of(ra, ca):
+                    start = [(sx, ay), (sx, yl)]
+                else:
+                    gxa = ax + aw + 60000; start = [(ax + aw, ay + ah // 2), (gxa, ay + ah // 2), (gxa, yl)]
+                into_end = by == top_of(rb, cb); ty = by
+            if into_end:
+                tx = bx + bw2 // 2 + ((dn_k if below else up_k) % 3 - 1) * 90000
+                pts = start + [(tx, yl), (tx, ty)]
+            else:
+                k = side_k.get(e['to'], 0); side_k[e['to']] = k + 1
+                gx = bx - 70000 - k * 50000
+                pts = start + [(gx, yl), (gx, by + bh2 // 2), (bx, by + bh2 // 2)]
+            poly(slide, pts)
+        elif rb > ra:  # 다음 줄 = 위 줄 맨 아래와 아래 줄 맨 위 사이 빈 칸에서 가로로 이동(2026-11-24 사용자 지적: 화살표가 상자 윤곽선에 겹침)
+            ybot = max(v[1] for (r_, c_), vs in col_boxes.items() if r_ == ra for v in vs)
+            ytop = min(v[0] for (r_, c_), vs in col_boxes.items() if r_ == rb for v in vs)
+            gy = (ybot + ytop) // 2 + (dn_row.get(ra, 0) % 3 - 1) * 60000; dn_row[ra] = dn_row.get(ra, 0) + 1
+            sx = ax + aw // 2; tx = bx + bw2 // 2
+            pts = [(sx, ay + ah), (sx, gy), (tx, gy), (tx, by)]
+            poly(slide, pts)
+        else:  # 되돌아감(같은 열 포함)
+            lo, hi = min(ca, cb), max(ca, cb)
+            cols = [(ra, c) for c in range(lo, hi + 1) if (ra, c) in col_boxes] + ([(rb, cb)] if (rb, cb) in col_boxes else [])
+            yl = max(bot_of(*c) for c in cols) + 160000 + dn_k * lane_gap; dn_k += 1
+            sx = ax + aw // 2 + (dn_k % 3 - 1) * 90000
+            if by + bh2 == bot_of(rb, cb):
+                tx = bx + bw2 // 2 + (dn_k % 3 - 1) * 90000
+                pts = [(sx, ay + ah), (sx, yl), (tx, yl), (tx, by + bh2)]
+            else:
+                k = side_k.get(e['to'], 0); side_k[e['to']] = k + 1
+                gx = bx - 70000 - k * 50000
+                pts = [(sx, ay + ah), (sx, yl), (gx, yl), (gx, by + bh2 // 2), (bx, by + bh2 // 2)]
+            poly(slide, pts, color=GREY)
+        if e.get('label'):
+            num += 1; leg.append((num, f'{name[e["from"]]} → {name[e["to"]]}: {e["label"]}'))
+            badge_on(slide, pts, num, used, boxes)
+    if leg or notes:  # 범례 = 번호 전부(2단, 7pt). 번호만 있고 범례가 없는 일이 없게
+        lines = [f'{CIRC[n - 1] if n <= len(CIRC) else n} {t}' for n, t in leg] + ['· ' + str(x) for x in (notes or [])]
+        if len(lines) > 6:
+            half = (len(lines) + 1) // 2
+            text(slide, x0, y0 + HH + 60000, W // 2 - 40000, lg_h, lines[:half], 7, False, SUB)
+            text(slide, x0 + W // 2, y0 + HH + 60000, W // 2, lg_h, lines[half:], 7, False, SUB)
+        else:
+            text(slide, x0, y0 + HH + 60000, W, lg_h, lines, 8, False, SUB)
+
+
+def draw_tree(slide, area, root, groups, max_items=14):
+    """계층 구조형: Level1(위 가운데) → Level2(가로 줄) → 화면(세로 목록). groups = [{name, items:[(id, 이름)]}]"""
+    x0, y0, W, H = area; n = max(1, len(groups))
+    rw = min(2600000, W // 3); rh = 420000
+    r = box(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x0 + (W - rw) // 2, y0, rw, rh, fill=NAVY, line=None)
+    put(r, [(root, fit_pt(root, rw, 14, 9), True, WHITE)])
+    gap = 80000; gw = (W - gap * (n - 1)) // n; gy = y0 + rh + 300000; gh = 400000
+    for i, g in enumerate(groups):
+        gx = x0 + i * (gw + gap)
+        gs = box(slide, MSO_SHAPE.ROUNDED_RECTANGLE, gx, gy, gw, gh, fill=NAVY2, line=None)
+        lab = f'{g["name"]} ({len(g["items"])})'
+        put(gs, [(lab, fit_pt(lab, gw, 12, 7), True, WHITE)])
+        connect(slide, r, 2, gs, 0, color=LINE, width=1.0)
+        items = g['items'][:max_items]; more = len(g['items']) - len(items)
+        ih = min(300000, (y0 + H - (gy + gh + 120000)) // max(1, len(items) + (1 if more else 0)) - 30000)
+        for k, (sid, nm) in enumerate(items):
+            iy = gy + gh + 120000 + k * (ih + 30000)
+            s = box(slide, MSO_SHAPE.RECTANGLE, gx + 120000, iy, gw - 120000, ih, fill=WHITE, line=LINE, lw=0.75)
+            t = f'{sid}  {nm}'
+            put(s, [(t, fit_pt(t, gw - 120000, 9, 6), False, TXT)], PP_ALIGN.LEFT)
+        line = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, gx + 60000, gy + gh, gx + 60000, gy + gh + 120000 + max(0, len(items) - 1) * (ih + 30000) + ih // 2)
+        line.line.color.rgb = LINE; line.line.width = Pt(1)
+        if more:
+            text(slide, gx + 120000, gy + gh + 120000 + len(items) * (ih + 30000), gw - 120000, ih, f'외 {more}개(화면 목록 표 참고)', 8, False, SUB)
+
+
+def draw_lanes(slide, area, hub, recv, send, notes=None):
+    """수신/송신 흐름(인터페이스 구성도): 왼쪽 = 보내는 외부 시스템, 가운데 = 모듈, 오른쪽 = 받는 외부 시스템. 선 위 글 없음, 번호 + 아래 범례"""
+    x0, y0, W, H = area
+    leg_n = len(recv) + len(send); lg_h = min(1300000, 150000 * (leg_n + len(notes or []))) if leg_n or notes else 0
+    HH = H - lg_h - 80000
+    text(slide, x0, y0, W // 4, 220000, '수신(외부 → 모듈)', 9, True, NAVY, PP_ALIGN.CENTER)
+    text(slide, x0 + W - W // 4, y0, W // 4, 220000, '송신(모듈 → 외부)', 9, True, NAVY, PP_ALIGN.CENTER)
+    cw = W // 4; hy = y0 + 260000; hh = HH - 260000
+    hs = box(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x0 + (W - int(cw * 1.1)) // 2, hy + hh // 2 - 450000, int(cw * 1.1), 900000, fill=NAVY, line=None)
+    put(hs, [(hub, fit_pt(hub, int(cw * 1.1), 16, 9), True, WHITE)])
+    num = 0; leg = []
+    for side, items in (('L', recv), ('R', send)):
+        k = max(1, len(items)); bh = min(520000, hh // k - 80000)
+        for i, (name, label) in enumerate(items):
+            bx = x0 if side == 'L' else x0 + W - cw; by = hy + i * (hh // k) + (hh // k - bh) // 2
+            s = box(slide, MSO_SHAPE.ROUNDED_RECTANGLE, bx, by, cw, bh)
+            put(s, [(name, fit_pt(name, cw, 12, 8), True, NAVY)])
+            c = connect(slide, s, 3, hs, 1) if side == 'L' else connect(slide, hs, 3, s, 1)
+            num += 1; leg.append((num, f'{"수신" if side == "L" else "송신"} {name}: {label}'))
+            badge(slide, c.begin_x + 260000 if side == 'L' else c.end_x - 260000, c.begin_y if side == 'L' else c.end_y, num)  # 갈라지는 세로선을 피해 상자 옆
+    lines = [f'{CIRC[n - 1] if n <= len(CIRC) else n} {t}' for n, t in leg] + ['· ' + str(x) for x in (notes or [])]
+    if lines:
+        text(slide, x0, y0 + HH + 80000, W, lg_h, lines[:12], 8, False, SUB)
+
+
+def sticker(slide, cx, cy, text='변경 필요', w=1700000, h=480000, rot=-12):
+    """덮어 붙이는 표시(노란 배경, 남색 테두리, 기울임). 2026-11-24 사용자: 표지 LG CNS 로고, 연락처와 담당 부서 장 = '변경 필요'"""
+    s = box(slide, MSO_SHAPE.RECTANGLE, cx - w // 2, cy - h // 2, w, h, fill=RGBColor(0xFF, 0xFF, 0x99), line=RGBColor(0x1F, 0x2D, 0x3D), lw=2.25)
+    s.rotation = rot
+    put(s, [(text, 20, False, RGBColor(0x00, 0x00, 0x00))])
+    return s
+
+
+def blocks_of(lines):
+    """'이름: 내용' 줄 = 블록. 이름 없는 줄 = 앞 블록에 붙임. 반환 [(이름, [내용])] 또는 None(이름 있는 줄이 60% 미만)"""
+    out = []; named = 0
+    for ln in lines:
+        s = re.sub(r'^\s*[·\-]\s*', '', str(ln))
+        m = re.match(r'^([^:：]{1,14})\s*[:：]\s*(.+)$', s)
+        if m and not re.match(r'^(SELECT|FROM|WHERE|EXEC|http)', s, re.I):
+            out.append((m.group(1).strip(), [m.group(2).strip()])); named += 1
+        elif out:
+            out[-1][1].append(s)
+        else:
+            out.append(('', [s]))
+    return out if lines and named >= max(2, len(lines) * 0.6) else None
+
+
+def draw_blocks(slide, area, blocks):
+    """세로 블록 목록형(SmartArt): 왼쪽 남색 이름 블록 + 오른쪽 내용 패널. 높이 = 내용 줄 수 비례"""
+    x0, y0, W, H = area; lw = int(W * 0.2); gap = 70000
+    units = [max(1, sum(max(1, -(-tw(t, 10) // int((W - lw) * 0.92))) for t in body)) for _, body in blocks]
+    unit = min(330000, (H - gap * (len(blocks) - 1)) // max(1, sum(units)))
+    y = y0
+    for (name, body), u in zip(blocks, units):
+        h = max(360000, u * unit)
+        lb = box(slide, MSO_SHAPE.ROUNDED_RECTANGLE, x0, y, lw, h, fill=NAVY, line=None)
+        put(lb, [(name or '·', fit_pt(name or '·', lw, 12, 8), True, WHITE)])
+        pn = box(slide, MSO_SHAPE.RECTANGLE, x0 + lw - 60000, y, W - lw + 60000, h, fill=LIGHT, line=None)
+        pn.text_frame.margin_left = 160000
+        put(pn, [(t, 10, False, TXT) for t in body], PP_ALIGN.LEFT, MSO_ANCHOR.MIDDLE)
+        slide.shapes._spTree.remove(lb._element); slide.shapes._spTree.append(lb._element)  # 이름 블록이 패널 위
+        y += h + gap
+    return y

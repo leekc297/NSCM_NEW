@@ -1,0 +1,41 @@
+{
+  "id": "20261123_184637_R7_DMF0082",
+  "at": "2026-11-23T18:46:37+09:00",
+  "ms": 1795427197111,
+  "rule": "R7",
+  "ruleName": "Claude 비정상 종료",
+  "title": "Claude 비정상 종료 (exit 1). 응답 중 종료",
+  "screen": "DMF0082",
+  "sig": "R7|응답 중 종료",
+  "count": 1,
+  "repeat": null,
+  "detail": "(stderr 없음)",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-23T18-46-22_claude_wb1.log",
+    "label": "",
+    "source": "prompt",
+    "cls": "응답 중 종료",
+    "lastType": ""
+  },
+  "status": "resolved",
+  "notice": true,
+  "actions": [
+    {
+      "at": "2026-11-23T18:46:56+09:00",
+      "by": "VMO",
+      "what": "창 다시 로드로 생긴 사건(창이 닫히며 끝난 프로세스). 사용자 확인 대상에서 뺌"
+    },
+    {
+      "at": "2026-11-23T19:18:50+09:00",
+      "by": "VMO 사후 검증",
+      "what": "사건 자동 해결 판정: 맞음. 30분 동안 같은 사건 없음"
+    }
+  ],
+  "reload": "shutdown",
+  "prevStatus": "open",
+  "vmoCheck": {
+    "entry": "I20261123_184657_1",
+    "verdict": "ok",
+    "at": "2026-11-23T19:18:50+09:00"
+  }
+}

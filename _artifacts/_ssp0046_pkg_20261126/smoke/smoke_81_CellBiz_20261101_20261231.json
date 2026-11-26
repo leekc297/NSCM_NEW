@@ -1,0 +1,131 @@
+{
+ "param": [
+  "81",
+  "Cell Biz",
+  "20261101",
+  "20261231"
+ ],
+ "run_at": "2026-11-26 10:58:50",
+ "TOBE_DMF0045": {
+  "rows": 268,
+  "datecols": 61,
+  "measure": {
+   "SCP_SHIP_PLAN": [
+    31,
+    0.0
+   ],
+   "SHIP_REQ": [
+    31,
+    4318560.0
+   ],
+   "SHIP_PLAN": [
+    31,
+    14827463.0
+   ],
+   "SITE_MOVE": [
+    25,
+    0.0
+   ],
+   "INTN_MOVEMENT": [
+    25,
+    0.0
+   ],
+   "INSP_PLAN": [
+    25,
+    0.0
+   ],
+   "TOTAL_PLAN": [
+    25,
+    14827463.0
+   ],
+   "TOTAL_REQ": [
+    25,
+    4318560.0
+   ],
+   "WH_BOH_PLAN": [
+    25,
+    -521474305.286
+   ],
+   "WH_BOH_REQ": [
+    25,
+    -38705497.286
+   ]
+  },
+  "ship_frozen": {
+   "0": 40,
+   "11": 30,
+   "14": 198
+  },
+  "result": [
+   [
+    "0",
+    "SUCCESS"
+   ]
+  ],
+  "sec": 37.8,
+  "title_rows": 90,
+  "title_first_D": "D_20261101",
+  "title_D_cnt": 61
+ },
+ "TOBE_SSP0046": {
+  "rows": 268,
+  "datecols": 61,
+  "measure": {
+   "SCP_SHIP_PLAN": [
+    31,
+    0.0
+   ],
+   "SHIP_REQ": [
+    31,
+    4318560.0
+   ],
+   "SHIP_PLAN": [
+    31,
+    14827463.0
+   ],
+   "SITE_MOVE": [
+    25,
+    0.0
+   ],
+   "INTN_MOVEMENT": [
+    25,
+    0.0
+   ],
+   "INSP_PLAN": [
+    25,
+    0.0
+   ],
+   "TOTAL_PLAN": [
+    25,
+    14827463.0
+   ],
+   "TOTAL_REQ": [
+    25,
+    4318560.0
+   ],
+   "WH_BOH_PLAN": [
+    25,
+    -351042074.286
+   ],
+   "WH_BOH_REQ": [
+    25,
+    131726733.714
+   ]
+  },
+  "ship_frozen": {
+   "0": 40,
+   "11": 30,
+   "8": 198
+  },
+  "result": [
+   [
+    "0",
+    "SUCCESS"
+   ]
+  ],
+  "sec": 1.4,
+  "title_rows": 61,
+  "title_first_D": "D_20261126",
+  "title_D_cnt": 36
+ }
+}

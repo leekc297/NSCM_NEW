@@ -1,0 +1,29 @@
+{
+  "id": "20261120_182534_R12_ALL",
+  "at": "2026-11-20T18:25:34+09:00",
+  "ms": 1795166734104,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S5 실행 오류: orch-improve.restore 오류 1회(새 서명)",
+  "screen": "",
+  "sig": "R12|S5|orch-improve.restore | N_SELF orch-history.js AI 편집 N건만 되돌림(반영 전과 같음) / t_orch_history.js AI 편집 N건만 되돌림(반영 전과 같음)",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261120181921_SELF orch-history.js AI 편집 1건만 되돌림(반영 전과 같음) / t_orch_history.js AI 편집 1건만 되돌림(반영 전과 같음) ·  · 마지막 2026-11-20T18:23:55+09:00",
+  "evidence": {
+    "check": "S5",
+    "key": "S5|orch-improve.restore | N_SELF orch-history.js AI 편집 N건만 되돌림(반영 전과 같음) / t_orch_history.js AI 편집 N건만 되돌림(반영 전과 같음)",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T18:39:07+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S5 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

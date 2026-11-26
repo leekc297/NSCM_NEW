@@ -1,0 +1,29 @@
+{
+  "id": "SCP0005",
+  "task": "chain_checklist",
+  "scope": "none",
+  "note": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "start": "2026-11-25T21:06:34+09:00",
+  "end": "2026-11-26T02:41:21+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "menu",
+  "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "text": "1. 1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용)\n2. 2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)\n3. 3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관)\n4. 4. 미검증 보완 (열린 행 → 원인 · 검사기 수정 · 그 행만 다시 재서 닫음)\n5. 5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록)\n6. 6. 해소 원장 점검 (이번 회차 닫힌 행 · 열린 행 · 다음 회차 여부)\n7. 7. 미검증 해소 게이트 (해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 닫는 방법 보고)\n8. 8. 퇴행 확인 (이번 보완에서 돈 시험만 행 제한 없이 1회 · 판정 난 행이 미검증으로 바뀌었는지)\n9. 9. 문서 갱신 (행 단위 해소 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261125_210634",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T21-06-35_SCP0005_1_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T22-36-29_SCP0005_2_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T22-40-36_SCP0005_3________________--mark______________________________--check________________engine_selfcheck__________________________Doc_verify__engine_changes.jsonl_.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T22-40-38_claude_wbJ20261125_210634_SCP0005.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T23-37-51_SCP0005_4________________--mark______________________________--check________________engine_selfcheck__________________________Doc_verify__engine_changes.jsonl_.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T23-38-27_SCP0005_5_______________________________________________________unverified_worklist.json_continue_.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-26T01-11-56_SCP0005_6_______________________unverified_settle.json_________________________________________.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-26T02-40-03_SCP0005_7_________________row_run_________________1__________________________.log",
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-26T02-40-04_SCP0005_8_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log"
+  ],
+  "afterMode": "end",
+  "changed": []
+}

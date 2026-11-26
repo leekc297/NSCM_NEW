@@ -14,8 +14,7 @@
 |---|---|---:|---|---|---|
 | event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U > FindData_Main > InitSpread_2 > GetSpdTitle | 288 | biz:CommonData.CommonDataList [code=SpreadTitle] | BIZ_MATCH |  |
 | event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U > FindData_Main | 534 | SCP.SCP0025_GET_SHIPMENT_PLAN_FIX | MATCH | SP SCP0025_GET_SHIPMENT_PLAN_FIX |
-| event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U | 1082 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET] | BIZ_MATCH |  |
-| event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U | 1082 | {?definition_path}#dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET | UNRESOLVED |  |
+| event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U | 1082 | dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET | NOT_IN_FOXQUERY |  |
 | event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U > SCM_SYS_LOG_BATCH | 1141 | SCP.PR_SCM_SYS_LOG_BATCH | MATCH | SP PR_SCM_SYS_LOG_BATCH |
 | event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U > FindData_Main > InitSpread_2 > GetSpdTitle | 1169 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
 | button:FindButton | FindButton > FindData_Main > InitSpread_2 > GetSpdTitle | 288 | biz:CommonData.CommonDataList [code=SpreadTitle] | BIZ_MATCH |  |
@@ -37,10 +36,9 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?definition_path}#dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET | UNRESOLVED | 1 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET] | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | biz:CommonData.CommonDataList [code=SpreadTitle] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SHEET_COLUMNS |
+| dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET | NOT_IN_FOXQUERY | 1 |  |  | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:#JV_ESS_SCM_SITE_MAP, REF:FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP, INSERT:#DIVISION_LAST_PLAN_INFO, SELECT:SCP_PLAN_INFO, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_PLAN_DETAIL, SELECT:SCM_MST_DIVISION, INSERT:#BOD_ITEM, SELECT:BOD_ITEM, SELECT:SCP_MST_BOD, SELECT:SCP_MST_BOD_ITEM, SELECT:#JV_ESS_SCM_SITE_MAP, SELECT:SCM_MST_BUCKET, SELECT:#DIVISION_LAST_PLAN_INFO, SELECT:#BOD_ITEM, INSERT:SCP_ANL_SHIPMENT_PLAN_FIX_H, SELECT:SCP_ANL_SHIPMENT_PLAN_FIX, DELETE:A, INSERT:SCM_SYS_LOG_BATCH |
 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | 1 | SP DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
 | SCP.PR_SCM_SYS_LOG_BATCH | MATCH | 1 | SP PR_SCM_SYS_LOG_BATCH | EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SCM_SYS_LOG_BATCH |  |
 | SCP.SCM0001_GET_SCP_DAILY_PLAN_PERIOD | MATCH | 1 | SP SCM0001_GET_SCP_DAILY_PLAN_PERIOD | EXEC:SCM0001_GET_SCP_DAILY_PLAN_PERIOD, SELECT:SCM_MST_DIVISION |  |
@@ -102,7 +100,7 @@
 ## 7. 확인 필요 (1건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 1082 | SaveData_FixInfo_U | {?definition_path}#dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
+| 1082 | SaveData_FixInfo_U | dbo.SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:#JV_ESS_SCM_SITE_MAP, REF:FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP, INSERT:#DIVISION_LAST_PLAN_INFO, SELECT:SCP_PLAN_INFO, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_PLAN_DETAIL, SELECT:SCM_MST_DIVISION, INSERT:#BOD_ITEM, SELECT:BOD_ITEM, SELECT:SCP_MST_BOD, SELECT:SCP_MST_BOD_ITEM, SELECT:#JV_ESS_SCM_SITE_MAP, SELECT:SCM_MST_BUCKET, SELECT:#DIVISION_LAST_PLAN_INFO, SELECT:#BOD_ITEM, INSERT:SCP_ANL_SHIPMENT_PLAN_FIX_H, SELECT:SCP_ANL_SHIPMENT_PLAN_FIX, DELETE:A, INSERT:SCM_SYS_LOG_BATCH · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

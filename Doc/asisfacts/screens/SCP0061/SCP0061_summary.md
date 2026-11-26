@@ -14,8 +14,7 @@
 |---|---|---:|---|---|---|
 | event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U > FindData_Main | 711 | SCP.SCP0024_GET_PRODUCTION_PLAN_FIX | MATCH | SP SCP0024_GET_PRODUCTION_PLAN_FIX |
 | event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U > FindData_Main > InitSpread > GetSpdTitle | 1062 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
-| event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U | 1399 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET] | BIZ_MATCH |  |
-| event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U | 1399 | {?definition_path}#dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET | UNRESOLVED |  |
+| event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U | 1399 | dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET | NOT_IN_FOXQUERY |  |
 | event:btnUnfix.Click | BtnUnfix_Click > SaveData_FixInfo_U > SCM_SYS_LOG_BATCH | 1458 | SCP.PR_SCM_SYS_LOG_BATCH | MATCH | SP PR_SCM_SYS_LOG_BATCH |
 | event:cboDivision.SelectedIndexChanged | CboDivision_SelectedIndexChanged > SetChangedControl | 630 | biz:CommonData.CommonDataList [code=PlantByDivisionOperation] | BIZ_MATCH |  |
 | event:cboDivision.SelectedIndexChanged | CboDivision_SelectedIndexChanged > SetChangedControl | 634 | biz:CommonData.CommonDataList [code=PlantByDivisionOperation] | BIZ_MATCH |  |
@@ -41,10 +40,9 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?definition_path}#dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET | UNRESOLVED | 1 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET] | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | biz:CommonData.CommonDataList [code=PlantByDivisionOperation] | BIZ_MATCH | 4 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
+| dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET | NOT_IN_FOXQUERY | 1 |  |  | DB 객체 존재(P) → FoxQuery 없이 직접 호출: CREATE:#TBLDYNAMIC_SCP0013FIX, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:#JV_ESS_LINE_MAP, REF:FN_GET_JV_REAL_ESS_VIRTUAL_LINE_MAP, INSERT:#JV_ESS_SCM_SITE_MAP, REF:FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP, INSERT:#DIVISION_LAST_PLAN_INFO, SELECT:SCP_PLAN_INFO, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_PLAN_DETAIL, SELECT:SCM_MST_DIVISION, INSERT:#TBLDYNAMIC_SCP0013FIX, SELECT:#JV_ESS_SCM_SITE_MAP, SELECT:#JV_ESS_LINE_MAP, SELECT:#DIVISION_LAST_PLAN_INFO, UPDATE:X, SELECT:#TBLDYNAMIC_SCP0013FIX, SELECT:SCP_ANL_PRODUCTION_PLAN, UPDATE:#TBLDYNAMIC_SCP0013FIX, UPDATE:B |
 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | 1 | SP DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
 | SCP.PR_SCM_SYS_LOG_BATCH | MATCH | 1 | SP PR_SCM_SYS_LOG_BATCH | EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:SCM_SYS_LOG_BATCH |  |
 | SCP.SCM0001_GET_SCP_DAILY_PLAN_PERIOD | MATCH | 1 | SP SCM0001_GET_SCP_DAILY_PLAN_PERIOD | EXEC:SCM0001_GET_SCP_DAILY_PLAN_PERIOD, SELECT:SCM_MST_DIVISION |  |
@@ -108,7 +106,7 @@
 ## 7. 확인 필요 (1건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 1399 | SaveData_FixInfo_U | {?definition_path}#dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
+| 1399 | SaveData_FixInfo_U | dbo.SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: CREATE:#TBLDYNAMIC_SCP0013FIX, EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:#JV_ESS_LINE_MAP, REF:FN_GET_JV_REAL_ESS_VIRTUAL_LINE_MAP, INSERT:#JV_ESS_SCM_SITE_MAP, REF:FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP, INSERT:#DIVISION_LAST_PLAN_INFO, SELECT:SCP_PLAN_INFO, SELECT:SCM_MST_PLAN, SELECT:SCM_MST_PLAN_DETAIL, SELECT:SCM_MST_DIVISION, INSERT:#TBLDYNAMIC_SCP0013FIX, SELECT:#JV_ESS_SCM_SITE_MAP, SELECT:#JV_ESS_LINE_MAP, SELECT:#DIVISION_LAST_PLAN_INFO, UPDATE:X, SELECT:#TBLDYNAMIC_SCP0013FIX, SELECT:SCP_ANL_PRODUCTION_PLAN, UPDATE:#TBLDYNAMIC_SCP0013FIX, UPDATE:B · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

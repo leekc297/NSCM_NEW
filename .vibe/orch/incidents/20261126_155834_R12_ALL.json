@@ -1,0 +1,28 @@
+{
+  "id": "20261126_155834_R12_ALL",
+  "at": "2026-11-26T15:58:34+09:00",
+  "ms": 1795676314056,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성)",
+  "screen": "",
+  "sig": "R12|S8|20261120181921_SELF_5",
+  "count": 1,
+  "repeat": null,
+  "detail": "개선안 20261120181921_SELF_5 반영 2026-11-21T02:11 · 점검 항목 S4|inv|REGISTRY 가 2026-11-26T15:57 점검에 다시 나옴",
+  "evidence": {
+    "check": "S8",
+    "key": "S8|20261120181921_SELF_5",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T16:13:28+09:00",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "오판: REGISTRY 재발은 새 도구 form_scen_gen.py, checker_defect_scan.py 미등록(set_vmo_rerun.py 는 등록됨). inventory_check --write-registry 로 갱신 → PASS. S8 이 목록형 점검에서 개선안이 다룬 파일 이름이 있을 때만 재발로 보게 orch-selfcheck.js s8 수정"
+    }
+  ]
+}

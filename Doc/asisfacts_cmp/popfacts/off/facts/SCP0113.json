@@ -1,0 +1,1266 @@
+{
+ "screen": "SCP0113",
+ "calls": [
+  {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "method": "btnColumn_Click",
+   "asis_ref": "SCP0113_LongTermStockMgmt.cs:2586",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnColumn",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SCP0113\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "EXPR",
+     "arg": "SpdSheet.shtMain"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "fixColumns",
+     "kind": "VAR",
+     "arg": "fixedColumns"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0113_LongTermStockMgmt.cs:2587",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0113_LongTermStockMgmtViewPopup",
+   "method": "btnDownloadExcel_Click",
+   "asis_ref": "SCP0113_LongTermStockMgmt.cs:3144",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnDownloadExcel",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "PSI Export",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "p_creation_type",
+     "kind": "CONTROL",
+     "arg": "CString.GetComboBoxValue(cboCreationType.SelectedItem)"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0113_LongTermStockMgmt.cs:3146",
+     "target": "popup.Filter",
+     "value": "Filter.Copy()"
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmt.cs:3149",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "ExcelUploadForm",
+   "method": "btnImport_Click",
+   "asis_ref": "SCP0113_LongTermStockMgmt.cs:2613",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnImport",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Upload",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "\"SCP0113\""
+    },
+    {
+     "param": "#2",
+     "kind": "EXPR",
+     "arg": "this.spdMain.ActiveSheet.SheetName"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0113_LongTermStockMgmt.cs:2615",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0113_LongTermProcessPopup",
+   "method": "btnProcessLongTerm_Click",
+   "asis_ref": "SCP0113_LongTermStockMgmt.cs:3205",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnProcessLongTerm",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Process LongTerm",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [
+    "monthPicker.ControlValues"
+   ],
+   "args": [
+    {
+     "param": "p_end_month",
+     "kind": "EXPR",
+     "arg": "monthPicker.ControlValues"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0113_LongTermStockMgmt.cs:3206",
+     "target": "popWowStatus.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmt.cs:3209",
+     "target": "popWowStatus.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCM0002_TitleSetForm_Popup": {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "115",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:287",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:235",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:253",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:167",
+     "method": "SetFixColumnStatus",
+     "raw": "svSource.Cells[r, c].BackColor = Color.WhiteSmoke;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:254",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:232",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:250",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:676",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:679",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCP0113_LongTermStockMgmtViewPopup": {
+   "cls": "SCP0113_LongTermStockMgmtViewPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermStockMgmtViewPopup.cs",
+   "title": "SCP0113_LongTermStockMgmtViewPopup",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "SCP0113_GET_LGTM_DET",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindData",
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:669",
+     "save": false
+    },
+    {
+     "sp": "SCP0113_GET_LGTM_DETAIL_FOR_EXPORT",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0113_GET_LGTM_DETAIL_FOR_EXPORT.sql",
+     "order_known": true,
+     "order_keys": "PLAN_DATE",
+     "order_line": "316",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_date",
+      "p_division_id",
+      "p_creation_type",
+      "p_group_code",
+      "p_item_type",
+      "p_item_id",
+      "p_end_month",
+      "p_plant_id",
+      "debug_mode",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "FindData",
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:673",
+     "save": false
+    },
+    {
+     "sp": "SCP0113_GET_BASE_MONTH",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0113_GET_BASE_MONTH.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_plan_date",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "GetBaseMonth",
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:844",
+     "save": false
+    },
+    {
+     "sp": "SCP0084_GET_COMBOBOX_DATA",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0084_GET_COMBOBOX_DATA.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_lookup_type",
+      "p_valid_yn"
+     ],
+     "method": "GetComboBoxMasterData",
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:705",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:695",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:740",
+     "method": "SetColumnFooterData",
+     "raw": "for (int col = 0; col <= sv.ColumnFooter.Columns.Count - 1; col++) { sv.Cells[newIdx, col].Border = columnHeaerStyle.Border; sv.Cells[newIdx, col].BackColor = c",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:743",
+     "method": "SetColumnFooterData",
+     "raw": "sv.Cells[newIdx, col].BackColor = columnHeaerStyle.BackColor",
+     "guard": "for (col <= sv.ColumnFooter.Columns.Count - 1)"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:418",
+     "method": "ExportExcelData",
+     "raw": "FarPoint.Win.Spread.HideRowFilter f = null;",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:450",
+     "method": "ExportExcelData",
+     "raw": "f = (FarPoint.Win.Spread.HideRowFilter)sv.RowFilter",
+     "guard": "try ▸ for (iSheetIndex < spSpread.Sheets.Count)"
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:478",
+     "method": "ExportExcelData",
+     "raw": "for (int i = newSheet.RowCount - 1; i >= 0; i--) { if (newSheet.Rows[i].Visible == false || (f != null && f.IsRowFilteredOut(i))) { newSheet.Rows.Remove(i, 1); ",
+     "guard": "try ▸ for (iSheetIndex < spSpread.Sheets.Count)"
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:480",
+     "method": "ExportExcelData",
+     "raw": "f.IsRowFilteredOut(i)",
+     "guard": "try ▸ for (iSheetIndex < spSpread.Sheets.Count) ▸ for (i >= 0)"
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:621",
+     "method": "ExportExcelData",
+     "raw": "saveFileDialog.Filter = \"Excel files (*.xls or .xlsx)|*.xls;*.xlsx\"",
+     "guard": "try ▸ else of (isOpen)"
+    }
+   ],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:808",
+     "method": "OkButtonClick",
+     "raw": "DialogResult = DialogResult.OK",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:809",
+     "method": "OkButtonClick",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:832",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "DialogResult = DialogResult.OK",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermStockMgmtViewPopup.cs:833",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00100\")",
+    "MessageHelper.GMessageBox(\"MSG00003\", new object[] { e.Message })"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  },
+  "ExcelUploadForm": {
+   "cls": "ExcelUploadForm",
+   "in_pack": true,
+   "file": "01.Framework/GSCM.Windows.Forms/UI/ExcelUploadForm.cs",
+   "title": "ExcelUpload",
+   "conds": [],
+   "buttons": [],
+   "sps": [],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "ExcelUploadForm.cs:93",
+     "method": "InitSheet",
+     "raw": "si.LockColumn(0, si.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "ExcelUploadForm.cs:101",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[0].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm.cs:102",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[2].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm.cs:103",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[4].BackColor = Color.LightGray;",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "ExcelUploadForm.cs:205",
+     "method": "OnSave_Click",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "ExcelUploadForm.cs:218",
+     "method": "OnClose_Click",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\");",
+    "if (MessageHelper.GMessageBox(\"MSG00195\") == DialogResult.No)"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCP0113_LongTermProcessPopup": {
+   "cls": "SCP0113_LongTermProcessPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermProcessPopup.cs",
+   "title": "SCP0113_LongTermProcessPopup",
+   "conds": [
+    {
+     "name": "cboMrpVersion",
+     "type": "UsrCombo",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0113_LongTermProcessPopup.Designer.cs:64",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "monthPicker",
+     "type": "UsrMonthPicker",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0113_LongTermProcessPopup.Designer.cs:66",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "drpPlanDate",
+     "type": "UsrDatePicker",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0113_LongTermProcessPopup.Designer.cs:67",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboPlanDate",
+     "type": "UsrCombo",
+     "label": "Change Plan Date",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0113_LongTermProcessPopup.Designer.cs:102",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "try ▸ if (chkStatus.Checked == false)",
+       "ref": "SCP0113_LongTermProcessPopup.cs:273",
+       "method": "InitControls"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (chkStatus.Checked == false)",
+       "ref": "SCP0113_LongTermProcessPopup.cs:3329",
+       "method": "chkStatus_CheckedChanged"
+      }
+     ],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnSearch",
+     "text": "Search",
+     "visible": true
+    },
+    {
+     "name": "btnClose",
+     "text": "Close",
+     "visible": true
+    },
+    {
+     "name": "btnCreatePlan",
+     "text": "Create Plan",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0113_GET_LGTM_PLAN_STATUS_DATA.sql",
+     "order_known": true,
+     "order_keys": "1, 2",
+     "order_line": "79",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_date",
+      "p_division_id",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "Check_Exec_IsRunningEngine",
+     "ref": "SCP0113_LongTermProcessPopup.cs:3454",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Delete_Is_Running_Release",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2259",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_MES_ERP_WO_MASTER",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2659",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_PR_SCM_OF_ASSY_ELEC_REPORT",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2806",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_PR_SCM_OF_CELL_DELIVERY_PLAN",
+     "ref": "SCP0113_LongTermProcessPopup.cs:3024",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_PR_SCM_OF_PACK_REQUIRE_CEL",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2868",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_PR_SCM_OF_PACK_TO_CELL",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2957",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_PR_SCM_PIC_ALARM",
+     "ref": "SCP0113_LongTermProcessPopup.cs:3113",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_Release_Plan",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1628",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_Release_Queue",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1113",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_RollBack_Release",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1866",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_SendMail_FinalTotal",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2411",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_Send_Mail_Quantity_Check",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1691",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Exec_Send_SMS",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2568",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Execute_Calcuration",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1448",
+     "save": false
+    },
+    {
+     "sp": "Find_Data_Sub",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindData_Sub",
+     "ref": "SCP0113_LongTermProcessPopup.cs:453",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Find_Confirm_Valid",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2340",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Find_Data_Sub",
+     "ref": "SCP0113_LongTermProcessPopup.cs:514",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Find_Release_Valid",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1777",
+     "save": false
+    },
+    {
+     "sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION.sql",
+     "order_known": true,
+     "order_keys": "CODE DESC",
+     "order_line": "47",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "GetMrpVersionComboBox",
+     "ref": "SCP0113_LongTermProcessPopup.cs:303",
+     "save": false
+    },
+    {
+     "sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE.sql",
+     "order_known": true,
+     "order_keys": "CODE desc",
+     "order_line": "44",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "GetPlanDateComboBox",
+     "ref": "SCP0113_LongTermProcessPopup.cs:293",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Insert_Hist_Detail",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2479",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Insert_Is_Running_Release",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2188",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Insert_OT_NET_JOB",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2741",
+     "save": false
+    },
+    {
+     "sp": "Exec_Release_Queue",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Save_Release",
+     "ref": "SCP0113_LongTermProcessPopup.cs:705",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Update_DivisionList",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1524",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Update_Release_Flag",
+     "ref": "SCP0113_LongTermProcessPopup.cs:1952",
+     "save": false
+    },
+    {
+     "sp": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "Update_Release_PlanList_2",
+     "ref": "SCP0113_LongTermProcessPopup.cs:2047",
+     "save": false
+    },
+    {
+     "sp": "PR_SCM_LGTM_MRP_P_RE",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "btnCreatePlan_ClickAsync",
+     "ref": "SCP0113_LongTermProcessPopup.cs:3230",
+     "save": false
+    },
+    {
+     "sp": "PR_SCM_LGTM_MRP_P_RESULT",
+     "src": "Doc/asisfacts/db/modules/dbo.PR_SCM_LGTM_MRP_P_RESULT.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_plan_start_yyyymmdd",
+      "p_base_yyyymm",
+      "p_mrp_version_id",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_plan_start_yyyymmdd",
+      "v_base_yyyymm",
+      "v_basis_yyyymmdd",
+      "v_mrp_p_version_no",
+      "v_add_days",
+      "v_result_yyyymmdd"
+     ],
+     "method": "btnCreatePlan_ClickAsync",
+     "ref": "SCP0113_LongTermProcessPopup.cs:3234",
+     "save": false
+    },
+    {
+     "sp": "PR_SCM_LGTM_INV_ALLO",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "btnCreatePlan_ClickAsync",
+     "ref": "SCP0113_LongTermProcessPopup.cs:3278",
+     "save": false
+    },
+    {
+     "sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+     "src": "Doc/asisfacts/db/modules/dbo.PR_SCM_LGTM_INV_ALLOCATION_START.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_tp_cd",
+      "p_division_id",
+      "p_plan_start_yyyymmdd",
+      "p_base_yyyymm",
+      "p_plant_id",
+      "p_chg_plan_start_yyyymmdd",
+      "p_mrp_version_id",
+      "p_type",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "RC",
+      "v_division_id",
+      "v_plan_tp_cd",
+      "v_plan_start_yyyymmdd",
+      "v_base_yyyymm",
+      "v_chg_plan_start_yyyymmdd",
+      "v_mrp_version_id",
+      "v_plan_tp_cd_result"
+     ],
+     "method": "btnCreatePlan_ClickAsync",
+     "ref": "SCP0113_LongTermProcessPopup.cs:3282",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3464",
+     "method": "Check_Exec_IsRunningEngine",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": "switch (sType) case \"SELECT_INIT\":"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:458",
+     "method": "FindData_Sub",
+     "raw": "if (ds != null) { //쿼리결과 Sheet에 바인딩 siMain.Query(ds); if (ds.Tables[0].Rows.Count > 0) { //스프레드 컬럼Lock 설정 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:463",
+     "method": "FindData_Sub",
+     "raw": "if (ds.Tables[0].Rows.Count > 0) { //스프레드 컬럼Lock 설정 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true); SetCheckRow(); }",
+     "guard": "try ▸ if (ds != null)"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:466",
+     "method": "FindData_Sub",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": "try ▸ if (ds != null) ▸ if (ds.Tables[0].Rows.Count > 0)"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:485",
+     "method": "FindData_Sub",
+     "raw": "siMain.SetLockFlag(SpdSheet.shtMain, false)",
+     "guard": "try ▸ if (ds != null)"
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:4024",
+     "method": "SetCheckRow",
+     "raw": "if (sCheckYn != \"Y\") { siMain.ActiveSheet.SetValue(iRow, siMain.GetColumnIndex(DefColumns.CHK), \"False\"); //siMain.ActiveSheet.Rows[iRow].BackColor = Color.From",
+     "guard": "for (iRow < siMain.ActiveSheet.RowCount)"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3318",
+     "method": "SetCboDivisionChangedControl",
+     "raw": "dtPlantByGroup = DBUtils.Filter(dtPlantByGroupAll, filterExpression, true)",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3318",
+     "method": "SetCboDivisionChangedControl",
+     "raw": "DBUtils.Filter(dtPlantByGroupAll, filterExpression, true)",
+     "guard": ""
+    }
+   ],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3384",
+     "method": "SCP0113_LongTermProcessPopup_FormClosing",
+     "raw": "if (blnReleaseRun == true) this.DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3385",
+     "method": "SCP0113_LongTermProcessPopup_FormClosing",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (blnReleaseRun == true)"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3175",
+     "method": "btnClose_Click",
+     "raw": "if (blnReleaseRun == true) this.DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3176",
+     "method": "btnClose_Click",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (blnReleaseRun == true)"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3178",
+     "method": "btnClose_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00086\", new object[] { sMsg })",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageHelper.GMessageBox(\"MSG00086\", new object[] { sMsg })",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(errorMsg, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)",
+    "MessageBox.Show(ex2.Message, \"Error\", MessageBoxButtons.OK, MessageBoxIcon.Warning)"
+   ],
+   "period_use": [
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3691",
+     "method": "Check_CapaValidation",
+     "raw": "if (dtEndDate != null) { if (dtEndDate.Rows.Count > 0) { _sPlanEndDate = dtEndDate.Rows[0][\"END_DATE\"].ToString(); } }",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3693",
+     "method": "Check_CapaValidation",
+     "raw": "if (dtEndDate.Rows.Count > 0) { _sPlanEndDate = dtEndDate.Rows[0][\"END_DATE\"].ToString(); }",
+     "guard": "if (dtEndDate != null)"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3695",
+     "method": "Check_CapaValidation",
+     "raw": "_sPlanEndDate = dtEndDate.Rows[0][\"END_DATE\"].ToString()",
+     "guard": "if (dtEndDate != null) ▸ if (dtEndDate.Rows.Count > 0)"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:3700",
+     "method": "Check_CapaValidation",
+     "raw": "DataCommon.GetPlannnigUserFormCodeData(_FormProcedure, \"FP00590_find_CapaValidation\", _sPlanGroup, _sPlanID, _sPlanDate, _sPlanEndDate, sComfirmArea, p_facoty_i",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:2285",
+     "method": "Delete_Is_Running_Release",
+     "raw": "req.Parameters[\"p_plan_end_date\"] = _sPlanEndDate",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0113_LongTermProcessPopup.cs:2685",
+     "method": "Exec_MES_ERP_WO_MASTER",
+     "raw": "req.Parameters[\"p_plan_end_date\"] = _sPlanEndDate",
+     "guard": "try ▸ for (i < dtReleasePlanList.Rows.Count)"
+    }
+   ],
+   "from": "factpack"
+  }
+ }
+}

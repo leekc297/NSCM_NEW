@@ -1,0 +1,26 @@
+{
+ "id": "DMF0082",
+ "at": "2026-11-24 18:45:24",
+ "status": "ERROR",
+ "steps": [
+  {
+   "step": "기본 실측(열기·필수 조건 최근 값·조회·덤프·호출)",
+   "rc": 0,
+   "sec": 33.9,
+   "note": ""
+  }
+ ],
+ "reused": false,
+ "basic": {
+  "status": "OK",
+  "why": "",
+  "opened": "True",
+  "find_how": "no_signal",
+  "total": "",
+  "grid_rows": "0",
+  "calls_find": "10",
+  "dialogs": "0",
+  "measured_at": "2026-11-12 18:22:00"
+ },
+ "note": "기본 실측 실패(rc 0) — 화면을 열지 못했거나 환경 미비"
+}

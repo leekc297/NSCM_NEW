@@ -1,471 +1,347 @@
 {
  "rule_id": "A5",
- "hash": "80533ae972211fe5",
+ "hash": "83d20024e478ff57",
  "groups": [
-  {
-   "rows": [
-    "EG-4a6fde38",
-    "EG-ff5fc5eb"
-   ],
-   "why": "같은 Measure 버튼(전체 Div)을 보고 기대도 'Measure 버튼'으로 같아서 규칙 번호만 다른 중복이다."
-  },
-  {
-   "rows": [
-    "EG-b2a7360c",
-    "EG-cf0ec665"
-   ],
-   "why": "같은 Div 칸을 보고 기대도 'Division 조회조건'으로 같아서 규칙 번호만 다른 중복이다."
-  },
-  {
-   "rows": [
-    "V-4b7a5c89",
-    "V-5824cc10"
-   ],
-   "why": "대상(Div 전환 컬럼 구성과 컬럼셋팅 OK 반영), 조건(Div 40, Div 전환), 기대(OK를 누르면 그리드 즉시 재구성)가 모두 같고 출처만 CONFIRMED와 GENERAL로 다르다."
-  },
-  {
-   "rows": [
-    "V-5373a014",
-    "V-d9fb1dc9"
-   ],
-   "why": "컬럼셋팅 Company ID에서 필수 컬럼은 Invisible로 옮길 수 없고 선택한 컬럼은 반드시 표시된다는 대상과 기대가 같고 출처만 다르다."
-  },
-  {
-   "rows": [
-    "V-6383306c",
-    "V-b3405d09"
-   ],
-   "why": "개인화 미저장 상태에서 Div를 전환할 때 선택 Div의 UI Category Default 컬럼과 Measure로 표시되는지 보는 같은 대상·조건·기대이고 출처만 CONFIRMED와 DEFECT로 다르다."
-  },
   {
    "rows": [
     "AD-22b8069b"
    ],
-   "why": "route/SEARCH 호출 #6(transportMode 전체)으로 조회조건이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "AD-45555459"
+    "AD-60544f89"
    ],
-   "why": "route/SEARCH 호출 #3(validYn=Y)으로 조회조건이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "AD-487d4322"
+    "AD-71dc25af"
    ],
-   "why": "SEARCH_CITY 호출 #9(city=ZZ_E2)로 조회조건이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "AD-593c47d6"
+    "AD-8631f0f9"
    ],
-   "why": "SEARCH_CITY 호출 #8(city=AATES)로 조회조건이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "AD-80339f4a"
+    "AD-8ef282f6"
    ],
-   "why": "SEARCH_CITY 호출 #7(city=CAWND)로 조회조건이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "AD-925eae0f"
+    "AD-93f5ef1b"
    ],
-   "why": "route/SEARCH 호출 #11(fromCountry=E2E)로 조회조건이 달라 따로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-98532ec6"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "AD-a025121f"
    ],
-   "why": "route/SEARCH 호출 #2(조건 없음)로 조회조건이 달라 따로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-aeca0564"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-b042bb6e"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "AD-bc8c3042"
    ],
-   "why": "route/SEARCH 호출 #4(validYn=N)로 조회조건이 달라 따로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-bdb23bbe"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-c8146c72"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "AD-cc4ea973"
    ],
-   "why": "route/SEARCH 호출 #5(transportMode=AIR)로 조회조건이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "AD-cdd32ed3"
+    "AD-dc9480f2"
    ],
-   "why": "route/SEARCH 호출 #10(transportMode=RAI)으로 조회조건이 달라 따로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-e243627c"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-f9a123ca"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "AD-fa7d3da1"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-4a6fde38"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-b2a7360c"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-cf0ec665"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-ff5fc5eb"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-06352660"
    ],
-   "why": "LT_DEPARTURE_INLAND 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-0d2e2797"
    ],
-   "why": "FROM_CITY 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-17ffc70f"
    ],
-   "why": "DB 메타 구동과 staticColumns fallback 구현이 있는지 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-1df5459b"
    ],
-   "why": "UC-07 필터 유지 구현을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-2692c992"
    ],
-   "why": "LT_VOYAGE 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-2e61b2f1"
    ],
-   "why": "TO_COUNTRY 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-2fffc5f9"
    ],
-   "why": "AS-IS 진입점 CreateSpread를 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-301b9568"
    ],
-   "why": "LT_WAIT_SHIPPING 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-30b62c4c"
    ],
-   "why": "AS-IS 진입점 SetSpreadColumn을 추적하는 행이다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-337f5278"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-405cad21"
    ],
-   "why": "FROM_COUNTRY 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4a09ea63"
    ],
-   "why": "R7 조회 databind 구현을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4d1f2b5d"
    ],
-   "why": "FROM_CITY_NAME 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-51c8c13c"
    ],
-   "why": "PRIORITY 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-622927ef"
    ],
-   "why": "R18 Insert/Delete 구현을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-7913c305"
    ],
-   "why": "VALID_YN 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-7cefbcce"
    ],
-   "why": "SHIP_DOC_PREPARATION_DATE 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-7f8d1955"
    ],
-   "why": "R11/R12 셀 더블클릭 도시팝업 구현을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-87831938"
    ],
-   "why": "LT_LAY_OFF_CLEARANCE 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-89e0ca9e"
    ],
-   "why": "ROUTE_ID 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-92e897c0"
    ],
-   "why": "TO_CITY 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-9439096b"
    ],
-   "why": "LT_ARRIVAL_INLAND 컬럼만 추적하는 행이다."
-  },
-  {
-   "rows": [
-    "T-aa4e2eb2"
-   ],
-   "why": "DAYS 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-b7447e65"
    ],
-   "why": "LT_SUM 컬럼만 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-d9524501"
    ],
-   "why": "R10 portsDash 구현을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-ef8dd416"
    ],
-   "why": "R16/R17 클라이언트 검증 색칠 구현을 추적하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-f260b406"
    ],
-   "why": "AS-IS 진입점 SetImageCell을 추적하는 행이다."
-  },
-  {
-   "rows": [
-    "V-01b23a61"
-   ],
-   "why": "컬럼셋팅 팝업에서 필수 컬럼을 빨간색으로 표시하고 다국어 메시지를 띄우는지 보는 고유 기대라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-0377e2c2"
-   ],
-   "why": "ROUTE_PATH 입력·저장이라는 다른 요소를 본다."
-  },
-  {
-   "rows": [
-    "V-0abd04b2"
-   ],
-   "why": "신규행 Div 기본값과 Div 변경 시 그리드 초기화를 보는 다른 상태다."
-  },
-  {
-   "rows": [
-    "V-0fce5740"
-   ],
-   "why": "개인화가 없을 때 Default 구성을 보지만 컬럼셋팅 팝업 구성까지 함께 기대하므로, 묶으면 팝업 검사가 빠질 수 있어 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-125ef7a3"
    ],
-   "why": "Div 40의 POPUP 그리드로 Div와 그리드 조합이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-130538af"
    ],
-   "why": "Div 81의 POPUP 그리드로 Div와 그리드 조합이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-1b37ccb3"
    ],
-   "why": "컬럼 표시 순서라는 다른 기대를 본다."
-  },
-  {
-   "rows": [
-    "V-2f17ab91"
-   ],
-   "why": "CATEGORY_ID 숨김이라는 다른 컬럼을 본다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-30ba0046"
    ],
-   "why": "Div 40의 Distribution Route 그리드로 Div와 그리드 조합이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-32e385e5"
    ],
-   "why": "Div 82의 Distribution Route 그리드로 Div와 그리드 조합이 고유하다."
-  },
-  {
-   "rows": [
-    "V-4309dffb"
-   ],
-   "why": "콤보 편집기, COL_LIST, Measure 위치라는 다른 요소를 본다."
-  },
-  {
-   "rows": [
-    "V-469ab071"
-   ],
-   "why": "Div별 Measure 추가·제거라는 다른 기대를 본다."
-  },
-  {
-   "rows": [
-    "V-48332ace"
-   ],
-   "why": "CHK 컬럼과 행 머리 선택기라는 다른 요소를 본다."
-  },
-  {
-   "rows": [
-    "V-4db3bf8f"
-   ],
-   "why": "BPS I/F 버튼과 Last Update 컬럼이라는 다른 요소를 본다."
-  },
-  {
-   "rows": [
-    "V-549300cf"
-   ],
-   "why": "Email 컬럼 비노출을 본다."
-  },
-  {
-   "rows": [
-    "V-592dd698"
-   ],
-   "why": "Measure 필수 컬럼이 항상 표시되는지 본다."
-  },
-  {
-   "rows": [
-    "V-6114a33a"
-   ],
-   "why": "Div 전환 후 필수 컬럼 자동 추가에 더해 개인화 저장 시 다른 Div의 필수 컬럼을 지우지 않는지도 기대하므로, V-71727dc5와 기대가 같다고 확신할 수 없어 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-65274573"
-   ],
-   "why": "Plan Type별 제외 컬럼이라는 다른 조건을 본다."
-  },
-  {
-   "rows": [
-    "V-70e44955"
-   ],
-   "why": "VERSION 컬럼과 AS FROM SITE 컬럼을 본다."
-  },
-  {
-   "rows": [
-    "V-71727dc5"
-   ],
-   "why": "40 Div 개인화 보유 상태에서 81 Div로 전환할 때 필수 컬럼이 자동 추가되는지 보는 행으로, V-6114a33a와 기대 범위가 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-72383cb8"
-   ],
-   "why": "Group 컬럼 미추가 확정 결정을 확인한다."
-  },
-  {
-   "rows": [
-    "V-786ede33"
-   ],
-   "why": "하단 그리드 CRUD Status 컬럼 비노출을 본다."
-  },
-  {
-   "rows": [
-    "V-97aac725"
-   ],
-   "why": "Div별 Project 계열 제외 컬럼을 본다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-9a333c50"
    ],
-   "why": "Div 82의 POPUP 그리드로 Div와 그리드 조합이 고유하다."
-  },
-  {
-   "rows": [
-    "V-9c8325f3"
-   ],
-   "why": "Div별 Measure 항목 구성을 본다."
-  },
-  {
-   "rows": [
-    "V-a6bbd83b"
-   ],
-   "why": "Column Setting 저장 후 재오픈 상태와 Default 기준을 본다."
-  },
-  {
-   "rows": [
-    "V-ac275716"
-   ],
-   "why": "Cust Group 조회조건, Div 파라미터, 헤더 재구성을 본다."
-  },
-  {
-   "rows": [
-    "V-b1a3da06"
-   ],
-   "why": "Div 40 Report 컬럼 표시를 본다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-ba345b49"
    ],
-   "why": "화면 전체를 포괄하는 규칙이라 개별 행과 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-ce989bcd"
-   ],
-   "why": "조회 그리드가 컬럼셋팅 설정값대로 그려지는지와 COL_LIST 비노출을 본다."
-  },
-  {
-   "rows": [
-    "V-d9537ea8"
-   ],
-   "why": "Div별 표시 컬럼·Measure 집합이 AS-IS와 같은지 보는 포괄 기대다."
-  },
-  {
-   "rows": [
-    "V-ea2f3dac"
-   ],
-   "why": "Div 40에서 개인화가 없을 때를 보며 Div 전환 조건이 없어 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f0385bd1"
    ],
-   "why": "Div 81의 Distribution Route 그리드로 Div와 그리드 조합이 고유하다."
-  },
-  {
-   "rows": [
-    "V-f04570ac"
-   ],
-   "why": "SUB_MODULE_CODE 컬럼 삭제를 본다."
-  },
-  {
-   "rows": [
-    "V-f05c2864"
-   ],
-   "why": "Plan Type=Biz Plan일 때 Version 컬럼 표시를 본다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:37:52",
- "cost": 0.27730079999999996
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 22:30:31",
+ "cost": 0,
+ "open": 0
 }

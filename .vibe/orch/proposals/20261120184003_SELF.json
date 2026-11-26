@@ -1,0 +1,126 @@
+{
+  "id": "20261120184003_SELF",
+  "at": "2026-11-20T18:40:03+09:00",
+  "ms": 1795167603280,
+  "source": "self",
+  "status": "applied",
+  "sig": "ladder usercheck recur effective time",
+  "title": "진단 사다리 사용자 지적 재발 판정에 '반영 효력 뒤 생긴 항목만' 조건 추가, 감지기 항목에 생긴 시각 ms 추가",
+  "evidence": "orch-ladder.js:51 · orch-usercheck.js:99,443 · ui.json miss 마지막 13:40:15 < activations.jsonl:20 13:55:28 · result.json:1046,1054 U21 근거 사건 00:26, 11:41 < 반영 17:34 · 진단 사다리 묶음 L3|usercheck|U8",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js"
+  ],
+  "before_after": "orch-ladder.js:51 지금 = 걸린 항목 있음 + applied 개선안 있음 → 재발. 바꾼 뒤 = 개선안마다 효력 시각 effMs 를 정함. needsReload 이면 appliedMs 뒤 첫 activations.jsonl ms, 로드 기록이 없으면 효력 전으로 보고 제외함. needsReload 가 아니면 appliedMs 를 씀. 항목 it.ms > effMs 인 항목이 1건 이상일 때만 재발로 묶음. orch-usercheck.js 감지기 결과에 생긴 시각 ms 를 넣음(U8 m.ms, U13 cutMs, U21 e.ms 또는 실패 ms). check() 의 같은 key 묶기(443줄)는 ms 가장 큰 항목을 남김. uiShown(99줄)은 ms 내림차순으로 정렬한 뒤 자름",
+  "verify": "새 시험이 실제 기록을 넣어 재현함. ① ui.json miss 25건 + SELF_2(appliedMs 1795148842813, needsReload) + activations 13:55:28 → L3|usercheck|U8 후보 0건 ② result.json U21 recur 항목 2건(00:26, 11:41) + 20261120172524_SELF appliedMs 1795163670380 → U21 후보 0건 ③ 효력 시각 뒤 ms 를 가진 miss 1건을 넣으면 U8 후보 1건 ④ node tools/VibeManager/test/t_orch_usercheck.js, t_webview_syntax.js 통과",
+  "rollback": "반영 전 백업 태그로 orch-ladder.js, orch-usercheck.js 되돌리고 새 시험 파일 삭제",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 판정 결함으로 L3 묶음 3건(U8, U13, U21)이 올라옴. 재발 정의 '고친 뒤 다시 걸림'은 그대로 두고, 그 정의대로 시각을 비교하도록 결함을 고침",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T19:53:09+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T19:56:38+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 59/59개 파일 통과(PASS 786, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1953"
+    },
+    {
+      "at": "2026-11-20T19:56:42+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T20:03:43+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 797, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T20:03:43+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 20:00:01 실행. node tools/VibeManager/test/t_orch_ladder_recur_time.js tools/VibeManager = ALL PASS 11건: '① U8 감지기 항목 1건 · ms 1795149615889', '① L3|usercheck|U8 후보 0건(효력 = 창 로드 13:55:28 1795150528179)', '② U21 recur 항목 2건 [1795101980000,1795142484000]', '② L3|usercheck|U21 후보 0건', '③ 효력 뒤 m · 변경 25개 파일 · 대상 목록 밖 변경 22개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_test_kind.jsonl, Doc/verify/SCP0028/eg/auth/e2e.json, Doc/verify/SCP0028/eg/auth/eg_combo_judge.json, Doc/verify/SCP0028/eg/auth/results.json, Doc/verify/SCP0028/eg/popup/popup_results.json",
+      "log": ".vibe\\logs\\2026-11-20T19-56-43_claude_orch.log",
+      "sec": 213,
+      "costUsd": 1.9674864000000003,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/eg/auth/e2e.json",
+        "Doc/verify/SCP0028/eg/auth/eg_combo_judge.json",
+        "Doc/verify/SCP0028/eg/auth/results.json",
+        "Doc/verify/SCP0028/eg/popup/popup_results.json",
+        "Doc/verify/SCP0028/eg/popup/popup_rowsets.json",
+        "Doc/verify/SCP0028/eg/popup/popup_source.csv",
+        "Doc/verify/SCP0028/eg/popup/results.json",
+        "Doc/verify/_parallel/E03/facts/SCP0028.json",
+        "tools/VibeManager/orch-usercheck.js",
+        "Doc/verify/SCP0028/calls/eg_auth_Div_순회_조건_활성_노출_버튼_헤더_재구성_조회_파라미터_401_기본값_0.json",
+        "Doc/verify/SCP0028/calls/eg_auth_Insert_그룹_차단_Sort_유지_선택_행_위_병합_그룹_위_0.json",
+        "Doc/verify/SCP0028/calls/eg_auth_계정_순회_메뉴_트리_직접_접근_Div_후보_자동_선택_조회_전_버튼_행_범위_0.json",
+        "Doc/verify/SCP0028/calls/eg_auth_헤더_병합_AS-IS_ColumnHeaderSpan_TO-BE_병합_헤더_0.json",
+        "Doc/verify/SCP0028/calls/eg_popup__eg-popup_CORNERS_SCP0028_2_SCM0002_ItembyDivisionPopup_COND_0.json",
+        "Doc/verify/SCP0028/calls/eg_popup__eg-popup_TEXT_SCP0028_2_SCM0002_ItembyDivisionPopup_COND_bt_0.json",
+        "Doc/verify/SCP0028/eg/popup/video/20261120_195707_38616/eg_popup--eg-popup-CORNERS-f0c01-ivisionPopup-COND-btnItemId-chromium.webm",
+        "Doc/verify/SCP0028/eg/popup/video/20261120_195707_38616/eg_popup--eg-popup-MAIN-SC-4d8b8-ntLotSizePopup-BTN-btnInput-chromium.webm",
+        "Doc/verify/SCP0028/eg/popup/video/20261120_195707_38616/eg_popup--eg-popup-MAIN-SC-53821-tLotSizePopup-BTN-btnDelete-chromium.webm",
+        "Doc/verify/SCP0028/eg/popup/video/20261120_195707_38616/eg_popup--eg-popup-MAIN-SC-6bc4f-ivisionPopup-COND-btnItemId-chromium.webm",
+        "Doc/verify/SCP0028/eg/popup/video/20261120_195707_38616/eg_popup--eg-popup-PICK-SC-c4e89-ivisionPopup-COND-btnItemId-chromium.webm",
+        "Doc/verify/SCP0028/eg/popup/video/20261120_195707_38616/eg_popup--eg-popup-TEXT-SC-43b88-ivisionPopup-COND-btnItemId-chromium.webm",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/test/t_orch_ladder_recur_time.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:28+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T20:45:03+09:00"
+    }
+  ],
+  "plain": {
+    "what": "고친 뒤에도 다시 났다는 판정을, 고친 내용이 실제로 적용된 뒤(창 다시 로드 뒤) 새로 생긴 기록으로만 하게 바꿈. 지금은 고치기 전 기록이 24시간 남아 있어서 고친 결함이 재발한 것으로 잘못 올라감",
+    "risk": "창 다시 로드 기록이 빠지면 진짜 재발을 효력 전으로 보고 놓침. activations.jsonl 은 VM 이 켜질 때마다 기록하므로 로드 기록 없이 새 코드가 도는 경우는 없음",
+    "undo": "개선안 탭에서 되돌리기 또는 백업 태그 복원"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795171989652,
+  "autoFp": "6986085679",
+  "applyStartMs": 1795172202657,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 797, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1953",
+  "needsReload": true,
+  "appliedMs": 1795172623078,
+  "synced": [
+    "orch-ladder.js",
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_ladder_recur_time.js"
+    ],
+    "verify_result": "2026-11-20 20:00:01 실행. node tools/VibeManager/test/t_orch_ladder_recur_time.js tools/VibeManager = ALL PASS 11건: '① U8 감지기 항목 1건 · ms 1795149615889', '① L3|usercheck|U8 후보 0건(효력 = 창 로드 13:55:28 1795150528179)', '② U21 recur 항목 2건 [1795101980000,1795142484000]', '② L3|usercheck|U21 후보 0건', '③ 효력 뒤 miss 1건 → L3|usercheck|U8 후보 1건', '④ 창 로드 기록 없음 → U8 후보 0건', '⑤ needsReload 아님 appliedMs 기준 1건/0건'. node tools/VibeManager/test/t_orch_usercheck.js = PASS 84줄, ALL PASS. node tools/VibeManager/test/t_webview_syntax.js = ALL PASS. 추가 실행 node tools/VibeManager/test/t_orch_ladder.js = ALL PASS",
+    "note": "orch-selfcheck.js s13 이 result.json 에 ms 를 싣지 않음(242줄 uid, quote 만 붙임). 대상 밖이라 고치지 않음. check() 가 .vibe/orch/usercheck/state.json itemMs[key] 에 항목 ms 를 남기고 orch-ladder 가 it.ms → itemMs[key] → S13 점검 ms 순으로 읽음. ms 없는 감지기(U1, U3 등) 항목은 점검 시각으로 기록해 종전 판정 유지. 시험은 orch-selfcheck 처럼 ms 를 뺀 항목으로 재현함"
+  },
+  "snap": "prop_20261120184003_SELF",
+  "effectiveMs": 1795175103931,
+  "effectiveAt": "2026-11-20T20:45:03+09:00"
+}

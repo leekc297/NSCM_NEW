@@ -629,14 +629,14 @@
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:170 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:264 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:506 |
-| this | Load | Form_Load | .ctor:144 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:241 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:313 |
+| this | Load | Form_Load | .ctor:212 |
+| this | Load | Form_Load | .ctor:144 |
 | this.txtItemID | KeyDown | txtItemID_KeyDown | InitializeComponent:130 |
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:170 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:264 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:506 |
-| this | Load | Form_Load | .ctor:212 |
 | this | Load | Form_Load | .ctor:144 |
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:171 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:225 |

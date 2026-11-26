@@ -1,0 +1,26 @@
+{
+ "proposal": {
+  "id": "20261123231847_SELF",
+  "title": "사용자 지시 R74 같은 문제: tools/VibeManager/quick.json:1647 워크벤치 메뉴 이름에 AI 제품명이 있고, 영문 label_en 도 \"💻 New Claude Terminal\" 임",
+  "evidence": "규칙 R74 \"VM 웹뷰 탭, 메뉴 이름은 AI 제품명 대신 기능을 나타내는 이름을 씀\" (원래 지시 2026-11-13 15:10 \"Console 이 가장 적당해 보이네요.. 이걸로 변경해주세요.\") · tools/VibeManager/quick.json:1647 \"label\": \"💻 새 Claude 터미널\",",
+  "targets": [
+   "tools/VibeManager/quick.json"
+  ],
+  "before_after": "label 을 \"💻 새 AI 터미널\", label_en 을 \"💻 New AI Terminal\" 로 바꿈. command(vibeManager.claudeNew)는 그대로 둠",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|워크벤치메뉴이름에ai제품명이있고영문labelen도newclaudeterm",
+  "check": "S13",
+  "selfKey": "S13|R74|tools/VibeManager/quick.json"
+ },
+ "result": null,
+ "gate": null,
+ "history": [
+  "03:10:41 VMO 자동(게이트 통과 조건): 승인",
+  "03:15:59 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1355, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self0310",
+  "03:16:05 VMO: 반영 시작",
+  "03:22:30 VMO: 반영 실패. Claude exit 1 · 대상 파일 1개 복원(quick.json AI 편집 2건만 되돌림(반영 전과 같음)) · 대상 밖 변경 Doc/e2e/specs/_trace.spec.ts, Doc/e2e/specs/_verify.spec.ts, Doc/e2e/specs/eg_popup.spec.ts, Doc/gen/SCP0005/FULLRUN.md, Doc/gen/SSP0005/FULLRUN.md, Doc/gen/SSP0014/FULLRUN.md 는 AI 가 고치지 않아 그대로 남음"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261123231847_SELF"
+}

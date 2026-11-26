@@ -276,19 +276,34 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
       const cur = get();
 
       if (activeTab === 'requestDetail') {
+        // AS-IS FindData_Request_Detail(cs:2260-2341) IN 파라미터 전체. 종전엔 Plan Date·Plant·Cell Type·
+        //   realFlag·모델권한 체크박스가 누락돼 조회 SP 가 확정일(EDIT_FLAG/CONFIRM_DAY)을 산출하지 못해 요청상세가
+        //   전부 잠기던 결함 교정(2026-11-20). main/stockDetail 배선과 동일 관례(joinComma/yn/nonChk/realFlag).
+        //   Requestor(txtRequestor)=P_REQUESTOR_ID 는 요청상세 탭 전용 2차 조건, Lot ID 는 공란(재고상세 전용).
+        const reqNonChk =
+          !sp.myModelChk && !sp.partLeaderChk && !sp.teamLeaderChk && !sp.delegateModelChk ? 'Y' : 'N';
         const newRequestDetailFilters: ProcRequest<MENU_ID, SHEETS.REQUEST_DETAIL> = {
           divisionId: sp.divisionId,
           companyId: sp.companyId,
+          planStartYyyymmdd: sp.planDate,
+          plantId: joinComma(sp.plantSiteIds),
+          cellType: joinComma(sp.cellTypes),
+          fromYyyymmdd: sp.fromYyyymmdd2,
+          toYyyymmdd: sp.toYyyymmdd2,
+          lotId: '',
           modelId: sp.modelId2,
           itemId: sp.itemId2,
           nickName: sp.nickName2,
-          fromYyyymmdd: sp.fromYyyymmdd2,
-          toYyyymmdd: sp.toYyyymmdd2,
-          // Requestor(txtRequestor) — AS-IS FindData_Request_Detail 가 P_REQUESTOR_ID 로 넘긴다(cs:2294,2355).
-          //   요청상세 탭 전용 2차 조건(재고상세는 Lot ID 기반이라 미사용 — AS-IS p_lot_id="" cs:2291-2292).
           requestorId: sp.requestor,
           sesUserId,
           mnuId: MENU_ID,
+          sheetName: ADMIN_SHEET_NAME[SHEETS.REQUEST_DETAIL] ?? '',
+          realFlag: get().realFlag ? 'Y' : 'N',
+          myModelChk: yn(sp.myModelChk),
+          partLeaderChk: yn(sp.partLeaderChk),
+          teamLeaderChk: yn(sp.teamLeaderChk),
+          delegateChk: yn(sp.delegateModelChk),
+          nonChk: reqNonChk,
         };
         const sameReq =
           JSON.stringify(cur.requestDetailFilters) === JSON.stringify(newRequestDetailFilters);

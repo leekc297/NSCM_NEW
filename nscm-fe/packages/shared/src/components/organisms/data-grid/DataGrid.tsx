@@ -15,13 +15,14 @@ import {
   DataMap,
   _EditHandler,
   SelectionMode,
+  CellRangeEventArgs,
   type CellEditEndingEventArgs,
-  type CellRangeEventArgs,
   type FlexGrid as TFlexGrid,
 } from '@mescius/wijmo.grid';
 import type { ColumnFilter} from '@mescius/wijmo.grid.filter';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { FlexGrid, type FlexGridProps } from '@mescius/wijmo.react.grid';
+import { UndoStack, type UndoActionEventArgs } from '@mescius/wijmo.undo';
 import {
   memo,
   type MutableRefObject,
@@ -150,6 +151,36 @@ const installGridListBoxWheelStep = () => {
 };
 
 /**
+ * 콤보 편집기 글자를 다 지우고 편집을 끝내면 셀을 빈 값으로 커밋한다.
+ *
+ * wijmo finishEditing 은 드롭다운이 열려 있으면 편집기 값이 선택 항목의 앞부분이면(indexOf == 0)
+ * 그 항목을 다시 커밋하는데, 빈 문자열은 모든 항목의 앞부분이라 지워도 원래 값(Y/N 등)이 되살아난다.
+ * 한 번 클릭으로 드롭다운이 열리므로(openComboDropDownOnClick) Delete 는 늘 이 경로를 탄다.
+ * 커밋 전에 드롭다운과 선택값을 치워 wijmo 가 편집기 값('')을 그대로 쓰게 한다.
+ * 제외: 목록 밖 값을 허용하는 DataMap(isEditable), 필수 컬럼(wijmo 도 빈 값 커밋을 막는다).
+ */
+const clearEmptiedComboSelection = (editHandler: _EditHandler) => {
+  const handler = editHandler as unknown as {
+    _edt: HTMLInputElement | null;
+    _map?: { isEditable?: boolean } | null;
+    _g: TFlexGrid;
+    _rng: { row: number; col: number } | null;
+    _lbx_SelectedValue: unknown;
+    _removeListBox: () => void;
+  };
+  const editor = handler._edt;
+  if (!editor || editor.value.trim() !== '' || !handler._map || handler._map.isEditable) return;
+  const range = handler._rng;
+  if (!range) return;
+  const column = handler._g.columns[range.col];
+  const row = handler._g.rows[range.row];
+  if (!column || !row || column.getIsRequired(row)) return;
+  editor.value = '';
+  handler._removeListBox();
+  handler._lbx_SelectedValue = null;
+};
+
+/**
  * 편집기 텍스트를 드롭다운 원본 표기로 되돌린다 (대소문자만 다를 때).
  * 방향키로 옮긴 선택이 있으면 그 값이 우선이고, 없으면 후보 목록에서 앞부분 일치로 찾는다.
  * 콤보가 아닌 컬럼은 _lbx/_list 가 없어 그대로 통과한다.
@@ -168,11 +199,14 @@ const restoreCanonicalComboText = (editHandler: _EditHandler) => {
   ];
 
   const lowerTyped = typed.toLowerCase();
+  // 부분일치(contains) - 친 글자가 표기 중간에 있어도 그 항목으로 커밋한다(검색 규칙과 동일, LIKE '%an%').
+  //   selectedValue(현재 드롭다운 선택 = 타이핑 중 wijmo 가 옮겨 둔 contains 항목)를 후보 맨 앞에 둬
+  //   화면에 하이라이트된 바로 그 항목으로 되돌린다. 종전엔 startsWith(접두)라 중간매칭은 커밋이 안 됐다.
   const canonical = candidates.find(
     (candidate): candidate is string =>
-      typeof candidate === 'string' && candidate.toLowerCase().startsWith(lowerTyped)
+      typeof candidate === 'string' && candidate.toLowerCase().includes(lowerTyped)
   );
-  if (canonical && !canonical.startsWith(typed)) editor.value = canonical;
+  if (canonical && canonical !== typed) editor.value = canonical;
 };
 
 /**
@@ -303,7 +337,7 @@ const highlightComposingCandidate = (editHandler: _EditHandler, typed: string) =
   const findIndexOf = (text: string) => {
     const lower = text.toLowerCase();
     return list.findIndex(item =>
-      search ? search(displayOf(item), text) : displayOf(item).toLowerCase().startsWith(lower)
+      search ? search(displayOf(item), text) : displayOf(item).toLowerCase().includes(lower)
     );
   };
 
@@ -322,16 +356,55 @@ const highlightComposingCandidate = (editHandler: _EditHandler, typed: string) =
   showComposingPreview(editor, typed, displayOf(list[index]));
 };
 
+/**
+ * 붙여넣기(Ctrl+V)로 콤보 입력창에 들어온 값의 contains 후보로 드롭다운 선택을 옮긴다.
+ *
+ * 붙여넣기는 keypress 가 아니라 input/paste 이벤트라 wijmo 타입어헤드도, 우리 _keypress override 도
+ * 돌지 않는다 → 드롭다운이 열려 있어도 선택(하이라이트)이 일치 후보로 이동하지 않는다(2026-11-25 리포트).
+ * 타이핑과 동일하게 _list 에서 contains 일치 후보를 찾아 _lbx.selectedIndex 를 옮긴다. 선택이 옮겨지면
+ * 커밋(finishEditing -> restoreCanonicalComboText)도 _lbx.selectedValue 를 우선해 그 후보로 들어간다.
+ * 검색 규칙은 타입어헤드(_keypress)·커밋과 같은 contains 를 쓴다(DataMap.search = includes).
+ */
+const moveComboSelectionToPastedMatch = (editHandler: _EditHandler) => {
+  const editor = editHandler._edt;
+  const listBox = editHandler._lbx;
+  const list = editHandler._list as unknown[] | null;
+  // 드롭다운이 닫혀 있으면(_lbx 없음) 옮길 선택이 없다 - 열린 상태에서의 붙여넣기만 대상.
+  if (!editor || !listBox || !list || list.length === 0) return;
+  const typed = editor.value;
+  if (!typed) return;
+
+  const map = editHandler._map;
+  const search = editHandler._mapSearch;
+  const displayOf = (item: unknown): string => {
+    const raw =
+      map?.useFilter && item && typeof item === 'object'
+        ? (item as Record<string, unknown>)[map.displayMemberPath]
+        : item;
+    if (typeof raw === 'string') return raw;
+    return typeof raw === 'number' || typeof raw === 'boolean' ? String(raw) : '';
+  };
+
+  const lower = typed.toLowerCase();
+  const index = list.findIndex(item =>
+    search ? search(displayOf(item), typed) : displayOf(item).toLowerCase().includes(lower)
+  );
+  if (index >= 0) listBox.selectedIndex = index;
+};
+
 let comboCaseInsensitiveSearchInstalled = false;
 const installComboCaseInsensitiveSearch = () => {
   if (comboCaseInsensitiveSearchInstalled) return;
   comboCaseInsensitiveSearchInstalled = true;
 
-  // 1) 후보 찾기
+  // 1) 후보 찾기 - 부분일치(contains). 친 글자가 표기의 **어디에** 있어도 후보로 잡는다(LIKE '%an%').
+  //   종전엔 접두일치(startsWith, LIKE 'an%')였으나 전역 요구로 부분일치로 바꿨다(2026-11-24).
+  //   주의: 비접두 매칭(친 글자가 중간에 있는 경우)은 아래 2) tail 자동완성/미리보기가 접두 전제라
+  //   건너뛴다(라인 408·271 가드) - wijmo 가 일치 표기로 편집기를 통째로 덮어써 커밋은 정상 동작한다.
   DataMap.prototype.search = (
     text: string | null | undefined,
     searchText: string | null | undefined
-  ) => (text ?? '').toLowerCase().startsWith((searchText ?? '').toLowerCase());
+  ) => (text ?? '').toLowerCase().includes((searchText ?? '').toLowerCase());
 
   // 2) 표시
   // 원본을 보관해 감싸는 것이므로 언바운드 참조가 맞다 - 호출은 항상 .call(this, ...) 로 한다.
@@ -375,7 +448,16 @@ const installComboCaseInsensitiveSearch = () => {
     if (typed === null || !editor || editor.value === beforeKeypress) return;
     const completed = editor.value;
     if (completed.startsWith(typed)) return; // 표기가 이미 같으면(=구분 일치) 손대지 않는다
-    if (!completed.toLowerCase().startsWith(typed.toLowerCase())) return;
+    if (!completed.toLowerCase().startsWith(typed.toLowerCase())) {
+      // contains(비접두) 매칭 - wijmo 는 일치 표기로 편집기를 통째로 덮어쓰고 커서를 친 글자 길이
+      //   뒤부터 선택상태로 둔다. 친 글자가 접두가 아니면 그 덮어쓴 값을 두는 순간 다음 타건이
+      //   선택영역을 덮어 입력이 깨진다("b"->"300MS BME SBS1", 이어서 "io"->"3io"). 친 글자만 남기고
+      //   커서를 끝에 둬 계속 입력되게 한다. 드롭다운 선택은 wijmo 가 이미 contains 항목으로 옮겨 뒀고,
+      //   커밋은 finishEditing->restoreCanonicalComboText(contains)가 전체 표기로 되돌려 값을 넣는다.
+      editor.value = typed;
+      editor.setSelectionRange(typed.length, typed.length);
+      return;
+    }
 
     editor.value = typed + completed.slice(typed.length);
     editor.setSelectionRange(typed.length, editor.value.length);
@@ -420,6 +502,15 @@ const installComboCaseInsensitiveSearch = () => {
         editor.addEventListener('keydown', keyEvent => {
           // Esc / Enter / Tab 로 편집을 끝내는 경우도 즉시 닫는다.
           if (['Escape', 'Enter', 'Tab'].includes(keyEvent.key)) hideComposingPreview();
+        });
+        // 붙여넣기(Ctrl+V)는 keypress 를 발생시키지 않아 wijmo 타입어헤드도, 우리 _keypress override 도
+        //   안 돌아 드롭다운 선택이 일치 후보로 안 옮겨지던 것을 보완한다(moveComboSelectionToPastedMatch).
+        //   paste 이벤트로 잡는다 - input+inputType 은 wijmo 가 값을 프로그램적으로 넣으면 안 뜰 수 있다.
+        //   paste 시점엔 아직 값이 안 들어와 있어(기본동작·wijmo 처리 전), 반영 뒤 다음 틱에 옮긴다.
+        editor.addEventListener('paste', () => {
+          const handler = editor[HANDLER] as _EditHandler | undefined;
+          if (!handler) return;
+          globalThis.setTimeout(() => moveComboSelectionToPastedMatch(handler), 0);
         });
       }
     }
@@ -484,7 +575,10 @@ const installComboCaseInsensitiveSearch = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method -- 위 2) 와 같은 이유
   const originalFinishEditing = _EditHandler.prototype.finishEditing;
   _EditHandler.prototype.finishEditing = function (this: _EditHandler, cancel?: boolean) {
-    if (!cancel) restoreCanonicalComboText(this);
+    if (!cancel) {
+      clearEmptiedComboSelection(this);
+      restoreCanonicalComboText(this);
+    }
     return originalFinishEditing.call(this, cancel);
   };
 };
@@ -529,6 +623,25 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   gridRef?: MutableRefObject<TFlexGrid | undefined>;
   editTrackerRef?: MutableRefObject<EditTracker<T> | undefined>;
+  /**
+   * 셀 편집 Undo/Redo(Ctrl+Z / Ctrl+Y) — AS-IS Spread UndoManager 대응(입력상태 되돌리기). **기본 활성(전역)**.
+   * wijmo UndoStack 이 FlexGrid 셀 편집을 기록하고 Ctrl+Z/Y 를 처리한다. 정렬/리사이즈/행추가·삭제는
+   * 스택에서 제외하고 **셀 편집만** 되돌린다(NSCM 은 행 CRUD 를 수동 관리하므로 wijmo 의 trackChanges
+   * 기반 행 undo 와 맞지 않는다). undo/redo 직후 EditTracker 로 CRUD_TYPE 를 재평가해 저장 정합을 맞춘다.
+   * 특정 그리드에서 끄려면 `enableUndo={false}`(스택 미생성 → 종전과 100% 동일).
+   */
+  enableUndo?: boolean;
+  /**
+   * undo/redo 시 되돌린 셀의 cellEditEnded 를 재발화할지(기본 false — opt-in). 한 편집이 다른 셀을 함께
+   * set 하는 **cascade(연동 편집) 그리드**에서, wijmo undo 가 직접 친 셀만 되돌리는 한계를 화면 자신의
+   * 연동 로직을 재실행시켜 연동 셀까지 되돌려 메운다.
+   *
+   * **결정적(집계형) cascade 화면에만 켠다** — 예: DMF0003 MktFcst(W→D/M 집계는 되돌린 값으로 재계산하면
+   * 원래대로 복원됨). **파괴적 cascade 화면에는 켜지 말 것** — 예: SCP0007 BOD(FROM 변경이 TO 를 ''로 지움)
+   * 처럼 forward 연동이 "의존 셀 clear/재산정" 이면, undo 때 재발화가 원래 값 복원이 아니라 다시 지워 버려
+   * 오히려 깨진다. 그런 화면은 끈 채로 둬 직접 친 셀만 되돌린다.
+   */
+  reapplyEditOnUndo?: boolean;
   itemsSource?: T[];
   staticColumns?: RawFlexGridColumnConfig[];
   dynamicColumns?: FlexGridColumnConfig[];
@@ -656,10 +769,45 @@ const EMPTY_COMBO_PARAMS: Record<string, string> = {};
 //   (2026-10-22 SSP0060 Shipment Request 팝업 Change Reason 콤보 실사고).
 const EMPTY_STATIC_COLUMNS: RawFlexGridColumnConfig[] = [];
 
+// 전역 단일 선택요약 바 — 모든 DataGrid 가 공유하는 하나의 요소(body 에 1개)로, 전체 화면 오른쪽 하단에
+//   고정 표시한다. 각 그리드는 선택 시 이 바를 "점유"(owner)해 자기 요약을 띄우고, 자기 선택이 비면
+//   자기가 owner 일 때만 숨긴다 — 그래서 여러 그리드가 있어도 "마지막에 선택한 그리드 하나만" 보인다.
+//   (AS-IS 상태바 파리티. 그리드별 하단 바 대신 전역 1개라 각 그리드 레이아웃을 건드리지 않는다.)
+let globalSummaryBarEl: HTMLDivElement | null = null;
+let globalSummaryOwner: unknown = null;
+const getGlobalSummaryBar = (): HTMLDivElement | null => {
+  if (typeof document === 'undefined') return null;
+  if (!globalSummaryBarEl) {
+    globalSummaryBarEl = document.createElement('div');
+    globalSummaryBarEl.className = 'grid-selection-summary-bar';
+    globalSummaryBarEl.style.display = 'none';
+    document.body.appendChild(globalSummaryBarEl);
+  }
+  return globalSummaryBarEl;
+};
+const setGlobalSummary = (owner: unknown, html: string): void => {
+  const bar = getGlobalSummaryBar();
+  if (!bar) return;
+  if (html) {
+    bar.innerHTML = html;
+    bar.style.display = 'flex';
+    globalSummaryOwner = owner;
+  } else if (globalSummaryOwner === owner) {
+    bar.innerHTML = '';
+    bar.style.display = 'none';
+    globalSummaryOwner = null;
+  }
+};
+const clearGlobalSummaryIfOwner = (owner: unknown): void => {
+  if (globalSummaryOwner === owner) setGlobalSummary(owner, '');
+};
+
 const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   gridFilterRef,
   gridRef,
   editTrackerRef,
+  enableUndo = true,
+  reapplyEditOnUndo = false,
   itemsSource = [],
   staticColumns = EMPTY_STATIC_COLUMNS,
   dynamicColumns = EMPTY_DYNAMIC_COLUMNS,
@@ -1024,6 +1172,8 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   useEffect(
     () => () => {
       detachContextMenuRef.current?.();
+      // 언마운트 시 이 그리드가 전역 요약 바를 물고 있으면 접는다(탭 닫힘/화면 이탈에 바가 남지 않게).
+      clearGlobalSummaryIfOwner(internalGridRef.current);
       if (gridRef) gridRef.current = undefined;
       if (gridFilterRef) gridFilterRef.current = undefined;
       if (editTrackerRef) editTrackerRef.current = undefined;
@@ -1033,7 +1183,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   );
 
   const {
-    setSummaryTooltip,
+    getSelectionSummaryHTML,
     setCellTooltip,
     setAggregationRow,
     setCheckbox,
@@ -1252,10 +1402,53 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   const drainRowParamRevalRef = useRef(drainRowParamReval);
   drainRowParamRevalRef.current = drainRowParamReval;
 
+  // 편집 중(드롭다운 열림)에 그 셀 row-param 후보가 늦게 도착하면, 지금 비어 있는 열린 드롭다운만
+  //   그 자리에서 채운다. row-param dataMap 은 스냅샷(getRowParamDataMap)이라 편집 시작 시점에 후보가
+  //   없으면 빈 목록으로 열리고, applyComboDataMaps/invalidate 는 편집 중 finishEditing 을 불러
+  //   드롭다운을 닫으므로(위 drainRowParamReval 주석) 쓸 수 없다. 그래서 라이브 rowParamRows 로 새
+  //   dataMap 을 만들어 그 행 후보만 뽑아 열린 리스트박스(_lbx)·내부 목록(_list)에 직접 채운다.
+  //   column.dataMap 은 건드리지 않는다 — row-param 커밋은 correctComboCommitHandler 가 라이브 ref 로
+  //   처리하고, 셀 표시용 dataMap 재대입은 편집 종료 후 기존 경로(cellEditEnded→applyComboDataMaps)가
+  //   따라잡는다. 안전판: 이미 차 있는 드롭다운(타이핑/필터 중)은 절대 건드리지 않고 '빈→채움'만 한다.
+  const refreshOpenRowParamDropdown = useCallback(() => {
+    const grid = internalGridRef.current;
+    if (!grid) return;
+    const editRange = grid.editRange;
+    const editHandler = grid._edtHdl;
+    const listBox = editHandler?._lbx;
+    if (!editRange || !listBox) return; // 편집 중 + 드롭다운 열림일 때만
+    const binding = grid.columns[editRange.col]?.binding ?? '';
+    const rawColumn = binding
+      ? layoutAppliedRef.current.find(column => column.colNm === binding)
+      : undefined;
+    if (!rawColumn || !isRowParamCombo(rawColumn)) return;
+    const dataItem = grid.rows[editRange.row]?.dataItem as WijmoRowItem | undefined;
+    if (!dataItem) return;
+
+    const current = (listBox.itemsSource as unknown[] | undefined) ?? [];
+    if (current.length > 0) return; // 이미 후보가 떠 있으면 건드리지 않는다(타이핑/필터 방해 금지)
+
+    const insertId = insertComboId(rawColumn);
+    const freshMap = buildLeafColumnDataMap({
+      ...rawColumn,
+      dataMap: comboQueryMapRef.current[comboKeyOfColumn(rawColumn)],
+      insertDataMap: insertId ? comboQueryMapRef.current[insertId] : undefined,
+      rowParamRows: rowParamRowsRef.current[rawColumn.colNm],
+      insertRowParamRows: insertRowParamRowsRef.current[rawColumn.colNm],
+    });
+    const values = freshMap?.getDisplayValues(dataItem) ?? [];
+    if (values.length === 0) return; // 아직 후보 0건(응답 전)이면 스킵 — 빈 걸 빈 걸로 덮지 않는다
+
+    listBox.itemsSource = values;
+    (editHandler as unknown as { _list?: unknown })._list = values;
+  }, []);
+
   // 재조회 결과(rowParamRows)가 갱신되면 큐를 소진한다 — 부모를 바꿔 나간 조회가 도착하는 시점.
+  //   편집 중이면 drain 은 미뤄지지만(에디터 보호), 열린 드롭다운이 비어 있으면 그 자리에서 채운다.
   useEffect(() => {
     drainRowParamReval();
-  }, [rowParamRows, insertRowParamRows, drainRowParamReval]);
+    refreshOpenRowParamDropdown();
+  }, [rowParamRows, insertRowParamRows, drainRowParamReval, refreshOpenRowParamDropdown]);
 
   // 편집 중이라 적용을 건너뛴 콤보 컬럼 — 편집이 끝나면 다시 적용한다.
   //   건너뛰고 끝내면 그 응답은 영영 반영되지 않는다. 이 이펙트는 dep 이 바뀔 때만 도는데,
@@ -1449,6 +1642,75 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     internalEditTrackerRef.current = editTracker;
     if (editTrackerRef) editTrackerRef.current = editTracker;
 
+    // ── Undo/Redo (Ctrl+Z / Ctrl+Y) — AS-IS Spread UndoManager 대응(셀 입력상태 되돌리기). opt-in(enableUndo).
+    if (enableUndo) {
+      const undoStack = new UndoStack(grid.hostElement, { autoKeyboard: true });
+      // 셀 편집(GridEditAction)만 스택에 쌓는다 — 정렬/리사이즈/행추가·삭제는 제외한다. NSCM 은 행 CRUD 를
+      //   수동(CRUD_TYPE)으로 관리해 wijmo 의 trackChanges 기반 행 undo 와 맞지 않는다. GridEditAction 만
+      //   dataItems(복수)를 가지므로 그걸로 가른다(행 액션은 dataItem 단수, 정렬/리사이즈는 없음).
+      undoStack.addingAction.addHandler((_s: UndoStack, e: UndoActionEventArgs) => {
+        const action = e.action as unknown as { dataItems?: unknown };
+        if (!action || !Array.isArray(action.dataItems)) e.cancel = true;
+      });
+      // undo/redo 는 binding.setValue 로 값만 되돌리고 grid.cellEditEnded 를 발생시키지 않는다 →
+      //   EditTracker 의 CRUD_TYPE 가 갱신되지 않아 "값은 원복인데 수정행으로 저장" 되는 불일치가 난다.
+      //   그래서 undo/redo 직후 수정상태를 다시 맞춘다. 두 경로를 함께 쓴다:
+      //   (A) 액션(부모+자식) 셀을 _oldState 기준으로 재평가 — redo 로 되살아난 셀 재표시용. wijmo 는 짧은
+      //       간격의 편집(붙여넣기/연속편집)을 부모 액션 + 자식 액션으로 묶으므로 자식까지 순회해야 한다
+      //       (종전엔 부모 셀만 봐서 묶인 여러 셀 수정 후 undo 시 status 가 안 풀렸다).
+      //   (B) EditTracker 가 추적 중인 모든 셀을 현재값으로 재평가 — (A)가 못 짚는 셀/동적컬럼까지 포함해
+      //       원복이면 M 해제, 아니면 유지. storeChange 가 보관한 최초 원본과 현재값을 비교한다.
+      const resyncActionCells = (act: {
+        dataItems?: T[];
+        range?: { topRow: number; leftCol: number; rightCol: number };
+        _oldState?: WijmoPrimitive;
+        _actions?: unknown[];
+      }) => {
+        if (act && Array.isArray(act.dataItems) && act.range) {
+          const { topRow, leftCol, rightCol } = act.range;
+          act.dataItems.forEach((item, i) => {
+            if (!item) return;
+            const rowIdx = topRow + i; // undo 는 행 순서를 안 바꾸므로 액션 시점 인덱스가 유효하다.
+            for (let c = leftCol; c <= rightCol; c++) {
+              const binding = grid.columns[c]?.binding ?? '';
+              if (!binding) continue;
+              const current = (item as WijmoRowItem)[binding] as WijmoPrimitive;
+              editTracker.storeChange(item, binding, act._oldState as WijmoPrimitive, current);
+              // 화면 cascade(한 편집이 다른 셀을 set 하는 연동 로직)도 함께 되돌린다 — 되돌린 셀의
+              //   cellEditEnded 를 재발화해 화면 자신의 연동 로직이 되돌린 값으로 다시 전파하게 한다
+              //   (연동 셀 W/D/M 집계 등이 기록되지 않아 안 돌아오던 문제. DMF0003 류 cascade 화면 대응).
+              //   편집 중이 아니라(activeEditor 없음) editor 를 읽는 핸들러는 스스로 건너뛰고, UndoStack 의
+              //   cellEditEnded 핸들러도 beginningEdit 이 없어 새 액션을 쌓지 않는다.
+              if (reapplyEditOnUndo && rowIdx >= 0 && rowIdx < grid.rows.length)
+                grid.cellEditEnded.raise(
+                  grid,
+                  new CellRangeEventArgs(grid.cells, new CellRange(rowIdx, c))
+                );
+            }
+          });
+        }
+        if (act && Array.isArray(act._actions))
+          for (const child of act._actions) resyncActionCells(child as typeof act);
+      };
+      const resyncCrudType = (_s: UndoStack, e: UndoActionEventArgs) => {
+        resyncActionCells(e.action as unknown as Parameters<typeof resyncActionCells>[0]);
+        // 추적 중인 전체 셀 재평가(스냅샷으로 떠서 순회 중 삭제 안전).
+        for (const [item, originals] of [...editTracker.getOriginalValues().entries()]) {
+          for (const binding of Object.keys(originals)) {
+            editTracker.storeChange(
+              item,
+              binding,
+              originals[binding],
+              (item as WijmoRowItem)[binding] as WijmoPrimitive
+            );
+          }
+        }
+        grid.invalidate();
+      };
+      undoStack.undoneAction.addHandler(resyncCrudType);
+      undoStack.redoneAction.addHandler(resyncCrudType);
+    }
+
     // 빈 셀 '0' 채우기 — 반드시 EditTracker **직후**에 건다(Wijmo Event 는 등록 순서대로 호출).
     //   화면 useEffect 에서 붙이면 순서는 같지만 화면마다 중복 구현 + 순서 실수의 여지가 남는다.
     const emptyCellAsZeroHandler = (sender: TFlexGrid<T>, event: { row: number; col: number }) => {
@@ -1566,7 +1828,21 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
       });
       if (isCandidate) return;
 
-      // 후보 0건(getDataMap 이 undefined → dataMap 없음)이면 자유 입력이 되는 경로 — 그것도 비운다.
+      // 부분일치(contains) 붙여넣기 - 정확일치 후보가 없으면 친 글자를 '포함'하는 첫 후보(표시명)로
+      //   바꿔 넣는다. 타입어헤드(DataMap.search=includes)와 같은 규칙이라 입력 방식과 동작을 맞춘다
+      //   (사용자 요구 2026-11-24). 반드시 전체 표시명으로 치환해야 wijmo 가 그 후보 코드로 커밋한다
+      //   (부분 문자열 그대로는 getKeyValue 가 못 찾아 커밋이 안 된다). 정확일치는 위에서 이미 우선
+      //   처리되므로 "81"처럼 정확 후보가 있으면 여기 오지 않는다(포함 후보 "813"로 바뀌지 않는다).
+      const containsName = candidateNames
+        .map(name => safeString(name).trim())
+        .find(name => name !== '' && name.toLowerCase().includes(loweredPasted));
+      if (containsName) {
+        event.data = containsName;
+        return;
+      }
+
+      // 정확·포함 어느 후보에도 안 걸리면(완전 불일치) 비운다 — 잘못된 값 유입 방지.
+      //   후보 0건(getDataMap 이 undefined → dataMap 없음)으로 자유 입력이 되는 경로도 여기서 비운다.
       event.data = '';
     };
     grid.pastingCell.addHandler(clearOutOfListComboOnPaste as never);
@@ -1794,7 +2070,18 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     setMoveByMetakey(grid, staticColumns.length);
     setHandleUppercase(grid);
 
-    if (useSummaryTooltip) setSummaryTooltip(grid);
+    // 선택 영역 요약 — 커서 툴팁 대신 전체 화면 오른쪽 하단의 전역 단일 상태바(AS-IS 파리티)에 표시한다.
+    //   선택이 바뀔 때마다 이 그리드가 전역 바를 점유해 요약을 띄우고(React 재렌더 없이 명령형), 선택이
+    //   1셀 이하로 비면 자기가 owner 일 때 숨긴다 — 여러 그리드가 있어도 마지막에 선택한 그리드 하나만 보인다.
+    //   집계는 _showAreaInfo(selectedRanges 전체: Ctrl 비연속·빈 셀 포함)로 getSelectionSummaryHTML 이 담당.
+    if (useSummaryTooltip) {
+      const updateSummaryBar = () => setGlobalSummary(grid, getSelectionSummaryHTML(grid));
+      grid.selectionChanged.addHandler(updateSummaryBar);
+      grid.cellEditEnded.addHandler(updateSummaryBar);
+      grid.pastedCell.addHandler(updateSummaryBar);
+      // 그리드를 벗어나면(다른 탭/영역으로) 자기 요약은 접는다 — 전역 바가 숨은 탭 요약을 물고 있지 않게.
+      grid.lostFocus.addHandler(() => clearGlobalSummaryIfOwner(grid));
+    }
     if (useCellTooptip) setCellTooltip(grid);
     if (useAggregationRow) setAggregationRow(grid, aggregationRowPlacement);
     if (useCheckbox) {

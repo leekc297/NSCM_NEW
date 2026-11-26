@@ -158,13 +158,13 @@ export const ShipmentPlanRequestModal = ({ open, modalClose, requestNo }: Props)
       height={560}
       position='basic'
       open={open}
-      title={t('_ssp0019.requestDetailTitle', { defaultValue: 'Request Info Popup' })}
+      title={t('LBL01107', '_Request Info')}
       handleClose={modalClose}
       customContentArea={
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 1.5, p: 1.5 }}>
           {/* AS-IS 섹션 캡션 "Request Confirm Detail"(가운데 굵게) — 자매 SSP0012 동일. */}
           <Box sx={{ fontWeight: 700, textAlign: 'center', fontSize: 14 }}>
-            {t('_ssp0019.requestDetailSection', { defaultValue: 'Request Confirm Detail' })}
+            {t('LBL01106', '_Request Confirm Detail')}
           </Box>
           <RequestForm form={res?.form ?? null} requestNo={requestNo} />
           <Box sx={{ flex: 1, minHeight: 0 }}>
@@ -197,7 +197,7 @@ export const ShipmentPlanRequestModal = ({ open, modalClose, requestNo }: Props)
               appearance='outlined'
               priority='normal'
               size='medium'
-              buttonLabel={t('_ssp0019.close', { defaultValue: 'Close' })}
+              buttonLabel={t('LBL00627', '_Close')}
               onClick={modalClose}
             />
           </Box>

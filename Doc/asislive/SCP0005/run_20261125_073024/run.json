@@ -1,0 +1,138 @@
+{
+ "id": "SCP0005",
+ "started": "2026-11-25 07:30:24.668",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-25 07:30:43.606",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0005_DistributionRoute",
+   "form_text": "Distribution Route",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0005_DistributionRoute.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-25 07:30:49.773"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-25 07:30:53.135",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0005\\run_20261125_073024\\dump_load.json",
+   "control_count": 28,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-25 07:30:53.156"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-25 07:30:53.469",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0005\\run_20261125_073024\\shots\\SCP0005_01_load.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-25 07:30:53.588"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-25 07:30:54.060",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-25 07:30:54.577"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-25 07:31:12.656",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0005\\run_20261125_073024\\dump_find.json",
+   "control_count": 28,
+   "grid_count": 1,
+   "total": "Total : 8,036",
+   "time_status": "DB : 1.038s, UI : 12.846s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-25 07:31:12.694"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-25 07:31:13.020",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0005\\run_20261125_073024\\shots\\SCP0005_02_find.png",
+   "width": 1723,
+   "height": 1035,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-25 07:31:13.090"
+  },
+  {
+   "step": "sweep",
+   "ok": true,
+   "left": 0,
+   "dialogs_open": 0,
+   "closed": 0,
+   "error": null
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 16,
+  "calls_with_params": 16
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "prev_user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0005_DistributionRoute",
+  "form_text": "Distribution Route",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0005_DistributionRoute.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 1.038s, UI : 12.846s",
+  "total": "Total : 8,036",
+  "how": "status"
+ },
+ "t_open": "2026-11-25 07:30:43.497",
+ "t_find": "2026-11-25 07:30:53.726",
+ "dialogs": [],
+ "popups_closed": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 28,
+  "layout_items": 13,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 40,
+  "data_rows": 50,
+  "grid_rows": 8036,
+  "calls_total": 25,
+  "calls_screen": 16,
+  "calls_find": 6,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-25 07:31:15.525",
+ "exit": 0
+}

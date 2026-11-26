@@ -1,0 +1,165 @@
+{
+  "id": "20261124012047_SELF",
+  "at": "2026-11-24T01:20:47+09:00",
+  "ms": 1795450847396,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/make_ui_test_sheet.py|checklist는있는데시험excel이없는scpssp화면n개scpn",
+  "title": "사용자 지시 R82 같은 문제: tools/Harness/verify/make_ui_test_sheet.py:246 CheckList는 있는데 시험 Excel이 없는 SCP, SSP 화면 13개(SCP0007 SCP0033 SCP0100 SCP0108 SCP0127 SSP000",
+  "evidence": "규칙 R82 \"CheckList 를 만드는 모든 실행 경로는 같은 실행에서 그 CheckList 조치필요 행으로 Doc/UI_TEST(SCP&SSP) 시험 Excel 을 함께 만듦\" (원래 지시 2026-11-16 14:41 \"Checklist 생성 후 C:\\Projects\\NSCM\\Doc\\UI_TEST(SCP&SSP) 폴더내에 Test Excel 문서도 같이 생성하도록 VM 보완 요청합니다.\") · tools/Harness/verify/make_ui_test_sheet.py:246 def build(mid, checklist=None):",
+  "targets": [
+    "tools/Harness/verify/make_ui_test_sheet.py"
+  ],
+  "before_after": "소스 수정 없음. 13개 화면에 python tools/Harness/verify/make_ui_test_sheet.py <ID> 를 1회씩 실행해 최신 CheckList 조치 필요 행으로 생성(CheckList 재수행 불필요)",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/make_ui_test_sheet.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T10:47:07+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T10:51:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1047"
+    },
+    {
+      "at": "2026-11-25T10:51:02+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T11:03:41+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T11:03:41+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 84/84 PASS 1374 FAIL 0 → 반영 뒤 84/84 PASS 1374 FAIL 0 (2026-11-25 10:51~10:59). 시험 Excel 없는 SCP·SSP 화면 13 → 0 (Doc/UI_CHECKLIST 대 Doc/UI_TEST(SCP&SSP) 화면ID 대조) · 변경 49개 파일 · 대상 목록 밖 변경 49개: tools/Harness/gate_baseline.tsv, Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0007(BOD).xlsx, Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0033(Shipment Semi Dept Day).xlsx, Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0100(Global PSI New).xlsx, Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0108(LOB Report).xlsx, Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0127(Precede_Safety Stock Day).xlsx",
+      "log": ".vibe\\logs\\2026-11-25T10-51-02_claude_orch.log",
+      "sec": 533,
+      "costUsd": 0.9847918999999999,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0007(BOD).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0033(Shipment Semi Dept Day).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0100(Global PSI New).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0108(LOB Report).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0127(Precede_Safety Stock Day).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0003(Shipment Change Request Confirm).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0015(Shipment Plan(Mobility & IT)).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0021(Shipment Plan(Auto & ESS)).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0023(Shipment Plan(Electrode)).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0024(Shipment Master Electrode).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0025(Shipment Requestor PIC).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0060(Shipment Plan(Auto & ESS)-WA_UC).xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0200(Shipment Change Request).xlsx",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SCP0007(BOD).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SCP0033(Shipment Semi Dept Day).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SCP0100(Global PSI New).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SCP0108(LOB Report).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SCP0127(Precede_Safety Stock Day).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0003(Shipment Change Request Confirm).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0015(Shipment Plan(Mobility & IT)).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0021(Shipment Plan(Auto & ESS)).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0023(Shipment Plan(Electrode)).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0024(Shipment Master Electrode).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0025(Shipment Requestor PIC).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0060(Shipment Plan(Auto & ESS)-WA_UC).xlsx.style.csv",
+        "Doc/_doc_style/☆NSCME_SCP&SSP 테스트_SSP0200(Shipment Change Request).xlsx.style.csv",
+        "Doc/verify/SCP0007/ui_test_rows.json",
+        "Doc/verify/SCP0033/ui_test_rows.json",
+        "Doc/verify/SCP0100/ui_test_rows.json",
+        "Doc/verify/SCP0108/ui_test_rows.json",
+        "Doc/verify/SCP0127/ui_test_rows.json",
+        "Doc/verify/SSP0003/ui_test_rows.json",
+        "Doc/verify/SSP0015/ui_test_rows.json",
+        "Doc/verify/SSP0021/ui_test_rows.json",
+        "Doc/verify/SSP0023/ui_test_rows.json",
+        "Doc/verify/SSP0024/ui_test_rows.json",
+        "Doc/verify/SSP0025/ui_test_rows.json",
+        "Doc/verify/SSP0060/ui_test_rows.json",
+        "Doc/verify/SSP0200/ui_test_rows.json",
+        "Doc/통합테스트_SSP/SCM_MST_PLAN_일계획ID_생성_실행쿼리_20261125.sql",
+        "Doc/통합테스트_SSP/SSP_단위별_데이터산출_실행명령_ORACLE_20261125.sql",
+        "Doc/통합테스트_SSP/SSP_사전점검_검증쿼리_MSSQL_20261125.sql",
+        "Doc/통합테스트_SSP/SSP_사전점검_검증쿼리_ORACLE_20261125.sql",
+        "tools/Analysis/ssp_it_precheck/gen_sql_files.py",
+        "tools/Analysis/ssp_it_precheck/lookup_group.py",
+        "tools/Analysis/ssp_it_precheck/lookup_scan.py",
+        "tools/Analysis/ssp_it_precheck/lookup_ssp_target.py",
+        "tools/Analysis/ssp_it_precheck/sqlplus_dryrun.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 를 만드는 모든 실행 경로는 같은 실행에서 그 CheckList 조치필요 행으로 Doc/UI_TEST(SCP&SSP) 시험 Excel 을 함께 만듦 규칙을 tools/Harness/verify/make_ui_test_sheet.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R82|tools/Harness/verify/make_ui_test_sheet.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795571226748,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795571462816,
+  "verifyJudge": {
+    "at": "2026-11-25T10:59:58+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1047",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795572221589,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 226.9s'(2026-11-25 10:51:45) → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 220s'(10:59 전). 웹뷰 파일 변경 없음, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0007(BOD).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0033(Shipment Semi Dept Day).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0100(Global PSI New).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0108(LOB Report).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0127(Precede_Safety Stock Day).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0003(Shipment Change Request Confirm).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0015(Shipment Plan(Mobility & IT)).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0021(Shipment Plan(Auto & ESS)).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0023(Shipment Plan(Electrode)).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0024(Shipment Master Electrode).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0025(Shipment Requestor PIC).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0060(Shipment Plan(Auto & ESS)-WA_UC).xlsx",
+      "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0200(Shipment Change Request).xlsx"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 84/84 PASS 1374 FAIL 0 → 반영 뒤 84/84 PASS 1374 FAIL 0 (2026-11-25 10:51~10:59). 시험 Excel 없는 SCP·SSP 화면 13 → 0 (Doc/UI_CHECKLIST 대 Doc/UI_TEST(SCP&SSP) 화면ID 대조)",
+    "note": "개선안대로 tools/Harness/verify/make_ui_test_sheet.py 소스 수정 없음. 13개 화면에 1회씩 실행, 새 파일 13개, 합계 170행. 파일마다 문장 규칙 위반 6~11건 보고(CheckList 조치 필요 행 문구를 그대로 옮김, 범위 밖이라 고치지 않음). 확인할 곳 후보: SCP0045 는 시험 Excel 만 있고 Doc/UI_CHECKLIST 최상위 CheckList 없음"
+  },
+  "snap": "prop_20261124012047_SELF"
+}

@@ -1,4 +1,4 @@
 ﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
-SSP0014_GET_SHIPMENT_MODEL_PIC,PKG_SSP0014.P_SSP0014_GET_MODEL_PIC,GET,27,DIFF:6 PASS:17 ROWS_ONLY:4,,1,find,7667,"{""p_division_id"": ""40"", ""p_operation_group"": """", ""p_from_site"": """", ""p_valid_yn"": """", ""p_item_id"": """", ""p_user_id"": """", ""p_language"": ""KO""}",BOTH,차등 검증·실측 모두 있음
-SSP0014_SAVE_SHIPMENT_MODEL_PIC,PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
-SSP0014_GET_USER_ID_CHECK,PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK,GET,16,PASS:12 ROWS_ONLY:4,,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP
+SSP0014_GET_SHIPMENT_MODEL_PIC,,GET,0,,,1,find,7667,"{""p_division_id"": ""40"", ""p_operation_group"": """", ""p_from_site"": """", ""p_valid_yn"": """", ""p_item_id"": """", ""p_user_id"": """", ""p_language"": ""KO""}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
+SSP0014_SAVE_SHIPMENT_MODEL_PIC,,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SSP0014_GET_USER_ID_CHECK,PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK,GET,14,PASS:14,,0,,,{},DIFF_ONLY,실측(로드·조회)에서는 호출되지 않음 — 다른 동작의 SP

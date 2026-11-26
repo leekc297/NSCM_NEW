@@ -1,0 +1,105 @@
+{
+  "id": "20261124012048_SELF_3",
+  "at": "2026-11-24T01:20:48+09:00",
+  "ms": 1795450848408,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/make_ui_test_sheet.py|시험excel폴더n줄와checklist폴더n줄pdocuicheckli",
+  "title": "사용자 지시 R83 같은 문제: tools/Harness/verify/make_ui_test_sheet.py:47 시험 Excel 폴더(47줄)와 CheckList 폴더(77줄 P('Doc', 'UI_CHECKLIST', ...))를 직접 적음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/Harness/verify/make_ui_test_sheet.py:47 OUTDIR = P('Doc', 'UI_TEST(SCP&SSP)')",
+  "targets": [
+    "tools/Harness/verify/make_ui_test_sheet.py"
+  ],
+  "before_after": "doc_paths.ui_test_dir(), doc_paths.checklist_dir()로 바꿈",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/make_ui_test_sheet.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T12:51:06+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T12:55:01+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1251"
+    },
+    {
+      "at": "2026-11-25T12:55:06+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T13:08:02+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T13:08:02+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 84/84 PASS 1374 FAIL 0 (2026-11-25T03:55:56Z) → 반영 뒤 ALL OK 84/84 PASS 1374 FAIL 0 (2026-11-25 13:00:05 KST). 고친 파일을 불러 확인: OUTDIR=C:\\Projects\\NSCM\\Doc\\UI_TEST(SCP&SSP), checklist_dir()=C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST, latest_checklist('SCP0104') · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T12-55-07_claude_orch.log",
+      "sec": 542,
+      "costUsd": 0.8188863000000002,
+      "files": [
+        "tools/Harness/verify/make_ui_test_sheet.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/Harness/verify/make_ui_test_sheet.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/Harness/verify/make_ui_test_sheet.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795578665702,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795578906590,
+  "verifyJudge": {
+    "at": "2026-11-25T13:04:12+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1251",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795579682566,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 실행. 반영 전 'ALL OK  파일 84/84  PASS 1374  FAIL 0  227.4s'(2026-11-25T03:55:56Z) → 반영 뒤 'ALL OK  파일 84/84  PASS 1374  FAIL 0  227s'(2026-11-25 13:00:05 시작). t_webview_syntax.js 는 run_all 안에서 PASS 19. 대상이 Python 파일이라 따로 돌리지 않음"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/make_ui_test_sheet.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 84/84 PASS 1374 FAIL 0 (2026-11-25T03:55:56Z) → 반영 뒤 ALL OK 84/84 PASS 1374 FAIL 0 (2026-11-25 13:00:05 KST). 고친 파일을 불러 확인: OUTDIR=C:\\Projects\\NSCM\\Doc\\UI_TEST(SCP&SSP), checklist_dir()=C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST, latest_checklist('SCP0104')=Doc\\UI_CHECKLIST\\SCP0104_LineAssign_CheckList_v50.xlsx",
+    "note": "47줄 OUTDIR → ui_test_dir()(harness.json paths.uiTestDir, 기본 Doc/UI_TEST(SCP&SSP)). 77줄 → checklist_dir()(paths.checklistDir, 기본 Doc/UI_CHECKLIST, glob.escape 적용). 250줄 안내 문구 폴더 = OUTDIR 상대경로. doc_paths 모듈이 저장소에 없어 같은 이름의 함수를 대상 파일 안에 만듦. harness.json 에 paths 가 없어 기본값을 쓰고 동작은 반영 전과 같음. 추가 확인 후보: quick.json 133·273·932·1202·1467·1782줄과 steps.json 2512·2534줄에 Doc/UI_TEST(SCP&SSP) 직접 표기(승인 범위 밖이라 안 고침)"
+  },
+  "snap": "prop_20261124012048_SELF_3"
+}

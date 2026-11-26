@@ -1,0 +1,148 @@
+{
+ "rule_id": "K4",
+ "hash": "a45401edd94e9a2d",
+ "groups": [
+  {
+   "rows": [
+    "EG-035d24e0"
+   ],
+   "why": "DELETE 버튼을 Div 81·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-1ca102cc"
+   ],
+   "why": "DELETE 버튼을 Div 82·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-327eb92e"
+   ],
+   "why": "SAVE 버튼이 Div 40·Viewer에서 비노출인지 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-4093ed61"
+   ],
+   "why": "INSERT 버튼을 Div 82·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-5f851100"
+   ],
+   "why": "INSERT 버튼을 Div 81·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-6586111e"
+   ],
+   "why": "DELETE 버튼을 Div 40·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-822dad7a"
+   ],
+   "why": "SAVE 버튼이 Div 81·Viewer에서 비노출인지 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-923f1e69"
+   ],
+   "why": "DELETE 버튼이 Div 81·Viewer에서 비노출인지 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-9e02fb7f"
+   ],
+   "why": "DELETE 버튼이 Div 40·Viewer에서 비노출인지 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-a1f74d30"
+   ],
+   "why": "INSERT 버튼이 Div 40·Viewer에서 비노출인지 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-a3524dab"
+   ],
+   "why": "SAVE 버튼을 Div 82·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-ddb89a2d"
+   ],
+   "why": "SAVE 버튼을 Div 81·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-f5a9c3fe"
+   ],
+   "why": "SAVE 버튼을 Div 40·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-ff72fa74"
+   ],
+   "why": "INSERT 버튼이 Div 81·Viewer에서 비노출인지 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "EG-ffe74885"
+   ],
+   "why": "INSERT 버튼을 Div 40·Planner 조건에서 확인하는 행이며, 같은 버튼·Div·역할 조합의 행이 따로 없다."
+  },
+  {
+   "rows": [
+    "T-ddc05b78"
+   ],
+   "why": "대조표 68행의 버튼 구성(Search/Save, Edit 제외)이 소스에 있는지 추적하는 행이라 확인하는 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-0486161d"
+   ],
+   "why": "Edit 버튼이 없어도 오류로 보지 않고 편집 기대를 판정하는 기준 규칙이라, 특정 버튼 노출을 측정하는 행과 묶을 수 없다."
+  },
+  {
+   "rows": [
+    "V-6df5c22d"
+   ],
+   "why": "Currency 고정, 중복 Keyset 메시지, Insert 위치를 함께 보는 복합 결함 유형이라 EG 단일 버튼 행과 대상·기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-99eb0d71"
+   ],
+   "why": "Price Batch Input 버튼은 다른 행에 없는 요소다."
+  },
+  {
+   "rows": [
+    "V-ceca4b3b"
+   ],
+   "why": "공통 버튼 노출이 조회 여부와 무관한지 보는 일반 원칙이고, 특정 버튼·Div·역할의 기대값이 없어 EG 개별 행과 같은 측정으로 확신할 수 없다."
+  },
+  {
+   "rows": [
+    "V-d8d564f4"
+   ],
+   "why": "Condition(F6) 저장 때 Period를 빼는지 보는 행이라 버튼 노출과 요소·기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-d9d87624"
+   ],
+   "why": "Div 40의 버튼 바를 접근성 트리 골든과 비교하는 스냅샷이라 방법과 기대가 개별 노출 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-e8f6c900"
+   ],
+   "why": "Data Type이 Cutoff Data일 때만 Delete 버튼이 숨는지 보는 행이라 조건이 EG Delete 행과 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:10:12",
+ "cost": 0.0980397
+}

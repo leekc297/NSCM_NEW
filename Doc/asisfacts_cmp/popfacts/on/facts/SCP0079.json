@@ -1,0 +1,571 @@
+{
+ "screen": "SCP0079",
+ "calls": [
+  {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "method": "BtnItem_Id_Click",
+   "asis_ref": "SCP0079_RTF_Analysis_Report.cs:943",
+   "trigger": {
+    "kind": "COND",
+    "control": "btnItem_Id",
+    "input": "txtItem_Id",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": "Model"
+   },
+   "multi": "true",
+   "div_arg": "division",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "division"
+    },
+    {
+     "param": "_ScmSiteId",
+     "kind": "LITERAL",
+     "arg": "sScmSite"
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "LITERAL",
+     "arg": "sProject"
+    },
+    {
+     "param": "_ItemID",
+     "kind": "CONTROL",
+     "arg": "sItemId"
+    }
+   ],
+   "results": [
+    "item"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0079_RTF_Analysis_Report.cs:944",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0079_RTF_Analysis_Report.cs:947",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_ProjectbyDivisionPopup",
+   "method": "BtnProject_Click",
+   "asis_ref": "SCP0079_RTF_Analysis_Report.cs:961",
+   "trigger": {
+    "kind": "COND",
+    "control": "btnProject",
+    "input": "txtProject",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": "Project"
+   },
+   "multi": "true",
+   "div_arg": "division",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "division"
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "CONTROL",
+     "arg": "sProject"
+    }
+   ],
+   "results": [
+    "project"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0079_RTF_Analysis_Report.cs:962",
+     "target": "popProject.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0079_RTF_Analysis_Report.cs:965",
+     "target": "sProjectCode",
+     "value": "popProject.ProjectCode"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0079_RTF_Analysis_Report_DetailPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0079_RTF_Analysis_Report.cs:783",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "MEASURE_LABEL",
+    "guard": "if (siMain.GetColumnTag(e.Column).ToUpper() == \"MEASURE_LABEL\")"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [
+    "p_plan_start_yyyymmdd_A"
+   ],
+   "args": [
+    {
+     "param": "PLAN_START_YYYYMMDD_A",
+     "kind": "CONTROL",
+     "arg": "p_plan_start_yyyymmdd_A"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": []
+  }
+ ],
+ "classes": {
+  "SCM0002_ItembyDivisionPopup": {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+   "title": "Model by DivisionPopup",
+   "conds": [
+    {
+     "name": "txtItemID",
+     "type": "UsrMultiLineEditor",
+     "label": "Model",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:164",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbScmSite",
+     "type": "UsrCheckedList",
+     "label": "Site",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:166",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProject",
+     "type": "UsrMultiLineEditor",
+     "label": "Project",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:165",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME",
+     "order_line": "64",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_project_code",
+      "p_scm_site_id",
+      "p_item_id"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:242",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:384",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_SITE_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_SITE_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "A.SITE_DESCRIPTION",
+     "order_line": "45",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer"
+     ],
+     "method": "GetDivisionbyScmSite",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:398",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:264",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:278",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:302",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:305",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:319",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCM0002_ProjectbyDivisionPopup": {
+   "cls": "SCM0002_ProjectbyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ProjectbyDivisionPopup.cs",
+   "title": "Project by Division",
+   "conds": [
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ProjectbyDivisionPopup.Designer.cs:40",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ProjectbyDivisionPopup.cs:163",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProject",
+     "type": "UsrMultiLineEditor",
+     "label": "Project",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ProjectbyDivisionPopup.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_PROJECT_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_PROJECT_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "P.DIVISION_ID",
+     "order_line": "67",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_project_code"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_ProjectbyDivisionPopup.cs:249",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCM0002_ProjectbyDivisionPopup.cs:381",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_ProjectbyDivisionPopup.cs:260",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_ProjectbyDivisionPopup.cs:298",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ProjectbyDivisionPopup.cs:301",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ProjectbyDivisionPopup.cs:309",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCP0079_RTF_Analysis_Report_DetailPopup": {
+   "cls": "SCP0079_RTF_Analysis_Report_DetailPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0079_RTF_Analysis_Report/POPUP/SCP0079_RTF_Analysis_Report_DetailPopup.cs",
+   "title": "RTF Analysis Report Detail Popup",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "SCP0079_GET_RTF_ANAL",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindData",
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:164",
+     "save": false
+    },
+    {
+     "sp": "SCP0079_GET_RTF_ANALYSIS_REPORT_DETAIL",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0079_GET_RTF_ANALYSIS_REPORT_DETAIL.sql",
+     "order_known": true,
+     "order_keys": "A.DIVISION_ID, A.BIZ_TYPE, A.ITEM_ID, A.TO_SITE,A.INCOTERMS, A.DATA_GUBUN_ORDER, G.DEPT_NAME_KO, A.VERSION_ID, M.SORT_ORDER_NO + CHAR(10);",
+     "order_line": "1641",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_start_yyyymmdd_A",
+      "p_plan_start_yyyymmdd_B",
+      "p_plan_type_A",
+      "p_plan_type_B",
+      "p_seq_A",
+      "p_seq_B",
+      "p_division_id",
+      "p_biz_type",
+      "p_project_code",
+      "p_item_id",
+      "p_electype",
+      "p_measure_list",
+      "p_from_yyyymmdd",
+      "p_to_yyyymmdd",
+      "p_version_id",
+      "p_user_id",
+      "debug_mode",
+      "v_plan_start_yyyymmdd_A",
+      "v_plan_start_yyyymmdd_B",
+      "v_division_id",
+      "v_user_id",
+      "v_debug_mode",
+      "v_program_id",
+      "v_sheet_name",
+      "POS",
+      "LEN",
+      "V_INDEX",
+      "mEXEC",
+      "COL",
+      "SORT_METHOD_CODE",
+      "v_RSLT_FLAG_A",
+      "v_RSLT_FLAG_B",
+      "v_from_yyyymmdd_A",
+      "v_to_yyyymmdd_A",
+      "v_from_result_A",
+      "v_to_result_A",
+      "v_from_yyyymmdd_B",
+      "v_to_yyyymmdd_B",
+      "v_from_result_B",
+      "v_to_result_B"
+     ],
+     "method": "FindData",
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:168",
+     "save": false
+    },
+    {
+     "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql",
+     "order_known": true,
+     "order_keys": "sort_order_no",
+     "order_line": "57",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd"
+     ],
+     "method": "GetSpdTitle",
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:359",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [
+    {
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:317",
+     "method": "Set_backgroupColor",
+     "raw": "for (int i = 0; i < rowcnt; i++) { //짝수행 //if (i % 2 == 1) //{ // this.siMain.ActiveSheet.Cells[i, iCol_MEASURE_LABEL + 1, i, endcol].BackColor = ControlColor.A",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:334",
+     "method": "Set_backgroupColor",
+     "raw": "range1.BackColor = Color.FromArgb(Convert.ToInt32(sValues[0]), Convert.ToInt32(sValues[1]), Convert.ToInt32(sValues[2]))",
+     "guard": "for (i < rowcnt) ▸ if (measureColor != \"\")"
+    },
+    {
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:342",
+     "method": "Set_backgroupColor",
+     "raw": "this.siMain.ActiveSheet.Cells[i, iCol_VERSION_ID, i, iCol_MEASURE_LABEL - 1].BackColor = Color.FromArgb(196, 189, 151)",
+     "guard": "for (i < rowcnt) ▸ if (siMain.GetValue(i, iCol_VERSION_ID).Equals(\"GAP\"))"
+    }
+   ],
+   "dyn_cols": [
+    {
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:236",
+     "method": "InitSpreadDateColumn",
+     "raw": "spdInfo.AddTextColumn(sColumnLabelname, sColumnName, FPMerge.None, 0, false)",
+     "guard": "foreach (DataRow dr in dsSpdTitle.Tables[0].Rows) ▸ if (sColumnName.IndexOf(\"B_\") > 0)"
+    },
+    {
+     "ref": "SCP0079_RTF_Analysis_Report_DetailPopup.cs:240",
+     "method": "InitSpreadDateColumn",
+     "raw": "spdInfo.AddNumColumn(sColumnLabelname, sColumnName, FPMerge.None, 70, true)",
+     "guard": "foreach (DataRow dr in dsSpdTitle.Tables[0].Rows) ▸ else of (sColumnName.IndexOf(\"B_\") > 0)"
+    }
+   ],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

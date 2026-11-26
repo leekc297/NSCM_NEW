@@ -1,0 +1,64 @@
+// job-runner.js 시험 — 임시 폴더에서 업무 1개를 화면 여러 개에 순차 실행(가짜 vscode · node 작업). 실제 Claude·서버 불필요
+//   사용: node test/t_job_runner.js <VibeManager 폴더>
+const Module = require('module'); const path = require('path'); const fs = require('fs'); const os = require('os');
+const vs = new Proxy({}, { get: (t, k) => {
+  if (k === 'window') return new Proxy({}, { get: () => () => Promise.resolve(undefined) });
+  if (k === 'commands') return { executeCommand: () => Promise.resolve(), registerCommand: () => ({ dispose() { } }) };
+  if (k === 'workspace') return { getConfiguration: () => ({ get: () => undefined }), workspaceFolders: [] };
+  if (k === 'Uri') return { file: f => ({ fsPath: f }), parse: s => s };
+  return function () { };
+} });
+const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'job-')); const vibeDir = path.join(root, '.vibe');
+const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
+W('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_FE', llmReview: false }));
+// 작업: 화면 ID 가 fail.txt 에 있으면 실패(exit 6), 아니면 산출물 생성. slow.txt 에 있으면 1.5초 걸림
+// 2026-11-23 사용자 매뉴얼 업무: 모듈 단위(unit module) + 업무 입력(jobInputs) + 입력 파일(inputsFile) 시험
+const umJs = W('tools/t/um.js', "const fs=require('fs'),path=require('path');const id=process.argv[2];const inp=JSON.parse(fs.readFileSync(path.join(process.cwd(),'Doc','UserManual',id,'_inputs.json'),'utf8'));fs.mkdirSync(path.join(process.cwd(),'out'),{recursive:true});fs.writeFileSync(path.join(process.cwd(),'out',id+'.txt'),[inp.module,inp.author,inp.version,inp.date].join('|'));if(!fs.existsSync(path.join(process.cwd(),'out','nofile.txt')))fs.writeFileSync(path.join(process.cwd(),'Doc','UserManual',id,'SCM_IM_사용자매뉴얼_'+id+'_v1.0.pptx'),'p');");
+const sample = W('in/sample.pptx', 'x'); const caps = W('in/caps.pptx', 'y');
+const item = { label: '📘 매뉴얼 시험', kind: 'chain', chainId: 'usermanual', batch: true, unit: 'module', combine: true, outputs: ['Doc/UserManual/${id}/SCM_IM_사용자매뉴얼_${id}_v*.pptx'], modules: ['DM', 'SCP', 'SSP', 'SYSTEM'], inputsFile: 'Doc/UserManual/${id}/_inputs.json',
+  jobInputs: [{ name: 'author', label: '작성자' }, { name: 'date', label: '작성일', type: 'date' }, { name: 'version', label: 'Version' }, { name: 'sample', label: '양식', type: 'file' }, { name: 'captures', label: '캡처', type: 'file', multi: true }],
+  steps: [{ task: 'T.um', title: '모듈 처리' }] };
+W('.vibe/quick.json', JSON.stringify({ groups: [{ title: 'g', items: [item] }] }));
+const tasks = { 'T.um': { id: 'T.um', title: '모듈 처리', kind: 'node', script: umJs, args: ['${input:id}'], cwd: root } };
+const p = { root, vibeDir, extDir: dir, genDir: path.join(root, 'Doc', 'gen'), outDir: path.join(root, 'Doc', 'asisfacts'), tobeDir: path.join(root, 'nscm-fe'), promptsDir: path.join(root, 'prompts'), node: 'node', python: 'python', powershell: 'powershell', claude: 'claude', claudeModel: '', language: 'ko', quickFile: path.join(vibeDir, 'quick.json') };
+const api = { ctx: { workspaceState: { get: () => undefined, update: () => { } }, extensionPath: dir }, paths: () => p, loadSteps: () => ({}), findTask: id => tasks[id] || null,
+  collectInputs: async (task, preset) => Object.assign({}, p, { inputs: Object.assign({}, preset || {}) }),
+  subst: (text, vars) => String(text == null ? '' : text).replace(/\$\{(input:)?([A-Za-z0-9_]+)\}/g, (m, isIn, n) => isIn ? (vars.inputs && vars.inputs[n] != null ? vars.inputs[n] : '') : (vars[n] != null ? String(vars[n]) : m)),
+  buildArgs: (task, vars) => (task.args || []).map(a => api.subst(a, vars)).filter(x => x !== ''), openPath: () => { }, pageDirOf: () => '', menuSections: () => [], claudeEnv: () => ({}), runTaskById: async () => 0, record: () => { }, afterTask: () => { } };
+const jr = require(path.join(dir, 'job-runner')); jr.init(api);
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+const R = rel => fs.readFileSync(path.join(root, rel), 'utf8'); const sleep = t => new Promise(r => setTimeout(r, t));
+const waitEnd = async (id, ms = 40000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { const j = jr.get(id); if (!/^(running|pausing)$/.test(j.status)) { await sleep(150); return j; } await sleep(100); } return jr.get(id); };
+(async () => {
+  const bi = jr.batchItems().find(x => x.label === item.label);
+  chk('업무 목록: unit module, 모듈 4개, 입력 칸 5개', !!bi && bi.unit === 'module' && bi.modules.join() === 'DM,SCP,SSP,SYSTEM' && bi.jobInputs.length === 5, JSON.stringify(bi && { unit: bi.unit, m: bi.modules }));
+  const caps2 = W('in/caps2.pptx', 'z'); const good = { author: '조재훈', date: '2026.11.23', version: 'Ver 1.0', sample, captures: [caps, caps2] };
+  let e1 = ''; try { jr.create({ itemLabel: item.label, screens: ['DM'], inputs: Object.assign({}, good, { author: '' }) }); } catch (e) { e1 = e.message; }
+  chk('입력 빠짐 = 만들지 않음', /입력 빠짐: 작성자/.test(e1), e1);
+  let e2 = ''; try { jr.create({ itemLabel: item.label, screens: ['DM'], inputs: Object.assign({}, good, { sample: path.join(root, 'none.pptx') }) }); } catch (e) { e2 = e.message; }
+  chk('없는 파일 = 만들지 않음', /파일 없음: 양식/.test(e2), e2);
+  let e3 = ''; try { jr.create({ itemLabel: item.label, screens: ['DMF0004', 'XX'], inputs: good }); } catch (e) { e3 = e.message; }
+  chk('모듈이 아닌 값 = 만들지 않음', /모듈이 없습니다/.test(e3), e3);
+  const j = jr.create({ itemLabel: item.label, screens: ['SYSTEM', 'DM', 'DMF0004'], inputs: good });
+  chk('모듈 2개 = 단위 1개 DM_SYSTEM(순서 DM, SCP, SSP, SYSTEM)', j.screens.map(s => s.id).join() === 'DM_SYSTEM' && j.unit === 'module' && j.inputs.author === '조재훈', j.screens.map(s => s.id).join());
+  const inp = JSON.parse(R('Doc/UserManual/DM_SYSTEM/_inputs.json'));
+  let e4 = ''; try { jr.create({ itemLabel: item.label, screens: ['DM'], inputs: Object.assign({}, good, { captures: [] }) }); } catch (e) { e4 = e.message; }
+  chk('캡처 0개 = 만들지 않음', /입력 빠짐: 캡처/.test(e4), e4);
+  let e5 = ''; try { jr.create({ itemLabel: item.label, screens: ['DM'], inputs: Object.assign({}, good, { captures: [caps, path.join(root, 'x.pptx')] }) }); } catch (e) { e5 = e.message; }
+  chk('캡처 중 없는 파일 = 만들지 않음', /파일 없음: 캡처/.test(e5), e5);
+  chk('캡처 여러 개 = 목록으로 기록', Array.isArray(inp.captures) && inp.captures.length === 2);
+  chk('_inputs.json = 모듈마다(작업 번호, 입력값)', inp.jobId === j.id && inp.module === 'DM_SYSTEM' && inp.version === 'Ver 1.0');
+  jr.start(j.id); const e = await waitEnd(j.id);
+  chk('묶음 단위 실행 끝(완료)', e.status === 'done' && e.screens.every(s => s.status === 'done'), e.screens.map(s => s.id + ':' + s.status + ':' + s.summary).join(' | '));
+  chk('단계 스크립트가 묶음 입력을 읽음', R('out/DM_SYSTEM.txt') === 'DM_SYSTEM|조재훈|Ver 1.0|2026.11.23', R('out/DM_SYSTEM.txt'));
+  chk('산출물 = 이번 실행에서 만든 파일(저장소 기준 경로)', JSON.stringify(e.screens[0].outputs) === JSON.stringify(['Doc/UserManual/DM_SYSTEM/SCM_IM_사용자매뉴얼_DM_SYSTEM_v1.0.pptx']), JSON.stringify(e.screens[0].outputs));
+  chk('결과 요약에 산출물 줄', /## 산출물/.test(R(`.vibe/jobs/${j.id}/SUMMARY.md`)) && /SCM_IM_사용자매뉴얼_DM_SYSTEM_v1.0.pptx/.test(R(`.vibe/jobs/${j.id}/SUMMARY.md`)));
+  { const fl = e.screens[0].flow || {}; const st = (fl.steps || [])[0] || {};
+    chk('상세 프로세스 기록(s.flow): 단계 1개 = 완료, 시작, 끝, 소요, 주체', (fl.steps || []).length === 1 && st.no === 1 && st.name === '모듈 처리' && st.st === 'ok' && !!st.start && !!st.end && st.sec != null && st.actor === 'script', JSON.stringify(fl)); }
+  chk('업무 목록에 단계 이름(시작 전 상세 표시용)', JSON.stringify(bi.stepNames) === JSON.stringify(['모듈 처리']), JSON.stringify(bi.stepNames));
+  W('out/nofile.txt', 'x'); const j2 = jr.create({ itemLabel: item.label, screens: ['SCP'], inputs: good }); jr.start(j2.id); const ee2 = await waitEnd(j2.id);
+  chk('산출물을 만들지 못하면 완료(경고) + 이유', ee2.screens[0].status === 'warn' && /산출물 파일 없음/.test(ee2.screens[0].why) && !ee2.screens[0].outputs.length, ee2.screens[0].status + ' ' + ee2.screens[0].why);
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})();

@@ -1,0 +1,107 @@
+{
+  "id": "20261123204530_SELF_4",
+  "at": "2026-11-23T20:45:30+09:00",
+  "ms": 1795434330625,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/run rule.js|모든ai호출앞문구가n분초과때한번만보고하게하고n분마다보고와끝날때까지멈추지않",
+  "title": "사용자 지시 R39 같은 문제: tools/VibeManager/run-rule.js:10 모든 AI 호출 앞 문구가 5분 초과 때 한 번만 보고하게 하고, 5분마다 보고와 끝날 때까지 멈추지 않고 진행 지시가 없음",
+  "evidence": "규칙 R39 \"긴 자동 진행 작업은 5분마다 진행 상태 한 줄을 보고하고 전체가 끝날 때까지 멈추지 않고 진행함\" (원래 지시 2026-11-11 14:47 \"중간 중간에 진행상태 알려주고, 전체 다 끝날때까지는 자동 진행해주세요.\") · tools/VibeManager/run-rule.js:10 + '8) 산출물 자체 검증은 보고 전 9) 5분 넘으면 진행 한 줄 10) 보고 끝에 걸린 시간과 오래 걸린 단계.';",
+  "targets": [
+    "tools/VibeManager/run-rule.js"
+  ],
+  "before_after": "9) 를 '5분마다 진행 한 줄(지금 하는 일, 남은 일), 전체가 끝날 때까지 멈추지 않고 진행'으로 바꿈",
+  "verify": "node --check tools/VibeManager/run-rule.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/run-rule.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T07:40:22+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T07:43:58+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self0740"
+    },
+    {
+      "at": "2026-11-24T07:44:00+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T07:55:30+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 run-rule.js"
+    },
+    {
+      "at": "2026-11-24T07:55:30+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-24 07:47:49 반영 전: node --check run-rule.js 오류 없음, run_all.js ALL OK 74/74 PASS 1161 FAIL 0 → 2026-11-24 07:51:34 반영 뒤: node --check 오류 없음, run_all.js ALL OK 74/74 PASS 1161 FAIL 0 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T07-44-00_claude_orch.log",
+      "sec": 476,
+      "costUsd": 0.6021230000000001,
+      "files": [
+        "tools/VibeManager/run-rule.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "긴 자동 진행 작업은 5분마다 진행 상태 한 줄을 보고하고 전체가 끝날 때까지 멈추지 않고 진행함 규칙을 tools/VibeManager/run-rule.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R39|tools/VibeManager/run-rule.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795473622639,
+  "autoFp": "887bdaec4b",
+  "applyStartMs": 1795473840582,
+  "verifyJudge": {
+    "at": "2026-11-24T07:51:59+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self0740",
+  "needsReload": false,
+  "hotLoaded": [
+    "run-rule.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795474530962,
+  "synced": [
+    "run-rule.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/run-rule.js 반영 전, 반영 뒤 둘 다 출력 없음(구문 오류 0). node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 211.4s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 211.4s'. 대상이 웹뷰 파일이 아니라 t_webview_syntax.js 는 별도 실행 안 함(run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/run-rule.js"
+    ],
+    "verify_result": "2026-11-24 07:47:49 반영 전: node --check run-rule.js 오류 없음, run_all.js ALL OK 74/74 PASS 1161 FAIL 0 → 2026-11-24 07:51:34 반영 뒤: node --check 오류 없음, run_all.js ALL OK 74/74 PASS 1161 FAIL 0",
+    "note": "run-rule.js:11 의 '9) 5분 넘으면 진행 한 줄' 을 '9) 5분마다 진행 한 줄(지금 하는 일, 남은 일), 전체가 끝날 때까지 멈추지 않고 진행' 으로 바꿈. 걸린 시간 07:44:15~07:51:37(7분 22초), 오래 걸린 단계 = run_all.js 2회(211.4s씩)."
+  },
+  "snap": "prop_20261123204530_SELF_4"
+}

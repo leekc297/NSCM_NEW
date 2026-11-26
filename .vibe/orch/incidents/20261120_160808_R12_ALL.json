@@ -1,0 +1,30 @@
+{
+  "id": "20261120_160808_R12_ALL",
+  "at": "2026-11-20T16:08:08+09:00",
+  "ms": 1795158488394,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U9 중지 뒤 계속 실행 미해결 SCP0028",
+  "screen": "",
+  "sig": "R12|S13|U9|20261120_160650_R14_SCP0028",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261120_160650_R14_SCP0028 acting · 중지 뒤 계속 실행. SCP0028 중지 14:56:34 뒤 단계 시작 1건",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U9|20261120_160650_R14_SCP0028",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T16:28:52+09:00",
+      "by": "Claude Code 세션",
+      "grade": "A",
+      "what": "U9 미해결 판단의 근거였던 R14 20261120_160650 이 감시 오판으로 확인됨. 중지 경로 결함 아님 · 정정 16:28"
+    }
+  ],
+  "resolvedBy": "Claude Code 세션(사용자 지시 대응)"
+}

@@ -1,0 +1,102 @@
+{
+ "definition": "시스템 메뉴를 Level 1, Level 2, Level 3 단계로 등록하고 메뉴 이름, 화면 주소, 정렬 순서, 사용 여부를 관리하는 화면",
+ "overview": [
+  "메뉴 단계(Level 1 대메뉴, Level 2 중메뉴, Level 3 화면)별 메뉴 이름, 화면 주소, 정렬 순서, 사용 여부를 관리하는 관리자 화면임",
+  "왼쪽 위 Level 1, 오른쪽 위 Level 2, 아래 Level 3 그리드와 Menu Title 메시지 팝업으로 구성됨. 조회 조건 영역 없음",
+  "Level 1 행 선택 → Level 2 행 선택 → Level 3 에 Insert 로 화면 추가 → 화면ID, Route Path, Sort Order 입력 → Save 순서로 작업함",
+  "Level 3 에 등록한 화면은 Group Menu(SYS0008) Menu Item Info 에 나오고 그룹별 Auth 를 지정함"
+ ],
+ "pages": [
+  {
+   "title": "Menu",
+   "keyPoint": "Level 3 값은 화면ID, Route Path 는 화면 주소로 쓰여 메뉴 클릭 때 열리는 화면이 정해짐. Menu Title 팝업을 열기 전에 다른 변경분을 먼저 저장함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.756,
+     "y": 0.143
+    },
+    {
+     "no": 2,
+     "x": 0.157,
+     "y": 0.143
+    },
+    {
+     "no": 3,
+     "x": 0.567,
+     "y": 0.143
+    },
+    {
+     "no": 4,
+     "x": 0.131,
+     "y": 0.613
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 커서가 있는 그리드(Level 1, Level 2, Level 3)에 적용됨",
+      "Sort, Filter 는 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "Level 1 그리드",
+     "lines": [
+      "최상위 메뉴 목록(Master, Demand, Supply 등). 캡처는 9건",
+      "필수 입력: Level 1, Menu Title, URL, Sort Order, Active(제목 앞 빨간 점)",
+      "Menu Title: 칸의 아이콘을 누르거나 더블클릭하면 메뉴 이름 메시지 팝업이 열림",
+      "저장하지 않은 변경분이 있을 때 팝업을 열면 \"변경사항을 먼저 저장하세요.\" 메시지가 뜸",
+      "행을 클릭하면 오른쪽 Level 2 그리드에 하위 메뉴가 조회됨"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Level 2 그리드",
+     "lines": [
+      "위에서 고른 Level 1 의 하위 메뉴(캡처: Demand 아래 Demand_Master 등 4건)",
+      "필수 입력: Level 2, Menu Title, URL, Sort Order",
+      "Menu Title 팝업과 저장 전 확인 메시지는 Level 1 과 같음",
+      "행을 클릭하면 아래 Level 3 그리드에 화면 메뉴가 조회됨"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Level 3 그리드",
+     "lines": [
+      "고른 Level 2 아래 화면 메뉴. Level 3 에 화면ID 를 입력함(예: DMF0004)",
+      "필수 입력: Level 3, Menu Title, Route Path, Menu Type, Auth Unit, Sort Order, Active",
+      "Route Path: 화면 주소(예: demand/demand-master/sales-site)",
+      "Menu Type: 캡처 값 SCREEN. Auth Unit: 캡처 값 D",
+      "Active = N 인 행(캡처: DM0004 Sales Site_bk 등)은 Sort Order 500 이후에 모여 있음"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0003",
+ "uiName": "Menu",
+ "menuPath": "SYSTEM> System> Menu",
+ "captures": [
+  "captures/SYS0003.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0003/"
+ ],
+ "buttons": [
+  "levelOneMenu:DELETE",
+  "levelOneMenu:INSERT",
+  "levelOneMenu:SAVE",
+  "levelOneMenu:SEARCH",
+  "levelThreeMenu:DELETE",
+  "levelThreeMenu:INSERT",
+  "levelThreeMenu:SAVE",
+  "levelThreeMenu:SEARCH",
+  "levelTwoMenu:DELETE",
+  "levelTwoMenu:INSERT",
+  "levelTwoMenu:SAVE",
+  "levelTwoMenu:SEARCH"
+ ]
+}

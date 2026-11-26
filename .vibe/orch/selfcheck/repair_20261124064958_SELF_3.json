@@ -1,0 +1,48 @@
+{
+ "proposal": {
+  "id": "20261124064958_SELF_3",
+  "title": "사용자 지시 R178 같은 문제: tools/VibeManager/history.js:126 Revision 창 왼쪽 목록(#l)에 접기와 펴기 단추가 없음",
+  "evidence": "규칙 R178 \"웹뷰에서 목록, 보조 패널처럼 본문 옆에 붙은 영역은 접기와 펴기 단추를 둠\" (원래 지시 2026-11-20 18:32 \"VMW 의 왼쪽 영역을 펴기/닫기 할 수 있도록 해주세요.\") · tools/VibeManager/history.js:126 #l{width:46%;overflow:auto;padding:8px 10px;",
+  "targets": [
+   "tools/VibeManager/history.js"
+  ],
+  "before_after": ".tabs 줄에 접기 단추를 두고 body 에 collapsed 클래스를 토글해 #l 을 숨김",
+  "verify": "node --check tools/VibeManager/history.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "sig": "userrule|rn|tools/vibemanager/history.js|revision창왼쪽목록l에접기와펴기단추가없음",
+  "check": "S13",
+  "selfKey": "S13|R178|tools/VibeManager/history.js"
+ },
+ "result": {
+  "applied": true,
+  "already_applied": false,
+  "verified": true,
+  "verify_items": [
+   {
+    "n": 1,
+    "result": "pass",
+    "note": "node --check tools/VibeManager/history.js 통과 → 통과 · node tools/VibeManager/test/run_all.js ALL OK 파일 88/88 PASS 1424 FAIL 0(225s) → ALL OK 파일 88/88 PASS 1424 FAIL 0(228.5s) · node tools/VibeManager/test/t_webview_syntax.js PASS 19 ALL PASS → PASS 19 ALL PASS. t_webview_syntax 가 history.js 를 검사하지 않아 html() 렌더 결과의 script 를 new Function 으로 따로 검사함: SCRIPT_SYNTAX_OK [true,true,true,true]"
+   }
+  ],
+  "changed_files": [
+   "tools/VibeManager/history.js"
+  ],
+  "verify_result": "2026-11-26 08:24:55 반영 전: node --check 통과, run_all ALL OK 88/88 PASS 1424 FAIL 0, t_webview_syntax ALL PASS(19) → 2026-11-26 08:29:02 반영 뒤: node --check CHECK_OK, run_all ALL OK 파일 88/88 PASS 1424 FAIL 0 228.5s, t_webview_syntax ALL PASS(19). 자기 시험: history.js html() 렌더 script 구문 통과, #cl·#ex 단추·body.collapsed #l{display:none}·classList.toggle 4항목 true",
+  "note": ".tabs 줄에 '◀ 접기'(#cl) 단추를 둠. body.collapsed 클래스를 토글해 #l 을 숨김. #l 이 숨으면 .tabs 도 숨으므로 #r 맨 위에 '▶ 목록 펴기'(#ex) 단추를 둠. #ex 는 접힘 상태에서만 보임. 접힘 상태는 vscode.setState 로 다시 그려도 유지함. 실제 창에서 단추 동작은 창 다시 로드 뒤 확인 대상임. git diff --stat 의 나머지 변경은 이번 작업 전부터 커밋되지 않은 채 있던 변경이고, 이번에 고친 곳은 3곳임."
+ },
+ "gate": {
+  "ok": false,
+  "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1",
+  "newBad": [
+   "S11 history.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/history.js.style.csv)"
+  ]
+ },
+ "history": [
+  "08:16:50 VMO 자동(게이트 통과 조건): 승인",
+  "08:20:46 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0816",
+  "08:20:49 VMO: 반영 시작",
+  "08:33:34 VMO: 반영 실패. 게이트에서 새로 어긋난 항목 1건: S11 history.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/history.js.style.csv) · 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1 · 대상 파일 1개 복원(history.js AI 편집 3건만 되돌림(반영 전과 같음))"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261124064958_SELF_3"
+}

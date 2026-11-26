@@ -1,0 +1,115 @@
+{
+  "id": "20261124064959_SELF",
+  "at": "2026-11-24T06:49:59+09:00",
+  "ms": 1795470599108,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/history.js|revision웹뷰에글래스모피즘양식gngbbackdropfilter이없음",
+  "title": "사용자 지시 R181 같은 문제: tools/VibeManager/history.js:125 Revision 웹뷰에 글래스모피즘 양식(--g1, --gb, backdrop-filter)이 없음(backdrop-filter 0건)",
+  "evidence": "규칙 R181 \"VM 웹뷰(VMO, VMW, WORKBENCH, FLOW 등)는 사용자가 고른 한 가지 디자인 양식(글래스모피즘)을 같게 씀\" (원래 지시 2026-11-20 20:45 \"VMW 도 같은 글래스모피즘으로 적용해주세요\") · tools/VibeManager/history.js:125 body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;display:flex;height:100vh}",
+  "targets": [
+    "tools/VibeManager/history.js"
+  ],
+  "before_after": "orchestra.js:73~76 의 :root 변수와 .glass 규칙을 공용 CSS 로 빼서 넣고 목록, 상세 상자에 적용함",
+  "verify": "node --check tools/VibeManager/history.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/history.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T09:25:02+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T09:28:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0925"
+    },
+    {
+      "at": "2026-11-26T09:29:00+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T09:41:49+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 history.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T09:41:49+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 09:29 반영 전 → 09:33 반영 뒤. node --check history.js: CHECK_OK → CHECK_OK. run_all.js: ALL OK 88/88 PASS 1424 FAIL 0 → ALL OK 88/88 PASS 1424 FAIL 0. t_webview_syntax.js: 19 PASS ALL PASS → 19 PASS ALL PASS. history.js backdrop-filter 건수: 0 → 2 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T09-29-00_claude_orch.log",
+      "sec": 535,
+      "costUsd": 0.9639023999999997,
+      "files": [
+        "tools/VibeManager/history.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:05+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM 웹뷰(VMO, VMW, WORKBENCH, FLOW 등)는 사용자가 고른 한 가지 디자인 양식(글래스모피즘)을 같게 씀 규칙을 tools/VibeManager/history.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R181|tools/VibeManager/history.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795652701807,
+  "autoFp": "c03f53a558",
+  "applyStartMs": 1795652940680,
+  "verifyJudge": {
+    "at": "2026-11-26T09:37:59+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0925",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "history.js"
+  ],
+  "appliedMs": 1795653709640,
+  "synced": [
+    "history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/history.js → CHECK_OK(반영 전, 반영 뒤) · node tools/VibeManager/test/run_all.js → 반영 전 'ALL OK 파일 88/88 PASS 1424 FAIL 0 228.7s' → 반영 뒤 'ALL OK 파일 88/88 PASS 1424 FAIL 0 228.4s' · node tools/VibeManager/test/t_webview_syntax.js → 19 PASS, 'ALL PASS'(반영 전, 반영 뒤)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/history.js"
+    ],
+    "verify_result": "2026-11-26 09:29 반영 전 → 09:33 반영 뒤. node --check history.js: CHECK_OK → CHECK_OK. run_all.js: ALL OK 88/88 PASS 1424 FAIL 0 → ALL OK 88/88 PASS 1424 FAIL 0. t_webview_syntax.js: 19 PASS ALL PASS → 19 PASS ALL PASS. history.js backdrop-filter 건수: 0 → 2",
+    "note": "GLASS_CSS 상수(orchestra.js:73~75 의 :root 변수, body 배경, .glass 규칙, 투명도 줄이기 대체 규칙)를 history.js 에 두고 module.exports 에 추가함. Revision 웹뷰 style 맨 앞에 넣고 목록(#l), 상세(#r) 상자에 class glass 를 붙임. body padding 8px. 승인 범위가 history.js 하나라 orchestra.js 는 고치지 않음. orchestra.js 가 이 상수를 받아 쓰게 하는 일은 추가 확인 후보. t_webview_syntax.js 는 Revision 창을 검사하지 않으므로 화면 표시는 창 다시 로드 뒤 확인 필요(미확인)."
+  },
+  "snap": "prop_20261124064959_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

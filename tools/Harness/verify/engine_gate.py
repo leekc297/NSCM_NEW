@@ -10,10 +10,26 @@
   잠금 Doc/verify/_engine_fix.lock {screen, at, pid}. 주인이 같은 화면이면 다시 잡는다. STALE_MIN(90분: Claude 단계 상한 60분 + 여유) 넘은 잠금은 버려진 것으로 보고 넘겨받는다
   사본 .vibe/orch/snap/engine_<ID>/  (manifest.json = 경로별 해시)
   기록 Doc/verify/_engine_changes.jsonl  {at, screen, files[], gate('ok'|'reverted'|'none'), why}
+  결과 Doc/verify/<ID>/engine_gate.json  {at, screen, changed, passed(gate ok=1), reverted(gate reverted=1), files} --check 마다 덮어씀(변경 없음 = changed 0, passed 0)
        다른 화면은 다음 실행의 소스 기준선(source_snap.py 의 lib·시험 지문)이 이 변경을 감지해 영향 규칙을 다시 잰다
   종료코드 0 = 진행(변경 없음 · 게이트 통과 · 되돌림 모두 0. 되돌렸으면 [WARN] 줄) · 3 = --check 인데 사본 없음
 """
 import datetime, glob, hashlib, json, os, shutil, subprocess, sys, time
+
+# 2026-11-26 개선안 20261125123145_REVIEW: 잠금 대기를 orch 대기 기록(wait.start·wait.end, kind 'enginefix')으로 남긴다. 기록 실패·모듈 없음은 진행을 멈추지 않는다
+try:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import orch_event as _oev
+except Exception:
+    _oev = None
+
+
+def oev(type_, **fields):
+    try:
+        if _oev:
+            _oev.emit(type_, **fields)
+    except Exception:
+        pass
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 STALE_MIN = 90
@@ -45,9 +61,11 @@ def lock_path(root=None):
     return os.path.join(root or ROOT, 'Doc', 'verify', '_engine_fix.lock')
 
 
-def acquire(mid, root=None, wait_sec=None, say=print, sleep=time.sleep):
-    """잠금 획득. 반환 = 기다린 초. wait_sec 를 넘기면 그대로 넘겨받지 않고 계속 기다린다(None = 끝없이, 시험용 한도만)"""
+def acquire(mid, root=None, wait_sec=None, say=print, sleep=time.sleep, emit=None):
+    """잠금 획득. 반환 = 기다린 초. wait_sec 를 넘기면 그대로 넘겨받지 않고 계속 기다린다(None = 끝없이, 시험용 한도만)
+       처음 기다릴 때 wait.start(kind enginefix, screen, blocker), 잡거나 포기할 때 wait.end(sec_wait, gave_up) 기록"""
     lp = lock_path(root); os.makedirs(os.path.dirname(lp), exist_ok=True); t0 = time.time(); told = 0
+    emit = emit or oev; waiting = False
     while True:
         try:
             cur = json.load(open(lp, encoding='utf-8'))
@@ -58,10 +76,16 @@ def acquire(mid, root=None, wait_sec=None, say=print, sleep=time.sleep):
             if stale and cur.get('screen') != mid:
                 say(f"[INFO] 검사기 보완 잠금 넘겨받음: {cur.get('screen')} 가 {cur.get('at')} 에 잡고 {STALE_MIN}분 넘게 풀지 않음", flush=True)
             json.dump({'screen': mid, 'at': now(), 'ts': time.time(), 'pid': os.getpid()}, open(lp, 'w', encoding='utf-8'), ensure_ascii=False)
+            if waiting:
+                emit('wait.end', kind='enginefix', screen=mid, sec_wait=int(time.time() - t0), gave_up=False)
             return int(time.time() - t0)
+        if not waiting:
+            waiting = True
+            emit('wait.start', kind='enginefix', screen=mid, blocker=cur.get('screen'), why=f"검사기 보완 순서 대기({cur.get('screen')} {cur.get('at')} 부터)")
         if time.time() - told > 60:
             say(f"[WAIT] 검사기 보완 순서 대기: {cur.get('screen')} 가 {cur.get('at')} 부터 보완 중(공용 검사기 파일을 한 화면씩 고침)", flush=True); told = time.time()
         if wait_sec is not None and time.time() - t0 > wait_sec:
+            emit('wait.end', kind='enginefix', screen=mid, sec_wait=int(time.time() - t0), gave_up=True)
             return -1
         sleep(5)
 
@@ -131,8 +155,21 @@ def check(mid, root=None, gate=None):
         else:
             restore(mid, mod, new, gone, root); rec['gate'] = 'reverted'; rec['why'] = f'engine_selfcheck rc {rc}: ' + tail[-600:]
         log_change(rec, root)
+    write_result(rec, root)
     release(mid, root)
     return rec
+
+
+def result_path(mid, root=None):
+    return os.path.join(root or ROOT, 'Doc', 'verify', mid, 'engine_gate.json')
+
+
+def write_result(rec, root=None):
+    """화면별 게이트 결과(Doc/verify/<ID>/engine_gate.json)를 매번 덮어씀. 체인 조건 ifJsonGt(key passed) 입력"""
+    p = result_path(rec['screen'], root); os.makedirs(os.path.dirname(p), exist_ok=True)
+    out = {'at': rec['at'], 'screen': rec['screen'], 'changed': len(rec['files']), 'passed': 1 if rec['gate'] == 'ok' else 0,
+           'reverted': 1 if rec['gate'] == 'reverted' else 0, 'files': rec['files']}
+    json.dump(out, open(p, 'w', encoding='utf-8'), ensure_ascii=False)
 
 
 def run_gate():
@@ -148,6 +185,7 @@ def selftest():
         nonlocal ok
         print(('PASS ' if cond else 'FAIL ') + name + (' ' + str(extra) if extra and not cond else '')); ok = ok and bool(cond)
     root = tempfile.mkdtemp(prefix='egate-')
+    orch_d = os.path.join(root, '_orch'); prev_orch = os.environ.get('VIBE_ORCH_DIR'); os.environ['VIBE_ORCH_DIR'] = orch_d   # 시험 대기 기록은 임시 폴더에만 씀
 
     def W(rel, s):
         p = os.path.join(root, rel); os.makedirs(os.path.dirname(p), exist_ok=True); open(p, 'w', encoding='utf-8').write(s); return p
@@ -155,6 +193,10 @@ def selftest():
     msgs = []
     chk('잠금 획득(대기 0)', acquire('SCP0001', root, say=lambda *a, **k: msgs.append(a[0])) == 0)
     chk('다른 화면은 대기(한도 안에 못 잡음)', acquire('SCP0002', root, wait_sec=0, say=lambda *a, **k: msgs.append(a[0]), sleep=lambda s: None) == -1 and any('[WAIT]' in m for m in msgs))
+    ef = os.path.join(orch_d, 'events.jsonl')
+    ev = [json.loads(l) for l in open(ef, encoding='utf-8')] if os.path.exists(ef) else []
+    chk('대기 기록 wait.start·wait.end(kind enginefix, blocker SCP0001, gave_up)', [(e.get('type'), e.get('kind')) for e in ev] == [('wait.start', 'enginefix'), ('wait.end', 'enginefix')]
+        and ev[0].get('blocker') == 'SCP0001' and ev[1].get('gave_up') is True, ev)
     chk('같은 화면은 다시 잡음', acquire('SCP0001', root, say=lambda *a, **k: None) == 0)
     n = mark('SCP0001', root); chk('사본 3개', n == 3)
     chk('변경 없음', changed('SCP0001', root) == ([], [], []))
@@ -163,16 +205,22 @@ def selftest():
     W('tools/E2E/lib/probe.ts', 'a2'); W('tools/E2E/lib/newprobe.ts', 'n')
     chk('바뀐 파일 · 새 파일 감지', changed('SCP0001', root) == (['tools/E2E/lib/probe.ts'], ['tools/E2E/lib/newprobe.ts'], []))
     r = check('SCP0001', root, gate=lambda: (0, 'ok')); chk('게이트 통과 = 유지 · 기록', r['gate'] == 'ok' and open(os.path.join(root, 'tools/E2E/lib/probe.ts')).read() == 'a2')
+    j = json.load(open(result_path('SCP0001', root), encoding='utf-8'))
+    chk('JSON 기록 통과(passed 1)', j['passed'] == 1 and j['reverted'] == 0 and j['changed'] == 2, j)
     acquire('SCP0001', root, say=lambda *a, **k: None); mark('SCP0001', root)
     W('tools/E2E/lib/probe.ts', 'broken'); W('tools/Harness/verify/x.py', 'new')
     r = check('SCP0001', root, gate=lambda: (2, 'PY_UNDEF'))
     chk('게이트 실패 = 되돌림', r['gate'] == 'reverted' and open(os.path.join(root, 'tools/E2E/lib/probe.ts')).read() == 'a2' and 'PY_UNDEF' in r['why'])
+    j = json.load(open(result_path('SCP0001', root), encoding='utf-8'))
+    chk('JSON 기록 되돌림(reverted 1, passed 0)', j['reverted'] == 1 and j['passed'] == 0 and j['changed'] == 2, j)
     chk('새 파일은 .reverted 로 남김', os.path.exists(os.path.join(root, 'tools/Harness/verify/x.py.reverted')) and not os.path.exists(os.path.join(root, 'tools/Harness/verify/x.py')))
     lines = [json.loads(l) for l in open(os.path.join(root, 'Doc', 'verify', '_engine_changes.jsonl'), encoding='utf-8')]
     chk('변경 기록 2줄(ok, reverted)', [x['gate'] for x in lines] == ['ok', 'reverted'])
     json.dump({'screen': 'SSP0009', 'at': 'old', 'ts': time.time() - (STALE_MIN + 1) * 60}, open(lock_path(root), 'w', encoding='utf-8'))
     chk('오래된 잠금은 넘겨받음', acquire('SCP0002', root, wait_sec=0, say=lambda *a, **k: None, sleep=lambda s: None) == 0)
     chk('사본 없는 화면 check = None', check('NONE0001', root) is None)
+    if prev_orch is None: os.environ.pop('VIBE_ORCH_DIR', None)
+    else: os.environ['VIBE_ORCH_DIR'] = prev_orch
     shutil.rmtree(root, ignore_errors=True)
     print('SELFTEST ' + ('OK' if ok else 'FAIL')); return 0 if ok else 1
 

@@ -1,0 +1,44 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>DMF0082 건수 현황</title><style>
+:root{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+@media (prefers-color-scheme:dark){:root{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}}
+:root[data-theme=light]{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+:root[data-theme=dark]{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}
+*{box-sizing:border-box}
+body{margin:0;padding:14px 16px;background:var(--bg);color:var(--fg);font:13px/1.5 'Malgun Gothic',system-ui,sans-serif;max-width:760px}
+.hd{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}.hd b{font-size:15px}.hd span{color:var(--mut);font-size:12px}
+.kpi{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.kpi div{flex:1;padding:6px 10px;border-left:1px solid var(--line)}.kpi div:first-child{border-left:0}
+.kpi i{display:block;font-style:normal;color:var(--mut);font-size:11px}.kpi em{font-style:normal;font-size:18px;font-weight:600}
+.kpi .FAIL em{color:var(--fail)}.kpi .판정필요 em{color:var(--rev)}.kpi .미검증 em{color:var(--unv)}.kpi .PASS em{color:var(--pass)}
+table{border-collapse:collapse;width:100%;margin-top:12px}
+th,td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th{color:var(--mut);font-weight:400;font-size:12px}th:first-child,td:first-child{text-align:left}
+td.bar{width:34%;padding-left:12px}
+.bar div{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--soft)}
+.bar span{height:100%}
+.c-PASS{background:var(--pass)}.c-FAIL{background:var(--fail)}.c-판정필요{background:var(--rev)}.c-미검증{background:var(--unv)}.c-해당없음{background:var(--na)}
+td.FAIL{color:var(--fail);font-weight:600}td.판정필요{color:var(--rev)}td.미검증{color:var(--unv)}
+tr.sum td{font-weight:600;border-bottom:0}
+h3{font-size:13px;margin:16px 0 4px}
+ul{margin:0;padding-left:18px}li{margin:1px 0}li code{color:var(--mut);font-size:12px}
+.line{margin-top:12px;color:var(--fg)}.line b{font-weight:600}.warn{color:var(--unv)}
+.src{margin-top:14px;color:var(--mut);font-size:11px}
+</style></head><body>
+<div class="hd"><b>DMF0082 FcstNPrice_Mgmt</b><span>CheckList v27 · 생성 2026-11-23 15:12</span></div>
+<div class="kpi"><div><i>전체</i><em>3,178</em></div><div class="PASS"><i>PASS</i><em>782</em></div><div class="FAIL"><i>FAIL</i><em>262</em></div><div class="판정필요"><i>판정필요</i><em>78</em></div><div class="미검증"><i>미검증</i><em>126</em></div><div class="해당없음"><i>해당없음</i><em>1,930</em></div></div>
+<table><tr><th>축</th><th>전체</th><th>PASS</th><th>FAIL</th><th>판정필요</th><th>미검증</th><th>해당없음</th><th></th></tr>
+<tr><td>1.디자인·다국어</td><td>506</td><td class="">173</td><td class="FAIL">18</td><td class="">0</td><td class="">0</td><td class="">315</td><td class="bar"><div><span class="c-PASS" style="width:34.2%" title="PASS 173"></span><span class="c-FAIL" style="width:3.6%" title="FAIL 18"></span><span class="c-해당없음" style="width:62.3%" title="해당없음 315"></span></div></td></tr>
+<tr><td>2.AS-IS 로직</td><td>254</td><td class="">15</td><td class="FAIL">8</td><td class="">0</td><td class="미검증">9</td><td class="">222</td><td class="bar"><div><span class="c-PASS" style="width:5.9%" title="PASS 15"></span><span class="c-FAIL" style="width:3.1%" title="FAIL 8"></span><span class="c-미검증" style="width:3.5%" title="미검증 9"></span><span class="c-해당없음" style="width:87.4%" title="해당없음 222"></span></div></td></tr>
+<tr><td>3.SMOKE</td><td>1,355</td><td class="">455</td><td class="FAIL">153</td><td class="판정필요">71</td><td class="미검증">72</td><td class="">604</td><td class="bar"><div><span class="c-PASS" style="width:33.6%" title="PASS 455"></span><span class="c-FAIL" style="width:11.3%" title="FAIL 153"></span><span class="c-판정필요" style="width:5.2%" title="판정필요 71"></span><span class="c-미검증" style="width:5.3%" title="미검증 72"></span><span class="c-해당없음" style="width:44.6%" title="해당없음 604"></span></div></td></tr>
+<tr><td>4.CRUD</td><td>1,028</td><td class="">130</td><td class="FAIL">83</td><td class="판정필요">7</td><td class="미검증">45</td><td class="">763</td><td class="bar"><div><span class="c-PASS" style="width:12.6%" title="PASS 130"></span><span class="c-FAIL" style="width:8.1%" title="FAIL 83"></span><span class="c-판정필요" style="width:0.7%" title="판정필요 7"></span><span class="c-미검증" style="width:4.4%" title="미검증 45"></span><span class="c-해당없음" style="width:74.2%" title="해당없음 763"></span></div></td></tr>
+<tr><td>5.권한별 CRUD</td><td>35</td><td class="">9</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">26</td><td class="bar"><div><span class="c-PASS" style="width:25.7%" title="PASS 9"></span><span class="c-해당없음" style="width:74.3%" title="해당없음 26"></span></div></td></tr>
+<tr class="sum"><td>합계</td><td>3,178</td><td>782</td><td>262</td><td>78</td><td>126</td><td>1,930</td><td></td></tr></table>
+<div class="line">FE 대조표 <b>308</b>행 (구현 220, 미구현 <b class="warn">25</b>), AS-IS 액션 대조표 <b>1,182</b>행 (상태 빈칸 <b class="warn">1,115</b>)</div>
+<h3>조치 필요 45건</h3><ul><li>DMF0082 화면 <code>A5 V-75957a15</code></li><li>DMF0082 화면 <code>G3 V-38a8a336</code></li><li>DMF0082 저장 연계 테이블 <code>F7 V-b92ec5a3</code></li><li>DMF0082 화면 <code>H11 V-42fea939</code></li><li>PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA <code>F10 V-a9870add</code></li><li>PKG_DMF0082.P_DMF0082_EXCEL_UPLOAD <code>F10 V-0c8f4244</code></li><li>PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA <code>F10 V-9027370c</code></li><li>SCM0002_SET_TITLESET_POPUP <code>F10 V-3064b06b</code></li><li>조회조건 End Customer <code>B3 V-5537bfe4</code></li><li>조회조건 Team <code>B3 V-cc05e048</code></li><li>FcstNPrice.TEAM_ID (Team) <code>B4 V-2cece244</code></li><li>FcstNPrice.SOLDTO_CUSTOMER (Sold-To Customer) <code>B3 V-7e7c4c2d</code></li><li>FcstNPrice.ITEM_ID (Model*) <code>H2 V-d9d2a8c3</code></li><li>FcstNPrice.FCST_TYPE (FCST Type*) <code>B3 V-c7a4b5d8</code></li><li>FcstNPrice.FCST_TYPE (FCST Type*) <code>B4 V-67e34115</code></li><li>FcstNPrice.CELL_PROD_SITE_ID (Cell Prod Site*) <code>B4 V-48949855</code></li><li>FcstNPrice.CURRENCY (Currency*) <code>B1 V-a1173add</code></li><li>FcstNPrice.&lt;DYNAMIC:LOOP&gt; (동적 LOOP 컬럼) <code>D5 V-617cc49a</code></li><li>FcstNPrice.&lt;DYNAMIC:LOOP&gt; (동적 LOOP 컬럼) <code>H8 V-fc8c3261</code></li><li>MSG00137 <code>MS1 V-dc74a9a1</code></li><li>MSG00283 <code>MS1 V-0a1d4ac3</code></li><li>MSG00108 <code>MS1 V-0556d0b8</code></li><li>MSG00164 <code>MS1 V-9703b532</code></li><li>new DM0002_TitleSetForm_Popup(&quot;DMF0082&quot;, SpdSheet.shtMain, true, clbDivision.ControlValues) <code>G5 V-4066740e</code></li><li>MSG00227 <code>MS1 V-c1bcb2bc</code></li><li>InsertButton 전제 isCurVersion <code>D4 V-9b36903b</code></li><li>DIVISION_ID / Division <code>C2 T-0d37e73a</code></li><li>ITEM_ID / Model <code>H2 T-48c20115</code></li><li>CELL_PROD_SITE_ID / Cell Prod Site <code>H2 T-13ca144b</code></li><li>MEASURE / Measure <code>D5 T-22cd82b1</code></li><li>POPUP_GET_FUTUREPRICE_INFO <code>F4 T-d7c7bae7</code></li><li>PKG_DMF0082 <code>F4 T-3052e069</code></li><li>DIVISION_ID / Division <code>D5 T-0230a46d</code></li><li>cboBucketType / Bucket / Bucket Type <code>G4 T-44442445</code></li><li>drpPeriod / Period / From / To / 기간 <code>G4 T-1b3d0f40</code></li><li>DMF0003_GET_BUCKET_TYPE_CODE <code>F4 T-786235be</code></li><li>clbDivision / Division / Div. <code>G4 T-62b53f5b</code></li><li>clbTeam / Team <code>G4 T-20f1994f</code></li><li>clbCustomer / End Customer / Customer <code>G4 T-7618544d</code></li><li>clbBizType / Biz Type / Biz. Type <code>G4 T-dfcf7638</code></li><li>clbSalesSite / Sales Site <code>G4 T-9a904c00</code></li><li>txtVersion / Version <code>G4 T-762604a0</code></li><li>chkSum / Sum <code>G4 T-124c05e1</code></li><li>drpDateTime / Date Time <code>G4 T-676451ad</code></li><li>clbDivisions / Division / Divisions <code>G4 T-f36de5dc</code></li></ul>
+<div class="src">출처: DMF0082_FcstMgmt_CheckList_v27.xlsx 10-31 15:41, __asis-mapping__.md 11-09 13:22, __asis-actions__.md 10-23 11:28, work_ledger_summary.json 10-31 15:40</div>
+</body></html>

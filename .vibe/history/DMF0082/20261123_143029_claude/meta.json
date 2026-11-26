@@ -1,0 +1,35 @@
+{
+  "id": "DMF0082",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0082] · Doc/gen/DMF0082/CHECK.md · Doc/gen/DMF0082/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0082/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-23T14:30:29+09:00",
+  "end": "2026-11-23T15:03:47+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\forecast-price",
+      "files": 44
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0082",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "클라우드, 운영에서 저장  시 SQL ERROR 오류 발생한 이력 LOG 로 찾아서 원인 확인 할 수 있도록 검증QUERY 제공해주세요.",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "afterMode": "end",
+  "afterAt": "2026-11-23T15:03:47+09:00",
+  "changed": []
+}

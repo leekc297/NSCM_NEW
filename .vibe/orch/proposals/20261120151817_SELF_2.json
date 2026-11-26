@@ -3,7 +3,7 @@
   "at": "2026-11-20T15:18:17+09:00",
   "ms": 1795155497517,
   "source": "self",
-  "status": "pending",
+  "status": "applied",
   "sig": "sn|newdet|resumerestartfromstart",
   "title": "사용자 지적 감지기 추가 U18 resumeRestartFromStart: UI 생성·UI 보완 체인도 재개하면 끊긴 단계를 처음부터 다시 돎. 끊긴 시점이나 바로 앞 시점부터 이어 돌아야 함",
   "evidence": "사용자 지적(2026-11-20T15:04:49+09:00) \"CHECKLIST 가 아닌 UI 생성, UI 보완 작업일 때의 작업재개도 중단된 시점이나 그 바로 이전 시점부터 재개되도록 되어야 합니다. 이것도 같이 고민해주세요.\"",
@@ -18,8 +18,98 @@
   "impact": "",
   "incident": "",
   "screen": "",
-  "history": [],
+  "history": [
+    {
+      "at": "2026-11-20T15:48:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T16:01:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 671, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1548"
+    },
+    {
+      "at": "2026-11-20T16:01:03+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T16:07:39+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 679, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T16:07:39+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS. 새 U18 표본 8건 PASS: 끊긴 기록만 있음 = 아님, 재개 첫 단계 1<4 = 실패, 첫 단계 4 = 아님, 연결 기록 없이 같은 창 chain.start 로 찾아 2<4 = 실패, 지원 표시 단계 [단계 1/8] (끊길 때 4/8) = 실패, 바로 앞 3/8과 남은 시험 31건 = 아님, 시험 전체 81건 다시 = 실패, 미지원 표시 단계 = 판정 안 함. 2026-11-20 16:04 · 변경 24개 파일 · 대상 목록 밖 변경 21개: Doc/verify/SCP0028/_dedup/rule_A1.json, Doc/verify/SCP0028/_dedup/rule_A5.json, Doc/verify/SCP0028/_dedup/rule_A6.json, Doc/verify/SCP0028/_dedup/rule_A7.json, Doc/verify/SCP0028/_dedup/rule_H10.json, Doc/verify/SCP0028/_dedup/rule_H4.json",
+      "log": ".vibe\\logs\\2026-11-20T16-01-04_claude_orch.log",
+      "sec": 197,
+      "costUsd": 1.653474,
+      "files": [
+        "Doc/verify/SCP0028/_dedup/rule_A1.json",
+        "Doc/verify/SCP0028/_dedup/rule_A5.json",
+        "Doc/verify/SCP0028/_dedup/rule_A6.json",
+        "Doc/verify/SCP0028/_dedup/rule_A7.json",
+        "Doc/verify/SCP0028/_dedup/rule_H10.json",
+        "Doc/verify/SCP0028/_dedup/rule_H4.json",
+        "Doc/verify/SCP0028/_dedup/rule_MS1.json",
+        "Doc/verify/SCP0028/dedup_screen.csv",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/llm_review_base.json",
+        "Doc/verify/SCP0028/llm_usage.csv",
+        "Doc/verify/SCP0028/mapping_trace.csv",
+        "Doc/verify/SCP0028/mapping_trace.md",
+        "Doc/verify/SCP0028/mapping_trace_checks.csv",
+        "Doc/verify/SCP0028/mapping_trace_instances.csv",
+        "Doc/verify/SCP0028/mapping_trace_summary.json",
+        "Doc/verify/SCP0028/verify_ledger.csv",
+        "Doc/verify/_app_level_results.csv",
+        "Doc/verify/_llm_usage.csv",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:30+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T16:11:34+09:00"
+    }
+  ],
   "self": true,
   "check": "S13",
-  "selfKey": "S13|U18"
+  "selfKey": "S13|U18",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795157293373,
+  "autoFp": "ffd6df2fe3",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 679, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1548",
+  "needsReload": true,
+  "appliedMs": 1795158459535,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS. 새 U18 표본 8건 PASS: 끊긴 기록만 있음 = 아님, 재개 첫 단계 1<4 = 실패, 첫 단계 4 = 아님, 연결 기록 없이 같은 창 chain.start 로 찾아 2<4 = 실패, 지원 표시 단계 [단계 1/8] (끊길 때 4/8) = 실패, 바로 앞 3/8과 남은 시험 31건 = 아님, 시험 전체 81건 다시 = 실패, 미지원 표시 단계 = 판정 안 함. 2026-11-20 16:04:03 실행. 첫 실행 16:03:50 은 시험 표본 정규식 문구 불일치 1건 FAIL, 시험 쪽 정규식 수정 뒤 재실행",
+    "note": "DETECTORS 에 resumeRestartFromStart 추가, user_checks.json U18 status pending-detector → active, params.slack 1. 단계 번호 판정: chain_progress interruptedAt 기록을 state.json resumeRun 에 보관(재개 때 workbench.js:1051 progDel 이 원본을 지움). 재개 실행은 resumedFrom 연결로 찾고, 없으면 끊긴 뒤 같은 wb·체인의 첫 chain.start runId 로 찾음. 그 runId 첫 step.start no 가 끊긴 단계보다 작으면 fail. 세부 진행 판정: 업무 작업 로그의 '↻ 작업 재개: n/m단계 … 단계 안 끊긴 지점부터(끊길 때 …)' 줄이 있는 단계만 판정함(workbench.js resumePlan 이 scriptResumes, argResume 지원일 때만 이 문구를 씀). 그 뒤 첫 [단계], [세부], AI 판정 검토 묶음 줄이 끊길 때 값보다 slack 1 넘게 작거나, Running N tests 의 N 이 끊길 때 시험 분모와 같으면 fail. '바로 이전 시점' 지적에 맞춰 1 작은 값은 허용함. 업무 작업 밖 Workbench 체인은 job 로그가 없어 단계 번호만 판정함. 작업 모드 DB_ONLY 이지만 대상이 tools/VibeManager 라 hook 차단 없음."
+  },
+  "snap": "prop_20261120151817_SELF_2",
+  "effectiveMs": 1795158694757,
+  "effectiveAt": "2026-11-20T16:11:34+09:00"
 }

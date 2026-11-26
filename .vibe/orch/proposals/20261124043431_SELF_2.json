@@ -1,0 +1,115 @@
+{
+  "id": "20261124043431_SELF_2",
+  "at": "2026-11-24T04:34:31+09:00",
+  "ms": 1795462471978,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|status탭fe게이트타일이작업모드분기없이block수로bad를표시하고n",
+  "title": "사용자 지시 R135 같은 문제: tools/VibeManager/workbench.js:449 Status 탭 FE 게이트 타일이 작업 모드 분기 없이 BLOCK 수로 bad 를 표시하고, 440줄 진행률도 같은 s.gate 를 써서 DB MODE 에서 미",
+  "evidence": "규칙 R135 \"DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함\" (원래 지시 2026-11-19 18:51 \"현재는 DB MODE로만 작업을 해서 현재의 소스가 최신 소스이고 변경대상이 아닌것으로 STATUS 변경하고 싶어요. 게이트 대상에서도 제외하고 싶어요. 차후 UI/DB MODE 일때는 게이트 대상이 되면 될 것 같아요.\") · tools/VibeManager/workbench.js:449 tile(t(p, 'st_fe'), fe ? `B ${fe[1]} · W ${fe[2]}` : '–', fe ? '' : t(p, 'st_notrun'), fe ? (fe[1] === '0' ? 'ok' : 'bad') : ''),",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "workMode(p).db 이면 타일 값을 'DB MODE 제외', 클래스 'ok' 로 표시. UI/DB MODE 에서는 gate_baseline.tsv 이후 바뀐 화면일 때만 BLOCK 판정을 씀",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T03:54:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T03:58:24+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 · 백업 태그 20261126_self0354"
+    },
+    {
+      "at": "2026-11-26T03:58:28+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T04:10:58+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T04:10:58+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check workbench.js: 반영 전 check_ok → 반영 뒤 check_ok. run_all.js: 반영 전 87/87 PASS 1422 FAIL 0 (2026-11-25T18:58:58.554Z) → 반영 뒤 87/87 PASS 1422 FAIL 0 (2026-11-25T19:03:03.425Z). t_webview_syntax.js: 반영 전 PASS 19(run_all 안) → 반영 뒤 단독 실행 ALL PASS 19. · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T03-58-28_claude_orch.log",
+      "sec": 517,
+      "costUsd": 0.8753684000000002,
+      "files": [
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:10+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R135|tools/VibeManager/workbench.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795632871124,
+  "autoFp": "a90f574709",
+  "applyStartMs": 1795633108171,
+  "verifyJudge": {
+    "at": "2026-11-26T04:07:09+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2"
+  },
+  "selfTag": "20261126_self0354",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795633858736,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/workbench.js 반영 전 check_ok → 반영 뒤 check_ok · node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.3s'(at 2026-11-25T18:58:58Z) → 반영 뒤 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.6s'(at 2026-11-25T19:03:03Z) · node tools/VibeManager/test/t_webview_syntax.js 반영 뒤 PASS 19 'ALL PASS'(workbench ko/en 스크립트 구문 PASS)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "node --check workbench.js: 반영 전 check_ok → 반영 뒤 check_ok. run_all.js: 반영 전 87/87 PASS 1422 FAIL 0 (2026-11-25T18:58:58.554Z) → 반영 뒤 87/87 PASS 1422 FAIL 0 (2026-11-25T19:03:03.425Z). t_webview_syntax.js: 반영 전 PASS 19(run_all 안) → 반영 뒤 단독 실행 ALL PASS 19.",
+    "note": "workbench.js:489 FE 게이트 타일 분기 추가. DB MODE = 'DB MODE 제외'·ok. UI/DB MODE = flow.stageStatus 의 gateTip 이 'UI/DB MODE:'(기준선 이후 바뀐 파일 없음)이면 '변경 없음'·ok, 그 밖은 종전 CHECK.md BLOCK 판정. 진행률이 쓰는 s.gate 는 flow-panel.js:96-104 에 개선안 20261124043431_SELF 로 모드 분기가 이미 있어 고치지 않음. 추가 확인 후보: fe_gate.json 이 있는 화면은 flow-panel.js:106 이 gateTip 을 덮어써 UI/DB MODE 에서 기준선 판정이 타일에 반영되지 않음. gateBaseline 이 flow-panel.js 에서 export 되지 않아 targets 범위 안에서 처리 불가."
+  },
+  "snap": "prop_20261124043431_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

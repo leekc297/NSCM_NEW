@@ -1,0 +1,47 @@
+{
+ "proposal": {
+  "id": "20261124000457_VISION",
+  "title": "개념 재정립: CheckList 시간 목적의 어긋남 판정(지적 건수 → 효력 뒤 근거와 1판 실측)",
+  "evidence": "events.jsonl 11-21 이후 CheckList chain.end 는 2001행(2026-11-21 01:55 SCP0028 ms_run 18571542) 1건뿐(2026-11-24 00:03 조회). Doc/verify/*/run_timing.json 마지막 run_at 2026-11-21 01:52:30. orch-ladder.js:104 L4-2 는 u.at 7일 안만 보고 효력 시각을 보지 않음. 같은 파일 77, 87-94행 L3 usercheck 는 effMsOf 로 효력 뒤 근거만 셈. 근거 3건 지적 시각 모두 20261123000419_VISION 반영 전. 개념 문서 .vibe/orch/vision/concept_20261124_L4_useraxis_checklistTime.md · 진단 사다리 묶음 L4|useraxis|checklistTime · 문서 .vibe/orch/vision/concept_20261124_L4_useraxis_checklistTime.md",
+  "targets": [
+   "tools/VibeManager/orch-ladder.js",
+   "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "지금 개념: CheckList 시간 목적의 개념이 어긋났는지를 7일 안 사용자 지적 건수로 판정함. 같은 목적 개선안 반영 여부와 측정 결과는 보지 않음 → 새 개념: 같은 목적 개선안의 효력 시각 뒤에 생긴 지적과 chainTarget 1판 초과 실측만 근거로 판정함. 효력 뒤 실행이 0건이면 '실측 대기'로 두고 L4 진단을 부르지 않음",
+  "verify": "1) t_orch_ladder.js 표본: U2, U24, U25(11-20) + 20261123000419_VISION 효력 = L4|useraxis|checklistTime 안 나옴. 효력 뒤 지적 3건 = 나옴. 효력 뒤 1판 초과 chain.end 1건(events.jsonl:2001 형식) = 나옴. 효력 뒤 실행 0건 = '실측 대기' 상태 기록. 2) node tools/VibeManager/test/run_all.js FAIL 0. 3) 반영 뒤 ladder 갱신에서 L4|useraxis|checklistTime 이 실측 대기로 바뀌었는지 ladder.json 확인. 4) 사용자가 다음 CheckList 를 1회 실행한 뒤 chainTarget 1판 분과 묶음 상태 확인",
+  "sig": "ln|useraxis|checklisttime|effms filter"
+ },
+ "result": {
+  "applied": true,
+  "already_applied": false,
+  "verified": false,
+  "verify_items": [
+   {
+    "n": 1,
+    "result": "pass",
+    "note": "node tools/VibeManager/test/t_orch_ladder.js. 반영 전 코드(git show HEAD 사본 .vibe/tmp/ladder_old, 04:52:12): 새 표본 6건 FAIL, 'SOME FAIL'. ① why '같은 목적 키 지적 3건 ≥ 3', ① 원장 st open, ④ st open. 반영 뒤(04:52:16): PASS 47, 'ALL PASS'. ① wait true, label '실측 대기: 다음 CheckList 1회 필요', why '같은 목적 개선안 20261123000419_VISION 효력(…) 뒤 지적 0건…효력 뒤 실행 0건 = 실측 대기'. ① 원장 st wait, fresh 에 없음. ② 근거 U60, U61, U62(효력 전 3건 제외). ③ 'CheckList SCP0028 1판 40분(목표 30분)', 1판 초과 1건. ④ 1판 20분이면 묶음 없음, wait → resolved. ⑤ 같은 목적 개선안이 없으면 종전대로 3건으로 나옴"
+   },
+   {
+    "n": 3,
+    "result": "fail",
+    "note": "node .vibe/tmp/ladder_copy_update.js(실원장 사본에서 scan → update, 04:53:29). 반영 전 status open, why '같은 목적 키 지적 4건 ≥ 3'. 반영 뒤 status open, statusLabel 없음, why '같은 목적 개선안 20261123000419_VISION 효력(2026-11-23 15:58) 뒤 지적 1건(기준 3) · 효력 뒤 실행 5건 중 1판 초과 4건(기준 1) · 효력 전 지적 3건 제외'. '실측 대기'로 바뀌지 않음. 원인은 개선안 근거 조회(2026-11-24 00:03) 뒤 CheckList chain.end 5건(events.jsonl 4401, 4408, 4417, 4424, 4487, 2026-11-25 03:19~03:26)이 생긴 것임. 1판 SCP0005 114분, SSP0014 84분, SCP0028 80분, SSP0005 1판 없음 체인 전체 143분. 개념 문서 기준으로 효력 뒤 1판 초과 = L4 다시 참(v1 ③과 같은 경우). 실원장 ladder.json 은 쓰지 않음(판정 스크립트가 모듈 일부만 붙여 돌아 다른 묶음을 잘못 닫을 수 있음)"
+   }
+  ],
+  "changed_files": [
+   "tools/VibeManager/orch-ladder.js",
+   "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "verify_result": "2026-11-25 04:48:59~04:53:34. v1: t_orch_ladder.js 새 표본 6건, 반영 전 코드 FAIL 6('SOME FAIL', 04:52:12) → 반영 뒤 PASS 47, 'ALL PASS'(04:52:16). 기존 41건은 반영 전에도 'ALL PASS'(04:50). node --check orch-ladder.js 통과. v3: 실원장 사본 갱신 결과 L4|useraxis|checklistTime 상태 open → open. '실측 대기' 아님. 효력 뒤 실행 5건 중 1판 초과 4건이 근거로 들어감(04:53:29). v2, v4 는 지시대로 미실행",
+  "note": "반영: L4-2 에 같은 목적 L4 개선안(묶음 key 목적 키, sig 토큰, purpose 필드 중 하나가 같음) 효력 시각 거름 추가. 근거 = 효력 뒤 지적(l4UserAxisMin) + 효력 뒤 CheckList chain.end 1판 초과(l4RunOverMin 기본 1, chainTarget 감지기가 있는 축만, 1판 = 같은 runId 의 첫 ':--docs' step.end, 없으면 체인 전체). 효력 뒤 실행 0건 = status wait '실측 대기: 다음 CheckList 1회 필요', 효력 전 = '효력 대기'. 두 경우 모두 진단 대상(fresh)과 tick 진단에서 뺌. 조건이 사라진 wait 묶음은 resolved. 같은 목적 개선안이 없는 축은 종전 기준(7일 3건)을 유지함. v3 fail 은 코드 결함이 원인 아님: 효력 뒤 실행 0건 전제가 2026-11-25 03:19 CheckList 4건 실행으로 맞지 않게 됨. 이 결과를 v1 ③ 경우로 인정할지 사용자 판단 필요. 승인 범위 밖이라 미반영(추가 확인 후보): Overview 사다리 카드 '실측 대기' 표시(개념 문서 2단계, workbench.js 등). 미확인: 중지(stopped true)된 실행의 1판을 실측 근거로 셀지(이번 코드는 1판 step.end 가 있으면 셈). 남긴 임시 파일: .vibe/tmp/ladder_real_scan.js, ladder_copy_update.js, ladder_before.txt, ladder_after.txt, ladder_old_run.txt. 반영 전 코드 사본 .vibe/tmp/ladder_old 는 지움"
+ },
+ "gate": null,
+ "history": [
+  "04:44:53 VMO 자동(게이트 통과 조건): 승인",
+  "04:48:44 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0444",
+  "04:48:47 VMO: 반영 시작",
+  "04:54:06 VMO: 반영 실패. 검증 실패: 실행한 항목 실패 1건(v3). 2026-11-25 04:48:59~04:53:34. v1: t_orch_ladder.js 새 표본 6건, 반영 전 코드 FAIL 6('SOME FAIL', 04:52:12) → 반영 뒤 PASS 47, 'ALL PASS'(04:52:16). 기존 41건은 반영 전에도 'ALL PASS'(04:50). node --check orch-ladder.js 통과 · 대상 파일 2개 복원(orch-ladder.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: git show HEAD:tools/VibeManager/orch-ladder.js > .vibe/tmp/ladder_old/orch-ladder.js). 덮기 전 파일 tools/VibeManager/orch-ladder.js.bak_prerestore_20261125_045406 / t_orch_ladder.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: node -e \"require('fs').rmSync('.vibe/tmp/ladder_old',{recursive:true,force:true})\" && git diff --stat -- tools/VibeManag). 덮기 전 파일 tools/VibeManager/test/t_orch_ladder.js.bak_prerestore_20261125_045406) · 대상 밖 변경 Doc/verify/SCP0005/e2e/serial/scn_1.png, Doc/verify/SCP0005/e2e/serial/scn_2.png, Doc/verify/SCP0005/e2e/serial/scn_3.png, Doc/verify/SCP0005/e2e/serial/scn_4.png, Doc/verify/SCP0005/e2e/serial"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261124000457_VISION"
+}

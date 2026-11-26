@@ -1,0 +1,118 @@
+{
+  "id": "20261123113703_INC",
+  "at": "2026-11-23T11:37:03+09:00",
+  "ms": 1795401423881,
+  "source": "incident",
+  "status": "applied",
+  "sig": "source backup 대상에서 대용량 생성물 .vibe/orch/snap ene video 제외와 push 실패 n회 재시도",
+  "title": "Source Backup 대상에서 대용량 생성물(.vibe/orch/snap, e2e video) 제외와 push 실패 1회 재시도",
+  "evidence": "push 로그 HTTP 500. 미push 커밋 4,521파일·3,288,898줄에 Doc/verify/SCP0028/e2e/video 242파일(1007M), .vibe/orch/snap(디스크 27G) 경로 포함. .gitignore 에 제외 규칙 없음. workbench.js:3567-3568 push 1회 후 종료",
+  "targets": [
+    ".gitignore",
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "전: 바뀐 경로 전부 add 후 push 1회. 후: .gitignore 에 .vibe/orch/snap/, Doc/verify/*/e2e/video/ 추가(이미 커밋된 파일은 git rm --cached 별도 승인), workbench.js 3/3 push 가 HTTP 500·sideband 끊김이면 30초 뒤 1회 재시도하고 실패 시 미push 커밋 파일 수와 대용량 경로를 출력",
+  "verify": "Source Backup 실행 뒤 git status -sb 가 ahead 0 인지 확인. node tools/VibeManager/test/run_all.js 통과",
+  "rollback": ".gitignore 2줄 삭제, workbench.js 재시도 블록 되돌림",
+  "impact": "",
+  "level": "L2",
+  "levelWhy": "같은 서명 과거 사건 0건, 이번 1건(repeat.same 1). 재발 2건 미만이라 L3 조건 미충족",
+  "incident": "20261123_112448_R1_ALL",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T20:13:52+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T20:17:30+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1137, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self2013"
+    },
+    {
+      "at": "2026-11-23T20:17:33+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T20:22:05+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1137, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T20:22:05+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v1 Source Backup 실행 뒤 git status -sb 가 ahead 0 인지 확인. (사용자 실행이 있어야 확인)"
+    },
+    {
+      "at": "2026-11-23T20:22:05+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 반영 뒤 확인 1건, 게이트 판정 1건. 반영할 때 실행 항목 없음(v1 사용자 실행, v2 VMO 게이트). 참고 측정: git check-ignore -v .vibe/orch/snap/x Doc/verify/SCP0028/e2e/video/a.webm 반영 전 exit 1(매칭 없음) → 반영 뒤 '.gitignore:229:.vibe/orch/snap/' '.gitignore:230:Doc/verify/*/e2e/video/' 매칭. git status -sb 반영 전 '## main...origin/main [ahead 1]'(v1 기준값, 반영 뒤는 Source  · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-23T20-17-34_claude_orch.log",
+      "sec": 54,
+      "costUsd": 0.6738377,
+      "files": [
+        ".gitignore",
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:21+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T21:20:34+09:00"
+    }
+  ],
+  "needsApproval": "자동 범위 밖 .gitignore",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795432432085,
+  "autoFp": "63c328661d",
+  "applyStartMs": 1795432653136,
+  "postChecks": [
+    {
+      "n": 1,
+      "text": "Source Backup 실행 뒤 git status -sb 가 ahead 0 인지 확인.",
+      "why": "사용자 실행이 있어야 확인",
+      "status": "open",
+      "at": "2026-11-23T20:18:31+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-23T20:18:31+09:00",
+    "verified": true,
+    "text": "반영 뒤 확인 1건, 게이트 판정 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1137, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self2013",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795432925902,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      ".gitignore",
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_items": [],
+    "verify_result": "반영할 때 실행 항목 없음(v1 사용자 실행, v2 VMO 게이트). 참고 측정: git check-ignore -v .vibe/orch/snap/x Doc/verify/SCP0028/e2e/video/a.webm 반영 전 exit 1(매칭 없음) → 반영 뒤 '.gitignore:229:.vibe/orch/snap/' '.gitignore:230:Doc/verify/*/e2e/video/' 매칭. git status -sb 반영 전 '## main...origin/main [ahead 1]'(v1 기준값, 반영 뒤는 Source Backup 실행 후 확인). node --check workbench.js 통과 2026-11-23 20:18:12",
+    "note": "workbench.js 3/3 push: spawnStream onLine 으로 HTTP 500·sideband·unexpected disconnect·hung up·early EOF·RPC failed 감지 시 30초 뒤 1회 재시도, 재실패 시 origin/main..HEAD 파일 수와 상위 경로별 크기 상위 10개 출력. 이미 커밋된 e2e/video·snap 파일의 git rm --cached 는 별도 승인 대상이라 하지 않음."
+  },
+  "snap": "prop_20261123113703_INC",
+  "effectiveMs": 1795436434041,
+  "effectiveAt": "2026-11-23T21:20:34+09:00"
+}

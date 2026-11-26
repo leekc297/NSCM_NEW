@@ -1,0 +1,98 @@
+{
+  "id": "20261121100245_REVIEW",
+  "at": "2026-11-21T10:02:45+09:00",
+  "ms": 1795222965048,
+  "source": "review",
+  "status": "applied",
+  "sig": "stopby window mislabel and split",
+  "title": "창 종료로 멈춘 실행이 '중지 단추'로 기록되는 결함 수정과 집계에 체인 중지 원인별 수 추가(측정 추가)",
+  "evidence": "events.jsonl user.stop 37줄 중 by '중지 단추'(why '중지됨(사용자 지시)') 8줄. 그중 6줄(11-20 14:12:46, 14:24:02, 14:56:34, 18:34:05, 18:46:22, 20:44:16)은 같은 VM 프로세스의 by 'VM' why 'vscode.dispose' 줄 뒤 1초 안에 생김. 사용자가 단추를 누른 것은 17:36:38, 19:06:55 2건. 원인: workbench.js:140 abortRunningChains 가 lv.wb.stopAll 을 부를 때 stopBy 를 정하지 않아 workbench.js:676 이 기본값 '중지 단추'를 씀(stopInst 는 workbench.js:3662 에서 stopBy 를 정함). 집계 chains checklist n 22, ok 1, stopped 18 에는 원인 구분이 없음. events.jsonl chain.end 22줄 중 aborted 'VM 창 종료로 중단' 7줄, ok true 1줄, 나머지 14줄. 같은 7일 selfcheck.sync 81회, 동기화 알림 문구는 '적용은 VS Code 창 다시 로드 뒤'(orch-selfcheck.js:310)",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/orch-improve.js"
+  ],
+  "before_after": "창 종료 중단 때 user.stop by '중지 단추', 집계 chains.stopped 한 값 → abortRunningChains 가 stopAll 전에 wb.stopBy = 'VS Code 종료' 를 정하고, 집계 chains 와 steps 에 stoppedBy { window, button, vmo, other } 를 더함(chain.end aborted 또는 앞뒤 60초 user.stop 의 by 로 나눔)",
+  "verify": "node tools/VibeManager/test/run_all.js 통과(t_chain_abort.js, t_chain_userstop.js 포함). 지금 events.jsonl 로 집계를 다시 냈을 때 checklist stoppedBy.window 7 이상, button 2. 창 종료 표본에서 user.stop by 가 'VS Code 종료'",
+  "rollback": "두 파일을 반영 전 .bak 로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "중지 주체 기록 결함 1곳과 집계 항목 추가. 판정 기준과 단계 구성은 그대로",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T10:40:27+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T10:43:52+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self1040"
+    },
+    {
+      "at": "2026-11-21T10:43:54+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T10:52:41+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T10:52:41+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 10:49 확인. (1) node tools/VibeManager/test/run_all.js 출력 'ALL OK  파일 62/62  PASS 864  FAIL 0  201.3s', 'OK   t_chain_abort.js  PASS 7', 'OK   t_chain_userstop.js  PASS 7'. (2) 현재 .vibe/orch/events.jsonl 사본(2122줄)으로 im.digest(7) 다시 냄: 'chain checklist n 22 ok 1 stopped 18 {\"window\":10,\"butt · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-21T10-43-54_claude_orch.log",
+      "sec": 322,
+      "costUsd": 1.2748232,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:26+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795225226911,
+  "autoFp": "cf7badb720",
+  "applyStartMs": 1795225434462,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self1040",
+  "needsReload": true,
+  "appliedMs": 1795225961134,
+  "synced": [
+    "orch-improve.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/orch-improve.js"
+    ],
+    "verify_result": "2026-11-21 10:49 확인. (1) node tools/VibeManager/test/run_all.js 출력 'ALL OK  파일 62/62  PASS 864  FAIL 0  201.3s', 'OK   t_chain_abort.js  PASS 7', 'OK   t_chain_userstop.js  PASS 7'. (2) 현재 .vibe/orch/events.jsonl 사본(2122줄)으로 im.digest(7) 다시 냄: 'chain checklist n 22 ok 1 stopped 18 {\"window\":10,\"button\":2,\"vmo\":1,\"other\":5}', 'step S8.checklistRun stopped 8 {\"window\":3,\"button\":0,\"vmo\":0,\"other\":5}'. 기준 window 7 이상, button 2 충족. (3) 창 종료 표본(%TEMP%/vmo_winclose_sample.js, 실행 중 체인에 abortRunningChains 호출): 'user.stop by=VM why=vscode.dispose', 'chain.end why=VM 창 종료로 중단 aborted', 'user.stop by=VS Code 종료 why=중지됨(사용자 지시)', 'SAMPLE PASS: 중지 단추 줄 0건'",
+    "note": "workbench.js:140 abortRunningChains 가 stopAll 전에 lv.wb.stopBy = 'VS Code 종료' 를 정함. 창 종료 중이라 값을 되돌리지 않음. orch-improve.js digest 의 chains, steps 에 stoppedBy {window, button, vmo, other} 추가. 나누는 순서: chain.end aborted = window. 그 밖은 같은 화면 앞뒤 60초 user.stop 의 by 를 봄. 'VS Code 종료', 'VM', why 'vscode.dispose' 가 있으면 window 우선(반영 전 기록에 창 종료 뒤 1초 안 '중지 단추' 줄이 같이 남아 있음). by 'VMO…' = vmo, '중지 단추' 또는 by 없음 = button, 나머지 = other. stopped 를 세는 조건은 바꾸지 않음. checklist other 5건은 근처에 user.stop 줄이 없는 기록이고 개별 원인은 미확인. 확인 스크립트 2개는 저장소 밖 %TEMP% 에 둠. .bak, 설치 폴더, CHANGELOG.md 는 건드리지 않음."
+  },
+  "snap": "prop_20261121100245_REVIEW",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

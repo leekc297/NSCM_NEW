@@ -32,7 +32,7 @@ const badJs = W('tools/t/bad.js', "const fs=require('fs'),path=require('path');c
 const fake = W('.vibe/fake_claude.js', `
 const fs=require('fs'),path=require('path');let inp='';let done=false;process.stdin.on('data',d=>{inp+=d;if(inp.includes('\\n'))go();});
 function go(){if(done)return;done=true;let txt='';try{txt=JSON.parse(inp.split('\\n')[0]).message.content[0].text;}catch(e){}
- const args=process.argv.slice(2).join(' ');fs.appendFileSync(path.join('.vibe','calls.txt'),JSON.stringify({args,txt:txt.slice(0,300)})+'\\n');
+ const args=process.argv.slice(2).join(' ');fs.appendFileSync(path.join('.vibe','calls.txt'),JSON.stringify({args,txt:txt.slice(0,2000)})+'\\n');
  const m=/--resume (\\S+)/.exec(args);const sid=m?m[1]:'sess-'+(/수선/.test(txt)?'rq':'ai');const out=o=>console.log(JSON.stringify(o));
  out({type:'system',subtype:'init',session_id:sid});
  const hang=(/HANG/.test(txt)||/수선 2 /.test(txt))&&!/창 다시 로드로/.test(txt);
@@ -104,7 +104,16 @@ const cut = async (r, pr, ms) => { await new Promise(res => setTimeout(res, ms))
   const d2 = mk('rin0004'); const n1 = calls().length; const bD = await d2.run(chD, { resume: recD });
   const cd = calls().slice(n1);
   chk('재개: 첫 실행 생략 · 2회차 AI(재개 문구) → 재실행 → 3회차 AI → 재실행', cnt('bad_cnt') === 4 && cd.length === 2 && /창 다시 로드로/.test(cd[0].txt) && /수선 2 /.test(cd[0].txt) && /수선 3 /.test(cd[1].txt) && !/창 다시 로드로/.test(cd[1].txt), JSON.stringify({ n: cnt('bad_cnt'), cd }));
-  chk('수선 횟수 = 3회(끊기기 전 회차 포함)', (bD.steps || [])[0] && /수선 3회/.test(bD.steps[0].name || ''), JSON.stringify((bD.steps || [])[0]));
+  let fr = ''; try { fr = fs.readFileSync(path.join(root, 'Doc', 'gen', 'RIN0004', 'FULLRUN.md'), 'utf8'); } catch { }
+  chk('수선 횟수 = 3회(끊기기 전 회차 포함 · FULLRUN.md)', /수선 3회/.test(fr), fr.split(String.fromCharCode(10)).filter(l => /판정/.test(l)).join(' | '));
+  // 인자에 따라 단계 안 재개 여부가 다른 작업(steps.json resumeArg · pipeline.js --phase 4·5 만, 2026-11-20 R4 세션 요청)
+  tasks['T.pipe'] = { id: 'T.pipe', title: 'pipeline', kind: 'node', script: progJs, args: [], cwd: root, resumeArg: { flag: '--phase', inner: ['4', '5'] } };
+  const pipeRec = ph => ({ resumeFrom: 9, steps: 26, cur: 8, curActor: 'script', curTask: 'T.pipe', curName: `pipeline ${ph}`, curArgs: ph ? ['${input:id}', '--max', '3', '--phase', ph] : ['${input:id}'], sub: { prog: '세부 1/3' } });
+  const pl4 = wbm.resumePlan(p, api, pipeRec('4')); const pl2 = wbm.resumePlan(p, api, pipeRec('2')); const pl0 = wbm.resumePlan(p, api, pipeRec(''));
+  chk('phase 4 = 작업 재개(단계 안 끊긴 지점부터)', !pl4.restart && /단계 안 끊긴 지점부터/.test(pl4.text), pl4.text);
+  chk('phase 2 = 작업 재시작(phase 2: 단계 안 재개 없음) · 스크립트 원문에 VM_RESUME 있어도', pl2.restart && /이 단계는 처음부터\(phase 2: 단계 안 재개 없음\)/.test(pl2.text), pl2.text);
+  chk('phase 인자 없음 = 작업 재시작(phase 4·5 만 단계 안 재개)', pl0.restart && /phase 4·5 만 단계 안 재개/.test(pl0.text), pl0.text);
+  chk('진행 기록에 단계 인자(curArgs) 기록', Array.isArray(recA.curArgs), JSON.stringify(recA.curArgs));
   // 체인 밖 AI 호출(메뉴 · 채팅) 기록의 표시
   const plS = wbm.resumePlan(p, api, { single: true, label: '🧯 자동 보완', sub: { session: 's9' } });
   chk('체인 밖 AI 호출 표시 = 세션 이어받기', !plS.restart && /🧯 자동 보완 · AI 세션 이어받기/.test(plS.text), plS.text);

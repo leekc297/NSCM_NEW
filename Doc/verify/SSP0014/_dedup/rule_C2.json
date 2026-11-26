@@ -1,88 +1,16 @@
 {
  "rule_id": "C2",
- "hash": "28cdf444141d41cb",
+ "hash": "1e0b0fc65b950903",
  "groups": [
   {
    "rows": [
     "T-9c8a5d60"
    ],
-   "why": "TRACE 행으로 Division 콤보 이벤트 핸들러가 소스에 실제로 있는지 대조하는 행이라, 셀 cascade 동작을 측정하는 다른 행과 성질이 달라 묶지 않았다."
-  },
-  {
-   "rows": [
-    "V-008ddaa2"
-   ],
-   "why": "End Customer→Sold-to Customer 한 쌍만 Div 40 외 조건에서 확인하는 행이다. C2-G06은 여러 상위·하위 셀 쌍을 신규 행 조건에서 확인하므로 대상과 상태 범위가 같지 않아 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-b94530d7"
-   ],
-   "why": "Sales Company→Sales Plant, Sales Site→Company/Plant 두 쌍만 행 상태 지정 없이 확인하는 행이다. 신규 행으로 한정하고 End Customer 쌍까지 포함하는 C2-G06과 범위가 달라 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-facd02d1"
-   ],
-   "why": "신규 행에서 End Customer, Sales Company, Sales Site 상위 셀 전부의 cascade를 확인하는 묶음 행이다. 대상 요소와 상태가 다른 행들과 정확히 같지 않아 단독으로 두었다."
-  },
-  {
-   "rows": [
-    "V-2dc70679"
-   ],
-   "why": "Div 40의 Cust Group→End Customer→Sales Site cascade와 후보 중복 0건을 확인하는 행이다. 대상은 V-eaa9a935와 겹치지만 저장 차단이나 Active 유지는 기대에 없어서 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-eaa9a935"
-   ],
-   "why": "Div 40에서 저장할 때 관계가 맞지 않는 데이터의 차단과 Active N 유지를 확인하는 행이다. 저장 시점의 기대가 V-2dc70679와 달라 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-ce51df72"
-   ],
-   "why": "Div 81/82에서 Sales Site의 Company를 WA00→NJ00으로 바꾼 뒤 NJ00 후보가 나오고 키인 수정이 한 번에 저장되는지 확인하는 행이다. 조건과 기대가 V-46b70996과 달라 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-46b70996"
-   ],
-   "why": "신규 행의 Sales Company·Sales Plant 콤보에서 키인으로 후보 외 값이 저장되지 않게 막는지 확인하는 행이다. Company 변경 후 반영을 보는 V-ce51df72와 기대가 반대 방향이라 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-434b72ac"
-   ],
-   "why": "Insert로 만든 신규 행에서 Div 셀을 바꿀 수 있는지와 바꿨을 때 하위 Site 후보가 다시 구성되는지 확인하는 행이다. 이 셀을 다루는 다른 행이 없어 단독으로 두었다."
-  },
-  {
-   "rows": [
-    "V-a614fe0d"
-   ],
-   "why": "Div 82에서 저장 검증 팝업 뒤 AS From Site를 입력했을 때 W35~W38 수량이 유지되는지 확인하는 행이다. 대상 요소와 기대가 다른 행과 겹치지 않아 단독으로 두었다."
-  },
-  {
-   "rows": [
-    "V-0c87088b"
-   ],
-   "why": "Current 버전에서 Div와 권한, VMI, FCST Type 조건별로 입력 Measure와 AS From Site 콤보가 통제되는지 확인하는 행이다. Measure를 다루는 다른 두 행과 조건·기대 범위가 달라 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-f5bcdac1"
-   ],
-   "why": "Div 81 W/S 권한에서 Sales Site 유형별로 AS From Site 활성 여부와 Measure 후보(SCM_FCST 비노출)를 확인하는 행이다. AS From Site 활성 검증이 들어 있어 V-f93e5268과 범위가 달라 따로 두었다."
-  },
-  {
-   "rows": [
-    "V-f93e5268"
-   ],
-   "why": "신규 행에서 Sales Site 유형별로 입력 가능한 Measure 후보만 나오는지 확인하는 행이다. Div와 AS From Site 조건이 있는 V-f5bcdac1, V-0c87088b와 조건이 정확히 같지 않아 따로 두었다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:12:26",
- "cost": 0.0875992
+ "why": "행 1건",
+ "by": "코드",
+ "at": "2026-11-25 02:13:24",
+ "cost": 0
 }

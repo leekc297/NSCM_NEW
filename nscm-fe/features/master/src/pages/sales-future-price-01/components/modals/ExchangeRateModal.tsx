@@ -51,7 +51,7 @@ interface Props {
 //   설계서 [popup-1] B40 의 표기 그대로이며 다국어 코드 등록 대상이 아니다(LOC · KRW 같은 Measure 값과 같은 취급).
 const ROW_KIND = {
   IF: 'BPS I/F',
-  USER: 'User Define',
+  USER: 'User Defined', // 2026-11-25 요청으로 표기 변경(종전 'User Define')
 } as const;
 
 // 행에 숨겨 두는 칸 — 그 달 환율 행의 YYYYMMDD(저장 키)와 사용자 편집 권한(EDIT_YN). 그리드 컬럼이 아니다.
@@ -788,10 +788,11 @@ export const ExchangeRateModal = ({
           />
 
           <div className={styles.gridWrapper}>
+            {/* 조회 중 · User Define 저장 중 모두 표시 — 저장 프로시저가 판가 · 매출계획 금액까지 다시 계산해 수 초 걸린다. */}
             <ProgressIndicator
               shape='circular'
               apprearance='infinite'
-              open={loading}
+              open={loading || isSaving}
               placement='parent'
             />
             <ResultArea

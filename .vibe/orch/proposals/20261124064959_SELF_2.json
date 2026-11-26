@@ -1,0 +1,123 @@
+{
+  "id": "20261124064959_SELF_2",
+  "at": "2026-11-24T06:49:59+09:00",
+  "ms": 1795470599291,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/menu view.js|메뉴웹뷰에글래스모피즘양식이없음backdropfiltern건",
+  "title": "사용자 지시 R181 같은 문제: tools/VibeManager/menu-view.js:240 메뉴 웹뷰에 글래스모피즘 양식이 없음(backdrop-filter 0건)",
+  "evidence": "규칙 R181 \"VM 웹뷰(VMO, VMW, WORKBENCH, FLOW 등)는 사용자가 고른 한 가지 디자인 양식(글래스모피즘)을 같게 씀\" (원래 지시 2026-11-20 20:45 \"VMW 도 같은 글래스모피즘으로 적용해주세요\") · tools/VibeManager/menu-view.js:240 body{margin:0;padding:0;display:flex;flex-direction:column;font:12px/1.35 var(--vscode-font-family);color:var(--fg);background:var(--bg);overflow:hidden}",
+  "targets": [
+    "tools/VibeManager/menu-view.js"
+  ],
+  "before_after": "VMO 와 같은 --g1, --gb 변수와 .glass 규칙을 넣어 묶음 상자, 머리줄에 적용함",
+  "verify": "node --check tools/VibeManager/menu-view.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/menu-view.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T09:42:05+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T09:45:59+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0942"
+    },
+    {
+      "at": "2026-11-26T09:46:03+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T09:59:46+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1425, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 menu-view.js, workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T09:59:46+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 09:46:28 반영 전: backdrop-filter 0건, node --check 통과, run_all 'ALL OK 파일 88/88 PASS 1424 FAIL 0', t_webview_syntax 'ALL PASS'(19) → 2026-11-26 09:51:02~09:55:18 반영 뒤: backdrop-filter 3건, node --check 통과, run_all 'ALL OK 파일 88/88 PASS 1424 FAIL 0', t_webview_syntax 'ALL PASS'(19) · 변경 7개 파일 · 대상 목록 밖 변경 6개: tools/Harness/verify/eg_chain.py, tools/Harness/verify/run_verify.py, tools/VibeManager/test/t_chain_loop.js, tools/VibeManager/workbench.js, tools/Harness/plan_state.json, tools/Harness/verify/row_run.py",
+      "log": ".vibe\\logs\\2026-11-26T09-46-03_claude_orch.log",
+      "sec": 571,
+      "costUsd": 0.9098773000000001,
+      "files": [
+        "tools/Harness/verify/eg_chain.py",
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/menu-view.js",
+        "tools/VibeManager/test/t_chain_loop.js",
+        "tools/VibeManager/workbench.js",
+        "tools/Harness/plan_state.json",
+        "tools/Harness/verify/row_run.py"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:04+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM 웹뷰(VMO, VMW, WORKBENCH, FLOW 등)는 사용자가 고른 한 가지 디자인 양식(글래스모피즘)을 같게 씀 규칙을 tools/VibeManager/menu-view.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R181|tools/VibeManager/menu-view.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795653724606,
+  "autoFp": "d2a0090a2c",
+  "applyStartMs": 1795653963514,
+  "verifyJudge": {
+    "at": "2026-11-26T09:55:41+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1425, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0942",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "menu-view.js",
+    "workbench.js"
+  ],
+  "appliedMs": 1795654786004,
+  "synced": [
+    "menu-view.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/menu-view.js → 통과(반영 전 통과 → 반영 뒤 통과) · node tools/VibeManager/test/run_all.js → 'ALL OK  파일 88/88  PASS 1424  FAIL 0' (반영 전 234.9s → 반영 뒤 245s, 결과 같음) · node tools/VibeManager/test/t_webview_syntax.js → 'ALL PASS' 19건(반영 전 19 → 반영 뒤 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/menu-view.js"
+    ],
+    "verify_result": "2026-11-26 09:46:28 반영 전: backdrop-filter 0건, node --check 통과, run_all 'ALL OK 파일 88/88 PASS 1424 FAIL 0', t_webview_syntax 'ALL PASS'(19) → 2026-11-26 09:51:02~09:55:18 반영 뒤: backdrop-filter 3건, node --check 통과, run_all 'ALL OK 파일 88/88 PASS 1424 FAIL 0', t_webview_syntax 'ALL PASS'(19)",
+    "note": ":root 에 --g1, --g2, --gb 추가(orchestra.js:73 과 같은 값). .glass 규칙 추가(orchestra.js:75 와 같은 값) 및 투명 효과 끈 환경 규칙 추가. 묶음 상자 section.ai 에 glass 클래스, 화면 머리줄 #hd 에 glass 클래스, 묶음 머리줄 .ah 에 반투명 배경과 backdrop-filter 적용. .ai 위아래 구분선을 둥근 상자 간격(margin 6px)으로 바꿈. 화면 모양은 창 다시 로드 뒤 확인 필요. t_webview_syntax 출력에 menu-view 항목명이 없어 이 시험이 menu-view 웹뷰를 검사하는지는 미확인. 걸린 시간 약 9분, 가장 오래 걸린 단계 run_all(반영 전 234.9s, 반영 뒤 245s)."
+  },
+  "snap": "prop_20261124064959_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

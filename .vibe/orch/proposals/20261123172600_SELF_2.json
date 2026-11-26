@@ -1,0 +1,115 @@
+{
+  "id": "20261123172600_SELF_2",
+  "at": "2026-11-23T17:26:00+09:00",
+  "ms": 1795422360237,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|sourceuploadui의페이지폴더를경로입력으로만받고찾기폴더선택창가없음",
+  "title": "사용자 지시 R3 같은 문제: tools/VibeManager/workbench.js:3402 Source Upload(UI)의 페이지 폴더를 경로 입력으로만 받고 찾기(폴더 선택 창)가 없음",
+  "evidence": "규칙 R3 \"파일을 고르는 입력칸은 찾기 단추(VS Code 파일 선택 창)를 둠. 여러 파일을 받을 수 있는 입력은 여러 개 선택, 고른 파일 목록, 파일마다 빼기를 둠\" (원래 지시 2026-11-23 16:31 \"파일의 경우 여러개도 선택할 수 있으므로, 충분히 여유공간이 있으면 좋겠습니다.\") · tools/VibeManager/workbench.js:3402 if (!pageAbs) { const v = await vscode.window.showInputBox({ prompt: `${ID} 페이지 폴더 (nscm-fe 기준 상대경로)`, placeHolder: 'features/supply/src/pages/xxx', ignoreFocusOut: true });",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "showOpenDialog({canSelectFolders:true, canSelectFiles:false, canSelectMany:false, defaultUri: nscm-fe/features}) 로 고르게 하고, 고른 경로를 nscm-fe 기준 상대경로로 바꿔 pageAbs 에 넣음. 직접 입력은 취소했을 때만 둠",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T22:56:14+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T22:59:50+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261123_self2256"
+    },
+    {
+      "at": "2026-11-23T22:59:52+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T23:11:27+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T23:11:27+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check workbench.js 반영 전 종료 0 → 반영 뒤 종료 0 · run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 209.8s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 211.5s' · 반영 뒤 측정 끝 2026-11-23 23:07:34 · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/WORKLOG.md",
+      "log": ".vibe\\logs\\2026-11-23T22-59-52_claude_orch.log",
+      "sec": 477,
+      "costUsd": 0.6551457000000003,
+      "files": [
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:36+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "파일을 고르는 입력칸은 찾기 단추(VS Code 파일 선택 창)를 둠. 여러 파일을 받을 수 있는 입력은 여러 개 선택, 고른 파일 목록, 파일마다 빼기를 둠 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R3|tools/VibeManager/workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795442174021,
+  "autoFp": "9ffb3b275b",
+  "applyStartMs": 1795442392224,
+  "verifyJudge": {
+    "at": "2026-11-23T23:07:52+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261123_self2256",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795443087849,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/workbench.js: 반영 전 출력 없음(종료 0) → 반영 뒤 출력 없음(종료 0). node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK  파일 74/74  PASS 1161  FAIL 0  209.8s' → 반영 뒤 'ALL OK  파일 74/74  PASS 1161  FAIL 0  211.5s'. t_webview_syntax.js 는 workbench.js 가 웹뷰 파일이 아니어서 대상 아님"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "node --check workbench.js 반영 전 종료 0 → 반영 뒤 종료 0 · run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 209.8s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 211.5s' · 반영 뒤 측정 끝 2026-11-23 23:07:34",
+    "note": "대상 줄이 3402 → 3410 으로 밀려 있었음(3402 는 git 실행 함수 줄). pageAbs 를 못 찾으면 showOpenDialog({canSelectFolders:true, canSelectFiles:false, canSelectMany:false, defaultUri: nscm-fe/features, features 없으면 nscm-fe}) 로 고르고 nscm-fe 기준 상대경로로 바꿔 넣음. nscm-fe 밖 폴더면 '`nscm-fe 밖 폴더`' 출력 후 중단. 선택 창을 취소했을 때만 showInputBox 직접 입력. 폴더 선택 창 실화면 확인은 창 다시 로드 뒤 사용자 실행 필요(미확인). 임시 출력 파일 2개 삭제함."
+  },
+  "snap": "prop_20261123172600_SELF_2",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

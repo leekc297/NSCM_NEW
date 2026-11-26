@@ -1,0 +1,78 @@
+{
+ "id": "DMF0005",
+ "uiName": "Sales Site Project Model",
+ "menuPath": "DM> Demand Master> Sales Site Project Model",
+ "captures": [
+  "captures/DMF0005.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0005/",
+  "Doc/asisfacts/screens/DMF0005/",
+  "Doc/gen/DMF0005/"
+ ],
+ "buttons": [
+  "modelChange:SAVE",
+  "production:DELETE",
+  "production:INSERT",
+  "production:MODEL_CHANGE",
+  "production:SAVE",
+  "production:SEARCH",
+  "purchase:SEARCH"
+ ],
+ "definition": "Sales Site 별 Project, Model 과 담당 Team, Owner, Sales Company, Sales Plant 를 연결해 관리하는 화면",
+ "pages": [
+  {
+   "title": "Sales Site Project Model",
+   "keyPoint": "End Customer 가 비어 있으면 저장되지 않음. Sales Company, Sales Plant 는 행의 Sales Site 에 등록된 값으로 고름.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.136,
+     "y": 0.135
+    },
+    {
+     "no": 2,
+     "x": 0.54,
+     "y": 0.247
+    },
+    {
+     "no": 3,
+     "x": 0.18,
+     "y": 0.247
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div, Active: 필수. Active 기본값은 ALL",
+      "Team, End Customer, Sales Site: 콤보에서 고름. ALL 이면 전체 조회",
+      "Model/Nickname, Owner: 돋보기를 누르면 모델 찾기, Owner 찾기 팝업이 열림"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Model Code Change: Div 40 기준 팝업. BEFORE 모델 코드와 AFTER 모델 코드를 짝지어 입력하고 Save 함",
+      "Insert(F8): SCP Planner 그룹 계정이면 \"권한이 없습니다.\" 메시지가 뜨고 행이 추가되지 않음",
+      "Save(F7): 바뀐 행이 없으면 \"수정한 내용이 없습니다.\", 저장이 끝나면 \"성공적으로 저장되었습니다.\", 실패하면 \"저장에 실패하였습니다.\" 메시지가 뜸",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Sales Site Project Model 그리드",
+     "lines": [
+      "필수 입력: Team, Cust Group, End Customer, Owner, Sales Site, Sales Company, Sales Plant(제목 앞 빨간 점)",
+      "End Customer 가 비어 있으면 \"End Customer 값은 필수 입력입니다.\", 다른 필수 칸이 비어 있으면 \"{0} 값은 필수 입력입니다.\" 메시지가 뜸",
+      "Team, Owner: 칸 오른쪽 아이콘을 누르면 팀 찾기, Owner 찾기 팝업이 열림",
+      "Sales Company, Sales Plant: 행의 Sales Site 에 등록된 값만 콤보에 나옴",
+      "노란 칸만 입력할 수 있음"
+     ]
+    }
+   ]
+  }
+ ]
+}

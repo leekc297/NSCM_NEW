@@ -24,6 +24,11 @@ export const Header = () => {
 
   const displayName = session.langCd === 'KO' ? session.userNm : session.userEngNm;
 
+  // 영어 부제의 끝 괄호 꼬리(예: "(dev)")만 떼어 env 색으로 강조한다.
+  // 운영/기본 빌드는 VITE_EN_NAME 에 꼬리가 없어 enMatch 가 null → 강조 없음.
+  const enName = import.meta.env.VITE_EN_NAME ?? '';
+  const enMatch = enName.match(/^(.*?)\s*(\([^)]*\))\s*$/);
+
   const handleClickMenu = (menu: Menu) => {
     setSidebarOpen(true);
     setSidebarMenu(menu);
@@ -44,7 +49,15 @@ export const Header = () => {
           <span className={styles.abb}>{import.meta.env.VITE_APP_NAME}</span>
           <span className={styles.full}>
             <span className={styles.ko}>{import.meta.env.VITE_KO_NAME}</span>
-            <span className={styles.en}>{import.meta.env.VITE_EN_NAME}</span>
+            <span className={styles.en}>
+              {enMatch ? (
+                <>
+                  {enMatch[1]} <span className={styles.envTag}>{enMatch[2]}</span>
+                </>
+              ) : (
+                enName
+              )}
+            </span>
           </span>
         </Link>
       </div>

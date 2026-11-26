@@ -1,3 +1,4 @@
+import { CommunicationBookmarkIcon } from '@lges/design-system/icon';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { Menu } from '@foundation/models';
@@ -110,7 +111,7 @@ export const HomeNscm = () => {
   };
 
   // 미로그인(운영): ID 로그인 폼을 두지 않는다. 부팅 시 자동 SSO 이동이 막혔거나
-  //   로그아웃 직후에 여기 남으므로 SSO 진입 버튼만 둔다(core/ssoLogin.ts).
+  //   세션 만료로 로그아웃된 뒤 여기 남으므로 SSO 진입 버튼만 둔다(core/ssoLogin.ts).
   if (!isLogin && IS_SSO_ONLY) {
     return (
       <div className={styles.homeWrapper}>
@@ -137,7 +138,9 @@ export const HomeNscm = () => {
     <div className={styles.homeWrapper}>
       <div className={styles.topBar}>
         <span className={styles.welcome}>Hello! {session.userNm}</span>
-        <Button onClick={() => void handleLogout()}>Logout</Button>
+        {/* 운영(SSO 전용)은 Logout 버튼을 두지 않는다. /user/logout 은 NSCM 세션만 끊고
+            SSO(NLS) 세션은 남아 SSO Login 한 번에 같은 계정으로 다시 들어온다(core/ssoLogin.ts). */}
+        {!IS_SSO_ONLY && <Button onClick={() => void handleLogout()}>Logout</Button>}
       </div>
 
       {/* 게스트는 대시보드(즐겨찾기/공지/권한/관리자) 숨김 — 권한요청만 하면 되므로 */}
@@ -147,7 +150,15 @@ export const HomeNscm = () => {
           <div className={styles.favoriteCell}>
             <section className={`${styles.panel} ${styles.favoritePanel}`}>
               <div className={styles.panelHeader}>
-                <span className={styles.panelTitle}>Favorite Screens</span>
+                <span className={styles.panelTitle}>
+                  <CommunicationBookmarkIcon
+                    appearance='lined'
+                    iconSize={16}
+                    className={styles.favoriteStar}
+                    aria-hidden='true'
+                  />
+                  Favorite Screens
+                </span>
               </div>
               <div className={styles.panelBody}>
                 {favorites.length === 0 ? (

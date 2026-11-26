@@ -14,6 +14,7 @@
 //   pData/pUserId 로 보내던 것을 iter-2 에서 data/sesUserId 로 수정(ShipmentPlanSemi.tsx 2곳).
 import type { FlexGrid } from '@mescius/wijmo.grid';
 
+import { CRUD_TYPE } from '@foundation/constants';
 import type { EditTracker } from '@foundation/utils';
 
 import { MEASURE } from '../shipment-plan-semi.constants';
@@ -92,6 +93,7 @@ export const buildSaveRows = (
   const targetKind = bucketType === 'WEEKLY' ? 'W' : 'D';
   tracker.getOriginalValues().forEach((changed, row) => {
     const r = row as unknown as Record<string, unknown>;
+    if (r.CRUD_TYPE === CRUD_TYPE.INSERT) return; // BOD 팝업 삽입 행은 shipment-plan-semi.insert.ts 가 만든다
     Object.keys(changed).forEach(binding => {
       const kind = dynColKindOf(binding);
       // if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨)
@@ -111,7 +113,7 @@ export const buildSaveRows = (
         bodId: s(pickField(r, 'BOD_ID')),
         measure: s(pickField(r, 'MEASURE')),
         yyyymmdd,
-        qty: s(r[binding]),
+        qty: s(r[binding]) || '0', // 지운 셀은 0 으로 저장(AS-IS .cs:2454/2561 "공백일때 0으로 저장하기")
         toSite: s(pickField(r, 'TO_SITE')),
         originFromDivisionId: s(pickField(r, 'ORIGIN_FROM_DIVISION_ID')),
         // originToDivisionId: s(pickField(r, 'ORIGIN_TO_DIVISION_ID')),

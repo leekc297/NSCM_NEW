@@ -60,8 +60,10 @@ interface Props {
   adminColumns?: RawFlexGridColumnConfig[];
   // 행별 편집판정 서버원천 (M4c — CP_KEY→EDIT_INFO 엔트리). beginningEdit/pastingCell 가 소비.
   editInfoMap: EditInfoMap;
-  // fix 확정 셀 키 집합 (M4a/M2 — `${FIX_KEY}|${D_/W_ 컬럼키}`). formatHandler 가 녹색 판정.
+  // fix 확정 셀 키 집합 (M4a/M2 — `${FIX_KEY}|${D_/W_ 컬럼키}`). formatHandler 가 진회색 판정.
   fixCellSet: Set<string>;
+  // SAVE 버튼 권한 — 편집가능 셀 연노랑은 권한 보유자에게만, 미보유자는 연회색(테스트 이슈 2026-11-25).
+  canSave: boolean;
   onFocus: () => void;
 }
 
@@ -149,6 +151,7 @@ export const ProductionPlanLineGrid = ({
   adminColumns,
   editInfoMap,
   fixCellSet,
+  canSave,
   onFocus,
 }: Props) => {
   // 편집가능 구간 하한 = Plan Date(plan_start). 테스터 이슈: 편집구간이 '당주 월요일'이 아니라 'Plan Date' 기준이어야
@@ -234,6 +237,12 @@ export const ProductionPlanLineGrid = ({
   bucketRef.current = bucket;
   const ctxRef = useRef(editContext);
   ctxRef.current = editContext;
+  const canSaveRef = useRef(canSave);
+  canSaveRef.current = canSave;
+  // 버튼권한은 비동기로 늦게 도착한다 — 도착/변경 시 셀 색을 다시 칠한다.
+  useEffect(() => {
+    gridRef.current?.invalidate();
+  }, [canSave, gridRef]);
   const editInfoRef = useRef(editInfoMap);
   editInfoRef.current = editInfoMap;
   const fixSetRef = useRef(fixCellSet);
@@ -378,12 +387,18 @@ export const ProductionPlanLineGrid = ({
         //   면 이전 날짜 셀이 없어 자연히 회색 없음(AS-IS from<plan_start 게이트 + chkAll 상시 등가).
         if (isPastPivot(binding, planStartRef.current))
           ev.cell.style.backgroundColor = CELL_COLOR.PAST_GRAY;
+        // 계획구간 Prod Plan(Amend) 행 연회색(테스트 이슈 "Prod Plan Amend Measure 색상" 2번, 2026-11-25).
+        //   편집가능 셀은 아래 노랑이, fix 셀은 진회색이 덮는다.
+        else if (s(dataItem.MEASURE) === EDITABLE_MEASURE)
+          ev.cell.style.backgroundColor = CELL_COLOR.AMEND_PLAN_GRAY;
 
         // 편집가능 pivot 셀 노란색 (수정가능 표시 — AS-IS Set_FPOperationColor 편집밴드의 TO-BE 치환).
         //   전건 INPUT_TP_CD='S' 라 공용 formatEditableColumns(wj-cell-editable) 이 안 걸리므로 여기서
         //   직접 칠한다. isPivotCellEditable 이 measure(AMEND)·bucket 편집kind·미래·행편집가능(new_edit_mode
         //   포함)을 이미 종합하므로 참이면 진짜 편집셀이다. 과거회색을 덮고, fix 녹색엔 덮인다(아래 우선).
+        //   SAVE 권한이 없으면 노랑을 칠하지 않아 위 연회색이 남는다(수정권한 사용자만 연노랑, 2026-11-25).
         if (
+          canSaveRef.current &&
           isPivotCellEditable(
             binding,
             dataItem,
@@ -396,13 +411,13 @@ export const ProductionPlanLineGrid = ({
           ev.cell.style.backgroundColor = CELL_COLOR.EDIT_YELLOW;
         }
 
-        // fix 확정 셀 녹색 (M4a/M2 — design 03 §3.8 #62~64 / AS-IS Set_FixCellColor cs:3621~3653).
-        //   O_RC2(dtFix) FIX_KEY 8필드 + 기간키 매칭. PROD_PLAN_AMEND 행만(cs:3606). 과거회색보다 우선.
-        //   Daily=D_·W_, Weekly=W_ 셀(fixCellSet 이 두 키를 모두 담음 — 보이는 버킷 셀만 매칭됨).
+        // fix 확정 셀 진회색 (M4a/M2 — design 03 §3.8 #62~64 / AS-IS Set_FixCellColor cs:3621~3653 는 녹색,
+        //   2026-11-25 진회색으로 변경). O_RC2(dtFix) FIX_KEY 8필드 + 기간키 매칭. PROD_PLAN_AMEND 행만(cs:3606).
+        //   과거회색·연회색·편집노랑보다 우선. Daily=D_·W_, Weekly=W_ 셀(fixCellSet 이 두 키를 모두 담음).
         if (s(dataItem.MEASURE) === EDITABLE_MEASURE) {
           const fixKey = buildFixKey(dataItem);
           if (fixSetRef.current.has(`${fixKey}|${binding}`)) {
-            ev.cell.style.backgroundColor = CELL_COLOR.FIX_GREEN;
+            ev.cell.style.backgroundColor = CELL_COLOR.FIX_DARK_GRAY;
           }
         }
 
@@ -476,6 +491,8 @@ export const ProductionPlanLineGrid = ({
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
+      // cascade(연동 편집) 화면 — undo 시 cellEditEnded 재발화로 연동 셀까지 복원(순수 집계/파생, clear·부작용 없음 확인).
+      reapplyEditOnUndo
       itemsSource={rows as unknown as WijmoRowItem[]}
       staticColumns={fixedColumns}
       dynamicColumns={pivotColumns}

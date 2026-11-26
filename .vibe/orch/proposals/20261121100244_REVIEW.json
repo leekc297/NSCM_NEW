@@ -1,0 +1,98 @@
+{
+  "id": "20261121100244_REVIEW",
+  "at": "2026-11-21T10:02:44+09:00",
+  "ms": 1795222964765,
+  "source": "review",
+  "status": "applied",
+  "sig": "replay gone dup",
+  "title": "VM 기동 때 기록 다시 읽기에서 wait.gone, proc.gone 을 반영해 같은 대기·실행의 사라짐 기록 중복 제거",
+  "evidence": "집계 waits dbwin gone 21, goneSec 70594, goneUnknown 17. events.jsonl wait.gone 21줄의 (kind, screen, waiter_pid) 고유값 4개(DMF0042 대기 PID 28056 6회, 34920 7회, 7936 7회, SCP0028 26800 1회). 같은 대기를 VM 프로세스 7개(28312, 32932, 12916, 15124, 40580, 13672, 40520)가 다시 씀. goneSec 70594 = 11-20 00:48 기록 25172+23277+21648 + 19:07 기록 497. events.jsonl proc.gone 37줄의 (screen, start_ms, childPid) 고유값 7개, 6개는 VM 프로세스 6개가 같은 실행을 6번씩 씀. 원인: orch-state.js:47-48 은 기록을 다시 읽을 때 wait.start 를 대기 목록에 넣고 wait.end 만 지움. wait.gone 은 반영하지 않음. 그래서 새 VM 의 sweep(orch-state.js:70)이 같은 죽은 대기를 다시 꺼내고 orch-watch.js:330 이 wait.gone 을 또 씀. proc.gone(orch-watch.js:364)도 같음",
+  "targets": [
+    "tools/VibeManager/orch-state.js",
+    "tools/VibeManager/orch-improve.js"
+  ],
+  "before_after": "기록을 다시 읽을 때 wait.gone, proc.gone 무시, 집계가 줄 수대로 셈 → orch-state apply 가 wait.gone(kind, screen, waiter_pid 일치 대기)과 proc.gone(screen, start_ms 일치 실행)을 목록에서 지움. orch-improve 집계는 wait.gone 을 (kind, screen, waiter_pid), proc.gone 을 (screen, start_ms) 기준 1번만 셈",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. 지금 events.jsonl 로 집계를 다시 냈을 때 waits dbwin gone 4, goneSec 70594 대신 고유 대기 기준 값(첫 기록 25172+23277+21648+497)이 나오고, VM 창 다시 로드 뒤 새 wait.gone, proc.gone 줄이 0줄 늘어남",
+  "rollback": "두 파일을 반영 전 .bak 로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "측정 기록 결함 1곳. 지금 동작 안에서 고침",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T10:03:23+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T10:06:46+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self1003"
+    },
+    {
+      "at": "2026-11-21T10:06:49+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T10:15:25+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T10:15:25+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 10:07:40 node tools/VibeManager/test/run_all.js → 'ALL OK  파일 62/62  PASS 864  FAIL 0  200.9s'. 2026-11-21 10:11:41 orch-improve.digest(7) on a temp copy of events.jsonl → {\"dbwin\":{\"gone\":4,\"goneSec\":70594,\"goneUnknown\":0},\"waitGoneDup\":17,\"procGone\":{\"n\":7,\"lines\":37}} (before: gone 21, · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-21T10-06-49_claude_orch.log",
+      "sec": 312,
+      "costUsd": 1.1909954000000003,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-state.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:27+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795223003514,
+  "autoFp": "c6429aab11",
+  "applyStartMs": 1795223209002,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self1003",
+  "needsReload": true,
+  "appliedMs": 1795223725713,
+  "synced": [
+    "orch-improve.js",
+    "orch-state.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-state.js",
+      "tools/VibeManager/orch-improve.js"
+    ],
+    "verify_result": "2026-11-21 10:07:40 node tools/VibeManager/test/run_all.js → 'ALL OK  파일 62/62  PASS 864  FAIL 0  200.9s'. 2026-11-21 10:11:41 orch-improve.digest(7) on a temp copy of events.jsonl → {\"dbwin\":{\"gone\":4,\"goneSec\":70594,\"goneUnknown\":0},\"waitGoneDup\":17,\"procGone\":{\"n\":7,\"lines\":37}} (before: gone 21, goneUnknown 17). First records: DMF0042 28056 25172, DMF0042 34920 23277, DMF0042 7936 21648, SCP0028 26800 497. 2026-11-21 10:11:10 all events fed into orch-state.apply, then sweep() → 'wait gone 0 already-recorded 0 | proc gone 1 already-recorded 0'",
+    "note": "orch-state.apply: wait.gone removes the wait matching kind, screen, waiter_pid. proc.gone removes the run matching screen, start_ms. orch-improve.digest: wait.gone counted once per (kind, screen, waiter_pid), proc.gone once per (screen, start_ms); new fields waitGoneDup and procGone. goneSec stays 70594 because the 4 first records sum to 70594 and the 17 duplicate lines had sec_wait null. Not confirmed: line counts after a real VM window reload; checked only by feeding the events into orch-state and running sweep. The git diff of orch-improve.js also includes uncommitted changes made before this work. Temp script C:\\Users\\LG\\AppData\\Local\\Temp\\vmo_dg_check.js not deleted (deletion needs approval)."
+  },
+  "snap": "prop_20261121100244_REVIEW",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

@@ -1,0 +1,30 @@
+# SCP0028 미검증 행별 조치 · 라운드 6(2026-11-20 23:40, CheckList 23:38 원장)
+
+- 입력: 원장 verify_ledger.csv(23:38:10), 분류 unverified_triage.*(23:38:21)
+- 원장 미검증 12행 = 엔진 2, 사람 4, 집계 6. AI 검토 행 2(V-8e065123, EG-ac06e957) 포함 표 8행
+- 집계 6행(A6 2, F4 4)은 하위 행 T-2c20a3fc, T-fad117f6 을 따라가서 표에 넣지 않음
+- 지난 라운드 표는 _unverified_plan.md.r5_20261120. 라운드 5 대상 중 T-6b9a8ce8 PASS, V-a99ddb18 FAIL(실측), T-fc9d26c9 PASS, EG-017a5164 PASS 로 풀림
+
+| 묶음 | 행 ID | 규칙 | 원인(실측 근거) | 조치(고칠 파일) |
+|---|---|---|---|---|
+| S1 To Site 대조 칸(T521 뒤 재발) | V-8e065123 | G1 | 22:17:08 실행(T521 반영 뒤)도 'FROM_SITE 값 조건 밖 HQ07-A'. bindingByHeader('To Site') = TO_SITE_DESCRIPTION(TO-BE 메타 sheet_columns.csv), 그 값과 읽은 후보의 겹침 0 이라 condColForOpts 가 전 칸을 훑음. 라벨 갈래 칸 TO_SITE 도 겹침 0 으로 끝나 FROM_SITE(최다 겹침)를 고름. 겹침 0 인 이유는 칸별 값이 실행 기록에 없어 미확인 | tools/E2E/lib/condcol.ts chooseCondCol 신설(라벨 갈래 코드 칸에 값이 있으면 겹침 0 이어도 그 칸), smoke-extra.ts condColForOpts 가 사용, _trace.spec.ts 증거에 대조 칸 근거 기록 (T527) |
+| S2 Model 팝업 교체 | EG-ac06e957 | G4 | AI 검토 룰등록 권장. 2026-10-08 사용자 지시는 5화면 소스 주석에만 있음. SCP 전체 일반 규칙 근거 없음 | 결정 R4-D1 |
+| S2 | T-2c20a3fc | A6 | 대조표 행의 AS-IS 팝업 SP P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 호출 0건. TO-BE 는 COM0013 팝업 | 결정 R4-D1 |
+| S2 | T-fad117f6 | F4 | 위와 같음 | 결정 R4-D1 |
+| S3 AS-IS 시간 초과(담당 사람) | AD-f1266f6f | A1 | 호출 #48 popup/SEARCH 'I' From Site 30개. AS-IS DEV 300초 초과(T524 표시 적용 확인) | 결정 R5-D2 |
+| S3 | AD-f1c0069f | A5 | 위와 같음 | 결정 R5-D2 |
+| S3 | AD-26bd623d | A6 | 위와 같음 | 결정 R5-D2 |
+| S3 | AD-ab35c7bf | A7 | 위와 같음 | 결정 R5-D2 |
+
+## 행 수 대조
+
+- 원장 ERROR 12 = 표 6행(T-2c20a3fc, T-fad117f6, AD 4행) + 집계 6
+- V-8e065123(원장 PASS, AI 검토), EG-ac06e957(원장 판정필요, AI 검토)은 AI 검토 행
+
+## 처리 결과
+
+| 행 | 처리 | 남은 사유 |
+|---|---|---|
+| V-8e065123 | 검사기 수정(T527) | 없음 |
+| EG-ac06e957, T-2c20a3fc, T-fad117f6, 집계 6행 | 처리 안 함 | R4-D1 룰 등록 범위 결정 필요 |
+| AD 4행 | 처리 안 함 | R5-D2 AS-IS DEV 성능, 판정 갈음 결정 필요 |

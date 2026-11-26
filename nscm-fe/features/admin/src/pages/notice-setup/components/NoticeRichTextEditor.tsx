@@ -1,6 +1,12 @@
-import { useEffect, useRef, type ClipboardEvent, type FormEvent, type MouseEvent } from 'react';
+import { useEffect, useRef, type ChangeEvent, type ClipboardEvent, type FormEvent, type MouseEvent } from 'react';
 
-import { sanitizeNoticeHtml } from '../notice-setup.util';
+import { useMessageStore } from '@shared/stores';
+
+import {
+  createNoticeImageElement,
+  getClipboardImageFile,
+  sanitizeNoticeHtml,
+} from '../notice-setup.util';
 import { useNoticeSetupStore } from '../useNoticeSetupStore';
 
 import styles from './NoticeRichTextEditor.module.scss';
@@ -272,9 +278,17 @@ const removeFormatTypingMarkers = (editor: HTMLDivElement) => {
   }
 };
 
-export const NoticeRichTextEditor = () => {
+interface NoticeRichTextEditorProps {
+  uploadImage: (file: File) => Promise<{ fileId: string; fileName: string }>;
+  isImageUploading: boolean;
+}
+
+export const NoticeRichTextEditor = ({ uploadImage, isImageUploading }: NoticeRichTextEditorProps) => {
   const { t } = useTranslation();
   const editorRef = useRef<HTMLDivElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const savedRangeRef = useRef<Range | null>(null);
+  const setAlert = useMessageStore(state => state.setAlert);
   const persistenceTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const content = useNoticeSetupStore(state => state.draft.NOTICE_CONTENT);
@@ -290,6 +304,66 @@ export const NoticeRichTextEditor = () => {
     if (editor) removeFormatTypingMarkers(editor);
     const nextContent = sanitizeNoticeHtml(editor?.innerHTML ?? '');
     setDraft({ NOTICE_CONTENT: nextContent });
+  };
+
+  const saveEditorSelection = () => {
+    const editor = editorRef.current;
+    const selection = globalThis.document.getSelection();
+    if (
+      editor &&
+      selection?.rangeCount &&
+      editor.contains(selection.getRangeAt(0).commonAncestorContainer)
+    ) {
+      savedRangeRef.current = selection.getRangeAt(0).cloneRange();
+    }
+  };
+
+  const insertImageFile = async (file: File) => {
+    if (isImageUploading || !file.type.startsWith('image/')) return;
+    try {
+      const { fileId, fileName } = await uploadImage(file);
+      const editor = editorRef.current;
+      if (!editor) return;
+
+      const img = createNoticeImageElement(fileId, fileName);
+      const saved = savedRangeRef.current;
+      const range =
+        saved && editor.contains(saved.commonAncestorContainer)
+          ? saved
+          : (() => {
+              const end = globalThis.document.createRange();
+              end.selectNodeContents(editor);
+              end.collapse(false);
+              return end;
+            })();
+
+      range.collapse(false);
+      range.insertNode(img);
+      range.setStartAfter(img);
+      range.collapse(true);
+
+      const selection = globalThis.document.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+      savedRangeRef.current = range.cloneRange();
+
+      syncContent();
+    } catch (error) {
+      void setAlert({
+        type: 'alert',
+        content:
+          error instanceof Error && error.message
+            ? error.message
+            : t('MSG00003', '_Image upload failed.'),
+      });
+    }
+  };
+
+  const handleImageInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (file) void insertImageFile(file);
+    input.value = '';
   };
 
   const runCommand = (command: string, value?: string) => {
@@ -499,6 +573,26 @@ export const NoticeRichTextEditor = () => {
   };
 
   const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
+    const imageFile = getClipboardImageFile(event.clipboardData);
+    if (imageFile) {
+      event.preventDefault();
+      saveEditorSelection();
+      void insertImageFile(imageFile);
+      return;
+    }
+
+    // 본문의 인라인 이미지를 잘라내기/복사하면 클립보드엔 text/html(=img 마크업)만 담기고
+    // 파일(files)은 없다. 이때 plain-text 분기로 떨어지면 alt(파일명)만 붙으므로, 우리 이미지가
+    // 담긴 html 은 sanitize(이미지 보존+src 재조립) 후 그대로 삽입한다. 외부 붙여넣기(우리 이미지
+    // 없음)는 기존대로 서식을 제거한 plain text 로 붙인다.
+    const html = event.clipboardData.getData('text/html');
+    if (html && /data-notice-image/i.test(html)) {
+      event.preventDefault();
+      globalThis.document.execCommand('insertHTML', false, sanitizeNoticeHtml(html));
+      globalThis.queueMicrotask(syncContent);
+      return;
+    }
+
     event.preventDefault();
     const plainText = event.clipboardData.getData('text/plain');
     globalThis.document.execCommand('insertText', false, plainText);
@@ -606,6 +700,26 @@ export const NoticeRichTextEditor = () => {
         >
           ↗
         </button>
+        <button
+          type='button'
+          className={styles.toolbarButton}
+          aria-label={t('LBL00410', '_Image')}
+          disabled={isImageUploading}
+          onMouseDown={handleToolbarMouseDown}
+          onClick={() => {
+            saveEditorSelection();
+            imageInputRef.current?.click();
+          }}
+        >
+          Img
+        </button>
+        <input
+          ref={imageInputRef}
+          type='file'
+          accept='.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp'
+          style={{ display: 'none' }}
+          onChange={handleImageInputChange}
+        />
         <button
           type='button'
           className={styles.toolbarButton}

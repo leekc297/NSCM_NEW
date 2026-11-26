@@ -128,6 +128,39 @@ export interface MainEditContext {
   weekBindingsAsc?: string[];
 }
 
+// plan-level 편집가능 — AS-IS GetIsEditable(.cs:1330-1480) 이식. rc2 = GET SP o_rc2(그 Plan Date 의
+//   plan type/seq 전건 + 공통 IS_EDITABLE). 'N' 이면 EditButton 이 그리드 전체를 잠근다(.cs:900, 918).
+//   주의: AS-IS 는 다음 단계가 있으면 PLAN_STATUS 와 무관하게 결과가 항상 'N' 이다(ret 초기값 'N',
+//   -1 이면 아무것도 안 바꿈). 주석의 "-1 이면 수정가능" 의도는 코드에 없으므로 코드대로 따른다.
+export const computePlanEditable = (
+  rc2: Record<string, unknown>[],
+  planStartYyyymmdd: string,
+  planType: string,
+  planSeq: string
+): boolean => {
+  if (rc2.length === 0) return false; // AS-IS 는 Rows[0] 접근(조회 0건이면 이 판정 자체를 안 탐) — 보수적으로 잠금
+  const str = (r: Record<string, unknown>, k: string) => {
+    const v = pickField(r, k);
+    return typeof v === 'string' || typeof v === 'number' ? String(v) : '';
+  };
+  if (str(rc2[0], 'IS_EDITABLE') === 'N' || planType === 'FN' || planType === 'TE') return false;
+
+  const nextSeq: Record<string, string> = { PR: '1', MA: '2', SE: '3' };
+  const next = nextSeq[planType];
+  if (!next) return false; // PR/MA/SE 외 — AS-IS ret 기본값 'N'
+  if (rc2.some(r => str(r, 'PLAN_TYPE_SEQ') === next)) return false; // 다음 단계 생성됨
+
+  // MA 만 다음 단계 미생성 시 자기 플랜 확정(CONFIRM_YN='Y') 필요(.cs:1425-1436). PR/SE 는 바로 Y.
+  if (planType !== 'MA') return true;
+  const cur = rc2.find(
+    r =>
+      str(r, 'PLAN_START_YYYYMMDD').replace(/-/g, '') === planStartYyyymmdd.replace(/-/g, '') &&
+      str(r, 'PLAN_TYPE') === planType &&
+      str(r, 'PLAN_SEQ') === planSeq
+  );
+  return !!cur && str(cur, 'CONFIRM_YN') === 'Y';
+};
+
 // SHIP_PLAN_AMEND 행 1건의 Dept Day 등록 여부(design 03 §1 #27, §3.1 BlockCellsChecking_2) —
 //   'X' = 미등록, 그 외 요일값 = 등록.
 export const isDeptDayRegistered = (deptDay: string): boolean => deptDay !== '' && deptDay !== 'X';
@@ -151,6 +184,9 @@ export const isMainCellEditable = (
   const measureVal = pickField(row, 'MEASURE');
   const measure = typeof measureVal === 'string' ? measureVal : '';
   if (measure !== MEASURE.SHIP_PLAN_AMEND) return false; // 규칙1 — SHIP_PLAN_AMEND 행만 편집후보
+  // To Site 가 NULL 이거나 '-'(소계성 행)면 잠금(AS-IS .cs:3111-3112, 3341-3342).
+  const toSite = pickField(row, 'TO_SITE');
+  if (toSite == null || toSite === '-') return false;
 
   if (ctx.bucketType === BUCKET_TYPE.MONTHLY) return false; // Monthly — 항상 전체 잠금
 

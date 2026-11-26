@@ -401,6 +401,33 @@ def same_rule_block(r, rule_ref):
     return '', row_rules
 
 
+# 2026-11-21 T528(SCP0028 V-4633ca25 H11 저장 중 로딩): AI 검토가 AS-IS 저장 cs:661 'new FoxAsyncProxy(this)' 를 인용하고 "AS-IS 저장엔 진행 표시 없음" 으로 PASS 반영.
+#   FoxAsyncProxy.ShowProgress 기본값 = True(GSCM/00.Assemblies/TheOne.Windows.Forms.4.5.dll 리플렉션 2026-11-21 00:5x 실측) — 호출부가 ShowProgress = false 로 끄지 않으면 AS-IS 는 진행 창을 띄운다.
+#   → 로딩 규칙(H11) 행에서 인용한 AS-IS 줄 뒤 8줄 안에 FoxAsyncProxy 생성이 있고 ShowProgress = false 가 없으면(또는 ProgressForm 생성) AS-IS 진행 표시 있음 → 'AS-IS 에 없음' 근거로 PASS·NA 낮추지 않음
+FOX_PROGRESS_DEFAULT = True
+
+
+def asis_progress_on(refs):
+    """refs = 인용 확인된 AS-IS 'path:line' 목록 → AS-IS 진행 표시 근거 문구('' = 없음)"""
+    for ref in refs:
+        m = re.match(r'^(.*?):(\d+)', str(ref or '').strip())
+        if not m:
+            continue
+        fp = os.path.join(ROOT, m.group(1).replace('/', os.sep))
+        try:
+            lines = open(fp, encoding='utf-8-sig', errors='replace').read().splitlines()
+        except OSError:
+            continue
+        i = int(m.group(2)) - 1
+        win = lines[max(0, i): i + 9]
+        txt = chr(10).join(win)
+        if re.search(r'new\s+[\w.]*ProgressForm\s*\(', txt):
+            return f'{m.group(1)}:{m.group(2)} ProgressForm 생성'
+        if FOX_PROGRESS_DEFAULT and re.search(r'new\s+FoxAsyncProxy\s*\(', txt) and not re.search(r'ShowProgress\s*=\s*false', txt):
+            return f'{m.group(1)}:{m.group(2)} FoxAsyncProxy(ShowProgress 기본 True · 끄는 문장 없음)'
+    return ''
+
+
 def decide(r, it):
     """답 1건 → llm_review.csv 행(인용 확인 · 반영 여부)"""
     cur = eff_result(r)
@@ -441,6 +468,8 @@ def decide(r, it):
             why = f'분류 {cls} 는 PASS·NA 로 낮추지 않음'
         elif blk:
             why = blk
+        elif (r.get('rule_id') or '') == 'H11' and asis_progress_on([c[2] for c in checked if c[0] and is_asis_ref(c[2])]):
+            why = 'AS-IS 진행 표시 있음(' + asis_progress_on([c[2] for c in checked if c[0] and is_asis_ref(c[2])]) + ') — AS-IS 에 없다는 근거로 낮추지 않음(T528)'
         elif cur == 'FAIL' and cls == 'TOBE룰' and not (rule_ok and set(RX_RULE_NO.findall(rule_ref.upper())) - row_rules):
             # T487: TO-BE 룰 예외 주장 = FAIL 근거 룰과 다른 등록 룰 번호가 있어야 함(AS-IS 인용만으로 TO-BE 룰 예외를 세우지 않음)
             why = 'TO-BE 룰 예외는 FAIL 근거 룰과 다른 등록 룰 번호 필요'
@@ -793,6 +822,24 @@ def selftest():
         chk('반영 — 다른 문서의 다른 등록 룰 예외는 반영', d['apply'] == 'Y')
         d = decide(dict(rr, expect_src='GENERAL', asis_ref=''), {'class': '검사기오판', 'verdict': 'PASS', 'evidence': ga, 'rule_ref': ''})
         chk('반영 — 룰 근거 없는 FAIL 은 AS-IS 인용으로 반영(종전 유지)', d['apply'] == 'Y')
+        # T528: H11 행 AS-IS 인용 줄에 FoxAsyncProxy(ShowProgress 안 끔) → PASS 반영 막음 · 끈 경우는 종전대로
+        import tempfile
+        td = tempfile.mkdtemp(dir=ROOT)
+        try:
+            rel = os.path.relpath(td, ROOT).replace(os.sep, '/')
+            open(os.path.join(td, 'a.cs'), 'w', encoding='utf-8').write('var asyncProxy = new FoxAsyncProxy(this);' + chr(10) + 'var t = await asyncProxy.ExecuteAsync(x);' + chr(10))
+            open(os.path.join(td, 'b.cs'), 'w', encoding='utf-8').write('var asyncProxy = new FoxAsyncProxy(this);' + chr(10) + 'asyncProxy.ShowProgress = false;' + chr(10))
+            hr = {'row_id': 'V-H11', 'rule_id': 'H11', 'result': '판정필요', 'evidence': 'x', 'expect_src': 'GENERAL', 'asis_ref': ''}
+            orig_is = is_asis_ref
+            globals()['is_asis_ref'] = lambda ref: True
+            d = decide(hr, {'class': 'TOBE룰', 'verdict': 'PASS', 'evidence': [{'ref': rel + '/a.cs:1', 'quote': 'x'}]})
+            chk('반영 — H11 AS-IS FoxAsyncProxy 진행 표시 있으면 PASS 불가', d['apply'] == 'N' and 'T528' in d['apply_why'])
+            d = decide(hr, {'class': 'TOBE룰', 'verdict': 'PASS', 'evidence': [{'ref': rel + '/b.cs:1', 'quote': 'x'}]})
+            chk('반영 — H11 AS-IS ShowProgress=false 면 종전대로', d['apply'] == 'Y')
+            globals()['is_asis_ref'] = orig_is
+        finally:
+            import shutil
+            shutil.rmtree(td, ignore_errors=True)
     finally:
         _REG, llm_call.verify_quote = reg0, vq0
     p = build_prompt('ZZZ0000', {'asis_id': 'ZZZ0000', 'asis_files': [], 'page_dir': '', 'facts_dir': 'f', 'verify_dir': 'v'}, [dict(r0, rule_id='A1')])

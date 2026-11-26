@@ -1,0 +1,104 @@
+{
+  "id": "20261123204529_SELF",
+  "at": "2026-11-23T20:45:29+09:00",
+  "ms": 1795434329755,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/cloudpkg/cloud_pkg.py|수정본단추에서변경이없을때printnothingn행이lates",
+  "title": "사용자 지시 R36 같은 문제: tools/CloudPkg/cloud_pkg.py:1226 수정본 단추에서 변경이 없을 때 print_nothing(1246~1252행)이 latest_pkg 로 MOD, FULL 중 가장 최근 폴더를 골라 '수정본 폴더",
+  "evidence": "규칙 R36 \"수정본 이관 산출물은 전체 이관본과 따로 최근 수정분만 추출한 파일을 만들고 수정본 단추는 그 파일 경로를 보여 줌\" (원래 지시 2026-11-11 11:19 \"클라우드 이관 패키지(수정본) 클릭 시 전체 패키지 이관본을 적용하는게 아니라 최근 수정본만 추출해서 그부분만 적용하도록 보완해주세요. 지금은 수정본을 클릭해서 전체 패키지 이관본의 주소만 보입니다.\") · tools/CloudPkg/cloud_pkg.py:1226 pat = re.compile(rf\"^{ID}_CLOUD_{'DBUI' if mode == 'all' else 'DB'}_(MOD|FULL)_(\\d{{8}}_\\d{{4}}(?:\\d{{2}})?)$\")",
+  "targets": [
+    "tools/CloudPkg/cloud_pkg.py"
+  ],
+  "before_after": "latest_pkg 에 scope 인자를 추가하고 print_nothing 은 scope='delta' 일 때 (MOD) 만 찾게 바꿈. 수정본 폴더가 없으면 '수정본 없음'만 출력하고 FULL 경로는 출력하지 않음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/CloudPkg/cloud_pkg.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T06:04:19+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T06:07:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0604"
+    },
+    {
+      "at": "2026-11-24T06:07:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T06:19:40+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T06:19:40+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-24 06:08:21(run_all RESULT at 2026-11-23T21:08:21Z) run_all.js ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤 2026-11-24 06:12:15~06:15:49 run_all.js ALL OK 74/74 PASS 1161 FAIL 0, t_webview_syntax.js ALL PASS. 자체 확인: 임시 폴더 MOD 20261101·FULL 20261120 에서 latest_pkg(scope 없음)=FULL, delta=MOD, full= · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T06-07-59_claude_orch.log",
+      "sec": 485,
+      "costUsd": 0.6778936999999999,
+      "files": [
+        "tools/CloudPkg/cloud_pkg.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "수정본 이관 산출물은 전체 이관본과 따로 최근 수정분만 추출한 파일을 만들고 수정본 단추는 그 파일 경로를 보여 줌 규칙을 tools/CloudPkg/cloud_pkg.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R36|tools/CloudPkg/cloud_pkg.py",
+  "needsApproval": "자동 범위 밖 tools/CloudPkg/cloud_pkg.py",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795467859065,
+  "autoFp": "f57e155ae6",
+  "applyStartMs": 1795468079086,
+  "verifyJudge": {
+    "at": "2026-11-24T06:16:05+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0604",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795468780659,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.3s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.1s' · node tools/VibeManager/test/t_webview_syntax.js 반영 뒤 'ALL PASS'(반영 전 run_all 안 t_webview_syntax.js PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/CloudPkg/cloud_pkg.py"
+    ],
+    "verify_result": "반영 전 2026-11-24 06:08:21(run_all RESULT at 2026-11-23T21:08:21Z) run_all.js ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤 2026-11-24 06:12:15~06:15:49 run_all.js ALL OK 74/74 PASS 1161 FAIL 0, t_webview_syntax.js ALL PASS. 자체 확인: 임시 폴더 MOD 20261101·FULL 20261120 에서 latest_pkg(scope 없음)=FULL, delta=MOD, full=FULL · FULL만 있는 ID 의 print_nothing 출력 '수정본 없음'(FULL 경로 출력 없음)",
+    "note": "latest_pkg(ID, mode, scope=None) 추가: delta=MOD, full=FULL, None=MOD|FULL(mark_applied 1197행 종전 동작 유지). print_nothing 은 scope='delta' 로 조회하고 수정본이 없으면 '수정본 없음' 출력 뒤 종료(FULL 경로·적용 안내 출력 안 함). 작업 모드·hook 차단 없음. 소요: 반영 전 테스트 끝 06:08:21 → 반영 뒤 테스트 끝 06:15:49 = 7분 28초, 세션 전체 소요 미측정 · 오래 걸린 단계 run_all.js 2회(213초씩)"
+  },
+  "snap": "prop_20261123204529_SELF"
+}

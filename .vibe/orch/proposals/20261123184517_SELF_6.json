@@ -1,0 +1,105 @@
+{
+  "id": "20261123184517_SELF_6",
+  "at": "2026-11-23T18:45:17+09:00",
+  "ms": 1795427117703,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|보완promptn줄n줄n줄이클라우드이관파일결과를한줄로만보",
+  "title": "사용자 지시 R32 같은 문제: tools/VibeManager/quick.json:1378 보완 prompt 1378줄, 1548줄, 1564줄이 클라우드 이관 파일 결과를 한 줄로만 보고하게 해서 파일 링크와 실행 위치가 답변에 빠짐",
+  "evidence": "규칙 R32 \"사용자가 직접 실행할 SQL, 패키지는 답변에 파일 링크와 실행 위치(클라우드, 사내)를 적어 제시함\" (원래 지시 2026-11-09 17:39 \"클라우드에서 실행해야 하면 링크 알려주세요\") · tools/VibeManager/quick.json:1378 [이관 파일 사전 생성] 작업이 끝나면 `python tools/CloudPkg/cloud_pkg.py ${id} --stage` 를 실행해 클라우드 이관 파일(4종)을 미리 만들어 둔다 — 실패해도 보완 결과에는 영향 없음(결과 한 줄만 보고).",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "'결과 한 줄만 보고' 를 '만든 파일마다 [파일명](Doc/_artifacts/_deploy_packages/... 경로) 링크 1줄과 실행 위치(클라우드)를 적음' 으로 바꿈",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T04:10:18+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T04:13:55+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0410"
+    },
+    {
+      "at": "2026-11-24T04:13:57+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T04:25:40+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T04:25:40+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 74/74 PASS 1161 FAIL 0 → 반영 뒤 74/74 PASS 1161 FAIL 0. node -e JSON.parse(quick.json) → JSON_OK. grep '결과 한 줄만 보고' 3 → 0건, '링크 1줄과 실행 위치(클라우드)' 0 → 3건. 시각 2026-11-24 04:21:53 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T04-13-57_claude_orch.log",
+      "sec": 487,
+      "costUsd": 0.6582109,
+      "files": [
+        "tools/VibeManager/quick.json"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "사용자가 직접 실행할 SQL, 패키지는 답변에 파일 링크와 실행 위치(클라우드, 사내)를 적어 제시함 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R32|tools/VibeManager/quick.json",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795461017808,
+  "autoFp": "4652efb44e",
+  "applyStartMs": 1795461237291,
+  "verifyJudge": {
+    "at": "2026-11-24T04:22:06+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0410",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795461940852,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.9s'(2026-11-23T19:14:34Z), 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.1s'(2026-11-24 04:21 직전). quick.json 은 웹뷰 파일이 아님. t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 74/74 PASS 1161 FAIL 0 → 반영 뒤 74/74 PASS 1161 FAIL 0. node -e JSON.parse(quick.json) → JSON_OK. grep '결과 한 줄만 보고' 3 → 0건, '링크 1줄과 실행 위치(클라우드)' 0 → 3건. 시각 2026-11-24 04:21:53",
+    "note": "개선안 줄 번호 1378, 1548, 1564 → 현재 파일 1438, 1616, 1632. 3곳 replace_all 로 고침. 경로는 개선안의 Doc/_artifacts/... 대신 cloud_pkg.py:64 PKG_ROOT(ROOT=저장소 최상위) 기준 _artifacts/_deploy_packages/<폴더>/<파일> 로 적음(Doc/_artifacts/_deploy_packages 폴더 없음 확인)"
+  },
+  "snap": "prop_20261123184517_SELF_6"
+}

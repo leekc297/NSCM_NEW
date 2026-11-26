@@ -1,0 +1,42 @@
+{
+  "id": "20261126123112_SELF",
+  "at": "2026-11-26T12:31:12+09:00",
+  "ms": 1795663872737,
+  "source": "self",
+  "status": "applied",
+  "sig": "lnplan cacgbbcfaaacec_vision step b",
+  "title": "CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 1",
+  "evidence": "L4 단계 원장 20261125000242_VISION 단계 1/6 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js"
+  ],
+  "before_after": "orch-ladder.js L4-1 에 목적 키와 같은 축 L4 안(제목 또는 묶음 key 의 목적, 연결 근거를 evidence 에 남김)의 effMsOf 를 구해 그보다 앞선 판정 run 은 연속 횟수에서 뺌 · 상세 = .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md 전환 절 단계 1",
+  "verify": "이번 묶음 근거 4건(11-20~11-23 14:54)과 효력 2026-11-23 15:58:21 표본에서 L4|purpose|CheckList화면1개10분길어야30분안에 가 나오지 않음, 효력 뒤 어긋남 3건 표본은 나옴",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 단계 원장 끔. 단계마다 반영 백업과 .bak_<날짜>_concept 사본으로 orch-ladder.js, orch-vision.js, orchestra.js, 시험 파일 복원. VMO 개선안 탭 되돌리기. plans.json 원장 삭제는 개선안 원본에 영향 없음",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261125000242_VISION 단계 1",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-D2",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:50:48+09:00",
+      "by": "S-D2",
+      "what": "반영 완료(세션 직접 보완) · 코드 변경 없음. 같은 단계 1 동작이 개선안 20261126131312_SELF(2026-11-26 13:25:21 반영, orch-ladder.js:99-119 L4-1 효력 전 판정 제외)로 이미 들어가 있음 · plans.json 원장 20261125000242_VISION related 20261123000419_VISION 효력 2026-11-23 15:58:21 연결 확인 · 표본 시험(실제 vision 근거 4건 11-20~11-23 14:54 = 안 나옴, 효력 뒤 어긋남 3건 = 나옴) SAMPLE PASS 2026-11-26 15:50:40 · t_orch_ladder.js ALL PASS 15:49:41"
+    }
+  ],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261125000242_VISION|1",
+  "kind": "fix",
+  "plan": "20261125000242_VISION",
+  "planStep": 1,
+  "claimedBy": "S-D2",
+  "waitNote": "",
+  "appliedMs": 1795675848542
+}

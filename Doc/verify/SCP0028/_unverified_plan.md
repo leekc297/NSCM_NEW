@@ -1,75 +1,113 @@
-# SCP0028 미검증 해소 계획 · 2026-11-20 라운드 3(CheckList 13:07 원장)
+# SCP0028 미검증 행별 조치 · 2026-11-25 라운드 1(CheckList 02:10:34 원장)
 
-- 입력: 원장 verify_ledger.csv(13:07:33) · 분류 unverified_triage.*(13:10:16). 원장 미검증 87 = 엔진 19 · 결정 2 · 집계 66. AI 검토 행 20(미검증 아님) 포함 처리 대상 39
-- 목록 41행 = 처리 대상 39 + 결정 2. 집계 66행은 하위 행을 따라가므로 목록에서 뺌
-- 묶음: P1 mapping_trace.py · P2a gen_expect·i18n_static·llm_review · P2b sort_check·syn_check·judge B6·popup_args_check·golden · T1 _verify.spec.ts·smoke-extra.ts · T2 _trace.spec.ts. 서로 다른 파일이라 하위 에이전트 4개(P2a·P2b 는 한 에이전트)로 나눔
-- 지난 라운드 U(엔진 확장 필요) 34행 중 이번 목록에 남은 행 전부를 이번 라운드에 처리함
+- 입력: verify_ledger.csv(11-25 02:10:34), unverified_triage.*(02:10:34). 재생성 안 함(원장과 같은 시각)
+- 원장 ERROR 71행 = 처리 대상 65행 + 집계 6행. AI 검토 2행(V-4633ca25 원장 판정필요, EG-ac06e957 원장 판정필요) 추가해 표 73행
+- 지난 라운드 표 _unverified_plan.md.r7_20261121
 
-| 행 | 담당 | 유형 | 규칙 | 대상 | 묶음 | 고칠 파일 | 원인·조치 |
-|---|---|---|---|---|---|---|---|
-| V-8da88867 | 엔진 | 검사기공백 | A7 | SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT | P2b | tools/DbConn/golden.py | 입력용 SP(인자 = 일괄입력 팝업 선택 행 목록) 실행 인자 원천 없음 |
-| V-db17a330 | 엔진 | 검사기공백 | G2 | 조회조건 Model | T1 | Doc/e2e/specs/_verify.spec.ts G2 | Model 텍스트 조회조건(팝업 단추 있는 칸)을 콤마 다중 입력 대상으로 잡지 못함 |
-| V-99331be4 | 엔진 | 검사기공백 | G5 | 조회조건 Model | T1 | Doc/e2e/specs/_verify.spec.ts G5 | Model 조회조건 팝업 인자 실측 경로 없음 |
-| V-dd4f9db4 | 엔진 | 미분류 | G1 | 조회조건 From Site | T1 | Doc/e2e/specs/_verify.spec.ts·tools/E2E/lib/smoke-extra.ts 멀티선택 | 코드 후보를 설명 칸(FROM_SITE_DESCRIPTION) 값과 대조해 결과에 있는 후보를 못 고름 |
-| V-86e7f1e2 | 엔진 | 검사기공백 | G1 | MSG00031 | T2 | Doc/e2e/specs/_trace.spec.ts 팝업 Delete 경로 → G1 행 연결 | smoke 조회조건 대상으로 배정된 FindDelete 메시지 |
-| V-a89007be | 엔진 | 검사기공백 | G1 | MSG00284 | T2 | Doc/e2e/specs/_trace.spec.ts 팝업 Delete 경로 → G1 행 연결 | 같은 원인(MSG00284) |
-| V-a99ddb18 | 엔진 | 데이터전제 | H2 | siMain.SetBGColor | T2 | Doc/e2e/specs/_trace.spec.ts H2 색 규칙 | action==FlagM 조건을 조회 결과에서만 찾음. 일괄입력 팝업 OK 로 편집 상태 행을 만든 뒤 재야 함(저장 안 함) |
-| V-4c3670c9 | 엔진 | 검사기공백 | K3 | 전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드 | T1 | Doc/e2e/specs/_verify.spec.ts K3 | K3 조작 시험이 메인 그리드만 잼(증거 '미포함: 팝업 그리드'). 팝업 그리드 Ctrl+클릭·F5·No. 칸 측정 추가 |
-| V-04302ccf | 엔진 | 검사기공백 | K3 | [DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀) | T1 | Doc/e2e/specs/_verify.spec.ts K3 | K3 조작 시험이 메인 그리드만 잼(증거 '미포함: 팝업 그리드'). 팝업 그리드 Ctrl+클릭·F5·No. 칸 측정 추가 |
-| V-cbcda052 | 엔진 | 검사기공백 | K3 | [결함 유형 묶음 K3-G01 · 1건] 그리드 Ctrl+클릭 다중 선택(팝업 그리드 포함) | T1 | Doc/e2e/specs/_verify.spec.ts K3 | K3 조작 시험이 메인 그리드만 잼(증거 '미포함: 팝업 그리드'). 팝업 그리드 Ctrl+클릭·F5·No. 칸 측정 추가 |
-| V-6cf2af49 | 엔진 | 검사기공백 | K3 | [결함 유형 묶음 K3-G02 · 2건] 조회 단축키(F5) 실행 | T1 | Doc/e2e/specs/_verify.spec.ts K3 | K3 조작 시험이 메인 그리드만 잼(증거 '미포함: 팝업 그리드'). 팝업 그리드 Ctrl+클릭·F5·No. 칸 측정 추가 |
-| V-729c8d58 | 엔진 | 검사기공백 | K3 | 그리드 Ctrl+클릭 다중 선택(Version 팝업 포함) | T1 | Doc/e2e/specs/_verify.spec.ts K3 | K3 조작 시험이 메인 그리드만 잼(증거 '미포함: 팝업 그리드'). 팝업 그리드 Ctrl+클릭·F5·No. 칸 측정 추가 |
-| T-2c20a3fc | 엔진 | 검사기공백 | A6 | PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP | 결정 | - | 같은 결정(R3-D2). 대조표 17행 SP 표기 |
-| T-fad117f6 | 엔진 | 검사기공백 | F4 | PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP | 결정 | - | 같은 결정(R3-D2). TO-BE 가 P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 을 부르지 않음 |
-| T-52d59336 | 엔진 | 검사기공백 | DB-SYN | PR_GET_MNU_BTN_AUTH | P2b | tools/Harness/verify/syn_check.py | 공용 권한 SP 시노님·객체 상태를 재는 경로 없음 |
-| T-6b9a8ce8 | 엔진 | 검사기공백 | F4 | PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT | T2 | Doc/e2e/specs/_trace.spec.ts F4 | 입력용 SP 는 일괄입력 팝업 OK 때만 불림. 팝업 Input → From Site → Find → 행 선택 → OK 시나리오 없음 |
-| T-0caf6c62 | 엔진 | 검사기공백 | E4 | MSG00031 | T2 | Doc/e2e/specs/_trace.spec.ts 팝업 Delete 경로 | FindDelete 경로 메시지 시나리오 없음(일괄삭제 팝업 OK → 삭제 SP → MSG00031) |
-| T-4677b9e5 | 엔진 | 검사기공백 | E4 | MSG00284 | T2 | Doc/e2e/specs/_trace.spec.ts 팝업 Delete 경로 | 같은 원인(MSG00284) |
-| T-d6ad4a4e | 엔진 | 검사기공백 | G4 | btnDelete | T2 | Doc/e2e/specs/_trace.spec.ts G4 BTN | popup_args 에 btnDelete_Click 행 2건 있음(host_label 빈 값 · 인자 원천 "D"·sDivision_id). 기능 단추로 여는 팝업을 조회조건 칸 단추로만 찾음 |
-| EG-6cc339e1 | 결정 | 판단 | H6 | SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input COUNT | 결정 | - | 담당 결정(지난 라운드 D6 건수 표시) |
-| EG-273588ca | 결정 | 판단 | M3 | SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DATA | 결정 | - | 담당 결정(지난 라운드 D6 DATA). T2 일괄입력 팝업 시나리오가 From Site 를 채우면 같이 잼 |
-| V-c346a4a2 | 엔진 | AI검토:검사기오판 | H10 | SCP0028 시나리오 [자동] 편집 중 Input 실행 → MSG00680(DM-52 일반 규칙) | P2a | tools/Harness/verify/gen_expect.py P15 | DM-52 시나리오를 AS-IS 편집 중 차단 분기가 없는 버튼(btnInput)에도 만듦 |
-| V-5d06fca9 | 엔진 | AI검토:검사기오판 | B6 | 조회조건 Valid | P2b | tools/Harness/verify/judge.py B6 | 조회조건 기준표 행 0 화면에서 AS-IS 컨트롤 사실(combo_src DataBind isAll)로 기대값을 만들지 않음 |
-| V-480372c9 | 엔진 | AI검토:검사기오판 | G5 | popItem.Form_Load("D", sDivision_id.ToString()) | P2b | tools/Harness/verify/popup_args_check.py | AS-IS 고정 플래그(_action_flag D·I)를 TO-BE 상태값(setBatchMode → mode prop) 전달로 읽지 못함 |
-| V-86b2f489 | 엔진 | AI검토:검사기오판 | G5 | popItem.Form_Load("I", sDivision_id.ToString()) | P2b | tools/Harness/verify/popup_args_check.py | 같은 원인(I 플래그) |
-| T-653f1a5d | 엔진 | AI검토:검사기오판 | A6 | PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION | P2b | tools/Harness/verify/sort_check.py A6 대상 | AS-IS 화면 경로에 없는 SP(SCM0002_GET_MATERIAL_BY_DIVISION)를 A6 대상에 넣음 |
-| T-6dc0e2d5 | 엔진 | AI검토:검사기오판 | A6 | PR_GET_MNU_BTN_AUTH | P2b | tools/Harness/verify/sort_check.py A6 대상 | 그리드에 표시하지 않는 공용 권한 SP(PR_GET_MNU_BTN_AUTH) 정렬 대상 판별(CR-075 ③ 확인) |
-| T-8ef356b6 | 엔진 | AI검토:검사기오판 | M4 | btnInput | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-2a9cd623 | 엔진 | AI검토:검사기오판 | M4 | btnDelete | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-449b82ac | 엔진 | AI검토:검사기오판 | H6 | clbFromSite / From Site | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-247bdc3c | 엔진 | AI검토:검사기오판 | G5 | clbFromSite / From Site | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-5bb8509f | 엔진 | AI검토:검사기오판 | M4 | clbFromSite / From Site | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-0855373f | 엔진 | AI검토:검사기오판 | H6 | clbToSite / To Site | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-57afcab2 | 엔진 | AI검토:검사기오판 | G5 | clbToSite / To Site | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-84c5ee4c | 엔진 | AI검토:검사기오판 | M4 | clbToSite / To Site | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-c7a94f1d | 엔진 | AI검토:검사기오판 | H6 | TRANS_MODE_CODE / Trans Mode | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-3dbd9fe5 | 엔진 | AI검토:검사기오판 | G5 | TRANS_MODE_CODE / Trans Mode | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| T-41bb3f1f | 엔진 | AI검토:검사기오판 | M4 | TRANS_MODE_CODE / Trans Mode | P1 | tools/Harness/verify/mapping_trace.py(TRACE 행 생성) | AS-IS 팝업 연결 없는 요소(조회조건 체크 목록 콤보·숨김 칸·기능 버튼)에 팝업 규칙 G5·H6·M4 행을 만듦. AS-IS 원문에서 팝업 연결 여부 재확인 뒤 대상 판별 추가 |
-| EG-2644dff3 | 엔진 | AI검토:검사기오판 | H6 | SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model BTN_ORDER | P2a | tools/Harness/verify/llm_review.py 반영 조건 | AI 검토가 검사기가 FAIL 을 낸 같은 룰(CR-005 OK → CLOSE)을 근거로 FAIL → PASS 로 바꿈. 실측 [Open, Search, Close, OK] = FAIL 이 맞음. 화면 결함은 결정 목록·FE 가이드 |
-| EG-ac06e957 | 엔진 | AI검토:룰등록 | G4 | SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model COND_LIST | 결정 | - | Model 팝업 COM0013 교체 = 화면 소스 주석 '사용자 지시 2026-10-08'(ShipmentLotSize.tsx:363·371)뿐. 일반 룰 근거 없음 → 화면 결정(R3-D2) |
-| EG-bd80125c | 엔진 | AI검토:검사기오판 | MS1 | SCP0028 화면 고정 한글 {0}은 {1} 보다 클 수 없습니다. | P2a | tools/Harness/verify/i18n_static.py | 등록 코드 상수를 첫 인자로 받는 래퍼의 기본 문구를 고정 한글로 잡음 |
+## 묶음
 
-## 처리 결과(13:44, 다음 CheckList 판정은 미측정)
+| 묶음 | 행 수 | 원인(실측 근거) | 조치(고친 파일) |
+|---|---|---|---|
+| B1 팝업 조회 SP 짝 | 60 | sp_pair.csv 에 PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 의 AS-IS 짝 없음. 원인: 화면 cs:270 이 다른 프로젝트 팝업 SCM0002_ShipmentLotSizePopup 을 new 로 열고 팝업 cs:284 가 SCM.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 을 부름. endpoints.csv(4행)에 팝업 SP 없음 | tools/Harness/verify/gen_param_map.py popup_class_sps (T529) |
+| B2 팝업 SP 정렬 | 1 | sort_rules.csv 에 팝업 SP 정렬 규칙 0행(facts_sortrules 가 endpoints.csv SP 만 읽음). sort_check.csv 에 팝업 SP 행 없음 | tools/Harness/verify/facts_sortrules.py popup_sps (T529) |
+| B3 계정 지정 시나리오 언어 단계 | 2 | 시나리오 계정 dana.robot 지정이라 adminPool 계정을 못 씀. 언어 단계가 다른 화면 E2E(SCP0005, SSP0005, SSP0014) 전부 끝나길 기다리다 생략(_verify.spec.ts 시나리오 lang 단계) | tools/E2E/lib/langacct.ts, nscm.ts, Doc/e2e/specs/_verify.spec.ts (T530) |
+| B4 K2 무판정 | 1 | 원장 applicable=N(COLUMN_SETTING: actions.csv TitleSet|btnColumn 0건)인데 judge.py 무판정 단계가 ERROR 로 바꾸고 적용성 단계(NOT_RUN 만)가 건너뜀 | tools/Harness/verify/judge.py (T531) |
+| B5 Item 팝업 SP | 1 | TO-BE SCP0028 은 PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 을 부르지 않음(callProc = SCM0002, SCP0033, SSP0019). Model 팝업 COM0013 교체 룰 결정 전에는 대상 SP 를 정할 수 없음 | 처리 안 함, 결정 R4-D1 |
+| B6 저장 중 로딩 AI 검토 | 1 | AI 검토 근거 'AS-IS SaveData 에 진행 창 없음' 이 원문과 다름. cs:661 new FoxAsyncProxy(this), ShowProgress=false 없음(조회 cs:344, 411 은 끔). T528 막음 작동해 판정필요 유지 | 검사기 수정 없음, 결정 R7-D1 |
+| B7 Model 팝업 교체 룰 | 1 | 담당 결정 | 처리 안 함, 결정 R4-D1 |
+| 집계 | 6 | 하위 행 판정을 따라감 | 따로 고치지 않음 |
 
-| 묶음 | 행 | T번호 | 고친 곳 | 다음 CheckList 에서 바뀔 판정 |
-|---|---|---|---|---|
-| P1 | T-247bdc3c, T-57afcab2, T-3dbd9fe5, T-449b82ac, T-0855373f, T-c7a94f1d, T-2a9cd623, T-8ef356b6, T-5bb8509f, T-84c5ee4c, T-41bb3f1f | T480 | tools/Harness/verify/mapping_trace.py popup_linkage, main NA 적용, to_ledger asis_ref | 미검증 → 해당없음(사본 원장 드라이런 11/11) |
-| P2a | V-c346a4a2 | T485 | gen_expect.py DM-52 반복문 | FAIL 행 생성 안 됨 |
-| P2a | EG-bd80125c | T486 | i18n_static.py wrap_default_code | 행 없음(i18n_static.csv 재생성에서 1행 빠짐) |
-| P2a | EG-2644dff3 | T487 | llm_review.py same_rule_block | AI 반영 PASS → FAIL 유지. 화면 결함은 FE_GUIDE_20261120_1320.md G1, R3-D1 |
-| P2b | T-653f1a5d, T-6dc0e2d5 | T488 | sort_check.py TO-BE 전용 SP(CR-075 ①③) | PASS(ORDER BY 확인), 해당없음(BE 매퍼 전용 Auth.xml:26) |
-| P2b | T-52d59336 | T488 | syn_check.py ①-c | 미검증 → 통과 경로(syn_check.csv 재생성 OK) |
-| P2b | V-5d06fca9 | T489 | judge.py B6 기준표 0행 AS-IS 사실 경로 | 미검증 → 통과 경로 |
-| P2b | V-480372c9, V-86b2f489 | T489 | popup_args_check.py state_literal_trace | 판정필요 → 통과(popup_args.csv 재생성 2행 PASS) |
-| P2b | V-8da88867 | T489 | golden.py sqllog_args, no_arg_source_note, judge.py A7 | 미검증 유지(사유 명시). T502 호출 기록이 생기면 실측. R3-D6 |
-| T1 | V-4c3670c9, V-04302ccf, V-cbcda052, V-6cf2af49, V-729c8d58 | T496, T500 | _verify.spec.ts K3, tools/E2E/lib/popk3.ts, popk3run.ts | 미검증 → 실측(팝업 0행이면 사유 붙은 미검증) |
-| T1 | V-db17a330 | T497 | _verify.spec.ts G8/G9 시험이 G2 행도 받음 | 미검증 → 실측 |
-| T1 | V-99331be4 | T498 | _verify.spec.ts G5, popk3run.condPopupArgs | 미검증 → 실측 |
-| T1·T2 | V-dd4f9db4 | T499 | tools/E2E/lib/condcol.ts, smoke-extra.ts condColForOpts, _trace.spec.ts 멀티선택 | 미검증 → 실측 |
-| T2 | T-d6ad4a4e | T501 | _trace.spec.ts G4 기능 단추 | 미검증 → 실측 |
-| T2 | T-6b9a8ce8 | T502, T506 | _trace.spec.ts 'BTN 팝업 경로', _verify.spec.ts CRUD 저장 SP 대상에서 _GET_ SP 제외 | 미검증 → 실측 |
-| T2 | T-0caf6c62, T-4677b9e5, V-86e7f1e2, V-a89007be | T503, T504 | _trace.spec.ts 'BTN 팝업 경로' 삭제 분기(가짜 응답, 서버 미전송), W4 E4 넘김 | 미검증 → 실측(MSG00031 통과, MSG00284 오류 경로). R3-D5 |
-| T2 | V-a99ddb18 | T505 | _trace.spec.ts H2, h2RuntimeEdit(쓰기 요청 차단 뒤 Save) | 미검증 → 실측 |
-| 결정 | EG-ac06e957, T-fad117f6, T-2c20a3fc, EG-6cc339e1, EG-273588ca | - | 수정 없음 | 미검증·판정필요 유지(R3-D2, R3-D3, R3-D4) |
+## 행 목록
 
-- 처리 못 한 행: 없음. 결정 행 5건은 결정 목록에만 적음
+| 묶음 | 행 ID | 규칙 | 담당 | 유형 | 원장 판정 |
+|---|---|---|---|---|---|
+| B1 팝업 조회 SP 짝 | AD-16ed9f6d | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-176ef7aa | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-1a87a9b8 | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-2f776860 | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-31891e7c | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-4ada955f | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-6952e31a | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-854fc98d | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-89b11727 | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-9ce43e53 | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-b36657a8 | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-bd5d241e | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-cab0d67b | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-d81d48bb | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-e6233df3 | A1 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-0a4372ab | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-0f45ca72 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-1e8379a1 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-2d4079e6 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-35cdafc7 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-81f9457d | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-886d8c26 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-a87e4641 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-adc62326 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-b097262d | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-d7e8e8dc | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-d9428c6a | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-e4f51c47 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-f2a6cb89 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-fcd3cf86 | A5 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-0e7943c1 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-125dcd3f | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-13db7f49 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-244b08bb | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-305c8e11 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-36e52665 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-6e5cd70c | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-7abe0c89 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-84391a07 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-9d1865fa | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-a75595d7 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-afab4d83 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-d1ba0b6b | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-d4749e15 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-f8013ee3 | A6 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-0d4ddf6c | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-1eb9cb71 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-28da6f65 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-42fb59be | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-44898b71 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-5079c1a8 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-51dde9b2 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-7031951d | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-7f5c41f3 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-88332dd0 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-9e43972e | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-ce275074 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-d8901eb3 | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-eca4c0ee | A7 | 엔진 | 차등짝 | ERROR |
+| B1 팝업 조회 SP 짝 | AD-f377f227 | A7 | 엔진 | 차등짝 | ERROR |
+| B2 팝업 SP 정렬 | T-c6aefa56 | A6 | 엔진 | 판단 | ERROR |
+| B3 계정 지정 시나리오 언어 단계 | V-1f64fec6 | E4 | 엔진 | 검사기공백 | ERROR |
+| B3 계정 지정 시나리오 언어 단계 | V-ca2072cf | I1 | 엔진 | 검사기공백 | ERROR |
+| B4 K2 무판정 | V-b685dddf | K2 | 엔진 | 검사기공백 | ERROR |
+| B5 Item 팝업 SP | T-fad117f6 | F4 | 엔진 | 검사기공백 | ERROR |
+| B6 저장 중 로딩 AI 검토 | V-4633ca25 | H11 | 엔진 | AI검토:검사기오판 | 판정필요 |
+| B7 Model 팝업 교체 룰 | EG-ac06e957 | G4 | 결정 | AI검토:룰등록 | PASS |
+| 집계 | V-86208af2 | E4 | 집계 | 집계 | ERROR |
+| 집계 | T-14732ce2 | F4 | 집계 | 집계 | ERROR |
+| 집계 | T-80e70b77 | F4 | 집계 | 집계 | ERROR |
+| 집계 | T-98554096 | F4 | 집계 | 집계 | ERROR |
+| 집계 | T-f7a95dc6 | F4 | 집계 | 집계 | ERROR |
+| 집계 | T-4cec401b | X-ROW | 집계 | 집계 | ERROR |
+
+## 행 수 대조
+
+- 원장 ERROR 71 = 표 ERROR 71행. 표 판정필요 1행은 AI 검토 행
+
+## 처리 결과
+
+| 묶음 | 처리 | 남은 사유 |
+|---|---|---|
+| B1 | gen_param_map.py 수정. 체인 diff 단계가 gen_param_map 을 먼저 돌려 짝 생성 | 없음. 짝이 생기면 diff_verify 가 AS-IS SP 를 실행함. R5-D2(AS-IS DEV DB 300초 초과 호출)는 그대로 |
+| B2 | facts_sortrules.py 수정. 체인 1단계 facts_sortrules → sort_check 가 팝업 SP 정렬 2분기(61, 97행)를 TO-BE ORDER BY 와 대조 | 없음 |
+| B3 | langacct.ts, nscm.ts, _verify.spec.ts 수정 | 다른 실행이 dana.robot 으로 로그인해 있으면 종전처럼 다른 화면 대기(T200) |
+| B4 | judge.py 수정 | 없음. 적용성 N 근거로 NA(대상 없음) |
+| B5 | 처리 안 함 | R4-D1 결정 필요(대상 SP 를 COM0013 조회 SP 로 바꿀지) |
+| B6 | 처리 안 함 | R7-D1 결정 필요. 분류기가 담당 엔진으로 다시 올림(AI 검토 결론이 원문과 다른 경우를 결정으로 넘기는 분류 규칙 없음) |
+| B7 | 처리 안 함 | R4-D1 |
+| 집계 | 하위 행을 따라감 | V-86208af2 ← V-1f64fec6(E4). F4 행 집계 4행(T-98554096, T-14732ce2, T-80e70b77, T-f7a95dc6) ← mapping_trace_instances.csv 의 F4 요소 ERROR 1개 = T-fad117f6(R4-D1). T-4cec401b(checkValidSize 진입점 6검사 중 ERROR 1) 하위 검사 이름 미확인 |

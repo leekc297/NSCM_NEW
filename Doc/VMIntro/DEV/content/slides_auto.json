@@ -1,0 +1,442 @@
+{
+ "audience": "DEV",
+ "title": "Vibe Manager 소개",
+ "slides": [
+  {
+   "kind": "cover",
+   "title": "Vibe Manager",
+   "subtitle": "GSCM → NSCM 전환 자동화 도구",
+   "tag": "개발자, 운영 교육"
+  },
+  {
+   "kind": "agenda",
+   "title": "목차",
+   "items": [
+    "메뉴",
+    "작업 방법",
+    "미래 로드맵"
+   ]
+  },
+  {
+   "kind": "cards",
+   "title": "목적: 웹 개발자가 아닌 사람도 웹 화면을 만듦",
+   "cards": [
+    {
+     "head": "누가",
+     "items": [
+      "웹 개발자가 아닌 일반 사용자",
+      "Vibe 도구(VM)로 웹 화면 개발"
+     ]
+    },
+    {
+     "head": "무엇을",
+     "items": [
+      "사람이 손보지 않아도 쓰는 산출물",
+      "산출물 수준 95% 이상 목표"
+     ]
+    },
+    {
+     "head": "어떻게",
+     "items": [
+      "VMO 자가 진단, 자가 보완",
+      "쓸수록 산출물 수준이 오름"
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "table",
+   "title": "일반 바이브 코딩과 다른 점",
+   "table": {
+    "columns": [
+     "구분",
+     "일반 바이브 코딩",
+     "VM"
+    ],
+    "rows": [
+     [
+      "산출물 수준",
+      "60~70%",
+      "95% 이상(목표)"
+     ],
+     [
+      "사람 보정",
+      "개발자 보정 필요",
+      "보정 없이 사용(목표)"
+     ],
+     [
+      "개발 주체",
+      "웹 개발자",
+      "일반 사용자(현업)"
+     ],
+     [
+      "품질 기준",
+      "프롬프트와 사람 판단",
+      "AS-IS 사실 원장, 규칙 문서, 실행 hook, CheckList"
+     ],
+     [
+      "오류 개선",
+      "사람이 찾아 고침",
+      "VMO 자가 진단, 자가 보완, 다시 실행"
+     ],
+     [
+      "반복할수록",
+      "같은 실수 반복",
+      "사용자 지적을 규칙으로 쌓아 재발 방지"
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "cards",
+   "title": "창 3개가 역할을 나눠 함께 움직임",
+   "cards": [
+    {
+     "head": "VM",
+     "text": "메뉴와 체인 실행. 화면 단위 분석, 개발, 검증, 보완"
+    },
+    {
+     "head": "VMW",
+     "text": "업무 작업. 화면 묶음 처리, 모듈별 문서와 매뉴얼"
+    },
+    {
+     "head": "VMO",
+     "text": "감시와 자가 진단. 사건 감지, 원인, 보완, 다시 실행"
+    }
+   ]
+  },
+  {
+   "kind": "section",
+   "title": "메뉴"
+  },
+  {
+   "kind": "list",
+   "title": "메뉴 - UI 분석·생성·보완 (ID 필요)",
+   "items": [
+    "AS-IS 파싱·분석 (Fact Pack)",
+    "AS-IS 실측",
+    "CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+    "CheckList 수정분 재점검 (지난 실행 뒤 바뀐 소스 범위만 → CheckList·ActionItemList)",
+    "미검증 해소",
+    "TestResultList (CheckList 결과 → 그룹별 테스트 내역·결과 Excel · 캡처 포함)",
+    "문서 생성 (분석서·설계서·테스트 → MD + Excel)",
+    "사용자 매뉴얼 (모듈별 PPT: 양식 샘플 + 최신 UI 캡처)",
+    "사용자 매뉴얼 내용 보완 (check 실패 항목)",
+    "운영자 매뉴얼 (모듈별 PPT: 양식 구조 + 분석 자료 흐름과 운영 절차)",
+    "운영자 매뉴얼 내용 보완 (check 실패 항목)",
+    "VM 소개 자료 (대상 선택 · PPT, Google Slides, PDF, HTML)",
+    "VM 소개 자료 내용 보완 (check 실패 항목)",
+    "ID 하나로 전체 (파싱→실측→분석→생성→CheckList→오류분 자동보완→재판정→TestResultList→문서)"
+   ],
+   "note": "28개"
+  },
+  {
+   "kind": "list",
+   "title": "메뉴 - Overview & Reports",
+   "items": [
+    "Workbench",
+    "새 창 (멀티)",
+    "VMW (업무 작업 · 화면 여러 개 일괄)",
+    "VMO (기능, 감시)",
+    "전환 흐름 대시보드",
+    "FLOW 진척",
+    "Revision (일자별/화면별 · 수정 전후 비교)",
+    "Task History (메뉴·프롬프트 실행 내역)",
+    "새 Claude 터미널",
+    "계정 확인",
+    "대조표",
+    "E2E 리포트",
+    "이관 룰셋",
+    "조회조건 기준 (SCP·SSP)"
+   ],
+   "note": "17개"
+  },
+  {
+   "kind": "list",
+   "title": "메뉴 - Server(Start/Finish)",
+   "items": [
+    "BE & FE Finish & Start",
+    "BE & FE Start",
+    "BE Start",
+    "FE Start",
+    "BE & FE Finish",
+    "BE Finish",
+    "FE Finish",
+    "Open Browser(NSCM)",
+    "AS-IS IIS & Launcher Start",
+    "AS-IS IIS Start",
+    "AS-IS Launcher"
+   ],
+   "note": "11개"
+  },
+  {
+   "kind": "list",
+   "title": "메뉴 - Git(Upload/Download)",
+   "items": [
+    "Source Download & Merge",
+    "Source Download & Merge(BE)",
+    "Source Upload(UI)",
+    "Source Update Status",
+    "다국어 JSON 재생성"
+   ],
+   "note": "5개"
+  },
+  {
+   "kind": "list",
+   "title": "메뉴 - 환경설정",
+   "items": [
+    "DB 접속 (.env.asis)",
+    "AS-IS (asisfacts.json)",
+    "TO-BE (tobefacts.json)",
+    "하네스 (harness.json)",
+    "작업 모드 (DB MODE / UI/DB MODE)",
+    "AI 검토 (켜기 / 끄기)",
+    "VMO 보완 뒤 재수행 (재수행 / 수행 없음)",
+    "AS-IS 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",
+    "TO-BE 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",
+    "E2E (e2e.config.json)",
+    "환경 요약 (env.json)",
+    "DB 접속 확인 (probe)",
+    "환경 점검 (node·python·claude …)",
+    "환경 노트"
+   ],
+   "note": "19개"
+  },
+  {
+   "kind": "process",
+   "title": "화면 하나를 파싱부터 보완까지 한 흐름으로 처리함",
+   "steps": [
+    {
+     "name": "AS-IS 파싱",
+     "text": "원본 소스, DB 에서 사실 추출"
+    },
+    {
+     "name": "AS-IS 실측",
+     "text": "실제 화면을 띄워 동작 기록"
+    },
+    {
+     "name": "분석서, 설계서",
+     "text": "화면별 문서 생성"
+    },
+    {
+     "name": "개발",
+     "text": "React, Spring Boot, Oracle"
+    },
+    {
+     "name": "CheckList",
+     "text": "AS-IS 대조 판정"
+    },
+    {
+     "name": "보완",
+     "text": "DB 객체 우선 수정 후 재판정"
+    }
+   ]
+  },
+  {
+   "kind": "section",
+   "title": "작업 방법"
+  },
+  {
+   "kind": "list",
+   "title": "화면 하나 처리 순서",
+   "items": [
+    "작성 필요(AI 단계)"
+   ]
+  },
+  {
+   "kind": "list",
+   "title": "VMW 업무 실행",
+   "items": [
+    "작성 필요(AI 단계)"
+   ]
+  },
+  {
+   "kind": "list",
+   "title": "환경설정",
+   "items": [
+    "작성 필요(AI 단계)"
+   ]
+  },
+  {
+   "kind": "kpi",
+   "title": "규칙과 검사로 품질을 지킴",
+   "kpis": [
+    {
+     "fact": "rule.hooks"
+    },
+    {
+     "fact": "rule.exec"
+    },
+    {
+     "fact": "rule.tobe"
+    },
+    {
+     "fact": "vm.tests"
+    }
+   ]
+  },
+  {
+   "kind": "process",
+   "title": "VMO 가 스스로 진단하고 보완해 산출물 수준을 올림",
+   "lead": "사람이 오류를 찾고 고치지 않아도 VMO 오케스트라 에이전트가 개선을 이어감",
+   "steps": [
+    {
+     "name": "자가 진단",
+     "text": "실행 실패, 지연, 반복 오류 감지"
+    },
+    {
+     "name": "원인 분석",
+     "text": "로그, 단계 기록 분석"
+    },
+    {
+     "name": "자가 보완",
+     "text": "자동 등급은 바로 반영"
+    },
+    {
+     "name": "다시 실행",
+     "text": "그 화면 체인 재수행"
+    },
+    {
+     "name": "규칙화",
+     "text": "같은 문제 재발 방지"
+    }
+   ],
+   "kpis": [
+    {
+     "fact": "vmo.incidents"
+    },
+    {
+     "fact": "vmo.proposals"
+    },
+    {
+     "fact": "vmo.applied"
+    }
+   ]
+  },
+  {
+   "kind": "list",
+   "title": "자주 생기는 문제와 조치",
+   "items": [
+    "작성 필요(AI 단계)"
+   ]
+  },
+  {
+   "kind": "kpi",
+   "title": "산출물을 같은 규칙으로 만듦",
+   "kpis": [
+    {
+     "fact": "out.analysis"
+    },
+    {
+     "fact": "out.design"
+    },
+    {
+     "fact": "out.user_manual"
+    },
+    {
+     "fact": "out.ops_manual"
+    }
+   ]
+  },
+  {
+   "kind": "section",
+   "title": "미래 로드맵"
+  },
+  {
+   "kind": "table",
+   "title": "AS-IS 언어와 TO-BE 기술을 골라 전환하는 구조로 넓힘",
+   "table": {
+    "columns": [
+     "구분",
+     "지금",
+     "확장 대상"
+    ],
+    "rows": [
+     [
+      "AS-IS 화면",
+      "C#.NET WinForms",
+      "PowerBuilder, Visual Basic 6, MiPlatform, XPlatform, Nexacro, Delphi"
+     ],
+     [
+      "AS-IS DB",
+      "MS-SQL",
+      "Oracle, Sybase, Informix, DB2"
+     ],
+     [
+      "TO-BE 화면",
+      "React 18",
+      "React, Vue, Angular, Nexacro N, WebSquare"
+     ],
+     [
+      "TO-BE 서버",
+      "Spring Boot 3.5",
+      "Spring Boot, .NET, Node.js"
+     ],
+     [
+      "TO-BE DB",
+      "Oracle 19c",
+      "Oracle, PostgreSQL, MySQL, MS-SQL"
+     ],
+     [
+      "공통 기준",
+      "AS-IS 사실 원장, CheckList",
+      "언어별 파서 + 공통 중간 표현(화면, 이벤트, SP, 메타)"
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "roadmap",
+   "title": "미래 로드맵: 어떤 4GL, X-Platform 화면도 고른 TO-BE 로 전환",
+   "phases": [
+    {
+     "head": "지금",
+     "when": "진행 중",
+     "items": [
+      "C#.NET WinForms → React, Spring Boot, Oracle",
+      "AS-IS 사실 원장, CheckList 판정, VMO 자가 보완"
+     ]
+    },
+    {
+     "head": "1단계",
+     "when": "파서 확장",
+     "items": [
+      "PowerBuilder(PBL, DataWindow) 파서",
+      "Visual Basic(FRM, BAS) 파서",
+      "MiPlatform, XPlatform(XML 화면, 스크립트) 파서"
+     ]
+    },
+    {
+     "head": "2단계",
+     "when": "공통 중간 표현",
+     "items": [
+      "화면, 그리드, 이벤트, SP 호출을 언어와 무관한 형식으로 저장",
+      "CheckList, 분석서를 중간 표현 기준으로 생성"
+     ]
+    },
+    {
+     "head": "3단계",
+     "when": "TO-BE 선택",
+     "items": [
+      "화면 기술: React, Vue, Nexacro N 중 선택",
+      "서버, DB 기술 선택",
+      "기술별 생성 규칙과 검사 규칙 묶음"
+     ]
+    },
+    {
+     "head": "4단계",
+     "when": "전환 서비스",
+     "items": [
+      "프로젝트마다 AS-IS, TO-BE 조합 설정",
+      "같은 검증 흐름으로 품질 확인"
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "closing",
+   "title": "Q&A",
+   "subtitle": "Vibe Manager 2.0.1"
+  }
+ ]
+}

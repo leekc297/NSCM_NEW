@@ -1,9 +1,9 @@
 - dialog:
   - heading "Material by Division" [level=2]
+  - img
   - text: Div
   - combobox [disabled]: Mobility & IT Battery
   - button "Open" [disabled]
-  - img
   - text: Operation Group
   - textbox [disabled]
   - text: Material
@@ -23,5 +23,5 @@
       - row {데이터 행}
   - status
   - text: "0"
-  - button "OK"
   - button "Close"
+  - button "OK"

@@ -1,0 +1,123 @@
+{
+  "id": "20261126084048_SELF",
+  "at": "2026-11-26T08:40:48+09:00",
+  "ms": 1795650048194,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/history.js|revision창왼쪽목록l에접기와펴기단추가없음 rn",
+  "title": "사용자 지시 R178 같은 문제: tools/VibeManager/history.js Revision 창 왼쪽 목록(#l)에 접기와 펴기 단추가 없음(단추 문구 기호 없이)",
+  "evidence": "규칙 R178 \"웹뷰에서 목록, 보조 패널처럼 본문 옆에 붙은 영역은 접기와 펴기 단추를 둠\"(원래 지시 2026-11-20 18:32). tools/VibeManager/history.js:198 #l{width:46%;...}, :205 <div id=\"l\"><div class=\"tabs\">. 앞 시도 20261124064958_SELF_3 실패 원인은 단추 문구 '▶ 목록 펴기'의 ▶ 가 tools/Docs/doc_style_rules.csv:37 기호 규칙에 걸린 것임(게이트 보고 history.js.style.csv L205). (반영 실패한 20261124064958_SELF_3 를 고친 안 · 원인 반영 뒤 게이트의 문장 규칙 검사가 tools/VibeManager/history.js L205 의 단추 문구 '▶ 목록 펴기'를 위반 1건으로 셌음(.vibe/orch/selfcheck/doc_style_gate/history.js.style.csv, 2026-11-26 08:33). 규칙 tools/Docs/doc_style_rules.csv:37 패턴에 ▶ 가 있고 ◀ 는 없음. tools/Docs/doc_style.py:250 JS_MARKERS 는 줄 머리 기호만 표지로 빼는데, 이번 ▶ 는 HTML 단추 안 '\">' 뒤라 문장으로 분류됨. 시험 88/88 파일, PASS 1424, FAIL 0 은 통과함(result.verify_result 08:29:02).)",
+  "targets": [
+    "tools/VibeManager/history.js"
+  ],
+  "before_after": "앞 시도와 같은 구조로 함. .tabs 줄에 '목록 접기'(#cl) 단추를 둠. #r 맨 위에 '목록 펴기'(#ex) 단추를 두고 접힘 상태에서만 보이게 함. body.collapsed 를 토글해 #l 과 .tabs 를 숨기고, 접힘 상태는 vscode.setState 로 유지함. 단추 문구에는 ▶, ◀, ▸, ⇒, ➜, ➡, → 같은 기호를 넣지 않고 글자만 씀.",
+  "verify": "1) python tools/Docs/doc_style.py tools/VibeManager/history.js --out <임시폴더> 를 돌려 보고 csv 의 분류 '문장' 행 수를 셈. 반영 전 0(2026-11-26 08:20:46 게이트 기록, 이번 진단에서는 미측정) → 반영 뒤 기대 0. 2) history.js 에서 id=\"cl\", id=\"ex\" 단추 수: 반영 전 0 → 반영 뒤 기대 2. 3) 두 단추 문구 안의 ▶, ◀ 기호 수: 반영 뒤 기대 0. 4) html() 렌더 결과의 <script> 를 new Function 으로 구문 검사: 반영 뒤 기대 통과.",
+  "rollback": "tools/VibeManager/history.js 에서 이번에 고친 3곳(#cl 단추, #ex 단추, collapsed 스타일과 토글 스크립트)을 되돌림. 백업 태그 기준으로 복원해도 됨.",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T08:40:51+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T08:44:48+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0840"
+    },
+    {
+      "at": "2026-11-26T08:44:52+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T08:49:40+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 history.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T08:49:40+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건, 게이트 판정 1건. 2026-11-26 08:45:18 반영 전: doc_style exit 0, '문장 51 | 위반 0 | 표지 1', 분류 '문장' 0행, cl/ex 단추 0. 2026-11-26 08:45:34 반영 뒤: doc_style exit 0, '문장 51 | 위반 0 | 표지 1', 분류 '문장' 0 → 0, cl/ex 단추 0 → 2, 단추 문구 ▶◀ 0. v4(new Function 구문 검사)는 VMO 게이트 판정 대상이라 실행 안 함 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T08-44-52_claude_orch.log",
+      "sec": 54,
+      "costUsd": 0.6496143000000001,
+      "files": [
+        "tools/VibeManager/history.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:00+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R178|tools/VibeManager/history.js",
+  "kind": "fix",
+  "repairOf": "20261124064958_SELF_3",
+  "repairRoot": "20261124064958_SELF_3",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795650051225,
+  "autoFp": "3768aa7fb4",
+  "applyStartMs": 1795650292557,
+  "verifyJudge": {
+    "at": "2026-11-26T08:45:50+09:00",
+    "verified": true,
+    "text": "실행 통과 3건, 게이트 판정 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0840",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "history.js"
+  ],
+  "appliedMs": 1795650580734,
+  "synced": [
+    "history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "python -u vmo_hist_verify.py(doc_style.py tools/VibeManager/history.js --out 임시폴더 실행). 반영 전 08:45:18 분류 '문장' 0행 → 반영 뒤 08:45:34 분류 '문장' 0행. 위반 0, 표지 1행(L248 '💬 프롬프트', 분류 표지)"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "history.js 에서 id=\"cl\", id=\"ex\" button 정규식 계수: 반영 전 0 → 반영 뒤 2"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "단추 문구 ['목록 접기', '목록 펴기'] 안 ▶, ◀ 개수: 반영 뒤 0"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/history.js"
+    ],
+    "verify_result": "2026-11-26 08:45:18 반영 전: doc_style exit 0, '문장 51 | 위반 0 | 표지 1', 분류 '문장' 0행, cl/ex 단추 0. 2026-11-26 08:45:34 반영 뒤: doc_style exit 0, '문장 51 | 위반 0 | 표지 1', 분류 '문장' 0 → 0, cl/ex 단추 0 → 2, 단추 문구 ▶◀ 0. v4(new Function 구문 검사)는 VMO 게이트 판정 대상이라 실행 안 함",
+    "note": "html() 에 CSS 1줄(#ex 숨김, body.collapsed 일 때 #l, .tabs 숨김, #ex 표시), .tabs 줄 '목록 접기'(#cl) 단추, #r 맨 위 '목록 펴기'(#ex) 단추, setCol 토글 스크립트(vscode.setState collapsed 유지) 추가. 단추 문구 기호 없음. 작업 모드, hook 차단 없음. 백업, CHANGELOG, 설치 폴더 손대지 않음"
+  },
+  "snap": "prop_20261126084048_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

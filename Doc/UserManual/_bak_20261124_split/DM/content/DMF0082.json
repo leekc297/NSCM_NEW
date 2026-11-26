@@ -1,0 +1,126 @@
+{
+ "id": "DMF0082",
+ "uiName": "Fcst&Price MGMT",
+ "menuPath": "DM> Demand Plan> Fcst&Price MGMT",
+ "captures": [
+  "captures/DMF0082.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0082/",
+  "Doc/asisfacts/screens/DMF0082/",
+  "Doc/gen/DMF0082/"
+ ],
+ "buttons": [
+  "FcstNPrice:DELETE",
+  "FcstNPrice:FORM_DATA",
+  "FcstNPrice:SAVE",
+  "FcstNPrice:SEARCH",
+  "FcstNPrice:SEARCH_CURRENT",
+  "FcstNPrice:UPLOAD",
+  "FcstNPrice:UPLOAD_DATA",
+  "FcstNPrice:UPLOAD_SAVE",
+  "buttonAuth:SEARCH",
+  "fcstNPrice:DELETE",
+  "fcstNPrice:SAVE",
+  "fcstNPrice:SEARCH",
+  "futurePriceInfo:DELETE",
+  "futurePriceInfo:EDIT",
+  "futurePriceInfo:IF",
+  "futurePriceInfo:INSERT",
+  "futurePriceInfo:SAVE",
+  "futurePriceInfo:SEARCH",
+  "futurePriceInfo:SEARCH_DATA",
+  "futurePriceInfo:TITLE",
+  "savePriceData:SEARCH",
+  "savePriceTitle:SEARCH",
+  "spreadTitle:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH",
+  "version:SEARCH"
+ ],
+ "definition": "Division 별 고객 Forecast 수량과 판매 단가(Unit Price)를 Sales Site, Model, 기간 단위로 조회하고 입력하는 화면",
+ "pages": [
+  {
+   "title": "Fcst&Price MGMT (1/2)",
+   "keyPoint": "Insert 한 행은 Currency, Cell Prod Site 와 하루 이상의 수량 또는 가격을 넣어야 저장됨. 고객향 Sales Site 에 FCST Type 을 AS 또는 WS 로 넣으면 AS From Site 를 같이 입력함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.141,
+     "y": 0.137
+    },
+    {
+     "no": 2,
+     "x": 0.549,
+     "y": 0.245
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 권한이 있는 Division 만 콤보에 나옴",
+      "Team, End Customer, Sales Site, Biz. Type: ALL 또는 값을 골라 조회함. Sender Code 는 Div 81 계열에서만 입력할 수 있음",
+      "Period: 필수. 시작일이 종료일보다 늦으면 \"조회 기간이 잘못되었습니다 (시작일 > 종료일).\", 3년을 넘으면 \"조회 기간은 3년 이내로 입력해주세요.\" 메시지가 뜸",
+      "Bucket: Daily, Weekly, Monthly 중 고름. Insert 한 행이 있으면 바꿀 수 없음",
+      "펼침 버튼을 누르면 Project, Model, Owner, Version 조건이 더 나옴"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Price Batch Input: 기간을 정해 Price 를 한 번에 입력하는 팝업이 열림. 과거 구간은 일괄 입력할 수 없음",
+      "아이콘 버튼으로 Exchange Rate, Column Setting, Measure 창을 엶",
+      "저장하지 않은 변경이 있으면 Price Batch Input, Exchange Rate 를 쓸 수 없음",
+      "Save(F7): \"저장 하시겠습니까?\" 확인 뒤 저장함. 바뀐 값이 없으면 \"수정한 내용이 없습니다.\" 메시지가 뜸",
+      "Insert(F8)는 새 행을 추가함. Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Fcst&Price MGMT (2/2)",
+   "keyPoint": "Insert 한 행은 Currency, Cell Prod Site 와 하루 이상의 수량 또는 가격을 넣어야 저장됨. 고객향 Sales Site 에 FCST Type 을 AS 또는 WS 로 넣으면 AS From Site 를 같이 입력함.",
+   "markers": [
+    {
+     "no": 3,
+     "x": 0.178,
+     "y": 0.246
+    },
+    {
+     "no": 4,
+     "x": 0.737,
+     "y": 0.271
+    }
+   ],
+   "sections": [
+    {
+     "no": 3,
+     "title": "Fcst&Price 그리드",
+     "lines": [
+      "같은 Div, Team, End Customer, Sales Site, Model 은 셀이 합쳐져 한 묶음으로 보임",
+      "필수 입력: Div, End Customer, Sales Site, Model, Incoterms, Cell Prod Site, Currency, Measure(제목 앞 빨간 점)",
+      "Model: 칸을 더블클릭하면 모델 찾기 팝업이 열림. Cell Prod Site 는 고른 Model 에 맞는 값만 콤보에 나옴",
+      "Currency 가 빈 행은 저장되지 않음",
+      "고객향 Sales Site 에 FCST Type 을 AS 또는 WS 로 넣으면 AS From Site 를 입력함",
+      "새로 넣은 행끼리 키가 같으면 \"중복된 조합이 존재합니다 (Division/Project/Item/일자/Measure).\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Measure, 기간 컬럼",
+     "lines": [
+      "Measure 열에 Unit Price, MKT FCST, SCM FCST, RTF, Balance 행이 나옴",
+      "기간 컬럼은 Bucket 단위(W44, W45 등)로 나옴. 현재 주 W46 제목은 초록색으로 표시됨",
+      "노란 행만 값을 입력할 수 있음. 입력이 막힌 Measure 를 고치면 \"수정할 수 없는 메져입니다.\" 메시지가 뜸",
+      "Insert 한 행은 하루 이상의 일자에 수량 또는 가격을 넣어야 저장됨",
+      "SCP Planner 권한은 정해진 시간에만 수정할 수 있음",
+      "Balance 의 음수 값은 빨간색으로 표시됨"
+     ]
+    }
+   ]
+  }
+ ]
+}

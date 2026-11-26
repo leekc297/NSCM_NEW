@@ -1,0 +1,45 @@
+{
+  "id": "20261126153055_SELF_4",
+  "at": "2026-11-26T15:30:55+09:00",
+  "ms": 1795674655936,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/run_verify.py|시트별데이터조건생성기sheetdatacondpy를runverify가부르지",
+  "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/run_verify.py:1012 시트별 데이터 조건 생성기 sheet_data_cond.py 를 run_verify 가 부르지 않아 sheet_data_cond.json 이 SCP0104 1화면",
+  "evidence": "규칙 R241 \"검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함\" (원래 지시 2026-11-26 14:38 \"sheet_nav 생성기도 만들어서 상세 시트 진입 보완해줘\") · tools/Harness/verify/run_verify.py:1012 run([py, os.path.join(HERE, 'sheet_nav_gen.py'), mid, '--asis', asis])",
+  "targets": [
+    "tools/Harness/verify/run_verify.py"
+  ],
+  "before_after": "sheet_nav_gen 호출 옆에 run([py, os.path.join(HERE, 'sheet_data_cond.py'), mid]) 를 넣음(sqllog_calls.json 생성 뒤 순서). 실패해도 중단하지 않고 facts 단계 예정 수를 함께 올림",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/run_verify.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:47:23+09:00",
+      "by": "4ec206",
+      "what": "반영 완료(세션 직접 보완) · run_verify.py:1489-1490 diff 단계 sqllog_calls 뒤 sheet_data_cond.py 호출(실패해도 계속) · STAGES diff 7→8 · py_compile OK · 2026-11-26 15:5x"
+    }
+  ],
+  "plain": {
+    "what": "검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함 규칙을 tools/Harness/verify/run_verify.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R241|tools/Harness/verify/run_verify.py",
+  "kind": "fix",
+  "claimedBy": "4ec206",
+  "waitNote": "",
+  "appliedMs": 1795675643086
+}

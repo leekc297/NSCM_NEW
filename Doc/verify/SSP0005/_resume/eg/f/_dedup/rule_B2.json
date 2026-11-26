@@ -1,0 +1,65 @@
+{
+ "rule_id": "B2",
+ "hash": "f899ed9d00d668bf",
+ "groups": [
+  {
+   "rows": [
+    "V-9147d6a6",
+    "V-a8dab5b5"
+   ],
+   "why": "두 행은 대상(신규행 Insert 시 그리드 End Customer·Sold-to Customer 콤보)과 조건(신규행 Insert)이 같고, 기대 결과(중복 0, 정렬, 빈 콤보 아님)도 같아 출처만 DEFECT와 CONFIRMED로 다르다."
+  },
+  {
+   "rows": [
+    "T-7bb1cd5b"
+   ],
+   "why": "TRACE 행으로, 대조표 1행의 GC01 AddComboColumn 구현이 소스에 있는지를 확인해 측정 행과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-fa193de8"
+   ],
+   "why": "TRACE 행으로, B04 Data.Common(YesOrNo) cs:48 구현 위치가 소스에 있는지를 확인해 다른 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-0742eb5e"
+   ],
+   "why": "대상이 End Customer 하나뿐이고 기대에 '빈 행 0건'이 들어 있어, End Customer·Sold-to의 '빈 콤보 아님'을 보는 V-9147d6a6 묶음과 같은지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-41d1438e"
+   ],
+   "why": "조회조건 Team 후보가 선택 Div의 SSPM DEPT 기준과 맞는지까지 보는 복합 기대여서 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-84608722"
+   ],
+   "why": "Div 40에서 Cust Group→End Customer→Sales Site cascade와 상위 값 변경 시 초기화를 확인하는 행이라 대상과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-704a25d6"
+   ],
+   "why": "조회조건 Plant Site라는 별도 요소의 표시값 중복을 확인한다."
+  },
+  {
+   "rows": [
+    "V-d35fdfb8"
+   ],
+   "why": "조회조건 Div라는 별도 요소의 표시값 중복을 확인한다."
+  },
+  {
+   "rows": [
+    "V-ddf6ea3b"
+   ],
+   "why": "Shipment Working Day 그리드의 COMPANY_ID(Company) 컬럼이라는 별도 컬럼을 신규행에서 확인한다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:18",
+ "cost": 0.057039299999999994
+}

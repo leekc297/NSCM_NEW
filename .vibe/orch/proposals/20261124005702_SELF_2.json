@@ -1,0 +1,111 @@
+{
+  "id": "20261124005702_SELF_2",
+  "at": "2026-11-24T00:57:02+09:00",
+  "ms": 1795449422686,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/asislive/asis_live_screen.py|버튼조건값셀클릭입력이벤트값분기실행n줄이소스분기전부를런처로실행함a",
+  "title": "사용자 지시 R79 같은 문제: tools/AsisLive/asis_live_screen.py:204 버튼, 조건 값, 셀 클릭, 입력, 이벤트, 값 분기 실행(204~211줄)이 소스 분기 전부를 런처로 실행함. asis_live_proof_join.py:23-",
+  "evidence": "규칙 R79 \"검사기는 정적 분석으로 판정할 수 있는 항목을 정적으로 판정하고 런처 실구동은 동적 확인이 필요한 항목에만 쓰며 TO-BE 룰로 바뀐 항목은 룰 준수 여부만 판정함\" (원래 지시 2026-11-16 08:57 \"질문에 대한 답을 잠깐 멈추고 다시 처음으로 돌아가서 질문을 하나 할게요. as-is 을 to-be로 전환하고 기능을 100% 동작하도록 오류없이 만드는 것이 목적입니다. 모든 항목을 런처를 통하거나 할 필요는 없다고 생각합니다. 정적으로 가능한 부분은 정적으로 해결하고, 동적으로 필요\") · tools/AsisLive/asis_live_screen.py:204 step(st, \"버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기)\", [T(\"asis_live_scen_run.py\"), mid])",
+  "targets": [
+    "tools/AsisLive/asis_live_screen.py"
+  ],
+  "before_after": "asis_live_scen_src.py 결과 분기마다 판정 단위(정적, 정적 우선, 동적)를 붙임. scen_run, scen_input, scen_event, scen_values 에는 동적 분기만 --only 로 넘김. 정적 분기는 원문, 메타 대조 결과를 scen_cov 에 '정적 판정'으로 기록함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/AsisLive/asis_live_screen.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T08:39:38+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T08:39:38+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-24T09:34:11+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-24T09:37:13+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 76/76개 파일 통과(PASS 1204, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0934"
+    },
+    {
+      "at": "2026-11-24T09:37:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T09:50:31+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 76/76개 파일 통과(PASS 1204, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T09:50:31+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전(2026-11-24 09:38) ALL OK 76/76 PASS 1204 FAIL 0 → 반영 뒤(09:46:36) ALL OK 76/76 PASS 1204 FAIL 0. 추가: python -m py_compile COMPILE_OK. 임시 폴더 복사본 시험 classify+mark_cov: SCP0104 분기 128(정적 33, 정적 우선 44, 동적 51, cov 열 보존 True), SSP0020 분기 46(정적 17, 정적 우선 2, 동적 27 · 변경 3개 파일 · 대상 목록 밖 변경 2개: tools/Analysis/ssp_it_precheck/dbeaver.py, tools/Analysis/ssp_it_precheck/dbeaver_test.py",
+      "log": ".vibe\\logs\\2026-11-24T09-37-17_claude_orch.log",
+      "sec": 579,
+      "costUsd": 1.3783645000000002,
+      "files": [
+        "tools/AsisLive/asis_live_screen.py",
+        "tools/Analysis/ssp_it_precheck/dbeaver.py",
+        "tools/Analysis/ssp_it_precheck/dbeaver_test.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "검사기는 정적 분석으로 판정할 수 있는 항목을 정적으로 판정하고 런처 실구동은 동적 확인이 필요한 항목에만 쓰며 TO-BE 룰로 바뀐 항목은 룰 준수 여부만 판정함 규칙을 tools/AsisLive/asis_live_screen.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R79|tools/AsisLive/asis_live_screen.py",
+  "kind": "fix",
+  "needsApproval": "자동 범위 밖 tools/AsisLive/asis_live_screen.py",
+  "applyStartMs": 1795480636701,
+  "verifyJudge": {
+    "at": "2026-11-24T09:46:58+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 76/76개 파일 통과(PASS 1204, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0934",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795481431065,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 2026-11-24 09:38 'ALL OK 파일 76/76 PASS 1204 FAIL 0 211.6s' → 반영 뒤 09:46 'ALL OK 파일 76/76 PASS 1204 FAIL 0 210.4s'. 웹뷰 파일 변경 없음(t_webview_syntax.js 는 run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/AsisLive/asis_live_screen.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전(2026-11-24 09:38) ALL OK 76/76 PASS 1204 FAIL 0 → 반영 뒤(09:46:36) ALL OK 76/76 PASS 1204 FAIL 0. 추가: python -m py_compile COMPILE_OK. 임시 폴더 복사본 시험 classify+mark_cov: SCP0104 분기 128(정적 33, 정적 우선 44, 동적 51, cov 열 보존 True), SSP0020 분기 46(정적 17, 정적 우선 2, 동적 27, cov 열 보존 True)",
+    "note": "분기 판정 단위 분류(classify → Doc/asislive/<ID>/scen_units.csv, scen_only_<단계>.txt) 추가. 런처 단계 8개(scen_run 4회, scen_input, scen_event, scen_values)에 동적 분기 목록을 --only=<목록 파일>로 넘김. 동적 분기 0건 단계는 런처 실행 안 함(rc None). 분류 파일 없으면 종전대로 전 단계 실행. scenarios_cov.csv 에 unit, unit_why, static_judge('정적 판정') 열 추가, 기존 cov 열 유지(재사용 경로 포함). scen_run, scen_input, scen_event, scen_values 는 --only 를 아직 읽지 않음('-' 시작 인자 무시를 소스에서 확인). 대상 밖이라 미수정, 추가 확인 후보. 실제 CheckList 실행 확인은 사용자 실행."
+  },
+  "snap": "prop_20261124005702_SELF_2"
+}

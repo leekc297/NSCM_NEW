@@ -1,9 +1,9 @@
 {
  "menu_id": "SSP0014",
- "generated": "2026-11-20 09:37:32",
+ "generated": "2026-11-25 02:11:17",
  "F8": {
   "verdict": "PASS",
-  "note": "변경 행 2건 감사 칸 정상(생성 칸 불변 · 수정 칸 갱신 · LAST_UPDATED_BY = 저장 계정) · 계정 minyonglee1 · 기준 시각 2026-11-20 08:51:57"
+  "note": "변경 행 3건 감사 칸 정상(생성 칸 불변 · 수정 칸 갱신 · LAST_UPDATED_BY = 저장 계정) · 계정 minyonglee1 · 기준 시각 2026-11-25 01:18:56"
  },
  "F7": {
   "verdict": "PASS",
@@ -12,7 +12,7 @@
  "run": {
   "cleanup_sql": "save_trace.json(restore_touched 키 없는 복원)",
   "account": "minyonglee1",
-  "saved_at": "2026-11-20 08:51:57",
+  "saved_at": "2026-11-25 01:18:56",
   "tables": {
    "SSP_MST_MODEL_USER": 1
   }

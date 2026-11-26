@@ -1,0 +1,373 @@
+# -*- coding: utf-8 -*-
+"""행 단위 측정기(2026-11-25 사용자 승인 플랜 '행 단위 해소' P1). CheckList 측정 1회 뒤 미검증 행을 그 행만 다시 재서 닫는다
+
+  python tools/Harness/verify/row_run.py <MENU_ID> <row_id[,row_id...]>     고른 행만 다시 잼
+  python tools/Harness/verify/row_run.py <MENU_ID> --open                   해소 원장(unverified_worklist.csv)의 열린 행 전부
+  python tools/Harness/verify/row_run.py <MENU_ID> --regress '<YYYY-MM-DD HH:MM:SS>'   퇴행 확인: 그 시각 뒤 row_run 이 돈 시험을 행 제한 없이 1회
+  python tools/Harness/verify/row_run.py --selftest
+
+  run_verify.py 를 부르지 않는다. 사전 작업, 사실 추출, 기준 원장, 원장 재생성, AI 검토, 문서는 돌지 않는다(원장 행 ID 가 그대로 남음).
+  행 → 시험 = e2e_results.json 의 test(그 행을 마지막으로 판정한 시험 제목, 2026-11-25 스펙 기록). 기록이 없는 행만 규칙 소유 분석(judge.test_ownership).
+  시험은 VERIFY_ROWS(고른 행)로 돌아 고른 행 결과만 바꾼다(다른 행은 지난 결과가 남음).
+  출처별: E2E @verify/@trace = 고른 시험만 Playwright · ES-(E2E 4종) = e2e_suite --kinds · EG-(팝업·권한) = eg_chain · ASIS_DIFF = diff_verify
+          · FACT-(사실 검토) = llm_facts · 그 밖 정적 검사 행 = 사후 정적 검사 묶음(1분 안팎)
+  반입 = eg_ingest → e2e_suite_ingest → judge → mapping_trace --to-ledger 반복(원장 (행, 판정)이 안 바뀔 때까지, 최대 3회). AI 판정 검토 반입은 하지 않음(판정 = 검사엔진)
+  결과 = 행마다 전후 판정 출력 + Doc/verify/<ID>/row_run.jsonl 기록 + 해소 원장 갱신(있으면)
+  종료코드 0 = 고른 행 모두 미검증 아님 · 2 = 미검증 남음 · 3 = 원장 없음·행 없음 · 4 = 같은 화면 실행 중 · 5 = 서버 미기동
+"""
+import csv, datetime, json, os, re, subprocess, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..')); E2E = os.path.join(ROOT, 'tools', 'E2E')
+sys.path.insert(0, HERE)
+csv.field_size_limit(10 ** 8)
+PY = sys.executable
+SMOKE_RULES = {'SC1', 'SC2', 'G3', 'K1', 'K2', 'K4', 'H7', 'J1', 'J2', 'C1', 'I2', 'A5'}   # run_verify.py 와 같은 표: smoke/auth 요약으로 판정
+SNAP_RULES = {'H4', 'A5', 'G4', 'K4', 'H6'}
+ES_KIND = re.compile(r'E2E (authcrud|crud|auth)\b|\b(authcrud|crud|auth)\.spec')
+# 사후 정적 검사 묶음(run_verify stage_post 의 DB, 정적 검사. 화면 조작 없음)
+POST_STATIC = ['save_audit.py', 'menu_auth_sync.py', 'sp_branch_check.py', 'a1_live.py', 'asis_live_rows.py', 'sp_dml_check.py', 'i18n_static.py', 'lookup_check.py', 'sort_ci_check.py',
+               'i18n_lang_check.py', 'measure_sweep.py', 'db_ref_check.py', 'display_sort_check.py', 'all_cols_check.py', 'combo_live_check.py', 'measure_by_site_check.py', 'bg_style_check.py',
+               'master_sweep.py', 'titleset_check.py',
+               # 2026-11-25 T639(SCP0005 V-052d2add B4 · V-a6bb7234 G5 row_run 19:00 '닫힘 0/2'): 정적 판정 재료인데 묶음에 없어 결과 파일이 다시 안 만들어짐(run_verify 1059·1476 과 같은 인자)
+               'popup_args_check.py', 'combo_oracle.py']
+ASIS_ARG = {'save_audit.py', 'menu_auth_sync.py', 'popup_args_check.py', 'combo_oracle.py'}
+
+
+def now():
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+def _read(p):
+    try:
+        with open(p, encoding='utf-8-sig', newline='') as fh:
+            return list(csv.DictReader(fh))
+    except OSError:
+        return []
+
+
+def run(cmd, env=None, cwd=None, tag=''):
+    t0 = time.time()
+    print('$ ' + ' '.join(str(c) for c in cmd)[:500], flush=True)
+    rc = subprocess.call(cmd, cwd=cwd or ROOT, env=dict(env or os.environ, PYTHONUNBUFFERED='1'))
+    print(f'[시간] {tag or os.path.basename(str(cmd[1] if len(cmd) > 1 else cmd[0]))} · {time.time() - t0:.1f}s · rc={rc}', flush=True)
+    return rc
+
+
+def kind_of(r, res):
+    """행 출처 → 재측정 방법"""
+    rid = r.get('row_id') or ''
+    if rid.startswith('FACT-'):
+        return 'fact'
+    if rid.startswith('ES-'):
+        return 'suite'
+    if rid.startswith('EG-') or (res.get(rid) or {}).get('tobe_ref', '').startswith('E2E @eg'):
+        return 'eg'
+    if r.get('source') == 'ASIS_DIFF' or (res.get(rid) or {}).get('tobe_ref', '').startswith('DB @diff'):
+        return 'diff'
+    ref = (res.get(rid) or {}).get('tobe_ref', '')
+    if ref.startswith('E2E @verify') or ref.startswith('E2E @trace') or r.get('source') == 'TRACE' or rid in res:
+        return 'e2e'
+    if (r.get('rule_id') or '').upper() in SMOKE_RULES:
+        return 'e2e'
+    return 'static'
+
+
+def pick_tests(rows, res, own):
+    """E2E 행 → (시험 제목 집합, 시나리오 이름 집합, 스냅샷 필요, smoke 종류, 대응표 없이 고른 행)"""
+    titles, scn, snap, kinds, guessed = set(), set(), False, set(), []
+    for r in rows:
+        rid = r['row_id']; rule = (r.get('rule_id') or '').upper(); tg = r.get('target') or ''
+        if rule in SMOKE_RULES:
+            kinds |= {'smoke'} | ({'auth', 'authcrud'} if rule in ('J1', 'J2', 'C1') else set())
+        if rule in SNAP_RULES and '스냅샷' in tg:
+            snap = True
+        if ' 시나리오 ' in tg and tg.partition(' 시나리오 ')[2]:
+            titles.add('문서 시나리오'); scn.add(tg.partition(' 시나리오 ')[2]); continue
+        t = (res.get(rid) or {}).get('test') or ''
+        # 2026-11-25 T634(SCP0005 V-a32c8abf: 기록된 시험 'W4d 잔여 판정필요 실측' 이 '[측정 코드 없음]' 고정 문구만 남김 → 측정은 다른 시험으로 옮겨짐):
+        #   기록된 시험이 측정 경로·코드 없음으로 끝난 행은 기록된 시험과 규칙 소유 시험을 같이 고른다(검사기 보완으로 판정 주인이 바뀐 행)
+        ev0 = str((res.get(rid) or {}).get('evidence') or '')
+        if t:
+            titles.add(t)
+            if not re.match(r'\s*\[측정 (코드|경로) 없음\]', ev0):
+                continue
+        # 대응표 없음(2026-11-25 이전 결과) = 규칙 소유 분석(run_verify --only 와 같은 근거) + 대상 정규식
+        guessed.append(rid); src = r.get('source') or ''
+        for k, v in own.items():
+            if not isinstance(k, tuple):
+                continue
+            hit = rule in (v.get('rules') or set()) and (not v.get('sources') or src in v['sources'])
+            if not hit:
+                hit = bool(re.search(rf'(?<![A-Z0-9]){re.escape(rule)}(?![A-Z0-9])', k[1])) if rule else False
+            if not hit:
+                for rx in v.get('target_res') or []:
+                    try:
+                        if re.search(rx, tg):
+                            hit = True; break
+                    except re.error:
+                        continue
+            if hit:
+                titles.add(k[1])
+        for _rn, pre, _suf, v in own.get('_tmpl', []):
+            if rule in (v.get('rules') or set()) and pre:
+                titles.add(pre)
+    return titles, scn, snap, kinds, guessed
+
+
+def eg_calls(mid, rows):
+    """EG 행 → 팝업 호출 번호. 원장 target = '<ID> 팝업 <cls> <trig> <check>'(eg_ingest) ↔ popup_results.json 의 call·cls·trig. 반환 (번호 집합, 잇지 못한 행 ID)"""
+    try:
+        pr = json.load(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'popup', 'popup_results.json'), encoding='utf-8'))
+    except (OSError, ValueError):
+        pr = []
+    pref = {}
+    for e in pr:
+        if e.get('call') is not None and e.get('cls'):
+            pref.setdefault(f"{mid} 팝업 {e['cls']} {e.get('trig', '')}".strip(), set()).add(int(e['call']))
+    calls, rest = set(), []
+    for r in rows:
+        tg = (r.get('target') or '').strip(); hit = [c for p_, cs in pref.items() if tg == p_ or tg.startswith(p_ + ' ') for c in cs]
+        if hit:
+            calls |= set(hit)
+        else:
+            rest.append(r['row_id'])
+    return calls, rest
+
+
+def ledger_sig(mid):
+    return hash(tuple((x.get('row_id'), x.get('result')) for x in _read(os.path.join(ROOT, 'Doc', 'verify', mid, 'verify_ledger.csv'))))
+
+
+def fold(mid, asis):
+    """측정 결과 → 원장(run_verify stage_post 의 반입 구간과 같은 순서, AI 판정 검토 반입 없음)"""
+    env = dict(os.environ, LLM_JUDGE_APPLY='0')
+    s0 = None
+    for _ in range(3):
+        if run([PY, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis, '--to-ledger'], env=env):
+            return 9
+        run([PY, os.path.join(HERE, 'eg_ingest.py'), mid], env=env)
+        run([PY, os.path.join(HERE, 'e2e_suite_ingest.py'), mid], env=env)
+        if run([PY, os.path.join(HERE, 'judge.py'), mid], env=env):
+            return 7
+        s = ledger_sig(mid)
+        if s == s0:
+            break
+        s0 = s
+    run([PY, os.path.join(HERE, 'mapping_trace.py'), mid, '--asis', asis], env=env)
+    return 0
+
+
+def main(argv):
+    if not argv:
+        print(__doc__); return 3
+    mid = argv[0].upper(); vd = os.path.join(ROOT, 'Doc', 'verify', mid)
+    led = _read(os.path.join(vd, 'verify_ledger.csv'))
+    if not led:
+        print(f'[ERROR] 원장 없음: Doc/verify/{mid}/verify_ledger.csv', flush=True); return 3
+    import unverified_resolve as U
+    remap = U.id_bridge(mid, led)
+    if len(argv) > 1 and argv[1] == '--open':
+        ids = [w['row_id'] for w in _read(os.path.join(vd, 'unverified_worklist.csv')) if w.get('state') == 'open' and w.get('kind') not in ('집계', '다음측정')]   # 집계 행은 하위 행을 따라감
+    else:
+        ids = [remap(x.strip().strip('`*')) for x in (argv[1] if len(argv) > 1 else '').split(',') if x.strip()]
+    by = {r['row_id']: r for r in led}
+    rows = [by[i] for i in ids if i in by]
+    facts = [i for i in ids if i.startswith('FACT-') and i not in by]
+    miss = [i for i in ids if i not in by and i not in facts]
+    if not rows and not facts:
+        print(f'[ERROR] 원장에 고른 행이 없음: {",".join(ids) or "(없음)"}', flush=True); return 3
+    try:
+        res = {x['row_id']: x for x in json.load(open(os.path.join(vd, 'e2e_results.json'), encoding='utf-8'))}
+    except (OSError, ValueError):
+        res = {}
+    import run_verify as RV
+    asis = RV.asis_of(mid)
+    groups = {}
+    for r in rows:
+        groups.setdefault(kind_of(r, res), []).append(r)
+    before = {i: (by[i]['result'] if i in by else '') for i in ids}
+    t0 = time.time()
+    print(f"== 행 단위 측정 {mid} · {len(ids)}행 · " + ' · '.join(f'{k} {len(v)}' for k, v in groups.items()) + (f' · 사실 검토 {len(facts)}' if facts else '') + f' · {now()} ==', flush=True)
+    if miss:
+        print(f"[INFO] 원장에 없는 행 {len(miss)}: {', '.join(miss[:8])}", flush=True)
+    need_e2e = any(k in groups for k in ('e2e', 'suite', 'eg'))
+    if need_e2e:
+        with open(os.path.join(E2E, 'e2e.config.json'), encoding='utf-8-sig') as f:
+            cfg = json.load(f)
+        down = [u for u in (cfg['feUrl'], cfg['beUrl']) if not RV.reachable(u)]
+        if down:
+            print(f'[ERROR] 서버 미응답: {", ".join(down)}', flush=True); return 5
+    lock = subprocess.run(['node', 'runlock.js', 'acquire', 'verify', mid], cwd=E2E, capture_output=True, text=True, encoding='utf-8')
+    if lock.returncode:
+        print(f'[ERROR] 같은 화면({mid}) 검증 실행 중: {(lock.stderr or "").strip()[:200]}', flush=True); return 4
+    if not RV.dbwin_acquire(mid, max_min=30):
+        subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True); return 4
+    run_id = 'RR' + time.strftime('%Y%m%d%H%M%S')
+    try:
+        if 'e2e' in groups:
+            own = {}
+            try:
+                import judge as J
+                own = J.test_ownership([os.path.join(ROOT, 'Doc', 'e2e', 'specs', '_verify.spec.ts'), os.path.join(ROOT, 'Doc', 'e2e', 'specs', '_trace.spec.ts')])
+            except Exception as e:
+                print(f'[WARN] 규칙 소유 분석 실패({type(e).__name__}) · 대응표 있는 행만', flush=True)
+            titles, scn, snap, kinds, guessed = pick_tests(groups['e2e'], res, own)
+            if guessed:
+                print(f"[INFO] 시험 대응표 없는 행 {len(guessed)}(2026-11-25 이전 결과) → 규칙 소유 분석으로 고름: {', '.join(guessed[:6])}", flush=True)
+            for k in ('smoke', 'auth', 'authcrud'):
+                if k in kinds:
+                    run(['cmd', '/c', os.path.join(E2E, 'run-e2e.cmd'), k, mid], tag=f'run-e2e {k}')
+            if titles or snap:
+                env = dict(os.environ, VERIFY_RUN_ID=run_id, VERIFY_ID=mid, E2E_RESULTS=os.path.join(vd, 'e2e'), PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(vd, 'e2e', 'row_run_results.json'),
+                           VERIFY_ONLY=','.join(sorted({(r.get('rule_id') or '').upper() for r in groups['e2e']} - {''})) or 'ROWS', VERIFY_ROWS=','.join(r['row_id'] for r in groups['e2e']))
+                if scn:
+                    env['SCN_ONLY'] = '^(?:' + '|'.join(re.escape(n) for n in sorted(scn)) + ')$'
+                grep = '|'.join(re.escape(t) for t in sorted(titles)) + ('|@snap' if snap else '')
+                specs = ['_verify', '_trace'] + (['_snap'] if snap else [])
+                print(f"[INFO] 시험 {len(titles)}개{' + 스냅샷' if snap else ''}: " + ' | '.join(sorted(titles))[:400], flush=True)
+                run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', *specs, '--grep', grep, '--workers', '1', '--reporter=list,json'], env=env, cwd=E2E, tag='playwright')
+                with open(os.path.join(vd, 'row_run_runs.jsonl'), 'a', encoding='utf-8') as f:   # 퇴행 확인(--regress)이 이번 체인에서 돈 시험을 다시 돌릴 때 씀
+                    f.write(json.dumps({'at': now(), 'run': run_id, 'titles': sorted(titles), 'snap': snap, 'scn': sorted(scn), 'rows': [r['row_id'] for r in groups['e2e']]}, ensure_ascii=False) + '\n')
+        if 'suite' in groups:
+            ks = sorted({m.group(1) or m.group(2) for r in groups['suite'] for m in [ES_KIND.search((r.get('target') or '') + ' ' + (r.get('evidence') or ''))] if m})
+            run([PY, os.path.join(HERE, 'e2e_suite.py'), mid, '--kinds', ','.join(ks or ['crud', 'auth', 'authcrud']), '--force'], tag='e2e_suite')
+        if 'eg' in groups:
+            calls, rest = eg_calls(mid, groups['eg'])
+            if calls and not rest:   # 2026-11-25 속도 보완: 팝업 행만이면 그 팝업 호출만(eg_chain --calls, 다른 팝업 결과는 그대로)
+                run([PY, os.path.join(HERE, 'eg_chain.py'), mid, '--asis', asis, '--calls', ','.join(str(c) for c in sorted(calls))], tag='eg_chain --calls')
+            else:
+                if rest:
+                    print(f"[INFO] 팝업 호출로 잇지 못한 EG 행 {len(rest)}(권한 검사기 등) → 팝업·권한 검사기 전체: {', '.join(rest[:5])}", flush=True)
+                run([PY, os.path.join(HERE, 'eg_chain.py'), mid, '--asis', asis], tag='eg_chain')
+        if 'diff' in groups:
+            # 2026-11-25 속도 보완: 그 행의 SP 호출만 다시 비교(원장 target = '<ID> <AS-IS SP> …') · 다른 호출 결과는 그대로
+            sps = sorted({((r.get('target') or '').split() + ['', ''])[1] for r in groups['diff']} - {''})
+            run([PY, os.path.join(HERE, 'diff_verify.py'), mid] + ([f"--procs={','.join(sps)}"] if sps else []), tag='diff_verify'); run([PY, os.path.join(HERE, 'diff_ingest.py'), mid], tag='diff_ingest')
+        if 'static' in groups:
+            # 2026-11-25 T648(SCP0005 V-6e159871 A7 row_run 23:23 그대로): A1·A7 SP 행의 판정 재료(Doc/golden/<ID>/<sp>.cols.csv)를 만드는 golden.py 가 정적 묶음에 없어
+            #   검사기를 고쳐도 지난 결과 파일로 다시 판정했다 → 고른 행에 SP A1·A7 이 있으면 먼저 돌린다(run_verify 1062 와 같은 인자)
+            if any(r.get('source') == 'SP' and r.get('rule_id') in ('A1', 'A7') for r in groups['static']):
+                run([PY, os.path.join(ROOT, 'tools', 'DbConn', 'golden.py'), mid], tag='golden')
+            for s in POST_STATIC:
+                run([PY, os.path.join(HERE, s), mid] + (['--asis', asis] if s in ASIS_ARG else []), tag=s)
+        if facts:
+            run([PY, os.path.join(HERE, 'llm_facts.py'), mid], tag='llm_facts')
+        if need_e2e:
+            run([PY, os.path.join(HERE, 'db_orphan_sessions.py'), mid, '--kill'], tag='db_orphan_sessions')
+            run([PY, os.path.join(HERE, 'restore_touched.py'), mid, '--keep-trace'], tag='restore_touched')
+            run([PY, os.path.join(HERE, 'cleanup_marker.py'), mid], tag='cleanup_marker')
+        rc = fold(mid, asis)
+        if rc:
+            print(f'[ERROR] 반입 실패 rc={rc}', flush=True); return rc
+    finally:
+        RV.dbwin_release()
+        subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
+    after_led = {r['row_id']: r for r in _read(os.path.join(vd, 'verify_ledger.csv'))}
+    fc = {r.get('fact_id'): r for r in _read(os.path.join(vd, 'llm_facts.csv'))}
+    out, opened = [], 0
+    print(f'[행별 결과] {(time.time() - t0) / 60:.1f}분', flush=True)
+    for i in ids:
+        a = after_led.get(i)
+        if i.startswith('FACT-') and i not in by:
+            st = '열림' if (fc.get(i) or {}).get('verified') == 'Y' else '닫힘'
+            res_ = '(사실 검토 후보 남음)' if st == '열림' else '(사실 검토 후보 없음)'
+        else:
+            res_ = a['result'] if a else '(원장에 없음)'
+            st = '열림' if res_ in ('ERROR', '(원장에 없음)') else '닫힘'
+        opened += st == '열림'
+        ev = ' '.join(((a or {}).get('evidence') or '').split())[:140]
+        print(f"  {st} {i}: {before.get(i) or '-'} → {res_} · {ev}", flush=True)
+        out.append({'at': now(), 'run': run_id, 'row_id': i, 'before': before.get(i) or '', 'after': res_, 'state': st, 'evidence': ev})
+    with open(os.path.join(vd, 'row_run.jsonl'), 'a', encoding='utf-8') as f:
+        for o in out:
+            f.write(json.dumps(o, ensure_ascii=False) + '\n')
+    try:
+        import unverified_resolve as U2
+        if hasattr(U2, 'worklist_update'):
+            U2.worklist_update(mid, out, count=os.environ.get('ROW_RUN_NOCOUNT') != '1')   # 측정만(검사기 수정 없음) = 시도 횟수에 넣지 않음
+    except Exception as e:
+        print(f'[WARN] 해소 원장 갱신 실패({type(e).__name__}: {str(e)[:120]})', flush=True)
+    print(f"[{'OK' if not opened else 'INFO'}] 닫힘 {len(ids) - opened}/{len(ids)} · {(time.time() - t0) / 60:.1f}분", flush=True)
+    return 0 if not opened else 2
+
+
+def regress(mid, since):
+    """퇴행 확인(2026-11-25 플랜 원칙 7): since 뒤 row_run 이 돈 시험을 행 제한 없이 1회 다시 돌려, 그 전에 판정이 난 행이 미검증으로 바뀌었는지 본다.
+       반환 0 = 퇴행 없음 · 2 = 퇴행 있음(행 목록 출력, Doc/verify/<ID>/regress_rows.json) · 3 = 돌릴 시험 없음"""
+    vd = os.path.join(ROOT, 'Doc', 'verify', mid)
+    runs = []
+    try:
+        runs = [json.loads(l) for l in open(os.path.join(vd, 'row_run_runs.jsonl'), encoding='utf-8') if l.strip()]
+    except OSError:
+        pass
+    runs = [r for r in runs if (r.get('at') or '') >= since]
+    titles = sorted({t for r in runs for t in r.get('titles') or []}); scn = sorted({t for r in runs for t in r.get('scn') or []}); snap = any(r.get('snap') for r in runs)
+    if not titles and not snap:
+        print(f'[INFO] 퇴행 확인: {since} 뒤 row_run 이 돌린 시험 없음', flush=True); return 3
+    import run_verify as RV
+    asis = RV.asis_of(mid)
+    before = {r['row_id']: r['result'] for r in _read(os.path.join(vd, 'verify_ledger.csv'))}
+    lock = subprocess.run(['node', 'runlock.js', 'acquire', 'verify', mid], cwd=E2E, capture_output=True, text=True, encoding='utf-8')
+    if lock.returncode:
+        print(f'[ERROR] 같은 화면({mid}) 검증 실행 중', flush=True); return 4
+    if not RV.dbwin_acquire(mid, max_min=30):
+        subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True); return 4
+    t0 = time.time()
+    try:
+        env = dict(os.environ, VERIFY_RUN_ID='RG' + time.strftime('%Y%m%d%H%M%S'), VERIFY_ID=mid, E2E_RESULTS=os.path.join(vd, 'e2e'), PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(vd, 'e2e', 'row_run_results.json'), VERIFY_ONLY='REGRESS')
+        if scn:
+            env['SCN_ONLY'] = '^(?:' + '|'.join(re.escape(n) for n in scn) + ')$'
+        print(f'[퇴행 확인] 이번 해소에서 돈 시험 {len(titles)}개를 행 제한 없이 1회: ' + ' | '.join(titles)[:400], flush=True)
+        run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', '_verify', '_trace', *(['_snap'] if snap else []), '--grep', '|'.join(re.escape(t) for t in titles) + ('|@snap' if snap else ''), '--workers', '1', '--reporter=list,json'], env=env, cwd=E2E, tag='playwright 퇴행 확인')
+        run([PY, os.path.join(HERE, 'db_orphan_sessions.py'), mid, '--kill']); run([PY, os.path.join(HERE, 'restore_touched.py'), mid, '--keep-trace']); run([PY, os.path.join(HERE, 'cleanup_marker.py'), mid])
+        rc = fold(mid, asis)
+        if rc:
+            return rc
+    finally:
+        RV.dbwin_release(); subprocess.run(['node', 'runlock.js', 'release', 'verify', mid], cwd=E2E, capture_output=True)
+    after = {r['row_id']: (r['result'], ' '.join((r.get('evidence') or '').split())[:140]) for r in _read(os.path.join(vd, 'verify_ledger.csv'))}
+    bad = [(k, v, after[k][0], after[k][1]) for k, v in before.items() if k in after and v in ('PASS', 'FAIL', 'NA', '판정필요') and after[k][0] == 'ERROR']
+    json.dump([{'row_id': k, 'before': b, 'after': a, 'evidence': e} for k, b, a, e in bad], open(os.path.join(vd, 'regress_rows.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    for k, b, a, e in bad:
+        print(f'  퇴행 {k}: {b} → {a} · {e}', flush=True)
+    print(f"[{'OK' if not bad else 'ERROR'}] 퇴행 확인: 판정이 나 있던 행 중 미검증으로 바뀐 행 {len(bad)} · {(time.time() - t0) / 60:.1f}분", flush=True)
+    return 0 if not bad else 2
+
+
+def selftest():
+    ok = True
+    def chk(n, c):
+        nonlocal ok
+        print('PASS' if c else 'FAIL', n); ok &= bool(c)
+    res = {'V-1': {'test': '그리드 컬럼 프로브 A', 'tobe_ref': 'E2E @verify'}, 'EG-1': {'tobe_ref': 'E2E @eg-popup'}}
+    own = {('verify', 'W4 E4 업무 검증'): {'rules': {'E4'}, 'sources': set(), 'target_res': []}, ('trace', 'A6 조회 결과 행 순서'): {'rules': {'A6'}, 'sources': {'TRACE'}, 'target_res': []}, '_tmpl': []}
+    rows = [{'row_id': 'V-1', 'rule_id': 'A5', 'target': 'x'}, {'row_id': 'V-2', 'rule_id': 'E4', 'source': 'RULE_SCREEN', 'target': 'y'},
+            {'row_id': 'V-3', 'rule_id': 'F1', 'target': 'SCP 시나리오 저장 왕복'}, {'row_id': 'T-1', 'rule_id': 'A6', 'source': 'TRACE', 'target': 'SP'}]
+    t, scn, snap, kinds, guessed = pick_tests(rows, res, own)
+    chk('대응표 있는 행 = 기록된 시험 1개', '그리드 컬럼 프로브 A' in t)
+    chk('대응표 없는 행 = 규칙 소유 시험', 'W4 E4 업무 검증' in t and 'A6 조회 결과 행 순서' in t and set(guessed) == {'V-2', 'T-1'})
+    chk('시나리오 행 = 문서 시나리오 + 이름', '문서 시나리오' in t and scn == {'저장 왕복'})
+    chk('smoke 요약 규칙(A5) = smoke 재실행', 'smoke' in kinds)
+    chk('출처 분류: EG 결과 = eg, ES- = suite, FACT- = fact, 결과 없는 정적 행 = static',
+        kind_of({'row_id': 'EG-1'}, res) == 'eg' and kind_of({'row_id': 'ES-1'}, res) == 'suite' and kind_of({'row_id': 'FACT-1'}, res) == 'fact'
+        and kind_of({'row_id': 'V-9', 'rule_id': 'B5', 'source': 'RULE_SCREEN'}, res) == 'static' and kind_of({'row_id': 'V-1'}, res) == 'e2e')
+    # T634 기록된 시험이 '[측정 코드 없음]' 으로 끝난 행 = 기록된 시험 + 규칙 소유 시험
+    res2 = {'V-4': {'test': 'W4d 잔여', 'evidence': '[측정 코드 없음] 업로드 대조 미구현'}, 'V-5': {'test': 'W4d 잔여', 'evidence': 'ctrl ERROR: 실행 실패'}}
+    own2 = {('verify', 'Excel 양식·업로드(M1)'): {'rules': {'M1'}, 'sources': set(), 'target_res': []}, ('verify', 'K3 그리드'): {'rules': {'K3'}, 'sources': set(), 'target_res': []}, '_tmpl': []}
+    t2, _s2, _n2, _k2, g2 = pick_tests([{'row_id': 'V-4', 'rule_id': 'M1', 'source': 'CONFIRMED', 'target': 'Excel Form 버튼'}, {'row_id': 'V-5', 'rule_id': 'K3', 'source': 'RULE_SCREEN', 'target': 'x'}], res2, own2)
+    chk('T634 측정 코드 없음 행 = 기록 시험 + 소유 시험 · 그 밖 ERROR 행은 기록 시험만', t2 == {'W4d 잔여', 'Excel 양식·업로드(M1)'} and g2 == ['V-4'])
+    print('selftest', 'OK' if ok else 'FAIL'); return 0 if ok else 1
+
+
+if __name__ == '__main__':
+    if sys.argv[1:2] == ['--selftest']:
+        sys.exit(selftest())
+    if len(sys.argv) > 3 and sys.argv[2] == '--regress':
+        _m = sys.argv[1].upper(); _since = sys.argv[3]
+        if _since == 'auto':   # 해소 원장을 고정한 시각(이번 CheckList 측정 뒤) 이후
+            try:
+                _since = json.load(open(os.path.join(ROOT, 'Doc', 'verify', _m, 'unverified_worklist.json'), encoding='utf-8')).get('created') or ''
+            except (OSError, ValueError):
+                _since = ''
+        sys.exit(regress(_m, _since or now()))
+    sys.exit(main(sys.argv[1:]))

@@ -131,6 +131,8 @@ export const FormationGrid = ({ gridRef, gridFilterRef, data, setActiveTab }: Fo
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
+      // cascade(연동 편집) 화면 — undo 시 cellEditEnded 재발화로 연동 셀까지 복원(순수 집계/파생, clear·부작용 없음 확인).
+      reapplyEditOnUndo
       itemsSource={data}
       staticColumns={staticColumns[RESPONSE_SET.FORMATION]}
       allowMerging={AllowMerging.None}

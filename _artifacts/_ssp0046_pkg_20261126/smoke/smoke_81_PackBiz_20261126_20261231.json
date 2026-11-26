@@ -1,0 +1,118 @@
+{
+ "param": [
+  "81",
+  "Pack Biz",
+  "20261126",
+  "20261231"
+ ],
+ "run_at": "2026-11-26 10:55:23",
+ "TOBE_DMF0045": {
+  "rows": 453,
+  "datecols": 36,
+  "measure": {
+   "SCP_SHIP_PLAN": [
+    71,
+    0.0
+   ],
+   "SHIP_REQ": [
+    71,
+    612244.0
+   ],
+   "SHIP_PLAN": [
+    71,
+    422885.0
+   ],
+   "PACK_FP": [
+    48,
+    525015.0
+   ],
+   "TOTAL_PLAN": [
+    48,
+    422885.0
+   ],
+   "TOTAL_REQ": [
+    48,
+    612244.0
+   ],
+   "WH_BOH_PLAN": [
+    48,
+    4749085.0
+   ],
+   "WH_BOH_REQ": [
+    48,
+    622642.0
+   ]
+  },
+  "ship_frozen": {
+   "11": 54,
+   "14": 399
+  },
+  "result": [
+   [
+    "0",
+    "SUCCESS"
+   ]
+  ],
+  "sec": 2.4,
+  "title_rows": 61,
+  "title_first_D": "D_20261126",
+  "title_D_cnt": 36
+ },
+ "TOBE_SSP0046": {
+  "rows": 453,
+  "datecols": 36,
+  "measure": {
+   "SCP_SHIP_PLAN": [
+    71,
+    0.0
+   ],
+   "SHIP_REQ": [
+    71,
+    612244.0
+   ],
+   "SHIP_PLAN": [
+    71,
+    441773.0
+   ],
+   "PACK_FP": [
+    48,
+    525015.0
+   ],
+   "TOTAL_PLAN": [
+    48,
+    441773.0
+   ],
+   "TOTAL_REQ": [
+    48,
+    612244.0
+   ],
+   "WH_BOH_PLAN": [
+    48,
+    4293964.0
+   ],
+   "WH_BOH_REQ": [
+    48,
+    622642.0
+   ]
+  },
+  "ship_frozen": {
+   "11": 453
+  },
+  "result": [
+   [
+    "0",
+    "SUCCESS"
+   ]
+  ],
+  "sec": 2.4,
+  "title_rows": 61,
+  "title_first_D": "D_20261126",
+  "title_D_cnt": 36
+ },
+ "ASIS_DMF0045": {
+  "ERROR": "('42000', '[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Index \"IX04_SCP_PLN_SHIPMENT_PLAN\" on table \"SCP_PLN_SHIPMENT_PLAN\" (specified in the FROM clause) is disabled or resides in a filegroup which is not online. (315) (SQLExecDirectW)')"
+ },
+ "ASIS_SSP0046": {
+  "ERROR": "('42000', '[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Index \"IX04_SCP_PLN_SHIPMENT_PLAN\" on table \"SCP_PLN_SHIPMENT_PLAN\" (specified in the FROM clause) is disabled or resides in a filegroup which is not online. (315) (SQLExecDirectW)')"
+ }
+}

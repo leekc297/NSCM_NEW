@@ -5,7 +5,7 @@ SSP 한눈에 보기(SSP_OVERVIEW.md) 생성 (2026-11-16)
   ① Standard Information SSP Manual 1.pptx → Doc/asisfacts/ref_ssp/manual_*.csv (ssp_ref_extract.py --manual)
      1번 슬라이드 Master Flow: 단계 상자 10 · 연결선 9 · 담당 팀 = 상자 채움 색을 범례 색에 대조(가장 가까운 색)
      2~11번 슬라이드: 화면별 메뉴·UI 정의·설명·Key Point·자주 받는 문의(원문)
-  ② SSP 프로세스 확인 내용.pptx(2026-11-16 판) → ssp_ref.ppt_slides · run_conditions · proc_jobs(운영 잡 주기)
+  ② SSP 프로세스 확인 내용.pptx(2026-11-20 판 · 8번 사업부별 계획기준 추가) → ssp_ref.ppt_slides · run_conditions · proc_jobs(운영 잡 주기)
   ③ Doc/tobefacts/db/menu.csv(TO-BE 화면 ID) · Doc/asisfacts/screens/<화면>/endpoints.csv(AS-IS 화면 → SP) · SP 본문(parse_sp)
 검증: 단계 화살표(A → B)마다 A 화면 SP 가 쓰는 테이블을 B 화면 SP 가 읽는지 AS-IS SP 본문으로 대조한다.
       Manual 문구 중 저장소에서 확인되는 것(BOD ITEM 30분 자동 생성 = 운영 잡 주기 · BOD Required 계산 원천 = SCP0007_GET_BOD 읽기 테이블)은 확인 결과를 같이 적는다.
@@ -184,8 +184,9 @@ def build(out_dir, parse_sp=None, objs=None):
         s['reads'] = {t for t in rd_ if not re.search(r'_LOG$|SYS_LOG|_H$', t)}; s['writes'] = {t for t in wr_ if not re.search(r'_LOG$|SYS_LOG|_H$', t)}
     byno = {s['no']: s for s in steps}
 
+    sl_n = (R.ppt_slides() or [{'slide': 0}])[-1]['slide']  # 프로세스 PPT 장 수(11-20 판 10장)
     M = [f'# SSP 한눈에 보기 · {t0} 생성', '',
-         f'> 원천: ① `{SRC_MANUAL}`(기준정보 Master Flow 1장 · 화면 매뉴얼 10장) ② `{R.SRC_NAMES["ppt"]}`(2026-11-16 판 · 배치 9장) ③ 운영 잡 목록 `{R.SRC_NAMES["batch"]}` ④ TO-BE `menu.csv` · AS-IS 화면 SP(endpoints) · SP 본문. 사본 `Doc/asisfacts/ref_ssp/src/` · 구조화 `manual_*.csv` · 생성기 `tools/Analysis/ssp_master.py`',
+         f'> 원천: ① `{SRC_MANUAL}`(기준정보 Master Flow 1장 · 화면 매뉴얼 10장) ② `{R.SRC_NAMES["ppt"]}`(2026-11-20 판 · 배치 {sl_n}장) ③ 운영 잡 목록 `{R.SRC_NAMES["batch"]}` ④ TO-BE `menu.csv` · AS-IS 화면 SP(endpoints) · SP 본문. 사본 `Doc/asisfacts/ref_ssp/src/` · 구조화 `manual_*.csv` · 생성기 `tools/Analysis/ssp_master.py`',
          '> 전체 순서는 이 탭에서, 상세는 뒤 탭에서 본다. 업무 프로세스 탭에 PI 22 Seq, 통합테스트, 운영 잡, 배치 입출력이 있다. Shipment Plan 산출 흐름 탭에 사업부별 계산 순서, 화면별 상세 탭에 화면 → SP → 테이블이 있다.', '']
 
     # 1. Master Flow 카드
@@ -271,10 +272,11 @@ def build(out_dir, parse_sp=None, objs=None):
     cells3 = []
     for sl in sl_all:
         lines = []
-        for p_ in dict.fromkeys(sl['procs']):
+        for p_ in dict.fromkeys(sl['procs'] + [q for q in sl.get('table_procs', []) if q not in sl['procs']]):
             jb = pj.get(p_.upper(), [])
             when = '; '.join(dict.fromkeys(f'{cy} {tm}'.strip() for _, cy, tm in jb)) or '배치 목록 잡 시트에 없음'
-            lines.append(f"{'[조건] ' if p_.upper() in by_proc else ''}{p_} ({when})")
+            grp = [f_['rows'][0][ci] for f_ in sl.get('frames', []) for r in f_['rows'] if r and r[0].strip() == '참고 PRC' for ci in range(1, len(r)) if r[ci].strip() == p_ and ci < len(f_['rows'][0])]
+            lines.append(f"{'[조건] ' if p_.upper() in by_proc else ''}{(grp[0] + ' 계획기준 · ') if grp and p_ not in sl['procs'] else ''}{p_} ({when})")
         cells3.append(C.card(f"슬라이드 {sl['slide']}. {', '.join(sl['titles']) or '(제목 없음)'}", lines, '#1f7a8c'))
     M += [C.wrap(f'<div class="spf-grid" style="--n:2">' + ''.join(cells3) + '</div>'), '']
     M += ['### 3-1. 프로세스 진행 조건(계획을 만들기 전 확인, 2026-11-16 판 추가 내용)', '',

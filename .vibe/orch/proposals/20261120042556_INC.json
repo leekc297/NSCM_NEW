@@ -408,6 +408,11 @@
         "Doc/verify/SSP0014/llm_usage.csv",
         "tools/VibeManager/test/t_wb_stopmark.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:33+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:08:27+09:00"
     }
   ],
   "auto": true,
@@ -436,5 +441,7 @@
     "verify_result": "2026-11-20 07:21:13 node test/t_wb_stopmark.js: PASS 11, FAIL 0 (같은 초 체인 2개 로그 이름 다름: 2026-11-20T07-21-14_SCP0005_1_CheckList___.log / 2026-11-20T07-21-14_SSP0005_2_CheckList___.log, 중지한 실행 why = 중지됨(사용자 지시), [FAIL] 줄 원인 미사용, 표시 없는 [FAIL] 종료는 실패 원인 유지). 2026-11-20 07:21:19 node test/run_all.js: 파일 31/32, PASS 382, FAIL 5. FAIL 5건 = t_chain_abort.js(chain.end aborted 0건). extension.js deactivate(779행~)가 abortRunningChains 를 부르지 않음. 이번 수정과의 관계는 수정 전 코드로 다시 돌리지 않아 미확인",
     "note": "437행 로그 파일 이름 변경은 앞선 개선안 20261120042237_INC 에서 반영되어 있음(현재 514~515행: 시각_화면ID_procId_라벨.log). 이번 반영 = stopAll 이 procs 항목에 stopped 표시, 종료 처리에서 stopMarkOf(종료코드, 중지 표시, 마지막 줄)로 '중지됨' 판정, 중지면 why/whySrc='stop'/stopped=true 로 proc.end 기록, sig 비움, 직전에 user.stop(같은 wb) 기록으로 orch-watch userStopped 가 R1, R2 를 만들지 않음, 실패 알림 대신 '⏹ … 중지됨' 안내. orch-watch.js 는 범위 밖이라 수정 안 함. t_chain_abort.js FAIL 5건은 extension.js(범위 밖) 상태와 관련, 이번 수정과의 관계 미확인"
   },
-  "snap": "prop_20261120042556_INC"
+  "snap": "prop_20261120042556_INC",
+  "effectiveMs": 1795136907899,
+  "effectiveAt": "2026-11-20T10:08:27+09:00"
 }

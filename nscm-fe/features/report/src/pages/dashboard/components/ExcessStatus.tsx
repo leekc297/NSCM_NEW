@@ -1,29 +1,57 @@
 import { CellType, FlexGrid, HeadersVisibility, SelectionMode } from '@mescius/wijmo.grid';
 import ReportProblemOutlined from '@mui/icons-material/ReportProblemOutlined';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import type { ExcessRow } from '../demand-as-dashboard.mock';
-import { EXCESS_RISK_AMOUNT, EXCESS_ROWS } from '../demand-as-dashboard.mock';
+import { useTabProcQuery } from '@shared/hooks';
+
+import { MENU_ID, SHEETS } from '../demand-as-dashboard.constants';
+import type { DashboardBaseFilters } from '../demand-as-dashboard.filters';
+import { LBL } from '../demand-as-dashboard.labels';
 import styles from '../DemandAsDashboard.module.scss';
+import { useDashboardColumnLabels } from '../useDashboardColumnLabels';
 
-export const ExcessStatus = () => {
+import { mapExcess } from './excessStatus.map';
+
+interface ExcessStatusProps {
+  tabId: string;
+  filters: DashboardBaseFilters;
+}
+
+export const ExcessStatus = ({ tabId, filters }: ExcessStatusProps) => {
   const hostRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+  const { labels, header } = useDashboardColumnLabels(SHEETS.EXCESS);
+
+  const { data } = useTabProcQuery<MENU_ID, typeof SHEETS.EXCESS>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.EXCESS,
+    tabId,
+    filters,
+    enabled: !!filters,
+  });
+
+  const { rows, riskAmount } = useMemo(
+    () => mapExcess(data?.o_rc1 ?? [], t(...LBL.excessTotal)),
+    [data, t]
+  );
 
   useEffect(() => {
     if (!hostRef.current) return undefined;
     const grid = new FlexGrid(hostRef.current, {
-      itemsSource: EXCESS_ROWS,
+      itemsSource: rows,
       isReadOnly: true,
       selectionMode: SelectionMode.None,
       headersVisibility: HeadersVisibility.Column,
       allowSorting: false,
       autoGenerateColumns: false,
+      // 헤더 텍스트는 컬럼 메타(COLUMN_LABEL_NAME)에서 — binding·width·align 은 커스텀 유지.
       columns: [
-        { header: '제품', binding: 'product', width: '*', align: 'center' },
-        { header: '현재 재고 (EA)', binding: 'stock', width: '*', align: 'right' },
-        { header: '예상 수요 (12M)', binding: 'demand12m', width: '*', align: 'right' },
-        { header: 'Excess (EA)', binding: 'excessEa', width: '*', align: 'right' },
-        { header: 'Excess 금액 (억원)', binding: 'excessAmount', width: '*', align: 'right' },
+        { header: header('PRODUCT', '_제품'), binding: 'product', width: '*', align: 'center' },
+        { header: header('STOCK', '_현재 재고 (EA)'), binding: 'stock', width: '*', align: 'right' },
+        { header: header('DEMAND12M', '_예상 수요 (12M)'), binding: 'demand12m', width: '*', align: 'right' },
+        { header: header('EXCESSEA', '_Excess (EA)'), binding: 'excessEa', width: '*', align: 'right' },
+        { header: header('EXCESSAMOUNT', '_Excess 금액 (억원)'), binding: 'excessAmount', width: '*', align: 'right' },
       ],
     });
 
@@ -32,8 +60,8 @@ export const ExcessStatus = () => {
 
     grid.formatItem.addHandler((s, e) => {
       if (e.panel.cellType !== CellType.Cell) return;
-      const row = s.rows[e.row].dataItem as ExcessRow;
-      if (row.product === '합계') {
+      // 합계 행은 항상 마지막 행이다(라벨이 i18n 으로 바뀌므로 문구 비교 대신 위치로 판정).
+      if (e.row === s.rows.length - 1) {
         e.cell.style.fontWeight = '700';
         e.cell.style.background = '#f7f9fc';
       }
@@ -72,12 +100,12 @@ export const ExcessStatus = () => {
       observer.disconnect();
       grid.dispose();
     };
-  }, []);
+  }, [rows, labels]);
 
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
-        <span className={styles.panelTitle}>Excess / 과재고 현황</span>
+        <span className={styles.panelTitle}>{t(...LBL.excessTitle)}</span>
       </div>
       <div className={styles.panelBody}>
         <div className={styles.excessWrap}>
@@ -87,11 +115,11 @@ export const ExcessStatus = () => {
           <div className={styles.riskBox}>
             <ReportProblemOutlined sx={{ fontSize: 22, color: '#d32f2f' }} />
             <span className={styles.riskBoxLabel}>
-              예상 폐기 위험 금액
+              {t(...LBL.excessRiskLabel)}
               <br />
               (12M)
             </span>
-            <span className={styles.riskBoxValue}>{EXCESS_RISK_AMOUNT}</span>
+            <span className={styles.riskBoxValue}>{riskAmount}</span>
             <span className={styles.riskBoxUnit}>억원</span>
           </div>
         </div>

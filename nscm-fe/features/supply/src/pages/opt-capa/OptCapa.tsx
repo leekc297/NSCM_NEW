@@ -111,6 +111,20 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
     activeSheet,
   });
 
+  /**
+   * 탭 전환 = Plant/Line 선택 초기화(ALL) — AS-IS 파리티(사용자 지시 2026-11-23).
+   * AS-IS `SpdMain_ActiveSheetChanged`(cs:4289)가 `RefreshPlantIdByDivision`·`RefreshLine` 으로
+   * `setListBox` 를 다시 바인딩해 이전 선택이 모두 풀린다(`82` × Daily Capa/No Work 는 OSP Plant 제외).
+   * mount 시에는 실행하지 않는다 — F6 복원값을 지우지 않기 위함이다.
+   */
+  const prevActiveSheetRef = useRef(activeSheet);
+  useEffect(() => {
+    if (prevActiveSheetRef.current === activeSheet) return;
+    prevActiveSheetRef.current = activeSheet;
+    if (sc.plantIds.length > 0 || sc.lineIds.length > 0) setSearchParams({ plantIds: [], lineIds: [] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSheet]);
+
   // 활성 탭이 제외 Division 으로 바뀌면 첫 탭으로 폴백한다(R13 / L-13).
   const sheet = sheets.effectiveSheet;
   useEffect(() => {

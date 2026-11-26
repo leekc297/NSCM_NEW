@@ -74,7 +74,12 @@ interface Props {
   //   BE 가 NULL 컬럼을 응답에서 빼기 때문에 행 키만으로는 값 없는 주차 컬럼이 서지 않는다(utils/periodAxis.ts).
   //   행 키와 합집합으로 쓴다 — 미지정/빈 배열이면 종전처럼 행 키만으로 컬럼을 만든다(시간축 조회 실패 시 폴백).
   periodBindings?: string[];
+  // 동적 컬럼 너비(px) — 시간축 SP COLUMN_WIDTH 최우선. 미지정이면 DYN_COL_DEFAULT_WIDTH(종전 고정값).
+  periodColumnWidth?: number;
 }
+
+// 동적(기간) 컬럼 기본 너비 — 시간축 SP 가 COLUMN_WIDTH 를 주지 않을 때만 쓴다(2026-11-22 이전 고정값).
+const DYN_COL_DEFAULT_WIDTH = 90;
 
 // 조회된(기존) 행에서도 편집 가능한 고정 칸인지 — UI Category Setup 입력 구분 M(필수)/O(선택).
 //   IM/IO 는 신규 행 전용, S 는 조회 전용. 자동 매핑 칸(Team/End Customer)과 팝업 칸은 기존 행에서 열지 않는다.
@@ -181,6 +186,7 @@ export const SalesFuturePriceGrid = ({
   exchangeRateMap,
   siteEndCustomerMap,
   periodBindings,
+  periodColumnWidth,
 }: Props) => {
   const { t } = useTranslation();
   const bucketPrefix = bucketType === BUCKET_TYPE.MONTHLY ? 'M' : 'W';
@@ -443,7 +449,7 @@ export const SalesFuturePriceGrid = ({
         header: mmdd,
         align: 'right',
         format: 'n3',
-        width: 90,
+        width: periodColumnWidth ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,
@@ -474,7 +480,7 @@ export const SalesFuturePriceGrid = ({
         columns: dayCols,
       })),
     }));
-  }, [dynBindings, bucketPrefix]);
+  }, [dynBindings, bucketPrefix, periodColumnWidth]);
 
   // ⭐ grid 핸들러 + mergeManager useEffect 분리 등록.
   //    DataGrid wrapper 의 자동 기능 (setEditableColumns / setSortableColumns / formatItem default 등) 보존.

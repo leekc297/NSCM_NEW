@@ -1,0 +1,19 @@
+{
+  "id": "SCP0005",
+  "task": "S8.checklistSettle",
+  "scope": "none",
+  "note": "checklist_run.py SCP0005 --settle --no-docs",
+  "start": "2026-11-25T08:15:27+09:00",
+  "end": null,
+  "exit": null,
+  "sources": [],
+  "source": "chain",
+  "label": "미검증 해소 확인 — 🧪 보완 뒤 처리 대상 행의 규칙만 다시 측정(run_verify --only, 전체로 넓히지 않음) → 재분류 · 잴 수 없으면 반복 끝",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261125_005600",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T08-15-27_SCP0005_9________________________________________run_verify_--only__________________________________.log"
+  ]
+}

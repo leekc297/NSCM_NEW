@@ -1,0 +1,18 @@
+{
+  "id": "DMF0082",
+  "task": "chain_asislive",
+  "scope": "none",
+  "note": "🎥 AS-IS 실측",
+  "start": "2026-11-24T18:45:13+09:00",
+  "end": "2026-11-24T18:45:58+09:00",
+  "exit": 1,
+  "sources": [],
+  "source": "menu",
+  "label": "🎥 AS-IS 실측",
+  "text": "1. AS-IS 실행 환경 점검\n2. 관찰 문구 → TO-BE 룰 대응표 갱신\n3. 런처 실측(기본 실측 → 소스 분기 시나리오 → 버튼·조건 값·셀 클릭·셀 입력 분기 → Division·그룹 값 → 저장 정의 초안 → 대조)\n4. TO-BE 조건 시나리오 반복(TO-BE 조건을 AS-IS 화면에 넣어 재측정)\n5. 저장 시나리오 연습(저장 안 함)\n6. 저장 시나리오 실행(저장 → 인자 포착 → 복원)\n7. AS-IS↔TO-BE 저장 인자 대조\n8. 분기 시나리오 실행 현황\n9. AS-IS↔TO-BE 조회 조건 대조\n10. 분기별 AS-IS↔TO-BE 대조\n11. 그룹·Division 별 비교표\n12. 분기 시나리오 명세(전 분기)",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "afterMode": "end",
+  "changed": []
+}

@@ -1,12 +1,12 @@
 {
  "id": "SCP0005",
- "run_dir": "Doc/asislive/SCP0005/run_20261120_072708",
- "live_at": "2026-11-20 07:27:08.960",
+ "run_dir": "Doc/asislive/SCP0005/run_20261126_022600",
+ "live_at": "2026-11-26 02:26:00.287",
  "user": "jaeuk.shin",
  "find": {
   "signaled": true,
-  "time_status": "DB : 1.05s, UI : 14.91s",
-  "total": "Total : 8,036",
+  "time_status": "DB : 1.203s, UI : 14.88s",
+  "total": "Total : 8,076",
   "how": "status"
  },
  "mixed_risk": false,
@@ -24,9 +24,9 @@
  },
  "diff_gap": {
   "BOTH": 2,
-  "NONE": 2
+  "NONE": 3
  },
- "param_hints": 1,
+ "param_hints": 2,
  "limits": [
   "실측 조건 = AS-IS 화면 기본값(조건 시나리오 미적용) — TO-BE E2E 조건과 같다는 보장 없음",
   "호출 기록은 시간 구간 기준(다른 런처 동시 조작 시 섞임)",

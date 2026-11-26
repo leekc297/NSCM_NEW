@@ -1,0 +1,35 @@
+{
+ "헤더_Shipment_Working_Day": {
+  "kind": "헤더",
+  "scope": "Shipment Working Day",
+  "golden": "Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt",
+  "sha8": "a3a91030",
+  "approved_by": "사용자 상시 승인(2026-11-19 · harness.json snapAutoApprove)",
+  "approved_at": "2026-11-20 05:08",
+  "opinion": "CheckList 자동 승인: snap_validate OK·NA 수신본",
+  "validate": "OK",
+  "forced": false
+ },
+ "화면샷_1920": {
+  "kind": "화면샷",
+  "scope": "1920",
+  "golden": "Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1920.png",
+  "sha8": "3849b613",
+  "approved_by": "사용자 상시 승인(2026-11-19 · harness.json snapAutoApprove)",
+  "approved_at": "2026-11-20 09:02",
+  "opinion": "CheckList 자동 승인: snap_validate OK·NA 수신본",
+  "validate": "NA",
+  "forced": false
+ },
+ "화면샷_1366": {
+  "kind": "화면샷",
+  "scope": "1366",
+  "golden": "Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1366.png",
+  "sha8": "835dc8a6",
+  "approved_by": "사용자 상시 승인(2026-11-19 · harness.json snapAutoApprove)",
+  "approved_at": "2026-11-20 09:02",
+  "opinion": "CheckList 자동 승인: snap_validate OK·NA 수신본",
+  "validate": "NA",
+  "forced": false
+ }
+}

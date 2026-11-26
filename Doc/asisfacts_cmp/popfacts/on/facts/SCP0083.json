@@ -1,0 +1,115 @@
+{
+ "screen": "SCP0083",
+ "calls": [
+  {
+   "cls": "SCP0083_DIOReportPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0083_DIOReport.cs:3246",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "",
+    "guard": "if (siMain.ActiveSheet.SheetName.Equals(SpdSheet.shtMain)) ▸ if (selCol.IndexOf(\"DNI\") == 0)"
+   },
+   "multi": "",
+   "div_arg": "siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.DIVISION_ID)).ToString()",
+   "period_args": [],
+   "args": [
+    {
+     "param": "DIVISION_ID",
+     "kind": "GRID",
+     "arg": "siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.DIVISION_ID)).ToString()"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0083_DIOReport.cs:3269",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0083_DIOReport.cs:3292",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCP0083_DIOReportPopup": {
+   "cls": "SCP0083_DIOReportPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/POPUP/SCP0083_DIOReportPopup.cs",
+   "title": "DIO Report History",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "SCP0083_GET_DIO_REPORT",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0083_GET_DIO_REPORT.sql",
+     "order_known": true,
+     "order_keys": "PLANT_ID, END_CUSTOMER, NICK_NAME, ITEM_ID, BIZ_TYPE, INCOTERMS",
+     "order_line": "237",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_plan_start_yyyymmdd",
+      "p_plan_type",
+      "p_seq",
+      "p_ver",
+      "p_user_id",
+      "debug_mode",
+      "mEXEC"
+     ],
+     "method": "FindData",
+     "ref": "SCP0083_DIOReportPopup.cs:163",
+     "save": false
+    },
+    {
+     "sp": "SCP0083_GET_DIO_REPORT_H",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0083_GET_DIO_REPORT_H.sql",
+     "order_known": true,
+     "order_keys": "PLANT_ID, END_CUSTOMER, NICK_NAME, ITEM_ID, BIZ_TYPE, INCOTERMS, LAST_UPDATE_DATE DESC +CHAR(10);",
+     "order_line": "67",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_plan_start_yyyymmdd",
+      "p_plan_type",
+      "p_seq",
+      "p_item_id",
+      "p_nick_name",
+      "p_plant_id",
+      "p_sel_column",
+      "p_ver",
+      "debug_mode",
+      "mEXEC",
+      "POS",
+      "LEN"
+     ],
+     "method": "FindData",
+     "ref": "SCP0083_DIOReportPopup.cs:167",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

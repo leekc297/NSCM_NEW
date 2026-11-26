@@ -1,14 +1,26 @@
 # SCP0028 · SCP0028_GET_SHIPMENT_LOT_SIZE ↔ PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE
 
-- 실행 2026-11-20 12:55:29 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
-- **판정 ROWS_ONLY** — 공통행 0(키 DIVISION_ID+OPERATION_GROUP_ID+from_site+from_site_description+to_site+to_site_description+ITEM_ID+NICK_NAME+trans_mode_name+trans_mode_code+VALID_YN+SPLIT_YN) — AS-IS 0행 ↔ TO-BE 0행 · 데이터 불일치(DEV MSSQL≠사내 Oracle) 또는 인자 불일치 → 판정필요 · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+OPERATION_GROUP_ID+from_site+from_site_description+to_site+to_site_description+ITEM_ID+NICK_NAME+trans_mode_name+trans_mode_code+VALID_YN+SPLIT_YN · golden 집합 판정 PASS
-- 호출 #16 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 1 · 원천 Doc\verify\SCP0028\calls\_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json
-- TO-BE 인자(FE 본문): `{"divisionId": "81_HM", "operationGroup": "", "fromSite": "", "toSite": "", "transMode": "", "itemId": "", "valid": ""}`
-- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
-- AS-IS 인자(번역): `{"p_division_id": "81_HM", "p_operation_group": "", "p_from_site": "", "p_to_site": "", "p_trans_mode": "", "p_item_id": "", "p_valid": ""}`
-- 재시도 ''→'ALL': AS-IS 0행 ← `{"p_division_id": "81_HM", "p_operation_group": "ALL", "p_from_site": "ALL", "p_to_site": "ALL", "p_trans_mode": "ALL", "p_item_id": "ALL", "p_valid": "ALL"}`
+- 실행 2026-11-25 01:47:58 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- **판정 PASS** — 공통 1735행 전 컬럼 일치 · 단독행 AS-IS 0 / TO-BE 50 · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+OPERATION_GROUP_ID+from_site+from_site_description+to_site+to_site_description+ITEM_ID+NICK_NAME+trans_mode_name+trans_mode_code+VALID_YN+SPLIT_YN · golden 집합 판정 DIFF
+- 호출 #16 sheet=main btn=SEARCH user=brightboy FE 응답 행 1786 · 원천 Doc\verify\SCP0028\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
+- TO-BE 인자(FE 본문): `{"divisionId": "81", "operationGroup": "", "fromSite": "", "toSite": "EG00,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00-A,MI00-E,MI00-P,MI00_81-W,MI02-A,MI02-E,MI03-P,MI03_81-W,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00-A,WA00-E,WA00-P,WA00_81-W,ANDURIL_US_CZM,ANODE_US_YFA,ATBS_CN_SHA,ATL_DE_RDG,ATL_GB_POO,AW_DE_LEJ,Aeonus_KR_GUN,Alte_KR_SEL,Alte_US_SFJ,Ampere Electricity_FR_BAT,Ampere Electricity_FR_CLE,Ampere Electricity_FR_DOI,Ampere Electricity_FR_HRB,Ampherr_TR_TUZ,Arpiem_RO_OTP,Audi CKD_DE_ING,Audi_DE_ING,Audi_DE_KAS,Audi_DE_NEM,Audi_DE_WVN,Audi_PL_WRO,Audi_SK_BTS,BAE_US_ENC,BEDEO_TR_BTS,BMW_AT_GRZ,BMW_AT_SER,BMW_CZ_MOS,BMW_DE_BKB,BMW_DE_DFG,BMW_DE_ECH,BMW_DE_GBM,BMW_DE_LEJ,BMW_DE_MUC,BMW_DE_NBH,BMW_DE_NTG,BMW_DE_WEO,BMW_DE_WKD,BMW_GB_BSI,BMW_MX_MEX,BMW_US_SPA,Banglilai_CN_SZX,CMC_TW_TYN,COENSYS_KR_HWS,CRR_IL_BEV,CS Enertech_KR_OSN,CS Enertech_KR_OSN_KR_OSN,Celltech_FI_TPR,China Effort(A)_HK_KWN,Cling Systems_DE_AAH,Cling Systems_SE_STO,Club Car_US_AGS,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,Cummins EP(OTS)_GB_YTH,Cummins(OTS)_US_CLU,Cummins(OTS)_US_GNW,DBH_DE_MUC,DIS_DE_VBS,DSMT_KR_KMH,Daechang_KR_JCN,Daimler AS_DE_BAU,Daimler AS_DE_KAZ,E-Works Mobility GmbH_DE_IMG,EDISON MOTORS_KR_TJN,EForce(OTS)_CH_BCR,EG01-81-AS,EK_DE_DTG,ESST_CA_WND,ESS_CN_NKG,ESS_KR_HWS,ESS_KR_OCH,ESS_KR_TJN,ESS_US_HLM,EVT_CA_SEU,Edisoninno_KR_TJN,Edisoninno_KR_UIJ,Epiroc Electrification_CA_PIM,Epiroc Electrification_DE_MUC,Epiroc Electrification_IN_BLR,Epi`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "brightboy"}`
+- AS-IS 인자(번역): `{"p_division_id": "81", "p_operation_group": "", "p_from_site": "", "p_to_site": "EG00,EG01_81-W,HQ05-W,HQ07-A,HQ07-E,HQ07-P,HQ11-A,HQ11-E,HQ11-P,KR02239900_81-P,MI00-A,MI00-E,MI00-P,MI00_81-W,MI02-A,MI02-E,MI03-P,MI03_81-W,NA00-A,NA00-E,NA00-P,NB01-A,NB01-E,NB01-P,WA00-A,WA00-E,WA00-P,WA00_81-W,ANDURIL_US_CZM,ANODE_US_YFA,ATBS_CN_SHA,ATL_DE_RDG,ATL_GB_POO,AW_DE_LEJ,Aeonus_KR_GUN,Alte_KR_SEL,Alte_US_SFJ,Ampere Electricity_FR_BAT,Ampere Electricity_FR_CLE,Ampere Electricity_FR_DOI,Ampere Electricity_FR_HRB,Ampherr_TR_TUZ,Arpiem_RO_OTP,Audi CKD_DE_ING,Audi_DE_ING,Audi_DE_KAS,Audi_DE_NEM,Audi_DE_WVN,Audi_PL_WRO,Audi_SK_BTS,BAE_US_ENC,BEDEO_TR_BTS,BMW_AT_GRZ,BMW_AT_SER,BMW_CZ_MOS,BMW_DE_BKB,BMW_DE_DFG,BMW_DE_ECH,BMW_DE_GBM,BMW_DE_LEJ,BMW_DE_MUC,BMW_DE_NBH,BMW_DE_NTG,BMW_DE_WEO,BMW_DE_WKD,BMW_GB_BSI,BMW_MX_MEX,BMW_US_SPA,Banglilai_CN_SZX,CMC_TW_TYN,COENSYS_KR_HWS,CRR_IL_BEV,CS Enertech_KR_OSN,CS Enertech_KR_OSN_KR_OSN,Celltech_FI_TPR,China Effort(A)_HK_KWN,Cling Systems_DE_AAH,Cling Systems_SE_STO,Club Car_US_AGS,Corvus Norway_NO_BGO,Corvus Norway_US_BLI,Cummins EP(OTS)_GB_YTH,Cummins(OTS)_US_CLU,Cummins(OTS)_US_GNW,DBH_DE_MUC,DIS_DE_VBS,DSMT_KR_KMH,Daechang_KR_JCN,Daimler AS_DE_BAU,Daimler AS_DE_KAZ,E-Works Mobility GmbH_DE_IMG,EDISON MOTORS_KR_TJN,EForce(OTS)_CH_BCR,EG01-81-AS,EK_DE_DTG,ESST_CA_WND,ESS_CN_NKG,ESS_KR_HWS,ESS_KR_OCH,ESS_KR_TJN,ESS_US_HLM,EVT_CA_SEU,Edisoninno_KR_TJN,Edisoninno_KR_UIJ,Epiroc Electrification_CA_PIM,Epiroc Electrification_DE_MUC,Epiroc Electrificatio`
 
-### 결과셋 1  As-is 0행 ↔ To-Be O_RC1 0행
-- 일치
-- 데이터 기준: 공통 0행 · AS-IS 전용 0행 · TO-BE 전용 0행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
-- 실제 순서(공통·유일 0행의 상대 순서): 비교 불가(공통 행 2 미만)
+### 결과셋 1  As-is 1735행 ↔ To-Be O_RC1 1785행
+- 행수 불일치 1735 ↔ 1785
+- 값 차이: As-is 전용 0행 / To-Be 전용 50행 (공통 컬럼 18)
+| 측 | DIVISION_ID | OPERATION_GROUP_ID | from_site | from_site_description | to_site | to_site_description | ITEM_ID | NICK_NAME | trans_mode_name | trans_mode_code | LOT_SIZE | INCREMENT |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | AIR | AIR |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | FERRY | FRY |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | RAIL | RAI |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | SEA | SEA | 24840 | 2484 |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | TRUCK | TRK |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | AIR | AIR |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | FERRY | FRY |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | RAIL | RAI |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | SEA | SEA | 0 | 0 |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | TRUCK | TRK |  |  |
+- 데이터 기준: 공통 1735행 · AS-IS 전용 0행 · TO-BE 전용 50행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
+- 실제 순서(공통·유일 1735행의 상대 순서): 일치

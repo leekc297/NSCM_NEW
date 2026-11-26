@@ -10,7 +10,13 @@ export interface ValidationResult {
   sum?: number;
   /** 월별 모드 12개월 검사 실패 시 — 수정 행에서 값이 있는 달 수 */
   monthCount?: number;
+  /** 칸별 범위 검사(0~100) 실패 시 — 범위를 벗어난 칸의 값 (period 와 함께 알림에 붙인다) */
+  cellValue?: number;
 }
+
+/** 법인별 기여율 한 칸의 허용 범위(%) — 2026-11-22 개선 요청(음수·100 초과 입력 차단). */
+export const RATIO_MIN = 0;
+export const RATIO_MAX = 100;
 
 /** AS-IS ValidChk L767 `ValidChkCol.Count != 12` — 월별 모드 수정 행은 12개월 전부 값이 있어야 저장한다. */
 const MONTHS_PER_YEAR = 12;
@@ -77,6 +83,16 @@ export const validChk = (rows: MainRow[], chkYear: boolean): ValidationResult =>
       if (!sumByPeriod.has(cell.period)) continue;
       const n = Number(value);
       if (value == null || value === '' || Number.isNaN(n)) continue;
+      // 칸별 범위 검사 — 합계가 100 이어도 한 칸이 음수이거나 100 을 넘으면 저장하지 않는다
+      //   (예: -50 + 150 = 100). AS-IS ValidChk 는 합계만 봤다(.cs L707/L754) — 2026-11-22 개선 요청으로 추가.
+      if (n < RATIO_MIN || n > RATIO_MAX) {
+        return {
+          ok: false,
+          msgCode: VALIDATION_MSG.CELL_OUT_OF_RANGE,
+          period: cell.period,
+          cellValue: n,
+        };
+      }
       sumByPeriod.set(cell.period, (sumByPeriod.get(cell.period) ?? 0) + n);
     }
 

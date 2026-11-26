@@ -1,0 +1,46 @@
+{
+ "proposal": {
+  "id": "20261120183740_VISION",
+  "title": "개념 재정립: VMO 진단·조치 주기(새 일 반응 → 열린 일 장부 기준 10분 순환)",
+  "evidence": "orch-selfcheck.js:287 열린 사건 재등록 안 함 → :540 진단 조건 newIncidents 빔(진단은 하루 1회 조건만) · :539 반영 1건 뒤 tick 종료 · orch-agent.js:298 agentRules 밖 규칙 무기록 건너뜀 · harness.json:42 agentRules 에 R12 없음 · .vibe/orch/selfcheck/result.json:900-901(2026-11-20 18:27 판정) R12 열린 사건 10건 174~209분 · diag_meta.json lastAt 18:19:21 · CHANGELOG.md:536,542-543,710-711 · 진단 사다리 묶음 L4|useraxis|vmoCadence · 문서 .vibe/orch/vision/concept_20261120_L4_useraxis_vmoCadence.md",
+  "targets": [
+   "tools/VibeManager/orch-selfcheck.js",
+   "tools/VibeManager/orch-agent.js",
+   "tools/VibeManager/orch-usercheck.js",
+   "tools/VibeManager/orchestra.js",
+   "tools/VibeManager/orch-worklist.js(신규)",
+   "tools/Harness/harness.json",
+   "tools/VibeManager/test/t_orch_worklist.js(신규)"
+  ],
+  "before_after": "변경 전: VMO 는 새 사건, 새 점검 실패, 새 반영 실패에 1번 반응하고 이미 열린 일은 하루 1회 진단 전까지 다시 보지 않음. 변경 후: VMO 는 10분마다 열린 일 전부를 장부 하나에서 보고, 일마다 담당과 시한(60분)을 두어 시한 안에 조치나 기다리는 사유가 없으면 담당에게 다시 넘김",
+  "verify": "1) 재현 시험: 사건 줄 20261120_145605_R12_ALL·20261120_153113_R12_ALL 을 넣고 시한 60분 경과 시 진단 호출 1회, 조치 기록 1건 · 2) U3·U5·U7 표본 시험(t_orch_usercheck.js) 통과 · 3) node tools/VibeManager/test/run_all.js 전체 통과 · 4) 실가동 24시간 동안 result.json S13|U3|idleInc 0건",
+  "sig": "ln|useraxis|vmocadence"
+ },
+ "result": {
+  "applied": true,
+  "already_applied": false,
+  "verified": false,
+  "changed_files": [
+   "tools/VibeManager/orch-worklist.js",
+   "tools/VibeManager/orch-selfcheck.js",
+   "tools/VibeManager/orch-agent.js",
+   "tools/VibeManager/orch-usercheck.js",
+   "tools/VibeManager/orchestra.js",
+   "tools/Harness/harness.json",
+   "tools/VibeManager/test/t_orch_worklist.js",
+   "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "verify_result": "1) 재현 시험 node tools/VibeManager/test/t_orch_worklist.js tools/VibeManager: 반영 전 시험 파일 없음 → 반영 뒤 2026-11-23 12:07:09 ALL PASS 24건. 'PASS ① 시한 60분 경과 → 자가진단 진단 호출 1회 calls=1', 'PASS ① 사건마다 조치 기록 1건'(20261120_145605_R12_ALL, 20261120_153113_R12_ALL 저장소 원문 적재), 'PASS drain: agentRules 밖 R12 = 담당 아님 기록 1건(종전 0건)'. 2) node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager: 2026-11-23 11:56:31 ALL PASS(run_all 기준 131건) → 12:02:58 ALL PASS 134건('PASS U3 장부 막힘 2건 = 실패 1항목(S13|U3|worklist)', 'PASS U3 U5 U7 같은 감지기 = 같은 key 1건'). 3) node tools/VibeManager/test/run_all.js tools/VibeManager: 반영 전 'ALL OK 파일 65/65 PASS 963 FAIL 0 201.2s'(11:56 시작, 끝나기 전 편집 시작으로 일부 겹침) → 반영 뒤 1차 12:03:04 'SOME FAIL 파일 65/66 PASS 986 FAIL 3'(t_orch_selfcheck.js R12 7→8, 원인 = 에이전트 init 전 status 예외가 오류 기록 S5 로 감) → 수정 뒤 12:07:19~12:10:40 'ALL OK 파일 66/66 PASS 990 FAIL 0 201.4s'. 추가로 t_webview_syntax.js ALL PASS, node --check 6개 파일 통과, harness.json JSON 파싱 통과. 4) 실가동 24시간 result.json S13|U3|idleInc 0건 = 미측정(창 다시 로드 뒤 24시간 동안 .vibe/orch/selfcheck/result.json 의 S13|U3|idleInc, S13|U3|worklist 항목 건수로 확인)",
+  "note": "verify 4번(실가동 24시간)을 아직 측정하지 못해 verified 는 false 임. 1~3번은 통과함. 되돌리기 = harness.json orch.worklistEnabled false 로 종전 반응 경로. 고치기 전 코드에서 drain 시험이 실패하는지 보는 확인은 권한 제약으로 미실행함(종전 무기록 건너뜀은 orch-agent.js:298 소스로 확인). 시험 원인 확인용 임시 폴더 C:/Users/LG/AppData/Local/Temp/self-qs1GmQ 는 삭제가 권한에 막혀 남아 있음. 설치 폴더와 CHANGELOG.md 는 건드리지 않음."
+ },
+ "gate": null,
+ "history": [
+  "11:51:48 VMO 자동(게이트 통과 조건): 승인",
+  "11:55:13 VMO: 반영 전 게이트: 구문 검사 29개 파일 통과, 시험 65/65개 파일 통과(PASS 963, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self1151",
+  "11:55:16 VMO: 반영 시작",
+  "12:11:10 VMO: 반영 실패. 검증 실패: 1) 재현 시험 node tools/VibeManager/test/t_orch_worklist.js tools/VibeManager: 반영 전 시험 파일 없음 → 반영 뒤 2026-11-23 12:07:09 ALL PASS 24건. 'PASS ① 시한 60분 경과 → 자가진단 진단 호출 1회 calls=1', 'PASS ① 사건마다 조치 기록 1건'(202 · 대상 파일 5개 복원(orch-selfcheck.js AI 편집 6건만 되돌림(반영 전과 같음) / orch-agent.js AI 편집 1건만 되돌림(반영 전과 같음) / orch-usercheck.js AI 편집 1건만 되돌림(반영 전과 같음) / orchestra.js AI 편집 2건만 되돌림(반영 전과 같음) / harness.json AI 편집 1건만 되돌림(반영 전과 같음)) · 대상 밖 변경 tools/VibeManager/WORKLOG.md, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/orch-worklist.js, tools/VibeManager/test/t_orch_worklist.js 는 그대로 남음"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261120183740_VISION"
+}

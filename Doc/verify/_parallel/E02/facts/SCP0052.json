@@ -1,0 +1,381 @@
+{
+ "screen": "SCP0052",
+ "calls": [
+  {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "method": "BtnColumn_Click",
+   "asis_ref": "SCP0052_CAPA_Report.cs:1324",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnColumn",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SCP0052\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "EXPR",
+     "arg": "sSheetName"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "true"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0052_CAPA_Report.cs:1325",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0052_CAPA_Report.cs:1325",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0052_CAPAReportYieldMonitoringPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0052_CAPA_Report.cs:1423",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "",
+    "guard": "if (siMain.ActiveSheetIndex == 2) ▸ if ((gLabel != \"\" && colText == gLabel) || (rLabel != \"\" && colText == rLabel) || (yLabel != \"\" && colText == yLabel) || col…)"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [
+    "drpPeriodMonth.MonthText1.Replace(\"-\", \"\")"
+   ],
+   "args": [
+    {
+     "param": "FROM_YYYYMM",
+     "kind": "EXPR",
+     "arg": "drpPeriodMonth.MonthText1.Replace(\"-\", \"\")"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0052_CAPA_Report.cs:1460",
+     "target": "popup.SIGNAL",
+     "value": "popup.SIGNAL == \"ACCURACY\" ? \"TOTAL\" : popup.SIGNAL"
+    },
+    {
+     "ref": "SCP0052_CAPA_Report.cs:1460",
+     "target": "popup.SIGNAL",
+     "value": "popup.SIGNAL == \"ACCURACY\" ? \"TOTAL\" : popup.SIGNAL"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0052_CAPAReportYieldMonitoringPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0052_CAPA_Report.cs:1434",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "TOTAL",
+    "guard": "if (siMain.ActiveSheetIndex == 2) ▸ if ((gLabel != \"\" && colText == gLabel) || (rLabel != \"\" && colText == rLabel) || (yLabel != \"\" && colText == yLabel) || col…) ▸ if (division_id == \"TOTAL\")"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "GROUP_ID",
+     "kind": "CONTROL",
+     "arg": "group"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0052_CAPA_Report.cs:1460",
+     "target": "popup.SIGNAL",
+     "value": "popup.SIGNAL == \"ACCURACY\" ? \"TOTAL\" : popup.SIGNAL"
+    },
+    {
+     "ref": "SCP0052_CAPA_Report.cs:1460",
+     "target": "popup.SIGNAL",
+     "value": "popup.SIGNAL == \"ACCURACY\" ? \"TOTAL\" : popup.SIGNAL"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCM0002_TitleSetForm_Popup": {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "115",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:287",
+     "save": false
+    },
+    {
+     "sp": "SCM0002_SET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_SET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_active_flag",
+      "p_column_name",
+      "p_sort_order_no",
+      "p_sub_total_flag",
+      "p_sort_method_code",
+      "p_user_id",
+      "recv_active_flag",
+      "v_program_id",
+      "v_sheet_name",
+      "v_column_type",
+      "v_active_flag",
+      "v_column_name",
+      "v_sort_order_no",
+      "v_sub_total_flag",
+      "v_sort_method_code",
+      "v_user_id",
+      "v_delimiter",
+      "max_loop_cnt",
+      "mst_loop_cnt",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "SaveTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:570",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:235",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:253",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:167",
+     "method": "SetFixColumnStatus",
+     "raw": "svSource.Cells[r, c].BackColor = Color.WhiteSmoke;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:254",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:232",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:250",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:676",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:679",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCP0052_CAPAReportYieldMonitoringPopup": {
+   "cls": "SCP0052_CAPAReportYieldMonitoringPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0052_CAPA_Report.UIL/SCP0052_CAPAReportYieldMonitoringPopup.cs",
+   "title": "Yield Monitoring Detail",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "SCP0052_GET_CAPA_REPOR",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindData",
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:148",
+     "save": false
+    },
+    {
+     "sp": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL.sql",
+     "order_known": true,
+     "order_keys": "GAP DESC",
+     "order_line": "332",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_from_yyyymm",
+      "p_to_yyyymm",
+      "p_division_id",
+      "p_group",
+      "p_plant_id",
+      "p_site_id",
+      "p_signal",
+      "p_check_production",
+      "debug_mode",
+      "v_start_month",
+      "v_end_month",
+      "v_start_result",
+      "v_end_result",
+      "v_result_month",
+      "v_result_table_month"
+     ],
+     "method": "FindData",
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:152",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [
+    {
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:175",
+     "method": "FindData",
+     "raw": "for(var i=0; i<ds.Tables[0].Rows.Count; i++) { DataRow row = ds.Tables[0].Rows[i]; if (row[\"SIGNAL\"].Equals(\"GREEN\")) { siMain.SetBGColor(i, siMain.GetColumnInd",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:181",
+     "method": "FindData",
+     "raw": "siMain.SetBGColor(i, siMain.GetColumnIndex(DefColumns.SIGNAL), i, siMain.GetColumnIndex(DefColumns.SIGNAL), Color.FromArgb(240, 255, 240))",
+     "guard": "for (i<ds.Tables[0].Rows.Count) ▸ if (row[\"SIGNAL\"].Equals(\"GREEN\"))"
+    },
+    {
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:185",
+     "method": "FindData",
+     "raw": "siMain.SetBGColor(i, siMain.GetColumnIndex(DefColumns.SIGNAL), i, siMain.GetColumnIndex(DefColumns.SIGNAL), Color.FromArgb(255, 240, 240))",
+     "guard": "for (i<ds.Tables[0].Rows.Count) ▸ else of (row[\"SIGNAL\"].Equals(\"GREEN\")) ▸ if (row[\"SIGNAL\"].Equals(\"RED\"))"
+    },
+    {
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:189",
+     "method": "FindData",
+     "raw": "siMain.SetBGColor(i, siMain.GetColumnIndex(DefColumns.SIGNAL), i, siMain.GetColumnIndex(DefColumns.SIGNAL), Color.FromArgb(255, 255, 240))",
+     "guard": "for (i<ds.Tables[0].Rows.Count) ▸ else of (row[\"SIGNAL\"].Equals(\"GREEN\")) ▸ else of (row[\"SIGNAL\"].Equals(\"RED\")) ▸ if ("
+    },
+    {
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:175",
+     "method": "FindData",
+     "raw": "for(var i=0; i<ds.Tables[0].Rows.Count; i++) { DataRow row = ds.Tables[0].Rows[i]; if (row[\"SIGNAL\"].Equals(\"GREEN\")) { siMain.SetBGColor(i, siMain.GetColumnInd",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0052_CAPAReportYieldMonitoringPopup.cs:181",
+     "method": "FindData",
+     "raw": "siMain.SetBGColor(i, siMain.GetColumnIndex(DefColumns.SIGNAL), i, siMain.GetColumnIndex(DefColumns.SIGNAL), Color.FromArgb(240, 255, 240))",
+     "guard": "for (i<ds.Tables[0].Rows.Count) ▸ if (row[\"SIGNAL\"].Equals(\"GREEN\"))"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

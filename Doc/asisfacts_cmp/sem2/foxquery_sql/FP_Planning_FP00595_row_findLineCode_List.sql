@@ -1,0 +1,43 @@
+﻿SELECT A.LINE_ID AS CODE
+           , '(' + A.LINE_ID + ')' + (CASE WHEN A.LINE_NAME = '' OR A.LINE_NAME IS NULL THEN A.LINE_ID ELSE A.LINE_NAME END) AS NAME
+      FROM   SCM_LINE_M A(NOLOCK)
+      WHERE 1=1
+      AND   A.ACTIVE_FLAG = 'Y'
+      AND    EXISTS (
+			        	SELECT 1
+			        	FROM   FP_USER_ROLE_INFO_V B WITH(NOLOCK)
+			        	WHERE  A.COMPANY_ID  = B.COMPANY_ID
+			        	AND    A.DIVISION_ID = B.DIVISION_ID
+			        	AND    A.SITE_ID     = B.SITE_ID
+			        	AND    A.PLANT_ID	 = B.PLANT_ID
+			        	AND    A.FACTORY_ID  = B.FACTORY_ID
+			        	AND    A.OPERATION_ID = B.OPERATION_ID
+			        	AND    A.LINE_ID = B.LINE_ID
+			        	AND    B.USER_ID     = @USER_ID
+			      	)
+      AND   EXISTS (
+          SELECT 1 FROM (
+              SELECT DISTINCT A.COMPANY_ID,A.DIVISION_ID,A.SITE_ID,A.PLANT_ID,A.FACTORY_ID
+              FROM  SCM_FACTORY_M A(NOLOCK)
+              INNER JOIN FP_INSTANCE_FACTORY_M B(NOLOCK)
+              ON    A.FACTORY_ID=B.FACTORY_ID
+              AND		B.ACTIVE_FLAG = 'Y'
+              WHERE 1=1
+              AND   B.INSTANCE_ID = @INSTANCE_ID
+              AND		A.ACTIVE_FLAG = 'Y'
+          ) C
+          WHERE C.COMPANY_ID=A.COMPANY_ID AND C.DIVISION_ID=A.DIVISION_ID AND C.SITE_ID=A.SITE_ID AND C.PLANT_ID=A.PLANT_ID AND C.FACTORY_ID=A.FACTORY_ID
+      )
+            @CTRL_COMPANY_LT
+      @CTRL_DIVISION_LT
+      @CTRL_SITE_LT
+      @CTRL_PLANT_LT
+      @CTRL_FACTORY_LT
+      @CTRL_OPERATION_LT
+      
+      @CTRL_INSTANCE
+      @CTRL_PLAN_TYPE
+      @CTRL_LINE_LT
+      
+      GROUP BY A.LINE_ID, A.LINE_NAME
+      ORDER BY A.LINE_ID

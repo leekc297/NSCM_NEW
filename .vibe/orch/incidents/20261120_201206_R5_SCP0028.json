@@ -1,0 +1,87 @@
+{
+  "id": "20261120_201206_R5_SCP0028",
+  "at": "2026-11-20T20:12:06+09:00",
+  "ms": 1795173126039,
+  "rule": "R5",
+  "ruleName": "진행 없음",
+  "title": "진행 없음. CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계 로그 10분 무출력",
+  "screen": "SCP0028",
+  "sig": "R5|CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
+  "count": 1,
+  "repeat": null,
+  "detail": "PID 28184 · 실행 54분째 · E2E 추적 파일 155분 무변경",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-20T19-17-53_SCP0028_1_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log",
+    "pid": 28184,
+    "quiet_sec": 602,
+    "log_quiet_sec": 602,
+    "trace_quiet_sec": 9328,
+    "waits": []
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T20:16:20+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-20T20:20:43+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 중단, 사용자 확인 필요 · 원인 engine: diff_verify.py 호출 #47 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP(p_to_site='', p_item_id='', From Site 30개)이 AS-IS MSSQL 세션 55 에서 FN_GET_SCM_SITE_DESCRIPTION 실행 중 997초째 끝나지 않음(20:20:14 sys.dm_exec_requests). AS-IS 조회에 문장 상한 없음(tools/DbConn/dbconn.py:93 접속 15초만, tools/DbConn/golden.py:36~40 상한 없음). run_veri · 수정 2개 파일 · 허용 범위 밖 파일 변경 1개: tools/VibeManager/CHANGELOG.md",
+      "grade": "B",
+      "log": ".vibe\\logs\\2026-11-20T20-16-25_claude_orch.log",
+      "sec": 256,
+      "turns": 52,
+      "costUsd": 2.0240530000000003,
+      "files": [
+        "tools/Harness/verify/diff_verify.py",
+        "tools/Harness/verify/run_verify.py"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:13:22+09:00",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "원인 고쳐짐 확인: diff_verify.py:298-300 문장 시간 상한(pyodbc timeout, oracledb call_timeout)과 :430 HYT00 처리"
+    }
+  ],
+  "agent": {
+    "cause_class": "engine",
+    "cause": "diff_verify.py 호출 #47 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP(p_to_site='', p_item_id='', From Site 30개)이 AS-IS MSSQL 세션 55 에서 FN_GET_SCM_SITE_DESCRIPTION 실행 중 997초째 끝나지 않음(20:20:14 sys.dm_exec_requests). AS-IS 조회에 문장 상한 없음(tools/DbConn/dbconn.py:93 접속 15초만, tools/DbConn/golden.py:36~40 상한 없음). run_verify.py:158 이 자식을 버퍼 해제 없이 띄워 끝난 46건 결과 줄도 로그에 없었음.",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "프로세스, 결과 파일, DB 세션 조회",
+        "result": "diff_verify PID 15148 CPU 2.67초, 결과 파일 44개 20:03:37 이후 변화 없음, AS-IS 세션 55 실행 중 997초, Oracle 활성 python 세션 0"
+      },
+      {
+        "grade": "B",
+        "what": "tools/Harness/verify/diff_verify.py 호출 1건 상한 300초(DIFF_QTIMEOUT, AS-IS pyodbc timeout, TO-BE call_timeout), 결과 줄 flush",
+        "result": "상한 초과 시 ERR(미검증)로 남고 다음 호출 진행"
+      },
+      {
+        "grade": "B",
+        "what": "tools/Harness/verify/run_verify.py run() 자식 env PYTHONUNBUFFERED=1",
+        "result": "자식 출력이 줄 단위로 로그에 기록됨"
+      },
+      {
+        "grade": "B",
+        "what": "Doc/verify/_checker_defects.md T515 등록",
+        "result": "등록함"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/diff_verify.py",
+      "tools/Harness/verify/run_verify.py",
+      "Doc/verify/_checker_defects.md"
+    ],
+    "verify": "2026-11-20 20:19:06 py_compile 2개 통과, engine_selfcheck.py PASS(전 항목 0, selftest JS 34·PY 65). 20:19:42 AS-IS timeout=3 + WAITFOR 8초 → 3.0초 HYT00 예외. 자식 python 첫 줄 도착 기본 4.0초 → PYTHONUNBUFFERED 0.0초. 수정 코드로 diff_verify 전체 실행은 하지 않음(CheckList 재수행은 사용자 실행).",
+    "status": "need-user",
+    "next_for_user": "실행 중인 SCP0028 CheckList(PID 15148)는 수정 전 코드라 AS-IS 세션 55 가 끝날 때까지 대기함. 멈추고 CheckList 를 다시 실행할지 결정 필요. 다시 실행하면 #47 은 300초 뒤 ERR(미검증)로 남고 체인이 진행함. #47 AS-IS SP 지연이 AS-IS 원래 동작인지는 미확인.",
+    "proposal": null,
+    "level": "L2",
+    "levelWhy": "실행 실패 1건. 같은 서명 과거 사건 1건(20261119_205710_R5_ALL)은 Playwright 리포터 출력 시점 원인이고 실행 정지가 아니어서 같은 원인 재발 2건 조건 미충족"
+  },
+  "snap": "20261120_201206_R5_SCP0028"
+}

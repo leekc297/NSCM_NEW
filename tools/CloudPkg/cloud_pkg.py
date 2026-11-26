@@ -1221,9 +1221,10 @@ def mark_applied(ID, mode):
     return 0
 
 
-def latest_pkg(ID, mode):
-    """적용할 파일이 든 가장 최근 패키지(수정본·전체 무관). 00·90 만 있는 빈 패키지는 건너뛴다."""
-    pat = re.compile(rf"^{ID}_CLOUD_{'DBUI' if mode == 'all' else 'DB'}_(MOD|FULL)_(\d{{8}}_\d{{4}}(?:\d{{2}})?)$")
+def latest_pkg(ID, mode, scope=None):
+    """적용할 파일이 든 가장 최근 패키지. scope 없음 = 수정본·전체 무관, 'delta' = 수정본(MOD)만, 'full' = 전체(FULL)만. 00·90 만 있는 빈 패키지는 건너뛴다."""
+    kind = {'delta': 'MOD', 'full': 'FULL'}.get(scope, 'MOD|FULL')
+    pat = re.compile(rf"^{ID}_CLOUD_{'DBUI' if mode == 'all' else 'DB'}_({kind})_(\d{{8}}_\d{{4}}(?:\d{{2}})?)$")
     found = []
     for d in os.listdir(PKG_ROOT):
         m = pat.match(d)
@@ -1236,20 +1237,30 @@ def latest_pkg(ID, mode):
 def emit_links(pkg_dir):
     """VM 워크벤치가 Flow 보드에 클릭 링크로 붙이는 줄(@@LINK 라벨|경로) — 2026-11-11"""
     print(f"@@LINK 📂 패키지 폴더 {os.path.basename(pkg_dir)}|{os.path.relpath(pkg_dir, ROOT)}")
-    print(f"@@LINK 📄 README|{os.path.relpath(os.path.join(pkg_dir, '00_README.md'), ROOT)}")
-    adb = os.path.join(pkg_dir, 'A_DB')
-    if os.path.isdir(adb):
-        print(f"@@LINK 🗂 A_DB|{os.path.relpath(adb, ROOT)}")
+    # 2026-11-24 사용자: README.md 를 열 필요 없음, 이관 목록만 링크로. 이관 파일(00_README.md 제외)을 적용 순서(폴더, 파일 이름 순)대로 하나씩
+    files = []
+    for dp, dns, fns in os.walk(pkg_dir):
+        dns.sort()
+        for fn in sorted(fns):
+            if fn == '00_README.md' and dp == pkg_dir:
+                continue
+            files.append(os.path.join(dp, fn))
+    for n, f in enumerate(files, 1):
+        rel = os.path.relpath(f, pkg_dir).replace(os.sep, '/')
+        print(f"@@LINK 📄 이관 {n}. {rel}|{os.path.relpath(f, ROOT)}")
 
 
 def print_nothing(ID, mode, state):
-    pkg = latest_pkg(ID, mode)
+    pkg = latest_pkg(ID, mode, scope='delta')   # R36: 수정본 단추는 수정본(MOD) 폴더만 보여 준다. FULL 경로는 내지 않는다.
     base = f"이관 완료 표시 {state['applied_at']}" if state.get('applied_at') else f"기준선 {state.get('built_at', '?')}(생성 시각 · 이관 확정 아님)"
     print(f'\n✅ 변경 없음 · {base} 이후 바뀐 것이 없어 새 폴더를 만들지 않았다.')
     if pkg:
         print(f"   수정본 폴더: {os.path.relpath(os.path.join(PKG_ROOT, pkg), ROOT)}")
         print(f"   README: {os.path.relpath(os.path.join(PKG_ROOT, pkg, '00_README.md'), ROOT)}")
         emit_links(os.path.join(PKG_ROOT, pkg))
+    else:
+        print('   수정본 없음')
+        return
     if not state.get('applied_at'):
         print('   클라우드에 아직 적용하지 않았다면 위 폴더를 적용한다. 적용했다면 ☁️ 클라우드 이관 완료 표시를 누른다.')
 

@@ -1,0 +1,127 @@
+{
+  "id": "20261124040951_SELF",
+  "at": "2026-11-24T04:09:51+09:00",
+  "ms": 1795460991578,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/run_verify.py|수정분재점검checklistrunpydeltarunverifyonly은s",
+  "title": "사용자 지시 R108 같은 문제: tools/Harness/verify/run_verify.py:846 수정분 재점검(checklist_run.py --delta → run_verify --only)은 screen_sync 를 건너뛰어, DB MODE 에서 Git ",
+  "evidence": "규칙 R108 \"CheckList 시작 때 DB MODE 이면 그 화면 FE 폴더를 Git 원격과 비교해 최신 변경분을 Download & Merge 한 뒤 측정함\" (원래 지시 2026-11-18 17:54 \"작업 계속 진행해주세요. 그리고 다음 기능도 추가해주세요. CHECKLIST 수행 시 UI 해당 소스에 대해서 GIT 확인 후 최신소스 변경 분 있으면 다운로드 하는 기능 추가해주세요.\") · tools/Harness/verify/run_verify.py:846 if not only:",
+  "targets": [
+    "tools/Harness/verify/run_verify.py"
+  ],
+  "before_after": "checklist_run.py --delta 시작 때(delta_scope.decide 앞) repairScope=DB_ONLY 이면 screen_sync.py <ID> 를 1회 호출함. --recheck(--only)는 지금처럼 소스를 바꾸지 않음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/run_verify.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T08:39:04+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T08:39:04+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-24T10:05:51+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-24T10:09:26+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 76/76개 파일 통과(PASS 1204, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self1005"
+    },
+    {
+      "at": "2026-11-24T10:09:28+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T10:21:27+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1210, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T10:21:27+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js 반영 전(2026-11-24 10:10:02 종료) ALL OK 76/76 PASS 1204 FAIL 0 → 반영 뒤(2026-11-24 10:17:31 종료) ALL OK 77/77 PASS 1210 FAIL 0. 추가로 python -m py_compile run_verify.py 통과(COMPILE_OK) · 변경 19개 파일 · 대상 목록 밖 변경 18개: tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/quick.json, tools/VibeManager/steps.json, Doc/OpsManual/DM/SCM_OM_운영자매뉴얼_DM_v1.0.pptx, Doc/OpsManual/DM/content/chapters_auto.json",
+      "log": ".vibe\\logs\\2026-11-24T10-09-28_claude_orch.log",
+      "sec": 500,
+      "costUsd": 0.7830697999999998,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/quick.json",
+        "tools/VibeManager/steps.json",
+        "Doc/OpsManual/DM/SCM_OM_운영자매뉴얼_DM_v1.0.pptx",
+        "Doc/OpsManual/DM/content/chapters_auto.json",
+        "Doc/OpsManual/DM/facts/batch.csv",
+        "Doc/OpsManual/DM/facts/flow_edges.csv",
+        "Doc/OpsManual/DM/facts/screens.csv",
+        "Doc/OpsManual/DM/plan.json",
+        "Doc/_doc_style/ops_manual.py.style.csv",
+        "Doc/통합테스트_SSP/SSP 통합테스트 시나리오(e2e)_V9_사전점검_일산출_20261124.xlsx",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/00_BACKUP_PKG_DMF0082_BODY.ASIS.sql",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/01_PKG_DMF0082_BODY_UC_CUTOFF.sql",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/apply_uc_cutoff.py",
+        "tools/Analysis/ssp_it_precheck/split_sheet.ps1",
+        "tools/Docs/ops_manual.py",
+        "tools/VibeManager/test/t_om_job.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 시작 때 DB MODE 이면 그 화면 FE 폴더를 Git 원격과 비교해 최신 변경분을 Download & Merge 한 뒤 측정함 규칙을 tools/Harness/verify/run_verify.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R108|tools/Harness/verify/run_verify.py",
+  "kind": "fix",
+  "needsApproval": "작업 모드(repairScope) 변경",
+  "applyStartMs": 1795482568736,
+  "verifyJudge": {
+    "at": "2026-11-24T10:17:51+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1210, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self1005",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795483287158,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 76/76 PASS 1204 FAIL 0 219.4s' → 반영 뒤 'ALL OK 파일 77/77 PASS 1210 FAIL 0 219.5s'. 웹뷰 파일 수정 없음, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/run_verify.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js 반영 전(2026-11-24 10:10:02 종료) ALL OK 76/76 PASS 1204 FAIL 0 → 반영 뒤(2026-11-24 10:17:31 종료) ALL OK 77/77 PASS 1210 FAIL 0. 추가로 python -m py_compile run_verify.py 통과(COMPILE_OK)",
+    "note": "run_verify.py:848 'if not only:' → 'if not only or DELTA:'. VERIFY_DELTA=1 은 checklist_run.py --delta(partial)만 넘김(checklist_run.py:219), --recheck(checklist_run.py:245)는 넘기지 않아 소스를 바꾸지 않음. DB_ONLY 판별은 screen_sync.py:82-86. 개선안 문구의 'delta_scope.decide 앞' 위치는 checklist_run.py:202 라 targets 밖이어서 반영 못 함. 이번 반영은 decide 뒤 run_verify 단계에서 받으므로 받은 변경분은 이번 재측정 범위에 들지 않음. 다음 실행 범위 반영 여부 미확인. 추가 확인 후보 = checklist_run.py:195-202 에 decide 앞 screen_sync 호출 개선안 별도 승인"
+  },
+  "snap": "prop_20261124040951_SELF"
+}

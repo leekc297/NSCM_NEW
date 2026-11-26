@@ -1,0 +1,116 @@
+{
+  "id": "20261124064958_SELF_2",
+  "at": "2026-11-24T06:49:58+09:00",
+  "ms": 1795470598358,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|vmo본문옆고정폭영역tlsn줄dcnavn줄hcnavn줄에접기와",
+  "title": "사용자 지시 R178 같은 문제: tools/VibeManager/orchestra.js:355 VMO 본문 옆 고정 폭 영역 .tls(355줄), .dc-nav(365줄), .hc-nav(368줄)에 접기와 펴기 단추가 없음",
+  "evidence": "규칙 R178 \"웹뷰에서 목록, 보조 패널처럼 본문 옆에 붙은 영역은 접기와 펴기 단추를 둠\" (원래 지시 2026-11-20 18:32 \"VMW 의 왼쪽 영역을 펴기/닫기 할 수 있도록 해주세요.\") · tools/VibeManager/orchestra.js:355 .tls{width:220px;flex:none;position:sticky;top:0;",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "각 영역 머리에 접기 단추를 두고 부모에 collapsed 클래스를 토글해 폭 0 처리, 상태는 vscode.setState 로 보관함(jobs.js 왼쪽 영역 접기와 같은 방식)",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T08:01:52+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T08:05:45+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0801"
+    },
+    {
+      "at": "2026-11-26T08:05:48+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T08:15:44+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 기록 실패 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T08:15:44+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 08:07:18 node --check orchestra.js: 반영 전 통과 → 반영 뒤 통과 · 08:11 전 run_all.js: 반영 전 미측정 → 반영 뒤 ALL OK 87/87 PASS 1423 FAIL 0 · t_webview_syntax.js: 반영 뒤 ALL PASS('스크립트가 찾는 id 가 HTML 에 있음' PASS) · sideT 출현 수 반영 전 0 → 반영 뒤 8 · 확인 시각 2026-11-26 08:11:27 · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/WORKLOG.md",
+      "log": ".vibe\\logs\\2026-11-26T08-05-49_claude_orch.log",
+      "sec": 356,
+      "costUsd": 1.1139614999999998,
+      "files": [
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/orchestra.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:06+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰에서 목록, 보조 패널처럼 본문 옆에 붙은 영역은 접기와 펴기 단추를 둠 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R178|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795647711950,
+  "autoFp": "8409e282bb",
+  "applyStartMs": 1795647948917,
+  "verifyJudge": {
+    "at": "2026-11-26T08:11:48+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0801",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795648543990,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js 반영 전(.bak_20261126_self0801 사본) 통과 → 반영 뒤 통과(CHECK_OK, 08:07:18) · node tools/VibeManager/test/run_all.js 반영 전 미측정(첫 실행 권한 확인에서 멈춤) → 반영 뒤 'ALL OK  파일 87/87  PASS 1423  FAIL 0  227.2s' · node tools/VibeManager/test/t_webview_syntax.js 반영 뒤 'ALL PASS'(run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "2026-11-26 08:07:18 node --check orchestra.js: 반영 전 통과 → 반영 뒤 통과 · 08:11 전 run_all.js: 반영 전 미측정 → 반영 뒤 ALL OK 87/87 PASS 1423 FAIL 0 · t_webview_syntax.js: 반영 뒤 ALL PASS('스크립트가 찾는 id 가 HTML 에 있음' PASS) · sideT 출현 수 반영 전 0 → 반영 뒤 8 · 확인 시각 2026-11-26 08:11:27",
+    "note": "접기 단추(.sideT)를 사건(inc), 개선안(pr) 오른쪽 영역과 약자 사전(dict), 자가진단(self), 작업 이력(hist) 왼쪽 영역에 둠. 부모에 data-side 를 두고 sc-off 클래스를 토글해 .tls, .dc-nav, .hc-nav 폭을 0으로 줄임. 상태는 vscode.setState 의 side 키에 저장하고 sideApply() 가 창을 열 때와 incList, prList 를 다시 그릴 때 적용함. 탭 전환 함수 show() 의 setState({tab}) 가 저장 상태 전체를 덮어써 접은 상태가 지워지던 줄을 기존 상태에 tab 만 더하도록 고침(같은 원인으로 지워지던 agentHist 도 이제 남음). 개선안의 줄 번호(355, 365, 368)는 현재 파일에서 365, 375, 378줄임. 단추를 눌러 보는 화면 확인은 창 다시 로드 뒤 사용자 확인 대상임."
+  },
+  "snap": "prop_20261124064958_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

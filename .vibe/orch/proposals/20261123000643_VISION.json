@@ -1,0 +1,193 @@
+{
+  "id": "20261123000643_VISION",
+  "at": "2026-11-23T00:06:43+09:00",
+  "ms": 1795360003730,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ln|purpose|sn write time gate",
+  "title": "개념 재정립: VM 고정 문구 문장 규칙(S11)을 다 쓴 뒤 정리에서 쓰는 시점 차단으로",
+  "evidence": "CHANGELOG.md S11 정리 반영 16회(11-19 22:15 ~ 11-22 23:23). workbench.js 위반 333(:1176) → 119(:4). 정리 사이 증가 211 → 214(:531, :173), 141 → 142(:82, :4). 11-22 23:29 workbench.js.style.csv 기호 109/119, ▶ 진행 표지(L761, L806, L819, L1047), 메뉴 이름 인용(L1018) 포함. 표지 문구 수정 반영 실패 20261119232523_SELF, 20261119232524_SELF_3(:1002, :1144). 반영 게이트에 doc_style.py 없음(vm-orchestra.md:94, orch-selfcheck.js:219-229) · 진단 사다리 묶음 L4|purpose|VM고정문구가문장규칙을지킴 · 문서 .vibe/orch/vision/concept_20261123_L4_purpose_VM_.md",
+  "targets": [
+    "tools/Docs/doc_style.py",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-vision.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/Harness/harness.json",
+    ".claude/settings.json"
+  ],
+  "before_after": "지금: VM 코드의 문자열 전부를 다 쓴 뒤 하루 주기로 세고, 위반 0건이 될 때까지 파일별 정리 개선안을 반복함 → 새 개념: 문장, 코드 표지, 메뉴 이름 인용으로 나눠 문장만 대상으로 하고, 반영 게이트와 쓴 직후 검사에서 새 위반을 막고, 기존 위반은 계획 1건으로 한 번에 정리함. 판정 기준 = 새로 생긴 위반 0건, 대상 문장 잔량 0건",
+  "verify": "단계 1: workbench.js 기호 109건이 세 분류로 나뉘고 합 109 일치. 단계 2: 위반 1건을 넣은 가짜 개선안이 게이트에서 되돌려지는 시험 PASS. 단계 3: python tools/Docs/doc_style.py tools/VibeManager/*.js 문장 분류 위반 119(11-22 23:23 workbench.js) → 0, test/run_all.js PASS, t_webview_syntax.js PASS. 단계 4: 다음 Overall Review 이 목적 판정이 두 수치를 근거로 맞음",
+  "rollback": "단계별 .bak_<날짜>_orch 백업과 VMO 개선안 탭 되돌리기. 게이트는 harness.json orch 설정 키로 끔. hook 은 .claude/settings.json 에서 해당 줄 삭제",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "Overall Review 목적 'VM 고정 문구가 문장 규칙을 지킴' 어긋남 3회 연속(vision/20261120_115806.json:74, 20261121_120359.json:68, 20261122_140538.json:74). L3 조치(doc_style.py 주석, 정규식 제외, KNOWN_OK 제외, applyfail 구조 개선안) 뒤에도 같은 목적 어긋남",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T11:22:20+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:22:25+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T11:22:39+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:22:43+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T11:22:57+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:23:02+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T18:51:17+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T18:54:54+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 70/72개 파일 통과(PASS 1108, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1851"
+    },
+    {
+      "at": "2026-11-23T18:54:56+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T19:12:12+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1122, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-vision.js, workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T19:12:12+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v4 단계 4: 다음 Overall Review 이 목적 판정이 두 수치를 근거로 맞음 (다음 실행이 있어야 확인)"
+    },
+    {
+      "at": "2026-11-23T19:12:12+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건, 반영 뒤 확인 1건. 2026-11-23 18:55~19:08. doc_style.py(VM .js 36개) 반영 전 workbench.js 위반 119 → 반영 뒤 전체 위반 0(exit 0). 단계 1 기호 109 = 문장 65 + 표지 44 + 이름 인용 0. 단계 2 t_orch_selfcheck.js ALL PASS 32(가짜 개선안 S11 0 → 1 반영 실패, a.js 되돌림). run_all.js 72/72 PASS 1122 FAIL 0. t_webview_syntax.js PASS 19. node --check 4개, py_compile · 변경 13개 파일 · 대상 목록 밖 변경 7개: tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/WORKLOG.md, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/workbench.js, tools/VibeManager/test/t_orch_applyfail.js",
+      "log": ".vibe\\logs\\2026-11-23T18-54-57_claude_orch.log",
+      "sec": 817,
+      "costUsd": 7.437095200000001,
+      "files": [
+        "tools/Docs/doc_style.py",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/harness.json",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/orch-vision.js",
+        "tools/VibeManager/test/t_orch_selfcheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/workbench.js",
+        "tools/VibeManager/test/t_orch_applyfail.js",
+        "tools/VibeManager/test/t_orch_coreauto.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:22+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T21:20:34+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM 화면과 알림 문구의 문장 규칙을 매일 몰아서 고치지 않고, 문구를 새로 넣는 순간 검사해서 막습니다. 남은 위반은 한 번에 정리하고, 진행 표시 기호와 메뉴 이름은 고치지 않습니다.",
+    "risk": "검사 기준이 넓게 잡히면 일반 문장도 '표시 기호'로 빠져 위반이 안 보이거나, 기준이 좁으면 VM 자가 보완 반영이 자주 실패합니다.",
+    "undo": "환경설정에서 문장 검사 게이트를 끄고, 개선안 탭의 되돌리기로 바뀐 파일을 이전 상태로 돌립니다."
+  },
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795427477160,
+  "autoFp": "bb205ce4b1",
+  "applyStartMs": 1795427696534,
+  "postChecks": [
+    {
+      "n": 4,
+      "text": "단계 4: 다음 Overall Review 이 목적 판정이 두 수치를 근거로 맞음",
+      "why": "다음 실행이 있어야 확인",
+      "status": "open",
+      "at": "2026-11-23T19:08:36+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-23T19:08:36+09:00",
+    "verified": true,
+    "text": "실행 통과 3건, 반영 뒤 확인 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1122, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1851",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-vision.js",
+    "workbench.js"
+  ],
+  "appliedMs": 1795428732496,
+  "synced": [
+    "orch-vision.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "python doc_style.py 반영 전 workbench.js 사본 + C:/tmp/ds_count.py: 기호 분류 {'문장': 65, '표지': 44} 합 109, 이름 인용 0. 반영 전 사본이 인용한 메뉴 이름('🛠️ 기존 화면 보완', '🚒 자동 보완')은 quick.json, steps.json 에 없어 이름 인용 0. 정리 뒤 L1026 을 지금 메뉴 이름으로 고쳐 workbench.js 이름 인용 2"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node test/t_orch_selfcheck.js: PASS '위반 1건 넣은 가짜 개선안 = 게이트 S11 새로 어긋남 · 반영 실패 · a.js 되돌림'(newBad 'S11 a.js 문장 규칙 위반 늘어남: 0 → 1'), PASS '위반 없는 개선안 = 게이트 통과 · 문장 규칙 위반 0 → 0', ALL PASS 32"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "python tools/Docs/doc_style.py tools/VibeManager/*.js(36개): 반영 전 workbench.js 위반 119(기호 109, 수식어 5, 소개·맺음 2, 용어 2, 추측 1) → 반영 뒤 36개 파일 위반 0, exit 0(workbench.js 표지 48, 이름 인용 2, 제외 27). node test/run_all.js: ALL OK 파일 72/72 PASS 1122 FAIL 0 209.4s. node test/t_webview_syntax.js: PASS 19 ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/Docs/doc_style.py",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-vision.js",
+      "tools/VibeManager/test/t_orch_selfcheck.js",
+      "tools/Harness/harness.json",
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-23 18:55~19:08. doc_style.py(VM .js 36개) 반영 전 workbench.js 위반 119 → 반영 뒤 전체 위반 0(exit 0). 단계 1 기호 109 = 문장 65 + 표지 44 + 이름 인용 0. 단계 2 t_orch_selfcheck.js ALL PASS 32(가짜 개선안 S11 0 → 1 반영 실패, a.js 되돌림). run_all.js 72/72 PASS 1122 FAIL 0. t_webview_syntax.js PASS 19. node --check 4개, py_compile 통과. doc_style.py --hook 시험: 위반 1건 파일 exit 2, workbench.js와 VM 밖 파일 exit 0",
+    "note": "1) .claude/settings.json 쓰기가 권한에서 막혀 PostToolUse hook 줄(python C:/Projects/NSCM/tools/Docs/doc_style.py --hook, timeout 30)을 넣지 못함. 등록은 사용자가 함. doc_style.py --hook 모드는 들어가 있고 시험함. 2) 단계 3 위반 0을 맞추려고 targets 밖 workbench.js 문장 71건(줄표, 가운뎃점, '모두', '실제로', '필요 시')을 필요한 줄만 Edit 로 고침. 근거는 before_after '기존 위반은 계획 1건으로 한 번에 정리함'과 verify 단계 3. 줄 머리 표지(✖ ⛔ ✅ ▶ ⚠)와 FAIL_RE 가 읽는 ✖ 는 그대로 둠. L1026 메뉴 이름을 지금 quick.json 이름('🛠️ 수동 보완', '🧯 자동 보완')으로 고침. 3) 게이트 끄기 = harness.json orch.styleGate false. 대상에 doc_style.py나 doc_style_rules.csv가 있으면 비교 안 함. 4) KNOWN_OK 9건 중 분류가 대신하는 history.js, orchestra.js 2건 삭제, 나머지 7건(규칙 오탐 등)은 둠. 5) orch-improve.js, orch-selfcheck.js 는 같은 시각 다른 작업도 고치는 중이라 필요한 줄만 Edit. 6) v4 는 다음 Overall Review 뒤 확인."
+  },
+  "snap": "prop_20261123000643_VISION",
+  "effectiveMs": 1795436434041,
+  "effectiveAt": "2026-11-23T21:20:34+09:00"
+}

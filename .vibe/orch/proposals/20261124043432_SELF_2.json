@@ -1,0 +1,115 @@
+{
+  "id": "20261124043432_SELF_2",
+  "at": "2026-11-24T04:34:32+09:00",
+  "ms": 1795462472335,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|workbench탭순서가consolestatusloghistory와동적탭",
+  "title": "사용자 지시 R138 같은 문제: tools/VibeManager/workbench.js:2029 Workbench 탭 순서가 Console, Status, Log, History 와 동적 탭 순이라 Log 탭이 마지막이 아님",
+  "evidence": "규칙 R138 \"웹뷰 탭 순서는 주 기능 탭을 앞에 두고 LOG 탭을 마지막에 둠\" (원래 지시 2026-11-19 18:57 \"VMO TAB 순서에 LOG 을 제일 뒤로 보내주세요.\") · tools/VibeManager/workbench.js:2029 <button class=\"rtb\" data-t=\"logs\">${TI.logs}<span>Log</span></button><button class=\"rtb\" data-t=\"history\">${TI.hist}<span>History</span></button><span id=\"dtabs\"></span>",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "Log 단추를 History 단추와 #dtabs 뒤로 옮김(Console, Status, History, 동적 탭, Log). data-t 값과 탭 전환 스크립트는 그대로 둠",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T04:24:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T04:28:25+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 · 백업 태그 20261126_self0424"
+    },
+    {
+      "at": "2026-11-26T04:28:28+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T04:40:39+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T04:40:39+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 → 반영 뒤. node --check workbench.js: 오류 없음 → 오류 없음. run_all.js: 'ALL OK 파일 87/87 PASS 1422 FAIL 0'(2026-11-25T19:28:49Z) → 'ALL OK 파일 87/87 PASS 1422 FAIL 0'. t_webview_syntax.js: 'PASS 19' → 'ALL PASS'(19건). 확인 시각 2026-11-26 04:36:35 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T04-28-29_claude_orch.log",
+      "sec": 498,
+      "costUsd": 0.6249689,
+      "files": [
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:09+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰 탭 순서는 주 기능 탭을 앞에 두고 LOG 탭을 마지막에 둠 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R138|tools/VibeManager/workbench.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795634671602,
+  "autoFp": "c5eedc37cc",
+  "applyStartMs": 1795634908876,
+  "verifyJudge": {
+    "at": "2026-11-26T04:36:50+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2"
+  },
+  "selfTag": "20261126_self0424",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795635639646,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/workbench.js 출력 없음, 오류 없음(반영 전·뒤 같음) · node tools/VibeManager/test/run_all.js 'ALL OK  파일 87/87  PASS 1422  FAIL 0'(반영 전 227.7s → 반영 뒤 227.3s) · node tools/VibeManager/test/t_webview_syntax.js 19건 PASS, 'ALL PASS'(반영 전 run_all 안 19건 → 반영 뒤 단독 실행 19건)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "반영 전 → 반영 뒤. node --check workbench.js: 오류 없음 → 오류 없음. run_all.js: 'ALL OK 파일 87/87 PASS 1422 FAIL 0'(2026-11-25T19:28:49Z) → 'ALL OK 파일 87/87 PASS 1422 FAIL 0'. t_webview_syntax.js: 'PASS 19' → 'ALL PASS'(19건). 확인 시각 2026-11-26 04:36:35",
+    "note": "workbench.js:2139 Log 단추를 History 단추와 <span id=\"dtabs\"> 뒤로 옮김. 순서 Console, Status, History, 동적 탭, Log. 동적 탭은 2729행 $('dtabs').appendChild 로 #dtabs 안에 붙어 Log 가 마지막에 남음. data-t 값과 탭 전환 스크립트는 그대로 둠. git diff 에는 다른 작업의 미커밋 변경분이 함께 잡힘(171+/67-), 이번 변경은 1줄임"
+  },
+  "snap": "prop_20261124043432_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

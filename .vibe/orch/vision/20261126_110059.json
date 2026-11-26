@@ -1,0 +1,90 @@
+{
+ "at": "2026-11-26T11:00:59+09:00",
+ "summary": "자동 반영은 11-25 00:00~11-26 10:55에 98회 시도하고 89건 반영하며 계속 돌고 있음. 사용자 지적 감지기 U3(대기 시간만으로 막힘 판정)과 U11(진단 기록 '반영 실패 진단'을 실패로 셈)이 거짓 실패를 되풀이하고, VMO 점검 모듈 반영분 34건이 창 다시 로드 대기(가장 오래된 것 11-25 22:27)라 자가 보완이 효력까지 닫히지 않음. CheckList 30분 목적과 문장 규칙 목적은 어긋남이나 같은 목적의 L4 안이 이미 대기 또는 planned 상태라 새 안을 올리지 않음.",
+ "purposes": [
+  {
+   "purpose": "CheckList 화면 1개 10분, 길어야 30분. 속도 개선은 판정 결과가 같은 대체 방법만",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md, user_checks.json U2",
+   "verdict": "어긋남",
+   "evidence": "S13 U2 SCP0005 1판 94분, 체인 전체 335분(.vibe/orch/selfcheck/result.json, 11-26 02:41 끝). digest7d S8.checklistRun n 26, 중앙값 1862.6초, p90 12908.3초. 사다리 L4(같은 목적 개념 재정립 안 3건 pending: 30분 시계 범위, 효력 시계, 판정 기준). 겹치므로 새 안 없음"
+  },
+  {
+   "purpose": "VM 고정 문구가 문장 규칙을 지킴(S11)",
+   "source": "memory/feedback_sentence_rule_3_20261113.md, tools/VibeManager/rules/50_DOC_STYLE.md",
+   "verdict": "어긋남",
+   "evidence": "styleRule newSum7d 917, remain 3(remainAt 2026-11-26T08:39:43+09:00), measured7d 142. S11 warn workbench.js 2건, orch-usercheck.js 1건. 개념 재정립 '문장 규칙 2차' planned, 단계 1 안 pending. 겹치므로 새 안 없음"
+  },
+  {
+   "purpose": "수치, 원인을 감이나 예측으로 답하지 않음",
+   "source": "memory/feedback_no_guess_answers.md",
+   "verdict": "미확인",
+   "evidence": "userLearn 11-26 10:26 예측 요청을 '미측정(worklog.jsonl 2행 unverified)'으로 분류한 기록 1건만 있음. 답변 전체를 대조할 원장 없음"
+  },
+  {
+   "purpose": "AI 주간 한도 90% 이상이면 VMO 자가진단, 자동 보완을 멈추고 감시는 계속",
+   "source": "memory/feedback_vmo_ai_weekly_limit_stop_20261124.md, harness.json aiWeeklyStopPct 90",
+   "verdict": "미확인",
+   "evidence": ".vibe/orch/ai_usage.json 주간 28%(source api). 기준 90%에 미달해 멈춤 동작이 7일 안에 실행된 기록 없음"
+  },
+  {
+   "purpose": "개선안은 승인 대상(FE, BE, DB, 실행 hook, settings.json, 시험 계정, 작업 모드, 코드 삭제)만 사람 승인, 나머지 자동 반영",
+   "source": "memory/feedback_vmo_approval_core_only_20261120.md, harness.json coreAutoApply true",
+   "verdict": "맞음",
+   "evidence": "events.jsonl selfcheck.autoapply 11-25 00:00~11-26 10:55 98회(applied 89, apply-failed 8, applying 1), 한 건씩 13~27분 간격. 승인 사유가 붙은 대기는 20261125223534_SELF_2 '자동 범위 밖 .claude/hooks/README.md' 1건 확인. 자동 대상 대기 41건은 등록 순서 줄에 있음(apply_order.json, 맨 앞 처리 20261124230634_SELF_2 10:55)"
+  },
+  {
+   "purpose": "VMO 보완 뒤 재수행(작업·화면마다 2번까지)",
+   "source": "memory/feedback_vmo_rerun_after_fix_20261120.md",
+   "verdict": "미확인",
+   "evidence": "digest7d 와 interventions7d 에 rerun 개입 항목 없음. 7일 안에 재수행 조건이 생긴 기록을 찾지 못함"
+  },
+  {
+   "purpose": "실행 중 문제를 사람보다 먼저 감지, 원인, 해결, 확인, 그 화면 다시 실행까지",
+   "source": "memory/feedback_vmo_self_heal_restart_20261120.md, user_checks.json U4 U19",
+   "verdict": "어긋남",
+   "evidence": "S7 미해결 사건 10건(20261125_032605_R1_SCP0005 31시간째, 20261123_115110_R12_ALL 71시간째). incidents7d R1 need-user 2, R5 need-user 3. checklist 체인 28회 중 ok 2, 끝 기록 없음 12. 원인 소스 확인 안 함(추가 확인 후보)"
+  },
+  {
+   "purpose": "사용자 지적은 감시로 자가진단하고 보완(S13)",
+   "source": "memory/feedback_vmo_user_issue_selfcheck_20261120.md, user_checks.json",
+   "verdict": "어긋남",
+   "evidence": "S13 fail 8. 이 중 U11 2건(20261124012049_SELF_3 27시간, 20261123181708_SELF 61시간)은 재진단 stop 이 끝난 안을 감지기가 방치로 셈(orch-usercheck.js:146 정규식 /^반영 실패/ 가 '반영 실패 진단:' 기록을 실패로 셈, 148행 ra > last 가 같은 시각이라 거짓). U3 stuckProp 41건은 줄이 줄어드는 중인데 대기 시간만으로 판정(orch-usercheck.js:83-85). 같은 서명 R12|S13|U3|stuckProp 사건 8건(resolved 7, open 1)"
+  },
+  {
+   "purpose": "하루 1회 Overall Review",
+   "source": "memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "맞음",
+   "evidence": "이번 점검 실행. proposals vision applied 13, pending 5, planned 1"
+  },
+  {
+   "purpose": "프롬프트로 고친 VM 지시를 규칙으로 모아 다른 곳도 자가점검 보완",
+   "source": "memory/feedback_vmo_user_fix_rules_20261123.md",
+   "verdict": "맞음",
+   "evidence": "userLearn 11-26 10:32 새 프롬프트 9건 처리. changes24h 에 '사용자 지시 R110~R181 같은 문제' 자가 보완 반영 기록 30건 넘게 있음. userPromptsPending 4"
+  },
+  {
+   "purpose": "VMO 자가 보완이 사람 손 없이 효력(실행 중 코드 반영)까지 닫힘",
+   "source": "memory/feedback_vmo_self_repair_auto_20261119.md, feedback_vmo_self_heal_restart_20261120.md",
+   "verdict": "어긋남",
+   "evidence": "digest7d.code waitingReload 34(가장 오래된 것 2026-11-25T22:27:46), staleFiles 18개(orch-usercheck.js 10:50, orch-selfcheck.js 10:25, orch-worklist.js 10:25 포함). activations.jsonl 마지막 창 로드 11-25 20:55:34, 11-26 로드 0회. HOT_MODULES 6개(orch-selfcheck.js:31)에 감지기 모듈 없음. L3 20261122130655_REVIEW_2, L4 20261123000946_VISION 반영 뒤에도 같은 조건 참"
+  },
+  {
+   "purpose": "계획한 구현 항목이 남으면 측정, 통합 시험 금지(A-16)",
+   "source": "memory/feedback_plan_complete_before_test_20261125.md, user_checks.json U31",
+   "verdict": "미확인",
+   "evidence": "U31 pending-detector. 관련 개선안(R230 2건, U31 감지기 추가 1건) pending. 감지기가 없어 11-25 20:30 이후 재발 여부를 셀 수 없음"
+  },
+  {
+   "purpose": "AI 적용은 판단이 필요한 곳만, 재측정 대상 미검증은 AI 에 보내지 않음",
+   "source": "memory/feedback_ai_points_judgement_only_20261120.md",
+   "verdict": "미확인",
+   "evidence": "digest7d claude calls 612, totalSec 190217.8. AI 호출을 판단 필요 여부로 나눈 집계가 없어 판정 못 함"
+  }
+ ],
+ "proposals": [
+  "20261126110058_VISION",
+  "20261126110058_VISION_2",
+  "20261126110059_VISION"
+ ],
+ "log": ".vibe\\logs\\2026-11-26T10-55-43_claude_orch.log"
+}

@@ -41,6 +41,31 @@ function targets(p) {
   return [...ids.values()].sort((a, b) => a.id.localeCompare(b.id));
 }
 function pageDirOf(p, id) { try { const r = JSON.parse(rd(path.join(p.genDir, id, 'register.json'))); return path.join(p.tobeDir, 'features', r.feature, 'src', 'pages', r.pageDir); } catch { return ''; } }
+// 개선안 20261124043431_SELF: UI/DB MODE 게이트 대상 = tools/Harness/gate_baseline.tsv 와 내용이 다른 파일이 있는 화면 폴더(harness-stop-gate.ps1 과 같은 계산).
+//   nscm-fe git status(-uall) 중 features/<f>/src/pages/<dir>/ 파일의 SHA1(없는 파일 = D)이 기준선과 다르면 그 폴더를 바뀐 화면으로 본다. 15초 동안 재사용.
+//   기준선·nscm-fe .git 이 없거나 git 실행 실패 = null(호출 쪽이 종전대로 CHECK.md 판정)
+let gbCache = { ms: 0, v: null };
+function gateBaseline(p) {
+  const bf = path.join(p.root || '', 'tools', 'Harness', 'gate_baseline.tsv');
+  if (!p.tobeDir || !has(bf) || !has(path.join(p.tobeDir, '.git'))) return null;
+  const now = Date.now(); if (gbCache.ms && now - gbCache.ms < 15000) return gbCache.v;
+  let v = null;
+  try {
+    const txt = rd(bf); const base = new Map(); const at = (/at=(\S+ \S+)/.exec(txt.split(/\r?\n/, 1)[0] || '') || [])[1] || '';
+    for (const l of txt.split(/\r?\n/)) { if (!l || l[0] === '#') continue; const i = l.indexOf('\t'); if (i > 0) base.set(l.slice(i + 1), l.slice(0, i)); }
+    const out = require('child_process').execFileSync('git', ['-c', 'core.quotepath=false', 'status', '--porcelain', '-uall'], { cwd: p.tobeDir, encoding: 'utf8', timeout: 15000, windowsHide: true, maxBuffer: 64 * 1024 * 1024 });
+    const crypto = require('crypto'); const dirs = new Set();
+    for (const l of out.split(/\r?\n/)) {
+      if (!l || l.length < 4) continue;
+      let f = l.slice(3).replace(/^"|"$/g, ''); if (f.includes(' -> ')) f = f.split(' -> ').pop().replace(/^"|"$/g, '');
+      const m = /(features\/[^/]+\/src\/pages\/[^/]+)\//.exec(f); if (!m) continue;
+      let h = 'D'; try { const full = path.join(p.tobeDir, f); if (fs.statSync(full).isFile()) h = crypto.createHash('sha1').update(fs.readFileSync(full)).digest('hex'); } catch { /* 없는 파일 = D */ }
+      if (base.get(f) !== h) dirs.add(m[1]);
+    }
+    v = { at, dirs };
+  } catch { v = null; }
+  gbCache = { ms: now, v }; return v;
+}
 function stageStatus(p, id) {
   const g = path.join(p.genDir, id); const s = {};
   const pack = path.join(p.outDir, 'screens', id); s.pack = has(path.join(pack, `${id}_summary.md`)) ? 'ok' : (has(pack) ? 'warn' : 'none');
@@ -68,7 +93,15 @@ function stageStatus(p, id) {
   // 2026-11-18: TestResultList = Doc/테스트결과서/<ID>_*.xlsx · CheckList 보다 오래되면 warn
   try { const td = path.join(p.root, 'Doc', '테스트결과서'); const ts = fs.readdirSync(td).filter(f => f.toUpperCase().startsWith(id + '_') && /\.xlsx$/i.test(f) && !f.startsWith('~$')).map(f => fs.statSync(path.join(td, f)).mtimeMs); const envAt = has(path.join(vd, 'run_verify.result.json')) ? fs.statSync(path.join(vd, 'run_verify.result.json')).mtimeMs : 0; s.report = ts.length ? (Math.max(...ts) >= envAt ? 'ok' : 'warn') : 'none'; } catch { s.report = 'none'; }
   s.gen = has(path.join(g, 'GEN_NOTES.md')) ? (pageDirOf(p, id) && has(pageDirOf(p, id)) ? 'ok' : 'warn') : 'none';
-  const chk = rd(path.join(g, 'CHECK.md')); const m = chk.match(/BLOCK (\d+) \/ WARN (\d+)/); s.gate = m ? (Number(m[1]) === 0 ? 'ok' : 'bad') : 'none'; s.gateN = m ? `${m[1]}/${m[2]}` : '';
+  // 개선안 20261124043431_SELF(규칙 R135 · 2026-11-19 사용자 지시): DB MODE = FE 소스가 변경 대상 아님 → 게이트 칸 제외(통과로 셈).
+  //   UI/DB MODE = gate_baseline.tsv 이후 바뀐 파일이 있는 화면만 CHECK.md 로 판정(harness-stop-gate.ps1 과 같은 기준). 기준선·git 을 못 읽으면 종전대로 CHECK.md.
+  //   fe_gate.json(브라우저 열기) 제외 여부는 사용자 판정 대상이라 아래 73줄 판정은 그대로 둔다.
+  let wm = null; try { wm = require('./workbench').workMode(p); } catch { /* 모드 못 읽음 = 종전 판정 */ }
+  const pgDir = pageDirOf(p, id); const pgRel = pgDir && p.tobeDir ? path.relative(p.tobeDir, pgDir).replace(/\\/g, '/') : '';
+  const gb = wm && !wm.db && pgRel ? gateBaseline(p) : null;
+  if (wm && wm.db) { s.gate = 'ok'; s.gateN = p.language === 'en' ? 'skip' : '제외'; s.gateTip = 'DB MODE: FE 변경 대상 아님(게이트 제외 · harness.json repairScope DB_ONLY)'; }
+  else if (gb && !gb.dirs.has(pgRel)) { s.gate = 'ok'; s.gateN = p.language === 'en' ? 'no change' : '변경 없음'; s.gateTip = `UI/DB MODE: 기준선(gate_baseline.tsv ${gb.at}) 이후 바뀐 파일 없음 · 게이트 대상 아님`; }
+  else { const chk = rd(path.join(g, 'CHECK.md')); const m = chk.match(/BLOCK (\d+) \/ WARN (\d+)/); s.gate = m ? (Number(m[1]) === 0 ? 'ok' : 'bad') : 'none'; s.gateN = m ? `${m[1]}/${m[2]}` : ''; }
   // 2026-11-18: 게이트 = FE 게이트(Doc/verify/<ID>/fe_gate.json · 실제 브라우저 열기·콘솔·조회)가 있으면 그것을, 없으면 check.js(CHECK.md)
   try { const fg = JSON.parse(rd(path.join(p.root, 'Doc', 'verify', id, 'fe_gate.json')).replace(/^\uFEFF/, '')); const gs = (fg.gates || []).filter(x => x && x.result); const f = gs.filter(x => x.result === 'FAIL').length, ok = gs.filter(x => x.result === 'PASS').length; if (gs.length) { s.gate = f ? 'bad' : ok === gs.length ? 'ok' : 'warn'; s.gateN = `${ok}/${gs.length}`; s.gateTip = gs.map(x => `${x.gate} ${x.result}`).join(' · ') + ` · ${fg.at || ''}`; } } catch { }
   const dod = rd(path.join(g, 'DOD.md')).match(/(\d+)\/(\d+) 충족/); s.dod = dod ? `${dod[1]}/${dod[2]}` : '';
@@ -152,7 +185,7 @@ display:flex;flex-direction:column;height:100%;min-height:0;font:12px/1.4 var(--
 .flow-root .stages .sb span{display:block;height:100%;background:var(--fa);border-radius:2px}
 .flow-root .legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:8px 0 0;font-size:11px;color:var(--fd)}
 .flow-root .legend span{display:inline-flex;align-items:center;gap:5px}
-.flow-root .fl-wrap{flex:1;min-height:0;overflow:auto}
+.flow-root .fl-wrap{flex:1;min-height:220px;overflow:auto} /* 2026-11-25 사용자: 창이 낮으면 머리(단계 요약)가 공간을 다 써 표 높이 0 · 스크롤 없음(600x500 실측 머리 305px, 표 0px). 표는 220px 이상 두고 모자라면 바깥 틀이 스크롤 */
 .flow-root .dot{display:inline-block;width:11px;height:11px;border-radius:50%;box-sizing:border-box;vertical-align:middle}
 .flow-root .dot.ok{background:var(--fok)}
 .flow-root .dot.warn{border:2px solid var(--fwarn);background:linear-gradient(90deg,var(--fwarn) 50%,transparent 50%)}
@@ -177,6 +210,33 @@ display:flex;flex-direction:column;height:100%;min-height:0;font:12px/1.4 var(--
 .flow-tbl .fbtn.off,.flow-tbl .fbtn.off:hover{opacity:.38;cursor:not-allowed;background:transparent;color:var(--fa)}
 .flow-tbl .fbtn svg{font-size:11px;fill:currentColor;stroke:none}
 .flow-tbl td.hint{text-align:center;color:var(--fd);padding:24px}
+/* ── 2026-11-20 사용자: FLOW 프리미엄 글래스모피즘(은은한 색감) · VMO·VMW·Workbench 와 같은 변수 ── */
+.flow-root{--fg:var(--vscode-foreground);--fa:color-mix(in srgb,var(--vscode-textLink-foreground,#3794ff) 62%,#8b93a7);--fok:color-mix(in srgb,var(--vscode-testing-iconPassed,#3fb950) 72%,#8b93a7);--fwarn:color-mix(in srgb,var(--vscode-testing-iconQueued,#d29922) 72%,#8b93a7);--fbad:color-mix(in srgb,var(--vscode-testing-iconFailed,#f85149) 70%,#8b93a7);
+  --fl:color-mix(in srgb,var(--fg) 10%,transparent);
+  --gx1:color-mix(in srgb,var(--fg) 7.5%,transparent);--gx0:color-mix(in srgb,var(--fg) 3%,transparent);--gxb:color-mix(in srgb,var(--fg) 12%,transparent);
+  --gxh:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(255,255,255,.02);--gxs:0 16px 40px -18px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.18);gap:8px;padding:8px}
+.vscode-light .flow-root{--gxh:inset 0 1px 0 rgba(255,255,255,.85),inset 0 -1px 0 rgba(255,255,255,.3);--gxs:0 14px 36px -18px rgba(40,60,120,.26),0 2px 6px rgba(40,60,120,.06);--gx1:color-mix(in srgb,#fff 62%,transparent);--gx0:color-mix(in srgb,#fff 40%,transparent);--gxb:color-mix(in srgb,#fff 85%,transparent);--fl:color-mix(in srgb,var(--fg) 12%,transparent)}
+.flow-root .fl-head,.flow-root .fl-wrap{background:linear-gradient(155deg,var(--gx1),var(--gx0) 60%);border:1px solid var(--gxb);border-radius:14px;box-shadow:var(--gxs),var(--gxh);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+.flow-root .fl-head{padding:10px 14px 10px}
+.flow-root h3::before{content:"";display:inline-block;vertical-align:-3px;width:16px;height:16px;margin-right:7px;border-radius:5px;background:conic-gradient(from 210deg,var(--fa),color-mix(in srgb,var(--vscode-charts-purple,#a371f7) 55%,#8b93a7),var(--fok),var(--fa));box-shadow:inset 0 1px 0 rgba(255,255,255,.35);opacity:.85}
+.flow-root .fl-find input{border-color:var(--gxb);background:var(--gx0);box-shadow:var(--gxh)}
+.flow-root .fl-ib{border-color:var(--gxb);background:var(--gx0);box-shadow:var(--gxh)}
+.flow-root .fl-ib:hover{background:var(--gx1);border-color:color-mix(in srgb,var(--fa) 45%,var(--gxb));color:var(--vscode-foreground)}
+.flow-root .bar{height:5px;border-radius:4px;background:color-mix(in srgb,var(--fg) 8%,transparent)}
+.flow-root .bar div{background:linear-gradient(90deg,color-mix(in srgb,var(--fok) 60%,transparent),var(--fok));border-radius:4px}
+.flow-root .stages .sg{border:1px solid color-mix(in srgb,var(--fg) 8%,transparent);border-radius:11px;background:color-mix(in srgb,var(--fg) 3.5%,transparent);box-shadow:var(--gxh)}
+.vscode-light .flow-root .stages .sg{background:color-mix(in srgb,#fff 50%,transparent);border-color:color-mix(in srgb,#fff 80%,transparent)}
+.flow-root .stages .sb{background:color-mix(in srgb,var(--fg) 8%,transparent)}
+.flow-root .stages .sb span{background:color-mix(in srgb,var(--fa) 80%,transparent)}
+.flow-root .fl-wrap{overflow:auto}
+.flow-tbl th{background:color-mix(in srgb,var(--vscode-editor-background) 78%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--gxb)}
+.flow-tbl th:first-child{border-top-left-radius:14px}.flow-tbl th:last-child{border-top-right-radius:14px}
+.flow-tbl tbody tr:hover td{background:color-mix(in srgb,var(--fg) 5%,transparent)}
+.flow-tbl td.fc{border-radius:8px}
+.flow-tbl .fbtn{border-color:color-mix(in srgb,var(--fa) 40%,var(--gxb));background:var(--gx0);box-shadow:var(--gxh)}
+.flow-tbl .fbtn:hover{background:color-mix(in srgb,var(--fa) 70%,transparent);color:var(--vscode-editor-background)}
+.flow-root .fl-wrap::-webkit-scrollbar{width:8px;height:8px}.flow-root .fl-wrap::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--fg) 14%,transparent);border-radius:8px}
+@media (prefers-reduced-transparency:reduce){.flow-root .fl-head,.flow-root .fl-wrap,.flow-tbl th{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--vscode-editor-background)}}
 `;
 
 // 표 본문(워크벤치 탭·독립 패널 공용). opts.csv = CSV 저장 버튼(독립 패널만)
@@ -209,8 +269,19 @@ function loadRows(p, filter) {
 
 function html(p, rows, filter) {
   return `<!doctype html><html><head><meta charset="utf-8"><style>
-html,body{height:100%}body{margin:0;padding:0;background:var(--vscode-editor-background);overflow:hidden}
-${FLOW_CSS}</style></head><body>
+html,body{height:100%}body{margin:0;padding:0;background:var(--vscode-editor-background);overflow-x:hidden;overflow-y:auto}
+${FLOW_CSS}body{background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--vscode-editor-background) 92%,#24304d),var(--vscode-editor-background) 70%)}
+.vmo-aur{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.vmo-aur i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.24;animation:vmoDrift 30s ease-in-out infinite alternate}
+.vmo-aur i:nth-child(1){width:600px;height:600px;left:-160px;top:-240px;background:color-mix(in srgb,var(--vscode-charts-blue,#3794ff) 58%,#8b93a7)}
+.vmo-aur i:nth-child(2){width:520px;height:520px;right:-170px;top:-140px;background:color-mix(in srgb,var(--vscode-charts-purple,#a371f7) 55%,#8b93a7);animation-duration:36s}
+.vmo-aur i:nth-child(3){width:440px;height:440px;left:36%;bottom:-260px;background:color-mix(in srgb,var(--vscode-charts-green,#3fb9a8) 50%,#8b93a7);opacity:.14;animation-duration:42s}
+.vscode-light .vmo-aur i{opacity:.14}.vscode-light .vmo-aur i:nth-child(3){opacity:.09}
+@keyframes vmoDrift{to{transform:translate(50px,34px) scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.vmo-aur i{animation:none}}
+@media (prefers-reduced-transparency:reduce){.vmo-aur{display:none}}
+</style></head><body>
+<div class="vmo-aur" aria-hidden="true"><i></i><i></i><i></i></div>
 ${body(p, rows, filter, { csv: true })}
 <script>const vscode=acquireVsCodeApi();
 document.querySelectorAll('td.fc').forEach(td=>td.onclick=()=>vscode.postMessage({type:'task',task:td.dataset.task,id:td.dataset.id}));
@@ -228,7 +299,7 @@ function open(api) {
     panel.webview.html = html(p, rows, filter); panel._rows = rows;
   };
   if (panel) { panel.reveal(); render(panel._filter || ''); return; }
-  panel = vscode.window.createWebviewPanel('vibeManager.flow', 'NSCM FLOW 진척 — Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
+  panel = vscode.window.createWebviewPanel('vibeManager.flow', 'NSCM FLOW 진척, Vibe Manager ' + require('./package.json').version, vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
   panel.onDidDispose(() => { panel = null; });
   panel.webview.onDidReceiveMessage(async m => {
     const p = api.paths();

@@ -1,0 +1,29 @@
+{
+  "id": "20261123_134222_R12_ALL_5",
+  "at": "2026-11-23T13:42:22+09:00",
+  "ms": 1795408942256,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U21 같은 원인 반영 실패 3회 개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판",
+  "screen": "",
+  "sig": "R12|S13|U21|title|개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판)과 보완 회차 분리|3",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261123000419_VISION 11-23 11:31, 20261123000419_VISION 11-23 13:13, 20261123000419_VISION 11-23 13:34 · 마지막 '반영 실패. 검증 실패: 2026-11-23. 1) writing-plans 로 전환 계획 작성(.vibe/orch/vision/plan_202'",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U21|title|개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판)과 보완 회차 분리|3",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T13:50:47+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

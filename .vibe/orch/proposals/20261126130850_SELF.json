@@ -1,0 +1,45 @@
+{
+  "id": "20261126130850_SELF",
+  "at": "2026-11-26T13:08:50+09:00",
+  "ms": 1795666130486,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/ene/specs/_trace.spec.ts|n줄searchwait가nscmsearch와rowcount만쓰고en",
+  "title": "사용자 지시 R237 같은 문제: Doc/e2e/specs/_trace.spec.ts:2749 2595줄 searchWait() 가 nscm.search() 와 rowCount 만 쓰고 ensureRows 를 부르지 않음. 기존행 INCOTERMS 편집 시",
+  "evidence": "규칙 R237 \"검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠\" (원래 지시 2026-11-26 11:48 \"팝업 셀 33행도 Division 순회로 보완해줘 나한테 회신 받지 않고 계속 보완 대상 확인해서 보완해줄 수 업산요?\") · Doc/e2e/specs/_trace.spec.ts:2749 const exNow = await probe.findRow(p, 'existing'); if (!exNow) { put(x.row_id, 'FAIL', '기존행 없음(조회 결과 0행)'); continue; }",
+  "targets": [
+    "Doc/e2e/specs/_trace.spec.ts"
+  ],
+  "before_after": "2595줄 첫 조회 뒤 nAll<=0 이면 ensureRows(nscm, 3, ID) 를 불러 nAll 을 다시 셈. 2749줄 0행 판정은 FAIL 에서 ERROR('[측정 전제 미충족] 조회 0행 · ' + via)로 바꿈",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/e2e/specs/_trace.spec.ts.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:52:05+09:00",
+      "by": "4ec206",
+      "what": "반영 완료(세션 직접 보완) · _trace.spec.ts L1 첫 조회(searchWait) 뒤 0행이면 ensureRows 후 nAll 재계산 · 기존행 없음 FAIL→ERROR('[측정 전제 미충족]') · playwright --list SCP0005 _trace 18개 · engine_selfcheck PASS(TSC 0) 2026-11-26 15:51"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠 규칙을 Doc/e2e/specs/_trace.spec.ts 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R237|Doc/e2e/specs/_trace.spec.ts",
+  "kind": "fix",
+  "claimedBy": "4ec206",
+  "waitNote": "",
+  "appliedMs": 1795675925485
+}

@@ -35,7 +35,7 @@ class ChainRunner {
       else if (m.type === 'fb') {
         if (m.state === 'start') { this.plan = (m.steps || []).map(s => ({ no: s.no, name: s.name, actor: s.kind === 'claude' ? 'claude' : 'script' })); if (o.onStep) o.onStep({ kind: 'start', title: m.title, steps: this.plan }); }
         else if (m.state === 'add') { const s = m.step || {}; (this.plan = this.plan || []).push({ no: s.no, name: s.name, actor: s.kind === 'claude' ? 'claude' : 'script' }); if (o.onStep) o.onStep({ kind: 'add', no: s.no, name: s.name, actor: s.kind === 'claude' ? 'claude' : 'script' }); }
-        else if (m.state === 'step') { const s = (this.plan || []).find(x => x.no === m.no) || { no: m.no, name: '', actor: '' }; this.step = (m.status === 'RUN' || m.status === 'REPAIR') ? { no: s.no, name: s.name, actor: m.status === 'REPAIR' ? 'claude' : s.actor, status: m.status } : null; if (o.onStep) o.onStep({ kind: 'step', no: m.no, name: s.name, actor: s.actor, status: m.status, code: m.code, sec: m.sec }); }
+        else if (m.state === 'step') { const s = (this.plan || []).find(x => x.no === m.no) || { no: m.no, name: '', actor: '' }; this.step = (m.status === 'RUN' || m.status === 'REPAIR') ? { no: s.no, name: s.name, actor: m.status === 'REPAIR' ? 'claude' : s.actor, status: m.status } : null; if (o.onStep) o.onStep({ kind: 'step', no: m.no, name: s.name, actor: s.actor, status: m.status, code: m.code, sec: m.sec, round: m.round, rounds: m.rounds }); }
         else if (m.state === 'sub') { if (o.onStep) o.onStep({ kind: 'sub', no: m.no, name: m.name }); }
         else if (m.state === 'end') { if (o.onStep) o.onStep({ kind: 'end', ok: m.ok, warn: m.warn, summary: m.summary, sec: m.sec }); }
       }
@@ -72,8 +72,9 @@ class ChainRunner {
     } finally { this.running = false; this.step = null; }
   }
   /** 실행 중인 프로세스·Claude 를 중지한다(서버는 서버 서비스 소유라 영향 없음) */
-  stop() { this.stopped = true; try { this.wb.stopAll(); } catch { } }
-  dispose() { try { if (this.running) this.wb.stopAll(); } catch { } this.wb.sink = null; }
+  // opts.sync = VS Code 종료 때 taskkill 을 기다림(2026-11-20). 개선안 20261122000646_SELF: opts.by, opts.why 를 workbench.endRun 에 넘긴다(user.stop 1줄 · 체인 끝 기록 stopBy)
+  stop(opts) { this.stopped = true; const o = opts || {}; try { const wbm = require('./workbench'); wbm.endRun(wbm.runIdOf(this.wb), { wb: this.wb, by: o.by, why: o.why, sync: !!o.sync, job: this.opts.jobId || '' }); } catch (e) { try { require('./orch-errlog').note('chain-runner', 'stop', e); } catch { /* 기록 실패 */ } } }
+  dispose() { if (this.running) this.stop({ by: '실행기 정리', why: 'runner.dispose' }); this.wb.sink = null; }
 }
 
 module.exports = { ChainRunner, claudeGate, makeGate };

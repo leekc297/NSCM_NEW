@@ -68,12 +68,11 @@ RTF4,Y,N,COND,잠금 (InsertRow:7862),"RULES:[{""g"": """", ""lock"": ""Y"", ""r
 RTF5,Y,N,COND,잠금 (InsertRow:7862),"RULES:[{""g"": """", ""lock"": ""Y"", ""ref"": ""EditButton:1788""}, {""g"": ""SHEET==\""Shipment Confirm Detail\"""", ""lock"": ""Y"", ""ref"": ""EditButton:1922""}, {""g"": ""SHEET==\""Shipment Confirm Detail\"" && !(COL(SHIPMENT_STATUS)==\""C\"" && COL(ERP_STATUS)!=\""C\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:1938""}]",,기존행 SSP0015_ShipmentPSI:1788 LockRange2 | 기존행 SSP0015_ShipmentPSI:1916 LockColumn | 기존행 SSP0015_ShipmentPSI:1922 LockColumn | 기존행 SSP0015_ShipmentPSI:1938 LockRange | 신규행 SSP0015_ShipmentPSI:7856 LockRange | 신규행 SSP0015_ShipmentPSI:7862 LockRange,,Shipment Confirm Detail
 RTF6,Y,N,COND,잠금 (InsertRow:7862),"RULES:[{""g"": """", ""lock"": ""Y"", ""ref"": ""EditButton:1788""}, {""g"": ""SHEET==\""Shipment Confirm Detail\"""", ""lock"": ""Y"", ""ref"": ""EditButton:1922""}, {""g"": ""SHEET==\""Shipment Confirm Detail\"" && !(COL(SHIPMENT_STATUS)==\""C\"" && COL(ERP_STATUS)!=\""C\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:1938""}]",,기존행 SSP0015_ShipmentPSI:1788 LockRange2 | 기존행 SSP0015_ShipmentPSI:1916 LockColumn | 기존행 SSP0015_ShipmentPSI:1922 LockColumn | 기존행 SSP0015_ShipmentPSI:1938 LockRange | 신규행 SSP0015_ShipmentPSI:7856 LockRange | 신규행 SSP0015_ShipmentPSI:7862 LockRange,,Shipment Confirm Detail
 ATTRIBUTE10,Y,N,COND,잠금 (InsertRow:7862),"RULES:[{""g"": """", ""lock"": ""Y"", ""ref"": ""EditButton:1788""}, {""g"": ""SHEET==\""Shipment Confirm Detail\"""", ""lock"": ""Y"", ""ref"": ""EditButton:1922""}, {""g"": ""SHEET==\""Shipment Confirm Detail\"" && !(COL(SHIPMENT_STATUS)==\""C\"" && COL(ERP_STATUS)!=\""C\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:1938""}]",,기존행 SSP0015_ShipmentPSI:1788 LockRange2 | 기존행 SSP0015_ShipmentPSI:1916 LockColumn | 기존행 SSP0015_ShipmentPSI:1922 LockColumn | 기존행 SSP0015_ShipmentPSI:1938 LockRange | 신규행 SSP0015_ShipmentPSI:7856 LockRange | 신규행 SSP0015_ShipmentPSI:7862 LockRange,,Shipment Confirm Detail
-MEASURE,,Y,COND,,"RULES:[{""g"": ""RAW(fps.ActiveSheet.Columns.Get(xCol1).Visible == true) && COL(MEASURE)==\""WH_IN\"""", ""lock"": ""N"", ""ref"": ""EditButton:1826""}]",,기존행 SSP0015_ShipmentPSI:1826 LockRange2,,Shipment Confirm Detail
+<DYNAMIC:LOOP>,,Y,COND,,"RULES:[{""g"": ""RAW(fps.ActiveSheet.Columns.Get(xCol1).Visible == true) && COL(MEASURE)==\""WH_IN\"""", ""lock"": ""N"", ""ref"": ""EditButton:1826""}, {""g"": ""(SELF~\""^W_\"" || SELF~\""^M_\"")"", ""lock"": ""Y"", ""ref"": ""SetLockSumColumn:2179""}]",,기존행 SSP0015_ShipmentPSI:1826 LockRange2 | 기존행 SSP0015_ShipmentPSI:2179 LockRange,,Shipment Confirm Detail
 LAST_UPDATE_DATE,,COND,COND,"RULES:[{""g"": ""SHEET==\""Hold stock\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:7711""}]","RULES:[{""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:1958""}, {""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (!(COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:1964""}]",,기존행 SSP0015_ShipmentPSI:1958 LockRange | 기존행 SSP0015_ShipmentPSI:1964 LockRange | 신규행 SSP0015_ShipmentPSI:7711 LockRange,,Shipment Confirm Detail
 AVAILABLE_YN,,Y,COND,,"RULES:[{""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (!(COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:1962""}, {""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (!(COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:1963""}]",,기존행 SSP0015_ShipmentPSI:1962 LockRange | 기존행 SSP0015_ShipmentPSI:1963 LockRange,,Shipment Confirm Detail
 FCS_HOLD_YN,,Y,COND,,"RULES:[{""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (!(COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:1963""}]",,기존행 SSP0015_ShipmentPSI:1963 LockRange,,Shipment Confirm Detail
 JUDG_VLD_DATE,,Y,COND,,"RULES:[{""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (!(COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:1964""}]",,기존행 SSP0015_ShipmentPSI:1964 LockRange,,Shipment Confirm Detail
-<DYNAMIC:LOOP>,,Y,COND,,"RULES:[{""g"": ""(SELF~\""^W_\"" || SELF~\""^M_\"")"", ""lock"": ""Y"", ""ref"": ""SetLockSumColumn:2179""}]",,기존행 SSP0015_ShipmentPSI:2179 LockRange,,Shipment Confirm Detail
 HOLD_YYYYMMDD,,COND,Y,"RULES:[{""g"": ""SHEET==\""Hold stock\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:7710""}]",,,신규행 SSP0015_ShipmentPSI:7710 LockRange,,Shipment Confirm Detail
 LAST_UPDATED_BY,,COND,Y,"RULES:[{""g"": ""SHEET==\""Hold stock\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:7711""}]",,,신규행 SSP0015_ShipmentPSI:7711 LockRange,,Shipment Confirm Detail
 DIVISION_ID,Y,COND,COND,"RULES:[{""g"": ""SHEET==\""Hold stock\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:7710""}, {""g"": """", ""lock"": ""Y"", ""ref"": ""InsertRow:7852""}]","RULES:[{""g"": ""SHEET==\""Shipment Confirm Detail\"""", ""lock"": ""Y"", ""ref"": ""EditButton:1920""}, {""g"": ""SHEET==\""Shipment Confirm Detail\"" && !(COL(SHIPMENT_STATUS)==\""C\"" && COL(ERP_STATUS)!=\""C\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:1938""}, {""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:1958""}, {""g"": ""!(SHEET==\""Shipment Confirm Detail\"") && SHEET==\""Stock Detail\"" && (!(COL(MES_CHANGE_STATUS)==\""D\"" || COL(AVAILABLE_YN)==\""-\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:1962""}]",,기존행 SSP0015_ShipmentPSI:1915 LockColumn | 기존행 SSP0015_ShipmentPSI:1920 LockColumn | 기존행 SSP0015_ShipmentPSI:1938 LockRange | 기존행 SSP0015_ShipmentPSI:1958 LockRange | 기존행 SSP0015_ShipmentPSI:1962 LockRange | 신규행 SSP0015_ShipmentPSI:7710 LockRange | 신규행 SSP0015_ShipmentPSI:7852 LockRange,siDetail,Shipment Confirm Detail
@@ -152,73 +151,73 @@ JUDG_VLD_DATE,,Y,COND,,"RULES:[{""g"": ""!(SHEET==\""Shipment Confirm Detail\"")
 <DYNAMIC:LOOP>,,Y,COND,,"RULES:[{""g"": ""(SELF~\""^W_\"" || SELF~\""^M_\"")"", ""lock"": ""Y"", ""ref"": ""SetLockSumColumn:2179""}]",,기존행 SSP0015_ShipmentPSI:2179 LockRange,siDetail,Shipment Confirm Detail
 HOLD_YYYYMMDD,,COND,Y,"RULES:[{""g"": ""SHEET==\""Hold stock\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:7710""}]",,,신규행 SSP0015_ShipmentPSI:7710 LockRange,siDetail,Shipment Confirm Detail
 LAST_UPDATED_BY,,COND,Y,"RULES:[{""g"": ""SHEET==\""Hold stock\"""", ""lock"": ""Y"", ""ref"": ""InsertRow:7711""}]",,,신규행 SSP0015_ShipmentPSI:7711 LockRange,siDetail,Shipment Confirm Detail
-DIVISION_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-SHIPMENT_STATUS,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ERP_SO_NO,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-CONFIRM_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ITEM_ID,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NICK_NAME,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-FROM_SITE_DESCRIPTION,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-TO_SITE_DESCRIPTION,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-SHIPTO_DESCRIPTION,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-END_CUSTOMER,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-MTK_OWNER,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-TEAM,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-FCST_TYPE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-SHIPMENT_CONFIRM_QTY,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-SHIPMENT_DATE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-TRANSPORT_MODE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-REMARKS2,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-REMARKS,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-CHANGE_REASON_CODE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-CHANGE_REASON_DETAIL,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-REMARKS3,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-INCOTERMS,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-LT_DAY,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ETD,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ETA,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-EXPECTED_SHIPPING_DATE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-TO_SITE_SOLDTO_CODE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-TO_SITE_SHIPTO_CODE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-SOLDTO_DESCRIPTION,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-REQUESTOR,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-UPDATED_BY,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-UPDATED_DATE,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-CHANGE_REQ_NO,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-CHECK_NEED_YN,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-MODEL_USER,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-FROM_SITE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-TO_SITE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ERP_STATUS,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-PROJECT_CODE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-BOD_ID,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-CHANGE_TYPE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_ROUTE_ID,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_BOD_ID,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_INCOTERMS,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_D_COUNTRY,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_D_PORT_CODE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_A_COUNTRY,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_A_PORT_CODE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_CUSTOMER_LT,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_TO_COUNTRY,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_TO_CITY,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_ETA,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_ETD,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_LT_DAY,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_TRANSPORT_MODE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-NEW_SHIPMENT_DATE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-EDIT_REMARKS,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-EDIT_MAIN,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ELECTRODE_YN,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ELECTRODE_TYPE,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ORIGIN_FROM_DIVISION_ID,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ORIGIN_TO_DIVISION_ID,N,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ATTRIBUTE3,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ATTRIBUTE6,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-RTF3,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-RTF4,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-RTF5,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-RTF6,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-ATTRIBUTE10,Y,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
-MEASURE,,Y,UNKNOWN,,EditButton SwitchLock 없음(편집 모드 모델 아님),,기존행 SSP0015_ShipmentPSI:1826 LockRange2,siMain,Shipment Confirm Detail
+DIVISION_ID,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+SHIPMENT_STATUS,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ERP_SO_NO,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+CONFIRM_ID,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ITEM_ID,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NICK_NAME,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+FROM_SITE_DESCRIPTION,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+TO_SITE_DESCRIPTION,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+SHIPTO_DESCRIPTION,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+END_CUSTOMER,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+MTK_OWNER,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+TEAM,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+FCST_TYPE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+SHIPMENT_CONFIRM_QTY,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+SHIPMENT_DATE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+TRANSPORT_MODE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+REMARKS2,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+REMARKS,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+CHANGE_REASON_CODE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+CHANGE_REASON_DETAIL,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+REMARKS3,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+INCOTERMS,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+LT_DAY,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ETD,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ETA,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+EXPECTED_SHIPPING_DATE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+TO_SITE_SOLDTO_CODE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+TO_SITE_SHIPTO_CODE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+SOLDTO_DESCRIPTION,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+REQUESTOR,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+UPDATED_BY,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+UPDATED_DATE,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+CHANGE_REQ_NO,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+CHECK_NEED_YN,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+MODEL_USER,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+FROM_SITE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+TO_SITE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ERP_STATUS,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+PROJECT_CODE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+BOD_ID,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+CHANGE_TYPE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_ROUTE_ID,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_BOD_ID,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_INCOTERMS,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_D_COUNTRY,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_D_PORT_CODE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_A_COUNTRY,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_A_PORT_CODE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_CUSTOMER_LT,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_TO_COUNTRY,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_TO_CITY,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_ETA,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_ETD,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_LT_DAY,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_TRANSPORT_MODE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+NEW_SHIPMENT_DATE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+EDIT_REMARKS,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+EDIT_MAIN,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ELECTRODE_YN,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ELECTRODE_TYPE,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ORIGIN_FROM_DIVISION_ID,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ORIGIN_TO_DIVISION_ID,N,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ATTRIBUTE3,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ATTRIBUTE6,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+RTF3,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+RTF4,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+RTF5,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+RTF6,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+ATTRIBUTE10,Y,Y,N,,잠금 (EditButton:1788),,기존행 SSP0015_ShipmentPSI:1788 LockRange2,siMain,Shipment Confirm Detail
+<DYNAMIC:LOOP>,,Y,COND,,"RULES:[{""g"": ""RAW(fps.ActiveSheet.Columns.Get(xCol1).Visible == true) && COL(MEASURE)==\""WH_IN\"""", ""lock"": ""N"", ""ref"": ""EditButton:1826""}]",,기존행 SSP0015_ShipmentPSI:1826 LockRange2,siMain,Shipment Confirm Detail

@@ -1,0 +1,269 @@
+{
+  "id": "20261123000419_VISION",
+  "at": "2026-11-23T00:04:19+09:00",
+  "ms": 1795359859734,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ln|purpose|checklisttime|clock split first doc",
+  "title": "개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판)과 보완 회차 분리",
+  "evidence": "events.jsonl:2001 SCP0028 ms_run 18571542: 1차 3954초, Claude 2510초, 부분 재측정 11794초. _timing.csv 부분 재측정 E2E 제외 1852, 1657, 1790초. run_verify.py:1103, 1153 eg_chain, diff_verify 범위 인자 없음. orch-usercheck.js:55-57 U2 가 체인 전체 ms_run 에 30분을 댐. quick.json:193-216 회차 상한 없는 반복 후 문서 1회. 보완 회차 1번 최소 2178초라 체인 전체 시계로는 '미검증이 없어질때까지 한번에'와 '30분 내 종료'를 함께 지킬 수 없음. 대기안 20261121120359_VISION 은 E2E 몫만 줄임 · 진단 사다리 묶음 L4|purpose|CheckList화면1개10분길어야30분안에 · 문서 .vibe/orch/vision/concept_20261123_L4_purpose_CheckList_1_10_30_.md",
+  "targets": [
+    "tools/VibeManager/quick.json",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/chain-runner.js",
+    "tools/Harness/verify/run_verify.py",
+    "memory/project_checklist_one_run_loop_20261120.md"
+  ],
+  "before_after": "지금 개념: CheckList = 측정, 보완 회차 반복, 문서 1회를 묶은 체인이고 30분 목표를 체인 전체 소요에 댐 → 새 개념: 30분 목표는 측정 1회와 문서 1판까지에 대고, 보완 회차는 1판 뒤 같은 작업에서 이어 돌며 회차마다 문서를 갱신하고 미검증 0 은 체인 끝에서 지킴",
+  "verify": "1) 승인 뒤 writing-plans 로 전환 계획 작성. 2) t_orch_usercheck.js 에 events.jsonl:2001 을 넣어 U2 가 1판 시각과 체인 전체를 따로 표시하는지 시험. 3) 다음 SCP0028 체인에서 1판 xlsx 생성 시각을 chain.end 에서 확인하고, 1판과 최종 원장 차이가 보완 회차 행만인지 ledger_diff.py 로 대조. 4) 동시 실행 단계는 순차, 동시 원장 ledger_diff.py 차이 0건일 때만 채택",
+  "rollback": "quick.json, orch-usercheck.js, chain-runner.js, run_verify.py 를 전환 전 커밋으로 되돌리면 체인 전체 시계와 문서 1회 구조로 돌아감. 원장은 실행마다 새로 써서 남는 변경 없음",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "Overall Review 같은 목적 '어긋남' 3회 연속(vision/20261120_115806.json, 20261121_120359.json, 20261122_140538.json). 같은 목적 사용자 지적 7일 3건(U2, U24, U25). 구조 개선(B1 대기 제거, 중복 정리 AI, 두 범위 합치기) 반영 뒤 SCP0028 309.5분(events.jsonl:2001)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T11:22:12+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:22:17+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T11:31:53+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 1) writing-plans 계획 작성 .vibe/orch/vision/plan_20261123000419_VISION.md (11:31). 2) events.jsonl:2001 을 U2 감지기에 넣은 재현(node u2.js, 체인 끝+10분 고정): 반영 전 'U2 warn | CheckList SCP0028 310분(목표 30분)' → 반영 뒤 'U · 대상 파일 4개 복원(quick.json 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: Copy-Item tools/VibeManager/quick.json tools/VibeManager/quick.json.bak_20261123_orchprop). 덮기 전 파일 tools/VibeManager/quick.json.bak_prerestore_20261123_113153 / orch-usercheck.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: Copy-Item tools/VibeManager/orch-usercheck.js tools/VibeManager/orch-usercheck.js.bak_20261123_orchprop). 덮기 전 파일 tools/VibeManager/orch-usercheck.js.bak_prerestore_20261123_113153 / chain-runner.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: Copy-Item tools/VibeManager/chain-runner.js tools/VibeManager/chain-runner.js.bak_20261123_orchprop). 덮기 전 파일 tools/VibeManager/c) · 대상 밖 변경 tools/VibeManager/test/t_orch_usercheck.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-23T11-22-17_claude_orch.log",
+      "sec": 573,
+      "costUsd": 2.9770109000000002,
+      "files": [
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/chain-runner.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/quick.json",
+        "tools/VibeManager/test/t_orch_usercheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T13:04:16+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:04:23+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T13:13:05+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 2026-11-23 13:06~13:12 실행. 1) 전환 계획 .vibe/orch/vision/plan_20261123000419_VISION.md 있음(11:31 작성본 유지). 2) node %TEMP%/orchprop_u2/u2.js(events.jsonl:2001 runId SCP0028_1795175178967 step.end 14건, chain · 대상 파일 4개 복원(quick.json 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM; awk 'NR>=1291 && NR<=1420' tools/Harness/verify/run_verify.py | grep -n \"triage\\|unverified\" | head). 덮기 전 파일 tools/VibeManager/quick.json.bak_prerestore_20261123_131305 / orch-usercheck.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: node --check tools/VibeManager/chain-runner.js && node --check tools/VibeManager/orch-usercheck.js && node --check tools). 덮기 전 파일 tools/VibeManager/orch-usercheck.js.bak_prerestore_20261123_131305 / chain-runner.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: node --check tools/VibeManager/chain-runner.js && node --check tools/VibeManager/) · 대상 밖 변경 tools/Harness/gate_baseline.tsv, tools/VibeManager/test/t_orch_usercheck.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-23T13-04-23_claude_orch.log",
+      "sec": 519,
+      "costUsd": 3.0205792000000007,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/chain-runner.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/quick.json",
+        "tools/VibeManager/test/t_orch_usercheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T13:17:51+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:17:58+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T13:34:21+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 2026-11-23. 1) writing-plans 로 전환 계획 작성(.vibe/orch/vision/plan_20261123000419_VISION.md). 2) node tools/VibeManager/test/t_orch_usercheck.js: U2 5건 FAIL(13:19) → U2 6건 PASS(13:24). 'PASS U2 events.jso · 대상 파일 4개 복원(quick.json 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: Copy-Item tools/VibeManager/quick.json tools/VibeManager/quick.json.bak_20261123_orchprop). 덮기 전 파일 tools/VibeManager/quick.json.bak_prerestore_20261123_133421 / orch-usercheck.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: Copy-Item tools/VibeManager/orch-usercheck.js tools/VibeManager/orch-usercheck.js.bak_20261123_orchprop). 덮기 전 파일 tools/VibeManager/orch-usercheck.js.bak_prerestore_20261123_133421 / run_verify.py 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: Copy-Item tools/Harness/verify/run_verify.py tools/Harness/verify/run_verify.py.bak_20261123_orchprop). 덮기 전 파일 tools/Harness/verif) · 대상 밖 변경 Doc/verify/_engine_selfcheck.json, Doc/화면분석서/SSP_FLOW/README.md, Doc/화면분석서/SSP_FLOW/SSP_BATCH_ANALYSIS.md, Doc/화면분석서/SSP_FLOW/SSP_BATCH_FLOW.md, Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW.md, Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW_DETAIL.md 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-23T13-17-59_claude_orch.log",
+      "sec": 979,
+      "costUsd": 2.7545054000000007,
+      "files": [
+        "Doc/verify/_engine_selfcheck.json",
+        "Doc/화면분석서/SSP_FLOW/README.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_BATCH_ANALYSIS.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_BATCH_FLOW.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW_DETAIL.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_FLOW.html",
+        "Doc/화면분석서/SSP_FLOW/SSP_OVERVIEW.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_PROCESS_FLOW.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_REF_PROCESS.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_SHIPPLAN_FLOW.md",
+        "Doc/화면분석서/SSP_FLOW/ssp_screen_sp_table.csv",
+        "tools/Analysis/ssp_batch_flow.py",
+        "tools/Analysis/ssp_flow.py",
+        "tools/Analysis/ssp_flow_nav.js",
+        "tools/Analysis/ssp_flow_view.css",
+        "tools/Analysis/ssp_flow_view.js",
+        "tools/Analysis/ssp_ref.py",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/quick.json",
+        "Doc/화면분석서/SSP_FLOW/diagrams/ssp_map.svg",
+        "Doc/화면분석서/SSP_FLOW/diagrams/ssp_pi.svg",
+        "Doc/화면분석서/SSP_FLOW/diagrams/ssp_time.svg",
+        "tools/Analysis/ssp_flow_shell.css",
+        "tools/Analysis/ssp_flow_shell.js",
+        "tools/Analysis/ssp_shell.py",
+        "tools/Analysis/ssp_svg.py"
+      ]
+    },
+    {
+      "at": "2026-11-23T13:44:49+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:44:56+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T13:46:40+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 반영 안 됨: 같은 개선안이 11:31, 13:13, 13:34 세 번 반영됐고 세 번 다 verify 3번, 4번 미실행으로 verified false가 되어 orch-improve.js:307이 대상 파일을 복원함. 네 번째 반영도 같은 이유로 복원되므로 반영하지 않음(vm-orchestra.md:39). 사용자 판단 필요: verify를 1번, 2번과 run_all · 대상 파일 4개 복원 · 대상 밖 변경 tools/Harness/gate_baseline.tsv 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-23T13-44-56_claude_orch.log",
+      "sec": 102,
+      "costUsd": 1.1998305999999999,
+      "files": [
+        "tools/Harness/gate_baseline.tsv"
+      ]
+    },
+    {
+      "at": "2026-11-23T13:52:51+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:52:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T14:05:19+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 1) 전환 계획 .vibe/orch/vision/plan_20261123000419_VISION.md 있음(11:31 작성본, 이번 반영이 따름). 2) node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager: 반영 전 13:56:09 U2 PASS 1, FAIL 5('FAIL U2 events · 대상 파일 4개 복원(quick.json AI 편집 5건만 되돌림(반영 전과 같음) / orch-usercheck.js AI 편집 2건만 되돌림(반영 전과 같음) / run_verify.py AI 편집 1건만 되돌림(반영 전과 같음)) · 대상 밖 변경 tools/VibeManager/WORKLOG.md 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-23T13-52-59_claude_orch.log",
+      "sec": 737,
+      "costUsd": 2.9318206,
+      "files": [
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/quick.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T15:49:06+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T15:49:13+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T15:58:21+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 2건(합격 판정에서 뺌): v3 3) 다음 SCP0028 체인에서 1판 xlsx 생성 시각을 chain.end 에서 확인하고, 1판과 최종 원장 차이가 보완 회차 행만인지 ledger_diff.py 로 대조. (다음 실행이 있어야 확인) / v4 4) 동시 실행 단계는 순차, 동시 원장 ledger_diff.py 차이 0건일 때만 채택 (순차 원장과 동시 원장 대조는 같은 화면 CheckList 를 2회 실행해야 함(CheckList 실행은 사)"
+    },
+    {
+      "at": "2026-11-23T15:58:21+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 2건, 실행 못 함 1건, 반영 뒤 확인 1건. 2026-11-23 15:49:30~15:57:34. 1) 전환 계획 plan_20261123000419_VISION.md 있음, 이번 반영이 따름. 2) t_orch_usercheck.js U2: 반영 전 PASS 1, FAIL 5 → 반영 뒤 PASS 6, FAIL 0(15:53:41). 실제 events.jsonl:2001(runId SCP0028_1795175178967, ms_run 18571542) 대입: 'CheckList SCP0028 310분(목표 30분)' → 'CheckList SCP0028 1판 310분(목표  · 변경 11개 파일 · 대상 목록 밖 변경 8개: tools/VibeManager/extension.js, tools/VibeManager/jobs.js, tools/VibeManager/orchestra.js, tools/VibeManager/prompt-panel.js, tools/VibeManager/workbench.js, Doc/통합테스트_SSP/SSP 통합테스트 시나리오(e2e)_V9_사전점검_일산출.xlsx",
+      "log": ".vibe\\logs\\2026-11-23T15-49-13_claude_orch.log",
+      "sec": 545,
+      "costUsd": 5.0785678,
+      "files": [
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/extension.js",
+        "tools/VibeManager/jobs.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/prompt-panel.js",
+        "tools/VibeManager/quick.json",
+        "tools/VibeManager/workbench.js",
+        "Doc/통합테스트_SSP/SSP 통합테스트 시나리오(e2e)_V9_사전점검_일산출.xlsx",
+        "tools/VibeManager/id-input.js",
+        "tools/VibeManager/test/t_id_input.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 문서가 첫 측정 직후 먼저 나오고 그 시점까지를 30분 목표로 잼. 미검증 해소 보완은 그 뒤 이어서 돌며 문서를 고쳐 씀",
+    "risk": "첫 문서에는 아직 해소 안 된 미검증, 판정필요 행이 남아 있어 보완 회차 진행 중 표기를 보고 읽어야 함. SCP0028 은 첫 문서까지도 69.3분이라 동시 실행 시험이 따로 필요함",
+    "undo": "바꾼 VM 파일 4개를 전환 전 판으로 되돌리면 종전처럼 보완이 다 끝난 뒤 문서를 1번 만들고 전체 소요로 잼"
+  },
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "applyStartMs": 1795416553708,
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "writing-plans 스킬 호출. 전환 계획 .vibe/orch/vision/plan_20261123000419_VISION.md(11:31 작성본) Read, 1단계 시계 분리와 2단계 문서 1판 순서를 그대로 반영. 3단계 동시 실행은 계획대로 미반영"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager: 반영 전 U2 PASS 1, FAIL 5('FAIL U2 events.jsonl:2001 = 1판 310분 · 체인 전체 310분 따로 표시 CheckList SCP0028 310분(목표 30분)') → 반영 뒤 15:53:41 U2 PASS 6, FAIL 0('PASS U2 events.jsonl:2001 = 1판 310분 · 체인 전체 310분 따로 표시 CheckList SCP0028 1판 310분(목표 30분) · 체인 전체 310분'). 실제 events.jsonl 2001줄 대입(node .vibe/tmp/orchprop_u2_real.js, 15:54:00): 반영 전 'U2 warn | CheckList SCP0028 310분(목표 30분)' → 반영 뒤 'U2 warn | CheckList SCP0028 1판 310분(목표 30분) · 체인 전체 310분 | firstDocMin 310 chainMin 310'"
+      },
+      {
+        "n": 4,
+        "result": "blocked",
+        "note": "순차 원장과 동시 원장 대조는 같은 화면 CheckList 를 2회 실행해야 함(CheckList 실행은 사용자). 채택 조건(차이 0건)을 확인하지 못해 run_verify.py 에 동시 실행을 넣지 않음. python tools/Harness/verify/ledger_diff.py --selftest = ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/Harness/verify/run_verify.py"
+    ],
+    "verify_result": "2026-11-23 15:49:30~15:57:34. 1) 전환 계획 plan_20261123000419_VISION.md 있음, 이번 반영이 따름. 2) t_orch_usercheck.js U2: 반영 전 PASS 1, FAIL 5 → 반영 뒤 PASS 6, FAIL 0(15:53:41). 실제 events.jsonl:2001(runId SCP0028_1795175178967, ms_run 18571542) 대입: 'CheckList SCP0028 310분(목표 30분)' → 'CheckList SCP0028 1판 310분(목표 30분) · 체인 전체 310분'(15:54:00). 구조 확인 node .vibe/tmp/orchprop_newshape.js tools/VibeManager(15:53:36): ALL PASS 7건, 실행 순서 'M D F R D F R D', 남은 0건 'M D', quick.json checklist, checklist-delta 각 7단계(2 문서 1판 반복 밖, 반복 끝 단계 = 7 문서 갱신, late 단계 0). node --check orch-usercheck.js 통과, py_compile run_verify.py 통과. t_chain_loop.js: 반영 전 ALL PASS → 반영 뒤 PASS 10줄. run_all.js(15:57 끝): 'SOME FAIL 파일 66/68 PASS 1034 FAIL 2 206.8s'. FAIL 2건 = 'U3 장부 막힘 2건'(반영 전 실행에서도 FAIL), 't_orch_worklist.js sc.worklistCycle is not a function'(반영 전 미측정, worklistCycle 은 시험 파일에만 있고 이번 변경 파일에 없음). 3) 반영 뒤 확인 항목이라 미실행. 4) CheckList 실행이 필요해 미실행, ledger_diff.py --selftest ALL PASS",
+    "note": "반영: quick.json 체인 checklist, checklist-delta = 1 측정(--no-docs) → 2 문서 1판(checklist_run --docs) → loop fix [3 보완 준비 → 4 검증 보완 → 5 검사기 게이트 → 6 부분 재측정 → 7 문서 갱신(--docs)], late 문서 1회 단계 삭제, hint와 confirm 문구 변경. orch-usercheck.js chainTarget(U2) = 같은 runId 의 첫 문서 단계 step.end(stepKey ':--docs', 옛 기록은 task S8.checklistRun 이면서 이름에 '문서')까지를 1판 소요로 판정, 체인 전체는 따로 표시(firstDocMin, chainMin), 1판이 없으면 체인 전체로 판정. run_verify.py = VERIFY_SKIP_DOCS 안내 문구 2줄과 주석. chain-runner.js 변경 없음(chain.end 는 승인 대상 밖 workbench.js 가 기록, 1판 시각은 step.end stepKey 와 chain.end rows 로 계산됨). memory/project_checklist_one_run_loop_20261120.md 는 새 개념이 이미 들어 있어 고치지 않음. 백업 = 대상 4개 .bak_20261123_orchprop(15:51:49). 확인용 임시 파일 .vibe/tmp/orchprop_newshape.js, orchprop_u2_real.js, orchprop_all_after.txt 남김. 반영 전에 끊긴 CheckList 체인은 단계가 바뀌어 처음부터 실행함(13:57 반영 시도 기록 인용, 이번 미확인). 승인 대상 밖 미반영(추가 확인 후보): make_verify_docs.py 1판 시트 '보완 n회차 진행 중' 표기, job-runner.js VMW '1판 나옴' 표시, checklist_run.py:153 도움말 문구, t_chain_loop.js 새 순서 시험 추가, orch-selfcheck.js worklistCycle 없음. v3 는 다음 SCP0028 체인 뒤 1판 step.end 시각과 ledger_diff.py 대조로 확인"
+  },
+  "postChecks": [
+    {
+      "n": 3,
+      "text": "3) 다음 SCP0028 체인에서 1판 xlsx 생성 시각을 chain.end 에서 확인하고, 1판과 최종 원장 차이가 보완 회차 행만인지 ledger_diff.py 로 대조.",
+      "why": "다음 실행이 있어야 확인",
+      "status": "open",
+      "at": "2026-11-23T15:58:21+09:00"
+    },
+    {
+      "n": 4,
+      "text": "4) 동시 실행 단계는 순차, 동시 원장 ledger_diff.py 차이 0건일 때만 채택",
+      "why": "순차 원장과 동시 원장 대조는 같은 화면 CheckList 를 2회 실행해야 함(CheckList 실행은 사용자). 채택 조건(차이 0건)을 확인하지 못해 run_verify.py 에 동시 실행을 넣지 않음. python tools/Harness/verify/ledger_diff.py --selftest = ALL PASS",
+      "status": "open",
+      "at": "2026-11-23T15:58:21+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-23T15:58:21+09:00",
+    "verified": true,
+    "text": "실행 통과 2건, 실행 못 함 1건, 반영 뒤 확인 1건",
+    "why": ""
+  },
+  "snap": "prop_20261123000419_VISION"
+}

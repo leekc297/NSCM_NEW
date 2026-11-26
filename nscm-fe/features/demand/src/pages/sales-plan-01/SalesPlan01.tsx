@@ -290,7 +290,7 @@ export const SalesPlan01 = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (blockIfWorking()) return;
     const vr = validation.validateFind(sc);
     if (!vr.ok) {
-      // V-S3 — 3년 초과 시 종료일 = 시작일+3년 보정 (AS-IS L1481 Value2 보정 후 차단)
+      // V-S3 — 2년 초과 시 종료일 = 시작일+2년 보정 후 차단 (종전 AS-IS L1481 3년)
       if (vr.adjustedEnd) setSearchCondition({ endYyyymmdd: vr.adjustedEnd });
       return;
     }

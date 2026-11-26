@@ -1,0 +1,98 @@
+{
+  "id": "20261121225944_SELF_2",
+  "at": "2026-11-21T22:59:44+09:00",
+  "ms": 1795269584746,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn workbench nth ln ln",
+  "title": "workbench.js L715~L3171 고정 문구 정리 4차 25건(줄표, 알림 장식 기호, 가운뎃점 나열)",
+  "evidence": ".vibe/orch/selfcheck/doc_style/workbench.js.style.csv 2, 3, 9, 42~44, 47~65행(2026-11-21 12:28 생성, 위반 166건). 소스 확인: workbench.js:715, :721 알림 'Vibe_Manager ✖ ${name}:'. :1044 '⛔ 체인 ... 은 화면 ID 가 필요합니다'. :2716 '할 수 없습니다 — ID 직접 입력으로'. :2730 '— 직접 입력으로 재시도하거나'. :2748 '현재 ID 유지 — ${curId}'. :2890 '(수식어 금지 · 아는 주어 생략 · 번역투 금지 — 답변과 문서 문장 전부)'. :2937, :3056 '화면 ${picked} — 세션 리셋'. :3025 '(exit ${sc}) — 현재', 알림 'Vibe_Manager ✖ 작업 모드 변경 실패 — 현재'. :3046 '새 세션 — 다음 전송부터'. :3062 '열림 — 독립 AI Agent'. :3115, :3134 '되돌리기 완료 —'. :3122 '반영 보류 —'. :3127 '개선안 반려 —'. :3170 '켜고 끄기 실패 —'. :3171 'VMO 켬 — 감시 · 자동 조치 · 자동 분석', 'VMO 끔 — ...(서버 · 로그 · 기능 · 직접 지시는 그대로)'. test/ 아래에서 이 문구를 비교하는 시험 0건(grep 확인)",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": ":715, :721 'Vibe_Manager ✖ ${name}:' → 'Vibe_Manager ${name}:' / :1044 '⛔ 체인 '${item.label}' 은' → '체인 '${item.label}' 은' / :2716 '할 수 없습니다 — ID 직접 입력으로 진행하세요.' → '할 수 없습니다. ID 를 직접 입력하세요.' / :2730 '${reason} — 직접 입력으로 재시도하거나' → '${reason}. 직접 입력으로 다시 시도하거나' / :2748 '현재 ID 유지 — ${curId}' → '현재 ID 유지: ${curId}' / :2890 '문장 규칙(수식어 금지 · 아는 주어 생략 · 번역투 금지 — 답변과 문서 문장 전부): ...' → '문장 규칙(답변과 문서 문장 전부): 수식어 금지, 아는 주어 생략, 번역투 금지. ...' / :2937, :3056 '화면 ${picked} — 세션 리셋 · 다음 전송부터' → '화면 ${picked}: 세션 리셋. 다음 전송부터' / :3025 '(exit ${sc}) — 현재 ${now.name}' → '(exit ${sc}). 현재 ${now.name}', 'Vibe_Manager ✖ 작업 모드 변경 실패 — 현재' → 'Vibe_Manager 작업 모드 변경 실패. 현재' / :3046 '새 세션 — 다음 전송부터 새 대화' → '새 세션. 다음 전송부터 새 대화' / :3062 '열림 — 독립 AI Agent 세션/화면ID 로 멀티 작업' → '열림. 독립 AI Agent 세션과 화면ID 로 작업' / :3115, :3134 '되돌리기 완료 — ' → '되돌리기 완료: ' / :3122 '반영 보류 — 에이전트가' → '반영 보류. 에이전트가' / :3127 '개선안 반려 — ' → '개선안 반려: ' / :3170 '켜고 끄기 실패 — ' → '켜고 끄기 실패: ' / :3171 'VMO 켬 — 감시 · 자동 조치 · 자동 분석' → 'VMO 켬: 감시, 자동 조치, 자동 분석', 'VMO 끔 — 감시 · 자동 조치 · 자동 분석 멈춤(서버 · 로그 · 기능 · 직접 지시는 그대로)' → 'VMO 끔: 감시, 자동 조치, 자동 분석 멈춤(서버, 로그, 기능, 직접 지시는 그대로)'. 줄 머리 ✖(FAIL_RE workbench.js:661 제외 대상)와 ▶, 코드 식별자는 바꾸지 않음",
+  "verify": "python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet 반영 전 위반 166 → 반영 후 141, 생성 CSV 에 L715, L721, L1044, L2716, L2730, L2890, L2937, L3025(제외 행 빼고), L3046, L3056, L3062, L3115, L3122, L3127, L3134, L3170, L3171 행 0건, L2748 은 ✅ 1행만 남음",
+  "rollback": "tools/VibeManager/workbench.js 를 반영 전 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "문구 문제이고 근거 기준은 파일:줄. 같은 파일 정리 1~3차(CHANGELOG.md:1032, :436, :78)는 남은 위반을 차수별로 나눠 처리한 것이라 같은 결함이 다시 난 것으로 보지 않음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T23:08:34+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T23:11:59+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 874, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self2308"
+    },
+    {
+      "at": "2026-11-21T23:12:01+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T23:16:33+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 874, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T23:16:33+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet 실행. 반영 전 2026-11-21 23:12:13 출력 'workbench.js | 문장 534 | 위반 166 | 수식어 5 기호 156 소개·맺음 2 추측 1 용어 2 | 제외 27'. 반영 후 23:12:51 출력 'workbench.js | 문장 534 | 위반 141 | 수식어 5 기호 131 소개·맺음 2 추측 1 용어 2 | 제외 27'. 생성 CSV Doc/_doc_style/workbench · 변경 2개 파일 · 대상 목록 밖 변경 1개: Doc/_doc_style/workbench.js.style.csv",
+      "log": ".vibe\\logs\\2026-11-21T23-12-01_claude_orch.log",
+      "sec": 68,
+      "costUsd": 0.7511606,
+      "files": [
+        "Doc/_doc_style/workbench.js.style.csv",
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:26+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795270113959,
+  "autoFp": "5024ef9f3a",
+  "applyStartMs": 1795270321312,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 874, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self2308",
+  "needsReload": true,
+  "appliedMs": 1795270593827,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet 실행. 반영 전 2026-11-21 23:12:13 출력 'workbench.js | 문장 534 | 위반 166 | 수식어 5 기호 156 소개·맺음 2 추측 1 용어 2 | 제외 27'. 반영 후 23:12:51 출력 'workbench.js | 문장 534 | 위반 141 | 수식어 5 기호 131 소개·맺음 2 추측 1 용어 2 | 제외 27'. 생성 CSV Doc/_doc_style/workbench.js.style.csv(23:12:51)에서 대상 18개 줄 조회 결과: L2748 '기호 ✅ 현재 ID' 1행, L715·L721·L3025 '제외 ✖' 행만 남음, 그 밖의 대상 줄 0건",
+    "note": "CLI 기본 출력 경로는 Doc/_doc_style 임. verify 에 적힌 .vibe/orch/selfcheck/doc_style/workbench.js.style.csv 는 CLI 실행 때 갱신되지 않아 12:28 파일 그대로임. L3290 에 같은 문구 '작업 모드 변경 실패 — 현재'가 있으나 승인 범위(L715~L3171) 밖이라 고치지 않음"
+  },
+  "snap": "prop_20261121225944_SELF_2",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

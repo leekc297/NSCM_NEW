@@ -1,0 +1,45 @@
+{
+  "id": "20261126153055_SELF_2",
+  "at": "2026-11-26T15:30:55+09:00",
+  "ms": 1795674655524,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/ene/lib/popupprobe.ts|cellpoint와n줄sortbyfn가스크롤뒤nms를한번기다리고셀",
+  "title": "사용자 지시 R240 같은 문제: tools/E2E/lib/popupprobe.ts:238 cellPoint 와 270줄 sortByF3 가 스크롤 뒤 200ms 를 한 번 기다리고 셀이 없으면 바로 null, 다시 그리기와 다시 읽기 없음",
+  "evidence": "규칙 R240 \"E2E 측정 함수는 스크롤 직후 셀 요소가 없으면 다시 그린 뒤 정해진 횟수까지 다시 읽고, 끝까지 없을 때도 해당없음 대신 미검증으로 둠\" (원래 지시 2026-11-26 14:29 \"다른 보완 대상도 계속 찾아서 고쳐줘\") · tools/E2E/lib/popupprobe.ts:238 c.scrollIntoView(${row}, colI); await new Promise(r => setTimeout(r, 200)); const el = c.cells.getCellElement(${row}, colI); if (!el) return null;",
+  "targets": [
+    "tools/E2E/lib/popupprobe.ts"
+  ],
+  "before_after": "probe.ts 190~191 처럼 el 이 없으면 scrollIntoView, refresh(false), requestAnimationFrame 대기를 최대 10회 반복한 뒤 읽음. 끝까지 없으면 지금처럼 why 를 남겨 popk3.ts 가 ERROR 로 두게 유지함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/E2E/lib/popupprobe.ts.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-C",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:40:33+09:00",
+      "by": "S-C",
+      "what": "반영 완료(세션 직접 보완) · tools/E2E/lib/popupprobe.ts 238~241 cellPoint, 273~275 sortByF3: 셀이 없으면 scrollIntoView, refresh(false), requestAnimationFrame 대기를 최대 10회 반복 뒤 읽음, 끝까지 없으면 null 유지(probe.ts cellClasses 와 같은 방식). 검사: tools/E2E 에서 npx tsc --noEmit -p . exit 0, 출력 0바이트(2026-11-26 15:39:59~15:40:11). 백업 popupprobe.ts.bak_20261126_sc. Playwright 실측 미실행"
+    }
+  ],
+  "plain": {
+    "what": "E2E 측정 함수는 스크롤 직후 셀 요소가 없으면 다시 그린 뒤 정해진 횟수까지 다시 읽고, 끝까지 없을 때도 해당없음 대신 미검증으로 둠 규칙을 tools/E2E/lib/popupprobe.ts 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R240|tools/E2E/lib/popupprobe.ts",
+  "kind": "fix",
+  "claimedBy": "S-C",
+  "waitNote": "",
+  "appliedMs": 1795675233967
+}

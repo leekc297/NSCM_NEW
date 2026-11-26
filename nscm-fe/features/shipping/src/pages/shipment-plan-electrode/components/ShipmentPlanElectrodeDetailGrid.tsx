@@ -133,6 +133,13 @@ export const ShipmentPlanElectrodeDetailGrid = ({
         'wj-cell-editable',
         isDetailCellEditable(SHEETS.PLAN_DETAIL, row, binding, editableRef.current)
       );
+      // ERP_SO_NO(값 있음·'-' 제외) 더블클릭 시 OrderDetail 팝업이 열리므로 FPModal 과 동일한
+      //   팝업 아이콘(wj-cell-popup = 공용 OpenInNew)을 붙여 어포던스를 준다(아래 dblClickHandler 게이트와 동일).
+      const erpSoNo = str(row?.ERP_SO_NO).trim();
+      e.cell.classList.toggle(
+        'wj-cell-popup',
+        binding === 'ERP_SO_NO' && erpSoNo !== '' && erpSoNo !== '-'
+      );
     };
     g.formatItem.addHandler(formatItemHandler);
 

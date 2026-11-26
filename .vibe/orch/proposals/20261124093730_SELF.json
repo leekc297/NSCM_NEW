@@ -1,0 +1,122 @@
+{
+  "id": "20261124093730_SELF",
+  "at": "2026-11-24T09:37:30+09:00",
+  "ms": 1795480650289,
+  "source": "self",
+  "status": "applied",
+  "sig": "lnplan cacgbbceaaahbi_vision step d",
+  "title": "VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 3",
+  "evidence": "L4 단계 원장 20261124000718_VISION 단계 3/5 · 문서 .vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md",
+  "targets": [
+    "tools/VibeManager/orch-worklist.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_worklist.js"
+  ],
+  "before_after": "원장 남은 단계로 하위 안 생성. 1번째 하위 안 = orch-worklist.js 연결(selfcheck worklistCycle, U3 장부) · 상세 = .vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md 전환 절 단계 3",
+  "verify": "t_orch_worklist.js 전체 PASS, 20261123_115110_R12_ALL 등 4건 사건 줄 재현 시 60분 뒤 진단 1회와 조치 기록 1건.",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 지금 방식 복귀. 단계마다 반영 백업 태그와 .bak_<날짜>_concept 백업으로 파일 복원. plans.json 은 삭제해도 개선안 원본에 영향 없음",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261124000718_VISION 단계 3",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T10:19:12+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T10:23:30+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1425, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self1019"
+    },
+    {
+      "at": "2026-11-26T10:23:35+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T10:31:00+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1433, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 2개 · CHANGELOG 기록 실패 · 창 다시 로드 뒤 적용 orch-selfcheck.js, orch-worklist.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T10:31:00+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 10:24:28 node test/t_orch_worklist.js = PASS 4건, ALL PASS, 장부 순환 시험 없음 → 반영 뒤 10:26:09 node --check 2개 파일 통과, node test/t_orch_worklist.js = PASS 12건, ALL PASS ('cycle: 간격이 차면 진단 1회에 사건 4건', 'cycle: 사건마다 조치 기록 1건 [1,1,1,1]', 'cycle: 다음 tick 진단 추가 0회, 기록 1건 유지') · 변경 5개 파일 · 대상 목록 밖 변경 2개: tools/Harness/gate_baseline.tsv, Doc/PERF_점검/BATCH/SSP/BATCH_속도점검_SHIP_PLAN_40_3SP_실행일회차_20261125_20261126_1025.sql",
+      "log": ".vibe\\logs\\2026-11-26T10-23-35_claude_orch.log",
+      "sec": 174,
+      "costUsd": 1.4665636,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/orch-worklist.js",
+        "tools/VibeManager/test/t_orch_worklist.js",
+        "Doc/PERF_점검/BATCH/SSP/BATCH_속도점검_SHIP_PLAN_40_3SP_실행일회차_20261125_20261126_1025.sql"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:03+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261124000718_VISION|3",
+  "kind": "fix",
+  "plan": "20261124000718_VISION",
+  "planStep": 3,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795655952325,
+  "autoFp": "2ecce65c8b",
+  "applyStartMs": 1795656215706,
+  "verifyJudge": {
+    "at": "2026-11-26T10:26:36+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1433, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self1019",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-selfcheck.js",
+    "orch-worklist.js"
+  ],
+  "appliedMs": 1795656660564,
+  "synced": [
+    "orch-selfcheck.js",
+    "orch-worklist.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_worklist.js tools/VibeManager (2026-11-26 10:26:09): 반영 전 PASS 4건, 순환 시험 없음 → 반영 뒤 PASS 12건 ALL PASS. 사건 4건 재현: 진단 간격 안 진단 0회, 간격 60분 찬 회차 진단 1회(사건 4건 묶음), 사건마다 조치 기록 [1,1,1,1], 다음 회차 진단 추가 0회, 보류 시 기록 0건, worklistEnabled false 면 순환 안 함"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/orch-worklist.js",
+      "tools/VibeManager/test/t_orch_worklist.js"
+    ],
+    "verify_result": "반영 전 10:24:28 node test/t_orch_worklist.js = PASS 4건, ALL PASS, 장부 순환 시험 없음 → 반영 뒤 10:26:09 node --check 2개 파일 통과, node test/t_orch_worklist.js = PASS 12건, ALL PASS ('cycle: 간격이 차면 진단 1회에 사건 4건', 'cycle: 사건마다 조치 기록 1건 [1,1,1,1]', 'cycle: 다음 tick 진단 추가 0회, 기록 1건 유지')",
+    "note": "orch-selfcheck.js: worklistCycle 신설(selfLightMin 분마다와 새 사건이 생긴 회차, 시한 넘긴 자가진단 사건 진단 1회와 noteDiag 사건별 기록 1건, 진단 보류 시 기록 없음), 장부가 켜져 있으면 새 사건 진단(selfDiagOnFail)은 장부 경로만 씀, diagnose(manual, o) 에 openIncidents 입력 추가. orch-worklist.js: 머리 주석에 호출 경로 추가. U3 감지기(orch-usercheck.js)는 대상 밖이라 고치지 않음, 원장 단계 4 하위 안 후보. 10:24 조회 기준 실사건 20261123_115110_R12_ALL 은 열림·조치 기록 0건, 나머지 3건은 11-24, 11-25 재점검에서 resolved."
+  },
+  "snap": "prop_20261124093730_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

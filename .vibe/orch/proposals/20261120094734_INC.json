@@ -50,6 +50,11 @@
         "tools/VibeManager/test/t_orch_step_screen.js",
         "tools/VibeManager/test/t_webview_syntax.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:32+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T11:08:47+09:00"
     }
   ],
   "auto": true,
@@ -78,5 +83,7 @@
     "verify_result": "2026-11-20 10:58:02 node --check tools/VibeManager/orch-watch.js 통과. node tools/VibeManager/test/t_orch_step_screen.js 5건 PASS: SSP0005 표본 9119/9595/9394초 뒤 12408초 R3 0건, 20000초 R3 1건(sig R3|S8.checklistRun|SSP0005, 중앙값 9495초의 2.1배), 다른 화면 표본(SCP0028, SSP0014, SCP0005) 섞이지 않음, step_stats 키 단계|화면 4개. 2026-11-20 10:58:05~11:00:09 node tools/VibeManager/test/run_all.js 결과 파일 39/39, PASS 480, FAIL 0(t_orch_agent_real.js, t_orch_agent_diag.js 는 run_all 이 건너뜀)",
     "note": "orch-watch.js noteStep 통계 키를 base = ev.task || ev.name 에서 key = ev.screen 이 있으면 base|screen 으로 바꿈. sig 는 기존 R3|key 식 그대로라 화면별로 나뉨. step_stats.json 의 화면 없는 종전 키는 손대지 않음. 화면별 표본 3개가 쌓일 때까지 해당 화면 R3 미발생. 시험 파일 t_orch_step_screen.js 는 verify 지시에 따라 추가함. 작업 모드와 hook 차단 없음"
   },
-  "snap": "prop_20261120094734_INC"
+  "snap": "prop_20261120094734_INC",
+  "effectiveMs": 1795140527976,
+  "effectiveAt": "2026-11-20T11:08:47+09:00"
 }

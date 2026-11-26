@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1646,
+  "at": "2026-11-25T16:23:30.672Z",
+  "user": "brightboy",
+  "test": "조회조건 콤보 후보 품질(B1·B2)"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1779,
+  "at": "2026-11-25T16:23:37.243Z",
+  "user": "brightboy",
+  "test": "조회조건 콤보 후보 품질(B1·B2)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 794,
+  "at": "2026-11-25T16:23:39.293Z",
+  "user": "brightboy",
+  "test": "조회조건 콤보 후보 품질(B1·B2)"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1667,
+  "at": "2026-11-25T16:23:43.316Z",
+  "user": "brightboy",
+  "test": "조회조건 콤보 후보 품질(B1·B2)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 586,
+  "at": "2026-11-25T16:23:45.230Z",
+  "user": "brightboy",
+  "test": "조회조건 콤보 후보 품질(B1·B2)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"RAI\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 42,
+  "dur": 102,
+  "at": "2026-11-25T16:23:48.087Z",
+  "user": "brightboy",
+  "test": "조회조건 콤보 후보 품질(B1·B2)"
+ }
+]

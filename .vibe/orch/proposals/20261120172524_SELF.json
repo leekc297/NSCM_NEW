@@ -1,0 +1,95 @@
+{
+  "id": "20261120172524_SELF",
+  "at": "2026-11-20T17:25:24+09:00",
+  "ms": 1795163124761,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|applyfailrepeat",
+  "title": "사용자 지적 감지기 추가 U21 applyFailRepeat: VMO 자가 보완 반영 실패, 개선안 반영 실패 메시지가 반복 발생함. 중지 뒤 계속 실행 미해결을 같은 판단으로 다시 올림",
+  "evidence": "사용자 지적(2026-11-20T16:31:27+09:00) \"추가적으로 VMO 작업에 대해서 자가 보완 반영 실패, 개선안 반영 실패 등 반영 실패 메세지가 발생하는데 이것도 원인을 찾아서 보완해주세요. VMO 가 자기 오판을 스스로 알아내는 판단은 아직 약합니다. 이번에도 '중지 뒤 계속 실행 미해결'만 다시 올렸습니다. 이번 수정은 같은 오판이 다시 나지 않게 막는 수준입니다. 라고 의견을 주었는데. VMO 가 자기 오판을 스스로 알아내는 판단을 잘 하기 위해서 어떤 작업을 해야 할 지 가이드를 주세요.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 applyFailRepeat 없음 → 추가. 판정: 최근 24시간 개선안 history 의 what 이 '반영 실패'로 시작하는 기록이 2건 이상이거나, 같은 원인(title)으로 반영 실패가 2회 이상 반복되면 fail. 반영 실패 뒤 같은 key 사건이 다시 올라온 경우도 fail · 읽을 기록: .vibe/orch/proposals/*.json 의 status, history[].what, history[].at, title, repair. events.jsonl incident type 의 key. user_checks.json U21 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T17:26:07+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T17:29:33+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 28개 파일 통과, 시험 57/57개 파일 통과(PASS 740, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1726"
+    },
+    {
+      "at": "2026-11-20T17:29:36+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T17:34:30+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 28개 파일 통과, 시험 57/57개 파일 통과(PASS 747, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T17:34:30+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → PASS 82건, FAIL 0건, ALL PASS(2026-11-20 17:30:57). U21 표본 7건 통과: 24시간 1건(진단 기록 제외) = 아님, 24시간 2건 = fail, 제목 다름 = 같은 원인 아님, 같은 title 7일 안 2회 + 마지막 24시간 안 = fail, 마지막 24시간 지남 = 아님, 반영 실패 뒤 같은 sig 사건(selfKey, 원 사건 sig) = fail 2건이고 다른 si · 변경 4개 파일 · 대상 목록 밖 변경 1개: Doc/verify/SCP0028/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json",
+      "log": ".vibe\\logs\\2026-11-20T17-29-37_claude_orch.log",
+      "sec": 92,
+      "costUsd": 1.0149486,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json",
+        "Doc/verify/SCP0028/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:29+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T17:58:19+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U21",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795163167239,
+  "autoFp": "64239551e0",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 28개 파일 통과, 시험 57/57개 파일 통과(PASS 747, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1726",
+  "needsReload": true,
+  "appliedMs": 1795163670380,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → PASS 82건, FAIL 0건, ALL PASS(2026-11-20 17:30:57). U21 표본 7건 통과: 24시간 1건(진단 기록 제외) = 아님, 24시간 2건 = fail, 제목 다름 = 같은 원인 아님, 같은 title 7일 안 2회 + 마지막 24시간 안 = fail, 마지막 24시간 지남 = 아님, 반영 실패 뒤 같은 sig 사건(selfKey, 원 사건 sig) = fail 2건이고 다른 sig와 원 사건 자신은 아님, 반영 실패 전 사건 = 아님",
+    "note": "events.jsonl incident 기록에는 key 필드가 없고 sig 만 있음(.vibe/orch/events.jsonl incident 169건 확인). 그래서 사건 sig 가 개선안 selfKey 와 같거나 '|selfKey' 로 끝나는 경우, 또는 개선안 incident 의 원 사건 sig 와 같은 경우를 같은 key 로 봄. '반영 실패 진단:' 기록은 실패 원인 기록이라 건수에서 뺌(20261120001936_SELF_2.json:57 등). 기존 파일은 필요한 줄만 Edit 함. 구문 검사, run_all.js, 정의 정합은 실행하지 않음(VMO 게이트 대상). 설치 폴더와 CHANGELOG.md 는 건드리지 않음. 실행 중 VMO 에 반영되려면 창 다시 로드가 필요함(그 전에는 S13|U21|reload 경고)."
+  },
+  "snap": "prop_20261120172524_SELF",
+  "effectiveMs": 1795165099422,
+  "effectiveAt": "2026-11-20T17:58:19+09:00"
+}

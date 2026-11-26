@@ -29,10 +29,9 @@
 | (Hotkey 없음) | `excel` | `GridAction.excelDownload(grid, excelFileName, setProgress)` | (아이콘만) | ⭐ **자동** (`excelFileName` prop 의무) |
 | (Hotkey 없음) | `upload` | (default 없음) | (아이콘만) | 선택 (`upload: false` 또는 화면 구현) |
 
-### 1.0 ⭐ 공통버튼 노출 룰 (TO-BE 확정 — 사용자 지시 2026-10-26, CR-070)
+### 1.0 ⭐ 공통버튼 노출 구현 (룰 정본 CR-070)
 
-> **Insert(F8) / Delete(F9) / Save(F7) / Upload 는 "화면에 그 기능이 있고(핸들러 전달) × 사용자(선택 Division)에게 그 버튼 코드(INSERT/DELETE/SAVE/UPLOAD) 권한이 있을 때"만 보인다.**
-> AS-IS 는 기능이 없어도(override 본문 공백) 공통버튼을 일괄 노출했지만 TO-BE 는 **기능이 없으면 보이지 않는다** — 이 차이는 결함이 아니라 TO-BE 룰(정합검증 PASS).
+> 룰 본문은 정본 `Doc/_rules_consolidation/TOBE_RULES_DEV.md` CR-070 행을 따른다. 원천 `tools/Harness/rules/confirmed_requirements.csv`. 이 절에는 구현 위치만 적는다. 이 문서의 CR-057, CR-085, CR-094 도 같은 정본 행을 따른다.
 
 | 조건 | SubTitle 동작 | 구현 위치 |
 |---|---|---|

@@ -1,0 +1,106 @@
+{
+  "id": "20261124040954_SELF_2",
+  "at": "2026-11-24T04:09:54+09:00",
+  "ms": 1795460994216,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/run_verify.py|ai단계를켠채실행해도호출수를확인하지않음호출n건으로끝나도경고가없음llmca",
+  "title": "사용자 지시 R125 같은 문제: tools/Harness/verify/run_verify.py:110 AI 단계를 켠 채 실행해도 호출 수를 확인하지 않음. 호출 0건으로 끝나도 경고가 없음. llm_call.log_effect 는 '바꾼 것 없음 절반 초과'만 ",
+  "evidence": "규칙 R125 \"AI 단계를 켠 체인은 단계마다 AI 호출 여부와 건수를 기록하고 호출 없이 끝나면 경고로 표시함\" (원래 지시 2026-11-19 16:30 \"VM 의 기능을 UI 별 기능과 공통기능으로 분리하고자 합니다. 공통기능이라고 하면 서버구동, SOURCE DOWN, SOURCE BACKUP 등 UI 와 직접 연계되지 않는 공통의 기능을 처리하고 특시 BE LOG, FE LOG 창을 이쪽으로 이동하고, BE, FE 기동상태도 항상 표\") · tools/Harness/verify/run_verify.py:110 def llm_step(kind, cmd, skip=''):",
+  "targets": [
+    "tools/Harness/verify/run_verify.py"
+  ],
+  "before_after": "run(cmd) 뒤 Doc/verify/<ID>/llm_effect.csv 에서 이번 실행(LLM_RUN_START 이후) kind 행의 calls+cached 를 읽어 sub() 에 건수를 남기고, 0 이면 [WARN] AI {kind} 호출 0건을 출력함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/run_verify.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T02:58:26+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T03:02:19+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self0258"
+    },
+    {
+      "at": "2026-11-26T03:02:23+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T03:15:17+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-26T03:15:17+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. run_all.js 반영 전 PASS 1422 FAIL 0(2026-11-26 03:06) → 반영 뒤 PASS 1422 FAIL 0(03:11). python -m py_compile run_verify.py COMPILE_OK. llm_count 자기 시험 4건: 호출 있음 3 반환(단계 시작 전 행 제외), 호출 0건 행 [WARN], 해당 kind 기록 없음 [WARN](효과 기록 없음), 파일 없음 [WARN] 후 계속 · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/WORKLOG.md",
+      "log": ".vibe\\logs\\2026-11-26T03-02-23_claude_orch.log",
+      "sec": 541,
+      "costUsd": 1.0105078,
+      "files": [
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/WORKLOG.md"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "AI 단계를 켠 체인은 단계마다 AI 호출 여부와 건수를 기록하고 호출 없이 끝나면 경고로 표시함 규칙을 tools/Harness/verify/run_verify.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R125|tools/Harness/verify/run_verify.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795629505897,
+  "autoFp": "f7c0eabe19",
+  "applyStartMs": 1795629743151,
+  "verifyJudge": {
+    "at": "2026-11-26T03:11:27+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261126_self0258",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795630517181,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 2026-11-26 03:06 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.5s' → 반영 뒤 03:11 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.6s'. 웹뷰 파일 아님(t_webview_syntax.js 는 run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/run_verify.py"
+    ],
+    "verify_result": "run_all.js 반영 전 PASS 1422 FAIL 0(2026-11-26 03:06) → 반영 뒤 PASS 1422 FAIL 0(03:11). python -m py_compile run_verify.py COMPILE_OK. llm_count 자기 시험 4건: 호출 있음 3 반환(단계 시작 전 행 제외), 호출 0건 행 [WARN], 해당 kind 기록 없음 [WARN](효과 기록 없음), 파일 없음 [WARN] 후 계속",
+    "note": "llm_step 이 run 뒤 llm_count 를 부름. 건수를 sub() 대신 '[AI 호출]' 줄로 남김(sub 는 세부 번호를 늘려 예정 수 불일치 경고를 냄). 집계 시작 = max(LLM_RUN_START, 단계 시작): judge kind 를 dedup_screen.py 와 llm_review.py 가 같이 써서 겹쳐 세지 않게 함. facts(llm_facts.py), opinion(opinion_intake.py), judge 의 dedup_screen.py 는 llm_effect.csv 에 기록하지 않아 AI 를 켜면 매번 '호출 0건(효과 기록 없음)' 경고가 남. 각 도구에 log_effect 추가 여부는 범위 밖이라 후속 확인 후보"
+  },
+  "snap": "prop_20261124040954_SELF_2"
+}

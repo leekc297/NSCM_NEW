@@ -1,0 +1,104 @@
+{
+  "id": "20261121001845_SELF",
+  "at": "2026-11-21T00:18:45+09:00",
+  "ms": 1795187925966,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|unverifiedresolveincomplete",
+  "title": "사용자 지적 감지기 추가 U24 unverifiedResolveIncomplete: 진행 중인 CheckList 의 1차 미검증 30건을 미검증 해소 단계가 한 번에 처리하지 못하고 남김",
+  "evidence": "사용자 지적(2026-11-20T23:44:10+09:00) \"현재 작업중인 checklist에 1차 30개 미검증 을 한번에 처리하지 못한 사유 찾아서 보완해주세요\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 unverifiedResolveIncomplete 없음 → 추가. 판정: 같은 화면, 같은 체인에서 미검증 해소 단계가 끝난 뒤 미검증 건수가 0보다 크고, 남은 행이 처리 대상(actionable)에 들어 있으면 issue. 해소 전후 run_verify.result.json summary 미검증 값과 unverified_triage.json actionable 을 비교함 · 읽을 기록: Doc/verify/<ID>/run_verify.result.json (started, summary.미검증, issues[].class), Doc/verify/<ID>/unverified_triage.json (actionable), .vibe/history/<ID>/*_chain_checklist/meta.json (단계 순서, 종료 시각). user_checks.json U24 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T00:23:54+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T00:32:39+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 839, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self0023"
+    },
+    {
+      "at": "2026-11-21T00:32:41+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T00:38:59+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 846, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T00:38:59+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 00:35:07 실행: node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → 마지막 줄 'ALL PASS', PASS 111줄, FAIL 0줄. 새 표본 7건 PASS: 'PASS U24 해소 뒤 재측정 미검증 12 · 처리 대상 4 = 실패(해소 전 30 · 단계 3/3 표시)', 'PASS U24 남은 미검증이 처리 대상 아님(actionable 0) = 아님', 'PASS U24 재측정 미검증 0 = 아님', 'PASS U24 해소 단계 전 · 변경 9개 파일 · 대상 목록 밖 변경 6개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_test_kind.jsonl, Doc/verify/SCP0028/eg/popup/popup_results.json, Doc/verify/SCP0028/eg/popup/popup_rowsets.json, Doc/verify/SCP0028/calls/eg_popup__eg-popup_MAIN_SCP0028_1_SCM0002_ShipmentLotSizePopup_BTN_bt_0.json, Doc/verify/SCP0028/calls/eg_popup__eg-popup_MAIN_SCP0028_2_SCM0002_ItembyDivisionPopup_COND_bt_0.json",
+      "log": ".vibe\\logs\\2026-11-21T00-32-43_claude_orch.log",
+      "sec": 170,
+      "costUsd": 1.6537508,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/eg/popup/popup_results.json",
+        "Doc/verify/SCP0028/eg/popup/popup_rowsets.json",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json",
+        "Doc/verify/SCP0028/calls/eg_popup__eg-popup_MAIN_SCP0028_1_SCM0002_ShipmentLotSizePopup_BTN_bt_0.json",
+        "Doc/verify/SCP0028/calls/eg_popup__eg-popup_MAIN_SCP0028_2_SCM0002_ItembyDivisionPopup_COND_bt_0.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:27+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-21T01:59:17+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U24",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795188233873,
+  "autoFp": "77ed9a7fb8",
+  "applyStartMs": 1795188761876,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 846, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self0023",
+  "needsReload": true,
+  "appliedMs": 1795189139395,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "2026-11-21 00:35:07 실행: node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → 마지막 줄 'ALL PASS', PASS 111줄, FAIL 0줄. 새 표본 7건 PASS: 'PASS U24 해소 뒤 재측정 미검증 12 · 처리 대상 4 = 실패(해소 전 30 · 단계 3/3 표시)', 'PASS U24 남은 미검증이 처리 대상 아님(actionable 0) = 아님', 'PASS U24 재측정 미검증 0 = 아님', 'PASS U24 해소 단계 전 측정(1차)만 있음 = 판정 안 함', 'PASS U24 분류가 재측정 전 것(triage at < started) = 판정 안 함', 'PASS U24 해소 단계 아닌 Claude 단계 = 판정 안 함', 'PASS U24 체인 시작 24시간 지남 = 판정 안 함'. 추가 확인으로 실제 저장소 기록에 감지기만 실행: SCP0028 fail '해소 전 미검증 30(처리 대상 13, 11-20 21:52) → 해소 단계 3/3 11-20 21:52~11-20 22:16(J20261120_191752) → 재측정 11-20 22:16 미검증 12 · 처리 대상 4', SSP0014 fail '해소 전 127(처리 대상 68) → 재측정 미검증 42 · 처리 대상 11'",
+    "note": "DETECTORS 에 unverifiedResolveIncomplete 추가. 읽는 기록: .vibe/history/<ID>/*_chain_checklist·claude 단계 meta.json(start, end, label '검증 보완'·'미검증', job), Doc/verify/<ID>/run_verify.result.json(started, summary.미검증, issues[].class), unverified_triage.json(at, actionable, after.by_class), 해소 전 건수용 unverified_history.csv. user_checks.json U24 status pending-detector → active. 작업 모드 DB_ONLY 이지만 대상이 tools/VibeManager 라 hook 차단 없음. 해소 단계가 30건을 한 번에 처리하지 못한 원인은 이번 범위 밖이라 미확인. 설치 폴더와 CHANGELOG 는 손대지 않음."
+  },
+  "snap": "prop_20261121001845_SELF",
+  "effectiveMs": 1795193957740,
+  "effectiveAt": "2026-11-21T01:59:17+09:00"
+}

@@ -35,8 +35,23 @@ from openpyxl.utils import get_column_letter
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 P = lambda *a: os.path.join(ROOT, *a)
-OUTDIR = P('Doc', 'UI_CHECKLIST')               # 2026-11-16 사용자: CheckList 폴더 Doc/CheckList → Doc/UI_CHECKLIST (없으면 next_version 이 생성)
-OLD_CHECKLIST_DIR = P('Doc', 'CheckList')      # 2026-11-16 이전 폴더 — 쓰지 않음. 사용자 의견 누적·번호 이어가기용으로만 읽는다
+def _harness_paths():
+    """개선안 20261124012048_SELF_5(R83): verify 본과 같이 산출물 폴더 = harness.json paths 1곳. 값이 없으면 checklistDir 기본값만 쓴다."""
+    try:
+        with open(P('tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            h = json.load(f) or {}
+    except (OSError, ValueError):
+        h = {}
+    return h.get('paths') if isinstance(h.get('paths'), dict) else {}
+
+
+def _abs(p):
+    return os.path.normpath(p if os.path.isabs(p) else os.path.join(ROOT, p))
+
+
+_HP = _harness_paths()
+OUTDIR = _abs(_HP.get('checklistDir') or 'Doc/UI_CHECKLIST')  # 없으면 next_version 이 생성
+OLD_CHECKLIST_DIRS = [_abs(d) for d in (_HP.get('legacyChecklistDirs') or []) if d]  # 옛 폴더 = 쓰지 않음. 사용자 의견 누적·번호 이어가기용으로만 읽는다
 LEGACY_DIR = P('Doc', '화면분석서')            # 2026-10-28 이전 위치 — 사용자 의견 누적·번호 이어가기용으로만 읽는다
 DOC_KIND = {'CheckList': ('CheckList', '정합검증서'), 'ActionItemList': ('ActionItemList', '보완대상')}  # 2026-10-28 보완대상 → ActionItemList  # 종류 → (새 이름, 이전 이름)
 sys.path.insert(0, P('tools', 'Docs'))
@@ -75,8 +90,8 @@ def screen_name(mid):
 
 def next_path(mid, name, kind):
     new, old = DOC_KIND[kind]
-    n = max(doc_archive.next_version(OUTDIR, f'{mid}_{name}_{new}', also=[LEGACY_DIR, OLD_CHECKLIST_DIR]),
-            doc_archive.next_version(OUTDIR, f'{mid}_{name}_{old}', also=[LEGACY_DIR, OLD_CHECKLIST_DIR]))
+    n = max(doc_archive.next_version(OUTDIR, f'{mid}_{name}_{new}', also=[LEGACY_DIR] + OLD_CHECKLIST_DIRS),
+            doc_archive.next_version(OUTDIR, f'{mid}_{name}_{old}', also=[LEGACY_DIR] + OLD_CHECKLIST_DIRS))
     return os.path.join(OUTDIR, f'{mid}_{name}_{new}_v{n}.xlsx'), n
 
 
@@ -98,7 +113,8 @@ def archive_after_save(path, mid, name, kind):
 
 def prior_docs(mid):
     """사용자 의견·판정 누적용 — 이 화면 CheckList·옛 정합검증서 전 버전(새 폴더·old·이전 위치), 오래된 → 최신"""
-    fs = doc_archive.all_versions([OUTDIR, OLD_CHECKLIST_DIR, LEGACY_DIR], f'{mid}_*_CheckList_v*.xlsx') + doc_archive.all_versions([OUTDIR, OLD_CHECKLIST_DIR, LEGACY_DIR], f'{mid}_*_정합검증서_v*.xlsx')
+    dirs = [OUTDIR] + OLD_CHECKLIST_DIRS + [LEGACY_DIR]
+    fs = doc_archive.all_versions(dirs, f'{mid}_*_CheckList_v*.xlsx') + doc_archive.all_versions(dirs, f'{mid}_*_정합검증서_v*.xlsx')
     # '{mid}_*' 는 별개 화면(DMF0003 ↔ DMF0003_1_…)까지 잡는다 — ID 바로 뒤가 숫자 구간이면 다른 화면
     fs = [f for f in fs if not re.match(rf'^{re.escape(mid)}_\d+_', os.path.basename(f)) and not os.path.basename(f).startswith('~$')]
     return sorted(set(fs), key=os.path.getmtime)

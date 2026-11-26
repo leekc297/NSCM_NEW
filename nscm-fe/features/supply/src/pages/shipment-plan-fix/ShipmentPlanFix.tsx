@@ -167,7 +167,7 @@ export const ShipmentPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   "삭제할 데이터가 없습니다"(AS-IS SaveData_FixInfo_U 수집 0건 → MSG00046). "행 미선택" 이 아니다.
     const payload = buildUnfixPayload(gridRef.current);
     if (payload.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_DELETE_DATA, '_No data to delete.') });
+      void setToast({ type: 'error', message: t(MSG.NO_DELETE_DATA, '_No data to delete.') });
       return;
     }
     unfixCountRef.current = payload.length; // MSG00672 {0} = 전송 행수(AS-IS result_cnt 등가)

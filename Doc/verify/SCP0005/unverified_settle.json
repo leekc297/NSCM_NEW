@@ -1,0 +1,152 @@
+{
+ "menu_id": "SCP0005",
+ "at": "2026-11-25 07:45:31",
+ "ready": 0,
+ "why": "남은 처리 대상 20행 · 다음 회차 🧪 보완 대상",
+ "kind": "measured",
+ "actionable": 20,
+ "continue": 1,
+ "stalled": false,
+ "rows": [
+  {
+   "row_id": "V-28e296d5",
+   "rule_id": "A4",
+   "class": "미분류",
+   "actor": "엔진",
+   "remedy": "분류표(unverified_classes.csv)에 유형 정규식을 더하고 원인에 맞게 검사기 보완"
+  },
+  {
+   "row_id": "V-72fbb5b2",
+   "rule_id": "F6",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정 · 입력 경로 실패 = 칸 설정·편집기 실측 · PARTIAL = 측정 못 한 칸의 원문 근거 확인(2026-11-19 SCP0096 F6·J4)"
+  },
+  {
+   "row_id": "V-be38da4d",
+   "rule_id": "F4",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "V-26d2974c",
+   "rule_id": "F1",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "V-17e451a7",
+   "rule_id": "H2",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "V-e63ff383",
+   "rule_id": "H2",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "V-219edc76",
+   "rule_id": "M1",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "T-f0f809e9",
+   "rule_id": "A6",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "T-2f7778bd",
+   "rule_id": "A6",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "T-336fa068",
+   "rule_id": "A6",
+   "class": "검사기공백",
+   "actor": "엔진",
+   "remedy": "검사기 신설·보완(공용 엔진 · 화면 독립) 후 해당 규칙 재측정"
+  },
+  {
+   "row_id": "ES-836708a8",
+   "rule_id": "F1",
+   "class": "데이터전제",
+   "actor": "엔진",
+   "remedy": "검사기가 조회조건·Division·행 선택을 바꿔 측정 전제를 만족시키도록 보완(ensureRows 계열 · 전 후보 순회)"
+  },
+  {
+   "row_id": "V-087d756b",
+   "rule_id": "E3",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — Doc/e2e/specs: Excel 필수 칸 시험이 필수 안내를 팝업 문구에서만 찾습니다. 업로드 결과의 행 상태(Error-Required)와 ERROR_COUNT를 함께 봐야 합니다. / AS-IS는 필수 15칸 중 하나라도 비면 업로드 결과 그리드의 행 상태를 Error-Required로 표시하고, 별도 팝업은 띄우지 않습니다. TO-BE도 같은 15칸을 검사해 Error-Required로 표시하고, 오류가 1건 이상이면 적재하지 않습니다. 측정에서도 오류 1건·성공 0건과 '오류 행이 존재하여 저장할 수 없습니다' 문구가 나왔으므로 필수 안내와 저장 차단이 모두 있습니다. / 근거 GSCM/01.Framework/GSCM.Windows.Forms/UI/ExcelUploadForm2.cs:960 ; GSCM/01.Framework/GSCM.Windows.Forms/UI/ExcelUploadForm2.cs:964 ; _artifacts/_apply_corporate/SEARCHCOND_CI_LIKE_20261113/tobe/PKG_SCP0005.TOBE.sql:1875 ; _artifacts/_apply_corporate → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "V-7116d2aa",
+   "rule_id": "F6",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — tools/Harness/verify/ledger.py: 0 값 저장 검사가 AS-IS 저장 전 검증(CheckValid 의 intPRIORITY < 1)을 찾지 못해, AS-IS 와 같은 저장 거부를 미판정으로 남긴다. / AS-IS 는 Save 때 CheckValid 에서 Priority 가 1 미만인 행이 있으면 'Priority는 양의 정수입니다.' 메시지를 띄우고 저장을 막는다. TO-BE 도 Priority 를 4에서 0으로 바꿔 저장하자 같은 메시지를 띄우고 서버로 보내지 않았으므로 AS-IS 와 동작이 같다. 검사기는 AS-IS 원문에 있는 이 검증을 찾지 못해 '검증 근거 없음'으로 기록했다. / 근거 GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:655 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1293 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Ma → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "V-3e95d2be",
+   "rule_id": "E4",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — tools/E2E 의 _trace.spec.ts E4 위반 입력 생성이 경계값 999 를 위반으로 넣고 직전 알림을 비우지 않아, 합계 1000 이상 입력과 남은 알림 초기화가 필요하다(T550). / AS-IS 는 L/T 5칸 합계가 999 를 넘을 때만 MSG00209 를 띄우고 바꾼 칸을 0 으로 되돌린다. 검사기는 합계 999 를 넣어 위반이 아닌 입력으로 시험했고, 남아 있던 알림 문구까지 섞어 FAIL 로 기록했다. TO-BE 는 같은 조건에서 바꾼 칸을 0 으로 되돌리고 MSG01220 으로 같은 의미의 메시지를 띄운다. / 근거 GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1005 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1009 ; nscm-fe/features/shipping/src/pages/distribution-route/components/Distribut → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "V-8fd091cc",
+   "rule_id": "K3",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — tools/E2E 붙여넣기 검사가 칸 최대 길이를 넘는 시험 값을 넣고, 길이만큼 잘려 들어간 값을 '미반영'으로 기록함. / 신규행 FROM_COUNTRY에 'E2EPASTE1'을 붙여넣자 빈 칸이 'E2'로 바뀌었다. 붙여넣기는 동작했고 국가 코드 칸 길이 2자에서 잘린 것이다. LT_TYPE 콤보는 후보 'MIN'만 받고 후보 밖 값은 거부했으며, 병합은 AS-IS에서도 이력 팝업 SCP0005_DistributionRoutePopup 그리드에만 있고 메인 그리드에는 없다. / 근거 GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:222 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:948 ; GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCP0005_DistributionRoutePopup.cs:182 ; nscm-fe/features/shipping/src/pages/d → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "V-96a5218a",
+   "rule_id": "K3",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — Doc/e2e/specs/_verify.spec.ts f5 단계가 LT_TYPE 콤보 칸을 클릭한 뒤 F5 를 누르고, 미저장 변경 확인창(confirmIfDirtyKey)이 뜨면 처리하지 않아 조회 요청 0건을 미실행으로 기록한다. / AS-IS 는 F5 를 Find(FindButton) 조회로 처리하고, TO-BE 는 SearchArea 의 F5 처리기가 이 화면의 onSearch 로 조회를 실행한다. 같은 실행에서 To City Region Popup 값을 고른 직후 메인 F5 로 조회 호출 1건이 잡혀 F5 조회는 동작한다. 메인 f5 FAIL 은 앞 단계에서 LT_TYPE 콤보 칸을 클릭해 생긴 상태에서 F5 를 누른 측정 문제이고, DM-229·DM-240 의 Version 팝업은 이 화면에 없다. / 근거 GSCM/01.Framework/GSCM.Windows.Forms/GSCM_MainForm.cs:141 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:270 ; nscm-fe/packages → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "T-eea49685",
+   "rule_id": "E4",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — tools/E2E 의 _trace.spec.ts E4 위반 입력 생성이 경계값 999 를 위반으로 넣고 직전 알림을 비우지 않아, 합계 1000 이상 입력과 남은 알림 초기화가 필요하다(T550). / [대표 T-6a512ae5 와 같은 증거] AS-IS 는 L/T 5칸 합계가 999 를 넘을 때만 MSG00209 를 띄우고 바꾼 칸을 0 으로 되돌린다. 검사기는 합계 999 를 위반 입력으로 넣어 알림이 없는 정상 동작을 FAIL 로 기록했다. TO-BE 도 합계 999 초과 때 바꾼 칸을 0 으로 되돌리고 MSG01220 'Total L/T은 999 이하 입니다.' 를 띄운다. / 근거 GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1005 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1007 ; nscm-fe/features/shipping/src/pages/distribution → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "T-6a512ae5",
+   "rule_id": "E4",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — tools/E2E 의 _trace.spec.ts E4 위반 입력 생성이 경계값 999 를 위반으로 넣고 직전 알림을 비우지 않아, 합계 1000 이상 입력과 남은 알림 초기화가 필요하다(T550). / AS-IS 는 L/T 5칸 합계가 999 를 넘을 때만 MSG00209 를 띄우고 바꾼 칸을 0 으로 되돌린다. 검사기는 합계 999 를 위반 입력으로 넣어 알림이 없는 정상 동작을 FAIL 로 기록했다. TO-BE 도 합계 999 초과 때 바꾼 칸을 0 으로 되돌리고 MSG01220 'Total L/T은 999 이하 입니다.' 를 띄운다. / 근거 GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1005 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1007 ; nscm-fe/features/shipping/src/pages/distribution-route/components/Distri → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "ES-88905017",
+   "rule_id": "F1",
+   "class": "AI검토:검사기오판",
+   "actor": "엔진",
+   "remedy": "AI 판정 검토: 검사기오판 — tools/E2E/lib/crud.ts 필수 칸 채움(T166)이 메타 * 가 없는 요일 칸을 채우지 않아, 요일 1개 이상 Y 를 넣도록 보완해야 한다. / AS-IS 도 요일(DAYS_MON~DAYS_SUN)이 하나도 없으면 MSG00223 으로 저장을 막는다. 검사기는 TRANSPORT_MODE=FERRY 마커 행에 요일을 채우지 않아 TO-BE 의 '[Working Days] 값은 필수 입력 항목입니다.' 차단을 저장 실패로 기록했다. 이 차단은 AS-IS 와 같고, 신규 행 저장 왕복은 요일을 채워 다시 측정해야 한다. / 근거 GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:728 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:736 ; nscm-fe/features/shipping/src/pages/distribution-route/hooks/useDistributionRout → 원인(파일:줄) 확인 · 검사기 수정 · 결함 유형(T번호) 기록 · 전 화면 공통이면 룰 등록(confirmed_requirements.csv → tobe_rule_registry.py --build/--check)"
+  },
+  {
+   "row_id": "FACT-708ae4ce",
+   "rule_id": "",
+   "class": "AI검토:추출오류",
+   "actor": "엔진",
+   "remedy": "AS-IS 사실 추출 누락: 원문은 UsrCombo(ComboBox 상속)인 cboValidYN에 setListBox(dtValidYN, cboValidYN, true, \"CODE\", \"NAME\")를 호출하고, 이 오버로드는 blnAllFlag가 true이면 모든 컬럼을 CConstVariable.FlagAll(\"ALL\")로 채운 행을 0번에 넣는다. 추출본 cboValidYN 행은 rows가 Y/N 두 개뿐이고 added_rows가 비어 있다. / 추출기 원인 setListBox(DataTable, ComboBox, true, valueMember, displayMember) 오버로드가 0번에 넣는 ALL 행을 added_rows에 기록하지 않음 / 근거 GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:204 ; GSCM/01.Framework/GSCM.Windows.Forms/Class/CControl.cs:367 ; GSCM/01.Framework/GSCM.Windows.Forms/Class/CControl.cs:361 → 추출기(tools/Harness/verify/facts_*.py · tools/AsisFacts) 보완 · 사실 파일을 손으로 고치지 않음 · 영향 검사: 콤보"
+  }
+ ]
+}

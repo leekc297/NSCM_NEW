@@ -3,7 +3,8 @@ const fs = require('fs'), path = require('path');
 const ts = require(path.join(__dirname, '..', '..', '..', 'nscm-fe', 'node_modules', 'typescript'));
 const load = f => { const m = { exports: {} }; new Function('module', 'exports', ts.transpileModule(fs.readFileSync(path.join(__dirname, f), 'utf8'), { compilerOptions: { module: 'commonjs', target: 'es2020' } }).outputText)(m, m.exports); return m.exports; };
 const { judgePopK3: j, popK3Keys: keys } = load('popk3.ts');
-const { pickCondCol: pc } = load('condcol.ts');
+const { pickCondCol: pc, chooseCondCol: cc } = load('condcol.ts');
+const { orderCheck: oc } = load('popupprobe.ts');  // T522
 const P = { name: "조건 'Model' 아이콘", title: 'Material', opened: true, cond: true, grid: true, rows: 30, hasSearch: true,
   no: { corner: ['No.'], firstHdr: 'Material', n: 1 }, count: 'Total : 30', ctrl: { ok: true, rs: '[[0,0],[2,2]]' }, shift: { ok: true, rs: '[[0,2]]' },
   f5: { pop: 1, main: 0, nav: 0, sheets: 'COM0013/SEARCH' }, sort: { on: true, s1: 'A ASC', s2: 'A DESC' }, filter: { n0: 30, n1: 3, n2: 30, count1: '3 / 30', why: '' },
@@ -38,6 +39,21 @@ const cases = [
   ['후보 이름 ↔ 라벨 컬럼 우선', pc(['ALL', 'Pack', 'Cell'], { OPERATION_GROUP_NAME: ['Pack', 'Cell', 'Cell'], OG: ['P', 'A', 'A'] }, ['OPERATION_GROUP_NAME']).col, 'OPERATION_GROUP_NAME'],
   ['후보 첫 토큰(코드 이름)', pc(['ALL', '81 Automotive', '40 Mobility'], { DIVISION_ID: ['81', '81', '40'] }).value, '40'],
   ['겹침 없음', pc(['ALL', 'X1', 'X2'], { A: ['Y'], B: ['Z'] }).col, ''],
+  // T521(V-8e065123): To Site 조건 — 같은 코드 집합의 FROM_SITE 가 겹침이 더 많아도 라벨 갈래 TO_SITE 를 고른다 · 갈래 컬럼이 안 겹치면 종전대로 최다 겹침
+  ['To Site → TO_SITE(FROM_SITE 겹침 더 많음)', pc(['SELECT ALL', 'HQ07-A', 'MI03-P', 'MI00-P'], { TO_SITE_DESCRIPTION: ['Mich', 'Mich'], FROM_SITE: ['HQ07-A', 'MI03-P', 'MI00-P'], TO_SITE: ['MI03-P', 'MI03-P'] }, ['TO_SITE_DESCRIPTION'], 'To Site').col, 'TO_SITE'],
+  ['라벨만으로 갈래 찾기', pc(['ALL', 'A1', 'A2'], { FROM_SITE: ['A1', 'A2'], TO_SITE: ['A2'] }, [], 'To Site').col, 'TO_SITE'],
+  ['갈래 컬럼 겹침 0 → 최다 겹침', pc(['ALL', 'A1', 'A2'], { FROM_SITE: ['A1', 'A2'], TO_SITE: ['Z9'] }, [], 'To Site').col, 'FROM_SITE'],
+  // T522(EG-017a5164): 공백 < 밑줄 순서는 위반 아님 · 글자 순서가 뒤집힌 행은 위반 유지 · 내림차순
+  ['공백·밑줄 순서 위반 아님', oc([{ T: 'Renault AS HQ_FR_RHE' }, { T: 'Renault AS_FR_FNS' }], 'T').violAt, -1],
+  ['글자 역순은 위반', oc([{ T: 'Renault B' }, { T: 'Renault A' }], 'T').violAt, 1],
+  ['대소문자 무시', oc([{ T: 'abc' }, { T: 'ABD' }], 'T').violAt, -1],
+  ['내림차순 역순 위반', oc([{ T: 'A' }, { T: 'B' }], 'T DESC').violAt, 1],
+  ['숫자 비교', oc([{ N: '9' }, { N: '10' }], 'N').violAt, -1],
+  // T527(V-8e065123 재발): 갈래 칸 겹침 0 · 다른 칸(FROM_SITE)만 겹침 → 갈래 코드 칸 TO_SITE · 갈래 칸이 없으면 종전대로
+  ['갈래 코드 칸 우선(겹침 0)', cc({ col: 'FROM_SITE', cand: 'MI03-P', value: 'MI03-P', hits: 1, how: '' }, { TO_SITE_DESCRIPTION: ['Club Car_US_AGS'], TO_SITE: ['Club Car_US_AGS'], FROM_SITE: ['MI03-P'] }, 'TO_SITE_DESCRIPTION', 'To Site', 30).col, 'TO_SITE'],
+  ['갈래 칸이 고른 칸이면 그대로', cc({ col: 'TO_SITE', cand: 'A', value: 'A', hits: 1, how: '' }, { TO_SITE: ['A'] }, 'TO_SITE_DESCRIPTION', 'To Site', 3).col, 'TO_SITE'],
+  ['갈래 칸 없음 → 최다 겹침', cc({ col: 'FROM_SITE', cand: 'A', value: 'A', hits: 1, how: '' }, { FROM_SITE: ['A'] }, '', 'Plant', 3).col, 'FROM_SITE'],
+  ['갈래 칸 값 없음 → 최다 겹침', cc({ col: 'FROM_SITE', cand: 'A', value: 'A', hits: 1, how: '' }, { FROM_SITE: ['A'], TO_SITE: ['', ''] }, '', 'To Site', 3).col, 'FROM_SITE'],
   ['결과에 없는 후보는 안 고름', pc(['ALL', 'AU000062_81-P', 'HQ05-W'], { FROM_SITE: ['HQ05-W'] }).cand, 'HQ05-W'],
 ];
 let bad = 0; for (const [n, got, want] of cases) { const ok = got === want; if (!ok) bad++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${n}: ${got}${ok ? '' : ` (기대 ${want})`}`); }

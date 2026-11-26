@@ -1,0 +1,450 @@
+{
+ "screen": "SCP0005",
+ "calls": [
+  {
+   "cls": "ExcelUploadForm2",
+   "method": "btnEaxel_Upload_Click",
+   "asis_ref": "SCP0005_DistributionRoute.cs:376",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnEaxel_Upload",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Upload",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "\"SCP0005\""
+    },
+    {
+     "param": "#2",
+     "kind": "EXPR",
+     "arg": "this.spdMain.ActiveSheet.SheetName"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:383",
+     "raw": "FindDataMain()"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:378",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "btnFromSrch_Click",
+   "asis_ref": "SCP0005_DistributionRoute.cs:344",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnFromSrch",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "true",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_Country",
+     "kind": "CONTROL",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "CONTROL",
+     "arg": "sCity"
+    }
+   ],
+   "results": [
+    "fromcity",
+    "fromcountry"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:345",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:350",
+     "target": "txtFromCountry.Text",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:351",
+     "target": "txtFromCity.Text",
+     "value": "popCity.City"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "btnToSrch_Click",
+   "asis_ref": "SCP0005_DistributionRoute.cs:362",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnToSrch",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "true",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_Country",
+     "kind": "CONTROL",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "CONTROL",
+     "arg": "sCity"
+    }
+   ],
+   "results": [
+    "tocity",
+    "tocountry"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:363",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:368",
+     "target": "txtToCountry.Text",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:369",
+     "target": "txtToCity.Text",
+     "value": "popCity.City"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0005_DistributionRoute.cs:1138",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "FROM_COUNTRY",
+    "guard": "if (!siMain.IsLock(siMain.SheetName)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.FROM_CITY) || e.Column == siMain.GetColumnIndex(DefColumns.FROM_COUNTRY) ||…)"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_Country",
+     "kind": "GRID",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "GRID",
+     "arg": "sCity"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1139",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1142",
+     "target": "sCountry",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1143",
+     "target": "sCountryName",
+     "value": "popCity.CountryName"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1144",
+     "target": "sCity",
+     "value": "popCity.City"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1145",
+     "target": "sCityName",
+     "value": "popCity.CityName"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0005_DistributionRoutePopup",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0005_DistributionRoute.cs:1100",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "ROUTE_ID",
+    "guard": "if (e.Column == siMain.GetColumnIndex(DefColumns.ROUTE_ID))"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "ROUTE_ID",
+     "kind": "GRID",
+     "arg": "siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.ROUTE_ID)).ToString()"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1139",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1142",
+     "target": "sCountry",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1143",
+     "target": "sCountryName",
+     "value": "popCity.CountryName"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1144",
+     "target": "sCity",
+     "value": "popCity.City"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1145",
+     "target": "sCityName",
+     "value": "popCity.CityName"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "ExcelUploadForm2": {
+   "cls": "ExcelUploadForm2",
+   "in_pack": false,
+   "from": "none"
+  },
+  "SCM0002_CitybyCountry": {
+   "cls": "SCM0002_CitybyCountry",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_CitybyCountry.cs",
+   "title": "City by Country",
+   "conds": [
+    {
+     "name": "txtCity",
+     "type": "UsrMultiLineEditor",
+     "label": "City",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_CitybyCountry.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtCountry",
+     "type": "UsrMultiLineEditor",
+     "label": "Country",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_CitybyCountry.Designer.cs:42",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_CITY_BY_COUNTY_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_CITY_BY_COUNTY_POPUP.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_country",
+      "p_city"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_CitybyCountry.cs:211",
+     "save": false
+    },
+    {
+     "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+     "src": "Doc/asisfacts/db/modules/dbo.DM0000_GET_COMMON_SPREAD_TITLE.sql",
+     "order_known": true,
+     "order_keys": "SEQ, SORT_ORDER_NO",
+     "order_line": "152",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_created_by",
+      "p_program_id",
+      "p_sheet_name",
+      "i_Count"
+     ],
+     "method": "GetSpdTitle",
+     "ref": "SCM0002_CitybyCountry.cs:330",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_CitybyCountry.cs:222",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_CitybyCountry.cs:236",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_CitybyCountry.cs:260",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_CitybyCountry.cs:263",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_CitybyCountry.cs:270",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCP0005_DistributionRoutePopup": {
+   "cls": "SCP0005_DistributionRoutePopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCP0005_DistributionRoutePopup.cs",
+   "title": "DistributionRoute History",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "SCP0005_GET_DISTRIBUTI",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindData",
+     "ref": "SCP0005_DistributionRoutePopup.cs:167",
+     "save": false
+    },
+    {
+     "sp": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID.sql",
+     "order_known": true,
+     "order_keys": "from_country,from_city, TO_COUNTRY, TO_CITY, PRIORITY",
+     "order_line": "131",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_route_id"
+     ],
+     "method": "FindData",
+     "ref": "SCP0005_DistributionRoutePopup.cs:171",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

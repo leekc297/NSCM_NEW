@@ -1,0 +1,611 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "(?:(?:^| )검증엔진\\ SCP0028\\ @trace\\ BTN\\ 팝업\\ 경로\\(F4·E4·G1\\)\\ =\\ AS\\-IS\\ 버튼\\ →\\ 팝업\\ →\\ OK\\ →\\ 후속\\ 메서드(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ CRUD\\ —\\ 필수\\ 공란\\ 실제\\ 저장\\ 시도\\(E3\\)\\ →\\ 필수\\ 채워\\ 실제\\ 저장·재조회·값\\ 보존·정리\\(F1·F2·F4·F6\\)(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 저장\\ 세부\\(F1·F6\\)\\ —\\ 컬럼별\\ 왕복·0\\ 값\\ 저장(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 저장\\ 경로\\(F1\\ 실패·H10\\ 취소·H11\\ 로딩·F2\\ 붙여넣기\\)(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 입력\\ 검증\\ 저장\\(E1\\ 음수·소수·E2\\ 날짜·E5\\ 콤보\\)(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 언어\\ 전환\\ 문구\\ 덤프\\(I2\\)(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 문서\\ 시나리오(?: @\\S+)*$)",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0028/e2e/serial/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 SCP0028 @trace",
+          "file": "_trace.spec.ts",
+          "line": 347,
+          "column": 6,
+          "specs": [
+            {
+              "title": "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 117930,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:17:18.941Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts\\_trace-검증엔진-SCP0028-trace--798fc-AS-IS-버튼-→-팝업-→-OK-→-후속-메서드-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-ba1bebfb033fdc0d89a8",
+              "file": "_trace.spec.ts",
+              "line": 2866,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SCP0028 @verify",
+          "file": "_verify.spec.ts",
+          "line": 290,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 필수 칸(LOT_SIZE,INCREMENT,VALID_YN,SPLIT_YN) 채워진 행 후보 8셀 우선 · 입력 글자 누락 '2,484' → 재입력(키보드) '24,841'(T432) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"activeFlag\":\"M\",\"divisionId\":\"81\",\"operationGroup\":\"A\",\"fromSite\":\"HQ07-A\",\"toSite\":\"BAE_US_ENC\",\"itemId\":\"ACPP1015U-B1-001\",\"transportMode\":\"SEA\",\"lotSize\":\"24841\",\"increment\":\" 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}} | SEARCH:200 알림=성공적으로 저장되었습니다. · [4s] 재조회 · [5s] 행 찾기 3 · 행 [SEA|24,841|2,484] LOT_SIZE: '24,840' → '24841' 저장 성공 · 재조회 값 '24,841' 반영 확인 · [7s] 원복 입력 · [8s] 원복 저장 응답 · 원복 '24,840' 저장 성공 · 재조회 값 '24,840' 복원 확인"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 51484,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[save-sheet] AS-IS Save 대상 시트 'Shipment Lot Size'(SaveButton→SaveData · shtMain=\"Shipment Lot Size\" (SCP0028_Shipment_Lot_Size.cs)) 그리드에서 측정 · 메타 정의 대조 — 그리드 컬럼 15개 중 100% 가 'Shipment Lot Size'(정의 18컬럼) · DOM 그리드 #0(T224)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:19:19.800Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 수정 저장 경로 강제(edit-save) · 필수 칸(LOT_SIZE,INCREMENT,VALID_YN,SPLIT_YN) 채워진 행 후보 8셀 우선 · 입력 글자 누락 '2,484' → 재입력(키보드) '24,841'(T432) · [1s] 수정 입력 완료 · [2s] 저장 응답 SAVE:200 요청={\"activeFlag\":\"M\",\"divisionId\":\"81\",\"operationGroup\":\"A\",\"fromSite\":\"HQ07-A\",\"toSite\":\"BAE_US_ENC\",\"itemId\":\"ACPP1015U-B1-001\",\"transportMode\":\"SEA\",\"lotSize\":\"24841\",\"increment\":\" 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"RESULT_CNT\":1,\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}} | SEARCH:200 알림=성공적으로 저장되었습니다. · [4s] 재조회 · [5s] 행 찾기 3 · 행 [SEA|24,841|2,484] LOT_SIZE: '24,840' → '24841' 저장 성공 · 재조회 값 '24,841' 반영 확인 · [7s] 원복 입력 · [8s] 원복 저장 응답 · 원복 '24,840' 저장 성공 · 재조회 값 '24,840' 복원 확인"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts\\_verify-정합검증-SCP0028-verif-f6e55-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ed96ea3ab5a3c1d97216",
+              "file": "_verify.spec.ts",
+              "line": 1021,
+              "column": 7
+            },
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 166825,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[save-sheet] AS-IS Save 대상 시트 'Shipment Lot Size'(SaveButton→SaveData · shtMain=\"Shipment Lot Size\" (SCP0028_Shipment_Lot_Size.cs)) 그리드에서 측정 · 메타 정의 대조 — 그리드 컬럼 15개 중 100% 가 'Shipment Lot Size'(정의 18컬럼) · DOM 그리드 #0(T224)\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:21:23 LOT_SIZE r3 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:21:34 LOT_SIZE 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:21:35 INCREMENT r3 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:21:46 INCREMENT 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:21:47 VALID_YN r3 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:21:55 VALID_YN 끝\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:21:55 SPLIT_YN r3 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:22:04 SPLIT_YN 끝\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:20:14.865Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts\\_verify-정합검증-SCP0028-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-9bb726994e2458b4a524",
+              "file": "_verify.spec.ts",
+              "line": 1707,
+              "column": 7
+            },
+            {
+              "title": "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 122188,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:23:05.870Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts\\_verify-정합검증-SCP0028-verif-68d5c-1-실패·H10-취소·H11-로딩·F2-붙여넣기--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-16a79b876eb6b9a89f6b",
+              "file": "_verify.spec.ts",
+              "line": 1842,
+              "column": 7
+            },
+            {
+              "title": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1500000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 122521,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:25:11.248Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts\\_verify-정합검증-SCP0028-verify-입력-검증-저장-E1-음수·소수·E2-날짜·E5-콤보--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-08660f2fc0212d614ab5",
+              "file": "_verify.spec.ts",
+              "line": 2126,
+              "column": 7
+            },
+            {
+              "title": "언어 전환 문구 덤프(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 33630,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] SCP0028 I2: 언어 시험 계정 jungyu9.kim 로 로그인(다른 화면 대기 없음)\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e_results.json — UNKNOWN\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:27:18.345Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts\\_verify-정합검증-SCP0028-verify-언어-전환-문구-덤프-I2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-66620e4d6bef6570fa6c",
+              "file": "_verify.spec.ts",
+              "line": 2445,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 3000000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 805174,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] SCP0028 'CN 언어 조회 건수 총/건 표기' 시작 01:28:00\n"
+                        },
+                        {
+                          "text": "[langlock] SCP0028 시나리오: 다른 화면 E2E 실행 중(SCP0005,SSP0005,SSP0014) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 'KO 변경 없이 저장 → KO 수정사항 없음 알림' 시작 01:36:16\n"
+                        },
+                        {
+                          "text": "[langlock] SCP0028 시나리오: 다른 화면 E2E 실행 중(SCP0005,SSP0005,SSP0014) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 'KO Increment > Lot Size 저장 → KO 검증 문구' 시작 01:36:49\n"
+                        },
+                        {
+                          "text": "[langlock] SCP0028 시나리오: 다른 화면 E2E 실행 중(SCP0005,SSP0005,SSP0014) — 끝날 때까지 언어 전환 대기\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 조회 중 Loading 토스트 없음' 시작 01:37:21\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 선택 행 위로 Insert' 시작 01:37:29\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 셀 콤보 후보 = 서버 콤보 YesOrNo' 시작 01:37:38\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 01:37:49\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 01:38:01\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 01:38:12\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 01:38:24\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] VALID_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 01:38:36\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 셀 콤보 후보 = 서버 콤보 YesOrNo' 시작 01:38:46\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 01:38:57\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 01:39:09\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 01:39:21\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 01:39:32\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] SPLIT_YN 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 01:39:44\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 기존 행 LOT_SIZE 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 01:39:53\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0' 시작 01:40:06\n"
+                        },
+                        {
+                          "text": "[시나리오] SCP0028 '[자동] 조회조건 콤보 6종 = 콤보' 시작 01:41:18\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:27:56.170Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\serial\\artifacts\\_verify-정합검증-SCP0028-verify-문서-시나리오-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5a2030dae99662721778",
+              "file": "_verify.spec.ts",
+              "line": 2774,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T16:17:17.960Z",
+    "duration": 1450860.1549999998,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -92,6 +92,25 @@ export function respSample(texts: string[], sheet: string, btn: string): Record<
   }
   return null;
 }
+/** T642(2026-11-25 SCP0005 MSG00043 3행 · H2 5행 'route/SAVE 실제 응답 표본 없음'): 표본 원천(이번 결과 · 원장 · .prev)은 부분 재측정(run_mode only)이
+ *  .prev 를 덮으면 앞 회차의 실제 응답을 잃는다(19:41 부분 실행 .prev 표본 0건 · 22:36 결과 T-9b93a539 에 route/SAVE 표본 있음).
+ *  원천에서 찾은 '<sheet>/<btn>:200 응답={…}' 를 화면 폴더 파일(시트/버튼 → 마지막 실제 응답)에 쌓고 그 파일 내용도 원천으로 돌려준다.
+ *  가짜 응답 표지(E2E-FAKE) 가 든 본문은 쌓지 않는다 */
+export function persistRespSamples(texts: string[], file: string): string[] {
+  let store: Record<string, { body: string; at: string }> = {};
+  try { store = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { store = {}; }
+  const re = /([^\s|/:=']+\/[^\s|/:=']+):200 응답=/g; let changed = false;
+  for (const t of texts) {
+    const s = String(t || ''); re.lastIndex = 0; let m: RegExpExecArray | null;
+    while ((m = re.exec(s))) {
+      const js = balanced(s, m.index + m[0].length); if (!js || js.includes('E2E-FAKE')) continue;
+      try { const o = JSON.parse(js); if (!o || typeof o !== 'object' || Array.isArray(o)) continue; } catch { continue; }
+      if (!store[m[1]] || store[m[1]].body !== js) { store[m[1]] = { body: js, at: new Date().toISOString() }; changed = true; }
+    }
+  }
+  if (changed) { try { fs.writeFileSync(file, JSON.stringify(store, null, 1)); } catch { /* 쓰기 실패 = 이번 원천만 사용 */ } }
+  return Object.entries(store).map(([k, v]) => `${k}:200 응답=${v.body}`);
+}
 function balanced(t: string, st: number): string {
   if (t[st] !== '{') return '';
   let d = 0; let inS = false; let esc = false;

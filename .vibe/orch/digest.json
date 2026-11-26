@@ -1,21 +1,168 @@
 {
-  "at": "2026-11-20T14:58:49+09:00",
+  "at": "2026-11-26T15:55:42+09:00",
   "days": 7,
-  "events": 1114,
+  "code": {
+    "loadedAt": "2026-11-25T20:55:34+09:00",
+    "loadedPid": 3608,
+    "thisPid": 3608,
+    "extDir": "c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1",
+    "staleFiles": [
+      {
+        "file": "claim_proposal.js",
+        "mtime": "2026-11-26T15:52:41+09:00",
+        "mtimeMs": 1795675961651
+      },
+      {
+        "file": "extension.js",
+        "mtime": "2026-11-26T15:50:56+09:00",
+        "mtimeMs": 1795675856519
+      },
+      {
+        "file": "flow-panel.js",
+        "mtime": "2026-11-26T00:00:01+09:00",
+        "mtimeMs": 1795618801766
+      },
+      {
+        "file": "history.js",
+        "mtime": "2026-11-26T15:50:55+09:00",
+        "mtimeMs": 1795675855873
+      },
+      {
+        "file": "job-runner.js",
+        "mtime": "2026-11-26T15:50:54+09:00",
+        "mtimeMs": 1795675854715
+      },
+      {
+        "file": "jobs.js",
+        "mtime": "2026-11-26T15:50:56+09:00",
+        "mtimeMs": 1795675856164
+      },
+      {
+        "file": "menu-view.js",
+        "mtime": "2026-11-26T09:50:57+09:00",
+        "mtimeMs": 1795654257041
+      },
+      {
+        "file": "orch-agent.js",
+        "mtime": "2026-11-26T03:28:08+09:00",
+        "mtimeMs": 1795631288348
+      },
+      {
+        "file": "orch-dict.js",
+        "mtime": "2026-11-26T07:02:16+09:00",
+        "mtimeMs": 1795644136430
+      },
+      {
+        "file": "orch-ladder.js",
+        "mtime": "2026-11-26T13:19:21+09:00",
+        "mtimeMs": 1795666761939
+      },
+      {
+        "file": "orch-selfcheck.js",
+        "mtime": "2026-11-26T10:25:31+09:00",
+        "mtimeMs": 1795656331228
+      },
+      {
+        "file": "orch-state.js",
+        "mtime": "2026-11-25T22:18:53+09:00",
+        "mtimeMs": 1795612733991
+      },
+      {
+        "file": "orch-usercheck.js",
+        "mtime": "2026-11-26T13:33:22+09:00",
+        "mtimeMs": 1795667602701
+      },
+      {
+        "file": "orch-watch.js",
+        "mtime": "2026-11-26T12:43:03+09:00",
+        "mtimeMs": 1795664583598
+      },
+      {
+        "file": "orch-worklist.js",
+        "mtime": "2026-11-26T10:25:37+09:00",
+        "mtimeMs": 1795656337885
+      },
+      {
+        "file": "orchestra.js",
+        "mtime": "2026-11-26T15:50:55+09:00",
+        "mtimeMs": 1795675855354
+      },
+      {
+        "file": "prompt-panel.js",
+        "mtime": "2026-11-26T10:09:33+09:00",
+        "mtimeMs": 1795655373421
+      },
+      {
+        "file": "server-service.js",
+        "mtime": "2026-11-26T05:06:49+09:00",
+        "mtimeMs": 1795637209442
+      },
+      {
+        "file": "workbench.js",
+        "mtime": "2026-11-26T15:50:53+09:00",
+        "mtimeMs": 1795675853662
+      }
+    ],
+    "waitingReload": 39,
+    "waitingOldestAt": "2026-11-25T22:27:46+09:00"
+  },
+  "events": 6172,
   "firstEventAt": "2026-11-19T17:10:46+09:00",
-  "lastEventAt": "2026-11-20T14:58:30+09:00",
+  "lastEventAt": "2026-11-26T15:52:25+09:00",
   "steps": [
     {
       "key": "S8.checklistRun",
       "actor": "script",
-      "n": 19,
+      "n": 26,
       "fail": 3,
       "stopped": 8,
+      "stoppedBy": {
+        "window": 3,
+        "button": 0,
+        "vmo": 0,
+        "other": 5
+      },
       "warn": 0,
       "repairs": 0,
-      "medianSec": 1928.7,
-      "p90Sec": 14608.3,
-      "totalSec": 97062.3
+      "medianSec": 1862.6,
+      "p90Sec": 12908.3,
+      "totalSec": 113500.7
+    },
+    {
+      "key": "S8.checklistRun:--no-docs",
+      "actor": "script",
+      "n": 7,
+      "fail": 1,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 5393.9,
+      "p90Sec": 8599,
+      "totalSec": 37226.2
+    },
+    {
+      "key": "S8.checklistDelta",
+      "actor": "script",
+      "n": 4,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 3453.6,
+      "p90Sec": 4886.9,
+      "totalSec": 14127.9
     },
     {
       "key": "S8.checklistRecheck",
@@ -23,6 +170,12 @@
       "n": 5,
       "fail": 0,
       "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
       "warn": 3,
       "repairs": 0,
       "medianSec": 3473.2,
@@ -35,6 +188,12 @@
       "n": 5,
       "fail": 0,
       "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
       "warn": 1,
       "repairs": 0,
       "medianSec": 2425.9,
@@ -42,50 +201,486 @@
       "totalSec": 11356.8
     },
     {
+      "key": "S8.wlRound",
+      "actor": "script",
+      "n": 2,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 2804.8,
+      "p90Sec": 5609.2,
+      "totalSec": 5609.7
+    },
+    {
+      "key": "S8.checklistSettle:--settle:--no-docs",
+      "actor": "script",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 5591.6,
+      "p90Sec": 5591.6,
+      "totalSec": 5591.6
+    },
+    {
+      "key": "S8.unverifiedGate",
+      "actor": "script",
+      "n": 2,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 2643.3,
+      "p90Sec": 5286.3,
+      "totalSec": 5286.6
+    },
+    {
+      "key": "S8.checklistDelta:--delta:--no-docs",
+      "actor": "script",
+      "n": 2,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 2149.8,
+      "p90Sec": 2913.4,
+      "totalSec": 4299.5
+    },
+    {
+      "key": "2. 검사엔진 보완 (처리 대상 전체 → 일괄 신설·보완 · 처리 대상이 있을 때만)",
+      "actor": "claude",
+      "n": 2,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 1973.8,
+      "p90Sec": 3362.2,
+      "totalSec": 3947.5
+    },
+    {
+      "key": "4. 미검증 보완 (열린 행 → 원인 · 검사기 수정 · 그 행만 다시 재서 닫음)",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 3433.8,
+      "p90Sec": 3433.8,
+      "totalSec": 3433.8
+    },
+    {
+      "key": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 미검증 80건 · 처리 대상 92건",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 2677.4,
+      "p90Sec": 2677.4,
+      "totalSec": 2677.4
+    },
+    {
+      "key": "3. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완)",
+      "actor": "claude",
+      "n": 2,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 1253.9,
+      "p90Sec": 1434.9,
+      "totalSec": 2507.8
+    },
+    {
+      "key": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 2회차 · 미검증 23건 · 처리 대상 20건",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 1731.9,
+      "p90Sec": 1731.9,
+      "totalSec": 1731.9
+    },
+    {
+      "key": "화면별 내용 작성(캡처 보고 번호 위치, 설명, Key Point)",
+      "actor": "claude",
+      "n": 3,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 471.2,
+      "p90Sec": 764.4,
+      "totalSec": 1567.8
+    },
+    {
+      "key": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 미검증 127건 · 처리 대상 139건",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 1459.7,
+      "p90Sec": 1459.7,
+      "totalSec": 1459.7
+    },
+    {
+      "key": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 미검증 148건 · 처리 대상 165건",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 1362.1,
+      "p90Sec": 1362.1,
+      "totalSec": 1362.1
+    },
+    {
       "key": "2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만)",
       "actor": "claude",
       "n": 2,
       "fail": 0,
       "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
       "warn": 2,
       "repairs": 0,
       "medianSec": 607.9,
       "p90Sec": 642.1,
       "totalSec": 1215.7
+    },
+    {
+      "key": "S8.engineGate:--mark",
+      "actor": "script",
+      "n": 6,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 2.4,
+      "p90Sec": 685.9,
+      "totalSec": 1104.5
+    },
+    {
+      "key": "S8.checklistRun:--docs",
+      "actor": "script",
+      "n": 6,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 139.2,
+      "p90Sec": 248.2,
+      "totalSec": 887.3
+    },
+    {
+      "key": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 미검증 71건 · 처리 대상 66건",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 872.4,
+      "p90Sec": 872.4,
+      "totalSec": 872.4
+    },
+    {
+      "key": "내용 작성(업무 흐름, 프로세스, 점검표, 장애 대응, 로그, 기준 정보, 권한, 화면/잡/테이블 설명)",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 595.1,
+      "p90Sec": 595.1,
+      "totalSec": 595.1
+    },
+    {
+      "key": "3. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 2회차",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 554,
+      "p90Sec": 554,
+      "totalSec": 554
+    },
+    {
+      "key": "3. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 3회차",
+      "actor": "claude",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 520.6,
+      "p90Sec": 520.6,
+      "totalSec": 520.6
+    },
+    {
+      "key": "S8.engineGate:--check",
+      "actor": "script",
+      "n": 5,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 35.4,
+      "p90Sec": 62.7,
+      "totalSec": 225.8
+    },
+    {
+      "key": "S8.engineGate",
+      "actor": "script",
+      "n": 9,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 1.6,
+      "p90Sec": 45.7,
+      "totalSec": 143.6
+    },
+    {
+      "key": "S1.liveScreen",
+      "actor": "script",
+      "n": 1,
+      "fail": 1,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 35.1,
+      "p90Sec": 35.1,
+      "totalSec": 35.1
+    },
+    {
+      "key": "UM.prep",
+      "actor": "script",
+      "n": 3,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 3.4,
+      "p90Sec": 4.3,
+      "totalSec": 10.3
+    },
+    {
+      "key": "S1.liveCheck",
+      "actor": "script",
+      "n": 1,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 7.8,
+      "p90Sec": 7.8,
+      "totalSec": 7.8
+    },
+    {
+      "key": "UM.build",
+      "actor": "script",
+      "n": 3,
+      "fail": 0,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "warn": 0,
+      "repairs": 0,
+      "medianSec": 1.6,
+      "p90Sec": 2.5,
+      "totalSec": 5.5
     }
   ],
   "waits": [
     {
       "kind": "admit",
-      "started": 8,
+      "started": 10,
       "unfinished": 0,
       "unfinishedLive": 0,
       "unfinishedScreens": [],
       "gone": 0,
       "goneSec": 0,
       "goneUnknown": 0,
-      "n": 8,
-      "totalSec": 1140,
+      "n": 10,
+      "totalSec": 1500,
       "maxSec": 270,
       "gaveUp": 0,
       "topScreens": [
+        "SSP0005 540s",
+        "SCP0005 450s",
         "SCP0028 360s",
-        "SCP0005 360s",
-        "SSP0005 270s",
         "SSP0014 150s"
       ]
     },
     {
       "kind": "dbwin",
-      "started": 4,
-      "unfinished": 3,
+      "started": 5,
+      "unfinished": 0,
       "unfinishedLive": 0,
-      "unfinishedScreens": [
-        "DMF0042"
-      ],
-      "gone": 8,
-      "goneSec": 70097,
-      "goneUnknown": 5,
+      "unfinishedScreens": [],
+      "gone": 4,
+      "goneSec": 70594,
+      "goneUnknown": 0,
       "n": 1,
       "totalSec": 30,
       "maxSec": 30,
@@ -99,39 +694,173 @@
     {
       "chain": "checklist",
       "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
-      "n": 15,
+      "n": 28,
+      "ok": 2,
+      "stopped": 22,
+      "stoppedBy": {
+        "window": 10,
+        "button": 2,
+        "vmo": 1,
+        "other": 9
+      },
+      "medianSec": 2682.3,
+      "claudeRan": 8,
+      "claudeSkipped": 44,
+      "runsWithoutClaude": 22,
+      "noEnd": 12,
+      "noEndLive": 0,
+      "noEndScreens": [
+        "SCP0005",
+        "SSP0014",
+        "SCP0028",
+        "SSP0005"
+      ]
+    },
+    {
+      "chain": "usermanual",
+      "label": "📘 사용자 매뉴얼 (모듈별 PPT: 양식 샘플 + 최신 UI 캡처)",
+      "n": 3,
+      "ok": 3,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "medianSec": 476.6,
+      "claudeRan": 3,
+      "claudeSkipped": 0,
+      "runsWithoutClaude": 0,
+      "noEnd": 0,
+      "noEndLive": 0,
+      "noEndScreens": []
+    },
+    {
+      "chain": "opsmanual",
+      "label": "🛠 운영자 매뉴얼 (모듈별 PPT: 양식 구조 + 분석 자료 흐름과 운영 절차)",
+      "n": 1,
+      "ok": 1,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "medianSec": 600.6,
+      "claudeRan": 1,
+      "claudeSkipped": 0,
+      "runsWithoutClaude": 0,
+      "noEnd": 0,
+      "noEndLive": 0,
+      "noEndScreens": []
+    },
+    {
+      "chain": "asislive",
+      "label": "🎥 AS-IS 실측",
+      "n": 1,
       "ok": 0,
-      "stopped": 12,
-      "medianSec": 1054.9,
+      "stopped": 0,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 0
+      },
+      "medianSec": 45.4,
       "claudeRan": 0,
-      "claudeSkipped": 33,
-      "runsWithoutClaude": 15
+      "claudeSkipped": 0,
+      "runsWithoutClaude": 1,
+      "noEnd": 0,
+      "noEndLive": 0,
+      "noEndScreens": []
+    },
+    {
+      "chain": "unverifiedFix",
+      "label": "🧪 미검증 해소",
+      "n": 2,
+      "ok": 1,
+      "stopped": 1,
+      "stoppedBy": {
+        "window": 0,
+        "button": 0,
+        "vmo": 0,
+        "other": 1
+      },
+      "medianSec": 1976.2,
+      "claudeRan": 2,
+      "claudeSkipped": 0,
+      "runsWithoutClaude": 0,
+      "noEnd": 0,
+      "noEndLive": 0,
+      "noEndScreens": []
     }
   ],
+  "waitGoneDup": 17,
+  "procGone": {
+    "n": 7,
+    "lines": 37,
+    "screens": [
+      "SCP0005",
+      "SSP0014",
+      "SCP0028",
+      "SSP0005"
+    ]
+  },
+  "chainsNoEnd": 12,
   "claude": {
-    "started": 125,
+    "started": 643,
     "unfinished": 3,
-    "runningNow": 1,
-    "calls": 122,
-    "fail": 7,
+    "runningNow": 0,
+    "calls": 640,
+    "fail": 9,
     "timedOut": 0,
-    "stopped": 7,
+    "stopped": 20,
     "noResult": 0,
-    "totalSec": 28679.3,
-    "costUsd": 408.304,
-    "costCounted": 118,
+    "totalSec": 199901.5,
+    "costUsd": 2106.121,
+    "costCounted": 657,
     "sessionRetry": 0,
     "waitedSec": 520.7
   },
   "procFails": [
     {
       "label": "CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
-      "n": 19,
-      "fail": 3,
-      "stopped": 11,
+      "n": 39,
+      "fail": 4,
+      "stopped": 16,
       "exits": {
         "1": 2,
+        "3": 1,
         "6": 1
+      }
+    },
+    {
+      "label": "⬆️ Source Backup 3/3 push",
+      "n": 5,
+      "fail": 1,
+      "stopped": 1,
+      "exits": {
+        "1": 1
+      }
+    },
+    {
+      "label": "AS-IS 실측 묶음(화면 1개) — 기본 실측 → 소스 분기 시나리오 → 버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기) → 실행 현황 → TO-BE 조건 대조 · CheckList 전체 실행 때 자동 구동되는 것과 같은 묶음",
+      "n": 1,
+      "fail": 1,
+      "stopped": 0,
+      "exits": {
+        "3": 1
+      }
+    },
+    {
+      "label": "퇴행 확인 — 이번 해소에서 row_run 이 돈 시험만 행 제한 없이 1회, 판정이 나 있던 행이 미검증으로 바뀌었는지",
+      "n": 1,
+      "fail": 1,
+      "stopped": 0,
+      "exits": {
+        "3": 1
       }
     },
     {
@@ -140,45 +869,65 @@
       "fail": 0,
       "stopped": 3,
       "exits": {}
+    },
+    {
+      "label": "CheckList 수정분 재점검 — 지난 실행 뒤 바뀐 소스(FE 화면·공용, PROC, 메타, 검사기) 범위만 다시 측정(delta_scope: 기준선 대조 + AI 판단, 직전 미해결 행 규칙 포함) → 미검증 분류 · 기준선 없음·넓은 변경이면 전체",
+      "n": 6,
+      "fail": 0,
+      "stopped": 3,
+      "exits": {}
     }
   ],
   "incidents": {
-    "total": 154,
+    "total": 351,
     "byRule": {
-      "R5": 15,
-      "R12": 76,
-      "R9": 37,
-      "R7": 20,
+      "R5": 25,
+      "R12": 242,
+      "R6": 2,
+      "R9": 52,
+      "R1": 7,
+      "R7": 21,
+      "R14": 2,
       "R3": 1,
       "R2": 15,
       "R11": 16,
-      "R1": 5,
       "R4": 1
     },
     "topRepeats": [
       {
-        "rule": "R12",
-        "n": 11,
-        "screens": [],
-        "title": "VM 자가진단 S3 설치본 차이: CHANGELOG.md 내용 다름",
-        "statuses": {
-          "resolved": 11
-        },
-        "sig": "R12|S3|CHANGELOG.md"
-      },
-      {
         "rule": "R7",
-        "n": 11,
+        "n": 12,
         "screens": [
+          "DMF0082",
           "DMF0042"
         ],
         "title": "Claude 비정상 종료 (exit 1). 응답 중 종료",
         "statuses": {
+          "resolved": 6,
           "need-user": 1,
-          "resolved": 5,
           "closed": 1
         },
         "sig": "R7|응답 중 종료"
+      },
+      {
+        "rule": "R9",
+        "n": 12,
+        "screens": [],
+        "title": "죽은 잠금. _run.admit.lock (PID 9240 없음)",
+        "statuses": {
+          "resolved": 12
+        },
+        "sig": "R9|_run.admit.lock"
+      },
+      {
+        "rule": "R12",
+        "n": 12,
+        "screens": [],
+        "title": "VM 자가진단 S3 설치본 차이: CHANGELOG.md 내용 다름",
+        "statuses": {
+          "resolved": 12
+        },
+        "sig": "R12|S3|CHANGELOG.md"
       },
       {
         "rule": "R2",
@@ -219,14 +968,25 @@
         "sig": "R7|미분류"
       },
       {
-        "rule": "R9",
+        "rule": "R5",
         "n": 8,
         "screens": [],
-        "title": "죽은 잠금. _run.admit.lock (PID 42384 없음)",
+        "title": "창 다시 로드로 끊긴 실행 16건(알림)",
         "statuses": {
           "resolved": 8
         },
-        "sig": "R9|_run.admit.lock"
+        "sig": "R5|reloadcut|36504"
+      },
+      {
+        "rule": "R12",
+        "n": 8,
+        "screens": [],
+        "title": "VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 12건",
+        "statuses": {
+          "open": 1,
+          "resolved": 7
+        },
+        "sig": "R12|S13|U3|stuckProp"
       },
       {
         "rule": "R9",
@@ -241,6 +1001,59 @@
         "sig": "R9|_run.dbwin.DMF0042.lock"
       },
       {
+        "rule": "R12",
+        "n": 7,
+        "screens": [],
+        "title": "VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성)",
+        "statuses": {
+          "resolved": 7
+        },
+        "sig": "R12|S8|20261120181921_SELF_5"
+      },
+      {
+        "rule": "R9",
+        "n": 5,
+        "screens": [
+          "SCP0005"
+        ],
+        "title": "죽은 잠금. _run.dbwin.SCP0005.lock (PID 24996 없음)",
+        "statuses": {
+          "resolved": 4,
+          "closed": 1
+        },
+        "sig": "R9|_run.dbwin.SCP0005.lock"
+      },
+      {
+        "rule": "R12",
+        "n": 5,
+        "screens": [],
+        "title": "VM 자가진단 S3 설치본 차이: quick.json 내용 다름",
+        "statuses": {
+          "resolved": 5
+        },
+        "sig": "R12|S3|quick.json"
+      },
+      {
+        "rule": "R12",
+        "n": 5,
+        "screens": [],
+        "title": "VM 자가진단 S13 사용자 지적: U13 VMW 재개 표시 없음 J20261120_054831",
+        "statuses": {
+          "resolved": 5
+        },
+        "sig": "R12|S13|U13|mark|J20261120_054831"
+      },
+      {
+        "rule": "R12",
+        "n": 5,
+        "screens": [],
+        "title": "VM 자가진단 S13 사용자 지적: U13 VMW 재개 표시 없음 J20261120_003352",
+        "statuses": {
+          "resolved": 5
+        },
+        "sig": "R12|S13|U13|mark|J20261120_003352"
+      },
+      {
         "rule": "R11",
         "n": 5,
         "screens": [
@@ -252,92 +1065,6 @@
           "resolved": 1
         },
         "sig": "R11|SSP0005|checklist"
-      },
-      {
-        "rule": "R5",
-        "n": 5,
-        "screens": [
-          "SSP0014",
-          "SSP0005",
-          "SCP0028",
-          "SCP0005"
-        ],
-        "title": "종료 기록 없이 사라진 실행. 체인 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
-        "statuses": {
-          "resolved": 4
-        },
-        "sig": "R5|gone|chain|🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)"
-      },
-      {
-        "rule": "R5",
-        "n": 5,
-        "screens": [
-          "SCP0028"
-        ],
-        "title": "종료 기록 없이 사라진 실행. 프로세스 CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계",
-        "statuses": {
-          "resolved": 2
-        },
-        "sig": "R5|gone|proc|CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계"
-      },
-      {
-        "rule": "R9",
-        "n": 4,
-        "screens": [
-          "SCP0005"
-        ],
-        "title": "죽은 잠금. _run.dbwin.SCP0005.lock (PID 42752 없음)",
-        "statuses": {
-          "resolved": 3,
-          "closed": 1
-        },
-        "sig": "R9|_run.dbwin.SCP0005.lock"
-      },
-      {
-        "rule": "R2",
-        "n": 4,
-        "screens": [
-          "SCP0014"
-        ],
-        "title": "같은 오류 반복 SCP0014 2회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 6) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
-        "statuses": {
-          "resolved": 1,
-          "closed": 1
-        },
-        "sig": "S8.checklistRun | [FAIL] TO-BE 화면 소스·인덱스 — nscm-fe 에서 <ID> 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님"
-      },
-      {
-        "rule": "R2",
-        "n": 4,
-        "screens": [
-          "SCP0005"
-        ],
-        "title": "같은 오류 반복 SCP0005 2회 — 1. CheckList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList → 미검증 분류) 실패 (exit 1) — 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
-        "statuses": {
-          "resolved": 1,
-          "closed": 1
-        },
-        "sig": "S8.checklistRun | $ <path> <path> <ID> --asis <ID>"
-      },
-      {
-        "rule": "R12",
-        "n": 3,
-        "screens": [],
-        "title": "VM 자가진단 S2 시험: t_job_runner.js 실패",
-        "statuses": {
-          "resolved": 3
-        },
-        "sig": "R12|S2|t_job_runner.js"
-      },
-      {
-        "rule": "R12",
-        "n": 3,
-        "screens": [],
-        "title": "VM 자가진단 S3 설치본 차이: orchestra.js 내용 다름",
-        "statuses": {
-          "resolved": 3
-        },
-        "sig": "R12|S3|orchestra.js"
       }
     ]
   }

@@ -71,13 +71,23 @@ def plan(tri, review, ledger):
             continue
         if actor != '결정':
             continue
-        r = led.get(rid); x = rv.get(rid) or {}
+        r = led.get(rid); x = rv.get(rid) or {}; dc = t.get('_dec') or {}
+        if t.get('_ai') and dc:   # 2026-11-20: AI 검토 행(원장은 AI 판정 반영됨)이 결정 목록에 있음 → 원장 그대로, 기록만
+            out.append({'row_id': rid, 'rule_id': t.get('rule_id', ''), 'target': t.get('target', ''), 'status': 'kept', 'recommend': '', 'confidence': '',
+                        'reason': f"결정 {dc.get('id', '')}: {dc.get('what', '')}"[:600], 'evidence_ref': dc.get('ref', '')[:400], 'alternatives': '',
+                        'action': ('권장안 ' + dc.get('rec', ''))[:300]})
+            continue
         base = {'row_id': rid, 'rule_id': t.get('rule_id', ''), 'target': t.get('target', ''), 'confidence': x.get('confidence', ''),
                 'reason': (x.get('reason') or '').strip()[:600], 'evidence_ref': (x.get('evidence_ref') or '').strip()[:400], 'action': ''}
         if r is None:
             continue
         if USER.match(r.get('evidence') or '') or (r.get('tobe_ref') or '').startswith('수동'):
             out.append(dict(base, status='user', recommend='', alternatives='', action='사용자판정이 있어 그대로 둠')); continue
+        if dc:   # 2026-11-20: 세션 결정 목록·AS-IS 시간초과·결정 집계 행 = 결정의 권장안. 세션이 AI 검토 답(고칠 곳 포함)을 보고 결정 목록에 올린 행이라 검사기 되돌림보다 앞섬(원장 ERROR = AI 답이 결론을 못 낸 행)
+            base.update({'reason': (f"결정 {dc.get('id', '')}: {dc.get('what', '')} → 권장 {dc.get('rec', '')}")[:600], 'evidence_ref': (dc.get('ref') or '')[:400]})
+            out.append(dict(base, status='applied', recommend='판정필요', alternatives=alternatives('판정필요'),
+                            action='사용자 코멘트가 없으면 권장안 유지. 다르게 판정하려면 CheckList 사용자의견 칸에 적음'))
+            continue
         hint = (x.get('fix_hint') or '').strip()
         if hint and ENGINE_FILE.search(hint):
             out.append(dict(base, status='engine', recommend='', alternatives='', action='검사기 보완 대상으로 되돌림: ' + hint[:300])); continue

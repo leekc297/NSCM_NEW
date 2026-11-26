@@ -1,0 +1,341 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "(?:(?:^| )정합검증\\ SCP0028\\ @verify\\ 전용\\ 버튼\\ 확인창\\(M2\\)(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 조회조건\\ 겹침\\(H4\\)(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 레이아웃·조회\\ 묶음\\(H4·N1·G1·L2\\)(?: @\\S+)*$|(?:^| )정합검증\\ SCP0028\\ @verify\\ 정렬·필터\\ 상태\\ Insert\\(D6\\)·붙여넣기\\ 후보\\ 외\\(F3\\)(?: @\\S+)*$)",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0028/e2e/read9/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read9\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SCP0028 @verify",
+          "file": "_verify.spec.ts",
+          "line": 290,
+          "column": 6,
+          "specs": [
+            {
+              "title": "조회조건 겹침(H4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9836,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024 · e2e-read SCP0028)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n"
+                        },
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T17:52:49.136Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read9\\artifacts\\_verify-정합검증-SCP0028-verify-조회조건-겹침-H4--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-8b6e817fb0e78c711089",
+              "file": "_verify.spec.ts",
+              "line": 2262,
+              "column": 7
+            },
+            {
+              "title": "레이아웃·조회 묶음(H4·N1·G1·L2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18982,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024 · e2e-read SCP0028)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n"
+                        },
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T17:56:04.542Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read9\\artifacts\\_verify-정합검증-SCP0028-verify-레이아웃·조회-묶음-H4·N1·G1·L2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-8fa87eb01d7a3b600ffc",
+              "file": "_verify.spec.ts",
+              "line": 2547,
+              "column": 7
+            },
+            {
+              "title": "전용 버튼 확인창(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15488,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024 · e2e-read SCP0028)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n"
+                        },
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T17:59:27.291Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read9\\artifacts\\_verify-정합검증-SCP0028-verify-전용-버튼-확인창-M2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2be54424ac67cd3e6dc5",
+              "file": "_verify.spec.ts",
+              "line": 2693,
+              "column": 7
+            },
+            {
+              "title": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 35449,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024 · e2e-read SCP0028)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n"
+                        },
+                        {
+                          "text": "[langacct] heeyoung123: 다른 실행(pid 47024)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n"
+                        },
+                        {
+                          "text": "[Insert 전제] SCP0028 신규 행 없음 → 행 선택 후 재시도 — [전제 T312] 보이는 그리드 행 수 1990 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T18:02:47.280Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\e2e\\read9\\artifacts\\_verify-정합검증-SCP0028-verif-93af4-상태-Insert-D6-·붙여넣기-후보-외-F3--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-10e5da0a25462fe153a1",
+              "file": "_verify.spec.ts",
+              "line": 3117,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T17:52:47.916Z",
+    "duration": 826848.799,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

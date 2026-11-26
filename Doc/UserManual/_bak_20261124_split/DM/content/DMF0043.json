@@ -1,0 +1,99 @@
+{
+ "id": "DMF0043",
+ "uiName": "Contribution Rate Reg.",
+ "menuPath": "DM> Demand Master> Contribution Rate Reg.",
+ "captures": [
+  "captures/DMF0043.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0043/",
+  "Doc/asisfacts/screens/DMF0043/",
+  "Doc/gen/DMF0043/"
+ ],
+ "buttons": [
+  "ContributeMain:SAVE",
+  "ContributeMain:SEARCH",
+  "ContributeMain:VERSION_MGMT",
+  "ContributeMain:VERSION_MGT",
+  "mainTitle:SEARCH",
+  "ratePopup:SEARCH",
+  "salesList:SEARCH",
+  "salesListTitle:SEARCH",
+  "titleSet:SEARCH",
+  "version:DELETE",
+  "version:EDIT",
+  "version:INSERT",
+  "version:SAVE",
+  "version:SEARCH",
+  "versionPopup:SEARCH",
+  "yearPopup:SEARCH"
+ ],
+ "definition": "연도별 기여도 버전에 부문, 팀, 고객군, 판매처, 제품군, 형태 단위 해외법인 지역 기여율을 월 또는 연 단위로 등록하는 화면",
+ "pages": [
+  {
+   "title": "Contribution Rate Reg.",
+   "keyPoint": "행마다 지역 비율 합계를 100 으로 맞추고 저장함. By Year 체크 상태에 따라 연 단위 또는 월 단위 비율만 저장되므로 저장 전 체크 상태를 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.168,
+     "y": 0.155
+    },
+    {
+     "no": 2,
+     "x": 0.636,
+     "y": 0.207
+    },
+    {
+     "no": 3,
+     "x": 0.178,
+     "y": 0.207
+    },
+    {
+     "no": 4,
+     "x": 0.578,
+     "y": 0.236
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Year: 필수. 연도와 기여도 버전 이름이 같이 나옴(예: 2026(26년 해외법인 기여도))",
+      "By Year: 체크하면 연 단위 비율 칸, 해제하면 월 단위 비율 칸이 보임",
+      "그리드가 편집 상태일 때는 By Year 를 바꿀 수 없고 메시지가 뜸",
+      "Discard, History: 둘 중 하나만 체크됨. History 를 체크하면 비율 칸을 편집할 수 없음"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Contribution Version: 기여도 버전 팝업이 열림. 연도별 Version, Memo 를 등록하고 조회함",
+      "팝업에서 Year 를 고르지 않고 조회하면 메시지가 뜸",
+      "Save(F7): 화면에 보이는 단위의 비율만 저장함. By Year 체크 시 연 단위, 해제 시 월 단위로 저장됨",
+      "Sort, Filter, Condition, Reset Condition 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "기여율 그리드",
+     "lines": [
+      "부문, 팀, 고객군, 판매처, 제품군, 형태: 비율을 등록하는 기준 행이며 입력 불가",
+      "같은 값은 셀이 합쳐져 보이고, 가로로 스크롤해도 형태 컬럼까지 고정됨"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "월별 지역 비율 칸",
+     "lines": [
+      "2026-01, 2026-02 처럼 월마다 대만, 중국-화남, 중국-화북, 미주, 유럽, 일본, 인도, 기타 칸과 구분 칸이 나옴",
+      "지역 칸에 비율을 입력함. 한 행의 지역 비율 합계가 100 이 아니면 저장 때 메시지가 뜨고 저장되지 않음",
+      "구분: COMMISSION 등 기여 유형이 표시됨"
+     ]
+    }
+   ]
+  }
+ ]
+}

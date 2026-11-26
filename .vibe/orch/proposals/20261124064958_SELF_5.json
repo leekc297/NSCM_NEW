@@ -1,0 +1,116 @@
+{
+  "id": "20261124064958_SELF_5",
+  "at": "2026-11-24T06:49:58+09:00",
+  "ms": 1795470598935,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/history.js|l과r좌우분할에경계막대크기조절이없음historyjs에pointermove",
+  "title": "사용자 지시 R179 같은 문제: tools/VibeManager/history.js:126 #l 과 #r 좌우 분할에 경계 막대 크기 조절이 없음(history.js 에 pointermove, col-resize 0건)",
+  "evidence": "규칙 R179 \"웹뷰에서 좌우 또는 상하로 나뉜 영역은 경계 막대를 끌어 크기를 조절할 수 있게 함\" (원래 지시 2026-11-20 18:32 \"VMW 에 SPLIT BAR 을 두어서 왼쪽/오른쪽의 사이즈를 조정할 수 있도록 해주세요\") · tools/VibeManager/history.js:126 #l{width:46%;overflow:auto;padding:8px 10px;",
+  "targets": [
+    "tools/VibeManager/history.js"
+  ],
+  "before_after": "#l 과 #r 사이에 막대를 넣고 pointermove 로 #l width 를 바꿈",
+  "verify": "node --check tools/VibeManager/history.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/history.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T09:07:02+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T09:10:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0907"
+    },
+    {
+      "at": "2026-11-26T09:11:00+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T09:23:58+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 history.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T09:23:58+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 09:08~09:19:48 실행. node --check 통과 → 통과. run_all.js PASS 1424 FAIL 0 → PASS 1424 FAIL 0(88/88). t_webview_syntax.js ALL PASS 19건 → ALL PASS 19건. history.js 안 pointermove, col-resize 0줄 → 2줄. 자기 시험: vscode stub 으로 html([], 'screen', null) 렌더, script 구문 통과, #sp 가 #l 과 #r 사이에 있음 true, pointe · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/WORKLOG.md",
+      "log": ".vibe\\logs\\2026-11-26T09-11-00_claude_orch.log",
+      "sec": 544,
+      "costUsd": 0.8619538000000001,
+      "files": [
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/history.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:05+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰에서 좌우 또는 상하로 나뉜 영역은 경계 막대를 끌어 크기를 조절할 수 있게 함 규칙을 tools/VibeManager/history.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R179|tools/VibeManager/history.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795651621734,
+  "autoFp": "76164fe4f3",
+  "applyStartMs": 1795651860619,
+  "verifyJudge": {
+    "at": "2026-11-26T09:20:08+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0907",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "history.js"
+  ],
+  "appliedMs": 1795652638401,
+  "synced": [
+    "history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/history.js 반영 전 통과 → 반영 뒤 통과 · node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 88/88 PASS 1424 FAIL 0 228.3s' → 반영 뒤 'ALL OK 파일 88/88 PASS 1424 FAIL 0 229.2s' · node tools/VibeManager/test/t_webview_syntax.js 반영 전 19건 PASS, ALL PASS → 반영 뒤 19건 PASS, ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/history.js"
+    ],
+    "verify_result": "2026-11-26 09:08~09:19:48 실행. node --check 통과 → 통과. run_all.js PASS 1424 FAIL 0 → PASS 1424 FAIL 0(88/88). t_webview_syntax.js ALL PASS 19건 → ALL PASS 19건. history.js 안 pointermove, col-resize 0줄 → 2줄. 자기 시험: vscode stub 으로 html([], 'screen', null) 렌더, script 구문 통과, #sp 가 #l 과 #r 사이에 있음 true, pointermove 처리 있음 true",
+    "note": "#l 과 #r 사이에 경계 막대 #sp(너비 5px, col-resize) 추가. pointerdown, pointermove, pointerup, pointercancel 로 #l 너비 조절(최소 120px, 최대 창 너비 - 160px). 바꾼 너비는 vscode.setState lw 에 저장하고 창을 다시 열 때 복원. #l 에 box-sizing:border-box 추가(저장한 너비 복원 때 padding 이 더해지지 않게 함). 목록 접기 때 #sp 도 숨김. t_webview_syntax.js 는 history.js 화면을 검사하지 않아 렌더 HTML 의 script 구문을 따로 확인함. 창 다시 로드 뒤 막대 끌기 실화면 확인은 하지 않음. git diff --stat 94줄 추가, 10줄 삭제에는 마지막 커밋 뒤 다른 작업이 고친 줄이 섞여 있음. 이번 수정은 CSS 1줄 수정과 1줄 추가, #sp 요소 1곳, script 1줄 추가."
+  },
+  "snap": "prop_20261124064958_SELF_5",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "20261120_160704_R5_ALL",
+  "at": "2026-11-20T16:07:04+09:00",
+  "ms": 1795158424299,
+  "rule": "R5",
+  "ruleName": "진행 없음",
+  "title": "창 다시 로드로 끊긴 실행 1건(알림)",
+  "screen": "",
+  "sig": "R5|reloadcut|20384",
+  "count": 1,
+  "repeat": null,
+  "detail": "Claude 에이전트 대화 · 시작 18:31",
+  "evidence": {
+    "owner": 20384,
+    "runs": [
+      {
+        "what": "claude",
+        "screen": "",
+        "label": "에이전트 대화",
+        "log": ""
+      }
+    ]
+  },
+  "status": "resolved",
+  "notice": true,
+  "actions": [
+    {
+      "at": "2026-11-20T16:07:04+09:00",
+      "by": "VMO",
+      "what": "알림(사건 아님). Claude 조치 없음"
+    }
+  ]
+}

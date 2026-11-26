@@ -14,6 +14,7 @@ import { EndingInventoryForm } from './components/EndingInventoryForm';
 import { EndingInventoryGrid } from './components/EndingInventoryGrid';
 import {
   DEVALUATION_AGE_LABEL,
+  EXCEL_SHOW_COLUMNS,
   LBL,
   MENU_ID,
   MSG,
@@ -104,9 +105,25 @@ export const EndingInventory = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.EXCEL_NO_DATA, 'No data have been retrieved.') });
       return;
     }
-    if (gridRef.current) {
-      void GridAction.excelDownload(gridRef.current, 'EndingInventory', setProgress);
+    const g = gridRef.current;
+    if (!g) return;
+    // AS-IS 와 같이 CELL_CF 3컬럼을 엑셀에 포함한다(cs:925~953). 화면 컬럼은 그대로 둔다.
+    //   excelDownload 가 시작 시점의 visible 을 읽으므로 호출 직전에 켜고, 끝나면 원래 값으로 되돌린다.
+    const show = new Set(EXCEL_SHOW_COLUMNS);
+    const saved: [string, boolean][] = [];
+    for (const col of g.columns) {
+      const b = col.binding ?? '';
+      if (!show.has(b)) continue;
+      saved.push([b, col.visible]);
+      col.visible = true;
     }
+    void GridAction.excelDownload(g, 'EndingInventory', setProgress).finally(() => {
+      const prev = new Map(saved);
+      for (const col of g.columns) {
+        const v = prev.get(col.binding ?? '');
+        if (v !== undefined) col.visible = v;
+      }
+    });
   };
 
   // 진입 시 이전 filters 무효화(stale payload 자동발사 방지) + 컬럼 메타 1회 fetch +

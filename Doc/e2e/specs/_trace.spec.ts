@@ -23,8 +23,9 @@ import { useScreenLookups, evalExpr, evalRules, loadAccountCtx, parseRules, type
 import { staleKids } from '../../../tools/E2E/lib/cellclear';
 import { extraButtons } from '../../../tools/E2E/lib/extrabtn';
 import { combine, loadFormScen, loadResults, runFormScen, saveResult, scenariosOfRow, setVars } from '../../../tools/E2E/lib/formscen';  // 2026-11-16 폼 저장형 화면 시나리오
-import { asisControlColor, branchBody, guardBranch, isDestructive, judgeMsgBranch, onlyViaPopupButtons, popupButtonPaths, respSample, runtimeEditAtoms, type BtnPath } from '../../../tools/E2E/lib/btnpopup';  // 2026-11-20 T501~T505 팝업 버튼 경로
+import { asisControlColor, branchBody, guardBranch, isDestructive, judgeMsgBranch, onlyViaPopupButtons, persistRespSamples, popupButtonPaths, respSample, runtimeEditAtoms, type BtnPath } from '../../../tools/E2E/lib/btnpopup';  // 2026-11-20 T501~T505 팝업 버튼 경로
 import { labelVariants, msgTexts } from '../../../tools/E2E/lib/labeltrans';  // 2026-11-20 T501 버튼 글자 다른 언어
+import { afterDialogMsg, methodRange, bindLocalNum, bindNumCond, bindSaveErr, callArgs, codeForRule, codeVarFromCell00, evalArg, fakeErrBody, guardCodes, matchTpl, numHolds, numValueFor, premiseAtoms, rawNumAtoms, resetAfter, type PremiseAtoms, saveErrShape, sumCrossPlan, violatingValues } from '../../../tools/E2E/lib/saveerr';  // 2026-11-25 T550~T554 SCP0005 U3(메시지 인자 · 합계 상한 · 업로드 창 메시지 · 저장 오류 응답 · RAW 지역 변수)
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
 useScreenLookups(ID);  // 2026-11-18 INLOOKUP 원자(공통 코드 값)
@@ -37,13 +38,22 @@ const CL_SELFTEST = !!(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE);  
 
 // 2026-11-09 T176: 실행 식별 — 결과 병합의 '확정 판정을 판정필요로 덮지 않음' 은 같은 실행 안에서만(이전 실행의 낡은 FAIL 이 재측정을 막던 결함 · SSP0025 V-1cd2a756)
 const RUN_ID = process.env.VERIFY_RUN_ID || '';
-type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number }; run?: string };
+/** 2026-11-20 T520: asisVisible 값 = 문자열(전 Division 같음 · mapping_trace 손실 없는 줄이기) 또는 Division 별 dict */
+const visOf = (av: Record<string, string | Record<string, string>>, col: string, div: string): string => { const m = av[col]; if (typeof m === 'string') return m; if (!m) return ''; return m[div] ?? m['40'] ?? ''; };
+type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number }; run?: string; test?: string };
 const results: Res[] = [];
+// 2026-11-25 행 단위 해소(row_run.py): VERIFY_ROWS = 다시 잴 원장 행 ID(쉼표). 있으면 그 행만 고르고 그 행 결과만 남김(다른 행은 지난 결과가 행 단위 병합으로 남음).
+//   결과마다 판정한 시험 제목(test)을 적어 row_run 이 '이 행은 어느 시험이 쟀는가'를 실측 대응표로 씀
+const ROWS_ONLY = new Set(String(process.env.VERIFY_ROWS || '').split(',').map(z => z.trim()).filter(Boolean));
+const curTitle = (): string => { try { return test.info().title; } catch { return ''; } };
+{ const push0 = results.push.bind(results); results.push = (...xs: Res[]): number => push0(...xs.filter(x => !ROWS_ONLY.size || ROWS_ONLY.has(x.row_id)).map(x => (x.test ? x : { ...x, test: curTitle() }))); }
 // 2026-11-18: 이 실행 전 결과 파일의 행별 판정(판정을 다른 시험에 넘기는 행이 앞 실행의 확정 판정을 덮지 않게)
 const PREV: Map<string, Res> = (() => { try { return new Map((JSON.parse(fs.readFileSync(OUT, 'utf8')) as Res[]).map(z => [z.row_id, z])); } catch { return new Map(); } })();
 const prevVerdict = (rid: string): Res | undefined => PREV.get(rid);
 // 2026-10-30: 조건 JSON "dead"(실행되지 않는 AS-IS 메서드에서만 나온 검사 — mapping_trace.asis_live) 행은 측정하지 않는다. 정적 단계가 NA 로 둔 행을 이 엔진이 다시 재 FAIL 하던 결함(SCP0041 SCP0040 F4)
-const rows = ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => r.source === 'TRACE' && !/"dead":\s*"/.test(r.condition || '')) : [];
+// 2026-11-25 측정 전 중복 정리(dedup_pre.py · Doc/verify/<ID>/dup_groups.csv): 같은 확인 구성원 행은 재지 않음(judge 가 대표 측정 결과로 판정). 끄기 = VERIFY_DUP=0 · VERIFY_ROWS 로 고른 행은 그대로 잼
+const DUP_MEMBERS = new Set<string>(((): string[] => { if (process.env.VERIFY_DUP === '0' || !ID) return []; try { return parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'verify', ID, 'dup_groups.csv'), 'utf8')).filter(r => r.row_id && r.rep_row_id && r.row_id !== r.rep_row_id && !ROWS_ONLY.has(r.row_id)).map(r => r.row_id); } catch { return []; } })());
+const rows = ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => r.source === 'TRACE' && !/"dead":\s*"/.test(r.condition || '') && (!ROWS_ONLY.size || ROWS_ONLY.has(r.row_id)) && !DUP_MEMBERS.has(r.row_id)) : [];
 // 2026-10-28 화면 독립화: 메인 시트명·컬럼 집합은 화면 메타(plan.json·원장 COLUMN 행)에서 — SCP0007 의 'bod'·ROUTE_ID 등을 다른 화면에 적용하던 결함(SCP0096 L1 77초·G4/H5 허위 FAIL)
 const PLAN: { mainSheets?: { name?: string; key?: string }[] } = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')); } catch { return {}; } })();
 const nrmS = (s: unknown) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -51,6 +61,14 @@ const nrmS = (s: unknown) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g,
 //   searchWait 류가 60초(120×500ms) 대기 뒤 벽시계를 기록했다(6화면 전부 L1 '64초' 허위 FAIL · calls/*.json 실측 sheet='main')
 const MAIN_SHEETS = new Set([...(Array.isArray(PLAN.mainSheets) ? PLAN.mainSheets.flatMap(m => [nrmS(m && m.name), nrmS(m && m.key)]) : []), 'main'].filter(Boolean));
 const isMainSheet = (s: string) => MAIN_SHEETS.size ? MAIN_SHEETS.has(nrmS(s)) : true;
+/** T593(2026-11-25 SCP0005 V-28e296d5 A4 '이번 응답 -행' · L1 V-e32d34a2 '본 조회 call 미포착'): FE 조회 call-proc 의 시트 키('route' · calls/_trace_*.json 실측)가 plan.json mainSheets(name 'Distribution Route' · key 'DISTRIBUTION_ROUTE')와 달라 본 조회 호출을 못 골랐다.
+ *  → 조회 뒤 그리드 행 수 ≤ 응답 행 수 ≤ 그리드 행 수 + 5(부가 배열 몫)인 조회 호출의 시트가 하나뿐이면 그 시트를 본 조회 시트로 더한다(같은 실행 실측 · 화면 독립) */
+const learnMainSheet = (calls: { sheet: string; btn: string; rows: number | null }[], grid: number): string => {
+  if (!(grid > 0)) return '';
+  const ss = [...new Set(calls.filter(q => !/SAVE|INS|UPD|DEL/i.test(q.btn) && q.rows != null && Number(q.rows) >= grid && Number(q.rows) <= grid + 5).map(q => nrmS(q.sheet)))];
+  if (ss.length !== 1 || !ss[0]) return '';
+  MAIN_SHEETS.add(ss[0]); return ss[0];
+};
 const COLS = new Set(ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => r.source === 'COLUMN' && !/<DYNAMIC:/.test(r.target || '')).map(r => ((r.target || '').split('.')[1] || '').split(' ')[0]).filter(Boolean) : []);  // <DYNAMIC:…> 패밀리 행은 정적 컬럼 집합이 아니다(2026-10-30)
 const has = (...c: string[]) => c.every(x => COLS.has(x));
 // TO-BE SCM_MST_SITE 타입 표본(Doc/verify/<ID>/site_types.json — facts 단계 추출). 엔진 조건 JSON(3000자) 에 넣으면 키가 잘려 들어오지 않아 파일에서 직접 읽는다(2026-10-26)
@@ -58,6 +76,10 @@ const SITE_TYPES: Record<string, string> = (() => { try { const j = JSON.parse(f
 const siteTypeOf = (code: string) => SITE_TYPES[code] || SITE_TYPES[code.split('_')[0]] || SITE_TYPES[code.split(/\s+/)[0]] || '';
 // 2026-11-18 SCP0111 P_SCP0111_GET_ESS_PACK_LINE(T-c2eca54f·T-236699af): AS-IS 가 화면 진입(Form_Load 경로)에서 부르는 SP 인데 TO-BE 진입·조회에서 호출이 없으면 '셀 이벤트·팝업 경로' 가 아니라 배선 누락이다.
 //   근거 = actions_entries.csv(Form_Load 경로 메서드) × actions.csv(그 메서드의 ENDPOINT) × sp_pair.csv(AS-IS SP ↔ TO-BE PROC). 돌려줌: '' = 진입 호출 아님 · 그 밖 = 근거 문구
+// 2026-11-20 T511: TO-BE PROC 의 sp_pair.csv 종류(GET·LOG·SAVE · 모르면 '')
+const spPairKind = (tobeProc: string): string => {
+  try { const r = parseCsv(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'rules', 'sp_pair.csv'), 'utf8').replace(/^﻿/, '')).find(z => (z.menu_id || '').toUpperCase() === ID && (z.tobe_proc || '').toUpperCase() === tobeProc.toUpperCase()); return r ? String(r.kind || '').toUpperCase() : ''; } catch { return ''; }
+};
 const asisEntryCall = (tobeProc: string): string => {
   try {
     const sd = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID);
@@ -81,7 +103,8 @@ const flush = () => withFileLock(OUT, () => {  // 2026-11-20 D1
 const COND_HASH = new Map(rows.map(r => [r.row_id, createHash('sha1').update(String(r.condition || ''), 'utf8').digest('hex').slice(0, 8)]));  // 측정 시점의 검사 조건 — judge 가 조건이 바뀐 낡은 판정을 가려낸다(2026-10-29)
 // P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
 const CUR: { nscm: Nscm | null } = { nscm: null };
-const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows = n.calls.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1); return { calls: n.calls.length, rows, req: (n as unknown as { requiredNotes?: string[] }).requiredNotes?.length || 0 }; };
+const FIRST_SHEET: string = (() => { try { const n = ((JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')).mainSheets || []) as { name: string }[]).map(x => x.name).filter(Boolean); return n.length > 1 ? n[0] : ''; } catch { return ''; } })();  // 2026-11-26 탭을 안 바꾼 측정 = 계획 첫 시트
+const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows = n.calls.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1); const sheet = (n as unknown as { curSheet?: string }).curSheet ?? FIRST_SHEET; return { calls: n.calls.length, rows, req: (n as unknown as { requiredNotes?: string[] }).requiredNotes?.length || 0, ...(sheet ? { sheet } : {}) }; };
 // 2026-11-07 T142: 스냅샷 행(원장 target '<ID> 스냅샷 …' · _snap.spec 전용)은 규칙 묶음 판정(A5 컬럼 구성·H4 가로 스크롤 등 RULE_SCREEN 전체 put)이 덮지 않는다 —
 //   chain6b 에서 골든 없는 헤더·미승인 화면샷 행이 @trace 결과로 PASS 가 돼 '승인대기' 에서 빠졌다(SCP0037/0084/0122/0131)
 const SNAP_IDS = new Set(ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')).filter(r => /스냅샷/.test(r.target || '')).map(r => r.row_id) : []);
@@ -164,7 +187,26 @@ async function funcButton(nscm: Nscm, text: string): Promise<{ loc: Locator | nu
     const inside = await b.evaluate(e => !!e.closest('[role="dialog"], [role="alertdialog"], .wj-flexgrid, [class*="searchArea" i], [class*="SearchArea"]')).catch(() => true);
     if (!inside) return { loc: b, names };
   }
+  // T544(2026-11-25 SCP0005 btnEaxel_Upload 'Upload'): AS-IS 글자가 TO-BE 버튼 이름의 끝 단어(AS-IS 'Upload' ↔ TO-BE 'Excel Upload') — 그런 버튼이 화면에 하나뿐일 때만 같은 버튼으로 본다
+  const tail = nscm.page.getByRole('button', { name: new RegExp(`(?:^|\\s)(?:${names.map(escRe).join('|')})$`, 'i') }); const vis: Locator[] = [];
+  for (let i = 0; i < Math.min(await tail.count().catch(() => 0), 12); i++) { const b = tail.nth(i); if (!(await b.isVisible().catch(() => false))) continue; if (!(await b.evaluate(e => !!e.closest('[role="dialog"], [role="alertdialog"], .wj-flexgrid, [class*="searchArea" i], [class*="SearchArea"]')).catch(() => true))) vis.push(b); }
+  if (vis.length === 1) return { loc: vis[0], names: [...names, `(끝 단어 일치) ${(await vis[0].innerText().catch(() => '')).trim()}`] };
   return { loc: null, names };
+}
+/** 2026-11-20 T525: 팝업 콤보 칸 root 의 nth 번째 후보(전체·SELECT ALL 제외, 0부터)를 누른다 — 다중 선택이면 체크가 더해진다. 누른 후보 글자 · 없으면 '' */
+async function pickComboNth(nscm: Nscm, root: Locator, nth: number): Promise<string> {
+  const page = nscm.page; const combo = root.locator('[role="combobox"]').first();
+  await combo.click({ timeout: 5_000 }).catch(() => undefined);
+  const opts = page.locator('.MuiAutocomplete-popper [role="option"], .MuiAutocomplete-popper li, [role="listbox"] [role="option"]');
+  await opts.first().waitFor({ state: 'visible', timeout: 5_000 }).catch(() => undefined);
+  const texts = (await opts.allInnerTexts().catch(() => [] as string[])).map(t => t.trim());
+  const idx = texts.map((t, i) => ({ t, i })).filter(x => x.t && !/^(select\s*)?all$|^전체$/i.test(x.t))[nth];
+  if (idx) await opts.nth(idx.i).click({ timeout: 5_000 }).catch(() => undefined);
+  // 목록 닫기 — Escape 는 팝업까지 닫을 수 있어 팝업 머리를 누른다(popk3run fillPopRows 와 같음) · 머리가 없을 때만 Escape
+  const head = page.locator('[role="dialog"]:visible').last().locator('#draggable-dialog-title, h2').first();
+  if (await head.isVisible().catch(() => false)) await head.click({ timeout: 2_000, position: { x: 5, y: 5 } }).catch(() => undefined); else await page.keyboard.press('Escape').catch(() => undefined);
+  await page.waitForTimeout(300);
+  return idx ? idx.t : '';
 }
 type PopDrive = { opened: boolean; driven: boolean; why: string; trail: string[]; confirm: string; title: string; picked: string };
 /** T502·T503: 기능 버튼 → 팝업 → (진입 자동 조회 · 없으면 팝업 조회 · 필수 칸 알림이면 그 칸 첫 후보 선택 뒤 다시 조회) → 첫 행 체크 → OK → (확인창이 뜨면 confirmOk 일 때만 OK)
@@ -183,7 +225,7 @@ async function drivePopupPath(nscm: Nscm, text: string, opt: { confirmOk: boolea
   const n0 = await dlgs.count().catch(() => 0);
   await fb.loc.click({ timeout: 5_000 }).catch(() => undefined);
   let pop: Locator | null = null;
-  for (let k = 0; k < 25 && !pop; k++) { await p.waitForTimeout(400); if ((await dlgs.count().catch(() => 0)) > n0) { const d = dlgs.last(); if (await d.locator('.wj-flexgrid, [class*="formItem"]').count().catch(() => 0)) pop = d; } }
+  for (let k = 0; k < 25 && !pop; k++) { await p.waitForTimeout(400); if ((await dlgs.count().catch(() => 0)) > n0) { const d = dlgs.last(); if (await d.locator(opt.stopAtOpen ? '.wj-flexgrid, [class*="formItem"], input[type="file"]' : '.wj-flexgrid, [class*="formItem"]').count().catch(() => 0)) pop = d; } }  // T544: 열림만 볼 때는 파일 선택 칸만 있는 업로드 대화상자도 팝업
   if (!pop) { const al = await nscm.alertText().catch(() => ''); out.why = `'${text}' 클릭 → 팝업 안 열림${al ? ` · 알림 '${al.slice(0, 80)}'` : ''}`; await nscm.clearDialogs(); return out; }
   out.opened = true;
   out.title = ((await pop.locator('h1, h2, h3, [class*="title" i]').first().innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim().slice(0, 80);
@@ -194,18 +236,30 @@ async function drivePopupPath(nscm: Nscm, text: string, opt: { confirmOk: boolea
   for (let k = 0; k < 10 && !(await rowsN()); k++) await p.waitForTimeout(500);  // 진입 자동 조회
   if (await rowsN()) trail.push(`팝업 진입 자동 조회 ${await rowsN()}행`);
   const searchBtn = pop.getByRole('button', { name: /^(Search|Find|조회|검색|查询)/i }).first();
+  let fillLab = '';  // T525 필수 알림으로 채운 칸 라벨
   for (let round = 0; round < 4 && !(await rowsN()); round++) {
     const nb = await dlgs.count().catch(() => 0); let alert = '';
     await searchBtn.click({ timeout: 5_000 }).catch(() => undefined);
     for (let k = 0; k < 120; k++) { await p.waitForTimeout(500); if (await rowsN()) break; if ((await dlgs.count().catch(() => 0)) > nb) { alert = ((await dlgs.last().innerText().catch(() => '')) || '').replace(/\s+/g, ' ').trim(); break; } }
     if (await rowsN()) { trail.push(`팝업 조회 ${await rowsN()}행`); break; }
+    // 2026-11-20 T525(SCP0028 T-6b9a8ce8): 필수 칸에 첫 후보('AU000062_81-P')만 넣고 0행이면 멈춰 '후보 0행' 미검증이 됐다(같은 팝업 'HQ05-W' 는 966행 · diff #24).
+    //   → 필수 칸을 채운 뒤 0행이면 같은 칸의 다음 후보를 더해(다중 선택은 누적 · 단일 선택은 교체) 최대 8개까지 다시 조회한다(0행을 '없음'으로 끝내지 않음)
+    if (!alert && fillLab) {
+      for (let nth = 1; nth < 8 && !(await rowsN()); nth++) {
+        const t = await pickComboNth(nscm, pop.locator('[data-e2e-popfld="1"]').first(), nth); if (!t) { trail.push(`'${fillLab}' 다음 후보 없음(${nth}번째)`); break; }
+        await searchBtn.click({ timeout: 5_000 }).catch(() => undefined);
+        for (let k = 0; k < 120 && !(await rowsN()); k++) await p.waitForTimeout(500);
+        trail.push(`0행 → '${fillLab}' 후보 '${t}' 더해 조회 ${await rowsN()}행`);
+      }
+      break;
+    }
     if (!alert) { trail.push('팝업 조회 0행'); break; }
     await nscm.closeAlert('ok').catch(() => false); await p.waitForTimeout(300);
     // 필수 알림 문구에 이름이 든 팝업 칸을 표시해 그 칸 콤보의 첫 후보(전체 제외)를 고른다
     const lab = await pop.evaluate((el, al) => { const nz = (s: string) => s.toLowerCase().replace(/[^a-z0-9가-힣]/g, ''); const hit = [...el.querySelectorAll('[class*="formItem"]')].map(f => ({ f, l: ((f.firstElementChild as HTMLElement | null)?.innerText || '').replace(/[*\n]/g, ' ').trim() })).filter(z => z.l && z.f.querySelector('[role="combobox"]') && nz(al).includes(nz(z.l))).sort((a, b) => b.l.length - a.l.length)[0]; if (!hit) return ''; el.querySelectorAll('[data-e2e-popfld]').forEach(x => x.removeAttribute('data-e2e-popfld')); hit.f.setAttribute('data-e2e-popfld', '1'); return hit.l; }, alert).catch(() => '');
     if (!lab) { out.why = `팝업 조회 → 알림 '${alert.slice(0, 80)}' · 알림이 가리키는 콤보 칸을 팝업에서 못 찾음`; await closePop(); return out; }
     const picked = await pickComboOption(nscm, pop.locator('[data-e2e-popfld="1"]').first());
-    trail.push(`필수 알림 '${alert.slice(0, 60)}' → '${lab}' = '${picked || '(못 고름)'}'`);
+    trail.push(`필수 알림 '${alert.slice(0, 60)}' → '${lab}' = '${picked || '(못 고름)'}'`); if (picked) fillLab = lab;
     if (!picked) { out.why = `필수 칸 '${lab}' 후보를 고르지 못함`; await closePop(); return out; }
   }
   if (!(await rowsN())) { out.why = out.why || `팝업 '${out.title}' 후보 0행 — 체크할 행 없음`; await closePop(); return out; }
@@ -229,12 +283,25 @@ async function drivePopupPath(nscm: Nscm, text: string, opt: { confirmOk: boolea
   out.driven = true;
   return out;
 }
+/** T590(2026-11-25 SCP0005 E4 T-eea49685·T-6a512ae5·V-3e95d2be '합계 999 에서 알림'): 공용 토스트(ToastMessage = MUI Alert role="alert")는 닫혀도 DOM 에 남아 마지막 문구를 들고 화면 밖(bottom -60px)으로만 옮겨진다.
+ *  종전 collectMsgs 는 화면 밖 글자까지 읽어 앞 시험(T-dba493fd 합계 1000)의 알림을 다음 입력의 알림으로 셌다 → 가운데 점이 화면 안이고 보이는 알림 요소만 센다 */
+const MSG_SEL = '.MuiSnackbar-root, [role="alert"], [role="status"], .Toastify__toast';
+async function shownMsgs(p: import('@playwright/test').Page): Promise<string[]> {
+  return p.evaluate((sel: string) => { const o: string[] = []; const vw = window.innerWidth; const vh = window.innerHeight; for (const el of Array.from(document.querySelectorAll(sel)) as HTMLElement[]) { const r = el.getBoundingClientRect(); if (r.width <= 0 || r.height <= 0) continue; const cx = r.left + r.width / 2; const cy = r.top + r.height / 2; if (cx < 0 || cx > vw || cy < 0 || cy > vh) continue; const st = getComputedStyle(el); if (st.visibility === 'hidden' || st.display === 'none' || Number(st.opacity) === 0) continue; const t = (el.innerText || '').trim(); if (t) o.push(t); } return o; }, MSG_SEL).catch(() => [] as string[]);
+}
+/** T590: 입력 전 화면 안 알림이 사라질 때까지(최대 ms) 기다림 — 같은 문구 알림이 다시 떠도 새 알림으로 센다. 그때까지 남은 알림 글자를 돌려준다 */
+async function msgQuiet(nscm: Nscm, ms: number): Promise<string[]> {
+  const t0 = Date.now(); let left = await shownMsgs(nscm.page);
+  while (left.length && Date.now() - t0 < ms) { await nscm.page.waitForTimeout(300); left = await shownMsgs(nscm.page); }
+  await nscm.clearDialogs().catch(() => undefined);
+  return left;
+}
 /** T503: OK 뒤 ms 동안 보인 토스트·알림 글자(확인창·팝업 글자 제외) — 끝에 알림을 닫는다 */
 async function collectMsgs(nscm: Nscm, ms: number, skip: string[]): Promise<string[]> {
   const p = nscm.page; const seen: string[] = []; const t0 = Date.now();
   const add = (t: string) => { const v = String(t || '').replace(/\s+/g, ' ').trim(); if (v && !skip.some(s => s && (v === s || s.includes(v))) && !seen.includes(v)) seen.push(v); };
   while (Date.now() - t0 < ms) {
-    for (const z of await p.locator('.MuiSnackbar-root, [role="alert"], [role="status"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])) add(z);
+    for (const z of await shownMsgs(p)) add(z);  // T590(2026-11-25): 화면 안에 보이는 알림만(닫혀 화면 밖에 남은 토스트 글자 제외)
     const d = p.locator('[role="dialog"]:visible, [role="alertdialog"]:visible').last();
     if (await d.isVisible().catch(() => false) && !(await d.locator('.wj-flexgrid').count().catch(() => 0))) add(await d.innerText().catch(() => ''));
     await p.waitForTimeout(300);
@@ -262,9 +329,30 @@ async function h2RuntimeEdit(nscm: Nscm, cr: Record<string, string>, atoms: { fl
   const hBase = base >= 0 ? await rowHeadState(p, base) : null;
   const hBefore = await rowHeadState(p, row);
   const want = asisControlColor(ROOT, (cr.color_edit || '').trim());
+  const emptyBlocked: string[] = [];  // T526 빈 값 경로 3종 모두 실패한 칸
   const guard = await probe.blockWrites(p); const typed: string[] = []; let msgs: string[] = []; let hAfter: Awaited<ReturnType<typeof rowHeadState>> = null; let hMid: Awaited<ReturnType<typeof rowHeadState>> = null; let unmet = '';
   try {
-    for (let k = 0; k < 2; k++) for (const a of need) { const now = ((await probe.value(p, row, a.col)) || '').trim(); if (now === a.val) continue; const ok = await probe.setByEditor(p, row, a.col, a.val); typed.push(`${a.col} '${now}'→'${a.val}'${ok ? '' : '(편집기 입력 실패)'}`); await p.waitForTimeout(300); }
+    // 2026-11-20 T512(SCP0028 H2 V-a99ddb18 "LOT_SIZE '1'→''" 2회 뒤에도 '1'): 숫자 칸 편집기에 value='' 를 넣고 끝내는 경로는 값을 지우지 않았다.
+    //   빈 값 목표는 사용자 동작(셀 더블클릭 → 전체 선택 → Delete → Enter)으로 지우고 다시 읽는다. 그래도 남으면 아래 '측정 전제 미충족' 에 '키보드 지움 뒤 값' 을 남긴다
+    for (let k = 0; k < 2; k++) for (const a of need) {
+      const now = ((await probe.value(p, row, a.col)) || '').trim(); if (now === a.val) continue;
+      const ok = await probe.setByEditor(p, row, a.col, a.val); await p.waitForTimeout(300);
+      let how = ok ? '' : '(편집기 입력 실패)';
+      if (a.val === '' && ((await probe.value(p, row, a.col)) || '').trim() !== '') {
+        const pt = await probe.cellCenter(p, row, a.col);
+        if (pt) {
+          await p.mouse.dblclick(pt.x, pt.y); await p.waitForTimeout(300); await p.keyboard.press('Control+A'); await p.keyboard.press('Delete'); await p.keyboard.press('Enter'); await p.waitForTimeout(400); how = `(편집기 빈 값 안 들어감 → 키보드 지움 뒤 '${((await probe.value(p, row, a.col)) || '').trim()}'`;
+          // 2026-11-20 T526(V-a99ddb18 3회째 '1' 유지): 편집 없이 셀 선택 뒤 Delete(그리드 셀 지우기), 편집 중 Backspace 경로를 더 시도한다.
+          //   세 경로 모두 값이 남으면 TO-BE 가 이 빈 값 상태를 받지 않는 것 — '[전제 상태 TO-BE 입력 불가]' 로 남겨 결정 목록으로 보낸다(판정 낮추지 않음 · ERROR 유지)
+          if (((await probe.value(p, row, a.col)) || '').trim() !== '') { await p.keyboard.press('Escape').catch(() => undefined); await p.mouse.click(pt.x, pt.y); await p.waitForTimeout(250); await p.keyboard.press('Delete'); await p.waitForTimeout(400); how += ` → 셀 선택 Delete 뒤 '${((await probe.value(p, row, a.col)) || '').trim()}'`; }
+          if (((await probe.value(p, row, a.col)) || '').trim() !== '') { await p.mouse.dblclick(pt.x, pt.y); await p.waitForTimeout(300); await p.keyboard.press('End'); for (let b = 0; b < 12; b++) await p.keyboard.press('Backspace'); await p.keyboard.press('Tab'); await p.waitForTimeout(400); how += ` → Backspace 뒤 '${((await probe.value(p, row, a.col)) || '').trim()}'`; }
+          if (((await probe.value(p, row, a.col)) || '').trim() !== '') emptyBlocked.push(a.col);
+          how += ')';
+        }
+        else how = '(편집기 빈 값 안 들어감 · 셀 좌표 못 얻음)';
+      }
+      typed.push(`${a.col} '${now}'→'${a.val}'${how}`);
+    }
     const r1 = (await readRows(row + 1))[row] || null;
     const miss = atoms.cols.filter(a => !r1 || (r1[a.col] ?? '') !== a.val);
     hMid = await rowHeadState(p, row);
@@ -280,6 +368,7 @@ async function h2RuntimeEdit(nscm: Nscm, cr: Record<string, string>, atoms: { fl
   const fmt = (h: Awaited<ReturnType<typeof rowHeadState>>) => (h ? `표시 '${h.status || h.text || '-'}'·색 ${h.bg || '-'}·CRUD '${h.crud || '-'}'` : '읽지 못함');
   const ev = `${head} · r${row} 편집 ${typed.join(', ') || '-'} · 행 머리(행 상태 칸) 편집 전 ${fmt(hBefore)} → 편집 뒤 ${fmt(hMid)} → Save 뒤 ${fmt(hAfter)} · 수정 안 한 행 r${base} ${fmt(hBase)} · 막은 쓰기 요청 ${guard.st.n}건(서버 미전송) · 알림 '${msgs.join(' | ').slice(0, 120) || '없음'}' · AS-IS ${cr.ref} 수정 표시 지움 + ${cr.color_edit || '-'}${want ? `(${want})` : ''} 칠함 · 규칙 칸 ${cr.columns || '-'} = TO-BE 행 머리 data-status`;
   await nscm.openScreen(ID).catch(() => undefined);  // 편집 버림(저장 안 함)
+  if (unmet && emptyBlocked.length) return { result: 'ERROR', why: `[전제 상태 TO-BE 입력 불가] ${[...new Set(emptyBlocked)].join(', ')} 빈 값을 편집기·키보드 지움·셀 Delete·Backspace 4경로 모두 받지 않음 — AS-IS 분기 조건(빈 값) 상태를 TO-BE 에서 만들 수 없음(대상 여부 결정 필요) · ${unmet} · ${ev}` };
   if (unmet) return { result: 'ERROR', why: `[측정 전제 미충족] ${unmet} · ${ev}` };
   if (!hAfter) return { result: 'ERROR', why: `[측정 실패] Save 뒤 행 머리를 읽지 못함 · ${ev}` };
   if (guard.st.n > 0) return { result: 'FAIL', why: `Save 가 이 행 저장 요청을 냄(막음) — AS-IS 는 이 행의 수정 표시를 지우고 저장 대상에서 뺌 · ${ev}` };
@@ -287,6 +376,263 @@ async function h2RuntimeEdit(nscm: Nscm, cr: Record<string, string>, atoms: { fl
   const colorOk = !!hAfter.bg && ((!!want && hAfter.bg.replace(/\s+/g, '') === want.replace(/\s+/g, '')) || (!!hBase && hAfter.bg === hBase.bg));
   if (still) return { result: 'FAIL', why: `Save 뒤에도 행 상태 칸에 수정 표시 '${atoms.flag}' 유지 — AS-IS 는 수정 표시를 지우고 ${cr.color_edit || ''} 로 칠함 · ${ev}` };
   return { result: colorOk ? 'PASS' : 'FAIL', why: `${colorOk ? '수정 표시 지워짐 · 행 상태 칸 색 = 수정 안 한 행·AS-IS 색과 같음' : `수정 표시는 지워졌으나 행 상태 칸 색 ${hAfter.bg} ≠ AS-IS ${want || cr.color_edit || '-'} · 수정 안 한 행 ${hBase ? hBase.bg : '-'}`} · ${ev}` };
+}
+
+/** T541·T542(2026-11-25 SCP0005): AS-IS 화면 원문(files.csv current 의 .cs · Designer·AssemblyInfo 제외) 줄 목록 */
+const ASIS_SRC = (() => { const out: { file: string; lines: string[] }[] = []; try { for (const f of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'files.csv'), 'utf8').replace(/^\uFEFF/, ''))) { const rel = String(f.file || ''); if (!/\.cs$/i.test(rel) || /\.Designer\.cs$|AssemblyInfo\.cs$/i.test(rel) || String(f.variant || '') !== 'current') continue; const fp = path.join(ROOT, 'GSCM', ...rel.split('\\')); if (fs.existsSync(fp)) out.push({ file: path.basename(fp), lines: fs.readFileSync(fp, 'utf8').split(/\r?\n/) }); } } catch { /* 사실 없음 = 빈 목록 */ } return out; })();
+/** T541: AS-IS 원문에서 칸 값·후보를 쓰는 문장(행 값 대입 · SetValue·SetText · 콤보 설정 · Cells[..].Value/Text) 위치 — 칸 번호 변수(x = GetColumnIndex(DefColumns.칸)) 포함 */
+/** 2026-11-26 T659: AS-IS 지역 변수 → 그 변수에 대입되는 그리드 칸(원문 `v = …GetValue(…GetColumnIndex(DefColumns.X))`). 대입 칸이 하나일 때만(여럿·없음 = '')
+ *  DMF0005 `sDivision` = DIVISION_ID(cs 대입 28곳 모두 같은 칸) — 종전 이름 관례(s+Division → DIVISION)로는 그리드 칸을 못 찾아 E4 위반 입력 생성 불가 71행 */
+const _avc = new Map<string, string>();
+function asisVarCol(v: string): string {
+  if (!/^[A-Za-z_]\w*$/.test(v) || /^__C_/.test(v)) return '';
+  if (_avc.has(v)) return _avc.get(v) as string;
+  const rx = new RegExp(`\\b${v}\\s*=(?!=)[^;]*?\\bGet(?:Value|Text)\\([^;]*?GetColumnIndex\\(\\s*Def\\w*\\.([A-Z0-9_]+)(?![a-z])`);
+  const cols = new Set<string>();
+  for (const f of ASIS_SRC) for (const ln of f.lines) { const s0 = ln.split('//')[0]; const m = rx.exec(s0); if (m) cols.add(m[1]); }
+  const out = cols.size === 1 ? [...cols][0] : '';
+  _avc.set(v, out); return out;
+}
+function asisWrites(col: string): { writes: string[]; vars: string[]; files: string[] } {
+  const ws: string[] = []; const allVars: string[] = []; const idxRe = new RegExp(`\\b(\\w+)\\s*=\\s*[\\w.]*GetColumnIndex\\(\\s*DefColumns\\.${escRe(col)}\\s*\\)`);
+  for (const f of ASIS_SRC) {
+    const vars = new Set<string>(); for (const l of f.lines) { const m = idxRe.exec(l); if (m) vars.add(m[1]); }
+    allVars.push(...vars);
+    const ref = `(?:DefColumns\\.${escRe(col)}\\b${[...vars].map(v => `|\\b${v}\\b`).join('')})`;
+    const wr = [new RegExp(`\\[\\s*DefColumns\\.${escRe(col)}\\s*\\]\\s*=(?!=)`), new RegExp(`\\b(?:SetValue|SetText|SetCellTypeCombo\\w*|SetComboBox\\w*)\\s*\\([^;]*${ref}`), new RegExp(`Cells\\s*\\[[^\\]]*${ref}[^\\]]*\\]\\s*\\.\\s*(?:Value|Text)\\s*=(?!=)`)];
+    f.lines.forEach((l, i) => { if (l.trim().startsWith('//')) return; if (wr.some(r => r.test(l))) ws.push(`${f.file}:${i + 1}`); });
+  }
+  return { writes: ws, vars: [...new Set(allVars)], files: ASIS_SRC.map(f => f.file) };
+}
+/** T542: 셀 값 변경 이벤트 메서드의 메시지 조건 'if (Parse(합계 변수) > N)' 과 합계 식(Parse(a) + Parse(b) …)의 칸(a = …[DefColumns.X]) — 원문에서 못 찾으면 null */
+function asisSumGuard(meth: string, msg: string): { cols: string[]; n: number; ref: string } | null {
+  for (const f of ASIS_SRC) {
+    const L = f.lines;
+    const ms = L.findIndex(l => new RegExp(`^\\s*(?:(?:private|public|protected|internal|static|override|virtual|async)\\s+)*[\\w<>\\[\\],.]+\\s+${escRe(meth)}\\s*\\(`).test(l) && !/;\s*$/.test(l)); if (ms < 0) continue;
+    const ml = L.findIndex((l, i) => i > ms && l.includes(`"${msg}"`)); if (ml < 0) continue;
+    let gv = ''; let n = 0; let gl = -1;
+    for (let i = ml; i >= Math.max(ms, ml - 12); i--) { const m = /if\s*\(\s*(?:(?:Int64|Int32|Decimal|Double|long|int)\.Parse|Convert\.To\w+)\(\s*(\w+)\s*\)\s*>\s*(\d+)\s*\)/.exec(L[i]); if (m) { gv = m[1]; n = Number(m[2]); gl = i; break; } }
+    if (!gv) continue;
+    let terms: string[] = [];
+    for (let i = gl - 1; i > ms; i--) { const m = new RegExp(`\\b${gv}\\s*=\\s*([^;]*)`).exec(L[i]); if (m && /Parse\(|Convert\.To/.test(m[1])) { terms = [...m[1].matchAll(/(?:Parse|Convert\.To\w+)\(\s*(\w+)\s*\)/g)].map(z => z[1]); break; } }
+    if (!terms.length) terms = [gv];
+    const cols: string[] = [];
+    for (const tv of terms) for (let i = ms; i < gl; i++) { const m = new RegExp(`\\b${tv}\\s*=\\s*[^;=]*DefColumns\\.(\\w+)`).exec(L[i]); if (m) { if (!cols.includes(m[1])) cols.push(m[1]); break; } }
+    if (cols.length) return { cols, n, ref: `${f.file}:${ml + 1}` };
+  }
+  return null;
+}
+/** T550(2026-11-25): AS-IS 메시지 사전(Doc/asisfacts/db/meta/dbo.TB_FX_MessageInfo.csv Ko·En·Ch) — ASIS 문장 행은 원장에 문구가 없고 같은 메시지 TRACE 대조가 없을 수 있다 */
+const ASIS_MSG = (() => { const m = new Map<string, string[]>(); try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'db', 'meta', 'dbo.TB_FX_MessageInfo.csv'), 'utf8').replace(/^﻿/, ''))) if (z.MessageID) m.set(z.MessageID, [z.Ko, z.En, z.Ch].filter(Boolean)); } catch { /* 사전 없음 */ } return (id: string) => m.get(id) || []; })();
+/** T542: AS-IS 셀 상한(cell_rules.csv max) */
+const CELLMAX = (() => { const o: Record<string, string> = {}; try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'cell_rules.csv'), 'utf8').replace(/^\uFEFF/, ''))) if (z.column && z.max && !(z.column in o)) o[z.column] = z.max; } catch { /* 사실 없음 */ } return o; })();
+/** T540: AS-IS Save 진입점(SaveButton · btnSave Click)에서 닿는 메서드 */
+const H2_SAVE_REACH = (() => { const s = new Set<string>(); try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), 'utf8').replace(/^\uFEFF/, ''))) if (/^SaveButton$|btnSave\b.*Click|^this\.btnSave/i.test(String(z.entry || '')) || /^SaveButton$/i.test(String(z.handler || ''))) s.add(String(z.method || '')); } catch { /* 사실 없음 */ } return s; })();
+/** T540(2026-11-25 SCP0005 H2 V-17e451a7·V-e63ff383): 저장 검증 메서드(Save 진입점 경로)가 조건 만족 행의 규칙 칸을 오류 색(InvalidColor)으로 칠하는 규칙 — 조회 상태에는 그 색이 없다.
+ *  조건을 만족하는 기존 행 하나에서 규칙·조건 밖 편집 가능 칸을 다른 값으로 바꿔 수정 표시를 만들고, 쓰기 요청을 막은 채 Save → 규칙 칸 색이 바뀌는지(오류 표시 클래스 · AS-IS 색 · Save 전과 다른 배경) 잰다.
+ *  끝에 화면을 다시 열어 편집을 버린다 */
+async function h2SaveMark(nscm: Nscm, cr: Record<string, string>, cols: string[], hit: number[], condCols: string[], head: string): Promise<{ result: 'PASS' | 'FAIL' | 'ERROR'; why: string }> {
+  const p = nscm.page;
+  const want = (asisControlColor(ROOT, cr.color_edit || '') || asisControlColor(ROOT, String(cr.color_edit || '').replace(/Invalid/, 'InValid'))).replace(/\s+/g, '');
+  type CC = { b: string; cls: string; bg: string };
+  const readCols = (r: number) => p.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c || !c.rows[${r}]) return []; const ns = ${JSON.stringify(cols.map(s => s.toUpperCase()))}; const out = []; for (let i = 0; i < c.columns.length; i++) { const k = c.columns[i]; const b = String(k.binding || ''); if (k.visible === false || !ns.includes(b.toUpperCase())) continue; c.scrollIntoView(${r}, i); await new Promise(z => requestAnimationFrame(() => requestAnimationFrame(z))); const el = c.cells.getCellElement(${r}, i); if (el) out.push({ b, cls: String(el.className || ''), bg: getComputedStyle(el).backgroundColor }); } return out; })()`).catch(() => []) as Promise<CC[]>;
+  const skip = new Set([...cols, ...condCols].map(s => s.toUpperCase()));
+  const binds = ((await probe.allBindings(p)) || []).filter(b => !skip.has(b.toUpperCase()) && !/^(CRUD_TYPE|CHK|ROW_?NO|_.*)$/i.test(b));
+  let row = -1; let touch = ''; let from = ''; let to = '';
+  for (const r of hit.slice(0, 10)) {
+    const it = await probe.rowItem(p, r) as Record<string, unknown> | null; if (!it || String(it.CRUD_TYPE || '')) continue;
+    for (const b of binds.slice(0, 40)) {
+      if ((await probe.editable(p, r, b)) !== true) continue;
+      const now = String((await probe.value(p, r, b)) ?? '');
+      const alt = (((await probe.candidates(p, r, b)) || []).find(v => !!v && v.split(/\s+/)[0] !== now)) || (((await probe.columnValues(p, b)) || []).find(v => !!v && v !== now)) || '';
+      if (!alt) continue; row = r; touch = b; from = now; to = alt.split(/\s+/)[0]; break;
+    }
+    if (row >= 0) break;
+  }
+  if (row < 0) return { result: 'ERROR', why: `[측정 경로 없음] ${head} · 조건 만족 기존 행(앞 10행)에 규칙·조건 밖 편집 가능 칸이 없어 수정 표시를 만들 수 없음 · AS-IS ${cr.ref} ${cr.api} ${cr.color_edit || '-'}` };
+  const before = await readCols(row);
+  const guard = await probe.blockWrites(p); let msgs: string[] = []; let after: CC[] = []; let crud = ''; let typed = false;
+  try {
+    typed = await probe.setByEditor(p, row, touch, to); await p.waitForTimeout(400);
+    crud = String(((await probe.rowItem(p, row)) as Record<string, unknown> | null)?.CRUD_TYPE || '');
+    if (typed && crud) { await (await nscm.toolbarButton('Save')).click({ timeout: 10_000 }).catch(() => undefined); msgs = await collectMsgs(nscm, 5_000, []); await p.waitForTimeout(800); after = await readCols(row); }
+  } finally { await guard.off(); }
+  const bgOf = (xs: CC[], b: string) => (xs.find(c => c.b === b)?.bg || '');
+  const marked = after.filter(c => /invalid|error|danger/i.test(c.cls) || (!!want && c.bg.replace(/\s+/g, '') === want) || (bgOf(before, c.b) !== c.bg && !/wj-state-selected|wj-state-multi-selected/.test(c.cls)));
+  const ev = `${head} · r${row} ${touch} '${from}'→'${to}'${typed ? '' : '(입력 실패)'} · 수정 표시 '${crud || '-'}' · 규칙 칸 색 Save 전→후 [${after.length ? after.map(c => `${c.b}:${bgOf(before, c.b) || '-'}→${c.bg || '-'}`).join(', ') : cols.join(',') + ' 못 읽음'}] · 막은 쓰기 요청 ${guard.st.n}건(서버 미전송) · 알림 '${msgs.join(' | ').slice(0, 120) || '없음'}' · AS-IS ${cr.ref} ${cr.api} ${cr.color_edit || '-'}${want ? `(${want})` : ''} = Save 검증이 문제 칸을 오류 색으로 표시`;
+  await nscm.openScreen(ID).catch(() => undefined);  // 편집 버림(저장 안 함)
+  if (!typed || !crud) return { result: 'ERROR', why: `[측정 전제 미충족] 수정 표시를 만들지 못함 · ${ev}` };
+  if (!after.length) return { result: 'ERROR', why: `[측정 실패] Save 뒤 규칙 칸 색을 읽지 못함 · ${ev}` };
+  return { result: marked.length ? 'PASS' : 'FAIL', why: `${marked.length ? `오류 표시 칸 ${marked.map(c => c.b).join(', ')}` : 'Save 뒤 규칙 칸 색 변화 없음(문제 칸 표시 미구현)'} · ${ev}` };
+}
+
+/** T551·T553(2026-11-25 SCP0005): 그리드 행 r 의 칸별 셀 클래스·배경색(보이는 칸만) */
+type CellColor = { b: string; cls: string; bg: string };
+const readCellColors = (p: import('@playwright/test').Page, r: number, cols: string[]) => p.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c || !c.rows[${r}]) return []; const ns = ${JSON.stringify(cols.map(s => s.toUpperCase()))}; const out = []; for (let i = 0; i < c.columns.length; i++) { const k = c.columns[i]; const b = String(k.binding || ''); if (k.visible === false || !ns.includes(b.toUpperCase())) continue; c.scrollIntoView(${r}, i); await new Promise(z => requestAnimationFrame(() => requestAnimationFrame(z))); const el = c.cells.getCellElement(${r}, i); if (el) out.push({ b, cls: String(el.className || ''), bg: getComputedStyle(el).backgroundColor }); } return out; })()`).catch(() => []) as Promise<CellColor[]>;
+/** 오류 표시 칸 — 오류 클래스 · AS-IS 색 · Save 전과 다른 배경(선택 표시 제외) */
+const markedCells = (before: CellColor[], after: CellColor[], want: string) => after.filter(c => /invalid|error|danger/i.test(c.cls) || (!!want && c.bg.replace(/\s+/g, '') === want) || ((before.find(z => z.b === c.b)?.bg || c.bg) !== c.bg && !/wj-state-selected|wj-state-multi-selected/.test(c.cls)));
+/** T553: 행 상태 값 — AS-IS 수정 표시 'M' ↔ TO-BE 'U'(CRUD_TYPE) 를 같은 값으로 본다 */
+const rowCol = (it: Record<string, string> | null) => (c: string) => { const k = Object.keys(it || {}).find(z => z.toUpperCase() === c.toUpperCase()); if (!k) return null; const v = String(it![k]); return /^CRUD_TYPE$/i.test(k) && v === 'U' ? 'M' : v; };
+/** T551: 실제 응답 표본 원천 — 앞 실행 결과(.prev) · 이번 결과 파일 · 원장 증거의 '<sheet>/<btn>:200 응답={…}' (BTN 팝업 경로 T511 과 같은 원천) */
+/** T646: 저장 오류코드의 TO-BE 서버 문구(프로시저 원문 · proc_errmsg.py · 사내 DB 읽기) — 못 찾으면 null */
+const SRV_ERR = new Map<string, { msg: string; where: string } | null>();
+function srvErrMsg(code: string): { msg: string; where: string } | null {
+  if (!SRV_ERR.has(code)) {
+    let v: { msg: string; where: string } | null = null;
+    try { const { execFileSync } = require('child_process') as typeof import('child_process'); const o = JSON.parse(execFileSync('python', [path.join(ROOT, 'tools', 'Harness', 'verify', 'proc_errmsg.py'), ID, code], { encoding: 'utf8', timeout: 60_000 })); v = o && o[code] ? o[code] : null; } catch { v = null; }
+    SRV_ERR.set(code, v);
+  }
+  return SRV_ERR.get(code) || null;
+}
+function saveRespSamples(): string[] {
+  const prevRun = (() => { try { return (JSON.parse(fs.readFileSync(OUT + '.prev', 'utf8')) as Res[]).map(z => String(z.evidence || '')); } catch { return [] as string[]; } })();
+  const led = (() => { try { return parseCsv(fs.readFileSync(LEDGER, 'utf8')).map(z => z.evidence || ''); } catch { return [] as string[]; } })();
+  const src = [...PREV.values()].map(z => String(z.evidence || '')).concat(led, prevRun);
+  return src.concat(persistRespSamples(src, path.join(DIR, 'resp_samples.json')));  // T642 부분 재측정이 .prev 를 덮어도 앞 회차 실제 응답 유지
+}
+type SaveErrRun = { ok: boolean; why: string; row: number; item: Record<string, string> | null; touch: string; held: string[]; pre: string[]; msgs: string[]; marker: string; fields: string[]; shapeKnown: boolean; before: CellColor[]; after: CellColor[]; ev: string };
+/** T551·T553(2026-11-25 SCP0005 T-ece1c98b·T-f048d4a9·V-3134fc3e MSG00043 · H2 V-b6f27092 외 4행): AS-IS 저장 오류 응답 분기(오류코드 → 메시지 · 응답 행과 같은 그리드 행 칸 색)를 재현한다.
+ *  기존 행 하나의 규칙·키 밖 편집 칸을 바꿔 수정 표시를 만들고 Save → 저장 요청은 서버로 보내지 않고(route fulfill · 다른 쓰기는 probe.blockWrites 가 끊음)
+ *  같은 시트·버튼의 실제 응답 표본을 오류 응답으로 바꿔 답한다(오류코드 = AS-IS 분기 리터럴 · 응답 행 = 그 그리드 행 값 · MSG 열 = 표지 문구).
+ *  표본이 없으면 요청을 끊고 측정 경로 없음. 끝에 화면을 다시 열어 편집을 버린다(저장 없음) */
+async function driveSaveErr(nscm: Nscm, code: string, cols: string[], avoid: string[], samples: string[]): Promise<SaveErrRun> {
+  const p = nscm.page; const marker = `[${code}] E2E-FAKE-${Date.now() % 100000}`;
+  const out: SaveErrRun = { ok: false, why: '', row: -1, item: null, touch: '', held: [], pre: [], msgs: [], marker, fields: [], shapeKnown: false, before: [], after: [], ev: '' };
+  await openReady(nscm); const n = await searchAndRows(nscm);
+  if (n <= 0) { out.why = '[측정 전제 미충족] 조회 0행'; return out; }
+  const skip = new Set([...cols, ...avoid].map(s => s.toUpperCase()));
+  const binds = ((await probe.allBindings(p)) || []).filter(b => !skip.has(b.toUpperCase()) && !/^(CRUD_TYPE|CHK|ROW_?NO|_.*)$/i.test(b));
+  let from = ''; let to = '';
+  for (let r = 0; r < Math.min(n, 10) && out.row < 0; r++) {
+    const it = await probe.rowItem(p, r); if (!it || String(it.CRUD_TYPE || '')) continue;
+    for (const b of binds.slice(0, 40)) {
+      if ((await probe.editable(p, r, b)) !== true) continue;
+      const now = String((await probe.value(p, r, b)) ?? '');
+      const alt = (((await probe.candidates(p, r, b)) || []).find(v => !!v && v.split(/\s+/)[0] !== now)) || (((await probe.columnValues(p, b)) || []).find(v => !!v && v !== now)) || '';
+      if (!alt) continue; out.row = r; out.touch = b; from = now; to = alt.split(/\s+/)[0]; break;
+    }
+  }
+  if (out.row < 0) { out.why = '[측정 경로 없음] 앞 10행에 규칙·키 밖 편집 가능 칸이 없어 수정 표시를 만들 수 없음'; return out; }
+  out.before = await readCellColors(p, out.row, cols);
+  const guard = await probe.blockWrites(p); let noSample = '';
+  const WRITE = /\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i;
+  const h = async (rt: import('@playwright/test').Route) => {
+    const mm = /\/([^/]+)\/([^/]+)\/([^/]+)\/call-proc/.exec(rt.request().url()); const sheet = mm ? decodeURIComponent(mm[2]) : ''; const btn = mm ? decodeURIComponent(mm[3]) : '';
+    out.held.push(`${sheet}/${btn}`);
+    const smp = respSample(samples, sheet, btn); const fb = smp && out.item ? fakeErrBody(smp, code, out.item, marker) : null;
+    if (!fb) { noSample = `${sheet}/${btn} 실제 응답 표본${smp ? '에 CODE 열 있는 결과 행 없음' : ' 없음'}`; await rt.abort('blockedbyclient').catch(() => undefined); return; }
+    out.fields = fb.fields; out.shapeKnown = fb.shapeKnown;
+    await rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fb.body) }).catch(() => undefined);
+  };
+  let typed = false; let crud = '';
+  try {
+    typed = await probe.setByEditor(p, out.row, out.touch, to); await p.waitForTimeout(400);
+    out.item = await probe.rowItem(p, out.row); crud = String(out.item?.CRUD_TYPE || '');
+    if (typed && crud) {
+      await p.route(WRITE, h);
+      await (await nscm.toolbarButton('Save')).click({ timeout: 10_000 }).catch(() => undefined);
+      for (let k = 0; k < 12 && !out.held.length; k++) { await p.waitForTimeout(500); const t = await nscm.alertText().catch(() => ''); if (t) { out.pre.push(t); await nscm.closeAlert('ok').catch(() => false); } }
+      if (out.held.length) { out.msgs = await collectMsgs(nscm, 5_000, out.pre); await p.waitForTimeout(800); out.after = await readCellColors(p, out.row, cols); }
+    }
+  } finally { await p.unroute(WRITE, h).catch(() => undefined); await guard.off(); }
+  out.ev = `r${out.row} ${out.touch} '${from}'→'${to}'${typed ? '' : '(입력 실패)'} · 수정 표시 '${crud || '-'}' · Save${out.pre.length ? ` → 확인·알림 '${out.pre.join(' | ').slice(0, 60)}' OK` : ''} → 저장 요청 ${out.held.length}건 서버 미전송(${out.held.join(',') || '-'}) · 가짜 응답 오류코드 ${code}(${out.fields.join(', ') || '-'} · 응답 행 = 이 그리드 행 값 · 형식 근거 ${out.shapeKnown ? '오류 응답 표본' : '성공 응답 표본(오류 열 이름 미확인)'}) · 알림 '${out.msgs.join(' | ').slice(0, 120) || '없음'}' · 막은 다른 쓰기 ${guard.st.n}건`;
+  await nscm.openScreen(ID).catch(() => undefined);  // 편집 버림(저장 없음)
+  if (!typed || !crud) { out.why = '[측정 전제 미충족] 수정 표시를 만들지 못함'; return out; }
+  if (noSample) { out.why = `[측정 경로 없음] ${noSample} — 가짜 응답 형식 근거 없음(요청 끊음 · 서버 미전송) · 실저장 시험(@verify CRUD)이 같은 시트·버튼 응답을 남긴 뒤 재측정`; return out; }
+  if (!out.held.length) { out.why = `[측정 실패] Save 뒤 저장 요청 없음(화면 검증에서 멈춤 · 알림 '${out.pre.join(' | ').slice(0, 80) || '없음'}')`; return out; }
+  out.ok = true; return out;
+}
+/** T553(2026-11-25 SCP0005 H2 V-b4651880 'RAW(intPRIORITY < 1)'): 조건이 AS-IS 지역 숫자 변수(칸 값에서 읽음 · bindLocalNum)면 그 칸을 조건이 참이 되는 값으로 편집해 수정 표시를 만들고,
+ *  쓰기를 막은 채 Save → 규칙 칸 오류 색을 잰다. 행 상태 원자(COL(CRUD_TYPE) · TO-BE 'U' = AS-IS 'M')는 편집으로 참이 된다. 그 밖 RAW 가 남으면 평가 불가(ERROR). 끝에 화면을 다시 열어 편집을 버린다 */
+async function h2NumEdit(nscm: Nscm, cr: Record<string, string>, cols: string[], binds: { atom: string; col: string; op: string; n: number; emptyAs: string | null; ref: string }[], cond: string, head: string): Promise<{ result: 'PASS' | 'FAIL' | 'ERROR'; why: string }> {
+  const p = nscm.page; const b0 = binds[0];
+  const bindTxt = binds.map(b => `${b.atom.slice(4, -1)} = 칸 ${b.col}${b.emptyAs != null ? `(빈 값 → '${b.emptyAs}')` : ''} · 원문 줄 ${b.ref}`).join(' / ');
+  const want = (asisControlColor(ROOT, cr.color_edit || '') || asisControlColor(ROOT, String(cr.color_edit || '').replace(/Invalid/, 'InValid'))).replace(/\s+/g, '');
+  const n = await probe.rowCount(p); let row = -1; let typed = ''; let got = ''; const tried: string[] = [];
+  for (let r = 0; r < Math.min(n, 10) && row < 0 && tried.length < 6; r++) {
+    const it = await probe.rowItem(p, r); if (!it || String(it.CRUD_TYPE || '')) continue;
+    if ((await probe.editable(p, r, b0.col)) !== true) { tried.push(`r${r} ${b0.col} 편집 불가`); continue; }
+    const orig = String((await probe.value(p, r, b0.col)) ?? '');
+    for (const v of violatingValues(b0.op, b0.n, b0.emptyAs)) {
+      const ok = await probe.setByEditor(p, r, b0.col, v); await p.waitForTimeout(400); got = String((await probe.value(p, r, b0.col)) ?? '');
+      const bound = bindNumCond(b0.atom, [b0], () => got); tried.push(`r${r} '${orig}'→'${v}'${ok ? '' : '(입력 실패)'} 값 '${got}'`);
+      if (ok && bound === 'TRUE') { row = r; typed = v; break; }
+    }
+  }
+  if (row < 0) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[전제 상태 TO-BE 입력 불가] ${b0.col} 에 조건(${b0.atom.slice(4, -1)})이 참인 값을 넣지 못함 · 시도 ${tried.join(', ')} · ${bindTxt} · ${head}` }; }
+  const it2 = await probe.rowItem(p, row); const crud = String(it2?.CRUD_TYPE || ''); const colOf = rowCol(it2);
+  let rest = bindNumCond(cond, binds, colOf);
+  rest = rest.replace(/RAW\([^()]*CAppSetting\.Flag\w[^()]*\)/g, crud ? 'TRUE' : 'FALSE');  // 종전 형식 행 상태 원자
+  if (/RAW\(/.test(rest)) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[조건 평가 불가] 칸 바인딩 뒤에도 남은 RAW ${[...rest.matchAll(/RAW\([^)]*\)/g)].map(m => m[0]).slice(0, 2).join(' / ')} · ${bindTxt} · ${head}` }; }
+  let sat = false; try { sat = evalExpr(rest, { group: ACCT.group, admin: ACCT.admin, div: '', self: '', col: colOf }); } catch (e) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[조건 평가 불가] ${String(e).slice(0, 80)} · ${bindTxt} · ${head}` }; }
+  if (!sat) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[측정 전제 미충족] 편집 뒤 조건 거짓(${rest.slice(0, 120)}) · 수정 표시 '${crud || '-'}' · ${bindTxt} · ${head}` }; }
+  const before = await readCellColors(p, row, cols);
+  const guard = await probe.blockWrites(p); let msgs: string[] = []; let after: CellColor[] = [];
+  try { await (await nscm.toolbarButton('Save')).click({ timeout: 10_000 }).catch(() => undefined); msgs = await collectMsgs(nscm, 5_000, []); await p.waitForTimeout(800); after = await readCellColors(p, row, cols); }
+  finally { await guard.off(); }
+  const marked = markedCells(before, after, want);
+  const ev = `${head} · ${bindTxt} · r${row} ${b0.col} → '${typed}'(값 '${got}') · 수정 표시 '${crud || '-'}' · 조건 참 · Save(쓰기 ${guard.st.n}건 막음 · 서버 미전송) → 알림 '${msgs.join(' | ').slice(0, 100) || '없음'}' · 규칙 칸 색 Save 전→후 [${after.length ? after.map(c => `${c.b}:${before.find(z => z.b === c.b)?.bg || '-'}→${c.bg || '-'}`).join(', ') : cols.join(',') + ' 못 읽음'}] · AS-IS ${cr.ref} ${cr.api} ${cr.color_edit || '-'}${want ? `(${want})` : ''}`;
+  await nscm.openScreen(ID).catch(() => undefined);  // 편집 버림(저장 없음)
+  if (!after.length) return { result: 'ERROR', why: `[측정 실패] Save 뒤 규칙 칸 색을 읽지 못함 · ${ev}` };
+  const miss = after.filter(c => !marked.includes(c)).map(c => c.b);
+  return { result: miss.length ? 'FAIL' : 'PASS', why: `${miss.length ? `오류 색 아님 ${miss.join(', ')}` : `오류 표시 칸 ${marked.map(c => c.b).join(', ')}`} · ${ev}` };
+}
+
+/** T591(2026-11-25 SCP0005 H2 V-17e451a7(cs:1305)·V-e63ff383(cs:1313)): 색 규칙 조건의 전제(수정 표시 · 빈 칸 · 지역 숫자 변수 칸)를 기존 행 하나의 편집으로 만든 뒤 쓰기를 막은 채 Save → 규칙 칸 오류 색을 잰다.
+ *  빈 칸 원자 COL(X)=="" = X 를 비운다(X → 접미 _NAME/_NM/_DESC 를 뺀 원천 칸 → 규칙 칸 순 · 편집 가능한 칸만 · 비운 뒤 X 가 '' 가 됐는지 최대 5초 확인 = TO-BE 연쇄 비움 포함).
+ *  값 있음 원자 !(COL(X)=="") = 이미 값 있는 행만 고르고 편집 뒤 조건 평가로 남았는지 확인. 숫자 원자 = bindLocalNum 칸을 조건 값으로 맞춤(이미 맞으면 그대로). 끝에 화면을 다시 열어 편집을 버린다(저장 없음) */
+type H2NumBind = { atom: string; op: string; n: number; neg: boolean; col: string; emptyAs: string | null; ref: string };
+async function h2PremiseEdit(nscm: Nscm, cr: Record<string, string>, cols: string[], pa: PremiseAtoms, binds: H2NumBind[], cond: string, head: string): Promise<{ result: 'PASS' | 'FAIL' | 'ERROR'; why: string }> {
+  const p = nscm.page;
+  const want = (asisControlColor(ROOT, cr.color_edit || '') || asisControlColor(ROOT, String(cr.color_edit || '').replace(/Invalid/, 'InValid'))).replace(/\s+/g, '');
+  const numTxt = binds.map(b => `${b.neg ? '!' : ''}${b.atom.slice(4, -1)} = 칸 ${b.col}${b.emptyAs != null ? `(빈 값 → '${b.emptyAs}')` : ''} · 원문 줄 ${b.ref}`).join(' / ') || '숫자 원자 없음';
+  const premTxt = `전제 = 수정 표시 · 빈 칸 ${pa.empty.join(',')}${pa.filled.length ? ` · 값 있음 ${pa.filled.join(',')}` : ''} · ${numTxt}`;
+  const names = [...new Set([...pa.empty, ...pa.filled, ...binds.map(b => b.col)])];
+  const data = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const ns = ${JSON.stringify(names)}; const o = []; for (let i = 0; i < Math.min(c.rows.length, 200); i++) { const d = c.rows[i].dataItem; if (!d) { o.push(null); continue; } const r = { __crud: String(d.CRUD_TYPE || '') }; for (const n of ns) r[n] = d[n] == null ? '' : String(d[n]).trim(); o.push(r); } return o; })()`).catch(() => []) as (Record<string, string> | null)[];
+  // 값 있음 원자를 이미 만족하고 빈 칸 원자 칸에 값이 있는(비우면 수정 표시가 생기는) 기존 행
+  const cands = data.map((r, i) => ({ r, i })).filter(z => !!z.r && !z.r.__crud && pa.filled.every(c => (z.r![c] ?? '') !== '') && pa.empty.some(c => (z.r![c] ?? '') !== '')).map(z => z.i);
+  if (!cands.length) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[측정 전제 미충족] 앞 200행 중 값 있음 원자 칸(${pa.filled.join(',') || '-'})에 값이 있고 빈 칸 원자 칸(${pa.empty.join(',')})에 값이 있는 기존 행 없음 · ${premTxt} · ${head}` }; }
+  const row = cands[0]; const st: string[] = []; let fail = '';
+  for (const c of pa.empty) {
+    const orig = String((await probe.value(p, row, c)) ?? '').trim(); if (!orig) { st.push(`${c} 이미 빈 값`); continue; }
+    const srcs = [...new Set([c, c.replace(/_(?:NAME|NM|DESC)$/i, ''), ...cols])].filter(Boolean);
+    let ok = false;
+    for (const s of srcs) {
+      if ((await probe.editable(p, row, s)) !== true) { st.push(`${s} 편집 불가`); continue; }
+      const sv = String((await probe.value(p, row, s)) ?? '');
+      const typed = await probe.setByEditor(p, row, s, ''); await p.waitForTimeout(400);
+      let now = String((await probe.value(p, row, c)) ?? '').trim();
+      for (let k = 0; k < 10 && typed && now !== ''; k++) { await p.waitForTimeout(500); now = String((await probe.value(p, row, c)) ?? '').trim(); }
+      st.push(`${s} '${sv}'→''${typed ? '' : '(입력 실패)'} → ${c} '${orig}'→'${now}'`);
+      if (now === '') { ok = true; break; }
+    }
+    if (!ok) { fail = `${c} 를 비우지 못함`; break; }
+  }
+  if (!fail) for (const b of binds) {
+    const cur = String((await probe.value(p, row, b.col)) ?? '').trim(); const s0 = cur === '' ? (b.emptyAs ?? '') : cur; const need = !b.neg;
+    if (s0 !== '' && Number.isFinite(Number(s0)) && numHolds(b.op, Number(s0), b.n) === need) { st.push(`${b.col} '${cur}' 그대로(${b.neg ? '!' : ''}${b.atom.slice(4, -1)} 참)`); continue; }
+    if ((await probe.editable(p, row, b.col)) !== true) { fail = `${b.col} 편집 불가`; break; }
+    const v = numValueFor(b.op, b.n, need, b.emptyAs); const ok = await probe.setByEditor(p, row, b.col, v); await p.waitForTimeout(400);
+    const got = String((await probe.value(p, row, b.col)) ?? ''); st.push(`${b.col} '${cur}'→'${v}'${ok ? '' : '(입력 실패)'} 값 '${got}'`);
+    if (!ok) { fail = `${b.col} 입력 실패`; break; }
+  }
+  if (fail) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[전제 상태 TO-BE 입력 불가] r${row} ${fail} · 시도 ${st.join(', ')} · ${premTxt} · ${head}` }; }
+  const it2 = await probe.rowItem(p, row); const crud = String(it2?.CRUD_TYPE || ''); const colOf = rowCol(it2);
+  let rest = bindNumCond(cond, binds, colOf);
+  rest = rest.replace(/RAW\([^()]*CAppSetting\.Flag\w[^()]*\)/g, crud ? 'TRUE' : 'FALSE');  // 종전 형식 행 상태 원자
+  if (/RAW\(/.test(rest)) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[조건 평가 불가] 칸 바인딩 뒤에도 남은 RAW ${[...rest.matchAll(/RAW\([^)]*\)/g)].map(m => m[0]).slice(0, 2).join(' / ')} · r${row} ${st.join(', ')} · ${premTxt} · ${head}` }; }
+  let sat = false; try { sat = evalExpr(rest, { group: ACCT.group, admin: ACCT.admin, div: '', self: '', col: colOf }); } catch (e) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[조건 평가 불가] ${String(e).slice(0, 80)} · r${row} ${st.join(', ')} · ${premTxt} · ${head}` }; }
+  if (!sat) { await nscm.openScreen(ID).catch(() => undefined); return { result: 'ERROR', why: `[측정 전제 미충족] 편집 뒤 조건 거짓(${rest.slice(0, 160)}) · 수정 표시 '${crud || '-'}' · r${row} ${st.join(', ')} · ${premTxt} · ${head}` }; }
+  const before = await readCellColors(p, row, cols);
+  const guard = await probe.blockWrites(p); let msgs: string[] = []; let after: CellColor[] = [];
+  try { await (await nscm.toolbarButton('Save')).click({ timeout: 10_000 }).catch(() => undefined); msgs = await collectMsgs(nscm, 5_000, []); await p.waitForTimeout(800); after = await readCellColors(p, row, cols); }
+  finally { await guard.off(); }
+  const marked = markedCells(before, after, want);
+  const ev = `${head} · ${premTxt} · r${row} 편집 ${st.join(', ')} · 수정 표시 '${crud || '-'}' · 조건 참 · Save(쓰기 ${guard.st.n}건 막음 · 서버 미전송) → 알림 '${msgs.join(' | ').slice(0, 100) || '없음'}' · 규칙 칸 색 Save 전→후 [${after.length ? after.map(c => `${c.b}:${before.find(z => z.b === c.b)?.bg || '-'}→${c.bg || '-'}`).join(', ') : cols.join(',') + ' 못 읽음'}] · AS-IS ${cr.ref} ${cr.api} ${cr.color_edit || '-'}${want ? `(${want})` : ''}`;
+  await nscm.openScreen(ID).catch(() => undefined);  // 편집 버림(저장 없음)
+  if (!after.length) return { result: 'ERROR', why: `[측정 실패] Save 뒤 규칙 칸 색을 읽지 못함 · ${ev}` };
+  const miss = after.filter(c => !marked.includes(c)).map(c => c.b);
+  return { result: miss.length ? 'FAIL' : 'PASS', why: `${miss.length ? `오류 색 아님 ${miss.join(', ')}` : `오류 표시 칸 ${marked.map(c => c.b).join(', ')}`} · ${ev}` };
 }
 
 test.describe(`검증엔진 ${ID} @trace`, () => {
@@ -528,7 +874,10 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     for (const { x, c } of tr.filter(t => t.c.et === 'SP')) {
       const hit = nscm.calls.filter(q => (c.callProc || []).some(cp => cp.menu === ID && q.sheet === cp.sheet && q.btn === cp.btn));
       if (!hit.length) {
-        const isSave = /SAVE|INS|UPD|DEL/i.test((c.callProc || []).map(cp => cp.btn).join());
+        // 2026-11-20 T511(SCP0028 T-6b9a8ce8 → V-8da88867): 단추 이름(INSERT)만 보고 저장 경로 NA 로 두면 읽기 종류(sp_pair kind GET·LOG) PROC 의 팝업 경로 실측(BTN 팝업 경로 시험)이
+        //   병합 규칙(확정 NA 를 ERROR 로 안 덮음)에 가려 구동 실패 사유가 남지 않았다. sp_pair 종류가 GET·LOG 면 저장 경로로 보지 않는다(판정필요 → 그 경로 시험이 덮음)
+        const spKind = spPairKind(c.name || '');
+        const isSave = /^(GET|LOG)$/.test(spKind) ? false : /SAVE|INS|UPD|DEL/i.test((c.callProc || []).map(cp => cp.btn).join());
         const wired = (c.callProc || []).map(cp => `${cp.menu}/${cp.sheet}/${cp.btn}`).join(', ');
         // 진입·조회 경로에서 안 불리는 SP(저장·셀 이벤트·팝업 조회)는 실행 경로가 다르다 — 미호출은 FAIL 이 아니라 그 경로의 검사(CRUD·M3·C3)로 넘긴다. PROC_M 배선 자체가 없으면 FAIL
         const entry = !isSave ? asisEntryCall(c.name || '') : '';
@@ -551,8 +900,10 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const colInfoOf = async (b: string) => probe.colInfo(p, b);
     // A5 ENTRY — AS-IS 유효 그리드 컬럼 집합 ⊆ TO-BE 그리드(숨김 포함) · Division 별 '숨김' 은 제외
     for (const { x, c } of tr.filter(t => t.c.et === 'ENTRY')) {
-      const av = (c.asisVisible || {}) as Record<string, Record<string, string>>;
-      const want = (c.asisCols || []).filter(col => { const m = av[col] || {}; const v = m[divKey] ?? m['40'] ?? ''; return !/숨김\s*$/.test(v); }); // '숨김' · '… →숨김'(코드로 숨김) 모두 제외
+      const av = (c.asisVisible || {}) as Record<string, string | Record<string, string>>;
+      // 2026-11-20 T520(SCP0028 T-fc9d26c9): 원장 칸 상한으로 숨김 정보가 잘렸으면(asisVisCut · truncated) 잘린 정보로 세지 않는다. 값은 문자열(전 Division 같음) 또는 Division 별 dict
+      if ((c as { asisVisCut?: boolean }).asisVisCut || (c as { truncated?: boolean }).truncated || !(c.asisCols || []).length) { put(x.row_id, 'ERROR', `[측정 경로 없음] ${(c.asisCols || []).length ? `AS-IS 컬럼 숨김 정보가 원장 칸 상한으로 잘림(asisVisible ${Object.keys(av).length}/${(c.asisCols || []).length}컬럼)` : 'AS-IS 그리드 컬럼 목록 없음(원장 조건 asisCols 비었거나 잘림)'} — mapping_trace.py 조건 줄이기 단계 확인`); continue; }
+      const want = (c.asisCols || []).filter(col => { const v = visOf(av, col, divKey); return !/숨김\s*$/.test(v); }); // '숨김' · '… →숨김'(코드로 숨김) 모두 제외
       const miss = want.filter(col => !all.includes(col));
       put(x.row_id, miss.length ? 'FAIL' : 'PASS', `AS-IS 유효 컬럼 ${want.length}(Div ${divKey || '?'} 기준 숨김 제외) ↔ TO-BE 그리드 ${all.length}: 누락 ${miss.length ? miss.join(', ') : '0'} · TO-BE 에만 있는 컬럼 ${all.filter(b => !(c.asisCols || []).includes(b)).slice(0, 12).join(', ') || '0'}`);
     }
@@ -579,7 +930,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         if (!exp) { put(x.row_id, '판정필요', `${b} 표시=${shown ? 'Y' : 'N'} — AS-IS Division 별 표시 정보 없음(grid_effective)`); continue; }
         // grid_effective 값: '기본'(표시) · '숨김'·'… →숨김'(코드로 숨김) · '코드추가'(코드가 런타임에 추가 — 표시 여부는 원문 확인) · '선택'(사용자 선택)
         if (/코드추가|선택/.test(exp) && !/숨김\s*$/.test(exp)) { put(x.row_id, shown ? 'PASS' : '판정필요', `${b}: AS-IS(Div ${divKey || '40'}) '${exp}' ↔ TO-BE 표시=${shown ? 'Y' : 'N'}${shown ? '' : ' — AS-IS 코드 추가 컬럼의 표시 여부는 원문 확인(InitSpread 가 Visible=false 로 두는지)'} (TO-BE 메타 VISIBLE=${c.tobeMeta?.visible_flag || '?'})`); continue; }
-        if (/\?/.test(exp)) { put(x.row_id, 'NA', `${b}: AS-IS(Div ${divKey || '40'}) '${exp}' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=${shown ? 'Y' : 'N'})`); continue; }
+        if (/\?/.test(exp)) { put(x.row_id, 'ERROR', `[미검증] ${b}: AS-IS(Div ${divKey || '40'}) '${exp}' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=${shown ? 'Y' : 'N'})`); continue; }
         const w0 = !!si.sheet && asisW0.has(`${nSh(si.sheet)}|${b.toUpperCase()}`);
         const wantShown = !/숨김\s*$/.test(exp) && !w0;
         if (w0) { a5Diff.push({ b, want: false, shown }); put(x.row_id, shown ? 'FAIL' : 'PASS', `${b}: AS-IS 시트 '${si.sheet}' 메타 COLUMN_WIDTH 0 → 화면 미표시(사용자의견 2026-11-17) ↔ TO-BE 표시=${shown ? 'Y' : 'N'}${shown ? ' — AS-IS 에 안 보이는 컬럼이 TO-BE 에 보임' : ''} (TO-BE 메타 VISIBLE=${c.tobeMeta?.visible_flag || '?'})`); continue; }
@@ -608,7 +959,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       for (const cl of cond.split(' | ')) {
         const m = /^(잠금|해제) when (.*)$/.exec(cl.trim()); if (!m) continue;
         const neg = /^else of/.test(m[2]);
-        const g = /Get(?:Text|Value)\(\s*[\w.+\s-]+,\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"/.exec(m[2]); if (!g) continue;
+        const g = /Get(?:Text|Value)\(\s*[\w.+\s-]+,\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)(?![a-z])\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"/.exec(m[2]); if (!g) continue;
         const v = ((await probe.value(p, row, g[1])) ?? '').trim();
         let hold = g[2] === '==' ? v === g[3] : v !== g[3]; if (neg) hold = !hold;
         if (hold) res.push({ locked: m[1] === '잠금', by: `${g[1]}='${v}' ${neg ? 'not ' : ''}${g[2]} '${g[3]}'` });
@@ -730,7 +1081,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         if (!e && yellow) { const pt = await probe.popupOnDblclick(p, ref.row, b); if (pt) { ev.push(`${nm} 더블클릭 입력 팝업 '${pt}' 열림 → 편집 가능 칸 노랑 일치(CR-072)`); continue; } }
         if (e && !yellow) { fail = true; ev.push(`${nm} 편집 가능인데 노랑 아님`); } else if (!e && yellow) { fail = true; ev.push(`${nm} 편집 불가인데 노랑`); } else if (!e && gray) { human = true; ev.push(`${nm} 잠금 회색(특수 경우만 허용)`); } else ev.push(`${nm} 편집=${e} 표시 일치`);
       }
-      if (!probed) { put(x.row_id, 'NA', `${b} 현재 그리드에 없음`); continue; }
+      /* 2026-11-26 SCP0005: 컬럼은 있는데 셀을 못 읽은 경우는 해당없음이 아니라 미검증(재지 못한 행 = ERROR) */
+      if (!probed) { const has = !!(await probe.colInfo(p, b).catch(() => null)); put(x.row_id, has ? 'ERROR' : 'NA', has ? `[측정 실패] ${b} 컬럼은 그리드에 있음 · 셀 표시(클래스)·편집 여부를 읽지 못함` : `${b} 현재 그리드에 없음`); continue; }
       put(x.row_id, fail ? 'FAIL' : human ? '판정필요' : 'PASS', `${b}: ${ev.join(' · ')}`);
     }
     // C3 — 원천(src) 선택 → 대상 자동 채움(신규행 · Insert 없는 화면은 기존행)
@@ -738,6 +1090,36 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     for (const { x, c } of cols.filter(t => t.x.rule_id === 'C3')) {
       const tgt = c.name || ''; const srcs = (c.src || []).filter(s => s !== tgt);
       if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일·후보 설정·읽기) — 연쇄 채움 대상 아님(D1/D3/H2·C2 에서 판정)${(c.raws || []).length ? ` · AS-IS ${(c.raws || []).slice(0, 3).map(s => s.slice(0, 90)).join(' | ')}` : ''}`); continue; }
+      // T541(2026-11-25 SCP0005 C3 7행): 원천이 팝업을 여는 셀이거나 원천 해석이 비어도, 원천 칸이 키보드 입력을 받으면(AS-IS FPTextBox · 값 변경 이벤트 SetCityCode) 직접 입력 경로를 잰다.
+      //   종전엔 viaPopup 을 전부 M4 로 넘기고(판정필요) 원천 없음은 '해석 불가' 로 끝났다. 원천 = 대상 칸 자체가 값 변경 이벤트 문장에 있으면 자기 칸 · AS-IS 분기 리터럴(Loc == "FROM")과 같은 토큰을 이름에 가진 원천 · 그 밖 원천 목록
+      //   입력 값 = 원천 값이 있는 다른 기존 행의 값 → 기대 = 그 행의 대상 값. Insert 메서드 값 대입뿐이면 신규행 값과 리터럴 대조
+      {
+        const rawsJ = (c.raws || []).join(' ');
+        const insLit = (c.raws || []).length && (c.raws || []).every(s => /^\w*Insert\w*:\d+/i.test(s)) ? (new RegExp(`DefColumns\\.${escRe(tgt)}\\)\\s*,\\s*"([^"]*)"\\s*\\)`).exec(rawsJ) || [])[1] : undefined;
+        if (insLit != null && nr) { const v = String((await probe.value(p, nr.row, tgt)) ?? ''); const okI = v === insLit || (insLit === 'Y' && /^(true|y)$/i.test(v)) || (insLit === 'N' && /^(false|n)$/i.test(v)); put(x.row_id, okI ? 'PASS' : 'FAIL', `신규행 r${nr.row} ${tgt}='${v}' ↔ AS-IS Insert 값 대입 "${insLit}"(${(c.raws || [])[0].slice(0, 110)})${okI ? ' 일치' : ' 불일치'} — 다른 칸에서 이어지는 연쇄가 아닌 Insert 기본값`); continue; }
+        const selfTrig = (c.raws || []).some(s => /^\w*(?:Changed|EditChange|Change|EditModeOff)\w*:\d+/.test(s) && s.includes(`DefColumns.${tgt})`));
+        const lits = [...rawsJ.matchAll(/==\s*"(\w+)"/g)].map(m => m[1].toUpperCase());
+        const byLit = srcs.filter(s => lits.some(l => s.toUpperCase().split('_').includes(l)));
+        const head0 = tgt.split('_')[0];
+        const cand = selfTrig ? [tgt] : byLit.length ? byLit : [...srcs].sort((a, b) => Number(b.split('_')[0] === head0) - Number(a.split('_')[0] === head0));
+        if ((c.viaPopup || (!srcs.length && !c.selfAssign)) && cand.length) {
+          const tried: string[] = []; let okD = false; let anyAnchor = false;
+          for (const src of cand) {
+            if ((await probe.editable(p, cRow.row, src)) !== true) { tried.push(`${src} ${crNm} 편집 불가`); continue; }
+            const cur = String((await probe.value(p, cRow.row, src)) ?? '');
+            const anc = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return null; const s = ${JSON.stringify(src)}, t = ${JSON.stringify(tgt)}, me = ${cRow.row}, cur = ${JSON.stringify(cur)}; for (let r = 0; r < Math.min(c.rows.length, 3000); r++) { if (r === me) continue; const d = c.rows[r].dataItem; if (!d || d.CRUD_TYPE) continue; const sv = d[s] == null ? '' : String(d[s]).trim(); const tv = d[t] == null ? '' : String(d[t]).trim(); if (sv && tv && sv !== cur) return { r, sv, tv }; } return null; })()`).catch(() => null) as { r: number; sv: string; tv: string } | null;
+            if (!anc) { tried.push(`${src}: 값 있는 다른 기존 행 없음`); continue; }
+            anyAnchor = true;
+            const setOk = await probe.setByEditor(p, cRow.row, src, anc.sv); await p.waitForTimeout(1_200);
+            const got = String((await probe.value(p, cRow.row, tgt)) ?? '');
+            const hitD = setOk && got.trim() === anc.tv;
+            tried.push(`${src}='${anc.sv}'(기존 r${anc.r} 값) 입력${setOk ? '' : ' 실패'} → ${tgt}='${got}' · 기대 '${anc.tv}'(r${anc.r} 의 ${tgt}) ${hitD ? 'OK' : 'NG'}`);
+            if (!nr && cur !== anc.sv) { await probe.setByEditor(p, cRow.row, src, cur).catch(() => false); await p.waitForTimeout(400); }
+            if (hitD) { okD = true; break; }
+          }
+          if (anyAnchor) { put(x.row_id, okD ? 'PASS' : 'FAIL', `${crNm} r${cRow.row} 원천 칸 직접 입력(${selfTrig ? '자기 칸 = 값 변경 이벤트 원천' : byLit.length ? `AS-IS 분기 리터럴 ${[...new Set(lits)].join('/')} 로 고른 원천` : '원천'} ${cand.join('/')}): ${tried.join(' | ')}${okD ? '' : ' — 같은 원천 값의 기존 행과 다른 값(직접 입력 연쇄 미동작)'} · AS-IS ${(c.raws || []).slice(0, 2).map(s => s.slice(0, 90)).join(' | ')}${c.viaPopup ? ' · 팝업 선택 경로는 M4 에서 판정' : ''}`); continue; }
+        }
+      }
       if (c.viaPopup) { put(x.row_id, '판정필요', `${tgt}: 원천 ${srcs.join('/')} 이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4 팝업 선택값 반영 검사에서 판정)`); continue; }
       // T356: AS-IS 대입 문장이 전부 자기 칸 대입(팝업 선택값 · 조회 후 표시 변환) — 다른 칸에서 이어지는 연쇄 아님(근거 = 대입 문장 원문)
       if (!srcs.length && c.selfAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 값 대입이 자기 칸 대입뿐(${c.selfAssign === 'popup' ? '자기 칸 더블클릭 팝업 선택값 — 반영은 M4·G5 에서 판정' : c.selfAssign === 'transform' ? '조회 후 자기 값 표시 변환 — 표시값은 A2·H5 에서 판정' : c.selfAssign === 'reject' ? '자기 칸 입력 거부 — 메시지 뒤 고정 값으로 되돌림 · 메시지는 E4 에서 판정(T367)' : c.selfAssign}) — 연쇄 채움 대상 아님 · AS-IS ${(c.raws || []).slice(0, 2).map(s => s.slice(0, 120)).join(' | ')}`); continue; }
@@ -765,6 +1147,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 이 컬럼을 읽기만 함(후보·값을 쓰는 문장 없음) — 후보 재구성 대상 아님 · AS-IS ${(c.raws || [])[0]?.slice(0, 120) || ''}`); continue; }
       // T368(2026-11-19 SCP0005): AS-IS 가 이 칸에 값만 대입하고 후보 설정 문장이 없으면 후보 재구성 규칙 아님(값 채움은 C3 행) — 근거 = mapping_trace valueOnly 대입 문장 원문
       if (c.valueOnly) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 값 대입뿐(후보 설정 문장 없음) — 후보 재구성 대상 아님(값 채움은 C3) · AS-IS ${(c.raws || []).slice(0, 2).map(s => s.slice(0, 120)).join(' | ')}`); continue; }
+      // T541(2026-11-25 SCP0005 PRIORITY C2·C6): 원천도 AS-IS 문장도 없는 칸(대조표 후보만) — AS-IS 원문에 이 칸 값·후보를 쓰는 문장이 0건이면 연쇄 대상 아님(근거 = 원문 검색 결과)
+      if (!src && !(c.raws || []).length) { const aw = asisWrites(tgt); if (aw.files.length && !aw.writes.length) { put(x.row_id, 'NA', `${tgt}: AS-IS 원문(${aw.files.join(', ')})에 이 칸 값·후보를 쓰는 문장 0건(행 값 대입 · SetValue·SetText · 콤보 설정 · 칸 번호 변수 ${aw.vars.join(',') || '없음'} 포함) — ${x.rule_id === 'C2' ? '후보 재구성' : '무변경 편집 연쇄'} 대상 아님 · 원장 근거 ${(x.asis_ref || '-').slice(0, 60)}`); continue; } }
       if (!src) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 해석 불가 — AS-IS ${(c.raws || [])[0] || ''}`); continue; }
       if (!(await probe.editable(p, cRow.row, src))) { put(x.row_id, '판정필요', `원천 ${src} ${crNm} 편집 불가`); continue; }
       if ((await probe.candidates(p, cRow.row, tgt)) == null) { put(x.row_id, '판정필요', `${tgt} 콤보(dataMap) 아님 — 후보 변화 비교 불가(값 채움은 C3)`); continue; }
@@ -808,6 +1192,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     for (const { x, c } of cols.filter(t => t.x.rule_id === 'C6')) {
       const tgt = c.name || ''; const src = (c.src || []).find(s => s !== tgt) || '';
       if (c.noAssign) { put(x.row_id, 'NA', `${tgt}: AS-IS 문장이 이 컬럼을 읽기만 함(연쇄로 값을 쓰는 문장 없음) — 무변경 종료 연쇄 검사 대상 아님 · AS-IS ${(c.raws || [])[0]?.slice(0, 120) || ''}`); continue; }
+      // T541(2026-11-25 SCP0005 PRIORITY C2·C6): 원천도 AS-IS 문장도 없는 칸(대조표 후보만) — AS-IS 원문에 이 칸 값·후보를 쓰는 문장이 0건이면 연쇄 대상 아님(근거 = 원문 검색 결과)
+      if (!src && !(c.raws || []).length) { const aw = asisWrites(tgt); if (aw.files.length && !aw.writes.length) { put(x.row_id, 'NA', `${tgt}: AS-IS 원문(${aw.files.join(', ')})에 이 칸 값·후보를 쓰는 문장 0건(행 값 대입 · SetValue·SetText · 콤보 설정 · 칸 번호 변수 ${aw.vars.join(',') || '없음'} 포함) — ${x.rule_id === 'C2' ? '후보 재구성' : '무변경 편집 연쇄'} 대상 아님 · 원장 근거 ${(x.asis_ref || '-').slice(0, 60)}`); continue; } }
       if (!src) { put(x.row_id, '판정필요', `${tgt} 연쇄 원천 해석 불가`); continue; }
       if (!(await probe.editable(p, cRow.row, src))) { put(x.row_id, '판정필요', `원천 ${src} ${crNm} 편집 불가`); continue; }
       if (!((await probe.value(p, cRow.row, src)) ?? '')) { const cc = (await probe.candidates(p, cRow.row, src)) || []; const v = cc.find(t => t.trim()); if (v) { await probe.setByEditor(p, cRow.row, src, v); await p.waitForTimeout(600); } }
@@ -883,9 +1269,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const want = c.d5 || ''; const isNum = col.dataType === 2 || /^[nNcCpP]\d*$/.test(col.format); const isDate = col.dataType === 4 || /y{2,}|M{2}|d{2}/.test(col.format);
         const ok = want === 'COMBO' ? (col.hasMap || col.editor) : want === 'NUMBER' ? isNum : want === 'DATE' ? isDate : want === 'CHECK' ? (col.dataType === 3 || col.hasMap) : want === 'TEXT' ? (!col.hasMap && !isNum && !isDate) : want === 'POPUP' ? !col.hasMap : want === 'IMAGE' ? true : null;
         const implicitText = /AS-IS 기본|TextCellType\)\s*$|기본\(TextCellType/.test(c.d5Src || '') && (!want || want === 'TEXT');
-        put(x.row_id, (implicitText ? 'PASS' : ok === null ? 'NA' : ok ? 'PASS' : 'FAIL'), `팝업 ${b}: AS-IS ${want || '미식별'}(${c.d5Src || ''}) ↔ TO-BE dataType=${col.dataType} dataMap=${col.hasMap ? 'Y' : 'N'}${col.format ? ' format=' + col.format : ''}` + (implicitText ? ' — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님' : ok === null ? ' — AS-IS 셀 타입 미식별(대조 불가)' : ''));
+        put(x.row_id, (implicitText ? 'PASS' : ok === null ? 'ERROR' : ok ? 'PASS' : 'FAIL'), `${!implicitText && ok === null ? '[미검증] ' : ''}팝업 ${b}: AS-IS ${want || '미식별'}(${c.d5Src || ''}) ↔ TO-BE dataType=${col.dataType} dataMap=${col.hasMap ? 'Y' : 'N'}${col.format ? ' format=' + col.format : ''}` + (implicitText ? ' — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님' : ok === null ? ' — AS-IS 셀 타입 미식별(대조 불가)' : ''));
       } else if (x.rule_id === 'H2') {
-        if (!rowsInPop || col.editable == null) { put(x.row_id, '판정필요', `팝업 ${b}: 행 ${rowsInPop} — 셀 색 판정 불가(데이터 0 또는 편집 판정 실패)`); continue; }
+        if (!rowsInPop || col.editable == null) { put(x.row_id, 'ERROR', `[측정 전제 미충족] 팝업 ${b}: 행 ${rowsInPop} — 셀 색 판정 불가(데이터 0 또는 편집 판정 실패)`); continue; }  /* VMO 20261126130850_SELF_3 */
         const yellow = /wj-cell-editable/.test(col.cls); const gray = /wj-cell-non-editable/.test(col.cls);
         const bad = (col.editable && !yellow) || (!col.editable && yellow);
         put(x.row_id, bad ? 'FAIL' : (!col.editable && gray) ? '판정필요' : 'PASS', `팝업 ${b}: 편집=${col.editable} · 노랑=${yellow}${gray ? ' · 회색' : ''}${bad ? ' — 편집 가능/표시 불일치' : ''}`);
@@ -915,8 +1301,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       for (const seg0 of guard.split('▸').map(s => s.trim()).filter(Boolean)) {
         if (/^for\s*\(/.test(seg0) || /fps\.Name\s*==|IsLock\(|siMain\s*!=\s*null|SheetName\s*==/.test(seg0)) continue; // 루프·시트 guard = 항상 성립
         const neg = /^else of/.test(seg0); const seg = seg0.replace(/^else of\s*/, '').replace(/^if\s*/, '');
-        const g = /Get(?:Text|Value)\(\s*[\w.+\s-]+,\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"/.exec(seg)
-          || /dr\[DefColumns\.([A-Z0-9_]+)(?:\.ToLower\(\))?\]\.ToString\(\)\s*(==|!=)\s*"([^"]*)"/.exec(seg);
+        const g = /Get(?:Text|Value)\(\s*[\w.+\s-]+,\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)(?![a-z])\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"/.exec(seg)
+          || /dr\[DefColumns\.([A-Z0-9_]+)(?![a-z])(?:\.ToLower\(\))?\]\.ToString\(\)\s*(==|!=)\s*"([^"]*)"/.exec(seg);
         if (!g) { cannot.push(seg0.slice(0, 80)); continue; }
         const v = ((await probe.value(p, row, g[1])) ?? '').trim();
         let h = g[2] === '==' ? v === g[3] : v !== g[3]; if (neg) h = !h;
@@ -992,30 +1378,32 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       for (let i = asisRows.length - 1; i >= 0; i--) if (handled.has(asisRows[i].row_id)) asisRows.splice(i, 1);
       if (!tr.length && !asisRows.length) { await p.unroute(/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i).catch(() => undefined); return; }
     }
-    if (n0 <= 0) { for (const { x } of tr) put(x.row_id, '판정필요', '조회 0행 — 기존행 기반 위반 입력 불가'); return; }
+    if (n0 <= 0) { for (const { x } of tr) put(x.row_id, 'ERROR', '[측정 전제 미충족] Division 후보 순회 뒤에도 조회 0행 — 기존행 기반 위반 입력 불가'); return; }  /* 2026-11-26 VMO 20261126130850_SELF_3: 데이터 없음 = 미검증(판정필요는 사람이 판단할 때만) */
     const ex = await probe.findRow(p, 'existing'); if (!ex) return;
     type Viol = { kind: string; col: string; value: string; note: string };
     const planViolation = (guard: string, vars: Record<string, string>): Viol | null => {
       const last = guard.split('▸').map(s => s.trim()).filter(s => !/^for\s*\(|fps\.Name|IsLock\(|siMain\s*!=\s*null/.test(s)).pop() || '';
-      const seg = last.replace(/^if\s*/, '');
-      const varCol = (v: string) => vars[v] || (/^s(\w+)$/.exec(v) ? Object.entries(vars).find(([k]) => k.toLowerCase() === v.toLowerCase())?.[1] : '') || '';
+      // 2026-11-26 T659: 가드가 그리드 칸을 변수 없이 바로 읽으면(siMain.GetValue(i, siMain.GetColumnIndex(DefColumns.VALID_YN)).ToString() == "") 그 칸을 합성 변수로 바꾼다
+      const vv: Record<string, string> = { ...vars };
+      const seg = last.replace(/^if\s*/, '').replace(/\w+\.Get(?:Value|Text)\(\s*[^,()]+,\s*\w+\.GetColumnIndex\(\s*Def\w*\.([A-Z0-9_]+)(?![a-z])\s*\)\s*\)(?:\.ToString\(\))?(?:\.Trim\(\))?/g, (_s: string, c: string) => { const k = `__C_${c}`; vv[k] = c; return k; });
+      const varCol = (v: string) => vv[v] || (/^s(\w+)$/.exec(v) ? Object.entries(vv).find(([k]) => k.toLowerCase() === v.toLowerCase())?.[1] : '') || asisVarCol(v);
       let m: RegExpExecArray | null;
       if ((m = /\b(\w+)\s*==\s*""|string\.IsNullOrEmpty\(\s*(\w+)\s*\)/.exec(seg))) { const col = varCol(m[1] || m[2]); return col ? { kind: 'empty', col, value: '', note: `${col} 빈값` } : null; }
       if ((m = /Convert\.ToInt32\((\w+)\)\s*>\s*Convert\.ToInt32\((\w+)\)/.exec(seg))) { const a = varCol(m[1]), b = varCol(m[2]); return a && b ? { kind: 'gt', col: a, value: `>${b}`, note: `${a} > ${b}` } : null; }
       if ((m = /(\w+)\.DayOfWeek\s*!=\s*DayOfWeek\.(\w+)/.exec(seg))) { const col = varCol(m[1].replace(/^dt/, 's')) || varCol(m[1]); return col ? { kind: 'dow', col, value: m[2], note: `${col} 요일 ≠ ${m[2]}` } : null; }
       if ((m = /GetByteCount\(\s*(\w+)\s*\)\s*>=?\s*(\d+)/.exec(seg))) { const col = varCol(m[1]); return col ? { kind: 'len', col, value: m[2], note: `${col} ${m[2]}바이트 이상` } : null; }
       // 2026-11-03 EG169 확장 — 정수>0(Convert.ToInt32(x) <= 0 · x <= 0) · 조건부 필수(a != "" && b == "") · 숫자 아님(!int.TryParse/IsNumeric) · 상한(Convert.ToDecimal(x) > N)
-      if ((m = /(?:Convert\.To(?:Int32|Int64|Decimal|Double)\(\s*(\w+)\s*\)|\b(\w+))\s*<=?\s*0\b/.exec(seg))) { const col = varCol(m[1] || m[2]); if (col) return { kind: 'nonpos', col, value: '0', note: `${col} 0 이하` }; }
+      if ((m = /(?:(?:Convert\.To(?:Int32|Int64|Decimal|Double)|(?:[Dd]ecimal|[Ii]nt(?:32|64)?|[Dd]ouble|[Ll]ong)\.Parse)\(\s*(\w+)\s*\)|\b(\w+))\s*<=?\s*0\b/.exec(seg))) { const col = varCol(m[1] || m[2]); if (col) return { kind: 'nonpos', col, value: '0', note: `${col} 0 이하` }; }
       if ((m = /(\w+)\s*!=\s*""\s*&&\s*(\w+)\s*==\s*""/.exec(seg))) { const a = varCol(m[1]), b = varCol(m[2]); if (a && b) return { kind: 'condreq', col: b, value: a, note: `${a} 있고 ${b} 빈값` }; }
       if ((m = /!\s*(?:int|long|decimal|double)\.TryParse\(\s*(\w+)|!\s*IsNumeric\(\s*(\w+)/.exec(seg))) { const col = varCol(m[1] || m[2]); if (col) return { kind: 'nan', col, value: 'ABC', note: `${col} 숫자 아님` }; }
-      if ((m = /Convert\.To(?:Int32|Int64|Decimal|Double)\(\s*(\w+)\s*\)\s*>\s*(\d+)/.exec(seg))) { const col = varCol(m[1]); if (col) return { kind: 'gtn', col, value: m[2], note: `${col} > ${m[2]}` }; }
+      if ((m = /(?:Convert\.To(?:Int32|Int64|Decimal|Double)|(?:[Dd]ecimal|[Ii]nt(?:32|64)?|[Dd]ouble|[Ll]ong)\.Parse)\(\s*(\w+)\s*\)\s*>\s*(\d+)/.exec(seg))) { const col = varCol(m[1]); if (col) return { kind: 'gtn', col, value: m[2], note: `${col} > ${m[2]}` }; }
       // From Site == To Site (AS-IS: p_from_site == p_to_site → valid_chk=false → MSG00253)
       if (/valid_chk/.test(seg) && /FROM_SITE_CODE|TO_SITE_CODE/.test(Object.values(vars).join(',') + 'TO_SITE_CODE')) return { kind: 'same', col: 'TO_SITE_CODE', value: 'FROM_SITE_CODE', note: 'TO_SITE_CODE = FROM_SITE_CODE(동일 사이트)' };
       return null;
     };
     // ASIS 문장 행(원장)은 변수→컬럼 표가 없다 — AS-IS 지역변수 관례(s/str/dt + Camel = 컬럼 UPPER_SNAKE)로 그리드 binding 에 맞춰 추정(2026-10-26)
     const bindsAll = (await probe.allBindings(p)) || [];
-    const guessVars = (guard: string): Record<string, string> => { const out: Record<string, string> = {}; for (const m of guard.matchAll(/\b(s|str|dt)([A-Z]\w+)\b/g)) { const snake = m[2].replace(/([a-z0-9])([A-Z])/g, '$1_$2').toUpperCase(); const hit = bindsAll.find(b => b === snake || b === snake.replace(/_CODE$/, '') || b === snake + '_CODE'); if (hit) out[m[0]] = hit; } return out; };
+    const guessVars = (guard: string): Record<string, string> => { const out: Record<string, string> = {}; for (const m of guard.matchAll(/\b(s|str|dt)([A-Z]\w+)\b/g)) { const snake = m[2].replace(/([a-z0-9])([A-Z])/g, '$1_$2').toUpperCase(); const hit = bindsAll.find(b => b === snake || b === snake.replace(/_CODE$/, '') || b === snake + '_CODE'); if (hit) out[m[0]] = hit; } for (const m of guard.matchAll(/\b([A-Za-z_]\w*)\b/g)) { if (out[m[1]]) continue; const c0 = asisVarCol(m[1]); if (c0) out[m[1]] = c0; } return out; };
     const dowName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const items = [...tr.filter(t => !t.c.e4None).flatMap(({ x, c }) => (c.e4 || []).map(e => ({ rid: x.row_id, e }))), ...asisRows.map(x => ({ rid: x.row_id, e: { meth: (x.asis_ref.split('.').pop() || ''), line: '', msg: x.target, tobe: '', text: '', args: '', guard: x.condition, vars: guessVars(x.condition) } }))];
     // 위반 입력은 신규행에 넣는다(기존행은 키 컬럼이 잠겨 FROM/TO·Site 위반을 만들 수 없다) — Insert 가 있으면 1행 추가해 공용으로 쓴다
@@ -1025,6 +1413,8 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // CR-103: AS-IS 편집 버튼 진입점(EditButton · btnEdit Click)에서 닿는 메서드 — Save 진입점에서도 닿는 것은 저장 검증이라 제외(saveReach 가 먼저 걸러진다)
     const editReach = (() => { const by = new Map<string, boolean[]>(); const isEdit = (z: Record<string, string>) => /^EditButton$|btnEdit\b.*Click|^this\.btnEdit/i.test(String(z.entry || '')) || /^EditButton$/i.test(String(z.handler || '')); try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions_entries.csv'), 'utf8').replace(/^\uFEFF/, ''))) { const m = String(z.method || ''); if (!m) continue; if (!by.has(m)) by.set(m, []); by.get(m)!.push(isEdit(z)); } } catch { /* 사실 없음 */ } /* 그 메서드에 닿는 진입점이 전부 편집 버튼일 때만 — 셀 변경·다른 버튼에서도 닿으면 그 경로의 메시지일 수 있어 제외 */ const s = new Set<string>(); for (const [m, v] of by) if (v.length && v.every(Boolean)) s.add(m); return s; })();
     const seenRid = new Set<string>();
+    // T551(2026-11-25): 저장 오류 응답 분기 메시지 행 — 항목 순회 뒤 가짜 오류 응답으로 한꺼번에 구동
+    const saveErrRows: { rid: string; e: { meth: string; msg: string; tobe: string; text: string; guard: string }; codes: string[]; file: string; codeLine: number }[] = [];
     for (const { rid, e } of items) {
       if (seenRid.has(rid)) continue; seenRid.add(rid);
       // 2026-11-11 T243: 저장 전 검증인가 = 메서드 이름이 아니라 호출 경로 사실 — AS-IS Save 진입점(SaveButton·btnSave Click)에서 닿는 메서드면 저장 경로다
@@ -1034,19 +1424,108 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       // 2026-11-18 SCP0111 V-f679aa42·V-8f1324a1: 다른 시험에 판정을 넘기는 행 — 부분 재판정(--only)에서 이 시험만 돌면 앞 실행의 확정 판정(NA 'catch 블록 예외 메시지')을 판정필요로 덮었다 → 이전 결과에 확정 판정(PASS·FAIL·NA)이 있으면 쓰지 않는다
       // T504(2026-11-20 SCP0028 T-0caf6c62·T-4677b9e5): 팝업 버튼에서만 닿는 메서드(FindDelete 등)의 결과 분기 메시지는 'BTN 팝업 경로' 시험이 재므로 여기서 판정필요를 쓰지 않는다
       if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth) && viaPopBtn(e.meth) && guardBranch(e.guard)) continue;
+      // T542(2026-11-25 SCP0005 E4 4행 MSG00209): 셀 값 변경 이벤트 경로(…_Changed · EditChange) 메시지는 Save 로 닿지 않아 '해당 동작 시나리오에서 판정' 으로 끝났다.
+      //   AS-IS 원문에서 메시지 앞 조건 'Parse(합계 변수) > N' 과 합계 식의 칸을 읽어, 그 칸들에 셀 상한(cell_rules max) 안의 값을 차례로 넣어 합계가 N 을 넘게 하고 메시지가 뜨는지 잰다(저장 없음 · 끝에 값 원복)
+      if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth) && /(?:Changed|EditChange|Change|EditModeOff)$/i.test(e.meth) && e.msg) {
+        const sg = asisSumGuard(e.meth, e.msg);
+        if (sg) {
+          // T550(2026-11-25 SCP0005 T-dba493fd·T-eea49685·T-6a512ae5 '다른 메시지(기대 문구)'): 기대 문구를 자리표시자만 지운 '은  이하 입니다.' 로 비교했다(AS-IS 인자 'Total L/T'·'999' 를 넣지 않음).
+          //   또 상한 값을 한 칸에 넣어 합계가 경계값(n · AS-IS 조건 '> n' 에서 위반 아님)인 입력도 위반 입력으로 셌고, 그때 잡힌 알림의 출처는 미확인(앞 시험 원복 입력 때 남은 알림일 수 있어 입력 전마다 비운다).
+          //   → AS-IS 호출 인자(리터럴만 값 · 그 밖은 와일드카드)로 틀을 채워 비교 · 합계가 처음 n+1 이 되게 입력 계획(sumCrossPlan) · 경계 안 입력에서 뜬 알림은 따로 FAIL 근거로 적음 · AS-IS 메시지 뒤 되돌림 값(resetAfter)도 잰다
+          const row = nrE4 ? nrE4.row : ex.row; const where = nrE4 ? '신규행' : '기존행';
+          const [sf, sl] = sg.ref.split(':'); const SL = (ASIS_SRC.find(f => f.file === sf) || { lines: [] as string[] }).lines; const mIdx = Number(sl) - 1;
+          const aExprs = callArgs(SL[mIdx] || '', e.msg) || []; const aVals = aExprs.map(a => evalArg(a)); const resetTo = resetAfter(SL, mIdx);
+          const before: Record<string, string> = {}; for (const col of sg.cols) before[col] = String((await probe.value(p, row, col)) ?? '');
+          const plan = sumCrossPlan(sg.cols.map(c => Number(before[c]) || 0), sg.cols.map(c => Number(CELLMAX[c] || '') || sg.n), sg.n);
+          const sum0 = sg.cols.reduce((a, col) => a + (Number(before[col]) || 0), 0); let sum = sum0; const typed: string[] = []; let shown: string[] = []; let early: string[] = []; let last = ''; let lastGot = ''; let blocked = '';
+          const quiet0 = await msgQuiet(nscm, 6_000);  // T590(2026-11-25): 앞 시험 알림이 화면에서 사라질 때까지(토스트 4초) 기다림 · 종전 collectMsgs 600ms 는 닫힌 토스트 글자를 비우지 못했다
+          for (const st of plan || []) {
+            const col = sg.cols[st.idx];
+            if ((await probe.editable(p, row, col)) !== true) { blocked = `${col} 편집 불가`; typed.push(blocked); break; }
+            await msgQuiet(nscm, 6_000);  // T590
+            const okSet = await probe.setByEditor(p, row, col, String(st.value)); await p.waitForTimeout(400);
+            const msgs = await collectMsgs(nscm, 1_500, []); const got = String((await probe.value(p, row, col)) ?? '');
+            typed.push(`${col} '${before[col]}'→'${st.value}'${okSet ? '' : '(입력 실패)'} 값 '${got}' 합계 ${st.sumAfter}`);
+            if (!okSet) { blocked = `${col} 입력 실패`; break; }
+            sum = st.sumAfter; last = col; lastGot = got;
+            if (msgs.length) { if (st.sumAfter > sg.n) shown = msgs; else early = msgs; break; }
+          }
+          for (const col of sg.cols) { const now = String((await probe.value(p, row, col)) ?? ''); if (now !== before[col]) { await probe.setByEditor(p, row, col, before[col]).catch(() => false); await p.waitForTimeout(250); } }
+          await nscm.clearDialogs();
+          // ASIS 문장 행은 문구가 없다 — 같은 메시지 TRACE E4 대조(AS-IS 문구 · 짝 TO-BE 문구)에서 가져온다
+          const twin = tr.flatMap(t => t.c.e4 || []).find(z => z.msg === e.msg && z.meth === e.meth) || tr.flatMap(t => t.c.e4 || []).find(z => z.msg === e.msg);
+          const tpls = [e.text || twin?.text || '', ...ASIS_MSG(e.msg), ...msgTexts(e.tobe || twin?.tobe || '')].filter(Boolean); const txt = shown.join(' | ');
+          const mt = shown.length ? matchTpl(tpls, aVals, shown) : null;
+          const rs = last && resetTo[last] != null ? resetTo[last] : null; const resetOk = rs == null || lastGot === rs;
+          const ev = `${e.msg}${e.tobe ? `→${e.tobe}` : ''} 틀 '${(tpls[0] || '').slice(0, 40)}'${e.text ? '' : twin?.text ? '(같은 메시지 TRACE 대조 · T590)' : ASIS_MSG(e.msg).length ? '(AS-IS 메시지 사전 TB_FX_MessageInfo · T590)' : ''} · AS-IS 인자 [${aExprs.map((a, i) => aVals[i] ?? `${a.slice(0, 30)}(값 미상 · 와일드카드)`).join(', ') || '없음'}] · AS-IS ${sg.ref} ${e.meth}: 합계(${sg.cols.join('+')}) > ${sg.n} 이면 메시지${Object.keys(resetTo).length ? ` 뒤 바꾼 칸 '${Object.values(resetTo)[0]}'` : ''} · ${where} r${row} 합계 ${sum0}→${sum} · 입력 ${typed.join(', ') || '없음'} · 알림 '${txt.slice(0, 120) || '없음'}'${last ? ` · 마지막 입력 칸 ${last} 값 '${lastGot}'` : ''}${quiet0.length ? ` · 입력 전 6초 뒤에도 보인 알림 '${quiet0.join(' | ').slice(0, 60)}'` : ''}`;
+          if (!plan) put(rid, 'ERROR', `[측정 전제 미충족] 칸 상한(cell_rules max) 안에서 합계를 ${sg.n} 넘게 만들 입력 없음(시작 합계 ${sum0}) · ${ev}`);
+          else if (early.length) put(rid, 'FAIL', `합계 ${sum}(${sg.n} 이하 · AS-IS 는 '> ${sg.n}' 일 때만 메시지)에서 알림 '${early.join(' | ').slice(0, 120)}' · ${ev}`);
+          else if (sum <= sg.n) put(rid, 'ERROR', `[측정 전제 미충족] 합계가 ${sg.n} 을 넘게 입력하지 못함(${blocked || '입력 중단'}) · ${ev}`);
+          else if (!shown.length) put(rid, 'FAIL', `${ev} — 합계 ${sum} > ${sg.n} 인데 메시지 없음`);
+          else if (!tpls.length) put(rid, 'ERROR', `[측정 경로 없음] ${e.msg} 기대 문구 미상(같은 메시지 TRACE E4 대조 없음) · ${ev}`);
+          else if (!mt) put(rid, 'FAIL', `${ev} — 다른 메시지(AS-IS 틀·짝 TO-BE 틀과 다름)`);
+          else if (!mt.argsOk) put(rid, 'FAIL', `${ev} — 틀은 같고 인자 값이 AS-IS 와 다름('${mt.hit.slice(0, 80)}')`);
+          else put(rid, resetOk ? 'PASS' : 'FAIL', `${ev} — 메시지 일치(${mt.exact ? 'AS-IS 인자 값까지' : '값 미상 자리 제외'})${rs != null ? (resetOk ? ` · 바꾼 칸 '${rs}' 되돌림 일치` : ` · 바꾼 칸 값 '${lastGot}' ≠ AS-IS 되돌림 '${rs}'`) : ''}`);
+          continue;
+        }
+      }
+      // T552(2026-11-25 SCP0005 V-4a0b6271·T-2c4e7c8a·T-e19b6757 MSG00265 '해당 동작 시나리오(btnEaxel_Upload_Click)에서 판정'): Save 로 닿지 않는 버튼 클릭 메서드의 메시지를 판정필요로 남겼다.
+      //   AS-IS 원문에서 대화창(ShowDialog) 뒤 분기 없이 뜨는 메시지(afterDialogMsg · SCP0005 cs:379→381)는 그 버튼 → 대화창 → 닫기만으로 재현된다(업로드·저장 없음 · 쓰기 요청은 이 시험 시작에서 끊음).
+      //   버튼 = 클릭 메서드의 컨트롤(actions_entries 'this.<컨트롤>.Click') Text(props.csv)와 같은 이름의 TO-BE 버튼(funcButton · 끝 단어 일치 T544). 대화창 결과로 갈리는 메시지는 대상 아님(종전 판정필요)
+      if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth) && e.msg) {
+        const adm = ASIS_SRC.map(f => ({ f, a: afterDialogMsg(f.lines, e.meth, e.msg) })).find(z => !!z.a);
+        const ctlE = BTNPOP.ents.find(z => String(z.handler || '') === e.meth && /^this\.\w+\.Click$/.test(String(z.entry || '').trim()));
+        const ctl = ctlE ? ((/^this\.(\w+)\.Click$/.exec(String(ctlE.entry).trim()) || [])[1] || '') : '';
+        if (adm && adm.a && ctl) {
+          const btxt = (() => { try { const z = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'props.csv'), 'utf8').replace(/^﻿/, '')).find(q => q.target === ctl && q.prop === 'Text'); return z ? String(z.value || '').replace(/^"+|"+$/g, '').trim() : ''; } catch { return ''; } })();
+          const ref = `${adm.f.file}:${adm.a.dialogLine + 1}(${adm.a.popup || '대화창'}.ShowDialog) → :${adm.a.msgLine + 1}(${e.msg})`;
+          const head = `${e.msg}${e.tobe ? `→${e.tobe}` : ''} · AS-IS ${ctl}('${btxt || '-'}') → ${e.meth} · ${ref} = 대화창을 닫으면(업로드 여부와 관계없이) 메시지`;
+          await nscm.clearDialogs(); await collectMsgs(nscm, 600, []);
+          const fb = btxt ? await funcButton(nscm, btxt) : { loc: null, names: [] as string[] };
+          if (!fb.loc) { put(rid, 'ERROR', `[측정 경로 없음] TO-BE 에서 AS-IS 버튼 글자 '${btxt || '-'}'(${fb.names.join('/') || '-'}) 와 같은 버튼을 못 찾음 · ${head}`); continue; }
+          const dlgs = p.locator('[role="dialog"]:visible'); const d0 = await dlgs.count().catch(() => 0);
+          await fb.loc.click({ timeout: 10_000 }).catch(() => undefined);
+          let opened = false; for (let k = 0; k < 16 && !opened; k++) { opened = (await dlgs.count().catch(() => 0)) > d0; if (!opened) await p.waitForTimeout(500); }
+          if (!opened) { const al = await collectMsgs(nscm, 1_000, []); put(rid, 'ERROR', `[측정 실패] TO-BE '${(await fb.loc.innerText().catch(() => '')).trim()}' 눌러도 대화창 안 열림(8초) · 알림 '${al.join(' | ').slice(0, 80) || '없음'}' · ${head}`); continue; }
+          const dlg = dlgs.last(); const title = ((await dlg.locator('h2, #draggable-dialog-title').first().innerText().catch(() => '')) || '').trim().slice(0, 40);
+          const cb = dlg.getByRole('button', { name: /^(Close|닫기|Cancel|취소)$/i }).first(); const xb = dlg.locator('button[aria-label*="close" i], button[aria-label*="닫기"]').first();
+          let how = '';
+          if (await cb.isVisible().catch(() => false)) { how = `'${(await cb.innerText().catch(() => '')).trim()}' 버튼`; await cb.click({ timeout: 5_000 }).catch(() => undefined); }
+          else if (await xb.isVisible().catch(() => false)) { how = '닫기(X)'; await xb.click({ timeout: 5_000 }).catch(() => undefined); }
+          else { how = 'Escape'; await p.keyboard.press('Escape').catch(() => undefined); }
+          const seen: string[] = []; let closed = false;
+          for (let k = 0; k < 10; k++) { await p.waitForTimeout(400); closed = (await dlgs.count().catch(() => 0)) <= d0 || !(await dlg.isVisible().catch(() => false)); const t = await nscm.alertText().catch(() => ''); if (t && !seen.includes(t)) seen.push(t); }
+          for (const z of await collectMsgs(nscm, 1_500, [])) if (!seen.includes(z)) seen.push(z);
+          if (!closed) { await closeVisibleDialogs(nscm).catch(() => undefined); put(rid, 'ERROR', `[측정 실패] 대화창 '${title}' 을 ${how} 로 닫지 못함 · ${head}`); continue; }
+          // ASIS 문장 행은 문구가 없다 — 같은 메시지·메서드의 TRACE E4 대조(AS-IS 문구 · 짝 TO-BE 문구)에서 가져온다
+          const twin = tr.flatMap(t => t.c.e4 || []).find(z => z.msg === e.msg && (z.meth === e.meth || !e.meth)) || tr.flatMap(t => t.c.e4 || []).find(z => z.msg === e.msg);
+          const tpls = [e.text || twin?.text || '', ...ASIS_MSG(e.msg), ...msgTexts(e.tobe || twin?.tobe || '')].filter(Boolean);
+          if (!tpls.length) { put(rid, 'ERROR', `[측정 경로 없음] ${e.msg} 기대 문구 미상(같은 메시지 TRACE E4 대조 없음) · 화면 알림 '${seen.join(' | ').slice(0, 100) || '없음'}' · ${head}`); continue; }
+          const mt = matchTpl(tpls, [], seen);
+          const ev = `${head} · TO-BE '${(await fb.loc.innerText().catch(() => '')).trim()}' → 대화창 '${title}' 열림 → 업로드 없이 ${how} 로 닫음 → 알림 '${seen.join(' | ').slice(0, 120) || '없음'}'`;
+          put(rid, mt ? 'PASS' : 'FAIL', `${ev}${mt ? ` — 메시지 일치('${mt.hit.slice(0, 60)}')` : ` — AS-IS 는 닫은 뒤 '${(e.text || e.msg).slice(0, 60)}' · TO-BE ${seen.length ? '다른 메시지' : '메시지 없음'}`}`);
+          continue;
+        }
+      }
       if (!/^Save/i.test(e.meth) && !saveReach.has(e.meth)) { const pv = prevVerdict(rid); if (pv && ['PASS', 'FAIL', 'NA'].includes(pv.result)) continue; put(rid, '판정필요', `${e.msg || '(동적)'} — ${e.meth} 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(${e.meth})에서 판정`); continue; }
       const viol = planViolation(e.guard, e.vars);
       if (!viol) {
         const g = e.guard.split('▸').pop()?.trim() || '';
         // 입력 위반으로 만들 수 없는 메시지 — 경로별로 판정(2026-10-26: 판정필요를 남기지 않는다)
         if (/\.Success\b|\bSuccess\s*==\s*true|IsSuccess/.test(g) && !/^else|!\s*\w*\.?Success/.test(g)) put(rid, 'NA', `${e.msg || '(동적)'}: 저장 성공 분기(${g.slice(0, 40)})의 안내 메시지 — 위반 입력으로 만들 수 없는 메시지(저장 결과 메시지는 F2·E4_F1LINK 에서 판정)`);
-        else if (/errCode\s*==\s*"990[1-4]0"/.test(g) && !/^else/.test(g)) put(rid, 'FAIL', `${e.msg || '(동적)'}: AS-IS 는 저장 실패 응답의 오류코드(99010 중복·99020/99030/99040 검증 실패)에 따라 문제가 된 행·셀을 색으로 표시하고 그 셀 기준 메시지를 띄운다 — TO-BE 는 저장 실패 시 어느 행·셀이 문제인지 표시하지 않음(대조표 D00-3-043~ 미구현) → FAIL`);
+        // T551(2026-11-25 SCP0005 T-ece1c98b·T-f048d4a9·V-3134fc3e MSG00043 '검사기오판'): 중복 저장 응답을 만들지 않고 대조표 '미구현' 문장으로 FAIL 을 적었고, 오류코드를 AS-IS 에 없는 99030·99040 까지 넓혀 적었다(종전 정규식 고정 '990[1-4]0').
+        //   → 오류코드 집합 = 가드 리터럴(guardCodes) · 그 변수가 응답 표 Rows[0][0] 에서 온다는 원문 근거(codeVarFromCell00)가 있을 때만 시험 끝에 가짜 오류 응답으로 구동(driveSaveErr). 근거가 없으면 측정 경로 없음
+        else if (guardCodes(g)) {
+          const gc = guardCodes(g)!; const src = ASIS_SRC.map(f => ({ f, ln: codeVarFromCell00(f.lines, e.meth, gc.codeVar) })).find(z => z.ln > 0);
+          if (!src) put(rid, 'ERROR', `[측정 경로 없음] ${e.msg || '(동적)'}: 가드 '${g.slice(0, 100)}' 의 ${gc.codeVar} 가 저장 응답 표 Rows[0][0] 에서 온다는 원문 근거 없음(${e.meth}) — 가짜 오류 응답 구동 대상 아님`);
+          else saveErrRows.push({ rid, e, codes: gc.codes, file: src.f.file, codeLine: src.ln });
+        }
         else if (/^else of \(errCode/.test(g)) put(rid, 'NA', `${e.msg}: 그 밖의 서버 오류 코드 → 일반 저장 실패 메시지 — 정상 데이터로는 재현 불가(오류 주입 금지) · 서버 오류 표시는 공통 오류 핸들러(F4 BE 오류 0 로 판정)`);
         else if (/^catch/.test(g)) put(rid, 'NA', `${e.msg || '(동적)'}: catch 블록 예외 메시지(프레임워크 공통 오류 표시) — 검사 대상 아님`);
         // 2026-11-07 T130: _trace 는 _verify(F1) 보다 먼저 돌아 원장의 F1 이 NOT_RUN 이다 — 그때 FAIL 을 적으면 judge 의 E4_F1LINK 가 최종 F1 로 바꿔도
         //   note 의 '원판정:FAIL' 이 남아 regress 오라클(SCP0037 16행 '검사기 원판정 FAIL 유지')에 걸린다 → 미측정이면 NA(E4_F1LINK 대기)로 두고 judge 가 F1 최종값으로 판정
         else if (/Rows\[0\]\[0\]\.ToString\(\)\s*==\s*"S"/.test(g)) put(rid, f1Row && f1Row.result === 'PASS' ? 'PASS' : f1Row && f1Row.result === 'FAIL' ? 'FAIL' : 'NA', `${e.msg}: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 ${f1Row?.result || '미실행'}: ${(f1Row?.evidence || '').slice(0, 100)}) 경로에서 성공 알림·재조회 확인${f1Row && (f1Row.result === 'PASS' || f1Row.result === 'FAIL') ? '' : ' — F1 최종 결과로 재판정(judge E4_F1LINK)'}`);
-        else put(rid, 'NA', `${e.msg}: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard '${g.slice(0, 120)}' (변수→컬럼 ${JSON.stringify(e.vars).slice(0, 80)}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)`);
+        else put(rid, 'ERROR', `[미검증] ${e.msg}: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard '${g.slice(0, 120)}' (변수→컬럼 ${JSON.stringify(e.vars).slice(0, 80)}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)`);
         continue;
       }
       // 위반 값 입력 — 신규행 우선(저장은 route 로 차단되어 DB 에 닿지 않음)
@@ -1091,6 +1570,42 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       // 원복(화면 값만)
       await probe.setByEditor(p, row, viol.col, before).catch(() => undefined); await p.waitForTimeout(300);
     }
+    // T551(2026-11-25 SCP0005 MSG00043): 저장 오류 응답 분기 메시지 — 오류코드마다 한 번 가짜 오류 응답으로 구동(driveSaveErr · 서버 미전송)하고, AS-IS 호출 인자(응답 행 값으로 푼 식)를 채운 틀과 화면 알림을 비교한다.
+    //   알림이 가짜 응답의 MSG 열 표지 그대로면 TO-BE 가 서버 문구를 그대로 띄우는 것 — 실제 서버 문구는 가짜 응답으로 잴 수 없어 측정 경로 없음(결정 대상)
+    if (saveErrRows.length) {
+      const samples = saveRespSamples(); const runs = new Map<string, SaveErrRun>();
+      for (const s of saveErrRows) for (const code of s.codes) if (!runs.has(code)) runs.set(code, await driveSaveErr(nscm, code, [], [], samples));
+      for (const s of saveErrRows) {
+        const SL = (ASIS_SRC.find(f => f.file === s.file) || { lines: [] as string[] }).lines;
+        const ml = SL.findIndex((l, i) => i >= s.codeLine - 1 && l.includes(`"${s.e.msg}"`)); const aExprs = ml >= 0 ? (callArgs(SL[ml], s.e.msg) || []) : [];
+        const twin = tr.flatMap(t => t.c.e4 || []).find(z => z.msg === s.e.msg && z.meth === s.e.meth) || tr.flatMap(t => t.c.e4 || []).find(z => z.msg === s.e.msg);
+        const tpls = [s.e.text || twin?.text || '', ...ASIS_MSG(s.e.msg), ...msgTexts(s.e.tobe || twin?.tobe || '')].filter(Boolean);
+        const head = `${s.e.msg} · AS-IS ${s.file}:${ml + 1} ${s.e.meth} 저장 응답 오류코드 ${s.codes.join('·')}(${s.file}:${s.codeLine} Rows[0][0]) 이면 '${(tpls[0] || '').slice(0, 50)}' 인자 [${aExprs.map(a => a.slice(0, 50)).join(', ') || '없음'}]`;
+        if (!tpls.length) { put(s.rid, 'ERROR', `[측정 경로 없음] 기대 문구 미상(같은 메시지 TRACE E4 대조 없음) · ${head}`); continue; }
+        const parts: { res: 'PASS' | 'FAIL' | 'ERROR'; why: string }[] = [];
+        for (const code of s.codes) {
+          const run = runs.get(code)!;
+          if (!run.ok) { parts.push({ res: 'ERROR', why: `${code}: ${run.why} · ${run.ev}` }); continue; }
+          const aVals = aExprs.map(a => evalArg(a, run.item || undefined)); const mt = matchTpl(tpls, aVals, run.msgs);
+          const exp = `기대 [${aVals.map((v, i) => v ?? `${aExprs[i].slice(0, 20)}(값 미상)`).join(', ')}]`;
+          if (mt && mt.argsOk) parts.push({ res: 'PASS', why: `${code}: 알림 '${mt.hit.slice(0, 80)}' 일치(${exp}) · ${run.ev}` });
+          else if (run.msgs.some(m => m.includes(run.marker))) {
+            // 2026-11-25 T646(SCP0005 MSG00043 3행): 화면이 응답 MSG 열을 그대로 띄우는 것은 가짜 응답 표지로 실측됨 → 실제 문구 = TO-BE 프로시저 원문의 그 오류코드 문구(proc_errmsg.py).
+            //   표지 자리에 원문 문구를 넣은 알림을 AS-IS 틀과 비교한다. 원문 문구를 못 찾으면 종전대로 측정 경로 없음
+            const sv = srvErrMsg(code);
+            if (!sv) parts.push({ res: 'ERROR', why: `[서버 문구 표시] ${code}: TO-BE 알림 = 응답 MSG 열 값 그대로(가짜 응답 표지 '${run.marker}') · AS-IS 는 화면 메시지 ${s.e.msg}(${exp}) — TO-BE 프로시저 원문에서 오류코드 ${code} 문구 못 찾음 · ${run.ev}` });
+            else {
+              const real = run.msgs.map(m => m.split(run.marker).join(sv.msg)); const mt2 = matchTpl(tpls, aVals, real);
+              parts.push({ res: mt2 && mt2.argsOk ? 'PASS' : 'FAIL', why: `${code}: TO-BE 알림 = 응답 MSG 열 그대로(가짜 응답 표지 실측) · 서버 문구 '${sv.msg}'(${sv.where}) → 화면 '${real.join(' | ').slice(0, 80)}' · AS-IS ${s.e.msg} '${(tpls[0] || '').slice(0, 50)}'(${exp}) ${mt2 && mt2.argsOk ? '일치' : '다름'} · ${run.ev}` });
+            }
+          }
+          else if (!run.msgs.length) parts.push({ res: 'FAIL', why: `${code}: 저장 오류 응답 뒤 알림 없음(${exp}) · ${run.ev}` });
+          else parts.push({ res: 'FAIL', why: `${code}: 다른 메시지 '${run.msgs.join(' | ').slice(0, 80)}'(${exp}${mt ? ' · 틀은 같고 인자 다름' : ''}) · ${run.ev}` });
+        }
+        const res = parts.some(z => z.res === 'FAIL') ? 'FAIL' : parts.some(z => z.res === 'ERROR') ? 'ERROR' : 'PASS';
+        put(s.rid, res, `${res === 'ERROR' && !parts[0].why.startsWith('[') ? '[측정 실패] ' : ''}${parts.map(z => z.why).join(' / ')} · ${head} · [가짜 응답 · 서버 미전송]`);
+      }
+    }
     await p.unroute(/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i).catch(() => undefined);
   });
 
@@ -1105,7 +1620,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const r = await openReady(nscm);
     if (!r.authorized) { for (const { x } of tr) put(x.row_id, 'ERROR', '화면 권한 없음'); return; }
     const n0 = await searchAndRows(nscm);
-    if (n0 <= 0) { for (const { x } of tr) put(x.row_id, '판정필요', '조회 0행 — 팝업 프로브 불가'); return; }
+    if (n0 <= 0) { for (const { x } of tr) put(x.row_id, 'ERROR', '[측정 전제 미충족] Division 후보 순회 뒤에도 조회 0행 — 팝업 프로브 불가'); return; }  /* VMO 20261126130850_SELF_3 */
     const ex = await probe.findRow(p, 'existing'); if (!ex) return;
     const done = new Map<string, { ok: boolean; ev: string }>();
     for (const { x, c } of tr) {
@@ -1174,15 +1689,30 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const p = nscm.page;
     const tr = rows.filter(x => x.rule_id === 'A6').map(x => ({ x, c: condOf(x) })).filter(({ c }) => c.et === 'SP' && (c.sort?.length || c.sortNone));
     if (!tr.length) return;
-    const r = await openReady(nscm);
-    if (!r.authorized) { for (const { x } of tr) put(x.row_id, 'ERROR', '화면 권한 없음'); return; }
-    const n0 = await searchAndRows(nscm);
+    // 2026-11-25 D3(플랜 '검사 대상 중복 제거'): 같은 실행(VERIFY_RUN_ID)·같은 계정의 '실전송 건수(A1)' 시험이 남긴 조회 기록(a1_live.json: 조회 본문, 전체 칸, 행 수, 행 데이터)이 있으면
+    //   화면을 다시 열고 조회하지 않고 그 기록으로 같은 판정 코드를 돈다(SCP0005 1차 측정 A6 시험 13초 = 열기·조회). 기록이 없거나 다른 실행·계정·0행이면 종전대로 화면에서 잰다.
+    //   끄기 = VERIFY_A6_REUSE=0. 행 데이터는 그리드 행 순서(c.rows dataItem)이고 그룹 행(키가 모두 '_' 로 시작)은 뺀다
+    type A1Live = { run?: string; user?: string; rows?: number; cols?: string[]; sample?: Record<string, unknown>[]; allCalls?: { menu: string; sheet: string; btn: string; body: string; status: number }[] };
+    const a1: A1Live | null = (() => { if (process.env.VERIFY_A6_REUSE === '0' || !RUN_ID || CL_SELFTEST) return null; try { const j = JSON.parse(fs.readFileSync(path.join(DIR, 'a1_live.json'), 'utf8')) as A1Live; return j.run === RUN_ID && j.user === nscm.curUser && Number(j.rows) > 0 && Array.isArray(j.sample) && Array.isArray(j.allCalls) && Array.isArray(j.cols) ? j : null; } catch { return null; } })();
+    const a1Items = a1 ? (a1.sample || []).filter(d => d && typeof d === 'object' && Object.keys(d).some(k => !k.startsWith('_'))) : [];
+    const reuse = !!a1 && a1Items.length > 0;
+    let n0 = 0;
+    if (reuse) n0 = Number(a1!.rows);
+    else {
+      const r = await openReady(nscm);
+      if (!r.authorized) { for (const { x } of tr) put(x.row_id, 'ERROR', '화면 권한 없음'); return; }
+      n0 = await searchAndRows(nscm);
+    }
+    const srcNote = reuse ? ' · 같은 실행 A1 조회 기록(a1_live.json)으로 판정' : '';
+    const callsOf = (): { menu: string; sheet: string; btn: string; body?: string; status: number }[] => reuse ? a1!.allCalls! : nscm.calls;
+    const bindingsOf = async (): Promise<string[]> => reuse ? a1!.cols! : ((await probe.allBindings(p)) || []);
+    const valuesOf = async (k: string): Promise<string[]> => reuse ? a1Items.slice(0, 5000).map(d => d[k] != null ? String(d[k]) : '') : ((await probe.columnValues(p, k)) || []);
     const paramsOf = (body: string) => { let params: Record<string, unknown> = {}; try { const j = JSON.parse(body || '{}'); params = (j.data && typeof j.data === 'object' ? j.data : j) as Record<string, unknown>; } catch { /* no body */ } return params; };
     for (const { x, c } of tr) {
       if (/SAVE|INS|UPD|DEL/i.test((c.callProc || []).map(cp => cp.btn).join())) { put(x.row_id, 'NA', `${c.name}: 저장 SP — 결과 정렬 대상 아님`); continue; }
       // 이 SP 의 PROC_M 배선(시트/버튼)과 같은 call-proc 요청 본문에서 파라미터를 읽는다(보조 조회 countryCity 본문을 집던 오판 2026-10-26)
       // 스트리밍 응답은 rows 가 null 이라(bod/SEARCH '?행') 호출 기록 + 그리드 행 수로 판단한다
-      const myCall = nscm.calls.find(q => (c.callProc || []).some(cp => cp.menu === ID && q.sheet === cp.sheet && q.btn === cp.btn && q.status < 400));
+      const myCall = callsOf().find(q => (c.callProc || []).some(cp => cp.menu === ID && q.sheet === cp.sheet && q.btn === cp.btn && q.status < 400));
       const params = paramsOf(myCall?.body || '');
       const paramVal = (asisParam: string) => { const k = asisParam.replace(/^@?p_/i, '').replace(/_/g, '').toLowerCase(); const hit = Object.keys(params).find(q => q.replace(/_/g, '').toLowerCase() === k); return hit ? String(params[hit] ?? '') : undefined; };
       const called = !!myCall && n0 > 0;
@@ -1198,14 +1728,14 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       }
       if (!rule) { put(x.row_id, '판정필요', `${c.name}: 유효 분기 결정 불가 — ${why || '가드 해석 실패'} · 요청 ${JSON.stringify(params).slice(0, 120)}`); continue; }
       const keys = rule.keys.map(k => k.replace(/ DESC$/i, '')); const descs = rule.keys.map(k => / DESC$/i.test(k));
-      const all = (await probe.allBindings(p)) || [];
+      const all = await bindingsOf();
       const missing = keys.filter(k => !all.includes(k));
       // 그리드에 없는 키(비노출 컬럼) '뒤'의 키는 앞 키 동률 여부를 알 수 없어 비교 불가 → 첫 누락 키 앞까지만 대조(2026-10-29 SCP0020 LINE_ORDER·PLANT_SITE_ID 누락인데 LINE_ID 순서 FAIL 허위)
       const firstMissing = keys.findIndex(k => !all.includes(k));
       const useKeys = firstMissing < 0 ? keys : keys.slice(0, firstMissing);
       if (!useKeys.length) { put(x.row_id, 'NA', `${c.name}: 첫 정렬 키 ${keys[0]} 가 그리드에 없음(비노출 컬럼) — 화면 순서로는 판정 불가 · 골든 순서대조(Doc/golden/${ID}/*.order.csv · SP 행 A6)로 판정`); continue; }
       const cols: Record<string, string[]> = {};
-      for (const k of useKeys) cols[k] = ((await probe.columnValues(p, k)) || []).slice(0, 2000);
+      for (const k of useKeys) cols[k] = (await valuesOf(k)).slice(0, 2000);
       const n = Math.min(n0, 2000, ...useKeys.map(k => cols[k].length));
       const cmp = (a: string, b: string) => { const na = Number(a), nb = Number(b); if (a !== '' && b !== '' && !isNaN(na) && !isNaN(nb)) return na < nb ? -1 : na > nb ? 1 : 0; if (a === '' && b !== '') return -1; if (b === '' && a !== '') return 1; const ci = (z: string) => z.toUpperCase().replace(/_/g, '/').replace(/-/g, ''); const x = ci(a), y = ci(b); return x < y ? -1 : x > y ? 1 : 0; }; // 문자 비교 = TO-BE 정렬식 UPPER(TRANSLATE(칸,'_-','/')) 와 같은 기준(EG034 · 바이너리 비교는 올바른 대소문자 무시 정렬을 역전으로 잡는다)
       let bad = -1; let detail = '';
@@ -1217,7 +1747,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         }
       }
       const note = missing.length ? ` · 그리드에 없는 키 ${missing.join(',')} 와 그 뒤 키는 비교 제외(비노출 컬럼 — 앞 ${useKeys.length}개 키만 대조)` : '';
-      put(x.row_id, bad < 0 ? 'PASS' : 'FAIL', `${c.name}: 결과 ${n}행이 AS-IS 키 [${useKeys.join(',')}] 순으로 정렬됨${bad < 0 ? '' : ' 아님 — ' + detail} (${why || '단일 규칙'})${note}`);
+      put(x.row_id, bad < 0 ? 'PASS' : 'FAIL', `${c.name}: 결과 ${n}행이 AS-IS 키 [${useKeys.join(',')}] 순으로 정렬됨${bad < 0 ? '' : ' 아님 — ' + detail} (${why || '단일 규칙'})${note}${srcNote}`);
     }
   });
 
@@ -1336,7 +1866,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const f3Rows = [...f3.map(t => t.x), ...asisF3];
     if (f3Rows.length) {
       const nr = await probe.findRow(p, 'new');
-      if (!ex || !nr) { for (const t of f3Rows) put(t.row_id, '판정필요', `붙여넣기 프로브 전제 부족(기존행 ${!!ex} · 신규행 ${!!nr})`); }
+      if (!ex || !nr) { for (const t of f3Rows) put(t.row_id, 'ERROR', `[측정 전제 미충족] 붙여넣기 프로브 전제 부족(기존행 ${!!ex} · 신규행 ${!!nr})`); }  /* VMO 20261126130850_SELF_3 */
       else {
         const col = f3cols[0] || (has('TO_SITE_CODE') ? 'TO_SITE_CODE' : [...COLS][1] || [...COLS][0] || '');  // 붙여넣기 대상 열 = AS-IS F3 문장의 컬럼, 없으면 화면의 열
         const src = await probe.cellCenter(p, ex.row, col); const dst = await probe.cellCenter(p, nr.row, col);
@@ -1440,7 +1970,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     }
     // M3 — 팝업 내부 조회·버튼
     const m3trig = (rows.filter(x => x.rule_id === 'PCOL').map(x => (condOf(x).trigger || [])[0]).find(Boolean) as string | undefined) || (has('ROUTE_ID') ? 'ROUTE_ID' : '');  // W4b 에는 trc 가 없다(2026-10-28 v6 W4b ReferenceError)  // 팝업 트리거 셀 = 대조표 PCOL 의 trigger(없으면 Route Id 가 있는 화면만)
-    if (m3.length && ex && !m3trig) for (const { x } of m3) put(x.row_id, 'NA', '팝업을 여는 트리거 셀을 화면 메타에서 찾지 못함 — 팝업 내부 기능 검사 대상 미확정(수동 검수 W7)');
+    if (m3.length && ex && !m3trig) for (const { x } of m3) put(x.row_id, 'ERROR', '[미검증] 팝업을 여는 트리거 셀을 화면 메타에서 찾지 못함 — 팝업 내부 기능 검사 대상 미확정(수동 검수 W7)');
     if (m3.length && ex && m3trig) {
       const trig = m3trig;
       const pt = await probe.cellCenter(p, ex.row, trig);
@@ -1633,7 +2163,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       }
       const baseRows = await probe.rowCount(p);
       const o = await comboOpts(box.root);
-      { const cc = await condColForOpts(nscm, o.texts, col, base); col = cc.col; base = cc.base; }  // T499(V-dd4f9db4): 후보 글자와 값이 가장 많이 겹치는 결과 칸(숨은 칸 포함)
+      let colHow = ''; { const cc = await condColForOpts(nscm, o.texts, col, base, g.labels[0]); col = cc.col; base = cc.base; colHow = cc.how; }  // T499(V-dd4f9db4): 후보 글자와 값이 가장 많이 겹치는 결과 칸(숨은 칸 포함) · T521 라벨과 이름 갈래가 같은 칸 우선
       if (o.multi) {
         // ALL 해제 → 결과에 실제로 있는 값 1개 체크 → 조회
         const freq = new Map<string, number>(); for (const v of base) if (v) freq.set(v, (freq.get(v) || 0) + 1);
@@ -1677,7 +2207,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const shown = bx1 ? (await condValue(bx1.root, bx1.kind)).replace(/[​ ]/g, '').trim() : '';
         const shownOk = !!shown && (shown.includes(code) || shown.includes(optText));
         const ev1 = `[멀티선택 ${g.labels[0]}] '${optText}' 1개 선택 조회 → ${rowsOne}행${col ? ` · ${col} 값 ${!vals.length ? '없음' : bad.length ? `조건 밖 ${bad.length}종(${bad.slice(0, 4).join(',')})` : '전부 일치'}` : ''} (기본 ALL ${baseRows}행)${chg1 ? '' : ' · 조회 후 30초간 그리드 변화 없음'}`
-          + ` · 조회 요청 ${mainCalls.length}건${mainCalls.length ? `(본문에 '${code}' ${sent ? '포함' : '미포함'})` : ''}${singleOk ? '' : ` · 조건 칸 표시 '${shown.slice(0, 40)}'`}${al1 ? ` · 알림 '${al1.slice(0, 100)}'` : ''}${fallback ? ` · 결과 컬럼 ${col || '미식별'} 값에서 고를 후보를 못 찾아 임의 후보 선택` : ''}`;
+          + ` · 조회 요청 ${mainCalls.length}건${mainCalls.length ? `(본문에 '${code}' ${sent ? '포함' : '미포함'})` : ''}${singleOk ? '' : ` · 조건 칸 표시 '${shown.slice(0, 40)}'`}${al1 ? ` · 알림 '${al1.slice(0, 100)}'` : ''}${fallback ? ` · 결과 컬럼 ${col || '미식별'} 값에서 고를 후보를 못 찾아 임의 후보 선택` : ''}${colHow ? ` · 대조 칸 근거: ${colHow.slice(0, 160)}` : ''}`;
         const r1: Res['result'] = baseRows === 0 ? 'ERROR' : singleOk ? 'PASS'
           : !mainCalls.length ? 'ERROR'
           : fallback && rowsOne === 0 ? 'ERROR'
@@ -1734,8 +2264,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const ex = nAll > 0 ? await probe.findRow(p, 'existing') : null;
     // A5 ENTRY — 숨김 컬럼(AS-IS 숨김/코드추가 helper · TO-BE VISIBLE=N)은 누락이 아니다
     for (const { x, c } of trc('A5').filter(t => t.c.et === 'ENTRY' && t.c.asisCols)) {
-      const allB = (await probe.allBindings(p)) || []; const av = (c.asisVisible || {}) as Record<string, Record<string, string>>;
-      const want = (c.asisCols || []).filter(col => { const m = av[col] || {}; const v = m[divSearched.split(',')[0]] ?? m['40'] ?? ''; return v === '기본'; });
+      const allB = (await probe.allBindings(p)) || []; const av = (c.asisVisible || {}) as Record<string, string | Record<string, string>>;
+      if ((c as { asisVisCut?: boolean }).asisVisCut) { put(x.row_id, 'ERROR', `[측정 경로 없음] AS-IS 컬럼 숨김 정보가 원장 칸 상한으로 잘림(T520)`); continue; }
+      const want = (c.asisCols || []).filter(col => visOf(av, col, divSearched.split(',')[0]) === '기본');  // T520 문자열·dict 둘 다
       const miss = want.filter(col => !allB.includes(col));
       put(x.row_id, miss.length ? 'FAIL' : 'PASS', `AS-IS 기본 표시 컬럼 ${want.length} ⊆ TO-BE 그리드 ${allB.length}: 누락 ${miss.length ? miss.join(', ') : '0'} (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: ${(c.asisCols || []).filter(k => !want.includes(k)).join(', ')})`);
     }
@@ -1757,7 +2288,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         { const gm = /(?:!string\.IsNullOrEmpty\(\s*\w*[Gg]roup\w*\s*\)\s*&&\s*)?\b\w*[Gg]roup(?:ID|Id|_ID)?\b\s*(==|!=)\s*"([^"]*)"/.exec(seg0.replace(/^else of\s*/, '').replace(/^if\s*/, '')); if (gm) { if (ACCT.unknown) { cannot.push(`계정 그룹 미확인: ${seg0.slice(0, 50)}`); continue; } const inG = ACCT.group.some(g => g.toUpperCase() === gm[2].toUpperCase()) || (gm[2].toUpperCase() === 'ADMIN' && ACCT.admin); let h2 = gm[1] === '==' ? inG : !inG; if (/^else of/.test(seg0)) h2 = !h2; by.push(`계정 그룹 ${ACCT.group.join('/') || '-'} ${gm[1]} '${gm[2]}'`); if (!h2) hold = false; continue; } }
         const neg = /^else of/.test(seg0); const seg = seg0.replace(/^else of\s*/, '').replace(/^if\s*/, '').replace(/^\((.*)\)$/, '$1');
         let g: RegExpExecArray | null; let h: boolean | null = null; let desc = '';
-        if ((g = /Get(?:Text|Value)\(\s*[\w.+\s-]+,\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"/.exec(seg)) || (g = /dr\[DefColumns\.([A-Z0-9_]+)(?:\.ToLower\(\))?\]\.ToString\(\)\s*(==|!=)\s*"([^"]*)"/.exec(seg))) { const v = await rv(g[1]); h = g[2] === '==' ? v === g[3] : v !== g[3]; desc = `${g[1]}='${v}' ${g[2]} '${g[3]}'`; }
+        if ((g = /Get(?:Text|Value)\(\s*[\w.+\s-]+,\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)(?![a-z])\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"/.exec(seg)) || (g = /dr\[DefColumns\.([A-Z0-9_]+)(?![a-z])(?:\.ToLower\(\))?\]\.ToString\(\)\s*(==|!=)\s*"([^"]*)"/.exec(seg))) { const v = await rv(g[1]); h = g[2] === '==' ? v === g[3] : v !== g[3]; desc = `${g[1]}='${v}' ${g[2]} '${g[3]}'`; }
         else if ((g = /strTO_SITE_TYPE\s*(==|!=)\s*"(\w+)"/.exec(seg)) || (g = /!string\.IsNullOrEmpty\(strTO_SITE_TYPE\)\s*&&\s*strTO_SITE_TYPE\s*(==|!=)\s*"(\w+)"/.exec(seg))) { if (!hasSiteMap) { cannot.push(seg0.slice(0, 60)); continue; } const code = await rv('TO_SITE_CODE'); const t = code ? siteType(code) : ''; if (code && !t) { cannot.push(`TO_SITE_CODE='${code}' 타입 미확인`); continue; } h = g[1] === '==' ? t === g[2] : t !== g[2]; desc = `TO_SITE '${code}'=${t || '(빈 값 → 유형 없음: AS-IS strTO_SITE_TYPE 도 빈 문자열)'} ${g[1]} ${g[2]}`; }  // 2026-10-28: 빈 To Site(신규행)는 AS-IS 도 유형 없음으로 계산 — '타입 미확인' FAIL 아님
         else if ((g = /(?:svmiYn|strVMI_YN)\s*(==|!=)\s*"(\w+)"/.exec(seg))) { const v = await rv('VMI_YN'); h = g[1] === '==' ? v === g[2] : v !== g[2]; desc = `VMI_YN='${v}' ${g[1]} '${g[2]}'`; }
         else if (/!string\.IsNullOrEmpty\(strFROM_SITE_CODE\)/.test(seg)) { const v = await rv('FROM_SITE_CODE'); h = !!v; desc = `FROM_SITE_CODE='${v}' 비어있지 않음`; }
@@ -1880,7 +2411,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // ── H8 표시 포맷(숫자 천단위·소수) · 총 건수 표시
     for (const x of all.filter(r => r.source === 'COLUMN' && r.rule_id === 'H8')) {
       // 동적 컬럼 행(note {"dyn":{re}}) = 정규식 일치 binding 중 값 있는 첫 컬럼(2026-10-30 WP1)
-      let b = (/\.([A-Z0-9_]+)/.exec(x.target) || [])[1] || '';
+      let b = (/^[^.]+\.([A-Za-z0-9_]+)/.exec(x.target) || [])[1] || '';  // T656: 대소문자 섞인 칸 이름을 끝까지 읽음('One_SEGMENT_COST' → 'O' 잘림)
       if (/<DYNAMIC:/.test(x.target || '')) { try { const re = JSON.parse((x.note || '').replace(/\s\[잠금 해석 실패\].*$/s, '')).dyn.re as string; const cands = await probe.dynColumns(p, re); b = ''; for (const c0 of cands) { if (((await probe.columnValues(p, c0)) || []).some(v => v !== '')) { b = c0; break; } } b = b || cands[0] || ''; } catch { b = ''; } if (!b) { put(x.row_id, 'ERROR', `[측정 경로 누락] 동적 컬럼 binding 0 — ${x.target.slice(0, 60)}`); continue; } }
       const info = await probe.colInfo(p, b);
       const cr = trc('H8').find(t => t.c.name === b)?.c.cellRule;
@@ -2051,8 +2582,10 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       let dlg: import('@playwright/test').Locator | null = null; const until = Date.now() + 10_000;
       while (!dlg && Date.now() < until) { dlg = await tagPopup(nscm, tag); if (!dlg) await p.waitForTimeout(300); }
       if (!dlg) return { label: via ? `${f.label}(${via} 단추)` : f.label, btn: true, opened: false, rows: 0, before, after: before, alert: await nscm.alertText() };
-      const ds = dlg.getByRole('button', { name: /^(조회|Search|Find)(\(F5\))?$/i }).first(); if (await ds.isVisible().catch(() => false)) { await ds.click().catch(() => undefined); await p.waitForTimeout(2_500); }
-      const rowsN = await dlg.locator('.wj-cells .wj-row').count().catch(() => 0);
+      const ds = dlg.getByRole('button', { name: /^(조회|Search|Find)(\(F5\))?$/i }).first(); if (await ds.isVisible().catch(() => false)) { await ds.click().catch(() => undefined); await p.waitForTimeout(1_000); }
+      // T543(2026-11-25 SCP0005 M4 3행 T-47ab9353 등 '대화상자 열림(0행) · Total89,417rows'): 팝업 조회 결과 89,417행이 2.5초 안에 그려지지 않아 0행으로 셌다 — 행이 그려지거나 0건 표시가 뜰 때까지 60초까지 기다린다
+      let rowsN = 0;
+      for (const t0 = Date.now(); Date.now() - t0 < 60_000;) { rowsN = await dlg.locator('.wj-cells .wj-row').count().catch(() => 0); if (rowsN > 0) break; const tx = (await dlg.innerText().catch(() => '')) || ''; if (/Total\s*0\s*rows|조회된 데이터가 없|No data/i.test(tx)) break; await p.waitForTimeout(500); }
       if (rowsN > 0) { const r0 = dlg.locator('.wj-cells .wj-row').first(); await r0.locator('.wj-cell').nth(1).click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(300);
         const okb = dlg.getByRole('button', { name: /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i }).first(); if (await okb.isVisible().catch(() => false)) await okb.click().catch(() => undefined); else await r0.locator('.wj-cell').nth(1).dblclick({ timeout: 5_000 }).catch(() => undefined); }
       await p.waitForTimeout(800); const alert = await nscm.alertText(); if (await dlg.isVisible().catch(() => false)) await closeVisibleDialogs(nscm); await nscm.clearDialogs();
@@ -2070,11 +2603,14 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     // 조회 직후 그리드는 '행 0' 으로 먼저 그려지고 ~1초 뒤 데이터가 찬다(2026-10-27 진단 실측) — 0/−1 이면 최대 15초 기다린 뒤 확정. 응답 행수(call n)가 더 크면 그 값을 쓴다
     const rowsAfterSearch = async (callFrom?: number) => { let n = -1; for (let k = 0; k < 30 && n <= 0; k++) { n = await probe.rowCount(p); if (n <= 0) await p.waitForTimeout(500); } const resp = callFrom == null ? null : nscm.calls.slice(callFrom).filter(q => isMainSheet(q.sheet) && (q as unknown as { n?: number | null }).n != null).map(q => Number((q as unknown as { n?: number | null }).n)).pop(); return resp != null && resp > n ? resp : n; };
     // 응답시간 = 본 조회 call-proc 의 요청 시작~응답 끝(ProcCall.dur · EG415). 벽시계(search() 의 필수 조건 자동 선택·대기 포함)는 참고값 — 2026-11-07 SCP0127/SCP0016 L1 '64초' 허위 FAIL(DB 직접 호출 0.15s · 벽시계에 조회 준비 시간이 섞임)
-    const searchWait = async () => { const b = nscm.calls.length; const t0 = Date.now(); await nscm.search(); for (let k = 0; k < 120 && !nscm.calls.slice(b).some(q => isMainSheet(q.sheet)); k++) await p.waitForTimeout(500); const wall = Date.now() - t0; await p.waitForTimeout(1_200); await nscm.clearDialogs(); const main = nscm.calls.slice(b).filter(q => isMainSheet(q.sheet)); const net = Math.max(0, ...main.map(q => Number((q as { dur?: number }).dur || q.ms || 0))); return { ms: net > 0 ? net : wall, wall, net, n: await rowsAfterSearch(), calls: nscm.calls.slice(b) }; };
+    const searchWait = async () => { const b = nscm.calls.length; const t0 = Date.now(); await nscm.search(); for (let k = 0; k < 120 && !nscm.calls.slice(b).some(q => isMainSheet(q.sheet)); k++) { if (learnMainSheet(nscm.calls.slice(b), await probe.rowCount(p))) break; await p.waitForTimeout(500); } /* T593(2026-11-25) 본 조회 시트 실측 학습 */ const wall = Date.now() - t0; await p.waitForTimeout(1_200); await nscm.clearDialogs(); const main = nscm.calls.slice(b).filter(q => isMainSheet(q.sheet)); const net = Math.max(0, ...main.map(q => Number((q as { dur?: number }).dur || q.ms || 0))); return { ms: net > 0 ? net : wall, wall, net, n: await rowsAfterSearch(), calls: nscm.calls.slice(b) }; };
     const r0 = await openReady(nscm); if (!r0.authorized) return;
     // ── L1 조회 응답시간 · 기본(ALL) 조회
-    const first = await searchWait(); const nAll = first.n;
-    for (const x of [...byRule('RULE_SCREEN', 'L1').filter(z => z.note !== '전용'), ...byRule('DEFECT', 'L1'), ...byRule('CONFIRMED', 'L1')]) put(x.row_id, first.ms <= 10_000 ? 'PASS' : 'FAIL', `조회(Division ALL) 응답 ${first.ms}ms(${first.net > 0 ? `요청~응답 ${first.net}ms · 벽시계 ${first.wall}ms` : `벽시계 — 본 조회 call 미포착`}) · ${nAll}행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)${first.ms <= 10_000 ? '' : ' 초과'}`);
+    const first = await searchWait(); let nAll = first.n;
+    if (nAll <= 0) { const er = await ensureRows(nscm, 3, ID).catch(() => ({ via: '대안 조회 실패' })); nAll = await probe.rowCount(p).catch(() => 0); console.log(`[ensureRows] 기본(ALL) 조회 0행 → ${er.via} · ${nAll}행`); }  // 2026-11-26 VMO 20261126130850_SELF: 기본 조회 0행이면 Division·기간 대안(응답시간 L1 은 첫 조회로)
+    // T554(2026-11-25 SCP0005 V-dac80ff3·V-536d9503): 조회 응답시간 문장을 L1 결함 행 전부에 적었다(타이핑 깜박임 · 방향키 이동 응답 행까지). 기대 문구가 조회(Search) 응답·시간을 말하는 행만 받는다
+    const l1Search = (z: Record<string, string>) => { const t = `${z.target || ''} ${z.expected || ''}`; return /조회|search/i.test(t) && /응답|시간|\d+\s*초|\bms\b|response|time/i.test(t); };
+    for (const x of [...byRule('RULE_SCREEN', 'L1').filter(z => z.note !== '전용'), ...byRule('DEFECT', 'L1'), ...byRule('CONFIRMED', 'L1')].filter(l1Search)) put(x.row_id, first.ms <= 10_000 ? 'PASS' : 'FAIL', `조회(Division ALL) 응답 ${first.ms}ms(${first.net > 0 ? `요청~응답 ${first.net}ms · 벽시계 ${first.wall}ms` : `벽시계 — 본 조회 call 미포착`}) · ${nAll}행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)${first.ms <= 10_000 ? '' : ' 초과'}`);
     const divSearched = (() => { const q = nscm.calls.find(k => isMainSheet(k.sheet) && /SEARCH/i.test(k.btn)); try { const j = JSON.parse(q?.body || '{}'); const d = (j.data && typeof j.data === 'object' ? j.data : j) as Record<string, unknown>; return String(d.divisionId ?? ''); } catch { return ''; } })();
     // ── 조회조건 종류 수집(L2·B8 측정)
     await nscm.expandSearchArea(true);
@@ -2095,7 +2631,10 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     for (const x of [...byRule('DEFECT', 'B8'), ...byRule('CONFIRMED', 'B8'), ...byRule('RULE_SCREEN', 'B8')]) { const hit = ['Team', 'Sales Site', 'End Customer', 'Sold to Customer', 'Plant Site'].filter(l => condKinds[l]); put(x.row_id, hit.length ? 'ERROR' : 'NA', hit.length ? `[측정 코드 없음] Team/Sales Site 계열 조건 ${hit.join(',')} 존재 — 원천(SSPM DEPT_ID) 대조 검사 미구현(결함 아님 · 미측정)` : `Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: ${Object.keys(condKinds).join(', ')}) — 원천 표준 규칙 대상 없음`); }
     // ── M1 Excel Upload · A3 Sum 행 · J4 메뉴 · I3 명칭 컬럼 · A2 코드→Name · N1 공란 혼재
     const btns = await nscm.visibleButtons();
-    for (const x of [...byRule('CONFIRMED', 'M1'), ...byRule('DEFECT', 'M1'), ...byRule('RULE_SCREEN', 'M1')]) { const up = btns.some(b => /upload/i.test(b)); put(x.row_id, up ? 'ERROR' : 'NA', up ? `[측정 코드 없음] Excel Upload 버튼 있음 [${btns.join(' | ')}] — 양식·검증 시나리오 미구현(결함 아님 · 미측정)` : `Excel Upload 기능 없음(툴바 버튼: ${btns.join(' | ')}) — Upload 규칙 대상 아님`); }
+    // T554(2026-11-25 SCP0005 M1 V-219edc76): 고정 문장 '양식·검증 시나리오 미구현' 만 적었다. 오류 종류별 업로드 파일 생성·업로드 응답 행 상태 대조는 아직 없다(업로드 구동기는 _verify.spec E3 T567 · 이 파일 밖).
+    //   → 판정은 ERROR 유지하되 AS-IS 기대 상태 문구(업로드 창 클래스의 Validation_Check_<ID> 가 상태 칸에 넣는 리터럴)를 원문에서 읽어 증거에 적는다
+    const upStatus = (() => { const cls = (ASIS_SRC.flatMap(f => f.lines).map(l => (/new\s+(\w*Upload\w*)\s*\(/.exec(l) || [])[1]).find(Boolean)) || ''; if (!cls) return { ref: '', list: [] as string[] }; const fp = path.join(ROOT, 'GSCM', '01.Framework', 'GSCM.Windows.Forms', 'UI', `${cls}.cs`); if (!fs.existsSync(fp)) return { ref: `${cls}.cs 원문 없음`, list: [] as string[] }; const L = fs.readFileSync(fp, 'utf8').split(/\r?\n/); const mr = methodRange(L, `Validation_Check_${ID}`); if (!mr) return { ref: `${cls}.cs Validation_Check_${ID} 없음`, list: [] as string[] }; const s = new Set<string>(); for (let i = mr.s; i <= mr.e; i++) { const m = /Cells\s*\[[^\]]*,\s*0\s*\]\s*\.\s*(?:Value|Text)\s*=\s*"([^"]+)"/.exec(L[i]); if (m && m[1] !== 'Success') s.add(m[1]); } return { ref: `${cls}.cs:${mr.s + 1}~${mr.e + 1} Validation_Check_${ID}`, list: [...s] }; })();
+    for (const x of [...byRule('CONFIRMED', 'M1'), ...byRule('DEFECT', 'M1'), ...byRule('RULE_SCREEN', 'M1')]) { const up = btns.some(b => /upload/i.test(b)); /* 2026-11-25 T586(SCP0005 V-219edc76): 검증 메시지 행(CONFIRMED·DEFECT · validation|검증|메시지)은 _verify.spec M1(T584 m1upload) 이 업로드 응답 행 상태로 판정 — 여기서 고정 ERROR 로 덮지 않음(못 돌면 NOT_RUN → judge 미검증) */ if (up && ['CONFIRMED', 'DEFECT'].includes(x.source) && /validation|검증|메시지/i.test(`${x.target} ${x.expected}`)) continue; /* 2026-11-25 T632(SCP0005 V-a32c8abf CR-095 'Excel Form 버튼'): Excel Form 동작 행은 _verify.spec 'Excel 양식·업로드' 가 버튼 클릭 결과로 판정 — 업로드 대조 미구현 문구로 덮지 않음 */ if (['CONFIRMED', 'DEFECT'].includes(x.source) && /excel\s*form|엑셀\s*양식/i.test(x.target)) continue; put(x.row_id, up ? 'ERROR' : 'NA', up ? `[측정 코드 없음] Excel Upload 버튼 있음 [${btns.join(' | ')}] — 오류 종류별 업로드 파일 생성·업로드 응답 행 상태 대조 미구현(업로드 구동기 _verify.spec E3 T567 재사용 필요 · 저장 없음: TO-BE 는 ERROR_COUNT>0 이면 적재 차단) · AS-IS 기대 상태 ${upStatus.list.length ? `${upStatus.list.length}종 [${upStatus.list.join(', ')}]` : '미상'}(${upStatus.ref || '업로드 창 클래스 못 찾음'})` : `Excel Upload 기능 없음(툴바 버튼: ${btns.join(' | ')}) — Upload 규칙 대상 아님`); }
     const sumRows = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return -1; let n = 0; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && Object.values(d).some(v => /^(sum|total|합계|소계)$/i.test(String(v || '')))) n++; } return n + (c.columnFooters && c.columnFooters.rows.length ? 1000 : 0); })()`).catch(() => -1) as number;
     for (const x of [...byRule('CONFIRMED', 'A3'), ...byRule('DEFECT', 'A3'), ...byRule('RULE_SCREEN', 'A3')]) put(x.row_id, sumRows === 0 ? 'NA' : sumRows > 0 ? 'PASS' : 'FAIL', sumRows === 0 ? `그리드 ${nAll}행에 Sum/Total/합계 행·컬럼 푸터 없음 — 합계행 규칙 대상 아님` : sumRows > 0 ? `합계 행/푸터 감지(${sumRows}) — 조회 후 표시` : '그리드 없음');
     for (const x of [...byRule('DEFECT', 'J4'), ...byRule('CONFIRMED', 'J4')]) put(x.row_id, 'ERROR', `[측정 코드 없음] 메뉴 노출·라우트 실측 미구현 — 결함 대상 '${x.target.slice(0, 80)}' (결함 아님 · 미측정 · 문구 매칭 판정 제거 2026-10-31)`);
@@ -2104,7 +2643,19 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     for (const x of [...byRule('RULE_SCREEN', 'I3'), ...byRule('DEFECT', 'I3'), ...byRule('CONFIRMED', 'I3')]) {
       if (!nameCols.length) { put(x.row_id, 'NA', `명칭(_NAME/_NM) 컬럼 없음(표시 컬럼 ${vis.length}: ${vis.slice(0, 12).join(',')}…) — 데이터 다국어 규칙 대상 없음`); continue; }
       const vals = ((await probe.columnValues(p, nameCols[0])) || []).filter(Boolean).slice(0, 50); const ko = vals.filter(v => /[가-힣]/.test(v)).length;
-      put(x.row_id, 'ERROR', `[측정 코드 없음] 언어 전환 비교 미구현 — 명칭 컬럼 ${nameCols.join(',')} 표본 ${vals.length}건 중 한글 ${ko}(참고값 · 판정 근거 아님, 종전엔 무조건 PASS 였음 2026-10-31)`);
+      // T554(2026-11-25 SCP0005 I3 V-5a7b8946): 고정 ERROR '언어 전환 비교 미구현' 만 적었다. 언어 전환은 _verify.spec I2(언어 시험 계정 · 잠금)만 하고 그 덤프 lang_texts.json 에 명칭 칸 값이 없다.
+      //   기대값 = AS-IS 조회 SP 에 언어 인자가 없으면(Doc/asisfacts/db/modules 헤더 인자) 명칭은 저장값 그대로 → 언어별 같은 값. 덤프에 'nameVals'({칸: {행 키: 값}})가 있으면 KO·EN·CN 을 행 키로 비교하고, 없으면 ERROR 에 기대값과 사유를 적는다
+      //   judge.py:1605 가 i18n_lang EN·CN 데이터 PASS 로 I3 를 PASS 로 올린다 — 여기 FAIL 과 엇갈리면 judge 쪽 우선순위 확인 필요
+      const getSps = (() => { const o: { sp: string; lang: string[] }[] = []; try { for (const z of parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'endpoints.csv'), 'utf8').replace(/^\uFEFF/, ''))) { const sp = String(z.candidate || '').split('.').pop() || ''; if (!/_GET_/i.test(sp) || o.some(q => q.sp === sp)) continue; const fp = path.join(ROOT, 'Doc', 'asisfacts', 'db', 'modules', `dbo.${sp}.sql`); if (!fs.existsSync(fp)) continue; const t = fs.readFileSync(fp, 'utf8'); const hd = (/CREATE\s+(?:OR\s+ALTER\s+)?PROC(?:EDURE)?[\s\S]*?\bAS\b/i.exec(t) || [''])[0]; o.push({ sp, lang: [...hd.matchAll(/@(\w*(?:lang|locale|culture)\w*)/gi)].map(m => m[1]) }); } } catch { /* 사실 없음 */ } return o; })();
+      const sameExp = getSps.length > 0 && getSps.every(q => !q.lang.length);
+      const dump = (() => { try { return JSON.parse(fs.readFileSync(path.join(DIR, 'lang_texts.json'), 'utf8')) as Record<string, { nameVals?: Record<string, Record<string, string>> }>; } catch { return {} as Record<string, { nameVals?: Record<string, Record<string, string>> }>; } })();
+      const expTxt = getSps.length ? `AS-IS 조회 SP ${getSps.map(q => `${q.sp}(언어 인자 ${q.lang.join(',') || '없음'})`).join(', ')} → ${sameExp ? '명칭 = 저장값 · 언어별 같은 값' : '언어별 값 다를 수 있음(기대값 미정)'}` : 'AS-IS 조회 SP 원문 없음(기대값 미정)';
+      const kv = dump.KO?.nameVals; const others = ['EN', 'CN'].filter(l => dump[l]?.nameVals);
+      if (!kv || !others.length) { put(x.row_id, 'ERROR', `[측정 코드 없음] 언어 전환 명칭 값 덤프 없음(lang_texts.json 에 nameVals 없음 · 언어 전환은 _verify.spec I2 담당) — 기대: ${expTxt} · 명칭 컬럼 ${nameCols.join(',')} 표본 ${vals.length}건 중 한글 ${ko}(참고값)`); continue; }
+      if (!sameExp) { put(x.row_id, 'ERROR', `[측정 경로 없음] 기대값 미정 — ${expTxt}`); continue; }
+      let shared = 0; const diffs: string[] = [];
+      for (const l of others) for (const [col, m] of Object.entries(kv)) { const om = dump[l]!.nameVals![col] || {}; for (const [k, v] of Object.entries(m)) { if (!(k in om)) continue; shared++; if (om[k] !== v) diffs.push(`${l} ${col}[${k}] '${v}'→'${om[k]}'`); } }
+      put(x.row_id, !shared ? 'ERROR' : diffs.length ? 'FAIL' : 'PASS', `${!shared ? '[측정 실패] KO 와 같은 행 키 0건 · ' : ''}${expTxt} · KO 대비 ${others.join('·')} 같은 행 키 ${shared}칸 · 다른 값 ${diffs.length}${diffs.length ? ` (${diffs.slice(0, 4).join(', ')})` : ''}`);
     }
     {
       const maps: { b: string; raw: string; disp: string; ok: boolean }[] = [];
@@ -2135,14 +2686,14 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
       if (nr) {
         const val = async (col: string) => (await probe.value(p, nr.row, col)) ?? '';
         for (const { x, c } of trc('C3').filter(t => t.c.et === 'COL')) {
-          const ins = (c.raws || []).map(s => /InsertButton:\d+ siMain\.SetValue\([^,]+,\s*siMain\.GetColumnIndex\(DefColumns\.([A-Z0-9_]+)\),\s*(.+?)\)\s*\[/.exec(s)).find(m => m && m[1] === c.name);
+          const ins = (c.raws || []).map(s => /InsertButton:\d+ siMain\.SetValue\([^,]+,\s*siMain\.GetColumnIndex\(DefColumns\.([A-Z0-9_]+)(?![a-z])\),\s*(.+?)\)\s*\[/.exec(s)).find(m => m && m[1] === c.name);
           if (ins) {
             const expr = ins[2].trim(); const got = await val(c.name || '');
             const selDiv = /strSel_Division/.test(expr); const divOne = selDiv && /^[A-Z0-9]{2}$/i.test(divSearched) && !divSearched.includes(',') ? divSearched : '';
             const want = /^"(.*)"$/.test(expr) ? expr.slice(1, -1) : expr === 'sYYYYMMDD' ? mondayYmd : /^\d+$/.test(expr) ? expr : divOne;
             const ok = /^\d{8}$/.test(want) ? digits(got) === want : want !== '' ? got === want || Number(got) === Number(want) : false;
             if (selDiv && !divOne) { put(x.row_id, 'NA', `신규행 ${c.name}='${got}' ↔ AS-IS InsertButton 기본값 strSel_Division(조회 Division) — 이번 조회 Division 이 복수(${divSearched || 'ALL'})라 AS-IS 도 단일값 대입 불가 → 신규행 Division 은 콤보 선택(D4 에서 판정)`); continue; }
-            put(x.row_id, want === '' ? 'NA' : ok ? 'PASS' : 'FAIL', `신규행 ${c.name}='${got}' ↔ AS-IS InsertButton 기본값 ${expr}${expr === 'sYYYYMMDD' ? `(이번주 월요일 ${mondayYmd})` : ''}${want === '' ? ' — 식 해석 불가(변수 대입값은 검사기가 풀지 못함 · 화면 오류 아님 → 수동 검수 W7)' : ok ? ' 일치' : ' 불일치'} (값 대입은 연쇄가 아니라 Insert 기본값 — D4 와 같은 판정)`);
+            put(x.row_id, want === '' ? 'ERROR' : ok ? 'PASS' : 'FAIL', `${want === '' ? '[미검증] ' : ''}신규행 ${c.name}='${got}' ↔ AS-IS InsertButton 기본값 ${expr}${expr === 'sYYYYMMDD' ? `(이번주 월요일 ${mondayYmd})` : ''}${want === '' ? ' — 식 해석 불가(변수 대입값은 검사기가 풀지 못함 · 화면 오류 아님 → 수동 검수 W7)' : ok ? ' 일치' : ' 불일치'} (값 대입은 연쇄가 아니라 Insert 기본값 — D4 와 같은 판정)`);
             for (const y of [...byRule('ASIS', 'D4', new RegExp(`\\b${c.name}\\b`)), ...trc('D4').filter(t => t.c.name === c.name).map(t => t.x)]) if (true || /sYYYYMMDD|식/.test(y.expected + y.evidence)) put(y.row_id, want === '' ? 'NA' : ok ? 'PASS' : 'FAIL', `신규행 ${c.name}='${got}' ↔ AS-IS 기본값 ${expr}${expr === 'sYYYYMMDD' ? `(이번주 월요일 ${mondayYmd})` : ''}${ok ? ' 일치' : ' 불일치'}`);
             continue;
           }
@@ -2188,10 +2739,13 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const fromC = ((await probe.candidatesWithField(p, 'FROM_SITE_CODE', 'CITY')) || []).filter(Boolean); const fromPick = fromC[0] || (((await probe.candidates(p, nr.row, 'FROM_SITE_CODE')) || []).filter(Boolean))[0] || '';
         if (fromPick) { await probe.setByEditor(p, nr.row, 'FROM_SITE_CODE', fromPick); await p.waitForTimeout(700); }
         const a = plant ? await lockSig(plant) : null; const b2 = sales ? await lockSig(sales) : null;
+        // T541(2026-11-25 SCP0005 C3 4행 T300): 그리드에 From/To Site 칸이 없는 화면(도시 칸 직접 입력)은 이 Site 경로 전제가 없다 — W4 C3 직접 입력 판정을 'Site 후보 입력 실패' ERROR 로 덮지 않는다
+        const siteGrid = ((await probe.allBindings(p)) || []).some(b => /^(FROM|TO)_SITE_CODE$/i.test(b));
         // C3 값 연쇄(FROM/TO_COUNTRY · ROUTE_CNT) — From/To Site 입력 후 캐시(dtCountryCity)에서 채워지는지
         for (const { x, c } of trc('C3').filter(t => t.c.et === 'COL' && ['FROM_COUNTRY', 'TO_COUNTRY', 'FROM_CITY', 'TO_CITY', 'ROUTE_CNT', 'VMI_YN'].includes(t.c.name || ''))) {
           const v = await val(c.name || ''); const src = /^FROM/.test(c.name || '') ? `FROM_SITE_CODE='${fromPick}'` : /^TO|VMI/.test(c.name || '') ? `TO_SITE_CODE='${sales || plant}'` : `From/To City(${await val('FROM_CITY')}/${await val('TO_CITY')})`;
           const need = /^FROM/.test(c.name || '') ? !!fromPick : /^TO|VMI/.test(c.name || '') ? !!(sales || plant) : !!(fromPick && (sales || plant));
+          if (!need && !siteGrid) continue;
           if (!need) { put(x.row_id, 'ERROR', `[전제 미충족 T300] ${c.name}: 원천 Site 후보 입력 실패(From '${fromPick}' · To '${sales || plant}') — 연쇄 재현 불가`); continue; }
           put(x.row_id, v !== '' ? 'PASS' : 'FAIL', `${src} 입력 → ${c.name}='${v}' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움${c.name === 'ROUTE_CNT' ? ' · 양쪽 City 로 ROUTE_CNT 조회' : ''}${v !== '' ? ' 일치' : ' — 비어 있음'}`);
         }
@@ -2207,9 +2761,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
             const ok = col === 'INCOTERMS' ? (a.inc === false && b2.inc === true) : (a.ssp === true && b2.ssp === false);
             put(x.row_id, ok ? 'PASS' : 'FAIL', `신규행 ${col}: TO_SITE PLANT '${plant}' → 편집=${col === 'INCOTERMS' ? a.inc : a.ssp}(값 '${col === 'INCOTERMS' ? a.incV : a.sspV}') / 비PLANT '${sales}' → 편집=${col === 'INCOTERMS' ? b2.inc : b2.ssp}(값 '${col === 'INCOTERMS' ? b2.incV : b2.sspV}') — AS-IS SetCityCode: PLANT 면 ${col === 'INCOTERMS' ? '잠금(EXW/DAP 자동)' : '해제(dtIncotermsEdit)'}, 아니면 ${col === 'INCOTERMS' ? '해제' : '잠금'}${ok ? '' : ' — 불일치'}`);
           } else {
-            const exNow = await probe.findRow(p, 'existing'); if (!exNow) { put(x.row_id, 'FAIL', '기존행 없음(조회 결과 0행)'); continue; }
+            const exNow = await probe.findRow(p, 'existing'); if (!exNow) { put(x.row_id, 'ERROR', '[측정 전제 미충족] 기존행 없음(대안 조회 뒤에도 조회 결과 0행)'); continue; }  /* VMO 20261126130850_SELF: 0행 = 미검증(FAIL 아님) */
             const site = (await probe.value(p, exNow.row, 'TO_SITE_CODE')) ?? ''; const t = siteType(site); const e = await probe.editable(p, exNow.row, col);
-            if (!t) { put(x.row_id, 'NA', `기존행 r${exNow.row} TO_SITE_CODE='${site}' 사이트 유형 미등록(site_types.json ${Object.keys(SITE_TYPES).length}건 밖) — 검사기 한계(화면 오류 아님) · 사이트 유형표 보강 대상`); continue; }
+            if (!t) { put(x.row_id, 'ERROR', `[미검증] 기존행 r${exNow.row} TO_SITE_CODE='${site}' 사이트 유형 미등록(site_types.json ${Object.keys(SITE_TYPES).length}건 밖) — 검사기 한계(화면 오류 아님) · 사이트 유형표 보강 대상`); continue; }
             // 기존행 경로(EditButton): INCOTERMS 는 LockColumn(DIVISION_ID~INCOTERMS, EditButton:453) 로 항상 잠금 · INCOTERMS_SSP 만 TO_SITE PLANT 일 때 해제(EditButton:482) — SetCityCode 의 조건부 잠금은 Site 를 바꿀 때(신규행) 만 적용
             const exp = col === 'INCOTERMS' ? false : (t === 'PLANT');
             put(x.row_id, e === exp ? 'PASS' : 'FAIL', `기존행 r${exNow.row} TO_SITE '${site}'(${t}) → ${col} 편집=${e} — AS-IS 기존행(EditButton) 기대 ${exp ? '해제' : '잠금'}(${col === 'INCOTERMS' ? 'Incoterms 는 기존행에서 항상 잠금, EditButton:453' : 'SSP Incoterms 만 To Site 가 PLANT 일 때 해제, EditButton:482'})${e === exp ? ' 일치' : ' — 불일치'}`);
@@ -2400,6 +2954,53 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     await nscm.expandSearchArea(true);
     const dv = await fc(['Div', 'Division'], 'w4d_a4');
     const dvFx = dv ? await divFixedOf(dv.root, ID) : null;  // T215 — Division 고정·비활성 조건이면 다른 값으로 재조회 자체가 성립하지 않음(AS-IS 동일 고정이면 NA)
+    // T554(2026-11-25 SCP0005 V-28e296d5 'W4d 재조회 전 시트 초기화(Division 전환 조회) 실행 못 함'): Division 조회조건이 없는 화면(SCP0005 controls.csv Div 0건 · T455)은 A4 를 적지 않고 끝났다.
+    //   재려는 것 = 재조회 전에 시트를 비우는가 → Division 대신 다른 콤보 조회조건(조회영역 칸 · 후보 2개 이상)을 다른 값 하나로 바꿔 재조회하고,
+    //   그리드 행 수가 이번 응답 행 수(nscm.calls rows · 결과 커서 같은 부가 배열 포함) 이하인지 본다. 앞 결과가 남으면 그리드 = 앞 조회 행 + 이번 행 > 응답 행. Division 이 있는 화면은 종전 경로
+    if (!dv) {
+      const a4 = byRule('RULE_SCREEN', 'A4');
+      if (a4.length) {
+        const labs = await p.evaluate(() => { const items = Array.from(document.querySelectorAll('[class*="_formItem_"], [class*="formItem"]')) as HTMLElement[]; const o: string[] = []; for (const it of items) { if (!it.querySelector('[role="combobox"]') || !it.getBoundingClientRect().width) continue; const l = ((it.children[0] as HTMLElement | undefined)?.innerText || '').trim(); if (l && !/^div(ision)?$/i.test(l) && !o.includes(l)) o.push(l); } return o; }).catch(() => [] as string[]);
+        let done = false; const tried: string[] = [];
+        for (const lab of labs.slice(0, 6)) {
+          const f = await fc([lab], `w4d_a4c_${nrm(lab)}`); if (!f) { tried.push(`${lab} 칸 못 찾음`); continue; }
+          const v0 = await condValue(f.root, f.kind);
+          const o = await comboOpts(f.root); const sa = o.texts.findIndex(t => /select all|^all$|^전체$/i.test(t));
+          const allOn = await p.evaluate(() => { const c = [...document.querySelectorAll('.MuiAutocomplete-popper li[role="option"] input[type="checkbox"]')] as HTMLInputElement[]; return c.length > 0 && c.every(i => i.checked); }).catch(() => false);
+          const cand = o.texts.map((t, i) => ({ t, i })).filter(z => z.i !== sa && !!z.t && !v0.split(/\s*\|\s*/).includes(z.t));
+          if (!cand.length || o.texts.filter(Boolean).length < 2) { await p.keyboard.press('Escape'); tried.push(`${lab} 후보 ${o.texts.filter(Boolean).length}개`); continue; }
+          if (allOn && sa >= 0) { await o.lis.nth(sa).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); }
+          await o.lis.nth(cand[0].i).click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(300); await p.keyboard.press('Escape');
+          const f1 = await fc([lab], `w4d_a4d_${nrm(lab)}`); const v1 = f1 ? await condValue(f1.root, f1.kind) : v0;
+          // T592(2026-11-25 SCP0005 V-28e296d5 '[측정 실패] 이번 응답 -행 · 그리드 0행'): 콤보 표시 글자에 폭 없는 공백(U+200B)이 붙어 증거가 '(U+200B)'→'AIR (U+200B)' 로 찍혔다(값 비교는 공백을 지운 값).
+          //   응답 행 수 = 본 조회 시트 호출의 rows 인데 시트 키 불일치(T593)로 호출을 못 골랐고, 8076행 조회(L1 실측 63초)는 응답 본문 파싱 전에 행 수를 읽을 수 있었다
+          //   → 앞 본 조회 인자와 이번 인자를 비교해 바꾼 값이 조회에 실렸는지 적고 · 본 조회 호출 응답 끝(done)까지 요청 시작부터 최대 180초 기다린 뒤 응답 행 수·그리드 행 수를 읽는다
+          const zw = (s: string) => String(s || '').replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\s+/g, ' ').trim();
+          if (zw(v1) === zw(v0)) { tried.push(`${lab} 값 바뀌지 않음('${zw(v0)}')`); continue; }
+          const prevMain = [...nscm.calls].reverse().find(q => isMainSheet(q.sheet) && /SEARCH/i.test(q.btn) && !!q.body);
+          const cb = nscm.calls.length; const tq = Date.now();
+          await searchWait();
+          let mains = nscm.calls.slice(cb).filter(q => isMainSheet(q.sheet));
+          if (!mains.length) { learnMainSheet(nscm.calls.slice(cb), await probe.rowCount(p)); mains = nscm.calls.slice(cb).filter(q => isMainSheet(q.sheet)); }
+          while (Date.now() - tq < 180_000 && mains.length && mains.some(q => !q.done)) await p.waitForTimeout(500);
+          const resp = mains.filter(q => q.rows != null).map(q => Number(q.rows)).pop();
+          let grid = await probe.rowCount(p); for (let k = 0; k < 60 && resp != null && resp > 0 && grid <= 0; k++) { await p.waitForTimeout(500); grid = await probe.rowCount(p); }
+          const argDiff = (() => { const cur = mains.filter(q => /SEARCH/i.test(q.btn) && !!q.body).pop(); if (!cur || !prevMain) return null; try { const a = JSON.parse(prevMain.body || '{}') as Record<string, unknown>; const z = JSON.parse(cur.body || '{}') as Record<string, unknown>; return [...new Set([...Object.keys(a), ...Object.keys(z)])].filter(k => JSON.stringify(a[k]) !== JSON.stringify(z[k])).map(k => `${k} ${JSON.stringify(a[k] ?? null)}→${JSON.stringify(z[k] ?? null)}`); } catch { return null; } })();
+          const seen = nscm.calls.slice(cb).map(q => `${q.sheet}/${q.btn}:${q.rows ?? '-'}${q.done ? '' : '(응답 중)'}`).join(', ');
+          const ev = `Division 조회조건 없음(T455) → '${lab}' '${zw(v0)}'→'${zw(v1)}' 재조회(조회 인자 ${argDiff == null ? '비교 못 함' : argDiff.length ? argDiff.join(', ').slice(0, 120) : '변화 없음'}) · 앞 조회 ${nAll}행 · 이번 응답 ${resp ?? '-'}행(부가 배열 포함 · 본 조회 시트 ${[...new Set(mains.map(q => q.sheet))].join('/') || '못 찾음'}) · 그리드 ${grid}행 · 조회 ${Math.round((Date.now() - tq) / 1000)}초 · 호출 ${seen.slice(0, 160) || '없음'}`;
+          for (const x of a4) {
+            if (!mains.length) put(x.row_id, 'ERROR', `[측정 실패] 본 조회 호출을 못 고름(그리드 행 수와 응답 행 수가 맞는 조회 호출 없음) · ${ev}`);
+            else if (mains.some(q => !q.done)) put(x.row_id, 'ERROR', `[측정 실패] 본 조회 응답이 요청 시작부터 180초 안에 끝나지 않음 · ${ev}`);
+            else if (argDiff && !argDiff.length) put(x.row_id, 'ERROR', `[측정 실패] 바꾼 조건 값이 조회 인자에 실리지 않음 · ${ev}`);
+            else if (resp == null || grid < 0) put(x.row_id, 'ERROR', `[측정 실패] 재조회 응답·그리드 행 수 못 읽음 · ${ev}`);
+            else if (nAll <= 5) put(x.row_id, 'ERROR', `[측정 전제 미충족] 앞 조회 ${nAll}행 — 앞 결과 잔존을 행 수로 가릴 수 없음 · ${ev}`);
+            else put(x.row_id, grid <= resp ? 'PASS' : 'FAIL', `${ev} — ${grid <= resp ? '앞 결과 잔존 없음(시트 초기화 후 재채움)' : `앞 결과 잔존(그리드가 응답보다 ${grid - resp}행 많음)`}`);
+          }
+          done = true; break;
+        }
+        if (!done) for (const x of a4) put(x.row_id, 'ERROR', `[측정 경로 없음] Division 조회조건 없음(T455) · 값을 바꿀 다른 콤보 조회조건 없음(${tried.join(', ') || '콤보 칸 0'}) — 재조회 전 시트 초기화 미측정`);
+      }
+    }
     if (dvFx) { for (const x of byRule('RULE_SCREEN', 'A4')) put(x.row_id, dvFx.asis ? 'NA' : 'FAIL', `Division 조회조건 비활성 고정 '${dvFx.shown}' — ${dvFx.asis ? `AS-IS 도 고정(${dvFx.asis}) · Division 을 바꿔 재조회하는 시나리오가 성립하지 않음(T215)` : 'AS-IS 는 활성 — 비활성 고정은 AS-IS 와 다름'}`); }
     else if (dv) {
       const o = await comboOpts(dv.root); const allOn = await p.evaluate(() => { const c = [...document.querySelectorAll('.MuiAutocomplete-popper li[role="option"] input[type="checkbox"]')] as HTMLInputElement[]; return c.length > 0 && c.every(i => i.checked); });
@@ -2449,8 +3050,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const code = (s: string) => String(s || '').trim().split(/\s+/)[0];
     const comboTexts = async (root: Locator) => { const combo = root.locator('[role="combobox"]').first(); await combo.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(400); const lis = p.locator('.MuiAutocomplete-popper [role="option"], .MuiPopover-root [role="option"], [role="listbox"] [role="option"]'); const texts = (await lis.allInnerTexts().catch(() => [] as string[])).map(s => s.trim()).filter(Boolean); await p.keyboard.press('Escape').catch(() => undefined); return texts; };
     const r0 = await openReady(nscm); if (!r0.authorized) { putAll([...GA, ...GB, ...GC, ...GD, ...GD2, ...GE, ...GF, ...GG], 'NA', '화면 권한 없음 — 재현 불가'); return; }
-    await nscm.search(); await probe.waitRows(p);  // 시간 상한 120s(2026-10-29 횟수 상한 → 시간 상한) await nscm.clearDialogs();
-    const n0 = await probe.rowCount(p);
+    const n0 = await searchAndRows(nscm);  // 2026-11-26 VMO 20261126130850_SELF_2: 기본 조회 0행이면 ensureRows(Division·기간 대안)까지 — 종전 조회 1회 n0
     // 기준 기존행 — Route 가 있는(ROUTE_CNT>0) 첫 행
     let exRow = -1; for (let r = 0; r < Math.min(n0, 300) && exRow < 0; r++) { if (Number((await probe.value(p, r, 'ROUTE_CNT')) ?? 0) > 0) exRow = r; } if (exRow < 0 && n0 > 0) exRow = 0;
     const KEYS = ['DIVISION_ID', 'FROM_SITE_CODE', 'TO_SITE_CODE', 'INCOTERMS', 'INCOTERMS_SSP', 'PRIORITY', 'TRANSPORT_MODE', 'FROM_YYYYMMDD', 'TO_YYYYMMDD', 'ROUTE_ID'];
@@ -2587,7 +3187,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     } else putAll(GE, 'FAIL', 'Route Id 셀 위치 확인 불가');
     // ── G-D 저장 실패 시 문제 행·셀 강조 + 오류코드별 메시지 — 기존행과 같은 키의 신규행을 저장(AS-IS: SP 99010 중복 → 중복 행 DIVISION_ID~INCOTERMS 배경 InvalidColor)
     if (GD.length || GD2.length) {
-      if (exRow < 0 || !popOk) putAll([...GD, ...GD2], 'NA', `중복 저장 재현 불가 — ${exRow < 0 ? '기준 기존행 없음' : 'Route Id 팝업 설정 실패(필수값)'} · ${exDesc}`);
+      if (exRow < 0 || !popOk) putAll([...GD, ...GD2], 'ERROR', `[측정 전제 미충족] 중복 저장 재현 불가 — ${exRow < 0 ? '기준 기존행 없음(대안 조회 뒤에도 0행)' : 'Route Id 팝업 설정 실패(필수값)'} · ${exDesc}`);  /* VMO 20261126130850_SELF_2: 재지 못함 = 미검증 */
       else {
         const readCells = (rowIdx: number) => p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const out = []; for (const b of ['DIVISION_ID','FROM_SITE_CODE','TO_SITE_CODE','INCOTERMS','INCOTERMS_SSP','TRANSPORT_MODE','PRIORITY']) { const col = c.columns.getColumn(b); if (!col) continue; c.scrollIntoView(${rowIdx}, col.index); const el = c.cells.getCellElement(${rowIdx}, col.index); if (!el) { out.push({ b, cls: '', bg: '' }); continue; } const st = getComputedStyle(el); out.push({ b, cls: String(el.className), bg: st.backgroundColor + (el.style.backgroundColor ? ' inline:' + el.style.backgroundColor : '') }); } return out; })()`).catch(() => [] as { b: string; cls: string; bg: string }[]) as Promise<{ b: string; cls: string; bg: string }[]>;
         const cellsBefore = await readCells(nr.row);
@@ -2609,7 +3209,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         const saveDesc = `같은 키(${exDesc}) 신규행 Save → 저장 호출 ${saves.length}건 HTTP ${http.join('/') || '-'} · 결과 CODE≠0 ${codeFail ? '있음' : '없음'} · 화면 메시지 '${msg.slice(0, 160) || '(없음)'}'`;
         if (!saves.length && !msg) putAll([...GD, ...GD2], 'FAIL', `${saveDesc} — Save 를 눌렀는데 저장 요청도 메시지도 없음`);
         else if (!failed) putAll([...GD, ...GD2], 'FAIL', `${saveDesc} — 기존행과 같은 키의 BOD 가 거부되지 않고 저장됨(AS-IS 저장 SP 는 중복 99010 으로 거부하고 중복 행을 강조) · 저장된 행은 REMARKS 'E2E_W9_DUP' 마커로 정리 대상`);
-        else if (!cells.length) putAll([...GD, ...GD2], 'NA', `${saveDesc} — 저장은 거부됐으나 신규행 r${rowNow} 셀 색을 읽지 못함(그리드 재탐색 실패) → 강조 여부 측정 실패(재측정 대상)`);
+        else if (!cells.length) putAll([...GD, ...GD2], 'ERROR', `[미검증] ${saveDesc} — 저장은 거부됐으나 신규행 r${rowNow} 셀 색을 읽지 못함(그리드 재탐색 실패) → 강조 여부 측정 실패(재측정 대상)`);
         else {
           putAll(GD, hi.length ? 'PASS' : 'FAIL', `${saveDesc} → 신규행 r${rowNow} 셀 색 저장 전→후 [${cells.map(c => `${c.b}:${bgOf(cellsBefore, c.b)}→${bgOf(cells, c.b)}`).join(', ')}] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조${hi.length ? ` → 강조 셀 ${hi.map(c => c.b).join(', ')} 확인(일치)` : ' → TO-BE 는 메시지만 띄우고 어느 행·셀이 문제인지 색으로 표시하지 않음(미구현)'}`);
           // AS-IS 문장 행(E4 errCode 99010~99040 분기)도 같은 실측으로 판정 — W4 E4 의 정적 FAIL(대조표 미구현 가정)을 덮는다
@@ -2670,16 +3270,62 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
         }
         // T505(2026-11-20 SCP0028 V-a99ddb18): 조건에 실행 중 수정 표시(RAW action == FlagM)가 들면 조회 결과에는 만족 행이 없다 — 편집으로 조건을 만들고 쓰기 차단 Save 로 잰다
         if (!hit.length) { const ra = runtimeEditAtoms(cond); if (ra && ra.flag === 'M') { const r2 = await h2RuntimeEdit(nscm, cr, ra, `계정 ${cur} · Div ${curDiv || '-'} · 조회 ${data.length}행 · 조건 ${cond.slice(0, 160)}`); put(x.row_id, r2.result, r2.why); continue; } }
+        // T553(2026-11-25 SCP0005 H2 V-b4651880 'RAW(intPRIORITY < 1) · 조건 만족 0행 · 평가 불가 8076행'): AS-IS 지역 숫자 변수가 칸 값(bindLocalNum · cs GetValue → Parse)이면 그 칸을 편집해 조건을 만들고 Save 로 잰다(h2NumEdit).
+        //   부정(!(RAW(…)))으로만 쓰인 원자는 이 경로 대상 아님(앞 규칙이 참이 아님을 뜻하는 조건 · 종전 판정 유지)
+        // T553(2026-11-25 SCP0005 H2 V-b6f27092·V-bc631885·V-06e7dec2·V-fa71e89c·V-dc54eed4): 저장 오류 응답 분기(iCount·응답 'S' 아님·errCode·errStr == cpStr) 원자는 조회 결과로 평가할 수 없었다.
+        //   → 원문으로 원자를 분류(saveErrShape)하고 규칙을 참으로 만드는 오류코드(codeForRule)로 가짜 오류 응답을 구동(driveSaveErr · 서버 미전송) → 응답 행과 같은 그리드 행의 규칙 칸 색을 잰다
+        if (!hit.length) {
+          const ruleCols = String(cr.columns || '').split(';').map(s => s.trim()).filter(s => /^[A-Za-z][A-Za-z0-9_]*$/.test(s));
+          const nums = rawNumAtoms(cond).filter(a => !cond.includes(`!(${a.atom})`));
+          const nb = nums.map(a => { for (const f of ASIS_SRC) { const b = bindLocalNum(f.lines, cr.method || '', a.v); if (b) return { atom: a.atom, op: a.op, n: a.n, col: b.col, emptyAs: b.emptyAs, ref: `${f.file}:${b.ref}` }; } return null; });
+          const head2 = `계정 ${cur} · Div ${curDiv || '-'} · 조회 ${data.length}행 · 조건 ${cond.slice(0, 160)}`;
+          if (nb.length && nb.every(Boolean) && ruleCols.length) { const r2 = await h2NumEdit(nscm, cr, ruleCols, nb as { atom: string; op: string; n: number; col: string; emptyAs: string | null; ref: string }[], cond, head2); put(x.row_id, r2.result, r2.why); continue; }
+          const se = ASIS_SRC.map(f => ({ f, s: saveErrShape(cond, f.lines, cr.method || '') })).find(z => !!z.s);
+          if (se && se.s && ruleCols.length) {
+            const sh = se.s;
+            if (sh.other.length) { put(x.row_id, 'ERROR', `[조건 평가 불가] 저장 오류 응답 분기 밖 RAW ${sh.other.slice(0, 2).join(' / ')} · ${head2}`); continue; }
+            const cf = codeForRule(cond, sh);
+            if (!cf) { put(x.row_id, 'ERROR', `[조건 평가 불가] 오류코드 ${sh.codes.join('·')} 중 규칙을 참으로 만드는 값 없음 · ${head2}`); continue; }
+            const want = (asisControlColor(ROOT, cr.color_edit || '') || asisControlColor(ROOT, String(cr.color_edit || '').replace(/Invalid/, 'InValid'))).replace(/\s+/g, '');
+            const run = await driveSaveErr(nscm, cf.code, ruleCols, sh.keyCols, saveRespSamples());
+            const hid = ruleCols.filter(c => !run.after.some(z => z.b.toUpperCase() === c.toUpperCase()));
+            const ev = `AS-IS ${cr.ref} ${cr.api} ${cr.color_edit || '-'}${want ? `(${want})` : ''} · 오류코드 ${cf.code}(${se.f.file} 원문 줄 ${sh.refs.join(',')} · ${sh.codeVar} = Rows[0][0] · 행 일치 칸 ${sh.keyCols.join('+')}) · ${run.ev} · 규칙 칸 색 Save 전→후 [${run.after.map(c => `${c.b}:${run.before.find(z => z.b === c.b)?.bg || '-'}→${c.bg || '-'}`).join(', ') || '-'}]${hid.length ? ` · 안 보이는 칸 ${hid.join(',')}(판정 제외)` : ''} · ${head2}`;
+            if (!run.ok) { put(x.row_id, 'ERROR', `${run.why} · ${ev}`); continue; }
+            if (!run.after.length) { put(x.row_id, 'ERROR', `[측정 실패] 오류 응답 뒤 규칙 칸 색을 읽지 못함 · ${ev}`); continue; }
+            const mk = markedCells(run.before, run.after, want); const miss = run.after.filter(c => !mk.includes(c)).map(c => c.b);
+            if (!miss.length) put(x.row_id, 'PASS', `오류 표시 칸 ${mk.map(c => c.b).join(', ')} · ${ev}`);
+            else if (mk.length || run.shapeKnown) put(x.row_id, 'FAIL', `오류 색 아님 ${miss.join(', ')}${mk.length ? ` · 오류 표시 ${mk.map(c => c.b).join(', ')}(가짜 응답 형식은 화면이 읽음)` : ''} · ${ev}`);
+            else put(x.row_id, 'ERROR', `[가짜 응답 형식 근거 없음] 색 변화 0칸 — 오류 행 열 이름(ERR_CODE·ERROR_CODE·ERRCODE)을 화면이 읽는지 근거 없음(오류 응답 표본 없음) · ${ev}`);
+            continue;
+          }
+        }
+        // T591(2026-11-25 SCP0005 H2 V-17e451a7(cs:1305)·V-e63ff383(cs:1313) '조건 만족 0행 · 평가 불가 1행/14행'): 조건 = 수정 표시 행 && !(RAW(intPRIORITY < 1)) && 빈 칸 원자.
+        //   부정 숫자 원자는 T553 경로(부정 제외)에 들지 않아 종전 ERROR 로 끝났다. 평가 불가 행 = 조회 행에 CRUD_TYPE 키가 없어(행 상태 원자 평가 불가) RAW 와 함께 남고 빈 칸 원자가 이미 참인 행 · 그 밖 행은 빈 칸 원자가 거짓이라 거짓으로 끝난다
+        //   → 원자를 분류(premiseAtoms)해 기존 행 하나에서 빈 칸 원자 칸을 비우고 숫자 원자 칸을 조건 값으로 맞춘 뒤 쓰기를 막은 채 Save → 규칙 칸 색(h2PremiseEdit). TO-BE 가 비우기를 받지 않으면 '[전제 상태 TO-BE 입력 불가]'
+        if (!hit.length) {
+          const ruleCols = String(cr.columns || '').split(';').map(s => s.trim()).filter(s => /^[A-Za-z][A-Za-z0-9_]*$/.test(s));
+          const pa = premiseAtoms(cond);
+          const pb = pa.nums.map(a => { for (const f of ASIS_SRC) { const b = bindLocalNum(f.lines, cr.method || '', a.v); if (b) return { atom: a.atom, op: a.op, n: a.n, neg: a.neg, col: b.col, emptyAs: b.emptyAs, ref: `${f.file}:${b.ref}` }; } return null; });
+          if (!pa.other.length && pa.crud.length && pa.empty.length && pb.every(Boolean) && ruleCols.length) {
+            const noCrud = data.filter(r => !Object.keys(r).some(k => /^CRUD_TYPE$/i.test(k))).length;
+            const r2 = await h2PremiseEdit(nscm, cr, ruleCols, pa, pb as H2NumBind[], cond, `계정 ${cur} · Div ${curDiv || '-'} · 조회 ${data.length}행 중 조건 만족 0행${unk ? ` · 평가 불가 ${unk}행` : ''}(CRUD_TYPE 키 없는 행 ${noCrud}) · 조건 ${cond.slice(0, 160)}`);
+            put(x.row_id, r2.result, r2.why); continue;
+          }
+        }
         if (!hit.length) { put(x.row_id, 'ERROR', `[측정 경로 없음] 계정 ${cur}(그룹 ${ac.group.join('/') || '-'}) · Div ${curDiv || '-'} 조회 ${data.length}행 중 조건 만족 0행${unk ? ` · 평가 불가 ${unk}행` : ''} — 조건 ${cond.slice(0, 200)}`); continue; }
+        // T540(2026-11-25 SCP0005 H2 5행): 표본을 기간 칸(dyn_columns 정규식)에서만 찾아 고정 칸 규칙(color_rules columns PRIORITY·FROM_CITY_NAME~FROM_CITY 등)이 '표본 0칸' ERROR 였다.
+        //   규칙 칸이 고정(expand ≠ DYNAMIC)이면 그 칸을 잰다. 오류 색(InvalidColor)이고 메서드가 Save 진입점 경로면 조회 상태가 아닌 Save 뒤 색으로 잰다(h2SaveMark)
+        const fixedCols = cr.expand === 'DYNAMIC' ? [] : String(cr.columns || '').split(';').map(s => s.trim()).filter(s => /^[A-Z][A-Z0-9_]*$/.test(s));
+        if (fixedCols.length && /invalid/i.test(cr.color_edit || '') && H2_SAVE_REACH.has(cr.method || '')) { const r2 = await h2SaveMark(nscm, cr, fixedCols, hit, names, `계정 ${cur} · Div ${curDiv || '-'} · 조회 ${data.length}행 중 만족 ${hit.length}행 · 조건 ${cond.slice(0, 160)}`); put(x.row_id, r2.result, r2.why); continue; }
         const cells: { r: number; b: string; cls: string; bg: string }[] = [];
         for (const r of hit.slice(0, 4)) {
-          const got = await p.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c) return []; const re = new RegExp(${JSON.stringify(dynRe)}); const d = c.rows[${r}] && c.rows[${r}].dataItem; const out = []; for (let i = 0; i < c.columns.length && out.length < 3; i++) { const k = c.columns[i]; const b = String(k.binding || ''); if (k.visible === false || !re.test(b) || !d || d[b] == null || String(d[b]).trim() === '') continue; c.scrollIntoView(${r}, i); await new Promise(z => requestAnimationFrame(() => requestAnimationFrame(z))); const el = c.cells.getCellElement(${r}, i); if (el) out.push({ r: ${r}, b, cls: String(el.className || ''), bg: getComputedStyle(el).backgroundColor }); } return out; })()`).catch(() => []) as { r: number; b: string; cls: string; bg: string }[];
+          const got = await p.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c) return []; const re = new RegExp(${JSON.stringify(dynRe)}); const fx = ${JSON.stringify(fixedCols.map(s => s.toUpperCase()))}; const d = c.rows[${r}] && c.rows[${r}].dataItem; const out = []; for (let i = 0; i < c.columns.length && out.length < ${fixedCols.length ? Math.min(fixedCols.length, 12) : 3}; i++) { const k = c.columns[i]; const b = String(k.binding || ''); if (k.visible === false || !d || (fx.length ? !fx.includes(b.toUpperCase()) : (!re.test(b) || d[b] == null || String(d[b]).trim() === ''))) continue; c.scrollIntoView(${r}, i); await new Promise(z => requestAnimationFrame(() => requestAnimationFrame(z))); const el = c.cells.getCellElement(${r}, i); if (el) out.push({ r: ${r}, b, cls: String(el.className || ''), bg: getComputedStyle(el).backgroundColor }); } return out; })()`).catch(() => []) as { r: number; b: string; cls: string; bg: string }[];
           cells.push(...got);
         }
-        const want = (cr.color_edit || '').replace(/\s+/g, ''); const ok = (c: { cls: string; bg: string }) => /\bwj-cell-editable\b/.test(c.cls) || (!!want && c.bg.replace(/\s+/g, '') === want);
+        const want = (asisControlColor(ROOT, cr.color_edit || '') || asisControlColor(ROOT, String(cr.color_edit || '').replace(/Invalid/, 'InValid')) || cr.color_edit || '').replace(/\s+/g, ''); const ok = (c: { cls: string; bg: string }) => /\bwj-cell-editable\b/.test(c.cls) || (!!want && c.bg.replace(/\s+/g, '') === want);
         const bad = cells.filter(c => !ok(c));
         const res: 'PASS' | 'FAIL' | 'ERROR' = !cells.length ? 'ERROR' : bad.length ? 'FAIL' : 'PASS';
-        put(x.row_id, res, `${res === 'ERROR' ? '[측정 경로 없음] 조건 만족 행에 값 있는 기간 칸 없음 · ' : ''}AS-IS ${cr.ref} ${cr.api} 편집 모드 색 ${cr.color_edit || '-'}(조회 모드 ${cr.color_view || '-'}) · 조건 ${cond.slice(0, 220)} · 계정 ${cur}(그룹 ${ac.group.join('/') || '-'}) · Div ${curDiv || '-'} · 조회 ${data.length}행 중 만족 ${hit.length}행${unk ? ` · 평가 불가 ${unk}행` : ''} · 표본 ${cells.length}칸 ${cells.slice(0, 6).map(c => `r${c.r}.${c.b}=${/\bwj-cell-editable\b/.test(c.cls) ? '편집색(wj-cell-editable)' : c.bg}`).join(', ')}${bad.length ? ` — 편집색 아님 ${bad.length}칸` : ''} · TO-BE 편집 가능 셀 = 표준 노랑(CR-016)`);
+        put(x.row_id, res, `${res === 'ERROR' ? (fixedCols.length ? `[측정 경로 없음] 조건 만족 행에 규칙 칸(${fixedCols.join(',')}) 셀 없음 · ` : '[측정 경로 없음] 조건 만족 행에 값 있는 기간 칸 없음 · ') : ''}AS-IS ${cr.ref} ${cr.api} 편집 모드 색 ${cr.color_edit || '-'}(조회 모드 ${cr.color_view || '-'}) · 조건 ${cond.slice(0, 220)} · 계정 ${cur}(그룹 ${ac.group.join('/') || '-'}) · Div ${curDiv || '-'} · 조회 ${data.length}행 중 만족 ${hit.length}행${unk ? ` · 평가 불가 ${unk}행` : ''} · 표본 ${cells.length}칸 ${cells.slice(0, 6).map(c => `r${c.r}.${c.b}=${/\bwj-cell-editable\b/.test(c.cls) ? '편집색(wj-cell-editable)' : c.bg}`).join(', ')}${bad.length ? ` — 편집색 아님 ${bad.length}칸` : ''} · TO-BE 편집 가능 셀 = 표준 노랑(CR-016)`);
       }
     } finally {
       if (cur !== ACCT.account && ACCT.account) await nscm.loginAs(ACCT.account).catch(() => undefined);
@@ -2697,7 +3343,9 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const r0 = await nscm.openScreen(ID); if (!r0.authorized) { for (const x of btnRows) put(x.row_id, 'ERROR', '[측정 경로 없음] 화면 권한 없음'); return; }
     await nscm.expandSearchArea(true).catch(() => undefined);
     for (const x of btnRows) {
-      const name = String((/"name":\s*"([^"]+)"/.exec(x.condition || '') || [])[1] || '');
+      const name0 = String((/"name":\s*"([^"]+)"/.exec(x.condition || '') || [])[1] || '');
+      // T544(2026-11-25 SCP0005 T-eb5343b6 btnEaxel): 원장 대상 이름이 컨트롤 이름의 '_' 앞에서 잘림(btnEaxel_Upload → btnEaxel) — '<이름>_…_Click' 클릭 메서드가 하나뿐이면 그 컨트롤로 본다
+      const name = (() => { const lo = name0.toLowerCase(); if (pa.some(a => (a.asis_method || '').toLowerCase() === `${lo}_click`) || BTNPOP.ps.some(b => b.btn.toLowerCase() === lo)) return name0; const ms = [...new Set([...pa.filter(a => a.side === 'ASIS').map(a => String(a.asis_method || '')), ...BTNPOP.ps.map(b => `${b.btn}_Click`)].filter(m => m.toLowerCase().startsWith(`${lo}_`) && /_click$/i.test(m)).map(m => m.replace(/_click$/i, '')))]; return ms.length === 1 ? ms[0] : name0; })();
       let hit = pa.find(a => a.side === 'ASIS' && (a.asis_method || '').toLowerCase() === `${name}_click`.toLowerCase() && a.host_label);
       // T459(2026-11-20 SCP0005 T-85f3a8bb·T-7e1a41bb): popup_args 에 클릭 메서드 행은 있는데 TO-BE 칸 라벨(host_label)이 빈 경우 — AS-IS 인자 원천 조회조건 컨트롤 이름(txtFromCity.Text → 'From City')으로 칸을 찾는다
       let labs: string[] = hit ? [hit.host_label, ...hit.host_label.split(/\s*\/\s*/)] : [];
@@ -2827,7 +3475,11 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
     const r0 = await openReady(nscm); if (!r0.authorized) { for (const x of [...msgRows.map(m => m.rid), ...spRows.map(s => s.rid)]) put(x, 'ERROR', '[측정 경로 없음] 화면 권한 없음'); return; }
     const noDrive: PopDrive = { opened: false, driven: false, why: '구동 전 중단', trail: [], confirm: '', title: '', picked: '' };
     // ② 데이터 변경 경로 결과 분기 메시지 — 버튼·메서드·분기마다 한 번 구동
-    const samples = [...PREV.values()].map(z => String(z.evidence || '')).concat(ledger.map(z => z.evidence || ''));
+    // 2026-11-20 T511(SCP0028 V-86e7f1e2·V-a89007be·T-0caf6c62·T-4677b9e5 'main/SAVE 실제 응답 표본 없음'): run_verify.py 가 E2E 시작 때 e2e_results.json 을 .prev 로 옮기고
+    //   원장은 E2E 전에 다시 만들어 PREV·원장 증거에 표본이 없었다. 앞 실행 결과(.prev · T-0159f9dc 'main/SAVE:200 응답={…RESULT_CODE S…}')도 표본 원천으로 본다(같은 시트·버튼 실제 응답만 · respSample)
+    const prevRun = (() => { try { return (JSON.parse(fs.readFileSync(OUT + '.prev', 'utf8')) as Res[]).map(z => String(z.evidence || '')); } catch { return [] as string[]; } })();
+    const samples0 = [...PREV.values()].map(z => String(z.evidence || '')).concat(ledger.map(z => z.evidence || ''), prevRun);
+    const samples = samples0.concat(persistRespSamples(samples0, path.join(DIR, 'resp_samples.json')));  // T642
     const groups = new Map<string, MsgRow[]>();
     for (const m of msgRows) { const g = guardBranch(m.guard); if (!g) continue; const k = `${m.bp.btn}|${m.meth}|${g.literal}|${g.elseBranch ? 'else' : 'if'}`; groups.set(k, [...(groups.get(k) || []), m]); }
     const WRITE_RE = /\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i;

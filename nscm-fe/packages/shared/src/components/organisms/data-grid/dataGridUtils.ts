@@ -31,6 +31,7 @@ interface SummaryInfo {
   cntAll: number;
   sum: number;
   avg: number;
+  empty: number;
 }
 
 export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
@@ -41,7 +42,16 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
     rangeIndex: number
   ) => {
     const range = ranges[rangeIndex];
-    if (range.topRow === range.bottomRow && range.leftCol === range.rightCol) return;
+    // 단일 셀 하나만 선택한 경우(평범한 클릭)는 요약을 띄우지 않는다. 단 Ctrl 로 여러 셀을 비연속
+    //   선택하면(ranges.length > 1) 각 선택이 1x1 range 들이라, 여기서 전부 건너뛰면 집계가 0이 되어
+    //   요약이 안 뜬다(AS-IS 는 Ctrl 선택에도 Count/Sum/Avg 가 떴다). 다중 range 일 땐 1x1 도 집계한다.
+    const isSingleSelection = ranges.length === 1;
+    if (
+      isSingleSelection &&
+      range.topRow === range.bottomRow &&
+      range.leftCol === range.rightCol
+    )
+      return;
 
     for (let row = range.topRow; row <= range.bottomRow; row++) {
       for (let col = range.leftCol; col <= range.rightCol; col++) {
@@ -49,7 +59,12 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
         const cellData = grid.getCellData(row, col, false) as WijmoPrimitive;
 
         if (isOverlapped || !grid.getColumn(col).visible) continue;
-        if (!cellData || cellData === '' || !isNumber(cellData)) continue;
+        // 빈 셀(널/undefined/'')은 Empty Cell 로 센다. 0·false·숫자 아닌 값은 기존대로 집계에서 제외.
+        if (cellData === null || cellData === undefined || cellData === '') {
+          tally.empty++;
+          continue;
+        }
+        if (!cellData || !isNumber(cellData)) continue;
 
         const value = Number(cellData.toFixed(2));
 
@@ -65,7 +80,7 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
   };
 
   const _showAreaInfo = (grid: FlexGrid<T>): SummaryInfo => {
-    const tally: SummaryInfo = { cnt: 0, cntAll: 0, sum: 0, avg: 0 };
+    const tally: SummaryInfo = { cnt: 0, cntAll: 0, sum: 0, avg: 0, empty: 0 };
     const ranges: CellRange[] = grid.selectedRanges;
 
     for (let rangeIndex = 0; rangeIndex < ranges.length; rangeIndex++)
@@ -83,13 +98,15 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       if (ht.cellType === CellType.Cell) {
         const areaData = _showAreaInfo(grid);
 
-        if (areaData && areaData.cntAll > 1) {
-          const { cntAll, avg, sum } = areaData;
+        if (areaData && areaData.cntAll + areaData.empty > 1) {
+          const { cntAll, avg, sum, empty } = areaData;
           const content = `
               <div class='grid_summary_popup'>
                 <div class='grid_summary_popup_area'>
                   <div class='grid_summary_popup_title'>Count</div>
                   <div class='grid_summary_popup_cnt'>${Globalize.formatNumber(cntAll, 'n0')}</div>
+                  <div class='grid_summary_popup_title'>Empty Cell</div>
+                  <div class='grid_summary_popup_empty'>${Globalize.formatNumber(empty, 'n0')}</div>
                   <div class='grid_summary_popup_title'>Average</div>
                   <div class='grid_summary_popup_avg'>${Globalize.formatNumber(avg, 'G2')}</div>
                   <div class='grid_summary_popup_title'>Sum</div>
@@ -109,6 +126,22 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
 
     grid.scrollPositionChanged.addHandler(() => tooltip.hide());
     grid.selectionChanging.addHandler(() => tooltip.hide());
+  };
+
+  // 선택 영역 요약을 하단 상태바(그리드 최하단 오른쪽)에 뿌릴 HTML 을 만든다 — 커서 툴팁 대체(AS-IS 파리티).
+  //   집계 기준은 setSummaryTooltip 과 완전히 동일(_showAreaInfo: selectedRanges 전체, Ctrl 비연속·빈 셀 포함).
+  //   선택이 1셀 이하면 '' 를 돌려 상태바를 비운다(바 영역 자체는 유지 — 하단 영역 고정).
+  const getSelectionSummaryHTML = (grid: FlexGrid<T>): string => {
+    const { cntAll, empty, sum, avg } = _showAreaInfo(grid);
+    if (cntAll + empty <= 1) return '';
+    const item = (label: string, value: string) =>
+      `<span class='gsb-item'><span class='gsb-label'>${label}</span><span class='gsb-value'>${value}</span></span>`;
+    return (
+      item('Cell Count', Globalize.formatNumber(cntAll, 'n0')) +
+      item('Empty Cell', Globalize.formatNumber(empty, 'n0')) +
+      item('Sum', Globalize.formatNumber(sum, 'G2')) +
+      item('Avg', Globalize.formatNumber(avg, 'G2'))
+    );
   };
 
   // 셀 데이터에 마우스오버 시 전체 값을 툴팁으로 표시(공통).
@@ -834,6 +867,7 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
 
   return {
     setSummaryTooltip,
+    getSelectionSummaryHTML,
     setCellTooltip,
     setAggregationRow,
     setCheckbox,

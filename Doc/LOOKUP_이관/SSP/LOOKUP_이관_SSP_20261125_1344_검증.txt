@@ -1,0 +1,27 @@
+LOOKUP 이관 로컬 검증 2026-11-25 13:44:11
+방식 : AS-IS 개발 MSSQL 에서 [M1] [M3] [M2] 실행 → ZIOUI1 에서 시험 이름 백업 생성 → MERGE → [O1]~[O3] → 대조 → [R1]~[R5] → ROLLBACK → 시험 백업 삭제
+대상 : 그룹 = SSP · LOOKUP_TYPE = 조건 없음 · 상세 제외 유형 = IF_STOCK_CHECK
+AS-IS ('LGCE_SCMDEV', '2026-11-25 13:44:08') (개발 DB. 클라우드 QA MSSQL 아님)
+[M1] MASTER_CNT 62 · DETAIL_CNT 2252
+[M3] 유형 62
+[M2] 결과 행 2314 · 걸린 시간 1.0 초
+TO-BE ZIOUI1 ('2026-11-25 13:44:08', 'SCM_MGR')
+[B1] 시험 백업 생성(시험 이름 꼬리 VT134409)
+[B2] 시험 백업 생성(시험 이름 꼬리 VT134409)
+[B3] (644, 644, 65259, 65259, 66, 2260)
+[O1] 실행 전 (66, 2260)
+MERGE 실행 2314 문장 · 성공 2314 · 오류 0 · 걸린 시간 0.6 초
+[O1] 실행 뒤(트랜잭션 안) (66, 2260)
+[O2] 유형 66
+[O3] VALID_YN [('N', 939), ('Y', 1321)]
+  대조 SCM_ADM_LOOKUP_MASTER : AS-IS 62행 · Oracle 에 없음 0 · 값 다른 칸 0
+  대조 SCM_ADM_LOOKUP_MASTER_DETAIL : AS-IS 2252행 · Oracle 에 없음 0 · 값 다른 칸 0
+[R1] 처리 행 2260
+[R2] 처리 행 2260
+[R3] 처리 행 0
+[R4] 처리 행 66
+[R5] (0, 0, 0, 0)
+ROLLBACK 뒤 [O1] (66, 2260)
+시험 백업 삭제 SCM_ADM_LOOKUP_MASTER_DETAIL_VT134409
+시험 백업 삭제 SCM_ADM_LOOKUP_MASTER_VT134409
+결과 : PASS · 실패 0건

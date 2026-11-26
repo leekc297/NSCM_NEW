@@ -1,0 +1,74 @@
+{
+  "id": "J20261125_194123",
+  "itemLabel": "🧪 미검증 해소",
+  "kind": "claude",
+  "status": "done",
+  "mode": "par",
+  "maxPar": 5,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "unit": "screen",
+  "inputs": {},
+  "createdAt": "2026-11-25T19:41:23+09:00",
+  "startedAt": "2026-11-25T19:41:23+09:00",
+  "endedAt": "2026-11-25T19:51:11+09:00",
+  "note": "",
+  "screens": [
+    {
+      "id": "SCP0005",
+      "status": "cancel",
+      "step": "",
+      "actor": "",
+      "sec": 588,
+      "summary": "중지(에이전트 대화): 사용자 지시: SCP0005 미검증해소 작업 중단",
+      "why": "",
+      "md": "Doc\\gen\\SCP0005\\FULLRUN.md",
+      "startedAt": "2026-11-25T19:41:23+09:00",
+      "endedAt": "2026-11-25T19:51:11+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": null,
+      "flow": {
+        "at": "2026-11-25T19:41:23+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "1. 미검증 분류 (원장 미검증 행 → 담당·처리 방법 · 자동 재측정)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T19:41:23+09:00",
+            "end": "2026-11-25T19:41:25+09:00",
+            "sec": 2,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 2,
+            "name": "2. 검사엔진 보완 (처리 대상 전체 → 일괄 신설·보완 · 처리 대상이 있을 때만)",
+            "actor": "claude",
+            "st": "fail",
+            "start": "2026-11-25T19:41:25+09:00",
+            "end": "2026-11-25T19:51:11+09:00",
+            "sec": 585,
+            "prog": "",
+            "code": 1
+          },
+          {
+            "no": 4,
+            "name": "4. 미검증 해소 게이트 (해소 원장 열린 행 0 · 남으면 행별 시도 횟수 보고)",
+            "actor": "script",
+            "st": "notrun",
+            "end": "2026-11-25T19:51:11+09:00",
+            "prog": ""
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 1단계 · AI Agent 1회",
+      "log": ".vibe\\jobs\\J20261125_194123\\SCP0005.log",
+      "outputs": [
+        "Doc/verify/SCP0005/unverified_triage.md"
+      ]
+    }
+  ],
+  "resumable": 0
+}

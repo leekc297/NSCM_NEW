@@ -13,6 +13,7 @@ import {
   COLUMN,
   DUP_KEY_COLUMNS,
   EDITABLE_MEASURE,
+  PIVOT_QTY_MAX,
 } from '../shipment-request-semi.constants';
 
 import { dayOfBinding, isDayBinding } from './shipmentRequestSemi.editLock';
@@ -126,6 +127,18 @@ export const findNegativeCells = (cells: readonly SaveCell[]): SaveCell[] =>
   cells.filter(cell => {
     const n = Number(String(cell.qty).replace(/,/g, ''));
     return Number.isFinite(n) && n < 0;
+  });
+
+/**
+ * 자릿수 초과 셀 전수 탐지 — 저장 테이블 `DM_PLN_SHIPMENT_REQ(_H).QTY` 가 NUMBER(20,10) 이라 정수부
+ *   10자리(±9,999,999,999)를 넘으면 SP 가 ORA-01438 로 실패하고 화면엔 "저장에 실패하였습니다"만 뜬다.
+ *   타이핑은 그리드 `clampQtyOnCommit` 이 막지만 붙여넣기 등 다른 경로로 들어온 값의 최종 방어선이다.
+ */
+export const findOverMaxCells = (cells: readonly SaveCell[]): SaveCell[] =>
+  cells.filter(cell => {
+    const n = Number(String(cell.qty).replace(/,/g, ''));
+    // 1e21 이상은 String() 이 지수표기라 Number 로는 Infinity 가 아니어도 자릿수 초과다 — abs 비교로 충분.
+    return Number.isFinite(n) ? Math.abs(n) > PIVOT_QTY_MAX : /^\s*-?[\d,]+\s*$/.test(cell.qty);
   });
 
 /**

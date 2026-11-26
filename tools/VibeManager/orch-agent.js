@@ -16,7 +16,7 @@ const state = require('./orch-state');
 let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
 
 const DEF = { agentEnabled: true, agentMaxPerHour: 6, agentTimeoutMin: 30, agentMaxAttempts: 2, agentRules: ['R1', 'R2', 'R3', 'R4', 'R5', 'R10', 'R11', 'R13', 'R14'], agentPermissionMode: 'acceptEdits', snapKeepDays: 14 };
-const ALLOWED_TOOLS = 'Read,Edit,Write,Glob,Grep,Bash(node *),Bash(python *),Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *),Bash(git status*),Bash(git diff*),Bash(git log*),Bash(netstat *),Bash(tasklist *)';
+const ALLOWED_TOOLS = 'Skill,Read,Edit,Write,Glob,Grep,Bash(node *),Bash(python *),Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *),Bash(git status*),Bash(git diff*),Bash(git log*),Bash(netstat *),Bash(tasklist *)';
 const WRITE_ROOTS = ['tools/Harness/', 'tools/E2E/', 'tools/Docs/'];            // B 등급 수정 대상(스냅샷·되돌리기)
 const NOTE_ROOTS = ['Doc/verify/', '.vibe/'];                                    // 기록만 허용(결함 유형 문서 · 실행 기록)
 const SNAP_EXT = /\.(py|js|ts|json|csv|md|cmd|ps1|sql|txt)$/i;
@@ -37,7 +37,23 @@ const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: t
 function replaceFile(tmp, f) { for (let i = 0; i < 3; i++) { try { fs.renameSync(tmp, f); return; } catch (e) { if (i === 2 || !/EPERM|EBUSY|EACCES/.test(e.code || '')) { fs.copyFileSync(tmp, f); try { fs.unlinkSync(tmp); } catch { } return; } const t = Date.now() + 40 * (i + 1); while (Date.now() < t) { /* 짧게 기다림 */ } } } } // orch-selfcheck.js replaceFile 과 같은 처리: rename 이 EPERM, EBUSY, EACCES 면 재시도 뒤 복사(2026-11-19 21:27 실측)
 const P = () => getPaths();
 const orchDir = () => path.join(P().vibeDir, 'orch');
+const LG = () => { try { const l = require('./orch-ledger'); if (!l.ready()) l.init({ paths: () => P() }); return l; } catch (e) { return { note() { return ''; }, observing() { return false; }, tick() { return {}; }, stats() { return { byRule: {}, falses: [], observe: {}, total: 0, overdue: 0 }; } }; } }; // 2026-11-20 개입 장부(orch-ledger.js)
 function loadCfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); cfg = Object.assign({}, DEF, (h && h.orch) || {}); return cfg; }
+// 2026-11-24 사용자 지시: AI 주간 한도가 harness.json orch.aiWeeklyStopPct(기본 90)% 이상이면 VMO 자가진단과 보완(자동 AI 호출)을 멈춤.
+//   작업 모니터링(감시, 사건 기록, 알림, 상황판)은 계속. 사용자가 직접 시킨 일(VMO 직접 지시, 사람 승인, 사건 탭 에이전트 단추)은 진행.
+//   한도 값 = claude-usage.js(최근 AI 실행 기록의 rate_limit_event seven_day). 재설정 시각이 지나면 멈춤 풀림
+function aiLimit() {
+  let lim = 90;
+  try { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); const v = h.orch && h.orch.aiWeeklyStopPct; if (v != null && v !== '' && !isNaN(Number(v))) lim = Number(v); } catch { /* 기본 90 */ }
+  if (!(lim > 0)) return { stop: false, lim, pct: null, why: '' };
+  let u = null; try { u = require('./claude-usage').read(P().vibeDir); } catch { u = null; }
+  const w = u && u.weekly; const pct = w && typeof w.pct === 'number' ? w.pct : null; const reset = (w && w.resetsAt) || 0;
+  const stop = pct != null && pct >= lim && !(reset && Date.now() >= reset);
+  let rs = ''; try { rs = reset ? require('./date-fmt').fmtDT(reset) : ''; } catch { rs = ''; } // Windows 일자 형식
+  return { stop, lim, pct, resetsAt: reset, why: stop ? `AI 주간 한도 ${pct}%(멈춤 기준 ${lim}%)${rs ? `, 재설정 ${rs}` : ''}` : '' };
+}
+let limitKey = '';
+function limitNote(L, what) { const k = `${L.pct}|${what}`; if (limitKey === k) return; limitKey = k; say('note', { text: `${L.why}. ${what} 멈춤(작업 모니터링은 계속)` }); evt('ai.limit', { pct: L.pct, lim: L.lim, what }); }
 function evt(type, data) { try { if (orchEv) { orchEv.init(P().vibeDir); orchEv.emit(type, data); } } catch { } }
 function say(kind, o) { const m = Object.assign({ type: 'agent', kind, at: nowLocal() }, o || {}); feed.push(m); if (feed.length > 400) feed.shift(); for (const fn of listeners) { try { fn(m); } catch (ex) { errlog.note('orch-agent', 'listener', ex); } } }
 const act = (id, patch, what, extra) => watch.update(id, patch, Object.assign({ by: 'VMO', what }, extra || {}));
@@ -106,7 +122,7 @@ function pruneSnaps() {
 
 // 죽은 잠금 삭제(주인 PID 가 없을 때만). 반환 = 한 일(없으면 '')
 function removeDeadLock(dl) {
-  try { const f = path.join(P().root, dl.file); const j = readJson(f, null); if (!j) return ''; if (state.pidAlive(Number(j.pid))) return ''; fs.unlinkSync(f); return `죽은 잠금 삭제: ${dl.file} (PID ${j.pid} 없음 재확인)`; } catch { return ''; }
+  try { const f = path.join(P().root, dl.file); const j = readJson(f, null); if (!j) return ''; if (state.pidAlive(Number(j.pid))) return ''; fs.unlinkSync(f); LG().note({ kind: 'lockdel', rule: 'R2', target: dl.file, premise: { key: 'lockOwnerDead', lockPid: Number(j.pid) } }); return `죽은 잠금 삭제: ${dl.file} (PID ${j.pid} 없음 재확인)`; } catch { return ''; }
 }
 // ── 코드 조치 ──
 async function codeAction(inc) {
@@ -115,7 +131,7 @@ async function codeAction(inc) {
     const rel = (inc.evidence && inc.evidence.file) || ''; const f = path.join(p.root, rel); const j = readJson(f, null);
     if (!j) { act(inc.id, { status: 'resolved' }, `잠금 파일이 이미 없음: ${rel}`); return true; }
     if (state.pidAlive(Number(j.pid))) { act(inc.id, { status: 'closed' }, `잠금 주인 PID ${j.pid} 가 살아 있음. 삭제하지 않음`); return true; }
-    try { fs.unlinkSync(f); act(inc.id, { status: 'resolved' }, `죽은 잠금 삭제: ${rel} (PID ${j.pid} 없음 재확인)`, { grade: 'A' }); } catch (e) { act(inc.id, { status: 'need-user' }, `잠금 삭제 실패: ${e.message}`); }
+    try { fs.unlinkSync(f); LG().note({ kind: 'lockdel', rule: 'R9', inc: inc.id, screen: inc.screen, target: rel, premise: { key: 'lockOwnerDead', lockPid: Number(j.pid) } }); act(inc.id, { status: 'resolved' }, `죽은 잠금 삭제: ${rel} (PID ${j.pid} 없음 재확인)`, { grade: 'A' }); } catch (e) { act(inc.id, { status: 'need-user' }, `잠금 삭제 실패: ${e.message}`); }
     return true;
   }
   if (inc.rule === 'R6') {
@@ -131,6 +147,7 @@ async function codeAction(inc) {
     say('note', { text: `서버 재기동: ${name} 포트 ${port}` });
     if (st && st.state === 'listen') { const sr = await serverSvc.stop(p, stopIt || { port, expectProc: startIt.expectProc }, name); if (!sr || !sr.ok) { act(inc.id, { status: 'need-user' }, `종료 실패(${sr ? sr.why || '포트 점유 남음' : '오류'}). 재기동 중단`); return true; } }
     const r = await serverSvc.start(p, startIt, cwd, name);
+    LG().note({ kind: 'server', rule: 'R6', inc: inc.id, target: `${name} ${port}`, premise: { key: 'serverDown', port } });
     act(inc.id, { status: r && r.ok ? 'resolved' : 'need-user' }, r && r.ok ? `서버 재기동 완료. ${name} ${r.sec}s` : `서버 재기동 실패. ${r ? r.msg : '오류'}`, { grade: 'A' });
     return true;
   }
@@ -149,18 +166,22 @@ async function codeAction(inc) {
     const cls = (inc.evidence && inc.evidence.cls) || '';
     const how = cls === '세션 이어받기 실패' ? 'Workbench 체인이 새 세션으로 1회 다시 보냄(재시도 결과는 그 창 Console 확인)' : cls === '로그인 만료' ? '터미널에서 claude 를 실행해 다시 로그인' : cls === 'CLI 경로' ? '설정 vibeManager.claudeCommand 확인' : cls === '네트워크' ? 'VPN·프록시·PC 부하 확인 뒤 다시 실행' : `stderr 와 로그(${(inc.evidence && inc.evidence.log) || '-'}) 확인`;
     act(inc.id, { status: cls === '세션 이어받기 실패' ? 'resolved' : 'need-user' }, `Claude 종료 분류 ${cls || '미분류'}. ${how}`, { grade: 'A' });
+    if (cls === '세션 이어받기 실패') LG().note({ kind: 'resolve', rule: 'R7', inc: inc.id, screen: inc.screen, premise: { key: 'retryHandlesIt', sig: inc.sig, why: '새 세션 재시도로 풀림' }, undo: { how: 'reopen', status: 'open' } });
     return true;
   }
   return false;
 }
 
 // ── Claude 호출 ──
+const SKILL_NOTE = 'Skill 도구로 vmo-diagnosis-ladder 를 먼저 불러 문제 단계(L1 사소, L2 결함, L3 구조, L4 개념)를 판정하고 그 단계의 근거 기준을 따른다. 원인 찾기는 systematic-debugging, 고쳤다·통과했다고 적기 전에는 verification-before-completion 을 따른다. 결과의 개선안마다 level(L1~L4)과 levelWhy 를 적는다.'; // 2026-11-20 진단 사다리 · 스킬 적용(플랜 K1)
+function contractNote() { try { return require('./orch-worklist').CONTRACT_NOTE || ''; } catch { return ''; } }
 function buildPrompt(inc, extra) {
   const p = P(); const past = watch.list(200).filter(x => x.id !== inc.id && x.sig === inc.sig).slice(0, 5).map(x => ({ id: x.id, at: x.at, screen: x.screen, status: x.status, actions: (x.actions || []).map(a => `${a.by || ''}: ${a.what || ''}`).slice(-4), agent: x.agent ? { cause_class: x.agent.cause_class, cause: x.agent.cause, verify: x.agent.verify } : null }));
   const snap = state.snapshot(); const hj = readJson(path.join(p.root, 'tools', 'Harness', 'harness.json'), {});
   const brief = { servers: serverSvc ? serverSvc.stateList().map(s => `${s.label} ${s.port} ${s.state}`) : [], chains: snap.chains.map(c => `${c.screen} ${c.label} ${c.step ? `[${c.step.no}] ${c.step.name}` : ''}`), waits: snap.waits, locks: snap.locks, load: snap.load };
   return [
     '.claude/agents/vm-orchestra.md 를 먼저 읽고 그 순서, 조치 등급, 지킬 것, 결과 JSON 형식을 그대로 따른다.',
+    SKILL_NOTE,
     '',
     '[사건]', JSON.stringify(Object.assign({}, inc, { file: undefined }), null, 2),
     '',
@@ -169,6 +190,8 @@ function buildPrompt(inc, extra) {
     '[지금 상태]', JSON.stringify(brief, null, 2),
     '',
     `[작업 모드] repairScope = ${hj.repairScope || 'DB_ONLY'} · AI 검토(llmReview) = ${hj.llmReview === true ? '켬' : '끔'}`,
+    // 개선안 20261126103110_SELF(L4 단계 원장 20261124000718_VISION 단계 4): need-user 계약을 지시문에 넣음
+    ((hj.orch || {}).needUserContract !== false) ? `[need-user 계약] ${contractNote()}` : '',
     '[참고 파일] 실행 사건 .vibe/orch/events.jsonl, 실행 로그 .vibe/logs/, 검사기 결함 유형 Doc/verify/_checker_defects.md, 룰 tools/VibeManager/rules/10_RULES_KEEP.md, 문장 규칙 tools/VibeManager/rules/50_DOC_STYLE.md',
     extra ? `\n[추가 지시] ${extra}` : '',
   ].join('\n');
@@ -179,13 +202,25 @@ function lastJsonBlock(text) {
   const i = String(text || '').lastIndexOf('{"cause_class"'); if (i >= 0) { try { return JSON.parse(String(text).slice(i)); } catch { } }
   return null;
 }
+// 개선안 20261124040955_SELF(규칙 R130): VMO 호출 모델 = Workbench 활성 창에서 고른 모델 → 없으면 VS Code 설정 claudeModel
+//   workbench.currentModel() 이 있으면 그 값, 없으면 currentId() 와 같은 ID 창의 선택 모델. VS Code 밖(시험)에서는 require 실패 → 설정값
+function wbModel() {
+  try {
+    const wb = require('./workbench');
+    if (typeof wb.currentModel === 'function') { const m = String(wb.currentModel() || '').trim(); if (m) return m; }
+    const id = typeof wb.currentId === 'function' ? wb.currentId() : ''; const ps = wb._mirror && typeof wb._mirror.panels === 'function' ? wb._mirror.panels() : null;
+    if (id && ps) for (const w of ps) { const s = (w && typeof w.getState === 'function' ? w.getState() : null) || {}; if (String(s.id || '').toUpperCase() === id && s.model) return String(s.model); }
+  } catch (ex) { if (!(ex && ex.code === 'MODULE_NOT_FOUND' && /'vscode'/.test(String(ex.message)))) errlog.note('orch-agent', 'wbModel', ex); }
+  return '';
+}
 function runClaude(prompt, opts) {
   return new Promise(resolve => {
     const p = P(); opts = opts || {};
+    const model = wbModel() || p.claudeModel || '';
     const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true });
     const logF = path.join(logDir, `${stampFile()}_claude_orch.log`); let ws = null; try { ws = fs.createWriteStream(logF); } catch { ws = null; }
     const args = ['-p', '--input-format', 'stream-json', '--output-format', 'stream-json', '--verbose', '--permission-mode', opts.permissionMode || cfg.agentPermissionMode || 'acceptEdits', '--allowedTools', opts.allowedTools || ALLOWED_TOOLS];
-    if (p.claudeModel) args.push('--model', p.claudeModel);
+    if (model) args.push('--model', model);
     if (opts.resume) args.push('--resume', opts.resume);
     const env = Object.assign({}, process.env, { VIBE_HARNESS: '1', NSCM_SKIP_RULE_READ: '1', VIBE_ORCH: '1' });
     let child;
@@ -201,7 +236,7 @@ function runClaude(prompt, opts) {
     if (current) { current.child = child; current.run = run;
       // 진행 중인 응답에 추가 지시를 넣는다(Workbench 의 '지금 보내기'와 같은 방식 · 결과가 나온 뒤에는 넣을 수 없다)
       current.inject = t => { if (result) return false; try { child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content: [{ type: 'text', text: String(t) }] } }) + '\n'); say('user', { text: `(추가 지시) ${t}` }); return true; } catch { return false; } }; }
-    evt('claude.start', { wb: 0, screen: opts.screen || '', source: 'orch', label: String(opts.label || '').slice(0, 140), childPid: child.pid || null, harness: true, model: p.claudeModel || '' });
+    evt('claude.start', { wb: 0, screen: opts.screen || '', source: 'orch', label: String(opts.label || '').slice(0, 140), childPid: child.pid || null, harness: true, model });
     const timer = setTimeout(() => { killed = true; if (!run.stoppedBy) run.stoppedBy = '시간 초과'; say('note', { text: `시간 초과 ${cfg.agentTimeoutMin}분. 중지` }); try { cp.spawn('taskkill', ['/pid', String(child.pid), '/T', '/F']); } catch { } }, Math.max(1, cfg.agentTimeoutMin) * 60000);
     const handle = line => {
       let j; try { j = JSON.parse(line); } catch { return; }
@@ -219,7 +254,9 @@ function runClaude(prompt, opts) {
     child.stderr.on('data', d => { const t = d.toString('utf8'); if (ws) try { ws.write('[stderr] ' + t); } catch { } for (const ln of t.split(/\r?\n/)) if (ln.trim()) { errTail.push(ln.trim().slice(0, 200)); if (errTail.length > 6) errTail.shift(); } });
     try { child.stdin.on('error', () => { }); } catch { }
     child.on('error', e => errTail.push(`spawn 실패: ${e.message}`));
-    try { child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content: [{ type: 'text', text: prompt }] } }) + '\n'); } catch { }
+    // 2026-11-23 사용자: 실행 룰 A-13(누락 0 안에서 가장 빠르게)을 모든 VMO AI 호출 앞에 붙임
+    let ruleNote = ''; try { ruleNote = require('./run-rule').NOTE + '\n\n'; } catch (ex) { errlog.note('orch-agent', 'runRule', ex); }
+    try { child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content: [{ type: 'text', text: ruleNote + prompt }] } }) + '\n'); } catch { }
     child.on('close', code => {
       clearTimeout(timer); if (buf.trim()) handle(buf); if (ws) try { ws.end(`\n--- exit ${code} ---\n`); } catch { }
       const rel = path.relative(p.root, logF);
@@ -235,6 +272,7 @@ function noteAttempt(sig) { const h = readJson(attFile(), {}); h[sig] = (h[sig] 
 
 async function claudeAction(inc, extra, manual) {
   if (!manual) {
+    { const L = aiLimit(); if (L.stop) { const last = (inc.actions || []).slice(-1)[0]; if (!(last && /AI 주간 한도/.test(String(last.what || last.text || '')))) act(inc.id, { status: 'open' }, `${L.why}. 자동 조치 보류(사건 기록, 감시는 계속. 사건 탭 에이전트 단추로 직접 실행 가능)`); limitNote(L, '사건 자동 조치'); return; } }
     const n = attempts(inc.sig);
     if (n >= cfg.agentMaxAttempts) { act(inc.id, { status: 'need-user' }, `같은 서명으로 ${n}회 조치한 뒤 다시 발생. 자동 조치 중단, 사용자 확인 필요`); return; }
     const hour = runTimes.filter(t => Date.now() - t < 3600000).length;
@@ -269,6 +307,8 @@ async function claudeAction(inc, extra, manual) {
     notes.push(a.id ? `개선안 등록 ${a.id}(승인 대기)` : `같은 개선안이 이미 있음 ${a.dup}(${a.status})`);
   }
   if (exitNote) notes.push(`결과 JSON 뒤 비정상 종료(${exitNote})`);
+  // need-user 계약(개선안 20261126103110_SELF): 사용자 행동 기록 없이 need-user 면 열린 일 장부가 담당 VMO 로 이어 감
+  if (status === 'need-user' && !propId && !String(out.next_for_user || '').trim()) notes.push('사용자 행동 기록 없음, 열린 일 장부 담당 VMO');
   const what = `Claude 조치 ${status === 'resolved' ? '완료' : status === 'proposal' ? '중단, 개선안 올림' : '중단, 사용자 확인 필요'} · 원인 ${out.cause_class || 'unknown'}: ${String(out.cause || '').slice(0, 300)}${files.length ? ` · 수정 ${files.length}개 파일` : ''}${notes.length ? ' · ' + notes.join(' · ') : ''}`;
   act(inc.id, { status: status === 'proposal' ? 'need-user' : status, agent: out, proposal: propId || undefined, snap: files.length ? inc.id : undefined }, what, Object.assign({ grade: files.length ? 'B' : 'A' }, meta));
   say('end', { id: inc.id, ok: status === 'resolved', text: what });
@@ -282,15 +322,20 @@ async function drain() {
   if (busy) return; busy = true;
   try {
     while (queue.length) {
-      const job = queue.shift(); loadCfg();
+      const job = queue.shift(); saveQueue(); loadCfg();
       const inc = watch.get(job.id); if (!inc) continue;
       if (!job.manual && inc.status !== 'open') continue;
-      current = { id: inc.id, child: null, t0: Date.now() };
+      current = { id: inc.id, child: null, t0: Date.now(), ctx: { screens: [inc.screen].filter(Boolean), texts: [inc.title || '', inc.sig || '', inc.rule || ''].filter(Boolean) } }; // 2026-11-23 ctx = 작업 중 입력 관련 판정 자료
       try {
         if (!job.manual && cfg.enabled === false) continue; // VMO 꺼짐 = 자동 조치 없음(사건 탭의 에이전트 버튼으로 직접 실행은 가능)
         if (!job.manual && await codeAction(inc)) continue;
         if (job.manual && /^(R6|R8|R9)$/.test(inc.rule)) { await codeAction(inc); continue; }
-        if (!job.manual && (cfg.enabled === false || !cfg.agentEnabled || !(cfg.agentRules || []).includes(inc.rule))) continue;
+        if (!job.manual && (cfg.enabled === false || !cfg.agentEnabled)) continue;
+        // 2026-11-23 개선안 20261123121302_SELF: agentRules 밖 규칙(R12 등) = 사건마다 '에이전트 담당 아님' 기록 1건. 종전 기록 없이 넘겨 열린 이유가 안 보임. 사건 상태는 그대로(열림)
+        if (!job.manual && !(cfg.agentRules || []).includes(inc.rule)) {
+          if (!(inc.actions || []).some(a => /^에이전트 담당 아님/.test(String(a.what || '')))) act(inc.id, null, `에이전트 담당 아님: 규칙 ${inc.rule} 은 agentRules(${(cfg.agentRules || []).join(', ')}) 밖. 사건은 열린 채 둠`);
+          continue;
+        }
         await claudeAction(inc, job.extra, job.manual);
       } catch (e) { act(inc.id, { status: 'need-user' }, `조치 중 오류: ${e.message}`); say('note', { text: `조치 오류 ${inc.id}: ${e.message}` }); }
       finally { current = null; }
@@ -298,11 +343,20 @@ async function drain() {
   } finally { busy = false; setTimeout(pumpAsk, 80); }
 }
 /** 사건을 조치 대기열에 넣는다. manual = 사용자가 사건 탭에서 직접 실행(횟수·시간당 상한을 보지 않는다) */
-function enqueue(id, manual, extra) { if (queue.some(q => q.id === id) || (current && current.id === id)) return false; queue.push({ id, manual: !!manual, extra: extra || '' }); setTimeout(drain, 50); return true; }
+// 2026-11-20: 대기열을 파일에 남긴다(.vibe/orch/agent_queue.json). 종전 메모리만 → 창 다시 로드 때 자가 복구가 넘긴 사건(R14 20261120_160650)이 사라져 진단되지 않음. init 이 되살림
+function saveQueue() { try { writeJson(path.join(orchDir(), 'agent_queue.json'), queue.map(q => ({ id: q.id, manual: q.manual, extra: q.extra })).concat(current && current.id ? [{ id: current.id, manual: false, extra: '', running: true }] : [])); } catch (ex) { errlog.note('orch-agent', 'saveQueue', ex); } }
+function restoreQueue() { const a = readJson(path.join(orchDir(), 'agent_queue.json'), []); let n = 0; for (const q of Array.isArray(a) ? a : []) { const inc = watch.get(q.id); if (!inc || /^(resolved|closed|ignored)$/.test(inc.status)) continue; if (inc.status === 'acting') watch.update(q.id, { status: 'open' }, { by: 'VMO', what: '창 다시 로드 뒤 에이전트 대기열 되살림(조치 중이던 사건 다시 진단)' }); if (enqueue(q.id, !!q.manual, q.extra || '')) n++; } return n; }
+function enqueue(id, manual, extra) { if (queue.some(q => q.id === id) || (current && current.id === id)) return false; queue.push({ id, manual: !!manual, extra: extra || '' }); saveQueue(); setTimeout(drain, 50); return true; }
 /** 에이전트 탭 대화 — 사건 없이 질문·지시. 같은 세션을 이어 쓴다 */
 async function ask(text) {
-  if (busy) return enqueueAsk(text); // 바쁘면 대기열 — 끝나면 순서대로 자동 전송(Workbench 프롬프트 창과 같음)
-  busy = true; current = { id: '대화', child: null, t0: Date.now() }; loadCfg();
+  if (busy) { // 2026-11-23 사용자: 기본 대기열. 현재 작업과 같은 안건(prompt-relate.judge)이면 응답 중이라도 바로 반영
+    const jd = require('./prompt-relate').judge(text, relateCtx()); const t2 = /^[+>]/.test(String(text || '').trim()) && jd.text ? jd.text : text;
+    if (!jd.related) return enqueueAsk(t2, `다른 안건으로 판단: ${jd.why}. 바로 넣으려면 대기열의 지금 보내기`);
+    if (current && current.inject && current.inject(t2)) { if (current.ctx) current.ctx.texts.push(String(t2)); say('note', { text: `같은 안건으로 판단(${jd.why}). 진행 중인 응답에 바로 반영` }); return null; }
+    return enqueueAsk(t2, `같은 안건(${jd.why}), 지금은 응답 입력이 닫혀 있음`, true);
+  }
+  text = String(text || '').replace(/^\s*[+>]\s*/, '');
+  busy = true; current = { id: '대화', child: null, t0: Date.now(), ctx: { screens: [], texts: [String(text)] } }; loadCfg();
   try {
     say('user', { text });
     // 2026-11-20: 중지 지시면 그 화면의 실행 끝을 사용자 중지로 본다(대화 동안 + 끝난 뒤 30초). 화면 ID 가 없는 지시는 표시하지 않는다(다른 화면 실패를 가리지 않게)
@@ -319,7 +373,9 @@ async function ask(text) {
 const askQ = []; let askSeq = 0;
 function postQ() { const m = { type: 'agentQueue', items: askQ.map(x => ({ qid: x.qid, text: x.text })) }; for (const fn of listeners) { try { fn(m); } catch (ex) { errlog.note('orch-agent', 'listener', ex); } } }
 function queueList() { return askQ.map(x => ({ qid: x.qid, text: x.text })); }
-function enqueueAsk(text) { askQ.push({ qid: ++askSeq, text: String(text) }); say('note', { text: `대기열에 넣음(${askQ.length}번째). 진행 중인 작업이 끝나면 자동으로 보냅니다: ${String(text).replace(/\s+/g, ' ').slice(0, 80)}` }); postQ(); return null; }
+function enqueueAsk(text, why, front) { const it = { qid: ++askSeq, text: String(text) }; if (front) askQ.unshift(it); else askQ.push(it); say('note', { text: `대기열에 넣음(${front ? '맨 앞' : `${askQ.length}번째`}${why ? `, ${why}` : ''}). 진행 중인 작업이 끝나면 자동으로 보냅니다: ${String(text).replace(/\s+/g, ' ').slice(0, 80)}` }); postQ(); return null; }
+/** 2026-11-23 작업 중 입력 관련 판정 자료: 대화면 그 지시문, 사건 조치면 사건 화면 ID · 규칙 · 문구 */
+function relateCtx() { return current && current.ctx ? current.ctx : { screens: [], texts: [] }; }
 function pumpAsk() { if (busy || !askQ.length) return; const it = askQ.shift(); postQ(); say('note', { text: `대기열 전송(남은 ${askQ.length}건)` }); ask(it.text); }
 function removeQueued(qid) { const i = askQ.findIndex(x => x.qid === qid); if (i >= 0) { askQ.splice(i, 1); postQ(); } }
 /** 지금 보내기: 진행 중인 응답에 추가 지시로 넣는다. 넣을 수 없으면 대기열 맨 앞으로 옮긴다 */
@@ -342,10 +398,18 @@ function setEnabled(on) {
 }
 /** 다른 모듈(orch-improve.js)이 Claude 를 쓸 때: 사건 조치와 겹치지 않게 한 번에 1건. 바쁘면 { busy: true } */
 async function withLock(id, fn) {
-  if (busy) return { busy: true };
+  if (busy) { if (held && held.id === id && current === held.cur) return await fn(); return { busy: true }; } // 자리를 잡아 둔 같은 일은 그대로 진행(자리는 reserve 쪽이 놓음)
+  { const L = aiLimit(); if (L.stop) { limitNote(L, `VMO 자동 AI 작업(${String(id).replace(/_\d.*$/, '')})`); return { busy: true, limit: true, why: L.why }; } } // 2026-11-24 AI 주간 한도 멈춤 = 보류(busy 와 같게 다음에 다시)
   busy = true; current = { id, child: null, t0: Date.now() };
   try { return await fn(); } finally { current = null; busy = false; setTimeout(drain, 50); }
 }
+// 2026-11-23 개선안 20261123145412_VISION(반영 차례 장부): 개선안 반영은 에이전트 자리를 먼저 잡고 게이트를 돌린다.
+//   종전 = 게이트(약 100~200초) 뒤 withLock 에서 자리를 요청해, 그 사이 다른 일이 자리를 잡으면 게이트만 쓰고 보류됐다(11-23 '반영 전 게이트' 다음 '반영 보류' 9쌍)
+let held = null;
+/** 자리 잡기. 바쁘면 null. 잡으면 표(token)를 돌려주고, 같은 id 의 withLock 은 이 자리 안에서 바로 실행된다 */
+function reserve(id, opts) { if (busy) return null; if (!(opts && opts.manual)) { const L = aiLimit(); if (L.stop) { limitNote(L, 'VMO 자동 반영'); return null; } } busy = true; current = { id, child: null, t0: Date.now(), reserved: true }; held = { id, cur: current }; return held; }
+/** 자리 놓기. 잡은 표만 놓는다 */
+function release(tok) { if (!tok || held !== tok) return false; held = null; if (current === tok.cur) current = null; busy = false; setTimeout(drain, 50); setTimeout(pumpAsk, 120); return true; }
 function stop(by) { if (current && current.child) { if (current.run && !current.run.stoppedBy) current.run.stoppedBy = by || '중지 요청'; try { cp.spawn('taskkill', ['/pid', String(current.child.pid), '/T', '/F']); } catch { } say('note', { text: '중지 요청' }); return true; } return false; }
 
 function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
@@ -356,15 +420,17 @@ function status() { loadCfg(); return { on: cfg.enabled !== false, mode: cfg.age
 function init(opts) {
   if (started) return; started = true;
   getPaths = opts.paths; serverSvc = opts.serverSvc || null; loadQuick = opts.loadQuick || null; notifier = opts.notify || null;
-  loadCfg(); pruneSnaps();
+  loadCfg(); pruneSnaps(); try { require('./orch-ledger').init({ paths: getPaths, serverSvc }); } catch (ex) { errlog.note('orch-agent', 'ledgerInit', ex); }
   watch.on((inc, isNew) => {
     // 묶음 사건(같은 죽은 잠금 반복)은 횟수만 올라가도 그 잠금 파일은 지운다(주인 PID 없음 재확인 뒤)
     try { if (inc.rule === 'R2' && inc.evidence && inc.evidence.deadLock && cfg.enabled !== false) { const w = removeDeadLock(inc.evidence.deadLock); if (w) watch.update(inc.id, {}, { by: 'VMO', what: w, grade: 'A' }); } } catch (ex) { errlog.note('orch-agent', 'onIncident', ex); }
     // 2026-11-20: 화면 진입 실패 반복(R13)은 자가 복구(orch-heal.js)가 먼저 코드로 처리하고, 풀지 못하면 그쪽에서 enqueue 한다
     // 2026-11-20: 중지 뒤 계속 실행(R14)도 자가 복구가 먼저 프로세스를 끊고 체인 중지를 다시 보낸다. 재발하면 그쪽에서 enqueue(중지 경로 결함 진단)
+    if (isNew && !inc.notice && inc.rule !== 'R15' && LG().observing(inc.rule)) { try { watch.update(inc.id, {}, { by: 'VMO', what: `${inc.rule} 관찰 모드: 에이전트 조치하지 않음(오판 확정 뒤 개선안 반영 완료 때까지 · Health S14)` }); } catch (ex) { errlog.note('orch-agent', 'observe', ex); } return; }
     if (isNew && !((inc.rule === 'R13' || inc.rule === 'R14') && !inc.notice)) enqueue(inc.id, false);
   });
+  setTimeout(() => { try { const n = restoreQueue(); if (n) say('note', { text: `창 다시 로드 뒤 에이전트 진단 대기열 ${n}건 되살림` }); } catch (ex) { errlog.note('orch-agent', 'restoreQueue', ex); } }, opts.restoreDelayMs != null ? opts.restoreDelayMs : 5000); // 2026-11-20
 }
 function dispose() { started = false; stop('VS Code 종료'); }
 
-module.exports = { queueList, removeQueued, sendQueuedNow, setEnabled, init, dispose, on, feedList, status, enqueue, ask, stop, revert, lastJsonBlock, buildPrompt, snapshot, diffAfter, codeAction, DEF, runClaude, withLock, say, gitDirty, loadCfg, ALLOWED_TOOLS, paths: () => P() };
+module.exports = { aiLimit, SKILL_NOTE, restoreQueue, saveQueue, queueList, removeQueued, sendQueuedNow, setEnabled, init, dispose, on, feedList, status, enqueue, ask, stop, revert, lastJsonBlock, buildPrompt, snapshot, diffAfter, codeAction, DEF, runClaude, withLock, reserve, release, say, gitDirty, loadCfg, ALLOWED_TOOLS, paths: () => P() };

@@ -1,0 +1,29 @@
+{
+  "id": "20261120_204931_R12_ALL",
+  "at": "2026-11-20T20:49:31+09:00",
+  "ms": 1795175371129,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U18 재개 단계를 세부 진행 처음부터 다시 돎 SCP0028",
+  "screen": "",
+  "sig": "R12|S13|U18|sub|J20261120_191752|SCP0028|710",
+  "count": 1,
+  "repeat": null,
+  "detail": ".vibe\\jobs\\J20261120_191752\\SCP0028.log 710줄 1/6단계 재개(단계 안 재개 지원 표시) · 단계 6/8 → 1/8(751줄)",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U18|sub|J20261120_191752|SCP0028|710",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-22T02:00:34+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

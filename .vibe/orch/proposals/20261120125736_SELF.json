@@ -58,6 +58,11 @@
         "tools/VibeManager/user_checks.json",
         "tools/VibeManager/test/t_wb_openscreen.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:31+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T13:55:28+09:00"
     }
   ],
   "self": true,
@@ -90,5 +95,7 @@
     "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → PASS 50건, ALL PASS (U15 표본 9건 포함) · 2026-11-20 13:02:56",
     "note": "logTabShown 판정: 5173 up(server.state 마지막 사건) + FE LOG 켜짐(log.toggle/log.out on) 동안 서버 로그 파일(VM 기동 = .vibe/logs/*_<서버 이름>.log, 그 밖 = Doc/e2e/logs/_server_5173.log)이 60초 넘게 늘었는데 log.out stream fe 줄 수 0 = fail. 13:02 전 확인한 .vibe/orch/events.jsonl 에 log.out 0건, server.state 6건. server-service.js 에 out('fe') 송출 건수(log.out stream·lines)와 setLogOn 켜짐(log.toggle stream·on) 기록이 없어 지금은 warn(판정 못 함)만 냄. server-service.js 는 승인 targets 밖이라 고치지 않음. 기록 추가는 별도 개선안 필요. 작업 모드 DB_ONLY 였으나 대상이 tools/VibeManager 라 hook 차단 없음"
   },
-  "snap": "prop_20261120125736_SELF"
+  "snap": "prop_20261120125736_SELF",
+  "effectiveMs": 1795150528179,
+  "effectiveAt": "2026-11-20T13:55:28+09:00"
 }

@@ -1,0 +1,33 @@
+{
+  "id": "20261125_221312_R6_ALL",
+  "at": "2026-11-25T22:13:12+09:00",
+  "ms": 1795612392421,
+  "rule": "R6",
+  "ruleName": "서버 이상",
+  "title": "체인 실행 중 서버 꺼짐. 포트 5173",
+  "screen": "",
+  "sig": "R6|down|5173",
+  "count": 1,
+  "repeat": null,
+  "detail": "실행 중 체인 SCP0005 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "evidence": {
+    "port": 5173,
+    "chains": [
+      "SCP0005_1795608394751"
+    ]
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-25T22:13:12+09:00",
+      "by": "VMO",
+      "what": "VMW 작업 1건 일시 중지(실행 중 화면은 끝까지)"
+    },
+    {
+      "at": "2026-11-25T22:27:46+09:00",
+      "by": "VMO",
+      "what": "포트 5173 응답 회복 확인. 조치 없음"
+    }
+  ]
+}

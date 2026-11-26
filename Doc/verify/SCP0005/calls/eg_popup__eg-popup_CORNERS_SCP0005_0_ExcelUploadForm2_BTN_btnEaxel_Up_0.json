@@ -1,0 +1,15 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1534,
+  "at": "2026-11-25T17:01:37.468Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CORNERS SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload"
+ }
+]

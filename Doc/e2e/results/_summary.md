@@ -1,13 +1,13 @@
-# E2E 결과 — 2026-11-20 15:03
+# E2E 결과 — 2026-11-26 01:18
 
-테스트 145 · PASS 90 · FAIL 55 · FLAKY 0 · SKIP 0
+테스트 145 · PASS 92 · FAIL 53 · FLAKY 0 · SKIP 0
 
 | 화면 | 스모크 | 조회조건 동작 | 공통 기능 | CRUD | 권한(계정×DIV) | 권한별 CRUD(계정) | BE DB 오류(시노님·SQL) | 실패 요약 |
 |---|---|---|---|---|---|---|---|---|
 | DMF0004 | 1/3 ✗ | 5/8 OK · FAIL 0 · WARN 1 · ERROR 2 | 8/8 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Team' (TeamField) — 후보 [Team]<br>smoke: Error: 조회조건 판정 불가(ERROR) 2: Team, Detail |
 | DMF0005 | 1/3 ✗ | 7/12 OK · FAIL 0 · WARN 1 · ERROR 4 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - | smoke: Error: 조회조건 'Project' (ProjectField) — 후보 [PJT | Project]<br>smoke: Error: 조회조건 판정 불가(ERROR) 4: Project Null, Project, End Customer(Report) Null, Detail |
 | DMF0082 | 0/3 ✗ | 4/12 OK · FAIL 1 · WARN 4 · ERROR 3 | 10/12 OK · FAIL 1 · WARN 0 · ERROR 1 | - | - | - | - | smoke: Error: 조회조건 ' ' (Checkbox) — 후보 []<br>smoke: Error: 조회조건 동작 FAIL 1: Sum<br>smoke: Error: 공통 기능 FAIL 1: Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제) |
-| SCP0005 | 3/3 | 5/7 OK · FAIL 0 · WARN 2 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 2/2 | 1/2 ✗ | - | crud: Error: 마커 행 저장 성공 <br>authcrud: Error: [jooyong026] 허용 계정 마커 행 저장  |
+| SCP0005 | 3/3 | 7/7 OK · FAIL 0 · WARN 0 · ERROR 0 | 12/12 OK · FAIL 0 · WARN 0 · ERROR 0 | 1/1 | 2/2 | 2/2 | - |  |
 | SCP0007 | 2/3 ✗ | 8/9 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | 0/1 ✗ | 5/5 | 0/1 ✗ | - | smoke: Error: 헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn 2행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검<br>crud: Error: 마커 행 저장 성공 <br>authcrud: Test timeout of 540000ms exceeded. |
 | SCP0016 | 2/3 ✗ | 6/10 OK · FAIL 0 · WARN 4 · ERROR 0 | 12/13 OK · FAIL 0 · WARN 1 · ERROR 0 | - | - | - | - | smoke: Error: As-is 병합 헤더 리터럴 노출 [SUM] |
 | SCP0020 | 3/3 | 5/6 OK · FAIL 0 · WARN 1 · ERROR 0 | 11/11 OK · FAIL 0 · WARN 0 · ERROR 0 | - | - | - | - |  |

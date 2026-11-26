@@ -1,0 +1,106 @@
+{
+  "id": "20261120172524_SELF_2",
+  "at": "2026-11-20T17:25:24+09:00",
+  "ms": 1795163124984,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|promptserialize",
+  "title": "사용자 지적 감지기 추가 U22 promptSerialize: VM 이 프롬프트를 '[object Object],[object Object]' 로 보냄",
+  "evidence": "사용자 지적(2026-11-20T17:01:23+09:00) \"[object Object],[object Object]\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 promptSerialize 없음 → 추가. 판정: user 메시지 text 에 '[object Object]' 가 있으면 fail. 같은 시각 VM 이 보낸 첨부(이미지, 붙여넣기) 객체 배열을 문자열로 바꾸지 못한 것으로 봄 · 읽을 기록: ~/.claude/projects/<프로젝트 경로 인코딩>/*.jsonl 의 type user 메시지 content, timestamp. user_checks.json U22 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T17:35:09+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T17:38:32+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 28개 파일 통과, 시험 57/57개 파일 통과(PASS 747, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1735"
+    },
+    {
+      "at": "2026-11-20T17:38:35+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T17:43:31+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 28개 파일 통과, 시험 57/57개 파일 통과(PASS 749, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T17:43:31+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS, U22 2건 PASS(따옴표 인용, 학습 줄, tool_result = 아님 / 문자열, text 블록 첫머리 = 실패 2건, 26시간 전 = 아님), 기존 항목 FAIL 0, 2026-11-20 17:40 · 변경 15개 파일 · 대상 목록 밖 변경 12개: Doc/화면분석서/SSP_FLOW/README.md, Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW.md, Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW_DETAIL.md, Doc/화면분석서/SSP_FLOW/SSP_FLOW.html, Doc/화면분석서/SSP_FLOW/SSP_OVERVIEW.md, Doc/화면분석서/SSP_FLOW/SSP_PROCESS_FLOW.md",
+      "log": ".vibe\\logs\\2026-11-20T17-38-35_claude_orch.log",
+      "sec": 97,
+      "costUsd": 1.2762868,
+      "files": [
+        "Doc/화면분석서/SSP_FLOW/README.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW_DETAIL.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_FLOW.html",
+        "Doc/화면분석서/SSP_FLOW/SSP_OVERVIEW.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_PROCESS_FLOW.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_REF_PROCESS.md",
+        "Doc/화면분석서/SSP_FLOW/SSP_SHIPPLAN_FLOW.md",
+        "Doc/화면분석서/SSP_FLOW/ssp_ref_crosscheck.csv",
+        "Doc/화면분석서/SSP_FLOW/ssp_ref_run_conditions.csv",
+        "Doc/화면분석서/SSP_FLOW/ssp_screen_sp_table.csv",
+        "tools/Analysis/ssp_ref.py",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:29+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T17:58:19+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U22",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795163708973,
+  "autoFp": "46228ec132",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 28개 파일 통과, 시험 57/57개 파일 통과(PASS 749, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1735",
+  "needsReload": true,
+  "appliedMs": 1795164211245,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS, U22 2건 PASS(따옴표 인용, 학습 줄, tool_result = 아님 / 문자열, text 블록 첫머리 = 실패 2건, 26시간 전 = 아님), 기존 항목 FAIL 0, 2026-11-20 17:40",
+    "note": "판정 = type user 메시지의 문자열 본문 또는 text 블록에서 줄 첫머리(앞 공백 허용)에 '[object Object]' 가 있으면 fail. 따옴표 인용, 학습 프롬프트 줄은 줄 첫머리가 아니라 판정에서 빠짐. 원인 코드 위치(VM 의 프롬프트 직렬화 지점)는 미확인. 감지기는 현상만 잡음"
+  },
+  "snap": "prop_20261120172524_SELF_2",
+  "effectiveMs": 1795165099422,
+  "effectiveAt": "2026-11-20T17:58:19+09:00"
+}

@@ -1,0 +1,109 @@
+{
+  "id": "20261123184517_SELF_4",
+  "at": "2026-11-23T18:45:17+09:00",
+  "ms": 1795427117448,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/run rule.js|vmvmwworkbenchjsn줄vmoorchagentjsn줄모든",
+  "title": "사용자 지시 R31 같은 문제: tools/VibeManager/run-rule.js:5 VM, VMW(workbench.js 967줄), VMO(orch-agent.js 228줄) 모든 AI 호출 앞 문구에 한국어 응답 지시가 없음. quick.js",
+  "evidence": "규칙 R31 \"VM, VMW, VMO 가 띄운 AI 의 답변, 진행 보고, 알림 문장은 한국어로 씀\" (원래 지시 2026-11-09 16:45 \"회신은 한국어로 처리해주세요..\") · tools/VibeManager/run-rule.js:5 const NOTE = '[실행 룰 A-13, tools/VibeManager/rules/10_RULES_KEEP.md] 누락 0 안에서 가장 빠르게. 요청 항목, 검사, 검증, 보고 항목은 빼지 않음. '",
+  "targets": [
+    "tools/VibeManager/run-rule.js"
+  ],
+  "before_after": "NOTE 앞에 '답변, 진행 보고, 알림 문장은 한국어로 씀.' 을 넣음. 10_RULES_KEEP.md A-13 정본에도 같은 항목을 추가함",
+  "verify": "node --check tools/VibeManager/run-rule.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/run-rule.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T03:40:17+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T03:43:54+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self0340"
+    },
+    {
+      "at": "2026-11-24T03:43:56+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T03:55:21+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 run-rule.js"
+    },
+    {
+      "at": "2026-11-24T03:55:21+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-24 03:44:18: node --check 통과, run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.8s' → 반영 뒤 2026-11-24 03:48:00~03:51:33: node --check 통과, NOTE 첫머리 '답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, ...', run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213s' · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/rules/10_RULES_KEEP.md",
+      "log": ".vibe\\logs\\2026-11-24T03-43-56_claude_orch.log",
+      "sec": 468,
+      "costUsd": 0.5758420999999999,
+      "files": [
+        "tools/VibeManager/rules/10_RULES_KEEP.md",
+        "tools/VibeManager/run-rule.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "VM, VMW, VMO 가 띄운 AI 의 답변, 진행 보고, 알림 문장은 한국어로 씀 규칙을 tools/VibeManager/run-rule.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R31|tools/VibeManager/run-rule.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795459217381,
+  "autoFp": "6230196d76",
+  "applyStartMs": 1795459436489,
+  "verifyJudge": {
+    "at": "2026-11-24T03:51:47+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self0340",
+  "needsReload": false,
+  "hotLoaded": [
+    "run-rule.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795460121908,
+  "synced": [
+    "run-rule.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/run-rule.js 반영 전, 반영 뒤 오류 없음 · node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.8s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213s' · 웹뷰 파일 아님, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/run-rule.js",
+      "tools/VibeManager/rules/10_RULES_KEEP.md"
+    ],
+    "verify_result": "반영 전 2026-11-24 03:44:18: node --check 통과, run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.8s' → 반영 뒤 2026-11-24 03:48:00~03:51:33: node --check 통과, NOTE 첫머리 '답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, ...', run_all.js 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213s'",
+    "note": "run-rule.js NOTE 맨 앞에 '답변, 진행 보고, 알림 문장은 한국어로 씀. ' 추가함. before_after 에 따라 10_RULES_KEEP.md A-13 에 11항 '답변, 진행 보고, 알림 문장은 한국어로 쓴다(규칙 R31, 사용자 2026-11-09)' 추가함. 이 파일은 VMO 백업 .bak_20261123_self1851 있음. 설치 폴더, CHANGELOG.md, .bak 은 건드리지 않음. 걸린 시간 약 7분, 오래 걸린 단계 run_all.js 2회(212.8초, 213초)."
+  },
+  "snap": "prop_20261123184517_SELF_4"
+}

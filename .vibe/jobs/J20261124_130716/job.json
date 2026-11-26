@@ -1,0 +1,93 @@
+{
+  "id": "J20261124_130716",
+  "itemLabel": "🛠 운영자 매뉴얼 (모듈별 PPT: 양식 구조 + 분석 자료 흐름과 운영 절차)",
+  "kind": "chain",
+  "status": "done",
+  "mode": "par",
+  "maxPar": 5,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "unit": "module",
+  "inputs": {
+    "author": "조재훈",
+    "date": "2026-11-24",
+    "version": "Ver 1.0",
+    "template": "c:\\Users\\LG\\Downloads\\GSCM-DM-CV-2(운영자매뉴얼).pptx"
+  },
+  "createdAt": "2026-11-24T13:07:16+09:00",
+  "startedAt": "2026-11-24T13:07:16+09:00",
+  "endedAt": "2026-11-24T13:17:16+09:00",
+  "note": "",
+  "screens": [
+    {
+      "id": "DM",
+      "status": "done",
+      "step": "",
+      "actor": "",
+      "sec": 601,
+      "summary": "체인 완료: 4단계 중 OK 4 · 601s",
+      "why": "",
+      "md": "Doc\\gen\\DM\\FULLRUN.md",
+      "startedAt": "2026-11-24T13:07:16+09:00",
+      "endedAt": "2026-11-24T13:17:16+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": null,
+      "flow": {
+        "at": "2026-11-24T13:07:16+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "준비: 메뉴, 화면 테이블과 SP, AS-IS 배치 잡, 스케줄, 잡 호출, SP 읽기/쓰기 테이블, 데이터 구조",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-24T13:07:16+09:00",
+            "end": "2026-11-24T13:07:19+09:00",
+            "sec": 3,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 2,
+            "name": "내용 작성(업무 흐름, 프로세스, 점검표, 장애 대응, 로그, 기준 정보, 권한, 화면/잡/테이블 설명)",
+            "actor": "claude",
+            "st": "ok",
+            "start": "2026-11-24T13:07:19+09:00",
+            "end": "2026-11-24T13:17:14+09:00",
+            "sec": 595,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 3,
+            "name": "내용 검사(장 빠짐, 프로세스 간지와 흐름도, 화면, 잡, 테이블 설명, 근거, 연락처 비움, 문장 규칙)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-24T13:17:14+09:00",
+            "end": "2026-11-24T13:17:14+09:00",
+            "sec": 0,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 4,
+            "name": "PPTX 생성",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-24T13:17:14+09:00",
+            "end": "2026-11-24T13:17:16+09:00",
+            "sec": 2,
+            "prog": "",
+            "code": 0
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 3단계 · AI Agent 1회",
+      "log": ".vibe\\jobs\\J20261124_130716\\DM.log",
+      "outputs": [
+        "Doc/OpsManual/DM/SCM_OM_운영자매뉴얼_DM_v1.0.pptx"
+      ]
+    }
+  ],
+  "resumable": 0
+}

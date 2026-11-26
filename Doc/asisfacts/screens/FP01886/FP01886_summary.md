@@ -64,6 +64,7 @@
 | event:this.btnRequest.Click | btnRequest_Click | 609 | FP_Master.PR_UI_FP_MASTER_FORM_CODE | MATCH | SP PR_UI_FP_MASTER_FORM_CODE |
 | event:this.btnRequest.Click | btnRequest_Click > Save_Request > Find_Main > Find_Data_Main | 772 | FP_Master.PR_UI_FP01886_AUTHORITYREQUESTPOPUP | MATCH | SP PR_UI_FP01886_AUTHORITYREQUESTPOPUP |
 | event:this.btnRequest.Click | btnRequest_Click | 841 | biz:Authentication.SavePersonalSetting | BIZ_MATCH |  |
+| event:this.btnRequest.Click | btnRequest_Click | 848 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | event:this.btnRequest.Click | btnRequest_Click | 904 | FP_Master.PR_UI_FP_MASTER_FORM_CODE | MATCH | SP PR_UI_FP_MASTER_FORM_CODE |
 | event:this.btnRequest.Click | btnRequest_Click > Save_Request > Save_Data_Request | 1208 | FP_Master.PR_UI_FP_MASTER_FORM_CODE | MATCH | SP PR_UI_FP_MASTER_FORM_CODE |
 | event:this.btnRequest.Click | btnRequest_Click > Save_Request > Save_Data_Request | 1251 | FP_Master.PR_UI_FP01886_AUTHORITYREQUESTPOPUP | MATCH | SP PR_UI_FP01886_AUTHORITYREQUESTPOPUP |
@@ -98,6 +99,7 @@
 | event:this.Load | Form_Load > InitControls | 378 | FP_Master.PR_UI_FP_MASTER_FORM_CODE | MATCH | SP PR_UI_FP_MASTER_FORM_CODE |
 | event:this.Load | Form_Load > FindData_MyAddedAuthList | 490 | SystemManager.UP_FX_GetReqAuthMyListAdded | MATCH | SP UP_FX_GetReqAuthMyListAdded |
 | event:this.Load | Form_Load > FindData_MyAddedAuthList | 493 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SystemManager.UP_FX_GetReqAuthMyListAdded")}#{?serviceUri} | UNRESOLVED |  |
+| event:this.Load | Form_Load > FindData_MyAddedAuthList | 493 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SystemManager.UP_FX_GetReqAuthMyListAdded")}#{?serviceUri} | UNRESOLVED |  |
 | event:this.Load | Form_Load > Find_Main > SetChangedControl | 527 | FP_Master.PR_UI_FP_MASTER_FORM_CODE | MATCH | SP PR_UI_FP_MASTER_FORM_CODE |
 | event:this.Load | Form_Load > Find_Main > SetChangedControl | 533 | FP_Master.PR_UI_FP_MASTER_FORM_CODE | MATCH | SP PR_UI_FP_MASTER_FORM_CODE |
 | event:this.Load | Form_Load > Find_Main > SetChangedControl | 539 | FP_Master.PR_UI_FP_MASTER_FORM_CODE | MATCH | SP PR_UI_FP_MASTER_FORM_CODE |
@@ -114,7 +116,8 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?new TheOne.ServiceModel.Data.FoxDataRequest("SystemManager.UP_FX_GetReqAuthMyListAdded")}#{?serviceUri} | UNRESOLVED | 1 |  |  |  |
+| {?new TheOne.ServiceModel.Data.FoxDataRequest("SystemManager.UP_FX_GetReqAuthMyListAdded")}#{?serviceUri} | UNRESOLVED | 2 |  |  |  |
+| {?request.QueryId}#{?serviceUri} | UNRESOLVED | 1 |  |  |  |
 | biz:Authentication.SavePersonalSetting | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=Language] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | biz:CommonData.CommonDataList [code=TimeZone] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
@@ -215,9 +218,11 @@
 | TableLayoutPanel | 2 | tableLayoutPanel1, tableLayoutPanel1 |
 | UsrButtonList | 1 | btnButtonList |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (3건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 848 | btnRequest_Click | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
+| 493 | FindData_MyAddedAuthList | {?new TheOne.ServiceModel.Data.FoxDataRequest("SystemManager.UP_FX_GetReqAuthMyListAdded")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 | 493 | FindData_MyAddedAuthList | {?new TheOne.ServiceModel.Data.FoxDataRequest("SystemManager.UP_FX_GetReqAuthMyListAdded")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)

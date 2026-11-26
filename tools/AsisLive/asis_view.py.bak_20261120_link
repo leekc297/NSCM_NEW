@@ -1,0 +1,336 @@
+# -*- coding: utf-8 -*-
+"""AS-IS 실측 화면 방식 — 창 없이 실행 · 창 띄우기 · 녹화 (2026-11-20 사용자 지시 'AS-IS·TO-BE 실측을 설정으로 창 없이 실행/창 띄우기/녹화')
+
+  값: tools/Harness/harness.json "asisLiveView" = "hidden" | "window" | "record"  (없으면 window · 실행 한 번만 바꾸기 = 환경변수 ASIS_LIVE_VIEW)
+    window  종전과 같음. 런처 창이 화면에 보인다.
+    hidden  창 없이 실행. 실행기(AsisLive.Host.exe)의 창(로그인 · 메인 · 팝업 · 메시지 창)을 투명(1/255)하게 하고 클릭이 통과하게 한다.
+            조작은 창 메시지(PostMessage)·화면 안 조작이라 같다. 화면 사진(PrintWindow)도 그대로 찍힌다.
+            한계: 창이 처음 뜰 때 0.1초 안쪽으로 보였다가 투명해진다(창 생성 시점을 가로채지 않음). 작업 표시줄에는 보인다.
+    record  창 없이 녹화(2026-11-20 사용자 지시 '투명 창 + 녹화'). hidden 과 같이 창을 투명하게 두고, 1초마다 실행기 창(메인 + 그 위의 팝업·메시지 창)을 PrintWindow 로 찍어 끝날 때 동영상 1개(record.webm)로 묶는다.
+            동영상 = Playwright 전용 ffmpeg(%LOCALAPPDATA%/ms-playwright/ffmpeg-*/ffmpeg-win64.exe · VP9). ffmpeg 가 없으면 GIF(record.gif)
+            저장: 명령 폴더가 <실행 폴더>/_cmd 이면 <실행 폴더>/record.webm · 아니면 Doc/asislive/_rec/<명령 폴더 이름>.webm (가로 1280 이하로 줄임)
+  사용: Host.start() 뒤 view = asis_view.start(pid, cmddir) · Host.stop() 에서 view.stop() · 'maximize' 뒤 view.after_maximize()
+  python tools/AsisLive/asis_view.py --selftest   (창 없이 값 해석·경로 시험)
+"""
+import ctypes
+import json
+import os
+import sys
+import threading
+import time
+from ctypes import wintypes
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+MODES = ('hidden', 'window', 'record')
+NAMES = {'hidden': '창 없이 실행', 'window': '창 띄우기', 'record': '녹화'}
+
+
+def mode():
+    v = (os.environ.get('ASIS_LIVE_VIEW') or '').strip().lower()
+    if v not in MODES:
+        try:
+            v = str(json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig')).get('asisLiveView') or 'window').strip().lower()
+        except (OSError, ValueError):
+            v = 'window'
+    return v if v in MODES else 'window'
+
+
+def ffmpeg_path():
+    """Playwright 전용 ffmpeg(가장 높은 번호) · 없으면 ''. 2026-11-20 사용자 지시로 받음(node tools/E2E/node_modules/playwright-core/cli.js install ffmpeg)"""
+    import glob
+    base = os.path.join(os.environ.get('LOCALAPPDATA') or '', 'ms-playwright')
+    c = sorted(glob.glob(os.path.join(base, 'ffmpeg-*', 'ffmpeg-win64.exe')), key=lambda f: int(''.join(ch for ch in os.path.basename(os.path.dirname(f)) if ch.isdigit()) or 0))
+    return c[-1] if c else ''
+
+
+def keep_runs():
+    try:
+        v = int(json.load(open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig')).get('recordKeepRuns') or 5)
+        return max(1, v)
+    except (OSError, ValueError, TypeError):
+        return 5
+
+
+def prune_records(saved):
+    """2026-11-20 사용자 지시 '최근 N회만': 같은 화면의 실행 폴더(<화면>/run_*/record.*) 또는 _rec 폴더의 녹화를 최근 N개만 남긴다(실측 결과 파일은 지우지 않음). 반환 = 지운 수"""
+    import glob
+    d = os.path.dirname(saved)
+    pats = [os.path.join(os.path.dirname(d), 'run_*', 'record*.webm'), os.path.join(os.path.dirname(d), 'run_*', 'record*.gif')] if os.path.basename(d).startswith('run_') else [os.path.join(d, '*.webm'), os.path.join(d, '*.gif')]
+    fs_ = sorted({f for p in pats for f in glob.glob(p) if f.lower().endswith(('.webm', '.gif'))}, key=os.path.getmtime)
+    n = 0
+    for f in fs_[:max(0, len(fs_) - keep_runs())]:
+        try:
+            os.remove(f); n += 1
+        except OSError:
+            pass
+    return n
+
+
+def frames_dir(cmddir):
+    return gif_path(cmddir)[:-4] + '.frames'
+
+
+def encode_frames(fd, out_base):
+    """장면 폴더(00001.jpg …) → out_base.webm(ffmpeg) 또는 out_base.gif. 장면마다 창 크기가 달라(로그인 창 → 메인 창) 가장 큰 크기 바탕에 왼쪽 위로 붙인다. 끝나면 장면 폴더 지움. 반환 (경로, 장 수)"""
+    import glob, io, shutil, subprocess
+    from PIL import Image
+    files = sorted(glob.glob(os.path.join(fd, '*.jpg')))
+    if not files:
+        shutil.rmtree(fd, ignore_errors=True); raise RuntimeError('장면 없음')
+    ims = [Image.open(f).convert('RGB') for f in files]
+    W = max(i.width for i in ims); H = max(i.height for i in ims); W += W % 2; H += H % 2
+    canv = []
+    for i in ims:
+        c = Image.new('RGB', (W, H), (60, 60, 60)); c.paste(i, (0, 0)); canv.append(c)
+    ff = ffmpeg_path()
+    if ff:
+        p = out_base + '.webm'; mj = out_base + '.mjpeg'
+        # 이 ffmpeg 는 입력 '-'(표준 입력)를 받지 않는다(16:27 실측 'Protocol not found') → 장면을 JPEG 로 이어 붙인 임시 파일을 입력으로
+        with open(mj, 'wb') as fo:
+            for c in canv:
+                b = io.BytesIO(); c.save(b, 'JPEG', quality=85); fo.write(b.getvalue())
+        r = subprocess.run([ff, '-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', '1', '-c:v', 'mjpeg', '-i', mj, '-c:v', 'libvpx-vp9', '-deadline', 'realtime', '-speed', '8',
+                            '-b:v', '1M', '-pix_fmt', 'yuv420p', p], capture_output=True, timeout=600)
+        try:
+            os.remove(mj)
+        except OSError:
+            pass
+        if r.returncode != 0 or not os.path.exists(p):
+            raise RuntimeError('ffmpeg 종료코드 %s %s' % (r.returncode, r.stderr.decode('utf-8', 'replace')[:200]))
+    else:
+        p = out_base + '.gif'
+        pal = [c.convert('P', palette=Image.ADAPTIVE, colors=128) for c in canv]
+        pal[0].save(p, save_all=True, append_images=pal[1:], duration=1000, loop=0)
+    shutil.rmtree(fd, ignore_errors=True)
+    return p, len(canv)
+
+
+def rescue_frames(skip=''):
+    """중단된 AS-IS 실측이 남긴 장면 폴더(*.frames · 마지막 장면이 2분 넘게 지남)를 <이름>_중단.webm 으로 묶는다. 반환 = 묶은 수"""
+    import glob
+    n = 0
+    for fd in glob.glob(os.path.join(ROOT, 'Doc', 'asislive', '**', '*.frames'), recursive=True):
+        if os.path.abspath(fd) == os.path.abspath(skip or ''):
+            continue
+        fs_ = glob.glob(os.path.join(fd, '*.jpg'))
+        if fs_ and time.time() - max(os.path.getmtime(f) for f in fs_) < 120:
+            continue   # 다른 실측이 지금 찍는 중
+        try:
+            p, k = encode_frames(fd, fd[:-7] + '_중단')
+            prune_records(p); n += 1
+            print(f'[AS-IS 녹화] 지난 실측(중단)에 남은 장면 {k}장 → {os.path.relpath(p, ROOT)}', flush=True)
+        except Exception as e:
+            print(f'[WARN] 중단된 AS-IS 녹화 묶기 실패 {os.path.relpath(fd, ROOT)}: {e}', flush=True)
+    return n
+
+
+def gif_path(cmddir):
+    cmddir = os.path.abspath(cmddir)
+    if os.path.basename(cmddir) == '_cmd':
+        return os.path.join(os.path.dirname(cmddir), 'record.gif')
+    return os.path.join(ROOT, 'Doc', 'asislive', '_rec', os.path.basename(cmddir) + '.gif')
+
+
+if sys.platform == 'win32':
+    U = ctypes.WinDLL('user32', use_last_error=True)
+    G = ctypes.WinDLL('gdi32')
+    EnumProc = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+    U.EnumWindows.argtypes = [EnumProc, wintypes.LPARAM]
+    U.GetWindowThreadProcessId.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.DWORD)]
+    U.IsWindowVisible.argtypes = [wintypes.HWND]
+    U.IsZoomed.argtypes = [wintypes.HWND]
+    U.GetWindowRect.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.RECT)]
+    U.SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, wintypes.UINT]
+    U.ShowWindow.argtypes = [wintypes.HWND, ctypes.c_int]
+    U.PrintWindow.argtypes = [wintypes.HWND, wintypes.HDC, wintypes.UINT]
+    U.GetWindowLongW.argtypes = [wintypes.HWND, ctypes.c_int]
+    U.SetWindowLongW.argtypes = [wintypes.HWND, ctypes.c_int, ctypes.c_long]
+    U.SetLayeredWindowAttributes.argtypes = [wintypes.HWND, wintypes.COLORREF, ctypes.c_ubyte, wintypes.DWORD]
+    U.GetWindowDC.argtypes = [wintypes.HWND]
+    U.GetWindowDC.restype = wintypes.HDC
+    U.ReleaseDC.argtypes = [wintypes.HWND, wintypes.HDC]
+    G.CreateCompatibleDC.argtypes = [wintypes.HDC]
+    G.CreateCompatibleDC.restype = wintypes.HDC
+    G.CreateCompatibleBitmap.argtypes = [wintypes.HDC, ctypes.c_int, ctypes.c_int]
+    G.CreateCompatibleBitmap.restype = wintypes.HBITMAP
+    G.SelectObject.argtypes = [wintypes.HDC, wintypes.HGDIOBJ]
+    G.SelectObject.restype = wintypes.HGDIOBJ
+    G.DeleteObject.argtypes = [wintypes.HGDIOBJ]
+    G.DeleteDC.argtypes = [wintypes.HDC]
+    G.GetDIBits.argtypes = [wintypes.HDC, wintypes.HBITMAP, wintypes.UINT, wintypes.UINT, ctypes.c_void_p, ctypes.c_void_p, wintypes.UINT]
+
+
+def windows_of(pid):
+    """(hwnd, (l, t, r, b)) — 이 프로세스의 보이는 최상위 창"""
+    out = []
+
+    def cb(h, _):
+        p = wintypes.DWORD()
+        U.GetWindowThreadProcessId(h, ctypes.byref(p))
+        if p.value == pid and U.IsWindowVisible(h):
+            r = wintypes.RECT()
+            if U.GetWindowRect(h, ctypes.byref(r)) and r.right - r.left > 1 and r.bottom - r.top > 1:
+                out.append((h, (r.left, r.top, r.right, r.bottom)))
+        return True
+    U.EnumWindows(EnumProc(cb), 0)
+    return out
+
+
+def offscreen_x():
+    # 가상 화면(모니터 전부) 오른쪽 끝 바깥 · SM_XVIRTUALSCREEN 76 · SM_CXVIRTUALSCREEN 78
+    return U.GetSystemMetrics(76) + U.GetSystemMetrics(78) + 400
+
+
+def capture(h, rect):
+    """PrintWindow(PW_RENDERFULLCONTENT) → PIL.Image 또는 None"""
+    from PIL import Image
+    w, hh = rect[2] - rect[0], rect[3] - rect[1]
+    if w <= 1 or hh <= 1:
+        return None
+    wdc = U.GetWindowDC(h); mdc = G.CreateCompatibleDC(wdc); bmp = G.CreateCompatibleBitmap(wdc, w, hh); old = G.SelectObject(mdc, bmp)
+    try:
+        U.PrintWindow(h, mdc, 2)
+
+        class BIH(ctypes.Structure):
+            _fields_ = [('biSize', wintypes.DWORD), ('biWidth', wintypes.LONG), ('biHeight', wintypes.LONG), ('biPlanes', wintypes.WORD), ('biBitCount', wintypes.WORD),
+                        ('biCompression', wintypes.DWORD), ('biSizeImage', wintypes.DWORD), ('biXPelsPerMeter', wintypes.LONG), ('biYPelsPerMeter', wintypes.LONG),
+                        ('biClrUsed', wintypes.DWORD), ('biClrImportant', wintypes.DWORD)]
+        bi = BIH(); bi.biSize = ctypes.sizeof(BIH); bi.biWidth = w; bi.biHeight = -hh; bi.biPlanes = 1; bi.biBitCount = 32
+        buf = ctypes.create_string_buffer(w * hh * 4)
+        G.GetDIBits(mdc, bmp, 0, hh, buf, ctypes.byref(bi), 0)
+        return Image.frombuffer('RGB', (w, hh), buf, 'raw', 'BGRX', 0, 1)
+    finally:
+        G.SelectObject(mdc, old); G.DeleteObject(bmp); G.DeleteDC(mdc); U.ReleaseDC(h, wdc)
+
+
+class View:
+    def __init__(self, pid, cmddir, m=None):
+        self.pid, self.cmddir, self.mode = pid, cmddir, (m or mode())
+        self.frames, self.moved, self.stop_ev = [], 0, threading.Event(); self.done = set(); self.nframe = 0
+        self.t = None; self.gif = ''; self.why = ''
+
+    def begin(self):
+        if self.mode == 'window' or sys.platform != 'win32':
+            return self
+        if self.mode == 'record':
+            try:
+                rescue_frames(skip=frames_dir(self.cmddir))
+            except Exception:
+                pass
+        self.t = threading.Thread(target=self.loop, name='AsisLive.View', daemon=True); self.t.start()
+        return self
+
+    def hide(self):
+        """보이는 창을 투명(불투명도 1/255)하고 클릭이 통과하게 한다. 위치·크기·최대화는 그대로 — 화면 사진(PrintWindow)이 그대로 찍힌다.
+           2026-11-20 실측: 화면 밖으로 옮기는 방식은 화면 사진이 한 색(빈 그림)으로 찍혀 버림(SCP0028 run_20261120_161106)"""
+        for h, _ in windows_of(self.pid):
+            ex = U.GetWindowLongW(h, -20)   # GWL_EXSTYLE
+            if ex & 0x00080000 and ex & 0x00000020 and h in self.done:
+                continue
+            U.SetWindowLongW(h, -20, ex | 0x00080000 | 0x00000020)   # WS_EX_LAYERED · WS_EX_TRANSPARENT(클릭 통과)
+            U.SetLayeredWindowAttributes(h, 0, 1, 0x2)            # LWA_ALPHA 1/255
+            if h not in self.done:
+                self.done.add(h); self.moved += 1
+
+    def after_maximize(self):
+        if self.mode in ('hidden', 'record'):
+            time.sleep(0.3); self.hide()
+
+    def snap(self):
+        from PIL import Image
+        ws = windows_of(self.pid)
+        if not ws:
+            return
+        main = max(ws, key=lambda x: (x[1][2] - x[1][0]) * (x[1][3] - x[1][1]))
+        base = capture(*main)
+        if base is None:
+            return
+        for h, rc in ws:
+            if h == main[0]:
+                continue
+            im = capture(h, rc)
+            if im is not None:
+                base.paste(im, (rc[0] - main[1][0], rc[1] - main[1][1]))
+        if base.width > 1280:
+            base = base.resize((1280, int(base.height * 1280 / base.width)))
+        # 2026-11-20 사용자 지시 '중단된 실행도 녹화를 보관': 장면을 찍는 대로 파일로(<녹화 이름>.frames/00001.jpg). 실측 스크립트가 강제 종료돼도 다음 실측 시작 때 동영상으로 묶는다
+        fd = frames_dir(self.cmddir); os.makedirs(fd, exist_ok=True)
+        self.nframe += 1; base.convert('RGB').save(os.path.join(fd, '%05d.jpg' % self.nframe), 'JPEG', quality=85)
+        self.frames.append(1)
+
+    def loop(self):
+        last = 0.0
+        while not self.stop_ev.is_set():
+            try:
+                if self.mode in ('hidden', 'record'):   # 2026-11-20 사용자 지시: 녹화도 투명 창(창 없이 녹화)
+                    self.hide()
+                if self.mode == 'record' and time.time() - last >= 1.0:
+                    last = time.time(); self.snap()
+            except Exception as e:   # 화면 방식 실패는 실측을 멈추지 않는다(사유만 남김)
+                self.why = f'{type(e).__name__}: {str(e)[:160]}'
+            if not windows_of_alive(self.pid):
+                break
+            self.stop_ev.wait(0.1)
+        self.finish()
+
+    def finish(self):
+        """녹화 마무리 = 장면 폴더를 동영상(record.webm · Playwright 전용 ffmpeg)으로, ffmpeg 없으면 GIF(record.gif)"""
+        if self.mode != 'record' or self.gif or not self.frames:
+            return
+        try:
+            p, k = encode_frames(frames_dir(self.cmddir), gif_path(self.cmddir)[:-4])
+            self.gif = p
+            d = prune_records(p)
+            print(f'[AS-IS 녹화] {k}장 → {os.path.relpath(p, ROOT)}' + ('' if p.endswith('.webm') else ' (ffmpeg 없음 · GIF)')
+                  + (f' · 오래된 녹화 {d}개 지움(최근 {keep_runs()}회 유지)' if d else ''), flush=True)
+        except Exception as e:
+            self.why = f'녹화 저장 실패: {e}'
+        self.frames = []
+
+    def stop(self):
+        self.stop_ev.set()
+        if self.t:
+            self.t.join(timeout=30)
+        self.finish()
+        return {'mode': self.mode, 'moved': self.moved, 'gif': self.gif, 'why': self.why}
+
+
+def windows_of_alive(pid):
+    if sys.platform != 'win32':
+        return False
+    k = ctypes.WinDLL('kernel32')
+    h = k.OpenProcess(0x1000, False, pid)   # PROCESS_QUERY_LIMITED_INFORMATION
+    if not h:
+        return False
+    code = wintypes.DWORD()
+    ok = k.GetExitCodeProcess(h, ctypes.byref(code)); k.CloseHandle(h)
+    return bool(ok) and code.value == 259   # STILL_ACTIVE
+
+
+def start(pid, cmddir):
+    v = View(pid, cmddir).begin()
+    print(f'[AS-IS 실측 화면] {NAMES[v.mode]}(harness.json asisLiveView={v.mode})', flush=True)
+    return v
+
+
+def selftest():
+    ok = True
+
+    def chk(n, c):
+        nonlocal ok
+        print(('  [OK] ' if c else '  [FAIL] ') + n); ok = ok and bool(c)
+    os.environ['ASIS_LIVE_VIEW'] = 'record'; chk('값 — 환경변수 우선', mode() == 'record')
+    os.environ['ASIS_LIVE_VIEW'] = 'xx'; chk('값 — 모르는 값 = 설정 파일 값', mode() in MODES)
+    os.environ.pop('ASIS_LIVE_VIEW', None)
+    chk('녹화 경로 — 실행 폴더', gif_path(os.path.join(ROOT, 'Doc', 'asislive', 'X', 'run_1', '_cmd')).endswith(os.path.join('run_1', 'record.gif')))
+    chk('녹화 경로 — 그 밖', gif_path('C:/x/_cmd_save_101010').endswith(os.path.join('_rec', '_cmd_save_101010.gif')))
+    if sys.platform == 'win32':
+        chk('창 목록 — 이 프로세스 창 없음', windows_of(os.getpid()) == [])
+        chk('화면 밖 좌표 > 0', offscreen_x() > 0)
+        chk('프로세스 살아 있음', windows_of_alive(os.getpid()))
+    print('SELFTEST ' + ('OK' if ok else 'FAIL'))
+    return 0 if ok else 1
+
+
+if __name__ == '__main__':
+    sys.exit(selftest() if '--selftest' in sys.argv else 0)

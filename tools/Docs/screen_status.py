@@ -25,9 +25,20 @@ def norm_result(v):
     return s if s in RESULTS else (s or '빈칸')
 
 
+def checklist_dir():
+    """개선안 20261124012048_SELF_6(R83): CheckList 폴더 = harness.json paths.checklistDir 1곳(verify_if_stale·criteria_build 와 같은 값) · 없으면 Doc/UI_CHECKLIST"""
+    try:
+        with open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            hp = (json.load(f) or {}).get('paths')
+    except (OSError, ValueError):
+        hp = None
+    d = (hp.get('checklistDir') if isinstance(hp, dict) else None) or 'Doc/UI_CHECKLIST'
+    return os.path.normpath(d if os.path.isabs(d) else os.path.join(ROOT, d))
+
+
 def latest_checklist(sid):
     best = None
-    for p in glob.glob(os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', sid + '_*_CheckList_v*.xlsx')):
+    for p in glob.glob(os.path.join(checklist_dir(), sid + '_*_CheckList_v*.xlsx')):
         m = re.search(r'_v(\d+)\.xlsx$', p)
         if m and (best is None or int(m.group(1)) > best[0]):
             best = (int(m.group(1)), p)
@@ -43,6 +54,8 @@ def read_checklist(sid, sources):
     sources.append({'file': rel(path), 'time': mtime(path)})
     wb = openpyxl.load_workbook(path, read_only=True)
     rows = list(wb['검증 전체'].iter_rows(values_only=True))[1:]
+    if '해당없음' in wb.sheetnames:   # 2026-11-26 make_verify_docs 가 해당없음 행을 별도 시트로 옮김 — 건수는 두 시트 합
+        rows += list(wb['해당없음'].iter_rows(values_only=True))[1:]
     totals = collections.Counter(norm_result(r[8]) for r in rows)
     axes = collections.OrderedDict()
     for r in rows:

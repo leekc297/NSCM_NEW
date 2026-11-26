@@ -51,19 +51,38 @@ def all_read(mid, files):
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('menu'); ap.add_argument('--asis', default=''); ap.add_argument('--serial', action='store_true'); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument('menu'); ap.add_argument('--asis', default=''); ap.add_argument('--serial', action='store_true')
+    ap.add_argument('--calls', default='', help='2026-11-25 행 단위 해소: 팝업 호출 번호(쉼표)만 다시 잼. 다른 팝업 결과는 그대로 두고 호출 번호 단위로 합침. 권한 검사기는 돌지 않음(--auth 로 같이)')
+    ap.add_argument('--auth', action='store_true')
+    ap.add_argument('--auth-only', action='store_true', help='2026-11-26 행 단위 해소: 권한 검사기만(팝업 결과는 그대로). SCP0005 J20261125_210634 권한 행 때문에 팝업 36개 시험 전체가 돈 사고')
+    a = ap.parse_args()
     mid = a.menu.upper(); asis = (a.asis or mid).upper(); py = sys.executable; cli = os.path.join('node_modules', '@playwright', 'test', 'cli.js')
     base = dict(os.environ, VERIFY_ID=mid, VERIFY_NO_SAVE='1', CL_SELFTEST_BASE='1', EG_CHAIN='1')  # 2026-11-20 T443 EG_CHAIN: 호출 기록(calls/*.json) 남김
     pd = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'popup'); ad = os.path.join(ROOT, 'Doc', 'verify', mid, 'eg', 'auth')
     rc = {}
 
+    sel = [x.strip() for x in a.calls.split(',') if x.strip().isdigit()]
+    keep = {}
     def popup():
+        if sel:   # 고른 호출만: 지난 결과 중 다른 호출 것은 보관했다가 합침
+            for n in ('popup_results.json', 'popup_rowsets.json'):
+                try:
+                    keep[n] = [x for x in json.load(open(os.path.join(pd, n), encoding='utf-8')) if str(x.get('call')) not in sel]
+                except (OSError, ValueError):
+                    keep[n] = []
         fresh(pd)
         run([py, '-I', os.path.join(HERE, 'facts_popup.py'), asis]); run([py, '-I', os.path.join(HERE, 'facts_popup_meta.py'), mid])
         # 2026-11-13 점검: 팝업 호출이 없는 화면은 eg_popup 스펙이 테스트를 하나도 만들지 않아 Playwright 가 'Error: No tests found.' rc 1 로 끝났다
         #   (11-13 SCP0084·SCP0122·SSP0005 — calls 0). 오류가 아니라 '대상 없음' 이므로 --pass-with-no-tests 로 넘기고 아래에서 사유를 한 줄로 알린다.
         rc['p'] = run(['node', cli, 'test', 'eg_popup', '--workers', '1', '--retries', '0', '--pass-with-no-tests', '--reporter=list,json'], cwd=E2E, timeout=TIMEOUT_S,
-                      env=dict(base, EG_META='1', CL_RESULTS=os.path.join(pd, 'e2e.json'), E2E_RESULTS=pd, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(pd, 'results.json')))
+                      env=dict(base, EG_META='1', CL_RESULTS=os.path.join(pd, 'e2e.json'), E2E_RESULTS=pd, PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(pd, 'results.json'), **({'EG_CALLS': ','.join(sel)} if sel else {})))
+        for n, old in keep.items():
+            try:
+                new = json.load(open(os.path.join(pd, n), encoding='utf-8'))
+            except (OSError, ValueError):
+                new = []
+            json.dump(old + new, open(os.path.join(pd, n), 'w', encoding='utf-8'), ensure_ascii=False)
+            print(f'[eg_chain] {n}: 고른 호출 {",".join(sel)} 새 결과 {len(new)} + 다른 호출 지난 결과 {len(old)}', flush=True)
         if os.path.exists(os.path.join(pd, 'popup_rowsets.json')):
             run([py, '-I', os.path.join(HERE, 'facts_popup_golden.py'), pd, mid])
 
@@ -82,6 +101,14 @@ def main():
     except (OSError, ValueError, TypeError):
         par_cfg = 3
     ok, why = all_read(mid, ['eg_popup.spec.ts', 'eg_auth.spec.ts']) if (par_cfg > 1 and not a.serial) else (False, '설정으로 끔')
+    if a.auth_only:
+        import time as _t; t0 = _t.time(); auth()
+        print(f"[eg_chain] {mid} 권한 검사기만 · rc={rc.get('a')} · {round((_t.time() - t0) / 60, 1)}분", flush=True)
+        return 0
+    if sel and not a.auth:
+        import time as _t; t0 = _t.time(); popup()
+        print(f"[eg_chain] {mid} 팝업 호출 {','.join(sel)} 만 · rc={rc.get('p')} · {round((_t.time() - t0) / 60, 1)}분", flush=True)
+        return 0
     import time as _t; t0 = _t.time()
     if ok:
         import threading

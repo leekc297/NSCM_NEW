@@ -21,7 +21,7 @@
   종료 = ALTER SYSTEM KILL SESSION(열린 트랜잭션은 Oracle 이 롤백). 막고 있는 세션을 먼저 종료한다.
   종료코드: 0 남은 것 없음(또는 전부 종료) · 2 종료 대상이 남음(목록만 모드 포함) · 3 측정 실패(접속·권한)
 """
-import csv, datetime, getpass, os, socket, sys, time
+import csv, datetime, getpass, json, os, socket, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
@@ -211,6 +211,60 @@ def ensure_watch():
     print(f'[DB 감시] 시작(pid {p.pid}) — 5분 이상 경고 · 30분 이상 종료 · 기록 Doc/verify/_db_watch.log'); return 0
 
 
+def _pid_alive(pid):
+    try:
+        import subprocess
+        o = subprocess.run(['tasklist', '/FI', f'PID eq {pid}', '/FO', 'CSV', '/NH'], capture_output=True, text=True, timeout=30).stdout
+        return f'"{pid}"' in o
+    except Exception:
+        return True  # 못 읽었으면 살아 있는 것으로 본다(감시를 끄지 않는 쪽)
+
+
+def other_checklists(except_pid):
+    """실행 중인 다른 CheckList — 시험 데이터 구간 잠금(Doc/e2e/_run.dbwin.<ID>.lock)의 pid 가 살아 있고 except_pid 가 아닌 것"""
+    import glob
+    out = []
+    for fp in glob.glob(os.path.join(ROOT, 'Doc', 'e2e', '_run.dbwin.*.lock')):
+        try:
+            pid = int((json.load(open(fp, encoding='utf-8')) or {}).get('pid') or 0)
+        except Exception:
+            continue
+        if pid and pid != except_pid and _pid_alive(pid):
+            out.append(f"{os.path.basename(fp)[len('_run.dbwin.'):-len('.lock')]}(pid {pid})")
+    return out
+
+
+def stop_watch(a):
+    """2026-11-25 개선안 20261123223110_SELF_5(규칙 R65 'CheckList 끝나면 감시 꺼짐'): 감시 프로세스 종료.
+    --pid N = 이 pid 의 감시일 때만 끈다(호출한 CheckList 가 켠 감시) · --except-pid M = 호출한 CheckList 자신(다른 CheckList 판별에서 뺌).
+    다른 CheckList 가 실행 중이면 끄지 않는다"""
+    want = int(a[a.index('--pid') + 1]) if '--pid' in a else 0
+    me = int(a[a.index('--except-pid') + 1]) if '--except-pid' in a else 0
+    pid = watcher_alive()
+    if not pid:
+        print('[DB 감시] 실행 중인 감시 없음 — 끌 것 없음'); return 0
+    if want and pid != want:
+        print(f'[DB 감시] 유지 — 실행 중인 감시(pid {pid})가 이번 실행이 켠 감시(pid {want})가 아님'); return 0
+    others = other_checklists(me)
+    if others:
+        print(f"[DB 감시] 유지(pid {pid}) — 다른 CheckList 실행 중: {', '.join(others)}"); return 0
+    import subprocess
+    r = subprocess.run(['taskkill', '/PID', str(pid), '/T', '/F'], capture_output=True, text=True, timeout=30)
+    if r.returncode != 0 and _pid_alive(pid):
+        print(f"[DB 감시] 종료 실패(pid {pid}): {(r.stderr or r.stdout or '').strip()[:120]}"); return 1
+    try:
+        if int(open(PIDF, encoding='utf-8').read().strip()) == pid:
+            os.remove(PIDF)
+    except Exception:
+        pass
+    try:
+        with open(os.path.join(ROOT, 'Doc', 'verify', '_db_watch.log'), 'a', encoding='utf-8') as f:
+            print(f"[DB 감시 종료] {datetime.datetime.now():%Y-%m-%d %H:%M:%S} pid {pid} — CheckList 끝", file=f)
+    except Exception:
+        pass
+    print(f'[DB 감시] 종료(pid {pid})'); return 0
+
+
 def watch(a):
     """상시 감시 — 60초마다 조회. 알림 줄은 표준 출력(호출한 쪽이 사용자에게 전달)과 Doc/verify/_db_watch.log 에 남긴다"""
     import dbconn
@@ -273,6 +327,8 @@ def main():
         return selftest()
     if '--ensure-watch' in a:
         return ensure_watch()
+    if '--stop-watch' in a:
+        return stop_watch(a)
     if '--watch' in a:
         return watch(a)
     kill = '--kill' in a

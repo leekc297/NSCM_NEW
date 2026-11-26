@@ -456,11 +456,16 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       await setAlert({ type: 'alert', content: t(MSG.PERIOD_ORDER, '_Invalid period.') });
       return;
     }
-    // 3년 초과 (AS-IS MSG00164 — 종료일 보정 후 재입력 안내)
-    const fromYear = Number(from.slice(0, 4));
-    if (Number(to.slice(0, 4)) - fromYear >= 3) {
-      setSearchParams({ endYyyymmdd: `${fromYear + 2}${from.slice(4)}` });
-      await setAlert({ type: 'alert', content: t(MSG.PERIOD_3Y, '_Period exceeds 3 years.') });
+    // 2년 초과 (MSG01505 — 종료일을 시작일 + 2년으로 보정 후 재조회 안내). 2026-11-24 결정: Monthly 로 조회해도
+    //   일자 데이터까지 받는 화면은 2년 제한. 종전은 연도 차 3 이상(AS-IS MSG00164) 판정이었다.
+    //   일자 기준 판정: 시작일 + 2년(YYYYMMDD) 보다 종료일이 크면 초과.
+    const limit2y = `${Number(from.slice(0, 4)) + 2}${from.slice(4)}`;
+    if (to > limit2y) {
+      setSearchParams({ endYyyymmdd: limit2y });
+      await setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_2Y, '_Please enter a period within 2 years.'),
+      });
       return;
     }
     const isSame = setFilters();
@@ -740,7 +745,12 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       m3CutoffYyyymm,
       searchParams.bucketType
     );
-    if (saveRows.length === 0) return;
+    // 변경 0건이면 안내 후 종료 — 공통 저장 훅(useProcMutation)이 빈 배열에 MSG00004 를 띄우는 것과
+    //   같게 맞춘다. 이 화면은 call-proc 를 직접 호출해 공통 안내를 타지 않아 무반응으로 끝났다(2026-11-22 개선 요청).
+    if (saveRows.length === 0) {
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      return;
+    }
 
     const confirmed = await setAlert({ type: 'confirm', content: t(MSG.SAVE_CONFIRM, '_Save?') });
     if (!confirmed) return;

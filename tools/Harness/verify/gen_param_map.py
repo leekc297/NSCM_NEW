@@ -89,12 +89,82 @@ def asis_result_unused(mid, sp):
     return ' · '.join(ev)
 
 
+_UIL_IDX = None
+
+
+def _uil_class_files():
+    """06.UIL 아래 '파일명(.cs, Designer 제외) → 경로' 색인(클래스 이름 = 파일 이름 관례). 1회 생성"""
+    global _UIL_IDX
+    if _UIL_IDX is None:
+        _UIL_IDX = {}
+        try:
+            src = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or P('GSCM')
+        except (OSError, ValueError):
+            src = P('GSCM')
+        for d, _, fs in os.walk(os.path.join(src, '06.UIL')):
+            parts = {x.lower() for x in d.split(os.sep)}
+            if 'bin' in parts or 'obj' in parts:
+                continue
+            for f in fs:
+                if f.endswith('.cs') and not f.endswith('.Designer.cs'):
+                    _UIL_IDX.setdefault(f[:-3].upper(), []).append(os.path.join(d, f))
+    return _UIL_IDX
+
+
+def popup_class_sps(mid, names):
+    """2026-11-25 미검증 해소(SCP0028 차등 60행 '짝 없음', T529): 화면 본체가 다른 프로젝트의 팝업 클래스를 new 로 열고
+    그 팝업이 FoxDataRequest 로 SP 를 부르면 화면 호출 추출(endpoints.csv)에 그 SP 가 없다(실측: SCP0028_Shipment_Lot_Size.cs:270
+    new SCM0002_ShipmentLotSizePopup() → GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:284 SCM.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP).
+    names(TO-BE 가 이 화면에서 부른 PROC 의 AS-IS 이름) 중 그런 팝업 원문에 FoxDataRequest 가 있는 것만 [(name, '근거 파일:행')]"""
+    if not names:
+        return []
+    try:
+        src = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8')).get('asisSrcRoot') or P('GSCM')
+    except (OSError, ValueError):
+        src = P('GSCM')
+    sdir = P('Doc', 'asisfacts', 'screens', mid)
+    files = []
+    for r in rd(os.path.join(sdir, 'files.csv')):
+        f = r.get('file') or ''
+        if f.lower().endswith('.cs') and not f.lower().endswith('.designer.cs') and is_main(r, sdir) and f not in files:
+            files.append(f)
+    news = []
+    for rel in files:
+        try:
+            t = open(os.path.join(src, rel), encoding='utf-8', errors='replace').read()
+        except OSError:
+            continue
+        for i, line in enumerate(t.splitlines(), 1):
+            for c in re.findall(r'\bnew\s+(\w+)\s*\(', re.sub(r'//.*', '', line)):
+                news.append((c, f"{os.path.basename(rel)}:{i}"))
+    out, seen = [], set()
+    idx = _uil_class_files()
+    for name in names:
+        rx = re.compile(r'FoxDataRequest\(\s*"(?:\w+\.)?' + re.escape(name) + r'"', re.I)
+        for cls, at in news:
+            if name.upper() in seen:
+                break
+            for f in idx.get(cls.upper(), []):
+                try:
+                    t = open(f, encoding='utf-8', errors='replace').read()
+                except OSError:
+                    continue
+                if not re.search(r'\bclass\s+' + re.escape(cls) + r'\b', t):
+                    continue
+                m = rx.search(re.sub(r'//[^\n]*', lambda x: ' ' * len(x.group(0)), t))
+                if m:
+                    seen.add(name.upper())
+                    out.append((name, f"{at} new {cls}() → {os.path.relpath(f, ROOT)}:{t[:m.start()].count(chr(10)) + 1}"))
+                    break
+    return out
+
+
 def framework_sps(mid, sps):
     try:
         calls = json.load(open(P('Doc', 'verify', mid, 'sqllog_calls.json'), encoding='utf-8')).get('calls') or []
     except (OSError, ValueError):
         return []
-    have = {s.upper() for s in sps}; out = []
+    have = {s.upper() for s in sps}; out = []; left = []
     for proc in sorted({str(c.get('proc') or '') for c in calls if c.get('proc')}):
         name = re.sub(r'^P_', '', proc.split('.')[-1], flags=re.I)
         if not name or name.upper() in have:
@@ -106,6 +176,11 @@ def framework_sps(mid, sps):
             m = rx.search(t)
             if m:
                 out.append((name, f"{rel}:{t[:m.start()].count(chr(10)) + 1}")); have.add(name.upper()); break
+        else:
+            left.append(name)
+    # 2026-11-25 T529: 프레임워크에 없으면 화면이 연 팝업 클래스 원문에서 찾는다
+    for name, ev in popup_class_sps(mid, left):
+        out.append((name, ev)); have.add(name.upper())
     return out
 
 
@@ -254,6 +329,67 @@ def list_format(sp, pname, tobe_dt):
     return ''
 
 
+# T560(2026-11-25 SCP0005 A6·A7·A1·DB-SYN 7행): PKG_SCP0005 짝 3건(GET_DISTRIBUTION_ROUTEID → P_SCP0005_GET_ROUTEID 등)이 'TO-BE proc 미매칭'.
+#   PKG 원문 기록이 PROCEDURE 바로 앞 머리말 'Program ID : [SP]'(괄호 포함, 본문 575·734·944행)뿐이라 pkg_asis_map(선언부·명세 주석만)이 못 읽었다.
+#   머리말 짝은 한 칸 어긋남(11-11 실측)이 있어 조건 3개를 다 만족할 때만 쓴다: ① 주석 끝 '*/' 바로 다음 줄이 PROCEDURE ② PROC 이름(P_ 제거)이 다른 AS-IS SP 로 따로 있지 않음
+#   ③ AS-IS 입력 인자 집합(debug_mode 제외) = TO-BE IN 인자 집합(exact_key). 셋 중 하나라도 어긋나면 짝을 만들지 않는다(종전 '미매칭' 유지)
+RX_HDR_PGM = re.compile(r'Program\s*ID\s*:\s*\[?\s*([A-Za-z][A-Za-z0-9_]{5,})\s*\]?', re.I)
+RX_HDR_PROC = re.compile(r'^\s*PROCEDURE\s+(P_[A-Za-z0-9_]+)', re.I)
+
+
+def header_pairs(pkg, body_lines, asis_in, tobe_in, exists=lambda sp: os.path.exists(os.path.join(MODULES, f'dbo.{sp}.sql'))):
+    """PROCEDURE 바로 앞 머리말 주석의 Program ID → {PKG.P_PROC: (asis_sp, 근거)} · asis_in {SP: [인자]} · tobe_in {PKG.PROC: [인자]}"""
+    out = {}
+    dbg = lambda n: re.match(r'(?i)^@?(p_)?debug', n or '')
+    for i, l in enumerate(body_lines):
+        m = RX_HDR_PROC.match(l)
+        if not m:
+            continue
+        j = i - 1
+        while j >= 0 and not body_lines[j].strip():
+            j -= 1
+        if j < 0 or not body_lines[j].rstrip().endswith('*/'):
+            continue
+        k = j
+        while k >= 0 and '/*' not in body_lines[k] and j - k < 60:
+            k -= 1
+        if k < 0 or '/*' not in body_lines[k]:
+            continue
+        sps = {x.group(1).upper(): x.group(1) for ln in body_lines[k:j + 1] for x in [RX_HDR_PGM.search(ln)] if x}
+        if len(sps) != 1:
+            continue
+        sp = list(sps.values())[0]; proc = m.group(1); full = f'{pkg.upper()}.{proc.upper()}'
+        same = re.sub(r'(?i)^P_', '', proc)
+        if not exists(sp) or (same.upper() != sp.upper() and exists(same)):
+            continue
+        a = {exact_key(n) for n in asis_in.get(sp.upper(), []) if not dbg(n)}
+        t = {exact_key(n) for n in tobe_in.get(full, []) if not dbg(n)}
+        if not a or a != t:
+            continue
+        out[full] = (sp, f'본문 {k + 1}~{j + 1}행 PROCEDURE {proc} 바로 앞 머리말 Program ID "{sp}" · 입력 인자 {len(a)}개 이름 일치(T560)')
+    return out
+
+
+def _selftest_header_pairs():
+    body = ['    /*====', '     * Program ID   : [SCP_X_GET_ROUTEID]', '     *====*/', '    PROCEDURE P_X_GET_RID', '    (',
+            '    /*====', '     * Program ID   : [SCP_Y_GET_CITY]', '     *====*/', '', '    PROCEDURE P_X_GET_CITY',
+            '    /*====', '     * Program ID   : SCP_X_SAVE', '     */', '    PROCEDURE P_X_SAVE', '    -- gap', '    /* Program ID : SCP_X_GAP */', '    V := 1;', '    PROCEDURE P_X_GAP']
+    ex = {'SCP_X_GET_ROUTEID', 'SCP_Y_GET_CITY', 'X_GET_CITY', 'SCP_X_SAVE', 'SCP_X_GAP'}
+    ai = {'SCP_X_GET_ROUTEID': ['@p_route_id'], 'SCP_Y_GET_CITY': ['@p_country'], 'SCP_X_SAVE': ['@p_route_id', '@p_user_id', '@debug_mode'], 'SCP_X_GAP': ['@p_a']}
+    ti = {'PKG.P_X_GET_RID': ['routeId'], 'PKG.P_X_GET_CITY': ['country'], 'PKG.P_X_SAVE': ['routeId', 'userId'], 'PKG.P_X_GAP': ['a']}
+    r = header_pairs('PKG', body, ai, ti, exists=lambda s: s.upper() in ex)
+    cases = [('T560 괄호 머리말 + 인자 일치 = 짝', r.get('PKG.P_X_GET_RID', ('',))[0] == 'SCP_X_GET_ROUTEID'),
+             ('T560 PROC 이름의 AS-IS SP 가 따로 있으면 버림(변이)', 'PKG.P_X_GET_CITY' not in r),
+             ('T560 debug_mode 는 인자 비교에서 뺌', r.get('PKG.P_X_SAVE', ('',))[0] == 'SCP_X_SAVE'),
+             ('T560 주석과 PROCEDURE 사이에 문장이 있으면 버림(변이)', 'PKG.P_X_GAP' not in r)]
+    ti2 = dict(ti); ti2['PKG.P_X_GET_RID'] = ['routeId', 'langCd']
+    cases.append(('T560 인자 집합이 다르면 버림(변이)', 'PKG.P_X_GET_RID' not in header_pairs('PKG', body, ai, ti2, exists=lambda s: s.upper() in ex)))
+    bad = [n for n, ok in cases if not ok]
+    for n, ok in cases:
+        print(('PASS ' if ok else 'FAIL ') + n)
+    return 1 if bad else 0
+
+
 def build(mids):
     mids = [m.upper() for m in mids]
     pp = rd(P('Doc', 'tobefacts', 'db', 'proc_params.csv'))
@@ -303,6 +439,17 @@ def build(mids):
         rec_note = [f'[미측정] PKG 원문 기록을 읽지 못함({type(e).__name__}: {str(e)[:120]}) — 이름 일치만 사용']
     for n in rec_note:
         print('   ~ ' + n)
+    # T560: 명세·선언부 기록이 없는 PROC 은 PROCEDURE 바로 앞 머리말(조건 3개)로 짝을 읽는다
+    try:
+        _have = {p_.upper() for lst in rec_by_sp.values() for p_, _, _ in lst}
+        _ain = {k: [n for _, n, _ in v] for k, v in asis_params.items()}
+        _tin = {k: [n for _, n, _ in v] for k, v in tobe_in.items()}
+        for _pkg, (_spec, _body) in (pkg_asis_map.read_live(want).items() if want else []):
+            for _proc, (_sp, _why) in header_pairs(_pkg, _body, _ain, _tin).items():
+                if _proc not in _have:
+                    rec_by_sp.setdefault(_sp.upper(), []).append((_proc, _sp, _why)); print(f'   ~ {_proc}: 머리말 짝 {_sp} (T560)')
+    except Exception as e:  # 접속 실패 = 머리말 짝 미측정(종전 동작) — 숨기지 않고 출력
+        print(f'   ~ [미측정] 머리말 짝을 읽지 못함({type(e).__name__}: {str(e)[:120]})')
 
     pairs, pmap, stats = [], [], {}
     for mid in mids:
@@ -346,7 +493,7 @@ def build(mids):
                 continue
             pairs.append({'menu_id': mid, 'asis_sp': sp, 'tobe_proc': tobe, 'kind': kind, 'rs_map': 'ordinal' if tobe else '', 'source': how,
                           'note': ('' if tobe else 'TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual)') + (f" · 짝 근거: {rwhy}" if rwhy else '') + f" · kind 근거: {why}"
-                                  + (f" · AS-IS 프레임워크 경유 호출 {fw_ev[sp.upper()]}(화면 소스 직접 호출 없음)" if sp.upper() in fw_ev else '')})
+                                  + (f" · AS-IS {'팝업' if ' new ' in fw_ev[sp.upper()] else '프레임워크'} 경유 호출 {fw_ev[sp.upper()]}(화면 소스 직접 호출 없음)" if sp.upper() in fw_ev else '')})
             if not tobe:
                 continue
             aps = sorted(asis_params.get(sp.upper(), []))
@@ -425,6 +572,8 @@ def build(mids):
 
 
 def main():
+    if '--selftest' in sys.argv[1:]:
+        return _selftest_header_pairs()
     mids = [a.upper().strip('/').strip(chr(92)) for a in sys.argv[1:] if not a.startswith('--')]
     if not mids:
         print(__doc__); return 2

@@ -166,10 +166,10 @@ export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    // A-03 (MSG00164) — 2년 초과: 알림 + 종료일 자동 보정 후 중단 (AS-IS L688~695 보정까지 파리티.
-    //   ⚠ 공용 문구는 '3년' — 로직은 AS-IS 2년. 제약매트릭스 A-03 비고)
+    // A-03 (MSG01505) — 2년 초과: 알림 + 종료일 자동 보정 후 중단 (AS-IS L688~695 보정까지 파리티.
+    //   문구는 2년 MSG01505 — AS-IS '3년' MSG00164 에서 조건에 맞춰 교체, 2026-11-24)
     if (fromDt.add(PERIOD_LIMIT_YEARS, 'year').isBefore(toDt)) {
-      void setAlert({ type: 'alert', content: t(MSG.PERIOD_LIMIT, '_The period is too long.') });
+      void setAlert({ type: 'alert', content: t(MSG.PERIOD_LIMIT, '_Please enter a period within 2 years.') });
       setSearchParams({ endYyyymmdd: fromDt.add(PERIOD_LIMIT_YEARS, 'year').format('YYYYMMDD') });
       return;
     }

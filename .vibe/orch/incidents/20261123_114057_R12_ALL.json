@@ -1,0 +1,29 @@
+{
+  "id": "20261123_114057_R12_ALL",
+  "at": "2026-11-23T11:40:57+09:00",
+  "ms": 1795401657926,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_orch_usercheck.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_orch_usercheck.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 131 · FAIL 5 · FAIL U2 1판 기록 없는 체인 = 체인 전체로 판정 · 1판 없음 표시  / FAIL U2 events.jsonl:2001 = 1판 310분 · 체인 전체 310분 따로 표시 CheckList SCP0028 310분(목표 30분) / FAIL U2 새 구조 1판 40분 = 경고 · 체인 전체 200분 따로 표시 CheckList SCP0028 200분(목표 30분) / FAIL U2 1판 25분 · 체인 전체 200분 = 판정 없음(보완 회차는 목표 밖) [\"CheckList SCP0028 200분(목표 30분)\"] / FAIL U2 측정 단계(--no-docs)는 1판 아님 = 1판 없음, 전체 200분 판정 ",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_orch_usercheck.js",
+    "file": "t_orch_usercheck.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T11:51:10+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

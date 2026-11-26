@@ -4,12 +4,23 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import { useTranslation } from 'react-i18next';
 
 import { clsx } from '@shared/clsx';
+import { useTabProcQuery } from '@shared/hooks';
 
-import type { KpiAccent, KpiCard } from '../demand-as-dashboard.mock';
-import { KPI_CARDS } from '../demand-as-dashboard.mock';
+import { MENU_ID, SHEETS } from '../demand-as-dashboard.constants';
+import type { DashboardBaseFilters } from '../demand-as-dashboard.filters';
+import type { KpiAccent, KpiCard } from '../demand-as-dashboard.types';
 import styles from '../DemandAsDashboard.module.scss';
+
+import {
+  DELTA_LABEL_CODE,
+  DELTA_LABEL_FALLBACK,
+  KPI_PANEL_TITLE_CODE,
+  KPI_PANEL_TITLE_FALLBACK,
+  mapKpi,
+} from './kpiSummary.map';
 
 // 시안(참고 디자인)의 라인 스타일 아이콘에 최대한 근접하게 MUI Outlined 변형으로 맞춘다.
 //   관리 대상 품목/Excess 는 시안에서 같은 상자 아이콘(색만 다름)이라 둘 다 Inventory2Outlined 를 쓴다.
@@ -33,19 +44,35 @@ const ACCENT_TEXT_CLASS: Record<KpiAccent, string> = {
   indigo: styles.accentTextIndigo,
 };
 
-export const KpiSummary = () => {
+interface KpiSummaryProps {
+  tabId: string;
+  filters: DashboardBaseFilters;
+}
+
+export const KpiSummary = ({ tabId, filters }: KpiSummaryProps) => {
+  const { t } = useTranslation();
+  const { data } = useTabProcQuery<MENU_ID, typeof SHEETS.KPI>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.KPI,
+    tabId,
+    filters,
+    enabled: !!filters,
+  });
+
+  const cards = mapKpi(data?.o_rc1 ?? []);
+
   return (
     <div className={clsx(styles.panel)}>
       <div className={styles.panelHead}>
-        <span className={styles.panelTitle}>KPI 요약</span>
+        <span className={styles.panelTitle}>{t(KPI_PANEL_TITLE_CODE, KPI_PANEL_TITLE_FALLBACK)}</span>
       </div>
       <div className={styles.kpiRow}>
-        {KPI_CARDS.map(card => {
+        {cards.map(card => {
           const Icon = ICON_MAP[card.icon];
           return (
             <div key={card.key} className={styles.kpiCard}>
               <span className={clsx(styles.kpiLabel, ACCENT_TEXT_CLASS[card.accent])}>
-                {card.label}
+                {t(card.labelCode, card.labelFallback)}
               </span>
               <div className={styles.kpiMain}>
                 <span className={clsx(styles.kpiIcon, ACCENT_TEXT_CLASS[card.accent])}>
@@ -57,7 +84,7 @@ export const KpiSummary = () => {
                 </span>
               </div>
               <div className={styles.kpiDelta}>
-                <span className={styles.kpiDeltaLabel}>{card.deltaLabel}</span>
+                <span className={styles.kpiDeltaLabel}>{t(DELTA_LABEL_CODE, DELTA_LABEL_FALLBACK)}</span>
                 <em className={ACCENT_TEXT_CLASS[card.accent]}>{card.deltaValue}</em>
               </div>
             </div>

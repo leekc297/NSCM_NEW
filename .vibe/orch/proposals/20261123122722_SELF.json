@@ -1,0 +1,144 @@
+{
+  "id": "20261123122722_SELF",
+  "at": "2026-11-23T12:27:22+09:00",
+  "ms": 1795404442904,
+  "source": "self",
+  "status": "applied",
+  "sig": "ladder usercheck detector only not fix rn",
+  "title": "감지기 추가 개선안은 '고친 것'으로 세지 않고 감시 시작점으로 기록, 결함 수정 개선안이 나올 때부터 재발 판정(기존 사다리 시험 고정값 포함)",
+  "evidence": "repair_20261120184003_SELF_2.json gate.newBad: t_orch_ladder.js:49 FAIL · t_orch_ladder.js:17 P4 targets ['tools/VibeManager/orch-usercheck.js'] · orch-ladder.js:51 개선안 종류 구분 없음 · proposals/20261120114810_SELF.json, 20261120172524_SELF.json targets 감지기 파일만 (반영 실패한 20261120184003_SELF_2 를 고친 안 · 원인 새 규칙(targets 가 orch-usercheck.js, user_checks.json, test 뿐이면 감지기 개선안이고 L3 판정에 세지 않음)이 기존 시험 tools/VibeManager/test/t_orch_ladder.js:17 의 P4 를 감지기 개선안으로 판정함. P4 는 targets 가 orch-usercheck.js 하나임. 그래서 t_orch_ladder.js:49 'L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)'에서 U9 가 L3 후보에서 빠짐. 12:26:29 게이트 newBad: t_orch_ladder.js PASS 23, FAIL 1. 12:17:13 반영 전 게이트에는 이 실패가 없음. 안이 이 시험 파일을 targets 에 넣지 않았음.)",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "지금 = selfKey 가 S13|<uid> 인 applied 개선안은 모두 '고친 것'임. 바꾼 뒤 = orch-ladder.js 에 proposalKind 를 두고 export 함. targets 가 orch-usercheck.js, user_checks.json, test 만이면 detector, 그 밖은 fix 임. orch-improve.js add() 가 등록 때 kind 를 저장함. 옛 개선안은 scan() 이 targets 로 판정함. L3-5 는 kind fix 개선안만 셈. t_orch_ladder.js:17 P4 의 targets 를 ['tools/VibeManager/orch-usercheck.js'] → ['tools/VibeManager/orch-watch.js'] 로 바꿈. 시험 이름 'U9 · 반영 완료 개선안 있음'이 뜻하는 결함 수정 개선안 조건을 유지함",
+  "verify": "① node tools/VibeManager/test/t_orch_ladder.js: 'L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)' 항목 반영 전 미측정(12:17:13 반영 전 게이트 기록상 통과) → 반영 뒤 기대 PASS, FAIL 0건. ② node tools/VibeManager/test/t_orch_ladder_recur_time.js: 새 항목 ⑥ 감지기 개선안 20261120114810_SELF, 20261120172524_SELF 만 반영된 경우 U13, U21 L3 후보 반영 전 미측정(12:19:22 반영 Claude 측정 2건) → 반영 뒤 기대 0건. S13 항목은 2건 그대로 남음. 새 항목 ⑦ fix 개선안 효력 뒤 새 항목 L3 후보 반영 뒤 기대 1건(U21). ③ node tools/VibeManager/test/t_orch_usercheck.js: 반영 전후 FAIL 건수 같음(12:18:05 기준 FAIL 1, U3 장부 막힘)",
+  "rollback": "백업 태그로 대상 파일 4개 복원(orch-ladder.js, orch-improve.js, test/t_orch_ladder_recur_time.js, test/t_orch_ladder.js)",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T20:45:53+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T20:49:34+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1141, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self2045"
+    },
+    {
+      "at": "2026-11-23T20:49:36+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T20:55:37+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1146, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 바로 다시 읽음 orch-ladder.js · 창 다시 로드 뒤 적용 orch-improve.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T20:55:37+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 5건. 2026-11-23 반영 전 20:49:54: t_orch_ladder ALL PASS(U9 항목 PASS), t_orch_ladder_recur_time ALL PASS, t_orch_usercheck ALL PASS FAIL 0 → 반영 뒤 20:51:26: t_orch_ladder 'PASS L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)' ALL PASS, t_orch_ladder_recur_time '⑨ … U13, U21 L3 후보 0건 L3 0건', '⑨ S13 항목 2건 그대로 · L2 첫 감지 2건 S13  · 변경 4개 파일",
+      "log": ".vibe\\logs\\2026-11-23T20-49-38_claude_orch.log",
+      "sec": 139,
+      "costUsd": 1.2972180000000002,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/test/t_orch_ladder.js",
+        "tools/VibeManager/test/t_orch_ladder_recur_time.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:20+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T21:20:34+09:00"
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261120184003_SELF_2",
+  "repairRoot": "20261120184003_SELF_2",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795434353276,
+  "autoFp": "4f28a7b998",
+  "applyStartMs": 1795434576949,
+  "verifyJudge": {
+    "at": "2026-11-23T20:52:00+09:00",
+    "verified": true,
+    "text": "실행 통과 5건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1146, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self2045",
+  "needsReload": true,
+  "hotLoaded": [
+    "orch-ladder.js"
+  ],
+  "reloadFiles": [
+    "orch-improve.js"
+  ],
+  "appliedMs": 1795434937764,
+  "synced": [
+    "orch-improve.js",
+    "orch-ladder.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_ladder.js: 'L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)' 반영 전 PASS(20:49:54) → 반영 뒤 PASS(20:51), FAIL 0건, ALL PASS"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_ladder_recur_time.js: 반영 전 ALL PASS → 반영 뒤 ALL PASS, 새 항목 ⑨ ⑩(검증 ⑥ ⑦) 5줄 PASS"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "⑨(검증 ⑥): 감지기 개선안 20261120114810_SELF, 20261120172524_SELF 만 반영 → U13, U21 L3 후보 0건, S13 항목 2건 그대로, L2|usercheck-first|U13, L2|usercheck-first|U21 생김. 반영 전 코드도 sig sn|newdet 판정으로 0건임"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "⑩(검증 ⑦): fix 개선안 T_FAKE_U21_FIX(appliedMs 1795166000000, targets orch-improve.js) 효력 뒤 항목 → L3 후보 1건 L3|usercheck|U21"
+      },
+      {
+        "n": 5,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_usercheck.js: FAIL 반영 전 0건(20:49:54) → 반영 뒤 0건(20:51:26), 건수 같음, ALL PASS. 개선안에 적힌 12:18:05 기준 'FAIL 1, U3 장부 막힘'은 이번 실행에서 재현 안 됨"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_ladder.js",
+      "tools/VibeManager/test/t_orch_ladder_recur_time.js"
+    ],
+    "verify_result": "2026-11-23 반영 전 20:49:54: t_orch_ladder ALL PASS(U9 항목 PASS), t_orch_ladder_recur_time ALL PASS, t_orch_usercheck ALL PASS FAIL 0 → 반영 뒤 20:51:26: t_orch_ladder 'PASS L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)' ALL PASS, t_orch_ladder_recur_time '⑨ … U13, U21 L3 후보 0건 L3 0건', '⑨ S13 항목 2건 그대로 · L2 첫 감지 2건 S13 2건', '⑩ … L3 후보 1건(U21) L3|usercheck|U21' ALL PASS, t_orch_usercheck FAIL 0 ALL PASS. 모듈 로드 확인: proposalKind(orch-usercheck.js)=detector, proposalKind(orch-watch.js)=fix",
+    "note": "t_orch_ladder.js:17 P4 반영 전 targets 는 orchestra.js 였음(직전 개선안 20261123112024_SELF 가 이미 바꿈). before_after 대로 orch-watch.js 로 바꿈. 새 시험 번호는 기존 ⑥~⑧ 과 겹치지 않게 ⑨ ⑩ 으로 붙이고 이름에 '(검증 ⑥)', '(검증 ⑦)' 표기함. orch-ladder.js L3-5 는 orch-usercheck.isDetectorProposal 대신 proposalKind 를 씀. orch-improve.js add() 는 require('./orch-ladder') 실패 때 kind 없이 저장하고 scan() 이 targets 로 판정함. 시험 실행 중 셸 정책이 리다이렉트를 막아 같은 명령을 파이프 출력으로 한 번 다시 실행함"
+  },
+  "snap": "prop_20261123122722_SELF",
+  "effectiveMs": 1795436434041,
+  "effectiveAt": "2026-11-23T21:20:34+09:00"
+}

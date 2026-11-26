@@ -1,0 +1,45 @@
+{
+  "id": "20261126142231_SELF_2",
+  "at": "2026-11-26T14:22:31+09:00",
+  "ms": 1795670551754,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/judge.py|일반텍스트셀집합을시트구분없이컬럼이름으로만만들어다른시트에서텍스트셀인같은이름",
+  "title": "사용자 지시 R238 같은 문제: tools/Harness/verify/judge.py:3681 일반 텍스트 셀 집합을 시트 구분 없이 컬럼 이름으로만 만들어, 다른 시트에서 텍스트 셀인 같은 이름 컬럼 때문에 D1 FAIL 이 PASS 로 바뀜",
+  "evidence": "규칙 R238 \"검사기는 스프레드 컨트롤 하나에 시트가 여럿이면 편집 잠금 규칙과 편집 기대를 시트마다 따로 해석하고 판정함\" (원래 지시 2026-11-26 13:54 \"다중 시트 편집 기대도 시트별로 보완해줘\") · tools/Harness/verify/judge.py:3681 _cr_plain = {(x.get('column') or '').upper() for x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'cell_rules.csv')) if (x.get('cell_type') or 'TEXT').upper() in ('TEXT', '') and 'CELL=-' in (x",
+  "targets": [
+    "tools/Harness/verify/judge.py"
+  ],
+  "before_after": "키를 (정규화한 시트, 컬럼)으로 바꾸고, D1 행의 시트를 ledger.asis_sheet 와 같은 기준으로 맞춰 그 시트의 cell_rules 행으로만 판단함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/judge.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:47:58+09:00",
+      "by": "4ec206",
+      "what": "반영 완료(세션 직접 보완) · judge.py BACKSTOP T114 _cr_plain 키 (정규화 시트, 칸) · D1 대상 시트 → cell_rules 시트(같은 이름·<시트>_<Division>·단일 시트) · 현재 원장 T114 전환 행 0(예방) · py_compile OK · 2026-11-26 15:5x"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 스프레드 컨트롤 하나에 시트가 여럿이면 편집 잠금 규칙과 편집 기대를 시트마다 따로 해석하고 판정함 규칙을 tools/Harness/verify/judge.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R238|tools/Harness/verify/judge.py",
+  "kind": "fix",
+  "claimedBy": "4ec206",
+  "waitNote": "",
+  "appliedMs": 1795675678424
+}

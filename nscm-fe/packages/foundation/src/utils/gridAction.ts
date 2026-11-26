@@ -1202,11 +1202,17 @@ export const GridAction = {
     //   아래 컬럼 재구성(new Column)이 dataMap 을 복사하지 않아 엑셀에 표시명(Name) 대신
     //   Code 가 출력되던 결함 — 라이브 컬럼의 dataMap 을 binding 별로 보관했다가 재구성 시 주입.
     const liveDataMaps = new Map<string, unknown>();
+    // 화면이 런타임에 바꾼 leaf 헤더(예 SCP0101 MONTH1 -> '26.04' 월 relabel) 승계용 채집.
+    //   columnGroups 는 메타 라벨을 그대로 들고 있어, live 헤더를 안 쓰면 엑셀에 메타 라벨이 찍힌다.
+    const liveHeaders = new Map<string, string>();
     for (let i = 0; i < grid.columns.length; i++) {
       const liveColumn = grid.columns[i];
       if (liveColumn?.visible && liveColumn.binding) visibleBindings.add(liveColumn.binding);
       if (liveColumn?.binding && liveColumn.dataMap) {
         liveDataMaps.set(liveColumn.binding, liveColumn.dataMap);
+      }
+      if (liveColumn?.binding && typeof liveColumn.header === 'string' && liveColumn.header) {
+        liveHeaders.set(liveColumn.binding, liveColumn.header);
       }
     }
  
@@ -1237,10 +1243,15 @@ export const GridAction = {
       grid.columns.push(
         new Column({
           binding: columnGroup.binding,
-          header: columnGroup.header,
+          // live 헤더 승계는 columnGroups 경로에서만 — 평탄 합성 경로는 이미 다단 헤더를 이어 붙인 값이다.
+          header:
+            (rawColumnGroups?.length ? liveHeaders.get(columnGroup.binding ?? '') : undefined) ??
+            columnGroup.header,
           align: columnGroup.align,
           allowMerging: false,
-          visible: columnGroup.visible,
+          // 바인딩 컬럼은 flatColumnGroups 에 남은 것 자체가 화면에 보인다는 뜻(visibleBindings) — 메타 visible
+          //   (columnGroup.visible)이 false 여도 화면이 런타임에 켠 컬럼이면 보이게 내보낸다.
+          visible: columnGroup.binding ? true : columnGroup.visible,
           width: columnGroup.width,
           // [No.60-①] 콤보 표시명(Name) 승계 — dataMap 없던 컬럼은 undefined 그대로 (회귀 0)
           dataMap: liveDataMaps.get(columnGroup.binding ?? '') as never,
@@ -1416,6 +1427,15 @@ export const GridAction = {
           //   숫자 셀에만 건다 — 편집으로 문자열이 섭인 셀에 숫자 서식을 걸어도 Excel 은 무시하지만
           //   의도를 분명히 하기 위해 값 타입을 본다.
           const excelFormat = flatColumnGroups[col]._excelFormat;
+          // _excelFormat 을 준 컬럼은 숫자 문자열(SP 가 '1.000000' 처럼 문자로 준 값)도 숫자로 바꿔
+          //   서식을 건다 — 텍스트 셀로 저장되지 않게. 미지정 컬럼은 종전과 같다.
+          if (excelFormat && typeof xlsxCell.value === 'string' && xlsxCell.value.trim() !== '') {
+            const n = Number(xlsxCell.value.replace(/,/g, ''));
+            if (Number.isFinite(n)) {
+              xlsxCell.value = n;
+              xlsxCell.isNumber = true;
+            }
+          }
           if (excelFormat && typeof xlsxCell.value === 'number') {
             xlsxCell.style = { ...xlsxCell.style, format: excelFormat };
           }
@@ -1516,7 +1536,7 @@ export const GridAction = {
               const only = leafSpan === 1 ? singleVisibleLeaf(node) : null;
               if (only && String(only.header ?? '') === String(node.header ?? '')) {
                 headerRows[level].cells[colIdx] = makeCell(
-                  String(node.header ?? ''),
+                  liveHeaders.get(only.binding ?? '') ?? String(node.header ?? ''),
                   1,
                   headerDepth - level // 남은 행 세로 병합
                 );
@@ -1526,9 +1546,9 @@ export const GridAction = {
               headerRows[level].cells[colIdx] = makeCell(String(node.header ?? ''), leafSpan, 1);
               node.columns.forEach(child => walk(child, level + 1));
             } else {
-              // leaf (얕은 정적 컬럼 포함) — 남은 행을 세로 병합
+              // leaf (얕은 정적 컬럼 포함) — 남은 행을 세로 병합. 화면 런타임 relabel 헤더 우선.
               headerRows[level].cells[colIdx] = makeCell(
-                String(node.header ?? ''),
+                liveHeaders.get(node.binding ?? '') ?? String(node.header ?? ''),
                 1,
                 headerDepth - level
               );

@@ -181,17 +181,18 @@ export const Lookup = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
-  // VALID_YN 으로 사용 여부를 관리하는 그리드라 삭제는 신규행 제거 전용으로만 쓴다.
-  // removeRow 두 번째 인자 deleteOnlyNew=true 로 기존행에 D flag 를 찍지 않는다
-  //   (기존 항목 비활성은 VALID_YN='N' 으로 처리).
+  // 삭제 — 신규행은 그리드에서 빼고, 기존행은 D 표시 후 저장 때 삭제한다(다시 누르면 D 해제).
+  //   AS-IS SCM0003 DeleteButton(L261~268) 과 같다. 2026-09-14 신규행 전용으로 막았던 것을
+  //   2026-11-25 요청으로 되돌림. 저장 SP 는 CRUD_TYPE 'D' 를 DELETE 로 처리한다.
+  //   주의: 상단(Lookup Type) 삭제는 P_SYS0010_SAVE_LOOKUP_MASTER 가 그 타입의 하단 값까지 함께 지운다.
   const onDelete = () => {
     if (activeGrid === 'sub') {
       if (!detailGridRef.current) return;
-      GridAction.removeRow(detailGridRef.current, true);
+      GridAction.removeRow(detailGridRef.current);
       return;
     }
     if (!masterGridRef.current) return;
-    GridAction.removeRow(masterGridRef.current, true);
+    GridAction.removeRow(masterGridRef.current);
   };
 
   const alertDuplicate = () => {

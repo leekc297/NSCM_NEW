@@ -97,7 +97,7 @@ export const checkDraftingData = (
 // AS-IS change_status 산출(L908-918 / L1146-1154): A 는 체크/미체크 카운트로 A/R/P, 그 외는 액션 그대로.
 export const decideChangeStatus = (action: string, count: ChkCount): string => {
   if (action !== SAVE_STATUS.APPROVED) return action; // R/S/O
-  if (count.checked > 0 && count.unchecked === 0) return SAVE_STATUS.APPROVED;
+  if (count.unchecked === 0) return SAVE_STATUS.APPROVED; // 체크·미체크 모두 0 이면 AS-IS 는 'A' 그대로다(어느 분기도 안 탐)
   if (count.checked === 0 && count.unchecked > 0) return SAVE_STATUS.REJECT;
   return SAVE_STATUS.PARTIAL; // 부분 승인
 };
@@ -159,10 +159,19 @@ export const buildConfirmPayload = (
      *   현재 동작 영향이 없다(APPROVAL_TIME·LAST_UPDATE_DATE = SYSDATE).
      */
     timeZone: string;
+    /**
+     * ERP 가 거절한 CONFIRM_ID — 승인 payload 와 체크 건수에서 뺀다(AS-IS errConfrimList2, cs:1055~1066).
+     *   base CONFIRM·item/site/일자(행0)·division fallback(행0)은 AS-IS 와 같이 전체 행 기준 그대로다.
+     */
+    excludeIds?: Set<string>;
   }
 ): { payload: Record<string, string>; is40: boolean } => {
   const base = findBaseConfirmId(rows);
-  const count = countChk(rows, checkedIds);
+  const excluded = ctx.excludeIds ?? new Set<string>();
+  const count = countChk(
+    rows.filter(r => !excluded.has(rowId(r))),
+    checkedIds
+  );
 
   const acc: Record<string, string[]> = {
     confirmId: [],
@@ -201,6 +210,7 @@ export const buildConfirmPayload = (
     fromSite = str(rows[0]?.[SUB_COL.FROM_SITE]);
     yyyymmdd = str(rows[0]?.[SUB_COL.NEW_SHIPMENT_DATE]);
     for (const r of rows) {
+      if (excluded.has(rowId(r))) continue; // ERP 거절 CONFIRM 은 건수·payload 모두에서 제외(L1055-1066)
       if (!checkedIds.has(rowId(r))) continue; // 미체크(Reject) 행은 승인 payload 제외(L1070-1072)
       acc.confirmId.push(base);
       acc.divisionId.push(str(r[SUB_COL.DIVISION_ID]));
@@ -281,3 +291,23 @@ export const buildConfirmPayload = (
   };
   return { payload, is40 };
 };
+
+export interface ErpErrorConfirm {
+  confirmId: string;
+  message: string;
+}
+
+// AS-IS ReErrorMsg 파싱(cs:1367~1379) — `CONFIRM_ID:메시지^CONFIRM_ID:메시지`. 끝의 '^' 는 버린다.
+//   CONFIRM_ID 를 못 읽은 조각은 버린다(되돌림 대상이 될 수 없다). 메시지 안의 ':' 는 보존한다.
+export const parseErpErrors = (eMessage: string): ErpErrorConfirm[] =>
+  eMessage
+    .split(PROC_ROW_DELIMITER)
+    .map(part => part.trim())
+    .filter(part => part !== '')
+    .map(part => {
+      const at = part.indexOf(':');
+      return at < 0
+        ? { confirmId: '', message: part }
+        : { confirmId: part.slice(0, at).trim(), message: part.slice(at + 1).trim() };
+    })
+    .filter(e => e.confirmId !== '');

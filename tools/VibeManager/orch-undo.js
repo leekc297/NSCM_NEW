@@ -12,6 +12,165 @@ const SHELL_TOOLS = new Set(['Bash', 'PowerShell']);
 // 셸 명령이 파일을 쓰는 형태. 읽기·시험 실행(node test/…, grep, cat, Select-String, git diff)은 해당 안 됨
 const SHELL_WRITE = /(\bsed\b[^|;&]*\s-i\b|\bperl\b[^|;&]*\s-p?i\b|(^|[^>&0-9])>>?\s*[^&\s]|\bSet-Content\b|\bAdd-Content\b|\bOut-File\b|\bCopy-Item\b|\bMove-Item\b|\bRemove-Item\b|\bcp\b|\bmv\b|\brm\b|writeFile|\.write\(|open\([^)]*['"][wa]|\btee\b|\bgit\s+(checkout|restore|apply|stash)\b)/i;
 
+// 2026-11-24 개선안 20261123215513_INC(사용자 승인): 셸 쓰기 판정을 그 파일을 쓰는 명령으로 좁힘.
+//   사고: 명령 전체에 파일 이름이 있고 SHELL_WRITE 가 어디든 맞으면 쓰기로 봄. grep 정규식 안 'cp'(21:42), node 시험 출력 '> ../../.vibe/…'(21:42),
+//   awk 조건 'NR>=1291'(13:13)이 쓰기로 판정돼 AI 편집만 되돌리지 못함.
+//   방식: 명령을 ;, &&, ||, |, & , 줄바꿈으로 나누고(따옴표 안은 나누지 않고 연산자로 보지 않음) 조각마다 쓰기 대상을 뽑아 파일 이름과 비교.
+//   쓰기 대상 = > 와 >> 뒤 경로 · sed -i, perl -i 대상 · cp, mv, Copy-Item, Move-Item 의 마지막 경로(-Destination) · Set-Content, Out-File, Add-Content, tee 의 -Path 또는 첫 경로
+//   · rm, Remove-Item 대상 · git checkout/restore 대상. 대상을 정할 수 없는 쓰기(node -e 안 writeFile, git apply/stash, xargs rm, find -delete)는 종전처럼 명령에 파일 이름이 있으면 쓰기.
+//   SHELL_WRITE 는 orch-usercheck.js 가 쓰므로 그대로 둔다.
+const PS_VALUE_PARAMS = new Set(['path', 'literalpath', 'lp', 'pspath', 'filepath', 'destination', 'dest', 'value', 'encoding', 'filter', 'include', 'exclude', 'inputobject', 'width', 'delimiter', 'stream', 'credential', 'itemtype', 'name', 'newname', 'target', 'erroraction', 'ea']);
+const PATH_PARAM = /^(path|literalpath|lp|pspath|filepath)$/;
+const INLINE_WRITE = /writeFile|appendFile|copyFile|\brename(Sync)?\s*\(|\bunlink(Sync)?\s*\(|\brmSync\s*\(|\.write\(|open\([^)]*['"][wax+]|WriteAll(Text|Lines|Bytes)|AppendAll(Text|Lines)|shutil\.(copy|move)|os\.(remove|replace|rename)|\bSet-Content\b|\bAdd-Content\b|\bOut-File\b/i;
+
+/** 셸 명령을 조각으로 나눈다. 조각 = { words:[문자열], redirs:[경로] }. 따옴표 안 글자는 낱말 값으로만 남고 연산자·명령으로 보지 않음 */
+function shellSegments(cmd) {
+  const s = String(cmd || ''); const segs = []; let seg = { words: [], redirs: [] }; let cur = null; let want = null; const heredocs = [];
+  const endWord = () => { if (!cur) return; if (want === 'redir') seg.redirs.push(cur.v); else if (want !== 'skip') seg.words.push(cur.v); want = null; cur = null; };
+  const endSeg = () => { endWord(); if (seg.words.length || seg.redirs.length) segs.push(seg); seg = { words: [], redirs: [] }; want = null; };
+  const word = () => cur || (cur = { v: '' });
+  let i = 0;
+  while (i < s.length) {
+    const ch = s[i];
+    if ((ch === '@') && (s[i + 1] === "'" || s[i + 1] === '"') && /^\r?\n/.test(s.slice(i + 2, i + 4))) { // PowerShell here-string
+      const q = s[i + 1]; const end = s.indexOf(`\n${q}@`, i + 2); const e = end < 0 ? s.length : end; word().v += s.slice(i + 2, e); i = end < 0 ? s.length : end + 3; continue;
+    }
+    if (ch === "'") { const j = s.indexOf("'", i + 1); const e = j < 0 ? s.length : j; word().v += s.slice(i + 1, e); i = e + 1; continue; }
+    if (ch === '"') {
+      let j = i + 1, v = '';
+      while (j < s.length && s[j] !== '"') { if ((s[j] === '\\' || s[j] === '`') && j + 1 < s.length && /["\\$`]/.test(s[j + 1])) { v += s[j + 1]; j += 2; } else { v += s[j]; j++; } }
+      word().v += v; i = j + 1; continue;
+    }
+    if (ch === '\\' && s[i + 1] === '\n') { i += 2; continue; }
+    if (ch === '\\' && i + 1 < s.length && /[\s"'\\;|&<>]/.test(s[i + 1])) { word().v += s[i + 1]; i += 2; continue; }
+    if (ch === '\n' || ch === '\r') {
+      endSeg(); i++;
+      if (ch === '\n' && heredocs.length) { // heredoc 본문은 명령이 아님
+        while (heredocs.length && i < s.length) { const d = heredocs.shift(); const body = []; for (;;) { const nl = s.indexOf('\n', i); const line = s.slice(i, nl < 0 ? s.length : nl).replace(/\r$/, ''); i = nl < 0 ? s.length : nl + 1; if ((d.strip ? line.trim() : line) === d.tag) break; body.push(line); if (nl < 0) break; } d.seg.stdin = (d.seg.stdin ? d.seg.stdin + '\n' : '') + body.join('\n'); }
+      }
+      continue;
+    }
+    if (/\s/.test(ch)) { endWord(); i++; continue; }
+    if (ch === ';') { endSeg(); i++; continue; }
+    if (ch === '|') { endSeg(); i += (s[i + 1] === '|' || s[i + 1] === '&') ? 2 : 1; continue; }
+    if (ch === '&' && s[i + 1] === '&') { endSeg(); i += 2; continue; }
+    if (ch === '>' || (ch === '&' && s[i + 1] === '>')) {
+      if (cur && /^(\d+|\*)$/.test(cur.v) && want !== 'redir') cur = null; else endWord();
+      let j = i; if (s[j] === '&') j++; j++; if (s[j] === '>') j++; if (s[j] === '|') j++;
+      if (s[j] === '&') { j++; while (j < s.length && /[\d-]/.test(s[j])) j++; i = j; continue; } // 2>&1 = 파일 아님
+      want = 'redir'; i = j; continue;
+    }
+    if (ch === '&') { endSeg(); i++; continue; }
+    if (ch === '<') {
+      endWord();
+      if (s[i + 1] === '<' && s[i + 2] !== '<') { // heredoc 구분자
+        let j = i + 2; const strip = s[j] === '-'; if (strip) j++; while (s[j] === ' ') j++;
+        const m = /^(['"]?)([A-Za-z0-9_]+)\1/.exec(s.slice(j)); if (m) { heredocs.push({ tag: m[2], strip, seg }); i = j + m[0].length; continue; }
+        i += 2; continue;
+      }
+      want = 'skip'; i += s[i + 1] === '<' ? 3 : 1; continue;
+    }
+    word().v += ch; i++;
+  }
+  endSeg(); return segs;
+}
+
+/** 경로 낱말이 파일 이름(base)을 가리키는지. 와일드카드(*, ?)는 이름 부분만 맞춰 봄 */
+function pathHits(tok, base) {
+  const t = String(tok || '').replace(/\\/g, '/').toLowerCase(); const b = t.split('/').filter(Boolean).pop() || '';
+  if (!b) return false; if (b === base) return true;
+  if (/[*?]/.test(b)) { try { return new RegExp('^' + b.replace(/[.+^${}()|[\]]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.') + '$').test(base); } catch { return false; } }
+  return false;
+}
+/** 디렉터리 대상(rm -r, git checkout .)이 그 파일을 품는지. 실행 위치를 모르므로 '.'·'*'·경로 끝 일부가 맞으면 품는 것으로 봄 */
+function dirHits(tok, rel) {
+  const t = String(tok || '').replace(/\\/g, '/').toLowerCase().replace(/^\.\//, '').replace(/\/+$/, '');
+  if (!t || t === '.' || t === '*' || t === ':/' || t === '..') return true;
+  const r = '/' + String(rel || '').replace(/\\/g, '/').toLowerCase();
+  return r.includes('/' + t + '/') || r.endsWith('/' + t);
+}
+
+/** 조각 낱말을 PowerShell 식 이름 인자·위치 인자로 나눔 */
+function splitArgs(args, ps) {
+  const named = {}; const pos = [];
+  for (let k = 0; k < args.length; k++) {
+    const a = args[k];
+    if (a === '--') { pos.push(...args.slice(k + 1)); break; }
+    if (/^-{1,2}[A-Za-z]/.test(a) && !/^-\d/.test(a)) {
+      const m = /^-{1,2}([A-Za-z][\w-]*)(?::|=)?(.*)$/.exec(a); const name = m[1].toLowerCase();
+      if (m[2]) { (named[name] = named[name] || []).push(m[2]); continue; }
+      if (ps && PS_VALUE_PARAMS.has(name) && k + 1 < args.length) { (named[name] = named[name] || []).push(args[++k]); continue; }
+      (named[name] = named[name] || []).push(true); continue;
+    }
+    pos.push(a);
+  }
+  return { named, pos };
+}
+const listVals = v => (v || []).filter(x => x !== true).flatMap(x => String(x).split(','));
+
+/** 셸 명령 cmd 가 rel(저장소 기준 경로) 파일을 쓰는지. 쓰기 대상을 정할 수 없는 형태는 명령에 파일 이름이 있으면 쓰기 */
+function shellWritesFile(cmd, rel, depth = 0) {
+  const whole = String(cmd || ''); const base = path.basename(String(rel || '')).toLowerCase(); if (!base) return false;
+  const named = whole.toLowerCase().includes(base);
+  for (const seg of shellSegments(whole)) {
+    if (seg.redirs.some(t => pathHits(t, base))) return true;
+    let w = seg.words.slice();
+    for (;;) { // 앞붙이 명령·환경 변수 건너뜀
+      if (!w.length) break; const h = w[0].toLowerCase();
+      if (/^[A-Za-z_][A-Za-z0-9_]*=/.test(w[0])) { w.shift(); continue; }
+      if (['sudo', 'nohup', 'time', 'command', 'exec', 'env', 'builtin', 'nice'].includes(h)) { w.shift(); continue; }
+      if (h === 'timeout') { w.shift(); while (w.length && /^-/.test(w[0])) w.shift(); w.shift(); continue; }
+      break;
+    }
+    if (!w.length) continue;
+    const c = path.basename(w[0].replace(/\\/g, '/')).toLowerCase().replace(/\.(exe|cmd|bat)$/, ''); const args = w.slice(1);
+    // 감싼 셸: bash -c "…", powershell -Command "…", cmd /c …
+    if (['bash', 'sh', 'zsh', 'dash', 'powershell', 'pwsh', 'cmd'].includes(c) && depth < 3) {
+      const k = c === 'cmd' ? args.findIndex(a => /^\/[ck]$/i.test(a)) : ['powershell', 'pwsh'].includes(c) ? args.findIndex(a => /^-(c|command)$/i.test(a)) : args.findIndex(a => /^-[a-z]*c$/.test(a));
+      const inner = k >= 0 ? (['bash', 'sh', 'zsh', 'dash'].includes(c) ? (args[k + 1] || '') : args.slice(k + 1).join(' ')) : (seg.stdin || '');
+      if (inner && shellWritesFile(inner, rel, depth + 1)) return true; if (k >= 0 || seg.stdin) continue;
+    }
+    // 대상을 정할 수 없는 쓰기: 인터프리터 인라인 코드(-e, -c, heredoc 입력), [IO.File]::Write…
+    if (['node', 'python', 'python3', 'py', 'ruby', 'deno', 'bun'].includes(c) || (c === 'perl' && !args.some(a => /^-[a-z]*i/.test(a)))) {
+      const k = args.findIndex(a => /^(-e|-p|-c|--eval|--print|-pe|-ne|-le)$/.test(a)); const code = (k >= 0 ? (args[k + 1] || '') : '') + '\n' + (seg.stdin || '');
+      if (INLINE_WRITE.test(code) && named) return true; continue;
+    }
+    if (/^\[(system\.)?io\.file\]::(write|append|copy|move|delete|replace)/i.test(w[0]) && named) return true;
+    if (c === 'xargs') { const k = args.findIndex(a => !/^-/.test(a)); const x = k >= 0 ? args[k].toLowerCase() : ''; if (/^(rm|del|unlink|cp|mv|sed|perl|tee|remove-item|copy-item|move-item|set-content|out-file|truncate|touch)$/.test(x) && named) return true; continue; }
+    if (c === 'find') { if (args.some(a => /^-(delete|exec|execdir|ok|fprint)/.test(a)) && named) return true; continue; }
+    const ps = /-/.test(c) || ['sc', 'ac', 'ri', 'del', 'erase', 'rd', 'cpi', 'mi', 'copy', 'move', 'ren', 'rni'].includes(c);
+    const { named: nm, pos } = splitArgs(args, ps);
+    const paths = PATH_PARAM_VALS(nm);
+    if (c === 'sed') { if (args.some(a => /^-[a-zA-Z]*i/.test(a) || /^--in-place/.test(a))) { if (pos.some(t => pathHits(t, base))) return true; } continue; }
+    if (c === 'perl') { if (pos.some(t => pathHits(t, base))) return true; continue; } // 여기 오면 -i 있음
+    if (['cp', 'mv', 'copy', 'move', 'copy-item', 'move-item', 'cpi', 'mi', 'xcopy', 'robocopy', 'install'].includes(c)) {
+      const dest = listVals(nm.destination || nm.dest); const td = listVals(nm.t || nm['target-directory']);
+      if (dest.length) { if (dest.some(t => pathHits(t, base) || dirHits(t, rel) && [...pos, ...paths].some(x => pathHits(x, base)))) return true; continue; }
+      if (td.length) { if ([...pos, ...paths].some(t => pathHits(t, base))) return true; continue; }
+      if (c === 'robocopy') { if (pos.length >= 2 && pos.slice(2).some(t => pathHits(t, base))) return true; continue; }
+      const all = [...paths, ...pos]; const last = all[all.length - 1];
+      if (['mv', 'move', 'move-item', 'mi'].includes(c) && all.slice(0, -1).some(x => pathHits(x, base))) return true; // 옮기면 원래 파일이 없어짐
+      if (last != null && (pathHits(last, base) || (all.length > 1 && all.slice(0, -1).some(x => pathHits(x, base)) && dirHits(last, rel)))) return true;
+      continue;
+    }
+    if (['set-content', 'add-content', 'out-file', 'sc', 'ac', 'new-item', 'ni', 'clear-content', 'clc'].includes(c)) { const t = paths.length ? paths : pos.slice(0, 1); if (t.some(x => pathHits(x, base))) return true; continue; }
+    if (['tee', 'tee-object'].includes(c)) { const t = [...paths, ...pos]; if (t.some(x => pathHits(x, base))) return true; continue; }
+    if (['rm', 'del', 'erase', 'unlink', 'remove-item', 'ri', 'rmdir', 'rd', 'shred', 'truncate', 'rename-item', 'ren', 'rni'].includes(c)) {
+      const t = [...paths, ...(['rename-item', 'ren', 'rni'].includes(c) ? pos.slice(0, 1) : pos)]; const rec = Object.keys(nm).some(n => /^(recurse|recursive)$/.test(n) || (/^[a-z]{1,3}$/.test(n) && n.includes('r'))) || ['rmdir', 'rd'].includes(c);
+      if (t.some(x => pathHits(x, base) || (rec && dirHits(x, rel)))) return true; continue;
+    }
+    if (c === 'git') {
+      let k = 0; while (k < args.length && /^-/.test(args[k])) k += /^-(C|c)$/.test(args[k]) ? 2 : 1;
+      const sub = (args[k] || '').toLowerCase(); const rest = splitArgs(args.slice(k + 1), false);
+      if (sub === 'checkout' || sub === 'restore') { if (rest.pos.some(x => pathHits(x, base) || dirHits(x, rel))) return true; continue; }
+      if (['apply', 'stash', 'am'].includes(sub) && named) return true;
+      continue;
+    }
+  }
+  return false;
+}
+function PATH_PARAM_VALS(nm) { return Object.keys(nm).filter(n => PATH_PARAM.test(n)).flatMap(n => listVals(nm[n])); }
+
 const norm = (root, f) => { const r = path.relative(root, path.resolve(root, String(f || ''))).replace(/\\/g, '/'); return process.platform === 'win32' ? r.toLowerCase() : r; };
 
 /** AI 실행 기록(.vibe/logs/*_claude_orch.log, stream-json)에서 편집 도구 호출과 셸 명령을 읽는다. 실패한 도구 호출(is_error)은 뺀다 */
@@ -65,8 +224,7 @@ function planUndo(root, rel, info) {
   const key = norm(root, rel); const ops = (info.ops || []).filter(o => o.file === key);
   if (!ops.length) return { ok: false, why: 'AI 실행 기록에 이 파일 편집 없음' };
   if (ops.some(o => o.kind === 'write')) return { ok: false, why: 'AI 가 파일 전체를 씀(Write)' };
-  const base = path.basename(rel).toLowerCase();
-  const sh = (info.shells || []).find(c => c.toLowerCase().includes(base) && SHELL_WRITE.test(c));
+  const sh = (info.shells || []).find(c => shellWritesFile(c, rel)); // 2026-11-24 그 파일을 쓰는 조각만 쓰기로 봄(20261123215513_INC)
   if (sh) return { ok: false, why: `셸 명령으로 이 파일을 쓴 흔적: ${sh.slice(0, 120)}` };
   let text; try { text = fs.readFileSync(path.resolve(root, rel), 'utf8'); } catch (e) { return { ok: false, why: `읽기 실패: ${e.message}` }; }
   let n = 0;
@@ -106,4 +264,4 @@ function restoreFile(opt) {
   return { rel, how: 'whole', why: `사본으로 복원(${plan.why})${keep ? `. 덮기 전 파일 ${keep}` : ''}`, keep };
 }
 
-module.exports = { readOps, planUndo, restoreFile, undoOne, syntaxOk, SHELL_WRITE };
+module.exports = { readOps, planUndo, restoreFile, undoOne, syntaxOk, SHELL_WRITE, shellWritesFile, shellSegments };

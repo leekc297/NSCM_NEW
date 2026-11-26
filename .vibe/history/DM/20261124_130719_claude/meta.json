@@ -1,0 +1,25 @@
+{
+  "id": "DM",
+  "task": "claude",
+  "scope": "both",
+  "note": "[2/4] 내용 작성(업무 흐름, 프로세스, 점검표, 장애 대응, 로그, 기준 정보, 권한, 화면/잡/테이블 설명)",
+  "start": "2026-11-24T13:07:19+09:00",
+  "end": "2026-11-24T13:17:14+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DM",
+      "files": 0
+    }
+  ],
+  "source": "chain",
+  "label": "[2/4] 내용 작성(업무 흐름, 프로세스, 점검표, 장애 대응, 로그, 기준 정보, 권한, 화면/잡/테이블 설명)",
+  "text": "운영자 매뉴얼 DM 모듈 내용 작성(2026-11-24 사용자 확정 구성, tools/Docs/ops_struct.py OPS). 양식 PPT 는 구조(표지, 개정 이력, 목차, 간지, 표 서식, 마지막 장)만 쓰고 양식의 글은 옮기지 않음.\n배치 기준 = AS-IS SQL Server Agent 잡(Doc/asisfacts/db/batch, 개발 DB LGCE_SCMDEV 추출). 사용 여부는 개발 DB 값이라 쓰지 않고 '운영 사용 여부 미확인'으로 둠. TO-BE 실행 방식은 쓰지 않음(사용자가 확인 뒤 바꿈).\n읽을 것: Doc/OpsManual/DM/plan.json, facts/screens.csv(화면, 메뉴, 쓰는/읽는 테이블, SP, 저장 버튼), facts/jobs.csv(잡, 기본 프로세스, 스케줄, 단계 수, 실행 SP, 외부 시스템, AS-IS 설명), facts/batch.csv(잡 단계), facts/timeline.csv(요일, 시각, 반복), facts/job_links.csv(sp_start_job 잡 호출), facts/sp_tables.csv(SP 본문 기준 쓰기/읽기 테이블), facts/tables.csv(테이블별 쓰는 화면, 읽는 화면, 쓰는 배치 SP), facts/flow_edges.csv(화면 → 화면 데이터 연결), content/chapters_auto.json(초안).\n씀: content/chapters.json = { \"screenNotes\": {화면ID: 역할 1줄}, \"jobNotes\": {잡: 설명 1줄}, \"tableNotes\": {테이블: 역할 1줄}, \"processOf\": {잡: 프로세스 이름}, \"processOrder\": [프로세스 순서], \"chapters\": [ { \"id\": \"C1\", \"title\": \"1. 업무 개요\", \"slides\": [장표] } ] }\n 장표 = flow { kind, title, nodes:[{id,label,sub}], edges:[{from,to,label}], notes:[], src:[] } · table { kind, title, columns, rows, src } · text { kind, title, lines, src } · divider { kind: \"divider\", title: 프로세스 이름 }\n src = 근거 파일 경로(저장소 기준, 실제 있는 파일). 근거 없는 장표는 만들지 않음.\nAI 가 쓰는 장(빠지면 검사 실패)\n C1 업무 개요: 모듈이 맡는 업무, 앞뒤 모듈(SCP, SSP 등)과 주고받는 데이터, 주 단위 계획 주기(컷오프 → 계획 → 확정 순서와 요일, 시각은 timeline.csv 근거). text 1장 + 흐름 1장.\n C2 전체 업무 흐름: 기준 정보 → 수요 입력 → 컷오프 → 결과 전달 → 분석처럼 업무 순서 흐름도. 노드마다 sub 에 화면 ID 와 대표 잡. 연결 이름표 = 주고받는 테이블(tables.csv, flow_edges.csv 근거).\n C3 프로세스 구조: processOf 로 잡을 업무 프로세스로 묶음(jobs.csv process 기본값을 검토해 고침, 이름은 업무 말). 프로세스마다 divider 1장 + 흐름도 1장 이상(시작 조건, 관련 화면, 관련 잡, 쓰는 테이블, 결과 테이블, 다음 프로세스) + 필요하면 text(확인 사항). 모든 프로세스에 간지와 흐름도가 있어야 함.\n C9 일상 운영 점검표: 표 columns = 주기(일, 주, 월), 확인 시각, 점검 항목, 확인 쿼리, 정상 기준(건수, 상태값), 이상할 때 볼 곳. 시각은 timeline.csv. 쿼리는 AS-IS 테이블 기준 SQL Server 문법 원문 그대로(운영 대상이 AS-IS 배치이므로), 파일에 없는 컬럼은 쓰지 않음.\n C10 장애 대응: 표 columns = 증상, 확인, 조치, 재실행. 대상 = 배치 실패, 컷오프 누락, I/F 미수신, 화면 저장 오류, 장시간 쿼리. 재실행 순서는 job_links.csv 와 단계 순서 근거.\n C11 로그와 모니터링: 배치 이력(msdb 잡 이력, jobs.csv runs, failed), 배치 로그 테이블, 화면 SQL 로그(SCM_COM_SQL_LOG 는 LOG_SEQ 범위로 먼저 좁힘, tools/VibeManager/rules/10_RULES_KEEP.md A-12) 보는 순서와 예시.\n C12 기준 정보 관리: 운영자가 등록하는 기준 정보(Demand Master 메뉴 화면, 기준 정보 테이블)와 등록 순서, 빠지면 생기는 증상. 표.\n C13 권한과 메뉴 관리: 메뉴 추가, 버튼 권한, 사용자 그룹 변경 절차(SYSTEM 메뉴, 권한 테이블 근거). 근거가 없으면 text 1장에 '근거 자료 없음(미확인)'과 찾은 범위.\n생성기가 만드는 장(쓰지 않음, 설명만 notes 로): C4 UI 메뉴 구조(screenNotes = 화면 30개 전부 역할 1줄), C5 배치 잡 구조(jobNotes = AS-IS 설명이 없는 잡 전부), C6 시간대별 실행표, C7 데이터 구조(tableNotes = 쓰는 곳이 있는 테이블 전부 역할 1줄), C8 인터페이스(직접 그리려면 C8 장표를 넣으면 그것을 씀), C15 산출물, 부록 A 잡별 배치 흐름도.\nC14 연락처와 담당 부서 = 장표와 표 모양만 생성기가 만듦. chapters.json 에 C14 를 넣지 않고 연락처, 담당 부서, 담당자 이름을 어디에도 쓰지 않음.\n문장: tools/VibeManager/rules/50_DOC_STYLE.md. 개조식('~함', '~임'). 수식어, 번역투, 추측 어미, 줄표, 장식 기호 금지. 화면 ID, 테이블, SP, 건수, 요일, 시각을 적음. 'AI', '자동 생성' 같은 말을 쓰지 않음. AS-IS 원문(잡 설명, 메시지, 쿼리)은 그대로 인용.\n끝나면 python tools/Docs/ops_manual.py check --module DM 를 실행해 [FAIL] 0 을 확인. 남으면 그 항목을 고치고 다시 실행.",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261124_130716",
+  "afterMode": "end",
+  "afterAt": "2026-11-24T13:17:14+09:00",
+  "changed": []
+}

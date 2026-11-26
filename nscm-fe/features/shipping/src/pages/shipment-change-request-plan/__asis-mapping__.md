@@ -127,7 +127,7 @@
 | R-52 | popups 5건 | InsertPopup=`InsertMultipleModal` / Item·Project=공용 모달 / **`SSP0300_OrderDetailPopup`·`SCM0002_ShipmentPlanRequestPopup` 는 미구현**(TO-BE 공용 컴포넌트 부재 — 임의 신설하지 않았다) |  | 부분구현 |
 | R-60 C6 | detail→master `PLAN_CONFIRM_ID` 역참조 | **미구현이 정답** — master 에 그 컬럼이 없어 AS-IS 도 no-op | 미이식(dead) |
 | R-60 C7~C9 | 원본 스냅샷 대조 | 미구현 — 확정 체인(SP 미이관)과 함께 보류 | 미구현 |
-| R-60 C10 | 동일 SO 부분선택 → `MSG00247` | `hasPartialSoSelection()` **정의만, 참조 0건** — 소비처(요청확정 경로)가 SP 미이관으로 막혀 있다. **삭제하지 않고 보고**한다 | 미배선(보고) |
+| R-60 C10 | 동일 SO 부분선택 → `MSG00247`(TO-BE `MSG01257`, {0}=SO NO) | `findPartialSoSelection()` → `useShipmentChangeRequestPlanSaveActions` 저장 전 검사에서 SO 번호를 인자로 안내 | 구현 |
 | R-60 C11 | `dtTransMode` 9값 추출 | 미구현(R-23 과 동일 — AS-IS 대입 전부 주석) | 미이식(dead) |
 | R-60 C12·C13 | `GetItemFromBOD` 전극 판정 | 미구현(SP 미이관) | 미구현(SP) |
 | R-70 D1·D2·D4·D5 | ChangeType='P' 폭 0/복원 | `PLAN_HIDDEN_COLUMNS` → `colWth: 0` | 구현 |

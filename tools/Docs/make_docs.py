@@ -604,7 +604,7 @@ def build_recon(S):
     mapping = read_text(mp) if mp and os.path.exists(mp) else ''
     if not (scr or sht or sps or mapping): return None
     # 1. 화면 — key/value
-    sb = SB(wb.create_sheet('1.화면 대조'), [26, 90]); sb.title(f'{S.ID} ({S.name}) 대조표', f'작성 {TODAY} · AS-IS 화면 ↔ TO-BE 화면의 대조 현황. 원천: Doc/recon (전체 현황) + 페이지 __asis-mapping__.md (항목별 매핑)')
+    sb = SB(wb.create_sheet('1.화면 대조'), [26, 90]); sb.title(f'{S.ID} ({S.name}) GAP',f'작성 {TODAY} · AS-IS 화면 ↔ TO-BE 화면의 대조 현황. 원천: Doc/recon (전체 현황) + 페이지 __asis-mapping__.md (항목별 매핑)')
     sb.sec('화면 단위 대조 (Doc/recon · 대사표_화면.csv 의 이 화면 행)')
     if scr:
         for k, v in scr[0].items(): sb.kv(RECON_KO.get(k, k), clean(v))
@@ -666,7 +666,7 @@ for ID in IDS:
     made.append(save(with_live(build_analysis(S), 'UI분석서'), OUT_ANALYSIS, f'{ID}_{nm}_UI분석서'))
     # 2026-10-30 사용자: GAP 분석 폐지(CheckList 로 대체) — GAP분석서 생성 중단(build_gap 은 이력 보존용으로 남김)
     rc = build_recon(S)
-    if rc: made.append(save(rc, OUT_ANALYSIS, f'{ID}_{nm}_대조표'))
+    if rc: made.append(save(rc, OUT_ANALYSIS, f'{ID}_{nm}_GAP'))
     else: print(f'[{ID}] 대조 원천 없음(Doc/recon 행·__asis-mapping__.md) — 대조표 생략')
     # 2026-10-27: 단위테스트 = 사용자 흐름 재구성본(make_testcases — 정합검증 원장·Fact Pack·TO-BE 메타). 원천이 없을 때만 구 unit_test.md 양식
     import make_testcases

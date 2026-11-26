@@ -1,437 +1,353 @@
 {
  "rule_id": "D1",
- "hash": "2daaf56ff27bb6fb",
+ "hash": "045db5917f5682aa",
  "groups": [
-  {
-   "rows": [
-    "V-617d09ad",
-    "V-21293198"
-   ],
-   "why": "둘 다 Insert 신규행의 Div 셀을 바꿔 보고, Div를 바꿀 수 있는지와 하위 Site 후보가 다시 구성되는지를 확인하므로 기대 결과가 같다."
-  },
   {
    "rows": [
     "EG-0476257d"
    ],
-   "why": "팝업 MAIL_USER1 Delete — 다른 컬럼·동작과 대상이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-185b9777"
    ],
-   "why": "EG109 Insert 그룹 차단 — 고유 규칙이라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-1ad980bd"
    ],
-   "why": "팝업 MAIL_USER1 붙여넣기 — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-242449e5"
    ],
-   "why": "EG113 GET_ADMIN_GROUP_MEASURE — 고유 규칙이라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-27623e1d"
    ],
-   "why": "팝업 MAIL_USER4 붙여넣기 — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-409124db"
    ],
-   "why": "팝업 MAIL_USER3 Delete — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-429dc048"
    ],
-   "why": "팝업 MAIL_USER5 Delete — 컬럼·동작이 고유해 단독."
-  },
-  {
-   "rows": [
-    "EG-4455c8d8"
-   ],
-   "why": "팝업 USER_ID 붙여넣기와 코드 동반 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-5e44e96a"
    ],
-   "why": "팝업 MAIL_USER2 붙여넣기 — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-74efde0f"
    ],
-   "why": "팝업 MAIL_USER5 붙여넣기 — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-8c5a7efb"
    ],
-   "why": "팝업 MAIL_USER2 Delete — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-8f8b8573"
    ],
-   "why": "팝업 PART_LEADER 붙여넣기와 코드 동반 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-a5ce6809"
    ],
-   "why": "팝업 TEAM_LEADER Delete — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-ad50df80"
    ],
-   "why": "팝업 PART_LEADER Delete — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-ae3bb8e7"
    ],
-   "why": "EG124 잠금 규칙 — 규칙 조건이 EG123과 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-c4679959"
    ],
-   "why": "팝업 MAIL_USER4 Delete — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-c4c247c5"
    ],
-   "why": "EG123 잠금 규칙 — 규칙 조건이 EG124와 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-cf44a31e"
    ],
-   "why": "팝업 MAIL_USER3 붙여넣기 — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-dee026f7"
    ],
-   "why": "팝업 TEAM_LEADER 붙여넣기와 코드 동반 — 컬럼이 고유해 단독."
-  },
-  {
-   "rows": [
-    "EG-e4893818"
-   ],
-   "why": "팝업 USER_ID Delete — 컬럼·동작이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-401cfb8f"
    ],
-   "why": "ITEM_ID 대조표 추적 — 대조표 대응을 확인하는 다른 성질이고 신규행·기존행을 함께 다뤄 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-69d4500f"
    ],
-   "why": "FROM_SITE 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-7753c8a1"
    ],
-   "why": "CREATION_DATE 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-87ce606c"
    ],
-   "why": "NICK_NAME 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-89b09392"
    ],
-   "why": "DIVISION_ID 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-91247341"
    ],
-   "why": "B-1~B-7 해당없음 대조표 행 — 고유 대상이라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-9d8a5eb7"
    ],
-   "why": "OPERATION_GROUP 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-a4b563f8"
    ],
-   "why": "PART_LEADER_NAME 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-b106e24b"
    ],
-   "why": "EditButton 진입점 대조표 추적 — 대상이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-c3bb40e4"
    ],
-   "why": "CREATED_BY 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-d4faedd1"
    ],
-   "why": "USER_NAME 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-f3b4abc2"
    ],
-   "why": "TEAM_LEADER_NAME 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-f648433d"
    ],
-   "why": "LAST_UPDATED_BY 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "T-f6d08c81"
    ],
-   "why": "LAST_UPDATE_DATE 대조표 추적 — 성질이 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-01509080"
    ],
-   "why": "CREATION_DATE 기존행 잠금 — 컬럼이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-0826798e"
-   ],
-   "why": "SYS0003 ROUTE_PATH 결함 유형 — 이 화면에 대응 요소가 불명확해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-0a1a9a58"
    ],
-   "why": "FROM_SITE 기존행 잠금 — 컬럼이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-0abf79aa"
-   ],
-   "why": "UI Category와 편집 가능 여부 일치 일반 규칙 — 대상이 포괄적이라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-0bf87d04"
    ],
-   "why": "MAIL_USER4 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-0c95226d"
    ],
-   "why": "ITEM_ID 기존행 잠금 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-18d3e40d"
    ],
-   "why": "PART_LEADER_NAME 기존행 잠금 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-2099cd76"
    ],
-   "why": "TEAM_LEADER_NAME 기존행 잠금 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-25517880"
    ],
-   "why": "LAST_UPDATED_BY 기존행 잠금 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-31b41a4d"
    ],
-   "why": "MAIL_USER5 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3be016d3"
    ],
-   "why": "DIVISION_ID 기존행 잠금 — 신규행 Div 변경과 상태가 달라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-4df3afb1"
    ],
-   "why": "AS-IS LockColumn 전체 잠금 호출 — 확인 대상이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-5ac44108"
    ],
-   "why": "LAST_UPDATE_DATE 기존행 잠금 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-5ae8b728"
+    "V-617d09ad"
    ],
-   "why": "DMF0021 ETC Team·Measure 결함 유형 — 조건과 기대가 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-622d603a"
    ],
-   "why": "USER_ID 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-686a72a9"
    ],
-   "why": "USER_NAME 기존행 잠금 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6d2b4c1e"
    ],
-   "why": "CREATED_BY 기존행 잠금 — 컬럼이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-7152a877"
-   ],
-   "why": "필터·Sort 상태에서 Insert한 신규행 편집 유지 — 상태가 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-73880d47"
-   ],
-   "why": "DMF0049 병합 셀 콤보 입력 — Div=40 조건과 콤보 입력이 붙어 있어 화면 규칙 V-da719f8e와 같은지 확신이 없어 단독."
-  },
-  {
-   "rows": [
-    "V-73df6e37"
-   ],
-   "why": "DMF0005 Team 붙여넣기와 필수 검사 — 기대가 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-75f99d86"
    ],
-   "why": "MAIL_USER1 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-7687d46f"
-   ],
-   "why": "신규행 자동 매핑 컬럼 편집 불가 일반 규칙 — 대상이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-9111a372"
-   ],
-   "why": "DMF0021 신규행 Sales Site·Project·Model·Team — 대상이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-9427ae7b"
    ],
-   "why": "MAIL_USER3 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-9b7fe776"
    ],
-   "why": "VALID_YN 기존행 편집 가능 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-9ed142e7"
    ],
-   "why": "NICK_NAME 기존행 잠금 — 컬럼이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-a9bc120d"
-   ],
-   "why": "DMF0042 End Customer 변경 시 Sales Site 초기화 — 대상이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-ab0131a8"
    ],
-   "why": "조회 직후 기존행 편집 불가·Edit 버튼 없음 — V-fc7e7f3a와 기대가 반대라 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-b6a9b231"
    ],
-   "why": "TEAM_LEADER 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-c002c767"
-   ],
-   "why": "DMF0042 Currency·중복 Keyset·Insert 위치·Delete 버튼 — 대상이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c1ef00a9"
    ],
-   "why": "PART_LEADER 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-ca20b17a"
    ],
-   "why": "OPERATION_GROUP 기존행 잠금 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-cc5c890f"
    ],
-   "why": "MAIL_USER2 기존행 팝업 보조 입력 — 컬럼이 고유해 단독."
+   "why": "단독"
   },
   {
    "rows": [
     "V-da719f8e"
    ],
-   "why": "이 화면 병합 셀 더블클릭 입력 — Div 조건이 붙은 일반 결함 V-73880d47과 같은지 확신이 없어 단독."
-  },
-  {
-   "rows": [
-    "V-e2b66e46"
-   ],
-   "why": "SYS0002 Dept·Use Y/N 헤더 결함 유형 — 대상이 고유해 단독."
-  },
-  {
-   "rows": [
-    "V-fc7e7f3a"
-   ],
-   "why": "조회 직후 편집 가능해야 한다는 확정 규칙 — V-ab0131a8과 기대가 달라 단독."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 09:40:38",
- "cost": 0.22688509999999998
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:24",
+ "cost": 0,
+ "open": 0
 }

@@ -279,7 +279,7 @@ export const MSG = {
   NO_PERMISSION: 'MSG00096', // "No permission." (AS-IS MSG00096 동일 의미, 01 L-12)
   SAVE_SUCCESS: 'MSG00606', // "저장되었습니다." / "Saved successfully." (건수 미표기 — 사용자 요청. 이전 MSG00672 "{0}개의 데이터가 저장되었습니다")
   SAVE_FAIL: 'MSG00006', // "Failed to save." (AS-IS MSG00006 동일 의미)
-  NO_CHANGES: 'MSG00133', // "No modifications have been made." (AS-IS MSG00133 동일 의미)
+  NO_CHANGES: 'MSG00004', // 수정한 내용이 없습니다. (AS-IS MSG00133 은 TO-BE 미등록 → 같은 문구 MSG00004)
 } as const;
 
 /** 저장 실패 응답 중 "동일 라인에 다른 설비유형" 을 뜻하는 DB 오류번호(03 §3.2 #3, C-08). */

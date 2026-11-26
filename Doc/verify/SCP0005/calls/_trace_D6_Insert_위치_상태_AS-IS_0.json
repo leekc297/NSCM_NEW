@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 2602,
-  "at": "2026-11-20T00:11:17.465Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1519,
+  "at": "2026-11-25T16:24:17.271Z",
+  "user": "bindy122678",
   "test": "D6 Insert 위치·상태 = AS-IS"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 876,
-  "at": "2026-11-20T00:11:22.181Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 671,
+  "at": "2026-11-25T16:24:22.262Z",
+  "user": "bindy122678",
   "test": "D6 Insert 위치·상태 = AS-IS"
  }
 ]

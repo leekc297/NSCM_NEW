@@ -18,7 +18,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -65,7 +65,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -127,21 +135,27 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 36378,
+                  "duration": 38032,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:18:40.595Z",
+                  "startTime": "2026-11-24T16:37:34.566Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SSP0014-0-UserInfoPopup-CELL-USER-ID-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -149,7 +163,7 @@
           ],
           "id": "85feec5f8d5a0014d343-d755a6be6282529515d5",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -170,14 +184,24 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12299,
+                  "duration": 13993,
                   "errors": [],
-                  "stdout": [],
+                  "stdout": [
+                    {
+                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json — UNKNOWN\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:19:20.899Z",
+                  "startTime": "2026-11-24T16:38:15.933Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SSP0014-0-UserInfoPopup-CELL-USER-ID-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -185,12 +209,12 @@
           ],
           "id": "85feec5f8d5a0014d343-0aae5c52af7fb1dd95c3",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
           "title": "@eg-popup CELL SSP0014 #0 UserInfoPopup CELL:USER_ID",
-          "ok": true,
+          "ok": false,
           "tags": [
             "eg-popup"
           ],
@@ -205,23 +229,62 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 12268,
-                  "errors": [],
-                  "stdout": [],
+                  "status": "failed",
+                  "duration": 23538,
+                  "error": {
+                    "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json'",
+                    "stack": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json'\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:51:6)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:984:19",
+                    "location": {
+                      "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                      "column": 27,
+                      "line": 16
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[36mconst\u001b[39m wrapped \u001b[33m=\u001b[39m \u001b[36mfunction\u001b[39m (\u001b[36mthis\u001b[39m\u001b[33m:\u001b[39m unknown\u001b[33m,\u001b[39m \u001b[33m...\u001b[39ma\u001b[33m:\u001b[39m unknown[]) {\n \u001b[90m 15 |\u001b[39m       \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m \u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m         \u001b[36mtry\u001b[39m { \u001b[36mreturn\u001b[39m orig\u001b[33m.\u001b[39mapply(\u001b[36mthis\u001b[39m\u001b[33m,\u001b[39m a)\u001b[33m;\u001b[39m } \u001b[36mcatch\u001b[39m (e) {\n \u001b[90m    |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m           \u001b[36mconst\u001b[39m code \u001b[33m=\u001b[39m \u001b[33mString\u001b[39m((e \u001b[36mas\u001b[39m { code\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m string })\u001b[33m.\u001b[39mcode \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m>=\u001b[39m \u001b[35m8\u001b[39m \u001b[33m||\u001b[39m \u001b[33m!\u001b[39m\u001b[33mRETRY_CODES\u001b[39m\u001b[33m.\u001b[39mhas(code)) \u001b[36mthrow\u001b[39m e\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m) console\u001b[33m.\u001b[39mlog(\u001b[32m`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                        "column": 27,
+                        "line": 16
+                      },
+                      "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json'\n\n   at ..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n  14 |     const wrapped = function (this: unknown, ...a: unknown[]) {\n  15 |       for (let i = 0; ; i++) {\n> 16 |         try { return orig.apply(this, a); } catch (e) {\n     |                           ^\n  17 |           const code = String((e as { code?: string }).code || '');\n  18 |           if (i >= 8 || !RETRY_CODES.has(code)) throw e;\n  19 |           if (i === 0) console.log(`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`);\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:51:6)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:984:19"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json — UNKNOWN\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:19:35.621Z",
+                  "startTime": "2026-11-24T16:38:33.339Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SSP0014-0-UserInfoPopup-CELL-USER-ID-chromium\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SSP0014-0-UserInfoPopup-CELL-USER-ID-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                    "column": 27,
+                    "line": 16
+                  }
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "85feec5f8d5a0014d343-80eef6da40bd72e079e6",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -239,24 +302,30 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 35826,
+                  "duration": 38681,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:19:50.266Z",
+                  "startTime": "2026-11-24T16:39:00.895Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-a8a14-rInfoPopup-CELL-PART-LEADER-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -264,7 +333,7 @@
           ],
           "id": "85feec5f8d5a0014d343-73f91234fd4fbd2a615e",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -282,17 +351,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12806,
+                  "duration": 13019,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:20:28.676Z",
+                  "startTime": "2026-11-24T16:39:42.746Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-746b0-rInfoPopup-CELL-PART-LEADER-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -300,7 +375,7 @@
           ],
           "id": "85feec5f8d5a0014d343-4f7e409993c320f48620",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -318,17 +393,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12045,
+                  "duration": 13056,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:20:43.960Z",
+                  "startTime": "2026-11-24T16:39:59.246Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SS-5f8f1-rInfoPopup-CELL-PART-LEADER-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -336,7 +417,7 @@
           ],
           "id": "85feec5f8d5a0014d343-03d00bcf8904b2721d50",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -354,24 +435,30 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 35845,
+                  "duration": 36567,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:20:58.570Z",
+                  "startTime": "2026-11-24T16:40:15.449Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-f97de-rInfoPopup-CELL-TEAM-LEADER-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -379,7 +466,7 @@
           ],
           "id": "85feec5f8d5a0014d343-39d5b35060b3123e8353",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -397,21 +484,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 14736,
+                  "duration": 12690,
                   "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json — UNKNOWN\n"
-                    }
-                  ],
+                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:21:37.002Z",
+                  "startTime": "2026-11-24T16:40:55.033Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-3b253-rInfoPopup-CELL-TEAM-LEADER-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -419,7 +508,7 @@
           ],
           "id": "85feec5f8d5a0014d343-0ec4bcb84f80b493dcc2",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -437,17 +526,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12700,
+                  "duration": 11934,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:21:54.526Z",
+                  "startTime": "2026-11-24T16:41:10.548Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SS-cd53e-rInfoPopup-CELL-TEAM-LEADER-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -455,7 +550,7 @@
           ],
           "id": "85feec5f8d5a0014d343-25d8f816b0b36990c91e",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -473,24 +568,30 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 36650,
+                  "duration": 37408,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:22:09.913Z",
+                  "startTime": "2026-11-24T16:41:25.087Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-7920b-erInfoPopup-CELL-MAIL-USER1-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -498,7 +599,7 @@
           ],
           "id": "85feec5f8d5a0014d343-3ac4230dae95a4a5ac9d",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -516,17 +617,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13835,
+                  "duration": 13066,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:22:49.003Z",
+                  "startTime": "2026-11-24T16:42:05.783Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-8b94e-erInfoPopup-CELL-MAIL-USER1-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -534,7 +641,7 @@
           ],
           "id": "85feec5f8d5a0014d343-7de07533c0fc477eb2e8",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -552,17 +659,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10979,
+                  "duration": 12308,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:23:05.472Z",
+                  "startTime": "2026-11-24T16:42:22.026Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SS-1e508-erInfoPopup-CELL-MAIL-USER1-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -570,7 +683,7 @@
           ],
           "id": "85feec5f8d5a0014d343-11e2b67a200560e1c798",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -588,24 +701,30 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 35268,
+                  "duration": 36712,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:23:18.863Z",
+                  "startTime": "2026-11-24T16:42:37.459Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-b49d7-erInfoPopup-CELL-MAIL-USER2-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -613,7 +732,7 @@
           ],
           "id": "85feec5f8d5a0014d343-3fedb0c50992b58179a4",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -631,17 +750,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12360,
+                  "duration": 13261,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:23:56.511Z",
+                  "startTime": "2026-11-24T16:43:18.615Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-d6b45-erInfoPopup-CELL-MAIL-USER2-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -649,7 +774,7 @@
           ],
           "id": "85feec5f8d5a0014d343-f2415eafcf3aefaa38ec",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -667,17 +792,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11726,
+                  "duration": 10890,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:24:11.310Z",
+                  "startTime": "2026-11-24T16:43:34.747Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SS-0f38d-erInfoPopup-CELL-MAIL-USER2-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -685,7 +816,7 @@
           ],
           "id": "85feec5f8d5a0014d343-ca4a609ca0250fd98c1d",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -703,24 +834,30 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 36600,
+                  "duration": 38498,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:24:25.855Z",
+                  "startTime": "2026-11-24T16:43:48.816Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-92cdb-erInfoPopup-CELL-MAIL-USER3-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -728,7 +865,7 @@
           ],
           "id": "85feec5f8d5a0014d343-23886c65084c70ded5d9",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -746,17 +883,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13558,
+                  "duration": 13082,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:25:05.578Z",
+                  "startTime": "2026-11-24T16:44:30.535Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-84731-erInfoPopup-CELL-MAIL-USER3-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -764,7 +907,7 @@
           ],
           "id": "85feec5f8d5a0014d343-34fd732f9f839553cdce",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -782,24 +925,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11840,
+                  "duration": 12734,
                   "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json — UNKNOWN\n"
-                    },
-                    {
-                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_rowsets.json — UNKNOWN\n"
-                    }
-                  ],
+                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:25:21.759Z",
+                  "startTime": "2026-11-24T16:44:46.592Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SS-02bb0-erInfoPopup-CELL-MAIL-USER3-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -807,12 +949,12 @@
           ],
           "id": "85feec5f8d5a0014d343-d6e58841ada983502b53",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
           "title": "@eg-popup MAIN SSP0014 #6 UserInfoPopup CELL:MAIL_USER4",
-          "ok": true,
+          "ok": false,
           "tags": [
             "eg-popup"
           ],
@@ -825,32 +967,70 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 38064,
-                  "errors": [],
+                  "status": "failed",
+                  "duration": 48843,
+                  "error": {
+                    "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json'",
+                    "stack": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json'\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:51:6)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:984:19",
+                    "location": {
+                      "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                      "column": 27,
+                      "line": 16
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[36mconst\u001b[39m wrapped \u001b[33m=\u001b[39m \u001b[36mfunction\u001b[39m (\u001b[36mthis\u001b[39m\u001b[33m:\u001b[39m unknown\u001b[33m,\u001b[39m \u001b[33m...\u001b[39ma\u001b[33m:\u001b[39m unknown[]) {\n \u001b[90m 15 |\u001b[39m       \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m \u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m         \u001b[36mtry\u001b[39m { \u001b[36mreturn\u001b[39m orig\u001b[33m.\u001b[39mapply(\u001b[36mthis\u001b[39m\u001b[33m,\u001b[39m a)\u001b[33m;\u001b[39m } \u001b[36mcatch\u001b[39m (e) {\n \u001b[90m    |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m           \u001b[36mconst\u001b[39m code \u001b[33m=\u001b[39m \u001b[33mString\u001b[39m((e \u001b[36mas\u001b[39m { code\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m string })\u001b[33m.\u001b[39mcode \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m>=\u001b[39m \u001b[35m8\u001b[39m \u001b[33m||\u001b[39m \u001b[33m!\u001b[39m\u001b[33mRETRY_CODES\u001b[39m\u001b[33m.\u001b[39mhas(code)) \u001b[36mthrow\u001b[39m e\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m) console\u001b[33m.\u001b[39mlog(\u001b[32m`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                        "column": 27,
+                        "line": 16
+                      },
+                      "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json'\n\n   at ..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n  14 |     const wrapped = function (this: unknown, ...a: unknown[]) {\n  15 |       for (let i = 0; ; i++) {\n> 16 |         try { return orig.apply(this, a); } catch (e) {\n     |                           ^\n  17 |           const code = String((e as { code?: string }).code || '');\n  18 |           if (i >= 8 || !RETRY_CODES.has(code)) throw e;\n  19 |           if (i === 0) console.log(`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`);\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:51:6)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_popup.spec.ts:984:19"
+                    }
+                  ],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
+                    },
+                    {
+                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json — UNKNOWN\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:25:36.399Z",
+                  "startTime": "2026-11-24T16:45:03.502Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-b8f3f-erInfoPopup-CELL-MAIL-USER4-chromium\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-b8f3f-erInfoPopup-CELL-MAIL-USER4-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                    "column": 27,
+                    "line": 16
+                  }
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "85feec5f8d5a0014d343-06969925464a979fed7a",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -868,17 +1048,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13877,
+                  "duration": 13093,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:26:17.446Z",
+                  "startTime": "2026-11-24T16:46:00.078Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-ebe2c-erInfoPopup-CELL-MAIL-USER4-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -886,7 +1072,7 @@
           ],
           "id": "85feec5f8d5a0014d343-a6e118daac7e25cd457a",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -904,24 +1090,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12857,
+                  "duration": 12998,
                   "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json — UNKNOWN\n"
-                    },
-                    {
-                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_rowsets.json — UNKNOWN\n"
-                    }
-                  ],
+                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:26:35.003Z",
+                  "startTime": "2026-11-24T16:46:17.061Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SS-8a5a2-erInfoPopup-CELL-MAIL-USER4-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -929,7 +1114,7 @@
           ],
           "id": "85feec5f8d5a0014d343-583fbd040425db73b0cb",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -947,24 +1132,33 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 37459,
+                  "duration": 40467,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/1592 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/1595 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 1593 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8612\n"
+                      "text": "[F4 진단] egp 값 목록 1596 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 1 · filter=function items=1 src=8613\n"
+                    },
+                    {
+                      "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\popup_results.json — UNKNOWN\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:26:51.463Z",
+                  "startTime": "2026-11-24T16:46:35.533Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-15c2d-erInfoPopup-CELL-MAIL-USER5-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -972,7 +1166,7 @@
           ],
           "id": "85feec5f8d5a0014d343-170405b4e29f8c8ecbc2",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -990,17 +1184,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 13474,
+                  "duration": 12830,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:27:31.870Z",
+                  "startTime": "2026-11-24T16:47:20.232Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-7dcbc-erInfoPopup-CELL-MAIL-USER5-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -1008,7 +1208,7 @@
           ],
           "id": "85feec5f8d5a0014d343-4f47c515a7d8c17015bb",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -1026,17 +1226,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11152,
+                  "duration": 10695,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:27:48.657Z",
+                  "startTime": "2026-11-24T16:47:36.167Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SS-041ed-erInfoPopup-CELL-MAIL-USER5-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -1044,7 +1250,7 @@
           ],
           "id": "85feec5f8d5a0014d343-424d9273fee94e5cd4c2",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -1062,24 +1268,30 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 43972,
+                  "duration": 38460,
                   "errors": [],
                   "stdout": [
                     {
                       "text": "[F4 진단-목록] egp checked=1/36 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 37 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 4656 · filter=function items=4656 src=23309\n"
+                      "text": "[F4 진단] egp 값 목록 37 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 4689 · filter=function items=4689 src=23434\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:28:03.630Z",
+                  "startTime": "2026-11-24T16:47:49.845Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SS-a8321-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -1087,7 +1299,7 @@
           ],
           "id": "85feec5f8d5a0014d343-04cf2a2948ed56c06b07",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -1105,17 +1317,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 82845,
+                  "duration": 81406,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:28:50.627Z",
+                  "startTime": "2026-11-24T16:48:30.667Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SS-fa411-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -1123,7 +1341,7 @@
           ],
           "id": "85feec5f8d5a0014d343-714f59c119a92b4f2e16",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -1141,17 +1359,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12753,
+                  "duration": 12980,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:30:16.183Z",
+                  "startTime": "2026-11-24T16:49:54.787Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-CORNERS-e6bf8-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -1159,7 +1383,7 @@
           ],
           "id": "85feec5f8d5a0014d343-8ff657f0f67e5c36bfc2",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         },
         {
@@ -1177,17 +1401,23 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11655,
+                  "duration": 11546,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-20T00:30:31.613Z",
+                  "startTime": "2026-11-24T16:50:10.744Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\popup\\artifacts\\eg_popup--eg-popup-TEXT-SS-33d88-ivisionPopup-COND-btnItemId-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -1195,7 +1425,7 @@
           ],
           "id": "85feec5f8d5a0014d343-28cb8f2a694adc28ed50",
           "file": "eg_popup.spec.ts",
-          "line": 961,
+          "line": 975,
           "column": 9
         }
       ]
@@ -1203,11 +1433,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-20T00:18:39.647Z",
-    "duration": 726570.944,
-    "expected": 28,
+    "startTime": "2026-11-24T16:37:33.258Z",
+    "duration": 771884.076,
+    "expected": 26,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 2,
     "flaky": 0
   }
 }

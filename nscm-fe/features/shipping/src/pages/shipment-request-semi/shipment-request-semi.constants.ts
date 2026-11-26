@@ -225,6 +225,9 @@ export const MSG = {
   NO_CHANGE: 'MSG00676', // "There is no data to save."
   SYSTEM_ERROR: 'MSG01075', // "System error. Capture the screen and pass it on to the system manager."
   NEGATIVE_QTY: 'MSG00699', // "Please enter an integer greater than 0."
+  // 기간셀 자릿수 초과 — 저장 테이블 QTY 가 NUMBER(20,10)(정수부 10자리)라 ±9,999,999,999 초과는
+  //   SP 가 ORA-01438 로 실패한다. KO "입력할 수 있는 자리수를 초과하였습니다." (DB 실측 2026-11-23)
+  QTY_MAX: 'MSG00165',
   SELECT_FIRST: 'MSG01126', // "First, select {0}." (TR_MODE 클릭 시 Model 미선택 — V08)
   // AS-IS `MSG00260` 의 의도는 소스 주석 실측상 "입력 데이터 중 중복된 데이터가 있습니다."
   //   (cs:1449). TO-BE `MSG00260` 은 "Duplicate combination (Division/Project/Item/Date/Measure)." 로

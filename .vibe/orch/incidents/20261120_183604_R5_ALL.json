@@ -1,0 +1,111 @@
+{
+  "id": "20261120_183604_R5_ALL",
+  "at": "2026-11-20T18:36:04+09:00",
+  "ms": 1795167364003,
+  "rule": "R5",
+  "ruleName": "진행 없음",
+  "title": "창 다시 로드로 끊긴 실행 14건(알림)",
+  "screen": "",
+  "sig": "R5|reloadcut|36504",
+  "count": 1,
+  "repeat": null,
+  "detail": "프로세스 SCP0005 CheckList 재수행 — 미검증 행만 가능하면 그 규칙만(--only), 아니면 처음부터 → 재분류 · 🔎 CheckList 체인 3단계 · 시작 10:07\n체인 SCP0005 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 20:23\n체인 SSP0014 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 20:23\n체인 SCP0028 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 20:25\n체인 SSP0005 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 20:25\n체인 SCP0028 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 00:33\n체인 SSP0014 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 05:48\n체인 SCP0005 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 06:07\n체인 SCP0028 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 06:07\n체인 SSP0005 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 06:07\n체인 SSP0014 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 시작 06:07\nClaude 에이전트 대화 · 시작 18:31\nClaude SSP0014 [4/4] 2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만) · 시작 09:57\nClaude SSP0005 [4/4] 2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만) · 시작 10:07",
+  "evidence": {
+    "owner": 36504,
+    "runs": [
+      {
+        "what": "proc",
+        "screen": "SCP0005",
+        "label": "CheckList 재수행 — 미검증 행만 가능하면 그 규칙만(--only), 아니면 처음부터 → 재분류 · 🔎 CheckList 체인 3단계",
+        "log": ".vibe\\logs\\2026-11-20T10-07-52_CheckList_________________________--only_______________________CheckList____3__.log"
+      },
+      {
+        "what": "chain",
+        "screen": "SCP0005",
+        "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SSP0014",
+        "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SCP0028",
+        "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SSP0005",
+        "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SCP0028",
+        "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SSP0014",
+        "label": "🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SCP0005",
+        "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SCP0028",
+        "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SSP0005",
+        "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "chain",
+        "screen": "SSP0014",
+        "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+        "log": ""
+      },
+      {
+        "what": "claude",
+        "screen": "",
+        "label": "에이전트 대화",
+        "log": ""
+      },
+      {
+        "what": "claude",
+        "screen": "SSP0014",
+        "label": "[4/4] 2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만)",
+        "log": ""
+      },
+      {
+        "what": "claude",
+        "screen": "SSP0005",
+        "label": "[4/4] 2-2. 검증 보완 2회차 (직전 재수행 뒤 처리 대상이 남고 줄었을 때만)",
+        "log": ""
+      }
+    ]
+  },
+  "status": "resolved",
+  "notice": true,
+  "actions": [
+    {
+      "at": "2026-11-20T18:36:04+09:00",
+      "by": "VMO",
+      "what": "알림(사건 아님). Claude 조치 없음"
+    }
+  ]
+}

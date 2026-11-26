@@ -1,0 +1,280 @@
+{
+ "screen": "SCP0103",
+ "calls": [
+  {
+   "cls": "SCP0103_SemiStockPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0103_MaterialVisibility.cs:2325",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "BOH",
+    "guard": "if (isEEDivision && _operation_group == \"A\") ▸ if (_curr_measure_name.ToUpper().Equals(\"BALANCE\") && (e.Column == siMain.GetColumnIndex(DefColumns.BOH)))"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [
+    "this._tblSemiStockFiltered"
+   ],
+   "args": [
+    {
+     "param": "tblSemiStock",
+     "kind": "EXPR",
+     "arg": "this._tblSemiStockFiltered"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0103_MaterialVisibility.cs:2327",
+     "target": "pop.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "method": "btnColumn_Click",
+   "asis_ref": "SCP0103_MaterialVisibility.cs:1068",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnColumn",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SCP0103\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "EXPR",
+     "arg": "SpdSheet.shtAll"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "true"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0103_MaterialVisibility.cs:1069",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "method": "btnMeasure_Click",
+   "asis_ref": "SCP0103_MaterialVisibility.cs:1099",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnMeasure",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SCP0103\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "LITERAL",
+     "arg": "shtName"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0103_MaterialVisibility.cs:1100",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCP0103_SemiStockPopup": {
+   "cls": "SCP0103_SemiStockPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0103_MaterialVisibility/Popup/SCP0103_SemiStockPopup.cs",
+   "title": "Semi-manufactures Of BOH",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0103_SemiStockPopup.cs:129",
+     "method": "RefreshSpread",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0103_SemiStockPopup.cs:188",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Close: this.Close();break; }",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0103_SemiStockPopup.cs:190",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  },
+  "SCM0002_TitleSetForm_Popup": {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "115",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:287",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:235",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:253",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:167",
+     "method": "SetFixColumnStatus",
+     "raw": "svSource.Cells[r, c].BackColor = Color.WhiteSmoke;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:254",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:232",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:250",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:676",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:679",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

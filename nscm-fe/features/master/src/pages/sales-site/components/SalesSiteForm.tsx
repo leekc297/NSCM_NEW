@@ -236,6 +236,8 @@ export const SalesSiteForm = ({
               )}
             />
           </Grid>
+          {/* Active 는 다른 콤보와 완전히 같은 폭이어야 하므로 plain Grid(block) 셀에 둔다.
+              customGrid(flex) 로 감싸면 flex 컨텍스트에서 필드가 더 넓게 계산돼 혼자 커진다. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -262,21 +264,19 @@ export const SalesSiteForm = ({
               )}
             />
           </Grid>
-          <Grid size={3} className={commonStyles.customGrid}>
-            <FormItem
-              render={() => (
-                <div className={commonStyles.customCheckbox}>
-                  <Checkbox
-                    checked={openDetailGrid}
-                    onChange={checked => {
-                      setOpenDetailGrid(checked);
-                      if (!checked) setActiveTab(SHEET_INDEX.SITE);
-                    }}
-                  />
-                  <Label labelText={t('LBL00316', '_Detail')} depth='sub' />
-                </div>
-              )}
-            />
+          {/* Detail 체크박스 — 별도 size=3 셀이라 Active 와의 기본 간격은 그리드 columnGap(24px)인데,
+              marginLeft -12px 로 당겨 Active 드롭다운 바로 옆 12px 로 맞춘다(Active 폭은 건드리지 않는다). */}
+          <Grid size={3} className={commonStyles.customGrid} sx={{ marginLeft: '-12px' }}>
+            <div className={commonStyles.customCheckbox}>
+              <Checkbox
+                checked={openDetailGrid}
+                onChange={checked => {
+                  setOpenDetailGrid(checked);
+                  if (!checked) setActiveTab(SHEET_INDEX.SITE);
+                }}
+              />
+              <Label labelText={t('LBL00316', '_Detail')} depth='sub' />
+            </div>
           </Grid>
         </>
       }

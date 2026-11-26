@@ -1,9 +1,10 @@
 import dayjs, { type Dayjs } from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+// 주의: dayjs utc/timezone 플러그인을 전역 extend 하지 않는다(2026-11-22 변경).
+//   이 파일은 @foundation/utils 로 앱 전체에 로드돼, extend 하면 앱 dayjs 에 utc 플러그인이 항상 붙는다.
+//   그러면 MUI AdapterDayjs 가 value.isUTC() 를 호출하기 시작하는데, @lges/design-system 이 번들에 따로
+//   넣은 dayjs 사본(플러그인 없음)의 날짜가 넘어오면 'value.isUTC is not a function' 으로 화면이 깨진다
+//   (달력 연도 선택 — DMF0003·DMF0048 등). 그래서 대상 존의 날짜는 브라우저 기본 Intl 로 계산한다.
 
 /**
  * 사용자 타임존 코드(`UserSession.tmzCd` = `SCM_ADM_LOOKUP_MASTER_DETAIL.SEGMENT1`,
@@ -36,5 +37,18 @@ const TMZ_TO_IANA: Record<string, string> = {
 export const todayInTimeZone = (tmzCd: string | undefined): Dayjs => {
   const zone = tmzCd ? TMZ_TO_IANA[tmzCd] : undefined;
   if (!zone) return dayjs();
-  return dayjs(dayjs().tz(zone).format('YYYY-MM-DD'));
+  // Intl 로 대상 존의 현재 연·월·일만 뽑는다(서머타임 포함 — IANA 규칙은 브라우저가 적용).
+  //   formatToParts 로 각 부분을 이름으로 꺼내 로케일별 구분자·순서 차이에 영향받지 않게 한다.
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: zone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find(p => p.type === type)?.value ?? '';
+  const ymd = `${part('year')}-${part('month')}-${part('day')}`;
+  const today = dayjs(ymd);
+  // 혹시 Intl 이 존을 모르는 환경이면(구형 런타임) 종전 폴백과 같게 브라우저 시계로 돌아간다.
+  return today.isValid() ? today : dayjs();
 };

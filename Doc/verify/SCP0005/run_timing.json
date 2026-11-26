@@ -74,5 +74,672 @@
     "min": 0.3
    }
   ]
+ },
+ {
+  "run_at": "2026-11-25 00:56:02",
+  "wall_min": 111.0,
+  "stage_sum_min": 57.2,
+  "unattributed_min": 53.8,
+  "e2e_tests": 110,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 2.1,
+   "facts": 14.7,
+   "static": 0.5,
+   "eg": 10.4,
+   "diff": 12.5,
+   "post": 16.9
+  },
+  "top": [
+   {
+    "stage": "facts",
+    "tool": "criteria_build.py",
+    "start": "01:05:21",
+    "min": 12.7
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "02:34:43",
+    "min": 11.8
+   },
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "02:07:01",
+    "min": 10.4
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "02:22:30",
+    "min": 7.5
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "02:17:32",
+    "min": 3.8
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "02:31:39",
+    "min": 3.1
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "00:57:29",
+    "min": 2.0
+   },
+   {
+    "stage": "facts",
+    "tool": "llm_facts.py",
+    "start": "01:04:03",
+    "min": 1.3
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "02:21:29",
+    "min": 1.0
+   },
+   {
+    "stage": "facts",
+    "tool": "facts_combovalues.py",
+    "start": "01:03:26",
+    "min": 0.6
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 02:47:04",
+  "wall_min": 2.5,
+  "stage_sum_min": 1.5,
+  "unattributed_min": 1.0,
+  "e2e_tests": 0,
+  "e2e_retries": 0,
+  "stage_min": {
+   "docs": 1.5
+  },
+  "top": [
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "02:48:13",
+    "min": 1.0
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "02:49:12",
+    "min": 0.3
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "02:48:04",
+    "min": 0.2
+   },
+   {
+    "stage": "docs",
+    "tool": "regress.py",
+    "start": "02:49:29",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "precision.py",
+    "start": "02:49:32",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "checker_regress.py",
+    "start": "02:49:32",
+    "min": 0.0
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 03:29:05",
+  "wall_min": 115.9,
+  "stage_sum_min": 36.8,
+  "unattributed_min": 79.1,
+  "e2e_tests": 109,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 1.7,
+   "facts": 5.9,
+   "static": 0.6,
+   "eg": 9.5,
+   "diff": 10.2,
+   "post": 8.9
+  },
+  "top": [
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "04:56:18",
+    "min": 9.5
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "05:09:16",
+    "min": 6.8
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "05:19:15",
+    "min": 5.3
+   },
+   {
+    "stage": "facts",
+    "tool": "criteria_build.py",
+    "start": "03:48:12",
+    "min": 4.2
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "05:05:50",
+    "min": 2.8
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "05:17:40",
+    "min": 1.6
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "03:29:43",
+    "min": 1.6
+   },
+   {
+    "stage": "facts",
+    "tool": "llm_facts.py",
+    "start": "03:46:36",
+    "min": 1.6
+   },
+   {
+    "stage": "post",
+    "tool": "master_sweep.py",
+    "start": "05:16:26",
+    "min": 0.5
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "05:08:50",
+    "min": 0.4
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 05:25:01",
+  "wall_min": 2.0,
+  "stage_sum_min": 1.2,
+  "unattributed_min": 0.8,
+  "e2e_tests": 0,
+  "e2e_retries": 0,
+  "stage_min": {
+   "docs": 1.2
+  },
+  "top": [
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "05:26:00",
+    "min": 0.8
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "05:26:46",
+    "min": 0.2
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "05:25:51",
+    "min": 0.2
+   },
+   {
+    "stage": "docs",
+    "tool": "regress.py",
+    "start": "05:27:00",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "precision.py",
+    "start": "05:27:02",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "checker_regress.py",
+    "start": "05:27:02",
+    "min": 0.0
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 06:12:20",
+  "wall_min": 93.1,
+  "stage_sum_min": 43.6,
+  "unattributed_min": 49.5,
+  "e2e_tests": 72,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 1.7,
+   "facts": 3.1,
+   "static": 0.6,
+   "e2e": 8.8,
+   "eg": 9.4,
+   "diff": 13.2,
+   "post": 6.9
+  },
+  "top": [
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "07:15:56",
+    "min": 9.4
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "07:31:15",
+    "min": 7.3
+   },
+   {
+    "stage": "e2e",
+    "tool": "cmd",
+    "start": "06:34:00",
+    "min": 6.8
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "07:25:21",
+    "min": 4.5
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "07:41:16",
+    "min": 3.7
+   },
+   {
+    "stage": "facts",
+    "tool": "criteria_build.py",
+    "start": "06:29:33",
+    "min": 1.8
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "06:12:33",
+    "min": 1.7
+   },
+   {
+    "stage": "e2e",
+    "tool": "cmd",
+    "start": "06:32:01",
+    "min": 1.6
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "07:30:00",
+    "min": 1.2
+   },
+   {
+    "stage": "facts",
+    "tool": "llm_facts.py",
+    "start": "06:28:23",
+    "min": 1.1
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 21:06:35",
+  "wall_min": 89.8,
+  "stage_sum_min": 38.8,
+  "unattributed_min": 51.0,
+  "e2e_tests": 110,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 1.7,
+   "facts": 0.2,
+   "static": 1.0,
+   "eg": 10.0,
+   "diff": 17.7,
+   "post": 8.1
+  },
+  "top": [
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "22:00:26",
+    "min": 10.0
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "22:19:48",
+    "min": 8.4
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "22:10:27",
+    "min": 7.6
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "22:31:22",
+    "min": 4.7
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "21:08:00",
+    "min": 1.6
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "22:18:20",
+    "min": 1.5
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "22:30:31",
+    "min": 0.9
+   },
+   {
+    "stage": "post",
+    "tool": "sort_ci_check.py",
+    "start": "22:28:29",
+    "min": 0.6
+   },
+   {
+    "stage": "static",
+    "tool": "syn_check.py",
+    "start": "21:18:13",
+    "min": 0.5
+   },
+   {
+    "stage": "post",
+    "tool": "master_sweep.py",
+    "start": "22:29:13",
+    "min": 0.4
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 22:36:29",
+  "wall_min": 4.1,
+  "stage_sum_min": 3.1,
+  "unattributed_min": 1.0,
+  "e2e_tests": 0,
+  "e2e_retries": 0,
+  "stage_min": {
+   "docs": 3.1
+  },
+  "top": [
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "22:37:38",
+    "min": 2.6
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "22:40:13",
+    "min": 0.3
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "22:37:27",
+    "min": 0.2
+   },
+   {
+    "stage": "docs",
+    "tool": "regress.py",
+    "start": "22:40:31",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "precision.py",
+    "start": "22:40:33",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "checker_regress.py",
+    "start": "22:40:33",
+    "min": 0.0
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-25 23:38:27",
+  "wall_min": 93.4,
+  "stage_sum_min": 38.0,
+  "unattributed_min": 55.4,
+  "e2e_tests": 114,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 1.6,
+   "facts": 0.1,
+   "static": 1.1,
+   "eg": 10.3,
+   "diff": 15.5,
+   "post": 8.3,
+   "docs": 1.1
+  },
+  "top": [
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "00:36:34",
+    "min": 10.3
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "00:54:51",
+    "min": 7.5
+   },
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "00:46:53",
+    "min": 6.3
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "01:05:12",
+    "min": 5.2
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "23:38:52",
+    "min": 1.5
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "00:53:27",
+    "min": 1.4
+   },
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "01:10:56",
+    "min": 0.6
+   },
+   {
+    "stage": "post",
+    "tool": "sort_ci_check.py",
+    "start": "01:02:38",
+    "min": 0.6
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "01:04:37",
+    "min": 0.6
+   },
+   {
+    "stage": "static",
+    "tool": "syn_check.py",
+    "start": "23:43:53",
+    "min": 0.6
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-26 01:11:56",
+  "wall_min": 88.1,
+  "stage_sum_min": 41.4,
+  "unattributed_min": 46.7,
+  "e2e_tests": 112,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 1.8,
+   "facts": 0.1,
+   "static": 0.6,
+   "eg": 10.3,
+   "diff": 23.3,
+   "post": 4.8,
+   "docs": 0.5
+  },
+  "top": [
+   {
+    "stage": "diff",
+    "tool": "sqllog_calls.py",
+    "start": "02:11:19",
+    "min": 14.2
+   },
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "02:00:57",
+    "min": 10.3
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "02:26:54",
+    "min": 7.7
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "02:36:58",
+    "min": 2.2
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "01:13:07",
+    "min": 1.7
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_auto.py",
+    "start": "02:25:44",
+    "min": 1.2
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "02:36:23",
+    "min": 0.6
+   },
+   {
+    "stage": "post",
+    "tool": "master_sweep.py",
+    "start": "02:35:08",
+    "min": 0.3
+   },
+   {
+    "stage": "post",
+    "tool": "sort_ci_check.py",
+    "start": "02:34:47",
+    "min": 0.3
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "02:39:40",
+    "min": 0.3
+   }
+  ]
+ },
+ {
+  "run_at": "2026-11-26 02:40:04",
+  "wall_min": 1.2,
+  "stage_sum_min": 0.5,
+  "unattributed_min": 0.7,
+  "e2e_tests": 0,
+  "e2e_retries": 0,
+  "stage_min": {
+   "docs": 0.5
+  },
+  "top": [
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "02:40:55",
+    "min": 0.3
+   },
+   {
+    "stage": "docs",
+    "tool": "make_verify_docs.py",
+    "start": "02:40:43",
+    "min": 0.2
+   },
+   {
+    "stage": "docs",
+    "tool": "regress.py",
+    "start": "02:41:12",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "precision.py",
+    "start": "02:41:14",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "02:40:55",
+    "min": 0.0
+   },
+   {
+    "stage": "docs",
+    "tool": "checker_regress.py",
+    "start": "02:41:14",
+    "min": 0.0
+   }
+  ]
  }
 ]

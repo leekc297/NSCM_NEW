@@ -45,8 +45,12 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
   const setNoDivisionAuth = useInventoryTrendStore(state => state.setNoDivisionAuth);
   const setAuthDivisions = useInventoryTrendStore(state => state.setAuthDivisions);
 
-  // Division=ALL 이면 Plant 콤보에 빈값 전달 → @divisionId IS NULL → 전체(design 02 §2-2).
-  const divisionParam = sc.divisionId === 'ALL' ? '' : sc.divisionId;
+  const authDivisions = useInventoryTrendStore(state => state.authDivisions);
+
+  // Division=ALL 이면 Plant 콤보에 권한 Division 코드 열거를 넘긴다 — AS-IS SetChangedControl(cs:163)
+  //   GetCheckedListValue(dtMyDivision, ...) 2-arg 가 ALL 을 권한 division 코드로 펼쳐 PlantByGroup 을 부른 것과 등가.
+  //   빈값(@divisionId IS NULL)으로 보내면 권한 밖 사업부 Plant 까지 전부 나온다(제한 계정 실측).
+  const divisionParam = sc.divisionId === 'ALL' ? authDivisions.join(',') : sc.divisionId;
 
   const [divisions, plants, monthRangeRaw] = useTabComboQueries({
     filters: [COMBO.DIVISION, { comboId: COMBO.PLANT, divisionId: divisionParam }, COMBO.MONTH_RANGE],

@@ -81,12 +81,22 @@ function tail(maxBytes) {
   } catch { return []; }
 }
 
+// 개선안 20261121225944_SELF: info 필드가 생기기 전에 남은 정상 처리 기록도 집계에서 뺀다
+//   lockStopClean = 중지 뒤 잠금 정리 · restore = ' / ' 로 나눈 조각마다 'AI 편집 N건만 되돌림(반영 전과 같음)' 일 때만(되돌림 실패 조각이 섞이면 집계)
+const RESTORE_OK = /AI 편집 \d+건만 되돌림\(반영 전과 같음\)$/;
+function isInfo(r) {
+  if (r.info === true) return true;
+  if (r.fn === 'lockStopClean') return true;
+  if (r.fn === 'restore') { const parts = String(r.msg || '').split(' / '); return parts.length > 0 && parts.every(s => RESTORE_OK.test(s.trim())); }
+  return false;
+}
+
 /** sinceMs 뒤 기록을 서명별로 묶는다. 반환 = [{ sig, mod, fn, msg, count(건너뛴 수 포함), firstAt, lastAt, lastMs, stack }] 횟수 많은 순 */
 function stats(sinceMs) {
   const by = new Map();
   for (const r of tail(4 * 1024 * 1024)) {
     if (sinceMs && r.ms < sinceMs) continue;
-    if (r.info === true) continue; // 개선안 20261120143326_SELF_2: 정상 처리 기록(중지 뒤 잠금 정리 등)은 오류 집계에서 뺀다
+    if (isInfo(r)) continue; // 개선안 20261120143326_SELF_2 · 20261121225944_SELF: 정상 처리 기록(중지 뒤 잠금 정리, AI 편집만 되돌림)은 오류 집계에서 뺀다
     const g = by.get(r.sig) || { sig: r.sig, mod: r.mod, fn: r.fn, msg: r.msg, count: 0, firstAt: r.at, firstMs: r.ms, lastAt: r.at, lastMs: r.ms, stack: r.stack || [] };
     g.count += 1 + (r.skipped || 0); g.lastAt = r.at; g.lastMs = r.ms; g.msg = r.msg; if (r.stack && r.stack.length) g.stack = r.stack;
     by.set(r.sig, g);

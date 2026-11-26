@@ -7,7 +7,8 @@ import type { Nscm } from './nscm';
 import * as fs from 'fs';
 import * as path from 'path';
 import { probe, parseCsv } from './probe';
-import { typeCell, recordTouched, classifyNoCall, notePrecheck, precheckHints } from './saveprobe';
+import { typeCell, recordTouched, classifyNoCall, notePrecheck, precheckHints, restoreCell } from './saveprobe';
+import { identExclude, emptyLike, sameRestore, sheetCols, sheetOfGrid, cellRuleOf, pickFreeInt, msgLabelOf, groupMembers, groupFillValue, groupCandidates } from './rowlink';  // T534 · 2026-11-25 T555·T557·T558 · T599 묶음 필수
 import { fillPrereq } from './prereq';
 import { asisInsertNoop } from './newrow';
 
@@ -22,6 +23,34 @@ export type CrudOutcome = {
 };
 
 const ERR = /ORA-|PLS-|Exception|실패|fail|error|오류/i;
+
+// T640(2026-11-25): 화면에서 지울 수 없는 저장된 마커 행 → cleanup_spec keyset 키 값(그리드 원값)·저장 계정을 ledger_guard.py record 로 crud_keys.json 에 넘긴다.
+//   키 값은 마커 칸 값에 마커 문자열이 든 행 1개에서만 읽는다(0개·2개 이상이면 넘기지 않음). saved_before = DB 시각 - (저장 시작 뒤 지난 초 + 60초)
+export async function deferDbCleanup(nscm: Nscm, menu: string, markCol: string, mark: string, tSave0: number): Promise<{ ok: boolean; why: string }> {
+  const root = path.join(__dirname, '..', '..', '..');
+  let spec: { mode?: string; keys?: string[] } | undefined;
+  try { spec = JSON.parse(fs.readFileSync(path.join(root, 'tools', 'Harness', 'verify', 'cleanup_spec.json'), 'utf8'))[menu]; } catch { spec = undefined; }
+  if (!menu || !spec || spec.mode !== 'keyset' || !(spec.keys || []).length) return { ok: false, why: `cleanup_spec.json ${menu || '(화면 ID 없음)'} keyset 정의 없음` };
+  if (!markCol) return { ok: false, why: '마커 칸 이름 없음' };
+  let mv = (await probe.columnValues(nscm.page, markCol).catch(() => null)) || [];
+  if (!mv.some(v => v.includes(mark))) { await nscm.search().catch(() => undefined); mv = (await probe.columnValues(nscm.page, markCol).catch(() => null)) || []; }  // T647 삭제 시도 예외 뒤 그리드 재조회
+  const hit = mv.map((v, i) => (v.includes(mark) ? i : -1)).filter(i => i >= 0);
+  if (hit.length !== 1) return { ok: false, why: `마커 칸 ${markCol} 에 '${mark}' 든 행 ${hit.length}개` };
+  const keys: Record<string, string> = {};
+  for (const k of spec.keys || []) {
+    const cv = (await probe.columnValues(nscm.page, k).catch(() => null)) || [];
+    const v = (cv[hit[0]] || '').trim();
+    if (!v || /^[-/]$/.test(v)) return { ok: false, why: `키 칸 ${k} 값 없음` };
+    keys[k] = v;
+  }
+  const acc = nscm.curUser || '';
+  const ago = Math.ceil((Date.now() - (tSave0 || Date.now())) / 1000) + 60;
+  try {
+    const { execFileSync } = await import('child_process');
+    const r = JSON.parse(execFileSync('python', [path.join(root, 'tools', 'Harness', 'verify', 'ledger_guard.py'), 'record', menu, JSON.stringify({ ...keys, _account: acc, _ago_sec: ago, _marker_col: markCol, _marker: mark })], { encoding: 'utf8', timeout: 60_000 }));
+    return r && r.ok && r.recorded ? { ok: true, why: `키 ${JSON.stringify(keys)} · 계정 ${acc || '(미상)'} · crud_keys.json ${r.recorded}건` } : { ok: false, why: `ledger_guard record 실패 ${String(r && r.why || '')}` };
+  } catch (e) { return { ok: false, why: `ledger_guard record 예외 ${String(e).split('\n')[0].slice(0, 120)}` }; }
+}
 
 // 셀 표시값 → 바꿔 볼 값(숫자 +1 · Y/N 토글 · 그 외 뒤에 X) 과 복원 입력값
 function nextValue(orig: string): { next: string; restore: string } {
@@ -166,7 +195,8 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
     try {
       // 2) 저장 → 재조회 → 같은 행(키 셀 3개)에서 반영 확인
       // 저장 전에 행 전체 값으로 식별 문자열을 잡는다(수정 컬럼 제외)
-      const identEx = [colName]; const dataRow = await nscm.page.evaluate(`(() => { const el = [...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null); const c = el && el['$WJ-CTRL']; if (!c) return ${row}; const vr = c.viewRange; return (vr && vr.row > 0 ? vr.row : 0) + ${row}; })()`) as number;
+      const identEx = identExclude(colName, Object.keys((S.item0 as Record<string, unknown> | null) || {}));  // T534: 시험 칸 + 연동 칸(USER_ID → USER_NAME)
+      const dataRow = await nscm.page.evaluate(`(() => { const el = [...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null); const c = el && el['$WJ-CTRL']; if (!c) return ${row}; const vr = c.viewRange; return (vr && vr.row > 0 ? vr.row : 0) + ${row}; })()`) as number;
       const identity = await probe.rowIdentity(nscm.page, dataRow, identEx);
       if (opt.onBeforeSave) await opt.onBeforeSave(dataRow);  // 저장 전 DB 스냅샷(원복 전 비교용 · 2026-10-31)
       // 2026-11-09 T175(SSP0024 15:11 실저장 미기록): edit-save 실저장도 편집 전 행을 touched_rows 에 남긴다 — 종전엔 cellRoundTrip·realsave 만 기록해
@@ -200,13 +230,16 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       if (!out.saved) { out.restored = same(v1, orig); out.notes.push(`저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '${v1}' ${out.restored ? '원값 그대로' : '⚠ 원값과 다름'}`); countSave(); annotate(info, out); return out; }
       // 2026-11-07 T157(SCP0127 F6 'RESTORE: _수정한 내용이 없습니다.'): 수정은 키보드(setCell)로 넣고 원복만 편집기 주입(setByEditor)으로 넣어 화면이 변경으로 인식하지 못했다(저장 수집 0건) →
       //   원복도 사용자와 같은 키보드 입력(typeCell · 콤보만 편집기)을 먼저, 편집기 주입은 대체 경로. T156: 날짜 칸 InputDate 'Date expected' 도 같은 대체로 흡수
-      if (!(await typeCell(nscm, r1, colName, nv.restore)).ok && !(await probe.setByEditor(nscm.page, r1, colName, nv.restore))) throw new Error(`원복 입력 실패 r${r1} ${colName}`); T('원복 입력');
+      // 2026-11-25 T555: 원값이 '/'·'-'·'' 이고 콤보 후보에 없으면 칸 비우기로 원복(restoreCell)
+      if (!(await restoreCell(nscm, r1, colName, nv.restore)).ok && !(await probe.setByEditor(nscm.page, r1, colName, nv.restore))) throw new Error(`원복 입력 실패 r${r1} ${colName}`); T('원복 입력');
       const s2 = await nscm.save(); T('원복 저장 응답'); const sc2 = saveOf(s2.calls); const ok2 = !ERR.test(s2.message || '') && sc2.every(c => c.status < 400) && sc2.length > 0;
       if (!ok2) out.saveErrors.push(`RESTORE: ${s2.message || 'SAVE call-proc 없음'}`);
       await nscm.search();
       await nscm.page.waitForTimeout(800); await probe.waitRows(nscm.page, 30_000).catch(() => undefined);
-      const hits2 = await probe.findRowsByIdentity(nscm.page, identity, identEx);
-      const v2 = hits2.length === 1 ? (await probe.displayText(nscm.page, hits2[0], colName)) ?? '' : `(행 식별 ${hits2.length}건)`; out.restored = hits2.length === 1 && same(v2, orig);
+      let hits2 = await probe.findRowsByIdentity(nscm.page, identity, identEx);
+      // T534(SSP0014 V-244ceb9e '원복 저장 성공 · 재조회 값 (행 식별 0건)'): 원복 뒤에도 정확 일치 0건이면 수정 뒤 찾기와 같은 근접 일치(2칸 이내 · 유일)로 찾고 달라진 칸을 남긴다
+      if (identity && hits2.length === 0) { const near = await probe.findRowNear(nscm.page, identity, identEx, 2).catch(() => null); if (near) { hits2 = [near.row]; out.notes.push(`원복 뒤 행 식별 정확 일치 0 → 근접 일치 r${near.row}(달라진 칸: ${near.diff.join(', ') || '없음'})`); } }
+      const v2 = hits2.length === 1 ? (await probe.displayText(nscm.page, hits2[0], colName)) ?? '' : `(행 식별 ${hits2.length}건)`; out.restored = hits2.length === 1 && (same(v2, orig) || (emptyLike(orig) && sameRestore(v2, orig)));  // T555 '/' ↔ ''
       out.notes.push(`원복 '${orig}' 저장 ${ok2 ? '성공' : '실패'} · 재조회 값 '${v2}' ${out.restored ? '복원 확인' : '미복원 — 수동 확인 필요'}`);
     } catch (e) {
       out.notes.push(`예외: ${String(e).split('\n')[0].slice(0, 160)}`); out.restored = false;
@@ -223,6 +256,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
   // 2026-11-08 T168(SCP0122 4차 실측): 마커 텍스트가 비영속 칸에 들어가면 저장 뒤 재조회에서 행을 못 찾아(found=N) 정리(Delete)도 못 해 사내 DB 잔존(PG0014/A001/8) →
   //   채운 필수 칸 값들(이름·순번 …)을 시그니처로 보조 식별한다: 마커 텍스트 → 없으면 시그니처 값이 전부 들어 있는 행(2개 이상 값일 때만 · 숫자 하나로는 식별하지 않는다)
   const sig: string[] = [];
+  let tSave0 = 0, delCalls = 0;  // T640 정리 위임: 마커 저장 시작 시각 · 화면 삭제가 보낸 저장 요청 수
   const findMark = async (m: string) => {
     const n = await rowsLoc().count(); const texts: string[] = [];
     for (let i = 0; i < n; i++) { const t = await rowsLoc().nth(i).innerText().catch(() => ''); texts.push(t); if (t.includes(m)) return i; }
@@ -236,7 +270,18 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
   //   (2026-10-26 SCP0007: 0번 컬럼 DIVISION_ID 가 Division 단일 조회 시 신규행에서 자동세팅+잠금이라 더블클릭이 5초 타임아웃 — 허위 FAIL)
   const metaCols = await nscm.gridColumnsMeta(0);
   const remarkCol = headers.findIndex(h => /remark|comment|desc|memo|비고/i.test(h));
-  const firstEditable = metaCols ? metaCols.findIndex(m => !m.readOnly) : -1;
+  // T545(2026-11-25 SCP0005 F1 2행): 첫 편집 가능 칸을 컬럼 정의 readOnly 로만 골라 ROUTE_ID(DB 메타 input_tp_cd 'S' · 화면이 beginningEdit 로 잠그는 서버 채번 키 · 고정 열)에 마커를 넣으려다 실패했다.
+  //   메타 'S'(조회 전용) 칸을 빼고, 마커 문자열이 그대로 남는 일반 문자 칸(콤보·팝업·숫자·날짜·셀 템플릿 아님)을 먼저 고른다. 없으면 종전 기준
+  const menuS = ((plan as { menuId?: string }).menuId || process.env.VERIFY_ID || nscm.curMenu || '').toUpperCase();
+  // 2026-11-25 T557(SCP0005 ES-836708a8·ES-88905017 '[Trans Mode] 값은 필수 입력 항목입니다' · 필수 칸 채움에 TRANSPORT_MODE 없음): 'S' 칸을 프로그램 전체 시트에서 모아
+  //   팝업 시트 'route'(전 칸 'S' · LT_TYPE·FROM_COUNTRY·PRIORITY·D_PORT_NAME…)가 본 그리드 'Distribution Route' 의 편집 칸을 'S' 로 덮었다 → 일반 문자 칸 0개 →
+  //   마커 칸이 'S' 가 아닌 첫 칸 TRANSPORT_MODE(콤보)로 잡혀 필수 채움에서 빠지고 마커 문자열은 콤보가 거부했다. 그리드 칸과 가장 많이 겹치는 시트 1개만 본다(sheetOfGrid)
+  const sheetRows = (() => { try { const f = path.join(__dirname, '..', '..', '..', 'Doc', 'tobefacts', 'db', 'sheet_columns.csv'); return menuS && fs.existsSync(f) ? parseCsv(fs.readFileSync(f, 'utf8')).filter(r => (r.program_id || '').toUpperCase() === menuS) : []; } catch { return [] as Record<string, string>[]; } })();
+  const gridBinds = (metaCols || []).map(m => m.binding).filter(Boolean);
+  const sOnly = sheetCols(sheetRows, gridBinds, 'S');
+  const popCol = new Set<string>(); for (const m of metaCols || []) if (m.binding && await probe.popupColumn(nscm.page, m.binding).catch(() => null)) popCol.add(m.binding);
+  const plainText = metaCols ? metaCols.findIndex(m => !m.readOnly && !sOnly.has(m.binding) && !popCol.has(m.binding) && !m.hasMap && !m.cellTemplate && ![2, 3, 4].includes(m.dataType)) : -1;
+  const firstEditable = plainText >= 0 ? plainText : metaCols ? metaCols.findIndex(m => !m.readOnly && !sOnly.has(m.binding)) : -1;
   const targetCol = Math.max(keyCols.length ? headers.findIndex(h => h.toLowerCase() === keyCols[0].toLowerCase()) : remarkCol >= 0 ? remarkCol : firstEditable, 0);
   try {
     const before = await rowsLoc().count();
@@ -263,7 +308,8 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
         const nr = await probe.findRow(nscm.page, 'new').catch(() => null);
         if (nr) {
           await nscm.page.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (c) c.scrollIntoView(${nr.row}, -1); })()`).catch(() => undefined); await nscm.page.waitForTimeout(400);
-          ri = await nscm.page.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return -1; const ci = c.columns.findIndex(x => x.visible !== false); const el = c.cells.getCellElement(${nr.row}, ci < 0 ? 0 : ci); if (!el) return -1; const row = el.closest('.wj-row'); return row ? [...c.hostElement.querySelectorAll('.wj-cells .wj-row')].indexOf(row) : -1; })()`).catch(() => -1) as number;
+          // 2026-11-26 R240(VMO 20261126153055_SELF_3): 400ms 뒤 셀이 아직 안 그려졌으면 -1 → 실저장 시험 중단. 최대 10회 다시 그린 뒤 읽음. 끝까지 없으면 -1(아래 중단 유지)
+          ri = await nscm.page.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c) return -1; const ci0 = c.columns.findIndex(x => x.visible !== false); const ci = ci0 < 0 ? 0 : ci0; let el = c.cells.getCellElement(${nr.row}, ci); for (let k = 0; k < 10 && !el; k++) { try { c.scrollIntoView(${nr.row}, ci); c.refresh(false); } catch { /* 다시 그리기 실패는 다음 회차에서 */ } await new Promise(r => requestAnimationFrame(r)); await new Promise(r => setTimeout(r, 120)); el = c.cells.getCellElement(${nr.row}, ci); } if (!el) return -1; const row = el.closest('.wj-row'); return row ? [...c.hostElement.querySelectorAll('.wj-cells .wj-row')].indexOf(row) : -1; })()`).catch(() => -1) as number;
         }
       }
       if (ri < 0) throw new Error('신규 행 위치를 찾지 못함(빈 행 없음 · 그리드 CRUD_TYPE=I 행의 화면 위치 미확인) — 기존 행을 건드리지 않고 중단');
@@ -274,17 +320,32 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       try {
         const menuId = ((plan as { menuId?: string }).menuId || process.env.VERIFY_ID || '').toUpperCase();
         const metaFile = path.join(__dirname, '..', '..', '..', 'Doc', 'tobefacts', 'db', 'sheet_columns.csv');
-        const req = new Set(menuId && fs.existsSync(metaFile) ? parseCsv(fs.readFileSync(metaFile, 'utf8')).filter(r => (r.program_id || '').toUpperCase() === menuId && (r.input_tp_cd || '').toUpperCase() === 'M').map(r => r.column_name) : []);
+        // 2026-11-25 T557: 'M' 도 그리드와 겹치는 시트 1개에서만(다른 시트의 'M' 이 본 그리드 칸을 필수로 만들지 않게)
+        const req = menuId && fs.existsSync(metaFile) ? sheetCols(parseCsv(fs.readFileSync(metaFile, 'utf8')).filter(r => (r.program_id || '').toUpperCase() === menuId), gridBinds, 'M') : new Set<string>();
+        // 2026-11-25 T558: AS-IS 셀 규칙(cell_rules.csv min·max·max_length) — 같은 시트 이름 행 우선
+        const ruleRows = (() => { try { const f = path.join(__dirname, '..', '..', '..', 'Doc', 'asisfacts', 'screens', menuId, 'cell_rules.csv'); if (!menuId || !fs.existsSync(f)) return [] as Record<string, string>[]; const all = parseCsv(fs.readFileSync(f, 'utf8')); const sh = sheetOfGrid(sheetRows, gridBinds); const mine = all.filter(r => (r.sheet || '') === sh); return mine.length ? mine : all; } catch { return [] as Record<string, string>[]; } })();
+        const copiedVals: Record<string, string> = {};  // T558: 기존 행에서 가져온 칸 값(팝업 짝) — 숫자 필수 칸 중복 회피 범위
+        const targetPlain = keyCols.length > 0 || remarkCol >= 0 || plainText >= 0;  // T557: 마커 칸이 일반 문자 칸이 아니면(콤보 등) 필수 채움에서 빼지 않는다
+        // T545(2026-11-25 SCP0005 F1 2행): 필수 표시를 DB 메타 'M' 이 아니라 공용 그리드 설정(_requiredMark · 머리글 '*')으로 하는 화면(SCP0005 Country*·City*·Trans Mode*·Port* 등 · 메타 'M' 0건)은
+        //   필수 칸을 못 채워 화면 필수 검증에 막힌다 → 그리드 설정 필수 칸(probe.requiredColumns)도 채운다. 입력 행 = 그리드 행 번호(findRow 'new') ·
+        //   팝업 칸(등록 값만 받는 칸)은 필수 칸이 다 찬 기존 행 하나의 값을 그대로 쓴다(Country·City 짝이 어긋나지 않게)
+        for (const b of await probe.requiredColumns(nscm.page).catch(() => [] as string[])) req.add(b);
+        const nqRow = (await probe.findRow(nscm.page, 'new').catch(() => null))?.row ?? ri;
+        const exRow = (await probe.findRow(nscm.page, 'existing').catch(() => null))?.row ?? -1;
         const targetBinding = metaCols && metaCols[targetCol] ? metaCols[targetCol].binding : '';
         const filled: string[] = [];
         for (const m of metaCols || []) {
-          if (!m.binding || m.readOnly || !req.has(m.binding) || m.binding === targetBinding) continue;
-          const cur = (await probe.displayText(nscm.page, ri, m.binding).catch(() => '')) || '';
+          if (!m.binding || m.readOnly || !req.has(m.binding) || (m.binding === targetBinding && targetPlain)) continue;
+          const cur = (await probe.displayText(nscm.page, nqRow, m.binding).catch(() => '')) || '';
           if (cur.trim()) continue;
-          let v = mark;
-          if (m.hasMap) {
+          let v = mark; let copied = false;
+          const rule = cellRuleOf(ruleRows, m.binding);
+          // T558: 글자 수 상한(AS-IS max_length)이 마커보다 짧은 문자 칸(SCP0005 D_COUNTRY·A_COUNTRY 2자 · *_PORT_CODE 5자)은 마커가 잘려 입력 실패로 끝난다 → 기존 행 값을 그대로 쓴다
+          const shortText = !m.hasMap && m.dataType !== 2 && m.dataType !== 4 && rule.maxLength != null && rule.maxLength < mark.length;
+          if ((popCol.has(m.binding) || m.cellTemplate || shortText) && !m.hasMap && exRow >= 0) { const ev = ((await probe.displayText(nscm.page, exRow, m.binding).catch(() => '')) || '').trim(); if (ev) { v = ev; copied = true; copiedVals[m.binding] = ev; } }  // T545 · T558
+          else if (m.hasMap) {
             // 17:5x 2차 실측 '신규 입력 데이터 중 중복된 데이터' — 연동 콤보(OPMZ_ACTV_NAME→OPMZ_ACTV_CD)가 고른 후보가 이미 있는 행과 키 중복 → 현재 그리드 같은 열에 없는 후보를 먼저 고른다
-            const c = ((await probe.candidates(nscm.page, ri, m.binding).catch(() => null)) || []).filter(x => x && x.trim());
+            const c = ((await probe.candidates(nscm.page, nqRow, m.binding).catch(() => null)) || []).filter(x => x && x.trim());
             const used = new Set((((await probe.columnValues(nscm.page, m.binding).catch(() => null)) || []) as string[]).map(x => String(x ?? '').trim()));
             v = c.find(x => !used.has(x.trim())) || c[0] || '';
             if (!v) { filled.push(`${m.binding}(콤보 후보 없음)`); continue; }
@@ -294,17 +355,58 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
             // 18:1x 3차 실측: SCP0122 FE 가 (PRS_CD+PLAN_GR_ID+ACTV_SEQ) 중복을 선차단 → 그리드 같은 열의 최대 숫자 + 1(없으면 1)
             const nums = (((await probe.columnValues(nscm.page, m.binding).catch(() => null)) || []) as unknown[]).map(x => Number(String(x ?? '').replace(/,/g, ''))).filter(n => Number.isFinite(n));
             v = String((nums.length ? Math.max(...nums) : 0) + 1);
+            // 2026-11-25 T558(SCP0005 'PRIORITY=100(입력 실패: 입력 안 됨(''→'99'' · 최대 99 + 1 = 100 → 화면이 99 로 자름 · AS-IS SetReNumerCellType 0~99 SCP0005_DistributionRoute.cs:249):
+            //   AS-IS 범위(cell_rules min·max)가 있으면 그 안에서, 기존 행에서 가져온 칸(팝업 짝) 값이 같은 행들이 쓰지 않은 가장 작은 양의 정수를 쓴다(중복 Priority 99020 회피). 다 쓰였으면 종전 값
+            if (rule.max != null) {
+              const used = await nscm.page.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const m = ${JSON.stringify(copiedVals)}; const ks = Object.keys(m); const out = []; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (!d || d.CRUD_TYPE === 'I') continue; if (!ks.every(k => String(d[k] ?? '').trim() === m[k])) continue; const n = Number(String(d[${JSON.stringify(m.binding)}] ?? '').replace(/,/g, '')); if (Number.isFinite(n)) out.push(n); } return out; })()`).catch(() => []) as number[];
+              const free = pickFreeInt(used, rule.min, rule.max); if (free != null) v = String(free);
+            }
           }
           else if (m.dataType === 4) { const d = new Date(); v = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`; }
-          const r = await typeCell(nscm, ri, m.binding, v);
+          const r = await typeCell(nscm, nqRow, m.binding, v);
           filled.push(`${m.binding}=${v}${r.ok ? '' : '(입력 실패: ' + r.how.slice(0, 40) + ')'}`);
-          if (r.ok) sig.push(v);  // T168: 재조회·정리 때 행을 찾는 보조 시그니처
+          if (r.ok && !copied) sig.push(v);  // T545: 기존 행에서 가져온 값은 시그니처에서 뺀다(그 기존 행을 마커 행으로 오인해 정리 단계가 지우지 않게) · T168: 재조회·정리 때 행을 찾는 보조 시그니처
         }
         if (filled.length) out.notes.push(`필수 칸 채움(T166): ${filled.join(', ')}`);
+        // 2026-11-25 T558: 필수 칸 입력 실패가 있으면 저장 차단이 시험 입력 탓임을 앞에 남긴다(화면 결함 단정 금지 · 판정 근거)
+        const fillBad = filled.filter(x => /입력 실패|콤보 후보 없음/.test(x)).map(x => x.split(/[=(]/)[0]);
+        if (fillBad.length) out.notes.unshift(`[시험 입력 미충족] 필수 칸 입력 실패 ${fillBad.join(',')} — 저장 차단 시 화면 결함 아님(T558)`);
       } catch (e) { out.notes.push(`필수 칸 채움 예외: ${String(e).split('\n')[0].slice(0, 120)}`); }
-      await nscm.setCell(ri, targetCol, mark);
+      // T545: 마커 칸 = 바인딩·그리드 행 번호로 입력(typeCell). 종전 setCell(화면 행 순번·화면 칸 순번)은 가로 가상화·고정 열에서 다른 칸을 집거나 클릭이 가려졌다. 바인딩이 없을 때만 종전 경로
+      { const tb = metaCols && metaCols[targetCol] ? metaCols[targetCol].binding : ''; const nr2 = tb ? (await probe.findRow(nscm.page, 'new').catch(() => null)) : null;
+        if (tb && nr2) { const tr = await typeCell(nscm, nr2.row, tb, mark); out.notes.push(`마커 칸 ${tb}${tr.ok ? '' : ` 입력 실패(${tr.how.slice(0, 60)})`}`); }
+        else await nscm.setCell(ri, targetCol, mark); }
       for (const kc of keyCols.slice(1)) { const ci = headers.findIndex(h => h.toLowerCase() === kc.toLowerCase()); if (ci >= 0) await nscm.setCell(ri, ci, mark); }
-      const s1 = await nscm.save();
+      tSave0 = Date.now(); let s1 = await nscm.save();
+      // 2026-11-25 T599(SCP0005 ES-836708a8·ES-88905017 'SAVE: [Working Days] 값은 필수 입력 항목입니다.'): 필수 표시가 칸이 아니라 머리글 묶음(Working Days = DAYS_MON~DAYS_SUN)에 걸린 '하나 이상 필수' 규칙 —
+      //   TO-BE useDistributionRouteValidation.ts:38 요일 Y 1개 이상 · AS-IS SCP0005_DistributionRoute.cs:728~736 요일 7칸 모두 빈값이면 MSG00223 로 저장 중단(양쪽 같은 규칙).
+      //   저장 요청 없이 '[<이름>] ... 필수' 문구로 막히고 <이름> 이 그리드 묶음 머리글이면 묶음 첫 칸에 'Y'(없으면 N 아닌 첫 후보)를 넣고 1번만 다시 저장한다. 그래도 막히면 [시험 입력 미충족]
+      { const lab = msgLabelOf(s1.message || '');
+        if (!saveOf(s1.calls).length && lab && /필수|required|mandatory/i.test(s1.message || '')) {
+          const hcols = await nscm.page.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return []; const ch = c.columnHeaders; const out = []; for (let i = 0; i < c.columns.length; i++) { const col = c.columns[i]; if (!col || !col.binding) continue; const anc = []; let g = col.parentGroup; while (g) { if (g.header) anc.unshift(String(g.header)); g = g.parentGroup; } const rowsT = []; for (let r = 0; r < ch.rows.length; r++) { let t = ''; try { t = String(ch.getCellData(r, i, true) ?? ''); } catch (e) { t = ''; } rowsT.push(t); } const last = String(col.header ?? rowsT[rowsT.length - 1] ?? ''); out.push({ binding: col.binding, heads: [...anc, ...rowsT.slice(0, -1), last] }); } return out; })()`).catch(() => []) as { binding: string; heads: string[] }[];
+          let mem = groupMembers(hcols, lab); const nrG = await probe.findRow(nscm.page, 'new').catch(() => null);
+          // 2026-11-25 T636(SCP0005 ES-836708a8): 문구 '[Working Days]' 가 그리드 머리글이 아닌 고정 글자라 mem 0 → 아무 기록 없이 넘어갔다.
+          //   머리글 묶음 후보(groupCandidates) 중 새 행에서 칸이 모두 비고 첫 칸에 'Y' 후보가 있는 묶음을 쓴다(낱말 겹침 순 · 겹침 없으면 그런 묶음이 1개일 때만). 못 찾으면 찾은 머리글을 증거에 남긴다
+          let gHow = '';
+          if (!mem.length && nrG) {
+            const cands = groupCandidates(hcols, lab); const ok: { head: string; members: string[]; score: number }[] = [];
+            for (const g of cands.slice(0, 12)) { const vals = await Promise.all(g.members.map(b => probe.displayText(nscm.page, nrG.row, b).catch(() => null))); if (!vals.every(v => !String(v ?? '').trim() || /^[-/]$/.test(String(v).trim()))) continue; const cv = ((await probe.candidates(nscm.page, nrG.row, g.members[0]).catch(() => null)) || []) as string[]; if (!cv.some(x => String(x).trim().toUpperCase() === 'Y')) continue; ok.push(g); }
+            const pick = ok.find(g => g.score > 0) || (ok.length === 1 ? ok[0] : undefined);
+            if (pick) { mem = pick.members; gHow = ` · 묶음 = 머리글 '${pick.head}'(${pick.score ? `문구 이름과 낱말 ${pick.score}개 겹침` : '새 행에서 모두 빈 Y/N 묶음 1개'} · T636)`; }
+            else out.notes.unshift(`[시험 입력 미충족] 묶음 필수 [${lab}] 칸 못 찾음 · 머리글 묶음 ${cands.length}개(${cands.slice(0, 6).map(g => `${g.head}:${g.members.length}칸`).join(', ') || '없음'}) · 빈 Y/N 묶음 ${ok.length}개 — 저장 차단 시 화면 결함 아님(T636)`);
+          }
+          if (mem.length && !nrG) out.notes.unshift(`[시험 입력 미충족] 묶음 필수 [${lab}] 새 행 못 찾음(T636)`);
+          if (mem.length && nrG) {
+            const v = groupFillValue(((await probe.candidates(nscm.page, nrG.row, mem[0]).catch(() => null)) || []) as string[]);
+            if (!v) out.notes.unshift(`[시험 입력 미충족] 묶음 필수 [${lab}](${mem.join(',')}) 첫 칸 ${mem[0]} 넣을 후보 없음 — 저장 차단 시 화면 결함 아님(T599)`);
+            else {
+              const rG = await typeCell(nscm, nrG.row, mem[0], v);
+              out.notes.push(`묶음 필수 [${lab}] ${mem.length}칸(${mem[0]}~${mem[mem.length - 1]}) 중 ${mem[0]}=${v}${rG.ok ? '' : `(입력 실패: ${rG.how.slice(0, 40)})`} 채운 뒤 재저장(T599)${gHow} · 1차 문구 '${(s1.message || '').slice(0, 60)}'`);
+              if (rG.ok) { s1 = await nscm.save(); if (!saveOf(s1.calls).length) out.notes.unshift(`[시험 입력 미충족] 묶음 필수 [${lab}] ${mem[0]}=${v} 채운 뒤에도 저장 요청 없음('${(s1.message || '').slice(0, 60)}') — 저장 차단 시 화면 결함 아님(T599)`); }
+              else out.notes.unshift(`[시험 입력 미충족] 묶음 필수 [${lab}] ${mem[0]} 입력 실패 — 저장 차단 시 화면 결함 아님(T599)`);
+            }
+          }
+        } }
       // 2026-10-22: 저장 call-proc 0건(화면이 '변경 없음' 으로 저장을 건너뜀)은 저장 성공이 아니다 — edit-save 모드와 같은 기준(SCP0122 saved=Y 오판)
       { const sc = saveOf(s1.calls); out.saved = !ERR.test(s1.message || '') && sc.every(c => c.status < 400) && sc.length > 0;  // T154: SAVE 계열만
       // 2026-11-08 계측: 마커 저장의 실제 호출 목록·알림을 남긴다 — 'saved=Y 인데 사내 SQL 로그에 SAVE 0건'(SCP0122 J2) 원인 확정용(edit-save 경로의 T('저장 응답') 와 같은 정보)
@@ -324,18 +426,30 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
   } catch (e) { out.notes.push(`예외: ${String(e).split('\n')[0].slice(0, 160)}`); }
   finally {
     // D — 마커 행 정리(저장 성공 여부와 무관하게 시도). 재조회 후 마커가 남아 있으면 cleaned=false
+    // 2026-11-25 T647(SCP0005 ES-88905017 23:23 row_run '정리 예외: locator.click 20초'): 화면 삭제 시도의 예외가 정리 위임(T640)까지 건너뛰게 해 시험 행 2건이 남았다 → 삭제 시도 예외를 따로 받는다
+    let delErr = '';
     try {
       if (out.deleteVisible) {
         let ri = await findMark(mark);
         if (ri < 0) { await nscm.search(); ri = await findMark(mark); }
         if (ri >= 0) {
-          await rowsLoc().nth(ri).locator('.wj-cell').first().click();
+          await rowsLoc().nth(ri).locator('.wj-cell').first().click({ timeout: 10_000 });
           await (await nscm.toolbarButton('Delete')).click(); await nscm.closeAlert('ok');  // T430 화면 단추 'Delete' 아닌 툴바 Delete(F9)
-          const d = await nscm.save(); if (ERR.test(d.message || '')) out.saveErrors.push(`DELETE: ${d.message}`);
+          const d = await nscm.save(); delCalls = saveOf(d.calls).length; if (ERR.test(d.message || '')) out.saveErrors.push(`DELETE: ${d.message}`);
           await nscm.search();
         }
       } else if (out.saved) out.notes.push('Delete(F9) 버튼 없음 — 마커 행 수동 정리 필요');
+    } catch (e) { delErr = String(e).split('\n')[0].slice(0, 120); out.notes.push(`화면 삭제 시도 예외: ${delErr}`); }
+    try {
       out.cleaned = (await findMark(mark)) < 0;
+      // 2026-11-25 T640(SCP0005 ES-88905017 cleaned=N): 화면 삭제가 신규 행만 지우는 화면(AS-IS DeleteButton 'I' 행만 · TO-BE 신규 행만 제거)은
+      //   저장된 마커 행을 화면에서 지울 수 없다. 삭제 요청이 서버로 나가지 않고 행이 남았으면 cleanup_spec keyset 키 값과 저장 계정을
+      //   crud_keys.json 에 넘겨 cleanup_marker.py 가 DB 에서 백업·건수 단언 뒤 지운다(정리 위임). 삭제 요청이 나갔는데 남으면 종전대로 정리 실패
+      if (!out.cleaned && out.saved && delCalls === 0) {
+        const dz = await deferDbCleanup(nscm, menuS, metaCols && metaCols[targetCol] ? metaCols[targetCol].binding : '', mark, tSave0);
+        if (dz.ok) { out.cleaned = true; out.notes.push(`[DB 정리 위임] ${delErr ? `화면 삭제 시도 예외(${delErr.slice(0, 60)}) · ` : '저장된 마커 행은 화면 삭제 대상 아님(신규 행만 삭제) · '}삭제 요청 0건 · ${dz.why} → cleanup_marker.py(T640·T647)`); }
+        else out.notes.push(`DB 정리 위임 실패: ${dz.why}(T640)`);
+      }
     } catch (e) { out.cleaned = false; out.notes.push(`정리 예외: ${String(e).split('\n')[0].slice(0, 120)}`); }
   }
   countSave(); annotate(info, out); return out;

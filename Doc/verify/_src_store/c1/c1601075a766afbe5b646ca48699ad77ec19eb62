@@ -1,0 +1,68 @@
+// 스냅샷 형상 검사(@snap · 2026-11-06 플랜 Phase 3) — 화면 독립: VERIFY_ID 만 받아 plan.json·원장에서 범위를 읽는다. 저장하지 않는다.
+//   (a) 조회조건 패널 aria ×Div (b) 버튼 바 aria ×Div (c) 그리드 헤더 텍스트(모델) ×시트 (d) 조회조건 팝업 정적 aria (e) 화면샷(패널+헤더 띠, 1920/1366)
+//   결과: Doc/verify/<ID>/snap/{received,diff,results.json,_review.md} + 원장 스냅샷 행(target '<ID> 스냅샷 <종류> <범위>')이 있으면 e2e_results.json 에 put.
+//   골든 없음 = 판정필요(NEW) · 일치 = PASS · 다름 = FAIL(시험 검사 CM-SNAP 가 judge 에서 판정필요로 내린다 · 사용자 2화면 확인 후 confirmed)
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { createHash } from 'node:crypto';
+import { expect, test } from '../../../tools/E2E/fixtures/test';
+import { withFileLock } from '../../../tools/E2E/lib/writeguard';  // 2026-11-20 D1 동시 실행: 결과 파일 잠금
+import { parseCsv } from '../../../tools/E2E/lib/probe';
+import { setCondByLabel, findCondAny, clickSheetTab, openSheetPopup, sheetNav } from '../../../tools/E2E/lib/smoke-extra';
+import { ariaOf, buttonBar, ensureDirs, headerTextOf, judgeText, keyOf, saveResults, searchAreaTagged, ROOT, type SnapKind, type SnapResult } from '../../../tools/E2E/lib/snap';
+
+const ID = (process.env.VERIFY_ID || '').toUpperCase();
+const DIR = path.join(ROOT, 'Doc', 'verify', ID);
+const LEDGER = path.join(DIR, 'verify_ledger.csv');
+const OUT = process.env.CL_RESULTS || path.join(DIR, 'e2e_results.json');
+const CL_SELFTEST = !!(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE);
+type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number }; expect_src?: string; evidence_ref?: string; precond?: Record<string, unknown> };
+const rows = ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : [];
+const plan = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')); } catch { return null; } })();
+const results: Res[] = []; const snaps: SnapResult[] = [];
+const COND_HASH = new Map(rows.map(r => [r.row_id, createHash('sha1').update(String(r.condition || ''), 'utf8').digest('hex').slice(0, 8)]));
+// 원장 스냅샷 행 찾기 — target '<ID> 스냅샷 <종류> <범위>' (ledger.py 가 만든다). 범위 정규화 후 정확 일치
+const nrm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+const rowFor = (kind: SnapKind, scope: string) => rows.find(r => /스냅샷/.test(r.target || '') && nrm(r.target) === nrm(`${ID} 스냅샷 ${kind} ${scope}`));
+const SRC: Record<SnapKind, string> = {
+  '조회조건': 'ASIS:plan.json fields/condOrder(search_cond.csv tobe_seq · AS-IS 라벨)', '버튼': 'ASIS:plan.json buttons/menuBtnCodes(AS-IS 버튼 메서드 · btn_auth)',
+  '헤더': 'ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)', '팝업': 'ASIS:facts_popup(AS-IS 팝업 폼 · tobe_catalog)', '화면샷': 'RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본',
+};
+let CUR: { calls: number; rows: number } = { calls: 0, rows: -1 };
+const put = (kind: SnapKind, scope: string, s: SnapResult, extra: Record<string, unknown> = {}) => {
+  snaps.push(s);
+  const r = rowFor(kind, scope); if (!r) return;
+  // 2026-11-19 T348 TO-BE 룰 CR-114(사용자의견 SCP0111 v64 V-55556e17·V-e8ca7b9a '컬럼 폭 비율은 오류에서 제외'): 화면샷 픽셀 차이 = 오류 아님(PASS + 차이 경로 근거)
+  const shotRule = kind === '화면샷' && s.status === 'DIFF';
+  const result: Res['result'] = s.status === 'MATCH' || shotRule ? 'PASS' : s.status === 'DIFF' ? 'FAIL' : s.status === 'NEW' ? '판정필요' : 'ERROR';
+  if (shotRule) s = { ...s, detail: `[TO-BE 룰 CR-114 화면샷 차이(컬럼 폭 비율 등) 오류 제외] ${s.detail}` };
+  const ev = `[재실측 스냅샷 ${kind}] ${s.status === 'NEW' ? '골든 없음(승인 전)' : s.status === 'MATCH' ? `기준 ${s.golden} ↔ 실측 일치` : s.status === 'DIFF' ? `기준 ${s.golden} ↔ 실측 ${s.received} · 차이 ${s.lines}줄(${s.diff})` : '측정 실패'} · ${s.detail.slice(0, 500)} · 전제 Div ${String(extra.div || '-')} · calls ${CUR.calls} · rows ${CUR.rows} · 기대원천 ${SRC[kind]}`;
+  results.push({ row_id: r.row_id, result, evidence: ev.slice(0, 1400), tobe_ref: `E2E @snap ${kind}`, cond: COND_HASH.get(r.row_id), mctx: { calls: CUR.calls, rows: CUR.rows, req: 0 }, expect_src: SRC[kind], evidence_ref: s.golden || s.received, precond: { div: extra.div || '', calls: CUR.calls, rows: CUR.rows, viewport: extra.viewport || '' } });
+};
+const flush = () => withFileLock(OUT, () => {  // 2026-11-20 D1
+  if (!ID || CL_SELFTEST) return;
+  saveResults(ID, snaps);
+  if (!results.length) return;
+  const prev: Res[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
+  const m = new Map(prev.map(r => [r.row_id, r])); for (const r of results) m.set(r.row_id, r);
+  fs.writeFileSync(OUT, JSON.stringify([...m.values()], null, 1), 'utf8');
+});
+const divList = (): string[] => {
+  const out: string[] = [];
+  const s = plan && plan.sample && plan.sample.div ? String(plan.sample.div) : (process.env.E2E_DIVISION || '');
+  if (s) out.push(s);
+  for (const a of (plan && plan.accounts) || []) for (const d of a.divisions || []) if (!out.includes(String(d))) out.push(String(d));
+  return out.slice(0, 3);
+};
+const divLabels = (): string[] => { const f = ((plan && plan.fields) || []).find((x: { labels?: string[] }) => (x.labels || []).some(l => /^(div|division)\.?$/i.test(l))); return f ? [...(f.labels || []), f.tobeLabel].filter(Boolean) : ['Div', 'Div.', 'Division']; };
+const afterSearch = async (nscm: import('../../../tools/E2E/lib/nscm').Nscm) => {
+  const before = nscm.calls.length;
+  await (nscm as unknown as { search: () => Promise<unknown> }).search().catch(() => undefined);
+  const mine = nscm.calls.slice(before); CUR = { calls: nscm.calls.length, rows: mine.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1) };
+};
+
+test.describe('@snap 스냅샷 형상 검사', () => {
+  test.skip(!ID || !plan, 'VERIFY_ID·plan.json 필요');
+  test.beforeAll(() => { if (ID) ensureDirs(ID); });
+  test.afterEach(() => { try { flush(); } catch (e) { console.log(`[flush] 스냅샷 결과 기록 실패: ${String(e).slice(0, 120)}`); } });  // 2026-11-20 작업 재개(R3): 스냅샷 결과(snap/results.json, e2e_results.json)를 시험마다 기록(종전 = 프로세스 끝 1회, 끊기면 사라짐)
+  test.afterAll(() => flush());

@@ -156,6 +156,29 @@ export const SafetyStockGrid = ({
     };
     g.pastedCell.addHandler(pastedCellHandler as never);
 
+    // APL_QTY(number 셀 'n0') 입력 자릿수 cap — 16자리↑ 입력 시 JS 수치가 Number.MAX_SAFE_INTEGER
+    //   (≈9e15)를 넘어 정밀도가 깨지고(17자리 → 9,007,199,254,740,991 로 변조) 1e21↑은 지수표기로
+    //   뭉개진다. 15자리는 항상 안전정수라 표시·저장값 손상을 막는다. Int32 상한(2,147,483,647, 10자리)
+    //   초과는 저장검증(MSG00460, safetyStockSaveValidation)이 별도로 막아 AS-IS Convert.ToInt32
+    //   OverflowException 과 등가다(csharp-int-to-js 메모리, 자매 SCP0131 SalesSitePriorityGrid 동형).
+    //   Wijmo 기본 number 에디터는 keydown 단계를 우회하므로 값 반영 직후 input 이벤트에서 동기 sanitize 한다.
+    const QTY_MAX_DIGITS = 15;
+    const sanitizeQtyInput = (ev: Event) => {
+      const el = ev.target as HTMLInputElement;
+      const cleaned = el.value.replace(/\D/g, '').slice(0, QTY_MAX_DIGITS);
+      if (cleaned === el.value) return;
+      const caret = (el.selectionStart ?? el.value.length) - (el.value.length - cleaned.length);
+      el.value = cleaned;
+      const pos = Math.max(0, caret);
+      el.setSelectionRange(pos, pos);
+    };
+    // 같은 editor input 이 재사용되며 같은 함수 참조라 브라우저가 중복 등록을 제거 — 리스너가 쌓이지 않는다.
+    const prepareEditHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
+      if ((sender.columns[e.col]?.binding ?? '') !== 'APL_QTY') return;
+      sender.activeEditor?.addEventListener('input', sanitizeQtyInput);
+    };
+    g.prepareCellForEdit.addHandler(prepareEditHandler);
+
     // 날짜 컬럼 dataType/format 적용 — 즉시 1회 + 레이아웃 재계산(컬럼 재생성)마다 재적용.
     applyDateColumnTypes(g);
     g.updatedLayout.addHandler(applyDateColumnTypes);
@@ -165,6 +188,7 @@ export const SafetyStockGrid = ({
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
         g.pastedCell?.removeHandler(pastedCellHandler as never);
+        g.prepareCellForEdit?.removeHandler(prepareEditHandler);
         g.updatedLayout?.removeHandler(applyDateColumnTypes);
       } catch {
         /* unmount race */

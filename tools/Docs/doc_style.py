@@ -13,6 +13,7 @@
 
 검사하지 않는 것(오탐 방지)
   따옴표·백틱·「」 안 글자(AS-IS 원문 라벨·메시지 인용) · 한글 4자 미만 셀 · 경로·식별자만 있는 셀
+  .js 는 걸린 표현을 문장, 표지, 이름 인용으로 나눠 문장만 위반으로 센다(classify_js). 보고 csv '분류' 칸, 요약 줄 '표지 n | 이름 인용 n'
 종료 코드  0 = 위반 0 · 1 = 위반 있음(문서 생성 실패가 아님 — 생성기는 이 값을 종료 코드로 쓰지 않는다)
 """
 import csv, io, os, re, sys
@@ -212,9 +213,123 @@ def _source_literals(path, src):
     return res
 
 
+# ── 확인된 오탐 제외 (2026-11-21 개선안 20261120225006_SELF_2) ──────────────────────────────
+# (파일 이름, 걸린 표현 일부, 사유). 같은 파일에서 걸린 표현에 일부가 들어 있으면 위반 수에서 빼고 보고 csv 에 '제외'로 남긴다.
+# 제외를 더할 때는 소스에서 사유를 확인하고 파일:줄을 사유에 적는다. 위반을 PASS 로 바꾸려고 넣지 않는다.
+# 2026-11-23 개선안 20261123000643_VISION: history.js '💬 프롬프트'(줄 머리 표지), orchestra.js 정규식(웹뷰 <script> 코드)은 JS 분류(classify_js)가 표지로 나눠 목록에서 뺌
+KNOWN_OK = (
+    ('extension.js', '🔎 Check', '메뉴 이름 🔎 CheckList 실행 인용(extension.js:470)'),
+    ('jobs.js', 'abled>▶', 'HTML 단추 기호(jobs.js:107)'),
+    ('orch-ledger.js', '함 → 변경 후', '변경 전후 표기 화살표(orch-ledger.js:133)'),
+    ('orch-usercheck.js', '없음 → 추가', '변경 전후 표기 화살표(orch-usercheck.js:605)'),
+    ('orch-vision.js', '근거로 판단한다', '단정 어미, 추측 아님(orch-vision.js:66)'),
+    ('orch-undo.js', '곳에 있어 위치를', "'~에 있어서' 번역투 아님(orch-undo.js:48)"),
+)
+_FAIL_HEAD = ('✖', '✘')
+_FAIL_HEAD_WHY = '제외(FAIL_RE 실패 표시, workbench.js:661)'
+
+
+def _known_ok(path, hit):
+    name = os.path.basename(path)
+    for f, part, why in KNOWN_OK:
+        if f == name and part in hit:
+            return why
+    return None
+
+
+def _excluded(row):
+    return row[2] in NOT_SENTENCE
+
+
+# ── JS 고정 문구 분류 (2026-11-23 개선안 20261123000643_VISION 단계 1) ──────────────────────────
+# 문장 규칙 대상은 사람이 읽는 문장만이다. .js 리터럴에서 걸린 표현을 셋으로 나눈다.
+#   문장      = 알림, 화면 설명, 보고, AI 지시문. 위반 수에 넣는다.
+#   표지      = 코드와 사람이 상태를 알아보는 줄 머리 기호(JS_MARKERS), 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->).
+#   이름 인용 = quick.json, steps.json 에 있는 메뉴 이름을 그대로 적은 곳(사용자 원문 인용).
+# 표지, 이름 인용은 보고 csv 에 분류만 남기고 위반 수에서 뺀다. 줄 머리가 아닌 기호와 줄표, 가운뎃점은 문장으로 센다.
+JS_MARKERS = ('▶', '✅', '⛔', '⚠', '✖', '✘', '❌', '✔', '🔎', '💬')   # 줄 머리 상태 표지. 더할 때는 쓰는 코드 파일:줄을 주석에 적는다
+_NOTIFY_HEAD = 'Vibe_Manager'                                             # 알림 머리 'Vibe_Manager ✅ …'(workbench.js 알림)
+NOT_SENTENCE = ('제외', '표지', '이름 인용')
+_menu_names = None
+
+
+def menu_names():
+    """quick.json, steps.json 의 메뉴 이름(label, label_en, name). 괄호 설명은 떼고 기호로 시작하는 이름만."""
+    global _menu_names
+    if _menu_names is not None:
+        return _menu_names
+    import json
+    names = set()
+    vm = os.path.join(ROOT, 'tools', 'VibeManager')
+
+    def walk(o):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if k in ('label', 'label_en', 'name') and isinstance(v, str):
+                    n = re.split(r'\s+\(', v.strip(), 1)[0].strip()
+                    if len(n) >= 3 and not re.match(r'[A-Za-z0-9가-힣]', n):
+                        names.add(n)
+                else:
+                    walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+    for f in ('quick.json', 'steps.json'):
+        try:
+            with open(os.path.join(vm, f), encoding='utf-8-sig') as fh:
+                walk(json.load(fh))
+        except (OSError, ValueError):
+            pass
+    _menu_names = sorted(names, key=len, reverse=True)
+    return _menu_names
+
+
+def _code_mask(s):
+    """웹뷰 템플릿 글자 s 에서 화면에 문장으로 보이지 않는 코드 구간 → bytearray(1 = 코드)."""
+    mask = bytearray(len(s))
+    if '<' not in s:
+        return mask
+    for m in re.finditer(r'<!--.*?-->', s, re.S):
+        mask[m.start():m.end()] = b'\x01' * (m.end() - m.start())
+    for m in re.finditer(r'<style[^>]*>(.*?)</style>', s, re.S):
+        mask[m.start(1):m.end(1)] = b'\x01' * (m.end(1) - m.start(1))
+    for m in re.finditer(r'<script[^>]*>(.*?)(?:</script>|$)', s, re.S):
+        a, b = m.start(1), m.end(1)
+        mask[a:b] = b'\x01' * (b - a)
+        body = s[a:b]
+        for q, st, txt in _js_literals(body):   # 스크립트 안 문자열은 문장으로 되돌린다(주석, 정규식, 식별자는 코드)
+            if q == '`':
+                continue
+            e = min(b, a + st + len(txt) + 2)
+            mask[a + st:e] = bytes(e - a - st)
+    return mask
+
+
+def classify_js(s, kind, pos, code):
+    """.js 리터럴 s 의 pos 에서 걸린 kind 표현 → (분류, 사유). 분류 = '문장' | '표지' | '이름 인용'"""
+    if code and pos < len(code) and code[pos]:
+        return '표지', '웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)'
+    if kind != '기호':
+        return '문장', ''
+    for n in menu_names():
+        i = s.find(n)
+        while i >= 0:
+            if i <= pos < i + len(n):
+                return '이름 인용', f"메뉴 이름 '{n}'(quick.json, steps.json)"
+            i = s.find(n, i + 1)
+    if s[pos:pos + 1] in JS_MARKERS or s[pos:pos + 2] in JS_MARKERS:
+        ls = s.rfind('\n', 0, pos) + 1
+        head = s[ls:pos].strip()
+        if head == '' or head == _NOTIFY_HEAD:
+            return '표지', '줄 머리 상태 표지(JS_MARKERS)'
+    return '문장', ''
+
+
 def scan_source(path):
-    """생성기 소스의 문자열 리터럴 — 주석은 제외. 리터럴 안에서는 인용 구간을 가리지 않는다(리터럴 자체가 따옴표라서)."""
+    """생성기 소스의 문자열 리터럴 — 주석은 제외. 리터럴 안에서는 인용 구간을 가리지 않는다(리터럴 자체가 따옴표라서).
+    KNOWN_OK 와 .js 리터럴 머리 ✖ ✘ 는 규칙 칸 '제외' 행으로 내보낸다(위반 수에서 뺌)."""
     src = open(path, encoding='utf-8-sig', errors='replace').read()
+    is_js = path.lower().endswith('.js')
     n = 0
     for start, s, mask in _source_literals(path, src):
         if not is_sentence(s):
@@ -222,30 +337,51 @@ def scan_source(path):
         n += 1
         line = src.count('\n', 0, start) + 1
         t = re.sub(r"'[^'\n]{0,80}'|‘[^’\n]{0,80}’|「[^」\n]{0,80}」", lambda q: ' ' * len(q.group(0)), s) if mask else s
+        lead = len(s) - len(s.lstrip())
+        head_fail = is_js and s.lstrip()[:1] in _FAIL_HEAD
+        code = _code_mask(s) if is_js else None
         for kind, rx, hint in rules():
             for h in rx.finditer(t):
                 a, b = max(0, h.start() - 6), min(len(s), h.end() + 6)
-                yield ('', f'L{line}', kind, s[a:b].replace('\n', ' ').strip(), hint, s.replace('\n', ' ')[:300])
+                hit = s[a:b].replace('\n', ' ').strip()
+                at = f'L{line + s.count(chr(10), 0, h.start())}'   # 여러 줄 템플릿은 걸린 줄 번호
+                why = _known_ok(path, hit)
+                if why is None and head_fail and kind == '기호' and h.start() <= lead < h.end():
+                    why = _FAIL_HEAD_WHY
+                if why is not None:
+                    yield ('', at, '제외', hit, f'{kind}: {why}', s.replace('\n', ' ')[:300])
+                    continue
+                if is_js:
+                    cls, cwhy = classify_js(s, kind, h.start(), code)
+                    if cls != '문장':
+                        yield ('', at, cls, hit, f'{kind}: {cwhy}', s.replace('\n', ' ')[:300])
+                        continue
+                yield ('', at, kind, hit, hint, s.replace('\n', ' ')[:300])
     scan_source.cells = n
 
 
 def scan(path):
     ext = os.path.splitext(path)[1].lower()
     fn = scan_xlsx if ext in ('.xlsx', '.xlsm') else scan_source if ext in ('.py', '.js', '.cs', '.ps1') else scan_lines
-    rows = list(fn(path))
+    allr = list(fn(path))
+    rows = [r for r in allr if not _excluded(r)]
+    scan.excluded = [r for r in allr if _excluded(r)]   # 위반 수에서 뺀 행 — 보고 csv 에만 남긴다
     return rows, getattr(fn, 'cells', 0)
 
 
-def report(path, rows, cells, out_dir=None):
+scan.excluded = []
+
+
+def report(path, rows, cells, out_dir=None, excluded=()):
     out_dir = out_dir or OUT_DIR
     os.makedirs(out_dir, exist_ok=True)
     out = os.path.join(out_dir, os.path.basename(path) + '.style.csv')
     tmp = out + '.tmp'
     with open(tmp, 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.writer(f)
-        w.writerow(['시트', '위치', '규칙', '걸린 표현', '고치는 법', '문장'])
-        for r in rows:
-            w.writerow([r[0], r[1], r[2], r[3], r[4], r[5][:500]])
+        w.writerow(['시트', '위치', '규칙', '걸린 표현', '고치는 법', '문장', '분류'])
+        for r in list(rows) + list(excluded):
+            w.writerow([r[0], r[1], r[2], r[3], r[4], r[5][:500], r[2] if r[2] in NOT_SENTENCE else '문장'])
     os.replace(tmp, out)
     return out
 
@@ -261,11 +397,13 @@ def after_save(path, quiet=False):
     """생성기 저장 직후 호출 — 실패해도 문서 생성에는 영향이 없다. → 위반 수(검사 실패 = -1)"""
     try:
         rows, cells = scan(path)
+        if scan.excluded:
+            report(path, rows, cells, excluded=scan.excluded)
         if not rows:
             if not quiet:
                 print(f'[문장 규칙] 위반 0, 문장 {cells}개, {os.path.basename(path)}')
             return 0
-        out = report(path, rows, cells)
+        out = report(path, rows, cells, excluded=scan.excluded)
         c = summary(rows)
         if not quiet:
             print(f"[문장 규칙] 위반 {len(rows)}건({', '.join(f'{k} {v}' for k, v in c.items() if v)}), 문장 {cells}개, {os.path.basename(path)}, 보고 {os.path.relpath(out, ROOT)}")
@@ -464,11 +602,56 @@ PROMPT_RULE = """## 문장 규칙 (사용자 상시 지시 2026-11-13 · 모든 
 AS-IS 원문(라벨·메시지·코드·SP 본문) 인용은 고치지 않고 따옴표 안에 그대로 둔다."""
 
 
+_VM_JS = re.compile(r'(?:^|/)tools/VibeManager/([^/]+\.js)$', re.I)
+
+
+def hook_main():
+    """Claude Code PostToolUse(Write|Edit|MultiEdit) hook. tools/VibeManager/<파일>.js 를 고친 직후 문장 분류 위반 수를
+    git HEAD 판과 비교해 늘었으면 새 위반 줄을 stderr 로 알리고 종료 코드 2(Claude 에 보임). 그 밖 파일, 검사 실패 = 0(막지 않음).
+    2026-11-23 개선안 20261123000643_VISION 단계 2(쓰는 시점 검사). 끄기 = .claude/settings.json 에서 이 줄 삭제"""
+    import json, subprocess, tempfile
+    try:
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
+    try:
+        data = json.loads(sys.stdin.buffer.read().decode('utf-8', 'replace') or '{}')
+        fp = str(((data.get('tool_input') or {}).get('file_path')) or '').replace('\\', '/')
+        m = _VM_JS.search(fp)
+        if not m or not os.path.isfile(fp):
+            return 0
+        rows, _ = scan(fp)
+        if not rows:
+            return 0
+        rel = f'tools/VibeManager/{m.group(1)}'
+        base_n = 0
+        r = subprocess.run(['git', 'show', f'HEAD:{rel}'], cwd=ROOT, capture_output=True, timeout=10)
+        if r.returncode == 0:
+            with tempfile.TemporaryDirectory() as td:
+                bf = os.path.join(td, m.group(1))
+                with open(bf, 'wb') as fh:
+                    fh.write(r.stdout)
+                base_n = len(scan(bf)[0])
+        if len(rows) <= base_n:
+            return 0
+        lines = [f'[문장 규칙] {rel} 문장 위반 {base_n} → {len(rows)}건(HEAD 대비). 규칙 tools/VibeManager/rules/50_DOC_STYLE.md. '
+                 f'줄 머리 상태 표지(JS_MARKERS)와 메뉴 이름 인용은 위반 아님']
+        for x in rows[:15]:
+            lines.append(f'  {x[1]} {x[2]}: …{x[3]}… ({x[4][:60]})')
+        print('\n'.join(lines), file=sys.stderr)
+        return 2
+    except Exception as e:  # 검사 실패로 작업을 막지 않는다
+        print(f'[문장 규칙] hook 검사 못함: {e}', file=sys.stderr)
+        return 0
+
+
 def main(argv):
     try:
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     except Exception:
         pass
+    if '--hook' in argv:
+        return hook_main()
     quiet = '--quiet' in argv
     out_dir = argv[argv.index('--out') + 1] if '--out' in argv else None
     files = [a for i, a in enumerate(argv) if not a.startswith('--') and (i == 0 or argv[i - 1] != '--out')]
@@ -488,8 +671,10 @@ def main(argv):
             total += 1
             continue
         c = summary(rows)
-        out = report(p, rows, cells, out_dir) if rows else ''
-        print(f"{os.path.basename(p)} | 문장 {cells} | 위반 {len(rows)} | {' '.join(f'{k} {v}' for k, v in c.items() if v)}")
+        ex = scan.excluded
+        out = report(p, rows, cells, out_dir, ex) if rows or ex else ''
+        nx = {k: sum(1 for r in ex if r[2] == k) for k in NOT_SENTENCE}
+        print(f"{os.path.basename(p)} | 문장 {cells} | 위반 {len(rows)} | {' '.join(f'{k} {v}' for k, v in c.items() if v)}" + ''.join(f' | {k} {v}' for k, v in nx.items() if v))
         if not quiet:
             seen = {}
             for r in rows:

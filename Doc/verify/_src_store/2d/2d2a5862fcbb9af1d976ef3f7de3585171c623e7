@@ -1,0 +1,25 @@
+# 2026-11-25 미검증 해소 게이트 시험(checklist_run.py settle_state, gate) · 사용: py tools/Harness/verify/test_unverified_gate.py
+import sys, os, json, csv, shutil, io, contextlib
+sys.path.insert(0, r'c:\Projects\NSCM\tools\Harness\verify')
+import checklist_run as C
+mid = 'ZZGATE0'; vd = os.path.join(C.ROOT, 'Doc', 'verify', mid); os.makedirs(vd, exist_ok=True)
+def setup(act, stalled=False, cont=0):
+    json.dump({'actionable': act, 'stalled': stalled, 'continue': cont, 'after': {'total': act}}, open(os.path.join(vd, 'unverified_triage.json'), 'w', encoding='utf-8'))
+    with open(os.path.join(vd, 'unverified_triage.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=['row_id', 'rule_id', 'class', 'actor', 'remedy']); w.writeheader()
+        for i in range(act): w.writerow({'row_id': f'V-{i}', 'rule_id': 'A1', 'class': '검사기공백', 'actor': '엔진', 'remedy': 'x'})
+def g():
+    b = io.StringIO()
+    with contextlib.redirect_stdout(b): rc = C.gate(mid)
+    return rc, b.getvalue()
+ok = True
+def chk(n, c, x=''):
+    global ok; print('PASS' if c else 'FAIL', n, x); ok &= bool(c)
+setup(0); C.settle_state(mid, 'measured', 0); rc, o = g(); chk('처리 대상 0 → 통과', rc == 0, o.strip())
+setup(3, stalled=True); C.settle_state(mid, 'measured', 0); rc, o = g(); chk('풀린 행 0 → 재검증 안 함(rc 1) + 남은 행 목록', rc == 1 and 'V-0' in o and '풀린 행 0' in o, o.splitlines()[0])
+setup(2, cont=1); C.settle_state(mid, 'measured', 0); rc, o = g(); chk('5회차 상한 도달(continue 1) → rc 1 + 반복 상한', rc == 1 and '반복 상한 도달' in o)
+setup(2); C.settle_state(mid, 'failed', 5); rc, o = g(); chk('해소 확인 재측정 실패 → rc 1', rc == 1 and 'rc 5' in o)
+setup(4); C.settle_state(mid, 'fullonly', 0); rc, o = g(); chk('남은 행 = 전체 재측정으로만 잴 행 → 통과', rc == 0 and '전체 재검증으로만' in o)
+os.remove(os.path.join(vd, 'unverified_settle.json')); rc, o = g(); chk('해소 확인 결과 없음 → rc 1', rc == 1)
+shutil.rmtree(vd)
+print('ALL PASS' if ok else 'SOME FAIL')

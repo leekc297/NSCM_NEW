@@ -1,0 +1,15 @@
+// rowlink.ts — 저장 시험 칸과 함께 바뀌는 연동 칸(2026-11-25 T534 · SSP0014 F1·F6 5행 '재조회 행 식별 0건')
+//   실측: USER_ID 'eunjin.choi'→'luping' 저장 뒤 조회 SP 가 USER_ID 로 조인해 가져오는 USER_NAME 도 '이련'→'육평' 으로 바뀌어
+//   행 식별 문자열(rowIdentity)의 정확 일치가 0건, 근접 일치는 ITEM_ID 만 다른 이웃 행(MAMM9314U0A1-016 ↔ -018)과 차이 수 1로 동률이 되어 행을 잃었다.
+//   시험 칸 b 의 연동 칸 = 이름이 '<b>_' 로 시작하는 칸(T457 과 같은 규칙) + b 에서 끝의 _ID·_CD·_CODE 를 뺀 이름에 _NAME·_NM·_DESC 가 붙은 칸.
+//   행 식별·다른 칸 변경(sideDiff) 판단에서만 뺀다. 시험 칸 값 대조에는 쓰지 않는다.
+export function linkedCols(b: string, keys: string[]): string[] {
+  const B = String(b || '').toUpperCase(); if (!B) return [];
+  const stem = B.replace(/_(ID|CD|CODE)$/, '');
+  return keys.filter(k => { const K = String(k).toUpperCase(); if (K === B) return false; if (K.startsWith(`${B}_`)) return true; return stem !== B && (K === `${stem}_NAME` || K === `${stem}_NM` || K === `${stem}_DESC`); });
+}
+
+/** 행 식별 제외 목록 = 시험 칸 + 연동 칸 */
+export function identExclude(b: string, keys: string[]): string[] {
+  return [b, ...linkedCols(b, keys)];
+}

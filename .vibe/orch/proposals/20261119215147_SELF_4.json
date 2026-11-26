@@ -50,6 +50,11 @@
         "tools/VibeManager/orch-improve.js",
         "tools/VibeManager/orch-watch.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-19T22:53:54+09:00"
     }
   ],
   "self": true,
@@ -81,5 +86,7 @@
     "verify_result": "python tools/Docs/doc_style.py tools/VibeManager/orch-agent.js tools/VibeManager/orch-improve.js tools/VibeManager/orch-watch.js --out .vibe/orch/selfcheck/doc_style --quiet 실행. 출력 orch-agent.js 문장 64 위반 0, orch-improve.js 문장 71 위반 0, orch-watch.js 문장 44 위반 0, exit 0. 수정 전 같은 명령은 위반 23, 23, 16 에 exit 1. 확인 시각 2026-11-19 22:13:09",
     "note": "검사기가 짚은 62건만 고침. 줄표는 마침표로(orch-watch.js L183 은 쉼표), 가운뎃점 나열은 쉼표로 바꿈. test/t_orch_*.js 에 고친 문구의 줄표나 가운뎃점을 문자열로 맞춰 보는 시험 없음, 시험 파일 수정 없음. 검사기가 짚지 않은 줄표 5곳(orch-agent.js L235, L262, orch-improve.js L246, orch-watch.js L77, L139)은 범위 밖이라 그대로 둠. orchestra.js L230, workbench.js L2736 의 종전 문구 '감시 · 자동 조치' 는 대상 밖이라 그대로 둠. 구문 검사와 test/run_all.js 는 미실행(VMO 게이트 몫). 작업 모드 DB_ONLY, hook 차단 없음."
   },
-  "snap": "prop_20261119215147_SELF_4"
+  "snap": "prop_20261119215147_SELF_4",
+  "effectiveMs": 1795096434389,
+  "effectiveAt": "2026-11-19T22:53:54+09:00"
 }

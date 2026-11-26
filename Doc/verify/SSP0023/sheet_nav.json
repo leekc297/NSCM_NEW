@@ -1,0 +1,37 @@
+{
+ "sheets": {
+  "Shipment Plan Detail": {
+   "drill": {
+    "base": "Shipment Plan(Electrode)",
+    "row": {
+     "MEASURE": "P_SHIP_CONFIRM_ETD"
+    },
+    "cell": {
+     "after": "MEASURE"
+    },
+    "rest": [],
+    "src": "SSP0023_ShipmentPlanElectrode.cs:1798 SpdMain_CellDoubleClick"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Stock Detail": {
+   "tabsearch": {
+    "tab": "Stock Detail",
+    "button": "Search",
+    "ctl": "btnSearch",
+    "src": "SSP0023_ShipmentPlanElectrode.cs:5878 BtnSearch_Click ← this.btnSearch.Click"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Shipment Result": {
+   "tabsearch": {
+    "tab": "Shipment Result",
+    "button": "Search",
+    "ctl": "btnSearch",
+    "src": "SSP0023_ShipmentPlanElectrode.cs:5903 BtnSearch_Click ← this.btnSearch.Click"
+   },
+   "_gen": "sheet_nav_gen"
+  }
+ },
+ "_doc": "시트 이동 사실. drill 항목은 tools/Harness/verify/sheet_nav_gen.py 가 AS-IS 그리드 더블클릭 → ChangeSheet 원문에서 만든다(_gen). 그 밖은 사람이 적은 항목"
+}

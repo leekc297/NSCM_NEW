@@ -1,15 +1,14 @@
 {
  "menu_id": "SCP0005",
  "asis_id": "SCP0005",
- "at": "2026-11-20 07:35:42",
- "result": "PARTIAL",
+ "at": "2026-11-26 02:34:43",
+ "result": "PASS",
  "fails": [],
- "gaps": [
-  "ADMIN U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음",
-  "SCM PI Admin U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음",
-  "SSP Planner U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음"
- ],
+ "gaps": [],
  "notes": [
+  "ADMIN U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
+  "SCM PI Admin U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
+  "SSP Planner U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
   "TO-BE 전용 버튼 ['SEARCH_CITY', 'SEARCH_ROUTEID', 'UPLOAD', 'UPLOAD_SAVE'](AS-IS ACL 대응 없음 · 비교 제외)"
  ],
  "asis_groups": {
@@ -198,5 +197,5 @@
    "UPLOAD_SAVE(N)"
   ]
  },
- "why": "그룹 15↔15 · ADMIN U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음; SCM PI Admin U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음; SSP Planner U→EDIT: TO-BE 메뉴에 EDIT 버튼 정의 없음"
+ "why": "그룹 15↔15 · 메뉴 권한 그룹·버튼(R·C·U·D·SAVE) 일치"
 }

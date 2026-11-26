@@ -1,64 +1,94 @@
-# SCP0028 AI 판정 검토 (2026-11-20 13:07:07)
+# SCP0028 AI 판정 검토 (2026-11-25 02:09:55)
 
-- 대상 151행: 검토 52 · 검토 제외 99 · 미검토 0
-- 인용 확인 52행 · 판정 반영 22행 · 엔진 보완 대상 28행 · 룰 등록 후보 1행
-- 호출 1회(캐시 0) · 실패 0회 · 비용 2.1123 USD · 출처 Doc/verify/SCP0028/llm_usage.csv
+- 대상 146행: 검토 20 · 검토 제외 126 · 미검토 0
+- 인용 확인 20행 · 판정 반영 4행 · 엔진 보완 대상 4행 · 룰 등록 후보 1행
+- 호출 3회(캐시 0) · 실패 0회 · 비용 1.9575 USD · 출처 Doc/verify/SCP0028/llm_usage.csv
 
 | 행 | 규칙 | 지금 | 분류 | AI 판정 | 인용 | 반영 | 사유 | 근거 | 고칠 곳 |
 |---|---|---|---|---|---|---|---|---|---|
 | V-be29b7a4 | F5 | FAIL | 확인불가 | FAIL | Y | N 판정 같음 | T-8e194f95 와 같은 측정 결과를 쓴 행이다. Insert 무동작과 기존행 Delete 무변화는 AS-IS 와 같지만, 기존행 LOT_SIZE 편집 뒤 CRUD_TYPE 빈 값은 원문만으로 결함 여부를 가릴 수 없다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:221 ; GSCM/06.UIL/GSCM.SCP. |  |
+| V-b685dddf | K2 | ERROR | 검토 제외 |  | N | N 재측정 대상(검사기공백·엔진) — AI 판정 대상 아님 |  |  |  |
 | V-225e806d | H4 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | AS-IS 헤더와 칸 폭은 SetSheetHeaderColumn 이 기준정보에서 읽어 오므로 화면 코드만으로는 폭을 알 수 없습니다. TO-BE 헤더 15개 중 OPERATION_GROUP_ID(글자 68px, 칸 59px)와 SPLIT_YN(글자 67px, 칸 59px) 2개가 잘립니다. 같은 경우인 SCP0016 선례(사용자 지시로 판정 필요로 이관)에 따라 칸 폭은 사용자가 판정합니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:186 |  |
-| V-c346a4a2 | H10 | FAIL | 검사기오판 | PASS | Y | Y AS-IS 원문 인용 확인 | AS-IS Input 버튼은 편집 중인 데이터를 확인하지 않고 바로 일괄 입력 팝업을 엽니다. 따라서 TO-BE 에서 차단 메시지 없이 팝업이 열리는 것은 AS-IS 와 같습니다. CR-022 는 차단 메시지가 있을 때 코드를 MSG00680 하나로 쓰라는 규칙이고, 차단이 없던 버튼에 차단을 추가하라는 규칙이 아닙니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:260 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/gen_expect.py: DM-52 일반 규칙 시나리오(P15)를 AS-IS 에 편집 중 차단 분기가 없는 버튼(btnInput)에도 자동 생성합니다. |
-| V-4633ca25 | H11 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | AS-IS SaveData 에는 조회 때와 달리 ProgressForm 이 없습니다. 저장 호출의 FoxAsyncProxy 는 조회와 달리 ShowProgress = false 를 지정하지 않는데, 기본값을 정하는 라이브러리 소스가 저장소에 없어 저장 중 진행 표시가 있었는지 원문으로 확인할 수 없습니다. TO-BE handleSave 와 submitSave 는 로딩 표시를 쓰지 않으며, 같은 원인의 선례는 SCP0084 오류 아님과 SSP0020 오류(AS-I | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:661 ; GSCM/06.UIL/GSCM.SCP. |  |
-| V-57fd6f09 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS 는 Increment 칸을 최소값 0인 숫자 셀로 지정해 음수를 넣을 수 없습니다. TO-BE 저장 검증은 Lot Size < Increment 와 0·빈 값만 막아서, Lot Size 12800 행에 Increment -1 을 넣으면 그대로 저장 요청에 실립니다. 음수를 허용하는 TO-BE 룰은 없습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:188 ; GSCM/01.Framework/GSC |  |
-| V-b4192f37 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS 는 Lot Size 칸의 최소값을 0 으로 두어 음수 입력을 막습니다. TO-BE 는 Lot Size 에 -1 을 넣으면 자동 맞춤 로직이 Increment 도 -1 로 바꾸고, 저장 전 검증은 Lot Size 가 Increment 보다 작은 경우와 0 인 경우만 막아 -1 이 저장 요청에 실립니다. 음수를 허용하는 TO-BE 룰은 등록되어 있지 않습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:187 ; GSCM/01.Framework/GSC |  |
-| V-8da88867 | A7 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT 은 Input 버튼 처리 뒤 그리드를 채우는 AS-IS 조회 SP 이므로 대상이 존재합니다. golden 검사기가 이 SP 를 실행하지 못해 컬럼 값 대조 결과가 없습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:417 ; Doc/_legacy_source/DB | tools/DbConn/golden.py: sp_pair.csv 에서 이 SP 가 kind=LOG 로 분류돼 있고 AS-IS 본문에 BEGIN TRAN 과 로그 기록이 있어 읽기 전용 AS-IS 접속의 차등 실행 경로에 들어가지 않았습니다. 인자도 Input 팝업에서 고른 값이라 호출  |
-| V-5d06fca9 | B6 | 판정필요 | 검사기오판 | PASS | Y | Y AS-IS 원문 인용 확인 | AS-IS Valid 조회조건은 DropDownList 단일 콤보이고, DataBind 두 번째 인자 true 와 조회 시 ALL 을 null 로 보내는 처리로 ALL 항목이 있습니다. TO-BE 도 CustomDropdown 단일 선택에 allOption 이 있고, 실측값도 다중=false, ALL=true 로 같습니다. 기준표에 행이 없어서 검사기가 비교하지 못하고 ERROR 로 남긴 것입니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.Designer.cs:37 ; GSCM/06.UIL/G | tools/Harness/verify 의 B6 판정은 조회조건 기준표 행이 없으면 ERROR 로 끝납니다. 이때는 AS-IS 컨트롤 형식(UsrComboBox 단일, DataBind isALL 인자)으로 기대값을 만들어야 합니다. |
-| V-db17a330 | G2 | ERROR | 검사기오판 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | AS-IS 조회조건 Model(txtItemId) 은 입력 문자열을 p_item_id 로 조회 SP 에 넘기는 실재 조건이다. 검사기 _verify.spec 이 이 대상을 실행하지 않아 결과가 없으므로 미검증으로 둔다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:337 ; GSCM/06.UIL/GSCM.SCP. | Doc/e2e/specs/_verify.spec.ts: Model 텍스트 조건(UsrMultiLineEditor, 기준표 없음 DM)을 실행 대상으로 잡지 못해 측정 행이 생성되지 않았다. |
-| V-99331be4 | G5 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | AS-IS Model 조회조건 팝업은 Division 과 입력된 Model(txtItemId)을 인자로 넘기고, TO-BE MaterialByDivisionModal 도 divisionId 와 itemId 를 preSearchParams 로 넘깁니다. 다만 검사기가 이 대상을 실행하지 못했으므로, 팝업이 실제로 입력값으로 걸러진 결과를 보여주는지는 측정되지 않았습니다. 그래서 지금 결과를 그대로 둡니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:248 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/popup_args_check.py: 조회조건 Model(txtItemId, btnItemId)을 Doc/e2e/specs 의 _verify.spec(@verify) 실행 경로에 연결하지 않아서, 팝업을 열어 인자와 필터 결과를 재지 못했습니다. |
-| V-dd4f9db4 | G1 | ERROR | 검사기오판 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | From Site 에 'AU000062_81-P' 하나를 골라 조회한 요청에 값은 실렸지만 결과가 0행이라 조건이 제대로 걸렸는지 판정하지 못했다. 검사기가 결과 컬럼 FROM_SITE_DESCRIPTION 값에서 후보를 찾지 못해 기본 조회 결과(1940행)에 없는 후보를 임의로 고른 측정 실패다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:334 ; GSCM/06.UIL/GSCM.SCP. | tools/E2E: 조회조건 후보를 고를 때 코드값 후보를 설명 컬럼 FROM_SITE_DESCRIPTION 과 대조해 일치 후보를 못 찾고, 기본 조회 결과에 없는 후보를 골라 0행이 되었다. |
-| V-6259d313 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS 의 Lot Size 칸은 최소값 0 이라 -1 을 입력할 수 없습니다. TO-BE 는 컬럼 설정에 최소값이 없어서 -1 이 칸에 그대로 들어가며, 저장 전 검증도 빈 값과 0 만 막습니다. 소수와 문자 입력은 정상으로 막혔고 음수 입력 한 가지만 다릅니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:187 ; GSCM/01.Framework/GSC |  |
-| V-597f4433 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS 의 Increment 칸은 최소값 0 이라 -1 을 입력할 수 없습니다. TO-BE 는 컬럼 설정에 소수 자릿수(scale)만 있고 최소값이 없어서 -1 이 칸에 그대로 들어가며, 저장 전 검증도 음수를 막지 않습니다. 소수와 문자 입력은 정상으로 막혔고 음수 입력 한 가지만 다릅니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:188 ; GSCM/01.Framework/GSC |  |
-| V-86e7f1e2 | G1 | ERROR | 검사기오판 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | MSG00031 은 일괄삭제 팝업(btnDelete) 저장 성공 뒤 FindDelete 에서 띄우는 삭제 완료 메시지로 조회조건과 관계가 없다. TO-BE 도 일괄삭제 성공 시 DELETE_SUCCESS(MSG00031) 를 띄우지만 실행으로 확인하지 않았으므로 미검증으로 둔다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:312 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify: 일괄삭제 팝업 저장 경로(FindDelete)의 메시지를 G1 조회조건 smoke 대상으로 배정해, 팝업을 열어 삭제를 실행하지 않는 smoke 검사가 이 행을 측정하지 못했다. |
-| V-a89007be | G1 | ERROR | 검사기오판 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | MSG00284 는 일괄삭제 SAVE SP 가 S 가 아닌 결과를 돌려줄 때 FindDelete 에서 띄우는 실패 메시지로 조회조건과 관계가 없다. 삭제 실패를 일부러 일으켜야 확인할 수 있어 미검증으로 둔다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:553 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify: 일괄삭제 저장 실패 분기 메시지를 G1 조회조건 smoke 대상으로 배정해, 실패 응답을 만들 수 없는 smoke 검사가 이 행을 측정하지 못했다. |
-| V-a99ddb18 | H2 | ERROR | 검사기오판 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | 이 색 규칙은 Save 때 수정 표시(M)가 붙은 행 가운데 LOT_SIZE·INCREMENT 가 비고 VALID_YN=Y, SPLIT_YN=N 인 행의 상태 칸에만 적용됩니다. 이런 행은 Input 팝업으로 불러온 후보 행을 편집한 뒤에만 생깁니다. 검사기는 일반 조회 265행에서 조건에 맞는 행을 찾았으나 0행이어서 재지 못했습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:587 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify: action == FlagM 같은 실행 중 상태가 들어간 조건을 조회 결과에서 찾았습니다. Input 팝업으로 후보 행을 불러와 편집하고 되돌리는 경로로 대상 행을 만들어야 합니다. |
-| V-aa6bec9e | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-180ef854 | M3 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-480372c9 | G5 | 판정필요 | 검사기오판 | PASS | Y | Y AS-IS 원문 인용 확인 | AS-IS Delete 버튼은 팝업에 _action_flag=D 와 Division 을 넘기고, 팝업은 그 값을 p_action_flag 로 조회 SP 에 싣습니다. TO-BE Delete 버튼은 batchMode 를 D 로 정한 뒤 mode prop 으로 팝업에 넘기고, 팝업은 그 값을 actionFlag 로 조회 조건에 싣습니다. 두 인자가 모두 전달되므로 동작이 같습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:299 ; GSCM/06.UIL/GSCM.SCM. | tools/Harness/verify/popup_args_check.py: AS-IS 인자 이름 _action_flag 와 TO-BE prop 이름 mode 를 짝짓지 못해, 고정값 D 가 전달되는데도 전달 안 함으로 기록했습니다. |
-| V-6cb6bfa8 | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-d816896f | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-c2d97238 | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-b2d03a00 | M3 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-86b2f489 | G5 | 판정필요 | 검사기오판 | PASS | Y | Y AS-IS 원문 인용 확인 | AS-IS Input 버튼은 팝업에 _action_flag=I 와 Division 을 넘기고, 팝업은 I 일 때 From Site 를 필수로 검사합니다. TO-BE Input 버튼은 mode=I 로 팝업을 열고, 같은 From Site 필수 검사를 거쳐 actionFlag 를 조회 조건에 싣습니다. 인자 전달과 그에 따른 동작이 같습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:271 ; GSCM/06.UIL/GSCM.SCM. | tools/Harness/verify/popup_args_check.py: AS-IS 인자 이름 _action_flag 와 TO-BE prop 이름 mode 를 짝짓지 못해, 고정값 I 가 전달되는데도 전달 안 함으로 기록했습니다. |
-| V-d41bec0d | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-5123358d | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| V-ca2072cf | I1 | ERROR | 검토 제외 |  | N | N 재측정 대상(검사기공백·엔진) — AI 판정 대상 아님 |  |  |  |
+| V-1f64fec6 | E4 | ERROR | 검토 제외 |  | N | N 재측정 대상(검사기공백·엔진) — AI 판정 대상 아님 |  |  |  |
+| V-4633ca25 | H11 | 판정필요 | 검사기오판 | PASS | Y | N AS-IS 진행 표시 있음(GSCM/06.UIL/GSCM.SCP.Form | AS-IS SaveData(cs:575~707)에는 ProgressForm이 없습니다. ProgressForm은 조회 FindData(cs:322), FindInput(cs:397), 일괄삭제 FindDelete(cs:464)에만 있고, 저장 요청은 FoxAsyncProxy로 진행 창 없이 보냅니다. TO-BE handleSave도 저장 중 로딩 표시가 없으므로 AS-IS와 같으며, AS-IS 저장에 진행 창이 없던 SCP0084를 사용자가 PASS로 판정한 것 | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:575 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify 시험 검사 CM-003이 AS-IS SaveData에 ProgressForm이 있는지 보지 않고 모든 화면에 저장 중 로딩 표시를 기대값으로 걸었습니다. |
+| V-57fd6f09 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS 는 Increment 칸을 최소값 0 인 숫자 칸으로 만들어 음수가 들어가지 않는다. TO-BE 는 칸에 최소값 설정이 없고, 저장 전 검사도 Lot Size 보다 큰지와 0 인지만 본다. 그래서 Increment 에 -1 을 넣으면 그 값이 그대로 저장 요청에 실린다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:188 ; GSCM/01.Framework/GSC |  |
+| V-b4192f37 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS 는 Lot Size 칸을 최소값 0 인 숫자 칸으로 만들어 음수가 들어가지 않는다. TO-BE 에서 Lot Size 를 -1 로 바꾸면 Increment 도 -1 로 따라 바뀌어 Lot Size 와 Increment 비교 검사와 0 검사를 모두 통과한다. 그래서 -1 이 그대로 저장 요청에 실린다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:187 ; GSCM/01.Framework/GSC |  |
+| V-6259d313 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS Lot Size 칸은 소수 0자리, 최소 0 인 숫자 칸이다. TO-BE 는 소수와 문자 입력은 막지만 최소값 설정이 없어 -1 이 칸에 들어간다. 음수를 허용하는 TO-BE 룰은 없다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:187 ; GSCM/01.Framework/GSC |  |
+| V-597f4433 | E1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS Increment 칸은 소수 0자리, 최소 0 인 숫자 칸이다. TO-BE 는 소수와 문자 입력은 막지만 최소값 설정이 없어 -1 이 칸에 들어간다. 음수를 허용하는 TO-BE 룰은 없다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:188 ; GSCM/01.Framework/GSC |  |
+| V-a89007be | G1 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS FindDelete 는 결과값이 S 가 아닐 때 MSG00284 를 띄우고 다시 조회하지 않는다. TO-BE 는 RESULT_CODE 를 보지 않고 HTTP 200 이고 code 가 0 이면 성공으로 보고 '삭제되었습니다.' 를 띄운 뒤 다시 조회한다. 이 차이를 허용하는 TO-BE 룰은 없다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:540 ; GSCM/06.UIL/GSCM.SCP. |  |
+| V-a99ddb18 | H2 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS는 Save를 누를 때 LOT_SIZE와 INCREMENT가 비어 있고 VALID_YN이 Y, SPLIT_YN이 N인 M행을 기본값 회귀행으로 보고, 행 상태 칸의 M 표시를 지운 뒤 LockColor로 칠합니다(cs:594~595). TO-BE handleSave는 이 행을 저장 대상에서만 빼고 CRUD_TYPE은 지우지 않아서 '수정한 내용이 없습니다.' 알림 뒤에도 행 상태가 M으로 남습니다. isDefaultRevertRow는 ShipmentLo | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:594 ; GSCM/06.UIL/GSCM.SCP. |  |
 | V-97b0fc4e | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | V-a9485a6a | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | V-c4a9dc2c | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-4c3670c9 | K3 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | 이 화면에는 Input·Delete 버튼의 Shipment Lot Size 팝업 그리드와 Model 돋보기 팝업이 있습니다. 그런데 실측은 메인 그리드 F5 만 했습니다. 팝업 그리드의 No. 컬럼, 필터 건수, Sort 는 재지 않았습니다. | GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:210 ; GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipm | Doc/e2e/specs/_verify.spec.ts 의 K3 시험이 메인 그리드만 대상으로 해서 팝업 그리드의 No. 컬럼과 필터 건수를 열어 보지 않았습니다. |
-| V-e08bf28a | G2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-0c6de6d8 | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-fef86000 | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| V-86208af2 | E4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | V-45ef80f7 | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-04302ccf | K3 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | AS-IS 에는 빈 행 추가가 없고 InsertRow 본문이 비어 있습니다. 대신 Input 버튼 팝업에서 고른 조합이 병합 셀(SmartColMerge) 상태로 메인 그리드에 들어오고, 이 행의 LOT_SIZE·INCREMENT·VALID_YN·SPLIT_YN 을 편집합니다. 실측은 Copy·Ctrl·헤더·Hide·F5 만 했고 붙여넣기, 병합 셀 붙여넣기, 콤보 자동완성은 재지 않았습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:571 ; GSCM/06.UIL/GSCM.SCP. | Doc/e2e/specs/_verify.spec.ts 의 K3 시험이 신규 입력 그리드 대상을 빈 행 추가로만 찾습니다. 이 화면에서는 Input 팝업 OK 뒤 편집 행에 붙여넣기와 병합 셀 붙여넣기를 시험하지 않았습니다. |
 | V-0be83995 | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | V-c145c351 | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | V-10c70824 | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-242398fa | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-2a1fdf94 | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-2fe30674 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-3437dc1d | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-eb9a4807 | M3 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-198c12ab | H10 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-cbcda052 | K3 | ERROR | 검토 제외 |  | N | N 재측정 대상(검사기공백·엔진) — AI 판정 대상 아님 |  |  |  |
-| V-6cf2af49 | K3 | ERROR | 검사기오판 | PASS | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | F5 를 누르면 조회 호출(SEARCH)이 1건 나가는 것을 실측했고, AS-IS 와 같습니다. AS-IS 가 여는 팝업은 Model 팝업과 Shipment Lot Size 팝업 두 개뿐이고 Version 팝업은 없습니다. 따라서 'Version 팝업에서 버전을 고른 직후'라는 조건은 이 화면에 해당하지 않습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:195 ; GSCM/06.UIL/GSCM.SCP. | Doc/e2e/specs/_verify.spec.ts 가 Version 팝업이 없는 화면에도 '미포함: 팝업 그리드'를 붙여 ERROR 로 남깁니다. |
-| V-729c8d58 | K3 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | 메인 그리드는 TRANS_MODE_NAME 열에서 Ctrl+클릭으로 0행과 2행을 비연속 선택해 PASS 입니다. 하지만 이 화면의 Shipment Lot Size 팝업에도 그리드가 있는데, 거기서 Ctrl+클릭, Shift 선택, 드래그 선택은 재지 않았습니다. | GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:197 | Doc/e2e/specs/_verify.spec.ts 의 Ctrl 시험이 메인 그리드만 대상으로 해서 Input·Delete 팝업 그리드를 열어 시험하지 않았습니다. |
-| V-a7ba5dc9 | G2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| V-2fe30674 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | V-6008a294 | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-3afa0eef | H6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| V-7254a80c | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | V-db0f51c6 | H6 | FAIL | 검토 제외 |  | N | N 스냅샷 승인 대기(snap_validate·snap_approve 경로) |  |  |  |
-| AD-62e23a4b | A6 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | AS-IS 조회 SP 는 DIVISION_ID, OPERATION_GROUP_ID, from_site, to_site, ITEM_ID, trans_mode_code 순으로 정렬하고, 원장 정적 검사로는 TO-BE PKG 도 같은 키를 대소문자 무시로 정렬합니다. 같은 SP 의 다른 호출 20여 건은 순서가 일치하고, Division 82 호출 #6 만 280행 중 r85 에서 갈라집니다. 그 행의 앞 6개 컬럼이 같아서 ITEM_ID 또는 trans_mode_c | Doc/_legacy_source/DB_DDL/AsIs_LGCE_SCMDEV_SP6_DDL.sql:112709 ; Doc/verify/SCP0028/diff/P_SCP0028_GET_SHIPMENT_LOT_SIZE_ |  |
+| AD-1a87a9b8 | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-1eb9cb71 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-a87e4641 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-7abe0c89 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-31891e7c | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-5079c1a8 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-e4f51c47 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-244b08bb | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-4ada955f | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-eca4c0ee | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-2d4079e6 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-d4749e15 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-89b11727 | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-9e43972e | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-fcd3cf86 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-a75595d7 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-cab0d67b | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-88332dd0 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-886d8c26 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-afab4d83 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-d81d48bb | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-7f5c41f3 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-d7e8e8dc | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-6e5cd70c | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-e6233df3 | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-f377f227 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-1e8379a1 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-125dcd3f | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-176ef7aa | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-44898b71 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-b097262d | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-305c8e11 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-9ce43e53 | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-51dde9b2 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-adc62326 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-f8013ee3 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-16ed9f6d | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-7031951d | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-0a4372ab | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-36e52665 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-bd5d241e | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-0d4ddf6c | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-0f45ca72 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-d1ba0b6b | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-6952e31a | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-42fb59be | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-81f9457d | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-84391a07 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-2f776860 | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-d8901eb3 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-f2a6cb89 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-9d1865fa | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-b36657a8 | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-ce275074 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-d9428c6a | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-0e7943c1 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-854fc98d | A1 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-28da6f65 | A7 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-35cdafc7 | A5 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
+| AD-13db7f49 | A6 | ERROR | 검토 제외 |  | N | N 재측정 대상(차등짝·엔진) — AI 판정 대상 아님 |  |  |  |
 | T-ea1f18e5 | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-666b17d1 | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-e351edc9 | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
@@ -67,93 +97,58 @@
 | T-023e949d | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-b3755ed5 | A1 | 판정필요 | 실결함 | FAIL | Y | Y AS-IS 원문 인용 확인 | AS-IS 의 Model 조회 팝업(btnItemId)은 SCM0002_GET_ITEM_BY_DIVISION_POPUP 으로 후보를 조회합니다. TO-BE 는 MaterialByDivisionModal(COM0013, P_SCM0002_GET_MATERIAL_BY_DIVISION)로 바꿨습니다. shipment-lot-size 폴더를 P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 으로 찾았으나 주석에만 있어 후보 목록과 팝업 그리드 컬럼이 A | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:246 ; GSCM/06.UIL/GSCM.SCM. |  |
 | T-2c20a3fc | A6 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | AS-IS 의 Item 팝업(btnItemId)은 SCM0002_GET_ITEM_BY_DIVISION_POPUP 을 호출하므로 대상이 AS-IS 에 존재합니다. TO-BE 는 사용자 지시(2026-10-08)로 MaterialByDivisionModal(COM0013)로 교체했기 때문에 이 SP 를 호출하지 않습니다. 이 팝업 교체는 TO-BE 룰 원장에 등록돼 있지 않아 사람의 판정이 필요합니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:246 ; GSCM/06.UIL/GSCM.SCM. | tools/Harness/verify/sort_check.py: 대조표가 TO-BE 짝을 P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 으로 잡았는데, TO-BE 화면은 이 SP 를 호출하지 않아 실행 중 호출이 0건이고 정렬을 재지 못했습니다. |
-| T-653f1a5d | A6 | ERROR | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 · 대상 없음(미검증 → NA) | AS-IS SCP0028 의 Item 팝업은 SCM0002_GET_ITEM_BY_DIVISION_POPUP 만 호출합니다. SCM0002_GET_MATERIAL_BY_DIVISION 을 호출하는 MaterialByDivisionPopup 은 GSCM/06.UIL 의 사용 파일 28개 가운데 SCP0028 이 없습니다. 이 화면의 AS-IS 에는 이 SP 의 정렬 대상이 없습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:246 ; GSCM/06.UIL/GSCM.SCM. | tools/Harness/verify/sort_check.py: AS-IS 화면이 호출하지 않는 SP 를 A6 대상에 넣어, 호출 0건인 상태를 미검증으로 남겼습니다. |
 | T-fad117f6 | F4 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | AS-IS의 Model 조회조건 팝업은 SCM0002_ItembyDivisionPopup이고, 이 팝업이 P_SCM0002_GET_ITEM_BY_DIVISION_POPUP을 씁니다. TO-BE는 사용자 지시(2026-10-08)에 따라 MaterialByDivisionModal(COM0013, P_SCM0002_GET_MATERIAL_BY_DIVISION)로 바꿔서 이 화면에서는 이 SP를 부르지 않습니다. 이 차이는 TO-BE 룰 원장에 SCP0028 항목으로 | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:246 ; nscm-fe/features/ship | tools/E2E 의 _trace.spec W5 가 TO-BE 화면이 부르지 않는 AS-IS 팝업 SP를 호출 대상으로 기다려서 측정 경로가 생기지 않습니다(T7·T11). |
-| T-380b4c0f | G4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-59af1afb | G1 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-59af1afb | G1 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-a690e1a4 | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-7b306e42 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-7b306e42 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-c1421566 | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-f4dca6bb | A6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-98554096 | F4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-161e01f5 | DB-SYN | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-f2027c89 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-916f876d | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-ec3bc4f9 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-4f008f49 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-f28a6054 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-f2027c89 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-916f876d | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-ec3bc4f9 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-4f008f49 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-f28a6054 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-8e194f95 | F5 | FAIL | 확인불가 | FAIL | Y | N 판정 같음 | AS-IS InsertRow 는 본문이 비어 있고 DeleteButton 은 FlagI 신규행만 지우므로 TO-BE Insert 무동작과 기존행 Delete 무변화는 AS-IS 와 같고, 검사기가 누른 Delete 는 툴바가 아니라 일괄삭제 팝업 버튼이었다(팝업 SEARCH actionFlag D 호출 기록). 남은 쟁점은 기존행 LOT_SIZE 편집 뒤 CRUD_TYPE 이 빈 값으로 측정된 점인데, TO-BE 코드상 EditTracker 가 M 을 찍게 되어 | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:571 ; GSCM/06.UIL/GSCM.SCP. |  |
-| T-730ab462 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-81eb0db7 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-8c1a9dab | G1 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-730ab462 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-81eb0db7 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-8c1a9dab | G1 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-871717ab | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-14732ce2 | F4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-25c746d3 | DB-SYN | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-1417e33a | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-4c9f8629 | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-8f84f97b | M4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-9466f72f | G1 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-9466f72f | G1 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-0d12e24f | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-85737798 | A1 | 판정필요 | TOBE룰 | NA | Y | Y AS-IS 원문 인용 확인 | PR_GET_MNU_BTN_AUTH 는 TO-BE 버튼 권한 SP 로, AS-IS SP 원문(Doc/_legacy_source/DB_DDL 전체)을 MNU_BTN_AUTH 로 찾았으나 없었고 AS-IS Input 버튼도 ButtonAccessType None 입니다. 대조할 AS-IS SP 가 없으며, 버튼 노출은 CR-116 에 따라 TO-BE 권한 설정을 기준으로 J2·K4 행에서 판정합니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.Designer.cs:372 ; nscm-fe/feat |  |
-| T-6dc0e2d5 | A6 | 판정필요 | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 | PR_GET_MNU_BTN_AUTH 는 AS-IS 화면 원문(GSCM/)과 AS-IS SP 원문(Doc/_legacy_source/DB_DDL)에서 검색해도 0건입니다. AS-IS 의 Input·Delete 버튼은 클릭 이벤트만 연결돼 있습니다. 이 SP 는 버튼 권한을 조회하는 SP 로 그리드에 표시되지 않으므로 CR-075 ③에 따라 정렬 대상이 아닙니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:117 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/sort_check.py: 그리드에 바인딩되지 않는 TO-BE 권한 SP 를 A6 정렬 대상에서 빼지 않아 판정 불가로 남겼습니다. |
-| T-52d59336 | DB-SYN | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | PR_GET_MNU_BTN_AUTH 는 TO-BE 공용 권한 패키지 PKG_NSCM_UI_COM_AUTH 안에 정의된 SP 입니다. 검사기가 이 SP 의 BE 계정 시노님·권한·대상 객체를 실제로 조회하지 못해 결과가 없습니다. 원문만으로는 시노님과 권한이 있는지 가릴 수 없어 미검증으로 둡니다. | To-be_v2_converted/06_Packages/04_Package_PKG_NSCM_UI_COM_AUTH.sql:105 | tools/Harness/verify 의 syn_check.py 에 et=SP 대상을 실행하는 경로가 없어 이 행을 재지 못했습니다. ledger.py 에서 공용 권한 SP(PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH)의 시노님·EXECUTE 권한 조회 항목 |
-| T-8ef356b6 | M4 | 판정필요 | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 | AS-IS Input 버튼은 일괄입력 팝업을 열고, 저장에 성공하면 FindInput 으로 입력 대상을 다시 조회해 편집 상태로 바꿉니다. 팝업에서 고른 값을 셀에 채우는 동작이 없으므로 M4(팝업 선택값 셀 반영) 대상이 아닙니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:271 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/mapping_trace.py 가 popup=false 인 버튼(BTN)을 M4 팝업 선택값 반영 대상으로 추적 행을 만들고 있습니다. |
-| T-6c69b6ac | G1 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-6c69b6ac | G1 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-b31bbec5 | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-2a9cd623 | M4 | 판정필요 | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 | AS-IS Delete 버튼은 일괄삭제 팝업을 열고, 저장에 성공하면 FindDelete 로 삭제 SP 를 부른 뒤 다시 조회합니다. 팝업에서 고른 값을 셀에 채우는 동작이 없으므로 M4(팝업 선택값 셀 반영) 대상이 아닙니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:299 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/mapping_trace.py 가 popup=false 인 버튼(BTN)을 M4 팝업 선택값 반영 대상으로 추적 행을 만들고 있습니다. |
-| T-449b82ac | H6 | ERROR | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 · 대상 없음(미검증 → NA) | From Site 조회조건은 AS-IS에서 체크 목록 콤보(UsrCheckedList)이고 팝업 창을 여는 컨트롤이 아닙니다. 팝업 표준(OK→CLOSE 버튼 순서, No. 컬럼, 조회 건수)을 적용할 대상이 없습니다. SCP0007 From City 행을 콤보라서 판정오류로 본 지난 판정과 원인이 같습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.Designer.cs:42 ; GSCM/06.UIL/G | tools/Harness/verify/mapping_checkdefs.csv: 41행의 H6 정의가 ELEM 전체에 적용되어, popup=false인 조회조건 콤보에도 팝업 표준 행이 만들어졌습니다. |
-| T-247bdc3c | G5 | ERROR | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 · 대상 없음(미검증 → NA) | AS-IS 메인 화면의 From Site(clbFromSite)는 Division 기준으로 목록을 채우는 체크리스트 콤보이고, 연결된 팝업이 없습니다. 메인 cs 에서 팝업을 여는 곳은 btnItemId_Click 과 btnInput/btnDelete_Click 세 곳뿐이므로 팝업 인자 연동을 검사할 대상이 없습니다. asis_ref 의 From Site 필수 검사는 일괄입력 팝업 SCM0002_ShipmentLotSizePopup 안의 다른 컨트롤에 대한 것입 | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.Designer.cs:42 ; GSCM/06.UIL/G | tools/Harness/verify/trace_all.py: G5 검사 행을 만들 때 condition 이 popup=false 인 조회조건도 대상에 넣었고, 팝업 내부 컨트롤의 asis_ref 를 메인 조회조건에 붙였습니다. |
-| T-5bb8509f | M4 | 판정필요 | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 | From Site 조회조건은 Division 에 맞춰 목록을 채우는 체크 목록(UsrCheckedList)이고 팝업으로 값을 받지 않습니다. 근거로 든 일괄입력 팝업 From Site 필수 알림은 팝업 안의 조회조건 동작이라 M4(팝업 선택값 반영)와 관계없습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:166 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/mapping_trace.py 가 popup=false 인 조회조건(COND)을 M4 추적 대상으로 넣고 있습니다. |
 | T-3badcc5b | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-505b6f16 | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-484c739b | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-beee3244 | M4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-5869ab26 | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-e57376d2 | A6 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-80e70b77 | F4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-03160f3d | DB-SYN | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-7754adb7 | G1 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-7754adb7 | G1 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-31170afd | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-3a8b1d0e | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-71daa499 | M4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-e8824582 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-b5cbb882 | G1 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-e8824582 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-b5cbb882 | G1 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-6797ba6f | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-0855373f | H6 | ERROR | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 · 대상 없음(미검증 → NA) | To Site 조회조건은 AS-IS에서 체크 목록 콤보(UsrCheckedList)이고 팝업 창을 여는 컨트롤이 아닙니다. 팝업 표준(OK→CLOSE 버튼 순서, No. 컬럼, 조회 건수)을 적용할 대상이 없습니다. SCP0007 From City 행을 콤보라서 판정오류로 본 지난 판정과 원인이 같습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.Designer.cs:63 ; GSCM/06.UIL/G | tools/Harness/verify/mapping_checkdefs.csv: 41행의 H6 정의가 ELEM 전체에 적용되어, popup=false인 조회조건 콤보에도 팝업 표준 행이 만들어졌습니다. |
-| T-57afcab2 | G5 | ERROR | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 · 대상 없음(미검증 → NA) | AS-IS 메인 화면의 To Site(clbToSite)는 Division 기준으로 목록을 채우는 체크리스트 콤보이고, 연결된 팝업이 없습니다. asis_ref 의 cs:184·188 은 일괄입력 팝업 SCM0002_ShipmentLotSizePopup 안의 컨트롤 줄입니다. 따라서 팝업 인자 연동을 검사할 대상이 없습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.Designer.cs:63 ; GSCM/06.UIL/G | tools/Harness/verify/trace_all.py: popup=false 인 조회조건에 G5 행을 만들었고, 팝업 파일의 줄을 메인 조회조건 근거로 붙였습니다. |
-| T-84c5ee4c | M4 | 판정필요 | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 | To Site 조회조건은 Division 에 맞춰 목록을 채우는 체크 목록(UsrCheckedList)이고 팝업으로 값을 받지 않습니다. 팝업 선택값을 반영할 대상이 없으므로 M4 대상이 아닙니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:169 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/mapping_trace.py 가 popup=false 인 조회조건(COND)을 M4 추적 대상으로 넣고 있습니다. |
-| T-e3b75e51 | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-e3b75e51 | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-fa46d98c | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-47a23fbe | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-fde69078 | M4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-f7a95dc6 | F4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-5587aff6 | DB-SYN | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-c7a94f1d | H6 | ERROR | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 · 대상 없음(미검증 → NA) | TRANS_MODE_CODE(Trans Mode)는 숨김 컬럼이며, 저장 파라미터와 일괄삭제의 'X' 값에만 쓰입니다. AS-IS InitEvent에는 그리드 셀 클릭으로 팝업을 여는 이벤트가 없어 이 컬럼에서 열리는 팝업이 없습니다. 팝업 표준 검사 대상이 없습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:117 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/mapping_checkdefs.csv: 41행의 H6 정의가 popup=false인 숨김 그리드 컬럼(COL)에도 팝업 표준 행을 만들었습니다. |
-| T-3dbd9fe5 | G5 | ERROR | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 · 대상 없음(미검증 → NA) | AS-IS 의 Trans Mode(TRANS_MODE_CODE) 컬럼은 저장 파라미터 p_transport_mode 로만 쓰이고, 셀에 연결된 팝업이 없습니다. asis_ref 의 cs:498 는 일괄삭제 때 고정값 X 를 싣는 저장 인자이고 팝업 인자가 아닙니다. 메인 cs 에는 셀 팝업 이벤트(ButtonClicked, CellDoubleClick)가 없으므로 검사 대상이 없습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:75 ; GSCM/06.UIL/GSCM.SCP.F | tools/Harness/verify/trace_all.py: popup=false 인 그리드 컬럼에 G5 행을 만들었고, 저장 파라미터 줄을 팝업 인자 근거로 붙였습니다. |
-| T-41bb3f1f | M4 | 판정필요 | 검사기오판 | NA | Y | Y AS-IS 원문 인용 확인 | AS-IS 에서 TRANS_MODE_CODE(Trans Mode) 칸은 저장할 때 읽기만 하고, 일괄삭제에서는 고정값 X 를 넘깁니다. 그리드 이벤트는 TopChange 와 데이터 변경뿐이며, Designer 에서 셀 더블클릭·버튼 셀 이벤트를 찾았지만 없었습니다. 이 칸을 팝업으로 채우는 동작이 없으므로 M4 대상이 아닙니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:499 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/mapping_trace.py 가 팝업 연결이 없는 컬럼(popup=false)을 asis_ref 의 FindDelete 줄과 엮어 M4 추적 행을 만들고 있습니다. |
-| T-c9e36f25 | G1 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-c9e36f25 | G1 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-3ecb1c2d | A1 | 판정필요 | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-8f397015 | A1 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | AS-IS 는 Input 팝업에서 저장한 뒤 돌려받은 Division·Operation Group·From Site·To Site·Item 목록으로 SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT 을 부릅니다. 골든 비교는 이 값들이 정해지지 않아 SKIP(AS-IS -1행·TO-BE -1행)되었습니다. TO-BE 패키지 원문도 To-be_v2_converted/06_Packages 에서 찾았으나 없어서 조건 로직을 대조하지 못했습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:417 ; GSCM/06.UIL/GSCM.SCP. | golden_cases.csv 의 이 SP 케이스에 일괄입력 팝업이 돌려주는 콤마 목록(divList·operationList·fromSiteList·toSiteList·itemList)을 넣지 않아 파라미터 미정으로 SKIP 되었습니다. |
-| T-6b9a8ce8 | F4 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | 이 SP는 AS-IS에서 Input 버튼의 일괄입력 팝업 확인 뒤 FindInput이 부르는 후보 조회 SP입니다. TO-BE에서도 Input 팝업 확인 뒤 main/INSERT로 호출합니다. 검사엔진은 셀 수정 뒤 Save(main/SAVE)만 실행해서 이 호출의 DB 오류 여부를 재지 못했습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:284 ; GSCM/06.UIL/GSCM.SCP. | tools/E2E 의 _trace.spec W5 가 메인 셀 수정과 Save만 실행하고 Input 버튼 → 일괄입력 팝업 → OK 경로(main/INSERT)를 실행하지 않아서 이 SP를 재지 못했습니다(T210). |
 | T-e691090a | H6 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-a806b129 | G5 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-365b3790 | M4 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-c25bebfb | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-4f69770d | H2 | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-78a38634 | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-0adfea94 | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-0caf6c62 | E4 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | MSG00031은 AS-IS에서 Delete 버튼으로 일괄삭제 팝업을 열고 삭제가 성공했을 때만 뜨는 메시지이고, Save 버튼 경로에서는 나오지 않습니다. TO-BE에도 Delete 팝업 확인 뒤 삭제 성공 메시지를 띄우는 코드가 있습니다. 검사엔진은 Save 위반 입력만 실행해서 이 경로를 재지 못했습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:312 ; GSCM/06.UIL/GSCM.SCP. | tools/E2E 의 _trace.spec W4 가 Save 진입점만 실행해서 FindDelete 경로(Delete 버튼 → 일괄삭제 팝업 → OK)의 메시지를 재지 못했습니다. |
-| T-4677b9e5 | E4 | ERROR | 확인불가 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | MSG00284는 AS-IS 일괄삭제(FindDelete)에서 저장 SP가 S가 아닌 결과를 돌려줄 때만 뜨는 메시지이고, Save 버튼 경로에서는 나오지 않습니다. 이 메시지를 보려면 삭제 SP가 실패해야 하는데, 검사엔진은 Save 위반 입력만 실행해서 이 경로를 재지 못했습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:553 ; GSCM/06.UIL/GSCM.SCP. | tools/E2E 의 _trace.spec W4 가 Save 진입점만 실행하고 FindDelete 실패 응답을 만드는 시나리오가 없어서 이 메시지를 재지 못했습니다. |
-| T-73dbcb2d | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-5ef43a81 | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-d6ad4a4e | G4 | ERROR | 검사기오판 | ERROR | Y | N 미검증 행은 NA(대상 없음 근거)만 반영 | AS-IS Delete 버튼은 SCM0002_ShipmentLotSizePopup을 D 모드로 여는 버튼이므로 대상이 있고 NA가 아닙니다. 검사기는 popup_args.csv에 btnDelete_Click이 없다고 기록했지만, 실제로는 같은 파일에 btnDelete_Click의 팝업 인자 행 2건이 있습니다. 팝업 조회조건 표시, 라벨, 활성 상태를 재지 못했으므로 결과는 ERROR로 둡니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:118 ; GSCM/06.UIL/GSCM.SCP. | tools/Harness/verify/mapping_trace.py로 추정합니다. 버튼 이름(btnDelete)으로 찾아서 asis_method 열의 btnDelete_Click과 맞추지 못한 것으로 보이며, 실제 메시지 생성 위치는 찾지 못했습니다. |
-| T-b2cff1d9 | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| T-2a3f808e | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-f658cb62 | A1 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | AS-IS 일괄입력·삭제 팝업(SCM0002_ShipmentLotSizePopup)은 Find에서 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP을 실행하므로 비교할 대상이 있습니다. 그런데 sp_pair.csv에 SCP0028 짝이 조회·입력·저장 3건만 있고 이 팝업 SP는 빠져 있어서, 골든 비교가 실행되지 않았습니다. 비교를 하지 않았으니 지금 결과를 그대로 둡니다. | GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:284 ; Doc/asisfacts/db/modules/dbo.SCM0002_GET_SHIPMENT_L | tools/Harness/verify/gen_param_map.py: 화면 폴더 밖 팝업 폼(GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs)이 호출하는 SP를 sp_pair.csv 짝으로 만들지 않아서 골든 비교를 건너뛰었습니다. |
+| T-c6aefa56 | A6 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | AS-IS 팝업 SP는 I 분기와 D 분기 모두 DIVISION_ID, OPERATION_GROUP_ID, from_site, TO_SITE, ITEM_ID 순으로 정렬하고, 팝업 화면은 그리드에 다시 정렬하지 않고 그대로 표시합니다. 이 SP는 sp_pair.csv에 AS-IS 짝이 없어서 정렬 대조를 하지 못했습니다. TO-BE PKG_SCP0028 본문도 To-be_v2_converted/06_Packages에서 찾지 못해 ORDER BY를 직접 대조할 수 | Doc/asisfacts/db/modules/dbo.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP.sql:61 ; Doc/asisfacts/db/modules/dbo.SCM0002_GET_SHIPM | tools/Harness/verify/sort_check.py: sp_pair.csv에 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 짝이 없어서 AS-IS ORDER BY 두 분기를 TO-BE PKG ORDER BY와 대조하지 못했습니다. |
+| T-c25bebfb | X-ROW | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-4f69770d | H2 | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-0adfea94 | X-ROW | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-4677b9e5 | E4 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | AS-IS 일괄 Delete 는 저장 SP 결과 첫 값이 S 가 아니면(예외 때 F) MSG00284 오류를 띄운다. TO-BE 저장 응답에도 O_RESULT_CURSOR 의 RESULT_CODE 가 오지만(Doc/verify/SCP0028/_resume/post/f/save_diff/P_SCP0028_SAVE_SHIPMENT_LOT_SIZE__1.md:9), 화면은 HTTP 상태와 code 만 보고 RESULT_CODE 는 보지 않는다. 그래서 결과가 F 여도 | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:540 ; GSCM/06.UIL/GSCM.SCP. |  |
+| T-b2cff1d9 | X-ROW | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| T-2a3f808e | X-ROW | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-22025375 | X-ROW | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-0891c714 | X-ROW | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
 | T-7e1641ba | X-ROW | FAIL | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
-| EG-6cc339e1 | H6 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | Input 팝업은 AS-IS와 같이 열 때 자동 조회를 하지 않고, From Site를 고른 뒤 Search를 눌러야 후보가 조회됩니다. 검사기는 Search 없이 0행 상태에서 건수 문구를 찾았고, 공용 ResultArea는 0건이면 건수를 표시하지 않으므로 건수 표시 여부가 측정되지 않았습니다. TO-BE 팝업에는 count={rows.length}가 연결되어 있지만 실제 표시는 행이 있는 상태에서 다시 재야 합니다. | GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:146 ; GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotS | Doc/e2e/specs/_verify.spec.ts: Input 팝업을 연 직후 0행 상태에서 건수를 쟀습니다. From Site를 하나 고르고 Search로 1행 이상 조회한 뒤 측정해야 합니다(T34). |
-| EG-273588ca | M3 | 판정필요 | 확인불가 | 판정필요 | Y | N 판정 같음 | AS-IS 의 Input DATA 팝업은 열 때 자동 조회를 하지 않습니다. From Site 가 ALL 이면 Search 를 막고 'From Site 필수' 알림을 띄웁니다. TO-BE 도 같은 알림으로 막아서 실측된 0행과 알림은 AS-IS 와 같습니다. 다만 From Site 를 골라 조회한 뒤 데이터가 나오는지, No Permission 오류가 없는지는 재지 않았습니다. | GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:261 ; GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotS | Doc/e2e/specs/_verify.spec.ts 의 팝업 조회 시험이 From Site 를 ALL 로 둔 채 Search 를 눌렀습니다. 필수 알림에 막혀 데이터 조회를 측정하지 못했습니다. |
-| EG-2644dff3 | H6 | FAIL | 검사기오판 | PASS | Y | Y AS-IS 원문 인용 확인 | Model 팝업 하단 버튼은 TO-BE 공용 팝업 전부(ItemByDivision, ModelByDivision, Project, Owner 등)와 같은 Close, OK 배치입니다. 같은 규칙의 SCP0007 전체 팝업 버튼 순서 FAIL 을 사용자가 판정오류로 정정했습니다. 검사기가 수집한 버튼 목록에는 팝업 확인·닫기 버튼이 아닌 조회영역 Open, Search 까지 섞여 있습니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:246 ; nscm-fe/features/mast | tools/E2E/_verify.spec.ts: H6 버튼 순서 판정이 TO-BE 공용 팝업의 Close, OK 배치를 오류로 보고, 조회영역 Open·Search 버튼까지 비교 대상에 넣습니다. |
+| T-4cec401b | X-ROW | ERROR | 검토 제외 |  | N | N 집계·상속 행(하위 행을 검토) |  |  |  |
+| EG-2644dff3 | H6 | FAIL | 실결함 | FAIL | Y | N 판정 같음 | Model 조회조건 팝업(TO-BE MaterialByDivisionModal)은 Close 버튼을 OK 버튼보다 먼저 그리고, buttonWrapper 스타일에 순서를 뒤집는 설정이 없어 화면에서도 Close, OK 순서입니다. CR-005 는 모든 팝업 버튼 순서를 OK, CLOSE 로 정하고 있어 오류입니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:246 ; nscm-fe/features/mast |  |
 | EG-ac06e957 | G4 | 판정필요 | TOBE룰 | PASS | Y | Y AS-IS 원문 인용 확인 | AS-IS Model 돋보기는 ItembyDivision 팝업(조건 Model, Division, Site, Project)을 열지만, 화면은 Site 와 Project 를 빈 값으로 넘깁니다. TO-BE 는 2026-10-08 사용자 지시로 SCP 공용 Material by Division 팝업(Div, Operation Group, Material)을 쓰며, 화면 소스에 의도된 변경으로 기록되어 있습니다. 일반 규칙: SCP 화면 Model 조회조건 팝업은  | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:248 ; GSCM/06.UIL/GSCM.SCP. |  |
-| EG-bd80125c | MS1 | 판정필요 | 검사기오판 | PASS | Y | Y AS-IS 원문 인용 확인 | AS-IS 는 Lot Size 가 Increment 보다 작으면 MSG00099 「{0}은 {1} 보다 클 수 없습니다.」를 띄웁니다(cs:764). TO-BE 는 KO·EN·CN 에 모두 등록된 코드 MSG01127 을 t() 로 읽어 같은 문구를 띄웁니다. 검사기가 고정 한글로 잡은 문자열은 그 코드가 없을 때만 쓰는 기본 문구입니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:764 ; nscm-fe/features/ship | tools/Harness/verify/i18n_static.py 는 바로 앞에 t(코드, '기본 문구') 형태가 있을 때만 기본 문구로 빼 줍니다. 그래서 remember(MSG.INC_GT_LOT, '...') 처럼 등록 코드 상수를 첫 인자로 받는 래퍼 함수의 기본 문구를 고정 한글 |
+| EG-e15844cc | A1 | 판정필요 | TOBE룰 | NA | Y | Y AS-IS 원문 인용 확인 | AS-IS는 조회 버튼을 누르면 SCP0028_GET_SHIPMENT_LOT_SIZE를 실행합니다. 같은 인자로 돌렸을 때 AS-IS는 1940행, TO-BE는 1990행이 나왔습니다. 차이는 TO-BE에만 있는 키 50행뿐이고, AS-IS에만 있는 키는 0행, 공통 행 3030칸 가운데 값이 다른 칸은 0칸입니다. CR-105에 따라 차등 검증에서 행·키 집합 차이는 판정에서 빼고, 같은 SP의 정렬(A6)과 컬럼 18개(A7)는 원장에서 PASS입니다. | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:349 ; Doc/asisfacts/db/modu |  |

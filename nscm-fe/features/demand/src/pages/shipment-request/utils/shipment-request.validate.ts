@@ -1,7 +1,7 @@
 // DMF0045 — 저장 검증 (AS-IS DMF0045_ShipmentRequest.cs SaveData/fnValidation — design 03 §4.3).
 //   근거(라인 = AS-IS cs):
-//     · 필수 7종 (SaveData cs 2140~2189): Division / Project Code / FROM_SITE(Sales Site) /
-//       Item(Model) / FCST Type / Incoterms / Measure — MSG00002 '{0} 필수'.
+//     · 필수 9종 (SaveData cs 815 checkRequiredOfSpread): Division / Project Code / FROM_SITE /
+//       Item(Model) / FCST Type / Incoterms / Measure / Trans Mode / BOD ID — MSG00429 '{0} 필수'.
 //     · Division='81' 계열 조건부 (startsWith('81')): TO_SITE(Plant) 추가 필수.
 //     · 음수 qty 차단 (fnValidation cs 2205~2229): AS-IS MSG00084(미배포) → 사내 MSG00085 재매핑
 //       (__asis-mapping__ 기록). D_ 정규화 후 조립행(SaveUnfoldRow) qty 기준으로 판정.
@@ -11,14 +11,85 @@
 //     sales-plan 선례 2026-08-11 확정)이라, 여기서는 조립행이 아니라 원본 행(신규분) 을 받아 검증한다.
 import { useMessageStore } from '@shared/stores';
 
-import { MSG } from '../shipment-request.constants';
+import { FROZEN_PERIOD_MSG, MSG } from '../shipment-request.constants';
 import type { ShipmentRequestRow, ValidationResult } from '../shipment-request.types';
 
 import { isDiv81 } from './shipment-request.division';
+import { dynKindOf, isFrozenDayCell } from './shipment-request.editLock';
 import type { SaveUnfoldRow } from './shipment-request.save';
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v.trim() : typeof v === 'number' ? String(v) : '';
+
+// frozen 위반 셀 — 저장 대상 D_ 셀 중 마감 구간에 걸린 것(그리드 위치 이동용으로 행·binding 을 함께 넘긴다).
+export interface FrozenCell {
+  row: ShipmentRequestRow;
+  binding: string;
+}
+
+const ymdLabel = (binding: string): string => {
+  const ymd = binding.slice(2);
+  return `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`;
+};
+
+/**
+ * 저장 대상 D_ 셀 중 frozen 구간에 있는 셀을 찾는다(순수 함수).
+ *   셀 잠금(evalShipmentDynCell)이 1차 방어지만, Weekly/Monthly 입력이 하위 D_ 로 전개되거나(recalc)
+ *   잠금이 빠진 경로로 frozen 일자 값이 바뀌면 SP 는 그대로 저장/거부해 원인을 알 수 없었다(#236).
+ *   판정 기준은 잠금과 같은 isFrozenDayCell 이다.
+ *   - 신규행: 값이 있는 D_ 셀(buildUnfoldRows 신규 수집 기준과 동일).
+ *   - 수정행: EditTracker 가 잡은 변경 D_ 셀.
+ */
+export const findFrozenCells = (params: {
+  insertedRows: ShipmentRequestRow[];
+  editedChanges: Map<ShipmentRequestRow, Record<string, unknown>>;
+  dOrderedDayBindings: readonly string[];
+  insertFrozenCutoffYmd: string;
+}): FrozenCell[] => {
+  const { insertedRows, editedChanges, dOrderedDayBindings, insertFrozenCutoffYmd } = params;
+  const out: FrozenCell[] = [];
+  const check = (row: ShipmentRequestRow, binding: string) => {
+    if (dynKindOf(binding) !== 'D') return;
+    if (isFrozenDayCell(binding, row, dOrderedDayBindings, insertFrozenCutoffYmd)) {
+      out.push({ row, binding });
+    }
+  };
+  for (const row of insertedRows) {
+    const rec = row as Record<string, unknown>;
+    for (const key of Object.keys(rec)) {
+      const v = rec[key];
+      if (v == null || v === '') continue;
+      check(row, key);
+    }
+  }
+  for (const [row, changed] of editedChanges) {
+    if (row.CRUD_TYPE === 'I') continue;
+    for (const key of Object.keys(changed)) check(row, key);
+  }
+  return out;
+};
+
+/**
+ * frozen 상세 문구 — From Plant 별 "Plant ~ 마지막 frozen 일자". 같은 Plant 는 한 번만.
+ *   마지막 일자 = 그 행의 frozen 판정이 참인 D_ 중 가장 늦은 일자(잠금 구간의 끝).
+ */
+export const describeFrozenCells = (
+  cells: FrozenCell[],
+  dOrderedDayBindings: readonly string[],
+  insertFrozenCutoffYmd: string
+): string => {
+  const bySite = new Map<string, string>();
+  for (const { row } of cells) {
+    const site = str(row.FROM_SITE) || 'New Row';
+    const lastFrozen = dOrderedDayBindings
+      .filter(b => isFrozenDayCell(b, row, dOrderedDayBindings, insertFrozenCutoffYmd))
+      .at(-1);
+    if (!lastFrozen) continue;
+    const prev = bySite.get(site);
+    if (!prev || lastFrozen > prev) bySite.set(site, lastFrozen);
+  }
+  return [...bySite.entries()].map(([site, b]) => `${site} ~ ${ymdLabel(b)}`).join(', ');
+};
 
 // 필수 7종 (컬럼, 라벨 fallback) — 라벨은 t(MSG00002 {0}) 치환용. i18n LBL 코드가 있는 항목은
 //   LBL 을 우선(convert-core §2.4 자유 형식 금지), 없으면 컬럼 캡션 fallback.
@@ -30,6 +101,11 @@ const REQUIRED_FIELDS: ReadonlyArray<{ col: string; lblKey?: string; fallback: s
   { col: 'FCST_TYPE', fallback: 'FCST Type' },
   { col: 'INCOTERMS', fallback: 'Incoterms' },
   { col: 'MEASURE', fallback: 'Measure' },
+  // Trans Mode / BOD ID — AS-IS checkRequiredOfSpread 는 라벨 '*' 컬럼 전부를 본다(SHEET_COLUMNS 실측:
+  //   'Trans Mode*', 'BOD ID*'). 누락 시 SP 가 TRANSPORT_MODE/BOD_ID NOT NULL 위반(ORA-01400)으로
+  //   실패해 원문 오류가 알럿에 그대로 노출됐다. TR_MODE 를 먼저 검사(BOD 팝업이 둘을 함께 채운다).
+  { col: 'TR_MODE', fallback: 'Trans Mode' },
+  { col: 'BOD_ID', fallback: 'BOD ID' },
 ];
 
 export const useShipmentRequestValidation = () => {
@@ -113,9 +189,29 @@ export const useShipmentRequestValidation = () => {
     return { ok: true };
   };
 
+  /**
+   * frozen 구간 저장 차단 — 위반 셀이 있으면 SP 를 부르지 않고 frozen 때문임을 밝혀 안내한다(#236).
+   *   SP(P_DMF0045_SAVE_SHIPMENT_REQUEST)에는 frozen 검사가 없어, 이 가드가 없으면 원인 모를 실패나
+   *   frozen 일자 저장으로 이어진다. 전용 MSG 가 등록되기 전에는 MSG01196 + 상세 줄로 표시한다.
+   */
+  const validateFrozenCells = (
+    cells: FrozenCell[],
+    dOrderedDayBindings: readonly string[],
+    insertFrozenCutoffYmd: string
+  ): ValidationResult => {
+    if (cells.length === 0) return { ok: true };
+    const detail = describeFrozenCells(cells, dOrderedDayBindings, insertFrozenCutoffYmd);
+    const content = FROZEN_PERIOD_MSG
+      ? t(FROZEN_PERIOD_MSG, FROZEN_PERIOD_MSG).replace('{0}', detail)
+      : `${t(MSG.PLAN_NOT_EDITABLE, '_수정할 수 없는 플랜입니다.')}\nFrozen: ${detail}`;
+    void setAlert({ type: 'alert', content });
+    return { ok: false, msgId: FROZEN_PERIOD_MSG ?? MSG.PLAN_NOT_EDITABLE, detail };
+  };
+
   return {
     validateFind,
     validateBucketChange,
     validateSaveRows,
+    validateFrozenCells,
   };
 };

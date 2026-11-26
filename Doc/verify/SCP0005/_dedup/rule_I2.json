@@ -1,96 +1,52 @@
 {
  "rule_id": "I2",
- "hash": "2efeffe02c619099",
+ "hash": "0a2a063a5a3d7295",
  "groups": [
-  {
-   "rows": [
-    "V-89bb637a",
-    "V-dc48cc81"
-   ],
-   "why": "Both rows check the result-count (total/item) label in search results with the language set to CN and expect it in the CN resource, so they are the same element, state and result."
-  },
-  {
-   "rows": [
-    "V-51b65f71",
-    "V-d04571f1"
-   ],
-   "why": "Both rows switch the screen language and check that popup and notice message/label codes such as MSG00445 are registered and shown in every language, so they share the same element, method and expected result."
-  },
   {
    "rows": [
     "EG-0894db38"
    ],
-   "why": "This row checks screen labels with the account language set to CN, which differs from the other language conditions, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-4431808c"
-   ],
-   "why": "This row checks screen labels with the account language set to EN, which differs from the other language conditions, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-928e0116"
-   ],
-   "why": "This row checks screen labels with the account language set to KO, which differs from the other language conditions, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-2037a747"
-   ],
-   "why": "The target is 'EN data', and it is unclear whether that is the same as the plain EN label check, so it stays alone."
+   "why": "CN 언어로 라벨·버튼·헤더를 확인하는 행입니다. 'CN 데이터' 행은 데이터까지 보는지 화면 문구만 보는지 확실하지 않아 묶지 않았습니다."
   },
   {
    "rows": [
     "EG-60363cec"
    ],
-   "why": "The target is 'CN data', and it is unclear whether that is the same as the plain CN label check, so it stays alone."
+   "why": "대상이 'CN 데이터'로 CN 화면 문구 행과 달라서, 같은 요소를 확인하는지 확신할 수 없어 따로 두었습니다."
+  },
+  {
+   "rows": [
+    "EG-4431808c"
+   ],
+   "why": "EN 언어로 라벨·버튼·헤더를 확인하는 행입니다. 'EN 데이터' 행과 같은 요소인지 확실하지 않아 묶지 않았습니다."
+  },
+  {
+   "rows": [
+    "EG-2037a747"
+   ],
+   "why": "대상이 'EN 데이터'로 EN 화면 문구 행과 달라서, 같은 요소를 확인하는지 확신할 수 없어 따로 두었습니다."
+  },
+  {
+   "rows": [
+    "EG-928e0116"
+   ],
+   "why": "KO 언어로 확인하는 행이고, 같은 언어를 같은 기대 결과로 확인하는 다른 행이 없습니다."
   },
   {
    "rows": [
     "EG-f99f796d"
    ],
-   "why": "The target is the Search button, which is a different element from the per-language whole-screen checks, so it stays alone."
+   "why": "대상이 조회 버튼이라 언어별 화면 전체 확인과 요소가 달라서 따로 두었습니다."
   },
   {
    "rows": [
     "V-10713721"
    ],
-   "why": "This row checks labels, messages and combo items together across KO/EN/CN, which is broader than any other row, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-41d182e2"
-   ],
-   "why": "This row checks the multilingual message (MSG00701) for clicking OK without a selection in the Version popup, which is a different popup and condition, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-684afc1f"
-   ],
-   "why": "This row checks that Team names in the search condition and the result column show in English when logged in as ENG, which is a different element, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-d0643ed2"
-   ],
-   "why": "This row checks the four items of the Approval Result search-condition combo and that their language is not mixed, which is a different element, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-e09e1313"
-   ],
-   "why": "This row checks the KO 'no changes' notice when saving without changes, which is a different action and message, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-f0a5e96f"
-   ],
-   "why": "This row checks the KO validation message when Lot Size is less than Increment, which is a different condition and message, so it stays alone."
+   "why": "KO/EN/CN 세 언어 모두에서 메시지와 콤보 항목까지 혼용이 없는지 보는 행이라, 대상 범위와 기대 결과가 다른 행들과 달라 따로 두었습니다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:44:09",
- "cost": 0.0678738
+ "at": "2026-11-25 02:33:57",
+ "cost": 0.043311800000000004
 }

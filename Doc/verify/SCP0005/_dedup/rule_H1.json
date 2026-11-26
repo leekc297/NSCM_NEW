@@ -1,352 +1,341 @@
 {
  "rule_id": "H1",
- "hash": "5caf67376632ed7d",
+ "hash": "c4be10d2f10183bd",
  "groups": [
   {
    "rows": [
     "V-09aa36cf"
    ],
-   "why": "팝업 그리드의 LAST_UPDATE_DATE 컬럼 하나만 확인하는 행이고, 같은 컬럼을 다루는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-0e9ca72d"
    ],
-   "why": "팝업 그리드의 LT_ARRIVAL_INLAND 컬럼만 확인하며, 메인 그리드의 같은 이름 컬럼은 다른 그리드라서 다른 요소다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-11ac9943"
    ],
-   "why": "메인 그리드의 DAYS_TUE 컬럼만 확인하며, 팝업의 DAYS_TUE와는 다른 그리드의 요소다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-210c2345"
    ],
-   "why": "메인 그리드의 Two_SEGMENT_COST 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-2a2a3c6c"
    ],
-   "why": "메인 그리드의 ROUTE_ID 컬럼만 확인하며, 팝업의 ROUTE_ID와는 다른 그리드의 요소다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-2b5f9263"
    ],
-   "why": "메인 그리드의 SHIPPING_COMPANY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3195bb62"
    ],
-   "why": "메인 그리드의 SHIP_DOC_PREPARATION_DATE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3a43e057"
    ],
-   "why": "메인 그리드의 PRIORITY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3bbe2e72"
    ],
-   "why": "메인 그리드의 CREATED_BY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3bc8cdf7"
    ],
-   "why": "메인 그리드의 D_COUNTRY 컬럼 하나만 확인하며, 다른 Country 컬럼들과는 서로 다른 컬럼이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-3d86cdd4"
    ],
-   "why": "팝업 그리드의 ROUTE_ID 컬럼만 확인하며, 메인 그리드의 ROUTE_ID와는 다른 그리드의 요소다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-4248f868"
    ],
-   "why": "팝업 그리드의 DAYS_THU 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-42cf50ce"
    ],
-   "why": "메인 그리드의 DAYS_SUN 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-447928fb"
    ],
-   "why": "메인 그리드의 D_PORT_CODE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-51fed314"
    ],
-   "why": "팝업 그리드의 DAYS_SUN 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-526311fd"
    ],
-   "why": "메인 그리드의 FROM_CITY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-5377fdd1"
    ],
-   "why": "메인 그리드의 LT_ARRIVAL_INLAND 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-5f63eed5"
    ],
-   "why": "팝업 그리드의 LT_VOYAGE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6e549fdc"
    ],
-   "why": "팝업 그리드의 LT_SUM 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6eec2adf"
    ],
-   "why": "메인 그리드의 DAYS_FRI 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-70e1022e"
    ],
-   "why": "메인 그리드의 TRANSPORT_MODE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-71961dcd"
    ],
-   "why": "메인 그리드의 A_PORT_CODE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-74e40031"
    ],
-   "why": "메인 그리드의 FROM_COUNTRY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-77d0a9e9"
    ],
-   "why": "메인 그리드의 LAST_UPDATED_BY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-7b3aeb7b"
    ],
-   "why": "메인 그리드의 DAYS_SAT 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-7e8d7808"
    ],
-   "why": "메인 그리드의 D_PORT_NAME 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-86dbc4ce"
    ],
-   "why": "메인 그리드의 TO_COUNTRY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-87a9681d"
    ],
-   "why": "메인 그리드의 A_PORT_NAME 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-8cfb857a"
    ],
-   "why": "메인 그리드의 A_COUNTRY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-916e5b76"
    ],
-   "why": "메인 그리드의 FROM_CITY_NAME 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-956bd8d2"
    ],
-   "why": "메인 그리드의 LT_SUM 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-96eca841"
    ],
-   "why": "메인 그리드의 LT_LAY_OFF_CLEARANCE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a14218b0"
    ],
-   "why": "메인 그리드의 DAYS_MON 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a212623c"
    ],
-   "why": "메인 그리드의 LT_VOYAGE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a29bf24f"
    ],
-   "why": "메인 그리드의 LT_DEPARTURE_INLAND 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a89c2776"
    ],
-   "why": "메인 그리드의 LAST_UPDATE_DATE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-bf551efe"
    ],
-   "why": "메인 그리드의 LT_TYPE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c003bbad"
    ],
-   "why": "메인 그리드의 DAYS_WED 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c3d1e0fe"
    ],
-   "why": "팝업 그리드의 LT_LAY_OFF_CLEARANCE 컬럼 하나만 확인하는 행이다."
-  },
-  {
-   "rows": [
-    "V-c5262843"
-   ],
-   "why": "다른 화면(DMF0043)의 결함 유형에서 온 행으로, 기대가 '무조건 가운데 정렬'이라 AS-IS C→Left를 PASS로 보는 COLUMN 행(V-ee10b7a5)과 판정 기준이 달라 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-caa4e3ae"
-   ],
-   "why": "특정 컬럼 하나가 아니라 그리드 전체의 정렬 차이를 어떻게 판정할지 정한 확정 규칙이어서, 개별 컬럼 측정 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-cd45baa7"
    ],
-   "why": "팝업 그리드의 LT_DEPARTURE_INLAND 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-cf568382"
    ],
-   "why": "메인 그리드의 Three_SEGMENT_COST 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d158d541"
    ],
-   "why": "팝업 그리드의 DAYS_FRI 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d9c38a6c"
    ],
-   "why": "메인 그리드의 TO_CITY_NAME 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-da0ef770"
    ],
-   "why": "팝업 그리드의 LAST_UPDATED_BY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-de1f05bc"
    ],
-   "why": "팝업 그리드의 LT_WAIT_SHIPPING 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-df2e0228"
    ],
-   "why": "메인 그리드의 DAYS_THU 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e80178f5"
    ],
-   "why": "메인 그리드의 One_SEGMENT_COST 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e91d6d3d"
    ],
-   "why": "팝업 그리드의 DAYS_TUE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e9bd2bb4"
    ],
-   "why": "팝업 그리드의 DAYS_MON 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-eaa548e3"
    ],
-   "why": "팝업 그리드의 DAYS_WED 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-ee10b7a5"
    ],
-   "why": "메인 그리드의 VALID_YN 컬럼을 AS-IS C 기준으로 확인하며, GENERAL 행과는 판정 기준이 달라 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f3183890"
    ],
-   "why": "메인 그리드의 LT_WAIT_SHIPPING 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f4c6cd4b"
    ],
-   "why": "메인 그리드의 TO_CITY 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f63dff45"
    ],
-   "why": "메인 그리드의 CREATION_DATE 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f7957690"
    ],
-   "why": "팝업 그리드의 DAYS_SAT 컬럼 하나만 확인하는 행이다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:42:47",
- "cost": 0.14666059999999997
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:33:33",
+ "cost": 0,
+ "open": 0
 }

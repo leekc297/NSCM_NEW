@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 2112,
-  "at": "2026-11-20T00:41:57.886Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1534,
+  "at": "2026-11-25T16:21:45.906Z",
+  "user": "brightboy",
   "test": "동적 칸 정렬·방향키 응답(K1·L1)"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 736,
-  "at": "2026-11-20T00:42:00.387Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 743,
+  "at": "2026-11-25T16:21:48.824Z",
+  "user": "brightboy",
   "test": "동적 칸 정렬·방향키 응답(K1·L1)"
  }
 ]

@@ -37,8 +37,10 @@ export const MSG = {
   REQUIRE_DIVISION: 'MSG00667',
   // "시작일자가 종료일자보다 늦을 수 없습니다." (.cs L579 + drpPeriod_ValueChanged L980, AS-IS MSG00108)
   PERIOD_INVERTED: 'MSG01135',
-  // 기간 상한 (.cs L583: AddYears(2) — 조건 2년 / AS-IS·사내 문구 '3년' 불일치는 AS-IS 자체 상태 1:1 보존)
-  PERIOD_MAX: 'MSG00164',
+  // 기간 상한 2년 "조회 기간은 2년 이내로 입력해주세요." (.cs L420: AddYears(2)). AS-IS 는 MSG00164('3년')를
+  //   띄워 조건(2년)과 문구가 어긋났다 — 2년 문구를 신규 등록(MSG01505)해 맞춤(2026-11-22 개선 요청).
+  //   MSG00164 는 3년 제한 화면(DMF0048 등)이 계속 쓰므로 문구를 고치지 않고 코드를 분리했다.
+  PERIOD_MAX: 'MSG01505',
   // "{0} value is required." — spdMain_Changed 필수 11건 (AS-IS MSG00002 의미 1:1)
   REQUIRED_VALUE: 'MSG00429',
   // "Customer FCST 수량이 입력된 일자가 없습니다. Row 기준으로 …" (SaveData iCount=0, AS-IS MSG00152)

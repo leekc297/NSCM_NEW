@@ -3,7 +3,7 @@
   "at": "2026-11-20T15:18:17+09:00",
   "ms": 1795155497458,
   "source": "self",
-  "status": "pending",
+  "status": "applied",
   "sig": "sn|newdet|resumedjobshown",
   "title": "사용자 지적 감지기 추가 U16 resumedJobShown: 창 다시 로드 뒤 WORKBENCH 에서는 작업이 재개되는데 VMW 목록에는 재개된 작업이 보이지 않음",
   "evidence": "사용자 지적(2026-11-20T14:16:44+09:00) \"다시 로드 후 작업 재개 시 WORKBENCH 에서는 재개 되는데 VMW 에 재개된 작업이 보이지 않습니다.\"",
@@ -18,8 +18,83 @@
   "impact": "",
   "incident": "",
   "screen": "",
-  "history": [],
+  "history": [
+    {
+      "at": "2026-11-20T15:39:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T15:42:32+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 661, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1539"
+    },
+    {
+      "at": "2026-11-20T15:42:34+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T15:47:24+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 667, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T15:47:24+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(PASS 58건, U16 표본 6건 포함) · user_checks.json JSON 파싱 정상 · 2026-11-20 15:43:56 · 변경 9개 파일 · 대상 목록 밖 변경 6개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, Doc/verify/SCP0028/calls/_verify_그리드_표시_묶음_N1_H8_A5__0.json, Doc/verify/SCP0028/calls/_verify_셀_편집_표시_값_유지_A2_F6__0.json, Doc/verify/SCP0028/calls/_verify_정렬_필터_상태_Insert_D6_붙여넣기_후보_외_F3__0.json",
+      "log": ".vibe\\logs\\2026-11-20T15-42-35_claude_orch.log",
+      "sec": 95,
+      "costUsd": 1.0788867,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json",
+        "Doc/verify/SCP0028/calls/_verify_그리드_표시_묶음_N1_H8_A5__0.json",
+        "Doc/verify/SCP0028/calls/_verify_셀_편집_표시_값_유지_A2_F6__0.json",
+        "Doc/verify/SCP0028/calls/_verify_정렬_필터_상태_Insert_D6_붙여넣기_후보_외_F3__0.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:30+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T16:11:34+09:00"
+    }
+  ],
   "self": true,
   "check": "S13",
-  "selfKey": "S13|U16"
+  "selfKey": "S13|U16",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795156752835,
+  "autoFp": "07a2dd7ddf",
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 667, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1539",
+  "needsReload": true,
+  "appliedMs": 1795157244777,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(PASS 58건, U16 표본 6건 포함) · user_checks.json JSON 파싱 정상 · 2026-11-20 15:43:56",
+    "note": "resumedJobShown: 중단 시각(job.json interrupted면 interruptedAt, 다시 실행 중이면 user.stop why vscode.dispose 마지막 ms) 뒤 같은 job의 job.start 또는 chain.start가 있으면 재개로 봄. 재개 뒤 2분(graceMin)이 지나 받은 ui.json jobs 보고에 job id가 없으면 fail, 그런 보고가 없으면 warn(판정 못 함). noteUi tab 'job' {received, jobIds} 저장 추가. 웹뷰가 tab 'job' 보고를 보내는 코드는 대상 파일 밖(workbench.js 또는 jobs 웹뷰)이라 넣지 않음. 넣기 전까지 U16은 warn만 냄. 같은 감지기를 쓰는 U17은 승인 범위 밖이라 pending-detector로 둠."
+  },
+  "snap": "prop_20261120151817_SELF",
+  "effectiveMs": 1795158694757,
+  "effectiveAt": "2026-11-20T16:11:34+09:00"
 }

@@ -1,10 +1,12 @@
-import { toggleClass } from '@mescius/wijmo';
+import { Aggregate, toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   CellType,
+  type Column,
   DataMap,
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
+  GroupRow,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import styles from 'features/demand/src/pages/sales-plan-01/SalesPlan01.module.scss';
@@ -50,6 +52,14 @@ import {
   getMonthWeekKeysInRange,
   HierarchicalMergeManager,
 } from '../utils/sales-plan-01.merge';
+
+// 동적(기간) 컬럼 너비 = 프로시저(GET_SPREAD_TITLE) COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+const DYN_COL_DEFAULT_WIDTH = 90;
+const spColumnWidth = (raw: string | number | null | undefined): number | undefined => {
+  const n = Number(String(raw ?? '').trim());
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
 
 // 동적 컬럼 kind 서열 — M(월)=0 상위 … D(일)=2 하위. 표시 규칙/드릴다운 판정용 (DMF0003 동일).
 const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
@@ -313,6 +323,8 @@ export const SalesPlan01Grid = ({
     leaf: string;
     sort: number;
     dayCode: string;
+    /** SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+    width?: number;
   };
   // 동적 컬럼 fallback(spreadTitle 부재 시)만 rows 를 쓴다 — 그것도 '동적 키 집합' 만 본다.
   //   rows 배열 자체를 dynColMetas dep 에 두면 행추가(Insert)마다 rows 참조가 바뀌어 dynColMetas 가
@@ -349,6 +361,7 @@ export const SalesPlan01Grid = ({
           leaf: String(r.COLUMN_LABEL_NAME ?? ''),
           sort: Number(r.SORT_ORDER_NO ?? 0),
           dayCode: String(r.DAY_CODE ?? ''),
+          width: spColumnWidth(r.COLUMN_WIDTH),
         },
       ];
     });
@@ -361,6 +374,8 @@ export const SalesPlan01Grid = ({
           titleMetas.map(meta => [meta.binding.slice(2, 8), meta.large] as const)
         );
         const maxSort = Math.max(...titleMetas.map(meta => meta.sort), 0);
+        // 화면이 보완하는 주차도 SP 가 준 너비를 따른다(같은 SP 결과의 첫 너비).
+        const titleWidth = titleMetas.find(meta => meta.width !== undefined)?.width;
         getMonthWeekKeysInRange(startYyyymmdd, endYyyymmdd).forEach((binding, index) => {
           if (existing.has(binding)) return;
           const ym = binding.slice(2, 8);
@@ -372,6 +387,7 @@ export const SalesPlan01Grid = ({
             leaf: '',
             sort: maxSort + index + 1,
             dayCode: '',
+            width: titleWidth,
           });
         });
       }
@@ -476,7 +492,7 @@ export const SalesPlan01Grid = ({
         // 3단(leaf) 라벨 — M/W 합계는 'SUM' / D=일자(m.leaf).
         header: m.kind === 'D' ? m.leaf || m.small || 'SUM' : 'SUM',
         align: 'right',
-        width: 90,
+        width: m.width ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,
@@ -1075,7 +1091,30 @@ export const SalesPlan01Grid = ({
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
       const rowCount = headerRows.length;
-      const per = Math.round(48 / rowCount);
+      // 3단인데 보이는 동적 칸이 월(M_)뿐이면 2단 · 3단이 'SUM' 으로 세로 병합된다(펼치기 전)
+      //   → 24 / 12 / 12 로 나눠 보이는 두 줄을 24 : 24 로 맞춘다(2026-11-23 요청: 총 48 유지, 반반).
+      //   주 · 일로 펼쳐 하위 칸이 보이면 세 줄이 따로 보이므로 균등 분배.
+      let monthOnly = false;
+      if (rowCount === 3) {
+        let hasDyn = false;
+        let hasLower = false;
+        for (let i = 0; i < g.columns.length; i++) {
+          const col = g.columns[i];
+          if (!col.visible) continue;
+          const kind = dynKindOf(col.binding ?? '');
+          if (!kind) continue;
+          hasDyn = true;
+          if (kind !== 'M') {
+            hasLower = true;
+            break;
+          }
+        }
+        monthOnly = hasDyn && !hasLower;
+      }
+      const targets = monthOnly
+        ? [24, 12, 12]
+        : Array.from({ length: rowCount }, () => Math.round(48 / rowCount));
+      const per = targets[rowCount - 1];
       // 무한 루프 방지 가드 — 모든 헤더 행이 이미 per 인지 검사한다.
       //   주의: defaultSize + rows[0] 만 보던 종전 가드는 columnGroups 재대입으로 헤더가 재생성될 때
       //   defaultSize/rows[0] 은 per 로 맞았는데 rows[1]/rows[2] 만 이전(더 큰) 높이로 남는 전환
@@ -1083,11 +1122,11 @@ export const SalesPlan01Grid = ({
       //   ("헤더가 가끔씩 커진다" 리포트). 아래 for 재적용은 idempotent 하므로 전 행 검사로 바꿔도 안전.
       let allMatched = Math.round(headerRows.defaultSize) === per;
       for (let i = 0; allMatched && i < headerRows.length; i++) {
-        if (Math.round(headerRows[i]?.height ?? 0) !== per) allMatched = false;
+        if (Math.round(headerRows[i]?.height ?? 0) !== targets[i]) allMatched = false;
       }
       if (allMatched) return;
       headerRows.defaultSize = per;
-      for (let i = 0; i < headerRows.length; i++) headerRows[i].height = per;
+      for (let i = 0; i < headerRows.length; i++) headerRows[i].height = targets[i];
     };
 
     g.updatedLayout.addHandler(applyHeaderHeight);
@@ -1221,6 +1260,55 @@ export const SalesPlan01Grid = ({
     };
   }, [visibleColumns, gridRef, gridFilterRef, reapplyInsertRowVisibility]);
 
+  // 하단 합계 줄 (2026-11-25 요청 - 원천 DMF0021 SalesPlanGrid 2026-11-24 반영분과 같은 방식).
+  //   기간 칸(M_/W_/D_)만 Aggregate.Sum, 첫 번째 보이는 정적 칸에 라벨 'Sum'. 메저 구분 없이 보이는 행을 모두
+  //   더한다(요청자 확인 - 메저는 필터로 걸러 본다). 집계는 CollectionView 가 필터 적용 뷰로 계산하므로 필터로
+  //   숨긴 행은 빠지고, 셀 수정 뒤 다시 그릴 때 새 값으로 계산된다. 조회 결과가 없으면 footer 를 뺀다.
+  //   공용 DataGrid 가 컬럼을 다시 만들면 aggregate 가 사라질 수 있어 updatedLayout 마다 다시 건다
+  //   (바뀐 것이 없으면 invalidate 하지 않는다 - 재진입 루프 방지).
+  useEffect(() => {
+    const g = (gridRef as { current: FlexGridType<SalesPlanRow> | null } | null)?.current;
+    if (!g) return;
+    if (rows.length === 0) {
+      if (g.columnFooters.rows.length > 0) g.columnFooters.rows.clear();
+      return;
+    }
+    const isPeriodBinding = (binding: string): boolean => /^[MWD]_/.test(binding);
+    let labeledCol: Column | null = null;
+    const applyFooter = () => {
+      let changed = false;
+      if (g.columnFooters.rows.length === 0) {
+        g.columnFooters.rows.push(new GroupRow());
+        changed = true;
+      }
+      for (let i = 0; i < g.columns.length; i++) {
+        const col = g.columns[i];
+        const want = isPeriodBinding(col.binding ?? '') ? Aggregate.Sum : Aggregate.None;
+        if (col.aggregate !== want) {
+          col.aggregate = want;
+          changed = true;
+        }
+      }
+      const labelIdx = g.columns.findIndex(c => c.isVisible && !isPeriodBinding(c.binding ?? ''));
+      const labelCol = labelIdx >= 0 ? g.columns[labelIdx] : null;
+      if (labelCol && labelCol !== labeledCol) {
+        g.columnFooters.setCellData(0, labelIdx, 'Sum', false, false);
+        labeledCol = labelCol;
+        changed = true;
+      }
+      if (changed) g.invalidate(true);
+    };
+    g.updatedLayout.addHandler(applyFooter);
+    applyFooter();
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyFooter);
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [rows, mainStaticColumns, mainDynamicColumns, gridRef]);
+
   return (
     // <div className={styles.gridContainer}>
     <DataGrid
@@ -1251,7 +1339,7 @@ export const SalesPlan01Grid = ({
       //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
       //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
       allowMerging={AllowMerging.All}
-      useAggregationRow={false} // [2026-08-12 사용자 지시] Footer Summary 삭제
+      useAggregationRow={false} // 공용 집계행 대신 위 '하단 합계 줄' effect 가 데이터 있을 때만 넣는다(2026-11-25 재추가 요청, 08-12 삭제분)
     />
     // </div>
   );

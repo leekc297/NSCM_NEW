@@ -1,0 +1,237 @@
+// 2026-11-25 T550~T554(SCP0005 U3 묶음) — AS-IS 원문에서 메시지 인자·합계 상한 입력·지역 변수 칸 바인딩·저장 오류 응답 분기를 읽는 순수 함수.
+//   _trace.spec.ts 의 W4 E4(MSG 인자·합계 상한·업로드 창 닫힘 메시지·저장 오류 응답 메시지)와 H2(RAW 지역 변수 · 저장 오류 응답 색) 가 쓴다.
+//   화면 ID·칸 이름·메시지 코드·오류 코드를 코드에 두지 않는다. 변이 입증 = saveerr.selftest.js
+import { evalExpr } from './condeval';
+
+const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const sp = (s: string) => String(s || '').replace(/\s+/g, ' ').trim();
+
+/** 최상위 구분자로 나눔(괄호·따옴표 안 무시) */
+export function splitTop(s: string, sep: string): string[] {
+  const out: string[] = []; let d = 0; let q = false; let cur = '';
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (ch === '"' && s[i - 1] !== '\\') q = !q;
+    if (!q) { if ('([{'.includes(ch)) d++; else if (')]}'.includes(ch)) d--; }
+    if (!q && d === 0 && s.startsWith(sep, i)) { out.push(cur); cur = ''; i += sep.length - 1; continue; }
+    cur += ch;
+  }
+  out.push(cur);
+  return out.map(x => x.trim()).filter(x => x !== '');
+}
+
+/** T550: 메시지 호출 문장의 인자 식 — '"MSG", new object[] { a, b }' → ['a','b'] · 인자 없으면 [] · 메시지 호출이 아니면 null */
+export function callArgs(line: string, msg: string): string[] | null {
+  const i = String(line || '').indexOf(`"${msg}"`); if (i < 0) return null;
+  const rest = line.slice(i + msg.length + 2);
+  const m = /^\s*,\s*new\s+(?:object|string)\s*\[\s*\]\s*\{/.exec(rest); if (!m) return [];
+  let d = 1; let q = false; let j = m[0].length; const st = j;
+  for (; j < rest.length; j++) { const ch = rest[j]; if (ch === '"' && rest[j - 1] !== '\\') q = !q; if (q) continue; if (ch === '{') d++; else if (ch === '}') { d--; if (!d) break; } }
+  if (d) return null;
+  return splitTop(rest.slice(st, j), ',');
+}
+
+/** T550: 인자 식의 값 — 문자열 리터럴 · 숫자 · '<표>.Rows[0][DefColumns.X]' (row 에서) 를 '+' 로 이은 식만. 그 밖이 섞이면 null(자리 그대로 둠) */
+export function evalArg(expr: string, row?: Record<string, string>): string | null {
+  const parts = splitTop(String(expr || ''), '+'); if (!parts.length) return null;
+  let out = '';
+  for (const t0 of parts) {
+    const t = t0.trim();
+    let m = /^"((?:[^"\\]|\\.)*)"$/.exec(t); if (m) { out += m[1].replace(/\\"/g, '"'); continue; }
+    m = /^-?\d+(?:\.\d+)?$/.exec(t); if (m) { out += t; continue; }
+    m = /^\w+\.Rows\s*\[\s*0\s*\]\s*\[\s*DefColumns\.(\w+)\s*\](?:\s*\.\s*ToString\(\s*\))?$/.exec(t);
+    if (m && row) { const k = Object.keys(row).find(z => z.toUpperCase() === m![1].toUpperCase()); if (k === undefined) return null; out += String(row[k] ?? ''); continue; }
+    return null;
+  }
+  return out;
+}
+
+/** T550: 메시지 틀({0}…) 과 인자 값 → 정규식. 값을 모르는 자리(null)는 와일드카드 */
+export function tplRegex(tpl: string, args: (string | null)[]): RegExp {
+  const src = sp(tpl).split(/(\{\d+\})/).map(seg => { const m = /^\{(\d+)\}$/.exec(seg); if (!m) return escRe(seg).replace(/\\? /g, '\\s*'); const v = args[Number(m[1])]; return v == null ? '[\\s\\S]{0,120}?' : escRe(sp(v)).replace(/\\? /g, '\\s*'); }).join('');
+  return new RegExp(src, 'i');
+}
+
+/** T550: 화면 메시지 중 틀에 맞는 것 — exact = 모든 자리를 AS-IS 인자 값으로 채워 맞음 · 아니면 값 모르는 자리를 와일드카드로 맞음 */
+export function matchTpl(tpls: string[], args: (string | null)[], shown: string[]): { hit: string; tpl: string; exact: boolean; argsOk: boolean } | null {
+  const ts = tpls.map(sp).filter(Boolean); const ss = shown.map(sp).filter(Boolean);
+  const idx = (t: string) => [...t.matchAll(/\{(\d+)\}/g)].map(m => Number(m[1]));
+  for (const tpl of ts) { const full = idx(tpl).every(i => args[i] != null); const rx = tplRegex(tpl, args); const hit = ss.find(s => rx.test(s)); if (hit) return { hit, tpl, exact: full, argsOk: true }; }
+  // 틀은 맞는데 AS-IS 인자 값이 다른 문구(argsOk=false)
+  for (const tpl of ts) { const rx = tplRegex(tpl, []); const hit = ss.find(s => rx.test(s)); if (hit) return { hit, tpl, exact: false, argsOk: false }; }
+  return null;
+}
+
+/** T550: 합계 상한 위반 입력 계획 — 칸마다 상한(caps) 안에서 앞에서부터 채워, 마지막으로 바꾼 칸에서 처음으로 합계가 n 을 넘게(= n+1) 한다.
+ *  앞 칸 입력 뒤 합계는 n 이하(경계값 n 은 위반 아님). 이미 n 을 넘었거나 상한 안에서 n+1 을 못 만들면 null */
+export function sumCrossPlan(before: number[], caps: number[], n: number): { idx: number; value: number; sumAfter: number }[] | null {
+  const sum0 = before.reduce((a, b) => a + (Number(b) || 0), 0); if (sum0 > n) return null;
+  let need = n + 1 - sum0; let sum = sum0; const out: { idx: number; value: number; sumAfter: number }[] = [];
+  for (let i = 0; i < before.length && need > 0; i++) {
+    const b = Number(before[i]) || 0; const room = Math.max(0, (Number(caps[i]) || 0) - b); if (!room) continue;
+    const t = Math.min(room, need); need -= t; sum += t; out.push({ idx: i, value: b + t, sumAfter: sum });
+  }
+  return need > 0 ? null : out;
+}
+
+/** 메서드 본문 줄 범위(머리 줄 ~ 닫는 중괄호) — 못 찾으면 null */
+export function methodRange(lines: string[], meth: string): { s: number; e: number } | null {
+  const hr = new RegExp(`^\\s*(?:(?:private|public|protected|internal|static|override|virtual|async)\\s+)*[\\w<>\\[\\],.]+\\s+${escRe(meth)}\\s*\\(`);
+  const s = lines.findIndex(l => hr.test(l) && !/;\s*$/.test(l)); if (s < 0) return null;
+  let d = 0; let open = false;
+  for (let i = s; i < lines.length; i++) { const l = lines[i].replace(/"(?:[^"\\]|\\.)*"/g, '""').replace(/\/\/.*$/, ''); for (const ch of l) { if (ch === '{') { d++; open = true; } else if (ch === '}') d--; } if (open && d <= 0) return { s, e: i }; }
+  return null;
+}
+
+/** T550: 메시지 줄 뒤 같은 블록에서 칸에 넣는 리터럴('[DefColumns.X] = "v"') — AS-IS 가 메시지 뒤 바꾼 칸을 되돌리는 값 */
+export function resetAfter(lines: string[], msgLine: number, span = 40): Record<string, string> {
+  const o: Record<string, string> = {};
+  for (let i = msgLine + 1; i < Math.min(lines.length, msgLine + 1 + span); i++) { const m = /\[\s*DefColumns\.(\w+)\s*\]\s*=\s*"([^"]*)"/.exec(lines[i]); if (m && !(m[1] in o)) o[m[1]] = m[2]; if (/^\s*(?:return\b|break\b)/.test(lines[i])) break; }
+  return o;
+}
+
+/** T552: 버튼 클릭 메서드에서 대화창(ShowDialog) 뒤 메시지 — 사이에 분기·return 이 없으면 대화창을 닫기만 해도 뜨는 메시지 */
+export function afterDialogMsg(lines: string[], meth: string, msg: string): { dialogLine: number; msgLine: number; popup: string } | null {
+  const r = methodRange(lines, meth); if (!r) return null;
+  const dl = lines.findIndex((l, i) => i > r.s && i < r.e && /\.ShowDialog\s*\(/.test(l)); if (dl < 0) return null;
+  if (/=\s*\w+\.ShowDialog/.test(lines[dl]) || /\bif\s*\(/.test(lines[dl])) return null;  // 대화창 결과로 갈리는 경로
+  const ml = lines.findIndex((l, i) => i > dl && i <= r.e && l.includes(`"${msg}"`)); if (ml < 0) return null;
+  for (let i = dl + 1; i < ml; i++) { const t = lines[i].replace(/\/\/.*$/, '').trim(); if (!t) continue; if (/^(?:if|else|switch|return|try|catch|for|foreach|while)\b/.test(t) || /\?\s*[^:]+:/.test(t)) return null; }
+  let popup = ''; for (let i = r.s; i <= dl; i++) { const m = /new\s+(\w+)\s*\(/.exec(lines[i]); if (m) popup = m[1]; }
+  return { dialogLine: dl, msgLine: ml, popup };
+}
+
+/** T553: RAW(변수 연산 숫자) 원자 */
+export function rawNumAtoms(cond: string): { atom: string; v: string; op: string; n: number }[] {
+  return [...String(cond || '').matchAll(/RAW\(\s*(\w+)\s*(<=|>=|<|>|==|!=)\s*(-?\d+(?:\.\d+)?)\s*\)/g)].map(m => ({ atom: m[0], v: m[1], op: m[2], n: Number(m[3]) }));
+}
+export function numHolds(op: string, a: number, b: number): boolean { return op === '<' ? a < b : op === '<=' ? a <= b : op === '>' ? a > b : op === '>=' ? a >= b : op === '==' ? a === b : a !== b; }
+
+/** T553: 메서드 안 지역 숫자 변수 → 그리드 칸. 'n = Int64.Parse(s)' · 's = grid.GetValue(i, idx)…' · 'idx = grid.GetColumnIndex(DefColumns.X)' (또는 GetValue 안에 바로 GetColumnIndex) · 빈 값 기본('if (string.IsNullOrEmpty(s)) s = "0"') */
+export function bindLocalNum(lines: string[], meth: string, v: string): { col: string; emptyAs: string | null; ref: string } | null {
+  const r = methodRange(lines, meth); if (!r) return null;
+  const body = lines.slice(r.s, r.e + 1); const at = (i: number) => r.s + i + 1;
+  let sVar = ''; let ref: number[] = [];
+  body.forEach((l, i) => { const m = new RegExp(`\\b${escRe(v)}\\s*=\\s*(?:(?:Int64|Int32|Int16|long|int|decimal|double|Decimal|Double)\\.Parse|Convert\\.To\\w+)\\(\\s*(\\w+)(?:\\.ToString\\(\\))?\\s*\\)`).exec(l); if (m && !sVar) { sVar = m[1]; ref.push(at(i)); } });
+  if (!sVar) return null;
+  let col = ''; let idxVar = '';
+  body.forEach((l, i) => {
+    if (col || idxVar) return;
+    const m = new RegExp(`\\b${escRe(sVar)}\\s*=\\s*\\w+\\.(?:GetValue|GetText)\\(\\s*\\w+\\s*,\\s*([^)]*\\)?)\\s*\\)`).exec(l); if (!m) return;
+    ref.push(at(i)); const g = /GetColumnIndex\(\s*DefColumns\.(\w+)\s*\)/.exec(m[1]); if (g) col = g[1]; else idxVar = m[1].trim();
+  });
+  if (!col && idxVar) body.forEach((l, i) => { if (col) return; const m = new RegExp(`\\b${escRe(idxVar)}\\s*=\\s*\\w+\\.GetColumnIndex\\(\\s*DefColumns\\.(\\w+)\\s*\\)`).exec(l); if (m) { col = m[1]; ref.push(at(i)); } });
+  if (!col) return null;
+  let emptyAs: string | null = null;
+  body.forEach((l, i) => { const m = new RegExp(`IsNullOrEmpty\\(\\s*${escRe(sVar)}\\s*\\)\\s*\\)?\\s*${escRe(sVar)}\\s*=\\s*"([^"]*)"`).exec(l); if (m && emptyAs == null) { emptyAs = m[1]; ref.push(at(i)); } });
+  ref = [...new Set(ref)].sort((a, b) => a - b);
+  return { col, emptyAs, ref: ref.join(',') };
+}
+
+/** T553: 칸 값으로 RAW(지역 숫자 변수) 원자를 풀어 TRUE/FALSE 로 바꾼 식. 값이 숫자가 아니면 그 원자는 그대로(RAW) */
+export function bindNumCond(cond: string, binds: { atom: string; col: string; op: string; n: number; emptyAs: string | null }[], col: (name: string) => string | null): string {
+  let out = String(cond || '');
+  for (const b of binds) {
+    const raw = col(b.col); if (raw == null) continue;
+    const s = String(raw).trim() === '' ? (b.emptyAs ?? '') : String(raw).trim(); const x = Number(s);
+    if (s === '' || !Number.isFinite(x)) continue;
+    out = out.split(b.atom).join(numHolds(b.op, x, b.n) ? 'TRUE' : 'FALSE');
+  }
+  return out;
+}
+
+/** T553: 조건을 만족시키는 칸 값 후보(경계 바로 밖 · 빈 값 기본이 만족하면 빈 값) */
+export function violatingValues(op: string, n: number, emptyAs: string | null): string[] {
+  const v: string[] = [];
+  const near = op === '<' ? n - 1 : op === '<=' ? n : op === '>' ? n + 1 : op === '>=' ? n : op === '==' ? n : n + 1;
+  v.push(String(near));
+  if (emptyAs != null && Number.isFinite(Number(emptyAs)) && numHolds(op, Number(emptyAs), n)) v.push('');
+  return [...new Set(v)];
+}
+
+export type SaveErrShape = { codeVar: string; codes: string[]; successAtoms: string[]; countAtoms: string[]; matchAtoms: string[]; keyCols: string[]; codeAtoms: { atom: string; code: string; neg: boolean }[]; other: string[]; refs: string[] };
+/** T551·T553: 저장 오류 응답 분기 조건(RAW 원자)을 원문으로 분류한다.
+ *  오류코드 변수 = '<v> = <표>.Rows[0][0]…' 로 받은 변수 · 성공 원자 = 'Rows[0][0]…== "리터럴"' · 건수 원자 = 'RAW(<c> > 0)' 이고 메서드 안 '<c>++'
+ *  행 일치 원자 = 'RAW(a == b)' 이고 a 는 응답 표('<표>.Rows[0][DefColumns.X]'), b 는 그리드 칸('GetValue(i, …DefColumns.X)')을 '+=' 로 이은 문자열 */
+export function saveErrShape(cond: string, lines: string[], meth: string): SaveErrShape | null {
+  const r = methodRange(lines, meth); if (!r) return null;
+  const body = lines.slice(r.s, r.e + 1); const at = (i: number) => r.s + i + 1;
+  const raws = [...new Set([...String(cond || '').matchAll(/RAW\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)/g)].map(m => m[0]))];
+  const out: SaveErrShape = { codeVar: '', codes: [], successAtoms: [], countAtoms: [], matchAtoms: [], keyCols: [], codeAtoms: [], other: [], refs: [] };
+  const assignedFromCell00 = (v: string) => body.findIndex(l => new RegExp(`\\b${escRe(v)}\\s*=\\s*[\\w.\\[\\]]*Rows\\s*\\[\\s*0\\s*\\]\\s*\\[\\s*0\\s*\\]`).test(l));
+  const builtFrom = (v: string, rx: RegExp) => { const cols: string[] = []; body.forEach((l, i) => { const m = new RegExp(`\\b${escRe(v)}\\s*\\+=\\s*(.*)`).exec(l); if (!m) return; const c = rx.exec(m[1]); if (c && !cols.includes(c[1])) { cols.push(c[1]); if (!out.refs.includes(String(at(i)))) out.refs.push(String(at(i))); } }); return cols; };
+  for (const a of raws) {
+    const inner = a.slice(4, -1).trim();
+    let m = /^(\w+)\s*==\s*"(\w+)"$/.exec(inner);
+    if (m) { const li = assignedFromCell00(m[1]); if (li >= 0) { if (out.codeVar && out.codeVar !== m[1]) { out.other.push(a); continue; } out.codeVar = m[1]; if (!out.codes.includes(m[2])) out.codes.push(m[2]); out.codeAtoms.push({ atom: a, code: m[2], neg: false }); if (!out.refs.includes(String(at(li)))) out.refs.push(String(at(li))); continue; } }
+    m = /Rows\s*\[\s*0\s*\]\s*\[\s*0\s*\][^=]*==\s*"(\w+)"$/.exec(inner); if (m) { out.successAtoms.push(a); continue; }
+    m = /^(\w+)\s*>\s*0$/.exec(inner); if (m && body.some(l => new RegExp(`\\b${escRe(m![1])}\\s*\\+\\+|\\+\\+\\s*${escRe(m![1])}\\b|\\b${escRe(m![1])}\\s*\\+=\\s*1\\b`).test(l))) { out.countAtoms.push(a); continue; }
+    m = /^(\w+)\s*==\s*(\w+)$/.exec(inner);
+    if (m) {
+      const fromResp = /Rows\s*\[\s*0\s*\]\s*\[\s*DefColumns\.(\w+)\s*\]/; const fromGrid = /GetColumnIndex\(\s*DefColumns\.(\w+)\s*\)/;
+      const ra = builtFrom(m[1], fromResp); const ga = builtFrom(m[2], fromGrid); const rb = builtFrom(m[2], fromResp); const gb = builtFrom(m[1], fromGrid);
+      const rc = ra.length ? ra : rb; const gc = ga.length ? ga : gb;
+      if (rc.length && gc.length) { out.matchAtoms.push(a); for (const c of [...rc, ...gc]) if (!out.keyCols.includes(c)) out.keyCols.push(c); continue; }
+    }
+    out.other.push(a);
+  }
+  if (!out.codeVar) return null;
+  out.refs.sort((a, b) => Number(a) - Number(b));
+  return out;
+}
+
+/** T551·T553: 가짜 오류 응답 상황(code · 이 행이 응답 행과 같은가)에서 저장 오류 분기 원자를 TRUE/FALSE 로 바꾼 식 */
+export function bindSaveErr(cond: string, sh: SaveErrShape, code: string, isMatchRow: boolean): string {
+  let out = String(cond || '');
+  const rep = (a: string, v: boolean) => { out = out.split(a).join(v ? 'TRUE' : 'FALSE'); };
+  for (const c of sh.codeAtoms) rep(c.atom, c.code === code);
+  for (const a of sh.successAtoms) rep(a, false);
+  for (const a of sh.countAtoms) rep(a, true);
+  for (const a of sh.matchAtoms) rep(a, isMatchRow);
+  return out;
+}
+/** 규칙 조건을 참으로 만드는 오류코드(응답 행과 같은 그리드 행 기준) — 남은 RAW 가 있으면 평가 불가(null) */
+export function codeForRule(cond: string, sh: SaveErrShape): { code: string; bound: string } | null {
+  for (const code of sh.codes) {
+    const bound = bindSaveErr(cond, sh, code, true); if (/RAW\(/.test(bound)) return null;
+    let ok = false; try { ok = evalExpr(bound, { group: [], admin: false, div: '', self: '', col: () => null }); } catch { return null; }
+    if (ok) return { code, bound };
+  }
+  return null;
+}
+
+/** T551: 메시지 가드(문장 조건)의 오류코드 리터럴 — '<v> == "N" || <v> == "M"'(else 분기 제외). 변수 출처(Rows[0][0])는 호출부가 원문으로 확인 */
+export function guardCodes(guard: string): { codeVar: string; codes: string[] } | null {
+  const seg = String(guard || '').split('▸').map(x => x.trim()).filter(Boolean).pop() || '';
+  if (/^else\b/.test(seg)) return null;
+  const ms = [...seg.matchAll(/\b(\w+)\s*==\s*"(\d{3,})"/g)]; if (!ms.length) return null;
+  const v = ms[0][1]; if (ms.some(m => m[1] !== v)) return null;
+  return { codeVar: v, codes: [...new Set(ms.map(m => m[2]))] };
+}
+export function codeVarFromCell00(lines: string[], meth: string, v: string): number {
+  const r = methodRange(lines, meth); if (!r) return -1;
+  for (let i = r.s; i <= r.e; i++) if (new RegExp(`\\b${escRe(v)}\\s*=\\s*[\\w.\\[\\]]*Rows\\s*\\[\\s*0\\s*\\]\\s*\\[\\s*0\\s*\\]`).test(lines[i])) return i + 1;
+  return -1;
+}
+
+/** T551: 실제 응답 표본을 오류 응답으로 바꾼 본문 — 결과 행(CODE 열이 있는 첫 객체 배열의 0행)에 오류 코드·표시 문구·그리드 행 값을 싣는다.
+ *  shape = 표본이 오류 응답(CODE ≠ 0)이면 그 열 이름을 그대로 쓰고(형식 근거 있음), 성공 표본이면 오류코드 열 이름 후보(ERR_CODE·ERROR_CODE·ERRCODE)에 함께 싣는다(형식 근거 없음) */
+export function fakeErrBody(sample: Record<string, unknown>, code: string, item: Record<string, string>, marker: string): { body: Record<string, unknown>; fields: string[]; shapeKnown: boolean } | null {
+  const c = JSON.parse(JSON.stringify(sample)) as Record<string, unknown>;
+  const arrays: Record<string, unknown>[][] = [];
+  const scan = (v: unknown, d: number): void => { if (d > 4 || !v || typeof v !== 'object') return; if (Array.isArray(v)) { if (v.length && v[0] && typeof v[0] === 'object' && !Array.isArray(v[0])) arrays.push(v as Record<string, unknown>[]); return; } for (const x of Object.values(v as Record<string, unknown>)) scan(x, d + 1); };
+  scan(c, 0);
+  const arr = arrays.find(a => Object.keys(a[0]).some(k => /^CODE$/i.test(k))); if (!arr) return null;
+  const r0 = arr[0]; const codeKey = Object.keys(r0).find(k => /^CODE$/i.test(k)) as string;
+  const errKeys = Object.keys(r0).filter(k => /^(ERR|ERROR)_?CODE$/i.test(k));
+  const shapeKnown = String(r0[codeKey]) !== '0' && errKeys.length > 0;
+  const row: Record<string, unknown> = { ...r0 };
+  for (const [k, v] of Object.entries(item)) if (!/^(CRUD_TYPE|_.*|__.*)$/i.test(k) && (v == null || typeof v !== 'object')) row[k] = v;
+  const fields: string[] = [];
+  for (const k of Object.keys(r0)) if (String(r0[k]) === 'S') { row[k] = 'F'; fields.push(`${k}=F`); }
+  row[codeKey] = '-1'; fields.push(`${codeKey}=-1`);
+  const mk = Object.keys(r0).find(k => /^MSG$|^MESSAGE$/i.test(k)) || 'MSG'; row[mk] = marker; fields.push(`${mk}=표시 문구 표지`);
+  for (const k of shapeKnown ? errKeys : ['ERR_CODE', 'ERROR_CODE', 'ERRCODE']) { row[k] = code; fields.push(`${k}=${code}`); }
+  arr.splice(0, arr.length, row);
+  return { body: c, fields, shapeKnown };
+}

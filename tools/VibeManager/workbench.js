@@ -1,4 +1,5 @@
 'use strict';
+const dfmt = require('./date-fmt'); // 2026-11-23 사용자: VM 일자 = Windows 일자 형식
 // Vibe_Manager 1.5 — 워크벤치 (멀티 인스턴스 · 리본 메뉴 · 내부 탭 FLOW/이력 · 첨부 · 자동 컨텍스트/하네스 · 로딩 애니)
 //   왼쪽: 전체 메뉴 아코디언 (quick.json 그룹 + 단계·DoD·룰/Hook/하네스·환경설정)
 //   오른쪽 위: 작업출력 / Claude / 화면현황 / FLOW / 이력 (탭=언더라인, 버튼=필) + 로딩 스피너
@@ -8,6 +9,8 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
+// 개선안 20261125034940_SELF_2(R218): 수선 회차 안에서 돌리지 않는 전체 재검증 작업(반복이 끝나고 해소 게이트 통과 때 1회만)
+const REPAIR_FULL_RERUN = new Set(['S8.verify', 'S8.checklistRecheck', 'S8.verifyIfStale']);
 // SCP·SSP 화면 VALIDATION 취합 화면 파일(Doc/화면분석서/{SCP|SSP}_화면_VALIDATION_취합_<최신>/<ID>.md) — 2026-10-23 사용자 지시: 검증 관련 작업 참고자료
 function valRefOf(p, id) {
   try { const r = require(path.join(p.root, 'tools', 'Harness', 'lib', 'valref.js')).find({ validationRefDir: path.join(p.root, 'Doc', '화면분석서') }, id); return r && r.screen ? r.screen : ''; } catch { return ''; }
@@ -29,8 +32,48 @@ const PROG_TTL_MS = 24 * 3600 * 1000; // 기본값. 2026-11-20 설정 vibeManage
 function progTtlMs() { try { const v = vscode.workspace.getConfiguration('vibeManager').get('jobs.interruptedKeepHours'); if (v != null && v !== '' && !isNaN(Number(v))) return Number(v) > 0 ? Number(v) * 3600000 : Infinity; } catch { /* 설정 읽기 실패 = 기본값 */ } return PROG_TTL_MS; }
 const progDir = p => path.join(p.vibeDir, 'orch', 'chain_progress');
 function chainSig(steps) { const t = (steps || []).map(st => [st.task || '', st.title || '', st.claudeOf || '', st.claude ? 'c' : ''].join('|')).join(String.fromCharCode(10)); let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) >>> 0; return `${(steps || []).length}:${h.toString(36)}`; }
-function progWrite(p, rec) { try { fs.mkdirSync(progDir(p), { recursive: true }); fs.writeFileSync(path.join(progDir(p), `${rec.runId}.json`), JSON.stringify(rec), 'utf8'); } catch { /* 기록 실패 = 재개 불가일 뿐 */ } }
-function progDel(p, runId) { try { fs.unlinkSync(path.join(progDir(p), `${runId}.json`)); } catch { /* 없음 */ } }
+// 개선안 20261125000907_VISION 재개 원장: 끊긴 실행의 상태는 이 원장(chain_progress)에만 쓴다. VMW 화면 카드, Workbench 재개 띠, VMO 상황판은 ledgerView 하나로 읽기만 한다.
+//   원장 필드 = state(running, cut) · resumedFrom(계보) · screen(필수) · sub.inner(단계 안 재개 지점 참조 { tool, runId }). 옛 기록은 읽을 때 state 를 interruptedAt 으로 계산한다
+//   화면 ID 빈 기록은 쓰지 않는다(2026-11-23 18:46 WB1_1795427182442_ai screen '' 가 VMO 에만 보이던 사례). 반환 = 썼는가
+const progRefused = new Set();
+function progWrite(p, rec) {
+  if (!rec || !rec.runId) return false;
+  if (!String(rec.screen || '').trim()) { if (!progRefused.has(rec.runId)) { progRefused.add(rec.runId); evt(p, 'progress.refuse', { runId: rec.runId, screen: '', job: rec.job || '', why: '화면 ID 없음' }); } return false; }
+  rec.state = rec.interruptedAt ? 'cut' : 'running';
+  try { fs.mkdirSync(progDir(p), { recursive: true }); fs.writeFileSync(path.join(progDir(p), `${rec.runId}.json`), JSON.stringify(rec), 'utf8'); return true; } catch { return false; /* 기록 실패 = 재개 불가일 뿐 */ }
+}
+// 개선안 20261120184524_SELF_2: 지운 뒤 progress.drop 사건을 남김. why = resume, userDrop, ttl, jobRemove, normalEnd. 파일이 없어 안 지웠으면 사건 없음. 반환 = 지웠는가
+function progDel(p, runId, why) {
+  const f = path.join(progDir(p), `${runId}.json`); let r = null; try { r = JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* 없음·깨짐 */ }
+  try { fs.unlinkSync(f); } catch { return false; }
+  evt(p, 'progress.drop', { runId, screen: (r && r.screen) || '', job: (r && r.job) || '', why: why || '' }); return true;
+}
+
+/** 2026-11-20 19:08 실측: 창 다시 로드(18:56:53) 뒤에도 18:47 실행의 checklist_run(43504) → run_verify(30288) → Playwright 가 살아 남아, 재개 실행이 그 시험 데이터 잠금을 기다렸다(Workbench 에 대기 줄 1줄만 보임).
+ *  재개 기록의 pids(단계 프로세스 PID · 시작 ms)에서 끊긴 실행이 남긴 프로세스를 찾아 트리째 끝낸다. 기록 주인 VM 이 살아 있으면(다른 창이 돌리는 중) 건드리지 않는다.
+ *  찾는 법: 기록 PID 가 살아 있고 생성 시각이 시작 ms 와 5초 안이면 그 PID, 부모가 집합 안이고 생성 시각이 시작 ms 뒤면 자손(PID 재사용 방지). 반환 = 끝낸 [{ pid, name }] */
+function reapOrphans(p, rec) {
+  try {
+    const pids = (rec && Array.isArray(rec.pids) ? rec.pids : []).filter(x => x && Number(x.pid) > 0 && Number(x.ms) > 0);
+    if (!pids.length || process.platform !== 'win32') return [];
+    if (rec.ownerPid && rec.ownerPid !== process.pid && pidAlive(rec.ownerPid)) return [];
+    const ps = "Get-CimInstance Win32_Process | ForEach-Object { '{0}|{1}|{2}|{3}' -f $_.ProcessId, $_.ParentProcessId, ([DateTimeOffset]$_.CreationDate).ToUnixTimeMilliseconds(), $_.Name }";
+    const r = cp.spawnSync('powershell', ['-NoProfile', '-Command', ps], { encoding: 'utf8', windowsHide: true, timeout: 20000 });
+    if (r.status !== 0) return [];
+    const all = String(r.stdout || '').split(/\r?\n/).map(l => l.split('|')).filter(a => a.length >= 4 && /^\d+$/.test(a[0])).map(a => ({ pid: Number(a[0]), ppid: Number(a[1]), ms: Number(a[2]), name: a.slice(3).join('|').trim() }));
+    const t0 = Math.min(...pids.map(x => Number(x.ms)));
+    const set = new Map(); // pid → 프로세스
+    for (const x of pids) { const q = all.find(a => a.pid === Number(x.pid)); if (q && Math.abs(q.ms - Number(x.ms)) <= 5000) set.set(q.pid, q); }
+    const roots = new Set(pids.map(x => Number(x.pid)));
+    let grew = true; while (grew) { grew = false; for (const a of all) if (!set.has(a.pid) && (roots.has(a.ppid) || set.has(a.ppid)) && a.ms >= t0 - 1000 && a.pid !== process.pid) { set.set(a.pid, a); grew = true; } }
+    if (!set.size) return [];
+    const top = [...set.values()].filter(a => !set.has(a.ppid)); const done = [];
+    for (const a of top) { const k = cp.spawnSync('taskkill', ['/PID', String(a.pid), '/T', '/F'], { encoding: 'utf8', windowsHide: true, timeout: 15000 }); if (k.status === 0) done.push(...[...set.values()].filter(x => x === a || isUnder(x, a, set))); }
+    if (done.length) evt(p, 'proc.reap', { screen: rec.screen || '', runId: rec.runId || '', ownerPid: rec.ownerPid || null, pids: done.map(x => x.pid), names: done.map(x => x.name) });
+    return done.map(x => ({ pid: x.pid, name: x.name }));
+  } catch (e) { require('./orch-errlog').note('workbench', 'reapOrphans', e); return []; }
+}
+function isUnder(x, top, set) { let c = x; for (let i = 0; i < 20 && c; i++) { if (c.ppid === top.pid) return true; c = set.get(c.ppid); } return false; }
 // 2026-11-20 사용자 지시 '작업재개는 중단된 시점이나 그 바로 이전단계부터 … 처음부터 시작하는 것이면 재시작': 단계 안 재개 표시와 신호
 const RESUME_NOTE = '창 다시 로드로 이 작업이 중단됐습니다. 지금 파일 상태를 먼저 확인하고, 이미 끝난 부분은 다시 하지 말고 끊긴 지점부터 이어서 진행하세요.';
 const resumePrompt = text => `${RESUME_NOTE}\n\n[원래 지시]\n${text}`;
@@ -44,6 +87,15 @@ function scriptResumes(p, api, taskId) {
     return scriptResumeCache.get(k);
   } catch { return false; }
 }
+/** 2026-11-20 R4 세션 요청: 같은 스크립트라도 인자에 따라 단계 안 재개 여부가 다른 작업(steps.json resumeArg { flag, inner, why } · 예 pipeline.js --phase 4·5 만).
+ *  반환 null = resumeArg 없음(스크립트 원문 판단으로) · { ok, why } */
+function argResume(api, r) {
+  const t = api && api.findTask ? api.findTask(r.curTask) : null; const ra = t && t.resumeArg; if (!ra || !ra.flag) return null;
+  const args = Array.isArray(r.curArgs) ? r.curArgs : []; const k = args.indexOf(ra.flag); const v = k >= 0 ? String(args[k + 1] || '') : '';
+  const inner = (ra.inner || []).map(String);
+  if (v && inner.includes(v)) return { ok: true, why: '' };
+  return { ok: false, why: v ? `${ra.flag.replace(/^-+/, '')} ${v}: 단계 안 재개 없음` : `${ra.flag.replace(/^-+/, '')} ${inner.join('·')} 만 단계 안 재개` };
+}
 /** 재개 기록 → 이어갈 지점 문구와 재시작 여부. { text, restart } */
 function resumePlan(p, api, r) {
   const sub = (r && r.sub) || {}; const no = r.resumeFrom || ((r.cur || 0) + 1);
@@ -52,6 +104,7 @@ function resumePlan(p, api, r) {
   if (r.single) detail = sub.session ? 'AI 세션 이어받기(끊긴 지점부터)' : '새 AI 세션으로 이어서(파일 상태 기준)';
   else if (sub.round) detail = `수선 ${sub.round}회차${sub.stage === 'rerun' ? ' 재실행' : ''}부터${sub.session && sub.stage !== 'rerun' ? '(AI 세션 이어받기)' : ''}`;
   else if (r.curActor === 'claude') detail = sub.session ? 'AI 세션 이어받기(끊긴 지점부터)' : '새 AI 세션으로 이어서(파일 상태 기준)';
+  else if (r.curTask && argResume(api, r) !== null) { const ar = argResume(api, r); if (ar.ok) detail = `단계 안 끊긴 지점부터${sub.prog ? `(끊길 때 ${sub.prog})` : ''}`; else { restart = true; detail = `이 단계는 처음부터(${ar.why})${sub.prog ? ` · 끊길 때 ${sub.prog}` : ''}`; } }
   else if (r.curTask && scriptResumes(p, api, r.curTask)) detail = `단계 안 끊긴 지점부터${sub.prog ? `(끊길 때 ${sub.prog})` : ''}`;
   else { restart = true; detail = `이 단계는 처음부터${sub.prog ? `(끊길 때 ${sub.prog})` : ''} · 단계 안 재개 미지원`; }
   return { text: `${head} · ${detail}`, restart };
@@ -62,16 +115,16 @@ async function claudeMenuAfter(wb, p, label, r, effId) {
               // 2026-11-11 EN-03/EN-05: 보완 뒤 증명 단계 — quick 항목 proofTasks(예 ["S8.pkgGate"]). 프롬프트의 "적용 후 확인" 지시 대신 엔진이 사내 DB 를 실측한다. 종료코드 0 이 아니면 경고(보완 결과는 유지)
               if (Array.isArray(src2.proofTasks) && r && r.ok && effId) {
                 for (const pt of src2.proofTasks) {
-                  wb.out('task', `\n── 증명 단계: ${pt} (${effId}) — 보완 결과를 사내 DB 실측으로 확인\n`, 'cmd');
+                  wb.out('task', `\n── 증명 단계: ${pt} (${effId}). 보완 결과를 사내 DB 실측으로 확인\n`, 'cmd');
                   const pcp = await wb.runTaskStreaming(p, pt, effId, { noConfirm: true, inFlow: true });
-                  if (pcp !== 0) wb.out('task', `⚠ 증명 단계 ${pt} 종료코드 ${pcp} — 2 = FAIL 있음 · 3 = 미측정 있음. 위 출력의 FAIL·ERROR 줄을 확인하세요(보완이 증명되지 않은 상태)\n`, 'warn');
-                  else wb.out('task', `✔ 증명 단계 ${pt} 통과\n`, 'ok');
+                  if (pcp !== 0) wb.out('task', `증명 단계 ${pt} 종료코드 ${pcp}. 2 = FAIL 있음, 3 = 미측정 있음. 위 출력의 FAIL·ERROR 줄을 확인하세요(보완이 증명되지 않은 상태)\n`, 'warn');
+                  else wb.out('task', `증명 단계 ${pt} 통과\n`, 'ok');
                 }
               }
               if (src2.postTask && r && r.ok && effId) {
-                wb.out('task', `\n── 후속 단계: ${src2.postTask} (${effId}) — 클라우드 이관 파일 사전 생성\n`, 'cmd');
+                wb.out('task', `\n── 후속 단계: ${src2.postTask} (${effId}). 클라우드 이관 파일 사전 생성\n`, 'cmd');
                 const pc2 = await wb.runTaskStreaming(p, src2.postTask, effId, { noConfirm: true, inFlow: true });
-                if (pc2 !== 0) wb.out('task', `⚠ 후속 단계 종료코드 ${pc2} — 이관 메뉴 실행 시 그 자리에서 다시 만듭니다\n`, 'warn');
+                if (pc2 !== 0) wb.out('task', `후속 단계 종료코드 ${pc2}. 이관 메뉴 실행 시 그 자리에서 다시 만듭니다\n`, 'warn');
               }
             }
 function pidAlive(pid) { if (!pid) return false; try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } }
@@ -82,23 +135,52 @@ function resumable(p, filter) {
     let r = null; try { r = JSON.parse(fs.readFileSync(path.join(progDir(p), n), 'utf8')); } catch { continue; }
     if (!r || !r.runId) continue; const age = Date.now() - (r.updatedMs || 0);
     const cut = !!r.interruptedAt || (r.ownerPid && r.ownerPid !== process.pid && !pidAlive(r.ownerPid)); if (!cut) continue;
-    if (age > progTtlMs()) { try { fs.unlinkSync(path.join(progDir(p), n)); } catch { /* 이미 지움 */ } continue; } // 2026-11-20 중단 뒤 설정 시간이 지난 재개 기록 = 자동 삭제(종전 = 목록에서만 뺌)
+    if (age > progTtlMs()) { if (n === `${r.runId}.json`) progDel(p, r.runId, 'ttl'); else try { fs.unlinkSync(path.join(progDir(p), n)); } catch { /* 이미 지움 */ } continue; } // 2026-11-20 중단 뒤 설정 시간이 지난 재개 기록 = 자동 삭제(종전 = 목록에서만 뺌)
+    if (!String(r.screen || '').trim()) continue; // 재개 원장: 화면 ID 빈 옛 기록은 세 창 모두 보이지 않음(설정 시간 뒤 위 ttl 로 지움)
     if (filter && filter.screen && r.screen !== String(filter.screen).toUpperCase()) continue;
     if (filter && filter.job != null && (r.job || '') !== filter.job) continue;
     if (filter && filter.noJob && r.job) continue;
-    out.push(Object.assign({ resumeFrom: (r.cur || 0) + 1 }, r));
+    out.push(Object.assign({ resumeFrom: (r.cur || 0) + 1 }, r, { state: 'cut' }));
   }
   return out.sort((a, b) => (b.updatedMs || 0) - (a.updatedMs || 0));
+}
+/** 개선안 20261125000907_VISION 재개 원장 조회(세 창 공용). who = 'vmw'(key = 작업 번호) · 'wb'(key = 화면 ID) · 'vmo'(전체). 반환 = 끊긴(cut) 원장 기록, 최신 먼저 */
+function ledgerView(p, who, key) {
+  if (who === 'vmw') return resumable(p, { job: String(key || '') }).filter(r => !!r.job);
+  if (who === 'wb') return key ? resumable(p, { screen: key }) : [];
+  return resumable(p);
+}
+// 개선안 20261122000646_SELF: 실행 끝 기록 단일화. 중지 길(중지 단추, stopInst, 창 닫기, abortRunningChains, job-runner stop·stopScreen·requeueScreen·dispose)은 endRun 만 부른다.
+//   종전 = 길마다 stopReq, stopBy, user.stop, chain.end 를 따로 남기고 일부를 빠뜨림(events.jsonl user.stop 37줄 중 runId 있는 줄 4줄). 읽는 쪽(orch-watch, orch-improve, orch-usercheck)이 60초, 5초, 10분 시각 차이로 실행을 추정함
+//   endRun = 그 창 stopReq 지정과 프로세스 종료(stopAll · sync 선택) + user.stop 1줄(runId, job, screen, by, why) + 그 runId 의 chain.end 에 쓸 stopped, stopBy 표시(lv.stopBy).
+//   같은 runId 를 다시 부르면(VS Code 종료 때 job-runner.dispose 뒤 abortRunningChains) 프로세스 종료만 다시 하고 user.stop 을 또 남기지 않는다. by 없이 부르면 errlog 에 남기고 by '미지정'
+/** 이 창(WB)이 지금 돌리는 체인 runId. 없으면 '' */
+function runIdOf(wb) { const lv = wb && wb._lv; const id = lv && lv.evCh && lv.evCh.runId; return id && liveChains.get(id) === lv ? id : ''; }
+/** o = { by, why, sync, wb(체인이 없을 때 창), job, noEvent(체인 밖 AI 호출 기록 = 사건 없음) }. 반환 { runId, by, logged } */
+function endRun(runId, o) {
+  o = o || {}; const lv = runId ? liveChains.get(runId) || null : null; const wb = o.wb || (lv && lv.wb) || null;
+  let by = String(o.by || '');
+  if (!by) { try { require('./orch-errlog').note('workbench', 'endRun', `by 없이 부름, runId ${runId || '-'}, why ${o.why || '-'}`); } catch { /* 기록 실패 = 그대로 진행 */ } by = '미지정'; }
+  const why = String(o.why || ''); const first = !(lv && lv.stopBy);
+  if (lv && first) { lv.stopBy = by; lv.stopWhy = why; }
+  const logged = first && !o.noEvent;
+  if (logged) { // 중지 기록을 프로세스 종료보다 먼저 남겨 뒤따르는 proc.end, step.end 가 중지로 읽히게 한다
+    const evCh = (lv && lv.evCh) || {}; let p = lv && lv.p; if (!p && wb && wb.api && wb.api.paths) try { p = wb.api.paths(); } catch { p = null; }
+    evt(p, 'user.stop', { wb: evCh.wb != null ? evCh.wb : (wb ? wb.inst : ''), screen: evCh.screen || (wb ? wb.titleId || '' : ''), job: evCh.job || o.job || (wb && wb.jobId) || '', runId: runId || '', by, why, ms: Date.now() });
+  }
+  if (wb) { wb.stopBy = by; try { wb.stopAll({ sync: !!o.sync, logged: logged || (!first && !o.noEvent) }); /* 두 번째 부름 = 이미 남긴 1줄이 이 실행의 중지 기록 */ } catch (e) { try { require('./orch-errlog').note('workbench', 'endRun.stopAll', e); } catch { /* 기록 실패 */ } } }
+  return { runId: runId || '', by, logged };
 }
 function abortRunningChains(why) {
   const reason = why || 'VM 창 종료로 중단'; let n = 0;
   for (const [runId, lv] of liveChains) {
-    if (lv.aborted) continue; lv.aborted = true; n++;
-    if (lv.prog) { lv.prog.interruptedAt = history.nowLocal ? history.nowLocal() : new Date().toISOString(); lv.prog.resumeFrom = (lv.prog.cur || 0) + 1; lv.prog.updatedMs = Date.now(); lv.prog.why = reason; progWrite(lv.p, lv.prog); } // 재개 표시(동기 기록)
-    // user.stop 을 먼저 남겨 감시기가 이 chain.end 로 R11, CheckList 정체 사건을 만들지 않게 한다(job-runner.dispose 와 같은 방식)
-    if (lv.single) continue; // 체인 밖 AI 호출 기록 = 재개 표시만(체인 사건 없음)
-    evt(lv.p, 'user.stop', { wb: lv.evCh.wb, screen: lv.evCh.screen, job: lv.evCh.job || '', by: 'VM', why: 'vscode.dispose', ms: Date.now() });
-    evt(lv.p, 'chain.end', Object.assign({ ok: false, aborted: true, why: reason, failNo: null, ms_run: Date.now() - lv.t0, okN: 0, repairs: 0, hold: 0, md: '' }, abortCounts(lv.prog), lv.evCh, { runId }));
+    if (lv.aborted) continue; lv.aborted = true; n++; /* 2026-11-23 사용자 '18:46 재개 대기 건': 18:46:30 답을 받고 18:46:32 창이 닫혀 끝난 AI 대화가 재개 대기로 남음. 마지막 입력 뒤 정상 답을 받은 체인 밖 AI 대화는 재개 기록을 지움 */ if (lv.single && lv.wb && lv.wb._resultOkMs && lv.wb._resultOkMs >= Math.max(lv.t0 || 0, lv.wb._inputMs || 0)) { progDel(lv.p, runId, 'resultDone'); endRun(runId, { by: 'VS Code 종료', why: 'vscode.dispose', sync: true, noEvent: true }); continue; }
+
+    if (lv.prog) { lv.prog.interruptedAt = history.nowLocal ? history.nowLocal() : new Date().toISOString(); lv.prog.resumeFrom = (lv.prog.cur || 0) + 1; lv.prog.updatedMs = Date.now(); lv.prog.why = reason; if (progWrite(lv.p, lv.prog)) evt(lv.p, 'progress.cut', { runId, screen: lv.prog.screen || '', job: lv.prog.job || '', resumeFrom: lv.prog.resumeFrom }); } // 재개 표시(동기 기록) · 개선안 20261120184524_SELF_2 사건
+    // user.stop 을 먼저 남겨 감시기가 이 chain.end 로 R11, CheckList 정체 사건을 만들지 않게 한다. sync = 비동기 taskkill 은 확장 호스트가 먼저 끝나 실행되지 않음(2026-11-20 18:47 실행 고아)
+    endRun(runId, { by: 'VS Code 종료', why: 'vscode.dispose', sync: true, noEvent: !!lv.single }); // 체인 밖 AI 호출 기록 = 재개 표시만(체인 사건 없음)
+    if (lv.single) continue;
+    evt(lv.p, 'chain.end', Object.assign({ ok: false, aborted: true, why: reason, failNo: null, ms_run: Date.now() - lv.t0, okN: 0, repairs: 0, hold: 0, md: '' }, abortCounts(lv.prog), lv.evCh, { runId, stopped: true, stopBy: lv.stopBy || 'VS Code 종료' }));
   }
   liveChains.clear();
   return n;
@@ -117,6 +199,38 @@ let instSeq = 0;
 const panels = new Set();  // WB 인스턴스 집합
 let lastWB = null;
 let orchWB = null;         // 2026-11-19 VMO 창(1개) — panels 에 넣지 않는다
+// 2026-11-25 규칙 R57(사용자 지시 2026-11-11 21:07 Source Backup exit 128): VM 의 Git 작업(git-upload · git-merge)은 실행 전 이 함수를 부른다.
+//   인덱스를 쓰는 다른 git.exe 가 있으면 끝날 때까지 기다리고(3초 간격 · 30초마다 진행 출력 · 30분 넘으면 중단),
+//   없는데 남은 index.lock 이 있으면 강제 종료 잔재로 보고 index.lock.stale_<생성시각> 로 이름을 바꿔 보존한 뒤 진행한다.
+//   반환 true = 진행 가능 · false = 중단(30분 대기 초과 · 잠금 정리 실패). 종전 Source Backup 안의 clearLock 을 공용으로 뺀 것.
+const GIT_WRITE_RE = /\s(add|commit|merge|rebase|reset|checkout|switch|stash|pull|am|cherry-pick|revert|rm|mv|restore)(\s|$)/;
+function gitWriters() {
+  try {
+    const ps = "Get-CimInstance Win32_Process -Filter \"Name='git.exe'\" | ForEach-Object { \"$($_.ProcessId)`t$($_.CommandLine)\" }";
+    const r = cp.spawnSync('powershell', ['-NoProfile', '-Command', ps], { encoding: 'utf8', windowsHide: true, timeout: 20000 });
+    return String(r.stdout || '').split(/\r?\n/).filter(Boolean).filter(l => GIT_WRITE_RE.test(l) && !/update-index\b.*--stdin/.test(l));
+  } catch { return []; }
+}
+async function gitLockGate(wb, cwd, label, opt = {}) {
+  const gitDir = (() => { const r = cp.spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd, encoding: 'utf8', windowsHide: true }); return r.status === 0 ? r.stdout.trim() : path.join(cwd, '.git'); })();
+  const lockF = path.join(gitDir, 'index.lock');
+  const maxMs = opt.maxWaitMs || 30 * 60000; const t0 = Date.now(); let lastOut = 0;
+  for (;;) {
+    const live = gitWriters();
+    if (!live.length) break;
+    const el = Date.now() - t0;
+    if (el > maxMs) { wb.out('task', `⛔ ${label} 중단. 다른 git 작업 ${live.length}개가 ${Math.round(el / 60000)}분 넘게 끝나지 않음:\n${live.map(l => '   ' + l.slice(0, 200)).join('\n')}\n`, 'bad'); try { vscode.window.showErrorMessage(`Vibe_Manager ⛔ ${label}: 다른 git 작업이 끝나지 않음(${Math.round(el / 60000)}분)`); } catch { } return false; }
+    if (!lastOut || Date.now() - lastOut >= 30000) { lastOut = Date.now(); wb.out('task', `⏳ ${label}: 다른 git 작업 ${live.length}개가 끝날 때까지 대기 (${Math.round(el / 1000)}s)\n${live.map(l => '   ' + l.slice(0, 200)).join('\n')}\n`, 'warn'); }
+    await new Promise(rs => setTimeout(rs, 3000));
+  }
+  if (!fs.existsSync(lockF)) return true;
+  let st; try { st = fs.statSync(lockF); } catch { return true; } // 확인 사이에 사라짐
+  const ageMin = Math.round((Date.now() - st.mtimeMs) / 60000);
+  const stamp = new Date(st.mtimeMs); const pad2 = n => String(n).padStart(2, '0');
+  const moved = `${lockF}.stale_${stamp.getFullYear()}${pad2(stamp.getMonth() + 1)}${pad2(stamp.getDate())}_${pad2(stamp.getHours())}${pad2(stamp.getMinutes())}${pad2(stamp.getSeconds())}`;
+  try { fs.renameSync(lockF, moved); wb.out('task', `🧹 남은 index.lock 정리: 생성 ${ageMin}분 전, 크기 ${st.size}, 실행 중인 git 쓰기 작업 없음. ${path.basename(moved)} 로 이름 변경\n`, 'warn'); return true; }
+  catch (e) { wb.out('task', `⛔ ${label} 중단. index.lock 정리 실패: ${e.message}\n`, 'bad'); return false; }
+}
 // 기능 판별: quick.json 그룹 area 'common'(Server · Git · 환경설정) 안의 항목 중 화면 ID 가 필요 없고 프로세스·서버·설정을 다루는 종류.
 //   이 항목은 어느 창에서 눌러도 VMO 창에서 실행한다(출력·진행이 한곳에 모인다). 파일 열기·명령·브라우저는 누른 자리에서 그대로 실행한다
 const COMMON_KINDS = /^(terminal|multi|server-stop|app|git-common-sync|git-common-sync-be|git-status|git-fetch|git-merge|git-upload|work-mode|task)$/;
@@ -129,7 +243,8 @@ function isCommonItem(p, item) {
 }
 
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-const substQ = (s, vars) => String(s == null ? '' : s).replace(/\$\{(\w+)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m));
+// 개선안 20261124012049_SELF_4(R83): quick.json 지시문의 ${checklistDir} = harness.json 산출물 폴더(docPaths). vars 에 없고 root 가 있을 때 채움
+const substQ = (s, vars) => String(s == null ? '' : s).replace(/\$\{(\w+)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : (k === 'checklistDir' && vars.root ? checklistRel(vars.root) : m)));
 
 // 신규 UI 생성·GAP 분석/보완은 하네스 자동 ON — 사용자가 체크 안 해도 적용
 const AUTO_HARNESS_TASKS = new Set([
@@ -166,6 +281,18 @@ function workMode(p) {
   try { v = JSON.parse(fs.readFileSync(path.join(p.root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^\uFEFF/, '')).repairScope || 'DB_ONLY'; } catch { }
   const db = v !== 'DB_FE'; return { code: db ? 'DB_ONLY' : 'DB_FE', db, name: db ? 'DB MODE' : 'UI/DB MODE' };
 }
+/** 2026-11-26 R230(개선안 20261125211759_SELF, _2): 승인된 계획의 구현 항목이 남았는지. tools/Harness/plan_state.json 을 plan_state.py pending() 과 같은 기준(status done, dropped 외 = 남음)으로 읽는다. 반환 = 남은 항목 이름 배열 */
+function planPending(root) {
+  try { const s = JSON.parse(fs.readFileSync(path.join(root, 'tools', 'Harness', 'plan_state.json'), 'utf8').replace(/^\uFEFF/, '')) || {}; return (Array.isArray(s.items) ? s.items : []).filter(i => i && !/^(done|dropped)$/.test(String(i.status || ''))).map(i => String(i.name || i.id || '?')); } catch { return []; }
+}
+const MEASURE_RE = /(run_verify|checklist_run|row_run)\.py/i; // check-plan-before-test hook 이 막는 화면 측정 스크립트
+// 개선안 20261124012049_SELF(R83): 산출물 폴더 경로 = harness.json paths.checklistDir(또는 checklistDir) 1곳. 값이 없으면 Doc/UI_CHECKLIST(2026-11-16 지시). 실행 시점마다 읽는다
+function docPaths(root) {
+  let h = {}; try { h = JSON.parse(fs.readFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')) || {}; } catch { }
+  const rel = (h.paths && h.paths.checklistDir) || h.checklistDir || 'Doc/UI_CHECKLIST';
+  return { checklist: path.isAbsolute(rel) ? rel : path.join(root, rel) };
+}
+function checklistRel(root) { const d = docPaths(root).checklist; const r = path.relative(root, d); return (!r || r.startsWith('..') || path.isAbsolute(r) ? d : r).replace(/\\/g, '/'); }
 // 2026-11-12 사용자: DB MODE 에서는 화면을 통째로 만드는 일괄 작업(FLOW Batch Run · ID 하나로 전체 · 새 화면 체인 · pipeline 작업)을 시작하지 않는다.
 //   판정은 실행 시점의 harness.json repairScope. 막힌 사실은 Task Log 와 알림으로 알린다(조용히 무시하지 않는다)
 const GEN_TASK = /^S5\.(pipeline|pipelinedesign|pipelinedry|pipelineregen|new)$/;
@@ -183,7 +310,7 @@ function workModeLabel(p) { return workMode(p).db ? 'DB Mode' : 'UI&DB Mode'; }
 function workModePrefix(p, id) {
   if (!workMode(p).db) return '';
   const g = `Doc/verify/${id || '<화면ID>'}/FE_GUIDE_<YYYYMMDD_HHMM>.md`;
-  return `**[작업 모드 = DB MODE — 환경설정 값 · 아래 본문보다 이 문단이 우선한다]** DB 객체(PKG/SP)·DB 메타는 사내 ZIOUI1 에 직접 수정·적용한다. 화면 FE(nscm-fe)·BE(nscm-be)·공통 컴포넌트는 **한 줄도 수정하지 않는다** — FE 페이지 폴더 안 파일(대조표 __asis-mapping__.md 포함) 쓰기, FE 실행 확인 목적의 수정도 하지 않는다(실행 hook check-work-mode 가 차단한다). FE/BE 수정이 필요한 항목은 가이드(파일:라인 · 변경 전/후 · 이유 · 검증법)로 ${g} 에 모으고, fixlist.csv 해당 행 status=보류(가이드)·change 에 가이드 파일명을 적는다. 본문에서 FE·BE 를 고치라는 지시와 'FE 수정 승인' 문구는 모두 '가이드로 남긴다' 로 읽는다. 가이드 문장은 tools/VibeManager/rules/50_DOC_STYLE.md 규칙 19(개발 용어 대신 업무 단어)와 'FE·BE 가이드 문서 틀'을 따르고, 작성 뒤 python tools/Docs/doc_style.py <가이드 파일> 로 위반 0 을 확인한다. 보고 끝에 가이드 파일 경로와 항목 수를 적는다. **CheckList(run_verify)는 모드와 무관하게 전체를 수행한다** — 모드를 이유로 어떤 검사·E2E 도 건너뛰거나 NA 처리하지 않는다.\n\n`;
+  return `[작업 모드 = DB MODE, 환경설정 값. 아래 본문보다 이 문단이 우선한다] DB 객체(PKG/SP)·DB 메타는 사내 ZIOUI1 에 직접 수정·적용한다. 화면 FE(nscm-fe)·BE(nscm-be)·공통 컴포넌트는 한 줄도 수정하지 않는다. FE 페이지 폴더 안 파일(대조표 __asis-mapping__.md 포함) 쓰기, FE 실행 확인 목적의 수정도 하지 않는다(실행 hook check-work-mode 가 차단한다). FE/BE 수정이 필요한 항목은 가이드(파일:라인, 변경 전/후, 이유, 검증법)로 ${g} 에 모으고, fixlist.csv 해당 행 status=보류(가이드)·change 에 가이드 파일명을 적는다. 본문에서 FE·BE 를 고치라는 지시와 'FE 수정 승인' 문구는 '가이드로 남긴다' 로 읽는다. 가이드 문장은 tools/VibeManager/rules/50_DOC_STYLE.md 규칙 19(개발 용어 대신 업무 단어)와 'FE·BE 가이드 문서 틀'을 따르고, 작성 뒤 python tools/Docs/doc_style.py <가이드 파일> 로 위반 0 을 확인한다. 보고 끝에 가이드 파일 경로와 항목 수를 적는다. CheckList(run_verify)는 모드와 무관하게 전체를 실행한다. 모드를 이유로 어떤 검사·E2E 도 건너뛰거나 NA 처리하지 않는다.\n\n`;
 }
 let flowSeq = 0; // 1.8.9: Flow 보드 일련번호(체인·단일 작업)
 // 1.9.5: 체인 단계 산출물 검증 — verify: { type: 'e2eRows', kind } → Doc/e2e/results/_summary.csv 에 (화면, 종류) 행이 이번 실행(파일 갱신 시각 ≥ 단계 시작) 뒤 존재 · { type: 'fileExists', file }
@@ -337,7 +464,7 @@ const UI = {
   tab_claude: ['AI Agent', 'AI Agent'], tab_log: ['Log', 'Log'], tab_task: ['Task Log', 'Task Log'], tab_status: ['Status', 'Status'], tab_flow: ['FLOW', 'FLOW'], tab_hist: ['Revision', 'Revision'], tab_thist: ['Task History', 'Task History'],
   send: ['📤 Send (Enter)', '📤 전송 (Enter)'], sending: ['⌛ Responding…', '⌛ 응답 중…'], stop: ['⏹️ Stop', '⏹️ 중지'], clear: ['🧹 Clear', '🧹 지우기'], attach: ['📎 Attach', '📎 첨부'],
   noid: ['(no ID)', '(ID 없음)'], mode_auto: ['🤖 Auto (accept edits)', '🤖 자동 (수용)'], mode_manual: ['🖐️ Manual', '🖐️ 수동'], mode_plan: ['📋 PLAN', '📋 PLAN'], mode_bypass: ['🔓 Auto-approve (all)', '🔓 자동승인 (전부허용)'],
-  model_default: ['Default (Claude Code /model · settings)', '기본 (Claude Code /model·settings)'], model_default_set: ['Default (setting: ', '기본 (설정: '], model_custom: ['✏️ Enter model…', '✏️ 직접 입력…'], inuse: ['in use', '사용중'], after_send: ['(shown after first send)', '(전송 후 표시)'],
+  model_default: ['Default (/model · settings)', '기본 (/model·settings)'], model_default_set: ['Default (setting: ', '기본 (설정: '], model_custom: ['✏️ Enter model…', '✏️ 직접 입력…'], inuse: ['in use', '사용중'], after_send: ['(shown after first send)', '(전송 후 표시)'],
   remote: ['📱 Remote', '📱 원격'], nosess: ['no session', '세션 없음'], sess: ['session ', '세션 '], newsess: ['🔄 New Session', '🔄 새 세션'], newwin: ['➕ New Window', '➕ 새 창'], editq: ['✎ quick.json', '✎ quick.json'],
   latest: ['⤓ Latest', '⤓ 최신'], belog: ['☕ BE Log', '☕ BE Log'], felog: ['🎨 FE Log', '🎨 FE Log'], tasklog: ['🧾 Task Log', '🧾 Task Log'],
   ph: ['Enter to send · Shift+Enter for new line', 'Enter to send · Shift+Enter for new line'], // 2026-11-12 사용자: 입력 전 안내를 짧게 · 영문(언어 설정과 무관)
@@ -345,8 +472,8 @@ const UI = {
   st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_chk: ['Fix left', '보완 남음'], st_cl: ['CheckList', 'CheckList'], st_live: ['AS-IS Live', 'AS-IS 실측'], st_e2e: ['E2E', 'E2E'],
   st_notrun: ['not run', '미실행'], st_nospec: ['no spec', '스펙 없음'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
   tb: [{ reload: 'Reload', edit: 'Edit', view: 'View', save: 'Save', editor: 'Open in editor', os: 'Open with OS', close: 'Close tab' }, { reload: '새로고침', edit: '편집', view: '보기', save: '저장', editor: '에디터로', os: 'OS 로 열기', close: '탭 닫기' }],
-  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', stage: 'Stage', sub: 'sub', runN: 'run', firstRun: 'First run', optional: 'optional', warn: 'Done w/ warnings', pending: 'Reported · follow-up work still running', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
-       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', stage: '단계', sub: '세부', runN: '번째 실행', firstRun: '처음 실행', optional: '선택', warn: '경고 포함 완료', pending: '보고 완료 · 후속 작업 진행 중', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
+  bd: [{ late: 'Follow-up work', step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', stage: 'Stage', sub: 'sub', runN: 'run', firstRun: 'First run', optional: 'optional', warn: 'Done w/ warnings', pending: 'Reported · follow-up work still running', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
+       { late: '이어진 작업', step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', stage: '단계', sub: '세부', runN: '번째 실행', firstRun: '처음 실행', optional: '선택', warn: '경고 포함 완료', pending: '보고 완료 · 후속 작업 진행 중', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
   st_menu: ['Menu', '메뉴'], st_page: ['Page', '페이지'], st_click: ['Click a stage to run it', '단계를 누르면 실행됩니다'],
 };
 const t = (p, k) => (UI[k] || [k, k])[(p && p.language) === 'ko' ? 1 : 0];
@@ -382,7 +509,12 @@ function statusHtml(p, id) {
       const c = s.chkCounts; if (!c) return tile(t(p, 'st_cl'), '–', t(p, 'st_notrun'), ''); const ko2 = p.language === 'ko'; return tile(t(p, 'st_cl'), `FAIL ${c.FAIL}`, `${ko2 ? '판정필요' : 'Review'} ${c['판정필요']} · ${ko2 ? '미검증' : 'Unverified'} ${c['미검증']} · ${ko2 ? '미검증 시트' : 'Unverified sheet'} ${c['미검증시트'] == null ? '–' : c['미검증시트']}`, s.chk === 'ok' ? 'ok' : s.chk === 'bad' ? 'bad' : 'mid'); })(),
     tile(t(p, 'st_live'), s.liveN || '–', s.liveN ? '' : t(p, 'st_notrun'), s.live === 'ok' ? 'ok' : s.live === 'bad' ? 'bad' : s.live === 'warn' ? 'mid' : ''),
     tile(t(p, 'st_dod'), dod ? `${dod[1]}/${dod[2]}` : '–', dod ? '' : t(p, 'st_notrun'), dod ? (dod[1] === dod[2] ? 'ok' : 'mid') : ''),
-    tile(t(p, 'st_fe'), fe ? `B ${fe[1]} · W ${fe[2]}` : '–', fe ? '' : t(p, 'st_notrun'), fe ? (fe[1] === '0' ? 'ok' : 'bad') : ''),
+    // 개선안 20261124043431_SELF_2(규칙 R135 · 2026-11-19 사용자 지시): DB MODE = FE 소스 변경 대상 아님 → 타일 'DB MODE 제외'·ok.
+    //   UI/DB MODE = flow.stageStatus 가 gate_baseline.tsv 이후 바뀐 파일 없음으로 판정한 화면(gateTip 'UI/DB MODE:')은 '변경 없음'·ok, 그 밖에만 CHECK.md BLOCK 판정
+    (() => { const ko3 = p.language === 'ko'; let wm3 = null; try { wm3 = workMode(p); } catch { }
+      if (wm3 && wm3.db) return tile(t(p, 'st_fe'), ko3 ? 'DB MODE 제외' : 'Excluded (DB MODE)', ko3 ? 'FE 변경 대상 아님' : 'FE not a change target', 'ok');
+      if (/^UI\/DB MODE:/.test(s.gateTip || '')) return tile(t(p, 'st_fe'), ko3 ? '변경 없음' : 'No change', ko3 ? '기준선 이후 바뀐 파일 없음' : 'No file changed since baseline', 'ok');
+      return tile(t(p, 'st_fe'), fe ? `B ${fe[1]} · W ${fe[2]}` : '–', fe ? '' : t(p, 'st_notrun'), fe ? (fe[1] === '0' ? 'ok' : 'bad') : ''); })(),
     tile(t(p, 'st_pkg'), pk ? `B ${pk[1]} · W ${pk[2]}` : '–', pk ? '' : t(p, 'st_notrun'), pk ? (pk[1] === '0' ? 'ok' : 'bad') : ''),
     tile(t(p, 'st_chk'), gapOpen == null ? '–' : String(gapOpen), gapOpen == null ? t(p, 'st_notrun') : `/ ${gapTot} ${t(p, 'st_items')}`, gapOpen == null ? '' : (gapOpen === 0 ? 'ok' : 'bad')),
 
@@ -400,7 +532,7 @@ function statusHtml(p, id) {
   const VER_RE = /(?:[_\s-]?v?\d+(?:\.\d+)*)+$/i;
   const verOf = s => { const m = VER_RE.exec(s); const toks = m ? m[0].split(/[_\s-]+|(?=v\d)/i).filter(Boolean).map(x => x.replace(/^v/i, '')) : []; const dt = toks.find(x => /^20\d{6}$/.test(x)); return { dt: dt ? Number(dt) : 0, n: toks.filter(x => x !== dt).flatMap(x => x.split('.').map(Number)) }; };
   const cmpVer = (a, b) => { if (a.dt && b.dt && a.dt !== b.dt) return a.dt - b.dt; for (let i = 0; i < Math.max(a.n.length, b.n.length); i++) { const d = (a.n[i] || 0) - (b.n[i] || 0); if (d) return d; } return 0; };
-  for (const [dir, icon] of [[path.join(p.root, 'Doc', '화면설계서'), '📘'], [path.join(p.root, 'Doc', '화면분석서'), '📗'], [path.join(p.root, 'Doc', 'UI_CHECKLIST'), '📋'], [path.join(p.root, 'Doc', '단위테스트'), '🧪'], [path.join(p.root, 'Doc', 'documents', id), '📄']]) {
+  for (const [dir, icon] of [[path.join(p.root, 'Doc', '화면설계서'), '📘'], [path.join(p.root, 'Doc', '화면분석서'), '📗'], [docPaths(p.root).checklist, '📋'], [path.join(p.root, 'Doc', '단위테스트'), '🧪'], [path.join(p.root, 'Doc', 'documents', id), '📄']]) {
     const latest = new Map();
     try {
       for (const f of fs.readdirSync(dir)) {
@@ -423,7 +555,7 @@ function statusHtml(p, id) {
       <div class="dcard"><div class="dct">📂 ${t(p, 'st_outputs')}</div><div class="chips">${fs.existsSync(pack) ? chip(pack, ko ? '📜 Fact Pack 요약' : '📜 Fact Pack summary') : ''}${files.map(([f, l]) => chip(path.join(g, f), l)).join('')}${!files.length && !fs.existsSync(pack) ? `<span class="hint">${t(p, 'st_none')}</span>` : ''}</div></div>
       <div class="dcard"><div class="dct">📚 ${t(p, 'st_docs')} <span class="hint">· MD ${docs.length} · Excel ${xlsx.length}</span></div><div class="chips">${docs.map(f => chip(path.join(agent, f), f.replace('.md', ''))).join('')}${xlsx.map(([f, l]) => chip(f, l, 'data-open')).join('')}${!docs.length && !xlsx.length ? `<span class="hint">${t(p, 'st_none')}</span>` : ''}</div></div>
     </div>
-    <div class="dcard"><div class="dct">🕒 ${t(p, 'st_recent')}</div>${hist.length ? `<div class="tl">${hist.map(h => `<div class="tli"><span class="tlt">${esc(history.fmtLocal(h.start).slice(5, 16))}</span><a data-hist="${esc(h.dir)}">${esc(h.task)}</a><span class="tln ${h.exit === 0 ? 'ok' : (h.end ? 'bad' : '')}">${h.changed ? `${t(p, 'st_changed')} ${h.changed.length}` : t(p, 'st_open')}</span></div>`).join('')}</div>` : `<div class="hint">${t(p, 'st_none')}</div>`}</div>
+    <div class="dcard"><div class="dct">🕒 ${t(p, 'st_recent')}</div>${hist.length ? `<div class="tl">${hist.map(h => `<div class="tli"><span class="tlt">${esc(dfmt.fmtDT(h.start))}</span><a data-hist="${esc(h.dir)}">${esc(h.task)}</a><span class="tln ${h.exit === 0 ? 'ok' : (h.end ? 'bad' : '')}">${h.changed ? `${t(p, 'st_changed')} ${h.changed.length}` : t(p, 'st_open')}</span></div>`).join('')}</div>` : `<div class="hint">${t(p, 'st_none')}</div>`}</div>
   </div>`;
 }
 
@@ -465,10 +597,17 @@ const jobMirror = new Map();           // 화면 ID → { runner, jobId, msgs[],
 const MIRROR_TYPES = new Set(['out', 'fb', 'chat', 'todos', 'run', 'claude', 'busy', 'proc', 'html']);
 const MIRROR_OUT_MAX = 6000;
 const mirrorIdOf = w => (w.titleId != null ? w.titleId : String((w.getState() || {}).id || '').trim().toUpperCase());
+// 2026-11-23 사용자 '18:46 재개 대기 건이 Workbench 에 안 보임': titleId 가 빈 문자열인 창(다시 로드 뒤)은 창 상태의 화면 ID 를 씀. AI 대화 재개 기록과 재개 띠가 같은 값을 씀
+const screenIdOf = w => String(w.titleId || (w.getState ? (w.getState() || {}).id : '') || '').trim().toUpperCase();
 function mirrorSend(w, m) { try { if (w.panel) w.panel.webview.postMessage(m); } catch { /* 닫힌 창 */ } }
+/** 2026-11-25: 이 화면을 실행 중인 VMW 작업 번호(없으면 빈 문자열, job-runner 실행기 목록) */
+function jobRunning(scr) { try { return String(require('./job-runner').runningScreen(scr) || ''); } catch { return ''; } }
+/** 2026-11-25: VMW 작업 시작·끝, 실행기 busy 변화 → 같은 화면 ID 창의 중지 단추·실행 표시를 다시 계산 */
+function jobRunChanged(scr) { for (const w of panels) { try { if (mirrorIdOf(w) === String(scr || '').toUpperCase()) w.updateBusy(); } catch (ex) { require('./orch-errlog').note('workbench', 'jobRunChanged', ex); } } }
 function mirrorPost(runner, m) {
   if (!m || !MIRROR_TYPES.has(m.type)) return;
   const scr = runner.titleId; if (!scr) return;
+  if (m.type === 'busy') { jobRunChanged(scr); return; }  // 2026-11-25: 실행기 busy 를 그대로 보내면 창 자신의 busy 와 서로 덮음 → 창마다 합쳐 다시 계산
   let b = jobMirror.get(scr);
   if (!b || b.runner !== runner) {
     b = { runner, jobId: runner.jobId, msgs: [], outN: 0, seen: new Set(), done: false }; jobMirror.set(scr, b);
@@ -486,7 +625,7 @@ function mirrorAttach(w) {
     if (!w || !w.panel || w.headless || w.orch) return false;
     const scr = mirrorIdOf(w); if (!scr) return false;
     const b = jobMirror.get(scr);
-    if (b) { if (b.seen.has(w)) return false; b.seen.add(w); for (const m of b.msgs) mirrorSend(w, m); return true; }
+    if (b) { if (b.seen.has(w)) return false; b.seen.add(w); for (const m of b.msgs) mirrorSend(w, m); try { w.updateBusy(); } catch { /* 닫힌 창 */ } return true; }
     w._mirrorFile = w._mirrorFile || new Set(); if (w._mirrorFile.has(scr)) return false; w._mirrorFile.add(scr);
     const last = mirrorLastJobLog(w.api.paths(), scr); if (!last) return false;
     mirrorSend(w, { type: 'out', stream: 'task', cls: 'warn', text: `\n===== VMW ${last.jobId} · ${scr} · ${last.status} (기록 파일 ${last.rel}${last.cut ? ' · 끝 200KB' : ''}) =====\n` });
@@ -519,6 +658,26 @@ function mirrorStop(w) {
   try { const scr = mirrorIdOf(w); if (!scr) return false; const r = require('./job-runner').stopScreen(scr, '사용자', 'Workbench 창에서 중지'); return !!(r && r.job); } catch (ex) { require('./orch-errlog').note('workbench', 'mirrorStop', ex); return false; }
 }
 
+// 2026-11-24 사용자: 클라우드 이관 패키지를 제공할 때 VS Code 탐색기에서 그 위치로 이동.
+//   2026-11-24 20:2x 사용자: README.md 를 열 필요 없음, 이관 목록만 링크로. → 편집기로 README 를 열지 않고 탐색기만 패키지 폴더로 옮긴다.
+//   이관 파일 링크는 cloud_pkg.py 가 '@@LINK 📄 이관 n. 경로' 줄로 찍는다(Flow 보드 링크).
+//   실행이 '@@LINK …|<_artifacts/_deploy_packages/<패키지>/…>' 를 찍고 종료코드 0 으로 끝나면 대상. 알림 단추 '탐색기에서 보기'(VS Code 탐색기) · '폴더 열기'(Windows 탐색기).
+function cloudReadmeOf(p, links) {
+  const root = path.join(p.root, '_artifacts', '_deploy_packages'); const pk = (root + path.sep).toLowerCase();
+  const l = (links || []).find(x => x && String(x.file || '').toLowerCase().startsWith(pk) && fs.existsSync(x.file)); if (!l) return null;
+  const rel = path.relative(root, l.file).split(path.sep); const dir = path.join(root, rel[0]); // 패키지 폴더 = _deploy_packages 바로 아래 폴더
+  return fs.existsSync(dir) ? { label: l.label, file: dir } : null;
+}
+async function revealCloudReadme(p, links, quiet) {
+  const rd = cloudReadmeOf(p, links); if (!rd) return false;
+  const uri = vscode.Uri.file(rd.file);
+  try { await vscode.commands.executeCommand('revealInExplorer', uri); } catch { /* 탐색기 없음 */ }
+  if (!quiet) Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager 클라우드 이관 패키지: ${path.relative(p.root, rd.file).split(path.sep).join('/')}`, '탐색기에서 보기', '폴더 열기')).then(a => {
+    if (a === '탐색기에서 보기') vscode.commands.executeCommand('revealInExplorer', uri);
+    else if (a === '폴더 열기') vscode.commands.executeCommand('revealFileInOS', uri);
+  }, () => { });
+  return true;
+}
 // 개선안 20261120042556_INC: 실행이 중지로 끝났는지 판정. 반환 = '' 또는 '중지됨(…)'
 //   flagged = 중지 단추(stopAll)가 표시한 실행. 표시가 없으면 종료코드 1 이면서 마지막 출력이 진행 줄(표식 줄 아님)일 때만 외부 종료(taskkill)로 본다
 const PROG_RE = /^\s*(\[\s*\d+\s*\/\s*\d+\s*\]|\(\s*\d+\s*\/\s*\d+\s*\)|[▶⏳⌛]|진행|실행 중|대기 중)|(\.\.\.|…)\s*$|\b\d{1,3}(\.\d+)?\s*%\s*$/;
@@ -557,13 +716,30 @@ class WB {
     this.api.ctx.workspaceState.update(this.stateKey(), s); this.titleId = String((s || {}).id || '').trim().toUpperCase(); retitle(); mirrorAttach(this); // 화면 ID 를 지정하면 그 화면의 업무 작업 내용을 Console 에 보인다
   }
   // 2026-11-19 VMO P7: 출력 대상 = 창(webview) 또는 sink(창 없는 실행기 — 업무 작업창·파일). 둘 다 있으면 둘 다 받는다
-  post(m) { if (this.panel) try { this.panel.webview.postMessage(m); } catch { } if (this.sink) try { this.sink(m); } catch { } if (this.headless && this.jobId) try { mirrorPost(this, m); } catch { } }
+  post(m) { if (m && m.type === 'fb' && (m.state === 'sub' || m.state === 'step' || m.state === 'end')) this._subMark(m); if (this.panel) try { this.panel.webview.postMessage(m); } catch { } if (this.sink) try { this.sink(m); } catch { } if (this.headless && this.jobId) try { mirrorPost(this, m); } catch { }
+    if (this._rec && this._rec.size && m && REC_TYPES.has(m.type) && !(m.type === 'out' && (m.stream === 'be' || m.stream === 'fe'))) for (const d of [...this._rec]) if (!history.recAdd(d, m)) this._rec.delete(d); } // 2026-11-24 Console 녹화(History 다시 보기)
+  /** 2026-11-26 R234(개선안 20261126083525_SELF_2): 하위 단계(수선 회차, 시험 기준 보정, 전체 재검증, 다시 실행, 스크립트의 '[작업 k/K]' 줄) 시작과 소요를 사건 step.sub 로 남긴다.
+   *  새 하위 단계가 오거나 단계가 끝나면 직전 하위 단계를 step.sub.end(ms_run)로 닫는다. 체인 밖 실행(_lv 없음)은 남기지 않는다 */
+  _subMark(m) {
+    try {
+      const lv = this._lv; if (!lv || !lv.prog || liveChains.get(lv.prog.runId) !== lv || !m) return;
+      const close = () => { const o = this._subOpen; if (!o) return; this._subOpen = null; evt(lv.p, 'step.sub.end', Object.assign({ no: o.no, name: o.name, src: o.src, ms_run: Date.now() - o.ms }, lv.evCh)); };
+      if (m.type === 'fb' && m.state === 'sub') { close(); this._subOpen = { no: m.no, name: String(m.name || '').slice(0, 160), ms: Date.now(), src: 'chain' }; evt(lv.p, 'step.sub', Object.assign({ no: m.no, name: this._subOpen.name, src: 'chain' }, lv.evCh)); }
+      else if (m.type === 'sub-task') { close(); this._subOpen = { no: m.no, name: m.name, ms: Date.now(), src: 'script' }; evt(lv.p, 'step.sub', Object.assign({ no: m.no, name: m.name, src: 'script' }, lv.evCh)); }
+      else if ((m.type === 'fb' && m.state === 'step' && !/^(RUN|REPAIR)$/.test(String(m.status || ''))) || (m.type === 'fb' && m.state === 'end')) close();
+    } catch (e) { require('./orch-errlog').note('workbench', '_subMark', e); }
+  }
+  recBegin(dir) { if (!dir) return; (this._rec = this._rec || new Set()).add(dir); history.recStart(dir); }
   out(stream, text, cls) { this.post({ type: 'out', stream, text: String(text), cls: cls || '' }); }
   updateBusy() {
     // 1.9.32: 기동 완료(ready)된 상주 서버(BE/FE)는 '실행 중 작업'이 아니므로 스피너 대상에서 제외
     const busy = [...this.procs.values()].filter(x => !x.ready);
     const labels = busy.map(x => x.label);
-    this.post({ type: 'busy', procs: busy.length, claude: !!this.claudeProc, labels });
+    // 2026-11-25 사용자 'VMW 에서 CHECKLIST 실행 후 WORKBENCH 로 연결한 경우 중지 버튼이 보이지 않음': 이 창 화면 ID 로 VMW 작업이 돌고 있으면 job=true
+    //   → 중지 단추를 보이고(웹뷰 pbox.busy) 누르면 mirrorStop 이 그 VMW 화면을 멈춘다. 창 자신의 실행이 없어도 같다
+    let job = false; const jl = [];
+    if (!this.headless && !this.orch) { const scr = mirrorIdOf(this); const jid = scr ? jobRunning(scr) : ''; if (jid) { job = true; const b = jobMirror.get(scr); const rb = b && b.runner && b.runner.procs ? [...b.runner.procs.values()].filter(x => !x.ready).map(x => x.label) : []; jl.push(`VMW ${jid} 작업 실행 중`, ...rb); } }
+    this.post({ type: 'busy', procs: busy.length, claude: !!this.claudeProc, labels: labels.concat(jl), job });
   }
 
   // 2026-11-18: 답변·도구 출력에 '@@HTML 라벨|경로' 줄이 있으면 그 HTML 을 Console 탭 안에 그대로 그린다(건수 현황판 tools/Docs/screen_status.py 등)
@@ -577,7 +753,7 @@ class WB {
       try {
         if (!/\.html?$/i.test(f) || path.relative(p.root, f).startsWith('..')) throw new Error('프로젝트 폴더 안 .html 파일만 표시함');
         const st = fs.statSync(f); if (st.size > 3 * 1024 * 1024) throw new Error(`파일 크기 ${st.size} 바이트, 3MB 초과`);
-        this.post({ type: 'html', label, file: f, time: history.nowLocal().slice(0, 16).replace('T', ' '), html: fs.readFileSync(f, 'utf8') });
+        this.post({ type: 'html', label, file: f, time: dfmt.fmtDT(history.nowLocal()), html: fs.readFileSync(f, 'utf8') });
       } catch (e) { this.post({ type: 'chat', role: 'meta', text: `HTML 표시 안 함: ${f} (${e.message})` }); }
     }
   }
@@ -602,11 +778,13 @@ class WB {
     //   2026-11-20 개선안 20261120064043_SELF: opts.screen 이 있으면 화면 ID 로 먼저 쓴다
     const logOwner = String((opts && opts.screen) || this.titleId || '').replace(/[^\w.-]/g, '_') || `wb${this.inst}`;
     const logF = path.join(logDir, `${history.nowLocal().slice(0, 19).replace(/[:.]/g, '-')}_${logOwner}_${id}_${(label || 'run').replace(/[^\w.-]/g, '_')}.log`); // 1.8.2: 로컬 시간
+    for (const hd of [opts && opts.hist, this._chainHist]) if (hd) history.addLog(hd, logF); // 2026-11-24 사용자: Task History 에서 그 실행의 Console 을 보이게
     this.out(stream, `▶ ${label || cmd} \n  $ ${cmd} ${args.join(' ')}\n`, 'cmd');
     const child = cp.spawn(cmd, args, Object.assign({ cwd: p.root, shell: process.platform === 'win32', env: Object.assign({}, process.env, opts && opts.env || {}) }, opts && opts.spawn || {}));
     this.procs.set(id, { child, label });
-    const evT0 = Date.now(); const evBase = { wb: this.inst, screen: this.titleId || '', label: label || cmd, stream, procId: id, childPid: child.pid || null, log: path.relative(p.root, logF) };
+    const evT0 = Date.now(); const evBase = { wb: this.inst, screen: this.titleId || '', runId: runIdOf(this), label: label || cmd, stream, procId: id, childPid: child.pid || null, log: path.relative(p.root, logF) };
     evt(p, 'proc.start', Object.assign({ cmd: `${cmd} ${args.join(' ')}`.slice(0, 400) }, evBase));
+    { const lv = this._lv; if (lv && lv.prog && child.pid && liveChains.get(lv.prog.runId) === lv) { lv.prog.pids = (lv.prog.pids || []).concat({ pid: child.pid, ms: evT0 }).slice(-6); lv.prog.updatedMs = Date.now(); progWrite(lv.p, lv.prog); } } // 2026-11-20 재개 때 끊긴 실행의 남은 프로세스 정리용(reapOrphans)
     this.post({ type: 'proc', id, label, state: 'start' }); this.updateBusy();
     const ws = fs.createWriteStream(logF); let buf = '';
     // 2026-11-11: 작업이 '@@LINK 라벨|경로' 줄을 찍으면 종료 후 Flow 보드에 클릭 링크로 붙인다(클라우드 이관 패키지 폴더·README 등)
@@ -618,7 +796,7 @@ class WB {
     const FAIL_RE = /\[(FAIL|ERROR)\]|^[✖✘]|^(FAIL|ERROR)\b|Traceback \(most recent|^\s*[A-Za-z_.]*(Error|Exception)\b\s*[:(]|ORA-\d{5}|PLS-\d{5}|npm ERR!|error TS\d{4}|\bENOENT\b|\bEADDRINUSE\b|\bECONNREFUSED\b|^✖/;
     const failLines = []; const lastLines = [];
     const noteLine = ln => { const s = String(ln).replace(/\u001b\[[0-9;]*m/g, '').trim(); if (!s) return; lastLines.push(s); if (lastLines.length > 3) lastLines.shift(); if (FAIL_RE.test(s) && !failLines.includes(s)) { failLines.push(s); if (failLines.length > 8) failLines.shift(); } };
-    const onData = d => { const t = d.toString('utf8'); ws.write(t); buf += t; const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { this.out(stream, ln + '\n'); noteLine(ln); noteLink(ln); if (onLine) try { onLine(ln); } catch { } if (this._progHook) try { this._progHook(ln); } catch { } } };
+    const onData = d => { const t = d.toString('utf8'); ws.write(t); buf += t; const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { this.out(stream, ln + '\n'); noteLine(ln); noteLink(ln); if (onLine) try { onLine(ln); } catch { } if (this._progHook) try { this._progHook(ln); } catch { } { const mk = /^\s*\[작업 (\d+)\/(\d+)\]\s*(.*)$/.exec(ln); if (mk && this._lv && this._lv.prog) this._subMark({ type: 'sub-task', no: (this._lv.prog.cur || 0) + 1, name: `[작업 ${mk[1]}/${mk[2]}] ${mk[3]}`.slice(0, 160) }); } } }; // R234: 스크립트 하위 단계 줄
     child.stdout.on('data', onData); child.stderr.on('data', onData);
     child.on('error', e => noteLine(`spawn 실패: ${e.message}`)); // 실행 파일 없음(ENOENT) 등 — close 전에 원인을 남긴다
     if (opts && opts.input != null) { child.stdin.write(opts.input); child.stdin.end(); }
@@ -630,7 +808,12 @@ class WB {
       const stopMark = stopMarkOf(code, !!(rec && rec.stopped), lastLn, FAIL_RE.test(lastLn));
       this.post({ type: 'proc', id, label, state: 'end', code }); this.updateBusy();
       this.out(stream, `■ 종료 exit ${code}${stopMark ? `, ${stopMark}` : ''}, 로그 ${path.relative(p.root, logF)}\n`, code === 0 ? 'ok' : (stopMark ? 'warn' : 'bad'));
-      if (stopMark) evt(p, 'user.stop', { wb: evBase.wb, screen: evBase.screen, by: rec && rec.stopped ? '중지 단추' : '외부 종료 감지', why: stopMark, procId: id }); // orch-watch userStopped 가 뒤따르는 proc.end, step.end 를 실패 사건으로 올리지 않는다
+      // orch-watch userStopped 가 뒤따르는 proc.end, step.end 를 실패 사건으로 올리지 않는다. 개선안 20261122000646_SELF: endRun 으로 멈춘 프로세스(stopLogged)는 endRun 이 남긴 1줄로 끝. 기본값 '중지 단추' 없앰(by 없으면 errlog)
+      if (stopMark && !(rec && rec.stopped && rec.stopLogged)) {
+        const sBy = rec && rec.stopped ? (this.stopBy || '') : '외부 종료 감지';
+        if (!sBy) try { require('./orch-errlog').note('workbench', 'stopNoBy', `endRun 밖 중지 · 창 ${this.inst} · ${label || cmd}`); } catch { /* 기록 실패 */ }
+        evt(p, 'user.stop', { wb: evBase.wb, screen: evBase.screen, job: this.jobId || '', runId: runIdOf(this), by: sBy || '미지정', why: stopMark, procId: id });
+      }
       { const evWhy = stopMark || (code !== 0 ? (failLines.length ? failLines.slice(-5) : lastLines).join('\n').slice(0, 1200) : '');
         evt(p, 'proc.end', Object.assign({ exit: code, ms_run: Date.now() - evT0, server: !!(opts && opts.failReport === false), stopped: !!stopMark, why: evWhy, whySrc: stopMark ? 'stop' : (code !== 0 ? (failLines.length ? 'mark' : 'tail') : ''), sig: code !== 0 && !stopMark && orchEv ? orchEv.signature(label || cmd, evWhy) : '' }, evBase)); }
       if (stopMark && !(opts && opts.failReport === false)) {
@@ -647,6 +830,7 @@ class WB {
         this.post({ type: 'chat', role: 'meta', text: `✖ ${label || cmd} 실패 (exit ${code})\n${why}\n로그: ${rel}` });
         if (!this.quiet) try { Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ✖ ${label || cmd} 실패 (exit ${code}) — ${picked[0] || ''}`.slice(0, 300), 'Log 보기')).then(a => { if (a) this.post({ type: 'showTab', tab: 'log' }); }, () => { }); } catch { }
       }
+      if (code === 0 && !stopMark && this._links && this._links.length) { const lk = this._links.slice(); revealCloudReadme(p, lk, this.quiet).then(ok => { if (ok) this.out(stream, `클라우드 이관 패키지 탐색기 이동: ${path.relative(p.root, cloudReadmeOf(p, lk).file)}\n`, 'ok'); }, () => { }); } // 2026-11-24 사용자: 클라우드 이관 패키지 위치로 탐색기 이동
       res(code);
     }));
   }
@@ -669,13 +853,13 @@ class WB {
       const rc = it.requireConfig; const cf = path.join(path.dirname(exe), rc.file); let url = null;
       try { const x = fs.readFileSync(cf, 'utf8').replace(/<!--[\s\S]*?-->/g, ''); const re = /<address\b[^>]*>/gi; let mm; while ((mm = re.exec(x))) { const nm = /\bname\s*=\s*"([^"]*)"/i.exec(mm[0]); const bu = /\bbaseUrl\s*=\s*"([^"]*)"/i.exec(mm[0]); if (nm && bu && nm[1] === rc.address) { url = bu[1]; break; } } } catch (e) { say(`✖ ${name} 설정 읽기 실패: ${cf}, ${e.message}`, 'bad'); return false; }
       const norm = s => String(s || '').trim().replace(/\/+$/, '').toLowerCase();
-      if (norm(url) !== norm(rc.baseUrl)) { say(`✖ ${name} 실행 안 함. ${rc.file} 의 접속 주소가 ${url || '(없음)'} 입니다(기대 ${rc.baseUrl}).\n   재빌드하면 원본 서버 주소로 되돌아갑니다. ${cf} 의 <address name="${rc.address}" baseUrl> 을 ${rc.baseUrl} 로 바꾼 뒤 다시 실행하세요.`, 'bad'); try { vscode.window.showWarningMessage(`Vibe_Manager ✖ ${name}: ${rc.file} 접속 주소가 ${url || '없음'}, ${rc.baseUrl} 와 달라 실행하지 않았습니다`); } catch { } return false; }
+      if (norm(url) !== norm(rc.baseUrl)) { say(`✖ ${name} 실행 안 함. ${rc.file} 의 접속 주소가 ${url || '(없음)'} 입니다(기대 ${rc.baseUrl}).\n   재빌드하면 원본 서버 주소로 되돌아갑니다. ${cf} 의 <address name="${rc.address}" baseUrl> 을 ${rc.baseUrl} 로 바꾼 뒤 다시 실행하세요.`, 'bad'); try { vscode.window.showWarningMessage(`Vibe_Manager ${name}: ${rc.file} 접속 주소가 ${url || '없음'}, ${rc.baseUrl} 와 달라 실행하지 않았습니다`); } catch { } return false; }
     }
     if (it.waitPort) {
       const lim = Number(it.waitSec || 60) * 1000; const t0 = Date.now(); let occ = portOwner(it.waitPort);
       if (!occ) say(`⏳ ${name}: 포트 ${it.waitPort} 가 열릴 때까지 대기(최대 ${Math.round(lim / 1000)}초)`);
       while (!occ && Date.now() - t0 < lim) { await new Promise(r => setTimeout(r, 1500)); occ = portOwner(it.waitPort); }
-      if (!occ) { say(`✖ ${name} 실행 안 함. 포트 ${it.waitPort} 가 열려 있지 않습니다. IIS 를 먼저 기동하세요.`, 'bad'); try { vscode.window.showWarningMessage(`Vibe_Manager ✖ ${name}: 포트 ${it.waitPort} 미기동. 실행하지 않았습니다`); } catch { } return false; }
+      if (!occ) { say(`✖ ${name} 실행 안 함. 포트 ${it.waitPort} 가 열려 있지 않습니다. IIS 를 먼저 기동하세요.`, 'bad'); try { vscode.window.showWarningMessage(`Vibe_Manager ${name}: 포트 ${it.waitPort} 미기동. 실행하지 않았습니다`); } catch { } return false; }
     }
     try {
       const child = cp.spawn(exe, [], { cwd: path.dirname(exe), detached: true, stdio: 'ignore', windowsHide: false }); const pid = child.pid;
@@ -714,12 +898,15 @@ class WB {
     return r;
   }
 
-  stopAll() {
+  stopAll(opts) {
+    const sync = !!(opts && opts.sync); // 2026-11-20: VS Code 다시 로드·종료 때는 taskkill 을 끝까지 기다린다
+    const tk = pid => (sync ? cp.spawnSync('taskkill', ['/pid', String(pid), '/T', '/F'], { windowsHide: true, timeout: 4000 }) : cp.spawn('taskkill', ['/pid', String(pid), '/T', '/F'], { windowsHide: true }));
     this.stopReq = Date.now(); // 2026-11-20 사용자 중지(09:57 J20261120_060728): 지금 프로세스만 끊고 체인이 실패로 받아 보완·다음 단계를 계속 띄우던 결함 → 체인 루프가 이 표시를 보고 멈춘다
     // 1.9.30: 중지 전에 Claude 가 띄운 후속 작업을 보여 준다 — 함께 종료되어 결과가 소실되는 것을 사용자가 알 수 있게
     if (this.claudeProc) { try { const ds = liveDescendants(this.claudeProc.pid); if (ds && ds.length) this.post({ type: 'chat', role: 'meta', text: `⏹ 중지: 함께 종료되는 후속 작업 ${ds.length}개 (${procSummary(ds)})`, detail: procDetail(ds) }); } catch { } }
-    for (const [, pr] of this.procs) try { pr.stopped = true; if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(pr.child.pid), '/T', '/F']); else pr.child.kill('SIGTERM'); } catch { } // 개선안 20261120042556_INC: stopped = 종료 처리에서 '중지됨'으로 표시
-    if (this.claudeProc) try { if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(this.claudeProc.pid), '/T', '/F']); else this.claudeProc.kill(); } catch { }
+    const logged = !!(opts && opts.logged); // 개선안 20261122000646_SELF: endRun 이 user.stop 을 이미 남김 = 종료 처리에서 다시 남기지 않음
+    for (const [, pr] of this.procs) try { pr.stopped = true; if (logged) pr.stopLogged = true; if (process.platform === 'win32') tk(pr.child.pid); else pr.child.kill('SIGTERM'); } catch { } // 개선안 20261120042556_INC: stopped = 종료 처리에서 '중지됨'으로 표시
+    if (this.claudeProc) try { if (process.platform === 'win32') tk(this.claudeProc.pid); else this.claudeProc.kill(); } catch { }
   }
 
   // 1.8.8: Promise 반환 — 체인(runChain)이 Claude 단계의 종료(코드·is_error)를 기다릴 수 있게. 바쁘면 null
@@ -747,6 +934,10 @@ class WB {
       if (this.claudeProc) { this.out('task', `✖ ${label}: ${Math.round(maxMs / 60000)}분을 기다려도 AI Agent 가 비지 않음. 단계 취소\n`, 'bad'); return null; }
       this.out('task', `▶ ${label}: AI Agent 응답 끝남. 이어서 진행 (${Math.round((Date.now() - t0) / 1000)}s 대기)\n`, 'ok');
     }
+    if (this.chainNotes && this.chainNotes.length) { // 2026-11-23 작업 중 입력한 같은 안건 의견 = 이 AI 단계 지시에 붙여 반영
+      const ns = this.chainNotes.splice(0); prompt = `${prompt}\n\n[사용자 추가 의견. 일괄 작업 중 입력. 이 단계 작업에 반영]\n${ns.map((x, k) => `${k + 1}. ${x.text}`).join('\n')}`;
+      this.post({ type: 'chat', role: 'meta', text: `➕ ${label}: 작업 중 입력한 의견 ${ns.length}건을 이 단계 지시에 넣어 보냅니다` });
+    }
     let r = await this.askClaude(p, prompt, harness, { source: 'chain', label });
     if (r && !r.ok && r.resumeFail) { // 이전 세션을 이어받지 못함 → 새 세션으로 1회 재시도(종전: 안내만 하고 단계 실패)
       this.claudeSession = null; this.post({ type: 'session', id: '' });
@@ -761,20 +952,22 @@ class WB {
   _resumeWrap(on, sub, text) { if (!on) return text; if (sub && sub.session) { this.claudeSession = sub.session; this.post({ type: 'session', id: sub.session }); } return resumePrompt(text); }
   /** 2026-11-20: 체인 밖 AI 호출(메뉴 · 채팅)도 창 다시 로드 뒤 이어받을 수 있게 1단계 재개 기록(kind claude · single)을 남긴다. 체인 안 호출(source chain)은 체인 기록이 맡음 */
   askClaude(p, prompt, harness, hmeta = {}) {
-    const track = !this.headless && !this.orch && hmeta.source !== 'chain' && !this.claudeProc;
+    const scr = screenIdOf(this); // 재개 원장: 화면 ID 없는 창의 AI 대화는 원장에 쓰지 않음(2026-11-23 18:46 screen '' 기록)
+    const track = !this.headless && !this.orch && hmeta.source !== 'chain' && !this.claudeProc && !!scr;
     if (!track) return this.askClaudeCore(p, prompt, harness, hmeta);
-    const t0 = Date.now(); const scr = String(this.titleId || '').toUpperCase(); const label = hmeta.label || `AI 대화 · ${String(hmeta.text || prompt).replace(/\s+/g, ' ').slice(0, 40)}`;
+    const t0 = Date.now(); const label = hmeta.label || `AI 대화 · ${String(hmeta.text || prompt).replace(/\s+/g, ' ').slice(0, 40)}`;
     const prog = { runId: `${scr || `WB${this.inst}`}_${t0}_ai`, screen: scr, chainId: 'claude', label, kind: 'claude', single: true, wb: this.inst, job: '', t0, startedAt: history.nowLocal ? history.nowLocal(new Date(t0)) : '', steps: 1, sig: 'claude', res: [], shown: [0], cur: 0, curActor: 'claude', curTask: '', curName: label, harness: harness !== false, ownerPid: process.pid, updatedMs: t0, prompt: String(prompt).slice(0, 60000), source: hmeta.source || '', menu: hmeta.menu || '', sub: { session: this.claudeSession || '' } };
-    progWrite(p, prog); const lv = { p, evCh: { wb: this.inst, screen: scr, job: '' }, t0, prog, single: true }; liveChains.set(prog.runId, lv);
+    progWrite(p, prog); const lv = { p, evCh: { wb: this.inst, screen: scr, job: '' }, t0, prog, single: true, wb: this }; liveChains.set(prog.runId, lv);
     const prevOn = this._onSession; this._onSession = sid => { prog.sub.session = sid; prog.updatedMs = Date.now(); progWrite(p, prog); if (prevOn) try { prevOn(sid); } catch { } };
-    return this.askClaudeCore(p, prompt, harness, hmeta).finally(() => { this._onSession = prevOn; liveChains.delete(prog.runId); if (!lv.aborted) progDel(p, prog.runId); });
+    return this.askClaudeCore(p, prompt, harness, hmeta).finally(() => { this._onSession = prevOn; liveChains.delete(prog.runId); if (!lv.aborted) progDel(p, prog.runId, 'normalEnd'); });
   }
   askClaudeCore(p, prompt, harness, hmeta = {}) {
     if (this.claudeProc) { vscode.window.showWarningMessage(`워크벤치 #${this.inst}: AI Agent 가 아직 응답 중입니다. 중지 후 다시 보내세요.`); return Promise.resolve(null); }
-    return new Promise(resolveDone => { let resultError = false; this._htmlSeen = new Set();
+    return new Promise(resolveDone => { let resultError = false; this._htmlSeen = new Set(); const aiLinks = []; // 2026-11-26 R193(개선안 20261124232610_SELF): AI 가 돌린 도구 출력의 '@@LINK 라벨|경로' 줄
     // 첨부 파일 → Claude Code 에 @path 토큰으로 전달
     const atPrefix = this.attached.length ? this.attached.map(f => `@${f.path.replace(/\\/g, '/')}`).join(' ') + '\n' : '';
     const full = atPrefix + prompt;
+    this.curAsk = String(hmeta.text || prompt).slice(0, 4000); // 2026-11-23 작업 중 입력 관련 판정(prompt-relate) 자료
     this.post({ type: 'chat', role: 'user', text: full });
     if (this.attached.length) { this.attached = []; this.post({ type: 'attached', files: [] }); }
     const env = Object.assign({}, process.env, harness ? { VIBE_HARNESS: '1', NSCM_SKIP_RULE_READ: '1' } : {});
@@ -784,7 +977,7 @@ class WB {
     // 1.7.5: p.claude = 자동 선택된 최신 CLI 전체 경로 — shell 실행이므로 공백 경로 인용
     // 1.8.0: Claude 프롬프트(🛠️/🧯/💬 보완 포함)도 작업 전·후 스냅샷 — 화면ID 가 있을 때 FE 페이지 + DB 객체(both)
     // 1.9.36: 화면 ID 가 없어도 실행 기록(scope none) — 메뉴 이름·프롬프트 원문·출처를 함께 남긴다
-    let hdir = null; try { const sid = (s.id || '').toUpperCase(); hdir = history.begin(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), sid, 'claude', (hmeta.label || prompt).replace(/\s+/g, ' ').slice(0, 140), sid ? 'both' : 'none', { source: hmeta.source || 'prompt', label: hmeta.label || '', text: hmeta.text || prompt, job: this.jobId || '' }); } catch { }
+    let hdir = null; try { const sid = (s.id || '').toUpperCase(); hdir = history.begin(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), sid, 'claude', (hmeta.label || prompt).replace(/\s+/g, ' ').slice(0, 140), sid ? 'both' : 'none', { source: hmeta.source || 'prompt', label: hmeta.label || '', text: hmeta.text || prompt, job: this.jobId || '' }); this.recBegin(hdir); } catch { }
     const child = cp.spawn(/\s/.test(p.claude) ? `"${p.claude}"` : p.claude, claudeArgs(p, this.claudeSession, overrides), { cwd: p.root, shell: process.platform === 'win32', env });
     this.claudeProc = child; this.post({ type: 'claude', state: 'start' }); this.updateBusy();
     const evC0 = Date.now(); const evCB = { wb: this.inst, screen: (s.id || '').toUpperCase(), source: hmeta.source || 'prompt', label: String(hmeta.label || '').slice(0, 140), childPid: child.pid || null, harness: !!harness };
@@ -820,12 +1013,13 @@ class WB {
     //   → 턴마다 그 턴의 질문(turnPrompt)으로 결과(result) 때 검사 · 한 턴 1회(turnStatusDone)
     let turnPrompt = prompt; let turnStatusDone = false;
     const closeInput = () => { if (!inputOpen) return; inputOpen = false; if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; } try { child.stdin.end(); } catch { } };
-    const writeUser = text => { try { child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content: [{ type: 'text', text }] } }) + '\n'); return true; } catch { return false; } };
+    const writeUser = text => { this._inputMs = Date.now(); try { child.stdin.write(JSON.stringify({ type: 'user', message: { role: 'user', content: [{ type: 'text', text }] } }) + '\n'); return true; } catch { return false; } };
     this.claudeInject = text => {
       if (!inputOpen || child.exitCode != null || child.killed) return false;
       if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
       const ap = this.attached.length ? this.attached.map(f => `@${f.path.replace(/\\/g, '/')}`).join(' ') + '\n' : '';
       if (!writeUser(ap + text)) return false;
+      this.curAsk = `${afterResult ? '' : (this.curAsk || '') + '\n'}${text}`.slice(-4000);
       turnPrompt = afterResult ? text : `${turnPrompt}
 ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
       if (this.attached.length) { this.attached = []; this.post({ type: 'attached', files: [] }); }
@@ -862,10 +1056,11 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
           const t = typeof c.content === 'string' ? c.content : Array.isArray(c.content) ? c.content.map(x => x.text || '').join('\n') : '';
           if (t) this.post({ type: 'chat', role: 'result', text: t.length > 1200 ? t.slice(0, 1200) + ` … (+${t.length - 1200})` : t });
           if (t && t.includes('@@HTML')) this.postHtmlMarks(p, t);
+          if (t && t.includes('@@LINK')) for (const ln of t.split(/\r?\n/)) { const mm = /^@@LINK\s+([^|]+)\|(.+)$/.exec(ln.trim()); if (mm && aiLinks.length < 50) aiLinks.push({ label: mm[1].trim(), file: path.resolve(p.root, mm[2].trim()) }); } // spawnStream noteLink 와 같은 정규식
         }
       }
       else if (j.type === 'result') {
-        if (j.session_id) this.claudeSession = j.session_id; if (j.is_error) resultError = true;
+        if (j.session_id) this.claudeSession = j.session_id; if (j.is_error) resultError = true; else this._resultOkMs = Date.now(); /* 2026-11-23 답을 받은 시각(창 종료 때 재개 기록을 남길지 판단) */
         evt(p, 'claude.result', Object.assign({ session: j.session_id || '', isError: !!j.is_error, turns: j.num_turns || 0, ms_api: j.duration_ms || 0, costUsd: j.total_cost_usd != null ? Number(j.total_cost_usd) : null, resultHead: j.is_error ? String(j.result || '').slice(0, 300) : '' }, evCB));
         if (j.is_error && j.result && !any) this.post({ type: 'chat', role: 'assistant', text: String(j.result) });
         // 1.8.4: 최종 결과 = 상황판 마감(run done) — 헤더 상태·진행바 100%·최종 보고 펼침
@@ -879,14 +1074,15 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     // 1.9.29(2026-10-29 사용자: "세션이 끊어졌다" 메시지만 반복되고 원인을 알 수 없음): claude 의 stderr 를 파일(.vibe/logs/<ts>_claude.log)에 남기고
     //   비정상 종료 시 마지막 stderr 줄을 메시지에 그대로 붙인다 — '새 세션' 으로 해결되는 것은 --resume 실패(세션 없음)일 때만이고, 그 밖(인증 만료·CLI 경로·네트워크·CPU 과부하 타임아웃)은 stderr 가 답이다
     const errTail = []; let logWs = null; let logF = '';
-    try { const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true }); logF = path.join(logDir, `${history.nowLocal().slice(0, 19).replace(/[:.]/g, '-')}_claude_wb${this.inst}.log`); logWs = fs.createWriteStream(logF); logWs.write(`$ ${p.claude} ${claudeArgs(p, this.claudeSession, overrides).join(' ')}\n--- prompt ---\n${full.slice(0, 2000)}\n--- output ---\n`); } catch { logWs = null; }
+    try { const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true }); logF = path.join(logDir, `${history.nowLocal().slice(0, 19).replace(/[:.]/g, '-')}_claude_wb${String(this.inst).replace(/[^\w.-]/g, '_')}.log`); /* 2026-11-25: VMW 실행기 이름 'J…:SCP0028' 의 콜론 = NTFS 숨은 스트림(본 파일 0바이트) → 파일 이름 문자만 */ for (const hd of [hdir, this._chainHist]) if (hd) history.addLog(hd, logF); logWs = fs.createWriteStream(logF); logWs.write(`$ ${p.claude} ${claudeArgs(p, this.claudeSession, overrides).join(' ')}\n--- prompt ---\n${full.slice(0, 2000)}\n--- output ---\n`); } catch { logWs = null; }
     child.stdout.on('data', d => { onData(d); if (logWs) try { logWs.write(d); } catch { } });
     child.stderr.on('data', d => { const t = d.toString('utf8'); this.out('claude', t); if (logWs) try { logWs.write('[stderr] ' + t); } catch { } for (const ln of t.split(/\r?\n/)) if (ln.trim()) { errTail.push(ln.trim().slice(0, 200)); if (errTail.length > 6) errTail.shift(); } });
     try { child.stdin.on('error', () => { inputOpen = false; }); } catch { } // 입력을 닫은 뒤 쓰기(EPIPE)로 확장이 죽지 않게
     child.on('error', e => { errTail.push(`spawn 실패: ${e.message}`); this.out('claude', `spawn 실패: ${e.message}\n`, 'bad'); });
     // 2026-11-19 사용자: 작업 모드는 Console 줄 대신 프롬프트창 모델 옆 표시로(매 실행 때 현재 값으로 맞춤 · harness.json 이 밖에서 바뀐 경우 포함)
     this.post({ type: 'workMode', label: workModeLabel(p), code: workMode(p).code });
-    writeUser(workModePrefix(p, (s.id || '').toUpperCase()) + full); // 2026-11-18: 입력을 닫지 않음 — 결과 뒤 IDLE_MS 가 지나면 closeInput
+    let ruleNote = ''; try { ruleNote = require('./run-rule').NOTE + '\n'; } catch (ex) { require('./orch-errlog').note('workbench', 'runRule', ex); } // 2026-11-23 사용자: 실행 룰 A-13(누락 0 안에서 가장 빠르게)을 VM, VMW 모든 AI 호출 앞에 붙임
+    writeUser(workModePrefix(p, (s.id || '').toUpperCase()) + ruleNote + full); // 2026-11-18: 입력을 닫지 않음 — 결과 뒤 IDLE_MS 가 지나면 closeInput
     child.on('close', code => {
       if (buf.trim()) handle(buf);
       inputOpen = false; if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; } this.claudeInject = null;
@@ -894,6 +1090,7 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
       // 1.9.30: 보고 뒤 후속 작업이 돌던 중 종료 코드≠0 = 중지(taskkill /T) — 후속 작업도 함께 죽었음을 적는다. 정상 종료면 고아가 남아 있을 수 있으므로 settle 이 끝을 확인
       if (doneMsg && !finished) { if (code !== 0 && pendSince) finish(false, `⏹ 중지. 보고 뒤 돌고 있던 후속 작업 ${Math.round((Date.now() - pendSince) / 1000)}s 만에 함께 종료됨(그 작업의 결과는 소실·재실행 필요)`); else settle(); }
       this.post({ type: 'claude', state: 'end', code }); this.updateBusy();
+      if (code === 0 && aiLinks.length) { const lk = aiLinks.slice(); revealCloudReadme(p, lk, this.quiet).then(ok => { if (ok) { const rd = cloudReadmeOf(p, lk); this.post({ type: 'chat', role: 'meta', text: `클라우드 이관 패키지: ${rd ? path.relative(p.root, rd.file).split(path.sep).join('/') : ''} · 탐색기 이동`, detail: lk.map(x => `${x.label}: ${path.relative(p.root, x.file).split(path.sep).join('/')}`).join('\n') }); } }, () => { }); } // R193: README 는 열지 않음(R196)
       if (logWs) try { logWs.end(`\n--- exit ${code} ---\n`); } catch { }
       evt(p, 'claude.end', Object.assign({ exit: code, ms_run: Date.now() - evC0, anyOutput: any, resultError, session: this.claudeSession || '', stderrTail: errTail.slice(-6).join(' | ').slice(0, 800), log: logF ? path.relative(p.root, logF) : '' }, evCB));
       if (code !== 0 && !any) {
@@ -944,7 +1141,7 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     const STOP = '⏹ 중지', REPLACE = '🗑 기존 삭제 후 신규 생성';
     // 2026-11-19 VMO P10: 창 없는 실행기(업무 작업)는 기존 화면을 지우지 않는다 — 이미 생성된 화면은 그 화면만 건너뛴다(기존 화면은 자동보완 업무 대상)
     if (this.headless) { this.lastBlock = `기존 생성분 있음(${pages.map(d => path.relative(p.root, d)).join(', ')}). 일괄 작업은 기존 화면을 지우지 않음. 자동보완 업무 대상`; this.out('task', `⏭ ${ID} ${this.lastBlock}\n`, 'warn'); this.api.record('existing:skip', `${ID} ${label}`); return false; }
-    const pick = await vscode.window.showWarningMessage(`${ID} 는 이미 생성된 화면이 있습니다. 어떻게 할까요?`, { modal: true, detail: `${label}\n\n${lines.join('\n')}\n\n· 중지: 아무것도 바꾸지 않고 멈춥니다(기존 화면 보완은 🛠️ 기존 화면 보완 / 🚒 자동 보완).\n· 삭제 후 신규 생성: 위 폴더와 Doc/gen/${ID} 를 Doc/gen/_backup/${ID}/ 에 백업한 뒤 지우고 처음부터 생성합니다.` }, STOP, REPLACE);
+    const pick = await vscode.window.showWarningMessage(`${ID} 는 이미 생성된 화면이 있습니다. 어떻게 할까요?`, { modal: true, detail: `${label}\n\n${lines.join('\n')}\n\n· 중지: 아무것도 바꾸지 않고 멈춥니다(기존 화면 보완은 🛠️ 수동 보완 / 🧯 자동 보완 메뉴).\n· 삭제 후 신규 생성: 위 폴더와 Doc/gen/${ID} 를 Doc/gen/_backup/${ID}/ 에 백업한 뒤 지우고 처음부터 생성합니다.` }, STOP, REPLACE);
     if (pick !== REPLACE) { this.out('task', `⏹ 중지. ${ID} 기존 생성분 있음(${pages.map(d => path.relative(p.root, d)).join(', ')}) · ${label}\n`, 'warn'); this.api.record('existing:stop', `${ID} ${label}`); return false; }
     const stamp = (history.nowLocal ? history.nowLocal() : new Date().toISOString()).slice(0, 19).replace(/[:T]/g, '-');
     const bak = path.join(p.genDir, '_backup', ID, stamp); const gdir = path.join(p.genDir, ID);
@@ -965,9 +1162,13 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
   //   '지금 보내기' = 진행 중인 Claude 응답을 멈추고 그 프롬프트를 바로 보낸다(같은 세션 이어받기). 일괄 작업 중에는 단계가 깨지지 않게 '지금 보내기' 를 받지 않는다.
   //   claude -p 는 프롬프트 1건마다 프로세스 1개(입력 닫힘)라, 도는 중인 응답에 글을 끼워 넣을 수는 없다 → 대기열·중지 후 전송 두 가지로 처리.
   postQueue() { this.post({ type: 'pq', items: (this.pq || []).map(x => ({ qid: x.qid, text: x.text })), chain: (this.chainN || 0) > 0 }); }
-  enqueuePrompt(text, run) {
-    this.pq = this.pq || []; this.pqSeq = (this.pqSeq || 0) + 1; this.pq.push({ qid: this.pqSeq, text, run });
-    this.post({ type: 'chat', role: 'meta', text: `⏳ 대기열에 넣음(${this.pq.length}번째). ${(this.chainN || 0) > 0 ? '일괄 작업' : '진행 중인 응답'}이 끝나면 자동으로 보냅니다: ${text.replace(/\s+/g, ' ').slice(0, 80)}` });
+  /** 2026-11-23 작업 중 입력 관련 판정 자료: 현재 화면 ID · 현재 AI 지시문 · 체인 이름 · 단계 이름 */
+  relateCtx(id) { const c = this.chainCtx || {}; return { screens: [id, this.titleId, c.id].filter(Boolean), texts: [this.claudeProc ? this.curAsk : '', c.label, c.step].filter(Boolean) }; }
+  /** 체인에서 지금 단계 뒤에 AI 단계가 남았는가 */
+  chainAiLeft() { const c = this.chainCtx; return !!(c && Array.isArray(c.steps) && c.steps.slice(c.i + 1).some(st => st && (st.claude || st.claudeOf))); }
+  enqueuePrompt(text, run, o = {}) {
+    this.pq = this.pq || []; this.pqSeq = (this.pqSeq || 0) + 1; const qit = { qid: this.pqSeq, text, run }; if (o.front) this.pq.unshift(qit); else this.pq.push(qit);
+    this.post({ type: 'chat', role: 'meta', text: `⏳ 대기열에 넣음(${o.front ? '맨 앞' : `${this.pq.length}번째`}${o.why ? `, ${o.why}` : ''}). ${(this.chainN || 0) > 0 ? '일괄 작업' : '진행 중인 응답'}이 끝나면 자동으로 보냅니다: ${text.replace(/\s+/g, ' ').slice(0, 80)}` });
     this.postQueue();
   }
   drainQueue() {
@@ -988,28 +1189,30 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     this.post({ type: 'chat', role: 'meta', text: '⏭ 지금 넣을 수 없음. AI Agent 가 보고를 끝내 입력이 닫혔습니다. 멈추지 않고 대기열 맨 앞에 두었다가 프로세스가 끝나면 바로 보냅니다(즉시 보내려면 ⏹ 중지 후 전송).' });
   }
   // 2026-11-20 작업 재개: 이 창 화면 ID 의 끊긴 체인 기록을 Console 위 띠로 보낸다(업무 작업 VMW 화면 포함)
-  postResume() { try { if (this.headless || this.orch) return; const p = this.api.paths(); const id = String(this.titleId || '').toUpperCase(); const items = id ? resumable(p, { screen: id }) : []; this.post({ type: 'resumeInfo', items: items.slice(0, 5).map(r => ({ runId: r.runId, label: r.label, screen: r.screen, from: r.resumeFrom, of: r.steps, what: resumePlan(p, this.api, r).text, restart: resumePlan(p, this.api, r).restart, at: String(r.interruptedAt || '').replace('T', ' ').slice(5, 16), job: r.job || '' })) }); } catch { /* 띠 없음 */ } }
+  postResume() { try { if (this.headless || this.orch) return; const p = this.api.paths(); const id = mirrorIdOf(this) || screenIdOf(this); const items = ledgerView(p, 'wb', id); /* 2026-11-20: 다시 로드 뒤 연 창은 titleId 없음 → 저장된 화면 ID */ this.post({ type: 'resumeInfo', screen: id || '', items: items.slice(0, 5).map(r => ({ runId: r.runId, label: r.label, screen: r.screen, from: r.resumeFrom, of: r.steps, what: resumePlan(p, this.api, r).text, restart: resumePlan(p, this.api, r).restart, at: dfmt.fmtDT(r.interruptedAt || ''), job: r.job || '' })) }); } catch { /* 띠 없음 */ } }
   async runChain(p, item, id, harness, opts) {
     this.chainN = (this.chainN || 0) + 1; this.postQueue();
     try { return await this._runChain(p, item, id, harness, opts); }
-    finally { this.chainN--; this._progHook = null; this._onSession = null; this.postQueue(); setTimeout(() => this.drainQueue(), 500); this.postResume(); }
+    finally { this.chainN--; this.chainCtx = null; if ((this.chainN || 0) === 0 && this.chainNotes && this.chainNotes.length) { const left = this.chainNotes.splice(0); for (const n of left.reverse()) this.enqueuePrompt(n.text, n.run, { front: true, why: '일괄 작업 안에서 반영할 AI 단계가 남지 않음' }); } this._progHook = null; this._onSession = null; this.postQueue(); setTimeout(() => this.drainQueue(), 500); this.postResume(); }
   }
   async _runChain(p, item, id, harness, opts) {
     const steps = (item.steps || []).slice(); const baseSig = chainSig(item.steps || []); const resume = opts && opts.resume ? opts.resume : null; // 2026-11-20: 사본(반복 묶음이 회차를 덧붙임) · 지문은 정의 기준
-    if (!id) { this.out('task', `⛔ 체인 '${item.label}' 은 화면 ID 가 필요합니다\n`, 'bad'); return; }
+    if (!id) { this.out('task', `체인 '${item.label}' 은 화면 ID 가 필요합니다\n`, 'bad'); return; }
     if (!steps.length) { this.out('task', `체인 '${item.label}' 에 steps 가 없습니다 (quick.json)\n`, 'bad'); return; }
     if (isGenChain(item) && dbModeBlock(p, `${item.label} · ${id}`, t => this.out('task', t, 'bad'))) return; // 2026-11-12: DB MODE = 일괄 생성 체인 차단
     if (item.newScreen && !(await this.confirmExistingPage(p, id, `🚀 ${item.label}`))) return; // 1.9.14: 첫 단계 전에 판정(파싱·Agent 를 돌린 뒤 멈추지 않게)
     const all = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items);
     if (resume && resume.sig !== baseSig) { this.lastBlock = '체인 정의가 끊길 때와 달라 재개할 수 없음(quick.json 단계가 바뀜). 처음부터 실행하세요'; this.out('task', `⛔ ${item.label} · ${id}: ${this.lastBlock}\n`, 'bad'); return; }
+    { const meas = steps.some(st => { const t = st.task && this.api.findTask(st.task); return !!(t && MEASURE_RE.test(`${t.script || ''} ${(t.args || []).join(' ')}`)); }); const pend = meas ? planPending(p.root) : []; // R230: 계획 구현 항목이 남았으면 측정 체인을 시작하지 않음
+      if (pend.length) { this.lastBlock = `계획 구현 항목 ${pend.length}건 남음(${pend.slice(0, 6).join(', ')}${pend.length > 6 ? ' 외' : ''}). 구현을 끝내고 plan_state.py done 으로 표시한 뒤 측정`; this.out('task', `⛔ ${item.label} · ${id}: ${this.lastBlock}\n`, 'bad'); evt(p, 'chain.block', { screen: id, chain: item.chainId || '', why: 'plan', pending: pend.length, job: this.jobId || '' }); return; } }
     const t0 = Date.now(); const res = []; let stopped = false; const fresh0 = resume && resume.t0 ? resume.t0 : t0; const resumeIdx = resume ? Math.max(0, (resume.resumeFrom || 1) - 1) : 0; // 재개 = 원래 체인 시작 시각 기준으로 '이번 실행 결과' 판정
-    let chHist = null; try { chHist = history.begin(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), id, `chain_${item.chainId || 'run'}`, item.label, 'none', { source: 'menu', label: item.label, text: steps.map((st, k) => `${k + 1}. ${st.title || st.task || st.claudeOf || ''}`).join('\n'), job: this.jobId || '' }); } catch { }
+    let chHist = null; try { chHist = history.begin(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), id, `chain_${item.chainId || 'run'}`, item.label, 'none', { source: 'menu', label: item.label, text: steps.map((st, k) => `${k + 1}. ${st.title || st.task || st.claudeOf || ''}`).join('\n'), job: this.jobId || '' }); } catch { } this._chainHist = chHist; this.recBegin(chHist); // 2026-11-24 체인 단계 Console 로그를 체인 이력에도 연결 + Console 녹화
     const genDir = path.join(p.genDir, id); try { fs.mkdirSync(genDir, { recursive: true }); } catch { }
     const mdPath = path.join(genDir, 'FULLRUN.md');
     const nameOf = st => st.title || (st.task ? `${st.task} ${(this.api.findTask(st.task) || {}).title || ''}`.trim() : (st.claudeOf || 'AI Agent'));
     // 2026-11-19 사용자: 조건부 단계(ifJsonGt · ifPrevRan — CheckList 의 검증 보완·재수행 회차)는 처음 STEP 수에 넣지 않고 실행 조건이 맞을 때 보드에 추가한다.
     //   번호·총 STEP 수 = 보드에 올라간 단계 기준(shown) · 조건이 안 맞아 건너뛴 조건부 단계는 번호 없이 로그 한 줄만 남긴다
-    const isCond = st => !!(st.ifJsonGt || st.ifPrevRan || st.askUser || st.loop || st.late); // askUser = 사용자 승인 때만 실행(2026-11-19) · loop = 반복 묶음 · late = 반복 뒤 끝 단계(2026-11-20, 실행할 때 보드에 올림)
+    const isCond = st => !!(st.ifJsonGt || st.ifPrevRan || st.ifLoopRan || st.askUser || st.loop || st.late); // askUser = 사용자 승인 때만 실행(2026-11-19) · loop = 반복 묶음 · late = 반복 뒤 끝 단계(2026-11-20, 실행할 때 보드에 올림)
     const condN = steps.filter(isCond).length;
     const shown = new Set(steps.map((st, k) => (isCond(st) ? -1 : k)).filter(k => k >= 0));
     const shownN = () => shown.size;
@@ -1017,7 +1220,7 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     let fid = 0;
     const addStep = k => { if (shown.has(k)) return; shown.add(k); const st = steps[k]; this.post({ type: 'fb', state: 'add', id: fid, step: { no: k + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional } }); };
     const writeMd = (final) => {
-      const stamp = history.nowLocal ? history.nowLocal().slice(0, 16).replace('T', ' ') : new Date().toISOString();
+      const stamp = history.nowLocal ? dfmt.fmtDT(history.nowLocal()) : new Date().toISOString();
       const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const warn = res.some(r => r.status === 'WARN');
       const holdM = res.filter(r => r.status === 'HOLD').length; // 2026-10-26: 사람 확인 단계가 있으면 '전부 완료' 가 아니다
       const head = !final ? '⏳ 진행 중' : fail ? `✖ ${fail.no}단계에서 중단 (${fail.name})` : holdM ? `⏸ 사람 확인 필요 ${holdM}단계(Doc/e2e/_human_review.md)` : warn ? '경고 포함 완료' : '전부 완료';
@@ -1028,7 +1231,7 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     };
     // 1.8.9: Flow 보드 — Console 탭(2026-11-13 Claude → Console 이름 변경)에 체인 전체(Step 수·현재 Step·진행바)와 Step 별 상태 카드. 작업 출력은 Task Log 에 그대로 남고 카드에는 최근 줄만
     fid = ++flowSeq; try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'chat', auto: true }); } catch { }
-    this.post({ type: 'fb', state: 'start', id: fid, title: item.label, screen: id, steps: steps.map((st, i) => ({ no: i + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional })).filter((_, i) => shown.has(i)), md: `Doc/gen/${id}/FULLRUN.md` });
+    this.post({ type: 'fb', state: 'start', id: fid, runId: `${id}_${t0}`, title: item.label, screen: id, steps: steps.map((st, i) => ({ no: i + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional })).filter((_, i) => shown.has(i)), md: `Doc/gen/${id}/FULLRUN.md` }); // runId = 아래 evCh.runId(웹뷰 보고 tab wb 용 · 개선안 20261121001943_SELF)
     this.out('task', `\n🚀 체인 시작: ${item.label} · ${id} · ${shownN()}단계${condN ? ` (조건이 맞으면 최대 ${condN}단계 추가)` : ''}\n`, 'cmd');
     this.api.record(`chain:${item.chainId || item.label}`, id);
     // 2026-11-19 VMO P1: 체인·단계 사건 기록. actor = 그 단계를 실행한 주체(script | claude)
@@ -1036,9 +1239,10 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     this.lastRun = null; // P7: 실행 결과 요약(창 없는 실행기가 읽는다) — 체인이 끝나면 채운다
     const actorOf = st => (st.task ? 'script' : 'claude');
     evt(p, 'chain.start', Object.assign({ steps: steps.length, shown: shownN(), cond: condN, plan: steps.map((st, k) => ({ no: k + 1, task: st.task || '', actor: actorOf(st), cond: isCond(st) })) }, evCh));
-    const lvRef = { p, evCh, t0 }; liveChains.set(evCh.runId, lvRef); this.stopReq = 0; // 중지 표시는 체인마다 새로 시작
+    const lvRef = { p, evCh, t0, wb: this }; liveChains.set(evCh.runId, lvRef); this._lv = lvRef; this.stopReq = 0; this.stopBy = ''; // 중지 표시·중지 주체는 체인마다 새로 시작
     lvRef.prog = { runId: evCh.runId, screen: id, chainId: item.chainId || '', label: item.label, kind: item.kind || 'chain', wb: this.inst, job: this.jobId || '', t0: fresh0, startedAt: history.nowLocal ? history.nowLocal(new Date(t0)) : '', steps: steps.length, sig: baseSig, res: [], shown: [], cur: resumeIdx, harness: harness !== false, ownerPid: process.pid, updatedMs: Date.now(), resumedFrom: resume ? resume.runId : '' };
-    if (resume) { progDel(p, resume.runId); this.out('task', `↻ 작업 재개: ${resume.resumeFrom}단계부터(끊긴 시각 ${resume.interruptedAt || '-'} · 앞 단계 ${resumeIdx}개는 이전 실행 결과 사용)\n`, 'warn'); }
+    if (resume) { const rp = reapOrphans(p, resume); if (rp.length) this.out('task', `⏹ 끊긴 실행이 남긴 프로세스 ${rp.length}개 종료(${rp.map(x => `${x.name} ${x.pid}`).join(', ').slice(0, 300)}) · 시험 데이터 잠금 대기 방지\n`, 'warn'); }
+    if (resume) { progDel(p, resume.runId, 'resume'); this.out('task', `↻ 작업 재개: ${resume.resumeFrom}단계부터(끊긴 시각 ${resume.interruptedAt || '-'} · 앞 단계 ${resumeIdx}개는 이전 실행 결과 사용)\n`, 'warn'); }
     // 2026-11-20 반복 묶음(사용자 지시 'CheckList 한 번 실행에서 미검증이 없어질 때까지'): quick.json 체인 loops { <묶음>: { while: { file, key, gt }, max } } + 단계 loop: '<묶음>'.
     //   회차 첫 단계에서 조건(JSON 값 > gt · 파일이 이번 체인에서 쓰였고 직전 회차 뒤 갱신됨)을 한 번 보고, 참이면 그 회차를 실행하면서 다음 회차 단계를 바로 뒤에 덧붙인다.
     //   거짓이면 그 회차 단계를 모두 건너뛰고 더 덧붙이지 않는다(반복 끝). max 0 또는 없음 = 회차 상한 없음(끝은 조건이 정함 · unverified_triage.json continue = 처리 대상이 남고 줄어드는 동안)
@@ -1052,22 +1256,31 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     };
     if (resume && resume.loopRounds) for (const [g, n] of Object.entries(resume.loopRounds)) { loopSt[g] = { rounds: 1, go: {} }; for (let r = 1; r < Number(n); r++) addRound(g, r); } // 재개: 끊길 때의 회차 수만큼 다시 펼쳐 단계 번호를 맞춤
     if (Object.keys(loopSt).length) lvRef.prog.loopRounds = Object.fromEntries(Object.entries(loopSt).map(([k, x]) => [k, x.rounds]));
+    // 2026-11-20 사용자 지시 '작업재개 시 전체 단계를 보여주고 이전단계 이후 부터의 현재 단계를': 재개 = 회차를 다시 펼친 뒤 전체 단계 수와 앞 단계의 이전 실행 결과를 사건으로(VMO 실행 카드가 앞 단계를 채움)
+    if (resume) evt(p, 'chain.resume', Object.assign({ steps: steps.length, resumeFrom: resumeIdx + 1, resumedFrom: resume.runId, interruptedAt: resume.interruptedAt || '', carried: (resume.res || []).slice(0, resumeIdx).map((r, k) => ({ no: k + 1, status: (r && r.status) || 'SKIP', actor: (r && r.actor) || actorOf(steps[k] || {}) })) }, evCh));
     for (let i = 0; i < steps.length; i++) {
-      const st = steps[i]; const name = nameOf(st); const no = i + 1;
+      let st = steps[i]; let name = nameOf(st); const no = i + 1;
       if (resume && i < resumeIdx) { const r0 = (resume.res || [])[i] || { no, name, status: 'SKIP', code: null, sec: 0 }; res.push(Object.assign({}, r0, { note: [r0.note, '이전 실행 결과(재개)'].filter(Boolean).join(' · ') })); if ((resume.shown || []).includes(i)) addStep(i); if (shown.has(i)) this.post({ type: 'fb', state: 'step', id: fid, no, status: r0.status }); continue; }
       if (stopped || this.stopReq) { stopped = true; res.push({ no, name, status: 'NOT_RUN', code: null, sec: 0 }); if (shown.has(i)) this.post({ type: 'fb', state: 'step', id: fid, no, status: 'NOT_RUN' }); continue; }
       if (st.loop) {
         const g = st.loop; const rd = st._round || 1; const L = loops[g] || {}; const ls = loopSt[g] || (loopSt[g] = { rounds: 1, go: {} });
         if (ls.go[rd] === undefined) {
           const c = Object.assign({}, L.while || {}, rd === 1 && L.first ? L.first : {}); /* first = 1회차만 다른 키(처리 대상이 있으면 시작) */ const fp = String(c.file || '').replace(/\$\{id\}/g, id).replace(/\$\{root\}/g, p.root); let v = null, mt = 0;
-          try { mt = fs.statSync(fp).mtimeMs; v = String(c.key || '').split('.').reduce((o, k) => (o == null ? o : o[k]), JSON.parse(fs.readFileSync(fp, 'utf8'))); } catch { /* 파일 없음 = 조건 거짓 */ }
+          let jo = null; try { mt = fs.statSync(fp).mtimeMs; jo = JSON.parse(fs.readFileSync(fp, 'utf8')); v = String(c.key || '').split('.').reduce((o, k) => (o == null ? o : o[k]), jo); } catch { /* 파일 없음 = 조건 거짓 */ }
           const fresh = mt >= fresh0 - 1000 && (rd === 1 || !ls.mt || mt > ls.mt);
           const go = fresh && typeof v === 'number' && v > Number(c.gt || 0);
           ls.go[rd] = go; ls.why = !fresh ? (mt < fresh0 - 1000 ? '이번 실행의 분류 결과 없음' : '직전 회차가 분류 결과를 갱신하지 않음') : `${c.key} = ${v}`; ls.mt = mt;
           if (go && !(Number(L.max) > 0 && rd >= Number(L.max))) addRound(g, rd);
-          this.out('task', `\n↻ 반복 ${rd}회차 ${go ? '진행' : '없음(반복 끝)'}: ${ls.why}\n`, go ? 'warn' : '');
+          // 2026-11-20 사용자 지시 'CheckList 작업 시 검사기 보완에 미검증 건수 표기': 회차를 시작할 때 이번 분류 결과(unverified_triage.json, 이번 측정이 갱신한 파일만 = fresh 확인됨)의 미검증·처리 대상 건수를 그 회차 단계 이름에 붙인다
+          const ucnt = go && jo && jo.after && typeof jo.after.total === 'number' ? `미검증 ${jo.after.total}건 · 처리 대상 ${typeof jo.actionable === 'number' ? jo.actionable : jo.after.actionable}건` : '';
+          if (ucnt) for (const k of roundIdx(g, rd)) steps[k] = Object.assign({}, steps[k], { title: `${nameOf(steps[k])} · ${ucnt}` });
+          const ucntLog = fresh && jo && jo.after && typeof jo.after.total === 'number' ? `미검증 ${jo.after.total}건 · 처리 대상 ${typeof jo.actionable === 'number' ? jo.actionable : jo.after.actionable}건` : ''; // 2026-11-20 VMW 카드(job-runner 가 이 줄을 읽음) · 반복 끝 회차도 마지막 건수 표시
+          // 2026-11-20 사용자 지시 'VMO 에도 미검증 건수 표기': 이번 측정이 갱신한 분류 결과만(fresh) 사건으로 → orch-state 체인 스냅샷 unv → VMO 실행 카드
+          if (fresh && jo && jo.after && typeof jo.after.total === 'number') evt(p, 'chain.unv', Object.assign({ round: rd, go: !!go, total: jo.after.total, actionable: typeof jo.actionable === 'number' ? jo.actionable : (jo.after.actionable || 0), human: typeof jo.human === 'number' ? jo.human : 0, at: jo.at || '' }, evCh));
+          this.out('task', `\n↻ 반복 ${rd}회차 ${go ? '진행' : '없음(반복 끝)'}: ${ls.why}${ucntLog ? ` · ${ucntLog}` : ''}\n`, go ? 'warn' : '');
           lvRef.prog.loopRounds = Object.fromEntries(Object.entries(loopSt).map(([k, x]) => [k, x.rounds]));
         }
+        st = steps[i]; name = nameOf(st); // 회차 단계 이름에 미검증 건수가 붙었으면 다시 읽음
         if (!ls.go[rd]) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: `반복 끝(${ls.why})` }); continue; }
         if (!st.ifJsonGt && !st.ifPrevRan && !st.askUser) addStep(i);
       }
@@ -1091,6 +1304,11 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
       if (st.ifPrevRan) { // 2026-11-18: 바로 앞 단계가 건너뜀(SKIP)이 아닐 때만 실행 — 검증 보완을 안 했으면 CheckList 재수행도 안 한다
         const pr = res[i - 1];
         if (!pr || pr.status === 'SKIP' || pr.status === 'NOT_RUN') { const why = st.skipNote || `앞 단계 ${i} ${pr ? pr.status : '없음'}`; res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.out('task', `\n⏭ 추가 단계 없음 · ${name}: ${why}\n`, ''); writeMd(false); continue; }
+        if (!st.askUser) addStep(i);
+      }
+      if (st.ifLoopRan) { // 2026-11-25: 반복 묶음이 1회차라도 실행됐을 때만(🔎 CheckList 재검증 = 미검증 해소 반복이 끝난 뒤 1회)
+        const g = st.ifLoopRan; const ran = !!(loopSt[g] && loopSt[g].go && loopSt[g].go[1]);
+        if (!ran) { const why = st.skipNote || `반복 ${g} 실행 안 함`; res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: why }); this.out('task', `\n⏭ 추가 단계 없음 · ${name}: ${why}\n`, ''); writeMd(false); continue; }
         if (!st.askUser) addStep(i);
       }
       if (st.askUser) { // 2026-11-19 사용자: 메뉴에서 직접 실행한 🧪 미검증 해소는 보완까지만 — CheckList 재수행은 사용자가 승인할 때만(창 닫기·취소 = 실행 안 함)
@@ -1129,9 +1347,10 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
       const rsub = resume && i === resumeIdx && !lvRef.resumedStep ? Object.assign({}, resume.sub || {}) : null; if (rsub) lvRef.resumedStep = true;
       const sub = rsub ? Object.assign({}, rsub) : {}; let resumeOnce = !!(rsub && !rsub.round); const useResume = () => { const u = resumeOnce; resumeOnce = false; return u; };
       if (rsub) this.out('task', `↻ 작업 재개: ${resumePlan(p, this.api, Object.assign({}, resume, { cur: i, curActor: actorOf(st), curTask: st.task || '', curName: name, sub: rsub })).text}\n`, 'warn');
-      Object.assign(lvRef.prog, { cur: i, curActor: actorOf(st), curTask: st.task || '', curName: name, sub, res: res.map((r, k) => ({ no: r.no, name: r.name, status: r.status, code: r.code, sec: r.sec, note: r.note || '', actor: actorOf(steps[k] || {}), task: (steps[k] || {}).task || '' })), shown: [...shown], updatedMs: Date.now() }); progWrite(p, lvRef.prog); // actor · cur
+      this.chainCtx = { id, label: item.label, step: name, i, steps }; // 2026-11-23 작업 중 입력 관련 판정 · 남은 AI 단계 판단
+      Object.assign(lvRef.prog, { cur: i, curActor: actorOf(st), curTask: st.task || '', curName: name, curArgs: Array.isArray(st.args) ? st.args.map(String) : [], sub, res: res.map((r, k) => ({ no: r.no, name: r.name, status: r.status, code: r.code, sec: r.sec, note: r.note || '', actor: actorOf(steps[k] || {}), task: (steps[k] || {}).task || '' })), shown: [...shown], updatedMs: Date.now() }); progWrite(p, lvRef.prog); // actor · cur
       const flushSub = force => { if (!force && Date.now() - (lvRef.subMs || 0) < 10000) return; lvRef.subMs = Date.now(); lvRef.prog.updatedMs = Date.now(); progWrite(p, lvRef.prog); };
-      { const pgS = {}; const jrm = require('./job-runner'); this._progHook = ln => { if (jrm.parseProg(pgS, ln)) { sub.prog = jrm.progText(pgS); flushSub(false); } }; } // 진행 줄 → 세부 진행(10초 간격 기록)
+      { const pgS = {}; const jrm = require('./job-runner'); this._progHook = ln => { const im = /^\[VM_INNER\] (\w+) run_id=(\S+)/.exec(String(ln)); if (im) { sub.inner = { tool: im[1], runId: im[2] }; flushSub(true); return; } /* 재개 원장: 단계 안 재개 지점 참조(측정 도구 실행 ID) */ if (jrm.parseProg(pgS, ln)) { sub.prog = jrm.progText(pgS); flushSub(false); } }; } // 진행 줄 → 세부 진행(10초 간격 기록)
       this._onSession = sid => { sub.session = sid; flushSub(true); }; // AI 세션 확정 → 즉시 기록Actor = 끊길 때 abortCounts 가 센다
       const kind = st.task ? String(st.task).split('.').pop() : '';
       // 단계 1회 실행(작업 또는 Claude) + verify — 1.9.7: 수선 뒤 재실행을 위해 함수로 분리
@@ -1140,7 +1359,7 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
         let c = null; cancelled = false; failFrom = null; okCodeNote = ''; failWhy = '';
         if (st.verify) st.verify = Object.assign({}, st.verify, { _since: Date.now() - 1000 });
         try {
-          if (st.task) { c = await this.runTaskStreaming(p, st.task, id, { noConfirm: true, inFlow: true, args: st.args || null, resume: useResume() ? lvRef.prog.runId : null }); if (c == null) cancelled = true; }
+          if (st.task) { const ru = useResume(); c = await this.runTaskStreaming(p, st.task, id, { noConfirm: true, inFlow: true, args: st.args || null, resume: ru ? (resume.runId || lvRef.prog.runId) : null, resumeInner: ru && sub.inner && sub.inner.runId ? String(sub.inner.runId) : '' }); if (c == null) cancelled = true; }
           else {
             const q = st.claudeOf ? all.find(x => x.label === st.claudeOf || x.label_en === st.claudeOf) : null;
             const prompt = st.claude || (q && q.prompt);
@@ -1181,6 +1400,7 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
           this.post({ type: 'chat', role: 'meta', text: `🩹 ${name} 실패 → 수선 ${r}/${rounds} (${rq.label})` });
           const rr = skipAi ? { ok: true, resumed: true } : await this.askClaudeWhenIdle(p, this._resumeWrap(resumeRound, sub, substQ(rq.prompt, { root: p.root, id, kind, step: name, round: r })), harness !== false, 60 * 60 * 1000, `수선 ${r}/${rounds}`);
           if (!rr) { cancelled = true; this.out('task', `수선 ${r}/${rounds} 취소. AI Agent 를 쓸 수 없음(다른 응답이 끝나지 않음) → 단계 CANCEL\n`, 'bad'); break; }
+          if (this.stopReq) { cancelled = true; break; } // 2026-11-20: 수선 AI 도중 중지·창 다시 로드 = 재실행하지 않음(종전: AI 오류로 보고 단계를 한 번 더 돌림 · 재개 기록이 '재실행'으로 바뀌어 AI 수선을 건너뜀)
           if (!rr.ok) { this.out('task', `✖ 수선 ${r}/${rounds} AI Agent 오류(exit ${rr.code}). 재실행은 그래도 시도\n`, 'bad'); }
           const v = readVerdict(); lastV = v;
           // 2026-10-26: 수선 세션이 기대값 결함(c)을 주장했거나 판정요약이 없으면 → 독립 판정(새 세션·읽기 전용·근거 기계 확인)
@@ -1208,16 +1428,46 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
           this.out('task', `↻ [${pos(i)}/${shownN()}] ${name} 재실행 (수선 ${r} 뒤)\n`, 'cmd');
           this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
           // 2026-11-18 사용자: 미검증 해소 = 전체 목록 → 일괄 보완 → 전체 검증 1회. repair.rerunTask(예 S8.verify = CheckList 전체)가 있으면 보완 뒤 그 작업을 먼저 돌리고 이 단계(분류)를 다시 실행한다
+          // 개선안 20261125034940_SELF_2(R218): 회차 안 = 처리 대상 행만 재는 해소 확인 재측정(S8.checklistSettle)만. rerunTask 가 전체 재검증 작업이면 회차 안에서는 settle 로 바꾸고, 전체 재검증은 반복이 끝나고 해소 게이트 통과 때 1회
           if (st.repair.rerunTask) {
-            this.out('task', `↻ [${pos(i)}/${shownN()}] 보완 ${r} 뒤 전체 재검증: ${st.repair.rerunTask}\n`, 'cmd');
-            this.post({ type: 'fb', state: 'sub', id: fid, no, name: `전체 재검증: ${st.repair.rerunTask} ${((this.api.findTask(st.repair.rerunTask) || {}).title || '').slice(0, 40)}`.trim(), prev: rr.ok ? 'done' : 'bad' });
+            const rerunIn = REPAIR_FULL_RERUN.has(st.repair.rerunTask) ? 'S8.checklistSettle' : st.repair.rerunTask;
+            if (rerunIn !== st.repair.rerunTask) this.out('task', `ℹ 회차 안 전체 재검증(${st.repair.rerunTask}) 대신 해소 확인 재측정(${rerunIn})만 실행. 전체 재검증은 반복이 끝나고 해소 게이트를 넘었을 때 1회\n`, 'warn');
+            this.out('task', `↻ [${pos(i)}/${shownN()}] 보완 ${r} 뒤 해소 확인 재측정(처리 대상 행만): ${rerunIn}\n`, 'cmd');
+            this.post({ type: 'fb', state: 'sub', id: fid, no, name: `해소 확인 재측정: ${rerunIn} ${((this.api.findTask(rerunIn) || {}).title || '').slice(0, 40)}`.trim(), prev: rr.ok ? 'done' : 'bad' });
             this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
-            const rc = await this.runTaskStreaming(p, st.repair.rerunTask, id, { noConfirm: true, inFlow: true });
+            const rc = await this.runTaskStreaming(p, rerunIn, id, { noConfirm: true, inFlow: true });
             const okRc = rc === 0 || (Array.isArray(st.repair.rerunOkCodes) && st.repair.rerunOkCodes.includes(rc));
-            if (!okRc) { this.out('task', `✖ 전체 재검증 ${st.repair.rerunTask} 실패(exit ${rc}). 분류는 직전 결과로 다시 실행\n`, 'bad'); }
+            if (!okRc) { this.out('task', `✖ 해소 확인 재측정 ${rerunIn} 실패(exit ${rc}). 분류는 직전 결과로 다시 실행\n`, 'bad'); }
             this.post({ type: 'fb', state: 'sub', id: fid, no, name: `다시 실행 (보완 ${r} 뒤)`, prev: okRc ? 'done' : 'bad' });
           } else this.post({ type: 'fb', state: 'sub', id: fid, no, name: `다시 실행 (보완 ${r} 뒤)`, prev: rr.ok ? 'done' : 'bad' });
           code = await runOnce();
+        }
+        // 개선안 20261125034940_SELF_2(R218): rerunTask 가 전체 재검증 작업이면 반복이 끝난 뒤 해소 게이트(checklist_run.py --gate) → 통과 때만 전체 재검증 1회 · 실패면 재검증 없이 남은 행·사유 출력
+        if (repairs > 0 && !cancelled && !this.stopReq && REPAIR_FULL_RERUN.has(st.repair.rerunTask || '')) {
+          this.out('task', `🚧 [${pos(i)}/${shownN()}] ${name}: 미검증 해소 반복 끝(${repairs}회) → 해소 게이트(S8.unverifiedGate --gate)\n`, 'cmd');
+          this.post({ type: 'fb', state: 'sub', id: fid, no, name: '미검증 해소 게이트', prev: code === 0 ? 'done' : 'warn' });
+          const gc = await this.runTaskStreaming(p, 'S8.unverifiedGate', id, { noConfirm: true, inFlow: true });
+          if (gc == null || this.stopReq) cancelled = true;
+          else if (gc === 0) {
+            this.out('task', `↻ [${pos(i)}/${shownN()}] 해소 게이트 통과 → 전체 재검증 1회: ${st.repair.rerunTask}\n`, 'cmd');
+            this.post({ type: 'fb', state: 'sub', id: fid, no, name: `전체 재검증 1회: ${st.repair.rerunTask} ${((this.api.findTask(st.repair.rerunTask) || {}).title || '').slice(0, 40)}`.trim(), prev: 'done' });
+            this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
+            const fc = await this.runTaskStreaming(p, st.repair.rerunTask, id, { noConfirm: true, inFlow: true });
+            const okF = fc === 0 || (Array.isArray(st.repair.rerunOkCodes) && st.repair.rerunOkCodes.includes(fc));
+            if (fc == null || this.stopReq) cancelled = true;
+            else { if (!okF) this.out('task', `✖ 전체 재검증 ${st.repair.rerunTask} 실패(exit ${fc}). 분류는 직전 결과로 다시 실행\n`, 'bad'); code = await runOnce(); }
+          } else {
+            let left = '';
+            try {
+              const sj = JSON.parse(fs.readFileSync(path.join(p.root, 'Doc', 'verify', id, 'unverified_settle.json'), 'utf8'));
+              const rows = Array.isArray(sj.rows) ? sj.rows : [];
+              left = `\n   사유: ${sj.why || '-'}\n   남은 행 ${rows.length}건${rows.length ? '\n' + rows.slice(0, 30).map(x => `   - ${x.row_id || '-'} ${x.rule_id || ''} ${x.class || ''} ${x.remedy || ''}`.trimEnd()).join('\n') + (rows.length > 30 ? `\n   … 외 ${rows.length - 30}건` : '') : ''}`;
+            } catch (e) { left = `\n   남은 행·사유: Doc/verify/${id}/unverified_settle.json 읽기 실패(${e.message})`; }
+            this.out('task', `⛔ [${pos(i)}/${shownN()}] 해소 게이트 미통과(exit ${gc}) → 전체 재검증 안 함${left}\n`, 'bad');
+            this.post({ type: 'fb', state: 'sub', id: fid, no, name: '해소 게이트 미통과, 재검증 안 함', prev: 'bad' });
+            if (code === 0) { code = 3; failFrom = 'verify'; }
+            failWhy = `해소 게이트 미통과(exit ${gc}) · 전체 재검증 안 함 · 남은 행 Doc/verify/${id}/unverified_settle.json`;
+          }
         }
       }
       // 2026-10-26: 기대값 결함만 남아 WARN 으로 넘기는 것은 독립 판정이 근거를 확인했을 때만(화면·DB 결함 0 · 사람 확인 0 · 약화 0)
@@ -1232,14 +1482,16 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
       const note = [note0, okCodeNote, why ? `원인: ${why.split('\n')[0]}` : ''].filter(Boolean).join(' · ');
       res.push({ no, name: `${repairs ? `${name} (수선 ${repairs}회)` : name}${note ? ' — ' + note : ''}`, status, code, sec, repairs, note, why });
       this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec, repairs });
-      evt(p, 'step.end', Object.assign({ no, name, task: st.task || '', actor: actorOf(st), status, exit: code, ms_run: Date.now() - s0, repairs, failFrom: failFrom || '', why: String(failWhy || '').slice(0, 1200), sig: status === 'FAIL' && orchEv ? orchEv.signature(st.task || name, failWhy) : '', note: note.slice(0, 400), stopped: !!this.stopReq }, evCh)); // 개선안 20261120131344_SELF: 중지 표시(stopAll)를 끝 기록에 남겨 감시기가 시간 창 추정 없이 본다
+      // 개선안 20261122130655_REVIEW_3: 단계 소요 통계 키 = task + '--' 로 시작하는 고정 인자(예 S8.checklistRun:--docs). 6단계 문서 생성을 1단계 CheckList 측정 표본과 나눈다
+      const stepKey = (st.task || '') + (Array.isArray(st.args) ? st.args.map(String).filter(a => a.startsWith('--')).map(a => ':' + a).join('') : '');
+      evt(p, 'step.end', Object.assign({ no, name, task: st.task || '', stepKey, actor: actorOf(st), status, exit: code, ms_run: Date.now() - s0, repairs, failFrom: failFrom || '', why: String(failWhy || '').slice(0, 1200), sig: status === 'FAIL' && orchEv ? orchEv.signature(st.task || name, failWhy) : '', note: note.slice(0, 400), stopped: !!this.stopReq }, evCh)); // 개선안 20261120131344_SELF: 중지 표시(stopAll)를 끝 기록에 남겨 감시기가 시간 창 추정 없이 본다
       this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${pos(i)}/${shownN()}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''}${repairs ? ` · 수선 ${repairs}회` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
       if (status === 'FAIL' || status === 'CANCEL') stopped = true;
       writeMd(false);
     }
     writeMd(true);
     const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL');
-    if (chHist) try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), chHist, fail ? 1 : 0); } catch { } const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
+    if (this._chainHist === chHist) this._chainHist = null; if (chHist) try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), chHist, fail ? 1 : 0); } catch { } const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
     const repN = res.reduce((n, r) => n + (r.repairs || 0), 0);
     const holdN = res.filter(r => r.status === 'HOLD').length; // 2026-10-26: 사람 확인 단계가 있으면 '✅ 완료' 로 보고하지 않는다
     const summary = fail ? `✖ 체인 중단: ${pos(fail.no - 1)}/${shownN()} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}` : ''} · ${total}s${fail.why && fail.why.includes('\n') ? `\n원인:\n${fail.why}` : ''}` : `${holdN ? '⏸ 체인 종료(사람 확인 필요)' : '체인 완료'}: ${shownN()}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}(Doc/e2e/_human_review.md)` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
@@ -1265,10 +1517,10 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
       const rows = res.map((r, k) => ({ no: r.no, task: (steps[k] || {}).task || '', actor: actorOf(steps[k] || {}), status: r.status, exit: r.code, sec: r.sec, repairs: r.repairs || 0 }));
       const ran = rows.filter(r => r.status !== 'SKIP' && r.status !== 'NOT_RUN');
       const lv = liveChains.get(evCh.runId) || lvRef; liveChains.delete(evCh.runId);
-      if (!lvRef.aborted) progDel(p, evCh.runId); // 정상 종료·사용자 중지 = 재개 대상 아님
+      if (!lvRef.aborted) progDel(p, evCh.runId, 'normalEnd'); // 정상 종료·사용자 중지 = 재개 대상 아님
       if (!(lv && lv.aborted)) evt(p, 'chain.end', Object.assign({ ok: !fail && !holdN, failNo: fail ? fail.no : null, ms_run: Date.now() - t0, okN, repairs: repN, hold: holdN,
         claudeRan: ran.filter(r => r.actor === 'claude').length + repN, claudeSkipped: rows.filter(r => r.actor === 'claude' && (r.status === 'SKIP' || r.status === 'NOT_RUN')).length, scriptRan: ran.filter(r => r.actor === 'script').length,
-        rows, md: path.relative(p.root, mdPath), stopped: !!this.stopReq }, evCh)); }
+        rows, md: path.relative(p.root, mdPath), stopped: !!this.stopReq || !!lvRef.stopBy, stopBy: lvRef.stopBy || (this.stopReq ? this.stopBy || '' : '') }, evCh)); } // 개선안 20261122000646_SELF: 중지 주체(endRun by)를 끝 기록에
     this.post({ type: 'fb', state: 'end', id: fid, ok: !fail && !holdN, warn: res.some(r => r.status === 'WARN' || r.status === 'HOLD'), summary, sec: total });
     if (!this.quiet) try { (fail || holdN ? vscode.window.showWarningMessage : vscode.window.showInformationMessage)(`Vibe_Manager ${summary}`); } catch { }
     if (!this.headless) { this.post({ type: 'status', html: statusHtml(p, id) }); this.post({ type: 'flow', html: flow.innerHtml(p, '') }); } // P7: 창 없는 실행기는 화면 갱신용 HTML 을 만들지 않는다
@@ -1298,6 +1550,10 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     const vars = await api.collectInputs(task, Object.assign({ id, ids: id, dir: id ? api.pageDirOf(id) : '' }, opts.inFlow ? { mode: 'auto' } : {}, opts.preset || {})); if (!vars) return null; // 1.9.10: opts.preset(수선 뒤 재실행 mode=auto 등)
     // 1.9.4: 체인 단계가 인자를 직접 지정하면(st.args — 예: pipeline --phase N) 그 인자로 실행
     const extra = Array.isArray(opts.args) && opts.args.length ? opts.args.flatMap(a => { const v = api.subst(a, vars); return /\$\{input:/.test(a) && task.splitArgs ? v.split(/\s+/).filter(Boolean) : (v === '' ? [] : [v]); }) : null;
+    // 2026-11-26 체인 단계 args 는 작업 정의 args 를 통째로 바꾼다. 체인 args 에 '--' 옵션이 하나도 없는데 작업 정의에는 있으면
+    //   다른 동작으로 실행된다(SCP0005 J20261125_210634: --wl-round · --gate 누락 → CheckList 전체 2회 181.6분) → 작업 정의의 첫 '--' 옵션부터 끝까지 붙이고 알림
+    if (extra && Array.isArray(task.args)) { const k = task.args.findIndex(a => String(a).startsWith('--')); if (k >= 0 && !extra.some(a => String(a).startsWith('--'))) { const tail = task.args.slice(k).map(a => api.subst(a, vars)).filter(v => v !== ''); extra.push(...tail); this.out('task', `[WARN] 체인 단계 인자에 작업 정의 옵션이 없어 붙임: ${task.id || taskId} ${tail.join(' ')}
+`, 'bad'); } }
     if (opts.inFlow) return await this.execShell(p, task, vars, extra, id, { inFlow: true, resume: opts.resume || null });
     // 1.9.17: E2E 전체 4단계(steps.json splitKinds) — run-e2e all 1회 대신 kind 별 순차 실행 = Flow 보드 4단계(사용자 지시 2026-10-22: 4단계 중 어디인지·무슨 작업인지 안 보임)
     if (Array.isArray(task.splitKinds) && task.splitKinds.length) return await this.runSplitKinds(p, task, vars, id);
@@ -1391,7 +1647,9 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
   //   판정 근거(경로:줄 + 원문 인용)를 evidence_check.py 가 기계로 확인 → Doc/gen/<ID>/E2E_REPAIR.result.json
   async judgeRepair(p, id, kind, round) {
     const js = path.join(p.root, 'tools', 'Harness', 'e2e-judge.js');
-    const env = Object.assign({ CLAUDE_BIN: p.claude || '' }, p.claudeModel ? { CLAUDE_MODEL: p.claudeModel } : {});
+    // 2026-11-26 R130: 창에서 고른 모델을 그대로 씀(1664행 하네스 호출과 같은 방식)
+    const model = this.getState().model || p.claudeModel;
+    const env = this.api.claudeEnv ? this.api.claudeEnv(p, model) : Object.assign({ CLAUDE_BIN: p.claude || '' }, model ? { CLAUDE_MODEL: model } : {});
     await this.spawnStream(p, qArg(p.node || 'node'), [qArg(js), id, kind, ...(round ? ['--round', String(round)] : [])], { env }, 'task', `독립 판정 ${id} ${kind}`);
     const e = readEnvelope(p, path.join(p.genDir, id, 'E2E_REPAIR.result.json'));
     if (e.state !== 'error' && round && e.round && Number(e.round) !== Number(round)) return { state: 'error', why: `판정 회차 불일치(봉투 ${e.round} ≠ 수선 ${round})`, issues: [] };
@@ -1475,7 +1733,7 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
       if (!ok) { api.record(task.id, `(선행 실패, BE/FE 미기동) ${path.basename(script)} ${args.join(' ')}`); api.afterTask(task.id, 5); return 5; }
     }
     const histId = (vars.inputs.id || (vars.inputs.ids || '').split(/\s+/)[0] || '').toUpperCase(); let hdir = null;
-    try { hdir = history.begin(Object.assign({}, p, { pageDirOf: api.pageDirOf }), histId, task.id, `${path.basename(script)} ${args.join(' ')}`, null, { source: xopts && xopts.inFlow ? 'chain' : 'menu', label: task.title || task.id, job: this.jobId || '' }); } catch { }
+    try { hdir = history.begin(Object.assign({}, p, { pageDirOf: api.pageDirOf }), histId, task.id, `${path.basename(script)} ${args.join(' ')}`, null, { source: xopts && xopts.inFlow ? 'chain' : 'menu', label: task.title || task.id, job: this.jobId || '' }); this.recBegin(hdir); } catch { }
     api.record(task.id, `${path.basename(script)} ${args.join(' ')}`);
     let cmd, a;
     if (task.kind === 'node') { cmd = p.node; a = [script, ...args]; }
@@ -1485,8 +1743,9 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
     // 1.7.5: 하네스(repair-loop 등)가 같은 최신 CLI·이 창의 모델 선택을 쓰도록 CLAUDE_BIN/CLAUDE_MODEL 전달
     const cenv = api.claudeEnv ? api.claudeEnv(p, this.getState().model || p.claudeModel) : {};
     const tail = /run-e2e\.cmd$/i.test(script) ? this.logTailer() : null; // 1.9.17: E2E 실행별 로그 실시간 이어 읽기
-    const renv = xopts.resume ? { VM_RESUME: '1', VM_RESUME_RUN: String(xopts.resume) } : {}; if (xopts.resume) this.out('task', `↻ 단계 안 재개 신호 전달(VM_RESUME=1 · ${xopts.resume}). 스크립트가 지원하면 끊긴 지점부터\n`, 'warn'); // 2026-11-20
-    const code = await this.spawnStream(p, cmd, a, { spawn: { cwd }, env: Object.assign({}, cenv, renv), onLine: tail ? tail.onLine : null }, 'task', task.title);
+    if (this.stopReq && (this.chainN || 0) > 0) { this.out('task', `⏹ 중지 요청 뒤라 실행하지 않음: ${task.title || task.id}\n`, 'warn'); if (hdir) try { history.finish(Object.assign({}, p, { pageDirOf: api.pageDirOf }), hdir, null); } catch { } return null; } // 2026-11-20: 중지 직후 다음 단계 프로세스가 뜨던 빈틈(16:06:51 engine_gate)
+    const renv = xopts.resume ? Object.assign({ VM_RESUME: '1', VM_RESUME_RUN: String(xopts.resume) }, xopts.resumeInner ? { VM_RESUME_INNER: String(xopts.resumeInner) } : {}) : {}; // 재개 원장: 원장에 둔 측정 도구 실행 ID(VM_RESUME_INNER)와 도구 진행 기록을 대조 if (xopts.resume) this.out('task', `↻ 단계 안 재개 신호 전달(VM_RESUME=1 · ${xopts.resume}). 스크립트가 지원하면 끊긴 지점부터\n`, 'warn'); // 2026-11-20
+    const code = await this.spawnStream(p, cmd, a, { spawn: { cwd }, env: Object.assign({}, cenv, renv), onLine: tail ? tail.onLine : null, hist: hdir }, 'task', task.title);
     if (tail) tail.stop();
     if (hdir) try { history.finish(Object.assign({}, p, { pageDirOf: api.pageDirOf }), hdir, code); } catch { }
     api.afterTask(task.id, code);
@@ -1501,6 +1760,28 @@ ${text}`; turnStatusDone = false; if (afterResult) this._htmlSeen = new Set();
 }
 
 // ── HTML ──
+const REC_TYPES = new Set(['out', 'chat', 'fb', 'todos', 'run', 'claude', 'html', 'showTab']); // Console 녹화 대상 = Task Log, AI 대화, 흐름 보드, 할 일, 실행 끝, 결과 HTML
+/** 녹화한 Console 을 Workbench 와 같은 화면으로 다시 보여 주는 창. 입력 칸은 숨기고, 이 창에서 누른 실행 단추는 무시(파일 열기, 링크만 처리) */
+function openConsoleReplay(api, it) {
+  const p = api.paths(); const msgs = history.recRead(it.dir);
+  const panel = vscode.window.createWebviewPanel('vibeManager.consoleReplay', `🕒 Console 다시 보기 · ${(it.label || it.task || '').slice(0, 30)}`, vscode.ViewColumn.Active, { enableScripts: true, retainContextWhenHidden: true });
+  let page = html({ claudeSession: '' }, p, { steps: api.loadSteps() });
+  page = page.replace('</head>', '<style>#pbox{display:none!important}</style></head>');
+  panel.webview.html = page;
+  let started = false;
+  const run = async () => {
+    if (started) return; started = true;
+    const head = { type: 'chat', role: 'meta', text: `🕒 다시 보기 · ${it.label || it.task} · ${history.fmtLocal(it.start)}${it.end ? ` → ${history.fmtLocal(it.end)}` : ''} · 실행 때 Console 창 녹화 ${msgs.length}건(입력, 실행 단추는 동작하지 않음)` };
+    try { await panel.webview.postMessage(head); for (let i = 0; i < msgs.length; i += 200) { for (const x of msgs.slice(i, i + 200)) panel.webview.postMessage(x); await new Promise(r => setTimeout(r, 30)); } } catch { /* 창 닫힘 */ }
+  };
+  panel.webview.onDidReceiveMessage(m => {
+    run();
+    if (m && m.type === 'openExternal' && m.file) { try { openWithOS(p, null, m.file); } catch { } }
+    else if (m && m.type === 'mdlink' && m.href) { try { let f = String(m.href).split('#')[0]; try { f = decodeURIComponent(f); } catch { } f = path.resolve(p.root, f); if (fs.existsSync(f)) vscode.window.showTextDocument(vscode.Uri.file(f), { preview: true }); else if (/^https?:/i.test(m.href)) vscode.env.openExternal(vscode.Uri.parse(m.href)); } catch { } }
+  });
+  setTimeout(run, 2500); // 웹뷰가 먼저 메시지를 보내지 않아도 2.5초 뒤 재생
+  return panel;
+}
 function html(wb, p, state) {
   // 1.7.4: 워크벤치 좌측 메뉴 영역 제거(사용자 지시 "메뉴 Layer 없어도 됨") — 전체 메뉴는 사이드바(vibeManager.menu) 하나로.
   //        sidebar 항목 실행은 vibeManager.runQuick → workbench.quick() → onMsg('quick') 경로 그대로.
@@ -1517,7 +1798,8 @@ function html(wb, p, state) {
   const PI = { plus: pic('<path d="M12 5v14M5 12h14"/>'), slash: pic('<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M14 8l-4 8"/>'), pin: pic('<path d="M12 21.5s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10.5" r="2.3"/>'),
     newwin: pic('<rect x="3" y="7" width="13" height="13" rx="2"/><path d="M8 7V5a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-1M9.5 13.5h4M11.5 11.5v4"/>'), phone: pic('<rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.3h2"/>'),
     bolt: pic('<path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/>'), up: pic('<path d="M12 19V5.5M6 11.5l6-6 6 6"/>'), stop: pic('<rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/>'),
-    trash: pic('<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/>'), refresh: pic('<path d="M20 11a8 8 0 0 0-14.5-3.5M4 4v4h4M4 13a8 8 0 0 0 14.5 3.5M20 20v-4h-4"/>'), pencil: pic('<path d="M4 20l1-4.5L16.5 4a2.1 2.1 0 0 1 3 3L8 18.5zM14.5 6l3.5 3.5"/>') };
+    trash: pic('<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/>'), refresh: pic('<path d="M20 11a8 8 0 0 0-14.5-3.5M4 4v4h4M4 13a8 8 0 0 0 14.5 3.5M20 20v-4h-4"/>'), pencil: pic('<path d="M4 20l1-4.5L16.5 4a2.1 2.1 0 0 1 3 3L8 18.5zM14.5 6l3.5 3.5"/>'),
+    compass: pic('<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>') };
   // 2026-11-12 사용자: 상단 탭 아이콘 = VM 아이콘 색(테라코타) 단색. 고정 탭 6개 + 동적 탭(FLOW·비교·폴더·파일)
   const TI = { chat: pic('<path d="M12 3l1.8 5.7 5.7 1.8-5.7 1.8L12 18l-1.8-5.7-5.7-1.8 5.7-1.8z"/>'), logs: pic('<rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9.5l3 2.5-3 2.5M12.5 14.5H17"/>'), log: pic('<path d="M8.5 7h11M8.5 12h11M8.5 17h11M4.5 7h.3M4.5 12h.3M4.5 17h.3"/>'), status: pic('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>'), hist: pic('<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/>'), thist: pic('<rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 4.5v-1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1M8.5 10.5h7M8.5 14.5h7"/>'), flow: pic('<path d="M4 20h16M7 20v-7M12 20V6M17 20V10"/>'), diff: pic('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/>'), dir: pic('<path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'), file: pic('<path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM14 3v4h4M9 12h6M9 16h6"/>') };
   const noEm = s => String(s).replace(/^(?:(?:\p{Extended_Pictographic}|[✎✴★])[\uFE0F\u200D]*\s*)+/u, '');
@@ -1526,9 +1808,9 @@ function html(wb, p, state) {
 :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56}
 body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D}
 *{box-sizing:border-box}
-body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100vh;display:grid;grid-template-columns:1fr;grid-template-rows:1fr auto;grid-template-areas:"top" "bottom"}
+body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100vh;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:1fr auto;grid-template-areas:"top" "bottom"}
 #top{grid-area:top;overflow:hidden;padding:6px 10px;display:flex;flex-direction:column;min-height:0}
-#bottom{grid-area:bottom;border-top:1px solid var(--b);padding:6px 10px}
+#bottom{grid-area:bottom;border-top:1px solid var(--b);padding:6px 10px;min-width:0} /* 2026-11-22 사용자: 프롬프트에 긴 줄을 붙여넣어도 창 가로 스크롤 없음(body 열 minmax(0,1fr) + textarea 줄바꿈) */
 
 /* 모델 표시 박스 (1.7: 하드코딩 셀렉트 제거 → Claude Code 공식 /model 사용 안내) */
 .modelbox{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border:1px solid var(--b);border-radius:3px;font-size:11px;background:var(--vscode-editorWidget-background,transparent);user-select:text;max-width:220px;overflow:hidden}
@@ -1585,8 +1867,9 @@ body.lsdrag{cursor:row-resize;user-select:none}
 #history{flex:1;display:flex;flex-direction:column;min-height:0}
 #history .hpane{border-top:none}
 .htabs .ltb svg{width:12px;height:12px}
+.htabs .latest.on{font-weight:700;outline:1px solid var(--vscode-focusBorder);outline-offset:-1px}
 #chat,#status,#flow,#hist,#thist{white-space:normal;font-family:var(--vscode-font-family)}
-.m{margin:4px 0;padding:4px 6px;border-radius:4px;white-space:pre-wrap}
+.m{margin:4px 0;padding:4px 6px;border-radius:4px;white-space:pre-wrap;overflow-wrap:anywhere} /* 2026-11-22 사용자: 붙여넣은 긴 줄(경로·URL·SQL)이 창 가로 스크롤을 만들지 않게 줄바꿈 */
 .m.user{background:var(--vscode-input-background);border-left:3px solid var(--vscode-focusBorder)}
 .m.assistant{border-left:3px solid rgba(63,185,80,.35)}
 .m.meta{opacity:.6;font-size:11px}
@@ -1604,7 +1887,7 @@ details.m summary{cursor:pointer;list-style:revert;font-size:11px;opacity:.8;whi
 details.m[open] summary{opacity:1;font-weight:600}
 details.m .mb{white-space:pre-wrap;margin-top:4px;max-height:360px;overflow:auto;font-family:var(--vscode-editor-font-family);font-size:11px;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.08));padding:4px 6px;border-radius:3px}
 details.m.tool{border-left:3px solid #d29922}
-details.m.result{border-left:3px solid var(--vscode-focusBorder)}
+details.m.result{border-left:3px solid color-mix(in srgb,var(--vscode-focusBorder) 40%,transparent)}
 .thinking{display:none;margin:6px 2px;padding:4px 8px;font-size:11px;opacity:.75;border-left:3px solid #d29922}
 .thinking.on{display:block}
 .thinking .pulse{margin-right:6px}
@@ -1702,6 +1985,7 @@ body.vscode-light .ftail{background:rgba(0,0,0,calc(.035*var(--kf,1)))}
 .dtb .dtsp{opacity:.6;white-space:nowrap}
 .dtb button{font-size:10px;padding:1px 7px;margin:0}
 .dtc{flex:1;overflow:auto;padding:8px 12px;white-space:normal;font-family:var(--vscode-font-family)}
+table.codet td.ln{user-select:none} /* 2026-11-23 선택, 복사에서 줄 번호 제외 */
 .dte{flex:1;min-height:0;width:100%;box-sizing:border-box;resize:none;border:0;padding:8px;font:12px var(--vscode-editor-font-family);background:var(--vscode-editor-background);color:var(--vscode-editor-foreground,var(--vscode-foreground))}
 .mdv{max-width:1100px;line-height:1.5;font-size:12.5px}
 .mdv h1{font-size:18px;margin:10px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--b)}.mdv h2{font-size:15px;margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid var(--b)}.mdv h3{font-size:13px;margin:12px 0 4px}.mdv h4,.mdv h5,.mdv h6{font-size:12px;margin:10px 0 4px;opacity:.9}
@@ -1714,7 +1998,7 @@ body.vscode-light .ftail{background:rgba(0,0,0,calc(.035*var(--kf,1)))}
 .mdv a{color:var(--vscode-textLink-foreground,#58a6ff);cursor:pointer;text-decoration:none}.mdv a:hover{text-decoration:underline}.mdv a.pth{opacity:.9;border-bottom:1px dotted currentColor}
 .mdtw{overflow:auto;margin:6px 0 10px}.mdt{border-collapse:collapse;font-size:11.5px;min-width:50%}.mdt th,.mdt td{border:1px solid var(--b);padding:3px 8px;vertical-align:top}.mdt th{background:var(--vscode-editorWidget-background,rgba(127,127,127,.12));position:sticky;top:0}.mdt tbody tr:nth-child(even){background:rgba(127,127,127,.05)}.mdtn{font-size:10px;opacity:.5;margin-top:2px}
 .okk{color:#3fb950}.badd{color:#f85149}.warnn{color:#d29922}
-.csvw,.folderw,.diffw{font-size:11.5px}.csvn{font-size:11px;opacity:.75;margin-bottom:6px;display:flex;gap:8px;align-items:center}.csvf{width:200px;font-size:11px;padding:2px 6px}
+.csvw,.folderw,.diffw{font-size:11.5px}.csvn{font-size:11px;opacity:.75;margin-bottom:6px;display:flex;gap:8px;align-items:center}.csvf{width:200px;font-size:11px;padding:2px 6px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,var(--b))}.csvf::placeholder{color:var(--vscode-input-placeholderForeground)}
 table.csvt{border-collapse:collapse;white-space:nowrap}table.csvt th,table.csvt td{border:1px solid var(--b);padding:2px 7px;max-width:520px;overflow:hidden;text-overflow:ellipsis}table.csvt th{position:sticky;top:0;background:var(--vscode-editorWidget-background,#252526);z-index:1;text-align:left}table.csvt td.ln,table.csvt td.num{text-align:right;opacity:.6;font-family:var(--vscode-editor-font-family)}table.csvt td.mono{font-family:var(--vscode-editor-font-family);opacity:.75}table.csvt tbody tr:hover{background:var(--vscode-list-hoverBackground)}
 table.csvt.folder a{cursor:pointer;color:var(--vscode-textLink-foreground,#58a6ff)}table.csvt.folder a:hover{text-decoration:underline}.folderw a{cursor:pointer;color:var(--vscode-textLink-foreground,#58a6ff)}
 .codew{font-family:var(--vscode-editor-font-family);font-size:11.5px}table.codet{border-collapse:collapse;width:100%}table.codet td{padding:0 8px;vertical-align:top;white-space:pre;line-height:1.45}table.codet td.ln{text-align:right;opacity:.4;user-select:none;width:1%;border-right:1px solid var(--b)}table.codet tr.hl td{background:rgba(210,153,34,.18)}
@@ -1732,7 +2016,7 @@ details.bfinal .ft.md{white-space:normal}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}
 .kpi{border:1px solid var(--b);border-radius:8px;padding:8px 10px;background:var(--vscode-editorWidget-background,transparent);border-left:4px solid var(--b)}
 .kpi .kv{font-size:20px;font-weight:700;line-height:1.1;font-family:var(--vscode-editor-font-family)}.kpi .kl{font-size:11px;opacity:.75;margin-top:2px}.kpi .ks{font-size:10px;opacity:.55}
-.kpi.ok{border-left-color:#3fb950}.kpi.mid{border-left-color:#d29922}.kpi.bad{border-left-color:#f85149}
+.kpi.ok{border-left-color:rgba(63,185,80,.35)}.kpi.mid{border-left-color:rgba(210,153,34,.35)}.kpi.bad{border-left-color:rgba(248,81,73,.35)}
 .dcard{border:1px solid var(--b);border-radius:8px;padding:8px 10px;background:var(--vscode-editorWidget-background,transparent)}
 .dcard .dct{display:flex;align-items:center;gap:6px;font-weight:700;font-size:12px;margin-bottom:6px}
 .dcols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1758,7 +2042,7 @@ details.bfinal .ft.md{white-space:normal}
 .pbox[data-mode=plan]{--mc:#4a9eff;--mb:#4a9eff;--mf:#4a9eff}
 .pbox[data-mode=default]{--mc:#fff;--mb:#fff;--mf:#fff}.vscode-light .pbox[data-mode=default]{--mc:var(--vscode-foreground);--mb:var(--vscode-foreground);--mf:var(--vscode-foreground)}
 .pbox:focus-within{border-color:color-mix(in srgb,var(--mb) 75%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--mb) 12%,transparent),0 3px 12px color-mix(in srgb,var(--mb) 22%,transparent)} /* 2026-11-19 사용자: 평소 은은하게(35%) · 커서 있을 때 1px + 옅은 그림자 */
-.pbox textarea{display:block;width:100%;min-height:44px;max-height:40vh;field-sizing:content;resize:none;background:transparent;color:var(--vscode-input-foreground);border:0;outline:0;padding:2px 2px 6px;font:13px/1.45 var(--vscode-font-family)}
+.pbox textarea{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;overflow-x:hidden;white-space:pre-wrap;text-wrap-mode:wrap;overflow-wrap:anywhere;word-break:break-word;min-height:44px;max-height:40vh;resize:none;background:transparent;color:var(--vscode-input-foreground);border:0;outline:0;padding:2px 2px 6px;font:13px/1.45 var(--vscode-font-family)}
 .pbar{display:flex;align-items:flex-end;gap:4px;position:relative}
 .pbar .pl{display:flex;align-items:center;gap:4px;flex-wrap:wrap;flex:1;min-width:0}
 .pbar .pr{display:flex;align-items:center;gap:4px;flex:none;margin-left:auto}
@@ -1826,8 +2110,8 @@ h4{margin:8px 0 2px 0}
 /* FLOW inner */
 /* 2.0.2: FLOW 스타일은 flow-panel.js FLOW_CSS 한 곳(독립 패널과 공용). 탭 안에서는 바깥 틀 스크롤을 끄고 표만 스크롤 → 요약·표 머리글 고정 */
 ${flow.FLOW_CSS}
-.dtc:has(> #flow){overflow:hidden;padding:0;display:flex;flex-direction:column}
-.dtc > #flow{flex:1;min-height:0;overflow:hidden;padding:0;border:0}
+.dtc:has(> #flow){overflow-x:hidden;overflow-y:auto;padding:0;display:flex;flex-direction:column} /* 2026-11-25 창이 낮아 표 최소 높이(220px)가 안 들어가면 탭 본문이 스크롤 */
+.dtc > #flow{flex:1;min-height:0;overflow:visible;padding:0;border:0}
 .dtc > #flow #flow-rf{display:none} /* 탭 머리줄에 새로고침이 이미 있다 */
 
 /* 이력 inner */
@@ -1837,6 +2121,7 @@ ${flow.FLOW_CSS}
 .hist-l,.hist-r{overflow:auto;padding:4px 6px;border:1px solid var(--b);border-radius:3px}
 .hkv{border-collapse:collapse;margin:4px 0 6px 0;font-size:11.5px}.hkv td{padding:1px 8px 1px 0;vertical-align:top}.hkv td:first-child{opacity:.65;white-space:nowrap}
 .hpre{white-space:pre-wrap;word-break:break-all;max-height:320px;overflow:auto;font-size:11px;background:var(--vscode-textCodeBlock-background);padding:6px;border-radius:3px}
+.hcon{max-height:480px;font-family:var(--vscode-editor-font-family);white-space:pre}.hlog{margin:6px 0}
 .hist-top .hqw{display:inline-flex;align-items:center;gap:6px;margin-left:auto}
 .hist-top .hq{width:220px;max-width:40vw;height:22px;padding:0 8px;border-radius:4px;border:1px solid var(--vscode-input-border,var(--b));background:var(--vscode-input-background);color:var(--vscode-input-foreground);font:inherit;font-size:11px}
 .hist-top .hq:focus{outline:1px solid var(--vscode-focusBorder);outline-offset:-1px}
@@ -1850,10 +2135,81 @@ ${flow.FLOW_CSS}
 .hf:hover{background:var(--vscode-list-hoverBackground)}
 .hf .k{display:inline-block;width:14px}
 .hf.added .k{color:#3fb950}.hf.deleted .k{color:#f85149}.hf.modified .k{color:#d29922}
+/* ── 2026-11-20 사용자: Workbench 프리미엄 글래스모피즘(은은한 색감) · VMO·VMW 와 같은 변수 ── */
+:root{--fg:var(--vscode-foreground);--a1:color-mix(in srgb,var(--vscode-charts-blue,#3794ff) 58%,#8b93a7);--a2:color-mix(in srgb,var(--vscode-charts-purple,#a371f7) 55%,#8b93a7);--a3:color-mix(in srgb,var(--vscode-charts-green,#3fb9a8) 50%,#8b93a7);
+  --gok:color-mix(in srgb,#3fb950 72%,#8b93a7);--gwarn:color-mix(in srgb,#d29922 72%,#8b93a7);--gbad:color-mix(in srgb,#f85149 70%,#8b93a7);
+  --b:color-mix(in srgb,var(--fg) 12%,transparent);
+  --gx1:color-mix(in srgb,var(--fg) 7.5%,transparent);--gx0:color-mix(in srgb,var(--fg) 3%,transparent);--gxb:color-mix(in srgb,var(--fg) 12%,transparent);
+  --gxh:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(255,255,255,.02);--gxs:0 16px 40px -18px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.18)}
+body.vscode-light,body.vscode-high-contrast-light{--gxh:inset 0 1px 0 rgba(255,255,255,.85),inset 0 -1px 0 rgba(255,255,255,.3);--gxs:0 14px 36px -18px rgba(40,60,120,.26),0 2px 6px rgba(40,60,120,.06);--gx1:color-mix(in srgb,#fff 62%,transparent);--gx0:color-mix(in srgb,#fff 40%,transparent);--gxb:color-mix(in srgb,#fff 85%,transparent);--b:color-mix(in srgb,var(--fg) 14%,transparent)}
+body{background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--vscode-editor-background) 92%,#24304d),var(--vscode-editor-background) 70%)}
+.vmo-aur{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.vmo-aur i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.24;animation:vmoDrift 30s ease-in-out infinite alternate}
+.vmo-aur i:nth-child(1){width:600px;height:600px;left:-160px;top:-240px;background:var(--a1)}
+.vmo-aur i:nth-child(2){width:520px;height:520px;right:-170px;top:-140px;background:var(--a2);animation-duration:36s}
+.vmo-aur i:nth-child(3){width:440px;height:440px;left:36%;bottom:-260px;background:var(--a3);opacity:.14;animation-duration:42s}
+.vscode-light .vmo-aur i{opacity:.14}.vscode-light .vmo-aur i:nth-child(3){opacity:.09}
+@keyframes vmoDrift{to{transform:translate(50px,34px) scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.vmo-aur i{animation:none}}
+/* 상단 탭 = 유리 막대 + 선택 탭 유리 조각 */
+#top{padding:8px 10px 4px}
+.rtabs{border:1px solid var(--gxb);border-radius:14px;padding:4px;gap:2px;margin-bottom:6px;background:linear-gradient(155deg,var(--gx1),var(--gx0) 60%);box-shadow:var(--gxs),var(--gxh);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+.rtabs .rtb{border:1px solid transparent;border-radius:9px;padding:4px 11px;opacity:.68}
+.rtabs .rtb:hover{background:var(--gx0);opacity:.95}
+.rtabs .rtb.on{opacity:1;border-color:var(--gxb);background:linear-gradient(160deg,color-mix(in srgb,var(--fg) 13%,transparent),color-mix(in srgb,var(--fg) 5%,transparent));box-shadow:0 3px 10px -5px rgba(0,0,0,.4),var(--gxh)}
+body.vscode-light .rtabs .rtb.on{background:linear-gradient(160deg,#fff,color-mix(in srgb,#fff 70%,transparent))}
+/* 탭 본문 = 유리 면 */
+#chat,#status,#flow,#hist,#thist,.logbody,.dtab,.hist-l,.hist-r{background:linear-gradient(155deg,var(--gx1),var(--gx0) 60%);border:1px solid var(--gxb);border-radius:14px;box-shadow:var(--gxs),var(--gxh);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+#chat,#status,#flow,#hist,#thist{padding:8px 10px}
+.dtab{overflow:hidden}
+.dtb{background:var(--gx0);border-bottom-color:var(--gxb)}
+.dte{background:transparent}
+#logs .lpane,#history .hpane{border-top-left-radius:0}
+.ltabs{border-bottom-color:var(--gxb)}
+.ltabs .ltb{border-radius:8px 8px 0 0}
+.ltabs .ltb.on{border-color:var(--gxb);background:var(--gx1);box-shadow:var(--gxh)}
+.hist-cols{gap:8px}
+.hit{border-radius:7px}
+/* 대화 · 상황판 */
+.m{border-radius:8px}
+.m.user{background:var(--gx1);border-left-color:color-mix(in srgb,var(--a1) 70%,transparent);box-shadow:var(--gxh)}
+.m.assistant{border-left-color:color-mix(in srgb,var(--gok) 40%,transparent)}
+.runq,details.runq{background:var(--gx1);border-left-color:color-mix(in srgb,var(--a1) 70%,transparent);border-radius:8px}
+.board{border-radius:14px;-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
+details.step{border-radius:10px}
+details.bfinal .ft,.ftail{border-radius:8px}
+.thinking{border-left-color:var(--gwarn);border-radius:6px}
+.cmd{color:var(--a1)}.ok,.okk{color:var(--gok)}.bad,.badd{color:var(--gbad)}.warn,.warnn{color:var(--gwarn)}
+/* UI Status 대시보드 */
+.dhead{border-radius:14px;border:1px solid var(--gxb);background:linear-gradient(135deg,color-mix(in srgb,var(--a1) 22%,transparent),var(--gx0) 70%);box-shadow:var(--gxs),var(--gxh)}
+.kpi,.dcard{border-color:var(--gxb);border-radius:12px;background:linear-gradient(155deg,var(--gx1),var(--gx0) 60%);box-shadow:var(--gxs),var(--gxh)}
+.kpi{border-left-width:3px}
+.kpi.ok{border-left-color:color-mix(in srgb,var(--gok) 40%,transparent)}.kpi.mid{border-left-color:color-mix(in srgb,var(--gwarn) 40%,transparent)}.kpi.bad{border-left-color:color-mix(in srgb,var(--gbad) 40%,transparent)}
+.stp{background:var(--gx0);border-color:var(--gxb);box-shadow:var(--gxh)}
+.stp.ok{border-color:color-mix(in srgb,var(--gok) 60%,transparent)}.stp.ok .dot{background:var(--gok)}.stp.warn{border-color:color-mix(in srgb,var(--gwarn) 60%,transparent)}.stp.warn .dot{background:var(--gwarn)}.stp.bad{border-color:color-mix(in srgb,var(--gbad) 60%,transparent)}.stp.bad .dot{background:var(--gbad)}
+.dash .chip{background:var(--gx0);border-color:var(--gxb)}
+/* 입력창 */
+#bottom{border-top:none;padding:4px 10px 8px}
+.pbox{border-radius:16px;background:linear-gradient(155deg,var(--gx1),var(--gx0) 60%);box-shadow:var(--gxs),var(--gxh);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%)}
+.pbar .pchip{background:var(--gx1);box-shadow:var(--gxh)}
+.pbar .pgo{border-radius:10px}
+#pq .pqi{border-color:var(--gxb);background:var(--gx0);border-radius:8px}
+.pmenu{border-radius:12px;-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);background:color-mix(in srgb,var(--vscode-menu-background,var(--vscode-editorWidget-background,#252526)) 82%,transparent);box-shadow:var(--gxs),var(--gxh)}
+.rsbar{border-radius:12px}
+/* 버튼 · 입력 */
+button{border-radius:7px}
+button.sec{background:var(--gx1);border:1px solid var(--gxb);box-shadow:var(--gxh);color:var(--vscode-foreground)}
+button.sec:hover{background:color-mix(in srgb,var(--fg) 12%,transparent)}
+input[type=text],select.dd{border-radius:7px}
+#chat::-webkit-scrollbar,#status::-webkit-scrollbar,.logbody::-webkit-scrollbar,.dtc::-webkit-scrollbar,.hist-l::-webkit-scrollbar,.hist-r::-webkit-scrollbar{width:8px;height:8px}
+#chat::-webkit-scrollbar-thumb,#status::-webkit-scrollbar-thumb,.logbody::-webkit-scrollbar-thumb,.dtc::-webkit-scrollbar-thumb,.hist-l::-webkit-scrollbar-thumb,.hist-r::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--fg) 14%,transparent);border-radius:8px}
+.dtc > #flow{background:transparent;box-shadow:none;border-radius:0;-webkit-backdrop-filter:none;backdrop-filter:none} /* FLOW 탭 = 안쪽 머리·표가 유리 면(flow-panel.js FLOW_CSS) · 바깥 틀은 겹치지 않게 */
+@media (prefers-reduced-transparency:reduce){.vmo-aur{display:none}.rtabs,#chat,#status,#flow,#hist,#thist,.logbody,.dtab,.hist-l,.hist-r,.board,.pbox,.pmenu{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--vscode-editor-background)}}
 </style></head><body>
+<div class="vmo-aur" aria-hidden="true"><i></i><i></i><i></i></div>
 <div id="top">
   <!-- 1.8.0: '작업 출력' → Log. Log 탭 = BE Log | FE Log 두 창(서버 기동 스트림) · Task Log 탭 = 그 외 작업(gap.js·pipeline 등) 출력. 각 창에 ⤓ 최신 버튼 -->
-  <div class="rtabs"><button class="rtb on" data-t="chat">${TI.chat}<span>Console</span></button><button class="rtb" data-t="status">${TI.status}<span>Status</span></button><button class="rtb" data-t="logs">${TI.logs}<span>Log</span></button><button class="rtb" data-t="history">${TI.hist}<span>History</span></button><span id="dtabs"></span><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
+  <div class="rtabs"><button class="rtb on" data-t="chat">${TI.chat}<span>Console</span></button><button class="rtb" data-t="status">${TI.status}<span>Status</span></button><button class="rtb" data-t="history">${TI.hist}<span>History</span></button><span id="dtabs"></span><button class="rtb" data-t="logs">${TI.logs}<span>Log</span></button><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
   <div id="resumeBar" class="rsbar" hidden></div>
   <div id="chat">
     <div class="hint">${t(p, 'chat_hint')}</div>
@@ -1861,8 +2217,9 @@ ${flow.FLOW_CSS}
   </div>
   <!-- 2026-11-18 사용자: Log 탭 안 Task · FE · BE 를 하위 탭으로(세로 3칸·분할 막대 폐지) · ⤓ 최신 · 🧹 지우기 = 선택된 하위 탭에 공통 적용 -->
   <div id="logs" style="display:none">
-    <div class="ltabs"><span class="ltl" role="tablist"><button class="ltb on" role="tab" data-lp="log">${t(p, 'tasklog')}</button><button class="ltb" role="tab" data-lp="felog" style="display:none" hidden>${t(p, 'felog')}<span class="logst" id="felogst"></span></button><button class="ltb" role="tab" data-lp="belog" style="display:none" hidden>${t(p, 'belog')}<span class="logst" id="belogst"></span></button></span><button class="sec latest" id="logLatest" title="${p.language === 'ko' ? '선택한 로그의 마지막(최신) 줄로 이동' : 'Jump to the latest line of the selected log'}">${t(p, 'latest')}</button><button class="sec latest" id="logClear" title="${p.language === 'ko' ? '선택한 로그 지우기' : 'Clear the selected log'}">🧹 ${p.language === 'ko' ? '지우기' : 'Clear'}</button></div>
+    <div class="ltabs"><span class="ltl" role="tablist"><button class="ltb on" role="tab" data-lp="log">${t(p, 'tasklog')}</button><button class="ltb" role="tab" data-lp="rplog" id="rplogtab" style="display:none" title="${p.language === 'ko' ? 'History 에서 고른 실행의 Console 다시 보기' : 'Replay of a past run console'}">🕒 ${p.language === 'ko' ? '다시 보기' : 'Replay'}<span class="logst" id="rplogst"></span></button><button class="ltb" role="tab" data-lp="felog" style="display:none" hidden>${t(p, 'felog')}<span class="logst" id="felogst"></span></button><button class="ltb" role="tab" data-lp="belog" style="display:none" hidden>${t(p, 'belog')}<span class="logst" id="belogst"></span></button></span><button class="sec latest" id="logLatest" title="${p.language === 'ko' ? '선택한 로그의 마지막(최신) 줄로 이동' : 'Jump to the latest line of the selected log'}">${t(p, 'latest')}</button><button class="sec latest" id="logClear" title="${p.language === 'ko' ? '선택한 로그 지우기' : 'Clear the selected log'}">🧹 ${p.language === 'ko' ? '지우기' : 'Clear'}</button></div>
     <div id="log" class="logbody lpane"></div>
+    <div id="rplog" class="logbody lpane" style="display:none"></div>
     <div id="felog" class="logbody lpane" style="display:none"></div>
     <div id="belog" class="logbody lpane" style="display:none"></div>
   </div>
@@ -1870,7 +2227,7 @@ ${flow.FLOW_CSS}
   <div id="flow" style="display:none"><div class="hint">${t(p, 'flow_hint')}</div></div>
   <!-- 2026-11-18 사용자: Revision · Task History 를 History 탭 하나로 — 안에 Revision · Task 하위 탭 -->
   <div id="history" style="display:none">
-    <div class="ltabs htabs"><span class="ltl" role="tablist"><button class="ltb on" role="tab" data-hp="hist">${TI.hist}<span>Revision</span></button><button class="ltb" role="tab" data-hp="thist">${TI.thist}<span>Task</span></button></span></div>
+    <div class="ltabs htabs"><span class="ltl" role="tablist"><button class="ltb on" role="tab" data-hp="hist">${TI.hist}<span>Revision</span></button><button class="ltb" role="tab" data-hp="thist">${TI.thist}<span>Task</span></button></span><button class="sec latest on" data-hmode="date" title="${p.language === 'ko' ? '선택한 하위 탭 목록을 일자별로 묶기' : 'Group the selected list by date'}">📅 ${p.language === 'ko' ? '일자별' : 'By date'}</button><button class="sec latest" data-hmode="screen" title="${p.language === 'ko' ? '선택한 하위 탭 목록을 화면별로 묶기' : 'Group the selected list by screen'}">🗂 ${p.language === 'ko' ? '화면별' : 'By screen'}</button><button class="sec latest" id="histRf" title="${p.language === 'ko' ? '선택한 하위 탭 목록 새로 읽기' : 'Reload the selected list'}">🔁 ${p.language === 'ko' ? '새로고침' : 'Refresh'}</button></div>
     <div id="hist" class="hpane"><div class="hint">${t(p, 'hist_hint')}</div></div>
     <div id="thist" class="hpane" style="display:none"><div class="hint">Task 탭 선택 시 자동 로드됩니다…</div></div>
   </div>
@@ -1881,36 +2238,36 @@ ${flow.FLOW_CSS}
   <div class="pbox" id="pbox" data-mode="${esc(curMode)}">
     <textarea id="t" placeholder="${esc(String(t(p, 'ph')).replace(/\p{Extended_Pictographic}️?\s*/gu, ''))}"></textarea>
     <div class="pbar"><div class="pl">
-      <button class="pi" id="attach" aria-label="${esc(noEm(t(p, 'attach')))}" title="파일 첨부 — 선택한 파일을 AI Agent 에 @경로 로 전달. 이미지는 AI Agent 가 직접 읽습니다. 클립보드 이미지는 textarea 에 Ctrl+V 로 붙여넣기 가능.">${PI.plus}</button>
-      <span class="pmw"><button class="pi" id="slash" aria-haspopup="menu" aria-expanded="false" aria-label="${p.language === 'ko' ? '명령' : 'Commands'}" title="${p.language === 'ko' ? '명령 — 지우기 · 새 세션 · quick.json 편집 · 새 창 · 리모트' : 'Commands — clear · new session · edit quick.json · new window · remote'}">${PI.slash}</button>
+      <button class="pi" id="attach" aria-label="${esc(noEm(t(p, 'attach')))}" title="파일 첨부: 선택한 파일을 AI Agent 에 @경로 로 전달. 이미지는 AI Agent 가 직접 읽습니다. 클립보드 이미지는 textarea 에 Ctrl+V 로 붙여넣기 가능.">${PI.plus}</button>
+      <span class="pmw"><button class="pi" id="slash" aria-haspopup="menu" aria-expanded="false" aria-label="${p.language === 'ko' ? '명령' : 'Commands'}" title="${p.language === 'ko' ? '명령: 지우기, 새 세션, quick.json 편집, 새 창, 리모트' : 'Commands — clear · new session · edit quick.json · new window · remote'}">${PI.slash}</button>
         <div class="pmenu" id="pmenu" role="menu" hidden>
           <button class="pm" id="clear" role="menuitem" title="작업 출력·AI Agent 대화 지우기">${PI.trash}<span>${esc(noEm(t(p, 'clear')))}</span></button>
-          <button class="pm" id="newS" role="menuitem" title="AI Agent 세션 리셋 — 다음 전송부터 새 대화 (화면ID 유지)">${PI.refresh}<span>${esc(noEm(t(p, 'newsess')))}</span></button>
-          <button class="pm" id="editQ" role="menuitem" title="quick.json 편집 — 전체 메뉴 그룹·항목 커스터마이즈">${PI.pencil}<span>quick.json</span></button>
-          <button class="pm" id="newWin" role="menuitem" title="${esc(noEm(t(p, 'newwin')))} — 워크벤치를 하나 더 열기 — 각 창이 독립된 AI Agent 세션·화면ID 로 멀티 작업 가능">${PI.newwin}<span>${esc(noEm(t(p, 'newwin')))}</span></button>
-          <button class="pm" id="remote" role="menuitem" title="${esc(noEm(t(p, 'remote')))} — 현재 AI Agent 세션 ID 를 모바일 Claude Code 로 이어받기 위한 세션 ID / --resume 명령 복사">${PI.phone}<span>${esc(noEm(t(p, 'remote')))}</span></button>
+          <button class="pm" id="newS" role="menuitem" title="AI Agent 세션 리셋: 다음 전송부터 새 대화 (화면ID 유지)">${PI.refresh}<span>${esc(noEm(t(p, 'newsess')))}</span></button>
+          <button class="pm" id="editQ" role="menuitem" title="quick.json 편집: 메뉴 그룹, 항목 바꾸기">${PI.pencil}<span>quick.json</span></button>
+          <button class="pm" id="newWin" role="menuitem" title="${esc(noEm(t(p, 'newwin')))}: 워크벤치를 하나 더 엶. 창마다 AI Agent 세션과 화면ID 가 따로라 여러 작업을 함께 할 수 있음">${PI.newwin}<span>${esc(noEm(t(p, 'newwin')))}</span></button>
+          <button class="pm" id="remote" role="menuitem" title="${esc(noEm(t(p, 'remote')))}: 현재 AI Agent 세션 ID 를 모바일 Claude Code 로 이어받기 위한 세션 ID / --resume 명령 복사">${PI.phone}<span>${esc(noEm(t(p, 'remote')))}</span></button>
           <div class="pmi"><span id="sess" class="hint">${wb.claudeSession ? t(p, 'sess') + esc(wb.claudeSession.slice(0, 8)) : t(p, 'nosess')}</span></div>
         </div></span>
-      <button class="pchip idbtn" id="idBtn" title="화면 ID 확정 — 유지/다른 ID 입력/AS-IS DB 목록에서 선택. 묵시적 재사용 금지(1.6 룰).">${PI.pin}<span id="idTxt">${esc(state.id || t(p, 'noid'))}</span></button>
-      <span class="pchip pmodel"><select class="dd" id="model" title="Claude 모델 (--model) — 다음 전송부터 적용(세션 유지). 목록은 VS Code 설정 vibeManager.modelList, 없는 모델은 '직접 입력…'">${modelOpts}</select>
-        <span id="modelInfo" class="modelbox" title="현재 세션에서 실제로 응답한 모델 (Claude Code stream 의 model 필드)"><span class="mlbl">${t(p, 'inuse')}</span><span id="modelName" title="${esc(state.model || p.claudeModel || '')}">${esc(mShort(state.model || p.claudeModel || ''))}</span></span></span>
-      <span class="pchip pwmode" title="작업 모드 — DB Mode = DB·META 만 수정, FE·BE 는 가이드만 · UI&amp;DB Mode = 제약 없음 (고르면 바로 바뀜 · tools/Harness/harness.json repairScope)">🧭<select class="dd" id="wmode"><option value="DB_ONLY"${workMode(p).db ? ' selected' : ''}>DB Mode</option><option value="DB_FE"${workMode(p).db ? '' : ' selected'}>UI&amp;DB Mode</option></select></span>
+      <button class="pchip idbtn" id="idBtn" title="화면 ID 확정: 유지/다른 ID 입력/AS-IS DB 목록에서 선택. 묵시적 재사용 금지(1.6 룰).">${PI.pin}<span id="idTxt">${esc(state.id || t(p, 'noid'))}</span></button>
+      <span class="pchip pmodel"><select class="dd" id="model" title="Claude 모델 (--model). 다음 전송부터 적용(세션 유지). 목록은 VS Code 설정 vibeManager.modelList, 없는 모델은 '직접 입력…'">${modelOpts}</select>
+        <span id="modelInfo" class="modelbox" title="현재 세션에서 응답한 모델 (Claude Code stream 의 model 필드)"><span class="mlbl">${t(p, 'inuse')}</span><span id="modelName" title="${esc(state.model || p.claudeModel || '')}">${esc(mShort(state.model || p.claudeModel || ''))}</span></span></span>
+      <span class="pchip pwmode" title="작업 모드: DB Mode = DB, META 만 수정하고 FE, BE 는 가이드만. UI&amp;DB Mode = 제약 없음 (고르면 바로 바뀜, tools/Harness/harness.json repairScope)">${PI.compass}<select class="dd" id="wmode"><option value="DB_ONLY"${workMode(p).db ? ' selected' : ''}>DB Mode</option><option value="DB_FE"${workMode(p).db ? '' : ' selected'}>UI&amp;DB Mode</option></select></span>
       <span class="psp"></span>
       </div><div class="pr">
-      <span class="pmode" title="AI Agent 모드 (/mode) — 자동(acceptEdits) · 수동(default) · PLAN · 전부허용(bypassPermissions)">${PI.bolt}<select class="dd" id="mode" aria-label="mode">
-        <option value="acceptEdits" title="Auto — accept edits (acceptEdits)"${curMode === 'acceptEdits' ? ' selected' : ''}>Auto</option>
-        <option value="default" title="Manual — ask each time (default)"${curMode === 'default' ? ' selected' : ''}>Manual</option>
+      <span class="pmode" title="AI Agent 모드 (/mode): 자동(acceptEdits), 수동(default), PLAN, 전부허용(bypassPermissions)">${PI.bolt}<select class="dd" id="mode" aria-label="mode">
+        <option value="acceptEdits" title="Auto: accept edits (acceptEdits)"${curMode === 'acceptEdits' ? ' selected' : ''}>Auto</option>
+        <option value="default" title="Manual: ask each time (default)"${curMode === 'default' ? ' selected' : ''}>Manual</option>
         <option value="plan" title="Plan mode (plan)"${curMode === 'plan' ? ' selected' : ''}>Plan</option>
-        <option value="bypassPermissions" title="Bypass — auto-approve all (bypassPermissions)"${curMode === 'bypassPermissions' ? ' selected' : ''}>Bypass</option>
+        <option value="bypassPermissions" title="Bypass: auto-approve all (bypassPermissions)"${curMode === 'bypassPermissions' ? ' selected' : ''}>Bypass</option>
       </select></span>
-      <button class="pgo" id="stop" aria-label="${esc(noEm(t(p, 'stop')))}" title="실행 중인 자식 프로세스·AI Agent 요청 모두 중지">${PI.stop}</button>
-      <button class="pgo" id="send" aria-label="${esc(noEm(t(p, 'send')))}" title="프롬프트를 AI Agent 에 전송 (Enter · 줄바꿈 Shift+Enter) — AI Agent 응답 중이면 중지 없이 그 응답에 추가 지시로 반영(일괄 작업의 작업 단계 중이면 대기열)">${PI.up}</button>
+      <button class="pgo" id="stop" aria-label="${esc(noEm(t(p, 'stop')))}" title="실행 중인 자식 프로세스와 AI Agent 요청 중지">${PI.stop}</button>
+      <button class="pgo" id="send" aria-label="${esc(noEm(t(p, 'send')))}" title="프롬프트를 AI Agent 에 전송 (Enter, 줄바꿈 Shift+Enter). AI Agent 응답 중이면 중지 없이 그 응답에 추가 지시로 반영(일괄 작업의 작업 단계 중이면 대기열)">${PI.up}</button>
     </div></div>
   </div>
   <div id="pq" aria-live="polite"></div>
 </div>
 <script>
-const PQ_L=${JSON.stringify(p.language === 'en' ? { head: 'Queued — sent in order when the current run ends', now: 'Send now', nowTip: 'Add this prompt to the running response now (no stop)', del: 'Remove', chain: 'Batch run in progress — queued prompts are sent after it ends' } : { head: '대기 중 — 현재 작업이 끝나면 순서대로 자동 전송', now: '지금 보내기', nowTip: '진행 중인 응답을 멈추지 않고 이 프롬프트를 추가 지시로 바로 넣습니다', del: '삭제', chain: '일괄 작업 중 — 끝난 뒤 대기열을 보냅니다' })};
+const PQ_L=${JSON.stringify(p.language === 'en' ? { head: 'Queued — sent in order when the current run ends', now: 'Send now', nowTip: 'Add this prompt to the running response now (no stop)', del: 'Remove', chain: 'Batch run in progress — queued prompts are sent after it ends' } : { head: '대기 중. 현재 작업이 끝나면 순서대로 자동 전송', now: '지금 보내기', nowTip: '진행 중인 응답을 멈추지 않고 이 프롬프트를 추가 지시로 바로 넣습니다', del: '삭제', chain: '일괄 작업 중. 끝난 뒤 대기열을 보냅니다' })};
 const vscode=acquireVsCodeApi();${require('./orch-errlog').webviewSnippet('vscode')}const $=i=>document.getElementById(i);
 const UI_SEND=${JSON.stringify(t(p, 'send'))},UI_SENDING=${JSON.stringify(t(p, 'sending'))},UI_SESS=${JSON.stringify(t(p, 'sess'))},UI_NOSESS=${JSON.stringify(t(p, 'nosess'))},UI_NOID=${JSON.stringify(t(p, 'noid'))},UI_AFTERSEND=${JSON.stringify(t(p, 'after_send'))},UI_BD=${JSON.stringify(t(p, 'bd'))},UI_TB=${JSON.stringify(t(p, 'tb'))};
 let CUR_ID=${JSON.stringify(String(state.id || ''))};
@@ -1940,7 +2297,7 @@ function showTab(t){
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
   [['logs','logs'],['chat','chat'],['status','status'],['history','history']].forEach(([k,el])=>$(el).style.display=k===t?'':'none');
   if(t==='logs'){scrollLatest(logCur());const n=document.querySelector('.ltabs .ltb.on .nb');if(n)n.remove();}
-  if(t==='history'){if(!HSEL)vscode.postMessage(Object.assign({type:'history:refresh',view:histCur()==='thist'?'task':'rev',mode:'date',sel:''},st()));HSEL=false;}
+  if(t==='history'){if(!HSEL)histRf(HM);HSEL=false;}
   else if(t==='status') vscode.postMessage(Object.assign({type:'status'},st()));
 }
 document.querySelectorAll('.rtabs .rtb').forEach(b=>b.onclick=()=>showTab(b.dataset.t));
@@ -1949,12 +2306,18 @@ var HSEL=false;
 function histCur(){const b=document.querySelector('#history .ltb.on');return b?b.dataset.hp:'hist';}
 function histPick(id){if(id!=='thist')id='hist';document.querySelectorAll('#history .ltb').forEach(x=>{const on=x.dataset.hp===id;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');});
   ['hist','thist'].forEach(k=>{const e=$(k);if(e)e.style.display=k===id?'':'none';});try{vscode.setState(Object.assign({},vscode.getState()||{},{histTab:id}));}catch(_){}}
-document.querySelectorAll('#history .ltb').forEach(b=>b.onclick=()=>{histPick(b.dataset.hp);vscode.postMessage(Object.assign({type:'history:refresh',view:b.dataset.hp==='thist'?'task':'rev',mode:'date',sel:''},st()));});
+document.querySelectorAll('#history .ltb').forEach(b=>b.onclick=()=>{histPick(b.dataset.hp);histRf(HM);});
 try{histPick(((vscode.getState()||{}).histTab)||'hist');}catch(_){histPick('hist');}
+// 2026-11-25 R103: 일자별 · 화면별 · 새로고침 = 상단 한 벌 → 고른 하위 탭(histTab)에 history:refresh · Task 출처 필터는 하위 탭 안에 둠
+var HM='date';
+function hmSet(m){HM=m==='screen'?'screen':'date';document.querySelectorAll('#history .htabs [data-hmode]').forEach(x=>x.classList.toggle('on',x.dataset.hmode===HM));}
+function histRf(m){hmSet(m);const v=histCur()==='thist'?'task':'rev';const R=$(v==='task'?'thist':'hist');const s=R&&R.querySelector('[data-hsrc].on');vscode.postMessage(Object.assign({type:'history:refresh',view:v,mode:HM,src:s?s.dataset.hsrc:'all',sel:''},st()));}
+document.querySelectorAll('#history .htabs [data-hmode]').forEach(b=>b.onclick=()=>histRf(b.dataset.hmode));
+{const hrf=$('histRf');if(hrf)hrf.onclick=()=>histRf(HM);}
 // 2026-11-18: Log 하위 탭 — 선택은 웹뷰 상태(logTab)에 저장 · 안 보이는 탭에 출력이 오면 N 표시 · ⤓ 최신·🧹 지우기는 선택된 탭에 적용
 function logCur(){const b=document.querySelector('#logs .ltabs .ltb.on');return b?b.dataset.lp:'log';}
 function logShow(id){if(!$(id))id='log';document.querySelectorAll('#logs .ltabs .ltb').forEach(x=>{const on=x.dataset.lp===id;x.classList.toggle('on',on);x.setAttribute('aria-selected',on?'true':'false');if(on){const n=x.querySelector('.nb');if(n)n.remove();}});
-  ['log','felog','belog'].forEach(k=>{const e=$(k);if(e)e.style.display=k===id?'':'none';});scrollLatest(id);
+  ['log','rplog','felog','belog'].forEach(k=>{const e=$(k);if(e)e.style.display=k===id?'':'none';});scrollLatest(id);
   try{vscode.setState(Object.assign({},vscode.getState()||{},{logTab:id}));}catch(_){}}
 function logMark(id){if(logCur()===id&&curTab()==='logs')return;const b=document.querySelector('#logs .ltabs .ltb[data-lp="'+id+'"]');if(!b||b.querySelector('.nb'))return;const n=document.createElement('span');n.className='nb';n.textContent='N';b.appendChild(n);}
 document.querySelectorAll('#logs .ltabs .ltb').forEach(b=>b.onclick=()=>{if(b.dataset.lp==='felog'||b.dataset.lp==='belog'){vscode.postMessage({type:'openOrch',tab:b.dataset.lp});return;}logShow(b.dataset.lp);}); /* 2026-11-19: FE/BE Log 는 VMO 창에서 본다(버튼 = 그 창으로 이동 · 옆 상태 표시는 전 창 공통) */
@@ -1965,7 +2328,8 @@ try{logShow(((vscode.getState()||{}).logTab)||'log');}catch(_){logShow('log');}
 const PH={list:((vscode.getState()||{}).promptHist)||[],idx:-1,draft:''};
 function phSave(){try{vscode.setState(Object.assign({},vscode.getState()||{},{promptHist:PH.list.slice(-200)}));}catch(_){}}
 function phPush(t){t=String(t||'');if(!t.trim())return;if(PH.list[PH.list.length-1]!==t)PH.list.push(t);if(PH.list.length>200)PH.list.shift();PH.idx=-1;PH.draft='';phSave();}
-function phShow(v){const ta=$('t');ta.value=v;ta.setSelectionRange(v.length,v.length);ta.scrollTop=ta.scrollHeight;}
+function taFit(ta){if(!ta)return;ta.style.height='auto';const mx=Math.round(innerHeight*0.4);ta.style.height=Math.min(Math.max(ta.scrollHeight,44),mx)+'px';ta.style.overflowY=ta.scrollHeight>mx?'auto':'hidden';} /* 2026-11-23 사용자: 여러 줄 입력이 1줄 가로 스크롤로 보임. field-sizing:content 대신 높이를 스크립트로 맞추고 폭은 창 폭에 고정해 줄바꿈 */
+function phShow(v){const ta=$('t');ta.value=v;taFit(ta);ta.setSelectionRange(v.length,v.length);ta.scrollTop=ta.scrollHeight;}
 function phKey(e){
   const ta=$('t');
   if(e.key==='ArrowUp'&&!e.shiftKey&&!e.altKey&&!e.ctrlKey){
@@ -1981,7 +2345,7 @@ function phKey(e){
     if(PH.idx>=PH.list.length){PH.idx=-1;phShow(PH.draft);PH.draft='';} else phShow(PH.list[PH.idx]);
   }
 }
-function send(){const text=$('t').value;if(!text.trim())return;phPush(text);vscode.postMessage(Object.assign({type:'prompt',text},st()));$('t').value='';showTab('chat');}
+function send(){const text=$('t').value;if(!text.trim())return;phPush(text);vscode.postMessage(Object.assign({type:'prompt',text},st()));$('t').value='';taFit($('t'));showTab('chat');}
 $('send').onclick=send;
 function renderPQ(items,chain){const h=$('pq');h.textContent='';if(!items||!items.length)return;const hd=document.createElement('div');hd.className='pqh';hd.textContent=(chain?PQ_L.chain:PQ_L.head)+' ('+items.length+')';h.appendChild(hd);
   items.forEach((it,i)=>{const r=document.createElement('div');r.className='pqi';const n=document.createElement('span');n.className='pqn';n.textContent=(i+1)+'.';const t=document.createElement('span');t.className='pqt';t.textContent=String(it.text||'').replace(/\\s+/g,' ');t.title=it.text||'';
@@ -1991,6 +2355,7 @@ function renderPQ(items,chain){const h=$('pq');h.textContent='';if(!items||!item
 vscode.postMessage({type:'pq:get'});
 // 1.9.30: Claude 와 같이 Enter = 전송 · Shift+Enter = 줄바꿈 · 한글 IME 조합 중 Enter(isComposing·229)는 조합 확정만
 $('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.altKey&&!e.isComposing&&e.keyCode!==229){e.preventDefault();send();return;}phKey(e);});
+$('t').addEventListener('input',()=>taFit($('t')));addEventListener('resize',()=>taFit($('t')));taFit($('t'));
 $('t').addEventListener('paste',e=>{
   const items=(e.clipboardData||{}).items||[];
   for(const it of items){
@@ -2147,7 +2512,7 @@ function addTool(m){
 }
 function addResult(txt){
   const r=RUN;if(!r)return;const st=r.cur>=0?r.steps[r.cur]:null;const last=st&&st.tools[st.tools.length-1];
-  if(!last){const d=el('details','m result');d.appendChild(el('summary',null,'↳ '+firstLine(txt).slice(0,160)));d.appendChild(el('div','mb',txt));(st?st.body:$('chat')).appendChild(d);return;}
+  if(!last){const d=el('details','m result');d.appendChild(el('summary',null,'↳ '+firstLine(txt).slice(0,160)));d.appendChild(el('div','mb',txt));(st?st.body:lateHost()).appendChild(d);return;}
   let mr=last.querySelector('.mr');if(!mr){mr=el('div','mr');last.appendChild(mr);}
   mr.textContent=txt;
   if(/\\b(error|exception|traceback|failed|ORA-\\d+|PLS-\\d+)\\b|✖|✗|is not recognized/i.test(txt.slice(0,400)))last.classList.add('bad');
@@ -2238,12 +2603,12 @@ function addHtmlView(m){
   const fit=()=>{try{const d=fr.contentDocument;if(!d||!d.documentElement||!d.body)return;const bb=d.body.getBoundingClientRect();const mb=parseFloat(getComputedStyle(d.body).marginBottom)||0;const h=Math.ceil(bb.bottom+mb*HV_ZOOM);if(h>0)fr.style.height=(h+4)+'px';}catch(e){}};
   fr.onload=()=>{hvTheme(fr);fit();try{const d=fr.contentDocument;if(d&&d.body&&window.ResizeObserver)new ResizeObserver(fit).observe(d.body);if(d)d.addEventListener('toggle',fit,true);}catch(e){}};
   fr.srcdoc=String(m.html||'');box.appendChild(fr);hvWatch();
-  if(RUN){const ft=RUN.board.querySelector('.bfoot');RUN.board.insertBefore(box,ft);}else $('chat').appendChild(box);
+  if(RUN){const ft=RUN.board.querySelector('.bfoot');RUN.board.insertBefore(box,ft);}else lateHost().appendChild(box);
   chatScroll(stick);
 }
-function addMeta(text){const d=el('div','m meta',text);if(RUN)RUN.board.querySelector('.bfoot').appendChild(d);else $('chat').appendChild(d);}
+function addMeta(text){const d=el('div','m meta',text);if(RUN&&(!RUN.done||!(FLOW&&!FLOW.done)))RUN.board.querySelector('.bfoot').appendChild(d);else lateHost().appendChild(d);   /* 체인 밖은 종전대로 */}
 // 2026-11-19 사용자: 긴 안내(후속 작업 프로세스 목록 등) = 요약 한 줄만 보이고 클릭하면 상세
-function addMetaDetail(text,detail){const d=el('details','m meta mdet');const sm=el('summary',null,text);d.appendChild(sm);d.appendChild(el('div','mb',detail));if(RUN)RUN.board.querySelector('.bfoot').appendChild(d);else $('chat').appendChild(d);}
+function addMetaDetail(text,detail){const d=el('details','m meta mdet');const sm=el('summary',null,text);d.appendChild(sm);d.appendChild(el('div','mb',detail));if(RUN&&(!RUN.done||!(FLOW&&!FLOW.done)))RUN.board.querySelector('.bfoot').appendChild(d);else lateHost().appendChild(d);   /* 체인 밖은 종전대로 */}
 
 // ── 1.8.9 Flow 보드: 체인/단일 작업 = 전체 Step 수·현재 Step·진행바·경과 + Step 카드(대기/진행/완료/실패/경고). Claude 단계의 상황판(run)은 그 Step 카드 안에 ──
 let FLOW=null;
@@ -2251,7 +2616,7 @@ const FST={RUN:'running',REPAIR:'running',OK:'done',FAIL:'bad',WARN:'warn',HOLD:
 const FSI={RUN:'⏳',REPAIR:'🩹',OK:'✅',FAIL:'✖',WARN:'⚠',HOLD:'⏸',CANCEL:'⛔',NOT_RUN:'○',SKIP:'⏭',WAIT:'○'};
 function flowStart(m){
   if(FLOW&&!FLOW.done)flowEnd({ok:false,summary:UI_BD.stopped,sec:0});
-  const f={id:m.id,steps:[],cur:0,total:(m.steps||[]).length,t0:Date.now(),done:false,timer:null,title:m.title||'',screen:m.screen||'',md:m.md||''};
+  const f={id:m.id,runId:m.runId||'',steps:[],cur:0,total:(m.steps||[]).length,t0:Date.now(),done:false,timer:null,title:m.title||'',screen:m.screen||'',md:m.md||''};
   f.el=el('div','run flowrun');
   const b=el('div','board fboard running');
   b.innerHTML='<div class="bhead"><div class="bstep"><span class="bcur">0</span><span class="bsl">/</span><span class="btot">0</span><span class="bsll"></span></div><div class="bmid"><div class="btitle"></div><div class="bbar"><i></i></div><div class="bnow"></div></div><div class="bkpis"><div class="bk"><b class="bk-done">0</b><span></span></div><div class="bk"><b class="bk-time">0s</b><span></span></div><div class="bk"><b class="bk-st running"></b></div></div></div><div class="bsteps"></div><div class="bfoot"></div>';
@@ -2265,7 +2630,7 @@ function flowStart(m){
   flowRenum(f);
   $('chat').appendChild(f.el);const th=$('thinking');if(th)$('chat').appendChild(th);
   FLOW=f;flowHead();
-  f.timer=setInterval(()=>{if(FLOW!==f||f.done){clearInterval(f.timer);return;}f.board.querySelector('.bk-time').textContent=fmtSec((Date.now()-f.t0)/1000);},1000);
+  f.timer=setInterval(()=>{if(FLOW!==f||f.done){clearInterval(f.timer);return;}f.board.querySelector('.bk-time').textContent=fmtSec((Date.now()-f.t0)/1000);wbStat();},1000);
   chatScroll(true);
 }
 // 2026-11-19 사용자: 단계 카드 = 실행할 단계만. 조건부 단계(검증 보완·재수행 회차)는 실행이 정해질 때 flowAdd 로 붙고 번호·총 STEP 수를 다시 센다
@@ -2378,7 +2743,11 @@ function flowHead(){
   const prog=f.done?done:Math.max(0,done+(f.active?part:0));
   b.querySelector('.bbar i').style.width=(f.total?Math.round(100*prog/f.total):0)+'%';
   b.querySelector('.bnow').textContent=f.active?('▶ '+f.active.sum.querySelector('.sttl').textContent+(ae&&ae.stage?' · '+e2eSum(f.active):'')):'';
+  wbStat();
 }
+/* 개선안 20261121001943_SELF: 진행을 그린 체인 runId 를 감시(orch-usercheck noteUi tab wb, U23)에 보고. 같은 내용은 60초에 1번, 바뀌면 바로 */
+let WBS=null;
+function wbStat(){const f=FLOW;const ids=f&&!f.done&&f.runId?[f.runId]:[];const k=ids.join(',');const t=Date.now();if(WBS&&WBS.k===k&&t-WBS.t<60000)return;WBS={k:k,t:t};vscode.postMessage({type:'orch:uiStat',tab:'wb',received:ids.length,runIds:ids});}
 function flowOut(text){
   const f=FLOW;if(!f||f.done||!f.active)return;const s=f.active;
   const parts=String(text).split('\\n');
@@ -2401,7 +2770,20 @@ function flowEnd(m){
   if(m.links&&m.links.length){const d=el('div','m meta','');m.links.forEach(l=>{const a=document.createElement('a');a.className='chip';a.textContent=l.label;a.title=l.file;a.style.cursor='pointer';a.style.marginRight='6px';a.onclick=()=>vscode.postMessage(l.dir?{type:'openExternal',file:l.file}:{type:'show',file:l.file});d.appendChild(a);});f.board.querySelector(':scope > .bfoot').appendChild(d);}
 }
 // Claude 상황판(run)이 들어갈 컨테이너 — Flow 의 진행 중 Step 이 있으면 그 카드 안, 없으면 chat
-function runContainer(){return (FLOW&&!FLOW.done&&FLOW.active&&(FLOW.active.kind==='claude'||FLOW.active.status==='REPAIR'))?FLOW.active.body:$('chat');} // 2026-11-18 사용자: 단계 수선(🧪 미검증 해소 등) Claude 실행도 그 단계 카드 안 하위로
+function runContainer(){return (FLOW&&!FLOW.done&&FLOW.active&&(FLOW.active.kind==='claude'||FLOW.active.status==='REPAIR'))?FLOW.active.body:(FLOW&&!FLOW.done?lateHost():$('chat'));}   /* 2026-11-20 사용자: 체인 진행 중에는 어떤 행도 보드 아래로 나가지 않게 — 단계 카드 안 접는 묶음 */
+// 2026-11-20 사용자: 체인 진행 중 AI Agent 단계가 보고를 한 번 끝낸 뒤 이어서 한 작업(도구·결과·문장)이 단계 카드 밖(보드 아래)에 쌓이던 문제 → 그 단계 카드 안 '이어진 작업' 접는 묶음으로
+function lateHost(){
+  if(!FLOW||FLOW.done)return $('chat');
+  let s=(FLOW.active&&(FLOW.active.kind==='claude'||FLOW.active.status==='REPAIR'))?FLOW.active:null;
+  if(!s){for(let i=FLOW.steps.length-1;i>=0;i--){const x=FLOW.steps[i];if(x.kind==='claude'&&x.status!=='WAIT'){s=x;break;}}}   // AI Agent 작업 행 = 마지막으로 돈 AI Agent 단계
+  if(!s)s=FLOW.active||null;
+  if(!s){for(let i=FLOW.steps.length-1;i>=0;i--){if(FLOW.steps[i].status!=='WAIT'){s=FLOW.steps[i];break;}}}   // 그 밖 = 지금(또는 마지막으로) 도는 단계
+  if(!s&&FLOW.steps.length)s=FLOW.steps[0];
+  if(!s)return $('chat');
+  if(!s.late){const d=el('details','m late');const sm=el('summary');d.appendChild(sm);s.late={el:d,sum:sm,n:0};s.body.appendChild(d);}
+  s.late.n++;s.late.sum.textContent='🔧 '+(UI_BD.late||'')+' '+s.late.n;
+  return s.late.el;
+} // 2026-11-18 사용자: 단계 수선(🧪 미검증 해소 등) Claude 실행도 그 단계 카드 안 하위로
 
 // ── 1.9.0 Workbench 내부 탭(파일 뷰어/편집·폴더·diff) ──
 const TABS={};
@@ -2434,10 +2816,38 @@ function openTabUI(m){
   const pane=T.pane;pane.querySelector('.dtp').textContent=m.sub||m.path||'';pane.querySelector('.dtsp').textContent=m.meta||'';
   pane.querySelector('.dt-edit').style.display=m.editable?'':'none';pane.querySelector('.dt-editor').style.display=m.canEditor===false?'none':'';pane.querySelector('.dt-os').style.display=m.canOS===false?'none':'';
   const c=pane.querySelector('.dtc');c.innerHTML=m.html||'';T.editing=false;pane.querySelector('.dte').style.display='none';c.style.display='';pane.querySelector('.dt-save').style.display='none';pane.querySelector('.dt-edit').textContent='✏️ '+UI_TB.edit;
-  bindTabContent(T);
-  showTab('t:'+m.key);
+  T.allLen=0;bindTabContent(T);
+  showTab('t:'+m.key);SEL_T=T;SEL_L=null; // 2026-11-23 링크로 연 탭 = Ctrl+A 대상
   if(m.line){const r=c.querySelector('#L'+m.line);if(r)r.scrollIntoView({block:'center'});}
 }
+// 2026-11-23 사용자: 파일 탭 보기 모드에서 Ctrl+A = 그 파일 본문만 선택(종전 창 전체 선택). 선택한 채 Ctrl+C = 파일 원문 그대로 복사(줄 번호, 칸 구분 제외)
+//   대상 탭 SEL_T = 마지막으로 누른 파일 탭 또는 링크로 연 탭. 입력칸, 편집 모드(textarea)는 브라우저 기본 동작
+//   2026-11-23 R4: Log 탭의 로그 창(#log, #felog, #belog = .logbody)도 같은 대상. SEL_L = 마지막으로 누른 로그 창, 그 창 글만 선택
+let SEL_T=null,SEL_L=null;
+function selVisible(T){return !!(T&&T.pane&&T.pane.style.display!=='none'&&T.pane.isConnected&&!T.editing);}
+function selLogVisible(L){return !!(L&&L.isConnected&&L.getClientRects().length>0);}
+document.addEventListener('pointerdown',e=>{const t=e.target;const p=t.closest&&t.closest('.dtab');SEL_T=p?Object.values(TABS).find(x=>x.pane===p)||null:null;
+  SEL_L=(!p&&t.closest)?t.closest('.logbody'):null;},true);
+function selRange(c){const a=document.activeElement;if(a&&a!==document.body&&a.blur)a.blur();
+  const r=document.createRange();r.selectNodeContents(c);const s=window.getSelection();s.removeAllRanges();s.addRange(r);return s;}
+function selFile(){if(selLogVisible(SEL_L)){selRange(SEL_L);return true;}
+  const T=SEL_T;if(!selVisible(T))return false;const c=T.pane.querySelector('.dtc');if(!c)return false;
+  const s=selRange(c);T.allLen=s.toString().length;return true;}
+document.addEventListener('keydown',e=>{
+  if(!(e.ctrlKey||e.metaKey)||e.shiftKey||e.altKey||String(e.key).toLowerCase()!=='a')return;
+  const a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+  if(selFile())e.preventDefault();
+},true);
+// 2026-11-23 VS Code 웹뷰: Ctrl+A 는 페이지가 막아도 본체로 넘어가 본체가 document.execCommand('selectAll') 을 부른다
+//   (VS Code pre/index.html handleInnerKeydown → forwardKeyEvent, onMessage('execCommand')). 이때 본체가 마지막 입력칸으로 포커스를 되돌린 뒤 부르므로
+//   대상 판단은 포커스가 아니라 SEL_L(마지막으로 누른 로그 창), SEL_T(마지막으로 누른 곳이 파일 탭이거나 링크로 연 탭)로 한다. 그 밖의 명령(copy, paste 등)은 그대로 넘김
+(function(){if(typeof document.execCommand!=='function')return;const ex=document.execCommand.bind(document);document.execCommand=function(cmd,ui,val){if(String(cmd).toLowerCase()==='selectall'&&selFile())return true;return ex(cmd,ui,val);};})();
+document.addEventListener('copy',e=>{
+  const T=Object.values(TABS).find(x=>selVisible(x));if(!T||!T.text)return; // 원문 복사 = 지금 선택이 본문 전체(Ctrl+A 때 길이)와 같을 때만
+  const s=window.getSelection();const c=T.pane.querySelector('.dtc');if(!s||!s.rangeCount||!c||!T.allLen||s.toString().length!==T.allLen)return;
+  const rg=s.getRangeAt(0);if(!(rg.commonAncestorContainer===c||c.contains(rg.commonAncestorContainer)))return;
+  e.preventDefault();e.clipboardData.setData('text/plain',T.text);
+});
 function bindTabContent(T){
   const c=T.pane.querySelector('.dtc');
   c.querySelectorAll('a[data-open]').forEach(a=>a.onclick=ev=>{ev.preventDefault();vscode.postMessage({type:'tab:open',file:a.dataset.open});});
@@ -2488,14 +2898,16 @@ function bindFlow(){
 }
 function bindHist(view){
   const v=view==='task'?'task':'rev'; const R=$(v==='task'?'thist':'hist'); if(!R)return;
-  const hMode=()=>R.querySelector('[data-hmode].on')?.dataset.hmode||'date'; const hSrc=()=>R.querySelector('[data-hsrc].on')?.dataset.hsrc||'all';
-  R.querySelectorAll('[data-hmode]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'history:refresh',view:v,mode:b.dataset.hmode,src:hSrc(),sel:''}));
+  const hMode=()=>R.querySelector('.hist-top')?.dataset.mode||'date'; const hSrc=()=>R.querySelector('[data-hsrc].on')?.dataset.hsrc||'all';
+  if(histCur()===(v==='task'?'thist':'hist'))hmSet(hMode());
   R.querySelectorAll('[data-hsrc]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'history:refresh',view:v,mode:hMode(),src:b.dataset.hsrc,sel:''}));
-  const hrf=R.querySelector('#hist-rf');if(hrf)hrf.onclick=()=>vscode.postMessage({type:'history:refresh',view:v,mode:hMode(),src:hSrc(),sel:''});
   R.querySelectorAll('.hit').forEach(e=>e.onclick=()=>vscode.postMessage({type:'history:select',view:v,dir:e.dataset.dir,mode:hMode(),src:hSrc()}));
   R.querySelectorAll('.hf').forEach(e=>e.onclick=ev=>{if(ev.target.classList.contains('hlive'))return;vscode.postMessage({type:'history:diff',dir:e.dataset.dir,file:e.dataset.file});});
   R.querySelectorAll('.hlive').forEach(b=>b.onclick=ev=>{ev.stopPropagation();vscode.postMessage({type:'history:diffLive',dir:b.dataset.dir,file:b.dataset.file});});
   const od=R.querySelector('#hist-od');if(od)od.onclick=()=>vscode.postMessage({type:'openExternal',file:od.dataset.dir});
+  R.querySelectorAll('.hist-log').forEach(b=>b.onclick=()=>vscode.postMessage({type:'history:replay',file:b.dataset.file,dir:b.dataset.dir}));
+  R.querySelectorAll('.hist-rec').forEach(b=>b.onclick=()=>vscode.postMessage({type:'history:console',dir:b.dataset.dir}));
+  R.querySelectorAll('pre.hcon').forEach(x=>{x.scrollTop=x.scrollHeight;});
   const del=R.querySelector('#hist-del');if(del)del.onclick=()=>vscode.postMessage({type:'history:delete',view:v,dir:del.dataset.dir,mode:hMode(),src:hSrc()});
   // 2026-11-17 사용자: Revision · Task History 검색 — 띄어쓰기로 나눈 단어가 모두 들어간 행만(대소문자 무시). 검색어는 탭별로 기억해 새로고침·선택 후 다시 그려도 유지
   const q=R.querySelector('.hq');if(q){q.value=HQ[v]||'';q.oninput=()=>{HQ[v]=q.value;histFilter(R,q.value);};q.onkeydown=e=>{if(e.key==='Escape'){q.value='';HQ[v]='';histFilter(R,'');}};histFilter(R,q.value);}
@@ -2515,14 +2927,15 @@ bindStatus();
 const procs={};
 window.addEventListener('message',e=>{const m=e.data;
  if(m.type==='out'){if(m.stream==='task')flowOut(m.text);const box=$(m.stream==='be'?'belog':m.stream==='fe'?'felog':'log');logMark(box.id);const stick=box.scrollHeight-box.scrollTop-box.clientHeight<40;const d=document.createElement('span');if(m.cls)d.className=m.cls;d.textContent=m.text;box.appendChild(d);while(box.childNodes.length>4000)box.removeChild(box.firstChild);if(stick)box.scrollTop=box.scrollHeight;markNew(m.stream==='be'||m.stream==='fe'?'logs':'log');}
+ else if(m.type==='replay'){const box=$('rplog');if(box){box.textContent='';const fr=document.createDocumentFragment();(m.lines||[]).forEach(x=>{const d=document.createElement('span');if(x.cls)d.className=x.cls;d.textContent=x.text;fr.appendChild(d);});box.appendChild(fr);}const tb=$('rplogtab');if(tb){tb.style.display='';tb.hidden=false;}const st=$('rplogst');if(st)st.textContent=m.title||'';showTab('logs');logShow('rplog');}
  else if(m.type==='server'){const st=$(m.name&&/BE/i.test(m.name)?'belogst':'felogst');if(st)st.textContent=m.state==='stopped'?'⏹ 종료됨':(m.ok?'✅ 기동 완료 ':'✖ 실패 ')+(m.sec!=null?m.sec+'s':'');}
  else if(m.type==='html'){addHtmlView(m);}
  else if(m.type==='chat'){
    const stick=chatStick();
    if(m.role==='user'){newRun(String(m.text));}
-   else if(m.role==='assistant'){if(RUN&&!RUN.done)addText(String(m.text));else{$('chat').appendChild(mdEl('m assistant',String(m.text)));}}
-   else if(m.role==='tool'){if(RUN&&!RUN.done)addTool(m);else{const d=document.createElement('details');d.className='m tool';const sm=document.createElement('summary');sm.textContent='🔧 '+(m.brief||firstLine(m.text));d.appendChild(sm);const b=document.createElement('div');b.className='mb';b.textContent=m.text;d.appendChild(b);$('chat').appendChild(d);}}
-   else if(m.role==='result'){if(RUN&&!RUN.done)addResult(String(m.text));else{const d=document.createElement('details');d.className='m result';const sm=document.createElement('summary');sm.textContent='↳ '+firstLine(m.text).slice(0,160);d.appendChild(sm);const b=document.createElement('div');b.className='mb';b.textContent=m.text;d.appendChild(b);$('chat').appendChild(d);}}
+   else if(m.role==='assistant'){if(RUN&&!RUN.done)addText(String(m.text));else{lateHost().appendChild(mdEl('m assistant',String(m.text)));}}
+   else if(m.role==='tool'){if(RUN&&!RUN.done)addTool(m);else{const d=document.createElement('details');d.className='m tool';const sm=document.createElement('summary');sm.textContent='🔧 '+(m.brief||firstLine(m.text));d.appendChild(sm);const b=document.createElement('div');b.className='mb';b.textContent=m.text;d.appendChild(b);lateHost().appendChild(d);}}
+   else if(m.role==='result'){if(RUN&&!RUN.done)addResult(String(m.text));else{const d=document.createElement('details');d.className='m result';const sm=document.createElement('summary');sm.textContent='↳ '+firstLine(m.text).slice(0,160);d.appendChild(sm);const b=document.createElement('div');b.className='mb';b.textContent=m.text;d.appendChild(b);lateHost().appendChild(d);}}
    else if(m.detail){addMetaDetail(String(m.text),String(m.detail));}
    else {addMeta(String(m.text));}
    chatScroll(stick||m.role==='user');
@@ -2537,7 +2950,7 @@ window.addEventListener('message',e=>{const m=e.data;
      showTab('t:flow');
    } else openTabUI(m);
  }
- else if(m.type==='prefill'){const ta=$('t');ta.value=m.text||'';showTab('chat');ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);ta.scrollTop=ta.scrollHeight;}
+ else if(m.type==='prefill'){const ta=$('t');ta.value=m.text||'';taFit(ta);showTab('chat');ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);ta.scrollTop=ta.scrollHeight;}
  else if(m.type==='status'){$('status').innerHTML=m.html;bindStatus();}
  else if(m.type==='flow'){$('flow').innerHTML=m.html;bindFlow();}
  else if(m.type==='history'){$(m.view==='task'?'thist':'hist').innerHTML=m.html;bindHist(m.view);}
@@ -2548,15 +2961,15 @@ window.addEventListener('message',e=>{const m=e.data;
  else if(m.type==='setModel'){if(m.id){addModelOpt(m.id,mShort(m.id));$('model').value=m.id;CUR_MODEL=m.id;save();syncModelInfo();}}
  else if(m.type==='proc'){if(m.state==='start')procs[m.id]=m.label;else delete procs[m.id];}
  else if(m.type==='busy'){
-   const on=m.procs>0||m.claude;
+   const on=m.procs>0||m.claude||!!m.job;
    const b=$('busy');b.classList.toggle('on',on);$('pbox').classList.toggle('busy',on);
    const lbl=b.querySelector('.label');
-   if(on){const parts=[];if(m.claude)parts.push('AI Agent 응답 중');if(m.procs>0)parts.push((m.labels||[]).join(', ')||(m.procs+'개 실행'));lbl.textContent=parts.join(' · ');}
+   if(on){const parts=[];if(m.claude)parts.push('AI Agent 응답 중');if(m.procs>0||m.job)parts.push((m.labels||[]).join(', ')||(m.procs+'개 실행'));lbl.textContent=parts.join(' · ');}
    const th=$('thinking');if(th)th.classList.toggle('on',!!m.claude);
  }
  else if(m.type==='pq'){renderPQ(m.items||[],!!m.chain);}
  else if(m.type==='claude'){$('pbox').classList.toggle('resp',m.state==='start');if(m.state==='end'&&RUN&&!RUN.done)endRun(null,m.code===0?true:(m.code==null?null:false));}
- else if(m.type==='resumeInfo'){var rb=document.getElementById('resumeBar');var it=(m.items||[]);if(!it.length){rb.hidden=true;rb.innerHTML='';}else{var x=it[0];var esc2=function(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};rb.hidden=false;rb.innerHTML='<span class="rs-t">↻ <b>'+esc2(x.label)+'</b> · '+esc2(x.screen)+' <span class="rs-m">'+esc2(x.at)+' 창 다시 로드로 끊김 · '+esc2(x.what||(x.from+'/'+x.of+' 단계부터'))+(x.job?' · VMW '+esc2(x.job):'')+(it.length>1?' · 외 '+(it.length-1)+'건':'')+'</span></span><button class="rs-go" data-rr="'+esc2(x.runId)+'" title="'+(x.restart?'끊긴 단계를 처음부터 다시 실행(이 단계는 단계 안 재개 미지원 · 앞 단계는 이전 결과 사용)':'끊긴 지점부터 이어서 실행(앞 단계는 이전 결과 사용)')+'">'+(x.restart?'작업 재시작':'작업 재개')+'</button><button data-rd="'+esc2(x.runId)+'" title="이 중단 기록을 지움. 다시 재개할 수 없음">삭제</button>';rb.querySelector('[data-rr]').onclick=function(){vscode.postMessage({type:'resumeRun',runId:x.runId});rb.hidden=true;};rb.querySelector('[data-rd]').onclick=function(){vscode.postMessage({type:'resumeDrop',runId:x.runId});};}}
+ else if(m.type==='resumeInfo'){var rb=document.getElementById('resumeBar');var it=(m.items||[]);if(m.screen)vscode.postMessage({type:'orch:uiStat',tab:'wbResume',screen:m.screen,received:it.length,runIds:it.map(function(v){return v.runId;})});if(!it.length){rb.hidden=true;rb.innerHTML='';}else{var x=it[0];var esc2=function(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};rb.hidden=false;rb.innerHTML='<span class="rs-t">↻ <b>'+esc2(x.label)+'</b> · '+esc2(x.screen)+' <span class="rs-m">'+esc2(x.at)+' 창 다시 로드로 끊김 · '+esc2(x.what||(x.from+'/'+x.of+' 단계부터'))+(x.job?' · VMW '+esc2(x.job):'')+(it.length>1?' · 외 '+(it.length-1)+'건':'')+'</span></span><button class="rs-go" data-rr="'+esc2(x.runId)+'" title="'+(x.restart?'끊긴 단계를 처음부터 다시 실행(이 단계는 단계 안 재개 미지원 · 앞 단계는 이전 결과 사용)':'끊긴 지점부터 이어서 실행(앞 단계는 이전 결과 사용)')+'">'+(x.restart?'작업 재시작':'작업 재개')+'</button><button data-rd="'+esc2(x.runId)+'" title="이 중단 기록을 지움. 다시 재개할 수 없음">삭제</button>';rb.querySelector('[data-rr]').onclick=function(){vscode.postMessage({type:'resumeRun',runId:x.runId});rb.hidden=true;};rb.querySelector('[data-rd]').onclick=function(){vscode.postMessage({type:'resumeDrop',runId:x.runId});};}}
  else if(m.type==='setId'){CUR_ID=(m.id||'').toUpperCase();$('idTxt').textContent=(CUR_ID||UI_NOID);vscode.postMessage(Object.assign({type:'state'},st()));vscode.postMessage(Object.assign({type:'status'},st()));}
  else if(m.type==='attached'){renderAttached(m.files||[]);}
 });
@@ -2568,7 +2981,7 @@ window.addEventListener('message',e=>{const m=e.data;
 async function pickFromAsisList(p, curId) {
   const script = path.join(p.root, 'tools', 'DbConn', 'list_asis_programs.py');
   if (!fs.existsSync(script)) {
-    vscode.window.showWarningMessage('tools/DbConn/list_asis_programs.py 가 없어 목록 조회를 할 수 없습니다 — ID 직접 입력으로 진행하세요.');
+    vscode.window.showWarningMessage('tools/DbConn/list_asis_programs.py 가 없어 목록 조회를 할 수 없습니다. ID 를 직접 입력하세요.');
     return null;
   }
   const data = await vscode.window.withProgress(
@@ -2582,7 +2995,7 @@ async function pickFromAsisList(p, curId) {
       child.on('error', e => res({ ok: false, reason: `python 실행 실패: ${e.message}` }));
     })
   );
-  if (!data.ok) { vscode.window.showWarningMessage(`AS-IS DB 조회 실패: ${data.reason || '사유 불명'} — 직접 입력으로 재시도하거나 .env.asis 를 확인하세요.`); return null; }
+  if (!data.ok) { vscode.window.showWarningMessage(`AS-IS DB 조회 실패: ${data.reason || '사유 불명'}. 직접 입력으로 다시 시도하거나 .env.asis 를 확인하세요.`); return null; }
   const items = (data.items || []).map(it => ({
     label: `${it.id}  —  ${it.name || '(이름 없음)'}`,
     description: it.path || '',
@@ -2600,7 +3013,7 @@ async function pickFromAsisList(p, curId) {
 
 async function confirmScreenIdOrPick(wb, curId, actionLabel) {
   const items = [];
-  if (curId) items.push({ label: `✅ 현재 ID 유지 — ${curId}`, description: '명시적으로 확인 후 그대로 진행', _action: 'keep' });
+  if (curId) items.push({ label: `✅ 현재 ID 유지: ${curId}`, description: '명시적으로 확인 후 그대로 진행', _action: 'keep' });
   items.push({ label: '✏️ 다른 ID 직접 입력', description: '형식: 2~4자 영문 + 2~6자리 숫자 (예: DMF0052, SCP0096)', _action: 'input' });
   items.push({ label: '🔎 AS-IS DB 프로그램 목록에서 선택', description: 'TB_FX_ProgramInfo WHERE UseYN=\'Y\' (.env.asis 접속 필요)', _action: 'list' });
   items.push({ label: '⛔ 취소', description: '이 작업을 실행하지 않음', _action: 'cancel' });
@@ -2610,6 +3023,7 @@ async function confirmScreenIdOrPick(wb, curId, actionLabel) {
   const ID_RE = /^[A-Z]{2,4}[0-9]{2,6}$/;
   const pick = await new Promise(resolve => {
     const qp = vscode.window.createQuickPick();
+    require('./id-input').bindQuickPick(qp); // 2026-11-23 한글 입력 상태에서도 영문 대문자 ID
     let done = false;
     const finish = v => { if (done) return; done = true; resolve(v); qp.hide(); };
     qp.title = `워크벤치 #${wb.inst} · "${actionLabel}" 실행 전 화면 ID 확정`;
@@ -2617,7 +3031,7 @@ async function confirmScreenIdOrPick(wb, curId, actionLabel) {
     qp.matchOnDescription = true;
     qp.ignoreFocusOut = true;
     qp.items = items;
-    const typedItem = v => { const s = String(v || '').trim().toUpperCase(); return ID_RE.test(s) ? { label: `✅ ${s} 로 지정`, description: '입력한 화면 ID 로 바로 확정', _action: 'typed', _id: s, alwaysShow: true } : null; };
+    const typedItem = v => { const s = require('./id-input').toId(String(v || '').trim()); /* 2026-11-23 한글 조합 중에도 변환한 ID 로 '로 지정' 항목 */ return ID_RE.test(s) ? { label: `✅ ${s} 로 지정`, description: '입력한 화면 ID 로 바로 확정', _action: 'typed', _id: s, alwaysShow: true } : null; };
     qp.onDidChangeValue(v => {
       const ti = typedItem(v);
       qp.items = ti ? [ti, ...items] : items;
@@ -2634,7 +3048,7 @@ async function confirmScreenIdOrPick(wb, curId, actionLabel) {
   if (pick._action === 'typed') return pick._id;
   if (pick._action === 'keep') return curId;
   if (pick._action === 'input') {
-    const nid = await vscode.window.showInputBox({
+    const nid = await require('./id-input').askId(vscode, { // 2026-11-23 한글 입력 상태에서도 영문 대문자 ID
       prompt: '화면 ID 입력',
       value: curId || '',
       placeHolder: 'DMF0052',
@@ -2688,7 +3102,7 @@ function open(api, opts) {
     wb.post(m);
   });
   wb.syncServers = () => { try { const sts = serverSvc.stateList(); for (const st of sts) if (st.port === 8080 || st.port === 5173) wb.post(srvMsg(st)); if (orch) wb.post({ type: 'serverState', states: sts }); } catch { } };
-  panel.onDidDispose(() => { try { unsub(); } catch { } if (orch) { if (orchWB === wb) orchWB = null; wb.stopAll(); return; } panels.delete(wb); wb.stopAll(); if (lastWB === wb) lastWB = [...panels][0] || null; renumber(); });
+  panel.onDidDispose(() => { try { unsub(); } catch { } if (orch) { if (orchWB === wb) orchWB = null; endRun(runIdOf(wb), { wb, by: '창 닫기', why: 'panel.dispose' }); return; } panels.delete(wb); endRun(runIdOf(wb), { wb, by: '창 닫기', why: 'panel.dispose' }); if (lastWB === wb) lastWB = [...panels][0] || null; renumber(); });
   // 1.9.28+: 여러 Workbench 창을 열면 명령(사이드바·빠른 실행·열기)이 '마지막에 만든 창' 으로 가던 결함 — 사용자가 보고 있는(활성) 창을 lastWB 로 따라간다(2026-10-28)
   panel.onDidChangeViewState(e => { try { if (e.webviewPanel.active && panels.has(wb)) lastWB = wb; } catch { } });
 
@@ -2699,7 +3113,7 @@ function open(api, opts) {
   if (orch) { // 상황판: 3초마다 현재 상태(실행 중 체인·대기·잠금·부하)를 보낸다. 창이 보일 때만
     const orchState = require('./orch-state'); orchState.init(api.paths());
     // P6: 상단에 AI 검토(CheckList 안 Claude 호출) 켬·끔과 화면 1회 비용 상한을 항상 표시 — harness.json 을 매번 다시 읽는다
-    const boardData = () => { const d = orchState.snapshot(); try { d.resume = resumable(api.paths()).slice(0, 20).map(r => ({ runId: r.runId, screen: r.screen, label: r.label, from: r.resumeFrom, of: r.steps, at: String(r.interruptedAt || '').replace('T', ' ').slice(5, 16), job: r.job || '', wb: r.wb })); } catch { d.resume = []; } /* 2026-11-20 재개 대기 */ try { const hj = JSON.parse(fs.readFileSync(path.join(api.paths().root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')); d.ai = { on: hj.llmReview === true, budget: Number(hj.llmReviewBudgetUsd) || 0, kinds: hj.llmReviewKinds || [] }; d.mode = workModeLabel(api.paths()); } catch { } try { d.timeline = orchState.timeline(wb.tlMin || 60); } catch (ex) { require('./orch-errlog').note('workbench', 'timeline', ex); } return d; }; // timeline = 상황판 하단 시간별 흐름(2026-11-20)
+    const boardData = () => { const d = orchState.snapshot(); try { d.resume = ledgerView(api.paths(), 'vmo').slice(0, 20).map(r => ({ runId: r.runId, screen: r.screen, label: r.label, from: r.resumeFrom, of: r.steps, at: dfmt.fmtDT(r.interruptedAt || ''), job: r.job || '', wb: r.wb })); } catch { d.resume = []; } /* 2026-11-20 재개 대기 */ try { const hj = JSON.parse(fs.readFileSync(path.join(api.paths().root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')); d.ai = { on: hj.llmReview === true, budget: Number(hj.llmReviewBudgetUsd) || 0, kinds: hj.llmReviewKinds || [] }; d.mode = workModeLabel(api.paths()); } catch { } try { d.timeline = orchState.timeline(wb.tlMin || 60); } catch (ex) { require('./orch-errlog').note('workbench', 'timeline', ex); } return d; }; // timeline = 상황판 하단 시간별 흐름(2026-11-20)
     const bt = setInterval(() => { try { if (panel.visible) wb.post({ type: 'board', data: boardData() }); } catch { } }, 3000);
     panel.onDidDispose(() => clearInterval(bt));
     setTimeout(() => { try { wb.post({ type: 'board', data: boardData() }); } catch { } }, 1000);
@@ -2715,7 +3129,7 @@ function open(api, opts) {
     panel.onDidDispose(() => { try { unA(); } catch { } clearInterval(at); });
     // 개선안 탭(P5): 승인 대기·반영 결과 목록
     const orchImprove = require('./orch-improve'); let propSeen = -1;
-    wb.postProposals = () => { try { const scq = require('./orch-selfcheck'); const items = orchImprove.list().slice(0, 100).map(x => { let e = { ok: false }; try { e = scq.autoEligible(x); } catch { } const sk = (() => { try { return scq.status().autoSkip; } catch { return null; } })(); return Object.assign({}, x, { autoTarget: !!e.ok && /^(pending|apply-failed|approved|applying|superseded)$/.test(x.status) && !x.reason && !x.needsUser, needsApproval: e.ok ? '' : (x.needsApproval || e.why || ''), waitNote: x.waitNote || (e.ok && e.kind === 'code' && x.status === 'pending' && sk ? `자동 반영 대기: ${sk.skipped}${sk.nextAt ? `, 다시 가능 ${String(sk.nextAt).slice(5, 16).replace('T', ' ')}` : ''}` : '') }); }); const pend = items.filter(x => x.status === 'pending' && !x.autoTarget && !x.auto).length; wb.post({ type: 'proposals', items, meta: orchImprove.meta(), fresh: propSeen >= 0 && pend > propSeen }); propSeen = pend; } catch { } };
+    wb.postProposals = () => { try { const scq = require('./orch-selfcheck'); const items = orchImprove.list().slice(0, 100).map(x => { let e = { ok: false }; try { e = scq.autoEligible(x); } catch { } const sk = (() => { try { return scq.status().autoSkip; } catch { return null; } })(); return Object.assign({}, x, { autoTarget: !!e.ok && /^(pending|apply-failed|approved|applying|superseded)$/.test(x.status) && !x.reason && !x.needsUser, needsApproval: e.ok ? '' : (x.needsApproval || e.why || ''), waitNote: x.waitNote || (e.ok && e.kind === 'code' && x.status === 'pending' && sk ? `자동 반영 대기: ${sk.skipped}${sk.nextAt ? `, 다시 가능 ${dfmt.fmtDT(sk.nextAt)}` : ''}` : '') }); }); const pend = items.filter(x => x.status === 'pending' && !x.autoTarget && !x.auto).length; wb.post({ type: 'proposals', items, meta: orchImprove.meta(), fresh: propSeen >= 0 && pend > propSeen }); propSeen = pend; } catch { } };
     const unP = orchImprove.on(() => wb.postProposals());
     // 2026-11-20 큰 그림 점검(Overall Review · orch-vision.js): Overview 패널에 마지막 점검, 다음 점검, 적용 여부
     wb.postVision = () => { try { wb.post({ type: 'vision', meta: require('./orch-vision').meta() }); } catch (ex) { require('./orch-errlog').note('workbench', 'postVision', ex); } };
@@ -2735,14 +3149,20 @@ function open(api, opts) {
 
   const withCtx = (p, id, text, ctxCheck) => {
     // 자동 컨텍스트: 화면ID 가 있으면 체크 상태와 무관하게 attach
-    if (!id) return text;
+    // 2026-11-22 사용자: 답변의 파일은 링크로(10_RULES_KEEP A-11) · 검증 쿼리 요청은 A-12 순서(SYS0005 11분 39초 중 전체 grep 2건이 4분)
+    const linkNote = '답변에서 파일은 [파일명](프로젝트 루트 기준 경로) 링크로 적고 경로를 백틱으로 감싸지 않는다(tools/VibeManager/rules/10_RULES_KEEP.md A-11)';
+    const queryNote = '검증 쿼리·진단 SQL 요청은 10_RULES_KEEP.md A-12 순서를 따른다(Doc/tobefacts 자료와 사내 DB 메타 먼저, nscm-fe·nscm-be 루트 전체 grep 금지, DB 조회 스크립트는 python -u 와 cx.call_timeout = 60000 으로 실행하고 쿼리별 초 출력, SCM_COM_SQL_LOG 는 log_seq 범위로 먼저 좁힘, 클라우드는 접속 경로 없음)';
+    // 2026-11-23 사용자: DMF0082 최종보고 뒤 AS-IS 조회 백그라운드가 남아 '후속 작업 진행 중' 9분 → 보고 전 정리(10_RULES_KEEP H22)
+    const bgNote = '최종보고 전에 이번 턴에 띄운 백그라운드 작업을 확인해 보고에 쓰지 않는 것은 멈추고, 멈추지 못하면 보고 첫 줄에 PID·명령을 적는다(10_RULES_KEEP.md H22)';
+    if (!id) return `${linkNote} · ${bgNote} — 참고 후: ${text}`;
     const bits = [`[화면 ${id}]`];
     for (const f of ['GEN_NOTES.md', 'CHECK.md', 'DOD.md', 'PIPELINE.md']) if (fs.existsSync(path.join(p.genDir, id, f))) bits.push(`Doc/gen/${id}/${f}`);
     if (fs.existsSync(path.join(p.outDir, 'screens', id, '__asis-actions__.md'))) bits.push(`AS-IS 액션 대조표: Doc/asisfacts/screens/${id}/__asis-actions__.md`);
     if (fs.existsSync(path.join(p.outDir, 'screens', id))) bits.push(`Doc/asisfacts/screens/${id}/`);
     const vr = valRefOf(p, id); if (vr) bits.push(`VALIDATION 취합(검증 작업 대조 원천): ${vr}`);
     bits.push('룰: tools/VibeManager/rules/10_RULES_KEEP.md');
-    bits.push('문장 규칙(수식어 금지 · 아는 주어 생략 · 번역투 금지 — 답변과 문서 문장 전부): tools/VibeManager/rules/50_DOC_STYLE.md'); // 2026-11-13 사용자 상시 지시
+    bits.push('문장 규칙(답변과 문서 문장 전부): 수식어 금지, 아는 주어 생략, 번역투 금지. tools/VibeManager/rules/50_DOC_STYLE.md'); // 2026-11-13 사용자 상시 지시
+    bits.push(linkNote); bits.push(queryNote); bits.push(bgNote);
     return `${bits.join(' · ')} — 참고 후: ${text}`;
   };
 
@@ -2759,9 +3179,9 @@ function open(api, opts) {
           break;
         }
         case 'resumeRun': { // 2026-11-20 작업 재개: VMW 작업이면 그 작업 재개, 아니면 이 창에서 끊긴 단계부터
-          const rec = resumable(p).find(r => r.runId === m.runId); if (!rec) { vscode.window.showWarningMessage('Vibe_Manager: 재개 기록이 없거나 24시간이 지났습니다'); wb.postResume(); break; }
+          const rec = ledgerView(p, 'vmo').find(r => r.runId === m.runId); if (!rec) { vscode.window.showWarningMessage('Vibe_Manager: 재개 기록이 없거나 24시간이 지났습니다'); wb.postResume(); break; }
           if (rec.single) { // 2026-11-20 체인 밖 AI 호출 재개 = 저장한 세션 이어받기 + 재개 문구 · 메뉴였으면 증명·후속 단계까지
-            progDel(p, rec.runId); wb.claudeSession = (rec.sub && rec.sub.session) || null; wb.post({ type: 'session', id: wb.claudeSession || '' });
+            progDel(p, rec.runId, 'resume'); wb.claudeSession = (rec.sub && rec.sub.session) || null; wb.post({ type: 'session', id: wb.claudeSession || '' });
             wb.out('task', `\n↻ 작업 재개: ${resumePlan(p, api, rec).text}\n`, 'warn');
             let rr = await wb.askClaude(p, resumePrompt(rec.prompt || ''), rec.harness !== false, { source: rec.source || 'resume', label: rec.label, menu: rec.menu || '' });
             if (rr && !rr.ok && rr.resumeFail) { wb.claudeSession = null; wb.post({ type: 'session', id: '' }); wb.out('task', '↻ 이전 AI 세션을 이어받지 못함. 새 세션으로 같은 지시를 보냅니다\n', 'warn'); rr = await wb.askClaude(p, resumePrompt(rec.prompt || ''), rec.harness !== false, { source: rec.source || 'resume', label: rec.label, menu: rec.menu || '' }); }
@@ -2776,9 +3196,9 @@ function open(api, opts) {
           break;
         }
         case 'resumeDrop': { // 2026-11-20 사용자 지시: 삭제 = 기록을 지워 재개할 수 없게. 확인 뒤
-          const rec = resumable(p).find(r => r.runId === m.runId); if (!rec) { wb.postResume(); break; }
+          const rec = ledgerView(p, 'vmo').find(r => r.runId === m.runId); if (!rec) { wb.postResume(); break; }
           const a = await vscode.window.showWarningMessage(`중단된 체인 '${rec.label}' · ${rec.screen} 기록을 삭제합니다. 삭제하면 재개할 수 없습니다.`, { modal: true }, '삭제');
-          if (a === '삭제') { progDel(p, rec.runId); wb.out('task', `🗑 중단 기록 삭제: ${rec.label} · ${rec.screen}\n`, 'warn'); } wb.postResume();
+          if (a === '삭제') { progDel(p, rec.runId, 'userDrop'); wb.out('task', `🗑 중단 기록 삭제: ${rec.label} · ${rec.screen}\n`, 'warn'); } wb.postResume();
           break;
         }
         case 'pickId': {
@@ -2789,7 +3209,7 @@ function open(api, opts) {
           if (picked) api.ctx.workspaceState.update('vibeManager.lastId', picked);
           wb.claudeSession = null; wb.post({ type: 'session', id: '' });
           wb.post({ type: 'setId', id: picked });
-          wb.post({ type: 'chat', role: 'meta', text: picked ? `화면 ${picked} — 세션 리셋 · 다음 전송부터 ${picked} 컨텍스트가 자동 붙습니다` : '화면ID 해제' });
+          wb.post({ type: 'chat', role: 'meta', text: picked ? `화면 ${picked}: 세션 리셋. 다음 전송부터 ${picked} 컨텍스트가 자동 붙습니다` : '화면ID 해제' });
           vscode.commands.executeCommand('vibeManager.refresh');
           break;
         }
@@ -2844,6 +3264,25 @@ function open(api, opts) {
           } catch (e) { vscode.window.showErrorMessage(`diffLive 실패: ${e.message}`); }
           break;
         }
+        case 'history:console': { // 2026-11-24 사용자: Console 창에 나왔던 결과를 같은 화면으로 다시 보기(녹화 재생)
+          const it = history.list(p).find(x => x.dir === m.dir);
+          if (!it || !history.hasRec(it.dir)) { vscode.window.showWarningMessage('이 이력은 Console 녹화가 없습니다'); break; }
+          openConsoleReplay(api, it);
+          break;
+        }
+        case 'history:replay': { // 2026-11-24 사용자: Console 클릭 = Console 에 보였던 내용 그대로(Log 탭 다시 보기). .vibe/logs 안 파일만
+          const f = path.resolve(String(m.file || '')); const logs = path.resolve(p.vibeDir, 'logs');
+          if (!(f.toLowerCase().startsWith(logs.toLowerCase() + path.sep) && fs.existsSync(f))) { vscode.window.showWarningMessage('Console 로그 파일이 없습니다'); break; }
+          const it = history.list(p).find(x => x.dir === m.dir) || null;
+          wb.post({ type: 'replay', title: `${it ? (it.label || it.task) : path.basename(f)} · ${it ? history.fmtLocal(it.start, 16) : ''}`.slice(0, 60), lines: history.replayLines(p, it, f) });
+          break;
+        }
+        case 'history:openLog': { // 2026-11-24 Task History: 그 실행의 Console 로그 전체를 편집기로(.vibe/logs 안 파일만)
+          const f = path.resolve(String(m.file || '')); const logs = path.resolve(p.vibeDir, 'logs');
+          if (f.toLowerCase().startsWith(logs.toLowerCase() + path.sep) && fs.existsSync(f)) { try { const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(f)); await vscode.window.showTextDocument(doc, { preview: true, viewColumn: vscode.ViewColumn.Beside }); } catch (e) { vscode.window.showErrorMessage(`Console 로그 열기 실패: ${e.message}`); } }
+          else vscode.window.showWarningMessage('Console 로그 파일이 없습니다');
+          break;
+        }
         case 'history:delete': {
           const ok = await vscode.window.showWarningMessage(`이력 삭제: ${path.basename(m.dir)}`, { modal: true }, '삭제');
           if (ok === '삭제') { try { fs.rmSync(m.dir, { recursive: true, force: true }); } catch { } wb.post({ type: 'history', view: m.view || 'rev', html: history.innerHtml(p, m.mode || 'date', '', m.src || 'all', m.view || 'rev') }); }
@@ -2877,7 +3316,7 @@ function open(api, opts) {
           const sc = await wb.spawnStream(p, `"${p.python || 'python'}"`, [`"${path.join(p.root, 'tools', 'Harness', 'verify', 'set_scope.py')}"`, code], { env: { PYTHONIOENCODING: 'utf-8' } }, 'task', '작업 모드 변경');
           const now = workMode(p); wb.post({ type: 'workMode', label: workModeLabel(p), code: now.code });
           if (sc === 0 && now.code === code) { wb.out('task', `🧭 작업 모드 → ${now.name}\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager 🧭 작업 모드 → ${now.name}`); }
-          else { wb.out('task', `✖ 작업 모드 변경 실패(exit ${sc}) — 현재 ${now.name}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ 작업 모드 변경 실패 — 현재 ${now.name}`); }
+          else { wb.out('task', `✖ 작업 모드 변경 실패(exit ${sc}). 현재 ${now.name}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager 작업 모드 변경 실패. 현재 ${now.name}`); }
           api.record('quick', `🧭 작업 모드(드롭다운) ${cur.name}→${now.name}`); break;
         }
         case 'mdlink': { // 2026-11-19: 답변 Markdown 링크 — URL 은 브라우저, 파일은 프로젝트 기준 경로(#L줄 · #L줄-줄)로 연다
@@ -2889,16 +3328,22 @@ function open(api, opts) {
         }
         case 'prompt': {
           // 1.6: ctx/harness 체크박스 제거 — ID 가 있으면 자동 컨텍스트, 자동 하네스는 effectiveHarness 가 판정.
-          const ptxt = m.text; const prun = () => { const h = effectiveHarness(false, null, null, id); api.record('prompt', ptxt.slice(0, 120)); return wb.askClaude(p, withCtx(p, id, ptxt, true), h, { source: 'prompt', text: ptxt }); };
+          const busyNow = !!wb.claudeProc || (wb.chainN || 0) > 0; wb.chainNotes = wb.chainNotes || [];
+          const jd = require('./prompt-relate').judge(m.text, busyNow ? wb.relateCtx(id) : {});
+          const ptxt = /^[+>]/.test(String(m.text || '').trim()) && jd.text ? jd.text : m.text; const prun = () => { const h = effectiveHarness(false, null, null, id); api.record('prompt', ptxt.slice(0, 120)); return wb.askClaude(p, withCtx(p, id, ptxt, true), h, { source: 'prompt', text: ptxt }); };
           // 2026-11-18: Claude 가 응답 중이면 중지 없이 그 응답에 추가 지시로 넣는다(claudeInject). 입력이 이미 닫혔거나 작업(task) 단계만 도는 중이면 종전처럼 대기열
-          if (wb.claudeProc && wb.claudeInject && wb.claudeInject(ptxt)) { api.record('prompt:inject', ptxt.slice(0, 120)); }
-          else if (wb.claudeProc || (wb.chainN || 0) > 0) wb.enqueuePrompt(ptxt, prun); else prun(); // 2026-11-13: 실행 중이면 대기열
+          // 2026-11-23 사용자: 실행 중 입력 = 기본 대기열. 현재 작업과 같은 안건(prompt-relate.judge)이면 응답 중이라도 그 작업에 바로 반영
+          if (!busyNow) prun();
+          else if (!jd.related) wb.enqueuePrompt(ptxt, prun, { why: `다른 안건으로 판단: ${jd.why}. 바로 넣으려면 대기열의 지금 보내기` });
+          else if (wb.claudeProc && wb.claudeInject && wb.claudeInject(ptxt)) { api.record('prompt:inject', ptxt.slice(0, 120)); wb.post({ type: 'chat', role: 'meta', text: `같은 안건으로 판단(${jd.why}). 진행 중인 응답에 바로 반영` }); }
+          else if ((wb.chainN || 0) > 0 && wb.chainAiLeft()) { wb.chainNotes.push({ text: ptxt, run: prun }); api.record('prompt:chainNote', ptxt.slice(0, 120)); wb.post({ type: 'chat', role: 'meta', text: `➕ 같은 안건으로 판단(${jd.why}). 일괄 작업의 다음 AI 단계 지시에 넣어 반영합니다: ${ptxt.replace(/\s+/g, ' ').slice(0, 80)}` }); }
+          else wb.enqueuePrompt(ptxt, prun, { front: true, why: `같은 안건(${jd.why}), 지금은 응답 입력이 닫혀 있음` });
           break;
         }
         case 'pq:now': wb.sendQueuedNow(m.qid); break;
         case 'pq:del': wb.removeQueued(m.qid); break;
         case 'pq:get': wb.postQueue(); break;
-        case 'newSession': wb.claudeSession = null; wb.post({ type: 'session', id: '' }); wb.post({ type: 'chat', role: 'meta', text: '새 세션 — 다음 전송부터 새 대화' }); break;
+        case 'newSession': wb.claudeSession = null; wb.post({ type: 'session', id: '' }); wb.post({ type: 'chat', role: 'meta', text: '새 세션. 다음 전송부터 새 대화' }); break;
         case 'newScreen': {
           // 1.6: 하단에서는 'pickId' 가 호출된다. 이 핸들러는 외부(명령/트리뷰)에서 들어올 때 호환용.
           const cur = id || api.ctx.workspaceState.get('vibeManager.lastId', '');
@@ -2908,16 +3353,16 @@ function open(api, opts) {
           if (picked) api.ctx.workspaceState.update('vibeManager.lastId', picked);
           wb.claudeSession = null; wb.post({ type: 'session', id: '' });
           wb.post({ type: 'setId', id: picked });
-          wb.post({ type: 'chat', role: 'meta', text: picked ? `화면 ${picked} — 세션 리셋 · 다음 전송부터 ${picked} 컨텍스트가 자동 붙습니다` : '화면ID 해제' });
+          wb.post({ type: 'chat', role: 'meta', text: picked ? `화면 ${picked}: 세션 리셋. 다음 전송부터 ${picked} 컨텍스트가 자동 붙습니다` : '화면ID 해제' });
           vscode.commands.executeCommand('vibeManager.refresh');
           break;
         }
         case 'newWindow': {
           const nwb = open(api, { fresh: true });
-          wb.out('task', `➕ 워크벤치 #${nwb.inst} 열림 — 독립 AI Agent 세션/화면ID 로 멀티 작업\n`, 'ok');
+          wb.out('task', `➕ 워크벤치 #${nwb.inst} 열림. 독립 AI Agent 세션과 화면ID 로 작업\n`, 'ok');
           break;
         }
-        case 'stop': evt(p, 'user.stop', { wb: wb.inst, screen: wb.titleId || '' }); wb.stopAll(); wb.out('task', mirrorStop(wb) ? '⏹️ 중지 요청(VMW 의 이 화면)\n' : '⏹️ 중지 요청\n', 'warn'); break;
+        case 'stop': endRun(runIdOf(wb), { wb, by: '중지 단추', why: 'button' }); wb.out('task', mirrorStop(wb) ? '⏹️ 중지 요청(VMW 의 이 화면)\n' : '⏹️ 중지 요청\n', 'warn'); break;
         case 'task': await wb.runTaskStreaming(p, m.task, id); break;
         case 'pickFiles': {
           const uris = await vscode.window.showOpenDialog({ canSelectMany: true, canSelectFiles: true, canSelectFolders: false, openLabel: '첨부' });
@@ -2967,31 +3412,33 @@ function open(api, opts) {
         case 'orch:incAgent': { const ok = require('./orch-agent').enqueue(m.id, true); if (!ok) wb.post({ type: 'agent', kind: 'note', at: '', text: `이미 대기열에 있거나 조치 중: ${m.id}` }); break; }
         case 'orch:incRevert': {
           const a = await vscode.window.showWarningMessage(`사건 ${m.id} 에서 에이전트가 고친 파일을 조치 전으로 되돌립니다.`, { modal: true }, '되돌리기');
-          if (a === '되돌리기') { const r = require('./orch-agent').revert(m.id); vscode.window.showInformationMessage(r.ok ? `Vibe_Manager 되돌리기 완료 — ${r.done.length}개 파일` : `Vibe_Manager 되돌리기 ${r.why || `일부 실패 ${r.fail.length}개`}`); }
+          if (a === '되돌리기') { const r = require('./orch-agent').revert(m.id); vscode.window.showInformationMessage(r.ok ? `Vibe_Manager 되돌리기 완료: ${r.done.length}개 파일` : `Vibe_Manager 되돌리기 ${r.why || `일부 실패 ${r.fail.length}개`}`); }
           break;
         }
         // 개선안(P5): 승인한 것만 반영 · 반려는 사유 기록 · 반영 완료는 되돌리기 가능
         case 'orch:propApprove': {
           const im = require('./orch-improve'); const pr = im.get(m.id); if (!pr) break;
           const a = await vscode.window.showWarningMessage(`개선안을 승인하고 반영합니다.\n\n${pr.title}\n\n대상: ${(pr.targets || []).join(', ') || '(없음)'}\n변경: ${String(pr.before_after || '').slice(0, 300)}`, { modal: true }, '승인 · 반영');
-          if (a === '승인 · 반영') im.approve(m.id, '사용자').then(r => { if (r && r.why === 'busy') vscode.window.showInformationMessage('Vibe_Manager 개선안 반영 보류 — 에이전트가 다른 조치 중입니다. 끝난 뒤 다시 승인하세요.'); });
+          if (a === '승인 · 반영') im.approve(m.id, '사용자').then(r => { if (r && r.why === 'busy') vscode.window.showInformationMessage(r.queued ? 'Vibe_Manager 개선안 승인을 접수했습니다. 에이전트가 다른 조치 중이라 끝나면 자동 반영합니다. 다시 승인하지 않아도 됩니다.' : 'Vibe_Manager 개선안 반영 보류. 에이전트가 다른 조치 중입니다. 끝난 뒤 다시 승인하세요.'); });
           break;
         }
         case 'orch:propReject': {
           const im = require('./orch-improve'); const pr = im.get(m.id); if (!pr) break;
-          const why = await vscode.window.showInputBox({ title: `개선안 반려 — ${pr.title}`.slice(0, 120), prompt: '반려 사유(같은 안은 다시 올라오지 않습니다)', ignoreFocusOut: true });
+          const why = await vscode.window.showInputBox({ title: `개선안 반려: ${pr.title}`.slice(0, 120), prompt: '반려 사유(같은 안은 다시 올라오지 않습니다)', ignoreFocusOut: true });
           if (why !== undefined) im.reject(m.id, why, '사용자');
           break;
         }
         case 'orch:propRevert': {
           const im = require('./orch-improve'); const pr = im.get(m.id); if (!pr) break;
           const a = await vscode.window.showWarningMessage(`반영한 개선안의 대상 파일을 반영 전으로 되돌립니다.\n\n${pr.title}\n\nDB 객체 변경은 되돌리지 않습니다(개선안의 되돌리기 절차 참고).`, { modal: true }, '되돌리기');
-          if (a === '되돌리기') { const r = im.revert(m.id, '사용자'); vscode.window.showInformationMessage(r.ok ? `Vibe_Manager 되돌리기 완료 — ${r.done.length}개 파일` : `Vibe_Manager 되돌리기 ${r.why || `일부 실패 ${(r.fail || []).length}개`}`); }
+          if (a === '되돌리기') { const r = im.revert(m.id, '사용자'); vscode.window.showInformationMessage(r.ok ? `Vibe_Manager 되돌리기 완료: ${r.done.length}개 파일` : `Vibe_Manager 되돌리기 ${r.why || `일부 실패 ${(r.fail || []).length}개`}`); }
           break;
         }
         case 'orch:propOpen': api.openPath(path.join(p.vibeDir, 'orch', 'proposals', `${m.id}.json`)); break;
         case 'orch:propReview': require('./orch-improve').review(true); break;
+        case 'orch:ladder': { const l = require('./orch-ladder'); if (!l.ready()) l.init({ paths: () => api.paths() }); l.tick({ manual: true }).then(r => { vscode.window.showInformationMessage(`Vibe_Manager VMO 진단 사다리: 후보 ${r.cands}건 · 진단 ${r.ran.length}건${r.ran.length ? ` (${r.ran.map(x => `${x.level} ${x.ok ? '완료' : '실패'}`).join(', ')})` : ''}`); if (wb.postVision) wb.postVision(); if (wb.postProposals) wb.postProposals(); }, ex => require('./orch-errlog').note('workbench', 'ladder', ex)); break; } // 2026-11-20
         case 'orch:vision': require('./orch-vision').run(true).then(r => { if (r && r.skipped) vscode.window.showInformationMessage(`Vibe_Manager Overall Review(큰 그림 점검): ${r.skipped}`); if (wb.postVision) wb.postVision(); }, ex => require('./orch-errlog').note('workbench', 'orch:vision', ex)); if (wb.postVision) setTimeout(wb.postVision, 300); break;
+        case 'orch:consult': require('./orch-consult').run(true).then(r => { vscode.window.showInformationMessage(`Vibe_Manager VMO 컨설팅 검토: ${r && r.skipped ? r.skipped : r && r.ok ? `개선안 ${r.added || 0}건 등록 · 중복 ${r.dups || 0}건 · 보고 .vibe/orch/consult/last.md` : (r && r.why) || '실패'}`); }, ex => require('./orch-errlog').note('workbench', 'orch:consult', ex)); break; // 2026-11-26 사용자 지시('VMO 컨설팅 기능 기동'): 지금 컨설팅 검토 1회
         case 'orch:dict': try { wb.post({ type: 'dict', groups: require('./orch-dict').build(api.paths) }); } catch (ex) { require('./orch-errlog').note('workbench', 'orch:dict', ex); } break; // 2026-11-20 Dictionary 탭
         case 'orch:logOn': { const k = m.stream === 'fe' ? 'fe' : 'be'; wb.logOn = Object.assign({}, wb.logOn, { [k]: !!m.on }); try { if (api.ctx.globalState) api.ctx.globalState.update('vibeManager.orch.logOn', wb.logOn); } catch { } try { serverSvc.setLogOn(k, !!m.on); } catch (ex) { require('./orch-errlog').note('workbench', 'orch:logOn', ex); }
           wb.post({ type: 'logOn', on: wb.logOn });
@@ -3005,6 +3452,7 @@ function open(api, opts) {
         case 'orch:selfSync': { const r = require('./orch-selfcheck').syncInstalled('사용자', null); vscode.window.showInformationMessage(r.ok === false && r.why ? `Vibe_Manager 설치 폴더 동기화 안 함: ${r.why}` : `Vibe_Manager 설치 폴더 동기화: ${r.copied.length}개 복사${r.fail.length ? `, 실패 ${r.fail.length}개` : ''}. 적용은 VS Code 창 다시 로드 뒤`); require('./orch-selfcheck').run(['S3'], '설치 폴더 동기화 뒤').then(() => wb.postSelf && wb.postSelf(), () => { }); break; }
         case 'orch:selfMark': require('./orch-selfcheck').markUnverified(String(m.key || ''), /^(confirmed|dropped|open)$/.test(m.status) ? m.status : 'open', '사용자', ''); require('./orch-selfcheck').run(['S6'], '미확인 처리').then(() => wb.postSelf && wb.postSelf(), () => { }); break;
         case 'orch:selfMarkLoaded': { const n = require('./orch-selfcheck').markLoadedAll('사용자'); vscode.window.showInformationMessage(`Vibe_Manager 미확인 항목 ${n}건을 확인함으로 바꿈(창 로드 기록 있는 항목)`); require('./orch-selfcheck').run(['S6'], '미확인 일괄 확인').then(() => wb.postSelf && wb.postSelf(), () => { }); break; }
+        case 'orch:ruleRelease': { const lg = require('./orch-ledger'); if (!lg.ready()) lg.init({ paths: () => api.paths() }); const okR = lg.release(String(m.rule || ''), '사용자'); vscode.window.showInformationMessage(okR ? `Vibe_Manager VMO: ${m.rule} 관찰 모드 해제. 다시 개입합니다` : `Vibe_Manager VMO: ${m.rule} 은 관찰 모드가 아닙니다`); require('./orch-selfcheck').run(['S14'], '관찰 모드 해제').then(() => wb.postSelf && wb.postSelf(), ex => require('./orch-errlog').note('workbench', 'ruleRelease', ex)); break; } // 2026-11-20
         case 'orch:selfOpen': api.openPath(path.join(p.vibeDir, 'orch', 'selfcheck', 'result.json')); break;
         case 'orch:histCollect': require('./orch-history').collect().then(() => { if (wb.postHist) wb.postHist({ done: true }); }, ex => require('./orch-errlog').note('workbench', 'histCollect', ex)); if (wb.postHist) wb.postHist(); break;
         case 'orch:histAuto': { const r = require('./orch-history').setAuto(!!m.on); if (!r.ok) vscode.window.showWarningMessage(`Vibe_Manager 이력 자동 수집 설정 실패: ${r.why}`); if (wb.postHist) wb.postHist(); break; } // 2026-11-20 이력 탭 자동 수집 체크
@@ -3020,11 +3468,17 @@ function open(api, opts) {
         case 'orch:agq:del': require('./orch-agent').removeQueued(m.qid); break;
         case 'orch:toggle': {
           const ag = require('./orch-agent'); const r = ag.setEnabled(!!m.on);
-          if (!r.ok) vscode.window.showWarningMessage(`Vibe_Manager VMO 켜고 끄기 실패 — ${r.why}`);
-          else vscode.window.showInformationMessage(m.on ? 'Vibe_Manager VMO 켬 — 감시 · 자동 조치 · 자동 분석' : 'Vibe_Manager VMO 끔 — 감시 · 자동 조치 · 자동 분석 멈춤(서버 · 로그 · 기능 · 직접 지시는 그대로)');
+          if (!r.ok) vscode.window.showWarningMessage(`Vibe_Manager VMO 켜고 끄기 실패: ${r.why}`);
+          else vscode.window.showInformationMessage(m.on ? 'Vibe_Manager VMO 켬: 감시, 자동 조치, 자동 분석' : 'Vibe_Manager VMO 끔: 감시, 자동 조치, 자동 분석 멈춤(서버, 로그, 기능, 직접 지시는 그대로)');
           wb.post({ type: 'agentStatus', status: ag.status() });
           break;
         }
+        case 'orch:resumeDrop': { // 2026-11-23 사용자: 화면 ID 가 없는 재개 대기(Workbench 띠에 안 보임)도 VMO 에서 지움. 확인 뒤
+          const rec = ledgerView(p, 'vmo').find(r => r.runId === m.runId); if (!rec) { vscode.window.showWarningMessage('Vibe_Manager: 재개 기록이 없거나 이미 지워졌습니다'); break; }
+          const a = await vscode.window.showWarningMessage(`중단된 실행 '${rec.label}'${rec.screen ? ` · ${rec.screen}` : ''} 기록을 삭제합니다. 삭제하면 재개할 수 없습니다.`, { modal: true }, '삭제');
+          if (a === '삭제') progDel(p, rec.runId, 'userDrop'); break; }
+        case 'orch:jobStop': { // 2026-11-26 R232(개선안 20261125211759_SELF_3): VMO 실행 카드 ⏹ = VMW 화면(stopScreen) 또는 작업(stop). Workbench mirrorStop 과 같은 경로
+          const jr = require('./job-runner'); if (m.screen) { const r = jr.stopScreen(String(m.screen).toUpperCase(), '사용자', 'VMO 창에서 중지'); if (!r || !r.job) vscode.window.showWarningMessage(`Vibe_Manager: ${m.screen} 를 돌리는 VMW 작업이 없습니다`); } else if (m.job && /^J\d{8}_\d{6}/.test(String(m.job))) jr.stop(String(m.job)); break; }
         case 'orch:openWb': { openForScreen(api, m.screen, Number(m.wb)); break; } // 2026-11-20 상황판 ↗ = 같은 화면 창이면 그 창 Console, 없으면 새 창
         case 'orch:incOpen': { const x = require('./orch-watch').get(m.id); if (x) api.openPath(path.join(p.vibeDir, 'orch', 'incidents', `${m.id}.json`)); break; }
         case 'orch:incCloseMany': { const ow = require('./orch-watch'); for (const id of (Array.isArray(m.ids) ? m.ids : []).slice(0, 500)) { const x = ow.get(String(id)); if (x && (x.status === 'open' || x.status === 'need-user')) ow.update(x.id, { status: 'closed' }, { by: '사용자', what: '닫음(일괄)' }); } break; } // 2026-11-20 사건 일괄 닫기(조치 중, 해결, 닫은 사건은 건드리지 않음)
@@ -3040,7 +3494,7 @@ function open(api, opts) {
           const item = m.item;
           if (!wb.orch && isCommonItem(p, item)) { // 기능은 VMO 창에서 실행
             const o = open(api, { orchestra: true, tab: /^(terminal|multi|server-stop|app)$/.test(item.kind) ? '' : 'task' });
-            wb.out('task', `↪ 기능 "${item.label}" — VMO 창에서 실행\n`, 'cmd');
+            wb.out('task', `↪ 기능 "${item.label}", VMO 창에서 실행\n`, 'cmd');
             if (o && o.panel && o.panel._onQuick) await o.panel._onQuick({ type: 'quick', item, id: '' });
             break;
           }
@@ -3067,19 +3521,19 @@ function open(api, opts) {
               break;
             }
             if (src.preTask && item.kind === 'claude' && effId) {
-              wb.out('task', `\n── 사전 단계: ${src.preTask} (${effId}) — ${item.label}\n`, 'cmd');
+              wb.out('task', `\n── 사전 단계: ${src.preTask} (${effId}), ${item.label}\n`, 'cmd');
               const pc = await wb.runTaskStreaming(p, src.preTask, effId, { noConfirm: true, inFlow: true });
-              if (pc == null) { wb.out('task', `⛔ 사전 단계 취소 — "${item.label}" 실행 안 함\n`, 'warn'); break; }
+              if (pc == null) { wb.out('task', `사전 단계 취소. "${item.label}" 실행 안 함\n`, 'warn'); break; }
               // 2026-11-18 사용자: 자동 보완은 CheckList 기준으로만 — preTaskRequired 메뉴는 사전 단계 실패(종료코드≠0 · 4 = 같은 화면 CheckList 실행 중)나
               //   CheckList 결과(Doc/verify/<ID>/fixlist.csv) 없음이면 보완하지 않고 멈춘다. 그 밖 메뉴(🔗·🩺·🧾)는 종전대로 경고 후 계속
               const flp = path.join(p.root, 'Doc', 'verify', effId, 'fixlist.csv');
               if (src.preTaskRequired && (pc !== 0 || !fs.existsSync(flp))) {
                 const why = pc !== 0 ? `사전 단계 종료코드 ${pc}${pc === 4 ? '(같은 화면 CheckList 실행 중)' : ''}` : `CheckList 결과 없음(${path.relative(p.root, flp)})`;
-                wb.out('task', `⛔ ${why} — "${item.label}" 은 CheckList 조치 필요 행을 기준으로만 보완하므로 실행하지 않음. 🔎 CheckList 를 먼저 정상 완료한 뒤 다시 실행\n`, 'warn');
+                wb.out('task', `${why}. "${item.label}" 은 CheckList 조치 필요 행을 기준으로만 보완하므로 실행하지 않음. CheckList 를 먼저 정상 완료한 뒤 다시 실행\n`, 'warn');
                 try { wb.post({ type: 'chat', role: 'meta', text: `⛔ ${item.label} 중단 — ${why}` }); } catch (e) { /* 표시 실패는 무시 */ }
                 break;
               }
-              if (pc !== 0) wb.out('task', `⚠ 사전 단계 종료코드 ${pc} — CheckList 결과 없이(또는 직전 결과로) 보완을 계속합니다\n`, 'warn');
+              if (pc !== 0) wb.out('task', `사전 단계 종료코드 ${pc}. CheckList 결과 없이(또는 직전 결과로) 보완을 계속합니다\n`, 'warn');
             }
           }
           const taskId = item.kind === 'task' ? item.task : null;
@@ -3091,14 +3545,14 @@ function open(api, opts) {
             // 1.9.2: 화면 ID 확정(QuickPick) 뒤 두 번째 모달 확인창은 없앤다 — 바깥 클릭/Esc 로 조용히 취소돼 "실행이 안 된다" 로 보였음(사용자 지시 "신규 ID 넣으면 바로 진행").
             //        대신 비차단 알림으로 시작을 알리고, 내용(item.confirm)은 Task Log 에 남긴다. 중지는 워크벤치 ⏹ 중지.
             if (item.confirm) wb.out('task', `ℹ ${item.confirm}\n`, '');
-            vscode.window.showInformationMessage(`Vibe_Manager 🚀 ${item.label} — ${effId} 시작 (Console 탭 Flow 보드에서 진행 확인)`);
+            vscode.window.showInformationMessage(`Vibe_Manager 🚀 ${item.label}, ${effId} 시작 (Console 탭 Flow 보드에서 진행 확인)`);
             await wb.runChain(p, item, effId, h);
           }
           else if (item.kind === 'claude' && item.prefill) {
             // 1.9.13: 사용자 입력이 필요한 프롬프트(🛠️ 기존 화면 보완)는 바로 보내지 않고 채팅 입력창에 채워 둔다 — 사용자가 [보완 요청] 을 적고 전송(사용자 신고 "입력하기 전에 실행됨")
             const text = substQ(item.prompt, { root: p.root, id: effId });
             wb.post({ type: 'prefill', text }); try { wb.panel.reveal(undefined, false); } catch { }
-            wb.out('task', `📝 ${item.label} — 채팅 입력창에 프롬프트를 채웠습니다. 맨 아래 [보완 요청] 에 수정 내용을 적고 전송하세요(보내기 전에는 실행되지 않음)
+            wb.out('task', `📝 ${item.label}: 채팅 입력창에 프롬프트를 채웠습니다. 맨 아래 [보완 요청] 에 수정 내용을 적고 전송하세요(보내기 전에는 실행되지 않음)
 `, 'cmd');
             vscode.window.showInformationMessage(`Vibe_Manager 📝 ${item.label}: 채팅 입력창 맨 아래 [보완 요청] 에 내용을 적고 전송하세요`);
           }
@@ -3109,7 +3563,7 @@ function open(api, opts) {
             if (item.verdict === 'repair') {
               await wb.repairE2E(p, item, effId, h);
               const srcR = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items).find(x => x.label === item.label) || item;
-              if (srcR.postTask && effId) { wb.out('task', `\n── 후속 단계: ${srcR.postTask} (${effId}) — 클라우드 이관 파일 사전 생성\n`, 'cmd'); await wb.runTaskStreaming(p, srcR.postTask, effId, { noConfirm: true, inFlow: true }); }
+              if (srcR.postTask && effId) { wb.out('task', `\n── 후속 단계: ${srcR.postTask} (${effId}), 클라우드 이관 파일 사전 생성\n`, 'cmd'); await wb.runTaskStreaming(p, srcR.postTask, effId, { noConfirm: true, inFlow: true }); }
               break;
             }
             const vars = { root: p.root, id: effId };
@@ -3126,25 +3580,25 @@ function open(api, opts) {
             await claudeMenuAfter(wb, p, item.label, r, effId); // 증명 · 후속 단계(재개 때도 같은 함수)
             const rerun = !!(item.afterTask && vars.kind && r && r.ok);
             if (rerun) { const tid = substQ(item.afterTask, vars); wb.out('task', `\n↻ 보완 뒤 재실행: ${tid} ${effId}\n`, 'cmd'); await wb.runTaskStreaming(p, tid, effId, { noConfirm: true, preset: { mode: 'auto' } }); }
-            else if (item.afterTask && vars.kind && r && !r.ok) wb.out('task', `✖ 수선 AI Agent 오류(exit ${r.code}) — 재실행 생략\n`, 'bad');
+            else if (item.afterTask && vars.kind && r && !r.ok) wb.out('task', `✖ 수선 AI Agent 오류(exit ${r.code}). 재실행 생략\n`, 'bad');
           }
           else if (item.kind === 'work-mode') { // 1.9.37: 🧭 작업 모드 — 쓰기는 set_scope.py 하나로
             const cur = workMode(p);
             const opts = [
-              { label: 'UI/DB MODE', code: 'DB_FE', description: cur.code === 'DB_FE' ? '현재' : '', detail: '제약 없이 개발·수정 · Git Download & Merge 때 로컬 소스 보호 · 클라우드 이관 = DB + FE·BE' },
-              { label: 'DB MODE', code: 'DB_ONLY', description: cur.code === 'DB_ONLY' ? '현재' : '', detail: 'DB·META 만 개발·수정, FE·BE 는 가이드만 · Git Download & Merge 때 로컬 소스 보호 안 함 · 클라우드 이관 = DB 만' }];
-            const pick = await vscode.window.showQuickPick(opts, { placeHolder: `작업 모드 선택 (현재 ${cur.name}) — CheckList 는 모드와 무관하게 전체 수행`, ignoreFocusOut: true });
+              { label: 'UI/DB MODE', code: 'DB_FE', description: cur.code === 'DB_FE' ? '현재' : '', detail: '제약 없이 개발·수정, Git Download & Merge 때 로컬 소스 보호, 클라우드 이관 = DB + FE·BE' },
+              { label: 'DB MODE', code: 'DB_ONLY', description: cur.code === 'DB_ONLY' ? '현재' : '', detail: 'DB·META 만 개발·수정, FE·BE 는 가이드만, Git Download & Merge 때 로컬 소스 보호 안 함, 클라우드 이관 = DB 만' }];
+            const pick = await vscode.window.showQuickPick(opts, { placeHolder: `작업 모드 선택 (현재 ${cur.name}). CheckList 는 모드와 무관하게 전체 수행`, ignoreFocusOut: true });
             if (!pick) break;
-            if (pick.code === cur.code) { wb.out('task', `🧭 작업 모드 변경 없음 — ${cur.name}\n`, ''); break; }
+            if (pick.code === cur.code) { wb.out('task', `🧭 작업 모드 변경 없음: ${cur.name}\n`, ''); break; }
             const sc = await wb.spawnStream(p, `"${p.python || 'python'}"`, [`"${path.join(p.root, 'tools', 'Harness', 'verify', 'set_scope.py')}"`, pick.code], { env: { PYTHONIOENCODING: 'utf-8' } }, 'task', '작업 모드 변경');
             const now = workMode(p);
             wb.post({ type: 'workMode', label: workModeLabel(p), code: workMode(p).code });
             if (sc === 0 && now.code === pick.code) { wb.out('task', `🧭 작업 모드 → ${now.name}\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager 🧭 작업 모드 → ${now.name}`); }
-            else { wb.out('task', `✖ 작업 모드 변경 실패(exit ${sc}) — 현재 ${now.name}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ 작업 모드 변경 실패 — 현재 ${now.name}`); }
+            else { wb.out('task', `✖ 작업 모드 변경 실패(exit ${sc}). 현재 ${now.name}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager 작업 모드 변경 실패. 현재 ${now.name}`); }
             api.record('quick', `${item.label} ${cur.name}→${now.name}`);
           }
           else if (item.kind === 'command') vscode.commands.executeCommand(item.command);
-          else if (item.kind === 'flowtab') { wb.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); } // 1.9.0: FLOW = 고정 탭에서 제외, 메뉴로 여는 탭
+          else if (item.kind === 'flowtab') { wb.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW: 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); } // 1.9.0: FLOW = 고정 탭에서 제외, 메뉴로 여는 탭
           else if (item.kind === 'terminal' || item.kind === 'multi' || item.kind === 'server-stop' || item.kind === 'app') {
             const all = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items);
             const items = item.kind === 'multi' ? item.items.map(l => all.find(x => x.label === l)).filter(Boolean) : [item];
@@ -3156,7 +3610,7 @@ function open(api, opts) {
               if (!fs.existsSync(cwd)) { wb.out('task', `폴더 없음: ${cwd}\n`, 'bad'); continue; }
               if (serverSvc.isRunning(name)) { wb.out('task', `${name} 이미 실행 중\n`, 'warn'); continue; }
               // 1.7.9: 포트 선점검 — 이미 LISTEN 이면 점유 프로세스 이름을 보여주고 기동하지 않는다(종료는 사용자 판단 · F5FltSrv 등 VPN 프로세스 보호)
-              if (it.port) { const occ = portOwner(it.port); if (occ) { wb.out('task', `⏸ ${name} 기동 생략 — 포트 ${it.port} 이미 사용 중: ${occ}\n   재기동하려면 그 프로세스를 먼저 종료하세요(VPN 관련 프로세스면 종료 금지).\n`, 'warn'); wb.post({ type: 'chat', role: 'meta', text: `⏸ ${name}: 포트 ${it.port} 이미 사용 중 (${occ}) — 기동 생략` }); continue; } }
+              if (it.port) { const occ = portOwner(it.port); if (occ) { wb.out('task', `⏸ ${name} 기동 생략. 포트 ${it.port} 이미 사용 중: ${occ}\n   재기동하려면 그 프로세스를 먼저 종료하세요(VPN 관련 프로세스면 종료 금지).\n`, 'warn'); wb.post({ type: 'chat', role: 'meta', text: `⏸ ${name}: 포트 ${it.port} 이미 사용 중 (${occ}), 기동 생략` }); continue; } }
               wb.startServerStream(p, it, cwd, name);
             }
           }
@@ -3173,7 +3627,12 @@ function open(api, opts) {
               pageAbs = '';
               const featRoot = path.join(cwd, 'features');
               try { for (const f of fs.readdirSync(featRoot)) { const pg = path.join(featRoot, f, 'src', 'pages'); if (!fs.existsSync(pg)) continue; for (const d of fs.readdirSync(pg)) { const mp = path.join(pg, d, '__asis-mapping__.md'); if (fs.existsSync(mp) && new RegExp(`\\b${ID}\\b`).test(fs.readFileSync(mp, 'utf8').slice(0, 4000))) { pageAbs = path.join(pg, d); break; } } if (pageAbs) break; } } catch { }
-              if (!pageAbs) { const v = await vscode.window.showInputBox({ prompt: `${ID} 페이지 폴더 (nscm-fe 기준 상대경로)`, placeHolder: 'features/supply/src/pages/xxx', ignoreFocusOut: true }); if (!v) return; pageAbs = path.join(cwd, v.trim()); }
+              // 2026-11-23 R3: 찾기(폴더 선택 창)로 고름 → nscm-fe 기준 상대경로로 바꿔 넣음. 직접 입력은 선택 창을 취소했을 때만.
+              if (!pageAbs) {
+                const picked = await vscode.window.showOpenDialog({ canSelectFolders: true, canSelectFiles: false, canSelectMany: false, defaultUri: vscode.Uri.file(fs.existsSync(featRoot) ? featRoot : cwd), openLabel: `${ID} 페이지 폴더 선택`, title: `${ID} 페이지 폴더 (nscm-fe 아래)` });
+                if (picked && picked[0]) { const relPick = path.relative(cwd, picked[0].fsPath).split(path.sep).join('/'); if (relPick.startsWith('..') || path.isAbsolute(relPick)) { wb.out('task', `nscm-fe 밖 폴더: ${picked[0].fsPath}\n`, 'bad'); return; } pageAbs = path.join(cwd, relPick); }
+                else { const v = await vscode.window.showInputBox({ prompt: `${ID} 페이지 폴더 (nscm-fe 기준 상대경로)`, placeHolder: 'features/supply/src/pages/xxx', ignoreFocusOut: true }); if (!v) return; pageAbs = path.join(cwd, v.trim()); }
+              }
               if (!fs.existsSync(pageAbs)) { wb.out('task', `페이지 폴더 없음: ${pageAbs}\n`, 'bad'); return; }
             }
             const pageRel = rel(pageAbs); const pageBase = path.basename(pageAbs);
@@ -3200,20 +3659,22 @@ function open(api, opts) {
               ...relatedOk.map(f => ({ label: f, description: '이 화면 참조(변경됨)', picked: true, _f: f })),
             ];
             if (!picks.length) { wb.out('task', `⛔ 업로드할 화면 소스가 없음 (${pageRel})\n`, 'warn'); return; }
-            const sel = await vscode.window.showQuickPick(picks, { canPickMany: true, title: `Source Upload(UI) · ${ID} · ${pageRel}`, placeHolder: `업로드할 파일 선택 — ${ID} 화면 소스만 (페이지 폴더 + 이 화면 참조 변경 파일)`, ignoreFocusOut: true, matchOnDescription: true });
-            if (!sel || !sel.length) { wb.out('task', `⛔ 취소 — 선택 파일 없음\n`, 'warn'); return; }
+            const sel = await vscode.window.showQuickPick(picks, { canPickMany: true, title: `Source Upload(UI) · ${ID} · ${pageRel}`, placeHolder: `업로드할 파일 선택: ${ID} 화면 소스만 (페이지 폴더 + 이 화면 참조 변경 파일)`, ignoreFocusOut: true, matchOnDescription: true });
+            if (!sel || !sel.length) { wb.out('task', `⛔ 취소. 선택 파일 없음\n`, 'warn'); return; }
             const files = sel.map(x => x._f);
             const leak = files.filter(f => !guard(f));
-            if (leak.length) { wb.out('task', `⛔ 업로드 중단 — 허용 영역 밖 파일 포함: ${leak.join(', ')}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ⛔ Source Upload(UI): Vibe_Manager/도구 소스는 업로드할 수 없습니다 (${leak[0]})`); return; }
-            const url = git(['remote', 'get-url', item.remote || 'common']).out; if (!/^(https?:\/\/|ssh:\/\/|git@|file:\/\/|[A-Za-z]:[\\/]|\/)/.test(url)) { wb.out('task', `원격 ${item.remote} URL 없음: ${url}\n`, 'bad'); return; }
+            if (leak.length) { wb.out('task', `⛔ 업로드 중단. 허용 영역 밖 파일 포함: ${leak.join(', ')}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ⛔ Source Upload(UI): Vibe_Manager/도구 소스는 업로드할 수 없습니다 (${leak[0]})`); return; }
+            // 2026-11-24 R10: 계정·원격 주소를 명시해 실행(PC 로컬 원격 설정·전역 git 계정에 기대지 않음). 기준 = 사용자 지시 2026-11-05 (Upload = gyucheollee297 · eunjoo-hwang/nscm-fe.git). quick.json url·credUser 가 있으면 그 값.
+            const url = String(item.url || 'https://github.com/eunjoo-hwang/nscm-fe.git').trim(); if (!/^(https?:\/\/|ssh:\/\/|git@|file:\/\/|[A-Za-z]:[\\/]|\/)/.test(url)) { wb.out('task', `업로드 원격 URL 형식 오류: ${url}\n`, 'bad'); return; }
+            const credUser = String(item.credUser || 'gyucheollee297').trim(); const credArgs = credUser ? ['-c', `credential.https://github.com.username=${credUser}`] : [];
             const base = item.baseBranch || 'main'; const d = history.nowLocal().slice(0, 10).replace(/-/g, '');
             const tipRef = `refs/remotes/${item.remote || 'common'}/${base}`;
             // 1.9.17: 파일마다 '내 작업분'만 올린다(사용자 지시 2026-10-22) — 공통 최신을 받은 뒤 tools/CommonSync/common_sync.py --upload-prepare 가
             //   전체(신규·공통 무변경) / 내 수정분만 3-way(공통도 바뀜 · d.ts = 이 화면 메뉴 키 블록만 · locales = 키 단위) / 제외(동일·내 편집 없음·충돌) 를 판정해 올릴 내용을 만든다.
             //   종전엔 로컬 파일 전체를 공통 트리에 얹어 공통의 다른 사람 수정분을 덮을 수 있었고, 경로 접두(nscm-fe/)도 빠져 있었다.
             wb.post({ type: 'showTab', tab: 'log', auto: true });
-            wb.out('task', `▶ Source Upload(UI) ${ID} — 공통 최신 받기 · 파일별 내 작업분 판정\n`, 'cmd');
-            const fr = git(['fetch', url, `${base}:${tipRef}`]); wb.out('task', `$ git fetch ${base}\n${fr.out.split(/\r?\n/).slice(-3).join('\n')}\n`, fr.code === 0 ? '' : 'bad'); if (fr.code !== 0) { wb.out('task', `✖ 공통 최신 받기 실패 — 업로드 중단\n`, 'bad'); return; }
+            wb.out('task', `▶ Source Upload(UI) ${ID}: 공통 최신 받기, 파일별 내 작업분 판정\n`, 'cmd');
+            const fr = git([...credArgs, 'fetch', url, `${base}:${tipRef}`]); wb.out('task', `$ git fetch ${base} (계정 ${credUser})\n${fr.out.split(/\r?\n/).slice(-3).join('\n')}\n`, fr.code === 0 ? '' : 'bad'); if (fr.code !== 0) { wb.out('task', `✖ 공통 최신 받기 실패. 업로드 중단\n`, 'bad'); return; }
             const stampU = history.nowLocal().slice(0, 19).replace(/[:T]/g, '').replace(/-/g, ''); const prepDir = path.join(p.root, '.vibe', 'upload', `${ID}_${stampU}`);
             fs.mkdirSync(prepDir, { recursive: true }); const listF = path.join(prepDir, 'files.txt'); const sumF = path.join(prepDir, 'summary.json');
             fs.writeFileSync(listF, files.join('\n'), 'utf8');
@@ -3221,13 +3682,13 @@ function open(api, opts) {
             const pr = cp.spawnSync(p.python || 'python', [syncPy, '--upload-prepare', '--fe', cwd, '--tip', tipRef, '--keys', ID, '--files-from', listF, '--out', prepDir, '--summary', sumF], { cwd: p.root, encoding: 'utf8', windowsHide: true, maxBuffer: 64 * 1024 * 1024, env: Object.assign({}, process.env, { PYTHONIOENCODING: 'utf-8' }) });
             wb.out('task', ((pr.stdout || '') + (pr.stderr || '')).trim() + '\n', pr.status === 0 ? '' : 'bad');
             let prep = null; try { prep = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
-            if (pr.status !== 0 || !prep || !prep.ok) { wb.out('task', `✖ 업로드 준비 실패 — 중단 (${path.relative(p.root, prepDir)})\n`, 'bad'); return; }
+            if (pr.status !== 0 || !prep || !prep.ok) { wb.out('task', `✖ 업로드 준비 실패. 중단 (${path.relative(p.root, prepDir)})\n`, 'bad'); return; }
             const upl = prep.files.filter(f => /^(whole-new|whole-mine|merged-mine)$/.test(f.mode));
             const byMode = m => prep.files.filter(f => f.mode === m);
             const conf = byMode('conflict'), notmine = byMode('skip-notmine');
             wb.openTab(p, path.join(prepDir, 'UPLOAD_PREP.md'));
-            if (!upl.length) { wb.out('task', `⛔ 올릴 내 작업분이 없습니다 — 선택 ${files.length}개 모두 동일/내 편집 없음/충돌${conf.length ? ` (충돌 ${conf.length}: ${path.relative(p.root, path.join(prepDir, 'conflicts'))})` : ''}\n`, 'warn'); return; }
-            const sumTxt = `올릴 파일 ${upl.length} — 전체 ${byMode('whole-new').length + byMode('whole-mine').length}(신규 ${byMode('whole-new').length}·공통 무변경 ${byMode('whole-mine').length}) · 내 수정분만 병합 ${byMode('merged-mine').length}\n제외 — 공통과 동일 ${byMode('skip-same').length} · 내 편집 없음(옛 판본) ${notmine.length} · 로컬 없음 ${byMode('skip-missing').length} · 충돌 ${conf.length}${conf.length ? `\n충돌(올리지 않음): ${conf.map(f => f.rel.split('/').pop()).slice(0, 6).join(', ')}` : ''}`;
+            if (!upl.length) { wb.out('task', `⛔ 올릴 내 작업분이 없습니다. 선택 ${files.length}개가 동일/내 편집 없음/충돌${conf.length ? ` (충돌 ${conf.length}: ${path.relative(p.root, path.join(prepDir, 'conflicts'))})` : ''}\n`, 'warn'); return; }
+            const sumTxt = `올릴 파일 ${upl.length}: 전체 ${byMode('whole-new').length + byMode('whole-mine').length}(신규 ${byMode('whole-new').length}·공통 무변경 ${byMode('whole-mine').length}) · 내 수정분만 병합 ${byMode('merged-mine').length}\n제외: 공통과 동일 ${byMode('skip-same').length} · 내 편집 없음(옛 판본) ${notmine.length} · 로컬 없음 ${byMode('skip-missing').length} · 충돌 ${conf.length}${conf.length ? `\n충돌(올리지 않음): ${conf.map(f => f.rel.split('/').pop()).slice(0, 6).join(', ')}` : ''}`;
             // 공통 저장소 이력(브랜치·커밋 메시지)에도 도구 이름·경로를 남기지 않는다
             const TRACE_RE = /Vibe_?Manager|VibeManager|Harness|TobeGen|Fact ?Pack|CommonSync|\.vibe\b|tools[/\\]|Doc[/\\](asisfacts|tobefacts|gen|gap|e2e|recon|golden)/i;
             const branch = await vscode.window.showInputBox({ prompt: `푸시할 브랜치 (원격 ${url.replace(/\/\/[^@]+@/, '//')})`, value: `feat/${ID.toLowerCase()}-${d}`, ignoreFocusOut: true, validateInput: v => !/^[\w./-]+$/.test(v.trim()) ? '브랜치 이름 형식' : TRACE_RE.test(v) ? '쓸 수 없는 이름이 들어 있습니다' : null }); if (!branch) return;
@@ -3245,7 +3706,7 @@ function open(api, opts) {
               const line = ((g.stdout || '') + '').split(/\r?\n/).find(l => l.startsWith('{')); let gate = null; try { gate = JSON.parse(line); } catch { }
               const blk = gate ? Number(gate.block || 0) : -1;
               wb.out('task', `게이트 check.js --final: ${gate ? `BLOCK ${gate.block} / WARN ${gate.warn}` : '판정 실패(출력 해석 불가)'}\n`, blk === 0 ? 'ok' : 'warn');
-              if (blk !== 0) { const go = await vscode.window.showWarningMessage(`${ID} 하네스 게이트 ${gate ? `BLOCK ${gate.block}` : '판정 실패'} — 그래도 업로드할까요?`, { modal: true }, '그래도 업로드'); if (go !== '그래도 업로드') { wb.out('task', `⛔ 업로드 중단 — 게이트 미통과 (Doc/gen/${ID}/CHECK.md 확인)\n`, 'warn'); return; } }
+              if (blk !== 0) { const go = await vscode.window.showWarningMessage(`${ID} 하네스 게이트 ${gate ? `BLOCK ${gate.block}` : '판정 실패'}. 그래도 업로드할까요?`, { modal: true }, '그래도 업로드'); if (go !== '그래도 업로드') { wb.out('task', `⛔ 업로드 중단. 게이트 미통과 (Doc/gen/${ID}/CHECK.md 확인)\n`, 'warn'); return; } }
             }
             try {
               // 판정 때 받은 공통 최신(tipRef) 그대로 — 그 위에 준비된 내용(전체/내 수정분)만 공통 트리 경로(prefix + 상대경로)로 얹는다
@@ -3258,13 +3719,13 @@ function open(api, opts) {
               wb.out('task', `공통 최신 대비 바뀌는 파일 ${changedN.length}건${changedN.length ? ': ' + changedN.slice(0, 10).join(', ') : ''}\n`, changedN.length === upl.length ? 'ok' : 'warn');
               if (changedN.some(f => !upl.some(u => u.path === f))) throw new Error(`준비하지 않은 파일이 커밋에 섞임: ${changedN.filter(f => !upl.some(u => u.path === f)).slice(0, 5).join(', ')}`);
               const commit = step('commit-tree', ['commit-tree', tree, '-p', prep.tip, '-m', msg.trim()]).trim();
-              step('push', ['push', '--no-verify', url, `${commit}:refs/heads/${branch.trim()}`]); // pre-push(pnpm type-check·현재 브랜치명 검사)는 합성 커밋과 무관 → 위 하네스 게이트로 대체
+              step('push', [...credArgs, 'push', '--no-verify', url, `${commit}:refs/heads/${branch.trim()}`]); // pre-push(pnpm type-check·현재 브랜치명 검사)는 합성 커밋과 무관 → 위 하네스 게이트로 대체
               const web = url.replace(/\/\/[^@]+@/, '//').replace(/\.git$/, '') + `/tree/${branch.trim()}`;
-              wb.out('task', `✅ 업로드 완료 — ${upl.length}개 파일(선택 ${files.length}) · 커밋 ${commit.slice(0, 10)} · ${web}\n   (로컬 작업 브랜치·인덱스는 건드리지 않았습니다 · 판정 ${path.relative(p.root, path.join(prepDir, 'UPLOAD_PREP.md'))})\n`, 'ok');
+              wb.out('task', `✅ 업로드 완료: ${upl.length}개 파일(선택 ${files.length}), 커밋 ${commit.slice(0, 10)}, ${web}\n   (로컬 작업 브랜치와 인덱스는 그대로, 판정 ${path.relative(p.root, path.join(prepDir, 'UPLOAD_PREP.md'))})\n`, 'ok');
               wb.post({ type: 'chat', role: 'meta', text: `✅ Source Upload(UI) ${ID} → ${branch.trim()} (${upl.length} files)` });
               Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager ✅ ${ID} 소스 ${upl.length}개 → ${branch.trim()} 업로드 완료`, '브라우저로 열기')).then(a => { if (a) vscode.env.openExternal(vscode.Uri.parse(web)); }, () => { });
             } catch (e) {
-              wb.out('task', `✖ ${e.message}\n   (권한 거부 403 이면 eunjoo-hwang/nscm-fe 에 push 권한이 없는 계정입니다 — 저장소 소유자에게 요청)\n`, 'bad');
+              wb.out('task', `✖ ${e.message}\n   (권한 거부 403 이면 eunjoo-hwang/nscm-fe 에 push 권한이 없는 계정입니다. 저장소 소유자에게 요청)\n`, 'bad');
               vscode.window.showErrorMessage(`Vibe_Manager ✖ Source Upload(UI) 실패: ${e.message.slice(0, 160)}`);
             } finally { try { fs.rmSync(idx, { force: true }); } catch { } }
             api.record('quick', `${item.label} ${ID} ${branch ? branch.trim() : ''}`);
@@ -3278,9 +3739,9 @@ function open(api, opts) {
               const d = new Date(); const pad = n => String(n).padStart(2, '0');
               const ts = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
               msg = substQ(item.autoMessage, { ts, id: effId || '' }); ok = 'push 실행';
-              wb.out('task', `⬆️ ${item.label} — 커밋 메시지 "${msg}" (자동) → push ${item.remote} ${item.branch}\n`, 'cmd');
+              wb.out('task', `⬆️ ${item.label}: 커밋 메시지 "${msg}" (자동), push ${item.remote} ${item.branch}\n`, 'cmd');
             } else {
-              msg = await vscode.window.showInputBox({ prompt: `커밋 메시지 (${item.remote}/${item.branch} 로 push) — 화면 작업은 MNU_ID 명시 (예: feat(DMF0052): …)`, ignoreFocusOut: true });
+              msg = await vscode.window.showInputBox({ prompt: `커밋 메시지 (${item.remote}/${item.branch} 로 push). 화면 작업은 MNU_ID 명시 (예: feat(DMF0052): …)`, ignoreFocusOut: true });
               if (!msg) return;
               ok = await vscode.window.showWarningMessage(`전체 stage(.gitignore 적용) → commit → push ${item.remote} ${item.branch}${item.credUser ? ` (계정 ${item.credUser})` : ''}`, { modal: true }, 'push 실행', 'status 만');
               if (!ok) return;
@@ -3292,29 +3753,10 @@ function open(api, opts) {
             //   (Windows 이벤트 로그 Application 1000: 11-11 20:50·21:26 · 11-17 16:23), 이후 실행이 "index.lock: File exists" 로 실패했다.
             //   같은 조건 재현(임시 인덱스 · 11-17 16:36~16:45)에서는 충돌이 다시 나지 않았고, 실패 2회는 모두 add 도중 Doc/asislive/_cmd_* 파일이 사라진 것(AS-IS 런처 명령 대기열).
             //   보완: ① 실행 전 잠금 점검 ② 단계별 실행·종료코드 보고 ③ LF/CRLF 경고 억제 ④ _cmd_* 대기열 제외 ⑤ add 실패 시 잠금 정리 후 최대 3회 시도
-            if ([...wb.procs.values()].some(x => x.label && x.label.startsWith(item.label))) { wb.out('task', `⏸ ${item.label} 이미 실행 중 — 끝날 때까지 기다리세요\n`, 'warn'); break; }
-            const gitDir = (() => { const r = cp.spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd, encoding: 'utf8', windowsHide: true }); return r.status === 0 ? r.stdout.trim() : path.join(cwd, '.git'); })();
-            const lockF = path.join(gitDir, 'index.lock');
-            // 반환 true = 진행 가능(잠금 없음·정리함) · false = 중단(다른 git 쓰기 작업 실행 중·정리 실패)
-            const clearLock = () => {
-            if (fs.existsSync(lockF)) {
-              // 이 저장소 인덱스를 쓰는 git 이 살아 있으면 건드리지 않는다. 쓰기 명령이 없으면 남은 잠금 = 강제 종료 잔재 → 이름을 바꿔 보존하고 진행
-              let live = [];
-              try {
-                const ps = "Get-CimInstance Win32_Process -Filter \"Name='git.exe'\" | ForEach-Object { \"$($_.ProcessId)`t$($_.CommandLine)\" }";
-                const r = cp.spawnSync('powershell', ['-NoProfile', '-Command', ps], { encoding: 'utf8', windowsHide: true, timeout: 20000 });
-                live = String(r.stdout || '').split(/\r?\n/).filter(Boolean).filter(l => /\s(add|commit|merge|rebase|reset|checkout|switch|stash|pull|am|cherry-pick|revert|rm|mv|restore)(\s|$)/.test(l) && !/update-index\b.*--stdin/.test(l));
-              } catch { }
-              const st = fs.statSync(lockF); const ageMin = Math.round((Date.now() - st.mtimeMs) / 60000);
-              if (live.length) { wb.out('task', `⛔ ${item.label} 중단 — ${lockF} 사용 중인 git 프로세스 ${live.length}개:\n${live.map(l => '   ' + l.slice(0, 200)).join('\n')}\n   끝난 뒤 다시 실행하세요\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ⛔ ${item.label}: 다른 git 작업 실행 중(index.lock)`); return false; }
-              const stamp = new Date(st.mtimeMs); const pad2 = n => String(n).padStart(2, '0');
-              const moved = `${lockF}.stale_${stamp.getFullYear()}${pad2(stamp.getMonth() + 1)}${pad2(stamp.getDate())}_${pad2(stamp.getHours())}${pad2(stamp.getMinutes())}${pad2(stamp.getSeconds())}`;
-              try { fs.renameSync(lockF, moved); wb.out('task', `🧹 남은 index.lock 정리 — 생성 ${ageMin}분 전 · 크기 ${st.size} · 실행 중인 git 쓰기 작업 없음 → ${path.basename(moved)} 로 이름 변경\n`, 'warn'); }
-              catch (e) { wb.out('task', `⛔ ${item.label} 중단 — index.lock 정리 실패: ${e.message}\n`, 'bad'); return false; }
-            }
-            return true;
-            };
-            if (!clearLock()) break;
+            if ([...wb.procs.values()].some(x => x.label && x.label.startsWith(item.label))) { wb.out('task', `⏸ ${item.label} 이미 실행 중. 끝날 때까지 기다리세요\n`, 'warn'); break; }
+            // 2026-11-25 R57: 잠금 점검을 공용 gitLockGate 로 뺐다(git-merge 와 같이 씀). 다른 git 쓰기 작업이 있으면 중단 대신 끝날 때까지 대기
+            const clearLock = () => gitLockGate(wb, cwd, item.label);
+            if (!(await clearLock())) break;
             wb.out('task', `ℹ git add -A 가 끝나기 전에 중지·창 닫기를 하면 index.lock 이 남습니다(다음 실행 때 자동 정리)\n`, '');
             const env = { GIT_TERMINAL_PROMPT: '0' };
             const run = (sub, args) => wb.spawnStream(p, 'cmd', ['/c', `git ${args}`], { spawn: { cwd }, env }, 'task', `${item.label} ${sub}`);
@@ -3336,9 +3778,9 @@ function open(api, opts) {
             }
             const groups = [...grp.keys()].sort();
             const addLog = path.join(p.vibeDir, 'logs', `${history.nowLocal().slice(0, 19).replace(/[:.]/g, '-')}____Source_Backup_add_groups.log`);
-            try { fs.mkdirSync(path.dirname(addLog), { recursive: true }); fs.writeFileSync(addLog, `Source Backup 폴더 묶음별 add · 묶음 ${groups.length} · 경로 ${[...grp.values()].reduce((a, b) => a + b, 0)}\n`); } catch { }
+            try { fs.mkdirSync(path.dirname(addLog), { recursive: true }); fs.writeFileSync(addLog, `Source Backup 폴더 묶음별 add, 묶음 ${groups.length}, 경로 ${[...grp.values()].reduce((a, b) => a + b, 0)}\n`); } catch { }
             const logA = s => { try { fs.appendFileSync(addLog, s); } catch { } };
-            wb.out('task', `▶ ${item.label} 1/3 add — 폴더 묶음 ${groups.length}개 · 바뀐 경로 ${[...grp.values()].reduce((a, b) => a + b, 0)}개 (Doc/asislive/_cmd_* 제외) · 로그 ${path.basename(addLog)}\n`, 'cmd');
+            wb.out('task', `▶ ${item.label} 1/3 add: 폴더 묶음 ${groups.length}개, 바뀐 경로 ${[...grp.values()].reduce((a, b) => a + b, 0)}개 (Doc/asislive/_cmd_* 제외), 로그 ${path.basename(addLog)}\n`, 'cmd');
             const addOne = (g, skip) => new Promise(res => {
               const child = cp.spawn('git', ['-c', 'core.safecrlf=false', '-c', 'core.quotepath=false', 'add', '-A', '--', g, EXCL, ...skip.map(f => `:(exclude,literal)${f}`)], { cwd, windowsHide: true, env: Object.assign({}, process.env, env) });
               const key = `bkadd_${Date.now()}_${Math.random()}`; wb.procs.set(key, { child, label: `${item.label} add ${g}` }); wb.updateBusy();
@@ -3360,31 +3802,46 @@ function open(api, opts) {
                 const files = badFiles(r.err).filter(f => !skip.includes(f));
                 if (files.length && skip.length + files.length <= 20) {
                   skip.push(...files); skipped.push(...files.map(f => ({ f, why: (r.err.match(new RegExp('[^\\n]*' + f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[^\\n]*')) || [''])[0].trim().slice(0, 160) })));
-                  wb.out('task', `  ⚠ [${gi + 1}/${groups.length}] ${g} — 수정 중 파일 제외 후 다시: ${files.join(', ').slice(0, 300)}\n`, 'warn');
+                  wb.out('task', `  ⚠ [${gi + 1}/${groups.length}] ${g}: 수정 중 파일 제외 후 다시: ${files.join(', ').slice(0, 300)}\n`, 'warn');
                   api.record('quick', `${item.label} add ${g} skip ${files.length}`);
-                  if (!clearLock()) { c1 = -2; break; } continue;
+                  if (!(await clearLock())) { c1 = -2; break; } continue;
                 }
                 crash++;
-                wb.out('task', `  ⚠ [${gi + 1}/${groups.length}] ${g} ${crash}회차 실패 — ${why(r.c)}${r.err ? ' · ' + r.err.split('\n').pop().slice(0, 200) : ''}${crash < 3 ? ' · 잠금 정리 후 다시 시도' : ' · 이 묶음은 건너뜀'}\n`, 'warn');
+                wb.out('task', `  ⚠ [${gi + 1}/${groups.length}] ${g} ${crash}회차 실패: ${why(r.c)}${r.err ? ' · ' + r.err.split('\n').pop().slice(0, 200) : ''}${crash < 3 ? ' · 잠금 정리 후 다시 시도' : ' · 이 묶음은 건너뜀'}\n`, 'warn');
                 api.record('quick', `${item.label} add ${g} try${crash} exit ${r.c}`);
-                await new Promise(rs => setTimeout(rs, 3000)); if (!clearLock()) { c1 = -2; break; }
+                await new Promise(rs => setTimeout(rs, 3000)); if (!(await clearLock())) { c1 = -2; break; }
                 if (crash >= 3) { skippedGroups.push({ g, n: grp.get(g), why: why(r.c) }); done = true; }
               }
             }
-            if (c1 === -2) { wb.out('task', `✖ ${item.label} 중단 — index.lock 을 다른 git 작업이 사용 중 (${sec()}s) · 로그 ${path.basename(addLog)}\n`, 'bad'); api.record('quick', `${item.label} add lock busy`); break; }
+            if (c1 === -2) { wb.out('task', `✖ ${item.label} 중단. index.lock 을 다른 git 작업이 사용 중 (${sec()}s), 로그 ${path.basename(addLog)}\n`, 'bad'); api.record('quick', `${item.label} add lock busy`); break; }
             if (skipped.length || skippedGroups.length) {
               const lines = [...skipped.map(s => `   - ${s.f}${s.why ? '  ← ' + s.why : ''}`), ...skippedGroups.map(s => `   - [묶음] ${s.g} (${s.n}개) ← ${s.why}`)];
               logA(`\n이번 백업에서 제외 ${skipped.length}개 파일 · ${skippedGroups.length}개 묶음:\n${lines.join('\n')}\n`);
-              wb.out('task', `⚠ 이번 백업에서 제외 — 수정 중 파일 ${skipped.length}개${skippedGroups.length ? ` · 건너뛴 묶음 ${skippedGroups.length}개` : ''} (다음 백업 때 다시 대상):\n${lines.slice(0, 30).join('\n')}${lines.length > 30 ? `\n   … 외 ${lines.length - 30}개 (로그 참조)` : ''}\n`, 'warn');
+              wb.out('task', `⚠ 이번 백업에서 제외: 수정 중 파일 ${skipped.length}개${skippedGroups.length ? ` · 건너뛴 묶음 ${skippedGroups.length}개` : ''} (다음 백업 때 다시 대상):\n${lines.slice(0, 30).join('\n')}${lines.length > 30 ? `\n   … 외 ${lines.length - 30}개 (로그 참조)` : ''}\n`, 'warn');
             }
-            wb.out('task', `✅ 1/3 add 완료 — 묶음 ${groups.length - skippedGroups.length}/${groups.length}개 (${sec()}s)\n`, 'ok');
+            wb.out('task', `✅ 1/3 add 완료: 묶음 ${groups.length - skippedGroups.length}/${groups.length}개 (${sec()}s)\n`, 'ok');
             const staged = cp.spawnSync('git', ['diff', '--cached', '--quiet'], { cwd, windowsHide: true }).status; // 0 = 바뀐 것 없음 · 1 = 있음
             if (staged === 1) {
               const c2 = await run('2/3 commit', `-c core.safecrlf=false commit -q -m "${msg.replace(/"/g, "'")}"`);
               if (c2 !== 0) { wb.out('task', `✖ ${item.label} 실패 — 2/3 commit exit ${c2} (${sec()}s)\n`, 'bad'); api.record('quick', `${item.label} commit exit ${c2}`); break; }
-            } else wb.out('task', `ℹ 2/3 commit 생략 — 바뀐 파일 없음\n`, '');
-            const c3 = await run('3/3 push', `${cred}push ${item.remote} ${item.branch}`);
-            if (c3 !== 0) { wb.out('task', `✖ ${item.label} 실패 — 3/3 push exit ${c3} (${sec()}s) · 커밋은 로컬에 남아 있습니다(다시 실행하면 push 부터)\n`, 'bad'); api.record('quick', `${item.label} push exit ${c3}`); break; }
+            } else wb.out('task', `ℹ 2/3 commit 생략. 바뀐 파일 없음\n`, '');
+            // 2026-11-23(20261123113703_INC): push 가 HTTP 500·sideband 끊김으로 실패하면 30초 뒤 1회 재시도 · 다시 실패하면 미push 커밋 파일 수와 대용량 경로 출력
+            let pushErr = false; const PUSH_RETRY_RE = /HTTP 500|\b500\b.*(Internal|error)|sideband|unexpected disconnect|remote end hung up|early EOF|RPC failed/i;
+            const pushOnce = sub => wb.spawnStream(p, 'cmd', ['/c', `git ${cred}push ${item.remote} ${item.branch}`], { spawn: { cwd }, env, onLine: ln => { if (PUSH_RETRY_RE.test(ln)) pushErr = true; } }, 'task', `${item.label} ${sub}`);
+            let c3 = await pushOnce('3/3 push');
+            if (c3 !== 0 && pushErr) {
+              wb.out('task', `⚠ 3/3 push exit ${c3}: HTTP 500·sideband 끊김. 30초 뒤 1회 다시 시도\n`, 'warn'); api.record('quick', `${item.label} push retry`);
+              await new Promise(rs => setTimeout(rs, 30000)); pushErr = false; c3 = await pushOnce('3/3 push 재시도');
+              if (c3 !== 0) {
+                const up = `${item.remote}/${item.branch}`;
+                const nf = cp.spawnSync('git', ['-c', 'core.quotepath=false', 'diff', '--name-only', `${up}..HEAD`], { cwd, encoding: 'utf8', windowsHide: true, maxBuffer: 1 << 28 });
+                const files = String(nf.stdout || '').split(/\r?\n/).filter(Boolean);
+                const big = new Map(); for (const f of files) { const sg = f.split('/'); const k = sg.slice(0, Math.min(sg.length - 1, 4)).join('/') || f; let sz = 0; try { sz = fs.statSync(path.join(cwd, f)).size; } catch { } const o = big.get(k) || { n: 0, sz: 0 }; o.n++; o.sz += sz; big.set(k, o); }
+                const top = [...big.entries()].sort((a, b) => b[1].sz - a[1].sz).slice(0, 10).map(([k, o]) => `   - ${k}: ${o.n}파일 ${(o.sz / 1048576).toFixed(0)}M`);
+                wb.out('task', `✖ 재시도도 실패. 미push 커밋(${up}..HEAD) 파일 ${files.length}개, 큰 경로 순:\n${top.join('\n')}\n   대용량 생성물은 .gitignore 추가와 git rm --cached 로 커밋에서 빼야 합니다\n`, 'bad');
+              }
+            }
+            if (c3 !== 0) { wb.out('task', `✖ ${item.label} 실패: 3/3 push exit ${c3} (${sec()}s). 커밋은 로컬에 남아 있습니다(다시 실행하면 push 부터)\n`, 'bad'); api.record('quick', `${item.label} push exit ${c3}`); break; }
             const head = cp.spawnSync('git', ['log', '-1', '--format=%h %s'], { cwd, encoding: 'utf8', windowsHide: true }).stdout.trim();
             wb.out('task', `✅ ${item.label} 완료 — ${head} → ${item.remote}/${item.branch} (${sec()}s)\n`, 'ok');
             vscode.window.showInformationMessage(`Vibe_Manager ✅ ${item.label} 완료 — ${head}`);
@@ -3399,38 +3856,41 @@ function open(api, opts) {
             const beOnly = item.kind === 'git-common-sync-be'; const arArg = ['--areas', beOnly ? 'be' : 'fe'];
             const sumF = path.join(sumDir, beOnly ? 'last_summary_be.json' : 'last_summary.json'); try { fs.rmSync(sumF, { force: true }); } catch { }
             // 1.9.37: 작업 모드 — DB MODE = 로컬 소스 보호 안 함(--overwrite-local) · UI/DB MODE = 기존 보호 병합. 미리보기·적용이 같은 값을 쓰도록 여기서 한 번만 읽는다
+            // 2026-11-26 R115: 작업 모드 이름은 프롬프트 창 하단 보조 줄에만 표시. Console 에는 DB MODE 에서 실제 덮어쓴 파일이 있을 때만 건수 경고
             const wmSync = workMode(p); const owArg = wmSync.db ? ['--overwrite-local'] : [];
-            wb.out('task', `🧭 작업 모드 ${wmSync.name} — ${wmSync.db ? '로컬 소스 보호 안 함(내 편집본도 공통 원문으로 덮어씀)' : '로컬 소스 보호(내 편집본 유지·3-way)'}\n`, wmSync.db ? 'warn' : '');
             const env = { PYTHONIOENCODING: 'utf-8', GIT_TERMINAL_PROMPT: '0' };
-            wb.out('task', `▶ ${item.label} — 1/2 공통 최신 받기 + 파일별 판정(${beOnly ? 'BE nscm-be/src' : 'FE nscm-fe'} · 미리보기 · 파일 변경 없음)\n`, 'cmd');
+            wb.out('task', `▶ ${item.label} 1/2: 공통 최신 받기와 파일별 판정(${beOnly ? 'BE nscm-be/src' : 'FE nscm-fe'}, 미리보기, 파일 변경 없음)\n`, 'cmd');
             const c1 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--dry-run', ...arArg, ...owArg, '--summary', q(sumF)], { env }, 'task', `${item.label} 미리보기`);
             let s1 = null; try { s1 = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
-            if (c1 !== 0 || !s1 || !s1.ok) { wb.out('task', `✖ 미리보기 실패(exit ${c1}) — 적용하지 않습니다\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ ${item.label}: 미리보기 실패 — Task Log 확인`); break; }
+            if (c1 !== 0 || !s1 || !s1.ok) { wb.out('task', `✖ 미리보기 실패(exit ${c1}). 적용하지 않습니다\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ ${item.label}: 미리보기 실패. Task Log 확인`); break; }
             if (!s1.changed) { wb.out('task', `✅ 공통소스 새 변경 없음 (기준선 ${String(s1.base).slice(0, 9)})\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ✅ 공통소스${beOnly ? '(BE)' : ''} 새 변경 없음`); break; }
             if (s1.report) wb.openTab(p, s1.report);
             const A = s1.actions || {};
             // 2.0.4: BE(nscm-be/src)도 같은 규칙으로 받는다 — 확인창에 FE·BE 건수를 나눠 보여 준다(도구가 areas 를 주지 않으면 FE 만)
-            const AR = s1.areas || {}; const arLine = k => { const x = AR[k]; if (!x) return ''; const a = x.actions || {}; return `${k === 'be' ? 'BE(nscm-be/src)' : 'FE(nscm-fe)'}: 공통 원문 ${a.write || 0} · 병합 ${a.merge || 0} · 삭제 ${a.delete || 0} · 로컬 유지 ${a.keep || 0}${x.pending ? ` · 결정 대기 ${x.pending}` : ''}${k === 'be' && !x.base ? ' · 기준선 없음(첫 회차 — 공통 최신과 직접 대조)' : ''}`; };
+            const AR = s1.areas || {}; const arLine = k => { const x = AR[k]; if (!x) return ''; const a = x.actions || {}; return `${k === 'be' ? 'BE(nscm-be/src)' : 'FE(nscm-fe)'}: 공통 원문 ${a.write || 0} · 병합 ${a.merge || 0} · 삭제 ${a.delete || 0} · 로컬 유지 ${a.keep || 0}${x.pending ? ` · 결정 대기 ${x.pending}` : ''}${k === 'be' && !x.base ? ' · 기준선 없음(첫 회차라 공통 최신과 직접 대조)' : ''}`; };
             const loginTxt = (s1.be_login || []).map(x => `${x.ok ? '✔' : '⛔'} 로컬 로그인 점검: ${x.msg}`).join('\n');
-            const areaTxt = [arLine('fe'), arLine('be')].filter(Boolean).join('\n') + (AR.be ? '\nBE 보호: 환경 파일(application·config·mybatis-config·logback·CORS)과 로컬 필수 유지 소스는 로컬 그대로 · 로컬 기동용 설정은 없는 키만 보충 · 빌드 설정(build.gradle 등)·저장소·빌드 산출물은 쓰기 차단 · 로컬은 SSO 에 접속하지 않고 ID 로그인을 유지합니다.\n' + loginTxt + '\nBE 가 바뀌면 재기동해야 반영됩니다.' : '');
-            const detail = `기준선 ${String(s1.base).slice(0, 9)} → ${s1.tip_info}${s1.ancestor ? '' : ' (⚠ force-push 재작성)'}\n공통 신규 커밋 ${s1.commits} · 대상 파일 ${s1.changed}\n\n공통 원문 적용(내가 안 고친 파일·신규) ${A.write || 0}\n내 수정분 유지 + 공통 병합(3-way·d.ts·locales) ${A.merge || 0}\n삭제(내가 안 고친 파일) ${A.delete || 0}\n내 소스 유지 ${A.keep || 0}  (그중 결정 대기 ${s1.pending || 0} — 충돌 등, 자동 적용 안 함)\n\n${areaTxt}\n\n적용 전 바뀌는 로컬 파일은 모두 _artifacts/_backup 에 백업됩니다. 미리보기: 열린 탭(PLAN).`;
-            const detailDb = `⚠ DB MODE — 로컬 소스를 보호하지 않습니다.\n기준선 ${String(s1.base).slice(0, 9)} → ${s1.tip_info}${s1.ancestor ? '' : ' (⚠ force-push 재작성)'}\n\n공통 원문으로 덮어쓰기(내 편집본 포함) ${A.write || 0}\n삭제(공통이 지운 파일 · 내 편집본 포함) ${A.delete || 0}\n공통에 없는 로컬 전용 파일 유지 ${s1.local_only || 0}\n\n${areaTxt}\n\n적용 전 바뀌는 로컬 파일은 모두 _artifacts/_backup 에 백업됩니다. 미리보기: 열린 탭(PLAN).`;
+            const areaTxt = [arLine('fe'), arLine('be')].filter(Boolean).join('\n') + (AR.be ? '\nBE 보호: 환경 파일(application·config·mybatis-config·logback·CORS)과 로컬 필수 유지 소스는 로컬 그대로. 로컬 기동용 설정은 없는 키만 보충. 빌드 설정(build.gradle 등), 저장소, 빌드 산출물은 쓰기 차단. 로컬은 SSO 에 접속하지 않고 ID 로그인을 유지합니다.\n' + loginTxt + '\nBE 가 바뀌면 재기동해야 반영됩니다.' : '');
+            const detail = `기준선 ${String(s1.base).slice(0, 9)} → ${s1.tip_info}${s1.ancestor ? '' : ' (⚠ force-push 재작성)'}\n공통 신규 커밋 ${s1.commits} · 대상 파일 ${s1.changed}\n\n공통 원문 적용(내가 안 고친 파일·신규) ${A.write || 0}\n내 수정분 유지 + 공통 병합(3-way·d.ts·locales) ${A.merge || 0}\n삭제(내가 안 고친 파일) ${A.delete || 0}\n내 소스 유지 ${A.keep || 0}  (그중 결정 대기 ${s1.pending || 0}: 충돌 등, 자동 적용 안 함)\n\n${areaTxt}\n\n적용 전 바뀌는 로컬 파일은 _artifacts/_backup 에 백업됩니다. 미리보기: 열린 탭(PLAN).`;
+            const detailDb = `⚠ DB MODE: 로컬 소스를 보호하지 않습니다.\n기준선 ${String(s1.base).slice(0, 9)} → ${s1.tip_info}${s1.ancestor ? '' : ' (⚠ force-push 재작성)'}\n\n공통 원문으로 덮어쓰기(내 편집본 포함) ${A.write || 0}\n삭제(공통이 지운 파일 · 내 편집본 포함) ${A.delete || 0}\n공통에 없는 로컬 전용 파일 유지 ${s1.local_only || 0}\n\n${areaTxt}\n\n적용 전 바뀌는 로컬 파일은 _artifacts/_backup 에 백업됩니다. 미리보기: 열린 탭(PLAN).`;
             const go = await vscode.window.showWarningMessage(wmSync.db ? `DB MODE: 로컬 ${beOnly ? 'BE ' : ''}소스 ${s1.changed}건을 공통소스로 덮어쓸까요?` : `공통소스${beOnly ? '(BE)' : ''} ${s1.changed}건을 내 소스에 반영할까요?`, { modal: true, detail: wmSync.db ? detailDb : detail }, '적용');
-            if (go !== '적용') { wb.out('task', `⏹ 적용 취소 — 미리보기만 남김 (${s1.report ? path.relative(p.root, s1.report) : ''})\n`, 'warn'); break; }
-            wb.out('task', `▶ ${item.label} — 2/2 적용 (공통 ${String(s1.tip).slice(0, 9)})\n`, 'cmd');
+            if (go !== '적용') { wb.out('task', `⏹ 적용 취소. 미리보기만 남김 (${s1.report ? path.relative(p.root, s1.report) : ''})\n`, 'warn'); break; }
+            wb.out('task', `▶ ${item.label} 2/2 적용 (공통 ${String(s1.tip).slice(0, 9)})\n`, 'cmd');
             const c2 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--apply', '--no-fetch', ...arArg, ...owArg, '--target', s1.tip, '--summary', q(sumF)], { env }, 'task', `${item.label} 적용`);
             let s2 = null; try { s2 = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
             if (s2 && s2.report) wb.openTab(p, s2.report);
-            if (c2 === 0 && s2 && s2.ok) { wb.out('task', `✅ 반영 완료 — 기준선 ${String(s1.base).slice(0, 9)} → ${String(s1.tip).slice(0, 9)} · 결정 대기 ${s1.pending || 0} · 보고 ${path.relative(p.root, s2.report)}\n   다음: 결정 대기 파일 확인(README) · 필요 시 "타입체크 해줘"${s1.areas && s1.areas.be && ((s1.areas.be.actions || {}).write || (s1.areas.be.actions || {}).merge || (s1.areas.be.actions || {}).delete) ? ' · BE 소스가 바뀜 — BE 재기동 필요' : ''}\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ✅ 공통소스 반영 완료 — 결정 대기 ${s1.pending || 0}건 (README 확인)`); }
-            else { wb.out('task', `✖ 적용 실패(exit ${c2})${c2 === 3 ? ' — 미리보기 이후 공통이 바뀜: 다시 실행' : c2 === 4 ? ' — 적용 후 검증 실패: 기준선 미갱신, 백업으로 원복 가능' : ''}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ ${item.label} 적용 실패(exit ${c2}) — Task Log 확인`); }
+            if (wmSync.db && c2 === 0 && s2 && s2.ok) { const a2 = s2.actions || A; const ow = (a2.write || 0) + (a2.delete || 0); if (ow > 0) wb.out('task', `⚠ 로컬 소스 ${ow}건을 공통 원문으로 덮어씀(덮어쓰기 ${a2.write || 0} · 삭제 ${a2.delete || 0}, 내 편집본 포함)\n`, 'warn'); }
+            if (c2 === 0 && s2 && s2.ok) { wb.out('task', `✅ 반영 완료: 기준선 ${String(s1.base).slice(0, 9)} → ${String(s1.tip).slice(0, 9)}, 결정 대기 ${s1.pending || 0}, 보고 ${path.relative(p.root, s2.report)}\n   다음: 결정 대기 파일 확인(README). FE 소스가 바뀌었으면 "타입체크 해줘"${s1.areas && s1.areas.be && ((s1.areas.be.actions || {}).write || (s1.areas.be.actions || {}).merge || (s1.areas.be.actions || {}).delete) ? '. BE 소스가 바뀜, BE 재기동 필요' : ''}\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ✅ 공통소스 반영 완료. 결정 대기 ${s1.pending || 0}건 (README 확인)`); }
+            else { wb.out('task', `✖ 적용 실패(exit ${c2})${c2 === 3 ? '. 미리보기 이후 공통이 바뀜: 다시 실행' : c2 === 4 ? '. 적용 후 검증 실패: 기준선 미갱신, 백업으로 원복 가능' : ''}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ ${item.label} 적용 실패(exit ${c2}). Task Log 확인`); }
             api.record('quick', `${item.label} ${String(s1.base).slice(0, 9)}→${String(s1.tip).slice(0, 9)} exit ${c2}`);
           }
           else if (item.kind === 'git-merge') {
             const cwd = substQ(item.cwd, { root: p.root });
             const br = await vscode.window.showInputBox({ prompt: `${item.remote} 의 병합할 브랜치`, value: item.branch || 'main', ignoreFocusOut: true });
             if (!br) return;
-            const ok = await vscode.window.showWarningMessage(`git merge --no-ff ${item.remote}/${br} — 충돌 시 출력에 표시됩니다(공용 패키지 foundation/shared 는 Hard Boundary).`, { modal: true }, '병합');
+            const ok = await vscode.window.showWarningMessage(`git merge --no-ff ${item.remote}/${br}. 충돌 시 출력에 표시됩니다(공용 패키지 foundation/shared 는 Hard Boundary).`, { modal: true }, '병합');
             if (ok !== '병합') return;
+            // 2026-11-25 R57: merge 는 index 를 쓴다. 실행 전 다른 git 쓰기 작업 대기 · 남은 index.lock 정리(git-upload 와 같은 함수)
+            if (!(await gitLockGate(wb, cwd, item.label))) break;
             wb.spawnStream(p, 'cmd', ['/c', `git fetch ${item.remote} && git merge --no-ff ${item.remote}/${br}`], { spawn: { cwd }, env: { GIT_TERMINAL_PROMPT: '0' } }, 'task', item.label);
           }
           else if (item.kind === 'git-status' || item.kind === 'git-fetch') {
@@ -3494,7 +3954,7 @@ function retitle() {
 function currentId() { return lastWB && panels.has(lastWB) ? String((lastWB.getState() || {}).id || '').toUpperCase() : ''; }  // 1.9.28+: 현재 창의 ID
 function showTab(tab) { if (!lastWB) return false; lastWB.post({ type: 'showTab', tab }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
 function openDiff(key, title, aText, bText, aLabel, bLabel, sub) { if (!lastWB) return false; lastWB.openDiffTab(key, title, aText, bText, aLabel, bLabel, sub); return true; }
-function openFlowTab() { if (!lastWB) return false; lastWB.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
+function openFlowTab() { if (!lastWB) return false; lastWB.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW: 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
 // FLOW 독립 패널(flow-panel.js)의 ★ 끝까지 — Workbench 를 열고 같은 판정으로 체인 실행
 async function runFlowEnd(id) { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (!lastWB || !lastWB.panel) return false; await lastWB.flowEnd(lastWB.api.paths(), id); return true; }
 // 2026-11-19 VMO P7: 창 없는 실행기 — Workbench 창과 같은 WB 실행기(체인·작업·Claude)를 창 없이 만든다(업무 작업창이 화면마다 1개씩 쓴다).
@@ -3510,9 +3970,10 @@ function createRunner(api, opts) {
   return wb;
 }
 function openOrchestra(api, opts) { return open(api, Object.assign({ orchestra: true }, opts || {})); } // 2026-11-19 VMO 창(1개)
-module.exports = { openOrchestra, createRunner, effectiveHarness, isGenChain, verifyStep, workMode, dbModeBlock, GEN_TASK, open, ask, quick, runShell, runFlowEnd, openTab, openDiff, openFlowTab, openHtmlTab, refreshHtmlTab, showTab, currentId };
-module.exports._mirror = { jobMirror, mirrorPost, mirrorAttach, mirrorLastJobLog, mirrorStop, panels: () => panels }; // 시험용(test/t_job_mirror.js)
-module.exports.stopInst = n => { for (const w of panels) if (w.inst === n) { w.stopAll(); return true; } return false; }; // 2026-11-20 R14 자가 복구(orch-heal.js): 창 번호로 그 창의 실행을 멈춘다
+module.exports = { openOrchestra, createRunner, effectiveHarness, isGenChain, verifyStep, workMode, docPaths, dbModeBlock, GEN_TASK, open, ask, quick, runShell, runFlowEnd, openTab, openDiff, openFlowTab, openHtmlTab, refreshHtmlTab, showTab, currentId };
+module.exports._jobRunChanged = jobRunChanged;
+module.exports._mirror = { updateBusy: WB.prototype.updateBusy, jobRunning, jobRunChanged, jobMirror, mirrorPost, mirrorAttach, mirrorLastJobLog, mirrorStop, panels: () => panels }; // 시험용(test/t_job_mirror.js)
+module.exports.stopInst = (n, by) => { for (const w of panels) if (w.inst === n) { endRun(runIdOf(w), { wb: w, by, why: 'stopInst' }); return true; } return false; }; /* 개선안 20261122000646_SELF: endRun 하나로(by 없으면 errlog) */ /* 2026-11-20 by = 중지 주체(VMO 자가 복구가 멈추면 user.stop 에 그 이름) */ // 2026-11-20 R14 자가 복구(orch-heal.js): 창 번호로 그 창의 실행을 멈춘다
 // 2026-11-20 사용자 지시 'VMO, VMW 에서 작업 단위를 클릭해서 WORKBENCH 를 오픈할 때, 동일 UI 가 열려 있으면 새창을 열지않고 열려있는 UI 의 WORKBENCH CONSOLE 을 띄워주세요'
 //   같은 창 번호·화면 ID → 같은 화면 ID 창 순으로 찾아 앞으로 가져오고 Console 탭. 없으면 새 창에 화면 ID 지정 뒤 Console. 반환 { wb, reused }
 function openForScreen(api, screen, inst) {
@@ -3527,8 +3988,9 @@ function openForScreen(api, screen, inst) {
 }
 module.exports.openForScreen = openForScreen;
 module.exports.abortRunningChains = abortRunningChains;
+module.exports.endRun = endRun; module.exports.runIdOf = runIdOf; // 개선안 20261122000646_SELF: 실행 끝 기록 단일화(chain-runner.stop 이 부름)
 module.exports.abortCounts = abortCounts;
-module.exports.resumable = resumable; module.exports.resumePlan = resumePlan; module.exports._resumePrompt = resumePrompt; module.exports.chainSig = chainSig; module.exports._progDel = progDel; // 2026-11-20 작업 재개 // 개선안 20261120005942_INC: extension.deactivate 가 부른다
+module.exports._reapOrphans = reapOrphans; module.exports.planPending = planPending; module.exports.resumable = resumable; module.exports.resumePlan = resumePlan; module.exports._resumePrompt = resumePrompt; module.exports.chainSig = chainSig; module.exports._progDel = progDel; module.exports.ledgerView = ledgerView; module.exports._progWrite = progWrite; // 2026-11-20 작업 재개 · 개선안 20261125000907_VISION 재개 원장 조회·쓰기 // 개선안 20261120005942_INC: extension.deactivate 가 부른다
 module.exports._liveChains = liveChains; // 시험용(test/t_chain_abort.js)
 module.exports._stopMarkOf = stopMarkOf; // 시험용(test/t_wb_stopmark.js · 개선안 20261120042556_INC)
 module.exports._html = html; // 시험용(test/t_webview_syntax.js 웹뷰 스크립트 구문 검사) · 동작 변경 없음

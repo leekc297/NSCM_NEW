@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1384,
+  "at": "2026-11-25T17:09:34.950Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 465,
+  "at": "2026-11-25T17:09:38.835Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 90,
+  "at": "2026-11-25T17:09:39.705Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 387,
+  "at": "2026-11-25T17:09:39.797Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"KRCOJ\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 622,
+  "at": "2026-11-25T17:09:40.948Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"ZZ_E2\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 90,
+  "at": "2026-11-25T17:09:41.725Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY"
+ }
+]

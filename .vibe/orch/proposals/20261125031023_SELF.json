@@ -1,0 +1,130 @@
+{
+  "id": "20261125031023_SELF",
+  "at": "2026-11-25T03:10:23+09:00",
+  "ms": 1795543823848,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|remeasurewithoutresolve",
+  "title": "사용자 지적 감지기 추가 U30 remeasureWithoutResolve: 미검증을 해소하지 않은 채 재검증만 반복 실행됨",
+  "evidence": "사용자 지적(2026-11-25T02:53:18+09:00) \"미검증 건수에 대해서 해소를 하지 않고 재검증이 진행되는 현상이 반복되고 있습니다. 원인을 찾아서 보완이 필요합니다.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 remeasureWithoutResolve 없음 → 추가. 판정: 같은 체인 구간(chain_checklist start 부터 다음 start 전까지)에서 재측정 run_verify.result.json started 가 2회 이상인데 두 재측정 사이에 미검증 해소 단계(task claude, label 이나 note 에 '미검증' 또는 '검증 보완', end 있음) 기록이 없거나 해소 단계 처리 행 0건이고, unverified_history.csv 미검증 건수가 줄지 않으면 fail · 읽을 기록: .vibe/history/<ID>/*_chain_checklist 기록(task, label, note, start, end), Doc/verify/<ID>/run_verify.result.json(started, summary.미검증), Doc/verify/<ID>/unverified_history.csv, Doc/verify/<ID>/unverified_triage.json(at, actionable). user_checks.json U30 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T13:26:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T13:30:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1470, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 · 백업 태그 20261126_self1326"
+    },
+    {
+      "at": "2026-11-26T13:31:02+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T13:39:14+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 → 1 · 설치 폴더 복사 1개 · CHANGELOG 기록 실패 · 창 다시 로드 뒤 적용 orch-usercheck.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T13:39:14+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager · 반영 전 PASS 159 · ALL PASS → 반영 뒤 PASS 170 · ALL PASS(U30 시험 11건 포함) · 2026-11-26 13:34:05 기준 · 변경 17개 파일 · 대상 목록 밖 변경 14개: Doc/verify/DMF0082/fixlist.csv, Doc/verify/_TWO_SCREENS_DECISIONS.md, Doc/verify/DMF0082/_scratch/sumavg_20261126/perf.py, Doc/verify/DMF0082/_scratch/sumavg_20261126/q5.py, Doc/verify/DMF0082/_scratch/sumavg_20261126/q6.py, Doc/verify/DMF0082/_scratch/sumavg_20261126/smoke.out",
+      "log": ".vibe\\logs\\2026-11-26T13-31-03_claude_orch.log",
+      "sec": 204,
+      "costUsd": 2.0980412,
+      "files": [
+        "Doc/verify/DMF0082/fixlist.csv",
+        "Doc/verify/_TWO_SCREENS_DECISIONS.md",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json",
+        "Doc/verify/DMF0082/_scratch/sumavg_20261126/perf.py",
+        "Doc/verify/DMF0082/_scratch/sumavg_20261126/q5.py",
+        "Doc/verify/DMF0082/_scratch/sumavg_20261126/q6.py",
+        "Doc/verify/DMF0082/_scratch/sumavg_20261126/smoke.out",
+        "Doc/verify/DMF0082/_scratch/sumavg_20261126/smoke.py",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261126_1333/A_DB/00_PRECHECK_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261126_1333/A_DB/05_BACKUP_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261126_1333/A_DB/20_PKG_PKG_DMF0082.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261126_1333/A_DB/40_GRANT_DMF0082.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261126_1333/A_DB/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261126_1333/A_DB/99_ROLLBACK.sql",
+        "tools/Harness/plan_state.json"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:01+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U30",
+  "kind": "detector",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795667180937,
+  "autoFp": "a1420bfdcc",
+  "applyStartMs": 1795667462839,
+  "verifyJudge": {
+    "at": "2026-11-26T13:34:33+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 → 1"
+  },
+  "selfTag": "20261126_self1326",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-usercheck.js"
+  ],
+  "appliedMs": 1795667954008,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager 실행. 반영 전 PASS 159줄 + ALL PASS → 반영 뒤 PASS 170줄 + ALL PASS, FAIL 0줄. 새 감지기 실패 표본 4건(해소 단계 없음 80→80, meta processed 0, 해소 단계 안 history 줄 처리 0, run_verify summary 85 우선)과 통과·판정 안 함 표본 6건, 원장 U30 active 확인 1건 PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager · 반영 전 PASS 159 · ALL PASS → 반영 뒤 PASS 170 · ALL PASS(U30 시험 11건 포함) · 2026-11-26 13:34:05 기준",
+    "note": "run_verify.result.json 은 마지막 실행만 남아 측정 횟수는 history 의 S8.checklistRun, S8.checklistRecheck, S8.checklistDelta 단계 기록으로 셈. 해소 단계 meta 에 처리 행 필드가 없어(SCP0005 20261125_181915_claude, 20261125_224038_claude 확인) processed, rows_done, rows 값이나 해소 단계 시간 안 unverified_history.csv 줄로 셈. 둘 다 없으면 처리함으로 봄. 미검증 건수를 모르면 판정하지 않음. 추가 확인 후보: SCP0005 체인 J20261125_210634 의 측정 210635 → 223629 사이 해소 단계 기록 없음, 실제 판정 결과 미확인"
+  },
+  "snap": "prop_20261125031023_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

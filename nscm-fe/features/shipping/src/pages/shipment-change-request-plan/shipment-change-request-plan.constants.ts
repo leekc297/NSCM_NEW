@@ -434,7 +434,7 @@ export const MSG = {
   SHIPMENT_DATE_BEFORE_BASE: 'MSG01212',
   QTY_ZERO: 'MSG01213', // AS-IS MSG00202 -> 등가 'Enter a number greater than 0.'
   REASON_CODE_REQUIRED: 'MSG01291', // Reason Detail 선행으로 Reason Code 필수 (AS-IS MSG00287 는 TO-BE 미등록 → 같은 문구 MSG01291, KO/EN/CN)
-  SO_PARTIAL_SELECT: 'MSG00247', // 동일 SO 부분선택 금지 — 미등록, 영문 fallback
+  SO_PARTIAL_SELECT: 'MSG01257', // 동일 SO 부분선택 금지 — AS-IS MSG00247 → TO-BE MSG01257, {0}=SO NO
   // 저장 결과 **'F' 한 자리 전용**이다(AS-IS cs:1125~1128 / 설계 L-092). TO-BE 등록 문구가
   //   'The sales price has not been entered...' 라, 통신오류·사전검증 실패·요청확정/취소 실패까지
   //   이 코드로 묶으면 전부 '판가를 입력하세요' 가 뜬다(L-094/L-100/L-101 번호 재사용 금지).

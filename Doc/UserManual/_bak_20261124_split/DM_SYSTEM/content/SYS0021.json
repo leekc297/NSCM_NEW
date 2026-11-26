@@ -1,0 +1,70 @@
+{
+ "definition": "Division 과 계획 시작 주차별로 FP, MRP, DM RTF 연계 대상 여부(Y, N)를 관리하는 화면",
+ "overview": [
+  "Division 과 계획 주차(Plan Start Date)마다 FP, MRP, DM RTF 연계 대상에 넣을지 뺄지 Y, N 으로 정하는 화면임",
+  "위쪽 Div, Period 조회 조건과 연계 대상 그리드 1개로 구성됨. 행 추가, 삭제 없이 조회된 행의 Y, N 만 바꿈",
+  "Div, Period 지정 → Search(F5) → 막을 주차의 FP Target YN, MRP Target YN, DM RTF YN 을 N 으로 변경 → Save(F7) 순으로 작업함"
+ ],
+ "pages": [
+  {
+   "title": "SCP IF Blocking",
+   "keyPoint": "N 으로 바꾼 Division, 주차는 해당 연계 대상에서 빠지므로 저장 전 Div 와 Plan Start Date 를 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.152,
+     "y": 0.158
+    },
+    {
+     "no": 2,
+     "x": 0.664,
+     "y": 0.226
+    },
+    {
+     "no": 3,
+     "x": 0.178,
+     "y": 0.226
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 기본값 ALL. Division 으로 거름",
+      "Period: 필수(라벨 앞 *). 시작일 ~ 종료일을 달력에서 고름(예: 2026.11.09 ~ 2026.11.30)",
+      "Search(F5) 를 누르면 기간 안 주차별 목록과 총 건수(예: 총 56 건)가 나옴"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Save(F7): 바꾼 Y, N 값을 저장함",
+      "Insert, Delete 버튼이 없어 행 추가와 삭제는 할 수 없음",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "연계 대상 그리드",
+     "lines": [
+      "Div, Plan Start Date 순으로 나옴. 두 칸은 입력 불가",
+      "Plan Start Date: 계획 주차 시작일(YYYYMMDD, 예: 20261109)",
+      "FP Target YN, MRP Target YN, DM RTF YN: 노란 칸. Y 또는 N 을 고름",
+      "Y 는 해당 Division, 주차가 연계 대상이고 N 은 연계 대상이 아님"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "SYSTEM",
+ "id": "SYS0021",
+ "uiName": "SCP IF Blocking",
+ "menuPath": "SYSTEM> 메뉴 미등록> SCP IF Blocking",
+ "captures": [
+  "captures/SYS0021.png"
+ ],
+ "facts": [],
+ "buttons": []
+}

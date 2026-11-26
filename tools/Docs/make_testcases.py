@@ -484,9 +484,9 @@ def build_flows(S, L, div=None):
                    '정렬 = 원천 정렬', 'ALL·다중선택 사양 = AS-IS'], ['후보 목록을 연다', '목록·순서를 원천 결과와 비교한다'], pre=divtxt,
                   ledger=L.cond_rows(labs, {'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7'}), src_detail=srctxt, basis='O1 AS-IS 콤보 원천')
         if parent or is_div:
-            B.add('SC', 'CASCADE', '조회조건', lab, f"조회조건 [{lab}] 연쇄(CASCADE)" + (f" — 상위 {parent}" if parent else ' — 하위 조건 재구성'),
+            B.add('SC', 'CASCADE', '조회조건', lab, f"조회조건 [{lab}] CASCADE" + (f" — 상위 {parent}" if parent else ' — 하위 조건 재구성'),
                   ([f'상위 [{parent}] 변경 → [{lab}] 후보가 선택 Division 의 값으로 재구성 · 선택값 초기화(ALL)'] if parent else ['[Div] 변경 → Division 필터를 쓰는 하위 조건(' + ', '.join(o.get('tobe') or o.get('label') for o in order if 'DIVISION_ID' in (srch.get(o['ctl'], {}).get('filters') or '')) + ') 후보 재구성']) +
-                  ['연쇄 후 조회 → 결과가 바뀐 조건을 만족'], ['상위 조건을 다른 값으로 바꾼다', '하위 조건 후보·값을 확인한다', '조회'], pre=divtxt,
+                  ['CASCADE 후 조회 → 결과가 바뀐 조건을 만족'], ['상위 조건을 다른 값으로 바꾼다', '하위 조건 후보·값을 확인한다', '조회'], pre=divtxt,
                   ledger=L.cond_rows(labs, {'C1', 'C4'}), basis='O1 AS-IS SetChangeControl')
         B.add('SC', '결과 반영', '조회조건', lab, f"조회조건 [{lab}] 값 변경 → 조회 결과 반영",
               ['값 1개 선택 후 조회 → 결과 행 전체가 조건 만족', 'ALL → 특정값 → ALL 재조회 시 건수 복원', '텍스트 조건은 콤마 다중·대소문자 무시(해당 시)'],
@@ -588,8 +588,8 @@ def build_flows(S, L, div=None):
     for (trig, tcol, paste), rs in casc.items():
         kind = '셀 콤보 후보 재구성' if any(r['kind'] in ('GRID_COMBO', 'LIST_REBIND') for r in rs) else '자동 채움'
         trigtxt = ' · '.join(trig) or '상위 셀'
-        B.add('IN', '셀 CASCADE' + (' (붙여넣기)' if paste else ''), '셀 연쇄', f'{trigtxt} → {tcol}', f"{'붙여넣기로 ' if paste else ''}[{trigtxt}] 변경 → [{tcol}] {kind}",
-              [f'[{trigtxt}] 를 목록에서 선택' + (' (Ctrl+V 붙여넣기)' if paste else '') + f' → [{tcol}] {kind} = AS-IS', '무변경 편집 종료 시 연쇄 미발동(C6)', '연쇄 결과가 저장까지 유지'],
+        B.add('IN', '셀 CASCADE' + (' (붙여넣기)' if paste else ''), '셀 CASCADE', f'{trigtxt} → {tcol}', f"{'붙여넣기로 ' if paste else ''}[{trigtxt}] 변경 → [{tcol}] {kind}",
+              [f'[{trigtxt}] 를 목록에서 선택' + (' (Ctrl+V 붙여넣기)' if paste else '') + f' → [{tcol}] {kind} = AS-IS', '무변경 편집 종료 시 CASCADE 미발동(C6)', 'CASCADE 결과가 저장까지 유지'],
               [f'신규행/기존행에서 [{trigtxt}] 값을 ' + ('붙여넣기' if paste else '목록에서 선택'), f'[{tcol}] 값·후보 확인', '저장 후 재조회'],
               pre=divtxt, rowtype='신규행·기존행', inp=clean_expr(rs[0].get('raw'))[:120],
               ledger=[x for x in L.col(tcol, {'C2', 'C3', 'C6', 'F3'})] + [x for t in trig for x in L.col(t, {'C2', 'C6'})], basis=f"O1 AS-IS {rs[0]['method']}", desc=clean_expr(rs[0].get('guard'))[:200])
@@ -666,7 +666,7 @@ def build_flows(S, L, div=None):
         B.cur_div = fams[0]
         B.add('RD', 'CASCADE→CRUD', '계정 1개', f"{role or '계정 미등록'} × {fams[0]}", f"[{role or 'ADMIN/PLANNER'}] 1개 계정 — 조회조건 CASCADE → 조회 → CRUD",
               [f'[Div] 후보 = 계정 권한 Division · 1개면 자동 선택',
-               ('하위 조회조건 ' + ', '.join(divcasc) + ' 후보 = 선택 Division 값으로 재구성') if divcasc else '하위 조회조건 Division 연쇄 없음',
+               ('하위 조회조건 ' + ', '.join(divcasc) + ' 후보 = 선택 Division 값으로 재구성') if divcasc else '하위 조회조건 Division CASCADE 없음',
                f"버튼 = {', '.join(sorted(btn)) or '없음'}",
                (f"Insert → 셀 {', '.join(gridcasc) or ''} 후보 = 선택 Division 필터 → 저장 → 수정 → 삭제, 단계마다 DB 반영" if crud else 'CRUD 버튼 없음 — 조회까지만')],
               [f"{user or '계정(미등록)'} 로 로그인", '[Div] 후보·자동선택 확인 → 하위 조회조건 확인 → 조회', 'Insert → 셀 CASCADE → 저장 → 수정 → 삭제 → 각 단계 DB 확인'],
@@ -689,7 +689,7 @@ def build_flows(S, L, div=None):
                     if acl[k] != (b in btn): mism.append(f"{b}: AS-IS {'허용' if acl[k] else '불가'} ↔ TO-BE {'허용' if b in btn else '불가'}")
             expect = [f"메뉴 접근 = {'가능' if on == 'Y' else '불가(메뉴 미노출)' if on else '권한 행 없음(미노출)'}",
                       f'[Div] 후보 = 사용자 권한 Division(계열 {f}) · 1개면 자동 선택',
-                      ('하위 조회조건 ' + ', '.join(divcasc) + ' 후보 = 선택 Division 값으로 재구성') if divcasc else '하위 조회조건 Division 연쇄 없음',
+                      ('하위 조회조건 ' + ', '.join(divcasc) + ' 후보 = 선택 Division 값으로 재구성') if divcasc else '하위 조회조건 Division CASCADE 없음',
                       '조회 → 결과는 권한 Division 데이터만',
                       (f"버튼 = {', '.join(sorted(btn)) or '없음'}"),
                       (f"CRUD 가능: {', '.join(crud)} → 신규행 {', '.join(gridcasc) or '셀'} 후보 = 선택 Division 필터 → 저장·수정·삭제 DB 반영" if crud else 'CRUD 불가: Insert/Save/Delete 버튼 미노출 · 셀 편집 불가')]
@@ -731,9 +731,9 @@ def add_leftovers(B, L):
         tr = S.trace.get(rid, {}); summ = re.sub(r'`[^`]*`', '', tr.get('summary') or rid).strip()
         fams_ = collections.Counter(r['rule_id'][0] for r in rows if r['rule_id'] and not r['rule_id'].startswith(('X-', 'DB-', 'SC', 'G03', 'K-')))
         flow = RULE_FLOW.get(fams_.most_common(1)[0][0], 'ET') if fams_ else flow_for(summ + ' ' + rid)
-        B.add(flow, 'AS-IS 대조 항목', '대조표 행', rid, f'AS-IS 대조 — {summ[:70]}',
-              [f"대조표 '{summ[:120]}' 의 동작이 화면에서 AS-IS 와 같다", '검사: ' + ', '.join(f"{x} {RULE_NAME.get(x, '')}".strip() for x in sorted({r['rule_id'] for r in rows}))],
-              ['대조표 행의 AS-IS 동작을 화면에서 재현'], pre='Division 무관(대조표 항목)', ledger=rows, basis=f"대조표 {tr.get('source') or ''} {tr.get('section') or ''}".strip())
+        B.add(flow, 'AS-IS 대조 항목', 'GAP 행', rid, f'AS-IS 대조 — {summ[:70]}',
+              [f"GAP '{summ[:120]}' 의 동작이 화면에서 AS-IS 와 같다", '검사: ' + ', '.join(f"{x} {RULE_NAME.get(x, '')}".strip() for x in sorted({r['rule_id'] for r in rows}))],
+              ['GAP 행의 AS-IS 동작을 화면에서 재현'], pre='Division 무관(GAP 항목)', ledger=rows, basis=f"GAP {tr.get('source') or ''} {tr.get('section') or ''}".strip())
     grp = collections.OrderedDict()
     for r in L.rows:
         if r['rule_id'] == 'X-LOC' or L.used.get(r['row_id']): continue
@@ -741,7 +741,7 @@ def add_leftovers(B, L):
     for (src, tgt, fam_), rows in grp.items():
         flow = RULE_FLOW.get(fam_, 'ET') if src not in ('DEFECT', 'CONFIRMED') else RULE_FLOW.get(fam_, 'ET')
         r0 = rows[0]
-        sub = {'DEFECT': '결함 원장 재현', 'CONFIRMED': '확정 규칙', 'ASIS': 'AS-IS 동작', 'SP': 'SP 결과', 'COLUMN': '컬럼 검사', 'SEARCH': '조회조건 검사', 'RULE_SCREEN': '화면 규칙', 'TRACE': '대조표 검사'}.get(src, src)
+        sub = {'DEFECT': '결함 원장 재현', 'CONFIRMED': '확정 규칙', 'ASIS': 'AS-IS 동작', 'SP': 'SP 결과', 'COLUMN': '컬럼 검사', 'SEARCH': '조회조건 검사', 'RULE_SCREEN': '화면 규칙', 'TRACE': 'GAP 검사'}.get(src, src)
         rn = ' · '.join(dict.fromkeys(RULE_NAME.get(x['rule_id'], x['rule_id']) for x in rows))
         B.add(flow, sub, src, tgt[:60], f"{sub} — [{tgt.split(' / ')[0][:40]}] {rn[:60]}", [x['expected'][:200] for x in rows[:4]], ['기대 결과 조건을 만족하는 상태를 만들어 확인'],
               pre=(r0.get('condition') or '')[:150] if not (r0.get('condition') or '').startswith('{') else '', ledger=rows, basis=', '.join(sorted({x['oracle'] for x in rows})) + (f" · 결함 {', '.join(sorted({x['defect_ref'] for x in rows if x.get('defect_ref')}))}" if any(x.get('defect_ref') for x in rows) else ''))
@@ -901,7 +901,7 @@ def build(ID):
 
     # 자동검증 전용
     au = Plain(wb.create_sheet('자동검증 전용'), [14, 10, 34, 50, 10, 60])
-    au.title('자동검증 전용 원장 행', '사람이 화면에서 재현하는 항목이 아닌 정적 검사(대조표 구현 위치 실존 X-LOC) — 결과만 참고')
+    au.title('자동검증 전용 원장 행', '사람이 화면에서 재현하는 항목이 아닌 정적 검사(GAP 구현 위치 실존 X-LOC) — 결과만 참고')
     au.hdr(['원장 ID', '규칙', '대상', '기대', '결과', '근거'])
     xl = [r for r in L.rows if r['rule_id'] == 'X-LOC']
     for r in xl: au.row([r['row_id'], r['rule_id'], r['target'][:80], r['expected'][:150], r['result'], (r.get('evidence') or '')[:200]], fill=RES_FILL.get(r['result']))

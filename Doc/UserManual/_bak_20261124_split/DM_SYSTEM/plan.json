@@ -1,0 +1,1120 @@
+{
+ "module": "DM_SYSTEM",
+ "groups": [
+  {
+   "top": "Demand",
+   "group": "Demand Master",
+   "screens": [
+    {
+     "id": "DMF0004",
+     "name": "Sales Site",
+     "menuPath": "DM> Demand Master> Sales Site",
+     "captures": [
+      "captures/DMF0004.png"
+     ],
+     "captureFrom": "목록 표 Page 5",
+     "captureFile": 1,
+     "captureSlide": 5,
+     "inMenu": true,
+     "buttons": [
+      "bucket:SAVE",
+      "customer:SAVE",
+      "customer:SEARCH",
+      "location:SAVE",
+      "site:DELETE",
+      "site:INSERT",
+      "site:SAVE",
+      "site:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0005",
+     "name": "Sales Site Project Model",
+     "menuPath": "DM> Demand Master> Sales Site Project Model",
+     "captures": [
+      "captures/DMF0005.png"
+     ],
+     "captureFrom": "목록 표 Page 6",
+     "captureFile": 1,
+     "captureSlide": 6,
+     "inMenu": true,
+     "buttons": [
+      "modelChange:SAVE",
+      "production:DELETE",
+      "production:INSERT",
+      "production:MODEL_CHANGE",
+      "production:SAVE",
+      "production:SEARCH",
+      "purchase:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0006",
+     "name": "Customer Model Mapping",
+     "menuPath": "DM> Demand Master> Customer Model Mapping",
+     "captures": [
+      "captures/DMF0006.png"
+     ],
+     "captureFrom": "목록 표 Page 7",
+     "captureFile": 1,
+     "captureSlide": 7,
+     "inMenu": true,
+     "buttons": [
+      "customerModelMapping:DELETE",
+      "customerModelMapping:INSERT",
+      "customerModelMapping:SAVE",
+      "customerModelMapping:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0007",
+     "name": "Customer FCST Master",
+     "menuPath": "DM> Demand Master> Customer FCST Master",
+     "captures": [
+      "captures/DMF0007.png"
+     ],
+     "captureFrom": "목록 표 Page 8",
+     "captureFile": 1,
+     "captureSlide": 8,
+     "inMenu": true,
+     "buttons": [
+      "customerFcst:DELETE",
+      "customerFcst:INSERT",
+      "customerFcst:SAVE",
+      "customerFcst:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0020",
+     "name": "Sales Price",
+     "menuPath": "DM> Demand Master> Sales Price",
+     "captures": [
+      "captures/DMF0020.png"
+     ],
+     "captureFrom": "목록 표 Page 9",
+     "captureFile": 1,
+     "captureSlide": 9,
+     "inMenu": true,
+     "buttons": [
+      "exchange:ROW",
+      "exchange:SAVE",
+      "exchange:SEARCH",
+      "exchange:SEARCH_DATA",
+      "exchange:TITLE",
+      "exchangeRate:SAVE",
+      "exchangeRate:SEARCH",
+      "main:DELETE",
+      "main:INSERT",
+      "main:SAVE",
+      "main:SEARCH",
+      "main:SPREAD_TITLE_DATE",
+      "mainTitle:SEARCH",
+      "owner:SEARCH",
+      "priceBatch:SAVE",
+      "priceBatch:SEARCH",
+      "priceBatchInput:SAVE",
+      "priceBatchInput:SEARCH",
+      "salesPriceRange:SAVE",
+      "salesPriceRange:SEARCH",
+      "salesPriceTemplate:SEARCH",
+      "titleSet:SEARCH",
+      "version:SEARCH",
+      "week:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0043",
+     "name": "Contribution Rate Reg.",
+     "menuPath": "DM> Demand Master> Contribution Rate Reg.",
+     "captures": [
+      "captures/DMF0043.png"
+     ],
+     "captureFrom": "목록 표 Page 10",
+     "captureFile": 1,
+     "captureSlide": 10,
+     "inMenu": true,
+     "buttons": [
+      "ContributeMain:SAVE",
+      "ContributeMain:SEARCH",
+      "ContributeMain:VERSION_MGMT",
+      "ContributeMain:VERSION_MGT",
+      "mainTitle:SEARCH",
+      "ratePopup:SEARCH",
+      "salesList:SEARCH",
+      "salesListTitle:SEARCH",
+      "titleSet:SEARCH",
+      "version:DELETE",
+      "version:EDIT",
+      "version:INSERT",
+      "version:SAVE",
+      "version:SEARCH",
+      "versionPopup:SEARCH",
+      "yearPopup:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0043_01",
+     "name": "Contribution Sales",
+     "menuPath": "DM> Demand Master> Contribution Sales",
+     "captures": [
+      "captures/DMF0043_01.png"
+     ],
+     "captureFrom": "목록 표 Page 11",
+     "captureFile": 1,
+     "captureSlide": 11,
+     "inMenu": true,
+     "buttons": [
+      "main:SEARCH",
+      "mainTitle:SEARCH",
+      "ratePopup:SEARCH",
+      "version:SEARCH",
+      "versionPopup:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0008",
+     "name": "ERP EDI MASTER 정비",
+     "menuPath": "DM> Demand Master> ERP EDI MASTER 정비",
+     "captures": [
+      "captures/DMF0008.png"
+     ],
+     "captureFrom": "목록 표 Page 12",
+     "captureFile": 1,
+     "captureSlide": 12,
+     "inMenu": true,
+     "buttons": [
+      "division:SEARCH",
+      "main:SEARCH",
+      "main:STATUS_UPDATE",
+      "project:DELETE",
+      "project:SAVE",
+      "project:SEARCH",
+      "repair:DELETE",
+      "repair:SAVE",
+      "repair:SEARCH",
+      "salesSite:DELETE",
+      "salesSite:INSERT",
+      "salesSite:SAVE",
+      "salesSite:SEARCH",
+      "site:SEARCH",
+      "sspm:DELETE",
+      "sspm:INSERT",
+      "sspm:SAVE",
+      "sspm:SEARCH",
+      "summary:SEARCH",
+      "updateHistory:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0072",
+     "name": "N: N Master Mapping",
+     "menuPath": "DM> Demand Master> N: N Master Mapping",
+     "captures": [
+      "captures/DMF0072.png"
+     ],
+     "captureFrom": "목록 표 Page 13",
+     "captureFile": 1,
+     "captureSlide": 13,
+     "inMenu": true,
+     "buttons": [
+      "dataType:SEARCH",
+      "main:DELETE",
+      "main:INSERT",
+      "main:SAVE",
+      "main:SEARCH"
+     ]
+    }
+   ]
+  },
+  {
+   "top": "Demand",
+   "group": "Demand Plan",
+   "screens": [
+    {
+     "id": "DMF0003",
+     "name": "MKT FCST",
+     "menuPath": "DM> Demand Plan> MKT FCST",
+     "captures": [
+      "captures/DMF0003.png"
+     ],
+     "captureFrom": "목록 표 Page 14",
+     "captureFile": 1,
+     "captureSlide": 14,
+     "inMenu": true,
+     "buttons": [
+      "Mkt Fcst:COLUMN_SETUP",
+      "Mkt Fcst:DELETE",
+      "Mkt Fcst:EXCEL",
+      "Mkt Fcst:INSERT",
+      "Mkt Fcst:MEASURE_SELECT",
+      "Mkt Fcst:SAVE",
+      "Mkt Fcst:SEARCH",
+      "car:SEARCH",
+      "carProperty:SEARCH",
+      "carTitle:SEARCH",
+      "custDemand:SAVE",
+      "custDemandInit:SEARCH",
+      "custDemandResult:SEARCH",
+      "dayRange:SEARCH",
+      "prHistory:SEARCH",
+      "prPopup:SAVE",
+      "prPopup:SEARCH",
+      "psi:SEARCH",
+      "psiLogic:SEARCH",
+      "psiTitle:SEARCH",
+      "spreadTitle:SEARCH",
+      "sspCompare:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0048",
+     "name": "Sales Monitoring",
+     "menuPath": "DM> Demand Plan> Sales Monitoring",
+     "captures": [
+      "captures/DMF0048.png"
+     ],
+     "captureFrom": "목록 표 Page 16",
+     "captureFile": 1,
+     "captureSlide": 16,
+     "inMenu": true,
+     "buttons": [
+      "Sales Monitoring:COLUMN_SETUP",
+      "Sales Monitoring:EXCEL",
+      "Sales Monitoring:MEASURE_SELECT",
+      "Sales Monitoring:SEARCH",
+      "dayRange:SEARCH",
+      "spreadTitle:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0014",
+     "name": "Customer FCST Upload",
+     "menuPath": "DM> Demand Plan> Customer FCST Upload",
+     "captures": [
+      "captures/DMF0014.png"
+     ],
+     "captureFrom": "목록 표 Page 17",
+     "captureFile": 1,
+     "captureSlide": 17,
+     "inMenu": true,
+     "buttons": [
+      "FCST Upload:DELETE",
+      "FCST Upload:EXCEL",
+      "FCST Upload:FORM_DATA",
+      "FCST Upload:INSERT",
+      "FCST Upload:SAVE",
+      "FCST Upload:SEARCH",
+      "FCST Upload:UPLOAD",
+      "FCST Upload:UPLOAD_SAVE",
+      "dayRange:SEARCH",
+      "spreadTitle:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0042",
+     "name": "Business Plan",
+     "menuPath": "DM> Demand Plan> Business Plan",
+     "captures": [
+      "captures/DMF0042.png"
+     ],
+     "captureFrom": "목록 표 Page 18",
+     "captureFile": 1,
+     "captureSlide": 18,
+     "inMenu": true,
+     "buttons": [
+      "Biz Plan:COLUMN_SETUP",
+      "Biz Plan:CUTOFF",
+      "Biz Plan:DELETE",
+      "Biz Plan:EXCEL",
+      "Biz Plan:EXCHANGE_RATE",
+      "Biz Plan:INSERT",
+      "Biz Plan:MEASURE_SELECT",
+      "Biz Plan:REPLACE",
+      "Biz Plan:SAVE",
+      "Biz Plan:SEARCH",
+      "Biz Plan:SET_PRICE",
+      "cutoffVersion:SEARCH",
+      "dayRange:SEARCH",
+      "exchangeRate:SAVE",
+      "exchangeRate:SEARCH",
+      "futurePrice:SEARCH",
+      "futurePriceData:SEARCH",
+      "mdfVersion:SEARCH",
+      "spreadTitle:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0044",
+     "name": "Sales Reports",
+     "menuPath": "DM> Demand Plan> Sales Reports",
+     "captures": [
+      "captures/DMF0044.png"
+     ],
+     "captureFrom": "목록 표 Page 19",
+     "captureFile": 1,
+     "captureSlide": 19,
+     "inMenu": true,
+     "buttons": [
+      "MDF Reports:COLUMN_SETUP",
+      "MDF Reports:DELETE",
+      "MDF Reports:EXCEL",
+      "MDF Reports:EXCHANGE_RATE",
+      "MDF Reports:MEASURE_SELECT",
+      "MDF Reports:SAVE",
+      "MDF Reports:SAVE_CF",
+      "MDF Reports:SEARCH",
+      "MDF Reports:SP_VER",
+      "MDF Reports:TEXTBOX",
+      "exchangeRate:EXRATE_SAVE",
+      "exchangeRate:SAVE",
+      "exchangeRate:SEARCH",
+      "exchangeRate:SEARCH_DATA",
+      "exchangeRate:TITLE",
+      "measure:SEARCH",
+      "spreadTitle:SEARCH",
+      "textbox:SAVE",
+      "textbox:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH",
+      "unitedVersion:ACTION",
+      "unitedVersion:ACTION_BP",
+      "unitedVersion:SEARCH",
+      "unitedVersion:TITLE",
+      "unitedVersion:TRANSFER"
+     ]
+    },
+    {
+     "id": "DMF0049",
+     "name": "ETC Sales Reports",
+     "menuPath": "DM> Demand Plan> ETC Sales Reports",
+     "captures": [
+      "captures/DMF0049.png"
+     ],
+     "captureFrom": "목록 표 Page 20",
+     "captureFile": 1,
+     "captureSlide": 20,
+     "inMenu": true,
+     "buttons": [
+      "MDF Reports:COLUMN_SETUP",
+      "MDF Reports:DELETE",
+      "MDF Reports:EXCEL",
+      "MDF Reports:INSERT",
+      "MDF Reports:MEASURE_SELECT",
+      "MDF Reports:SAVE",
+      "MDF Reports:SEARCH",
+      "MDF Reports:SP_VER",
+      "measure:SEARCH",
+      "spreadTitle:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH",
+      "unitedVersion:ACTION",
+      "unitedVersion:ACTION_BP",
+      "unitedVersion:SEARCH",
+      "unitedVersion:TITLE",
+      "unitedVersion:TRANSFER"
+     ]
+    },
+    {
+     "id": "DMF0074",
+     "name": "Metal Link Price",
+     "menuPath": "DM> Demand Plan> Metal Link Price",
+     "captures": [
+      "captures/DMF0074.png"
+     ],
+     "captureFrom": "목록 표 Page 21",
+     "captureFile": 1,
+     "captureSlide": 21,
+     "inMenu": true,
+     "buttons": [
+      "Metal Link Price:EXCEL",
+      "Metal Link Price:SAVE",
+      "Metal Link Price:SEARCH",
+      "Metal Link Price:UPLOAD",
+      "template:SEARCH",
+      "version:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0082",
+     "name": "Fcst&Price MGMT",
+     "menuPath": "DM> Demand Plan> Fcst&Price MGMT",
+     "captures": [
+      "captures/DMF0082.png"
+     ],
+     "captureFrom": "목록 표 Page 22",
+     "captureFile": 1,
+     "captureSlide": 22,
+     "inMenu": true,
+     "buttons": [
+      "FcstNPrice:DELETE",
+      "FcstNPrice:FORM_DATA",
+      "FcstNPrice:SAVE",
+      "FcstNPrice:SEARCH",
+      "FcstNPrice:SEARCH_CURRENT",
+      "FcstNPrice:UPLOAD",
+      "FcstNPrice:UPLOAD_DATA",
+      "FcstNPrice:UPLOAD_SAVE",
+      "buttonAuth:SEARCH",
+      "fcstNPrice:DELETE",
+      "fcstNPrice:SAVE",
+      "fcstNPrice:SEARCH",
+      "futurePriceInfo:DELETE",
+      "futurePriceInfo:EDIT",
+      "futurePriceInfo:IF",
+      "futurePriceInfo:INSERT",
+      "futurePriceInfo:SAVE",
+      "futurePriceInfo:SEARCH",
+      "futurePriceInfo:SEARCH_DATA",
+      "futurePriceInfo:TITLE",
+      "savePriceData:SEARCH",
+      "savePriceTitle:SEARCH",
+      "spreadTitle:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH",
+      "version:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0021",
+     "name": "Sales Plan",
+     "menuPath": "DM> Demand Plan> Sales Plan",
+     "captures": [
+      "captures/DMF0021.png"
+     ],
+     "captureFrom": "목록 표 Page 15",
+     "captureFile": 1,
+     "captureSlide": 15,
+     "inMenu": true,
+     "buttons": [
+      "Sales Plan:COLUMN_SETUP",
+      "Sales Plan:DELETE",
+      "Sales Plan:EXCEL",
+      "Sales Plan:INSERT",
+      "Sales Plan:MEASURE_SELECT",
+      "Sales Plan:SAVE",
+      "Sales Plan:SEARCH",
+      "dayRange:SEARCH",
+      "measureInfo:SEARCH",
+      "spreadTitle:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH"
+     ]
+    }
+   ]
+  },
+  {
+   "top": "Demand",
+   "group": "Waterfall",
+   "screens": [
+    {
+     "id": "DMF0035",
+     "name": "Demand Plan Waterfall",
+     "menuPath": "DM> Waterfall> Demand Plan Waterfall",
+     "captures": [
+      "captures/DMF0035.png"
+     ],
+     "captureFrom": "목록 표 Page 23",
+     "captureFile": 1,
+     "captureSlide": 23,
+     "inMenu": true,
+     "buttons": [
+      "bizPlanSpreadTitle:SEARCH",
+      "bizPlanWaterfall:SEARCH",
+      "mktFcstSpreadTitle:SEARCH",
+      "mktFcstWaterfall:SEARCH",
+      "salesPlanSpreadTitle:SEARCH",
+      "salesPlanWaterfall:SEARCH",
+      "version:SAVE",
+      "version:SEARCH",
+      "versionWf:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0040",
+     "name": "MKT FCST Comparison",
+     "menuPath": "DM> Waterfall> MKT FCST Comparison",
+     "captures": [
+      "captures/DMF0040.png"
+     ],
+     "captureFrom": "목록 표 Page 24",
+     "captureFile": 1,
+     "captureSlide": 24,
+     "inMenu": true,
+     "buttons": [
+      "mktFcstComparison:SEARCH",
+      "spreadTitle:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH",
+      "version:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0068",
+     "name": "Demand Manager",
+     "menuPath": "DM> Waterfall> Demand Manager",
+     "captures": [
+      "captures/DMF0068.png"
+     ],
+     "captureFrom": "목록 표 Page 25",
+     "captureFile": 1,
+     "captureSlide": 25,
+     "inMenu": true,
+     "buttons": [
+      "ContributeSalesList:COLUMN_SETUP",
+      "ContributeSalesList:DELETE",
+      "ContributeSalesList:EDIT",
+      "ContributeSalesList:EXCEL",
+      "ContributeSalesList:INSERT",
+      "ContributeSalesList:SAVE",
+      "ContributeSalesList:SEARCH",
+      "ContributeSalesList:SP_VER",
+      "lookupProject:SEARCH",
+      "versionPopup:SEARCH"
+     ]
+    },
+    {
+     "id": "DMF0053",
+     "name": "Customer FCST Waterfall",
+     "menuPath": "DM> Waterfall> Customer FCST Waterfall",
+     "captures": [
+      "captures/DMF0053.png"
+     ],
+     "captureFrom": "목록 표 Page 26",
+     "captureFile": 1,
+     "captureSlide": 26,
+     "inMenu": true,
+     "buttons": [
+      "custFcstWaterfall:SEARCH",
+      "spreadTitle:SEARCH",
+      "titleSet:SAVE",
+      "titleSet:SEARCH"
+     ]
+    }
+   ]
+  },
+  {
+   "top": "Authority",
+   "group": "Auth Mgmt",
+   "screens": [
+    {
+     "id": "SYS0011",
+     "name": "Auth Request",
+     "menuPath": "SYSTEM> Auth Mgmt> Auth Request",
+     "captures": [
+      "captures/SYS0011.png"
+     ],
+     "captureFrom": "목록 표 Page 27",
+     "captureFile": 1,
+     "captureSlide": 27,
+     "inMenu": true,
+     "buttons": [
+      "authority:SEARCH",
+      "division:RETRIEVE",
+      "division:SEARCH",
+      "main:RETRIEVE",
+      "myAuth:ADD",
+      "myAuth:DELETE",
+      "myAuth:REQUEST",
+      "myAuth:RETRIEVE",
+      "myAuthorityList:SAVE",
+      "myAuthorityList:SEARCH",
+      "userInfo:RETRIEVE",
+      "userInfo:SAVE",
+      "userInfo:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0012",
+     "name": "Auth Approval",
+     "menuPath": "SYSTEM> Auth Mgmt> Auth Approval",
+     "captures": [
+      "captures/SYS0012.png"
+     ],
+     "captureFrom": "목록 표 Page 28",
+     "captureFile": 1,
+     "captureSlide": 28,
+     "inMenu": true,
+     "buttons": [
+      "main:APPROVE",
+      "main:REJECT",
+      "main:SEARCH"
+     ]
+    }
+   ]
+  },
+  {
+   "top": "Admin",
+   "group": "Admin",
+   "screens": [
+    {
+     "id": "SYS0002",
+     "name": "User",
+     "menuPath": "SYSTEM> Admin> User",
+     "captures": [
+      "captures/SYS0002.png"
+     ],
+     "captureFrom": "목록 표 Page 29",
+     "captureFile": 1,
+     "captureSlide": 29,
+     "inMenu": true,
+     "buttons": [
+      "userMgmt:DELETE",
+      "userMgmt:INSERT",
+      "userMgmt:SAVE",
+      "userMgmt:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0014",
+     "name": "Group User",
+     "menuPath": "SYSTEM> Admin> Group User",
+     "captures": [
+      "captures/SYS0014.png"
+     ],
+     "captureFrom": "목록 표 Page 30",
+     "captureFile": 1,
+     "captureSlide": 30,
+     "inMenu": true,
+     "buttons": [
+      "Division:DELETE",
+      "Division:INSERT",
+      "Division:SEARCH",
+      "DivisionPopup:SEARCH",
+      "GroupInfo:DELETE",
+      "GroupInfo:INSERT",
+      "GroupInfo:SAVE",
+      "GroupInfo:SEARCH",
+      "UserInfo:DELETE",
+      "UserInfo:INSERT",
+      "UserInfo:SEARCH",
+      "customer:SEARCH",
+      "division:SEARCH",
+      "main:SAVE",
+      "main:SEARCH",
+      "plant:SEARCH",
+      "userInfo:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0010",
+     "name": "Lookup",
+     "menuPath": "SYSTEM> Admin> Lookup",
+     "captures": [
+      "captures/SYS0010.png"
+     ],
+     "captureFrom": "목록 표 Page 31",
+     "captureFile": 1,
+     "captureSlide": 31,
+     "inMenu": true,
+     "buttons": [
+      "lookupDetail:DELETE",
+      "lookupDetail:INSERT",
+      "lookupDetail:SAVE",
+      "lookupDetail:SEARCH",
+      "lookupMaster:DELETE",
+      "lookupMaster:INSERT",
+      "lookupMaster:SAVE",
+      "lookupMaster:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0013",
+     "name": "Dynamic Query List",
+     "menuPath": "SYSTEM> Admin> Dynamic Query List",
+     "captures": [
+      "captures/SYS0013.png"
+     ],
+     "captureFrom": "목록 표 Page 32",
+     "captureFile": 1,
+     "captureSlide": 32,
+     "inMenu": true,
+     "buttons": [
+      "columns:DELETE",
+      "columns:INSERT",
+      "columns:SAVE",
+      "columns:SEARCH",
+      "history:SEARCH",
+      "main:DELETE",
+      "main:INSERT",
+      "main:SAVE",
+      "main:SEARCH",
+      "parameters:DELETE",
+      "parameters:INSERT",
+      "parameters:SAVE",
+      "parameters:SEARCH",
+      "result:EXECUTE"
+     ]
+    }
+   ]
+  },
+  {
+   "top": "Admin",
+   "group": "System",
+   "screens": [
+    {
+     "id": "SYS0003",
+     "name": "Menu",
+     "menuPath": "SYSTEM> System> Menu",
+     "captures": [
+      "captures/SYS0003.png"
+     ],
+     "captureFrom": "목록 표 Page 34",
+     "captureFile": 1,
+     "captureSlide": 34,
+     "inMenu": true,
+     "buttons": [
+      "levelOneMenu:DELETE",
+      "levelOneMenu:INSERT",
+      "levelOneMenu:SAVE",
+      "levelOneMenu:SEARCH",
+      "levelThreeMenu:DELETE",
+      "levelThreeMenu:INSERT",
+      "levelThreeMenu:SAVE",
+      "levelThreeMenu:SEARCH",
+      "levelTwoMenu:DELETE",
+      "levelTwoMenu:INSERT",
+      "levelTwoMenu:SAVE",
+      "levelTwoMenu:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0007",
+     "name": "Group",
+     "menuPath": "SYSTEM> System> Group",
+     "captures": [
+      "captures/SYS0007.png"
+     ],
+     "captureFrom": "목록 표 Page 35",
+     "captureFile": 1,
+     "captureSlide": 35,
+     "inMenu": true,
+     "buttons": [
+      "groupMgmt:DELETE",
+      "groupMgmt:INSERT",
+      "groupMgmt:SAVE",
+      "groupMgmt:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0008",
+     "name": "Group Menu",
+     "menuPath": "SYSTEM> System> Group Menu",
+     "captures": [
+      "captures/SYS0008.png"
+     ],
+     "captureFrom": "목록 표 Page 36",
+     "captureFile": 1,
+     "captureSlide": 36,
+     "inMenu": true,
+     "buttons": [
+      "button:SAVE",
+      "button:SEARCH",
+      "group:SEARCH",
+      "menu:SAVE",
+      "menu:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0001",
+     "name": "Message",
+     "menuPath": "SYSTEM> System> Message",
+     "captures": [
+      "captures/SYS0001.png"
+     ],
+     "captureFrom": "목록 표 Page 37",
+     "captureFile": 1,
+     "captureSlide": 37,
+     "inMenu": true,
+     "buttons": [
+      "msgMgmt:DELETE",
+      "msgMgmt:INSERT",
+      "msgMgmt:SAVE",
+      "msgMgmt:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0004",
+     "name": "UI Category Setup",
+     "menuPath": "SYSTEM> System> UI Category Setup",
+     "captures": [
+      "captures/SYS0004.png"
+     ],
+     "captureFrom": "목록 표 Page 38",
+     "captureFile": 1,
+     "captureSlide": 38,
+     "inMenu": true,
+     "buttons": [
+      "column:DELETE",
+      "column:SAVE",
+      "column:SEARCH",
+      "measure:SAVE"
+     ]
+    },
+    {
+     "id": "SYS0017",
+     "name": "Mail Setup",
+     "menuPath": "SYSTEM> System> Mail Setup",
+     "captures": [
+      "captures/SYS0017.png"
+     ],
+     "captureFrom": "목록 표 Page 39",
+     "captureFile": 1,
+     "captureSlide": 39,
+     "inMenu": true,
+     "buttons": [
+      "allReceiver:SEARCH",
+      "main:DELETE",
+      "main:INSERT",
+      "main:SAVE",
+      "main:SEARCH",
+      "message:DELETE",
+      "message:INSERT",
+      "message:SAVE",
+      "message:SEARCH",
+      "selReceiver:DELETE",
+      "selReceiver:SAVE",
+      "selReceiver:SEARCH",
+      "sqlText:SAVE",
+      "sqlText:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0005",
+     "name": "Proc Setting",
+     "menuPath": "SYSTEM> System> Proc Setting",
+     "captures": [
+      "captures/SYS0005.png"
+     ],
+     "captureFrom": "목록 표 Page 44",
+     "captureFile": 1,
+     "captureSlide": 44,
+     "inMenu": true,
+     "buttons": [
+      "procInfo:SAVE",
+      "procInfo:SEARCH",
+      "procList:SAVE",
+      "procList:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0006",
+     "name": "API Setting",
+     "menuPath": "SYSTEM> System> API Setting",
+     "captures": [
+      "captures/SYS0006.png"
+     ],
+     "captureFrom": "목록 표 Page 45",
+     "captureFile": 1,
+     "captureSlide": 45,
+     "inMenu": true,
+     "buttons": [
+      "aaaa:SEARCH",
+      "apiList:DELETE",
+      "apiList:INSERT",
+      "apiList:SAVE",
+      "apiList:SEARCH"
+     ]
+    },
+    {
+     "id": "SYS0009",
+     "name": "Menu Button",
+     "menuPath": "SYSTEM> System> Menu Button",
+     "captures": [
+      "captures/SYS0009.png"
+     ],
+     "captureFrom": "목록 표 Page 46",
+     "captureFile": 1,
+     "captureSlide": 46,
+     "inMenu": true,
+     "buttons": [
+      "menuBtnList:DELETE",
+      "menuBtnList:INSERT",
+      "menuBtnList:SAVE",
+      "menuBtnList:SEARCH"
+     ]
+    }
+   ]
+  },
+  {
+   "top": "SYSTEM",
+   "group": "메뉴 미등록",
+   "screens": [
+    {
+     "id": "SYS0018",
+     "name": "Notice Setup",
+     "menuPath": "SYSTEM> 메뉴 미등록> Notice Setup",
+     "captures": [
+      "captures/SYS0018.png"
+     ],
+     "captureFrom": "목록 표 Page 40",
+     "captureFile": 1,
+     "captureSlide": 40,
+     "inMenu": false,
+     "buttons": []
+    },
+    {
+     "id": "SYS0019",
+     "name": "Batch Log",
+     "menuPath": "SYSTEM> 메뉴 미등록> Batch Log",
+     "captures": [
+      "captures/SYS0019.png"
+     ],
+     "captureFrom": "목록 표 Page 41",
+     "captureFile": 1,
+     "captureSlide": 41,
+     "inMenu": false,
+     "buttons": []
+    },
+    {
+     "id": "SYS0020",
+     "name": "SMS Setup",
+     "menuPath": "SYSTEM> 메뉴 미등록> SMS Setup",
+     "captures": [
+      "captures/SYS0020.png"
+     ],
+     "captureFrom": "목록 표 Page 42",
+     "captureFile": 1,
+     "captureSlide": 42,
+     "inMenu": false,
+     "buttons": []
+    },
+    {
+     "id": "SYS0021",
+     "name": "SCP IF Blocking",
+     "menuPath": "SYSTEM> 메뉴 미등록> SCP IF Blocking",
+     "captures": [
+      "captures/SYS0021.png"
+     ],
+     "captureFrom": "목록 표 Page 43",
+     "captureFile": 1,
+     "captureSlide": 43,
+     "inMenu": false,
+     "buttons": []
+    }
+   ]
+  }
+ ],
+ "captureFile": [
+  "c:\\Users\\LG\\Downloads\\LGES-Next 화면 정의서 20260930 v1.0.pptx"
+ ],
+ "sample": "c:\\Users\\LG\\Downloads\\SCM_IM_사용자매뉴얼_DM_v1.0.pptx",
+ "at": "2026-11-23 18:01",
+ "order": [
+  "DMF0004",
+  "DMF0005",
+  "DMF0006",
+  "DMF0007",
+  "DMF0020",
+  "DMF0043",
+  "DMF0043_01",
+  "DMF0008",
+  "DMF0072",
+  "DMF0003",
+  "DMF0021",
+  "DMF0048",
+  "DMF0014",
+  "DMF0042",
+  "DMF0044",
+  "DMF0049",
+  "DMF0074",
+  "DMF0082",
+  "DMF0035",
+  "DMF0040",
+  "DMF0068",
+  "DMF0053",
+  "SYS0011",
+  "SYS0012",
+  "SYS0002",
+  "SYS0014",
+  "SYS0010",
+  "SYS0013",
+  "SYS0003",
+  "SYS0007",
+  "SYS0008",
+  "SYS0001",
+  "SYS0004",
+  "SYS0017",
+  "SYS0018",
+  "SYS0019",
+  "SYS0020",
+  "SYS0021",
+  "SYS0005",
+  "SYS0006",
+  "SYS0009"
+ ],
+ "orderRule": "화면 장표 = 최신 UI 캡처 파일 화면 목록 순서, 계층도 = 사내 메뉴(SCM_ADM_MNU_M) 묶음과 SORT_ORD",
+ "notInCapture": [
+  {
+   "id": "DMF0005_01",
+   "name": "Sales Site Project Model(ESS)",
+   "group": "Demand Master"
+  },
+  {
+   "id": "DMF0020_01",
+   "name": "Sales Price(ESS)",
+   "group": "Demand Master"
+  },
+  {
+   "id": "DMF0083",
+   "name": "DMF0083",
+   "group": "Demand Master"
+  },
+  {
+   "id": "DMF0003_01",
+   "name": "MKT FCST(ESS)",
+   "group": "Demand Plan"
+  },
+  {
+   "id": "DMF0021_01",
+   "name": "Sales Plan(ESS)",
+   "group": "Demand Plan"
+  },
+  {
+   "id": "DMF0035_01",
+   "name": "Demand Plan Waterfall(ESS)",
+   "group": "Waterfall"
+  },
+  {
+   "id": "DMD0001",
+   "name": "Report",
+   "group": "Dashboard"
+  },
+  {
+   "id": "DMF0022",
+   "name": "Sales Plan Waterfall",
+   "group": "Waterfall"
+  },
+  {
+   "id": "SYS0016",
+   "name": "Notice Setup",
+   "group": "System"
+  },
+  {
+   "id": "SCM0016",
+   "name": "Batch Log",
+   "group": "System"
+  },
+  {
+   "id": "SCM0007",
+   "name": "SMS Setup",
+   "group": "System"
+  },
+  {
+   "id": "SCM0019",
+   "name": "SCP IF Blocking",
+   "group": "System"
+  }
+ ],
+ "notInMenu": [
+  "SYS0018",
+  "SYS0019",
+  "SYS0020",
+  "SYS0021"
+ ]
+}

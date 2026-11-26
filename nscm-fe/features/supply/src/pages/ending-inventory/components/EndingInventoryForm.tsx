@@ -61,9 +61,18 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
   const set = useEndingInventoryStore(state => state.setSearchParams);
   const openSearchArea = useEndingInventoryStore(state => state.isOpenSearchArea);
   const setNoDivisionAuth = useEndingInventoryStore(state => state.setNoDivisionAuth);
+  const setAuthDivisions = useEndingInventoryStore(state => state.setAuthDivisions);
 
-  // ALL(전체)=빈값 전달 → 콤보 SQL '@x IS NULL'(Oracle 에서 '' IS NULL=TRUE) → 무필터(design 02 §2.1-(2)).
-  const divisionParam = sc.divisionId === 'ALL' ? '' : sc.divisionId;
+  // Division 콤보(권한 Division 목록) — Plant/Profit Center 콤보가 ALL 일 때 이 목록으로 스코프하므로 먼저 받는다.
+  const [divisions] = useTabComboQueries({ filters: [COMBO.DIVISION] });
+  const authDivisionKey = toOptions(divisions)
+    .map(o => o.value)
+    .join(',');
+
+  // Division=ALL 이면 권한 Division 코드 열거를 넘긴다 — AS-IS SetChangedControl/RefreshProfitByDivisionPlant
+  //   (cs:252·269) GetCheckedListValue(dtMyDivision, ...) 2-arg 가 ALL 을 권한 division 으로 펼쳐 Plant/Profit 을
+  //   DIVISION_ID IN (...) 로 거른 것과 등가. 빈값(무필터)으로 보내면 권한 밖 사업부 Plant 까지 나온다(제한 계정 실측).
+  const divisionParam = sc.divisionId === 'ALL' ? authDivisionKey : sc.divisionId;
   const plantParam = sc.plantId === 'ALL' ? '' : sc.plantId;
   // Profit Center 콤보 = AS-IS SCP0085_GET_SEARCH_INFO 이관 — 선택 기간 + Division/Plant 로 스코프(AS-IS 완전 동일).
   //   AS-IS SP 는 @P_YYYYMMDD 만 받고 DIVISION_ID/PLANT_ID 를 함께 내려 C# 클라가 선택 Division/Plant 로 걸렀다.
@@ -71,9 +80,8 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
   //   @yyyymmdd 길이로 월/일 테이블 분기(6=_R.YYYYMM, 8=_R_D.CUTOFF_DATE). 기간·Division·Plant 변경 시 재조회.
   const periodParam = sc.mode === SEARCH_MODE.DAILY ? sc.date : sc.month;
 
-  const [divisions, plants, profitCenters, monthRangeRaw] = useTabComboQueries({
+  const [plants, profitCenters, monthRangeRaw] = useTabComboQueries({
     filters: [
-      COMBO.DIVISION,
       { comboId: COMBO.PLANT, divisionId: divisionParam },
       {
         comboId: COMBO.PROFIT_CENTER,
@@ -139,6 +147,11 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
   useEffect(() => {
     setNoDivisionAuth(noDivisionAuth);
   }, [noDivisionAuth, setNoDivisionAuth]);
+
+  // 권한 Division 코드를 store 로 승계 — 조회(setFilters) 시 Division ALL 을 이 열거로 펼친다.
+  useEffect(() => {
+    setAuthDivisions(authDivisionKey ? authDivisionKey.split(',') : []);
+  }, [authDivisionKey, setAuthDivisions]);
 
   const isDaily = sc.mode === SEARCH_MODE.DAILY;
 

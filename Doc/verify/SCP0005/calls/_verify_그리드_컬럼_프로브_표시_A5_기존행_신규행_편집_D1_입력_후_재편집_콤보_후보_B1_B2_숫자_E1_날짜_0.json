@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 1802,
-  "at": "2026-11-20T00:22:10.372Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1444,
+  "at": "2026-11-25T16:19:28.727Z",
+  "user": "bindy122678",
   "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 985,
-  "at": "2026-11-20T00:22:13.051Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 560,
+  "at": "2026-11-25T16:19:31.535Z",
+  "user": "bindy122678",
   "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
  },
  {
@@ -34,8 +34,8 @@
   "status": 200,
   "rows": 2,
   "dur": 115,
-  "at": "2026-11-20T00:22:14.827Z",
-  "user": "minyonglee1",
+  "at": "2026-11-25T16:19:32.965Z",
+  "user": "bindy122678",
   "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
  },
  {
@@ -46,9 +46,9 @@
   "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 101,
-  "at": "2026-11-20T00:22:18.113Z",
-  "user": "minyonglee1",
+  "dur": 103,
+  "at": "2026-11-25T16:19:35.420Z",
+  "user": "bindy122678",
   "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
  },
  {
@@ -59,9 +59,48 @@
   "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 150,
-  "at": "2026-11-20T00:24:43.288Z",
-  "user": "minyonglee1",
+  "dur": 103,
+  "at": "2026-11-25T16:22:26.734Z",
+  "user": "bindy122678",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"ZZ_E2\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 106,
+  "at": "2026-11-25T16:22:27.147Z",
+  "user": "bindy122678",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 93,
+  "at": "2026-11-25T16:22:28.035Z",
+  "user": "bindy122678",
+  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH_CITY",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 125,
+  "at": "2026-11-25T16:22:28.426Z",
+  "user": "bindy122678",
   "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
  },
  {
@@ -73,8 +112,8 @@
   "status": 200,
   "rows": 1,
   "dur": 105,
-  "at": "2026-11-20T00:24:43.637Z",
-  "user": "minyonglee1",
+  "at": "2026-11-25T16:22:28.777Z",
+  "user": "bindy122678",
   "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
  },
  {
@@ -85,48 +124,9 @@
   "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 134,
-  "at": "2026-11-20T00:24:44.513Z",
-  "user": "minyonglee1",
-  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
- },
- {
-  "menu": "SCP0005",
-  "sheet": "route",
-  "btn": "SEARCH_CITY",
-  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
-  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
-  "status": 200,
-  "rows": 2,
-  "dur": 119,
-  "at": "2026-11-20T00:24:44.886Z",
-  "user": "minyonglee1",
-  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
- },
- {
-  "menu": "SCP0005",
-  "sheet": "route",
-  "btn": "SEARCH_CITY",
-  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
-  "postData": "{\"country\":\"\",\"city\":\"ZZ_E2\",\"cityName\":\"\"}",
-  "status": 200,
-  "rows": 1,
-  "dur": 125,
-  "at": "2026-11-20T00:24:45.209Z",
-  "user": "minyonglee1",
-  "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
- },
- {
-  "menu": "SCP0005",
-  "sheet": "route",
-  "btn": "SEARCH_CITY",
-  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH_CITY/call-proc",
-  "postData": "{\"country\":\"\",\"city\":\"CAWND\",\"cityName\":\"\"}",
-  "status": 200,
-  "rows": 2,
-  "dur": 150,
-  "at": "2026-11-20T00:24:46.100Z",
-  "user": "minyonglee1",
+  "dur": 161,
+  "at": "2026-11-25T16:22:29.697Z",
+  "user": "bindy122678",
   "test": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)"
  }
 ]

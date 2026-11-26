@@ -1,0 +1,27 @@
+﻿SELECT ISNULL(B.YIELD, (CASE WHEN A.YIELD = 0 THEN 1 ELSE A.YIELD END)) AS YIELD
+      FROM   SCM_YIELD_M A WITH(NOLOCK)
+      LEFT OUTER JOIN (
+        SELECT (CASE WHEN MAX(YIELD) = 0 THEN 1 ELSE MAX(YIELD) END) AS YIELD
+        FROM   SCM_YIELD_EXCEPT_M A WITH(NOLOCK)
+                  WHERE  1=1
+          @CTRL_COMPANY_LT
+        AND A.DIVISION_ID  = @DIVISION_ID
+        AND    A.SITE_ID      = @SITE_ID
+        AND    A.PLANT_ID     = @PLANT_ID
+        AND    A.FACTORY_ID   = @FACTORY_ID
+        AND    A.OPERATION_ID = @OPERATION_ID
+        AND    A.LINE_ID      = @LINE_ID
+        AND    A.ITEM_ID      = @ITEM_ID
+        AND    CONVERT(DATE,@PLAN_DATE) BETWEEN A.START_TIME AND A.END_TIME
+      ) B
+      on     1=1
+          WHERE  1=1
+          @CTRL_COMPANY_LT 
+      AND A.DIVISION_ID  = @DIVISION_ID
+      AND    A.SITE_ID      = @SITE_ID
+      AND    A.PLANT_ID     = @PLANT_ID
+      AND    A.FACTORY_ID   = @FACTORY_ID
+      AND    A.OPERATION_ID = @OPERATION_ID
+      AND    A.LINE_ID      = @LINE_ID
+      AND    A.ITEM_ID      = @ITEM_ID
+      AND    A.MONTH        = SUBSTRING(@PLAN_DATE,1,6)

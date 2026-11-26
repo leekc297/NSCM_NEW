@@ -3,13 +3,20 @@ import * as path from 'node:path';
 import { test as base } from '@playwright/test';
 import { Nscm, CFG, beLogMark, beLogErrors } from '../lib/nscm';
 import { installRequestMutations, flushMutationLog } from '../lib/mutate';
-import { installWriteGuard, recordKind } from '../lib/writeguard';
+import { installWriteGuard, recordKind, type Guard } from '../lib/writeguard';
+import { pageReg } from '../lib/pagereg';
 export type Opts = { account: string; division: string };
 
 // 2026-11-06(속도 개선 ① 계측): 테스트 1건의 시간을 구간별로 잰다 — 로그인 · 화면 열기 · 조회 · 고정 대기(page.waitForTimeout) · 나머지(본문).
 //   판정·동작은 바꾸지 않는다(원 함수를 그대로 부르고 걸린 시간만 더함). 결과 = 한 줄 JSON 을 _test_timing.jsonl 에 덧붙인다
 //   (VERIFY_ID 있으면 Doc/verify/<ID>/ · 없으면 E2E_RESULTS 또는 Doc/e2e/results/). 팝업으로 새로 뜬 page 의 대기는 세지 않는다(한계).
 const TIMING_RUN = new Date().toISOString();
+// 2026-11-20 작업 재개(플랜 vm-ui-snug-mountain R3): 시험 기록에 실행 ID(vrun = VERIFY_RUN_ID), 묶음 제목(tp), 전체 제목(full), 최종 상태, 재시도 상한(rmax), 오류 문구 첫 500자(err) , 
+//   동시 실행 단계(phase)와 쓰기 요청 차단 여부(wblocked)를 남긴다. 끊긴 E2E 를 다시 돌릴 때 끝난 시험을 건너뛰고 보고서 항목을 이 기록으로 다시 만든다(e2e_shard.py done_tests, carry_report).
+//   상태는 픽스처 정리(BE DB 오류 판정)까지 끝난 값으로 쓴다, 정리에서 실패로 바뀌면 failed
+const VRUN = process.env.VERIFY_RUN_ID || '';
+// eslint-disable-next-line no-control-regex
+const plainErr = (m: unknown): string => String(m || '').replace(/\x1b\[[0-9;]*[A-Za-z]/g, '').slice(0, 500);
 // 시간초과로 끝난 locator.waitFor(= '나타나면 쓰고 아니면 넘어가는' 탐침이 시간을 다 쓴 경우)를 위치별로 센다 — 'miss@파일:줄'.
 //   Locator 프로토타입을 워커당 1회 감싼다(원 함수 그대로 호출 · 예외도 그대로 던짐). 현재 테스트의 기록 함수는 CUR_SITE 로 연결.
 //   ⚠ 한계: Promise.race 에서 진 쪽(다른 쪽이 먼저 성공)의 시간초과도 miss 로 잡힌다 — 이 대기는 뒤에서 혼자 끝나 실제 시간을 쓰지 않는다
@@ -46,20 +53,27 @@ function timingProbe(n: Nscm, page: import('@playwright/test').Page) {
   const origWait = page.waitForTimeout.bind(page);
   page.waitForTimeout = async (ms: number) => { const s = Date.now(); try { return await origWait(ms); } finally { add('wait', Date.now() - s); site('wait', Date.now() - s); } };
   let wrappedLogin = false;
+  let tEnd = 0;  // 본문, 픽스처 사용이 끝난 시각(소요는 종전처럼 여기까지, 기록은 정리 뒤에 씀)
   return {
+    mark: () => { tEnd = Date.now(); },
     add: (k: string, ms: number) => { add(k, ms); if (!wrappedLogin) { wrappedLogin = true; wrap('loginAs', 'login'); } },  // 픽스처 첫 로그인 뒤부터 본문 안 재로그인(계정 순회)도 센다
-    flush(testInfo: import('@playwright/test').TestInfo) {
+    flush(testInfo: import('@playwright/test').TestInfo, fin?: { guard?: Guard; thrown?: unknown }) {
       CUR_SITE = null;
       try {
-        const total = Date.now() - t0;
+        const total = (tEnd || Date.now()) - t0;
         // open 안의 대기·search 안의 대기는 wait 에도 잡힌다(겹침) — 나머지(body)는 겹침을 빼지 않은 보수 값이므로 0 미만이면 0
         const body = Math.max(0, total - acc.login - acc.open - acc.search);
         const id = (process.env.VERIFY_ID || '').toUpperCase();
         const dir = id ? path.join(__dirname, '..', '..', '..', 'Doc', 'verify', id) : (process.env.E2E_RESULTS || path.join(__dirname, '..', '..', '..', 'Doc', 'e2e', 'results'));
         fs.mkdirSync(dir, { recursive: true });
-        const row = { run: TIMING_RUN, at: new Date().toISOString(), file: path.basename(testInfo.file), title: testInfo.title, status: testInfo.status, retry: testInfo.retry,
+        const thrown = fin && fin.thrown;
+        const status = thrown && (testInfo.status === 'passed' || testInfo.status === 'skipped') ? 'failed' : testInfo.status;
+        const err = plainErr(thrown ? (thrown as { message?: string }).message || thrown : (testInfo.errors[0] && testInfo.errors[0].message) || (testInfo.error && testInfo.error.message) || '');
+        const tp = testInfo.titlePath.slice(1, -1);
+        const row = { run: TIMING_RUN, vrun: VRUN, at: new Date().toISOString(), file: path.basename(testInfo.file), title: testInfo.title, full: [...tp, testInfo.title].join(' '), tp, status, retry: testInfo.retry, rmax: testInfo.project.retries,
+          err, phase: process.env.E2E_PHASE || 'serial', wblocked: !!(fin && fin.guard && fin.guard.blocked.length), ann: testInfo.annotations.map(a => ({ type: a.type, description: a.description })),
           ms: { total, login: acc.login, open: acc.open, search: acc.search, wait: acc.wait, miss: acc.miss || 0, body }, n: cnt,
-          parts: n.tparts, reqs: n.reqs,
+          parts: n.tparts, reqs: n.reqs, waitWhy: pageReg.get(n.page)?.waitWhy || [], waitWhyDrop: pageReg.get(n.page)?.waitWhyDrop || 0,
           sites: Object.fromEntries(Object.entries(sites).sort((x, y) => y[1] - x[1]).slice(0, 15)) };
         fs.appendFileSync(path.join(dir, '_test_timing.jsonl'), JSON.stringify(row) + '\n', 'utf8');
       } catch { /* 계측 실패는 판정에 영향 없음 */ }
@@ -82,7 +96,9 @@ export const test = base.extend<{ nscm: Nscm } & Opts>({
     const tm = timingProbe(n, page);
     const tl = Date.now(); await n.loginAs(account); tm.add('login', Date.now() - tl);
     await use(n);
-    tm.flush(testInfo);
+    tm.mark();
+    let thrown: unknown = null;
+    try {
     recordKind(testInfo.file, testInfo.title, wg);
     // 2026-11-06 플랜 2-1: 이 테스트가 보낸 모든 non-SAVE call-proc 본문 → Doc/verify/<ID>/calls/<spec>_<test>_<retry>.json (a1_live.json 은 마지막 1건만) · diff_verify.py 입력
     try {
@@ -128,6 +144,7 @@ export const test = base.extend<{ nscm: Nscm } & Opts>({
         throw new Error(`BE DB 오류 — ${syn.length ? `${grp} — tools/Harness/verify/syn_check.py 로 정적 확인` : ''}${syn.length && errs.length > syn.length ? ' · ' : ''}${errs.length > syn.length ? `SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})` : ''}`);
       }
     }
+    } catch (e) { thrown = e; throw e; } finally { tm.flush(testInfo, { guard: wg, thrown }); }
   }, { timeout: 360_000 }],
 });
 export { expect } from '@playwright/test';

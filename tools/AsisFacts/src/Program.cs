@@ -22,7 +22,7 @@ public static class Program
         var cfg = Config.Load(cfgPath);
         var root = Path.GetFullPath(Config.NormPath(rootOverride ?? cfg.asisRoot));
         var outDir = Path.GetFullPath(Config.NormPath(outOverride ?? cfg.outDir));
-        if (cmd is "scan" or "pack" or "agent" && !Directory.Exists(root)) { Console.Error.WriteLine("asisRoot not found: " + root); return 2; }
+        if (cmd is "scan" or "pack" or "agent" or "resolve" && !Directory.Exists(root)) { Console.Error.WriteLine("asisRoot not found: " + root); return 2; }
         if (outDir.StartsWith(root.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
         { Console.Error.WriteLine("outDir 는 asisRoot 바깥이어야 합니다 (As-is 원본은 읽기 전용)."); return 2; }
         Directory.CreateDirectory(outDir);
@@ -35,6 +35,7 @@ public static class Program
             "agent" => Agent.Run(cfg, outDir, args.Skip(1).Where(a => !a.StartsWith("--") && !IsOptValue(args, a)).ToList(), Opt(args, "--driver"), Opt(args, "--model"), Opt(args, "--agent-out"), Opt(args, "--phase")),
             "sqltest" => SqlTest(args[1]),
             "pack" => Pack.Run(cfg, root, outDir, args.Skip(1).Where(a => !a.StartsWith("--") && !IsOptValue(args, a)).ToList()),
+            "resolve" => ResolveCmd.Run(cfg, root, Opt(args, "--in"), Opt(args, "--result")),   // 2026-11-25 의미 분석 값 일괄 조회(검사 하네스용)
             _ => Usage()
         };
     }
@@ -131,6 +132,9 @@ public static class Scan
         var sites = facts.SelectMany(x => x.ff.Sites).ToList();
         var calls = facts.SelectMany(x => x.ff.Calls).ToList();
         Log($"extract: sites {sites.Count} (commented {sites.Count(s => s.Commented)}, inactive {sites.Count(s => !s.Active)}), calls {calls.Count}");
+
+        // ── 3.5 Roslyn 의미 분석으로 덜 풀린 값 보완(2026-11-25 · 범위 = asisfacts.json semanticScreens · semanticAlwaysPaths)
+        SemanticRefine.Run(cfg, root, files.ToList(), sites, calls, log, outDir);
 
         // ── 4. 결합 + 전파
         Linker.AttachReqParams(sites);

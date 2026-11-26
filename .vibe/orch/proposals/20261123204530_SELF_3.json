@@ -1,0 +1,104 @@
+{
+  "id": "20261123204530_SELF_3",
+  "at": "2026-11-23T20:45:30+09:00",
+  "ms": 1795434330433,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/_rules_vn/hooks/subtitle button actions mandatory.md|docrulesvn개파일n곳이cr룰을따로적고toberulesdiff",
+  "title": "사용자 지시 R38 같은 문제: Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md:32 Doc/_rules_v2 30개 파일, 71곳이 CR 룰을 따로 적고 TOBE_RULES_DIFF.md, TOBE_RULES_DEV.md 참조 0건(search-",
+  "evidence": "규칙 R38 \"TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함\" (원래 지시 2026-11-11 14:28 \"1. 'AS-IS 와 달라도 오류 아님'인지 'TO-BE 개발 규칙' 의 경우 별도의 MD 파일로 일괄 관리할 수 있도록 보완 요청 (현재의 MD 파일에 분산되어 있으면 취합해서 관리 요청) 2. M1 진행해주세요. 3. 2개 항목은 차후 결정 예정.\") · Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md:32 ### 1.0 ⭐ 공통버튼 노출 룰 (TO-BE 확정 — 사용자 지시 2026-10-26, CR-070)",
+  "targets": [
+    "Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md"
+  ],
+  "before_after": "CR 본문 서술을 정본 파일 참조로 바꿈. 정본에 없는 CR 은 원천 CSV 에 먼저 등록함. 정본 밖 CR 정의 건수를 세는 검사를 doc_proof 또는 selfcheck 에 추가함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T07:24:23+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T07:27:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0724"
+    },
+    {
+      "at": "2026-11-24T07:27:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T07:39:41+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T07:39:41+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전(2026-11-24 07:28 시작) 'ALL OK  파일 74/74  PASS 1161  FAIL 0  210.1s' → 반영 뒤(RESULT at 2026-11-23T22:32:17.923Z = 07:32 KST) 'ALL OK  파일 74/74  PASS 1161  FAIL 0  210.6s'. 대상 파일 34행 'TOBE_RULES_DEV.md CR-070' 참조 1건, 기존 CR-070 본문 인용 문장 0건(grep 확인) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T07-27-59_claude_orch.log",
+      "sec": 488,
+      "costUsd": 0.9600369999999999,
+      "files": [
+        "Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함 규칙을 Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R38|Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md",
+  "needsApproval": "자동 범위 밖 Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795472662828,
+  "autoFp": "887bdaec4b",
+  "applyStartMs": 1795472879811,
+  "verifyJudge": {
+    "at": "2026-11-24T07:36:09+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0724",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795473581172,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 ALL OK 파일 74/74 PASS 1161 FAIL 0 (210.1s) → 반영 뒤 ALL OK 파일 74/74 PASS 1161 FAIL 0 (210.6s). t_webview_syntax.js PASS 19 → PASS 19"
+      }
+    ],
+    "changed_files": [
+      "Doc/_rules_v2/hooks/subtitle-button-actions-mandatory.md"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전(2026-11-24 07:28 시작) 'ALL OK  파일 74/74  PASS 1161  FAIL 0  210.1s' → 반영 뒤(RESULT at 2026-11-23T22:32:17.923Z = 07:32 KST) 'ALL OK  파일 74/74  PASS 1161  FAIL 0  210.6s'. 대상 파일 34행 'TOBE_RULES_DEV.md CR-070' 참조 1건, 기존 CR-070 본문 인용 문장 0건(grep 확인)",
+    "note": "§1.0 CR-070 본문 2줄을 정본 TOBE_RULES_DEV.md CR-070 참조로 바꿈. CR-057, CR-085, CR-094 도 같은 정본 행 참조로 적음. 문서 내 CR 4건은 원천 confirmed_requirements.csv(58, 71, 86, 95행)와 정본에 이미 있어 CSV 등록 없음. 정본 밖 CR 정의 건수 검사(doc_proof, selfcheck) 추가와 나머지 Doc/_rules_v2 29개 파일은 targets 밖이라 하지 않음, 추가 확인 후보. 작업 모드 DB_ONLY, 룰 문서라 hook 차단 없음. 걸린 시간 07:28:08~07:35:52(7분 44초), 오래 걸린 단계 run_all.js 2회(210.1s, 210.6s)"
+  },
+  "snap": "prop_20261123204530_SELF_3"
+}

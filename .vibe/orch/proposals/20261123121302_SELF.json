@@ -1,0 +1,126 @@
+{
+  "id": "20261123121302_SELF",
+  "at": "2026-11-23T12:13:02+09:00",
+  "ms": 1795403582842,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|orch agent|agentrules skip norecord rn",
+  "title": "VMO 열린 일 순환 1조각: 에이전트 담당 밖 사건 기록 남기기, 되돌린 뒤 남은 시험 정리",
+  "evidence": "orch-agent.js:298 agentRules 밖 규칙(R12 등) 사건을 기록 없이 continue · orch-agent.js:18 DEF agentRules 에 R12 없음 · result.json:900-901(2026-11-20 18:27) R12 열린 사건 10건 174~209분 · 반영 실패 20261120183740_VISION(2026-11-23 12:11:10) 뒤 남은 test/t_orch_worklist.js:64,71(sc.worklistCycle 없음), test/t_orch_usercheck.js:54-61(orch-usercheck.js 에 worklist 없음) (반영 실패한 20261120183740_VISION 를 고친 안 · 원인 검증 4번(실가동 24시간 result.json S13|U3|idleInc 0건)은 반영 시점에 잴 수 없어 verified false(repair_20261120183740_VISION.json result.note, history 2026-11-23 12:11:10). 3번 run_all 전체 통과는 대상 밖 상태에 걸린 절대값. harness.json 은 승인 대상 설정 파일인데 코드 안과 섞임(.claude/agents/vm-orchestra.md:95), orch-worklist.js:18 DEF 기본값이 있어 불필요. 되돌린 뒤 orch-worklist.js, test/t_orch_worklist.js, test/t_orch_usercheck.js:54-61 이 남음. t_orch_worklist.js:64,71 은 orch-selfcheck.js 에 없는 sc.worklistCycle 을 호출하고, t_orch_usercheck.js:57 은 orch-usercheck.js 에 없는 S13|U3|worklist 를 기대함(소스 확인, 실행 미측정).)",
+  "targets": [
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/test/t_orch_worklist.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "변경 전: 에이전트 담당 규칙 밖 사건(R12 등)을 아무 기록 없이 넘겨서 열린 채 몇 시간 남아도 이유가 보이지 않음. 변경 후: 사건마다 '에이전트 담당 아님' 기록이 1건 남음. 다시 들어와도 1건을 유지하고 사건은 열린 상태로 둠. 시험 파일 정리: t_orch_worklist.js 는 drain 자식 시험(⑧)만 남기고 sc.worklistCycle·wl.tick 부분(①~⑦)을 뺌. t_orch_usercheck.js:54-61 U3 장부 시험을 뺌. 장부 순환(orch-worklist.js 연결, orch-selfcheck.js worklistCycle, orch-usercheck.js U3 장부)은 다음 조각으로 미룸.",
+  "verify": "1) node tools/VibeManager/test/t_orch_worklist.js tools/VibeManager: 'drain: agentRules 밖 R12 = 담당 아님 기록 1건' 반영 전 미측정 → 반영 뒤 기대 PASS, 'drain: 다시 넣어도 담당 아님 기록은 1건 유지' PASS, '사건은 열림 유지' PASS · 2) node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager: 'S13|U3|worklist' 시험 반영 전 3건(미실행, 소스 기준 54-61행) → 반영 뒤 0건, 나머지 시험 건수는 반영 전과 같음(반영 전 미측정)",
+  "rollback": "orch-agent.js 의 담당 아님 기록 줄을 빼면 종전처럼 기록 없이 넘김. 시험 파일 2개는 반영 전 백업에서 복원",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T18:58:31+09:00",
+      "by": "Claude Code 세션(사용자 지시)",
+      "what": "시험 정리 부분은 직접 반영함: test/t_orch_usercheck.js U3 장부 시험 9줄 뺌(ALL PASS), test/t_orch_worklist.js 는 test/t_orch_worklist.js.bak_failed_20261120183740_VISION 로 치움. orch-worklist.js 는 그대로 둠. 남은 일 = orch-agent.js 담당 아님 기록과 t_orch_worklist.js drain 시험(⑧) 새로 쓰기"
+    },
+    {
+      "at": "2026-11-23T20:28:26+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T20:32:06+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1137, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self2028"
+    },
+    {
+      "at": "2026-11-23T20:32:09+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T20:37:21+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1141, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-agent.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T20:37:21+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 2건. 2026-11-23 20:32:55~20:33:23. v1 t_orch_worklist.js 없음(MODULE_NOT_FOUND) → PASS 4건 ALL PASS(기록 what='에이전트 담당 아님: 규칙 R12 은 agentRules(R1) 밖. 사건은 열린 채 둠'). v2 t_orch_usercheck.js PASS 136 FAIL 0 worklist 0건 → PASS 136 FAIL 0 worklist 0건 · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-23T20-32-11_claude_orch.log",
+      "sec": 90,
+      "costUsd": 1.0630481,
+      "files": [
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/test/t_orch_worklist.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:21+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T21:20:34+09:00"
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261120183740_VISION",
+  "repairRoot": "20261120183740_VISION",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795433306019,
+  "autoFp": "ba6bb99af4",
+  "applyStartMs": 1795433529240,
+  "verifyJudge": {
+    "at": "2026-11-23T20:33:43+09:00",
+    "verified": true,
+    "text": "실행 통과 2건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1141, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self2028",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-agent.js"
+  ],
+  "appliedMs": 1795433841226,
+  "synced": [
+    "orch-agent.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_worklist.js tools/VibeManager: 반영 전 MODULE_NOT_FOUND(파일 없음, .bak 만 있음) → 반영 뒤 PASS 'drain: agentRules 밖 R12 = 담당 아님 기록 1건', PASS '다시 넣어도 담당 아님 기록은 1건 유지', PASS '사건은 열림 유지', PASS 'drain 자식 시험 통과', ALL PASS"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager: 반영 전 PASS 136, FAIL 0, worklist 0건, ALL PASS → 반영 뒤 PASS 136, FAIL 0, worklist 0건, ALL PASS. 54-61행 U3 장부 시험은 이번 작업 전에 이미 빠져 있었음(73행 주석)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/test/t_orch_worklist.js"
+    ],
+    "verify_result": "2026-11-23 20:32:55~20:33:23. v1 t_orch_worklist.js 없음(MODULE_NOT_FOUND) → PASS 4건 ALL PASS(기록 what='에이전트 담당 아님: 규칙 R12 은 agentRules(R1) 밖. 사건은 열린 채 둠'). v2 t_orch_usercheck.js PASS 136 FAIL 0 worklist 0건 → PASS 136 FAIL 0 worklist 0건",
+    "note": "orch-agent.js:300 agentEnabled 조건과 agentRules 조건을 나눔. agentRules 밖 사건에 '에이전트 담당 아님' 기록을 사건마다 1건 남김(patch null, 상태 유지). t_orch_worklist.js 는 작업 시작 때 없어서 .bak_failed_20261120183740_VISION 의 ⑧ drain 시험만 옮겨 새로 만듦. t_orch_usercheck.js 는 U3 worklist 시험이 이미 빠져 있어 고치지 않음. orch-worklist.js 는 연결 없이 남아 있고 다음 조각 대상임"
+  },
+  "snap": "prop_20261123121302_SELF",
+  "effectiveMs": 1795436434041,
+  "effectiveAt": "2026-11-23T21:20:34+09:00"
+}

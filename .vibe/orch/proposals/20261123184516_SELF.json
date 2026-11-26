@@ -1,0 +1,105 @@
+{
+  "id": "20261123184516_SELF",
+  "at": "2026-11-23T18:45:16+09:00",
+  "ms": 1795427116849,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|파일을만드는batch업무중outputs키가없는업무가남음n줄factpack",
+  "title": "사용자 지시 R25 같은 문제: tools/VibeManager/quick.json:112 파일을 만드는 batch 업무 중 outputs 키가 없는 업무가 남음. 8줄 Fact Pack, 19줄 AS-IS 실측, 112줄 CheckList 전체, 21",
+  "evidence": "규칙 R25 \"파일을 만드는 업무는 끝나면 완료 여부와 산출물 경로(저장소 기준)를 카드, 알림, 결과 요약에 보여 주고 열기 단추를 둠\" (원래 지시 2026-11-23 17:25 \"VMW 에서 작업 후 완료여부와 완료 후 산출물의 위치를 정확하게 알 수 있도록 해주세요.\") · tools/VibeManager/quick.json:112 \"label\": \"🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)\",",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "업무마다 outputs 에 저장소 기준 패턴을 넣음. 예: Doc/UI_CHECKLIST/${id}_*_CheckList_v*.xlsx, Doc/UI_CHECKLIST/${id}_*_ActionItemList_v*.xlsx, Doc/테스트결과서/${id}_*_테스트결과서_v*.xlsx, Doc/화면설계서, Doc/화면분석서 산출물. outputsOf 는 파일 이름에만 * 를 받으므로 폴더 부분은 고정 경로로 적음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T01:45:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T01:48:52+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0145"
+    },
+    {
+      "at": "2026-11-24T01:48:54+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T02:02:39+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T02:02:39+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-24 node tools/VibeManager/test/run_all.js: 반영 전(01:50:15) ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤(01:58:43) ALL OK 74/74 PASS 1161 FAIL 0. 패턴 대조(outputsOf 같은 정규식): batch 12건 중 outputs 없음 0건(반영 전 11건), SCP0100 CheckList·ActionItemList·테스트결과서·화면설계서·UI분석서·TestCases4 일치 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T01-48-54_claude_orch.log",
+      "sec": 608,
+      "costUsd": 1.7440801999999997,
+      "files": [
+        "tools/VibeManager/quick.json"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "파일을 만드는 업무는 끝나면 완료 여부와 산출물 경로(저장소 기준)를 카드, 알림, 결과 요약에 보여 주고 열기 단추를 둠 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R25|tools/VibeManager/quick.json",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795452316559,
+  "autoFp": "96c874a65e",
+  "applyStartMs": 1795452534834,
+  "verifyJudge": {
+    "at": "2026-11-24T01:59:05+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0145",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795453359253,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 편집 전 01:50:15 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.2s' → 편집 뒤 01:58:43 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.4s' · t_webview_syntax.js PASS 19 · t_job_runner.js PASS 29 · t_um_job.js PASS 16"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "2026-11-24 node tools/VibeManager/test/run_all.js: 반영 전(01:50:15) ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤(01:58:43) ALL OK 74/74 PASS 1161 FAIL 0. 패턴 대조(outputsOf 같은 정규식): batch 12건 중 outputs 없음 0건(반영 전 11건), SCP0100 CheckList·ActionItemList·테스트결과서·화면설계서·UI분석서·TestCases4 일치",
+    "note": "outputs 추가 11건: Fact Pack, AS-IS 실측, CheckList 전체, CheckList 수정분, 미검증 해소, TestResultList, 문서 생성, ID 하나로 전체, 새 화면(from AS-IS), 새 화면(from 설계서), 자동보완. 폴더는 고정 경로, 파일 이름만 * 사용. 클라우드 이관 패키지는 폴더가 고정되지 않아 넣지 않음. AS-IS 실측을 24시간 안에 재사용할 때 산출물 없음 경고가 나는지는 미확인(다음 VMW 실행에서 확인 필요)."
+  },
+  "snap": "prop_20261123184516_SELF"
+}

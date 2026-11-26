@@ -20,7 +20,7 @@
       8206788
     ]
   },
-  "status": "need-user",
+  "status": "resolved",
   "notice": false,
   "actions": [
     {
@@ -38,6 +38,11 @@
       "turns": 16,
       "costUsd": 0.7632085999999999,
       "files": []
+    },
+    {
+      "at": "2026-11-26T16:13:22+09:00",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "원인 고쳐짐 확인: R3 기준 통계 키에 화면 ID 포함(orch-watch.js:176 key = base|screen)"
     }
   ],
   "agent": {

@@ -1,0 +1,21 @@
+{
+  "id": "SCP0005",
+  "task": "S8.engineGate",
+  "scope": "none",
+  "note": "engine_gate.py SCP0005 --check",
+  "start": "2026-11-25T08:14:24+09:00",
+  "end": "2026-11-25T08:15:26+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "chain",
+  "label": "검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl)",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261125_005600",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T08-14-24_SCP0005_8________________--mark______________________________--check________________engine_selfcheck__________________________Doc_verify__engine_changes.jsonl_.log"
+  ],
+  "afterMode": "end",
+  "changed": []
+}

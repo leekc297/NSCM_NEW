@@ -3121,7 +3121,11 @@ ScmSitebyEndCustomer40,Y,"SELECT A.SCM_SITE_ID      AS CODE
                        FROM SCM_MST_SITE_ITEM XA
                       WHERE XA.DIVISION_ID = A.DIVISION_ID
                         AND XA.SCM_SITE_ID = A.SCM_SITE_ID
-                        AND INSTR(',' || @endCustomer || ',', ',' || XA.PROJECT_CODE || ',') > 0 ) )
+                        AND INSTR(',' || @endCustomer || ',', ',' || XA.PROJECT_CODE || ',') > 0 )
+         OR NOT EXISTS ( SELECT 1
+                           FROM SCM_MST_SITE_ITEM XB
+                          WHERE XB.DIVISION_ID = A.DIVISION_ID
+                            AND XB.SCM_SITE_ID = A.SCM_SITE_ID ) )
  ORDER BY UPPER(A.SCM_SITE_ID)"
 SenderCode,Y,"SELECT SEGMENT1 AS DIVISION_ID, SEGMENT2 AS CODE, NVL(ATTRIBUTE1, SEGMENT2) AS NAME
 FROM SCM_ADM_LOOKUP_MASTER_DETAIL

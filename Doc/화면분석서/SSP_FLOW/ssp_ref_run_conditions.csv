@@ -12,4 +12,4 @@
 6,PR_SSP_ANL_SHIP_PLAN_40,"JOB.PR_SSP_PLN_SHIP_PLAN_40 (월, 화, 수, 목, 금, 토, 일 08:00) | JOB.PR_SSP_PLN_SHIP_PLAN_40_AZ (월, 화, 수, 목, 금, 토, 일 10:30) | JOB.PR_SSP_PLN_SHIP_PLAN_40_C (월, 화, 수, 목, 금, 토, 일 11:00)",1. 당일기준 계획이 유무 확인 | 2. 당일기준 재고 I/F 확인 | 3. 계획이 없고 재고가 있으면 진행 (둘 중 하나라도 없으면 진행 X) | ※ 사업부-법인별로 1회 호출하기 때문에 각 JOB 실행시엔 일반적으론 프로세스항상 진행할 것으로 보임,패널 안 '- 프로시저' 줄 아래
 7,PR_SSP_ANL_SHIP_PLAN_P,"JOB.PR_SSP_PLN_SHIP_PLAN_P (월, 화, 수, 목, 금, 토, 일 07:15)",- 당일 계획된 Packer 출하계획이 있는경우엔 수행 X | ※ DIVISION_CD 는 변수선언부에서 40으로 지정됨,가장 가까운 머리 상자
 7,PR_SSP_ANL_SHIP_CONFIRM_P,"JOB.PR_SSP_PLN_SHIP_PLAN_P (월, 화, 수, 목, 금, 토, 일 07:15)",- 프로세스 진행 여부 체크 없음,가장 가까운 머리 상자
-8,PR_SSP_ANL_SHIP_PLAN_ALL,JOB.PR_SSP_ANL_SHIP_PLAN_ALL (매일 종일 30분마다),※ V_PLAN_START_YYYYMMDD = 전일 | 1. 한번 Snapshot 한 사업부-법인 은 제외,가장 가까운 머리 상자
+9,PR_SSP_ANL_SHIP_PLAN_ALL,JOB.PR_SSP_ANL_SHIP_PLAN_ALL (매일 종일 30분마다),※ V_PLAN_START_YYYYMMDD = 전일 | 1. 한번 Snapshot 한 사업부-법인 은 제외,가장 가까운 머리 상자

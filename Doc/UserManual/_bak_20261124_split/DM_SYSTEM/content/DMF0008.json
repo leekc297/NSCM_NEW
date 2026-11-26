@@ -1,0 +1,124 @@
+{
+ "definition": "ERP EDI 수신 데이터 중 GSCM 마스터(Sales Site, SSPM)가 없거나 맞지 않는 건을 EDI Sender 별로 찾아 정비하는 화면",
+ "overview": [
+  "ERP EDI 수신 데이터 중 GSCM 마스터(Sales Site, SSPM)가 없거나 맞지 않는 건을 EDI Sender 별로 찾아 마스터를 정비하는 화면임",
+  "위쪽 조회 조건과 마지막 상태 갱신 정보(Last Update Start, Last Update End, Updated by), 왼쪽 Summary, 오른쪽 List of SCM Master Data Requiring Maintenance, 아래 Sales Site, SSPM 탭으로 구성됨",
+  "Status Update → Summary 에서 EDI Sender 행 더블클릭 → 정비 대상 행 더블클릭 → 아래 Sales Site, SSPM 탭에서 행 추가, 수정 → Save 순서로 작업함",
+  "아래 탭에는 고객, 팀, 프로젝트, 모델, Owner 찾기 팝업이 있음",
+  "Sales Site 가 없는 건은 Sales Site 화면, SSPM 이 없는 건은 Sales Site Project Model 화면에서 추가하라는 메시지가 뜸"
+ ],
+ "pages": [
+  {
+   "title": "ERP EDI Master Validation",
+   "keyPoint": "Status Update 실행 후 Summary 의 GSCM Master Data 정비필요 건수를 확인함. Sales Site, SSPM 이 없는 건은 Sales Site, Sales Site Project Model 화면에서 먼저 추가함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.178,
+     "y": 0.153
+    },
+    {
+     "no": 2,
+     "x": 0.7,
+     "y": 0.205
+    },
+    {
+     "no": 3,
+     "x": 0.14,
+     "y": 0.205
+    },
+    {
+     "no": 4,
+     "x": 0.335,
+     "y": 0.205
+    },
+    {
+     "no": 5,
+     "x": 0.2,
+     "y": 0.705
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 권한이 있는 Division 만 나옴. 바꾸면 그리드가 비워지고 컬럼이 다시 구성됨",
+      "Last Update Start, Last Update End, Updated by: 마스터 상태 최근 갱신의 시작, 종료 시각과 실행 계정"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Status Update: \"실행하시겠습니까?\" 확인 후 EDI 마스터 상태를 다시 계산하고 Summary 를 다시 조회함. 오른쪽 그리드와 아래 탭은 비워짐",
+      "Sort, Filter, Condition, Reset Condition 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Summary",
+     "lines": [
+      "EDI Sender 별 GSCM Master Data 정비필요, 정상, 예외처리 건수가 나옴",
+      "행을 더블클릭하면 그 Sender 의 정비 대상이 오른쪽 그리드에 조회됨. 정비할 건이 없으면 \"정비할 데이터가 없습니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "List of SCM Master Data Requiring Maintenance",
+     "lines": [
+      "EDI 의 Cust. Unloading Point, Cust. Plant, Cust. Item ID 와 ERP. Soldto, ERP. Shipto, ERP. Item ID 가 나옴",
+      "GSCM. Sales Site, Active SS, GSCM. SSPM, GSCM. SSPM INCOTERMS, Active. SSPM 칸에 마스터가 없거나 맞지 않으면 빨간 \"확인필요\" 가 표시됨",
+      "행을 더블클릭하면 아래 Sales Site, SSPM 탭에 그 건의 마스터가 조회됨",
+      "Sales Site 가 없으면 \"Sales Site UI에서 Sales Site를 추가하시기 바랍니다.\", SSPM 이 없으면 \"Sales Site Project Model UI에서 데이터를 추가하시기 바랍니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 5,
+     "title": "Sales Site, SSPM 탭",
+     "lines": [
+      "Sales Site: Div, Sold-To, Rep Ship-To, Sales Site, Site Active, Customer Active 필수",
+      "SSPM: Div, Sales Site, Project Code, Sales Plant, EDI Incoterms, Active 필수(제목 앞 빨간 점)",
+      "행을 추가하면 Div, Sold-To, Ship-To 가 위 그리드 선택 행 값으로 채워짐. SSPM 은 Item ID 도 채워짐",
+      "SCP Planner 권한으로 행을 추가하면 \"권한이 없습니다.\" 메시지가 뜸",
+      "Sales Site 탭은 고객, Team 찾기 팝업, SSPM 탭은 Project, Item, Owner 찾기 팝업에서 값을 고름",
+      "저장 때 바뀐 행이 없으면 \"수정한 내용이 없습니다.\", 저장되면 \"저장되었습니다.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "DM",
+ "id": "DMF0008",
+ "uiName": "ERP EDI MASTER 정비",
+ "menuPath": "DM> Demand Master> ERP EDI MASTER 정비",
+ "captures": [
+  "captures/DMF0008.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0008/",
+  "Doc/asisfacts/screens/DMF0008/"
+ ],
+ "buttons": [
+  "division:SEARCH",
+  "main:SEARCH",
+  "main:STATUS_UPDATE",
+  "project:DELETE",
+  "project:SAVE",
+  "project:SEARCH",
+  "repair:DELETE",
+  "repair:SAVE",
+  "repair:SEARCH",
+  "salesSite:DELETE",
+  "salesSite:INSERT",
+  "salesSite:SAVE",
+  "salesSite:SEARCH",
+  "site:SEARCH",
+  "sspm:DELETE",
+  "sspm:INSERT",
+  "sspm:SAVE",
+  "sspm:SEARCH",
+  "summary:SEARCH",
+  "updateHistory:SEARCH"
+ ]
+}

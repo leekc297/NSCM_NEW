@@ -1,0 +1,45 @@
+{
+  "id": "20261125211759_SELF_4",
+  "at": "2026-11-25T21:17:59+09:00",
+  "ms": 1795609079900,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|vmo상단중지단추와실행중표시가vmo창자신의실행건수만셈workbenchjs",
+  "title": "사용자 지시 R232 같은 문제: tools/VibeManager/orchestra.js:1099 VMO 상단 중지 단추와 실행 중 표시가 VMO 창 자신의 실행 건수만 셈. workbench.js:702 updateBusy 가 !this.orch 조건으로 V",
+  "evidence": "규칙 R232 \"VMW 작업이 돌리는 화면을 다른 창(Workbench, VMO 등)에서 볼 때도 그 창에서 실행 중 표시와 중지 단추가 보이고 중지가 그 작업에 전달됨\" (원래 지시 2026-11-25 21:05 \"VMW 에서 CHECKLIST 실행 후, WORKBENCH 로 연결한 경우 중지 버턴이 보이지 않습니다. VMW 에서 연결한 경우에도 중지할 수 있도록 해주세요\") · tools/VibeManager/orchestra.js:1099 else if(m.type==='busy'){ $('stop').style.display=((m.procs||0)+(m.claude?1:0))?'':'none';",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "VMO 는 화면이 하나로 정해지지 않으므로 상단 단추는 그대로 두고, 위 1006줄 카드별 중지 단추로 VMW 화면을 멈추게 함. 상단 실행 중 표시(cbusy)에는 job-runner.running() 건수를 더해 VMW 실행 중 표시를 함께 보임",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:51:09+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orchestra.js drawBusy: 상단 실행 중 표시에 board d.jobs running 합(VMW 화면 n) 더함, 상단 중지 단추는 VMO 자신 실행만. run_all 88/88 PASS 1500 FAIL 0(15:50:45), t_webview_syntax ALL PASS, 설치 폴더 복사 15:50:57"
+    }
+  ],
+  "plain": {
+    "what": "VMW 작업이 돌리는 화면을 다른 창(Workbench, VMO 등)에서 볼 때도 그 창에서 실행 중 표시와 중지 단추가 보이고 중지가 그 작업에 전달됨 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R232|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795675869104
+}

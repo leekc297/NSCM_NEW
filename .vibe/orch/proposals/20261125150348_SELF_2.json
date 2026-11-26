@@ -1,0 +1,45 @@
+{
+  "id": "20261125150348_SELF_2",
+  "at": "2026-11-25T15:03:48+09:00",
+  "ms": 1795586628807,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/analysis/perf_check/perf_check.py|verify가블록마다소요를기록하기만하고n초넘는블록도pass로둠explai",
+  "title": "사용자 지시 R226 같은 문제: tools/Analysis/perf_check/perf_check.py:523 verify 가 블록마다 소요를 기록하기만 하고 5초 넘는 블록도 PASS 로 둠. EXPLAIN PLAN 확인이 없고, 530줄 res 는 오류 건수만 봄",
+  "evidence": "규칙 R226 \"생성기가 사용자에게 주는 점검 쿼리는 V$, ASH, DBA_HIST 같은 큰 뷰를 시간 범위 조건과 인덱스 범위로 먼저 줄여 읽고, 5초 넘는 블록은 제공 전 EXPLAIN PLAN 이나 사내 DB 실행으로 소요를 확인함\" (원래 지시 2026-11-25 13:44 \"제공 해준 쿼리의 L8 이 너무 오래 수행되고 있네요...\") · tools/Analysis/perf_check/perf_check.py:523 P('[%s] %.1f초 · %d행%s' % (st['key'], (datetime.datetime.now() - t0).total_seconds(), len(rows), (' · 첫 행 ' + str(rows[0])[:200]) if rows else ''))",
+  "targets": [
+    "tools/Analysis/perf_check/perf_check.py"
+  ],
+  "before_after": "소요 5초 넘는 블록은 fail 에 '[키] N초 > 5초' 로 넣거나 별도 [SLOW] 로 표시하고 EXPLAIN PLAN FOR + DBMS_XPLAN.DISPLAY 결과를 _검증.txt 에 남김. 결과 줄에 느린 블록 건수를 적음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Analysis/perf_check/perf_check.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:41:08+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · tools/Analysis/perf_check/perf_check.py:16 SLOW_SEC=5, 627~643 5초 넘는 블록 = [SLOW] + EXPLAIN PLAN FOR + DBMS_XPLAN.DISPLAY 를 _검증.txt 에, 654~660 결과 SLOW 와 느린 블록 건수 · py_compile OK, 가짜 DB 객체로 verify 실행해 [SLOW] 1건·실행계획 2줄·결과 줄 확인 · 사내 DB 실행 미확인 · 2026-11-26 15:41"
+    }
+  ],
+  "plain": {
+    "what": "생성기가 사용자에게 주는 점검 쿼리는 V$, ASH, DBA_HIST 같은 큰 뷰를 시간 범위 조건과 인덱스 범위로 먼저 줄여 읽고, 5초 넘는 블록은 제공 전 EXPLAIN PLAN 이나 사내 DB 실행으로 소요를 확인함 규칙을 tools/Analysis/perf_check/perf_check.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R226|tools/Analysis/perf_check/perf_check.py",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675268777
+}

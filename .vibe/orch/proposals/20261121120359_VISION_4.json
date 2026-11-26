@@ -1,0 +1,91 @@
+{
+  "id": "20261121120359_VISION_4",
+  "at": "2026-11-21T12:03:59+09:00",
+  "ms": 1795230239878,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ln|delta_scope|history unattributed",
+  "title": "부분 재측정 범위 판정 이력과 단계 밖 소요 시간을 기록",
+  "evidence": "delta_scope.py:396-398 finish 가 delta_scope.json 을 덮어씀. 지금 파일은 11-21 01:01 3회차 판정만 있음. run_verify.py:245-255 run_timing.json 이 단계별 도구 시간 합만 적음. 11-21 01:01 wall 50.7분 대 단계 합 31.6분(19.1분 기록 없음), 11-20 20:46 wall 65.8분 대 단계 합 34.8분",
+  "targets": [
+    "tools/Harness/verify/delta_scope.py",
+    "tools/Harness/verify/run_verify.py",
+    "tools/Harness/verify/timing_report.py"
+  ],
+  "before_after": "부분 재측정 범위 판정은 마지막 1건만 남고, 단계 밖 시간은 기록 없음 → delta_scope_hist.jsonl 에 회차마다 판정(규칙, 행 수, 시험 수, 사유) 1줄 추가, run_timing.json 에 'unattributed_min'(wall 에서 단계 합을 뺀 값)과 E2E 시험 수 기록",
+  "verify": "python tools/Harness/verify/delta_scope.py --selftest 통과. python -m py_compile 3개 통과. 다음 부분 재측정 뒤 Doc/verify/<ID>/delta_scope_hist.jsonl 줄 수가 회차 수와 같고 run_timing.json 마지막 항목에 unattributed_min 이 있는지 확인",
+  "rollback": "3개 파일을 반영 전 .bak 으로 되돌림. delta_scope_hist.jsonl 은 지워도 판정 영향 없음",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "기록 누락 1종. U25 원인 진단에 필요한 1회차, 2회차 범위 판정이 남지 않음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T12:16:28+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T12:19:52+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 871, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self1216"
+    },
+    {
+      "at": "2026-11-21T12:19:55+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T12:25:10+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 871, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T12:25:10+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 12:21:08 실행. python tools/Harness/verify/delta_scope.py --selftest 출력 'PASS 판정 이력 — 회차마다 1줄 덧붙임 · dry 제외' 포함 11건 PASS, 'ALL PASS'. python -m py_compile 3개 파일 출력 'COMPILE_OK'. 추가로 python tools/Harness/verify/timing_report.py SCP0028 실행 출력 '■ 경과 2026-11-21 01:52:30 — 실제 3.3분 · 단계 합 3.1분 · 단 · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-21T12-19-55_claude_orch.log",
+      "sec": 111,
+      "costUsd": 1.0060446,
+      "files": [
+        "tools/Harness/verify/delta_scope.py",
+        "tools/Harness/verify/run_verify.py",
+        "tools/Harness/verify/timing_report.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "부분 재측정이 왜 오래 걸렸는지 회차별 범위와 기록되지 않은 시간을 볼 수 있음",
+    "risk": "기록 파일이 화면마다 1개 늘어남. 판정 결과는 바뀌지 않음",
+    "undo": "검사 도구 3개를 반영 전 판으로 되돌림"
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795230987793,
+  "autoFp": "4abb4e6f38",
+  "applyStartMs": 1795231195209,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 871, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self1216",
+  "needsReload": false,
+  "appliedMs": 1795231510609,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/Harness/verify/delta_scope.py",
+      "tools/Harness/verify/run_verify.py",
+      "tools/Harness/verify/timing_report.py"
+    ],
+    "verify_result": "2026-11-21 12:21:08 실행. python tools/Harness/verify/delta_scope.py --selftest 출력 'PASS 판정 이력 — 회차마다 1줄 덧붙임 · dry 제외' 포함 11건 PASS, 'ALL PASS'. python -m py_compile 3개 파일 출력 'COMPILE_OK'. 추가로 python tools/Harness/verify/timing_report.py SCP0028 실행 출력 '■ 경과 2026-11-21 01:52:30 — 실제 3.3분 · 단계 합 3.1분 · 단계 밖 0.2분 · E2E 시험 미기록건(재시도 미기록)', '■ 부분 재측정 판정 이력 0회 (delta_scope_hist.jsonl 없음)'. 반영 전 기록이라 미기록으로 나옴.",
+    "note": "verify 3번째 항목(다음 부분 재측정 뒤 delta_scope_hist.jsonl 줄 수 = 회차 수, run_timing.json 마지막 항목 unattributed_min 확인)은 CheckList 실행이 사용자 몫이라 미확인. run_verify.py run_timing.json 에 unattributed_min, stage_sum_min, e2e_tests, e2e_retries 추가. e2e_tests 는 _test_timing.jsonl 의 at(UTC) 가 실행 시작 이후인 행 수. delta_scope.json 에 changed_tests 추가. 백업, 설치 폴더, CHANGELOG 는 건드리지 않음."
+  },
+  "snap": "prop_20261121120359_VISION_4"
+}

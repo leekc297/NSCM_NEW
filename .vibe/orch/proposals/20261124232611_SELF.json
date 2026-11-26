@@ -1,0 +1,112 @@
+{
+  "id": "20261124232611_SELF",
+  "at": "2026-11-24T23:26:11+09:00",
+  "ms": 1795530371193,
+  "source": "self",
+  "status": "superseded",
+  "sig": "userrule|rn|tools/vibemanager/job runner.js|quickjson사용자매뉴얼n줄운영자매뉴얼n줄이combinetru",
+  "title": "사용자 지시 R200 같은 문제: tools/VibeManager/job-runner.js:68 quick.json 사용자 매뉴얼(597줄), 운영자 매뉴얼(688줄)이 \"combine\": true 라서 DM, SYSTEM 2개를 고르면 'DM_SYSTEM'",
+  "evidence": "규칙 R200 \"대상(모듈, 화면)을 여러 개 고른 문서 생성 업무는 대상마다 산출물을 따로 만듦\" (원래 지시 2026-11-24 12:59 \"사용자 메뉴얼 생성 시 dm, system 2개를 동시 선택해서 2개를 하나의 사용자 메뉴얼로 작성했습니다. 이 하나를 2개의 메뉴얼로 분리해주세요.\") · tools/VibeManager/job-runner.js:68 if (modUnit && item.combine === true && ids.length > 1) { const one = mods.filter(m => ids.includes(m)).join('_'); ids.length = 0; ids.push(one); }",
+  "targets": [
+    "tools/VibeManager/job-runner.js"
+  ],
+  "before_after": "quick.json 597, 688줄의 \"combine\": true 를 지우거나 false 로 바꿔 모듈마다 단위 1개(문서 1개)로 실행함. user_manual.py mods_of 의 묶음 키는 예전 산출물 호환용으로만 두고 job-runner 에서는 만들지 않음",
+  "verify": "node --check tools/VibeManager/job-runner.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/job-runner.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T11:40:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T11:44:33+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self1140"
+    },
+    {
+      "at": "2026-11-26T11:44:39+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T11:54:33+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 실행한 항목 실패 1건(v1). 2026-11-26 11:45 반영 전: node --check 오류 0, run_all ALL OK 88/88 PASS 1449 FAIL 0 → 2026-11-26 11:50 반영 뒤(RESULT at 2026-11-26T02:50:11Z): node --check 오류 0, run_all SOME FAIL 86/88 PASS 1434 FAIL 2(t_u · 대상 파일 1개 복원(job-runner.js AI 편집 2건만 되돌림(반영 전과 같음)) · 대상 밖 변경 Doc/e2e/specs/_trace.spec.ts, Doc/e2e/specs/_verify.spec.ts, Doc/e2e/specs/eg_popup.spec.ts, Doc/verify/_ENGINE_MASTER.md, Doc/verify/_checker_defects.md, Doc/verify/_engine_selfcheck.json 는 AI 가 고치지 않아 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-26T11-44-39_claude_orch.log",
+      "sec": 589,
+      "costUsd": 1.0666634,
+      "files": [
+        "Doc/e2e/specs/_trace.spec.ts",
+        "Doc/e2e/specs/_verify.spec.ts",
+        "Doc/e2e/specs/eg_popup.spec.ts",
+        "Doc/verify/_ENGINE_MASTER.md",
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/facts_popup.py",
+        "tools/Harness/verify/ledger.py",
+        "tools/VibeManager/job-runner.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T12:01:56+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261126120156_SELF 로 다시 올림(자동 반영). 원인 tools/VibeManager/test/t_um_job.js:45, tools/VibeManager/test/t_om_job.js:43 이 combine: true 업무(t_um_job.js:23, t_om_job.js:22)에서 모듈 2개를 단위 1개 DM_SYSTEM 으로 기대함. 2026-11-26 11:50 반영 뒤 run_all 86/88, 실패 2건이 이 두 시험임(11:44 반영 전 88/88 PASS 1449). 시험 파일이 targets 에 없어 기대값을 고치지 못함"
+    }
+  ],
+  "plain": {
+    "what": "대상(모듈, 화면)을 여러 개 고른 문서 생성 업무는 대상마다 산출물을 따로 만듦 규칙을 tools/VibeManager/job-runner.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R200|tools/VibeManager/job-runner.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795660812282,
+  "autoFp": "a177d3f188",
+  "applyStartMs": 1795661079407,
+  "verifyJudge": {
+    "at": "2026-11-26T11:54:33+09:00",
+    "verified": false,
+    "text": "실패 1건",
+    "why": "실행한 항목 실패 1건(v1)"
+  },
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": false,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "fail",
+        "note": "node --check tools/VibeManager/job-runner.js: 반영 전, 반영 뒤 모두 출력 없음(구문 오류 0). node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 88/88 PASS 1449 FAIL 0 237s' → 반영 뒤 'SOME FAIL 파일 86/88 PASS 1434 FAIL 2 238s'. 실패 2건 = 'FAIL t_om_job.js ... FAIL 모듈 2개 = 단위 1개 DM_SYSTEM DM,SYSTEM', 'FAIL t_um_job.js ... FAIL 모듈 2개 = 단위 1개 DM_SYSTEM(순서 DM, SCP, SSP, SYSTEM) DM,SYSTEM'. 두 시험이 고치기 전 동작(묶음 1개)을 기대함. 개선안대로 바뀐 결과(DM, SYSTEM 단위 2개)와 충돌함. 시험 파일은 targets 밖이라 고치지 않음. t_webview_syntax.js 는 웹뷰 파일이 아니라 따로 실행하지 않음. run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/job-runner.js"
+    ],
+    "verify_result": "2026-11-26 11:45 반영 전: node --check 오류 0, run_all ALL OK 88/88 PASS 1449 FAIL 0 → 2026-11-26 11:50 반영 뒤(RESULT at 2026-11-26T02:50:11Z): node --check 오류 0, run_all SOME FAIL 86/88 PASS 1434 FAIL 2(t_um_job.js:45, t_om_job.js:43 이 DM_SYSTEM 묶음 기대). 따로 실행: t_lk_job.js ALL PASS(그룹 2개 = 묶음 1개 SSP_DM 유지), t_perf_job.js ALL PASS(perfbatch 묶음 유지)",
+    "note": "job-runner.js:75-79 수정. chainId usermanual, opsmanual 은 combine 이 true 여도 모듈을 묶지 않고 item.modules 순서(DM, SYSTEM)로 모듈마다 단위 1개(문서 1개)를 만듦. lookupmig, perfbatch 의 combine 묶음은 유지함. quick.json 은 targets 밖이라 combine 을 지우지 않고 job-runner 에서 무시하는 방식으로 반영함. user_manual.py 묶음 키는 손대지 않음. 남은 일: test/t_um_job.js:45-57, test/t_om_job.js:43-47 의 기대값을 'DM','SYSTEM' 단위 2개, 모듈별 _inputs.json, 모듈별 산출물로 바꾸는 개선안 필요(이번 범위 밖). 결정 목록 Doc/verify/_TWO_SCREENS_DECISIONS.md 는 targets 밖이라 기록하지 않음. 걸린 시간 11:44~11:51(7분), 오래 걸린 단계 = run_all 2회(237초, 238초)"
+  },
+  "repair": {
+    "at": "2026-11-26T12:01:56+09:00",
+    "decision": "revise",
+    "cause": "tools/VibeManager/test/t_um_job.js:45, tools/VibeManager/test/t_om_job.js:43 이 combine: true 업무(t_um_job.js:23, t_om_job.js:22)에서 모듈 2개를 단위 1개 DM_SYSTEM 으로 기대함. 2026-11-26 11:50 반영 뒤 run_all 86/88, 실패 2건이 이 두 시험임(11:44 반영 전 88/88 PASS 1449). 시험 파일이 targets 에 없어 기대값을 고치지 못함",
+    "reason": "",
+    "log": ".vibe\\logs\\2026-11-26T12-01-12_claude_orch.log",
+    "costUsd": 0.5813718000000001,
+    "sec": 44
+  },
+  "supersededBy": "20261126120156_SELF"
+}

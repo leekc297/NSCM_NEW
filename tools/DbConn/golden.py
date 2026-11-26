@@ -34,6 +34,7 @@ def nval(v):
     return s
 
 def run_asis(cx, sp, params):
+    _LAST_ASIS['sp'] = sp  # 2026-11-25 T545: compare() 가 AS-IS ORDER BY 키를 찾는 데 쓴다(diff_verify 는 sort_keys 를 넘기지 않음)
     cur = cx.cursor()
     ps = list(params.items())
     sql = f"EXEC dbo.[{sp}] " + ', '.join(f'@{k}=?' for k, _ in ps)
@@ -90,10 +91,51 @@ def _rows_of(sets):
 SENTINEL = ('', '-', '/')  # 빈 값 센티널(AS-IS '' ↔ TO-BE '-'/'/') 은 같은 값으로 본다(2026-10-15 지시)
 def snorm(v): return '' if v in SENTINEL else v
 ORDERPROF = []  # compare() 가 결과셋별 데이터 기준(공통/전용)·실제 순서 대조를 쌓는다 → <sp>.order.csv (A6 실측 순서 · A1 데이터 기준)
+# 2026-11-25 T545 (SCP0005 AD-9d969364·AD-dc3e6a42·AD-80df7337 A6 '공통·유일 행 상대 순서' 허위 DIFF):
+#   종전 _order_check 는 공통·유일 행 전체의 순서를 비교해 AS-IS ORDER BY 키가 같은 행(동률 · 예 운송방식만 다른 route 196 SEA ↔ 88 AIR)의
+#   배치 차이까지 불일치로 셌다. AS-IS 는 동률 행의 순서를 정하지 않는다 → AS-IS ORDER BY 키를 알면 키 값 묶음의 순서만 비교한다(묶음 안 = 집합).
+#   키 원천 = Doc/asisfacts/screens/*/sort_rules.csv(kind=SQL · depth 0) · 키 목록이 1종이고 분기 가드가 없을 때만 · 키가 결과 칸에 다 있을 때만. 아니면 종전 비교.
+_SORTKEYS = {}
+_LAST_ASIS = {'sp': ''}  # T545: run_asis 가 마지막으로 실행한 AS-IS SP — compare() 호출자가 sort_keys 를 넘기지 않을 때(diff_verify) 키를 찾는 데 쓴다
 
 
-def _order_check(setno, a, t, ac, tc, common, ai, ti, md):
-    """같은 인자로 받은 두 결과의 ① 데이터 기준(공통·한쪽 전용 행) ② 공통·유일 행의 상대 순서 — 2026-10-28 사용자: 'AS-IS 와 TO-BE 의 데이터가 조회되는 기준이 달라 비교 불가 → 정합검증에 추가'"""
+def asis_order_keys(sp):
+    """T545 AS-IS SP 결과 ORDER BY 키 목록 · 못 정하면 None(행 없음 · 가드 분기 · 키 목록 여러 종 · 'ORDER BY 없음' 행 섞임)"""
+    k = (sp or '').split('.')[-1].strip('[]').upper()
+    if not k:
+        return None
+    if k in _SORTKEYS:
+        return _SORTKEYS[k]
+    import glob as _g
+    lists, bad = set(), False
+    for f in _g.glob(os.path.join(HERE, '..', '..', 'Doc', 'asisfacts', 'screens', '*', 'sort_rules.csv')):
+        try:
+            with open(f, encoding='utf-8-sig', newline='') as fh:
+                for r in csv.DictReader(fh):
+                    if (r.get('kind') or '') != 'SQL' or (r.get('sp') or '').upper() != k or str(r.get('depth') or '0') != '0':
+                        continue
+                    ks = tuple(x.strip().upper() for x in (r.get('keys') or '').split(',') if x.strip())
+                    if not ks or (r.get('guard') or '').strip():
+                        bad = True; continue
+                    lists.add(ks)
+        except (OSError, csv.Error):
+            continue
+    _SORTKEYS[k] = list(next(iter(lists))) if (len(lists) == 1 and not bad) else None
+    return _SORTKEYS[k]
+
+
+def _key_index(sort_keys, common):
+    """T545 ORDER BY 키 → 공통 칸 위치 목록 · 키 하나라도 결과 칸에 없으면 None"""
+    if not sort_keys:
+        return None
+    pos = {k: i for i, k in enumerate(common)}
+    kk = [nkey(re.sub(r'(?i)\s+(ASC|DESC)$', '', s.strip()).split('.')[-1]) for s in sort_keys]
+    return [pos[x] for x in kk] if kk and all(x in pos for x in kk) else None
+
+
+def _order_check(setno, a, t, ac, tc, common, ai, ti, md, sort_keys=None):
+    """같은 인자로 받은 두 결과의 ① 데이터 기준(공통·한쪽 전용 행) ② 공통·유일 행의 상대 순서 — 2026-10-28 사용자: 'AS-IS 와 TO-BE 의 데이터가 조회되는 기준이 달라 비교 불가 → 정합검증에 추가'
+    2026-11-25 T545: sort_keys(AS-IS ORDER BY 키) 가 결과 칸에 다 있으면 공통·유일 행의 '키 값' 순서만 비교한다(키 동률 묶음 안 순서는 AS-IS 미정 = 집합)"""
     A = [tuple(r[j] for j in ai) for r in a[1]]; T = [tuple(r[j] for j in ti) for r in t[2]]
     An = [tuple(snorm(v) for v in r) for r in A]; Tn = [tuple(snorm(v) for v in r) for r in T]
     ca, ct_ = collections.Counter(An), collections.Counter(Tn)
@@ -101,6 +143,14 @@ def _order_check(setno, a, t, ac, tc, common, ai, ti, md):
     common_rows = sum(min(ca[k], ct_[k]) for k in both)
     uniq = {k for k in both if ca[k] == 1 and ct_[k] == 1}
     seqA = [k for k in An if k in uniq]; seqT = [k for k in Tn if k in uniq]
+    kix = _key_index(sort_keys, common)
+    basis, tie_note = '행 전체', ''
+    if kix is not None:  # T545 키 값 순서 비교 — 키가 다른 자리에서 갈리면 그대로 DIFF(FAIL)
+        seqA = [tuple(r[i] for i in kix) for r in seqA]; seqT = [tuple(r[i] for i in kix) for r in seqT]
+        _tg = collections.Counter(seqA)
+        _ties = [n for n in _tg.values() if n > 1]
+        basis = 'AS-IS ORDER BY 키 ' + ','.join(sort_keys)
+        tie_note = f" · {basis} 기준 · 키 동률 묶음 {len(_ties)}개({sum(_ties)}행)는 묶음 안 순서가 AS-IS 에서 정해지지 않아 집합으로 비교"
     first = next((i for i in range(min(len(seqA), len(seqT))) if seqA[i] != seqT[i]), -1)
     # 센티널 차이 — 같은 행(정규화 일치)에서 원값이 ''↔'-'/'/' 로 다른 컬럼과 행수(AS-IS '' 행이 MSSQL 에서는 '-' 행보다 앞에 정렬되므로 순서 차이의 원인이 된다)
     rawA = {}; rawT = {}
@@ -127,20 +177,26 @@ def _order_check(setno, a, t, ac, tc, common, ai, ti, md):
     if first >= 0:
         ex = f"r{first}: AS-IS={[x[:20] for x in seqA[first][:6]]} ↔ TO-BE={[x[:20] for x in seqT[first][:6]]}"
     md.append(f"- 데이터 기준: 공통 {common_rows}행 · AS-IS 전용 {len(A) - common_rows}행 · TO-BE 전용 {len(T) - common_rows}행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급){' · ⚠ 행 상한 ' + str(MAX_ROWS) + ' 도달' if cap else ''}")
-    md.append(f"- 실제 순서(공통·유일 {len(uniq)}행의 상대 순서): " + ('일치' if verdict == 'PASS' else ('불일치 — 첫 차이 ' + ex) if verdict == 'DIFF' else '비교 불가(공통 행 2 미만)')
+    md.append(f"- 실제 순서(공통·유일 {len(uniq)}행의 상대 순서{tie_note}): " + ('일치' if verdict == 'PASS' else ('불일치 — 첫 차이 ' + ex) if verdict == 'DIFF' else '비교 불가(공통 행 2 미만)')
               + (f" · 센티널 차이 컬럼 {', '.join(sent_cols[:6])} — 빈 값 표기가 달라 정렬 위치가 달라질 수 있음(TO-BE 센티널 정책 2026-10-15)" if sent_cols else '')
               + (f" · NULL 정렬 위치 차이 {', '.join(null_cols[:4])} — MSSQL '' 맨 앞 ↔ Oracle NULL 맨 뒤(NULLS LAST): PKG ORDER BY 에 NULLS FIRST 또는 NVL 센티널 적용 대상" if null_cols else ''))
     ORDERPROF.append({'set': setno, 'asis_rows': len(A), 'tobe_rows': len(T), 'common_rows': common_rows, 'asis_only': len(A) - common_rows, 'tobe_only': len(T) - common_rows,
-                      'uniq_rows': len(uniq), 'order': verdict, 'first_mismatch': ex[:400], 'sentinel_cols': ','.join(sent_cols), 'null_order_cols': ','.join(null_cols), 'capped': 'Y' if cap else ''})
+                      'uniq_rows': len(uniq), 'order': verdict, 'first_mismatch': ex[:400], 'sentinel_cols': ','.join(sent_cols), 'null_order_cols': ','.join(null_cols), 'capped': 'Y' if cap else '',
+                      'order_basis': basis})  # T545 순서 비교 기준(행 전체 / AS-IS ORDER BY 키)
 
 
-def compare(a_sets, t_sets, *, keys=None, norm=None, alias=None, rs_map=None):
+def compare(a_sets, t_sets, *, keys=None, norm=None, alias=None, rs_map=None, sort_keys=None):
     """As-is 결과셋 i ↔ To-Be O_RC{i} (O_RESULT_CURSOR 는 상태용이라 제외). 반환 (판정, 상세 md 라인)
     keys/norm/alias/rs_map (2026-11-06 플랜 2-3 · 차등 검증 전용 · 기본 None = 종전 동작):
       keys   {set_no: [업무 키 컬럼(nkey)]} — 주어지면 그 키로 같은 행을 잇는다(자동 복합 키 대신)
       norm   {nkey 컬럼 정규식: {'num_scale','trim','upper','date_fmt','sentinel_class'}} — 컬럼별 정규화(diff_verify 가 norm_rules.csv 에서 만든다)
       alias  [(정규식, 치환)] — 동적 컬럼명(M_yyyymm 등) 정규화
-      rs_map {asis_set_no: tobe_cursor_name} — 결과셋 짝(기본 서수)"""
+      rs_map {asis_set_no: tobe_cursor_name} — 결과셋 짝(기본 서수)
+    sort_keys (2026-11-25 T545) AS-IS ORDER BY 키 목록 · None = 마지막 run_asis SP 의 sort_rules 키 · [] = 키 없이 종전 비교 · AS-IS 결과셋이 1개일 때만 쓴다"""
+    if sort_keys is None:
+        sort_keys = asis_order_keys(_LAST_ASIS['sp'])
+    if len(a_sets or []) != 1:
+        sort_keys = None  # T545: 결과셋이 여럿이면 ORDER BY 가 어느 셋 것인지 증명 못 함 → 종전 비교
     t_data = [s for s in t_sets if not re.search(r'RESULT_CURSOR$', s[0])]
     if rs_map:  # 결과셋 짝을 이름으로 지정(서수 대신)
         by_name = {s[0].upper(): s for s in t_data}
@@ -175,7 +231,7 @@ def compare(a_sets, t_sets, *, keys=None, norm=None, alias=None, rs_map=None):
             for r in dt: md.append('| T | ' + ' | '.join(str(x)[:30] for x in r[:12]) + ' |')
         elif not only_a and not only_t and len(a[1]) == len(t[2]):
             md.append('- 일치')
-        _order_check(i + 1, a, t, ac, tc, common, ai, ti, md)  # 데이터 기준 · 실제 순서(2026-10-28)
+        _order_check(i + 1, a, t, ac, tc, common, ai, ti, md, sort_keys=sort_keys)  # 데이터 기준 · 실제 순서(2026-10-28) · T545 AS-IS ORDER BY 키 기준
         # A7 컬럼별 결과 값 (2026-10-27) — DEV↔사내 데이터가 달라 행 값 직접 비교는 차이가 많다 → 데이터 무관 판정 2가지
         #   ① 공란 컬럼: AS-IS 에 값이 있는 컬럼이 TO-BE 전 행 공란이면 FAIL (예: DM-169 Version 컬럼 공란)
         #   ② 같은 키 행 대조: 키 후보 복합 키로 겹치는 행의 컬럼별 불일치 — 1행이라도 있으면 REVIEW(예시 포함)
@@ -229,7 +285,9 @@ def compare(a_sets, t_sets, *, keys=None, norm=None, alias=None, rs_map=None):
         for k in common:
             ja, jt = a[0].index(ac[k]), t[1].index(tc[k])
             fa, ft = filled(a[1], ja), filled(t[2], jt)
-            misk = [kk for kk in both if nval(amap[kk][ja]) != nval(tmap[kk][jt])]; mis = len(misk)
+            # 2026-11-25 T643(SCP0005 V-6e159871 A7 'a_port_name·shipping_company·lt_type ''↔'/'' 확인 필요 3): 키 기반 셀 비교(T239)에 넣은 센티널 동치를
+            #   컬럼 프로파일 불일치 계산에는 넣지 않아 AS-IS '' ↔ TO-BE '/'(TO-BE 룰 CR-020 · NOT NULL 빈 값 = '/') 가 같은 키 값 다름으로 잡혔다
+            misk = [kk for kk in both if nval(amap[kk][ja]) != nval(tmap[kk][jt]) and snorm(nval(amap[kk][ja])) != snorm(nval(tmap[kk][jt]))]; mis = len(misk)
             mex = ' 예: ' + ' / '.join(f"{'|'.join(str(x)[:18] for x in kk[:3])}: '{str(nval(amap[kk][ja]))[:18]}'↔'{str(nval(tmap[kk][jt]))[:18]}'" for kk in misk[:2]) if misk else ''
             if fa >= 0.05 and ft == 0 and len(t[2]) > 0:
                 v, note = 'FAIL', f"공란 컬럼 — AS-IS 값 있음 {fa:.1%} ↔ TO-BE 전 행 공란"
@@ -390,8 +448,9 @@ def sqllog_args(sc, proc, keys):
     return {}, ''
 
 
-def no_arg_source_note(sc, sp, proc, keys):
-    """T489 빈 인자의 AS-IS 원천(actions.csv request.Parameters["k"] = 변수 ← 대입식 · 팝업 객체면 팝업 클래스)과 실행 기록 0 을 한 줄로. 원천 판독 실패 = '원천 미확인'"""
+def _arg_origins(sc, sp, keys):
+    """T489 인자의 AS-IS 원천 판독 → (asis 화면ID, actions 행, [{k, var, ex, lo, pc}]) · var None = 원천 미확인
+    2026-11-20 T514 (SCP0028 V-8da88867 A7): no_arg_source_note 본문에서 분리(문구 불변) · popup_list_args 가 재사용"""
     asis = sc
     try:
         for r in csv.DictReader(open(os.path.join(_ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv'), encoding='utf-8-sig')):
@@ -412,18 +471,30 @@ def no_arg_source_note(sc, sp, proc, keys):
             for a in acts:
                 om = re.match(r'^(\w+)\.(Form_Load|ShowDialog|Show)$', a.get('target') or '') if a['method'] == meth and a.get('kind') == 'POPUP' else None
                 if om: pops.setdefault(meth, {}).setdefault(om.group(1), next(iter(cls_)))
-    orig = []
+    out = []
     ep = {a['method'] for a in acts if a.get('kind') == 'ENDPOINT' and re.search(r'[".]' + re.escape(sp) + r'"', (a.get('target') or '') + (a.get('value') or ''), re.I)}  # 이 SP 를 부르는 메서드
     callers = ep | {a['method'] for a in acts if a.get('kind') == 'CALL_LOCAL' and a.get('target') in ep}
     for k in keys:
         dm = next((a for a in acts if a.get('method') in ep and a.get('kind') == 'DATA_OP' and re.fullmatch(r'\w+\.Parameters\[\s*"' + re.escape(k.lstrip('@')) + r'"\s*\]', a.get('target') or '', re.I)), None)
         if not dm:
-            orig.append(f'{k}(원천 미확인)'); continue
+            out.append({'k': k, 'var': None, 'ex': '', 'lo': None, 'pc': None}); continue
         var = (dm.get('value') or '').strip()
         lo = next((a for a in acts if a.get('method') in callers and a.get('kind') == 'LOCAL' and re.search(r'(?:^|\s)' + re.escape(var) + r'\s*=\s*(.+?);?$', a.get('target') or '')), None)
         ex = re.search(r'(?:^|\s)' + re.escape(var) + r'\s*=\s*(.+?);?$', lo['target']).group(1).strip() if lo else ''
         ob = re.match(r'^(\w+)\.', ex)
         pc = pops.get(lo['method'], {}).get(ob.group(1)) if (lo and ob) else None
+        out.append({'k': k, 'var': var, 'ex': ex, 'lo': lo, 'pc': pc})
+    return asis, acts, out
+
+
+def no_arg_source_note(sc, sp, proc, keys):
+    """T489 빈 인자의 AS-IS 원천(actions.csv request.Parameters["k"] = 변수 ← 대입식 · 팝업 객체면 팝업 클래스)과 실행 기록 0 을 한 줄로. 원천 판독 실패 = '원천 미확인'"""
+    asis, _acts, _og = _arg_origins(sc, sp, keys)
+    orig = []
+    for o in _og:
+        k, var, ex, lo, pc = o['k'], o['var'], o['ex'], o['lo'], o['pc']
+        if var is None:
+            orig.append(f'{k}(원천 미확인)'); continue
         orig.append(f"{k}={var}" + (f" ← {ex}({lo['method']}:{lo['line']}{' · 팝업 ' + pc + ' 선택 결과' if pc else ''})" if lo else ''))
     n_sql = 0
     try:
@@ -440,6 +511,217 @@ def no_arg_source_note(sc, sp, proc, keys):
     if n_sql or n_diff or n_live:
         return f"입력 인자 미정: {' · '.join(orig)} · 실행 기록은 있으나 빈 인자를 못 채움(TO-BE 호출 {n_sql} · 차등 검증 {n_diff} · AS-IS 실측 파일 {n_live})"
     return f"입력 인자 원천 없음: {' · '.join(orig)} · 실행 기록 없음(TO-BE sqllog_calls.json {proc} 호출 0 · 차등 검증 diff_summary {sp} 0 · AS-IS 실측 Doc/asislive/{asis} {sp} 0)"
+
+
+# 2026-11-20 T514 (SCP0028 V-8da88867 A7): 빈 인자 원천이 AS-IS 팝업 '체크 행 목록' getter(<팝업 객체>.Get<X>)면
+#   1) 팝업 클래스 원문(GSCM/06.UIL/**/<cls>.cs)에서 getter → 필드 → '<필드> += ….Field<…>(DefColumns.<COL>)' 열을 판독하고
+#   2) 그 메서드를 부르는 컨트롤(actions.csv EVENT_WIRE)로 연 TO-BE 팝업 조회 기록(Doc/verify/<sc>/eg/popup/popup_rowsets.json sample)의 첫 행 값을 쓴다.
+#   같은 팝업 객체의 목록 인자 전부를 같은 1행에서 채울 수 있을 때만 채운다(위치 대응 · 체크 1행 = AS-IS 목록 원소 1개).
+#   하나라도 증명 못 하면 아무것도 바꾸지 않는다(④ 의 ERROR 사유 유지). 트리거가 다른 같은 팝업 기록(다른 모드)은 쓰지 않는다.
+_POPUP_CS = {}
+
+
+def popup_cs_file(cls):
+    """AS-IS 팝업 클래스 원문 경로(GSCM/06.UIL 아래 <cls>.cs 1개) · 0개·2개 이상 = ''"""
+    if cls not in _POPUP_CS:
+        import glob as _g
+        fs = _g.glob(os.path.join(_ROOT, 'GSCM', '06.UIL', '**', cls + '.cs'), recursive=True)
+        _POPUP_CS[cls] = fs[0] if len(fs) == 1 else ''
+    return _POPUP_CS[cls]
+
+
+def popup_getter_column(cls, getter):
+    """팝업 getter → (열 이름, 'cs 상대경로:줄') · 'Get<X> { get { return this.<필드>; } }' → '<필드> += ….Field<…>(DefColumns.<COL>)' 열 1종 → DefColumns 상수 값. 증명 못 하면 ('', '')"""
+    f = popup_cs_file(cls)
+    if not f:
+        return '', ''
+    try:
+        lines = open(f, encoding='utf-8-sig', errors='replace').read().splitlines()
+    except OSError:
+        return '', ''
+    code = [re.sub(r'//.*$', '', ln) for ln in lines]  # 줄 주석 제외(주석 코드는 동작 아님)
+    txt = '\n'.join(code)
+    gm = re.search(r'\b' + re.escape(getter) + r'\s*\{\s*get\s*\{\s*return\s+(?:this\.)?(\w+)\s*;\s*\}', txt)
+    if not gm:
+        return '', ''
+    fld = gm.group(1)
+    hits = []
+    for i, ln in enumerate(code, 1):
+        m = re.search(r'(?:^|[^\w.])(?:this\.)?' + re.escape(fld) + r'\s*\+=\s*.*?\bDefColumns\.(\w+)\s*\)', ln)
+        if m: hits.append((m.group(1), i))
+    if len({h[0] for h in hits}) != 1:
+        return '', ''
+    const, line = hits[0]
+    cm = re.search(r'\bconst\s+string\s+' + re.escape(const) + r'\s*=\s*"([^"]*)"', txt)
+    return (cm.group(1) if cm else const), f"{os.path.relpath(f, _ROOT).replace(os.sep, '/')}:{line}"
+
+
+def popup_recorded_row(sc, cls, controls):
+    """TO-BE 팝업 조회 기록(Doc/verify/<sc>/eg/popup/popup_rowsets.json)에서 cls 이고 trig 컨트롤이 controls 인 기록의 첫 행 → (행 dict, 파일 상대경로, call 번호) · 없으면 ({}, '', None)"""
+    fp = os.path.join(_ROOT, 'Doc', 'verify', sc, 'eg', 'popup', 'popup_rowsets.json')
+    try:
+        recs = json.load(open(fp, encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}, '', None
+    ctl = {nkey(c) for c in controls}
+    for e in recs if isinstance(recs, list) else []:
+        if e.get('cls') != cls or nkey(str(e.get('trig') or '').split(':', 1)[-1]) not in ctl:
+            continue
+        for r in e.get('sample') or []:
+            try:
+                row = json.loads(r) if isinstance(r, str) else r
+            except ValueError:
+                continue
+            if isinstance(row, dict) and row:
+                return row, os.path.relpath(fp, _ROOT).replace(os.sep, '/'), e.get('call')
+    return {}, '', None
+
+
+def popup_list_args(sc, sp, params, empties):
+    """빈 인자 empties 원천이 전부 같은 팝업 객체 getter 면 그 객체의 목록 인자 전부(이미 채워진 것 포함)를 같은 기록 1행으로 채운다 → ({키: 값}, 사유) · 증명 못 하면 ({}, '')"""
+    if not empties:
+        return {}, ''
+    _asis, acts, og = _arg_origins(sc, sp, list(params.keys()))
+    def pop_of(o):
+        m = re.fullmatch(r'(\w+)\.(Get\w+)', o['ex'] or '')
+        return (o['lo']['method'], m.group(1), o['pc'], m.group(2)) if (o['pc'] and o['lo'] and m) else None
+    by_k = {o['k']: pop_of(o) for o in og}
+    srcs = {by_k[k][:3] if by_k.get(k) else None for k in empties}
+    if None in srcs or len(srcs) != 1:
+        return {}, ''
+    meth, obj, cls = next(iter(srcs))
+    lst = [k for k, v in by_k.items() if v and v[:3] == (meth, obj, cls)]  # 같은 팝업 객체의 목록 인자 전부(위치 대응)
+    cols = {k: popup_getter_column(cls, by_k[k][3]) for k in lst}
+    if any(not c for c, _ in cols.values()):
+        return {}, ''
+    controls = set()
+    for a in acts:  # 메서드를 부르는 컨트롤: 'this.<ctl>.<Event> += <meth>'
+        if a.get('kind') == 'EVENT_WIRE' and re.fullmatch(r'\+=\s*(?:new\s+[\w.]+\(\s*)?' + re.escape(meth) + r'\s*\)?', (a.get('value') or '').strip()):
+            cm = re.fullmatch(r'(?:this\.)?(\w+)\.\w+', a.get('target') or '')
+            if cm: controls.add(cm.group(1))
+    if not controls:
+        return {}, ''
+    row, rf, call = popup_recorded_row(sc, cls, controls)
+    if not row:
+        return {}, ''
+    rv = {nkey(c): v for c, v in row.items()}
+    hit = {k: str(rv.get(nkey(cols[k][0]), '') or '') for k in lst}
+    if any(v == '' for v in hit.values()):
+        return {}, ''
+    over = [f"{k} {params[k]}→{hit[k]}" for k in lst if k not in empties and str(params.get(k, '')) != hit[k]]
+    note = (f"빈 인자 {', '.join(sorted(k for k in lst if k in empties))} = AS-IS 팝업 {cls} 체크 행 목록("
+            + ' · '.join(f"{k}←{cols[k][0]} {cols[k][1]}" for k in lst)
+            + f") ← TO-BE 팝업 조회 기록 {rf} call {call} 첫 행(행 0 · 트리거 {meth})"
+            + (f" · 같은 행으로 맞춘 인자 {', '.join(over)}" if over else ''))
+    return hit, note
+
+
+# 2026-11-25 T547 (SCP0005 T-94b3ad3d·T-c65db01b A1 · V-4d5799f3 A7 'AS-IS -1행 · TO-BE -1행' 골든 SKIP):
+#   p_route_id 처럼 행 하나를 가리키는 키 인자(이름 끝 id·no·seq)는 ①~⑤ 원천(선언 기본값·차등 검증 인자·TO-BE 호출 기록·팝업 기록)이 없으면 SKIP 됐다.
+#   AS-IS 에서 이 값은 본 조회 그리드의 같은 이름 칸(ROUTE_ID 더블클릭 등)에서 온다 → 같은 화면 차등 검증이 실행한 다른 GET SP(diff_summary PASS/DIFF · 공통 행 > 0)
+#   중 결과 칸(Doc/golden/<sc>/<sp>.cols.csv 셋 1)에 같은 이름 칸이 다 있는 것을 그 실측 인자로 AS-IS·TO-BE 양쪽 다시 조회(읽기)하고,
+#   양쪽에 다 있는 값 묶음 중 AS-IS 첫 행을 쓴다. 후보가 여럿이면 공통 행이 가장 적은 호출(조회 부담 최소). 못 찾으면 아무것도 바꾸지 않는다(④ 사유 유지).
+_KEYARG = re.compile(r'(id|no|seq)$')
+
+
+def pick_common_row(a_set, t_set, cols):
+    """T547 a_set=(칸, 행) · t_set=(커서, 칸, 행) · cols=[nkey 칸] → (값 묶음, 양쪽 공통 묶음 수) · 빈 값·센티널 묶음 제외 · 못 찾으면 (None, 0)"""
+    ac = [nkey(c) for c in a_set[0]]; tc = [nkey(c) for c in t_set[1]]
+    if not all(c in ac for c in cols) or not all(c in tc for c in cols):
+        return None, 0
+    ia = [ac.index(c) for c in cols]; it = [tc.index(c) for c in cols]
+    tv = {tuple(r[j] for j in it) for r in t_set[2]}
+    hits = [v for v in (tuple(r[j] for j in ia) for r in a_set[1]) if v in tv and all(x not in SENTINEL for x in v)]
+    return (hits[0] if hits else None), len(set(hits))
+
+
+def main_result_args(sc, sp, params, empties, ca, ct):
+    """T547 빈 키 인자 empties 를 같은 화면 본 조회 결과의 같은 이름 칸 값으로 → ({키: 값}, 사유) · 못 채우면 ({}, '')"""
+    if not empties:
+        return {}, ''
+    want = {k: nkey(re.sub(r'^@?p_', '', k, flags=re.I)) for k in empties}
+    if not all(_KEYARG.search(v) for v in want.values()):
+        return {}, ''
+    try:
+        with open(os.path.join(_ROOT, 'Doc', 'verify', sc, 'diff', 'diff_summary.csv'), encoding='utf-8-sig', newline='') as f:
+            rows = list(csv.DictReader(f))
+    except OSError:
+        return {}, ''
+    cands = []
+    for r in rows:
+        asp, proc = (r.get('asis_sp') or '').strip(), (r.get('tobe_proc') or '').strip()
+        if not asp or not proc or asp.upper() == sp.upper() or r.get('verdict') not in ('PASS', 'DIFF') or not r.get('params_asis'):
+            continue
+        try:
+            n = int(r.get('common') or 0); cn = int(r.get('call_no') or 0)
+        except ValueError:
+            continue
+        if n <= 0:
+            continue
+        try:
+            with open(os.path.join(OUT_DIR, sc, f'{asp}.cols.csv'), encoding='utf-8-sig', newline='') as f:
+                cols = {nkey(x.get('column') or '') for x in csv.DictReader(f) if str(x.get('set')) == '1'}
+        except OSError:
+            continue
+        if set(want.values()) <= cols:
+            cands.append((n, cn, asp, proc, r))
+    for n, cn, asp, proc, r in sorted(cands, key=lambda x: (x[0], x[1]))[:1]:
+        try:
+            pa = json.loads(r['params_asis'])
+            a_sets = run_asis(ca, asp, pa)
+            try:
+                t_sets, _miss = run_tobe(ct, proc, pa)
+            finally:
+                ct.rollback()
+        except Exception:
+            return {}, ''
+        t_data = [s for s in t_sets if not re.search(r'RESULT_CURSOR$', s[0])]
+        if not a_sets or not t_data:
+            return {}, ''
+        keys_ = list(want)
+        v, ncommon = pick_common_row(a_sets[0], t_data[0], [want[k] for k in keys_])
+        if v is None:
+            return {}, ''
+        hit = {k: v[i] for i, k in enumerate(keys_)}
+        _cn = {nkey(c): c for c in a_sets[0][0]}
+        return hit, (f"빈 인자 {', '.join(keys_)} = 같은 화면 본 조회 {asp} 결과 칸 {', '.join(_cn.get(want[k], want[k]) for k in keys_)} 값"
+                     f"(차등 검증 호출 #{cn} 실측 인자로 AS-IS {len(a_sets[0][1])}행 · TO-BE {len(t_data[0][2])}행 다시 조회 · 양쪽 공통 값 {ncommon}개 중 AS-IS 첫 행 · T547)")
+    return {}, ''
+
+
+def selftest():
+    """2026-11-25 T545·T547 판정 변이 시험(DB 없이)"""
+    cols = ['RID', 'FC', 'TM']
+    common = [nkey(c) for c in cols]
+    def run(a_rows, t_rows, sk):
+        ORDERPROF.clear(); md = []
+        a = (cols, a_rows); t = ('O_RC', cols, t_rows)
+        _order_check(1, a, t, {k: c for k, c in zip(common, cols)}, {k: c for k, c in zip(common, cols)}, common, [0, 1, 2], [0, 1, 2], md, sort_keys=sk)
+        return ORDERPROF[-1]['order']
+    a = [['196', 'KR', 'SEA'], ['88', 'KR', 'AIR'], ['5', 'US', 'TRK']]
+    t_tie = [['88', 'KR', 'AIR'], ['196', 'KR', 'SEA'], ['5', 'US', 'TRK']]   # 키 FC 동률 묶음 안 순서만 다름
+    t_bad = [['5', 'US', 'TRK'], ['196', 'KR', 'SEA'], ['88', 'KR', 'AIR']]   # 키 순서 자체가 다름
+    cases = [('T545 키 없음 = 종전(동률 배치 차이도 DIFF)', run(a, t_tie, None), 'DIFF'),
+             ('T545 AS-IS 키 기준 동률 묶음 = 집합 → PASS', run(a, t_tie, ['FC']), 'PASS'),
+             ('T545 키 순서가 다르면 DIFF 유지(변이)', run(a, t_bad, ['FC']), 'DIFF'),
+             ('T545 키가 결과 칸에 없으면 종전 비교', run(a, t_tie, ['NOPE']), 'DIFF'),
+             ('T545 DESC 표기 키도 칸 대응', run(a, t_tie, ['FC DESC']), 'PASS'),
+             ('T545 키 2개 · 두 번째 키에서 갈림 = DIFF', run(a, t_tie, ['FC', 'TM']), 'DIFF')]
+    ra = (['ROUTE_ID', 'X'], [['/', 'a'], ['11', 'b'], ['12', 'c']])
+    rt = ('O_RC', ['route_id', 'X'], [['12', 'c'], ['/', 'a'], ['11', 'b']])
+    cases += [('T547 공통 값 중 AS-IS 첫 행(센티널 제외)', pick_common_row(ra, rt, ['routeid'])[0], ('11',)),
+              ('T547 TO-BE 에 없는 값은 안 씀', pick_common_row(ra, ('O_RC', ['ROUTE_ID'], [['99']]), ['routeid'])[0], None),
+              ('T547 칸 없음 = 못 채움', pick_common_row(ra, rt, ['cityid'])[0], None),
+              ('T547 키 인자 아님(이름 끝 id·no·seq 아님) = 대상 아님', main_result_args('X', 'Y', {}, ['p_from_country'], None, None), ({}, '')),
+              ('T643 센티널 동치(AS-IS \'\' ↔ TO-BE \'/\')', snorm(nval('')) == snorm(nval('/')), True),
+              ('T643 실값 차이는 유지(변이)', snorm(nval('MAX')) == snorm(nval('/')), False)]
+    bad = 0
+    for n, got, want in cases:
+        ok = got == want
+        bad += 0 if ok else 1
+        print(f"{'OK ' if ok else 'NG '} {n} → {got}(기대 {want})")
+    print(f'selftest {len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
 
 
 def main(argv=None):
@@ -503,6 +785,16 @@ def main(argv=None):
                 params.update(_hit); _live_note = (_live_note + ' · ' if _live_note else '') + _note
             else:
                 _src_note = no_arg_source_note(sc, sp, proc, [k for k, v in params.items() if v == '' and k not in _blank_ok])
+        # ⑤ 2026-11-20 T514 (SCP0028 V-8da88867 A7): 남은 빈 값 원천이 AS-IS 팝업 체크 행 목록이면 TO-BE 팝업 조회 기록 같은 1행으로 채운다(popup_list_args) · 못 채우면 ④ 사유 그대로
+        if _src_note:
+            _hit, _note = popup_list_args(sc, sp, params, {k for k, v in params.items() if v == '' and k not in _blank_ok})
+            if _hit:
+                params.update(_hit); _live_note = (_live_note + ' · ' if _live_note else '') + _note; _src_note = ''
+        # ⑥ 2026-11-25 T547 (SCP0005 T-94b3ad3d·T-c65db01b · V-4d5799f3): 남은 빈 키 인자(p_<X>_id 등) = 같은 화면 본 조회 결과의 같은 이름 칸 값(main_result_args) · 못 채우면 ④ 사유 그대로
+        if _src_note and proc:
+            _hit, _note = main_result_args(sc, sp, params, [k for k, v in params.items() if v == '' and k not in _blank_ok], ca, ct)
+            if _hit:
+                params.update(_hit); _live_note = (_live_note + ' · ' if _live_note else '') + _note; _src_note = ''
         md = [f"# {sc} · {sp} ↔ {proc or '(미매칭)'}", '', f"- 실행: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}", f"- 파라미터: `{json.dumps(params, ensure_ascii=False)}`", f"- 종류: {c['kind']}"] + ([f'- {_live_note}'] if _live_note else []) + ([f'- {_src_note}'] if _src_note else [])
         a_sets = t_sets = None
         if c['kind'] == 'SAVE' and not WRITE: verdict = 'SKIP'; md.append('- SAVE 류 — `--write` 없이 건너뜀')
@@ -514,7 +806,7 @@ def main(argv=None):
                 try:
                     t_sets, missing = run_tobe(ct, proc, params)
                     if missing: md.append(f"- To-Be 인자 중 값 없음(NULL 전달): {', '.join(missing)}")
-                    COLPROF.clear(); ORDERPROF.clear(); KEYPROF.clear(); verdict, lines = compare(a_sets, t_sets); md += lines
+                    COLPROF.clear(); ORDERPROF.clear(); KEYPROF.clear(); verdict, lines = compare(a_sets, t_sets, sort_keys=asis_order_keys(sp)); md += lines  # T545
                 finally:
                     if c['kind'] == 'SAVE': ct.rollback()
             except Exception as e:
@@ -540,4 +832,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(selftest() if '--selftest' in sys.argv[1:] else main())  # 2026-11-25 T545·T547 --selftest

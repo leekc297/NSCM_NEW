@@ -1,0 +1,201 @@
+# -*- coding: utf-8 -*-
+"""다국어 정적 점검(2026-11-01 엔진 갭 EG451·EG356·EG364)
+
+  python tools/Harness/verify/i18n_static.py <MENU_ID>   → Doc/verify/<ID>/i18n_static.csv (eg_ingest 가 MS1·I1 행으로 반입)
+
+  FE: 화면 폴더 .ts/.tsx 문자열·JSX 텍스트의 한글 — 주석 제외 · t(코드, '_기본문구') 의 기본 문구 제외(등록 코드가 우선) · 등록 코드 없는 고정 문구만
+  DB: 화면 저장·조회 PROC 본문의 한글 문자열 리터럴(주석 제외 · ALL_SOURCE 새로 조회) — 언어 전환 때 그대로 보이는 메시지 후보
+  사전: 화면이 쓰는 MSG 코드 중 같은 언어·같은 문구를 가진 다른 코드(재사용 위반 후보)
+  한계: 문자열이 화면에 실제 표시되는지는 재지 않는다 — 내부 비교값·로그일 수 있어 FAIL 이 아니라 ERROR(확인 대상)
+"""
+import argparse, collections, csv, json, os, re, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..')); DOC = os.path.join(ROOT, 'Doc')
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn')); sys.path.insert(0, HERE)
+from facts_sortrules import strip_comments  # noqa: E402  # SQL 주석(--·/* */) 제거 — facts_combosrc 판은 // 만 지운다(T37)
+from sort_check import proc_body  # noqa: E402
+from sp_branch_check import rd  # noqa: E402
+
+KO = re.compile(r'[가-힣]')
+RX_STR = re.compile(r"""'([^'\n]*[가-힣][^'\n]*)'|"([^"\n]*[가-힣][^"\n]*)"|`([^`\n]*[가-힣][^`\n]*)`""")
+RX_JSX = re.compile(r'>\s*([^<>{}\n]*[가-힣][^<>{}\n]*)\s*<')
+RX_T_DEFAULT = re.compile(r"\bt\(\s*[^,()]+,\s*$")
+# 2026-11-20 T486(SCP0028 EG-bd80125c MS1 remember(MSG.INC_GT_LOT, '{0}은 {1} 보다 클 수 없습니다.')): 화면 안 감싼 함수
+#   (remember(msgId, fallback) → t(msgId, fallback))의 둘째 인자도 기본 문구다. 첫 인자가 'MSGnnnnn' 문자열이거나
+#   화면 폴더 상수(이름: 'MSGnnnnn')로 풀리고 그 코드가 msg_master 에 KO 로 등록돼 있을 때만 제외한다(등록 코드 없으면 그대로 잡음).
+RX_WRAP_DEFAULT = re.compile(r"\b[A-Za-z_$][\w$]*\(\s*(?:(['\"`])(MSG\d{5})\1|([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*))\s*,\s*$")
+RX_MSG_CONST = re.compile(r"\b([A-Za-z_$][\w$]*)\s*[:=]\s*['\"`](MSG\d{5})['\"`]")
+
+
+def wrap_default_code(prefix, constmap, registered):
+    """문자열 바로 앞이 '함수(코드, ' 이고 코드가 등록 메시지면 그 코드 · 아니면 ''"""
+    m = RX_WRAP_DEFAULT.search(prefix)
+    if not m: return ''
+    code = m.group(2) or constmap.get((m.group(3) or '').split('.')[-1], '')
+    return code if code and code in registered else ''
+
+
+def page_dir(mid):
+    plan = os.path.join(DOC, 'e2e', 'specs', f'{mid}.plan.json')
+    if os.path.exists(plan):
+        rp = [x for x in re.split(r'[\\/]', json.load(open(plan, encoding='utf-8')).get('routePath') or '') if x]
+        if len(rp) >= 2:
+            d = os.path.join(ROOT, 'nscm-fe', 'features', rp[0], 'src', 'pages', rp[-1])
+            if os.path.isdir(d): return [d]
+    out = []; fr = os.path.join(ROOT, 'nscm-fe', 'features')
+    for feat in (os.listdir(fr) if os.path.isdir(fr) else []):
+        pg = os.path.join(fr, feat, 'src', 'pages')
+        if not os.path.isdir(pg): continue
+        for page in os.listdir(pg):
+            d = os.path.join(pg, page)
+            for dp, dn, fn in os.walk(d):
+                dn[:] = [x for x in dn if x != 'node_modules']
+                if any(f.endswith(('.ts', '.tsx')) and re.search(r"['\"`]" + mid + r"['\"`]", open(os.path.join(dp, f), encoding='utf-8', errors='replace').read()) for f in fn):
+                    out.append(d); break
+    return out
+
+
+RX_RAISE = re.compile(r'RAISE_APPLICATION_ERROR\s*\(', re.I)
+RX_MSGVAR = re.compile(r'\b([A-Z0-9_]*MSG[A-Z0-9_]*)\s*:=', re.I)
+
+
+def msg_use_line(line):
+    """문구가 사용자 메시지로 나가는 경로 — RAISE(RAISE_APPLICATION_ERROR 인자) · OUTMSG(이름에 MSG 가 든 변수·인자 대입) · ''(경로 못 찾음)"""
+    if RX_RAISE.search(line): return 'RAISE'
+    if RX_MSGVAR.search(line): return 'OUTMSG'
+    return ''
+
+
+def name_use(name, body, skip_decl=True):
+    """이름(상수·변수)을 본문이 쓰는 줄 중 메시지 경로 — RAISE 우선 · 선언 줄 제외"""
+    uses = []
+    for l in (body or '').split(chr(10)):
+        l = re.sub(r'--.*$', '', l)
+        if not re.search(r'(?i)\b' + re.escape(name) + r'\b', l): continue
+        if skip_decl and re.match(r'(?i)^\s*' + re.escape(name) + r'\s+(CONSTANT\b|VARCHAR2|NVARCHAR2|CHAR\b|[A-Z0-9_.]+%TYPE)', l): continue
+        uses.append(msg_use_line(l))
+    return 'RAISE' if 'RAISE' in uses else 'OUTMSG' if 'OUTMSG' in uses else ''
+
+
+def decl_use(line, body):
+    """선언 줄('C_MSG_DUP CONSTANT VARCHAR2(200) := '…'')이면 그 이름의 본문 사용 경로 · 선언 줄 아니면 ''"""
+    m = re.match(r"(?i)^\s*([A-Z][A-Z0-9_]*)\s+(?:CONSTANT\s+)?[A-Z0-9_.%()\s]+?:=\s*'", line)
+    return name_use(m.group(1), body) if m else ''
+
+
+def const_lits(pkg_src, body):
+    """본문 밖(패키지 선언부) 한글 상수 중 PROC 본문이 RAISE·메시지 변수 대입에 쓰는 것 — [(문구, use)] · 본문이 안 쓰면 넣지 않음"""
+    out = []
+    if not pkg_src or not body: return out
+    for m in re.finditer(r"(?im)^\s*([A-Z][A-Z0-9_]*)\s+CONSTANT\b[^:;]*:=\s*'((?:[^'\n]|'')*[가-힣](?:[^'\n]|'')*)'", pkg_src):
+        name, lit = m.group(1), m.group(2)
+        if re.search(r'(?i)\b' + name + r'\s+CONSTANT\b', body): continue  # 본문 안 선언 = 줄 단위 검사가 이미 잡음
+        if not re.search(r'(?i)\b' + name + r'\b', body): continue
+        out.append((lit, name_use(name, body)))
+    return out
+
+
+def selftest():
+    pkg = "  C_MSG_DUP CONSTANT VARCHAR2(200 CHAR) := '[99010]동일한 데이터가 존재합니다.';\n  C_X CONSTANT VARCHAR2(10) := '미사용';\nPROCEDURE P IS\nBEGIN\n  RAISE_APPLICATION_ERROR(-20010, C_MSG_DUP);\nEND;"
+    body = "PROCEDURE P IS\nBEGIN\n  RAISE_APPLICATION_ERROR(-20010, C_MSG_DUP);\nEND;"
+    cases = [('상수 RAISE', const_lits(pkg, body), [('[99010]동일한 데이터가 존재합니다.', 'RAISE')]),
+             ('본문 안 상수 중복 제외', const_lits(pkg, "PROCEDURE P IS\n C_MSG_DUP CONSTANT VARCHAR2(9) := '가';\nBEGIN RAISE_APPLICATION_ERROR(-1, C_MSG_DUP); END;"), []),
+             ('본문 선언 상수 RAISE', decl_use("        C_MSG_DUP       CONSTANT VARCHAR2(200 CHAR) := '[99010]동일한 데이터가 존재합니다.';", "PROCEDURE P IS\n        C_MSG_DUP       CONSTANT VARCHAR2(200 CHAR) := '[99010]동일한 데이터가 존재합니다.';\nBEGIN\n  IF X THEN\n    RAISE_APPLICATION_ERROR(-20010, C_MSG_DUP);\n  END IF;\nEND;"), 'RAISE'),
+             ('본문 선언 변수 미사용', decl_use("  V_T VARCHAR2(10) := '전극';", "PROCEDURE P IS\n  V_T VARCHAR2(10) := '전극';\nBEGIN NULL; END;"), ''),
+             ('직접 RAISE', msg_use_line("RAISE_APPLICATION_ERROR(-20001, '오류');"), 'RAISE'),
+             ('메시지 변수', msg_use_line("  O_RTN_MSG := '저장 실패';"), 'OUTMSG'),
+             ('비교값', msg_use_line("  WHERE A.NAME = '전극'"), ''),
+             ('감싼 함수 상수 코드 기본 문구', wrap_default_code("          remember(MSG.INC_GT_LOT, ", {'INC_GT_LOT': 'MSG01127'}, {'MSG01127'}), 'MSG01127'),
+             ('감싼 함수 코드 문자열 기본 문구', wrap_default_code("  show('MSG01127', ", {}, {'MSG01127'}), 'MSG01127'),
+             ('미등록 코드는 제외 안 함', wrap_default_code("  remember(MSG.X, ", {'X': 'MSG99999'}, {'MSG01127'}), ''),
+             ('상수 못 풂은 제외 안 함', wrap_default_code("  remember(label, ", {}, {'MSG01127'}), ''),
+             ('첫 인자 자리 아님', wrap_default_code("  setText(", {}, {'MSG01127'}), '')]
+    bad = 0
+    for n, got, want in cases:
+        ok = got == want; bad += not ok; print(('OK ' if ok else 'NG ') + n, got)
+    print(f'{len(cases) - bad}/{len(cases)}'); return 1 if bad else 0
+
+
+def strip_ts(t):
+    t = re.sub(r'/\*.*?\*/', lambda m: re.sub(r'[^\n]', ' ', m.group(0)), t, flags=re.S)
+    return re.sub(r'(?m)(?<![:\'"`])//.*$', '', t)
+
+
+def main():
+    if '--selftest' in sys.argv: return selftest()
+    ap = argparse.ArgumentParser(); ap.add_argument('menu'); a = ap.parse_args(); mid = a.menu.upper(); vd = os.path.join(DOC, 'verify', mid); os.makedirs(vd, exist_ok=True)
+    rows = []; ids = set()
+    registered = {x['msg_id'] for x in rd(os.path.join(DOC, 'tobefacts', 'db', 'msg_master.csv')) if (x.get('msg_id') or '').startswith('MSG') and x.get('use_yn') != 'N' and x.get('lang_cd') == 'KO'}
+    constmap = {}  # T486 화면 폴더 메시지 상수 이름 → 코드
+    for d in page_dir(mid):
+        for dp, dn, fn in os.walk(d):
+            dn[:] = [x for x in dn if x != 'node_modules']
+            for f in fn:
+                if f.endswith(('.ts', '.tsx')):
+                    for cm in RX_MSG_CONST.finditer(strip_ts(open(os.path.join(dp, f), encoding='utf-8', errors='replace').read())):
+                        constmap.setdefault(cm.group(1), cm.group(2))
+    for d in page_dir(mid):
+        for dp, dn, fn in os.walk(d):
+            dn[:] = [x for x in dn if x != 'node_modules']
+            for f in fn:
+                if not f.endswith(('.ts', '.tsx')) or re.search(r'\.(test|spec|asis\.spec)\.', f): continue
+                p = os.path.join(dp, f); src = strip_ts(open(p, encoding='utf-8', errors='replace').read()); rel = os.path.relpath(p, ROOT).replace('\\', '/')
+                ids |= set(re.findall(r'MSG\d{5}', src))
+                for m in RX_STR.finditer(src):
+                    if RX_T_DEFAULT.search(src[max(0, m.start() - 80):m.start()]): continue  # t(코드, '기본 문구')
+                    if wrap_default_code(src[max(0, m.start() - 120):m.start()], constmap, registered): continue  # T486 감싼 함수(코드, '기본 문구')
+                    txt = next(g for g in m.groups() if g is not None)
+                    if txt.startswith('_'): continue
+                    rows.append({'menu_id': mid, 'kind': 'FE', 'where': f"{rel}:{src.count(chr(10), 0, m.start()) + 1}", 'text': txt[:100]})
+                if f.endswith('.tsx'):
+                    for m in RX_JSX.finditer(src): rows.append({'menu_id': mid, 'kind': 'FE', 'where': f"{rel}:{src.count(chr(10), 0, m.start()) + 1}", 'text': m.group(1).strip()[:100]})
+    pm = [r for r in rd(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if (r.get('menu_id') or '').upper() == mid and r.get('proc') and '.' in r.get('proc')]
+    if pm:
+        from dbconn import connect
+        cache = {}; seen = set()
+        with connect('tobe') as cx:
+            cur = cx.cursor()
+            for r in pm:
+                pkg, proc = r['proc'].split('.')[:2]; pkg = pkg.upper()
+                if r['proc'] in seen: continue
+                seen.add(r['proc'])
+                if pkg not in cache:
+                    cur.execute("SELECT OWNER FROM ALL_OBJECTS WHERE OBJECT_NAME=:n AND OBJECT_TYPE='PACKAGE BODY'", n=pkg); m = cur.fetchone()
+                    if not m: cache[pkg] = ''
+                    else:
+                        cur.execute("SELECT TEXT FROM ALL_SOURCE WHERE OWNER=:o AND NAME=:n AND TYPE='PACKAGE BODY' ORDER BY LINE", o=m[0], n=pkg); cache[pkg] = strip_comments(''.join(x[0] for x in cur.fetchall()))
+                body = proc_body(cache[pkg], proc) if cache[pkg] else ''
+                # 2026-11-19 T340(SCP0111 EG-42d53d53): 잡힌 문구가 화면에 나가는지 몰라 전부 ERROR 였다 — 나가는 경로(use)를 기록하고,
+                #   패키지 선언부 상수(C_MSG_DUP := '…')를 본문이 RAISE·메시지 변수에 쓰는 경우도 넣는다
+                lits = []
+                for line in (body or '').split(chr(10)):
+                  line = re.sub(r'--.*$', '', line)
+                  for lit in re.findall(r"'((?:[^'\n]|'')*[가-힣](?:[^'\n]|'')*)'", line):
+                    lits.append((lit, decl_use(line, body) or msg_use_line(line)))
+                lits += const_lits(cache[pkg], body)
+                for lit, use in lits:
+                    rows.append({'menu_id': mid, 'kind': 'DB', 'where': r['proc'], 'text': lit[:100], 'use': use})
+    # 같은 문구 다른 코드
+    mm = rd(os.path.join(DOC, 'tobefacts', 'db', 'msg_master.csv')); by = collections.defaultdict(set)
+    for x in mm:
+        if (x.get('msg_id') or '').startswith('MSG') and x.get('use_yn') != 'N': by[(x.get('lang_cd'), (x.get('msg_nm') or '').strip())].add(x['msg_id'])
+    # 2026-11-18(SCP0096 EG-46e1377f·EG-e3aded01): 화면이 묶음 중 코드 1개만 쓰고 그 코드의 한글 문구가 나머지 코드와 다르면
+    #   번역 문구만 겹친 다른 메시지 — 화면 판정 대상 아님(MSG00002 '성공적으로 저장되었습니다.' ↔ MSG00606 '저장되었습니다.')
+    ko = {x['msg_id']: (x.get('msg_nm') or '').strip() for x in mm if x.get('lang_cd') == 'KO' and (x.get('msg_id') or '').startswith('MSG')}
+    for (lg, txt), codes in by.items():
+        used = codes & ids
+        if len(used) == 1 and lg != 'KO':
+            u = next(iter(used))
+            if ko.get(u) and all(ko.get(c) and ko.get(c) != ko[u] for c in codes - used):
+                continue
+        if len(codes) > 1 and txt and codes & ids:
+            rows.append({'menu_id': mid, 'kind': 'DUP', 'where': ','.join(sorted(codes)[:6]), 'text': f'[{lg}] {txt[:80]}'})
+    uniq = {(r['kind'], r['where'], r['text']): r for r in rows}; rows = list(uniq.values())
+    with open(os.path.join(vd, 'i18n_static.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=['menu_id', 'kind', 'where', 'text', 'use'], extrasaction='ignore'); w.writeheader(); w.writerows(rows)
+    print(f"{mid}: {dict(collections.Counter(r['kind'] for r in rows))} · 화면 사용 MSG {len(ids)}")
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

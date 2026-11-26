@@ -47,6 +47,14 @@ import { filterComboRowsByRow, toCellStr } from '../utils/business-plan.gridComb
 import { HierarchicalMergeManager } from '../utils/business-plan.merge';
 import { applyCellChange } from '../utils/business-plan.spread';
 
+// 동적(기간) 컬럼 너비 = 프로시저(GET_SPREAD_TITLE) COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+const DYN_COL_DEFAULT_WIDTH = 90;
+const spColumnWidth = (raw: string | number | null | undefined): number | undefined => {
+  const n = Number(String(raw ?? '').trim());
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
 // 동적 컬럼 kind 서열 — Y(연)=0 상위 … M(월)=2 하위. 표시 규칙/드릴다운 판정용
 //   (플랜 §E 확정: 활성 bucket=표시 / 상위 SUM=sumYn / 하위=드릴 전용. AS-IS SetSpreadColumn L466~498 대응).
 const DYN_RANK = { Y: 0, Q: 1, M: 2 } as const;
@@ -277,6 +285,8 @@ export const BusinessPlanGrid = ({
     small: string;
     leaf: string;
     sort: number;
+    /** SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+    width?: number;
   };
   const dynColMetas = useMemo<DynColMeta[]>(() => {
     // (1) GET_SPREAD_TITLE 우선
@@ -290,6 +300,7 @@ export const BusinessPlanGrid = ({
           small: String(r.SMALL_CLASS_LABEL_NAME ?? ''),
           leaf: String(r.COLUMN_LABEL_NAME ?? ''),
           sort: Number(r.SORT_ORDER_NO ?? 0),
+          width: spColumnWidth(r.COLUMN_WIDTH),
         }))
         .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
@@ -383,7 +394,7 @@ export const BusinessPlanGrid = ({
         //   Business_Plan measure 입력은 정수만 허용(MSG00679)이지만, 표시 서식은 소수 원천을 갖는
         //   다른 measure(ENERGE_WH·환율 등)와 공통으로 3자리를 쓴다.
         format: 'n3',
-        width: 90,
+        width: m.width ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,

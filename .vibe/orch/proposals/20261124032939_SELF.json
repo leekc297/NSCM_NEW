@@ -1,0 +1,107 @@
+{
+  "id": "20261124032939_SELF",
+  "at": "2026-11-24T03:29:39+09:00",
+  "ms": 1795458579363,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/engine_gate.py|검사기게이트결과화면별json rn",
+  "title": "검사기 게이트 결과를 화면별 JSON(Doc/verify/<ID>/engine_gate.json)으로 남겨 quick.json 6, 7단계 조건(ifJsonGt)의 입력을 만듦(R28 보완 1조각)",
+  "evidence": "tools/VibeManager/workbench.js:1180-1186 ifJsonGt = 이번 체인에서 갱신된 JSON 파일의 숫자 키만 읽음 · tools/Harness/verify/engine_gate.py:120-135 check() 결과 rec{gate: ok|reverted|none} 를 JSONL 에만 기록 · engine_gate.py:194-200 --check 종료코드 항상 0 · Doc/verify/*/engine_gate.json 현재 0개(Glob 2026-11-24) · 실패 안 20261123184517_SELF_3 note (반영 실패한 20261123184517_SELF_3 를 고친 안 · 원인 안의 대상이 quick.json 하나인데 quick.json 만으로 '게이트 통과 회차에만 7단계 실행'을 표현할 수 없음. 실행기 조건 키는 ifJsonGt, ifPrevRan, ifOk, askUser 4종(tools/VibeManager/workbench.js:1180-1207). engine_gate.py --check 는 통과, 되돌림, 변경 없음 모두 종료코드 0(tools/Harness/verify/engine_gate.py:194-200)이라 ifOk 로 구분 불가. 게이트 결과는 Doc/verify/_engine_changes.jsonl 에 줄로 쌓이기만 해서(engine_gate.py:114-117) ifJsonGt 로 읽을 수 없음. 2026-11-24 03:25:58 반영 실패 기록(history 4번째 줄), 변경 파일 0개.)",
+  "targets": [
+    "tools/Harness/verify/engine_gate.py"
+  ],
+  "before_after": "전: --check 결과는 Doc/verify/_engine_changes.jsonl 에 줄 추가만 함(변경 없음이면 기록도 없음). 후: check() 끝에서 Doc/verify/<ID>/engine_gate.json 에 {at, screen, changed: 파일 수, passed: gate ok 면 1 아니면 0, reverted: gate reverted 면 1 아니면 0, files} 를 매번 덮어씀(변경 없음도 changed 0, passed 0 으로 씀). 종료코드와 JSONL 기록은 그대로 둠. selftest 에 JSON 기록 확인 2건(통과 = passed 1, 되돌림 = reverted 1 · passed 0) 추가. quick.json 6, 7단계 ifJsonGt(file Doc/verify/${id}/engine_gate.json, key passed, gt 0) 연결은 다음 조각(6단계는 미검증 행 재측정과 겹쳐 승인 때 결정)",
+  "verify": "python -u tools/Harness/verify/engine_gate.py --selftest: 검사 수 반영 전 13개(소스 chk 호출 수, 실행 결과 반영 전 미측정) → 반영 뒤 기대 15개, FAIL 0, 마지막 줄 SELFTEST OK. 추가 2건 = 'JSON 기록 통과(passed 1)' · 'JSON 기록 되돌림(reverted 1, passed 0)'",
+  "rollback": "tools/Harness/verify/engine_gate.py 를 VMO 백업 태그 사본으로 복원. 생긴 Doc/verify/<ID>/engine_gate.json 은 읽는 곳이 없어 남겨도 동작 변화 없음",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T03:30:17+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T03:33:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0330"
+    },
+    {
+      "at": "2026-11-24T03:33:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T03:38:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T03:38:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 2건. python -u tools/Harness/verify/engine_gate.py --selftest. 2026-11-24 03:34:09 반영 전 PASS 13 FAIL 0 SELFTEST OK → 2026-11-24 03:34:24 반영 뒤 PASS 15 FAIL 0, 추가 2줄 'PASS JSON 기록 통과(passed 1)', 'PASS JSON 기록 되돌림(reverted 1, passed 0)', 마지막 줄 SELFTEST OK · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T03-33-59_claude_orch.log",
+      "sec": 35,
+      "costUsd": 0.5233728,
+      "files": [
+        "tools/Harness/verify/engine_gate.py"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R28|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "repairOf": "20261123184517_SELF_3",
+  "repairRoot": "20261123184517_SELF_3",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795458617276,
+  "autoFp": "6230196d76",
+  "applyStartMs": 1795458839814,
+  "verifyJudge": {
+    "at": "2026-11-24T03:34:37+09:00",
+    "verified": true,
+    "text": "실행 통과 2건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0330",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795459091023,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "python -u tools/Harness/verify/engine_gate.py --selftest: 반영 전 PASS 13, FAIL 0 → 반영 뒤 PASS 15, FAIL 0, 마지막 줄 SELFTEST OK"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "같은 실행 출력에 'PASS JSON 기록 통과(passed 1)', 'PASS JSON 기록 되돌림(reverted 1, passed 0)' 2줄 있음"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/engine_gate.py"
+    ],
+    "verify_result": "python -u tools/Harness/verify/engine_gate.py --selftest. 2026-11-24 03:34:09 반영 전 PASS 13 FAIL 0 SELFTEST OK → 2026-11-24 03:34:24 반영 뒤 PASS 15 FAIL 0, 추가 2줄 'PASS JSON 기록 통과(passed 1)', 'PASS JSON 기록 되돌림(reverted 1, passed 0)', 마지막 줄 SELFTEST OK",
+    "note": "check() 끝에서 write_result() 가 Doc/verify/<ID>/engine_gate.json 을 덮어씀(변경 없음도 changed 0, passed 0). 종료코드와 _engine_changes.jsonl 기록은 바꾸지 않음. quick.json 6, 7단계 ifJsonGt 연결은 다음 조각이라 이번 범위 밖임. 걸린 시간 약 1분."
+  },
+  "snap": "prop_20261124032939_SELF"
+}

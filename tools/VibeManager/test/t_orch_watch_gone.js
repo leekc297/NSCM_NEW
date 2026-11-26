@@ -46,6 +46,11 @@ chk('더 늦은 실행 없음 = 종전 알림 1건 · proc.gone 추가 없음', 
   const d = im.digest(1); const wd = d.waits.find(x => x.kind === 'dbwin'); const wa = d.waits.find(x => x.kind === 'admit');
   chk('집계 dbwin gone 1 · goneSec 0 · goneUnknown 1', wd && wd.gone === 1 && wd.goneSec === 0 && wd.goneUnknown === 1, JSON.stringify(wd));
   chk('집계 admit gone 1 · goneSec = sec_wait · goneUnknown 0', wa && wa.gone === 1 && wa.goneSec === a.sec_wait && wa.goneUnknown === 0, JSON.stringify(wa));
+  // 개선안 20261122133806_SELF: dbwin wait.start 2건 중 1건이 wait.gone 이면 끝나지 않은 대기 1건
+  ev.emit('wait.start', { kind: 'dbwin', screen: 'TST0111', pid: 999911, src: 'py' }); ev.emit('wait.start', { kind: 'dbwin', screen: 'TST0112', pid: 999912, src: 'py' });
+  ev.emit('wait.gone', { kind: 'dbwin', screen: 'TST0111', waiter_pid: 999911, sec_wait: 60 });
+  { const d3 = im.digest(1); const w3 = d3.waits.find(x => x.kind === 'dbwin');
+    chk('집계 dbwin 시작 2 · 사라짐 1 = 끝나지 않은 대기 1(TST0112)', w3 && w3.started === 2 && w3.unfinished === 1 && w3.unfinishedScreens.join(',') === 'TST0112' && w3.gone === 2, JSON.stringify(w3)); }
   w.dispose(); st.dispose(); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })();

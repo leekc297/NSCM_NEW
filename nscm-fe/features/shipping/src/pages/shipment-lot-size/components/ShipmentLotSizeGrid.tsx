@@ -7,11 +7,7 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomMergeManager, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import {
-  EDITABLE_COLUMNS,
-  LOT_SIZE_COLUMNS,
-  MERGE_COLUMNS,
-} from '../shipment-lot-size.constants';
+import { LOT_SIZE_COLUMNS, MERGE_COLUMNS } from '../shipment-lot-size.constants';
 import type { ShipmentLotSizeRow } from '../shipment-lot-size.types';
 import { buildColumns } from '../utils/shipmentLotSize.columns';
 import { computeIncrementSync } from '../utils/shipmentLotSize.derive';
@@ -35,13 +31,10 @@ interface Props {
   onFocus: () => void;
 }
 
-// 편집셀 배경 yellow / 위반 셀 red (design 03 §3-14, hook #95 grid-cell-backcolor-standard).
-//   formatItem 이 매 셀 렌더에 재적용해 스크롤/refresh 시 DOM 재사용에도 유지된다.
-const EDITABLE_BG = '#fffde7';
+// 저장검증 위반 셀 red (design 03 §3-14). 편집셀 yellow 는 공용 .wj-cell-editable 이 담당.
 const INVALID_BG = '#ffd7d7';
 
 const MERGE_SET = new Set<string>(MERGE_COLUMNS);
-const EDITABLE_SET = new Set<string>(EDITABLE_COLUMNS);
 
 export const ShipmentLotSizeGrid = ({
   rows,
@@ -96,21 +89,17 @@ export const ShipmentLotSizeGrid = ({
     g.cellEditEnded.addHandler(cellEditEndedHandler);
     g.pastedCell.addHandler(cellEditEndedHandler);
 
-    // formatItem: 편집셀(편집 화이트리스트 4컬럼) yellow / 위반셀 red. 미해당 셀은 '' 로 해제(DOM 재사용 대비).
-    //   상시편집이라 4컬럼은 항상 편집 가능 → 항상 yellow(hook #95 편집셀 배경 규약).
+    // formatItem: 저장검증 위반셀 red 하이라이트(영속). DOM 재사용 대비 매 렌더 재적용/해제.
+    //   편집셀 yellow 는 공용 .wj-cell-editable(INPUT_TP_CD 메타 'M' 4컬럼 + isReadOnly 권한연동)이
+    //   담당한다 — 커스텀 배경칠 제거(hook #95 grid-cell-backcolor-standard). 위반 red 는 인라인이라
+    //   .wj-cell-editable 보다 우선 적용된다.
     const formatItemHandler = (sndr: FlexGridType, e: FormatItemEventArgs) => {
       if (e.panel.cellType !== CellType.Cell) return;
       const binding = sndr.columns[e.col]?.binding ?? '';
       const dataItem = sndr.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
       const isInvalid =
         !!dataItem && invalidRef.current.some(c => c.row === dataItem && c.column === binding);
-      if (isInvalid) {
-        e.cell.style.backgroundColor = INVALID_BG;
-      } else if (canEditRef.current && EDITABLE_SET.has(binding)) {
-        e.cell.style.backgroundColor = EDITABLE_BG;
-      } else {
-        e.cell.style.backgroundColor = '';
-      }
+      e.cell.style.backgroundColor = isInvalid ? INVALID_BG : '';
     };
     g.formatItem.addHandler(formatItemHandler);
 
@@ -147,6 +136,9 @@ export const ShipmentLotSizeGrid = ({
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
+      // EDIT 권한 없으면 읽기전용 → 공용 .wj-cell-editable(편집 하이라이트)도 권한을 존중한다.
+      //   권한 있으면 INPUT_TP_CD 메타('M' 4컬럼)로 편집셀이 자동 판정·강조된다.
+      isReadOnly={!canEdit}
       itemsSource={rows as unknown as WijmoRowItem[]}
       staticColumns={columns}
       allowMerging={AllowMerging.Cells}

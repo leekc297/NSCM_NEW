@@ -1,0 +1,29 @@
+{
+  "id": "20261120_204931_R12_ALL_2",
+  "at": "2026-11-20T20:49:31+09:00",
+  "ms": 1795175371164,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U23 WORKBENCH 재개 진행 표시 보고 없음 SCP0028",
+  "screen": "",
+  "sig": "R12|S13|U23|wb|SCP0028_1795175178967",
+  "count": 1,
+  "repeat": null,
+  "detail": "SCP0028_1795175178967(재개 원본 SCP0028_1795169872066) SCP0028 작업 J20261120_191752 시작 11-20 20:46 · 재개 2분 뒤 받은 WORKBENCH 표시 보고 없음(.vibe/orch/usercheck/ui.json wb 없음 · 웹뷰 noteUi tab 'wb' 송출 필요)",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U23|wb|SCP0028_1795175178967",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T02:03:37+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

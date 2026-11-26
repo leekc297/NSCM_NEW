@@ -127,10 +127,13 @@ def do_ppt(path, prefix='ppt_'):
                     walk(el, T2, gpath + [gid])
                 elif tag == P + 'graphicFrame':  # 표 개체(a:tbl) — 칸 문구를 행·열 그대로
                     nvp = el.find('p:nvGraphicFramePr/p:cNvPr', NS); fid = nvp.get('id') if nvp is not None else ''
+                    # 2026-11-20 표 좌표(fx·fy) 추가: 한 슬라이드에 표가 여럿이면 frame_id 순서와 화면 배치 순서가 다름(11-20 판 8번 슬라이드 실측)
+                    fo = el.find('p:xfrm/a:off', NS); sx, sy, tx, ty = T
+                    fx, fy = (round(tx + sx * int(fo.get('x'))), round(ty + sy * int(fo.get('y')))) if fo is not None else ('', '')
                     for ri, tr in enumerate(el.iter(A + 'tr')):
                         for ci, tc in enumerate(tr.findall(A + 'tc')):
                             paras = [''.join(t.text or '' for t in pp.iter(A + 't')) for pp in tc.iter(A + 'p')]
-                            tables.append([sno, fid, ri, ci, ' / '.join(t.strip() for t in paras if t.strip())])
+                            tables.append([sno, fid, ri, ci, ' / '.join(t.strip() for t in paras if t.strip()), fx, fy])
                 elif tag in (P + 'sp', P + 'cxnSp'):
                     nvp = el.find('p:nvSpPr/p:cNvPr', NS) if tag == P + 'sp' else el.find('p:nvCxnSpPr/p:cNvPr', NS)
                     sid = nvp.get('id') if nvp is not None else ''; nm = nvp.get('name') if nvp is not None else ''
@@ -196,7 +199,7 @@ def do_ppt(path, prefix='ppt_'):
             conns.append([sno, c['id'], a_id, 'id' if c['st'] else 'geom', a_d, b_id, 'id' if c['en'] else 'geom', b_d, c['head'], c['tail'],
                           *(round(v) if v is not None else '' for v in (c['p1'][0], c['p1'][1], c['p2'][0], c['p2'][1])), c['prst'], c['rot'], ';'.join(f'{round(x)},{round(y)}' for x, y in c['pts'])])
     w(prefix + 'shapes.csv', ['slide', 'id', 'name', 'group', 'group_path', 'geom', 'x', 'y', 'w', 'h', 'text', 'fill', 'fill_raw'], shapes)
-    w(prefix + 'tables.csv', ['slide', 'frame_id', 'row', 'col', 'text'], tables)
+    w(prefix + 'tables.csv', ['slide', 'frame_id', 'row', 'col', 'text', 'fx', 'fy'], tables)
     w(prefix + 'groups.csv', ['slide', 'id', 'name', 'parent', 'x', 'y', 'w', 'h'], groups)
     w(prefix + 'connectors.csv', ['slide', 'id', 'start_id', 'start_by', 'start_dist_emu', 'end_id', 'end_by', 'end_dist_emu', 'arrow_at_start', 'arrow_at_end', 'x1', 'y1', 'x2', 'y2', 'prst', 'rot', 'path'], conns)
 

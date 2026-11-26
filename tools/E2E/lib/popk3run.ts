@@ -53,6 +53,17 @@ export async function popupTriggers(nscm: Nscm, id: string): Promise<{ name: str
       const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^\\s*${esc(n).replace(/\s+/g, '\\s*')}\\s*$`, 'i') })).catch(() => null);
       if (b) { hit = b; used = n; break; }
     }
+    // 2026-11-25 T600(SCP0005 V-96a5218a): TO-BE 단추 이름이 앞 낱말을 더 단 경우('Upload' → 'Excel Upload') — 끝 낱말 일치로 한 번 더 찾음(단축키 붙은 툴바 단추 'Delete(F9)' 는 여전히 제외)
+    if (!hit) for (const n of names) {
+      if (!n || n.length < 3) continue;
+      const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^\\s*[A-Za-z][\\w&]*\\s+${esc(n).replace(/\s+/g, '\\s*')}\\s*$`, 'i') })).catch(() => null);
+      if (b) { hit = b; used = n; break; }
+    }
+    // 2026-11-25 T600: AS-IS 검색 단추(btnFromSrch·btnToSrch)가 TO-BE 에서 조회조건 아이콘으로 바뀐 경우 — 단추 이름 줄기(From·To)가 조건 라벨 첫 낱말과 같고 그 조건 아이콘이 이미 목록에 있으면 같은 팝업을 조건 아이콘으로 잰 것으로 보고 단추 행을 따로 만들지 않음(T458 과 같은 기준)
+    if (!hit) {
+      const stem = (c.control || '').replace(/^btn/i, '').replace(/(Srch|Search|Find|Popup|Pop)$/i, '').toLowerCase();
+      if (stem && out.some(o => o.kind === 'COND' && (o.label || '').trim().split(/\s+/)[0].toLowerCase() === stem)) continue;
+    }
     if (!hit) { out.push({ name: `버튼 '${names[0] || c.control}'(AS-IS ${c.method})`, kind: 'BTN', label: names[0] || c.control }); continue; }
     if (seen.has(used)) continue; seen.add(used);
     out.push({ name: `버튼 '${used}'(AS-IS ${c.method})`, kind: 'BTN', btn: hit, label: used });
@@ -61,7 +72,7 @@ export async function popupTriggers(nscm: Nscm, id: string): Promise<{ name: str
 }
 
 /** 팝업 위에 뜬 알림(팝업 아닌 대화상자) 글자 · 닫는다(알림은 단일 확인 버튼). 없으면 '' */
-async function takePopAlert(p: Page, tag: string): Promise<string> {
+export async function takePopAlert(p: Page, tag: string): Promise<string> {  // T510 export(eg_popup 0행 필수 알림 닫기)
   const ok = await p.evaluate(t => {
     document.querySelectorAll('[data-e2e-popalert]').forEach(e => e.removeAttribute('data-e2e-popalert'));
     const vis = (e: Element) => { const r = (e as HTMLElement).getBoundingClientRect(); return r.width > 0 && r.height > 0; };
@@ -71,14 +82,16 @@ async function takePopAlert(p: Page, tag: string): Promise<string> {
   if (!ok) return '';
   const al = p.locator('[data-e2e-popalert="1"]').first();
   const txt = ((await al.innerText({ timeout: 1_000 }).catch(() => '')) || '').replace(/\s+/g, ' ').trim();
-  const b = al.getByRole('button', { name: /^(확인|OK|Close|닫기)$/i }).first();
+  // 2026-11-20 T510(SCP0028 K3 V-4c3670c9 '후보 목록 안 열림'): 공용 알림 단추는 'Confirm'. 빠지면 Escape 를 누르는데 basic CustomDialog 는 onClose 가 없어 알림이 남고 뒤 콤보 클릭이 막혔다
+  const b = al.getByRole('button', { name: /^(확인|OK|Confirm|Yes|예|Close|닫기)$/i }).first();
   if (await b.isVisible().catch(() => false)) await b.click({ timeout: 3_000 }).catch(() => undefined); else await p.keyboard.press('Escape').catch(() => undefined);
   await p.waitForTimeout(400);
   return txt;
 }
 
 /** 팝업 그리드가 0행이면 Search → 필수 안내가 나오면 그 콤보(안내에 이름이 있는 칸 · 없으면 다중 콤보)에서 후보를 차례로 골라 다시 Search(최대 6개) */
-async function fillPopRows(p: Page, dlg: Locator, tag: string, net: PopNet): Promise<{ rows: number; fill: string }> {
+// 2026-11-20 T510: eg_popup.spec.ts runCall(H6 COUNT · M3 DATA)도 같은 필수 칸 채우기를 쓴다(export)
+export async function fillPopRows(p: Page, dlg: Locator, tag: string, net: PopNet): Promise<{ rows: number; fill: string }> {
   let rows = await waitPopRows(p, tag, 3_000); if (rows > 0) return { rows, fill: '' };
   const trail: string[] = [];
   const s0 = await popSearch(p, dlg, net, 60_000); rows = await waitPopRows(p, tag, 6_000);
@@ -92,7 +105,7 @@ async function fillPopRows(p: Page, dlg: Locator, tag: string, net: PopNet): Pro
   const c = targets[0]; const box = dlg.locator(`[data-e2e-pc="${c.pc}"] [role="combobox"]`).first();
   const lis = p.locator('.MuiAutocomplete-popper li[role="option"]');
   for (let i = 1; i <= 6 && rows <= 0; i++) {
-    await box.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(400);
+    await box.click({ timeout: 3_000 }).catch(() => undefined); await lis.first().waitFor({ state: 'visible', timeout: 5_000 }).catch(() => undefined);  // T510 후보 목록이 뜰 때까지(최대 5초)
     const texts = (await lis.allInnerTexts().catch(() => [] as string[])).map(t => t.trim());
     if (!texts.length) { trail.push(`${c.label} 후보 목록 안 열림`); break; }
     // 'SELECT ALL' 이 있으면 먼저 전부 해제(일부·전체 체크 → SELECT ALL 클릭, 그래도 전체 체크면 한 번 더) 후 후보 1개만 체크

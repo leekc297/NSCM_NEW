@@ -1,0 +1,46 @@
+{
+ "rule_id": "M2",
+ "hash": "8babfad7956982e1",
+ "groups": [
+  {
+   "rows": [
+    "V-32f10dd5"
+   ],
+   "why": "Checks the SQL View (VIEW) button in each state (Insert, bottom tab) for zero SQL errors; no other row targets this button."
+  },
+  {
+   "rows": [
+    "V-5aa28204"
+   ],
+   "why": "Checks the Replace button popup's default Period and data lookup; no other row has this popup or expected result."
+  },
+  {
+   "rows": [
+    "V-5e1d64bd"
+   ],
+   "why": "Checks that the screen-specific buttons send no write request without a confirmation dialog; the expected result is about blocking writes, unlike the other rows."
+  },
+  {
+   "rows": [
+    "V-92add78d"
+   ],
+   "why": "Checks that closing the Exchange Rate popup discards unsaved edits and that reopening reloads the data. This differs from V-bd9d5ef3, which expects the BPS I/F run to apply the rates, so they are not merged."
+  },
+  {
+   "rows": [
+    "V-acb265b7"
+   ],
+   "why": "Checks validation and version creation in the BP Version popup right after a version cutoff; no other row has this popup or state."
+  },
+  {
+   "rows": [
+    "V-bd9d5ef3"
+   ],
+   "why": "Checks that BPS I/F applies exchange rates, shows the no-data message and displays the Last Update Date/By columns; the button and expected result differ from the close/reopen check in V-92add78d."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:10:12",
+ "cost": 0.0419424
+}

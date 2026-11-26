@@ -107,22 +107,23 @@ const str = (v: unknown): string => (typeof v === 'string' ? v : typeof v === 'n
 // Plan 전체 편집가능 게이트 — AS-IS GetIsEditable(.cs:3527-3658) 이식. SHIP_PLAN_AMEND 행 단위 날짜
 //   판정(위 computeEditableRange)보다 앞서 통과해야 하는 더 상위 게이트다: 더 나중 단계 Plan
 //   (PR→MA→SE→FN 순서)이 이미 생성되어 있고 그 PLAN_STATUS 가 '실패'(-1)가 아니면, 현재 선택된
-//   (더 이전 단계) Plan 은 전체 잠금된다 — 다음 단계가 이미 진행/완료됐으므로 현 단계는 더 이상
-//   손대면 안 된다는 업무 규칙. rows 는 O_RC2(Weekly/Monthly 조회일 때만 non-empty, design 03 §4.2) —
-//   Daily 는 SP 가 이 커서를 채우지 않으므로(P_BUCKET 조건) 이 게이트 자체가 적용 대상이 아니다(gate
-//   통과로 간주 — Daily 는 기존 SHIP_FROZEN/BOD 판정만 적용).
+//   (더 이전 단계) Plan 은 전체 잠금된다(= 최신 단계 버전일 때만 입력 가능). rows 는 O_RC2
+//   (Weekly/Monthly 조회일 때만 non-empty — SP 의 P_BUCKET 조건). 빈 rows 는 AS-IS 처럼 'N'(L3531)이며,
+//   O_RC2 가 비었을 때 판정값을 갱신하지 않고 직전 값을 유지하는 것(cs:1568)은 호출측(그리드)이 맡는다.
+//   SP 의 IS_EDITABLE 은 상수 'Y'(PKG_SCP0009 실측 2026-11-23)지만 AS-IS L3544 대로 함께 본다.
 export const computeIsEditable = (rows: PlanStatusRow[], curPlanType: string, curPlanSeq: string): boolean => {
-  if (rows.length === 0) return true; // O_RC2 비어있음(=Daily) — 이 게이트 적용 대상 아님
+  if (rows.length === 0) return false; // L3531 — dtEditable 비어있으면 'N'
+  if (str(rows[0].IS_EDITABLE) === 'N') return false; // L3544-3546
   if (curPlanType === 'FN' || curPlanType === 'TE') return false; // L3546 — 최종/임시 단계는 항상 잠금
 
   const nextSeq = NEXT_PLAN_TYPE_SEQ[curPlanType];
   if (!nextSeq) return false; // PR/MA/SE/FN/TE 외 미지 PLAN_TYPE — AS-IS 도 분기 없이 기본값 'N'
 
-  const nextRows = rows.filter(r => str(r.PLAN_TYPE_SEQ) === nextSeq);
-  if (nextRows.length > 0) {
-    // 다음 단계가 이미 존재 — 그중 하나라도 '실패'(-1)가 아니면 잠금.
-    return !nextRows.some(r => str(r.PLAN_STATUS) !== '-1');
-  }
+  // 이후 단계가 하나라도 존재하면 상태와 무관하게 잠금 — AS-IS 는 주석상 "-1(실패)이면 수정가능"이지만 코드가
+  //   ret='N' 에서 시작해 Y 로 바꾸는 분기가 없어 실제로는 항상 'N'(L3571-3582/3611-3619/3642-3650). 실동작 기준.
+  //   AS-IS 코드는 "바로 다음" seq 만 보지만, 81 계열은 SE 없이 MA 다음에 FN 이 생긴다(DB 실측 2026-11-23).
+  //   AS-IS 주석 L3560 "FN 모두 수정불가" 의도대로 바로 다음뿐 아니라 이후 단계 전체를 본다(사용자 지시).
+  if (rows.some(r => str(r.PLAN_TYPE_SEQ) !== '' && Number(r.PLAN_TYPE_SEQ) >= Number(nextSeq))) return false;
 
   // 다음 단계 미생성 — PR/SE 는 무조건 Y(190604 PR 확인, SE 는 원래부터 confirm_yn 체크 없음).
   //   MA 만 현재(planType=MA, planSeq=curPlanSeq) 행의 CONFIRM_YN 을 본다(L3622-3631).

@@ -6,6 +6,10 @@ const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const stub = new Proxy(function () { }, { get: (t, k) => (k === 'then' ? undefined : stub), apply: () => stub, construct: () => stub });
 const orig = Module._load; Module._load = function (req, ...rest) { return req === 'vscode' ? stub : orig.call(this, req, ...rest); };
 const heal = require(path.join(dir, 'orch-heal'));
+// 2026-11-20 재수행 설정(harness.json orch.rerunAfterFix · 기본 none = 보완까지만): 아래 기존 경우는 'rerun' 에서, 끝에 'none' 경우를 따로 본다
+const fs = require('fs'); const os = require('os'); const root = fs.mkdtempSync(path.join(os.tmpdir(), 'heal-')); fs.mkdirSync(path.join(root, 'tools', 'Harness'), { recursive: true }); fs.mkdirSync(path.join(root, '.vibe', 'orch'), { recursive: true });
+const setRerun = v => fs.writeFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: { rerunAfterFix: v } }));
+setRerun('rerun'); heal.init({ paths: () => ({ root, vibeDir: path.join(root, '.vibe') }), watch: { on() { } } });
 let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
 const FE = { file: 'nscm-fe/features/shipping/src/pages/zz/components/ZzForm.tsx', msg: '[plugin:vite:import-analysis] Failed to resolve import "@shared/paste" from "ZzForm.tsx". Does the file exist?' };
 function mk(o) {
@@ -34,5 +38,10 @@ function mk(o) {
     chk('받은 뒤에도 변환 오류: 다시 실행 안 함 · 에이전트로 넘김', !r.healed && log.rq.length === 0 && log.enq[0] === 'I5', r.why); }
   { const { deps, log } = mk({ rq: { none: '같은 작업에서 이미 2번 다시 실행함', job: 'J1' } }); const r = await heal.handle({ id: 'I6', rule: 'R13', screen: 'UUP0006', evidence: { fe: FE } }, deps);
     const last = log.upd[log.upd.length - 1]; chk('다시 실행 한도: 해결은 기록 · 다시 실행 안 함 사유', r.healed && /다시 실행 안 함\(같은 작업에서 이미 2번/.test(last.act.what), last.act.what); }
+  { setRerun('none'); const { deps, log } = mk({}); const r = await heal.handle({ id: 'I7', rule: 'R13', screen: 'TTP0007', evidence: { fe: FE } }, deps);
+    const last = log.upd[log.upd.length - 1]; chk('재수행 설정 = 수행 없음(기본): 보완·확인·해결은 하고 다시 실행은 안 함', r.healed && log.sync === 1 && log.fe === 1 && log.rq.length === 0 && /다시 실행 안 함\(재수행 설정 = 수행 없음/.test(last.act.what), last.act.what); }
+  { fs.writeFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: {} })); const { deps, log } = mk({}); await heal.handle({ id: 'I8', rule: 'R13', screen: 'SSP0008', evidence: { fe: FE } }, deps);
+    chk('설정 없음 = 재수행(기본값 · 17:2x 사용자 변경)', log.rq.length === 1); }
+  try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error('ERROR', e); process.exit(2); });

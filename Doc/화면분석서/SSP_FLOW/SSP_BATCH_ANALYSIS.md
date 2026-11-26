@@ -1,4 +1,4 @@
-# SSP 배치 프로그램 분석서 — 2026-11-16 18:31 생성 · 생성기 `tools/Analysis/ssp_batch_flow.py`
+# SSP 배치 프로그램 분석서 — 2026-11-23 13:31 생성 · 생성기 `tools/Analysis/ssp_batch_flow.py`
 
 > 배치 = 화면(UI) 이 아닌 스케줄러가 실행하는 프로그램. AS-IS 에서는 ① SQL Agent 잡(T-SQL 스텝이 PR_* SP 실행) ② SSP 자체 스케줄러 표 `SSP_INT_SYSTEMEXE`(러너 `PR_SSP_INT_SYSTEMEXEC_RUNJOB`) ③ 외부 실행기(SAP RFC 콘솔 `SAPRFC_Batch_NERP.exe`) ④ 화면 저장이 뒤에서 호출하는 배치형 SP(화면 유발) 네 경로로 실행된다.
 
@@ -1386,7 +1386,7 @@
 
 ## 7. TO-BE 이관 현황 요약
 
-- PR_SSP_* 140 중 TO-BE 카탈로그(`procs_catalog.csv` 2033행)에 대응 객체 있음 118 · 없음 22 (이름 일치 기준: 동일 · NERP_ 접두 · PKG 안 P_ 접두)
+- PR_SSP_* 140 중 TO-BE 카탈로그(`procs_catalog.csv` 2055행)에 대응 객체 있음 118 · 없음 22 (이름 일치 기준: 동일 · NERP_ 접두 · PKG 안 P_ 접두)
 - TO-BE BE(`nscm-be`)에는 스케줄러 코드(@Scheduled/Quartz) 0건(11-09 grep) — 배치 실행 기반(Oracle DBMS_SCHEDULER 또는 별도 배치 서버)은 **미결정 사항**으로 담당자 확인 필요.
 
 > 흐름 다이어그램 = `SSP_BATCH_FLOW.md` · 근거 행 = `ssp_batch_sp_table.csv` · 잡 원문 = `Doc/asisfacts/db/batch/*.csv`

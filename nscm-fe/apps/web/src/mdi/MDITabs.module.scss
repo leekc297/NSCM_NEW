@@ -27,10 +27,13 @@
 }
 
 .tab {
+  // 비활성 탭: 배경 #f7f9f8($commonBgDeep) · 폰트 #979998($commonTextDone).
+  //   배경은 tabArea 상속에 기대지 않고 탭이 직접 소유한다(활성 탭이 흰색으로 override).
+  background-color: $commonBgDeep;
   color: $commonTextDone;
   font-family: inherit;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 12px;
   border: 0;
   border-right: 1px solid $commonBorderBasic;
   display: flex;
@@ -49,8 +52,13 @@
 
   &.active {
     background-color: $commonBgBasic;
-    font-weight: 400;
+    font-weight: 700;
     color: $commonTextBasic;
+
+    // 닫기(X) 아이콘은 currentColor 상속 — 활성 탭에선 #585c5b(비활성은 .closeBtn 의 #979998).
+    .closeBtn {
+      color: #585c5b;
+    }
   }
 }
 
@@ -75,29 +83,29 @@
   flex: 0 0 auto;
   display: flex;
   align-items: stretch;
-  border-left: 1px solid $commonBorderBasic;
   background-color: $navTopBgBasic;
 }
 
 .scrollBtn {
+  // 탭 이동 화살표(MUI ArrowLeft/ArrowRight) — 색 #5b5c5b(currentColor 상속).
   border: 0;
-  border-right: 1px solid $commonBorderBasic;
   background: transparent;
   padding: 0 6px;
   display: grid;
   place-items: center;
   cursor: pointer;
-  color: $commonTextDone;
+  color: #5b5c5b;
+
+  // 두 번째 화살표(ArrowRight = scrollBtn 다음의 scrollBtn) 오른쪽에만 구분선.
+  //   ArrowLeft 왼쪽·두 화살표 사이에는 선을 두지 않는다.
+  & + & {
+    border-right: 1px solid $commonBorderBasic;
+  }
 
   &:disabled {
     opacity: 0.3;
     cursor: default;
   }
-}
-
-// ic-arrow-left 를 뒤집어 오른쪽 화살표로 재사용(오른쪽 아이콘 에셋이 없음)
-.flip {
-  transform: rotate(180deg);
 }
 
 .actionBtn {

@@ -1,0 +1,34 @@
+{
+  "id": "20261123_215129_R12_ALL",
+  "at": "2026-11-23T21:51:29+09:00",
+  "ms": 1795438289756,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_orch_selfapply.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_orch_selfapply.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 43 · FAIL 1 · FAIL 자동 대상 판정: 코드 파일 삭제 · 설정 · 룰 · hook · 범위 밖 · 대상 없음 = 승인 필요 [{\"ok\":false,\"why\":\"파일 삭제(생성물 아님)\"},{\"ok\":false,\"why\":\"자동 범위 밖 nscm-fe/a.ts\"}] / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_orch_selfapply.js",
+    "file": "t_orch_selfapply.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T21:55:15+09:00",
+      "by": "VMO",
+      "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    },
+    {
+      "at": "2026-11-23T21:59:32+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "20261126130850_SELF_2",
+  "at": "2026-11-26T13:08:50+09:00",
+  "ms": 1795666130725,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/ene/specs/_trace.spec.ts|대조표미구현재현gagg기준기존행routecntn시험이기본조회n회의nn만쓰",
+  "title": "사용자 지시 R237 같은 문제: Doc/e2e/specs/_trace.spec.ts:3038 대조표 미구현 재현(GA~GG, 기준 기존행 ROUTE_CNT>0) 시험이 기본 조회 1회의 n0 만 쓰고 0행이면 '기준 기존행 없음(조회 0행)' 으로 진행함",
+  "evidence": "규칙 R237 \"검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠\" (원래 지시 2026-11-26 11:48 \"팝업 셀 33행도 Division 순회로 보완해줘 나한테 회신 받지 않고 계속 보완 대상 확인해서 보완해줄 수 업산요?\") · Doc/e2e/specs/_trace.spec.ts:3038 await nscm.search(); await probe.waitRows(p);  // 시간 상한 120s(2026-10-29 횟수 상한 → 시간 상한) await nscm.clearDialogs();",
+  "targets": [
+    "Doc/e2e/specs/_trace.spec.ts"
+  ],
+  "before_after": "3038~3039줄을 const n0 = await searchAndRows(nscm) 로 바꿔 ensureRows 를 거치게 함. 끝까지 0행이면 기존행이 필요한 GC 행을 ERROR(미검증)로 둠",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/e2e/specs/_trace.spec.ts.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:52:05+09:00",
+      "by": "4ec206",
+      "what": "반영 완료(세션 직접 보완) · _trace.spec.ts GA~GG 기준 조회를 searchAndRows(ensureRows 포함)로 · 기준 기존행 없음 NA→ERROR · engine_selfcheck PASS(TSC 0) 2026-11-26 15:51"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠 규칙을 Doc/e2e/specs/_trace.spec.ts 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R237|Doc/e2e/specs/_trace.spec.ts",
+  "kind": "fix",
+  "claimedBy": "4ec206",
+  "waitNote": "",
+  "appliedMs": 1795675925576
+}

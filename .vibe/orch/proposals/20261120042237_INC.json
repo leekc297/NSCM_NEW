@@ -309,6 +309,11 @@
         "Doc/verify/SSP0014/diff/P_SSP0014_GET_USER_ID_CHECK__36.md",
         "Doc/verify/SSP0014/e2e_test_kind.jsonl"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:33+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:08:27+09:00"
     }
   ],
   "auto": true,
@@ -339,5 +344,7 @@
     "verify_result": "2026-11-20 07:04:42 node test/t_wb_logname.js . = ALL PASS 10건(같은 초 07-04-43 에 띄운 SCP0005_1, SCP0014_2, SCP0028_3 로그 3개 생성, 로그마다 자기 출력만 있음, 같은 창 같은 라벨 SSP0014_4, SSP0014_5 2개). node test/t_orch_watch.js . = ALL PASS 28건, '체인 시작보다 이른 result.json = 건수 없는 R11 제목 · R10 없음 · checklist_prev 그대로' PASS(제목 'Claude 없이 끝난 체인. TST0001 이번 실행 결과 없음(1단계 실패)'). 07:06:37 node test/run_all.js . = 파일 30/31, PASS 371, FAIL 5. FAIL 은 t_chain_abort.js(개선안 20261120005942_INC 시험) 1개이고 이번 변경과 관계없음",
     "note": "t_chain_abort.js FAIL 5건 원인: extension.js 에 abortRunningChains 호출이 없음(grep 결과 workbench.js:25 정의, 3326 export 만 있음). extension.js 는 이번 개선안 targets 밖이라 고치지 않음. 기존 t_orch_watch.js c5 시험은 '앞선 결과 = R11 0건' 이었는데 개선안 before_after 대로 '건수 없는 R11 1건, R10 없음, checklist_prev 그대로' 로 바꿈. 체인이 성공(ok true)으로 끝났는데 결과 파일이 지난 실행 것이면 R11 을 올리지 않음"
   },
-  "snap": "prop_20261120042237_INC"
+  "snap": "prop_20261120042237_INC",
+  "effectiveMs": 1795136907899,
+  "effectiveAt": "2026-11-20T10:08:27+09:00"
 }

@@ -1,0 +1,402 @@
+{
+  "id": "J20261125_005600",
+  "itemLabel": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "kind": "chain",
+  "status": "interrupted",
+  "mode": "par",
+  "maxPar": 5,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "unit": "screen",
+  "inputs": {},
+  "createdAt": "2026-11-25T00:56:00+09:00",
+  "startedAt": "2026-11-25T00:56:00+09:00",
+  "endedAt": "",
+  "note": "VS Code 창을 닫거나 다시 로드해 중단됨. 이어서 실행으로 남은 화면을 실행",
+  "screens": [
+    {
+      "id": "SCP0005",
+      "status": "wait",
+      "step": "",
+      "actor": "script",
+      "sec": 21388,
+      "summary": "중단됨. 다시 실행 대상",
+      "why": "",
+      "md": "Doc\\gen\\SCP0005\\FULLRUN.md",
+      "startedAt": "2026-11-25T03:29:04+09:00",
+      "endedAt": "",
+      "tries": 2,
+      "prog": "단계 5/8 E2E 팝업·권한 검사기(eg_chain) · 건너뜀(--only A4,",
+      "unv": {
+        "round": 2,
+        "go": true,
+        "total": 23,
+        "actionable": 20,
+        "at": "2026-11-25T07:45:31+09:00"
+      },
+      "flow": {
+        "at": "2026-11-25T03:29:04+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T03:29:04+09:00",
+            "end": "2026-11-25T05:25:00+09:00",
+            "sec": 6957,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 2,
+            "name": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T05:25:00+09:00",
+            "end": "2026-11-25T05:27:05+09:00",
+            "sec": 125,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 3,
+            "name": "3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 미검증 80건 · 처리 대상 92건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T05:27:05+09:00",
+            "end": "2026-11-25T05:27:08+09:00",
+            "sec": 3,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 4,
+            "name": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 미검증 80건 · 처리 대상 92건",
+            "actor": "claude",
+            "st": "ok",
+            "start": "2026-11-25T05:27:08+09:00",
+            "end": "2026-11-25T06:11:45+09:00",
+            "sec": 2677,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 5,
+            "name": "5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) · 미검증 80건 · 처리 대상 92건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T06:11:45+09:00",
+            "end": "2026-11-25T06:12:19+09:00",
+            "sec": 34,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 6,
+            "name": "6. 해소 확인 재측정 (이번 회차 처리 대상 행의 규칙만 · 전체로 넓히지 않음 → 재분류 · 남으면 3~6 다시) · 미검증 80건 · 처리 대상 92건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T06:12:19+09:00",
+            "end": "2026-11-25T07:45:31+09:00",
+            "sec": 5592,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 7,
+            "name": "3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 2회차 · 미검증 23건 · 처리 대상 20건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T07:45:31+09:00",
+            "end": "2026-11-25T07:45:32+09:00",
+            "sec": 1,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 8,
+            "name": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 2회차 · 미검증 23건 · 처리 대상 20건",
+            "actor": "claude",
+            "st": "ok",
+            "start": "2026-11-25T07:45:32+09:00",
+            "end": "2026-11-25T08:14:24+09:00",
+            "sec": 1732,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 9,
+            "name": "5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) · 2회차 · 미검증 23건 · 처리 대상 20건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T08:14:24+09:00",
+            "end": "2026-11-25T08:15:26+09:00",
+            "sec": 63,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 10,
+            "name": "6. 해소 확인 재측정 (이번 회차 처리 대상 행의 규칙만 · 전체로 넓히지 않음 → 재분류 · 남으면 3~6 다시) · 2회차 · 미검증 23건 · 처리 대상 20건",
+            "actor": "script",
+            "st": "cut",
+            "start": "2026-11-25T08:15:26+09:00",
+            "end": "",
+            "sec": null,
+            "prog": "단계 5/8 E2E 팝업·권한 검사기(eg_chain) · 건너뜀(--only A4,"
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 3단계 · AI Agent 1회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 87회 호출 · 2631행 · 32.36 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261125_005600\\SCP0005.log",
+      "outputs": [
+        "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v8.xlsx",
+        "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v8.xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0005(Distribution Route).xlsx"
+      ],
+      "healed": 1
+    },
+    {
+      "id": "SCP0028",
+      "status": "cancel",
+      "step": "",
+      "actor": "",
+      "sec": 8608,
+      "summary": "중지(사용자): Workbench 창에서 중지",
+      "why": "",
+      "md": "Doc\\gen\\SCP0028\\FULLRUN.md",
+      "startedAt": "2026-11-25T00:56:00+09:00",
+      "endedAt": "2026-11-25T03:19:27+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": {
+        "round": 1,
+        "go": true,
+        "total": 71,
+        "actionable": 66,
+        "at": "2026-11-25T02:15:44+09:00"
+      },
+      "flow": {
+        "at": "2026-11-25T00:56:00+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 권장안 적용)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T00:56:00+09:00",
+            "end": "2026-11-25T02:12:39+09:00",
+            "sec": 4599,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 2,
+            "name": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T02:12:39+09:00",
+            "end": "2026-11-25T02:15:44+09:00",
+            "sec": 185,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 3,
+            "name": "3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 미검증 71건 · 처리 대상 66건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T02:15:44+09:00",
+            "end": "2026-11-25T02:15:46+09:00",
+            "sec": 2,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 4,
+            "name": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 미검증 71건 · 처리 대상 66건",
+            "actor": "claude",
+            "st": "ok",
+            "start": "2026-11-25T02:15:46+09:00",
+            "end": "2026-11-25T02:30:19+09:00",
+            "sec": 872,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 5,
+            "name": "5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) · 미검증 71건 · 처리 대상 66건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T02:30:19+09:00",
+            "end": "2026-11-25T02:30:54+09:00",
+            "sec": 35,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 6,
+            "name": "6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 71건 · 처리 대상 66건",
+            "actor": "script",
+            "st": "fail",
+            "start": "2026-11-25T02:30:54+09:00",
+            "end": "2026-11-25T03:19:27+09:00",
+            "sec": 2913,
+            "prog": "",
+            "code": 1
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 5단계 · AI Agent 1회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 49회 호출 · 1492행 · 18.08 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261125_005600\\SCP0028.log",
+      "outputs": [
+        "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v18.xlsx",
+        "Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_ActionItemList_v18.xlsx"
+      ]
+    },
+    {
+      "id": "SSP0005",
+      "status": "cancel",
+      "step": "",
+      "actor": "",
+      "sec": 8599,
+      "summary": "중지(사용자): Workbench 창에서 중지",
+      "why": "",
+      "md": "Doc\\gen\\SSP0005\\FULLRUN.md",
+      "startedAt": "2026-11-25T00:56:00+09:00",
+      "endedAt": "2026-11-25T03:19:19+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": null,
+      "flow": {
+        "at": "2026-11-25T00:56:00+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 권장안 적용)",
+            "actor": "script",
+            "st": "fail",
+            "start": "2026-11-25T00:56:00+09:00",
+            "end": "2026-11-25T03:19:19+09:00",
+            "sec": 8599,
+            "prog": "",
+            "code": 1
+          },
+          {
+            "no": 2,
+            "name": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+            "actor": "script",
+            "st": "notrun",
+            "end": "2026-11-25T03:19:19+09:00",
+            "prog": ""
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 1단계 · AI Agent 0회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 37회 호출 · 928행 · 12.94 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261125_005600\\SSP0005.log",
+      "outputs": []
+    },
+    {
+      "id": "SSP0014",
+      "status": "cancel",
+      "step": "",
+      "actor": "",
+      "sec": 8604,
+      "summary": "중지(사용자): Workbench 창에서 중지",
+      "why": "",
+      "md": "Doc\\gen\\SSP0014\\FULLRUN.md",
+      "startedAt": "2026-11-25T00:56:00+09:00",
+      "endedAt": "2026-11-25T03:19:24+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": {
+        "round": 1,
+        "go": true,
+        "total": 127,
+        "actionable": 139,
+        "at": "2026-11-25T02:19:33+09:00"
+      },
+      "flow": {
+        "at": "2026-11-25T00:56:00+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 권장안 적용)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T00:56:00+09:00",
+            "end": "2026-11-25T02:17:55+09:00",
+            "sec": 4915,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 2,
+            "name": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T02:17:55+09:00",
+            "end": "2026-11-25T02:19:33+09:00",
+            "sec": 98,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 3,
+            "name": "3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 미검증 127건 · 처리 대상 139건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T02:19:33+09:00",
+            "end": "2026-11-25T02:30:59+09:00",
+            "sec": 686,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 4,
+            "name": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완) · 미검증 127건 · 처리 대상 139건",
+            "actor": "claude",
+            "st": "ok",
+            "start": "2026-11-25T02:30:59+09:00",
+            "end": "2026-11-25T02:55:19+09:00",
+            "sec": 1460,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 5,
+            "name": "5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) · 미검증 127건 · 처리 대상 139건",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T02:55:19+09:00",
+            "end": "2026-11-25T02:56:17+09:00",
+            "sec": 59,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 6,
+            "name": "6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 127건 · 처리 대상 139건",
+            "actor": "script",
+            "st": "fail",
+            "start": "2026-11-25T02:56:17+09:00",
+            "end": "2026-11-25T03:19:24+09:00",
+            "sec": 1386,
+            "prog": "",
+            "code": 1
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 5단계 · AI Agent 1회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 56회 호출 · 1459행 · 17.74 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261125_005600\\SSP0014.log",
+      "outputs": [
+        "Doc/UI_CHECKLIST/SSP0014_ShipmentModelPic_CheckList_v10.xlsx",
+        "Doc/UI_CHECKLIST/SSP0014_ShipmentModelPic_ActionItemList_v10.xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SSP0014(Shipment Model PIC).xlsx"
+      ]
+    }
+  ],
+  "resumable": 0,
+  "interruptedAt": "2026-11-25T18:18:35+09:00"
+}

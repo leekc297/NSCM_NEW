@@ -471,3 +471,24 @@ H2 design 서브태스크) + 신규로 G23(SQL_DTL_CTN 재조회)·G24(드릴다
 - `W_`/`M_` 컬럼 저장 시 `yyyymmdd` 는 binding 앞 8자리로 잘린다. SP 가 요구하는 값인지는 확인 필요.
 - Fix 사유 모달의 `^` 제거는 JSON 전환으로 필요 없어졌지만 AS-IS 와 같게 유지했다. 허용 여부는 사용자 확인 필요.
 
+## 19. 2026-11-20 BOD Master 팝업 행 삽입(AS-IS SpdMain_CellClick → SCM0002_GetBODPopup → InsertRow)
+
+| AS-IS | TO-BE | 상태 |
+|---|---|---|
+| 셀 클릭 조건(.cs:1185-1209): 편집가능, Bucket≠Monthly, 시트 잠금 아님, TRANSPORT_MODE/FROM_SITE_NAME 열, 행 두 값과 클릭값 길이 2 초과, I/D 행 아님 | `ShipmentPlanFgGrid` click 리스너 + `canOpenBodPopup`(utils/shipment-plan-fg.insert.ts), 잠금(FN/TE·최신 SEQ 아님)은 `ShipmentPlanFg.handleBodCellClick` | 구현 |
+| SCM0002_GetBODPopup(FG) | 공용 `components/bodMasterModal/BodMasterModal`(type 0), 메타 `.atlas/gscm-design/SCP0009/design/09_register_bod_master_popup.sql` | 구현 |
+| InsertRow T/S 모드, GetNewInsertRowIndex(.cs:2037-2296, 2584-2636) | `buildInsertedRows`/`getNewInsertRowIndex` — 새 배열로 itemsSource 교체, 삽입 행 `CRUD_TYPE='I'` | 구현 |
+| Save 'I' 분기 검증(.cs:2779-2853): 음수 MSG00225, 최대치 MSG00165, 값 없음 MSG01243 | `buildInsertSaveRows` → `handleSave` 가 M 행과 합쳐 같은 SAVE 래퍼로 전송(activeFlag 'I') | 구현 |
+| AMEND 아닌 I 행은 첫 날짜 열에 수량 0(.cs:2936-3029) | 첫 D_/W_ 동적 열 일자로 전송 | 구현 |
+
+### 19.1 AS-IS 와 다른 점
+
+- 팝업의 잠금 후보(호출 행과 같은 KEY_IDX)는 체크+잠금 표시 대신 OK 결과에서 제외한다. 결과는 같다.
+- 재조회하면 저장 안 한 삽입 행은 사라진다(AS-IS 도 데이터소스를 다시 받는다).
+
+### 19.2 확인하지 못한 것
+
+- 브라우저에서 삽입 행 저장이 SP 에 반영되는지(실제 왕복 미검증, BE `BaseService.toSqlDate` 수정분 재기동 필요).
+- Weekly 조회에서 I 행 일자가 W_ binding 앞 8자리인 것이 SP 기대값과 같은지.
+- SCP0010(SEMI, type 1) 연결은 다음 단계(5).
+

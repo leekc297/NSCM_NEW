@@ -6,9 +6,9 @@
   "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
   "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
   "status": 200,
-  "rows": 8613,
-  "dur": 390,
-  "at": "2026-11-19T23:43:53.032Z",
+  "rows": 8614,
+  "dur": 335,
+  "at": "2026-11-24T18:11:31.426Z",
   "user": "minyonglee1",
   "test": "@snap 조회조건 팝업 정적 aria"
  },
@@ -19,9 +19,9 @@
   "url": "http://127.0.0.1:5173/api/COM0013/materialByDivision/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"itemId\":\"\",\"scpModuleType\":\"SSP0014\"}",
   "status": 200,
-  "rows": 23310,
-  "dur": 1111,
-  "at": "2026-11-19T23:43:57.083Z",
+  "rows": 23435,
+  "dur": 1214,
+  "at": "2026-11-24T18:11:44.621Z",
   "user": "minyonglee1",
   "test": "@snap 조회조건 팝업 정적 aria"
  }

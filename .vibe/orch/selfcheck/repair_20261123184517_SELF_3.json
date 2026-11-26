@@ -1,0 +1,40 @@
+{
+ "proposal": {
+  "id": "20261123184517_SELF_3",
+  "title": "사용자 지시 R28 같은 문제: tools/VibeManager/quick.json:197 5단계 검사기 게이트(173줄, optional true)가 실패해 검사기를 되돌린 회차에도 6단계 부분 재측정과 7단계 S8.checklistRun --docs",
+  "evidence": "규칙 R28 \"CheckList 작업은 검사기 판정 정확도를 목표로 하고 화면별 판 재생성은 검사기 수정 확인 범위에서만 함\" (원래 지시 2026-11-07 15:18 \"6개 화면에 대한 checklist을 만드는 것이 목적이.아니라 checklist의 정합성을 높이는 것이 목적입니다\") · tools/VibeManager/quick.json:197 \"title\": \"7. 문서 갱신 (이번 회차 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)\",",
+  "targets": [
+   "tools/VibeManager/quick.json"
+  ],
+  "before_after": "7단계에 '이번 회차 검사기 변경이 게이트를 통과했을 때만' 조건을 둠(engineGate 결과 파일의 통과, 변경 건수 확인). 또는 checklist_run.py --docs 에서 직전 판 뒤 판정 변경 0건이면 판을 만들지 않고 이유를 한 줄 출력함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|n단계검사기게이트n줄optionaltrue가실패해검사기를되돌린회차에도",
+  "check": "S13",
+  "selfKey": "S13|R28|tools/VibeManager/quick.json"
+ },
+ "result": {
+  "applied": false,
+  "already_applied": false,
+  "verified": true,
+  "verify_items": [
+   {
+    "n": 1,
+    "result": "pass",
+    "note": "node tools/VibeManager/test/run_all.js → ALL OK 파일 74/74 PASS 1161 FAIL 0 212.6s (t_webview_syntax.js PASS 19 포함). 파일을 바꾸지 않아 반영 전 → 반영 뒤 같음"
+   }
+  ],
+  "changed_files": [],
+  "verify_result": "node tools/VibeManager/test/run_all.js, 2026-11-23T18:22:07Z(결과 JSON at): 반영 전 ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤 같음(변경 없음)",
+  "note": "quick.json 만으로는 반영할 수 없음. 실행기 조건 키는 ifJsonGt, ifPrevRan, ifOk, askUser 4종(workbench.js:1180-1207). engine_gate.py --check 는 통과든 되돌림이든 종료코드 0(engine_gate.py:194-200)이라 ifOk 로 구분할 수 없음. 게이트 결과는 Doc/verify/_engine_changes.jsonl(JSONL)에만 남아 ifJsonGt 로 읽을 수 없음. delta_scope.json rows_in 은 미검증 행을 포함해 게이트 결과를 대신할 수 없음. 두 번째 안(checklist_run.py --docs)은 targets 밖. 후속 개선안: engine_gate.py --check 가 Doc/verify/<ID>/engine_gate.json {changed, passed, reverted} 를 쓰고 quick.json 6, 7단계에 ifJsonGt(key passed, gt 0) 추가. 6단계 포함 여부는 미검증 행 재측정과 겹쳐 승인 때 결정 필요."
+ },
+ "gate": null,
+ "history": [
+  "03:17:17 VMO 자동(게이트 통과 조건): 승인",
+  "03:20:53 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0317",
+  "03:20:55 VMO: 반영 시작",
+  "03:25:58 VMO: 반영 실패. 반영 안 됨: quick.json 만으로는 반영할 수 없음. 실행기 조건 키는 ifJsonGt, ifPrevRan, ifOk, askUser 4종(workbench.js:1180-1207). engine_gate.py --check 는 통과든 되돌림이든 종료코드 0(engine_gate.py:194-200)이라 ifOk 로 구분할 수 없음. 게이트 결과는 Doc/veri · 대상 파일 1개 복원"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261123184517_SELF_3"
+}

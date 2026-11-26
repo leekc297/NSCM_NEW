@@ -1,0 +1,140 @@
+{
+  "id": "20261120181921_SELF_2",
+  "at": "2026-11-20T18:19:21+09:00",
+  "ms": 1795166361635,
+  "source": "self",
+  "status": "applied",
+  "sig": "changelogself files ai only",
+  "title": "자가 보완 CHANGELOG 파일 목록과 되돌리기 줄에서 반영 중 다른 작업이 바꾼 파일 제외",
+  "evidence": "repeatFiles e2e_results.json 21건(세션 수정 0건). orch-improve.js:171 changedSince 가 git 변경 전후 차이를 모두 반환하고(.vibe/ 와 .bak_ 만 제외), :271 changelogSelf(cur, out, files || snap.kept, …) 가 그 목록을 '- 변경: … 파일' 과 '- 되돌리기' 줄에 그대로 씀(:288, :291). CHANGELOG.md:108, :111(U18 절)에 Doc/verify/SCP0028/e2e_results.json 등 CheckList 결과 19개와 그 .bak_20261120_self1548 경로가 적힘. Doc/verify/SCP0028 아래 bak_20261120_self 파일 0개(18:18 ls). 2026-11-20 e2e_results.json 이 나온 15절 모두 '- 변경' 줄",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "orch-improve.js:271 changelogSelf 에 files || snap.kept 전달 → snap.kept 와 AI 실행 기록(orch-undo readOps)의 편집 파일 합집합만 전달. 그 밖의 변경은 '대상 밖 변경 N개(다른 작업)' 로 개수만 적음. 되돌리기 줄은 .bak_ 사본이 있는 snap.kept 만 적음. t_orch_improve.js 에 changelogSelf 시험 추가(대상 밖 Doc/verify 파일 → 파일 목록과 되돌리기 줄에 없음)",
+  "verify": "node tools/VibeManager/test/t_orch_improve.js → ALL PASS",
+  "rollback": "orch-improve.js, t_orch_improve.js 를 반영 태그 .bak_ 사본으로 되돌림",
+  "impact": "fix",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T18:27:29+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T18:30:46+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 767, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1827"
+    },
+    {
+      "at": "2026-11-20T18:30:48+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T18:34:32+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 2개(orch-improve.js AI 편집 4건만 되돌림(반영 전과 같음) / t_orch_improve.js AI 편집 1건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-20T18:47:18+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T18:51:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 768, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1847"
+    },
+    {
+      "at": "2026-11-20T18:51:04+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T18:56:54+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 2개(orch-improve.js AI 편집 5건만 되돌림(반영 전과 같음) / t_orch_improve.js AI 편집 1건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-20T18:57:44+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T19:01:13+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 770, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1857"
+    },
+    {
+      "at": "2026-11-20T19:01:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T19:05:47+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 772, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T19:05:47+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_improve.js 실행(2026-11-20 19:02:19, 시험 출력 lastAt 기준). 끝 줄 'ALL PASS', FAIL 0줄. 추가 시험 'PASS CHANGELOG: 대상 밖 Doc/verify 파일 → 파일 목록·되돌리기 줄에 없음 · 개수 2개만 - 변경: b. 파일 tools/VibeManager/orch-x.js, tools/VibeManager/orch-y.js, tools/VibeManager/test/t_x.js. 대상 밖 변경 2개(다른 작업 · 변경 3개 파일 · 대상 목록 밖 변경 1개: Doc/verify/SCP0028/touched_rows.json",
+      "log": ".vibe\\logs\\2026-11-20T19-01-16_claude_orch.log",
+      "sec": 74,
+      "costUsd": 0.6173862,
+      "files": [
+        "Doc/verify/SCP0028/touched_rows.json",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/test/t_orch_improve.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:29+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T19:17:14+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S9",
+  "selfKey": "S9|file|e2e_results.json",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795168664480,
+  "autoFp": "c07e3cb09d",
+  "applyStartMs": 1795168876152,
+  "interrupted": true,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 772, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1857",
+  "needsReload": true,
+  "appliedMs": 1795169147474,
+  "synced": [
+    "orch-improve.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_improve.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_improve.js 실행(2026-11-20 19:02:19, 시험 출력 lastAt 기준). 끝 줄 'ALL PASS', FAIL 0줄. 추가 시험 'PASS CHANGELOG: 대상 밖 Doc/verify 파일 → 파일 목록·되돌리기 줄에 없음 · 개수 2개만 - 변경: b. 파일 tools/VibeManager/orch-x.js, tools/VibeManager/orch-y.js, tools/VibeManager/test/t_x.js. 대상 밖 변경 2개(다른 작업).', 'PASS CHANGELOG: 되돌리기 줄 = .bak_ 사본 있는 대상만 - 되돌리기: … tools/VibeManager/orch-x.js.bak_20261120_self1548(설치 폴더는 같은 태그).'",
+    "note": "changelogSelf 에 8번째 인자 scope { kept, ai } 추가. scope 가 있을 때 파일 목록 = 대상 + (변경 중 AI 편집 파일), 나머지는 '대상 밖 변경 N개(다른 작업)' 로 개수만 적음. 되돌리기 줄 = .bak_<tag> 사본이 있는 대상만. approve 는 orch-undo readOps(r.log) 의 편집 파일을 ai 로 넘김. scope 가 없는 호출(revert 되돌림 절)은 종전 동작. 범위 밖이라 고치지 않은 것: :270 vmRel(설치 폴더 복사 대상)은 아직 files || snap.kept 를 씀."
+  },
+  "snap": "prop_20261120181921_SELF_2",
+  "effectiveMs": 1795169834991,
+  "effectiveAt": "2026-11-20T19:17:14+09:00"
+}

@@ -1,0 +1,94 @@
+{
+  "id": "20261121100244_REVIEW_3",
+  "at": "2026-11-21T10:02:44+09:00",
+  "ms": 1795222964963,
+  "source": "review",
+  "status": "applied",
+  "sig": "sn doc files autosync",
+  "title": "자가진단 S3 설치본 차이에서 기록 문서(CHANGELOG.md, README.md, CONCEPT.md)는 사건 없이 바로 동기화",
+  "evidence": "집계 R12 127건 중 R12|S3|CHANGELOG.md 12회, 12건 모두 '다시 점검한 결과 S3 항목에서 사라짐'으로 resolved. 사건 12건 detail 에서 저장소와 설치본의 수정 시각 차이 1~32분, 크기 305693 → 708077바이트(11-19 22:40 ~ 11-20 14:55). VMO 가 반영할 때마다 저장소 CHANGELOG.md 에 기록하는데, orch-selfcheck.js:309 자동 동기화는 S1, S2, S4 가 같은 지문으로 통과했을 때만 돌아서 그 사이 점검에서 R12 가 됨. CHANGELOG.md 는 orch-selfcheck.js:22 BUNDLE_FILES 에 들어 있지만 실행 코드가 아니라 VS Code 창 다시 로드가 필요 없음",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js"
+  ],
+  "before_after": "CHANGELOG.md 내용이 다르면 S3 실패 → R12 사건, 다음 점검에서 닫힘 → S3 에서 기록 문서 3개(CHANGELOG.md, README.md, CONCEPT.md)만 다르면 S1, S2, S4 조건 없이 설치 폴더로 복사하고 selfcheck.sync 기록만 남김. 코드 파일 차이는 종전대로",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. 저장소 CHANGELOG.md 에 줄을 더한 표본에서 S3 실행 결과 status ok, R12 사건 0건, 설치본 해시가 저장소와 같음",
+  "rollback": "orch-selfcheck.js 를 반영 전 .bak 로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "자가진단 오탐 반복 1종. 기록 문서에 코드 파일과 같은 동기화 조건이 걸림",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T10:28:27+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T10:31:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self1028"
+    },
+    {
+      "at": "2026-11-21T10:31:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T10:40:18+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T10:40:18+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 10:33:09~10:36:31 node test/run_all.js → 'ALL OK  파일 62/62  PASS 864  FAIL 0  201.2s'. 2026-11-21 10:33:06 표본(임시 폴더, 저장소 CHANGELOG.md 에 줄 추가 후 sc.run(['S3'])) → 'PASS S3 status ok ok', 'PASS R12 0 R12 0', 'PASS installed hash = repo da3c5c289e738055503a694146b9fbaa7271d5d0', 'PASS autoSyn · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-21T10-31-53_claude_orch.log",
+      "sec": 300,
+      "costUsd": 1.0166414,
+      "files": [
+        "tools/VibeManager/orch-selfcheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:27+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795224506759,
+  "autoFp": "bedb3cc183",
+  "applyStartMs": 1795224713817,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self1028",
+  "needsReload": true,
+  "appliedMs": 1795225218139,
+  "synced": [
+    "orch-selfcheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-selfcheck.js"
+    ],
+    "verify_result": "2026-11-21 10:33:09~10:36:31 node test/run_all.js → 'ALL OK  파일 62/62  PASS 864  FAIL 0  201.2s'. 2026-11-21 10:33:06 표본(임시 폴더, 저장소 CHANGELOG.md 에 줄 추가 후 sc.run(['S3'])) → 'PASS S3 status ok ok', 'PASS R12 0 R12 0', 'PASS installed hash = repo da3c5c289e738055503a694146b9fbaa7271d5d0', 'PASS autoSyncDocs copied [\"CHANGELOG.md\"]', 'PASS code a.js not synced, R12 1 S3 fail R12 1', 'ALL PASS'. 2026-11-21 10:36:38 주석 수정 뒤 node --check CHECK_OK, t_orch_selfcheck.js ALL PASS, 표본 ALL PASS",
+    "note": "DOC_FILES(README.md, CHANGELOG.md, CONCEPT.md) 추가. run() 에서 종전 자동 동기화 앞에 S3 실패 항목 중 기록 문서만 syncInstalled('VMO 자동(기록 문서)', null, docs) 로 복사하고 S3 를 다시 잰다(res.autoSyncDocs, selfcheck.sync 이벤트, 알림 없음). selfAutoSync, opts.autoSync 설정은 그대로 따른다. 코드 파일 차이는 종전 S1, S2, S4 조건 유지. 표본 스크립트는 저장소 밖 임시 폴더라 test/run_all.js 에 들어가지 않음. 설치 폴더, CHANGELOG.md 는 손대지 않음"
+  },
+  "snap": "prop_20261121100244_REVIEW_3",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

@@ -10,5 +10,7 @@ chk('자가진단: NAMES 의 항목마다 설명 있음', Object.keys(sc.NAMES).
 chk('묶음 R · S · U · P · Q · SP · H · G · ST 있음', ['R', 'S', 'U', 'P', 'Q', 'SP', 'H', 'G', 'ST'].every(id => by(id).items.length));
 if (fs.existsSync(path.join(root, 'tools', 'Harness', 'verify', 'mapping_checkdefs.csv'))) chk('CheckList 규칙 묶음 = csv 행 수', by('CK').items.length > 0 && by('CK').items.every(i => i.code));
 chk('속도 플랜 D1 설명 = E2E 병렬', /E2E 병렬/.test((by('SP').items.find(i => i.code === 'D1') || {}).desc || ''));
+const urf = path.join(root, 'tools', 'VibeManager', 'user_rules.json');
+if (fs.existsSync(urf)) { const n = (JSON.parse(fs.readFileSync(urf, 'utf8').replace(/^﻿/, '')).items || []).length; chk('사용자 지시 규칙 묶음 UR 항목 수 = user_rules.json items 수, 빈 설명 없음', by('UR').items.length === n && by('UR').items.every(i => i.code && i.desc), `${by('UR').items.length}/${n}`); }
 chk('빈 설명 없음', g.every(x => x.items.every(i => i.code && (i.desc || i.name))), g.flatMap(x => x.items.filter(i => !(i.desc || i.name)).map(i => x.id + ':' + i.code)).join(','));
 console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

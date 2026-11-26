@@ -1,0 +1,116 @@
+// 탭 바 높이는 34px 고정 — MDIContainer.module.scss 의 .mdiContent 가
+// height: calc(100% - 34px) 로 이 값에 묶여 있다. 바꾸면 본문 높이가 어긋난다.
+.tabArea {
+  background-color: $navTopBgBasic;
+  height: 34px;
+  border-bottom: 1px solid $commonBorderBasic;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+// 탭만 가로 스크롤되는 영역. 화살표/닫기 버튼은 .tabActions 로 분리해 항상 고정된다.
+.tabStrip {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+
+  // 34px 높이에 가로 스크롤바가 보이면 탭을 가린다. 이동은 화살표/휠/트랙패드로.
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tab {
+  color: $commonTextDone;
+  font-family: inherit;
+  font-weight: 300;
+  font-size: 14px;
+  border: 0;
+  border-right: 1px solid $commonBorderBasic;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  justify-content: space-between;
+
+  // 내용 맞춤 폭 — 찌그러지지 않아야 스크롤이 성립한다.
+  // 다만 지나치게 긴 메뉴명 하나가 폭을 다 먹지 않도록 상한을 둔다(초과분은 말줄임).
+  flex: 0 0 auto;
+  max-width: 240px;
+
+  &.active {
+    background-color: $commonBgBasic;
+    font-weight: 400;
+    color: $commonTextBasic;
+  }
+}
+
+.tabContent {
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  min-width: 0;
+  line-height: 32px;
+}
+
+.closeBtn {
+  color: $commonTextDone;
+  flex: 0 0 12px;
+  display: grid;
+  place-items: center;
+  margin-left: 12px;
+}
+
+// 오른쪽 고정 영역 — 스크롤과 무관하게 항상 같은 자리에 보인다.
+.tabActions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: stretch;
+  border-left: 1px solid $commonBorderBasic;
+  background-color: $navTopBgBasic;
+}
+
+.scrollBtn {
+  border: 0;
+  border-right: 1px solid $commonBorderBasic;
+  background: transparent;
+  padding: 0 6px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: $commonTextDone;
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+// ic-arrow-left 를 뒤집어 오른쪽 화살표로 재사용(오른쪽 아이콘 에셋이 없음)
+.flip {
+  transform: rotate(180deg);
+}
+
+.actionBtn {
+  color: $commonTextDone;
+  font-family: inherit;
+  font-weight: 300;
+  font-size: 14px;
+  border: 0;
+  border-right: 1px solid $commonBorderBasic;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}

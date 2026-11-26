@@ -1,0 +1,107 @@
+{
+  "id": "20261122130655_REVIEW_4",
+  "at": "2026-11-22T13:06:55+09:00",
+  "ms": 1795320415766,
+  "source": "review",
+  "status": "superseded",
+  "sig": "digest|open vs gone|wait chain",
+  "title": "집계의 '끝나지 않은 대기·체인'에서 사라짐이 확인된 것 분리: wait.gone 이 열린 대기를 닫고, 체인도 chain.gone 측정 기록 추가",
+  "evidence": "events.jsonl dbwin wait.start 5건(pid 37688, 28056, 34920, 7936, 26800), wait.end 1건(37688, 2026-11-19T17:11:17, 30초). wait.gone 고유 waiter_pid 4개(DMF0042 28056·34920·7936, SCP0028 26800). 집계 dbwin unfinished 4, unfinishedScreens [DMF0042, SCP0028] 가 이 4건과 같음. orch-improve.js:105~109 는 wait.gone 을 세기만 하고 wOpen 에서 지우지 않음. 체인: 집계 chainsNoEnd 11, noEndLive 0, events.jsonl chain.gone 0줄. orch-watch.js:378~389 는 사라진 체인을 R5 사건 또는 창 로드 알림으로만 남기고 측정 기록을 쓰지 않음",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/test/t_orch_watch_gone.js"
+  ],
+  "before_after": "wait.gone 이 와도 열린 대기 목록 유지, 체인 사라짐은 기록 없음 → digest 가 wait.gone(kind, screen, waiter_pid 일치)을 만나면 열린 대기에서 지우고, orch-watch 가 사라진 체인마다 chain.gone{runId, screen, chain, start_ms, owner}을 남기며 digest 는 noEnd 를 noEndGone(사라짐 확인)과 나머지로 나눔. sweep 반환에 runId 가 없으면 추가",
+  "verify": "node tools/VibeManager/test/t_orch_watch_gone.js 에 표본 추가: dbwin wait.start 2건 + 그중 1건 wait.gone → unfinished 1. 끝 기록 없는 chain.start 1건 + chain.gone → noEnd 0, noEndGone 1. 반영 전 기준값: 이번 7일 기록에서 dbwin unfinished 4, 반영 뒤 같은 기록으로 0. node tools/VibeManager/test/run_all.js 전체 PASS",
+  "rollback": "orch-improve.js, orch-watch.js, t_orch_watch_gone.js 를 반영 전 .bak 으로 되돌리고 설치본에 다시 복사",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "집계 결함 1건: 사라짐 기록이 있는 대기를 '끝나지 않음'으로 계속 셈. 체인은 사라짐 측정 기록이 없음(측정 추가)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-22T13:27:39+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-22T13:31:18+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 942, FAIL 0), 정의 정합 통과 · 백업 태그 20261122_self1327"
+    },
+    {
+      "at": "2026-11-22T13:31:21+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-22T13:37:20+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: ① 실제 7일 기록 집계(digest(7), digest.json 쓰기 막음): 반영 전 13:31:49 'wait dbwin started 5 unfinished 4 [\"DMF0042\",\"SCP0028\"] gone 4', 'chainsNoEnd 11' → 반영 뒤 13:33:15 'wait dbwin started 5 unfinished 0 [] gone · 대상 파일 3개 복원(orch-improve.js AI 편집 5건만 되돌림(반영 전과 같음) / orch-watch.js AI 편집 1건만 되돌림(반영 전과 같음) / t_orch_watch_gone.js AI 편집 1건만 되돌림(반영 전과 같음)) · 대상 밖 변경 _artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a1.sql, _artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a2.sql, _artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a3.sql, _artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a4.sql, _artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a5.sql, _artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a6.sql 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-22T13-31-21_claude_orch.log",
+      "sec": 357,
+      "costUsd": 1.3125394,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_watch_gone.js",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a1.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a2.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a3.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a4.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a5.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a6.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a7.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a8.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/a9.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/b1_unpriced_keys_by_month.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/body.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/c.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/c2.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/get.sql",
+        "_artifacts/_diagnostics/DMF0082_PRICEZERO_20261122/q.py"
+      ]
+    },
+    {
+      "at": "2026-11-22T13:38:06+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261122133806_SELF 로 다시 올림(자동 반영). 원인 tools/VibeManager/test/t_orch_improve.js:52 가 종전 동작을 기대함(wd.unfinished === 2, unfinishedScreens 'TST0091,TST0092'). 이 파일이 개선안 대상에 없어 반영 뒤 run_all(13:33:16 시작)에서 FAIL 1건(PASS 945, 파일 63/64)이 나와 13:37:20 반영 실패로 복원함. 실제 값 unfinished 1, 화면 'TST0092' 는 개선안이 의도한 값과 같음. 체인 부분(chain.gone)은 지난 기록 0줄이라 실기록 효과 없음(chainsNoEnd 11 → 11)"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795321659400,
+  "autoFp": "e217407393",
+  "applyStartMs": 1795321881052,
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": false,
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/test/t_orch_watch_gone.js"
+    ],
+    "verify_result": "① 실제 7일 기록 집계(digest(7), digest.json 쓰기 막음): 반영 전 13:31:49 'wait dbwin started 5 unfinished 4 [\"DMF0042\",\"SCP0028\"] gone 4', 'chainsNoEnd 11' → 반영 뒤 13:33:15 'wait dbwin started 5 unfinished 0 [] gone 4', 'chainsNoEnd 11 chainsNoEndGone 0'. 지난 기록에 chain.gone 줄 0건이라 체인 수 변화 없음. ② node test/t_orch_watch_gone.js: 반영 전 13:31:53 9 PASS 'ALL PASS' → 반영 뒤 13:33:01 13 PASS 'ALL PASS'. 추가 4건 'PASS dbwin wait.start 2 + wait.gone 1 → unfinished 1 (TST0202)', 'PASS chain.gone 전 = noEnd 1 · noEndGone 0', 'PASS chain.gone 1건 · runId · screen · start_ms · owner', 'PASS chain.gone 뒤 = noEnd 0 · noEndGone 1 · chainsNoEndGone 1'. ③ node test/run_all.js 13:33:16 시작: 'SOME FAIL  파일 63/64  PASS 945  FAIL 1  218s'. 실패 = t_orch_improve.js 'FAIL 집계: 끝 사건 없는 대기 2건 · 화면 목록 · 사라진 대기 1건 {\"kind\":\"dbwin\",\"started\":3,\"unfinished\":1,...\"unfinishedScreens\":[\"TST0092\"]'.",
+    "note": "t_orch_improve.js:52 가 종전 동작(wait.gone 받은 TST0091 도 unfinished 에 남음, unfinished 2, 화면 'TST0091,TST0092')을 기대함. 이번 개선안이 바꾸는 동작이라 반영 뒤 FAIL. 대상 밖 파일이라 고치지 않음. 기대값을 unfinished 1, 화면 'TST0092' 로 바꾸면 통과함(targets 에 t_orch_improve.js 추가 결정 필요). sweep 반환 runId: orch-state.js 가 대상 밖이라 orch-watch tick 에서 sweep 전후 state.snapshot().chains runId 를 비교해 얻음(Map 삽입 순서 = sweep 순서). 반영 전 사본으로 새 시험 실패 확인(red)은 명령 승인 거부로 미실행."
+  },
+  "repair": {
+    "at": "2026-11-22T13:38:06+09:00",
+    "decision": "revise",
+    "cause": "tools/VibeManager/test/t_orch_improve.js:52 가 종전 동작을 기대함(wd.unfinished === 2, unfinishedScreens 'TST0091,TST0092'). 이 파일이 개선안 대상에 없어 반영 뒤 run_all(13:33:16 시작)에서 FAIL 1건(PASS 945, 파일 63/64)이 나와 13:37:20 반영 실패로 복원함. 실제 값 unfinished 1, 화면 'TST0092' 는 개선안이 의도한 값과 같음. 체인 부분(chain.gone)은 지난 기록 0줄이라 실기록 효과 없음(chainsNoEnd 11 → 11)",
+    "reason": "",
+    "log": ".vibe\\logs\\2026-11-22T13-37-40_claude_orch.log",
+    "costUsd": 0.41531799999999996,
+    "sec": 25
+  },
+  "supersededBy": "20261122133806_SELF"
+}

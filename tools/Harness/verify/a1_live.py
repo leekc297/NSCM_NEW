@@ -87,6 +87,9 @@ def judge_time(a_sec, t_sec, a_rows, t_rows):
     return 'PASS', f'조회 시간 TO-BE {t_sec:.1f}초({t_rows}행) · AS-IS {a_sec:.1f}초({a_rows}행)'
 
 
+_T536 = "\t,@p_user_id\t\t\t\tNVARCHAR(MAX)\nAS\n  AND ( ( @p_user_id   IS NULL OR @p_user_id ='')  OR (a.USER_ID like '%' + @p_user_id + '%') or (u.UserName like '%' + @p_user_id + '%')\n   OR (a.PART_LEADER like '%' + @p_user_id + '%') )"
+
+
 def selftest():
     A = ['SITE', 'MEASURE', 'QTY']; T = ['SITE', 'MEASURE', 'QTY']
     ar = [('X', 'RTF', 1), ('X', 'KRW', 2), ('Y', 'RTF', 3), ('Y', 'KRW', 4)]
@@ -109,6 +112,10 @@ def selftest():
         ('Measure 컬럼 없음', judge_shape(['SITE'], [('X',)], ['SITE'], [{'SITE': 'X'}]), None),
         ('AS-IS 0행', judge_shape(A, [], T, tr), None),
         ('사용자 인자 없음 = 같은 사용자 대상 아님', same_user_rows(None, None, 'X', {'sheet': 'S'}, {'asis_sp': 'X_GET_Y'}, 'P', {'p_division_id': '40'})[0]['verdict'], 'NA'),
+        ('T536 검색어 user_id(LIKE·빈 값 검사만) = NA', same_user_rows(None, None, 'X', {'sheet': 'S'}, {'asis_sp': 'X_GET_Y'}, 'P', {'p_user_id': ''}, _T536)[0]['verdict'], 'NA'),
+        ('T536 변이: TITLESET_USER 참조 = 검색어 아님', bool(user_param_is_search_term(_T536 + ' JOIN SCM_MST_TITLESET_USER T ON T.USER_ID = @p_user_id', {'p_user_id': ''})), False),
+        ('T536 변이: = 비교(로그인 사용자) = 검색어 아님', bool(user_param_is_search_term("@p_user_id NVARCHAR(MAX)\nWHERE a.CREATED_BY = @p_user_id", {'p_user_id': ''})), False),
+        ('T536 변이: 원문 없음 = 검색어 아님', bool(user_param_is_search_term('', {'p_user_id': ''})), False),
     ]
     ok = 0
     for n, g, w in cases:
@@ -176,13 +183,47 @@ def pick_users(acur, tcur, program, top=5):
     return sorted(set(a) & set(t), key=lambda u: (-min(a[u], t[u]), u))[:top]
 
 
-def same_user_rows(cx, tcx, mid, base, g, proc, ps):
+def user_param_is_search_term(sp_text, ps):
+    """T536(2026-11-25 SSP0014 EG-29c0f2b6 · AI 검토 검사기오판): 이름에 user_id 가 든 인자가 로그인 사용자가 아니라 조회조건 검색어인지.
+    AS-IS SP 원문이 사용자별 칸 설정(SCM_MST_TITLESET_USER)을 참조하지 않고, 그 인자를 쓰는 곳이 선언·빈 값 검사·LIKE 비교뿐이면 검색어 → 반환 = 근거 문구('' = 아님)"""
+    t = re.sub(r'(?s)/\*.*?\*/', ' ', sp_text or ''); t = re.sub(r'--[^\n]*', '', t)  # 주석(예시 EXEC 문 등)은 쓰임으로 세지 않는다
+    if not t.strip() or re.search(r'(?i)TITLESET_USER', t):
+        return ''
+    ups = [k for k in ps if re.search('(?i)created_by|user_id', k)]
+    if not ups:
+        return ''
+    ev = []
+    for k in ups:
+        n = re.escape(k.lstrip('@'))
+        uses = [m.start() for m in re.finditer(rf'(?i)@{n}\b', t)]
+        if not uses:
+            return ''
+        kinds = set()
+        for i in uses:
+            e = t.find('\n', i)
+            ln = t[t.rfind('\n', 0, i) + 1: e if e >= 0 else len(t)]
+            seg = t[max(0, i - 40): i + len(k) + 40]
+            decl = re.match(rf'(?i)^,?\s*@{n}\s+\w+', ln.strip()) and not re.search(r'(?i)\b(AND|OR|WHERE|LIKE)\b|=', ln)
+            empty = re.search(rf"(?i)@{n}\s+IS\s+NULL|@{n}\s*=\s*N?''", seg)
+            like = re.search(rf"(?i)LIKE\s+N?'%'\s*\+\s*@{n}\b", seg)
+            if not (decl or empty or like):
+                return ''
+            kinds.add('LIKE' if like else '빈 값 검사' if empty else '선언')
+        ev.append(f"{k}({'·'.join(sorted(kinds))})" if kinds != {'선언'} else f"{k}(선언만 · 본문에서 안 씀)")
+    return f"AS-IS SP 원문(주석 제외): 인자 {ev} · SCM_MST_TITLESET_USER 참조 없음 → 로그인 사용자 칸 아님(LIKE 검색어 또는 미사용)"
+
+
+def same_user_rows(cx, tcx, mid, base, g, proc, ps, sp_text=None):
     """AS-IS 0행일 때 같은 실사용자·같은 인자로 양쪽을 실행해 건수·Measure 행 구성을 대조"""
     # 2026-11-19 미검증 해소(SCP0096 EG-938ba32f): 조회 SP 인자에 사용자 칸이 없으면 결과가 사용자별 칸 설정과 무관하다, 같은 사용자 재실행 대상 아님(SP 인자 근거 NA).
     #   건수 차이 판정은 주 행(판정필요)이 맡는다. 사용자 인자가 있는데 양쪽 설정 사용자가 없을 때만 측정 경로 없음(ERROR)
     if not any(re.search('(?i)created_by|user_id', k) for k in ps):
         return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'NA', 'asis_rows': 0,
                  'detail': f"조회 SP 인자 {sorted(ps)} 에 사용자 칸 없음, 결과가 사용자 칸 설정과 무관해 같은 사용자 재실행 대상 아님(건수 차이는 주 행에서 판정)", 'note': ''}]
+    srch = user_param_is_search_term(sp_text, ps)  # T536
+    if srch:
+        return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'NA', 'asis_rows': 0,
+                 'detail': f"{srch} — 결과가 사용자 칸 설정과 무관해 같은 사용자 재실행 대상 아님(건수 차이는 주 행에서 판정)", 'note': ''}]
     users = pick_users(cx.cursor(), tcx.cursor(), mid)
     if not users:
         return [{**base, 'sheet': f"{base['sheet']}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'ERROR', 'asis_rows': 0, 'detail': '[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음', 'note': ''}]
@@ -275,7 +316,7 @@ def main():
         if n_a != n_t and n_t > 0:  # 시험 계정은 AS-IS 설정이 없어 건수가 안 맞는다 — 양쪽 실사용자로 다시(2026-11-03)
             try:
                 with connect('tobe') as tcx:
-                    out += same_user_rows(cx, tcx, mid, {**base, 'sheet': c.get('sheet', '')}, g, proc, ps)
+                    out += same_user_rows(cx, tcx, mid, {**base, 'sheet': c.get('sheet', '')}, g, proc, ps, _t)
             except Exception as e:  # noqa: BLE001
                 out.append({**base, 'sheet': f"{c.get('sheet', '')}|같은 사용자", 'asis_sp': g['asis_sp'], 'verdict': 'ERROR', 'asis_rows': '', 'detail': f'[측정 경로 없음] 직접 실행 실패 {str(e)[:160]}', 'note': ''})
         elif tr and len(tr) >= n_t:  # EG003·EG037 Measure 행 구성(표본이 전 행일 때만)

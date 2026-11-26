@@ -5,6 +5,7 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './precede-safety-stock-day.constants';
 import type { SearchParamProps } from './precede-safety-stock-day.types';
+import { normalizeAllSelectedToAll } from './utils/precede-safety-stock-day.util';
 
 interface PrecedeSafetyStockDayState {
   initialized: boolean;
@@ -15,6 +16,9 @@ interface PrecedeSafetyStockDayState {
   // Search 클릭 전에는 undefined(useTabProcQuery enabled 게이트) — nscm-patterns.md §3.6.
   filters?: ProcRequest<MENU_ID, SHEETS.MAIN>;
   staticColumns: RawFlexGridColumnConfig[];
+  // SCM Site 콤보의 현재 옵션 코드 전체 — setFilters 가 "전 사이트 선택 = 'ALL'(무필터)" 보정에 쓴다.
+  //   Division cascade 로 옵션이 바뀌므로 Form 이 siteOptions 변화마다 동기화한다(setSiteOptionCodes).
+  siteOptionCodes: string[];
 }
 
 interface PrecedeSafetyStockDayAction {
@@ -22,6 +26,7 @@ interface PrecedeSafetyStockDayAction {
   setOpenSearchArea: (open?: boolean) => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
   setDivision: (divisionId: string) => void;
+  setSiteOptionCodes: (codes: string[]) => void;
   setFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
@@ -54,6 +59,7 @@ const initPrecedeSafetyStockDayState: PrecedeSafetyStockDayState = {
   conditionsRestored: false,
   filters: undefined,
   staticColumns: [],
+  siteOptionCodes: [],
 };
 
 export const usePrecedeSafetyStockDayStore = createPersistedStoreWithTab<
@@ -89,6 +95,13 @@ export const usePrecedeSafetyStockDayStore = createPersistedStoreWithTab<
         state.filters = undefined; // 그리드 초기화 — 재조회(Search) 전까지 빈 상태(useTabProcQuery enabled 게이트)
       });
     },
+    // SCM Site 콤보 옵션 코드 동기화 — Division cascade 로 옵션이 바뀔 때 Form 이 호출. setFilters 의
+    //   "전 사이트 선택 = 'ALL'" 보정 기준값(아래 normalizeAllSelectedToAll).
+    setSiteOptionCodes: codes => {
+      set(state => {
+        state.siteOptionCodes = codes;
+      });
+    },
     // SP 파라미터 9종(procedures.d.ts SCP0127.main.request)만 추린다 — design/02_search-combo.md §5.
     setFilters: () => {
       set(state => {
@@ -106,7 +119,10 @@ export const usePrecedeSafetyStockDayStore = createPersistedStoreWithTab<
         state.filters = {
           divisionId,
           planGroupId,
-          scmSiteId,
+          // SCM Site 는 Plan Group 처럼 전 항목 선택을 열거값으로 들고 있어(콤보 체크 유지), 조회
+          //   직전에만 "전 사이트 = 'ALL'(무필터)"로 보정한다 — AS-IS 파리티(GET SP 는 'ALL'/NULL 만
+          //   무필터, 열거값은 IN(..)으로 좁힘). util normalizeAllSelectedToAll 참조.
+          scmSiteId: normalizeAllSelectedToAll(scmSiteId, get().siteOptionCodes),
           itemId,
           stage,
           validYn,

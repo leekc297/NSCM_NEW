@@ -89,8 +89,10 @@ export const useStockOspStore = createPersistedStoreWithTab<State & Action>(
       set(state => {
         const cur = get().searchCondition;
         state.searchCondition = {
-          ...initSearch, // Division·기간/날짜 제외 전 조건 초기화(plantSite/item/inspection/status)
+          ...initSearch, // Division·기간/날짜·Status 제외 전 조건 초기화(plantSite/item/inspection)
           divisionId,
+          // Status 는 사업부 무관 공통코드(PACKER_HOLD_STATUS)라 AS-IS 처럼 유지(사용자 지시 2026-11-23)
+          status: cur.status,
           fromYyyymmdd: cur.fromYyyymmdd,
           toYyyymmdd: cur.toYyyymmdd,
           cutoffFromYyyymmdd: cur.cutoffFromYyyymmdd,

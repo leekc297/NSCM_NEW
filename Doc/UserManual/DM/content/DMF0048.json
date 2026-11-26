@@ -1,0 +1,108 @@
+{
+ "definition": "Division 별 Sales Site, Model 단위 MKT FCST 수량, 단가, 매출 금액을 기간 Bucket 으로 조회하는 판매 모니터링 화면",
+ "overview": [
+  "Sales Plan 에 저장된 MKT FCST 수량과 Unit Price(LOC), Sales Amt. 를 기간별로 모아 보는 조회 전용 화면임",
+  "위쪽 조회 조건, 왼쪽 Sales Monitoring 그리드, 오른쪽 기간 컬럼, 맨 아래 Sum 행으로 구성됨",
+  "Div, Period, Bucket 을 고르고 Search(F5) → Measure 선택 아이콘으로 볼 행을 고름 → Excel 로 내려받음",
+  "Sales Plan(DMF0021)에서 저장한 판매 계획 데이터를 조회함"
+ ],
+ "pages": [
+  {
+   "title": "Sales Monitoring",
+   "keyPoint": "",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.157,
+     "y": 0.15
+    },
+    {
+     "no": 2,
+     "x": 0.714,
+     "y": 0.245
+    },
+    {
+     "no": 3,
+     "x": 0.167,
+     "y": 0.245
+    },
+    {
+     "no": 4,
+     "x": 0.631,
+     "y": 0.348
+    },
+    {
+     "no": 5,
+     "x": 0.879,
+     "y": 0.972
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 비우고 조회하면 \"Division 을 선택하세요.\" 메시지가 뜸",
+      "Team, End Customer: Div 에 속한 값만 나옴. Sales Site 는 고른 End Customer 기준으로 나옴",
+      "Period: 필수. 시작일이 종료일보다 늦으면 조회되지 않음. 3년을 넘으면 \"조회 기간은 3년 이내로 입력해주세요.\" 메시지가 뜸",
+      "Bucket: Daily, Weekly, Monthly 중 선택",
+      "Item Type, Biz. Type: 콤보에서 하나를 고름"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert, Delete, Save 버튼 없음",
+      "Sort 왼쪽 아이콘 2개: Column Setting, Measure 선택. 고른 컬럼과 Measure 는 사용자별로 저장됨",
+      "조회가 끝나기 전에 다시 조회하면 \"이전 작업이 아직 실행 중입니다. 잠시 후 다시 시도해주세요.\" 메시지가 뜸",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Sales Monitoring 그리드",
+     "lines": [
+      "Div, Team, End Customer, Sales Site, Model 순서로 같은 값이 묶여 표시됨",
+      "Measure: 모델마다 MKT FCST[R+P], Unit Price(LOC), Sales Amt. 행이 나옴"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "기간 컬럼",
+     "lines": [
+      "Bucket 에 맞춰 일, 주, 월 단위 컬럼이 만들어짐",
+      "값은 소수 셋째 자리까지 표시됨"
+     ]
+    },
+    {
+     "no": 5,
+     "title": "Sum 행",
+     "lines": [
+      "그리드 맨 아래 회색 Sum 행에 기간 컬럼별 합계가 표시됨"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0048",
+ "uiName": "Sales Monitoring",
+ "menuPath": "DM> Demand Plan> Sales Monitoring",
+ "captures": [
+  "captures/DMF0048.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0048/",
+  "Doc/asisfacts/screens/DMF0048/"
+ ],
+ "buttons": [
+  "Sales Monitoring:COLUMN_SETUP",
+  "Sales Monitoring:EXCEL",
+  "Sales Monitoring:MEASURE_SELECT",
+  "Sales Monitoring:SEARCH",
+  "dayRange:SEARCH",
+  "spreadTitle:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH"
+ ]
+}

@@ -119,8 +119,7 @@
 | button:FindButton | FindButton > FindData_Main > InitSpread > GetUserTitle | 2642 | SCP.SCP0049_GET_SHEET_USER_TITLE | MATCH | SP SCP0049_GET_SHEET_USER_TITLE |
 | button:FindButton | FindButton > FindData_Main > GetTactTime | 2768 | FP_Master.PR_UI_SCP0049_FIND | MATCH | SP PR_UI_SCP0049_FIND |
 | button:FindButton | FindButton > FindData_Main > GetLossNoRun | 2825 | FP_Master.PR_UI_SCP0049_FIND | MATCH | SP PR_UI_SCP0049_FIND |
-| button:SaveButton | SaveButton > SaveData_Main | 1210 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.SCP0049_SAVE_CAPA] | BIZ_MATCH |  |
-| button:SaveButton | SaveButton > SaveData_Main | 1210 | {?definition_path}#dbo.SCP0049_SAVE_CAPA | UNRESOLVED |  |
+| button:SaveButton | SaveButton > SaveData_Main | 1210 | dbo.SCP0049_SAVE_CAPA | NOT_IN_FOXQUERY |  |
 | button:SaveButton | SaveButton > SaveData_Main > SCM_SYS_LOG_BATCH | 1272 | SCP.PR_SCM_SYS_LOG_BATCH | MATCH | SP PR_SCM_SYS_LOG_BATCH |
 | button:SaveButton | SaveButton > SaveData | 1278 | SCP.SCP0049_SAVE_NEW_MODEL | MATCH | SP SCP0049_SAVE_NEW_MODEL |
 | button:SaveButton | SaveButton > SaveData_Main | 2445 | biz:AppService.GeneralRunProcedureCustomTable [procedure=SaveCapa] | BIZ_MATCH |  |
@@ -248,10 +247,8 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?definition_path}#dbo.SCP0049_SAVE_CAPA | UNRESOLVED | 1 |  |  |  |
 | biz:AppService.GeneralExecuteQuery [batchId=LineByShop] | BIZ_MATCH | 2 |  |  |  |
 | biz:AppService.GeneralExecuteQuery [batchId=MyDivision] | BIZ_MATCH | 1 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.SCP0049_SAVE_CAPA] | BIZ_MATCH | 1 |  |  |  |
 | biz:AppService.GeneralRunProcedureCustomTable [procedure=SaveCapa] | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=LocationGroupByCapa] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GetCommonDataList:SELECT:SCM_MST_OPERATION_SN, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
@@ -261,6 +258,7 @@
 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_release_building] | BIZ_MATCH | 2 |  |  |  |
 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=OperationByShop] | BIZ_MATCH | 2 |  |  |  |
 | biz:FPCommonDataBLL.GeneralUpdateBatch [batchId=save_excel_month] | BIZ_MATCH | 1 |  |  |  |
+| dbo.SCP0049_SAVE_CAPA | NOT_IN_FOXQUERY | 1 |  |  | DB 객체 존재(P) → FoxQuery 없이 직접 호출: CREATE:#TMP_SCP0049_SAVE_DATA, CREATE:#TMP_SCP0049_SAVE_LOSS_UTIL_TACT, CREATE:#TMP_SCP0049_SAVE_LOSS_UTIL_LOSS, EXEC:PR_SCM_SYS_LOG_BATCH, SELECT:SCM_MST_LINE_SN, INSERT:#TMP_SCP0049_SAVE_DATA, DELETE:X, SELECT:#TMP_SCP0049_SAVE_DATA, UPDATE:SCM_MASTER_MANAGER_M_SN, SELECT:SCM_MASTER_MANAGER_M_SN, EXEC:PR_SCP_CAPA_HIST_DATASET, MERGE:SCM_WORK_CALENDAR_M_SN, DELETE:SCM_WORK_CALENDAR_M_SN, SELECT:SCM_WORK_CALENDAR_M_SN, SELECT:SCM_SYS_CALENDAR_M, MERGE:SCM_LOSS_M_SN, UPDATE:SCM_MST_ITEM_LINE_ASSIGN_SN, SELECT:SCM_MST_ITEM_LINE_ASSIGN_SN, UPDATE:SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN, SELECT:SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN |
 | FP_Master.PR_UI_FP01886_AUTHORITY_REQUEST | MATCH | 2 | SP PR_UI_FP01886_AUTHORITY_REQUEST | EXEC:PR_UI_FP01886_AUTHORITY_REQUEST | ⚠ DB에 SP 없음 |
 | FP_Master.PR_UI_FP03033_MODEL_MEASURECONVERSION | MATCH | 1 | SP PR_UI_FP03033_MODEL_MEASURECONVERSION | EXEC:PR_UI_FP03033_MODEL_MEASURECONVERSION | ⚠ DB에 SP 없음 |
 | FP_Master.PR_UI_SCP0049_FIND | MATCH | 3 | SP PR_UI_SCP0049_FIND | EXEC:PR_UI_SCP0049_FIND | ⚠ DB에 SP 없음 |
@@ -461,8 +459,8 @@
 ## 7. 확인 필요 (2건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 1210 | SaveData_Main | dbo.SCP0049_SAVE_CAPA | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: CREATE:#TMP_SCP0049_SAVE_DATA, CREATE:#TMP_SCP0049_SAVE_LOSS_UTIL_TACT, CREATE:#TMP_SCP0049_SAVE_LOSS_UTIL_LOSS, EXEC:PR_SCM_SYS_LOG_BATCH, SELECT:SCM_MST_LINE_SN, INSERT:#TMP_SCP0049_SAVE_DATA, DELETE:X, SELECT:#TMP_SCP0049_SAVE_DATA, UPDATE:SCM_MASTER_MANAGER_M_SN, SELECT:SCM_MASTER_MANAGER_M_SN, EXEC:PR_SCP_CAPA_HIST_DATASET, MERGE:SCM_WORK_CALENDAR_M_SN, DELETE:SCM_WORK_CALENDAR_M_SN, SELECT:SCM_WORK_CALENDAR_M_SN, SELECT:SCM_SYS_CALENDAR_M, MERGE:SCM_LOSS_M_SN, UPDATE:SCM_MST_ITEM_LINE_ASSIGN_SN, SELECT:SCM_MST_ITEM_LINE_ASSIGN_SN, UPDATE:SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN, SELECT:SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 2445 | SaveData_Main | {?definition_path}#SaveCapa | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1210 | SaveData_Main | {?definition_path}#dbo.SCP0049_SAVE_CAPA | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

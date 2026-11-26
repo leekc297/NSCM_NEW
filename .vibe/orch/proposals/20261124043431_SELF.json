@@ -1,0 +1,115 @@
+{
+  "id": "20261124043431_SELF",
+  "at": "2026-11-24T04:34:31+09:00",
+  "ms": 1795462471801,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/flow panel.js|화면상태gate칸n줄이repairscope분기없이checkmdfeg",
+  "title": "사용자 지시 R135 같은 문제: tools/VibeManager/flow-panel.js:71 화면 상태 Gate 칸(71~73줄)이 repairScope 분기 없이 CHECK.md·fe_gate.json 으로 bad/warn 을 매겨 DB MODE 에서도",
+  "evidence": "규칙 R135 \"DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함\" (원래 지시 2026-11-19 18:51 \"현재는 DB MODE로만 작업을 해서 현재의 소스가 최신 소스이고 변경대상이 아닌것으로 STATUS 변경하고 싶어요. 게이트 대상에서도 제외하고 싶어요. 차후 UI/DB MODE 일때는 게이트 대상이 되면 될 것 같아요.\") · tools/VibeManager/flow-panel.js:71 const chk = rd(path.join(g, 'CHECK.md')); const m = chk.match(/BLOCK (\\d+) \\/ WARN (\\d+)/); s.gate = m ? (Number(m[1]) === 0 ? 'ok' : 'bad') : 'none';",
+  "targets": [
+    "tools/VibeManager/flow-panel.js"
+  ],
+  "before_after": "stageStatus 에서 workbench.workMode(p).db 이면 s.gate='ok'(또는 별도 값 'skip'), s.gateTip='DB MODE: FE 변경 대상 아님'으로 두고 COLS 완료 계산에서 통과로 셈. UI/DB MODE 는 gate_baseline.tsv 이후 바뀐 화면만 CHECK.md 로 판정. fe_gate.json(브라우저 열기) 제외 여부는 사용자 판정",
+  "verify": "node --check tools/VibeManager/flow-panel.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/flow-panel.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T08:38:46+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T08:38:46+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-24T10:33:53+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-24T10:37:29+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1253, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self1033"
+    },
+    {
+      "at": "2026-11-24T10:37:31+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T10:49:24+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1253, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T10:49:24+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 → 반영 뒤. node --check flow-panel.js: exit 0 → CHECK_OK. run_all.js: 77/77 PASS 1253 FAIL 0(2026-11-24T01:38:29Z 종료) → 77/77 PASS 1253 FAIL 0(2026-11-24 10:46:49 종료). t_webview_syntax.js: ALL PASS(19) → ALL PASS(19). 추가 확인: stageStatus 임시 스크립트 결과 DB MODE에서 SCP0104, SSP0020, DMF0082 3건 gate=ok, ga · 변경 7개 파일 · 대상 목록 밖 변경 6개: tools/Harness/gate_baseline.tsv, Doc/통합테스트_SSP/SSP 통합테스트 시나리오(e2e)_V10.xlsx, _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/APPLIED_OPERATIONS.md, _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/rehearse_cloud_patch.py, _artifacts/_deploy_packages/DMF0082_UC_CUTOFF_CLOUD_20261124_1037/00_README.md, tools/Analysis/ssp_it_precheck/apply_all.ps1",
+      "log": ".vibe\\logs\\2026-11-24T10-37-31_claude_orch.log",
+      "sec": 578,
+      "costUsd": 1.2228869,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/flow-panel.js",
+        "Doc/통합테스트_SSP/SSP 통합테스트 시나리오(e2e)_V10.xlsx",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/APPLIED_OPERATIONS.md",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/rehearse_cloud_patch.py",
+        "_artifacts/_deploy_packages/DMF0082_UC_CUTOFF_CLOUD_20261124_1037/00_README.md",
+        "tools/Analysis/ssp_it_precheck/apply_all.ps1"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함 규칙을 tools/VibeManager/flow-panel.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R135|tools/VibeManager/flow-panel.js",
+  "kind": "fix",
+  "needsApproval": "작업 모드(repairScope) 변경",
+  "applyStartMs": 1795484251213,
+  "verifyJudge": {
+    "at": "2026-11-24T10:47:13+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1253, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self1033",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795484964004,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/flow-panel.js: 반영 전 출력 없음(exit 0) → 반영 뒤 CHECK_OK. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 77/77 PASS 1253 FAIL 0 212.6s' → 반영 뒤 'ALL OK 파일 77/77 PASS 1253 FAIL 0 217.9s'. node tools/VibeManager/test/t_webview_syntax.js: 반영 전 PASS 19, ALL PASS → 반영 뒤 PASS 19, ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/flow-panel.js"
+    ],
+    "verify_result": "반영 전 → 반영 뒤. node --check flow-panel.js: exit 0 → CHECK_OK. run_all.js: 77/77 PASS 1253 FAIL 0(2026-11-24T01:38:29Z 종료) → 77/77 PASS 1253 FAIL 0(2026-11-24 10:46:49 종료). t_webview_syntax.js: ALL PASS(19) → ALL PASS(19). 추가 확인: stageStatus 임시 스크립트 결과 DB MODE에서 SCP0104, SSP0020, DMF0082 3건 gate=ok, gateN=제외. UI/DB MODE 모의에서 3건 gate=ok, gateN=변경 없음(기준선 2026-11-24 10:38:39).",
+    "note": "flow-panel.js stageStatus: DB MODE(workbench.workMode(p).db)면 s.gate=ok, gateN=제외, gateTip='DB MODE: FE 변경 대상 아님'. UI/DB MODE는 gateBaseline(p)가 nscm-fe git status -uall 파일 SHA1을 tools/Harness/gate_baseline.tsv와 비교(harness-stop-gate.ps1과 같은 계산, 15초 재사용). 바뀐 파일이 있는 화면만 CHECK.md로 판정하고 나머지는 ok, gateN=변경 없음. 기준선 또는 nscm-fe .git이 없거나 git 실행 실패면 종전 CHECK.md 판정. fe_gate.json 판정(73줄 원래 코드)은 개선안에서 사용자 판정으로 남겨 바꾸지 않음. 그래서 DB MODE라도 fe_gate.json에 FAIL이 있으면 Gate 칸이 bad로 나옴. 미확인: 기준선과 달라진 파일이 있는 화면 경로. 현재 바뀐 화면 0건이라 그 경로를 타지 않았고, harness-stop-gate.ps1 DRYRUN 대조는 중첩 PowerShell 실행이 권한에서 막혀 하지 않음. 임시 스크립트 .vibe/_t_gate_probe.js, .vibe/_t_gate_h.json은 삭제함."
+  },
+  "snap": "prop_20261124043431_SELF"
+}

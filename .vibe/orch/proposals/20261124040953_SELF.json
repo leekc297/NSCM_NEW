@@ -1,0 +1,141 @@
+{
+  "id": "20261124040953_SELF",
+  "at": "2026-11-24T04:09:53+09:00",
+  "ms": 1795460993061,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|vmo주간정리ai호출결과costusd기록의summary를prewrap평문",
+  "title": "사용자 지시 R114 같은 문제: tools/VibeManager/orchestra.js:933 VMO 주간 정리(AI 호출 결과, costUsd 기록)의 summary 를 pre-wrap 평문으로 보임",
+  "evidence": "규칙 R114 \"VM, VMW, VMO 웹뷰가 보이는 AI 답변과 결과 보고는 마크다운(제목, 번호 목록, 표, 코드)을 렌더링해 보임\" (원래 지시 2026-11-19 10:18 \"질문에 대한 답변이나 작업 후 결과에 대해서 나열할 때 클로드 코드와 같이 정리된 형태로 보여줄 수 있도록 해주세요. 지금은 나열된 text 내에서 결과나 답변을 찾아야 하는 형태 입니다. 아래는 클로드코드에서 일반적이 ㄴ답변의 형태 입니다. <pasted_content id=\"e389\") · tools/VibeManager/orchestra.js:933 '<div style=\"white-space:pre-wrap\">'+esc(t.summary)+'</div>'",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "workbench.js mdHtml 과 같은 변환 함수를 orchestra 웹뷰에 두고 t.summary 를 마크다운으로 렌더함",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T00:15:33+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T00:19:37+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0015"
+    },
+    {
+      "at": "2026-11-26T00:19:42+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T00:33:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T00:33:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 뒤 2026-11-26 00:28:54 측정. node --check 종료 0 → 종료 0, run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0' → 'ALL OK 파일 87/87 PASS 1422 FAIL 0', t_webview_syntax.js 'ALL PASS'(19항목) → 'ALL PASS'(19항목) · 변경 27개 파일 · 대상 목록 밖 변경 26개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_Excel_2단계_차단_M1__0.json, Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json, Doc/verify/SCP0005/calls/_verify_언어_전환_문구_덤프_I2__0.json, Doc/verify/SCP0005/combo_runtime.json, Doc/verify/SCP0005/e2e/shots/index_verify.json",
+      "log": ".vibe\\logs\\2026-11-26T00-19-42_claude_orch.log",
+      "sec": 568,
+      "costUsd": 1.0119586,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_verify_Excel_2단계_차단_M1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_언어_전환_문구_덤프_I2__0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0005/e2e/shots/verify_Excel_양식_업로드_M1.png",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0005/lang_texts.json",
+        "tools/VibeManager/orchestra.js",
+        "Doc/e2e/_run.acct.42848.json",
+        "Doc/verify/SCP0005/e2e/serial/bad_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank2_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank_result_SCP0005.png",
+        "Doc/verify/SCP0005/e2e/serial/form2_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/form_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/m1_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/m1_result_SCP0005.png",
+        "Doc/verify/SCP0005/e2e/serial/m1rows_SCP0005.json",
+        "Doc/verify/SCP0005/e2e/serial/scn_1.png",
+        "Doc/verify/SCP0005/e2e/serial/scn_2.png",
+        "Doc/verify/SCP0005/e2e/serial/scn_3.png",
+        "Doc/verify/SCP0005/e2e/serial/scn_4.png",
+        "Doc/verify/SCP0005/e2e/serial/scn_end.png",
+        "Doc/verify/SCP0005/m1_upload.json"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:13+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM, VMW, VMO 웹뷰가 보이는 AI 답변과 결과 보고는 마크다운(제목, 번호 목록, 표, 코드)을 렌더링해 보임 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R114|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795619732899,
+  "autoFp": "dd34622d40",
+  "applyStartMs": 1795619982287,
+  "verifyJudge": {
+    "at": "2026-11-26T00:29:14+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0015",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795620791463,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js: 반영 전 종료 0 → 반영 뒤 종료 0 · node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 87/87 PASS 1422 FAIL 0 234s' → 반영 뒤 'ALL OK 파일 87/87 PASS 1422 FAIL 0 234.1s' · node tools/VibeManager/test/t_webview_syntax.js: 반영 전 19항목 ALL PASS → 반영 뒤 19항목 ALL PASS(orchestra(ko/en) 스크립트 1개 구문, 같은 이름 함수 선언 없음 포함)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "반영 뒤 2026-11-26 00:28:54 측정. node --check 종료 0 → 종료 0, run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0' → 'ALL OK 파일 87/87 PASS 1422 FAIL 0', t_webview_syntax.js 'ALL PASS'(19항목) → 'ALL PASS'(19항목)",
+    "note": "개선안의 933줄은 현재 962줄. paintSummary 앞에 mdEsc, mdInline, mdHtml 추가(jobs.js 466~508 줄과 같은 코드, 템플릿 문자열 이스케이프 동일). t.summary 를 <div class=\"md\">+mdHtml 로 렌더. #hsSum .md 스타일 추가(jobs.js .log .md 스타일과 같은 값). 요약 안의 링크는 모양만 보이고 클릭 동작 없음(파일 열기 처리는 개선안 범위 밖). 웹뷰 실화면 확인은 VMO 복사와 창 다시 로드 뒤 가능하며 이번에는 미확인. 시험 출력 임시 파일 4개(.vibe/orch/_*.txt)는 읽은 뒤 삭제."
+  },
+  "snap": "prop_20261124040953_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

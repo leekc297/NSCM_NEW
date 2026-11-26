@@ -1,0 +1,84 @@
+{"t":1795542424753,"m":{"type":"out","stream":"task","text":"▶ CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005 --docs\n","cls":"cmd"}}
+{"t":1795542425082,"m":{"type":"out","stream":"task","text":"[작업 1/1] 문서 생성(CheckList · ActionItemList · UI 테스트 · 회귀 점검) — 판정은 지난 단계 결과 그대로\n","cls":""}}
+{"t":1795542425082,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SCP0005 --resume-docs\n","cls":""}}
+{"t":1795542484574,"m":{"type":"out","stream":"task","text":"[selfcheck] full · 59.4초 · PY_COMPILE 0(신규 0) · PY_UNDEF 0(신규 0) · CTRL_CHARS 0(신규 0) · JS_SYNTAX 0(신규 0) · SPEC_SIZE 0(신규 0) · TSC 0(신규 0) · SELFTEST_JS 0(신규 0) · SELFTEST_PY 0(신규 0) · RULE_REGISTRY 0(신규 0) · selftest JS 35개·PY 66개 실행(DB 필요 2개 미실행)\n","cls":""}}
+{"t":1795542484574,"m":{"type":"out","stream":"task","text":"[selfcheck] PASS → Doc/verify/_engine_selfcheck.json\n","cls":""}}
+{"t":1795542484574,"m":{"type":"out","stream":"task","text":"== UI CheckList SCP0005 (AS-IS SCP0005) ==\n","cls":""}}
+{"t":1795542484574,"m":{"type":"out","stream":"task","text":"[INFO] --resume-docs — 판정·추적 산출물은 그대로, 문서 생성(make_verify_docs)·회귀 게이트(regress)만 다시 실행\n","cls":""}}
+{"t":1795542484575,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542484576,"m":{"type":"out","stream":"task","text":"[단계 8/8] 문서 생성·회귀 점검 — 세부 6개 · --resume-docs(앞 단계는 지난 실행 결과 사용)\n","cls":""}}
+{"t":1795542484577,"m":{"type":"out","stream":"task","text":"[세부 1/6] make_verify_docs.py\n","cls":""}}
+{"t":1795542484577,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542484577,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\make_verify_docs.py SCP0005 --plan-only\n","cls":""}}
+{"t":1795542493737,"m":{"type":"out","stream":"task","text":"[설명 정리 필요] 11건(목록만 · --plan-only · 문서는 설명 문장 작성 뒤 1회 생성)\n","cls":""}}
+{"t":1795542493791,"m":{"type":"out","stream":"task","text":"[시간] make_verify_docs.py · 시작 02:48:04 · 9.2s · rc=0\n","cls":""}}
+{"t":1795542493792,"m":{"type":"out","stream":"task","text":"[세부 2/6] llm_desc.py\n","cls":""}}
+{"t":1795542493792,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542493792,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\llm_desc.py SCP0005\n","cls":""}}
+{"t":1795542493877,"m":{"type":"out","stream":"task","text":"[설명 문장] 정리 문장 없는 행 11 · 작성 대상 11 · 묶음 2개\n","cls":""}}
+{"t":1795542493902,"m":{"type":"out","stream":"task","text":"  · 설명 문장 작성 묶음 1/2 — 6행\n","cls":""}}
+{"t":1795542493903,"m":{"type":"out","stream":"task","text":"  · 설명 문장 작성 묶음 2/2 — 5행\n","cls":""}}
+{"t":1795542552664,"m":{"type":"out","stream":"task","text":"  [설명 미작성] V-6e159871 — 문장 규칙 위반 — title: ('추상어', 'ity 값 일부 행 불일치', \"'일부 컬럼' → 컬럼명·건수 적기\")\n","cls":""}}
+{"t":1795542552665,"m":{"type":"out","stream":"task","text":"[설명 문장] 작성 10행 · 미작성 1행 · 비용 $0.6242\n","cls":""}}
+{"t":1795542552666,"m":{"type":"out","stream":"task","text":"DESC_WRITTEN 10\n","cls":""}}
+{"t":1795542552677,"m":{"type":"out","stream":"task","text":"[시간] llm_desc.py · 시작 02:48:13 · 58.9s · rc=0\n","cls":""}}
+{"t":1795542552679,"m":{"type":"out","stream":"task","text":"[세부 3/6] make_verify_docs.py\n","cls":""}}
+{"t":1795542552680,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542552680,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\make_verify_docs.py SCP0005\n","cls":""}}
+{"t":1795542565344,"m":{"type":"out","stream":"task","text":"[문장 규칙] 저장 전 정리 12140셀\n","cls":""}}
+{"t":1795542569159,"m":{"type":"out","stream":"task","text":"[문장 규칙] 위반 768건(수식어 203, 주어 1, 번역투 104, 기호 312, 틀 39, 접속 6, 소개·맺음 1, 추측 28, 추상어 43, 용어 31), 문장 25101개, SCP0005_DistributionRoute_CheckList_v8.xlsx, 보고 Doc\\_doc_style\\SCP0005_DistributionRoute_CheckList_v8.xlsx.style.csv\n","cls":""}}
+{"t":1795542569165,"m":{"type":"out","stream":"task","text":"  이전 버전 1개 → C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\old: SCP0005_DistributionRoute_CheckList_v7.xlsx\n","cls":""}}
+{"t":1795542569317,"m":{"type":"out","stream":"task","text":"[문장 규칙] 위반 8건(수식어 1, 번역투 5, 기호 2), 문장 105개, ☆NSCME_SCP&SSP 테스트_SCP0005(Distribution Route).xlsx, 보고 Doc\\_doc_style\\☆NSCME_SCP&SSP 테스트_SCP0005(Distribution Route).xlsx.style.csv\n","cls":""}}
+{"t":1795542569481,"m":{"type":"out","stream":"task","text":"[문장 규칙] 저장 전 정리 587셀\n","cls":""}}
+{"t":1795542569649,"m":{"type":"out","stream":"task","text":"[문장 규칙] 위반 6건(수식어 2, 틀 2, 추상어 2), 문장 977개, SCP0005_DistributionRoute_ActionItemList_v8.xlsx, 보고 Doc\\_doc_style\\SCP0005_DistributionRoute_ActionItemList_v8.xlsx.style.csv\n","cls":""}}
+{"t":1795542569652,"m":{"type":"out","stream":"task","text":"  이전 버전 1개 → C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\old: SCP0005_DistributionRoute_ActionItemList_v7.xlsx\n","cls":""}}
+{"t":1795542569655,"m":{"type":"out","stream":"task","text":"CheckList v8: C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\SCP0005_DistributionRoute_CheckList_v8.xlsx\n","cls":""}}
+{"t":1795542569655,"m":{"type":"out","stream":"task","text":"  결과 ERROR 144 · FAIL 38 · NA 869 · PASS 1186 · 판정필요 16 · 결함 원장 335건 중 FAIL 6\n","cls":""}}
+{"t":1795542569655,"m":{"type":"out","stream":"task","text":"ActionItemList v8: C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\SCP0005_DistributionRoute_ActionItemList_v8.xlsx (설정 DB_ONLY)\n","cls":""}}
+{"t":1795542569655,"m":{"type":"out","stream":"task","text":"UI 테스트 Sheet: Doc\\UI_TEST(SCP&SSP)\\☆NSCME_SCP&SSP 테스트_SCP0005(Distribution Route).xlsx · 기존 파일에 덧붙임(원본 백업 Doc/verify/SCP0005/ui_test_backup) · 추가 6행 · 이미 있는 행 3 · 기준 SCP0005_DistributionRoute_CheckList_v8.xlsx\n","cls":""}}
+{"t":1795542569656,"m":{"type":"out","stream":"task","text":"  공통 컴포넌트 16 · 화면 FE 20 · 사람판정 16 · DB 메타 1 · DB 객체(PKG/SP) 1 · 기계용 C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\fixlist.csv\n","cls":""}}
+{"t":1795542569656,"m":{"type":"out","stream":"task","text":"[설명 정리 필요] 1건 — Doc/verify/SCP0005/action_summary.csv 에 작성 후 run_verify.py SCP0005 --resume-docs (틀: tools/VibeManager/rules/50_DOC_STYLE.md 'CheckList 설명 칸 틀') · V-6e159871\n","cls":""}}
+{"t":1795542569738,"m":{"type":"out","stream":"task","text":"[시간] make_verify_docs.py · 시작 02:49:12 · 17.1s · rc=0\n","cls":""}}
+{"t":1795542569744,"m":{"type":"out","stream":"task","text":"[세부 4/6] regress.py\n","cls":""}}
+{"t":1795542569745,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542569746,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\regress.py SCP0005 --harvest\n","cls":""}}
+{"t":1795542572475,"m":{"type":"out","stream":"task","text":"사용자 판정 수집 360건 → Doc\\verify\\_user_verdicts.csv · 판 596개(캐시 적중 594 · 재파싱 2)\n","cls":""}}
+{"t":1795542572536,"m":{"type":"out","stream":"task","text":"SCP0005: 사용자 판정 4건 대조 · 위반 0 · 조치 필요 9건\n","cls":""}}
+{"t":1795542572540,"m":{"type":"out","stream":"task","text":"→ Doc\\verify\\_regress_report.md · 화면별 Doc/verify/<ID>/_regress_report.md · 위반 0\n","cls":""}}
+{"t":1795542572569,"m":{"type":"out","stream":"task","text":"[시간] regress.py · 시작 02:49:29 · 2.8s · rc=0\n","cls":""}}
+{"t":1795542572571,"m":{"type":"out","stream":"task","text":"[세부 5/6] checker_regress.py\n","cls":""}}
+{"t":1795542572571,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542572571,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\checker_regress.py SCP0005\n","cls":""}}
+{"t":1795542572670,"m":{"type":"out","stream":"task","text":"[checker_regress] SCP0005: 악화 0(승인 스냅샷 0) · 개선 0 · 변경 3 · 자동 승인 4 → Doc/verify/SCP0005/_checker_regress.md\n","cls":""}}
+{"t":1795542572682,"m":{"type":"out","stream":"task","text":"[시간] checker_regress.py · 시작 02:49:32 · 0.1s · rc=0\n","cls":""}}
+{"t":1795542572683,"m":{"type":"out","stream":"task","text":"[세부 6/6] precision.py\n","cls":""}}
+{"t":1795542572683,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542572683,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\precision.py SCP0005\n","cls":""}}
+{"t":1795542574690,"m":{"type":"out","stream":"task","text":"[precision] SCP0005: 판 8개 → Doc/verify/SCP0005/precision.csv · 최신 v8 조치필요 9 · 실결함 0 · 허위 0 · 중복 0 · 미검토 9 · 정밀도 미측정(검토 0)\n","cls":""}}
+{"t":1795542574690,"m":{"type":"out","stream":"task","text":"   v 1 조치  13 실결함   0 허위   0 중복   0 미검토  13 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574690,"m":{"type":"out","stream":"task","text":"   v 2 조치  12 실결함   0 허위   0 중복   0 미검토  12 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574690,"m":{"type":"out","stream":"task","text":"   v 3 조치  14 실결함   0 허위   0 중복   0 미검토  14 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574690,"m":{"type":"out","stream":"task","text":"   v 4 조치  13 실결함   0 허위   0 중복   0 미검토  13 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574690,"m":{"type":"out","stream":"task","text":"   v 5 조치  12 실결함   0 허위   0 중복   0 미검토  12 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574690,"m":{"type":"out","stream":"task","text":"   v 6 조치   5 실결함   0 허위   0 중복   0 미검토   5 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574691,"m":{"type":"out","stream":"task","text":"   v 7 조치   5 실결함   0 허위   0 중복   0 미검토   5 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574691,"m":{"type":"out","stream":"task","text":"   v 8 조치   9 실결함   0 허위   0 중복   0 미검토   9 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795542574691,"m":{"type":"out","stream":"task","text":"[시간] precision.py · 시작 02:49:32 · 0.7s · rc=0\n","cls":""}}
+{"t":1795542574691,"m":{"type":"out","stream":"task","text":"[시간] 단계 docs 끝 · 1.5분\n","cls":""}}
+{"t":1795542574691,"m":{"type":"out","stream":"task","text":"[OK] CheckList 생성 완료 — Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v8.xlsx · Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v8.xlsx\n","cls":""}}
+{"t":1795542574691,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795542574691,"m":{"type":"out","stream":"task","text":"다음: ActionItemList xlsx 를 확인한 뒤 보완 범위(🧭 보완 범위 설정)를 정하고 🛠️/🧯 로 보완을 적용한다.\n","cls":""}}
+{"t":1795542574692,"m":{"type":"out","stream":"task","text":"[시간] 단계별 도구 시간 합 — docs 1.5분 · 전체 1.5분 → Doc\\verify\\SCP0005\\_timing.csv\n","cls":""}}
+{"t":1795542574692,"m":{"type":"out","stream":"task","text":"[시간] 실제 경과 2.5분 · 단계 밖(기록 없음) 1.0분\n","cls":""}}
+{"t":1795542577315,"m":{"type":"out","stream":"task","text":"[기준선] SCP0005 소스 기준선 저장 · 항목 564개 · 마지막 전체 2026-11-25 02:49:36\n","cls":""}}
+{"t":1795542577322,"m":{"type":"out","stream":"task","text":"결과 봉투: Doc\\verify\\SCP0005\\run_verify.result.json — verdict fail · FAIL 39 · 판정필요 16 · 미검증 148\n","cls":""}}
+{"t":1795542577431,"m":{"type":"out","stream":"task","text":"[INFO] 끝 상태: 미검증 148행 · 처리 대상 165 · 권장안 적용 2 · 사람 확인 1 · 보완 대기 0 · 집계 47\n","cls":""}}
+{"t":1795542577457,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T02-47-04_SCP0005_11_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log\n","cls":"ok"}}
+{"t":1795542577578,"m":{"type":"fb","state":"step","id":1,"no":2,"status":"OK","code":0,"sec":154,"repairs":0}}
+{"t":1795542577583,"m":{"type":"out","stream":"task","text":"✅ [2/2] 2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝) — OK (exit 0) · 154s\n","cls":"ok"}}
+{"t":1795542577587,"m":{"type":"out","stream":"task","text":"\n↻ 반복 1회차 진행: actionable = 165 · 미검증 148건 · 처리 대상 165건\n","cls":"warn"}}
+{"t":1795542577589,"m":{"type":"fb","state":"add","id":1,"step":{"no":3,"name":"3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 미검증 148건 · 처리 대상 165건","kind":"task","optional":true}}}
+{"t":1795542577590,"m":{"type":"out","stream":"task","text":"\n── [3/3] 3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 미검증 148건 · 처리 대상 165건\n","cls":"cmd"}}
+{"t":1795542577592,"m":{"type":"fb","state":"step","id":1,"no":3,"status":"RUN"}}
+{"t":1795542577610,"m":{"type":"out","stream":"task","text":"▶ 검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/engine_gate.py SCP0005 --mark\n","cls":"cmd"}}
+{"t":1795542578582,"m":{"type":"out","stream":"task","text":"[WAIT] 검사기 보완 순서 대기: SSP0014 가 2026-11-25 02:30:58 부터 보완 중(공용 검사기 파일을 한 화면씩 고침)\n","cls":""}}

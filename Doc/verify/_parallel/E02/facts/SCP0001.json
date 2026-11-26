@@ -1,0 +1,438 @@
+{
+ "screen": "SCP0001",
+ "calls": [
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0001_PlantSite.cs:1766",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "CITY",
+    "guard": "else of (siMain.IsLock(siMain.SheetName) == true) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.COUNTRY) || e.Column == siMain.GetColumnIndex(DefColumns.CITY))"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_Country",
+     "kind": "GRID",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "GRID",
+     "arg": "sCity"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0001_PlantSite.cs:1767",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:1770",
+     "target": "sCountry",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:1771",
+     "target": "sCity",
+     "value": "popCity.City"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_PlantCustomerbyDivisionPopup",
+   "method": "spdSub_CellDoubleClick",
+   "asis_ref": "SCP0001_PlantSite.cs:2132",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdSub",
+    "column": "SOLD_TO",
+    "guard": "if (!siSub.IsLock(siSub.SheetName)) ▸ if (siSub.ActiveSheet.SheetName == SpdSheet.shtCustomer) ▸ if (siSub.GetColumnTag(e.Column) == siSub.GetColumnTag(siSub.GetColumnIndex(DefColumns.SOLD_TO)) || siSub.GetColumnTag(e.Col…)"
+   },
+   "multi": "false",
+   "div_arg": "division",
+   "period_args": [
+    "sSoldToCode",
+    "sShipToCode"
+   ],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "GRID",
+     "arg": "division"
+    },
+    {
+     "param": "_SoldToCode",
+     "kind": "GRID",
+     "arg": "sSoldToCode"
+    },
+    {
+     "param": "_ShipToCode",
+     "kind": "GRID",
+     "arg": "sShipToCode"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0001_PlantSite.cs:2133",
+     "target": "popCustomer.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:2143",
+     "target": "siSub.SetText",
+     "value": "(e.Row, siSub.GetColumnIndex(DefColumns.SOLD_TO), popCustomer.SoldToCode)"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:2144",
+     "target": "siSub.SetText",
+     "value": "(e.Row, siSub.GetColumnIndex(DefColumns.SOLD_TO_NAME), popCustomer.SoldToDesc)"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:2145",
+     "target": "siSub.SetText",
+     "value": "(e.Row, siSub.GetColumnIndex(DefColumns.SHIP_TO), popCustomer.ShipToCode)"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:2146",
+     "target": "siSub.SetText",
+     "value": "(e.Row, siSub.GetColumnIndex(DefColumns.SHIP_TO_NAME), popCustomer.ShipToDesc)"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:2147",
+     "target": "siSub.SetText",
+     "value": "(e.Row, siSub.GetColumnIndex(DefColumns.SHIP_TO_REGION), popCustomer.ShiptoRegio"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:2148",
+     "target": "siSub.SetText",
+     "value": "(e.Row, siSub.GetColumnIndex(DefColumns.SHIP_TO_CITY), popCustomer.ShiptoCity)"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0001_PlantSite.cs:1766",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "COUNTRY",
+    "guard": "else of (siMain.IsLock(siMain.SheetName) == true) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.COUNTRY) || e.Column == siMain.GetColumnIndex(DefColumns.CITY))"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_Country",
+     "kind": "GRID",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "GRID",
+     "arg": "sCity"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0001_PlantSite.cs:1767",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:1770",
+     "target": "sCountry",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0001_PlantSite.cs:1771",
+     "target": "sCity",
+     "value": "popCity.City"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCM0002_CitybyCountry": {
+   "cls": "SCM0002_CitybyCountry",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_CitybyCountry.cs",
+   "title": "City by Country",
+   "conds": [
+    {
+     "name": "txtCity",
+     "type": "UsrMultiLineEditor",
+     "label": "City",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_CitybyCountry.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtCountry",
+     "type": "UsrMultiLineEditor",
+     "label": "Country",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_CitybyCountry.Designer.cs:42",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_CITY_BY_COUNTY_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_CITY_BY_COUNTY_POPUP.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_country",
+      "p_city"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_CitybyCountry.cs:211",
+     "save": false
+    },
+    {
+     "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+     "src": "Doc/asisfacts/db/modules/dbo.DM0000_GET_COMMON_SPREAD_TITLE.sql",
+     "order_known": true,
+     "order_keys": "SEQ, SORT_ORDER_NO",
+     "order_line": "152",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_created_by",
+      "p_program_id",
+      "p_sheet_name",
+      "i_Count"
+     ],
+     "method": "GetSpdTitle",
+     "ref": "SCM0002_CitybyCountry.cs:330",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_CitybyCountry.cs:222",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_CitybyCountry.cs:236",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_CitybyCountry.cs:260",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_CitybyCountry.cs:263",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_CitybyCountry.cs:270",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCM0002_PlantCustomerbyDivisionPopup": {
+   "cls": "SCM0002_PlantCustomerbyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_PlantCustomerbyDivisionPopup.cs",
+   "title": "Customer by Division",
+   "conds": [
+    {
+     "name": "txtShipTo",
+     "type": "UsrMultiLineEditor",
+     "label": "Ship-To",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:156",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtSoldTo",
+     "type": "UsrMultiLineEditor",
+     "label": "Sold-To",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.Designer.cs:43",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_PLANT_CUSTOMER_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_PLANT_CUSTOMER_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_soldto_code",
+      "p_shipto_code"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:231",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:356",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:243",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:258",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:282",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:285",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_PlantCustomerbyDivisionPopup.cs:293",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

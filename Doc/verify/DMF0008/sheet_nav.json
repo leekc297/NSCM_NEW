@@ -1,0 +1,40 @@
+{
+ "sheets": {
+  "SALES_SITE": {
+   "drill": {
+    "base": "REPAIR",
+    "row": {},
+    "cell": {},
+    "rest": [
+     "e.Column < iGSCM_SSPM_INDEX"
+    ],
+    "src": "DMF0008_ErpEdiMaster.cs:1975 spdRepair_CellDoubleClick → FindData_SubSalesSite:1179",
+    "tab": "SALES_SITE"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "SSPM": {
+   "drill": {
+    "base": "REPAIR",
+    "row": {},
+    "cell": {},
+    "rest": [],
+    "src": "DMF0008_ErpEdiMaster.cs:1979 spdRepair_CellDoubleClick → FindData_SubSalesSiteProjectModel:1270",
+    "tab": "SSPM"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "REPAIR": {
+   "drill": {
+    "base": "SUMMARY",
+    "row": {},
+    "cell": {},
+    "rest": [],
+    "src": "DMF0008_ErpEdiMaster.cs:1941 spdSummary_CellDoubleClick → FindData_SubRepair_New:1087",
+    "tab": "REPAIR"
+   },
+   "_gen": "sheet_nav_gen"
+  }
+ },
+ "_doc": "시트 이동 사실. drill 항목은 tools/Harness/verify/sheet_nav_gen.py 가 AS-IS 그리드 더블클릭 → ChangeSheet 원문에서 만든다(_gen). 그 밖은 사람이 적은 항목"
+}

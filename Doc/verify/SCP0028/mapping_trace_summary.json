@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0028",
  "asis_id": "SCP0028",
- "generated": "2026-11-20T15:04:02",
+ "generated": "2026-11-25T02:49:10",
  "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\shipment-lot-size\\__asis-mapping__.md",
  "rows": 397,
  "fe_rows": 42,
@@ -17,23 +17,23 @@
  },
  "instances": 393,
  "instance_result": {
-  "PASS": 91,
-  "NOT_RUN": 139,
-  "REVIEW": 20,
+  "PASS": 93,
+  "NOT_RUN": 136,
+  "REVIEW": 18,
   "FAIL": 4,
   "NOPATH": 6,
   "WARN": 6,
   "NA": 27,
-  "ERROR": 100
+  "ERROR": 103
  },
  "by_layer": {
   "동적 생성·조회": {
-   "PASS": 51,
-   "NOT_RUN": 13,
-   "REVIEW": 20,
+   "PASS": 53,
+   "NOT_RUN": 12,
+   "REVIEW": 18,
    "NA": 11,
    "NOPATH": 1,
-   "ERROR": 20,
+   "ERROR": 21,
    "FAIL": 3
   },
   "정적 디자인": {
@@ -64,8 +64,8 @@
    "NOT_RUN": 4
   },
   "편집·검증": {
-   "ERROR": 38,
-   "NOT_RUN": 55
+   "ERROR": 40,
+   "NOT_RUN": 53
   },
   "Cascade": {
    "NOT_RUN": 12,
@@ -81,9 +81,9 @@
  },
  "by_check": {
   "A1": {
-   "REVIEW": 19,
+   "REVIEW": 18,
    "NA": 1,
-   "PASS": 1
+   "PASS": 2
   },
   "A10": {
    "NOT_RUN": 1
@@ -93,9 +93,8 @@
   },
   "A6": {
    "NOPATH": 1,
-   "PASS": 3,
-   "NA": 3,
-   "NOT_RUN": 1
+   "PASS": 4,
+   "NA": 3
   },
   "B3": {
    "NOT_RUN": 3
@@ -141,7 +140,7 @@
    "PASS": 11
   },
   "E1": {
-   "NOT_RUN": 2
+   "ERROR": 2
   },
   "E3": {
    "ERROR": 3,
@@ -253,18 +252,17 @@
   },
   "X-ROW": {
    "NA": 4,
-   "ERROR": 12,
+   "ERROR": 13,
    "PASS": 1,
-   "REVIEW": 1,
    "FAIL": 3
   }
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "NOT_RUN": 397,
+  "NOT_RUN": 396,
   "WARN": 1,
-  "ERROR": 125,
-  "REVIEW": 33,
+  "ERROR": 156,
+  "REVIEW": 1,
   "NOPATH": 6
  }
 }

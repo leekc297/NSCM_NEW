@@ -1,0 +1,356 @@
+{
+ "screen": "SSP0024",
+ "calls": [
+  {
+   "cls": "SSP0024_ItembyDivisionPopup",
+   "method": "BtnMaterialId_Click",
+   "asis_ref": "SSP0024_ShipmentMasterElectrode.cs:738",
+   "trigger": {
+    "kind": "COND",
+    "control": "btnMaterialId",
+    "input": "txtMaterialId",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": "Material"
+   },
+   "multi": "true",
+   "div_arg": "sdivisionId",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "sdivisionId"
+    },
+    {
+     "param": "_PlantSiteCode",
+     "kind": "CONTROL",
+     "arg": "sPlantSiteCode"
+    },
+    {
+     "param": "_Material",
+     "kind": "CONTROL",
+     "arg": "sMaterialId"
+    }
+   ],
+   "results": [
+    "item"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:739",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:742",
+     "target": "sMaterialId",
+     "value": "popup.MaterialId"
+    }
+   ]
+  },
+  {
+   "cls": "SSP0024_ItembyDivisionPopup",
+   "method": "BtnModelId_Click",
+   "asis_ref": "SSP0024_ShipmentMasterElectrode.cs:759",
+   "trigger": {
+    "kind": "COND",
+    "control": "btnModelId",
+    "input": "txtModelId",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": "Model"
+   },
+   "multi": "true",
+   "div_arg": "sdivisionId",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "sdivisionId"
+    },
+    {
+     "param": "_PlantSiteCode",
+     "kind": "CONTROL",
+     "arg": "sPlantSiteCode"
+    },
+    {
+     "param": "_Material",
+     "kind": "CONTROL",
+     "arg": "sMaterialId"
+    }
+   ],
+   "results": [
+    "item"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:760",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:763",
+     "target": "sModelId",
+     "value": "popup.ModelId"
+    }
+   ]
+  },
+  {
+   "cls": "SSP0024_ItembyDivisionPopup",
+   "method": "SpdMain_CellClick",
+   "asis_ref": "SSP0024_ShipmentMasterElectrode.cs:563",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "SpdMain_CellClick",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "true",
+   "div_arg": "sDivisionId",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "GRID",
+     "arg": "sDivisionId"
+    },
+    {
+     "param": "_PlantSiteCode",
+     "kind": "GRID",
+     "arg": "sPlantSiteCode"
+    },
+    {
+     "param": "_Material",
+     "kind": "GRID",
+     "arg": "sMaterial"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:565",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:570",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.DIVISION_ID), popup.DivisionId)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:571",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.PLANT_SITE_CODE), popup.PlantSiteCode)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:572",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID), popup.PlantSiteCode)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:573",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.MATERIAL_ID), popup.MaterialId)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:574",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.MODEL_ID), popup.ModelId)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:575",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.CELL_TYPE), popup.CellType)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:576",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.NICK_NAME), popup.NickName)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:577",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.ELECTRODE_TYPE), popup.ElectrodeType)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:578",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.ITEM_UOM), popup.ItemUOM)"
+    },
+    {
+     "ref": "SSP0024_ShipmentMasterElectrode.cs:579",
+     "target": "siMain.SetValue",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.UOM_CONVERT_IN_TACT_TIME), popup.UomCon"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SSP0024_ItembyDivisionPopup": {
+   "cls": "SSP0024_ItembyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0024_ItembyDivisionPopup.cs",
+   "title": "Item by DivisionPopup",
+   "conds": [
+    {
+     "name": "txtMaterialId",
+     "type": "UsrMultiLineEditor",
+     "label": "Material",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SSP0024_ItembyDivisionPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivisionId",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SSP0024_ItembyDivisionPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SSP0024_ItembyDivisionPopup.cs:190",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbPlantSiteId",
+     "type": "UsrCheckedList",
+     "label": "Plant Site",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SSP0024_ItembyDivisionPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SSP0024_ItembyDivisionPopup.cs:191",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SSP0024_GET_ITEM_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "A.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, A.ITEM_ID",
+     "order_line": "40",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_plant_site_id",
+      "p_material_id"
+     ],
+     "method": "FindData",
+     "ref": "SSP0024_ItembyDivisionPopup.cs:263",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SSP0024_ItembyDivisionPopup.cs:405",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SSP0024_ItembyDivisionPopup.cs:278",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SSP0024_ItembyDivisionPopup.cs:297",
+     "method": "FindData",
+     "raw": "this.Close()",
+     "guard": "if (ds.Tables[0].Rows.Count == 1)"
+    },
+    {
+     "ref": "SSP0024_ItembyDivisionPopup.cs:305",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Find: FindData(); break; case ButtonListType.OK: SetMaterial(); this.Close(); break; case ButtonListType.Clos",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0024_ItembyDivisionPopup.cs:312",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.OK:"
+    },
+    {
+     "ref": "SSP0024_ItembyDivisionPopup.cs:315",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    },
+    {
+     "ref": "SSP0024_ItembyDivisionPopup.cs:329",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

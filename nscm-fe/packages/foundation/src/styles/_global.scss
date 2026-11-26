@@ -9,6 +9,28 @@
 
 @use './variables/colors-lges' as *;
 
+// 좌상단 브랜드 영역(사이드바 토글 사각형, 로고 좌측 띠) 색을 한 겹 변수로 뺀다.
+// 환경별 3색 구분: 운영/기본=청록(기존), 개발=초록, 품질=파랑.
+// 환경값(VITE_ENV)은 index.tsx 가 <html data-env="..."> 로 새긴다.
+:root {
+  // 운영(prod)·기본(default) = 기존 청록(teal) 그대로
+  --nav-brand-bg: #{$commonBgPrimary};
+  --nav-brand-bg-hover: #3ab3bf;
+  --nav-brand-text: #{$navTopTextSysNamePrimary};
+}
+:root[data-env='dev'] {
+  // 개발서버 = 연두(yellow-green)
+  --nav-brand-bg: #7cb342;
+  --nav-brand-bg-hover: #8bc34a;
+  --nav-brand-text: #33691e;
+}
+:root[data-env='stg'] {
+  // 품질서버 = 파랑(blue)
+  --nav-brand-bg: #2d6fb2;
+  --nav-brand-bg-hover: #3a7ecc;
+  --nav-brand-text: #13457d;
+}
+
 html,
 body,
 #root {

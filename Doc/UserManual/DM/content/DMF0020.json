@@ -1,0 +1,124 @@
+{
+ "definition": "Division 별 Sales Site, Project, Model 의 주차, 월별 판매 가격(LOC, KRW, USD)을 버전 단위로 등록하고 관리하는 화면",
+ "overview": [
+  "Division 별 Sales Site, Project, Model 의 판매 가격을 주차, 월 단위로 등록하고 버전별로 관리하는 화면임. LOC 가격을 입력하면 환율로 KRW, USD 가격이 계산됨",
+  "위쪽 조회 조건(펼침 영역 Bucket, Version 포함)과 Sales Price 그리드로 구성됨. Model 1건이 RTF, KRW, USD, LOC 4행으로 나오고 오른쪽에 주차 칸이 이어짐",
+  "환율, Price Batch Input, 버전 찾기, 프로젝트 찾기, 모델 찾기, 범위 초과 목록, 컬럼 설정 팝업이 있음",
+  "Div, Period, Version 선택 → Search → LOC 주차 칸 가격 입력(기간 일괄 입력은 Price Batch Input) → Save → 범위 초과 목록 팝업 확인 순서로 작업함",
+  "Sales Site 를 고르면 End Customer 가 Sales Site 화면 기준정보 값으로 채워짐. 환율 팝업에 저장한 환율로 KRW, USD 가격이 다시 계산됨"
+ ],
+ "pages": [
+  {
+   "title": "Sales Price",
+   "keyPoint": "Current 버전으로 조회했을 때만 Insert, Save 할 수 있음. 이번 주 월요일 이전 주차의 가격은 고칠 수 없음.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.14,
+     "y": 0.152
+    },
+    {
+     "no": 2,
+     "x": 0.515,
+     "y": 0.244
+    },
+    {
+     "no": 3,
+     "x": 0.18,
+     "y": 0.244
+    },
+    {
+     "no": 4,
+     "x": 0.622,
+     "y": 0.317
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. Div 를 바꾸면 그리드 컬럼 구성이 그 Division 기준으로 다시 정해짐",
+      "Project: Div 40 에서는 입력 불가. 돋보기를 누르면 프로젝트 찾기 팝업이 열림",
+      "Period: 필수. 시작일이 종료일보다 늦으면 \"조회 기간이 잘못되었습니다 (시작일 > 종료일).\" 메시지가 뜸",
+      "Plant Site: 81 계열 Division 에서 입력함. 다른 Division 에서는 회색으로 잠김",
+      "Search 오른쪽 펼침 버튼: Bucket(Weekly, Monthly), Version 조건이 열림. Version 이 비어 있으면 \"버전을 선택하세요.\" 메시지가 뜸",
+      "Version 팝업에서 3개 이상 고르면 \"버전은 최대 2개까지 선택할 수 있습니다.\", Insert 한 행이 있을 때 Bucket 을 바꾸면 \"Insert 된 행이 있어 Bucket 을 변경할 수 없습니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "환율 아이콘: 환율 팝업이 열려 기간별 환율을 조회하고 저장함. 컬럼 설정 아이콘: 그리드에 보일 컬럼과 순서를 사용자별로 저장함",
+      "Price Batch Input: 기간과 조건을 정해 LOC 가격을 한 번에 입력함. KRW, USD 는 환율로 다시 계산됨",
+      "Price Batch Input 기간 시작일과 종료일은 월요일로 고름. 아니면 \"기간을 다시 선택하여 주십시오.(월요일)\" 메시지가 뜸",
+      "Price Batch Input 시작일이 이번 주 월요일 이전이면 \"과거 구간은 일괄입력이 불가합니다. 현재/미래 구간으로 기간 설정해주세요.\" 메시지가 뜸",
+      "Insert(F8): RTF, KRW, USD, LOC 4행이 한 묶음으로 추가됨. Delete(F9)는 Insert 한 묶음만 지움",
+      "Save(F7): 저장 중 다시 누르면 \"이전 작업이 아직 실행 중입니다. 잠시 후 다시 시도해주세요.\" 메시지가 뜸. 저장 뒤 Range Rate 를 넘는 가격이 있으면 범위 초과 목록 팝업이 열림"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Sales Price 그리드",
+     "lines": [
+      "필수 입력: Div, Sales Site, Project Code, Model, FCST Type, Price Exist, Measure(제목 앞 빨간 점)",
+      "신규 행 저장 때 Div, Project Code, Measure, Customs Handbook, FCST Type, Incoterms 를 검사함. Div 40 은 Project Code 대신 End Customer, 81 계열은 Plant Site 를 추가로 검사함",
+      "필수 칸이 비어 있으면 \"{0} 값은 필수 입력 항목입니다.\", 같은 키 신규 행이 화면에 이미 있으면 \"저장시 중복 오류가 발생하였습니다.\" 메시지가 뜸",
+      "Sales Site 를 고르면 End Customer 가 Sales Site 기준정보 값으로 채워짐",
+      "Project Code, Model: 칸을 더블클릭하면 찾기 팝업이 열림. Project 를 고르면 Project, Biz.Type 이 채워지고 Model 을 고르면 Team, Currency 가 채워짐",
+      "Currency: 기존 행에서 바꾸면 \"화면에 조회된 기간의 데이터만 Currency가 변경됩니다. 기간을 확인하시고 Currency 변경을 진행해주세요.\" 안내가 먼저 뜸"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Measure, 주차 칸",
+     "lines": [
+      "Model 1건이 RTF, KRW, USD, LOC 4행으로 표시됨",
+      "LOC 행만 입력함. KRW, USD 는 LOC 와 환율로 다시 계산되고, RTF 는 시스템이 만드는 값임",
+      "이번 주 월요일 이전 주차와 월은 회색으로 잠겨 입력 불가",
+      "Currency 가 비어 있는 행에서 가격을 입력하면 \"Currency를 입력하세요.\" 메시지가 뜸",
+      "주차 칸 제목: 위 줄은 월(2026-11), 아래 줄은 주차와 시작일(W46, 1109)",
+      "편집 가능 Division 목록에 없는 Division 은 가격을 고칠 수 없음"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0020",
+ "uiName": "Sales Price",
+ "menuPath": "DM> Demand Master> Sales Price",
+ "captures": [
+  "captures/DMF0020.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0020/",
+  "Doc/asisfacts/screens/DMF0020/"
+ ],
+ "buttons": [
+  "exchange:ROW",
+  "exchange:SAVE",
+  "exchange:SEARCH",
+  "exchange:SEARCH_DATA",
+  "exchange:TITLE",
+  "exchangeRate:SAVE",
+  "exchangeRate:SEARCH",
+  "main:DELETE",
+  "main:INSERT",
+  "main:SAVE",
+  "main:SEARCH",
+  "main:SPREAD_TITLE_DATE",
+  "mainTitle:SEARCH",
+  "owner:SEARCH",
+  "priceBatch:SAVE",
+  "priceBatch:SEARCH",
+  "priceBatchInput:SAVE",
+  "priceBatchInput:SEARCH",
+  "salesPriceRange:SAVE",
+  "salesPriceRange:SEARCH",
+  "salesPriceTemplate:SEARCH",
+  "titleSet:SEARCH",
+  "version:SEARCH",
+  "week:SEARCH"
+ ]
+}

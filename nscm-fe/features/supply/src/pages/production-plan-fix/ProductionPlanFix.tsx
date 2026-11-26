@@ -153,7 +153,7 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
     gridRef.current?.finishEditing();
     const payload = buildUnfixPayload(gridRef.current);
     if (payload.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_DELETE_DATA, '_No data to delete.') });
+      void setToast({ type: 'error', message: t(MSG.NO_DELETE_DATA, '_No data to delete.') });
       return;
     }
     unfixCountRef.current = payload.length;

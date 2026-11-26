@@ -1,0 +1,37 @@
+﻿scenario_id,unit,why,type,axes,entry,src
+SSP0014-S207f89,정적,저장 분기 · SP 원문 대조 SSP0014_ShipmentModelPIC.cs:208,저장,NONE,event:Form_Load | event:this.Load,SSP0014_ShipmentModelPIC.cs:208
+SSP0014-Sd7efec,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SSP0014_ShipmentModelPIC.cs:160,초기,NONE,event:Form_Load | event:this.Load,SSP0014_ShipmentModelPIC.cs:160
+SSP0014-S62d59a,동적,실행 값 필요 축 OTHER,기타,OTHER,button:EditButton,SSP0014_ShipmentModelPIC.cs:272
+SSP0014-Sed3e1e,동적,서버 호출 관찰 필요 SSP.SSP0014_GET_SHIPMENT_MODEL_PIC,조회,NONE,button:FindButton | button:SaveButton,SSP0014_ShipmentModelPIC.cs:295
+SSP0014-S9ad0f3,동적,실행 값 필요 축 DATA,조회,DATA,button:FindButton | button:SaveButton,SSP0014_ShipmentModelPIC.cs:357
+SSP0014-S32bf66,동적,서버 호출 관찰 필요 SSP.SSP0014_GET_USER_ID_CHECK,조회,NONE,button:SaveButton,SSP0014_ShipmentModelPIC.cs:562
+SSP0014-Safabae,동적,실행 값 필요 축 OTHER,조회,OTHER,button:SaveButton,SSP0014_ShipmentModelPIC.cs:600
+SSP0014-Sfc19ed,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SSP0014_ShipmentModelPIC.cs:183,초기,NONE,event:Form_Load | event:this.Load,SSP0014_ShipmentModelPIC.cs:183
+SSP0014-Se946c7,동적,실행 값 필요 축 DATA+SHEET,초기,SHEET+DATA,button:FindButton | button:SaveButton | event:Form_Load | event:this.Load,SSP0014_ShipmentModelPIC.cs:220
+SSP0014-S0c555f,정적,저장 분기 · SP 원문 대조 SSP0014_ShipmentModelPIC.cs:387,저장,NONE,button:SaveButton,SSP0014_ShipmentModelPIC.cs:387
+SSP0014-Sefa30e,정적,저장 분기 · SP 원문 대조 SSP.SSP0014_SAVE_SHIPMENT_MODEL_PIC,저장,DATA,button:SaveButton,SSP0014_ShipmentModelPIC.cs:497
+SSP0014-S27afdf,정적,저장 분기 · SP 원문 대조 SSP0014_ShipmentModelPIC.cs:524,저장,DATA,button:SaveButton,SSP0014_ShipmentModelPIC.cs:524
+SSP0014-S922e24,정적,저장 분기 · SP 원문 대조 SSP0014_ShipmentModelPIC.cs:542,저장,DATA,button:SaveButton,SSP0014_ShipmentModelPIC.cs:542
+SSP0014-S81bccd,정적 우선,분기 조건 DIVISION · guard 원문·메타 값 대조 SSP0014_ShipmentModelPIC.cs:144,초기,DIVISION,event:Form_Load | event:this.Load,SSP0014_ShipmentModelPIC.cs:144
+SSP0014-Sad1c39,동적,실행 값 필요 축 OTHER,초기,OTHER,event:Form_Load | event:this.Load,SSP0014_ShipmentModelPIC.cs:149
+SSP0014-S5dcee3,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SSP0014_ShipmentModelPIC.cs:202,초기,NONE,event:CboDivision_SelectedIndexChanged | event:Form_Load | event:cboDivision.SelectedIndexChanged | event:this.Load,SSP0014_ShipmentModelPIC.cs:202
+SSP0014-S6a8326,정적,도달 경로 없음 · 원문 SSP0014_ShipmentModelPIC.cs:381,기타,SHEET+DATA,,SSP0014_ShipmentModelPIC.cs:381
+SSP0014-Sdf96ef,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:633
+SSP0014-Sd0c36e,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:649
+SSP0014-S4485c8,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:658
+SSP0014-S8a26f8,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:674
+SSP0014-Sbf1a08,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:683
+SSP0014-Sd9ae7b,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:699
+SSP0014-Sdcc851,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:708
+SSP0014-Sc0513e,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:724
+SSP0014-S7e34f1,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:733
+SSP0014-S0e99db,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:749
+SSP0014-Sd54967,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:758
+SSP0014-S7b5b80,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:774
+SSP0014-Sd72b51,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:783
+SSP0014-S09a805,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:799
+SSP0014-S767cc0,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:808
+SSP0014-S39a4cd,동적,실행 값 필요 축 DATA+SHEET+STATE,연쇄,SHEET+DATA+STATE,event:SpdMain_CellDoubleClick | event:spdMain.CellDoubleClick,SSP0014_ShipmentModelPIC.cs:824
+SSP0014-Sb39c49,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SSP0014_ShipmentModelPIC.cs:622,연쇄,NONE,event:spdMain.TopChange,SSP0014_ShipmentModelPIC.cs:622
+SSP0014-Sea1449,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SSP0014_ShipmentModelPIC.cs:847,팝업,NONE,event:btnItemId.Click | event:btnItemId_Click,SSP0014_ShipmentModelPIC.cs:847
+SSP0014-Sec3442,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:btnItemId.Click | event:btnItemId_Click,SSP0014_ShipmentModelPIC.cs:857

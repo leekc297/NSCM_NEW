@@ -1207,7 +1207,7 @@
 | GetCheckedListValue | FindDataPlanAmendMAAsync:487, filter_onDivision:658, filter_onPlanGroup:683, filter_onSite:823, filter_onPlant:841, filter_onFactory:865, filter_onOperation:900, filter_onProdType:921 | CString.GetCheckedListValue | CODE |
 | AddServiceParam | InitLocalDataSet:1134, InitLocalDataSet:1135, InitLocalDataSet:1136, InitLocalDataSet:1138, InitLocalDataSet:1139, InitLocalDataSet:1140, InitLocalDataSet:1141, InitLocalDataSet:1143 | FilterDataSet.AddServiceParam | DESCRIPTOR, IN_DATASET_LIST, OUT_DATASET_LIST, SERVICE, SVC_ID, SYNC_YN |
 | SetFilter | InitControls:199, InitControls:200, GetBasisTime:224, SetChangePlanDate:229, SetChangeControl:247, SetChangeControl:250, SetChangeControl:253, SetChangeControl:259 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
-| GetMeasure | CheckAndGetMeasure:394, RefreshSpreadSheet:1547, CheckAndGetMeasure:432, Measure:129, InitControl:150, CheckAndGetMeasure:441, InitControl:151, Measure:200 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
+| GetMeasure | CheckAndGetMeasure:394, RefreshSpreadSheet:1547, CheckAndGetMeasure:432, CheckAndGetMeasure:441, Measure:129, InitControl:150, InitControl:151, Measure:200 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:1428, CreateFilterDataSet:1762, CreateFilterDataSet:1963, CreateFilterDataSet:1766 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
 | SetRowsUnVisible | CreateFilterDataSet:1429, CreateFilterDataSet:1763, CreateFilterDataSet:1964, CreateFilterDataSet:1767 | MeasureService.SetRowsUnVisible | _MM_ |
 | FP_UpdateBatch | call_Excel_Col_Validation:2383, call_Excel_Row_Validation:2569, call_Excel_Row_Validation:2584, call_Excel_Row_Validation:3031, call_Excel_Row_Validation:3063 | DataService.FP_UpdateBatch | COUNT, RESULT |
@@ -1396,10 +1396,6 @@
 | nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5009 |
 | cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5991 |
 | cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:5994 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
 | this | Load | Form_Load | .ctor:141 |
 | cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:363 |
 | mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:364 |
@@ -1433,10 +1429,10 @@
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:170 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:462 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:499 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:525 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:526 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
 | this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:314 |
 | this.chk_Info | CheckedChanged | chk_Info_CheckedChanged_1 | InitializeComponent:489 |
 | this.cbo_fpplanid | DropDown | cbo_fpplanid_DropDown | InitializeComponent:793 |
@@ -1477,6 +1473,10 @@
 | this.btn_category | Click | btnCatagory_Click | InitializeComponent:2208 |
 | this.btn_column | Click | btnColumn_Click | InitializeComponent:2246 |
 | this | Load | FP00599_PlanAmend_Model_Assy_Load | InitializeComponent:2470 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:462 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:499 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:525 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:526 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:390 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:427 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:453 |

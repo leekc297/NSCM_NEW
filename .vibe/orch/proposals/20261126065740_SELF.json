@@ -1,0 +1,119 @@
+{
+  "id": "20261126065740_SELF",
+  "at": "2026-11-26T06:57:40+09:00",
+  "ms": 1795643860115,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orch dict.js|dictionary원천에userrulesjson추가|style쉼표 rn",
+  "title": "Dictionary 탭에 사용자 지시 규칙(user_rules.json) 묶음 추가, 출처와 제목 나열은 쉼표로",
+  "evidence": "규칙 R154(새 코드를 추가할 때 Dictionary 탭도 갱신) · tools/VibeManager/orch-dict.js:87~88 원천에 user_checks.json 만 있고 user_rules.json 없음 · 직전 반영(20261124064957_SELF_3) 실패 원인 = 추가한 출처 문구의 가운뎃점 2개(doc_style_gate/orch-dict.js.style.csv L90) (반영 실패한 20261124064957_SELF_3 를 고친 안 · 원인 반영본 tools/VibeManager/orch-dict.js L90 의 사용자 지시 규칙 묶음 출처 문구 'tools/VibeManager/user_rules.json · orch-userrule.js · 자가진단 S13' 이 가운뎃점 나열로 문장 규칙 위반 1건이 됨(.vibe/orch/selfcheck/doc_style_gate/orch-dict.js.style.csv 2행, 게이트 2026-11-26 06:56:11 기록 0 → 1). 게이트는 대상 VM .js 의 위반 수가 늘면 실패 처리함(tools/VibeManager/orch-selfcheck.js:395~414). 구문 검사, 시험 87/87(PASS 1422), 정의 정합은 통과함)",
+  "targets": [
+    "tools/VibeManager/orch-dict.js",
+    "tools/VibeManager/test/t_orch_dict.js"
+  ],
+  "before_after": "orch-dict.js build() 의 U 묶음 다음에 user_rules.json items 묶음(id 'UR', 번호, 유형 이름, 규칙 1줄, 등록 일시와 상태)을 추가함. 제목 '사용자 지시 규칙(N개, 감시 규칙 R# 과 다른 번호 체계)', 출처 'tools/VibeManager/user_rules.json, orch-userrule.js, 자가진단 S13' 처럼 나열은 쉼표만 쓰고 새 문자열에 가운뎃점(·)과 줄표(—)를 넣지 않음. 파일이 없으면 묶음을 건너뜀. t_orch_dict.js 에 'user_rules.json 이 있으면 UR 묶음 항목 수 = items 수, 빈 설명 없음' 시험 1건 추가",
+  "verify": "1) python tools/Docs/doc_style.py tools/VibeManager/orch-dict.js --out <임시 폴더> --quiet 의 orch-dict.js 위반 수: 반영 전 0(2026-11-26 06:43:37 반영 전 게이트 기록, 이번 진단에서는 미측정) → 반영 뒤 기대 0. 2) node tools/VibeManager/test/t_orch_dict.js: 반영 전 PASS 6(2026-11-26 06:52 반영 기록) → 반영 뒤 기대 PASS 7, FAIL 0. 3) node -e \"const d=require('./tools/VibeManager/orch-dict');const g=d.build(()=>({root:process.cwd()}));const u=g.find(x=>x.id==='UR');console.log(u&&u.items.length)\" 결과 = tools/VibeManager/user_rules.json items 수(직전 반영 때 233, 반영 전 UR 묶음 없음 → 반영 뒤 기대 items 수와 같음)",
+  "rollback": "tools/VibeManager/orch-dict.js, tools/VibeManager/test/t_orch_dict.js 를 VMO 반영 전 백업본으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T06:57:42+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T07:01:39+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0657"
+    },
+    {
+      "at": "2026-11-26T07:01:43+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T07:06:30+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 orch-dict.js"
+    },
+    {
+      "at": "2026-11-26T07:06:30+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건. 2026-11-26 07:02:06 반영 전: doc_style 위반 0, t_orch_dict PASS 6, UR undefined. 2026-11-26 07:02:21 반영 뒤: doc_style 위반 0 (문장 170), t_orch_dict PASS 7 FAIL 0 ALL PASS, UR 233 = user_rules.json items 233 · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-26T07-01-43_claude_orch.log",
+      "sec": 54,
+      "costUsd": 0.719012,
+      "files": [
+        "tools/VibeManager/orch-dict.js",
+        "tools/VibeManager/test/t_orch_dict.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R154|tools/VibeManager/orch-dict.js",
+  "kind": "fix",
+  "repairOf": "20261124064957_SELF_3",
+  "repairRoot": "20261124064957_SELF_3",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795643862147,
+  "autoFp": "a205cbd23f",
+  "applyStartMs": 1795644103273,
+  "verifyJudge": {
+    "at": "2026-11-26T07:02:40+09:00",
+    "verified": true,
+    "text": "실행 통과 3건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0657",
+  "needsReload": false,
+  "hotLoaded": [
+    "orch-dict.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795644390466,
+  "synced": [
+    "orch-dict.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "python tools/Docs/doc_style.py tools/VibeManager/orch-dict.js --out .vibe/tmp_dictchk --quiet → 반영 전 '문장 167 | 위반 0' → 반영 뒤 '문장 170 | 위반 0'"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_dict.js → 반영 전 PASS 6, ALL PASS → 반영 뒤 PASS 7, FAIL 0, ALL PASS ('PASS 사용자 지시 규칙 묶음 UR 항목 수 = user_rules.json items 수, 빈 설명 없음 233/233')"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "node -e build() UR items.length → 반영 전 undefined → 반영 뒤 233, user_rules.json items 233"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-dict.js",
+      "tools/VibeManager/test/t_orch_dict.js"
+    ],
+    "verify_result": "2026-11-26 07:02:06 반영 전: doc_style 위반 0, t_orch_dict PASS 6, UR undefined. 2026-11-26 07:02:21 반영 뒤: doc_style 위반 0 (문장 170), t_orch_dict PASS 7 FAIL 0 ALL PASS, UR 233 = user_rules.json items 233",
+    "note": "UR 묶음은 U 묶음 다음에 추가함. 제목 '사용자 지시 규칙(N개, 감시 규칙 R# 과 다른 번호 체계)', 출처는 쉼표 나열, 새 문자열에 가운뎃점과 줄표 없음. 파일이 없으면 건너뜀. 임시 검사 폴더 .vibe/tmp_dictchk 는 검사 뒤 삭제함"
+  },
+  "snap": "prop_20261126065740_SELF"
+}

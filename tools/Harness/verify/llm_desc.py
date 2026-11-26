@@ -109,8 +109,8 @@ def accept(it):
     bad = [f'{k}: {v}' for k in TEXT_COLS for v in style_bad(row[k])[:2]]
     if bad:
         return None, '문장 규칙 위반 — ' + ' / '.join(bad)[:200]
-    if not (row['asis'] and row['tobe'] and row['gap']):
-        return None, 'AS-IS·TO-BE·GAP 중 빈 칸'
+    if not (row['where'] and row['asis'] and row['tobe'] and row['gap']):
+        return None, 'where·AS-IS·TO-BE·GAP 중 빈 칸'
     return row, ''
 
 

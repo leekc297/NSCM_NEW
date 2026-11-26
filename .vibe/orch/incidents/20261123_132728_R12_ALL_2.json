@@ -1,0 +1,29 @@
+{
+  "id": "20261123_132728_R12_ALL_2",
+  "at": "2026-11-23T13:27:28+09:00",
+  "ms": 1795408048275,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S3 설치본 차이: quick.json 내용 다름",
+  "screen": "",
+  "sig": "R12|S3|quick.json",
+  "count": 1,
+  "repeat": null,
+  "detail": "저장소 118465바이트 2026-11-23T13:25 / 설치본 117419바이트 2026-11-20T17:27",
+  "evidence": {
+    "check": "S3",
+    "key": "S3|quick.json",
+    "file": "quick.json",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T13:42:22+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S3 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

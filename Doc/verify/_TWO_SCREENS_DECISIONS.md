@@ -164,3 +164,46 @@ action_summary.csv 쉼표 미인용으로 칸 밀림 7행(11-17 오전 v27 설�
 - 사용자: '대조표' 는 일반 사용자에게 낯섦 → AS-IS↔TO-BE 대조 의미라 'GAP'. 문서 저장 직전 정리(tools/Docs/doc_style.py PLAIN_TERMS · clean_workbook)와 테스트 Excel 생성기(make_ui_test_sheet.py _AREA_PLAIN)에서 바꿈. 원장·검사 엔진 원문은 그대로. 따옴표 안 인용은 그대로.
 - SSP0020 Doc/verify/SSP0020/action_summary.csv 신설(SCP0104 형식, 2묶음 4행) → CheckList v55 조치 필요 2건 '[위치 / 성격 / 수정 대상] 오류명' 형식. '대조표' 잔존 0.
 - 테스트 Excel 재생성: SCP0104 11행(11:41), SSP0020 2행(11:52 · 이전 파일 18행은 ui_test_backup/…_20261118_115220_재생성전.xlsx).
+
+## 2026-11-25 02:2x SCP0028 미검증 해소 라운드 1 권장안 진행
+| 항목 | 선택 | 근거 | 되돌리는 방법 | 사용자 확인 |
+|---|---|---|---|---|
+| 계정 지정 시나리오의 언어 전환 대기 범위(T530) | 같은 계정으로 로그인한 다른 실행이 있을 때만 대기. 언어를 바꾸는 동안 같은 계정 로그인은 최대 180초 기다림 | 언어 설정은 SCM_ADM_USER_M.LANG_CD 계정별 값(tools/E2E/lib/langacct.ts:3) | tools/E2E/lib/langacct.ts, nscm.ts, Doc/e2e/specs/_verify.spec.ts 의 .bak_20261125_scp28u8 로 되돌림 | 미확인 |
+| 팝업 클래스 경유 AS-IS SP 를 차등 짝·정렬 규칙 대상에 넣음(T529) | 화면 본체가 new 로 연 06.UIL 클래스 원문에 FoxDataRequest 가 있는 SP 만 | GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:270, GSCM/06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:284 | gen_param_map.py, facts_sortrules.py 의 .bak_20261125_scp28u8 | 미확인 |
+
+## 2026-11-25 02:5x SSP0014 미검증 해소 라운드 1 권장안 진행
+| 항목 | 선택 | 근거 | 되돌리는 방법 | 사용자 확인 |
+|---|---|---|---|---|
+| PKG 본문 선언부 Program ID 를 차등 짝 근거로 씀(T532) | PROCEDURE 의 IS ~ 첫 BEGIN 사이 머리말만. PROC 이름과 같은 AS-IS SP 가 있으면 버림 | PKG_SSP0014 본문 127·429행. 전 PKG 144개 대조에서 기존 짝과 다른 짝 0 | pkg_asis_map.py 의 T532 블록 삭제 · sp_pair.csv.bak_20261125_ssp14u 복원 | 미확인 |
+| 차등 ORDER 를 정적 정렬 검사 NA 에 맞춤(T533) | 양쪽 ORDER BY 없음 + sort_check NA 면 순서 대조 NA(근거 문구) | CR-075 ③ · dbo.SSP0014_GET_USER_ID_CHECK.sql:22~28 | diff_ingest.py order_na 호출 삭제 | 미확인 |
+| 저장 시험 행 식별에서 연동 이름 칸 제외(T534) | '<칸>_*' 와 '<칸 줄기>_NAME·_NM·_DESC' | results.json USER_NAME '이련'→'육평' | rowlink.ts 사용 3곳을 [b] 로 되돌림 | 미확인 |
+| user_id 인자가 LIKE 검색어면 같은 사용자 재실행 NA(T536) | TITLESET_USER 참조 없음 + 선언·빈 값·LIKE 사용만 | dbo.SSP0014_GET_SHIPMENT_MODEL_PIC.sql:86~88 | a1_live.py srch 분기 삭제 | 미확인 |
+| 하드코딩 콤보 항목 철자 차이 대응(T537) | 2자 이내·4자 이상·유일할 때만 같은 코드 | SSP0014_ShipmentModelPIC.cs:183~187 | combo_oracle.py T537 블록 삭제 | 미확인 |
+
+## 2026-11-25 06:1x SCP0005 미검증 해소 라운드 4 권장안 진행
+| 항목 | 선택 | 근거 | 되돌리는 방법 | 사용자 확인 |
+|---|---|---|---|---|
+| 후보 밖 붙여넣기 전제 없음(T562) | 칸 전체 후보 밖 값 또는 합성 토큰을 붙여넣고 TO-BE 결과만 기록, 판정은 ERROR 유지 | 8076행 중 후보 밖 값 행 0 · SpreadInfo.cs:521 · 화면 cs 붙여넣기 처리 0건 | _verify.spec.ts T562 블록 되돌림(.bak_20261125_scp05u4) | 미확인 |
+| 원복 실패 칸 DB 복원 위임(T556) | touched_rows 기록 + ID 칸 있으면 다음 칸 계속, 그 행 시험 대상 제외 | restore_touched.py 기록 순서 복원 · DB 05:45 ROUTE_ID 3764 복원 확인 | saveprobe.ts T556 블록 되돌림 | 미확인 |
+| 정렬 키 NULL 위치 = 데이터 실측 PASS(T546) | UPPER 원문 증명은 NA, NULL 0행 실측은 PASS(실측 명시) | Table_DDL:48168~48187 NULL 허용 · 05:49 NULL 0행 | sort_ci_check.py moot 분기 삭제 | 미확인 |
+| 원장 행 ID 30개 변경(T579-a) | 셀 규칙 (시트, 칸) 조회 유지 | 근거 줄 팝업 cs:141~145 → 본 화면 cs:251~255 | ledger.py:501~506 되돌림 | 미확인 |
+| I3 상향 제한(T585) | 측정 실패·기대값 미정 ERROR 는 i18n 데이터 PASS 로 올리지 않음 | 측정 실패를 PASS 로 바꾸지 않는 원칙 | judge.py T585 두 줄 삭제 | 미확인 |
+| 나머지 결정 R4-D1~D14 | Doc/verify/SCP0005/_unverified_decisions.md | 행별 근거 경로:줄 | - | 미확인 |
+
+## 2026-11-25 08:1x SCP0005 미검증 해소 라운드 5 권장안 진행
+| 항목 | 선택 | 근거 | 되돌리는 방법 | 사용자 확인 |
+|---|---|---|---|---|
+| 화면 알림은 화면 안에 보이는 것만 셈(T590) | 공용 적용 | 닫힌 토스트가 DOM 에 남아 화면 밖에 있음 | _trace.spec.ts shownMsgs 를 종전 innerText 수집으로 되돌림(.bak_20261125_scp05u5) | 미확인 |
+| 0 값·빈값 저장 PASS 에 문구 대조 추가(T596) | 적용 | TB_FX_MessageInfo.csv · cs:1293~1297 | _verify.spec.ts 저장 세부 T596 블록 삭제 | 미확인 |
+| Excel 빈 업로드 기대 상태에 덮어쓰기 문구 포함(T601) | 적용 | ExcelUploadForm2.cs:964, 1112, 1140 | excelcheck.ts overwriteChain 사용 삭제 | 미확인 |
+| AS-IS 검색 단추가 조건 아이콘으로 바뀐 경우 조건 아이콘 측정으로 갈음(T600) | 적용 | 라운드 2 T458 과 같은 기준 | popk3run.ts T600 블록 삭제 | 미확인 |
+| 팝업·셀 이벤트 조회 정렬 = 정적 정렬 + 골든 순서 둘 다 있을 때만 PASS(T605) | 적용 | judge.py:383 | judge.py a6_offpath_verdict 호출 삭제 | 미확인 |
+
+## 2026-11-25 14:1x DMF0045 클라우드 조회 지연 점검 권장안 진행
+| 항목 | 선택 | 근거 | 되돌리는 방법 | 사용자 확인 |
+|---|---|---|---|---|
+| PKG_DMF0045 클라우드 반영 방식 (14:35 변경) | 클라우드 원문은 그대로 두고 보완 17줄 구간만 교체하는 전용 스크립트 | 클라우드 본 2436줄은 사내 2399줄과 달라 전체 교체 시 클라우드 쪽 차이가 사라짐. 클라우드 본에 사내 11-13 보완(STORAGE_ID 빈 문자열 비교) 미반영 확인 | 99_ROLLBACK_PKG_DMF0045.sql | 미확인 |
+| W/H BOH 82 사업부 수정 방향 | 재고 뷰 SSP_DNM_ESS_PACKER_STOCK_V 를 1번만 읽고 일자 최대값은 같은 읽기 안에서 구함(힌트 없음) | 클라우드 1261줄 1회 960.18초, 처리 행 0, 실행계획에서 뷰 2번 읽기 | 수정 전 PKG 원문 재컴파일 | 미확인 |
+| DMF0082 단가 월 SUM 칸, 그 달에 수량이 없는 경우(11-26 13:3x) | 종전처럼 그 달 단가 전체 평균을 표시. Monthly 조회에서는 이 칸이 단가 입력 칸이라 빈칸으로 두면 수량 없는 달의 단가가 안 보임 | 사용자 요청은 '수량 없으면 평균 대상에서 제외'. 15행 기대값 798.260 은 수량 있는 달 사례 | PKG_DMF0082 M_ 단가 식에서 ELSE 를 NULL 로 바꾸면 빈칸 | 미확인 |
+| DMF0082 단가 주(W_) SUM 칸 | 바꾸지 않음. Weekly 조회에서 W_ 칸이 단가 입력 칸이고, SP 는 조회 Bucket 값을 받지 않아 Daily 조회 때만 다르게 계산할 수 없음 | P_DMF0082_GET_MAIN_DATA 인자 16개에 Bucket 없음 | W_ 단가 식도 M_ 과 같은 CASE 로 바꿈 | 미확인 |
+| DMF0082 평균 판단에 쓰는 수량 메저 | MKT_FCST, MKT_FCST_PP, MKT_FCST_RP_CAR, MKT_FCST_RP_CELL, SCM_FCST, RTF_SYS_RP, RTF_SYS_RP_CAR, RTF_SYS_RP_CELL, RTF_SCP, TMM_FCST(값 0 제외). Cust. FCST, Balance, In-Transit, VMI, AS, Fcst Gap, Amt 는 넣지 않음 | 사용자 예시 'MKT_FCST, SCM_FCST, RTF 등' · SCM_MST_SHEET_MEASURE DMF0082 26행 | PKG QW_ 목록 수정 | 미확인 |

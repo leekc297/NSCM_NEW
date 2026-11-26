@@ -1,0 +1,145 @@
+{
+  "id": "20261124040953_SELF_5",
+  "at": "2026-11-24T04:09:53+09:00",
+  "ms": 1795460993829,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/prompt panel.js|사이드바프롬프트입력창이불투명테두리이고focus규칙이없어workbenchj",
+  "title": "사용자 지시 R118 같은 문제: tools/VibeManager/prompt-panel.js:142 사이드바 프롬프트 입력창이 불투명 테두리이고 :focus 규칙이 없어 workbench.js:1862 .pbox 규칙과 다름",
+  "evidence": "규칙 R118 \"프롬프트 입력창 테두리는 포커스 없을 때 반투명, 포커스 때 얇은 테두리와 그림자로 표시하고 프롬프트를 받는 모든 입력창에 같게 씀\" (원래 지시 2026-11-19 11:08 \"프롬프트 창의 Boarder 에 대해서 cursor가 없을때와 있을 때 의 두께와 색감에 대해서 보완하고자 합니다 . Cursor 가 없을 때는 투명도를 높여 은은하게 보이도록 하고 Cursor가 갔을 때도 지금보다는 조금 두께는 줄이고 그림자가 보이는 것 같은 느낌이 보이면 좋겠습니다\") · tools/VibeManager/prompt-panel.js:142 textarea{width:100%;box-sizing:border-box;min-height:84px;resize:vertical;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,tran",
+  "targets": [
+    "tools/VibeManager/prompt-panel.js"
+  ],
+  "before_after": "평소 테두리는 color-mix(..., 40%, transparent)로 하고, :focus 에 workbench.js:1862 와 같은 border-color, box-shadow 를 둠",
+  "verify": "node --check tools/VibeManager/prompt-panel.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/prompt-panel.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T01:33:41+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T01:37:44+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0133"
+    },
+    {
+      "at": "2026-11-26T01:37:49+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T01:50:49+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 prompt-panel.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T01:50:49+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check prompt-panel.js 통과 → 통과(CHECK_OK) · run_all.js 87/87 PASS 1422 FAIL 0 → 87/87 PASS 1422 FAIL 0(233.1s) · t_webview_syntax.js ALL PASS → ALL PASS · 측정 2026-11-26 01:46:32 · 변경 31개 파일 · 대상 목록 밖 변경 30개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_Excel_2단계_차단_M1__0.json, Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json, Doc/verify/SCP0005/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json, Doc/verify/SCP0005/calls/_verify_언어_전환_문구_덤프_I2__0.json, Doc/verify/SCP0005/calls/_verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보__0.json",
+      "log": ".vibe\\logs\\2026-11-26T01-37-49_claude_orch.log",
+      "sec": 538,
+      "costUsd": 0.9020379000000002,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_verify_Excel_2단계_차단_M1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json",
+        "Doc/verify/SCP0005/calls/_verify_언어_전환_문구_덤프_I2__0.json",
+        "Doc/verify/SCP0005/calls/_verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보__0.json",
+        "Doc/verify/SCP0005/calls/_verify_저장_세부_F1_F6_컬럼별_왕복_0_값_저장_0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0005/e2e/shots/verify_Excel_양식_업로드_M1.png",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0005/lang_texts.json",
+        "tools/VibeManager/prompt-panel.js",
+        "Doc/e2e/_run.acct.41304.json",
+        "Doc/verify/SCP0005/e2e/serial/bad_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank2_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank_result_SCP0005.png",
+        "Doc/verify/SCP0005/e2e/serial/form2_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/form_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/m1_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/m1_result_SCP0005.png",
+        "Doc/verify/SCP0005/e2e/serial/m1rows_SCP0005.json",
+        "Doc/verify/SCP0005/e2e/serial/scn_1.png",
+        "Doc/verify/SCP0005/e2e/serial/scn_3.png",
+        "Doc/verify/SCP0005/e2e/serial/scn_4.png",
+        "Doc/verify/SCP0005/e2e/serial/scn_end.png",
+        "Doc/verify/SCP0005/e2e/shots/verify_저장_세부_F1_F6_컬럼별_왕복_0_값_저장.png",
+        "Doc/verify/SCP0005/m1_upload.json",
+        "Doc/verify/SCP0005/touched_rows.json"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:12+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "프롬프트 입력창 테두리는 포커스 없을 때 반투명, 포커스 때 얇은 테두리와 그림자로 표시하고 프롬프트를 받는 모든 입력창에 같게 씀 규칙을 tools/VibeManager/prompt-panel.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R118|tools/VibeManager/prompt-panel.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795624421367,
+  "autoFp": "4060b45d28",
+  "applyStartMs": 1795624669796,
+  "verifyJudge": {
+    "at": "2026-11-26T01:46:52+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0133",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "prompt-panel.js"
+  ],
+  "appliedMs": 1795625449287,
+  "synced": [
+    "prompt-panel.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/prompt-panel.js: 편집 전 출력 없음(exit 0) → 편집 뒤 CHECK_OK · node tools/VibeManager/test/run_all.js: 편집 전 'ALL OK  파일 87/87  PASS 1422  FAIL 0  236.6s'(실행 도중 편집됨) → 편집 뒤 'ALL OK  파일 87/87  PASS 1422  FAIL 0  233.1s' · node tools/VibeManager/test/t_webview_syntax.js: 편집 전 ALL PASS → 편집 뒤 ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/prompt-panel.js"
+    ],
+    "verify_result": "node --check prompt-panel.js 통과 → 통과(CHECK_OK) · run_all.js 87/87 PASS 1422 FAIL 0 → 87/87 PASS 1422 FAIL 0(233.1s) · t_webview_syntax.js ALL PASS → ALL PASS · 측정 2026-11-26 01:46:32",
+    "note": "prompt-panel.js:142 textarea 평소 테두리 = color-mix(--mb 40%, transparent), radius 4px, outline 0, 0.15초 전환 · :143 textarea:focus = workbench.js:1964 .pbox:focus-within 과 같은 border-color 75%, box-shadow 2겹 · :144 모션 줄이기 설정이면 전환 끔 · 개선안의 workbench.js:1862 는 지금 1959·1964 · .pbox 평소값은 35% 이고 before_after 에 따라 40% 적용 · 편집 전 run_all 은 실행 도중 파일이 바뀌어 편집 뒤 run_all 을 처음부터 다시 실행 · 임시 출력 파일 4개(.vibe/ra_*.txt, ws_*.txt) 삭제"
+  },
+  "snap": "prop_20261124040953_SELF_5",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

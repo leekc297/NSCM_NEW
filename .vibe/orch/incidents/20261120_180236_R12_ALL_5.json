@@ -1,0 +1,29 @@
+{
+  "id": "20261120_180236_R12_ALL_5",
+  "at": "2026-11-20T18:02:36+09:00",
+  "ms": 1795165356577,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U21 반영 실패 뒤 같은 사건 다시 올라옴 R12",
+  "screen": "",
+  "sig": "R12|S13|U21|recur|20261120_114124_R12_ALL_2",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261119220749_SELF 반영 실패 11-19 22:18 뒤 20261120_114124_R12_ALL_2 11-20 11:41 sig 'R12|S3|orch-selfcheck.js' · VM 자가진단 S3 설치본 차이: orch-selfcheck.js 내용 다름",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U21|recur|20261120_114124_R12_ALL_2",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T02:03:37+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

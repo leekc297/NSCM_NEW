@@ -1,0 +1,29 @@
+{
+  "id": "20261123_121713_R12_ALL_2",
+  "at": "2026-11-23T12:17:13+09:00",
+  "ms": 1795403833556,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_orch_worklist.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_orch_worklist.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 1 · FAIL 1 · FAIL 예외 TypeError: sc.worklistCycle is not a function",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_orch_worklist.js",
+    "file": "t_orch_worklist.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T19:12:12+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

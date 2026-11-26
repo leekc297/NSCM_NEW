@@ -20,7 +20,6 @@
 | button:FindButton | FindButton > FindData > InitSpread > SetComboColumn > GetComboData | 2073 | DM.DMF0009_GET_CODE | MATCH | SP DMF0009_GET_CODE |
 | button:FindButton | FindButton > FindData > InitSpread > GetSpdTitle | 2161 | DM.DMF0009_GET_COMMON_SPREAD_TITLE | MATCH | SP DMF0009_GET_COMMON_SPREAD_TITLE |
 | button:SaveButton | SaveButton > SaveData > FindData | 837 | DM.DMF0009_GET_BIZ_PLAN_PRICE_INPUT | MATCH | SP DMF0009_GET_BIZ_PLAN_PRICE_INPUT |
-| button:SaveButton | SaveButton > SaveData | 1294 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > SaveData | 1294 | DM.DMF0009_SAVE_BIZ_PLAN_PRICE_INPUT | MATCH | SP DMF0009_SAVE_BIZ_PLAN_PRICE_INPUT |
 | button:SaveButton | SaveButton > SaveData | 1294 | DM.DMF0009_SAVE_ESS_BIZ_PLAN_PRICE_INPUT | MATCH | SP DMF0009_SAVE_ESS_BIZ_PLAN_PRICE_INPUT |
 | button:SaveButton | SaveButton > SaveData > FindData > InitSpread > SetComboColumn > GetComboData | 2073 | DM.DMF0009_GET_CODE | MATCH | SP DMF0009_GET_CODE |
@@ -49,7 +48,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?string.Empty} | UNRESOLVED | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=EndCustomerByDivision40] | BIZ_MATCH | 3 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE_ITEM, UP_FX_GetCommonDataList:SELECT:SCM_MST_SSO_USER_INFO, UP_FX_GetCommonDataList:SELECT:SCM_MST_SSO_DEPT_INFO, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
 | biz:CommonData.CommonDataList [code=SalesCompany] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:SELECT:SCM_MST_PROJECT_ITEM, UP_FX_GetCommonDataList:SELECT:SCM_MST_ITEM_SN |
@@ -139,10 +137,9 @@
 | EmptySpaceItem | 1 | emptySpaceItem1 |
 | ImageList | 1 | imageList1 |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 1294 | SaveData | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

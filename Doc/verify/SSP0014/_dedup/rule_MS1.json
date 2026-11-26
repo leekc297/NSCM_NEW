@@ -1,53 +1,35 @@
 {
  "rule_id": "MS1",
- "hash": "53063953eb228438",
+ "hash": "4772c2b18cd48496",
  "groups": [
-  {
-   "rows": [
-    "V-bb80a16c",
-    "V-ca621553"
-   ],
-   "why": "Both rows check AS-IS MSG00251 on the same GetUserIDChk path and expect the same thing: a TO-BE MSG_ID with the same meaning, so measure once. The (BRANCH) label only marks how the path was traced and does not change the target or expected result."
-  },
   {
    "rows": [
     "V-534c1fad"
    ],
-   "why": "This is the only row that checks the TO-BE mapping for MSG00004 on the SaveData path."
+   "why": "단독"
   },
   {
    "rows": [
     "V-af2f3288"
    ],
-   "why": "This is the only row that checks the TO-BE mapping for MSG00284 on the SaveData path."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-067456a4"
+    "V-bb80a16c"
    ],
-   "why": "This is a combined check covering several search and save actions (empty Division, start date after end date, Save with no changes, normal Save) and several MSG IDs, so it doesn't match any single-message row."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-90edd014"
+    "V-ca621553"
    ],
-   "why": "The target is a different element: the confirmation box (MSG00684) shown when closing the shared upload window after validation passes but before saving."
-  },
-  {
-   "rows": [
-    "V-9f6bf7a6"
-   ],
-   "why": "The target is a different element: the multilingual MSG00701 notice for clicking OK with nothing selected in the Version popup, checked in EN mode."
-  },
-  {
-   "rows": [
-    "V-b12a4147"
-   ],
-   "why": "The target overlaps with MSG00004 for Save with no changes, but the expected result is different: every MSG code must be registered in SCM_ADM_MSG_M for KO/EN/CN, and the '_' default text must not appear on screen. It is not grouped with V-534c1fad."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:18:03",
- "cost": 0.055573399999999995
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:42",
+ "cost": 0,
+ "open": 0
 }

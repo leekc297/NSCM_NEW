@@ -1,0 +1,29 @@
+{
+  "id": "20261123_140326_R12_ALL",
+  "at": "2026-11-23T14:03:26+09:00",
+  "ms": 1795410206396,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S3 설치본 차이: orch-usercheck.js 내용 다름",
+  "screen": "",
+  "sig": "R12|S3|orch-usercheck.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "저장소 80871바이트 2026-11-23T13:56 / 설치본 79443바이트 2026-11-22T23:11",
+  "evidence": {
+    "check": "S3",
+    "key": "S3|orch-usercheck.js",
+    "file": "orch-usercheck.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T14:13:35+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S3 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,654 @@
+{
+ "key": "DM",
+ "auto": true,
+ "screenNotes": {},
+ "jobNotes": {},
+ "tableNotes": {},
+ "processOf": {},
+ "processOrder": [
+  "기준 정보 동기화",
+  "인터페이스 수신",
+  "계획 생성",
+  "컷오프",
+  "인터페이스 송신",
+  "분석과 KPI",
+  "메일과 SMS 알림",
+  "기타"
+ ],
+ "chapters": [
+  {
+   "id": "C1",
+   "title": "1. 업무 개요",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "1. 업무 개요",
+     "lines": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/screens.csv",
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C2",
+   "title": "2. 전체 업무 흐름",
+   "slides": [
+    {
+     "kind": "flow",
+     "title": "2. 전체 업무 흐름",
+     "nodes": [
+      {
+       "id": "기준 정보 동기화",
+       "label": "기준 정보 동기화",
+       "sub": "잡 6개"
+      },
+      {
+       "id": "인터페이스 수신",
+       "label": "인터페이스 수신",
+       "sub": "잡 6개"
+      },
+      {
+       "id": "계획 생성",
+       "label": "계획 생성",
+       "sub": "잡 23개"
+      },
+      {
+       "id": "컷오프",
+       "label": "컷오프",
+       "sub": "잡 3개"
+      },
+      {
+       "id": "인터페이스 송신",
+       "label": "인터페이스 송신",
+       "sub": "잡 2개"
+      },
+      {
+       "id": "분석과 KPI",
+       "label": "분석과 KPI",
+       "sub": "잡 3개"
+      },
+      {
+       "id": "메일과 SMS 알림",
+       "label": "메일과 SMS 알림",
+       "sub": "잡 15개"
+      },
+      {
+       "id": "기타",
+       "label": "기타",
+       "sub": "잡 5개"
+      }
+     ],
+     "edges": [
+      {
+       "from": "기준 정보 동기화",
+       "to": "인터페이스 수신",
+       "label": ""
+      },
+      {
+       "from": "인터페이스 수신",
+       "to": "계획 생성",
+       "label": ""
+      },
+      {
+       "from": "계획 생성",
+       "to": "컷오프",
+       "label": ""
+      },
+      {
+       "from": "컷오프",
+       "to": "인터페이스 송신",
+       "label": ""
+      },
+      {
+       "from": "인터페이스 송신",
+       "to": "분석과 KPI",
+       "label": ""
+      },
+      {
+       "from": "분석과 KPI",
+       "to": "메일과 SMS 알림",
+       "label": ""
+      },
+      {
+       "from": "메일과 SMS 알림",
+       "to": "기타",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/flow_edges.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C3",
+   "title": "3. 프로세스 구조",
+   "slides": [
+    {
+     "kind": "divider",
+     "title": "기준 정보 동기화"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 기준 정보 동기화",
+     "nodes": [
+      {
+       "id": "JOB_PR_DM_4MCC_SCM_MST",
+       "label": "JOB_PR_DM_4MCC_SCM_MST",
+       "sub": "매일 00:30"
+      },
+      {
+       "id": "JOB_PR_DM_CUST_MODEL_MAPPING_IF",
+       "label": "JOB_PR_DM_CUST_MODEL_MAPPING_IF",
+       "sub": "매일 11:10"
+      },
+      {
+       "id": "JOB_PR_DM_HI_STANDARD_CREATE_BATCH",
+       "label": "JOB_PR_DM_HI_STANDARD_CREATE_BATCH",
+       "sub": "매일 04:00"
+      },
+      {
+       "id": "JOB_PR_DM_MST_CUST_FCST_WEEKLY_ROLLING_MON_TOTAL",
+       "label": "JOB_PR_DM_MST_CUST_FCST_WEEKLY_ROLLING_M",
+       "sub": "월 00:00"
+      },
+      {
+       "id": "JOB_PR_DM_MST_FINAL_ITEM_BOM_UPDATE_BATCH",
+       "label": "JOB_PR_DM_MST_FINAL_ITEM_BOM_UPDATE_BATC",
+       "sub": "매일 1시간마다"
+      },
+      {
+       "id": "JOB_PR_DM_SSP_SYNC",
+       "label": "JOB_PR_DM_SSP_SYNC",
+       "sub": "월 07:50"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "인터페이스 수신"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 인터페이스 수신",
+     "nodes": [
+      {
+       "id": "JOB_PR_DM_DNM_EDI_CALLOFF",
+       "label": "JOB_PR_DM_DNM_EDI_CALLOFF",
+       "sub": "매일 03:20 / 매일 06:20, 06:50, 07"
+      },
+      {
+       "id": "JOB_PR_DM_MST_EDI_CUST_MATERIAL_INFO",
+       "label": "JOB_PR_DM_MST_EDI_CUST_MATERIAL_INFO",
+       "sub": "매일 1시간마다"
+      },
+      {
+       "id": "JOB_PR_DM_MST_EDI_UNLOADING_POINT",
+       "label": "JOB_PR_DM_MST_EDI_UNLOADING_POINT",
+       "sub": "매일 1시간마다"
+      },
+      {
+       "id": "JOB_PR_DM_SM_JOB",
+       "label": "JOB_PR_DM_SM_JOB",
+       "sub": "일 10:30, 11:30, 12:30, 13:30"
+      },
+      {
+       "id": "JOB_RFC_PR_DM_PLN_XIF_ERP_MDF_TO_DM_MDF_RESULT",
+       "label": "JOB_RFC_PR_DM_PLN_XIF_ERP_MDF_TO_DM_MDF_",
+       "sub": "매일 07:00"
+      },
+      {
+       "id": "JOB_RFC_XIF_ERP_MATERIAL_DOCUMENT_DM_R",
+       "label": "JOB_RFC_XIF_ERP_MATERIAL_DOCUMENT_DM_R",
+       "sub": "매일 07:15"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "계획 생성"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 계획 생성",
+     "nodes": [
+      {
+       "id": "JOB_LGCE_SCMPROD_PR_DM_PLN_ADJUSTED_MKT_FCST_R_TO_MKT_FCST",
+       "label": "JOB_LGCE_SCMPROD_PR_DM_PLN_ADJUSTED_MKT_",
+       "sub": "매일 1시간마다"
+      },
+      {
+       "id": "JOB_PR_DM_HI_RATIO_CREATE_BATCH",
+       "label": "JOB_PR_DM_HI_RATIO_CREATE_BATCH",
+       "sub": "화 04:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_ESS_VMI_REFRESH",
+       "label": "JOB_PR_DM_PLN_ESS_VMI_REFRESH",
+       "sub": "월 07:50 / 월 08:50"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_40",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MO",
+       "sub": "월 15:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_82",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MO",
+       "sub": "월 16:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TOTAL_MOBILE",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TO",
+       "sub": "일,수,목,금,토 00:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_2",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 04:10"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HD",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 10:05"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HG",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 10:10"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HM",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 04:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_ST",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 04:05"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_UC",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 10:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "월 17:30"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 11:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_HD",
+       "label": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TU",
+       "sub": "화 11:50"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "컷오프"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 컷오프",
+     "nodes": [
+      {
+       "id": "JOB_PR_DM_BPS_INTERFACE",
+       "label": "JOB_PR_DM_BPS_INTERFACE",
+       "sub": "금 22:00"
+      },
+      {
+       "id": "JOB_PR_DM_CUTOFF_DATA_CLEANSING",
+       "label": "JOB_PR_DM_CUTOFF_DATA_CLEANSING",
+       "sub": "토 00:45"
+      },
+      {
+       "id": "JOB_PR_DM_DNM_EDI_CUTOFF",
+       "label": "JOB_PR_DM_DNM_EDI_CUTOFF",
+       "sub": "매일 06:15"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "인터페이스 송신"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 인터페이스 송신",
+     "nodes": [
+      {
+       "id": "JOB_LGCE_SCMPROD_PR_DM_PLN_MKT_FCST_TO_XIF_PLM_PLAN_S",
+       "label": "JOB_LGCE_SCMPROD_PR_DM_PLN_MKT_FCST_TO_X",
+       "sub": "매일 01:00"
+      },
+      {
+       "id": "JOB_PR_DM_TO_XIF_DM_SSPM_CELL_CAR_S",
+       "label": "JOB_PR_DM_TO_XIF_DM_SSPM_CELL_CAR_S",
+       "sub": "매일 06:40"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "분석과 KPI"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 분석과 KPI",
+     "nodes": [
+      {
+       "id": "JOB_PR_DM_ANL_KPI_RTF_SALES",
+       "label": "JOB_PR_DM_ANL_KPI_RTF_SALES",
+       "sub": "화 06:00"
+      },
+      {
+       "id": "JOB_PR_DM_ANL_MKT_PSI_DATA",
+       "label": "JOB_PR_DM_ANL_MKT_PSI_DATA",
+       "sub": "매일 06:00"
+      },
+      {
+       "id": "JOB_PR_DM_CUST_DEMAND_ANL_SUMMARY",
+       "label": "JOB_PR_DM_CUST_DEMAND_ANL_SUMMARY",
+       "sub": "수 08:00"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "메일과 SMS 알림"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 메일과 SMS 알림",
+     "nodes": [
+      {
+       "id": "JOB_DMF0070_AUTO_PR_REQUEST_MAIL",
+       "label": "JOB_DMF0070_AUTO_PR_REQUEST_MAIL",
+       "sub": "화 01:00"
+      },
+      {
+       "id": "JOB_DMF0070_DIFF_QTY_MAIL_SEND_AUTO",
+       "label": "JOB_DMF0070_DIFF_QTY_MAIL_SEND_AUTO",
+       "sub": "매일 12시간마다"
+      },
+      {
+       "id": "JOB_PR_DM_CHECK_BEFOREHAND_SMS_SEND",
+       "label": "JOB_PR_DM_CHECK_BEFOREHAND_SMS_SEND",
+       "sub": "매일 5분마다"
+      },
+      {
+       "id": "JOB_PR_DM_DNM_ERP_EDI_MST_SUMMARY_MAIL_SEND",
+       "label": "JOB_PR_DM_DNM_ERP_EDI_MST_SUMMARY_MAIL_S",
+       "sub": "매일 08:00"
+      },
+      {
+       "id": "JOB_PR_DM_DNM_ESS_MAIL",
+       "label": "JOB_PR_DM_DNM_ESS_MAIL",
+       "sub": "월 13:50"
+      },
+      {
+       "id": "JOB_PR_DM_DNM_EXCHANGE_RATE_MAIL_SEND",
+       "label": "JOB_PR_DM_DNM_EXCHANGE_RATE_MAIL_SEND",
+       "sub": "수 23:40"
+      },
+      {
+       "id": "JOB_PR_DM_IF_CHECK_SMS_SEND",
+       "label": "JOB_PR_DM_IF_CHECK_SMS_SEND",
+       "sub": "매일 1시간마다"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81",
+       "label": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_",
+       "sub": "금 15:00 / 수 10:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HD",
+       "label": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_",
+       "sub": "금 15:20 / 수 15:30"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HG",
+       "label": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_",
+       "sub": "금 15:20 / 수 15:30"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HM",
+       "label": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_",
+       "sub": "금 15:10 / 수 10:10"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_ST",
+       "label": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_",
+       "sub": "금 15:15 / 수 10:15"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_UC",
+       "label": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_",
+       "sub": "금 15:05 / 수 15:00"
+      },
+      {
+       "id": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_82",
+       "label": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_",
+       "sub": "금 03:00 / 목 03:00"
+      },
+      {
+       "id": "JOB_PR_DM_UNLOGIN_MAIL_SEND",
+       "label": "JOB_PR_DM_UNLOGIN_MAIL_SEND",
+       "sub": "매일 04:00"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "기타"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 기타",
+     "nodes": [
+      {
+       "id": "JOB_DMF0070_AUTO_PR_REQUEST",
+       "label": "JOB_DMF0070_AUTO_PR_REQUEST",
+       "sub": "월 01:00"
+      },
+      {
+       "id": "JOB_PR_DM_BI_FULFILL_CURRENT",
+       "label": "JOB_PR_DM_BI_FULFILL_CURRENT",
+       "sub": "매일 07:30 / 매일 23:30"
+      },
+      {
+       "id": "JOB_PR_DM_BI_FULFILL_GEN",
+       "label": "JOB_PR_DM_BI_FULFILL_GEN",
+       "sub": "수 14:30 / 수 08:30 / 매일 07:00"
+      },
+      {
+       "id": "JOB_PR_DM_BI_FULFILL_VMI",
+       "label": "JOB_PR_DM_BI_FULFILL_VMI",
+       "sub": "매일 06:30"
+      },
+      {
+       "id": "JOB_PR_DM_DNM_SALES_RESULT",
+       "label": "JOB_PR_DM_DNM_SALES_RESULT",
+       "sub": "매일 05:00 / 매일 07:20 / 매일 19:10"
+      }
+     ],
+     "edges": [],
+     "notes": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CT",
+   "title": "T. TO-BE 변경 사항과 개선점",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "T. TO-BE 변경 사항과 개선점",
+     "lines": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C9",
+   "title": "9. 일상 운영 점검표",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "9. 일상 운영 점검표",
+     "lines": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C10",
+   "title": "10. 장애 대응",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "10. 장애 대응",
+     "lines": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C11",
+   "title": "11. 로그와 모니터링",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "11. 로그와 모니터링",
+     "lines": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C12",
+   "title": "12. 기준 정보 관리",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "12. 기준 정보 관리",
+     "lines": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C13",
+   "title": "13. 권한과 메뉴 관리",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "13. 권한과 메뉴 관리",
+     "lines": [
+      "작성 필요(AI 단계)"
+     ],
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ]
+    }
+   ]
+  }
+ ]
+}

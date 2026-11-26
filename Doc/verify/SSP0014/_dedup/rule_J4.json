@@ -1,78 +1,59 @@
 {
  "rule_id": "J4",
- "hash": "fdabcca6b14c890e",
+ "hash": "1ec1914de755c32c",
  "groups": [
   {
    "rows": [
-    "EG-00dcd811",
-    "V-610c6b06"
+    "EG-00dcd811"
    ],
-   "why": "Both rows check the same thing: when an account with no permissions logs in, the first screen shown must be the Auth Request main screen."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-4485912c"
    ],
-   "why": "This row checks the SSP/81/SSP Viewer menu-tree entry, which differs from the other EG382 rows in menu number or group, so it stands alone."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-7293655e"
    ],
-   "why": "This row checks the SSP/40/SSP Viewer menu-tree entry, which differs from the other EG382 rows in menu number or group, so it stands alone."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-85946ecd"
    ],
-   "why": "This row checks the SSP/40/SSP Planner menu-tree entry, which differs from the other EG382 rows in menu number or group, so it stands alone."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-a83e1ce5"
    ],
-   "why": "This row checks the SSP/81/SSP Planner menu-tree entry, which differs from the other EG382 rows in menu number or group, so it stands alone."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-c7bfdf9c"
    ],
-   "why": "This row checks the SSP/82/SSP Planner menu-tree entry, which differs from the other EG382 rows in menu number or group, so it stands alone."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-9a70a457",
-    "V-e75aa9d7"
+    "V-9a70a457"
    ],
-   "why": "Both rows open the screen from its menu and expect it to display normally with no 404 or request error."
-  },
-  {
-   "rows": [
-    "V-19f316e2"
-   ],
-   "why": "This row covers more than the others: it checks the Division default value and the whole menu tree under a single SCP Planner permission, plus that exposed menus have no 404, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d43543e2"
    ],
-   "why": "This row checks that the top tab name matches the registered menu name, which is a different element from the other rows."
-  },
-  {
-   "rows": [
-    "V-d74917d5"
-   ],
-   "why": "This row expects menu and button permissions to match the AS-IS production data, while V-ffb8618a uses the TO-BE settings as the standard and excludes AS-IS differences, so the two are kept apart."
-  },
-  {
-   "rows": [
-    "V-ffb8618a"
-   ],
-   "why": "This row uses the TO-BE permission settings as the standard and treats AS-IS differences as a PASS, which differs from V-d74917d5, so it stays alone."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 09:42:07",
- "cost": 0.06173889999999999
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:40",
+ "cost": 0,
+ "open": 0
 }

@@ -1,0 +1,111 @@
+// 2026-11-23 사용자 지시: "제가 지금 프롬프트로 수정하는 부분들이 VMO 에서 취합해 놓고 있다가 제가 지정하지 않았으면, VMO 가 자가점검으로 보완할 수 있으면 좋겠습니다."
+//   ① 원장 tools/VibeManager/user_rules.json: 사용자가 VM, VMO, VMW 화면이나 동작을 고치라고 한 지시를 다른 곳에도 쓸 수 있는 규칙 1줄로 모음
+//      (출처 = orch-usercheck.learn 의 fix-request 분류, 처음 9건은 2026-11-23 세션 지시를 손으로 넣음)
+//   ② sweep(): 자가진단 S13 주기에 붙어 돈다. 새 규칙이 생겼거나 userRuleEveryHours(기본 24) 가 지나면 Claude(읽기 전용)가 VM 소스에서
+//      같은 문제가 남은 곳을 찾음 → 곳마다 개선안(source self, check S13, selfKey S13|R번호|파일) → VMO 자동 반영 흐름(대상 = VM 코드면 게이트 통과 조건으로 자동)
+//   기록: .vibe/orch/userrule/state.json(마지막 점검, 결과, 찾은 곳)
+'use strict';
+const fs = require('fs');
+const path = require('path');
+let errlog = { note() { return null; } }; try { errlog = require('./orch-errlog'); } catch { /* 오류 기록 모듈 없음 */ }
+let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
+
+let getPaths = null; let opts = {}; let sweeping = null;
+const P = () => getPaths();
+const vmDir = () => opts.vmDir || path.join(P().root, 'tools', 'VibeManager');
+const ledgerFile = () => path.join(vmDir(), 'user_rules.json');
+const stDir = () => path.join(P().vibeDir, 'orch', 'userrule');
+const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f + '.t', JSON.stringify(v, null, 1), 'utf8'); fs.renameSync(f + '.t', f); return true; } catch (e) { errlog.note('orch-userrule', 'writeJson', e); return false; } };
+const nowLocal = ms => (orchEv ? orchEv.nowLocal(ms) : new Date(ms || Date.now()).toISOString());
+const mod = n => { if (opts.mods && opts.mods[n]) return opts.mods[n]; try { return require(`./${n}`); } catch (e) { errlog.note('orch-userrule', `require ${n}`, e); return null; } };
+function cfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); return Object.assign({ userRuleEnabled: true, userRuleEveryHours: 24 }, (h && h.orch) || {}); }
+const ledger = () => readJson(ledgerFile(), { about: '', items: [] });
+const norm = s => String(s || '').toLowerCase().replace(/[^0-9a-z가-힣]/g, '');
+// 점검 대상 = VM 화면(웹뷰 HTML 생성 코드)과 VS Code 입력창을 쓰는 확장 코드. 규칙 scope 가 더 좁으면 그 파일만
+const SCOPE_FILES = ['workbench.js', 'orchestra.js', 'jobs.js', 'flow-panel.js', 'menu-view.js', 'prompt-panel.js', 'tabview.js', 'history.js', 'extension.js'];
+const SWEEP_TOOLS = 'Read,Glob,Grep';
+
+/** 규칙 추가(learn 의 fix-request, 손 입력). 같은 규칙(글자만 비교)이 있으면 인용만 더함. 반환 { id, dup } */
+function addRule(o) {
+  const L = ledger(); L.items = L.items || [];
+  const ex = L.items.find(r => norm(r.rule) === norm(o.rule));
+  if (ex) { ex.also = (ex.also || []).concat([`${o.at || nowLocal().slice(0, 16)} ${String(o.quote || '').replace(/\s+/g, ' ').slice(0, 200)}`]).slice(-10); if (o.fixedIn && !String(ex.fixedIn || '').includes(String(o.fixedIn))) ex.fixedIn = [ex.fixedIn, o.fixedIn].filter(Boolean).join(' / ').slice(-600); /* 2026-11-24 같은 규칙의 Claude Code 수정 이력도 쌓음 */ writeJson(ledgerFile(), L); return { id: ex.id, dup: true }; }
+  const id = `R${L.items.length + 1}`;
+  L.items.push({ id, at: String(o.at || nowLocal()).slice(0, 16).replace('T', ' '), quote: String(o.quote || '').slice(0, 400), rule: String(o.rule || '').slice(0, 300), category: String(o.category || '').slice(0, 30), scope: String(o.scope || 'VM 화면 전체').slice(0, 200), check: String(o.check || '').slice(0, 300), fixedIn: String(o.fixedIn || '').slice(0, 300), status: 'active' });
+  writeJson(ledgerFile(), L); return { id, dup: false };
+}
+
+function sweepDue() {
+  const c = cfg(); if (c.enabled === false || c.userRuleEnabled === false) return { due: false, why: '꺼짐' };
+  const L = ledger(); const act = (L.items || []).filter(r => r.status === 'active'); if (!act.length) return { due: false, why: '규칙 없음' };
+  const st = readJson(path.join(stDir(), 'state.json'), {});
+  const seen = new Set(st.rules || []); const fresh = act.filter(r => !seen.has(r.id));
+  if (fresh.length) return { due: true, rules: fresh, why: `새 규칙 ${fresh.map(r => r.id).join(', ')}` };
+  if (!st.lastMs || Date.now() - st.lastMs >= c.userRuleEveryHours * 3600000) return { due: true, rules: act, why: `주기 ${c.userRuleEveryHours}시간` };
+  return { due: false, why: '주기 전' };
+}
+
+function buildPrompt(rules) {
+  const cats = Object.fromEntries((ledger().categories || []).map(c => [c.key, c]));
+  return [
+    '.claude/agents/vm-orchestra.md 의 지킬 것을 따른다. 이번 일은 사용자 지시 규칙 점검이다. 파일을 고치지 않는다(읽기만).',
+    '아래 [규칙] 은 사용자가 VM(Vibe_Manager), VMO, VMW 의 화면이나 동작을 고치라고 지시해 한 곳을 고친 뒤 일반화한 것이다.',
+    '사용자가 지정하지 않은 다른 화면, 입력칸, 단추, 기능에 같은 문제가 남아 있는지 tools/VibeManager 소스에서 찾는다.',
+    `대상 파일 = 규칙 scope 와 유형 점검 범위에 적힌 파일, 없으면 tools/VibeManager/ 의 ${SCOPE_FILES.join(', ')}. 웹뷰 화면은 이 파일들이 만드는 HTML, CSS, 스크립트다.`,
+    '찾는 기준: 같은 원인으로 같은 증상이 날 곳만. 근거 = 파일, 줄, 그 줄의 코드 인용. 이미 고친 곳(fixedIn)과 규칙을 지키는 곳은 적지 않는다. 추측으로 적지 않는다.',
+    '곳마다 고치는 방법을 1~3줄로 적는다(바꿀 코드, 지킬 것). 같은 파일 같은 원인은 1건으로 묶는다.',
+    '마지막 출력은 JSON 코드 블록 1개다. 남은 곳이 없으면 items 를 빈 배열로 둔다.',
+    '```json',
+    '{ "items": [ { "rule": "R1", "file": "jobs.js", "line": 120, "quote": "그 줄 코드", "what": "남은 문제 한 줄", "fix": "고치는 방법" } ] }',
+    '```',
+    '', '[규칙]',
+    ...rules.map(r => `- ${r.id} [${r.category || '-'}${cats[r.category] ? ` ${cats[r.category].name}, 유형 점검 범위 ${cats[r.category].scope}` : ''}]: ${r.rule} · 범위: ${r.scope || 'VM 화면 전체'} · 확인 방법: ${r.check || '-'} · 이미 고친 곳: ${r.fixedIn || '-'} · 원래 지시: "${String(r.quote || '').replace(/\s+/g, ' ').slice(0, 200)}"`),
+  ].join('\n');
+}
+
+/** 자가진단 S13 이 부름. 점검이 필요하면 띄우고 기다리지 않는다. 반환 = 띄웠는가 */
+function maybeSweep() { if (sweeping) return false; const d = sweepDue(); if (!d.due) return false; sweep(false).catch(e => errlog.note('orch-userrule', 'maybeSweep', e)); return true; }
+
+async function sweep(manual) {
+  if (sweeping) return { skipped: '점검 중' };
+  const d = manual ? { due: true, rules: (ledger().items || []).filter(r => r.status === 'active'), why: '직접 실행' } : sweepDue();
+  if (!d.due) return { skipped: d.why };
+  const agent = mod('orch-agent'); if (!agent || !agent.runClaude) return { skipped: '에이전트 없음' };
+  sweeping = (async () => {
+    const sf = path.join(stDir(), 'state.json'); const st = readJson(sf, {});
+    const r = await agent.withLock('userrule', async () => { agent.say('start', { id: 'userrule', text: `사용자 지시 규칙 점검. ${d.why}, 규칙 ${d.rules.length}개` }); return agent.runClaude(buildPrompt(d.rules), { label: '사용자 지시 규칙 점검', permissionMode: 'default', allowedTools: SWEEP_TOOLS }); });
+    if (r && r.busy) return { skipped: '에이전트 사용 중' };
+    const out = r && r.ok ? agent.lastJsonBlock(r.text) : null;
+    const meta = Object.assign(st, { lastMs: Date.now(), lastAt: nowLocal(), log: r && r.log, sec: Math.round(((r && r.ms) || 0) / 1000) });
+    if (!out || !Array.isArray(out.items)) { meta.lastResult = !r || !r.ok ? `점검 실패 exit ${r && r.code}` : '결과 JSON 없음'; writeJson(sf, meta); agent.say('end', { id: 'userrule', ok: false, text: meta.lastResult }); return { ok: false, why: meta.lastResult }; }
+    const imp = mod('orch-improve'); let added = 0, dup = 0; const found = [];
+    const byId = Object.fromEntries((ledger().items || []).map(x => [x.id, x]));
+    for (const it of out.items) {
+      const rule = byId[it.rule]; const raw = String(it.file || '').replace(/\\/g, '/').replace(/^\.\//, '');
+      if (!rule || !raw || raw.includes('..') || /^[A-Za-z]:|^\//.test(raw)) continue;
+      // 경로: 저장소 기준(tools/DbConn/... 등 유형 범위가 VM 밖일 수 있음) · 파일 이름만 오면 tools/VibeManager/
+      const rel = /^(tools|Doc|nscm-fe|nscm-be|\.claude|scripts)\//.test(raw) ? raw : `tools/VibeManager/${raw}`;
+      found.push({ rule: it.rule, file: rel, line: it.line || 0, what: String(it.what || '').slice(0, 200) });
+      if (!imp) continue;
+      const a = imp.add({ title: `사용자 지시 ${it.rule} 같은 문제: ${rel}:${it.line || ''} ${String(it.what || '').slice(0, 90)}`,
+        evidence: `규칙 ${it.rule} "${rule.rule}" (원래 지시 ${rule.at} "${String(rule.quote || '').replace(/\s+/g, ' ').slice(0, 160)}") · ${rel}:${it.line || ''} ${String(it.quote || '').slice(0, 200)}`,
+        targets: [rel], before_after: String(it.fix || '').slice(0, 800),
+        verify: `${/\.js$/.test(rel) ? `node --check ${rel} · ` : ''}node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js`,
+        rollback: `${rel}.bak_<날짜>_self<시각>`, impact: 'fix',
+        plain: { what: `${rule.rule} 규칙을 ${rel} 에도 적용`, risk: '화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영', undo: 'VMO Fixes 탭 되돌리기' },
+        check: 'S13', selfKey: `S13|${it.rule}|${rel}`, sig: `userrule|${it.rule}|${rel}|${norm(it.what).slice(0, 40)}` }, 'self');
+      if (a && a.id) added++; else dup++;
+    }
+    meta.rules = Array.from(new Set([...(meta.rules || []), ...d.rules.map(x => x.id)]));
+    meta.found = found.slice(0, 100); meta.lastResult = `규칙 ${d.rules.length}개 점검: 남은 곳 ${found.length}, 개선안 ${added}, 이미 올라간 안 ${dup}`; writeJson(sf, meta);
+    agent.say('end', { id: 'userrule', ok: true, text: `사용자 지시 규칙 점검 끝. ${meta.lastResult}` });
+    return { ok: true, found: found.length, added, dup };
+  })();
+  try { return await sweeping; } catch (e) { errlog.note('orch-userrule', 'sweep', e); return { ok: false, why: e.message }; } finally { sweeping = null; }
+}
+
+function status() { const st = readJson(path.join(stDir(), 'state.json'), {}); const L = ledger(); return { rules: (L.items || []).length, active: (L.items || []).filter(r => r.status === 'active').length, lastAt: st.lastAt || '', lastResult: st.lastResult || '', due: sweepDue() }; }
+function init(o) { getPaths = o.paths; opts = o || {}; }
+const ready = () => !!getPaths;
+module.exports = { init, ready, ledger, addRule, sweep, maybeSweep, sweepDue, buildPrompt, status, SCOPE_FILES };

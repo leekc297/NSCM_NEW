@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1531,
+  "at": "2026-11-25T17:03:31.964Z",
+  "user": "minyonglee1",
+  "test": "개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 503,
+  "at": "2026-11-25T17:03:34.767Z",
+  "user": "minyonglee1",
+  "test": "개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만"
+ }
+]

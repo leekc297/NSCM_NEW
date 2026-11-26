@@ -1,0 +1,30 @@
+{
+  "id": "SYS0016",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SYS0016] · 룰: tools/VibeManager/rules/10_RULES_KEEP.md · 문장 규칙(답변과 문서 문장 전부): 수식어 금지, 아는 주어 생략, 번역투 금지. tools/VibeManager/rules/50_DOC_S",
+  "start": "2026-11-24T14:44:31+09:00",
+  "end": "2026-11-24T14:56:30+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SYS0016",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "방금 새로 받은 소스에 fe 는 수정되어 있을 것으로 예상되는데 확인해주세요. ",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "afterMode": "end",
+  "afterAt": "2026-11-24T14:56:30+09:00",
+  "changed": []
+}

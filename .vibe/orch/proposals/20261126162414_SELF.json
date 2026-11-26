@@ -1,0 +1,40 @@
+{
+  "id": "20261126162414_SELF",
+  "at": "2026-11-26T16:24:14+09:00",
+  "ms": 1795677854251,
+  "source": "self",
+  "status": "pending",
+  "sig": "userrule|rn|tools/vibemanager/orch vision.js|uiux추천대상지정이viewjs라menuviewjstabviewjs만걸리",
+  "title": "사용자 지시 R251 같은 문제: tools/VibeManager/orch-vision.js:84 UI/UX 추천 대상 지정이 '*view*.js' 라 menu-view.js, tabview.js 만 걸리고 workbench.js, orchestra.js, j",
+  "evidence": "규칙 R251 \"VMO 는 VM 웹뷰 UI/UX 를 현재 널리 쓰는 패턴과 비교한 개선안을 스스로 올리고 큰 디자인 변경은 컨셉 시안 HTML 을 먼저 보임\" (원래 지시 2026-11-26 16:10 \"VMO 의 기능 에 한계는 없다라고 전달했습니다. 이는 VMO 의 UI/UX 도 마찬가지 입니다. 더 나은 UI/UX 을 추천하고 싶으면 추천해주세요. 그것도 VMO 가 스스로 해주면 좋을 것 같아요. 제가 UI/UX 에 대해서 요청 하는 부분은 제가 인지하고 있는 한시적인 부분을 가지\") · tools/VibeManager/orch-vision.js:84 '10. UI/UX 추천: VM·VMO·VMW 웹뷰(tools/VibeManager 의 *view*.js·media·webview 관련 파일)를 읽고, ...'",
+  "targets": [
+    "tools/VibeManager/orch-vision.js"
+  ],
+  "before_after": "대상을 파일 이름으로 적음: workbench.js, orchestra.js, jobs.js, flow-panel.js, menu-view.js, prompt-panel.js, history.js, tabview.js 와 media 폴더",
+  "verify": "node --check tools/VibeManager/orch-vision.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-vision.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:26:23+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    }
+  ],
+  "plain": {
+    "what": "VMO 는 VM 웹뷰 UI/UX 를 현재 널리 쓰는 패턴과 비교한 개선안을 스스로 올리고 큰 디자인 변경은 컨셉 시안 HTML 을 먼저 보임 규칙을 tools/VibeManager/orch-vision.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R251|tools/VibeManager/orch-vision.js",
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "autoWaitMs": 1795706783223,
+  "waitNote": "Claude Code 세션 3acd3c 가 직접 보완 중"
+}

@@ -1,0 +1,579 @@
+{
+ "screen": "SCP0078",
+ "calls": [
+  {
+   "cls": "MultipartFormDataContent",
+   "method": "CallFileUpload",
+   "asis_ref": "SCP0078_FileUpload.cs:548",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "CallFileUpload",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "Add",
+     "kind": "EXPR",
+     "arg": "(byteContent, name: \"file\", fileName: fileName)"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": []
+  },
+  {
+   "cls": "SCP0078_UserInfoPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0078_GSCM_VOC.cs:3589",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "DefMain",
+    "guard": "if (!String.IsNullOrEmpty(VOC_NO) && !e.ColumnHeader) ▸ else of (e.Column == siMain.GetColumnIndex(DefMain.VOC_DETAIL_VIEW) || e.Column == siMain.GetColumnIndex(DefMain.VOC_DETAIL)) ▸ else of (e.Column == siMain.GetColumnIndex(DefMain.REMARK)) ▸ else of (e.Column == siMain.GetColumnIndex(DefMain.FILE_UPLOAD)) ▸ if (e.Column == siMain.GetColumnIndex(DefMain.SCM_PI_USER_ID))"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "Language",
+     "kind": "EXPR",
+     "arg": "UserInfoContext.Current[UserInfoProperites.Language].ToString()"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0078_GSCM_VOC.cs:3611",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0078_GSCM_VOC.cs:3635",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0078_FileUpload",
+   "method": "openFileUpload",
+   "asis_ref": "SCP0078_GSCM_VOC.cs:3270",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "openFileUpload",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "VOC_NO",
+     "kind": "VAR",
+     "arg": "voc_no"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0078_GSCM_VOC.cs:3276",
+     "raw": "FindData_Main()"
+    },
+    {
+     "ref": "SCP0078_GSCM_VOC.cs:3280",
+     "raw": "FindData_Main()"
+    }
+   ],
+   "back": []
+  },
+  {
+   "cls": "SCP0078_GSCM_VOC_Popup",
+   "method": "openPopup",
+   "asis_ref": "SCP0078_GSCM_VOC.cs:3257",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "openPopup",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "VOC_NO",
+     "kind": "VAR",
+     "arg": "voc_no"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0078_GSCM_VOC.cs:3263",
+     "raw": "FindData_Main()"
+    }
+   ],
+   "back": []
+  }
+ ],
+ "classes": {
+  "MultipartFormDataContent": {
+   "cls": "MultipartFormDataContent",
+   "in_pack": false,
+   "from": "none"
+  },
+  "SCP0078_UserInfoPopup": {
+   "cls": "SCP0078_UserInfoPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_UserInfoPopup.cs",
+   "title": "PIC UserInfo",
+   "conds": [
+    {
+     "name": "txtSearch",
+     "type": "UsrTextBox",
+     "label": "User ID(Name)",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0078_UserInfoPopup.Designer.cs:38",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0050_GET_CAPA_PIC_U",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindData",
+     "ref": "SCP0078_UserInfoPopup.cs:153",
+     "save": false
+    },
+    {
+     "sp": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0050_GET_CAPA_PIC_USERINFO_POPUP.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "Search",
+      "Language"
+     ],
+     "method": "FindData",
+     "ref": "SCP0078_UserInfoPopup.cs:157",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0078_UserInfoPopup.cs:167",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0078_UserInfoPopup.cs:240",
+     "method": "OkButtonClick",
+     "raw": "DialogResult = DialogResult.OK",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0078_UserInfoPopup.cs:241",
+     "method": "OkButtonClick",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0078_UserInfoPopup.cs:264",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "DialogResult = DialogResult.OK",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0078_UserInfoPopup.cs:265",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  },
+  "SCP0078_FileUpload": {
+   "cls": "SCP0078_FileUpload",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_FileUpload.cs",
+   "title": "string.Format(\"VOC NO = {0}\", VOC_NO)",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0078_GET_GSCM_VOC_DATA",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0078_GET_GSCM_VOC_DATA.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_voc_no",
+      "mEXEC"
+     ],
+     "method": "GetFileMapping",
+     "ref": "SCP0078_FileUpload.cs:389",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_LOOKUP_VALUES",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_LOOKUP_VALUES.sql",
+     "order_known": true,
+     "order_keys": "L.DISPLAY_SEQ",
+     "order_line": "26",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_lookup_type"
+     ],
+     "method": "GetVocFileAPI",
+     "ref": "SCP0078_FileUpload.cs:1045",
+     "save": false
+    },
+    {
+     "sp": "GSCM_SCP_MASTER_SVC",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SetVOCFileList",
+     "ref": "SCP0078_FileUpload.cs:805",
+     "save": false
+    },
+    {
+     "sp": "SCP0078_GET_GSCM_VOC_DATA",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0078_GET_GSCM_VOC_DATA.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_voc_no",
+      "mEXEC"
+     ],
+     "method": "SetVOCFileList",
+     "ref": "SCP0078_FileUpload.cs:805",
+     "save": false
+    },
+    {
+     "sp": "SCP0078_SAVE_GSCM_VOC_FILE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0078_SAVE_GSCM_VOC_FILE.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_active_flag",
+      "p_voc_no",
+      "p_file_seq",
+      "p_user_id",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "v_file_seq",
+      "v_action_info",
+      "d_event_date",
+      "n_search_position"
+     ],
+     "method": "UpdateFileList",
+     "ref": "SCP0078_FileUpload.cs:757",
+     "save": true
+    },
+    {
+     "sp": "GSCM_SCP_MASTER_SVC",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "UpdateFileList",
+     "ref": "SCP0078_FileUpload.cs:759",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0078_FileUpload.cs:289",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": "try"
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0078_FileUpload.cs:1240",
+     "method": "BtnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Find: CallFileUpload(); break; case ButtonListType.OK: //OkButtonClick(); break; case ButtonListType.Close: t",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0078_FileUpload.cs:1249",
+     "method": "BtnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    },
+    {
+     "ref": "SCP0078_FileUpload.cs:1332",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "DialogResult = DialogResult.OK",
+     "guard": "try ▸ if (!String.IsNullOrEmpty(VOC_NO) && !e.ColumnHeader) ▸ else of (e.Column == siMain.GetColumnIndex(DefColumns.FILE"
+    },
+    {
+     "ref": "SCP0078_FileUpload.cs:1333",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": "try ▸ if (!String.IsNullOrEmpty(VOC_NO) && !e.ColumnHeader) ▸ else of (e.Column == siMain.GetColumnIndex(DefColumns.FILE"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBoxForException(ex)",
+    "MessageHelper.GMessageBox(\"MSG00390\")",
+    "MessageHelper.GMessageBox(\"MSG00391\")",
+    "MessageHelper.GMessageBox(\"MSG00392\")",
+    "MessageHelper.GMessageBox(\"MSG00388\")",
+    "MessageHelper.GMessageBox(\"MSG00386\")",
+    "MessageHelper.GMessageBox(\"MSG00387\")",
+    "MessageHelper.GMessageBox(\"MSG00393\")",
+    "MessageHelper.GMessageBox(\"MSG00016\")",
+    "MessageHelper.GMessageBox(\"MSG00393\")",
+    "MessageHelper.GMessageBox(\"MSG00133\")",
+    "MessageHelper.GMessageBox(\"MSG00006\")"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  },
+  "SCP0078_GSCM_VOC_Popup": {
+   "cls": "SCP0078_GSCM_VOC_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_GSCM_VOC_Popup.cs",
+   "title": "string.Format(\"VOC NO = {0}\", VOC_NO)",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "GSCM_SCP_MASTER_SVC",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "GetDetailText",
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:211",
+     "save": false
+    },
+    {
+     "sp": "SCP0078_GET_GSCM_VOC_DATA",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0078_GET_GSCM_VOC_DATA.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_voc_no",
+      "mEXEC"
+     ],
+     "method": "GetDetailText",
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:211",
+     "save": false
+    },
+    {
+     "sp": "SCP0078_SAVE_GSCM_VOC_DATA",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0078_SAVE_GSCM_VOC_DATA.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_active_flag",
+      "p_edit_type",
+      "p_voc_no",
+      "p_voc_type",
+      "p_voc_name",
+      "p_voc_detail",
+      "p_request_date",
+      "p_request_user_id",
+      "p_scm_pi_user_id",
+      "p_scm_solution_user_id",
+      "p_csr_no",
+      "p_remark",
+      "p_use_yn",
+      "recv_active_flag",
+      "v_active_flag",
+      "v_voc_no",
+      "v_voc_type",
+      "v_voc_name",
+      "v_voc_detail",
+      "v_request_date",
+      "v_request_user_id",
+      "v_scm_pi_user_id",
+      "v_scm_solution_user_id",
+      "v_csr_no",
+      "v_remark",
+      "v_use_yn",
+      "v_delimiter",
+      "max_loop_cnt",
+      "mst_loop_cnt",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "SaveDetailData",
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:114",
+     "save": true
+    },
+    {
+     "sp": "GSCM_SCP_MASTER_SVC",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SaveDetailData",
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:116",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:154",
+     "method": "SaveDetailData",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (t.Success)"
+    },
+    {
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:155",
+     "method": "SaveDetailData",
+     "raw": "this.Close()",
+     "guard": "if (t.Success)"
+    },
+    {
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:185",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "if (buttonItem.UserType == ButtonListType.OK) { SaveData(); } else if (buttonItem.UserType == ButtonListType.Cancel) { this.DialogResult = DialogResult.No; this",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:189",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "if (buttonItem.UserType == ButtonListType.Cancel) { this.DialogResult = DialogResult.No; this.Close(); }",
+     "guard": "else of (buttonItem.UserType == ButtonListType.OK)"
+    },
+    {
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:191",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.DialogResult = DialogResult.No",
+     "guard": "else of (buttonItem.UserType == ButtonListType.OK) ▸ if (buttonItem.UserType == ButtonListType.Cancel)"
+    },
+    {
+     "ref": "SCP0078_GSCM_VOC_Popup.cs:192",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "else of (buttonItem.UserType == ButtonListType.OK) ▸ if (buttonItem.UserType == ButtonListType.Cancel)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00165\")",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { t.DataSet.Tables[0].Rows[0][1] })",
+    "MessageHelper.GMessageBox(\"MSG00006\")"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

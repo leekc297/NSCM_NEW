@@ -1,0 +1,45 @@
+{
+  "id": "20261126115652_SELF_2",
+  "at": "2026-11-26T11:56:52+09:00",
+  "ms": 1795661812272,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/dedup_pre.py|해당없음판정필요행을대표로삼아묶고applyn줄가구성원결과를대표결과로바꿈",
+  "title": "사용자 지시 R235 같은 문제: tools/Harness/verify/dedup_pre.py:19 해당없음, 판정필요 행을 대표로 삼아 묶고, apply(146줄)가 구성원 결과를 대표 결과로 바꿈. 사용자판정 행을 빼지 않음",
+  "evidence": "규칙 R235 \"CheckList 는 같은 대상(호출 위치, 표본 키만 다름)이나 같은 측정으로 판정된 요구 행을 대표 1행으로 묶고 묶은 행은 중복 정리 시트로 옮기며 원장은 바꾸지 않음. 결과, 증거, TO-BE 위치가 다르거나 해당없음, 미검증, 사용자판정이 있는 행은 묶지 않음\" (원래 지시 2026-11-26 10:38 \"네, 보완해줘\") · tools/Harness/verify/dedup_pre.py:19 MEASURED = {'PASS', 'FAIL', 'NA', '판정필요'}",
+  "targets": [
+    "tools/Harness/verify/dedup_pre.py"
+  ],
+  "before_after": "build 의 대표와 구성원 대상에서 NA, 판정필요, ERROR 를 뺌. _user_verdicts.csv, _user_verdicts_direct.csv 행은 check_key 에서 '' 를 돌려줌. selftest 에 NA 묶음 없음, 사용자판정 행 남김 2건을 넣음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/dedup_pre.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:55:19+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/dedup_pre.py:19~21(MEASURED = PASS·FAIL, NO_GROUP NA·해당없음·판정필요·ERROR), check_key·build·ai_pairs 에 사용자판정 행(_user_verdicts.csv, _user_verdicts_direct.csv) 제외, apply 는 NA·판정필요 구성원 덮지 않음. selftest 7 → 9건 selftest OK(판정 다른 묶음 시험 NA → FAIL 로 바꿈). 2026-11-26 15:55:19"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 는 같은 대상(호출 위치, 표본 키만 다름)이나 같은 측정으로 판정된 요구 행을 대표 1행으로 묶고 묶은 행은 중복 정리 시트로 옮기며 원장은 바꾸지 않음. 결과, 증거, TO-BE 위치가 다르거나 해당없음, 미검증, 사용자판정이 있는 행은 묶지 않음 규칙을 tools/Harness/verify/dedup_pre.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R235|tools/Harness/verify/dedup_pre.py",
+  "kind": "fix",
+  "claimedBy": "S-A",
+  "waitNote": "",
+  "appliedMs": 1795676119287
+}

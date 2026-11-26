@@ -52,6 +52,23 @@ const feed = ev => { st.apply(Object.assign({ src: 'vm', pid: process.pid }, ev)
   chk('복구: 체인 끝남 = 해결', r.healed === true && (w.get(inc.id) || {}).status === 'resolved', JSON.stringify(r));
   const inc2 = r14().find(x => x.screen === 'SSP0005'); const r2 = await heal.handle(inc2, Object.assign({}, deps, { kill: async () => true }));
   chk('복구 뒤에도 체인 살아 있음 = 에이전트로 넘김', r2.healed === false && enq === 1, JSON.stringify(r2));
+  chk('에이전트로 넘길 때 사건 상태 = 열림(에이전트 drain 이 받음)', (w.get(inc2.id) || {}).status === 'open', (w.get(inc2.id) || {}).status);
+  // ⑥ 2026-11-20 오판 재현: 창 다시 로드 때 끝난 옛 VM 프로세스의 중지 기록을, 새 프로세스가 재개 체인 시작 뒤에 읽음 → R14 없어야 함
+  got.length = 0; const JR = 'J20261120_140047'; const now = Date.now();
+  feed({ ms: now - 1000, type: 'chain.start', wb: `${JR}:SCP0028`, screen: 'SCP0028', job: JR, chain: 'checklist', chainLabel: 'CheckList', runId: 'SCP0028_R', steps: 6, plan: [] });
+  feed({ ms: now - 100000, type: 'user.stop', wb: `${JR}:SCP0028`, screen: 'SCP0028', job: JR, by: '중지 단추', pid: 999991 }); // 끝난 옛 프로세스(PID 없음)
+  feed({ ms: now, type: 'step.start', wb: `${JR}:SCP0028`, screen: 'SCP0028', no: 2, name: '2. 검사기 보완 준비', runId: 'SCP0028_R' });
+  chk('끝난 VM 프로세스의 중지 기록 → 재개 체인 R14 없음', !got.some(x => x.rule === 'R14'), JSON.stringify(got.map(x => [x.rule, x.title])));
+  // ⑦ 같은 프로세스라도 중지 시각 뒤에 시작한 체인은 묶지 않음
+  feed({ ms: now - 500, type: 'chain.start', wb: 'J5:SSP0020', screen: 'SSP0020', job: 'J5', runId: 'SSP0020_R', plan: [] });
+  feed({ ms: now - 60000, type: 'user.stop', wb: 'J5:SSP0020', screen: 'SSP0020', job: 'J5', by: '중지 단추' });
+  feed({ ms: now + 10, type: 'step.start', wb: 'J5:SSP0020', screen: 'SSP0020', no: 2, name: '2. 다음 단계', runId: 'SSP0020_R' });
+  chk('중지 시각 뒤에 시작한 체인 = R14 없음', !got.some(x => x.rule === 'R14'), JSON.stringify(got.map(x => [x.rule, x.title])));
+  // ⑧ 자가 복구 전 확인: 사건의 체인이 중지 뒤에 시작했으면 감시 오판으로 닫고 멈추지 않음
+  const fake = { id: 'FP1', rule: 'R14', screen: 'SCP0028', evidence: { wb: `${JR}:SCP0028`, screen: 'SCP0028', job: JR, runId: 'SCP0028_R', stopMs: now - 100000 } };
+  const killed2 = []; const stopped2 = [];
+  const r3 = await heal.handle(fake, Object.assign({}, deps, { watch: { update: () => { }, get: () => fake }, kill: async pid => { killed2.push(pid); return true; }, jobRunner: { stopScreen: s => { stopped2.push(s); return {}; } } }));
+  chk('자가 복구 전 확인 = 감시 오판(프로세스 종료·화면 중지 없음)', r3.healed === true && r3.falsePositive === true && !killed2.length && !stopped2.length, JSON.stringify(r3));
   w.dispose(); st.dispose(); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

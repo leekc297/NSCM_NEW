@@ -7,9 +7,9 @@
   "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
   "status": 200,
   "rows": 2,
-  "dur": 89,
-  "at": "2026-11-20T01:05:02.481Z",
-  "user": "minyonglee1",
+  "dur": 84,
+  "at": "2026-11-24T16:51:45.992Z",
+  "user": "seongwon.j",
   "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
  },
  {
@@ -17,12 +17,12 @@
   "sheet": "calendar",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
-  "postData": "{\"startYyyymmdd\":\"20261120\",\"endYyyymmdd\":\"20271114\"}",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
   "status": 200,
-  "rows": 435,
-  "dur": 101,
-  "at": "2026-11-20T01:05:02.614Z",
-  "user": "minyonglee1",
+  "rows": 437,
+  "dur": 104,
+  "at": "2026-11-24T16:51:46.133Z",
+  "user": "seongwon.j",
   "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
  },
  {
@@ -30,12 +30,12 @@
   "sheet": "calendar",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
-  "postData": "{\"startYyyymmdd\":\"20261120\",\"endYyyymmdd\":\"20271114\"}",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
   "status": 200,
-  "rows": 435,
-  "dur": 126,
-  "at": "2026-11-20T01:05:05.537Z",
-  "user": "minyonglee1",
+  "rows": 437,
+  "dur": 110,
+  "at": "2026-11-24T16:51:49.106Z",
+  "user": "seongwon.j",
   "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
  },
  {
@@ -43,12 +43,12 @@
   "sheet": "Shipment Working Day",
   "btn": "SEARCH",
   "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/SEARCH/call-proc",
-  "postData": "{\"fromYyyymmdd\":\"20261120\",\"toYyyymmdd\":\"20271114\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AA00\",\"debugMode\":\"F\"}",
+  "postData": "{\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}",
   "status": 200,
   "rows": 1,
-  "dur": 131,
-  "at": "2026-11-20T01:05:05.541Z",
-  "user": "minyonglee1",
+  "dur": 123,
+  "at": "2026-11-24T16:51:49.117Z",
+  "user": "seongwon.j",
   "test": "@snap 화면샷 패널+헤더 띠 1920/1366"
  }
 ]

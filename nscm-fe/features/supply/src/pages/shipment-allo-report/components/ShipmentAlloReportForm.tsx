@@ -230,34 +230,17 @@ export const ShipmentAlloReportForm = ({ onSearch, mainPlanSeq, gapPlanSeq }: Pr
         onSearch={onSearch}
         conditions={
           <>
-            {/* 필드 배치 순서 = AS-IS SCP0055 조회영역(좌→우·상→하):
-                  1행 Div · Operation Group · From Site · Team · Bucket
-                  2행 Gap Date · Model/Nickname(통합) · Cell Type Gr · Period
-                  3행 Plan Date · FCST Pegging
-                AS-IS Model + Nick Name 2필드는 Model/Nickname 1필드로 통합(#5/#6). 공용 SearchArea 는
-                4필드/행(각 25%)이라 AS-IS 5열과 열수는 다르나 필드 순서를 AS-IS 와 일치시킨다. */}
+            {/* 필드 배치 순서 = 테스트 이슈 "조회조건 순서 조정"(사용자 지시 2026-11-24):
+                  1행 Div · Plan Date · Gap Date · Model/Nickname
+                  2행 From Site · Team · Period · FCST Pegging
+                  3행(접기) Operation Group · Cell Type Gr · Bucket — 화면 고정값(disabled)이라 접어 둔다.
+                AS-IS Model + Nick Name 2필드는 Model/Nickname 1필드로 통합(#5/#6). */}
             {single(t(LABEL.DIVISION, { defaultValue: 'Division' }), sc.divisionId, divisionOptions, () => undefined, true, true)}
-            {single(
-              t(LABEL.OPERATION_GROUP, { defaultValue: 'Operation Group' }),
-              sc.operationGroup,
-              operationGroupOptions,
-              () => undefined,
-              true,
-              true
-            )}
-            {multi(t(LABEL.FROM_SITE, { defaultValue: 'From Site' }), sc.fromSite, fromSiteOptions, v => set({ fromSite: v }))}
-            {multi(t(LABEL.TEAM, { defaultValue: 'Team' }), sc.team, teamOptions, v => set({ team: v }))}
-            {single(t(LABEL.BUCKET, { defaultValue: 'Bucket' }), sc.bucketType, bucketTypeOptions, () => undefined, false, true)}
-
+            {single(t(LABEL.PLAN_DATE, { defaultValue: 'Plan Date' }), sc.planDate, dateOptions, handlePlanDateChange, true)}
             {single(t(LABEL.GAP_DATE, { defaultValue: 'Gap Date' }), sc.gapDate, dateOptions, v => set({ gapDate: v }), true)}
             {popupField_(t(LABEL.MODEL_NICKNAME, { defaultValue: 'Model/Nickname' }), sc.itemId, () => setOpenPopup(true))}
-            {single(t(LABEL.CELL_TYPE_GR, { defaultValue: 'Cell Type Gr' }), sc.cellTypeGr, cellTypeGrOptions, () => undefined, false, true)}
-          </>
-        }
-        extraConditions={
-          <>
-            {/* 조회조건 2줄(8필드)까지 상시 표시, 3줄째(Period/Plan Date)는 접기(사용자 지시 2026-11-03).
-                SearchArea 는 extraConditions 가 있으면 접기 토글(ArrowChevron 버튼)을 자동 노출하고 기본 접힘이다. */}
+            {multi(t(LABEL.FROM_SITE, { defaultValue: 'From Site' }), sc.fromSite, fromSiteOptions, v => set({ fromSite: v }))}
+            {multi(t(LABEL.TEAM, { defaultValue: 'Team' }), sc.team, teamOptions, v => set({ team: v }))}
             {/* Period(월 범위) — SCP0111 통합PSI 와 동일한 PeriodRangePicker(monthOnly): 조밀 입력칸
                 (YYYY-MM) + 달력 팝업. 인라인 월 그리드(DatePickerCalendar)에서 교체(사용자 지시 2026-10-30).
                 값 계약은 YYYYMMDD 라 경계에서 YYYYMM 과 환산(monthStart/monthEnd). */}
@@ -302,9 +285,6 @@ export const ShipmentAlloReportForm = ({ onSearch, mainPlanSeq, gapPlanSeq }: Pr
                 </div>
               )}
             </Grid>
-
-            {single(t(LABEL.PLAN_DATE, { defaultValue: 'Plan Date' }), sc.planDate, dateOptions, handlePlanDateChange, true)}
-
             {/* FCST Pegging — AS-IS 3행(Plan Date 옆) 체크박스 chkFCST("FCST Pegging", Designer L1313). 체크 시
                 P_FCST_YN='Y' 전송(.cs:765-769,796). Designer L1315 가 chkFCST.Visible=false 지만 이 컨트롤은
                 DevExpress LayoutControlItem(layoutFCST)에 담겨 있고 layoutFCST 에 Visibility 설정이 없어(기본
@@ -327,6 +307,22 @@ export const ShipmentAlloReportForm = ({ onSearch, mainPlanSeq, gapPlanSeq }: Pr
                 )}
               />
             </Grid>
+          </>
+        }
+        extraConditions={
+          <>
+            {/* 3줄째 = 화면 고정값(disabled) 3종. SearchArea 는 extraConditions 가 있으면 접기 토글
+                (ArrowChevron 버튼)을 자동 노출하고 기본 접힘이다. */}
+            {single(
+              t(LABEL.OPERATION_GROUP, { defaultValue: 'Operation Group' }),
+              sc.operationGroup,
+              operationGroupOptions,
+              () => undefined,
+              true,
+              true
+            )}
+            {single(t(LABEL.CELL_TYPE_GR, { defaultValue: 'Cell Type Gr' }), sc.cellTypeGr, cellTypeGrOptions, () => undefined, false, true)}
+            {single(t(LABEL.BUCKET, { defaultValue: 'Bucket' }), sc.bucketType, bucketTypeOptions, () => undefined, false, true)}
           </>
         }
       />

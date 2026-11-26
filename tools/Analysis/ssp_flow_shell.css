@@ -1,0 +1,78 @@
+/* SSP 흐름 뷰어 화면 틀 — 왼쪽 목차 + 절 단위 본문 (2026-11-23) */
+:root{--sdw:292px;--navh:44px}
+#side{position:fixed;left:0;top:0;bottom:0;width:var(--sdw);background:#f3f5f8;border-right:1px solid #d6dbe1;display:flex;flex-direction:column;z-index:40;box-sizing:border-box}
+.sd-top{padding:12px 12px 8px;border-bottom:1px solid #d6dbe1;position:relative}
+.sd-title{font-size:17px;font-weight:700;color:#1b1f23}
+.sd-gen{font-size:11.5px;color:#6b7480;margin:1px 0 8px}
+#sdq{width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid #b6bec9;border-radius:4px;font:13px Segoe UI,Malgun Gothic,sans-serif}
+#sdres{display:none;position:absolute;left:8px;right:-260px;top:100%;max-height:70vh;overflow:auto;background:#fff;border:1px solid #9aa5b3;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:5}
+#sdres button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #eef0f3;background:#fff;padding:6px 10px;font:13px Segoe UI,Malgun Gothic,sans-serif;cursor:pointer}
+#sdres button:hover{background:#e8f0fe}
+#sdres b{display:inline-block;min-width:34px;font-size:11px;color:#fff;background:#6b7480;border-radius:3px;padding:0 5px;margin-right:6px;text-align:center}
+.sd-none{padding:8px 10px;color:#777;font-size:13px}
+#sdtree{flex:1;overflow:auto;padding:6px 6px 20px}
+.sd-gh{display:flex;align-items:center;width:100%;border:0;background:none;padding:8px 6px 5px;font:700 13.5px Segoe UI,Malgun Gothic,sans-serif;color:#1b1f23;cursor:pointer;text-align:left}
+.sd-gh .sd-n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#1f6feb;color:#fff;font-size:12px;margin-right:7px;flex:none}
+.sd-gh i{margin-left:auto;font-style:normal;font-weight:400;font-size:11.5px;color:#7a8490}
+.sd-g.shut .sd-gi{display:none}
+.sd-g.shut .sd-gh{color:#5b6570}
+.sd-i{display:block;width:100%;border:0;border-left:3px solid transparent;background:none;text-align:left;padding:4px 8px 4px 30px;font:13px/1.35 Segoe UI,Malgun Gothic,sans-serif;color:#2d3540;cursor:pointer;border-radius:0 4px 4px 0}
+.sd-i:hover{background:#e4e9f0}
+.sd-i.on{background:#dbe7fd;border-left-color:#1f6feb;font-weight:600;color:#0b3d91}
+#main{margin-left:var(--sdw);padding:0 22px 60px;min-width:0}
+body.noside #side{display:none}
+body.noside #main{margin-left:0}
+#crumb{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;background:#fafafa;border-bottom:1px solid #d6dbe1;padding:7px 0;font-size:13px;color:#444}
+#crumb button{padding:4px 10px;border:1px solid #b6bec9;background:#fff;border-radius:4px;cursor:pointer;font:12.5px Segoe UI,Malgun Gothic,sans-serif}
+#crumb button:hover:not(:disabled){background:#e8f0fe;border-color:#0b57d0}
+#crumb button:disabled{opacity:.4;cursor:default}
+.cr-sp{flex:1}
+#itemhead h2{margin:14px 0 2px;font-size:22px}
+#itemhead p{margin:0 0 10px;color:#444;font-size:14px}
+#pickbar{position:sticky;top:var(--navh);z-index:6;background:#fff7e6;border:1px solid #e3c27a;border-radius:6px;padding:8px 12px;margin:0 0 10px;font-size:14px}
+#pickbar select{font-size:14px;padding:4px 6px;min-width:380px;max-width:70vw}
+section.tab{display:none}
+section.tab.on{display:block}
+section.tab>h2{display:none}
+.sx.off,.sx4.off,.sx5.off{display:none}
+.tbl-wrap{overflow-x:auto;max-width:100%}
+.sx4>h2{font-size:15px;color:#555;font-weight:600;margin:10px 0 4px}
+section.tab h3{border-left:5px solid #1f6feb;padding:4px 10px;background:#eef3fb;font-size:17px}
+h4{font-size:15.5px;border-bottom:1px solid #d6dbe1;padding-bottom:3px}
+details.fold{margin:6px 0 12px;border:1px solid #d6dbe1;border-radius:6px;background:#fff;padding:0 10px}
+details.fold>summary{cursor:pointer;padding:7px 2px;font-size:13.5px;color:#0b57d0}
+details.fold[open]>summary{border-bottom:1px solid #e6e9ee;margin-bottom:6px}
+.tbl-filter{margin-left:10px;padding:2px 7px;border:1px solid #b6bec9;border-radius:3px;font:12.5px Segoe UI,Malgun Gothic,sans-serif;width:230px}
+.tbl-scroll td:first-child,.tbl-scroll th:first-child{position:sticky;left:0;z-index:1;box-shadow:1px 0 0 #ccc}
+.tbl-scroll td:first-child{background:#fff}
+.tbl-scroll thead th:first-child{z-index:3}
+tr.fout{display:none}
+@media print{#side,#crumb,#pickbar{display:none}#main{margin:0}}
+/* 새 그림(ssp_svg.py · baoyu-diagram 규칙 SVG) · 단계 × 엔터티 격자 */
+.spf-svg{margin:10px 0 16px}
+pre.mermaid.bdsvg{font-family:inherit;white-space:normal;line-height:0}
+pre.mermaid.bdsvg .mv-bar{line-height:normal;white-space:nowrap}
+.bd-cap{font-size:13px;color:#444;margin-top:6px;line-height:1.55}
+.bd-leg{display:inline-flex;flex-wrap:wrap;gap:4px 14px;margin-left:8px;vertical-align:middle}
+.bd-leg i{display:inline-block;width:13px;height:13px;border:1.5px solid;border-radius:3px;margin-right:5px;vertical-align:-2px}
+table.mx{border-collapse:separate;border-spacing:3px;font-size:13.5px;background:#fff;border:1px solid #d6dbe1;border-radius:8px;padding:6px}
+table.mx th,table.mx td{border:0;padding:6px 10px;text-align:center;vertical-align:middle}
+table.mx thead th{background:#e0f2f4;color:#0f4c5c;border-radius:4px;min-width:92px}
+table.mx thead th small{display:block;font-weight:400;font-size:11.5px;color:#4b6b74}
+table.mx th.mx-e{text-align:left;background:#eef2f6;border-radius:4px;cursor:pointer;white-space:nowrap}
+table.mx th.mx-e:hover{background:#dbe7fd}
+table.mx td.mx-n{color:#555;background:#f6f7f9;border-radius:4px}
+table.mx td.mx-0{background:#fafbfc;border-radius:4px}
+table.mx td.mx-c{background:#f3f6f9;border-radius:4px;white-space:nowrap}
+table.mx td.mx-c:hover{outline:2px solid #3b82f6}
+.mx-w{display:inline-block;background:#059669;color:#fff;border-radius:3px;padding:1px 7px;font-weight:700;margin:0 2px}
+.mx-r{display:inline-block;background:#dbeafe;color:#1d4ed8;border:1px solid #93c5fd;border-radius:3px;padding:0 6px;font-weight:600;margin:0 2px}
+table.mx thead th.mx-g{font-size:13px}
+table.mx thead th.mx-g1,table.mx thead th.mx-g.mx-g1{background:#ede9fe;color:#4c1d95}
+table.mx.if td.if-c{text-align:left;white-space:normal;background:#f6f7f9;border-radius:4px;max-width:560px}
+.if-j{display:inline-block;margin:2px 3px;padding:1px 7px;border-radius:10px;font-size:12.5px;background:#fff;border:1px solid #c7ced8}
+.if-0{color:#9aa3ad;font-size:12.5px;margin-left:6px}
+table.mx thead th{min-width:58px}
+table.mx th.mx-e{position:sticky;left:0;z-index:1}
+table.mx th.mx-e small{display:block;font-weight:400;font-size:11.5px;color:#5b6570;white-space:normal;max-width:260px}
+table.mx thead th small{white-space:normal}

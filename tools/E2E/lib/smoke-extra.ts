@@ -14,8 +14,9 @@ import type { Locator, TestInfo } from '@playwright/test';
 import type { Nscm, ProcCall } from './nscm';
 import { CFG, FE, bePortOpen } from './nscm';
 import { probe } from './probe';
+import { gridSheetsResolved, pickSheetGrid } from './sheetid';  // 2026-11-26 T662 드릴 진입 확인
 import { stdAlias } from './labelalias';
-import { pickCondCol } from './condcol';  // 2026-11-20 T499 후보 ↔ 결과 컬럼 대응
+import { chooseCondCol, pickCondCol } from './condcol';  // 2026-11-20 T499 후보 ↔ 결과 컬럼 대응
 
 export type Verdict = 'OK' | 'FAIL' | 'WARN' | 'NA' | 'ERROR';
 export type Item = { name: string; kind: string; verdict: Verdict; note: string };
@@ -837,13 +838,106 @@ export async function openSheetPopup(nscm: Nscm, name: string): Promise<{ ok: bo
   let n = -1; for (let k = 0; k < 25 && n < 0; k++) { await p.waitForTimeout(400); n = await rowsIn(); }
   if (n < 0) return { ok: false, how: `${nav.open === 'insert' ? 'Insert' : '셀 더블클릭'} 뒤 팝업 그리드 없음` };
   if (n === 0) { await p.locator('[role="dialog"]:visible').last().getByRole('button', { name: /^Search/i }).first().click({ timeout: 3_000 }).catch(() => undefined); for (let k = 0; k < 40 && n <= 0; k++) { await p.waitForTimeout(500); n = await rowsIn(); } }
+  (nscm as unknown as { curSheet?: string }).curSheet = name;  // 2026-11-26 팝업 시트 측정 = 그 시트 이름(mctx.sheet)
   return { ok: true, how: `바탕 시트 ${nav.base} · ${nav.open === 'insert' ? 'Insert' : (nav.cell || '첫 칸') + ' 더블클릭'} · 팝업 그리드 ${n}행` };
 }
+// 2026-11-26 탭 이동에 성공하면 측정 시트를 남긴다(mctx.sheet · 원장 precond → grid_absent_guard 가 같은 컬럼이 여러 시트에 있을 때 구분)
 export async function clickSheetTab(nscm: Nscm, name: string): Promise<boolean> {
+  const ok = await clickSheetTabRaw(nscm, name);
+  if (ok) (nscm as unknown as { curSheet?: string }).curSheet = name;
+  return ok;
+}
+/** 2026-11-26 T662: 상세 시트 진입(sheet_nav.json drill · tools/Harness/verify/sheet_nav_gen.py 가 AS-IS 그리드 더블클릭 → ChangeSheet 원문에서 만듦).
+ *  바탕 시트(base)로 가서 조회 → 행 조건(row: 칸=값 · '!' 빈값 아님 · '!v' 값 아님)에 맞는 첫 행의 칸(cell: col 그 칸 · after 그 칸 뒤 첫 값 있는 칸 · tag 접두 칸 중 값 있는 첫 칸 · 없으면 행 조건 칸)을 더블클릭
+ *  → 대상 시트 그리드(T203 sheetid 확정)가 보이면 true. 그리드가 안 나오면 false(호출부가 측정 경로 누락으로 남김) */
+type SheetDrill = { base?: string; pretab?: string; tab?: string; row?: Record<string, string>; cell?: { col?: string; after?: string; tag?: string }; src?: string };
+type SheetTabSearch = { tab: string; button: string; ctl?: string; src?: string };
+const nzSh = (t: string) => String(t || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+/** 시트 이동 사실을 타지 않는 탭 클릭(탭·버튼 이름이 그 시트 이름) — 드릴 앞뒤 탭(pretab·tab)용. 탭은 보이는 것 중 마지막(상세 영역 탭이 아래에 있다) */
+async function clickTabPlain(nscm: Nscm, name: string): Promise<boolean> {
+  const p = nscm.page; const rx = new RegExp(`^\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i');
+  for (const loc of [p.getByRole('tab', { name: rx }), p.getByRole('button', { name: rx })]) {
+    const n = await loc.count().catch(() => 0);
+    for (let i = n - 1; i >= 0; i--) { const e = loc.nth(i); if (await e.isVisible().catch(() => false)) { await e.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(800); return true; } }
+  }
+  return false;
+}
+/** 시트 그리드가 확정될 때까지(최대 sec 초) — T203 sheetid */
+async function waitSheetGrid(nscm: Nscm, id: string, name: string, sec: number): Promise<boolean> {
+  for (let k = 0; k < sec; k++) { const gs = await gridSheetsResolved(nscm.page, id).catch(() => [] as { sheet: string; cols: string[]; how: string }[]); if (gs.some(g => nzSh(g.sheet) === nzSh(name))) return true; await nscm.page.waitForTimeout(1_000); }
+  return false;
+}
+/** 2026-11-26 T662·T663: 상세 시트 진입(sheet_nav.json drill · tools/Harness/verify/sheet_nav_gen.py 가 AS-IS 그리드 더블클릭 원문에서 만듦).
+ *  ① 바탕 시트(base): 시트 이동 사실이 있으면(드릴의 드릴 · DMF0008 SUMMARY → REPAIR → SALES_SITE) 그 진입을 따르고 재조회하지 않는다 · 없으면 탭 → 조회
+ *  ② 더블클릭 칸 = 바탕 시트로 확정된 그리드(T203)의 행 조건(row: 칸=값 · '!' 빈값 아님 · '!v' 값 아님)에 맞는 첫 행 ·
+ *     칸(cell: col 그 칸 · after 그 칸 뒤 첫 값 있는 칸 · tag 접두 칸 중 값 있는 첫 칸 · 없으면 행 조건 칸 또는 첫 보이는 칸)
+ *  ③ pretab = 더블클릭 전에 누를 하위 탭(DMF0004 siSub.ActiveSheet 조건) · tab = 더블클릭 뒤 누를 탭(조회 메서드가 여러 시트를 채움 · SSP0015 Hold stock Detail)
+ *  ④ 대상 시트 그리드가 확정되면 true · 아니면 false(호출부가 측정 경로 누락으로 남김) */
+async function drillSheet(nscm: Nscm, name: string, d: SheetDrill): Promise<boolean> {
+  const p = nscm.page; const id = (process.env.VERIFY_ID || (nscm as unknown as { curMenu?: string }).curMenu || '').toUpperCase();
+  const baseNav = d.base ? sheetNav(id, d.base) as (SheetNav & { drill?: SheetDrill; tabsearch?: SheetTabSearch }) | null : null;
+  if (baseNav && (baseNav.drill || baseNav.tabsearch)) { if (!(await clickSheetTabRaw(nscm, d.base as string))) { console.log(`[sheetNav] ${name}: 바탕 시트 '${d.base}' 진입 실패`); return false; } }
+  else {
+    if (d.base && !(await clickTabPlain(nscm, d.base))) console.log(`[sheetNav] ${name}: 바탕 시트 '${d.base}' 탭 없음 — 지금 보이는 그리드로 진행`);
+    await nscm.clearDialogs().catch(() => undefined);
+    await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+  }
+  if (d.pretab && !(await clickTabPlain(nscm, d.pretab))) console.log(`[sheetNav] ${name}: 먼저 누를 탭 '${d.pretab}' 없음`);
+  const pk = d.base ? await pickSheetGrid(p, id, d.base).catch(() => ({ ok: false, how: '' })) : { ok: false, how: '' };
+  const spec = { row: d.row || {}, cell: d.cell || {}, pref: !!pk.ok };
+  const pt = await p.evaluate(`(() => { const S = ${JSON.stringify(spec)};
+    const ok = (v, w) => { v = v == null ? '' : String(v).trim(); if (w === '!') return v !== ''; if (w.startsWith('!')) return v !== w.slice(1); return v === w; };
+    let els = [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null && !e.closest('[role="dialog"]'));
+    const want = S.pref ? window.__e2eGridCols : null;
+    if (want && want.length) { const hit = els.filter(e => { const c = e['$WJ-CTRL']; return c && want.every(b => c.columns.getColumn(b)); }); if (hit.length) els = hit; }
+    for (const e of els) { const c = e['$WJ-CTRL']; if (!c || !c.rows || !c.rows.length) continue;
+      const keys = Object.keys(S.row); const N = Math.min(c.rows.length, 3000);
+      for (let r = 0; r < N; r++) { const it = c.rows[r].dataItem; if (!it) continue; if (!keys.every(k => ok(it[k], S.row[k]))) continue;
+        const vis = []; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.visible !== false && x.binding) vis.push(x); }
+        let col = null; const has = x => { const v = it[x.binding]; return v != null && String(v).trim() !== ''; };
+        if (S.cell.col) col = c.columns.getColumn(S.cell.col);
+        else if (S.cell.after) { const a = c.columns.getColumn(S.cell.after); const ai = a ? a.index : -1; col = vis.find(x => x.index > ai && has(x)) || vis.find(x => x.index > ai) || null; }
+        else if (S.cell.tag) { col = vis.find(x => String(x.binding).startsWith(S.cell.tag) && has(x)) || vis.find(x => String(x.binding).startsWith(S.cell.tag)) || null; }
+        else col = (keys.length ? c.columns.getColumn(keys[0]) : null) || vis.find(x => has(x)) || vis[0] || null;
+        if (!col || col.visible === false) continue;
+        c.scrollIntoView(r, col.index); const rc = c.getCellBoundingRect(r, col.index);
+        return { x: rc.left + rc.width / 2, y: rc.top + rc.height / 2, r, b: col.binding };
+      } }
+    return null; })()`).catch(() => null) as { x: number; y: number; r: number; b: string } | null;
+  await probe.pickGrid(p, null).catch(() => undefined);
+  if (!pt) { console.log(`[sheetNav] ${name}: 드릴 행 없음(바탕 ${d.base || '-'}${pk.ok ? '' : ' 그리드 미확정'} · 행 조건 ${JSON.stringify(d.row || {})} · 칸 ${JSON.stringify(d.cell || {})} · ${d.src || ''})`); return false; }
+  await p.waitForTimeout(300);
+  const pt2 = await p.evaluate(`(() => { const els = [...document.querySelectorAll('.wj-flexgrid')].filter(e => e.offsetParent !== null && !e.closest('[role="dialog"]')); for (const e of els) { const c = e['$WJ-CTRL']; if (!c) continue; const col = c.columns.getColumn(${JSON.stringify(pt.b)}); if (!col || !c.rows[${pt.r}]) continue; const rc = c.getCellBoundingRect(${pt.r}, col.index); return { x: rc.left + rc.width / 2, y: rc.top + rc.height / 2 }; } return null; })()`).catch(() => null) as { x: number; y: number } | null;
+  const at = pt2 || pt; await p.mouse.dblclick(at.x, at.y).catch(() => undefined);
+  if (d.tab) { await p.waitForLoadState('networkidle', { timeout: 20_000 }).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); if (!(await clickTabPlain(nscm, d.tab))) console.log(`[sheetNav] ${name}: 드릴 뒤 탭 '${d.tab}' 없음`); }
+  if (await waitSheetGrid(nscm, id, name, 30)) { await nscm.clearDialogs().catch(() => undefined); console.log(`[sheetNav] ${name}: 드릴 진입(행 r${pt.r} · 칸 ${pt.b} 더블클릭${d.tab ? ` → 탭 ${d.tab}` : ''} · ${d.src || ''})`); return true; }
+  console.log(`[sheetNav] ${name}: 드릴 뒤 30초 안에 시트 그리드 안 보임(행 r${pt.r} · 칸 ${pt.b} · ${d.src || ''})`);
+  return false;
+}
+/** 2026-11-26 T663: 탭 + 상세 조회 버튼으로 채우는 시트(AS-IS BtnSearch_Click 의 상세 시트 분기 · TO-BE 상세 영역 Search) — 메인 조회 → 탭 → 같은 글자의 보이는 버튼 중 마지막(메인 조회 버튼 다음) */
+async function tabSearchSheet(nscm: Nscm, name: string, ts: SheetTabSearch): Promise<boolean> {
+  const p = nscm.page; const id = (process.env.VERIFY_ID || (nscm as unknown as { curMenu?: string }).curMenu || '').toUpperCase();
+  await nscm.clearDialogs().catch(() => undefined); await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+  if (!(await clickTabPlain(nscm, ts.tab))) { console.log(`[sheetNav] ${name}: 탭 '${ts.tab}' 없음`); return false; }
+  const rx = new RegExp(`^\\s*${ts.button.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i'); const bl = p.getByRole('button', { name: rx });
+  const vis: number[] = []; const n = await bl.count().catch(() => 0); for (let i = 0; i < n; i++) if (await bl.nth(i).isVisible().catch(() => false)) vis.push(i);
+  if (vis.length < 2) { console.log(`[sheetNav] ${name}: 상세 '${ts.button}' 버튼 없음(보이는 같은 글자 버튼 ${vis.length}개 · ${ts.src || ''})`); return false; }
+  await bl.nth(vis[vis.length - 1]).click({ timeout: 5_000 }).catch(() => undefined);
+  await p.waitForLoadState('networkidle', { timeout: 20_000 }).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined);
+  if (await waitSheetGrid(nscm, id, name, 30)) { console.log(`[sheetNav] ${name}: 탭 + 상세 '${ts.button}' 진입(${ts.src || ''})`); return true; }
+  console.log(`[sheetNav] ${name}: 탭 + 상세 '${ts.button}' 뒤 30초 안에 시트 그리드 안 보임(${ts.src || ''})`);
+  return false;
+}
+export function isDrillSheet(menuId: string, sheet: string): boolean { const n = sheetNav(menuId, sheet) as (SheetNav & { drill?: SheetDrill; tabsearch?: SheetTabSearch }) | null; return !!(n && (n.drill || n.tabsearch)); }
+async function clickSheetTabRaw(nscm: Nscm, name: string): Promise<boolean> {
   const p = nscm.page; const rx = new RegExp(`^\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i');
   // 시트 이동 사실이 있으면 그대로 따른다: 조회조건 값 → 탭을 바깥부터 차례로. 팝업 안 그리드(popup)는 탭으로 갈 수 없어 false(호출부가 측정 경로 없음으로 남김)
   const nav = sheetNav(process.env.VERIFY_ID || (nscm as unknown as { curMenu?: string }).curMenu || '', name);
-  if (nav) {
+  const dr = nav ? (nav as SheetNav & { drill?: SheetDrill }).drill : undefined; const tsr = nav ? (nav as SheetNav & { tabsearch?: SheetTabSearch }).tabsearch : undefined;
+  if (dr && await drillSheet(nscm, name, dr)) return true;  // T662 상세 시트 = 메인 그리드 더블클릭
+  if (tsr && await tabSearchSheet(nscm, name, tsr)) return true;  // T663 탭 + 상세 조회
+  if (dr || tsr) console.log(`[sheetNav] ${name}: ${dr ? '드릴' : '탭 + 상세 조회'} 진입 실패 → 탭 이름으로 다시 시도(다른 그리드 측정은 호출부 시트 확정 T661 이 막음)`);
+  if (nav && !dr && !tsr) {
     if (nav.popup && !(nav.tabs || []).length) return false;
     // 2026-11-17: 시트 이동 사실에 Division 조건이 없고 시트 데이터 조건(sheet_data_cond.json)이 있으면 그 첫 Division 을 먼저 고른다
     if (!Object.keys(nav.cond || {}).some(l => /^(div\.?|division)$/i.test(l.trim()))) { const dd = sheetDataDivs(process.env.VERIFY_ID || (nscm as unknown as { curMenu?: string }).curMenu || '', name); const curDiv = dd.length ? ((await p.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: p.locator(':scope > :first-child', { hasText: /^\s*\*?\s*(Div\.?|Division)\s*\*?\s*$/i }) }).first().locator('[role="combobox"]').first().inputValue({ timeout: 2_000 }).catch(() => '')) || '').trim().split(/\s+/)[0] : ''; /* 현재 Division 에 이 시트 행이 있으면 그대로 둔다(계정·Division 별 시험이 고른 Division 을 바꾸지 않음) */ if (dd.length && !dd.includes(curDiv) && await nscm.setDivision(dd[0]).catch(() => false)) { console.log(`[sheetNav] ${name}: 데이터 조건 Division ${dd[0]}`); await nscm.clearDialogs().catch(() => undefined); } }
@@ -887,13 +981,19 @@ export async function clickSheetTab(nscm: Nscm, name: string): Promise<boolean> 
  *   반환 col/base = 바꿀 결과 컬럼과 그 값(겹치면 그대로) · how = 근거 문구('' = 바꾸지 않음). 호출 예(_trace.spec.ts G1 멀티선택 · comboOpts 직후):
  *     const cc = await condColForOpts(nscm, o.texts, col, base); col = cc.col; base = cc.base;
  */
-export async function condColForOpts(nscm: Nscm, opts: string[], col: string, base: string[]): Promise<{ col: string; base: string[]; how: string }> {
+export async function condColForOpts(nscm: Nscm, opts: string[], col: string, base: string[], label = ''): Promise<{ col: string; base: string[]; how: string }> {  // T521: label = 조회조건 라벨(이름 갈래가 같은 컬럼 우선)
   const p = nscm.page;
   const hits = (vals: string[]) => { const vs = new Set(vals.map(v => String(v ?? '').trim()).filter(Boolean)); return opts.filter(t => { const s0 = String(t || '').trim(); return s0 && (vs.has(s0) || vs.has(s0.split(/\s+/)[0])); }).length; };
   if (col && hits(base) > 0) return { col, base, how: '' };
   const cols: Record<string, string[]> = {};
-  for (const b of ((await probe.allBindings(p).catch(() => null)) || [])) cols[b] = (await probe.columnValues(p, b).catch(() => null)) || [];
-  const pk = pickCondCol(opts, cols, col ? [col] : []);
-  if (!pk.col) return { col, base, how: '' };
-  return { col: pk.col, base: cols[pk.col], how: `${col ? `라벨 컬럼 ${col} 값과 후보 겹침 0 → ` : ''}${pk.how}` };
+  // 2026-11-20 T513(SCP0028 V-dd4f9db4 재발): 코드 칸 FROM_SITE 는 그리드 칸 목록에 없고 행 데이터에만 있다(calls/_grid_main.json cols 15개 · sample FROM_SITE 'HQ07-A').
+  //   그리드 칸(숨김 포함)에 행 데이터 키를 더해 훑는다. 값 읽기 columnValues 는 dataItem 기준이라 그대로 쓴다
+  const keys = [...new Set([...((await probe.allBindings(p).catch(() => null)) || []), ...((await probe.dataKeys(p).catch(() => null)) || [])])];
+  for (const b of keys) cols[b] = (await probe.columnValues(p, b).catch(() => null)) || [];
+  const pk = pickCondCol(opts, cols, col ? [col] : [], label);
+  // 2026-11-20 T527(SCP0028 V-8e065123 T521 뒤 재발 · 22:17 실행): 라벨 갈래 칸(TO_SITE·TO_SITE_DESCRIPTION)과 읽은 후보 글자의 겹침이 0 이라
+  //   전 칸 최다 겹침 FROM_SITE 를 골랐다(겹침 0 인 이유는 실행 기록에 칸별 값이 없어 미확인 · 이번부터 근거를 증거에 남김).
+  //   후보는 뒤 단계가 검색창으로 찾으므로 겹침 0 이어도 라벨 갈래 코드 칸에 값이 있으면 그 칸을 쓴다. 갈래 칸이 없을 때만 다른 칸으로 넘어간다
+  const ch = chooseCondCol(pk, cols, col, label, opts.length);
+  return { col: ch.col, base: ch.col === col ? base : (cols[ch.col] || []), how: ch.how };
 }

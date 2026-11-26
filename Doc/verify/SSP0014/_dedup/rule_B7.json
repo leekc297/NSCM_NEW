@@ -1,130 +1,101 @@
 {
  "rule_id": "B7",
- "hash": "c69bd291cc5dd726",
+ "hash": "9de9c1aaead94dba",
  "groups": [
   {
    "rows": [
     "EG-178614d5"
    ],
-   "why": "Checks whether LookupCommon (OPERATION_GROUP) candidates are current when divisionId is ''. That differs from the divisionId '40' row, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-4e9579b4"
-   ],
-   "why": "Checks LookupCommon candidates with divisionId '40'. Its condition value differs from the divisionId '' row, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-938a31ee"
-   ],
-   "why": "Checks PlantSiteByDivision with divisionId '' only. EG-224cda47 sends extra parameters, so the request body is not the same and the row stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-224cda47"
    ],
-   "why": "Checks PlantSiteByDivision with divisionId '' plus lookupType and other parameters. The request differs from the minimal-parameter row, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-4789682e"
-   ],
-   "why": "Checks PlantSiteByDivision with divisionId '40' only. It is not grouped with the '40' request that sends extra parameters."
-  },
-  {
-   "rows": [
-    "EG-de8d4b20"
-   ],
-   "why": "Checks PlantSiteByDivision with divisionId '40' plus lookupType and other parameters. The request body differs, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-2440cb25"
    ],
-   "why": "Checks YesOrNo with no parameters. It is not certain that the extra parameters in the other YesOrNo requests are ignored, so this row stays alone."
-  },
-  {
-   "rows": [
-    "EG-ef45fd22"
-   ],
-   "why": "Checks YesOrNo with divisionId '' and the OPERATION_GROUP parameters. The request body differs, so it stays alone."
-  },
-  {
-   "rows": [
-    "EG-a4c409ae"
-   ],
-   "why": "Checks YesOrNo with divisionId '40' and the OPERATION_GROUP parameters. The request body differs, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-3e9cae78"
    ],
-   "why": "This is the only row that checks the SCM0001_GET_DIVISION combo."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-4789682e"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-4e9579b4"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-938a31ee"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-a4c409ae"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-de8d4b20"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-eccaaf9a"
    ],
-   "why": "This is the only row that checks the MyDivision combo."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-9d444674"
+    "EG-ef45fd22"
    ],
-   "why": "Checks in the UI that the Div search condition reflects master changes. That is a different element and method from the DB re-run rows."
-  },
-  {
-   "rows": [
-    "V-38d59acf"
-   ],
-   "why": "Checks in the UI that the Operation group search condition reflects changes. That method differs from the LookupCommon DB re-run rows."
-  },
-  {
-   "rows": [
-    "V-b8fd2a3d"
-   ],
-   "why": "Checks the From Site multi-select search condition. No other row checks this element."
+   "why": "단독"
   },
   {
    "rows": [
     "V-1d47e1bf"
    ],
-   "why": "Checks the Active search condition. No other row checks this element."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-2017af6e"
+    "V-38d59acf"
    ],
-   "why": "Checks the team name shown in the Team (DEPT_ID) cell combo after DEPT_ID is changed in SSPM. Its expected result is different from V-30b82a62, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-30b82a62"
+    "V-9d444674"
    ],
-   "why": "Checks that the Team change from SSPM appears on re-query, under the separate condition Div=82. Its condition and expected result differ, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-c491dc7d"
+    "V-b8fd2a3d"
    ],
-   "why": "Checks that newly registered LOOKUP entries appear in the grid's End Customer and Sold to Customer combos. The grid cell combo is a different element from the search-condition combos."
-  },
-  {
-   "rows": [
-    "V-e96d7a0a"
-   ],
-   "why": "Checks that the Team search condition is refreshed right after a new team is saved and still includes it on reopen. Both the element and the expected result are specific to this row."
-  },
-  {
-   "rows": [
-    "V-fe6e29f3"
-   ],
-   "why": "Checks that one save succeeds and the new master item, such as a Sales Site, appears in the search-condition combo. The target element and expected result differ from the other rows."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:12:15",
- "cost": 0.09781959999999999
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:24",
+ "cost": 0,
+ "open": 0
 }

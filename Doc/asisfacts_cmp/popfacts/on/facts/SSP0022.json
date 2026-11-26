@@ -1,0 +1,1480 @@
+{
+ "screen": "SSP0022",
+ "calls": [
+  {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "method": "BtnItemID2_Click",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:1782",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnItemID2",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "true",
+   "div_arg": "sdivision",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "sdivision"
+    },
+    {
+     "param": "_ScmSiteId",
+     "kind": "CONTROL",
+     "arg": "sScmSite"
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "LITERAL",
+     "arg": "sProject"
+    },
+    {
+     "param": "_ItemID",
+     "kind": "CONTROL",
+     "arg": "sItemId"
+    }
+   ],
+   "results": [
+    "itemld2"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1783",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1786",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "method": "BtnMeasure_Click",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:1315",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnMeasure",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SSP0022\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "LITERAL",
+     "arg": "shtName"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1316",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "UserInfoPopup",
+   "method": "BtnRequestor_Click",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:3753",
+   "trigger": {
+    "kind": "COND",
+    "control": "btnRequestor",
+    "input": "txtRequestor",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": "Requestor"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "SSOUserYN",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [
+    "requestor"
+   ],
+   "after": [],
+   "back": []
+  },
+  {
+   "cls": "SSP0022_BodItemPopup",
+   "method": "SpdDetail_CellDoubleClick",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:1072",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdDetail",
+    "column": "ITEM_ID",
+    "guard": "if (siDetail.ActiveSheet.SheetName == SpdSheet.shtRequestDetail) ▸ if (e.Column == siDetail.GetColumnIndex(DefColumns.ITEM_ID)) ▸ if ((sFromSite != \"\" && sToSite != \"\")) ▸ if (action == \"I\")"
+   },
+   "multi": "false",
+   "div_arg": "sdivision",
+   "period_args": [
+    "sFromSite",
+    "sToSite",
+    "sPlanDate"
+   ],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "GRID",
+     "arg": "sdivision"
+    },
+    {
+     "param": "_FromSiteId",
+     "kind": "GRID",
+     "arg": "sFromSite"
+    },
+    {
+     "param": "_ToSiteId",
+     "kind": "GRID",
+     "arg": "sToSite"
+    },
+    {
+     "param": "_ItemID",
+     "kind": "GRID",
+     "arg": "sItemId"
+    },
+    {
+     "param": "_planDate",
+     "kind": "CONTROL",
+     "arg": "sPlanDate"
+    },
+    {
+     "param": "_bodId",
+     "kind": "GRID",
+     "arg": "sBodId"
+    },
+    {
+     "param": "_incoterms",
+     "kind": "GRID",
+     "arg": "sIncoterms"
+    },
+    {
+     "param": "_transmode",
+     "kind": "GRID",
+     "arg": "sTransport"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1090",
+     "raw": "FindData_BOD(e.Row)"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1073",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1076",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1077",
+     "target": "sModelID",
+     "value": "popItem.ModelID"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1078",
+     "target": "sIncoterms",
+     "value": "popItem.Incoterms"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1079",
+     "target": "sTransport",
+     "value": "popItem.Transport"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1080",
+     "target": "sBodId",
+     "value": "popItem.BodId"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1081",
+     "target": "sConfirmDay",
+     "value": "popItem.ConfirmDay"
+    }
+   ]
+  },
+  {
+   "cls": "SSP0022_BodItemPopup",
+   "method": "SpdDetail_ClipboardPasted",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:927",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "SpdDetail_ClipboardPasted",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "false",
+   "div_arg": "sdivision",
+   "period_args": [
+    "sFromSite",
+    "sToSite",
+    "sPlanDate"
+   ],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "GRID",
+     "arg": "sdivision"
+    },
+    {
+     "param": "_FromSiteId",
+     "kind": "GRID",
+     "arg": "sFromSite"
+    },
+    {
+     "param": "_ToSiteId",
+     "kind": "GRID",
+     "arg": "sToSite"
+    },
+    {
+     "param": "_ItemID",
+     "kind": "VAR",
+     "arg": "sItemId"
+    },
+    {
+     "param": "_planDate",
+     "kind": "CONTROL",
+     "arg": "sPlanDate"
+    },
+    {
+     "param": "_bodId",
+     "kind": "VAR",
+     "arg": "sBodId"
+    },
+    {
+     "param": "_incoterms",
+     "kind": "VAR",
+     "arg": "sIncoterms"
+    },
+    {
+     "param": "_transmode",
+     "kind": "VAR",
+     "arg": "sTransport"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:943",
+     "raw": "FindData_BOD(iRow)"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:959",
+     "raw": "FindData_BOD(iRow)"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:973",
+     "raw": "FindData_BOD(iRow)"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:999",
+     "raw": "FindData_BOD(iRow)"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:928",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:931",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:932",
+     "target": "sModelID",
+     "value": "popItem.ModelID"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:933",
+     "target": "sIncoterms",
+     "value": "popItem.Incoterms"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:934",
+     "target": "sTransport",
+     "value": "popItem.Transport"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:935",
+     "target": "sBodId",
+     "value": "popItem.BodId"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:936",
+     "target": "sConfirmDay",
+     "value": "popItem.ConfirmDay"
+    }
+   ]
+  },
+  {
+   "cls": "SSP0022_ShipmentRequestPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:1404",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "MEASURE",
+    "guard": "if (e.Column == siMain.GetColumnIndex(DefColumns.MEASURE) - 1) ▸ if (strMeasure == \"R_SHIP_REQ_ETA\")"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_UserID",
+     "kind": "EXPR",
+     "arg": "UserInfo.UserId"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1431",
+     "raw": "if (popup.DialogResult == DialogResult.OK) { FindData_Main(); }"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1433",
+     "raw": "FindData_Main()"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1420",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "ExcelUploadForm",
+   "method": "btnExcelUpload_Click",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:4188",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnExcelUpload",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Upload",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "\"SSP0022\""
+    },
+    {
+     "param": "#2",
+     "kind": "LITERAL",
+     "arg": "\"Shipment Request(Electrode)\""
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:4200",
+     "raw": "FindData_Request_Detail()"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:4202",
+     "raw": "FindData_Main()"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:4190",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "method": "btnItemId_Click",
+   "asis_ref": "SSP0022_ShipmentRequestElectrode.cs:1762",
+   "trigger": {
+    "kind": "COND",
+    "control": "btnItemId",
+    "input": "txtItemId",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": "Material"
+   },
+   "multi": "true",
+   "div_arg": "sDivision_ID",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "sDivision_ID"
+    },
+    {
+     "param": "_ScmSiteId",
+     "kind": "CONTROL",
+     "arg": "sScmSite"
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "LITERAL",
+     "arg": "sProject"
+    },
+    {
+     "param": "_ItemID",
+     "kind": "CONTROL",
+     "arg": "sItemId"
+    }
+   ],
+   "results": [
+    "item"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1763",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestElectrode.cs:1766",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCM0002_ItembyDivisionPopup": {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+   "title": "Model by DivisionPopup",
+   "conds": [
+    {
+     "name": "txtItemID",
+     "type": "UsrMultiLineEditor",
+     "label": "Model",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:164",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbScmSite",
+     "type": "UsrCheckedList",
+     "label": "Site",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:166",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProject",
+     "type": "UsrMultiLineEditor",
+     "label": "Project",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:165",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME",
+     "order_line": "64",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_project_code",
+      "p_scm_site_id",
+      "p_item_id"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:242",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:384",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_SITE_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_SITE_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "A.SITE_DESCRIPTION",
+     "order_line": "45",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer"
+     ],
+     "method": "GetDivisionbyScmSite",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:398",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:264",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:278",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:302",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:305",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:319",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCM0002_TitleSetForm_Popup": {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "115",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:287",
+     "save": false
+    },
+    {
+     "sp": "SCM0002_SET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_SET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_active_flag",
+      "p_column_name",
+      "p_sort_order_no",
+      "p_sub_total_flag",
+      "p_sort_method_code",
+      "p_user_id",
+      "recv_active_flag",
+      "v_program_id",
+      "v_sheet_name",
+      "v_column_type",
+      "v_active_flag",
+      "v_column_name",
+      "v_sort_order_no",
+      "v_sub_total_flag",
+      "v_sort_method_code",
+      "v_user_id",
+      "v_delimiter",
+      "max_loop_cnt",
+      "mst_loop_cnt",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date"
+     ],
+     "method": "SaveTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:570",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:235",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:253",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:167",
+     "method": "SetFixColumnStatus",
+     "raw": "svSource.Cells[r, c].BackColor = Color.WhiteSmoke;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:254",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:232",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:250",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:676",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:679",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "UserInfoPopup": {
+   "cls": "UserInfoPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SystemMgmt.UIL/UserInfoPopup.cs",
+   "title": "UserInfoPopup",
+   "conds": [
+    {
+     "name": "txtSearch",
+     "type": "UsrTextBox",
+     "label": "User ID(Name)",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "UserInfoPopup.Designer.cs:37",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "UP_FX_GetUserInfoList",
+     "src": "Doc/asisfacts/db/modules/dbo.UP_FX_GetUserInfoList.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "Search",
+      "Language",
+      "SSOUserYN"
+     ],
+     "method": "FindData",
+     "ref": "UserInfoPopup.cs:177",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "UserInfoPopup.cs:188",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "UserInfoPopup.cs:215",
+     "method": "SpdMain_CellClick",
+     "raw": "if (siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == type",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "UserInfoPopup.cs:263",
+     "method": "OkButtonClick",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:264",
+     "method": "OkButtonClick",
+     "raw": "this.Close();",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:287",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:288",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SSP0022_BodItemPopup": {
+   "cls": "SSP0022_BodItemPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0022_BodItemPopup.cs",
+   "title": "Model by DivisionPopup",
+   "conds": [
+    {
+     "name": "txtItemID",
+     "type": "UsrMultiLineEditor",
+     "label": "Model",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SSP0022_BodItemPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SSP0022_BodItemPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SSP0022_BodItemPopup.cs:183",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbFromSite",
+     "type": "UsrCheckedList",
+     "label": "From Site",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SSP0022_BodItemPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SSP0022_BodItemPopup.cs:184",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbToSite",
+     "type": "UsrCheckedList",
+     "label": "To Site",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SSP0022_BodItemPopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SSP0022_BodItemPopup.cs:185",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SSP0022_GET_ITEM_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SSP0022_GET_ITEM_POPUP.sql",
+     "order_known": true,
+     "order_keys": "V.PRIORITY",
+     "order_line": "311",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_from_site_id",
+      "p_to_site_id",
+      "p_item_id",
+      "p_bod_id",
+      "p_incoterms",
+      "p_transport_mode",
+      "P_PLAN_START_YYYYMMDD"
+     ],
+     "method": "FindData",
+     "ref": "SSP0022_BodItemPopup.cs:254",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SSP0022_BodItemPopup.cs:395",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_SITE_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_SITE_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "A.SITE_DESCRIPTION",
+     "order_line": "45",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer"
+     ],
+     "method": "GetDivisionbyScmSite",
+     "ref": "SSP0022_BodItemPopup.cs:409",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SSP0022_BodItemPopup.cs:275",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SSP0022_BodItemPopup.cs:291",
+     "method": "FindData",
+     "raw": "this.Close()",
+     "guard": "if (!string.IsNullOrEmpty(txtItemID.Text)) ▸ if (ds.Tables[0].Rows.Count > 0)"
+    },
+    {
+     "ref": "SSP0022_BodItemPopup.cs:309",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Find: FindData(); break; case ButtonListType.OK: SetItem(); this.Close(); break; case ButtonListType.Close: t",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_BodItemPopup.cs:316",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.OK:"
+    },
+    {
+     "ref": "SSP0022_BodItemPopup.cs:319",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    },
+    {
+     "ref": "SSP0022_BodItemPopup.cs:333",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "factpack"
+  },
+  "SSP0022_ShipmentRequestPopup": {
+   "cls": "SSP0022_ShipmentRequestPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0022_ShipmentRequestPopup.cs",
+   "title": "Shipment Request Insert",
+   "conds": [
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SSP0022_ShipmentRequestPopup.Designer.cs:39",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SSP0022_ShipmentRequestPopup.cs:206",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SSP0022_GET_BOD_ITEM_VALID_CHECK",
+     "src": "Doc/asisfacts/db/modules/dbo.SSP0022_GET_BOD_ITEM_VALID_CHECK.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_bod_id",
+      "p_to_site",
+      "p_item_id"
+     ],
+     "method": "BodItemValidChk",
+     "ref": "SSP0022_ShipmentRequestPopup.cs:770",
+     "save": false
+    },
+    {
+     "sp": "SSP0002_GET_BOD_VALID_CHECK",
+     "src": "Doc/asisfacts/db/modules/dbo.SSP0002_GET_BOD_VALID_CHECK.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_from_site",
+      "p_to_site",
+      "p_incoterms",
+      "p_transport_mode",
+      "p_bod_id"
+     ],
+     "method": "BodValidChk",
+     "ref": "SSP0022_ShipmentRequestPopup.cs:663",
+     "save": false
+    },
+    {
+     "sp": "SSP0022_GET_ITEM_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SSP0022_GET_ITEM_POPUP.sql",
+     "order_known": true,
+     "order_keys": "V.PRIORITY",
+     "order_line": "311",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_from_site_id",
+      "p_to_site_id",
+      "p_item_id",
+      "p_bod_id",
+      "p_incoterms",
+      "p_transport_mode",
+      "P_PLAN_START_YYYYMMDD"
+     ],
+     "method": "FindData",
+     "ref": "SSP0022_ShipmentRequestPopup.cs:362",
+     "save": false
+    },
+    {
+     "sp": "GET_DATE_RANGE_1MONTH",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "GetDayRange",
+     "ref": "SSP0022_ShipmentRequestPopup.cs:1225",
+     "save": false
+    },
+    {
+     "sp": "SSP0022_SAVE_SHIPMENT_REQUEST",
+     "src": "Doc/asisfacts/db/modules/dbo.SSP0022_SAVE_SHIPMENT_REQUEST.sql",
+     "order_known": true,
+     "order_keys": "V.PRIORITY",
+     "order_line": "292",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_active_flag",
+      "p_division_id",
+      "p_company_id",
+      "p_scm_site_id",
+      "p_plant_id",
+      "p_model_id",
+      "p_item_id",
+      "p_from_site",
+      "p_to_site",
+      "p_eta_date",
+      "p_bod_id",
+      "p_qty",
+      "p_incoterms",
+      "p_transport_mode",
+      "p_created_by",
+      "debug_mode",
+      "v_delimiter",
+      "max_loop_cnt",
+      "mst_loop_cnt",
+      "recv_division_id",
+      "v_active_flag",
+      "v_division_id",
+      "v_company_id",
+      "v_plant_id",
+      "v_scm_site_id",
+      "v_model_id",
+      "v_item_id",
+      "v_bod_id",
+      "v_incoterms",
+      "v_transport_mode",
+      "v_from_site",
+      "v_to_site",
+      "v_eta_date",
+      "v_qty",
+      "v_cnt",
+      "v_division_id_temp",
+      "v_new_bod_id_temp",
+      "v_from_site_temp",
+      "v_to_site_temp",
+      "v_new_incoterms_temp"
+     ],
+     "method": "SaveData",
+     "ref": "SSP0022_ShipmentRequestPopup.cs:539",
+     "save": true
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:327",
+     "method": "InsertRow",
+     "raw": "siMain.LockRange3(insCell, siMain.GetColumnIndex(DefColumns.DIVISION_ID), siMain.GetColumnIndex(DefColumns.DIVISION_ID), true)",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:328",
+     "method": "InsertRow",
+     "raw": "siMain.LockRange(insCell, siMain.GetColumnIndex(DefColumns.NICK_NAME), siMain.GetColumnIndex(DefColumns.NICK_NAME), true)",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:329",
+     "method": "InsertRow",
+     "raw": "siMain.LockRange(insCell, siMain.GetColumnIndex(DefColumns.LT), siMain.GetColumnIndex(DefColumns.ETA), true)",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:330",
+     "method": "InsertRow",
+     "raw": "siMain.LockRange3(insCell, siMain.GetColumnIndex(DefColumns.MODEL_ID), siMain.GetColumnIndex(DefColumns.MODEL_ID), true)",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:331",
+     "method": "InsertRow",
+     "raw": "siMain.LockRange3(insCell, siMain.GetColumnIndex(DefColumns.ITEM_ID), siMain.GetColumnIndex(DefColumns.ITEM_ID), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:586",
+     "method": "SaveData",
+     "raw": "if (t.Success) { if (t.DataSet.Tables[0].Rows[0][0].ToString() == \"S\") { MessageHelper.GMessageBox(\"MSG00004\", new object[] { 1 }); //저장결과메시지 DialogResult = Dia",
+     "guard": "try ▸ if (MessageHelper.GMessageBox(\"MSG00012\") == DialogResult.Yes)"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:592",
+     "method": "SaveData",
+     "raw": "DialogResult = DialogResult.OK",
+     "guard": "try ▸ if (MessageHelper.GMessageBox(\"MSG00012\") == DialogResult.Yes) ▸ if (t.Success) ▸ if (t.DataSet.Tables[0].Rows[0]["
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:593",
+     "method": "SaveData",
+     "raw": "this.Close()",
+     "guard": "try ▸ if (MessageHelper.GMessageBox(\"MSG00012\") == DialogResult.Yes) ▸ if (t.Success) ▸ if (t.DataSet.Tables[0].Rows[0]["
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:814",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "if (buttonItem.UserType == ButtonListType.Save) { SaveData(); if (!bSaveCheck) return; DialogResult = DialogResult.OK; } else if (buttonItem.UserType == ButtonL",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:821",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK",
+     "guard": "if (buttonItem.UserType == ButtonListType.Save)"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:823",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "if (buttonItem.UserType == ButtonListType.Cancel) { IsChange = false; this.Close(); }",
+     "guard": "else of (buttonItem.UserType == ButtonListType.Save)"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:826",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "else of (buttonItem.UserType == ButtonListType.Save) ▸ if (buttonItem.UserType == ButtonListType.Cancel)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00324\")",
+    "MessageHelper.GMessageBox(\"MSG00324\")",
+    "MessageHelper.GMessageBox(\"MSG00324\")",
+    "MessageHelper.GMessageBox(\"MSG00323\", new object[] { sConfirmDay })",
+    "MessageHelper.GMessageBox(\"MSG00324\")",
+    "GSCM.App.Core.Text.MessageHelper.GMessageBox(\"MSG00049\", new object[] { \"\" })",
+    "MessageHelper.GMessageBox(\"MSG00012\")",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { 1 })",
+    "MessageHelper.GMessageBox(errorMsg)",
+    "MessageHelper.GMessageBox(\"MSG00324\")",
+    "MessageHelper.GMessageBox(\"MSG00042\")",
+    "MessageHelper.GMessageBox(ex.ToString())"
+   ],
+   "period_use": [
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:1227",
+     "method": "GetDayRange",
+     "raw": "request.Parameters[\"p_from_date\"] = sFromDate",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:202",
+     "method": "InitControls",
+     "raw": "dBaseDate = Convert.ToDateTime(dtTime).AddDays(dDay)",
+     "guard": ""
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:501",
+     "method": "SaveData",
+     "raw": "strShipDate = Convert.ToDateTime(siMain.GetText(0, siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE)).ToString()).ToString(\"yyyy-MM-dd HH:mm:ss.fff\")",
+     "guard": "try ▸ if (DateTime.TryParse(siMain.GetText(0, siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE)).ToString(), out temp) == "
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:1050",
+     "method": "SpdMain_EditChange",
+     "raw": "Convert.ToDateTime(siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE))).ToString(\"yyyy-MM-dd\")",
+     "guard": "if (e.Column == siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE))"
+    },
+    {
+     "ref": "SSP0022_ShipmentRequestPopup.cs:1052",
+     "method": "SpdMain_EditChange",
+     "raw": "Convert.ToDateTime(siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE)).ToString())",
+     "guard": "if (e.Column == siMain.GetColumnIndex(DefColumns.SHIPMENT_DATE))"
+    }
+   ],
+   "from": "factpack"
+  },
+  "ExcelUploadForm": {
+   "cls": "ExcelUploadForm",
+   "in_pack": true,
+   "file": "01.Framework/GSCM.Windows.Forms/UI/ExcelUploadForm.cs",
+   "title": "ExcelUpload",
+   "conds": [],
+   "buttons": [],
+   "sps": [],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "ExcelUploadForm.cs:93",
+     "method": "InitSheet",
+     "raw": "si.LockColumn(0, si.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "ExcelUploadForm.cs:101",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[0].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm.cs:102",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[2].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm.cs:103",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[4].BackColor = Color.LightGray;",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "ExcelUploadForm.cs:205",
+     "method": "OnSave_Click",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "ExcelUploadForm.cs:218",
+     "method": "OnClose_Click",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\");",
+    "if (MessageHelper.GMessageBox(\"MSG00195\") == DialogResult.No)"
+   ],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

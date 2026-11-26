@@ -48,14 +48,14 @@ GROUPS = [
     (r'검사기 미구현\(검증 엔진 확장 대상\)|검사기가 이 대상을 실행하지 못함|검증 엔진이 실행됐으나', '검증 엔진 확장 대상(시나리오·검사기) — 사람 확인 또는 엔진 보강'),
     (r'골든|데이터 원천 차이|DIFF', '조회 결과(A1) — AS-IS dev DB 와 데이터 차이 해석'),
     (r'메타 라벨.*대로 표시됨|명칭 변경이 기준표', '라벨 명칭 변경 — 기준표·메타 결정 확인'),
-    (r'팝업 내부 (그리드 )?컬럼|팝업 내부 조건|M3 시나리오', '팝업 내부(M3) — 팝업 안 동작·연쇄는 팝업 시나리오 필요'),
+    (r'팝업 내부 (그리드 )?컬럼|팝업 내부 조건|M3 시나리오', '팝업 내부(M3) — 팝업 안 동작·CASCADE 는 팝업 시나리오 필요'),
     (r'팝업을 여는 셀|팝업 선택으로 채워', '팝업 선택값 반영(M4)'),
     (r'AS-IS 셀 타입 미식별|기대 미정|기대값 형태를 못 정함|기대값 미식별', 'AS-IS 기대값 미식별 — 원문 확인'),
     (r'InsertButton 은 이 컬럼에 값을 넣지 않음|TO-BE 가 값을 채움', '신규행 기본값 — TO-BE 가 AS-IS 와 다르게 채움'),
     (r'메타 라벨\(SHEET_COLUMNS|명칭 변경', '라벨 명칭 변경 — 기준표·메타 결정 확인'),
-    (r'연쇄 원천 컬럼 해석 불가|연쇄 원천 해석 불가|원천/대상 해석 불가', '연쇄 원천 해석 불가 — AS-IS 분기 수동 확인'),
-    (r'원천 값과 무관하게 후보 동일|후보 변화', '셀 연쇄 후보 — 원천별 차이 없음'),
-    (r'하위 대상 미식별|재요청 여부만', '조회조건 연쇄(C1) — AS-IS 핸들러 없음'),
+    (r'(연쇄|CASCADE) 원천 컬럼 해석 불가|(연쇄|CASCADE) 원천 해석 불가|원천/대상 해석 불가', 'CASCADE 원천 해석 불가 — AS-IS 분기 수동 확인'),
+    (r'원천 값과 무관하게 후보 동일|후보 변화', '셀 CASCADE 후보 — 원천별 차이 없음'),
+    (r'하위 대상 미식별|재요청 여부만', '조회조건 CASCADE(C1) — AS-IS 핸들러 없음'),
     (r'행 값으로 계산 불가|계산 불가 절', '행 조건 잠금(D3) — 지역 변수·상태 플래그 조건'),
     (r'위반 입력 자동 생성 불가|경로 메시지|신규행 시나리오 필요|에디터\) — 수동|TO-BE 메시지 문구 미식별', '업무 검증 메시지(E4) — 위반 시나리오 수동'),
     (r'사유·근거', '제외·해당없음 사유 미기재(X-REASON)'),
@@ -76,6 +76,39 @@ def group_of(ev):
     return '기타'
 
 
+# 11-25 사용자 지시: 질문·선택지에 규칙 번호·판정 코드·내부 열 이름을 쓰지 않는다 → 규칙 사전(detect_rules.csv)의 업무 이름과 화면 위치로 묻는다
+_RULE_NAMES = None
+
+
+def rule_name(rid):
+    """detect_rules.csv 의 규칙 이름(괄호 부연 제외). 사전에 없으면 빈 문자열."""
+    global _RULE_NAMES
+    if _RULE_NAMES is None:
+        _RULE_NAMES = {}
+        for x in rdcsv(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'detect_rules.csv')):
+            _RULE_NAMES[(x.get('rule_id') or '').strip()] = re.sub(r'\s*\(.*?\)\s*$', '', (x.get('name') or '').strip())
+    return _RULE_NAMES.get((rid or '').strip(), '')
+
+
+def question_of(r, group):
+    what = rule_name(r.get('rule_id')) or re.sub(r'\s*[—(].*$', '', group) or '화면 동작'
+    where = (r.get('target') or '').strip()[:50]
+    return f"{where} 의 '{what}' 실측 결과가 AS-IS 와 같은가?" if where else f"'{what}' 실측 결과가 AS-IS 와 같은가?"
+
+
+OPTIONS = ("같다(answer 에 '같다' 또는 P): CheckList 에 정상으로 표시 · "
+           "다르다(answer 에 '다르다' 또는 F): 오류로 표시하고 보완 대상에 올림 · "
+           "해당없음(answer 에 '해당없음' 또는 N): reason 에 사유를 적으면 제외 · "
+           "by 에 답한 사람 이름을 적어야 반영 · AI 가 같다·해당없음으로 답하면 근거 파일 위치와 그 줄 원문을 함께 적어야 반영")
+ANSWER_WORDS = {'같다': 'P', '다르다': 'F', '해당없음': 'N', 'PASS': 'P', 'FAIL': 'F', 'NA': 'N'}
+
+
+def answer_code(v):
+    """answer 칸 값 → P/F/N. 업무 단어(같다·다르다·해당없음)와 기존 코드 둘 다 받는다."""
+    v = (v or '').strip()
+    return ANSWER_WORDS.get(v, ANSWER_WORDS.get(v.upper(), v.upper()))
+
+
 def main():
     a = sys.argv[1:]
     if not a: print(__doc__); return 2
@@ -87,7 +120,7 @@ def main():
     if apply:
         n = 0; skipped = collections.Counter(); by = {r['row_id']: r for r in led}
         for d in prev.values():
-            ans = (d.get('answer') or '').strip().upper()
+            ans = answer_code(d.get('answer'))
             if ans not in ('P', 'F', 'N'): continue
             r = by.get(d['row_id'])
             if not r: continue
@@ -116,7 +149,7 @@ def main():
         if r.get('result') not in ('판정필요', 'WARN'): continue
         g = group_of(r.get('evidence', '')); pv = prev.get(r['row_id'], {})
         out.append({'dec_id': '', 'row_id': r['row_id'], 'rule_id': r['rule_id'], 'source': r['source'], 'target': r['target'][:80], 'group': g, 'measured': (r.get('evidence') or '')[:400],
-                    'question': f"{r['rule_id']} {r['target'][:50]} — 실측대로가 AS-IS 와 같은가?", 'options': 'P=같다(PASS) · F=결함(FAIL) · N=해당없음(사유) · by=답한 사람(필수) · AI 가 P/N 이면 evidence_ref(경로:줄)+evidence_quote(원문 인용) 필수',
+                    'question': question_of(r, g), 'options': OPTIONS,
                     'answer': pv.get('answer', ''), 'reason': pv.get('reason', ''), 'by': pv.get('by', ''), 'evidence_ref': pv.get('evidence_ref', ''), 'evidence_quote': pv.get('evidence_quote', '')})
     out.sort(key=lambda x: (x['group'], x['rule_id'], x['target']))
     for i, x in enumerate(out, 1): x['dec_id'] = f'DC-{mid}-{i:03d}'
@@ -124,18 +157,19 @@ def main():
         w = csv.DictWriter(fp, fieldnames=COLS); w.writeheader(); [w.writerow(x) for x in out]
     g = collections.Counter(x['group'] for x in out)
     L = [f'# 결정표 — {mid} · {datetime.datetime.now():%Y-%m-%d %H:%M}', '',
-         f'> 기계가 PASS/FAIL 을 정하지 못한 {len(out)}건. 각 행의 **실측**을 보고 answer 에 P(같다)/F(결함)/N(해당없음·사유) 를 적은 뒤 `python tools/Harness/verify/decisions.py {mid} --apply` → 원장에 수동 판정으로 반영(재실행이 덮지 않음).', '',
-         '> **근거 등급(2026-10-26)**: `by` 열에 답한 사람을 적는다(비우면 반영 안 함). AI(claude 등)가 답한 P·N 은 `evidence_ref`(경로:줄) + `evidence_quote`(그 줄 원문 인용)가 기계로 확인될 때만 반영하고, 확인되지 않으면 판정필요로 남는다. AI 의 F 는 보수적으로 반영한다.', '','',
+         f'> 자동으로 정상·오류를 정하지 못한 {len(out)}건. 각 행의 실측을 보고 answer 에 답을 적은 뒤 `python tools/Harness/verify/decisions.py {mid} --apply` 를 실행하면 CheckList 판정에 반영한다(다시 검사해도 유지).', '',
+         '> 같다: CheckList 에 정상으로 표시. 다르다: 오류로 표시하고 보완 대상에 올림. 해당없음: reason 에 사유를 적으면 제외.', '',
+         '> by 에 답한 사람 이름을 적어야 반영한다. AI 가 같다·해당없음으로 답하면 근거 파일 위치와 그 줄 원문을 함께 적어야 반영하고, 없으면 판정필요로 남는다. AI 가 다르다로 답하면 그대로 반영한다.', '', '',
          '| 그룹 | 건수 | 어떻게 결정하나 |', '|---|---|---|']
-    HOW = {'팝업 내부(M3) — 팝업 안 동작·연쇄는 팝업 시나리오 필요': '팝업을 열어 해당 컬럼·연쇄를 직접 확인(또는 M3 시나리오 추가 요청)', '팝업 선택값 반영(M4)': '팝업에서 행을 고른 뒤 셀이 채워지는지 확인',
-           'AS-IS 기대값 미식별 — 원문 확인': 'AS-IS .cs 원문에서 기대(초기값·셀타입)를 읽어 실측과 비교', '신규행 기본값 — TO-BE 가 AS-IS 와 다르게 채움': 'TO-BE 가 넣는 값이 연쇄·메타 기본값인지(의도) 아닌지',
+    HOW = {'팝업 내부(M3) — 팝업 안 동작·CASCADE 는 팝업 시나리오 필요': '팝업을 열어 해당 컬럼·CASCADE 를 직접 확인(또는 M3 시나리오 추가 요청)', '팝업 선택값 반영(M4)': '팝업에서 행을 고른 뒤 셀이 채워지는지 확인',
+           'AS-IS 기대값 미식별 — 원문 확인': 'AS-IS .cs 원문에서 기대(초기값·셀타입)를 읽어 실측과 비교', '신규행 기본값 — TO-BE 가 AS-IS 와 다르게 채움': 'TO-BE 가 넣는 값이 CASCADE·메타 기본값인지(의도) 아닌지',
            '라벨 명칭 변경 — 기준표·메타 결정 확인': '기준표(search_cond)·SHEET_COLUMNS 라벨 결정이면 P, 오타·미반영이면 F', '제외·해당없음 사유 미기재(X-REASON)': '대조표 사유 열에 근거(룰·지시·원문·이동 위치) 기입 후 P',
            '행 조건 잠금(D3) — 지역 변수·상태 플래그 조건': '해당 조건의 행(예 To Site 가 PLANT) 을 골라 편집 가능 여부 확인', '업무 검증 메시지(E4) — 위반 시나리오 수동': '위반 값을 넣고 Save 해 메시지 확인(저장은 취소)',
            'SP 호출 경로 — 조회 외 경로(셀 이벤트·팝업·저장)': '해당 동작(셀 변경·팝업 조회·저장)에서 SP 호출·오류 확인'}
     for k, v in g.most_common(): L.append(f'| {k} | {v} | {HOW.get(k, "실측과 AS-IS 원문 대조")} |')
     for k, _ in g.most_common():
-        L += ['', f'## {k}', '', '| ID | 규칙 | 대상 | 실측 | answer |', '|---|---|---|---|---|']
-        L += [f"| {x['dec_id']} | {x['rule_id']} | {x['target'][:40].replace('|', '/')} | {x['measured'][:180].replace('|', '/')} | {x['answer']} |" for x in out if x['group'] == k]
+        L += ['', f'## {k}', '', '| ID | 질문 | 실측 | answer |', '|---|---|---|---|']
+        L += [f"| {x['dec_id']} | {x['question'].replace('|', '/')} | {x['measured'][:180].replace('|', '/')} | {x['answer']} |" for x in out if x['group'] == k]
     open(os.path.join(od, 'decisions.md'), 'w', encoding='utf-8').write('\n'.join(L) + '\n')
     print(f'{mid}: 결정표 {len(out)}건 — ' + ' · '.join(f'{k} {v}' for k, v in g.most_common(8)) + f' → Doc/verify/{mid}/decisions.md')
     return 0

@@ -14,10 +14,12 @@ $cfg = Join-Path $here "asisfacts.json"
 $conf = Get-Content $cfg -Raw -Encoding UTF8 | ConvertFrom-Json
 $out = $conf.outDir
 $log = Join-Path $here "run-log.txt"
-"[$(Get-Date -Format s)] start" | Out-File $log -Encoding utf8
+# 2026-11-25: run-log.txt 를 다른 프로세스가 열어 두면(user-mapped section) 실행 전체가 멈췄다 → 임시 폴더 로그로 바꿔 계속
+try { "[$(Get-Date -Format s)] start" | Out-File $log -Encoding utf8 -ErrorAction Stop }
+catch { $log = Join-Path $env:TEMP ("asisfacts_run-log_" + (Get-Date -Format yyyyMMdd_HHmmss) + ".txt"); "[$(Get-Date -Format s)] start (run-log.txt 잠김 → $log)" | Out-File $log -Encoding utf8; Write-Host "run-log.txt 잠김 → $log" }
 
 if (-not $SkipBuild) {
-  dotnet build -c Release -o $bin 2>&1 | Tee-Object -FilePath $log -Append | Select-String -Pattern "error|Build succeeded"
+  dotnet build -c Release -o $bin -p:UseSharedCompilation=false 2>&1 | Tee-Object -FilePath $log -Append | Select-String -Pattern "error|Build succeeded"
   if ($LASTEXITCODE -ne 0) { Write-Host "빌드 실패 - $log 확인" -ForegroundColor Red; exit 1 }
 }
 $exe = Join-Path $bin "AsisFacts.dll"

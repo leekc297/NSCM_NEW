@@ -235,13 +235,17 @@ const CSS = `
 :root{--acc:var(--fg);--fg:var(--vscode-sideBar-foreground,var(--vscode-foreground));--dim:var(--vscode-descriptionForeground,#8b8b8b);
 --bg:var(--vscode-sideBar-background,var(--vscode-editor-background));--line:var(--vscode-widget-border,var(--vscode-sideBarSectionHeader-border,rgba(128,128,128,.28)));
 --card:color-mix(in srgb,var(--fg) 5%,transparent);--tint:color-mix(in srgb,var(--acc) 13%,transparent);--tint2:color-mix(in srgb,var(--acc) 24%,transparent);
---ok:var(--vscode-testing-iconPassed,#3fb950);--bad:var(--vscode-testing-iconFailed,#f85149);--warn:var(--vscode-testing-iconQueued,#d29922)}
+--ok:var(--vscode-testing-iconPassed,#3fb950);--bad:var(--vscode-testing-iconFailed,#f85149);--warn:var(--vscode-testing-iconQueued,#d29922);
+--g1:color-mix(in srgb,var(--fg) 5%,transparent);--g2:color-mix(in srgb,var(--fg) 9%,transparent);--gb:color-mix(in srgb,var(--fg) 14%,transparent)}
+/* 2026-11-26 R181: VMO 와 같은 글래스모피즘 양식(--g1 · --gb · .glass) · 묶음 상자(.ai) · 머리줄(.ah · #hd) */
+.glass{background:var(--g1);border:1px solid var(--gb);border-radius:12px;-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 22px rgba(0,0,0,.16)}
+@media (prefers-reduced-transparency:reduce){.glass,.ah{-webkit-backdrop-filter:none;backdrop-filter:none}}
 *{box-sizing:border-box}html,body{height:100%}
 body{margin:0;padding:0;display:flex;flex-direction:column;font:12px/1.35 var(--vscode-font-family);color:var(--fg);background:var(--bg);overflow:hidden}
 svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;display:block;flex:none}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit}
 button:focus-visible,input:focus-visible{outline:1px solid var(--vscode-focusBorder,var(--acc));outline-offset:1px}
-#hd{display:flex;align-items:center;gap:6px;padding:4px 6px 4px}
+#hd{display:flex;align-items:center;gap:6px;padding:4px 6px 4px;margin:4px 6px 6px}
 .ht{flex:1;min-width:0}#crumb{font-size:10.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:14px}
 h1{margin:0;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.2;text-wrap:balance;overflow-wrap:anywhere}
 #cnt{font-size:10.5px;color:var(--dim);font-variant-numeric:tabular-nums;padding-bottom:3px;white-space:nowrap}
@@ -252,8 +256,9 @@ h1{margin:0;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.2
 #q::placeholder{color:var(--dim)}#q:focus{border-color:var(--vscode-focusBorder,var(--acc));outline:0}
 .si{position:absolute;left:9px;top:6px;font-size:14px;color:var(--dim);pointer-events:none}
 #acc{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:0 0 14px}
-.ai{border-top:1px solid var(--line)}.ai:last-child{border-bottom:1px solid var(--line)}
-.ah{display:flex;align-items:center;gap:8px;width:100%;height:34px;padding:0 8px;position:sticky;top:0;z-index:3;background:var(--bg);color:var(--fg)}
+.ai{margin:6px 6px 0}.ai.glass{box-shadow:0 3px 12px rgba(0,0,0,.12)}
+.ah{display:flex;align-items:center;gap:8px;width:100%;height:34px;padding:0 8px;position:sticky;top:0;z-index:3;border-radius:11px;background:color-mix(in srgb,var(--bg) 78%,transparent);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);color:var(--fg)}
+.ai.on>.ah{border-radius:11px 11px 0 0;border-bottom:1px solid var(--gb)}.ah::after{border-radius:inherit}
 .ah::after{content:"";position:absolute;inset:0;pointer-events:none;background:transparent}.ah:hover::after{background:var(--card)}.ai.on>.ah::after{background:var(--tint)}
 .ah .aic{width:22px;height:22px;border-radius:7px;background:var(--tint);color:var(--acc);display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
 .ai.on>.ah .aic{background:var(--tint2);color:var(--fg)}
@@ -379,7 +384,7 @@ function client() {
     $('sw').hidden = false; let onItem = null;
     for (const s of m.sections) {
       const on = s.key === m.tab && !st.closed;
-      const item = el('section', 'ai' + (on ? ' on' : '')); const h = el('button', 'ah'); h.setAttribute('aria-expanded', on ? 'true' : 'false');
+      const item = el('section', 'ai glass' + (on ? ' on' : '')); const h = el('button', 'ah'); h.setAttribute('aria-expanded', on ? 'true' : 'false');
       const ic = el('span', 'aic'); ic.appendChild(svg(s.icon)); h.appendChild(ic);
       h.appendChild(el('span', 'at', s.title)); if (s.count) h.appendChild(el('span', 'ac', s.count));
       const cv = el('span', 'acv'); cv.appendChild(svg('chevron')); h.appendChild(cv);
@@ -389,7 +394,7 @@ function client() {
       if (on) {
         onItem = item; const ap = el('div', 'ap');
         if (m.stack.length) {
-          const hd = el('div'); hd.id = 'hd'; const back = el('button', 'ib'); back.id = 'back'; back.appendChild(svg('back')); back.title = S.back; back.setAttribute('aria-label', S.back);
+          const hd = el('div', 'glass'); hd.id = 'hd'; const back = el('button', 'ib'); back.id = 'back'; back.appendChild(svg('back')); back.title = S.back; back.setAttribute('aria-label', S.back);
           back.onclick = () => { st.stack = st.stack.slice(0, -1); $('q').value = ''; ask(); };
           const ht = el('div', 'ht'); const cr = el('div', '', m.crumbs.slice(0, -1).join(' › ')); cr.id = 'crumb'; const t = el('h1', '', m.crumbs[m.crumbs.length - 1]); t.id = 'title'; ht.appendChild(cr); ht.appendChild(t);
           hd.appendChild(back); hd.appendChild(ht); ap.appendChild(hd);

@@ -1,0 +1,111 @@
+{
+  "id": "20261124021155_SELF",
+  "at": "2026-11-24T02:11:55+09:00",
+  "ms": 1795453915133,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/judge.py|checklist근거문장에하위연쇄없음이들어감n셀입력방식연쇄후보는편집",
+  "title": "사용자 지시 R90 같은 문제: tools/Harness/verify/judge.py:2431 CheckList 근거 문장에 '하위 연쇄 없음'이 들어감. :3068 '셀 입력 방식·연쇄 후보는 편집 칸에만 해당'도 같은 원인",
+  "evidence": "규칙 R90 \"CheckList 분류어와 설명은 현업에서 부르는 이름(CASCADE, GRID COLUMN 등)을 쓰고 번역어를 만들지 않음\" (원래 지시 2026-11-17 14:25 \"연쇄는 빼고 CASCADE로 해주세요.\") · tools/Harness/verify/judge.py:2431 r['evidence'] = (f\"AS-IS 핸들러 {hn} 본문 비어 있음({loc}) — 하위 연쇄 없음 · \" + r['evidence'])[:1500]",
+  "targets": [
+    "tools/Harness/verify/judge.py"
+  ],
+  "before_after": "evidence f-string 두 곳(:2431, :3068)의 '연쇄'를 'CASCADE'로 바꿈. :2491 조건문의 '연쇄 프로브 불가' 매칭은 기존 증거 문장과 맞춰야 하므로 옛 문구와 새 문구를 같이 받게 둠",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/judge.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T15:41:25+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T15:45:37+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1541"
+    },
+    {
+      "at": "2026-11-25T15:45:41+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T15:58:33+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T15:58:33+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js · 반영 전 2026-11-25T06:46:00Z 'ALL OK 파일 86/86 PASS 1406 FAIL 0' → 반영 뒤 2026-11-25T06:50:10Z 'ALL OK 파일 86/86 PASS 1406 FAIL 0'. Grep 결과 judge.py:2660 '하위 CASCADE 없음', :3318 '셀 입력 방식·CASCADE 후보는 편집 칸에만 해당', :2720 '연쇄 프로브 불가' or 'CASCADE 프로브 불가' · 변경 7개 파일 · 대상 목록 밖 변경 6개: tools/Harness/gate_baseline.tsv, Doc/verify/SSP0020/applied/SSP_MST_DELEGATE_slash_deleted_20261125_155330.csv, _artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/10_SELECT_SLASH.sql, _artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/20_BACKUP_DELETE_SLASH.sql, _artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/90_VERIFY.sql, _artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/99_ROLLBACK.sql",
+      "log": ".vibe\\logs\\2026-11-25T15-45-42_claude_orch.log",
+      "sec": 528,
+      "costUsd": 0.6621227000000001,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/judge.py",
+        "Doc/verify/SSP0020/applied/SSP_MST_DELEGATE_slash_deleted_20261125_155330.csv",
+        "_artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/10_SELECT_SLASH.sql",
+        "_artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/20_BACKUP_DELETE_SLASH.sql",
+        "_artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/SSP0020_CLOUD_DATA_SLASH_20261125_1555/99_ROLLBACK.sql"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 분류어와 설명은 현업에서 부르는 이름(CASCADE, GRID COLUMN 등)을 쓰고 번역어를 만들지 않음 규칙을 tools/Harness/verify/judge.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R90|tools/Harness/verify/judge.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795588884894,
+  "autoFp": "50f739b722",
+  "applyStartMs": 1795589141824,
+  "verifyJudge": {
+    "at": "2026-11-25T15:54:34+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1541",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795589913224,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 실행. 반영 전 ALL OK 파일 86/86 PASS 1406 FAIL 0 (239.4s) → 반영 뒤 ALL OK 파일 86/86 PASS 1406 FAIL 0 (246.7s). 웹뷰 파일 변경 없음, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/judge.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js · 반영 전 2026-11-25T06:46:00Z 'ALL OK 파일 86/86 PASS 1406 FAIL 0' → 반영 뒤 2026-11-25T06:50:10Z 'ALL OK 파일 86/86 PASS 1406 FAIL 0'. Grep 결과 judge.py:2660 '하위 CASCADE 없음', :3318 '셀 입력 방식·CASCADE 후보는 편집 칸에만 해당', :2720 '연쇄 프로브 불가' or 'CASCADE 프로브 불가'",
+    "note": "개선안 줄 번호(:2431, :3068, :2491)가 현재 파일과 달라 문구로 위치를 찾음(2660, 3318, 2720). '연쇄 프로브 불가' 문구를 만드는 곳은 judge.py 에서 찾지 못했고 범위 밖이라 더 찾지 않음, 추가 확인 후보. 백업, 설치 폴더, CHANGELOG 는 손대지 않음"
+  },
+  "snap": "prop_20261124021155_SELF"
+}

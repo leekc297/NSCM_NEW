@@ -15,6 +15,7 @@ import { computeDrillToggles } from '../utils/shipment-plan-fg.drilldown';
 import { computeIsEditable, dynColKindOf, isMainCellEditable, type MainEditContext } from '../utils/shipment-plan-fg.editLock';
 import { buildFixedCellSet, type FixedCellSet, isCellFixed } from '../utils/shipment-plan-fg.fix';
 import { type HeaderKey, ShipmentPlanFgHeaderMergeManager } from '../utils/shipment-plan-fg.headerMerge';
+import { canOpenBodPopup } from '../utils/shipment-plan-fg.insert';
 
 export interface SpreadTitleRow {
   COLUMN_NAME?: string;
@@ -45,9 +46,13 @@ interface Props {
   planType: string;
   planSeq: string;
   onFocus: () => void;
+  onBodCellClick?: (row: MainRow) => void; // BOD Master 팝업 열기(TRANSPORT_MODE/FROM_SITE_NAME 셀 클릭)
 }
 
 const HEADER_TOTAL_HEIGHT = 48;
+
+// 헤더 Bold 대상(AS-IS .cs:666-667 — From Site·Trans Mode 컬럼 헤더만 Bold).
+const BOLD_HEADER_BINDINGS = new Set(['FROM_SITE_NAME', 'TRANSPORT_MODE']);
 
 const s = (v: unknown): string => (typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '');
 
@@ -70,6 +75,7 @@ export const ShipmentPlanFgGrid = ({
   planType,
   planSeq,
   onFocus,
+  onBodCellClick,
 }: Props) => {
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;
@@ -229,6 +235,17 @@ export const ShipmentPlanFgGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dynColMetas, bucketType, chkSum]);
 
+  // 정수 입력제한 — AS-IS 버킷컬럼 SetReNumerCellType(cs:905, DecimalPlaces=0). 편집 가능한 행은
+  //   SHIP_PLAN_AMEND 뿐이라 ENERGY 행의 3자리(표시 전용 SetCellType cs:4143)와 충돌하지 않는다.
+  //   동적 컬럼 config 에 integerOnly 를 실으면 wijmo Column 생성이 깨지므로 numberRules prop 으로 건다.
+  const numberRules = useMemo(() => {
+    const rules: Record<string, { integerOnly: true }> = {};
+    dynColMetas.forEach(m => {
+      rules[m.binding] = { integerOnly: true };
+    });
+    return rules;
+  }, [dynColMetas]);
+
   // Fix 정보(O_RC3) — 행(KEY_IDX+FROM_SITE+INCOTERMS+BOD_ID) × 일자 단위 셀 판정(design 03 §2.5, AS-IS
   //   Set_FixCellColor .cs:1655-1731). Weekly 시 W_ 셀은 Fix된 일자가 속한 주를 weekOrMonthStart 로 역추적한다.
   //   calendar SP 가 주 시작일을 채우지 않으면(확인 필요) W_ 판정 집합은 비어 D_ 셀만 칠해진다(안전 degrade).
@@ -238,10 +255,13 @@ export const ShipmentPlanFgGrid = ({
 
   // Plan 전체 편집가능 게이트(AS-IS GetIsEditable, design 03 §3.1 R-K 상위 게이트) — SHIP_PLAN_AMEND
   //   행이라도 더 나중 단계 Plan(PR→MA→SE→FN)이 이미 생성돼 있으면 전체 잠금(2026-10-21 추가 구현).
-  const isEditable = useMemo(
-    () => computeIsEditable(planStatusRows, planType, planSeq),
-    [planStatusRows, planType, planSeq]
-  );
+  //   O_RC2 가 비면(Daily 조회) AS-IS cs:1568 처럼 판정값을 갱신하지 않고 직전 값을 유지한다 —
+  //   초기값은 AS-IS _IsEditable 기본값 "N"(cs:287)이라 처음부터 Daily 로 조회하면 전체 잠금.
+  const isEditableRef = useRef(false);
+  const isEditable = useMemo(() => {
+    if (planStatusRows.length > 0) isEditableRef.current = computeIsEditable(planStatusRows, planType, planSeq);
+    return isEditableRef.current;
+  }, [planStatusRows, planType, planSeq]);
 
   const editCtxRef = useRef<MainEditContext>({
     bucketType,
@@ -327,6 +347,9 @@ export const ShipmentPlanFgGrid = ({
       const binding = e.panel?.columns?.[e.col]?.binding ?? '';
       // 주말 헤더 색 — 일자(leaf) 행만. 월/주 그룹 행도 leaf binding 을 돌려줘 구분하지 않으면 그룹 블록 전체가 물든다.
       if (e.panel?.cellType === CellType.ColumnHeader) {
+        // From Site·Trans Mode 헤더 Bold(AS-IS .cs:666-667). 공통 CSS 의 font-weight:400 !important 를 넘으려면
+        //   inline !important 가 필요하다(자매 화면 ShipmentPlanSemiGrid 동일).
+        if (BOLD_HEADER_BINDINGS.has(binding)) e.cell.style.setProperty('font-weight', 'bold', 'important');
         if (e.row !== e.panel.rows.length - 1) return;
         const weekend = weekendByBinding.get(binding);
         if (weekend) e.cell.style.color = WEEKEND_HEADER_COLOR[weekend];
@@ -384,6 +407,8 @@ export const ShipmentPlanFgGrid = ({
   //   AS-IS 는 클릭한 헤더 셀 텍스트가 'SUM' 일 때만 동작하므로 대/소분류 행 클릭은 무시한다.
   //   chkAll 가드(.cs:3771)는 TO-BE 가 chkAll 을 항상 true 로 고정해 구현하지 않는다.
   const drillVisRef = useRef<Map<string, boolean>>(new Map());
+  const onBodCellClickRef = useRef(onBodCellClick);
+  onBodCellClickRef.current = onBodCellClick;
 
   useEffect(() => {
     drillVisRef.current.clear();
@@ -423,10 +448,25 @@ export const ShipmentPlanFgGrid = ({
     };
     g.hostElement.addEventListener('dblclick', dblClickHandler);
 
+    // TRANSPORT_MODE / FROM_SITE_NAME 셀 클릭 -> BOD Master 팝업(AS-IS SpdMain_CellClick .cs:1185-1209).
+    //   Plan 편집가능 + Bucket != Monthly 일 때만. 시트 잠금(FN/TE·최신 SEQ 아님)은 부모가 본다.
+    const clickHandler = (ev: MouseEvent) => {
+      const ht = g.hitTest(ev);
+      if (ht.cellType !== CellType.Cell) return;
+      const binding = g.columns[ht.col]?.binding ?? '';
+      const row = g.rows[ht.row]?.dataItem as MainRow | undefined;
+      if (!row || !onBodCellClickRef.current) return;
+      if (!editCtxRef.current.isEditable || editCtxRef.current.bucketType === String(BUCKET_TYPE.MONTHLY)) return;
+      if (!canOpenBodPopup(row as Record<string, unknown>, binding)) return;
+      onBodCellClickRef.current(row);
+    };
+    g.hostElement.addEventListener('click', clickHandler);
+
     return () => {
       try {
         g.updatedLayout?.removeHandler(applyDrill);
         g.hostElement?.removeEventListener('dblclick', dblClickHandler);
+        g.hostElement?.removeEventListener('click', clickHandler);
       } catch {
         /* unmount race */
       }
@@ -493,6 +533,7 @@ export const ShipmentPlanFgGrid = ({
       itemsSource={rows as unknown as WijmoRowItem[]}
       staticColumns={staticColumns}
       dynamicColumns={dynamicColumns as unknown as FlexGridColumnConfig[]}
+      numberRules={numberRules}
       allowMerging={AllowMerging.All}
       gotFocus={onFocus}
     />

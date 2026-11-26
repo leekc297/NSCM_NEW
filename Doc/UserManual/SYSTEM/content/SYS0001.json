@@ -1,0 +1,78 @@
+{
+ "definition": "화면 라벨과 메시지의 Message ID 별 한국어, 영어, 중국어 문구를 등록하고 관리하는 화면",
+ "overview": [
+  "화면 라벨(LBL)과 안내 메시지(MSG) 문구를 Message ID 별로 Korean, English, Chinese 로 등록하는 관리자 화면임",
+  "위쪽 조회 조건과 Message 그리드 1개로 구성됨",
+  "Type, Message 로 조회 → 문구 수정 또는 Insert 로 행 추가 → Save 순서로 작업함",
+  "등록한 Message ID 는 각 화면 라벨, 메시지 문구로 쓰임(예: LBL00007 = Active)"
+ ],
+ "pages": [
+  {
+   "title": "Message",
+   "keyPoint": "문구를 바꾸면 그 Message ID 를 쓰는 화면 라벨과 메시지 문구가 바뀜. 저장 전 Message ID 와 Type 을 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.135,
+     "y": 0.14
+    },
+    {
+     "no": 2,
+     "x": 0.606,
+     "y": 0.193
+    },
+    {
+     "no": 3,
+     "x": 0.166,
+     "y": 0.193
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Type: 공통 코드 MessageType 목록에서 고름. 처음 값 ALL",
+      "Message: 찾을 문구 입력. 처음 값 빈칸",
+      "Active: ALL, Y, N 중 선택. 처음 값 Y"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8): 그리드에 새 행 추가. Delete(F9): 고른 행 삭제 표시. Save(F7): 추가, 수정, 삭제분 저장",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Message 그리드",
+     "lines": [
+      "제목 위에 조회 건수 표시(캡처 1,730건)",
+      "Message ID: 라벨은 LBL, 메시지는 MSG 로 시작하는 번호(예: LBL00001)",
+      "Korean: 필수(제목 앞 빨간 점). English, Chinese 와 함께 노란 칸에 언어별 문구 입력",
+      "Type: 필수. Label 등 MessageType 값을 고름",
+      "Active: 필수. Y 또는 N",
+      "Created By, Creation Date, Last Updated By, Last Update Date: 등록, 수정 이력. 입력 불가"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0001",
+ "uiName": "Message",
+ "menuPath": "SYSTEM> System> Message",
+ "captures": [
+  "captures/SYS0001.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0001/"
+ ],
+ "buttons": [
+  "msgMgmt:DELETE",
+  "msgMgmt:INSERT",
+  "msgMgmt:SAVE",
+  "msgMgmt:SEARCH"
+ ]
+}

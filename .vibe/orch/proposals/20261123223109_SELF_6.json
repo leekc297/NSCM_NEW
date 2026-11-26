@@ -1,0 +1,115 @@
+{
+  "id": "20261123223109_SELF_6",
+  "at": "2026-11-23T22:31:09+09:00",
+  "ms": 1795440669905,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|vmo상단탭n개n행overvieweventsfixeshealth",
+  "title": "사용자 지시 R55 같은 문제: tools/VibeManager/orchestra.js:463 VMO 상단 탭 8개(463~470행: Overview, Events, Fixes, Health, History, Agent, Dictionary, Logs)의 ",
+  "evidence": "규칙 R55 \"VM, VMW, VMO 화면의 메뉴, 모드, 단추 이름은 VM 언어 설정을 따르고 한글 설정에서 영문 고정 문구를 보이지 않음\" (원래 지시 2026-11-11 20:43 \"현재 설정이 한글인데 메뉴가 영문으로 나옵니다... 한글일때는 한글로 나오도록 다시 변경해주세요. 영문으로 변경하면 영문메뉴 나오도록 할게요.\") · tools/VibeManager/orchestra.js:463 <button class=\"tab\" data-t=\"board\" title=\"${T('상황판', 'Overview')}\">Overview</button>",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "탭 글자를 T('상황판','Overview') 처럼 언어 사전을 거치게 바꿈. 8개 탭 전부 적용함",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T00:25:39+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T00:29:27+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0025"
+    },
+    {
+      "at": "2026-11-25T00:29:30+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T00:41:45+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T00:41:45+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-25 00:33:42 반영 전: node --check 오류 0, run_all ALL OK 83/83 PASS 1349 FAIL 0, t_webview_syntax ALL PASS(19) → 2026-11-25 00:37:47 반영 뒤: node --check 오류 0, run_all ALL OK 83/83 PASS 1349 FAIL 0, t_webview_syntax ALL PASS(19) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T00-29-31_claude_orch.log",
+      "sec": 509,
+      "costUsd": 0.6688803999999999,
+      "files": [
+        "tools/VibeManager/orchestra.js"
+      ]
+    },
+    {
+      "at": "2026-11-25T03:24:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T03:23:43+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM, VMW, VMO 화면의 메뉴, 모드, 단추 이름은 VM 언어 설정을 따르고 한글 설정에서 영문 고정 문구를 보이지 않음 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R55|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795533938777,
+  "autoFp": "d02264b751",
+  "applyStartMs": 1795534170011,
+  "verifyJudge": {
+    "at": "2026-11-25T00:38:03+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0025",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795534905361,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js: 반영 전·뒤 출력 없음, 구문 오류 0 · node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 83/83 PASS 1349 FAIL 0' → 반영 뒤 'ALL OK 파일 83/83 PASS 1349 FAIL 0'(at 2026-11-24T15:33:59Z) · node tools/VibeManager/test/t_webview_syntax.js: 반영 전 19 PASS ALL PASS → 반영 뒤 19 PASS ALL PASS, 탭 순서 board,inc,prop,self,hist,agent,dict,log 유지"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "2026-11-25 00:33:42 반영 전: node --check 오류 0, run_all ALL OK 83/83 PASS 1349 FAIL 0, t_webview_syntax ALL PASS(19) → 2026-11-25 00:37:47 반영 뒤: node --check 오류 0, run_all ALL OK 83/83 PASS 1349 FAIL 0, t_webview_syntax ALL PASS(19)",
+    "note": "orchestra.js 463~470행 탭 8개 표시 글자를 T('상황판','Overview'), T('사건','Events'), T('개선안','Fixes'), T('자가진단','Health'), T('작업 이력','History'), T('에이전트','Agent'), T('사전','Dictionary'), T('로그','Logs') 로 바꿈. title·건수 chip·BE/FE 점 유지. 탭 글자를 읽는 코드 없음(tools/VibeManager *.js 검색). 남은 확인: 창 다시 로드 뒤 한글·영문 화면 육안 확인(미실행)"
+  },
+  "snap": "prop_20261123223109_SELF_6",
+  "effectiveMs": 1795544623686,
+  "effectiveAt": "2026-11-25T03:23:43+09:00"
+}

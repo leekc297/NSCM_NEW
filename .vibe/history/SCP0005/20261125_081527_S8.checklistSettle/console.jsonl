@@ -1,0 +1,520 @@
+{"t":1795562127421,"m":{"type":"out","stream":"task","text":"▶ 미검증 해소 확인 — 🧪 보완 뒤 처리 대상 행의 규칙만 다시 측정(run_verify --only, 전체로 넓히지 않음) → 재분류 · 잴 수 없으면 반복 끝 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005 --settle --no-docs\n","cls":"cmd"}}
+{"t":1795562128152,"m":{"type":"out","stream":"task","text":"[작업 1/2] 해소 확인 재측정(처리 대상 행의 규칙만 · 전체로 넓히지 않음)\n","cls":""}}
+{"t":1795562128152,"m":{"type":"out","stream":"task","text":"[INFO] 처리 대상 12행 · 규칙 8개 · 함께 돌 단계 E2E 4종: A4,A6,F1,F4,G5,H2,K3,M1 · E2E 4종 authcrud,crud · 사실 검토 포함\n","cls":""}}
+{"t":1795562128153,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SCP0005 --only A4,A6,F1,F4,G5,H2,K3,M1 (VERIFY_DELTA_STAGES=suite)\n","cls":""}}
+{"t":1795562171593,"m":{"type":"out","stream":"task","text":"[selfcheck] full · 43.7초 · PY_COMPILE 0(신규 0) · PY_UNDEF 0(신규 0) · CTRL_CHARS 0(신규 0) · JS_SYNTAX 0(신규 0) · SPEC_SIZE 0(신규 0) · TSC 0(신규 0) · SELFTEST_JS 0(신규 0) · SELFTEST_PY 0(신규 0) · RULE_REGISTRY 0(신규 0) · selftest JS 40개·PY 66개 실행(DB 필요 3개 미실행)\n","cls":""}}
+{"t":1795562171593,"m":{"type":"out","stream":"task","text":"[selfcheck] PASS → Doc/verify/_engine_selfcheck.json\n","cls":""}}
+{"t":1795562171593,"m":{"type":"out","stream":"task","text":"[INFO] 해소 확인 재측정(VERIFY_SETTLE): AS-IS 런처 실측(판정 영향 없음) 생략 · 사실 검토는 처리 대상 FACT 행이 있을 때만 · E2E 4종은 한 번만\n","cls":""}}
+{"t":1795562173528,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795562173535,"m":{"type":"out","stream":"task","text":"== UI CheckList SCP0005 (AS-IS SCP0005) ==\n","cls":""}}
+{"t":1795562173535,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562173537,"m":{"type":"out","stream":"task","text":"[단계 1/8] 사전 작업(DB·Fact Pack·메타·스펙·smoke)\n","cls":""}}
+{"t":1795562175435,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562175435,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\prereq.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795562175525,"m":{"type":"out","stream":"task","text":"== UI CheckList 사전 작업 점검 SCP0005 (AS-IS SCP0005)\n","cls":""}}
+{"t":1795562175526,"m":{"type":"out","stream":"task","text":"  $ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\DbConn\\probe.py\n","cls":""}}
+{"t":1795562177051,"m":{"type":"out","stream":"task","text":"    [OK] asis: As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV — DB=LGCE_SCMDEV server=zio now=2026-11-25 08:16:16 · SP 2456 (0.9s)\n","cls":""}}
+{"t":1795562177052,"m":{"type":"out","stream":"task","text":"    [OK] tobe: To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 — DB=ZIOUI1 host=localhost schema=SCM_MGR now=2026-11-25 08:16:16 · PKG/PROC 1082 · 사용 메뉴 189 (0.5s)\n","cls":""}}
+{"t":1795562177052,"m":{"type":"out","stream":"task","text":"    리포트: C:\\Projects\\NSCM\\Doc\\db\\probe_20261125_081617.md\n","cls":""}}
+{"t":1795562177053,"m":{"type":"out","stream":"task","text":"[세부 1/10] DB 접속(AS-IS MSSQL · TO-BE Oracle) — OK\n","cls":""}}
+{"t":1795562177053,"m":{"type":"out","stream":"task","text":"[OK] DB 접속(AS-IS MSSQL · TO-BE Oracle) — 전부 접속\n","cls":""}}
+{"t":1795562177054,"m":{"type":"out","stream":"task","text":"[세부 2/10] AS-IS Fact Pack(SCP0005) — OK\n","cls":""}}
+{"t":1795562177054,"m":{"type":"out","stream":"task","text":"[OK] AS-IS Fact Pack(SCP0005) — controls.csv, actions.csv, files.csv, endpoints.csv 있음\n","cls":""}}
+{"t":1795562177054,"m":{"type":"out","stream":"task","text":"[세부 3/10] TO-BE DB 메타(Doc/tobefacts/db) — OK\n","cls":""}}
+{"t":1795562177055,"m":{"type":"out","stream":"task","text":"[OK] TO-BE DB 메타(Doc/tobefacts/db) — 7.3시간 전 export(기준 12시간)\n","cls":""}}
+{"t":1795562177062,"m":{"type":"out","stream":"task","text":"[세부 4/10] TO-BE 화면 인덱스(Doc/tobefacts/screens) — OK\n","cls":""}}
+{"t":1795562177062,"m":{"type":"out","stream":"task","text":"[OK] TO-BE 화면 인덱스(Doc/tobefacts/screens) — nscm-fe\\features\\shipping\\src\\pages\\distribution-route · 인덱스 최신\n","cls":""}}
+{"t":1795562177063,"m":{"type":"out","stream":"task","text":"[세부 5/10] FE 대조표(__asis-mapping__.md) — OK\n","cls":""}}
+{"t":1795562177063,"m":{"type":"out","stream":"task","text":"[OK] FE 대조표(__asis-mapping__.md) — nscm-fe\\features\\shipping\\src\\pages\\distribution-route\\__asis-mapping__.md\n","cls":""}}
+{"t":1795562177073,"m":{"type":"out","stream":"task","text":"[세부 6/10] 조회조건 기준표(search_cond.csv) — MANUAL\n","cls":""}}
+{"t":1795562177074,"m":{"type":"out","stream":"task","text":"[MANUAL] 조회조건 기준표(search_cond.csv) — 기준표 xlsx 에 이 화면 행 없음 — 조회조건 순서·라벨(CR-071)은 AS-IS 기준으로만 판정. 기준표 xlsx 보강 후 build_search_cond.py\n","cls":""}}
+{"t":1795562177083,"m":{"type":"out","stream":"task","text":"[세부 7/10] 골든 케이스(golden_cases.csv) — OK\n","cls":""}}
+{"t":1795562177084,"m":{"type":"out","stream":"task","text":"[OK] 골든 케이스(golden_cases.csv) — 5건 있음\n","cls":""}}
+{"t":1795562177085,"m":{"type":"out","stream":"task","text":"[세부 8/10] E2E plan(Doc/gen/<ID>/e2e_plan.json) — OK\n","cls":""}}
+{"t":1795562177085,"m":{"type":"out","stream":"task","text":"[OK] E2E plan(Doc/gen/<ID>/e2e_plan.json) — 있음\n","cls":""}}
+{"t":1795562177085,"m":{"type":"out","stream":"task","text":"[세부 9/10] E2E 스펙(Doc/e2e/specs/<ID>.*) — OK\n","cls":""}}
+{"t":1795562177085,"m":{"type":"out","stream":"task","text":"[OK] E2E 스펙(Doc/e2e/specs/<ID>.*) — 최신\n","cls":""}}
+{"t":1795562177521,"m":{"type":"out","stream":"task","text":"  $ cmd /c C:\\Projects\\NSCM\\tools\\E2E\\run-e2e.cmd smoke SCP0005\n","cls":""}}
+{"t":1795562291182,"m":{"type":"out","stream":"task","text":"    Playwright smoke SCP0005  running - output goes to the log file\n","cls":""}}
+{"t":1795562291182,"m":{"type":"out","stream":"task","text":"    # E2E 결과 — 2026-11-25 08:18\n","cls":""}}
+{"t":1795562291182,"m":{"type":"out","stream":"task","text":"    \n","cls":""}}
+{"t":1795562291182,"m":{"type":"out","stream":"task","text":"    테스트 8 · PASS 6 · FAIL 2 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795562291183,"m":{"type":"out","stream":"task","text":"    → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795562291183,"m":{"type":"out","stream":"task","text":"    log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261125_081617_smoke.log\n","cls":""}}
+{"t":1795562291185,"m":{"type":"out","stream":"task","text":"[세부 10/10] smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용) — DONE\n","cls":""}}
+{"t":1795562291186,"m":{"type":"out","stream":"task","text":"[DONE] smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용) — smoke 3건 실행 · rc=0 · 114s · cts\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261125_081617_smoke.log FE 5173 / BE 8080 responding Playwright smoke SCP0005 running - output goes to the log file # E2E 결과 — 2026-11-2\n","cls":""}}
+{"t":1795562291186,"m":{"type":"out","stream":"task","text":"== 사전 작업 {'OK': 8, 'MANUAL': 1, 'DONE': 1} → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\prereq.json\n","cls":""}}
+{"t":1795562291187,"m":{"type":"out","stream":"task","text":"[시간] prereq.py · 시작 08:16:15 · 115.7s · rc=0\n","cls":""}}
+{"t":1795562291318,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562291318,"m":{"type":"out","stream":"task","text":"$ run-e2e.cmd authcrud SCP0005 --mode admin\n","cls":""}}
+{"t":1795562292828,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795562292840,"m":{"type":"out","stream":"task","text":"RUNID 20261125_081811 - log C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261125_081811_authcrud.log\n","cls":""}}
+{"t":1795562293096,"m":{"type":"out","stream":"task","text":"FE 5173 / BE 8080 responding\n","cls":""}}
+{"t":1795562300420,"m":{"type":"out","stream":"task","text":"Playwright authcrud SCP0005  running - output goes to the log file\n","cls":""}}
+{"t":1795562730168,"m":{"type":"out","stream":"task","text":"[FAIL] Playwright exit code 1 - log tail:\n","cls":""}}
+{"t":1795562730430,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562730431,"m":{"type":"out","stream":"task","text":"    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────\n","cls":""}}
+{"t":1795562730431,"m":{"type":"out","stream":"task","text":"    ..\\..\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\trace.zip\n","cls":""}}
+{"t":1795562730431,"m":{"type":"out","stream":"task","text":"    Usage:\n","cls":""}}
+{"t":1795562730431,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562730431,"m":{"type":"out","stream":"task","text":"        npx playwright show-trace ..\\..\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\trace.zip\n","cls":""}}
+{"t":1795562730432,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562730432,"m":{"type":"out","stream":"task","text":"    ────────────────────────────────────────────────────────────────────────────────────────────────\n","cls":""}}
+{"t":1795562730432,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562730433,"m":{"type":"out","stream":"task","text":"  1 failed\n","cls":""}}
+{"t":1795562730433,"m":{"type":"out","stream":"task","text":"    [chromium] › ..\\..\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:17:9 › SCP0005 권한별 CRUD @authcrud [jooyong026 ADMIN/GUEST/SSP Planner] › 메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가 \n","cls":""}}
+{"t":1795562730433,"m":{"type":"out","stream":"task","text":"  1 passed (7.0m)\n","cls":""}}
+{"t":1795562730630,"m":{"type":"out","stream":"task","text":"# E2E 결과 — 2026-11-25 08:25\n","cls":""}}
+{"t":1795562730630,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562730630,"m":{"type":"out","stream":"task","text":"테스트 8 · PASS 6 · FAIL 2 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795562730631,"m":{"type":"out","stream":"task","text":"→ C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795562730642,"m":{"type":"out","stream":"task","text":"log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261125_081811_authcrud.log\n","cls":""}}
+{"t":1795562730802,"m":{"type":"out","stream":"task","text":"[OK] authcrud: 실행 · FAIL 포함(판정 반입) · 2건 · 439.4s\n","cls":""}}
+{"t":1795562730803,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795562730803,"m":{"type":"out","stream":"task","text":"$ run-e2e.cmd crud SCP0005 --mode admin\n","cls":""}}
+{"t":1795562732129,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795562732137,"m":{"type":"out","stream":"task","text":"RUNID 20261125_082530 - log C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261125_082530_crud.log\n","cls":""}}
+{"t":1795562732382,"m":{"type":"out","stream":"task","text":"FE 5173 / BE 8080 responding\n","cls":""}}
+{"t":1795562739709,"m":{"type":"out","stream":"task","text":"Playwright crud SCP0005  running - output goes to the log file\n","cls":""}}
+{"t":1795563145164,"m":{"type":"out","stream":"task","text":"[FAIL] Playwright exit code 1 - log tail:\n","cls":""}}
+{"t":1795563145525,"m":{"type":"out","stream":"task","text":"    Error Context: ..\\..\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.crud-SCP0005-Distr-5574c-은-셀-수정-Save→재조회→원복-Save→재조회-chromium-retry1\\error-context.md\n","cls":""}}
+{"t":1795563145525,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563145525,"m":{"type":"out","stream":"task","text":"    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────\n","cls":""}}
+{"t":1795563145526,"m":{"type":"out","stream":"task","text":"    ..\\..\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.crud-SCP0005-Distr-5574c-은-셀-수정-Save→재조회→원복-Save→재조회-chromium-retry1\\trace.zip\n","cls":""}}
+{"t":1795563145526,"m":{"type":"out","stream":"task","text":"    Usage:\n","cls":""}}
+{"t":1795563145526,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563145526,"m":{"type":"out","stream":"task","text":"        npx playwright show-trace ..\\..\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.crud-SCP0005-Distr-5574c-은-셀-수정-Save→재조회→원복-Save→재조회-chromium-retry1\\trace.zip\n","cls":""}}
+{"t":1795563145527,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563145527,"m":{"type":"out","stream":"task","text":"    ────────────────────────────────────────────────────────────────────────────────────────────────\n","cls":""}}
+{"t":1795563145527,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563145527,"m":{"type":"out","stream":"task","text":"  1 failed\n","cls":""}}
+{"t":1795563145528,"m":{"type":"out","stream":"task","text":"    [chromium] › ..\\..\\Doc\\e2e\\specs\\SCP0005.crud.spec.ts:12:7 › SCP0005 DistributionRoute CRUD @crud › Save 노출 · Insert 화면은 마커 행 Insert→Save→재조회→수정→Delete→Save→재조회 · Insert 없는 화면은 셀 수정 Save→재조회→원복 Save→재조회 \n","cls":""}}
+{"t":1795563145544,"m":{"type":"out","stream":"task","text":"# E2E 결과 — 2026-11-25 08:32\n","cls":""}}
+{"t":1795563145544,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563145544,"m":{"type":"out","stream":"task","text":"테스트 8 · PASS 6 · FAIL 2 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795563145544,"m":{"type":"out","stream":"task","text":"→ C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795563145544,"m":{"type":"out","stream":"task","text":"log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261125_082530_crud.log\n","cls":""}}
+{"t":1795563145606,"m":{"type":"out","stream":"task","text":"[OK] crud: 실행 · FAIL 포함(판정 반입) · 1건 · 414.9s\n","cls":""}}
+{"t":1795563145607,"m":{"type":"out","stream":"task","text":"[e2e_suite] SCP0005: crud 실행 · FAIL 포함(판정 반입) · auth 실행 · 전부 PASS · authcrud 실행 · FAIL 포함(판정 반입) → Doc\\verify\\SCP0005\\e2e_suite.json\n","cls":""}}
+{"t":1795563150099,"m":{"type":"out","stream":"task","text":"[시간] 단계 pre 끝 · 16.3분\n","cls":""}}
+{"t":1795563150099,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563150101,"m":{"type":"out","stream":"task","text":"[단계 2/8] AS-IS 사실 보강·자동 기대 행·검증 원장 — 세부 17개\n","cls":""}}
+{"t":1795563151520,"m":{"type":"out","stream":"task","text":"[세부 1/17] facts_defcols.py\n","cls":""}}
+{"t":1795563151521,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563151521,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_defcols.py SCP0005\n","cls":""}}
+{"t":1795563151626,"m":{"type":"out","stream":"task","text":"[facts_defcols] SCP0005: 컬럼 상수 이름 → 값 0곳(0종)\n","cls":""}}
+{"t":1795563151626,"m":{"type":"out","stream":"task","text":"[시간] facts_defcols.py · 시작 08:32:31 · 0.1s · rc=0\n","cls":""}}
+{"t":1795563151627,"m":{"type":"out","stream":"task","text":"[세부 2/17] facts_gridcols.py\n","cls":""}}
+{"t":1795563151627,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563151627,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_gridcols.py SCP0005\n","cls":""}}
+{"t":1795563151641,"m":{"type":"out","stream":"task","text":"SCP0005: 그리드 컬럼 선언 55행 (CODE 0 · META 55) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\grid_columns_asis.csv · 프레임워크 기본값 12행 → Doc/asisfacts/framework/spreadinfo_defaults.csv\n","cls":""}}
+{"t":1795563151648,"m":{"type":"out","stream":"task","text":"[시간] facts_gridcols.py · 시작 08:32:31 · 0.1s · rc=0\n","cls":""}}
+{"t":1795563151648,"m":{"type":"out","stream":"task","text":"[세부 3/17] facts_dyncols.py\n","cls":""}}
+{"t":1795563151649,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563151649,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_dyncols.py SCP0005\n","cls":""}}
+{"t":1795563151699,"m":{"type":"out","stream":"task","text":"SCP0005: 동적 컬럼 패밀리 0건 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\dyn_columns.csv\n","cls":""}}
+{"t":1795563151705,"m":{"type":"out","stream":"task","text":"[시간] facts_dyncols.py · 시작 08:32:31 · 0.1s · rc=0\n","cls":""}}
+{"t":1795563151705,"m":{"type":"out","stream":"task","text":"[세부 4/17] facts_cellclear.py\n","cls":""}}
+{"t":1795563151705,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563151706,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_cellclear.py SCP0005\n","cls":""}}
+{"t":1795563152226,"m":{"type":"out","stream":"task","text":"SCP0005: 셀 초기화 0건(무조건 0·조건부 0·컬럼 미해석 0) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\cell_clear.csv\n","cls":""}}
+{"t":1795563152232,"m":{"type":"out","stream":"task","text":"[시간] facts_cellclear.py · 시작 08:32:31 · 0.5s · rc=0\n","cls":""}}
+{"t":1795563152234,"m":{"type":"out","stream":"task","text":"[세부 5/17] facts_cellrules.py\n","cls":""}}
+{"t":1795563152234,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563152234,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_cellrules.py SCP0005\n","cls":""}}
+{"t":1795563152316,"m":{"type":"out","stream":"task","text":"SCP0005: 55행(39컬럼) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\cell_rules.csv\n","cls":""}}
+{"t":1795563152324,"m":{"type":"out","stream":"task","text":"[시간] facts_cellrules.py · 시작 08:32:32 · 0.1s · rc=0\n","cls":""}}
+{"t":1795563152324,"m":{"type":"out","stream":"task","text":"[세부 6/17] facts_lockrules.py\n","cls":""}}
+{"t":1795563152325,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563152325,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_lockrules.py SCP0005\n","cls":""}}
+{"t":1795563152882,"m":{"type":"out","stream":"task","text":"SCP0005: 잠금 규칙 13건(미해석 1) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\lock_rules.csv\n","cls":""}}
+{"t":1795563152882,"m":{"type":"out","stream":"task","text":"  조건부 배경색 규칙 12건 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\color_rules.csv\n","cls":""}}
+{"t":1795563152883,"m":{"type":"out","stream":"task","text":"  편집 기대 39컬럼 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\edit_expect.csv (메인 시트 Distribution Route, 클래스 SCP0005_DistributionRoute, Insert 경로 .Insert 있음, 기존행 기본 N)\n","cls":""}}
+{"t":1795563152883,"m":{"type":"out","stream":"task","text":"  평가 불가 원자(RAW): errCode == \"99010\" · errCode == \"99020\" · errStr == cpStr · iCount > 0 · intPRIORITY < 1 · response.DataSet.Tables[0].Rows[0][0].ToString() == \"S\"\n","cls":""}}
+{"t":1795563152889,"m":{"type":"out","stream":"task","text":"[시간] facts_lockrules.py · 시작 08:32:32 · 0.6s · rc=0\n","cls":""}}
+{"t":1795563152889,"m":{"type":"out","stream":"task","text":"[세부 7/17] facts_combosrc.py\n","cls":""}}
+{"t":1795563152890,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563152890,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_combosrc.py SCP0005\n","cls":""}}
+{"t":1795563153099,"m":{"type":"out","stream":"task","text":"SCP0005: 콤보 원천 12행(바인딩 19 · 미해결 0) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\combo_src.csv\n","cls":""}}
+{"t":1795563153105,"m":{"type":"out","stream":"task","text":"[시간] facts_combosrc.py · 시작 08:32:32 · 0.2s · rc=0\n","cls":""}}
+{"t":1795563153105,"m":{"type":"out","stream":"task","text":"[세부 8/17] facts_combovalues.py\n","cls":""}}
+{"t":1795563153105,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563153105,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_combovalues.py SCP0005\n","cls":""}}
+{"t":1795563153917,"m":{"type":"out","stream":"task","text":"SCP0005: 콤보 원천 3종 — 값 확보 3 · 미해석 0 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\combo_values.json\n","cls":""}}
+{"t":1795563153932,"m":{"type":"out","stream":"task","text":"[시간] facts_combovalues.py · 시작 08:32:33 · 0.8s · rc=0\n","cls":""}}
+{"t":1795563153933,"m":{"type":"out","stream":"task","text":"[세부 9/17] facts_sortrules.py\n","cls":""}}
+{"t":1795563153933,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563153933,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_sortrules.py SCP0005\n","cls":""}}
+{"t":1795563154524,"m":{"type":"out","stream":"task","text":"SCP0005: SP 5 → 정렬 규칙 4 (SQL 4 · GRID 0 · CODE 0) · ORDER BY 없는 SP 1 → Doc/asisfacts/screens/SCP0005/sort_rules.csv\n","cls":""}}
+{"t":1795563154530,"m":{"type":"out","stream":"task","text":"[시간] facts_sortrules.py · 시작 08:32:33 · 0.6s · rc=0\n","cls":""}}
+{"t":1795563154532,"m":{"type":"out","stream":"task","text":"[세부 10/17] facts_prereq.py\n","cls":""}}
+{"t":1795563154532,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563154532,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_prereq.py SCP0005\n","cls":""}}
+{"t":1795563155053,"m":{"type":"out","stream":"task","text":"SCP0005: 선행 칸 0건(행 전체 0·칸 지정 0·미해석 0) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\cell_prereq.csv\n","cls":""}}
+{"t":1795563155060,"m":{"type":"out","stream":"task","text":"[시간] facts_prereq.py · 시작 08:32:34 · 0.5s · rc=0\n","cls":""}}
+{"t":1795563155060,"m":{"type":"out","stream":"task","text":"[세부 11/17] facts_popup_meta.py\n","cls":""}}
+{"t":1795563155060,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563155061,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe -I C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_popup_meta.py SCP0005\n","cls":""}}
+{"t":1795563155415,"m":{"type":"out","stream":"task","text":"SCP0005 columns 88 measures 0 titleset 0 no_personal []\n","cls":""}}
+{"t":1795563155433,"m":{"type":"out","stream":"task","text":"[시간] facts_popup_meta.py · 시작 08:32:35 · 0.4s · rc=0\n","cls":""}}
+{"t":1795563155433,"m":{"type":"out","stream":"task","text":"[세부 12/17] facts_append_tables.py\n","cls":""}}
+{"t":1795563155433,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563155433,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe -I C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_append_tables.py SCP0005\n","cls":""}}
+{"t":1795563155537,"m":{"type":"out","stream":"task","text":"SCP0005: 저장 SP INSERT 표 3개 · 그중 저장마다 새 키 행 표 2개 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SCP0005\\append_tables.csv · SCP_MST_DISTRIBUTION_ROUTE(NEXT VALUE FOR), SCP_MST_DISTRIBUTION_ROUTE_H(NEXT VALUE FOR)\n","cls":""}}
+{"t":1795563155543,"m":{"type":"out","stream":"task","text":"[시간] facts_append_tables.py · 시작 08:32:35 · 0.1s · rc=0\n","cls":""}}
+{"t":1795563155551,"m":{"type":"out","stream":"task","text":"[세부 13/17] llm_facts.py\n","cls":""}}
+{"t":1795563155551,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563155551,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\llm_facts.py SCP0005\n","cls":""}}
+{"t":1795563155661,"m":{"type":"out","stream":"task","text":"[사실 검토] AS-IS SCP0005 · 추출본 7개(191행) · 원문 2개 · 프롬프트 2262자\n","cls":""}}
+{"t":1795563215495,"m":{"type":"out","stream":"task","text":"[사실 검토] 후보 0건 · 원문 인용 확인 0건 · 호출 1회 · 비용 $0.8777\n","cls":""}}
+{"t":1795563215505,"m":{"type":"out","stream":"task","text":"[시간] llm_facts.py · 시작 08:32:35 · 60.0s · rc=0\n","cls":""}}
+{"t":1795563215507,"m":{"type":"out","stream":"task","text":"[세부 14/17] gen_expect.py\n","cls":""}}
+{"t":1795563215507,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563215508,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\gen_expect.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795563215710,"m":{"type":"out","stream":"task","text":"SCP0005: 자동 행 74 {'P01': 1, 'P02': 1, 'P03': 1, 'P04': 1, 'P05': 1, 'P07': 10, 'P08': 10, 'P09': 10, 'P10': 10, 'P12': 1, 'P13': 1, 'P21': 1, 'P22': 1, 'P23': 1, 'P24': 4, 'P31': 10, 'P32': 10} · env -(sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건)\n","cls":""}}
+{"t":1795563215710,"m":{"type":"out","stream":"task","text":"합계 74행 · 화면 1\n","cls":""}}
+{"t":1795563215727,"m":{"type":"out","stream":"task","text":"[시간] gen_expect.py · 시작 08:33:35 · 0.2s · rc=0\n","cls":""}}
+{"t":1795563215727,"m":{"type":"out","stream":"task","text":"[세부 15/17] scenario_env.py\n","cls":""}}
+{"t":1795563215727,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563215727,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\scenario_env.py SCP0005\n","cls":""}}
+{"t":1795563215890,"m":{"type":"out","stream":"task","text":"[실측 2026-11-25 08:33:35] SCP0005: Div조건 없음 · 기본 Div -(sheet_columns 단일 Division 칸 없음) · 계정 Div 40,81,82 · 필수조건 없음 · 마지막 관측 조회 최대 8076행\n","cls":""}}
+{"t":1795563215905,"m":{"type":"out","stream":"task","text":"[시간] scenario_env.py · 시작 08:33:35 · 0.2s · rc=0\n","cls":""}}
+{"t":1795563215905,"m":{"type":"out","stream":"task","text":"[세부 16/17] ledger.py\n","cls":""}}
+{"t":1795563215905,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563215905,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\ledger.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795563216414,"m":{"type":"out","stream":"task","text":"  [INFO] 실행되지 않는 AS-IS 메서드 6개 문장 제외: SCP0005_DistributionRoute.CSafeSetText, SCP0005_DistributionRoute.GetBodType, SCP0005_DistributionRoute.GetFromSitebyDivision, SCP0005_DistributionRoute.GetToSitebyDivision, SCP0005_DistributionRoute.GetTransMode, SCP0005_DistributionRoute.checkCtiyCode\n","cls":""}}
+{"t":1795563216552,"m":{"type":"out","stream":"task","text":"[ledger] T451 컬럼 메타 미조회 시트 제외 ['POPUP', 'route'] (조회 기록 ['Distribution Route'])\n","cls":""}}
+{"t":1795563216733,"m":{"type":"out","stream":"task","text":"  적용성: N 51 · UNKNOWN 141 · Y 742\n","cls":""}}
+{"t":1795563216744,"m":{"type":"out","stream":"task","text":"SCP0005: 1357행 → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\verify_ledger.csv\n","cls":""}}
+{"t":1795563216744,"m":{"type":"out","stream":"task","text":"  RULE_SCREEN 223 · SP 10 · SEARCH 20 · COLUMN 284 · MSG 11 · ASIS 98 · DEFECT 50 · GENERAL 551 · CONFIRMED 110\n","cls":""}}
+{"t":1795563216759,"m":{"type":"out","stream":"task","text":"[시간] ledger.py · 시작 08:33:35 · 0.9s · rc=0\n","cls":""}}
+{"t":1795563216759,"m":{"type":"out","stream":"task","text":"[세부 17/17] criteria_build.py\n","cls":""}}
+{"t":1795563216760,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563216760,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\criteria_build.py SCP0005\n","cls":""}}
+{"t":1795563216929,"m":{"type":"out","stream":"task","text":"[기준 정리 SCP0005] 원장 1357행 · 요소 103개(BTN 10 · COL 41 · COND 7 · MSG 31 · POPUP 2 · SCREEN 1 · SP 11) · 검사엔진 행 646(요소 연결 510) · 결함 유형 행 711 · 실측 연결 45/70 · AI 묶음 38개\n","cls":""}}
+{"t":1795563216994,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 4/38 규칙 B2,B3 · 기억\n","cls":""}}
+{"t":1795563217004,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 3/38 규칙 A5,A6,A7,A8,A9,B1 · 기억\n","cls":""}}
+{"t":1795563217005,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 1/38 규칙 A1,A10,A2,A3,A4 · 기억\n","cls":""}}
+{"t":1795563217024,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 2/38 규칙 A5 · 기억\n","cls":""}}
+{"t":1795563217033,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 5/38 규칙 B4 · 기억\n","cls":""}}
+{"t":1795563217045,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 7/38 규칙 B6,B7,B8 · 기억\n","cls":""}}
+{"t":1795563217055,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 8/38 규칙 C1,C2 · 기억\n","cls":""}}
+{"t":1795563217065,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 9/38 규칙 C3,C4,C5 · 기억\n","cls":""}}
+{"t":1795563217074,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 10/38 규칙 D1,D2 · 기억\n","cls":""}}
+{"t":1795563217086,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 11/38 규칙 D3,D4,D5,D6,DB-SYN · 기억\n","cls":""}}
+{"t":1795563217096,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 12/38 규칙 E1,E2,E3 · 기억\n","cls":""}}
+{"t":1795563217098,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 13/38 규칙 E4,E5,E6 · 기억\n","cls":""}}
+{"t":1795563217115,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 14/38 규칙 E7 · 기억\n","cls":""}}
+{"t":1795563217124,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 15/38 규칙 F1 · 기억\n","cls":""}}
+{"t":1795563217125,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 16/38 규칙 F1,F2,F3 · 기억\n","cls":""}}
+{"t":1795563217142,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 17/38 규칙 F4,F5 · 기억\n","cls":""}}
+{"t":1795563217151,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 6/38 규칙 B4,B5 · 기억\n","cls":""}}
+{"t":1795563217160,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 19/38 규칙 G1,G10 · 기억\n","cls":""}}
+{"t":1795563217169,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 20/38 규칙 G2,G3 · 기억\n","cls":""}}
+{"t":1795563217179,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 21/38 규칙 G4 · 기억\n","cls":""}}
+{"t":1795563217192,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 22/38 규칙 G5,G6,G7,G8 · 기억\n","cls":""}}
+{"t":1795563217202,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 23/38 규칙 G9,H1,H10,H11,H12 · 기억\n","cls":""}}
+{"t":1795563217211,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 24/38 규칙 H2,H3 · 기억\n","cls":""}}
+{"t":1795563217221,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 25/38 규칙 H4 · 기억\n","cls":""}}
+{"t":1795563217230,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 26/38 규칙 H5 · 기억\n","cls":""}}
+{"t":1795563217238,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 27/38 규칙 H6 · 기억\n","cls":""}}
+{"t":1795563217247,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 28/38 규칙 H7,H8,H9 · 기억\n","cls":""}}
+{"t":1795563217256,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 29/38 규칙 I1,I2,I3,I4 · 기억\n","cls":""}}
+{"t":1795563217267,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 30/38 규칙 J1,J2,J3 · 기억\n","cls":""}}
+{"t":1795563217277,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 31/38 규칙 J4,K1 · 기억\n","cls":""}}
+{"t":1795563217287,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 18/38 규칙 F6,F7,F8 · 기억\n","cls":""}}
+{"t":1795563217296,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 32/38 규칙 K2 · 기억\n","cls":""}}
+{"t":1795563217305,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 33/38 규칙 K3,K4,K5,K6,L1 · 기억\n","cls":""}}
+{"t":1795563217306,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 35/38 규칙 M2 · 기억\n","cls":""}}
+{"t":1795563217326,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 36/38 규칙 M3 · 기억\n","cls":""}}
+{"t":1795563217329,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 34/38 규칙 L2,M1 · 기억\n","cls":""}}
+{"t":1795563217330,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 37/38 규칙 M3,M4,MS1 · 기억\n","cls":""}}
+{"t":1795563217332,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 38/38 규칙 N1,SC1 · 기억\n","cls":""}}
+{"t":1795563220173,"m":{"type":"out","stream":"task","text":"[기준 정리 SCP0005] 기준 항목 1253 · 확정 857 · 대상 아님 372 · 판단 대기 24 · 합침 104 · 대상 아님 365 · 판단 대기 52 · 룰 결합 347 · AI 호출 0(기억 38 · 실패 0)\n","cls":""}}
+{"t":1795563220173,"m":{"type":"out","stream":"task","text":"@@LINK 📐 기준 원장|Doc/verify/SCP0005/criteria/criteria.md\n","cls":""}}
+{"t":1795563220209,"m":{"type":"out","stream":"task","text":"[시간] criteria_build.py · 시작 08:33:36 · 3.4s · rc=0\n","cls":""}}
+{"t":1795563220499,"m":{"type":"out","stream":"task","text":"[시간] 단계 facts 끝 · 1.2분\n","cls":""}}
+{"t":1795563220500,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563220502,"m":{"type":"out","stream":"task","text":"[단계 3/8] 정적 검사·골든·대조표 추적 — 세부 10개\n","cls":""}}
+{"t":1795563221523,"m":{"type":"out","stream":"task","text":"[세부 1/10] syn_check.py\n","cls":""}}
+{"t":1795563221523,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563221524,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\syn_check.py SCP0005\n","cls":""}}
+{"t":1795563238492,"m":{"type":"out","stream":"task","text":"SCP0005: 검사 12 · 문제 0\n","cls":""}}
+{"t":1795563238525,"m":{"type":"out","stream":"task","text":"[시간] syn_check.py · 시작 08:33:41 · 17.0s · rc=0\n","cls":""}}
+{"t":1795563238528,"m":{"type":"out","stream":"task","text":"[세부 2/10] syn_fix.py — 건너뜀(앱 계정 접근 불가 객체 없음)\n","cls":""}}
+{"t":1795563238529,"m":{"type":"out","stream":"task","text":"[세부 3/10] sort_check.py\n","cls":""}}
+{"t":1795563238530,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563238530,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\sort_check.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795563239213,"m":{"type":"out","stream":"task","text":"SCP0005: 정렬 대조 5행 — PASS 4 · NA 1 (TO-BE 원문 ZIOUI1 2026-11-25 08:33 조회) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\sort_check.csv\n","cls":""}}
+{"t":1795563239214,"m":{"type":"out","stream":"task","text":"  [NA] SCP0005_SAVE_DISTRIBUTION_ROUTE → PKG_SCP0005.P_SCP0005_SAVE_ROUTE | AS-IS  | TO-BE  | AS-IS·TO-BE 모두 ORDER BY 없음 — 저장·검증 SP(이름 _SAVE) — 결과 순서 대상 아님(CR-075 ③)\n","cls":""}}
+{"t":1795563239234,"m":{"type":"out","stream":"task","text":"[시간] sort_check.py · 시작 08:33:58 · 0.7s · rc=0\n","cls":""}}
+{"t":1795563239234,"m":{"type":"out","stream":"task","text":"[세부 4/10] align_check.py\n","cls":""}}
+{"t":1795563239234,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563239234,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\align_check.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795563241276,"m":{"type":"out","stream":"task","text":"SCP0005: H1 정렬 55컬럼 — {'PASS': 55} · 시트 대응 Distribution Route→SCP0005/Distribution Route, POPUP→SCP0005/POPUP → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\align_check.csv\n","cls":""}}
+{"t":1795563241302,"m":{"type":"out","stream":"task","text":"[시간] align_check.py · 시작 08:33:59 · 2.1s · rc=0\n","cls":""}}
+{"t":1795563241304,"m":{"type":"out","stream":"task","text":"[세부 5/10] popup_args_check.py\n","cls":""}}
+{"t":1795563241304,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563241304,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\popup_args_check.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795563242122,"m":{"type":"out","stream":"task","text":"SCP0005: G5 팝업 인자 — AS-IS 호출 6 · TO-BE 사용처 2 · 짝 5 · 조회조건 필드 6 → {'NA': 7, 'PASS': 8} → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\popup_args.csv\n","cls":""}}
+{"t":1795563242128,"m":{"type":"out","stream":"task","text":"[시간] popup_args_check.py · 시작 08:34:01 · 0.8s · rc=0\n","cls":""}}
+{"t":1795563242128,"m":{"type":"out","stream":"task","text":"[세부 6/10] popup_data_check.py\n","cls":""}}
+{"t":1795563242129,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563242129,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\popup_data_check.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795563242948,"m":{"type":"out","stream":"task","text":"SCP0005: M3 팝업 데이터 — AS-IS 개인화 팝업 없음 → 대상 0 → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\popup_data.csv\n","cls":""}}
+{"t":1795563242955,"m":{"type":"out","stream":"task","text":"[시간] popup_data_check.py · 시작 08:34:02 · 0.8s · rc=0\n","cls":""}}
+{"t":1795563242955,"m":{"type":"out","stream":"task","text":"[세부 7/10] f10_check.py\n","cls":""}}
+{"t":1795563242955,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563242955,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\f10_check.py SCP0005\n","cls":""}}
+{"t":1795563243685,"m":{"type":"out","stream":"task","text":"SCP0005: 저장 PROC 2건 — PKG_SCP0005.P_SCP0005_EXCEL_UPLOAD=FAIL · PKG_SCP0005.P_SCP0005_SAVE_ROUTE=PASS → Doc\\verify\\SCP0005\\f10_check.csv\n","cls":""}}
+{"t":1795563243702,"m":{"type":"out","stream":"task","text":"[시간] f10_check.py · 시작 08:34:02 · 0.7s · rc=0\n","cls":""}}
+{"t":1795563243703,"m":{"type":"out","stream":"task","text":"[세부 8/10] golden.py\n","cls":""}}
+{"t":1795563243703,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563243703,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\DbConn\\golden.py SCP0005\n","cls":""}}
+{"t":1795563243755,"m":{"type":"out","stream":"task","text":"As-is: As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV\n","cls":""}}
+{"t":1795563243756,"m":{"type":"out","stream":"task","text":"To-Be: To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1\n","cls":""}}
+{"t":1795563249230,"m":{"type":"out","stream":"task","text":"[DIFF] SCP0005:SCP0005_GET_DISTRIBUTION_ROUTE\n","cls":""}}
+{"t":1795563249832,"m":{"type":"out","stream":"task","text":"[PASS] SCP0005:SCP0005_GET_DISTRIBUTION_ROUTEID\n","cls":""}}
+{"t":1795563250178,"m":{"type":"out","stream":"task","text":"[SKIP] SCP0005:SCP0005_SAVE_DISTRIBUTION_ROUTE\n","cls":""}}
+{"t":1795563259762,"m":{"type":"out","stream":"task","text":"[DIFF] SCP0005:SCP0005_GET_COUNTRY_CITY\n","cls":""}}
+{"t":1795563260989,"m":{"type":"out","stream":"task","text":"[PASS] SCP0005:SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID\n","cls":""}}
+{"t":1795563261015,"m":{"type":"out","stream":"task","text":"요약: PASS 50 · COLS 0 · ROWS 0 · DIFF 21 · ERR 0 · SKIP 208 → C:\\Projects\\NSCM\\Doc\\golden\\_summary.md\n","cls":""}}
+{"t":1795563261036,"m":{"type":"out","stream":"task","text":"[시간] golden.py · 시작 08:34:03 · 17.3s · rc=0\n","cls":""}}
+{"t":1795563261038,"m":{"type":"out","stream":"task","text":"[세부 9/10] b7_check.py\n","cls":""}}
+{"t":1795563261038,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563261039,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\b7_check.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795563262757,"m":{"type":"out","stream":"task","text":"SCP0005: B7(a) NA — 저장 SP SCP0005_SAVE_DISTRIBUTION_ROUTE 대상 SCP_MST_DISTRIBUTION_ROUTE 와 콤보 원천 12종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\b7_check.json\n","cls":""}}
+{"t":1795563262769,"m":{"type":"out","stream":"task","text":"[시간] b7_check.py · 시작 08:34:21 · 1.7s · rc=0\n","cls":""}}
+{"t":1795563262769,"m":{"type":"out","stream":"task","text":"[세부 10/10] mapping_trace.py\n","cls":""}}
+{"t":1795563262769,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563262770,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\mapping_trace.py SCP0005 --asis SCP0005 --to-ledger\n","cls":""}}
+{"t":1795563266333,"m":{"type":"out","stream":"task","text":"원장 편입: TRACE 516행(원장 연결 없던 검사 인스턴스) — C3:57 C6:48 H2:41 X-ROW:37 X-LOC:35 E4:35 C2:27 A5:26 H5:26 D3:20 M4:17 D5:17 → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\verify_ledger.csv\n","cls":""}}
+{"t":1795563266355,"m":{"type":"out","stream":"task","text":"SCP0005: 대조표 714행(FE 39 · 액션 675) → 인스턴스 560 — 행 미검증 458 · FAIL 202 · 해당없음 30 · 검증완료 23 · 미구현 1 | 인스턴스 NOT_RUN 305 · PASS 97 · ERROR 90 · NA 44 · REVIEW 13 · NOPATH 5 · WARN 4 · FAIL 2 → Doc/verify/SCP0005/mapping_trace.md\n","cls":""}}
+{"t":1795563266368,"m":{"type":"out","stream":"task","text":"[시간] mapping_trace.py · 시작 08:34:22 · 3.6s · rc=0\n","cls":""}}
+{"t":1795563266581,"m":{"type":"out","stream":"task","text":"[시간] 단계 static 끝 · 0.8분\n","cls":""}}
+{"t":1795563266581,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795563266582,"m":{"type":"out","stream":"task","text":"[단계 4/8] E2E 검증엔진(@verify·@trace) · tier all\n","cls":""}}
+{"t":1795563266797,"m":{"type":"out","stream":"task","text":"[INFO] SCP0005 E2E 시작 — 다른 E2E 없음 · 다음 화면 입장은 120초 뒤부터(부하 반영)\n","cls":""}}
+{"t":1795563268745,"m":{"type":"out","stream":"task","text":"[INFO] TCP 항목 447개(Get-NetTCPConnection)\n","cls":""}}
+{"t":1795563268913,"m":{"type":"out","stream":"task","text":"[INFO] --only 시나리오 행 1건 포함(SCN_ONLY): [자동] Excel Form 동작(CR-095)\n","cls":""}}
+{"t":1795563268914,"m":{"type":"out","stream":"task","text":"[INFO] --only A4,A6,F1,F4,G5,H2,K3,M1 → 테스트 26개 만 재실행(이전 E2E 결과는 행 단위 병합 보존): A6 조회 결과 행 순서 = AS-IS ORDER BY | BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드 | CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6) | Division별 조회 오류·콤보 이름(F4·A2) | Excel 2단계 차단(M1) | Excel 양식·업로드(M1)\n","cls":""}}
+{"t":1795563272576,"m":{"type":"out","stream":"task","text":"[INFO] E2E 나눠 실행: 시험 26개 = 읽기 21개(연관 기능 묶음 20개, 지난 소요 합 149.6분) + 차례 5개(쓰기 또는 처음 보는 시험)\n","cls":""}}
+{"t":1795563272576,"m":{"type":"out","stream":"task","text":"[INFO] 읽기 작업자 최대 10개 = min(설정 e2eReadPar 10, 쓸 수 있는 계정 10개, 묶음 20개) · 계정 minyonglee1, bindy122678, brightboy, candoism, cnsytchoi, crjung, donghoon.lee, fran.d.k, heeyoung123, hoonlee_cns · 늘리는 기준 CPU < 80%, 여유 메모리 >= 3072MB, 늘린 뒤 20초 대기\n","cls":""}}
+{"t":1795563272578,"m":{"type":"out","stream":"task","text":"Running 26 tests using up to 10 workers(읽기) + 1 worker(차례)\n","cls":""}}
+{"t":1795563272585,"m":{"type":"out","stream":"task","text":"[작업자 1 · 계정 minyonglee1] 일 1: 시험 1개 · 지난 소요 합 19.8분 · 남은 묶음 19개\n","cls":""}}
+{"t":1795563274299,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563296744,"m":{"type":"out","stream":"task","text":"[작업자 2 · 계정 bindy122678] 일 2: 시험 1개 · 지난 소요 합 16.4분 · 남은 묶음 18개\n","cls":""}}
+{"t":1795563297675,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563299281,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563320865,"m":{"type":"out","stream":"task","text":"[작업자 3 · 계정 brightboy] 일 3: 시험 2개 · 지난 소요 합 16.0분 · 남은 묶음 17개\n","cls":""}}
+{"t":1795563321816,"m":{"type":"out","stream":"task","text":"[작업자 3 brightboy] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795563322791,"m":{"type":"out","stream":"task","text":"[작업자 3 brightboy] [langacct] brightboy: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563344990,"m":{"type":"out","stream":"task","text":"[작업자 4 · 계정 candoism] 일 4: 시험 1개 · 지난 소요 합 14.4분 · 남은 묶음 16개\n","cls":""}}
+{"t":1795563345874,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563346933,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [langacct] candoism: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563369055,"m":{"type":"out","stream":"task","text":"[작업자 5 · 계정 cnsytchoi] 일 5: 시험 1개 · 지난 소요 합 14.0분 · 남은 묶음 15개\n","cls":""}}
+{"t":1795563369915,"m":{"type":"out","stream":"task","text":"[작업자 5 cnsytchoi] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563371401,"m":{"type":"out","stream":"task","text":"[작업자 5 cnsytchoi] [langacct] cnsytchoi: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563393167,"m":{"type":"out","stream":"task","text":"[작업자 6 · 계정 crjung] 일 6: 시험 1개 · 지난 소요 합 11.1분 · 남은 묶음 14개\n","cls":""}}
+{"t":1795563394053,"m":{"type":"out","stream":"task","text":"[작업자 6 crjung] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563395019,"m":{"type":"out","stream":"task","text":"[작업자 6 crjung] [langacct] crjung: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563417344,"m":{"type":"out","stream":"task","text":"[작업자 7 · 계정 donghoon.lee] 일 7: 시험 1개 · 지난 소요 합 9.9분 · 남은 묶음 13개\n","cls":""}}
+{"t":1795563418233,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563419235,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] [langacct] donghoon.lee: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563441685,"m":{"type":"out","stream":"task","text":"[작업자 8 · 계정 fran.d.k] 일 8: 시험 1개 · 지난 소요 합 9.2분 · 남은 묶음 12개\n","cls":""}}
+{"t":1795563442555,"m":{"type":"out","stream":"task","text":"[작업자 8 fran.d.k] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563444140,"m":{"type":"out","stream":"task","text":"[작업자 8 fran.d.k] [langacct] fran.d.k: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563466033,"m":{"type":"out","stream":"task","text":"[작업자 9 · 계정 heeyoung123] 일 9: 시험 1개 · 지난 소요 합 7.7분 · 남은 묶음 11개\n","cls":""}}
+{"t":1795563467031,"m":{"type":"out","stream":"task","text":"[작업자 9 heeyoung123] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795563468529,"m":{"type":"out","stream":"task","text":"[작업자 9 heeyoung123] [langacct] heeyoung123: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563479819,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563490253,"m":{"type":"out","stream":"task","text":"[작업자 10 · 계정 hoonlee_cns] 일 10: 시험 2개 · 지난 소요 합 14.7분 · 남은 묶음 9개\n","cls":""}}
+{"t":1795563491145,"m":{"type":"out","stream":"task","text":"[작업자 10 hoonlee_cns] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795563492790,"m":{"type":"out","stream":"task","text":"[작업자 10 hoonlee_cns] [langacct] hoonlee_cns: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563503369,"m":{"type":"out","stream":"task","text":"[작업자 3 brightboy] [langacct] brightboy: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563527501,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [langacct] candoism: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563537494,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] 기존행 편집(D1) 6s\n","cls":""}}
+{"t":1795563542465,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] 신규행 11s\n","cls":""}}
+{"t":1795563543438,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [Insert 전제] 시트 'Distribution Route' 선택(InsertRow:944 · shtMain=\"Distribution Route\")\n","cls":""}}
+{"t":1795563559443,"m":{"type":"out","stream":"task","text":"[작업자 5 cnsytchoi] [langacct] cnsytchoi: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563571776,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] 입력 프로브 행 41s\n","cls":""}}
+{"t":1795563571776,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] 연쇄 프로브 행 41s\n","cls":""}}
+{"t":1795563575637,"m":{"type":"out","stream":"task","text":"[작업자 6 crjung] [langacct] crjung: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563579304,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] 콤보 후보+재편집 48s\n","cls":""}}
+{"t":1795563590313,"m":{"type":"out","stream":"task","text":"  ok 1 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:830:7 › 검증엔진 SCP0005 @trace › W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행) (1.4m)  [작업자 3 brightboy]\n","cls":""}}
+{"t":1795563590497,"m":{"type":"out","stream":"task","text":"[작업자 3 brightboy] [langacct] brightboy: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563595862,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795563599913,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] [langacct] donghoon.lee: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563604016,"m":{"type":"out","stream":"task","text":"  ok 2 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:2503:7 › 검증엔진 SCP0005 @trace › W4d 잔여 판정필요 실측 (2.0m)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795563604206,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] E1 73s\n","cls":""}}
+{"t":1795563609056,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read2\\video\\20261125_084004_46440\n","cls":""}}
+{"t":1795563609062,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678]   1 passed (5.1m)\n","cls":""}}
+{"t":1795563611360,"m":{"type":"out","stream":"task","text":"[부하 조절] 작업자 9개 유지 · CPU 77.3% · 여유 메모리 2590MB (늘리는 기준 CPU < 80%, 메모리 >= 3072MB)\n","cls":""}}
+{"t":1795563624802,"m":{"type":"out","stream":"task","text":"[작업자 8 fran.d.k] [langacct] fran.d.k: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563628359,"m":{"type":"out","stream":"task","text":"[작업자 8 fran.d.k] [시나리오] SCP0005 '[자동] Excel Form 동작(CR-095)' 시작 08:40:28\n","cls":""}}
+{"t":1795563638304,"m":{"type":"out","stream":"task","text":"  ok 3 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2902:7 › 정합검증 SCP0005 @verify › 문서 시나리오 (9.8s)  [작업자 8 fran.d.k]\n","cls":""}}
+{"t":1795563638742,"m":{"type":"out","stream":"task","text":"[작업자 8 fran.d.k] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read8\\video\\20261125_084038_45104\n","cls":""}}
+{"t":1795563638743,"m":{"type":"out","stream":"task","text":"[작업자 8 fran.d.k]   1 passed (3.3m)\n","cls":""}}
+{"t":1795563648551,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] [F4 진단-목록] k3pop0 checked=1/248 · 첫 체크 칸 item checked=false ind=true\n","cls":""}}
+{"t":1795563649194,"m":{"type":"out","stream":"task","text":"[작업자 9 heeyoung123] [langacct] heeyoung123: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563649460,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] [F4 진단] k3pop0 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n","cls":""}}
+{"t":1795563673504,"m":{"type":"out","stream":"task","text":"[작업자 10 hoonlee_cns] [langacct] hoonlee_cns: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563675237,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] [F4 진단-목록] k3pop1 checked=1/248 · 첫 체크 칸 item checked=false ind=true\n","cls":""}}
+{"t":1795563676159,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] [F4 진단] k3pop1 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n","cls":""}}
+{"t":1795563676445,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [inRow] LT_SUM: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n","cls":""}}
+{"t":1795563676585,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] H13 146s\n","cls":""}}
+{"t":1795563676586,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] E2 146s\n","cls":""}}
+{"t":1795563682982,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [inRow] CREATION_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n","cls":""}}
+{"t":1795563685474,"m":{"type":"out","stream":"task","text":"  ok 4 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1992:7 › 검증엔진 SCP0005 @trace › W4c 정밀 판정 — 판정필요 해소 (6.8m)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795563689432,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read1\\video\\20261125_084127_34220\n","cls":""}}
+{"t":1795563689432,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   Slow test file: [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts (6.8m)\n","cls":""}}
+{"t":1795563689433,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel\n","cls":""}}
+{"t":1795563689433,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   1 passed (6.9m)\n","cls":""}}
+{"t":1795563689537,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [inRow] LAST_UPDATE_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n","cls":""}}
+{"t":1795563689537,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] C3 158s\n","cls":""}}
+{"t":1795563691542,"m":{"type":"out","stream":"task","text":"  ok 5 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1318:7 › 검증엔진 SCP0005 @trace › W4 E4 업무 검증 메시지 = AS-IS(저장 차단) (1.9m)  [작업자 6 crjung]\n","cls":""}}
+{"t":1795563692022,"m":{"type":"out","stream":"task","text":"[작업자 6 crjung] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read6\\video\\20261125_084132_36432\n","cls":""}}
+{"t":1795563692024,"m":{"type":"out","stream":"task","text":"[작업자 6 crjung]   1 passed (5.0m)\n","cls":""}}
+{"t":1795563693799,"m":{"type":"out","stream":"task","text":"  ok 6 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3245:7 › 정합검증 SCP0005 @verify › 정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3) (40.8s)  [작업자 9 heeyoung123]\n","cls":""}}
+{"t":1795563694132,"m":{"type":"out","stream":"task","text":"[작업자 9 heeyoung123] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read9\\video\\20261125_084134_30436\n","cls":""}}
+{"t":1795563694133,"m":{"type":"out","stream":"task","text":"[작업자 9 heeyoung123]   1 passed (3.8m)\n","cls":""}}
+{"t":1795563698618,"m":{"type":"out","stream":"task","text":"  ok 7 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3678:7 › 정합검증 SCP0005 @verify › 그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회 (1.6m)  [작업자 7 donghoon.lee]\n","cls":""}}
+{"t":1795563699093,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read7\\video\\20261125_084139_35168\n","cls":""}}
+{"t":1795563699094,"m":{"type":"out","stream":"task","text":"[작업자 7 donghoon.lee]   1 passed (4.7m)\n","cls":""}}
+{"t":1795563699180,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] D5 168s\n","cls":""}}
+{"t":1795563699180,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] K5 168s\n","cls":""}}
+{"t":1795563699467,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] H2 168s\n","cls":""}}
+{"t":1795563701366,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] A2 170s\n","cls":""}}
+{"t":1795563701769,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] C2 171s\n","cls":""}}
+{"t":1795563701784,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] C6 171s\n","cls":""}}
+{"t":1795563702374,"m":{"type":"out","stream":"task","text":"[작업자 1 · 계정 minyonglee1] 일 11: 시험 2개 · 지난 소요 합 14.3분 · 남은 묶음 7개\n","cls":""}}
+{"t":1795563703432,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795563705654,"m":{"type":"out","stream":"task","text":"  ok 8 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1699:7 › 검증엔진 SCP0005 @trace › W4b H3·F5·F3·M3·J1·H4 (28.2s)  [작업자 10 hoonlee_cns]\n","cls":""}}
+{"t":1795563706250,"m":{"type":"out","stream":"task","text":"[작업자 10 hoonlee_cns] [langacct] hoonlee_cns: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563715901,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] E5 185s\n","cls":""}}
+{"t":1795563720369,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [lap] E7 189s\n","cls":""}}
+{"t":1795563726652,"m":{"type":"out","stream":"task","text":"[작업자 2 · 계정 bindy122678] 일 12: 시험 7개 · 지난 소요 합 2.0분 · 남은 묶음 0개\n","cls":""}}
+{"t":1795563727669,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] Running 7 tests using 1 worker\n","cls":""}}
+{"t":1795563728334,"m":{"type":"out","stream":"task","text":"  ok 9 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:366:65 › 정합검증 SCP0005 @verify › 그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2) (3.3m)  [작업자 4 candoism]\n","cls":""}}
+{"t":1795563729036,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795563729067,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read4\\video\\20261125_084209_26184\n","cls":""}}
+{"t":1795563729068,"m":{"type":"out","stream":"task","text":"[작업자 4 candoism]   1 passed (6.4m)\n","cls":""}}
+{"t":1795563730320,"m":{"type":"out","stream":"task","text":"  ok 10 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:4100:7 › 정합검증 SCP0005 @verify › 조회조건 콤보 후보 품질(B1·B2) (22.2s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795563754977,"m":{"type":"out","stream":"task","text":"  ok 11 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:4343:7 › 정합검증 SCP0005 @verify › Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수 (21.6s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795563755238,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read11\\video\\20261125_084235_35692\n","cls":""}}
+{"t":1795563755240,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   2 passed (52.4s)\n","cls":""}}
+{"t":1795563771245,"m":{"type":"out","stream":"task","text":"[작업자 3 brightboy] [langacct] brightboy: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563774499,"m":{"type":"out","stream":"task","text":"  ok 12 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1181:7 › 검증엔진 SCP0005 @trace › PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2 (435ms)  [작업자 3 brightboy]\n","cls":""}}
+{"t":1795563774810,"m":{"type":"out","stream":"task","text":"[작업자 3 brightboy] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read3\\video\\20261125_084254_42196\n","cls":""}}
+{"t":1795563774811,"m":{"type":"out","stream":"task","text":"[작업자 3 brightboy]   2 passed (7.6m)\n","cls":""}}
+{"t":1795563778994,"m":{"type":"out","stream":"task","text":"  ok 13 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:3169:7 › 검증엔진 SCP0005 @trace › H2 조건부 배경색 = AS-IS 행 조건(color_rules) (3.7m)  [작업자 5 cnsytchoi]\n","cls":""}}
+{"t":1795563779522,"m":{"type":"out","stream":"task","text":"[작업자 5 cnsytchoi] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read5\\video\\20261125_084259_12472\n","cls":""}}
+{"t":1795563779523,"m":{"type":"out","stream":"task","text":"[작업자 5 cnsytchoi]   1 passed (6.8m)\n","cls":""}}
+{"t":1795563886869,"m":{"type":"out","stream":"task","text":"[작업자 10 hoonlee_cns] [langacct] hoonlee_cns: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563909676,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795563910667,"m":{"type":"out","stream":"task","text":"  ok 14 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:998:7 › 정합검증 SCP0005 @verify › 그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지 (20.9s)  [작업자 10 hoonlee_cns]\n","cls":""}}
+{"t":1795563910955,"m":{"type":"out","stream":"task","text":"[작업자 10 hoonlee_cns] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read10\\video\\20261125_084510_32112\n","cls":""}}
+{"t":1795563910957,"m":{"type":"out","stream":"task","text":"[작업자 10 hoonlee_cns]   2 passed (7.0m)\n","cls":""}}
+{"t":1795563921144,"m":{"type":"out","stream":"task","text":"  ok 15 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1644:7 › 검증엔진 SCP0005 @trace › A6 조회 결과 행 순서 = AS-IS ORDER BY (8.7s)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795563921252,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795564101977,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795564109495,"m":{"type":"out","stream":"task","text":"  ok 16 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:3395:7 › 검증엔진 SCP0005 @trace › BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드 (4.5s)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795564109840,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795564290595,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795564299822,"m":{"type":"out","stream":"task","text":"  ok 17 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2760:7 › 정합검증 SCP0005 @verify › Division별 조회 오류·콤보 이름(F4·A2) (6.5s)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795564299932,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795564480563,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795564483556,"m":{"type":"out","stream":"task","text":"  ok 18 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2845:7 › 정합검증 SCP0005 @verify › 실적 구간 색(H2) (265ms)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795564483666,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795564664237,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795564667071,"m":{"type":"out","stream":"task","text":"  ok 19 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3207:7 › 정합검증 SCP0005 @verify › 재조회 하위 시트 초기화(A4) (252ms)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795564667170,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795564847675,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795564850695,"m":{"type":"out","stream":"task","text":"  ok 20 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3219:7 › 정합검증 SCP0005 @verify › 월 Bucket 합계(F1) (247ms)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795564850806,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780 · e2e-read SCP0005)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795565031530,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [langacct] bindy122678: 다른 실행(pid 27780)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795565048240,"m":{"type":"out","stream":"task","text":"  ok 21 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3401:7 › 정합검증 SCP0005 @verify › 고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2) (13.9s)  [작업자 2 bindy122678]\n","cls":""}}
+{"t":1795565048516,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678] [TO-BE 녹화] 녹화 파일 7개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\read12\\video\\20261125_090408_33324\n","cls":""}}
+{"t":1795565048516,"m":{"type":"out","stream":"task","text":"[작업자 2 bindy122678]   7 passed (22.0m)\n","cls":""}}
+{"t":1795565050903,"m":{"type":"out","stream":"task","text":"[시간] 읽기 29.6분 · 실행 12회 · 동시 최대 10개 · 작업자별 일한 시간 minyonglee1 7.9분, bindy122678 27.2분, brightboy 7.6분, candoism 6.4분, cnsytchoi 6.9분, crjung 5.0분, donghoon.lee 4.8분, fran.d.k 3.4분, heeyoung123 3.8분, hoonlee_cns 7.0분\n","cls":""}}
+{"t":1795565051762,"m":{"type":"out","stream":"task","text":"[차례] Running 5 tests using 1 worker\n","cls":""}}
+{"t":1795565090056,"m":{"type":"out","stream":"task","text":"[차례] [crud] 빈 키 없음 — 신규행 경로 무효, 기존행 수정 저장으로 측정 · 초기 {\"ROUTE_ID\":\"\"}: 키 값 없음 ['ROUTE_ID'] · 추천 0건\n","cls":""}}
+{"t":1795565113321,"m":{"type":"out","stream":"task","text":"  ok 22 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:1066:7 › 정합검증 SCP0005 @verify › CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6) (58.0s)  [차례]\n","cls":""}}
+{"t":1795565173170,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] T64 저장 키 컬럼 제외 1: ROUTE_ID\n","cls":""}}
+{"t":1795565178733,"m":{"type":"out","stream":"task","text":"[차례] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795565181420,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:06:21 LT_TYPE r4 시작\n","cls":""}}
+{"t":1795565197276,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:06:37 LT_TYPE 끝\n","cls":""}}
+{"t":1795565198640,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:06:38 FROM_COUNTRY r360 시작\n","cls":""}}
+{"t":1795565221347,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:07:01 FROM_COUNTRY 끝\n","cls":""}}
+{"t":1795565222213,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:07:02 FROM_CITY r360 시작\n","cls":""}}
+{"t":1795565244351,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:07:24 FROM_CITY 끝\n","cls":""}}
+{"t":1795565244912,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:07:24 TRANSPORT_MODE r360 시작\n","cls":""}}
+{"t":1795565263227,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:07:43 TRANSPORT_MODE 끝\n","cls":""}}
+{"t":1795565263977,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:07:43 PRIORITY r360 시작\n","cls":""}}
+{"t":1795565280171,"m":{"type":"out","stream":"task","text":"[차례] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795565281974,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:01 PRIORITY 끝\n","cls":""}}
+{"t":1795565285444,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:05 DAYS_MON r7012 시작\n","cls":""}}
+{"t":1795565303278,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:23 DAYS_MON 끝\n","cls":""}}
+{"t":1795565303975,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:23 DAYS_TUE r360 시작\n","cls":""}}
+{"t":1795565319557,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:39 DAYS_TUE 끝\n","cls":""}}
+{"t":1795565320229,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:40 DAYS_WED r360 시작\n","cls":""}}
+{"t":1795565337912,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:57 DAYS_WED 끝\n","cls":""}}
+{"t":1795565338620,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:08:58 DAYS_THU r360 시작\n","cls":""}}
+{"t":1795565357213,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:09:16 DAYS_THU 끝\n","cls":""}}
+{"t":1795565357596,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:09:17 DAYS_FRI r360 시작\n","cls":""}}
+{"t":1795565373561,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:09:33 DAYS_FRI 끝\n","cls":""}}
+{"t":1795565374265,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:09:34 DAYS_SAT r360 시작\n","cls":""}}
+{"t":1795565389480,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:09:49 DAYS_SAT 끝\n","cls":""}}
+{"t":1795565390167,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:09:50 DAYS_SUN r360 시작\n","cls":""}}
+{"t":1795565405579,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:05 DAYS_SUN 끝\n","cls":""}}
+{"t":1795565406399,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:06 D_PORT_NAME r360 시작\n","cls":""}}
+{"t":1795565423552,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:23 D_PORT_NAME 끝\n","cls":""}}
+{"t":1795565424330,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:24 D_COUNTRY r360 시작\n","cls":""}}
+{"t":1795565427685,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:27 D_COUNTRY 끝\n","cls":""}}
+{"t":1795565428262,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:28 D_PORT_CODE r360 시작\n","cls":""}}
+{"t":1795565431562,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:31 D_PORT_CODE 끝\n","cls":""}}
+{"t":1795565432121,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:32 A_PORT_NAME r360 시작\n","cls":""}}
+{"t":1795565452300,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:52 A_PORT_NAME 끝\n","cls":""}}
+{"t":1795565453099,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:53 A_COUNTRY r360 시작\n","cls":""}}
+{"t":1795565456419,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:56 A_COUNTRY 끝\n","cls":""}}
+{"t":1795565456981,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:10:56 A_PORT_CODE r360 시작\n","cls":""}}
+{"t":1795565460379,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:11:00 A_PORT_CODE 끝\n","cls":""}}
+{"t":1795565461104,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:11:01 SHIPPING_COMPANY r360 시작\n","cls":""}}
+{"t":1795565481632,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:11:21 SHIPPING_COMPANY 끝\n","cls":""}}
+{"t":1795565482448,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:11:22 TO_COUNTRY r360 시작\n","cls":""}}
+{"t":1795565507674,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:11:47 TO_COUNTRY 끝\n","cls":""}}
+{"t":1795565508482,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:11:48 TO_CITY r360 시작\n","cls":""}}
+{"t":1795565526923,"m":{"type":"out","stream":"task","text":"[차례] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795565528595,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:08 TO_CITY 끝\n","cls":""}}
+{"t":1795565530445,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:10 SHIP_DOC_PREPARATION_DATE r138 시작\n","cls":""}}
+{"t":1795565552859,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:29 SHIP_DOC_PREPARATION_DATE 끝\n","cls":""}}
+{"t":1795565552864,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:29 LT_DEPARTURE_INLAND r360 시작\n","cls":""}}
+{"t":1795565562654,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:42 LT_DEPARTURE_INLAND 끝\n","cls":""}}
+{"t":1795565563080,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:43 LT_WAIT_SHIPPING r360 시작\n","cls":""}}
+{"t":1795565574783,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:54 LT_WAIT_SHIPPING 끝\n","cls":""}}
+{"t":1795565575198,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:12:55 LT_VOYAGE r360 시작\n","cls":""}}
+{"t":1795565589693,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:09 LT_VOYAGE 끝\n","cls":""}}
+{"t":1795565590067,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:10 LT_LAY_OFF_CLEARANCE r360 시작\n","cls":""}}
+{"t":1795565604718,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:24 LT_LAY_OFF_CLEARANCE 끝\n","cls":""}}
+{"t":1795565605365,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:25 LT_ARRIVAL_INLAND r360 시작\n","cls":""}}
+{"t":1795565621752,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:41 LT_ARRIVAL_INLAND 끝\n","cls":""}}
+{"t":1795565622208,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:42 One_SEGMENT_COST r3075 시작\n","cls":""}}
+{"t":1795565638094,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:58 One_SEGMENT_COST 끝\n","cls":""}}
+{"t":1795565638596,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:13:58 Two_SEGMENT_COST r3075 시작\n","cls":""}}
+{"t":1795565654214,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:14:14 Two_SEGMENT_COST 끝\n","cls":""}}
+{"t":1795565654726,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:14:14 Three_SEGMENT_COST r3075 시작\n","cls":""}}
+{"t":1795565671344,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:14:31 Three_SEGMENT_COST 끝\n","cls":""}}
+{"t":1795565672055,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:14:32 VALID_YN r360 시작\n","cls":""}}
+{"t":1795565685479,"m":{"type":"out","stream":"task","text":"[차례] [저장 세부] 00:14:45 VALID_YN 끝\n","cls":""}}
+{"t":1795565714290,"m":{"type":"out","stream":"task","text":"[차례] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795565746650,"m":{"type":"out","stream":"task","text":"[차례] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795565788552,"m":{"type":"out","stream":"task","text":"[차례] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795565792992,"m":{"type":"out","stream":"task","text":"  ok 23 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:1752:7 › 정합검증 SCP0005 @verify › 저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장 (11.3m)  [차례]\n","cls":""}}
+{"t":1795565826045,"m":{"type":"out","stream":"task","text":"[차례] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795565862372,"m":{"type":"out","stream":"task","text":"  ok 24 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:1907:7 › 정합검증 SCP0005 @verify › 저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기) (1.1m)  [차례]\n","cls":""}}
+{"t":1795565892944,"m":{"type":"out","stream":"task","text":"[차례] [excel_stage_clean] SCP0005: 2026-11-25 09:16:45 이후 4행 중 표식 4건 → 삭제 4건 · IDs [1360561, 1360562, 1360563, 1360564]\n","cls":""}}
+{"t":1795565893559,"m":{"type":"out","stream":"task","text":"  ok 25 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2344:7 › 정합검증 SCP0005 @verify › Excel 2단계 차단(M1) (28.3s)  [차례]\n","cls":""}}
+{"t":1795565917783,"m":{"type":"out","stream":"task","text":"[차례] [excel_stage_clean] SCP0005: 2026-11-25 09:17:16 이후 0행 중 표식 0건 → 삭제 0건 · IDs []\n","cls":""}}
+{"t":1795565937006,"m":{"type":"out","stream":"task","text":"[차례] [excel_stage_clean] SCP0005: 2026-11-25 09:17:16 이후 4행 중 표식 4건 → 삭제 4건 · IDs [1360565, 1360566, 1360567, 1360568]\n","cls":""}}
+{"t":1795566048367,"m":{"type":"out","stream":"task","text":"[차례] [excel_stage_clean] SCP0005: 2026-11-25 09:17:16 이후 22행 중 표식 0건 → 삭제 0건 · IDs []\n","cls":""}}
+{"t":1795566062541,"m":{"type":"out","stream":"task","text":"  ok 26 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2358:7 › 정합검증 SCP0005 @verify › Excel 양식·업로드(M1) (2.8m)  [차례]\n","cls":""}}

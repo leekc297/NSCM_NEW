@@ -297,10 +297,59 @@ export const MktFcstComparisonForm = ({
             {multiField('LBL00011', 'Sales Site', searchParams.salesSiteIds, salesSiteOptions, v =>
               setSearchParams({ salesSiteIds: v })
             )}
-            {/* Row 2 — Biz.Type / Plant Site / Period* / Bucket */}
-            {multiField('LBL00085', 'Biz.Type', searchParams.bizTypes, bizTypeOptions, v =>
-              setSearchParams({ bizTypes: v })
-            )}
+            {/* Row 2 — Version* / Plant Site / Period* / Bucket
+                Version 과 Biz.Type 자리 교체(2026-11-22 개선 요청) — 필수 조건인 Version 을 펼침 영역 밖에 둔다. */}
+            {/* Version* (모달 전용 — AS-IS G-01: 직접 타이핑 차단) */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t('LBL00031', 'Ver.')}
+                labelAlign='right'
+                required
+                render={() => (
+                  // Project/Model·Nickname 과 동일한 PopupSearchInput 레이아웃(입력 + 별도 버튼 flex row) —
+                  // 종전 endAdornment absolute 배치(right:-40px)는 폭이 달라 보이는 원인이라 아래 구현으로 교체.
+                  // 구 구현(참고용, 미사용):
+                  // <InputField
+                  //   fullWidth
+                  //   className={clsx(styles.inputWithSearch, styles.input)}
+                  //   value={searchParams.version}
+                  //   inputProps={{ readOnly: true }}
+                  //   InputProps={{
+                  //     endAdornment: (
+                  //       <Button
+                  //         appearance='outlined'
+                  //         priority='normal'
+                  //         iconComponent={
+                  //           <FunctionSearchIcon
+                  //             appearance='lined'
+                  //             onClick={() => setOpenVersionModal(true)}
+                  //           />
+                  //         }
+                  //       />
+                  //     ),
+                  //   }}
+                  //   onClick={() => setOpenVersionModal(true)}
+                  //   onKeyDown={() => setOpenVersionModal(true)} // AS-IS txtVersion_KeyDown L1670 — 키 = 팝업
+                  // />
+                  <Stack direction='row' spacing={0.5} alignItems='stretch' sx={{ width: '100%' }}>
+                    <InputField
+                      fullWidth
+                      value={searchParams.version}
+                      inputProps={{ readOnly: true }}
+                      onClick={() => setOpenVersionModal(true)}
+                      onKeyDown={() => setOpenVersionModal(true)} // AS-IS txtVersion_KeyDown L1670 — 키 = 팝업
+                    />
+                    <Button
+                      appearance='outlined'
+                      priority='normal'
+                      iconComponent={<FunctionSearchIcon appearance='lined' />}
+                      onClick={() => setOpenVersionModal(true)}
+                    />
+                  </Stack>
+                )}
+              />
+            </Grid>
             {multiField(
               'LBL00005',
               'Plant Site',
@@ -395,58 +444,10 @@ export const MktFcstComparisonForm = ({
               scmSiteIds={searchParams.salesSiteIds}
               projectCodes={searchParams.projectCodes}
             />
-            {/* Row 4 — Version* (모달 전용 — AS-IS G-01: 직접 타이핑 차단) / QTY / 체크박스 */}
-            {/* Project 와 동일 폭(size 3) — Version 밑에 QTY 는 Model/Nickname, 체크박스는 Item Type 아래로 정렬 */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t('LBL00031', 'Ver.')}
-                labelAlign='right'
-                required
-                render={() => (
-                  // Project/Model·Nickname 과 동일한 PopupSearchInput 레이아웃(입력 + 별도 버튼 flex row) —
-                  // 종전 endAdornment absolute 배치(right:-40px)는 폭이 달라 보이는 원인이라 아래 구현으로 교체.
-                  // 구 구현(참고용, 미사용):
-                  // <InputField
-                  //   fullWidth
-                  //   className={clsx(styles.inputWithSearch, styles.input)}
-                  //   value={searchParams.version}
-                  //   inputProps={{ readOnly: true }}
-                  //   InputProps={{
-                  //     endAdornment: (
-                  //       <Button
-                  //         appearance='outlined'
-                  //         priority='normal'
-                  //         iconComponent={
-                  //           <FunctionSearchIcon
-                  //             appearance='lined'
-                  //             onClick={() => setOpenVersionModal(true)}
-                  //           />
-                  //         }
-                  //       />
-                  //     ),
-                  //   }}
-                  //   onClick={() => setOpenVersionModal(true)}
-                  //   onKeyDown={() => setOpenVersionModal(true)} // AS-IS txtVersion_KeyDown L1670 — 키 = 팝업
-                  // />
-                  <Stack direction='row' spacing={0.5} alignItems='stretch' sx={{ width: '100%' }}>
-                    <InputField
-                      fullWidth
-                      value={searchParams.version}
-                      inputProps={{ readOnly: true }}
-                      onClick={() => setOpenVersionModal(true)}
-                      onKeyDown={() => setOpenVersionModal(true)} // AS-IS txtVersion_KeyDown L1670 — 키 = 팝업
-                    />
-                    <Button
-                      appearance='outlined'
-                      priority='normal'
-                      iconComponent={<FunctionSearchIcon appearance='lined' />}
-                      onClick={() => setOpenVersionModal(true)}
-                    />
-                  </Stack>
-                )}
-              />
-            </Grid>
+            {/* Row 4 — Biz.Type / QTY / 체크박스 (Biz.Type 은 Version 과 자리 교체, 2026-11-22) */}
+            {multiField('LBL00085', 'Biz.Type', searchParams.bizTypes, bizTypeOptions, v =>
+              setSearchParams({ bizTypes: v })
+            )}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}

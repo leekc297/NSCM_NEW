@@ -1,5 +1,1153 @@
 [
  {
+  "row_id": "V-ae96b44a",
+  "result": "NA",
+  "evidence": "병합된 행 쌍 없음 — 현재 조회 결과로 계층 병합 재현 불가",
+  "tobe_ref": "E2E @verify 병합 셀",
+  "cond": "89a7bf5d",
+  "mctx": {
+   "calls": 24,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-c063e27c",
+  "result": "NA",
+  "evidence": "값 있는 콤보 칸 없음",
+  "tobe_ref": "E2E @verify 조회 순회",
+  "cond": "6fa5edb3",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-489602aa",
+  "result": "PASS",
+  "evidence": "다중 선택 Division(요청 '81') — 값별 순회 불가 · 전체 조회 오류 0 · 행 0",
+  "tobe_ref": "E2E @verify 조회 순회",
+  "cond": "e0110833",
+  "mctx": {
+   "calls": 20,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-c9c36f93",
+  "result": "PASS",
+  "evidence": "조건 그대로 재조회 본문 동일 · 글자 입력 조건 없어 변경 시험 미측정",
+  "tobe_ref": "E2E @verify 필터·본문",
+  "cond": "7ac2da6f",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-63c6cabf",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 조회 0행",
+  "tobe_ref": "E2E @verify 필터·본문",
+  "cond": "1c5fe62d",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6d330a41",
+  "result": "PASS",
+  "evidence": "진입 화면 '_' 폴백 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-b986e197",
+  "result": "NA",
+  "evidence": "Insert 비노출·비활성 — 신규 행 없는 화면",
+  "tobe_ref": "E2E @verify Insert Div",
+  "cond": "26a4e16f",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5564070a",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 방향키 이동 0회만 측정(행 부족 또는 선택 안 움직임)",
+  "tobe_ref": "E2E @verify 동적·응답",
+  "cond": "f0a74fbd",
+  "mctx": {
+   "calls": 16,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-679f5030",
+  "result": "NA",
+  "evidence": "동적 기간 칸 없음(정규식 (^[WMDY]?_?\\d{6,8}$) · 뒤쪽 칸 )",
+  "tobe_ref": "E2E @verify 동적·응답",
+  "cond": "1008d7ad",
+  "mctx": {
+   "calls": 16,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-67877bc6",
+  "result": "NA",
+  "evidence": "Insert 버튼 비노출 — 신규행 없는 화면",
+  "tobe_ref": "E2E @verify 행 상태",
+  "cond": "04e26ead",
+  "mctx": {
+   "calls": 24,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6f1aea63",
+  "result": "FAIL",
+  "evidence": "MSG00135(조회 전 가드) · 조회 전 'Bulk Update' 클릭 → 알림 없음 · 모달 열림",
+  "tobe_ref": "E2E @verify 버튼 모달",
+  "cond": "2df707b9",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-23e055de",
+  "result": "판정필요",
+  "evidence": "MSG00093 — BtnInput_Click 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(BtnInput_Click)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-21c0cf89",
+  "result": "판정필요",
+  "evidence": "MSG00134 — BtnInput_Click 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(BtnInput_Click)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-c3498440",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-57fe96b8",
+  "result": "FAIL",
+  "evidence": "MSG00135(조회 전 가드) · 조회 전 'Bulk Update' 클릭 → 알림 없음 · 모달 열림",
+  "tobe_ref": "E2E @verify 버튼 모달",
+  "cond": "5c59b565",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-f5e2b116",
+  "result": "판정필요",
+  "evidence": "MSG00093 — BtnInput_Click 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(BtnInput_Click)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "dab952f6",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-59de933f",
+  "result": "판정필요",
+  "evidence": "MSG00134 — BtnInput_Click 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(BtnInput_Click)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "d98a4dab",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-bc60d5c7",
+  "result": "판정필요",
+  "evidence": "MSG00093 — BtnInput_Click 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(BtnInput_Click)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "405aa082",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-db2a4710",
+  "result": "FAIL",
+  "evidence": "MSG00135(조회 전 가드) · 조회 전 'Bulk Update' 클릭 → 알림 없음 · 모달 열림",
+  "tobe_ref": "E2E @verify 버튼 모달",
+  "cond": "e5386727",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-c61b1188",
+  "result": "판정필요",
+  "evidence": "MSG00093 — BtnInput_Click 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(BtnInput_Click)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "765e6e6c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-f6d2008f",
+  "result": "판정필요",
+  "evidence": "MSG00134 — BtnInput_Click 경로 메시지(저장 전 검증 아님 · Save 진입점에서 닿지 않음) — 해당 동작 시나리오(BtnInput_Click)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "047b6903",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-c409c22a",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "76d7d684",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-a05684ff",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "265a1808",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-a9a4a551",
+  "result": "PASS",
+  "evidence": "AS-IS 입력 버튼 ↔ TO-BE 버튼영역 'Bulk Update' 표시 · 조회 전 알림 없음 · 조회 뒤 모달 열림(조건 Day of the week·Input Value)",
+  "tobe_ref": "E2E @verify 버튼 모달",
+  "cond": "18b1b685",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-d6b26b0f",
+  "result": "NA",
+  "evidence": "COMPANY_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "bd86c6a2",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-fc2ae9de",
+  "result": "NA",
+  "evidence": "DIVISION_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "3a6aa9a7",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-9c7bd228",
+  "result": "NA",
+  "evidence": "siMain.SwitchLock: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "f435a0fa",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-24f44d76",
+  "result": "NA",
+  "evidence": "COMPANY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "217ad48f",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4a7ffdbe",
+  "result": "PASS",
+  "evidence": "r0 siMain.SwitchLock 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-1f2690f4",
+  "result": "PASS",
+  "evidence": "r0 COMPANY 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-81e0eea9",
+  "result": "PASS",
+  "evidence": "기존행 r0 COMPANY_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ffd1b737",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4c0fb1d3",
+  "result": "판정필요",
+  "evidence": "기존행 r0 동적 <DYNAMIC:LOOP> → 대표 D_20261125(362개 중)  편집=true — 기대: AS-IS 동적 컬럼 잠금 기대 없음(편집 모드 기본 해제 가정) — 잠금 문장이 없으면 편집 가능",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-182caf9d",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ddf6ea3b",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-831acbe0",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-2cb6636e",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8a24338f",
+  "result": "PASS",
+  "evidence": "COMPANY_ID: 원값 'GM00' → 표시 'Ultium Cells LLC' (이름 'Ultium Cells LLC') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-1598bbba",
+  "result": "PASS",
+  "evidence": "COMPANY_ID 신규행·기존행 모두 편집 불가 — 입력 경로 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-b8e1ebd2",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6c335f99",
+  "result": "PASS",
+  "evidence": "COMPANY_ID: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-85cbb017",
+  "result": "PASS",
+  "evidence": "D_20261125: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d203d42a",
+  "result": "PASS",
+  "evidence": "COMPANY_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-04c7dc81",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d017dfef",
+  "result": "PASS",
+  "evidence": "D_20261125 (동적 <DYNAMIC:LOOP> → 대표 D_20261125(362개 중)): 기존행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-b297258d",
+  "result": "PASS",
+  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 Shipment Working Day/GET_SCP_PERIOD(2행), calendar/SEARCH(437행) — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출 없음)",
+  "tobe_ref": "E2E @trace",
+  "cond": "5bf828cc",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-ddc05b78",
+  "result": "PASS",
+  "evidence": "AS-IS 버튼 Search·Save → TO-BE 전부 노출 · 대조표 제외 결정 Edit(비교 제외) (보이는 버튼: KOR, 장 장성원, Home, SSP Working Day, Scroll tabs left, Scroll tabs right, Close others, Close All, Full screen, Open, Search(F5), Bulk Update, Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Excel)",
+  "tobe_ref": "E2E @trace",
+  "cond": "84e4a56e",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-411ddf36",
+  "result": "PASS",
+  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c93a5b5d",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-50365a11",
+  "result": "PASS",
+  "evidence": "PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY: Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 2행",
+  "tobe_ref": "E2E @trace",
+  "cond": "97595841",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-a9bbcb00",
+  "result": "PASS",
+  "evidence": "P_SSP0005_GET: Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 1행, Shipment Working Day/SEARCH HTTP 200 2행",
+  "tobe_ref": "E2E @trace",
+  "cond": "21847734",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-686bcc89",
+  "result": "PASS",
+  "evidence": "PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN: calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행, calendar/SEARCH HTTP 200 437행",
+  "tobe_ref": "E2E @trace",
+  "cond": "2c2e9b5e",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-cbcf7784",
+  "result": "PASS",
+  "evidence": "PKG_COM0000.P_SCM0001_GET_SCP_PERIOD: Shipment Working Day/GET_SCP_PERIOD HTTP 200 2행",
+  "tobe_ref": "E2E @trace",
+  "cond": "0bf20acb",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-16740de1",
+  "result": "NA",
+  "evidence": "SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW: SSP0005/Shipment Working Day/SAVE — 화면 진입·조회 중 호출 없음(저장 경로 — @verify CRUD 실저장 행에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "9cc06719",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-85bad504",
+  "result": "PASS",
+  "evidence": "AS-IS 기본 표시 컬럼 2 ⊆ TO-BE 그리드 364: 누락 0 (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: )",
+  "tobe_ref": "E2E @trace",
+  "cond": "0961e4b9",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-887f2f99",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "5ade7c22",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-d21982ea",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: AS-IS 'Divison' = TO-BE 헤더 'Divison'",
+  "tobe_ref": "E2E @trace",
+  "cond": "5ade7c22",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-e1fff170",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace",
+  "cond": "fd8f0918",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d081aabb",
+  "result": "PASS",
+  "evidence": "그리드 컬럼 구성(AS-IS Div 81 기준 1컬럼 대조): 누락 없음 · 추가 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-db64f402",
+  "result": "PASS",
+  "evidence": "공통 2개 컬럼 순서 일치(시트 Shipment Working Day)",
+  "tobe_ref": "E2E @verify 표시",
+  "cond": "e7af3788",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a66d06d4",
+  "result": "ERROR",
+  "evidence": "Shipment Working Day · [측정 전제 미충족] 조회 행 0(호출 20건) — 화면 결함이 아니라 측정 실패(ERROR) — Div 40 조회 결과 없이 컬럼 구성 판정 불가",
+  "tobe_ref": "E2E @verify Division 컬럼",
+  "cond": "afde2791",
+  "mctx": {
+   "calls": 20,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4245df49",
+  "result": "ERROR",
+  "evidence": "Shipment Working Day · [측정 전제 미충족] 조회 행 0(호출 38건) — 화면 결함이 아니라 측정 실패(ERROR) — Div 81 조회 결과 없이 컬럼 구성 판정 불가",
+  "tobe_ref": "E2E @verify Division 컬럼",
+  "cond": "b050dd7f",
+  "mctx": {
+   "calls": 38,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6524b70e",
+  "result": "ERROR",
+  "evidence": "Shipment Working Day · [측정 전제 미충족] 조회 행 0(호출 56건) — 화면 결함이 아니라 측정 실패(ERROR) — Div 82 조회 결과 없이 컬럼 구성 판정 불가",
+  "tobe_ref": "E2E @verify Division 컬럼",
+  "cond": "c000d424",
+  "mctx": {
+   "calls": 56,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-4aa8e925",
+  "result": "PASS",
+  "evidence": "기존행 r0 COMPANY_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @trace",
+  "cond": "d4e73cb7",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-35395986",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @trace",
+  "cond": "5ade7c22",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-c38775b6",
+  "result": "NA",
+  "evidence": "Insert 버튼 비노출 · AS-IS Insert 도 무동작(AS-IS InsertButton 실행 문장 0) — 신규행이 없는 화면이라 신규행 기본값(D4) 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "23318061",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-89492970",
+  "result": "NA",
+  "evidence": "DAY_CODE 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "ca4e151d",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-d274d443",
+  "result": "NA",
+  "evidence": "SAT 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "c0a47837",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-ca2efd2e",
+  "result": "NA",
+  "evidence": "SUN 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "55ef50f7",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-8725229f",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "5ade7c22",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-3e579fb8",
+  "result": "NA",
+  "evidence": "DAY_CODE: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일·후보 설정·읽기) — 연쇄 채움 대상 아님(D1/D3/H2·C2 에서 판정) · AS-IS InitSpreadDateColumn:250 dr[DefColumns.DAY_CODE].ToString()",
+  "tobe_ref": "E2E @trace",
+  "cond": "bbb6bb06",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-3912ade6",
+  "result": "NA",
+  "evidence": "SAT: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일·후보 설정·읽기) — 연쇄 채움 대상 아님(D1/D3/H2·C2 에서 판정) · AS-IS InitSpreadDateColumn:267 spdInfo.Sheet().ColumnHeader.Cells[2, spdInfo.GetMaxColumnIndex()",
+  "tobe_ref": "E2E @trace",
+  "cond": "9250e025",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-37d62dbc",
+  "result": "NA",
+  "evidence": "SUN: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일·후보 설정·읽기) — 연쇄 채움 대상 아님(D1/D3/H2·C2 에서 판정) · AS-IS InitSpreadDateColumn:265 if (sDayCode == DefColumnsLabel.SAT || sDayCode == DefColumnsLabe",
+  "tobe_ref": "E2E @trace",
+  "cond": "e6aa16b1",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-94eb5239",
+  "result": "판정필요",
+  "evidence": "P_FIRST_ROW 연쇄 원천 컬럼 해석 불가 — AS-IS SaveData_Main:514 saveDS.Tables[0].Rows[0][DefColumns.P_FIRST_ROW] = \"Y\" [try ▸ if (fps.Name == \"spdMain\") ▸ if (siMain != null && siMain.IsLock(SpdSheet.shtMain) == false)]",
+  "tobe_ref": "E2E @trace",
+  "cond": "9b7f84e8",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-542b856c",
+  "result": "판정필요",
+  "evidence": "P_LAST_ROW 연쇄 원천 컬럼 해석 불가 — AS-IS SaveData_Main:515 saveDS.Tables[0].Rows[iCount-1][DefColumns.P_LAST_ROW] = \"Y\" [try ▸ if (fps.Name == \"spdMain\") ▸ if (siMain != null && siMain.IsLock(SpdSheet.shtMain) == false)]",
+  "tobe_ref": "E2E @trace",
+  "cond": "c772b5bb",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a9d8cee0",
+  "result": "PASS",
+  "evidence": "조회조건 Div: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true · 기준표 '[순서 1 · 선택/단일 · 기본 ]' ↔ AS-IS 원문 UsrCheckedList — AS-IS 원문 우선(T181)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-197bd851",
+  "result": "PASS",
+  "evidence": "[멀티선택 Div] ALL 선택 조회 → 1행 (개별 1행)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 10,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6b0304a4",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 8건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d35fdfb8",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 8건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-fe598693",
+  "result": "판정필요",
+  "evidence": "조회조건 라벨 'Plant Site' 를 조회조건 영역에서 못 찾음 — 명칭 차이는 H5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-c9bd2b82",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 조회조건 Plant Site 칸을 찾지 못함(라벨·구조 — 존재 여부는 smoke 조회조건 검사에서 판정 · 2026-11-06 T106)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9bf88d42",
+  "result": "PASS",
+  "evidence": "[멀티선택 Div] '81_UC Automotive Battery(UC)' 1개 선택 조회 → 1행 · DIVISION_ID 값 전부 일치 (기본 ALL 1행) · 조회 후 30초간 그리드 변화 없음 · 조회 요청 1건(본문에 '81_UC' 포함)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 10,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4aafa2ac",
+  "result": "NA",
+  "evidence": "Excel Upload 버튼 없음 · 요청 0건 [] · 응답 없음",
+  "tobe_ref": "E2E @verify Excel",
+  "cond": "207fafa5",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-054016a3",
+  "result": "NA",
+  "evidence": "Insert 없음(수정 저장형) · 대상 칸 해석 불가: DataUtil.checkRequiredOfSpread",
+  "tobe_ref": "E2E @verify",
+  "cond": "d6d97a29",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-87c93e74",
+  "result": "NA",
+  "evidence": "Insert 없음(수정 저장형) · 대상 칸 해석 불가: SSP0005 신규행 필수 공란 저장",
+  "tobe_ref": "E2E @verify",
+  "cond": "be0442ce",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-689c2134",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 조회 0행 — 편집 가능 여부 판정 불가",
+  "tobe_ref": "E2E @verify 편집 모드",
+  "cond": "482d0d98",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-450840d5",
+  "result": "NA",
+  "evidence": "같은 이름의 결과 컬럼·값 2종 이상을 가진 해당 유형 콤보 조건 없음",
+  "tobe_ref": "E2E @verify 선택 조회",
+  "cond": "be445c32",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6482ac41",
+  "result": "NA",
+  "evidence": "같은 이름의 결과 컬럼·값 2종 이상을 가진 해당 유형 콤보 조건 없음",
+  "tobe_ref": "E2E @verify 선택 조회",
+  "cond": "229a06b9",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-e17142fb",
+  "result": "NA",
+  "evidence": "같은 이름의 결과 컬럼·값 2종 이상을 가진 해당 유형 콤보 조건 없음",
+  "tobe_ref": "E2E @verify 선택 조회",
+  "cond": "ed5ab234",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5e1d64bd",
+  "result": "PASS",
+  "evidence": "'Bulk Update' → 창 'Bulk Update Day of the week ​ Input Value ​ OK Clo' · 쓰기 없음",
+  "tobe_ref": "E2E @verify 전용 버튼",
+  "cond": "058cab2a",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
   "row_id": "V-dd7c2ad9",
   "result": "판정필요",
   "evidence": "[재실측 스냅샷 조회조건] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\\verify\\SSP0005\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(13줄 · formItem 공통 조상) · 시각 순서 3칸 · 전제 Div 40 · calls 0 · rows -1 · 기대원천 ASIS:plan.json fields/condOrder(search_cond.csv tobe_seq · AS-IS 라벨)",
@@ -22,7 +1170,7 @@
  {
   "row_id": "V-d9d87624",
   "result": "판정필요",
-  "evidence": "[재실측 스냅샷 버튼] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\\verify\\SSP0005\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(10줄) · 보이는 버튼 KOR,이 이민용,Home,SSP Working Day,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Bulk Update,Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel · 전제 Div 40 · calls 0 · rows -1 · 기대원천 ASIS:plan.json buttons/menuBtnCodes(AS-IS 버튼 메서드 · btn_auth)",
+  "evidence": "[재실측 스냅샷 버튼] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\\verify\\SSP0005\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(10줄) · 보이는 버튼 KOR,장 장성원,Home,SSP Working Day,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Bulk Update,Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel · 전제 Div 40 · calls 0 · rows -1 · 기대원천 ASIS:plan.json buttons/menuBtnCodes(AS-IS 버튼 메서드 · btn_auth)",
   "tobe_ref": "E2E @snap 버튼",
   "cond": "5bade736",
   "mctx": {
@@ -41,13 +1189,13 @@
  },
  {
   "row_id": "V-34e1b890",
-  "result": "PASS",
-  "evidence": "[재실측 스냅샷 헤더] 기준 Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt ↔ 실측 일치 · 골든 Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt 와 일치 · 헤더 3행 · 칸 362 · 전제 Div - · calls 4 · rows 435 · 기대원천 ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
+  "result": "FAIL",
+  "evidence": "[재실측 스냅샷 헤더] 기준 Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt ↔ 실측 Doc\\verify\\SSP0005\\snap\\received\\헤더_Shipment_Working_Day.txt · 차이 6줄(Doc\\verify\\SSP0005\\snap\\diff\\헤더_Shipment_Working_Day.txt) · 골든 Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt 와 6줄 다름(Doc\\verify\\SSP0005\\snap\\diff\\헤더_Shipment_Working_Day.txt) — 첫 차이: - [골든 1] Company | Divison | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DATE} | {DA · 헤더 3행 · 칸 364 · 전제 Div - · calls 4 · rows 437 · 기대원천 ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
   "tobe_ref": "E2E @snap 헤더",
   "cond": "9260f978",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 437,
    "req": 0
   },
   "expect_src": "ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
@@ -55,19 +1203,19 @@
   "precond": {
    "div": "",
    "calls": 4,
-   "rows": 435,
+   "rows": 437,
    "viewport": ""
   }
  },
  {
   "row_id": "V-735f7065",
   "result": "PASS",
-  "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1920.png ↔ 실측 일치 · 골든 화면샷과 일치(maxDiffPixelRatio 0.002) · 전제 Div - · calls 4 · rows 435 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1920.png ↔ 실측 C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read17\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 차이 1줄(C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read17\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium) · [TO-BE 룰 CR-114 화면샷 차이(컬럼 폭 비율 등) 오류 제외] 화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 4372 pixels (ratio 0.02 of all image pixels) are different. Snapshot: SSP0005\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read17\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 4 · rows 437 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "76e850b6",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 437,
    "req": 0
   },
   "expect_src": "RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
@@ -75,19 +1223,19 @@
   "precond": {
    "div": "",
    "calls": 4,
-   "rows": 435,
+   "rows": 437,
    "viewport": 1920
   }
  },
  {
   "row_id": "V-dc1a965d",
   "result": "PASS",
-  "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1366.png ↔ 실측 일치 · 골든 화면샷과 일치(maxDiffPixelRatio 0.002) · 전제 Div - · calls 4 · rows 435 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1366.png ↔ 실측 C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read17\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 차이 1줄(C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read17\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium) · [TO-BE 룰 CR-114 화면샷 차이(컬럼 폭 비율 등) 오류 제외] 화면샷 차이 — Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveScreenshot\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed 3714 pixels (ratio 0.02 of all image pixels) are different. Snapshot: SSP0005\\snap\\golden\\ · actual/diff: C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read17\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium · 전제 Div - · calls 4 · rows 437 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
   "tobe_ref": "E2E @snap 화면샷",
   "cond": "dd9a0f7d",
   "mctx": {
    "calls": 4,
-   "rows": 435,
+   "rows": 437,
    "req": 0
   },
   "expect_src": "RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
@@ -95,8 +1243,2179 @@
   "precond": {
    "div": "",
    "calls": 4,
-   "rows": 435,
+   "rows": 437,
    "viewport": 1366
   }
+ },
+ {
+  "row_id": "T-15ecca3e",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace",
+  "cond": "a4182def",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4068b6f5",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9b27bdf0",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-1a5e296e",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-cc61811c",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)' · 선택 0개 / 후보 8개",
+  "tobe_ref": "E2E @trace",
+  "cond": "98388b92",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-5436b9c0",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 'Ultium Cells LLC' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "aa381094",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-3fcc372a",
+  "result": "FAIL",
+  "evidence": "조회조건 [Input Value] 칸 없음 — 화면 미구현 또는 라벨 불일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "8421ee2f",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-b4703e42",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '2026.11.25 | 2027.11.21' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "8e39615a",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-d4a25387",
+  "result": "FAIL",
+  "evidence": "조회조건 [Day of the week | Day Week] 칸 없음 — 화면 미구현 또는 라벨 불일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "b3f3fe83",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-e92a5ea5",
+  "result": "PASS",
+  "evidence": "AS-IS clbDivision 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "bace6652",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-e35a08b8",
+  "result": "PASS",
+  "evidence": "AS-IS cboCompany 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "2210dbec",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-bc93c313",
+  "result": "FAIL",
+  "evidence": "상위 조회조건 [Input Value] 칸 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "36219bb3",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-6aac674b",
+  "result": "PASS",
+  "evidence": "[단일선택 Company] 'LGES Arizona ESS Inc.' → 0행 · COMPANY_ID 조건 밖 0 OK | 'LG CHEM AUSTRAILIA PTY LT' → 0행 · COMPANY_ID 조건 밖 0 OK(조회 후 30초간 그리드 변화 없음) | 'LGES Arizona, Inc.' → 0행 · COMPANY_ID 조건 밖 0 OK(조회 후 30초간 그리드 변화 없음)",
+  "tobe_ref": "E2E @trace",
+  "cond": "a79ba8de",
+  "mctx": {
+   "calls": 38,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-0ac85697",
+  "result": "ERROR",
+  "evidence": "[측정 실패] 기간 'Period' 끝 값 변경: 달력이 열리지 않음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-24508990",
+  "result": "NA",
+  "evidence": "기간 범위 칸(단일 범위) — ALL·다중 선택 사양 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-abd1d540",
+  "result": "PASS",
+  "evidence": "조회 1행 — 화면에 건수 '1' 표시 있음 · TO-BE 공용 건수 영역 '총1건'(보이는 그리드 행 수 1) = 활성 그리드 건수 → TO-BE 룰 CR-110 PASS(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d150a84e",
+  "result": "PASS",
+  "evidence": "조회 1행 — 화면에 건수 '1' 표시 있음 · TO-BE 공용 건수 영역 '총1건'(보이는 그리드 행 수 1) = 활성 그리드 건수 → TO-BE 룰 CR-110 PASS(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-dc46c9fd",
+  "result": "PASS",
+  "evidence": "조회 1행 — 화면에 건수 '1' 표시 있음 · TO-BE 공용 건수 영역 '총1건'(보이는 그리드 행 수 1) = 활성 그리드 건수 → TO-BE 룰 CR-110 PASS(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9c543d4d",
+  "result": "PASS",
+  "evidence": "칸 2개 폭 = 메타",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "eb4c5cfa",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9060fc1a",
+  "result": "PASS",
+  "evidence": "컬럼 폭 2개 메타 대조 — 25% 초과 이탈 0: 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9c196c33",
+  "result": "PASS",
+  "evidence": "컬럼 폭 2개 메타 대조 — 25% 초과 이탈 0: 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-909c64fd",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭 비율(TO-BE/AS-IS) 평균 1.00 · 비율 이탈 0: 없음 (2컬럼 비교)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-0a997734",
+  "result": "NA",
+  "evidence": "같은 컬럼 구성에서 비교할 시점 1개 — Division 전환 단계 없음(고정·비활성 조건 등) · 컬럼 구성 다른 시점 제외: 조회 전 54(컬럼 364), 조회 뒤 54(컬럼 364)(T216)",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "70c8b29c",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-edb955cc",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 조회 0행 — 스크롤 판정 불가",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "f4868673",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-f2bd7c17",
+  "result": "판정필요",
+  "evidence": "헤더 22개 중 글자 잘림 1개: DIVISION_ID(글자 50 > 칸 47px) — 칸 폭(COLUMN_WIDTH) 확인 대상(사람 판정)",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "1d68df2e",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4941bae6",
+  "result": "PASS",
+  "evidence": "폭 1920 조회조건 3칸 겹침·넘침 없음",
+  "tobe_ref": "E2E @verify 조회조건 겹침",
+  "cond": "baacfd1e",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d7c83f9c",
+  "result": "PASS",
+  "evidence": "폭 1366 조회조건 3칸 겹침·넘침 없음",
+  "tobe_ref": "E2E @verify 조회조건 겹침",
+  "cond": "d7029302",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-c1e6f01f",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-0a012ab4",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ad028e16",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a9d05cdb",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-710a0604",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8498bb0e",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-cf84c50e",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-bc3e7021",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-540d5f40",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-0896f465",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ef56a00d",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9eca9110",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-78d9bc25",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d12c7baa",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-7d91cd48",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4bcbbb07",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-cb99a7cc",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-f46800f5",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-e3998ea2",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-786cbaa7",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭 비율(TO-BE/AS-IS) 평균 1.00 · 비율 이탈 0: 없음 (2컬럼 비교)",
+  "tobe_ref": "E2E @trace",
+  "cond": "585e385d",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-7f38f4c1",
+  "result": "NA",
+  "evidence": "(동적 메시지): catch 블록 예외 메시지(프레임워크 공통 오류 표시) — 검사 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-f55f813e",
+  "result": "NA",
+  "evidence": "(동적 메시지): catch 블록 예외 메시지(프레임워크 공통 오류 표시) — 검사 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-9c41c2a1",
+  "result": "NA",
+  "evidence": "(동적 메시지): 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "7c9a3d2d",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-9df99546",
+  "result": "NA",
+  "evidence": "(동적 메시지): 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "7c9a3d2d",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-bd9b7b34",
+  "result": "NA",
+  "evidence": "대조표 행 C09(TextVisible=false) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "a1efb4ca",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-485b5ce9",
+  "result": "NA",
+  "evidence": "대조표 행 C12() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "30d68abf",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-4ca17d7e",
+  "result": "NA",
+  "evidence": "대조표 행 B04(YesOrNo) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "0eae188e",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-3033cfc8",
+  "result": "NA",
+  "evidence": "대조표 행 Δ6() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "b93fd91a",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a66393ea",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 그리드를 읽지 못함",
+  "tobe_ref": "E2E @verify 합계 값",
+  "cond": "364d8f2c",
+  "mctx": {
+   "calls": 16,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-270be947",
+  "result": "NA",
+  "evidence": "행 E01() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C1 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "4c6182a7",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-32e05fd2",
+  "result": "NA",
+  "evidence": "행 P07() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C1 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9b397c93",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-619b8db9",
+  "result": "FAIL",
+  "evidence": "상위 조회조건 [Day of the week | Day Week] 칸 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "b6a8b0de",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-670a2d2b",
+  "result": "NA",
+  "evidence": "행 E01() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C4 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "4c6182a7",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-64e04f79",
+  "result": "NA",
+  "evidence": "행 P07() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C4 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9b397c93",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4ee21f62",
+  "result": "ERROR",
+  "evidence": "기본 조회 결과 0행 — 텍스트 조건 검사 재료 없음(측정 실패)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8051ecab",
+  "result": "ERROR",
+  "evidence": "기본 조회 결과 0행 — 텍스트 조건 검사 재료 없음(측정 실패)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-defa3798",
+  "result": "PASS",
+  "evidence": "조회(Division ALL) 응답 123ms(요청~응답 123ms · 벽시계 917ms) · 0행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-fcc5697c",
+  "result": "PASS",
+  "evidence": "조회(Division ALL) 응답 123ms(요청~응답 123ms · 벽시계 917ms) · 0행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-0e6a45db",
+  "result": "NA",
+  "evidence": "글자 입력되는 텍스트 조건 없음",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "ae5f8b8d",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-46c4075e",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-c768d493",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-91e1d7eb",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-50affe7b",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a0556d41",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a29ba8ca",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 장 장성원 | Home | SSP Working Day | Scroll tabs left | Scroll tabs right | Close others | Close All | Full screen | Open | Search(F5) | Bulk Update | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-91bdcb5e",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 장 장성원 | Home | SSP Working Day | Scroll tabs left | Scroll tabs right | Close others | Close All | Full screen | Open | Search(F5) | Bulk Update | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-0ba12adf",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 장 장성원 | Home | SSP Working Day | Scroll tabs left | Scroll tabs right | Close others | Close All | Full screen | Open | Search(F5) | Bulk Update | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-7b19ede7",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 장 장성원 | Home | SSP Working Day | Scroll tabs left | Scroll tabs right | Close others | Close All | Full screen | Open | Search(F5) | Bulk Update | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8e2c9933",
+  "result": "NA",
+  "evidence": "Excel Form 버튼 없음 · AS-IS 진입점에도 없음",
+  "tobe_ref": "E2E @verify Excel",
+  "cond": "dd038fda",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-2da50bea",
+  "result": "NA",
+  "evidence": "Excel Upload 버튼 없음",
+  "tobe_ref": "E2E @verify Excel 2단계",
+  "cond": "a2988e16",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-f93e78da",
+  "result": "NA",
+  "evidence": "Excel Upload 버튼 없음",
+  "tobe_ref": "E2E @verify Excel",
+  "cond": "2a6dc203",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-92d0ce2b",
+  "result": "NA",
+  "evidence": "그리드 0행에 Sum/Total/합계 행·컬럼 푸터 없음 — 합계행 규칙 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-0f692acd",
+  "result": "ERROR",
+  "evidence": "[측정 코드 없음] 메뉴 노출·라우트 실측 미구현 — 결함 대상 'Home / Auth Request 메뉴' (결함 아님 · 미측정 · 문구 매칭 판정 제거 2026-10-31)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6699d960",
+  "result": "ERROR",
+  "evidence": "[측정 코드 없음] 메뉴 노출·라우트 실측 미구현 — 결함 대상 '그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화' (결함 아님 · 미측정 · 문구 매칭 판정 제거 2026-10-31)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4684d743",
+  "result": "ERROR",
+  "evidence": "[측정 코드 없음] 메뉴 노출·라우트 실측 미구현 — 결함 대상 '그룹별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화' (결함 아님 · 미측정 · 문구 매칭 판정 제거 2026-10-31)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ef85017d",
+  "result": "NA",
+  "evidence": "명칭(_NAME/_NM) 컬럼 없음(표시 컬럼 364: COMPANY_ID,DIVISION_ID,D_20261125,D_20261126,D_20261127,D_20261128,D_20261129,D_20261130,D_20261201,D_20261202,D_20261203,D_20261204…) — 데이터 다국어 규칙 대상 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-7817cd17",
+  "result": "NA",
+  "evidence": "dataMap(콤보) 컬럼 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-7d9d415a",
+  "result": "NA",
+  "evidence": "dataMap(콤보) 컬럼 없음",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ad197a3a",
+  "result": "PASS",
+  "evidence": "CUSTOMER 0행 공란 표기 없음 — 단일 표기",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9a045231",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE 0행 공란 표기 없음 — 단일 표기",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-3019a617",
+  "result": "NA",
+  "evidence": "'LBL/MSG/MENU 코드 사전' 은 코드 사전·마스터 전역 항목 — SSP0005 그리드 데이터로 측정할 공란 컬럼 아님(전역 N1 은 사전 점검 도구 대상)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-da32e30b",
+  "result": "PASS",
+  "evidence": "SSP0005_GET_SHIPMENT_WORKING_DAY: PASS AS-IS 6행 ↔ TO-BE 6행 · SCP0009_GET_SHEET_CALENDAR_3SPAN: PASS AS-IS 434행 ↔ TO-BE 434행 · SCM0001_GET_SCP_PERIOD: SKIP AS-IS ?행 ↔ TO-BE ?행",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-487fddf1",
+  "result": "PASS",
+  "evidence": "Division ALL 0행 조회 후 '81' 단일 재조회 → 0행 · DIVISION_ID 다른 값 0 — 이전 결과 잔존 없음(시트 초기화 후 재채움)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-00476254",
+  "result": "NA",
+  "evidence": "양식 파일 없음",
+  "tobe_ref": "E2E @verify Excel",
+  "cond": "3b12d9ac",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9511d96e",
+  "result": "NA",
+  "evidence": "문서가 2단 머리글을 정하지 않은 화면",
+  "tobe_ref": "E2E @verify Excel",
+  "cond": "ae660f5d",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9c955342",
+  "result": "ERROR",
+  "evidence": "[확인 대상] Division 초기값 '​' 가 후보에 없음 — 후보 81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC)",
+  "tobe_ref": "E2E @verify 조건 초기값",
+  "cond": "7d2a3114",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-3b7b3c3e",
+  "result": "NA",
+  "evidence": "Version 조건 없음",
+  "tobe_ref": "E2E @verify 조건 초기값",
+  "cond": "158b39b1",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-3fa63d31",
+  "result": "PASS",
+  "evidence": "기간 칸 글자 입력 거부 — '2026.11.25' → '2026.11.25'",
+  "tobe_ref": "E2E @verify 기간 조건",
+  "cond": "08dc7828",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ce2c787d",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 기간을 뒤집어 넣지 못함 · 대조군도 안 들어감(From '2026.11.25' · To '2026.11.25') · 입력 방법 키보드 입력",
+  "tobe_ref": "E2E @verify 기간 조건",
+  "cond": "c4306d3a",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-96ab3439",
+  "result": "PASS",
+  "evidence": "메뉴 오픈 정상 — 404·요청 실패 0",
+  "tobe_ref": "E2E @verify 화면 틀",
+  "cond": "6d939bf3",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5be4f9ae",
+  "result": "PASS",
+  "evidence": "탭 'SSP Working Day' = 메뉴 등록 이름",
+  "tobe_ref": "E2E @verify 화면 틀",
+  "cond": "1903bb48",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-469ad4ca",
+  "result": "NA",
+  "evidence": "돋보기 버튼 달린 입력칸 없음 · 좌표 []",
+  "tobe_ref": "E2E @verify 화면 틀",
+  "cond": "0528a59b",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5ef21cd2",
+  "result": "NA",
+  "evidence": "AS-IS 잠금 규칙에 권한 그룹(GROUP) 조건이 있는 컬럼 없음 — 권한별 편집 구간 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-3f39ad5f",
+  "result": "NA",
+  "evidence": "Division 기본 순회 — COMPANY_ID 값 있는 편집 행 없음(표시 여부는 A5·편집은 D1 행에서 판정)",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "94002964",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-23be0292",
+  "result": "NA",
+  "evidence": "Division 기본 순회 — COMPANY_ID 값 있는 편집 행 없음(표시 여부는 A5·편집은 D1 행에서 판정)",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "dc0c3226",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-e3a3e44f",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] Insert 버튼 없음",
+  "tobe_ref": "E2E @verify 신규행 검증",
+  "cond": "71c89073",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6644b67e",
+  "result": "NA",
+  "evidence": "그리드 1개 — 상단·하단(HEAD/DETAIL) 구조 아님(TO-BE 단일 그리드 · AS-IS 시트 구성 차이는 A 규칙)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-803fc0b5",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW 대상 SSP_MST_SHIP_CALENDAR 와 콤보 원천 5종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 5건 재조회(새 마스터 반영 경로 있음) · 최초 진입 5건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ec9e8596",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW 대상 SSP_MST_SHIP_CALENDAR 와 콤보 원천 5종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 5건 재조회(새 마스터 반영 경로 있음) · 최초 진입 5건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-7c279ee0",
+  "result": "PASS",
+  "evidence": "PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 5건 재조회(새 마스터 반영 경로 있음) · 최초 진입 5건",
+  "tobe_ref": "E2E @verify",
+  "cond": "fd9611d0",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8bccac42",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW 대상 SSP_MST_SHIP_CALENDAR 와 콤보 원천 5종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 5건 재조회(새 마스터 반영 경로 있음) · 최초 진입 5건",
+  "tobe_ref": "E2E @verify",
+  "cond": "11699a71",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-e6fa5f9d",
+  "result": "PASS",
+  "evidence": "PASS: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 없음(초기화 때만 바인딩 — 재진입 기준으로 판정) | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 5건 재조회(새 마스터 반영 경로 있음) · 최초 진입 5건",
+  "tobe_ref": "E2E @verify",
+  "cond": "b13670e8",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-278e3425",
+  "result": "PASS",
+  "evidence": "PASS: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 없음(초기화 때만 바인딩 — 재진입 기준으로 판정) | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 5건 재조회(새 마스터 반영 경로 있음) · 최초 진입 5건",
+  "tobe_ref": "E2E @verify",
+  "cond": "726e5489",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-b4c1b701",
+  "result": "NA",
+  "evidence": "NA: (a) 저장 SP SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW 대상 SSP_MST_SHIP_CALENDAR 와 콤보 원천 5종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "b637058e",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-494abd53",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 진입 직후 그리드를 못 찾음",
+  "tobe_ref": "E2E @verify 표시 묶음2",
+  "cond": "14055692",
+  "mctx": {
+   "calls": 16,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-70c10de0",
+  "result": "NA",
+  "evidence": "기간 값 칸 없음(이름에 DATE·MONTH·WEEK·PERIOD·YYYYMM)",
+  "tobe_ref": "E2E @verify 표시 묶음2",
+  "cond": "1bd40be8",
+  "mctx": {
+   "calls": 16,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6bee414b",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 정렬할 칸 없음",
+  "tobe_ref": "E2E @verify 표시 묶음2",
+  "cond": "4f68a894",
+  "mctx": {
+   "calls": 16,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-b2cf061d",
+  "result": "PASS",
+  "evidence": "센티널 '/' 노출 0 (본 칸 364)",
+  "tobe_ref": "E2E @verify 표시",
+  "cond": "893f180f",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-2ff0e17f",
+  "result": "NA",
+  "evidence": "행 1 — 천 단위 미만이라 판정 재료 없음 ('총1')",
+  "tobe_ref": "E2E @verify 표시",
+  "cond": "15a24a2f",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-d0627780",
+  "result": "NA",
+  "evidence": "C08: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9473a541",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-78e5f7bd",
+  "result": "NA",
+  "evidence": "MSG00672: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "1968b965",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-6bb51613",
+  "result": "NA",
+  "evidence": "MSG00618: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "dffec121",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-8379129e",
+  "result": "NA",
+  "evidence": "V03: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "2c0bd878",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-526f0502",
+  "result": "NA",
+  "evidence": "MSG00719: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "41218f7d",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-f940fd4d",
+  "result": "NA",
+  "evidence": "MSG01122: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "0fc32ba4",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-6a36644b",
+  "result": "NA",
+  "evidence": "MSG01153: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "ebc68e97",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-70f04acc",
+  "result": "NA",
+  "evidence": "P05: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "94f57d3d",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-2d2a01e5",
+  "result": "NA",
+  "evidence": "A02: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "38c6dc0a",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-35bab764",
+  "result": "NA",
+  "evidence": "MSG00667: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "bf745470",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-ff56d71b",
+  "result": "NA",
+  "evidence": "MSG00614: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "07341874",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-cd6386c9",
+  "result": "NA",
+  "evidence": "MSG00004: 저장 성공 분기(if (t.Success))의 안내 메시지 — 위반 입력으로 만들 수 없는 메시지(저장 결과 메시지는 F2·E4_F1LINK 에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "07c112ad",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-d9af9685",
+  "result": "NA",
+  "evidence": "MSG00004: 저장 성공 분기(if (t.Success))의 안내 메시지 — 위반 입력으로 만들 수 없는 메시지(저장 결과 메시지는 F2·E4_F1LINK 에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "a38d53a9",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8c0b1fa7",
+  "result": "NA",
+  "evidence": "MSG00004: 저장 성공 분기(if (t.Success))의 안내 메시지 — 위반 입력으로 만들 수 없는 메시지(저장 결과 메시지는 F2·E4_F1LINK 에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8f2b620c",
+  "result": "NA",
+  "evidence": "Excel 버튼 비노출",
+  "tobe_ref": "E2E @verify Excel 내용",
+  "cond": "3df20a64",
+  "mctx": {
+   "calls": 24,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-b4f21a24",
+  "result": "NA",
+  "evidence": "Excel 버튼 비노출",
+  "tobe_ref": "E2E @verify Excel 내용",
+  "cond": "3df20a64",
+  "mctx": {
+   "calls": 24,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-2a38e40f",
+  "result": "NA",
+  "evidence": "Excel 버튼 비노출",
+  "tobe_ref": "E2E @verify Excel 내용",
+  "cond": "3df20a64",
+  "mctx": {
+   "calls": 24,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d95b6f78",
+  "result": "NA",
+  "evidence": "Excel 버튼 비노출",
+  "tobe_ref": "E2E @verify Excel 내용",
+  "cond": "3df20a64",
+  "mctx": {
+   "calls": 24,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-ec70d951",
+  "result": "NA",
+  "evidence": "글자 입력되는 텍스트 조회조건 없음(입력칸 2개)",
+  "tobe_ref": "E2E @verify 입력 조작",
+  "cond": "2b19fdba",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5a57089c",
+  "result": "NA",
+  "evidence": "Insert 버튼 비노출",
+  "tobe_ref": "E2E @verify 입력 조작",
+  "cond": "48e66caa",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-dc2837b7",
+  "result": "ERROR",
+  "evidence": "조회 결과 0행 — 셀 키 입력 측정 불가(Insert 없음 · 기존행 없음)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-bfa56aec",
+  "result": "ERROR",
+  "evidence": "조회 결과 0행 — 셀 키 입력 측정 불가(Insert 없음 · 기존행 없음)",
+  "tobe_ref": "E2E @verify",
+  "cond": "e5cf1e91",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-6766a0f1",
+  "result": "ERROR",
+  "evidence": "조회 결과 0행 — 셀 키 입력 측정 불가(Insert 없음 · 기존행 없음)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0e8dbe71",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4f9ee984",
+  "result": "ERROR",
+  "evidence": "조회 결과 0행 — 셀 키 입력 측정 불가(Insert 없음 · 기존행 없음)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0e8dbe71",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-81b4003b",
+  "result": "PASS",
+  "evidence": "수정 저장 1회 DB 전후 대조 — SSP_MST_SHIP_CALENDAR(키 COMPANY_ID,DIVISION_ID): 추가 0 · 삭제 0 · 변경 1",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "4fbac3a1",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-49200bb3",
+  "result": "PASS",
+  "evidence": "변경 행 1 감사 컬럼 대조: Created 불변 · Updated 갱신 · 수정자=저장 계정",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "4fbac3a1",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-812d4edc",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 저장 대상에 이력 표 없음 · 실측 SSP_MST_SHIP_CALENDAR: +0 -0 ~1",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "4fbac3a1",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-b4363ff6",
+  "result": "PASS",
+  "evidence": "저장 2회 뒤 SSP_MST_SHIP_CALENDAR: 추가 0 · 삭제 0",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "dd928257",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5be74c34",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 비교할 원장 변경 1건·이력 행 표 0개",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "c0c2b940",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-657eef0e",
+  "result": "PASS",
+  "evidence": "편집 가능 1컬럼 중 왕복 1 · 입력 경로 실패 0 · 변경 인식 실패 0 · 업무 검증 차단·사유 불명 0 · 값 불일치 0 — D_20261125 r0 'Y'→'N' 재조회 'N' OK · 원복 OK",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "0f1387ec",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a14b0257",
+  "result": "NA",
+  "evidence": "값 있는 숫자 편집 셀 없음 — 0·빈값 저장 대상 없음",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "33391ca3",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-2c074ac3",
+  "result": "NA",
+  "evidence": "값 있는 숫자 편집 셀 없음 — 0·빈값 저장 대상 없음",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "86ca7438",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5f3d1aad",
+  "result": "NA",
+  "evidence": "AS-IS 최대값이 있는 편집 컬럼 없음 — 경계값 저장 대상 없음",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "5f790b2d",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-3c282728",
+  "result": "PASS",
+  "evidence": "Insert 버튼 비노출 · 기존행 D_20261125 편집 → CRUD_TYPE='M' · Delete 버튼 비노출(권한 또는 기능 없음) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c93a5b5d",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-2b612c39",
+  "result": "PASS",
+  "evidence": "Insert 버튼 비노출 · 기존행 D_20261125 편집 → CRUD_TYPE='M' · Delete 버튼 비노출(권한 또는 기능 없음) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a5233fef",
+  "result": "PASS",
+  "evidence": "Insert 버튼 비노출 · 기존행 D_20261125 편집 → CRUD_TYPE='M' · Delete 버튼 비노출(권한 또는 기능 없음) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-7de57eeb",
+  "result": "PASS",
+  "evidence": "Insert 버튼 비노출 · 기존행 D_20261125 편집 → CRUD_TYPE='M' · Delete 버튼 비노출(권한 또는 기능 없음) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-f1230888",
+  "result": "판정필요",
+  "evidence": "붙여넣기 프로브 전제 부족(기존행 true · 신규행 false)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c93a5b5d",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a97f26ef",
+  "result": "NA",
+  "evidence": "필수 조회조건 Div,Period 전부 비울 수 없는 컨트롤(Div: combo — 사용자가 비울 수 없는 컨트롤 · Period: period — 사용자가 비울 수 없는 컨트롤) — 공란 저장 시나리오 성립 불가(콤보·날짜 필수는 항상 값 보유)",
+  "tobe_ref": "E2E @trace",
+  "mctx": {
+   "calls": 32,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "T-19ecf1cd",
+  "result": "NA",
+  "evidence": "Insert 버튼 없음 · AS-IS 에도 InsertButton/Insert 문장 없음(조회·보고 화면) — 신규행 위치 검사 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "c2935dc0",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-66b6fe9a",
+  "result": "FAIL",
+  "evidence": "D_20261125 r0 → N · 저장 요청 1.5초 지연 동안 로딩 표시 0회 · 대조군 조회 지연 때는 35회 관측 · 표본 45개·저장 구간 1507ms",
+  "tobe_ref": "E2E @verify 저장 경로",
+  "cond": "670b4701",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-9f46dfd7",
+  "result": "PASS",
+  "evidence": "조회 클릭 → 로딩 표시 관측 1회(100ms 폴링) · 응답 820ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-4b9beb46",
+  "result": "PASS",
+  "evidence": "고정 컬럼 2개 [COMPANY_ID, DIVISION_ID] ↔ META FIXED_FLAG=Y [DIVISION_ID] → 기대 고정(마지막 FIXED 까지) [COMPANY_ID, DIVISION_ID] · 고정 영역 폭 200px / 그리드 가시 폭 1543px(뷰포트 1920)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-59909ef8",
+  "result": "PASS",
+  "evidence": "동적 헤더 바인딩 362 · 헤더 362(빈 0 · 중복 0) 예 25 | 26 | 27",
+  "tobe_ref": "E2E @verify A9",
+  "cond": "da39a3ee",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-f8bcc179",
+  "result": "PASS",
+  "evidence": "D_20261125 r0 → N · 실패 문구 표시 '[저장 경로 시험] 강제 실패'",
+  "tobe_ref": "E2E @verify 저장 경로",
+  "cond": "56594782",
+  "mctx": {
+   "calls": 35,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-a6d90c80",
+  "result": "NA",
+  "evidence": "D_20261125 r0 → N · 확인창 없음 · AS-IS 저장 경로에도 확인 코드 없음",
+  "tobe_ref": "E2E @verify 저장 경로",
+  "cond": "e5202097",
+  "mctx": {
+   "calls": 49,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-75c9d6f8",
+  "result": "PASS",
+  "evidence": "D_20261125 r0 'Y' ← 붙여넣기 'N'(이 컬럼에 없는 값) · 붙여넣은 뒤 칸 'N' · 붙여넣기 → 저장 요청 3건 · 본문에 값 있음",
+  "tobe_ref": "E2E @verify 저장 경로",
+  "cond": "fd28131e",
+  "mctx": {
+   "calls": 56,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-3100cb6a",
+  "result": "PASS",
+  "evidence": "콤보 조건 2개 후보 정상",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "0e28e42c",
+  "mctx": {
+   "calls": 2,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-2e889f80",
+  "result": "PASS",
+  "evidence": "ALL(Div) 조회 0행 · 필수 안내 없음",
+  "tobe_ref": "E2E @verify 레이아웃 묶음",
+  "cond": "a795772a",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-11d06153",
+  "result": "PASS",
+  "evidence": "저장 2회 소요 175·184ms · 최소 175ms · 기준 3000ms",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "338fc284",
+  "mctx": {
+   "calls": 44,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-d75aa24b",
+  "result": "PASS",
+  "evidence": "[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: 기대대로 문구 '저장할 데이터가 없습니다.' · 저장 요청 0 · 저장 요청 0 · 편집기 null · 언어 시험 계정 hwayoung.lim → lang:0행·신규0·호출2·요청13 → 언어 KOR→KOR → search:0행·신규0·호출2·요청14 → save:1행·신규0·호출32·요청59 → 언어 복원 → KOR → 끝:0행·신규0·호출34·요청59 · 문서 자동 생성 P01 · btn_auth SAVE",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "aba8c369",
+  "mctx": {
+   "calls": 34,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-c80a8e31",
+  "result": "FAIL",
+  "evidence": "[자동] CN 언어 조회 건수 총/건 표기: 화면 글자에 /(总|共|合计)\\s*[\\d,]+\\s*(条|行|件|个)/ 없음 — 근처 'iv. ​ Period ​ ~ ​ Search(F5) Total1rows Bulk Upda' · 저장 요청 0 · 편집기 null · 언어 시험 계정 hwayoung.lim → lang:0행·신규0·호출2·요청17 → 언어 KOR→CHN → search:0행·신규0·호출2·요청23 → pagetext:1행·신규0·호출6·요청29 → 언어 복원 → KOR → 끝:0행·신규0·호출8·요청29 · 문서 자동 생성 P02 · btn_auth SEARCH",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "b4253da6",
+  "mctx": {
+   "calls": 8,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-71847098",
+  "result": "PASS",
+  "evidence": "[자동] 조회 중 Loading 토스트 없음: 기대대로 · 저장 요청 0 · 편집기 null · noload:0행·신규0·호출2·요청8 → 조회 중 로딩 토스트 0 → 끝:0행·신규0·호출4·요청11 · 문서 자동 생성 P03 · btn_auth SEARCH",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "7d4e4c62",
+  "mctx": {
+   "calls": 4,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-3a321dcf",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] 선택 행 위로 Insert: 행 3 없음(행 수 부족) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → insertat:1행·신규0·호출6·요청14 → 끝:1행·신규0·호출6·요청14 · 문서 자동 생성 P05 · btn_auth INSERT · D6 확정 요구(O2)",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "aaa8091d",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-8bcce9c3",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] [자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음: 칸 D_20261125 입력 실패: 입력 안 됨('Y'→'Y' · 더블클릭 뒤 포커스 INPUT:Y) · 저장 요청 0 · 편집기 null · search:0행·신규0·호출2·요청8 → type:1행·신규0·호출6·요청14 → 끝:1행·신규0·호출6·요청14 · 문서 자동 생성 P12 · AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · 필수 오탐 유형(DM-215)",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "9fbaa312",
+  "mctx": {
+   "calls": 6,
+   "rows": 437,
+   "req": 0
+  },
+  "run": "20261125005659"
+ },
+ {
+  "row_id": "V-5b329f48",
+  "result": "PASS",
+  "evidence": "필수 조건 자동 채움 0건 — 조회가 기본값으로 바로 됨",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee",
+  "run": "20261125005659"
  }
 ]

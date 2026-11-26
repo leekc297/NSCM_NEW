@@ -1,0 +1,35 @@
+﻿elem_key,kind,item,asis_static,asis_live,tobe,verdict,status,src
+SP:SQL: DECLARE @TRESULT TABLE(,실측-파싱 대조,SQL: DECLARE @TResult TABLE(,,1회,,INLINE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+SP:SQL: SELECT *,실측-파싱 대조,SQL: SELECT *,,1회,,INLINE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+SP:SSP0014_GET_SHIPMENT_MODEL_PIC,실측-파싱 대조,SSP0014_GET_SHIPMENT_MODEL_PIC,SSP0014_ShipmentModelPIC.cs:329 FindData_Main,1회 · 구간 find,,MATCH,확정,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+SP:SSP0014_GET_USER_ID_CHECK,실측-파싱 대조,SSP0014_GET_USER_ID_CHECK,SSP0014_ShipmentModelPIC.cs:562 GetUserIDChk,0회,,NOT_CALLED,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+SP:SSP0014_SAVE_SHIPMENT_MODEL_PIC,실측-파싱 대조,SSP0014_SAVE_SHIPMENT_MODEL_PIC,SSP0014_ShipmentModelPIC.cs:497 SaveData,0회,,NOT_CALLED,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,(선언 ↔ 실측),23개,23개,,INFO,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,BaseRibbonCtl,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,Change,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,cbo,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,chkAll,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,clb,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,panel1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,pictureBox1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlMain,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,statusStripBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,textBox1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,textBox2,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtTextKeyin,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboDivision,Y,Div* [필수],,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboOperationGroup,Y,Operation Group,,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbFromSite,Y,From Site,,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboValidYN,Y,Valid,,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtUser,Y,User ID(Name),,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnItemId,Y,layoutControlItem4,,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtItemId,Y,Model,,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+,실측-파싱 대조,spdMain/Shipment Model PIC,정적 컬럼 사실 21행(시트 미지정 포함),컬럼 23(보임 21) · 헤더 1단 · 행 7667 · 고정 1,,LIVE,판단 대기,Doc/verify/SSP0014/asis_live/live_vs_static.csv
+COL:DIVISION_ID,조회 인자,SSP0014_GET_SHIPMENT_MODEL_PIC.division_id,,40,40,SAME,확정,Doc/asislive/SSP0014/cond_compare.csv
+COL:FROM_SITE,조회 인자,SSP0014_GET_SHIPMENT_MODEL_PIC.from_site,,,,SAME,확정,Doc/asislive/SSP0014/cond_compare.csv
+COL:ITEM_ID,조회 인자,SSP0014_GET_SHIPMENT_MODEL_PIC.item_id,,,,SAME,확정,Doc/asislive/SSP0014/cond_compare.csv
+,조회 인자,SSP0014_GET_SHIPMENT_MODEL_PIC.language,,KO,CN,DIFF,판단 대기,Doc/asislive/SSP0014/cond_compare.csv
+COL:OPERATION_GROUP,조회 인자,SSP0014_GET_SHIPMENT_MODEL_PIC.operation_group,,,,SAME,확정,Doc/asislive/SSP0014/cond_compare.csv
+COL:USER_ID,조회 인자,SSP0014_GET_SHIPMENT_MODEL_PIC.user_id,,,,USER(비교 제외),판단 대기,Doc/asislive/SSP0014/cond_compare.csv
+COL:VALID_YN,조회 인자,SSP0014_GET_SHIPMENT_MODEL_PIC.valid_yn,,,,SAME,확정,Doc/asislive/SSP0014/cond_compare.csv

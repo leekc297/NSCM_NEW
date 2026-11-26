@@ -224,19 +224,19 @@ export const MSG = {
   PERIOD_ORDER: 'MSG00108', // "Invalid period (start > end)."
   PERIOD_MAX: 'MSG01187', // "Maximum Period is From Date + {0}." ({0}=371)
   // 미등록(EN.json 0건, 2026-10-27 실측) — AS-IS 번호를 key 로 두되 EN.json 에 없어 영문 fallback 이 표시된다.
-  CONFIRM_DAY_BEFORE: 'MSG00323', // "Shipment date cannot be entered before {0}"
+  CONFIRM_DAY_BEFORE: 'MSG01320', // AS-IS MSG00323 // "Shipment date cannot be entered before {0}"
   STANDARD_INFO: 'MSG01321', // 저장결과 'X' — "Standard information is not registered."
-  SYSTEM_ERROR: 'MSG00042', // 저장결과 'F'/else — "A system error occurred."
+  SYSTEM_ERROR: 'MSG01075', // AS-IS MSG00042 // 저장결과 'F'/else — "A system error occurred."
   // ETA 요청팝업 출하일 하한(AS-IS SpdMain_EditChange cs:1058) — EN.json 미등록(TC-V-19, 2026-10-27 실측 0건).
   //   AS-IS 번호를 key 로 두되 영문 fallback 이 표시된다. {0}=D+n(CHANGE_REQ_DAY lookup, 기본 1).
-  CHANGE_REQ_MIN_SHIP: 'MSG00194', // "Change requests are possible from the current D+{0} ship date."
+  CHANGE_REQ_MIN_SHIP: 'MSG01206', // AS-IS MSG00194 // "Change requests are possible from the current D+{0} ship date."
   // GetSSPUserCheck(EditButton 가드①, cs:1482-1489) — SSP Planner 미등록 사용자. AS-IS MSG00251 은
   //   TO-BE SCM_ADM_MSG_M 에 미존재(0행)라 전 자매(SSP0015/SSP0021/SSP0024/SSP0025)가 동일 문구 MSG01261
   //   "This user does not have permission to the SSP Planner.\n\rUser ID : {0}" 로 대체했다 — 그 선례를 따른다.
   USER_NOT_REGISTERED: 'MSG01261',
   // bRealFlag==false(과거/CutOff Plan Date) 편집 차단(EditButton 가드②·SpdMain 더블클릭 가드, cs:1494-1498/1368-1372).
   //   AS-IS MSG00312 "It is not real time data." — TO-BE 등록 코드 미확정(verify 대상)이라 호출부 fallback 문구로 degrade.
-  NOT_REAL_TIME: 'MSG00312',
+  NOT_REAL_TIME: 'MSG01314', // AS-IS MSG00312
 } as const;
 
 // ETA 요청팝업(SSP0022_ShipmentRequestPopup "Shipment Request Insert") 전용 상수.

@@ -1,178 +1,89 @@
 {
  "rule_id": "A2",
- "hash": "fe85571a25f201ce",
+ "hash": "77ebdbcc09c7ebf9",
  "groups": [
-  {
-   "rows": [
-    "V-01513867"
-   ],
-   "why": "POPUP 그리드의 DAYS_TUE 컬럼(신규행)만 보는 행이고, 같은 컬럼을 보는 다른 행이 없다."
-  },
-  {
-   "rows": [
-    "V-06a826d4"
-   ],
-   "why": "POPUP 그리드의 DAYS_FRI 컬럼(신규행)만 보는 행이고, 같은 컬럼을 보는 다른 행이 없다."
-  },
-  {
-   "rows": [
-    "V-0e4aee51"
-   ],
-   "why": "조회 건수, Team 표시, 컬럼팝업 저장 구성을 함께 기대하는 복합 행이라 같은 대상과 기대를 가진 행이 없다."
-  },
   {
    "rows": [
     "V-11a950c3"
    ],
-   "why": "대상이 화면 전체이고 조건도 없어서 특정 컬럼이나 상태를 보는 행과 같다고 확신할 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-16c02135"
    ],
-   "why": "조회 결과의 기존행 콤보 칸이 대상이라, 신규행 조건인 COLUMN 행과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-1ddb5f1a"
-   ],
-   "why": "SSPM에서 DEPT_ID를 바꾼 뒤 재조회했을 때 Team 표시를 보는 고유 조건 행이다."
-  },
-  {
-   "rows": [
-    "V-1f2cbf73"
-   ],
-   "why": "다른 화면의 Cell Prod Site 셀 편집기에서 나온 결함 유형이라, 이 화면의 일반 편집기 규칙 행과 대상 컬럼이 같다고 확신할 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-267773b0"
    ],
-   "why": "Distribution Route 그리드의 DAYS_SUN 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-2bd38486"
    ],
-   "why": "Distribution Route의 LT_TYPE(L/T Type*)이 대상이다. route.LT_TYPE(L/T Type)과는 그리드 식별자와 헤더가 달라 같은 요소라고 확신할 수 없다."
-  },
-  {
-   "rows": [
-    "V-31d9d16c"
-   ],
-   "why": "POPUP 그리드의 DAYS_THU 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-41caec3e"
    ],
-   "why": "Distribution Route 그리드의 DAYS_WED 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-5f05f6d0"
    ],
-   "why": "Distribution Route 그리드의 DAYS_MON 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-64c992e8"
    ],
-   "why": "Distribution Route 그리드의 DAYS_TUE 컬럼(신규행)만 보는 단독 행이다."
-  },
-  {
-   "rows": [
-    "V-806c4192"
-   ],
-   "why": "POPUP 그리드의 DAYS_SUN 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-89e1da91"
    ],
-   "why": "Distribution Route의 VALID_YN(Active*)이 대상이다. route.VALID_YN(Active)과는 그리드 식별자와 헤더가 달라 같은 요소라고 확신할 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-8a413dbd"
    ],
-   "why": "Distribution Route 그리드의 TRANSPORT_MODE 컬럼(신규행)만 보는 단독 행이다."
-  },
-  {
-   "rows": [
-    "V-99a1435a"
-   ],
-   "why": "POPUP 그리드의 DAYS_WED 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-9f601adb"
    ],
-   "why": "Distribution Route 그리드의 DAYS_FRI 컬럼(신규행)만 보는 단독 행이다."
-  },
-  {
-   "rows": [
-    "V-a4bcbd15"
-   ],
-   "why": "route 그리드의 VALID_YN(Active)이 대상이고, Distribution Route의 Active*와 같은 요소라고 확신할 수 없다."
-  },
-  {
-   "rows": [
-    "V-a4d6fa3c"
-   ],
-   "why": "Excel Download 출력의 Name 표시와 화면 컬럼 구성 일치를 함께 기대하는 행이라 그리드 셀 행과 대상과 기대가 다르다."
-  },
-  {
-   "rows": [
-    "V-ab53e0d8"
-   ],
-   "why": "Team 컬럼에 Owner 소속팀이 아닌 SSPM DEPT_ID가 들어가는지를 보는 규칙이라 기대 결과가 다르다."
-  },
-  {
-   "rows": [
-    "V-c092e099"
-   ],
-   "why": "POPUP 그리드의 DAYS_MON 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-ce037076"
    ],
-   "why": "Distribution Route 그리드의 DAYS_SAT 컬럼(신규행)만 보는 단독 행이다."
-  },
-  {
-   "rows": [
-    "V-d61965b5"
-   ],
-   "why": "route 그리드의 LT_TYPE(L/T Type)이 대상이고, Distribution Route의 L/T Type*와 같은 요소라고 확신할 수 없다."
-  },
-  {
-   "rows": [
-    "V-f1c15c0f"
-   ],
-   "why": "CATEGORY_ID 코드 컬럼이 숨겨져 있는지를 보는 행이라 표시값이 Name인지 보는 행과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f32b2ca9"
    ],
-   "why": "콤보 셀 편집기를 연 상태가 대상이라 셀 표시값을 보는 행과 상태가 다르다. 다른 화면 결함인 V-1f2cbf73과도 대상 컬럼이 같다고 확신할 수 없다."
-  },
-  {
-   "rows": [
-    "V-f449252f"
-   ],
-   "why": "POPUP 그리드의 DAYS_SAT 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f9f01b19"
    ],
-   "why": "Distribution Route 그리드의 DAYS_THU 컬럼(신규행)만 보는 단독 행이다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:37:16",
- "cost": 0.1028857
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 05:17:40",
+ "cost": 0,
+ "open": 0
 }

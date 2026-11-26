@@ -1,0 +1,114 @@
+{
+ "definition": "메일 발송 Category 별 발송 주기, 메일 제목과 내용, 수신자, 대상 데이터 SQL 을 관리하는 화면",
+ "overview": [
+  "모듈별 알림 메일(Category)의 발송 주기, 언어별 제목과 본문, 수신자, 대상 데이터 SQL 을 관리하는 화면임",
+  "위쪽 조회 조건, Category 그리드, 아래 Message Setup, Mail Setup 탭과 SQL VIEW 창, Mail Content 입력 창으로 구성됨",
+  "Category 등록, 저장 → 행 선택 → Message Setup 탭에 제목과 본문 입력 → Mail Setup 탭에 수신자 지정 순으로 작업함"
+ ],
+ "pages": [
+  {
+   "title": "Mail Setup",
+   "keyPoint": "Main 과 Sub1~Sub3 조합이 맞지 않으면 저장되지 않음. SQL VIEW 의 SQL 이 메일 대상 데이터를 정하므로 저장 전 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.134,
+     "y": 0.14
+    },
+    {
+     "no": 2,
+     "x": 0.607,
+     "y": 0.193
+    },
+    {
+     "no": 3,
+     "x": 0.159,
+     "y": 0.193
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Module: 공통 코드 MailModule 목록에서 고름. 처음 값 ALL",
+      "Active: ALL, Y, N 중 선택. 처음 값 Y"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 커서가 있는 그리드(위 Category, 아래 Message Setup, Mail Setup 탭)에 적용됨",
+      "Category 저장 때 Main 과 Sub1~Sub3 조합이 맞지 않으면 메시지가 뜨고 저장되지 않음",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Category 그리드",
+     "lines": [
+      "제목 위에 조회 건수 표시(캡처 44건)",
+      "Module: 필수(제목 앞 빨간 점). COMMON, DM, SCP 등 MailModule 값",
+      "Category: 필수. 메일 이름(예: Daily Cutoff 결과 검증)",
+      "Active: Y 또는 N",
+      "Main: 필수. 발송 주기(일 1회, 주 1회, Real Time 등). 공통 코드 MailSendCycle 값",
+      "Sub1: 주기 상세(일 1회는 시각, 주 1회는 요일). Sub2: 발송 시각. Sub3: 발송 분",
+      "SQL VIEW: VIEW 를 누르면 \"SQL VIEW (Category 이름)\" 창이 열리고 메일 대상 데이터를 뽑는 SQL 을 보고 고쳐 저장함",
+      "행을 고르면 아래 탭이 그 Category 기준으로 조회됨"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Mail Setup",
+   "keyPoint": "Mail Content 는 4000 byte 이내로 입력함. 수신자는 Category 마다 Mail Setup 탭에서 지정함.",
+   "markers": [
+    {
+     "no": 4,
+     "x": 0.26,
+     "y": 0.486
+    }
+   ],
+   "sections": [
+    {
+     "no": 4,
+     "title": "Message Setup, Mail Setup 탭",
+     "lines": [
+      "탭 이름 옆 괄호 숫자는 건수(캡처 1건)",
+      "Message Setup: Category, Language, Mail Title, Mail Content. Category 는 위 그리드에서 고른 값으로 입력 불가",
+      "Language: 공통 코드 MailLanguage 값(예: Korean). Mail Title, Mail Content: 필수",
+      "Mail Content 칸을 열면 \"Mail Content *\" 입력 창이 뜸. 4000 byte 를 넘으면 메시지가 뜸",
+      "Mail Setup: Department, User ID(Name) 로 사용자를 찾아 수신자로 추가, 제거함. 지정한 수신자는 Department 로 걸러 볼 수 있음"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "SYSTEM",
+ "id": "SYS0017",
+ "uiName": "Mail Setup",
+ "menuPath": "SYSTEM> System> Mail Setup",
+ "captures": [
+  "captures/SYS0017.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0017/"
+ ],
+ "buttons": [
+  "allReceiver:SEARCH",
+  "main:DELETE",
+  "main:INSERT",
+  "main:SAVE",
+  "main:SEARCH",
+  "message:DELETE",
+  "message:INSERT",
+  "message:SAVE",
+  "message:SEARCH",
+  "selReceiver:DELETE",
+  "selReceiver:SAVE",
+  "selReceiver:SEARCH",
+  "sqlText:SAVE",
+  "sqlText:SEARCH"
+ ]
+}

@@ -1,0 +1,101 @@
+{
+  "id": "20261121000456_SELF_2",
+  "at": "2026-11-21T00:04:56+09:00",
+  "ms": 1795187096857,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|ladder|usercheck warn as recur",
+  "title": "진단 사다리 사용자 지적 재발 판정에서 '판정 못 함' 경고 분리",
+  "evidence": "orch-ladder.js:61~63 · result.json:1028~1032(U16 level warn, key S13|U16|norep|J20261120_191752) · 묶음 why '반영 완료 1건 효력(11-20 16:11) 뒤 11-20 23:52 재발' · 진단 사다리 묶음 L3|usercheck|U16",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "변경 전: S13 항목이면 level 과 상관없이 효력 뒤 생기면 L3 usercheck 재발. 변경 후: level fail 항목만 재발로 셈. key 에 norep, nomenu, err 가 붙은 warn(판정 자료 없음)은 kind 'nodata' 묶음(L2, 감지기 자료 결함)으로 따로 올리고, 같은 감지기 nodata 가 반영 뒤 2회 이상이면 L3 applyfail 과 같은 규칙으로 올림",
+  "verify": "재현 시험: result.json:1028 U16 warn 항목과 개선안 20261120151817_SELF(효력 11-20 16:11)를 넣고 사다리 실행 → L3|usercheck|U16 0건, nodata U16 1건. result.json:1084 U23 fail 항목을 넣으면 반영 개선안 효력 뒤일 때 L3|usercheck|U23 1건 유지. node tools/VibeManager/test/run_all.js 통과",
+  "rollback": "orch-ladder.js 와 시험 파일을 반영 전 .bak 으로 되돌림. ladder.json 의 nodata 묶음은 status resolved 로 닫음",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "사다리 올림 조건의 판정 기준 변경. 이번 묶음 L3|usercheck|U16 의 근거 1건이 warn(판정 못 함)뿐인데 재발로 집계됨(orch-ladder.js:61~63, result.json:1028). 진단 단계 판정 기준 변경이라 판단이 서지 않아 core",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T12:52:14+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T12:55:46+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 966, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1252"
+    },
+    {
+      "at": "2026-11-23T12:55:51+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T13:01:18+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 971, FAIL 2), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-23T13:01:18+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. ① 재현 시험 node %TEMP%/ladder_repro/repro.js tools/VibeManager. result.json:1028 U16 warn 항목(S13|U16|norep|J20261120_191752, ms 1795260930101), 20261120151817_SELF(selfKey S13|U16, needsReload, appliedMs 1795157244777, 효력 11-20 16:11), U23 fail 항목(S13|U23|wb|…)을 넣음. 반영 전 12:56:42 'L3|usercheck|U16 1 /  · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-23T12-55-51_claude_orch.log",
+      "sec": 119,
+      "costUsd": 1.1752107000000003,
+      "files": [
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/test/t_orch_ladder.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:27+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T13:49:59+09:00"
+    }
+  ],
+  "plain": {
+    "what": "감시가 '자료가 없어 판정 못 함'이라고 한 것을 '고쳤는데 또 남'으로 세지 않고, 자료가 빠진 문제로 따로 올림",
+    "risk": "기준을 잘못 나누면 실제 재발이 '자료 없음'으로 분류돼 구조 진단이 늦어짐",
+    "undo": "바꾼 파일 2개를 반영 전 백업으로 되돌리면 종전 집계 방식으로 돌아감"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795405932412,
+  "autoFp": "f0e828a0fa",
+  "applyStartMs": 1795406151226,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 971, FAIL 2), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1252",
+  "needsReload": true,
+  "appliedMs": 1795406478432,
+  "synced": [
+    "orch-ladder.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "① 재현 시험 node %TEMP%/ladder_repro/repro.js tools/VibeManager. result.json:1028 U16 warn 항목(S13|U16|norep|J20261120_191752, ms 1795260930101), 20261120151817_SELF(selfKey S13|U16, needsReload, appliedMs 1795157244777, 효력 11-20 16:11), U23 fail 항목(S13|U23|wb|…)을 넣음. 반영 전 12:56:42 'L3|usercheck|U16 1 / nodata U16 0 / L3|usercheck|U23 1' → 반영 뒤 12:57 'L3|usercheck|U16 0 / nodata U16 L2|nodata|U16 L2 / L3|usercheck|U23 1'. ② node tools/VibeManager/test/t_orch_ladder.js: 반영 전 12:56:42 ALL PASS(24항목) → 반영 뒤 12:57 ALL PASS(29항목). 추가 5항목: U16 norep warn = L3|usercheck|U16 없음·L2|nodata|U16 1건 / U23 fail = L3|usercheck|U23 유지 / U14 nomenu·err 효력 뒤 2건 = L3|nodata|U14 / 키 아닌 warn(U9) 묶음 없음 / L2 묶음 원장 open·진단 안 함. ③ run_all.js 는 지시대로 VMO 반영 뒤 실행에 맡김(이번에 미실행). 시각 2026-11-23 12:57:36",
+    "note": "orch-ladder.js: S13 loop fail 만 재발, warn 이면서 키 norep/nomenu/err 는 감지기별 nodata 묶음(L2, 효력 뒤 l3ApplyFailMin=2 건 이상이면 L3). L3→L4 minOf, KIND_ORDER 에 nodata 추가. tick 은 L2 진단 안 함. 범위 밖 미수정 1건: orch-selfcheck.js:272 S15 가 runs 없는 열린 묶음을 '진단 대기' warn 으로 띄워 L2|nodata 도 S15|wait 로 표시됨(시험 출력 S15|wait|L2|nodata|U16). S15 가 L2 를 건너뛰게 하려면 별도 개선안 필요. 임시 재현 스크립트 %TEMP%/ladder_repro/repro.js 삭제 승인 안 나서 남아 있음."
+  },
+  "snap": "prop_20261121000456_SELF_2",
+  "effectiveMs": 1795409399628,
+  "effectiveAt": "2026-11-23T13:49:59+09:00"
+}

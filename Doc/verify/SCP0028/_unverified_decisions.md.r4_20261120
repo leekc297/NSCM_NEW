@@ -1,0 +1,8 @@
+# SCP0028 결정 목록 · 2026-11-20 라운드 4(CheckList 16:06 원장)
+
+| 결정 | 정할 내용 | 행 수 | 행 ID | 권장안 | 근거 경로:줄 |
+|---|---|---|---|---|---|
+| R4-D1 | Model 조회조건 팝업 COM0013(Material by Division) 교체를 확정 룰로 등록할지. 등록하면 G4 조건 목록, A6, F4 기준을 COM0013 조회 SP 로 바꿈. AI 검토는 SCP 전체 일반 룰 등록을 권장함 | 3 | EG-ac06e957, T-2c20a3fc, T-fad117f6 | 등록하되 범위는 사용자 지시가 기록된 5화면(SCP0028, 출하 변경 요청 4화면). SCP 전체로 넓힐 근거 없음 | nscm-fe/features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx:362~372, nscm-fe/features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx:950, Doc/verify/SCP0028/FE_GUIDE_20261120_0817.md |
+| R4-D2 | 일괄 삭제 결과 메시지를 가짜 응답(서버 미전송)으로 잰 판정을 확정 판정으로 인정할지(R3-D5 이월). T511 로 표본을 찾게 되어 다음 CheckList 에서 PASS 또는 FAIL 이 나옴 | 4 | T-0caf6c62, T-4677b9e5, V-86e7f1e2, V-a89007be | 인정. 성공 표본은 앞 실행 실저장 응답 RESULT_CODE 'S'(e2e_results.json.prev T-0159f9dc), 실패 분기는 PKG_SCP0028 예외 분기 원문 | Doc/e2e/specs/_trace.spec.ts 'BTN 팝업 경로', SCP0028_Shipment_Lot_Size.cs:544, :553 |
+| R4-D3 | 일괄 입력 팝업 조회 건수 표시 없음을 결함으로 볼지(R3-D3 이월). T510 으로 행을 만든 뒤 재므로 다음 CheckList 에서 FAIL 또는 PASS | 1 | EG-6cc339e1 | FAIL. CR-007 은 모든 팝업 그리드 건수 표시, CR-100 예외는 메타 공통 셀 팝업만 | tools/Harness/rules/confirmed_requirements.csv:8, :101 |
+| R3-D7~R3-D13 | 라운드 3 결정(다른 화면 NA 전환 확인, 기준 원장 판단 대기 18건, 실측-파싱 대조, 조회·저장 인자 차이) | 이월 | _unverified_decisions.md.r3_20261120 | 라운드 3 권장안 유지 | Doc/verify/SCP0028/criteria/criteria.md:8~87 |

@@ -1,0 +1,28 @@
+{
+ "menu_id": "SSP0005",
+ "at": "2026-11-11 14:55:26",
+ "seconds": 1,
+ "rc": 0,
+ "gates": [
+  {
+   "gate": "G1 원문 반영",
+   "result": "NA",
+   "detail": "Doc/gen/<ID>/<ID>_PKG.sql 없음 — 비교 대상 파일 없음"
+  },
+  {
+   "gate": "G2 컴파일",
+   "result": "PASS",
+   "detail": "2건 전부 PASS"
+  },
+  {
+   "gate": "G3 시그니처",
+   "result": "PASS",
+   "detail": "4건 전부 PASS"
+  },
+  {
+   "gate": "G4 실행 대조",
+   "result": "SKIPPED",
+   "detail": "--no-diff — 실행 대조 생략(미측정)"
+  }
+ ]
+}

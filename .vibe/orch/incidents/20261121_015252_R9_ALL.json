@@ -1,0 +1,37 @@
+{
+  "id": "20261121_015252_R9_ALL",
+  "at": "2026-11-21T01:52:52+09:00",
+  "ms": 1795193572202,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.admit.lock (PID 9240 없음)",
+  "screen": "",
+  "sig": "R9|_run.admit.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20T16:04:09.966Z · 인자 SCP0028",
+  "evidence": {
+    "file": "Doc/e2e/_run.admit.lock",
+    "pid": 9240
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T01:52:52+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.admit.lock (PID 9240 없음 재확인)",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-21T02:00:04+09:00",
+      "by": "VMO 사후 검증",
+      "what": "잠금 삭제 판정: 맞음. 잠금 주인 PID 9240 없음 확인"
+    }
+  ],
+  "vmoCheck": {
+    "entry": "I20261121_015252_12",
+    "verdict": "ok",
+    "at": "2026-11-21T02:00:04+09:00"
+  }
+}

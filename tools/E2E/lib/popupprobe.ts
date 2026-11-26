@@ -235,7 +235,10 @@ export async function pickRows(page: Page, dlg: Locator, tag: string, rows: numb
 /** 행의 첫 보이는 데이터 셀 중심점 + 있으면 행 체크박스 — 그리드 hitTest 로 확인 */
 export async function cellPoint(page: Page, tag: string, row: number): Promise<{ x: number; y: number; check: { x: number; y: number } | null } | null> {
   return page.evaluate(`(async () => { const c = ${CTLS(tag)}[0]; if (!c) return null; let colI = -1; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.visible !== false && x.binding && (x.dataType !== 3)) { colI = i; break; } } if (colI < 0) return null;
-    c.scrollIntoView(${row}, colI); await new Promise(r => setTimeout(r, 200)); const el = c.cells.getCellElement(${row}, colI); if (!el) return null; const r = el.getBoundingClientRect();
+    c.scrollIntoView(${row}, colI); await new Promise(r => setTimeout(r, 200)); let el = c.cells.getCellElement(${row}, colI);
+    /* 2026-11-26 R240(VMO 20261126153055_SELF_2): 스크롤 직후 셀이 아직 안 그려지면 null → 행 위치 확인 불가. probe.ts cellClasses 와 같이 최대 10회 다시 그린 뒤 읽음. 끝까지 없으면 null(호출부 why 유지) */
+    for (let k = 0; k < 10 && !el; k++) { try { c.scrollIntoView(${row}, colI); c.refresh(false); } catch { /* 다시 그리기 실패는 다음 회차에서 */ } await new Promise(r => requestAnimationFrame(r)); await new Promise(r => setTimeout(r, 120)); el = c.cells.getCellElement(${row}, colI); }
+    if (!el) return null; const r = el.getBoundingClientRect();
     let check = null; for (let i = 0; i < c.columns.length; i++) { const e2 = c.cells.getCellElement(${row}, i); const inp = e2 && e2.querySelector && e2.querySelector('input[type="checkbox"]'); if (inp) { const q = inp.getBoundingClientRect(); check = { x: q.left + q.width / 2, y: q.top + q.height / 2 }; break; } }
     /* 2026-11-07 T148: 공용 모달 multiCheckbox(useCheckbox) 는 체크박스를 행 헤더 패널(rowHeaders)에 그린다 — cells 만 보면 체크 없음으로 오인해 행 클릭+OK → 조건 칸 '' (SCP0131 COND:Model PICK_OK ERROR · 15:4x 단독 실측: rowheaders 체크 뒤 OK → 'AAEF1001I-A1-000' 반영) */
     if (!check && c.rowHeaders) { for (let i = 0; i < c.rowHeaders.columns.length; i++) { const e3 = c.rowHeaders.getCellElement(${row}, i); const inp = e3 && e3.querySelector && e3.querySelector('input[type="checkbox"]'); if (inp) { const q = inp.getBoundingClientRect(); check = { x: q.left + q.width / 2, y: q.top + q.height / 2 }; break; } } }
@@ -267,7 +270,9 @@ export async function clickPopHeader(page: Page, tag: string, binding: string): 
 
 /** F3 정렬 스위치(선택 컬럼) + 머리글 클릭 2회 — 공용 DataGrid 팝업 규칙(DataGrid.tsx:1891 팝업만 F3/F4 자동 등록) */
 export async function sortByF3(page: Page, tag: string, binding: string, row = 0): Promise<{ on: boolean; s1: string; s2: string; first1: string; first2: string } | null> {
-  const pt = await page.evaluate(`(async () => { const c = ${CTLS(tag)}[0]; if (!c) return null; const col = c.columns.getColumn(${J(binding)}); if (!col) return null; c.scrollIntoView(${row}, col.index); await new Promise(r => setTimeout(r, 200)); const el = c.cells.getCellElement(${row}, col.index); if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`).catch(() => null) as { x: number; y: number } | null;
+  const pt = await page.evaluate(`(async () => { const c = ${CTLS(tag)}[0]; if (!c) return null; const col = c.columns.getColumn(${J(binding)}); if (!col) return null; c.scrollIntoView(${row}, col.index); await new Promise(r => setTimeout(r, 200)); let el = c.cells.getCellElement(${row}, col.index);
+    for (let k = 0; k < 10 && !el; k++) { try { c.scrollIntoView(${row}, col.index); c.refresh(false); } catch { /* 2026-11-26 R240: 다시 그리기 실패는 다음 회차에서 */ } await new Promise(r => requestAnimationFrame(r)); await new Promise(r => setTimeout(r, 120)); el = c.cells.getCellElement(${row}, col.index); }
+    if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`).catch(() => null) as { x: number; y: number } | null;
   if (!pt) return null;
   await page.mouse.click(pt.x, pt.y); await page.waitForTimeout(200); await page.keyboard.press('F3'); await page.waitForTimeout(400);
   const on = await page.evaluate(`(() => { const c = ${CTLS(tag)}[0]; const s = c && c._userSortEnabledBindings; return !!(s && s.has && s.has(${J(binding)})); })()`).catch(() => false) as boolean;
@@ -401,6 +406,15 @@ export function orderCheck(rows: Record<string, string>[], keysExpr: string): { 
       if (a === b) continue;
       if (a === '' || b === '') break;  // NULL/빈값 위치 차이(MSSQL 앞·Oracle 뒤)는 위반 아님(2026-10-28 판정 규칙)
       const cmp = typeof a === 'number' && typeof b === 'number' ? a - b : String(a) < String(b) ? -1 : 1;
+      // 2026-11-20 T522(SCP0028 EG-017a5164): 위 norm 은 공백·기호를 지워 'Renault AS HQ_FR_RHE' → 'Renault AS_FR_FNS'(11번째 글자 공백 0x20 < 밑줄 0x5F, AS-IS·TO-BE 둘 다 이 순서)를
+      //   'renaultashq…' > 'renaultasfr…' 로 보고 위반으로 판정했다. 공백·밑줄 등 기호는 DB 정렬에서 글자 앞에 오므로 기호를 남긴 비교(대소문자 무시 · '-'·''' 만 무시 = Windows 단어 정렬)도
+      //   위반일 때만 위반으로 본다. 두 비교가 갈리는 행은 정렬 규칙(콜레이션) 차이라 위반 근거가 아니다
+      if (typeof a !== 'number' || typeof b !== 'number') {
+        const raw = (v: string) => String(v ?? '').toLowerCase().replace(/[-']/g, '');
+        const ra = raw(rows[i - 1][k.real]); const rb = raw(rows[i][k.real]);
+        const cmp2 = ra === rb ? 0 : ra < rb ? -1 : 1;
+        if (cmp2 === 0 || (k.desc ? cmp2 > 0 : cmp2 < 0)) break;  // 기호를 남긴 비교로는 순서대로(또는 같음) — 위반 아님, 다음 행
+      }
       if (k.desc ? cmp < 0 : cmp > 0) { res.violAt = i; res.viol = `${k.real}: ${i - 1}행 '${rows[i - 1][k.real]}' → ${i}행 '${rows[i][k.real]}'`; return res; }
       break;
     }

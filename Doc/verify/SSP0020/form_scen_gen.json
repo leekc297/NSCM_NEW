@@ -1,0 +1,644 @@
+{
+ "_gen": "form_scen_gen.py 2026-11-26 16:40:18",
+ "menu_id": "SSP0020",
+ "asis": "SSP0020",
+ "buttons": [
+  {
+   "button": "btnSave",
+   "form": true,
+   "label": "SAVE",
+   "save": [
+    "SaveData"
+   ],
+   "tables": [
+    "SSP_MST_DELEGATE"
+   ]
+  },
+  {
+   "button": "btnUnSet",
+   "form": false,
+   "why": "저장 메서드 UnSet 가 그리드를 읽음",
+   "save": [
+    "UnSet"
+   ],
+   "tables": [
+    "SSP_MST_DELEGATE"
+   ]
+  }
+ ],
+ "counts": {
+  "active": 15,
+  "dynamic": 9,
+  "pending": 0,
+  "blocked": 0,
+  "delegated": 0
+ },
+ "scenarios": [
+  {
+   "msg": "MSG00302",
+   "meth": "UserName_Search",
+   "asis_line": "cs:802",
+   "asis_text": "다중검색된 User입니다. 검색창을 여시겠습니까?",
+   "asis_text_alt": [
+    "This is a multiple-searched User. Open search box?",
+    "This is a multiple-searched User. Open search box?"
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "note": "txtDelegatee 빈 검색어 = UP_FX_GetSSPUserUseInfoList @Search LIKE '%'+@Search+'%' 전부 일치(여러 건) · 라벨 근거 txtDelegatee=lblDelegatee.Text",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": ""
+    },
+    {
+     "op": "click",
+     "name": "SAVE"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "id": "G01"
+  },
+  {
+   "msg": "MSG00301",
+   "meth": "UserName_Search",
+   "asis_line": "cs:811",
+   "asis_text": "사용자를 찾지 못했습니다. 검색창을 여시겠습니까?",
+   "asis_text_alt": [
+    "No user were found. Open search box?",
+    "No user were found. Open search box?"
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "note": "txtDelegatee 일치 없는 검색어 'ZQ9NOMATCH'(UP_FX_GetSSPUserUseInfoList @Search 길이 12) · 라벨 근거 txtDelegatee=lblDelegatee.Text",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "ZQ9NOMATCH"
+    },
+    {
+     "op": "click",
+     "name": "SAVE"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "id": "G02"
+  },
+  {
+   "msg": "MSG00298",
+   "meth": "Validation_Check",
+   "asis_line": "cs:372",
+   "asis_text": "Delegatee를 입력해 주세요.",
+   "asis_text_alt": [
+    "Please enter Delegatee.",
+    "Please enter Delegatee."
+   ],
+   "button": "btnSave",
+   "kind": "unreachable",
+   "basis": "앞선 검사 MSG00302(UserName_Search cs:802)가 같은 칸 txtDelegatee 를 먼저 검사함 — 빈값이면 그 검사에서 끝남",
+   "id": "G03"
+  },
+  {
+   "msg": "MSG00305",
+   "meth": "Validation_Check",
+   "asis_line": "cs:379",
+   "asis_text": "위임자와 수임자가 동일 합니다.",
+   "asis_text_alt": [
+    "The delegator and the officer are the same.",
+    "The delegator and the officer are the same."
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "note": "txtDelegatee {\"value\": \"@ME\"} · sDelegateeID = UserName_Search 조회 결과(txtDelegatee 값) · 로그인 계정과 같으면 발생 · 라벨 근거 txtDelegatee=lblDelegatee.Text",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@ME"
+    },
+    {
+     "op": "click",
+     "name": "SAVE"
+    }
+   ],
+   "needs": [
+    "DELEGATEE"
+   ],
+   "id": "G04"
+  },
+  {
+   "msg": "MSG00134",
+   "meth": "Validation_Check",
+   "asis_line": "cs:385",
+   "asis_text": "날짜 선택 후 입력하세요.",
+   "asis_text_alt": [
+    "Select a date and enter it.",
+    "Select a date and enter it."
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "note": "drpPeriod {\"from\": \"\", \"to\": \"\"} · 라벨 근거 txtDelegatee=lblDelegatee.Text, drpPeriod=layoutControlItem6.Text",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "",
+     "to": ""
+    },
+    {
+     "op": "click",
+     "name": "SAVE"
+    }
+   ],
+   "needs": [
+    "DELEGATEE"
+   ],
+   "id": "G05"
+  },
+  {
+   "msg": "MSG00219",
+   "meth": "Validation_Check",
+   "asis_line": "cs:393",
+   "asis_text": "시작일자가 종료일자보다 늦을 수 없습니다.\\n\\r리스트 확인 후 입력하십시오.",
+   "asis_text_alt": [
+    "The start date can not be later than the end date.\\n\\rSearch the list and enter it again.",
+    "The start date can not be later than the end date.\\n\\rSearch the list and enter it again."
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "note": "drpPeriod {\"from\": \"@TODAY+1\", \"to\": \"@TODAY\"} · 라벨 근거 txtDelegatee=lblDelegatee.Text, drpPeriod=layoutControlItem6.Text",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY+1",
+     "to": "@TODAY"
+    },
+    {
+     "op": "click",
+     "name": "SAVE"
+    }
+   ],
+   "needs": [
+    "DELEGATEE"
+   ],
+   "id": "G06"
+  },
+  {
+   "msg": "MSG00296",
+   "meth": "Validation_Check",
+   "asis_line": "cs:440",
+   "asis_text": "수임자의 다른 위임 현황이 있습니다.",
+   "asis_text_alt": [
+    "There is another delegation status of the appointed person.",
+    "There is another delegation status of the appointed person."
+   ],
+   "button": "btnSave",
+   "kind": "unreachable",
+   "basis": "cs:430 건수 조건은 앞선 MSG00105(cs:426) 조건에 row.Field<string>(\"USER_ID\")==sDelegateeID 를 더한 것이라, 이 조건이 참이면 앞선 조건이 먼저 참이 되어 cs:426 에서 끝남",
+   "id": "G07"
+  },
+  {
+   "msg": "MSG00297",
+   "meth": "Validation_Check",
+   "asis_line": "cs:454",
+   "asis_text": "중첩된 기간에 수임받은 현황이 있습니다.",
+   "asis_text_alt": [
+    "You have a status that you have received in the nested period.",
+    "You have a status that you have received in the nested period."
+   ],
+   "button": "btnSave",
+   "kind": "unreachable",
+   "basis": "cs:444 건수 조건은 앞선 MSG00105(cs:426) 조건에 row.Field<string>(\"DELEGATEE_ID\")==base.UserInfo.UserId 를 더한 것이라, 이 조건이 참이면 앞선 조건이 먼저 참이 되어 cs:426 에서 끝남",
+   "id": "G08"
+  },
+  {
+   "msg": "MSG00299",
+   "meth": "Validation_Check",
+   "asis_line": "cs:462",
+   "asis_text": "선택된 Division ID가 없습니다.",
+   "asis_text_alt": [
+    "No Division ID selected.",
+    "No Division ID selected."
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "note": "clbDivision {\"mode\": \"none\"} · 라벨 근거 txtDelegatee=lblDelegatee.Text, drpPeriod=layoutControlItem6.Text, clbDivision=컨트롤 이름 clbDivision",
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY",
+     "to": "@TODAY"
+    },
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "none"
+    },
+    {
+     "op": "click",
+     "name": "SAVE"
+    }
+   ],
+   "needs": [
+    "DELEGATEE"
+   ],
+   "id": "G09"
+  },
+  {
+   "msg": "MSG00004",
+   "meth": "SaveData",
+   "asis_line": "cs:523",
+   "asis_text": "{0}개의 데이터가 저장되었습니다.",
+   "asis_text_alt": [
+    "{0} data saved.",
+    "{0} data saved."
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "phase": "setup",
+   "allowSave": true,
+   "expectSave": 1,
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY",
+     "to": "@TODAY"
+    },
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "click",
+     "name": "SAVE",
+     "ms": 4500
+    }
+   ],
+   "matchAfter": {
+    "where": {
+     "DELEGATEE_ID": "@DELEGATEE",
+     "FROM_DATE": "@TODAY",
+     "TO_DATE": "@TODAY"
+    },
+    "min": 1
+   },
+   "note": "정상 저장(검증용 행 생성) · 조건 칸 근거 p_delegatee_id=sDelegateeID(UserName_Search 조회 결과, txtDelegatee), p_from_date=drpPeriod.Text1, p_to_date=drpPeriod.Text2 · 정리 단추 btnUnSet",
+   "needs": [
+    "DELEGATEE"
+   ],
+   "id": "G10"
+  },
+  {
+   "msg": "MSG00004",
+   "meth": "UnSet",
+   "asis_line": "cs:749",
+   "asis_text": "{0}개의 데이터가 저장되었습니다.",
+   "asis_text_alt": [
+    "{0} data saved.",
+    "{0} data saved."
+   ],
+   "button": "btnUnSet",
+   "kind": "dynamic",
+   "phase": "teardown",
+   "allowSave": true,
+   "expectSave": 1,
+   "expectRowsMin": 1,
+   "steps": [
+    {
+     "op": "checkrows",
+     "where": {
+      "DELEGATEE_ID": "@DELEGATEE",
+      "FROM_DATE": "@TODAY",
+      "TO_DATE": "@TODAY"
+     }
+    },
+    {
+     "op": "click",
+     "name": "UnSet",
+     "ms": 3000
+    }
+   ],
+   "matchAfter": {
+    "where": {
+     "DELEGATEE_ID": "@DELEGATEE",
+     "FROM_DATE": "@TODAY",
+     "TO_DATE": "@TODAY"
+    },
+    "max": 0
+   },
+   "note": "검증용으로 만든 행만 골라 UnSet(정리)",
+   "needs": [
+    "DELEGATEE"
+   ],
+   "id": "G11"
+  },
+  {
+   "msg": "MSG00284",
+   "meth": "SaveData",
+   "asis_line": "cs:528",
+   "asis_text": "실행중 에러가 발생했습니다.",
+   "asis_text_alt": [
+    "Error occurred during execution.",
+    "Error occurred during execution."
+   ],
+   "button": "btnSave",
+   "kind": "error_branch",
+   "basis": "저장 응답 실패 갈래(response.DataSet.Tables[0].Rows[0][0].ToString() == \"S\" · SaveData cs:528)",
+   "id": "G12"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "SaveData",
+   "asis_line": "cs:535",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSave",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(SaveData cs:535)",
+   "id": "G13"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "BtnSave_Click",
+   "asis_line": "cs:359",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSave",
+   "kind": "error_branch",
+   "basis": "오류 문구·코드를 그대로 띄우는 분기(else of (SaveData() == true))",
+   "id": "G14"
+  },
+  {
+   "msg": "MSG00105",
+   "meth": "Validation_Check",
+   "asis_line": "cs:426",
+   "asis_text": "중첩된 기간이 있습니다.",
+   "asis_text_alt": [
+    "There are overlapping periods.",
+    "There are overlapping periods."
+   ],
+   "button": "btnSave",
+   "kind": "dynamic",
+   "expectRowsMin": 1,
+   "steps": [
+    {
+     "op": "text",
+     "label": "Delegatee",
+     "value": "@DELEGATEE"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "from": "@TODAY",
+     "to": "@TODAY"
+    },
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "click",
+     "name": "SAVE"
+    }
+   ],
+   "note": "준비(SaveData cs:523)와 같은 입력으로 다시 저장 · 조회 표 dtFind_Data 의 건수 조건(cs:416)",
+   "needs": [
+    "DELEGATEE"
+   ],
+   "id": "G15"
+  }
+ ],
+ "_pending": [],
+ "_blocked": [],
+ "_delegated": [],
+ "compare_manual": [
+  {
+   "manual": "B01",
+   "gen": "",
+   "kind_manual": "dynamic",
+   "kind_gen": "없음",
+   "meth": "SpdMain_SheetTabClick",
+   "asis_line": "cs:232"
+  },
+  {
+   "manual": "P01",
+   "gen": "",
+   "kind_manual": "dynamic",
+   "kind_gen": "없음",
+   "meth": "UserPopup",
+   "asis_line": "cs:821"
+  },
+  {
+   "manual": "F16",
+   "gen": "G01",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "F17",
+   "gen": "G02",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "F02",
+   "gen": "G04",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "F03",
+   "gen": "G05",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "F04",
+   "gen": "G06",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": false
+  },
+  {
+   "manual": "F08",
+   "gen": "G09",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "F09",
+   "gen": "G10",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": false
+  },
+  {
+   "manual": "F09b",
+   "gen": "G10",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": false
+  },
+  {
+   "manual": "F05",
+   "gen": "G15",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "F12",
+   "gen": "",
+   "kind_manual": "dynamic",
+   "kind_gen": "없음",
+   "meth": "BtnUnSet_Click",
+   "asis_line": "cs:576"
+  },
+  {
+   "manual": "F13",
+   "gen": "G11",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": false
+  },
+  {
+   "manual": "F13b",
+   "gen": "G11",
+   "kind_manual": "dynamic",
+   "kind_gen": "dynamic",
+   "same_kind": true,
+   "same_text": false
+  },
+  {
+   "manual": "U01",
+   "gen": "G03",
+   "kind_manual": "unreachable",
+   "kind_gen": "unreachable",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "U06",
+   "gen": "G07",
+   "kind_manual": "unreachable",
+   "kind_gen": "unreachable",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "U07",
+   "gen": "G08",
+   "kind_manual": "unreachable",
+   "kind_gen": "unreachable",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "E10",
+   "gen": "G12",
+   "kind_manual": "error_branch",
+   "kind_gen": "error_branch",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "E14",
+   "gen": "",
+   "kind_manual": "error_branch",
+   "kind_gen": "없음",
+   "meth": "UnSet",
+   "asis_line": "cs:757"
+  },
+  {
+   "manual": "E11",
+   "gen": "G14",
+   "kind_manual": "error_branch",
+   "kind_gen": "error_branch",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "E11c",
+   "gen": "G13",
+   "kind_manual": "error_branch",
+   "kind_gen": "error_branch",
+   "same_kind": true,
+   "same_text": true
+  },
+  {
+   "manual": "E15",
+   "gen": "",
+   "kind_manual": "error_branch",
+   "kind_gen": "없음",
+   "meth": "BtnUnSet_Click",
+   "asis_line": "cs:571"
+  },
+  {
+   "manual": "E15c",
+   "gen": "",
+   "kind_manual": "error_branch",
+   "kind_gen": "없음",
+   "meth": "UnSet",
+   "asis_line": "cs:761"
+  },
+  {
+   "manual": "B02",
+   "gen": "",
+   "kind_manual": "dynamic",
+   "kind_gen": "없음",
+   "meth": "SpdMain_CellClick",
+   "asis_line": "cs:850"
+  }
+ ]
+}

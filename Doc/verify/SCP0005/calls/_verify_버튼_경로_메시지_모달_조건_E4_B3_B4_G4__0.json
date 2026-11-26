@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 2056,
-  "at": "2026-11-20T00:42:34.979Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1592,
+  "at": "2026-11-25T16:26:11.010Z",
+  "user": "cnsytchoi",
   "test": "버튼 경로 메시지·모달 조건(E4·B3·B4·G4)"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 1448,
-  "at": "2026-11-20T00:42:38.326Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 793,
+  "at": "2026-11-25T16:26:13.414Z",
+  "user": "cnsytchoi",
   "test": "버튼 경로 메시지·모달 조건(E4·B3·B4·G4)"
  }
 ]

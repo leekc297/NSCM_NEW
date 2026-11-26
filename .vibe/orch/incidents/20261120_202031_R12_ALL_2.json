@@ -1,0 +1,29 @@
+{
+  "id": "20261120_202031_R12_ALL_2",
+  "at": "2026-11-20T20:20:31+09:00",
+  "ms": 1795173631519,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U21 반영 실패 뒤 같은 사건 다시 올라옴 R5 SCP0028",
+  "screen": "",
+  "sig": "R12|S13|U21|recur|20261120_201206_R5_SCP0028",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261119205920_INC 반영 실패 11-19 21:52 뒤 20261120_201206_R5_SCP0028 11-20 20:12 sig 'R5|CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체' · 진행 없음. CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) ",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U21|recur|20261120_201206_R5_SCP0028",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T02:03:37+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

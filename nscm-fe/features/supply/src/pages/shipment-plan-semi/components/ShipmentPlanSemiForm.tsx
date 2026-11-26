@@ -297,8 +297,11 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
               )}
             />
           </Grid>
+          {/* Operation Group 변경 = From/To Site 선택 초기화(ALL). AS-IS CboBizType_SelectedIndexChanged
+              (cs:4695)가 SetFromSite/SetToSite 로 목록을 다시 바인딩해 체크가 풀린다. 안 비우면 화면은
+              ALL 로 보여도 store 의 이전 선택이 조회 파라미터로 나간다(shipment-plan-fg 자매 화면 동일 수정). */}
           {single(LBL.OPERATION_GROUP, '_Operation Group', sc.operationGroupId, operationGroupOptions, v =>
-            set({ operationGroupId: v })
+            set({ operationGroupId: v, fromSiteIds: [], toSiteIds: [] })
           , true)}
           {multi(LBL.FROM_SITE, '_From Site', sc.fromSiteIds, fromSiteOptions, fromSiteIds => set({ fromSiteIds }))}
           {multi(LBL.TO_SITE, '_To Site', sc.toSiteIds, toSiteOptions, toSiteIds => set({ toSiteIds }))}

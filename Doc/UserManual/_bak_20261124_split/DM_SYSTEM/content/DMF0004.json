@@ -1,0 +1,105 @@
+{
+ "definition": "Division 별 Sales Site 와 Site 에 연결된 Sold-To, Ship-To, 창고(SLOC), 요일 Bucket 을 등록하고 관리하는 화면",
+ "overview": [
+  "Division 별 판매 거점(Sales Site)을 등록하고 거점에 연결된 Sold-To, Ship-To 고객, 출하 Plant, SLOC, 요일 Bucket 을 관리하는 기준정보 화면임",
+  "위쪽 조회 조건, Sales Site 그리드, 아래 Sales Customer, Sales Location, Sales Bucket 탭으로 구성됨. 아래 탭은 Detail 을 체크하면 보임. 지역, 고객, 창고 찾기 팝업이 있음",
+  "Sales Site 등록 → Save → Sales Site 행 선택 → 아래 탭에서 고객, 창고, 요일 값 입력 → Save 순서로 작업함",
+  "등록한 Sales Site 는 Sales Site Project Model, Customer Model Mapping, Customer FCST Master, Sales Price 화면의 Sales Site 값으로 쓰임",
+  "ERP EDI Master Validation 화면에서 Sales Site 가 없다고 나온 건은 Sales Site 화면에서 추가함"
+ ],
+ "pages": [
+  {
+   "title": "Sales Site",
+   "keyPoint": "Sales Site 이름은 Sold-To Customer, Country, City 로 만들어지므로 세 값을 확인하고 저장함. 같은 Sales Site 안에서 Rep = Y 인 Sold-To 는 1건만 둠.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.136,
+     "y": 0.135
+    },
+    {
+     "no": 2,
+     "x": 0.605,
+     "y": 0.236
+    },
+    {
+     "no": 3,
+     "x": 0.173,
+     "y": 0.251
+    },
+    {
+     "no": 4,
+     "x": 0.282,
+     "y": 0.75
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 권한이 있는 Division 만 콤보에 나옴. Division 을 바꾸면 아래 콤보 목록과 그리드 컬럼이 다시 구성됨",
+      "End Customer: 필수 표시. Div 40 에서는 입력 불가(ALL 고정)",
+      "Sold-To Customer, Sales Site: 앞 조건에 맞는 값만 콤보에 나옴. 복수 선택 가능",
+      "Active: ALL, Y, N 중 선택",
+      "Detail: 체크하면 아래 Sales Customer, Sales Location, Sales Bucket 탭이 보임"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 커서가 있는 그리드(위 Sales Site 또는 아래 탭)에 적용됨",
+      "아래 탭에서 Insert 할 때 위 그리드에서 Sales Site 를 고르지 않았으면 \"Site가 선택되지 않았습니다.\" 메시지가 뜸",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Sales Site 그리드",
+     "lines": [
+      "필수 입력: Sold-To Customer, Company, Country Name, City Name, Active, Ship Plan Auto(제목 앞 빨간 점)",
+      "Sales Site: Sold-To Customer, Country, City 를 입력하면 \"Sold-To Customer_국가_도시\" 형식으로 채워짐(예: Acculon Energy_US_CMH)",
+      "Country, City: 더블클릭하면 지역 찾기 팝업이 열리고, 고른 값으로 Country Name, City Name 이 같이 채워짐",
+      "Company: 노란 칸. 내부 거래 법인 코드(HQ00, AA00 등)를 고름",
+      "VMI, Active, Ship Plan Auto: Y 또는 N",
+      "Update Date, Update By: 저장 때 채워지며 입력 불가"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Sales Customer, Sales Location, Sales Bucket 탭",
+     "lines": [
+      "위 그리드에서 Sales Site 행을 고르면 그 Site 의 데이터가 탭에 조회됨",
+      "Sales Customer: Sold-To, Ship-To 필수. 칸을 더블클릭하면 고객 찾기 팝업이 열려 Sold-To Name, Ship-To Name, Ship-To Region, Ship-To City 가 채워짐",
+      "Sales Customer Rep: 같은 Sales Site 에 Rep = Y 가 2건 이상이면 \"Rep Yn = Y 인 데이터 동일 Sales Site 기준으로 하나만 존재할 수 있습니다.\" 메시지가 뜸",
+      "Sales Location: Plant, SLOC 필수. SLOC 은 창고 찾기 팝업에서 고름",
+      "Sales Bucket: Sales Site, Incoterms 필수. Incoterms 를 고른 뒤 요일 칸(Mon~Sun) 값을 입력함",
+      "같은 키가 이미 있으면 \"중복된 키가 존재합니다.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "DM",
+ "id": "DMF0004",
+ "uiName": "Sales Site",
+ "menuPath": "DM> Demand Master> Sales Site",
+ "captures": [
+  "captures/DMF0004.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0004/",
+  "Doc/asisfacts/screens/DMF0004/"
+ ],
+ "buttons": [
+  "bucket:SAVE",
+  "customer:SAVE",
+  "customer:SEARCH",
+  "location:SAVE",
+  "site:DELETE",
+  "site:INSERT",
+  "site:SAVE",
+  "site:SEARCH"
+ ]
+}

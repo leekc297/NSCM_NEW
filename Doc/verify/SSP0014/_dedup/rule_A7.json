@@ -1,304 +1,274 @@
 {
  "rule_id": "A7",
- "hash": "a0fb5d8ecc3d42d5",
+ "hash": "70641638500e48a7",
  "groups": [
-  {
-   "rows": [
-    "AD-01b942bc"
-   ],
-   "why": "호출 #74 SEARCH(divisionId=40, itemId=AMDAU0348A, KO)만 확인한다. 조회조건이 같은 다른 행이 없어 단독으로 둔다."
-  },
   {
    "rows": [
     "AD-0207067b"
    ],
-   "why": "호출 #20 SEARCH(divisionId=81_HG, KO)만 확인한다. 사업부 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #20 SEARCH(divisionId 81_HG, KO)에만 있는 조회 조건이라 같은 조건의 행이 없다."
   },
   {
    "rows": [
-    "AD-0b092014"
+    "AD-05912610"
    ],
-   "why": "호출 #35 USER_CHECK(luping^njzhoumengwei^guoxiaoliang)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #28 USER_CHECK(ZZ_E2E_BAD_POPUP_KEY^sethlee^junha.hwang)에만 있는 userId 조합이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-132401f8"
+   ],
+   "why": "호출 #48 SEARCH(81_HM, EN)는 #21(81_HM, KO)과 언어 조건이 달라 같은 묶음이 아니다."
   },
   {
    "rows": [
     "AD-1710c6cd"
    ],
-   "why": "호출 #19 SEARCH(divisionId=82, KO)만 확인한다. 사업부 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #19 SEARCH(divisionId 82, KO)에만 있는 조회 조건이다."
   },
   {
    "rows": [
-    "AD-1ab0ade2"
+    "AD-18f17676"
    ],
-   "why": "호출 #28 SEARCH(divisionId=40, language=CN)만 확인한다. 언어 조건이 KO·EN 호출과 달라 단독으로 둔다."
+   "why": "호출 #38 USER_CHECK(eunjin.choiX^sethlee^junha.hwang)는 오타가 섞인 userId라 다른 입력이다."
+  },
+  {
+   "rows": [
+    "AD-1a8b4904"
+   ],
+   "why": "호출 #37 SEARCH(40, EN)는 #2(40, KO)와 언어 조건이 다르다."
   },
   {
    "rows": [
     "AD-1dcb0833"
    ],
-   "why": "호출 #6 SEARCH(divisionId=81, KO)만 확인한다. 사업부 조건이 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-202298af"
-   ],
-   "why": "호출 #58 SEARCH(userId=unha.hwan)만 확인한다. 부분 일치 userId 조건이라 다른 userId 호출과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-25b7045e"
-   ],
-   "why": "호출 #44 USER_CHECK(njzhoumengwei^kwonl)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #6 SEARCH(divisionId 81, KO)에만 있는 조회 조건이다."
   },
   {
    "rows": [
     "AD-2dc052ff"
    ],
-   "why": "호출 #22 SEARCH(divisionId=81_ST, KO)만 확인한다. 사업부 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #22 SEARCH(81_ST, KO)에만 있는 조회 조건이다."
   },
   {
    "rows": [
-    "AD-44f34edf"
+    "AD-48f19363"
    ],
-   "why": "호출 #51 USER_CHECK(5개 userId 조합)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #26 SEARCH(itemId MTR465768A10)에만 있는 품목 조건이다."
   },
   {
    "rows": [
     "AD-4f3d407b"
    ],
-   "why": "호출 #17 USER_CHECK(luping 단일)만 확인한다. userId가 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #17 USER_CHECK(luping^sethlee^junha.hwang)에만 있는 userId 조합이다."
   },
   {
    "rows": [
-    "AD-5111db1a"
+    "AD-628f2c6e"
    ],
-   "why": "호출 #49 USER_CHECK(njzhoumengwei^guoxiaoliang)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #43 SEARCH(userId eunjin.choi)에만 있는 사용자 조건이다."
   },
   {
    "rows": [
-    "AD-5214f5f3"
+    "AD-639a8e90"
    ],
-   "why": "호출 #55 SEARCH(itemId 2건 쉼표 목록)만 확인한다. itemId 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #30 USER_CHECK는 잘못된 키가 세 번째 위치에 있어 다른 입력이다."
   },
   {
    "rows": [
-    "AD-572491ef"
+    "AD-6ad0b100"
    ],
-   "why": "호출 #65 USER_CHECK(secretshushu^ZZ_E2E_BAD_KEY)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-59eb9b63"
-   ],
-   "why": "호출 #41 USER_CHECK(njzhoumengwei^zhouziqiang^guoxiaoliang)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-66415c2a"
-   ],
-   "why": "호출 #26 USER_CHECK(ZZ_E2E_BAD_POPUP_KEY 단일)만 확인한다. userId가 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-67de3ad8"
-   ],
-   "why": "호출 #27 USER_CHECK(junha.hwang^ZZ_E2E_BAD_POPUP_KEY)만 확인한다. 정상 키와 잘못된 키가 섞인 조합이라 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-6a692543"
-   ],
-   "why": "호출 #52 SEARCH(itemId=MAMM9314U0A1-016 대문자)만 확인한다. 소문자 itemId를 쓰는 #53과 조건이 달라 단독으로 둔다."
+   "why": "호출 #50 USER_CHECK(ZZ_E2E_BAD_KEY^sethlee^junha.hwang)에만 있는 userId 조합이다."
   },
   {
    "rows": [
     "AD-6dcea621"
    ],
-   "why": "호출 #21 SEARCH(divisionId=81_HM, KO)만 확인한다. 언어가 EN인 #61과 조건이 달라 단독으로 둔다."
+   "why": "호출 #21 SEARCH(81_HM, KO)는 #48(81_HM, EN)과 언어 조건이 다르다."
   },
   {
    "rows": [
     "AD-6f8295cb"
    ],
-   "why": "호출 #15 USER_CHECK(njlilian)만 확인한다. userId가 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #15 USER_CHECK(njlilian^sethlee^junha.hwang)에만 있는 userId 조합이다."
   },
   {
    "rows": [
     "AD-6fe6b4f5"
    ],
-   "why": "호출 #9 SEARCH(operationGroup=E)만 확인한다. operationGroup 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #9 SEARCH(operationGroup E)에만 있는 조회 조건이다."
   },
   {
    "rows": [
-    "AD-73e38469"
+    "AD-7148789d"
    ],
-   "why": "호출 #53 SEARCH(itemId 소문자)만 확인한다. 대소문자 처리를 보는 조건이라 #52와 달라 단독으로 둔다."
+   "why": "호출 #29 USER_CHECK(eunjin.choi^ZZ_E2E_BAD_POPUP_KEY^junha.hwang)에만 있는 userId 조합이다."
   },
   {
    "rows": [
-    "AD-83abfd55"
+    "AD-73e700aa"
    ],
-   "why": "호출 #64 USER_CHECK(ZZ_E2E_BAD_KEY 단일)만 확인한다. userId가 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #45 SEARCH(userId unjin.cho, 부분 문자열)에만 있는 사용자 조건이다."
+  },
+  {
+   "rows": [
+    "AD-7abee9d9"
+   ],
+   "why": "호출 #56 USER_CHECK는 잘못된 키가 끝에 있어 다른 입력이다."
+  },
+  {
+   "rows": [
+    "AD-812bda7a"
+   ],
+   "why": "호출 #46 SEARCH는 사용자 두 명을 넣은 다중 userId 조건이다."
   },
   {
    "rows": [
     "AD-84de4a48"
    ],
-   "why": "호출 #8 SEARCH(operationGroup=A)만 확인한다. operationGroup 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #8 SEARCH(operationGroup A)에만 있는 조회 조건이다."
+  },
+  {
+   "rows": [
+    "AD-92362299"
+   ],
+   "why": "호출 #44 SEARCH(userId 대문자 EUNJIN.CHOI)는 대소문자 처리를 보는 별도 조건이다."
+  },
+  {
+   "rows": [
+    "AD-981e13f3"
+   ],
+   "why": "호출 #39 SEARCH(itemId MAMM9314U0A1-016)에만 있는 품목 조건이다."
   },
   {
    "rows": [
     "AD-9970b1d9"
    ],
-   "why": "호출 #23 SEARCH(divisionId=81_UC, KO)만 확인한다. 사업부 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #23 SEARCH(81_UC, KO)에만 있는 조회 조건이다."
   },
   {
    "rows": [
-    "AD-a6b555a1"
+    "AD-a3faf1c0"
    ],
-   "why": "호출 #61 SEARCH(divisionId=81_HM, language=EN)만 확인한다. 언어가 KO인 #21과 조건이 달라 단독으로 둔다."
+   "why": "호출 #32 USER_CHECK는 잘못된 POPUP 키가 끝에 있어 다른 입력이다."
   },
   {
    "rows": [
-    "AD-ad32f708"
+    "AD-ae15c161"
    ],
-   "why": "호출 #46 USER_CHECK(njzhoumengwei^pantaonj)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #42 SEARCH는 품목 두 개를 넣은 다중 itemId 조건이다."
+  },
+  {
+   "rows": [
+    "AD-b09d5d6e"
+   ],
+   "why": "호출 #31 USER_CHECK(eunjin.choi^sethlee^ZZ_E2E_BAD_POPUP_KEY)에만 있는 userId 조합이다."
   },
   {
    "rows": [
     "AD-b0d16abb"
    ],
-   "why": "호출 #2 SEARCH(divisionId=40, KO 기본 조회)만 확인한다. 언어가 CN·EN인 #28·#31과 조건이 달라 단독으로 둔다."
+   "why": "호출 #2 SEARCH(40, KO, 나머지 조건 공란)인 기본 조회라 다른 행과 조건이 다르다."
   },
   {
    "rows": [
-    "AD-bd3d1050"
+    "AD-b784e12c"
    ],
-   "why": "호출 #57 SEARCH(userId=JUNHA.HWANG 대문자)만 확인한다. 소문자 userId를 쓰는 #56과 조건이 달라 단독으로 둔다."
+   "why": "호출 #40 SEARCH(소문자 itemId)는 대소문자 처리를 보는 별도 조건이다."
   },
   {
    "rows": [
-    "AD-be5b6154"
+    "AD-beb5f8ea"
    ],
-   "why": "호출 #56 SEARCH(userId=junha.hwang 소문자)만 확인한다. 대문자 userId를 쓰는 #57과 조건이 달라 단독으로 둔다."
+   "why": "호출 #54 USER_CHECK(luping^sethlee^ZZ_E2E_BAD_KEY^junha.hwang)에만 있는 userId 조합이다."
+  },
+  {
+   "rows": [
+    "AD-bfadcbd6"
+   ],
+   "why": "호출 #33 SEARCH(40, CN)에만 있는 언어 조건이다."
   },
   {
    "rows": [
     "AD-c28d25e0"
    ],
-   "why": "호출 #7 SEARCH(divisionId=81_HD, KO)만 확인한다. 사업부 조건이 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-ca51f11b"
-   ],
-   "why": "호출 #59 SEARCH(userId 2건 쉼표 목록)만 확인한다. userId 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #7 SEARCH(81_HD, KO)에만 있는 조회 조건이다."
   },
   {
    "rows": [
     "AD-cd2a3186"
    ],
-   "why": "호출 #10 SEARCH(fromSite=AZ00-E 단일)만 확인한다. fromSite 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #10 SEARCH(fromSite AZ00-E 하나)에만 있는 조회 조건이다."
   },
   {
    "rows": [
-    "AD-d08a1c2c"
+    "AD-d2344784"
    ],
-   "why": "호출 #60 SEARCH(itemId=E2E)만 확인한다. itemId 조건이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #47 SEARCH(itemId E2E)에만 있는 품목 조건이다."
   },
   {
    "rows": [
-    "AD-d83f652b"
+    "AD-dc9300bb"
    ],
-   "why": "호출 #54 SEARCH(itemId 부분 문자열 AMM9314U0A1-01)만 확인한다. itemId 조건이 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-d944c667"
-   ],
-   "why": "호출 #31 SEARCH(divisionId=40, language=EN)만 확인한다. 언어가 KO·CN인 #2·#28과 조건이 달라 단독으로 둔다."
+   "why": "호출 #41 SEARCH(itemId AMM9314U0A1-01, 부분 문자열)에만 있는 품목 조건이다."
   },
   {
    "rows": [
     "AD-de3cb47b"
    ],
-   "why": "호출 #12 SEARCH(validYn=Y)만 확인한다. validYn이 N인 #13과 조건이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-e07fc3ac"
-   ],
-   "why": "호출 #39 USER_CHECK(njzhoumengwei^shengqiongfen^guoxiaoliang)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-ec1a6e7a"
-   ],
-   "why": "호출 #37 USER_CHECK(njzhoumengweiX^njzhoumengwei^guoxiaoliang)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #12 SEARCH(validYn Y)에만 있는 조회 조건이다."
   },
   {
    "rows": [
     "AD-f25f3003"
    ],
-   "why": "호출 #13 SEARCH(validYn=N)만 확인한다. validYn이 Y인 #12와 조건이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "AD-f30915cd"
-   ],
-   "why": "호출 #48 USER_CHECK(njzhoumengwei^guoxiaoliangX)만 확인한다. userId 조합이 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #13 SEARCH(validYn N)에만 있는 조회 조건이다."
   },
   {
    "rows": [
     "AD-f8e5ef43"
    ],
-   "why": "호출 #11 SEARCH(fromSite 다건 목록)만 확인한다. 단일 fromSite를 쓰는 #10과 조건이 달라 단독으로 둔다."
+   "why": "호출 #11 SEARCH는 fromSite 여러 개를 넣은 다중 조건이다."
+  },
+  {
+   "rows": [
+    "AD-f912c28a"
+   ],
+   "why": "호출 #52 USER_CHECK(luping^ZZ_E2E_BAD_KEY^junha.hwang)에만 있는 userId 조합이다."
+  },
+  {
+   "rows": [
+    "AD-f929a7d5"
+   ],
+   "why": "호출 #65 SEARCH(itemId AMDAU0348A)에만 있는 품목 조건이다."
+  },
+  {
+   "rows": [
+    "AD-fbfb1c5f"
+   ],
+   "why": "호출 #55 USER_CHECK(luping^sethlee^ZZ_E2E_BAD_KEY)에만 있는 userId 조합이다."
   },
   {
    "rows": [
     "AD-fd99ee7f"
    ],
-   "why": "호출 #18 USER_CHECK(junha.hwang 단일)만 확인한다. userId가 다른 행과 달라 단독으로 둔다."
+   "why": "호출 #18 USER_CHECK(eunjin.choi^sethlee^junha.hwang)에만 있는 userId 조합이다."
   },
   {
    "rows": [
     "V-32f63abf"
    ],
-   "why": "GET_SHIPMENT_MODEL_PIC 전체에 대한 SP 규칙으로, 개별 호출 행에 없는 '공란 컬럼 0' 기대를 포함한다. 특정 호출 하나와 같다고 볼 수 없어 단독으로 둔다."
+   "why": "SHIPMENT_MODEL_PIC 전체의 공란 컬럼을 보는 행인데, SEARCH 원장 행은 짝 없음이라 같은 결과를 확인한다고 볼 수 없어 단독으로 둔다."
   },
   {
    "rows": [
     "V-65f47f69"
    ],
-   "why": "GET_USER_ID_CHECK 전체에 대한 SP 규칙으로, '공란 컬럼 0' 기대를 포함한다. 특정 호출 하나와 같다고 볼 수 없어 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-0ce5e320"
-   ],
-   "why": "CR-105 판정 규칙이다(값·행 불일치는 해당없음, FAIL 기준은 컬럼 집합·정렬·로직). 기대 결과가 CR-101(V-5fde4cfe)과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-5fde4cfe"
-   ],
-   "why": "CR-101 판정 규칙이다(값 불일치는 판정필요). V-0ce5e320이 이 처리를 대체해 기대 결과가 다르므로 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-9025a9ab"
-   ],
-   "why": "DMF0035 결함 유형을 옮겨 온 일반 규칙이라 이 화면에서 가리키는 대상 요소가 특정되지 않는다. 확신이 없어 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-bb657573"
-   ],
-   "why": "RTF Measure의 AMT를 LOC 기준으로 계산하는지 보는 결함 행으로, 공란 컬럼 검증과 대상·기대가 달라 단독으로 둔다."
+   "why": "USER_CHECK SP 전체의 공란 컬럼 0을 보는 행으로, 호출별 공통행 값 비교인 AD 행과 범위와 기대가 달라 단독으로 둔다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 09:40:01",
- "cost": 0.2907824
+ "at": "2026-11-25 02:13:30",
+ "cost": 0.248241
 }

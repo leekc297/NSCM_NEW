@@ -133,10 +133,10 @@ export const MSG = {
   // 권한 Division 0건(design 01 §2 R1 SetDivisionAuthCheck). MSG00097(EN)='Please select Division.'(실측).
   NO_DIVISION_AUTH: 'MSG00097',
   // 기간 horizon 초과(C9) — AS-IS CheckPlanPeriodRange 가 MSG00402 를 {0}=DIFF_WEEK/{1}=HORIZON_END 로 포맷.
-  //   TO-BE SCM_ADM_MSG_M 미등록(ora.py 실측 0행, 공유 메시지). FE 는 AS-IS(TB_FX_MessageInfo) 실측 영문을
-  //   defaultValue 로 병기해 i18n fallback 으로 표시한다(코드베이스 {0}/{1} .replace 규약, 예 MSG.PERIOD_MAX
-  //   WaterfallShipmentPlanFg). DB 등록은 공유 메시지 후속(04 명시) — 미등록이어도 기능 정상.
-  PERIOD_EXCEEDS: 'MSG01393',
+  //   시드 MSG00402 가 TO-BE SCM_ADM_MSG_M 에 3개 언어로 등록돼 있어 그대로 사용(실측 2026-11-24).
+  //   이전엔 같은 문구의 전환 중복 MSG01393 을 참조했으나 중복 정리로 시드 MSG00402 로 통합(MSG01393 삭제).
+  //   defaultValue 는 DB 미해석 시 fallback(코드베이스 {0}/{1} .replace 규약).
+  PERIOD_EXCEEDS: 'MSG00402',
   // 기간 시작 > 종료 — AS-IS FindData_Main 기간 검사(MSG00108) 후 조회 중단(갭분석 F-02).
   PERIOD_INVALID: 'MSG00108',
 } as const;

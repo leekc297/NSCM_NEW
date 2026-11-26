@@ -1,0 +1,58 @@
+{
+ "rule_id": "B1",
+ "hash": "b7e2f203e39f89b5",
+ "groups": [
+  {
+   "rows": [
+    "T-389c3347"
+   ],
+   "why": "Trace row checking that the GC01 AddComboColumn(dtYesOrNo) implementation exists in source; that is a different property from runtime candidate checks, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-b11580fd"
+   ],
+   "why": "Trace row tracing B04 Data.Common(YesOrNo) cs:48; both its element and the property checked (implementation exists) differ from the other rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-182caf9d"
+   ],
+   "why": "Checks the Company combo candidates of the COMPANY_ID grid column in the new-row state; no other row targets the same column and state."
+  },
+  {
+   "rows": [
+    "V-6b0304a4"
+   ],
+   "why": "Checks that the Div search-condition combo (single select) has no blank candidates; it is a different search condition from Plant Site, so it is not grouped."
+  },
+  {
+   "rows": [
+    "V-fe598693"
+   ],
+   "why": "Checks that the Plant Site search-condition combo (multi-select, ALL button) has no blank candidates; it is a different search condition from Div, so it is not grouped."
+  },
+  {
+   "rows": [
+    "V-b263da2c"
+   ],
+   "why": "Checks that both search conditions (Div and Plant Site) are combo type; both its target scope and its expected result (no message) differ from the blank-candidate checks, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-b55213f4"
+   ],
+   "why": "Carried over from an SYS0006 defect about selecting API Type; it is unclear which element on this screen matches it and its expected result differs, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-e8e6e483"
+   ],
+   "why": "Checks the End Customer grid combo after a new-row Insert, including duplicates and sort order; no other row targets the same column and expected result."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:17",
+ "cost": 0.05043160000000001
+}

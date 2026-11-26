@@ -1,81 +1,88 @@
 ﻿rule_id,group_id,row_id,rep_row_id,source,target,size,why,judged_by,judged_at
-A1,A1-G001,AD-f2fb9661,AD-f2fb9661,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1940 · AS-IS 전용 0 · TO-BE 전용 0),1,"main 호출 #1(Division 81, 나머지 조건 비움)의 키 집합 비교로, 인자가 같은 다른 행이 없다.",AI,2026-11-20 13:00:51
-A1,A1-G002,AD-779fa689,AD-779fa689,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 265 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #2는 Division 40만 지정한 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G003,AD-abefd102,AD-abefd102,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1866 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #4는 valid=Y 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G004,AD-d4d24fa8,AD-d4d24fa8,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 74 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #5는 valid=N 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G005,AD-7ff32f05,AD-7ff32f05,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 280 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #6은 Division 82 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G006,AD-c0e3f1b6,AD-c0e3f1b6,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1270 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #7은 operationGroup=P 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G007,AD-153865e0,AD-153865e0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 670 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #8은 operationGroup=A 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G008,AD-2a3defff,AD-2a3defff,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #9는 fromSite 하나(AU000062_81-P)만 지정한 조건이라 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G009,AD-8c6de956,AD-8c6de956,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1940 · AS-IS 전용 0 · TO-BE 전용 0),1,"main 호출 #10은 fromSite 여러 개를 지정한 조건이라, 건수(1940)가 같은 행이 있어도 인자가 달라 묶지 않는다.",AI,2026-11-20 13:00:51
-A1,A1-G010,AD-8a3fb20c,AD-8a3fb20c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 388 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #11은 transMode=AIR 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G011,AD-e64a6e82,AD-e64a6e82,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1940 · AS-IS 전용 0 · TO-BE 전용 0),1,"main 호출 #12는 transMode 5종을 모두 지정한 조건이라, 건수가 같은 행이 있어도 인자가 달라 묶지 않는다.",AI,2026-11-20 13:00:51
-A1,A1-G012,AD-c40b6458,AD-c40b6458,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 5 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #13은 toSite=HKI_KR_WJU 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G013,AD-82545d74,AD-82545d74,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1735 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #14는 toSite 여러 개를 지정한 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G014,AD-66e90678,AD-66e90678,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 215 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #15는 Division 81_UC 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G015,AD-c2e07056,AD-c2e07056,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #16은 Division 81_HM 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G016,AD-cd4564ea,AD-cd4564ea,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 50 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #17은 Division 81_ST 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G017,AD-3e960610,AD-3e960610,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #18은 Division 81_HD 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G018,AD-c51f3d15,AD-c51f3d15,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 5 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #19는 Division 81_HG 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G019,AD-1c8f6c98,AD-1c8f6c98,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 776 · AS-IS 전용 0 · TO-BE 전용 0),1,"main 호출 #20은 transMode=AIR,FRY 조건이라 다른 행과 조회조건이 다르다.",AI,2026-11-20 13:00:51
-A1,A1-G020,AD-b8f770fd,AD-b8f770fd,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 25 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #21은 itemId를 대문자 한 건으로 지정한 조건이라 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G021,AD-7a568201,AD-7a568201,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 25 · AS-IS 전용 0 · TO-BE 전용 0),1,"main 호출 #22는 itemId를 소문자로 지정한 조건이라, 대소문자 처리를 따로 확인하므로 #21과 묶지 않는다.",AI,2026-11-20 13:00:51
-A1,A1-G022,AD-e4aeaab1,AD-e4aeaab1,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 25),1,main 호출 #23은 itemId 부분 문자열 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G023,AD-20975e7d,AD-20975e7d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 35 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #24는 itemId 여러 개를 지정한 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G024,AD-f64a6a8b,AD-f64a6a8b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #25는 itemId=E2E 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G025,AD-1dc66c6a,AD-1dc66c6a,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,main 호출 #40은 itemId=AAEF1001I-A1-000 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G026,AD-1a87a9b8,AD-1a87a9b8,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 383 · AS-IS 전용 0 · TO-BE 전용 0),1,"팝업 호출 #3은 actionFlag=D이고 나머지 조건을 비운 경우라, 건수(383)가 같은 #32와도 인자가 달라 묶지 않는다.",AI,2026-11-20 13:00:51
-A1,A1-G027,AD-7f7cbe76,AD-7f7cbe76,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 1 · AS-IS 전용 0 · TO-BE 전용 0),1,팝업 호출 #27은 itemId를 대문자 한 건으로 지정한 조건이라 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G028,AD-77559dc5,AD-77559dc5,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 8),1,팝업 호출 #28은 itemId 부분 문자열 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G029,AD-dcea3d60,AD-dcea3d60,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 1 · AS-IS 전용 0 · TO-BE 전용 0),1,팝업 호출 #29는 itemId를 소문자로 지정한 조건이라 #27과 따로 확인한다.,AI,2026-11-20 13:00:51
-A1,A1-G030,AD-4ada955f,AD-4ada955f,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 2),1,팝업 호출 #30은 itemId 여러 개를 지정한 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G031,AD-89b11727,AD-89b11727,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,팝업 호출 #31은 fromSite 하나만 지정한 조건이라 다른 행과 조회조건이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G032,AD-cab0d67b,AD-cab0d67b,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 383 · AS-IS 전용 0 · TO-BE 전용 0),1,"팝업 호출 #32는 fromSite 여러 개를 지정했는데, 결과 건수가 #33·#34와 달라 인자가 다른 것으로 보고 묶지 않는다.",AI,2026-11-20 13:00:51
-A1,A1-G033,AD-d81d48bb,AD-d81d48bb,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,팝업 호출 #33은 #32와 앞부분만 같고 결과 건수(0)가 달라 인자가 다른 것으로 본다.,AI,2026-11-20 13:00:51
-A1,A1-G034,AD-e6233df3,AD-e6233df3,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 342 · AS-IS 전용 0 · TO-BE 전용 0),1,팝업 호출 #34는 #32와 앞부분만 같고 결과 건수(342)가 달라 인자가 다른 것으로 본다.,AI,2026-11-20 13:00:51
-A1,A1-G035,AD-176ef7aa,AD-176ef7aa,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 행·키 집합(공통 235 · AS-IS 전용 0 · TO-BE 전용 0),1,팝업 호출 #35는 operationGroup=P에 fromSite를 함께 지정한 조건이라 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G036,EG-111359ef,EG-111359ef,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCP Tester,1,"EG007 권한 범위를 SCP Tester(40) 사용자로 확인하는 행이라, 기대 범위가 같아도 로그인 사용자가 달라 따로 측정한다.",AI,2026-11-20 13:00:51
-A1,A1-G037,EG-5e6aebde,EG-5e6aebde,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/ADMIN,1,"EG007 권한 범위를 ADMIN(40) 사용자로 확인하는 행이라, 기대 범위가 같아도 사용자가 달라 따로 측정한다.",AI,2026-11-20 13:00:51
-A1,A1-G038,EG-8dbd5f36,EG-8dbd5f36,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCM PI Admin,1,"EG007 권한 범위를 SCM PI Admin(40) 사용자로 확인하는 행이라, 기대 범위가 같아도 사용자가 달라 따로 측정한다.",AI,2026-11-20 13:00:51
-A1,A1-G039,EG-5184e4d9,EG-5184e4d9,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCM Viewer,1,EG007 권한 범위를 SCM Viewer(40) 사용자로 확인하며 기대 범위는 40이다.,AI,2026-11-20 13:00:51
-A1,A1-G040,EG-78055f79,EG-78055f79,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCP Planner,1,"EG007 권한 범위를 SCP Planner(40) 사용자로 확인하며 기대 범위는 40,82다.",AI,2026-11-20 13:00:51
-A1,A1-G041,EG-6e87bcf8,EG-6e87bcf8,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/81/SCP Planner,1,EG007 권한 범위를 SCP Planner(81) 사용자로 확인하는 행이라 사용자와 기대 범위가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G042,EG-a02da1d0,EG-a02da1d0,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/81/SCM Viewer,1,EG007 권한 범위를 SCM Viewer(81) 사용자로 확인하며 기대 범위는 81이다.,AI,2026-11-20 13:00:51
-A1,A1-G043,EG-a1d40109,EG-a1d40109,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/82/SCM Viewer,1,EG007 권한 범위를 SCM Viewer(82) 사용자로 확인하며 기대 범위는 82다.,AI,2026-11-20 13:00:51
-A1,A1-G044,EG-ffe87d61,EG-ffe87d61,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/81/SCM PI Admin,1,"EG007 권한 범위를 SCM PI Admin(81) 사용자로 확인하며 기대 범위는 81,82,EE다.",AI,2026-11-20 13:00:51
-A1,A1-G045,EG-1332e81d,EG-1332e81d,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/81/SCM Viewer,1,EG368 조회 행 범위를 SCM Viewer(81) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G046,EG-5e1c5326,EG-5e1c5326,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCM PI Admin,1,EG368 조회 행 범위를 SCM PI Admin(40) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G047,EG-a73c321b,EG-a73c321b,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCP Planner,1,EG368 조회 행 범위를 SCP Planner(40) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G048,EG-ade81c53,EG-ade81c53,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/81/SCM PI Admin,1,EG368 조회 행 범위를 SCM PI Admin(81) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G049,EG-b34d4456,EG-b34d4456,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/ADMIN,1,EG368 조회 행 범위를 ADMIN(40) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G050,EG-c6297d9f,EG-c6297d9f,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCM Viewer,1,EG368 조회 행 범위를 SCM Viewer(40) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G051,EG-cce1d3cb,EG-cce1d3cb,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/81/SCP Planner,1,EG368 조회 행 범위를 SCP Planner(81) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G052,EG-eb10cca1,EG-eb10cca1,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCP Tester,1,EG368 조회 행 범위를 SCP Tester(40) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G053,EG-fd452ae1,EG-fd452ae1,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/82/SCM Viewer,1,EG368 조회 행 범위를 SCM Viewer(82) 사용자로 확인하는 행이라 사용자가 다른 행과 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G054,EG-476015e5,EG-476015e5,RULE_SCREEN,SCP0028 콤보 SQL 실존 PKG_SCP0028,1,콤보 SQL이 실제로 있는지 소스·메타를 정적으로 점검하는 행이라 성질이 다르다.,AI,2026-11-20 13:00:51
-A1,A1-G055,EG-e15844cc,EG-e15844cc,RULE_SCREEN,SCP0028 실전송 건수 main,1,"화면이 실제로 보낸 인자로 main 조회를 재현해 건수를 비교하는 행으로, 특정 호출 인자와 같다고 확정할 근거가 없어 따로 둔다.",AI,2026-11-20 13:00:51
-A1,A1-G056,V-195df708,V-195df708,RULE_SCREEN,SCP0028 화면,1,화면 전체(main과 팝업 포함)의 조회 비교를 포괄하는 행이라 대상 범위가 다른 행과 같지 않다.,AI,2026-11-20 13:00:51
-A1,A1-G057,T-023e949d,T-023e949d,TRACE,clbToSite `ToSiteByDivision` (cs:169) · To Site multi(+ALL),1,대조표에서 To Site 조회조건의 구현을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G058,T-0cc9c7d1,T-0cc9c7d1,TRACE,"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14 · Trans Mode multi(+ALL)",1,대조표에서 Trans Mode 조회조건의 구현을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G059,T-0d12e24f,T-0d12e24f,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,대조표에서 Delete 버튼(노출만 되고 동작 없음)을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G060,T-18793b28,T-18793b28,TRACE,PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION,1,대조표에서 SP P_SCM0002_GET_MATERIAL_BY_DIVISION를 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G061,T-2907d478,T-2907d478,TRACE,clbFromSite `FromSiteByDivision` (cs:166) · From Site multi(+ALL),1,대조표에서 From Site 조회조건의 구현을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G062,T-3badcc5b,T-3badcc5b,TRACE,**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266) · `ShipmentLotSizeBatchModal.handleFind` 가드 — `mode==='I' && (!fromSi,1,대조표에서 팝업 Find의 From Site 필수 가드를 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G063,T-3ecb1c2d,T-3ecb1c2d,TRACE,"SetDivisionAuthCheck (cs:131~132, R1) · Form `noAuth` 시 조회영역 disable + 안내, handleSearch Division 필수 가드",1,대조표에서 Division 권한 체크와 필수 가드를 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G064,T-5869ab26,T-5869ab26,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,대조표에서 팝업 진입 시 자동조회 여부(D와 I 구분)를 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G065,T-666b17d1,T-666b17d1,TRACE,"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137) · Operation Group select(+ALL)",1,대조표에서 Operation Group 콤보의 구현을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G066,T-6797ba6f,T-6797ba6f,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,대조표에서 팝업 검색영역 배치와 Find 버튼을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G067,T-844199b4,T-844199b4,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE,1,"대조표에서 main 조회 SP의 구현 위치를 추적하는 행이라, 실행 결과를 비교하는 행과 성질이 달라 묶지 않는다.",AI,2026-11-20 13:00:51
-A1,A1-G068,T-85737798,T-85737798,TRACE,PR_GET_MNU_BTN_AUTH,1,대조표에서 버튼 권한 SP PR_GET_MNU_BTN_AUTH를 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G069,T-871717ab,T-871717ab,TRACE,FindButton (cs) · `hotkeyConfig.search` → handleSearch,1,대조표에서 Find 버튼이 handleSearch로 연결되는지를 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G070,T-8f397015,T-8f397015,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,대조표에서 일괄입력 후보 SP GET_SHIPMENT_LOT_SIZE_INPUT을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G071,T-a690e1a4,T-a690e1a4,TRACE,`SetChangedControl` cascade (cs:158~171) · Division 변경 → From/To Site 재조회(divisionId 키) + reset,1,대조표에서 Division 변경 시 Site 재조회 연쇄 동작을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G072,T-b31bbec5,T-b31bbec5,TRACE,"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5) · BtnArea 커스텀 버튼(SubTitle `customButtons`) → 팝업 → GET_INPUT 후보(상시편집)",1,대조표에서 Input 버튼과 일괄입력 팝업을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G073,T-b3755ed5,T-b3755ed5,TRACE,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,1,대조표에서 SP P_SCM0002_GET_ITEM_BY_DIVISION_POPUP을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G074,T-c1421566,T-c1421566,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,대조표에서 FindData 쿼리의 o_rc1 바인딩을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G075,T-e351edc9,T-e351edc9,TRACE,"cboValid `DataBind(Type.YesOrNo,true)` (cs:135) · Valid select(+ALL)",1,대조표에서 Valid 콤보의 구현을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G076,T-ea1f18e5,T-ea1f18e5,TRACE,cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi · `ShipmentLotSizeForm` Division select,1,대조표에서 Division 콤보의 구현을 추적하는 행이다.,AI,2026-11-20 13:00:51
-A1,A1-G077,T-f658cb62,T-f658cb62,TRACE,PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,1,대조표에서 팝업 조회 SP의 구현 위치를 추적하는 행이라 팝업 결과 비교 행과 묶지 않는다.,AI,2026-11-20 13:00:51
+A1,A1-G001,AD-153865e0,AD-153865e0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 100 · AS-IS 전용 180 · TO-BE 전용 40),1,"호출 #8 main 조회(divisionId=82)로, 인자가 같은 다른 호출이 없어 단독으로 둔다.",AI,2026-11-25 02:06:56
+A1,A1-G002,AD-16ed9f6d,AD-16ed9f6d,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,호출 #37 popup 조회다. fromSite가 잘려 있어 #35·#36과 인자가 같은지 확인할 수 없으므로 단독으로 둔다.,AI,2026-11-25 02:06:56
+A1,A1-G003,AD-176ef7aa,AD-176ef7aa,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,호출 #35 popup 조회다. fromSite가 잘려 있어 #36·#37과 인자가 같은지 확인할 수 없으므로 단독으로 둔다.,AI,2026-11-25 02:06:56
+A1,A1-G004,AD-1a87a9b8,AD-1a87a9b8,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #3 popup 조회(actionFlag=D, 다른 조건 없음)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G005,AD-1c8f6c98,AD-1c8f6c98,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #20 main 조회(divisionId=81_HD)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G006,AD-20975e7d,AD-20975e7d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 776 · AS-IS 전용 0 · TO-BE 전용 20),1,"호출 #24 main 조회(transMode=AIR,FRY)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G007,AD-2a3defff,AD-2a3defff,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1270 · AS-IS 전용 0 · TO-BE 전용 30),1,"호출 #9 main 조회(operationGroup=P)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G008,AD-2f776860,AD-2f776860,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #40 popup 조회(itemId=PVCC519H-A, actionFlag=I)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G009,AD-31891e7c,AD-31891e7c,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #4 popup 조회(fromSite=HQ05-W, actionFlag=I)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G010,AD-3598781f,AD-3598781f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #29 main 조회(itemId=E2E)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G011,AD-3e960610,AD-3e960610,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #18 main 조회(divisionId=81_HM)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G012,AD-4ada955f,AD-4ada955f,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #30 popup 조회(itemId=APVCC517H-A4, actionFlag=D)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G013,AD-4d86b892,AD-4d86b892,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #47 main 조회(itemId=AAEF1001I-A1-000)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G014,AD-66e90678,AD-66e90678,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 5 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #15 main 조회(toSite=HKI_KR_WJU)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G015,AD-6952e31a,AD-6952e31a,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #39 popup 조회(itemId=APVCC519H-A1, actionFlag=I)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G016,AD-797bbc41,AD-797bbc41,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 10),1,"호출 #28 main 조회(itemId 다중값)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G017,AD-7ff32f05,AD-7ff32f05,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1866 · AS-IS 전용 0 · TO-BE 전용 46),1,"호출 #6 main 조회(valid=Y)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G018,AD-82545d74,AD-82545d74,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1940 · AS-IS 전용 0 · TO-BE 전용 50),1,"호출 #14 main 조회(transMode 전체 다중값)로, 결과 건수가 #1과 같아도 조회 조건이 다르다.",AI,2026-11-25 02:06:56
+A1,A1-G019,AD-854fc98d,AD-854fc98d,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #42 popup 조회(itemId 다중값, actionFlag=I)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G020,AD-89b11727,AD-89b11727,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #31 popup 조회(itemId=PVCC517H-A, actionFlag=D)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G021,AD-8a3fb20c,AD-8a3fb20c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 15 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #11 main 조회(fromSite=MI03-P)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G022,AD-8c6de956,AD-8c6de956,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 670 · AS-IS 전용 0 · TO-BE 전용 20),1,"호출 #10 main 조회(operationGroup=A)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G023,AD-9ce43e53,AD-9ce43e53,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,호출 #36 popup 조회다. fromSite가 잘려 있어 #35·#37과 인자가 같은지 확인할 수 없으므로 단독으로 둔다.,AI,2026-11-25 02:06:56
+A1,A1-G024,AD-b0c074fc,AD-b0c074fc,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 5),1,"호출 #26 main 조회(itemId 소문자)로, 대문자로 조회한 #25와 대소문자 처리를 따로 확인하는 조건이다.",AI,2026-11-25 02:06:56
+A1,A1-G025,AD-b36657a8,AD-b36657a8,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #41 popup 조회(itemId 소문자)로, 대문자로 조회한 #39와 대소문자 처리를 따로 확인하는 조건이다.",AI,2026-11-25 02:06:56
+A1,A1-G026,AD-b8f770fd,AD-b8f770fd,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 5 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #21 main 조회(divisionId=81_HG)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G027,AD-bd5d241e,AD-bd5d241e,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #38 popup 조회(operationGroup=P, fromSite 다중값)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G028,AD-c0e3f1b6,AD-c0e3f1b6,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 74 · AS-IS 전용 0 · TO-BE 전용 4),1,"호출 #7 main 조회(valid=N)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G029,AD-c2e07056,AD-c2e07056,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1735 · AS-IS 전용 0 · TO-BE 전용 50),1,"호출 #16 main 조회(toSite 다중값)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G030,AD-c40b6458,AD-c40b6458,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 388 · AS-IS 전용 0 · TO-BE 전용 10),1,"호출 #13 main 조회(transMode=AIR)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G031,AD-c51f3d15,AD-c51f3d15,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 50 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #19 main 조회(divisionId=81_ST)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G032,AD-cab0d67b,AD-cab0d67b,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #32 popup 조회(itemId 소문자, actionFlag=D)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G033,AD-cd4564ea,AD-cd4564ea,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 215 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #17 main 조회(divisionId=81_UC)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G034,AD-ce973ed6,AD-ce973ed6,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 5),1,"호출 #27 main 조회(itemId 부분문자열)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G035,AD-d4d24fa8,AD-d4d24fa8,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 265 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #5 main 조회(divisionId=40)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G036,AD-d81d48bb,AD-d81d48bb,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #33 popup 조회(itemId 다중값, actionFlag=D)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G037,AD-e4aeaab1,AD-e4aeaab1,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 0),1,"호출 #23 main 조회(itemId=APCAN0981A)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G038,AD-e6233df3,AD-e6233df3,ASIS_DIFF,SCP0028 (짝 없음) 결과 행·키 집합(공통  · AS-IS 전용  · TO-BE 전용 ),1,"호출 #34 popup 조회(fromSite=HQ05-W, actionFlag=D)로, actionFlag=I인 #4와 다르다.",AI,2026-11-25 02:06:56
+A1,A1-G039,AD-e64a6e82,AD-e64a6e82,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1940 · AS-IS 전용 0 · TO-BE 전용 50),1,"호출 #12 main 조회(fromSite 다중값)로, 결과 건수가 #1과 같아도 조회 조건이 다르다.",AI,2026-11-25 02:06:56
+A1,A1-G040,AD-f2fb9661,AD-f2fb9661,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 1940 · AS-IS 전용 0 · TO-BE 전용 50),1,"호출 #1 main 기본 조회(divisionId=81, 다른 조건 없음)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G041,AD-f64a6a8b,AD-f64a6a8b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 행·키 집합(공통 0 · AS-IS 전용 0 · TO-BE 전용 5),1,"호출 #25 main 조회(itemId=ACPP1015U-B1-001)로, 조건이 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G042,EG-111359ef,EG-111359ef,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCP Tester,1,EG007 권한 범위 조회를 40/SCP Tester 사용자로 한다. 기대 범위가 같은 다른 역할이 있어도 사용자가 달라 조회 상태가 다르다.,AI,2026-11-25 02:06:56
+A1,A1-G043,EG-1332e81d,EG-1332e81d,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/81/SCM Viewer,1,"EG368 행 범위 검사를 81/SCM Viewer 사용자로 하며, 사용자·기대 범위가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G044,EG-476015e5,EG-476015e5,RULE_SCREEN,SCP0028 콤보 SQL 실존 PKG_SCP0028,1,콤보 SQL이 실존하는지 소스·메타를 정적 점검하는 행이라 결과 비교 행과 성질이 다르다.,AI,2026-11-25 02:06:56
+A1,A1-G045,EG-5184e4d9,EG-5184e4d9,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCM Viewer,1,EG007 권한 범위 조회를 40/SCM Viewer 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G046,EG-5e1c5326,EG-5e1c5326,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCM PI Admin,1,"EG368 행 범위 검사를 40/SCM PI Admin 사용자로 하며, 사용자가 달라 다른 행과 묶지 않는다.",AI,2026-11-25 02:06:56
+A1,A1-G047,EG-5e6aebde,EG-5e6aebde,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/ADMIN,1,"EG007 권한 범위 조회를 40/ADMIN 사용자로 하며, 사용자가 달라 다른 행과 묶지 않는다.",AI,2026-11-25 02:06:56
+A1,A1-G048,EG-6e87bcf8,EG-6e87bcf8,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/81/SCP Planner,1,EG007 권한 범위 조회를 81/SCP Planner 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G049,EG-6fe47e2f,EG-6fe47e2f,RULE_SCREEN,SCP0028 실전송 건수 main|같은 사용자,1,"main 실전송 건수를 '같은 사용자'로 한정해 비교하므로, 사용자를 한정하지 않은 EG-e15844cc와 같은지 확신할 수 없어 단독으로 둔다.",AI,2026-11-25 02:06:56
+A1,A1-G050,EG-78055f79,EG-78055f79,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCP Planner,1,EG007 권한 범위 조회를 40/SCP Planner 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G051,EG-8dbd5f36,EG-8dbd5f36,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/40/SCM PI Admin,1,"EG007 권한 범위 조회를 40/SCM PI Admin 사용자로 하며, 사용자가 달라 다른 행과 묶지 않는다.",AI,2026-11-25 02:06:56
+A1,A1-G052,EG-a02da1d0,EG-a02da1d0,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/81/SCM Viewer,1,EG007 권한 범위 조회를 81/SCM Viewer 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G053,EG-a1d40109,EG-a1d40109,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/82/SCM Viewer,1,EG007 권한 범위 조회를 82/SCM Viewer 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G054,EG-a73c321b,EG-a73c321b,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCP Planner,1,EG368 행 범위 검사를 40/SCP Planner 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G055,EG-ade81c53,EG-ade81c53,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/81/SCM PI Admin,1,EG368 행 범위 검사를 81/SCM PI Admin 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G056,EG-b34d4456,EG-b34d4456,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/ADMIN,1,"EG368 행 범위 검사를 40/ADMIN 사용자로 하며, 사용자가 달라 다른 행과 묶지 않는다.",AI,2026-11-25 02:06:56
+A1,A1-G057,EG-c6297d9f,EG-c6297d9f,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCM Viewer,1,EG368 행 범위 검사를 40/SCM Viewer 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G058,EG-cce1d3cb,EG-cce1d3cb,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/81/SCP Planner,1,EG368 행 범위 검사를 81/SCP Planner 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G059,EG-e15844cc,EG-e15844cc,RULE_SCREEN,SCP0028 실전송 건수 main,1,main 실전송 건수 비교에 사용자 한정이 없어 '같은 사용자' 행과 조건이 같은지 확신할 수 없으므로 단독으로 둔다.,AI,2026-11-25 02:06:56
+A1,A1-G060,EG-eb10cca1,EG-eb10cca1,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/40/SCP Tester,1,"EG368 행 범위 검사를 40/SCP Tester 사용자로 하며, 사용자가 달라 다른 행과 묶지 않는다.",AI,2026-11-25 02:06:56
+A1,A1-G061,EG-fd452ae1,EG-fd452ae1,RULE_SCREEN,SCP0028 EG368 조회 행 범위 SCP/82/SCM Viewer,1,EG368 행 범위 검사를 82/SCM Viewer 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G062,EG-ffe87d61,EG-ffe87d61,RULE_SCREEN,SCP0028 EG007 권한 범위 조회 SCP/81/SCM PI Admin,1,EG007 권한 범위 조회를 81/SCM PI Admin 사용자로 한다.,AI,2026-11-25 02:06:56
+A1,A1-G063,T-023e949d,T-023e949d,TRACE,clbToSite `ToSiteByDivision` (cs:169) · To Site multi(+ALL),1,"To Site 조회조건의 대조표 추적 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G064,T-0cc9c7d1,T-0cc9c7d1,TRACE,"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14 · Trans Mode multi(+ALL)",1,"Trans Mode 조회조건의 대조표 추적 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G065,T-0d12e24f,T-0d12e24f,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,Delete 버튼 구현을 추적하는 행이라 조회 결과 비교와 성질이 다르다.,AI,2026-11-25 02:06:56
+A1,A1-G066,T-18793b28,T-18793b28,TRACE,PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION,1,"SCM0002 자재 SP를 추적하는 행으로, 대상 SP가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G067,T-2907d478,T-2907d478,TRACE,clbFromSite `FromSiteByDivision` (cs:166) · From Site multi(+ALL),1,"From Site 조회조건의 대조표 추적 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G068,T-3badcc5b,T-3badcc5b,TRACE,**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266) · `ShipmentLotSizeBatchModal.handleFind` 가드 — `mode==='I' && (!fromSi,1,"팝업 Find의 From Site 필수 가드를 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G069,T-3ecb1c2d,T-3ecb1c2d,TRACE,"SetDivisionAuthCheck (cs:131~132, R1) · Form `noAuth` 시 조회영역 disable + 안내, handleSearch Division 필수 가드",1,"Division 권한 체크와 필수 가드를 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G070,T-5869ab26,T-5869ab26,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,"팝업 진입 시 자동조회 동작을 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G071,T-666b17d1,T-666b17d1,TRACE,"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137) · Operation Group select(+ALL)",1,"Operation Group 조회조건의 대조표 추적 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G072,T-6797ba6f,T-6797ba6f,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,"팝업 검색영역 배치를 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G073,T-844199b4,T-844199b4,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE,1,main 조회 SP의 대조표 추적 행이다. 구현 위치 실존이라는 다른 성질을 확인하므로 AD 비교 행과 묶지 않는다.,AI,2026-11-25 02:06:56
+A1,A1-G074,T-85737798,T-85737798,TRACE,PR_GET_MNU_BTN_AUTH,1,"버튼 권한 SP를 추적하는 행으로, 대상 SP가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G075,T-871717ab,T-871717ab,TRACE,FindButton (cs) · `hotkeyConfig.search` → handleSearch,1,"Find 버튼과 handleSearch 연결을 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G076,T-8f397015,T-8f397015,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,"INPUT 조회 SP를 추적하는 행으로, 대상 SP가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G077,T-a690e1a4,T-a690e1a4,TRACE,`SetChangedControl` cascade (cs:158~171) · Division 변경 → From/To Site 재조회(divisionId 키) + reset,1,"Division 변경 시 연쇄 재조회를 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G078,T-b31bbec5,T-b31bbec5,TRACE,"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5) · BtnArea 커스텀 버튼(SubTitle `customButtons`) → 팝업 → GET_INPUT 후보(상시편집)",1,"Input 일괄입력 팝업 버튼을 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G079,T-b3755ed5,T-b3755ed5,TRACE,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,1,"SCM0002 품목 팝업 SP를 추적하는 행으로, 대상 SP가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G080,T-c1421566,T-c1421566,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,"FindData의 o_rc1 바인딩을 추적하는 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G081,T-e351edc9,T-e351edc9,TRACE,"cboValid `DataBind(Type.YesOrNo,true)` (cs:135) · Valid select(+ALL)",1,"Valid 조회조건의 대조표 추적 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G082,T-ea1f18e5,T-ea1f18e5,TRACE,cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi · `ShipmentLotSizeForm` Division select,1,"Division select의 대조표 추적 행으로, 대상 요소가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G083,T-f658cb62,T-f658cb62,TRACE,PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,1,"팝업 조회 SP를 추적하는 행으로, 대상 SP가 고유하다.",AI,2026-11-25 02:06:56
+A1,A1-G084,V-195df708,V-195df708,RULE_SCREEN,SCP0028 화면,1,화면 전체를 대상으로 한 포괄 비교 규칙이라 main 전용 행(EG-e15844cc 등)과 범위가 같은지 확신할 수 없어 단독으로 둔다.,AI,2026-11-25 02:06:56
 A10,A10-G001,T-e438eb9a,T-e438eb9a,TRACE,SCP0028 화면,1,단독,코드,2026-11-20 12:59:56
 A10,A10-G002,V-08ffa5e0,V-08ffa5e0,RULE_SCREEN,SCP0028 조회 전 합계 행,1,단독,코드,2026-11-20 12:59:56
 A2,A2-G001,V-06335300,V-06335300,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 12:59:56
@@ -86,151 +93,169 @@ A2,A2-G005,V-ac1a6185,V-ac1a6185,COLUMN,Shipment Lot Size.VALID_YN (Active*),1,�
 A2,A2-G006,V-f7a0b89e,V-f7a0b89e,RULE_SCREEN,SCP0028 편집기 표시값,1,단독,코드,2026-11-20 12:59:56
 A3,A3-G001,V-3615e93d,V-3615e93d,RULE_SCREEN,SCP0028 합계 값,1,단독,코드,2026-11-20 12:59:56
 A4,A4-G001,V-b431e23a,V-b431e23a,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G001,AD-1758a5a7,AD-1758a5a7,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G002,AD-1e8379a1,AD-1e8379a1,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G003,AD-21405464,AD-21405464,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G004,AD-2a517e33,AD-2a517e33,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G005,AD-2cd9480f,AD-2cd9480f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G006,AD-2d4079e6,AD-2d4079e6,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G007,AD-2d8b9b41,AD-2d8b9b41,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G008,AD-3526dace,AD-3526dace,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G009,AD-3d85319a,AD-3d85319a,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G010,AD-42c0eee6,AD-42c0eee6,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G011,AD-4bc8f42f,AD-4bc8f42f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G012,AD-4f41edbb,AD-4f41edbb,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G013,AD-55237e4e,AD-55237e4e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G014,AD-617bf24c,AD-617bf24c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G015,AD-6ed5f21c,AD-6ed5f21c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G016,AD-7e2c444a,AD-7e2c444a,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G017,AD-802e6862,AD-802e6862,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G018,AD-8474ca57,AD-8474ca57,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G019,AD-886d8c26,AD-886d8c26,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G020,AD-8bf40bb8,AD-8bf40bb8,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G021,AD-9ac444dc,AD-9ac444dc,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G022,AD-9c0ca10d,AD-9c0ca10d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G023,AD-a87e4641,AD-a87e4641,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G024,AD-aaa1e40c,AD-aaa1e40c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G025,AD-aedc14d0,AD-aedc14d0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G026,AD-b097262d,AD-b097262d,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G027,AD-c8ace316,AD-c8ace316,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G028,AD-d7e8e8dc,AD-d7e8e8dc,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G029,AD-d8d8d288,AD-d8d8d288,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G030,AD-dd13845e,AD-dd13845e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G031,AD-e38b49fc,AD-e38b49fc,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G032,AD-e8fdfe2f,AD-e8fdfe2f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G033,AD-ecbe5161,AD-ecbe5161,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G034,AD-ef929e9b,AD-ef929e9b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G035,AD-fcd3cf86,AD-fcd3cf86,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G036,EG-13d34768,EG-13d34768,RULE_SCREEN,SCP0028 EG257 조회 본문 Division Div 40,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G037,EG-87c80432,EG-87c80432,RULE_SCREEN,SCP0028 EG022 Measure 버튼 전체 Div,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G038,EG-a37537bf,EG-a37537bf,RULE_SCREEN,SCP0028 EG024 복귀 헤더 81→40→81,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G039,EG-a5d95def,EG-a5d95def,RULE_SCREEN,SCP0028 EG257 조회 본문 Division Div 81,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G040,EG-b60a525b,EG-b60a525b,RULE_SCREEN,SCP0028 EG402 Measure 버튼 전체 Div,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G041,EG-f4a61ba4,EG-f4a61ba4,RULE_SCREEN,SCP0028 EG024 Div 전용 컬럼 81/40,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G042,T-2173d3e1,T-2173d3e1,TRACE,"SwitchLock (cs:232, gridSignals#4) · **미이식(NSCM 상시편집 표준)** — Edit 토글 state 없음. 편집권한 `canEdit=hasButton('EDI",1,단독,코드,2026-11-20 12:59:56
-A5,A5-G043,T-2696413d,T-2696413d,TRACE,"SmartColMerge (cs:371,438,721, #9/#12/#15) · `CustomMergeManager` allowMerging Cells, MERGE_COLUMNS 6",1,단독,코드,2026-11-20 12:59:56
-A5,A5-G044,T-333f0c00,T-333f0c00,TRACE,checkValidSize LOT<INC / 0값 (cs:762~773) · `useShipmentLotSizeValidation`,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G045,T-504dde67,T-504dde67,TRACE,"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369) · `canEdit && isLotSizeCellEditable(binding)` beginningEdit cancel",1,단독,코드,2026-11-20 12:59:56
-A5,A5-G046,T-66d50cfd,T-66d50cfd,TRACE,"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14) · `isDefaultRevertRow` — handleSave 에서 M 제외",1,단독,코드,2026-11-20 12:59:56
-A5,A5-G047,T-69768704,T-69768704,TRACE,LOT_SIZE / Lot Size,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G048,T-74c096a6,T-74c096a6,TRACE,두 버튼 **노출** 조건 · `hasButton('INSERT'/'DELETE')` 게이트 유지(AUTH-01),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G049,T-7f8e5dae,T-7f8e5dae,TRACE,**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G050,T-b4d82292,T-b4d82292,TRACE,checkRequiredOfSpread · `useSaveWithValidation`(메타 INPUT_TP_CD='M'),1,단독,코드,2026-11-20 12:59:56
-A5,A5-G051,T-d98b1bc1,T-d98b1bc1,TRACE,"Delete() 신규행만 (cs:213~224, #3) · (아래 §3 버튼 consolidation 참조)",1,단독,코드,2026-11-20 12:59:56
-A5,A5-G052,T-e1e924a8,T-e1e924a8,TRACE,VALID_YN / Valid,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G053,T-e56e8da0,T-e56e8da0,TRACE,INCREMENT / Increment,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G054,T-ed99a75c,T-ed99a75c,TRACE,SPLIT_YN / Container Split,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G055,T-fc9d26c9,T-fc9d26c9,TRACE,SCP0028_Shipment_Lot_Size.CreateSpread,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G056,T-ff3fb8d5,T-ff3fb8d5,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G057,V-08715b17,V-08715b17,RULE_SCREEN,SCP0028 Division 컬럼 81/Shipment Lot Size,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G058,V-118f6d1e,V-118f6d1e,RULE_SCREEN,SCP0028 Division 컬럼 40/Shipment Lot Size,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G059,V-49982211,V-49982211,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G060,V-6ee36520,V-6ee36520,RULE_SCREEN,SCP0028 컬럼 순서,1,단독,코드,2026-11-20 12:59:56
-A5,A5-G061,V-fcbaeab9,V-fcbaeab9,RULE_SCREEN,SCP0028 Division 컬럼 82/Shipment Lot Size,1,단독,코드,2026-11-20 12:59:56
-A6,A6-G001,AD-072c6abe,AD-072c6abe,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,Call #1 checks main-query row order with only divisionId=81; no other row uses these exact arguments.,AI,2026-11-20 13:00:29
-A6,A6-G002,AD-da8bcdf7,AD-da8bcdf7,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #2 uses divisionId=40, so its query result differs from every other call.",AI,2026-11-20 13:00:29
-A6,A6-G003,AD-9a169e92,AD-9a169e92,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #4 uses valid=Y, so its query result differs from every other call.",AI,2026-11-20 13:00:29
-A6,A6-G004,AD-b6e03e8a,AD-b6e03e8a,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #5 uses valid=N, so its query result differs from every other call.",AI,2026-11-20 13:00:29
-A6,A6-G005,AD-62e23a4b,AD-62e23a4b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #6 uses divisionId=82, so its query result differs from every other call.",AI,2026-11-20 13:00:29
-A6,A6-G006,AD-34e30c64,AD-34e30c64,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #7 uses operationGroup=P, so its query result differs from every other call.",AI,2026-11-20 13:00:29
-A6,A6-G007,AD-d8bd10b2,AD-d8bd10b2,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #8 uses operationGroup=A, so its query result differs from every other call.",AI,2026-11-20 13:00:29
-A6,A6-G008,AD-2af1bd7e,AD-2af1bd7e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #9 uses a single fromSite value, so its query result differs from every other call.",AI,2026-11-20 13:00:29
-A6,A6-G009,AD-b6390373,AD-b6390373,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #10 uses a multi-value fromSite on the main query, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G010,AD-4c7a11a9,AD-4c7a11a9,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #11 uses transMode=AIR, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G011,AD-03fd5b01,AD-03fd5b01,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #12 uses all five transMode values, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G012,AD-a44b9f91,AD-a44b9f91,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #13 uses a single toSite value, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G013,AD-bbcfd07e,AD-bbcfd07e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #14 uses a multi-value toSite, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G014,AD-cde75381,AD-cde75381,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #15 uses divisionId=81_UC, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G015,AD-9abf4233,AD-9abf4233,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #16 uses divisionId=81_HM, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G016,AD-8ee9253d,AD-8ee9253d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #17 uses divisionId=81_ST, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G017,AD-7307a8c7,AD-7307a8c7,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #18 uses divisionId=81_HD, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G018,AD-7abad1a0,AD-7abad1a0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #19 uses divisionId=81_HG, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G019,AD-eb77d44f,AD-eb77d44f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #20 uses transMode=AIR,FRY, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G020,AD-e8b7b67e,AD-e8b7b67e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #21 uses the uppercase itemId ACEP2065I-B1; it is not certain to return the same result as the lowercase search in #22, so it stays separate.",AI,2026-11-20 13:00:29
-A6,A6-G021,AD-18433a5d,AD-18433a5d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #22 uses the lowercase itemId acep2065i-b1, a different condition that checks case-insensitive searching.",AI,2026-11-20 13:00:29
-A6,A6-G022,AD-638f7dd3,AD-638f7dd3,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #23 uses the partial itemId CEP2065I-B, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G023,AD-e50c244e,AD-e50c244e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #24 uses two itemId values, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G024,AD-5220bfed,AD-5220bfed,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #25 uses itemId=E2E, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G025,AD-31b656ab,AD-31b656ab,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"Call #40 uses itemId AAEF1001I-A1-000, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G026,AD-7abe0c89,AD-7abe0c89,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,Popup call #3 uses actionFlag=D with no other conditions; no other row uses these exact arguments.,AI,2026-11-20 13:00:29
-A6,A6-G027,AD-65516749,AD-65516749,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #27 uses itemId APVCC517H-A4, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G028,AD-c14d317b,AD-c14d317b,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #28 uses the partial itemId PVCC517H-A, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G029,AD-bf0f8fdd,AD-bf0f8fdd,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #29 uses a lowercase itemId, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G030,AD-d4749e15,AD-d4749e15,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #30 uses two itemId values, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G031,AD-a75595d7,AD-a75595d7,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #31 uses a single fromSite value, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G032,AD-afab4d83,AD-afab4d83,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #32's arguments are cut off, so it cannot be confirmed equal to #33 or #34 and stays separate.",AI,2026-11-20 13:00:29
-A6,A6-G033,AD-6e5cd70c,AD-6e5cd70c,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #33's arguments are cut off, so it cannot be confirmed equal to #32 or #34 and stays separate.",AI,2026-11-20 13:00:29
-A6,A6-G034,AD-125dcd3f,AD-125dcd3f,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #34's arguments are cut off, so it cannot be confirmed equal to #32 or #33 and stays separate.",AI,2026-11-20 13:00:29
-A6,A6-G035,AD-305c8e11,AD-305c8e11,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통·유일 행 상대 순서,1,"Popup call #35 uses operationGroup=P plus a multi-value fromSite, a different condition from the other calls.",AI,2026-11-20 13:00:29
-A6,A6-G036,V-cb9cf45f,V-cb9cf45f,SP,SCP0028_GET_SHIPMENT_LOT_SIZE,1,Checks the main SP's ORDER BY key order both in the code and in the end-to-end (E2E) results; this differs in kind from the per-call order comparisons.,AI,2026-11-20 13:00:29
-A6,A6-G037,EG-78281d4c,EG-78281d4c,RULE_SCREEN,SCP0028 문자 정렬 PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE,1,"Checks how the text sort keys are compared (ignore case, NULLs first), which is a different expected result.",AI,2026-11-20 13:00:29
-A6,A6-G038,V-871ad348,V-871ad348,SP,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,"Checks that the INPUT SP, which has no ORDER BY, did not get an extra sort added, which is a different target and expected result.",AI,2026-11-20 13:00:29
-A6,A6-G039,EG-3da46b0f,EG-3da46b0f,RULE_SCREEN,SCP0028 EG032 SCP0028 계정쌍,1,"Checks a pair of accounts with and without TITLESET_USER, which has nothing to do with sort order.",AI,2026-11-20 13:00:29
-A6,A6-G040,T-073acab9,T-073acab9,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,"Trace row confirming the INPUT SP's comparison-table entry exists in the source, so it is not grouped.",AI,2026-11-20 13:00:29
-A6,A6-G041,T-2c20a3fc,T-2c20a3fc,TRACE,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,1,Trace row confirming that the ITEM_BY_DIVISION_POPUP SP's implementation exists in the source.,AI,2026-11-20 13:00:29
-A6,A6-G042,T-427c462f,T-427c462f,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE,1,Trace row confirming that the main SP's sort implementation exists in the source; the trace rule keeps it out of the V row's group.,AI,2026-11-20 13:00:29
-A6,A6-G043,T-653f1a5d,T-653f1a5d,TRACE,PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION,1,Trace row confirming that the MATERIAL_BY_DIVISION SP's implementation exists in the source.,AI,2026-11-20 13:00:29
-A6,A6-G044,T-6dc0e2d5,T-6dc0e2d5,TRACE,PR_GET_MNU_BTN_AUTH,1,Trace row confirming that the PR_GET_MNU_BTN_AUTH implementation exists in the source.,AI,2026-11-20 13:00:29
-A6,A6-G045,T-c6aefa56,T-c6aefa56,TRACE,PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,1,Trace row confirming that the popup SP's implementation exists in the source; it differs in kind from the popup's per-call order checks.,AI,2026-11-20 13:00:29
-A6,A6-G046,T-e57376d2,T-e57376d2,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,Trace row confirming where the popup's auto-search on load is implemented.,AI,2026-11-20 13:00:29
-A6,A6-G047,T-f4dca6bb,T-f4dca6bb,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,Trace row confirming that the FindData o_rc1 binding exists in the source.,AI,2026-11-20 13:00:29
-A7,A7-G001,AD-a8d58ff3,AD-a8d58ff3,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1940행 · 불일치 셀 0),1,"호출 #1 main 조회, 기본 조건(divisionId 81, 나머지 공란)의 공통행 값 비교는 다른 행과 조건이 달라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G002,AD-7efe56a3,AD-7efe56a3,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 265행 · 불일치 셀 0),1,"호출 #2 main 조회, divisionId 40 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G003,AD-e8e1fd1b,AD-e8e1fd1b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1866행 · 불일치 셀 0),1,"호출 #4 main 조회, valid=Y 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G004,AD-e88e6cb7,AD-e88e6cb7,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 74행 · 불일치 셀 0),1,"호출 #5 main 조회, valid=N 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G005,AD-a57667af,AD-a57667af,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 280행 · 불일치 셀 0),1,"호출 #6 main 조회, divisionId 82 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G006,AD-b7f35300,AD-b7f35300,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1270행 · 불일치 셀 0),1,"호출 #7 main 조회, operationGroup=P 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G007,AD-15417ce8,AD-15417ce8,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 670행 · 불일치 셀 0),1,"호출 #8 main 조회, operationGroup=A 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G008,AD-969177a5,AD-969177a5,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #9 main 조회, fromSite 단일값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G009,AD-11ab971b,AD-11ab971b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1940행 · 불일치 셀 0),1,"호출 #10 main 조회, fromSite 다중값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G010,AD-5ad26b5f,AD-5ad26b5f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 388행 · 불일치 셀 0),1,"호출 #11 main 조회, transMode=AIR 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G011,AD-2ceb212b,AD-2ceb212b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1940행 · 불일치 셀 0),1,"호출 #12 main 조회, transMode 전체 다중값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G012,AD-26c48730,AD-26c48730,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 5행 · 불일치 셀 0),1,"호출 #13 main 조회, toSite 단일값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G013,AD-a78da743,AD-a78da743,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1735행 · 불일치 셀 0),1,"호출 #14 main 조회, toSite 다중값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G014,AD-c6b8b7b9,AD-c6b8b7b9,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 215행 · 불일치 셀 0),1,"호출 #15 main 조회, divisionId 81_UC 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G015,AD-86c8e05f,AD-86c8e05f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #16 main 조회, divisionId 81_HM 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G016,AD-4ccd4e88,AD-4ccd4e88,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 50행 · 불일치 셀 0),1,"호출 #17 main 조회, divisionId 81_ST 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G017,AD-67a2549b,AD-67a2549b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #18 main 조회, divisionId 81_HD 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G018,AD-a7590165,AD-a7590165,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 5행 · 불일치 셀 0),1,"호출 #19 main 조회, divisionId 81_HG 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G019,AD-bf9240c6,AD-bf9240c6,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 776행 · 불일치 셀 0),1,"호출 #20 main 조회, transMode=AIR,FRY 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G020,AD-973a1a5f,AD-973a1a5f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 25행 · 불일치 셀 0),1,"호출 #21 main 조회, itemId 대문자 정확값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G021,AD-7fce1600,AD-7fce1600,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 25행 · 불일치 셀 0),1,"호출 #22 main 조회, itemId 소문자 입력 조건으로 대소문자 처리를 따로 확인하므로 #21과 묶지 않는다.",AI,2026-11-20 13:00:24
-A7,A7-G022,AD-df394103,AD-df394103,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #23 main 조회, itemId 부분 문자열 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G023,AD-bfa0da1e,AD-bfa0da1e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 35행 · 불일치 셀 0),1,"호출 #24 main 조회, itemId 다중값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G024,AD-4fe005ee,AD-4fe005ee,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #25 main 조회, itemId=E2E 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G025,AD-138fc411,AD-138fc411,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #40 main 조회, itemId AAEF1001I-A1-000 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G026,AD-1eb9cb71,AD-1eb9cb71,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 383행 · 불일치 셀 0),1,"호출 #3 팝업 조회, 기본 조건(actionFlag D)이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G027,AD-5593c547,AD-5593c547,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 1행 · 불일치 셀 0),1,"호출 #27 팝업 조회, itemId 대문자 정확값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G028,AD-689db7a8,AD-689db7a8,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #28 팝업 조회, itemId 부분 문자열 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G029,AD-c6ed9f10,AD-c6ed9f10,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 1행 · 불일치 셀 0),1,"호출 #29 팝업 조회, itemId 소문자 입력 조건이라 #27과 묶지 않는다.",AI,2026-11-20 13:00:24
-A7,A7-G030,AD-eca4c0ee,AD-eca4c0ee,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #30 팝업 조회, itemId 다중값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G031,AD-9e43972e,AD-9e43972e,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #31 팝업 조회, fromSite 단일값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G032,AD-88332dd0,AD-88332dd0,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 383행 · 불일치 셀 0),1,"호출 #32 팝업 조회, fromSite 다중값 조건이다. #33·#34와 앞부분은 같지만 잘린 뒤쪽 인자가 다를 수 있어 묶지 않는다.",AI,2026-11-20 13:00:24
-A7,A7-G033,AD-7f5c41f3,AD-7f5c41f3,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #33 팝업 조회, fromSite 다중값 조건이다. 결과 행 수(0행)도 #32·#34와 달라 조건이 다른 것으로 보고 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G034,AD-f377f227,AD-f377f227,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 342행 · 불일치 셀 0),1,"호출 #34 팝업 조회, fromSite 다중값 조건이다. 결과 행 수(342행)도 #32·#33과 달라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G035,AD-44898b71,AD-44898b71,ASIS_DIFF,SCP0028 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 공통행 컬럼 값(공통 235행 · 불일치 셀 0),1,"호출 #35 팝업 조회, operationGroup=P와 fromSite 다중값 조건이라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G036,V-ee003a13,V-ee003a13,SP,SCP0028_GET_SHIPMENT_LOT_SIZE,1,"SCP0028_GET_SHIPMENT_LOT_SIZE 전체의 공란 컬럼 0 검사를 포함하는 SP 규칙이라, 특정 호출만 보는 행과 기대 결과가 달라 단독으로 둔다.",AI,2026-11-20 13:00:24
-A7,A7-G037,V-8da88867,V-8da88867,SP,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT 프로시저 대상이고 같은 대상의 다른 행이 없어 단독으로 둔다.,AI,2026-11-20 13:00:24
+A5,A5-G001,EG-87c80432,EG-87c80432,RULE_SCREEN,SCP0028 EG022 Measure 버튼 전체 Div,2,Both rows check the same Measure button for all Divisions and expect the same result ('Measure 버튼'); only the rule ID (EG022/EG402) differs.,AI,2026-11-25 02:06:40
+A5,A5-G001,EG-b60a525b,EG-87c80432,RULE_SCREEN,SCP0028 EG402 Measure 버튼 전체 Div,2,Both rows check the same Measure button for all Divisions and expect the same result ('Measure 버튼'); only the rule ID (EG022/EG402) differs.,AI,2026-11-25 02:06:40
+A5,A5-G002,AD-0a4372ab,AD-0a4372ab,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #37 has its own arguments, and the truncated fromSite value cannot be confirmed to match any other call.",AI,2026-11-25 02:06:40
+A5,A5-G003,AD-0f45ca72,AD-0f45ca72,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Popup call #38 has its own arguments (operationGroup=P).,AI,2026-11-25 02:06:40
+A5,A5-G004,AD-1758a5a7,AD-1758a5a7,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #9 has its own arguments (operationGroup=P).,AI,2026-11-25 02:06:40
+A5,A5-G005,AD-1e8379a1,AD-1e8379a1,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #34 has its own arguments (fromSite=HQ05-W, actionFlag=D).",AI,2026-11-25 02:06:40
+A5,A5-G006,AD-21405464,AD-21405464,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #23 has its own arguments (itemId=APCAN0981A).,AI,2026-11-25 02:06:40
+A5,A5-G007,AD-28733ab0,AD-28733ab0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #47 has its own arguments (itemId=AAEF1001I-A1-000).,AI,2026-11-25 02:06:40
+A5,A5-G008,AD-2a517e33,AD-2a517e33,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #16 has its own arguments (multi-value toSite).,AI,2026-11-25 02:06:40
+A5,A5-G009,AD-2cd9480f,AD-2cd9480f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #15 has its own arguments (toSite=HKI_KR_WJU).,AI,2026-11-25 02:06:40
+A5,A5-G010,AD-2d4079e6,AD-2d4079e6,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #30 has its own arguments (itemId=APVCC517H-A4, D).",AI,2026-11-25 02:06:40
+A5,A5-G011,AD-2d8b9b41,AD-2d8b9b41,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #7 has its own arguments (valid=N).,AI,2026-11-25 02:06:40
+A5,A5-G012,AD-3526dace,AD-3526dace,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Main call #1 uses the default arguments (divisionId=81, all other conditions empty).",AI,2026-11-25 02:06:40
+A5,A5-G013,AD-35cdafc7,AD-35cdafc7,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #42 has its own arguments (two itemIds, actionFlag=I).",AI,2026-11-25 02:06:40
+A5,A5-G014,AD-3d85319a,AD-3d85319a,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #18 has its own arguments (divisionId=81_HM).,AI,2026-11-25 02:06:40
+A5,A5-G015,AD-43541b17,AD-43541b17,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #28 has its own arguments (two itemIds).,AI,2026-11-25 02:06:40
+A5,A5-G016,AD-4bc0f704,AD-4bc0f704,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #26 has its own arguments (lowercase itemId).,AI,2026-11-25 02:06:40
+A5,A5-G017,AD-4bc8f42f,AD-4bc8f42f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #6 has its own arguments (valid=Y).,AI,2026-11-25 02:06:40
+A5,A5-G018,AD-55237e4e,AD-55237e4e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #11 has its own arguments (fromSite=MI03-P).,AI,2026-11-25 02:06:40
+A5,A5-G019,AD-617bf24c,AD-617bf24c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #14 has its own arguments (five transModes).,AI,2026-11-25 02:06:40
+A5,A5-G020,AD-6ed5f21c,AD-6ed5f21c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #12 has its own arguments (multi-value fromSite).,AI,2026-11-25 02:06:40
+A5,A5-G021,AD-790518bd,AD-790518bd,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #29 has its own arguments (itemId=E2E).,AI,2026-11-25 02:06:40
+A5,A5-G022,AD-7e2c444a,AD-7e2c444a,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #10 has its own arguments (operationGroup=A).,AI,2026-11-25 02:06:40
+A5,A5-G023,AD-81f9457d,AD-81f9457d,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #39 has its own arguments (itemId=APVCC519H-A1, I).",AI,2026-11-25 02:06:40
+A5,A5-G024,AD-886d8c26,AD-886d8c26,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #32 has its own arguments (lowercase itemId, D).",AI,2026-11-25 02:06:40
+A5,A5-G025,AD-8bf40bb8,AD-8bf40bb8,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #25 has its own arguments (itemId=ACPP1015U-B1-001).,AI,2026-11-25 02:06:40
+A5,A5-G026,AD-9c0ca10d,AD-9c0ca10d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #21 has its own arguments (divisionId=81_HG).,AI,2026-11-25 02:06:40
+A5,A5-G027,AD-a87e4641,AD-a87e4641,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #3 has its own arguments (all empty, actionFlag=D).",AI,2026-11-25 02:06:40
+A5,A5-G028,AD-aaa1e40c,AD-aaa1e40c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #19 has its own arguments (divisionId=81_ST).,AI,2026-11-25 02:06:40
+A5,A5-G029,AD-adc62326,AD-adc62326,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #36 has its own arguments, and the truncated fromSite value cannot be confirmed to match any other call.",AI,2026-11-25 02:06:40
+A5,A5-G030,AD-aedc14d0,AD-aedc14d0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Main call #5 has its own arguments (divisionId=40), and it checks the result-set column set, not the displayed grid columns.",AI,2026-11-25 02:06:40
+A5,A5-G031,AD-b097262d,AD-b097262d,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #35 has its own arguments, and the truncated fromSite value cannot be confirmed to match any other call.",AI,2026-11-25 02:06:40
+A5,A5-G032,AD-c828d1ef,AD-c828d1ef,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #27 has its own arguments (partial itemId).,AI,2026-11-25 02:06:40
+A5,A5-G033,AD-d7e8e8dc,AD-d7e8e8dc,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #33 has its own arguments (two itemIds, D).",AI,2026-11-25 02:06:40
+A5,A5-G034,AD-d8d8d288,AD-d8d8d288,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #20 has its own arguments (divisionId=81_HD).,AI,2026-11-25 02:06:40
+A5,A5-G035,AD-d9428c6a,AD-d9428c6a,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #41 has its own arguments (lowercase itemId, I).",AI,2026-11-25 02:06:40
+A5,A5-G036,AD-dd13845e,AD-dd13845e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Main call #24 has its own arguments (transMode=AIR,FRY).",AI,2026-11-25 02:06:40
+A5,A5-G037,AD-e38b49fc,AD-e38b49fc,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Main call #8 has its own arguments (divisionId=82), and it checks the result-set column set, not the displayed grid columns.",AI,2026-11-25 02:06:40
+A5,A5-G038,AD-e4f51c47,AD-e4f51c47,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #4 has its own arguments (fromSite=HQ05-W, I).",AI,2026-11-25 02:06:40
+A5,A5-G039,AD-ecbe5161,AD-ecbe5161,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #17 has its own arguments (divisionId=81_UC).,AI,2026-11-25 02:06:40
+A5,A5-G040,AD-ef929e9b,AD-ef929e9b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,Main call #13 has its own arguments (transMode=AIR).,AI,2026-11-25 02:06:40
+A5,A5-G041,AD-f2a6cb89,AD-f2a6cb89,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #40 has its own arguments (partial itemId, I).",AI,2026-11-25 02:06:40
+A5,A5-G042,AD-fcd3cf86,AD-fcd3cf86,ASIS_DIFF,SCP0028 (짝 없음) 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 ),1,"Popup call #31 has its own arguments (partial itemId, D).",AI,2026-11-25 02:06:40
+A5,A5-G043,EG-13d34768,EG-13d34768,RULE_SCREEN,SCP0028 EG257 조회 본문 Division Div 40,1,Checks the Division value in the query body for Div 40; the other Div 40 rows expect something different.,AI,2026-11-25 02:06:40
+A5,A5-G044,EG-a5d95def,EG-a5d95def,RULE_SCREEN,SCP0028 EG257 조회 본문 Division Div 81,1,Checks the Division value in the query body for Div 81; the Div 81 column-display row expects something different.,AI,2026-11-25 02:06:40
+A5,A5-G045,EG-a37537bf,EG-a37537bf,RULE_SCREEN,SCP0028 EG024 복귀 헤더 81→40→81,1,"Checks that the header matches the original after switching 81→40→81, which is a different expectation from Div default column differences.",AI,2026-11-25 02:06:40
+A5,A5-G046,EG-f4a61ba4,EG-f4a61ba4,RULE_SCREEN,SCP0028 EG024 Div 전용 컬럼 81/40,1,"Checks DEFAULT column differences between Div 81 and Div 40, which no other row expects.",AI,2026-11-25 02:06:40
+A5,A5-G047,T-2173d3e1,T-2173d3e1,TRACE,"SwitchLock (cs:232, gridSignals#4) · **미이식(NSCM 상시편집 표준)** — Edit 토글 state 없음. 편집권한 `canEdit=hasButton('EDI",1,Trace row confirming the SwitchLock implementation (canEdit) exists.,AI,2026-11-25 02:06:40
+A5,A5-G048,T-2696413d,T-2696413d,TRACE,"SmartColMerge (cs:371,438,721, #9/#12/#15) · `CustomMergeManager` allowMerging Cells, MERGE_COLUMNS 6",1,Trace row confirming the SmartColMerge implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G049,T-333f0c00,T-333f0c00,TRACE,checkValidSize LOT<INC / 0값 (cs:762~773) · `useShipmentLotSizeValidation`,1,Trace row confirming the checkValidSize implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G050,T-504dde67,T-504dde67,TRACE,"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369) · `canEdit && isLotSizeCellEditable(binding)` beginningEdit cancel",1,Trace row confirming the LockColumn implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G051,T-66d50cfd,T-66d50cfd,TRACE,"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14) · `isDefaultRevertRow` — handleSave 에서 M 제외",1,Trace row confirming the default-value revert implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G052,T-69768704,T-69768704,TRACE,LOT_SIZE / Lot Size,1,Trace row for the LOT_SIZE column metadata.,AI,2026-11-25 02:06:40
+A5,A5-G053,T-74c096a6,T-74c096a6,TRACE,두 버튼 **노출** 조건 · `hasButton('INSERT'/'DELETE')` 게이트 유지(AUTH-01),1,Trace row confirming the INSERT/DELETE button visibility gate exists.,AI,2026-11-25 02:06:40
+A5,A5-G054,T-7f8e5dae,T-7f8e5dae,TRACE,**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG,1,Trace row confirming the popup OK SaveData implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G055,T-b4d82292,T-b4d82292,TRACE,checkRequiredOfSpread · `useSaveWithValidation`(메타 INPUT_TP_CD='M'),1,Trace row confirming the required-field check implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G056,T-d98b1bc1,T-d98b1bc1,TRACE,"Delete() 신규행만 (cs:213~224, #3) · (아래 §3 버튼 consolidation 참조)",1,Trace row confirming the new-row-only Delete implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G057,T-e1e924a8,T-e1e924a8,TRACE,VALID_YN / Valid,1,Trace row for the VALID_YN column metadata.,AI,2026-11-25 02:06:40
+A5,A5-G058,T-e56e8da0,T-e56e8da0,TRACE,INCREMENT / Increment,1,Trace row for the INCREMENT column metadata.,AI,2026-11-25 02:06:40
+A5,A5-G059,T-ed99a75c,T-ed99a75c,TRACE,SPLIT_YN / Container Split,1,Trace row for the SPLIT_YN column metadata.,AI,2026-11-25 02:06:40
+A5,A5-G060,T-fc9d26c9,T-fc9d26c9,TRACE,SCP0028_Shipment_Lot_Size.CreateSpread,1,Trace row matching the CreateSpread entry to the AS-IS column list.,AI,2026-11-25 02:06:40
+A5,A5-G061,T-ff3fb8d5,T-ff3fb8d5,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,Trace row confirming the query binding implementation exists.,AI,2026-11-25 02:06:40
+A5,A5-G062,V-08715b17,V-08715b17,RULE_SCREEN,SCP0028 Division 컬럼 81/Shipment Lot Size,1,Checks the displayed grid columns for Div 81 only.,AI,2026-11-25 02:06:40
+A5,A5-G063,V-118f6d1e,V-118f6d1e,RULE_SCREEN,SCP0028 Division 컬럼 40/Shipment Lot Size,1,Checks the displayed grid columns for Div 40 only.,AI,2026-11-25 02:06:40
+A5,A5-G064,V-fcbaeab9,V-fcbaeab9,RULE_SCREEN,SCP0028 Division 컬럼 82/Shipment Lot Size,1,Checks the displayed grid columns for Div 82 only.,AI,2026-11-25 02:06:40
+A5,A5-G065,V-49982211,V-49982211,RULE_SCREEN,SCP0028 화면,1,"Checks overall screen rules (default columns with no personalization, required columns, rebuild on Div switch), which no other row expects together.",AI,2026-11-25 02:06:40
+A5,A5-G066,V-6ee36520,V-6ee36520,RULE_SCREEN,SCP0028 컬럼 순서,1,"Checks column order after a search, which is a different expectation from the column set.",AI,2026-11-25 02:06:40
+A6,A6-G001,AD-03fd5b01,AD-03fd5b01,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #12 메인 조회(fromSite 다중)의 결과 순서로, 조회조건이 달라 결과 집합이 다르므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G002,AD-072c6abe,AD-072c6abe,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #1 메인 조회(조건 비움)의 결과 순서로, 다른 호출과 조회조건이 다르므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G003,AD-0b566aea,AD-0b566aea,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #27 메인 조회(itemId=CPP1015U-B1-00)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G004,AD-0e7943c1,AD-0e7943c1,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #41 팝업 조회(I, 소문자 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G005,AD-125dcd3f,AD-125dcd3f,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #34 팝업 조회(D, fromSite=HQ05-W)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G006,AD-13db7f49,AD-13db7f49,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #42 팝업 조회(I, itemId 2건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G007,AD-244b08bb,AD-244b08bb,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #4 팝업 조회(I, fromSite=HQ05-W)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G008,AD-2af1bd7e,AD-2af1bd7e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #9 메인 조회(operationGroup=P)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G009,AD-305c8e11,AD-305c8e11,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #35 팝업 조회의 결과 순서로, 인자가 잘려 있어 #36·#37과 같은 조건인지 확인할 수 없으므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G010,AD-34e30c64,AD-34e30c64,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #7 메인 조회(valid=N)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G011,AD-36e52665,AD-36e52665,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #37 팝업 조회의 결과 순서로, 인자가 잘려 있어 #35·#36과 같은 조건인지 확인할 수 없으므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G012,AD-4c7a11a9,AD-4c7a11a9,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #11 메인 조회(fromSite=MI03-P)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G013,AD-5220bfed,AD-5220bfed,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #25 메인 조회(itemId=ACPP1015U-B1-001)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G014,AD-62e23a4b,AD-62e23a4b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #6 메인 조회(valid=Y)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G015,AD-638f7dd3,AD-638f7dd3,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #23 메인 조회(itemId=APCAN0981A)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G016,AD-6e5cd70c,AD-6e5cd70c,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #33 팝업 조회(D, itemId 2건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G017,AD-7307a8c7,AD-7307a8c7,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #18 메인 조회(divisionId=81_HM)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G018,AD-7abad1a0,AD-7abad1a0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #19 메인 조회(divisionId=81_ST)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G019,AD-7abe0c89,AD-7abe0c89,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #3 팝업 조회(D, 조건 비움)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G020,AD-84391a07,AD-84391a07,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #39 팝업 조회(I, itemId=APVCC519H-A1)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G021,AD-8ee9253d,AD-8ee9253d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #17 메인 조회(divisionId=81_UC)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G022,AD-9abf4233,AD-9abf4233,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #16 메인 조회(toSite 다중)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G023,AD-9d1865fa,AD-9d1865fa,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #40 팝업 조회(I, 부분 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G024,AD-a44b9f91,AD-a44b9f91,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #13 메인 조회(transMode=AIR)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G025,AD-a6692d80,AD-a6692d80,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #28 메인 조회(itemId 2건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G026,AD-a75595d7,AD-a75595d7,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #31 팝업 조회(D, 부분 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G027,AD-afab4d83,AD-afab4d83,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #32 팝업 조회(D, 소문자 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G028,AD-b43f90c6,AD-b43f90c6,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #29 메인 조회(itemId=E2E)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G029,AD-b6390373,AD-b6390373,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #10 메인 조회(operationGroup=A)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G030,AD-b6e03e8a,AD-b6e03e8a,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #5 메인 조회(divisionId=40)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G031,AD-bbcfd07e,AD-bbcfd07e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #14 메인 조회(transMode 5건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G032,AD-cde75381,AD-cde75381,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #15 메인 조회(toSite=HKI_KR_WJU)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G033,AD-d1ba0b6b,AD-d1ba0b6b,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #38 팝업 조회(operationGroup=P, fromSite 다중)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G034,AD-d410c886,AD-d410c886,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #47 메인 조회(itemId=AAEF1001I-A1-000)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G035,AD-d4749e15,AD-d4749e15,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #30 팝업 조회(D, itemId=APVCC517H-A4)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G036,AD-d8bd10b2,AD-d8bd10b2,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #8 메인 조회(divisionId=82)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G037,AD-e50c244e,AD-e50c244e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #24 메인 조회(transMode=AIR,FRY)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G038,AD-e8b7b67e,AD-e8b7b67e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #21 메인 조회(divisionId=81_HG)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G039,AD-eb77d44f,AD-eb77d44f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #20 메인 조회(divisionId=81_HD)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G040,AD-f0d1102c,AD-f0d1102c,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통·유일 행 상대 순서,1,"호출 #26 메인 조회(소문자 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G041,AD-f8013ee3,AD-f8013ee3,ASIS_DIFF,SCP0028 (짝 없음) 공통·유일 행 상대 순서,1,"호출 #36 팝업 조회의 결과 순서로, 인자가 잘려 있어 #35·#37과 같은 조건인지 확인할 수 없으므로 단독으로 둔다.",AI,2026-11-25 02:06:43
+A6,A6-G042,EG-3da46b0f,EG-3da46b0f,RULE_SCREEN,SCP0028 EG032 SCP0028 계정쌍,1,정렬이 아니라 권한(TITLESET_USER) 계정쌍을 확인하는 행이라 다른 행과 성질이 다르므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G043,EG-78281d4c,EG-78281d4c,RULE_SCREEN,SCP0028 문자 정렬 PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE,1,문자 키의 대소문자 무시·NULL 먼저(콜레이션)를 기대하는 행이라 키 순서 동일 여부와 기대 결과가 다르므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G044,T-073acab9,T-073acab9,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,_INPUT SP 대조표 행의 구현 위치 실존을 추적하는 행이라 V-871ad348과 확인 성질이 다르므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G045,T-2c20a3fc,T-2c20a3fc,TRACE,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,1,SCM0002 품목 팝업 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G046,T-427c462f,T-427c462f,TRACE,PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE,1,메인 SP 대조표 41행의 구현 위치 실존을 추적하는 행이라 V-cb9cf45f의 정렬 실측과 성질이 다르므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G047,T-653f1a5d,T-653f1a5d,TRACE,PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION,1,SCM0002 자재 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G048,T-6dc0e2d5,T-6dc0e2d5,TRACE,PR_GET_MNU_BTN_AUTH,1,버튼 권한 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G049,T-c6aefa56,T-c6aefa56,TRACE,PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,1,팝업 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G050,T-e57376d2,T-e57376d2,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,팝업 Form_Load 자동조회(D만 진입 자동조회)를 추적하는 행이라 대상 요소가 다르므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G051,T-f4dca6bb,T-f4dca6bb,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,FindData의 o_rc1 바인딩 구현 위치를 추적하는 행이라 대상 요소가 다르므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G052,V-871ad348,V-871ad348,SP,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,_INPUT SP가 ORDER BY 없이 임의 정렬을 추가하지 않았는지 확인하는 행이라 기대 결과가 고유하므로 단독으로 둔다.,AI,2026-11-25 02:06:43
+A6,A6-G053,V-cb9cf45f,V-cb9cf45f,SP,SCP0028_GET_SHIPMENT_LOT_SIZE,1,"메인 SP의 ORDER BY 6개 키 동일 여부(정적)와 E2E 실측을 확인하는 행이며, 호출별 AD 행과 측정 단위가 달라 단독으로 둔다.",AI,2026-11-25 02:06:43
+A7,A7-G001,AD-a8d58ff3,AD-a8d58ff3,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1940행 · 불일치 셀 0),1,"호출 #1 main 기본 조회(사업부 81, 나머지 조건 공란)로 인자가 같은 다른 행이 없어 단독으로 둔다.",AI,2026-11-25 02:06:37
+A7,A7-G002,AD-1eb9cb71,AD-1eb9cb71,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #3 popup 조회(actionFlag D, 조건 공란)로 인자가 같은 다른 행이 없다.",AI,2026-11-25 02:06:37
+A7,A7-G003,AD-5079c1a8,AD-5079c1a8,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #4 popup 조회(fromSite HQ05-W, actionFlag I)로 인자가 같은 다른 행이 없다.",AI,2026-11-25 02:06:37
+A7,A7-G004,AD-e88e6cb7,AD-e88e6cb7,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 265행 · 불일치 셀 0),1,호출 #5 main 조회(사업부 40)로 사업부 조건이 다른 행과 다르다.,AI,2026-11-25 02:06:37
+A7,A7-G005,AD-a57667af,AD-a57667af,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1866행 · 불일치 셀 0),1,호출 #6 main 조회(valid Y)로 valid 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G006,AD-b7f35300,AD-b7f35300,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 74행 · 불일치 셀 0),1,호출 #7 main 조회(valid N)로 valid 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G007,AD-15417ce8,AD-15417ce8,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 100행 · 불일치 셀 0),1,호출 #8 main 조회(사업부 82)로 사업부 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G008,AD-969177a5,AD-969177a5,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1270행 · 불일치 셀 0),1,호출 #9 main 조회(operationGroup P)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G009,AD-11ab971b,AD-11ab971b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 670행 · 불일치 셀 0),1,호출 #10 main 조회(operationGroup A)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G010,AD-5ad26b5f,AD-5ad26b5f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 15행 · 불일치 셀 0),1,호출 #11 main 조회(fromSite MI03-P)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G011,AD-2ceb212b,AD-2ceb212b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1940행 · 불일치 셀 0),1,"호출 #12 main 조회(fromSite 다중값)로 조건이 고유하고, 인자가 잘려 있어 다른 행과 같다고 확인할 수 없다.",AI,2026-11-25 02:06:37
+A7,A7-G012,AD-26c48730,AD-26c48730,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 388행 · 불일치 셀 0),1,호출 #13 main 조회(transMode AIR)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G013,AD-a78da743,AD-a78da743,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1940행 · 불일치 셀 0),1,호출 #14 main 조회(transMode 5종 다중값)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G014,AD-c6b8b7b9,AD-c6b8b7b9,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 5행 · 불일치 셀 0),1,호출 #15 main 조회(toSite HKI_KR_WJU)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G015,AD-86c8e05f,AD-86c8e05f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 1735행 · 불일치 셀 0),1,호출 #16 main 조회(toSite 다중값)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G016,AD-4ccd4e88,AD-4ccd4e88,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 215행 · 불일치 셀 0),1,호출 #17 main 조회(사업부 81_UC)로 사업부 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G017,AD-67a2549b,AD-67a2549b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #18 main 조회(사업부 81_HM)로 사업부 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G018,AD-a7590165,AD-a7590165,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 50행 · 불일치 셀 0),1,호출 #19 main 조회(사업부 81_ST)로 사업부 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G019,AD-bf9240c6,AD-bf9240c6,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #20 main 조회(사업부 81_HD)로 사업부 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G020,AD-973a1a5f,AD-973a1a5f,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 5행 · 불일치 셀 0),1,호출 #21 main 조회(사업부 81_HG)로 사업부 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G021,AD-df394103,AD-df394103,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #23 main 조회(itemId APCAN0981A)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G022,AD-bfa0da1e,AD-bfa0da1e,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 776행 · 불일치 셀 0),1,"호출 #24 main 조회(transMode AIR,FRY)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G023,AD-4fe005ee,AD-4fe005ee,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,"호출 #25 main 조회(itemId 대문자 ACPP1015U-B1-001)로, 소문자 조회와는 대소문자 처리를 확인하는 다른 조건이다.",AI,2026-11-25 02:06:37
+A7,A7-G024,AD-ac6f799d,AD-ac6f799d,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #26 main 조회(itemId 소문자)로 대소문자 처리를 확인하는 고유한 조건이다.,AI,2026-11-25 02:06:37
+A7,A7-G025,AD-73dcb10b,AD-73dcb10b,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #27 main 조회(itemId 부분값 CPP1015U-B1-00)로 부분일치를 확인하는 고유한 조건이다.,AI,2026-11-25 02:06:37
+A7,A7-G026,AD-f4bf26b0,AD-f4bf26b0,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #28 main 조회(itemId 다중값)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G027,AD-9177a9cf,AD-9177a9cf,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #29 main 조회(itemId E2E)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G028,AD-1c7fd9d9,AD-1c7fd9d9,ASIS_DIFF,SCP0028 SCP0028_GET_SHIPMENT_LOT_SIZE 공통행 컬럼 값(공통 0행 · 불일치 셀 0),1,호출 #47 main 조회(itemId AAEF1001I-A1-000)로 조건이 고유하다.,AI,2026-11-25 02:06:37
+A7,A7-G029,AD-eca4c0ee,AD-eca4c0ee,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #30 popup 조회(itemId APVCC517H-A4, actionFlag D)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G030,AD-9e43972e,AD-9e43972e,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #31 popup 조회(itemId 부분값, actionFlag D)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G031,AD-88332dd0,AD-88332dd0,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #32 popup 조회(itemId 소문자, actionFlag D)로 대소문자 처리를 확인하는 고유한 조건이다.",AI,2026-11-25 02:06:37
+A7,A7-G032,AD-7f5c41f3,AD-7f5c41f3,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #33 popup 조회(itemId 다중값, actionFlag D)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G033,AD-f377f227,AD-f377f227,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #34 popup 조회(fromSite HQ05-W, actionFlag D)로, 같은 fromSite의 I 조회(#4)와 actionFlag가 다르다.",AI,2026-11-25 02:06:37
+A7,A7-G034,AD-44898b71,AD-44898b71,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,호출 #35 popup 조회(fromSite 다중값)로 인자가 잘려 있어 #36·#37과 같은지 확인할 수 없으므로 단독으로 둔다.,AI,2026-11-25 02:06:37
+A7,A7-G035,AD-51dde9b2,AD-51dde9b2,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,호출 #36 popup 조회로 인자가 잘려 있어 #35·#37과 같은지 확인할 수 없으므로 단독으로 둔다.,AI,2026-11-25 02:06:37
+A7,A7-G036,AD-7031951d,AD-7031951d,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,호출 #37 popup 조회로 인자가 잘려 있어 #35·#36과 같은지 확인할 수 없으므로 단독으로 둔다.,AI,2026-11-25 02:06:37
+A7,A7-G037,AD-0d4ddf6c,AD-0d4ddf6c,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #38 popup 조회(operationGroup P, fromSite 다중값)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G038,AD-42fb59be,AD-42fb59be,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #39 popup 조회(itemId APVCC519H-A1, actionFlag I)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G039,AD-d8901eb3,AD-d8901eb3,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #40 popup 조회(itemId 부분값, actionFlag I)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G040,AD-ce275074,AD-ce275074,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #41 popup 조회(itemId 소문자, actionFlag I)로 대소문자 처리를 확인하는 고유한 조건이다.",AI,2026-11-25 02:06:37
+A7,A7-G041,AD-28da6f65,AD-28da6f65,ASIS_DIFF,SCP0028 (짝 없음) 공통행 컬럼 값(공통 행 · 불일치 셀 ),1,"호출 #42 popup 조회(itemId 다중값, actionFlag I)로 조건이 고유하다.",AI,2026-11-25 02:06:37
+A7,A7-G042,V-ee003a13,V-ee003a13,SP,SCP0028_GET_SHIPMENT_LOT_SIZE,1,SCP0028_GET_SHIPMENT_LOT_SIZE 전체에 거는 일반 규칙이라 조건이 특정 호출과 같다고 확정할 수 없어 단독으로 둔다.,AI,2026-11-25 02:06:37
+A7,A7-G043,V-8da88867,V-8da88867,SP,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,1,"다른 프로시저(SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT)가 대상이고, 이 프로시저와 짝지어진 호출 행이 없어 단독으로 둔다.",AI,2026-11-25 02:06:37
 A8,A8-G001,EG-4d1d3641,EG-4d1d3641,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete DYN_COLS,1,단독,코드,2026-11-20 12:59:56
 A8,A8-G002,EG-a44d4d31,EG-a44d4d31,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model DYN_COLS,1,단독,코드,2026-11-20 12:59:56
 A8,A8-G003,EG-c00a3159,EG-c00a3159,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DYN_COLS,1,단독,코드,2026-11-20 12:59:56
@@ -253,18 +278,18 @@ B2,B2-G006,V-cc05baba,V-cc05baba,SEARCH,조회조건 From Site,1,단독,코드,2
 B2,B2-G007,V-d08e451c,V-d08e451c,SEARCH,조회조건 Operation Group,1,단독,코드,2026-11-20 12:59:56
 B2,B2-G008,V-e6f27a68,V-e6f27a68,SEARCH,조회조건 Division*,1,단독,코드,2026-11-20 12:59:56
 B2,B2-G009,V-fe0de9c0,V-fe0de9c0,COLUMN,Shipment Lot Size.OPERATION_GROUP_ID (Operation Group),1,단독,코드,2026-11-20 12:59:56
-B3,B3-G001,EG-017a5164,EG-017a5164,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input ORDER,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G002,EG-c93ee43e,EG-c93ee43e,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete ORDER,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G003,EG-fdb1b3d4,EG-fdb1b3d4,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model ORDER,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G004,V-04de073e,V-04de073e,SEARCH,조회조건 To Site,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G005,V-1032c717,V-1032c717,COLUMN,Shipment Lot Size.OPERATION_GROUP_ID (Operation Group),1,단독,코드,2026-11-20 12:59:56
-B3,B3-G006,V-4b4a7ae3,V-4b4a7ae3,COLUMN,Shipment Lot Size.VALID_YN (Active*),1,단독,코드,2026-11-20 12:59:56
-B3,B3-G007,V-4bcc5430,V-4bcc5430,SEARCH,조회조건 Operation Group,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G008,V-55f0d272,V-55f0d272,COLUMN,Shipment Lot Size.SPLIT_YN (Container Split*),1,단독,코드,2026-11-20 12:59:56
-B3,B3-G009,V-565e08ec,V-565e08ec,SEARCH,조회조건 Trans Mode,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G010,V-567a4264,V-567a4264,SEARCH,조회조건 Division*,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G011,V-b974dfd5,V-b974dfd5,SEARCH,조회조건 From Site,1,단독,코드,2026-11-20 12:59:56
-B3,B3-G012,V-d081074c,V-d081074c,SEARCH,조회조건 Valid,1,단독,코드,2026-11-20 12:59:56
+B3,B3-G001,EG-017a5164,EG-017a5164,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input ORDER,1,Checks the order of the SCM0002_ShipmentLotSizePopup results through the Input button. It is not grouped with the Delete button row because the button is a different element.,AI,2026-11-20 21:41:46
+B3,B3-G002,EG-c93ee43e,EG-c93ee43e,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete ORDER,1,"Checks the order of the SCM0002_ShipmentLotSizePopup results through the Delete button. The expected ORDER BY matches the Input row, but the button is different, so it stays alone.",AI,2026-11-20 21:41:46
+B3,B3-G003,EG-fdb1b3d4,EG-fdb1b3d4,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model ORDER,1,"Checks the order of the Model condition in a different popup, SCM0002_ItembyDivisionPopup, and its expected ORDER BY is also different, so it stays alone.",AI,2026-11-20 21:41:46
+B3,B3-G004,V-04de073e,V-04de073e,SEARCH,조회조건 To Site,1,Only this row checks the candidate order of the To Site search condition.,AI,2026-11-20 21:41:46
+B3,B3-G005,V-1032c717,V-1032c717,COLUMN,Shipment Lot Size.OPERATION_GROUP_ID (Operation Group),1,Only this row checks the candidate order of the OPERATION_GROUP_ID column for a new row. It is not grouped with the Operation Group search condition because one is a grid column and the other is a search condition.,AI,2026-11-20 21:41:46
+B3,B3-G006,V-4b4a7ae3,V-4b4a7ae3,COLUMN,Shipment Lot Size.VALID_YN (Active*),1,Only this row checks the candidate order of the VALID_YN column for a new row. It is not grouped with the Valid search condition because one is a grid column and the other is a search condition.,AI,2026-11-20 21:41:46
+B3,B3-G007,V-4bcc5430,V-4bcc5430,SEARCH,조회조건 Operation Group,1,Only this row checks the candidate order of the Operation Group search condition.,AI,2026-11-20 21:41:46
+B3,B3-G008,V-55f0d272,V-55f0d272,COLUMN,Shipment Lot Size.SPLIT_YN (Container Split*),1,Only this row checks the candidate order of the SPLIT_YN column for a new row.,AI,2026-11-20 21:41:46
+B3,B3-G009,V-565e08ec,V-565e08ec,SEARCH,조회조건 Trans Mode,1,Only this row checks the candidate order of the Trans Mode search condition.,AI,2026-11-20 21:41:46
+B3,B3-G010,V-567a4264,V-567a4264,SEARCH,조회조건 Division*,1,Only this row checks the candidate order of the Division search condition.,AI,2026-11-20 21:41:46
+B3,B3-G011,V-b974dfd5,V-b974dfd5,SEARCH,조회조건 From Site,1,Only this row checks the candidate order of the From Site search condition.,AI,2026-11-20 21:41:46
+B3,B3-G012,V-d081074c,V-d081074c,SEARCH,조회조건 Valid,1,Only this row checks the candidate order of the Valid search condition.,AI,2026-11-20 21:41:46
 B4,B4-G001,EG-39246d2d,EG-39246d2d,RULE_SCREEN,SCP0028 EG067 SCP0028 전체,1,단독,코드,2026-11-20 12:59:56
 B4,B4-G002,V-2c13dbe7,V-2c13dbe7,SEARCH,조회조건 Valid,1,단독,코드,2026-11-20 12:59:56
 B4,B4-G003,V-45432329,V-45432329,COLUMN,Shipment Lot Size.SPLIT_YN (Container Split*),1,단독,코드,2026-11-20 12:59:56
@@ -368,29 +393,29 @@ D1,D1-G043,V-e2bb1721,V-e2bb1721,COLUMN,Shipment Lot Size.CREATED_BY (Created By
 D1,D1-G044,V-e31dedc9,V-e31dedc9,RULE_SCREEN,SCP0028 병합 셀 입력,1,단독,코드,2026-11-20 13:00:10
 D1,D1-G045,V-e742cfe3,V-e742cfe3,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-20 13:00:10
 D1,D1-G046,V-f33e2f4d,V-f33e2f4d,COLUMN,Shipment Lot Size.LAST_UPDATED_BY (Last Updated By),1,단독,코드,2026-11-20 13:00:10
-D3,D3-G001,EG-12a208c4,EG-12a208c4,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_LOCK,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G002,EG-f70cad2d,EG-f70cad2d,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_LOCK,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G003,EG-fb231b5d,EG-fb231b5d,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_LOCK,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G004,T-0c40b2d8,T-0c40b2d8,TRACE,"Delete() 신규행만 (cs:213~224, #3) · (아래 §3 버튼 consolidation 참조)",1,단독,코드,2026-11-20 13:00:10
-D3,D3-G005,T-4bc81061,T-4bc81061,TRACE,SPLIT_YN / Container Split,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G006,T-4d6f6c87,T-4d6f6c87,TRACE,LOT_SIZE / Lot Size,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G007,T-53391d50,T-53391d50,TRACE,"SwitchLock (cs:232, gridSignals#4) · **미이식(NSCM 상시편집 표준)** — Edit 토글 state 없음. 편집권한 `canEdit=hasButton('EDI",1,단독,코드,2026-11-20 13:00:10
-D3,D3-G008,T-6242b38f,T-6242b38f,TRACE,"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14) · `isDefaultRevertRow` — handleSave 에서 M 제외",1,단독,코드,2026-11-20 13:00:10
-D3,D3-G009,T-657a057c,T-657a057c,TRACE,DIVISION_ID / Division,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G010,T-686860e9,T-686860e9,TRACE,VALID_YN / Valid,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G011,T-80409fc6,T-80409fc6,TRACE,EditButton SwitchLock (cs:229~236) · **미이식** — `canEdit=hasButton('EDIT')` 로드 1회 판정(상시편집),1,단독,코드,2026-11-20 13:00:10
-D3,D3-G012,T-8249bbe9,T-8249bbe9,TRACE,TRANS_MODE_NAME / Trans Mode,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G013,T-85aedacc,T-85aedacc,TRACE,"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5) · BtnArea 커스텀 버튼(SubTitle `customButtons`) → 팝업 → GET_INPUT 후보(상시편집)",1,단독,코드,2026-11-20 13:00:10
-D3,D3-G014,T-8c50b747,T-8c50b747,TRACE,CREATED_BY / Created By,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G015,T-950d3d65,T-950d3d65,TRACE,LAST_UPDATE_DATE / Last Update Date,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G016,T-992a6002,T-992a6002,TRACE,SCP0028_Shipment_Lot_Size.EditButton,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G017,T-a14b1ffd,T-a14b1ffd,TRACE,INCREMENT / Increment,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G018,T-aa1aa43e,T-aa1aa43e,TRACE,checkRequiredOfSpread · `useSaveWithValidation`(메타 INPUT_TP_CD='M'),1,단독,코드,2026-11-20 13:00:10
-D3,D3-G019,T-bbdb321d,T-bbdb321d,TRACE,checkValidSize LOT<INC / 0값 (cs:762~773) · `useShipmentLotSizeValidation`,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G020,T-d3fac0ba,T-d3fac0ba,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,단독,코드,2026-11-20 13:00:10
-D3,D3-G021,T-e1abe0cf,T-e1abe0cf,TRACE,"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369) · `canEdit && isLotSizeCellEditable(binding)` beginningEdit cancel",1,단독,코드,2026-11-20 13:00:10
-D3,D3-G022,T-e9e792b4,T-e9e792b4,TRACE,"SmartColMerge (cs:371,438,721, #9/#12/#15) · `CustomMergeManager` allowMerging Cells, MERGE_COLUMNS 6",1,단독,코드,2026-11-20 13:00:10
-D3,D3-G023,T-ef36c4d3,T-ef36c4d3,TRACE,**저장대상 = 편집행만** (cs:582~603·631~654) · 일괄입력 후보에 `CRUD_TYPE` 미주입 → EditTracker 가 편집행만 'M' 표시(원복 시 해제),1,단독,코드,2026-11-20 13:00:10
+D3,D3-G001,EG-12a208c4,EG-12a208c4,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_LOCK,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G002,EG-f70cad2d,EG-f70cad2d,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_LOCK,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G003,EG-fb231b5d,EG-fb231b5d,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_LOCK,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G004,T-0c40b2d8,T-0c40b2d8,TRACE,"Delete() 신규행만 (cs:213~224, #3) · (아래 §3 버튼 consolidation 참조)",1,단독,코드,2026-11-20 21:41:39
+D3,D3-G005,T-4bc81061,T-4bc81061,TRACE,SPLIT_YN / Container Split,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G006,T-4d6f6c87,T-4d6f6c87,TRACE,LOT_SIZE / Lot Size,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G007,T-53391d50,T-53391d50,TRACE,"SwitchLock (cs:232, gridSignals#4) · **미이식(NSCM 상시편집 표준)** — Edit 토글 state 없음. 편집권한 `canEdit=hasButton('EDI",1,단독,코드,2026-11-20 21:41:39
+D3,D3-G008,T-6242b38f,T-6242b38f,TRACE,"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14) · `isDefaultRevertRow` — handleSave 에서 M 제외",1,단독,코드,2026-11-20 21:41:39
+D3,D3-G009,T-657a057c,T-657a057c,TRACE,DIVISION_ID / Division,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G010,T-686860e9,T-686860e9,TRACE,VALID_YN / Valid,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G011,T-80409fc6,T-80409fc6,TRACE,EditButton SwitchLock (cs:229~236) · **미이식** — `canEdit=hasButton('EDIT')` 로드 1회 판정(상시편집),1,단독,코드,2026-11-20 21:41:39
+D3,D3-G012,T-8249bbe9,T-8249bbe9,TRACE,TRANS_MODE_NAME / Trans Mode,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G013,T-85aedacc,T-85aedacc,TRACE,"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5) · BtnArea 커스텀 버튼(SubTitle `customButtons`) → 팝업 → GET_INPUT 후보(상시편집)",1,단독,코드,2026-11-20 21:41:39
+D3,D3-G014,T-8c50b747,T-8c50b747,TRACE,CREATED_BY / Created By,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G015,T-950d3d65,T-950d3d65,TRACE,LAST_UPDATE_DATE / Last Update Date,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G016,T-992a6002,T-992a6002,TRACE,SCP0028_Shipment_Lot_Size.EditButton,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G017,T-a14b1ffd,T-a14b1ffd,TRACE,INCREMENT / Increment,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G018,T-aa1aa43e,T-aa1aa43e,TRACE,checkRequiredOfSpread · `useSaveWithValidation`(메타 INPUT_TP_CD='M'),1,단독,코드,2026-11-20 21:41:39
+D3,D3-G019,T-bbdb321d,T-bbdb321d,TRACE,checkValidSize LOT<INC / 0값 (cs:762~773) · `useShipmentLotSizeValidation`,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G020,T-d3fac0ba,T-d3fac0ba,TRACE,Query(ds) FindData (cs:368) · `useTabProcQuery` o_rc1 바인딩,1,단독,코드,2026-11-20 21:41:39
+D3,D3-G021,T-e1abe0cf,T-e1abe0cf,TRACE,"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369) · `canEdit && isLotSizeCellEditable(binding)` beginningEdit cancel",1,단독,코드,2026-11-20 21:41:39
+D3,D3-G022,T-e9e792b4,T-e9e792b4,TRACE,"SmartColMerge (cs:371,438,721, #9/#12/#15) · `CustomMergeManager` allowMerging Cells, MERGE_COLUMNS 6",1,단독,코드,2026-11-20 21:41:39
+D3,D3-G023,T-ef36c4d3,T-ef36c4d3,TRACE,**저장대상 = 편집행만** (cs:582~603·631~654) · 일괄입력 후보에 `CRUD_TYPE` 미주입 → EditTracker 가 편집행만 'M' 표시(원복 시 해제),1,단독,코드,2026-11-20 21:41:39
 D4,D4-G001,EG-2ae4d809,EG-2ae4d809,RULE_SCREEN,SCP0028 EG126 Sort 유지 Insert 정렬 OPERATION_GROUP_ID asc · 선택 r2,1,단독,코드,2026-11-20 13:00:10
 D4,D4-G002,EG-6e7f354b,EG-6e7f354b,RULE_SCREEN,SCP0028 EG315 헤더 병합 SCP0028,1,단독,코드,2026-11-20 13:00:10
 D4,D4-G003,EG-ab8129bb,EG-ab8129bb,RULE_SCREEN,SCP0028 EG140 병합 그룹 위 삽입 병합 DIVISION_ID r0~36 · 선택 r1,1,단독,코드,2026-11-20 13:00:10
@@ -406,20 +431,19 @@ D4,D4-G012,T-ce022866,T-ce022866,TRACE,**SAVE SP 분기 = M/D 2종** · `toSaveR
 D4,D4-G013,T-e0206256,T-e0206256,TRACE,LOT_SIZE / Lot Size,1,단독,코드,2026-11-20 13:00:10
 D4,D4-G014,V-a005cb70,V-a005cb70,RULE_SCREEN,SCP0028 Insert 행 Division,1,단독,코드,2026-11-20 13:00:10
 D4,D4-G015,V-b48e5d97,V-b48e5d97,ASIS,DeleteButton 전제 fps,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G001,EG-42a2c7ad,EG-42a2c7ad,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input IDENTITY,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G002,EG-be9d2e58,EG-be9d2e58,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model IDENTITY,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G003,EG-dcd1c347,EG-dcd1c347,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete IDENTITY,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G004,EG-fbe06cfe,EG-fbe06cfe,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model TEXT_INPUT,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G005,T-a53e3cf6,T-a53e3cf6,TRACE,LOT_SIZE / Lot Size,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G006,T-facf1db7,T-facf1db7,TRACE,INCREMENT / Increment,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G007,T-fbb53708,T-fbb53708,TRACE,SCP0028_Shipment_Lot_Size.CreateSpread,1,단독,코드,2026-11-20 13:00:10
-D5,D5-G008,V-2bdf7955,V-2bdf7955,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-20 13:00:10
-D5,D5-G009,V-2ce779cb,V-2ce779cb,COLUMN,Shipment Lot Size.LAST_UPDATE_DATE (Last Update Date),1,단독,코드,2026-11-20 13:00:10
-D5,D5-G010,V-3ae7c623,V-3ae7c623,COLUMN,Shipment Lot Size.CREATION_DATE (Creation Date),1,단독,코드,2026-11-20 13:00:10
-D5,D5-G011,V-618e561f,V-618e561f,COLUMN,Shipment Lot Size.VALID_YN (Active*),1,단독,코드,2026-11-20 13:00:10
-D5,D5-G012,V-66b1a489,V-66b1a489,COLUMN,Shipment Lot Size.OPERATION_GROUP_ID (Operation Group),1,단독,코드,2026-11-20 13:00:10
-D5,D5-G013,V-77100d57,V-77100d57,COLUMN,Shipment Lot Size.LOT_SIZE (Lot Size*),1,단독,코드,2026-11-20 13:00:10
-D5,D5-G014,V-aa075cf2,V-aa075cf2,COLUMN,Shipment Lot Size.SPLIT_YN (Container Split*),1,단독,코드,2026-11-20 13:00:10
+D5,D5-G001,EG-42a2c7ad,EG-42a2c7ad,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input IDENTITY,1,단독,코드,2026-11-25 02:06:37
+D5,D5-G002,EG-be9d2e58,EG-be9d2e58,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model IDENTITY,1,단독,코드,2026-11-25 02:06:37
+D5,D5-G003,EG-dcd1c347,EG-dcd1c347,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete IDENTITY,1,단독,코드,2026-11-25 02:06:37
+D5,D5-G004,T-a53e3cf6,T-a53e3cf6,TRACE,LOT_SIZE / Lot Size,1,단독,코드,2026-11-25 02:06:37
+D5,D5-G005,T-facf1db7,T-facf1db7,TRACE,INCREMENT / Increment,1,단독,코드,2026-11-25 02:06:37
+D5,D5-G006,T-fbb53708,T-fbb53708,TRACE,SCP0028_Shipment_Lot_Size.CreateSpread,1,단독,코드,2026-11-25 02:06:37
+D5,D5-G007,V-2bdf7955,V-2bdf7955,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-25 02:06:37
+D5,D5-G008,V-2ce779cb,V-2ce779cb,COLUMN,Shipment Lot Size.LAST_UPDATE_DATE (Last Update Date),1,단독,코드,2026-11-25 02:06:37
+D5,D5-G009,V-3ae7c623,V-3ae7c623,COLUMN,Shipment Lot Size.CREATION_DATE (Creation Date),1,단독,코드,2026-11-25 02:06:37
+D5,D5-G010,V-618e561f,V-618e561f,COLUMN,Shipment Lot Size.VALID_YN (Active*),1,단독,코드,2026-11-25 02:06:37
+D5,D5-G011,V-66b1a489,V-66b1a489,COLUMN,Shipment Lot Size.OPERATION_GROUP_ID (Operation Group),1,단독,코드,2026-11-25 02:06:37
+D5,D5-G012,V-77100d57,V-77100d57,COLUMN,Shipment Lot Size.LOT_SIZE (Lot Size*),1,단독,코드,2026-11-25 02:06:37
+D5,D5-G013,V-aa075cf2,V-aa075cf2,COLUMN,Shipment Lot Size.SPLIT_YN (Container Split*),1,단독,코드,2026-11-25 02:06:37
 D6,D6-G001,T-234d08f7,T-234d08f7,TRACE,SCP0028 화면,1,단독,코드,2026-11-20 13:00:10
 D6,D6-G002,V-0c97a0f1,V-0c97a0f1,RULE_SCREEN,SCP0028 시나리오 [자동] 선택 행 위로 Insert,1,단독,코드,2026-11-20 13:00:10
 D6,D6-G003,V-1fa717cd,V-1fa717cd,RULE_SCREEN,SCP0028 정렬 상태 Insert,1,단독,코드,2026-11-20 13:00:10
@@ -437,12 +461,10 @@ DB-SYN,DB-SYN-G010,T-5587aff6,T-5587aff6,TRACE,**팝업 OK `SaveData` (cs:308~36
 DB-SYN,DB-SYN-G011,T-8429c58d,T-8429c58d,TRACE,PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,1,팝업 조회 SP인 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP을 확인하는 행이다. 다른 SP 행과 객체가 달라 단독으로 둔다.,AI,2026-11-20 13:00:25
 DB-SYN,DB-SYN-G012,T-b8cce406,T-b8cce406,TRACE,PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,1,대상 객체 PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP을 확인하는 행이다. 다른 행과 객체가 달라 단독으로 둔다.,AI,2026-11-20 13:00:25
 DB-SYN,DB-SYN-G013,V-62df918f,V-62df918f,RULE_SCREEN,SCP0028 화면,1,화면 전체의 BE 계정 객체·권한이 VALID한지와 메뉴·PROC_M·SHEET_COLUMNS 메타가 있는지를 함께 보는 차단 게이트 행이다. 개별 SP 추적 행이나 정적 점검 행과는 범위와 기대 결과가 달라 단독으로 둔다.,AI,2026-11-20 13:00:25
-E1,E1-G001,T-593d0c8b,T-593d0c8b,TRACE,INCREMENT / Increment,1,단독,코드,2026-11-20 13:00:24
-E1,E1-G002,T-e7ce5e82,T-e7ce5e82,TRACE,LOT_SIZE / Lot Size,1,단독,코드,2026-11-20 13:00:24
-E1,E1-G003,V-57fd6f09,V-57fd6f09,RULE_SCREEN,SCP0028 입력검증 음수 INCREMENT,1,단독,코드,2026-11-20 13:00:24
-E1,E1-G004,V-597f4433,V-597f4433,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-20 13:00:24
-E1,E1-G005,V-6259d313,V-6259d313,COLUMN,Shipment Lot Size.LOT_SIZE (Lot Size*),1,단독,코드,2026-11-20 13:00:24
-E1,E1-G006,V-b4192f37,V-b4192f37,RULE_SCREEN,SCP0028 입력검증 음수 LOT_SIZE,1,단독,코드,2026-11-20 13:00:24
+E1,E1-G001,V-57fd6f09,V-57fd6f09,RULE_SCREEN,SCP0028 입력검증 음수 INCREMENT,1,단독,코드,2026-11-25 02:06:37
+E1,E1-G002,V-597f4433,V-597f4433,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-25 02:06:37
+E1,E1-G003,V-6259d313,V-6259d313,COLUMN,Shipment Lot Size.LOT_SIZE (Lot Size*),1,단독,코드,2026-11-25 02:06:37
+E1,E1-G004,V-b4192f37,V-b4192f37,RULE_SCREEN,SCP0028 입력검증 음수 LOT_SIZE,1,단독,코드,2026-11-25 02:06:37
 E2,E2-G001,V-0577b243,V-0577b243,RULE_SCREEN,SCP0028 입력검증 날짜 CREATION_DATE,1,단독,코드,2026-11-20 13:00:24
 E2,E2-G002,V-2ab668bf,V-2ab668bf,COLUMN,Shipment Lot Size.CREATION_DATE (Creation Date),1,단독,코드,2026-11-20 13:00:24
 E2,E2-G003,V-69b08565,V-69b08565,RULE_SCREEN,SCP0028 기간 칸 글자 입력,1,단독,코드,2026-11-20 13:00:24
@@ -565,32 +587,35 @@ F8,F8-G001,V-8576fe4c,V-8576fe4c,RULE_SCREEN,SCP0028 수정 감사 컬럼,1,단�
 F8,F8-G002,V-db5046d9,V-db5046d9,RULE_SCREEN,SCP0028 저장 감사 필드,1,단독,코드,2026-11-20 13:00:29
 F8,F8-G003,V-eb542cf8,V-eb542cf8,RULE_SCREEN,SCP0028 이력 행 값,1,단독,코드,2026-11-20 13:00:29
 G03-WIRE,G03-WIRE-G001,T-522ba284,T-522ba284,TRACE,SCP0028 화면,1,단독,코드,2026-11-20 07:18:58
-G1,G1-G001,EG-0c9c840e,EG-0c9c840e,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_ROWS,1,ItembyDivisionPopup의 Model 조건으로 정확한 값을 넣어 필터한 결과만 확인하는 유일한 행이다.,AI,2026-11-20 13:00:50
-G1,G1-G002,EG-69d74bd7,EG-69d74bd7,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_LIKE,1,"ShipmentLotSizePopup에서 부분 문자열로 필터하는 행이며, 같은 팝업의 다른 필터 방식이나 다른 팝업과는 기대가 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G003,EG-6bc5611a,EG-6bc5611a,RULE_SCREEN,SCP0028 NULL 행 탈락 LIKE PKG_SCP0028,1,화면을 조작하지 않고 소스와 메타를 정적으로 점검하는 행이라 성질이 다르다.,AI,2026-11-20 13:00:50
-G1,G1-G004,EG-7bf5ec98,EG-7bf5ec98,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_LIKE,1,"ItembyDivisionPopup의 Model 조건으로 부분일치를 확인하는 팝업 행이며, 메인 화면의 Model 조건과는 대상 화면이 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G005,EG-9e42ccfd,EG-9e42ccfd,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_ALL,1,"ItembyDivisionPopup에서 조건을 비우고 다시 조회해 기준 9616행을 확인하며, 다른 팝업과는 기준 행 수가 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G006,EG-a84a7224,EG-a84a7224,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_ALL,1,ShipmentLotSizePopup에서 조건을 비우고 다시 조회해 기준 383행을 확인하는 유일한 행이다.,AI,2026-11-20 13:00:50
-G1,G1-G007,EG-b6943f3b,EG-b6943f3b,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model PICK_SEARCH,1,팝업에서 고른 값으로 메인 화면을 조회해 본문 키 형식을 확인하는 행이라 팝업 내부 필터와는 기대가 다르다.,AI,2026-11-20 13:00:50
-G1,G1-G008,EG-e7bd767e,EG-e7bd767e,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_ROWS,1,"ShipmentLotSizePopup에서 Model/Nickname에 정확한 값을 넣어 필터하는 행이며, 다른 팝업과 다른 컬럼이다.",AI,2026-11-20 13:00:50
-G1,G1-G009,T-59af1afb,T-59af1afb,TRACE,`SetChangedControl` cascade (cs:158~171) · Division 변경 → From/To Site 재조회(divisionId 키) + reset,1,"Division을 바꿀 때 From/To Site가 다시 조회되고 초기화되는지 추적하는 행으로, 대상이 다른 행들과 겹치지 않는다.",AI,2026-11-20 13:00:50
-G1,G1-G010,T-6c69b6ac,T-6c69b6ac,TRACE,"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5) · BtnArea 커스텀 버튼(SubTitle `customButtons`) → 팝업 → GET_INPUT 후보(상시편집)",1,"Input 일괄입력 버튼과 그 팝업을 추적하는 행으로, 조회조건 요소가 아니다.",AI,2026-11-20 13:00:50
-G1,G1-G011,T-7754adb7,T-7754adb7,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,팝업 진입 시 D 모드만 자동조회하는지 확인하는 행이라 상태와 기대가 다르다.,AI,2026-11-20 13:00:50
-G1,G1-G012,T-8c1a9dab,T-8c1a9dab,TRACE,FindButton (cs) · `hotkeyConfig.search` → handleSearch,1,"FindButton 단축키가 handleSearch에 연결되는지 추적하는 행으로, 조회 결과를 확인하는 행과 성질이 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G013,T-9466f72f,T-9466f72f,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,"툴바 Delete 버튼이 보이기만 하고 동작하지 않는지 확인하는 행으로, 다른 버튼 요소이다.",AI,2026-11-20 13:00:50
-G1,G1-G014,T-b5cbb882,T-b5cbb882,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,"팝업 검색영역의 배치와 표준 Search 버튼 구성을 추적하는 행으로, 화면 구조를 확인한다.",AI,2026-11-20 13:00:50
-G1,G1-G015,T-c9e36f25,T-c9e36f25,TRACE,"SetDivisionAuthCheck (cs:131~132, R1) · Form `noAuth` 시 조회영역 disable + 안내, handleSearch Division 필수 가드",1,권한이 없을 때 조회영역이 비활성화되고 Division이 필수인지 확인하는 행이라 상태와 기대가 다르다.,AI,2026-11-20 13:00:50
-G1,G1-G016,V-602d9026,V-602d9026,SEARCH,조회조건 Valid,1,조회조건 Valid라는 개별 조건 요소를 확인하는 행이다.,AI,2026-11-20 13:00:50
-G1,G1-G017,V-6f2c58ff,V-6f2c58ff,RULE_SCREEN,SCP0028 텍스트 부분일치 Model,1,"Model 조건에 값의 일부만 넣어 부분일치를 확인하는 행으로, 일반 조건 반영 행과 방법이 다르므로 확신이 없어 묶지 않았다.",AI,2026-11-20 13:00:50
-G1,G1-G018,V-86e7f1e2,V-86e7f1e2,ASIS,MSG00031,1,MSG00031 메시지를 띄우고 처리를 멈추는 분기를 확인하는 행이다.,AI,2026-11-20 13:00:50
-G1,G1-G019,V-8968fb50,V-8968fb50,SEARCH,조회조건 Division*,1,"Division 조회조건이 결과에 반영되는지 확인하는 행으로, 다른 조건과는 요소가 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G020,V-8e065123,V-8e065123,SEARCH,조회조건 To Site,1,"To Site 조회조건이 결과에 반영되는지 확인하는 행으로, 다른 조건과는 요소가 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G021,V-9e2b9258,V-9e2b9258,SEARCH,조회조건 Model,1,"Model 조회조건이 결과에 반영되는지 확인하는 행이며, 부분일치를 보는 행과 방법이 달라 단독으로 두었다.",AI,2026-11-20 13:00:50
-G1,G1-G022,V-a89007be,V-a89007be,ASIS,MSG00284,1,"MSG00284를 띄우는 else 분기를 확인하는 행으로, MSG00031과는 기대가 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G023,V-a9349c2a,V-a9349c2a,SEARCH,조회조건 Operation Group,1,"Operation Group 조회조건이 결과에 반영되는지 확인하는 행으로, 다른 조건과는 요소가 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G024,V-b56a59fa,V-b56a59fa,RULE_SCREEN,SCP0028 ALL 상태 조회,1,조건을 ALL로 둔 채 조회할 때 필수 안내가 없는지 확인하는 행이라 상태와 기대가 다르다.,AI,2026-11-20 13:00:50
-G1,G1-G025,V-c096b37d,V-c096b37d,SEARCH,조회조건 Trans Mode,1,"Trans Mode 조회조건이 결과에 반영되는지 확인하는 행으로, 다른 조건과는 요소가 다르다.",AI,2026-11-20 13:00:50
-G1,G1-G026,V-dd4f9db4,V-dd4f9db4,SEARCH,조회조건 From Site,1,"From Site 조회조건이 결과에 반영되는지 확인하는 행으로, 다른 조건과는 요소가 다르다.",AI,2026-11-20 13:00:50
+G1,G1-G001,EG-0c9c840e,EG-0c9c840e,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_ROWS,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G002,EG-69d74bd7,EG-69d74bd7,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_LIKE,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G003,EG-6bc5611a,EG-6bc5611a,RULE_SCREEN,SCP0028 NULL 행 탈락 LIKE PKG_SCP0028,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G004,EG-7bf5ec98,EG-7bf5ec98,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_LIKE,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G005,EG-7bf74510,EG-7bf74510,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input FILTER_ALL,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G006,EG-8c049599,EG-8c049599,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input FILTER_LIKE,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G007,EG-9e42ccfd,EG-9e42ccfd,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_ALL,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G008,EG-a84a7224,EG-a84a7224,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_ALL,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G009,EG-af83b337,EG-af83b337,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input FILTER_ROWS,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G010,EG-b6943f3b,EG-b6943f3b,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model PICK_SEARCH,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G011,EG-e7bd767e,EG-e7bd767e,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_ROWS,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G012,T-59af1afb,T-59af1afb,TRACE,`SetChangedControl` cascade (cs:158~171) · Division 변경 → From/To Site 재조회(divisionId 키) + reset,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G013,T-6c69b6ac,T-6c69b6ac,TRACE,"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5) · BtnArea 커스텀 버튼(SubTitle `customButtons`) → 팝업 → GET_INPUT 후보(상시편집)",1,단독,코드,2026-11-25 02:06:37
+G1,G1-G014,T-7754adb7,T-7754adb7,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,단독,코드,2026-11-25 02:06:37
+G1,G1-G015,T-8c1a9dab,T-8c1a9dab,TRACE,FindButton (cs) · `hotkeyConfig.search` → handleSearch,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G016,T-9466f72f,T-9466f72f,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,단독,코드,2026-11-25 02:06:37
+G1,G1-G017,T-b5cbb882,T-b5cbb882,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G018,T-c9e36f25,T-c9e36f25,TRACE,"SetDivisionAuthCheck (cs:131~132, R1) · Form `noAuth` 시 조회영역 disable + 안내, handleSearch Division 필수 가드",1,단독,코드,2026-11-25 02:06:37
+G1,G1-G019,V-602d9026,V-602d9026,SEARCH,조회조건 Valid,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G020,V-6f2c58ff,V-6f2c58ff,RULE_SCREEN,SCP0028 텍스트 부분일치 Model,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G021,V-86e7f1e2,V-86e7f1e2,ASIS,MSG00031,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G022,V-8968fb50,V-8968fb50,SEARCH,조회조건 Division*,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G023,V-8e065123,V-8e065123,SEARCH,조회조건 To Site,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G024,V-9e2b9258,V-9e2b9258,SEARCH,조회조건 Model,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G025,V-a89007be,V-a89007be,ASIS,MSG00284,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G026,V-a9349c2a,V-a9349c2a,SEARCH,조회조건 Operation Group,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G027,V-b56a59fa,V-b56a59fa,RULE_SCREEN,SCP0028 ALL 상태 조회,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G028,V-c096b37d,V-c096b37d,SEARCH,조회조건 Trans Mode,1,단독,코드,2026-11-25 02:06:37
+G1,G1-G029,V-dd4f9db4,V-dd4f9db4,SEARCH,조회조건 From Site,1,단독,코드,2026-11-25 02:06:37
 G2,G2-G001,V-0a1e0c9f,V-0a1e0c9f,SEARCH,조회조건 Division*,1,"조회조건 Division*만 대상으로 하는 행이고, 이 조건을 대상으로 하는 다른 행은 없다.",AI,2026-11-20 13:00:50
 G2,G2-G002,V-0cb5ad1c,V-0cb5ad1c,SEARCH,조회조건 Operation Group,1,조회조건 Operation Group만 대상으로 하는 행이라 다른 조건 행과 요소가 다르다.,AI,2026-11-20 13:00:50
 G2,G2-G003,V-506dfa50,V-506dfa50,SEARCH,조회조건 Trans Mode,1,조회조건 Trans Mode만 대상으로 하는 행이라 다른 조건 행과 요소가 다르다.,AI,2026-11-20 13:00:50
@@ -621,35 +646,35 @@ G4,G4-G017,T-c84f6550,T-c84f6550,TRACE,cboDivision / Division / Div. / Div,1,메
 G4,G4-G018,T-d8b53e0a,T-d8b53e0a,TRACE,cboOperationGroup / Operation Group / Operation group,1,메인 화면 Operation Group 조건 단독 추적 행이다.,AI,2026-11-20 13:01:12
 G4,G4-G019,T-f67deb05,T-f67deb05,TRACE,clbTransMode / Trans Mode,1,메인 화면 Trans Mode 조건 단독 추적 행이다.,AI,2026-11-20 13:01:12
 G4,G4-G020,V-6ba6160a,V-6ba6160a,RULE_SCREEN,SCP0028 돋보기 위치,1,돋보기 버튼 위치를 보는 시각 확인으로 다른 행과 기대가 다르다.,AI,2026-11-20 13:01:12
-G5,G5-G001,EG-30a77e98,EG-30a77e98,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete PERIOD,1,"Delete 버튼 팝업의 Period 연동 확인이며, 같은 버튼·같은 기대를 가진 다른 행이 없어 단독으로 둔다.",AI,2026-11-20 13:01:16
-G5,G5-G002,EG-3312dae6,EG-3312dae6,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model CORNERS,1,"Model 조건 팝업 버튼의 클릭 영역 확인으로, 인자 전달과는 확인 성질이 달라 단독으로 둔다.",AI,2026-11-20 13:01:16
-G5,G5-G003,EG-4271840d,EG-4271840d,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_ARG,1,"Model 조건의 'Material' 값이 조회 요청 본문에 실리는지 보는 행이며, 같은 값·같은 기대를 가진 다른 행이 없다.",AI,2026-11-20 13:01:16
-G5,G5-G004,EG-6ce9009f,EG-6ce9009f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_ARG,1,"Delete 버튼 팝업의 'Model/Nickname' 값 전달 확인으로, 다른 요소나 다른 값을 보는 행과 구분된다.",AI,2026-11-20 13:01:16
-G5,G5-G005,EG-6f00d86c,EG-6f00d86c,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DIV_FIXED,1,Input 버튼 팝업의 Div 고정 확인이고 Delete 버튼과는 요소가 달라 단독으로 둔다.,AI,2026-11-20 13:01:16
-G5,G5-G006,EG-7070bcc6,EG-7070bcc6,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input PERIOD,1,Input 버튼 팝업의 Period 연동 확인이고 Delete 버튼이나 Model 조건과는 요소가 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G007,EG-7f5aeace,EG-7f5aeace,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model TEXT_PASS,1,"Model 조건에 텍스트 'ELFP-000'을 넣어 전달되는지 보는 행으로, FILTER_ARG 행과 입력값·기대가 달라 묶지 않는다.",AI,2026-11-20 13:01:16
-G5,G5-G008,EG-8bbf1461,EG-8bbf1461,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete DIV_FIXED,1,"Delete 버튼 팝업의 Div 고정 확인이며, Input 버튼 행과는 요소가 다르다.",AI,2026-11-20 13:01:16
-G5,G5-G009,EG-8dca56be,EG-8dca56be,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model PERIOD,1,"Model 조건 팝업의 Period 연동 확인으로, 버튼 팝업들과는 요소가 다르다.",AI,2026-11-20 13:01:16
-G5,G5-G010,EG-c404de5e,EG-c404de5e,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model DIV_FIXED,1,"Model 조건 팝업의 Div 비활성·고정 확인이며, V-99331be4는 입력값·기간 전달까지 함께 기대하는 복합 기대라 묶지 않는다.",AI,2026-11-20 13:01:16
-G5,G5-G011,T-247bdc3c,T-247bdc3c,TRACE,clbFromSite / From Site,1,"대조표에서 From Site 조건의 구현을 추적하는 행으로, 화면 측정 행과는 성질이 다르다.",AI,2026-11-20 13:01:16
-G5,G5-G012,T-3a8b1d0e,T-3a8b1d0e,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,대조표에서 팝업 검색영역 구현을 추적하는 행으로 성질이 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G013,T-3dbd9fe5,T-3dbd9fe5,TRACE,TRANS_MODE_CODE / Trans Mode,1,대조표에서 Trans Mode 컬럼 메타를 추적하는 행으로 성질이 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G014,T-47a23fbe,T-47a23fbe,TRACE,**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG,1,대조표에서 팝업 OK 처리 구현을 추적하는 행으로 성질이 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G015,T-484c739b,T-484c739b,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,대조표에서 팝업 진입 시 자동조회 동작을 추적하는 행으로 성질이 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G016,T-4c9f8629,T-4c9f8629,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,대조표에서 툴바 Delete 버튼이 동작하지 않음을 추적하는 행으로 성질이 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G017,T-57afcab2,T-57afcab2,TRACE,clbToSite / To Site,1,대조표에서 To Site 조건을 추적하는 행이며 From Site 행과는 요소가 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G018,T-a806b129,T-a806b129,TRACE,P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP · 6 (division/opGroup/from/to/item/actionFlag),1,대조표에서 팝업 조회 프로시저의 인자 6개를 추적하는 행으로 성질이 다르다.,AI,2026-11-20 13:01:16
-G5,G5-G019,V-26b0134a,V-26b0134a,ASIS,new SCM0002_ItembyDivisionPopup(),1,"ItembyDivisionPopup 생성 호출이며, 같은 호출 위치를 가리키는 다른 행이 없다.",AI,2026-11-20 13:01:16
-G5,G5-G020,V-46f73ab8,V-46f73ab8,ASIS,popItem.ShowDialog(),1,ShowDialog 호출이 3곳에 있어 어느 팝업의 호출인지 확정할 수 없으므로 단독으로 둔다.,AI,2026-11-20 13:01:16
-G5,G5-G021,V-480372c9,V-480372c9,ASIS,"popItem.Form_Load(""D"", sDivision_id.ToString())",1,"'D' 모드로 팝업을 여는 Form_Load 인자 확인이며, 'I' 모드와는 인자가 다르다.",AI,2026-11-20 13:01:16
-G5,G5-G022,V-4ad19f40,V-4ad19f40,ASIS,new SCM0002_ShipmentLotSizePopup(),1,ShipmentLotSizePopup 생성 호출이 2곳(Input/Delete 추정)이라 같은 요소인지 확신할 수 없어 묶지 않는다.,AI,2026-11-20 13:01:16
-G5,G5-G023,V-86b2f489,V-86b2f489,ASIS,"popItem.Form_Load(""I"", sDivision_id.ToString())",1,"'I' 모드로 팝업을 여는 Form_Load 인자 확인이며, 'D' 모드와는 인자가 다르다.",AI,2026-11-20 13:01:16
-G5,G5-G024,V-99331be4,V-99331be4,SEARCH,조회조건 Model,1,"Model 조회조건의 입력값·기간 전달, 고정 조건, 결과 필터를 한꺼번에 기대하는 복합 행이라 단일 기대 행과 묶지 않는다.",AI,2026-11-20 13:01:16
-G5,G5-G025,V-99c509aa,V-99c509aa,ASIS,new SCM0002_ShipmentLotSizePopup(),1,"ShipmentLotSizePopup의 또 다른 생성 호출로, 다른 버튼일 수 있어 단독으로 둔다.",AI,2026-11-20 13:01:16
-G5,G5-G026,V-b9f0504a,V-b9f0504a,ASIS,popItem.ShowDialog(),1,ShowDialog 호출 위치를 특정할 수 없어 단독으로 둔다.,AI,2026-11-20 13:01:16
-G5,G5-G027,V-dc8f2fac,V-dc8f2fac,ASIS,"popItem.Form_Load(true, division, sScmSite, sProject, sItemId)",1,"인자 5개(true, division, sScmSite, sProject, sItemId)로 여는 별도 팝업 호출이라 다른 행과 인자가 다르다.",AI,2026-11-20 13:01:16
-G5,G5-G028,V-e06826aa,V-e06826aa,ASIS,popItem.ShowDialog(),1,ShowDialog 호출 위치를 특정할 수 없어 단독으로 둔다.,AI,2026-11-20 13:01:16
-G5,G5-G029,V-f7f4012a,V-f7f4012a,RULE_SCREEN,SCP0028 Excel 양식 버킷,1,"Excel 양식의 입력 버킷 확인으로, 팝업 인자와는 요소가 다르다.",AI,2026-11-20 13:01:16
+G5,G5-G001,EG-30a77e98,EG-30a77e98,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete PERIOD,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G002,EG-3312dae6,EG-3312dae6,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model CORNERS,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G003,EG-4271840d,EG-4271840d,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_ARG,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G004,EG-6ce9009f,EG-6ce9009f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_ARG,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G005,EG-6f00d86c,EG-6f00d86c,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DIV_FIXED,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G006,EG-7070bcc6,EG-7070bcc6,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input PERIOD,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G007,EG-8bbf1461,EG-8bbf1461,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete DIV_FIXED,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G008,EG-8dca56be,EG-8dca56be,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model PERIOD,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G009,EG-a6dd5cd7,EG-a6dd5cd7,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input FILTER_ARG,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G010,EG-c404de5e,EG-c404de5e,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model DIV_FIXED,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G011,T-247bdc3c,T-247bdc3c,TRACE,clbFromSite / From Site,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G012,T-3a8b1d0e,T-3a8b1d0e,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G013,T-3dbd9fe5,T-3dbd9fe5,TRACE,TRANS_MODE_CODE / Trans Mode,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G014,T-47a23fbe,T-47a23fbe,TRACE,**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G015,T-484c739b,T-484c739b,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,단독,코드,2026-11-25 02:06:37
+G5,G5-G016,T-4c9f8629,T-4c9f8629,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,단독,코드,2026-11-25 02:06:37
+G5,G5-G017,T-57afcab2,T-57afcab2,TRACE,clbToSite / To Site,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G018,T-a806b129,T-a806b129,TRACE,P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP · 6 (division/opGroup/from/to/item/actionFlag),1,단독,코드,2026-11-25 02:06:37
+G5,G5-G019,V-26b0134a,V-26b0134a,ASIS,new SCM0002_ItembyDivisionPopup(),1,단독,코드,2026-11-25 02:06:37
+G5,G5-G020,V-46f73ab8,V-46f73ab8,ASIS,popItem.ShowDialog(),1,단독,코드,2026-11-25 02:06:37
+G5,G5-G021,V-480372c9,V-480372c9,ASIS,"popItem.Form_Load(""D"", sDivision_id.ToString())",1,단독,코드,2026-11-25 02:06:37
+G5,G5-G022,V-4ad19f40,V-4ad19f40,ASIS,new SCM0002_ShipmentLotSizePopup(),1,단독,코드,2026-11-25 02:06:37
+G5,G5-G023,V-86b2f489,V-86b2f489,ASIS,"popItem.Form_Load(""I"", sDivision_id.ToString())",1,단독,코드,2026-11-25 02:06:37
+G5,G5-G024,V-99331be4,V-99331be4,SEARCH,조회조건 Model,1,단독,코드,2026-11-25 02:06:37
+G5,G5-G025,V-99c509aa,V-99c509aa,ASIS,new SCM0002_ShipmentLotSizePopup(),1,단독,코드,2026-11-25 02:06:37
+G5,G5-G026,V-b9f0504a,V-b9f0504a,ASIS,popItem.ShowDialog(),1,단독,코드,2026-11-25 02:06:37
+G5,G5-G027,V-dc8f2fac,V-dc8f2fac,ASIS,"popItem.Form_Load(true, division, sScmSite, sProject, sItemId)",1,단독,코드,2026-11-25 02:06:37
+G5,G5-G028,V-e06826aa,V-e06826aa,ASIS,popItem.ShowDialog(),1,단독,코드,2026-11-25 02:06:37
+G5,G5-G029,V-f7f4012a,V-f7f4012a,RULE_SCREEN,SCP0028 Excel 양식 버킷,1,단독,코드,2026-11-25 02:06:37
 G6,G6-G001,T-085f39dd,T-085f39dd,TRACE,clbFromSite / From Site,1,단독,코드,2026-11-20 13:00:51
 G6,G6-G002,T-38f907e2,T-38f907e2,TRACE,txtItemId / Model / Item Id,1,단독,코드,2026-11-20 13:00:51
 G6,G6-G003,T-482ab29e,T-482ab29e,TRACE,`SetChangedControl` cascade (cs:158~171) · Division 변경 → From/To Site 재조회(divisionId 키) + reset,1,단독,코드,2026-11-20 13:00:51
@@ -669,12 +694,14 @@ G7,G7-G004,V-38508365,V-38508365,SEARCH,조회조건 Division*,1,단독,코드,2
 G7,G7-G005,V-560e8298,V-560e8298,SEARCH,조회조건 Trans Mode,1,단독,코드,2026-11-20 13:00:51
 G7,G7-G006,V-b634fff7,V-b634fff7,SEARCH,조회조건 Operation Group,1,단독,코드,2026-11-20 13:00:51
 G7,G7-G007,V-d01b7aa9,V-d01b7aa9,SEARCH,조회조건 From Site,1,단독,코드,2026-11-20 13:00:51
-G8,G8-G001,EG-c64a2df4,EG-c64a2df4,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_CASE,1,단독,코드,2026-11-20 13:00:51
-G8,G8-G002,EG-e261e0b7,EG-e261e0b7,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_CASE,1,단독,코드,2026-11-20 13:00:51
-G8,G8-G003,V-93e5a09c,V-93e5a09c,SEARCH,조회조건 Model,1,단독,코드,2026-11-20 13:00:51
-G9,G9-G001,EG-1d1dfd47,EG-1d1dfd47,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_COMMA,1,단독,코드,2026-11-20 13:00:51
-G9,G9-G002,EG-3dad877d,EG-3dad877d,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_COMMA,1,단독,코드,2026-11-20 13:00:51
-G9,G9-G003,V-ed2ee896,V-ed2ee896,SEARCH,조회조건 Model,1,단독,코드,2026-11-20 13:00:51
+G8,G8-G001,EG-1f02e6fc,EG-1f02e6fc,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input FILTER_CASE,1,단독,코드,2026-11-25 02:06:37
+G8,G8-G002,EG-c64a2df4,EG-c64a2df4,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_CASE,1,단독,코드,2026-11-25 02:06:37
+G8,G8-G003,EG-e261e0b7,EG-e261e0b7,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_CASE,1,단독,코드,2026-11-25 02:06:37
+G8,G8-G004,V-93e5a09c,V-93e5a09c,SEARCH,조회조건 Model,1,단독,코드,2026-11-25 02:06:37
+G9,G9-G001,EG-1d1dfd47,EG-1d1dfd47,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete FILTER_COMMA,1,단독,코드,2026-11-25 02:06:37
+G9,G9-G002,EG-3dad877d,EG-3dad877d,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model FILTER_COMMA,1,단독,코드,2026-11-25 02:06:37
+G9,G9-G003,EG-f3d3bcfa,EG-f3d3bcfa,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input FILTER_COMMA,1,단독,코드,2026-11-25 02:06:37
+G9,G9-G004,V-ed2ee896,V-ed2ee896,SEARCH,조회조건 Model,1,단독,코드,2026-11-25 02:06:37
 H1,H1-G001,V-13f34fc0,V-13f34fc0,COLUMN,Shipment Lot Size.TRANS_MODE_CODE (Trans Mode),1,단독,코드,2026-11-20 13:00:51
 H1,H1-G002,V-312c1d29,V-312c1d29,COLUMN,Shipment Lot Size.DIVISION_ID (Division),1,단독,코드,2026-11-20 13:00:51
 H1,H1-G003,V-4c720367,V-4c720367,COLUMN,Shipment Lot Size.TO_SITE_DESCRIPTION (To Site),1,단독,코드,2026-11-20 13:00:51
@@ -693,14 +720,13 @@ H1,H1-G015,V-dd38e808,V-dd38e808,COLUMN,Shipment Lot Size.NICK_NAME (Nick Name),
 H1,H1-G016,V-e6aa4e45,V-e6aa4e45,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-20 13:00:51
 H1,H1-G017,V-f6ef3a9d,V-f6ef3a9d,COLUMN,Shipment Lot Size.CREATED_BY (Created By),1,단독,코드,2026-11-20 13:00:51
 H1,H1-G018,V-f879d742,V-f879d742,COLUMN,Shipment Lot Size.TO_SITE (To Site),1,단독,코드,2026-11-20 13:00:51
-H10,H10-G001,V-80d7f29e,V-80d7f29e,RULE_SCREEN,SCP0028 저장 취소 요청 없음,1,단독,코드,2026-11-20 13:00:51
-H10,H10-G002,V-8a2d8bb8,V-8a2d8bb8,RULE_SCREEN,SCP0028 시나리오 [자동] 조회 중 Loading 토스트 없음,1,단독,코드,2026-11-20 13:00:51
-H10,H10-G003,V-c346a4a2,V-c346a4a2,RULE_SCREEN,SCP0028 시나리오 [자동] 편집 중 Input 실행 → MSG00680(DM-52 일반 규칙),1,단독,코드,2026-11-20 13:00:51
+H10,H10-G001,V-80d7f29e,V-80d7f29e,RULE_SCREEN,SCP0028 저장 취소 요청 없음,1,단독,코드,2026-11-20 16:01:19
+H10,H10-G002,V-8a2d8bb8,V-8a2d8bb8,RULE_SCREEN,SCP0028 시나리오 [자동] 조회 중 Loading 토스트 없음,1,단독,코드,2026-11-20 16:01:19
 H11,H11-G001,V-4633ca25,V-4633ca25,RULE_SCREEN,SCP0028 저장 중 로딩,1,"This row checks only the Save action with a 1.5-second response delay, so its condition and scope differ from the next row.",AI,2026-11-20 13:00:59
 H11,H11-G002,V-dbc1fcb2,V-dbc1fcb2,RULE_SCREEN,SCP0028 화면,1,"This row covers both search and save requests and also expects zero unresponsiveness during server calls, so it checks more than V-4633ca25 and is kept separate.",AI,2026-11-20 13:00:59
 H12,H12-G001,V-2480338d,V-2480338d,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 13:00:52
-H13,H13-G001,V-8ab368de,V-8ab368de,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,"INCREMENT 컬럼의 음수 빨강 표시를 확인하는 행이며, LOT_SIZE와는 대상 컬럼이 달라 따로 측정해야 한다.",AI,2026-11-20 07:20:08
-H13,H13-G002,V-e06a0981,V-e06a0981,COLUMN,Shipment Lot Size.LOT_SIZE (Lot Size*),1,"LOT_SIZE 컬럼의 음수 빨강 표시를 확인하는 행이며, INCREMENT와는 대상 컬럼이 달라 따로 측정해야 한다.",AI,2026-11-20 07:20:08
+H13,H13-G001,V-8ab368de,V-8ab368de,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-25 02:06:37
+H13,H13-G002,V-e06a0981,V-e06a0981,COLUMN,Shipment Lot Size.LOT_SIZE (Lot Size*),1,단독,코드,2026-11-25 02:06:37
 H2,H2-G001,EG-514b2b1d,EG-514b2b1d,RULE_SCREEN,SCP0028 조건부 셀 색 SaveData SetBGColor ,1,"Checks that the TO-BE code implements the conditional cell color at SaveData. This is a check of code presence, not a runtime color measurement like V-a99ddb18, so it stays alone.",AI,2026-11-20 13:01:14
 H2,H2-G002,V-a99ddb18,V-a99ddb18,ASIS,siMain.SetBGColor,1,"Checks at runtime that the Action column has the same LockColor rule as AS-IS when action is M. This is a different kind of check from EG-514b2b1d, which only confirms the code exists.",AI,2026-11-20 13:01:14
 H2,H2-G003,T-092101ec,T-092101ec,TRACE,INCREMENT / Increment,1,"TRACE check of trace-table row 5 for INCREMENT. Its expected result (trace-table row) differs from V-65ae4e60's standard 3-color expectation, so it stays alone.",AI,2026-11-20 13:01:14
@@ -750,34 +776,34 @@ H3,H3-G014,T-8f5bdd5a,T-8f5bdd5a,TRACE,Query(ds) FindData (cs:368) · `useTabPro
 H3,H3-G015,T-a49f8dfc,T-a49f8dfc,TRACE,"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369) · `canEdit && isLotSizeCellEditable(binding)` beginningEdit cancel",1,단독,코드,2026-11-20 13:00:59
 H3,H3-G016,V-4edb4ebc,V-4edb4ebc,RULE_SCREEN,SCP0028 입력 중 병합 해제,1,단독,코드,2026-11-20 13:00:59
 H3,H3-G017,V-67a5a89e,V-67a5a89e,RULE_SCREEN,SCP0028 계층 병합 중간 미병합,1,단독,코드,2026-11-20 13:00:59
-H4,H4-G001,EG-176fe5e0,EG-176fe5e0,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input LAYOUT_SCROLL,1,"ShipmentLotSizePopup을 Input 버튼으로 연 상태의 스크롤 검사이며, Delete 버튼으로 열면 모드와 내용이 달라질 수 있어 단독으로 둔다.",AI,2026-11-20 13:01:23
-H4,H4-G002,EG-1a5a4d45,EG-1a5a4d45,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input LAYOUT_VIEW,1,"Input 버튼으로 연 팝업의 뷰포트 검사이며, Delete 버튼으로 연 팝업과 내용이 다를 수 있어 단독으로 둔다.",AI,2026-11-20 13:01:23
-H4,H4-G003,EG-1b00a92f,EG-1b00a92f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete LAYOUT_SCROLL,1,"Delete 버튼으로 연 팝업의 스크롤 검사이며, 여는 버튼(모드)이 달라 Input 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G004,EG-3c0db5c9,EG-3c0db5c9,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model RESIZE_MAX,1,"ItembyDivisionPopup 팝업의 최대 크기 조절 검사로, 같은 팝업·같은 동작을 다루는 다른 행이 없다.",AI,2026-11-20 13:01:23
-H4,H4-G005,EG-45768452,EG-45768452,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model DRAG,1,"ItembyDivisionPopup 팝업의 화면 밖 드래그 검사로, 같은 팝업·같은 동작을 다루는 다른 행이 없다.",AI,2026-11-20 13:01:23
-H4,H4-G006,EG-5387cb21,EG-5387cb21,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model RESIZE_W,1,"ItembyDivisionPopup 팝업의 가로만 조절 검사로, 같은 팝업·같은 동작을 다루는 다른 행이 없다.",AI,2026-11-20 13:01:23
-H4,H4-G007,EG-598dcb4c,EG-598dcb4c,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete LAYOUT_VIEW,1,"Delete 버튼으로 연 팝업의 뷰포트 검사이며, 여는 버튼(모드)이 달라 Input 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G008,EG-62b99a40,EG-62b99a40,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input RESIZE_MAX,1,"Input 버튼으로 연 팝업의 최대 조절 검사인데, 기대가 '뷰포트 제한'이라 Delete 행의 '뷰포트 안·닫기 보임'과 다르다.",AI,2026-11-20 13:01:23
-H4,H4-G009,EG-6484f732,EG-6484f732,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input RESIZE_W,1,"Input 버튼으로 연 팝업의 가로 조절 검사인데, 기대에 810 수치가 없어 Delete 행과 기대가 다르다.",AI,2026-11-20 13:01:23
-H4,H4-G010,EG-69e6afb2,EG-69e6afb2,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DRAG_BACK,1,"Input 버튼으로 연 팝업의 반대 방향 드래그 검사이며, 여는 버튼(모드)이 달라 Delete 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G011,EG-7aff185e,EG-7aff185e,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model DRAG_BACK,1,"ItembyDivisionPopup 팝업의 반대 방향 드래그 검사로, 같은 팝업·같은 동작을 다루는 다른 행이 없다.",AI,2026-11-20 13:01:23
-H4,H4-G012,EG-7c065345,EG-7c065345,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DRAG,1,"Input 버튼으로 연 팝업의 화면 밖 드래그 검사이며, 여는 버튼(모드)이 달라 Delete 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G013,EG-89567901,EG-89567901,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete RESIZE_MIN,1,"Delete 버튼으로 연 팝업의 축소 검사이며, 여는 버튼(모드)이 달라 Input 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G014,EG-9a56f5ab,EG-9a56f5ab,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete DRAG,1,"Delete 버튼으로 연 팝업의 화면 밖 드래그 검사이며, 여는 버튼(모드)이 달라 Input 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G015,EG-a8934499,EG-a8934499,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model LAYOUT_VIEW,1,"ItembyDivisionPopup 팝업의 뷰포트 검사로, 같은 팝업·같은 동작을 다루는 다른 행이 없다.",AI,2026-11-20 13:01:23
-H4,H4-G016,EG-d52e6cd3,EG-d52e6cd3,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete RESIZE_MAX,1,"Delete 버튼으로 연 팝업의 크게 조절 검사인데, Input 행과 기대 문구가 다르다.",AI,2026-11-20 13:01:23
-H4,H4-G017,EG-e793d7c4,EG-e793d7c4,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model LAYOUT_SCROLL,1,"ItembyDivisionPopup 팝업의 스크롤 검사로, 같은 팝업·같은 동작을 다루는 다른 행이 없다.",AI,2026-11-20 13:01:23
-H4,H4-G018,EG-ede85c8d,EG-ede85c8d,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete DRAG_BACK,1,"Delete 버튼으로 연 팝업의 반대 방향 드래그 검사이며, 여는 버튼(모드)이 달라 Input 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G019,EG-ef7af61a,EG-ef7af61a,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model RESIZE_MIN,1,"ItembyDivisionPopup 팝업의 축소 검사로, 같은 팝업·같은 동작을 다루는 다른 행이 없다.",AI,2026-11-20 13:01:23
-H4,H4-G020,EG-f094b59b,EG-f094b59b,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input RESIZE_MIN,1,"Input 버튼으로 연 팝업의 축소 검사이며, 여는 버튼(모드)이 달라 Delete 행과 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G021,EG-f1dcb664,EG-f1dcb664,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete RESIZE_W,1,"Delete 버튼으로 연 팝업의 가로 조절 검사인데, 기대에 810 수치가 있어 Input 행과 기대가 다르다.",AI,2026-11-20 13:01:23
-H4,H4-G022,T-ece165f6,T-ece165f6,TRACE,SCP0028 화면,1,대조표 추적 행으로 AS-IS/TO-BE 컬럼 폭 대조라는 다른 성질을 확인하므로 묶지 않는다.,AI,2026-11-20 13:01:23
-H4,H4-G023,V-1dd68872,V-1dd68872,RULE_SCREEN,SCP0028 화면,1,화면 전체의 스크롤·최소 크기·조회조건 높이 36px를 한꺼번에 보는 복합 기대여서 조회 뒤 스크롤만 보는 행과 다르다.,AI,2026-11-20 13:01:23
-H4,H4-G024,V-225e806d,V-225e806d,RULE_SCREEN,SCP0028 헤더 글자 잘림,1,"조회 뒤 헤더 글자 잘림을 보는 행으로, 다른 행과 대상 요소가 다르다.",AI,2026-11-20 13:01:23
-H4,H4-G025,V-5b9b110e,V-5b9b110e,RULE_SCREEN,SCP0028 불필요 스크롤,1,"조회 뒤 상태의 바깥 스크롤만 보는 행으로, 상태와 기대가 V-1dd68872와 달라 묶지 않는다.",AI,2026-11-20 13:01:23
-H4,H4-G026,V-8a4bb82a,V-8a4bb82a,RULE_SCREEN,SCP0028 헤더 높이 유지,1,"조회와 Division 전환 전후의 헤더 높이 유지를 보는 행으로, 다른 행과 대상 요소가 다르다.",AI,2026-11-20 13:01:23
-H4,H4-G027,V-9e35a1d4,V-9e35a1d4,RULE_SCREEN,SCP0028 조회조건 겹침 1920,1,폭 1920 조건에서 조회조건 겹침을 보므로 1366 행과 조건이 다르다.,AI,2026-11-20 13:01:23
-H4,H4-G028,V-abf7496d,V-abf7496d,RULE_SCREEN,SCP0028 조회조건 겹침 1366,1,폭 1366 조건에서 조회조건 겹침을 보므로 1920 행과 조건이 다르다.,AI,2026-11-20 13:01:23
+H4,H4-G001,EG-176fe5e0,EG-176fe5e0,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input LAYOUT_SCROLL,1,"ShipmentLotSizePopup을 Input 버튼으로 열었을 때의 스크롤 검사이며, Delete로 연 팝업은 상태가 다를 수 있어 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G002,EG-1a5a4d45,EG-1a5a4d45,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input LAYOUT_VIEW,1,"ShipmentLotSizePopup을 Input 버튼으로 열었을 때 뷰포트 안에 있는지 보는 검사이며, Delete로 연 경우와 상태가 다를 수 있어 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G003,EG-1b00a92f,EG-1b00a92f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete LAYOUT_SCROLL,1,"ShipmentLotSizePopup을 Delete 버튼으로 열었을 때의 스크롤 검사로, Input 쪽과 상태가 다를 수 있어 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G004,EG-3c0db5c9,EG-3c0db5c9,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model RESIZE_MAX,1,"ItembyDivisionPopup 최대 크기 조절 검사로, 대상 팝업이 다르므로 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G005,EG-45768452,EG-45768452,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model DRAG,1,"ItembyDivisionPopup을 화면 밖으로 드래그하는 검사로, 대상 팝업이 다르므로 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G006,EG-5387cb21,EG-5387cb21,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model RESIZE_W,1,"ItembyDivisionPopup 가로 조절 검사로, 대상 팝업이 다르므로 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G007,EG-598dcb4c,EG-598dcb4c,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete LAYOUT_VIEW,1,"ShipmentLotSizePopup을 Delete 버튼으로 열었을 때 뷰포트 안에 있는지 보는 검사로, 여는 버튼(상태)이 달라 Input 쪽과 묶지 않는다.",AI,2026-11-25 02:07:01
+H4,H4-G008,EG-62b99a40,EG-62b99a40,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input RESIZE_MAX,1,"Input 버튼으로 연 팝업의 최대 조절 검사이며, 기대 결과가 '뷰포트 제한'으로 Delete 쪽('닫기 보임' 포함)과 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G009,EG-6484f732,EG-6484f732,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input RESIZE_W,1,"Input 버튼으로 연 팝업의 가로 조절 검사이며, 기대 결과에 높이 810이 없어 Delete 쪽과 기대가 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G010,EG-69e6afb2,EG-69e6afb2,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DRAG_BACK,1,"Input 버튼으로 연 팝업의 반대 방향 드래그 검사로, 여는 버튼(상태)이 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G011,EG-7aff185e,EG-7aff185e,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model DRAG_BACK,1,"ItembyDivisionPopup 반대 방향 드래그 검사로, 대상 팝업이 다르므로 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G012,EG-7c065345,EG-7c065345,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input DRAG,1,"Input 버튼으로 연 팝업의 화면 밖 드래그 검사로, 여는 버튼(상태)이 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G013,EG-89567901,EG-89567901,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete RESIZE_MIN,1,"Delete 버튼으로 연 팝업의 축소 검사로, 여는 버튼(상태)이 달라 Input 쪽과 묶지 않는다.",AI,2026-11-25 02:07:01
+H4,H4-G014,EG-9a56f5ab,EG-9a56f5ab,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete DRAG,1,"Delete 버튼으로 연 팝업의 화면 밖 드래그 검사로, 여는 버튼(상태)이 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G015,EG-a8934499,EG-a8934499,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model LAYOUT_VIEW,1,"ItembyDivisionPopup이 뷰포트 안에 있는지 보는 검사로, 대상 팝업이 다르므로 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G016,EG-d52e6cd3,EG-d52e6cd3,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete RESIZE_MAX,1,"Delete 버튼으로 연 팝업의 크게 조절 검사이며, 기대 결과가 Input 쪽 RESIZE_MAX와 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G017,EG-e793d7c4,EG-e793d7c4,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model LAYOUT_SCROLL,1,"ItembyDivisionPopup 스크롤 검사로, 대상 팝업이 다르므로 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G018,EG-ede85c8d,EG-ede85c8d,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete DRAG_BACK,1,"Delete 버튼으로 연 팝업의 반대 방향 드래그 검사로, 여는 버튼(상태)이 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G019,EG-ef7af61a,EG-ef7af61a,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model RESIZE_MIN,1,"ItembyDivisionPopup 축소 검사로, 대상 팝업이 다르므로 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G020,EG-f094b59b,EG-f094b59b,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input RESIZE_MIN,1,"Input 버튼으로 연 팝업의 축소 검사로, 여는 버튼(상태)이 달라 Delete 쪽과 묶지 않는다.",AI,2026-11-25 02:07:01
+H4,H4-G021,EG-f1dcb664,EG-f1dcb664,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete RESIZE_W,1,"Delete 버튼으로 연 팝업의 가로 조절(810 유지) 검사로, Input 쪽과 기대가 달라 단독으로 둔다.",AI,2026-11-25 02:07:01
+H4,H4-G022,T-ece165f6,T-ece165f6,TRACE,SCP0028 화면,1,대조표 컬럼 너비(as-is/to-be)를 추적하는 행이라 성질이 달라 묶지 않는다.,AI,2026-11-25 02:07:01
+H4,H4-G023,V-1dd68872,V-1dd68872,RULE_SCREEN,SCP0028 화면,1,"스크롤바, 최소 크기, 조회조건 높이 36px를 한 번에 보는 복합 기대이고 조회 전후 조건도 없어, 조회 뒤 스크롤 검사와 다르다.",AI,2026-11-25 02:07:01
+H4,H4-G024,V-225e806d,V-225e806d,RULE_SCREEN,SCP0028 헤더 글자 잘림,1,"조회 뒤 헤더 글자가 잘리는지 보는 검사로, 다른 행과 대상이 다르다.",AI,2026-11-25 02:07:01
+H4,H4-G025,V-5b9b110e,V-5b9b110e,RULE_SCREEN,SCP0028 불필요 스크롤,1,"조회 뒤 페이지·그리드 바깥 스크롤만 보는 검사로, 상태와 기대가 V-1dd68872와 다르다.",AI,2026-11-25 02:07:01
+H4,H4-G026,V-8a4bb82a,V-8a4bb82a,RULE_SCREEN,SCP0028 헤더 높이 유지,1,"조회·Division 전환 전후 헤더 높이를 비교하는 검사로, 대상과 기대가 다르다.",AI,2026-11-25 02:07:01
+H4,H4-G027,V-9e35a1d4,V-9e35a1d4,RULE_SCREEN,SCP0028 조회조건 겹침 1920,1,"화면 폭 1920에서 조회조건 칸 겹침을 보는 검사로, 폭 조건이 1366과 다르다.",AI,2026-11-25 02:07:01
+H4,H4-G028,V-abf7496d,V-abf7496d,RULE_SCREEN,SCP0028 조회조건 겹침 1366,1,"화면 폭 1366에서 조회조건 칸 겹침을 보는 검사로, 폭 조건이 1920과 다르다.",AI,2026-11-25 02:07:01
 H5,H5-G001,EG-45e90381,EG-45e90381,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model TITLE,1,단독,코드,2026-11-20 13:01:12
 H5,H5-G002,EG-6361a825,EG-6361a825,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete TITLE,1,단독,코드,2026-11-20 13:01:12
 H5,H5-G003,EG-c81d145e,EG-c81d145e,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input TITLE,1,단독,코드,2026-11-20 13:01:12
@@ -802,41 +828,41 @@ H5,H5-G021,V-98ff27f3,V-98ff27f3,SEARCH,조회조건 Division*,1,단독,코드,2
 H5,H5-G022,V-d4c01cb9,V-d4c01cb9,SEARCH,조회조건 To Site,1,단독,코드,2026-11-20 13:01:12
 H5,H5-G023,V-e7e611bb,V-e7e611bb,SEARCH,조회조건 Trans Mode,1,단독,코드,2026-11-20 13:01:12
 H5,H5-G024,V-e91ea18c,V-e91ea18c,SEARCH,조회조건 Valid,1,단독,코드,2026-11-20 13:01:12
-H6,H6-G001,EG-2219b2fc,EG-2219b2fc,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model SECTION_TITLE,1,"ItembyDivisionPopup(Model 조건 진입)의 섹션 타이틀 위치 검사로, 같은 팝업·같은 항목을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G002,EG-2644dff3,EG-2644dff3,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model BTN_ORDER,1,"ItembyDivisionPopup의 버튼 순서 검사로, 같은 팝업에 같은 항목을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G003,EG-2e65bc91,EG-2e65bc91,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete TOPLINE,1,"ShipmentLotSizePopup Delete('D') 진입의 가로줄 검사로, Input('I') 진입과는 상태(자동조회 여부, 행 수)가 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G004,EG-31faacc6,EG-31faacc6,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete NO_WIDTH,1,"Delete 진입 팝업의 No. 폭 검사로, 기대값(27px, 383행)이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G005,EG-52c5fc68,EG-52c5fc68,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input BTN_ORDER,1,"Input 진입 팝업의 버튼 순서 검사로, Delete 진입과는 상태가 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G006,EG-6be7f873,EG-6be7f873,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model NO_WIDTH,1,"ItembyDivisionPopup의 No. 폭 검사로, 기대값(34px, 9616행)이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G007,EG-6cc339e1,EG-6cc339e1,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input COUNT,1,"Input 진입 팝업의 조회 건수 검사로, 이 진입은 자동조회가 없어 Delete 진입과 상태가 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G008,EG-89799316,EG-89799316,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model COUNT,1,"ItembyDivisionPopup의 조회 건수 검사로, 대상 팝업이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G009,EG-8d104ad6,EG-8d104ad6,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete BTN_ORDER,1,"Delete 진입 팝업의 버튼 순서 검사로, Input 진입과는 상태가 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G010,EG-a1a860f0,EG-a1a860f0,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input NO_COL,1,"Input 진입 팝업의 No. 컬럼 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G011,EG-af67cddc,EG-af67cddc,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete NO_COL,1,"Delete 진입 팝업의 No. 컬럼 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G012,EG-b0d10a90,EG-b0d10a90,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model NO_COL,1,"ItembyDivisionPopup의 No. 컬럼 검사로, 대상 팝업이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G013,EG-b2b9b2fb,EG-b2b9b2fb,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input SECTION_TITLE,1,"Input 진입 팝업의 섹션 타이틀 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G014,EG-b3b6c195,EG-b3b6c195,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input NO_WIDTH,1,"Input 진입 팝업의 No. 폭 검사로, 기대값(13px, 0행)이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G015,EG-cfb36dbd,EG-cfb36dbd,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model TOPLINE,1,"ItembyDivisionPopup의 가로줄 검사로, 대상 팝업이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G016,EG-e04489c3,EG-e04489c3,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete SECTION_TITLE,1,"Delete 진입 팝업의 섹션 타이틀 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G017,EG-f28038e7,EG-f28038e7,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input TOPLINE,1,"Input 진입 팝업의 가로줄 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G018,EG-f3ab83c2,EG-f3ab83c2,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete COUNT,1,"Delete 진입 팝업의 조회 건수 검사로, Input 진입과는 상태가 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G019,T-0855373f,T-0855373f,TRACE,clbToSite / To Site,1,"To Site 조건 하나를 추적하는 대조표 행으로, 같은 대상을 보는 다른 행이 없다.",AI,2026-11-20 13:01:39
-H6,H6-G020,T-1417e33a,T-1417e33a,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,"툴바 Delete 버튼이 보이지만 동작하지 않는지를 추적하는 행으로, 다른 행과 확인하는 성질이 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G021,T-31170afd,T-31170afd,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,"팝업 검색영역 배치와 Find 버튼 구현을 추적하는 행으로, 대상 요소가 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G022,T-449b82ac,T-449b82ac,TRACE,clbFromSite / From Site,1,"From Site 조건을 추적하는 대조표 행으로, To Site와는 다른 조건이다.",AI,2026-11-20 13:01:39
-H6,H6-G023,T-505b6f16,T-505b6f16,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,"D/I 진입 시 자동조회 여부를 추적하는 행으로, 팝업 표준 외형 검사와 성질이 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G024,T-c7a94f1d,T-c7a94f1d,TRACE,TRANS_MODE_CODE / Trans Mode,1,"TRANS_MODE_CODE 컬럼 메타를 추적하는 행으로, 대상 컬럼이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G025,T-e691090a,T-e691090a,TRACE,P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP · 6 (division/opGroup/from/to/item/actionFlag),1,"팝업 조회 프로시저의 파라미터 6개를 추적하는 행으로, 대상이 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G026,T-fa46d98c,T-fa46d98c,TRACE,**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG,1,"팝업 OK(SaveData)의 메시지 분기를 추적하는 행으로, 대상과 기대가 다른 행과 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G027,V-5123358d,V-5123358d,ASIS,popItem.ShowDialog(),1,ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다.,AI,2026-11-20 13:01:39
-H6,H6-G028,V-6cb6bfa8,V-6cb6bfa8,ASIS,"popItem.Form_Load(""D"", sDivision_id.ToString())",1,'D' 모드 Form_Load 지점이다. 기대값이 세 항목을 합친 것이어서 개별 규칙 행과 같다고 보기 어려워 단독으로 두었다.,AI,2026-11-20 13:01:39
-H6,H6-G029,V-97b0fc4e,V-97b0fc4e,ASIS,new SCM0002_ItembyDivisionPopup(),1,ItembyDivisionPopup 생성 지점이다. 기대값이 세 항목을 합친 것이어서 개별 규칙 행과 묶기에 확신이 없다.,AI,2026-11-20 13:01:39
-H6,H6-G030,V-a9485a6a,V-a9485a6a,ASIS,"popItem.Form_Load(true, division, sScmSite, sProject, sItemId)",1,"ItembyDivisionPopup의 Form_Load 지점으로, 생성 지점과 같은 진입인지 확신할 수 없다.",AI,2026-11-20 13:01:39
-H6,H6-G031,V-aa6bec9e,V-aa6bec9e,ASIS,new SCM0002_ShipmentLotSizePopup(),1,"ShipmentLotSizePopup 생성 지점으로, Input 진입과 Delete 진입 중 어느 쪽인지 알 수 없다.",AI,2026-11-20 13:01:39
-H6,H6-G032,V-c2d97238,V-c2d97238,ASIS,new SCM0002_ShipmentLotSizePopup(),1,ShipmentLotSizePopup 생성 지점이다. V-aa6bec9e와 문장은 같지만 다른 진입(I/D)일 수 있어 묶지 않았다.,AI,2026-11-20 13:01:39
-H6,H6-G033,V-c4a9dc2c,V-c4a9dc2c,ASIS,popItem.ShowDialog(),1,ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다.,AI,2026-11-20 13:01:39
-H6,H6-G034,V-d41bec0d,V-d41bec0d,ASIS,"popItem.Form_Load(""I"", sDivision_id.ToString())",1,"'I' 모드 Form_Load 지점으로, 'D' 모드와는 상태가 다르다.",AI,2026-11-20 13:01:39
-H6,H6-G035,V-d816896f,V-d816896f,ASIS,popItem.ShowDialog(),1,ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다.,AI,2026-11-20 13:01:39
+H6,H6-G001,EG-2219b2fc,EG-2219b2fc,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model SECTION_TITLE,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G002,EG-2644dff3,EG-2644dff3,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model BTN_ORDER,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G003,EG-2e65bc91,EG-2e65bc91,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete TOPLINE,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G004,EG-31faacc6,EG-31faacc6,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete NO_WIDTH,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G005,EG-52c5fc68,EG-52c5fc68,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input BTN_ORDER,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G006,EG-6be7f873,EG-6be7f873,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model NO_WIDTH,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G007,EG-6cc339e1,EG-6cc339e1,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input COUNT,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G008,EG-89799316,EG-89799316,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model COUNT,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G009,EG-8d104ad6,EG-8d104ad6,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete BTN_ORDER,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G010,EG-a1a860f0,EG-a1a860f0,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input NO_COL,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G011,EG-af67cddc,EG-af67cddc,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete NO_COL,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G012,EG-b0d10a90,EG-b0d10a90,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model NO_COL,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G013,EG-b2b9b2fb,EG-b2b9b2fb,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input SECTION_TITLE,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G014,EG-b3b6c195,EG-b3b6c195,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input NO_WIDTH,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G015,EG-cfb36dbd,EG-cfb36dbd,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model TOPLINE,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G016,EG-e04489c3,EG-e04489c3,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete SECTION_TITLE,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G017,EG-f28038e7,EG-f28038e7,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input TOPLINE,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G018,EG-f3ab83c2,EG-f3ab83c2,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete COUNT,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G019,T-0855373f,T-0855373f,TRACE,clbToSite / To Site,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G020,T-1417e33a,T-1417e33a,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,단독,코드,2026-11-25 02:06:40
+H6,H6-G021,T-31170afd,T-31170afd,TRACE,팝업 검색영역 + Find 버튼 (cs 상단 검색영역) · 공용 `SearchArea`(conditions 5칸 **size=4** = 한 줄 3칸) + 표준 Search 버튼 `LBL,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G022,T-449b82ac,T-449b82ac,TRACE,clbFromSite / From Site,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G023,T-505b6f16,T-505b6f16,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,단독,코드,2026-11-25 02:06:40
+H6,H6-G024,T-c7a94f1d,T-c7a94f1d,TRACE,TRANS_MODE_CODE / Trans Mode,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G025,T-e691090a,T-e691090a,TRACE,P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP · 6 (division/opGroup/from/to/item/actionFlag),1,단독,코드,2026-11-25 02:06:40
+H6,H6-G026,T-fa46d98c,T-fa46d98c,TRACE,**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG,1,단독,코드,2026-11-25 02:06:40
+H6,H6-G027,V-5123358d,V-5123358d,ASIS,popItem.ShowDialog(),1,단독,코드,2026-11-25 02:06:40
+H6,H6-G028,V-6cb6bfa8,V-6cb6bfa8,ASIS,"popItem.Form_Load(""D"", sDivision_id.ToString())",1,단독,코드,2026-11-25 02:06:40
+H6,H6-G029,V-97b0fc4e,V-97b0fc4e,ASIS,new SCM0002_ItembyDivisionPopup(),1,단독,코드,2026-11-25 02:06:40
+H6,H6-G030,V-a9485a6a,V-a9485a6a,ASIS,"popItem.Form_Load(true, division, sScmSite, sProject, sItemId)",1,단독,코드,2026-11-25 02:06:40
+H6,H6-G031,V-aa6bec9e,V-aa6bec9e,ASIS,new SCM0002_ShipmentLotSizePopup(),1,단독,코드,2026-11-25 02:06:40
+H6,H6-G032,V-c2d97238,V-c2d97238,ASIS,new SCM0002_ShipmentLotSizePopup(),1,단독,코드,2026-11-25 02:06:40
+H6,H6-G033,V-c4a9dc2c,V-c4a9dc2c,ASIS,popItem.ShowDialog(),1,단독,코드,2026-11-25 02:06:40
+H6,H6-G034,V-d41bec0d,V-d41bec0d,ASIS,"popItem.Form_Load(""I"", sDivision_id.ToString())",1,단독,코드,2026-11-25 02:06:40
+H6,H6-G035,V-d816896f,V-d816896f,ASIS,popItem.ShowDialog(),1,단독,코드,2026-11-25 02:06:40
 H7,H7-G001,V-135bc955,V-135bc955,RULE_SCREEN,SCP0028 Excel 양식 2단 머리글,1,단독,코드,2026-11-20 13:01:14
 H7,H7-G002,V-3d372294,V-3d372294,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 13:01:14
 H7,H7-G003,V-8c8d16b3,V-8c8d16b3,RULE_SCREEN,SCP0028 Excel 틀 고정,1,단독,코드,2026-11-20 13:01:14
@@ -849,9 +875,9 @@ H8,H8-G003,V-8028b0e3,V-8028b0e3,COLUMN,Shipment Lot Size.CREATION_DATE (Creatio
 H8,H8-G004,V-c3eedb77,V-c3eedb77,RULE_SCREEN,SCP0028 총 건수 천단위,1,단독,코드,2026-11-20 13:01:14
 H8,H8-G005,V-da75db3d,V-da75db3d,COLUMN,Shipment Lot Size.INCREMENT (Increment*),1,단독,코드,2026-11-20 13:01:14
 H9,H9-G001,V-2f8d5085,V-2f8d5085,RULE_SCREEN,SCP0028 칸 폭 메타,1,단독,코드,2026-11-20 13:01:14
-I1,I1-G001,V-2aef119a,V-2aef119a,RULE_SCREEN,SCP0028 시나리오 CN 언어 조회 건수 총/건 표기,1,단독,코드,2026-11-20 13:01:14
-I1,I1-G002,V-ca2072cf,V-ca2072cf,RULE_SCREEN,SCP0028 시나리오 KO 변경 없이 저장 → KO 수정사항 없음 알림,1,단독,코드,2026-11-20 13:01:14
-I1,I1-G003,V-cf28ca72,V-cf28ca72,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 13:01:14
+I1,I1-G001,V-2aef119a,V-2aef119a,RULE_SCREEN,SCP0028 시나리오 CN 언어 조회 건수 총/건 표기,1,"CN 언어로 조회한 뒤 결과 건수 문구(총/건)에 한자 표기가 없는지 보는 행이라, 대상과 기대 결과가 다른 두 행과 다르다.",AI,2026-11-25 02:06:48
+I1,I1-G002,V-ca2072cf,V-ca2072cf,RULE_SCREEN,SCP0028 시나리오 KO 변경 없이 저장 → KO 수정사항 없음 알림,1,"KO 언어에서 변경 없이 저장했을 때 '수정사항 없음' 알림이 뜨고 저장 요청이 0건인지 보는 행이라, 대상 요소(저장 버튼)와 기대 결과가 다르다.",AI,2026-11-25 02:06:48
+I1,I1-G003,V-cf28ca72,V-cf28ca72,RULE_SCREEN,SCP0028 화면,1,"화면 전체에서 FE가 쓰는 코드가 3개 언어에 모두 등록됐고 '_' 폴백이 노출되지 않는지 보는 포괄 검사라, 특정 시나리오 행과 범위·기대가 달라 묶으면 검사가 빠진다.",AI,2026-11-25 02:06:48
 I2,I2-G001,EG-251309cf,EG-251309cf,RULE_SCREEN,SCP0028 언어 전환 EN 데이터,1,단독,코드,2026-11-20 13:01:14
 I2,I2-G002,EG-2af92b82,EG-2af92b82,RULE_SCREEN,SCP0028 언어 전환 조회 버튼,1,단독,코드,2026-11-20 13:01:14
 I2,I2-G003,EG-393dff7e,EG-393dff7e,RULE_SCREEN,SCP0028 언어 전환 EN,1,단독,코드,2026-11-20 13:01:14
@@ -958,26 +984,26 @@ J4,J4-G010,EG-ffd49731,EG-ffd49731,RULE_SCREEN,SCP0028 EG382 메뉴 트리 SCP/4
 J4,J4-G011,V-acd1b960,V-acd1b960,RULE_SCREEN,SCP0028 메뉴 오픈,1,단독,코드,2026-11-20 13:01:14
 J4,J4-G012,V-b45d4015,V-b45d4015,RULE_SCREEN,SCP0028 탭 이름,1,단독,코드,2026-11-20 13:01:14
 K-SA,K-SA-G001,T-945773bf,T-945773bf,TRACE,SCP0028 화면,1,단독,코드,2026-11-20 07:21:31
-K1,K1-G001,EG-1ab3f3fd,EG-1ab3f3fd,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_FILTER,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G002,EG-4bc05a10,EG-4bc05a10,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_FILTER_COUNT,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G003,EG-7177257f,EG-7177257f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_SORT,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G004,EG-79db1264,EG-79db1264,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_SORT,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G005,EG-9a0c5212,EG-9a0c5212,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_FILTER_COUNT,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G006,EG-a726c68f,EG-a726c68f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_FILTER,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G007,EG-f4b4cce0,EG-f4b4cce0,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_FILTER,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G008,EG-fa9c06b1,EG-fa9c06b1,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_SORT,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G009,V-0eff9351,V-0eff9351,RULE_SCREEN,SCP0028 동적 칸 정렬·필터,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G010,V-1f6042d3,V-1f6042d3,RULE_SCREEN,SCP0028 정렬 상태 Copy·Hide,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G011,V-46adcb8d,V-46adcb8d,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G012,V-a6d2a7df,V-a6d2a7df,RULE_SCREEN,SCP0028 필터 유지 재조회,1,단독,코드,2026-11-20 13:01:14
-K1,K1-G013,V-e0f9b50c,V-e0f9b50c,RULE_SCREEN,SCP0028 필터 편집기 항목,1,단독,코드,2026-11-20 13:01:14
-K2,K2-G001,EG-45863dbe,EG-45863dbe,RULE_SCREEN,SCP0028 EG395 SCP0028 저장 후 비움,1,단독,코드,2026-11-20 13:01:14
-K2,K2-G002,V-b685dddf,V-b685dddf,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 13:01:14
-K3,K3-G001,EG-c86c09ca,EG-c86c09ca,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_KEYS,1,단독,코드,2026-11-20 13:01:14
-K3,K3-G002,EG-d437848c,EG-d437848c,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_KEYS,1,단독,코드,2026-11-20 13:01:14
-K3,K3-G003,EG-e192f929,EG-e192f929,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_KEYS,1,단독,코드,2026-11-20 13:01:14
-K3,K3-G004,V-444ae05c,V-444ae05c,RULE_SCREEN,SCP0028 붙여넣기 코드 동반,1,단독,코드,2026-11-20 13:01:14
-K3,K3-G005,V-9d4a3179,V-9d4a3179,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 13:01:14
+K1,K1-G001,EG-1ab3f3fd,EG-1ab3f3fd,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_FILTER,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G002,EG-2a0a258c,EG-2a0a258c,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_FILTER_COUNT,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G003,EG-4bc05a10,EG-4bc05a10,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_FILTER_COUNT,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G004,EG-7177257f,EG-7177257f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_SORT,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G005,EG-79db1264,EG-79db1264,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_SORT,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G006,EG-9a0c5212,EG-9a0c5212,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_FILTER_COUNT,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G007,EG-a726c68f,EG-a726c68f,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_FILTER,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G008,EG-f4b4cce0,EG-f4b4cce0,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_FILTER,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G009,EG-fa9c06b1,EG-fa9c06b1,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_SORT,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G010,V-0eff9351,V-0eff9351,RULE_SCREEN,SCP0028 동적 칸 정렬·필터,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G011,V-1f6042d3,V-1f6042d3,RULE_SCREEN,SCP0028 정렬 상태 Copy·Hide,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G012,V-46adcb8d,V-46adcb8d,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G013,V-a6d2a7df,V-a6d2a7df,RULE_SCREEN,SCP0028 필터 유지 재조회,1,단독,코드,2026-11-20 21:41:46
+K1,K1-G014,V-e0f9b50c,V-e0f9b50c,RULE_SCREEN,SCP0028 필터 편집기 항목,1,단독,코드,2026-11-20 21:41:46
+K2,K2-G001,V-b685dddf,V-b685dddf,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-25 02:06:43
+K3,K3-G001,EG-c86c09ca,EG-c86c09ca,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Input GRID_KEYS,1,단독,코드,2026-11-20 21:41:46
+K3,K3-G002,EG-d437848c,EG-d437848c,RULE_SCREEN,SCP0028 팝업 SCM0002_ItembyDivisionPopup COND:Model GRID_KEYS,1,단독,코드,2026-11-20 21:41:46
+K3,K3-G003,EG-e192f929,EG-e192f929,RULE_SCREEN,SCP0028 팝업 SCM0002_ShipmentLotSizePopup BTN:Delete GRID_KEYS,1,단독,코드,2026-11-20 21:41:46
+K3,K3-G004,V-444ae05c,V-444ae05c,RULE_SCREEN,SCP0028 붙여넣기 코드 동반,1,단독,코드,2026-11-20 21:41:46
+K3,K3-G005,V-9d4a3179,V-9d4a3179,RULE_SCREEN,SCP0028 화면,1,단독,코드,2026-11-20 21:41:46
 K4,K4-G001,EG-171d98f7,EG-171d98f7,RULE_SCREEN,SCP0028 EG411 SAVE 버튼 조회 전 SCP/40/ADMIN,1,단독,코드,2026-11-20 13:01:14
 K4,K4-G002,EG-254f2d17,EG-254f2d17,RULE_SCREEN,SCP0028 EG411 INSERT 버튼 조회 전 SCP/40/SCP Tester,1,단독,코드,2026-11-20 13:01:14
 K4,K4-G003,EG-39bafa68,EG-39bafa68,RULE_SCREEN,SCP0028 EG411 SAVE 버튼 조회 전 SCP/81/SCM PI Admin,1,단독,코드,2026-11-20 13:01:14
@@ -1035,17 +1061,16 @@ M4,M4-G011,T-8ef356b6,T-8ef356b6,TRACE,btnInput,1,"btnInput 버튼의 추적 행
 M4,M4-G012,T-8f84f97b,T-8f84f97b,TRACE,"**toolbar DeleteButton remove-new (cs:213~224, R4)** · `hotkeyConfig.delete = () => undefined` (버튼 노출+무동작)",1,툴바 Delete 버튼이 보이기만 하고 동작하지 않는지 확인하는 행이라 기대가 다르다.,AI,2026-11-20 13:01:30
 M4,M4-G013,T-beee3244,T-beee3244,TRACE,"팝업 Form_Load `//FindData();` (cs:146) · **'D' 만 진입 자동조회, 'I' 는 자동조회 없음**(AS-IS 파리티 복원)",1,"팝업이 열릴 때 자동조회하는지('D'만 조회, 'I'는 조회 없음) 확인하는 행으로, 상태와 기대가 다르다.",AI,2026-11-20 13:01:30
 M4,M4-G014,T-fde69078,T-fde69078,TRACE,**팝업 OK `SaveData` (cs:308~369)** · `handleConfirm` — 그리드 0행→`MSG01091` / 체크 0건→`MSG00014` / 'D' 삭제확인→`MSG,1,팝업 OK의 검증 메시지(MSG01091/MSG00014/MSG00683)와 체크한 행 반환을 확인하는 행이라 PICK_OK의 '대상 칸에 선택값' 기대와 다르다. 확신이 없어 단독으로 둔다.,AI,2026-11-20 13:01:30
-MS1,MS1-G001,EG-bd80125c,EG-bd80125c,RULE_SCREEN,SCP0028 화면 고정 한글 {0}은 {1} 보다 클 수 없습니다.,1,"화면에 고정된 한글 문구를 등록 코드로 바꿨는지 정적으로 점검하는 행이라, 특정 경로에서 MSG_ID 의미가 같은지 확인하는 다른 행들과 방법과 기대 결과가 다르다.",AI,2026-11-20 13:01:38
-MS1,MS1-G002,V-08ec4f80,V-08ec4f80,MSG,MSG00004,1,"SaveData 기본 경로의 MSG00004만 확인하며, 같은 ID가 나오는 SaveData(BRANCH)나 FindDelete 경로와 같은 호출 지점인지 확신할 수 없어 단독으로 둔다.",AI,2026-11-20 13:01:38
-MS1,MS1-G003,V-98e58390,V-98e58390,MSG,MSG00004,1,"SaveData 분기(BRANCH) 경로의 MSG00004로, 기본 경로와 같은 호출 지점이라는 근거가 없어 묶지 않는다.",AI,2026-11-20 13:01:38
-MS1,MS1-G004,V-43018ae7,V-43018ae7,MSG,MSG00004,1,"FindDelete 분기 경로의 MSG00004로, SaveData 경로와는 확인하는 대상 경로가 다르다.",AI,2026-11-20 13:01:38
-MS1,MS1-G005,V-1c79fc25,V-1c79fc25,MSG,MSG00006,1,"SaveData 경로의 MSG00006만 확인하는 행이며, 같은 메시지와 같은 경로를 확인하는 행이 따로 없다.",AI,2026-11-20 13:01:38
-MS1,MS1-G006,V-bbc7bc80,V-bbc7bc80,MSG,MSG00133,1,"SaveData 기본 경로의 MSG00133만 확인하며, 분기 경로와 같은 호출 지점인지 확신할 수 없어 단독으로 둔다.",AI,2026-11-20 13:01:38
-MS1,MS1-G007,V-6102c1f2,V-6102c1f2,MSG,MSG00133,1,"SaveData 분기(BRANCH) 경로의 MSG00133으로, 기본 경로와 같은 지점이라는 근거가 없어 묶지 않는다.",AI,2026-11-20 13:01:38
-MS1,MS1-G008,V-1a428856,V-1a428856,MSG,MSG00284,1,"FindDelete 경로의 MSG00284만 확인하는 행이며, 같은 메시지와 같은 경로를 확인하는 행이 따로 없다.",AI,2026-11-20 13:01:38
-MS1,MS1-G009,V-2692f262,V-2692f262,MSG,MSG00031,1,"FindDelete 경로의 MSG00031만 확인하는 행이며, 같은 메시지와 같은 경로를 확인하는 행이 따로 없다.",AI,2026-11-20 13:01:38
-MS1,MS1-G010,V-285fe540,V-285fe540,MSG,MSG00084,1,"checkValidSize 경로의 MSG00084로, 같은 경로의 MSG00099와 메시지가 달라 따로 둔다.",AI,2026-11-20 13:01:38
-MS1,MS1-G011,V-ff130081,V-ff130081,MSG,MSG00099,1,"checkValidSize 경로의 MSG00099로, 같은 경로의 MSG00084와 메시지가 달라 따로 둔다.",AI,2026-11-20 13:01:38
+MS1,MS1-G001,V-08ec4f80,V-08ec4f80,MSG,MSG00004,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G002,V-1a428856,V-1a428856,MSG,MSG00284,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G003,V-1c79fc25,V-1c79fc25,MSG,MSG00006,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G004,V-2692f262,V-2692f262,MSG,MSG00031,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G005,V-285fe540,V-285fe540,MSG,MSG00084,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G006,V-43018ae7,V-43018ae7,MSG,MSG00004,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G007,V-6102c1f2,V-6102c1f2,MSG,MSG00133,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G008,V-98e58390,V-98e58390,MSG,MSG00004,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G009,V-bbc7bc80,V-bbc7bc80,MSG,MSG00133,1,단독,코드,2026-11-20 16:01:46
+MS1,MS1-G010,V-ff130081,V-ff130081,MSG,MSG00099,1,단독,코드,2026-11-20 16:01:46
 N1,N1-G001,EG-e18fa1ad,EG-e18fa1ad,RULE_SCREEN,SCP0028 기준정보 키 존재 SCM_ADM_LOOKUP_MASTER_DETAIL,1,단독,코드,2026-11-20 13:01:23
 N1,N1-G002,V-965ac2dd,V-965ac2dd,RULE_SCREEN,SCP0028 조건 후보 기호 일색,1,단독,코드,2026-11-20 13:01:23
 N1,N1-G003,V-c80495b1,V-c80495b1,RULE_SCREEN,SCP0028 센티널 표시,1,단독,코드,2026-11-20 13:01:23

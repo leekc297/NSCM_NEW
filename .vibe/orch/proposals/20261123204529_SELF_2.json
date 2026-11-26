@@ -1,0 +1,105 @@
+{
+  "id": "20261123204529_SELF_2",
+  "at": "2026-11-23T20:45:29+09:00",
+  "ms": 1795434329921,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|ai메뉴n개미검증해소n행사용자매뉴얼내용보완n행자동보완n행에p",
+  "title": "사용자 지시 R37 같은 문제: tools/VibeManager/quick.json:1386 AI 메뉴 3개(🧪 미검증 해소 327행, 📘 사용자 매뉴얼 내용 보완 569행, 🧯 자동 보완 1386행)에 proofTasks 가 없어 AI 종료코드(r",
+  "evidence": "규칙 R37 \"AI 가 추측으로 결론을 내는 단계는 실제 실행(파싱, 실측, 시험) 결과와 대조하는 엔진을 두고 대조 전 결과는 미검증으로 표시함\" (원래 지시 2026-11-11 14:00 \"지금 VM 프로세스에 대해서 근본적인 질문을 하나 할게요 1. AS-IS C#.NET 을 TO-BE REACT 로 변환 2. AS-IS MSSQL 을 TO-BE ORACLE 로 변환 3. 정적, 동적으로 AS-IS 대비 TO-BE 기능 구현 확인 - TO-BE에서의 신규 RULE 적용분\") · tools/VibeManager/quick.json:1386 \"label\": \"🧯 자동 보완\",",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "세 항목에 proofTasks 를 추가함. 자동 보완과 미검증 해소에는 해당 행 부분 재측정 task, 매뉴얼 보완에는 매뉴얼 check task. workbench.js claudeMenuAfter 109행처럼 증명 전 결과는 '증명되지 않은 상태'로 표시함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T06:23:19+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T06:26:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0623"
+    },
+    {
+      "at": "2026-11-24T06:26:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T06:39:02+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T06:39:02+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전(06:31) ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤(06:35) ALL OK 74/74 PASS 1161 FAIL 0. node 로 quick.json 을 읽은 결과 proofTasks 메뉴 3개 → 6개: 🧪 미검증 해소 => [S8.checklistDelta], 📘 사용자 매뉴얼 내용 보완 => [UM.check], 🧯 자동 보완 => [S8.checklistDelta] · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T06-26-59_claude_orch.log",
+      "sec": 506,
+      "costUsd": 1.0037113,
+      "files": [
+        "tools/VibeManager/quick.json"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "AI 가 추측으로 결론을 내는 단계는 실제 실행(파싱, 실측, 시험) 결과와 대조하는 엔진을 두고 대조 전 결과는 미검증으로 표시함 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R37|tools/VibeManager/quick.json",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795468999191,
+  "autoFp": "f57e155ae6",
+  "applyStartMs": 1795469219423,
+  "verifyJudge": {
+    "at": "2026-11-24T06:35:27+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0623",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795469942133,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 2026-11-24 06:31 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.3s' → 반영 뒤 06:35 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.1s'. t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전(06:31) ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤(06:35) ALL OK 74/74 PASS 1161 FAIL 0. node 로 quick.json 을 읽은 결과 proofTasks 메뉴 3개 → 6개: 🧪 미검증 해소 => [S8.checklistDelta], 📘 사용자 매뉴얼 내용 보완 => [UM.check], 🧯 자동 보완 => [S8.checklistDelta]",
+    "note": "proofTasks 는 steps.json 의 기존 task id(S8.checklistDelta 1637행, UM.check 1025행)만 씀. 증명 실패 경고('보완이 증명되지 않은 상태')는 workbench.js claudeMenuAfter 109행이 이미 처리해 workbench.js 는 수정 안 함. 🧪 미검증 해소는 flow(batch) 메뉴이고 flow 의 claudeOf 단계가 claudeMenuAfter 를 부르는지는 미확인(추가 확인 후보 workbench.js:2995, 3365). 걸린 시간 약 12분, 오래 걸린 단계는 run_all 2회(각 213초)."
+  },
+  "snap": "prop_20261123204529_SELF_2"
+}

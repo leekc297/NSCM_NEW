@@ -1,0 +1,128 @@
+{
+ "id": "SCP0028",
+ "started": "2026-11-20 16:11:06.155",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-20 16:11:25.289",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SCP.Master.UIL.SCP0028_Shipment_Lot_Size",
+   "form_text": "Shipment Lot Size",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0028_Shipment_Lot_Size.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-20 16:11:30.551"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-20 16:11:33.916",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0028\\run_20261120_161106\\dump_load.json",
+   "control_count": 44,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-20 16:11:33.940"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-20 16:11:34.099",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0028\\run_20261120_161106\\shots\\SCP0028_01_load.png",
+   "width": 1920,
+   "height": 1200,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-20 16:11:34.147"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-20 16:11:34.467",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-20 16:11:35.073"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-20 16:11:44.100",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0028\\run_20261120_161106\\dump_find.json",
+   "control_count": 44,
+   "grid_count": 1,
+   "total": "Total : 1,735",
+   "time_status": "DB : 3.217s, UI : 0.085s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-20 16:11:44.123"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-20 16:11:44.452",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SCP0028\\run_20261120_161106\\shots\\SCP0028_02_find.png",
+   "width": 1920,
+   "height": 1200,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-20 16:11:44.506"
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 15,
+  "calls_with_params": 15
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SCP.Master.UIL.SCP0028_Shipment_Lot_Size",
+  "form_text": "Shipment Lot Size",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SCP\\Master\\SCP0028_Shipment_Lot_Size.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 3.217s, UI : 0.085s",
+  "total": "Total : 1,735",
+  "how": "status"
+ },
+ "t_open": "2026-11-20 16:11:25.271",
+ "t_find": "2026-11-20 16:11:34.251",
+ "dialogs": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 44,
+  "layout_items": 15,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 19,
+  "data_rows": 20,
+  "grid_rows": 1735,
+  "calls_total": 24,
+  "calls_screen": 15,
+  "calls_find": 4,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-20 16:11:45.316",
+ "exit": 0
+}

@@ -37,6 +37,14 @@ import {
   type SetKeyMap,
 } from '../utils/etc-sales-reports.merge';
 
+// 동적(월) 컬럼 너비 = 프로시저(GET_SPREAD_TITLE) COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+const DYN_COL_DEFAULT_WIDTH = 90;
+const spColumnWidth = (raw: string | number | null | undefined): number | undefined => {
+  const n = Number(String(raw ?? '').trim());
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
 // ⭐ DMF0049 EtcSalesReportsGrid — sales-reports(DMF0044) Grid 이식 (M_ 단일축 · **1단 헤더**
 //   [월 라벨 '2025-01'] · 배분/롤업 없음 · 2행 Measure 블록은 행 데이터 차원 — Grid 는 셀 편집만).
 //   편집 게이트 = evalEtcReportCell 4변수 매트릭스 (EDIT_FLAG×Measure×Div×시점 + ALL 차단).
@@ -246,7 +254,14 @@ const EtcSalesReportsGridBase = ({
   //     '2025-01' 그룹 아래 '2025-01' 1개짜리가 12개 생겼다(오구성).
   //   ⭐ REQ:CHAT-20260820-16 — `scale` 은 같은 SP 가 주는 `DATA_SCALE_NUMBER` 를 소비한다
   //     (동적 M_ 분기 실측 '3'). 표시·입력 정규화가 이 값 하나를 공유하므로 둘이 갈릴 수 없다.
-  type DynColMeta = { binding: string; label: string; sort: number; scale: number };
+  type DynColMeta = {
+    binding: string;
+    label: string;
+    sort: number;
+    scale: number;
+    /** SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+    width?: number;
+  };
   const dynColMetas = useMemo<DynColMeta[]>(() => {
     const titleRows = (spreadTitle ?? []).filter(r => dynKindOf(String(r.COLUMN_NAME ?? '')));
     if (titleRows.length > 0) {
@@ -260,6 +275,7 @@ const EtcSalesReportsGridBase = ({
           ),
           sort: Number(r.SORT_ORDER_NO ?? 0),
           scale: dataScaleOf(r.DATA_SCALE_NUMBER),
+          width: spColumnWidth(r.COLUMN_WIDTH),
         }))
         .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
@@ -316,7 +332,7 @@ const EtcSalesReportsGridBase = ({
         binding: m.binding,
         header: m.label,
         align: 'right',
-        width: 90,
+        width: m.width ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,

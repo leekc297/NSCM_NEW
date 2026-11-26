@@ -1,0 +1,115 @@
+{
+  "id": "20261124064957_SELF_2",
+  "at": "2026-11-24T06:49:57+09:00",
+  "ms": 1795470597359,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|history탭은hrow행양식이고eventspaintincn줄와fix",
+  "title": "사용자 지시 R153 같은 문제: tools/VibeManager/orchestra.js:910 History 탭은 hrow 행 양식이고, Events(paintInc 671줄)와 Fixes(paintProp 721줄)는 tlw, tls, tlm 타임라인 양",
+  "evidence": "규칙 R153 \"VMO 의 기록 성격 탭(Events, Fixes, History)은 같은 타임라인 양식으로 표시함\" (원래 지시 2026-11-20 10:13 \"현재 작업 완료 후 Incidents 의 Design 을 C 타임라인으로 변경해주세요.\") · tools/VibeManager/orchestra.js:910 h+='<div class=\"hrow\" data-hid=\"'+esc(e.id)+'\"><span class=\"tm\">'",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "paintHistList 를 paintInc 와 같은 tlw, tlm, tls 구조와 클래스로 그리고 hs-day, tlh 구분선만 유지함",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T06:21:41+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T06:25:36+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0621"
+    },
+    {
+      "at": "2026-11-26T06:25:39+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T06:38:47+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T06:38:48+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-26 06:26 실행: node --check 통과, run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.2s', t_webview_syntax.js 'ALL PASS'. 반영 뒤 2026-11-26 06:30~06:34 실행: node --check 통과, run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.2s', t_webview_syntax.js 'ALL PASS'. 옛 행 양식 class=\"hrow\" 0건 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T06-25-39_claude_orch.log",
+      "sec": 553,
+      "costUsd": 1.0767795,
+      "files": [
+        "tools/VibeManager/orchestra.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:08+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VMO 의 기록 성격 탭(Events, Fixes, History)은 같은 타임라인 양식으로 표시함 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R153|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795641701231,
+  "autoFp": "afebea6d8b",
+  "applyStartMs": 1795641939744,
+  "verifyJudge": {
+    "at": "2026-11-26T06:34:56+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0621",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795642727987,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js: 반영 전 통과 → 반영 뒤 통과 · node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 87/87 PASS 1422 FAIL 0' → 반영 뒤 'ALL OK 파일 87/87 PASS 1422 FAIL 0' · node tools/VibeManager/test/t_webview_syntax.js: 반영 전 ALL PASS → 반영 뒤 ALL PASS, FAIL 0줄"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "반영 전 2026-11-26 06:26 실행: node --check 통과, run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.2s', t_webview_syntax.js 'ALL PASS'. 반영 뒤 2026-11-26 06:30~06:34 실행: node --check 통과, run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.2s', t_webview_syntax.js 'ALL PASS'. 옛 행 양식 class=\"hrow\" 0건",
+    "note": "paintHistList 행을 hrow에서 paintInc와 같은 tle 구조(tm, dt, tb의 tt와 meta, kb)로 바꿈. hs-day와 tlh 구분선 유지. 감싸는 틀 tlw, tls, tlm은 567줄 HTML에 이미 있어 그대로 둠. 상세는 행 안 .kd.hdet로 펼치고 .open 표시함. 클릭 처리와 paintHistItem은 새 구조에 맞춤. CSS는 종류 8개 점 색(hd-*)을 넣고 .hdet>div 왼쪽 들여쓰기 136px를 없앰. 웹뷰 화면은 창 다시 로드 뒤 확인 필요(미확인)"
+  },
+  "snap": "prop_20261124064957_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

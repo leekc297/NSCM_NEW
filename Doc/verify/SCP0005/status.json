@@ -1,7 +1,232 @@
 {
  "screen": "SCP0005",
- "made": "2026-11-20 08:57",
- "checklist": null,
+ "made": "2026-11-26 08:14",
+ "checklist": {
+  "version": 13,
+  "total": 2138,
+  "totals": {
+   "PASS": 1214,
+   "FAIL": 47,
+   "판정필요": 25,
+   "미검증": 3,
+   "해당없음": 849
+  },
+  "axes": [
+   {
+    "axis": "1.디자인·다국어",
+    "total": 325,
+    "PASS": 207,
+    "FAIL": 21,
+    "판정필요": 1,
+    "미검증": 0,
+    "해당없음": 96
+   },
+   {
+    "axis": "2.AS-IS 로직",
+    "total": 262,
+    "PASS": 151,
+    "FAIL": 1,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 110
+   },
+   {
+    "axis": "3.SMOKE",
+    "total": 550,
+    "PASS": 247,
+    "FAIL": 17,
+    "판정필요": 3,
+    "미검증": 2,
+    "해당없음": 281
+   },
+   {
+    "axis": "4.CRUD",
+    "total": 596,
+    "PASS": 308,
+    "FAIL": 5,
+    "판정필요": 18,
+    "미검증": 1,
+    "해당없음": 264
+   },
+   {
+    "axis": "5.권한별 CRUD",
+    "total": 27,
+    "PASS": 5,
+    "FAIL": 0,
+    "판정필요": 0,
+    "미검증": 0,
+    "해당없음": 22
+   },
+   {
+    "axis": "분류 없음",
+    "total": 378,
+    "PASS": 296,
+    "FAIL": 3,
+    "판정필요": 3,
+    "미검증": 0,
+    "해당없음": 76
+   }
+  ],
+  "action": [
+   [
+    "V-660a833e",
+    "H5",
+    "SCP·SSP 컬럼·조회조건 라벨 Valid→Active"
+   ],
+   [
+    "V-2ca073e5",
+    "N1",
+    "SCP0005 센티널 표시"
+   ],
+   [
+    "V-0810a59e",
+    "H2",
+    "FROM_CITY"
+   ],
+   [
+    "V-4e4af2a4",
+    "F1",
+    "SCP0005 컬럼별 저장 왕복"
+   ],
+   [
+    "T-6d14c72c",
+    "M3",
+    "SCP0005_DistributionRoutePopup"
+   ],
+   [
+    "EG-a1c25099",
+    "M3",
+    "SCP0005 팝업 SCP0005_DistributionRoutePopup CELL:ROUTE_ID OPEN"
+   ],
+   [
+    "V-7cdbda05",
+    "H6",
+    "popCity.ShowDialog()"
+   ],
+   [
+    "EG-09469e15",
+    "H6",
+    "SCP0005 팝업 SCM0002_CitybyCountry BTN:btnToSrch BTN_ORDER"
+   ],
+   [
+    "V-616b4d31",
+    "H6",
+    "popCity.Form_Load(true, sCountry, sCity)"
+   ],
+   [
+    "V-087d756b",
+    "E3",
+    "SCP0005 Excel 필수 칸 빈 업로드"
+   ],
+   [
+    "T-2c4e7c8a",
+    "E4",
+    "MSG00265"
+   ],
+   [
+    "V-b4651880",
+    "H2",
+    "siMain.SetBGColor"
+   ],
+   [
+    "T-ece1c98b",
+    "E4",
+    "MSG00043"
+   ]
+  ],
+  "review": [
+   [
+    "V-d5a22e0f",
+    "M1",
+    "SCP0005 시나리오 [자동] Excel Form 동작(CR-095)"
+   ],
+   [
+    "V-6f2db8d3",
+    "F3",
+    "SCP0005 시나리오 [자동] TRANSPORT_MODE 기존 행 셀 Copy → 신규 행 붙여넣기: 후보 밖 값(비활성 등) 행에서 복사"
+   ],
+   [
+    "V-ba8f9817",
+    "F3",
+    "SCP0005 시나리오 [자동] DAYS_MON 기존 행 셀 Copy → 신규 행 붙여넣기: 후보 밖 값(비활성 등) 행에서 복사"
+   ],
+   [
+    "V-b3450ff5",
+    "E4",
+    "SCP0005 키 중복 신규행"
+   ],
+   [
+    "V-e458f301",
+    "MS1",
+    "MSG00265"
+   ],
+   [
+    "V-0e9099ba",
+    "H6",
+    "new GSCM.SCM.PopUp.UIL.SCP0005_DistributionRoutePopup()"
+   ],
+   [
+    "V-a46588cb",
+    "M3",
+    "new GSCM.SCM.PopUp.UIL.SCP0005_DistributionRoutePopup()"
+   ],
+   [
+    "V-5daefe3f",
+    "K4",
+    "SCP0005 스냅샷 버튼 Div 40"
+   ],
+   [
+    "T-78600da2",
+    "F4",
+    "FindDataMain 파라미터 6종 'ALL'→'', store `setFilter()` `orEmpty()`"
+   ],
+   [
+    "T-719d403c",
+    "F4",
+    "SCP0005_GET_DISTRIBUTION_ROUTEID"
+   ],
+   [
+    "T-432b276b",
+    "X-ROW",
+    "SCP0005_DistributionRoute.FindDataMain"
+   ],
+   [
+    "T-1a5e50b8",
+    "X-ROW",
+    "SCP0005_DistributionRoute.spdMainDataModel_Changed"
+   ],
+   [
+    "T-fce350f2",
+    "M4",
+    "SCP0005_DistributionRoutePopup"
+   ],
+   [
+    "T-ea530cd5",
+    "F4",
+    "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID"
+   ],
+   [
+    "EG-9c573043",
+    "D5",
+    "SCP0005 팝업 SCP0005_DistributionRoutePopup CELL:ROUTE_ID CELL_TYPE"
+   ],
+   [
+    "EG-a2cf8306",
+    "A1",
+    "SCP0005 실전송 건수 route"
+   ],
+   [
+    "EG-58ec94c4",
+    "N1",
+    "SCP0005 기준정보 키 존재 SCM_MST_CITY"
+   ]
+  ],
+  "ledger": {
+   "PASS": 18,
+   "미검증": 274
+  },
+  "unverified_sheet_rows": 434
+ },
  "fe_mapping": {
   "total": 7,
   "by_state": {
@@ -26,15 +251,80 @@
    "그리드 값 설정": 6
   }
  },
- "counts": null,
- "ledger": null,
- "pending_recheck": {
-  "fixed_at": "2026-11-20 08:56",
-  "ledger_at": "2026-11-20 08:12",
-  "note": "미검증 해소 보완 2026-11-20 08:56 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
+ "counts": {
+  "menu_id": "SCP0005",
+  "unverified_sheet": 434,
+  "unverified_by_reason": {
+   "대상불명": 68,
+   "상속생략": 363,
+   "측정못함": 3
+  },
+  "direct_unmeasured": 256
  },
+ "ledger": {
+  "menu_id": "SCP0005",
+  "generated": "2026-11-26T02:39:25",
+  "instances": 560,
+  "done": 487,
+  "open": 73,
+  "by_type": {
+   "W3": 57,
+   "W7": 3,
+   "W9": 13
+  },
+  "by_owner": {
+   "DB 객체": 3,
+   "화면 FE": 36,
+   "FE": 8,
+   "공통 컴포넌트": 10,
+   "사람 판정 / AS-IS 원문 확인 → 재판정": 3,
+   "하네스·환경": 13
+  },
+  "suspect_not_implemented": 0,
+  "by_check": {
+   "F1": {
+    "W3": 1
+   },
+   "H2": {
+    "W3": 18
+   },
+   "E4": {
+    "W3": 4
+   },
+   "X-ROW": {
+    "W3": 17,
+    "W7": 2,
+    "W9": 2
+   },
+   "H6": {
+    "W3": 16,
+    "W9": 4
+   },
+   "M3": {
+    "W3": 1,
+    "W9": 1
+   },
+   "I1": {
+    "W7": 1
+   },
+   "K4": {
+    "W9": 1
+   },
+   "F4": {
+    "W9": 3
+   },
+   "M4": {
+    "W9": 2
+   }
+  }
+ },
+ "pending_recheck": null,
  "name": "DistributionRoute",
  "sources": [
+  {
+   "file": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v13.xlsx",
+   "time": "2026-11-26 02:41"
+  },
   {
    "file": "nscm-fe/features/shipping/src/pages/distribution-route/__asis-mapping__.md",
    "time": "2026-10-01 09:14"
@@ -42,6 +332,14 @@
   {
    "file": "Doc/asisfacts/screens/SCP0005/__asis-actions__.md",
    "time": "2026-10-23 11:29"
+  },
+  {
+   "file": "Doc/verify/SCP0005/checklist_counts.json",
+   "time": "2026-11-26 02:41"
+  },
+  {
+   "file": "Doc/verify/SCP0005/work_ledger_summary.json",
+   "time": "2026-11-26 02:39"
   }
  ]
 }

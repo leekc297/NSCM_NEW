@@ -1,0 +1,110 @@
+{
+  "id": "20261120182700_SELF",
+  "at": "2026-11-20T18:27:00+09:00",
+  "ms": 1795166820894,
+  "source": "self",
+  "status": "applied",
+  "sig": "history files exclude verify test node lines rn",
+  "title": "변경 기록 파일 집계에서 확인, 사용자, 되돌리기, 미확인, 시험, node 명령 줄과 줄 가운데 '확인:' 뒤 부분 제외",
+  "evidence": "repeatFiles run_all.js 36건(세션 수정 1건). orch-history.js:109 finishSection 이 절 본문 전체에서 파일 이름을 뽑음. 1차 반영(2026-11-20 18:22~18:23, 20261120181921_SELF)에서 머리말 4개만 뺐을 때 36 → 6(18:23:30 측정). 남은 6건 중 4건은 CHANGELOG.md:27 '- 시험:', :79 와 :104 '- node test/run_all.js', :458 '· 확인: node test/run_all.js'. 2건(:783 '- 변경:', :893 'Q4 신규')은 변경 줄 (반영 실패한 20261120181921_SELF 를 고친 안 · 원인 검증 기대값이 승인 범위와 맞지 않음. 2026-11-20 18:23:30 측정에서 머리말 4개('- 확인', '- 사용자', '- 되돌리기', '- 미확인')를 빼도 run_all.js 7일 횟수 36 → 6이라 목표 5 미만 미달. 남은 6건 중 4건은 범위 밖 줄 모양임. tools/VibeManager/CHANGELOG.md:27 '- 시험:', :79 와 :104 '- node test/run_all.js ...', :458 줄 가운데 '· 확인: node test/run_all.js'. 나머지 2건(:783 '- 변경:', :893 'Q4 신규 test/run_all.js')은 변경 줄이라 집계에 남는 것이 맞음. orch-history.js:109 는 반영 전 상태로 복원됨(18:23:55 기록))",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/test/t_orch_history.js"
+  ],
+  "before_after": "orch-history.js:109 files = 본문 전체의 파일 이름 → files = 본문에서 '- 확인', '- 사용자', '- 되돌리기', '- 미확인', '- 시험', '- node ' 로 시작하는 줄을 빼고, 남은 줄의 '· 확인:' 뒤 부분을 잘라낸 본문의 파일 이름. t_orch_history.js 시험 4건 추가: '확인 줄에만 run_all.js → files 에 없음', '- node test/run_all.js 줄에만 있음 → 없음', '- 엔진 쪽 변경 X.md · 확인: node test/run_all.js → X.md 있음, run_all.js 없음', '- 변경 줄에 있는 파일 → files 에 있음'",
+  "verify": "node tools/VibeManager/test/t_orch_history.js → ALL PASS(추가 4건 포함). 저장소 tools/VibeManager/CHANGELOG.md 에 parseChangelog 와 buildStats 의 7일 집계를 적용하면 run_all.js 7일 횟수가 5 미만으로 repeatFiles 에서 빠짐(18:23:30 측정 6건에서 :27, :79, :104, :458 4건을 뺀 계산값 2, 실행 측정은 아님). node tools/VibeManager/test/run_all.js → FAIL 0",
+  "rollback": "백업 태그 20261120_self1819 기준으로 orch-history.js, t_orch_history.js 2개 파일 되돌림",
+  "impact": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T19:37:27+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T19:40:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 59/59개 파일 통과(PASS 782, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1937"
+    },
+    {
+      "at": "2026-11-20T19:40:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T19:52:14+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 59/59개 파일 통과(PASS 786, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T19:52:14+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 1) 2026-11-20 19:41:35 node tools/VibeManager/test/t_orch_history.js → PASS 22건, 'ALL PASS' (추가 4건: '확인 줄에만 run_all.js = files 에 없음 []', '- node 명령 줄에만 run_all.js = files 에 없음 []', \"줄 가운데 '· 확인:' 뒤 = 제외, 앞 X.md = 있음 [\\\"X.md\\\"]\", '변경 줄의 파일 = files 에 있음 [\\\"test/run_all.js\\\",\\\"t_x.js\\\"]'). 2) 19:41 저장소 · 변경 16개 파일 · 대상 목록 밖 변경 14개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/combo_runtime.json, Doc/verify/SCP0028/e2e/shots/index_verify.json, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, Doc/verify/SCP0028/calls/_verify_언어_전환_문구_덤프_I2__0.json",
+      "log": ".vibe\\logs\\2026-11-20T19-41-01_claude_orch.log",
+      "sec": 263,
+      "costUsd": 0.7457188000000001,
+      "files": [
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/combo_runtime.json",
+        "Doc/verify/SCP0028/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0028/e2e_results.json",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "tools/VibeManager/orch-history.js",
+        "tools/VibeManager/test/t_orch_history.js",
+        "Doc/verify/SCP0028/calls/_verify_언어_전환_문구_덤프_I2__0.json",
+        "Doc/verify/SCP0028/calls/_verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보__0.json",
+        "Doc/verify/SCP0028/e2e/serial/scn_1.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_2.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_3.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_4.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_6.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_end.png",
+        "Doc/verify/SCP0028/e2e/shots/verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보.png"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:29+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T20:45:03+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S9",
+  "selfKey": "S9|file|run_all.js",
+  "repairOf": "20261120181921_SELF",
+  "repairRoot": "20261120181921_SELF",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795171047522,
+  "autoFp": "a889dc7b1f",
+  "applyStartMs": 1795171259956,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 59/59개 파일 통과(PASS 786, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1937",
+  "needsReload": true,
+  "appliedMs": 1795171934527,
+  "synced": [
+    "orch-history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-history.js",
+      "tools/VibeManager/test/t_orch_history.js"
+    ],
+    "verify_result": "1) 2026-11-20 19:41:35 node tools/VibeManager/test/t_orch_history.js → PASS 22건, 'ALL PASS' (추가 4건: '확인 줄에만 run_all.js = files 에 없음 []', '- node 명령 줄에만 run_all.js = files 에 없음 []', \"줄 가운데 '· 확인:' 뒤 = 제외, 앞 X.md = 있음 [\\\"X.md\\\"]\", '변경 줄의 파일 = files 에 있음 [\\\"test/run_all.js\\\",\\\"t_x.js\\\"]'). 2) 19:41 저장소 CHANGELOG.md 에 parseChangelog 적용 + buildStats 7일 집계 같은 계산 실행 → '7d test/run_all.js 2 2026-11-19', 'sections 859,965' (5 미만, repeatFiles 에서 빠짐. 남은 2절은 변경 줄). 3) 2026-11-20 19:41:47 node test/run_all.js → 'ALL OK  파일 59/59  PASS 786  FAIL 0  205s'",
+    "note": "orch-history.js 109행 앞에 fileBody 를 만들어 '- 확인|사용자|되돌리기|미확인|시험|node ' 로 시작하는 줄을 빼고 줄 가운데 '· 확인:' 뒤를 잘라낸 본문에서 files 를 뽑게 고침. 개선안의 :783, :893 은 CHANGELOG 가 늘어나 지금 859행, 965행임. 설치 폴더와 CHANGELOG.md 는 손대지 않음."
+  },
+  "snap": "prop_20261120182700_SELF",
+  "effectiveMs": 1795175103931,
+  "effectiveAt": "2026-11-20T20:45:03+09:00"
+}

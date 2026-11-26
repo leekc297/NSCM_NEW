@@ -1,0 +1,29 @@
+{
+  "id": "20261123_181345_R12_ALL",
+  "at": "2026-11-23T18:13:45+09:00",
+  "ms": 1795425225106,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S5 실행 오류: job-runner.listener 오류 1회(새 서명)",
+  "screen": "",
+  "sig": "R12|S5|job-runner.listener | p is not defined",
+  "count": 1,
+  "repeat": null,
+  "detail": "p is not defined · at c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\jobs.js:66:81 < at emit (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\job-runner.js:36:72) · 마지막 2026-11-23T18:06:42+09:00",
+  "evidence": {
+    "check": "S5",
+    "key": "S5|job-runner.listener | p is not defined",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T18:21:27+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S5 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

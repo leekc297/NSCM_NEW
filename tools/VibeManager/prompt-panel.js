@@ -119,7 +119,7 @@ class _LegacyPromptViewProvider {
         case 'saveState': this.ctx.workspaceState.update('vibe.prompt.state', { id: m.id, ctx: m.ctx, harness: m.harness }); break;
         case 'newScreen': {
           const cur = id || this.ctx.workspaceState.get('vibeManager.lastId', '');
-          const nid = await vscode.window.showInputBox({ prompt: '새 화면ID (예: DMF0052, SCP0096). 비우면 현재 화면ID 를 해제합니다', value: cur, placeHolder: 'DMF0052', ignoreFocusOut: true, validateInput: v => v && !/^[A-Z]{2,4}[0-9]{2,6}$/i.test(v.trim()) ? '형식: 2~4자 영문 + 2~6자리 숫자 (예: DMF0052)' : null });
+          const nid = await require('./id-input').askId(vscode, { prompt: '새 화면ID (예: DMF0052, SCP0096). 비우면 현재 화면ID 를 해제합니다', value: cur, placeHolder: 'DMF0052', ignoreFocusOut: true, validateInput: v => v && !/^[A-Z]{2,4}[0-9]{2,6}$/i.test(v.trim()) ? '형식: 2~4자 영문 + 2~6자리 숫자 (예: DMF0052)' : null });
           if (nid === undefined) break;
           const NID = (nid || '').trim().toUpperCase();
           this.ctx.workspaceState.update('vibe.prompt.state', { id: NID, ctx: m.ctx, harness: m.harness });
@@ -135,11 +135,17 @@ class _LegacyPromptViewProvider {
   html() {
     const p = this.api.paths(); const q = loadQuick(p.extDir, p.root); const st = this.ctx.workspaceState.get('vibe.prompt.state') || { id: 'DMF0052', ctx: true, harness: false };
     const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-    const groups = (q.groups || []).map(g => `<div class="grp"><div class="gt">${esc(g.title)}</div><div class="btns">${(g.items || []).map((it, i) => `<button class="qb${it.needsId ? ' nid' : ''}" data-g="${esc(g.title)}" data-i="${i}" title="${esc(it.hint || it.prompt || it.cmd || it.task || it.path || '')}">${esc(it.label)}</button>`).join('')}</div></div>`).join('');
+    const groups = (q.groups || []).map(g => `<div class="grp glass"><div class="gt">${esc(g.title)}</div><div class="btns">${(g.items || []).map((it, i) => `<button class="qb${it.needsId ? ' nid' : ''}" data-g="${esc(g.title)}" data-i="${i}" title="${esc(it.hint || it.prompt || it.cmd || it.task || it.path || '')}">${esc(it.label)}</button>`).join('')}</div></div>`).join('');
     const qjson = JSON.stringify(q).replace(/</g, '\\u003c');
     return `<!doctype html><html><head><meta charset="utf-8"><style>
+:root{--fg:var(--vscode-editor-foreground,#ccc);--g1:color-mix(in srgb,var(--fg) 5%,transparent);--g2:color-mix(in srgb,var(--fg) 9%,transparent);--gb:color-mix(in srgb,var(--fg) 14%,transparent);--acc:var(--vscode-charts-blue,#3794ff);--acc2:var(--vscode-charts-purple,#a371f7)}
 body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);padding:6px 8px;margin:0}
-textarea{width:100%;box-sizing:border-box;min-height:84px;resize:vertical;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,transparent);padding:6px;font:12px var(--vscode-editor-font-family)}
+.glass{background:var(--g1);border:1px solid var(--gb);border-radius:12px;-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 22px rgba(0,0,0,.16)}
+@media (prefers-reduced-transparency:reduce){.glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--vscode-editor-background)}}
+.box{padding:6px;margin:4px 0}.row.glass,.grp.glass{padding:4px 6px}.grp.glass .gt{margin-top:0}
+textarea{width:100%;box-sizing:border-box;min-height:84px;resize:vertical;background:var(--vscode-input-background);color:var(--vscode-input-foreground);--mb:var(--vscode-input-border,var(--vscode-focusBorder));border:1px solid var(--mb);border-color:color-mix(in srgb,var(--mb) 40%,transparent);border-radius:4px;outline:0;padding:6px;font:12px var(--vscode-editor-font-family);transition:border-color .15s ease,box-shadow .15s ease}
+textarea:focus{border-color:color-mix(in srgb,var(--mb) 75%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--mb) 12%,transparent),0 3px 12px color-mix(in srgb,var(--mb) 22%,transparent)}
+@media (prefers-reduced-motion:reduce){textarea{transition:none}}
 input[type=text]{width:90px;background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,transparent);padding:3px 5px}
 button{background:var(--vscode-button-background);color:var(--vscode-button-foreground);border:0;padding:4px 8px;margin:2px 2px 2px 0;cursor:pointer;border-radius:2px}
 button.sec{background:var(--vscode-button-secondaryBackground);color:var(--vscode-button-secondaryForeground)}
@@ -150,8 +156,8 @@ button.sec{background:var(--vscode-button-secondaryBackground);color:var(--vscod
 label{user-select:none}.hint{opacity:.6;font-size:11px;margin-top:4px}
 </style></head><body>
 <div class="row"><b>Vibe_Manager</b><span class="hint">입력은 워크벤치(에디터) 패널로 전달됩니다. 터미널 없음</span></div>
-<textarea id="t" placeholder="프롬프트 입력. Enter 전송, Shift+Enter 줄바꿈"></textarea>
-<div class="row"><button id="send">전송 (Enter)</button><button class="sec" id="new">워크벤치 열기</button><button class="sec" id="newScr" title="화면ID 를 새로 입력합니다. 이전 화면 컨텍스트가 자동 prefix 로 섞이지 않도록 리셋합니다.">새 화면</button><button class="sec" id="cont" style="display:none"></button></div>
+<div class="glass box"><textarea id="t" placeholder="프롬프트 입력. Enter 전송, Shift+Enter 줄바꿈"></textarea></div>
+<div class="row glass"><button id="send">전송 (Enter)</button><button class="sec" id="new">워크벤치 열기</button><button class="sec" id="newScr" title="화면ID 를 새로 입력합니다. 이전 화면 컨텍스트가 자동 prefix 로 섞이지 않도록 리셋합니다.">새 화면</button><button class="sec" id="cont" style="display:none"></button></div>
 <div class="row">화면ID <input id="id" type="text" value="${esc(st.id || '')}" placeholder="DMF0052"><label title="화면ID 가 있으면 자동으로 컨텍스트 prefix 가 붙습니다. 체크를 꺼도 ID 가 있으면 자동 적용. 체크는 ID 없이 강제할 때."><input id="ctx" type="checkbox" ${st.ctx ? 'checked' : ''}> 컨텍스트(자동)</label><label title="신규 UI 생성·GAP 분석/보완 작업은 자동으로 하네스 모드가 됩니다. 체크 안 해도 자동. 체크는 다른 Claude 지시에도 강제할 때."><input id="harness" type="checkbox" ${st.harness ? 'checked' : ''}> 하네스(자동)</label></div>
 ${groups}
 <div class="row"><button class="sec" id="editq">메뉴 편집 (quick.json)</button></div>

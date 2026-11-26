@@ -1,0 +1,85 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장,분류
+,L670,기호,nager ☁️ 클라우드,이모지·장식 기호 삭제,Vibe_Manager ☁️ 클라우드 이관 패키지:                                                            ,문장
+,L817,기호,☁️ 탐색기,이모지·장식 기호 삭제,☁️ 탐색기 이동:                                                    \n,문장
+,L222,표지,⛔,기호: 줄 머리 상태 표지(JS_MARKERS),⛔          중단. 다른 git 작업               개가                          분 넘게 끝나지 않음:\n                                                    \n,표지
+,L222,표지,nager ⛔,기호: 줄 머리 상태 표지(JS_MARKERS),Vibe_Manager ⛔         : 다른 git 작업이 끝나지 않음(                         분),표지
+,L232,표지,⛔,기호: 줄 머리 상태 표지(JS_MARKERS),⛔          중단. index.lock 정리 실패:             \n,표지
+,L813,제외,✖ 실패 원인,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 실패 원인(                                                                ):\n                                                 \n,제외
+,L814,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖                 실패 (exit        )\n      \n로그:       ,제외
+,L830,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖         실행 파일 없음:       ,제외
+,L838,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)","✖         설정 읽기 실패:      ,             ",제외
+,L840,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)","✖         실행 안 함.            의 접속 주소가                  입니다(기대              ).\n   재빌드하면 원본 서버 주소로 되돌아갑니다.       의 <address name=""             "" baseUrl> 을               로 바꾼 뒤 다시 실행하세요.",제외
+,L846,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖         실행 안 함. 포트                가 열려 있지 않습니다. IIS 를 먼저 기동하세요.,제외
+,L852,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖         실행 실패:             ,제외
+,L861,표지,▶,기호: 줄 머리 상태 표지(JS_MARKERS),▶         기동 요청. 출력은 VMO 창                                                                                                                            \n,표지
+,L872,제외,✖ E2E 선,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ E2E 선행 실패. VMO 창 BE Log / FE Log 확인,제외
+,L906,표지,▶,기호: 줄 머리 상태 표지(JS_MARKERS),▶         : AI Agent 세션 자리 확보 (                                       s 대기)\n,표지
+,L918,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖         :                             분을 기다려도 AI Agent 가 비지 않음. 단계 취소\n,제외
+,L919,표지,▶,기호: 줄 머리 상태 표지(JS_MARKERS),▶         : AI Agent 응답 끝남. 이어서 진행 (                                       s 대기)\n,표지
+,L1082,제외,✖ claud,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ claude 종료 코드        :        \nstderr:                                                            ,제외
+,L1126,이름 인용,면 보완은 🛠️ 수동 보,"기호: 메뉴 이름 '🛠️ 수동 보완'(quick.json, steps.json)",        \n\n                   \n\n· 중지: 아무것도 바꾸지 않고 멈춥니다(기존 화면 보완은 🛠️ 수동 보완 / 🧯 자동 보완 메뉴).\n· 삭제 후 신규 생성: 위 폴더와 Doc/gen/      를 Doc/gen/_backup/     / 에 백업한 뒤 지우고 처음부터 생성합니다.,이름 인용
+,L1126,이름 인용,보완 / 🧯 자동 보완,"기호: 메뉴 이름 '🧯 자동 보완'(quick.json, steps.json)",        \n\n                   \n\n· 중지: 아무것도 바꾸지 않고 멈춥니다(기존 화면 보완은 🛠️ 수동 보완 / 🧯 자동 보완 메뉴).\n· 삭제 후 신규 생성: 위 폴더와 Doc/gen/      를 Doc/gen/_backup/     / 에 백업한 뒤 지우고 처음부터 생성합니다.,이름 인용
+,L1135,제외,✖ 기존 생성,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 기존 생성분 삭제 실패:              (백업:       ) → 중지\n,제외
+,L1159,표지,▶ 대기열 전,기호: 줄 머리 상태 표지(JS_MARKERS),▶ 대기열 전송(남은                  건),표지
+,L1206,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖           단계에서 중단 (            ),제외
+,L1355,제외,✖ 검증 실패,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 검증 실패:         \n,제외
+,L1384,제외,✖ 수선,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 수선     /          AI Agent 오류(exit           ). 재실행은 그래도 시도\n,제외
+,L1403,제외,✖ 시험 기준,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 시험 기준 보정 AI Agent 오류(exit           ). 재실행은 그래도 시도\n,제외
+,L1420,제외,✖ 해소 확인,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 해소 확인 재측정            실패(exit      ). 분류는 직전 결과로 다시 실행\n,제외
+,L1438,제외,✖ 전체 재검,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 전체 재검증                        실패(exit      ). 분류는 직전 결과로 다시 실행\n,제외
+,L1446,표지,⛔ [,기호: 줄 머리 상태 표지(JS_MARKERS),⛔ [         /           ] 해소 게이트 미통과(exit      ) → 전체 재검증 안 함       \n,표지
+,L1477,제외,✖ 체인 중단,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 체인 중단:                    /            '            '                · 완료       단계                                                                   ·         s                                                                  ,제외
+,L2208,표지,탭 하나로 — 안에 Re,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2217,표지,력창 형태 — 도구 줄,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2272,표지,으로 통합 — 기존 'l,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2318,표지,가기 시작 — 초안 보관,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2667,표지,(/\\s+—\\s.*$,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2498,표지,+)\\b|✖|✗|is,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2771,표지,}|[⇄✎✴★])[\\u,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2198,표지,안 Task · FE · BE 를 하위,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2217,표지,n) · 모델 · 모드 · 전송/중지 +,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2217,표지,개(화면 ID · 새 창 · 원격) -->,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2680,표지,= 37.3s · 2.7m · 850ms,"기호: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2758,표지,업 행 = 마지막으로 돈 AI,"소개·맺음: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2760,표지,지금(또는 마지막으로) 도는 단,"소개·맺음: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2570,표지,">',   unfold:'<svg","용어: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2578,표지,HV_IC.unfold:HV_IC,"용어: 웹뷰 템플릿 안 코드(<script> 안 문자열 밖, <style>, <!-- -->)","<!doctype html><html><head><meta charset=""utf-8""><style> :root{--b:var(--vscode-editorWidget-border,#444);--vm:#D77A56} body.vscode-light,body.vscode-high-contrast-light{--vm:#C55F3D} *{box-sizing:border-box} body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0;height:100",표지
+,L2996,표지,✅ 현재 ID,기호: 줄 머리 상태 표지(JS_MARKERS),✅ 현재 ID 유지:         ,표지
+,L2998,표지,🔎 AS-IS,기호: 줄 머리 상태 표지(JS_MARKERS),🔎 AS-IS DB 프로그램 목록에서 선택,표지
+,L3299,제외,✖ 작업 모드,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 작업 모드 변경 실패(exit      ). 현재            \n,제외
+,L3560,제외,✖ 수선 AI,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 수선 AI Agent 오류(exit          ). 재실행 생략\n,제외
+,L3574,제외,✖ 작업 모드,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 작업 모드 변경 실패(exit      ). 현재            \n,제외
+,L3638,표지,⛔ 업로드할,기호: 줄 머리 상태 표지(JS_MARKERS),⛔ 업로드할 화면 소스가 없음 (          )\n,표지
+,L3640,표지,⛔ 취소. 선,기호: 줄 머리 상태 표지(JS_MARKERS),⛔ 취소. 선택 파일 없음\n,표지
+,L3643,표지,⛔ 업로드 중,기호: 줄 머리 상태 표지(JS_MARKERS),⛔ 업로드 중단. 허용 영역 밖 파일 포함:                   \n,표지
+,L3643,표지,nager ⛔ Sourc,기호: 줄 머리 상태 표지(JS_MARKERS),Vibe_Manager ⛔ Source Upload(UI): Vibe_Manager/도구 소스는 업로드할 수 없습니다 (          ),표지
+,L3653,표지,▶ Sourc,기호: 줄 머리 상태 표지(JS_MARKERS),"▶ Source Upload(UI)      : 공통 최신 받기, 파일별 내 작업분 판정\n",표지
+,L3654,제외,✖ 공통 최신,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 공통 최신 받기 실패. 업로드 중단\n,제외
+,L3662,제외,✖ 업로드 준,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 업로드 준비 실패. 중단 (                                 )\n,제외
+,L3667,표지,⛔ 올릴 내,기호: 줄 머리 상태 표지(JS_MARKERS),⛔ 올릴 내 작업분이 없습니다. 선택                개가 동일/내 편집 없음/충돌                                                                                                       \n,표지
+,L3675,표지,▶ Sourc,기호: 줄 머리 상태 표지(JS_MARKERS),▶ Source Upload(UI)      \n  repo       \n  base               /                                        · branch                  · 올릴 파일               / 선택                 · 경로 접두 '              '\n,표지
+,L3686,표지,⛔ 업로드 중,기호: 줄 머리 상태 표지(JS_MARKERS),⛔ 업로드 중단. 게이트 미통과 (Doc/gen/     /CHECK.md 확인)\n,표지
+,L3701,표지,✅ 업로드 완,기호: 줄 머리 상태 표지(JS_MARKERS),"✅ 업로드 완료:              개 파일(선택                ), 커밋                       ,       \n   (로컬 작업 브랜치와 인덱스는 그대로, 판정                                                               )\n",표지
+,L3703,표지,nager ✅,기호: 줄 머리 상태 표지(JS_MARKERS),Vibe_Manager ✅       소스              개 →                  업로드 완료,표지
+,L3705,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖             \n   (권한 거부 403 이면 eunjoo-hwang/nscm-fe 에 push 권한이 없는 계정입니다. 저장소 소유자에게 요청)\n,제외
+,L3760,표지,▶,기호: 줄 머리 상태 표지(JS_MARKERS),"▶               1/3 add: 폴더 묶음                 개, 바뀐 경로                                                개 (Doc/asislive/_cmd_* 제외), 로그                         \n",표지
+,L3782,표지,⚠ [,기호: 줄 머리 상태 표지(JS_MARKERS),  ⚠ [         /                ]     : 수정 중 파일 제외 후 다시:                                  \n,표지
+,L3787,표지,⚠ [,기호: 줄 머리 상태 표지(JS_MARKERS),  ⚠ [         /                ]              회차 실패:                                                                                                                           \n,표지
+,L3793,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)","✖               중단. index.lock 을 다른 git 작업이 사용 중 (        s), 로그                         \n",제외
+,L3797,표지,⚠ 이번 백업,기호: 줄 머리 상태 표지(JS_MARKERS),⚠ 이번 백업에서 제외: 수정 중 파일                  개                                                                    (다음 백업 때 다시 대상):\n                                                                                                    \n,표지
+,L3799,표지,✅ 1/3 a,기호: 줄 머리 상태 표지(JS_MARKERS),✅ 1/3 add 완료: 묶음                                        /                개 (        s)\n,표지
+,L3810,표지,⚠ 3/3 p,기호: 줄 머리 상태 표지(JS_MARKERS),⚠ 3/3 push exit      : HTTP 500·sideband 끊김. 30초 뒤 1회 다시 시도\n,표지
+,L3818,제외,✖ 재시도도,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)","✖ 재시도도 실패. 미push 커밋(     ..HEAD) 파일                개, 큰 경로 순:\n                 \n   대용량 생성물은 .gitignore 추가와 git rm --cached 로 커밋에서 빼야 합니다\n",제외
+,L3821,제외,✖,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖               실패: 3/3 push exit       (        s). 커밋은 로컬에 남아 있습니다(다시 실행하면 push 부터)\n,제외
+,L3839,표지,▶,기호: 줄 머리 상태 표지(JS_MARKERS),"▶               1/2: 공통 최신 받기와 파일별 판정(                                           , 미리보기, 파일 변경 없음)\n",표지
+,L3842,제외,✖ 미리보기,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 미리보기 실패(exit      ). 적용하지 않습니다\n,제외
+,L3842,표지,nager ✖,기호: 줄 머리 상태 표지(JS_MARKERS),Vibe_Manager ✖              : 미리보기 실패. Task Log 확인,표지
+,L3843,표지,✅ 공통소스,기호: 줄 머리 상태 표지(JS_MARKERS),✅ 공통소스 새 변경 없음 (기준선                               )\n,표지
+,L3843,표지,nager ✅ 공통소스,기호: 줄 머리 상태 표지(JS_MARKERS),Vibe_Manager ✅ 공통소스                        새 변경 없음,표지
+,L3851,표지,⚠ DB MO,기호: 줄 머리 상태 표지(JS_MARKERS),⚠ DB MODE: 로컬 소스를 보호하지 않습니다.\n기준선                                →                                                          \n\n공통 원문으로 덮어쓰기(내 편집본 포함)                \n삭제(공통이 지운 파일 · 내 편집본 포함)                 \n공통에 없는 로컬 전용 파일 유지                      \n\n          \n\n적용 전 바뀌는 로컬 파일은 _artifacts/_bac,표지
+,L3854,표지,▶,기호: 줄 머리 상태 표지(JS_MARKERS),▶               2/2 적용 (공통                              )\n,표지
+,L3858,표지,⚠ 로컬 소스,기호: 줄 머리 상태 표지(JS_MARKERS),"⚠ 로컬 소스      건을 공통 원문으로 덮어씀(덮어쓰기                  · 삭제                  , 내 편집본 포함)\n",표지
+,L3859,표지,✅ 반영 완료,기호: 줄 머리 상태 표지(JS_MARKERS),"✅ 반영 완료: 기준선                                →                              , 결정 대기                   , 보고                                    \n   다음: 결정 대기 파일 확인(README). FE 소스가 바뀌었으면 ""타입체크 해줘""                                                                                                           ",표지
+,L3859,표지,nager ✅ 공통소스,기호: 줄 머리 상태 표지(JS_MARKERS),Vibe_Manager ✅ 공통소스 반영 완료. 결정 대기                   건 (README 확인),표지
+,L3860,제외,✖ 적용 실패,"기호: 제외(FAIL_RE 실패 표시, workbench.js:661)",✖ 적용 실패(exit      )                                                                                             \n,제외
+,L3860,표지,nager ✖,기호: 줄 머리 상태 표지(JS_MARKERS),Vibe_Manager ✖               적용 실패(exit      ). Task Log 확인,표지

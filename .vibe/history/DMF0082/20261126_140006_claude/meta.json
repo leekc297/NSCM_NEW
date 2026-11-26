@@ -1,0 +1,38 @@
+{
+  "id": "DMF0082",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0082] · Doc/gen/DMF0082/CHECK.md · Doc/gen/DMF0082/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0082/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-26T14:00:06+09:00",
+  "end": "2026-11-26T14:04:38+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\forecast-price",
+      "files": 44
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0082",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "클라우드에서 20 실행 시 아래 오류 발생 \n\n> SKIP  PACKAGE PKG_DMF0082 — 이미 사내와 같음 · 원문 무변경 \n\n  \n\n  \n\nPL/SQL 프로시저가 성공적으로 완료되었습니다. \n\n  \n\nDECLARE \n\n* \n\n오류 발생 행: 1: \n\nORA-20011: 중단 — PACKAGE BODY PKG_DMF0082 변경 3 기준 문구 0건(1 기대) · 클라우드 원문이 기준본과 다름 → 전체 메뉴 패키지 사용. 원문 무변경 \n\nORA-06512:  36행 \n\nORA-06512:  134행 \n\n  \n\nhttps://docs.oracle.com/error-help/db/ora-20011/ \n\n  \n\n  \n\nMore Details : \n\nhttps://docs.oracle.com/error-help/db/ora-20011/ \n\nhttps://docs.oracle.com/error-help/db/ora-06512/ \n\n  \n\nOBJECT_NAME                                                                                                                      OBJECT_TYPE             STATUS  LAST_DDL            \n\n-------------------------------------------------------------------------------------------------------------------------------- ----------------------- ------- ------------------- \n\nPKG_DMF0082                                                                                                                      PACKAGE                 VALID   2026-11-18 15:01:23 \n\nPKG_DMF0082                                                                                                                      PACKAGE BODY            VALID   2026-11-24 14:47:42 \n\n  \n\n선택된 행 없음 \n\n ",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-26T14-00-06_claude_wb2.log"
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-11-26T14:04:38+09:00",
+  "changed": []
+}

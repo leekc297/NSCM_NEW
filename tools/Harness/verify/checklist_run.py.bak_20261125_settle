@@ -1,0 +1,276 @@
+# -*- coding: utf-8 -*-
+"""VM 🔎 CheckList 체인의 1단계·3단계 실행기 (2026-11-18 사용자 지시)
+   "1 단계 - CHECKLIST 수행, 2단계 - 검증 보완, 3단계 - CHECKLIST 재수행" · "미검증 항목에 대해서만 별도 CHECK 가능하면 가장 좋고, 그게 아니면 처음부터 수행"
+
+  python tools/Harness/verify/checklist_run.py <MENU_ID>            1단계: CheckList 전체(run_verify.py) → 미검증 분류(unverified_resolve.py --no-rerun)
+  python tools/Harness/verify/checklist_run.py <MENU_ID> --recheck  3단계: 미검증 행만 다시 잴 수 있으면 그 규칙만(run_verify --only), 아니면 전체 → 재분류
+  python tools/Harness/verify/checklist_run.py <MENU_ID> --delta    수정분 재점검(2026-11-20): 지난 실행 뒤 바뀐 소스 범위만(delta_scope.py → run_verify --only + 필요한 단계) → 재분류
+                                                                    기준선 없음·넓은 변경·AI 가 설명 못 한 변경 = 전체 · 바뀐 것 없음 = 재측정 없이 분류만
+
+  미검증 행만 재측정하는 조건(모두 만족):
+    - 처리 대상 행(분류 담당 엔진·대조표·판단·자동 · Doc/verify/<ID>/unverified_triage.csv)이 1행 이상
+    - 그 행들이 --only 가 다시 돌리는 E2E 시험(@verify·@trace·@snap)으로 판정되는 행: 차등 검증(source ASIS_DIFF)·팝업 권한 검사기(EG-)·E2E 4종(ES-) 행이 없음
+      (--only 는 eg·diff 단계와 E2E 4종을 건너뛴다 · run_verify.py --only 설명)
+    - run_verify --only 가 시험을 찾음(종료코드 3 = 이 규칙 시험 없음 → 전체로 다시)
+  종료코드 = run_verify 종료코드(0 정상 · 10 검사기 게이트 경고) · 분류 실패는 무시(결과 파일 없음은 체인 검증이 잡는다)
+
+  작업 재개(2026-11-20, --resume 또는 환경변수 VM_RESUME=1): Doc/verify/<ID>/_cl_resume.json(인자, 시작 시각, 범위 결정, CheckList 측정 끝 여부)으로
+    CheckList 측정(run_verify)이 같은 실행에서 끝났으면(run_verify.result.json 완료, 시작 시각 이후) 미검증 분류부터. 아니면 run_verify 에 재개 신호(VM_RESUME=1)를 넘겨 끊긴 단계부터.
+    수정분 범위(delta_scope), 재수행 범위는 처음 정한 값을 다시 쓴다. 인자가 다르거나 기한(VM_RESUME_KEEP_HOURS, 기본 24시간)이 지나면 처음부터. 정상 종료 때 기록 삭제
+"""
+import argparse, csv, datetime, json, os, subprocess, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+csv.field_size_limit(10 ** 8)
+WORK = ('엔진', '대조표', '판단', '자동')
+
+
+def run(args):
+    print('$ ' + ' '.join(args[1:]), flush=True)
+    return subprocess.call([sys.executable] + args[1:] if args[0] == 'py' else args, cwd=ROOT)
+
+
+STAGE_OF = (('EG-', 'eg', '팝업·권한 검사기'), ('ES-', 'suite', 'E2E 4종'))
+
+
+def recheck_plan(mid):
+    """2026-11-20 C2: (규칙 목록, 함께 돌 단계 목록, 단계로만 판정되는 규칙, 사유) — 규칙 목록이 비면 전체 실행.
+       종전(recheck_rules)은 EG-·ES-·ASIS_DIFF 행이 1행만 있어도 전체로 돌았다(11-20 SCP0005·SCP0028·SSP0014 재점검 3건 모두 전체 · 1단계 96~137분)"""
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, 'unverified_triage.csv')
+    if not os.path.exists(p):
+        return [], [], [], '미검증 분류 결과 없음'
+    rows = [r for r in csv.DictReader(open(p, encoding='utf-8-sig')) if r.get('actor') in WORK]
+    if not rows:
+        return [], [], [], '처리 대상 0행'
+    stages, names, per_rule = set(), set(), {}
+    for r in rows:
+        rid = (r.get('rule_id') or '').upper(); st = ''
+        if r.get('source') == 'ASIS_DIFF':
+            st = 'diff'; names.add('차등 검증')
+        for pre, s_, nm in STAGE_OF:
+            if (r.get('row_id') or '').startswith(pre):
+                st = s_; names.add(nm)
+        if st:
+            stages.add(st)
+        if rid:
+            per_rule.setdefault(rid, set()).add(st or 'verify')
+    rules = sorted(per_rule)
+    stage_rules = sorted(r for r, s in per_rule.items() if 'verify' not in s)
+    if not rules:
+        return [], [], [], f'처리 대상 {len(rows)}행에 규칙 ID 없음'
+    return rules, sorted(stages), stage_rules, f'처리 대상 {len(rows)}행 · 규칙 {len(rules)}개' + (f" · 함께 돌 단계 {', '.join(sorted(names))}" if stages else '')
+
+
+def effect_line(mid, since):
+    """2026-11-20 A8: 이번 실행의 AI 지점별 효과(Doc/verify/<ID>/llm_effect.csv)"""
+    try:
+        rs = [r for r in csv.DictReader(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'llm_effect.csv'), encoding='utf-8-sig')) if (r.get('at') or '') >= since]
+    except OSError:
+        return ''
+    if not rs:
+        return ''
+    by = {}
+    for r in rs:
+        a = by.setdefault(r.get('kind') or '', [0, 0, 0, 0])
+        for i, k in enumerate(('calls', 'cached', 'applied', 'nochange_calls')):
+            try:
+                a[i] += int(float(r.get(k) or 0))
+            except ValueError:
+                pass
+    return '[AI 효과] ' + ' · '.join(f'{k} 호출 {v[0]}(기억 {v[1]}) 반영 {v[2]} 무변화 호출 {v[3]}' for k, v in sorted(by.items())) + f' · Doc/verify/{mid}/llm_effect.csv'
+
+
+def recheck_rules(mid):
+    """(규칙 목록, 사유) — 규칙 목록이 비면 전체 실행"""
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, 'unverified_triage.csv')
+    if not os.path.exists(p):
+        return [], '미검증 분류 결과 없음'
+    rows = [r for r in csv.DictReader(open(p, encoding='utf-8-sig')) if r.get('actor') in WORK]
+    if not rows:
+        return [], '처리 대상 0행'
+    blk = [r for r in rows if r.get('source') == 'ASIS_DIFF' or (r.get('row_id') or '').startswith(('EG-', 'ES-'))]
+    if blk:
+        kinds = sorted({'차등 검증' if r.get('source') == 'ASIS_DIFF' else ('팝업·권한 검사기' if r['row_id'].startswith('EG-') else 'E2E 4종') for r in blk})
+        return [], f"처리 대상 {len(rows)}행 중 {len(blk)}행이 --only 로 다시 잴 수 없는 단계({', '.join(kinds)})"
+    rules = sorted({(r.get('rule_id') or '').upper() for r in rows if r.get('rule_id')})
+    return rules, f'처리 대상 {len(rows)}행 · 규칙 {len(rules)}개'
+
+
+def cl_path(mid):
+    return os.path.join(ROOT, 'Doc', 'verify', mid, '_cl_resume.json')
+
+
+def cl_save(mid, cl):
+    cl['updated'] = time.time(); cl['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
+    tmp = cl_path(mid) + '.tmp'; os.makedirs(os.path.dirname(tmp), exist_ok=True)
+    json.dump(cl, open(tmp, 'w', encoding='utf-8'), ensure_ascii=False, indent=1); os.replace(tmp, cl_path(mid))
+
+
+def cl_begin(mid, sig, started, want):
+    """재개면 지난 기록, 아니면 새 기록(dict)"""
+    why = ''
+    if want:
+        try:
+            old = json.load(open(cl_path(mid), encoding='utf-8'))
+            try:
+                kh = float(os.environ.get('VM_RESUME_KEEP_HOURS') or 24)
+            except ValueError:
+                kh = 24.0
+            if not isinstance(old, dict) or old.get('sig') != sig:
+                why = '실행 인자가 다름'
+            elif kh > 0 and time.time() - float(old.get('updated') or 0) > kh * 3600:
+                why = f"끊긴 뒤 {kh:g}시간 경과(마지막 기록 {old.get('updated_at', '?')})"
+            else:
+                print(f"[재개] CheckList 실행 이어서, 처음 시작 {old.get('started')}, CheckList 측정 {'끝남' if old.get('rv_done') else '끊김(끊긴 단계부터)'}", flush=True)
+                return old
+        except FileNotFoundError:
+            why = '진행 기록 없음(_cl_resume.json), CheckList 측정은 자체 기록으로 재개 판단'
+        except (OSError, ValueError) as e:
+            why = f'진행 기록 깨짐({type(e).__name__})'
+        print(f'[재개] CheckList 실행 기록 사용 안 함: {why}', flush=True)
+    cl = {'v': 1, 'sig': sig, 'started': started, 'rv_done': False}
+    cl_save(mid, cl)
+    return cl
+
+
+def rv_done_same_run(mid, cl):
+    """CheckList 측정(run_verify)이 이 실행에서 정상으로 끝났는가, 기록 + run_verify.result.json(완료, 이 실행 시작 이후)"""
+    if not cl.get('rv_done'):
+        return False
+    try:
+        j = json.load(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'run_verify.result.json'), encoding='utf-8'))
+        st = datetime.datetime.strptime(j.get('started') or '', '%Y-%m-%d %H:%M:%S')
+        return j.get('state') == 'completed' and st >= datetime.datetime.strptime(cl['started'], '%Y-%m-%d %H:%M:%S')
+    except (OSError, ValueError, KeyError, TypeError):
+        return False
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('menu_id')
+    ap.add_argument('--recheck', action='store_true')
+    ap.add_argument('--delta', action='store_true')
+    ap.add_argument('--no-docs', action='store_true', help='2026-11-20 한 번 실행 구조: 반복 중간 회차는 문서를 만들지 않음(끝 단계 --docs 가 1회)')
+    ap.add_argument('--docs', action='store_true', help='문서 단계만: CheckList·ActionItemList·회귀 점검(run_verify --resume-docs)')
+    ap.add_argument('--resume', action='store_true', help='2026-11-20 끊긴 실행 이어서(환경변수 VM_RESUME=1 과 같음)')
+    a = ap.parse_args()
+    mid = a.menu_id.upper()
+    rv = os.path.join(HERE, 'run_verify.py'); ur = os.path.join(HERE, 'unverified_resolve.py')
+    if a.docs:
+        print('[작업 1/1] 문서 생성(CheckList · ActionItemList · UI 테스트 · 회귀 점검) — 판정은 지난 단계 결과 그대로', flush=True)
+        os.environ.pop('VERIFY_SKIP_DOCS', None)
+        rc_d = run(['py', rv, mid, '--resume-docs'])
+        try:
+            j = json.load(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'unverified_triage.json'), encoding='utf-8')); af = j.get('after') or {}
+            print(f"[{'OK' if not j.get('actionable') else 'INFO'}] 끝 상태: 미검증 {af.get('total')}행 · 처리 대상 {j.get('actionable')}" + (' (같은 보완으로 더 줄지 않아 반복을 멈춤)' if j.get('stalled') else '')
+                  + f" · 권장안 적용 {af.get('recommended', 0)} · 사람 확인 {j.get('human')} · 보완 대기 {af.get('blocked', 0)} · 집계 {af.get('aggregate', 0)}", flush=True)
+        except (OSError, ValueError):
+            pass
+        return rc_d
+    if a.no_docs:
+        os.environ['VERIFY_SKIP_DOCS'] = '1'
+    started = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    want = a.resume or os.environ.get('VM_RESUME') == '1'
+    if a.resume:
+        os.environ['VM_RESUME'] = '1'   # run_verify 에 재개 신호 전달(환경변수로 이어받음)
+    cl = cl_begin(mid, json.dumps({'id': mid, 'recheck': a.recheck, 'delta': a.delta, 'no_docs': a.no_docs}, sort_keys=True), started, want)
+    started = cl['started']
+    rv_skip = want and rv_done_same_run(mid, cl)
+
+    def run_rv(args_, env=None):
+        """CheckList 측정 1회, 같은 실행에서 이미 끝났으면 건너뜀(지난 종료코드)"""
+        if rv_skip:
+            print(f"[재개] CheckList 측정(run_verify {' '.join(args_)}) 이어서, 같은 실행에서 끝남(지난 실행 결과 사용)", flush=True)
+            return int(cl.get('rv_rc') or 0)
+        rc_ = subprocess.call([sys.executable, rv, mid, *args_], cwd=ROOT, env=env) if env is not None else run(['py', rv, mid, *args_])
+        if rc_ == 0:
+            cl.update(rv_done=True, rv_rc=0); cl_save(mid, cl)
+        return rc_
+    rc = None
+    # 2026-11-19 사용자: 한 단계 안에서 이어지는 작업은 하위 단계로 보이게 — '[작업 k/K] 이름' 줄(VM Flow 카드가 하위 단계 목록으로 그림)
+    jobs = 2
+    if a.delta:
+        # 2026-11-20 사용자: 수정분 재점검 = 이전 수행과 달라진 소스의 범위 안에서만 시험·검증
+        jobs = 3
+        print(f'[작업 1/{jobs}] 수정분 범위 결정(delta_scope · 소스 기준선 대조 + AI 판단)', flush=True)
+        sys.path.insert(0, HERE)
+        if want and isinstance(cl.get('sc'), dict):
+            sc = cl['sc']; print('[재개] 수정분 범위 = 처음 정한 값(_cl_resume.json)', flush=True)
+        else:
+            try:
+                import delta_scope
+                sc = delta_scope.decide(mid)
+            except Exception as e:
+                sc = {'mode': 'full', 'why': f'범위 결정 실패({type(e).__name__}: {str(e)[:120]}), 모르면 전체'}
+            cl['sc'] = sc; cl_save(mid, cl)
+        # 2026-11-20 사용자 결정 '두 범위 합치기': 수정분 범위 ∪ 미검증 처리 대상 범위(recheck_plan). 전체 = 기준선 없음 · 화면 소스 넓은 변경 · AI 설명 실패만
+        if sc.get('mode') in ('partial', 'none'):
+            r_rules, r_stages, r_stage_rules, r_why = recheck_plan(mid)
+            add = sorted(set(r_rules) - set(sc.get('rules') or []))
+            if r_rules:
+                sc = dict(sc, mode='partial', rules=sorted(set(sc.get('rules') or []) | set(r_rules)), stages=sorted(set(sc.get('stages') or []) | set(r_stages)),
+                          stage_rules=sorted(set(r_stage_rules) - set(sc.get('rules') or [])), why=(sc.get('why') or '') + f' · 미검증 처리 대상 규칙 {len(r_rules)}개 합침(새로 {len(add)}개 · {r_why})')
+                cl['sc'] = sc; cl_save(mid, cl)
+        print(f"[수정분 범위] {sc['mode']} · {sc.get('why', '')}" + (f" · 재측정 규칙 {len(sc.get('rules') or [])}개 · 행 {sc.get('rows_in', 0)} · 유지 {sc.get('rows_keep', 0)} · 추가 단계 {','.join(sc.get('stages') or []) or '없음'} · Doc/verify/{mid}/delta_scope.json" if sc['mode'] == 'partial' else ''), flush=True)
+        if sc['mode'] == 'none':
+            print(f'[작업 2/{jobs}] CheckList 재측정 없음 — 바뀐 소스와 직전 미해결 행이 없음(지난 판정 그대로)', flush=True); rc = 0
+        elif sc['mode'] == 'partial':
+            print(f'[작업 2/{jobs}] CheckList 수정분 재측정(run_verify --only · 규칙 {len(sc["rules"])}개)', flush=True)
+            env = dict(os.environ, VERIFY_DELTA='1', VERIFY_DELTA_STAGES=','.join(sc.get('stages') or []), VERIFY_STAGE_RULES=','.join(sc.get('stage_rules') or []))
+            if cl.get('only_rc3'):
+                print('[재개] 지난 실행에서 --only 가 잴 시험이 없음(rc 3) → 전체기능 재점검으로', flush=True); rc = None
+            else:
+                print('$ ' + ' '.join([rv, mid, '--only', ','.join(sc['rules'])])[:400], flush=True)
+                rc = run_rv(['--only', ','.join(sc['rules'])], env)
+                if rc == 3:
+                    print('[INFO] --only 로 잴 시험이 없는 규칙이 있음(rc 3) → 전체기능 재점검으로', flush=True); rc = None
+                    cl['only_rc3'] = True; cl_save(mid, cl)
+        else:
+            print(f"[INFO] 수정분 재점검 → 전체기능 재점검으로 실행: {sc.get('why', '')}", flush=True)
+        if rc is None:
+            print(f'[작업 2/{jobs}] CheckList 전체(run_verify)', flush=True)
+            rc = run_rv([])
+    if a.recheck:
+        if want and isinstance(cl.get('rplan'), list):
+            rules, stages, stage_rules, why = cl['rplan']; print('[재개] 재수행 범위 = 처음 정한 값(_cl_resume.json)', flush=True)
+        else:
+            rules, stages, stage_rules, why = recheck_plan(mid)
+            cl['rplan'] = [rules, stages, stage_rules, why]; cl_save(mid, cl)
+        if rules and cl.get('only_rc3'):
+            print('[재개] 지난 실행에서 --only 가 잴 시험이 없음(rc 3) → 처음부터 전체 수행', flush=True)
+            rules = []; jobs = 3
+        if rules:
+            print(f'[INFO] CheckList 재수행 = 미검증 행만 — {why}: {",".join(rules)}', flush=True)
+            print(f'[작업 1/{jobs}] CheckList 재측정(미검증 규칙만 --only' + (f" + 단계 {','.join(stages)}" if stages else '') + ')', flush=True)
+            env = dict(os.environ, VERIFY_DELTA_STAGES=','.join(stages), VERIFY_STAGE_RULES=','.join(stage_rules))
+            print('$ ' + ' '.join([rv, mid, '--only', ','.join(rules)])[:400] + (f' (VERIFY_DELTA_STAGES={",".join(stages)})' if stages else ''), flush=True)
+            rc = run_rv(['--only', ','.join(rules)], env)
+            if rc == 3:
+                print('[INFO] --only 로 잴 시험이 없는 규칙이 있음(rc 3) → 처음부터 전체 수행', flush=True)
+                rc = None; jobs = 3
+                cl['only_rc3'] = True; cl_save(mid, cl)
+        else:
+            print(f'[INFO] CheckList 재수행 = 처음부터 전체 — {why}', flush=True)
+    if rc is None:
+        print(f'[작업 {jobs - 1}/{jobs}] CheckList 전체(run_verify)', flush=True)
+        rc = run_rv([])
+    print(f'[작업 {jobs}/{jobs}] 미검증 분류(unverified_resolve)', flush=True)
+    run(['py', ur, mid, '--no-rerun'])
+    if rc == 0:
+        try:
+            os.remove(cl_path(mid))   # 2026-11-20 작업 재개: 정상 종료면 진행 기록 삭제(실패로 끝나면 남겨 다음 재개가 씀)
+        except OSError:
+            pass
+    try:
+        j = json.load(open(os.path.join(ROOT, 'Doc', 'verify', mid, 'unverified_triage.json'), encoding='utf-8'))
+        print(f"[{'OK' if not j.get('actionable') else 'INFO'}] 미검증 {j['after']['total']}행 · 처리 대상 {j.get('actionable')} · 사람 확인 {j.get('human')} · 결정 목록 {j['after'].get('decide', 0)} · 보완 대기 {j['after'].get('blocked', 0)} · 집계 {j['after'].get('aggregate')}", flush=True)
+    except (OSError, ValueError, KeyError):
+        pass
+    el = effect_line(mid, started)
+    if el:
+        print(el, flush=True)
+    return rc
+
+
+if __name__ == '__main__':
+    sys.exit(main())

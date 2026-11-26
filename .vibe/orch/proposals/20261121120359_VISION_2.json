@@ -1,0 +1,97 @@
+{
+  "id": "20261121120359_VISION_2",
+  "at": "2026-11-21T12:03:59+09:00",
+  "ms": 1795230239725,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ln|autoeligible|delete title word",
+  "title": "자동 반영 판정에서 삭제 안 구분을 제목 낱말 대신 대상 경로와 안 종류로 함",
+  "evidence": "orch-selfcheck.js:389 isDeleteTitle 이 제목에 '삭제|지움'과 '로그|파일' 낱말이 있으면 삭제 안으로 봄. :397 대상이 전부 코드여도 '파일 삭제(생성물 아님)'로 승인 처리. proposals/20261121000933_SELF.json impact fix, 대상 orch-ladder.js, orch-usercheck.js, t_orch_ladder_recur_time.js, 11-21 00:09 등록 뒤 11:59 까지 pending. selfcheck S13 U3 fail 과 같은 증상(자동 반영 대상인데 반영 안 됨)",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_selfcheck_eligible.js"
+  ],
+  "before_after": "제목에 '삭제'와 '로그'가 있으면 대상이 코드 파일이어도 승인 대기 → 대상이 생성물 경로(DEL_OK)이거나 안에 삭제 목록 필드가 있을 때만 삭제 안, 대상이 전부 AUTO_ROOTS 코드면 code 로 자동 반영",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. 새 시험에 20261121000933_SELF 제목과 대상을 넣어 autoEligible 이 {ok:true, kind:'code'} 를 돌려주고, 20261119215147_SELF_2(.vibe/logs 로그 2개 삭제)는 kind 'delete' 를 유지하는지 확인",
+  "rollback": "orch-selfcheck.js 를 반영 전 백업(.bak_<날짜>_orch)으로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "오판 1건 재현(20261121000933_SELF). 같은 함수 오판 사례 2건 이상은 미확인이라 L3 로 올리지 않음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T12:04:24+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T12:07:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self1204"
+    },
+    {
+      "at": "2026-11-21T12:07:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T12:16:02+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 871, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T12:16:02+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 12:08:58 node tools/VibeManager/test/t_orch_selfcheck_eligible.js tools/VibeManager: 'PASS 20261121000933_SELF = 자동 반영(code) {\"ok\":true,\"kind\":\"code\",\"why\":\"\"}', 'PASS 20261119215147_SELF_2 = 생성물 삭제(delete) {\"ok\":true,\"kind\":\"delete\",\"why\":\"\"}', 'ALL PASS'(7건). 이어서 node tools/VibeManager/ · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-21T12-07-59_claude_orch.log",
+      "sec": 278,
+      "costUsd": 0.8552530000000002,
+      "files": [
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_selfcheck_eligible.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:26+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "코드 고침 안이 제목에 '삭제' 낱말이 들어갔다는 이유로 승인 대기에 걸리던 일이 없어짐",
+    "risk": "삭제 안을 코드 고침으로 잘못 보면 승인 없이 파일이 지워질 수 있어, 삭제 판정은 대상 경로 기준을 유지함",
+    "undo": "자가진단 파일 1개를 반영 전 백업으로 되돌림"
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795230264762,
+  "autoFp": "dcff2e565c",
+  "applyStartMs": 1795230479002,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 871, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self1204",
+  "needsReload": true,
+  "appliedMs": 1795230962150,
+  "synced": [
+    "orch-selfcheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/test/t_orch_selfcheck_eligible.js"
+    ],
+    "verify_result": "2026-11-21 12:08:58 node tools/VibeManager/test/t_orch_selfcheck_eligible.js tools/VibeManager: 'PASS 20261121000933_SELF = 자동 반영(code) {\"ok\":true,\"kind\":\"code\",\"why\":\"\"}', 'PASS 20261119215147_SELF_2 = 생성물 삭제(delete) {\"ok\":true,\"kind\":\"delete\",\"why\":\"\"}', 'ALL PASS'(7건). 이어서 node tools/VibeManager/test/run_all.js tools/VibeManager 실행, 12:12:24 확인: 'ALL OK  파일 63/63  PASS 871  FAIL 0  201.1s'(t_orch_selfapply.js PASS 41, t_orch_selfcheck_eligible.js PASS 7)",
+    "note": "autoEligible 삭제 안 판정 변경. 삭제 안은 ① 삭제 목록 필드(deletes, delete, remove, removeFiles)가 있거나 ② 제목에 삭제 낱말과 대상 파일 이름이 같이 있을 때만 해당함. 대상이 전부 생성물 경로(DEL_OK)이면 종전처럼 제목에 삭제 낱말이 있거나 삭제 목록 필드가 있을 때 delete 로 판정함. 제목에 '삭제', '로그' 낱말만 있고 대상이 전부 AUTO_ROOTS 코드이면 code 로 판정함. ② 조건은 기존 시험 t_orch_selfapply.js 의 'a.js 파일 삭제 = 승인' 확인을 깨지 않으려고 넣음. 그 시험 파일은 승인 범위 밖이라 고치지 않음. 20261121000933_SELF 의 needsApproval 값은 다음 autoApplyNext 실행 때 갱신되며 미확인."
+  },
+  "snap": "prop_20261121120359_VISION_2",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

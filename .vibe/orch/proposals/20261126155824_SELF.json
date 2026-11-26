@@ -1,0 +1,28 @@
+{
+  "id": "20261126155824_SELF",
+  "at": "2026-11-26T15:58:24+09:00",
+  "ms": 1795676304115,
+  "source": "self",
+  "status": "pending",
+  "sig": "lnplan cacgbbcfaaacec_vision step c",
+  "title": "CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 2",
+  "evidence": "L4 단계 원장 20261125000242_VISION 단계 2/6 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md",
+  "targets": [
+    "tools/VibeManager/orch-vision.js"
+  ],
+  "before_after": "orch-vision.js 입력에 checklistEffect { effAt, runsAfter: [{runId, firstDocMin, chainMin}] } 를 넣고 지시문에 규칙 1-2(효력 뒤 실행 0건 = 미확인 '실측 대기', firstDocMin > checklistTargetMin = 어긋남, 이하 = 맞음, chainMin 은 표시만) 추가 · 상세 = .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md 전환 절 단계 2",
+  "verify": "지시문 생성 시험에서 1-2 줄과 입력 필드 존재, events.jsonl:2001 형식 표본에서 runsAfter 0건",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 단계 원장 끔. 단계마다 반영 백업과 .bak_<날짜>_concept 사본으로 orch-ladder.js, orch-vision.js, orchestra.js, 시험 파일 복원. VMO 개선안 탭 되돌리기. plans.json 원장 삭제는 개선안 원본에 영향 없음",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261125000242_VISION 단계 2",
+  "incident": "",
+  "screen": "",
+  "history": [],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261125000242_VISION|2",
+  "kind": "fix",
+  "plan": "20261125000242_VISION",
+  "planStep": 2
+}

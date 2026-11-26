@@ -71,7 +71,10 @@ for sc in screens:
     sps = []
     for r in rcsv(os.path.join(ASIS, 'screens', sc, 'endpoints.csv')):
         m = re.match(r'^SP\s+(\S+)', r.get('sp_or_sql', '') or '')
-        if m and r.get('status') == 'MATCH' and is_main(r, os.path.join(ASIS, 'screens', sc)):
+        # 2026-11-25 T548 (SCP0005 T-c65db01b A1 SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID 골든 케이스 없음): 공유(shared) 팝업 원문의 SP 는 is_main 이 빼서 케이스가 생기지 않았다.
+        #   차등 검증 짝 원장 sp_pair.csv 에 이 화면 짝으로 등록된 SP(화면 경로 근거 있음)는 shared 여도 케이스를 만든다 · legacy 는 그대로 제외
+        _shared_paired = m and r.get('variant') == 'shared' and (sc.upper(), m.group(1).split('.')[-1].upper()) in SP_PAIR
+        if m and r.get('status') == 'MATCH' and (is_main(r, os.path.join(ASIS, 'screens', sc)) or _shared_paired):
             sp = m.group(1).split('.')[-1]
             if sp not in sps: sps.append(sp)
     for sp in sps:

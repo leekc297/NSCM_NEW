@@ -121,7 +121,17 @@ def vm_vars():
     return {'root': ROOT, 'toolsDir': P('tools', 'AsisFacts'), 'harnessDir': P('tools', 'Harness'), 'outDir': P('Doc', 'asisfacts'), 'tobeDir': P('nscm-fe'), 'tobeOutDir': P('Doc', 'tobefacts'),
             'rulesDir': P('tools', 'Harness', 'rules'), 'gapDir': P('Doc', 'gap'), 'genDir': P('Doc', 'gen'), 'vibeDir': P('.vibe'), 'promptsDir': P('tools', 'Harness', 'prompts'),
             'dbconnDir': P('tools', 'DbConn'), 'reconDir': P('tools', 'Recon'), 'e2eDir': P('tools', 'E2E'), 'dbOutDir': P('Doc', 'db'), 'reconOutDir': P('Doc', 'recon'),
-            'e2eOutDir': P('Doc', 'e2e'), 'goldenDir': P('Doc', 'golden'), 'extDir': P('tools', 'VibeManager')}
+            'e2eOutDir': P('Doc', 'e2e'), 'goldenDir': P('Doc', 'golden'), 'extDir': P('tools', 'VibeManager'), 'checklistDir': checklist_dir()}
+
+
+def checklist_dir():
+    # 2026-11-26 R83: VM extension.js paths().checklistDir 와 같은 값(harness.json paths.checklistDir · 없으면 Doc/UI_CHECKLIST)
+    try:
+        h = json.load(open(P('tools', 'Harness', 'harness.json'), encoding='utf-8-sig'))
+    except (OSError, ValueError):
+        h = {}
+    rel = (h.get('paths') or {}).get('checklistDir') or h.get('checklistDir') or 'Doc/UI_CHECKLIST'
+    return rel if os.path.isabs(rel) else P(*rel.replace(BS, '/').split('/'))
 
 
 def load_vm():

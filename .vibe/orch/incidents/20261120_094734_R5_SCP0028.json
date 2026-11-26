@@ -14,7 +14,7 @@
     "log": ".vibe\\logs\\2026-11-20T08-28-54_CheckList_________________________--only_______________________CheckList____3__.log",
     "pid": 22336
   },
-  "status": "need-user",
+  "status": "resolved",
   "notice": false,
   "actions": [
     {
@@ -380,6 +380,11 @@
         "tools/Harness/_verify_next/_orig/_tmp_new_sort.py(신규)",
         "tools/Harness/_verify_next/_tmp_new_sort.py(신규)"
       ]
+    },
+    {
+      "at": "2026-11-26T16:13:22+09:00",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "원인 고쳐짐 확인: 하위 PID 소멸 10초 유예(orch-state.js:67, 개선안 20261120095113_INC)"
     }
   ],
   "agent": {

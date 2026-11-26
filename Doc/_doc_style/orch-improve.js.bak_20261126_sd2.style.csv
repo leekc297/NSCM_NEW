@@ -1,0 +1,10 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장,분류
+,L1,기호,시 개선안 — 실행 기록,줄표 삭제 — 문장을 나누거나 쉼표로,// 2026-11-19 VMO P5: 상시 개선안 — 실행 기록을 집계하고 개선안을 올린다. 반영은 사용자 승인 뒤에만 한다(사용자 지시 11-19).,문장
+,L6,기호,선안 금지 — 측정값이,줄표 삭제 — 문장을 나누거나 쉼표로,//   근거 없는 개선안 금지 — 측정값이 없으면 '측정 추가' 개선안만 올리게 지시한다.,문장
+,L7,기호,Enabled · reviewEveryHours · reviewD,가운뎃점 나열 → 쉼표,//   기준값: tools/Harness/harness.json orch 절(reviewEnabled · reviewEveryHours · reviewDays · proposalMaxPerReview),문장
+,L129,기호,출도 센다 — 종전에는,줄표 삭제 — 문장을 나누거나 쉼표로,// VMO 개선안 20261119193539_REVIEW_4(사용자 승인 2026-11-19): 끝 사건 없이 사라진 대기와 Claude 호출도 센다 — 종전에는 wait.end · claude.end 만 세어 중간에 끝난 실행의 대기 3건과 호출 1건이 집계에 없었다,문장
+,L178,추측,면 실행 중일 수 있어 noEn,'~일 수 있다' → 확인했으면 단정 · 못 했으면 '미확인',"for (const e of chOpen.values()) { const c = chOf(e.chain || e.chainLabel, e.chainLabel); (c.open || (c.open = [])).push(e); } // 끝 기록 없는 체인(주인 VM 프로세스가 살아 있으면 실행 중일 수 있어 noEndLive 로 따로 셈)",문장
+,L331,수식어,회 승인이 모두 사라졌다.,삭제 — 범위는 수량·조건으로(예: 3건 모두 일치 → 3건 일치 · 정확히 일치 → 일치),//   000643_VISION 3회 · 000946_VISION 4회 승인이 모두 사라졌다. 사람 승인은 approvedWait 로 남기고 에이전트가 비면 pumpApprovals 가 이어서 반영한다,문장
+,L379,기호,게이트(구문 · 시험 · 정합) 기준선,가운뎃점 나열 → 쉼표,// 2026-11-19 자가진단 Q6: VM 자가 보완 = 반영 전 게이트(구문 · 시험 · 정합) 기준선을 재고 대상 파일을 .bak_<yyyymmdd>_self<hhmm> 로 백업한다,문장
+,L423,기호,믿을 수 없음 → 되돌리고,문장을 잇는 화살표 삭제 — 문장으로 풀어 쓰기(순서·변경 전후 표기 'A → B' 는 허용),// ② 다른 작업과 겹침(131344_SELF: 반영 중 Claude Code 세션이 workbench.js 표기를 바꿔 시험 실패): AI 가 고치지 않은 VM 파일이 반영 중에 바뀌었으면 판정을 믿을 수 없음 → 되돌리고 10분 뒤 다시(실패로 세지 않음),문장
+,L482,기호,n ? ` — ${pr.,줄표 삭제 — 문장을 나누거나 쉼표로,"pr.status = 'rejected'; delete pr.approvedWait; pr.reason = String(reason || '').slice(0, 500); log(pr, by || '사용자', `반려${pr.reason ? ` — ${pr.reason}` : ''}`); save(pr);",문장

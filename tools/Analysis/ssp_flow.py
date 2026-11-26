@@ -13,9 +13,23 @@
 """
 import argparse, csv, io, json, os, re, sys, time, collections, html
 
+# 2026-11-23 실측: 산출 md 를 다른 프로세스(편집기 · 색인)가 잠깐 잡고 있으면 쓰기 열기가 OSError 22 로 실패한다(13:33 · 13:37 2회).
+#   쓰기 열기만 1초 간격으로 20번까지 다시 시도한다. 읽기 · 다른 오류는 그대로 둔다.
+_io_open = io.open
+def _open_retry(*a, **k):
+    mode = a[1] if len(a) > 1 else k.get('mode', 'r')
+    for i in range(20):
+        try: return _io_open(*a, **k)
+        except OSError as e:
+            if e.errno != 22 or 'w' not in str(mode) or i == 19: raise
+            time.sleep(1)
+io.open = _open_retry
+
+
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'Harness', 'verify'))
 sys.path.insert(0, HERE)
+import ssp_shell  # 화면 틀(왼쪽 목차, 절 상자, 2026-11-23)
 import ssp_ref  # 2026-11-11 사용자 제공 기존 분석 자료(PI 프로세스 · 운영 잡 스케줄 · 통합테스트 시나리오) 반영
 import ssp_shipplan  # 2026-11-11 사용자 제공 사업부별 Shipment Plan 산출 흐름도 · 산출 로직
 import ssp_master  # 2026-11-16 사용자 제공 Standard Information SSP Manual(기준정보 Master Flow) + 프로세스 PPT 11-16 판 → 한눈에 보기 탭
@@ -297,6 +311,12 @@ def main(out_dir):
         d = tabdom[t]
         if d != 'SSP' and t not in log_tabs:
             for sid in ws: dom_out[d][owner_stage(sid)].add(t)
+    _mm = max(i for i, x in enumerate(L) if isinstance(x, str) and x.startswith('```mermaid'))  # 2026-11-23: R/W 선 30개가 겹치는 그래프 대신 격자를 먼저 보인다
+    try:
+        import ssp_svg
+        L[_mm:_mm] = [ssp_svg.context_matrix(st_list, dom_in, dom_out), '', ssp_svg.fold_next('그래프로 보기(같은 내용)'), '']
+    except Exception as ex:
+        print(f'[ssp_flow] 컨텍스트 격자 건너뜀: {type(ex).__name__}: {ex}')
     L.append('  subgraph IN["입력: 타 도메인·공통 테이블(SSP 화면이 읽음)"]')
     for d in sorted(dom_in): L.append(f'    IN_{mm_id(d)}["{d}<br/>{objcnt(set().union(*dom_in[d].values()))}"]')
     L.append('  end'); L.append('  subgraph SSPD["SSP 업무 단계"]')
@@ -343,6 +363,12 @@ def main(out_dir):
         for t in ts:
             for sid in writers.get(t, set()): ew[(owner_stage(sid), en)].add(t)
             for sid in readers.get(t, set()) - writers.get(t, set()): er[(owner_stage(sid), en)].add(t)
+    _mm = max(i for i, x in enumerate(L) if isinstance(x, str) and x.startswith('```mermaid'))  # 2026-11-23: 선이 겹치는 그래프 대신 단계 × 엔터티 격자를 먼저 보인다
+    try:
+        import ssp_svg
+        L[_mm:_mm] = [ssp_svg.matrix(st_list, ent_tabs, ew, er), '', ssp_svg.fold_next('그래프로 보기(같은 내용)'), '']
+    except Exception as ex:
+        print(f'[ssp_flow] 단계 × 엔터티 격자 건너뜀: {type(ex).__name__}: {ex}')
     L.append('  subgraph WS["만드는 단계(W)"]')
     for st in st_list:
         if any(k[0] == st for k in ew): L.append(f'    W_{st}["{st_label(st)}"]')
@@ -468,7 +494,7 @@ def main(out_dir):
         for (a_, ost), n in sorted(to_st.items()): P.append(f'  {mm_id(a_)} -.->|{n}| OUT_{ost}')
         if not inner and not to_st and not from_st: P.append(f'  NOTE_{st}["다른 화면과 SSP 테이블 의존 없음(공통 마스터·로그 제외)"]')
         P += ['```', '']
-    P += ['### 2-2. TO-BE 메뉴 화면 간 흐름(19 화면만 · 단계별 색)', '', '- Master 단계 화면(기준정보 · 거의 모든 화면이 읽음)은 한 노드로 접음 · AS-IS 전용 화면을 거치는 의존은 제외 · 라벨 = 매개 테이블 수(쓰는 화면 → 읽기만 하는 화면 · 단방향 전달) · 여러 TO-BE 화면이 함께 쓰는 허브 표는 그림 아래 표 · 화면정의서 재작성 순서 검토용', '', '```mermaid', 'flowchart LR']
+    P += ['### 2-2. TO-BE 메뉴 화면 간 흐름(19 화면만 · 단계별 색)', '', '- Master 단계 화면(기준정보 · 거의 모든 화면이 읽음)은 한 노드로 접음 · AS-IS 전용 화면을 거치는 의존은 제외 · 라벨 = 매개 테이블 수(쓰는 화면 → 읽기만 하는 화면 · 단방향 전달) · 여러 TO-BE 화면이 함께 쓰는 허브 표는 그림 아래 표 · 화면정의서 재작성 순서 검토용', '', '```mermaid', 'flowchart TB']  # 2026-11-23: 가로 2,565px(화면 맞춤 40%) → 세로 배치
     colors = {'Master': '#e3f2fd', 'Request': '#fff3e0', 'Plan': '#e8f5e9', 'Confirm': '#f3e5f5', 'Change': '#fce4ec', 'ChangeConfirm': '#ede7f6', 'Analysis': '#f1f8e9', 'Etc': '#eeeeee'}
     for st in st_list: P.append(f'  classDef {st} fill:{colors.get(st, "#eee")},stroke:#777')
     tobe_ids = {s['id'] for s in tobe}
@@ -490,6 +516,13 @@ def main(out_dir):
     pair2 = collections.defaultdict(set)
     for (a_, b_), ts in pair.items():
         if tb_node(a_) != tb_node(b_): pair2[(tb_node(a_), tb_node(b_))] |= ts
+    _mm = max(i for i, x in enumerate(P) if isinstance(x, str) and x.startswith('```mermaid'))  # 2026-11-23: 선이 겹치는 그래프(화면 맞춤 40%) 대신 쓰는 화면 × 읽는 화면 격자를 먼저 보인다
+    try:
+        import ssp_svg
+        _ord = [x['id'] for x in sorted(tobe, key=lambda x: (STAGES.index(stage[x['id']]), x['tobe_sort']))]
+        P[_mm:_mm] = [ssp_svg.pair_matrix(pair, _ord, lambda sid: (screens.get(sid, {}).get('tobe_desc') or screens.get(sid, {}).get('name') or ''), mst_ids), '', ssp_svg.fold_next('그래프로 보기(같은 내용)'), '']
+    except Exception as ex:
+        print(f'[ssp_flow] 화면 간 격자 건너뜀: {type(ex).__name__}: {ex}')
     for (a_, b_), ts in sorted(pair2.items(), key=lambda x: -len(x[1])): P.append(f'  {a_} -->|{len(ts)}| {b_}'); n_tb += 1
     P.append(f'  LEG["범례: ' + ' · '.join(f'{st}' for st in st_list) + f' — 전달 간선 {n_tb} · 허브 표 {len(hubs)}개는 아래 표"]')
     P += ['```', '', f'**허브 표** — 쓰는 TO-BE 화면 ≥ {HUB_MIN}: 여러 화면이 함께 쓰고 읽는 표라 화면쌍 간선 대신 표로 제시(그림에 넣으면 간선이 폭발)', '', '| 허브 표 | 쓰는 TO-BE 화면 | 읽기만 하는 TO-BE 화면 |', '|---|---|---|']
@@ -548,7 +581,7 @@ def main(out_dir):
                 tbl = []
         while i < len(lines):
             ln = lines[i]
-            if ln.startswith('<div class="spf'):   # 카드형 흐름(ssp_cards.py) — 한 줄짜리 HTML 은 그대로 통과
+            if ln.startswith('<div class="spf'):   # 카드형 흐름(ssp_cards.py) · SVG 그림(ssp_svg.py) — 한 줄짜리 HTML 은 그대로 통과
                 flush(); out.append(ln); i += 1; continue
             if ln.startswith('```mermaid'):
                 flush(); j = i + 1; buf = []
@@ -578,9 +611,25 @@ def main(out_dir):
     TAB_ORDER = [('한눈에 보기', 'SSP_OVERVIEW.md'), ('업무 프로세스(PI · 통합테스트)', 'SSP_REF_PROCESS.md'), ('프로세스 흐름', 'SSP_PROCESS_FLOW.md'), ('데이터 흐름(개요)', 'SSP_DATA_FLOW.md'),
                  ('배치 흐름', 'SSP_BATCH_FLOW.md'), ('배치 분석서', 'SSP_BATCH_ANALYSIS.md'), ('Shipment Plan 산출 흐름', 'SSP_SHIPPLAN_FLOW.md'), ('화면별 상세', 'SSP_DATA_FLOW_DETAIL.md')]
     tabs = [(t_, fn_) for t_, fn_ in TAB_ORDER if os.path.exists(os.path.join(out_dir, fn_)) and (fn_ != 'SSP_REF_PROCESS.md' or ref_stat)]
-    body = []
+    # ── 화면 틀(2026-11-23 사용자 요청 '보기가 쉽지 않다'): 위쪽 탭 8개 → 왼쪽 목차(묶음 6) + 절 단위 본문. 절 상자·목차 대응표 = ssp_shell.py
+    body = []; blocks = []
+    HELP = ('<h3>읽는 법</h3><ul>'
+            '<li>왼쪽 목차에서 항목을 고르면 그 절만 보입니다. 목차 위 검색 칸에 화면 ID, 잡 이름, 테이블 이름, 절 제목을 넣으면 바로 찾습니다.</li>'
+            '<li>그림의 상자와 파란 점선 이름(화면 ID, 단계, 잡, 프로시저, 테이블, 테스트 ID)을 클릭하면 오른쪽에 상세가 열립니다. 상세 창의 「본문에서 보기 ↗」 또는 Ctrl+클릭은 그 위치로 이동합니다. 이동한 뒤에는 오른쪽 아래 「◀ 이전 위치」로 돌아갑니다. Esc 는 상세 창을 닫습니다.</li>'
+            '<li>그림은 처음에 화면에 맞춰 보입니다. 그림 위 도구줄: 전체 보기, 폭 맞춤, 100%, 확대·축소, 크게 보기. Ctrl+휠은 확대·축소, 끌면 이동합니다. 상자에 마우스를 올리면 이어진 선과 상대만 남습니다.</li>'
+            '<li>15행이 넘는 표는 표 위 입력 칸에 글자를 넣어 행을 거릅니다.</li>'
+            '<li>상자 기본 색 <span class="kleg"><span><i style="background:#e7f0ff;border-color:#3a6ea5"></i>화면</span><span><i style="background:#fff4de;border-color:#d98e2b"></i>프로시저</span><span><i style="background:#e9f6ec;border-color:#4e8f4a"></i>테이블, 엔터티</span><span><i style="background:#f1e9fb;border-color:#7b52b8"></i>배치 잡, 그룹</span><span><i style="background:#e0f2f4;border-color:#1f7a8c"></i>업무 단계</span></span> 그림에 범례가 따로 있으면 그 색을 따릅니다.</li></ul>'
+            '<h4>문서별 원천</h4>')
+    map_html = ''
+    try:
+        import ssp_svg
+        map_html = ssp_svg.overview_map(out_dir, stage_screens={st: [(x['id'], bool(x.get('tobe_menu'))) for x in mains if stage[x['id']] == st] for st in STAGES})
+    except Exception as e:  # 전체 지도는 없어도 나머지 화면은 만든다(오류는 로그)
+        print(f'[ssp_flow] 전체 지도 생성 건너뜀: {type(e).__name__}: {e}')
+    body.append('<section id="tabM" data-file="SSP_MAP" class="tab on">' + (ssp_shell.wrap_one('<h3>SSP 전체 지도</h3>' + map_html, 'MAP', 0, 'SSP 전체 지도', blocks) if map_html else '') + ssp_shell.wrap_one(HELP, 'MAP', 1, '읽는 법', blocks) + '</section>')
     for i, (title, fn) in enumerate(tabs):
-        body.append(f'<section id="tab{i}" data-file="{fn}" class="tab{" on" if i == 0 else ""}"><h2>{html.escape(title)} <small>({fn})</small></h2>')
+        fk = ssp_shell.FILE_KEY[fn]
+        body.append(f'<section id="tab{i}" data-file="{fn}" class="tab on"><h2>{html.escape(title)} <small>({fn})</small></h2>')
         if fn == 'SSP_DATA_FLOW_DETAIL.md':
             # 화면 선택 드롭다운(11-10 사용자) — 절(## 화면ID …)마다 div 로 감싸고 선택한 화면만 표시 · 주소 #화면ID 로 바로 열기
             txt = io.open(os.path.join(out_dir, fn), encoding='utf-8').read()
@@ -595,33 +644,43 @@ def main(out_dir):
                 opts.append((grp_, f'<option value="{html.escape(sid_)}">{html.escape(lab)}</option>'))
                 divs.append(f'<div class="scr" data-id="{html.escape(sid_)}">' + md2html(None, sec) + '</div>')
             n_tb = sum(1 for x in secs if screens.get(x.split('\n', 1)[0][3:].strip().split(' ', 1)[0], {}).get('tobe_menu'))
-            body.append(md2html(None, head))
+            body.append(ssp_shell.wrap(md2html(None, head), fk, blocks))
             opt_html = ''.join('<optgroup label="' + html.escape(g) + '">' + ''.join(o for g2, o in opts if g2 == g) + '</optgroup>' for g in dict.fromkeys(g for g, _ in opts))
-            body.append(f'<div class="scrbar">화면 선택 <select id="scrSel" onchange="pickScr(this.value)"><option value="*">전체 화면({len(secs)})</option>{opt_html}</select> <small>TO-BE {n_tb} · AS-IS 전용 {len(secs) - n_tb} · 주소 끝에 #화면ID 를 붙이면 그 화면으로 바로 열림</small></div>')
-            body.append(''.join(divs))
+            body.append(ssp_shell.wrap_one(f'<div class="scrbar">화면 선택 <select id="scrSel" onchange="pickScr(this.value)"><option value="*">전체 화면({len(secs)})</option>{opt_html}</select> <small>TO-BE {n_tb} · AS-IS 전용 {len(secs) - n_tb} · 주소 끝에 #화면ID 를 붙이면 그 화면으로 바로 열림</small></div>' + ''.join(divs), fk, 9, '화면별 상세', blocks))
         else:
-            body.append(md2html(os.path.join(out_dir, fn)))
+            body.append(ssp_shell.wrap(md2html(os.path.join(out_dir, fn)), fk, blocks))
         body.append('</section>')
+    nav_groups = ssp_shell.build_nav(blocks)
     view_css = io.open(os.path.join(HERE, 'ssp_flow_view.css'), encoding='utf-8').read(); view_js = io.open(os.path.join(HERE, 'ssp_flow_view.js'), encoding='utf-8').read()  # 그림 보기 틀 · 카드형 흐름(2026-11-11 인식성 보완)
     nav_js = io.open(os.path.join(HERE, 'ssp_flow_nav.js'), encoding='utf-8').read()  # 클릭 → 상세 창 · 본문 이동 · 이전 위치(2026-11-11)
+    shell_css = io.open(os.path.join(HERE, 'ssp_flow_shell.css'), encoding='utf-8').read(); shell_js = io.open(os.path.join(HERE, 'ssp_flow_shell.js'), encoding='utf-8').read()  # 왼쪽 목차 · 절 단위 표시(2026-11-23)
     H = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>SSP 데이터·프로세스 흐름</title>
-<style>body{{font-family:Segoe UI,Malgun Gothic,sans-serif;margin:16px;background:#fafafa;color:#222}} nav button{{margin:0 4px 12px 0;padding:6px 12px;border:1px solid #888;background:#fff;cursor:pointer}} nav button.on{{background:#1f6feb;color:#fff}} .tab{{display:none}} .tab.on{{display:block}} pre.mermaid{{background:#fff;border:1px solid #ddd;padding:8px;overflow:auto}} pre.code{{background:#f3f3f3;padding:8px;overflow:auto}} h3,h4,h5{{margin:18px 0 6px}} small{{color:#666}} table{{border-collapse:collapse;margin:6px 0;font-size:13px}} th,td{{border:1px solid #ccc;padding:3px 8px;vertical-align:top}} th{{background:#eef}} code{{background:#eee;padding:0 3px}} blockquote{{color:#555;border-left:3px solid #bbb;margin:6px 0;padding:2px 10px}} .scrbar{{position:sticky;top:0;z-index:5;background:#fafafa;padding:8px 0;border-bottom:1px solid #ddd;margin-bottom:8px}} .scrbar select{{font-size:14px;padding:4px 6px;min-width:420px}} .scr.off{{display:none}} .lnk{{color:#0b57d0;cursor:pointer;border-bottom:1px dotted #0b57d0}} .lnk:hover{{background:#e8f0fe}} g.nlnk{{cursor:pointer}} g.nlnk:hover rect,g.nlnk:hover polygon,g.nlnk:hover path,g.nlnk:hover circle{{stroke:#0b57d0!important;stroke-width:3px!important}} #navpop{{display:none;position:fixed;top:0;right:0;width:min(58vw,1100px);height:100vh;background:#fff;border-left:2px solid #1f6feb;box-shadow:-6px 0 18px rgba(0,0,0,.18);z-index:50;flex-direction:column}} #navpop.on{{display:flex}} .np-bar{{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#eef3fb;border-bottom:1px solid #c9d6ee}} .np-title{{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}} .np-bar button{{padding:5px 10px;border:1px solid #888;background:#fff;cursor:pointer}} .np-bar button:disabled{{opacity:.4;cursor:default}} .np-jump{{border-color:#1f6feb!important;color:#1f6feb}} .np-body{{flex:1;overflow:auto;padding:10px 14px}} .np-body svg{{max-width:none}} .np-card th{{width:170px;text-align:left;background:#eef;white-space:nowrap}} .np-src{{color:#666;font-size:12px;margin:0 0 6px}} #navback{{display:none;position:fixed;right:18px;bottom:18px;z-index:60;padding:10px 16px;border:0;border-radius:22px;background:#1f6feb;color:#fff;font-size:14px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3)}} #navpop.on ~ #navback{{right:calc(min(58vw,1100px) + 18px)}} .navflash{{outline:3px solid #f59e0b;outline-offset:3px;transition:outline-color .3s}} .navhint{{color:#555;font-size:12px;margin:-6px 0 10px}}</style><style>{view_css}</style></head><body>
-<h1>SSP 데이터 흐름 · 프로세스 흐름 <small>{time.strftime("%Y-%m-%d %H:%M")} · 원천 = AS-IS 매트릭스·endpoints·SP 본문 · 근거 CSV 동봉</small></h1>
-<div id="err" style="color:#b00"></div><nav>{''.join(f'<button onclick="show({i})" id="b{i}" class="{"on" if i == 0 else ""}">{html.escape(t)}</button>' for i, (t, _) in enumerate(tabs))}</nav>
-<div class="navhint">그림의 노드와 파란 점선 이름(화면 ID · 단계 · 잡 · 프로시저 · 테이블 · 테스트 ID)을 클릭하면 오른쪽에 상세가 열립니다 · 상세 창의 「본문에서 보기 ↗」 또는 Ctrl+클릭 = 해당 위치로 이동 · 이동 후에는 오른쪽 아래 「◀ 이전 위치」로 되돌아갑니다 · Esc = 상세 창 닫기<br/>그림은 처음에 화면에 맞춰 보입니다 · 그림 위 도구줄: 전체 보기 / 폭 맞춤 / 100% / －＋ / ⛶ 크게 보기 · Ctrl+휠 = 확대·축소 · 끌어서 이동 · 노드에 마우스를 올리면 이어진 선과 상대만 강조 · 노드 기본 색 <span class="kleg"><span><i style="background:#e7f0ff;border-color:#3a6ea5"></i>화면</span><span><i style="background:#fff4de;border-color:#d98e2b"></i>프로시저</span><span><i style="background:#e9f6ec;border-color:#4e8f4a"></i>테이블 · 엔터티</span><span><i style="background:#f1e9fb;border-color:#7b52b8"></i>배치 잡 · 그룹</span><span><i style="background:#e0f2f4;border-color:#1f7a8c"></i>업무 단계</span></span> (그림에 범례가 따로 있으면 그 색이 우선)</div>
+<style>body{{font-family:Segoe UI,Malgun Gothic,sans-serif;margin:0;background:#fafafa;color:#222}} pre.mermaid{{background:#fff;border:1px solid #ddd;padding:8px;overflow:auto}} pre.code{{background:#f3f3f3;padding:8px;overflow:auto}} h3,h4,h5{{margin:18px 0 6px}} small{{color:#666}} table{{border-collapse:collapse;margin:6px 0;font-size:13px}} th,td{{border:1px solid #ccc;padding:3px 8px;vertical-align:top}} th{{background:#eef}} code{{background:#eee;padding:0 3px}} blockquote{{color:#555;border-left:3px solid #bbb;margin:6px 0;padding:2px 10px}} .scrbar{{position:sticky;top:0;z-index:5;background:#fafafa;padding:8px 0;border-bottom:1px solid #ddd;margin-bottom:8px}} .scrbar select{{font-size:14px;padding:4px 6px;min-width:420px}} .scr.off{{display:none}} .lnk{{color:#0b57d0;cursor:pointer;border-bottom:1px dotted #0b57d0}} .lnk:hover{{background:#e8f0fe}} g.nlnk{{cursor:pointer}} g.nlnk:hover rect,g.nlnk:hover polygon,g.nlnk:hover path,g.nlnk:hover circle{{stroke:#0b57d0!important;stroke-width:3px!important}} #navpop{{display:none;position:fixed;top:0;right:0;width:min(58vw,1100px);height:100vh;background:#fff;border-left:2px solid #1f6feb;box-shadow:-6px 0 18px rgba(0,0,0,.18);z-index:50;flex-direction:column}} #navpop.on{{display:flex}} .np-bar{{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#eef3fb;border-bottom:1px solid #c9d6ee}} .np-title{{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}} .np-bar button{{padding:5px 10px;border:1px solid #888;background:#fff;cursor:pointer}} .np-bar button:disabled{{opacity:.4;cursor:default}} .np-jump{{border-color:#1f6feb!important;color:#1f6feb}} .np-body{{flex:1;overflow:auto;padding:10px 14px}} .np-body svg{{max-width:none}} .np-card th{{width:170px;text-align:left;background:#eef;white-space:nowrap}} .np-src{{color:#666;font-size:12px;margin:0 0 6px}} #navback{{display:none;position:fixed;right:18px;bottom:18px;z-index:60;padding:10px 16px;border:0;border-radius:22px;background:#1f6feb;color:#fff;font-size:14px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3)}} #navpop.on ~ #navback{{right:calc(min(58vw,1100px) + 18px)}} .navflash{{outline:3px solid #f59e0b;outline-offset:3px;transition:outline-color .3s}}</style><style>{view_css}</style><style>{shell_css}</style></head><body>
+<div id="shell"><aside id="side"><div class="sd-top"><div class="sd-title">SSP 흐름</div><div class="sd-gen">{time.strftime("%Y-%m-%d %H:%M")} 생성</div><input id="sdq" type="search" placeholder="검색: 화면 ID, 잡, 테이블, 절 제목" autocomplete="off"><div id="sdres"></div></div><div id="sdtree"></div></aside>
+<main id="main"><div id="crumb"><button id="sdtoggle" title="목차 접기/펴기">☰</button><span id="crumbtxt"></span><span class="cr-sp"></span><button id="prevI">◀ 앞 절</button><button id="nextI">다음 절 ▶</button></div><div id="err" style="color:#b00"></div><div id="itemhead"></div><div id="pickbar"></div>
 {''.join(body)}
+</main></div>
+<script>window.SSP_NAV={ssp_shell.nav_json(nav_groups)};</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
 <script>{view_js}</script>
 <script>{nav_js}</script>
-<script>document.querySelectorAll('.tab').forEach(e=>e.classList.add('on'));mermaid.initialize({{startOnLoad:false,maxTextSize:900000,theme:'base',themeVariables:{{fontFamily:'Segoe UI,Malgun Gothic,sans-serif',fontSize:'14px',primaryColor:'#f1f4f9',primaryBorderColor:'#7c8aa0',primaryTextColor:'#1b1f23',lineColor:'#66727f',clusterBkg:'#f7f9fb',clusterBorder:'#b9c3cf',edgeLabelBackground:'#ffffff',tertiaryColor:'#f7f9fb'}},flowchart:{{useMaxWidth:false,nodeSpacing:36,rankSpacing:64,padding:10}},securityLevel:'loose'}});function pickScr(v,q){{document.querySelectorAll('.scr').forEach(d=>d.classList.toggle('off',v!=='*'&&d.dataset.id!==v));const s=document.getElementById('scrSel');if(s&&s.value!==v)s.value=v;if(v!=='*'&&!q){{try{{history.replaceState(null,'','#'+v);}}catch(e){{}}}}}}function afterRender(){{const h=decodeURIComponent((location.hash||'').slice(1));const s=document.getElementById('scrSel');if(h&&s&&[...s.options].some(o=>o.value===h)){{const k=[...document.querySelectorAll('.tab')].findIndex(t=>t.querySelector('#scrSel'));show(k);pickScr(h);}}else{{show(0);if(s){{pickScr(s.options[1]?s.options[1].value:'*',1);}}}}}}mermaid.run({{querySelector:'pre.mermaid'}}).then(function(){{try{{SSPView.init();}}catch(e){{document.getElementById('err').textContent='그림 보기 틀 오류: '+e;}}afterRender();try{{SSPNav.init();}}catch(e){{document.getElementById('err').textContent='탐색 초기화 오류: '+e;}}}}).catch(e=>{{document.getElementById('err').textContent='Mermaid 오류: '+e;afterRender();}});function show(i){{document.querySelectorAll('.tab').forEach((e,k)=>e.classList.toggle('on',k===i));document.querySelectorAll('nav button').forEach((e,k)=>e.classList.toggle('on',k===i));}}</script>
+<script>{shell_js}</script>
+<script>mermaid.initialize({{startOnLoad:false,maxTextSize:900000,theme:'base',themeVariables:{{fontFamily:'Segoe UI,Malgun Gothic,sans-serif',fontSize:'14px',primaryColor:'#f1f4f9',primaryBorderColor:'#7c8aa0',primaryTextColor:'#1b1f23',lineColor:'#66727f',clusterBkg:'#f7f9fb',clusterBorder:'#b9c3cf',edgeLabelBackground:'#ffffff',tertiaryColor:'#f7f9fb'}},flowchart:{{useMaxWidth:false,nodeSpacing:36,rankSpacing:64,padding:10}},securityLevel:'loose'}});function pickScr(v,q){{document.querySelectorAll('.scr').forEach(d=>d.classList.toggle('off',v!=='*'&&d.dataset.id!==v));const s=document.getElementById('scrSel');if(s&&s.value!==v)s.value=v;if(v!=='*'&&!q){{try{{history.replaceState(null,'','#'+v);}}catch(e){{}}}}}}function afterRender(){{const s=document.getElementById('scrSel');if(s)pickScr(s.options[1]?s.options[1].value:'*',1);try{{SSPShell.init();}}catch(e){{document.getElementById('err').textContent='화면 틀 오류: '+e;}}}}mermaid.run({{querySelector:'pre.mermaid'}}).then(function(){{try{{SSPView.init();}}catch(e){{document.getElementById('err').textContent='그림 보기 틀 오류: '+e;}}try{{SSPNav.init();}}catch(e){{document.getElementById('err').textContent='탐색 초기화 오류: '+e;}}afterRender();}}).catch(e=>{{document.getElementById('err').textContent='Mermaid 오류: '+e;afterRender();}});</script>
 </body></html>"""
     io.open(os.path.join(out_dir, 'SSP_FLOW.html'), 'w', encoding='utf-8', newline='\n').write(H)
 
+    # ── 편집용 .drawio · PNG(2026-11-23, 실패해도 HTML 은 그대로)
+    dg_done, dg_skip = [], []
+    try:
+        import ssp_svg
+        dg_done, dg_skip = ssp_svg.export_files(out_dir)
+    except Exception as e:
+        print(f'[ssp_flow] diagrams 내보내기 건너뜀: {type(e).__name__}: {e}')
     # ── README
     nx = sum(1 for c in cross if c['only_endpoints']); nm = sum(1 for c in cross if c['only_matrix'])
     R = [f'# SSP 흐름 산출물 — {time.strftime("%Y-%m-%d %H:%M")} · 생성기 `tools/Analysis/ssp_flow.py`', '',
          *((['## 기존 분석 자료 반영(2026-11-11)', f'- `SSP_REF_PROCESS.md` = PI SSP CUTOFF Process 단계 박스 {ref_stat["steps"]}개(Seq 1-1 ~ 22 · 흐름 간선 {ref_stat["edges_ok"]} · 풀지 못한 줄기 {ref_stat["edges"] - ref_stat["edges_ok"]}) · 통합테스트 {ref_stat["scenarios"]}건 · 운영 SSP 잡 {ref_stat["ssp_jobs"]} · 교차검증 {ref_stat["cross"]}행(`ssp_ref_crosscheck.csv`) · 화면 연계 `ssp_ref_screen_links.csv` · 원천 사본 `Doc/asisfacts/ref_ssp/src/`', '']) if ref_stat else []),
-         *((['## 한눈에 보기(2026-11-16)', f'- `SSP_OVERVIEW.md` = SSP Manual Master Flow 단계 {ov_stat["steps"]} · 화살표 {ov_stat["edges"]}(AS-IS SP 본문 데이터 연결 확인 {ov_stat["edges_data"]}) · 매뉴얼 장 {ov_stat["pages"]} · 자주 받는 문의 {ov_stat["faq"]}건 · 배치 진행 조건 {ov_stat["conds"]}묶음 · `ssp_master_steps.csv` · `ssp_master_crosscheck.csv` · 원천 `Doc/asisfacts/ref_ssp/src/Standard Information SSP Manual 1.pptx`', '- 프로세스 PPT = 2026-11-16 판(9장 · 「프로세스 진행여부 체크 기준」 추가)으로 교체 · 11-11 판 사본 `src/SSP 프로세스 확인 내용_20261111.pptx` · 진행 조건 표 `ssp_ref_run_conditions.csv`', '']) if ov_stat else []),
+         *((['## 한눈에 보기(2026-11-16)', f'- `SSP_OVERVIEW.md` = SSP Manual Master Flow 단계 {ov_stat["steps"]} · 화살표 {ov_stat["edges"]}(AS-IS SP 본문 데이터 연결 확인 {ov_stat["edges_data"]}) · 매뉴얼 장 {ov_stat["pages"]} · 자주 받는 문의 {ov_stat["faq"]}건 · 배치 진행 조건 {ov_stat["conds"]}묶음 · `ssp_master_steps.csv` · `ssp_master_crosscheck.csv` · 원천 `Doc/asisfacts/ref_ssp/src/Standard Information SSP Manual 1.pptx`', '- 프로세스 PPT = 2026-11-20 판(10장 · 8번 「SSP 각 사업부별 계획기준」·「재고별 I/F 기준 일자」 추가)으로 교체 · 11-16 판 사본 `src/SSP 프로세스 확인 내용_20261116.pptx` · 11-11 판 사본 `src/SSP 프로세스 확인 내용_20261111.pptx` · 진행 조건 표 `ssp_ref_run_conditions.csv` · 계획기준 표 본문 대조 = 업무 프로세스 탭 6-6', '']) if ov_stat else []),
          *(([f'- `SSP_SHIPPLAN_FLOW.md` = 사업부별 Shipment Plan 산출 흐름(흐름도 슬라이드 {sp_stat["slides"]} · 단계 카드 {sp_stat["cards"]} · 단계별 상세 {sp_stat["detail_rows"]}행 · AS-IS 본문 대조 {sp_stat["cmp"]}행 중 일치 {sp_stat["ok"]}) · `ssp_shipplan_steps.csv` · `ssp_shipplan_crosscheck.csv`', '']) if sp_stat else []),
          '## 범위', f'- AS-IS SSP 화면 ∪ TO-BE Shipping 메뉴(Shipping Master · Shipping Schedule) 아래 전 화면 = {len(screens)}화면(TO-BE {len(tobe)}) · 접두가 SSP 가 아닌 Shipping 메뉴 화면 포함: {", ".join(sorted(x for x in ship_ids if not x.startswith("SSP")))} (11-10 사용자 지적으로 범위 보정)', '', '## 원천·방법', f'- 화면→SP: `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx`(범위 내 {len(mat)}행) + `Doc/asisfacts/screens/<화면>/endpoints.csv`(Fact Pack {len(packs)}) 합집합 · 둘의 차이는 `ssp_crosscheck.csv`',
          '- SP→테이블: `Doc/asisfacts/db/modules/dbo.<SP>.sql` 본문 — 읽기 FROM/JOIN · 쓰기 INSERT/UPDATE/MERGE(sp_dml_check.writes)+DELETE/TRUNCATE · 중첩 EXEC 깊이 3 · 로그 SP(PR_SCM_SYS_LOG_*)는 호출만 기록',
@@ -632,6 +691,9 @@ def main(out_dir):
          f'- 교차검증: endpoints 에만 있는 SP 가 있는 화면 {nx} · 매트릭스에만 있는 화면 {nm}(상세 ssp_crosscheck.csv)', f'- 데이터 의존 간선 {len(dep)} · 위상 정렬 미결(사이클) 화면 {len(cyc)}', '',
          '## 한계(명시)', '- 본문 없는 SP·동적 SQL 안의 테이블은 매트릭스 참조 테이블(R?)로만 표기 · 외부 DB/링크 서버·함수 내부 테이블은 미추출 · 배치(UI 외) 가 SSP 표를 쓰는 흐름은 범위 밖(화면 기준)',
          '- 프로세스 순서는 데이터 의존에서 도출 — 운영 절차·승인 흐름은 담당자 확인 필요', '',
+         '## 화면 구성(2026-11-23 인식성 보완)', f'- `SSP_FLOW.html` = 왼쪽 목차(묶음 {len(nav_groups)} · 항목 {sum(len(g_["items"]) for g_ in nav_groups)}) + 절 단위 본문. 묶음 순서 = 전체 지도, 업무 순서, 계획 산출, 배치, 화면과 데이터, 근거와 대조. 목차 대응표 `tools/Analysis/ssp_shell.py` NAV, 화면 동작 `ssp_flow_shell.js`',
+         '- 새 그림(`tools/Analysis/ssp_svg.py`, baoyu-diagram skill 규칙 SVG): SSP 전체 지도, PI 프로세스 맵(슬라이드 배치), 운영 잡 하루 시간표. 격자 표: 단계 × 엔터티, 외부 ↔ SSP 데이터, 배치 그룹 ↔ 엔터티 ↔ 화면 2종, 외부 인터페이스, 쓰는 화면 × 읽는 화면. 기존 자동 배치 그래프는 각 절의 「그래프로 보기」 안에 있음',
+         f'- `diagrams/` = 단독 SVG 3종 + 편집용 .drawio, PNG(이번 생성 {len(dg_done)}개: {", ".join(dg_done) or "없음"}' + (f' · 건너뜀 {"; ".join(dg_skip)}' if dg_skip else '') + '). .drawio 는 drawio skill 변환 스크립트, PNG 는 baoyu-diagram skill main.ts 로 만듦', '',
          '## 파일', '- `SSP_FLOW.html` 뷰어(브라우저로 열기 · Mermaid · 배치 탭 포함) · `SSP_DATA_FLOW.md` · `SSP_DATA_FLOW_DETAIL.md` · `SSP_PROCESS_FLOW.md` · `ssp_screen_inventory.csv` · `ssp_screen_sp_table.csv` · `ssp_crosscheck.csv`', '- 배치(`tools/Analysis/ssp_batch_flow.py` · 원천 `Doc/asisfacts/db/batch/*.csv` = `asis_batch_facts.py` 가 AS-IS msdb·SSP_INT_SYSTEMEXE 에서 추출): `SSP_BATCH_ANALYSIS.md` · `SSP_BATCH_FLOW.md` · `ssp_batch_inventory.csv` · `ssp_batch_sp_table.csv`']
     io.open(os.path.join(out_dir, 'README.md'), 'w', encoding='utf-8', newline='\n').write('\n'.join(R) + '\n')
     print(f'[ssp_flow] 비객체 제외 {len(nonobj)}종 · 화면 {len(screens)}(메인 {len(screens) - n_pop} · 팝업 전용 {n_pop}) · TO-BE {len(tobe)} · SP {len(sp_info)}(본문 없음 {len(missing)}) · 테이블 {len(tabdom)} · 의존 간선 {len(dep)} · 사이클 {len(cyc)} → {os.path.relpath(out_dir, ROOT)}')

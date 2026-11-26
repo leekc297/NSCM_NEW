@@ -1,0 +1,43 @@
+{
+  "id": "20261125123144_REVIEW_2",
+  "at": "2026-11-25T12:31:44+09:00",
+  "ms": 1795577504614,
+  "source": "review",
+  "status": "applied",
+  "sig": "digest|step|cancel stopped",
+  "title": "단계 끝 기록의 취소(CANCEL)를 집계의 중지로 세고 소요 시간 중앙값에서 뺌",
+  "evidence": "events.jsonl step.end status CANCEL 14줄, 이 중 13줄 확인(1017, 1039, 1097, 1173, 1267, 1343, 1392, 1472, 1584, 4399, 4406, 4415, 4422) 전부 stopped true, note '취소 사유: 사용자 중지'. 1줄 미확인. orch-improve.js:165 는 status === 'FAIL' 일 때만 stopped, stoppedBy 를 셈. 집계 S8.checklistDelta:--delta:--no-docs n 2, stopped 0, medianSec 2149.8 은 4415(1386.1초), 4422(2913.4초) 두 취소 실행의 평균이고 끝까지 돈 실행은 0건. S8.checklistRun:--no-docs p90 8599 는 4406 취소 실행 ms_run 8599024. S8.checklistRun stopped 8 에 취소 7줄(1017~1584)이 빠짐",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "step.end status CANCEL → n 만 셈 → stopped true 면 stopped++ 와 stoppedBy[stopCause] 에 더하고 ms 배열에서 뺌. stopped 가 아닌 CANCEL(AI 사용 불가)은 새 칸 cancel 로 셈. t_orch_improve.js 에 CANCEL 표본 2건(stopped true, false) 추가",
+  "verify": "node -e \"const d=require('./tools/VibeManager/orch-improve').digest(7);const g=k=>d.steps.find(s=>s.key===k)||{};console.log(g('S8.checklistRun').stopped,g('S8.checklistDelta:--delta:--no-docs').stopped,g('S8.checklistDelta:--delta:--no-docs').medianSec)\" 반영 전 8, 0, 2149.8(12:27:57 집계, 이 세션 직접 실행 미측정) → 반영 뒤 기대 15, 2, 0. node tools/VibeManager/test/t_orch_improve.js 시험 수 반영 전 미측정 → 반영 뒤 +2",
+  "rollback": "orch-improve.js step.end 분기의 CANCEL 처리와 시험 표본 2건을 지움",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "digest 가 step.end status FAIL 만 중지 여부를 보고 CANCEL 은 건수에만 넣는 집계 결함 1건. 소요 시간이 끝까지 돈 실행처럼 보임",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-D2",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:49:19+09:00",
+      "by": "S-D2",
+      "what": "반영 완료(세션 직접 보완) · orch-improve.js:167 step.end CANCEL = stopped 면 stopped, stoppedBy · 아니면 cancel 칸 · 소요는 ms 에서 빼고 cancelSec 로 순위만 · test/t_orch_improve.js CANCEL 표본 2건 ALL PASS 53건(반영 전 51건) 2026-11-26 15:49:12 · 실측 digest(7) S8.checklistRun stopped 8 → 15, S8.checklistDelta:--delta:--no-docs stopped 0 → 2, medianSec 2149.8 → 0(15:48:20)"
+    }
+  ],
+  "plain": {
+    "what": "중간에 멈춘 단계가 집계에서 중지로 잡히고 단계 소요 시간에서 빠짐",
+    "risk": "중지가 아닌 취소까지 중지로 세면 중지 건수가 늘어 보임",
+    "undo": "집계 분기 한 곳을 되돌리면 예전 수치로 돌아감"
+  },
+  "kind": "fix",
+  "claimedBy": "S-D2",
+  "waitNote": "",
+  "appliedMs": 1795675759065
+}

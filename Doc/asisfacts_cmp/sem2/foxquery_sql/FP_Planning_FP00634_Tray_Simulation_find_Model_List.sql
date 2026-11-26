@@ -1,0 +1,50 @@
+﻿SELECT DISTINCT A.TOP_ITEM_ID AS CODE_ID, A.TOP_ITEM_ID AS CODE
+      FROM (
+          -- P
+          SELECT A.TOP_ITEM_ID
+          FROM   @AMEND_TABLE A WITH(NOLOCK)
+          WHERE  A.INSTANCE_ID  = @MASTER_ID
+          AND    A.FP_PLAN_ID   = @PLAN_ID
+          AND    CONVERT(VARCHAR,A.PLAN_DATE,112) >= @PLAN_DATE
+          @CTRL_DIVISION_LT
+          @CTRL_SITE_LT
+          @CTRL_PLANT_LT
+          @CTRL_FACTORY_LT
+          AND    A.OPERATION_ID = @OPERATION_ID
+          @CTRL_LINE_LT
+          -- S
+          UNION ALL
+          SELECT A.TOP_ITEM_ID
+          FROM   @AMEND_TABLE A WITH(NOLOCK)
+          WHERE  A.INSTANCE_ID  = @MASTER_ID
+          AND    A.FP_PLAN_ID   = @PLAN_ID
+          AND    CONVERT(VARCHAR,A.PLAN_DATE,112) >= @PLAN_DATE
+          @CTRL_DIVISION_LT
+          @CTRL_SITE_LT
+          @CTRL_PLANT_LT
+          @CTRL_FACTORY_LT
+          AND    A.FACTORY_ID = '-'
+          AND    A.OPERATION_ID = @OPERATION_ID
+          UNION ALL
+          SELECT A.TOP_ITEM_ID
+          FROM   FP_DAILY_PRODUCTIOIN_PLAN_H A WITH(NOLOCK)
+          WHERE  CONVERT(VARCHAR,A.PLAN_DATE,112) < @PLAN_DATE
+          AND    A.PLAN_TYPE = 'RELEASE'
+          @CTRL_DIVISION_LT
+          @CTRL_SITE_LT
+          @CTRL_PLANT_LT
+          @CTRL_FACTORY_LT
+          AND    A.OPERATION_ID = @OPERATION_ID
+          @CTRL_LINE_LT
+          UNION ALL
+          SELECT A.TOP_ITEM_ID
+          FROM   SCM_DAILY_PRODUCT_RESULT_H A WITH(NOLOCK)
+          WHERE  CONVERT(VARCHAR,A.PLAN_DATE,112) BETWEEN @BUCKET_FROM AND @BUCKET_TO
+          @CTRL_DIVISION_LT
+          @CTRL_SITE_LT
+          @CTRL_PLANT_LT
+          @CTRL_FACTORY_LT
+          AND    A.OPERATION_ID = @OPERATION_ID
+          @CTRL_LINE_LT
+      ) A
+      ORDER BY A.TOP_ITEM_ID

@@ -165,8 +165,8 @@ export const usePlanControlStore = createPersistedStoreWithTab<
   //   GET /admin/menu/{MENU_ID}/search-conditions → paramNm/paramCtn 를 searchParams 에 patch.
   //   조회조건 4개(divisionId/planGroupId/planDateCode/planDate)는 전부 문자열이라 역직렬화 불요(그대로 patch).
   //   저장은 EXCLUDED_DATE_PARAM·빈값 필터 후 재삽입이라(gridAction.ts personalizeCondition) 응답에 없는
-  //   키는 initSearchParams 기본값 그대로 둔다. planDate 키는 EXCLUDED_DATE_PARAM 미해당이라 저장·복원된다
-  //   (AS-IS ConditionNotUseList 는 키기반 공용 저장에 반영되지 않음 — SSP0021 선례와 동일 거동).
+  //   키는 initSearchParams 기본값 그대로 둔다. Plan Date(planDateCode/planDate)는 AS-IS ConditionNotUseList
+  //   대상이라 저장하지 않고(PlanControl.tsx conditionParam), 예전에 저장된 행이 남아 있어도 복원하지 않는다.
   //   setSearchParams 를 쓰지 않는다 — divisionId 변경 cascade 가 planGroupId/planDateCode 를 지워버린다.
   restoreSearchConditions: async () => {
     if (get().conditionsRestored) return;
@@ -182,6 +182,7 @@ export const usePlanControlStore = createPersistedStoreWithTab<
       const patch: Partial<PlanControlSearchParams> = {};
       for (const { paramNm, paramCtn } of rows) {
         if (!(paramNm in initSearchParams)) continue; // searchParams 필드만 allowlist
+        if (paramNm === 'planDateCode' || paramNm === 'planDate') continue; // Condition 제외 대상
         patch[paramNm as keyof PlanControlSearchParams] = paramCtn ?? '';
       }
       set(state => {

@@ -1,0 +1,267 @@
+{
+ "screen": "DMF0068",
+ "calls": [
+  {
+   "cls": "DMF0068_VersionPopup",
+   "method": "btnSPVer_Click",
+   "asis_ref": "DMF0068_DemandManager40.cs:1324",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnSPVer",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "true",
+   "div_arg": "sDivision",
+   "period_args": [
+    "sStartDate",
+    "sEndDate"
+   ],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_Code",
+     "kind": "LITERAL",
+     "arg": "\"SP\""
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "LITERAL",
+     "arg": "sDivision"
+    },
+    {
+     "param": "sStartDate",
+     "kind": "EXPR",
+     "arg": "sStartDate"
+    },
+    {
+     "param": "sEndDate",
+     "kind": "EXPR",
+     "arg": "sEndDate"
+    }
+   ],
+   "results": [
+    "version"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "DMF0068_DemandManager40.cs:1325",
+     "target": "popVersion.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "DMF0068_DemandManager40.cs:1330",
+     "target": "txtVersion.Text",
+     "value": "popVersion.sVersions"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "DMF0068_VersionPopup": {
+   "cls": "DMF0068_VersionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0068_VersionPopup.cs",
+   "title": "Version Popup",
+   "conds": [
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "DMF0068_VersionPopup.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "drpPeriod",
+     "type": "UsrDateRangePicker",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DMF0068_VersionPopup.Designer.cs:43",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbType",
+     "type": "UsrCombo",
+     "label": "Report Type",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DMF0068_VersionPopup.Designer.cs:44",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "DMF0068_GET_CONT_VIEW_VERSIONPOPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0068_GET_CONT_VIEW_VERSIONPOPUP.sql",
+     "order_known": true,
+     "order_keys": "CODE DESC, VERSION_NO DESC",
+     "order_line": "46",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_division_id",
+      "p_version_type",
+      "p_description"
+     ],
+     "method": "FindData",
+     "ref": "DMF0068_VersionPopup.cs:245",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_LOOKUP_VALUES",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_LOOKUP_VALUES.sql",
+     "order_known": true,
+     "order_keys": "L.DISPLAY_SEQ",
+     "order_line": "26",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_lookup_type"
+     ],
+     "method": "GetLookupData",
+     "ref": "DMF0068_VersionPopup.cs:377",
+     "save": false
+    },
+    {
+     "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+     "src": "Doc/asisfacts/db/modules/dbo.DM0000_GET_COMMON_SPREAD_TITLE.sql",
+     "order_known": true,
+     "order_keys": "SEQ, SORT_ORDER_NO",
+     "order_line": "152",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_created_by",
+      "p_program_id",
+      "p_sheet_name",
+      "i_Count"
+     ],
+     "method": "GetSpdTitle",
+     "ref": "DMF0068_VersionPopup.cs:319",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "DMF0068_VersionPopup.cs:263",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "DMF0068_VersionPopup.cs:354",
+     "method": "SetItem",
+     "raw": "this.Close()",
+     "guard": "if (cellRange.LongLength > 0)"
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:286",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Find: FindData(); break; case ButtonListType.OK: SetItem(); this.Close(); break; case ButtonListType.Close: t",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:293",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.OK:"
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:296",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:310",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00279\")",
+    "MessageHelper.GMessageBox(\"MSG00279\")"
+   ],
+   "period_use": [
+    {
+     "ref": "DMF0068_VersionPopup.cs:212",
+     "method": "FindData",
+     "raw": "drpPeriod.Value1.ToString(\"yyyyMMdd\")",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:213",
+     "method": "FindData",
+     "raw": "drpPeriod.Value2.ToString(\"yyyyMMdd\")",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:247",
+     "method": "FindData",
+     "raw": "using (var client = new FoxDataClient(\"GSCM\", sBinding)) { request.Parameters[\"p_start_yyyymmdd\"] = sStartDate; request.Parameters[\"p_end_yyyymmdd\"] = sEndDate;",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:250",
+     "method": "FindData",
+     "raw": "request.Parameters[\"p_start_yyyymmdd\"] = sStartDate",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:251",
+     "method": "FindData",
+     "raw": "request.Parameters[\"p_end_yyyymmdd\"] = sEndDate",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0068_VersionPopup.cs:108",
+     "method": "Form_Load",
+     "raw": "drpPeriod.InitValue = sStartDate + \":\" + sEndDate",
+     "guard": ""
+    }
+   ],
+   "from": "factpack"
+  }
+ }
+}

@@ -1,0 +1,100 @@
+{
+  "id": "20261121225944_SELF_3",
+  "at": "2026-11-21T22:59:44+09:00",
+  "ms": 1795269584826,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn quoted unverified word",
+  "title": "S6 미확인 원장: 변경 줄 안의 따옴표 인용에 든 '미확인', '미측정' 낱말을 미확인 항목으로 세지 않음",
+  "evidence": "orch-history.js:103~107 은 '미확인:' 이 아닌 줄(변경, 사용자, 확인)도 마침표와 가운뎃점으로 나눈 뒤 isUnverifiedSentence 로 판정함. 따옴표 안 인용도 그대로 판정해서 CHANGELOG.md:80 '- 변경:' 줄의 원문 인용 ''⚠ 증명 단계 ${pt} 종료코드 ${pcp} — 2 = FAIL 있음 · 3 = 미측정 있음.'' 조각 3개가 미확인 3건(6mq4rl)이 됨. CHANGELOG.md:129 '- 변경:' 줄의 인용 ''- 미확인'' 도 미확인 1건(1w34aty)이 됨. 같은 방식으로 따옴표 없이 쓰인 CHANGELOG.md:66 '(... 파일명과 필드명 미확인)'(oopngr#7660c95b1f)은 실제 미확인이라 그대로 둠",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/test/t_orch_history.js"
+  ],
+  "before_after": "orch-history.js:106 for (const seg of b.split(...)) 가 줄 전체를 나눠 판정함 → 나누기 전에 b 에서 따옴표 구간('...', \"...\", ‘...’, “...”)을 지운 뒤 나눠 판정함('미확인:' 줄을 처리하는 :105 는 그대로 둠). t_orch_history.js 에 CHANGELOG.md:80 변경 줄 원문은 0건, :129 변경 줄 원문은 0건, :66 변경 줄 원문은 1건('파일명과 필드명 미확인' 포함)이 되는 시험 3건 추가. 기존 시험(:41 확인 줄 1 + 미확인 줄 2 = 3건, :68 확인 줄의 미확인 문장 1건)은 그대로 통과해야 함",
+  "verify": "node -e \"const h=require('./tools/VibeManager/orch-history');const t=require('fs').readFileSync('tools/VibeManager/CHANGELOG.md','utf8');const c=h.parseChangelog(t);for(const k of ['workbench.js L106~L1963 고정 문구 정리 3차','변경 기록 파일 집계에서 확인, 사용자, 되돌리기, 미확인, 시험']){const s=c.find(x=>x.title.includes(k));console.log(JSON.stringify(s.unverified))}\" 실행 → 두 줄 모두 [\"VS Code 실화면(창 다시 로드 필요).\"] 1건",
+  "rollback": "tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history.js 를 반영 전 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "오판 1종(인용 문구를 미확인 문장으로 뽑음). 재현 원문 2절(CHANGELOG.md:80, :129)과 잘못 뽑힌 원장 항목 4건으로 확인. 같은 함수의 앞선 수정은 11-19 SELF_2 1건(CHANGELOG.md:1127)뿐이라 L3 올림 조건(재발 2건 이상) 미충족",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T23:17:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T23:20:55+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 874, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self2317"
+    },
+    {
+      "at": "2026-11-21T23:20:58+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T23:25:10+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 877, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T23:25:10+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 23:21:36 실행. verify 명령(node -e ... parseChangelog ... 두 절 unverified 출력) 출력 2줄: [\"VS Code 실화면(창 다시 로드 필요).\"] / [\"VS Code 실화면(창 다시 로드 필요).\"] 각 1건. 같은 명령을 수정 전에 돌리면 첫 절 4건(\"3 = 미측정 있음'.\" 등 따옴표 인용 조각 3건 포함), 둘째 절 2건(\"변경: orch-history.js:109 ... '- 미확인' ...\" 포함). node tools/VibeManager/test/t · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-21T23-20-58_claude_orch.log",
+      "sec": 48,
+      "costUsd": 0.7129816,
+      "files": [
+        "tools/VibeManager/orch-history.js",
+        "tools/VibeManager/test/t_orch_history.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:25+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S6",
+  "selfKey": "S6|CL:2026-11-20:6mq4rl#8ee6b1eb4e, S6|CL:2026-11-20:6mq4rl#1121647e1a, S6|CL:2026-11-20:6mq4rl#3fa52bfaef, unverifiedOpen CL:2026-11-20:1w34aty(변경 줄 항목)",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795270651343,
+  "autoFp": "a1c6f6eda0",
+  "applyStartMs": 1795270858047,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 877, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self2317",
+  "needsReload": true,
+  "appliedMs": 1795271110656,
+  "synced": [
+    "orch-history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-history.js",
+      "tools/VibeManager/test/t_orch_history.js"
+    ],
+    "verify_result": "2026-11-21 23:21:36 실행. verify 명령(node -e ... parseChangelog ... 두 절 unverified 출력) 출력 2줄: [\"VS Code 실화면(창 다시 로드 필요).\"] / [\"VS Code 실화면(창 다시 로드 필요).\"] 각 1건. 같은 명령을 수정 전에 돌리면 첫 절 4건(\"3 = 미측정 있음'.\" 등 따옴표 인용 조각 3건 포함), 둘째 절 2건(\"변경: orch-history.js:109 ... '- 미확인' ...\" 포함). node tools/VibeManager/test/t_orch_history.js 출력: PASS 변경 절: 미확인 3건(확인 줄 1 + 미확인 줄 2), PASS 확인 줄의 미확인 문장 = 1건, PASS 변경 줄 따옴표 안 미측정 = 0건, PASS 변경 줄 따옴표 안 '- 미확인' = 0건, PASS 따옴표 없는 미확인 = 1건, ALL PASS",
+    "note": "orch-history.js:106 앞에 따옴표 구간('...', \"...\", ‘...’, “...”)을 공백으로 바꾸는 줄을 추가함. 나누기와 판정은 바꾼 문자열로 함. '미확인:' 줄 처리(:105)는 그대로 둠. 개선안에 적힌 CHANGELOG.md 줄 :80, :129, :66 은 현재 파일에서 :94, :143, :80 이고 시험 원문은 현재 줄에서 가져옴. 설치 폴더와 CHANGELOG.md 는 건드리지 않음"
+  },
+  "snap": "prop_20261121225944_SELF_3",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

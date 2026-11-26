@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1621,
+  "at": "2026-11-25T17:02:52.406Z",
+  "user": "minyonglee1",
+  "test": "Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 572,
+  "at": "2026-11-25T17:02:55.345Z",
+  "user": "minyonglee1",
+  "test": "Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1696,
+  "at": "2026-11-25T17:02:59.188Z",
+  "user": "minyonglee1",
+  "test": "Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 533,
+  "at": "2026-11-25T17:03:00.928Z",
+  "user": "minyonglee1",
+  "test": "Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위"
+ }
+]

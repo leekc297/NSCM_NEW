@@ -1,0 +1,111 @@
+{
+  "id": "20261122133806_SELF",
+  "at": "2026-11-22T13:38:06+09:00",
+  "ms": 1795322286146,
+  "source": "self",
+  "status": "applied",
+  "sig": "digest|open vs gone|wait rn",
+  "title": "집계의 끝나지 않은 대기에서 wait.gone 으로 사라짐이 확인된 대기 빼기(1조각: 대기만, 체인 chain.gone 은 다음 조각)",
+  "evidence": "orch-improve.js:115 wait.start 를 wOpen 에 넣고 :119 wait.gone 은 gone 만 셈. wOpen 에서 지우지 않아 :132 open 에 남음. 실제 7일 기록 집계(13:31:49) dbwin started 5, unfinished 4 [DMF0042, SCP0028], gone 4. 앞선 반영(13:31~13:37) 실패 원인 = t_orch_improve.js:52 기대값이 종전 동작(unfinished 2, 'TST0091,TST0092')이고 대상 밖이었음 (반영 실패한 20261122130655_REVIEW_4 를 고친 안 · 원인 tools/VibeManager/test/t_orch_improve.js:52 가 종전 동작을 기대함(wd.unfinished === 2, unfinishedScreens 'TST0091,TST0092'). 이 파일이 개선안 대상에 없어 반영 뒤 run_all(13:33:16 시작)에서 FAIL 1건(PASS 945, 파일 63/64)이 나와 13:37:20 반영 실패로 복원함. 실제 값 unfinished 1, 화면 'TST0092' 는 개선안이 의도한 값과 같음. 체인 부분(chain.gone)은 지난 기록 0줄이라 실기록 효과 없음(chainsNoEnd 11 → 11))",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_improve.js",
+    "tools/VibeManager/test/t_orch_watch_gone.js"
+  ],
+  "before_after": "orch-improve.js:119 wait.gone 처리에서 wOpen 중 kind, screen 이 같고 pid === waiter_pid 인 항목을 지움(첫 기록만, 중복은 :118 에서 건너뜀). t_orch_improve.js:52 기대값 wd.unfinished === 2 → 1, unfinishedScreens 'TST0091,TST0092' → 'TST0092', 시험 이름 '끝 사건 없는 대기 2건' → '끝 사건 없는 대기 1건(사라진 대기 1건 제외)'. t_orch_watch_gone.js 에 표본 추가: dbwin wait.start 2건 + 그중 1건 wait.gone → unfinished 1",
+  "verify": "① node tools/VibeManager/test/t_orch_improve.js ALL PASS(52줄 unfinished 1, 'TST0092'). ② node tools/VibeManager/test/t_orch_watch_gone.js ALL PASS(반영 전 9 PASS → 반영 뒤 10 PASS). ③ 실제 7일 digest(7), digest.json 쓰기 막음: dbwin unfinished 4 → 0, gone 4 유지, started 5 유지. ④ node tools/VibeManager/test/run_all.js 64/64 파일 통과, FAIL 0(반영 전 기준 13:31:18 PASS 942)",
+  "rollback": "백업 태그에서 대상 파일 3개 되돌림(orch-improve.js, test/t_orch_improve.js, test/t_orch_watch_gone.js)",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-22T13:38:36+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-22T13:42:15+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 942, FAIL 0), 정의 정합 통과 · 백업 태그 20261122_self1338"
+    },
+    {
+      "at": "2026-11-22T13:42:18+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-22T13:50:40+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 943, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-22T13:50:40+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 반영 전 13:42:36 node test/t_orch_watch_gone.js PASS 9 ALL PASS, t_orch_improve.js 52줄 unfinished 2 'TST0091,TST0092'. 반영 뒤 ① 13:42:53 node test/t_orch_improve.js: 'PASS 집계: 끝 사건 없는 대기 1건(사라진 대기 1건 제외) ... \"unfinished\":1 ... \"unfinishedScreens\":[\"TST0092\"]' ALL PASS. ② 13:42:53 node test/t_orch_watch_g · 변경 13개 파일 · 대상 목록 밖 변경 10개: _artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/00_BACKUP_PKG_DMF0014_BODY.ASIS.sql, _artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/00_BACKUP_PKG_DMF0048_BODY.ASIS.sql, _artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/APPLY_RESULT.txt, _artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/VERIFY_RESULT.txt, _artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/_base_PKG_DMF0014_BODY.txt, _artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/_base_PKG_DMF0048_BODY.txt",
+      "log": ".vibe\\logs\\2026-11-22T13-42-18_claude_orch.log",
+      "sec": 287,
+      "costUsd": 0.8565232000000002,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/test/t_orch_improve.js",
+        "tools/VibeManager/test/t_orch_watch_gone.js",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/00_BACKUP_PKG_DMF0014_BODY.ASIS.sql",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/00_BACKUP_PKG_DMF0048_BODY.ASIS.sql",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/APPLY_RESULT.txt",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/VERIFY_RESULT.txt",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/_base_PKG_DMF0014_BODY.txt",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/_base_PKG_DMF0048_BODY.txt",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/_fixed_PKG_DMF0014_BODY.txt",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/_fixed_PKG_DMF0048_BODY.txt",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/apply.py",
+        "_artifacts/_apply_corporate/DMF0048_DMF0014_LONGPERIOD_20261122/verify_equiv.py"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:24+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261122130655_REVIEW_4",
+  "repairRoot": "20261122130655_REVIEW_4",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795322316028,
+  "autoFp": "e217407393",
+  "applyStartMs": 1795322538468,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 943, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261122_self1338",
+  "needsReload": true,
+  "appliedMs": 1795323040434,
+  "synced": [
+    "orch-improve.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_improve.js",
+      "tools/VibeManager/test/t_orch_watch_gone.js"
+    ],
+    "verify_result": "반영 전 13:42:36 node test/t_orch_watch_gone.js PASS 9 ALL PASS, t_orch_improve.js 52줄 unfinished 2 'TST0091,TST0092'. 반영 뒤 ① 13:42:53 node test/t_orch_improve.js: 'PASS 집계: 끝 사건 없는 대기 1건(사라진 대기 1건 제외) ... \"unfinished\":1 ... \"unfinishedScreens\":[\"TST0092\"]' ALL PASS. ② 13:42:53 node test/t_orch_watch_gone.js PASS 10, 'PASS 집계 dbwin 시작 2 · 사라짐 1 = 끝나지 않은 대기 1(TST0112) {\"started\":2,\"unfinished\":1,...\"gone\":2}' ALL PASS. ③ 13:43:19 실제 .vibe 7일 digest(7), digest.json 쓰기 막음('blocked write ...digest.json'): HEAD 판 dbwin {started:5, unfinished:4, screens:[DMF0042,SCP0028], gone:21} → 반영 판 {started:5, unfinished:0, screens:[], gone:4}. ④ 13:43:24~13:46:48 node test/run_all.js: 'ALL OK  파일 64/64  PASS 943  FAIL 0  204.2s'",
+    "note": "HEAD 판 gone 21 은 커밋본에 중복 제외(:118)가 없어 생긴 값이고, 지금 작업본 기준 gone 4 는 바뀌지 않음. 비교용 임시 파일 orch-improve.__base_tmp.js 는 지움. 저장소 밖 임시 폴더 %TEMP%\\vmo_dg(dg.js)는 삭제 승인이 나지 않아 남아 있음. 체인 chain.gone 부분은 개선안대로 다음 조각임."
+  },
+  "snap": "prop_20261122133806_SELF",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

@@ -4,7 +4,7 @@
 사용: python tools/Harness/verify/regress.py [<MENU_ID> ...] [--harvest]   (인자 없으면 원장이 있는 모든 화면)
 
 하는 일
-  1 --harvest(또는 오라클 파일이 없을 때): 모든 CheckList 판(Doc/UI_CHECKLIST, old, 옛 Doc/CheckList, 옛 Doc/화면분석서)의 '사용자의견/사용자판정' 열을 모아
+  1 --harvest(또는 오라클 파일이 없을 때): 모든 CheckList 판(harness.json paths.checklistDir·legacyChecklistDirs 와 그 old, 옛 Doc/화면분석서)의 '사용자의견/사용자판정' 열을 모아
     Doc/verify/_user_verdicts.csv (menu_id,row_id,class,opinion,rule_id,target,explain,source_file) 로 쓴다. class = 판정오류 | 중복 | 대상아님 | 실제오류확인 | 설명요구 | 기타
   2 화면별 검사:
     (a) class=판정오류 행 — judge 가 사용자판정으로 덮기 전 '원판정'(note 의 원판정:) 이 FAIL 이면 위반 → 검사기가 여전히 같은 허위 FAIL 을 낸다
@@ -36,11 +36,25 @@ def cls(o):
     return '기타'
 
 
+def _checklist_dirs():
+    """CheckList 폴더 목록 = harness.json paths.checklistDir(없으면 Doc/UI_CHECKLIST) + paths.legacyChecklistDirs."""
+    try:
+        with open(os.path.join(ROOT, 'tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            hp = (json.load(f) or {}).get('paths') or {}
+    except (OSError, ValueError):
+        hp = {}
+    hp = hp if isinstance(hp, dict) else {}
+    ds = [hp.get('checklistDir') or 'Doc/UI_CHECKLIST'] + list(hp.get('legacyChecklistDirs') or [])
+    return [os.path.normpath(d if os.path.isabs(d) else os.path.join(ROOT, d)) for d in ds if d]
+
+
 def harvest():
     import openpyxl
-    pats = [os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', '*_CheckList_v*.xlsx'), os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', 'old', '*_CheckList_v*.xlsx'),  # 2026-11-16 폴더 변경
-            os.path.join(ROOT, 'Doc', 'CheckList', '*_CheckList_v*.xlsx'), os.path.join(ROOT, 'Doc', 'CheckList', 'old', '*_CheckList_v*.xlsx'),
-            os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_정합검증서_v*.xlsx'), os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_CheckList_v*.xlsx')]
+    # 개선안 20261124012047_SELF_4(R83): CheckList 폴더 = harness.json paths.checklistDir + legacyChecklistDirs(make_verify_docs·judge 와 같은 값)
+    pats = []
+    for d in _checklist_dirs():
+        pats += [os.path.join(d, '*_CheckList_v*.xlsx'), os.path.join(d, 'old', '*_CheckList_v*.xlsx')]
+    pats += [os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_정합검증서_v*.xlsx'), os.path.join(ROOT, 'Doc', '화면분석서', '**', '*_CheckList_v*.xlsx')]
     files = sorted({f for p in pats for f in glob.glob(p, recursive=True) if not os.path.basename(f).startswith('~$')}, key=os.path.getmtime)
     # 2026-11-08 속도: 판 xlsx 262개를 매 실행 전부 여는 데 264s(SCP0122 --only K3 실측 · docs 단계의 95%) → 파일별 (mtime, size) 캐시 — 바뀐/새 판만 다시 읽는다(결과 동일 · 순서 = mtime)
     CACHE = os.path.join(ROOT, 'Doc', 'verify', '_user_verdicts_cache.json')

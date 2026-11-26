@@ -1,0 +1,52 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+DIVISION_ID,Y,N,N,잠금 (InsertButton:791),잠금 (EditButton:568),,기존행 SCP0020_TactTime:568 LockColumn | 신규행 SCP0020_TactTime:791 LockRange,,Packer
+SITE_DESCRIPTION,Y,N,N,잠금 (InsertButton:791),잠금 (EditButton:568),,기존행 SCP0020_TactTime:568 LockColumn | 신규행 SCP0020_TactTime:791 LockRange,,Packer
+ITEM_ID,Y,N,N,잠금 (InsertButton:791),잠금 (EditButton:568),,기존행 SCP0020_TactTime:568 LockColumn | 신규행 SCP0020_TactTime:791 LockRange,,Packer
+NICK_NAME,Y,N,N,잠금 (InsertButton:791),잠금 (EditButton:568),,기존행 SCP0020_TactTime:568 LockColumn | 신규행 SCP0020_TactTime:791 LockRange,,Packer
+LINE_ID,Y,Y,COND,,"RULES:[{""g"": ""COL(INPUT_STATUS)==\""M\"""", ""lock"": ""Y"", ""ref"": ""EditButton:588""}, {""g"": ""COL(MODEL_SITE)==\""\"""", ""lock"": ""Y"", ""ref"": ""EditButton:593""}]",,기존행 SCP0020_TactTime:588 LockRange | 기존행 SCP0020_TactTime:593 LockRange,,Packer
+PRIORITY,Y,Y,Y,,,,,,Packer
+YIELD,Y,Y,Y,,,,,,Packer
+DAILY_CAPACITY,Y,COND,COND,"RULES:[{""g"": ""!(COL(DIVISION_ID)==\""42\"" || COL(DIVISION_ID)==\""44\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:806""}]","RULES:[{""g"": ""!(DIV==\""42\"" || DIV==\""44\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:577""}]",,기존행 SCP0020_TactTime:577 LockColumn | 신규행 SCP0020_TactTime:806 LockRange,,Packer
+TACT_TIME,Y,COND,COND,"RULES:[{""g"": ""COL(DIVISION_ID)==\""42\"" || COL(DIVISION_ID)==\""44\"""", ""lock"": ""Y"", ""ref"": ""InsertButton:802""}]","RULES:[{""g"": ""DIV==\""42\"" || DIV==\""44\"""", ""lock"": ""Y"", ""ref"": ""EditButton:573""}]",,기존행 SCP0020_TactTime:573 LockColumn | 신규행 SCP0020_TactTime:802 LockRange,,Packer
+CREATED_BY,Y,Y,Y,,,,,,Packer
+CREATION_DATE,Y,Y,Y,,,,,,Packer
+LAST_UPDATED_BY,Y,Y,Y,,,,,,Packer
+LAST_UPDATE_DATE,Y,Y,Y,,,,,,Packer
+OPERATION_ID,N,Y,Y,,,,,,Packer
+PLANT_SITE_ID,N,Y,Y,,,,,,Packer
+INPUT_STATUS,N,Y,Y,,,,,,Packer
+EXCEPT_YN,N,Y,Y,,,,,,Packer
+OSP_YN,Y,Y,Y,,,,,,Packer
+BIG_LAST_UPDATE_DATE,,N,N,잠금 (InsertButton:792),잠금 (EditButton:569),,기존행 SCP0020_TactTime:569 LockColumn | 신규행 SCP0020_TactTime:792 LockRange,,Packer
+JUMBO_MIN,,N,N,잠금 (InsertButton:792),잠금 (EditButton:569),,기존행 SCP0020_TactTime:569 LockColumn | 신규행 SCP0020_TactTime:792 LockRange,,Packer
+ITEM_UOM,,COND,COND,"RULES:[{""g"": ""COL(DIVISION_ID)==\""42\"" || COL(DIVISION_ID)==\""44\"""", ""lock"": ""Y"", ""ref"": ""InsertButton:802""}]","RULES:[{""g"": ""DIV==\""42\"" || DIV==\""44\"""", ""lock"": ""Y"", ""ref"": ""EditButton:573""}]",,기존행 SCP0020_TactTime:573 LockColumn | 신규행 SCP0020_TactTime:802 LockRange,,Packer
+UOM_CONVERT_VALUE,,COND,COND,"RULES:[{""g"": ""!(COL(DIVISION_ID)==\""42\"" || COL(DIVISION_ID)==\""44\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:806""}]","RULES:[{""g"": ""!(DIV==\""42\"" || DIV==\""44\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:577""}]",,기존행 SCP0020_TactTime:577 LockColumn | 신규행 SCP0020_TactTime:806 LockRange,,Packer
+OPERATION_GROUP_ID,,N,N,잠금 (InsertButton:796),잠금 (EditButton:583),,기존행 SCP0020_TactTime:583 LockRange | 신규행 SCP0020_TactTime:796 LockRange,,Packer
+LANE_QTY,,COND,COND,"RULES:[{""g"": ""COL(OPERATION_GROUP_ID)!=\""E\"""", ""lock"": ""Y"", ""ref"": ""InsertButton:811""}]","RULES:[{""g"": ""COL(MODEL_SITE)==\""\"""", ""lock"": ""Y"", ""ref"": ""EditButton:593""}, {""g"": ""COL(OPERATION_GROUP_ID)!=\""E\"""", ""lock"": ""Y"", ""ref"": ""EditButton:598""}]",,기존행 SCP0020_TactTime:593 LockRange | 기존행 SCP0020_TactTime:598 LockRange | 신규행 SCP0020_TactTime:811 LockRange,,Packer
+DIVISION_ID,Y,N,N,잠금 (InsertButton:928),잠금 (EditButton:676),,기존행 SCP0020_TactTime:676 LockColumn | 신규행 SCP0020_TactTime:928 LockRange,,Tact Time Except
+PLANT_SITE_NAME,Y,N,N,잠금 (InsertButton:928),잠금 (EditButton:676),,기존행 SCP0020_TactTime:676 LockColumn | 신규행 SCP0020_TactTime:928 LockRange,,Tact Time Except
+OPERATION_NAME,Y,N,N,잠금 (InsertButton:928),잠금 (EditButton:676),,기존행 SCP0020_TactTime:676 LockColumn | 신규행 SCP0020_TactTime:928 LockRange,,Tact Time Except
+ITEM_ID,Y,N,N,잠금 (InsertButton:928),잠금 (EditButton:676),,기존행 SCP0020_TactTime:676 LockColumn | 신규행 SCP0020_TactTime:928 LockRange,,Tact Time Except
+NICK_NAME,Y,N,N,잠금 (InsertButton:928),잠금 (EditButton:676),,기존행 SCP0020_TactTime:676 LockColumn | 신규행 SCP0020_TactTime:928 LockRange,,Tact Time Except
+LINE_ID,Y,N,N,잠금 (InsertButton:928),잠금 (EditButton:676),,기존행 SCP0020_TactTime:676 LockColumn | 신규행 SCP0020_TactTime:928 LockRange,,Tact Time Except
+TACT_TIME_START_DATE,Y,Y,Y,,,,,,Tact Time Except
+TACT_TIME_END_DATE,Y,Y,Y,,,,,,Tact Time Except
+DAILY_CAPACITY,Y,Y,Y,,,,,,Tact Time Except
+TACT_TIME,Y,N,N,잠금 (InsertButton:937),잠금 (EditButton:684),,기존행 SCP0020_TactTime:684 LockColumn | 신규행 SCP0020_TactTime:937 LockRange,,Tact Time Except
+YIELD,Y,Y,Y,,,,,,Tact Time Except
+EXCEPT_COMMENT,Y,Y,Y,,,,,,Tact Time Except
+USE_YN,Y,Y,Y,,,,,,Tact Time Except
+CREATED_BY,Y,N,N,잠금 (InsertButton:929),잠금 (EditButton:677),,기존행 SCP0020_TactTime:677 LockColumn | 신규행 SCP0020_TactTime:929 LockRange,,Tact Time Except
+CREATION_DATE,Y,N,N,잠금 (InsertButton:929),잠금 (EditButton:677),,기존행 SCP0020_TactTime:677 LockColumn | 신규행 SCP0020_TactTime:929 LockRange,,Tact Time Except
+LAST_UPDATED_BY,Y,N,N,잠금 (InsertButton:929),잠금 (EditButton:677),,기존행 SCP0020_TactTime:677 LockColumn | 신규행 SCP0020_TactTime:929 LockRange,,Tact Time Except
+LAST_UPDATE_DATE,Y,N,N,잠금 (InsertButton:929),잠금 (EditButton:677),,기존행 SCP0020_TactTime:677 LockColumn | 신규행 SCP0020_TactTime:929 LockRange,,Tact Time Except
+PLANT_SITE_ID,N,Y,Y,,,,,,Tact Time Except
+OPERATION_ID,N,Y,Y,,,,,,Tact Time Except
+INPUT_STATUS,N,Y,Y,,,,,,Tact Time Except
+ORG_DIVISION_ID,N,Y,Y,,,,,,Tact Time Except
+ORG_PLANT_SITE_ID,N,Y,Y,,,,,,Tact Time Except
+ORG_ITEM_ID,N,Y,Y,,,,,,Tact Time Except
+ORG_OPERATION_ID,N,Y,Y,,,,,,Tact Time Except
+ORG_LINE_ID,N,Y,Y,,,,,,Tact Time Except
+ORG_TACT_TIME_START_DATE,N,Y,Y,,,,,,Tact Time Except
+ORG_TACT_TIME_END_DATE,N,Y,Y,,,,,,Tact Time Except

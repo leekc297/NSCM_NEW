@@ -1,53 +1,71 @@
 {
  "rule_id": "F8",
- "hash": "b6b074bb4a4a8340",
+ "hash": "3f5290e4d9ea4ccf",
  "groups": [
+  {
+   "rows": [
+    "EG-157be290"
+   ],
+   "why": "단독"
+  },
   {
    "rows": [
     "EG-9ec319ae"
    ],
-   "why": "DISTRIBUTION_ROUTE 키 9917 행 하나를 저장 직전(AS OF)과 저장 뒤로 비교하는 행이다. 대상 레코드가 7305 행과 달라서 따로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-c228262d"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-d899e761"
    ],
-   "why": "DISTRIBUTION_ROUTE 키 7305 행 하나를 저장 직전(AS OF)과 저장 뒤로 비교하는 행이다. 대상 레코드가 9917 행과 달라서 따로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-4bee5c9b",
-    "V-8bf27cb9"
+    "EG-dc2ad128"
    ],
-   "why": "둘 다 기존 행을 수정 저장한 뒤 같은 감사 컬럼(Created/Updated By·Date)에서 'Created는 그대로, Updated만 갱신'을 확인한다. 출처와 문장만 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-a8518547"
+    "EG-ded49290"
    ],
-   "why": "실제 저장 1건에서 생성·수정 감사 필드가 모두 저장 계정과 저장 시각으로 세팅되는지 본다. 신규 저장(Insert) 기준이라 기대가 Created 불변을 보는 수정 행들과 다르다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-e8906b53"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-4bee5c9b"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "V-91dc58e6"
    ],
-   "why": "감사 컬럼이 아니라 이력 테이블 행의 공통 컬럼 값이 원장의 변경 전 또는 변경 후 값과 같은지 본다. 대상 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-22c17dca"
+    "V-a8518547"
    ],
-   "why": "Reject 뒤 재요청 상태에서 Reject Reason이 비고 Request Date가 MAX(Create, LastUpdate)인지 본다. 대상 컬럼과 상태가 모두 다르다."
-  },
-  {
-   "rows": [
-    "V-5c9e1f44"
-   ],
-   "why": "Auth Request 시점에 Approval Date가 생기지 않는지 본다. 대상 컬럼과 시점이 다르다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:41:41",
- "cost": 0.05827519999999999
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-26 02:36:23",
+ "cost": 0,
+ "open": 0
 }

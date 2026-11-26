@@ -76,6 +76,11 @@
         "tools/VibeManager/workbench.js",
         "tools/VibeManager/test/t_job_resume.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:32+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T11:43:42+09:00"
     }
   ],
   "auto": true,
@@ -117,5 +122,7 @@
     "verify_result": "2026-11-20 11:18:39 node tools/VibeManager/test/t_orch_proc_grace.js → PASS 8, ALL PASS (child PID gone, first sweep gone 0 / after proc.end gone 0 / 5 s gone 0 / 10 s with no proc.end gone 1 / owner PID gone, first sweep gone 1). Then node tools/VibeManager/test/run_all.js (2026-11-20T02:18:41Z start, 129.9 s) → files 40/41, PASS 497, FAIL 1. Failure: t_jobs_recent.js '기본 실행 방식 = 부하가 허용하면 동시 · 최대 5'. That test only loads jobs.js, which does not require orch-state.js. t_orch_proc_grace.js PASS 8 within run_all.",
     "note": "Both targets already had the change in the working tree when this session started (orch-state.js:58-63 deadAt 10-second grace, owner PID condition unchanged; t_orch_proc_grace.js exists). No edits this session. The t_jobs_recent.js failure is in jobs.js, outside the targets, and was not fixed; its cause is unchecked. repairScope=DB_ONLY, but the targets are VibeManager files and no hook blocked anything."
   },
-  "snap": "prop_20261120095113_INC"
+  "snap": "prop_20261120095113_INC",
+  "effectiveMs": 1795142622914,
+  "effectiveAt": "2026-11-20T11:43:42+09:00"
 }

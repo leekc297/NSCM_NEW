@@ -83,8 +83,9 @@ export const LBL = {
   STAGE: 'LBL00061',
   // Valid — AS-IS lblValid "Active"(사용자 지정 LBL00007). 이전 LBL00639("Valid")에서 교체.
   VALID: 'LBL00007',
-  // Item ID — AS-IS Model/Nickname 라벨(사용자 지정 LBL00618). 이전 하드코딩 'Item ID'에서 교체.
-  ITEM_ID: 'LBL00618',
+  // Item ID — 표준 라벨은 Model/Nickname(LBL00618)이나, 이 화면은 조회 내용에 Nickname 이 없어
+  //   "Model"(LBL00669, KO/EN/CN 등록)로 표기한다. 고객 테스트 요청(2026-11-23) 표준화 예외처리.
+  ITEM_ID: 'LBL00669',
   // Period — AS-IS lblPeriod "Period*"(UsrDateRangePicker3 단일 컨트롤). From Date/To Date 2분할이
   //   아니라 하나의 기간 범위다(.Designer.cs:520~527 lblPeriod + dCalendar UsrDateRangePicker3).
   //   라벨값은 사용자 지정 LBL00013("Period"). 이전 LBL00062 에서 교체.

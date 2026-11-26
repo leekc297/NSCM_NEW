@@ -1,0 +1,122 @@
+{
+ "definition": "Sales Plan 또는 Business Plan 버전을 골라 Department, 모델별 월 Sales Amt., Unit Price, RTF 를 조회하고 수정하는 화면",
+ "overview": [
+  "Sales Plan 또는 Business Plan 버전 기준으로 Department, 모델별 월 Sales Amt., Unit Price(LOC), RTF[R+P] 를 모아 보고 보고용 값을 고치는 매출 보고 화면임",
+  "위쪽 조회 조건, 왼쪽 Sales Reports 그리드, 오른쪽 월 컬럼으로 구성됨. SP Version 버전 팝업, Exchange Rate 팝업, 모델 찾기 팝업을 씀",
+  "Div, Year, Report Type 을 고르고 SP Version 팝업에서 버전 선택 → Search(F5) → Data Type 을 고른 상태로 값 수정 → Save(F7) 순서로 작업함",
+  "버전 팝업은 ETC Sales Reports(DMF0049)와 같은 버전 목록을 씀"
+ ],
+ "pages": [
+  {
+   "title": "Sales Reports",
+   "keyPoint": "SP Version 을 찾아 조회한 뒤에 입력, 저장할 수 있음. Data Type 이 ALL 이면 편집, 저장할 수 없으므로 Data Type 을 고른 뒤 수정함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.15,
+     "y": 0.153
+    },
+    {
+     "no": 2,
+     "x": 0.617,
+     "y": 0.247
+    },
+    {
+     "no": 3,
+     "x": 0.188,
+     "y": 0.349
+    },
+    {
+     "no": 4,
+     "x": 0.941,
+     "y": 0.455
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div, Year: 필수",
+      "Report Type: 계획 종류를 고름(캡처 값 Sales Plan). Report Type 에 따라 버전 항목 이름이 SP Version 또는 BP Version 으로 바뀜",
+      "Data Type: ALL 이면 조회만 할 수 있음",
+      "SP Version: 필수. 돋보기를 누르면 버전 팝업이 열리고, 고른 버전이 채워짐",
+      "SP Version 없이 조회하면 \"버전을 선택하세요.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Exchange Rate 아이콘: Year 기준 월별 환율 팝업을 열어 환율을 입력하고 저장함",
+      "컬럼 설정 아이콘: 보이는 컬럼, 순서, 폭을 사용자별로 저장함",
+      "Delete, Save: Data Type 이 ALL 이면 \"Data Type 이 ALL 인 상태에서는 편집할 수 없습니다.\" 메시지가 뜸",
+      "버전을 찾아 조회하기 전에 저장하거나 팝업을 열면 \"Version을 검색 후 조회하신 후에 입력이 가능합니다.\" 메시지가 뜸",
+      "저장 권한이 없는 그룹은 \"권한이 없습니다.\" 메시지가 뜸",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Sales Reports 그리드",
+     "lines": [
+      "필수 입력: Department, Company Id, Cell Prod Site(제목 앞 빨간 점)",
+      "Department, Team, Report 컬럼은 같은 값이면 셀이 합쳐져 보임",
+      "Model 칸을 더블클릭하면 모델 찾기 팝업이 열리고, 고른 모델 값이 행에 채워짐",
+      "필수 칸이 비어 있으면 \"{0} 값은 필수 입력 항목입니다.\" 메시지에 컬럼 이름이 들어가 뜸"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Measure, 월 컬럼",
+     "lines": [
+      "Measure: 모델마다 Sales Amt. 3행, MKT_FCST, Unit Price(LOC), RTF[R+P] 행이 묶여 나옴",
+      "월 컬럼: Year 의 월이 2026-01 부터 순서대로 나옴. 값은 소수 3자리로 표시됨",
+      "음수는 빨간 글자로 표시됨",
+      "저장이 끝나면 \"성공적으로 저장되었습니다.\", 바뀐 내용이 없으면 \"저장할 대상 데이터가 없습니다.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "DM",
+ "id": "DMF0044",
+ "uiName": "Sales Reports",
+ "menuPath": "DM> Demand Plan> Sales Reports",
+ "captures": [
+  "captures/DMF0044.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0044/",
+  "Doc/asisfacts/screens/DMF0044/",
+  "Doc/gen/DMF0044/"
+ ],
+ "buttons": [
+  "MDF Reports:COLUMN_SETUP",
+  "MDF Reports:DELETE",
+  "MDF Reports:EXCEL",
+  "MDF Reports:EXCHANGE_RATE",
+  "MDF Reports:MEASURE_SELECT",
+  "MDF Reports:SAVE",
+  "MDF Reports:SAVE_CF",
+  "MDF Reports:SEARCH",
+  "MDF Reports:SP_VER",
+  "MDF Reports:TEXTBOX",
+  "exchangeRate:EXRATE_SAVE",
+  "exchangeRate:SAVE",
+  "exchangeRate:SEARCH",
+  "exchangeRate:SEARCH_DATA",
+  "exchangeRate:TITLE",
+  "measure:SEARCH",
+  "spreadTitle:SEARCH",
+  "textbox:SAVE",
+  "textbox:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH",
+  "unitedVersion:ACTION",
+  "unitedVersion:ACTION_BP",
+  "unitedVersion:SEARCH",
+  "unitedVersion:TITLE",
+  "unitedVersion:TRANSFER"
+ ]
+}

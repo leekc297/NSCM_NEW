@@ -1,0 +1,88 @@
+{
+ "definition": "고객사가 보낸 Customer FCST 를 입력일(Input Date)별로 펼쳐 Model, 기간 단위로 변화를 조회하는 Waterfall 화면",
+ "overview": [
+  "고객사가 보낸 Customer FCST(EDI 수신분 포함)를 받은 날짜별 행으로 나눠 같은 Model 의 FCST 변화를 보는 조회 화면임",
+  "위쪽 조회 조건과 펼침 조건, Customer FCST 그리드로 구성됨. Column Setting, Measure 설정 창을 씀",
+  "Div, Input Date, Period, Bucket 을 정해 조회 → Input Date 별 Cust. FCST 값을 기간 컬럼에서 비교함"
+ ],
+ "pages": [
+  {
+   "title": "Customer FCST Waterfall (1/2)",
+   "keyPoint": "Input Date 는 고객 FCST 를 받은 날짜 범위이고 Period 는 FCST 대상 기간임.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.141,
+     "y": 0.144
+    },
+    {
+     "no": 2,
+     "x": 0.714,
+     "y": 0.247
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 비우고 조회하면 \"Division 을 선택하세요.\" 메시지가 뜸",
+      "Team, End Customer, Sales Site, Biz. Type: ALL 또는 값을 골라 조회함",
+      "Input Date: 필수. 고객 FCST 를 받은 날짜 범위를 지정함",
+      "Period: 필수. 시작일이 종료일보다 늦으면 \"조회 기간이 잘못되었습니다 (시작일 > 종료일).\", 3년을 넘으면 \"조회 기간은 3년 이내로 입력해주세요.\" 메시지가 뜸",
+      "Bucket: 기간 컬럼 단위를 고름(기본 Monthly)",
+      "Search(F5) 옆 펼침 버튼을 누르면 Project, Model, Item Type, Owner, QTY 조건이 더 나옴"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "아이콘 버튼으로 Column Setting, Measure 설정 창을 열어 컬럼 표시와 보일 Measure 를 사용자별로 정함",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Customer FCST Waterfall (2/2)",
+   "keyPoint": "Input Date 는 고객 FCST 를 받은 날짜 범위이고 Period 는 FCST 대상 기간임.",
+   "markers": [
+    {
+     "no": 3,
+     "x": 0.17,
+     "y": 0.247
+    }
+   ],
+   "sections": [
+    {
+     "no": 3,
+     "title": "Customer FCST 그리드",
+     "lines": [
+      "Division, End Customer, Sales Site, Project Code, Model, Model Name, Incoterms, EDI Sender, FCST Type, Cust. Plant, Cust. Unloading Point, Customs Handbook 이 앞쪽에 나옴",
+      "같은 Model 이 Input Date 별 행으로 나뉘어 입력일마다 받은 Cust. FCST 를 비교할 수 있음",
+      "Cust. Item ID, EDI SEQ NO, Last Update, Last Update By 로 고객 품번과 EDI 수신 건을 확인함",
+      "Measure 열은 Cust. FCST 임. 오른쪽으로 스크롤하면 Bucket 단위 기간 컬럼과 맨 아래 합계 행이 나옴",
+      "값은 조회만 할 수 있고 입력, 저장은 없음"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0053",
+ "uiName": "Customer FCST Waterfall",
+ "menuPath": "DM> Waterfall> Customer FCST Waterfall",
+ "captures": [
+  "captures/DMF0053.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0053/",
+  "Doc/asisfacts/screens/DMF0053/"
+ ],
+ "buttons": [
+  "custFcstWaterfall:SEARCH",
+  "spreadTitle:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH"
+ ]
+}

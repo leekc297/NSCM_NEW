@@ -22,7 +22,7 @@ import { ScpBomGrid } from './components/ScpBomGrid';
 import { MENU_ID, MSG, RESPONSE_KEY, SHEETS } from './scp-bom.constants';
 import type { ScpBomRow } from './scp-bom.types';
 import { useScpBomStore } from './useScpBomStore';
-import { isRowLocked } from './utils/scp-bom.editLock';
+import { isRowLocked, markRowLocks } from './utils/scp-bom.editLock';
 import { buildSavePayload, callSaveScpBom } from './utils/scp-bom.save';
 // import { findInvalidScpYnParents } from './utils/scp-bom.scpYn';
 
@@ -69,7 +69,8 @@ export const ScpBom = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
 
   // 커서 읽기키 = PROC_M COL_NM 실측 'o_rc'(RESPONSE_KEY). o_rc1 아님 주의.
-  const rows = useMemo<ScpBomRow[]>(() => data?.[RESPONSE_KEY] ?? [], [data]);
+  //   행 잠금은 조회 시점 SCP YN 으로 고정(markRowLocks) — 편집 중 지운 행도 저장 대상(AS-IS 등가).
+  const rows = useMemo<ScpBomRow[]>(() => markRowLocks(data?.[RESPONSE_KEY] ?? []), [data]);
 
   // mount 1회 + Search 마다 admin 컬럼 메타 fetch. keep-alive 탭 stale filters 자동발사 방지(clearFilters).
   //   F6 저장 조회조건 복원도 mount 1회(conditionsRestored 가드). 새로고침 시 새 store → 재복원.
@@ -125,7 +126,8 @@ export const ScpBom = ({ tabId, title }: PageProps<MENU_ID>) => {
     const grid = gridRef.current;
     grid?.finishEditing();
     const src = (grid?.collectionView?.sourceCollection ?? []) as Record<string, unknown>[];
-    // dirty = 변경행(CRUD_TYPE). 잠금행(SCP_PLAN_YN 비 Y/N)은 편집 자체가 차단되나 방어적으로 제외.
+    // dirty = 변경행(CRUD_TYPE). 조회 시점 잠금행(SCP_PLAN_YN 비 Y/N)은 편집 자체가 차단되나 방어적으로 제외.
+    //   편집 중 SCP YN 을 지운 행은 잠금행이 아니므로 빈 값으로 저장된다(AS-IS SaveData_Main cs:460-485 등가).
     const dirty = src.filter(r => r.CRUD_TYPE && !isRowLocked(r));
     if (dirty.length === 0) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes to save.') });

@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SSP0005",
  "asis_id": "SSP0005",
- "generated": "2026-11-20T10:02:23",
+ "generated": "2026-11-25T01:17:50",
  "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\shipment-working-day\\__asis-mapping__.md",
  "rows": 477,
  "fe_rows": 118,
@@ -19,10 +19,10 @@
  "instance_result": {
   "PASS": 140,
   "NA": 101,
-  "ERROR": 85,
-  "NOT_RUN": 63,
+  "ERROR": 83,
+  "NOT_RUN": 62,
   "WARN": 16,
-  "REVIEW": 20,
+  "REVIEW": 23,
   "NOPATH": 2,
   "FAIL": 2
  },
@@ -31,9 +31,9 @@
    "PASS": 86,
    "NA": 44,
    "WARN": 15,
-   "ERROR": 17,
-   "REVIEW": 20,
-   "NOT_RUN": 7
+   "ERROR": 15,
+   "REVIEW": 23,
+   "NOT_RUN": 6
   },
   "공통 기능": {
    "PASS": 3
@@ -93,8 +93,8 @@
   },
   "A6": {
    "PASS": 2,
-   "NOT_RUN": 2,
-   "ERROR": 2
+   "REVIEW": 3,
+   "NOT_RUN": 1
   },
   "B1": {
    "NA": 2
@@ -277,10 +277,10 @@
  },
  "todo_checks": {},
  "unverified_reasons": {
-  "ERROR": 140,
-  "NOT_RUN": 471,
+  "ERROR": 138,
+  "NOT_RUN": 470,
   "WARN": 26,
-  "REVIEW": 20,
+  "REVIEW": 23,
   "NOPATH": 4
  }
 }

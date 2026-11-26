@@ -1,0 +1,106 @@
+{
+ "rule_id": "F6",
+ "hash": "0ebf3e4e3e0dfbd1",
+ "groups": [
+  {
+   "rows": [
+    "V-01974509"
+   ],
+   "why": "Checks the SYS0002 Dept/SSO auto-fill and Use Y/N header merge. No other row checks these elements, so it stands alone."
+  },
+  {
+   "rows": [
+    "V-06030ef0"
+   ],
+   "why": "Checks that quantities stay after AS From Site input following the save-validation popup. The condition differs from V-400f4037's generic edit of another cell, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-0752090e"
+   ],
+   "why": "Checks that values past week 51 (near the 2-year query limit) are saved and shown on requery. That period condition appears nowhere else."
+  },
+  {
+   "rows": [
+    "V-0ae460bc"
+   ],
+   "why": "Checks that the Cutoff value is saved exactly as entered, with no doubling, for Report Type Biz Plan. It is tied to a specific condition and differs in scope from the screen-wide V-2bc6b855."
+  },
+  {
+   "rows": [
+    "V-1a6ab9c6"
+   ],
+   "why": "Checks several elements at once: the Monthly bucket, the saved value, version case-insensitivity and the double-click popup. Its expected result differs from every other row."
+  },
+  {
+   "rows": [
+    "V-26b00fc1"
+   ],
+   "why": "Checks a new-row insert saved once and the Sales Site combo candidates. The state (new row) and the elements differ from the other rows."
+  },
+  {
+   "rows": [
+    "V-2bc6b855"
+   ],
+   "why": "Checks the whole screen for no changed values, doubling or automatic reset. It is a broad screen-level rule and does not match any other row's element or condition."
+  },
+  {
+   "rows": [
+    "V-2c074ac3"
+   ],
+   "why": "Checks clearing a numeric cell and saving it. The condition differs from V-a14b0257, which saves 0, so I kept them apart."
+  },
+  {
+   "rows": [
+    "V-400f4037"
+   ],
+   "why": "Checks that an entered quantity stays after editing another cell. It differs from V-06030ef0's specific trigger (popup then AS From Site), so it stands alone to be safe."
+  },
+  {
+   "rows": [
+    "V-5f8374a8"
+   ],
+   "why": "Checks the new-data Team value and the Owner→Team fill rule. These elements are unique."
+  },
+  {
+   "rows": [
+    "V-81b4003b"
+   ],
+   "why": "Checks that the business table's row count does not change after one save of an edited existing row. V-d894f49b also expects Text validation, so the expected results differ."
+  },
+  {
+   "rows": [
+    "V-a14b0257"
+   ],
+   "why": "Checks saving 0 into a numeric cell. The input condition differs from V-2c074ac3's blank-value save."
+  },
+  {
+   "rows": [
+    "V-c58e7841"
+   ],
+   "why": "Checks the relationship-mismatch block, the Active N value being kept, and the cascade. These elements and expected results are unique."
+  },
+  {
+   "rows": [
+    "V-d37f8ff3"
+   ],
+   "why": "Checks Division sheet saving for the JV Planner group and the duplicate message. The element is unique."
+  },
+  {
+   "rows": [
+    "V-d894f49b"
+   ],
+   "why": "Checks the Text required-field validation conditions and that saving an edited ETC row updates the existing row. It adds a validation expectation that V-81b4003b does not have."
+  },
+  {
+   "rows": [
+    "V-f7caf9f8"
+   ],
+   "why": "Checks that required columns are added automatically when switching Div with saved personal settings. This is a column-display check, not value retention after save."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:07:32",
+ "cost": 0.07413209999999999
+}

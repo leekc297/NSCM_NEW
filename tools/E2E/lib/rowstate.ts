@@ -22,17 +22,29 @@ export function judgePasteBad(s: { b: string; bad: string; before: string; after
 /** 텍스트 조건 부분 문자열 조회 — full 원래 값 · part 입력 · vals 결과 칸 값 · sent 요청 여부 · inBody 부분 문자열이 조회 요청 본문에 실렸는지.
  *  기대 = 요건 EG245(문서 DM-181·GAP-75·GAP-419·SSP45-6 — 텍스트 조건 부분일치). AS-IS SP 가 정확 일치(IN)여도 TO-BE 요건이 우선한다.
  *  0행: 본문에 부분 문자열이 실렸으면 FAIL(조건은 전달됐는데 부분일치 안 됨) · 안 실렸거나 모르면 입력 조작 실패일 수 있어 ERROR
- *  (2026-11-10 T177 — SSP0024 Material 'PCAN0506' 0행이 'AS-IS Like 여부 확인 필요' ERROR 로 미검증에 묻혀 조치필요 누락 · 사용자 판정 오류) */
-export function judgeLike(s: { b: string; full: string; part: string; vals: string[]; sent: boolean; inBody?: boolean }): J {
+ *  (2026-11-10 T177 — SSP0024 Material 'PCAN0506' 0행이 'AS-IS Like 여부 확인 필요' ERROR 로 미검증에 묻혀 조치필요 누락 · 사용자 판정 오류)
+ *  asisOp = AS-IS 조회 SP 의 해당 파라미터 비교식(LIKE·IN·=) · asisBy = 근거(SP명:라인). ledger.py G1 이 expected 로 넘긴다(2026-11-24 R33 · 20261123192155_SELF_2).
+ *  asisOp 가 있으면 AS-IS 비교식과 TO-BE 실측(부분일치 됨 = LIKE, 본문에 실렸는데 0행 = 정확 일치)이 다를 때 FAIL. 기준(AS-IS 비교식 · 요건 EG245) 선택은 사용자 확인 대상으로 why 에 적는다.
+ *  asisOp 가 없으면 종전 판정(요건 EG245 기대) 그대로. */
+export function judgeLike(s: { b: string; full: string; part: string; vals: string[]; sent: boolean; inBody?: boolean; asisOp?: string; asisBy?: string }): J {
   const ci = (v: string) => v.toLowerCase();
+  const op = (s.asisOp || '').trim().toUpperCase();
+  const asisLike = op ? op.includes('LIKE') || op.includes('INSTR') : undefined;
+  const asis = op ? `AS-IS 비교식 ${op}${s.asisBy ? `(${s.asisBy})` : ''}` : '';
+  const pick = '기준 선택(AS-IS 비교식 · 요건 EG245) 사용자 확인 필요';
   if (!s.sent) return { result: 'ERROR', why: `[측정 경로 없음] 조회 요청 없음` };
-  if (!s.vals.length) return s.inBody
-    ? { result: 'FAIL', why: `'${s.part}'(값 '${s.full}' 일부) 이 조회 요청 본문에 실렸는데 0행 — 텍스트 조건 부분일치(Like) 안 됨 · 기대 근거 요건 EG245(DM-181·GAP-75·GAP-419·SSP45-6)` }
-    : { result: 'ERROR', why: `[확인 대상] '${s.part}'(값 '${s.full}' 일부) 조회 0행 · 조회 요청 본문에 부분 문자열 ${s.inBody === false ? '없음' : '확인 안 함'} — 입력 조작 실패일 수 있어 판정 보류` };
+  if (!s.vals.length) {
+    if (!s.inBody) return { result: 'ERROR', why: `[확인 대상] '${s.part}'(값 '${s.full}' 일부) 조회 0행 · 조회 요청 본문에 부분 문자열 ${s.inBody === false ? '없음' : '확인 안 함'} — 입력 조작 실패일 수 있어 판정 보류` };
+    const base = `'${s.part}'(값 '${s.full}' 일부) 이 조회 요청 본문에 실렸는데 0행 — TO-BE 텍스트 조건 정확 일치(부분일치 안 됨)`;
+    if (asisLike === true) return { result: 'FAIL', why: `${base} ↔ ${asis} 부분일치 — AS-IS 와 다름` };
+    if (asisLike === false) return { result: 'FAIL', why: `${base} · ${asis} 와 같음 · 요건 EG245(DM-181·GAP-75·GAP-419·SSP45-6) 기대 부분일치와 다름 — ${pick}` };
+    return { result: 'FAIL', why: `${base} · 기대 근거 요건 EG245(DM-181·GAP-75·GAP-419·SSP45-6)` };
+  }
   const out = [...new Set(s.vals.filter(v => !ci(v).includes(ci(s.part))))];
   if (!s.vals.some(v => ci(v) === ci(s.full))) return { result: 'FAIL', why: `'${s.part}' 조회 ${s.vals.length}행에 원래 값 '${s.full}' 없음` };
   if (out.length) return { result: 'ERROR', why: `[확인 대상] '${s.part}' 조회 ${s.vals.length}행 중 ${s.b} 에 그 문자열 없는 값 ${out.length}종: ${out.slice(0, 4).join(', ')}(ID·명칭 등 다른 칸 검색일 수 있음)` };
-  return { result: 'PASS', why: `'${s.part}' 부분일치 ${s.vals.length}행 · 원래 값 포함` };
+  if (asisLike === false) return { result: 'FAIL', why: `'${s.part}' TO-BE 부분일치 ${s.vals.length}행 ↔ ${asis} 정확 일치 — AS-IS 와 다름 · 요건 EG245 기대와는 같음 — ${pick}` };
+  return { result: 'PASS', why: `'${s.part}' 부분일치 ${s.vals.length}행 · 원래 값 포함${asis ? ` · ${asis} 와 같음` : ''}` };
 }
 
 /** 선택 조회 — want 고른 값 · vals 결과 칸 값 · 복수면 고른 값이 전부 결과에 있어야 한다 */

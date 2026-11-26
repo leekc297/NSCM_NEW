@@ -1,0 +1,65 @@
+﻿BEGIN 
+									
+									MERGE INTO SCM_PACK_WORKER_M AS A
+									USING (SELECT @COMPANY_ID AS COMPANY_ID, @DIVISION_ID AS DIVISION_ID, @SITE_ID AS SITE_ID, @PLANT_ID AS PLANT_ID, @FACTORY_ID AS FACTORY_ID, 
+									              @ITEM_ID AS ITEM_ID, @OPERATION_ID AS OPERATION_ID,  @LINE_ID AS LINE_ID) AS B
+									ON (A.COMPANY_ID = B.COMPANY_ID AND A.DIVISION_ID = B.DIVISION_ID AND A.SITE_ID = B.SITE_ID AND A.PLANT_ID = B.PLANT_ID AND A.FACTORY_ID = B.FACTORY_ID
+									    AND A.ITEM_ID = B.ITEM_ID  AND A.LINE_ID = B.LINE_ID)
+									WHEN MATCHED THEN
+									UPDATE SET
+									WORKER_QTY = @WORKER_QTY,
+									UPDATE_ID = @USER_ID, UPDATE_TIME = dbo.SYSDATE1()
+									WHEN NOT MATCHED THEN
+									INSERT (
+									COMPANY_ID,DIVISION_ID,SITE_ID,PLANT_ID,FACTORY_ID,
+									ITEM_ID, OPERATION_ID, LINE_ID, WORKER_QTY,
+									INSERT_ID,INSERT_TIME,UPDATE_ID,UPDATE_TIME
+									)
+									VALUES (
+									@COMPANY_ID, @DIVISION_ID, @SITE_ID, @PLANT_ID, @FACTORY_ID,
+									@ITEM_ID, @OPERATION_ID, @LINE_ID, @WORKER_QTY,
+									@USER_ID, dbo.SYSDATE1(), @USER_ID, dbo.SYSDATE1()
+									)
+									;
+									
+									INSERT INTO HIS_PACK_WORKER_M
+									(COMPANY_ID
+									 ,DIVISION_ID
+									 ,SITE_ID
+									 ,PLANT_ID
+									 ,FACTORY_ID
+									 ,ITEM_ID
+									 ,OPERATION_ID
+									 ,LINE_ID
+									 ,WORKER_QTY
+									 ,INSERT_ID
+									 ,INSERT_TIME
+									 ,UPDATE_ID
+									 ,UPDATE_TIME
+									 ,JOB_USER_ID, JOB_TIME, JOB_TYPE)
+									SELECT COMPANY_ID
+									 ,DIVISION_ID
+									 ,SITE_ID
+									 ,PLANT_ID
+									 ,FACTORY_ID
+									 ,ITEM_ID
+									 ,OPERATION_ID
+									 ,LINE_ID
+									 ,WORKER_QTY
+									 ,INSERT_ID
+									 ,INSERT_TIME
+									 ,UPDATE_ID
+									 ,UPDATE_TIME
+									 ,@USER_ID, dbo.SYSDATE1(), 'UPDATE'
+									FROM SCM_PACK_WORKER_M(NOLOCK)
+									WHERE COMPANY_ID = @COMPANY_ID
+									AND   DIVISION_ID = @DIVISION_ID
+									AND   SITE_ID = @SITE_ID
+									AND   PLANT_ID = @PLANT_ID
+									AND   FACTORY_ID = @FACTORY_ID
+									AND   ITEM_ID = @ITEM_ID
+									AND   OPERATION_ID = @OPERATION_ID
+									AND   LINE_ID = @LINE_ID
+									;
+									
+									END;

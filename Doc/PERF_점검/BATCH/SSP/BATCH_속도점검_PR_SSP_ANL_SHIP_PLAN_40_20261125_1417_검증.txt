@@ -1,0 +1,13 @@
+속도 점검 쿼리 로컬 검증 2026-11-25 14:17:27
+방식 : 파일의 쿼리를 사내 ZIOUI1 에서 차례로 실행(조회. 재실행 블록 뒤 ROLLBACK)
+ZIOUI1 ('2026-11-25 14:17:25', 'SCM_MGR')
+[L1] 0.1초 · 0행
+[L2] 0.1초 · 0행
+[L3] 0.0초 · 3행 · 첫 행 ('JOB_PR_SSP_PLN_SHIP_PLAN_40', 'FALSE', 'DISABLED', None, None, None, 'FREQ=DAILY;BYHOUR=8;BYMINUTE=0;BYSECOND=0', None, None)
+[L3-1] 0.0초 · 0행
+[L4] 0.2초 · 0행
+[L5] 1.0초 · 0행
+[L6] 0.1초 · 0행
+[L7] 0.0초 · 1행 · 첫 행 (1, 'ZIO', 'localhost.localdomain')
+[L8] 1.2초 · 0행
+결과 : PASS · 실패 0건

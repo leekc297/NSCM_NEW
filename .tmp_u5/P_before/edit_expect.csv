@@ -1,0 +1,40 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+ROUTE_ID,Y,N,N,잠금 (InsertRow:950),잠금 (EditButton:321),,기존행 SCP0005_DistributionRoute:321 LockColumn | 신규행 SCP0005_DistributionRoute:950 LockRange,,Distribution Route
+LT_TYPE,Y,Y,Y,,,,,,Distribution Route
+FROM_CITY_NAME,Y,N,N,잠금 (InsertRow:951),잠금 (EditButton:322),,기존행 SCP0005_DistributionRoute:322 LockColumn | 신규행 SCP0005_DistributionRoute:951 LockRange,,Distribution Route
+FROM_COUNTRY,Y,Y,Y,,,,,,Distribution Route
+FROM_CITY,Y,Y,Y,,,,,,Distribution Route
+TRANSPORT_MODE,Y,Y,Y,,,,,,Distribution Route
+PRIORITY,Y,Y,Y,,,,,,Distribution Route
+DAYS_MON,Y,Y,Y,,,,,,Distribution Route
+DAYS_TUE,Y,Y,Y,,,,,,Distribution Route
+DAYS_WED,Y,Y,Y,,,,,,Distribution Route
+DAYS_THU,Y,Y,Y,,,,,,Distribution Route
+DAYS_FRI,Y,Y,Y,,,,,,Distribution Route
+DAYS_SAT,Y,Y,Y,,,,,,Distribution Route
+DAYS_SUN,Y,Y,Y,,,,,,Distribution Route
+D_PORT_NAME,Y,Y,Y,,,,,,Distribution Route
+D_COUNTRY,Y,Y,Y,,,,,,Distribution Route
+D_PORT_CODE,Y,Y,Y,,,,,,Distribution Route
+A_PORT_NAME,Y,Y,Y,,,,,,Distribution Route
+A_COUNTRY,Y,Y,Y,,,,,,Distribution Route
+A_PORT_CODE,Y,Y,Y,,,,,,Distribution Route
+SHIPPING_COMPANY,Y,Y,Y,,,,,,Distribution Route
+TO_CITY_NAME,Y,N,N,잠금 (InsertRow:952),잠금 (EditButton:323),,기존행 SCP0005_DistributionRoute:323 LockColumn | 신규행 SCP0005_DistributionRoute:952 LockRange,,Distribution Route
+TO_COUNTRY,Y,Y,Y,,,,,,Distribution Route
+TO_CITY,Y,Y,Y,,,,,,Distribution Route
+SHIP_DOC_PREPARATION_DATE,Y,Y,Y,,,,,,Distribution Route
+LT_DEPARTURE_INLAND,Y,Y,Y,,,,,,Distribution Route
+LT_WAIT_SHIPPING,Y,Y,Y,,,,,,Distribution Route
+LT_VOYAGE,Y,Y,Y,,,,,,Distribution Route
+LT_LAY_OFF_CLEARANCE,Y,Y,Y,,,,,,Distribution Route
+LT_ARRIVAL_INLAND,Y,Y,Y,,,,,,Distribution Route
+LT_SUM,Y,N,N,잠금 (InsertRow:953),잠금 (EditButton:324),,기존행 SCP0005_DistributionRoute:324 LockColumn | 신규행 SCP0005_DistributionRoute:953 LockRange,,Distribution Route
+ONE_SEGMENT_COST,Y,Y,Y,,,,,,Distribution Route
+TWO_SEGMENT_COST,Y,Y,Y,,,,,,Distribution Route
+THREE_SEGMENT_COST,Y,Y,Y,,,,,,Distribution Route
+VALID_YN,Y,Y,Y,,,,,,Distribution Route
+CREATED_BY,Y,N,N,잠금 (InsertRow:954),잠금 (EditButton:325),,기존행 SCP0005_DistributionRoute:325 LockColumn | 신규행 SCP0005_DistributionRoute:954 LockRange,,Distribution Route
+CREATION_DATE,Y,N,N,잠금 (InsertRow:954),잠금 (EditButton:325),,기존행 SCP0005_DistributionRoute:325 LockColumn | 신규행 SCP0005_DistributionRoute:954 LockRange,,Distribution Route
+LAST_UPDATED_BY,Y,N,N,잠금 (InsertRow:954),잠금 (EditButton:325),,기존행 SCP0005_DistributionRoute:325 LockColumn | 신규행 SCP0005_DistributionRoute:954 LockRange,,Distribution Route
+LAST_UPDATE_DATE,Y,N,N,잠금 (InsertRow:954),잠금 (EditButton:325),,기존행 SCP0005_DistributionRoute:325 LockColumn | 신규행 SCP0005_DistributionRoute:954 LockRange,,Distribution Route

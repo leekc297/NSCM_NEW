@@ -268,7 +268,7 @@ export const WaterfallVersionModal = ({
       const originals = editTrackerRef.current?.getOriginalValues();
       const dirtyRows = Array.from(originals?.keys() ?? []);
       if (dirtyRows.length === 0) {
-        void setAlert({ type: 'alert', content: t('MSG00133', '_수정한 내용이 없습니다.') });
+        void setAlert({ type: 'alert', content: t('MSG00004', '_수정한 내용이 없습니다.') });
         return;
       }
 

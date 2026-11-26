@@ -1,0 +1,102 @@
+{
+  "id": "20261120181921_SELF_3",
+  "at": "2026-11-20T18:19:21+09:00",
+  "ms": 1795166361696,
+  "source": "self",
+  "status": "applied",
+  "sig": "restore note info",
+  "title": "AI 편집만 되돌린 정상 처리 기록을 오류 집계에서 제외",
+  "evidence": "errors 서명 'orch-improve.restore | N_VISION_N probe.ts AI 편집 N건만 되돌림(반영 전과 같음)…' 1건, 'orch-improve.restore | N_SELF orch-usercheck.js AI 편집 N건만 되돌림(반영 전과 같음)…' 1건. orch-improve.js:190 이 되돌림 결과 설명(notes)을 errlog.note 로 info 표시 없이 씀. orch-errlog.js:89 stats 는 r.info === true 인 기록만 뺌(중지 뒤 잠금 정리와 같은 방식)",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_errlog.js"
+  ],
+  "before_after": "orch-improve.js:190 errlog.note('orch-improve','restore', …) → fail 과 skipped 가 없을 때 errlog.note(…, { info: true }). 실패나 건너뛴 파일이 있으면 지금처럼 오류로 기록. t_orch_errlog.js 에 info 기록이 stats 에서 빠지는 시험 1건 추가",
+  "verify": "node tools/VibeManager/test/t_orch_errlog.js → ALL PASS",
+  "rollback": "orch-improve.js, t_orch_errlog.js 를 반영 태그 .bak_ 사본으로 되돌림",
+  "impact": "fix",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T19:05:56+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T19:09:14+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 772, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1905"
+    },
+    {
+      "at": "2026-11-20T19:09:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T19:13:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 774, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T19:13:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node tools/VibeManager/test/t_orch_errlog.js 실행 결과 PASS 13줄, 마지막 줄 'ALL PASS'. 추가 시험 2건 'PASS 되돌림 정상 처리 info = stats 제외', 'PASS 되돌림 실패 = stats 집계' 포함. 실행 시각 2026-11-20 19:09:42(date 출력) · 변경 6개 파일 · 대상 목록 밖 변경 4개: Doc/verify/SCP0028/e2e/serial/scn_1.png, Doc/verify/SCP0028/e2e/serial/scn_2.png, Doc/verify/SCP0028/e2e/serial/scn_4.png, Doc/verify/SCP0028/e2e/serial/scn_end.png",
+      "log": ".vibe\\logs\\2026-11-20T19-09-17_claude_orch.log",
+      "sec": 32,
+      "costUsd": 0.4930676,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/test/t_orch_errlog.js",
+        "Doc/verify/SCP0028/e2e/serial/scn_1.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_2.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_4.png",
+        "Doc/verify/SCP0028/e2e/serial/scn_end.png"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:29+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T19:17:14+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S5",
+  "selfKey": "orch-improve.restore",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795169156165,
+  "autoFp": "d351f563e9",
+  "applyStartMs": 1795169356843,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 58/58개 파일 통과(PASS 774, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1905",
+  "needsReload": true,
+  "appliedMs": 1795169591876,
+  "synced": [
+    "orch-improve.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_errlog.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_errlog.js 실행 결과 PASS 13줄, 마지막 줄 'ALL PASS'. 추가 시험 2건 'PASS 되돌림 정상 처리 info = stats 제외', 'PASS 되돌림 실패 = stats 집계' 포함. 실행 시각 2026-11-20 19:09:42(date 출력)",
+    "note": "orch-improve.js:190 restoreTargets 안에서 fail, skipped 가 0건이면 errlog.note 에 { info: true } 를 넘김. 1건 이상이면 extra 없이 종전처럼 오류로 기록. 시험 2건 추가: info 되돌림 기록이 stats 에서 빠지는지, 실패한 되돌림 기록이 stats 에 남는지 확인. 저장소 hook 차단 없음"
+  },
+  "snap": "prop_20261120181921_SELF_3",
+  "effectiveMs": 1795169834991,
+  "effectiveAt": "2026-11-20T19:17:14+09:00"
+}

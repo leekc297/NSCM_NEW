@@ -1,11 +1,11 @@
-# 대조표 ↔ 검증 추적표 v2 — SSP0005 (AS-IS SSP0005) · 2026-11-20T10:02:23
+# 대조표 ↔ 검증 추적표 v2 — SSP0005 (AS-IS SSP0005) · 2026-11-25T01:17:50
 
 > 대조표의 **모든 행이 검증 대상**이다(제외·해당없음 행 = 사유 근거 검사 X-REASON). 행마다 카탈로그(`mapping_checks.csv`)가 정한 검사를 대상 단위 인스턴스로 묶어 판정한다.
 > **NOT_RUN** = 검사기 있음·이 대상 미실행 · **TODO** = 검사기 미구현(검증 엔진 구현 대상) · **BLOCKED** = 대조표 상태 미구현(구현 엔진 대상 — 구현 후 검증) · REVIEW = 판정필요
 
 - 대상: FE 대조표 118행 (nscm-fe\features\shipping\src\pages\shipment-working-day\__asis-mapping__.md) · AS-IS 액션 359행(진입점 + 전 문장) = **477행** → 검사 인스턴스 **429개**
 - 행 판정: 미검증 287 · 검증완료 155 · 해당없음 33 · FAIL 2
-- 인스턴스 결과: PASS 140 · NA 101 · ERROR 85 · NOT_RUN 63 · REVIEW 20 · WARN 16 · NOPATH 2 · FAIL 2
+- 인스턴스 결과: PASS 140 · NA 101 · ERROR 83 · NOT_RUN 62 · REVIEW 23 · WARN 16 · NOPATH 2 · FAIL 2
 
 ## 검사별
 
@@ -23,7 +23,7 @@
 | X-REASON | 정적 디자인 | 있음 | 24 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 제외·해당없음 사유·근거(룰·지시·원문·이동 위치) 존재 — 근거 없으면 사람 확인 |
 | A1 | 동적 생성·조회 | 있음 | 2 | 0 | 0 | 18 | 0 | 0 | 0 | 0 | 0 | 0 | 같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교 |
 | A10 | 동적 생성·조회 | 있음 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 조회 전 그리드 초기 상태(빈 그리드·헤더) = AS-IS |
-| A6 | 동적 생성·조회 | 있음 | 2 | 0 | 0 | 0 | 2 | 0 | 2 | 0 | 0 | 0 | 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 |
+| A6 | 동적 생성·조회 | 있음 | 2 | 0 | 0 | 3 | 0 | 0 | 1 | 0 | 0 | 0 | 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 |
 | G03-WIRE | 동적 생성·조회 | 있음 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | AS-IS 이벤트가 TO-BE 대조표·핸들러로 전부 연결 |
 | G1 | 동적 생성·조회 | 있음 | 2 | 0 | 14 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 조회조건 값 변경 → 조회 인자·결과 반영 |
 | G6 | 동적 생성·조회 | 있음 | 0 | 0 | 0 | 0 | 4 | 2 | 3 | 0 | 0 | 0 | 조회조건 초기 기본값 = AS-IS Form_Load |
@@ -70,7 +70,7 @@
 | 층 | PASS | FAIL | WARN | REVIEW | ERROR | NA | NOT_RUN | NOPATH | TODO | BLOCKED |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 정적 디자인 | 39 | 2 | 1 | 0 | 16 | 11 | 7 | 1 | 0 | 0 |
-| 동적 생성·조회 | 86 | 0 | 15 | 20 | 17 | 44 | 7 | 0 | 0 | 0 |
+| 동적 생성·조회 | 86 | 0 | 15 | 23 | 15 | 44 | 6 | 0 | 0 | 0 |
 | 콤보 후보 | 0 | 0 | 0 | 0 | 4 | 18 | 4 | 1 | 0 | 0 |
 | Cascade | 0 | 0 | 0 | 0 | 5 | 9 | 7 | 0 | 0 | 0 |
 | 편집·검증 | 0 | 0 | 0 | 0 | 40 | 10 | 30 | 0 | 0 | 0 |
@@ -102,7 +102,6 @@
 - E4|MSG:MSG01122 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
 - E4|MSG:MSG00134 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: 원장 행 실행(@verify)
 - E4|MSG:MSG01153 — 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace
-- A6|SP:P_SSP0005_GET — 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) —
 - F4|SP:P_SSP0005_GET — 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace
 - A6|SP:P_SCM0001_GET_SCP_PERIOD — 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) —
 - F4|SP:P_SCM0001_GET_SCP_PERIOD — 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace

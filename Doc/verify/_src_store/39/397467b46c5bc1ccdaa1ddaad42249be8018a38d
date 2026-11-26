@@ -1,0 +1,101 @@
+// E03 Division·권한 순회 검사(@eg-auth · 2026-10-31) — 공식 체인(_verify·_trace) 밖의 독립 스펙. 결과 = CL_RESULTS(eg_auth 결과 JSON, EgRes[]).
+//   화면 = VERIFY_ID. 대상·기대 = Doc/verify/_parallel/E03/facts/<ID>.json(facts_auth.py: AS-IS 원문·사내 DB). 저장 없음(VERIFY_NO_SAVE=1 전제 — 없으면 시작하지 않는다).
+//   변이 = EG_MUT=<종류>: 결함을 일부러 만든 상태에서 FAIL 이 나는지 확인. 계정 ID 는 결과·로그에 쓰지 않는다.
+import { measurable } from '../../../tools/E2E/lib/precond';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { test } from '../../../tools/E2E/fixtures/test';
+import { evalRules, parseRules, type Rule } from '../../../tools/E2E/lib/condeval';
+import { GRID, accountId, buttonSnapshot, customLike, toolbarRe, condOptions, condSnapshot, ctxOf, distinctAccounts, divState, expectState, findMerged, gridState, groupStates, isDivLabel, labelKey, loadFacts, selectDiv, sessionMenus, watchStatus, type Account, type EgRes, type Facts, type Verdict } from '../../../tools/E2E/lib/authprobe';
+import { parseCsv, probe } from '../../../tools/E2E/lib/probe';
+import { CFG, FE as FE_URL, type Nscm } from '../../../tools/E2E/lib/nscm';
+import { ensureRows } from '../../../tools/E2E/lib/smoke-extra';
+
+const ID = (process.env.VERIFY_ID || '').toUpperCase();
+const MUT = process.env.EG_MUT || '';
+const OUT = process.env.CL_RESULTS || '';
+const F: Facts | null = ID ? loadFacts(ID) : null;
+// 2026-11-06(SCP0084 EG366 허위 FAIL): AS-IS Division 콤보가 헬퍼 필터를 얹은 경우(BLUtils.GetDivisionWithoutEE = ATTRIBUTE3 <> 'EE' ·
+//   GetDivisionESS = ATTRIBUTE3 = '82' — facts_combosrc.py 가 asisfacts/screens/<ID>/combo_src.csv filters 에 기록) 기대 후보도 같은 필터로 줄인다.
+//   ATTRIBUTE3 = Doc/tobefacts/db/division.csv. 필터·원장이 없으면 종전대로(권한 Division 전체).
+const DIV_FILTER: { note: string; keep: (d: string) => boolean } | null = (() => {
+  try {
+    const src = parseCsv(fs.readFileSync(path.join(__dirname, '..', '..', 'asisfacts', 'screens', ID, 'combo_src.csv'), 'utf8').replace(/^﻿/, ''));
+    let row = src.find(r => r.target_kind === 'SEARCH' && /division/i.test(`${r.target} ${r.code}`) && /ATTRIBUTE3/i.test(r.filters || ''));
+    // 2026-11-20 T376(SSP0014 EG-a6f6bebc 'EE 없음 판정필요'): 화면 원문에 필터가 없고 BigFilter(SSP_BIGFILTER) 결과셋을 쓰면 그 SP @Code 분기 원문의 ATTRIBUTE3 필터를 쓴다
+    //   (MyDivisionCMM = UP_FX_GetCommonDataList @Code='MyDivision' · ATTRIBUTE3 <> 'EE' · tools/Harness/verify/combo_branch_filter.py)
+    if (!row) {
+      try {
+        const bf = JSON.parse(execFileSync('python', [path.join(__dirname, '..', '..', '..', 'tools', 'Harness', 'verify', 'combo_branch_filter.py'), ID], { encoding: 'utf8', timeout: 60_000 })) as { target: string; code: string; filter: string; ref: string }[];
+        const hit = bf.find(b => /division/i.test(`${b.target} ${b.code}`));
+        const base = hit && src.find(r => r.target_kind === 'SEARCH' && r.target === hit.target);
+        if (hit && base) row = { ...base, filters: hit.filter, ref: hit.ref };
+      } catch { /* 분기 원문 없음 = 종전 */ }
+    }
+    const m = row && /ATTRIBUTE3\s*(<>|!=|=)\s*'([^']*)'/i.exec(row.filters || '');
+    if (!m) return null;
+    const attr = new Map(parseCsv(fs.readFileSync(path.join(__dirname, '..', '..', 'tobefacts', 'db', 'division.csv'), 'utf8').replace(/^﻿/, '')).map(d => [d.division_id, d.attribute3 || '']));
+    const neg = m[1] !== '='; const v = m[2];
+    return { note: `AS-IS 필터 ${row!.filters.split(' @')[0]}(${row!.ref || ''})`, keep: (d: string) => (attr.has(d) ? (neg ? attr.get(d) !== v : attr.get(d) === v) : true) };
+  } catch { return null; }
+})();
+const results: EgRes[] = [];
+// P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
+const CUR: { nscm: Nscm | null } = { nscm: null };
+const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows = n.calls.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1); return { calls: n.calls.length, rows, req: (n as unknown as { requiredNotes?: string[] }).requiredNotes?.length || 0 }; };
+const put = (eg: string, target: string, ctx: string, result: Verdict, expected: string, actual: string, asis = '', note = '') => { results.push({ eg, screen: ID, target, ctx, result, expected, actual, asis, note, mctx: mctxOf() } as EgRes); };
+const flush = () => {
+  if (!OUT) return; const prev: EgRes[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
+  fs.mkdirSync(path.dirname(OUT), { recursive: true }); fs.writeFileSync(OUT, JSON.stringify([...prev, ...results], null, 1), 'utf8'); results.length = 0;
+};
+const sum = () => { const c: Record<string, number> = {}; for (const r of results) { const k = `${r.eg} ${r.result}`; c[k] = (c[k] || 0) + 1; } console.log('[eg_auth]', ID, JSON.stringify(c)); for (const r of results.filter(x => x.result === 'FAIL' || x.result === 'ERROR').slice(0, 30)) console.log(`  ${r.eg} ${r.result} ${r.target} [${r.ctx}] 기대 ${r.expected.slice(0, 70)} · 실측 ${r.actual.slice(0, 90)} · ${r.asis} ${(r.note || '').slice(0, 80)}`); };
+
+// ── 변이: 라우트·XHR 은 화면 진입 전에, DOM 은 측정 직전에 ─────────────────────────────
+async function installMut(nscm: Nscm) {
+  const p = nscm.page;
+  if (MUT === 'div_param') await p.addInitScript(() => { const s = XMLHttpRequest.prototype.send; XMLHttpRequest.prototype.send = function (b?: Document | XMLHttpRequestBodyInit | null) { if (typeof b === 'string' && /division/i.test(b)) b = b.replace(/("division(?:Id)?"\s*:\s*")[^"]*/i, '$1ZZ_MUT'); return s.call(this, b as never); }; });
+  if (MUT === 'div_leak') await p.route(/\/admin\/combo(\?|$)/, async r => { const body = r.request().postData() || ''; const res = await r.fetch(); if (!/"comboId"\s*:\s*"\w*Division/i.test(body)) return r.fulfill({ response: res }); const j = await res.json().catch(() => null); const key = j?.result ? 'result' : 'data'; const a = j?.[key]; if (Array.isArray(a) && a[0]) { const k = Object.keys(a[0]); const row: Record<string, string> = {}; for (const x of k) row[x] = /name/i.test(x) ? 'ZZ_MUT Leak' : 'ZZ_MUT'; a.push(row); } return r.fulfill({ response: res, json: j }); });
+  if (MUT === 'menu_leak') await p.route(/\/user\/session/, async r => { const res = await r.fetch(); const j = await res.json().catch(() => null); if (j?.result?.menus?.[0]) { const m0 = j.result.menus[0]; (m0.children = m0.children || []).push({ mnuId: 'ZZ_MUT_MENU', upprMnuId: m0.mnuId, mnuUrl: 'zz', routePath: 'zz', mnuMsgId: '', mnuDesc: 'zz', sortOrd: 99, favorite: false }); } return r.fulfill({ response: res, json: j }); });
+}
+async function mutDom(nscm: Nscm, stage: string, arg: { label?: string; binding?: string } = {}) {
+  const p = nscm.page;
+  if (MUT === 'cond_enable' && stage === 'snap') await p.evaluate(() => { for (const i of Array.from(document.querySelectorAll('[class*="_formItem_"] input[disabled], [class*="_formItem_"] button[disabled]')) as HTMLInputElement[]) { i.disabled = false; i.closest('.Mui-disabled')?.classList.remove('Mui-disabled'); i.classList.remove('Mui-disabled'); } });
+  if (MUT === 'cond_disable' && stage === 'snap') await p.evaluate(() => { for (const i of Array.from(document.querySelectorAll('[class*="_formItem_"] input')) as HTMLInputElement[]) if (!/div/i.test(i.closest('[class*="_formItem_"]')?.textContent || '')) i.disabled = true; });
+  if (MUT === 'cond_hide' && stage === 'snap') await p.evaluate(() => { const a = Array.from(document.querySelectorAll('[class*="_formItem_"]')) as HTMLElement[]; for (const e of a) if (!/^\s*div/i.test(e.innerText)) e.style.display = 'none'; });
+  if (MUT === 'btn_hide' && stage === 'snap') await p.evaluate(() => { for (const b of Array.from(document.querySelectorAll('button')) as HTMLElement[]) if (!b.closest('nav, .wj-flexgrid, [class*="_formItem_"], [class*="_tab_"]') && !/search|조회/i.test(b.innerText)) b.style.display = 'none'; });
+  if (MUT === 'col_drop' && stage === 'back') await p.evaluate(`(() => { const el = [...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null); let c = el && el['$WJ-CTRL']; if (!c && el) for (const k of Object.getOwnPropertyNames(el)) { const v = el[k]; if (v && v.columns) { c = v; break; } } if (c) for (let i = c.columns.length - 1; i >= 0; i--) if (c.columns[i].binding && c.columns[i].visible !== false) { c.columns[i].visible = false; break; } })()`);
+  if (MUT === 'auth401' && stage === 'walk-start') await p.route(/\/admin\/combo(\?|$)/, r => r.fulfill({ status: 401, contentType: 'application/json', body: '{"code":"-9998","message":"mut"}' }));
+  if (MUT === 'auth401' && stage === 'walk-end') await p.unroute(/\/admin\/combo(\?|$)/).catch(() => undefined);
+  if (MUT === 'btn_show' && stage === 'snap') { const labels = [...new Set(groupStates(F as Facts).filter(g => g.isButton && g.prop === 'visible').flatMap(g => g.labels))]; await p.evaluate((ls: string[]) => { document.querySelectorAll('[data-eg-mut]').forEach(e => e.remove()); const host = document.querySelector('[class*="SubTitle"], [class*="subTitle"]') || document.body; for (const l of ls) { const b = document.createElement('button'); b.textContent = l; b.setAttribute('data-eg-mut', '1'); host.appendChild(b); } }, labels); }
+  if (MUT === 'div_stale' && stage === 'acct-open') await p.evaluate(() => { for (const e of Array.from(document.querySelectorAll('[class*="_formItem_"]')) as HTMLElement[]) { if (/^\s*div/i.test(e.innerText)) { const i = e.querySelector('input') as HTMLInputElement | null; if (i) { const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set; set?.call(i, 'ZZ_MUT Residue'); i.setAttribute('value', 'ZZ_MUT Residue'); } } } });
+  if (MUT === 'btn_late' && stage === 'acct-open') await p.evaluate(() => { for (const b of Array.from(document.querySelectorAll('button')) as HTMLElement[]) if (/^(Save|Insert|Delete)/i.test(b.innerText)) { b.setAttribute('data-eg-hid', '1'); b.style.display = 'none'; } });
+  if (MUT === 'btn_late' && stage === 'acct-after') await p.evaluate(() => { for (const b of Array.from(document.querySelectorAll('[data-eg-hid]')) as HTMLElement[]) b.style.display = ''; });
+  if (MUT === 'row_div' && stage === 'rows') await p.evaluate(`(() => { const c = ${GRID}; if (c && c.rows[0] && c.rows[0].dataItem) { const d = c.rows[0].dataItem; for (const k of Object.keys(d)) if (/^DIVISION(_ID)?$/i.test(k)) d[k] = 'ZZ_MUT'; } })()`);
+  if (MUT === 'edit_lock' && stage === 'edit') await p.evaluate(`(() => { const c = ${GRID}; if (c) c.isReadOnly = true; })()`);
+  if (MUT === 'sort_lost' && stage === 'after-insert') await p.evaluate(`(() => { const c = ${GRID}; if (c && c.collectionView) c.collectionView.sortDescriptions.clear(); })()`);
+  if (MUT === 'ins_bottom' && stage === 'after-insert') await p.evaluate(`(() => { const c = ${GRID}; const cv = c && c.collectionView; if (!cv) return; const a = cv.sourceCollection; const i = a.findIndex(x => x && x.CRUD_TYPE === 'I'); if (i >= 0) { const [x] = a.splice(i, 1); a.push(x); cv.refresh(); } })()`);
+  if (MUT === 'hdr_flat' && stage === 'hdr') await p.evaluate(`(() => { const c = ${GRID}; if (c) c.allowMerging = 0; })()`);
+  if (MUT === 'sort_shuffle' && stage === 'sort') await p.evaluate(`(() => { const c = ${GRID}; const cv = c && c.collectionView; if (cv && cv.sourceCollection && cv.sourceCollection.length > 3) { const a = cv.sourceCollection; const x = a.splice(0, 1)[0]; a.splice(2, 0, x); const y = a.pop(); a.splice(1, 0, y); cv.refresh(); } })()`);
+  void arg;
+}
+
+/** edit_expect RULES 의 RAW 중 의미가 확정된 형태만 COL/TRUE 로 — EditFlag 는 행 값 · Action 공란 = 기존행 */
+const rewriteRaw = (c: string) => c.replace(/RAW\(si\w+\.GetValue\(iRow, si\w+\.GetColumnIndex\(DefColumns\.(\w+)\)\)\.ToString\(\) == CAppSetting\.StringY\)/g, (_m, n: string) => `COL(${n.replace(/([a-z])([A-Z0-9])/g, '$1_$2').toUpperCase()})==\\"Y\\"`).replace(/RAW\(String\.IsNullOrEmpty\(si\w+\.GetText\(iRow, si\w+\.GetColumnIndex\(CAppSetting\.StringAction\)\)\) == true\)/g, 'TRUE');
+const listHas = (lst: string, d: string) => { const v = (lst || '').trim(); return !v || v.split(',').map(s => s.trim()).includes(d); };
+/** 메타 기대 컬럼 — Div 해당·VALID·VISIBLE·DEFAULT. 시트 = 지금 보이는 바인딩과 가장 많이 겹치는 시트 */
+function metaSheet(f: Facts, visible: string[]): string {
+  const up = new Set(visible.map(v => v.toUpperCase())); const score = new Map<string, number>();
+  for (const c of f.db.columns) if (up.has((c.column_name || '').toUpperCase())) score.set(c.sheet_name, (score.get(c.sheet_name) || 0) + 1);
+  return [...score.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+}
+function metaCols(f: Facts, sheet: string, d: string): string[] {
+  return f.db.columns.filter(c => c.sheet_name === sheet && c.valid_yn === 'Y' && c.visible_flag === 'Y' && c.default_flag === 'Y' && listHas(c.division_id, d)).map(c => c.column_name.toUpperCase());
+}
+
+test.describe(`E03 Division·권한 ${ID} @eg-auth`, () => {
+  test.beforeEach(({ nscm }) => { CUR.nscm = nscm; });
+  test.describe.configure({ retries: 0 });
+  test.skip(!ID || !F, 'VERIFY_ID 또는 facts 없음(facts_auth.py 선행)');
+  test.skip(!process.env.VERIFY_NO_SAVE, 'VERIFY_NO_SAVE=1 전제 — 이 스펙은 저장하지 않는다');
+  test.afterEach(() => { sum(); flush(); });

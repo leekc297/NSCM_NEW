@@ -1,311 +1,293 @@
 {
  "rule_id": "A6",
- "hash": "dba0b4376a7bf262",
+ "hash": "276ca982705bee3c",
  "groups": [
   {
    "rows": [
     "V-2d3318b4",
     "T-2c58e352"
    ],
-   "why": "Both rows check the same SP (SSP0014_GET_SHIPMENT_MODEL_PIC) with the same AS-IS sort keys [DIVISION_ID, OPERATION_GROUP, FROM_SITE, ITEM_ID…] and expect the results in that key order. The TRACE row checks the sort order itself, not whether the implementation exists in the source."
-  },
-  {
-   "rows": [
-    "V-22c6d5f6"
-   ],
-   "why": "This is a confirmed rule covering every grid lookup SP. It expects a missing ORDER BY to FAIL and has exception (NA) rules, so its scope and expectation differ from the single-SP sort-key check."
+   "why": "두 행 모두 같은 SP SSP0014_GET_SHIPMENT_MODEL_PIC의 결과 행 순서가 AS-IS 정렬 키(DIVISION_ID, OPERATION_GROUP, FROM_SITE, ITEM_ID…)와 같은지 확인하므로, 대상과 기대 결과가 같다."
   },
   {
    "rows": [
     "EG-b255a2c0"
    ],
-   "why": "It checks how character keys are collated (case-insensitive, NULLs first), which is a different property from the order of the sort keys."
+   "why": "문자 키 콜레이션(대소문자 무시, NULL 먼저)을 확인하는 행이라 단순 키 순서 확인과 기대 결과가 달라 따로 둔다."
   },
   {
    "rows": [
     "EG-74b52c7e"
    ],
-   "why": "It is about preparing an account pair that has or lacks TITLESET_USER, not about sort order."
-  },
-  {
-   "rows": [
-    "V-9a580acd"
-   ],
-   "why": "It has a different state: the order of grid rows after a popup selection is applied with Div=81_HG."
+   "why": "TITLESET_USER 보유·미보유 계정쌍을 확인하는 행이라 정렬 순서 확인과 대상이 다르다."
   },
   {
    "rows": [
     "T-d1bd8978"
    ],
-   "why": "Its target is a different SP (the item popup SP PKG_SCM0002) and it has no sort keys."
+   "why": "다른 대상인 팝업 SP PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP의 정렬을 추적하는 행이다."
   },
   {
    "rows": [
     "T-ee384c11"
    ],
-   "why": "Its target is a different element (the ProgressForm row trace)."
+   "why": "SP가 아니라 ProgressForm(FindData/SaveData) 행 요소를 추적하는 행이라 대상이 다르다."
   },
   {
    "rows": [
     "AD-6ecb42f1"
    ],
-   "why": "SEARCH call #2 (Div 40, KO): no other row uses the same search arguments."
+   "why": "호출 #2 SEARCH(40/KO)는 조회조건이 고유해 결과도 따로 나온다."
   },
   {
    "rows": [
     "AD-33f4bf55"
    ],
-   "why": "SEARCH call #6 (Div 81): unique search arguments."
+   "why": "호출 #6 SEARCH는 division 81이라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-1c54dac6"
    ],
-   "why": "SEARCH call #7 (Div 81_HD): unique search arguments."
+   "why": "호출 #7 SEARCH는 division 81_HD라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-885a2b72"
    ],
-   "why": "SEARCH call #8 (operationGroup A): unique search arguments."
+   "why": "호출 #8 SEARCH는 operationGroup A라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-e71aef68"
    ],
-   "why": "SEARCH call #9 (operationGroup E): unique search arguments."
+   "why": "호출 #9 SEARCH는 operationGroup E라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-01c50b01"
    ],
-   "why": "SEARCH call #10 (fromSite AZ00-E): unique search arguments."
+   "why": "호출 #10 SEARCH는 fromSite AZ00-E라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-effc047b"
    ],
-   "why": "SEARCH call #11 (multiple fromSite values): unique search arguments."
+   "why": "호출 #11 SEARCH는 fromSite가 여러 개라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-798731e5"
    ],
-   "why": "SEARCH call #12 (validYn Y): unique search arguments."
+   "why": "호출 #12 SEARCH는 validYn Y라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-a1c0209f"
    ],
-   "why": "SEARCH call #13 (validYn N): unique search arguments."
+   "why": "호출 #13 SEARCH는 validYn N이라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-bbb9a397"
    ],
-   "why": "SEARCH call #19 (Div 82): unique search arguments."
+   "why": "호출 #19 SEARCH는 division 82라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-d98a5b8f"
    ],
-   "why": "SEARCH call #20 (Div 81_HG): unique search arguments."
+   "why": "호출 #20 SEARCH는 division 81_HG라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-2a3611d6"
    ],
-   "why": "SEARCH call #21 (Div 81_HM, KO): unique search arguments."
+   "why": "호출 #21 SEARCH는 division 81_HM, 언어 KO라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-e4fd77c8"
    ],
-   "why": "SEARCH call #22 (Div 81_ST): unique search arguments."
+   "why": "호출 #22 SEARCH는 division 81_ST라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-75def704"
    ],
-   "why": "SEARCH call #23 (Div 81_UC): unique search arguments."
+   "why": "호출 #23 SEARCH는 division 81_UC라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-5f97808a"
+    "AD-77389ec1"
    ],
-   "why": "SEARCH call #28 (language CN): unique search arguments."
+   "why": "호출 #26 SEARCH는 itemId MTR465768A10이라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-8b4c8225"
+    "AD-5f7c70da"
    ],
-   "why": "SEARCH call #31 (Div 40, EN): unique search arguments."
+   "why": "호출 #33 SEARCH는 언어 CN이라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-7b5786c0"
+    "AD-03813da7"
    ],
-   "why": "SEARCH call #52 (itemId MAMM9314U0A1-016): unique search arguments."
+   "why": "호출 #37 SEARCH는 division 40, 언어 EN이라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-a454fc08"
+    "AD-db49eb95"
    ],
-   "why": "SEARCH call #53 (lowercase itemId): unique search arguments."
+   "why": "호출 #39 SEARCH는 대문자 itemId라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-fa9b2f03"
+    "AD-abc1ee9e"
    ],
-   "why": "SEARCH call #54 (partial itemId): unique search arguments."
+   "why": "호출 #40 SEARCH는 소문자 itemId라 입력이 달라 고유하다."
   },
   {
    "rows": [
-    "AD-102aa2fd"
+    "AD-f1f40f9a"
    ],
-   "why": "SEARCH call #55 (two itemIds): unique search arguments."
+   "why": "호출 #41 SEARCH는 부분 itemId라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-6a4dae4f"
+    "AD-2fea247f"
    ],
-   "why": "SEARCH call #56 (userId junha.hwang): unique search arguments."
+   "why": "호출 #42 SEARCH는 itemId가 2개라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-a401ad43"
+    "AD-e290a971"
    ],
-   "why": "SEARCH call #57 (uppercase userId): unique search arguments."
+   "why": "호출 #43 SEARCH는 소문자 userId라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-3867cb61"
+    "AD-cbbdf1ce"
    ],
-   "why": "SEARCH call #58 (userId unha.hwan): unique search arguments."
+   "why": "호출 #44 SEARCH는 대문자 userId라 입력이 달라 고유하다."
   },
   {
    "rows": [
-    "AD-66b20626"
+    "AD-96ab6b45"
    ],
-   "why": "SEARCH call #59 (two userIds): unique search arguments."
+   "why": "호출 #45 SEARCH는 부분 userId라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-fb2b4d20"
+    "AD-9d593d92"
    ],
-   "why": "SEARCH call #60 (itemId E2E): unique search arguments."
+   "why": "호출 #46 SEARCH는 userId가 2개라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-24cc1bda"
+    "AD-ec30f7b0"
    ],
-   "why": "SEARCH call #61 (Div 81_HM, EN): unique search arguments."
+   "why": "호출 #47 SEARCH는 itemId E2E라 조회조건이 고유하다."
   },
   {
    "rows": [
-    "AD-ebfbbb5b"
+    "AD-7c842ef2"
    ],
-   "why": "SEARCH call #74 (itemId AMDAU0348A): unique search arguments."
+   "why": "호출 #48 SEARCH는 division 81_HM, 언어 EN이라 조회조건이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-bdf7f569"
+   ],
+   "why": "호출 #65 SEARCH는 itemId AMDAU0348A라 조회조건이 고유하다."
   },
   {
    "rows": [
     "AD-174c2ddd"
    ],
-   "why": "USER_CHECK call #15 (njlilian): no other row uses the same input."
+   "why": "호출 #15 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
     "AD-9121416d"
    ],
-   "why": "USER_CHECK call #17 (luping): unique input."
+   "why": "호출 #17 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
     "AD-bd7200cb"
    ],
-   "why": "USER_CHECK call #18 (junha.hwang): unique input."
+   "why": "호출 #18 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-fd399794"
+    "AD-279962b4"
    ],
-   "why": "USER_CHECK call #26 (ZZ_E2E_BAD_POPUP_KEY): unique input."
+   "why": "호출 #28 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-c18899c2"
+    "AD-a3fc75f7"
    ],
-   "why": "USER_CHECK call #27 (valid ID ^ bad key): unique input."
+   "why": "호출 #29 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-d3913cab"
+    "AD-69aebf72"
    ],
-   "why": "USER_CHECK call #35 (three IDs): unique input."
+   "why": "호출 #30 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-20759787"
+    "AD-51993393"
    ],
-   "why": "USER_CHECK call #37 (combination with njzhoumengweiX): unique input."
+   "why": "호출 #31 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-274e091c"
+    "AD-ead84776"
    ],
-   "why": "USER_CHECK call #39 (combination with shengqiongfen): unique input."
+   "why": "호출 #32 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-8987bf2d"
+    "AD-8878632d"
    ],
-   "why": "USER_CHECK call #41 (combination with zhouziqiang): unique input."
+   "why": "호출 #38 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-e7365161"
+    "AD-0437c9bc"
    ],
-   "why": "USER_CHECK call #44 (njzhoumengwei^kwonl): unique input."
+   "why": "호출 #50 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-e6110ca4"
+    "AD-ad649973"
    ],
-   "why": "USER_CHECK call #46 (njzhoumengwei^pantaonj): unique input."
+   "why": "호출 #52 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-b6885fbe"
+    "AD-c2d21f53"
    ],
-   "why": "USER_CHECK call #48 (guoxiaoliangX): unique input."
+   "why": "호출 #54 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-66f97ca2"
+    "AD-c8cb8953"
    ],
-   "why": "USER_CHECK call #49 (njzhoumengwei^guoxiaoliang): unique input."
+   "why": "호출 #55 USER_CHECK는 userId 조합이 고유하다."
   },
   {
    "rows": [
-    "AD-00315f44"
+    "AD-09b44044"
    ],
-   "why": "USER_CHECK call #51 (five IDs): unique input."
-  },
-  {
-   "rows": [
-    "AD-9eb1e574"
-   ],
-   "why": "USER_CHECK call #64 (ZZ_E2E_BAD_KEY): unique input."
-  },
-  {
-   "rows": [
-    "AD-e9df257c"
-   ],
-   "why": "USER_CHECK call #65 (secretshushu^bad key): unique input."
+   "why": "호출 #56 USER_CHECK는 userId 조합이 고유하다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 09:39:51",
- "cost": 0.2049453
+ "at": "2026-11-25 02:13:18",
+ "cost": 0.192241
 }

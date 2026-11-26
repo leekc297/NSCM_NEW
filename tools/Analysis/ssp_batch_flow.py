@@ -323,6 +323,9 @@ def main():
             if SF.classify(t) == 'SSP' and not re.search(r'_LOG|_HIST$', t):
                 en = SF.entity_of(t); gr[(en, r['group'])].add(t)
                 for sid in scr_w.get(t, set()): ew[(stage_of_screen.get(sid, 'Etc'), en)].add(t)
+    import ssp_svg  # 2026-11-23: 세로 2,473px 그래프 대신 엔터티 × (배치 그룹 | 화면 단계) 격자를 먼저 보인다
+    _mm = max(i for i, x in enumerate(F) if isinstance(x, str) and x.startswith('```mermaid'))
+    F[_mm:_mm] = [ssp_svg.batch_matrix(gw, er, 'batch'), '', ssp_svg.fold_next('그래프로 보기(같은 내용)'), '']
     F.append('  subgraph BG["배치 그룹(W)"]')
     for g in sorted({k[0] for k in gw}): F.append(f'    BW_{SF.mm_id(g)}["{html.escape(g)}"]')
     F += ['  end', '  subgraph EN["SSP 엔터티"]']
@@ -332,7 +335,7 @@ def main():
     F.append('  end')
     for (g, en), ts in sorted(gw.items()): F.append(f'  BW_{SF.mm_id(g)} =="W {len(ts)}"==> E_{SF.mm_id(en)}')
     for (en, st), ts in sorted(er.items()): F.append(f'  E_{SF.mm_id(en)} -."R {len(ts)}".-> SR_{st}')
-    F += ['```', '', '## 3. 화면 단계 ⇒ SSP 엔터티 ⇒ 배치 그룹 (화면이 만든 데이터를 배치가 가져감)', '', '```mermaid', 'flowchart LR', '  subgraph SS["쓰는 화면 단계(W)"]']
+    F += ['```', '', '## 3. 화면 단계 ⇒ SSP 엔터티 ⇒ 배치 그룹 (화면이 만든 데이터를 배치가 가져감)', '', ssp_svg.batch_matrix(ew, gr, 'screen'), '', ssp_svg.fold_next('그래프로 보기(같은 내용)'), '', '```mermaid', 'flowchart LR', '  subgraph SS["쓰는 화면 단계(W)"]']
     for st in sorted({k[0] for k in ew}): F.append(f'    SW_{st}["{st}"]')
     F += ['  end', '  subgraph EN["SSP 엔터티"]']
     for en in sorted({k[1] for k in ew} | {k[0] for k in gr}): F.append(f'    E_{SF.mm_id(en)}[("{html.escape(en)}")]')
@@ -371,6 +374,8 @@ def main():
             if not e: continue
             if re.search(r'_R(_\w+)?$', sp): exts[e][0].add(r['job_name'].replace('JOB.', '').replace('SYSTEMEXE:', '⏱'))
             elif re.search(r'_S(_\w+)?$|_SEND', sp): exts[e][1].add(r['job_name'].replace('JOB.', '').replace('SYSTEMEXE:', '⏱'))
+    _mm = max(i for i, x in enumerate(F) if isinstance(x, str) and x.startswith('```mermaid'))
+    F[_mm:_mm] = [ssp_svg.iface_table(exts), '', ssp_svg.fold_next('그래프로 보기(같은 내용)'), '']
     for e, (rin, sout) in sorted(exts.items()):
         F.append(f'  X_{SF.mm_id(e)}["{html.escape(e)}"]')
         if rin: F.append(f'  X_{SF.mm_id(e)} -->|"수신 {len(rin)}: {html.escape("<br/>".join(sorted(rin)[:6]))}{"…" if len(rin) > 6 else ""}"| SSP')

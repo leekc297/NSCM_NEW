@@ -1,0 +1,78 @@
+// orch-history.js: 원천 → 원장 수집 · 세션 기록은 늘어난 부분만 읽기 · 비밀값 가리기 · 변경 절과 세션 연결 · 정리본 생성
+//   사용: node test/t_orch_history.js <VibeManager 폴더>
+const path = require('path'); const fs = require('fs'); const os = require('os');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hist-')); const vibeDir = path.join(root, '.vibe'); const vm = path.join(root, 'tools', 'VibeManager'); const sess = path.join(root, 'sess');
+const mk = (f, s) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s, 'utf8'); };
+const NL = String.fromCharCode(10);
+mk(path.join(vm, 'CHANGELOG.md'), [
+  '## (판 번호 없음, VM 저장소 + 설치 폴더) VMO: 에이전트 탭 프롬프트 창 (2026-11-19 18:5x)',
+  '- 사용자(11-19): "프롬프트 창을 하단에 배치해주세요."',
+  '- orchestra.js: 탭 구성 변경. workbench.js: 메시지 처리 추가.',
+  '- 확인(18:55 실행): t_orch_agent_q.js 13건. VS Code 실화면 미확인(창 다시 로드 필요).',
+  '- 미확인: 실제 Claude 응답 표시 · 대기열 5건 넘을 때 동작',
+  '- 되돌리기: orchestra.js.bak_20261119_agtab · workbench.js.bak_20261119_agtab',
+  '',
+  '## 1.9.23 (2026-10-22)',
+  '- quick.json: 사이드바 메뉴 항목 추가',
+].join(NL));
+mk(path.join(vm, 'orchestra.js.bak_20261119_agtab'), 'x'); mk(path.join(vm, 'workbench.js.bak_20261119_agtab'), 'x'); mk(path.join(vm, 'quick.json.bak_20261030'), 'x');
+mk(path.join(root, 'tools', 'E2E', 'users.json'), JSON.stringify({ adminPool: { users: ['tester01', 'kimadmin2'] } }));
+const line = o => JSON.stringify(o) + NL; const sf = path.join(sess, 'abc-123.jsonl');
+mk(sf, line({ type: 'session-owner', accountUuid: 'secret-owner', sessionId: 'abc-123' })
+  + line({ type: 'user', isSidechain: false, message: { role: 'user', content: [{ type: 'text', text: '<system-reminder>무시</system-reminder>VMO 에이전트 탭을 고쳐주세요. tester01 계정 someone@example.com SCP0111' }] }, timestamp: '2026-11-19T09:50:00.000Z', sessionId: 'abc-123' })
+  + line({ type: 'user', message: { role: 'user', content: [{ type: 'tool_result', content: 'ok' }] }, timestamp: '2026-11-19T09:51:00.000Z' })
+  + line({ type: 'assistant', message: { role: 'assistant', content: [{ type: 'tool_use', name: 'Edit', input: { file_path: 'C:\\Projects\\NSCM\\tools\\VibeManager\\orchestra.js' } }, { type: 'tool_use', name: 'Bash', input: { command: 'node tools/VibeManager/test/t.js' } }] }, timestamp: '2026-11-19T09:52:00.000Z' })
+  + line({ type: 'custom-title', customTitle: 'VM 고도화', sessionId: 'abc-123' }));
+mk(path.join(sess, 'memory', 'feedback_x_20261119.md'), ['---', 'name: feedback-x', 'description: VMO 관련 지시', 'metadata:', '  type: feedback', '  originSessionId: abc-123', '---', '본문'].join(NL));
+mk(path.join(vibeDir, 'history', 'SCP0111', '20261119_101500_claude', 'meta.json'), JSON.stringify({ id: 'SCP0111', task: 'claude', source: 'prompt', label: '프롬프트', text: '검증쿼리 제공해주세요', start: '2026-11-19T10:15:00+09:00', end: '2026-11-19T10:20:00+09:00', exit: 0, changed: [] }));
+mk(path.join(vibeDir, 'logs', '2026-11-19T20-57-19_claude_orch.log'), ['$ claude.exe -p', '--- prompt ---', '사건 R5 를 확인한다', '--- output ---', '{}', '--- exit 0 ---', ''].join(NL));
+mk(path.join(vibeDir, 'orch', 'incidents', '20261119_181812_R4_DMF0042.json'), JSON.stringify({ id: '20261119_181812_R4_DMF0042', ms: Date.parse('2026-11-19T18:18:12+09:00'), rule: 'R4', title: '대기 지연', screen: 'DMF0042', status: 'resolved', actions: [{ what: '확인' }] }));
+mk(path.join(vibeDir, 'orch', 'proposals', '20261119193539_REVIEW.json'), JSON.stringify({ id: '20261119193539_REVIEW', at: '2026-11-19T19:35:39+09:00', status: 'applied', source: 'review', title: 'hook 제한', targets: ['.claude/settings.json'] }));
+mk(path.join(root, 'Doc', 'verify', '_checker_defects.md'), ['## 1. 유형', '## T314~T319 (2026-11-18 18:1x · SCP0111 미검증 해소 라운드 1)', '내용'].join(NL));
+
+const h = require(path.join(dir, 'orch-history')); h.init({ paths: () => ({ root, vibeDir, extDir: vm }), sessionDirs: [sess] });
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+(async () => {
+  const st = await h.collect();
+  chk('원천별 건수', st.sources.changelog === 2 && st.sources.sessions === 1 && st.sources.runs === 1 && st.sources.claudeLogs === 1 && st.sources.vmo === 2 && st.sources.baks === 3 && st.sources.memories === 1 && st.sources.docs === 1, JSON.stringify(st.sources));
+  const cl = h.list({ kind: 'change' }).items; const c0 = cl.find(x => /에이전트 탭/.test(x.title));
+  chk('변경 절: 일자 · 영역 · 지시 · 파일 · 되돌리기 태그', c0 && c0.date === '2026-11-19' && c0.area === 'VMO' && c0.ask[0] === '프롬프트 창을 하단에 배치해주세요.' && c0.files.includes('orchestra.js') && c0.files.includes('workbench.js') && c0.baks.join() === '20261119_agtab' && c0.bakFiles === 2 && c0.needsReload, JSON.stringify(c0));
+  chk('변경 절: 미확인 3건(확인 줄 1 + 미확인 줄 2)', c0.unverified.length === 3 && c0.unverified.some(u => /대기열 5건/.test(u)), JSON.stringify(c0.unverified));
+  chk('판 번호 절', cl.some(x => x.ver === '1.9.23' && x.date === '2026-10-22' && x.area === '체인·메뉴'), JSON.stringify(cl.map(x => [x.ver, x.area])));
+  const s = h.get('S:abc-123');
+  chk('세션: 제목 · 지시 1건(도구 결과 · 주입 문구 제외) · VM 파일 수정 1 · 명령 1', s && s.title === 'VM 고도화' && s.askCount === 1 && s.vmEditCount === 1 && s.vmCmds === 1 && s.fileEdits['orchestra.js'] === 1 && s.vm === true, JSON.stringify(s));
+  chk('세션: 계정 · 메일 가림 · 화면 ID · 메모리 연결', /<계정>/.test(s.ask[0]) && /<메일>/.test(s.ask[0]) && !/tester01|someone@|무시/.test(s.ask[0]) && s.screens.includes('SCP0111') && s.memories.includes('feedback-x'), s.ask[0]);
+  chk('변경 절과 세션 연결(같은 날 같은 파일)', c0.sessions.length === 1 && c0.sessions[0] === 'abc-123');
+  const raw = fs.readFileSync(path.join(vibeDir, 'orch', 'history', 'worklog.jsonl'), 'utf8');
+  chk('원장에 소유자 줄 · 계정 · 메일 없음', !/secret-owner|tester01|someone@example/.test(raw));
+  chk('1회째 = 세션 파일 전체 읽음', st.sessionBytesRead === fs.statSync(sf).size, String(st.sessionBytesRead));
+  const st2 = await h.collect(); chk('2회째 = 읽은 바이트 0', st2.sessionBytesRead === 0 && st2.total === st.total);
+  const add = line({ type: 'user', message: { role: 'user', content: 'Log 탭을 맨 뒤로 보내주세요' }, timestamp: '2026-11-19T10:30:00.000Z' }); fs.appendFileSync(sf, add);
+  const st3 = await h.collect(); chk('3회째 = 늘어난 줄만 읽음 · 지시 2건', st3.sessionBytesRead === Buffer.byteLength(add) && h.get('S:abc-123').askCount === 2, String(st3.sessionBytesRead));
+  chk('거르기: 영역 · 화면 · 검색어', h.list({ area: 'VMO', kind: 'change' }).total === 1 && h.list({ screen: 'scp0111', kind: 'run' }).total === 1 && h.list({ q: '검증쿼리' }).total === 1);
+  const md = fs.readFileSync(path.join(vm, 'WORKLOG.md'), 'utf8');
+  chk('정리본: 건수 표 · 일자 절 · 굵은 글씨와 줄표 없음', /\| 변경 \| 2 \|/.test(md) && /^## 2026-11-19$/m.test(md) && !/\*\*|—/.test(md), md.slice(0, 80));
+  chk('주 목록', h.weeks().some(w => w.week === '2026-11-16' && w.count >= 2), JSON.stringify(h.weeks()));
+  // 미확인 판별(2026-11-19 SELF_2): 기능 설명 줄 제외 · '미확인:' 줄 문장 단위 분리. 원문 = CHANGELOG.md 의 Q3, Q4, Q5 줄과 개선안 반영 절차 줄, 21:1x~21:5x 절의 미확인 줄
+  const unv = body => h.parseChangelog(['## (판 번호 없음, VM 저장소) 시험 (2026-11-19 21:00)'].concat(body).join(NL))[0].unverified;
+  const DESC = [
+    `- Q3 VMO 창 '이력' 탭: 건수 카드, 기간·영역·종류·화면·검색어 조회, 행을 누르면 지시 원문·파일·확인·미확인·되돌리기 태그·세션·원천. 주제별 정리 = 주 단위 Claude 호출 1회(읽기 전용), 끝난 주는 보관한 결과를 씀.`,
+    `- Q4 신규 orch-selfcheck.js: 점검 S1 구문, S2 시험, S3 저장소와 설치 폴더 내용 차이, S4 정의 정합(없는 작업 id, 없는 메뉴, package.json 명령과 registerCommand, 없는 모듈 require, inventory_check.py), S5 실행 오류, S6 변경 기록의 미확인 원장, S7 VMO 자기 상태, S8 반영한 개선안의 재발, S9 반복 수정 지점, S10 용량, S11 고정 문구(doc_style.py), S12 설정 정합. 어긋남(fail) = 사건 R12 1건(풀리면 해결 처리), 주의(warn) = 탭 표시만. 주기 = 가벼운 항목 10분, 무거운 항목은 VM 파일이 바뀌고 120초 지난 뒤와 24시간마다, 체인 실행 중에는 쉼.`,
+    `- Q5 VMO 창 '자가진단' 탭: 항목 카드 12개, 어긋난 항목 표, 미확인 원장(확인함, 대상 아님, 다시 열기), 실행 오류 상위 서명. 버튼 = 지금 점검, 지금 진단, 설치 폴더 동기화, 결과 파일. Claude 진단(읽기 전용)은 개선안을 source 'self'(id 끝 SELF)로 올림. .claude/agents/vm-orchestra.md 에 'VM 자가진단' 절 추가.`,
+    `  - 승인(확인 창) → 대상 파일 사본 저장(.vibe/orch/snap/prop_<id>/) → Claude 반영(승인 범위 안에서 C 등급 대상 수정 허용 · D 등급 금지 유지) → 검증. 반영 안 됨·검증 실패·검증 미실행이면 대상 파일을 복원하고 '반영 실패'. 통과면 '반영 완료'.`,
+  ];
+  const u0 = unv(DESC); chk('기능 설명 4개 문장 = 미확인 0건', u0.length === 0, JSON.stringify(u0));
+  const u5 = unv(['- 미확인: VS Code 실화면(창 다시 로드 필요). 가동 중 주기 점검(시작 45초 뒤 첫 실행, 10분 주기)과 첫 이력 수집 자동 실행. 실제 Claude 로 자가 보완 반영(가짜 claude 로만 확인). 주제별 정리 실제 Claude 호출. 사건 R12 가 실제 VMO 사건 탭에 올라오는 모습.']);
+  chk("'미확인:' 줄 문장 5개 = 5건", u5.length === 5 && u5[0] === 'VS Code 실화면(창 다시 로드 필요).' && /^사건 R12/.test(u5[4]), JSON.stringify(u5));
+  const u1 = unv(['- 확인: node --check. VS Code 실화면 미확인(창 다시 로드 필요).']); chk('확인 줄의 미확인 문장 = 1건', u1.length === 1 && u1[0] === 'VS Code 실화면 미확인(창 다시 로드 필요).', JSON.stringify(u1));
+  chk('제외 자리와 미확인이 함께 있는 문장 = 미확인', h.isUnverifiedSentence('미확인 원장 표시는 VS Code 화면 미확인.') && !h.isUnverifiedSentence('미확인 원장 표시') && h.isUnverifiedSentence('실행 시간 증가 미측정.') && h.isUnverifiedSentence('플랜 7절 검증 13·14 미실행'));
+  // 변경 파일 집계 제외 줄(2026-11-20 20261120182700_SELF): 원문 = CHANGELOG.md :27 '- 시험:', :79·:104 '- node test/run_all.js', :458 '· 확인: node test/run_all.js'
+  const fl = body => h.parseChangelog(['## (판 번호 없음, VM 저장소) 시험 (2026-11-20 18:30)'].concat(body).join(NL))[0].files;
+  const f1 = fl(['- 변경 없음', '- 확인: node test/run_all.js FAIL 0']); chk('확인 줄에만 run_all.js = files 에 없음', !f1.includes('test/run_all.js') && !f1.some(x => /run_all\.js/.test(x)), JSON.stringify(f1));
+  const f2 = fl(['- node test/run_all.js → FAIL 0']); chk('- node 명령 줄에만 run_all.js = files 에 없음', !f2.some(x => /run_all\.js/.test(x)), JSON.stringify(f2));
+  const f3 = fl(['- 엔진 쪽 변경 X.md · 확인: node test/run_all.js']); chk("줄 가운데 '· 확인:' 뒤 = 제외, 앞 X.md = 있음", f3.includes('X.md') && !f3.some(x => /run_all\.js/.test(x)), JSON.stringify(f3));
+  const f4 = fl(['- 변경: test/run_all.js 에 t_x.js 추가']); chk('변경 줄의 파일 = files 에 있음', f4.includes('test/run_all.js') && f4.includes('t_x.js'), JSON.stringify(f4));
+  try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})().catch(e => { console.error('ERROR', e); process.exit(2); });

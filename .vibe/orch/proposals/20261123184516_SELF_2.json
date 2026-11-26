@@ -1,0 +1,114 @@
+{
+  "id": "20261123184516_SELF_2",
+  "at": "2026-11-23T18:45:16+09:00",
+  "ms": 1795427116966,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/extension.js|화면표시일자를mdd고정형식으로만듦n줄n줄n줄에서씀n줄age",
+  "title": "사용자 지시 R27 같은 문제: tools/VibeManager/extension.js:154 화면 표시 일자를 M/DD 고정 형식으로 만듦. 310줄, 351줄, 630줄에서 씀. 309줄 `# Agent 게이트 집계, ${new Date().toLoca",
+  "evidence": "규칙 R27 \"VM 화면, 알림, 결과 요약, 생성 문서에 보이는 일자는 Windows 짧은 날짜 형식(date-fmt.js fmtDate, fmtDT, 웹뷰 fmtD)으로 보임. 저장 값은 바꾸지 않음\" (원래 지시 2026-11-23 17:55 \"VM의 모든 일자는 윈도우의 일자 FORMAT 에 맞도록 해주세요. 현재 윈도우는 YYYY-MM-DD 로 표기하고 있습니다.\") · tools/VibeManager/extension.js:154 function fmtTime(ms) { if (!ms) return ''; const d = new Date(ms); const z = n => String(n).padStart(2, '0'); return `${d.getMonth() + 1}/${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; }",
+  "targets": [
+    "tools/VibeManager/extension.js"
+  ],
+  "before_after": "fmtTime 본문을 require('./date-fmt').fmtDT(ms) 로 바꿈. 309줄과 587줄의 toLocaleString() 도 fmtDT(Date.now()) 로 바꿈. 312줄 파일 이름 slice 는 저장 값이라 그대로 둠",
+  "verify": "node --check tools/VibeManager/extension.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/extension.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T02:12:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T02:15:50+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self0212"
+    },
+    {
+      "at": "2026-11-24T02:15:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T02:27:18+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 extension.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-24T02:27:18+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 node --check CHECK_OK, run_all.js 'ALL OK  파일 74/74  PASS 1161  FAIL 0  212.4s' (RESULT at 2026-11-23T17:16:14Z) → 반영 뒤 node --check CHECK_OK (2026-11-24 02:19:55), run_all.js 'ALL OK  파일 74/74  PASS 1161  FAIL 0  212.8s'. 추가 확인 node -e fmtDT(ms) 출력 '2026-11-24 09:05' · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T02-15-53_claude_orch.log",
+      "sec": 469,
+      "costUsd": 0.5832654,
+      "files": [
+        "tools/VibeManager/extension.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:35+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM 화면, 알림, 결과 요약, 생성 문서에 보이는 일자는 Windows 짧은 날짜 형식(date-fmt.js fmtDate, fmtDT, 웹뷰 fmtD)으로 보임. 저장 값은 바꾸지 않음 규칙을 tools/VibeManager/extension.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R27|tools/VibeManager/extension.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795453936677,
+  "autoFp": "dd1375d137",
+  "applyStartMs": 1795454153246,
+  "verifyJudge": {
+    "at": "2026-11-24T02:23:44+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self0212",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "extension.js"
+  ],
+  "appliedMs": 1795454838306,
+  "synced": [
+    "extension.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/extension.js: 반영 전 CHECK_OK → 반영 뒤 CHECK_OK. node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 파일 74/74 PASS 1161 FAIL 0 → 반영 뒤 ALL OK 파일 74/74 PASS 1161 FAIL 0. extension.js 는 웹뷰 파일이 아니라 t_webview_syntax.js 단독 실행 안 함, run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/extension.js"
+    ],
+    "verify_result": "반영 전 node --check CHECK_OK, run_all.js 'ALL OK  파일 74/74  PASS 1161  FAIL 0  212.4s' (RESULT at 2026-11-23T17:16:14Z) → 반영 뒤 node --check CHECK_OK (2026-11-24 02:19:55), run_all.js 'ALL OK  파일 74/74  PASS 1161  FAIL 0  212.8s'. 추가 확인 node -e fmtDT(ms) 출력 '2026-11-24 09:05'",
+    "note": "154줄 fmtTime 본문 → require('./date-fmt').fmtDT(ms). 309줄 Agent 게이트 집계 제목, 587줄 환경 점검 제목의 toLocaleString() → fmtDT(Date.now()). 312줄 파일 이름 slice 는 저장 값이라 그대로 둠. 310, 351, 630줄은 fmtTime 호출부라 수정 없음"
+  },
+  "snap": "prop_20261123184516_SELF_2",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

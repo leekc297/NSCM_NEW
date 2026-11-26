@@ -136,6 +136,11 @@
         "Doc/verify/SSP0014/llm_cache.json",
         "Doc/verify/SSP0014/llm_usage.csv"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:33+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:08:27+09:00"
     }
   ],
   "auto": true,
@@ -164,5 +169,7 @@
     "verify_result": "2026-11-20 07:29:42 node tools/VibeManager/test/run_all.js 실행. 32개 파일 중 31개 OK, PASS 382, FAIL 5, 113.4초. t_orch_watch.js 는 PASS 28, FAIL 0이고 새 시험 '체인 시작보다 이전 ts의 결과 파일이면 R11 없음 · R10 없음 · checklist_prev 그대로'를 통과함. FAIL 5건은 모두 t_chain_abort.js 에서 나옴(chain.end aborted 1건, why, user.stop 선행, 체인 목록 비움, R5 gone). 이 파일을 단독으로 다시 돌려도 같은 5건이 FAIL 임. t_chain_abort.js 는 orch-events, orch-state, workbench, extension 을 불러오고 orch-watch 는 불러오지 않음. 이번 변경과 관계없는 실패로 봄",
     "note": "현재 orch-watch.js 에는 개선안 20261120003909_INC, 20261120042237_INC 가 이미 반영되어 있었음. resultAfterChainStart 가 결과 ts 를 보고, 결과가 체인 시작보다 이르면 R10 과 checklist_prev 를 건너뛰며, 148행 R11 조건에는 !userStopped(ev.wb) 가 이미 들어 있었음. 그래서 이번에는 checkChecklist 의 '지난 실행 결과' 분기(139~143행)에서 건수 없는 R11 을 올리던 코드만 지우고 return 만 남김. 1단계 실패는 step.end 의 R1 이 맡음. t_orch_watch.js 의 기존 시험(42237 기준, 이른 결과면 R11 1건을 기대)은 새 기대값인 R11 0건으로 바꾸고 시험 이름을 개선안 문구대로 고침. 시험 수는 늘지 않음. t_chain_abort.js 의 FAIL 5건은 extension.js 등 함께 작업 중인 파일과 관련이 있는지 확인하지 못함(미확인)"
   },
-  "snap": "prop_20261120042738_INC"
+  "snap": "prop_20261120042738_INC",
+  "effectiveMs": 1795136907899,
+  "effectiveAt": "2026-11-20T10:08:27+09:00"
 }

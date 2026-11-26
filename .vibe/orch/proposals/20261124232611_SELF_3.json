@@ -1,0 +1,110 @@
+{
+  "id": "20261124232611_SELF_3",
+  "at": "2026-11-24T23:26:11+09:00",
+  "ms": 1795530371380,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|사용자매뉴얼n줄운영자매뉴얼n줄업무에출력형식선택항목formats이없",
+  "title": "사용자 지시 R210 같은 문제: tools/VibeManager/quick.json:527 사용자 매뉴얼(527줄), 운영자 매뉴얼(634줄) 업무에 출력 형식 선택 항목(formats)이 없음. VM 소개 자료(734줄)에만 있음",
+  "evidence": "규칙 R210 \"VMW 문서 생성 업무는 출력 형식(PPTX, Google Slides, PDF, HTML)과 대상을 선택 항목으로 둠\" (원래 지시 2026-11-24 16:07 \"VMW 에 기능 추가해주세요. PPT의 양식은 자유롭고 세련된 비지니스 제안서 느낌으로 할게요. GOOGLE PT 로도 만들 수 있도록 PPT, PT 등 OUTPUT 양식은 다양하게 선택할 수 있도록 해주세요. 대상도 선택할 수 있도록 해주세요.\") · tools/VibeManager/quick.json:527 \"jobInputs\": [ { \"name\": \"author\", ... } , date, version, sample, captures ]",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "두 업무 jobInputs 에 vm_intro 와 같은 formats 항목(PPTX 기본, PDF 등)을 넣고, user_manual.py, ops_manual.py build 가 _inputs.json formats 를 읽어 고른 형식마다 저장하게 함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T12:12:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T12:16:15+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self1212"
+    },
+    {
+      "at": "2026-11-26T12:16:19+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T12:29:46+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-26T12:29:46+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js 반영 전 2026-11-26 12:16(03:16:41Z) ALL OK 88/88 PASS 1449 FAIL 0 → 반영 뒤 12:25(03:21:36Z 시작) ALL OK 88/88 PASS 1449 FAIL 0. 자기 시험: py_compile 2개 통과, quick.json 읽기 통과, formats_of 입력 3종 결과 ['pptx'] / ['gslides','pdf'] / ['pptx'], 시험 PPTX Google Slides 저장 글자 2곳 Noto  · 변경 3개 파일 · 대상 목록 밖 변경 2개: tools/Docs/ops_manual.py, tools/Docs/user_manual.py",
+      "log": ".vibe\\logs\\2026-11-26T12-16-19_claude_orch.log",
+      "sec": 569,
+      "costUsd": 1.2013713,
+      "files": [
+        "tools/Docs/ops_manual.py",
+        "tools/Docs/user_manual.py",
+        "tools/VibeManager/quick.json"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "VMW 문서 생성 업무는 출력 형식(PPTX, Google Slides, PDF, HTML)과 대상을 선택 항목으로 둠 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R210|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795662735282,
+  "autoFp": "2eb94c2c26",
+  "applyStartMs": 1795662979416,
+  "verifyJudge": {
+    "at": "2026-11-26T12:25:52+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261126_self1212",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795663786551,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js: 반영 전 2026-11-26 12:16 ALL OK 파일 88/88 PASS 1449 FAIL 0 → 반영 뒤 12:25 ALL OK 파일 88/88 PASS 1449 FAIL 0. t_webview_syntax.js PASS 19, t_um_job.js PASS 16, t_om_job.js PASS 6"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json",
+      "tools/Docs/user_manual.py",
+      "tools/Docs/ops_manual.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js 반영 전 2026-11-26 12:16(03:16:41Z) ALL OK 88/88 PASS 1449 FAIL 0 → 반영 뒤 12:25(03:21:36Z 시작) ALL OK 88/88 PASS 1449 FAIL 0. 자기 시험: py_compile 2개 통과, quick.json 읽기 통과, formats_of 입력 3종 결과 ['pptx'] / ['gslides','pdf'] / ['pptx'], 시험 PPTX Google Slides 저장 글자 2곳 Noto Sans KR 2곳, doc_style user_manual.py 문장 97 위반 0",
+    "note": "사용자 매뉴얼, 운영자 매뉴얼 입력 항목에 formats(pptx 기본, gslides, pdf) 추가, outputs 에 pdf 추가. user_manual.py 에 formats_of, to_pdf, to_gslides, export_formats 추가 후 cmd_build 끝에서 호출. ops_manual.py cmd_build 가 um.export_formats 사용. HTML 은 양식 PPT 기반이라 넣지 않음. PDF 저장은 PowerPoint 실행이 필요해 실제 매뉴얼 업무 실행 때 확인됨(미실행). targets 는 quick.json 이고 before_after 에 적힌 생성기 2개도 고침"
+  },
+  "snap": "prop_20261124232611_SELF_3"
+}

@@ -1,0 +1,114 @@
+{
+  "id": "20261123172600_SELF",
+  "at": "2026-11-23T17:26:00+09:00",
+  "ms": 1795422360057,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|tabviewjsn이만드는csv필터칸inputclasscsvf은type",
+  "title": "사용자 지시 R1 같은 문제: tools/VibeManager/workbench.js:1815 tabview.js:80 이 만드는 CSV 필터칸(<input class=\"csvf\">)은 type 이 없어 input[type=text] 규칙(1906)에 걸리",
+  "evidence": "규칙 R1 \"웹뷰 입력칸(input 의 모든 type, select, textarea)은 VS Code 테마 입력 배경과 글자색을 씀. 브라우저 기본 흰 배경이 보이는 칸 없음. date, number, time 칸은 color-scheme 도 테마 밝기를 따름\" (원래 지시 2026-11-23 16:30 \"VMW 의 작성일 선택 부분만 BACKCOLOR 가 WHTE 로 되어 서 현재의 BACK THEME 에 많이 튀어 보기 안좋습니다.\") · tools/VibeManager/workbench.js:1815 .csvf{width:200px;font-size:11px;padding:2px 6px}",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": ".csvf 에 background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,var(--b)) 를 넣음. placeholder 색은 --vscode-input-placeholderForeground 를 씀",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T22:31:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T22:34:54+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261123_self2231"
+    },
+    {
+      "at": "2026-11-23T22:34:56+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T22:46:34+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T22:46:34+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-23 22:35:06 반영 전 node --check check_ok, run_all 74/74 PASS 1161 FAIL 0(216.7s, t_webview_syntax PASS 19) → 2026-11-23 22:39:06 반영 뒤 node --check check_ok, run_all(at 2026-11-23T13:39:08Z) 74/74 PASS 1161 FAIL 0(215.3s, t_webview_syntax PASS 19) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-23T22-34-56_claude_orch.log",
+      "sec": 480,
+      "costUsd": 0.6541507,
+      "files": [
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:36+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰 입력칸(input 의 모든 type, select, textarea)은 VS Code 테마 입력 배경과 글자색을 씀. 브라우저 기본 흰 배경이 보이는 칸 없음. date, number, time 칸은 color-scheme 도 테마 밝기를 따름 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R1|tools/VibeManager/workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795440673474,
+  "autoFp": "31f8ac5a5b",
+  "applyStartMs": 1795440896726,
+  "verifyJudge": {
+    "at": "2026-11-23T22:42:59+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261123_self2231",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795441594013,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/workbench.js: 반영 전 check_ok(22:35:06) → 반영 뒤 check_ok(22:39:06). node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 216.7s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 215.3s'. t_webview_syntax.js 는 run_all 안에서 반영 전 PASS 19 → 반영 뒤 PASS 19, 단독 실행은 권한 승인 대기로 하지 못함"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-23 22:35:06 반영 전 node --check check_ok, run_all 74/74 PASS 1161 FAIL 0(216.7s, t_webview_syntax PASS 19) → 2026-11-23 22:39:06 반영 뒤 node --check check_ok, run_all(at 2026-11-23T13:39:08Z) 74/74 PASS 1161 FAIL 0(215.3s, t_webview_syntax PASS 19)",
+    "note": "workbench.js:1819 .csvf 에 background:var(--vscode-input-background);color:var(--vscode-input-foreground);border:1px solid var(--vscode-input-border,var(--b)) 추가, .csvf::placeholder{color:var(--vscode-input-placeholderForeground)} 추가. Edit 1곳만 고침. 화면 색 확인은 창 다시 로드 뒤 할 수 있음."
+  },
+  "snap": "prop_20261123172600_SELF",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

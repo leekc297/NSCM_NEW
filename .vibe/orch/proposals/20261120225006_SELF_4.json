@@ -1,0 +1,106 @@
+{
+  "id": "20261120225006_SELF_4",
+  "at": "2026-11-20T22:50:06+09:00",
+  "ms": 1795182606649,
+  "source": "self",
+  "status": "applied",
+  "sig": "workbench 문구 n차 ln ln",
+  "title": "workbench.js L106~L1963 고정 문구 정리 3차 21건(줄표, 굵은 글씨, 장식 기호, 번역투, 수식어)",
+  "evidence": ".vibe/orch/selfcheck/doc_style/workbench.js.style.csv 2~17행, 75~79행. workbench.js:106, :113 '— 보완 결과…', '— 클라우드…' 줄표. :108 '⚠ 증명 단계 … — 2 = FAIL 있음 · 3 = 미측정 있음'. :109 '✔ 증명 단계'. :115 '⚠ 후속 단계 … — 이관 메뉴…'. :228 DB MODE 지시문의 '**' 3쌍, 줄표 4건, '파일:라인 · 변경 전/후 · 이유 · 검증법', '수행한다', '모두'. :1935 title '명령 — 지우기 · 새 세션 · …'. :1963 '대기 중 — 현재 작업…', '일괄 작업 중 — 끝난 뒤…'. ⚠ ✔ 를 읽는 코드와 시험 0건(grep 확인). wb.out 셋째 인자 warn, ok 로 상태가 따로 표시됨",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "예: :106 '── 증명 단계: ${pt} (${effId}) — 보완 결과를 사내 DB 실측으로 확인' → '── 증명 단계: ${pt} (${effId}). 보완 결과를 사내 DB 실측으로 확인' / :108 '⚠ 증명 단계 ${pt} 종료코드 ${pcp} — 2 = FAIL 있음 · 3 = 미측정 있음.' → '증명 단계 ${pt} 종료코드 ${pcp}. 2 = FAIL 있음, 3 = 미측정 있음.' / :109 '✔ 증명 단계 ${pt} 통과' → '증명 단계 ${pt} 통과' / :228 '**[작업 모드 = DB MODE — 환경설정 값 · 아래 본문보다 이 문단이 우선한다]**' → '[작업 모드 = DB MODE, 환경설정 값. 아래 본문보다 이 문단이 우선한다]', '**한 줄도 수정하지 않는다** — FE 페이지' → '한 줄도 수정하지 않는다. FE 페이지', '(파일:라인 · 변경 전/후 · 이유 · 검증법)' → '(파일:라인, 변경 전/후, 이유, 검증법)', '문구는 모두' → '문구는', '**CheckList(run_verify)는 모드와 무관하게 전체를 수행한다** — 모드를' → 'CheckList(run_verify)는 모드와 무관하게 전체를 실행한다. 모드를' / :1935 '명령 — 지우기 · 새 세션 · quick.json 편집 · 새 창 · 리모트' → '명령: 지우기, 새 세션, quick.json 편집, 새 창, 리모트' / :1963 '대기 중 — 현재 작업이…' → '대기 중. 현재 작업이…', '일괄 작업 중 — 끝난 뒤…' → '일괄 작업 중. 끝난 뒤…'. 지시 내용과 ${…} 식, 영어 문구는 바꾸지 않음. 필요한 줄만 Edit",
+  "verify": "node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 가 ALL PASS. python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet 위반 수가 반영 전보다 21 줄고 L106, L108, L109, L113, L115, L228, L1935, L1963 위치가 보고에 없음",
+  "rollback": "workbench.js 를 반영 전 백업으로 되돌림(다른 작업 편집 보존은 orch-undo 방식)",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "문구 위반 21건, 근거 파일:줄",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T23:08:23+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T23:15:09+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self2308"
+    },
+    {
+      "at": "2026-11-20T23:15:11+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T23:20:16+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T23:20:16+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 23:16 실행. (1) node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 출력 'PASS workbench(ko): 스크립트 1개 구문', 'PASS workbench(en): 스크립트 1개 구문', 마지막 줄 'ALL PASS'. (2) python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet 반영 전 'workbench.js | 문장 532 | 위반 214 | 수식어 6 번 · 변경 10개 파일 · 대상 목록 밖 변경 9개: Doc/_doc_style/workbench.js.style.csv, Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_test_kind.jsonl, Doc/verify/SCP0028/eg/popup/popup_results.json, Doc/verify/SCP0028/eg/popup/popup_rowsets.json, tools/Harness/gate_baseline.tsv",
+      "log": ".vibe\\logs\\2026-11-20T23-15-12_claude_orch.log",
+      "sec": 86,
+      "costUsd": 0.8044950000000002,
+      "files": [
+        "Doc/_doc_style/workbench.js.style.csv",
+        "Doc/verify/SCP0028/_test_timing.jsonl",
+        "Doc/verify/SCP0028/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0028/eg/popup/popup_results.json",
+        "Doc/verify/SCP0028/eg/popup/popup_rowsets.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/workbench.js",
+        "Doc/verify/SCP0028/calls/eg_popup__eg-popup_MAIN_SCP0028_1_SCM0002_ShipmentLotSizePopup_BTN_bt_0.json",
+        "Doc/verify/SCP0028/calls/eg_popup__eg-popup_MAIN_SCP0028_2_SCM0002_ItembyDivisionPopup_COND_bt_0.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:28+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-21T01:59:17+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795183702935,
+  "autoFp": "8bf0ad2e9b",
+  "applyStartMs": 1795184111547,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 827, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self2308",
+  "needsReload": true,
+  "appliedMs": 1795184416556,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-20 23:16 실행. (1) node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 출력 'PASS workbench(ko): 스크립트 1개 구문', 'PASS workbench(en): 스크립트 1개 구문', 마지막 줄 'ALL PASS'. (2) python tools/Docs/doc_style.py tools/VibeManager/workbench.js --quiet 반영 전 'workbench.js | 문장 532 | 위반 214 | 수식어 6 번역투 1 기호 202 소개·맺음 2 추측 1 용어 2', 반영 뒤 'workbench.js | 문장 532 | 위반 193 | 수식어 5 기호 183 소개·맺음 2 추측 1 용어 2'로 21 감소. --out 으로 만든 style.csv 에서 L106, L108, L109, L113, L115, L228, L2006, L2034, L1935, L1963 위치 행 0건(grep -c 결과 0).",
+    "note": "개선안의 :1935, :1963 은 현재 파일에서 2006행(slash 버튼 title), 2034행(PQ_L 대기열 문구)으로 밀려 있어 해당 줄을 고침. 3248행 '── 후속 단계: ${srcR.postTask} (${effId}) — 클라우드 이관 파일 사전 생성'은 같은 문구지만 승인 범위(L106~L1963 21건) 밖이라 고치지 않음. ${…} 식, 영어 문구, wb.out 셋째 인자(warn, ok, cmd)는 바꾸지 않음."
+  },
+  "snap": "prop_20261120225006_SELF_4",
+  "effectiveMs": 1795193957740,
+  "effectiveAt": "2026-11-21T01:59:17+09:00"
+}

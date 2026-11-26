@@ -1,0 +1,29 @@
+{
+  "id": "20261120_191806_R12_ALL_3",
+  "at": "2026-11-20T19:18:06+09:00",
+  "ms": 1795169886510,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U13 창 다시 로드 뒤 재실행 없음 SSP0005",
+  "screen": "",
+  "sig": "R12|S13|U13|r5|20261120_184728_R5_ALL|SSP0005",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261120_184728_R5_ALL 11-20 18:47 끊긴 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) 뒤 31분째 같은 화면 chain.start 없음",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U13|r5|20261120_184728_R5_ALL|SSP0005",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T20:49:31+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+{
+  "id": "20261121000933_SELF_2",
+  "at": "2026-11-21T00:09:33+09:00",
+  "ms": 1795187373788,
+  "source": "self",
+  "status": "superseded",
+  "sig": "ln|resume|all or nothing fingerprint",
+  "title": "재개 끊김을 사건으로 남기고, 소스 지문을 단계별로 나눠 바뀐 파일을 쓰는 단계부터만 다시 돌게 함",
+  "evidence": "run_verify.py:398-408, :539-549, :660-666, :474-478 · source_snap.py:174-183 · J20261120_191752/SCP0028.log 666-667, 721, 738, 751 · 2026-11-20T18-36-05 로그 1-3, 33 · diff_verify.py.bak_20261120_scp28u5 20:18, run_verify.py.bak_20261120_onlyshard 20:19 · 진단 사다리 묶음 L3|usercheck|U18",
+  "targets": [
+    "tools/Harness/verify/run_verify.py",
+    "tools/Harness/verify/source_snap.py",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "변경 전: rs_stage_done 이 화면 FE, @shared, 엔진 py 174개, E2E lib, specs 를 해시 1개로 기록함. 재개 때 하나라도 다르면 rs_refuse 가 _resume 을 지우고 1/8단계부터 실행함. 사유는 '[재개 거부]' 글줄 1개뿐이고 바뀐 파일 목록은 없음. 변경 후: ① 재개 거부, 신호 없음 등 모든 끊김 지점에서 Doc/verify/<ID>/_resume/refuse.json 과 events.jsonl 에 resume.refuse(단계, 사유 코드, 바뀐 파일 목록)를 남김. U18 감지기는 이 사건이 있으면 '무시하고 처음부터'가 아니라 '거부 사유 X'로 나눠 보고함(fix 성격). ② 지문을 단계별로 기록함. 단계가 실행한 스크립트(로그의 $ 줄 기준)와 공용 lib 을 단계 지문으로 삼음. 재개 때 바뀐 파일을 쓰는 첫 단계부터 다시 돌고 앞 단계는 유지함. run_verify.py 자체가 바뀌면 지금처럼 처음부터 실행함(core).",
+  "verify": "재현 시험: 사례 2를 그대로 재현함. eg 까지 끝난 _resume/progress.json 에 단계별 지문을 둔 뒤 diff_verify.py 해시만 바꾸고 VM_RESUME=1 로 실행함. 그러면 '[재개] … 끊긴 단계 diff'가 찍히고 '[단계 1/8]' 없이 6/8부터 돌아야 함. run_verify.py 해시를 바꾸면 처음부터 돌고 resume.refuse 사건 1줄(바뀐 파일 run_verify.py)이 남아야 함. 사례 1 재현: VM_RESUME 없이 끊긴 기록이 있는 상태로 실행하면 resume.refuse 사유 '신호 없음'이 남아야 함. t_orch_usercheck.js 에 J20261120_191752 710~751줄 표본을 넣어 U18 이 '거부 사유 소스 지문(diff_verify.py, run_verify.py)'으로 보고되는지 확인함. 시험 전체 ALL PASS.",
+  "rollback": "네 파일을 반영 전 bak 사본으로 되돌림. 단계별 지문이 없는 이전 progress.json 은 지금처럼 단일 지문으로 판정하도록 하위 호환을 둠.",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "U18 재개 단계가 처음부터 다시 돈 사례 2건(18:36, 20:47)의 끊김 지점이 다름(신호 미전달, 지문 불일치). 공유하는 설계는 '어디서 끊겨도 처음부터, 사건 줄 없음'임. 단계 묶음 방식과 엔진이 바뀐 뒤 끝난 단계 결과를 인정할지는 CheckList 판정 기준과 단계 구성이라 core 로 둠.",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T13:01:56+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:05:22+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 971, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1301"
+    },
+    {
+      "at": "2026-11-23T13:05:25+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T13:15:17+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:18:48+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 971, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1315"
+    },
+    {
+      "at": "2026-11-23T13:18:51+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T13:42:59+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:46:27+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 976, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1343"
+    },
+    {
+      "at": "2026-11-23T13:46:29+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T13:50:48+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T13:54:34+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 976, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1350"
+    },
+    {
+      "at": "2026-11-23T13:54:36+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T14:06:02+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T14:09:37+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 976, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1406"
+    },
+    {
+      "at": "2026-11-23T14:09:39+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T14:25:28+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T14:29:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 32개 파일 통과, 시험 66/68개 파일 통과(PASS 1022, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1425"
+    },
+    {
+      "at": "2026-11-23T14:29:02+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T14:47:40+09:00",
+      "by": "VMO",
+      "what": "게이트 판정 보류. 반영 중에 AI 가 고치지 않은 파일이 바뀜(다른 작업): tools/Harness/gate_baseline.tsv, tools/VibeManager/rules/10_RULES_KEEP.md · 새로 어긋난 항목 1건은 개선안 실패로 세지 않음 · 대상 파일 4개 되돌림(run_verify.py AI 편집 12건만 되돌림(반영 전과 같음) / source_snap.py 사본으로 복원(새 문자열이 지금 파일에 없음(그 뒤 다른 쪽이 같은 곳을 고침)). 덮기 전 파일 tools/Harness/verify/source_snap.py.bak_prerestore_20261123_144740 / orch-usercheck.js AI 편집 3건만 되돌림(반영 전과 같음) / t_orch_usercheck.js AI 편집 1건만 되돌림(반영 전과 같음)) · 10분 뒤 다시 시도"
+    },
+    {
+      "at": "2026-11-23T15:11:11+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T15:14:47+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 33개 파일 통과, 시험 65/68개 파일 통과(PASS 1020, FAIL 9), 정의 정합 통과 · 반영 전부터 어긋난 항목 3건 · 백업 태그 20261123_self1511"
+    },
+    {
+      "at": "2026-11-23T15:14:49+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T15:28:47+09:00",
+      "by": "VMO",
+      "what": "게이트 판정 보류. 반영 중에 AI 가 고치지 않은 파일이 바뀜(다른 작업): tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/test/t_resume_inner.js · 새로 어긋난 항목 2건은 개선안 실패로 세지 않음 · 대상 파일 4개 되돌림(run_verify.py AI 편집 14건만 되돌림(반영 전과 같음) / source_snap.py AI 편집 4건만 되돌림(반영 전과 같음) / orch-usercheck.js AI 편집 4건만 되돌림(반영 전과 같음) / t_orch_usercheck.js AI 편집 3건만 되돌림(반영 전과 같음)) · 10분 뒤 다시 시도"
+    },
+    {
+      "at": "2026-11-23T15:46:12+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T15:48:14+09:00",
+      "by": "VMO",
+      "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    },
+    {
+      "at": "2026-11-23T16:03:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T16:06:46+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 34개 파일 통과, 시험 66/69개 파일 통과(PASS 1047, FAIL 6), 정의 정합 통과 · 반영 전부터 어긋난 항목 3건 · 백업 태그 20261123_self1603"
+    },
+    {
+      "at": "2026-11-23T16:06:48+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T16:18:42+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 게이트에서 새로 어긋난 항목 2건: S2 t_orch_usercheck.js 실패: exit 1 · PASS 142 · FAIL 1 · FAIL U3 장부 막힘 2건 = 실패 1항목(S13|U3|worklist) [] / SOME FAIL / S4 inventory_check CHAIN_FILES: 체인 3개 파일의 도구 참조 138 · 없는 파일 1 - run_verify.py:451 x.py · 구문 검사 34개 파일 통과, 시험 66/69개 파일 통과(PASS 1051, FAIL 6), 정의 정합 실패 1 · 대상 파일 4개 복원(run_verify.py AI 편집 8건만 되돌림(반영 전과 같음) / orch-usercheck.js AI 편집 2건만 되돌림(반영 전과 같음) / t_orch_usercheck.js AI 편집 1건만 되돌림(반영 전과 같음))",
+      "log": ".vibe\\logs\\2026-11-23T16-06-50_claude_orch.log",
+      "sec": 499,
+      "costUsd": 3.7106282,
+      "files": [
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T16:20:20+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261123162019_SELF 로 다시 올림(자동 반영). 원인 ① tools/Harness/verify/run_verify.py 반영본 451줄에 따옴표로 감싼 'x.py' 문자열이 들어감. scripts/rules/inventory_check.py:212-221 은 '#' 로 시작하지 않는 줄에서 '  # ' 앞의 '<이름>.py' 를 도구 파일 참조로 세서 CHAIN_FILES '없는 파일 1 - run_verify.py:451 x.py' 가 됨(.vibe/orch/selfcheck/result.json 2026-11-23T16:15:11, S4). 지금 복원된 run_verify.py 에는 'x.py' 0건. ② S2 t_orch_usercheck.js 실패(U3 장부 막힘 S13|U3|worklist)는 반영 전부터 있었음(repair 기록 verify_items 7: 반영 전 PASS 138 FAIL 1). tools/VibeManager/orch-improve.js:326 이 반영 전후 실패 문구를 글자 그대로 비교하고, 문구에 PASS 건수가 들어 있음. t_orch_usercheck.js 에 시험 4개를 더해 PASS 138 → 142 로 바뀌자 같은 실패가 새로 어긋난 항목으로 세어짐(16:18:42 기"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 를 재개할 때 다른 단계의 검사 스크립트가 고쳐졌다는 이유로 이미 끝난 앞 단계(사례 2에서 40분 넘게 걸린 5개 단계)를 버리지 않게 함. 재개를 못 하면 왜 못 했는지 남게 함.",
+    "risk": "앞 단계 결과를 고치기 전 엔진으로 만든 채 이어 쓰므로, 단계별 지문 범위가 틀리면 바뀐 엔진의 영향을 받는 단계를 건너뛸 수 있음. 그래서 판정 기준 변경으로 보고 승인 대상으로 둠.",
+    "undo": "bak 사본 복사. 또는 단계별 지문을 끄면 지금처럼 단일 지문으로 돌아감"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 9,
+  "autoMs": 1795417396006,
+  "autoFp": "c6f54d4a40",
+  "applyStartMs": 1795417608634,
+  "autoWaitMs": 1795415927712,
+  "waitNote": "다른 작업과 겹쳐 10분 뒤 다시(tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/test/t_resume_inner.js)",
+  "verifyJudge": {
+    "at": "2026-11-23T16:15:11+09:00",
+    "verified": true,
+    "text": "실행 통과 7건",
+    "why": ""
+  },
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "사례 2 재현: 임시 하네스(가짜 화면 ZZRSTEST, 실제 도구, DB, 브라우저 호출 막음)로 J20261120_191752/SCP0028.log 1차 실행의 단계별 $ 스크립트로 pre~eg 단계 지문을 만들고 diff 끊김 상태 progress.json 생성. 출력 'progress done [pre,facts,static,e2e,eg] cur diff 단계 지문 파일 수 pre 156, facts 35, static 22, e2e 144, eg 155'"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "python tmp_rs_harness.py v2: source_snap.fhash 로 diff_verify.py 해시만 바꾸고 VM_RESUME=1 로 run_verify.main() 실행. 끝난 단계 지문에 diff_verify.py 없음(출력 '없음')"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "v2 출력 '[재개] ZZRSTEST 실행 ID 20261123161357 이어서, 끝난 단계 pre,facts,static,e2e,eg, 끊긴 단계 diff' → '[이어서] 단계 1/8 … 5/8' → '[단계 6/8] 차등 검증' → '[재개] 단계 diff: 단계 시작 시점 사본 1개로 되돌린 뒤' → '$ … sqllog_calls.py'. '[단계 1/8]' 줄 없음, resume.refuse 0줄"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "v4: run_verify.py 해시만 바꿈 → '[재개 거부] ZZRSTEST: 소스 지문이 다름(바뀐 파일 run_verify.py) → 처음부터 실행', '[단계 1/8] 사전 작업', 'resume.refuse 사건 1줄 code source_fp changed [tools/Harness/verify/run_verify.py]', refuse.json code source_fp"
+      },
+      {
+        "n": 5,
+        "result": "pass",
+        "note": "v5: VM_RESUME 없이 끊긴 기록 상태로 실행 → '[재개 거부] ZZRSTEST: 재개 신호 없음(VM_RESUME=1, --resume 없음) → 처음부터 실행', 'resume.refuse 사건 1줄 code no_signal stage diff', refuse.json code no_signal"
+      },
+      {
+        "n": 6,
+        "result": "pass",
+        "note": "node test/t_orch_usercheck.js: 'PASS U18 표본 710~751 + resume.refuse = 거부 사유 소스 지문(diff_verify.py, run_verify.py) 1건 · 경고', 'PASS U18 사건·refuse.json 없음 = 로그 [재개 거부] 줄로 거부 사유 소스 지문', 'PASS U18 사건 없음 + refuse.json = … 소스 지문(diff_verify.py)', 'PASS U18 사례 1 신호 없음 = 실패, 거부 사유 신호 없음'"
+      },
+      {
+        "n": 7,
+        "result": "pass",
+        "note": "t_orch_usercheck.js exit 1, PASS 138 FAIL 1 → PASS 142 FAIL 1(반영 전 값은 개선안에 적힌 측정값, 편집 전 직접 실행 안 함). 남은 FAIL 1 = 'U3 장부 막힘 2건 = 실패 1항목(S13|U3|worklist)', 반영 전부터 어긋난 항목(S2)이라 판정에서 뺌. 새로 생긴 FAIL 0"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/run_verify.py",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "2026-11-23 16:13~16:14. 임시 하네스(.vibe/tmp_rs_harness.py, 가짜 화면 ZZRSTEST, 실행 뒤 삭제, Doc/verify/ZZRSTEST, .vibe/tmp_rs_orch 없음 확인) v2: '[이어서] 단계 1/8~5/8' 뒤 '[단계 6/8] 차등 검증', '[단계 1/8]' 없음, refuse 0줄. v4: '[재개 거부] … (바뀐 파일 run_verify.py)' + '[단계 1/8]', resume.refuse 1줄 source_fp. v5: '재개 신호 없음' resume.refuse 1줄 no_signal. 추가 eg_chain.py 변경: '단계 eg(5/8)부터 다시, 앞 단계 pre,facts,static,e2e 유지' source_fp_stage 1줄. t_orch_usercheck.js: 반영 전 PASS 138 FAIL 1 → 반영 뒤 PASS 142 FAIL 1(U3 반영 전 실패). U18 새 시험 4개 PASS",
+    "note": "source_snap.py 는 수정하지 않음(fe_items, shared_items, fhash 만 가져다 씀, 단계 지문 함수는 run_verify.py 에 둠). 단계 지문 = run() 의 $ 스크립트 + RS_STAGE_EXTRA(run() 밖 subprocess: e2e_suite, e2e_shard, runlock.js, diff_ingest, e2e_suite_ingest, llm_review) + import, 주석 밖 'x.py' 문자열 닫힘 + 브라우저 단계(pre, e2e, eg) FE, @shared, specs, E2E lib. 단계 지문 없는 이전 progress.json 은 종전 단일 지문(rs_fp)으로 판정(하위 호환). 건너뛴 단계 줄을 '[단계 i/8] … 이어서' → '[이어서] 단계 i/8 …' 로 바꿈(U18, 진행 표시가 1/8 다시로 읽던 줄). 실제 CheckList(run_verify.py SCP0028) 재실행은 지침상 하지 않음. 추가 확인 후보: 사례 1에서 VM 이 VM_RESUME 을 넘기지 않은 원인(workbench, job-runner, 범위 밖, 미확인). 걸린 시간 미측정(시작 시각 기록 없음, 끝 16:14:34)"
+  },
+  "gate": {
+    "ok": false,
+    "text": "구문 검사 34개 파일 통과, 시험 66/69개 파일 통과(PASS 1051, FAIL 6), 정의 정합 실패 1",
+    "newBad": [
+      "S2 t_orch_usercheck.js 실패: exit 1 · PASS 142 · FAIL 1 · FAIL U3 장부 막힘 2건 = 실패 1항목(S13|U3|worklist) [] / SOME FAIL",
+      "S4 inventory_check CHAIN_FILES: 체인 3개 파일의 도구 참조 138 · 없는 파일 1 - run_verify.py:451 x.py"
+    ]
+  },
+  "repair": {
+    "at": "2026-11-23T16:20:19+09:00",
+    "decision": "revise",
+    "cause": "① tools/Harness/verify/run_verify.py 반영본 451줄에 따옴표로 감싼 'x.py' 문자열이 들어감. scripts/rules/inventory_check.py:212-221 은 '#' 로 시작하지 않는 줄에서 '  # ' 앞의 '<이름>.py' 를 도구 파일 참조로 세서 CHAIN_FILES '없는 파일 1 - run_verify.py:451 x.py' 가 됨(.vibe/orch/selfcheck/result.json 2026-11-23T16:15:11, S4). 지금 복원된 run_verify.py 에는 'x.py' 0건. ② S2 t_orch_usercheck.js 실패(U3 장부 막힘 S13|U3|worklist)는 반영 전부터 있었음(repair 기록 verify_items 7: 반영 전 PASS 138 FAIL 1). tools/VibeManager/orch-improve.js:326 이 반영 전후 실패 문구를 글자 그대로 비교하고, 문구에 PASS 건수가 들어 있음. t_orch_usercheck.js 에 시험 4개를 더해 PASS 138 → 142 로 바뀌자 같은 실패가 새로 어긋난 항목으로 세어짐(16:18:42 기",
+    "reason": "run_verify.py 에 남은 'x.py' 문자열 1줄과 시험 추가로 바뀐 PASS 건수가 게이트에 걸림. 안의 동작 확인 7건은 통과함. 범위를 run_verify.py 1개로 줄이고 'x.py' 문자열을 빼서 다시 냄.",
+    "log": ".vibe\\logs\\2026-11-23T16-19-17_claude_orch.log",
+    "costUsd": 0.658638,
+    "sec": 62
+  },
+  "supersededBy": "20261123162019_SELF"
+}

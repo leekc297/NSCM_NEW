@@ -240,7 +240,9 @@ export const MSG = {
   DUP_SAVE_ERROR: 'MSG00043', // 저장시 중복 오류가 발생하였습니다. {0} (동일)
   PERIOD_ORDER: 'MSG00108', // 조회 기간이 잘못되었습니다 (시작일 > 종료일). (동일 의미)
   MANDATORY_COLUMN: 'MSG00113', // 필수 입력 컬럼이 없습니다. (동일)
-  PERIOD_3Y: 'MSG00164', // 조회 기간은 3년 이내로 입력해주세요. (동일 의미)
+  // 조회 기간은 2년 이내로 입력해주세요. (2026-11-24 결정: Monthly 로 조회해도 일자 데이터까지 받는 화면은
+  //   조회 기간 2년 제한. 종전 3년 MSG00164)
+  PERIOD_2Y: 'MSG01505',
   BUCKET_CHANGE_BLOCK: 'MSG00227', // Insert 된 행이 있어 Bucket 을 변경할 수 없습니다. (동일 의미)
   DUP_NEW_ROW: 'MSG00260', // 중복된 조합이 존재합니다 (Division/Project/Item/일자/Measure). (동일 의미)
   VERSION_REQUIRED: 'MSG00283', // 버전을 선택하세요. (동일)

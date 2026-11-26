@@ -12,8 +12,22 @@ const s = (v: unknown): string =>
 // 행 편집잠금 판정 (design 03 §3 W6, cs:351~361 소스 확정):
 //   SCP_PLAN_YN 셀 값이 'Y'/'N'(대문자 비교) 둘 다 아니면(NULL/공백/기타) 그 행 전체 편집 차단.
 //   = 'ALL' 조회의 ALTER_BOM 미등록 outer-join 행(편집컬럼 NULL) — UPDATE 대상이 없어 편집 무의미.
-export const isRowLocked = (row: Row | undefined): boolean => {
-  if (!row) return true;
+//   판정 시점 = 조회 직후 값(AS-IS EditButton cs:288-296 이 편집 진입 때 1회 잠금). 편집 중 SCP YN 을
+//   지워도 그 행은 잠기지 않고 계속 편집·저장된다(AS-IS 는 빈 값을 그대로 저장). markRowLocks 가 조회
+//   시점 판정을 ROW_LOCKED_KEY 에 고정해 두고, 플래그가 없을 때만 현재 값으로 판정한다.
+const ROW_LOCKED_KEY = '_ROW_LOCKED';
+
+const isLockValue = (row: Row): boolean => {
   const v = s(row[ROW_LOCK_COLUMN]).trim().toUpperCase();
   return v !== 'Y' && v !== 'N';
 };
+
+export const isRowLocked = (row: Row | undefined): boolean => {
+  if (!row) return true;
+  const fixed = row[ROW_LOCKED_KEY];
+  return typeof fixed === 'boolean' ? fixed : isLockValue(row);
+};
+
+// 조회 결과 행에 조회 시점 잠금 여부를 고정한다.
+export const markRowLocks = <T extends Row>(rows: T[]): T[] =>
+  rows.map(r => ({ ...r, [ROW_LOCKED_KEY]: isLockValue(r) }));

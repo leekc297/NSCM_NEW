@@ -1,0 +1,303 @@
+{
+ "key": "DM",
+ "mods": [
+  "DM"
+ ],
+ "at": "2026-11-24 15:13",
+ "template": {
+  "file": "c:\\Users\\LG\\Downloads\\GSCM-DM-CV-2(운영자매뉴얼).pptx",
+  "roles": {
+   "cover": 0,
+   "rev": 1,
+   "toc": 3,
+   "body": 5,
+   "table": 6,
+   "divider": 11,
+   "end": 81
+  },
+  "outline": [
+   {
+    "no": "1",
+    "title": "인터페이스 구성도",
+    "subs": [
+     "NERP I/F",
+     "MDM I/F",
+     "BPMS",
+     "ERP"
+    ],
+    "slides": [
+     6,
+     38,
+     39,
+     40
+    ],
+    "tables": []
+   },
+   {
+    "no": "2",
+    "title": "개발 프로그램 목록",
+    "subs": [
+     "UI",
+     "Batch"
+    ],
+    "slides": [
+     7,
+     8,
+     41,
+     42,
+     43,
+     44,
+     45,
+     46
+    ],
+    "tables": [
+     [
+      "Level1 Menu",
+      "Level2 Menu",
+      "Program ID",
+      "화면명",
+      "프로시저명",
+      "내용"
+     ],
+     [
+      "프로시저명",
+      "내용"
+     ],
+     [
+      "프로시저명",
+      "내용",
+      "프로시저명",
+      "내용"
+     ]
+    ]
+   },
+   {
+    "no": "3",
+    "title": "Batch Job 목록",
+    "subs": [],
+    "slides": [
+     9,
+     47,
+     48,
+     49
+    ],
+    "tables": [
+     [
+      "BATCH_JOB",
+      "JOB Schedule",
+      "프로시져 호출",
+      "프로시져 설명"
+     ],
+     [
+      "name",
+      "description",
+      "step_id",
+      "step_name",
+      "STEP",
+      "name",
+      "Period",
+      "freq_interval",
+      "freq_subday_interval",
+      "HHMISS"
+     ],
+     [
+      "NAME",
+      "내용",
+      "주기",
+      "실행"
+     ]
+    ]
+   },
+   {
+    "no": "4",
+    "title": "I/F 점검",
+    "subs": [],
+    "slides": [
+     10,
+     11,
+     50,
+     51,
+     52
+    ],
+    "tables": []
+   },
+   {
+    "no": "4",
+    "title": "배치 프로세스 흐름도",
+    "subs": [],
+    "slides": [
+     13,
+     14,
+     15,
+     16,
+     17,
+     20,
+     23,
+     54
+    ],
+    "tables": []
+   },
+   {
+    "no": "5",
+    "title": "배치 수행 점검",
+    "subs": [],
+    "slides": [
+     18,
+     55,
+     56,
+     62,
+     63,
+     64
+    ],
+    "tables": []
+   },
+   {
+    "no": "6",
+    "title": "수신 웹서비스 개발 프로세스",
+    "subs": [],
+    "slides": [
+     25
+    ],
+    "tables": []
+   },
+   {
+    "no": "5",
+    "title": "기타 참고사항",
+    "subs": [],
+    "slides": [
+     59,
+     60,
+     65
+    ],
+    "tables": []
+   },
+   {
+    "no": "6",
+    "title": "기타 운영자 전달사항",
+    "subs": [],
+    "slides": [
+     66,
+     67,
+     68,
+     69,
+     70,
+     71,
+     72,
+     73
+    ],
+    "tables": [
+     [
+      "시스템 명",
+      "PI 담당자",
+      "CNS 담당자"
+     ]
+    ]
+   },
+   {
+    "no": "7",
+    "title": "산출물 목록",
+    "subs": [],
+    "slides": [
+     74
+    ],
+    "tables": []
+   }
+  ],
+  "layouts": [
+   "표지",
+   "본문",
+   "제목 슬라이드",
+   "제목 및 내용"
+  ],
+  "slides": 82,
+  "dividerExample": "N : N 매핑"
+ },
+ "modules": [
+  {
+   "mod": "DM",
+   "groups": [
+    {
+     "top": "Demand",
+     "group": "Demand Master",
+     "screens": [
+      "DMF0004",
+      "DMF0005",
+      "DMF0005_01",
+      "DMF0006",
+      "DMF0007",
+      "DMF0020",
+      "DMF0020_01",
+      "DMF0083",
+      "DMF0043",
+      "DMF0043_01",
+      "DMF0008",
+      "DMF0072"
+     ]
+    },
+    {
+     "top": "Demand",
+     "group": "Demand Plan",
+     "screens": [
+      "DMF0003",
+      "DMF0003_01",
+      "DMF0048",
+      "DMF0014",
+      "DMF0042",
+      "DMF0044",
+      "DMF0049",
+      "DMF0074",
+      "DMF0082",
+      "DMF0021",
+      "DMF0021_01"
+     ]
+    },
+    {
+     "top": "Demand",
+     "group": "Waterfall",
+     "screens": [
+      "DMF0035",
+      "DMF0040",
+      "DMF0068",
+      "DMF0053",
+      "DMF0035_01"
+     ]
+    },
+    {
+     "top": "Report",
+     "group": "Dashboard",
+     "screens": [
+      "DMD0001"
+     ]
+    }
+   ],
+   "screens": 29,
+   "noFacts": [],
+   "edges": 176,
+   "batchJobs": 63,
+   "batchSteps": 113,
+   "batchBasis": {
+    "TO-BE 잡": 63
+   }
+  }
+ ],
+ "struct": {
+  "jobs": 63,
+  "schedules": 81,
+  "links": 0,
+  "sps": 54,
+  "spFound": 54,
+  "tables": 115,
+  "tobeRules": 333,
+  "tobeMapped": 0,
+  "processes": [
+   "기준 정보 동기화",
+   "인터페이스 수신",
+   "계획 생성",
+   "컷오프",
+   "인터페이스 송신",
+   "분석과 KPI",
+   "메일과 SMS 알림",
+   "기타"
+  ]
+ }
+}

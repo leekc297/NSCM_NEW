@@ -199,6 +199,17 @@ export const ShipmentPsiDetailGrid = ({
         'wj-cell-editable',
         isDetailCellEditable(SHEETS.CONFIRM_DETAIL, row, binding, editableRef.current, isPackerRef.current)
       );
+      // 클릭/더블클릭 시 팝업이 열리는 셀(값 있을 때)에 FPModal 과 동일한 팝업 아이콘을 붙인다.
+      //   wj-cell-popup = 공용 _grid.scss 의 FPModal/FPTextModal 팝업 아이콘(OpenInNew, 우측 16px)과
+      //   같은 클래스라 모달 셀과 아이콘이 일치한다(is-popup 은 미등록 formatPopupIcon 소속이라 미사용).
+      //   조건은 각 팝업 핸들러 게이트와 동일: CHANGE_REQ_NO(비공백·'-' 아님) → ConfirmDetail,
+      //   ERP_SO_NO(비공백) → OrderDetail.
+      const changeReqNo = str(row?.CHANGE_REQ_NO).trim();
+      const erpSoNo = str(row?.ERP_SO_NO).trim();
+      const hasPopup =
+        (binding === 'CHANGE_REQ_NO' && changeReqNo !== '' && changeReqNo !== '-') ||
+        (binding === 'ERP_SO_NO' && erpSoNo !== '');
+      e.cell.classList.toggle('wj-cell-popup', hasPopup);
     };
     g.formatItem.addHandler(formatItemHandler);
 

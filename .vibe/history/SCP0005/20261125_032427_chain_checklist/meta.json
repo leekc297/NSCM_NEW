@@ -1,0 +1,21 @@
+{
+  "id": "SCP0005",
+  "task": "chain_checklist",
+  "scope": "none",
+  "note": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "start": "2026-11-25T03:24:27+09:00",
+  "end": "2026-11-25T03:26:05+09:00",
+  "exit": 1,
+  "sources": [],
+  "source": "menu",
+  "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "text": "1. 1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용)\n2. 2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)\n3. 3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관)\n4. 4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완)\n5. 5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록)\n6. 6. 해소 확인 재측정 (이번 회차 처리 대상 행의 규칙만 · 전체로 넓히지 않음 → 재분류 · 남으면 3~6 다시)\n7. 7. 미검증 해소 게이트 (처리 대상 전체 해소 확인 · 남으면 재검증 안 함, 남은 행·사유 보고)\n8. 8. 재검증 (미검증 전체 해소 뒤 1회 · 수정분 범위 → 재분류 · 권장안 적용)\n9. 9. 문서 갱신 (재검증 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261125_032427",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T03-24-28_SCP0005_1_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log"
+  ],
+  "afterMode": "end",
+  "changed": []
+}

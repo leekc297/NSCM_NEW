@@ -15,6 +15,48 @@ interface Base {
 interface RawProcedureMap extends Base {
 
   /**
+   * DMD0001 AS 수요예측 대시보드 — 위젯별 조회 프로시저(PKG_DMD0001.P_DMD0001_GET_*).
+   *   sheetName = 등록 SHT_NM(글자 그대로). proc IN 파라미터는 DB 실측(ora.py args PKG_DMD0001).
+   *   BE 가 'P_' 제거 후 snake→camel 로 요청 키를 유도(BaseService). response o_rc1 은 permissive 로
+   *   두고, 각 위젯 배선 시 실제 커서 컬럼으로 정제한다(추정 금지, 실측 우선).
+   */
+  DMD0001: {
+    forecastInfo: {
+      request: {
+        yyyymmdd: string; // P_YYYYMMDD
+      };
+      response: {
+        o_rc1: { [key: string]: string | number };
+      };
+    };
+  } & {
+    [K in 'kpi' | 'productStatus' | 'riskHeatmap' | 'excess']: {
+      request: {
+        divisionId: string; // P_DIVISION_ID (81 고정)
+        yyyymmdd: string; // P_YYYYMMDD
+        bizType: string; // P_BIZ_TYPE ('ALL' | 라벨, 콤마 다중)
+        endCustomer: string; // P_END_CUSTOMER ('ALL' | End Customer)
+      };
+      response: {
+        o_rc1: { [key: string]: string | number };
+      };
+    };
+  } & {
+    [K in 'coverTrend' | 'demandTrend' | 'inventoryProjection' | 'mape']: {
+      request: {
+        divisionId: string; // P_DIVISION_ID (81 고정)
+        yyyymmdd: string; // P_YYYYMMDD
+        bizType: string; // P_BIZ_TYPE
+        endCustomer: string; // P_END_CUSTOMER
+        nickName: string; // P_NICK_NAME (모델코드 필터, 빈값=전체)
+      };
+      response: {
+        o_rc1: { [key: string]: string | number };
+      };
+    };
+  };
+
+  /**
    * 테스트용.
    */
   test: {
@@ -111,16 +153,27 @@ interface RawProcedureMap extends Base {
     };
     requestDetail: {
       request: {
-        divisionId: string;
-        companyId: string;
+        divisionId: string; // P_DIVISION_ID
+        companyId: string; // P_COMPANY_ID
+        planStartYyyymmdd: string; // P_PLAN_START_YYYYMMDD(cboPlanDate) — 확정일(EDIT_FLAG/CONFIRM_DAY) 산출 필수. 누락 시 SP 가 확정일 미산출 → EDIT_FLAG 전부 'N'·CONFIRM_DAY 공란(AS-IS cs:2262,2323)
+        plantId: string; // P_PLANT_ID(From Site, 콤마·'ALL' 가드, AS-IS cs:2265,2326)
+        cellType: string; // P_CELL_TYPE(콤마·'ALL' 가드, AS-IS cs:2266,2327)
+        fromYyyymmdd: string; // P_FROM_YYYYMMDD(drpPeriod2, 2차 기간)
+        toYyyymmdd: string; // P_TO_YYYYMMDD(drpPeriod2)
+        lotId: string; // P_LOT_ID — 요청상세는 공란(AS-IS cs:2270 p_lot_id="")
         modelId: string; // P_MODEL_ID(2차, txtModelId2)
         itemId: string; // P_ITEM_ID(2차, txtItemId2)
-        nickName: string; // P_NICK_NAME(2차)
-        fromYyyymmdd: string; // drpPeriod2
-        toYyyymmdd: string;
-        requestorId: string; // P_REQUESTOR_ID(txtRequestor, 요청상세 탭 전용 — AS-IS cs:2294,2355)
-        sesUserId: string;
-        mnuId: string;
+        nickName: string; // P_NICK_NAME(2차, textNickName2)
+        requestorId: string; // P_REQUESTOR_ID(txtRequestor, 요청상세 탭 전용 — AS-IS cs:2272,2333)
+        sesUserId: string; // P_USER_ID
+        mnuId: string; // P_PROGRAM_ID
+        sheetName: string; // P_SHEET_NAME('Shipment Request Detail')
+        realFlag: string; // P_REAL_FLAG('Y'|'N' — bRealFlag, cboPlanDate 최신선택 여부)
+        myModelChk: string; // P_MY_MODEL_CHK('Y'|'N')
+        partLeaderChk: string; // P_PART_LEADER_CHK('Y'|'N')
+        teamLeaderChk: string; // P_TEAM_LEADER_CHK('Y'|'N')
+        delegateChk: string; // P_DELEGATE_CHK('Y'|'N')
+        nonChk: string; // P_NON_CHK('Y' — 4개 체크박스 전부 미체크 시)
       };
       response: {
         o_rc1: {
@@ -3870,6 +3923,8 @@ interface RawProcedureMap extends Base {
    *   priceBatch / SEARCH      : P_DMF0083_GET_SCM_MST_FUTURE_PRICE_MDL_GR_POPUP
    *   priceBatch / EXCHANGE_RATE : P_DMF0083_GET_EXCHANGE_RATE
    *   titleSet / SEARCH        : DMF0002_GET_TITLESET_POPUP (공용)
+   *   exchange / SEARCH        : PKG_DMF0020_01.P_DMF0020_01_GET_FUTUREPRICE_INFO (DMF0020_01 재사용, 2026-11-23)
+   *   exchange / SAVE          : PKG_DMF0020_01.P_DMF0020_01_SAVE_DM_MST_EXCHANGE_RATE_ALL (DMF0020_01 재사용, 2026-11-23)
    * 한 시트를 여러 버튼이 쓰므로 request 는 버튼별 인자의 합집합이고 모두 선택 키다.
    * sesUserId 는 BE(NDaoInterface)가 세션 값으로 채우고, mnuId 는 call-proc URL 에서 채운다.
    * 저장 인자(activeFlag 등)는 칸마다 '^' 로 이은 문자열이다.
@@ -3955,6 +4010,34 @@ interface RawProcedureMap extends Base {
         divisionId: string;
       };
       response: { o_rc1: { COLUMN_NAME: string; [key: string]: string } };
+    };
+    exchange: {
+      // SEARCH 는 기간만 받는다(사업부 인자 없음 — 사용자 편집 권한 사업부 전부가 온다). SAVE 는 칸마다 '^' 로 이은 문자열.
+      request: {
+        startYyyymmdd?: string;
+        endYyyymmdd?: string;
+        activeFlag?: string;
+        divisionId?: string;
+        yyyymmdd?: string;
+        currency?: string;
+        unitCurrency?: string;
+        exchangePrice?: string;
+        createdBy?: string;
+        lastUpdatedBy?: string;
+      };
+      response: {
+        o_rc1: {
+          YYYYMMDD: string;
+          YYYYMM: string;
+          DIVISION_ID: string;
+          CURRENCY: string;
+          UNIT_CURRENCY: string;
+          EXCHANGE_PRICE: string | number | null;
+          EDIT_YN: string;
+          IF_EXCHANGE_PRICE: string | number | null;
+          USER_EXCHANGE_PRICE: string | number | null;
+        };
+      };
     };
   };
   /**

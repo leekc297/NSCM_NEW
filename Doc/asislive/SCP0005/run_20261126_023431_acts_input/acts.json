@@ -1,0 +1,386 @@
+{
+ "id": "SCP0005",
+ "group": "ADMIN",
+ "cellrun": true,
+ "inputrun": true,
+ "edit": true,
+ "acts": [
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "Action",
+       "before": "",
+       "after": "M"
+      },
+      {
+       "row": 0,
+       "col": "TRANSPORT_MODE",
+       "before": "TRUCK",
+       "after": "AIR"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[TRANSPORT_MODE]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 TRUCK → AIR(수정 모드) · 입력 뒤 값 AIR · 변경 표시 '' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0005-Sd1bc49",
+    "SCP0005-Sa4344e"
+   ],
+   "cell": {
+    "before": "TRUCK",
+    "after": "AIR",
+    "action_before": "",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "LT_DEPARTURE_INLAND",
+       "before": "0",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "LT_SUM",
+       "before": "0",
+       "after": "1"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LT_DEPARTURE_INLAND]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 0 → 1(수정 모드) · 입력 뒤 값 1 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0005-S0b9ff3",
+    "SCP0005-S716dcb",
+    "SCP0005-S53ae08"
+   ],
+   "cell": {
+    "before": "0",
+    "after": "1",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "LT_WAIT_SHIPPING",
+       "before": "0",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "LT_SUM",
+       "before": "1",
+       "after": "2"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LT_WAIT_SHIPPING]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 0 → 1(수정 모드) · 입력 뒤 값 1 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0005-S7186c8",
+    "SCP0005-S0b9ff3",
+    "SCP0005-S716dcb",
+    "SCP0005-S53ae08"
+   ],
+   "cell": {
+    "before": "0",
+    "after": "1",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "LT_VOYAGE",
+       "before": "0",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "LT_SUM",
+       "before": "2",
+       "after": "3"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LT_VOYAGE]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 0 → 1(수정 모드) · 입력 뒤 값 1 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0005-S53ae08"
+   ],
+   "cell": {
+    "before": "0",
+    "after": "1",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "LT_LAY_OFF_CLEARANCE",
+       "before": "0",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "LT_SUM",
+       "before": "3",
+       "after": "4"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LT_LAY_OFF_CLEARANCE]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 0 → 1(수정 모드) · 입력 뒤 값 1 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0005-S716dcb",
+    "SCP0005-S53ae08"
+   ],
+   "cell": {
+    "before": "0",
+    "after": "1",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "LT_ARRIVAL_INLAND",
+       "before": "0",
+       "after": "1"
+      },
+      {
+       "row": 0,
+       "col": "LT_SUM",
+       "before": "4",
+       "after": "5"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LT_ARRIVAL_INLAND]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 0 → 1(수정 모드) · 입력 뒤 값 1 · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [
+    "SCP0005-S9dcdc7",
+    "SCP0005-S6fd597",
+    "SCP0005-S7186c8",
+    "SCP0005-S0b9ff3",
+    "SCP0005-S716dcb",
+    "SCP0005-S53ae08",
+    "SCP0005-Sa8af86",
+    "SCP0005-Sd1bc49",
+    "SCP0005-Sa4344e"
+   ],
+   "cell": {
+    "before": "0",
+    "after": "1",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "LT_TYPE",
+       "before": "AVERAGE",
+       "after": "MAX"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[LT_TYPE]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 AVERAGE → MAX(수정 모드) · 입력 뒤 값 MAX · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "AVERAGE",
+    "after": "MAX",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  },
+  {
+   "popups": [],
+   "new_screens": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "grid_changes": [
+    {
+     "sheet": "spdMain/Distribution Route",
+     "rows_before": 8076,
+     "rows_after": 8076,
+     "cells": [
+      {
+       "row": 0,
+       "col": "FROM_COUNTRY",
+       "before": "CA",
+       "after": "CN"
+      }
+     ],
+     "more": 0
+    }
+   ],
+   "excel": [],
+   "control": "spdMain[FROM_COUNTRY]",
+   "kind": "cell",
+   "change": "첫 행 값 입력 CA → CN(수정 모드) · 입력 뒤 값 CN · 변경 표시 'M' → 'M'",
+   "ok": true,
+   "error": null,
+   "scenarios": [],
+   "cell": {
+    "before": "CA",
+    "after": "CN",
+    "action_before": "M",
+    "action_after": "M",
+    "is_change": true
+   }
+  }
+ ],
+ "skipped": [],
+ "at": "2026-11-26 02:32:46",
+ "edit_mode": true,
+ "plan": {
+  "grid": "spdMain",
+  "sheet": "Distribution Route",
+  "named_cols": [
+   "TRANSPORT_MODE",
+   "LT_DEPARTURE_INLAND",
+   "LT_WAIT_SHIPPING",
+   "LT_VOYAGE",
+   "LT_LAY_OFF_CLEARANCE",
+   "LT_ARRIVAL_INLAND"
+  ],
+  "branches": 9,
+  "branches_without_col_name": 0,
+  "rule": "조건식에 이름이 나온 열 먼저, 그다음 앞쪽 보이는 열 · 실제 입력된 열 8개까지"
+ }
+}

@@ -1,0 +1,105 @@
+{
+  "id": "20261124005702_SELF",
+  "at": "2026-11-24T00:57:02+09:00",
+  "ms": 1795449422555,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/run_verify.py|checklist차등단계가대상화면이면항목구분없이asis런처기본실측과실측묶",
+  "title": "사용자 지시 R79 같은 문제: tools/Harness/verify/run_verify.py:1369 CheckList 차등 단계가 대상 화면이면 항목 구분 없이 AS-IS 런처 기본 실측과 실측 묶음(asis_live_screen.py --after-basic)",
+  "evidence": "규칙 R79 \"검사기는 정적 분석으로 판정할 수 있는 항목을 정적으로 판정하고 런처 실구동은 동적 확인이 필요한 항목에만 쓰며 TO-BE 룰로 바뀐 항목은 룰 준수 여부만 판정함\" (원래 지시 2026-11-16 08:57 \"질문에 대한 답을 잠깐 멈추고 다시 처음으로 돌아가서 질문을 하나 할게요. as-is 을 to-be로 전환하고 기능을 100% 동작하도록 오류없이 만드는 것이 목적입니다. 모든 항목을 런처를 통하거나 할 필요는 없다고 생각합니다. 정적으로 가능한 부분은 정적으로 해결하고, 동적으로 필요\") · tools/Harness/verify/run_verify.py:1369 run([py, os.path.join(HERE, 'asis_live_auto.py'), mid])",
+  "targets": [
+    "tools/Harness/verify/run_verify.py"
+  ],
+  "before_after": "런처 호출 전에 asis_live_proof_join.py 와 같은 기준(정적, 정적 우선, 동적)으로 이 화면 원장에서 동적 확인이 필요한 행 수를 셈. 0건이면 asis_live_auto, asis_live_screen 을 건너뛰고 사유를 로그에 남김. 동적 행이 있는데 실측을 못 하면 종전대로 미측정 처리",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/run_verify.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T10:10:01+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T10:13:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1010"
+    },
+    {
+      "at": "2026-11-25T10:13:59+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T10:27:58+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T10:27:58+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js 반영 전 84/84 PASS 1374 FAIL 0(10:18:55) → 반영 뒤 84/84 PASS 1374 FAIL 0(10:23:40). 추가: python -m py_compile run_verify.py COMPILE_OK. asis_live_dynamic_rows 실화면 계수: 추적 파일 있는 131화면 중 75화면 계수, 0건 6화면(SCP0096, SYS0002, SYS0006, SYS0015, SYS0016, SYS0017) 건너뜀 대상, 원장 없는 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T10-13-59_claude_orch.log",
+      "sec": 602,
+      "costUsd": 1.5270532,
+      "files": [
+        "tools/Harness/verify/run_verify.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "검사기는 정적 분석으로 판정할 수 있는 항목을 정적으로 판정하고 런처 실구동은 동적 확인이 필요한 항목에만 쓰며 TO-BE 룰로 바뀐 항목은 룰 준수 여부만 판정함 규칙을 tools/Harness/verify/run_verify.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R79|tools/Harness/verify/run_verify.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795569000674,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795569239761,
+  "verifyJudge": {
+    "at": "2026-11-25T10:24:07+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1010",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795570078941,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 229.5s'(2026-11-25 10:18:55) → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 229.9s'(10:23:40). t_webview_syntax.js 는 run_all 안에서 PASS 19, 웹뷰 파일 수정 없음"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/run_verify.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js 반영 전 84/84 PASS 1374 FAIL 0(10:18:55) → 반영 뒤 84/84 PASS 1374 FAIL 0(10:23:40). 추가: python -m py_compile run_verify.py COMPILE_OK. asis_live_dynamic_rows 실화면 계수: 추적 파일 있는 131화면 중 75화면 계수, 0건 6화면(SCP0096, SYS0002, SYS0006, SYS0015, SYS0016, SYS0017) 건너뜀 대상, 원장 없는 56화면 None → 종전 실행",
+    "note": "run_verify.py:1371 asis_live_dynamic_rows 추가(proof_backlog.classify → asis_live_proof_targets.kind 런처 몫 → asis_live_proof_join.NEXT 정적, 정적 우선, 동적). 동적+정적 우선 0건이면 asis_live_auto, asis_live_screen 건너뛰고 [INFO] 로그와 세부 단계 건너뜀 사유 기록. 계수 불가(None)면 종전대로 실행, asis_live_ingest 는 계속 실행. 정적 우선은 동적 후보로 셈(누락 방지). 같은 파일의 다른 미커밋 변경(SETTLE 등)은 건드리지 않음. 실제 CheckList 실행 로그 확인은 미실행"
+  },
+  "snap": "prop_20261124005702_SELF"
+}

@@ -1,7 +1,7 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MaterialByDivisionModal, MeasureSelectModal, ProjectByDivisionModal } from 'features/master/src/components';
-import { NewPlanModal, type NewPlanContext } from 'features/supply/src/components';
+import { BodMasterModal, type BodMasterPick, NewPlanModal, type NewPlanContext } from 'features/supply/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -42,7 +42,15 @@ import {
 } from './shipment-plan-fg.constants';
 import type { FixInfoRow, MainRow, PlanStatusRow } from './shipment-plan-fg.types';
 import { useShipmentPlanFgStore } from './useShipmentPlanFgStore';
+import { dynColKindOf } from './utils/shipment-plan-fg.editLock';
 import { collectFixCells, type FixCell, type FixedCellSet, hasUnsavedCell } from './utils/shipment-plan-fg.fix';
+import {
+  bodCallerKeys,
+  buildInsertedRows,
+  buildInsertSaveRows,
+  callerRowsOf,
+  isInsertedRow,
+} from './utils/shipment-plan-fg.insert';
 import { buildFixRows, buildSavePayload, buildSaveRows, isSaveResultFailure } from './utils/shipment-plan-fg.save';
 
 // AS-IS GSCM.SCP.Analysis.UIL SCP0009_Shipment_Plan_FG — spdMain 단일 그리드(하단 서브그리드는 제외, 사용자 결정).
@@ -101,7 +109,12 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.CALENDAR],
   });
 
-  const mainRows = useMemo<MainRow[]>(() => (mainData as { o_rc1?: MainRow[] })?.o_rc1 ?? [], [mainData]);
+  const fetchedRows = useMemo<MainRow[]>(() => (mainData as { o_rc1?: MainRow[] })?.o_rc1 ?? [], [mainData]);
+  // BOD Master 팝업으로 삽입한 행을 포함한 그리드 행(AS-IS InsertRow). 재조회 결과가 오면 버린다.
+  const [insertedRows, setInsertedRows] = useState<MainRow[] | null>(null);
+  useEffect(() => setInsertedRows(null), [mainData]);
+  const mainRows = insertedRows ?? fetchedRows;
+  const [bodTarget, setBodTarget] = useState<MainRow | null>(null);
   const fixInfoRows = useMemo<FixInfoRow[]>(
     () => (mainData as { o_rc3?: FixInfoRow[] })?.o_rc3 ?? [],
     [mainData]
@@ -145,16 +158,24 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.PERIOD_FROM_REQUIRED, '_Period is required.') });
       return;
     }
-    // 기간 365일 초과(design 02 §3, design 00 §4e #19)
+    // 기간 검증 — AS-IS DateUtil.Check_PeriodDate_New(dCalendar, "1", "7")(cs:1361) 등가.
+    //   From > To 차단, To >= From + 1년 + 7개월 + 7일 차단(안내 인자는 AS-IS 하드코딩 364+7+213 = '584').
     const from = Number(sc.fromYyyymmdd);
     const to = Number(sc.toYyyymmdd);
-    const fromDate = new Date(Math.floor(from / 10000), Math.floor((from % 10000) / 100) - 1, from % 100);
-    const toDate = new Date(Math.floor(to / 10000), Math.floor((to % 10000) / 100) - 1, to % 100);
-    const diffDays = Math.round((toDate.getTime() - fromDate.getTime()) / 86400000);
-    if (diffDays > 365) {
+    if (from > to) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.PERIOD_OVER_365, '_The maximum search period is {0} days.').replace('{0}', '365'),
+        content: t(MSG.PERIOD_FROM_AFTER_TO, '_The start date can not be later than the end date.'),
+      });
+      return;
+    }
+    const maxExclusive = Number(
+      dayjs(sc.fromYyyymmdd, 'YYYYMMDD').add(1, 'year').add(7, 'month').add(7, 'day').format('YYYYMMDD')
+    );
+    if (to >= maxExclusive) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_OVER_MAX, '_Maximum Period is From Date + {0}.').replace('{0}', '584'),
       });
       return;
     }
@@ -407,12 +428,28 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
     const grid = mainGridRef.current;
     grid?.finishEditing();
     const tracker = mainTrackerRef.current;
-    if (!tracker?.hasChanges()) {
+    const hasInsert = (mainRows as Record<string, unknown>[]).some(isInsertedRow);
+    if (!tracker?.hasChanges() && !hasInsert) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes.') });
       return;
     }
     if (!(await checkServerSaveYn())) return; // 최종 PLAN 상태 체크(.cs:2744)
-    const rows = buildSaveRows(tracker, useSessionStore.getState().session.userId ?? '', '');
+    const userId = useSessionStore.getState().session.userId ?? '';
+    // 삽입 행(I) — 검증 실패 시 저장하지 않는다(.cs:2787-2824).
+    const inserted = buildInsertSaveRows(mainRows as Record<string, unknown>[], {
+      userId,
+      timeZone: '',
+      bucketType: sc.bucketType,
+      planStartYyyymmdd: sc.planStartYyyymmdd,
+      planType: sc.planType,
+      seq: sc.planSeq,
+      dynBindings: (grid?.columns ?? []).map(c => c.binding ?? '').filter(b => !!dynColKindOf(b)),
+    });
+    if (!inserted.ok) {
+      void setAlert({ type: 'alert', content: t(inserted.msg, `_${inserted.msg}`) });
+      return;
+    }
+    const rows = [...buildSaveRows(tracker, userId, ''), ...inserted.rows];
     if (rows.length === 0) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes.') });
       return;
@@ -435,8 +472,28 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '_Saved successfully.') });
-    tracker.clearChanges();
+    tracker?.clearChanges();
+    setInsertedRows(null);
     setFilter();
+  };
+
+  // TRANSPORT_MODE/FROM_SITE_NAME 셀 클릭(.cs:1185-1209) — 그리드가 행 조건을 보고, 잠금 Plan 은 여기서 막는다.
+  const handleBodCellClick = (row: MainRow) => {
+    if (isLockedPlan) return;
+    setBodTarget(row);
+  };
+
+  const handleBodSelect = (picks: BodMasterPick[]) => {
+    if (!bodTarget) return;
+    setInsertedRows(
+      buildInsertedRows(mainRows as Record<string, unknown>[], bodTarget as Record<string, unknown>, picks) as MainRow[]
+    );
+  };
+
+  const bodRow = (bodTarget ?? {}) as Record<string, unknown>;
+  const bodStr = (k: string): string => {
+    const v = bodRow[k];
+    return typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
   };
 
   // Column 개인화 저장(AS-IS btnColumn -> SCM0002_TitleSetForm_Popup 'C') — 확정(OK) 시점에만 저장하고
@@ -549,6 +606,26 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
         planType={sc.planType}
         planSeq={sc.planSeq}
         onFocus={() => undefined}
+        onBodCellClick={handleBodCellClick}
+      />
+
+      <BodMasterModal
+        open={!!bodTarget}
+        modalClose={() => setBodTarget(null)}
+        type={0}
+        menuId={MENU_ID}
+        params={{
+          divisionId: bodStr('DIVISION_ID'),
+          bodId: bodStr('BOD_ID'),
+          fromSite: bodStr('FROM_SITE'),
+          toSite: bodStr('TO_SITE'),
+          planStartYyyymmdd: sc.planStartYyyymmdd,
+          operGrp: bodStr('BIZ_TYPE'),
+          itemId: bodStr('ITEM_ID'),
+          originFromDivisionId: bodStr('ORIGIN_FROM_DIVISION_ID'),
+        }}
+        callerKeys={bodTarget ? bodCallerKeys(callerRowsOf(mainRows as Record<string, unknown>[], bodRow)) : []}
+        onSelect={handleBodSelect}
       />
 
       <MaterialByDivisionModal

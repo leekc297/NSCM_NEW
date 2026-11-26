@@ -19,7 +19,6 @@
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
-| event:btnBatchSave.Click | BtnBatchSave_Click > FindData_Main | 1257 | {?string.Empty} | UNRESOLVED |  |
 | event:btnBatchSave.Click | BtnBatchSave_Click > FindData_Main | 1257 | SCP.SCP0126_GET_DAILY_CAPA | MATCH | SP SCP0126_GET_DAILY_CAPA |
 | event:btnBatchSave.Click | BtnBatchSave_Click > FindData_Main | 1257 | SCP.SCP0126_GET_NO_WORK_WEEK | MATCH | SP SCP0126_GET_NO_WORK_WEEK |
 | event:btnBatchSave.Click | BtnBatchSave_Click > FindData_Main | 1257 | SCP.SCP0126_GET_NO_WORK | MATCH | SP SCP0126_GET_NO_WORK |
@@ -29,7 +28,6 @@
 | event:btnBatchSave.Click | BtnBatchSave_Click > FindData_Main | 1257 | SCP.SCP0126_GET_PREP_RT | MATCH | SP SCP0126_GET_PREP_RT |
 | event:btnBatchSave.Click | BtnBatchSave_Click > FindData_Main | 1257 | SCP.SCP0126_GET_UTIL_RT | MATCH | SP SCP0126_GET_UTIL_RT |
 | event:btnBatchSave.Click | BtnBatchSave_Click > FindData_Main | 1257 | SCP.SCP0126_GET_YLD_ELEC | MATCH | SP SCP0126_GET_YLD_ELEC |
-| button:FindButton | FindButton > FindData_Main | 1257 | {?string.Empty} | UNRESOLVED |  |
 | button:FindButton | FindButton > FindData_Main | 1257 | SCP.SCP0126_GET_DAILY_CAPA | MATCH | SP SCP0126_GET_DAILY_CAPA |
 | button:FindButton | FindButton > FindData_Main | 1257 | SCP.SCP0126_GET_NO_WORK_WEEK | MATCH | SP SCP0126_GET_NO_WORK_WEEK |
 | button:FindButton | FindButton > FindData_Main | 1257 | SCP.SCP0126_GET_NO_WORK | MATCH | SP SCP0126_GET_NO_WORK |
@@ -40,7 +38,6 @@
 | button:FindButton | FindButton > FindData_Main | 1257 | SCP.SCP0126_GET_UTIL_RT | MATCH | SP SCP0126_GET_UTIL_RT |
 | button:FindButton | FindButton > FindData_Main | 1257 | SCP.SCP0126_GET_YLD_ELEC | MATCH | SP SCP0126_GET_YLD_ELEC |
 | button:SaveButton | SaveButton > SaveData | 411 | SCP.SCP0126_SAVE_NO_WORK_BATCH | MATCH | SP SCP0126_SAVE_NO_WORK_BATCH |
-| button:SaveButton | SaveButton > Save_YieldElec > FindData_Main | 1257 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_YieldElec > FindData_Main | 1257 | SCP.SCP0126_GET_DAILY_CAPA | MATCH | SP SCP0126_GET_DAILY_CAPA |
 | button:SaveButton | SaveButton > Save_YieldElec > FindData_Main | 1257 | SCP.SCP0126_GET_NO_WORK_WEEK | MATCH | SP SCP0126_GET_NO_WORK_WEEK |
 | button:SaveButton | SaveButton > Save_YieldElec > FindData_Main | 1257 | SCP.SCP0126_GET_NO_WORK | MATCH | SP SCP0126_GET_NO_WORK |
@@ -68,7 +65,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?string.Empty} | UNRESOLVED | 1 |  |  |  |
 | SCM.SCM0001_GET_DIVISION | MATCH | 1 | SP SCM0001_GET_DIVISION | EXEC:SCM0001_GET_DIVISION, SELECT:SCM_MST_DIVISION |  |
 | SCP.SCP0121_GET_SEARCH_INFO | MATCH | 1 | SP SCP0121_GET_SEARCH_INFO | EXEC:SCP0121_GET_SEARCH_INFO, INSERT:#DIVISION_INFO, SELECT:SCM_MST_DIVISION, INSERT:#LINE_MASTER, SELECT:SCM_MST_LINE_SN, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, INSERT:#OSP_PLANT_INFO, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_MST_VENDOR, SELECT:#LINE_MASTER, SELECT:#DIVISION_INFO, SELECT:SCP_MST_CAPA_LINE, SELECT:#OSP_PLANT_INFO, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER, SELECT:SCM_OPERATION_M_SN |  |
 | SCP.SCP0126_GET_CAPA_SEARCH_INFO | MATCH | 2 | SP SCP0126_GET_CAPA_SEARCH_INFO | EXEC:SCP0126_GET_CAPA_SEARCH_INFO, INSERT:#DIVISION_INFO, SELECT:SCM_MST_DIVISION, INSERT:#LINE_MASTER, SELECT:SCM_MST_LINE_SN, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, INSERT:#OSP_PLANT_INFO, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_MST_VENDOR, SELECT:#LINE_MASTER, SELECT:#DIVISION_INFO, SELECT:SCP_MST_CAPA_LINE, SELECT:#OSP_PLANT_INFO, SELECT:SCM_ADM_LOOKUP_MASTER, SELECT:SCM_OPERATION_M_SN |  |
@@ -196,10 +192,9 @@
 | ToolTip | 1 | toolTip1 |
 | SplitContainer | 1 | splitContainer1 |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 1257 | FindData_Main | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

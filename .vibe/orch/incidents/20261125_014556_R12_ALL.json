@@ -1,0 +1,34 @@
+{
+  "id": "20261125_014556_R12_ALL",
+  "at": "2026-11-25T01:45:56+09:00",
+  "ms": 1795538756005,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S5 실행 오류: orch-improve.writeJson 오류 1회(새 서명)",
+  "screen": "",
+  "sig": "R12|S5|orch-improve.writeJson | UNKNOWN: unknown error, open '<path>'",
+  "count": 1,
+  "repeat": null,
+  "detail": "UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\.vibe\\orch\\proposals\\20261123223110_SELF_3.json' · at Object.writeFileSync (node:fs:2496:20) < at writeJson (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-improve.js:27:92) · 마지막 2026-11-25T01:24:06+09:00",
+  "evidence": {
+    "check": "S5",
+    "key": "S5|orch-improve.writeJson | UNKNOWN: unknown error, open '<path>'",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-25T02:04:38+09:00",
+      "by": "VMO",
+      "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    },
+    {
+      "at": "2026-11-25T02:04:57+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S5 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

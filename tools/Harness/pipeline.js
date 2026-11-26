@@ -14,6 +14,9 @@ const ID = (a.find(x => !x.startsWith('--') && !['--max', '--config', '--phase',
 const PH = String(opt('--phase', '')).split(',').map(x => parseInt(x, 10)).filter(n => n >= 1 && n <= 8); const want = n => !PH.length || PH.includes(n);
 const MAX = opt('--max', '3'); const E2E = a.includes('--e2e'); const NOCLAUDE = a.includes('--no-claude');
 const DESIGN = opt('--design', ''); const DARGS = DESIGN ? ['--design', DESIGN] : [];
+// 2026-11-20 재개(플랜 vm-ui-snug-mountain R4): VM 이 재개 때 넘기는 VM_RESUME=1, VM_RESUME_RUN 은 아래 run() 이 환경을 그대로 물려줘 phase 4·5 의 repair-loop.js 까지 전달된다.
+//   repair-loop 는 Doc/gen/<ID>/_repair_state*.json 의 끊긴 회차부터 이어간다. 그 밖의 phase(1·2·3·6·7·8)는 끊긴 phase 처음부터 다시 실행한다.
+if (process.env.VM_RESUME === '1') { const inner = PH.filter(n => n === 4 || n === 5), whole = PH.length ? PH.filter(n => n !== 4 && n !== 5) : [1, 2, 3, 6, 7, 8]; console.log(`[재개] VM_RESUME=1${process.env.VM_RESUME_RUN ? ' · ' + process.env.VM_RESUME_RUN : ''}${inner.length || !PH.length ? ` · phase ${(inner.length ? inner : [4, 5]).join(',')} = repair-loop 끊긴 회차부터` : ''}${whole.length ? ` · phase ${whole.join(',')} = 단계 처음부터` : ''}`); }
 const repo = path.dirname(cfg.feRoot); const genDir = path.join(cfg.genOutDir, ID); fs.mkdirSync(genDir, { recursive: true });
 const stepsFile = path.join(genDir, '_pipeline_steps.json');
 let steps = []; if (PH.length && fs.existsSync(stepsFile)) { try { steps = JSON.parse(fs.readFileSync(stepsFile, 'utf8')).filter(st => !PH.includes(parseInt(String(st.name).trim(), 10))); } catch { steps = []; } }

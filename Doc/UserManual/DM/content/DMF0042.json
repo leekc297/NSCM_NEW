@@ -1,0 +1,119 @@
+{
+ "definition": "Division 별 모델, Sales Site 단위 Business Plan 수량과 단가를 월별로 입력하고 Cutoff 버전으로 관리하는 화면",
+ "overview": [
+  "Division 의 Business Plan 수량과 Unit Price 를 모델, Sales Site 단위로 월별 입력하고 Sales Amt. 를 확인하는 사업계획 화면임",
+  "위쪽 조회 조건, 왼쪽 Business Plan 그리드, 오른쪽 연, 분기, 월 기간 컬럼으로 구성됨. Exchange Rate, Ver. Cutoff, Replace 버튼은 각각 팝업을 엶",
+  "Div, Period 를 고르고 Search(F5) → 월 Business Plan, Unit Price 입력 → Save(F7) → 환율이 바뀌면 Exchange Rate 저장 뒤 Set Price 실행 → Ver. Cutoff 로 버전 생성",
+  "Ver. Cutoff 로 만든 버전은 Replace 팝업에서 골라 현재 Business Plan 값을 그 버전 값으로 바꾸는 데 씀"
+ ],
+ "pages": [
+  {
+   "title": "Business Plan",
+   "keyPoint": "Business Plan 수량은 정수로 입력하고 빨간 점 컬럼 8개를 채운 뒤 저장함. 저장하지 않은 변경이 있으면 Exchange Rate, Ver. Cutoff, Replace 를 실행할 수 없음.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.15,
+     "y": 0.155
+    },
+    {
+     "no": 2,
+     "x": 0.426,
+     "y": 0.247
+    },
+    {
+     "no": 3,
+     "x": 0.219,
+     "y": 0.339
+    },
+    {
+     "no": 4,
+     "x": 0.679,
+     "y": 0.339
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 고르지 않고 조회하면 \"Division 을 선택하세요.\" 메시지가 뜸",
+      "Team, End Customer, Sales Site, Biz. Type: 복수 선택 콤보. ALL 이면 조건 없이 조회함",
+      "Plant Site: Div 40 에서는 입력 불가(ALL 고정)",
+      "Period: 필수. 시작월이 종료월보다 늦으면 \"조회 기간이 잘못되었습니다 (시작일 > 종료일).\" 메시지가 뜸",
+      "Period 가 6년을 넘으면 \"조회 기간은 6년 이상 설정 할 수 없습니다.\" 메시지가 뜸",
+      "Bucket: 기간 컬럼 단위를 고름. Insert 한 행이 있으면 \"Insert 된 행이 있어 Bucket 을 변경할 수 없습니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Set Price: \"변경된 환율을 적용하시겠습니까?\" 확인 후 바뀐 환율을 적용해 다시 조회함",
+      "Exchange Rate: 환율 팝업에서 기간별 환율을 입력하고 저장함",
+      "Ver. Cutoff: Description, 기간을 넣고 Cutoff 버전을 만듦. 끝나면 \"Manual Cutoff가 완료되었습니다.\" 메시지가 뜸",
+      "Replace: Cutoff 버전 팝업에서 고른 버전 값으로 Business Plan 을 바꿈",
+      "Exchange Rate, Ver. Cutoff, Replace 는 저장하지 않은 변경이 있으면 \"변경 중인 데이터가 있어 수행할 수 없습니다. 저장 또는 취소 후 다시 시도해 주세요.\" 메시지가 뜸",
+      "컬럼 설정 아이콘: 보이는 컬럼, 순서, 폭을 사용자별로 저장함. Insert, Delete, Save 와 Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Business Plan 그리드",
+     "lines": [
+      "필수 입력: Division, End Customer, Sales Site, Model, Rep. Incoterms, FCST Type, Cell Prod Site, Currency(제목 앞 빨간 점)",
+      "Division, Team, End Customer, Sales Site 는 같은 값이면 셀이 합쳐져 보임",
+      "Measure: 모델마다 Business Plan, Unit Price, Sales Amt. 행이 한 묶음으로 나옴",
+      "필수 칸이 비어 있으면 \"{0} 값은 필수 입력 항목입니다.\" 메시지에 컬럼 이름이 들어가 뜸",
+      "같은 키 행이 있으면 \"저장시 중복 오류가 발생하였습니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "기간 컬럼",
+     "lines": [
+      "Bucket 이 Monthly 이면 연 SUM, 분기 SUM, 월(2026-11, 2026-12) 순으로 컬럼이 나옴",
+      "노란 칸만 입력할 수 있음. 캡처에서는 2027-01 의 Business Plan, Unit Price 칸임",
+      "Business Plan 에 소수를 넣으면 \"Business Plan 데이터는 정수로 입력해 주세요.\" 메시지가 뜸",
+      "월 값을 바꾸면 분기 SUM, 연 SUM 이 다시 계산됨",
+      "저장 대상이 없으면 \"저장할 대상 데이터가 없습니다.\", 저장이 끝나면 \"성공적으로 저장되었습니다.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0042",
+ "uiName": "Business Plan",
+ "menuPath": "DM> Demand Plan> Business Plan",
+ "captures": [
+  "captures/DMF0042.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0042/",
+  "Doc/asisfacts/screens/DMF0042/",
+  "Doc/gen/DMF0042/"
+ ],
+ "buttons": [
+  "Biz Plan:COLUMN_SETUP",
+  "Biz Plan:CUTOFF",
+  "Biz Plan:DELETE",
+  "Biz Plan:EXCEL",
+  "Biz Plan:EXCHANGE_RATE",
+  "Biz Plan:INSERT",
+  "Biz Plan:MEASURE_SELECT",
+  "Biz Plan:REPLACE",
+  "Biz Plan:SAVE",
+  "Biz Plan:SEARCH",
+  "Biz Plan:SET_PRICE",
+  "cutoffVersion:SEARCH",
+  "dayRange:SEARCH",
+  "exchangeRate:SAVE",
+  "exchangeRate:SEARCH",
+  "futurePrice:SEARCH",
+  "futurePriceData:SEARCH",
+  "mdfVersion:SEARCH",
+  "spreadTitle:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH"
+ ]
+}

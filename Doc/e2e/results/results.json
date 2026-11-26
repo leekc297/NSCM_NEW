@@ -4,8 +4,10 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "_tmp_w_ssp0020",
-      "--retries=0"
+      "_verify",
+      "--list",
+      "--grep",
+      "문서 시나리오"
     ],
     "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
     "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -13,23 +15,19 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "C:/Projects/NSCM/Doc/e2e/results/artifacts",
         "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "retries": 1,
+        "metadata": {},
         "id": "chromium",
         "name": "chromium",
         "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
@@ -46,10 +44,8 @@
         "grepInvert": null,
         "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts",
         "repeatEach": 1,
-        "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "retries": 1,
+        "metadata": {},
         "name": "chromium",
         "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
         "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
@@ -60,7 +56,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -110,58 +114,117 @@
   },
   "suites": [
     {
-      "title": "_tmp_w_ssp0020.spec.ts",
-      "file": "_tmp_w_ssp0020.spec.ts",
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
       "column": 0,
       "line": 0,
-      "specs": [
+      "specs": [],
+      "suites": [
         {
-          "title": "SSP0020 width",
-          "ok": true,
-          "tags": [],
-          "tests": [
+          "title": "정합검증 SCP0005 @verify",
+          "file": "_verify.spec.ts",
+          "line": 304,
+          "column": 6,
+          "specs": [
             {
-              "timeout": 180000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "chromium",
-              "projectName": "chromium",
-              "results": [
+              "title": "문서 시나리오 1/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 25333,
-                  "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[W] [{\"visible\":true,\"rows\":0,\"cols\":\"DIVISION_ID,FROM_DATE,TO_DATE,DELEGATEE,VALID,LAST_UPDATED_BY,LAST_UPDATE_DATE\",\"w\":150,\"rw\":150}]\n"
-                    }
-                  ],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-17T13:37:18.745Z",
+                  "timeout": 180000,
                   "annotations": [],
-                  "attachments": []
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
-              "status": "expected"
+              "id": "d557cdbda6ec1bc6afb1-554ff84d1fd431fbe6a6",
+              "file": "_verify.spec.ts",
+              "line": 2934,
+              "column": 47
+            },
+            {
+              "title": "문서 시나리오 2/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1f1502de4d42247a81fc",
+              "file": "_verify.spec.ts",
+              "line": 2934,
+              "column": 47
+            },
+            {
+              "title": "문서 시나리오 3/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6c6aa7b0fc95d64794e9",
+              "file": "_verify.spec.ts",
+              "line": 2934,
+              "column": 47
+            },
+            {
+              "title": "문서 시나리오 4/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3840e75299f94d9de437",
+              "file": "_verify.spec.ts",
+              "line": 2934,
+              "column": 47
             }
-          ],
-          "id": "43b69e5639c06dd0b0a3-6f6fba3ad716f665a470",
-          "file": "_tmp_w_ssp0020.spec.ts",
-          "line": 4,
-          "column": 5
+          ]
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-17T13:37:18.188Z",
-    "duration": 28594.039,
-    "expected": 1,
-    "skipped": 0,
+    "startTime": "2026-11-26T01:04:36.944Z",
+    "duration": 1334.93,
+    "expected": 0,
+    "skipped": 4,
     "unexpected": 0,
     "flaky": 0
   }

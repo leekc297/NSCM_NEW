@@ -1,8 +1,15 @@
-import { clsx } from '@shared/clsx';
+import { useTranslation } from 'react-i18next';
 
-import type { RiskLevel } from '../demand-as-dashboard.mock';
-import { RISK_ROWS } from '../demand-as-dashboard.mock';
+import { clsx } from '@shared/clsx';
+import { useTabProcQuery } from '@shared/hooks';
+
+import { MENU_ID, SHEETS } from '../demand-as-dashboard.constants';
+import type { DashboardBaseFilters } from '../demand-as-dashboard.filters';
+import { LBL } from '../demand-as-dashboard.labels';
+import type { RiskLevel } from '../demand-as-dashboard.types';
 import styles from '../DemandAsDashboard.module.scss';
+
+import { mapRiskHeatmap } from './riskHeatMap.map';
 
 const CELL_CLASS: Record<RiskLevel, string> = {
   low: styles.riskLow,
@@ -21,25 +28,42 @@ const RiskCell = ({ level }: { level: RiskLevel }) => (
   </td>
 );
 
-export const RiskHeatMap = () => {
+interface RiskHeatMapProps {
+  tabId: string;
+  filters: DashboardBaseFilters;
+}
+
+export const RiskHeatMap = ({ tabId, filters }: RiskHeatMapProps) => {
+  const { t } = useTranslation();
+  const { data } = useTabProcQuery<MENU_ID, typeof SHEETS.RISK_HEATMAP>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.RISK_HEATMAP,
+    tabId,
+    filters,
+    enabled: !!filters,
+  });
+
+  const rows = mapRiskHeatmap(data?.o_rc1 ?? []);
+
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
         <span className={styles.panelTitle}>
-          리스크 Heat Map<small>(부족 위험도)</small>
+          {t(...LBL.riskTitle)}
+          <small>({t(...LBL.riskSubtitle)})</small>
         </span>
         <div className={styles.heatLegend}>
           <span>
             <i className={styles.dotGreen} />
-            Low
+            {t(...LBL.riskLow)}
           </span>
           <span>
             <i className={styles.dotOrange} />
-            Medium
+            {t(...LBL.riskMedium)}
           </span>
           <span>
             <i className={styles.dotRed} />
-            High
+            {t(...LBL.riskHigh)}
           </span>
         </div>
       </div>
@@ -47,14 +71,14 @@ export const RiskHeatMap = () => {
         <table className={styles.heatTable}>
           <thead>
             <tr>
-              <th>제품</th>
-              <th>3개월</th>
-              <th>6개월</th>
-              <th>12개월</th>
+              <th>{t(...LBL.product)}</th>
+              <th>{t(...LBL.m3)}</th>
+              <th>{t(...LBL.m6)}</th>
+              <th>{t(...LBL.m12)}</th>
             </tr>
           </thead>
           <tbody>
-            {RISK_ROWS.map(row => (
+            {rows.map(row => (
               <tr key={row.product}>
                 <td>{row.product}</td>
                 <RiskCell level={row.m3} />

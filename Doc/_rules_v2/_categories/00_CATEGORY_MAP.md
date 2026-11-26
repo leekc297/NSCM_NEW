@@ -21,7 +21,7 @@
 | 11 | [11_asis_parity.md](11_asis_parity.md) | AS-IS 분석·정합 | 4축 매핑/원소스 전량 Read/분석서 표준 |
 | 12 | [12_process_ops.md](12_process_ops.md) | 프로세스·운영·배포 | 게이트 3종/사내 적용/이관 패키지/git/로컬 |
 
-## 전수 분류표 (hook 156 · 2026-11-13 디스크 실측 — 커버리지 검증 원장)
+## 전수 분류표 (hook 157 · 2026-11-25 디스크 실측 — 커버리지 검증 원장)
 
 > 형식: `#번호 hook파일명 → 소속 카테고리(첫 번째 = 주 소속)`. RULESET_MASTER §4 번호 체계.
 
@@ -183,6 +183,7 @@
 | 152 | db-source-refresh-before-work | 09, 12 |
 | 153 | pinpoint-request-scope-first | 12 |
 | 156 | ui-mandatory-12-behaviors | 01, 04, 03, 11 |
+| 157 | plan-complete-before-test | 12 |
 
 ## 커버리지 검증 (신규 hook 등재 시 재실행 의무)
 

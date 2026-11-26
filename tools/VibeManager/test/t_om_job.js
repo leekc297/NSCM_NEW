@@ -1,0 +1,50 @@
+// 2026-11-24 운영자 매뉴얼 업무(VMW) 시험 — 모듈 묶음, 양식 PPT 입력, Doc/OpsManual/<묶음>/_inputs.json, 산출물 경로. 실제 Claude 불필요
+//   사용: node test/t_job_runner.js <VibeManager 폴더>
+const Module = require('module'); const path = require('path'); const fs = require('fs'); const os = require('os');
+const vs = new Proxy({}, { get: (t, k) => {
+  if (k === 'window') return new Proxy({}, { get: () => () => Promise.resolve(undefined) });
+  if (k === 'commands') return { executeCommand: () => Promise.resolve(), registerCommand: () => ({ dispose() { } }) };
+  if (k === 'workspace') return { getConfiguration: () => ({ get: () => undefined }), workspaceFolders: [] };
+  if (k === 'Uri') return { file: f => ({ fsPath: f }), parse: s => s };
+  return function () { };
+} });
+const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'job-')); const vibeDir = path.join(root, '.vibe');
+const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
+W('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_FE', llmReview: false }));
+// 작업: 화면 ID 가 fail.txt 에 있으면 실패(exit 6), 아니면 산출물 생성. slow.txt 에 있으면 1.5초 걸림
+// 2026-11-23 사용자 매뉴얼 업무: 모듈 단위(unit module) + 업무 입력(jobInputs) + 입력 파일(inputsFile) 시험
+const umJs = W('tools/t/um.js', "const fs=require('fs'),path=require('path');const id=process.argv[2];const inp=JSON.parse(fs.readFileSync(path.join(process.cwd(),'Doc','OpsManual',id,'_inputs.json'),'utf8'));fs.mkdirSync(path.join(process.cwd(),'out'),{recursive:true});fs.writeFileSync(path.join(process.cwd(),'out',id+'.txt'),[inp.module,inp.author,inp.version,inp.date].join('|'));if(!fs.existsSync(path.join(process.cwd(),'out','nofile.txt')))fs.writeFileSync(path.join(process.cwd(),'Doc','OpsManual',id,'SCM_OM_운영자매뉴얼_'+id+'_v1.0.pptx'),'p');");
+const tpl = W('in/ops_template.pptx', 'x');
+const item = { label: '🛠 운영자 매뉴얼 시험', kind: 'chain', chainId: 'opsmanual', batch: true, unit: 'module', combine: true, outputs: ['Doc/OpsManual/${id}/SCM_OM_운영자매뉴얼_${id}_v*.pptx'], modules: ['DM', 'SCP', 'SSP', 'SYSTEM'], inputsFile: 'Doc/OpsManual/${id}/_inputs.json',
+  jobInputs: [{ name: 'author', label: '작성자' }, { name: 'date', label: '작성일', type: 'date' }, { name: 'version', label: 'Version' }, { name: 'template', label: '운영자 매뉴얼 양식', type: 'file' }],
+  steps: [{ task: 'T.um', title: '모듈 처리' }] };
+W('.vibe/quick.json', JSON.stringify({ groups: [{ title: 'g', items: [item] }] }));
+const tasks = { 'T.um': { id: 'T.um', title: '모듈 처리', kind: 'node', script: umJs, args: ['${input:id}'], cwd: root } };
+const p = { root, vibeDir, extDir: dir, genDir: path.join(root, 'Doc', 'gen'), outDir: path.join(root, 'Doc', 'asisfacts'), tobeDir: path.join(root, 'nscm-fe'), promptsDir: path.join(root, 'prompts'), node: 'node', python: 'python', powershell: 'powershell', claude: 'claude', claudeModel: '', language: 'ko', quickFile: path.join(vibeDir, 'quick.json') };
+const api = { ctx: { workspaceState: { get: () => undefined, update: () => { } }, extensionPath: dir }, paths: () => p, loadSteps: () => ({}), findTask: id => tasks[id] || null,
+  collectInputs: async (task, preset) => Object.assign({}, p, { inputs: Object.assign({}, preset || {}) }),
+  subst: (text, vars) => String(text == null ? '' : text).replace(/\$\{(input:)?([A-Za-z0-9_]+)\}/g, (m, isIn, n) => isIn ? (vars.inputs && vars.inputs[n] != null ? vars.inputs[n] : '') : (vars[n] != null ? String(vars[n]) : m)),
+  buildArgs: (task, vars) => (task.args || []).map(a => api.subst(a, vars)).filter(x => x !== ''), openPath: () => { }, pageDirOf: () => '', menuSections: () => [], claudeEnv: () => ({}), runTaskById: async () => 0, record: () => { }, afterTask: () => { } };
+const jr = require(path.join(dir, 'job-runner')); jr.init(api);
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+const R = rel => fs.readFileSync(path.join(root, rel), 'utf8'); const sleep = t => new Promise(r => setTimeout(r, t));
+const waitEnd = async (id, ms = 40000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { const j = jr.get(id); if (!/^(running|pausing)$/.test(j.status)) { await sleep(150); return j; } await sleep(100); } return jr.get(id); };
+(async () => {
+  const bi = jr.batchItems().find(x => x.label === item.label);
+  chk('업무 목록: unit module, 입력 4칸(양식 파일 포함)', !!bi && bi.unit === 'module' && bi.jobInputs.map(x => x.name).join() === 'author,date,version,template', JSON.stringify(bi && bi.jobInputs.map(x => x.name)));
+  const good = { author: '조재훈', date: '2026-11-24', version: 'Ver 1.0', template: tpl };
+  let e1 = ''; try { jr.create({ itemLabel: item.label, screens: ['DM'], inputs: Object.assign({}, good, { template: '' }) }); } catch (e) { e1 = e.message; }
+  chk('양식 빠짐 = 만들지 않음', /입력 빠짐: 운영자 매뉴얼 양식/.test(e1), e1);
+  let e2 = ''; try { jr.create({ itemLabel: item.label, screens: ['DM'], inputs: Object.assign({}, good, { template: path.join(root, 'none.pptx') }) }); } catch (e) { e2 = e.message; }
+  chk('없는 양식 파일 = 만들지 않음', /파일 없음: 운영자 매뉴얼 양식/.test(e2), e2);
+  const j = jr.create({ itemLabel: item.label, screens: ['SYSTEM', 'DM'], inputs: good });
+  // 2026-11-26 개선안 20261126120156_SELF: 모듈 2개 = 모듈마다 문서 1개(단위 2개)
+  chk('모듈 2개 = 단위 2개 DM, SYSTEM', j.screens.map(s => s.id).join() === 'DM,SYSTEM', j.screens.map(s => s.id).join());
+  const inp = JSON.parse(R('Doc/OpsManual/DM/_inputs.json')); const inpS = JSON.parse(R('Doc/OpsManual/SYSTEM/_inputs.json'));
+  chk('입력 파일 = Doc/OpsManual/<모듈>/_inputs.json(양식 경로 포함)', inp.module === 'DM' && inpS.module === 'SYSTEM' && inp.template === tpl && inpS.template === tpl && inp.author === '조재훈', JSON.stringify(inp).slice(0, 200));
+  jr.start(j.id); const e = await waitEnd(j.id);
+  chk('실행 끝(완료) + 산출물 = OpsManual 모듈마다 경로', e.screens.length === 2 && e.screens.every(s => s.status === 'done') && JSON.stringify(e.screens.map(s => s.outputs)) === JSON.stringify([['Doc/OpsManual/DM/SCM_OM_운영자매뉴얼_DM_v1.0.pptx'], ['Doc/OpsManual/SYSTEM/SCM_OM_운영자매뉴얼_SYSTEM_v1.0.pptx']]), e.screens.map(s => s.status + ' ' + JSON.stringify(s.outputs) + ' ' + s.why).join(' | '));
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})();

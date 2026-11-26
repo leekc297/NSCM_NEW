@@ -39,7 +39,7 @@ Step 4  T01/T01M 이면 Read: Doc/_rules_consolidation/UI_MANDATORY_CHECKLIST.md
 - 2대 통합 진입 hook: **Oracle SP/DB 전부** → `hooks/oracle-db-workflow.md` / **화면 종료 선언 전** → `hooks/screen-completion-gate.md` (11 게이트 G1~G11).
 - 공통 hook: 작성 직전 `hooks/pre-write.md` · 직후 `hooks/post-write.md` · 종료 직전 `hooks/pre-submit.md`.
 - 신규/수정 화면 **절대 누락 금지 3종**: `ui-dynamic-property-management`(master) → `menu-button-dynamic-fetch` → `ui-category-setup-column-meta`.
-- 전체 카탈로그(hook 한 줄 요약 156종)·카운트 단일 소스 = `RULESET_MASTER.md §4` + `00_INDEX.md §B.3` — **카탈로그가 필요할 때만** 연다. 매 작업 전문 Read 금지(토큰 150K+).
+- 전체 카탈로그(hook 한 줄 요약 157종)·카운트 단일 소스 = `RULESET_MASTER.md §4` + `00_INDEX.md §B.3` — **카탈로그가 필요할 때만** 연다. 매 작업 전문 Read 금지(토큰 150K+).
 - 경로별 상세 규약은 `.claude/rules/*.md` 가 **해당 경로 파일을 만질 때 자동 로드**된다: FE 화면 / BE / DB·SQL / 분석 산출물.
 
 ## 4. 절대 금지 (Top 11 — 요약)

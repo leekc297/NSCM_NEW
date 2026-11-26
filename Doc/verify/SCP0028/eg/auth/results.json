@@ -17,7 +17,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -64,7 +64,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -133,7 +141,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 13236,
+                      "duration": 17128,
                       "errors": [],
                       "stdout": [
                         {
@@ -142,9 +150,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:52:04.399Z",
+                      "startTime": "2026-11-24T16:41:39.721Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-44211-더-재구성-·-조회-파라미터-·-401-·-기본값-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -173,59 +187,59 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 81673,
+                      "duration": 98642,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SCP/40/SCP Planner 9s\n"
+                          "text": "[eg_auth] SCP/40/SCP Planner 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCP Tester 9s\n"
+                          "text": "[eg_auth] SCP/40/SCP Tester 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM Viewer 9s\n"
+                          "text": "[eg_auth] SCP/40/SCM Viewer 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/ADMIN 9s\n"
+                          "text": "[eg_auth] SCP/40/ADMIN 12s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/40/SCM PI Admin 9s\n"
+                          "text": "[eg_auth] SCP/40/SCM PI Admin 10s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCP Planner 9s\n"
+                          "text": "[eg_auth] SCP/81/SCP Planner 10s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 9s\n"
+                          "text": "[eg_auth] SCP/81/SCM Viewer 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 9s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/82/SCM Viewer 9s\n"
+                          "text": "[eg_auth] SCP/82/SCM Viewer 11s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0028 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -236,9 +250,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:52:20.404Z",
+                      "startTime": "2026-11-24T16:42:00.971Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-64acc-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -267,7 +287,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 8608,
+                      "duration": 10287,
                       "errors": [],
                       "stdout": [
                         {
@@ -276,9 +296,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:53:44.756Z",
+                      "startTime": "2026-11-24T16:43:43.143Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-42ec7-컬럼-필수-표시-UI-Category-Div-별--chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -307,7 +333,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 37904,
+                      "duration": 42225,
                       "errors": [],
                       "stdout": [
                         {
@@ -328,9 +354,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:53:55.954Z",
+                      "startTime": "2026-11-24T16:43:56.855Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-e185b--Sort-유지-·-선택-행-위-·-병합-그룹-위-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -359,7 +391,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 187,
+                      "duration": 480,
                       "errors": [],
                       "stdout": [
                         {
@@ -368,9 +400,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:54:36.446Z",
+                      "startTime": "2026-11-24T16:44:43.334Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-2df94-S-규칙-GROUP·행-값-·룩업-시간창-×-계정-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -399,7 +437,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5713,
+                      "duration": 9284,
                       "errors": [],
                       "stdout": [
                         {
@@ -408,9 +446,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:54:39.425Z",
+                      "startTime": "2026-11-24T16:44:47.461Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-94392-umnHeaderSpan-↔-TO-BE-병합-헤더-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -439,7 +483,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 166,
+                      "duration": 697,
                       "errors": [],
                       "stdout": [
                         {
@@ -448,9 +492,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:54:48.070Z",
+                      "startTime": "2026-11-24T16:45:01.080Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-c3acc--—-칸-설정-보유-미보유-계정-정렬-EG032--chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -463,7 +513,7 @@
             },
             {
               "title": "개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만",
-              "ok": true,
+              "ok": false,
               "tags": [
                 "eg-auth"
               ],
@@ -478,22 +528,70 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 5456,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 16530,
+                      "error": {
+                        "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\e2e.json'",
+                        "stack": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\e2e.json'\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_auth.spec.ts:50:60)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_auth.spec.ts:101:33",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                          "column": 27,
+                          "line": 16
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n\u001b[0m \u001b[90m 14 |\u001b[39m     \u001b[36mconst\u001b[39m wrapped \u001b[33m=\u001b[39m \u001b[36mfunction\u001b[39m (\u001b[36mthis\u001b[39m\u001b[33m:\u001b[39m unknown\u001b[33m,\u001b[39m \u001b[33m...\u001b[39ma\u001b[33m:\u001b[39m unknown[]) {\n \u001b[90m 15 |\u001b[39m       \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m \u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 16 |\u001b[39m         \u001b[36mtry\u001b[39m { \u001b[36mreturn\u001b[39m orig\u001b[33m.\u001b[39mapply(\u001b[36mthis\u001b[39m\u001b[33m,\u001b[39m a)\u001b[33m;\u001b[39m } \u001b[36mcatch\u001b[39m (e) {\n \u001b[90m    |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 17 |\u001b[39m           \u001b[36mconst\u001b[39m code \u001b[33m=\u001b[39m \u001b[33mString\u001b[39m((e \u001b[36mas\u001b[39m { code\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m string })\u001b[33m.\u001b[39mcode \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m>=\u001b[39m \u001b[35m8\u001b[39m \u001b[33m||\u001b[39m \u001b[33m!\u001b[39m\u001b[33mRETRY_CODES\u001b[39m\u001b[33m.\u001b[39mhas(code)) \u001b[36mthrow\u001b[39m e\u001b[33m;\u001b[39m\n \u001b[90m 19 |\u001b[39m           \u001b[36mif\u001b[39m (i \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m) console\u001b[33m.\u001b[39mlog(\u001b[32m`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                            "column": 27,
+                            "line": 16
+                          },
+                          "message": "Error: UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\e2e.json'\n\n   at ..\\..\\..\\tools\\E2E\\playwright.config.ts:16\n\n  14 |     const wrapped = function (this: unknown, ...a: unknown[]) {\n  15 |       for (let i = 0; ; i++) {\n> 16 |         try { return orig.apply(this, a); } catch (e) {\n     |                           ^\n  17 |           const code = String((e as { code?: string }).code || '');\n  18 |           if (i >= 8 || !RETRY_CODES.has(code)) throw e;\n  19 |           if (i === 0) console.log(`[파일 쓰기 재시도] ${name} ${String(a[0]).slice(-80)} — ${code}`);\n    at Object.writeFileSync (C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts:16:27)\n    at flush (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_auth.spec.ts:50:60)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_auth.spec.ts:101:33"
+                        }
+                      ],
                       "stdout": [
                         {
                           "text": "[eg_auth] SCP0028 {\"EG395 NA\":1}\n"
+                        },
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\e2e.json — UNKNOWN\n"
                         }
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:54:50.897Z",
+                      "startTime": "2026-11-24T16:45:07.241Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-0b5e7--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium\\video.webm"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-0b5e7--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-0b5e7--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-0b5e7--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+                        "column": 27,
+                        "line": 16
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "fce9d8edbd378244cae8-5391b674f2ac1d07277b",
@@ -516,10 +614,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7780,
+                      "duration": 8782,
                       "errors": [],
                       "stdout": [
                         {
@@ -531,9 +629,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T03:54:59.152Z",
+                      "startTime": "2026-11-24T16:45:30.104Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0028\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-49faa-G380-—-세션-메뉴-없음-상태의-FE-첫-화면-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -551,11 +655,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-20T03:52:03.798Z",
-    "duration": 186675.356,
-    "expected": 9,
+    "startTime": "2026-11-24T16:41:38.246Z",
+    "duration": 246712.873,
+    "expected": 8,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

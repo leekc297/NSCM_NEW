@@ -228,7 +228,12 @@ export const QTY_MAX_LABEL = '100,000,000';
 //         구간이라 이 회차는 회색(과거)·<100 강조만 재현. fix 녹색은 O_RC2 소비(M2 잔여) 후 배선.
 export const CELL_COLOR = {
   PAST_GRAY: 'rgb(234,234,234)', // 실적/과거(편집불가) 구간 배경
-  FIX_GREEN: 'rgb(188,229,92)', // fix 확정 셀 배경 (O_RC2 매칭 후)
+  // fix 확정 셀 배경 — AS-IS 녹색(188,229,92, Set_FixCellColor cs:3629)에서 진회색으로 변경
+  //   (테스트 이슈 "Prod Plan Amend Measure 색상" 1번, 사용자 지시 2026-11-25 — 의도적 AS-IS deviation).
+  FIX_DARK_GRAY: '#a6a6a6',
+  // 계획구간(Plan Date 이후) Prod Plan(Amend) 행 배경 — 흰색에서 연회색으로(같은 이슈 2번). 실적구간
+  //   회색(PAST_GRAY 234)과 구분되도록 한 단계 밝게 둔다. 편집가능 셀은 EDIT_YELLOW 가 덮는다.
+  AMEND_PLAN_GRAY: '#f2f2f2',
   // 편집가능 pivot 셀 표시색 — NSCM 공통 editable 색 토큰($wj-editable-cell=#fff8cd, _variables.scss)과 동일.
   //   AS-IS 는 편집밴드를 회색(234,234,234, Set_FPOperationColor cs:3574)으로 칠했으나 TO-BE 는 플랫폼
   //   공통 editable 노랑으로 통일한다. 고정/동적컬럼 전건 INPUT_TP_CD='S' 라 공용 formatEditableColumns

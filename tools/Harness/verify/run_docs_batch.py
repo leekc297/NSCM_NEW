@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """3개 문서가 지목한 메뉴 전체에 정합검증 실행(2026-10-31) — 문서 행 많은 메뉴부터 · 동시 상한 3(BE 풀 · 메모리 기록)
 
-  정리 정의(cleanup_spec.json)가 없는 메뉴 = VERIFY_NO_SAVE=1(사내 DB 미기록 · 저장 규칙은 ERROR '[저장 미실행]')
+  저장 시험 = 모든 메뉴 실저장 왕복(2026-11-25 R99). 정리 정의(cleanup_spec.json)가 없으면 run_verify.py 가 gen_cleanup_spec.py --write 로 만들고, 끝나면 save_residue.py 로 잔존 변경을 잰다
   python tools/Harness/verify/run_docs_batch.py [--only A,B] [--skip A,B] [--workers 3]
-  결과 = Doc/verify/_batch_docs.csv(메뉴·시작·끝·rc·no_save·로그) — 진행율 보고는 이 파일과 doc_proof.py 만 인용한다
+  결과 = Doc/verify/_batch_docs.csv(메뉴·시작·끝·rc·residue_rc·로그) — 진행율 보고는 이 파일과 doc_proof.py 만 인용한다
 """
 import argparse, collections, csv, datetime, json, os, subprocess, sys, threading
 from concurrent.futures import ThreadPoolExecutor
@@ -29,24 +29,22 @@ def main():
     print(f'실행 불가(map_screen·asisfacts 없음) {len(not_runnable)}: {" ".join(not_runnable)} — 문서 행 {sum(cnt[m] for m in not_runnable)}', flush=True)
     if not os.path.exists(OUT):
         with open(OUT, 'w', encoding='utf-8-sig', newline='') as f:
-            csv.writer(f).writerow(['menu_id', 'doc_rows', 'start', 'end', 'rc', 'no_save', 'log'])
+            csv.writer(f).writerow(['menu_id', 'doc_rows', 'start', 'end', 'rc', 'residue_rc', 'log'])
 
     def one(m):
-        ns = m not in json.load(open(os.path.join(HERE, 'cleanup_spec.json'), encoding='utf-8')); log = os.path.join(LOGD, f'{m}.log'); t0 = datetime.datetime.now()
+        # 실저장 = 모든 메뉴(R99). 정리 정의가 없으면 run_verify.py 가 gen_cleanup_spec.py --write 로 만든다
+        log = os.path.join(LOGD, f'{m}.log'); t0 = datetime.datetime.now()
         env = dict(os.environ); env.pop('VERIFY_NO_SAVE', None)
-        if ns:
-            env['VERIFY_NO_SAVE'] = '1'
         with open(log, 'w', encoding='utf-8') as lf:
             rc = subprocess.run([sys.executable, '-I', os.path.join(HERE, 'run_verify.py'), m, '--tier', a.tier], cwd=ROOT, env=env, stdout=lf, stderr=subprocess.STDOUT).returncode
         t1 = datetime.datetime.now()
-        if not ns:  # 실저장 메뉴 — 잔존 변경 실측(save_residue.py)
-            with open(log, 'a', encoding='utf-8') as lf:
-                rr = subprocess.run([sys.executable, '-I', os.path.join(HERE, 'save_residue.py'), m, '--since', f'{t0:%Y-%m-%d %H:%M:%S}'], cwd=ROOT, stdout=lf, stderr=subprocess.STDOUT).returncode
-                lf.write(f'RESIDUE_RC={rr}\n')
+        with open(log, 'a', encoding='utf-8') as lf:  # 잔존 변경 실측(save_residue.py) — 모든 메뉴
+            rr = subprocess.run([sys.executable, '-I', os.path.join(HERE, 'save_residue.py'), m, '--since', f'{t0:%Y-%m-%d %H:%M:%S}'], cwd=ROOT, stdout=lf, stderr=subprocess.STDOUT).returncode
+            lf.write(f'RESIDUE_RC={rr}\n')
         with lock:
             with open(OUT, 'a', encoding='utf-8-sig', newline='') as f:
-                csv.writer(f).writerow([m, cnt[m], f'{t0:%m-%d %H:%M}', f'{t1:%m-%d %H:%M}', rc, 'Y' if ns else 'N', os.path.relpath(log, ROOT)])
-            print(f'{t1:%H:%M} {m} rc={rc} no_save={ns}', flush=True)
+                csv.writer(f).writerow([m, cnt[m], f'{t0:%m-%d %H:%M}', f'{t1:%m-%d %H:%M}', rc, rr, os.path.relpath(log, ROOT)])
+            print(f'{t1:%H:%M} {m} rc={rc} residue_rc={rr}', flush=True)
     with ThreadPoolExecutor(max_workers=a.workers) as ex:
         list(ex.map(one, todo))
     print('BATCH_DONE', flush=True)

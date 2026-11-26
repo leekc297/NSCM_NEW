@@ -1,0 +1,687 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "(?:(?:^| )검증엔진\\ SSP0005\\ @trace\\ BTN\\ 팝업\\ 경로\\(F4·E4·G1\\)\\ =\\ AS\\-IS\\ 버튼\\ →\\ 팝업\\ →\\ OK\\ →\\ 후속\\ 메서드(?: @\\S+)*$|(?:^| )정합검증\\ SSP0005\\ @verify\\ 언어\\ 전환\\ 문구\\ 덤프\\(I2\\)(?: @\\S+)*$|(?:^| )정합검증\\ SSP0005\\ @verify\\ 문서\\ 시나리오(?: @\\S+)*$|(?:^| )정합검증\\ SSP0005\\ @verify\\ 저장\\ 세부\\(F1·F6\\)\\ —\\ 컬럼별\\ 왕복·0\\ 값\\ 저장(?: @\\S+)*$)",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SSP0005/e2e/serial/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 SSP0005 @trace",
+          "file": "_trace.spec.ts",
+          "line": 347,
+          "column": 6,
+          "specs": [
+            {
+              "title": "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 353,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T17:19:57.276Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_trace-검증엔진-SSP0005-trace--c5071-AS-IS-버튼-→-팝업-→-OK-→-후속-메서드-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-516789a01514ec460053",
+              "file": "_trace.spec.ts",
+              "line": 2866,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SSP0005 @verify",
+          "file": "_verify.spec.ts",
+          "line": 290,
+          "column": 6,
+          "specs": [
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 1810072,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 1800000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 1800000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 1800000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts",
+                            "column": 7,
+                            "line": 227
+                          },
+                          "message": "Error: page.evaluate: Target page, context or browser has been closed\n\n   at ..\\..\\..\\tools\\E2E\\lib\\probe.ts:227\n\n  225 |   /** 조건을 만족하는 행 번호들 — pred 는 dataItem 전체를 받는다(행 값 기반 조건부 잠금 평가·값 있는/빈 셀 표본). c.rows 를 직접 순회(columnValues 인덱스 ≠ 행 번호) */\n  226 |   findRowsByValue: (p: Page, predSrc: string, max = 2) =>\n> 227 |     p.evaluate(`(() => { const c = ${CTL}; if (!c) return []; const pred = ${predSrc}; const o = []; for (let r = 0; r < c.rows.length && o.length < ${max}; r++) { const d = c.rows[r].dataItem; if (!d) continue; try { if (pred(d)) o.push(r); } catch {} } return o; })()`) as Promise<number[]>,\n      |       ^\n  228 |   /** 행 dataItem 전체(조건 평가용) */\n  229 |   rowItem: (p: Page, row: number) =>\n  230 |     p.evaluate(`(() => { const c = ${CTL}; const d = c && c.rows[${row}] && c.rows[${row}].dataItem; if (!d) return null; const o = {}; for (const k of Object.keys(d)) { const v = d[k]; o[k] = v == null ? '' : (v instanceof Date ? v.toISOString() : String(v)); } return o; })()`) as Promise<Record<string, string> | null>,\n    at Object.findRowsByValue (C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts:227:7)\n    at editableValueRow (C:\\Projects\\NSCM\\tools\\E2E\\lib\\saveprobe.ts:228:32)\n    at pickPair (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1832:251)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1834:127"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 4번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"EG00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 5번째 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조회조건 'Company' 5번째 후보 대안 조회(Div SELECT:0행 · Div 81:0행 · Div 40:0행 · Div 82:0행 · Div 81_UC:0행 · Div 81_HM:0행 · Div 81_ST:0행 · Div 81_HD:0행 · Div 81_HG:0행 · Company 'LGES Arizona ESS Inc.'(후보 14개 중 1번째):0행 · Company 'LG CHEM AUSTRAILIA PTY LT'(후보 14개 중 2번째:0행 · Company 'LGES Arizona, Inc.'(후보 14개 중 3번째):0행 · Company 'LG Ensol Europe GmbH'(후보 14개 중 4번째):0행 · Company 'Ultium Cells LLC'(후보 14개 중 5번째):1행)\n"
+                        },
+                        {
+                          "text": "[저장 세부] T64 저장 키 컬럼 제외 2: COMPANY_ID,DIVISION_ID\n"
+                        },
+                        {
+                          "text": "[저장 세부] 17:28:56 D_20261125 r0 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 17:29:06 D_20261125 끝\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HD,81_HG\",\"companyId\":\"GM00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 1번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 3번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AZ00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 4번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 5번째 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 6번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 7번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"HG00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 8번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"HM00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 4번째 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 5번째 → 1행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 6번째 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 7번째 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 8번째 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T17:20:01.153Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5b294f0bf07e37297125",
+              "file": "_verify.spec.ts",
+              "line": 1707,
+              "column": 7
+            },
+            {
+              "title": "언어 전환 문구 덤프(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 386586,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] SSP0005 I2: 언어 시험 계정 hwayoung.lim 로 로그인(다른 화면 대기 없음)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T17:50:28.077Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-언어-전환-문구-덤프-I2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ad62030b90941664e1c7",
+              "file": "_verify.spec.ts",
+              "line": 2445,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 1210558,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 1200000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 1200000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 1200000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "message": "Error: browserContext._wrapApiCall: file data stream has unexpected number of bytes"
+                        },
+                        {
+                          "message": "Error: apiRequestContext._wrapApiCall: Target page, context or browser has been closed"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts",
+                            "column": 63,
+                            "line": 2780
+                          },
+                          "message": "Error: page.route: Target page, context or browser has been closed\n\n  2778 |     for (const e of readExpect('scenario_expect.csv').filter(z => z.menu_id === ID && (!process.env.SCN_ONLY || new RegExp(process.env.SCN_ONLY).test(z.name)))) { const x = rs.find(y => y.target.endsWith(`시나리오 ${e.name}`)); if (!x) continue;\n  2779 |       console.log(`[시나리오] ${ID} '${e.name}' 시작 ${new Date().toTimeString().slice(0, 8)}`); /* 2026-11-11 T249: DMF0005 가 이 검사 안에서 두 번 무응답(18:58·21:20) — 어느 시나리오인지 로그에 남긴다 */\n> 2780 |       let saves = 0; const saveBodies: string[] = []; await p.route(SAVE_RE, async rt => { saves++; saveBodies.push(rt.request().postData() || ''); await rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [], message: '[시나리오] 서버 미전송' }) }); });\n       |                                                               ^\n  2781 |       let switched = ''; let langFrom = ''; let realSaved = false; let newRow0: Record<string, unknown> | null = null; let comboMark = 0; let lastTypedRow = -1; let lastTypedCol = ''; let lastTypedVal = ''; let lastDblVal = ''; const resolveTarget = async (col: string, bRaw: string) => { const tm = bRaw.match(/^(@cand:\\d+|@row:\\d+|@copy:(?:in|out))(?:@(.*))?$/); const b2 = tm ? (tm[2] ? `${tm[1]}@${tm[2]}` : tm[1]) : bRaw; const at = tm ? (tm[2] ? tm[1].length : -1) : b2.indexOf('@'); const val0 = at >= 0 ? b2.slice(0, at) : b2; const loc = at >= 0 ? b2.slice(at + 1) : ''; const locParts = loc.split('&'); const lm = locParts[0].match(/^([^=]+)=(.*)$/); const sameAs: string[] = locParts.slice(1).filter(z => /=@last$/.test(z)).map(z => z.replace(/=@last$/, '').trim()); const extraRe: [string, string][] = locParts.slice(1).filter(z => !/=@last$/.test(z) && z.includes('=')).map(z => [z.slice(0, z.indexOf('=')).trim(), z.slice(z.indexOf('=') + 1)] as [string, string]); const lastVals: Record<string, string> = lastTypedRow >= 0 && sameAs.length ? (await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; const d = c && c.rows[${lastTypedRow}] ? c.rows[${lastTypedRow}].dataItem : null; const o = {}; for (const k of ${JSON.stringify(sameAs)}) o[k] = d ? String(d[k] ?? '') : ''; return o; })()`).catch(() => ({}))) as Record<string, string> : {}; const row = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return -1; const lc = ${JSON.stringify(lm ? lm[1].trim() : '')}; const lre = ${JSON.stringify(lm ? lm[2] : '')}; const same = ${JSON.stringify(lastVals)}; const ex = ${JSON.stringify(extraRe)}.map(([k, r]) => [k, new RegExp(r)]); if (lc) { const re = new RegExp(lre); for (let i = 0; i < Math.min(c.rows.length, 30000); i++) { const d = c.rows[i].dataItem; if (!d || d.CRUD_TYPE === 'I' || !re.test(String(d[lc] ?? ''))) continue; let ok = true; for (const k of Object.keys(same)) if (String(d[k] ?? '') !== same[k]) { ok = false; break; } for (const [k, r] of ex) if (!r.test(String(d[k] ?? ''))) { ok = false; break; } if (ok) return i; } return -1; } for (let i = 0; i < Math.min(c.rows.length, 30000); i++) { const d = c.rows[i].dataItem; if (d && d.CRUD_TYPE === 'I') return i; } return c.rows.length ? 0 : -1; })()`).catch(() => -1) as number; let val = val0; let how = ''; let rowSel = row; let col2 = col === '@LASTCOL' ? (lastTypedCol || col) : col; if (row >= 0 && /^@DYN(VAL)?$/.test(col2)) { /* 2026-11-03 그 행에서 실제 편집기가 열리는 첫 동적 칸 · 조건 행 여러 개면 편집 가능한 칸이 있는 첫 행(최대 10행) */ const pick = await p.evaluate(`(async () => { const c = ${probe.CTL_SRC}; if (!c) return null; const lc = ${JSON.stringify(lm ? lm[1].trim() : '')}; const lre = ${JSON.stringify(lm ? lm[2] : '')}; const same = ${JSON.stringify(lastVals)}; const ex = ${JSON.stringify(extraRe)}.map(([k, r]) => [k, new RegExp(r)]); const cands = []; if (lc) { const re = new RegExp(lre); for (let i = 0; i < Math.min(c.rows.length, 30000) && cands.length < 10; i++) { const d = c.rows[i].dataItem; if (!d || d.CRUD_TYPE === 'I' || !re.test(String(d[lc] ?? ''))) continue; let ok = true; for (const k of Object.keys(same)) if (String(d[k] ?? '') !== same[k]) { ok = false; break; } for (const [k, r] of ex) if (!r.test(String(d[k] ?? ''))) { ok = false; break; } if (ok) cands.push(i); } } else { cands.push(${row}); /* 2026-11-05 SCP0111 P19: 조건 없는 @DYN 이 첫 행만 보고 '편집 칸 없음' ERROR — 행별 잠금(Measure) 화면. 기존 행이면 다음 기존 행 최대 50개까지 편집기 열리는 칸 탐색(신규 행 시작이면 그 행만) */ const d0 = c.rows[${row}] ? c.rows[${row}].dataItem : null; if (!(d0 && d0.CRUD_TYPE === 'I')) for (let i = ${row} + 1; i < Math.min(c.rows.length, 3000) && cands.length < 50; i++) { const d = c.rows[i].dataItem; if (d && d.CRUD_TYPE !== 'I') cands.push(i); } } const needVal = ${col2 === '@DYNVAL'}; for (const rw of cands) { const d = c.rows[rw] ? c.rows[rw].dataItem : null; for (let i = 0; i < c.columns.length; i++) { const k = c.columns[i]; if (!(/^[WMD]?_?\\\\d{6,8}$/.test(String(k.binding || '')) || /^[WMDY]#\\\\d{4,8}#[A-Za-z0-9_]+$/.test(String(k.binding || ''))) || k.visible === false) continue; if (needVal) { const v = d ? d[String(k.binding)] : null; if (v === null || v === undefined || String(v).trim() === '' || Number.isNaN(Number(v)) || Number(v) === 0) continue; } c.scrollIntoView(rw, i); const ok = c.startEditing(true, rw, i); await new Promise(r => setTimeout(r, 60)); const open = !!c.activeEditor; c.finishEditing(true); if (ok && open) return { row: rw, b: String(k.binding), tried: cands.length }; } } return { row: -1, b: '', tried: cands.length }; })()`).catch(() => null) as { row: number; b: string; tried: number } | null; if (!pick || !pick.b) { how = `${col2} 에 맞는 편집 가능 동적 칸 없음(조건 행 ${pick ? pick.tried : 0}개 확인)`;\n  2782 |             /* 2026-11-19 미검증 해소(SCP0096 V-ca0b2246 D2): @DYNVAL 은 '수량' 값이 있는 칸 전제, 동적 칸이 전부 숫자 칸이 아니면(메타 dataType · 값 종류 Y·N) 시나리오 대상 아님(NA). 숫자 칸·숫자 값이 하나라도 있으면 종전대로 미검증 */\n  2783 |             if (col2 === '@DYNVAL') { const dg = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return null; let n = 0, numType = 0, numVal = 0; const types = {}; const vals = new Set(); const R = Math.min(c.rows.length, 500); for (let i = 0; i < c.columns.length; i++) { const k = c.columns[i]; const b = String(k.binding || ''); if (!(/^[WMD]?_?\\\\d{6,8}$/.test(b) || /^[WMDY]#\\\\d{4,8}#[A-Za-z0-9_]+$/.test(b)) || k.visible === false) continue; n++; types[String(k.dataType)] = (types[String(k.dataType)] || 0) + 1; if (k.dataType === 2) numType++; for (let r = 0; r < R; r++) { const d = c.rows[r].dataItem; const v = d ? d[b] : null; if (v === null || v === undefined || String(v).trim() === '') continue; if (!Number.isNaN(Number(v))) numVal++; else if (vals.size < 6) vals.add(String(v).slice(0, 10)); } } return { n, numType, numVal, types, vals: [...vals], rows: R }; })()`).catch(() => null) as { n: number; numType: number; numVal: number; types: Record<string, number>; vals: string[]; rows: number } | null;\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:2780:63"
+                        },
+                        {
+                          "message": "Error: End of central directory record signature not found. Either not a zip file, or file is truncated."
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 02:57:00\n"
+                        },
+                        {
+                          "text": "[langacct] SSP0005 시나리오 [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: 언어 시험 계정 hwayoung.lim 로 로그인(다른 화면 대기 없음)\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 4번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"EG00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 5번째 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] CN 언어 조회 건수 총/건 표기' 시작 03:05:52\n"
+                        },
+                        {
+                          "text": "[langacct] SSP0005 시나리오 [자동] CN 언어 조회 건수 총/건 표기: 언어 시험 계정 hwayoung.lim 로 로그인(다른 화면 대기 없음)\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] 조회 중 Loading 토스트 없음' 시작 03:08:17\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] 선택 행 위로 Insert' 시작 03:08:24\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 03:10:32\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] 당주 구분선(rail) = 이번 주(Weekly)' 시작 03:12:43\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0005 '[자동] 값 있는 편집 구간 수량 셀 편집' 시작 03:17:10\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T17:56:57.635Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-문서-시나리오-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0005-verify-문서-시나리오-chromium\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-953e087e750393584dd0",
+              "file": "_verify.spec.ts",
+              "line": 2774,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T17:19:54.816Z",
+    "duration": 3437496.7739999997,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

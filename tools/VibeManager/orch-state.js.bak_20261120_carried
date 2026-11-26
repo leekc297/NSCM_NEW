@@ -1,0 +1,200 @@
+// 2026-11-19 VMO P2·P3: 실행 상태 모음 — 사건(.vibe/orch/events.jsonl)을 받아 '지금 돌고 있는 것'을 유지한다.
+//   VM 안 사건은 orch-events.js 구독으로, VM 밖 사건(run_verify.py · runlock.js · 다른 VS Code 창)은 파일을 이어 읽어 받는다.
+//   상황판(VMO 창)과 감시기(orch-watch.js)가 이 모듈의 snapshot()·on() 을 쓴다. Claude 를 부르지 않는다.
+'use strict';
+const fs = require('fs');
+const path = require('path');
+let errlog = { note() { return null; }, init() { return ''; } }; try { errlog = require('./orch-errlog'); } catch { } // 2026-11-19 자가진단 Q1: 삼키던 오류를 .vibe/orch/vm_errors.jsonl 에 남긴다
+const os = require('os');
+const cp = require('child_process');
+let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
+
+const procs = new Map();    // key → { label, screen, wb, stream, pid, t0, log, server }
+const chains = new Map();   // runId → { screen, chain, label, wb, t0, shown, step:{no,name,actor,t0}|null, done:[{no,status,actor}] }
+const claudes = new Map();  // key → { screen, wb, label, source, pid, t0 }
+const waits = new Map();    // key → { kind, screen, why, pid, t0, max_sec, blocker_pid }
+const jobs = new Map();     // jobId → { label, total, done, running, t0 }
+const recent = [];          // 최근 사건(상황판 하단 · 최대 200)
+const listeners = new Set();
+let root = '', vibeDir = '', started = false, tailTimer = null, tailPos = 0, tailBuf = '';
+let cpuPrev = null, cpuPct = null, tcpN = null, tcpAt = 0, tcpBusy = false;
+
+function pidAlive(pid) { if (!pid) return false; try { process.kill(pid, 0); return true; } catch (e) { return !!(e && e.code === 'EPERM'); } }
+const kProc = ev => `${ev.src}:${ev.pid}:${ev.procId != null ? ev.procId : (ev.childPid || ev.label)}`;
+const kWait = ev => `${ev.src}:${ev.pid}:${ev.kind}:${ev.screen || ''}`;
+const kClaude = ev => `${ev.pid}:${ev.wb != null ? ev.wb : ''}:${ev.job || ''}:${ev.screen || ''}`;
+
+// 개선안 20261120005532_INC: proc.start 의 screen 이 비어 있으면 명령 끝의 화면 ID(예: checklist_run.py SSP0005)를 쓴다
+//   (실측: events.jsonl:49 screen "" · cmd '... checklist_run.py SSP0005'). 화면·label 별 마지막 proc.start 시각은 감시기가 지난 실행 판정에 쓴다(laterStart)
+const screenFromCmd = cmd => { const m = /(?:^|\s)["']?([A-Z]{2,4}\d{4}[A-Z]?)["']?\s*$/.exec(String(cmd || '').trim()); return m ? m[1] : ''; };
+const lastStart = new Map(); // `${screen}|${label}` → 가장 늦은 proc.start ms
+function laterStart(screen, label, ms) { const v = lastStart.get(`${String(screen || '').toUpperCase()}|${label || ''}`) || 0; return v > (ms || 0) ? v : 0; }
+function apply(ev) {
+  if (!ev || !ev.type) return;
+  const t = ev.type;
+  if (t === 'proc.start' && !ev.screen) { const s = screenFromCmd(ev.cmd); if (s) ev.screen = s; }
+  if (t === 'proc.start' && ev.screen && ev.ms) { const k = `${String(ev.screen).toUpperCase()}|${ev.label || ''}`; if ((lastStart.get(k) || 0) < ev.ms) lastStart.set(k, ev.ms); }
+  if (t === 'proc.start') procs.set(kProc(ev), { label: ev.label, screen: ev.screen || '', wb: ev.wb, stream: ev.stream, pid: ev.childPid, owner: ev.pid, t0: ev.ms, log: ev.log || '', server: !!ev.server });
+  else if (t === 'proc.end') procs.delete(kProc(ev));
+  else if (t === 'chain.start') chains.set(ev.runId, { screen: ev.screen, chain: ev.chain, label: ev.chainLabel, wb: ev.wb, job: ev.job || '', owner: ev.pid, t0: ev.ms, shown: ev.shown, total: ev.steps || 0, plan: Array.isArray(ev.plan) ? ev.plan.map(x => ({ no: x.no, task: x.task, actor: x.actor })) : [], step: null, done: [] }); // total · plan = 상황판 단계 막대(2026-11-20)
+  else if (t === 'step.start') { const c = chains.get(ev.runId); if (c) c.step = { no: ev.no, name: ev.name, actor: ev.actor, task: ev.task, t0: ev.ms }; }
+  else if (t === 'step.end') { const c = chains.get(ev.runId); if (c) { c.step = null; c.done.push({ no: ev.no, status: ev.status, actor: ev.actor }); } }
+  else if (t === 'chain.end') chains.delete(ev.runId);
+  else if (t === 'claude.start') claudes.set(kClaude(ev), { screen: ev.screen || '', wb: ev.wb, label: ev.label || '', source: ev.source || '', pid: ev.childPid, owner: ev.pid, t0: ev.ms });
+  else if (t === 'claude.end') claudes.delete(kClaude(ev));
+  else if (t === 'wait.start') waits.set(kWait(ev), { kind: ev.kind, screen: ev.screen || '', why: ev.why || '', pid: ev.pid, t0: ev.ms, max_sec: ev.max_sec || null, blocker_pid: ev.blocker_pid || null });
+  else if (t === 'wait.end') waits.delete(kWait(ev));
+  else if (t === 'job.start') jobs.set(ev.job, { label: ev.label || '', total: ev.total || 0, done: 0, running: 0, t0: ev.ms, owner: ev.pid });
+  else if (t === 'job.item.start') { const j = jobs.get(ev.job); if (j) j.running++; }
+  else if (t === 'job.item.end') { const j = jobs.get(ev.job); if (j) { j.running = Math.max(0, j.running - 1); j.done++; } }
+  else if (t === 'job.end') jobs.delete(ev.job);
+  recent.push(ev); if (recent.length > 200) recent.shift();
+  for (const fn of listeners) { try { fn(ev); } catch (ex) { errlog.note('orch-state', 'listener', ex); } }
+}
+
+// 주인 프로세스가 없어진 항목 정리(중지·창 다시 로드·스크립트 강제 종료로 끝 사건이 안 남은 경우). 반환 = 정리한 항목(감시기가 '종료 기록 없음' 사건으로 쓴다)
+function sweep() {
+  const gone = [];
+  // 개선안 20261120095113_INC: 하위 PID 소멸은 처음 본 시각(deadAt)부터 10초 유예. 그 사이 proc.end 가 오면 procs 에서 지워져 사건 없음
+  //   (실측: events.jsonl:681 R5 09:47:34.645 · 682 proc.end exit 0 09:47:34.689). 주인 PID 소멸은 종전대로 바로 gone
+  for (const [k, v] of procs) {
+    let dead = !pidAlive(v.owner);
+    if (!dead && v.pid && !pidAlive(v.pid)) { if (!v.deadAt) v.deadAt = Date.now(); dead = Date.now() - v.deadAt > 10000; }
+    if (dead) { procs.delete(k); gone.push(Object.assign({ what: 'proc' }, v)); }
+  }
+  for (const [k, v] of chains) if (!pidAlive(v.owner)) { chains.delete(k); gone.push(Object.assign({ what: 'chain' }, v)); }
+  for (const [k, v] of claudes) if (!pidAlive(v.owner)) { claudes.delete(k); gone.push(Object.assign({ what: 'claude' }, v)); }
+  // 개선안 20261120103659_SELF: 살아 있는 대기는 seenMs(마지막 생존 확인 시각)를 갱신. 사라진 대기의 대기 시간 = seenMs - t0(이번 VM 에서 한 번도 못 봤으면 seenMs 없음)
+  for (const [k, v] of waits) { if (pidAlive(v.pid)) v.seenMs = Date.now(); else { waits.delete(k); gone.push(Object.assign({ what: 'wait' }, v)); } }
+  for (const [k, v] of jobs) if (!pidAlive(v.owner)) { jobs.delete(k); }
+  return gone;
+}
+
+// 2초마다 살아 있는 대기의 seenMs 갱신(감시기 tick 이 sweep 을 부르지 않는 동안에도 마지막 생존 확인 시각을 남긴다)
+function touchWaits() { const now = Date.now(); for (const v of waits.values()) if (pidAlive(v.pid)) v.seenMs = now; }
+
+// ── VM 밖 사건: 파일 이어 읽기(이 프로세스가 쓴 줄은 구독으로 이미 받았으므로 건너뛴다) ──
+function tailTick() {
+  const f = orchEv ? orchEv.file() : ''; if (!f) return;
+  fs.stat(f, (e, st) => {
+    if (e) return;
+    if (st.size < tailPos) { tailPos = 0; tailBuf = ''; }
+    if (st.size === tailPos) return;
+    const len = Math.min(st.size - tailPos, 1024 * 1024); const b = Buffer.alloc(len);
+    fs.open(f, 'r', (e2, fd) => {
+      if (e2) return;
+      fs.read(fd, b, 0, len, tailPos, (e3, n) => {
+        fs.close(fd, () => { });
+        if (e3 || n <= 0) return;
+        tailPos += n; tailBuf += b.slice(0, n).toString('utf8');
+        const lines = tailBuf.split(/\r?\n/); tailBuf = lines.pop();
+        for (const ln of lines) { if (!ln.trim()) continue; let ev; try { ev = JSON.parse(ln); } catch { continue; } if (ev.src === 'vm' && ev.pid === process.pid) continue; apply(ev); }
+      });
+    });
+  });
+}
+
+// ── 잠금 파일 · 부하 ──
+// 개선안 20261120143326_SELF: 잠금 파일 at 형식이 쓰는 쪽마다 다르다(server_guard.py:92 = 'YYYY-MM-DD HH:MM:SS' 글자 · langlock.ts:22 · langacct.ts:42 = Date.now() 밀리초 · 그 밖 = 초).
+//   숫자 1e11 이상 = 밀리초, 미만 = 초, 글자 = 그대로, 유효 날짜가 아니면 ''(toISOString 예외 없음)
+function lockAt(at) {
+  if (at == null || at === '') return '';
+  const n = typeof at === 'number' ? at : (/^\s*\d+(\.\d+)?\s*$/.test(String(at)) ? Number(at) : NaN);
+  if (!Number.isFinite(n)) return typeof at === 'string' && Number.isFinite(Date.parse(at.trim().replace(' ', 'T'))) ? at : '';
+  const d = new Date(n >= 1e11 ? n : n * 1000);
+  return Number.isFinite(d.getTime()) ? d.toISOString() : '';
+}
+function locks() {
+  const out = []; const d = path.join(root, 'Doc', 'e2e');
+  let names = []; try { names = fs.readdirSync(d).filter(f => /^_run(\.[\w.-]+)?\.lock$/.test(f) || /^_server_\d+\.lock$/.test(f)); } catch { }
+  for (const n of names) {
+    let j = null; try { j = JSON.parse(fs.readFileSync(path.join(d, n), 'utf8')); } catch { j = null; }
+    const pid = j && Number(j.pid) || 0;
+    out.push({ file: n, pid, started: (j && (j.started || lockAt(j.at))) || '', args: (j && (j.args || j.tag || j.id)) || '', alive: pid ? pidAlive(pid) : null, ppid: (j && j.ppid) || null, parent: (j && j.parent) || '', chain: (j && j.chain) || '' });
+  }
+  return out;
+}
+function sampleCpu() {
+  const cs = os.cpus(); let idle = 0, total = 0;
+  for (const c of cs) { for (const k of Object.keys(c.times)) total += c.times[k]; idle += c.times.idle; }
+  if (cpuPrev && total > cpuPrev.total) cpuPct = Math.round(100 * (1 - (idle - cpuPrev.idle) / (total - cpuPrev.total)));
+  cpuPrev = { idle, total };
+}
+function sampleTcp() {
+  if (process.platform !== 'win32' || tcpBusy || Date.now() - tcpAt < 30000) return;
+  tcpBusy = true;
+  cp.exec('netstat -ano -p tcp | find /c "TCP"', { windowsHide: true, timeout: 15000 }, (e, so) => { tcpBusy = false; tcpAt = Date.now(); const n = parseInt(String(so || '').trim(), 10); tcpN = Number.isFinite(n) ? n : null; });
+}
+function aiUsage() { try { return vibeDir ? require('./claude-usage').read(vibeDir) : null; } catch { return null; } } // 2026-11-20 AI 주간 한도(최근 AI 실행 기록의 rate_limit_event)
+function load() { return { cpu: cpuPct, memFreeMB: Math.round(os.freemem() / 1048576), memTotalMB: Math.round(os.totalmem() / 1048576), tcp: tcpN, tcpAt, ai: aiUsage(), at: Date.now() }; }
+
+/** 상황판용 현재 상태 */
+function snapshot() {
+  const now = Date.now(); const age = t0 => Math.max(0, Math.round((now - t0) / 1000));
+  return {
+    at: now,
+    chains: [...chains.entries()].map(([id, c]) => ({ runId: id, screen: c.screen, label: c.label, wb: c.wb, job: c.job, sec: age(c.t0), shown: c.shown, doneN: c.done.length, total: c.total || 0, plan: c.plan || [], done: c.done.map(x => ({ no: x.no, status: x.status })), step: c.step ? { no: c.step.no, name: c.step.name, actor: c.step.actor, sec: age(c.step.t0) } : null })),
+    procs: [...procs.values()].filter(v => !v.server).map(v => ({ label: v.label, screen: v.screen, wb: v.wb, pid: v.pid, sec: age(v.t0), log: v.log })),
+    claudes: [...claudes.values()].map(v => ({ screen: v.screen, wb: v.wb, label: v.label, source: v.source, pid: v.pid, sec: age(v.t0) })),
+    waits: [...waits.values()].filter(v => pidAlive(v.pid)).map(v => ({ kind: v.kind, screen: v.screen, why: v.why, sec: age(v.t0), max_sec: v.max_sec, blocker_pid: v.blocker_pid })),
+    jobs: [...jobs.entries()].map(([id, j]) => ({ job: id, label: j.label, total: j.total, done: j.done, running: j.running, sec: age(j.t0) })),
+    locks: root ? locks() : [],
+    load: load(),
+  };
+}
+
+/** 사건 구독(VM 안팎 전부). 반환 = 해제 함수 */
+function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
+function recentEvents(n) { return recent.slice(-(n || 50)); }
+
+function init(p) {
+  if (started || !p || !p.root) return;
+  started = true; root = p.root; vibeDir = p.vibeDir || path.join(p.root, '.vibe');
+  if (orchEv) { orchEv.init(vibeDir); orchEv.on(apply); try { tailPos = fs.statSync(orchEv.file()).size; } catch { tailPos = 0; } }
+  sampleCpu();
+  tailTimer = setInterval(() => { tailTick(); sampleCpu(); sampleTcp(); touchWaits(); }, 2000);
+}
+function dispose() { if (tailTimer) { clearInterval(tailTimer); tailTimer = null; } started = false; }
+
+
+// ── 2026-11-20 상황판 하단 '시간별 흐름' 차트 자료: 최근 minutes 분 동안 화면(줄)마다 무엇이 언제 돌았는지 ──
+//   원천 = .vibe/orch/events.jsonl(파일 끝 2MB). 단계(step.start/end) · 대기(wait.start/end/gone) · Claude 호출(claude.start/end) · 체인 밖 프로세스(proc.start/end)
+//   막대 종류 k: s 스크립트 · c Claude · w 대기 · f 실패. 끝 사건이 아직 없으면 지금까지(open)로 그린다. 같은 자료를 10초 동안 다시 쓴다
+let tlCache = null;
+function timeline(minutes) {
+  const min = Math.max(10, Math.min(24 * 60, minutes || 60)); const now = Date.now();
+  if (tlCache && tlCache.min === min && now - tlCache.at < 10000) return tlCache.data;
+  const from = now - min * 60000; const evs = orchEv ? orchEv.tail(2 * 1024 * 1024) : [];
+  const lanes = new Map(); const open = new Map();
+  const laneOf = (e, fallback) => { const key = String(e.screen || '').toUpperCase() || (e.wb === 0 || e.source === 'orch' ? 'VMO' : fallback || '공통'); let l = lanes.get(key); if (!l) { l = { key, sub: '', segs: [], last: 0 }; lanes.set(key, l); } return l; };
+  const add = (l, a, b, k, t, isOpen) => { if (b < from || a > now) return; l.segs.push({ a: Math.max(a, from), b: Math.min(b, now), k, t: String(t || '').slice(0, 80), open: !!isOpen, cut: a < from }); l.last = Math.max(l.last, b); };
+  const inChain = new Set(); // 체인 단계가 있는 줄 = 같은 줄의 프로세스 막대는 그리지 않는다(겹침)
+  for (const e of evs) {
+    const t = e.type; if (!e.ms) continue;
+    if (t === 'chain.start') { const l = laneOf(e); l.sub = e.chainLabel || e.chain || l.sub; inChain.add(`${e.wb}|${l.key}`); }
+    else if (t === 'step.start') open.set(`step|${e.runId}|${e.no}`, e);
+    else if (t === 'step.end') { const s = open.get(`step|${e.runId}|${e.no}`); open.delete(`step|${e.runId}|${e.no}`); const a = s ? s.ms : e.ms - (e.ms_run || 0); add(laneOf(e), a, e.ms, e.status === 'FAIL' ? 'f' : (e.actor === 'claude' ? 'c' : 's'), `${e.no}. ${e.name || e.task || ''}`); }
+    else if (t === 'wait.start') open.set(`wait|${e.src}|${e.pid}|${e.kind}|${e.screen || ''}`, e);
+    else if (t === 'wait.end') { const k = `wait|${e.src}|${e.pid}|${e.kind}|${e.screen || ''}`; const s = open.get(k); open.delete(k); add(laneOf(e), s ? s.ms : e.ms - (e.sec_wait || 0) * 1000, e.ms, 'w', e.kind); }
+    else if (t === 'wait.gone') { for (const [k, s] of open) if (k.startsWith('wait|') && s.pid === e.waiter_pid && s.kind === e.kind) { open.delete(k); add(laneOf(s), s.ms, e.ms, 'w', `${e.kind}(끝 기록 없음)`); break; } }
+    else if (t === 'claude.start') { const k = `claude|${e.src}|${e.pid}|${e.wb}|${e.label || ''}`; open.set(k, e); }
+    else if (t === 'claude.end') { const k = `claude|${e.src}|${e.pid}|${e.wb}|${e.label || ''}`; const s = open.get(k); open.delete(k); const l = laneOf(s || e); if (!inChain.has(`${e.wb}|${l.key}`) || l.key === 'VMO') add(l, s ? s.ms : e.ms - (e.ms_run || 0), e.ms, e.exit && e.exit !== 0 ? 'f' : 'c', e.label || 'Claude'); }
+    else if (t === 'proc.start' && !e.server) open.set(`proc|${e.src}|${e.pid}|${e.procId}`, e);
+    else if (t === 'proc.end' && !e.server) { const k = `proc|${e.src}|${e.pid}|${e.procId}`; const s = open.get(k); open.delete(k); const l = laneOf(s || e); if (!inChain.has(`${e.wb}|${l.key}`)) add(l, s ? s.ms : e.ms - (e.ms_run || 0), e.ms, e.exit !== 0 && e.exit != null ? 'f' : 's', e.label); }
+  }
+  // 끝 기록이 아직 없는 것 = 지금 진행 중(주인 프로세스가 살아 있을 때만)
+  for (const [k, s] of open) {
+    // 끝 기록 없는 대기가 그 대기의 최대 시간(max_sec, 없으면 1시간)을 넘었으면 거기서 끝난 것으로 그린다. 주인 PID 가 다른 프로세스에 재사용되면 몇 시간짜리 대기로 보였다(2026-11-20 실측: DMF0042 dbwin 18:47 시작 · 끝 기록 없음 · 19,822초)
+    if (k.startsWith('wait|')) { const lim = Math.max(60, Number(s.max_sec) || 3600) * 1000; const nxt = [...open.values()].filter(x => x !== s && x.type === 'wait.start' && x.kind === s.kind && (x.screen || '') === (s.screen || '') && x.ms > s.ms).reduce((m, x) => Math.min(m, x.ms), Infinity); const end = Math.min(s.ms + lim, nxt); if (end < now) { add(laneOf(s), s.ms, end, 'w', `${s.kind}(끝 기록 없음)`); continue; } } // 끝 = 최대 시간과 같은 화면 · 종류의 다음 대기 시작 중 이른 쪽
+    if (!pidAlive(s.pid)) continue;
+    const kind = k.startsWith('wait|') ? 'w' : k.startsWith('claude|') ? 'c' : k.startsWith('step|') ? (s.actor === 'claude' ? 'c' : 's') : 's';
+    const l = laneOf(s); if (k.startsWith('proc|') && inChain.has(`${s.wb}|${l.key}`)) continue;
+    add(l, s.ms, now, kind, k.startsWith('step|') ? `${s.no}. ${s.name || s.task || ''}` : k.startsWith('wait|') ? s.kind : (s.label || ''), true);
+  }
+  const list = [...lanes.values()].filter(l => l.segs.length).sort((a, b) => b.last - a.last).slice(0, 12)
+    .map(l => ({ key: l.key, sub: l.sub, segs: l.segs.sort((x, y) => x.a - y.a), busySec: Math.round(l.segs.filter(s => s.k !== 'w').reduce((n, s) => n + (s.b - s.a), 0) / 1000), waitSec: Math.round(l.segs.filter(s => s.k === 'w').reduce((n, s) => n + (s.b - s.a), 0) / 1000) }));
+  const data = { from, to: now, min, lanes: list, total: lanes.size };
+  tlCache = { at: now, min, data }; return data;
+}
+
+module.exports = { init, dispose, snapshot, timeline, on, sweep, recentEvents, locks, load, apply, pidAlive, laterStart, screenFromCmd };

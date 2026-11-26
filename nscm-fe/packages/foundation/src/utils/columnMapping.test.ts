@@ -331,6 +331,34 @@ describe('셀 콤보 행 단위 필터 (attribute2)', () => {
   });
 });
 
+describe('콤보 셀 표시 - 색인에 없는 코드는 빈 칸 (AS-IS FarPoint 파리티)', () => {
+  // 실측 SCP0127: 원장이 VALID_YN='N'(비활성)으로 콤보에서 빠진 PG0031 을 참조하는 기존 행이 있다.
+  //   콤보 목록(색인)에 없는 코드라 Wijmo 기본값은 코드 원문(PG0031)을 노출했다 — AS-IS 는 빈 칸.
+  const PLAN_GROUPS: ComboResponse[] = [
+    { CODE: 'PG0012', NAME: 'L10D', DIVISION_ID: '81' },
+    { CODE: 'PG0001', NAME: 'E129A_E128A', DIVISION_ID: '81' },
+  ];
+  const planGroupMap = () => {
+    const [leaf] = mapRawColumnsToWijmoColumns([
+      col({ colNm: 'OPMZ_PLAN_GR_ID', colLblNm: 'Plan Group', dataMap: PLAN_GROUPS }),
+    ]);
+    return leaf.dataMap as DataMap;
+  };
+
+  it('색인에 있는 코드는 종전대로 NAME 을 보인다', () => {
+    expect(planGroupMap().getDisplayValue('PG0012')).toBe('L10D');
+  });
+
+  it('색인에 없는 코드(비활성 등)는 코드 원문 대신 빈 칸', () => {
+    expect(planGroupMap().getDisplayValue('PG0031')).toBe('');
+  });
+
+  it('빈/공백 코드도 빈 칸', () => {
+    expect(planGroupMap().getDisplayValue('')).toBe('');
+    expect(planGroupMap().getDisplayValue('   ')).toBe('');
+  });
+});
+
 describe('상위 콤보 변경 시 후보 밖이 된 하위 셀 (findStaleComboCells)', () => {
   // DMF0006 3단 종속 — Team(DEPT_ID) → End Customer → Sales Site
   const COLUMNS: RawFlexGridColumnConfig[] = [

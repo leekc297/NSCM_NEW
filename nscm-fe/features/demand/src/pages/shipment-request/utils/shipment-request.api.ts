@@ -15,6 +15,8 @@ export interface SaveShipmentRequestResult {
   ok: boolean;
   msgCode?: string;
   addMessage?: string;
+  // SP 기타 예외(RESULT_CODE 'F' — ORA 원문). AS-IS 는 원문 대신 시스템 오류 MSG 를 띄운다(cs 952~957).
+  systemError?: boolean;
 }
 
 const MSG_CODE_RE = /^MSG\d+$/i;
@@ -35,6 +37,14 @@ export const parseSaveOutcome = (resultValues: unknown[]): SaveShipmentRequestRe
   const status = String(resultValues[0]).trim();
   const upperStatus = status.toUpperCase();
   if (status === '0' || upperStatus === 'SUCCESS' || upperStatus === 'S') return { ok: true };
+  // 'F' = 업무검증 외 예외(ORA-xxxxx 원문). 원문은 addMessage 로만 보존하고 화면은 시스템 오류 문구.
+  if (upperStatus === 'F') {
+    return {
+      ok: false,
+      systemError: true,
+      addMessage: resultValues.slice(1).map(String).join(' ').trim() || undefined,
+    };
+  }
 
   // 실패 — 첫 열(상태코드 'N'/'F'/'-1')은 메시지/코드 탐색에서 제외하고 둘째 열(ERR_MESSAGE)부터 본다.
   const tokens = resultValues
@@ -117,8 +127,21 @@ export const callSaveShipmentRequest = async (
           | undefined)
       : undefined;
   const first = rows?.[0];
-  const values =
-    first && typeof first === 'object' ? Object.values(first as Record<string, unknown>) : [first];
+  // 주의: 결과행은 BE CustomMap(HashMap)이라 JSON 키 순서가 SP SELECT 순서와 다르다
+  //   (실패행이 {"ERR_MESSAGE":..,"RESULT_CODE":"N"} 로 와서 위치 기준 판정 시 메시지 대신 "N" 만 떴다).
+  //   그래서 RESULT_CODE 를 키로 집어 맨 앞에 두고, 메시지 컬럼(ERR_MESSAGE/MSG)을 그 뒤에 붙인다.
+  const values = (() => {
+    if (!first || typeof first !== 'object') return [first];
+    const rec = first as Record<string, unknown>;
+    const pick = (key: string): unknown =>
+      Object.entries(rec).find(([k]) => k.toUpperCase() === key)?.[1];
+    const code = pick('RESULT_CODE');
+    if (code === undefined) return Object.values(rec);
+    const rest = Object.entries(rec)
+      .filter(([k]) => k.toUpperCase() !== 'RESULT_CODE')
+      .map(([, v]) => v);
+    return [code, ...rest];
+  })();
   const resultValues = values.filter(
     value =>
       (typeof value === 'string' && value.trim() !== '') ||

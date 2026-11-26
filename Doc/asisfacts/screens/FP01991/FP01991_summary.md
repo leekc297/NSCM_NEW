@@ -16,11 +16,13 @@
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
+| event:this.btnSave.Click | btnSave_Click | 193 | {?rtxtSQL.Text} | UNRESOLVED |  |
 | unreached:(진입점 미연결) | <field:dtYesOrNo> | 41 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
+| {?rtxtSQL.Text} | UNRESOLVED | 1 |  |  |  |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
@@ -72,9 +74,10 @@
 | GroupControl | 1 | groupControl1 |
 | ContextMenuStrip | 1 | contextMenuStrip1 |
 
-## 7. 확인 필요 (0건)
+## 7. 확인 필요 (1건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 193 | btnSave_Click | {?rtxtSQL.Text} | UNRESOLVED | 런타임: 화면 컨트롤 값으로 SP명 조립 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

@@ -1,0 +1,42 @@
+{
+  "id": "20261125123145_REVIEW",
+  "at": "2026-11-25T12:31:45+09:00",
+  "ms": 1795577505012,
+  "source": "review",
+  "status": "applied",
+  "sig": "wait|enginefix|engine_gate.acquire",
+  "title": "측정 추가: 검사기 보완 순서 잠금 대기를 대기 기록으로 남김",
+  "evidence": "집계 S8.engineGate:--mark n 5, medianSec 2.9, p90Sec 685.9, totalSec 1103.3. events.jsonl:4401 SCP0005 체인 3단계 S8.engineGate 412초(J20261125_005600, 4화면 동시 실행). 집계 waits 종류는 admit, dbwin 2종뿐임. tools/Harness/verify/engine_gate.py:49~67 acquire 는 다른 화면이 Doc/verify/_engine_fix.lock 을 잡고 있으면 [WAIT] 를 출력하고 5초씩 기다리지만, orch_event wait.start, wait.end 를 남기지 않음(run_verify.py:386, 1109, 1135, 1805, 1870 은 남김)",
+  "targets": [
+    "tools/Harness/verify/engine_gate.py"
+  ],
+  "before_after": "acquire 대기 → 출력만 → 처음 기다릴 때 wait.start(kind 'enginefix', screen, blocker 화면), 잡거나 포기할 때 wait.end(sec_wait, gave_up) 기록. selftest 에 orch_event 기록 확인 1건 추가",
+  "verify": "python tools/Harness/verify/engine_gate.py --selftest 의 확인 수 반영 전 미측정 → 반영 뒤 +1. 반영 뒤 다음 동시 CheckList 실행에서 digest(7).waits 에 kind 'enginefix' 항목 0 → 1",
+  "rollback": "engine_gate.py 의 orch_event 호출 2곳과 selftest 추가 1건을 지움",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "대기 시간이 단계 시간에 섞여 집계 대기 목록에 없음. 기록 보완 1건",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:41:25+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/engine_gate.py:17~31(orch_event 연결), acquire 처음 대기 때 wait.start(kind enginefix, screen, blocker), 잡거나 포기 때 wait.end(sec_wait, gave_up). selftest 확인 15 → 16건 SELFTEST OK(시험 기록은 VIBE_ORCH_DIR 임시 폴더). digest waits 확인은 다음 동시 CheckList 실행 때 미측정. 2026-11-26 15:41:25"
+    }
+  ],
+  "plain": {
+    "what": "여러 화면 CheckList 가 검사기 보완 차례를 기다린 시간이 VMO 대기 집계에 따로 잡힘",
+    "risk": "기록 실패가 나도 대기 자체에는 영향이 없고 집계 칸만 비어 보임",
+    "undo": "기록 두 줄을 지우면 예전처럼 출력만 남음"
+  },
+  "kind": "fix",
+  "waitNote": "",
+  "claimedBy": "S-A",
+  "appliedMs": 1795675285655
+}

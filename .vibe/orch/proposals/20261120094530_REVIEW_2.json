@@ -77,6 +77,11 @@
         "tools/VibeManager/orch-usercheck.js",
         "tools/VibeManager/user_checks.json"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:32+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:42:53+09:00"
     }
   ],
   "plain": {
@@ -121,5 +126,7 @@
     "verify_result": "2026-11-20 10:17:06(+09:00) node tools/VibeManager/test/t_orch_events.js: PASS 7, FAIL 0, ALL PASS. 추가 시험 3건 결과: 'log tail:' 머리 줄을 건너뛰어 'S8.checklistRun <ID> | [FAIL] X', '$ a.py' 줄을 건너뛰어 'S8.verify <ID> | == 제목', 한 줄짜리는 종전과 같음. 2026-11-20T01:17:09Z(10:17 KST) node tools/VibeManager/test/run_all.js: ALL OK, 파일 34/34, PASS 414, FAIL 0, 120.4s, 제외 2건(t_orch_agent_real.js, t_orch_agent_diag.js)",
     "note": "작업 시작 때 targets 2개 파일에 개선안 내용이 이미 있어 이번 턴에는 수정하지 않음. 이전 시도에서 반영된 것으로 보이나 출처는 미확인. 확인과 시험 실행만 함. 작업 모드 repairScope=DB_ONLY 이지만 tools/VibeManager 는 FE·BE 가 아니라서 막히지 않음"
   },
-  "snap": "prop_20261120094530_REVIEW_2"
+  "snap": "prop_20261120094530_REVIEW_2",
+  "effectiveMs": 1795138973072,
+  "effectiveAt": "2026-11-20T10:42:53+09:00"
 }

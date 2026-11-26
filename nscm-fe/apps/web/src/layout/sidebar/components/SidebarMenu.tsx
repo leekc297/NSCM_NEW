@@ -23,6 +23,12 @@ export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  // 이 그룹의 하위 메뉴가 현재 활성 탭일 때만 상위 제목을 강조색(primary)으로 표시한다.
+  // 단순히 펼쳐졌다고(isOpen) 강조하면 활성 메뉴가 아닌 그룹도 강조색으로 보인다.
+  const isActiveGroup =
+    activeMnuId != null &&
+    (menu.children?.some(sub => String(sub.mnuId) === String(activeMnuId)) ?? false);
+
   // 새 탭이 열려 이 그룹이 지목되면 펼친다.
   // 접는 건 사용자 몫이라 여기서 강제로 닫지는 않는다.
   useEffect(() => {
@@ -62,7 +68,7 @@ export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
       >
         {menu.children ? (
           <>
-            <p className={clsx(styles.title, { [styles.isOpen]: isOpen })}>
+            <p className={clsx(styles.title, { [styles.isActive]: isActiveGroup })}>
               {t(menu.mnuMsgId, menu.mnuDesc)}
             </p>
             {isOpen ? (

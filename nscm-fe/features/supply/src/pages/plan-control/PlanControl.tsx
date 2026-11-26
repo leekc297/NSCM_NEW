@@ -130,6 +130,14 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
   const planStartYyyymmdd = resolvePlanStartYyyymmdd(searchParams, isDailyPlanDateMode);
 
+  // Condition(F6) 저장 대상 — Plan Date(주단위 콤보·일단위 DatePicker)는 제외한다. AS-IS
+  //   `ConditionNotUseList.Add(cboPlanDate)`(cs:180, 2025-06-17)이고 일단위 DateEdit 는 AS-IS 조건 저장
+  //   대상 컨트롤 타입이 아니다. planDate 키는 공용 EXCLUDED_DATE_PARAM 에 안 걸려 화면에서 뺀다(사용자 지시 2026-11-23).
+  const conditionParam = useMemo(
+    () => ({ divisionId: searchParams.divisionId, planGroupId: searchParams.planGroupId }),
+    [searchParams.divisionId, searchParams.planGroupId]
+  );
+
   const {
     data: planControlData,
     isFetching: isMainFetching,
@@ -223,7 +231,7 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='PlanControl'
         useHotkey
         hotkeyConfig={hotkeyConfig}
-        searchParam={searchParams}
+        searchParam={conditionParam}
       />
       {/* AS-IS splitContainer1 은 Orientation=Horizontal = 상/하 2분할이다. react-resizable-panels 는
           orientation='vertical' 이 상/하라 용어가 반대다 — 이름대로 옮기면 좌우로 갈라진다.

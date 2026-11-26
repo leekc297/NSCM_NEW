@@ -294,9 +294,6 @@ SSP0003,ShipmentChangeRequestConfirm,UP_FX_GETUSERINFOLIST,matrix,Y,SCM_MST_SSO_
 SSP0003,ShipmentChangeRequestConfirm,UP_FX_GETUSERINFOLIST,matrix,Y,SCM_MST_SSO_USER_INFO,R,공통(마스터·시스템),body
 SSP0003,ShipmentChangeRequestConfirm,UP_FX_GETUSERINFOLIST,matrix,Y,TB_FX_GROUPINFO,R,공통(마스터·시스템),body
 SSP0003,ShipmentChangeRequestConfirm,UP_FX_GETUSERINFOLIST,matrix,Y,TB_FX_USER,R,공통(마스터·시스템),body
-SSP0003,ShipmentChangeRequestConfirm,SSP0200_GET_SHIPMENT_DIVISION,endpoints,Y,SCM_MST_DIVISION,R,공통(마스터·시스템),body
-SSP0003,ShipmentChangeRequestConfirm,SSP0200_GET_SHIPMENT_DIVISION,endpoints,Y,SCM_MST_SITE,R,공통(마스터·시스템),body
-SSP0003,ShipmentChangeRequestConfirm,SSP0200_GET_SHIPMENT_DIVISION,endpoints,Y,TB_FX_USERGROUPAUTHEXTENTION,R,공통(마스터·시스템),body
 SSP0003,ShipmentChangeRequestConfirm,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,endpoints,Y,DM_PLN_MKT_FCST,W,DM,body
 SSP0003,ShipmentChangeRequestConfirm,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,endpoints,Y,DM_PLN_MKT_FCST_CONFIRM,W,DM,body
 SSP0003,ShipmentChangeRequestConfirm,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,endpoints,Y,SCM_ADM_SMS_MAIL_SEND_LOG,W,공통(마스터·시스템),body
@@ -322,6 +319,9 @@ SSP0003,ShipmentChangeRequestConfirm,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,en
 SSP0003,ShipmentChangeRequestConfirm,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,endpoints,Y,SSP_MST_SITE_ITEM_EE_V,R,SSP,body
 SSP0003,ShipmentChangeRequestConfirm,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,endpoints,Y,TB_FX_USER,R,공통(마스터·시스템),body
 SSP0003,ShipmentChangeRequestConfirm,SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40,endpoints,Y,XIF_ERP_SHIP_DOC_R_SN,R,인터페이스,body
+SSP0003,ShipmentChangeRequestConfirm,SSP0200_GET_SHIPMENT_DIVISION,endpoints,Y,SCM_MST_DIVISION,R,공통(마스터·시스템),body
+SSP0003,ShipmentChangeRequestConfirm,SSP0200_GET_SHIPMENT_DIVISION,endpoints,Y,SCM_MST_SITE,R,공통(마스터·시스템),body
+SSP0003,ShipmentChangeRequestConfirm,SSP0200_GET_SHIPMENT_DIVISION,endpoints,Y,TB_FX_USERGROUPAUTHEXTENTION,R,공통(마스터·시스템),body
 SSP0005,ShipmentWorkingDay,SCM0001_GET_SCP_PERIOD,matrix+endpoints,Y,SCM_SYS_CALENDAR_M,R,공통(마스터·시스템),body
 SSP0005,ShipmentWorkingDay,SCP0009_GET_SHEET_CALENDAR_3SPAN,matrix+endpoints,Y,SCM_SYS_CALENDAR_M,R,공통(마스터·시스템),body
 SSP0005,ShipmentWorkingDay,SSP0005_GET_SHIPMENT_WORKING_DAY,matrix+endpoints,Y,SCM_SYS_CALENDAR_M,R,공통(마스터·시스템),body

@@ -1,0 +1,89 @@
+{
+  "id": "20261120225006_SELF_2",
+  "at": "2026-11-20T22:50:06+09:00",
+  "ms": 1795182606477,
+  "source": "self",
+  "status": "applied",
+  "sig": "doc_style 확인된오탐 제외목록 실패표시",
+  "title": "doc_style.py JS 소스 검사에 확인된 오탐 제외 목록과 줄 머리 ✖ 실패 표시 제외 추가",
+  "evidence": "doc_style.py:215-229 scan_source 에 예외 처리 없음(grep allow|ignore|exclude 0건). 제외 사유를 소스에서 확인함. workbench.js:661 FAIL_RE 가 '^✖' 를 실패 줄로 읽음(:663 noteLine). history.js:167, :172 '💬 프롬프트'는 같은 줄 📋 🔗 ⚙️ 와 같은 버튼 아이콘. extension.js:470 '🔎 CheckList 실행'은 메뉴 이름 인용. jobs.js L107 'abled>▶'는 HTML 단추 기호. orchestra.js L13 은 웹뷰 스크립트 정규식 '/ · | — |\\./'. orch-ledger.js L133 '함 → 변경 후', orch-usercheck.js L605 '없음 → 추가'는 변경 전후 표기. orch-vision.js:66 '근거로 판단한다'는 단정 어미. orch-undo.js:48 '곳에 있어 위치를'은 '~에 있어서' 번역투 아님. workbench.js 줄 머리 ✖ 리터럴 17건(L689, L690, L705, L713, L715 첫 건, L721 첫 건, L727, L747, L792, L948, L1001, L1068, L1204, L1233, L1252, L1266, L1294)",
+  "targets": [
+    "tools/Docs/doc_style.py"
+  ],
+  "before_after": "변경 전: .js 문자열 리터럴의 규칙 위반을 모두 셈. 변경 후: (1) 코드 상수 KNOWN_OK = [(파일 이름, 걸린 표현 일부, 사유)] 9건을 두고, 같은 파일에서 걸린 표현이 맞으면 위반 수에서 뺌. 보고 csv 에는 규칙 칸 '제외'와 사유를 넣어 남김. (2) .js 리터럴 첫 글자(공백 뺀)가 ✖ 또는 ✘ 인 기호 위반은 '제외(FAIL_RE 실패 표시, workbench.js:661)'로 남기고 셈에서 뺌. 'Vibe_Manager ✖' 처럼 가운데 있는 ✖ 는 종전대로 셈. xlsx, md, py 검사는 바뀌지 않음",
+  "verify": "python -m py_compile tools/Docs/doc_style.py 통과. python tools/Docs/doc_style.py tools/VibeManager/history.js tools/VibeManager/extension.js tools/VibeManager/jobs.js tools/VibeManager/orch-ledger.js tools/VibeManager/orch-undo.js tools/VibeManager/orch-usercheck.js tools/VibeManager/orch-vision.js tools/VibeManager/orchestra.js --quiet 출력에서 8개 파일 위반 0. workbench.js 위반 214 → 197(제외 17건이 csv 에 '제외'로 남음). Doc/UI_CHECKLIST 의 xlsx 1개를 반영 전후로 검사해 위반 수 같음",
+  "rollback": "tools/Docs/doc_style.py 를 반영 전 백업으로 되돌림",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 오탐이 문구 정리 3개 절에서 제외로 처리되고도 다시 걸림(CHANGELOG.md:339 14:12 제외 8건, :284 14:55 제외 23건, :352 14:05 extension.js L470). 이번 S11 에도 같은 표현 26건이 다시 나옴",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T02:11:22+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T02:14:46+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self0211"
+    },
+    {
+      "at": "2026-11-21T02:14:48+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T02:20:57+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T02:20:57+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 02:17 실행. python -m py_compile tools/Docs/doc_style.py 오류 없음. git diff --stat HEAD: tools/Docs/doc_style.py 56 insertions, 8 deletions. python tools/Docs/doc_style.py <8개 js> tools/VibeManager/workbench.js --quiet 출력: 'history.js | 문장 39 | 위반 0 | 제외 2', 'extension.js | 문장 212 | 위반 0 | 제외  · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-21T02-14-48_claude_orch.log",
+      "sec": 160,
+      "costUsd": 1.0838074,
+      "files": [
+        "tools/Docs/doc_style.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S11",
+  "selfKey": "S11|workbench.js, S11|history.js, S11|extension.js, S11|jobs.js, S11|orch-ledger.js, S11|orch-undo.js, S11|orch-usercheck.js, S11|orch-vision.js, S11|orchestra.js",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795194682317,
+  "autoFp": "c6429aab11",
+  "applyStartMs": 1795194888312,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self0211",
+  "needsReload": false,
+  "appliedMs": 1795195257361,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/Docs/doc_style.py"
+    ],
+    "verify_result": "2026-11-21 02:17 실행. python -m py_compile tools/Docs/doc_style.py 오류 없음. git diff --stat HEAD: tools/Docs/doc_style.py 56 insertions, 8 deletions. python tools/Docs/doc_style.py <8개 js> tools/VibeManager/workbench.js --quiet 출력: 'history.js | 문장 39 | 위반 0 | 제외 2', 'extension.js | 문장 212 | 위반 0 | 제외 1', 'jobs.js | 문장 44 | 위반 0 | 제외 1', 'orch-ledger.js | 문장 60 | 위반 0 | 제외 1', 'orch-undo.js | 문장 22 | 위반 0 | 제외 1', 'orch-usercheck.js | 문장 122 | 위반 0 | 제외 1', 'orch-vision.js | 문장 28 | 위반 0 | 제외 1', 'orchestra.js | 문장 83 | 위반 0 | 제외 1', 'workbench.js | 문장 534 | 위반 166 | 수식어 5 기호 156 소개·맺음 2 추측 1 용어 2 | 제외 27'. 반영 전 workbench.js 위반 193(같은 날 측정, 개선안 작성 시점 214에서 파일이 바뀜). 'Vibe_Manager ✖' 기호 위반 11건 유지, 제외 0건. xlsx: Doc/UI_CHECKLIST/SCP0028_ShipmentLotSize_CheckList_v17.xlsx 반영 전(HEAD 본) 'SCP0028_ShipmentLotSize_CheckList_v17.xlsx | 문장 21694 | 위반 829 | 수식어 268 주어 4 번역투 98 기호 229 틀 75 소개·맺음 1 추측 97 추상어 31 용어 26', 반영 후 같은 줄, 보고 csv 같음 True",
+    "note": "KNOWN_OK 8건: 개선안 근거 9건 중 workbench.js 1건은 리터럴 머리 ✖ 규칙(2)로 처리함. 제외 행은 보고 csv 에 규칙 칸 '제외', 고치는 법 칸 '<원래 규칙>: <사유>' 로 남김. scan() 반환 위반 목록에서 제외 행을 빼고 scan.excluded 로 넘김. 위반 0이어도 제외 행이 있으면 csv 를 씀. workbench.js 제외 27건: 개선안 목록 17건(L689~L1301, 줄 번호 일부 이동) 외 L3025, L3276, L3290, L3363, L3371, L3414, L3521, L3534, L3555, L3572 10건이 더 걸림. 이 10건이 FAIL_RE(workbench.js:661)를 지나는지 미확인. xlsx, md, py 검사 경로 변경 없음."
+  },
+  "snap": "prop_20261120225006_SELF_2"
+}

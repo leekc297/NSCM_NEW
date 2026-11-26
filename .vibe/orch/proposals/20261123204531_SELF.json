@@ -1,0 +1,114 @@
+{
+  "id": "20261123204531_SELF",
+  "at": "2026-11-23T20:45:31+09:00",
+  "ms": 1795434331020,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/extension.js|kindclaude터미널실행snclaudetodo이식은runrulenot",
+  "title": "사용자 지시 R39 같은 문제: tools/VibeManager/extension.js:245 kind claude 터미널 실행(S5.claude TODO 이식)은 run-rule NOTE 를 붙이지 않아 진행 보고와 끝까지 진행 지시가 빠짐",
+  "evidence": "규칙 R39 \"긴 자동 진행 작업은 5분마다 진행 상태 한 줄을 보고하고 전체가 끝날 때까지 멈추지 않고 진행함\" (원래 지시 2026-11-11 14:47 \"중간 중간에 진행상태 알려주고, 전체 다 끝날때까지는 자동 진행해주세요.\") · tools/VibeManager/extension.js:245 const instruction = `${rel} 를 읽고 그 지시대로 화면 ${id} 작업을 해주세요.${genNotes ? ` 메모: ${genNotes}.` : ''} TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`;",
+  "targets": [
+    "tools/VibeManager/extension.js"
+  ],
+  "before_after": "instruction 앞에 require('./run-rule').NOTE 를 붙임(workbench.js 967행 방식). 실패하면 orch-errlog 에 기록함",
+  "verify": "node --check tools/VibeManager/extension.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/extension.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T08:17:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T08:20:58+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self0817"
+    },
+    {
+      "at": "2026-11-24T08:21:00+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T08:32:34+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 extension.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-24T08:32:34+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-24 08:24:50 반영 전: node --check 통과, run_all 'ALL OK  파일 74/74  PASS 1161  FAIL 0' → 2026-11-24 08:28:41 반영 뒤: node --check 통과, run_all 'ALL OK  파일 74/74  PASS 1161  FAIL 0'. NOTE 검사 {len:584, nl:false, special:false, dq:false} · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T08-21-00_claude_orch.log",
+      "sec": 478,
+      "costUsd": 0.6286815,
+      "files": [
+        "tools/VibeManager/extension.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:35+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "긴 자동 진행 작업은 5분마다 진행 상태 한 줄을 보고하고 전체가 끝날 때까지 멈추지 않고 진행함 규칙을 tools/VibeManager/extension.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R39|tools/VibeManager/extension.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795475841044,
+  "autoFp": "19789a018a",
+  "applyStartMs": 1795476060432,
+  "verifyJudge": {
+    "at": "2026-11-24T08:29:00+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self0817",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "extension.js"
+  ],
+  "appliedMs": 1795476754848,
+  "synced": [
+    "extension.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/extension.js 통과(반영 전·뒤) · node tools/VibeManager/test/run_all.js 반영 전 'ALL OK  파일 74/74  PASS 1161  FAIL 0  213.5s' → 반영 뒤 'ALL OK  파일 74/74  PASS 1161  FAIL 0  212.6s' · extension.js 는 웹뷰 파일 아님이라 t_webview_syntax.js 대상 아님"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/extension.js"
+    ],
+    "verify_result": "2026-11-24 08:24:50 반영 전: node --check 통과, run_all 'ALL OK  파일 74/74  PASS 1161  FAIL 0' → 2026-11-24 08:28:41 반영 뒤: node --check 통과, run_all 'ALL OK  파일 74/74  PASS 1161  FAIL 0'. NOTE 검사 {len:584, nl:false, special:false, dq:false}",
+    "note": "runClaude 의 instruction 앞에 require('./run-rule').NOTE 를 붙임(headless·대화형 공통). require 실패 시 orch-errlog.note('extension','runClaude.runRule') 기록 후 NOTE 없이 진행. git diff 의 다른 줄은 이번 작업 전부터 있던 변경임"
+  },
+  "snap": "prop_20261123204531_SELF",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

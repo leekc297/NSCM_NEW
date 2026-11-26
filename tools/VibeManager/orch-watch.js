@@ -17,13 +17,16 @@ const state = require('./orch-state');
 let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
 
 const DEF = { repeatLockCount: 3, repeatLockMin: 60, repeatSameScreen: 2, repeatAllScreens: 3, repeatDays: 14, stepSlowFactor: 2, stepSlowMinSec: 60, stepSlowMinSamples: 3, waitMaxSec: 600, stallSec: 600, openFailRepeat: 5, serverListenSec: 60, tcpWarn: 12000, dedupeMin: 30, tickSec: 30, r14Enabled: true, stopLeakSec: 60 };
-const TITLE = { R1: '실행 실패', R2: '같은 오류 반복', R3: '단계 지연', R4: '대기 지연', R5: '진행 없음', R6: '서버 이상', R7: 'Claude 비정상 종료', R8: 'TCP 연결 수 높음', R13: '화면 진입 실패 반복', R9: '죽은 잠금', R10: 'CheckList 판정 정체', R11: 'Claude 없이 끝난 체인에 오류 남음', R12: 'VM 자가진단', R14: '중지 뒤 계속 실행' }; // R12 = orch-selfcheck.js 가 올린다(2026-11-19)
+const LG = () => { try { const l = require('./orch-ledger'); if (!l.ready() && root) l.init({ paths: () => ({ root, vibeDir: path.dirname(orchDir) }) }); return l; } catch (e) { return { note() { return ''; }, observing() { return false; } }; } }; // 2026-11-20 개입 장부
+const TITLE = { R15: 'VMO 개입 오판', R1: '실행 실패', R2: '같은 오류 반복', R3: '단계 지연', R4: '대기 지연', R5: '진행 없음', R6: '서버 이상', R7: 'Claude 비정상 종료', R8: 'TCP 연결 수 높음', R13: '화면 진입 실패 반복', R9: '죽은 잠금', R10: 'CheckList 판정 정체', R11: 'Claude 없이 끝난 체인에 오류 남음', R12: 'VM 자가진단', R14: '중지 뒤 계속 실행' }; // R12 = orch-selfcheck.js 가 올린다(2026-11-19)
 
 let root = '', orchDir = '', incDir = '', started = false, timer = null, serverSvc = null;
 let cfg = Object.assign({}, DEF);
 const listeners = new Set();        // fn(incident, isNew)
 const seenOnce = new Set();         // 한 번만 알리는 키(R4·R5·R9)
 const stops = new Map();            // wb → 사용자 중지 시각(ms)
+const stoppedRuns = new Map();      // 개선안 20261122000646_SELF: runId → { ms, by } user.stop 에 runId 가 있는 중지. 읽는 쪽은 runId 로 먼저 맞추고 runId 없는 옛 기록만 시각 차이로 추정
+const runStopped = ev => !!(ev && ev.runId && stoppedRuns.has(ev.runId));
 const stopWatch = new Map();        // R14: wb → { ms, screen, job, runId, leaks[] } 중지 때 살아 있던 체인. 같은 체인이 새 단계·프로세스·Claude 를 띄우면 사건
 let lastTcpInc = 0;
 let lastTickMs = 0;                // 자가진단 S7: 감시기 tick 이 도는지 확인하는 값
@@ -32,7 +35,7 @@ let initMs = 0;                    // 감시기 init 시각. 이보다 이른 �
 const two = n => String(n).padStart(2, '0');
 const stamp = (ms) => { const d = new Date(ms || Date.now()); return `${d.getFullYear()}${two(d.getMonth() + 1)}${two(d.getDate())}_${two(d.getHours())}${two(d.getMinutes())}${two(d.getSeconds())}`; };
 const readJson = (f, dflt) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return dflt; } };
-const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 2), 'utf8'); return true; } catch (e) { errlog.note('orch-watch', 'writeJson', e); return false; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); require('./fs-retry').writeFileSyncRetry(f, JSON.stringify(v, null, 2), 'utf8'); /* 2026-11-26 쓰기 일시 실패 재시도(fs-retry.js) */ return true; } catch (e) { errlog.note('orch-watch', 'writeJson', e); return false; } };
 function loadCfg() { const h = readJson(path.join(root, 'tools', 'Harness', 'harness.json'), {}); cfg = Object.assign({}, DEF, (h && h.orch) || {}); return cfg; }
 
 // ── 사건 저장·조회 ──
@@ -47,7 +50,8 @@ function save(inc) { return writeJson(path.join(incDir, `${inc.id}.json`), inc);
 function update(id, patch, action) {
   const inc = get(id); if (!inc) return null;
   if (inc.reload && patch && patch.status === 'need-user') patch = Object.assign({}, patch, { status: inc.status }); // 창 다시 로드로 생긴 사건 = 사용자 확인 대상 아님(2026-11-20 사용자 지시)
-  Object.assign(inc, patch || {}); if (action) { inc.actions = inc.actions || []; inc.actions.push(Object.assign({ at: orchEv ? orchEv.nowLocal() : new Date().toISOString() }, action)); }
+  const st0 = inc.status; Object.assign(inc, patch || {}); if (orchEv && patch && patch.status && patch.status !== st0) { try { orchEv.emit('incident.update', { id: inc.id, rule: inc.rule, screen: inc.screen, from: st0, status: inc.status, by: (action && action.by) || '' }); } catch { /* 기록만 */ } } // 2026-11-20 상태 변경 사건(개입 장부 대조 원천)
+  if (action) { inc.actions = inc.actions || []; inc.actions.push(Object.assign({ at: orchEv ? orchEv.nowLocal() : new Date().toISOString() }, action)); }
   save(inc); for (const fn of listeners) { try { fn(inc, false); } catch (ex) { errlog.note('orch-watch', 'listener', ex); } }
   return inc;
 }
@@ -57,7 +61,7 @@ function raise(rule, o) {
   // 같은 사건이 열려 있으면 횟수만 올린다
   const open = list(60).find(x => x.rule === rule && x.sig === sig && (x.screen || '') === screen && x.status !== 'closed' && x.status !== 'resolved' && now - (x.ms || 0) < cfg.dedupeMin * 60000);
   if (open) { if (o.evidence) open.evidence = o.evidence; if (o.title && /반복 \d+회/.test(o.title)) open.title = o.title; open.count = (open.count || 1) + 1; open.lastAt = orchEv ? orchEv.nowLocal(now) : ''; open.lastMs = now; if (o.detail) open.detail = o.detail; save(open); for (const fn of listeners) { try { fn(open, false); } catch (ex) { errlog.note('orch-watch', 'listener', ex); } } return open; }
-  const inc = { id: `${stamp(now)}_${rule}_${screen || 'ALL'}`, at: orchEv ? orchEv.nowLocal(now) : new Date(now).toISOString(), ms: now, rule, ruleName: TITLE[rule] || rule, title: o.title || TITLE[rule] || rule, screen, sig, count: 1, repeat: o.repeat || null, detail: o.detail || '', evidence: o.evidence || {}, status: o.notice ? 'resolved' : 'open', notice: !!o.notice, actions: o.notice ? [{ at: orchEv ? orchEv.nowLocal(now) : '', by: 'VMO', what: '알림(사건 아님). Claude 조치 없음' }] : [] };
+  const inc = { id: `${stamp(now)}_${rule}_${screen || 'ALL'}`, at: orchEv ? orchEv.nowLocal(now) : new Date(now).toISOString(), ms: now, rule, ruleName: TITLE[rule] || rule, title: o.title || TITLE[rule] || rule, screen, sig, count: 1, repeat: o.repeat || null, detail: o.detail || '', evidence: o.evidence || {}, status: o.notice ? 'resolved' : 'open', notice: !!o.notice, ...(o.reload ? { reload: o.reload } : {}), actions: o.notice ? [{ at: orchEv ? orchEv.nowLocal(now) : '', by: 'VMO', what: '알림(사건 아님). Claude 조치 없음' }] : [] };
   let n = 1; while (fs.existsSync(path.join(incDir, `${inc.id}.json`))) inc.id = `${stamp(now)}_${rule}_${screen || 'ALL'}_${++n}`;
   save(inc);
   if (orchEv) orchEv.emit('incident', { id: inc.id, rule, screen, title: inc.title, sig });
@@ -86,7 +90,8 @@ function failure(o) { // 실패 1건 → 반복 기준을 넘으면 R2, 아니�
   if (NOTARGET_RE.test(String(o.detail || ''))) { try { if (orchEv) orchEv.emit('notice', { screen: String(o.screen || '').toUpperCase(), what: '대상 아님(TO-BE 화면 없음)', title: o.title || '', sig: o.sig || '' }); } catch (ex) { errlog.note('orch-watch', 'notarget', ex); } return null; }
   const rp = noteSig(o.sig, o.screen, o.key, !o.cut);
   if (rp.dup) return null;
-  if (o.cut) return raise('R1', Object.assign({}, o, { repeat: rp, title: `${o.title} (창 종료로 끊긴 실행 · 반복 집계 제외)` }));
+  // 개선안 20261126053333_SELF(규칙 R143): 창 다시 로드로 끊긴 실행은 실패 사건 대신 알림(status resolved, Claude 조치 없음)으로 올림
+  if (o.cut) return raise('R1', Object.assign({}, o, { repeat: rp, notice: true, reload: 'cut', title: `${o.title} (창 다시 로드로 끊긴 실행 알림, 반복 집계 제외)` }));
   const repeated = rp.same >= cfg.repeatSameScreen || rp.all >= cfg.repeatAllScreens;
   return raise(repeated ? 'R2' : 'R1', Object.assign({}, o, { repeat: rp, title: repeated ? `같은 오류 반복 ${rp.same >= cfg.repeatSameScreen ? `${o.screen || '공통'} ${rp.same}회` : `전 화면 ${rp.all}회`}: ${o.title}` : o.title }));
 }
@@ -133,7 +138,7 @@ function stopCleanLock(l, fileScreen, evs) {
   const scr = String(fileScreen || (SCREEN_RE.exec(String(l.args || '')) || [])[1] || '').toUpperCase(); if (!scr) return false;
   const st = recentStopFor(scr, evs); if (!st) return false;
   const f = path.join(root, 'Doc', 'e2e', l.file);
-  try { const j = readJson(f, null); if (!j || Number(j.pid) !== Number(l.pid) || state.pidAlive(Number(j.pid))) return false; fs.unlinkSync(f); } catch (e) { errlog.note('orch-watch', 'stopCleanLock', e); return false; }
+  try { const j = readJson(f, null); if (!j || Number(j.pid) !== Number(l.pid) || state.pidAlive(Number(j.pid))) return false; fs.unlinkSync(f); LG().note({ kind: 'lockdel', rule: 'lock', screen: scr, target: `Doc/e2e/${l.file}`, premise: { key: 'lockOwnerDead', lockPid: Number(l.pid) } }); } catch (e) { errlog.note('orch-watch', 'stopCleanLock', e); return false; }
   const stopKo = st.type === 'user.stop' ? `중지 ${st.by || ''}`.trim() : `VMW 작업 ${st.job || ''} ${st.status}`;
   const msg = `중지 뒤 잠금 정리: Doc/e2e/${l.file} (PID ${l.pid} 없음 · 화면 ${scr} · ${stopKo} ${orchEv ? orchEv.nowLocal(st.ms).slice(11, 19) : st.ms})`;
   // 개선안 20261120143326_SELF_2: info: true = 정상 처리 기록. vm_errors.jsonl 에는 남기고 errlog.stats()(S5) 집계에서 뺀다
@@ -142,6 +147,23 @@ function stopCleanLock(l, fileScreen, evs) {
   try { fs.appendFileSync(path.join(orchDir, 'activations.jsonl'), JSON.stringify(Object.assign({ at: orchEv ? orchEv.nowLocal() : new Date().toISOString() }, rec)) + '\n', 'utf8'); } catch (e) { errlog.note('orch-watch', 'stopCleanLock.act', e); }
   return true;
 }
+// ── 입장 잠금 유효 시각 경과(개선안 20261121100244_REVIEW_2 · 사용자 승인 2026-11-21) ──
+//   실측: R9|_run.admit.lock 12회 전부 resolved, 잠금 시작~감지 5~223분으로 verifyAdmitRampSec(120초) 경과. run_verify.py:1528 은 until 경과 또는 주인 없음이면
+//   잠금을 스스로 지우고 들어가는 설계이고 쥔 실행은 끝날 때 파일을 지우지 않는다. 그래서 정상 종료 뒤 남은 파일 = 사건 없이 지우고 lockdel 장부 1줄만 남긴다.
+//   until 이 남았는데 주인이 없을 때만 종전대로 R9. 주인이 살아 있으면 손대지 않는다(장부 lockdel 사후 검증이 주인 생존을 '전제 틀림'으로 본다)
+const ADMIT_LOCK = '_run.admit.lock';
+/** 반환 = true(지움 · 사건 안 만듦) | false(종전대로 R9, R2 판정) */
+function admitCleanLock(l) {
+  if (!l || l.file !== ADMIT_LOCK) return false;
+  const f = path.join(root, 'Doc', 'e2e', l.file);
+  try {
+    const j = readJson(f, null); if (!j || Number(j.pid) !== Number(l.pid) || state.pidAlive(Number(j.pid))) return false;
+    const until = Number(j.until) || 0; if (!until || Date.now() / 1000 <= until) return false;
+    fs.unlinkSync(f);
+    LG().note({ kind: 'lockdel', rule: 'lock', screen: String(j.id || ''), target: `Doc/e2e/${l.file}`, premise: { key: 'admitExpired', lockPid: Number(l.pid), until: orchEv ? orchEv.nowLocal(Math.round(until * 1000)) : until } });
+    return true;
+  } catch (e) { errlog.note('orch-watch', 'admitCleanLock', e); return false; }
+}
 
 // ── R3: 단계 소요 통계 ──
 const statFile = () => path.join(orchDir, 'step_stats.json');
@@ -149,7 +171,8 @@ function median(a) { const s = [...a].sort((x, y) => x - y); const m = Math.floo
 // 개선안 20261120094734_INC: 통계 키를 단계|화면으로 나눈다(실측: S8.checklistRun 표본 4개 중 3개가 06:07:32 동시 시작한 SCP0028, SSP0014, SCP0005 실행 시간).
 //   화면 없는 종전 키는 그대로 두며, 화면별 표본이 stepSlowMinSamples 개 쌓일 때까지 R3 를 올리지 않는다
 function noteStep(ev) {
-  const base = ev.task || ev.name; if (!base || !ev.ms_run) return;
+  // 개선안 20261122130655_REVIEW_3: stepKey(task + 고정 인자, 예 S8.checklistRun:--docs)를 먼저 쓴다. 옛 기록은 종전 키
+  const base = ev.stepKey || ev.task || ev.name; if (!base || !ev.ms_run) return;
   const key = ev.screen ? `${base}|${ev.screen}` : base;
   const st = readJson(statFile(), {}); const arr = st[key] || [];
   if (arr.length >= cfg.stepSlowMinSamples) {
@@ -201,8 +224,19 @@ function userStopped(wb, screen) { const t = stops.get(wb); if (t && Date.now() 
 /** user.stop 때 그 창(wb)에 살아 있던 체인을 기억한다. 오래된 중지 기록(다시 읽기)은 보지 않는다 */
 function watchStop(ev) {
   if (cfg.r14Enabled === false || ev.wb == null) return; const ms = ev.ms || Date.now(); if (Date.now() - ms > STALE_EVENT_MS) return;
-  const ch = state.snapshot().chains.find(c => c.wb === ev.wb); if (!ch) return;
+  // 2026-11-20 R14 오판(16:06:50 SCP0028): 창 다시 로드 때 끝난 옛 VM 프로세스(32932)의 중지 기록(14:56:34)을 새 프로세스가 재개 체인(14:58:16 시작) 뒤에 읽어 재개 체인을 '중지된 체인'으로 묶음 → 재개 2단계 시작을 계속 실행으로 보고 자가 복구가 사용자 실행을 멈춤.
+  //   ① 끝난 VM 프로세스의 중지 기록 = 그 프로세스의 체인은 함께 끝남 → 감시 안 함 ② 중지 시각 뒤에 시작한 체인(재개 · 다시 실행) = 묶지 않음
+  if (ev.src === 'vm' && ev.pid && ev.pid !== process.pid && !state.pidAlive(ev.pid)) return;
+  // 개선안 20261122000646_SELF: runId 가 있는 중지 = 그 체인만(재개·다시 실행 체인은 runId 가 달라 묶이지 않음). runId 없는 옛 기록 = 같은 창, 중지 시각 전에 시작한 체인
+  //   개선안 20261125000907_VISION 재개 원장: runId 없는 중지 기록은 재개 계보(resumedFrom)가 있는 체인에 묶지 않는다. 그 중지는 끊긴 앞 실행의 것(16:06:50 SCP0028 오판)
+  const ch = ev.runId ? state.snapshot().chains.find(c => c.runId === ev.runId) : state.snapshot().chains.find(c => c.wb === ev.wb && Date.now() - (c.sec || 0) * 1000 <= ms + 2000 && !resumedFromOf(c.runId)); if (!ch) return;
   stopWatch.set(ev.wb, { ms, screen: String(ev.screen || ch.screen || '').toUpperCase(), job: ev.job || ch.job || '', runId: ch.runId, label: ch.label || '', by: ev.by || '', leaks: [] });
+}
+/** 재개 계보: runId → 끊긴 앞 실행 runId. chain.resume 사건 또는 원장(.vibe/orch/chain_progress/<runId>.json resumedFrom). 없으면 '' */
+const resumedRuns = new Map();
+function resumedFromOf(runId) {
+  if (!runId) return ''; if (resumedRuns.has(runId)) return resumedRuns.get(runId);
+  try { const r = readJson(path.join(orchDir || path.join(root, '.vibe', 'orch'), 'chain_progress', `${runId}.json`), null); return (r && r.resumedFrom) || ''; } catch { return ''; }
 }
 const LEAK_KO = { 'step.start': '단계 시작', 'proc.start': '프로세스 시작', 'claude.start': 'Claude 시작', 'claude.wait': 'Claude 자리 대기' };
 /** 멈춘 체인이 새로 띄운 실행 1건 → R14. 같은 체인은 사건 1건에 횟수만 올린다 */
@@ -224,7 +258,7 @@ function stopRecordCheck(snap) {
   for (const c of snap.chains) {
     if (!c.job) continue; const k = `R14|rec|${c.runId}`; if (seenOnce.has(k)) continue;
     const js = jobStatus(c.job); if (!js || js.status !== 'stopped') continue;
-    const since = stops.get(c.wb) || js.mtime; if (Date.now() - since < cfg.stopLeakSec * 1000) continue;
+    const since = (stoppedRuns.get(c.runId) || {}).ms || stops.get(c.wb) || js.mtime; if (Date.now() - since < cfg.stopLeakSec * 1000) continue;
     seenOnce.add(k);
     raise('R14', { screen: c.screen, sig: `R14|${c.wb}|${c.runId}`, title: `중지 뒤 계속 실행. VMW 작업 ${c.job} 은 '${js.note || '중지'}' 인데 ${c.screen} 체인이 ${Math.round((Date.now() - since) / 1000)}초째 실행 중`, detail: `체인 ${c.label} · 지금 단계 ${c.step ? `[${c.step.no}] ${c.step.name}` : '단계 사이'}`, evidence: { wb: c.wb, screen: c.screen, job: c.job, runId: c.runId, chain: c.label, stopMs: since, leaks: [] } });
   }
@@ -239,7 +273,8 @@ function onEvent(ev) {
     if (t !== 'user.stop' && ev.ms && Date.now() - ev.ms > STALE_EVENT_MS) return;
     // user.stop: 작업 목록 중지(stop), 화면 중지(stopScreen), VMO 다시 실행(requeueScreen), VS Code 종료(dispose · why 'vscode.dispose', 개선안 20261120005403_INC) 모두 같은 처리.
     //   뒤따르는 proc.end, step.end FAIL 은 failure() 를 부르지 않으므로 R1 사건과 R2 반복 이력(sig_history)에 들어가지 않고, chain.end 는 R11 을 만들지 않는다
-    if (t === 'user.stop') { stops.set(ev.wb, ev.ms || Date.now()); watchStop(ev); return; }
+    if (t === 'user.stop') { stops.set(ev.wb, ev.ms || Date.now()); if (ev.runId) { stoppedRuns.set(ev.runId, { ms: ev.ms || Date.now(), by: ev.by || '' }); if (stoppedRuns.size > 500) stoppedRuns.delete(stoppedRuns.keys().next().value); } watchStop(ev); return; }
+    if (t === 'chain.resume' && ev.runId && ev.resumedFrom) { resumedRuns.set(ev.runId, ev.resumedFrom); if (resumedRuns.size > 500) resumedRuns.delete(resumedRuns.keys().next().value); } // 재개 원장 계보
     if (t === 'chain.start' || t === 'chain.end') { const s = stopWatch.get(ev.wb); if (s && (t === 'chain.start' ? ev.runId !== s.runId : ev.runId === s.runId)) stopWatch.delete(ev.wb); } // 다시 실행(새 체인) 또는 멈춘 체인이 끝남 = 지켜보기 끝
     if (t === 'step.start' || t === 'proc.start' || t === 'claude.start' || t === 'claude.wait') stopLeak(ev);
     // 2026-11-20 개선안 20261120005059_INC: 감시기 init 전 사건 = 상태 반영만(orch-state.apply 가 이미 함). R1, R2, R7, R11 판정 안 함
@@ -247,17 +282,17 @@ function onEvent(ev) {
     // 실패를 보낸 VM 프로세스가 처리 시점에 없음 = VS Code 종료, 창 다시 로드로 끊긴 실행(실측: jobs/J20261120_003352 'VS Code 종료로 중단됨'). 반복 집계에서 뺀다
     const cutRun = ev.src === 'vm' && !!ev.pid && ev.pid !== process.pid && !state.pidAlive(ev.pid);
     if (t === 'proc.end' && ev.exit !== 0 && ev.exit != null && !ev.server) {
-      if (beforeInit || ev.stopped === true || userStopped(ev.wb, ev.screen)) return; // 개선안 20261120131344_SELF: 끝 기록의 중지 표시 먼저. userStopped 는 stopped 필드 없는 옛 기록용
+      if (beforeInit || ev.stopped === true || runStopped(ev) || userStopped(ev.wb, ev.screen)) return; // 개선안 20261120131344_SELF: 끝 기록의 중지 표시 먼저. userStopped 는 stopped 필드 없는 옛 기록용
       const inChain = state.snapshot().chains.some(c => c.wb === ev.wb && c.screen === ev.screen);
       if (inChain) return;                               // 체인 안 실패는 step.end 가 판정(okCodes · verify 반영)
       failure({ screen: ev.screen, sig: ev.sig || `proc|${ev.label}`, key: `${ev.ms || ''}|${ev.pid || ''}`, cut: cutRun, title: `${ev.label} 실패 (exit ${ev.exit})`, detail: ev.why || '', evidence: { log: ev.log, exit: ev.exit, whySrc: ev.whySrc, pid: ev.pid } });
     }
     else if (t === 'step.end') {
       noteStep(ev);
-      if (ev.status === 'FAIL' && !beforeInit && ev.stopped !== true && !userStopped(ev.wb, ev.screen)) failure({ screen: ev.screen, sig: ev.sig || `step|${ev.task || ev.name}`, key: ev.runId ? `${ev.runId}|${ev.no != null ? ev.no : ''}` : `${ev.ms || ''}|${ev.pid || ''}`, cut: cutRun, title: `${ev.name} 실패${ev.exit != null ? ` (exit ${ev.exit})` : ''} — ${ev.chainLabel || ''}`, detail: ev.why || ev.note || '', evidence: { runId: ev.runId, task: ev.task, actor: ev.actor, failFrom: ev.failFrom, repairs: ev.repairs } });
+      if (ev.status === 'FAIL' && !beforeInit && ev.stopped !== true && !runStopped(ev) && !userStopped(ev.wb, ev.screen)) failure({ screen: ev.screen, sig: ev.sig || `step|${ev.task || ev.name}`, key: ev.runId ? `${ev.runId}|${ev.no != null ? ev.no : ''}` : `${ev.ms || ''}|${ev.pid || ''}`, cut: cutRun, title: `${ev.name} 실패${ev.exit != null ? ` (exit ${ev.exit})` : ''} — ${ev.chainLabel || ''}`, detail: ev.why || ev.note || '', evidence: { runId: ev.runId, task: ev.task, actor: ev.actor, failFrom: ev.failFrom, repairs: ev.repairs } });
     }
     else if (t === 'chain.end') {
-      if (ev.stopped === true || userStopped(ev.wb, ev.screen)) return; // 사용자(또는 사용자 지시를 받은 에이전트, VMO 자가 복구)가 멈춘 체인 = 실패 사건 없음
+      if (ev.stopped === true || runStopped(ev) || userStopped(ev.wb, ev.screen)) return; // 사용자(또는 사용자 지시를 받은 에이전트, VMO 자가 복구)가 멈춘 체인 = 실패 사건 없음
       if (/^checklist$/i.test(ev.chain || '') || /CheckList/i.test(ev.chainLabel || '')) checkChecklist(ev, beforeInit);
       else if (!beforeInit && ev.claudeRan === 0 && ev.ok === false && !userStopped(ev.wb)) raise('R11', { screen: ev.screen, sig: `R11|${ev.screen}|${ev.chain}`, title: `AI Agent 없이 끝난 체인. ${ev.chainLabel} ${ev.failNo ? `${ev.failNo}단계에서 중단` : '미완료'}`, detail: `스크립트 단계 ${ev.scriptRan}개 실행, Claude 단계 실행 0, 건너뜀 ${ev.claudeSkipped}`, evidence: { md: ev.md } });
     }
@@ -372,6 +407,7 @@ ${fe.msg}` : 'FE 변환 오류 없음. 메뉴 권한, BE 상태, 계정 순으�
     let stopEvs = null; // 개선안 20261120094531_REVIEW: 죽은 잠금이 있을 때만 사건 기록을 읽는다
     for (const l of snap.locks) {
       const k = `R9|${l.file}|${l.pid}`; if (l.alive !== false || seenOnce.has(k)) continue; seenOnce.add(k);
+      if (admitCleanLock(l)) continue; // 개선안 20261121100244_REVIEW_2: 유효 시각 지난 입장 잠금 = 사건 없이 지우고 장부 1줄만
       const screen = (/\.([A-Z]{2,4}\d{4}[A-Z]?)\.lock$/.exec(l.file) || [])[1] || '';
       if (stopEvs == null) stopEvs = orchEv ? orchEv.tail(2 * 1024 * 1024) : [];
       if (stopCleanLock(l, screen, stopEvs)) continue; // 중지 직후 남은 잠금 = 사건 없이 지우고 처리 기록만
@@ -420,11 +456,12 @@ function readLines(f) { const out = []; try { for (const ln of fs.readFileSync(f
 function reloadSweep() {
   const marked = [];
   try {
+    if (LG().observing && LG().observing('reload')) return marked; // 2026-11-20 관찰 모드: 자동 해결하지 않음
     const lastAct = x => { const a = (x.actions || []).slice(-1)[0]; const t = a ? Date.parse(a.at) : NaN; return Number.isFinite(t) ? t : (x.lastMs || x.ms || 0); };
     const cand = list(400).filter(x => !x.reload && !x.notice && (x.status === 'open' || x.status === 'need-user' || (x.status === 'acting' && Date.now() - lastAct(x) > 30 * 60000)));
     if (!cand.length) return marked;
     const ctx = { selfPid: process.pid, alive: state.pidAlive, events: orchEv ? orchEv.tail(8 * 1024 * 1024) : [], activations: readLines(path.join(orchDir, 'activations.jsonl')) };
-    for (const inc of cand) { const c = reloadCause(inc, ctx); if (!c) continue; update(inc.id, { status: 'resolved', notice: true, reload: c, prevStatus: inc.status }, { by: 'VMO', what: `창 다시 로드로 생긴 사건(${RELOAD_KO[c]}). 사용자 확인 대상에서 뺌` }); marked.push(inc.id); }
+    for (const inc of cand) { const c = reloadCause(inc, ctx); if (!c) continue; update(inc.id, { status: 'resolved', notice: true, reload: c, prevStatus: inc.status }, { by: 'VMO', what: `창 다시 로드로 생긴 사건(${RELOAD_KO[c]}). 사용자 확인 대상에서 뺌` }); LG().note({ kind: 'resolve', rule: 'reload', inc: inc.id, screen: inc.screen, premise: { key: 'causedByReload', sig: inc.sig, why: `창 다시 로드(${RELOAD_KO[c]})` }, undo: { how: 'reopen', status: inc.status === 'acting' ? 'open' : inc.status } }); marked.push(inc.id); }
   } catch (ex) { errlog.note('orch-watch', 'reloadSweep', ex); }
   return marked;
 }
@@ -446,4 +483,4 @@ function dispose() { if (timer) { clearInterval(timer); timer = null; } started 
 
 function health() { return { started, lastTickMs, initMs, tickSec: Math.max(5, cfg.tickSec) }; }
 
-module.exports = { _stopWatch: stopWatch, reloadCause, reloadSweep, RELOAD_KO, STALE_EVENT_MS, markUserStop, userStopped, feCompileError, openFailCount, init, dispose, on, list, get, update, raise, tick, onEvent, health, TITLE, DEF };
+module.exports = { _stopWatch: stopWatch, _stoppedRuns: stoppedRuns, runStopped,reloadCause, reloadSweep, RELOAD_KO, STALE_EVENT_MS, markUserStop, userStopped, feCompileError, openFailCount, init, dispose, on, list, get, update, raise, tick, onEvent, health, TITLE, DEF };

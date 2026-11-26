@@ -1,41 +1,63 @@
 import { Point } from '@mescius/wijmo';
 import { ChartType, FlexChart, Position, type RenderEventArgs } from '@mescius/wijmo.chart';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import type { ProductKey } from '../demand-as-dashboard.mock';
-import { INVENTORY_PROJECTION, PRODUCTS, SHORTAGE_MARK } from '../demand-as-dashboard.mock';
+import { useTabProcQuery } from '@shared/hooks';
+
+import { MENU_ID, SHEETS } from '../demand-as-dashboard.constants';
+import type { DashboardBaseFilters } from '../demand-as-dashboard.filters';
+import { LBL } from '../demand-as-dashboard.labels';
+import type { ProductKey } from '../demand-as-dashboard.types';
+import { PRODUCTS } from '../demand-as-dashboard.types';
 import styles from '../DemandAsDashboard.module.scss';
-import { drawYUnitTop } from '../wijmo-axis-unit';
 import { attachAutoSize } from '../wijmo-autosize';
+import { drawYUnitTop } from '../wijmo-axis-unit';
 import { styleLineLegend } from '../wijmo-legend';
 import { applyCompactTooltip } from '../wijmo-tooltip';
+
+import { mapInventoryProjection } from './inventoryProjectionChart.map';
 
 interface Props {
   product: ProductKey;
   onProductChange: (p: ProductKey) => void;
-  refreshKey: string;
+  tabId: string;
+  filters: DashboardBaseFilters & { nickName: string };
 }
 
 // '예상 부족 시작' 세로 선·라벨 색(부족 경고 = 빨강).
 const SHORTAGE_COLOR = '#d32f2f';
 
-export const InventoryProjectionChart = ({ product, onProductChange, refreshKey }: Props) => {
+export const InventoryProjectionChart = ({ product, onProductChange, tabId, filters }: Props) => {
   const hostRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+
+  const { data } = useTabProcQuery<MENU_ID, typeof SHEETS.INVENTORY_PROJECTION>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.INVENTORY_PROJECTION,
+    tabId,
+    filters,
+    enabled: !!filters,
+  });
+
+  const { points, shortageMark } = useMemo(
+    () => mapInventoryProjection(data?.o_rc1 ?? []),
+    [data]
+  );
 
   useEffect(() => {
     if (!hostRef.current) return undefined;
-    void refreshKey;
     const chart = new FlexChart(hostRef.current, {
-      itemsSource: INVENTORY_PROJECTION[product],
+      itemsSource: points,
       bindingX: 'x',
       // series 를 수요예측 추이처럼: LineSymbols(선 + 작은 동그라미 심볼 6px). 투영·안전선은 점선 유지.
       chartType: ChartType.LineSymbols,
       series: [
-        { name: '재고 (On Hand)', binding: 'onHand', symbolSize: 6 },
-        { name: '예상 수요', binding: 'demand', symbolSize: 6, style: { strokeDasharray: '6 4' } },
-        { name: '예상 입고', binding: 'inbound', symbolSize: 6, style: { strokeDasharray: '6 4' } },
+        { name: t(...LBL.seriesOnHand), binding: 'onHand', symbolSize: 6 },
+        { name: t(...LBL.seriesDemand), binding: 'demand', symbolSize: 6, style: { strokeDasharray: '6 4' } },
+        { name: t(...LBL.seriesInbound), binding: 'inbound', symbolSize: 6, style: { strokeDasharray: '6 4' } },
         // 안전재고는 기준선 성격이라 심볼 없이 점선만(ChartType.Line). 데이터 점을 찍지 않는다.
-        { name: '안전재고', binding: 'safety', chartType: ChartType.Line, style: { strokeDasharray: '2 3' } },
+        { name: t(...LBL.seriesSafety), binding: 'safety', chartType: ChartType.Line, style: { strokeDasharray: '2 3' } },
       ],
       palette: ['#1565c0', '#ed6c02', '#2e7d32', '#9e9e9e'],
       legend: { position: Position.Top },
@@ -48,8 +70,8 @@ export const InventoryProjectionChart = ({ product, onProductChange, refreshKey 
 
     // '예상 부족 시작'을 수요예측 추이의 Forecast 구분선처럼 해당 날짜에 세로 선 + 라벨로 표시.
     //   카테고리 축이라 축좌표 변환(convert) 필요 → rendered 이벤트에서 직접 그린다.
-    const mark = SHORTAGE_MARK[product];
-    const boundary = mark ? INVENTORY_PROJECTION[product].findIndex(p => p.x === mark.x) : -1;
+    const mark = shortageMark;
+    const boundary = mark ? points.findIndex(p => p.x === mark.x) : -1;
     chart.rendered.addHandler((_s, e: RenderEventArgs) => {
       if (!mark || boundary < 0) return;
       const x = chart.axisX.convert(boundary);
@@ -105,16 +127,17 @@ export const InventoryProjectionChart = ({ product, onProductChange, refreshKey 
     });
 
     return attachAutoSize(chart, hostRef.current);
-  }, [product, refreshKey]);
+  }, [points, shortageMark, t]);
 
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
         <span className={styles.panelTitle}>
-          재고 전망<small>(Inventory Projection)</small>
+          {t(...LBL.inventoryTitle)}
+          <small>({t(...LBL.inventorySubtitle)})</small>
         </span>
         <div className={styles.chartTool}>
-          <label>제품</label>
+          <label>{t(...LBL.product)}</label>
           <select value={product} onChange={e => onProductChange(e.target.value as ProductKey)}>
             {PRODUCTS.map(p => (
               <option key={p} value={p}>

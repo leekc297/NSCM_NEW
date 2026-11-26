@@ -55,6 +55,35 @@ const has = id => fs.existsSync(path.join(vibeDir, 'jobs', id));
   const rs = wb.resumable(p);
   chk('Workbench 끊긴 기록 24시간 지남 = 파일 삭제', !fs.existsSync(progF('SCP0028_W1.json')) && !rs.some(x => x.runId === 'SCP0028_W1'));
   chk('Workbench 끊긴 기록 2시간 = 남김 · 재개 목록에 있음', fs.existsSync(progF('SCP0028_W2.json')) && rs.some(x => x.runId === 'SCP0028_W2'));
+  // 개선안 20261120184524_SELF_2: 재개 기록 삭제 사건 progress.drop
+  { const evs = (() => { try { return fs.readFileSync(path.join(vibeDir, 'orch', 'events.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l)); } catch { return []; } })().filter(e => e.type === 'progress.drop');
+    const of = (id, why) => evs.filter(e => e.runId === id && e.why === why);
+    chk('작업 삭제 = progress.drop why jobRemove 1줄(SCP0028_A · 작업 번호)', of('SCP0028_A', 'jobRemove').length === 1 && of('SCP0028_A', 'jobRemove')[0].job === 'J20261101_000000', JSON.stringify(evs));
+    chk('기한 삭제 = progress.drop why ttl 1줄(SCP0028_W1) · 남긴 기록(SCP0028_W2) 사건 없음', of('SCP0028_W1', 'ttl').length === 1 && !evs.some(e => e.runId === 'SCP0028_W2'), JSON.stringify(evs)); }
+  // 2026-11-20 VMO 오판 복구: 잘못 멈춘 화면(cancel)을 '중단됨, 재개 가능'으로 되돌림(실행은 시작하지 않음)
+  mkJob('J20261120_990000', 'done', null, 0);
+  { const f = path.join(vibeDir, 'jobs', 'J20261120_990000', 'job.json'); const j = JSON.parse(fs.readFileSync(f, 'utf8')); j.screens[0].status = 'cancel'; j.screens[0].summary = '중지(VMO 자가 복구)'; fs.writeFileSync(f, JSON.stringify(j)); }
+  const rok = jr.restoreInterrupted('J20261120_990000', 'scp0028', 'VMO 오판(R14)으로 중지됨. 2단계부터 재개 가능'); const jr9 = jr.get('J20261120_990000');
+  chk('오판 복구: 작업 = 중단됨 · 화면 = 대기 · 중단 시각 기록 · 실행 안 함', rok === true && jr9.status === 'interrupted' && jr9.screens[0].status === 'wait' && !!jr9.interruptedAt && /오판/.test(jr9.note) && jr.running().length === 0, JSON.stringify({ s: jr9.status, sc: jr9.screens[0].status }));
+  chk('오판 복구: 끝난 화면(ok)·없는 작업은 건드리지 않음', jr.restoreInterrupted('J20261101_000003', 'SCP0028', 'x') === false && jr.restoreInterrupted('J20991231_000000', 'SCP0028', 'x') === false);
+  // 2026-11-20 재수행 설정(harness.json orch.rerunAfterFix · 기본 none): VMO 의 다시 실행 요청 · 일시 중지 해제
+  const hj = path.join(root, 'tools', 'Harness', 'harness.json'); fs.mkdirSync(path.dirname(hj), { recursive: true }); const setRerun = v => fs.writeFileSync(hj, JSON.stringify({ orch: v ? { rerunAfterFix: v } : {} }));
+  const reqDir = path.join(vibeDir, 'orch', 'stop_requests'); fs.mkdirSync(reqDir, { recursive: true });
+  const doneOf = n => { try { return JSON.parse(fs.readFileSync(path.join(reqDir, `${n}.done.json`), 'utf8')); } catch { return null; } };
+  setRerun('none'); fs.writeFileSync(path.join(reqDir, 'q1.json'), JSON.stringify({ screen: 'SCP0028', action: 'rerun', by: '에이전트', why: '시험' })); jr.pollRequests();
+  chk('수행 없음: 다시 실행 요청 = 실행 안 함 · 사유 기록', /재수행 설정 = 수행 없음/.test((doneOf('q1') || {}).none || ''), JSON.stringify(doneOf('q1')));
+  setRerun('rerun'); fs.writeFileSync(path.join(reqDir, 'q2.json'), JSON.stringify({ screen: 'SCP0028', action: 'rerun', by: '에이전트', why: '시험' })); jr.pollRequests();
+  chk('재수행: 다시 실행 요청을 requeueScreen 으로 넘김(대상 없으면 그 사유)', !!doneOf('q2') && !/재수행 설정/.test(doneOf('q2').none || ''), JSON.stringify(doneOf('q2')));
+  mkJob('J20261120_990100', 'paused', null, 0); { const f = path.join(vibeDir, 'jobs', 'J20261120_990100', 'job.json'); const j = JSON.parse(fs.readFileSync(f, 'utf8')); Object.assign(j, { pausedBy: 'orch', pausedInc: 'INC9' }); fs.writeFileSync(f, JSON.stringify(j)); }
+  jr.get('J20261120_990100'); setRerun('none'); const nR = jr.resumeOrch('INC9'); const jp = jr.get('J20261120_990100');
+  chk('수행 없음: R6/R8 해결 뒤에도 일시 중지 작업을 이어서 실행하지 않음 · 안내 문구', nR === 0 && jp.status === 'paused' && /이어서 실행은 사용자/.test(jp.note || '') && jr.running().length === 0, JSON.stringify({ n: nR, s: jp.status, note: jp.note }));
+  // 재수행 한도(orch.rerunMax 기본 2): 같은 작업·화면 2번까지 다시 실행, 3번째는 거절 + 화면 표시
+  setRerun(null);
+  mkJob('J20261120_990200', 'interrupted', null, 0); jr.get('J20261120_990200');
+  const setFail = () => { const j = jr.get('J20261120_990200'); j.screens[0].status = 'fail'; };
+  const q = []; for (let k = 0; k < 3; k++) { setFail(); q.push(jr.requeueScreen('SCP0028', `시험 ${k + 1}`)); try { jr.stop('J20261120_990200'); } catch { } }
+  const jlim = jr.get('J20261120_990200');
+  chk('재수행 한도: 1·2번째 = 다시 실행 · 3번째 = 거절(재수행 한도 2회 도달)', !q[0].none && !q[1].none && /재수행 한도 2회 도달/.test(q[2].none || '') && jlim.screens[0].healed === 2 && /재수행 한도 2회 도달/.test(jlim.screens[0].summary || ''), JSON.stringify({ q, healed: jlim.screens[0].healed, sum: jlim.screens[0].summary }));
   try { jr.dispose(); } catch { }
   try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

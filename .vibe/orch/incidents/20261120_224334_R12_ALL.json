@@ -1,0 +1,29 @@
+{
+  "id": "20261120_224334_R12_ALL",
+  "at": "2026-11-20T22:43:34+09:00",
+  "ms": 1795182214244,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S7 VMO 자기 상태: 감시기 tick 멈춤",
+  "screen": "",
+  "sig": "R12|S7|tick",
+  "count": 1,
+  "repeat": null,
+  "detail": "마지막 2026-11-20T22:25:47+09:00 · 주기 30초",
+  "evidence": {
+    "check": "S7",
+    "key": "S7|tick",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T22:59:29+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S7 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

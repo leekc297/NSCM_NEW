@@ -1,13 +1,26 @@
 # SCP0028 · SCP0028_GET_SHIPMENT_LOT_SIZE ↔ PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE
 
-- 실행 2026-11-20 12:55:29 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
-- **판정 PASS** — 공통 5행 전 컬럼 일치 · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+OPERATION_GROUP_ID+from_site+from_site_description+to_site+to_site_description+ITEM_ID+NICK_NAME+trans_mode_name+trans_mode_code+VALID_YN+SPLIT_YN · golden 집합 판정 PASS
-- 호출 #13 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 6 · 원천 Doc\verify\SCP0028\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
-- TO-BE 인자(FE 본문): `{"divisionId": "81", "operationGroup": "", "fromSite": "", "toSite": "HKI_KR_WJU", "transMode": "", "itemId": "", "valid": ""}`
-- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
-- AS-IS 인자(번역): `{"p_division_id": "81", "p_operation_group": "", "p_from_site": "", "p_to_site": "HKI_KR_WJU", "p_trans_mode": "", "p_item_id": "", "p_valid": ""}`
+- 실행 2026-11-25 01:47:58 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- **판정 PASS** — 공통 388행 전 컬럼 일치 · 단독행 AS-IS 0 / TO-BE 10 · 키 원천 db_resultsets.csv is_nullable=0 · 키 DIVISION_ID+OPERATION_GROUP_ID+from_site+from_site_description+to_site+to_site_description+ITEM_ID+NICK_NAME+trans_mode_name+trans_mode_code+VALID_YN+SPLIT_YN · golden 집합 판정 DIFF
+- 호출 #13 sheet=main btn=SEARCH user=brightboy FE 응답 행 399 · 원천 Doc\verify\SCP0028\calls\_trace_W4c_정밀_판정_판정필요_해소_0.json
+- TO-BE 인자(FE 본문): `{"divisionId": "81", "operationGroup": "", "fromSite": "", "toSite": "", "transMode": "AIR", "itemId": "", "valid": ""}`
+- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "brightboy"}`
+- AS-IS 인자(번역): `{"p_division_id": "81", "p_operation_group": "", "p_from_site": "", "p_to_site": "", "p_trans_mode": "AIR", "p_item_id": "", "p_valid": ""}`
 
-### 결과셋 1  As-is 5행 ↔ To-Be O_RC1 5행
-- 일치
-- 데이터 기준: 공통 5행 · AS-IS 전용 0행 · TO-BE 전용 0행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
-- 실제 순서(공통·유일 5행의 상대 순서): 일치
+### 결과셋 1  As-is 388행 ↔ To-Be O_RC1 398행
+- 행수 불일치 388 ↔ 398
+- 값 차이: As-is 전용 0행 / To-Be 전용 10행 (공통 컬럼 18)
+| 측 | DIVISION_ID | OPERATION_GROUP_ID | from_site | from_site_description | to_site | to_site_description | ITEM_ID | NICK_NAME | trans_mode_name | trans_mode_code | LOT_SIZE | INCREMENT |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | BAE_US_ENC | BAE_US_ENC | ACPP1015U-B1-001 | P1.7-001 | AIR | AIR |  |  |
+| T | 81 | A | HQ07-A | LGESOC Cell HQ07 | Club Car_US_AGS | Club Car_US_AGS | ACEN1059I-A1-000 | N2.1-000 | AIR | AIR |  |  |
+| T | 81 | A | WA00-A | LGESWA Cell WA00 | HKMC_WA_CZ_NVS | HKMC_WA_CZ_NVS | AAEH1085I-A1-100 | E85A-100 | AIR | AIR |  |  |
+| T | 81 | A | WA00-A | LGESWA Cell WA00 | HKMC_WA_CZ_NVS | HKMC_WA_CZ_NVS | ACEH1085I-A1-100 | E85A-100 | AIR | AIR |  |  |
+| T | 81 | P | MI00-P | LGESMI Pack MI00 | TY_US_VDH | TY_US_VDH | AMTYTTNGA-A1-070 | TYT E-TNGA-070 | AIR | AIR | 1 | 1 |
+| T | 81 | P | WA00-P | LGESWA Pack WA00 | Ford_HU_BUD | Ford_HU_BUD | AMFMCV710-A1 | FMC-V710-8S | AIR | AIR |  |  |
+| T | 81 | P | WA00-P | LGESWA Pack WA00 | Ford_HU_BUD | Ford_HU_BUD | AMFMCV710-B1 | FMC-V710-12S | AIR | AIR |  |  |
+| T | 81 | P | WA00-P | LGESWA Pack WA00 | Ford_HU_BUD | Ford_HU_BUD | AMFMCV710-C1 | FMC-V710-12R | AIR | AIR |  |  |
+| T | 81 | P | WA00-P | LGESWA Pack WA00 | Porsche_DE_SHM | Porsche_DE_SHM | AMPAGJ1PA-A1-050 | PAG-J1PA(N)-050 | AIR | AIR |  |  |
+| T | 81 | P | WA00-P | LGESWA Pack WA00 | Porsche_DE_SHM | Porsche_DE_SHM | AMPAGJ1PA-B1-050 | PAG-J1PA(M)-050 | AIR | AIR |  |  |
+- 데이터 기준: 공통 388행 · AS-IS 전용 0행 · TO-BE 전용 10행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
+- 실제 순서(공통·유일 388행의 상대 순서): 일치

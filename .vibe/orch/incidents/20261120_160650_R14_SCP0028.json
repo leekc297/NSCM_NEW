@@ -1,0 +1,58 @@
+{
+  "id": "20261120_160650_R14_SCP0028",
+  "at": "2026-11-20T16:06:50+09:00",
+  "ms": 1795158410827,
+  "rule": "R14",
+  "ruleName": "중지 뒤 계속 실행",
+  "title": "중지 뒤 계속 실행. SCP0028 중지 14:56:34 뒤 단계 시작 1건",
+  "screen": "SCP0028",
+  "sig": "R14|J20261120_140047:SCP0028|SCP0028_1795154296871",
+  "count": 2,
+  "repeat": null,
+  "detail": "2026-11-20T16:06:51+09:00 프로세스 시작 (중지 0.1초 뒤) 검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl)",
+  "evidence": {
+    "wb": "J20261120_140047:SCP0028",
+    "screen": "SCP0028",
+    "job": "J20261120_140047",
+    "runId": "SCP0028_1795154296871",
+    "chain": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+    "stopMs": 1795158411142,
+    "stopBy": "VMO 자가 복구",
+    "leaks": [
+      {
+        "type": "proc.start",
+        "at": "2026-11-20T16:06:51+09:00",
+        "what": "검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl)",
+        "childPid": 21372,
+        "afterSec": 0.1
+      }
+    ]
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T16:06:50+09:00",
+      "by": "VMO 자가 복구",
+      "grade": "A",
+      "what": "중지된 체인이 계속 실행 중. 프로세스 0개 종료(PID 없음) · 체인 중지 다시 요청"
+    },
+    {
+      "at": "2026-11-20T16:07:21+09:00",
+      "by": "VMO 자가 복구",
+      "grade": "A",
+      "what": "종료 0/0 · VMW 작업 J20261120_140047 화면 중지 요청 뒤에도 새 실행 1건. 에이전트 진단으로 넘김(중지 경로 결함)"
+    },
+    {
+      "at": "2026-11-20T16:28:52+09:00",
+      "by": "Claude Code 세션",
+      "grade": "A",
+      "what": "감시 오판: 재개 체인 SCP0028_1795154296871(14:58:16 시작)을 끝난 옛 VM 프로세스(32932)의 중지 기록(14:56:34)에 묶어 R14 로 판단함. 원인 orch-watch watchStop 결함 정정(16:28 설치 폴더 반영) · 작업 J20261120_140047 은 2단계부터 재개 가능으로 되돌림"
+    }
+  ],
+  "file": "C:\\Projects\\NSCM\\.vibe\\orch\\incidents\\20261120_160650_R14_SCP0028.json",
+  "lastAt": "2026-11-20T16:06:51+09:00",
+  "lastMs": 1795158411237,
+  "resolvedBy": "Claude Code 세션(사용자 지시 대응)",
+  "falsePositive": true
+}

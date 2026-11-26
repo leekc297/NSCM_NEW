@@ -1,0 +1,29 @@
+{
+  "id": "20261123_163900_R12_ALL_4",
+  "at": "2026-11-23T16:39:00+09:00",
+  "ms": 1795419540485,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_jobs_recent.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_jobs_recent.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 0 · FAIL 0 · Node.js v24.22.2",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_jobs_recent.js",
+    "file": "t_jobs_recent.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T16:50:50+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

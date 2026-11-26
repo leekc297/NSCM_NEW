@@ -1,0 +1,102 @@
+{
+ "definition": "화면별 그리드 컬럼의 제목, 순서, 폭, 입력 방식과 Measure 항목을 등록하는 컬럼 설정 화면",
+ "overview": [
+  "화면과 팝업(Program ID)마다 그리드 컬럼 제목, 표시 순서, 폭, 입력 방식과 Measure 항목을 등록하는 컬럼 기준 화면임",
+  "위쪽 조회 조건, 버튼 줄, 아래 Column, Measure 2개 탭으로 구성됨",
+  "Program ID, Column Name 으로 조회 → 값 수정 또는 Insert(F8) 로 행 추가 → Save(F7) 순으로 작업함",
+  "저장한 값은 해당 Program ID 화면과 팝업의 그리드 제목, 순서, 폭으로 쓰임"
+ ],
+ "pages": [
+  {
+   "title": "UI Category Setup",
+   "keyPoint": "Column Label Name, Sort Order No, Column Width 를 바꾸면 해당 Program ID 화면의 그리드 제목, 순서, 폭이 바뀜. 저장 전 Program ID, Sheet Name, Column Name 을 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.134,
+     "y": 0.14
+    },
+    {
+     "no": 2,
+     "x": 0.606,
+     "y": 0.236
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Program ID, Sheet Name, Column Name, Column Label Name: 찾을 글자 입력. 처음 값 빈칸",
+      "Active: ALL, Y, N 중 선택. 처음 값 Y",
+      "한 번 조회로 Column 탭과 Measure 탭이 같이 채워짐"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9): Column 탭 행 추가, 삭제",
+      "Save(F7): 보고 있는 탭의 변경분을 저장함. Measure 탭은 Save 만 씀",
+      "저장되면 \"성공적으로 저장되었습니다!\" 메시지가 뜨고 다시 조회함",
+      "서버에서 저장을 막으면 실패 메시지가 뜨고 저장되지 않음"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "UI Category Setup",
+   "keyPoint": "Column Label Name, Sort Order No, Column Width 를 바꾸면 해당 Program ID 화면의 그리드 제목, 순서, 폭이 바뀜. 저장 전 Program ID, Sheet Name, Column Name 을 확인함.",
+   "markers": [
+    {
+     "no": 3,
+     "x": 0.17,
+     "y": 0.236
+    },
+    {
+     "no": 4,
+     "x": 0.189,
+     "y": 0.275
+    }
+   ],
+   "sections": [
+    {
+     "no": 3,
+     "title": "Column 탭",
+     "lines": [
+      "필수(제목 앞 빨간 점): Program ID, Sheet Name, Column Name, Column Label Name, Fixed, Column Width",
+      "Program ID, Program Name: 화면 또는 팝업 ID 와 이름(예: COM0001 CityByCountry)",
+      "Sheet Name: 화면 안 그리드 구분. Column Name: DB 컬럼 이름(예: COUNTRY_NAME)",
+      "Column Label Name: 그리드 제목. Small Label, Large Label: 2단, 3단 제목",
+      "Sort Order No: 표시 순서. Data Sort Method: ASC 등 정렬 방식. Fixed: 틀 고정 Y 또는 N",
+      "Column Width: 폭. Cell object: 셀 입력 방식(예: FPTextBox). Cell Combo Data Type, Data Scale Num, Data Max Length: 콤보 코드, 소수 자릿수, 최대 길이"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Measure 탭",
+     "lines": [
+      "Program ID, Sheet Name, Column Name, Column Label Name, Sort Order No 로 Measure 항목을 등록함",
+      "Measure 색상, 대문자 변환, 사용 여부, 사용자 선택 여부, Division 값을 관리함"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "SYSTEM",
+ "id": "SYS0004",
+ "uiName": "UI Category Setup",
+ "menuPath": "SYSTEM> System> UI Category Setup",
+ "captures": [
+  "captures/SYS0004.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0004/"
+ ],
+ "buttons": [
+  "column:DELETE",
+  "column:SAVE",
+  "column:SEARCH",
+  "measure:SAVE"
+ ]
+}

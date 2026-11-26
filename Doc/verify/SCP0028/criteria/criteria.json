@@ -1,33 +1,33 @@
 {
  "menu_id": "SCP0028",
- "at": "2026-11-20 15:03:46",
+ "at": "2026-11-25 02:48:39",
  "ledger": "Doc/verify/SCP0028/verify_ledger.csv",
- "ledger_rows": 1071,
- "elements": 75,
- "items": 965,
+ "ledger_rows": 1073,
+ "elements": 76,
+ "items": 974,
  "status": {
-  "확정": 567,
-  "대상 아님": 380,
-  "판단 대기": 18
+  "확정": 565,
+  "대상 아님": 389,
+  "판단 대기": 20
  },
  "family_rows": 711,
  "family": {
-  "same": 106,
-  "element": 75,
-  "screen": 129,
-  "absent_confirmed": 376,
+  "same": 99,
+  "element": 71,
+  "screen": 134,
+  "absent_confirmed": 381,
   "absent_wait": 18
  },
- "rules_applied": 231,
+ "rules_applied": 219,
  "rules_quote_fail": 0,
  "user_fixed": 0,
  "live_links": 135,
- "live_wait": 58,
+ "live_wait": 79,
  "ai": {
-  "calls": 0,
-  "cached": 37,
+  "calls": 37,
+  "cached": 0,
   "failed": 0,
-  "cost": 0.0,
+  "cost": 13.34594,
   "nochange": 0
  },
  "batches": 37

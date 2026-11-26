@@ -1,0 +1,136 @@
+{
+  "id": "20261124232611_SELF_2",
+  "at": "2026-11-24T23:26:11+09:00",
+  "ms": 1795530371000,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/history.js|녹화consolejsonl가있는실행도텍스트로그끝nkb와로그기반conso",
+  "title": "사용자 지시 R198 같은 문제: tools/VibeManager/history.js:246 녹화(console.jsonl)가 있는 실행도 텍스트 로그 끝 40KB 와 로그 기반 Console 단추를 같이 보임. 로그 기반 보기는 녹화 없는 예전 이력에만",
+  "evidence": "규칙 R198 \"Workbench History Task 의 Console 다시 보기 = 실행 때 Console 창(AI Agent, Task Log)에 보낸 표시를 녹화(console.jsonl)해 같은 Workbench 화면으로 재생. 녹화 없는 예전 이력만 로그 파일 기반\" (원래 지시 2026-11-24 21:38 \"history, task 에서 console 을 클릭하면 console 창에 나왔던 결과를 동일하게 보여줄수는 없나요? → 네\") · tools/VibeManager/history.js:246 const box = cl.files.map(f => { const t = tailText(f); return `<div class=\"hlog\">... <button class=\"sec hist-log\" ...>🖥 Console</button></div><pre class=\"hpre hcon\">${esc(t.text) || '(내용 없음)'}</pre><",
+  "targets": [
+    "tools/VibeManager/history.js"
+  ],
+  "before_after": "hasRec(cur.dir) 이 참이면 box 를 만들지 않고 rec 단추만 둠. 거짓일 때만 consoleLogs 로그 목록과 hist-log 단추를 보임",
+  "verify": "node --check tools/VibeManager/history.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/history.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T11:20:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T11:24:41+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self1120"
+    },
+    {
+      "at": "2026-11-26T11:24:48+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T11:38:24+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 history.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T11:38:24+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 11:34:00 기준. node --check history.js 반영 전 통과 → 반영 뒤 통과. run_all.js 반영 전 'ALL OK 파일 88/88 PASS 1449 FAIL 0 248.9s' → 반영 뒤 'ALL OK 파일 88/88 PASS 1449 FAIL 0 238s'. t_webview_syntax.js 반영 뒤 ALL PASS 19건. 자기 시험(임시 폴더, 로그 연결 + recStart): 녹화 있음 'REC hasRec=true hist-rec=true hist-log=false hcon · 변경 22개 파일 · 대상 목록 밖 변경 21개: Doc/verify/_ENGINE_MASTER.md, Doc/verify/_checker_defects.md, Doc/verify/_engine_selfcheck.json, tools/Harness/README.md, tools/Harness/gate_baseline.tsv, tools/Harness/verify/judge.py",
+      "log": ".vibe\\logs\\2026-11-26T11-24-48_claude_orch.log",
+      "sec": 565,
+      "costUsd": 0.9035963,
+      "files": [
+        "Doc/verify/_ENGINE_MASTER.md",
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Harness/README.md",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/judge.py",
+        "tools/VibeManager/history.js",
+        "Doc/PERF_점검/BATCH/SSP/SHIP_PLAN_40_3SP_로컬개선요소_20261126.md",
+        "Doc/verify/_na_grid_audit.csv",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_3SP_PERF_20261126/APPLIED_OPERATIONS.md",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_3SP_PERF_20261126/build_package.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_3SP_PERF_20261126/run_pkg.py",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/00_README.md",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/A_DB/00_PRECHECK.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/A_DB/05_BACKUP.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/A_DB/10_PATCH_DS2_PR_SSP_ANL_SHIP_PLAN_40.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/A_DB/11_PATCH_DS2_PR_SSP_MAIL_SHIP_REQ_MINUS_BALANCE_40.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/A_DB/20_REPLACE_PR_SSP_ANL_SHIP_PLAN_40_BALANCE.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/A_DB/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/A_DB/99_ROLLBACK.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_BATCH_PERF_CLOUD_20261126/_hash.txt",
+        "tools/Harness/verify/grid_absent_guard.py"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:02+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "Workbench History Task 의 Console 다시 보기 = 실행 때 Console 창(AI Agent, Task Log)에 보낸 표시를 녹화(console.jsonl)해 같은 Workbench 화면으로 재생. 녹화 없는 예전 이력만 로그 파일 기반 규칙을 tools/VibeManager/history.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R198|tools/VibeManager/history.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795659620359,
+  "autoFp": "af67d32d16",
+  "applyStartMs": 1795659888351,
+  "verifyJudge": {
+    "at": "2026-11-26T11:34:20+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self1120",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "history.js"
+  ],
+  "appliedMs": 1795660704217,
+  "synced": [
+    "history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/history.js 출력 없음(반영 전, 반영 뒤 통과) · node tools/VibeManager/test/run_all.js 'ALL OK 파일 88/88 PASS 1449 FAIL 0'(반영 전 248.9s → 반영 뒤 238s) · node tools/VibeManager/test/t_webview_syntax.js 'ALL PASS' 19건"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/history.js"
+    ],
+    "verify_result": "2026-11-26 11:34:00 기준. node --check history.js 반영 전 통과 → 반영 뒤 통과. run_all.js 반영 전 'ALL OK 파일 88/88 PASS 1449 FAIL 0 248.9s' → 반영 뒤 'ALL OK 파일 88/88 PASS 1449 FAIL 0 238s'. t_webview_syntax.js 반영 뒤 ALL PASS 19건. 자기 시험(임시 폴더, 로그 연결 + recStart): 녹화 있음 'REC hasRec=true hist-rec=true hist-log=false hcon=false' · 녹화 없음 'NOREC hasRec=false hist-log=true hint=true'",
+    "note": "history.js Task 보기: recOn = hasRec(cur.dir). 참이면 consoleLogs 를 부르지 않고 box 를 비움, hist-rec 단추만 보임. 거짓일 때만 로그 목록, hist-log 단추, 녹화 없음 안내를 보임. 추가 확인 후보: t_hist_console.js 에 녹화 있는 실행에서 hist-log 가 없는지 확인하는 검사 추가(targets 밖이라 손대지 않음)."
+  },
+  "snap": "prop_20261124232611_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

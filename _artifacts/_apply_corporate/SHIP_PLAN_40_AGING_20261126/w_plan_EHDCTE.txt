@@ -1,0 +1,172 @@
+SQL_ID  bg55j1k72r5mw, child number 0
+-------------------------------------
+/* W14_EHDCTE_143646 */ WITH BOH AS (                      SELECT 
+A.DIVISION_ID                           , A.PLAN_START_YYYYMMDD         
+                  , A.PLAN_TYPE                           , A.SEQ       
+                    , A.FROM_SITE                           , A.ITEM_ID 
+                          , SUM(A.QTY)   AS QTY                      
+FROM   (                             SELECT A.DIVISION_ID               
+                   , A.PLAN_START_YYYYMMDD                              
+    , A.PLAN_TYPE                                  , A.SEQ              
+                    , A.FROM_SITE                                  , 
+A.ITEM_ID                                  , (CASE WHEN NVL(C.SEGMENT3, 
+'-') = 'P' THEN SUM(A.LOT_QTY_MES) ELSE 0 END) AS QTY                   
+          FROM   SSP_ANL_MES_FCS_STOCK_40_C  A                          
+          LEFT OUTER JOIN SCP_MST_FINAL_ITEM  B                         
+        ON B.DIVISION_ID = A.DIVISION_ID                                
+AND
+ 
+Plan hash value: 2683096789
+ 
+---------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                        | Name                               | Rows  | Bytes | Cost (%CPU)| Time     |
+---------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                                 |                                    |       |       |  8799 (100)|          |
+|   1 |  NESTED LOOPS OUTER                              |                                    |   288 |   244K|  8799   (1)| 00:00:01 |
+|*  2 |   HASH JOIN OUTER                                |                                    |     1 |   823 |  8588   (1)| 00:00:01 |
+|   3 |    NESTED LOOPS OUTER                            |                                    |     1 |   444 |  4298   (1)| 00:00:01 |
+|   4 |     VIEW                                         |                                    |     1 |   390 |  4280   (1)| 00:00:01 |
+|   5 |      WINDOW NOSORT                               |                                    |     1 |   517 |  4280   (1)| 00:00:01 |
+|   6 |       SORT GROUP BY                              |                                    |     1 |   517 |  4280   (1)| 00:00:01 |
+|*  7 |        FILTER                                    |                                    |       |       |            |          |
+|   8 |         NESTED LOOPS                             |                                    |     1 |   517 |  4279   (1)| 00:00:01 |
+|   9 |          NESTED LOOPS                            |                                    |     1 |   517 |  4279   (1)| 00:00:01 |
+|* 10 |           TABLE ACCESS FULL                      | GT_SSP_ANL_SHIP_PLAN_40            |     1 |   492 |  4278   (1)| 00:00:01 |
+|* 11 |           INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                    |     1 |       |     0   (0)|          |
+|* 12 |          TABLE ACCESS BY INDEX ROWID             | SCM_MST_SITE                       |     1 |    25 |     1   (0)| 00:00:01 |
+|  13 |     VIEW PUSHED PREDICATE                        |                                    |     1 |    54 |    18   (6)| 00:00:01 |
+|  14 |      SORT GROUP BY                               |                                    |     1 |    78 |    18   (6)| 00:00:01 |
+|* 15 |       FILTER                                     |                                    |       |       |            |          |
+|  16 |        NESTED LOOPS                              |                                    |     1 |    78 |    18   (6)| 00:00:01 |
+|* 17 |         TABLE ACCESS BY INDEX ROWID              | SCM_MST_SITE                       |     1 |    25 |     2   (0)| 00:00:01 |
+|* 18 |          INDEX UNIQUE SCAN                       | PK_SCM_MST_SITE                    |     1 |       |     1   (0)| 00:00:01 |
+|* 19 |         VIEW                                     |                                    |     1 |    53 |    16   (7)| 00:00:01 |
+|  20 |          UNION-ALL                               |                                    |     3 |   204 |    16   (7)| 00:00:01 |
+|  21 |           SORT GROUP BY                          |                                    |     1 |   115 |    10  (10)| 00:00:01 |
+|* 22 |            FILTER                                |                                    |       |       |            |          |
+|  23 |             NESTED LOOPS OUTER                   |                                    |     1 |   115 |     9   (0)| 00:00:01 |
+|  24 |              NESTED LOOPS OUTER                  |                                    |     1 |    69 |     6   (0)| 00:00:01 |
+|* 25 |               TABLE ACCESS BY INDEX ROWID BATCHED| SSP_ANL_MES_FCS_STOCK_40_C         |     1 |    48 |     5   (0)| 00:00:01 |
+|* 26 |                INDEX RANGE SCAN                  | PK_SSP_ANL_MES_FCS_STOCK_40_C      |     1 |       |     4   (0)| 00:00:01 |
+|  27 |               TABLE ACCESS BY INDEX ROWID        | SCP_MST_FINAL_ITEM                 |     1 |    21 |     1   (0)| 00:00:01 |
+|* 28 |                INDEX UNIQUE SCAN                 | PK_SCP_MST_FINAL_ITEM              |     1 |       |     0   (0)|          |
+|  29 |              TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_LOOKUP_MASTER_DETAIL       |     1 |    46 |     3   (0)| 00:00:01 |
+|* 30 |               INDEX RANGE SCAN                   | IDX01_SCM_ADM_LOOKUP_MASTER_DETAIL |     1 |       |     2   (0)| 00:00:01 |
+|  31 |           SORT GROUP BY                          |                                    |     1 |    46 |     4   (0)| 00:00:01 |
+|* 32 |            FILTER                                |                                    |       |       |            |          |
+|* 33 |             TABLE ACCESS BY INDEX ROWID BATCHED  | SSP_ANL_OWMS_STOCK_C               |     5 |   230 |     4   (0)| 00:00:01 |
+|* 34 |              INDEX RANGE SCAN                    | CIX_SSP_ANL_OWMS_STOCK_C           |     5 |       |     3   (0)| 00:00:01 |
+|  35 |           SORT GROUP BY                          |                                    |     1 |    43 |     2   (0)| 00:00:01 |
+|* 36 |            FILTER                                |                                    |       |       |            |          |
+|  37 |             TABLE ACCESS BY INDEX ROWID          | SSP_ANL_TCO_STOCK_C                |     1 |    43 |     2   (0)| 00:00:01 |
+|* 38 |              INDEX UNIQUE SCAN                   | PK_SSP_ANL_TCO_STOCK_C             |     1 |       |     1   (0)| 00:00:01 |
+|  39 |    VIEW                                          |                                    |     1 |   379 |  4290   (1)| 00:00:01 |
+|  40 |     HASH GROUP BY                                |                                    |     1 |   605 |  4290   (1)| 00:00:01 |
+|  41 |      NESTED LOOPS                                |                                    |     1 |   605 |  4289   (1)| 00:00:01 |
+|  42 |       NESTED LOOPS                               |                                    |     1 |   605 |  4289   (1)| 00:00:01 |
+|* 43 |        HASH JOIN                                 |                                    |     1 |   584 |  4288   (1)| 00:00:01 |
+|  44 |         MERGE JOIN CARTESIAN                     |                                    |     1 |    92 |     9   (0)| 00:00:01 |
+|* 45 |          TABLE ACCESS BY INDEX ROWID BATCHED     | SCM_ADM_LOOKUP_MASTER_DETAIL       |     1 |    46 |     4   (0)| 00:00:01 |
+|* 46 |           INDEX RANGE SCAN                       | PK_SCM_ADM_LOOKUP_MASTER_DETAIL    |     1 |       |     3   (0)| 00:00:01 |
+|  47 |          BUFFER SORT                             |                                    |    16 |   736 |     5   (0)| 00:00:01 |
+|* 48 |           TABLE ACCESS BY INDEX ROWID BATCHED    | SCM_ADM_LOOKUP_MASTER_DETAIL       |    16 |   736 |     5   (0)| 00:00:01 |
+|* 49 |            INDEX RANGE SCAN                      | PK_SCM_ADM_LOOKUP_MASTER_DETAIL    |    21 |       |     2   (0)| 00:00:01 |
+|* 50 |         TABLE ACCESS FULL                        | GT_SSP_ANL_SHIP_PLAN_40            |   117K|    54M|  4278   (1)| 00:00:01 |
+|* 51 |        INDEX UNIQUE SCAN                         | PK_SCP_MST_FINAL_ITEM              |     1 |       |     0   (0)|          |
+|* 52 |       TABLE ACCESS BY INDEX ROWID                | SCP_MST_FINAL_ITEM                 |     1 |    21 |     1   (0)| 00:00:01 |
+|* 53 |   VIEW PUSHED PREDICATE                          |                                    |     1 |    47 |   211   (1)| 00:00:01 |
+|  54 |    SORT GROUP BY                                 |                                    |     1 |    70 |   211   (1)| 00:00:01 |
+|* 55 |     FILTER                                       |                                    |       |       |            |          |
+|  56 |      NESTED LOOPS                                |                                    |     1 |    70 |   210   (0)| 00:00:01 |
+|* 57 |       INDEX RANGE SCAN                           | IDX_SCM_SYS_CALENDAR_N3            |     1 |     9 |     1   (0)| 00:00:01 |
+|* 58 |       TABLE ACCESS BY INDEX ROWID BATCHED        | SSP_ANL_HOLD_STOCK                 |     1 |    61 |   209   (0)| 00:00:01 |
+|* 59 |        INDEX SKIP SCAN                           | PK_SSP_ANL_HOLD_STOCK_C            |    59 |       |   206   (0)| 00:00:01 |
+---------------------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("B"."DIVISION_ID"="Z"."DIVISION_ID" AND "B"."PLAN_START_YYYYMMDD"="Z"."PLAN_START_YYYYMMDD" AND 
+              "B"."PLAN_TYPE"="Z"."PLAN_TYPE" AND "B"."SEQ"="Z"."SEQ" AND "B"."ITEM_ID"="Z"."ITEM_ID" AND "B"."FROM_SITE"="Z"."FROM_SITE")
+   7 - filter(:V_DIVISION_ID=:V_DIVISION_ID)
+  10 - filter(("P"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND "P"."PLAN_TYPE"=:V_PLAN_TYPE AND "P"."SEQ"=:V_SEQ AND 
+              INTERNAL_FUNCTION("P"."MEASURE") AND "P"."YYYYMMDD">=:V_DATA_START_YYYYMMDD AND "P"."DIVISION_ID"=:V_DIVISION_ID AND 
+              "P"."DIVISION_ID"=:V_DIVISION_ID))
+  11 - access("E"."DIVISION_ID"=:V_DIVISION_ID AND "E"."SCM_SITE_ID"="P"."FROM_SITE")
+       filter("E"."DIVISION_ID"=:V_DIVISION_ID)
+  12 - filter(NVL("E"."COMPANY_ID",'-')=NVL(:V_COMPANY_ID,'-'))
+  15 - filter("Z"."DIVISION_ID"=:V_DIVISION_ID)
+  17 - filter(NVL("E"."COMPANY_ID",'-')=NVL(:V_COMPANY_ID,'-'))
+  18 - access("E"."DIVISION_ID"="Z"."DIVISION_ID" AND "E"."SCM_SITE_ID"="Z"."FROM_SITE")
+       filter("E"."DIVISION_ID"=:V_DIVISION_ID)
+  19 - filter("E"."SCM_SITE_ID"="A"."FROM_SITE")
+  22 - filter(("Z"."DIVISION_ID"=:V_DIVISION_ID AND "Z"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND 
+              "Z"."PLAN_TYPE"=:V_PLAN_TYPE AND "Z"."SEQ"=:V_SEQ AND :V_DIVISION_ID=:V_DIVISION_ID))
+  25 - filter(("A"."AVAILABLE_YN"<>'N' AND "A"."CHANGE_STATUS"<>'D'))
+  26 - access("A"."DIVISION_ID"=:V_DIVISION_ID AND "A"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND 
+              "A"."PLAN_TYPE"=:V_PLAN_TYPE AND "A"."SEQ"=:V_SEQ AND "A"."FROM_SITE"="Z"."FROM_SITE" AND "A"."ITEM_ID"="Z"."ITEM_ID")
+  28 - access("B"."DIVISION_ID"=:V_DIVISION_ID AND "B"."ITEM_ID"="Z"."ITEM_ID")
+       filter("B"."ITEM_ID"="A"."ITEM_ID")
+  30 - access("C"."SEGMENT1"="B"."CELL_TYPE_GROUP_CODE" AND "C"."LOOKUP_TYPE"='CELL_TYPE_CODE' AND "C"."VALID_YN"='Y')
+  32 - filter(("Z"."DIVISION_ID"=:V_DIVISION_ID AND "Z"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND 
+              "Z"."PLAN_TYPE"=:V_PLAN_TYPE AND "Z"."SEQ"=:V_SEQ AND :V_DIVISION_ID=:V_DIVISION_ID))
+  33 - filter(("A"."PLAN_TYPE"=:V_PLAN_TYPE AND "A"."SEQ"=:V_SEQ))
+  34 - access("A"."DIVISION_ID"=:V_DIVISION_ID AND "A"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND 
+              "A"."FROM_SITE"="Z"."FROM_SITE" AND "A"."ITEM_ID"="Z"."ITEM_ID")
+  36 - filter(("Z"."DIVISION_ID"=:V_DIVISION_ID AND "Z"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND 
+              "Z"."PLAN_TYPE"=:V_PLAN_TYPE AND "Z"."SEQ"=:V_SEQ AND :V_DIVISION_ID=:V_DIVISION_ID))
+  38 - access("T"."DIVISION_ID"=:V_DIVISION_ID AND "T"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND 
+              "T"."PLAN_TYPE"=:V_PLAN_TYPE AND "T"."SEQ"=:V_SEQ AND "T"."SCM_SITE_ID"="Z"."FROM_SITE" AND "T"."ITEM_ID"="Z"."ITEM_ID")
+  43 - access("D"."SEGMENT1"=SUBSTR("A"."ITEM_ID",1,3))
+       filter("A"."YYYYMMDD"<=TO_CHAR(TO_DATE(:V_DATA_START_YYYYMMDD,'YYYYMMDD')+TO_NUMBER("D"."SEGMENT2"),'YYYYMMDD'))
+  45 - filter("C"."VALID_YN"='Y')
+  46 - access("C"."LOOKUP_TYPE"='CELL_TYPE_CODE' AND "C"."SEGMENT3"='P')
+       filter("C"."SEGMENT3"='P')
+  48 - filter("D"."VALID_YN"='Y')
+  49 - access("D"."LOOKUP_TYPE"='POUCH_WH_IN_DAY')
+       filter(TO_CHAR(TO_DATE(:V_DATA_START_YYYYMMDD,'YYYYMMDD')+TO_NUMBER("D"."SEGMENT2"),'YYYYMMDD')>:V_DATA_START_YYYYMMDD)
+  50 - filter(("A"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND "A"."PLAN_TYPE"=:V_PLAN_TYPE AND "A"."SEQ"=:V_SEQ AND 
+              "A"."MEASURE"='WH_IN' AND "A"."YYYYMMDD">:V_DATA_START_YYYYMMDD AND "A"."DIVISION_ID"=:V_DIVISION_ID))
+  51 - access("B"."DIVISION_ID"=:V_DIVISION_ID AND "B"."ITEM_ID"="A"."ITEM_ID")
+  52 - filter(("B"."CELL_TYPE_GROUP_CODE" IS NOT NULL AND "C"."SEGMENT1"="B"."CELL_TYPE_GROUP_CODE"))
+  53 - filter(("HD"."DIVISION_ID"="Z"."DIVISION_ID" AND "HD"."FROM_SITE"="Z"."FROM_SITE" AND "HD"."ITEM_ID"="Z"."ITEM_ID"))
+  55 - filter(("Z"."YYYYMMDD"<:V_DATA_END_YYYYMMDD AND "Z"."YYYYMMDD">:V_DATA_START_YYYYMMDD AND 
+              :V_DATA_END_YYYYMMDD>:V_DATA_START_YYYYMMDD))
+  57 - access("C"."BASIS_YYYYMMDD"="Z"."YYYYMMDD")
+       filter(("C"."BASIS_YYYYMMDD"<:V_DATA_END_YYYYMMDD AND "C"."BASIS_YYYYMMDD">:V_DATA_START_YYYYMMDD))
+  58 - filter(("H"."HOLD_YYYYMMDD"<="Z"."YYYYMMDD" AND "H"."RELEASE_YYYYMMDD">="Z"."YYYYMMDD" AND 
+              "H"."RELEASE_YYYYMMDD">:V_DATA_START_YYYYMMDD AND "C"."BASIS_YYYYMMDD"<="H"."RELEASE_YYYYMMDD" AND 
+              "H"."DIVISION_ID"=:V_DIVISION_ID AND "C"."BASIS_YYYYMMDD">="H"."HOLD_YYYYMMDD" AND "H"."HOLD_YYYYMMDD"<:V_DATA_END_YYYYMMDD))
+  59 - access("H"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND "H"."PLAN_TYPE"=:V_PLAN_TYPE AND "H"."SEQ"=:V_SEQ)
+       filter(("H"."PLAN_START_YYYYMMDD"=:V_PLAN_START_YYYYMMDD AND "H"."PLAN_TYPE"=:V_PLAN_TYPE AND "H"."SEQ"=:V_SEQ))
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+ 
+SQL Analysis Report (identified by operation id/Query Block Name/Object Alias):
+-------------------------------------------------------------------------------
+ 
+  11 -  SEL$29193881 / "E"@"SEL$1"
+           -  The following columns have predicates which preclude their 
+              use as keys in index range scan. Consider rewriting the 
+              predicates.
+                "COMPANY_ID"
+ 
+  17 -  SEL$08304066 / "E"@"SEL$2"
+           -  The following columns have predicates which preclude their 
+              use as keys in index range scan. Consider rewriting the 
+              predicates.
+                "COMPANY_ID"
+ 
+  40 -  SEL$47653967
+           -  The query block has 1 cartesian product which may be 
+              expensive. Consider adding join conditions or removing the 
+              disconnected tables or views.
+ 
+  48 -  SEL$47653967 / "D"@"SEL$14"
+           -  The following columns have predicates which preclude their 
+              use as keys in index range scan. Consider rewriting the 
+              predicates.
+                "SEGMENT2"
+ 

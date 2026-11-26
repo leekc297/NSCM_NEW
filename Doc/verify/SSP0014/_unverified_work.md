@@ -96,3 +96,48 @@
 
 - M4|BTN:btnItemId PASS 근거가 Model 팝업이 아닌 UserInfoPopup(TEAM_LEADER 더블클릭) 실측임(D 묶음 확인). 검사기 근거 연결 결함 의심, 이번 라운드 범위 밖이라 고치지 않음
 - 백업: 각 파일 옆 *.bak_20261120_ssp14u. eg_auth.spec.ts 백업은 수정 뒤 git HEAD 본으로 만듦(다른 세션 T430 변경 미포함)
+
+## 라운드 4 (2026-11-25 02:31~02:5x · 일괄 보완)
+
+- 입력: CheckList 2026-11-25 00:56~02:17 결과. 원장 02:17 ERROR 127행 + AI 판정 검토 17행. 분류 02:17:55 라운드 1 = 처리 대상 139, 사람 1, 집계 4. 분류표가 원장과 같은 시각이라 재생성 안 함
+- 행별 조치 `_unverified_plan.md`(144행). 결정 `_unverified_decisions.md`(5건 37행)
+- 재측정: run_verify, 개별 검사기 재실행 안 함. 다음 CheckList 재수행에서 측정
+- 이전 라운드와 같은 시도 없음. 라운드 3 저장 경로 보완(T370~T375)은 반영돼 USER_CHECK 차단 뒤 'luping' 저장까지 진행됨(이번 실측). 이번 실패는 그 뒤 행 식별 단계
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 재측정 |
+|---|---|---|---|---|
+| P1 차등짝 | 112 | diff/P_SSP0014_GET_MODEL_PIC__2.md 'SKIP: sp_pair.csv 에 이 TO-BE proc 의 AS-IS 짝 없음'. sp_pair.csv 230·231행 tobe_proc 빈 값(HEAD 231~233행은 pkgsrc 짝 있음). 사내 ALL_SOURCE PKG_SSP0014 LAST_DDL 2026-11-24 13:55:30, 명세 51줄에 'AS-IS -> P_' 주석 없음. pkg_asis_map.py PKG_SSP0014 실행 결과 짝 0 | T532 tools/Harness/verify/pkg_asis_map.py parse(본문 선언부 Program ID). gen_param_map.py SSP0014 실행으로 sp_pair.csv 234·235행 pkgsrc 복구, 다른 화면 행·param_map 다른 화면 행 변화 없음 | 미측정 |
+| P2 A6 USER_ID_CHECK | 13 | diff/P_SSP0014_GET_USER_ID_CHECK__15.md 공통 2행 전 컬럼 일치, 순서만 다름. sort_check.csv 해당 SP = NA(양쪽 ORDER BY 없음). dbo.SSP0014_GET_USER_ID_CHECK.sql:22~28 ORDER BY 없음 | T533 tools/Harness/verify/diff_ingest.py order_na · sort_check.py NA 문구 | 미측정 |
+| P3 저장 왕복 | 5 | results.json V-244ceb9e: '근접 일치 r0(USER_NAME 이련→육평)' 뒤 '원복 eunjin.choi 저장 성공 · 재조회 값 (행 식별 0건)'. V-9bcbf1f5 '재조회 행 식별 0건'. 사내 SSP_MST_MODEL_USER 40/AZ00-A/MAMM9314U0A1-016 USER_ID eunjin.choi, LAST_UPDATE 11-25 01:02:34 minyonglee1(복원됨) | T534 신규 tools/E2E/lib/rowlink.ts · saveprobe.ts · crud.ts | 미측정 |
+| P4 G2·G9 | 2 | judge.py:1686 _gsp 가 tobe_proc 있는 GET 짝만 봄(P1 원인으로 빈 값). G2 행은 G9 판정 조건 밖. dbo.SSP0014_GET_SHIPMENT_MODEL_PIC.sql:86~88 LIKE, 85줄 Item ID 만 String_Split | T535 tools/Harness/verify/judge.py | 미측정 |
+| P5 A1 같은 사용자 | 1 | a1_live.csv 'main|같은 사용자 ERROR [측정 경로 없음] 양쪽 Measure 칸 설정이 있는 사용자 없음'. a1_live.py:183 인자 이름 판정 | T536 tools/Harness/verify/a1_live.py user_param_is_search_term | 미측정 |
+| P6 DB-SYN | 2 | mapping_trace.py:1102~1127 시노님 결과를 sp_pair.csv 짝으로 찾음. P1 원인으로 짝 빈 값 | P1 의 sp_pair.csv 재생성 | 미측정 |
+| P7 Model 팝업 | 2 | 대조표 SCM0002 기재, FE COM0013(ShipmentModelPic.tsx:545~558). sqllog_calls.json 팝업 SP 호출 0건 | 없음. 가이드 FE_GUIDE_20261119_1647.md G5 · 결정 D7 | 가이드 반영 뒤 |
+| P8 B4 | 1 | b4 사유 '?Warranty' · AS-IS 하드코딩 W:Warrnaty @cs:183 | T537 tools/Harness/verify/combo_oracle.py pair_added_by_name | 미측정 |
+| P9 A2 | 1 | 사내·AS-IS SCM_MST_SITE CN003256_40-A VALID_YN 'N'(02:4x 조회). AS-IS 원천 PlantSiteByDivision VALID_YN='Y' 조건 | 없음. 결정 D2 | 결정 뒤 |
+| P10 K4 | 1 | snap_validate.py 02:4x MISMATCH 1(USER_CHECK) | 없음. 결정 D1 | 승인 뒤 |
+| P11 집계 | 4 | 하위 행 따라감 | 없음 | 하위 행 따라감 |
+
+### 확인
+
+- selftest: pkg_asis_map 12/12 · diff_ingest 8/8 · a1_live 21/21 · combo_oracle 13/13 · sort_check 10/10 · rowlink.selftest.js 9/9
+- tsc(tools/E2E) 오류 0. engine_selfcheck PASS(02:53:14 · TSC 0 · selftest JS 35 · PY 66)
+- inventory_check --write-registry 실행(tools/Harness/README.md)
+- 실제 E2E 동작(연동 칸 제외 뒤 행 식별)과 차등 재실행 결과는 미측정
+
+### 다른 화면 영향
+
+- T532: 전 PKG 144개 대조 = 선언부 머리말로 새로 생기는 짝 191, 기존 sp_pair.csv 짝과 다른 짝 0, 새 CONFLICT 0. 짝 없던 SP 중 SSP0021_DELETE_SHIPMENT_REQUEST_DRAFTING, SSP0060_DELETE_SHIPMENT_REQUEST_DRAFTING 이 풀림. sp_pair.csv 재생성은 SSP0014 만 함
+- T536: AS-IS GET SP 412개(user_id·created_by 인자) 중 104개가 같은 사용자 재실행 NA 조건에 맞음
+- T533·T534·T535·T537: 같은 조건 행만 바뀜. 바뀌는 행 수 미측정
+- 같은 시각 다른 세션이 SCP0028(T529~T531)로 gen_param_map.py·judge.py·langacct.ts 등을 고침. judge.py 에 T531·T535 둘 다 남아 있음 확인
+- 백업: sp_pair.csv.bak_20261125_ssp14u · param_map.csv.bak_20261125_ssp14u · _unverified_plan.md.bak_20261125 · _unverified_decisions.md.bak_20261125
+
+### 남은 사유
+
+- T-d1bd8978, T-bab6f023: 대조표 정정 필요(DB MODE 라 가이드 G5). 결정 D7
+- V-16ab0403: AS-IS 화면 표시 미확인. 결정 D2
+- V-3bb51520: 스냅샷 승인 대기. 결정 D1
+- 추가 확인 후보: snap 버튼 기대 목록이 btn_auth 의 화면 밖 권한 코드(USER_CHECK)를 넣는 규칙(다른 화면 같은 유형 여부 미확인) · SCP0028 sp_pair.csv 짝은 그 화면 다음 CheckList diff 단계에서 재생성

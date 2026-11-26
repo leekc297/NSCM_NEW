@@ -1,0 +1,100 @@
+{
+ "definition": "ERP, SCM 데이터 구분별로 고객 품목(Cust. Item ID)과 MDM 품목, Sold-To, Ship-To, Sales Site, Project 를 N:N 으로 연결하는 매핑 마스터를 관리하는 화면",
+ "overview": [
+  "ERP/SCM 데이터 구분별로 고객 품목 코드(Cust. Item ID)와 MDM 품목을 연결하는 기준정보 화면임. 고객 Plant, Unload 지점 단위로 Sold-To, Ship-To, Sales Site, Project, Incoterms 를 함께 관리함",
+  "위쪽 조회 조건과 아래 매핑 그리드 1개로 구성됨. 그리드 오른쪽 Cust. Item ID, MDM CODE, MAPPING, Valid From, Valid To 칸에서 품목을 연결함",
+  "Div 를 고르고 Search(F5) → Insert(F8) 로 행 추가 → Sold-To, Ship-To, Project Code, MAPPING 값을 찾기 팝업에서 고름 → Save(F7) 순서로 작업함",
+  "고객 찾기, Project 찾기, 품목 찾기 팝업을 씀"
+ ],
+ "pages": [
+  {
+   "title": "N: N Master Mapping",
+   "keyPoint": "저장된 행은 Delete 로 지울 수 없으므로 저장 전 Cust. Item ID 별 MDM CODE 와 Valid From, Valid To 를 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.155,
+     "y": 0.157
+    },
+    {
+     "no": 2,
+     "x": 0.612,
+     "y": 0.249
+    },
+    {
+     "no": 3,
+     "x": 0.17,
+     "y": 0.249
+    },
+    {
+     "no": 4,
+     "x": 0.83,
+     "y": 0.29
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Data Type: ERP/SCM 구분. 초기값 ALL",
+      "Div: 필수. 권한이 있는 Division 만 나옴",
+      "Team, End Customer, Sales Site: 앞 조건에 맞는 값만 콤보에 나옴. 초기값 ALL",
+      "Project: 돋보기 버튼으로 Project 찾기 팝업을 엶. Div 40 에서는 입력 불가",
+      "Model/ Nickname: 돋보기 버튼으로 품목 찾기 팝업을 엶"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7) 는 아래 그리드에 적용됨",
+      "Delete 는 새로 추가한 행만 지움. 저장된 행이면 \"신규 입력 (Insert) 한 행만 삭제할 수 있습니다.\" 메시지가 뜸",
+      "Sort, Filter, Condition, Reset Condition 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "매핑 그리드",
+     "lines": [
+      "필수 입력: Company ID, End Customer, Sold-To, Ship-To, Sales Site, Project Code, Incoterms, MDM CODE, MAPPING 컬럼(제목 앞 빨간 점)",
+      "Company ID: EDI 법인 코드 목록에서 고름",
+      "Sold-To, Ship-To: 더블클릭하면 고객 찾기 팝업이 열림. Project Code 는 Project 찾기 팝업에서 고름",
+      "Div 40 에서는 Project Code 컬럼이 숨겨짐",
+      "같은 값은 셀이 합쳐져 보임"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "품목 매핑 칸",
+     "lines": [
+      "Cust. Item ID 1건에 MDM CODE 를 행마다 1건씩 연결함",
+      "MAPPING 컬럼: 더블클릭하면 품목 찾기 팝업이 열림",
+      "저장 때 필수값이 비면 \"{0} 값은 필수 입력입니다.\" 형식으로 컬럼 이름이 들어간 메시지가 뜸",
+      "Valid From, Valid To 는 YYYYMMDD 형식. 틀리면 \"유효한 날짜 형식이 아닙니다. (YYYYMMDD)\" 메시지가 뜸",
+      "Cust. Unload 35자, Cust. Plant 10자, Cust. Item ID 50자를 넘으면 \"Unloading(≤35) / Plant(≤10) / Customer Item ID(≤50) 최대 입력길이 초과.\" 메시지가 뜸",
+      "저장되면 \"성공적으로 저장되었습니다.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "DM",
+ "id": "DMF0072",
+ "uiName": "N: N Master Mapping",
+ "menuPath": "DM> Demand Master> N: N Master Mapping",
+ "captures": [
+  "captures/DMF0072.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0072/",
+  "Doc/asisfacts/screens/DMF0072/"
+ ],
+ "buttons": [
+  "dataType:SEARCH",
+  "main:DELETE",
+  "main:INSERT",
+  "main:SAVE",
+  "main:SEARCH"
+ ]
+}

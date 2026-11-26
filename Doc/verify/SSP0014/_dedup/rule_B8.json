@@ -1,35 +1,16 @@
 {
  "rule_id": "B8",
- "hash": "97f19e475e70a9af",
+ "hash": "a5a984ad3c4fd1d3",
  "groups": [
-  {
-   "rows": [
-    "V-6e3ea9a2",
-    "V-7aa8e3f2"
-   ],
-   "why": "두 행 모두 MKT FCST 조회·신규행의 Team 컬럼을 SSPM Team 변경 후 조회로 확인하고, 기대 결과도 Owner 소속팀 대신 SSPM DEPT_ID를 표시·세팅하는 것으로 같다(출처만 CONFIRMED와 GENERAL로 다르다)."
-  },
   {
    "rows": [
     "EG-5a6d68b7"
    ],
-   "why": "PKG_SSP0014 소스·메타를 정적으로 점검해 TB_FX_* 참조와 ATTRIBUTE9 SQL_ID 실존을 확인하는 행이라, 화면에서 값을 확인하는 다른 행들과 성질이 달라 따로 둔다."
-  },
-  {
-   "rows": [
-    "V-7a390fd7"
-   ],
-   "why": "조회조건 콤보 다섯 개(Sales Site·End Customer·Sold to·Plant Site·Team)의 후보 원천과 Team cascade를 공통 상태에서 확인하는 행이라, 대상 범위와 기대가 다른 행과 다르다."
-  },
-  {
-   "rows": [
-    "V-c9b4997e"
-   ],
-   "why": "Div 선택과 신규행 Insert(81_HD) 상태에서 조회조건 Team과 그리드 콤보를 확인하고, 기대가 Div별 SSPM DEPT 일치와 중복 0이라서 상태·대상·기대가 V-7a390fd7과 달라 묶지 않는다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:12:03",
- "cost": 0.0426628
+ "why": "행 1건",
+ "by": "코드",
+ "at": "2026-11-25 02:13:24",
+ "cost": 0
 }

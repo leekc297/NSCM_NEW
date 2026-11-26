@@ -42,6 +42,7 @@ export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 //   저장 전 두 검증은 모두 화면(utils/validators.ts)에서 하며 저장 SP 는 이 검사를 하지 않는다.
 export const VALIDATION_MSG = {
   RATIO_OUT_OF_RANGE: 'MSG01306', // "입력한 데이터가 100을 초과하거나 미만입니다." (ValidChk — 기간별 법인 합계 ≠ 100)
+  CELL_OUT_OF_RANGE: 'MSG01037', // "{0}~{1} 사이의 수를 입력하세요." (ValidChk — 한 칸이 0~100 밖. 2026-11-22 개선 요청)
   REQUIRED_DIVISION: 'MSG01310', // "구분값을 입력해 주세요." (ValidChk2 — 기여율이 있는 기간의 구분(RBU_0999) 칸 공란)
   SAVE_CONFIRM: 'MSG00001', // 저장 전 확인
   VERSION_REQUIRED: 'MSG00283', // FindData — 버전 미선택

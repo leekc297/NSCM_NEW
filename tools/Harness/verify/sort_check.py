@@ -364,7 +364,7 @@ def main():
                     if not tkeys:
                         sh = sheet_of.get(tail(sp), ''); g = gold.get(tail(sp), {}); nrows = int(g.get('asis_rows') or g.get('tobe_rows') or -1)
                         is_save = bool(re.search(r'(?i)_(SAVE|SET|INS|UPD|DEL|CHK|CHECK)', sp))
-                        if is_save: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': '저장 SP — 결과 순서 대상 아님'})
+                        if is_save: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': f"AS-IS·TO-BE 모두 ORDER BY 없음 — 저장·검증 SP(이름 {re.search(r'(?i)_(SAVE|SET|INS|UPD|DEL|CHK|CHECK)', sp).group(0)}) — 결과 순서 대상 아님(CR-075 ③)"})  # T533 문구
                         elif sh and sh not in grid_sheets: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': f"AS-IS·TO-BE 모두 ORDER BY 없음 — 그리드 비바인딩 룩업 SP(PROC_M sheet '{sh}' 는 SHEET_COLUMNS 없음) → CR-075 대상 아님"})
                         elif 0 <= nrows <= 1: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': f'AS-IS·TO-BE 모두 ORDER BY 없음 — 결과 {nrows}행 집계 SP → CR-075 대상 아님'})
                         elif nrows < 0 and single_row_result(_read_asis(r['file'])): out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': 'AS-IS·TO-BE 모두 ORDER BY 없음 — 골든 행 수 없음 · AS-IS 원문 구조상 결과 1행(GROUP BY 없는 집계/FROM 없는 SELECT/단일 파생표) → CR-075 ③ 대상 아님(T204)'})

@@ -265,13 +265,297 @@
      "value": "popCity.CityName"
     }
    ]
+  },
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0005_DistributionRoute.cs:1138",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "FROM_CITY",
+    "guard": "if (!siMain.IsLock(siMain.SheetName)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.FROM_CITY) || e.Column == siMain.GetColumnIndex(DefColumns.FROM_COUNTRY) ||…)"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_Country",
+     "kind": "GRID",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "GRID",
+     "arg": "sCity"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1139",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1142",
+     "target": "sCountry",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1143",
+     "target": "sCountryName",
+     "value": "popCity.CountryName"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1144",
+     "target": "sCity",
+     "value": "popCity.City"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1145",
+     "target": "sCityName",
+     "value": "popCity.CityName"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0005_DistributionRoute.cs:1138",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "TO_CITY",
+    "guard": "if (!siMain.IsLock(siMain.SheetName)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.FROM_CITY) || e.Column == siMain.GetColumnIndex(DefColumns.FROM_COUNTRY) ||…)"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_Country",
+     "kind": "GRID",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "GRID",
+     "arg": "sCity"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1139",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1142",
+     "target": "sCountry",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1143",
+     "target": "sCountryName",
+     "value": "popCity.CountryName"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1144",
+     "target": "sCity",
+     "value": "popCity.City"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1145",
+     "target": "sCityName",
+     "value": "popCity.CityName"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_CitybyCountry",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0005_DistributionRoute.cs:1138",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "TO_COUNTRY",
+    "guard": "if (!siMain.IsLock(siMain.SheetName)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.FROM_CITY) || e.Column == siMain.GetColumnIndex(DefColumns.FROM_COUNTRY) ||…)"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_Country",
+     "kind": "GRID",
+     "arg": "sCountry"
+    },
+    {
+     "param": "_City",
+     "kind": "GRID",
+     "arg": "sCity"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1139",
+     "target": "popCity.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1142",
+     "target": "sCountry",
+     "value": "popCity.Country"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1143",
+     "target": "sCountryName",
+     "value": "popCity.CountryName"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1144",
+     "target": "sCity",
+     "value": "popCity.City"
+    },
+    {
+     "ref": "SCP0005_DistributionRoute.cs:1145",
+     "target": "sCityName",
+     "value": "popCity.CityName"
+    }
+   ]
   }
  ],
  "classes": {
   "ExcelUploadForm2": {
    "cls": "ExcelUploadForm2",
-   "in_pack": false,
-   "from": "none"
+   "in_pack": true,
+   "file": "01.Framework/GSCM.Windows.Forms/UI/ExcelUploadForm2.cs",
+   "title": "ExcelUpload",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "PR_SCM_ADM_GET_UPLOAD_INFO",
+     "src": "Doc/asisfacts/db/modules/dbo.PR_SCM_ADM_GET_UPLOAD_INFO.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name"
+     ],
+     "method": "GetUploadInfo",
+     "ref": "ExcelUploadForm2.cs:446",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "ExcelUploadForm2.cs:121",
+     "method": "InitSheet",
+     "raw": "si.LockColumn(0, si.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "ExcelUploadForm2.cs:129",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[0].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm2.cs:130",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[2].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm2.cs:131",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[4].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm2.cs:1029",
+     "method": "Excel_TempUpload",
+     "raw": "sprdDetail.Sheets[0].Rows[i].BackColor = ErrorColor;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "ExcelUploadForm2.cs:1040",
+     "method": "Excel_TempUpload",
+     "raw": "sprdDetail.Sheets[0].Rows[i].BackColor = ErrorColor;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "ExcelUploadForm2.cs:1054",
+     "method": "Excel_TempUpload",
+     "raw": "sprdDetail.Sheets[0].Rows[i].BackColor = ErrorColor;",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [
+    {
+     "ref": "ExcelUploadForm2.cs:180",
+     "method": "GetExcelFileName",
+     "raw": "openFile.Filter = \"Excel files (*.xls;*.xlsx)|*.xls;*.xlsx|xls files (*.xls)|*.xls|xlsx files (*.xlsx)|*.xlsx|All files (*.*)|*.*\";",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "ExcelUploadForm2.cs:431",
+     "method": "OnClose_Click",
+     "raw": "this.Close();",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm2.cs:1200",
+     "method": "btnOK_Click",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageBox.Show(ex.Message, ex.Source, MessageBoxButtons.OK, MessageBoxIcon.Error);",
+    "if (MessageHelper.GMessageBox(\"MSG00195\") == DialogResult.No)",
+    "MessageBox.Show(ex.Message, ex.Source, MessageBoxButtons.OK, MessageBoxIcon.Error);",
+    "MessageHelper.GMessageBox(\"MSG00051\", new object[] { \"{ \" + errorVal + \" }\" });",
+    "MessageBox.Show(errorMsg, errCode, MessageBoxButtons.OK, MessageBoxIcon.Error);"
+   ],
+   "period_use": [],
+   "from": "source"
   },
   "SCM0002_CitybyCountry": {
    "cls": "SCM0002_CitybyCountry",

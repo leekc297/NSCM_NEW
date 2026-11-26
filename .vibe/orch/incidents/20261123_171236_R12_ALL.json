@@ -1,0 +1,29 @@
+{
+  "id": "20261123_171236_R12_ALL",
+  "at": "2026-11-23T17:12:36+09:00",
+  "ms": 1795421556842,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U14 VMW 화면 목록 명칭 빠짐 1건",
+  "screen": "",
+  "sig": "R12|S13|U14|names",
+  "count": 1,
+  "repeat": null,
+  "detail": "메뉴(Doc\\tobefacts\\db\\menu.csv mnu_desc)에 이름이 있는데 목록 이름이 비었거나 ID 와 같음: SYSTEM 'System' · 웹뷰 보고 11-23 17:12",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U14|names",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-24T23:04:25+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

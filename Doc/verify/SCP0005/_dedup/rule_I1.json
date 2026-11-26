@@ -1,80 +1,29 @@
 {
  "rule_id": "I1",
- "hash": "0c9f9fea63540b6b",
+ "hash": "bbf0761f808fcf8d",
  "groups": [
   {
    "rows": [
-    "V-29c34a39",
-    "V-2e65752a",
-    "V-3b3576fd"
+    "V-29c34a39"
    ],
-   "why": "All three check the whole screen's MSG/LBL codes the same way and expect every code registered in all three languages with no '_' fallback shown."
-  },
-  {
-   "rows": [
-    "V-27f623b5",
-    "V-96bccdbd"
-   ],
-   "why": "Both check the same popup message (MSG00445 etc.) by switching the language, and both expect it to be registered in every language and shown in the runtime language."
-  },
-  {
-   "rows": [
-    "V-49e2564d",
-    "V-e804cfcc"
-   ],
-   "why": "Both check the same LBL/MSG/MENU code dictionary and expect each identical text to have only one code that every screen reuses."
-  },
-  {
-   "rows": [
-    "V-29cc48a3"
-   ],
-   "why": "This checks the 'no changes' message after saving with nothing edited in KO and EN, expecting a registered code and no '_' fallback, which differs from the KO-only scenario that also expects zero save requests."
+   "why": "단독"
   },
   {
    "rows": [
     "V-38472e83"
    ],
-   "why": "This KO-only automated scenario also expects zero save requests and a text-pattern match, so its condition and expected result differ from V-29cc48a3."
-  },
-  {
-   "rows": [
-    "V-474dd8c8"
-   ],
-   "why": "Its target is the shared Excel Upload window's MSG00657/658/659 in EN and CN, a different element and condition from the other rows."
-  },
-  {
-   "rows": [
-    "V-5dc1872b"
-   ],
-   "why": "Its target is only the search button label LBL00112, a different element."
-  },
-  {
-   "rows": [
-    "V-b16663b1"
-   ],
-   "why": "Its target is only the Route search popup title, a different element."
-  },
-  {
-   "rows": [
-    "V-ed4994cd"
-   ],
-   "why": "Its target is the KO validation message for Lot Size<Increment, a different element and condition."
+   "why": "단독"
   },
   {
    "rows": [
     "V-cad0bff9"
    ],
-   "why": "Its expected result is 'no text', which is unclear and conflicts with V-f8f8adcc's expectation of CN text for the same element, so it stays on its own."
-  },
-  {
-   "rows": [
-    "V-f8f8adcc"
-   ],
-   "why": "This checks the result count in CN and expects CN text, which differs from V-cad0bff9's expected result, so it stays on its own."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:44:10",
- "cost": 0.07633640000000001
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:33:46",
+ "cost": 0,
+ "open": 0
 }

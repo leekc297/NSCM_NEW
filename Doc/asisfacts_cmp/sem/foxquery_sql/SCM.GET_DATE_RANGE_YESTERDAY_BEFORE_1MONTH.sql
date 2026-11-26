@@ -1,0 +1,2 @@
+﻿select	CONVERT(varchar(8) , DATEADD(DAY, -1, (convert(varchar(8), [dbo].[FN_MULTY_TIME](@p_timezone),112))), 112)+':'+
+              CONVERT(varchar(8) , DATEADD(DAY, -1, (convert(varchar(8), [dbo].[FN_MULTY_TIME](@p_timezone),112))), 112)

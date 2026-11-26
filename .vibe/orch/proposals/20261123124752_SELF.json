@@ -1,0 +1,36 @@
+{
+  "id": "20261123124752_SELF",
+  "at": "2026-11-23T12:47:52+09:00",
+  "ms": 1795405672663,
+  "source": "self",
+  "status": "superseded",
+  "sig": "selfapply|gate|newbad|pass count in compare rn",
+  "title": "자가 보완 게이트 비교에서 시험 PASS 건수 빼기(시험을 늘린 개선안이 반영 전 실패를 새 실패로 세는 문제)",
+  "evidence": "orch-improve.js:302 preBad = 반영 전 detail 문자열 Set, newBad = 반영 뒤 detail 중 Set 에 없는 것 · orch-improve.js:304 재실행 비교도 같은 문자열 · orch-selfcheck.js:75 S2 detail = 'exit N · PASS N · FAIL N · 실패 줄' · repair_20261121000234_VISION.json gate.newBad 'PASS 137' vs 12-31-18_claude_orch.log:33 'PASS 133', 실패 줄 같음 · 2026-11-23 12:46 20261121000234_VISION 반영 실패 (반영 실패한 20261121000234_VISION 를 고친 안 · 원인 tools/VibeManager/orch-improve.js:302 가 반영 전·뒤 게이트 항목(gate().detail, orch-selfcheck.js:332)을 문자열 전체로 비교함. S2 항목 문자열에 PASS 건수가 들어감(orch-selfcheck.js:75). 반영 전 12:31 로그(.vibe/logs/2026-11-23T12-31-18_claude_orch.log:33) 'S2 t_orch_usercheck.js 실패: exit 1 · PASS 133 · FAIL 1', 반영 뒤 12:46 result.json:842 'PASS 137 · FAIL 1', 실패 내용은 같은 'U3 장부 막힘(S13|U3|worklist)'. 개선안이 시험 4건을 추가해 PASS 만 늘었는데 새로 어긋난 항목 1건으로 셈. 개선안 검증 ①~⑤ 는 반영 결과에서 통과함. 같은 안을 retry 하면 PASS 건수가 또 달라져 같은 이유로 실패함)",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_selfapply.js"
+  ],
+  "before_after": "지금: 반영 전·뒤 게이트 항목 문자열이 PASS 건수 하나만 달라도 새로 어긋난 항목으로 셈. 바꾼 뒤: 비교 전에 'PASS 숫자 · ' 부분을 지운 문자열로 비교함(302행 preBad·newBad, 304행 again·keep). FAIL 건수와 실패 줄이 다르면 종전대로 새 항목으로 셈. 기록(gate.newBad, history)에는 원문 문자열을 그대로 남김. t_orch_selfapply.js 에 '반영 전부터 실패한 시험이 PASS 건수만 늘고 실패 줄은 같으면 반영 완료' 사례 1건 추가",
+  "verify": "① grep -c \"chk('\" tools/VibeManager/test/t_orch_selfapply.js: 반영 전 41 → 반영 뒤 기대 42 ② node tools/VibeManager/test/t_orch_selfapply.js tools/VibeManager: 반영 전 미측정(이번 진단에서 실행이 권한 확인에 막힘) → 반영 뒤 기대 = 반영 전 PASS 수 + 1, 추가한 'PASS 건수만 다른 반영 전 실패 = 새로 어긋난 항목 아님' 사례 PASS, 기존 '실패 기록에 새로 어긋난 항목(S2 t_a.js)' 사례 PASS 유지",
+  "rollback": "tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_selfapply.js 를 VMO 백업 태그 사본으로 복원",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T18:58:31+09:00",
+      "by": "Claude Code 세션(사용자 지시)",
+      "what": "같은 내용을 orch-improve.js gateKey 로 직접 반영(게이트 항목 비교에서 PASS, FAIL 건수 뺌). 시험 test/t_orch_applyfail.js ① 4건 통과. 이 안은 반영하지 않음"
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261121000234_VISION",
+  "repairRoot": "20261121000234_VISION",
+  "repairDepth": 1,
+  "supersededBy": "Claude Code 세션 직접 반영 2026-11-23"
+}

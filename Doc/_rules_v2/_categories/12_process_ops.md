@@ -41,6 +41,7 @@
 | 88 | [issue-log-daily-workflow](../hooks/issue-log-daily-workflow.md) | 🅒 | 이슈목록 정리 → 룰 승격 절차 |
 | 125 | [ui-selfcheck-runtime-mandatory](../hooks/ui-selfcheck-runtime-mandatory.md) | ⭐⭐⭐ | **완료 선언 전 셀프 런타임 검증 의무** — SP 직접 CRUD 왕복 + HTTP E2E 러너(ui_http_e2e.py) 8축 + Division×역할 15계정 권한별 + 모달=MAIN 동등 5칸 + 3리포트 첨부 (주 소속 — 02·05 공유, 2026-08-07 사용자 지정) |
 | 126 | [verification-completion-honesty](../hooks/verification-completion-honesty.md) | ⭐⭐⭐ | **검증 완료 선언 정직성 계약** — 보고 3값(PASS/**ERROR**/FAIL): 미실행·미확인·환경파손·미적용 = ERROR(PASS 아님). 완료 판정식 5조건(9섹션 전수 실행 + 리포트 3종 + **신선도** + 적용축 사내/QA/DEV + 사용자축 명시) · ERROR 5칸 양식 · **게이트 자기검증**(역재현·커버리지 실측·절단 고지) · 환경오류≠통과. #124→#125→**#126 출구** (주 소속 — 11·10 공유, 2026-08-08 사용자 지정) |
+| 157 | [plan-complete-before-test](../hooks/plan-complete-before-test.md) | ⭐⭐⭐ | 계획한 구현 항목을 다 끝낸 뒤 시험(사용자 지시 2026-11-25) — 남은 항목이 있으면 화면 측정·통합 시험 금지 · plan_state.py set/done/drop/clear · 실행 hook check-plan-before-test.ps1 · VM run-rule.js 14 · 10_RULES_KEEP A-16 |
 
 ## Cross-ref
 - 룰 v1 유지 8: 02(브랜치/커밋)/21(트러블슈팅)/**22(이관패키지)**/28(multi-remote)/29(CSV 적재)/30(백업/원복)/31(Figma)/32(Oracle 직결)

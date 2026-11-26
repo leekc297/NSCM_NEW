@@ -80,7 +80,60 @@ const keys = (r, id) => r.checks[id].items.map(i => i.key);
     const res = JSON.parse(fs.readFileSync(path.join(vibeDir, 'orch', 'selfcheck', 'result.json'), 'utf8')); res.checks.S11 = { at: new Date().toISOString(), items: [{ key: 'S11|good.js' }] }; res.checks.S1 = { at: new Date().toISOString(), items: [{ key: 'S1|bad.js' }] }; res.checks.S9 = { at: new Date().toISOString(), items: [{ key: 'S9|file|a.js' }] }; fs.writeFileSync(path.join(vibeDir, 'orch', 'selfcheck', 'result.json'), JSON.stringify(res));
     const r8 = await sc.run(['S8'], '시험'); const k8 = r8.checks.S8.items.map(i => i.key);
     chk('S8: 건수형 S11 은 판정 안 함 · S1 은 남으면 판정', k8.includes('S8|P_S1') && !k8.includes('S8|P_S11'), JSON.stringify(k8));
-    chk('S8: S9 누적 건수 key(S9|file|a.js)는 같은 key 가 다시 나와도 판정 안 함', !k8.includes('S8|P_S9') && k8.length === 1, JSON.stringify(k8)); }
+    chk('S8: S9 누적 건수 key(S9|file|a.js)는 같은 key 가 다시 나와도 판정 안 함', !k8.includes('S8|P_S9') && k8.length === 1, JSON.stringify(k8));
+    // 개선안 20261120225006_SELF: 원래 사건과 재발 사건의 agent.cause_class 가 둘 다 있고 다르면 재발 아님
+    const id8 = path.join(vibeDir, 'orch', 'incidents'); fs.mkdirSync(id8, { recursive: true }); const tMs = Date.now() - 3600000;
+    const inc8 = (id, sig, ms, cc) => fs.writeFileSync(path.join(id8, id + '.json'), JSON.stringify(Object.assign({ id, rule: 'R5', sig, ms, at: new Date(ms).toISOString(), status: 'open', title: id }, cc ? { agent: { cause_class: cc } } : {})));
+    for (const [pid, sig, c1, c2] of [['P_CC_DIFF', 'R5|T8|diff', 'env', 'engine'], ['P_CC_SAME', 'R5|T8|same', 'env', 'env'], ['P_CC_NONE', 'R5|T8|none', '', 'engine']]) {
+      inc8(`I8_${pid}_SRC`, sig, tMs - 600000, c1); inc8(`I8_${pid}_AGAIN`, sig, Date.now() - 600000, c2);
+      fs.writeFileSync(path.join(pd, pid + '.json'), JSON.stringify({ id: pid, status: 'applied', incident: `I8_${pid}_SRC`, title: pid, history: [{ at: new Date(tMs).toISOString(), what: '반영 완료' }] })); }
+    const k8c = (await sc.run(['S8'], '시험 원인 분류')).checks.S8.items.map(i => i.key);
+    chk('S8: cause_class env → engine = 0건', !k8c.includes('S8|P_CC_DIFF'), JSON.stringify(k8c));
+    chk('S8: cause_class 같음 = 1건', k8c.filter(k => k === 'S8|P_CC_SAME').length === 1, JSON.stringify(k8c));
+    chk('S8: cause_class 없음 = 1건(종전대로)', k8c.filter(k => k === 'S8|P_CC_NONE').length === 1, JSON.stringify(k8c)); }
+  // 2026-11-20 개선안 VISION_3: 자동 동기화 조건(S1 · S2 통과, S4 통과)이 맞으면 동기화를 먼저 하고 S3 를 다시 잰 뒤 사건을 연결한다
+  { const vmd2 = path.join(root, 'vm2'); const inst2 = path.join(root, 'installed2');
+    const runAll = okFlag => `console.log('RESULT ' + JSON.stringify({ files: [{ file: 't_x.js', ok: ${okFlag}, code: ${okFlag ? 0 : 1}, pass: 1, fail: ${okFlag ? 0 : 1}, failLines: [], last: '' }], pass: 1, fail: ${okFlag ? 0 : 1}, sec: 0, skipped: [] }));\n`;
+    mk(path.join(vmd2, 'a.js'), 'module.exports = 1;\n'); mk(path.join(vmd2, 'package.json'), JSON.stringify({ name: 'y' })); mk(path.join(vmd2, 'quick.json'), JSON.stringify({ groups: [] })); mk(path.join(vmd2, 'steps.json'), JSON.stringify({ steps: [] })); mk(path.join(vmd2, 'test', 'run_all.js'), runAll(true));
+    for (const f of ['package.json', 'quick.json', 'steps.json']) mk(path.join(inst2, f), fs.readFileSync(path.join(vmd2, f), 'utf8'));
+    mk(path.join(inst2, 'a.js'), 'module.exports = 0; // 옛 판\n');
+    sc.init({ paths: () => p, timer: false, autoSync: true, inventory: false, docStyle: false, vmDir: vmd2, extDir: inst2 });
+    const s3Inc = f => watch.list(500).filter(x => x.rule === 'R12' && x.sig === `R12|S3|${f}`).length;
+    let ra = await sc.run(['S1', 'S2', 'S3', 'S4'], '시험 동기화 조건 충족');
+    chk('동기화 조건 충족 → 동기화 먼저 · S3 통과 · R12 S3 사건 0건', ra.checks.S1.status === 'ok' && ra.checks.S2.status === 'ok' && ra.checks.S4.status === 'ok' && ra.checks.S3.status === 'ok' && ra.autoSync && ra.autoSync.copied.join() === 'a.js' && s3Inc('a.js') === 0 && fs.readFileSync(path.join(inst2, 'a.js'), 'utf8') === 'module.exports = 1;\n', `S1 ${ra.checks.S1.status} S2 ${ra.checks.S2.status} S3 ${ra.checks.S3.status} S4 ${ra.checks.S4.status} sync ${JSON.stringify(ra.autoSync)} R12 S3 ${s3Inc('a.js')}`);
+    mk(path.join(vmd2, 'a.js'), 'module.exports = 2;\n'); mk(path.join(vmd2, 'test', 'run_all.js'), runAll(false));
+    ra = await sc.run(['S1', 'S2', 'S3', 'S4'], '시험 동기화 조건 미충족');
+    chk('동기화 조건 미충족(S2 실패) → 동기화 안 함 · R12 S3 사건 1건', ra.checks.S2.status === 'fail' && ra.checks.S3.status === 'fail' && s3Inc('a.js') === 1 && fs.readFileSync(path.join(inst2, 'a.js'), 'utf8') === 'module.exports = 1;\n', `S2 ${ra.checks.S2.status} S3 ${ra.checks.S3.status} R12 S3 ${s3Inc('a.js')}`); }
+  // 2026-11-23 개선안 20261123000643_VISION 단계 2: 문장 규칙 게이트. 위반 1건을 넣는 가짜 개선안 = 게이트 S11 새로 어긋남 → 대상 파일 되돌림 · 위반 없는 안 = 반영 완료
+  { const docs = path.resolve(dir, '..', 'Docs'); const r3 = path.join(root, 'r3'); const v3 = path.join(r3, '.vibe'); const W3 = (rel, s) => mk(path.join(r3, rel), s);
+    const A3 = 'module.exports = { msg: `작업 결과를 저장함` };\n';
+    W3('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_FE', orch: { agentEnabled: false, agentTimeoutMin: 1, selfTestTimeoutSec: 60, selfRepairEnabled: false } }));
+    for (const f of ['doc_style.py', 'doc_style_rules.csv']) W3(`tools/Docs/${f}`, fs.readFileSync(path.join(docs, f), 'utf8'));
+    W3('tools/VibeManager/a.js', A3); W3('tools/VibeManager/package.json', '{"name":"x"}'); W3('tools/VibeManager/quick.json', '{"groups":[]}'); W3('tools/VibeManager/steps.json', '{"steps":[]}');
+    W3('tools/VibeManager/CHANGELOG.md', '## (판 번호 없음, VM 저장소) 종전 절 (2026-11-23 10:00)\n- 내용\n'); W3('tools/VibeManager/test/run_all.js', fs.readFileSync(path.join(dir, 'test', 'run_all.js'), 'utf8'));
+    W3('tools/VibeManager/test/t_a.js', "console.log('PASS', 'a'); console.log('ALL PASS'); process.exit(0);\n"); W3('.gitignore', '.vibe/\n');
+    require('child_process').execSync('git init -q && git add -A && git -c user.email=t@t -c user.name=t commit -q -m init', { cwd: r3, windowsHide: true, stdio: 'ignore' });
+    const fake = path.join(v3, 'fake_claude.js'); mk(fake, [
+      "const fs=require('fs'),path=require('path');let inp='';let done=false;process.stdin.on('data',d=>{inp+=d;if(inp.includes('\\n'))go();});",
+      "function go(){if(done)return;done=true;const mode=fs.readFileSync(path.join('.vibe','mode.txt'),'utf8').trim();const out=o=>console.log(JSON.stringify(o));",
+      " fs.writeFileSync(path.join('tools','VibeManager','a.js'), mode==='bad' ? 'module.exports = { msg: `작업 결과를 저장함 \\u2014 다음 단계로 넘어감` };\\n' : 'module.exports = { msg: `작업 결과를 저장함. 다음 단계로 넘어감` };\\n');",
+      " const j={applied:true,verified:true,changed_files:['tools/VibeManager/a.js'],verify_result:'확인 명령 없음',note:''};",
+      " out({type:'system',subtype:'init',session_id:'s'}); out({type:'assistant',message:{content:[{type:'tool_use',name:'Edit',input:{file_path:'tools/VibeManager/a.js'}},{type:'text',text:'```json\\n'+JSON.stringify(j)+'\\n```'}]}});",
+      " out({type:'result',is_error:false,num_turns:1,duration_ms:5,total_cost_usd:0,session_id:'s'});setTimeout(()=>process.exit(0),50);}"].join(NL));
+    const fakeCmd = path.join(v3, 'fake_claude.cmd'); fs.writeFileSync(fakeCmd, `@node "${fake}" %*\r\n`);
+    const p3 = { root: r3, vibeDir: v3, extDir: '', claude: fakeCmd, claudeModel: '' };
+    const ev = require(path.join(dir, 'orch-events')); const agent = require(path.join(dir, 'orch-agent')); const im = require(path.join(dir, 'orch-improve'));
+    sc.dispose(); watch.dispose(); ev.init(v3); watch.init(p3, {}); agent.init({ paths: () => p3, serverSvc: null, loadQuick: () => [] }); im.init({ notify: () => { } });
+    sc.init({ paths: () => p3, timer: false, autoSync: false, inventory: false, incidents: false });
+    chk('styleTargets: VM .js 만 · 검사기 변경 안은 비교 안 함', sc.styleTargets(['tools/VibeManager/a.js', 'tools/Harness/x.py']).files.join() === 'a.js' && sc.styleTargets(['tools/Docs/doc_style.py', 'tools/VibeManager/a.js']).files.length === 0);
+    const mode = m => fs.writeFileSync(path.join(v3, 'mode.txt'), m);
+    const a = im.add({ title: 'a.js 문구 변경(위반 1건)', evidence: 'S11|a.js', targets: ['tools/VibeManager/a.js'], before_after: '문구 변경', verify: '', rollback: '', sig: 'style-bad', check: 'S11', selfKey: 'S11|a.js' }, 'self');
+    mode('bad'); let rr = await im.approve(a.id, '시험'); let pa = im.get(a.id);
+    chk('위반 1건 넣은 가짜 개선안 = 게이트 S11 새로 어긋남 · 반영 실패 · a.js 되돌림', rr.ok === false && pa.status === 'apply-failed' && pa.gate && (pa.gate.newBad || []).some(x => /^S11 a\.js 문장 규칙 위반 늘어남: 0 → 1/.test(x)) && fs.readFileSync(path.join(r3, 'tools', 'VibeManager', 'a.js'), 'utf8') === A3, JSON.stringify([pa.status, pa.gate, (pa.history || []).slice(-2).map(h => h.what)]));
+    const b = im.add({ title: 'a.js 문구 변경(위반 없음)', evidence: 'S11|a.js', targets: ['tools/VibeManager/a.js'], before_after: '문구 변경', verify: '', rollback: '', sig: 'style-good', check: 'S11', selfKey: 'S11|a.js' }, 'self');
+    mode('good'); rr = await im.approve(b.id, '시험'); const pb = im.get(b.id);
+    chk('위반 없는 개선안 = 게이트 통과 · 게이트 기록에 문장 규칙 위반 0 → 0', rr.ok === true && pb.status === 'applied' && /문장 규칙 위반 0 → 0/.test(pb.gate.text), JSON.stringify([pb.status, pb.gate]));
+    agent.dispose && agent.dispose(); im.dispose && im.dispose(); }
   sc.dispose(); watch.dispose(); st.dispose(); await new Promise(x => setTimeout(x, 100)); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error('ERROR', e); process.exit(2); });

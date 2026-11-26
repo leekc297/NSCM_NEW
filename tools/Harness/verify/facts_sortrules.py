@@ -154,6 +154,89 @@ def code_rules(screen):
     return out
 
 
+def popup_sps(screen, sps):
+    """2026-11-25 T529(SCP0028 T-c6aefa56 A6 'SP P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 판정 못함'): 화면이 new 로 연 다른 프로젝트 팝업이
+    부르는 SP 는 endpoints.csv 에 없어 정렬 규칙이 0행이었다. 이 화면 TO-BE PROC(proc_meta) 이름의 AS-IS SP 중 팝업 원문 FoxDataRequest 가
+    확인된 것만 더한다(gen_param_map.popup_class_sps 와 같은 판정 · 근거 없으면 0건)"""
+    have = {s.upper() for s in sps}; names = []
+    tobe = {screen}
+    for r in rdcsv(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')):
+        if (r.get('asis_id') or '').upper() == screen:
+            tobe.add((r.get('tobe_id') or '').upper())
+    for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')):
+        if (r.get('menu_id') or '').upper() in tobe and r.get('proc'):
+            n = re.sub(r'(?i)^P_', '', r['proc'].split('.')[-1])
+            if n.upper() not in have and n not in names and os.path.exists(os.path.join(MOD, f'dbo.{n}.sql')):
+                names.append(n)
+    if not names:
+        return []
+    try:
+        from gen_param_map import popup_class_sps
+        return popup_class_sps(screen, names)
+    except Exception as e:  # 원문 색인 실패 = 더하지 않음(종전 동작) — 숨기지 않고 출력
+        print(f'[sortrules] {screen}: 팝업 SP 탐색 실패({type(e).__name__}: {str(e)[:100]}) — 화면 SP 만 사용')
+        return []
+
+
+# T563(2026-11-25 SCP0005 FACT-9f114f46 1행): 화면 본체가 부르지 않는 팝업 클래스 SP(SCP0005_DistributionRoutePopup.cs:171 SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID)의
+#   ORDER BY 가 소속 표시 없이 화면 정렬처럼 적혔다(endpoints.csv class 칸 미사용). 행은 그대로 두고(T529 팝업 SP 추가와 같은 방향) note 에 팝업 소속과 여는 위치를 적는다.
+#   팝업 = 화면 .cs 원문에서 다른 클래스가 new 로 만들어 ShowDialog 로 여는 클래스. SP 를 부르는 클래스가 전부 팝업일 때만 표시
+def popup_owner(screen, sd=None, src_root=None):
+    """{SP 대문자: '팝업 <클래스> 소속(<연 곳 파일:행> new <클래스>() → <SP 호출 파일:행>)'}"""
+    sd = sd or os.path.join(SCR, screen)
+    roots = [src_root] if src_root else [os.path.join(ROOT, 'GSCM'), os.path.join(ROOT, 'GSCM_20260512')]
+    news = {}
+    for f in rdcsv(os.path.join(sd, 'files.csv')):
+        rel = f.get('file', '')
+        if not rel.endswith('.cs') or rel.endswith('.Designer.cs'): continue
+        pth = next((os.path.join(r, rel) for r in roots if os.path.exists(os.path.join(r, rel))), '')
+        if not pth: continue
+        txt = cs_strip_comments(open(pth, encoding='utf-8', errors='ignore').read())
+        own = set(re.findall(r'\bclass\s+(\w+)', txt))
+        for ln, line in enumerate(txt.split('\n'), 1):
+            # 대화상자로 여는 것만 팝업(변수 = new C(…) 뒤 변수.ShowDialog( · new C(…).ShowDialog() — 패널에 끼우는 하위 폼(DMF0043_Contribute_Main)은 화면 본체로 본다
+            for v, c in re.findall(r'(?:\b(\w+)\s*=\s*)?\bnew\s+(?:[\w]+\.)*(\w+)\s*\(', line):
+                if c in own: continue
+                if (v and re.search(r'\b' + re.escape(v) + r'\s*\.\s*ShowDialog\s*\(', txt)) or re.search(r'\bnew\s+(?:[\w]+\.)*' + re.escape(c) + r'\s*\([^;]*\)\s*\.\s*ShowDialog\s*\(', line):
+                    news.setdefault(c, f"{os.path.basename(rel)}:{ln}")
+    calls = {}
+    for r in rdcsv(os.path.join(sd, 'endpoints.csv')):
+        m = re.match(r'^SP\s+(\S+)', r.get('sp_or_sql', '') or '')
+        if m and r.get('class'): calls.setdefault(m.group(1).split('.')[-1].upper(), []).append((r['class'], f"{os.path.basename(r.get('file', ''))}:{r.get('line', '')}"))
+    for r in rdcsv(os.path.join(sd, 'actions.csv')):
+        if r.get('kind') == 'ENDPOINT' and r.get('endpoint') and r.get('class'):
+            calls.setdefault(r['endpoint'].split('.')[-1].upper(), []).append((r['class'], f"{os.path.basename(r.get('file', ''))}:{r.get('line', '')}"))
+    out = {}
+    for sp, lst in calls.items():
+        cls = {c for c, _ in lst}
+        if cls and all(c in news for c in cls):
+            c0 = sorted(cls)[0]; at = next(a for c, a in lst if c == c0)
+            out[sp] = f"팝업 {c0} 소속({news[c0]} new {c0}() → {at})"
+    return out
+
+
+def _selftest_popup_owner():
+    import tempfile, shutil
+    d = tempfile.mkdtemp(); sd = os.path.join(d, 'scr'); os.makedirs(os.path.join(d, 'src')); os.makedirs(sd)
+    open(os.path.join(d, 'src', 'Main.cs'), 'w', encoding='utf-8').write('class Main {\n void A() {\n  var p = new NS.Pop();\n  // new Ghost();\n  p.ShowDialog();\n  var q = new Sub();\n  pnl.Controls.Add(q);\n }\n}\n')
+    open(os.path.join(d, 'src', 'Pop.cs'), 'w', encoding='utf-8').write('class Pop { }\n')
+    with open(os.path.join(sd, 'files.csv'), 'w', encoding='utf-8', newline='') as f:
+        f.write('file\nMain.cs\nPop.cs\n')
+    with open(os.path.join(sd, 'endpoints.csv'), 'w', encoding='utf-8', newline='') as f:
+        f.write('file,class,line,sp_or_sql\nMain.cs,Main,9,SP X_GET_MAIN\nPop.cs,Pop,7,SP X_GET_HIST\nMain.cs,Main,12,SP X_GET_BOTH\nPop.cs,Pop,8,SP X_GET_BOTH\nMain.cs,Ghost,3,SP X_GET_GHOST\nSub.cs,Sub,4,SP X_GET_SUB\n')
+    try:
+        r = popup_owner('X', sd=sd, src_root=os.path.join(d, 'src'))
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
+    cases = [('T563 팝업 클래스만 부르는 SP = 팝업 소속', r.get('X_GET_HIST', '').startswith('팝업 Pop 소속(Main.cs:3')),
+             ('T563 화면 본체 SP 는 표시 없음(변이)', 'X_GET_MAIN' not in r),
+             ('T563 본체·팝업 둘 다 부르면 표시 없음(변이)', 'X_GET_BOTH' not in r),
+             ('T563 주석 속 new 는 팝업 근거 아님(변이)', 'X_GET_GHOST' not in r),
+             ('T563 패널에 끼우는 하위 폼(ShowDialog 없음)은 표시 없음(변이)', 'X_GET_SUB' not in r)]
+    for n, ok in cases: print(('PASS ' if ok else 'FAIL ') + n)
+    return 0 if all(ok for _, ok in cases) else 1
+
+
 def run(screen):
     sd = os.path.join(SCR, screen)
     if not os.path.isdir(sd): print(f'[SKIP] {screen} Fact Pack 없음'); return None
@@ -166,8 +249,17 @@ def run(screen):
         if r.get('kind') == 'ENDPOINT' and r.get('endpoint') and (r['class'], r['method']) not in dead: sps.append(r['endpoint'].split('.')[-1])
     dsp = dead_sps(screen)  # 호출이 전부 실행되지 않는 메서드 안에만 있는 SP — endpoints.csv 에 있어도 정렬 규칙 원천 아님(2026-10-30 asis_live)
     sps = [s for s in dict.fromkeys(sps) if re.fullmatch(r'[A-Za-z0-9_]+', s) and sp_base(s) not in dsp]
+    _pop = popup_sps(screen, sps)
+    sps += [s for s, _ in _pop]
+    owner = popup_owner(screen)  # T563 팝업 소속 표시
+    for _s, _ev in _pop:  # T529 로 더한 팝업 SP = 근거 문장에 연 곳이 있다
+        owner.setdefault(_s.upper(), f"팝업 소속({_ev})")
     rows = []
-    for sp in sps: rows += sp_rules(sp, screen)
+    for sp in sps:
+        _r = sp_rules(sp, screen)
+        if sp.upper() in owner:
+            for x in _r: x['note'] = (x.get('note') or '') + ' · ' + owner[sp.upper()] + ' — 화면 본체 조회 아님'
+        rows += _r
     rows += code_rules(screen)
     with open(os.path.join(sd, 'sort_rules.csv'), 'w', encoding='utf-8-sig', newline='') as fp:
         w = csv.DictWriter(fp, fieldnames=COLS); w.writeheader(); [w.writerow({k: r.get(k, '') for k in COLS}) for r in rows]
@@ -179,7 +271,7 @@ def run(screen):
 if __name__ == '__main__':
     a = sys.argv[1:]
     if not a: print(__doc__); sys.exit(2)
-    if a[0] == '--selftest': sys.exit(_selftest_assign())
+    if a[0] == '--selftest': sys.exit(_selftest_assign() or _selftest_popup_owner())
     if a[0] == '--all':
         for s in sorted(os.listdir(SCR)):
             if os.path.isdir(os.path.join(SCR, s)) and not s.startswith('_'): run(s)

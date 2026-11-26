@@ -1,0 +1,41 @@
+{
+ "sheets": {
+  "Sales Customer": {
+   "drill": {
+    "base": "Sales Site",
+    "pretab": "Sales Customer",
+    "row": {},
+    "cell": {},
+    "rest": [],
+    "src": "DMF0004_SalesSite.cs:2012 spdMain_CellDoubleClick → FindData_SubCustomer:852",
+    "tab": "Sales Customer"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Sales Location": {
+   "drill": {
+    "base": "Sales Site",
+    "pretab": "Sales Location",
+    "row": {},
+    "cell": {},
+    "rest": [],
+    "src": "DMF0004_SalesSite.cs:2016 spdMain_CellDoubleClick → FindData_SubLocation:906",
+    "tab": "Sales Location"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Sales Bucket": {
+   "drill": {
+    "base": "Sales Site",
+    "pretab": "Sales Bucket",
+    "row": {},
+    "cell": {},
+    "rest": [],
+    "src": "DMF0004_SalesSite.cs:2020 spdMain_CellDoubleClick → FindData_SubBucket:956",
+    "tab": "Sales Bucket"
+   },
+   "_gen": "sheet_nav_gen"
+  }
+ },
+ "_doc": "시트 이동 사실. drill 항목은 tools/Harness/verify/sheet_nav_gen.py 가 AS-IS 그리드 더블클릭 → ChangeSheet 원문에서 만든다(_gen). 그 밖은 사람이 적은 항목"
+}

@@ -48,6 +48,11 @@
         "tools/VibeManager/orch-usercheck.js",
         "tools/VibeManager/test/t_orch_usercheck.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:31+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T13:55:28+09:00"
     }
   ],
   "plain": {
@@ -84,5 +89,7 @@
     "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js 실행, ALL PASS(FAIL 0), reload 표본 PASS(U15 level warn, key S13|U15|reload), U99 noSuch 는 fail S13|U99|nodet 유지, 2026-11-20 13:17:42",
     "note": "orch-usercheck.js:243 unknown 에 detector 이름을 같이 담음. :250 은 fs.readFileSync(__filename) 원문에 '<detector>(u, x)' 정의가 있으면 warn S13|<id>|reload, 없으면 종전 fail S13|<id>|nodet. 설치 폴더와 CHANGELOG.md 는 건드리지 않음."
   },
-  "snap": "prop_20261120131343_SELF"
+  "snap": "prop_20261120131343_SELF",
+  "effectiveMs": 1795150528179,
+  "effectiveAt": "2026-11-20T13:55:28+09:00"
 }

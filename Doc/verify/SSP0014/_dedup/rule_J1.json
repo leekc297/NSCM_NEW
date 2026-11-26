@@ -1,163 +1,119 @@
 {
  "rule_id": "J1",
- "hash": "c1e41d2f18ca9975",
+ "hash": "7f7ff8a4f6b6a84f",
  "groups": [
   {
    "rows": [
     "EG-260d3138"
    ],
-   "why": "Checks automatic selection for the SSP/40/SSP Viewer account only; other accounts are measured separately."
-  },
-  {
-   "rows": [
-    "EG-caf73741"
-   ],
-   "why": "Checks automatic selection for the SSP/40/SSP Planner account; the expected value matches EG-260d3138 but the account differs, so it is measured separately."
-  },
-  {
-   "rows": [
-    "EG-e014790c"
-   ],
-   "why": "Checks that the SSP/81/SSP Planner account automatically selects its single permission, 81_HM."
-  },
-  {
-   "rows": [
-    "EG-e14c8b35"
-   ],
-   "why": "The SSP/81/SSP Viewer account has several permissions, so it expects a value from the candidate list rather than a single permission. That is a different expected result."
-  },
-  {
-   "rows": [
-    "EG-ee7c9658"
-   ],
-   "why": "Checks that the SSP/82/SSP Planner account automatically selects 82."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-4e05532f"
    ],
-   "why": "Checks the Division candidate list (81_HM) for the SSP/81/SSP Planner account."
-  },
-  {
-   "rows": [
-    "EG-85882398"
-   ],
-   "why": "Checks the Division candidate list (40) for the SSP/40/SSP Viewer account."
-  },
-  {
-   "rows": [
-    "EG-d7a78859"
-   ],
-   "why": "Checks the Division candidate list for the SSP/40/SSP Planner account; the expected value matches EG-85882398 but the account differs."
-  },
-  {
-   "rows": [
-    "EG-8dd108d8"
-   ],
-   "why": "Checks the Division candidate list (82) for the SSP/82/SSP Planner account."
-  },
-  {
-   "rows": [
-    "EG-a6f6bebc"
-   ],
-   "why": "Checks the SSP/81/SSP Viewer account's candidates (40, 81, 82) with EE excluded, so the account and expected result are unique."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-6090e098"
    ],
-   "why": "Checks that no Division from the previous session remains after switching from 81 Planner to 81 Viewer."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-85882398"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-8a621bd4"
    ],
-   "why": "Checks that no Division from the previous session remains after switching from 40 Viewer to 81 Planner, which is a different account switch."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-8dd108d8"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-a6f6bebc"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "EG-a8ae503f"
    ],
-   "why": "Checks that no Division from the previous session remains after switching from 81 Viewer to 82 Planner, which is a different account switch."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-acc94744"
+    "EG-caf73741"
    ],
-   "why": "Checks for leftover values using a specific sequence (admin → wonqthanq → admin) that differs from the EG account switches."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-d7a78859"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-e014790c"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-e14c8b35"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-ee7c9658"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "ES-18fc156d"
    ],
-   "why": "Checks the query result's data scope after selecting Division 40 and running the query, not the candidates or default value before the query."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4bc8caac"
    ],
-   "why": "This TRACE row checks that the implementation actually exists in the source (SetDivisionAuthCheck), which is a different kind of check."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-1453bad5"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-96fb2930"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "V-b53141f3"
    ],
-   "why": "This AS-IS row checks the SetDivisionAuthCheck call that runs when there is no permission (Rows.Count == 0), which is a different branch and expected result."
-  },
-  {
-   "rows": [
-    "V-1453bad5",
-    "V-96fb2930"
-   ],
-   "why": "Both check that the Division query condition offers only the account's permitted Divisions and auto-selects when there is a single permission, so the element and expected result are the same."
-  },
-  {
-   "rows": [
-    "V-9d665690",
-    "V-b065e37b"
-   ],
-   "why": "Same Division candidate element, same condition (ys_cho, per-menu permission group) and identical expected text."
-  },
-  {
-   "rows": [
-    "V-00ed9c75",
-    "V-18ae9b5c"
-   ],
-   "why": "Same menu tree element, same condition (SCP Planner, single permission) and identical expected result."
-  },
-  {
-   "rows": [
-    "V-dd0e4c9d"
-   ],
-   "why": "It also checks the width of the Period input, so the elements checked are not the same as any other row."
-  },
-  {
-   "rows": [
-    "V-524c973e"
-   ],
-   "why": "Checks that a permission with USE_YN set to N is excluded, using a separate precondition account."
-  },
-  {
-   "rows": [
-    "V-1dc2244c"
-   ],
-   "why": "Checks the FCST Type candidates, which are a different element."
-  },
-  {
-   "rows": [
-    "V-426a74bb"
-   ],
-   "why": "Checks the Team query condition candidates, which are a different element."
-  },
-  {
-   "rows": [
-    "V-eecf8f42"
-   ],
-   "why": "Checks permission evaluation for screens, buttons and editing using the union of all held permissions, which covers a different scope and expected result."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 09:41:53",
- "cost": 0.09586689999999999
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:40",
+ "cost": 0,
+ "open": 0
 }

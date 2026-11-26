@@ -90,8 +90,9 @@ export const MSG = {
   REQUIRE_DIVISION: 'MSG00667',
   // 기간 역전 — "조회 기간이 잘못되었습니다 (시작일 > 종료일)." (FindData L1474)
   PERIOD_INVERTED: 'MSG00108',
-  // 기간 3년 초과 — "조회 기간은 3년 이내로 입력해주세요." (FindData L1481 — Value2 자동 보정 후 차단)
-  PERIOD_MAX_3YEAR: 'MSG00164',
+  // 기간 2년 초과 — MSG01505 "조회 기간은 2년 이내로 입력해주세요." (2026-11-25 결정: Mkt Fcst 등과 같이 2년 제한.
+  //   종전 AS-IS FindData L1481 3년 MSG00164. 종료일 자동 보정 후 차단은 유지)
+  PERIOD_MAX_2YEAR: 'MSG01505',
   // 필수값 — "{0} 값은 필수 입력 항목입니다." (AS-IS MSG00002 용법 → 사내 MSG00429 재매핑. SaveData L2239 필수 13종)
   REQUIRED_FIELD: 'MSG00429',
   // 필수 컬럼 — "필수 입력 컬럼이 없습니다." (EditButton L726/730 · SaveData L2024)

@@ -1,0 +1,28 @@
+{
+  "id": "20261126_162254_R12_ALL_7",
+  "at": "2026-11-26T16:22:54+09:00",
+  "ms": 1795677774679,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S3 설치본 차이: orch-watch.js 내용 다름",
+  "screen": "",
+  "sig": "R12|S3|orch-watch.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "저장소 54450바이트 2026-11-26T16:20 / 설치본 54365바이트 2026-11-26T12:43",
+  "evidence": {
+    "check": "S3",
+    "key": "S3|orch-watch.js",
+    "file": "orch-watch.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "open",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T16:24:14+09:00",
+      "by": "VMO",
+      "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    }
+  ]
+}

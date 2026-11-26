@@ -1,0 +1,566 @@
+# -*- coding: utf-8 -*-
+"""form_scen_gen.py — 폼 저장형 시나리오(Doc/verify/<ID>/form_scenarios.json) 생성 (2026-11-26 · VMO 20261126153056_SELF_3 · 규칙 R241)
+
+  배경: 폼 저장형 시나리오(tools/E2E/lib/formscen.ts)가 SSP0020 1화면 수작업 파일에만 있어, 다른 폼 저장형 화면은 E4 메시지 행을 재지 못했다.
+  근거 = AS-IS 원문만(Doc/asisfacts/screens/<AS-IS ID>/actions.csv·actions_entries.csv·events.csv·endpoints.csv·props.csv·controls.csv,
+         GSCM/<파일> 원문 줄, Doc/asisfacts/db/meta/dbo.TB_FX_MessageInfo.csv 메시지 문구).
+
+  1) 폼 저장 단추 = 단추 Click 처리 사슬(actions_entries)에 저장 SP(endpoints objects 에 INSERT·UPDATE·DELETE·MERGE, 로그 표 SCM_SYS_LOG* 제외)가 있고
+     그 SP 를 부르는 메서드 본문이 그리드(spread)를 읽지 않는 단추. 없으면 폼 저장형 화면 아님(파일 안 만듦).
+  2) 사슬 안 메시지(actions kind=MESSAGE) 1건마다 시나리오 1건. 순서 = 처리 메서드 호출 줄 → 메서드 안 줄.
+     kind
+       error_branch  catch 블록 · GMessageBoxForException · 문구 없는 동적 메시지 · 저장 SP 응답이 실패인 갈래(else of)
+       dynamic       아래 입력 패턴으로 단계를 만든 메시지
+       unreachable   발생 입력이 앞선 검사의 통과 조건과 같은 칸에서 부딪힘(앞선 검사 원문 줄을 basis 에 적음)
+       (보류)        저장 성공 갈래 · 조회 결과 갈래 · 해석 못 한 조건 → 활성 파일에 넣지 않고 _pending 에 사유와 함께 둠
+     입력 패턴(가드 마지막 조건)
+       빈값      string.IsNullOr(WhiteSpace|Empty)(X.Text) · X.Text == "" · 원문 변수 = X.Text…         → text X ""
+       기간 빈값  IsNullOrEmpty(a) || IsNullOrEmpty(b), a·b = 같은 기간 칸 Text1·Text2(Value1·Value2)   → period "" ""
+       기간 역전  Convert.ToInt32(a) > Convert.ToInt32(b) 같은 기간 칸                                  → period @TODAY+1 ~ @TODAY
+       선택 없음  else of (F == true), F = true 가 X.Items[i].CheckState == Checked 아래에서만 · X.CheckedItems.Count == 0 → multi X none
+       본인 지정  V == UserInfoContext.Current.UserId · base.UserInfo.UserId, V = 칸 X 조회 결과         → text X @ME
+     앞선 검사 통과값: 빈값·조회 결과 검사 칸 = vars 토큰 @<칸 이름>(값은 Doc/verify/<ID>/form_vars.json · 사람이 정함), 기간 = @TODAY~@TODAY, 선택 = all.
+     필요한 vars 가 없으면 그 시나리오는 보류(_pending).
+  3) 출력
+     Doc/verify/<ID>/form_scen_gen.json   생성 결과 전부(활성 + 보류 + 대조) — 항상 씀
+     Doc/verify/<ID>/form_scenarios.json  활성 시나리오(dynamic 1건 이상일 때만). 사람이 쓴 파일(_gen 표시 없음)은 덮지 않고 대조만 함
+     저장 요청을 서버에 보내는 시나리오(allowSave)는 만들지 않음(검증용 행 생성·정리는 사람이 정함)
+  사용:
+    python tools/Harness/verify/form_scen_gen.py <ID> [--asis <AS-IS ID>] [--dry]
+    python tools/Harness/verify/form_scen_gen.py --all [--dry]          (asisfacts 화면 전부)
+    python tools/Harness/verify/form_scen_gen.py --selftest              (SSP0020 수작업본 대조)
+"""
+import csv, json, os, re, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+FACTS = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens')
+MSGCSV = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'meta', 'dbo.TB_FX_MessageInfo.csv')
+SRC = os.path.join(ROOT, 'GSCM')
+csv.field_size_limit(10 ** 9)
+
+RX_GRID = re.compile(r'\b(si\w*|spd\w*|fpSpread\w*)\.(Get(Text|Value|Cell)\w*|ActiveSheet|Sheets)\b|GetChanged|GetSave\w*Data|GetModified|ActiveSheet\.', re.I)
+RX_DML = re.compile(r'\b(INSERT|UPDATE|DELETE|MERGE):([A-Z0-9_\.]+)', re.I)
+RX_RESP = re.compile(r'\bresponse\b|\.DataSet\b|Tables\s*\[|Rows\s*\[\s*0\s*\]\s*\[|ExecuteDataSet')
+RX_NOSAVE_T = re.compile(r'^(dbo\.)?(SCM_SYS_LOG|SCM_MST_TITLESET|SCM_ADM_DB_SCRIPT|TB_FX_)', re.I)
+RX_NOSAVE_M = re.compile(r'^(Find|Get|Search|Select|Init|Load|Set\w*Title|\w*TitleSet)', re.I)
+RX_NOSAVE_SP = re.compile(r'_(GET|SEARCH|FIND|SELECT|SEL|LIST)(_|)', re.I)
+RX_ME = re.compile(r'UserInfoContext\.Current\.UserId|base\.UserInfo\.UserId|UserInfo\.UserId')
+PREFIX = re.compile(r'^(txt|clb|drp|dtp|cbo|cmb|chk|rdo|num|mcb|lkp|usr|edt|lbl)(?=[A-Z])')
+
+
+def rd(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def atoms(guard):
+    return [s.strip() for s in (guard or '').split('▸') if s.strip()]
+
+
+def inner(atom):
+    """'if (X)' · 'else of (X)' → ('if'|'else', X)"""
+    m = re.match(r'^(if|else of|else if)\s*\((.*)\)\s*$', atom.strip(), re.S)
+    if not m:
+        return ('', atom.strip())
+    return ('else' if m.group(1) == 'else of' else 'if', m.group(2).strip())
+
+
+def strip_par(t):
+    t = t.strip()
+    while t.startswith('(') and t.endswith(')'):
+        d = 0; ok = True
+        for k, ch in enumerate(t):
+            d += ch == '('; d -= ch == ')'
+            if d == 0 and k < len(t) - 1:
+                ok = False; break
+        if not ok:
+            break
+        t = t[1:-1].strip()
+    return t
+
+
+def exclusive(prior, cur):
+    """앞선 메시지 가드와 이번 가드가 같은 조건의 if / else 갈래로 갈리면 True(앞선 검사는 이번 경로에서 실행되지 않음)"""
+    for a, b in zip(prior, cur):
+        if a == b:
+            continue
+        ka, ca = inner(a); kb, cb = inner(b)
+        return ca == cb and {ka, kb} == {'if', 'else'}
+    return False
+
+
+def ctl_name(name):
+    base = PREFIX.sub('', name)
+    return re.sub(r'[^A-Za-z0-9]', '', base).upper() or name.upper()
+
+
+class Screen:
+    def __init__(self, asis):
+        d = os.path.join(FACTS, asis)
+        self.asis = asis
+        self.acts = rd(os.path.join(d, 'actions.csv'))
+        self.entries = rd(os.path.join(d, 'actions_entries.csv'))
+        self.events = rd(os.path.join(d, 'events.csv'))
+        self.eps = rd(os.path.join(d, 'endpoints.csv'))
+        self.props = rd(os.path.join(d, 'props.csv'))
+        self.ctls = {c['name']: c for c in rd(os.path.join(d, 'controls.csv'))}
+        self.by_meth = {}
+        for a in self.acts:
+            self.by_meth.setdefault(a['method'], []).append(a)
+        self._src = {}
+        self.labels = self._labels()
+
+    # ── 원문 ──
+    def src_lines(self, rel):
+        if rel not in self._src:
+            p = os.path.join(SRC, rel.replace('\\', os.sep))
+            try:
+                with open(p, encoding='utf-8-sig', errors='replace') as f:
+                    self._src[rel] = f.read().splitlines()
+            except OSError:
+                self._src[rel] = []
+        return self._src[rel]
+
+    def assigns(self, meth):
+        """메서드 원문 범위의 '변수 = 식;' → {변수: 식}"""
+        rows = self.by_meth.get(meth, [])
+        if not rows:
+            return {}
+        rel = rows[0]['file']; lines = self.src_lines(rel)
+        lo = min(int(r['line']) for r in rows) - 8; hi = max(int(r['line']) for r in rows)
+        txt = '\n'.join(lines[max(lo - 1, 0):hi])
+        out = {}
+        for m in re.finditer(r'(?:\b(?:string|var|int|bool|DateTime|decimal|double|long)\s+)?\b([A-Za-z_]\w*)\s*=\s*(?!=)([^;]+);', txt):
+            out.setdefault(m.group(1), m.group(2).strip())
+        return out
+
+    # ── 라벨 ──
+    def _labels(self):
+        item_text, item_ctl, ctl_text = {}, {}, {}
+        for p in self.props:
+            if p['prop'] == 'Text':
+                v = p['value'].strip()
+                if v.startswith('"') and v.endswith('"'):
+                    item_text[p['target']] = v[1:-1]
+            if p['prop'] == 'Control':
+                m = re.match(r'this\.(\w+)$', p['value'].strip())
+                if m:
+                    item_ctl[p['target']] = m.group(1)
+        out = {}
+        for it, c in item_ctl.items():
+            if it in item_text and item_text[it] and not item_text[it].startswith(it):
+                out[c] = {'label': item_text[it].replace('*', '').strip(), 'src': f'{it}.Text', 'fuzzy': False}
+        return out
+
+    def label(self, ctl):
+        if ctl in self.labels:
+            return self.labels[ctl]
+        base = PREFIX.sub('', ctl)
+        return {'label': re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', base), 'src': f'컨트롤 이름 {ctl}', 'fuzzy': True}
+
+    def ctl_kind(self, ctl):
+        t = (self.ctls.get(ctl, {}).get('type') or '')
+        if re.search(r'CheckedListBox|CheckedComboBox|MultiCheck', t):
+            return 'multi'
+        if re.search(r'DateRange|Period|DateEditRange', t) or ctl.startswith('drp'):
+            return 'period'
+        if re.search(r'Combo|LookUp', t):
+            return 'combo'
+        if re.search(r'Text|Editor|Edit\b|MemoEdit', t):
+            return 'text'
+        return ''
+
+    # ── 단추 사슬 ──
+    def save_members(self):
+        out = {}
+        for e in self.eps:
+            # 로그·화면 개인 설정(타이틀셋·프레임워크 TB_FX_) 표와 조회 메서드·조회 SP 는 저장으로 보지 않음(2026-11-26 DMF0044 FindData 타이틀셋 저장 오탐)
+            if RX_NOSAVE_M.search(e['member']) or RX_NOSAVE_SP.search(e.get('sp_or_sql') or ''):
+                continue
+            tabs = [t for k, t in RX_DML.findall(e.get('objects') or '') if not RX_NOSAVE_T.search(t)]
+            if tabs:
+                out.setdefault(e['member'], set()).update(tabs)
+        return out
+
+    def chains(self):
+        """단추 Click 처리 → [(method, order_key, call_args)]"""
+        res = {}
+        btns = [ev for ev in self.events if ev['event'] == 'Click' and ev['op'] == '+=']
+        for ev in btns:
+            ent = f"{ev['target']}.Click"
+            rows = [r for r in self.entries if r['entry'] == ent]
+            if not rows:
+                continue
+            meths = []
+            for r in rows:
+                path = r['path'].split(' > ')
+                # 호출 줄 사슬: 경로 각 단계의 call_line 을 찾아 키로 쓴다
+                key = []
+                for k in range(1, len(path)):
+                    sub = ' > '.join(path[:k + 1])
+                    hit = next((q for q in rows if q['path'] == sub), None)
+                    key.append(int(hit['call_line']) if hit and hit['call_line'].isdigit() else 0)
+                meths.append((r['method'], tuple(key), r))
+            res[re.sub(r'^this\.', '', ev['target'])] = {'handler': ev['handler'], 'meths': meths}
+        return res
+
+
+def msg_master():
+    out = {}
+    for r in rd(MSGCSV):
+        out[r['MessageID']] = r
+    return out
+
+
+def resp_kind(sc, meth, cond, savem, chain_meths):
+    """조건이 서버 응답을 읽는가 → 'save' | 'lookup' | ''"""
+    names = set(re.findall(r'\b([A-Za-z_]\w*)\b', cond))
+    hit = bool(RX_RESP.search(cond))
+    if not hit:
+        # 조건 변수가 응답 갈래 안에서 대입되는가(bolSuessceChk 등)
+        for a in sc.by_meth.get(meth, []):
+            if a['kind'] in ('LOCAL', 'FLAG') and a['target'] in names and a['value'] and RX_RESP.search(a['guard'] or ''):
+                hit = True; break
+    if not hit:
+        return ''
+    return 'save' if meth in savem else 'lookup'
+
+
+def lookup_ctl(sc, handler, meth):
+    """조회 메서드 호출 인자의 칸 → [ctl]"""
+    for a in sc.by_meth.get(handler, []):
+        if a['kind'] == 'CALL_LOCAL' and re.sub(r'^this\.', '', a['target']) == meth:
+            return re.findall(r'\b([A-Za-z_]\w*)\.(?:Text|EditValue|Value)\b', a['value'])
+    return []
+
+
+def resolve(sc, meth, operand):
+    """피연산자 → (ctl, part) part = Text|Text1|Text2|Value1|Value2|''"""
+    operand = operand.strip()
+    m = re.match(r'^([A-Za-z_]\w*)\.(Text1|Text2|Value1|Value2|Text|EditValue)\b', operand)
+    if m and m.group(1) in sc.ctls:
+        return m.group(1), m.group(2)
+    if re.match(r'^[A-Za-z_]\w*$', operand):
+        ex = sc.assigns(meth).get(operand, '')
+        m = re.search(r'\b([A-Za-z_]\w*)\.(Text1|Text2|Value1|Value2|Text|EditValue)\b', ex)
+        if m and m.group(1) in sc.ctls:
+            return m.group(1), m.group(2)
+    return '', ''
+
+
+def pattern(sc, meth, br, cond, chain, handler):
+    """→ {'trigger': step, 'pass': step, 'ctl': ctl} | {'why': 사유}"""
+    c = strip_par(cond)
+    parts = [strip_par(x) for x in re.split(r'\|\|', c)]
+    # 기간 빈값
+    if br == 'if' and len(parts) == 2 and all(re.match(r'^string\.IsNullOr(?:WhiteSpace|Empty)\((.+)\)$', p) for p in parts):
+        rs = [resolve(sc, meth, re.match(r'^string\.IsNullOr(?:WhiteSpace|Empty)\((.+)\)$', p).group(1)) for p in parts]
+        if rs[0][0] and rs[0][0] == rs[1][0] and sc.ctl_kind(rs[0][0]) == 'period':
+            x = rs[0][0]
+            return {'ctl': x, 'op': 'period', 'trigger': {'from': '', 'to': ''}, 'pass': {'from': '@TODAY', 'to': '@TODAY'}}
+    # 빈값
+    m = re.match(r'^string\.IsNullOr(?:WhiteSpace|Empty)\((.+)\)$', c) or re.match(r'^(.+?)(?:\.Trim\(\))?\s*==\s*""$', c) or re.match(r'^(.+?)\.(?:Trim\(\)\.)?Length\s*==\s*0$', c)
+    if br == 'if' and m:
+        x, part = resolve(sc, meth, m.group(1))
+        if x and sc.ctl_kind(x) == 'text':
+            return {'ctl': x, 'op': 'text', 'trigger': {'value': ''}, 'pass': {'value': f'@{ctl_name(x)}'}, 'needs': [ctl_name(x)]}
+        return {'why': f'빈값 검사 대상 {m.group(1)} 의 입력칸을 원문에서 찾지 못함'}
+    # 기간 역전
+    m = re.match(r'^Convert\.ToInt(?:32|64)\((\w+)\)\s*>\s*Convert\.ToInt(?:32|64)\((\w+)\)$', c) or re.match(r'^(\w+)\s*>\s*(\w+)$', c)
+    if br == 'if' and m:
+        a, b = resolve(sc, meth, m.group(1)), resolve(sc, meth, m.group(2))
+        if a[0] and a[0] == b[0] and sc.ctl_kind(a[0]) == 'period' and a[1] in ('Text1', 'Value1') and b[1] in ('Text2', 'Value2'):
+            return {'ctl': a[0], 'op': 'period', 'trigger': {'from': '@TODAY+1', 'to': '@TODAY'}, 'pass': {'from': '@TODAY', 'to': '@TODAY'}}
+    # 선택 없음
+    m = re.match(r'^(\w+)\s*==\s*true$', c)
+    if br == 'else' and m:
+        f = m.group(1); boxes = set()
+        for a in sc.by_meth.get(meth, []):
+            if a['kind'] in ('LOCAL', 'FLAG') and a['target'] == f and a['value'].strip() == 'true':
+                boxes.update(re.findall(r'\b(\w+)\.Items\[\w+\]\.CheckState\s*==\s*CheckState\.Checked', a['guard'] or ''))
+        if len(boxes) == 1 and sc.ctl_kind(next(iter(boxes))) == 'multi':
+            x = next(iter(boxes))
+            return {'ctl': x, 'op': 'multi', 'trigger': {'mode': 'none'}, 'pass': {'mode': 'all'}}
+    m = re.match(r'^(\w+)\.CheckedItems\.Count\s*==\s*0$', c)
+    if br == 'if' and m and sc.ctl_kind(m.group(1)) == 'multi':
+        return {'ctl': m.group(1), 'op': 'multi', 'trigger': {'mode': 'none'}, 'pass': {'mode': 'all'}}
+    # 본인 지정
+    m = re.match(r'^(\w+)\s*==\s*(.+)$', c)
+    if br == 'if' and m and RX_ME.search(m.group(2)):
+        v = m.group(1)
+        for cm, _k, _r in chain:
+            if any(a['kind'] in ('LOCAL', 'FLAG') and a['target'] == v for a in sc.by_meth.get(cm, [])):
+                xs = [x for x in lookup_ctl(sc, handler, cm) if sc.ctl_kind(x) == 'text']
+                if len(xs) == 1:
+                    return {'ctl': xs[0], 'op': 'text', 'trigger': {'value': '@ME'}, 'pass': {'value': f'@{ctl_name(xs[0])}'}, 'needs': [ctl_name(xs[0])],
+                            'note': f'{v} = {cm} 조회 결과({xs[0]} 값) · 로그인 계정과 같으면 발생'}
+    return {'why': f'조건 해석 패턴 없음: {br} ({c[:120]})'}
+
+
+def build(asis, vars_=None):
+    sc = Screen(asis)
+    if not sc.acts:
+        return {'ok': False, 'why': f'AS-IS 사실 없음 Doc/asisfacts/screens/{asis}'}
+    master = msg_master(); savem = sc.save_members(); vars_ = vars_ or {}
+    buttons, gen, pending = [], [], []
+    seen_msg = set()
+    for btn, ch in sorted(sc.chains().items()):
+        handler = ch['handler']; chain = ch['meths']
+        names = {m for m, _k, _r in chain}
+        sv = [m for m in names if m in savem]
+        if not sv:
+            continue
+        grid = [m for m in sv if any(RX_GRID.search(' '.join((a['target'], a['value'], a['guard'], a['raw']))) for a in sc.by_meth.get(m, []))]
+        if grid:
+            buttons.append({'button': btn, 'form': False, 'why': f'저장 메서드 {",".join(sorted(grid))} 가 그리드를 읽음'})
+            continue
+        blabel = next((p['value'].strip('"') for p in sc.props if p['target'] == btn and p['prop'] == 'Text'), '') or PREFIX.sub('', btn)
+        buttons.append({'button': btn, 'form': True, 'label': blabel, 'save': sorted(sv), 'tables': sorted(set().union(*[savem[m] for m in sv]))})
+        # 사슬 메시지(순서)
+        keyof = {m: k for m, k, _r in chain}
+        msgs = []
+        for m in names:
+            for a in sc.by_meth.get(m, []):
+                if a['kind'] == 'MESSAGE':
+                    msgs.append((keyof.get(m, ()) + (int(a['line']),), m, a))
+        msgs.sort(key=lambda t: t[0])
+        msgs = [t for t in msgs if (t[1], t[2]['line']) not in seen_msg]
+        seen_msg.update((t[1], t[2]['line']) for t in msgs)
+        passed = []  # 앞선 검사 통과 단계 [(ctl, op, pass, line, meth, msg, needs, guard)]
+        for _key, m, a in msgs:
+            ga = atoms(a['guard'])
+            excl = lambda pg: exclusive(pg, ga)
+            code = (re.search(r'"(MSG\d+)"', a['value']) or [None, ''])[1] if re.search(r'"(MSG\d+)"', a['value']) else ''
+            mr = master.get(code, {})
+            base = {'msg': code or '(동적 메시지)', 'meth': m, 'asis_line': f"cs:{a['line']}", 'asis_text': mr.get('Ko', ''),
+                    'asis_text_alt': [t for t in (mr.get('En', ''), mr.get('Ch', '')) if t], 'button': btn}
+            ats = [inner(x) for x in atoms(a['guard']) if not x.startswith('for (') and x != 'try']
+            br, cond = ats[-1] if ats else ('', '')
+            if 'catch' in (a['guard'] or '') or 'ForException' in a['target'] + a['value']:
+                gen.append({**base, 'kind': 'error_branch', 'basis': f"예외 catch 블록({m} cs:{a['line']})"}); continue
+            if not code:
+                gen.append({**base, 'kind': 'error_branch', 'basis': f"오류 문구·코드를 그대로 띄우는 분기({a['guard'] or m})"}); continue
+            rk = resp_kind(sc, m, cond, savem, names)
+            if rk == 'save':
+                if br == 'else':
+                    gen.append({**base, 'kind': 'error_branch', 'basis': f"저장 응답 실패 갈래({cond[:100]} · {m} cs:{a['line']})"})
+                else:
+                    pending.append({**base, 'why': '저장 성공 갈래 — 검증용 행 생성·정리(setup·teardown)를 사람이 정함'})
+                continue
+            if rk == 'lookup':
+                xs = [x for x in lookup_ctl(sc, handler, m) if sc.ctl_kind(x) == 'text']
+                pending.append({**base, 'why': f'조회 결과 갈래({cond[:80]}) — 발생 입력값을 사람이 정함'})
+                if len(xs) == 1 and not any(p[0] == xs[0] for p in passed):
+                    passed.append((xs[0], 'text', {'value': f'@{ctl_name(xs[0])}'}, a['line'], m, code, [ctl_name(xs[0])], ga))
+                elif len(xs) != 1:
+                    passed.append((None, '', {}, a['line'], m, code, [], ga))
+                continue
+            pt = pattern(sc, m, br, cond, chain, handler)
+            if 'why' in pt:
+                pending.append({**base, 'why': pt['why']})
+                passed.append((None, '', {}, a['line'], m, code, [], ga))
+                continue
+            x = pt['ctl']
+            # 발생 입력이 앞선 검사 통과 조건과 같은 칸에서 부딪히는가
+            clash = next((p for p in passed if not excl(p[7]) and p[0] == x and p[1] == pt['op'] and p[2] != pt['trigger'] and pt['op'] == 'text' and pt['trigger'].get('value') == ''), None)
+            if clash:
+                gen.append({**base, 'kind': 'unreachable', 'basis': f"앞선 검사 {clash[5]}({clash[4]} cs:{clash[3]})가 같은 칸 {x} 를 먼저 검사함 — 빈값이면 그 검사에서 끝남"})
+                if not any(p[0] == x for p in passed):
+                    passed.append((x, pt['op'], pt['pass'], a['line'], m, code, pt.get('needs', []), ga))
+                continue
+            unknown = [p for p in passed if p[0] is None and not excl(p[7])]
+            if unknown:
+                pending.append({**base, 'why': f"앞선 검사 {unknown[0][5]}({unknown[0][4]} cs:{unknown[0][3]})의 통과 입력을 해석하지 못함"})
+            else:
+                lab = {}
+                steps, needs = [], []
+                for p in passed:
+                    if p[0] == x or p[0] is None or excl(p[7]):
+                        continue
+                    lb = sc.label(p[0]); lab[p[0]] = lb
+                    steps.append({'op': p[1], 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **p[2]}); needs += p[6]
+                lb = sc.label(x); lab[x] = lb
+                steps.append({'op': pt['op'], 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **pt['trigger']})
+                steps.append({'op': 'click', 'name': blabel})
+                if mr.get('Button') and mr.get('Button') != '0202001':
+                    steps.append({'op': 'dialog', 'how': 'cancel'})
+                needs = sorted(set(needs))
+                miss = [n for n in needs if n not in vars_]
+                note = f"{x} {'빈값' if pt['trigger'].get('value') == '' else json.dumps(pt['trigger'], ensure_ascii=False)}" + (f" · {pt['note']}" if pt.get('note') else '') + \
+                       ' · 라벨 근거 ' + ', '.join(f"{k}={v['src']}" for k, v in lab.items())
+                sc_ = {**base, 'kind': 'dynamic', 'note': note, 'steps': steps, **({'needs': needs} if needs else {})}
+                if miss:
+                    pending.append({**sc_, 'why': f"앞선 검사 통과값 vars 미지정: {', '.join(miss)} (Doc/verify/<ID>/form_vars.json)"})
+                else:
+                    gen.append(sc_)
+            if not any(p[0] == x for p in passed):
+                passed.append((x, pt['op'], pt['pass'], a['line'], m, code, pt.get('needs', []), ga))
+    for i, s in enumerate(gen, 1):
+        s['id'] = f'G{i:02d}'
+    for i, s in enumerate(pending, 1):
+        s['id'] = f'GP{i:02d}'
+    return {'ok': True, 'asis': asis, 'buttons': buttons, 'scenarios': gen, 'pending': pending}
+
+
+def compare(gen, manual):
+    """수작업본 ↔ 생성분: (meth, asis_line, msg) 기준"""
+    key = lambda s: (s.get('meth'), s.get('asis_line'), s.get('msg'))
+    g = {key(s): s for s in gen['scenarios']}; gp = {key(s): s for s in gen['pending']}
+    rows = []
+    for s in manual.get('scenarios', []):
+        k = key(s)
+        if k in g:
+            kg = g[k]['kind']
+            rows.append({'manual': s['id'], 'gen': g[k]['id'], 'kind_manual': s['kind'], 'kind_gen': kg, 'same_kind': kg == s['kind'],
+                         'same_text': (g[k].get('asis_text') or '') == (s.get('asis_text') or '')})
+        elif k in gp:
+            rows.append({'manual': s['id'], 'gen': gp[k]['id'], 'kind_manual': s['kind'], 'kind_gen': '보류', 'why': gp[k]['why']})
+        else:
+            rows.append({'manual': s['id'], 'gen': '', 'kind_manual': s['kind'], 'kind_gen': '없음', 'meth': s.get('meth'), 'asis_line': s.get('asis_line')})
+    return rows
+
+
+def asis_of(mid):
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, 'run_mode.json')
+    try:
+        a = json.load(open(p, encoding='utf-8')).get('asis')
+        if a:
+            return a
+    except Exception:
+        pass
+    return mid
+
+
+def run(mid, asis=None, dry=False):
+    asis = asis or asis_of(mid)
+    vdir = os.path.join(ROOT, 'Doc', 'verify', mid)
+    vf = os.path.join(vdir, 'form_vars.json'); vars_ = {}
+    if os.path.exists(vf):
+        try:
+            vars_ = json.load(open(vf, encoding='utf-8-sig'))
+        except Exception as e:
+            print(f'[WARN] {vf} 읽기 실패({type(e).__name__}) — vars 없이 생성')
+    target = os.path.join(vdir, 'form_scenarios.json')
+    manual = None
+    if os.path.exists(target):
+        try:
+            cur = json.load(open(target, encoding='utf-8-sig'))
+            if not cur.get('_gen'):
+                manual = cur
+                vars_ = {**(cur.get('vars') or {}), **vars_}
+        except Exception:
+            manual = {}
+    g = build(asis, vars_)
+    if not g['ok']:
+        print(f"[SKIP] {mid}: {g['why']}"); return 0
+    forms = [b for b in g['buttons'] if b['form']]
+    dyn = [s for s in g['scenarios'] if s['kind'] == 'dynamic']
+    stamp = time.strftime('%Y-%m-%d %H:%M:%S')
+    rep = {'_gen': f'form_scen_gen.py {stamp}', 'menu_id': mid, 'asis': asis, 'buttons': g['buttons'],
+           'counts': {'active': len(g['scenarios']), 'dynamic': len(dyn), 'pending': len(g['pending'])},
+           'scenarios': g['scenarios'], '_pending': g['pending']}
+    if manual is not None:
+        rep['compare_manual'] = compare(g, manual)
+    msg = f"[form_scen_gen] {mid}(AS-IS {asis}) 폼 저장 단추 {len(forms)}개 · 활성 {len(g['scenarios'])}건(dynamic {len(dyn)}) · 보류 {len(g['pending'])}건"
+    if not forms:
+        if manual is None and os.path.exists(target) and not dry:
+            os.remove(target)  # 지난 생성분(_gen)만 정리
+        print(msg + ' — 폼 저장형 화면 아님(파일 안 만듦)'); return 0
+    if dry:
+        print(msg + ' (--dry)'); return 0
+    os.makedirs(vdir, exist_ok=True)
+    with open(os.path.join(vdir, 'form_scen_gen.json'), 'w', encoding='utf-8') as f:
+        json.dump(rep, f, ensure_ascii=False, indent=1)
+    if manual is not None:
+        print(msg + ' — 사람이 쓴 form_scenarios.json 있음: 덮지 않고 대조만(form_scen_gen.json compare_manual)')
+    elif not dyn:
+        print(msg + ' — dynamic 0건: form_scenarios.json 안 만듦(form_scen_gen.json 에 보류 사유)')
+        if os.path.exists(target):
+            os.remove(target)  # 지난 생성분(_gen) 정리
+    else:
+        out = {'_gen': rep['_gen'], '_doc': 'form_scen_gen.py 생성분 — 사람이 고치려면 _gen 키를 지운다(그 뒤로 생성기가 덮지 않음)',
+               'vars': {k: v for k, v in vars_.items()}, 'scenarios': g['scenarios']}
+        with open(target, 'w', encoding='utf-8') as f:
+            json.dump(out, f, ensure_ascii=False, indent=1)
+        print(msg + f' — form_scenarios.json 씀')
+    return 0
+
+
+def selftest():
+    mf = os.path.join(ROOT, 'Doc', 'verify', 'SSP0020', 'form_scenarios.json')
+    manual = json.load(open(mf, encoding='utf-8-sig'))
+    g = build('SSP0020', manual.get('vars') or {})
+    rows = compare(g, manual)
+    bad = []
+    want = {  # 수작업본과 같아야 할 판정(생성기가 다루는 Save 사슬 메시지)
+        ('Validation_Check', 'cs:372', 'MSG00298'): 'unreachable',
+        ('Validation_Check', 'cs:379', 'MSG00305'): 'dynamic',
+        ('Validation_Check', 'cs:385', 'MSG00134'): 'dynamic',
+        ('Validation_Check', 'cs:393', 'MSG00219'): 'dynamic',
+        ('Validation_Check', 'cs:462', 'MSG00299'): 'dynamic',
+        ('SaveData', 'cs:528', 'MSG00284'): 'error_branch',
+        ('SaveData', 'cs:535', '(동적 메시지)'): 'error_branch',
+        ('BtnSave_Click', 'cs:359', '(동적 메시지)'): 'error_branch',
+    }
+    idx = {(s['meth'], s['asis_line'], s['msg']): s for s in g['scenarios']}
+    for k, kind in want.items():
+        s = idx.get(k)
+        if not s:
+            bad.append(f'{k} 생성 안 됨(보류 {[p["why"] for p in g["pending"] if (p["meth"], p["asis_line"], p["msg"]) == k]})')
+        elif s['kind'] != kind:
+            bad.append(f'{k} kind {s["kind"]} ≠ {kind}')
+    man = {(s['meth'], s['asis_line'], s['msg']): s for s in manual['scenarios']}
+    for k in want:
+        s, m = idx.get(k), man.get(k)
+        if s and m and s['kind'] == 'dynamic':
+            ops_g = [(t['op'], t.get('value'), t.get('from'), t.get('to'), t.get('mode')) for t in s['steps'] if t['op'] != 'click']
+            ops_m = [(t['op'], t.get('value'), t.get('from'), t.get('to'), t.get('mode')) for t in m['steps'] if t['op'] != 'click']
+            if ops_g != ops_m:
+                bad.append(f'{k} 단계 차이 생성 {ops_g} ↔ 수작업 {ops_m}')
+            if not (s.get('asis_text') or '').startswith(m.get('asis_text') or 'NO-TEXT'):
+                bad.append(f"{k} 문구 차이 '{s.get('asis_text')}' ↔ '{m.get('asis_text')}'")
+    # 그리드 저장 단추(UnSet)는 폼 저장 단추가 아님
+    if any(b['button'] == 'btnUnSet' and b['form'] for b in g['buttons']):
+        bad.append('btnUnSet 을 폼 저장 단추로 봄')
+    if any(s.get('allowSave') for s in g['scenarios']):
+        bad.append('allowSave 시나리오 생성')
+    print(f"[selftest] SSP0020 생성 활성 {len(g['scenarios'])}건 · 보류 {len(g['pending'])}건 · 수작업 {len(manual['scenarios'])}건 대조")
+    for r in rows:
+        print('  ', json.dumps(r, ensure_ascii=False))
+    for b in bad:
+        print('  [FAIL]', b)
+    print('[selftest]', 'PASS' if not bad else f'FAIL {len(bad)}건')
+    return 0 if not bad else 1
+
+
+def main(argv):
+    if '--selftest' in argv:
+        return selftest()
+    dry = '--dry' in argv
+    if '--all' in argv:
+        for sid in sorted(os.listdir(FACTS)):
+            if os.path.isdir(os.path.join(FACTS, sid)):
+                try:
+                    run(sid, sid, dry)
+                except Exception as e:
+                    print(f'[ERROR] {sid}: {type(e).__name__} {e}')
+        return 0
+    args = [a for a in argv if not a.startswith('--')]
+    if not args:
+        print(__doc__); return 2
+    asis = None
+    if '--asis' in argv:
+        i = argv.index('--asis'); asis = argv[i + 1] if i + 1 < len(argv) else None
+        args = [a for a in args if a != asis]
+    try:
+        return run(args[0].upper(), asis, dry)
+    except Exception as e:
+        print(f'[ERROR] form_scen_gen {args[0]}: {type(e).__name__} {e}')
+        return 0  # 체인 중단 안 함
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

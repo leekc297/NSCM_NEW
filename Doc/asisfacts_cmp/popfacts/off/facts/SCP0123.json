@@ -1,0 +1,606 @@
+{
+ "screen": "SCP0123",
+ "calls": [
+  {
+   "cls": "SCP0123_PlanIDCreatePopup",
+   "method": "SpdMain_CellClick",
+   "asis_ref": "SCP0123_PlanControl.cs:945",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "SpdMain_CellClick",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "division_id",
+   "period_args": [
+    "plan_start_yyyymmdd"
+   ],
+   "args": [
+    {
+     "param": "p_division_id",
+     "kind": "VAR",
+     "arg": "division_id"
+    },
+    {
+     "param": "p_prs_cd",
+     "kind": "VAR",
+     "arg": "prs_cd"
+    },
+    {
+     "param": "p_plan_group_id",
+     "kind": "VAR",
+     "arg": "plan_group_id"
+    },
+    {
+     "param": "p_plan_group_name",
+     "kind": "VAR",
+     "arg": "plan_group_name"
+    },
+    {
+     "param": "p_plan_start_yyyymmdd",
+     "kind": "CONTROL",
+     "arg": "plan_start_yyyymmdd"
+    },
+    {
+     "param": "p_plan_id",
+     "kind": "VAR",
+     "arg": "plan_id"
+    },
+    {
+     "param": "p_tgt_divs_cd",
+     "kind": "VAR",
+     "arg": "tgt_divs_cd"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0123_PlanControl.cs:961",
+     "raw": "FindData_Sub(this.nSelRowSpdMain)"
+    },
+    {
+     "ref": "SCP0123_PlanControl.cs:1071",
+     "raw": "FindData_Main()"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SCP0123_PlanControl.cs:946",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0123_PlanControl.cs:1062",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCP0123_PlanIDCreatePopup": {
+   "cls": "SCP0123_PlanIDCreatePopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0123_PlanControl/SCP0123_PlanIDCreatePopup.cs",
+   "title": "SCP0123_PlanIDCreatePopup",
+   "conds": [
+    {
+     "name": "txtFcstVersion",
+     "type": "UsrTextBox",
+     "label": "FCST Version",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0123_PlanIDCreatePopup.cs:196",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtPlanGroup",
+     "type": "UsrTextBox",
+     "label": "Plan Group",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:45",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0123_PlanIDCreatePopup.cs:193",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtHorizonStart",
+     "type": "UsrTextBox",
+     "label": "Plan Horizon",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:46",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0123_PlanIDCreatePopup.cs:194",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "dpCellEnd",
+     "type": "UsrDatePicker",
+     "label": " ~ ",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:61",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (chkCellNoFrozen.Checked == true)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:340",
+       "method": "ChkCellNoFrozen_CheckedChanged"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:255",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtCellStart",
+     "type": "UsrTextBox",
+     "label": "Cell ",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:62",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0123_PlanIDCreatePopup.cs:198",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "dpProdEnd",
+     "type": "UsrDatePicker",
+     "label": " ~ ",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:63",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (chkProdNoFrozen.Checked == true)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:310",
+       "method": "ChkProdNoFrozen_CheckedChanged"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:254",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProdStart",
+     "type": "UsrTextBox",
+     "label": "Period",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:64",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0123_PlanIDCreatePopup.cs:197",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboProdCd",
+     "type": "UsrCombo",
+     "label": "Plan Type ",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:65",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:252",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "cboProdPlanID",
+     "type": "UsrCombo",
+     "label": "Plan ID ",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:66",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:253",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "dpShipEnd",
+     "type": "UsrDatePicker",
+     "label": " ~ ",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:88",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (chkShipNoFrozen.Checked == true)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:370",
+       "method": "ChkShipNoFrozen_CheckedChanged"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:259",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtShipStart",
+     "type": "UsrTextBox",
+     "label": "Period ",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:89",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0123_PlanIDCreatePopup.cs:199",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboShipPlanID",
+     "type": "UsrCombo",
+     "label": "Plan ID ",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:90",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:258",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "cboShipCd",
+     "type": "UsrCombo",
+     "label": "Plan Type ",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:91",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:257",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtDesc",
+     "type": "UsrTextBox",
+     "label": "Desc.",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:103",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:262",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "cboParameter",
+     "type": "UsrCombo",
+     "label": "Parameter",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:104",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0123_PlanIDCreatePopup.cs:149",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:261",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "dpHorizonEnd",
+     "type": "UsrDatePicker",
+     "label": " ~ ",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0123_PlanIDCreatePopup.Designer.cs:109",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (this.dtPlanIDInfo != null && this.dtPlanIDInfo.Rows.Count > 0)",
+       "ref": "SCP0123_PlanIDCreatePopup.cs:220",
+       "method": "Set_PlanID_Info"
+      }
+     ],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnClose",
+     "text": "Close",
+     "visible": true
+    },
+    {
+     "name": "btnCreatePlan",
+     "text": "Create Plan",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0123_GET_PLAN_ID_CREATE_INFO",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0123_GET_PLAN_ID_CREATE_INFO.sql",
+     "order_known": true,
+     "order_keys": "B.DISPLAY_SEQ",
+     "order_line": "235",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_plan_group_id",
+      "p_plan_start_yyyymmdd",
+      "p_plan_id",
+      "horizon_start_date",
+      "horizon_end_date",
+      "version_no",
+      "prod_frozen_date",
+      "ship_frozen_date",
+      "monday_date",
+      "sunday_date",
+      "plan_days",
+      "CNT"
+     ],
+     "method": "GetInitInfo",
+     "ref": "SCP0123_PlanIDCreatePopup.cs:276",
+     "save": false
+    },
+    {
+     "sp": "SCP0123_SAVE_PLAN_ID_CREATE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0123_SAVE_PLAN_ID_CREATE.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_plan_gr_id",
+      "p_plan_gr_name",
+      "p_prs_cd",
+      "p_plan_start_yyyymmdd",
+      "p_plan_end_yyyymmdd",
+      "p_dmd_ver_id",
+      "p_prod_ref_sys_divs_cd",
+      "p_prod_ref_sys_plan_id",
+      "p_prod_frz_start_yyyymmdd",
+      "p_prod_frz_end_yyyymmdd",
+      "p_cell_prod_frz_start_yyyymmdd",
+      "p_cell_prod_frz_end_yyyymmdd",
+      "p_ship_ref_sys_divs_cd",
+      "p_ship_ref_sys_plan_id",
+      "p_ship_frz_start_yyyymmdd",
+      "p_ship_frz_end_yyyymmdd",
+      "p_pram_ty_cd",
+      "p_plan_desc",
+      "p_prod_no_frz_yn",
+      "p_cell_no_frz_yn",
+      "p_ship_no_frz_yn",
+      "p_user_id",
+      "v_working_time",
+      "recv_active_flag",
+      "v_active_flag",
+      "v_plan_id",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_data_dup_cnt",
+      "v_err_code",
+      "v_err_message",
+      "strKey"
+     ],
+     "method": "SaveData",
+     "ref": "SCP0123_PlanIDCreatePopup.cs:533",
+     "save": true
+    },
+    {
+     "sp": "GSCM_SCP_MASTER_SVC",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SaveData",
+     "ref": "SCP0123_PlanIDCreatePopup.cs:536",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:117",
+     "method": "InitControls",
+     "raw": "DBUtils.Filter(dtDivision_GM, \"CODE = '\" + this.division_id + \"'\", true)",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:119",
+     "method": "InitControls",
+     "raw": "if (dtGM.Rows.Count > 0) { dtSysProdCd = DBUtils.Filter(dtSysProdCd, \"CODE <> 'SCP'\", true); dtSysShipCd = DBUtils.Filter(dtSysShipCd, \"CODE <> 'SCP'\", true); }",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:122",
+     "method": "InitControls",
+     "raw": "dtSysProdCd = DBUtils.Filter(dtSysProdCd, \"CODE <> 'SCP'\", true)",
+     "guard": "if (dtGM.Rows.Count > 0)"
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:122",
+     "method": "InitControls",
+     "raw": "DBUtils.Filter(dtSysProdCd, \"CODE <> 'SCP'\", true)",
+     "guard": "if (dtGM.Rows.Count > 0)"
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:123",
+     "method": "InitControls",
+     "raw": "dtSysShipCd = DBUtils.Filter(dtSysShipCd, \"CODE <> 'SCP'\", true)",
+     "guard": "if (dtGM.Rows.Count > 0)"
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:123",
+     "method": "InitControls",
+     "raw": "DBUtils.Filter(dtSysShipCd, \"CODE <> 'SCP'\", true)",
+     "guard": "if (dtGM.Rows.Count > 0)"
+    }
+   ],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:435",
+     "method": "BtnClose_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:572",
+     "method": "SaveData",
+     "raw": "if (tran.Success) { if (tran.DataSet.Tables[0].Rows[0][0].ToString() == \"S\") { this.DialogResult = DialogResult.OK; string saveMsg = \"Executed.\"; MessageHelper.",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:576",
+     "method": "SaveData",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "try ▸ if (tran.Success) ▸ if (tran.DataSet.Tables[0].Rows[0][0].ToString() == \"S\")"
+    },
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:600",
+     "method": "SaveData",
+     "raw": "this.Close()",
+     "guard": "finally"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00108\")",
+    "MessageHelper.GMessageBox(\"MSG00108\")",
+    "MessageHelper.GMessageBox(\"MSG00108\")",
+    "MessageHelper.GMessageBox(saveMsg)",
+    "MessageHelper.GMessageBox(errorMsg)",
+    "MessageHelper.GMessageBoxForException(ex)"
+   ],
+   "period_use": [
+    {
+     "ref": "SCP0123_PlanIDCreatePopup.cs:153",
+     "method": "InitControls",
+     "raw": "ConvertToDateString(this.plan_start_yyyymmdd)",
+     "guard": ""
+    }
+   ],
+   "from": "factpack"
+  }
+ }
+}

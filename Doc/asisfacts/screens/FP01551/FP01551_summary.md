@@ -340,10 +340,10 @@
 | Save_Data | newrow | INSTANCE_ID, PLAN_ID, DIVISION_ID, COMPANY_ID, CATEGORY_ID, SITE_ID, PLANT_ID, STORAGE_ID, SOC_ID, MARKET, REQUIRE_DATE, CELL_ITEM_ID, REQUIRE_QTY, ORIG_REQUIRE_QTY, M |
 | Save_Data | dr | USER_ID |
 | Save_Data | resultDT.Rows[0] | RESULT |
-| Save_Data_Execute | newrow | INSTANCE_ID, PLAN_ID, DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, CELL_ITEM_ID, USER_ID |
-| Save_Data_Execute | Filter | INSTANCE_ID, PLAN_ID, BASIS_PLAN_ID, CREATE_PLAN_ID, FIX_DATE, COPY_FLAG, TARGET_DATE, CAL_OPTION, USER_ID |
-| Save_Data_Execute | resultDT.Rows[0] | RESULT |
+| Save_Data_Execute | Filter | BASIS_PLAN_ID, PLAN_ID, CREATE_PLAN_ID, CAL_OPTION, FIX_DATE, COPY_FLAG, USER_ID, TARGET_DATE, INSTANCE_ID |
 | Save_Data_Execute | dtCurrDate.Rows[0] | CUR_DATE |
+| Save_Data_Execute | newrow | INSTANCE_ID, PLAN_ID, DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, CELL_ITEM_ID, USER_ID |
+| Save_Data_Execute | resultDT.Rows[0] | RESULT |
 | SetBohQty | row | DATA_TYPE, OPERATION_ID, BOH_QTY, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
 | SetBohQty | each_row | _TYPE, OPERATION_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
 | SetBohQty | result.First() | QTY |
@@ -399,10 +399,6 @@
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:543 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:544 |
 | this | Load | Form_Load | .ctor:93 |
-| this | Load | Form_Load | .ctor:136 |
-| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:190 |
-| clbSite | SelectedIndexChanged | clbSite_SelectedIndexChanged | InitControls:191 |
-| clbPlant | SelectedIndexChanged | ClbPlant_SelectedIndexChanged | InitControls:192 |
 | this.btnVerClose | Click | btnVerClose_Click | InitializeComponent:121 |
 | this.btnVerSave | Click | btnVerSave_Click | InitializeComponent:158 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:182 |
@@ -410,6 +406,10 @@
 | rdoRequest | CheckedChanged | rdoRequest_Click | MeasureSetForm_Load:91 |
 | rdoMoving | CheckedChanged | rdoMoving_Click | MeasureSetForm_Load:92 |
 | rdoPack | CheckedChanged | rdoPack_Click | MeasureSetForm_Load:93 |
+| this | Load | Form_Load | .ctor:136 |
+| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:190 |
+| clbSite | SelectedIndexChanged | clbSite_SelectedIndexChanged | InitControls:191 |
+| clbPlant | SelectedIndexChanged | ClbPlant_SelectedIndexChanged | InitControls:192 |
 | this | Load | Form_Load | .ctor:66 |
 | this | Load | Form_Load | .ctor:138 |
 | cboInstance | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:296 |

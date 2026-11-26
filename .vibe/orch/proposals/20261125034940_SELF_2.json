@@ -1,0 +1,132 @@
+{
+  "id": "20261125034940_SELF_2",
+  "at": "2026-11-25T03:49:40+09:00",
+  "ms": 1795546180620,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|repairreruntask처리가보완회차마다전체재검증을실행함처리대상이남아",
+  "title": "사용자 지시 R218 같은 문제: tools/VibeManager/workbench.js:1370 repair.rerunTask 처리가 보완 회차마다 전체 재검증을 실행함. 처리 대상이 남아 있어도 해소 게이트 없이 재검증으로 감",
+  "evidence": "규칙 R218 \"CheckList 미검증 = 1단계 측정 안 자동 재측정(--no-rerun 금지) / 2단계 반복 = 🧪 보완 → 게이트 → 처리 대상 행 규칙만 해소 확인 재측정 / 재검증은 미검증 전체 해소 뒤에만(해소 게이트: 처리 대상 0 또는 전체 재측정으로만 잴 행만 남음). 해소 못 하고 반복이 끝나면 재검증 없이 남은 행·사유 보고\" (원래 지시 2026-11-25 03:07 \"미검증 건수에 대해서 해소를 하지 않고 재검증이 진행되는 현상이 반복되고 있습니다. … 미검증에 대한 해소 이전에 checklist 단계에서도 미검증을 자체적으로 보완할 수 있게 하는 것이 1단계이고, 2단계로 미검증해소단계에서는 도출된 미검증에 대해서는 전체 미검증에 대한 해소를 한후\") · tools/VibeManager/workbench.js:1370 if (st.repair.rerunTask) { this.out('task', `↻ [${pos(i)}/${shownN()}] 보완 ${r} 뒤 전체 재검증: ${st.repair.rerunTask}\\n`, 'cmd');",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "회차 안에서는 처리 대상 행만 재는 작업(S8.checklistSettle)만 돌리고, 전체 재검증은 반복이 끝나고 checklist_run.py --gate 가 통과했을 때 1회만 실행함. 게이트가 실패하면 재검증 없이 남은 행과 사유를 출력함",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T14:27:46+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T14:32:13+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 · 백업 태그 20261126_self1427"
+    },
+    {
+      "at": "2026-11-26T14:32:19+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T14:43:54+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2 · 설치 폴더 복사 1개 · CHANGELOG 기록 실패 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T14:43:54+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check: 반영 전 백업본 workbench.js.bak_20261126_self1427 stdin 검사 통과 → 반영 뒤 통과(2026-11-26 14:34:32). run_all.js: 반영 전 이번 미측정(첫 실행이 권한 확인에 막힘, 같은 날 14:06 CHANGELOG 기록 ALL OK 88/88 PASS 1481 FAIL 0) → 반영 뒤 ALL OK 파일 88/88 PASS 1481 FAIL 0 267.8s(2026-11-26 14:39) · 변경 18개 파일 · 대상 목록 밖 변경 17개: Doc/e2e/specs/_verify.spec.ts, Doc/verify/_ENGINE_MASTER.md, Doc/verify/_checker_defects.md, Doc/verify/_engine_selfcheck.json, tools/E2E/lib/probe.ts, tools/Harness/gate_baseline.tsv",
+      "log": ".vibe\\logs\\2026-11-26T14-32-19_claude_orch.log",
+      "sec": 431,
+      "costUsd": 1.1963261,
+      "files": [
+        "Doc/e2e/specs/_verify.spec.ts",
+        "Doc/verify/_ENGINE_MASTER.md",
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/E2E/lib/probe.ts",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/workbench.js",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/e_hdcte.sql",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/e_hdmat.sql",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/e_nopush.sql",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/e_old.sql",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/g1.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/g2.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/h1.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/w1.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/w2.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/w_plan_OLD.txt",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/w_sel_old.sql"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:01+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 미검증 = 1단계 측정 안 자동 재측정(--no-rerun 금지) / 2단계 반복 = 🧪 보완 → 게이트 → 처리 대상 행 규칙만 해소 확인 재측정 / 재검증은 미검증 전체 해소 뒤에만(해소 게이트: 처리 대상 0 또는 전체 재측정으로만 잴 행만 남음). 해소 못 하고 반복이 끝나면 재검증 없이 남은 행·사유 보고 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R218|tools/VibeManager/workbench.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795670866441,
+  "autoFp": "93bae66cab",
+  "applyStartMs": 1795671139402,
+  "verifyJudge": {
+    "at": "2026-11-26T14:39:35+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2"
+  },
+  "selfTag": "20261126_self1427",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795671834133,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/workbench.js 통과(14:34:32). node tools/VibeManager/test/run_all.js 'ALL OK 파일 88/88 PASS 1481 FAIL 0 267.8s'(14:39). t_webview_syntax.js 는 workbench.js 가 웹뷰 파일이 아니라 해당 없음"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "node --check: 반영 전 백업본 workbench.js.bak_20261126_self1427 stdin 검사 통과 → 반영 뒤 통과(2026-11-26 14:34:32). run_all.js: 반영 전 이번 미측정(첫 실행이 권한 확인에 막힘, 같은 날 14:06 CHANGELOG 기록 ALL OK 88/88 PASS 1481 FAIL 0) → 반영 뒤 ALL OK 파일 88/88 PASS 1481 FAIL 0 267.8s(2026-11-26 14:39)",
+    "note": "회차 안 rerunTask 가 전체 재검증 작업(S8.verify, S8.checklistRecheck, S8.verifyIfStale)이면 S8.checklistSettle 로 바꿔 처리 대상 행만 재측정함. 반복이 끝나면 S8.unverifiedGate --gate 를 돌려 통과 때만 전체 재검증 1회 후 재분류함. 미통과면 재검증 없이 unverified_settle.json 의 사유와 남은 행(최대 30건)을 출력하고 단계를 verify 실패(code 3)로 기록함. quick.json 9곳은 이미 rerunTask S8.checklistSettle 이라 반복 뒤 게이트는 rerunTask 에 전체 재검증 작업이 남은 체인에만 적용됨."
+  },
+  "snap": "prop_20261125034940_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

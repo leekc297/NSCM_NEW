@@ -139,12 +139,15 @@
     },
     {
       "id": "S1L",
+      "chain": "asislive",
+      "chainNote": "단계 목록 정본 = quick.json '🎥 AS-IS 실측'(chainId asislive). 트리 '▶ 전체 실행'이 같은 체인을 실행함. hidden 작업 = 체인이 부르는 상세 단계",
       "title": "2. AS-IS 실측 (런처 구동)",
       "title_en": "2. AS-IS Live Run (launcher)",
       "detail": "AS-IS 런처를 실제로 띄워 화면 열기·조회·분기 시나리오·저장 시나리오를 실행하고 호출 SP·인자·건수·캡처를 모음(Doc/asislive/<ID>). CheckList 실행 때도 같은 묶음(S1.liveScreen)이 자동 구동됨. 24시간 안의 정상 실측은 재사용.",
       "tasks": [
         {
           "id": "S1.liveCheck",
+          "hidden": true,
           "title": "AS-IS 실행 환경 점검 — 로컬 서버(8086)·런처 접속 주소·사본 DB 대상·화면 DLL·FoxQuery 정의 (읽기 전용)",
           "kind": "python",
           "script": "${root}/tools/AsisLocal/asis_env_check.py",
@@ -166,6 +169,7 @@
         },
         {
           "id": "S1.liveScreen",
+          "hidden": true,
           "title": "AS-IS 실측 묶음(화면 1개) — 기본 실측 → 소스 분기 시나리오 → 버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기) → 실행 현황 → TO-BE 조건 대조 · CheckList 전체 실행 때 자동 구동되는 것과 같은 묶음",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_screen.py",
@@ -252,6 +256,7 @@
         },
         {
           "id": "S1.liveRuleMap",
+          "hidden": true,
           "title": "AS-IS 관찰 문구→TO-BE 룰 대응표 다시 만들기 — 룰 원장의 메시지 코드 + AS-IS 메시지 사전(룰 원장을 고친 뒤 실행)",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_rule_map.py",
@@ -260,6 +265,7 @@
         },
         {
           "id": "S1.liveCond",
+          "hidden": true,
           "title": "AS-IS↔TO-BE 조회 조건 대조 — TO-BE 검증이 보낸 조건과 런처 실측 인자·건수 비교 (Doc/asislive/<ID>/cond_compare.csv)",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_cond.py",
@@ -278,6 +284,7 @@
         },
         {
           "id": "S1.liveScen",
+          "hidden": true,
           "title": "AS-IS 조건 시나리오 반복 — TO-BE 조건을 AS-IS 화면에 넣어 재측정(대조 → 시나리오 → 재측정, 최대 3회)",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_scen_loop.py",
@@ -317,6 +324,7 @@
         },
         {
           "id": "S1.liveScenCov",
+          "hidden": true,
           "title": "분기 시나리오 실행 현황 — 지금까지의 런처 실측으로 어떤 소스 분기가 실행됐는지 계산 (Doc/asislive/<ID>/scenarios_cov.csv)",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_scen_cov.py",
@@ -335,6 +343,7 @@
         },
         {
           "id": "S1.liveScenCmp",
+          "hidden": true,
           "title": "분기별 AS-IS↔TO-BE 대조 — 소스 분기마다 AS-IS 실행 결과와 TO-BE 대조표 판정을 맞대고, TO-BE 룰로 정의된 차이는 오류 아님으로 표시",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_scen_cmp.py",
@@ -353,6 +362,7 @@
         },
         {
           "id": "S1.liveScenSpec",
+          "hidden": true,
           "title": "분기 시나리오 명세 — 소스 분기마다 조작(trigger)·전제·실행 수단 상태·AS-IS/TO-BE 실행 여부를 한 줄씩(빠지는 분기 없음)",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_scen_spec.py",
@@ -392,6 +402,7 @@
         },
         {
           "id": "S1.liveSaveDry",
+          "hidden": true,
           "title": "AS-IS 저장 시나리오 연습(저장 안 함) — 셀 1개 수정까지 하고 저장 없이 닫은 뒤 DB 가 그대로인지 확인 · 화면별 정의 Doc/asislive/<ID>/save_scenario.json 필요",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_save.py",
@@ -414,6 +425,7 @@
         },
         {
           "id": "S1.liveSave",
+          "hidden": true,
           "title": "AS-IS 저장 시나리오 실행 — 셀 1개 수정 → 저장 → 저장 인자 포착 → 원래 값 복원·전 컬럼 대조(AS-IS 개발 DB 에 실제로 쓰고 되돌림) · 화면별 정의 save_scenario.json 필요",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_save.py",
@@ -435,6 +447,7 @@
         },
         {
           "id": "S1.liveSaveCmp",
+          "hidden": true,
           "title": "AS-IS↔TO-BE 저장 인자 대조 — 런처 저장에서 포착한 저장 SP 인자와 TO-BE 저장 호출 인자(sqllog_calls.json)를 인자별로 맞댄다",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_save_cmp.py",
@@ -713,6 +726,7 @@
         },
         {
           "id": "S1.liveScenMatrix",
+          "hidden": true,
           "title": "그룹·Division 별 비교표 — 버튼 분기 실행 결과를 실행 조건(그룹·Division·수정 모드)별로 나란히 놓고 조건에 따라 달라지는 버튼을 표시",
           "kind": "python",
           "script": "${root}/tools/AsisLive/asis_live_scen_matrix.py",
@@ -1001,6 +1015,295 @@
             }
           ],
           "title_en": "Open Agent results — ID"
+        },
+        {
+          "id": "UM.prep",
+          "title": "사용자 매뉴얼 준비: 사용자 메뉴(사내 DB), 최신 UI 캡처 추출, 화면별 초안(Doc/UserManual/<모듈>)",
+          "title_en": "User manual prep",
+          "kind": "python",
+          "script": "${root}/tools/Docs/user_manual.py",
+          "args": [
+            "prep",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (DM, SCP, SSP, SYSTEM)",
+              "default": "DM"
+            }
+          ]
+        },
+        {
+          "id": "UM.check",
+          "title": "사용자 매뉴얼 내용 검사: 빠진 화면, 번호 위치, 문장 규칙",
+          "title_en": "User manual content check",
+          "kind": "python",
+          "script": "${root}/tools/Docs/user_manual.py",
+          "args": [
+            "check",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (DM, SCP, SSP, SYSTEM)",
+              "default": "DM"
+            }
+          ]
+        },
+        {
+          "id": "UM.build",
+          "title": "사용자 매뉴얼 PPTX 생성: 양식 샘플 + 최신 UI 캡처 + 화면별 내용",
+          "title_en": "User manual PPTX build",
+          "kind": "python",
+          "script": "${root}/tools/Docs/user_manual.py",
+          "args": [
+            "build",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (DM, SCP, SSP, SYSTEM)",
+              "default": "DM"
+            }
+          ]
+        },
+        {
+          "id": "OM.prep",
+          "title": "운영자 매뉴얼 준비: 양식 구조, 메뉴(사내 DB), 화면별 읽기/쓰기 테이블, 배치 잡, 화면 흐름(Doc/OpsManual/<모듈>)",
+          "title_en": "Operator manual prep",
+          "kind": "python",
+          "script": "${root}/tools/Docs/ops_manual.py",
+          "args": [
+            "prep",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (DM, SCP, SSP, SYSTEM)",
+              "default": "DM"
+            }
+          ]
+        },
+        {
+          "id": "OM.check",
+          "title": "운영자 매뉴얼 내용 검사: 양식 장 빠짐, 화면 빠짐, 배치 잡 빠짐, 근거, 문장 규칙",
+          "title_en": "Operator manual content check",
+          "kind": "python",
+          "script": "${root}/tools/Docs/ops_manual.py",
+          "args": [
+            "check",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (DM, SCP, SSP, SYSTEM)",
+              "default": "DM"
+            }
+          ]
+        },
+        {
+          "id": "OM.build",
+          "title": "운영자 매뉴얼 PPTX 생성: 양식 구조 + 분석 자료 내용",
+          "title_en": "Operator manual PPTX build",
+          "kind": "python",
+          "script": "${root}/tools/Docs/ops_manual.py",
+          "args": [
+            "build",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (DM, SCP, SSP, SYSTEM)",
+              "default": "DM"
+            }
+          ]
+        },
+        {
+          "id": "VI.prep",
+          "title": "VM 소개 자료 준비: VM 측정 + 대상별 초안(Doc/VMIntro/<대상>)",
+          "title_en": "VM 소개 자료 준비: VM 측정 + 대상별 초안(Doc/VMIntro/<대상>)",
+          "kind": "python",
+          "script": "${root}/tools/Docs/vm_intro.py",
+          "args": [
+            "prep",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "대상 (EXEC, DEV, SHARE)",
+              "default": "EXEC"
+            }
+          ]
+        },
+        {
+          "id": "VI.check",
+          "title": "VM 소개 자료 내용 검사: 장 수, fact 키, 본문 숫자, 문장 규칙",
+          "title_en": "VM 소개 자료 내용 검사: 장 수, fact 키, 본문 숫자, 문장 규칙",
+          "kind": "python",
+          "script": "${root}/tools/Docs/vm_intro.py",
+          "args": [
+            "check",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "대상 (EXEC, DEV, SHARE)",
+              "default": "EXEC"
+            }
+          ]
+        },
+        {
+          "id": "VI.build",
+          "title": "VM 소개 자료 출력: PPTX, Google Slides PPTX, PDF, HTML",
+          "title_en": "VM 소개 자료 출력: PPTX, Google Slides PPTX, PDF, HTML",
+          "kind": "python",
+          "script": "${root}/tools/Docs/vm_intro.py",
+          "args": [
+            "build",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "대상 (EXEC, DEV, SHARE)",
+              "default": "EXEC"
+            }
+          ]
+        },
+        {
+          "id": "LK.gen",
+          "title": "LOOKUP 이관 쿼리 생성: 백업, MERGE 생성(MSSQL), 확인, 복원(Doc/LOOKUP_이관/<묶음>)",
+          "title_en": "LOOKUP 이관 쿼리 생성: 백업, MERGE 생성(MSSQL), 확인, 복원(Doc/LOOKUP_이관/<묶음>)",
+          "kind": "python",
+          "script": "${root}/tools/Analysis/lookup_migrate/lookup_migrate.py",
+          "args": [
+            "gen",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "LOOKUP_GROUP 묶음 (SSP, SCP, DM, COMMON, ALL · 여러 개는 _ 로 이음)",
+              "default": "SSP"
+            }
+          ]
+        },
+        {
+          "id": "LK.verify",
+          "title": "LOOKUP 이관 로컬 검증: AS-IS 개발 MSSQL → ZIOUI1 MERGE, 대조, 복원 확인, ROLLBACK",
+          "title_en": "LOOKUP 이관 로컬 검증: AS-IS 개발 MSSQL → ZIOUI1 MERGE, 대조, 복원 확인, ROLLBACK",
+          "kind": "python",
+          "script": "${root}/tools/Analysis/lookup_migrate/lookup_migrate.py",
+          "args": [
+            "verify",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "LOOKUP_GROUP 묶음 (SSP, SCP, DM, COMMON, ALL · 여러 개는 _ 로 이음)",
+              "default": "SSP"
+            }
+          ]
+        },
+        {
+          "id": "PF.batch",
+          "title": "BATCHJOB 속도 점검 쿼리 생성(Doc/PERF_점검/BATCH/<모듈>)",
+          "title_en": "BATCHJOB 속도 점검 쿼리 생성(Doc/PERF_점검/BATCH/<모듈>)",
+          "kind": "python",
+          "script": "${root}/tools/Analysis/perf_check/perf_check.py",
+          "args": [
+            "batch",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (SSP, SCP, DM, SCM · 여러 개는 _ 로 이음)",
+              "default": "SSP"
+            }
+          ]
+        },
+        {
+          "id": "PF.batchVerify",
+          "title": "BATCHJOB 속도 점검 쿼리 ZIOUI1 실행 확인",
+          "title_en": "BATCHJOB 속도 점검 쿼리 ZIOUI1 실행 확인",
+          "kind": "python",
+          "script": "${root}/tools/Analysis/perf_check/perf_check.py",
+          "args": [
+            "verify",
+            "--module",
+            "${input:ids}",
+            "--kind",
+            "batch"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "모듈 (SSP, SCP, DM, SCM)",
+              "default": "SSP"
+            }
+          ]
+        },
+        {
+          "id": "PF.ui",
+          "title": "UI 속도 점검 쿼리 생성(Doc/PERF_점검/UI/<화면ID>)",
+          "title_en": "UI 속도 점검 쿼리 생성(Doc/PERF_점검/UI/<화면ID>)",
+          "kind": "python",
+          "script": "${root}/tools/Analysis/perf_check/perf_check.py",
+          "args": [
+            "ui",
+            "--module",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면 ID",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "PF.uiVerify",
+          "title": "UI 속도 점검 쿼리 ZIOUI1 실행 확인(재실행 뒤 ROLLBACK)",
+          "title_en": "UI 속도 점검 쿼리 ZIOUI1 실행 확인(재실행 뒤 ROLLBACK)",
+          "kind": "python",
+          "script": "${root}/tools/Analysis/perf_check/perf_check.py",
+          "args": [
+            "verify",
+            "--module",
+            "${input:ids}",
+            "--kind",
+            "ui"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면 ID",
+              "default": "SCP0007"
+            }
+          ]
         }
       ]
     },
@@ -1030,6 +1333,14 @@
         },
         {
           "id": "S5.pipeline",
+          "resumeArg": {
+            "flag": "--phase",
+            "inner": [
+              "4",
+              "5"
+            ],
+            "why": "phase 4·5(repair-loop.js)만 끊긴 회차부터 이어감. 그 밖 phase 는 처음부터"
+          },
           "newScreen": true,
           "title": "★ ID 하나로 끝까지 — 화면ID (pipeline.js: 골격→등록SQL→PKG→FE수선→PKG이식→E2E스펙→대조표)",
           "kind": "node",
@@ -1056,6 +1367,14 @@
         },
         {
           "id": "S5.pipelinedesign",
+          "resumeArg": {
+            "flag": "--phase",
+            "inner": [
+              "4",
+              "5"
+            ],
+            "why": "phase 4·5(repair-loop.js)만 끊긴 회차부터 이어감. 그 밖 phase 는 처음부터"
+          },
           "newScreen": true,
           "title": "★ 새 화면 — 화면설계서 우선(from 설계서: pipeline --design Doc/asisfacts/agent/<ID>/screen_design.md)",
           "kind": "node",
@@ -1083,6 +1402,14 @@
         },
         {
           "id": "S5.pipelinedry",
+          "resumeArg": {
+            "flag": "--phase",
+            "inner": [
+              "4",
+              "5"
+            ],
+            "why": "phase 4·5(repair-loop.js)만 끊긴 회차부터 이어감. 그 밖 phase 는 처음부터"
+          },
           "title": "파이프라인 드라이런 — 화면ID (--no-claude: 생성+게이트만)",
           "kind": "node",
           "script": "${harnessDir}/pipeline.js",
@@ -1101,6 +1428,14 @@
         },
         {
           "id": "S5.pipelineregen",
+          "resumeArg": {
+            "flag": "--phase",
+            "inner": [
+              "4",
+              "5"
+            ],
+            "why": "phase 4·5(repair-loop.js)만 끊긴 회차부터 이어감. 그 밖 phase 는 처음부터"
+          },
           "title": "파이프라인 — PKG 골격 강제 재생성(--regen-pkg, 이식 결과 폐기)",
           "kind": "node",
           "script": "${harnessDir}/pipeline.js",
@@ -1455,7 +1790,7 @@
       "id": "S8",
       "title": "6. 테스트 · UI CheckList (E2E 4종 smoke·crud·auth·authcrud 포함 → CheckList · ActionItemList)",
       "title_en": "6. Test · UI CheckList (E2E smoke·crud·auth·authcrud included → CheckList · ActionItemList)",
-      "detail": "CheckList 전체 실행 = 사실 보강 → 원장 → E2E 4종(smoke 는 사전 작업, crud·auth·authcrud 는 e2e_suite.py) → @verify·@trace → 팝업·권한 검사기 → 차등 검증(AS-IS 실측 포함) → 판정 → CheckList·ActionItemList(Doc/UI_CHECKLIST). 판정에 안 들어가던 E2E 기능 시험(CRUD 저장 왕복·Division 조회·BE 5xx·라벨·헤더 행)은 e2e_suite_ingest.py 가 원장 ES- 행으로 넣음. 아래 S7.* = E2E 종류별 단독 재현용. 미검증 0 보고 전 CheckList '미검증' 시트 행 수도 확인.",
+      "detail": "CheckList 전체 실행 = 사실 보강 → 원장 → E2E 4종(smoke 는 사전 작업, crud·auth·authcrud 는 e2e_suite.py) → @verify·@trace → 팝업·권한 검사기 → 차등 검증(AS-IS 실측 포함) → 판정 → CheckList·ActionItemList(CheckList 폴더 = harness.json paths.checklistDir). 판정에 안 들어가던 E2E 기능 시험(CRUD 저장 왕복·Division 조회·BE 5xx·라벨·헤더 행)은 e2e_suite_ingest.py 가 원장 ES- 행으로 넣음. 아래 S7.* = E2E 종류별 단독 재현용. 미검증 0 보고 전 CheckList '미검증' 시트 행 수도 확인.",
       "tasks": [
         {
           "id": "S8.verify",
@@ -1485,8 +1820,8 @@
             8080,
             5173
           ],
-          "title": "미검증 해소 1단계: 원장 미검증 분류 + 같은 조건 재측정(--only) → 남은 처리 대상은 🧪 미검증 해소(검사엔진 보완)",
-          "title_en": "Unverified resolve step 1: classify ledger ERROR rows + re-measure (--only) → remaining rows go to engine supplement",
+          "title": "CheckList Unverified Fix 1단계: 원장 미검증 분류 + 같은 조건 재측정(--only) → 남은 처리 대상은 🧪 미검증 해소(검사엔진 보완)",
+          "title_en": "CheckList Unverified Fix 1: classify ledger ERROR rows + re-measure (--only) → remaining rows go to engine supplement",
           "kind": "python",
           "script": "${harnessDir}/verify/unverified_resolve.py",
           "splitArgs": true,
@@ -1535,6 +1870,87 @@
           "splitArgs": true,
           "args": [
             "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "S8.wlRound",
+          "title": "해소 원장 점검 — 🧪 미검증 보완 회차 끝: 이번 회차 닫힌 행, 열린 행, 다음 회차 여부(unverified_worklist.json continue)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/checklist_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--wl-round"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "S8.rowRegress",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "퇴행 확인 — 이번 해소에서 row_run 이 돈 시험만 행 제한 없이 1회, 판정이 나 있던 행이 미검증으로 바뀌었는지",
+          "kind": "python",
+          "script": "${harnessDir}/verify/row_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--regress",
+            "auto"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "S8.unverifiedGate",
+          "title": "미검증 해소 게이트 — 해소 확인 결과(unverified_settle.json) 처리 대상 전체 해소 전이면 남은 행·사유를 적고 오류(재검증 안 함)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/checklist_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--gate"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ]
+        },
+        {
+          "id": "S8.checklistSettle",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "미검증 해소 확인 — 🧪 보완 뒤 처리 대상 행의 규칙만 다시 측정(run_verify --only, 전체로 넓히지 않음) → 재분류 · 잴 수 없으면 반복 끝",
+          "kind": "python",
+          "script": "${harnessDir}/verify/checklist_run.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--settle"
           ],
           "inputs": [
             {
@@ -1691,9 +2107,9 @@
         },
         {
           "id": "S8.folder",
-          "title": "CheckList·ActionItemList 폴더 열기 (Doc/UI_CHECKLIST)",
+          "title": "CheckList·ActionItemList 폴더 열기 (설정 harness.json paths.checklistDir)",
           "kind": "open",
-          "path": "${root}/Doc/UI_CHECKLIST",
+          "path": "${checklistDir}",
           "title_en": "Open CheckList folder"
         },
         {
@@ -2068,6 +2484,229 @@
             }
           ],
           "title_en": "AI review on/off"
+        },
+        {
+          "id": "S8.flagSnapAutoApprove",
+          "title": "스냅샷 자동 승인 켜고 끄기 (CheckList 대조 OK·NA 수신본을 기준본으로 승인 · harness.json snapAutoApprove)",
+          "title_en": "Snapshot auto approve on/off",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_harness_flag.py",
+          "splitArgs": true,
+          "args": ["snapAutoApprove", "${input:flag}"],
+          "inputs": [
+            {
+              "name": "flag",
+              "prompt": "스냅샷 자동 승인 — CheckList 때 대조 OK·NA 수신본을 기준본으로 승인할지",
+              "options": [
+                { "value": "ON", "description": "켜기 — CheckList 때 자동 승인(대조 불일치는 승인 안 함)" },
+                { "value": "OFF", "description": "끄기 — 사람이 스냅샷 승인" },
+                { "value": "STATUS", "description": "현재 값만 표시" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "S8.flagLlmReviewLean",
+          "title": "AI 검토 가벼운 호출 켜고 끄기 (harness.json llmReviewLean)",
+          "title_en": "AI review lean call on/off",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_harness_flag.py",
+          "splitArgs": true,
+          "args": ["llmReviewLean", "${input:flag}"],
+          "inputs": [
+            {
+              "name": "flag",
+              "prompt": "AI 검토 가벼운 호출 — Claude Code 호출에 CLAUDE.md·메모리·hook·MCP·스킬을 싣지 않을지",
+              "options": [
+                { "value": "ON", "description": "켜기(기본) — 검토 규칙은 프롬프트만 싣고 도구는 Read·Glob·Grep 만" },
+                { "value": "OFF", "description": "끄기 — 세션 기본 문맥을 모두 싣고 호출" },
+                { "value": "STATUS", "description": "현재 값만 표시" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "S8.flagDedupGeneral",
+          "title": "공용 결함 중복 정리 켜고 끄기 (harness.json dedupGeneral)",
+          "title_en": "General defect dedup on/off",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_harness_flag.py",
+          "splitArgs": true,
+          "args": ["dedupGeneral", "${input:flag}"],
+          "inputs": [
+            {
+              "name": "flag",
+              "prompt": "공용 결함 중복 정리 — 여러 화면의 같은 결함을 GENERAL 행 1개로 묶을지",
+              "options": [
+                { "value": "ON", "description": "켜기(기본) — 묶음 1개 = GENERAL 행 1개, 묶인 결함 번호는 asis_ref 에 남김" },
+                { "value": "OFF", "description": "끄기 — 결함마다 행을 따로 둠" },
+                { "value": "STATUS", "description": "현재 값만 표시" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "S8.flagDedupScreen",
+          "title": "화면 안 중복 정리 켜고 끄기 (harness.json dedupScreen)",
+          "title_en": "Screen dedup on/off",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_harness_flag.py",
+          "splitArgs": true,
+          "args": ["dedupScreen", "${input:flag}"],
+          "inputs": [
+            {
+              "name": "flag",
+              "prompt": "화면 안 중복 정리 — 같은 화면에서 같은 원인 행을 대표 행으로 묶을지",
+              "options": [
+                { "value": "ON", "description": "켜기(기본) — AI 판정 검토와 문서는 대표 행만, 구성원은 '중복 정리' 시트" },
+                { "value": "OFF", "description": "끄기 — 행마다 검토·문서 반영" },
+                { "value": "STATUS", "description": "현재 값만 표시" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "S8.flagAgentEnabled",
+          "title": "VMO 에이전트 자동 진단 켜고 끄기 (harness.json orch.agentEnabled)",
+          "title_en": "VMO agent auto diagnosis on/off",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_harness_flag.py",
+          "splitArgs": true,
+          "args": ["orch.agentEnabled", "${input:flag}"],
+          "inputs": [
+            {
+              "name": "flag",
+              "prompt": "VMO 에이전트 자동 진단 — 사건이 생기면 VMO 에이전트가 원인 확인·조치를 스스로 시작할지",
+              "options": [
+                { "value": "ON", "description": "켜기(기본) — 사건마다 에이전트 자동 실행(시간당 상한 orch.agentMaxPerHour)" },
+                { "value": "OFF", "description": "끄기 — 사람이 직접 지시한 진단만 실행" },
+                { "value": "STATUS", "description": "현재 값만 표시" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "S8.flagR14Enabled",
+          "title": "VMO 중지 뒤 계속 실행 감시 켜고 끄기 (harness.json orch.r14Enabled)",
+          "title_en": "VMO run-after-stop watch on/off",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_harness_flag.py",
+          "splitArgs": true,
+          "args": ["orch.r14Enabled", "${input:flag}"],
+          "inputs": [
+            {
+              "name": "flag",
+              "prompt": "중지 뒤 계속 실행 감시 — 사용자가 중지한 작업이 계속 단계·프로세스를 띄우면 사건으로 올릴지",
+              "options": [
+                { "value": "ON", "description": "켜기(기본) — 중지 뒤 orch.stopLeakSec 초 넘게 남은 실행을 사건으로 올림" },
+                { "value": "OFF", "description": "끄기 — 중지 뒤 실행을 감시하지 않음" },
+                { "value": "STATUS", "description": "현재 값만 표시" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "S8.vmoRerun",
+          "title": "VMO 보완 뒤 재수행 (수행 없음 / 재수행 · harness.json orch.rerunAfterFix)",
+          "title_en": "VMO rerun after fix",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_vmo_rerun.py",
+          "splitArgs": true,
+          "args": [
+            "${input:rerun}"
+          ],
+          "inputs": [
+            {
+              "name": "rerun",
+              "prompt": "VMO 보완 뒤 재수행 — 사용자 작업 오류를 VMO 가 보완한 뒤 그 작업을 다시 돌릴지",
+              "options": [
+                {
+                  "value": "RERUN",
+                  "description": "재수행(기본) — VMO 가 보완한 뒤 작업 재개(끊긴 단계부터) 또는 재실행 · 작업·화면마다 2번까지, 3번째 오류면 재수행 안 함"
+                },
+                {
+                  "value": "NONE",
+                  "description": "수행 없음 — VMO 는 보완까지만. 작업 재개·재실행은 사용자"
+                },
+                {
+                  "value": "STATUS",
+                  "description": "현재 값만 표시"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "S8.asisView",
+          "title": "AS-IS 실측 화면 방식 (창 없이 실행 · 창 띄우기 · 녹화 · harness.json asisLiveView)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_live_view.py",
+          "splitArgs": true,
+          "args": [
+            "ASIS",
+            "${input:view}"
+          ],
+          "inputs": [
+            {
+              "name": "view",
+              "prompt": "AS-IS 실측 — 런처 실행기 창을 어떻게 할지(녹화 = 동영상)",
+              "options": [
+                {
+                  "value": "hidden",
+                  "description": "창 없이 실행"
+                },
+                {
+                  "value": "window",
+                  "description": "창 띄우기"
+                },
+                {
+                  "value": "record",
+                  "description": "녹화"
+                },
+                {
+                  "value": "STATUS",
+                  "description": "현재 값만 표시"
+                }
+              ]
+            }
+          ],
+          "title_en": "AS-IS live view (hidden / window / record)"
+        },
+        {
+          "id": "S8.tobeView",
+          "title": "TO-BE 실측 화면 방식 (창 없이 실행 · 창 띄우기 · 녹화 · harness.json e2eView)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_live_view.py",
+          "splitArgs": true,
+          "args": [
+            "TOBE",
+            "${input:view}"
+          ],
+          "inputs": [
+            {
+              "name": "view",
+              "prompt": "TO-BE 실측 — Playwright Chrome 창을 어떻게 할지(녹화 = 동영상)",
+              "options": [
+                {
+                  "value": "hidden",
+                  "description": "창 없이 실행"
+                },
+                {
+                  "value": "window",
+                  "description": "창 띄우기"
+                },
+                {
+                  "value": "record",
+                  "description": "녹화"
+                },
+                {
+                  "value": "STATUS",
+                  "description": "현재 값만 표시"
+                }
+              ]
+            }
+          ],
+          "title_en": "TO-BE live view (hidden / window / record)"
         },
         {
           "id": "S8.diagnose",

@@ -1,0 +1,104 @@
+{
+  "id": "20261124012049_SELF_5",
+  "at": "2026-11-24T01:20:49+09:00",
+  "ms": 1795450849600,
+  "source": "self",
+  "status": "superseded",
+  "sig": "userrule|rn|tools/vibemanager/claude.md|ai세션지시문에docchecklist문자열과폴더경로가직접들어감",
+  "title": "사용자 지시 R83 같은 문제: tools/VibeManager/CLAUDE.md:8 AI 세션 지시문에 Doc/CheckList 문자열과 폴더 경로가 직접 들어감",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/VibeManager/CLAUDE.md:8 CheckList·ActionItemList 폴더 = `Doc/UI_CHECKLIST/`(2026-11-16 `Doc/CheckList` 에서 변경, 옛 경로에 쓰지 않음)",
+  "targets": [
+    "tools/VibeManager/CLAUDE.md"
+  ],
+  "before_after": "'폴더 = harness.json paths.checklistDir, paths.uiTestDir'로 바꾸고 옛 경로 문자열을 지움",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/CLAUDE.md.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T07:54:08+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T07:58:25+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 35개 파일 통과, 시험 82/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 실패 28 · 반영 전부터 어긋난 항목 7건 · 백업 태그 20261125_self0754"
+    },
+    {
+      "at": "2026-11-25T07:58:28+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T07:59:15+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 반영 안 됨: 대상 파일 tools/VibeManager/CLAUDE.md 가 저장소에 없어 반영 불가. 근거 문구는 루트 CLAUDE.md §0 에 있으나 승인 범위 밖. harness.json 에 paths.checklistDir, paths.uiTestDir 키가 없어 개선안 문구를 넣으면 없는 키를 가리킴. 대상 경로 정정과 harness.json 키 추가 개선안 · 대상 파일 0개 복원 · 대상 밖 변경 tools/Harness/verify/judge.py, tools/Harness/verify/mapping_trace.py, tools/Harness/verify/run_verify.py, tools/E2E/lib/rowlink.ts 는 AI 가 고치지 않아 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-25T07-58-28_claude_orch.log",
+      "sec": 44,
+      "costUsd": 0.47453219999999996,
+      "files": [
+        "tools/Harness/verify/judge.py",
+        "tools/Harness/verify/mapping_trace.py",
+        "tools/Harness/verify/run_verify.py",
+        "tools/E2E/lib/rowlink.ts"
+      ]
+    },
+    {
+      "at": "2026-11-25T08:06:30+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261125080629_SELF 로 다시 올림(자동 반영). 원인 tools/VibeManager/orch-userrule.js:88 이 저장소 폴더 접두어가 없는 경로에 파일 존재 확인 없이 tools/VibeManager/ 를 붙임. 2026-11-24 01:20:49 점검에서 Claude 가 루트 CLAUDE.md 를 file: \"CLAUDE.md\" 로 돌려줘 없는 대상 tools/VibeManager/CLAUDE.md 개선안이 생김. 2026-11-25 07:59:15 반영 실패 기록에 대상 파일 0개. 인용 문장은 루트 CLAUDE.md:9 에 있음. tools/Harness/harness.json 에 checklistDir, uiTestDir 키 없음."
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/VibeManager/CLAUDE.md 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/VibeManager/CLAUDE.md",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795560848178,
+  "autoFp": "ec61319047",
+  "applyStartMs": 1795561108073,
+  "verifyJudge": {
+    "at": "2026-11-25T07:59:15+09:00",
+    "verified": true,
+    "text": "실행 못 함 1건",
+    "why": ""
+  },
+  "result": {
+    "applied": false,
+    "already_applied": false,
+    "verified": false,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "blocked",
+        "note": "node tools/VibeManager/test/run_all.js 실행이 Bash, PowerShell 모두 권한 승인 요청으로 차단됨. 대상 파일이 없어 웹뷰 검사 대상도 없음"
+      }
+    ],
+    "changed_files": [],
+    "verify_result": "검증 명령 미실행(권한 차단), 반영 전 값 미측정 → 반영 뒤 값 미측정. Read tools/VibeManager/CLAUDE.md = File does not exist, Glob tools/VibeManager/CLAUDE* = 0건, Grep harness.json checklistDir|uiTestDir = 0건. 2026-11-25",
+    "note": "대상 파일 tools/VibeManager/CLAUDE.md 가 저장소에 없어 반영 불가. 근거 문구는 루트 CLAUDE.md §0 에 있으나 승인 범위 밖. harness.json 에 paths.checklistDir, paths.uiTestDir 키가 없어 개선안 문구를 넣으면 없는 키를 가리킴. 대상 경로 정정과 harness.json 키 추가 개선안이 필요함"
+  },
+  "repair": {
+    "at": "2026-11-25T08:06:29+09:00",
+    "decision": "revise",
+    "cause": "tools/VibeManager/orch-userrule.js:88 이 저장소 폴더 접두어가 없는 경로에 파일 존재 확인 없이 tools/VibeManager/ 를 붙임. 2026-11-24 01:20:49 점검에서 Claude 가 루트 CLAUDE.md 를 file: \"CLAUDE.md\" 로 돌려줘 없는 대상 tools/VibeManager/CLAUDE.md 개선안이 생김. 2026-11-25 07:59:15 반영 실패 기록에 대상 파일 0개. 인용 문장은 루트 CLAUDE.md:9 에 있음. tools/Harness/harness.json 에 checklistDir, uiTestDir 키 없음.",
+    "reason": "원래 안은 없는 파일을 대상으로 잡아 반영할 수 없음. 점검이 없는 파일로 개선안을 만들지 않게 고치는 안으로 바꿈. 루트 CLAUDE.md 의 폴더 경로 문장을 설정값 참조로 바꿀지는 사람 판단이 필요해 이번 안에서 뺌.",
+    "log": ".vibe\\logs\\2026-11-25T08-04-26_claude_orch.log",
+    "costUsd": 0.7039577000000001,
+    "sec": 123
+  },
+  "supersededBy": "20261125080629_SELF"
+}

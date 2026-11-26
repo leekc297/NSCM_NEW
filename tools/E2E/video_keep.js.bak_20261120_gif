@@ -1,0 +1,38 @@
+// TO-BE 실측 녹화 보관(2026-11-20 사용자 지시 '창 없이 실행 · 창 띄우기 · 녹화') — playwright.config.ts 가 e2eView=record 일 때만 globalTeardown 으로 부른다.
+//   녹화 = Playwright 실행 기록(trace.zip · 화면 장면 포함). 동영상(video)은 전용 ffmpeg 가 이 PC 에 없어 쓰지 않는다(외부 다운로드 필요 · 16:16 실측 'ffmpeg-win64.exe doesn't exist').
+//   Playwright 는 실행할 때마다 outputDir(results/artifacts)을 비우므로, 실행이 끝날 때마다 trace.zip 을 <results>/video/<시각>_<pid>/<테스트 폴더>.zip 으로 옮기고
+//   tools/E2E/trace_gif.py 로 같은 이름 .gif(장면을 이은 녹화)를 만든다. zip 은 'npx playwright show-trace <zip>' 로 단계별로도 볼 수 있다.
+const fs = require('node:fs');
+const path = require('node:path');
+const cp = require('node:child_process');
+
+function stamp() { const d = new Date(); const t = n => String(n).padStart(2, '0'); return `${d.getFullYear()}${t(d.getMonth() + 1)}${t(d.getDate())}_${t(d.getHours())}${t(d.getMinutes())}${t(d.getSeconds())}`; }
+
+function keep(artifacts, dest) {
+  let n = 0;
+  const walk = d => {
+    let ents = []; try { ents = fs.readdirSync(d, { withFileTypes: true }); } catch { return; }
+    for (const e of ents) {
+      const f = path.join(d, e.name);
+      if (e.isDirectory()) walk(f);
+      else if (/^trace.*\.zip$/i.test(e.name) || /\.webm$/i.test(e.name)) {
+        fs.mkdirSync(dest, { recursive: true });
+        const rel = path.relative(artifacts, d).replace(/[\\/]/g, '__') || 'test';
+        const to = path.join(dest, `${rel}${/^(trace\.zip|video\.webm)$/i.test(e.name) ? '' : '_' + e.name.replace(/\.(zip|webm)$/i, '')}${path.extname(e.name)}`);
+        try { fs.copyFileSync(f, to); n++; } catch { /* 다음 파일 */ }
+      }
+    }
+  };
+  walk(artifacts);
+  return n;
+}
+
+module.exports = async function videoKeep(config) {
+  const artifacts = (config && config.projects && config.projects[0] && config.projects[0].outputDir) || '';
+  if (!artifacts) return;
+  const dest = path.join(path.dirname(artifacts), 'video', `${stamp()}_${process.pid}`);
+  const n = keep(artifacts, dest);
+  console.log(`[TO-BE 녹화] 실행 기록 ${n}개 → ${dest}`);
+  if (n) { try { const r = cp.spawnSync(process.env.PYTHON || 'python', [path.join(__dirname, 'trace_gif.py'), dest], { encoding: 'utf8', timeout: 600000 }); console.log(String(r.stdout || '').trim() || String(r.stderr || '').trim().slice(0, 300)); } catch (e) { console.log(`[WARN] 녹화 GIF 만들기 실패: ${e.message}`); } }
+};
+module.exports.keep = keep;

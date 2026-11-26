@@ -1,0 +1,56 @@
+// 2026-11-24 클라우드 이관 패키지 README → VS Code 탐색기 이동(workbench.js cloudReadmeOf · revealCloudReadme) 시험
+// vscode 모듈 대신 호출 기록용 가짜를 넣고, workbench.js 에서 두 함수 원문을 잘라 실행한다.
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+
+const src = fs.readFileSync(path.join(__dirname, '..', 'workbench.js'), 'utf8');
+const s = src.indexOf('function cloudReadmeOf(');
+const e = src.indexOf('// 개선안 20261120042556_INC: 실행이 중지로 끝났는지 판정');
+assert(s > 0 && e > s, '함수 원문 위치 못 찾음');
+const calls = [];
+const vscode = {
+  Uri: { file: f => ({ fsPath: f }) },
+  window: {
+    showTextDocument: async (u, o) => { calls.push(['open', u.fsPath, o && o.preserveFocus]); },
+    showInformationMessage: async (m, ...b) => { calls.push(['info', m, b.join(',')]); return undefined; },
+  },
+  commands: { executeCommand: async (c, u) => { calls.push(['cmd', c, u && u.fsPath]); } },
+};
+const mod = new Function('fs', 'path', 'vscode', src.slice(s, e) + '\nreturn { cloudReadmeOf, revealCloudReadme };')(fs, path, vscode);
+
+const root = path.resolve(__dirname, '..', '..', '..');
+const p = { root };
+const pk = fs.readdirSync(path.join(root, '_artifacts', '_deploy_packages')).filter(d => fs.existsSync(path.join(root, '_artifacts', '_deploy_packages', d, '00_README.md')));
+assert(pk.length > 0, '시험용 패키지 폴더 없음');
+const readme = path.join(root, '_artifacts', '_deploy_packages', pk[pk.length - 1], '00_README.md');
+const dirLink = { label: '📂 패키지 폴더', file: path.dirname(readme) };
+const rdLink = { label: '📄 README', file: readme };
+
+(async () => {
+  let n = 0;
+  // 1) README 링크 있음 → 열기(포커스 유지) + 탐색기 이동 + 알림 단추 2개
+  calls.length = 0;
+  assert.strictEqual(await mod.revealCloudReadme(p, [dirLink, rdLink], false), true);
+  assert.deepStrictEqual(calls[0], ['open', readme, true]);
+  assert.deepStrictEqual(calls[1], ['cmd', 'revealInExplorer', readme]);
+  assert.strictEqual(calls[2][0], 'info'); assert.strictEqual(calls[2][2], '탐색기에서 보기,폴더 열기'); n++;
+  // 2) 대소문자 다른 루트(c:\ vs C:\)도 같은 경로로 봄
+  calls.length = 0;
+  const p2 = { root: root[0] === root[0].toUpperCase() ? root[0].toLowerCase() + root.slice(1) : root[0].toUpperCase() + root.slice(1) };
+  assert.strictEqual(await mod.revealCloudReadme(p2, [rdLink], true), true);
+  assert.strictEqual(calls.filter(c => c[0] === 'info').length, 0, 'quiet 이면 알림 없음'); n++;
+  // 3) _deploy_packages 밖 README → 대상 아님
+  calls.length = 0;
+  assert.strictEqual(await mod.revealCloudReadme(p, [{ label: '📄 README', file: path.join(root, 'tools', 'VibeManager', 'README.md') }], false), false);
+  assert.strictEqual(calls.length, 0); n++;
+  // 4) README 없는 링크(폴더만) → 대상 아님
+  calls.length = 0;
+  assert.strictEqual(await mod.revealCloudReadme(p, [dirLink], false), false); n++;
+  // 5) 없는 파일 → 대상 아님
+  calls.length = 0;
+  assert.strictEqual(await mod.revealCloudReadme(p, [{ label: 'README', file: path.join(path.dirname(readme), 'NO_README.md') }], false), false); n++;
+  // 6) 링크 없음
+  assert.strictEqual(await mod.revealCloudReadme(p, [], false), false); n++;
+  console.log(`t_cloud_reveal: ${n}/6 통과 (시험 README ${path.relative(root, readme)})`);
+})().catch(err => { console.error('t_cloud_reveal 실패:', err.message); process.exit(1); });

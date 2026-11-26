@@ -1,0 +1,112 @@
+{
+  "id": "20261124012047_SELF_3",
+  "at": "2026-11-24T01:20:47+09:00",
+  "ms": 1795450847665,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/judge.py|n줄에새폴더와옛폴더를직접적음n줄주석에doccheckli",
+  "title": "사용자 지시 R83 같은 문제: tools/Harness/verify/judge.py:1939 1939, 1940줄에 새 폴더와 옛 폴더를 직접 적음. 1937줄 주석에 Doc/CheckList",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/Harness/verify/judge.py:1939 files = [f for f in doc_archive.all_versions([P('Doc', 'UI_CHECKLIST'), P('Doc', 'CheckList'), P('Doc', '화면분석서')], f'{mid}_*_CheckList_v*.xlsx')",
+  "targets": [
+    "tools/Harness/verify/judge.py"
+  ],
+  "before_after": "doc_paths의 checklistDir + legacyChecklistDirs 목록으로 바꿈. 주석의 옛 경로 문자열은 지움",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/judge.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T11:22:02+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T11:26:05+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1122"
+    },
+    {
+      "at": "2026-11-25T11:26:07+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T11:39:04+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T11:39:04+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-25 11:27 run_all.js 'ALL OK 파일 84/84 PASS 1374 FAIL 0 225.7s' → 반영 뒤 2026-11-25 11:34:57 run_all.js 'ALL OK 파일 84/84 PASS 1374 FAIL 0 227.9s', t_webview_syntax.js 'ALL PASS', judge.py py_compile COMPILE_OK · 변경 8개 파일 · 대상 목록 밖 변경 7개: tools/Harness/gate_baseline.tsv, Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql, Doc/통합테스트_SSP/SSP_LOOKUP_이관_2_MERGE생성_MSSQL_20261125.sql, Doc/통합테스트_SSP/SSP_LOOKUP_이관_3_확인_ORACLE_20261125.sql, Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql, tools/Analysis/ssp_it_precheck/lookup_merge_gen.py",
+      "log": ".vibe\\logs\\2026-11-25T11-26-07_claude_orch.log",
+      "sec": 542,
+      "costUsd": 0.6876051,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/judge.py",
+        "Doc/통합테스트_SSP/SSP_LOOKUP_이관_1_백업_ORACLE_20261125.sql",
+        "Doc/통합테스트_SSP/SSP_LOOKUP_이관_2_MERGE생성_MSSQL_20261125.sql",
+        "Doc/통합테스트_SSP/SSP_LOOKUP_이관_3_확인_ORACLE_20261125.sql",
+        "Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql",
+        "tools/Analysis/ssp_it_precheck/lookup_merge_gen.py",
+        "tools/Analysis/ssp_it_precheck/lookup_merge_verify.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/Harness/verify/judge.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/Harness/verify/judge.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795573322026,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795573567731,
+  "verifyJudge": {
+    "at": "2026-11-25T11:35:14+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1122",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795574344935,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 파일 84/84 PASS 1374 FAIL 0 225.7s → 반영 뒤 ALL OK 파일 84/84 PASS 1374 FAIL 0 227.9s · node tools/VibeManager/test/t_webview_syntax.js: ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/judge.py"
+    ],
+    "verify_result": "반영 전 2026-11-25 11:27 run_all.js 'ALL OK 파일 84/84 PASS 1374 FAIL 0 225.7s' → 반영 뒤 2026-11-25 11:34:57 run_all.js 'ALL OK 파일 84/84 PASS 1374 FAIL 0 227.9s', t_webview_syntax.js 'ALL PASS', judge.py py_compile COMPILE_OK",
+    "note": "judge.py 2158~2171줄 사용자 의견 누적 폴더를 harness.json paths.checklistDir(기본 Doc/UI_CHECKLIST) + legacyChecklistDirs 로 변경함. make_verify_docs.py _harness_paths 와 같은 방식임. 소스와 주석의 Doc/CheckList, Doc/UI_CHECKLIST 직접 표기 삭제함. Doc/화면분석서 이전 위치는 개선안 범위 밖이라 유지함. 현재 harness.json 에 paths 키 없음, Doc/CheckList 폴더 없음(확인 시각 11:2x)."
+  },
+  "snap": "prop_20261124012047_SELF_3"
+}

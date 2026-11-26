@@ -1,36 +1,37 @@
 {
  "ok": true,
  "mode": "apply",
- "stamp": "20261120_112839",
+ "stamp": "20261126_100718",
  "areas_sel": "fe",
  "be_login": [],
- "tip": "c62b4200c55116910b659b2f5bcc7fd61e109a7b",
- "tip_info": "c62b4200c 2026-11-20 11:16 Jeongyun Park fix(SCP0011): 입력 차단·편집 잠금·조회조건 AS-IS 패리티",
- "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
+ "tip": "6f99270c01ed7c3b2f42b1379d9922ea42f75342",
+ "tip_info": "6f99270c0 2026-11-26 09:30 Jungwon Ha fix(SSP0003): ERP 전송 실패 시 승인이 저장되지 않도록 AS-IS 순서로 변경",
+ "base": "2e27252dba3f3f64e74dff86c485f39285b7439d",
  "ancestor": true,
- "commits": 40,
- "changed": 163,
+ "commits": 28,
+ "changed": 79,
  "counts": {
-  "동일": 2613,
-  "공통 변경분 — 공통 원문 적용(로컬 보호 안 함)": 161,
-  "공통 파일 — 로컬 부재": 2,
+  "동일": 2735,
+  "공통 변경분 — 공통 원문 적용(로컬 보호 안 함)": 78,
+  "공통 삭제 — 로컬 삭제(로컬 보호 안 함)": 1,
   "로컬 전용(공통에 없음) — 유지": 102
  },
  "actions": {
-  "none": 2613,
-  "write": 163,
+  "none": 2735,
+  "write": 78,
+  "delete": 1,
   "keep": 102,
-  "merge": 0,
-  "delete": 0
+  "merge": 0
  },
  "pending": 0,
  "areas": {
   "fe": {
-   "base": "06e7d22ded01a46846c08a0d9c65d0d497111081",
-   "changed": 163,
+   "base": "2e27252dba3f3f64e74dff86c485f39285b7439d",
+   "changed": 79,
    "actions": {
-    "none": 2613,
-    "write": 163,
+    "none": 2735,
+    "write": 78,
+    "delete": 1,
     "keep": 102
    },
    "pending": 0,
@@ -40,12 +41,12 @@
  },
  "overwrite_local": true,
  "local_only": 102,
- "report": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261120\\README.md",
- "backup": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261120",
+ "report": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126\\README.md",
+ "backup": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126",
  "verify": [
-  "공통 원문 적용 163건 — 개행 정규화 후 공통 원문과 불일치 0건",
+  "공통 원문 적용 78건 — 개행 정규화 후 공통 원문과 불일치 0건",
   "적용 파일 충돌 마커 잔존 0건",
-  "삭제 0건 — 잔존 0",
+  "삭제 1건 — 잔존 0",
   "procedures.d.ts `declare global` 1건(기대 1)"
  ]
 }

@@ -1,13 +1,6 @@
-# SSP0014 · SSP0014_GET_SHIPMENT_MODEL_PIC ↔ PKG_SSP0014.P_SSP0014_GET_MODEL_PIC
+# SSP0014 · (AS-IS 짝 없음) ↔ PKG_SSP0014.P_SSP0014_GET_MODEL_PIC
 
-- 실행 2026-11-20 09:34:58 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
-- **판정 PASS** — 공통 20행 전 컬럼 일치 · 키 원천 cleanup_spec.json · 키 DIVISION_ID+FROM_SITE+ITEM_ID · golden 집합 판정 PASS
-- 호출 #21 sheet=main btn=SEARCH user=minyonglee1 FE 응답 행 21 · 원천 Doc\verify\SSP0014\calls\_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json
+- 실행 2026-11-25 01:54:01 · AS-IS As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV (readOnly) · TO-BE To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 (매 호출 rollback) · 호출 원천 calls
+- 호출 #21 sheet=main btn=SEARCH user=bindy122678 FE 응답 행 21 · 원천 Doc\verify\SSP0014\calls\_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json
 - TO-BE 인자(FE 본문): `{"divisionId": "81_HM", "operationGroup": "", "fromSite": "", "validYn": "", "itemId": "", "userId": "", "language": "KO"}`
-- 세션 인자(호출 로그 SCM_COM_SQL_LOG): `{"sesLangCd": "KO", "sesUserId": "minyonglee1"}`
-- AS-IS 인자(번역): `{"p_division_id": "81_HM", "p_operation_group": "", "p_from_site": "", "p_valid_yn": "", "p_item_id": "", "p_user_id": "", "p_language": "KO"}`
-
-### 결과셋 1  As-is 20행 ↔ To-Be O_RC1 20행
-- 일치
-- 데이터 기준: 공통 20행 · AS-IS 전용 0행 · TO-BE 전용 0행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급)
-- 실제 순서(공통·유일 20행의 상대 순서): 일치
+- SKIP: sp_pair.csv 에 이 TO-BE proc 의 AS-IS 짝 없음 — gen_param_map.py 또는 source=manual 행 추가

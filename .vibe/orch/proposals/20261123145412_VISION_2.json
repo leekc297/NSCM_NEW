@@ -1,0 +1,134 @@
+{
+  "id": "20261123145412_VISION_2",
+  "at": "2026-11-23T14:54:12+09:00",
+  "ms": 1795413252834,
+  "source": "vision",
+  "status": "applied",
+  "sig": "struct|applyfail|restore ai edits outside targets",
+  "title": "반영 실패 되돌리기 범위를 대상 파일에서 그 반영의 AI 편집 전체로 넓힘(대상 밖 시험 파일, 새로 만든 파일 포함)",
+  "evidence": "orch-improve.js:317, :332 실패 처리는 restoreTargets(cur)로 targets 만 복원하고, 대상 밖 변경은 이력 문구로만 남김(:319 '대상 밖 변경 … 는 그대로 남음'). 사례 대조: ① 20261123000419_VISION 11:31, 13:13 실패 뒤 'tools/VibeManager/test/t_orch_usercheck.js 는 그대로 남음' → result.json S2(14:52) 't_orch_usercheck.js 실패 exit 1 · PASS 133 · FAIL 6', FAIL 6건이 되돌려진 U2 1판 판정 시험. ② 20261120183740_VISION 12:11 실패 뒤 t_orch_worklist.js 가 남아 S2 'sc.worklistCycle is not a function', S3 'orch-worklist.js 설치본에 없음'. ③ 그 뒤 반영 전 게이트가 12:17 부터 '반영 전부터 어긋난 항목 2건', 13:18 부터 FAIL 7 로 시작. ④ 20261121000234_VISION 12:46 실패의 새로 어긋난 항목이 't_orch_usercheck.js … PASS 137 · FAIL 1'(남은 시험 파일의 건수 변화). AI 편집 목록은 orch-undo.js readOps(실행 기록의 Edit, Write)로 이미 읽고 있음(orch-improve.js:330). 대기 중인 20261123121302_SELF 는 남은 시험 2개를 지우는 사례 조치이고 되돌리기 범위는 바꾸지 않음. 미확인: 23건 중 AI 편집분과 다른 세션 변경분의 비율(이력 문구만으로 구분 안 됨), orch-worklist.js 가 복원에서 빠진 경로",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-undo.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "반영 실패 시 targets 파일만 복원하고 AI 가 대상 밖에서 고친 시험, 새로 만든 파일은 남김 → 실행 기록에서 읽은 AI 편집을 대상 밖 파일까지 거꾸로 적용하고, AI 가 새로 만든 파일은 지우지 않고 <파일>.bak_rollback_<시각> 으로 이름을 바꿈. 다른 세션이 고친 파일은 종전대로 건드리지 않음",
+  "verify": "1) node tools/VibeManager/test/t_orch_improve.js tools/VibeManager 에 재현 시험 2건 추가: 실패한 반영이 targets 밖 시험 파일에 넣은 Edit 가 되돌려짐, 같은 시각 다른 쪽이 고친 대상 밖 파일은 그대로임. 반영 전 미측정(해당 시험 없음, node 실행 권한 없음) → 반영 뒤 기대 2건 PASS. 2) 반영 시각 뒤 새 반영 실패 이력에서 '대상 밖 변경' 문구에 그 실행 기록의 AI 편집 파일이 들어간 건수: 반영 전 확인된 사례 3건(000419_VISION 11:31, 13:13 의 t_orch_usercheck.js, 183740_VISION 12:11 의 t_orch_worklist.js) → 기대 0건",
+  "rollback": "대상 3개 파일을 반영 전 사본으로 복원. 이름이 바뀐 .bak_rollback_ 파일은 원래 이름으로 되돌리면 됨",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "같은 원인 반영 실패 2건 이상 조건. 7일 반영 실패 이력 58건 중 23건에 '대상 밖 변경 … 그대로 남음'. 남은 시험이 다음 안의 게이트 실패로 이어진 사례 2건(12:46, 14:52). 자동 반영의 되돌리기 규칙을 바꾸므로 core",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T22:10:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T22:13:55+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1159, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261123_self2210"
+    },
+    {
+      "at": "2026-11-23T22:13:57+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T22:20:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-improve.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T22:20:11+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v2 2) 반영 시각 뒤 새 반영 실패 이력에서 '대상 밖 변경' 문구에 그 실행 기록의 AI 편집 파일이 들어간 건수: 반영 전 확인된 사례 3건(000419_VISION 11:31, 13:13 의 t_orch_user (시간 경과 필요. 반영 시각 뒤 새 반영 실패 이력이 생겨야 셀 수 있음. 반영 전 값 = .vibe/orc)"
+    },
+    {
+      "at": "2026-11-23T22:20:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건, 실행 못 함 1건. 2026-11-23 22:16:04 node tools/VibeManager/test/t_orch_improve.js tools/VibeManager → ALL PASS, 새 시험 2건 PASS(반영 전 = 시험 없음, PowerShell node 실행 권한 확인에 걸려 미측정 → 반영 뒤 2건 PASS). node tools/VibeManager/test/t_orch_applyfail.js → ALL PASS. v2 반영 전 '대상 밖 변경 … 그대로 남음' 25건 → 반영 뒤 새 실패 이력 대기(미측정) · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-23T22-13-57_claude_orch.log",
+      "sec": 152,
+      "costUsd": 1.4981928000000004,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/test/t_orch_improve.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:37+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "개선안 반영이 실패했을 때 VMO 가 그 반영에서 AI 가 고친 파일을 빠짐없이 원래대로 돌려놓습니다. 지금은 일부 시험 파일이 남아 다음 반영의 사전 점검을 실패로 만듭니다.",
+    "risk": "AI 편집을 거꾸로 적용하지 못하는 파일은 종전처럼 남고 이력에 사유가 적힙니다. 새로 만든 파일은 삭제하지 않고 이름만 바꾸므로 내용은 남습니다.",
+    "undo": "VMO 개선안 탭에서 이 안을 되돌리면 종전 방식(대상 파일만 복원)으로 돌아갑니다."
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795439413314,
+  "autoFp": "6273a5a755",
+  "applyStartMs": 1795439637371,
+  "postChecks": [
+    {
+      "n": 2,
+      "text": "2) 반영 시각 뒤 새 반영 실패 이력에서 '대상 밖 변경' 문구에 그 실행 기록의 AI 편집 파일이 들어간 건수: 반영 전 확인된 사례 3건(000419_VISION 11:31, 13:13 의 t_orch_usercheck.js, 183740_VISION 12:11 의 t_orch_worklist.js) → 기대 0건",
+      "why": "시간 경과 필요. 반영 시각 뒤 새 반영 실패 이력이 생겨야 셀 수 있음. 반영 전 값 = .vibe/orch/proposals 20개 파일에 '대상 밖 변경 … 그대로 남음' 25건(000419_VISION 5건, 183740_VISION 1건 포함). 반영 뒤 문구는 outsideLeft 로 실행 기록의 AI 편집 파일(ro.ai)을 빼고 적음, 기대 ",
+      "status": "open",
+      "at": "2026-11-23T22:16:31+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-23T22:16:31+09:00",
+    "verified": true,
+    "text": "실행 통과 1건, 실행 못 함 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261123_self2210",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-improve.js"
+  ],
+  "appliedMs": 1795440011074,
+  "synced": [
+    "orch-improve.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_improve.js tools/VibeManager 22:15~22:16 ALL PASS(FAIL 0). 새 시험 'PASS 반영 실패: 대상 밖 시험 파일에 넣은 AI Edit 되돌림 · 실패 문구 대상 밖 변경에 그 파일 없음', 'PASS 반영 실패: 같은 시각 다른 쪽이 고친 대상 밖 파일은 그대로 · 문구에 남은 파일로 표시'. 추가 실행 t_orch_applyfail.js ALL PASS"
+      },
+      {
+        "n": 2,
+        "result": "blocked",
+        "note": "시간 경과 필요. 반영 시각 뒤 새 반영 실패 이력이 생겨야 셀 수 있음. 반영 전 값 = .vibe/orch/proposals 20개 파일에 '대상 밖 변경 … 그대로 남음' 25건(000419_VISION 5건, 183740_VISION 1건 포함). 반영 뒤 문구는 outsideLeft 로 실행 기록의 AI 편집 파일(ro.ai)을 빼고 적음, 기대 0건"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_improve.js"
+    ],
+    "verify_result": "2026-11-23 22:16:04 node tools/VibeManager/test/t_orch_improve.js tools/VibeManager → ALL PASS, 새 시험 2건 PASS(반영 전 = 시험 없음, PowerShell node 실행 권한 확인에 걸려 미측정 → 반영 뒤 2건 PASS). node tools/VibeManager/test/t_orch_applyfail.js → ALL PASS. v2 반영 전 '대상 밖 변경 … 그대로 남음' 25건 → 반영 뒤 새 실패 이력 대기(미측정)",
+    "note": "되돌리기 대부분(revertOutside: 새 파일 이름 바꿈, 대상 밖 AI Edit 역적용)은 반영 전에 이미 있었음. 이번 변경 = revertOutside 경로 제한(tools/VibeManager|Harness|E2E|Docs) 없앰(.vibe/, .bak_ 제외는 유지), 실행 기록의 AI 편집 대상 밖 파일 목록 out.ai 추가, 실패 이력 2곳(orch-improve.js:388, :403)의 '대상 밖 변경 … 그대로 남음'을 AI 가 고치지 않은 파일만으로 좁힘(outsideLeft). 새 파일 이름은 before_after 의 .bak_rollback_<시각> 대신 종전 .bak_failed_<개선안> 유지(대상 밖 test/t_orch_applyfail.js:50 이 이 이름을 확인함). orch-undo.js 는 고칠 곳 없어 그대로. 확인 안 함 = 수정을 빼고 새 시험이 실패하는지 보는 확인. 따로 확인할 곳 = orch-worklist.js 가 복원에서 빠진 경로, 20261123121302_SELF 의 남은 시험 2개 정리"
+  },
+  "snap": "prop_20261123145412_VISION_2",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

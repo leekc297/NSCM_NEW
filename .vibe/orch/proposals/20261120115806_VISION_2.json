@@ -3,7 +3,7 @@
   "at": "2026-11-20T11:58:06+09:00",
   "ms": 1795143486149,
   "source": "vision",
-  "status": "pending",
+  "status": "superseded",
   "sig": "waitrows reason log",
   "title": "행 대기(waitRows)가 상한까지 기다린 사유를 시험 소요 기록에 남김",
   "evidence": "Doc/verify/SSP0005/_test_timing.jsonl run 2026-11-19T21:12:18Z: wait@probe.ts:60 6,566초(E2E 143.3분 중 109.4분), 37개 시험, 최대 714초. B1(pagereg.ts emptyAnswered) 반영 05:30 뒤 실행인데 생략이 일어났는지 기록 없음. run_timing.json SSP0005 e2e 143.7분",
@@ -21,6 +21,49 @@
       "at": "2026-11-20T14:43:46+09:00",
       "by": "사용자 지시(Claude Code 세션 분류)",
       "what": "권장안 승인. 분류 fix: 행 대기 사유 기록 추가(대기 동작·상한 그대로). 사용자 지시 11-20 '버그성이나 시스템 관련 항목은 권장안으로 처리'. VMO 자동 반영(게이트 통과 조건)으로 반영"
+    },
+    {
+      "at": "2026-11-20T16:08:08+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T16:11:34+09:00",
+      "by": "VMO",
+      "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    },
+    {
+      "at": "2026-11-20T16:16:11+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T16:19:25+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 679, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1616"
+    },
+    {
+      "at": "2026-11-20T16:19:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T16:21:36+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 2026-11-20 16:21 node tools/E2E/node_modules/typescript/bin/tsc --noEmit -p tools/E2E/tsconfig.json 출력 없음(통과, npx 는 권한 없어 로컬 tsc 직접 실행). node tools/E2E/lib/pagereg.selftest.js 14건 PASS, ALL PASS. 다음 C · 대상 파일 2개 복원(probe.ts AI 편집 3건만 되돌림(반영 전과 같음) / pagereg.ts AI 편집 3건만 되돌림(반영 전과 같음)) · 대상 밖 변경 tools/VibeManager/CHANGELOG.md 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-20T16-19-28_claude_orch.log",
+      "sec": 126,
+      "costUsd": 1.0183244,
+      "files": [
+        "tools/E2E/lib/pagereg.ts",
+        "tools/E2E/lib/probe.ts",
+        "tools/VibeManager/CHANGELOG.md"
+      ]
+    },
+    {
+      "at": "2026-11-20T16:22:35+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261120162234_SELF 로 다시 올림(자동 반영). 원인 기록 줄을 만드는 tools/E2E/fixtures/test.ts:72-76 이 targets 에 없음. 2026-11-20 16:19 반영(.vibe/logs/2026-11-20T16-19-28_claude_orch.log 끝 결과)에서 probe.ts, pagereg.ts 만 고쳐 waitWhy 가 pageReg 에만 쌓이고 _test_timing.jsonl 에는 0건 기록됨. 검증 기대값이 다음 CheckList 실행 뒤 대조라서 반영 시점에 확인 못 함. tsc 통과, pagereg.selftest.js 14건 PASS 인데 verified false 로 끝남"
     }
   ],
   "plain": {
@@ -30,5 +73,31 @@
   },
   "needsApproval": "큰 그림 점검 안 = 사용자 승인 뒤 반영(harness.json orch.visionAutoApply false)",
   "impact": "fix",
-  "waitNote": "실행 중인 작업이 읽는 검증 도구 대상이라 작업이 끝난 뒤 반영"
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 2,
+  "autoMs": 1795158971113,
+  "autoFp": "c429a1ba18",
+  "result": {
+    "applied": true,
+    "verified": false,
+    "changed_files": [
+      "tools/E2E/lib/pagereg.ts",
+      "tools/E2E/lib/probe.ts"
+    ],
+    "verify_result": "2026-11-20 16:21 node tools/E2E/node_modules/typescript/bin/tsc --noEmit -p tools/E2E/tsconfig.json 출력 없음(통과, npx 는 권한 없어 로컬 tsc 직접 실행). node tools/E2E/lib/pagereg.selftest.js 14건 PASS, ALL PASS. 다음 CheckList 뒤 waitWhy 건수 대조는 미실행",
+    "note": "_test_timing.jsonl 기록 줄은 tools/E2E/fixtures/test.ts:72-76 에서 만듦. targets 밖이라 수정 안 함. 현 상태로는 waitWhy 가 pageReg(Nscm 객체)에만 쌓이고 jsonl 에는 0건 기록됨. 반영하려면 test.ts 에 import { pageReg } from '../lib/pagereg' 추가, 75행 parts/reqs 뒤에 waitWhy: pageReg.get(n.page)?.waitWhy || [], waitWhyDrop: pageReg.get(n.page)?.waitWhyDrop || 0 추가 필요(추가 승인 대상). emptyAnswered 판정 조건, 대기 동작, 상한 120초 변경 없음. waitWhy 항목 = why(noReg, early, pending, reqGap, noResp, notDone, notSure, rows, settle, empty, emptyThenRows), sec, rows, cap, full. 시험당 40건 넘으면 waitWhyDrop 에 건수만 셈"
+  },
+  "repair": {
+    "at": "2026-11-20T16:22:34+09:00",
+    "decision": "revise",
+    "cause": "기록 줄을 만드는 tools/E2E/fixtures/test.ts:72-76 이 targets 에 없음. 2026-11-20 16:19 반영(.vibe/logs/2026-11-20T16-19-28_claude_orch.log 끝 결과)에서 probe.ts, pagereg.ts 만 고쳐 waitWhy 가 pageReg 에만 쌓이고 _test_timing.jsonl 에는 0건 기록됨. 검증 기대값이 다음 CheckList 실행 뒤 대조라서 반영 시점에 확인 못 함. tsc 통과, pagereg.selftest.js 14건 PASS 인데 verified false 로 끝남",
+    "reason": "",
+    "log": ".vibe\\logs\\2026-11-20T16-21-37_claude_orch.log",
+    "costUsd": 0.5784984,
+    "sec": 57
+  },
+  "supersededBy": "20261120162234_SELF"
 }

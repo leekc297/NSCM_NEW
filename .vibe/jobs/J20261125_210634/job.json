@@ -1,0 +1,147 @@
+{
+  "id": "J20261125_210634",
+  "itemLabel": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "kind": "chain",
+  "status": "done",
+  "mode": "par",
+  "maxPar": 5,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "unit": "screen",
+  "inputs": {},
+  "createdAt": "2026-11-25T21:06:34+09:00",
+  "startedAt": "2026-11-25T21:06:34+09:00",
+  "endedAt": "2026-11-26T02:41:21+09:00",
+  "note": "VMO 조치 완료. 이어서 진행",
+  "screens": [
+    {
+      "id": "SCP0005",
+      "status": "warn",
+      "step": "",
+      "actor": "",
+      "sec": 20087,
+      "summary": "체인 완료: 9단계 중 OK 8 · 경고 1 · 20087s",
+      "why": "",
+      "md": "Doc\\gen\\SCP0005\\FULLRUN.md",
+      "startedAt": "2026-11-25T21:06:34+09:00",
+      "endedAt": "2026-11-26T02:41:21+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": null,
+      "flow": {
+        "at": "2026-11-25T21:06:34+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T21:06:34+09:00",
+            "end": "2026-11-25T22:36:28+09:00",
+            "sec": 5394,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 2,
+            "name": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T22:36:28+09:00",
+            "end": "2026-11-25T22:40:36+09:00",
+            "sec": 248,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 3,
+            "name": "3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T22:40:36+09:00",
+            "end": "2026-11-25T22:40:38+09:00",
+            "sec": 1,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 4,
+            "name": "4. 미검증 보완 (열린 행 → 원인 · 검사기 수정 · 그 행만 다시 재서 닫음)",
+            "actor": "claude",
+            "st": "ok",
+            "start": "2026-11-25T22:40:38+09:00",
+            "end": "2026-11-25T23:37:51+09:00",
+            "sec": 3434,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 5,
+            "name": "5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T23:37:51+09:00",
+            "end": "2026-11-25T23:38:27+09:00",
+            "sec": 35,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 6,
+            "name": "6. 해소 원장 점검 (이번 회차 닫힌 행 · 열린 행 · 다음 회차 여부)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-25T23:38:27+09:00",
+            "end": "2026-11-26T01:11:56+09:00",
+            "sec": 5609,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 11,
+            "name": "7. 미검증 해소 게이트 (해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 닫는 방법 보고)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-26T01:11:56+09:00",
+            "end": "2026-11-26T02:40:02+09:00",
+            "sec": 5286,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 12,
+            "name": "8. 퇴행 확인 (이번 보완에서 돈 시험만 행 제한 없이 1회 · 판정 난 행이 미검증으로 바뀌었는지)",
+            "actor": "script",
+            "st": "warn",
+            "start": "2026-11-26T02:40:02+09:00",
+            "end": "2026-11-26T02:40:03+09:00",
+            "sec": 1,
+            "prog": "",
+            "code": 0
+          },
+          {
+            "no": 13,
+            "name": "9. 문서 갱신 (행 단위 해소 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)",
+            "actor": "script",
+            "st": "ok",
+            "start": "2026-11-26T02:40:03+09:00",
+            "end": "2026-11-26T02:41:21+09:00",
+            "sec": 78,
+            "prog": "",
+            "code": 0
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 8단계 · AI Agent 1회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 27회 호출 · 516행 · 13.38 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261125_210634\\SCP0005.log",
+      "outputs": [
+        "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v13.xlsx",
+        "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v13.xlsx",
+        "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_SCP0005(Distribution Route).xlsx"
+      ]
+    }
+  ],
+  "resumable": 0,
+  "pausedBy": "",
+  "pausedInc": "20261125_221312_R6_ALL"
+}

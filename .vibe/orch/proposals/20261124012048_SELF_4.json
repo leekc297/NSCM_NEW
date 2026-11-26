@@ -1,0 +1,106 @@
+{
+  "id": "20261124012048_SELF_4",
+  "at": "2026-11-24T01:20:48+09:00",
+  "ms": 1795450848567,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/precision.py|머리주석에docchecklist문자열이남음",
+  "title": "사용자 지시 R83 같은 문제: tools/Harness/verify/precision.py:6 머리 주석에 Doc/CheckList 문자열이 남음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/Harness/verify/precision.py:6 판별 = CheckList 각 판(Doc/UI_CHECKLIST · old · 옛 Doc/CheckList · 옛 Doc/화면분석서, make_verify_docs.prior_docs 와 같은 탐색)의 '조치 필요' 시트.",
+  "targets": [
+    "tools/Harness/verify/precision.py"
+  ],
+  "before_after": "주석을 '설정 checklistDir와 옛 폴더 목록'으로 고쳐 옛 경로 문자열을 지움",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/precision.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T13:08:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T13:12:06+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1308"
+    },
+    {
+      "at": "2026-11-25T13:12:09+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T13:24:20+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T13:24:20+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 84/84 PASS 1374 FAIL 0 → 반영 뒤 ALL OK 84/84 PASS 1374 FAIL 0 (2026-11-25 13:20:15 기준). precision.py 안의 'Doc/CheckList' 문자열 1건 → 0건. python ast.parse PARSE_OK · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/WORKLOG.md",
+      "log": ".vibe\\logs\\2026-11-25T13-12-09_claude_orch.log",
+      "sec": 496,
+      "costUsd": 0.5846134999999999,
+      "files": [
+        "tools/Harness/verify/precision.py",
+        "tools/VibeManager/WORKLOG.md"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/Harness/verify/precision.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/Harness/verify/precision.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795579692566,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795579929231,
+  "verifyJudge": {
+    "at": "2026-11-25T13:20:30+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1308",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795580660686,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 실행. 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 228.5s' → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 228.1s'. 대상이 웹뷰 파일 아님, t_webview_syntax.js 는 전체 검사 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/precision.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 84/84 PASS 1374 FAIL 0 → 반영 뒤 ALL OK 84/84 PASS 1374 FAIL 0 (2026-11-25 13:20:15 기준). precision.py 안의 'Doc/CheckList' 문자열 1건 → 0건. python ast.parse PARSE_OK",
+    "note": "precision.py 6행 주석의 판 탐색 목록 'Doc/UI_CHECKLIST · old · 옛 Doc/CheckList · 옛 Doc/화면분석서' → '설정 checklistDir 와 옛 폴더 목록'. 실행 코드 변경 없음. 백업, 설치 폴더, CHANGELOG 건드리지 않음"
+  },
+  "snap": "prop_20261124012048_SELF_4"
+}

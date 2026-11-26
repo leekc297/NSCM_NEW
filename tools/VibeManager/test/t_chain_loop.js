@@ -73,6 +73,31 @@ const mkR = id => new ChainRunner(api, { id, jobId: '', autoAnswer: false, onLog
   const c2 = mk(0); c2.steps[0] = { task: 'T.m2', title: '1. 측정' }; c2.loops.fix.first = { key: 'actionable' };
   a = await mkR('lp0005').run(c2);
   chk('first 키: 1회차는 처리 대상이 있으면 시작, 2회차부터 while 키', log() === 'M F R D', log());
+  // 2026-11-20 사용자 지시 '검사기 보완에 미검증 건수 표기': 회차 단계 이름에 분류 결과의 미검증(after.total)·처리 대상(actionable) 건수
+  clear(); const m3 = W('tools/t/m3.js', "const fs=require('fs');fs.writeFileSync('n.txt','1');fs.writeFileSync('tri.json',JSON.stringify({continue:1,actionable:13,after:{total:30,actionable:13}}));fs.appendFileSync('log.txt','M ');");
+  tasks['T.m3'] = { id: 'T.m3', title: '측정(건수)', kind: 'node', script: m3, args: [], cwd: root };
+  const c3 = mk(0); c3.steps[0] = { task: 'T.m3', title: '1. 측정' }; let lg3 = ''; a = await new ChainRunner(api, { id: 'lp0006', jobId: '', autoAnswer: false, onLog: t => { lg3 += String(t); }, onStep: () => { }, onNote: () => { } }).run(c3);
+  const nm = ['', (lg3.match(/2\. 보완[^\n]*?처리 대상 \d+건/) || [''])[0], (lg3.match(/3\. 부분 재측정[^\n]*?처리 대상 \d+건/) || [''])[0]];
+  chk('회차 단계 이름에 미검증·처리 대상 건수', nm[1] === '2. 보완 · 미검증 30건 · 처리 대상 13건' && nm[2] === '3. 부분 재측정 · 미검증 30건 · 처리 대상 13건', JSON.stringify(nm));
+  chk('건수 표기는 원래 체인 정의를 바꾸지 않음', c3.steps[1].title === '2. 보완', c3.steps[1].title);
+  // 2026-11-25 사용자 2단계: 재검증·문서(ifLoopRan) = 해소 반복이 1회차라도 돌았을 때만, 반복 뒤 1회. 회차 상한 max
+  const mk2 = n => { const c = mk(n); c.steps[3] = { task: 'T.docs', title: '4. 재검증·문서', late: true, ifLoopRan: 'fix', skipNote: '미검증 해소 반복 없음' }; return c; };
+  clear(); a = await mkR('lp0007').run(mk2(0));
+  chk('처리 대상 0 → 반복 없음 → 재검증·문서 건너뜀', log() === 'M' && (a.steps || []).some(x => x.status === 'SKIP' && /미검증 해소 반복 없음/.test(x.note || '')), log());
+  clear(); a = await mkR('lp0008').run(mk2(2));
+  chk('처리 대상 2 → 해소 반복 2회차 뒤 재검증·문서 1회', log() === 'M F R F R D', log());
+  clear(); const c9 = mk2(9); c9.loops.fix.max = 3; a = await mkR('lp0009').run(c9);
+  chk('회차 상한 max 3 → 3회차 뒤 재검증(무한 반복 없음)', log() === 'M F R F R F R D', log());
+  // 실제 체인 정의(quick.json): 반복 = 보완 준비, 🧪, 게이트, 해소 확인 재측정 · 재검증·문서 = late + ifLoopRan · max 5
+  const q = JSON.parse(fs.readFileSync(path.join(dir, 'quick.json'), 'utf8')); const chains = []; const walk = x => { if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') { if (x.chainId === 'checklist' || x.chainId === 'checklist-delta') chains.push(x); Object.values(x).forEach(walk); } }; walk(q);
+  chk('quick.json CheckList 체인 2종 = 행 단위 해소(반복 = 보완 준비, 🧪, 게이트, 해소 원장 점검 · 화면 재측정 없음 · 뒤 = 해소 게이트, 퇴행 확인, 문서)', chains.length === 2 && chains.every(c => { const lp = c.steps.filter(s => s.loop === 'fix'); const lt = c.steps.filter(s => s.late); return lp.length === 4 && lp[3].task === 'S8.wlRound' && !c.steps.some(s => ['S8.checklistSettle', 'S8.checklistDelta'].includes(s.task) && (s.loop || s.late)) && lt.map(s => s.task).join() === 'S8.unverifiedGate,S8.rowRegress,S8.checklistRun' && lt.every(s => s.ifLoopRan === 'fix') && c.loops.fix.max === 3 && /unverified_worklist\.json/.test(c.loops.fix.while.file); }), chains.map(c => c.steps.map(s => s.task || s.claudeOf).join('>')).join(' | '));
+  const cr = fs.readFileSync(path.join(dir, '..', 'Harness', 'verify', 'checklist_run.py'), 'utf8');
+  chk('checklist_run: 1단계 자동 재측정(--no-rerun 없음) + --settle 은 전체로 넓히지 않고, 못 재면 continue 0', !/run\(\['py', ur, mid, '--no-rerun'\]\)/.test(cr) && /run\(\['py', ur, mid\] \+ \(\['--settle'\] if a\.settle else \[\]\)\)/.test(cr) && /if a\.settle and not settle_measured/.test(cr) && /j\['continue'\] = 0/.test(cr));
+  // 2026-11-26 체인 args 가 작업 정의 '--' 옵션을 모두 잃으면 작업 정의 옵션을 붙임(SCP0005 J20261125_210634 --wl-round · --gate 누락 사고)
+  clear(); const fl = W('tools/t/fl.js', "require('fs').appendFileSync('log.txt','A['+process.argv.slice(2).join(' ')+'] ');");
+  tasks['T.fl'] = { id: 'T.fl', title: '옵션 작업', kind: 'node', script: fl, args: ['${input:id}', '--wl-round', '--max', '3'], cwd: root };
+  a = await mkR('lp0010').run({ kind: 'chain', label: '옵션 시험', chainId: 'targs', steps: [{ task: 'T.fl', title: '1. 옵션 없음', args: ['X1'] }, { task: 'T.fl', title: '2. 다른 옵션', args: ['X2', '--gate'] }, { task: 'T.fl', title: '3. 인자 없음' }] });
+  chk('체인 args 에 옵션 없음 → 작업 정의 옵션(값 포함) 붙임 · 다른 옵션을 적은 단계는 그대로 · args 없는 단계는 작업 정의 그대로', log() === 'A[X1 --wl-round --max 3] A[X2 --gate] A[LP0010 --wl-round --max 3]', log());
   // 재개: 2회차 보완 단계에서 끊김 → 재개하면 2회차 보완부터, 앞 단계는 다시 안 돎
   clear(); const r1 = mkR('lp0004'); const pr = r1.run(mk(2));
   const t0 = Date.now(); while (Date.now() - t0 < 15000 && log() !== 'M F R') await new Promise(r => setTimeout(r, 50));

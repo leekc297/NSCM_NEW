@@ -1,0 +1,16 @@
+속도 점검 쿼리 로컬 검증 2026-11-25 15:36:46
+방식 : 파일의 쿼리를 사내 ZIOUI1 에서 차례로 실행(조회. 재실행 블록 뒤 ROLLBACK)
+ZIOUI1 ('2026-11-25 15:36:42', 'SCM_MGR')
+[L0] ALTER SESSION SET CURRENT_SCHEMA = SCM_MGR
+[L0-1] 1.5초 · 1행 · 첫 행 ('PR_SSP_ANL_SHIP_PLAN_40', 'PROCEDURE', 'VALID', '2026-11-25 10:33:42', 3580, 3580, 'Y')
+[L1] 0.1초 · 0행
+[L2] 0.1초 · 0행
+[L2-1] 0.0초 · 10행 · 첫 행 ('101', '40', '147006', 1, 'SP', '1', datetime.datetime(2026, 11, 21, 8, 3), datetime.datetime(2026, 11, 21, 10, 32, 25), 149.4, datetime.datetime(2026, 11, 21, 8, 3), datetime.datetime(2026, 11, 21, 
+[L3] 0.0초 · 3행 · 첫 행 ('JOB_PR_SSP_PLN_SHIP_PLAN_40', 'FALSE', 'DISABLED', None, None, None, 'FREQ=DAILY;BYHOUR=8;BYMINUTE=0;BYSECOND=0', None, None)
+[L3-1] 0.0초 · 0행
+[L4] 0.2초 · 0행
+[L5] 0.8초 · 0행
+[L6] 0.0초 · 0행
+[L7] 0.0초 · 1행 · 첫 행 (1, 'ZIO', 'localhost.localdomain')
+[L8] 1.1초 · 0행
+결과 : PASS · 실패 0건

@@ -1,0 +1,27 @@
+// m1upload 판정 변이 입증(2026-11-25 T584 SCP0005 M1 V-219edc76) · 실패 1건이라도 있으면 exit 1
+const fs = require('fs'), path = require('path');
+const ts = require(path.join(__dirname, '..', '..', '..', 'nscm-fe', 'node_modules', 'typescript'));
+const src = fs.readFileSync(path.join(__dirname, 'm1upload.ts'), 'utf8');
+const m = { exports: {} }; new Function('module', 'exports', ts.transpileModule(src, { compilerOptions: { module: 'commonjs', target: 'es2020' } }).outputText)(m, m.exports);
+const { parseUploadKinds, buildM1Rows, statusesOf, judgeM1, mapFormToGrid } = m.exports;
+const cs = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'GSCM', '01.Framework', 'GSCM.Windows.Forms', 'UI', 'ExcelUploadForm2.cs'), 'utf8');
+const ps = parseUploadKinds(cs, 'SCP0005');
+const st = ps.kinds.map(k => `${k.status}:${k.kind}`);
+const base = Array.from({ length: 35 }, (_, i) => `v${i}`);
+const b = buildM1Rows(base, ps);
+const exp = b.rows.map(r => r.status);
+const okJ = judgeM1(b.rows, exp, b.notBuilt, ps.skipped);
+const badJ = judgeM1(b.rows, exp.map((s, i) => (i === 2 ? 'Error-Required' : s)), b.notBuilt, ps.skipped);
+const ctlJ = judgeM1(b.rows, ['Error-Required', ...exp.slice(1)], b.notBuilt, ps.skipped);
+const resp = { result: { O_CUR_CNT: [{ ERROR_COUNT: 1 }], O_CUR_LIST: [{ A: 'x', STATUS: 'Success' }, { A: 'y', STATUS: 'Error-L/T Type' }] } };
+const mp = mapFormToGrid(['Route Id', 'From Country*', 'Valid*'], [{ b: 'ROUTE_ID', header: 'Route Id' }, { b: 'FROM_COUNTRY', header: 'Country*' }, { b: 'VALID_YN', header: 'Active*' }, { b: 'X', header: 'X' }]);
+const cases = [
+  ['상태 8종 해석', st.join(','), 'Error-Required:required,Error-Departure days:allEmpty,Error-L/T Type:lookup,Error-TransMode:lookup,Error-From Site:lookup,Error-To Site:lookup,Error-Unique Duplicate:dbdup,Error-Duplicate:filedup'],
+  ['주석 Priority Error 제외', ps.skipped.join(','), 'Priority Error'], ['식별 변수', ps.idVar, 'strRouteId'], ['From Site 칸', String(ps.varIdx.strFromCountry), '3'],
+  ['행 수(대조군+8종+중복 2행)', String(b.rows.length), '10'], ['못 만든 종류', b.notBuilt.join('|'), ''],
+  ['중복 칸 = 자유 칸', b.rows[b.rows.length - 1].how.split(' ')[0], 'strShippingCompany'],
+  ['일치 PASS', okJ.result, 'PASS'], ['다름 FAIL', badJ.result, 'FAIL'], ['대조군 오류 ERROR', ctlJ.result, 'ERROR'], ['행 수 다름 ERROR', judgeM1(b.rows, ['Success'], [], []).result, 'ERROR'],
+  ['응답 상태 배열', (statusesOf(resp) || []).join(','), 'Success,Error-L/T Type'], ['머리글 대응 2/3 = 80% 미만', String(mp.ok), 'false'],
+];
+let bad = 0; for (const [n, got, want] of cases) { const ok = got === want; if (!ok) bad++; console.log(`${ok ? 'OK ' : 'NG '} ${n} → ${got}${ok ? '' : `(기대 ${want})`}`); }
+console.log(`${cases.length - bad}/${cases.length}`); process.exit(bad ? 1 : 0);

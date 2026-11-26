@@ -11,7 +11,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 REF = os.path.join(ROOT, 'Doc', 'asisfacts', 'ref_ssp')
 GEOM_TOL = 90000   # EMU(약 0.1인치) — 연결선 끝점이 도형 테두리에서 이 거리 안이면 그 도형에 붙은 것으로 본다(도형 id 가 없을 때)
 LINE_TOL = 60000   # EMU — 연결선 끝점이 다른 연결선 경로에서 이 거리 안이면 같은 줄기로 합류한 것으로 본다
-SRC_NAMES = {'ppt': 'SSP 프로세스 확인 내용.pptx',  # 2026-11-16 판(9장 · 진행여부 체크 기준 추가)으로 교체 · 11-11 판 = src/SSP 프로세스 확인 내용_20261111.pptx
+SRC_NAMES = {'ppt': 'SSP 프로세스 확인 내용.pptx',  # 2026-11-20 판(10장 · 8번 「SSP 각 사업부별 계획기준」 추가)으로 교체 · 11-16 판 = src/SSP 프로세스 확인 내용_20261116.pptx · 11-11 판 = src/SSP 프로세스 확인 내용_20261111.pptx
  'batch': 'SCP_SSP_Batch List_261103.xlsx', 'it': '(20261112) SSP 통합테스트 시나리오-V2.xlsx'}  # 2026-11-16 V2 로 교체(11-09 판 사본은 src/ 에 그대로)
 
 
@@ -112,6 +112,9 @@ def cellmd(s): return str(s or '').replace('|', '/').replace('\n', ' ')
 
 
 # ── PI 프로세스(PPT 1번 슬라이드) ─────────────────────────────────────────────
+PI_BOXES = {}
+
+
 def pi_process():
     sh = [x for x in rd('ppt_shapes.csv') if x['slide'] == '1']; gr = {x['id']: x for x in rd('ppt_groups.csv') if x['slide'] == '1'}
     cn = [x for x in rd('ppt_connectors.csv') if x['slide'] == '1']
@@ -157,11 +160,12 @@ def pi_process():
         if e['a'].startswith('X') and yn:  # 판단 도형에서 나가는 선 — 선 경로에 가장 가까운 Y/N 문구
             best = min(((min(_seg_dist((x, y_), pl[j], pl[j + 1]) for pl in e['pts'] for j in range(len(pl) - 1))), t) for x, y_, t in yn)
             if best[0] < 400000: label = best[1]
-        edges.append({'id': e['conns'], 'a': e['a'], 'al': labels.get(e['a'], ''), 'b': e['b'], 'bl': labels.get(e['b'], ''), 'arrow': 'end' if e['arrow'] else 'none', 'by': e['how'], 'dist': 0, 'ok': True, 'label': label})
+        edges.append({'id': e['conns'], 'a': e['a'], 'al': labels.get(e['a'], ''), 'b': e['b'], 'bl': labels.get(e['b'], ''), 'arrow': 'end' if e['arrow'] else 'none', 'by': e['how'], 'dist': 0, 'ok': True, 'label': label, 'pts': e['pts']})  # pts = 슬라이드 연결선 경로(2026-11-23 SVG 맵)
         for nid in (e['a'], e['b']):
             if nid.startswith('X'): loose_nodes[nid] = labels[nid]
     for u in unresolved: edges.append({'id': u['id'], 'a': '', 'al': '', 'b': '', 'bl': '', 'arrow': '', 'by': '', 'dist': 0, 'ok': False, 'label': '', 'why': u['why']})
     order = sorted(steps.values(), key=lambda s: [int(p) for p in s['seq'].split('-')])
+    PI_BOXES.clear(); PI_BOXES.update(boxes)  # 상자 좌표(EMU) — ssp_svg.pi_map 이 슬라이드 배치 그대로 그린다
     return order, lanes, edges, loose_nodes
 
 
@@ -277,10 +281,37 @@ def ppt_slides():
         titles = [x['text'] for x in sorted(notes, key=lambda x: (x['y'], x['x'])) if re.match(r'^\d+(-\d+)?\.\s', x['text']) and x['y'] < TITLE_BAND]
         used = {k for r in rows for k in (r['a'], r['b'])}
         lone_tabs = [(x['text']) for x in sorted(texts, key=lambda x: (x['y'], x['x'])) if x['id'] in tabs and 'T' + x['id'] not in used and not any(x in inner for cid, (c_, inner) in conts.items() if 'C' + cid in used)]
-        tbl = collections.defaultdict(dict)
+        # 표 = 표 개체(frame)별로 나눠 화면 배치 순서(위 → 아래, 왼쪽 → 오른쪽)로 둔다. 2026-11-20 판 8번 슬라이드는 칸 수가 다른 표 4개가 한 장에 있어 합치면 칸이 섞임
+        fr = collections.defaultdict(lambda: {'rows': collections.defaultdict(dict), 'x': 0, 'y': 0})
         for t in rd('ppt_tables.csv'):
-            if t['slide'] == str(sno): tbl[(t['frame_id'], int(t['row']))][int(t['col'])] = t['text']
-        out.append({'slide': sno, 'tables': [[r[c] for c in sorted(r)] for k, r in sorted(tbl.items())], 'procs': [x['text'].strip() for x in sorted(procs, key=lambda x: (x['x'] // 2000000, x['y']))], 'rows': rows, 'notes': [x['text'] for x in sorted(notes, key=lambda x: (x['y'], x['x']))], 'titles': titles, 'unresolved': unresolved, 'lone_tabs': lone_tabs, 'n_conn': sum(1 for c in cn if c['slide'] == str(sno))})
+            if t['slide'] != str(sno): continue
+            f_ = fr[t['frame_id']]; f_['rows'][int(t['row'])][int(t['col'])] = t['text']
+            f_['x'] = int(t.get('fx') or 0); f_['y'] = int(t.get('fy') or 0)
+        frames = []
+        for fid, f_ in sorted(fr.items(), key=lambda kv: (kv[1]['y'] // 600000, kv[1]['x'], kv[0])):
+            rows_ = [[r[c] for c in sorted(r)] for _, r in sorted(f_['rows'].items())]
+            # 표 이름 = 표 바로 위에 있는 '※' 문구(가장 가까운 것)
+            cap = [x for x in notes if x['text'].startswith('※') and x['y'] + x['h'] <= f_['y'] + 40000]
+            frames.append({'fid': fid, 'x': f_['x'], 'y': f_['y'], 'rows': rows_, 'caption': max(cap, key=lambda x: x['y'])['text'] if cap else '', 'group': ''})
+        # 표끼리 연결: 첫 열 테이블 이름이 다른 표의 한 열(머리글 칸) 문구와 가장 많이 겹치고 절반을 넘으면 그 머리글을 소속으로 붙인다(8번 슬라이드 재고 I/F 표 → 사업부 열).
+        # 11-20 판 실측: 40 자리 재고 I/F 표에 Packer 열의 SCM_DNM_SCS_STOCK 이 있어 전부 일치 조건이면 연결이 빠짐 → 최다 일치 + 차이(group_diff) 기록
+        for f_ in frames:
+            names = [r[0] for r in f_['rows'][1:] if r and re.fullmatch(r'[A-Z][A-Z0-9_]+', r[0] or '')]
+            if not names: continue
+            best = None
+            for g in frames:
+                if g is f_ or not g['rows']: continue
+                for ci in range(1, len(g['rows'][0])):
+                    col = ' '.join((r[ci] if ci < len(r) else '') for r in g['rows'][1:])
+                    hit = [n for n in names if re.search(r'\b' + n + r'\b', col)]
+                    col_names = list(dict.fromkeys(re.findall(r'\b((?:SSP|SCM|XIF)_[A-Z0-9_]{3,})\b', col)))
+                    if len(hit) * 2 > len(names) and (best is None or len(hit) > len(best[1])): best = (g['rows'][0][ci], hit, col_names)
+            if best:
+                f_['group'] = best[0]
+                f_['group_diff'] = {'표에만': [n for n in names if n not in best[1]], '열에만': [n for n in best[2] if n not in names and not n.endswith('_V')]}
+        tprocs = list(dict.fromkeys(c.strip() for f_ in frames for r in f_['rows'] for c in r if RX_PROC.match((c or '').strip())))
+        if not titles: titles = [x['text'] for x in sorted(notes, key=lambda x: (x['y'], x['x'])) if x['y'] < TITLE_BAND][:1]  # 번호 제목이 없는 장(11-20 판 8번)은 위쪽 띠 문구
+        out.append({'slide': sno, 'tables': [r for f_ in frames for r in f_['rows']], 'frames': frames, 'table_procs': tprocs, 'procs': [x['text'].strip() for x in sorted(procs, key=lambda x: (x['x'] // 2000000, x['y']))], 'rows': rows, 'notes': [x['text'] for x in sorted(notes, key=lambda x: (x['y'], x['x']))], 'titles': titles, 'unresolved': unresolved, 'lone_tabs': lone_tabs, 'n_conn': sum(1 for c in cn if c['slide'] == str(sno))})
     return out
 
 
@@ -361,6 +392,17 @@ def tgt_tables(text):
 
 
 # ── 산출 ──────────────────────────────────────────────────────────────────────
+def _timetable_lines(ssp_jobs, out_dir):
+    """운영 잡 하루 시간표(SVG, 2026-11-23). 잡 그룹 = ssp_batch_inventory.csv(배치 분석 산출)의 group 열 · 없으면 '기타'."""
+    try:
+        import ssp_svg
+        p = os.path.join(out_dir, 'ssp_batch_inventory.csv'); jg = {}
+        if os.path.exists(p): jg = {r['job_name']: r['group'] for r in csv.DictReader(io.open(p, encoding='utf-8-sig'))}
+        return [ssp_svg.timetable(ssp_jobs, out_dir, jg), '']
+    except Exception as ex:
+        print(f'[ssp_ref] 시간표 SVG 건너뜀: {type(ex).__name__}: {ex}'); return []
+
+
 def build(out_dir, parse_sp=None, objs=None, screens=None):
     """SSP_REF_PROCESS.md 생성. parse_sp(sp)->{'reads','writes','calls','missing'} · objs = AS-IS 객체 이름 집합 · screens = {id: {...}}"""
     if not available(): return None
@@ -379,6 +421,12 @@ def build(out_dir, parse_sp=None, objs=None, screens=None):
          f'- 연결선 판정: 연결선의 실제 꺾인 경로를 계산해 ① 끝점이 도형에 붙었는지(도형 id · 없으면 테두리 {GEOM_TOL} EMU 이내) ② 끝점이 다른 연결선에 {LINE_TOL} EMU 이내로 닿으면 한 줄기로 묶음 ③ 줄기의 화살표 없는 쪽 박스 → 화살표가 닿는 박스. 풀지 못한 선은 §1-2. PowerPoint 로 내보낸 슬라이드 이미지와 눈으로 대조함', '', '```mermaid', 'flowchart LR']
     by_lane = collections.defaultdict(list)
     for s in order: by_lane[s['lane']].append(s)
+    _mm_at = max(i for i, x in enumerate(M) if x == '```mermaid')  # 2026-11-23: 슬라이드 배치 그대로 그린 SVG 를 먼저 보이고, 자동 배치 그래프는 접어 둔다
+    try:
+        import ssp_svg
+        M[_mm_at:_mm_at] = [ssp_svg.pi_map(order, lanes, edges, loose, PI_BOXES, out_dir), '', ssp_svg.fold_next('자동 배치 그래프로 보기(같은 내용)'), '']
+    except Exception as ex:
+        print(f'[ssp_ref] PI 맵 SVG 건너뜀: {type(ex).__name__}: {ex}')
     for i, (x, ln) in enumerate(lanes):
         if not by_lane.get(ln): continue
         M.append(f'  subgraph L{i}["{esc(ln)}"]')
@@ -521,6 +569,7 @@ def build(out_dir, parse_sp=None, objs=None, screens=None):
     tt = [r for r in rd('prod_job_timetable.csv') if 'SSP' in r['module'] or r['job'] in dict(ssp_jobs)]
     M += ['', f'## 4. 운영 잡 스케줄 — SSP({len(ssp_jobs)}잡 · 운영 LGCE_SCMPROD 기준)', '',
           f'- 출처 = {SRC_NAMES["batch"]} 시트 JOB-Daily&Weekly · JOB-RealTime · JOB-Monthly · Job 시간대별 실행 요일. DEV msdb 복제본에는 없던 운영 주기·시각이다', '',
+          *_timetable_lines(ssp_jobs, out_dir),
           '### 4-1. 시각 지정 잡(시각순)', '', '| 시각 | 잡 | 월 | 화 | 수 | 목 | 금 | 토 | 일 | 호출 프로시저 |', '|---|---|---|---|---|---|---|---|---|---|']
     def tkey(t):
         m = re.match(r'(\d+):(\d+)', t or ''); return (int(m.group(1)), int(m.group(2))) if m else (99, 99)
@@ -538,7 +587,7 @@ def build(out_dir, parse_sp=None, objs=None, screens=None):
     # §5 PPT 배치별 입출력
     _sl_all = ppt_slides(); _rng = f"{_sl_all[0]['slide']}~{_sl_all[-1]['slide']}" if _sl_all else '-'
     conds = run_conditions(); pj = proc_jobs(prod)
-    M += ['', f'## 5. 배치별 입출력 · 처리 규칙 — {SRC_NAMES["ppt"]} {_rng}번 슬라이드(2026-11-16 판 · 9장)', '',
+    M += ['', f'## 5. 배치별 입출력 · 처리 규칙 — {SRC_NAMES["ppt"]} {_rng}번 슬라이드(2026-11-20 판 · {_sl_all[-1]["slide"] if _sl_all else 0}장 · 8번 「SSP 각 사업부별 계획기준」 11-20 추가)', '',
           '### 5-0. 프로세스 진행 조건 — 배치가 실제로 계획을 만들기 전에 확인하는 것(2026-11-16 판에 추가된 「■ 프로세스 진행여부 체크 기준」)', '',
           '- 소속 규칙: 체크 패널이 있는 슬라이드는 패널 안 「- 프로시저」 줄 또는 「- 프로세스 진행여부 체크 -」 표지에 가장 가까운 머리 상자 · 패널이 없는 슬라이드는 같은 세로 줄 바로 위(없으면 가장 가까운) 머리 상자 · 운영 잡 = 배치 목록 운영 잡 시트 + 잡 호출 트리', '',
           '| 슬라이드 | 프로시저 | 운영 잡(주기 · 시각) | 진행 조건(원문 순서) | 소속 판정 |', '|---|---|---|---|---|']
@@ -551,7 +600,7 @@ def build(out_dir, parse_sp=None, objs=None, screens=None):
         for c in conds: w_.writerow([c['slide'], c['proc'], ' | '.join(f'{j} ({cy} {tm})' for j, cy, tm in pj.get(c['proc'].upper(), [])), ' | '.join(c['items']), c['how']])
     M += ['### 5-1. 슬라이드별 입출력', '',
           '- 슬라이드 그림 규칙(PowerPoint 이미지로 확인): 프로시저 머리 상자 아래에 「원천 테이블(묶음) → 대상 테이블(묶음)」 화살표. 화살표의 소속 프로시저 = 같은 세로 줄에서 바로 위 머리 상자(슬라이드 배치 기준). 설명 문구는 원문 그대로', '']
-    slide_procs = collections.defaultdict(set); ppt_rows = []
+    slide_procs = collections.defaultdict(set); ppt_rows = []; ppt_tab_diff = []
     for sl in _sl_all:
         for p_ in sl['procs']: slide_procs[p_.upper()].add(sl['slide'])
         M += [f"#### 슬라이드 {sl['slide']} — {cellmd(' · '.join(sl['titles']) or '(제목 문구 없음)')}", '',
@@ -574,9 +623,15 @@ def build(out_dir, parse_sp=None, objs=None, screens=None):
         if no_arrow: M += [f"- 화살표 없이 머리 상자만 있는 프로시저: {', '.join(no_arrow)}"]
         if sl['lone_tabs']: M += [f"- 화살표에 연결되지 않은 테이블 문구: {'; '.join(cellmd(t) for t in sl['lone_tabs'])}"]
         if sl['unresolved']: M += ['- 도형에 붙지 않은 선(구역 구분선 등): ' + ' / '.join(f"{u['id']}({u['why']})" for u in sl['unresolved'])]
+        for k_, f_ in enumerate(sl['frames'], 1):  # 표 개체별(2026-11-20) · 첫 행을 머리글로 둔다(원문 그대로)
+            n_ = max(len(r) for r in f_['rows']); hd = (f_['rows'][0] + [''] * n_)[:n_]
+            is_hd = all(len(c or '') <= 20 and not RX_PROC.match((c or '').strip()) for c in hd)  # 첫 행에 프로시저 이름·긴 문구가 있으면 머리글 없는 표(10번 슬라이드)
+            gd = f_.get('group_diff') or {}
+            gd_t = ' · '.join(f"{k} {', '.join(v)}" for k, v in gd.items() if v)
+            if gd_t: ppt_tab_diff.append(['ppt_table', f"슬라이드 {sl['slide']} 표 {k_} ↔ 계획기준 표 {f_['group']} 열", '재고 I/F 표와 사업부 열의 테이블 이름 차이', gd_t])
+            cap = ' · '.join(q for q in (cellmd(f_['caption']), f"{f_['group']} 열(계획기준 표 재고확인일자 · 재고 Validation 칸과 테이블 이름으로 연결)" if f_['group'] else '', f'차이: {gd_t}' if gd_t else '') if q)
+            M += ['', f"슬라이드 안 표 {k_}/{len(sl['frames'])}(원문){' — ' + cap if cap else ''}:", '', '| ' + ' | '.join((cellmd(c) if is_hd else '') or f'칸{i + 1}' for i, c in enumerate(hd)) + ' |', '|' + '---|' * n_] + ['| ' + ' | '.join(cellmd(c) for c in (r + [''] * n_)[:n_]) + ' |' for r in f_['rows'][(1 if is_hd else 0):]]
         if sl['tables']:
-            n_ = max(len(r) for r in sl['tables'])
-            M += ['', '슬라이드 안 표(원문):', '', '| ' + ' | '.join(f'칸{i + 1}' for i in range(n_)) + ' |', '|' + '---|' * n_] + ['| ' + ' | '.join(cellmd(c) for c in (r + [''] * n_)[:n_]) + ' |' for r in sl['tables']]
             for r in sl['tables']:
                 for c in r:
                     if RX_PROC.match(c.strip()): slide_procs[c.strip().upper()].add(sl['slide'])
@@ -584,7 +639,7 @@ def build(out_dir, parse_sp=None, objs=None, screens=None):
 
     # §6 교차검증
     M += ['## 6. 교차검증 — 기존 자료 ↔ 이 저장소 분석', '']
-    cross = list(cross_v2)  # §2-1 V2 송신 규칙 대조 결과 포함
+    cross = list(cross_v2) + ppt_tab_diff  # 슬라이드 안 표끼리 차이(11-20) · §2-1 V2 송신 규칙 대조 결과 포함
     # (a) 운영 잡 ↔ DEV msdb
     inv_p = os.path.join(out_dir, 'ssp_batch_inventory.csv'); dev_jobs = set()
     if os.path.exists(inv_p):
@@ -679,10 +734,80 @@ def build(out_dir, parse_sp=None, objs=None, screens=None):
             M.append(f"| {c['slide']} | {p_} | {', '.join(need)} | {', '.join(ok_) or '-'} | {', '.join(ng_) or '-'} |")
             for t in ng_: cross.append(['cond', f"슬라이드 {c['slide']} {p_}", '진행 조건 객체 — 본문에 없음', t])
     M += ['', f'- 대조한 진행 조건 묶음 {n_cd}', '']
+    # (c4) 2026-11-20 판 8번 「SSP 각 사업부별 계획기준」 표 ↔ AS-IS SP 본문 — '참고 PRC' 행이 있는 표의 열마다 ① 그 열의 테이블 이름이 본문(깊이 3 읽기·쓰기 · 없으면 본문 문자열)에 있는지 ② PLAN_YYYYMMDD · 계획구간 시작 칸 값과 본문 날짜 변수 대입문(SET @v_plan_start_yyyymmdd · @v_data_start_yyyymmdd)
+    M += ['### 6-6. 사업부별 계획기준 표(5-1 슬라이드 8) ↔ AS-IS SP 본문', '',
+          "- 표의 「참고 PRC」 열마다 그 열에 나온 테이블 이름이 프로시저 본문의 읽기·쓰기 대상(중첩 호출 깊이 3)에 있는지, 없으면 본문 문자열에 있는지 대조. 날짜 칸은 본문의 `SET @v_plan_start_yyyymmdd`(PLAN_YYYYMMDD) · `SET @v_data_start_yyyymmdd`(계획구간 시작) 대입문을 GETDATE 기준 일수로 풀어 비교(주석 줄 제외)", '',
+          '| 사업부 열 | 참고 PRC | 표의 테이블 | 본문에 있음 | 본문에 없음 | PLAN_YYYYMMDD 표 / 본문 | 계획구간 시작 표 / 본문 |', '|---|---|---|---|---|---|---|']
+    def _off(txt):
+        m_ = re.fullmatch(r'\s*SYSDATE\s*(?:([-+])\s*(\d+))?\s*', (txt or '').split(' / ')[0])
+        return None if not m_ else (0 if not m_.group(1) else int(m_.group(2)) * (-1 if m_.group(1) == '-' else 1))
+    def _body_dates(proc):
+        bp_ = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'modules', f'dbo.{proc}.sql')
+        if not os.path.exists(bp_): return {}, ''
+        body_ = io.open(bp_, encoding='utf-8', errors='replace').read()
+        live = chr(10).join(re.sub(r'--.*$', '', ln) for ln in body_.splitlines())
+        val = {}; src_ = {}
+        for m_ in re.finditer(r'SET\s+@v_(plan_start|data_start)_yyyymmdd\s*=\s*([^;\r\n]+)', live, re.I):
+            k = m_.group(1).lower(); e = re.sub(r'\s+', ' ', m_.group(2)).strip()
+            if k in val: continue
+            if re.fullmatch(r'CONVERT\s*\(\s*\w+(\(\d+\))?\s*,\s*GETDATE\(\)\s*,\s*112\s*\)', e, re.I): v = 0
+            elif re.search(r'DATEADD\s*\(\s*D{1,2}\s*,\s*(-?\d+)\s*,\s*GETDATE\(\)\s*\)', e, re.I): v = int(re.search(r'DATEADD\s*\(\s*D{1,2}\s*,\s*(-?\d+)', e, re.I).group(1))
+            elif re.search(r'DATEADD\s*\(\s*D{1,2}\s*,\s*(-?\d+)\s*,\s*CONVERT\s*\(\s*DATETIME\s*,\s*@v_plan_start_yyyymmdd', e, re.I) and isinstance(val.get('plan_start'), int): v = val['plan_start'] + int(re.search(r'DATEADD\s*\(\s*D{1,2}\s*,\s*(-?\d+)', e, re.I).group(1))
+            elif re.fullmatch(r'@v_plan_start_yyyymmdd', e, re.I) and 'plan_start' in val: v = val['plan_start']
+            elif re.match(r'@p_', e, re.I): v = '인자 ' + e
+            else: v = '풀지 못함 ' + e
+            val[k] = v; src_[k] = e
+        return val, body_
+    def _fmt(v): return '-' if v is None else (v if isinstance(v, str) else ('SYSDATE' if v == 0 else f'SYSDATE {"-" if v < 0 else "+"} {abs(v)}'))
+    n_pb = 0; n_pb_ng = 0; _live_c = {}
+    for sl in _sl_all:
+        for f_ in sl.get('frames', []):
+            rw = {r[0].strip(): r for r in f_['rows'] if r}
+            if '참고 PRC' not in rw: continue
+            hd = f_['rows'][0]
+            for ci in range(1, len(hd)):
+                p_ = (rw['참고 PRC'][ci] if ci < len(rw['참고 PRC']) else '').strip().upper()
+                if not p_: continue
+                col = ' '.join((r[ci] if ci < len(r) else '') for k_, r in rw.items() if k_ != '참고 PRC')
+                need = [t for t in dict.fromkeys(re.findall(r'\b((?:SSP|SCM|XIF)_[A-Z0-9_]{3,})\b', col)) if not RX_PROC.match(t)]
+                al = set()
+                if parse_sp and p_ in mods:
+                    info = parse_sp(p_); al = {norm_tab(t) for t in info['reads']} | {norm_tab(t) for t in info['writes']}
+                val, body_ = _body_dates(p_)
+                # 2026-11-20 실측: 81,82 열 테이블은 같은 열의 뷰(SCM_DNM_STOCK_V · SSP_DNM_ESS_PACKER_STOCK_V) 원천이거나 호출 측(PR_SSP_PLN_SHIP_PLAN_CUTOFF 재고 Validation)에서 읽음 → 같은 열 뷰 본문 · 이 프로시저를 EXEC 하는 프로시저 본문(주석 줄 제외)까지 본다
+                def _live(nm):
+                    if nm not in _live_c:
+                        fp_ = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'modules', f'dbo.{nm}.sql')
+                        _live_c[nm] = chr(10).join(re.sub(r'--.*$', '', ln) for ln in io.open(fp_, encoding='utf-8', errors='replace').read().splitlines()) if os.path.exists(fp_) else ''
+                    return _live_c[nm]
+                extra = [(f'뷰 {v}', _live(v)) for v in need if v.endswith('_V') and v in mods]
+                callers = [c for c in sorted(mods) if c != p_ and not re.search(r'_\d{8}|\(DEL\)|_ORG|_BAK|_OLD', c) and re.search(r'\bEXEC\w*\s+(@\w+\s*=\s*)?(dbo\.)?' + p_ + r'\b', _live(c), re.I)]
+                extra += [(f'호출 측 {c}', _live(c)) for c in callers]
+                def where(t):
+                    if norm_tab(t) in al: return ''
+                    if re.search(r'\b' + t + r'\b', body_, re.I): return '(본문 문자열)'
+                    for lab, b in extra:
+                        if re.search(r'\b' + t + r'\b', b, re.I): return f'({lab})'
+                    return None
+                ok_ = [t + where(t) for t in need if where(t) is not None]
+                ng_ = [t for t in need if where(t) is None]
+                def cmp_(row_name, key):
+                    t_ = (rw.get(row_name, [''] * (ci + 1)) + [''] * (ci + 1))[ci]; o_ = _off(t_); b_ = val.get(key)
+                    if not t_: return '-'
+                    if b_ is None: verdict = '본문에 대입문 없음(미대조)'
+                    elif isinstance(b_, str): verdict = '호출 측 인자라 본문만으로 판정 불가(미확인' + (f" · 호출 측 {', '.join(callers)}" if callers else '') + ')'
+                    else: verdict = '일치' if o_ == b_ else '불일치'
+                    return f'{cellmd(t_)} / {_fmt(b_)} → {verdict}'
+                c1 = cmp_('PLAN_YYYYMMDD', 'plan_start'); c2 = cmp_('계획구간 시작', 'data_start'); n_pb += 1
+                M.append(f"| {cellmd(hd[ci])} | {p_} | {', '.join(need) or '-'} | {', '.join(ok_) or '-'} | {', '.join(ng_) or '-'} | {c1} | {c2} |")
+                for t in ng_: cross.append(['plan_basis', f"슬라이드 {sl['slide']} {hd[ci]} {p_}", '계획기준 표 테이블 — 본문에 없음', t]); n_pb_ng += 1
+                for nm_, c_ in (('PLAN_YYYYMMDD', c1), ('계획구간 시작', c2)):
+                    if c_.endswith('불일치') or '미확인' in c_ or '미대조' in c_: cross.append(['plan_basis', f"슬라이드 {sl['slide']} {hd[ci]} {p_}", f'{nm_} ' + c_.rsplit('→ ', 1)[-1], c_]); n_pb_ng += 1
+    M += ['', f'- 대조한 사업부 열 {n_pb} · 교차검증 목록에 올린 항목 {n_pb_ng}', '']
     # (d) TO-BE 객체 상태
     ssp_bl = [r for r in bl.values() if r['module'] == 'SSP']
     inval = sorted(r['procedure'] for r in ssp_bl if (r['dev_ora_1028'] or '').upper() not in ('VALID', ''))
-    M += ['### 6-6. TO-BE 객체 상태 — 배치 목록(개발서버 Oracle 10-28 확인분)', '',
+    M += ['### 6-7. TO-BE 객체 상태 — 배치 목록(개발서버 Oracle 10-28 확인분)', '',
           f"- SSP 프로시저 {len(ssp_bl)} · VALID {sum(1 for r in ssp_bl if (r['dev_ora_1028'] or '').upper() == 'VALID')} · VALID 아님 {len(inval)} · I/F 수신(R) {sum(1 for r in ssp_bl if r['if'] == 'R')} · 송신(S) {sum(1 for r in ssp_bl if r['if'] == 'S')} · 잡 관련 {sum(1 for r in ssp_bl if r['job_related'] == 'Y')} · UI 연계 {sum(1 for r in ssp_bl if r['ui_linked'] == 'Y')}",
           f"- VALID 아님: {', '.join(inval) or '없음'}", '- 통합테스트 「수정 필요사항」 1번(11-09 접수)의 컴파일 오류 8건과는 확인 시점이 달라 목록이 다를 수 있음 — 두 목록을 그대로 병기', '']
     with io.open(os.path.join(out_dir, 'ssp_ref_crosscheck.csv'), 'w', encoding='utf-8-sig', newline='') as f:

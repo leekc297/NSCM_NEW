@@ -14,11 +14,18 @@ import * as net from 'node:net';
 import { spawn } from 'node:child_process';
 import { applyGridMutations } from './mutate';  // CheckList 자기검증(변이 시험, 2026-10-28) — CL_MUTATE 없으면 무동작
 import { waitLangFree, pendingLangRestore, langRestored, acquireLang, releaseLang } from './langlock';
+import { noteLogin, waitLangHolder } from './langacct';  // 2026-11-25 T530 계정별 언어 시험 잠금
 import { retryInsertWithRow } from './insertpre';  // 2026-11-12 Y01(T259)  // 2026-11-10 T189 — 다른 실행의 언어 전환(서버 사용자 설정) 중에는 화면을 열지 않는다
 
 export const CFG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'e2e.config.json'), 'utf8').replace(/^﻿/, ''));
 export const FE: string = process.env.E2E_FE || CFG.feUrl;
 export const BE: string = process.env.E2E_BE || CFG.beUrl;
+// 2026-11-25 D2(플랜 '검사 대상 중복 제거'): 읽기 시험은 같은 워커 안에서 앞 시험의 로그인 세션(쿠키, localStorage)을 다시 쓴다.
+//   SCP0005 1차 측정(_test_timing.jsonl parts, 821개 시험): 로그인 1회 = goto1 1.02s + post 0.21s + goto2 0.83s + idle 0.76s. 재사용 때는 세션 확인(/user/session) 뒤 FE 1회만 연다.
+//   대상 = 읽기 단계(E2E_PHASE=read) 또는 E2E_SESSION_REUSE=1. 끄기 = E2E_SESSION_REUSE=0.
+//   버림 조건: 세션 확인의 userId 가 다름·HTTP 실패, 같은 브라우저에서 다른 계정 로그인, 세션 언어·시간대 변경(/user/session/lang-cd, tmz-cd), 로그아웃 호출
+const SESS = new Map<string, { cookies: Parameters<import('@playwright/test').BrowserContext['addCookies']>[0]; origins: { origin: string; localStorage: { name: string; value: string }[] }[] }>();
+export const sessionReuseOn = (): boolean => process.env.E2E_SESSION_REUSE !== '0' && (process.env.E2E_PHASE === 'read' || process.env.E2E_SESSION_REUSE === '1');
 /** 2026-11-12 T256: BE 포트가 열려 있나(TCP 연결 2초) */
 export function bePortOpen(): Promise<boolean> {
   return new Promise(res => { let u: URL; try { u = new URL(BE); } catch { res(true); return; } const s = net.connect({ host: u.hostname, port: Number(u.port || (u.protocol === 'https:' ? 443 : 80)) });
@@ -138,7 +145,12 @@ export class Nscm {
    *  /user/login 은 useSessionStore.ts 가 실제로 쓰는 엔드포인트라 FE 쿠키 동작(SameSite/credentials)까지 그대로 재현된다. 실패 시에만 dev-login 으로 한 번 더 시도.
    */
   async loginAs(userId: string) {
+    await waitLangHolder(userId);  // 2026-11-25 T530: 다른 실행이 이 계정 언어를 바꾸는 중이면 기다림
+    const prevSess = this.sessFrom;
     this.curUser = userId;
+    if (await this.reuseSession(userId)) return;
+    if (prevSess && prevSess !== userId) SESS.delete(prevSess);  // D2: 같은 브라우저에서 다른 계정 로그인 → 앞 계정 서버 세션이 바뀌었을 수 있어 버림
+    this.sessFrom = '';
     // FE 는 BE 를 직접 부르지 않고 vite 프록시(FE/api → BE)를 거친다(axios baseURL '/api') → 세션 쿠키는 FE origin 에 있어야 한다.
     // BE(localhost:8080) 에 직접 로그인하면 쿠키가 다른 호스트에 남아 FE 는 로그인 화면을 보여준다(2026-10-20 실측 스크린샷).
     const api = `${FE}${CFG.feApiPrefix ?? '/api'}`;
@@ -168,6 +180,7 @@ export class Nscm {
       const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
       if (!res || res.status() >= 400) throw new Error(`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
     }
+    noteLogin(userId);  // 2026-11-25 T530: 지금 쓰는 계정 기록(다른 실행의 계정별 언어 시험 판단)
     this.tp('login.retry', t0); t0 = Date.now();
     await this.page.goto(FE, { waitUntil: 'domcontentloaded' });
     this.tp('login.goto2', t0); t0 = Date.now();
@@ -185,6 +198,39 @@ export class Nscm {
     if (await loginBtn.isVisible({ timeout: 1_000 }).catch(() => false)) throw new Error(`로그인 후에도 FE 로그인 화면이 남아 있음 — ${api}/user/session 확인`);
     await this.dismissNotices();
     this.tp('login.notice', t0);
+    if (sessionReuseOn()) { try { SESS.set(userId, await this.page.context().storageState()); this.sessFrom = userId; this.watchSession(); } catch { /* 저장 실패 = 다음 시험도 종전 로그인 */ } }
+  }
+
+  /** D2 세션 재사용 원천 계정(이 브라우저 컨텍스트에 그 계정 쿠키가 있음) */
+  private sessFrom = '';
+  private sessWatched = false;
+  /** D2: 세션 언어·시간대 변경, 로그아웃 요청이 나가면 그 계정 보관 세션을 버린다(다음 시험이 바뀐 서버 세션을 물려받지 않게) */
+  private watchSession() {
+    if (this.sessWatched) return; this.sessWatched = true;
+    this.page.on('request', rq => { if (/\/user\/(session\/(lang-cd|tmz-cd)|logout)\b/i.test(rq.url()) && this.sessFrom) SESS.delete(this.sessFrom); });
+  }
+  /** D2: 같은 워커의 앞 시험 로그인 세션을 다시 쓴다. 세션 확인 실패면 false(호출부가 종전 로그인) */
+  private async reuseSession(userId: string): Promise<boolean> {
+    const st = sessionReuseOn() ? SESS.get(userId) : undefined;
+    if (!st || this.sessFrom) return false;   // 이 시험에서 이미 로그인한 뒤의 재로그인(계정 순회, 재시도)은 종전 방식
+    const t0 = Date.now();
+    try {
+      const ctx = this.page.context();
+      await ctx.addCookies(st.cookies);
+      const api = `${FE}${CFG.feApiPrefix ?? '/api'}`;
+      const r = await this.page.request.get(`${api}/user/session`, { timeout: 10_000 });
+      const j = r.ok() ? await r.json().catch(() => null) as { data?: { userId?: string } } | null : null;
+      if (!j || String(j.data?.userId || '').toUpperCase() !== userId.toUpperCase()) { SESS.delete(userId); await ctx.clearCookies(); this.tp('login.reuseMiss', t0); return false; }
+      const ls = st.origins.filter(o => o.localStorage.length);
+      if (ls.length) await ctx.addInitScript((os: { origin: string; localStorage: { name: string; value: string }[] }[]) => { const o = os.find(x => x.origin === location.origin); if (o) for (const kv of o.localStorage) { try { if (localStorage.getItem(kv.name) === null) localStorage.setItem(kv.name, kv.value); } catch { /* 저장소 막힘 */ } } }, ls);
+      await this.page.goto(FE, { waitUntil: 'domcontentloaded' });
+      const loginBtn = this.page.getByRole('button', { name: /^(Login|로그인)$/i }).first();
+      if (await loginBtn.isVisible({ timeout: 1_500 }).catch(() => false)) { SESS.delete(userId); await ctx.clearCookies(); this.tp('login.reuseMiss', t0); return false; }
+      noteLogin(userId);
+      this.sessFrom = userId; this.watchSession();
+      this.tp('login.reuse', t0);
+      return true;
+    } catch { SESS.delete(userId); this.tp('login.reuseMiss', t0); return false; }
   }
 
   /**
@@ -293,6 +339,7 @@ export class Nscm {
   async openScreen(menuId: string): Promise<{ authorized: boolean; notFound: boolean; beDown?: boolean }> {
     this.calls = []; this.searchExpanded = false; this.consoleErrors = [];
     this.curMenu = menuId;
+    (this as unknown as { curSheet?: string }).curSheet = undefined;  // 2026-11-26 화면을 다시 열면 첫 시트(측정 맥락 mctx.sheet — grid_absent_guard 가 시트 구분에 씀)
     this.userConds = {}; this.userCondsApplied = false; this.userCondsNote = '';
     try { const uj = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'users.json'), 'utf8').replace(/^\uFEFF/, '')); const sc = (uj.screens || {})[menuId.toUpperCase()] || {};
       // condsValidUntil(ISO) 이 지났으면 무시 — '이번만 한정' 조건(2026-10-31 사용자: SCP0111 Plan Date 20260907 은 이번 실행만)
@@ -665,7 +712,19 @@ export class Nscm {
     const cell = await this.gridCell(r, c, i);
     const dlg0 = await this.page.locator('[role="dialog"]:visible').count().catch(() => 0);  // T350: 더블클릭 전 대화상자 수
     try { await cell.dblclick({ timeout: 5_000 }); await this.page.waitForTimeout(300); await this.dismissDblPopup(() => cell.click({ timeout: 3_000 }), dlg0); }
-    catch { await cell.scrollIntoViewIfNeeded({ timeout: 3_000 }).catch(() => undefined); await cell.click({ timeout: 5_000 }); await this.page.keyboard.press('F2'); } // 재조회 직후 더블클릭이 안정화 대기에 걸리면 클릭 + F2 로 편집기 열기
+    catch {
+      // T545(2026-11-25 SCP0005 F1 2행): 고정 열(wj-frozen) 칸은 본문 칸 위에 고정 복제 층(wj-frozen-clone)·머리글(tl·ch)이 덮어 dblclick·click 이 5초 시간 초과로 끝났다
+      //   (trace 20261125_010112 crud.ts:291 setCell → 'wj-frozen-clone subtree intercepts pointer events' · saveCalls=0). 클릭 대신 그리드 API 로 그 칸(hitTest 요소)을 보이게·선택하고 F2 로 편집기를 연다
+      const viaApi = await cell.evaluate((el: Element) => {
+        type Ctl = { hitTest: (e: Element) => { row: number; col: number } | null; scrollIntoView: (r: number, c: number) => void; select: (r: number, c: number) => void; focus: () => void };
+        const host = el.closest('.wj-flexgrid') as unknown as Record<string, unknown> | null; const ctl = host ? host['$WJ-CTRL'] as Ctl | undefined : undefined;
+        if (!ctl || typeof ctl.hitTest !== 'function') return false;
+        const h = ctl.hitTest(el); if (!h || h.row < 0 || h.col < 0) return false;
+        ctl.scrollIntoView(h.row, h.col); ctl.select(h.row, h.col); ctl.focus(); return true;
+      }, undefined, { timeout: 3_000 }).catch(() => false);
+      if (viaApi) { await this.page.waitForTimeout(250); await this.page.keyboard.press('F2'); }
+      else { await cell.scrollIntoViewIfNeeded({ timeout: 3_000 }).catch(() => undefined); await cell.click({ timeout: 5_000 }); await this.page.keyboard.press('F2'); } // 재조회 직후 더블클릭이 안정화 대기에 걸리면 클릭 + F2 로 편집기 열기
+    }
     await this.page.keyboard.press('Control+A'); if (value === '') await this.page.keyboard.press('Delete'); else await this.page.keyboard.type(value); await this.page.keyboard.press('Enter');  // 2026-11-06 빈 값 = 지우기(빈 칸 왕복 원복)
   }
   /** 화면이 편집 가능으로 표시한 셀(.wj-cell-editable) 목록 — {row, col, text}. 컬럼 정의 isReadOnly 가 전부 false 인 화면(SCP0096)에서는 이것이 유일한 편집 가능 신호 */
@@ -901,9 +960,16 @@ export class Nscm {
     // quickBlock: 취소 버튼 없는 알림 = 저장 전 차단 — 응답을 기다리지 않는다(저장 구간을 가짜 응답으로 끊는 시험 전용)
     // T371: 저장 전 검증 호출(SAVE 류가 아닌 call-proc · 예 SSP0014 USER_CHECK)만 끝나고 취소 버튼 없는 알림이 뜨면 저장 요청은 나가지 않는다 — SAVE 응답을 60s 기다리지 않고 알림 문구를 돌려준다
     const SAVE_RE = /SAVE|INS|UPD|DEL/i; let preCheckMsg = lateAlert && !lateCancel && this.calls.slice(before).some(c => !SAVE_RE.test(c.btn)) && !this.calls.slice(before).some(c => SAVE_RE.test(c.btn)) ? lateAlert : '';
+    // 2026-11-25 T611(SCP0005 crud 1회 202초 중 110초 · 17:49 실측 '마커 저장 응답: call-proc 없음 알림=[Working Days] 값은 필수 입력 항목입니다.'):
+    //   Save 직후 화면 자체 검증 알림(취소 단추 없음 · 확인 질문 아님)은 위 closeAlert 가 이미 닫아 아래 응답 대기가 알림을 못 보고 60초를 다 썼다(저장 2회 = 110초).
+    //   요청이 하나도 없고 1.5초 더 기다려도 요청이 시작되지 않으면 저장 전 차단으로 끝낸다(결과 문구는 종전과 같은 그 알림)
+    if (!preCheckMsg && preAlert && !preCancel && !/[?？]|하시겠|Would you|Do you|Are you/i.test(preAlert) && !this.calls.slice(before).length) {
+      await this.page.waitForTimeout(1_500);
+      if (!this.calls.slice(before).length) preCheckMsg = preAlert;
+    }
     if (!(opts.quickBlock && preAlert && !preCancel) && !preCheckMsg) {
       let stop = false; let seenAt = 0;
-      const poll = (async () => { const end = Date.now() + (opts.timeout ?? 60_000); while (!stop && Date.now() < end) { await this.page.waitForTimeout(400).catch(() => undefined); const cs = this.calls.slice(before); if (cs.some(c => SAVE_RE.test(c.btn))) return; if (!cs.length || cs.some(c => !c.status)) continue; const a = await this.alertText().catch(() => ''); if (!a) continue; const cx = await this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last().getByRole('button', { name: /^(취소|Cancel|No|아니오)$/i }).first().isVisible().catch(() => false); if (!cx) { preCheckMsg = a; return; } /* 2026-11-20 T378(SSP0014 라운드 4 ES-de56f621 '[60s] 저장 응답 USER_CHECK:200 알림=…'): 알림 창에 취소 모양 단추가 있어 60초를 기다렸다 → 확인 질문(?·하시겠·Would you·Do you)이 아닌 알림이 2초 넘게 그대로면 저장 전 차단 */ if (!/[?？]|하시겠|Would you|Do you|Are you/i.test(a)) { seenAt = seenAt || Date.now(); if (Date.now() - seenAt >= 2_000) { preCheckMsg = a; return; } } else seenAt = 0; } })();
+      const poll = (async () => { const end = Date.now() + (opts.timeout ?? 60_000); while (!stop && Date.now() < end) { await this.page.waitForTimeout(400).catch(() => undefined); const cs = this.calls.slice(before); if (cs.some(c => SAVE_RE.test(c.btn))) return; if (cs.some(c => !c.status)) continue; /* 2026-11-25 T611(SCP0005 crud 1회 206초 중 116초): 화면이 저장 전 자체 검증 알림('[Working Days] 값은 필수 입력 항목입니다')으로 막으면 요청이 0건이라 60초를 다 기다렸다 → 요청 0건이어도 확인 질문이 아닌 알림이 2초 넘게 그대로면 저장 전 차단 */ if (!cs.length) { const a0 = (await this.alertText().catch(() => '')) || toast; /* 토스트(MuiSnackbar)로 뜬 검증 문구도 같은 차단(SCP0005 crud 17:39 실측: 대화상자 알림 없이 토스트만 → 112초) */ if (a0 && !/[?？]|하시겠|Would you|Do you|Are you/i.test(a0)) { seenAt = seenAt || Date.now(); if (Date.now() - seenAt >= 2_000) { preCheckMsg = a0; return; } } else seenAt = 0; continue; } const a = await this.alertText().catch(() => ''); if (!a) continue; const cx = await this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last().getByRole('button', { name: /^(취소|Cancel|No|아니오)$/i }).first().isVisible().catch(() => false); if (!cx) { preCheckMsg = a; return; } /* 2026-11-20 T378(SSP0014 라운드 4 ES-de56f621 '[60s] 저장 응답 USER_CHECK:200 알림=…'): 알림 창에 취소 모양 단추가 있어 60초를 기다렸다 → 확인 질문(?·하시겠·Would you·Do you)이 아닌 알림이 2초 넘게 그대로면 저장 전 차단 */ if (!/[?？]|하시겠|Would you|Do you|Are you/i.test(a)) { seenAt = seenAt || Date.now(); if (Date.now() - seenAt >= 2_000) { preCheckMsg = a; return; } } else seenAt = 0; } })();
       await Promise.race([waitSave, poll]); stop = true;
     }
     await this.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined);

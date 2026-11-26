@@ -1,0 +1,20 @@
+PASS orchestra(ko): 스크립트 1개 구문 
+PASS orchestra(ko): 같은 이름 함수 선언 없음 
+PASS orchestra: 오류 보고 코드 포함 
+PASS orchestra: 자가진단 · 이력 탭 함수 
+PASS jobs(ko): 스크립트 1개 구문 
+PASS jobs(ko): 같은 이름 함수 선언 없음 
+PASS jobs: 오류 보고 코드 포함 
+PASS workbench(ko): 스크립트 1개 구문 
+PASS workbench(ko): 같은 이름 함수 선언 없음 
+PASS orchestra(en): 스크립트 1개 구문 
+PASS orchestra(en): 같은 이름 함수 선언 없음 
+PASS jobs(en): 스크립트 1개 구문 
+PASS jobs(en): 같은 이름 함수 선언 없음 
+PASS workbench(en): 스크립트 1개 구문 
+PASS workbench(en): 같은 이름 함수 선언 없음 
+PASS orchestra: 탭 순서(Overview · Events · Fixes · Health · History · Agent · Dictionary · Logs) · 기능 탭 없음(2026-11-20 Dictionary 추가) board,inc,prop,self,hist,agent,dict,log
+PASS orchestra: Log 하위 탭 BE · FE · Task Log 
+PASS orchestra: 탭마다 패널 있음 
+PASS orchestra: 스크립트가 찾는 id 가 HTML 에 있음 
+ALL PASS

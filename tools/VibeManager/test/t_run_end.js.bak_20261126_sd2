@@ -1,0 +1,146 @@
+// 개선안 20261122000646_SELF: 실행 끝 기록 단일화(workbench.endRun) 시험. 중지 길마다 user.stop 1줄(runId, by) · chain.end stopped, stopBy ·
+//   감시기 R11, R14, R5, R1 사건 0건 · digest stoppedBy 분류를 events 줄 재현으로 본다.
+//   사례: ① 창 다시 로드(abortRunningChains) ② 작업 목록 중지(실제 ChainRunner.stop) ③ 작업 번호 없는 체인 종료 ④ 중지 뒤 단계 시작(R14)
+//         ⑤ 재개 체인과 옛 중지 기록 ⑥ 창 닫기 ⑦ stopInst ⑧ by 없이 부름(errlog) ⑨ VS Code 종료 때 두 번 부름(job-runner.dispose 뒤 abortRunningChains) ⑩ 중지 단추
+//   사용: node test/t_run_end.js <VibeManager 폴더>
+const Module = require('module'); const path = require('path'); const fs = require('fs'); const os = require('os');
+const vs = new Proxy({}, { get: (t, k) => {
+  if (k === 'window') return new Proxy({}, { get: () => () => Promise.resolve(undefined) });
+  if (k === 'commands') return { executeCommand: () => Promise.resolve(), registerCommand: () => ({ dispose() { } }) };
+  if (k === 'workspace') return { getConfiguration: () => ({ get: () => undefined }), workspaceFolders: [] };
+  if (k === 'Uri') return { file: f => ({ fsPath: f }), parse: s => s };
+  if (k === 'ViewColumn') return { Active: 1, Beside: 2 };
+  return function () { };
+} });
+const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'runend-')); const vibeDir = path.join(root, '.vibe');
+const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
+W('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_FE', llmReview: false, orch: { agentEnabled: false } }));
+W('.vibe/quick.json', JSON.stringify({ groups: [] }));
+const slowJs = W('tools/t/slow.js', "setTimeout(()=>process.exit(0),8000);console.log('slow start');");
+const okJs = W('tools/t/ok.js', "console.log('[INFO] ok');");
+const p = { root, vibeDir, extDir: dir, genDir: path.join(root, 'Doc', 'gen'), outDir: path.join(root, 'Doc', 'asisfacts'), tobeDir: path.join(root, 'nscm-fe'), promptsDir: path.join(root, 'prompts'), node: 'node', python: 'python', powershell: 'powershell', claude: 'claude-없음', claudeModel: '', permissionMode: 'bypassPermissions', language: 'ko' };
+const tasks = { 'T.slow': { id: 'T.slow', title: '오래 걸리는 작업', kind: 'node', script: slowJs, args: [], cwd: root }, 'T.ok': { id: 'T.ok', title: '산출물', kind: 'node', script: okJs, args: [], cwd: root } };
+const api = {
+  ctx: { workspaceState: { get: () => undefined, update: () => { } }, extensionPath: dir },
+  paths: () => p, loadSteps: () => ({}), findTask: id => tasks[id] || null,
+  collectInputs: async (task, preset) => Object.assign({}, p, { inputs: Object.assign({}, preset || {}) }),
+  subst: (text, vars) => String(text == null ? '' : text).replace(/\$\{(input:)?([A-Za-z0-9_]+)\}/g, (m, isIn, n) => isIn ? (vars.inputs && vars.inputs[n] != null ? vars.inputs[n] : '') : (vars[n] != null ? String(vars[n]) : m)),
+  buildArgs: (task, vars) => (task.args || []).map(a => api.subst(a, vars)).filter(x => x !== ''),
+  openPath: () => { }, pageDirOf: () => '', menuSections: () => [], claudeEnv: () => ({}),
+  runTaskById: async () => 0, record: () => { }, afterTask: () => { },
+};
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+const orchEv = require(path.join(dir, 'orch-events')); orchEv.init(vibeDir);
+const st = require(path.join(dir, 'orch-state')); const w = require(path.join(dir, 'orch-watch'));
+w.init(p, { noReloadSweep: true }); const incs = []; w.on((inc, isNew) => { if (isNew) incs.push(inc); }); // state.init 이 orchEv 구독 = 이후 사건은 감시기까지 간다
+const wbm = require(path.join(dir, 'workbench'));
+const { ChainRunner } = require(path.join(dir, 'chain-runner'));
+const readEv = () => { try { return fs.readFileSync(orchEv.file(), 'utf8').split(/\r?\n/).filter(Boolean).map(l => JSON.parse(l)); } catch { return []; } };
+const stopsOf = runId => readEv().filter(e => e.type === 'user.stop' && e.runId === runId);
+const endsOf = runId => readEv().filter(e => e.type === 'chain.end' && e.runId === runId);
+// 가짜 창(WB): stopAll = 중지 표시만. 체인 시작·끝은 workbench._runChain 과 같은 사건·필드로 남긴다
+let seq = 0;
+const mkWb = (inst, screen, job) => ({ inst, titleId: screen, jobId: job || '', api, procs: new Map(), stopReq: 0, stopBy: '', stopAll(o) { this.stopReq = Date.now(); this.lastStop = o || {}; } });
+const startChain = (wb, chain) => { const t0 = Date.now(); const runId = `${wb.titleId}_${t0}_${++seq}`; const evCh = { wb: wb.inst, screen: wb.titleId, chain, chainLabel: chain, runId, job: wb.jobId || '' }; orchEv.emit('chain.start', Object.assign({ steps: 2, shown: 2, cond: 0, plan: [] }, evCh)); const lv = { p, evCh, t0, wb }; wbm._liveChains.set(runId, lv); wb._lv = lv; return lv; };
+// workbench.js 체인 끝(정상 경로)과 같은 필드: stopped = 중지 표시 또는 endRun 주체 · stopBy = lvRef.stopBy
+const endChain = lv => { wbm._liveChains.delete(lv.evCh.runId); orchEv.emit('chain.end', Object.assign({ ok: false, failNo: 1, ms_run: Date.now() - lv.t0, okN: 0, repairs: 0, hold: 0, claudeRan: 0, claudeSkipped: 1, scriptRan: 1, rows: [], md: '', stopped: !!lv.wb.stopReq || !!lv.stopBy, stopBy: lv.stopBy || (lv.wb.stopReq ? lv.wb.stopBy || '' : '') }, lv.evCh)); };
+const one = (name, runId, by, why) => { const s = stopsOf(runId); chk(`${name}: user.stop 1줄 · runId · by '${by}'`, s.length === 1 && s[0].runId === runId && s[0].by === by && (why == null || s[0].why === why), JSON.stringify(s.map(x => ({ by: x.by, why: x.why, runId: x.runId })))); };
+const endStopped = (name, runId, by) => { const e = endsOf(runId); chk(`${name}: chain.end 1건 stopped · stopBy '${by}'`, e.length === 1 && e[0].stopped === true && e[0].stopBy === by, JSON.stringify(e.map(x => ({ stopped: x.stopped, stopBy: x.stopBy, aborted: x.aborted })))); };
+
+(async () => {
+  // ① 창 다시 로드: abortRunningChains = endRun(by 'VS Code 종료', sync) + chain.end(aborted, stopped, stopBy)
+  { const wb = mkWb(3, 'TST0001', ''); const lv = startChain(wb, 'c_reload');
+    wbm.abortRunningChains('VM 창 종료로 중단');
+    one('① 창 다시 로드', lv.evCh.runId, 'VS Code 종료', 'vscode.dispose'); endStopped('① 창 다시 로드', lv.evCh.runId, 'VS Code 종료');
+    chk('① sync 종료 요청 · 중지 표시', wb.lastStop && wb.lastStop.sync === true && wb.lastStop.logged === true && wb.stopReq > 0, JSON.stringify(wb.lastStop));
+    chk('① chain.end aborted · user.stop 이 앞', endsOf(lv.evCh.runId)[0].aborted === true && readEv().findIndex(e => e.type === 'user.stop' && e.runId === lv.evCh.runId) < readEv().findIndex(e => e.type === 'chain.end' && e.runId === lv.evCh.runId)); }
+  // ② 작업 목록 중지: 실제 ChainRunner(창 없는 실행기) 체인을 job-runner.stop 과 같은 인자로 멈춤
+  { const r = new ChainRunner(api, { id: 'tst0002', jobId: 'J2', name: 'J2:TST0002', autoAnswer: false, noGate: true, onLog: () => { }, onStep: () => { }, onNote: () => { } });
+    const chain = { kind: 'chain', label: '작업 목록 중지 시험', chainId: 'c_job', steps: [{ task: 'T.slow', title: '1. 오래 걸림' }, { task: 'T.ok', title: '2. 다음' }] };
+    const pr = r.run(chain); await new Promise(x => setTimeout(x, 1500)); r.stop({ by: '작업 목록 중지', why: 'job.stop' }); const a = await pr;
+    const start = readEv().find(e => e.type === 'chain.start' && e.chain === 'c_job'); const runId = start && start.runId;
+    chk('② 체인 CANCEL', a.status === 'CANCEL', a.status);
+    one('② 작업 목록 중지', runId, '작업 목록 중지', 'job.stop'); endStopped('② 작업 목록 중지', runId, '작업 목록 중지');
+    chk('② user.stop 에 job, wb', (stopsOf(runId)[0] || {}).job === 'J2' && (stopsOf(runId)[0] || {}).wb === 'J2:TST0002', JSON.stringify(stopsOf(runId)[0]));
+    chk('② 프로세스 끝 줄에서 user.stop 을 다시 남기지 않음(procId 줄 0)', !readEv().some(e => e.type === 'user.stop' && e.procId && e.screen === 'TST0002'));
+    const pe = readEv().filter(e => e.type === 'proc.end' && e.screen === 'TST0002');
+    chk('② proc.end stopped · runId', pe.length === 1 && pe[0].stopped === true && pe[0].runId === runId, JSON.stringify(pe.map(x => ({ stopped: x.stopped, runId: x.runId, exit: x.exit }))));
+    chk('② 중지 뒤 2단계 시작 없음', !readEv().some(e => e.type === 'step.start' && e.runId === runId && e.no > 1));
+    r.dispose(); }
+  // ③ 작업 번호 없는 체인 종료(Workbench 창 체인 · job '')
+  { const wb = mkWb(4, 'TST0003', ''); const lv = startChain(wb, 'c_nojob');
+    wbm.abortRunningChains('VM 창 종료로 중단');
+    one('③ 작업 번호 없는 체인', lv.evCh.runId, 'VS Code 종료'); endStopped('③ 작업 번호 없는 체인', lv.evCh.runId, 'VS Code 종료');
+    chk('③ user.stop job 빈 값 · wb 4', stopsOf(lv.evCh.runId)[0].job === '' && stopsOf(lv.evCh.runId)[0].wb === 4); }
+  // ④ 중지 뒤 단계 시작 = R14(같은 runId) · 다른 runId 의 단계는 R14 아님
+  { const wb = mkWb('J4:TST0004', 'TST0004', 'J4'); const lv = startChain(wb, 'c_leak'); const before = incs.length;
+    wbm.endRun(lv.evCh.runId, { by: '작업 목록 중지', why: 'job.stop' });
+    one('④ 중지 뒤 단계 시작', lv.evCh.runId, '작업 목록 중지');
+    chk('④ 감시기 stoppedRuns 에 runId', w.runStopped({ runId: lv.evCh.runId }));
+    orchEv.emit('step.start', { wb: wb.inst, screen: 'TST0004', no: 2, name: '2. 다음 단계', runId: `${lv.evCh.runId}_다른체인` });
+    chk('④ 다른 runId 단계 = R14 없음', !incs.slice(before).some(x => x.rule === 'R14'));
+    orchEv.emit('step.start', { wb: wb.inst, screen: 'TST0004', no: 2, name: '2. 다음 단계', runId: lv.evCh.runId });
+    const r14 = incs.slice(before).filter(x => x.rule === 'R14');
+    chk('④ 같은 runId 단계 시작 = R14 1건 · 근거 runId · by', r14.length === 1 && r14[0].evidence.runId === lv.evCh.runId && r14[0].evidence.stopBy === '작업 목록 중지', JSON.stringify(r14.map(x => x.evidence)));
+    endChain(lv); w.update(r14[0] && r14[0].id, { status: 'resolved' }); }
+  // ⑤ 재개 체인과 옛 중지 기록: 옛 runId 의 중지 줄 뒤 재개 체인(새 runId) 단계 = R14 없음
+  { const wb = mkWb('J5:TST0005', 'TST0005', 'J5'); const oldLv = startChain(wb, 'c_resume'); wbm.endRun(oldLv.evCh.runId, { by: '작업 목록 중지', why: 'job.stop' }); endChain(oldLv);
+    const before = incs.length; const lv = startChain(wb, 'c_resume'); wb.stopReq = 0; wb.stopBy = '';
+    orchEv.emit('user.stop', { wb: wb.inst, screen: 'TST0005', job: 'J5', runId: oldLv.evCh.runId, by: '작업 목록 중지', why: 'job.stop' }); // 다시 읽힌 옛 중지 줄
+    orchEv.emit('step.start', { wb: wb.inst, screen: 'TST0005', no: 2, name: '2. 재개 단계', runId: lv.evCh.runId });
+    chk('⑤ 옛 runId 중지 줄 뒤 재개 체인 단계 = R14 없음', !incs.slice(before).some(x => x.rule === 'R14'), JSON.stringify(incs.slice(before).map(x => [x.rule, x.title])));
+    chk('⑤ 재개 체인 runId 는 중지 아님', !w.runStopped({ runId: lv.evCh.runId }));
+    wbm._liveChains.delete(lv.evCh.runId); orchEv.emit('chain.end', Object.assign({ ok: true, failNo: null, ms_run: 5, okN: 2, repairs: 0, hold: 0, claudeRan: 1, claudeSkipped: 0, scriptRan: 1, rows: [], md: '', stopped: false, stopBy: '' }, lv.evCh)); }
+  // ⑥ 창 닫기(panel.onDidDispose)
+  { const wb = mkWb(6, 'TST0006', ''); const lv = startChain(wb, 'c_close');
+    wbm.endRun(wbm.runIdOf(wb), { wb, by: '창 닫기', why: 'panel.dispose' }); endChain(lv);
+    chk('⑥ runIdOf = 그 창 체인', stopsOf(lv.evCh.runId).length === 1);
+    one('⑥ 창 닫기', lv.evCh.runId, '창 닫기', 'panel.dispose'); endStopped('⑥ 창 닫기', lv.evCh.runId, '창 닫기'); }
+  // ⑦ stopInst(VMO 자가 복구가 창 번호로 멈춤)
+  { const wb = mkWb(7, 'TST0007', ''); const lv = startChain(wb, 'c_inst'); wbm._mirror.panels().add(wb);
+    chk('⑦ stopInst 반환 true', wbm.stopInst(7, 'VMO 자가 복구') === true); endChain(lv); wbm._mirror.panels().delete(wb);
+    one('⑦ stopInst', lv.evCh.runId, 'VMO 자가 복구', 'stopInst'); endStopped('⑦ stopInst', lv.evCh.runId, 'VMO 자가 복구'); }
+  // ⑧ by 없이 부름 = errlog 1줄 + by '미지정'('중지 단추' 기본값 없음)
+  { const wb = mkWb(8, 'TST0008', ''); const lv = startChain(wb, 'c_noby'); wbm._mirror.panels().add(wb);
+    wbm.stopInst(8); endChain(lv); wbm._mirror.panels().delete(wb);
+    one('⑧ by 없음', lv.evCh.runId, '미지정');
+    let errs = []; try { errs = fs.readFileSync(path.join(vibeDir, 'orch', 'vm_errors.jsonl'), 'utf8').split(/\r?\n/).filter(Boolean).map(l => JSON.parse(l)); } catch { }
+    chk('⑧ errlog workbench.endRun 1줄', errs.filter(e => e.mod === 'workbench' && e.fn === 'endRun' && String(e.msg || '').includes(lv.evCh.runId)).length === 1, JSON.stringify(errs.slice(-2)));
+    chk('⑧ \'중지 단추\' 로 남지 않음', !stopsOf(lv.evCh.runId).some(s => s.by === '중지 단추')); }
+  // ⑨ VS Code 종료: job-runner.dispose(ChainRunner.stop sync) 뒤 abortRunningChains = user.stop 1줄 · chain.end 1건
+  { const wb = mkWb('J9:TST0009', 'TST0009', 'J9'); const lv = startChain(wb, 'c_double');
+    wbm.endRun(wbm.runIdOf(wb), { wb, by: 'VS Code 종료', why: 'vscode.dispose', sync: true, job: 'J9' });
+    wbm.abortRunningChains('VM 창 종료로 중단');
+    one('⑨ 두 번 부름', lv.evCh.runId, 'VS Code 종료', 'vscode.dispose'); endStopped('⑨ 두 번 부름', lv.evCh.runId, 'VS Code 종료');
+    chk('⑨ 두 번째 부름도 종료 처리 줄 생략 표시(logged)', wb.lastStop.logged === true && wb.lastStop.sync === true, JSON.stringify(wb.lastStop)); }
+  // ⑩ 중지 단추(Workbench 웹뷰 'stop')
+  { const wb = mkWb(10, 'TST0010', ''); const lv = startChain(wb, 'c_button');
+    wbm.endRun(wbm.runIdOf(wb), { wb, by: '중지 단추', why: 'button' }); endChain(lv);
+    one('⑩ 중지 단추', lv.evCh.runId, '중지 단추', 'button'); endStopped('⑩ 중지 단추', lv.evCh.runId, '중지 단추'); }
+  // 체인 없는 창 중지 = runId '' 1줄(종전 필드 유지)
+  { const wb = mkWb(11, 'TST0011', ''); wbm.endRun(wbm.runIdOf(wb), { wb, by: '중지 단추', why: 'button' });
+    const s = readEv().filter(e => e.type === 'user.stop' && e.wb === 11);
+    chk('체인 없는 창 중지 = user.stop 1줄 runId 빈 값', s.length === 1 && s[0].runId === '' && s[0].by === '중지 단추', JSON.stringify(s)); }
+
+  // 감시기: 중지 길 전부 R11, R5, R1, R2 사건 0건 · R14 는 ④ 1건만
+  await new Promise(x => setTimeout(x, 300));
+  const gone = st.sweep().filter(g => g.what === 'chain' && /^TST/.test(g.screen || ''));
+  chk('R5 대상(끝 기록 없이 남은 체인) 0건', gone.length === 0 && !st.snapshot().chains.some(c => /^TST/.test(c.screen || '')), JSON.stringify(st.snapshot().chains.map(c => c.runId)));
+  chk('R11, R1, R2, R5 사건 0건', !incs.some(x => /^(R11|R1|R2|R5)$/.test(x.rule)), JSON.stringify(incs.map(x => [x.rule, x.screen, x.title])));
+  chk('R14 사건 = ④ 1건', incs.filter(x => x.rule === 'R14').length === 1 && incs.find(x => x.rule === 'R14').screen === 'TST0004', JSON.stringify(incs.filter(x => x.rule === 'R14').map(x => x.screen)));
+
+  // digest stoppedBy: chain.end stopBy · user.stop runId 로 분류
+  const agent = require(path.join(dir, 'orch-agent')); agent.init({ paths: () => p, serverSvc: null, loadQuick: () => [] });
+  const im = require(path.join(dir, 'orch-improve')); const d = im.digest(7); const c = k => d.chains.find(x => x.chain === k) || { stoppedBy: {} };
+  const by = (k, cause) => chk(`digest ${k} stoppedBy.${cause} 1`, c(k).stopped === 1 && c(k).stoppedBy[cause] === 1, JSON.stringify(c(k)));
+  by('c_reload', 'window'); by('c_job', 'button'); by('c_nojob', 'window'); by('c_close', 'window'); by('c_inst', 'vmo'); by('c_noby', 'other'); by('c_double', 'window'); by('c_button', 'button'); by('c_leak', 'button');
+  chk('digest c_double 끝 기록 1건', c('c_double').n === 1, String(c('c_double').n));
+  chk('digest c_resume = 옛 실행 중지 1 · 재개 실행 정상 1', c('c_resume').n === 2 && c('c_resume').stopped === 1 && c('c_resume').ok === 1, JSON.stringify(c('c_resume')));
+  { const s = d.steps.find(x => x.key === 'T.slow'); const se = readEv().filter(e => e.type === 'step.end' && e.task === 'T.slow');
+    chk('digest 단계 T.slow = 실패 0(중지 단계는 CANCEL · step.end stopped)', s && s.n === 1 && s.fail === 0 && se.length === 1 && se[0].status === 'CANCEL' && se[0].stopped === true, JSON.stringify({ s, se: se.map(x => ({ status: x.status, stopped: x.stopped })) })); }
+
+  w.dispose(); st.dispose(); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

@@ -1,0 +1,35 @@
+.customPanelGroup {
+  //height: calc(88vh - 220px) !important;
+  /* 페이지(.view)가 flex column 이 되면서 Result 영역은 flex:1 로 남은 높이를 받는다.
+  기존 calc(88vh - 220px) 고정 높이는 화면 크기에 따라 바닥에서 뜨거나 넘쳐서 제거. */
+  flex: 1 1 0 !important;
+  min-height: 0;
+  gap: 24px;
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+  > div > div {
+    display: flex;
+  }
+}
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+// 40 전용 조회조건 체크박스 두 개(End Customer(Report) Null · Project Null) 묶음.
+//   라벨이 길어 줄바꿈되면 서로 겹치므로 한 줄로 고정하고, 칸이 좁으면 둘째 체크박스가 아랫줄로 내려간다.
+.nullFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  align-items: center;
+  padding-left: 16px;
+  white-space: nowrap;
+
+  > div {
+    flex-shrink: 0;
+  }
+}

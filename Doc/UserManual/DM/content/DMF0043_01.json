@@ -1,0 +1,91 @@
+{
+ "definition": "기여도 버전과 Sales Plan 버전을 골라 부문, 팀, 고객군, 판매처별 금액을 해외법인 지역별 Commission, Markup 으로 나눠 조회하는 화면",
+ "overview": [
+  "Sales Plan 버전의 판매 금액을 Contribution Rate Reg. 화면에 등록한 해외법인 기여율로 나눠 지역별 Commission, Markup 금액을 보는 조회 화면임",
+  "위쪽 조회 조건과 조회 전용 그리드 1개로 구성됨. 그리드 오른쪽에 지역별 Commission, Markup 칸이 이어짐. 버전 찾기, 컬럼 설정 팝업이 있음",
+  "Year 에서 기여도 버전 선택 → Version 팝업에서 판매 계획 버전 1개 선택 → Product Group, Biz, Customer Group 입력 → Search 순서로 조회함",
+  "Year 목록과 지역별 기여율은 Contribution Rate Reg. 화면에 등록한 값을 씀"
+ ],
+ "pages": [
+  {
+   "title": "Contribution Sales",
+   "keyPoint": "",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.17,
+     "y": 0.153
+    },
+    {
+     "no": 2,
+     "x": 0.735,
+     "y": 0.226
+    },
+    {
+     "no": 3,
+     "x": 0.178,
+     "y": 0.246
+    },
+    {
+     "no": 4,
+     "x": 0.578,
+     "y": 0.274
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Year: 필수. Contribution Rate Reg. 화면과 같은 연도 기여도 버전 목록이 나옴",
+      "Version: 필수. 돋보기 버튼을 누르거나 칸을 더블클릭하면 버전 찾기 팝업이 열림. Div 는 40 고정이며 Report Type, 기간, Description 으로 찾음",
+      "팝업에서 버전을 2개 이상 고르면 \"버전은 1개만 선택해 주세요.\" 메시지가 뜸",
+      "Version 없이 조회하면 \"버전을 선택하세요.\" 메시지가 뜸",
+      "Product Group, Biz: 콤보에서 고름(초기값 ALL). Customer Group 은 직접 입력함",
+      "M$: 금액 표시 단위 선택. 초기값은 체크 해제"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "그리드 오른쪽 위 컬럼 설정 아이콘: 컬럼 표시 여부와 순서를 정해 저장함. 저장한 설정은 다음에 화면을 열 때 다시 적용됨",
+      "Sort, Filter, Condition, Reset Condition 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "그리드",
+     "lines": [
+      "년월, 부문, 팀, 고객군(보고), 고객군, 판매처코드, 판매처, 제품군, Biz 기준으로 금액이 나오며 같은 값은 셀이 합쳐져 보임",
+      "조회 전용 화면이며 입력, 저장 버튼 없음",
+      "조회 조건에 맞는 데이터가 없으면 \"조회 조건에 해당하는 데이터가 없습니다.\" 메시지가 뜸",
+      "기여도가 맵핑되지 않은 마스터가 있으면 \"해외법인 기여도 미 맵핑된 마스터가 존재합니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "지역별 금액 칸",
+     "lines": [
+      "대만, 중국-화남, 중국-화북, 미주, 유럽 등 지역마다 Commission, Markup 금액 칸이 나옴",
+      "금액은 소수점 없이 오른쪽 정렬로 표시되고 음수는 빨간 글자로 표시됨"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0043_01",
+ "uiName": "Contribution Sales",
+ "menuPath": "DM> Demand Master> Contribution Sales",
+ "captures": [
+  "captures/DMF0043_01.png"
+ ],
+ "facts": [],
+ "buttons": [
+  "main:SEARCH",
+  "mainTitle:SEARCH",
+  "ratePopup:SEARCH",
+  "version:SEARCH",
+  "versionPopup:SEARCH"
+ ]
+}

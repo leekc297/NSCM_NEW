@@ -1,0 +1,146 @@
+{
+  "id": "20261124040952_SELF",
+  "at": "2026-11-24T04:09:52+09:00",
+  "ms": 1795460992141,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|단계막대와n행stnoctotal표시가조건부단계를포함한총수로그려짐",
+  "title": "사용자 지시 R110 같은 문제: tools/VibeManager/orchestra.js:964 단계 막대와 978행 st.no+'/'+(c.total) 표시가 조건부 단계를 포함한 총수로 그려짐",
+  "evidence": "규칙 R110 \"체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함\" (원래 지시 2026-11-19 09:13 \"VM CHECKLIST작업 시 최초부터 3단계 보완까지를 전체 STEP 으로 표기되는데, CHECKLIST 작업만 진행하고, 필요시 추가 STEP 이 추가되도록 해주세요.\") · tools/VibeManager/orchestra.js:964 const n=Math.max(c.total||0,(c.doneN||0)+(c.step?1:0),1);",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "n 과 978행 분모에 c.shown 을 씀(orch-state.js 에서 추가 단계 반영 뒤). 정의 전체 수는 title 에만 둠",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T22:36:03+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T22:40:21+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self2236"
+    },
+    {
+      "at": "2026-11-25T22:40:26+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T22:53:57+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T22:53:57+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-25 22:40:54: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 243.4s', t_webview_syntax 'ALL PASS'. 반영 뒤 2026-11-25 22:45:18: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 235.5s', t_webview_syntax 'ALL PASS'. aShown 자기 시험 출력 '2 3 2 5'(실행 확정 2단계 → 2, 단계 1개 추가 → 3, · 변경 32개 파일 · 대상 목록 밖 변경 31개: Doc/e2e/specs/_trace.spec.ts, Doc/gen/SCP0005/FULLRUN.md, Doc/verify/SCP0005/_checker_regress.md, Doc/verify/SCP0005/_regress_report.md, Doc/verify/SCP0005/_timing.csv, Doc/verify/SCP0005/fixlist.csv",
+      "log": ".vibe\\logs\\2026-11-25T22-40-27_claude_orch.log",
+      "sec": 552,
+      "costUsd": 0.7655291,
+      "files": [
+        "Doc/e2e/specs/_trace.spec.ts",
+        "Doc/gen/SCP0005/FULLRUN.md",
+        "Doc/verify/SCP0005/_checker_regress.md",
+        "Doc/verify/SCP0005/_regress_report.md",
+        "Doc/verify/SCP0005/_timing.csv",
+        "Doc/verify/SCP0005/fixlist.csv",
+        "Doc/verify/SCP0005/precision.csv",
+        "Doc/verify/SCP0005/run_timing.json",
+        "Doc/verify/SCP0005/run_verify.result.json",
+        "Doc/verify/SCP0005/source_baseline.json",
+        "Doc/verify/_checker_golden/SCP0005.received.csv",
+        "Doc/verify/_precision.csv",
+        "Doc/verify/_regress_report.md",
+        "Doc/verify/_user_verdicts_cache.json",
+        "tools/E2E/lib/btnpopup.selftest.js",
+        "tools/E2E/lib/btnpopup.ts",
+        "tools/E2E/lib/crud.ts",
+        "tools/Harness/verify/cleanup_marker.py",
+        "tools/Harness/verify/eg_ingest.py",
+        "tools/Harness/verify/judge.py",
+        "tools/Harness/verify/ledger_guard.py",
+        "tools/Harness/verify/save_audit.py",
+        "tools/VibeManager/orchestra.js",
+        "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v10.xlsx",
+        "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v10.xlsx",
+        "Doc/UI_CHECKLIST/old/SCP0005_DistributionRoute_ActionItemList_v9.xlsx",
+        "Doc/UI_CHECKLIST/old/SCP0005_DistributionRoute_CheckList_v9.xlsx",
+        "Doc/_doc_style/SCP0005_DistributionRoute_ActionItemList_v10.xlsx.style.csv",
+        "Doc/_doc_style/SCP0005_DistributionRoute_CheckList_v10.xlsx.style.csv",
+        "Doc/verify/SCP0005/ui_test_backup/☆NSCME_SCP&SSP 테스트_SCP0005(Distribution Route)_20261125_224030.xlsx",
+        "Doc/verify/_engine_fix.lock",
+        "tools/Harness/plan_state.json"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:14+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R110|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795613762984,
+  "autoFp": "cdbbc2783c",
+  "applyStartMs": 1795614026399,
+  "verifyJudge": {
+    "at": "2026-11-25T22:49:44+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self2236",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795614837572,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js 오류 없음 → 오류 없음 · node tools/VibeManager/test/run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0 243.4s' → 'ALL OK 파일 87/87 PASS 1422 FAIL 0 235.5s' · node tools/VibeManager/test/t_webview_syntax.js 'ALL PASS'(19건) → 'ALL PASS'"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "반영 전 2026-11-25 22:40:54: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 243.4s', t_webview_syntax 'ALL PASS'. 반영 뒤 2026-11-25 22:45:18: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 235.5s', t_webview_syntax 'ALL PASS'. aShown 자기 시험 출력 '2 3 2 5'(실행 확정 2단계 → 2, 단계 1개 추가 → 3, 옛 사건 → 조건부 아닌 단계 2, 단계 정의 없음 → total 5)",
+    "note": "aShown(c) 추가. 실행 확정 단계 수(c.shown)에 chain.add 추가 단계를 더한 orch-state total 을 aSteps 막대 칸 수와 실행 카드 '현재 단계/전체' 분모에 씀. shown 이 없는 옛 사건은 조건부 아닌 plan 단계 수를 씀. 정의 전체 단계 수(plan 길이)는 막대 title 에만 둠. 실제 상황판 화면 확인은 창 다시 로드 뒤 가능해 하지 않음. 걸린 시간 22:40:54 → 22:45:18, 오래 걸린 단계 run_all 2회(243.4s, 235.5s)"
+  },
+  "snap": "prop_20261124040952_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

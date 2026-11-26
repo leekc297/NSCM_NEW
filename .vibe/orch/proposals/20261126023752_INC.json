@@ -1,0 +1,37 @@
+{
+  "id": "20261126023752_INC",
+  "at": "2026-11-26T02:37:52+09:00",
+  "ms": 1795628272635,
+  "source": "incident",
+  "status": "applied",
+  "sig": "sqllog_calls.py 소요 증가 원인 측정 뒤 params 읽기 방식 보완",
+  "title": "sqllog_calls.py 소요 증가 원인 측정 뒤 PARAMS 읽기 방식 보완",
+  "evidence": ".vibe/logs/2026-11-26T01-11-56_SCP0005_6_...unverified_settle.json...log:771-775(20,485행, 호출 1,012건, 849.6초). 2026-11-25T00-56-02_SCP0005_1 로그 825·829행(41,189행, 373건, 225.4초). 행 수와 소요가 비례하지 않고 호출 건수와 같이 늘어남. sqllog_calls.py:193 이 후보 행마다 r[3].read() 를 호출함",
+  "targets": [
+    "tools/Harness/verify/sqllog_calls.py"
+  ],
+  "before_after": "전: 후보 행마다 PARAMS 를 따로 읽음(193행). 후: 측정에서 PARAMS 읽기 비중이 확인되면 조회 단계에서 문자열로 받음(fetch_lobs 끔 또는 DBMS_LOB.SUBSTR). 읽는 행과 판정 결과는 같게 유지",
+  "verify": "diag_sqllog_20261126.py 로 전후 묶음 1개 소요 비교, sqllog_calls.py --selftest 통과, 같은 시각대 --since/--until 로 전후 sqllog_calls.json 의 calls 건수와 seq 목록 일치 확인",
+  "rollback": "tools/Harness/verify/sqllog_calls.py.bak_20261126_orch 를 원래 이름으로 복사",
+  "impact": "",
+  "level": "L2",
+  "levelWhy": "같은 서명 과거 사건 0건, 이번 1건. SCP0005 회차별 소요가 166초에서 849초로 늘었으나 재발 사건이 없어 L3 조건(재발 2건 이상)에 해당하지 않음",
+  "incident": "20261126_022124_R5_SCP0005",
+  "screen": "SCP0005",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:08:26+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/sqllog_calls.py:181~185 조회 커서 outputtypehandler 로 CLOB(PARAMS)를 문자열(DB_TYPE_LONG)로 받음(oracledb 4.0.1 은 커서별 fetch_lobs 없음). 측정(diag_sqllog_20261126.py, SCP0005 LOG_SEQ 7191711~7196710 후보 387건): 15:48~15:54 행마다 read 방식 조회 0.1초 + PARAMS 읽기 362.8초. 16:02~16:07 같은 프로세스에서 문자열 방식 123.0초, 행마다 read 방식 157.2초(이때 read 0.0초). 두 방식 seq·PARAMS 387건 일치. 3회 소요가 서로 달라 개선 폭 미확정(DB 쪽 시간 비중 미측정). selftest 11/11. sqllog_calls.json 전후 비교는 CheckList 산출물을 덮어써서 미실행. 2026-11-26 16:08:26"
+    }
+  ],
+  "kind": "fix",
+  "waitNote": "",
+  "claimedBy": "S-A",
+  "appliedMs": 1795676906227
+}

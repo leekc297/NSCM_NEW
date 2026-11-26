@@ -15,7 +15,9 @@ const RUN = process.env.VERIFY_RUN_ID || new Date().toISOString();
 export const PHASE = (process.env.E2E_PHASE || '').toLowerCase();
 const FAKE_SAVE = !!(process.env.VERIFY_NO_SAVE || process.env.CL_FAKE_SAVE);
 // 상태를 바꾸지 않는 POST 경로(로그인·조회형). 모르면 쓰기
-const READ_API = /\/api\/(?:user\/(?:login|session)(?:\?|$)|sso\/dev-login|admin\/combo(?:-muti)?(?:\?|$)|admin\/menu\/(?!favorite))/i;  // 로그인(lib/nscm.ts loginAs) · 콤보(admin/combo, combo-muti) · 메뉴 조회(즐겨찾기 제외). 근거 2026-11-20 nscm.ts:79,121
+// 2026-11-20 사용자 지시(E2E 시간 단축): admin/lookup(-muti) = 조회만(LookupController.java:52 → LookupServiceImpl selectList) · admin/log/menu-access = 화면을 처음 열 때 접속 기록 1건(LogController.java:80 · 시험이 확인하는 화면 데이터와 무관)
+//   종전엔 이 두 주소 때문에 화면을 열기만 해도 모든 시험이 쓰기로 분류돼 동시 실행이 한 번도 없었음(SCP0028 97/97 · SSP0014 118/118 · SCP0005 108/108)
+const READ_API = /\/api\/(?:user\/(?:login|session)(?:\?|$)|sso\/dev-login|admin\/combo(?:-muti)?(?:\?|$)|admin\/lookup(?:-muti)?(?:\?|$)|admin\/log\/menu-access(?:\?|$)|admin\/menu\/(?!favorite))/i;  // 로그인(lib/nscm.ts loginAs) · 콤보(admin/combo, combo-muti) · 메뉴 조회(즐겨찾기 제외). 근거 2026-11-20 nscm.ts:79,121
 const PROC = /\/call-proc(?:-stream)?(?:\?|$)/i;
 const PROC_WRITE = /\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i;
 

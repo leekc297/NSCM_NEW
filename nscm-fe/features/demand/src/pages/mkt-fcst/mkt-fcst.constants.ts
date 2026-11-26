@@ -315,8 +315,9 @@ export const MSG = {
   REQUIRE_DIVISION: 'MSG00097',
   // 기간 역전 — 사내 MSG00108 "조회 기간이 잘못되었습니다 (시작일 > 종료일)." EXACT.
   PERIOD_INVERTED: 'MSG00108',
-  // 기간 3년 초과 — 사내 MSG00164 "조회 기간은 3년 이내로 입력해주세요." EXACT.
-  PERIOD_MAX_3YEAR: 'MSG00164',
+  // 기간 2년 초과 — MSG01505 "조회 기간은 2년 이내로 입력해주세요." (2026-11-24 결정: Monthly 로 조회해도
+  //   일자 데이터까지 받는 화면은 조회 기간 2년 제한. 종전 AS-IS 3년 MSG00164)
+  PERIOD_MAX_2YEAR: 'MSG01505',
   // Bucket 변경 가드 — 사내 MSG00227 "Insert 된 행이 있어 Bucket 을 변경할 수 없습니다." EXACT.
   INSERT_ONLY_BUCKET: 'MSG00227',
   // 저장 대상 없음 — 사내 MSG00152 "저장할 데이터가 없습니다." EXACT.

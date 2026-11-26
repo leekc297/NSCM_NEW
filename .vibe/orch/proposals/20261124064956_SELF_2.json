@@ -1,0 +1,116 @@
+{
+  "id": "20261124064956_SELF_2",
+  "at": "2026-11-24T06:49:56+09:00",
+  "ms": 1795470596601,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/server service.js|같은함수n줄posttypeservernameoksec를orchestr",
+  "title": "사용자 지시 R142 같은 문제: tools/VibeManager/server-service.js:240 같은 함수 238줄 post({ type: 'server', name, ok, sec }) 를 orchestra.js:1063 이 '기동 완료' note 로 띄워",
+  "evidence": "규칙 R142 \"같은 사건의 알림은 VS Code 알림과 웹뷰 알림 중 한 경로에서 한 번만 보임\" (원래 지시 2026-11-20 00:24 \"알림에 동일 FE 기동완료, BE 기동 완료 가 2번씩 나오는 것도 사유 확인해서 보완해주세요.\") · tools/VibeManager/server-service.js:240 if (ok) vscode.window.showInformationMessage(`Vibe_Manager ${name} 기동 완료 (${sec}s)${it.port ? ` · 포트 ${it.port}` : ''}`);",
+  "targets": [
+    "tools/VibeManager/server-service.js"
+  ],
+  "before_after": "한 경로만 남김. 240줄과 296줄 VS Code 알림을 지우거나, post 메시지에 notified:true 를 넣고 orchestra.js:1063 이 그 값이면 note 를 띄우지 않게 함",
+  "verify": "node --check tools/VibeManager/server-service.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/server-service.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T04:58:33+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T05:02:26+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0458"
+    },
+    {
+      "at": "2026-11-26T05:02:30+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T05:14:48+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 server-service.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T05:14:48+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-26 05:02:55: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.1s' → 반영 뒤 2026-11-26 05:06:53~05:10:41: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228s', t_webview_syntax 'ALL PASS'. 로그 .vibe/logs/runall_before_self2.txt, runall_after_self2.txt, wvsyntax_aft · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/WORKLOG.md",
+      "log": ".vibe\\logs\\2026-11-26T05-02-30_claude_orch.log",
+      "sec": 504,
+      "costUsd": 0.6701433000000002,
+      "files": [
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/server-service.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:09+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "같은 사건의 알림은 VS Code 알림과 웹뷰 알림 중 한 경로에서 한 번만 보임 규칙을 tools/VibeManager/server-service.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R142|tools/VibeManager/server-service.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795636712851,
+  "autoFp": "6bdff0b09c",
+  "applyStartMs": 1795636950439,
+  "verifyJudge": {
+    "at": "2026-11-26T05:10:58+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0458",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "server-service.js"
+  ],
+  "appliedMs": 1795637688779,
+  "synced": [
+    "server-service.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/server-service.js 통과(exit 0) · node tools/VibeManager/test/run_all.js 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228s' (t_server_service.js PASS 14, t_server_belog.js PASS 11) · node tools/VibeManager/test/t_webview_syntax.js 'ALL PASS'"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/server-service.js"
+    ],
+    "verify_result": "반영 전 2026-11-26 05:02:55: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.1s' → 반영 뒤 2026-11-26 05:06:53~05:10:41: node --check 통과, run_all 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228s', t_webview_syntax 'ALL PASS'. 로그 .vibe/logs/runall_before_self2.txt, runall_after_self2.txt, wvsyntax_after_self2.txt",
+    "note": "start() 240줄 기동 완료 VS Code 알림(showInformationMessage)과 stop() 296줄 종료 완료 VS Code 알림을 지움. 같은 사건은 post({type:'server'}) 로 orchestra.js:1144 웹뷰 note 한 경로만 보임. 기동 실패 경고(241줄)는 'Log 보기' 버튼이 있어 남김. 추가 확인 후보(범위 밖이라 안 고침): 기동 실패도 VS Code 경고와 웹뷰 '기동 실패' note 두 경로로 보임. 297줄 포트 점유 경고 때 웹뷰는 stop-failed 상태를 '기동 완료'로 띄움."
+  },
+  "snap": "prop_20261124064956_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

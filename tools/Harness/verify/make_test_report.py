@@ -53,7 +53,7 @@ RES_ORDER = {'FAIL': 0, '판정필요': 1, 'WARN': 2, 'ERROR': 3, 'NOT_RUN': 4, 
 RES_FILL = {'FAIL': 'F8CBAD', 'PASS': 'E2EFDA', '판정필요': 'FFF2CC', 'WARN': 'FFF2CC', 'ERROR': 'D9D9D9', 'NOT_RUN': 'EDEDED', '': 'EDEDED', 'NA': 'F2F2F2'}
 METHOD_KO = {'E2E': '화면 자동 조작(E2E)', 'STATIC': '소스·SP 정적 분석', 'META': '화면 메타(DB) 조회', 'DB': 'DB 실측 비교', 'W1': '콤보 원천 실행 비교', 'SYN': '시노님·권한 조회'}
 ORACLE_KO = {'O1': 'AS-IS 실제 동작과 같아야 함', 'O2': 'TO-BE 확정 규칙(CR)을 지켜야 함', 'O3': '기능이 깨지지 않아야 함(무결성)'}
-SOURCE_KO = {'SEARCH': '조회조건', 'COLUMN': '그리드 컬럼', 'SP': '조회 SP', 'ASIS': 'AS-IS 화면 동작', 'RULE_SCREEN': '화면 공통 규칙', 'TRACE': '대조표 항목', 'DEFECT': '이 화면 과거 결함', 'GENERAL': '다른 화면 결함 유형', 'CONFIRMED': 'TO-BE 확정 규칙'}
+SOURCE_KO = {'SEARCH': '조회조건', 'COLUMN': '그리드 컬럼', 'SP': '조회 SP', 'ASIS': 'AS-IS 화면 동작', 'RULE_SCREEN': '화면 공통 규칙', 'TRACE': 'GAP 항목', 'DEFECT': '이 화면 과거 결함', 'GENERAL': '다른 화면 결함 유형', 'CONFIRMED': 'TO-BE 확정 규칙'}
 # 영역(원장 area) → 그룹 제목·순서. 원장에 없는 영역은 '기타' 로(새 영역이 생기면 여기에 추가 — 누락 없이 뒤에 붙는다)
 GROUPS = OrderedDict([
     ('화면', '화면 공통 — 진입·버튼·다국어·레이아웃'),
@@ -63,7 +63,7 @@ GROUPS = OrderedDict([
     ('팝업', '팝업 — 열기·선택값 반영·내부 기능'),
     ('메시지', '메시지 — 업무 검증·안내 문구'),
     ('검증', '저장 검증'),
-    ('대조표', 'AS-IS 동작 대조 — 대조표 항목별 화면 재현'),
+    ('대조표', 'GAP — AS-IS 동작 대조, GAP 항목별 화면 재현'),   # 키 = 원장 area 값(바꾸면 행 묶음이 끊김) · 표시 = GAP(R100, make_ui_test_sheet._AREA_PLAIN 과 같음)
     ('확정규칙', 'TO-BE 확정 규칙(CR) 준수'),
     ('결함원장', '이 화면의 과거 결함 재발 확인'),
     ('결함일반화', '다른 화면 결함 유형 재발 확인(공통 점검)'),
@@ -292,7 +292,8 @@ def main():
     ws0.append(['테스트 환경', f"FE {cfg.get('feUrl', '-')} · BE {cfg.get('beUrl', '-')}", '', f"계정 {cfg.get('forceAccount') or cfg.get('defaultAccount') or '-'} · 기본 Division {cfg.get('defaultDivision', '-')} · 사내오라클(ZIOUI1) 기준"])
     pw_ok = sum(1 for t in tests if t['status'] == 'passed'); pw_bad = [t for t in tests if t['status'] not in ('passed', 'skipped')]
     ws0.append(['자동 테스트 실행', f'Playwright 테스트 {len(tests)}개 — 통과 {pw_ok} · 실패/중단 {len(pw_bad)} · 건너뜀 {sum(1 for t in tests if t["status"] == "skipped")}', '', '테스트가 측정 전에 죽으면 담당 항목은 미검증(오류)로 남는다(검증엔진 미기동)' if pw_bad else '모든 자동 테스트가 끝까지 실행됨'])
-    ws0.append(['CheckList 대조', f"검증 행 {total['전체']} = CheckList '검증 전체' 행 수", '', '테스트결과서의 항목 = CheckList 검증 행 1:1(검증 ID 열로 대조) — 결과 분포가 다르면 서로 다른 실행이다'])
+    # 2026-11-26 CheckList 는 해당없음 행을 '해당없음' 시트로, 같은 측정·중복 묶음을 '중복 정리'·'집계' 시트로 옮김 → '검증 전체' 행 수와 같지 않음
+    ws0.append(['CheckList 대조', f"검증 행 {total['전체']} = 원장 전체(CheckList '검증 전체' + '해당없음' + '중복 정리' + '집계' 시트 합)", '', '테스트결과서의 항목 = 원장 검증 행 1:1(검증 ID 열로 대조) — 결과 분포가 다르면 서로 다른 실행이다'])
     ws0.append([])
     ws0.append(['전체 결과', '항목', '통과', '실패', '확인 필요', '미검증', '해당 없음', '통과율(해당 없음 제외)'])
     style_header(ws0, 8)

@@ -1,0 +1,38 @@
+{"t":1795544667384,"m":{"type":"fb","state":"start","id":1,"runId":"SCP0005_1795544667372","title":"🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)","screen":"SCP0005","steps":[{"no":1,"name":"1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용)","kind":"task","optional":false},{"no":2,"name":"2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)","kind":"task","optional":false}],"md":"Doc/gen/SCP0005/FULLRUN.md"}}
+{"t":1795544667385,"m":{"type":"out","stream":"task","text":"\n🚀 체인 시작: 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · SCP0005 · 2단계 (조건이 맞으면 최대 7단계 추가)\n","cls":"cmd"}}
+{"t":1795544667396,"m":{"type":"out","stream":"task","text":"\n── [1/2] 1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용)\n","cls":"cmd"}}
+{"t":1795544667399,"m":{"type":"fb","state":"step","id":1,"no":1,"status":"RUN"}}
+{"t":1795544668507,"m":{"type":"out","stream":"task","text":"🔌 선행 확인: BE 8080 · FE 5173 기동 중(LISTEN)\n","cls":"ok"}}
+{"t":1795544668507,"m":{"type":"chat","role":"meta","text":"🔌 E2E 선행: BE·FE 기동 확인"}}
+{"t":1795544668526,"m":{"type":"out","stream":"task","text":"▶ CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005 --no-docs\n","cls":"cmd"}}
+{"t":1795544669154,"m":{"type":"out","stream":"task","text":"[작업 1/2] CheckList 전체(run_verify)\n","cls":""}}
+{"t":1795544669154,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SCP0005\n","cls":""}}
+{"t":1795544765017,"m":{"type":"out","stream":"task","text":"[selfcheck] full · 94.5초 · PY_COMPILE 0(신규 0) · PY_UNDEF 0(신규 0) · CTRL_CHARS 0(신규 0) · JS_SYNTAX 0(신규 0) · SPEC_SIZE 0(신규 0) · TSC 0(신규 0) · SELFTEST_JS 0(신규 0) · SELFTEST_PY 2(신규 2) · RULE_REGISTRY 0(신규 0) · selftest JS 35개·PY 66개 실행(DB 필요 3개 미실행)\n","cls":""}}
+{"t":1795544765017,"m":{"type":"out","stream":"task","text":"  [신규 실패] SELFTEST_PY: llm_review.py exit 1 · SELFTEST FAIL\n","cls":""}}
+{"t":1795544765017,"m":{"type":"out","stream":"task","text":"  [신규 실패] SELFTEST_PY: unverified_resolve.py exit 1 · KeyError: 'order'\n","cls":""}}
+{"t":1795544765017,"m":{"type":"out","stream":"task","text":"[selfcheck] FAIL — 실행 투입 금지(위 항목 수정 뒤 다시) → Doc/verify/_engine_selfcheck.json\n","cls":""}}
+{"t":1795544765017,"m":{"type":"out","stream":"task","text":"[FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)\n","cls":""}}
+{"t":1795544765018,"m":{"type":"out","stream":"task","text":"[INFO] 엔진 변경 게이트 차단 — 이 화면의 결과 봉투·실행 모드 기록은 바꾸지 않음\n","cls":""}}
+{"t":1795544765029,"m":{"type":"out","stream":"task","text":"[작업 2/2] 미검증 분류(unverified_resolve)\n","cls":""}}
+{"t":1795544765029,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\unverified_resolve.py SCP0005\n","cls":""}}
+{"t":1795544765125,"m":{"type":"out","stream":"task","text":"Traceback (most recent call last):\n","cls":""}}
+{"t":1795544765125,"m":{"type":"out","stream":"task","text":"  File \"C:\\Projects\\NSCM\\tools\\Harness\\verify\\unverified_resolve.py\", line 559, in <module>\n","cls":""}}
+{"t":1795544765126,"m":{"type":"out","stream":"task","text":"    sys.exit(main())\n","cls":""}}
+{"t":1795544765126,"m":{"type":"out","stream":"task","text":"             ^^^^^^\n","cls":""}}
+{"t":1795544765126,"m":{"type":"out","stream":"task","text":"  File \"C:\\Projects\\NSCM\\tools\\Harness\\verify\\unverified_resolve.py\", line 346, in main\n","cls":""}}
+{"t":1795544765127,"m":{"type":"out","stream":"task","text":"    classes = load_classes()\n","cls":""}}
+{"t":1795544765127,"m":{"type":"out","stream":"task","text":"              ^^^^^^^^^^^^^^\n","cls":""}}
+{"t":1795544765128,"m":{"type":"out","stream":"task","text":"  File \"C:\\Projects\\NSCM\\tools\\Harness\\verify\\unverified_resolve.py\", line 40, in load_classes\n","cls":""}}
+{"t":1795544765128,"m":{"type":"out","stream":"task","text":"    out.append(dict(r, rx=re.compile(r['pattern']), order=int(r['order'])))\n","cls":""}}
+{"t":1795544765128,"m":{"type":"out","stream":"task","text":"                                                              ~^^^^^^^^^\n","cls":""}}
+{"t":1795544765128,"m":{"type":"out","stream":"task","text":"KeyError: 'order'\n","cls":""}}
+{"t":1795544765142,"m":{"type":"out","stream":"task","text":"[INFO] 미검증 148행 · 처리 대상 165 · 사람 확인 1 · 결정 목록 0 · 보완 대기 0 · 집계 47\n","cls":""}}
+{"t":1795544765158,"m":{"type":"out","stream":"task","text":"■ 종료 exit 3, 로그 .vibe\\logs\\2026-11-25T03-24-28_SCP0005_1_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log\n","cls":"bad"}}
+{"t":1795544765171,"m":{"type":"out","stream":"task","text":"✖ 실패 원인(로그의 [FAIL]/[ERROR] 줄):\n   [FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)\n   Traceback (most recent call last):\n   KeyError: 'order'\n","cls":"bad"}}
+{"t":1795544765171,"m":{"type":"chat","role":"meta","text":"✖ CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계 실패 (exit 3)\n[FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)\nTraceback (most recent call last):\nKeyError: 'order'\n로그: .vibe\\logs\\2026-11-25T03-24-28_SCP0005_1_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log"}}
+{"t":1795544765250,"m":{"type":"fb","state":"step","id":1,"no":1,"status":"FAIL","code":3,"sec":98,"repairs":0}}
+{"t":1795544765321,"m":{"type":"out","stream":"task","text":"✖ [1/2] 1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용) — FAIL (exit 3) · 98s\n","cls":"bad"}}
+{"t":1795544765324,"m":{"type":"fb","state":"step","id":1,"no":2,"status":"NOT_RUN"}}
+{"t":1795544765328,"m":{"type":"out","stream":"task","text":"\n✖ 체인 중단: 1/2 '1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용) — 원인: [FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)' FAIL · 완료 0단계 · 98s\n원인:\n[FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)\nTraceback (most recent call last):\nKeyError: 'order'\n   실행 주체: Script 1단계 · AI Agent 0회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 0회 호출 · 0행 · 0.00 USD(상한 없음)\n   → Doc\\gen\\SCP0005\\FULLRUN.md\n","cls":"bad"}}
+{"t":1795544765328,"m":{"type":"chat","role":"meta","text":"실행 주체: Script 1단계 · AI Agent 0회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 0회 호출 · 0행 · 0.00 USD(상한 없음)"}}
+{"t":1795544765335,"m":{"type":"fb","state":"end","id":1,"ok":false,"warn":false,"summary":"✖ 체인 중단: 1/2 '1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용) — 원인: [FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)' FAIL · 완료 0단계 · 98s\n원인:\n[FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)\nTraceback (most recent call last):\nKeyError: 'order'","sec":98}}

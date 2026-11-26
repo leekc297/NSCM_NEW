@@ -1,0 +1,87 @@
+{"t":1795540676517,"m":{"type":"out","stream":"task","text":"▶ CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SSP0014 --docs\n","cls":"cmd"}}
+{"t":1795540676827,"m":{"type":"out","stream":"task","text":"[작업 1/1] 문서 생성(CheckList · ActionItemList · UI 테스트 · 회귀 점검) — 판정은 지난 단계 결과 그대로\n","cls":""}}
+{"t":1795540676828,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SSP0014 --resume-docs\n","cls":""}}
+{"t":1795540687473,"m":{"type":"out","stream":"task","text":"[selfcheck] quick · 10.6초 · PY_COMPILE 0(신규 0) · PY_UNDEF 0(신규 0) · CTRL_CHARS 0(신규 0) · JS_SYNTAX 0(신규 0) · SPEC_SIZE 0(신규 0)\n","cls":""}}
+{"t":1795540687474,"m":{"type":"out","stream":"task","text":"[selfcheck] PASS → Doc/verify/_engine_selfcheck.json\n","cls":""}}
+{"t":1795540687474,"m":{"type":"out","stream":"task","text":"== UI CheckList SSP0014 (AS-IS SSP0014) ==\n","cls":""}}
+{"t":1795540687474,"m":{"type":"out","stream":"task","text":"[INFO] --resume-docs — 판정·추적 산출물은 그대로, 문서 생성(make_verify_docs)·회귀 게이트(regress)만 다시 실행\n","cls":""}}
+{"t":1795540687474,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540687476,"m":{"type":"out","stream":"task","text":"[단계 8/8] 문서 생성·회귀 점검 — 세부 6개 · --resume-docs(앞 단계는 지난 실행 결과 사용)\n","cls":""}}
+{"t":1795540687477,"m":{"type":"out","stream":"task","text":"[세부 1/6] make_verify_docs.py\n","cls":""}}
+{"t":1795540687478,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540687478,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\make_verify_docs.py SSP0014 --plan-only\n","cls":""}}
+{"t":1795540697919,"m":{"type":"out","stream":"task","text":"[설명 정리 필요] 8건(목록만 · --plan-only · 문서는 설명 문장 작성 뒤 1회 생성)\n","cls":""}}
+{"t":1795540697978,"m":{"type":"out","stream":"task","text":"[시간] make_verify_docs.py · 시작 02:18:07 · 10.5s · rc=0\n","cls":""}}
+{"t":1795540697979,"m":{"type":"out","stream":"task","text":"[세부 2/6] llm_desc.py\n","cls":""}}
+{"t":1795540697980,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540697980,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\llm_desc.py SSP0014\n","cls":""}}
+{"t":1795540698090,"m":{"type":"out","stream":"task","text":"[설명 문장] 정리 문장 없는 행 8 · 작성 대상 8 · 묶음 2개\n","cls":""}}
+{"t":1795540698125,"m":{"type":"out","stream":"task","text":"  · 설명 문장 작성 묶음 1/2 — 6행\n","cls":""}}
+{"t":1795540698125,"m":{"type":"out","stream":"task","text":"  · 설명 문장 작성 묶음 2/2 — 2행\n","cls":""}}
+{"t":1795540754011,"m":{"type":"out","stream":"task","text":"[설명 문장] 작성 8행 · 미작성 0행 · 비용 $0.4911\n","cls":""}}
+{"t":1795540754013,"m":{"type":"out","stream":"task","text":"DESC_WRITTEN 8\n","cls":""}}
+{"t":1795540754022,"m":{"type":"out","stream":"task","text":"[시간] llm_desc.py · 시작 02:18:17 · 56.0s · rc=0\n","cls":""}}
+{"t":1795540754024,"m":{"type":"out","stream":"task","text":"[세부 3/6] make_verify_docs.py\n","cls":""}}
+{"t":1795540754026,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540754026,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\make_verify_docs.py SSP0014\n","cls":""}}
+{"t":1795540765020,"m":{"type":"out","stream":"task","text":"[문장 규칙] 저장 전 정리 11868셀\n","cls":""}}
+{"t":1795540767974,"m":{"type":"out","stream":"task","text":"[문장 규칙] 위반 1002건(수식어 346, 주어 5, 번역투 101, 기호 218, 틀 107, 접속 2, 소개·맺음 1, 추측 144, 추상어 30, 용어 48), 문장 23360개, SSP0014_ShipmentModelPic_CheckList_v10.xlsx, 보고 Doc\\_doc_style\\SSP0014_ShipmentModelPic_CheckList_v10.xlsx.style.csv\n","cls":""}}
+{"t":1795540767975,"m":{"type":"out","stream":"task","text":"  이전 버전 1개 → C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\old: SSP0014_ShipmentModelPic_CheckList_v9.xlsx\n","cls":""}}
+{"t":1795540768055,"m":{"type":"out","stream":"task","text":"[문장 규칙] 위반 6건(수식어 1, 번역투 5), 문장 86개, ☆NSCME_SCP&SSP 테스트_SSP0014(Shipment Model PIC).xlsx, 보고 Doc\\_doc_style\\☆NSCME_SCP&SSP 테스트_SSP0014(Shipment Model PIC).xlsx.style.csv\n","cls":""}}
+{"t":1795540768209,"m":{"type":"out","stream":"task","text":"[문장 규칙] 저장 전 정리 715셀\n","cls":""}}
+{"t":1795540768371,"m":{"type":"out","stream":"task","text":"[문장 규칙] 위반 6건(수식어 2, 틀 2, 용어 2), 문장 1187개, SSP0014_ShipmentModelPic_ActionItemList_v10.xlsx, 보고 Doc\\_doc_style\\SSP0014_ShipmentModelPic_ActionItemList_v10.xlsx.style.csv\n","cls":""}}
+{"t":1795540768373,"m":{"type":"out","stream":"task","text":"  이전 버전 1개 → C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\old: SSP0014_ShipmentModelPic_ActionItemList_v9.xlsx\n","cls":""}}
+{"t":1795540768375,"m":{"type":"out","stream":"task","text":"CheckList v10: C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\SSP0014_ShipmentModelPic_CheckList_v10.xlsx\n","cls":""}}
+{"t":1795540768375,"m":{"type":"out","stream":"task","text":"  결과 ERROR 127 · FAIL 42 · NA 762 · PASS 1148 · 판정필요 22 · 결함 원장 335건 중 FAIL 5\n","cls":""}}
+{"t":1795540768375,"m":{"type":"out","stream":"task","text":"ActionItemList v10: C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST\\SSP0014_ShipmentModelPic_ActionItemList_v10.xlsx (설정 DB_ONLY)\n","cls":""}}
+{"t":1795540768375,"m":{"type":"out","stream":"task","text":"UI 테스트 Sheet: Doc\\UI_TEST(SCP&SSP)\\☆NSCME_SCP&SSP 테스트_SSP0014(Shipment Model PIC).xlsx · 기존 파일에 덧붙임(원본 백업 Doc/verify/SSP0014/ui_test_backup) · 추가 3행 · 이미 있는 행 1 · 기준 SSP0014_ShipmentModelPic_CheckList_v10.xlsx\n","cls":""}}
+{"t":1795540768376,"m":{"type":"out","stream":"task","text":"  화면 FE 3 · 공통 컴포넌트 39 · 사람판정 22 · 기계용 C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\fixlist.csv\n","cls":""}}
+{"t":1795540768376,"m":{"type":"out","stream":"task","text":"[설명 정리 필요] 0건\n","cls":""}}
+{"t":1795540768446,"m":{"type":"out","stream":"task","text":"[시간] make_verify_docs.py · 시작 02:19:14 · 14.4s · rc=0\n","cls":""}}
+{"t":1795540768450,"m":{"type":"out","stream":"task","text":"[세부 4/6] regress.py\n","cls":""}}
+{"t":1795540768451,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540768451,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\regress.py SSP0014 --harvest\n","cls":""}}
+{"t":1795540770337,"m":{"type":"out","stream":"task","text":"사용자 판정 수집 360건 → Doc\\verify\\_user_verdicts.csv · 판 595개(캐시 적중 593 · 재파싱 2)\n","cls":""}}
+{"t":1795540770386,"m":{"type":"out","stream":"task","text":"SSP0014: 사용자 판정 5건 대조 · 위반 1 · 조치 필요 4건\n","cls":""}}
+{"t":1795540770386,"m":{"type":"out","stream":"task","text":"   ✖ V-808a747c 판정오류   — 검사기 원판정 FAIL 유지 — 사용자: '스냅샷 승인 Doc\\verify\\SSP0014\\snap\\golden\\팝업_Model_Nickname.aria' · 현재 증거: [재실측 스냅샷 팝업] 기준 Doc\\verify\\SSP0014\\snap\\golden\\팝업_Model\n","cls":""}}
+{"t":1795540770389,"m":{"type":"out","stream":"task","text":"→ Doc\\verify\\_regress_report.md · 화면별 Doc/verify/<ID>/_regress_report.md · 위반 1\n","cls":""}}
+{"t":1795540770414,"m":{"type":"out","stream":"task","text":"[시간] regress.py · 시작 02:19:28 · 2.0s · rc=2\n","cls":""}}
+{"t":1795540770414,"m":{"type":"out","stream":"task","text":"[세부 5/6] checker_regress.py\n","cls":""}}
+{"t":1795540770414,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540770414,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\checker_regress.py SSP0014\n","cls":""}}
+{"t":1795540770489,"m":{"type":"out","stream":"task","text":"[checker_regress] SSP0014: 악화 0(승인 스냅샷 0) · 개선 0 · 변경 3 · 자동 승인 5 → Doc/verify/SSP0014/_checker_regress.md\n","cls":""}}
+{"t":1795540770496,"m":{"type":"out","stream":"task","text":"[시간] checker_regress.py · 시작 02:19:30 · 0.1s · rc=0\n","cls":""}}
+{"t":1795540770497,"m":{"type":"out","stream":"task","text":"[세부 6/6] precision.py\n","cls":""}}
+{"t":1795540770497,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540770497,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\precision.py SSP0014\n","cls":""}}
+{"t":1795540770947,"m":{"type":"out","stream":"task","text":"[precision] SSP0014: 판 10개 → Doc/verify/SSP0014/precision.csv · 최신 v10 조치필요 4 · 실결함 0 · 허위 0 · 중복 0 · 미검토 4 · 정밀도 미측정(검토 0)\n","cls":""}}
+{"t":1795540770947,"m":{"type":"out","stream":"task","text":"   v 1 조치   9 실결함   0 허위   0 중복   0 미검토   9 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770947,"m":{"type":"out","stream":"task","text":"   v 2 조치   6 실결함   0 허위   0 중복   0 미검토   6 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770948,"m":{"type":"out","stream":"task","text":"   v 3 조치   6 실결함   0 허위   0 중복   0 미검토   6 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770948,"m":{"type":"out","stream":"task","text":"   v 4 조치   6 실결함   0 허위   0 중복   0 미검토   6 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770948,"m":{"type":"out","stream":"task","text":"   v 5 조치   6 실결함   0 허위   0 중복   0 미검토   6 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770948,"m":{"type":"out","stream":"task","text":"   v 6 조치   4 실결함   0 허위   0 중복   0 미검토   4 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770948,"m":{"type":"out","stream":"task","text":"   v 7 조치   4 실결함   0 허위   0 중복   0 미검토   4 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770949,"m":{"type":"out","stream":"task","text":"   v 8 조치   3 실결함   0 허위   0 중복   0 미검토   3 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770949,"m":{"type":"out","stream":"task","text":"   v 9 조치   3 실결함   0 허위   0 중복   0 미검토   3 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770949,"m":{"type":"out","stream":"task","text":"   v10 조치   4 실결함   0 허위   0 중복   0 미검토   4 정밀도     - 검토율 0.000\n","cls":""}}
+{"t":1795540770974,"m":{"type":"out","stream":"task","text":"[시간] precision.py · 시작 02:19:30 · 0.5s · rc=0\n","cls":""}}
+{"t":1795540770975,"m":{"type":"out","stream":"task","text":"⚠ 경고(오류 아님) — 검사기 회귀 오라클 위반 — Doc/verify/SSP0014/_regress_report.md 확인(검사기 결함 재발 가능성)\n","cls":""}}
+{"t":1795540770975,"m":{"type":"out","stream":"task","text":"[시간] 단계 docs 끝 · 1.4분\n","cls":""}}
+{"t":1795540770987,"m":{"type":"out","stream":"task","text":"[OK] CheckList 생성 완료 — Doc/UI_CHECKLIST/SSP0014_ShipmentModelPic_CheckList_v10.xlsx · Doc/UI_CHECKLIST/SSP0014_ShipmentModelPic_ActionItemList_v10.xlsx\n","cls":""}}
+{"t":1795540770987,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795540770987,"m":{"type":"out","stream":"task","text":"다음: ActionItemList xlsx 를 확인한 뒤 보완 범위(🧭 보완 범위 설정)를 정하고 🛠️/🧯 로 보완을 적용한다.\n","cls":""}}
+{"t":1795540770988,"m":{"type":"out","stream":"task","text":"[시간] 단계별 도구 시간 합 — docs 1.4분 · 전체 1.4분 → Doc\\verify\\SSP0014\\_timing.csv\n","cls":""}}
+{"t":1795540770988,"m":{"type":"out","stream":"task","text":"[시간] 실제 경과 1.6분 · 단계 밖(기록 없음) 0.2분\n","cls":""}}
+{"t":1795540773481,"m":{"type":"out","stream":"task","text":"[기준선] SSP0014 소스 기준선 저장 · 항목 491개 · 마지막 전체 2026-11-25 02:19:33\n","cls":""}}
+{"t":1795540773486,"m":{"type":"out","stream":"task","text":"결과 봉투: Doc\\verify\\SSP0014\\run_verify.result.json — verdict fail · FAIL 42 · 판정필요 22 · 미검증 127\n","cls":""}}
+{"t":1795540773527,"m":{"type":"out","stream":"task","text":"[INFO] 끝 상태: 미검증 127행 · 처리 대상 139 · 권장안 적용 1 · 사람 확인 1 · 보완 대기 0 · 집계 4\n","cls":""}}
+{"t":1795540773537,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T02-17-56_SSP0014_7_CheckList______run_verify____AI_________________AS-IS_____________________________unverified_triage_______CheckList____1__.log\n","cls":"ok"}}
+{"t":1795540773631,"m":{"type":"fb","state":"step","id":4,"no":2,"status":"OK","code":0,"sec":98,"repairs":0}}
+{"t":1795540773633,"m":{"type":"out","stream":"task","text":"✅ [2/2] 2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝) — OK (exit 0) · 98s\n","cls":"ok"}}
+{"t":1795540773637,"m":{"type":"out","stream":"task","text":"\n↻ 반복 1회차 진행: actionable = 139 · 미검증 127건 · 처리 대상 139건\n","cls":"warn"}}
+{"t":1795540773638,"m":{"type":"fb","state":"add","id":4,"step":{"no":3,"name":"3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 미검증 127건 · 처리 대상 139건","kind":"task","optional":true}}}
+{"t":1795540773638,"m":{"type":"out","stream":"task","text":"\n── [3/3] 3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관) · 미검증 127건 · 처리 대상 139건\n","cls":"cmd"}}
+{"t":1795540773639,"m":{"type":"fb","state":"step","id":4,"no":3,"status":"RUN"}}
+{"t":1795540773648,"m":{"type":"out","stream":"task","text":"▶ 검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/engine_gate.py SSP0014 --mark\n","cls":"cmd"}}
+{"t":1795540774206,"m":{"type":"out","stream":"task","text":"[WAIT] 검사기 보완 순서 대기: SCP0028 가 2026-11-25 02:15:45 부터 보완 중(공용 검사기 파일을 한 화면씩 고침)\n","cls":""}}

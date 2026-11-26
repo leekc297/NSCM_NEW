@@ -34,6 +34,15 @@ export interface MergeRange {
   text: string;
 }
 
+// 동적 컬럼 너비 = 제목 프로시저 COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비(80)
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 고정(BASE) 칸 120 은 대상 아님.
+const DYN_COL_DEFAULT_WIDTH = 80;
+const BASE_COL_WIDTH = 120;
+const spColumnWidth = (raw: unknown): number | undefined => {
+  const n = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw.trim()) : NaN;
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
 // 컬럼 메타 생성 — title sheet 의 SpreadTitleRow[] 로부터 ColumnMeta[] 빌드
 export const buildColumnMeta = (
   titleRows: SpreadTitleRow[],
@@ -59,7 +68,7 @@ export const buildColumnMeta = (
       leaf: r.COLUMN_LABEL_NAME ?? '',
       isBase,
       isHidden,
-      width: isBase ? 120 : 80,
+      width: isBase ? BASE_COL_WIDTH : (spColumnWidth(r.COLUMN_WIDTH) ?? DYN_COL_DEFAULT_WIDTH),
     };
   });
 };

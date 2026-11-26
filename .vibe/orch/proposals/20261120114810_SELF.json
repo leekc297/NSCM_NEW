@@ -68,6 +68,11 @@
         "Doc/e2e/_run.dbwin.SCP0028.lock",
         "Doc/e2e/_run.e2e.SCP0028.lock"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:32+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T13:55:28+09:00"
     }
   ],
   "self": true,
@@ -103,5 +108,7 @@
     "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS 35건(U13 표본 6건: 재개 기록 없음 실패, 재개 기록 있음 10분 통과, 40분째 재시작 없음 실패, job.start 있음 통과, R5 reloadcut 뒤 재실행 없음 실패, chain.start 있음 통과) · 2026-11-20 11:52:34",
     "note": "DETECTORS 에 reloadResumeMissing 추가. 중단 시각 = 해당 작업 user.stop 마지막 ms, 없으면 job.json mtime. 중단 2분 안은 판정 제외. 재개 기록 = chain_progress interruptedAt(24시간 안), job.json resumable, screens[].resume. 대기 기준 params.waitMin 30. user_checks.json U13 pending-detector → active. 작업 모드 DB_ONLY 이나 tools/VibeManager 대상이라 hook 차단 없음. CHANGELOG, 설치 폴더 미변경"
   },
-  "snap": "prop_20261120114810_SELF"
+  "snap": "prop_20261120114810_SELF",
+  "effectiveMs": 1795150528179,
+  "effectiveAt": "2026-11-20T13:55:28+09:00"
 }

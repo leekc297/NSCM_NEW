@@ -10,6 +10,7 @@ import {
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useCallback, useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 
+import { CELL_CONTROL_TYPE } from '@foundation/constants';
 import { CustomMergeManager, ensureTopLeftMergeManager } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
@@ -65,7 +66,11 @@ export const LongTermStockGrid = ({ gridRef, gridFilterRef, data, editable }: Pr
     () =>
       staticColumns.map(column => {
         const pair = EXCEL_XLS_PAIRS.find(p => p.xls === column.colNm);
-        return pair ? { ...column, _excelFormat: `#,##0.${'0'.repeat(pair.scale)}` } : column;
+        if (pair) return { ...column, _excelFormat: `#,##0.${'0'.repeat(pair.scale)}` };
+        // 그 외 숫자 컬럼(Exchange Rate 등)도 엑셀은 메타 scale 자릿수(AS-IS 는 화면 서식 그대로 export).
+        if (column.cellCtrlObjTpCd !== CELL_CONTROL_TYPE.NUMBER) return column;
+        const scale = Number(column.scale) || 0;
+        return { ...column, _excelFormat: scale > 0 ? `#,##0.${'0'.repeat(scale)}` : '#,##0' };
       }),
     [staticColumns]
   );
@@ -100,6 +105,34 @@ export const LongTermStockGrid = ({ gridRef, gridFilterRef, data, editable }: Pr
         if (!col.binding) continue;
         col.allowMerging = col.binding !== COL.MEMO;
       }
+    };
+    g.updatedLayout.addHandler(apply);
+    apply();
+    return () => {
+      g.updatedLayout?.removeHandler(apply);
+    };
+  }, [gridRef, staticColumns, data]);
+
+  // 정수 표시 — 메타 FPNumber + DATA_SCALE_NUMBER NULL/0 컬럼(Quantity·Amount(KRW)·Amount)은 AS-IS 가
+  //   decimalPlaces=0·천단위로 표시한다. 공용 getFormat 은 NULL/0 이면 포맷을 안 걸어 wijmo 기본(소수)으로
+  //   보이므로 화면에서 'n0' 를 건다. updatedLayout 마다 재적용(columnGroups 재대입 시 포맷 초기화).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const integerBindings = new Set(
+      staticColumns
+        .filter(c => c.cellCtrlObjTpCd === CELL_CONTROL_TYPE.NUMBER && !c.scale)
+        .map(c => c.colNm)
+    );
+    const apply = () => {
+      let changed = false;
+      for (const col of g.columns) {
+        if (col.binding && integerBindings.has(col.binding) && col.format !== 'n0') {
+          col.format = 'n0';
+          changed = true;
+        }
+      }
+      if (changed) g.invalidate(true);
     };
     g.updatedLayout.addHandler(apply);
     apply();

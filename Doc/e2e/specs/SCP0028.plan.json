@@ -340,11 +340,11 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
+        "DELETE",
         "EDIT",
         "SEARCH",
-        "DELETE",
-        "SAVE",
-        "INSERT"
+        "INSERT",
+        "SAVE"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -398,103 +398,103 @@
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
+      "DELETE",
       "EDIT",
       "SEARCH",
-      "DELETE",
-      "SAVE",
-      "INSERT"
+      "INSERT",
+      "SAVE"
     ],
     "CAPA Planner": [
-      "SAVE",
-      "INSERT",
+      "DELETE",
       "SEARCH",
-      "DELETE"
+      "INSERT",
+      "SAVE"
     ],
     "DM ADMIN": [
       "SAVE",
       "SEARCH",
-      "DELETE",
-      "INSERT"
+      "INSERT",
+      "DELETE"
     ],
     "DM Planner": [
       "SAVE",
-      "DELETE",
-      "EDIT",
       "INSERT",
-      "SEARCH"
+      "EDIT",
+      "SEARCH",
+      "DELETE"
     ],
     "DM Viewer": [
-      "SEARCH",
+      "SAVE",
       "DELETE",
-      "SAVE",
-      "INSERT"
-    ],
-    "FP Planner": [
-      "SAVE",
       "INSERT",
-      "EDIT",
-      "DELETE",
       "SEARCH"
     ],
-    "FP Viewer": [
-      "SEARCH",
-      "SAVE",
+    "FP Planner": [
+      "EDIT",
       "INSERT",
-      "DELETE"
+      "DELETE",
+      "SEARCH",
+      "SAVE"
+    ],
+    "FP Viewer": [
+      "DELETE",
+      "SAVE",
+      "SEARCH",
+      "INSERT"
     ],
     "SCM PI Admin": [
       "DELETE",
-      "EDIT",
-      "INSERT",
       "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "EDIT",
+      "INSERT"
     ],
     "SCM Viewer": [
-      "SEARCH",
-      "SAVE",
       "DELETE",
-      "INSERT"
+      "SEARCH",
+      "INSERT",
+      "SAVE"
     ],
     "SCP Planner": [
-      "SEARCH",
       "EDIT",
       "DELETE",
       "SAVE",
-      "INSERT"
+      "INSERT",
+      "SEARCH"
     ],
     "SCP Tester": [
+      "DELETE",
       "INSERT",
-      "SEARCH",
       "EDIT",
       "SAVE",
-      "DELETE"
+      "SEARCH"
     ],
     "SSP ADMIN": [
       "DELETE",
+      "SEARCH",
       "SAVE",
-      "INSERT",
-      "SEARCH"
+      "INSERT"
     ],
     "SSP Planner": [
-      "SEARCH",
       "SAVE",
       "INSERT",
       "EDIT",
-      "DELETE"
+      "DELETE",
+      "SEARCH"
     ],
     "SSP Viewer": [
-      "SEARCH",
-      "INSERT",
+      "SAVE",
       "DELETE",
-      "SAVE"
+      "INSERT",
+      "SEARCH"
     ]
   },
   "menuBtnCodes": [
+    "DELETE",
     "EDIT",
     "SEARCH",
-    "DELETE",
-    "SAVE",
-    "INSERT"
+    "INSERT",
+    "SAVE"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

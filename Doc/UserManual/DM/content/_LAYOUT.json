@@ -1,0 +1,69 @@
+{
+ "id": "_LAYOUT",
+ "uiName": "Next SCM Layout",
+ "menuPath": "DM> 공통",
+ "captures": [
+  "captures/DMF0004.png"
+ ],
+ "definition": "Next SCM 화면 공통 구성: 상단 메뉴, 왼쪽 메뉴, 화면 탭, 조회 조건, 버튼, 그리드",
+ "pages": [],
+ "note": "_LAYOUT = 화면 구성 영역 이름표(labels), _COMMON = 공통 버튼과 기능(sections, markers). 캡처는 화면 캡처 중 하나를 고름(captures 에 경로)",
+ "labels": [
+  {
+   "text": "Top Menu",
+   "x": 0.36,
+   "y": 0.012,
+   "w": 0.07,
+   "h": 0.03
+  },
+  {
+   "text": "Menu Tree",
+   "x": 0.01,
+   "y": 0.6,
+   "w": 0.09,
+   "h": 0.035
+  },
+  {
+   "text": "Screen Tab",
+   "x": 0.4,
+   "y": 0.052,
+   "w": 0.07,
+   "h": 0.03
+  },
+  {
+   "text": "Title & Breadcrumb",
+   "x": 0.4,
+   "y": 0.095,
+   "w": 0.12,
+   "h": 0.03
+  },
+  {
+   "text": "Search Condition",
+   "x": 0.45,
+   "y": 0.178,
+   "w": 0.08,
+   "h": 0.035
+  },
+  {
+   "text": "Buttons",
+   "x": 0.4,
+   "y": 0.232,
+   "w": 0.06,
+   "h": 0.03
+  },
+  {
+   "text": "Data Grid",
+   "x": 0.55,
+   "y": 0.5,
+   "w": 0.08,
+   "h": 0.035
+  },
+  {
+   "text": "Detail Tab & Grid",
+   "x": 0.4,
+   "y": 0.733,
+   "w": 0.11,
+   "h": 0.03
+  }
+ ]
+}

@@ -1,0 +1,104 @@
+{
+ "definition": "Division 별 Sales Site, Model 단위로 MKT FCST, RTF, SCM FCST 수량과 단가, 매출 금액을 기간 Bucket 으로 조회하고 판매 계획을 입력하는 화면",
+ "overview": [
+  "Sales Site, Model 단위로 MKT FCST, RTF, SCM FCST 수량과 Unit Price(LOC), Sales Amt. 를 한 그리드에서 보고 판매 계획 수량과 단가를 입력하는 화면임",
+  "위쪽 조회 조건, 왼쪽 Sales Plan 그리드, 오른쪽 기간 수량 영역으로 구성됨. Measure 선택 아이콘으로 보일 Measure 행을 고름",
+  "Div, Period 와 Bucket(Weekly 또는 Monthly)을 고르고 Search(F5) → 노란 칸 수정 또는 Insert(F8) 로 행 추가 → Save(F7) 순서로 작업함",
+  "MKT FCST(DMF0003)에서 저장한 수량이 MKT FCST[R+P] 행에 반영됨. 저장한 판매 계획은 Sales Monitoring(DMF0048)에서 조회함"
+ ],
+ "pages": [
+  {
+   "title": "Sales Plan",
+   "keyPoint": "Daily 로 조회하면 편집할 수 없으므로 Weekly 또는 Monthly 로 조회한 뒤 입력함. 추가한 행은 하루 이상의 일자에 수량 또는 가격을 넣고 저장함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.157,
+     "y": 0.153
+    },
+    {
+     "no": 2,
+     "x": 0.576,
+     "y": 0.248
+    },
+    {
+     "no": 3,
+     "x": 0.173,
+     "y": 0.248
+    },
+    {
+     "no": 4,
+     "x": 0.726,
+     "y": 0.547
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 권한이 있는 Division 이 없으면 \"권한을 가진 Division이 없습니다.\" 메시지가 뜸",
+      "Team, End Customer: Div 에 속한 값만 나옴. Sales Site 는 고른 End Customer 기준으로 나옴",
+      "Period: 필수. 시작일이 종료일보다 늦으면 조회되지 않음. 3년을 넘으면 \"조회 기간은 3년 이내로 입력해주세요.\" 메시지가 뜸",
+      "Bucket: Daily, Weekly, Monthly 중 선택. 저장하지 않은 변경이 있으면 \"변경 중인 데이터가 있어 수행할 수 없습니다. 저장 또는 취소 후 다시 시도해 주세요.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert 왼쪽 아이콘 2개: Column Setting, Measure 선택. 고른 컬럼과 Measure 는 사용자별로 저장됨",
+      "Insert(F8): 새 행을 추가함. FCST Type 기본값은 ETC 임",
+      "Save(F7): 저장되면 \"성공적으로 저장되었습니다.\" 메시지가 뜸. 바꾼 내용이 없으면 \"수정한 내용이 없습니다.\" 메시지가 뜸",
+      "Delete(F9), Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Sales Plan 그리드",
+     "lines": [
+      "필수 입력(제목 앞 빨간 점): Div, Team, End Customer, Sales Site, Model, Incoterms, FCST Type, Customs Handbook, Cell Prod Site, Measure",
+      "필수 값이 비면 \"{0} 값은 필수 입력 항목입니다.\" 메시지가 뜸",
+      "Measure: 모델마다 MKT FCST[R+P], RTF[R+P], SCM FCST[R+P], Unit Price(LOC), Sales Amt. 행이 묶여 나옴"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "기간 수량 영역",
+     "lines": [
+      "Bucket 에 맞춰 일, 주, 월 단위 컬럼이 만들어짐",
+      "노란 칸에 값을 입력함",
+      "Daily 로 조회하면 \"Daily Bucket 에서는 편집할 수 없습니다. Weekly 또는 Monthly 로 조회 후 편집하세요.\" 메시지가 뜸",
+      "Catch Up 값은 0 이상만 입력할 수 있음",
+      "추가한 행마다 하루 이상의 일자에 수량 또는 가격이 없으면 저장되지 않음"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "DM",
+ "id": "DMF0021",
+ "uiName": "Sales Plan",
+ "menuPath": "DM> Demand Plan> Sales Plan",
+ "captures": [
+  "captures/DMF0021.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0021/",
+  "Doc/asisfacts/screens/DMF0021/"
+ ],
+ "buttons": [
+  "Sales Plan:COLUMN_SETUP",
+  "Sales Plan:DELETE",
+  "Sales Plan:EXCEL",
+  "Sales Plan:INSERT",
+  "Sales Plan:MEASURE_SELECT",
+  "Sales Plan:SAVE",
+  "Sales Plan:SEARCH",
+  "dayRange:SEARCH",
+  "measureInfo:SEARCH",
+  "spreadTitle:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH"
+ ]
+}

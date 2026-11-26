@@ -1,0 +1,130 @@
+{
+ "screen": "SSP0020",
+ "calls": [
+  {
+   "cls": "UserInfoPopup",
+   "method": "UserPopup",
+   "asis_ref": "SSP0020_Delegate.cs:826",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "UserPopup",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "SSOUserYN",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [
+    "delegatee"
+   ],
+   "after": [],
+   "back": []
+  }
+ ],
+ "classes": {
+  "UserInfoPopup": {
+   "cls": "UserInfoPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SystemMgmt.UIL/UserInfoPopup.cs",
+   "title": "UserInfoPopup",
+   "conds": [
+    {
+     "name": "txtSearch",
+     "type": "UsrTextBox",
+     "label": "User ID(Name)",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "UserInfoPopup.Designer.cs:37",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "UP_FX_GetUserInfoList",
+     "src": "Doc/asisfacts/db/modules/dbo.UP_FX_GetUserInfoList.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "Search",
+      "Language",
+      "SSOUserYN"
+     ],
+     "method": "FindData",
+     "ref": "UserInfoPopup.cs:177",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "UserInfoPopup.cs:188",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "UserInfoPopup.cs:215",
+     "method": "SpdMain_CellClick",
+     "raw": "if (siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == type",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "UserInfoPopup.cs:263",
+     "method": "OkButtonClick",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:264",
+     "method": "OkButtonClick",
+     "raw": "this.Close();",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:287",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:288",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

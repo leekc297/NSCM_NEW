@@ -1,0 +1,45 @@
+{
+  "id": "20261126130851_SELF_2",
+  "at": "2026-11-26T13:08:51+09:00",
+  "ms": 1795666131431,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/all_cols_check.py|lastupdate칸추가행분리검사가anlivejson실전송본문divisi",
+  "title": "사용자 지시 R237 같은 문제: tools/Harness/verify/all_cols_check.py:36 Last Update 칸 추가 행 분리 검사가 a1_live.json 실전송 본문(Division 1개)으로만 PROC 을 실행함. 0행이면 Division 후보",
+  "evidence": "규칙 R237 \"검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠\" (원래 지시 2026-11-26 11:48 \"팝업 셀 33행도 Division 순회로 보완해줘 나한테 회신 받지 않고 계속 보완 대상 확인해서 보완해줄 수 업산요?\") · tools/Harness/verify/all_cols_check.py:36 if base == 0:\n        return 'NA', f'{sheet} 칸 추가 전 0행 — 표본 없음'",
+  "targets": [
+    "tools/Harness/verify/all_cols_check.py"
+  ],
+  "before_after": "counts[0]==0 이면 Doc/verify/<ID>/sheet_data_cond.json 또는 combo_runtime.json 의 Division 후보로 up 의 division 인자를 바꿔 다시 call 함. 행이 나오는 첫 Division 으로 판정함. 끝까지 0행이면 'ERROR [측정 전제 미충족] Division 후보 N개 전부 0행' 으로 두고, selftest '0행' 기대도 NA 에서 ERROR 로 바꿈",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/all_cols_check.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:58:44+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/all_cols_check.py judge_split 0행 = ERROR [측정 전제 미충족] Division 후보 N개 전부 0행, div_candidates(sheet_data_cond.json → combo_runtime.json)·with_div 추가, main Last Update 행 분리 검사가 0행이면 Division 후보 순회 뒤 첫 행 있는 Division 으로 판정. selftest 8 → 11건 11/11, SCP0104 LINE 후보 8개 읽기 확인. DB 실행(main)은 미실행. 2026-11-26 15:58:44"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠 규칙을 tools/Harness/verify/all_cols_check.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R237|tools/Harness/verify/all_cols_check.py",
+  "kind": "fix",
+  "claimedBy": "S-A",
+  "waitNote": "",
+  "appliedMs": 1795676324616
+}

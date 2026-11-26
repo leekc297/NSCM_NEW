@@ -1,0 +1,115 @@
+{
+  "id": "20261124040954_SELF_4",
+  "at": "2026-11-24T04:09:54+09:00",
+  "ms": 1795460994604,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/job runner.js|vmw실행기에model을넘기지않아checklistai검토와ai단계가설정값",
+  "title": "사용자 지시 R130 같은 문제: tools/VibeManager/job-runner.js:136 VMW 실행기에 model 을 넘기지 않아 CheckList AI 검토와 AI 단계가 설정값(p.claudeModel)으로 돔",
+  "evidence": "규칙 R130 \"VM 이 띄우는 AI 호출(CheckList AI 검토, VMO 진단 등)은 모델을 따로 고정하지 않고 WORKBENCH 에서 고른 모델을 씀\" (원래 지시 2026-11-19 16:49 \"WORKBENCH 가 사용하고 있는 MODEL 그대로 사용하도록 해주세요.\") · tools/VibeManager/job-runner.js:136 const runner = new ChainRunner(api, { id: s.id, jobId: job.id, autoAnswer: job.autoAnswer, name: `${job.id}:${s.id}`,",
+  "targets": [
+    "tools/VibeManager/job-runner.js"
+  ],
+  "before_after": "작업을 만들 때 Workbench 에서 고른 모델(마지막 활성 창 getState().model)을 job.model 에 저장하고 ChainRunner opts.model 로 넘김",
+  "verify": "node --check tools/VibeManager/job-runner.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/job-runner.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T02:41:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T02:45:12+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0241"
+    },
+    {
+      "at": "2026-11-26T02:45:15+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T02:57:50+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 job-runner.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T02:57:50+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check job-runner.js: 반영 전 OK → 반영 뒤 OK · run_all.js: 반영 전 87/87 PASS 1422 FAIL 0 (2026-11-25T17:45:51.761Z) → 반영 뒤 87/87 PASS 1422 FAIL 0 (2026-11-25T17:49:54.314Z) · t_job_runner PASS 29, t_job_par PASS 16, t_job_resume PASS 14 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T02-45-16_claude_orch.log",
+      "sec": 521,
+      "costUsd": 1.0633574000000001,
+      "files": [
+        "tools/VibeManager/job-runner.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:11+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM 이 띄우는 AI 호출(CheckList AI 검토, VMO 진단 등)은 모델을 따로 고정하지 않고 WORKBENCH 에서 고른 모델을 씀 규칙을 tools/VibeManager/job-runner.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R130|tools/VibeManager/job-runner.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795628476138,
+  "autoFp": "7989acaf58",
+  "applyStartMs": 1795628715596,
+  "verifyJudge": {
+    "at": "2026-11-26T02:54:00+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0241",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "job-runner.js"
+  ],
+  "appliedMs": 1795629470045,
+  "synced": [
+    "job-runner.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/job-runner.js → 반영 전 OK, 반영 뒤 OK · node tools/VibeManager/test/run_all.js → 반영 전 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.2s'(2026-11-25T17:45:51Z), 반영 뒤 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.1s'(2026-11-25T17:49:54Z) · job-runner.js 는 웹뷰 파일 아님(run_all 안 t_webview_syntax.js PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/job-runner.js"
+    ],
+    "verify_result": "node --check job-runner.js: 반영 전 OK → 반영 뒤 OK · run_all.js: 반영 전 87/87 PASS 1422 FAIL 0 (2026-11-25T17:45:51.761Z) → 반영 뒤 87/87 PASS 1422 FAIL 0 (2026-11-25T17:49:54.314Z) · t_job_runner PASS 29, t_job_par PASS 16, t_job_resume PASS 14",
+    "note": "wbModel() 추가: workbench._mirror.panels() 에서 활성 창 → 보이는 창 → 마지막에 연 창 순서로 getState().model, 없으면 '' (실행기가 p.claudeModel 사용). create() 가 job.model 에 저장(opts.model 우선), runOne() 이 ChainRunner opts.model 로 넘김. job.model 이 없는 옛 작업은 실행 시점 Workbench 모델. workbench.js 가 lastWB 를 내보내지 않아 창 목록으로 고름(workbench.js 는 범위 밖이라 수정 안 함). 실제 VMW 작업에서 고른 모델로 도는지는 창 다시 로드 뒤 확인 필요, 미확인."
+  },
+  "snap": "prop_20261124040954_SELF_4",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

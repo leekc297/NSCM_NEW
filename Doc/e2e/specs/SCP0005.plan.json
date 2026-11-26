@@ -460,9 +460,9 @@
         "SEARCH",
         "SEARCH_ROUTEID",
         "SEARCH_CITY",
+        "DELETE",
         "INSERT",
-        "SAVE",
-        "DELETE"
+        "SAVE"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -505,8 +505,8 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "SEARCH",
-        "SEARCH_CITY",
-        "SEARCH_ROUTEID"
+        "SEARCH_ROUTEID",
+        "SEARCH_CITY"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -523,9 +523,9 @@
       "SEARCH",
       "SEARCH_ROUTEID",
       "SEARCH_CITY",
+      "DELETE",
       "INSERT",
-      "SAVE",
-      "DELETE"
+      "SAVE"
     ],
     "CAPA Planner": [
       "UPLOAD_SAVE",
@@ -541,83 +541,93 @@
       "UPLOAD",
       "UPLOAD_SAVE",
       "SEARCH",
-      "SAVE",
       "INSERT",
       "DELETE",
       "SEARCH_CITY",
+      "SAVE",
       "SEARCH_ROUTEID"
     ],
     "DM Planner": [
       "UPLOAD",
       "UPLOAD_SAVE",
       "SEARCH",
-      "SAVE",
       "SEARCH_ROUTEID",
-      "DELETE",
       "SEARCH_CITY",
+      "SAVE",
+      "DELETE",
       "INSERT"
     ],
     "DM Planner (W/S)": [
       "UPLOAD",
       "UPLOAD_SAVE",
       "SEARCH",
-      "SEARCH_CITY",
-      "INSERT",
       "SAVE",
-      "SEARCH_ROUTEID",
-      "DELETE"
+      "DELETE",
+      "INSERT",
+      "SEARCH_CITY",
+      "SEARCH_ROUTEID"
     ],
     "DM Viewer": [
       "UPLOAD_SAVE",
       "UPLOAD",
       "SEARCH",
-      "DELETE",
-      "SEARCH_ROUTEID",
-      "SEARCH_CITY",
-      "SAVE",
-      "INSERT"
-    ],
-    "FP Planner": [
-      "UPLOAD",
-      "UPLOAD_SAVE",
-      "SEARCH",
       "INSERT",
-      "SEARCH_ROUTEID",
       "DELETE",
+      "SEARCH_ROUTEID",
       "SAVE",
       "SEARCH_CITY"
     ],
-    "FP Viewer": [
-      "UPLOAD",
+    "FP Planner": [
       "UPLOAD_SAVE",
+      "UPLOAD",
       "SEARCH",
+      "SAVE",
+      "SEARCH_CITY",
+      "INSERT",
+      "DELETE",
+      "SEARCH_ROUTEID"
+    ],
+    "FP Viewer": [
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SEARCH",
+      "SAVE",
+      "DELETE",
       "INSERT",
       "SEARCH_ROUTEID",
-      "DELETE",
-      "SEARCH_CITY",
-      "SAVE"
+      "SEARCH_CITY"
     ],
     "SCM PI Admin": [
       "UPLOAD",
       "UPLOAD_SAVE",
       "SEARCH",
-      "SEARCH_ROUTEID",
-      "DELETE",
-      "INSERT",
+      "SEARCH_CITY",
       "SAVE",
-      "SEARCH_CITY"
+      "INSERT",
+      "DELETE",
+      "SEARCH_ROUTEID"
     ],
     "SCM Viewer": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "SEARCH_ROUTEID",
+      "SEARCH_CITY",
+      "DELETE",
+      "SAVE",
+      "INSERT"
+    ],
+    "SCP Planner": [
       "UPLOAD_SAVE",
       "UPLOAD",
       "SEARCH",
-      "SEARCH_CITY",
-      "INSERT",
       "SEARCH_ROUTEID",
+      "SEARCH_CITY",
       "SAVE",
+      "INSERT",
       "DELETE"
     ],
-    "SCP Planner": [
+    "SCP Tester": [
       "UPLOAD_SAVE",
       "UPLOAD",
       "SEARCH",
@@ -627,37 +637,17 @@
       "SEARCH_CITY",
       "SEARCH_ROUTEID"
     ],
-    "SCP Tester": [
-      "UPLOAD",
-      "UPLOAD_SAVE",
-      "SEARCH",
-      "SEARCH_ROUTEID",
-      "SEARCH_CITY",
-      "SAVE",
-      "INSERT",
-      "DELETE"
-    ],
     "SSP ADMIN": [
       "UPLOAD",
       "UPLOAD_SAVE",
       "SEARCH",
-      "SEARCH_ROUTEID",
       "SAVE",
       "SEARCH_CITY",
       "DELETE",
-      "INSERT"
+      "INSERT",
+      "SEARCH_ROUTEID"
     ],
     "SSP Planner": [
-      "UPLOAD",
-      "UPLOAD_SAVE",
-      "SEARCH",
-      "INSERT",
-      "SEARCH_CITY",
-      "DELETE",
-      "SEARCH_ROUTEID",
-      "SAVE"
-    ],
-    "SSP Viewer": [
       "UPLOAD_SAVE",
       "UPLOAD",
       "SEARCH",
@@ -666,6 +656,16 @@
       "INSERT",
       "SEARCH_CITY",
       "DELETE"
+    ],
+    "SSP Viewer": [
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "SAVE",
+      "INSERT",
+      "DELETE",
+      "SEARCH_ROUTEID",
+      "SEARCH_CITY"
     ]
   },
   "menuBtnCodes": [
@@ -674,9 +674,9 @@
     "SEARCH",
     "SEARCH_ROUTEID",
     "SEARCH_CITY",
+    "DELETE",
     "INSERT",
-    "SAVE",
-    "DELETE"
+    "SAVE"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

@@ -1,0 +1,26 @@
+stmts 8
+[1] 0.03s rows=1 cols=['DIVISION_ID', 'CHANGE_REQ_NO', 'CHANGE_REQ_STATUS', 'VALID_YN', 'REQUEST_USER', 'APPROVAL_USER', 'DELEGATEE_USER', 'REQUEST_TIME', 'HEADER_CNT']
+    ('40', 'R20261120555032', 'A', 'Y', 'chahg', 'chahg', None, '2026-11-20 10:40:10', 1)
+[2] 0.03s rows=1 cols=['CHANGE_REQ_NO', 'SP_ROWS', 'REQ_USER_ROWS', 'APPR_USER_ROWS', 'DELEG_USER_ROWS', 'DELEGATE_ROWS', 'DELEGATEE_IDS']
+    ('R20261120555032', 2, 1, 1, 0, 2, '/,gwonjung')
+[3] 0.05s rows=5 cols=['DIVISION_ID', 'USER_ID', 'DELEGATEE_ID', 'FROM_DATE', 'TO_DATE', 'VALID_YN', 'TODAY_VALID', 'CREATED_BY', 'CREATION_DATE', 'LAST_UPDATED_BY', 'LAST_UPDATE_DATE']
+    ('40', 'chahg', 'gwonjung', '20260123', '20301231', 'N', 'N', 'chahg', '2026-01-23 11:21:26', 'chahg', '2026-10-01 10:48:09')
+    ('40', 'chahg', 'gurumi', '20260401', '20260406', 'N', 'N', 'chahg', '2026-04-01 10:05:07', 'chahg', '2026-04-08 16:40:55')
+    ('40', 'chahg', 'gurumi', '20261001', '20261224', 'N', 'N', 'chahg', '2026-10-01 10:56:14', 'chahg', '2026-11-03 17:30:46')
+    ('40', 'chahg', '/', '20261103', '20271231', 'Y', 'Y', 'chahg', '2026-11-03 17:31:00', 'chahg', '2026-11-03 17:31:00')
+    ('40', 'chahg', 'gwonjung', '20261105', '20271231', 'Y', 'Y', 'chahg', '2026-11-05 15:33:01', 'chahg', '2026-11-05 15:33:01')
+[4] 0.05s rows=2 cols=['DIVISION_ID', 'USER_ID', 'VALID_CNT', 'DETAIL']
+    ('40', 'chahg', 2, '/:20261103~20271231@20261103 173100 | gwonjung:20261105~20271231@20261105 153301')
+    ('81', 'yhleea', 2, 'rsc0704:20200625~20471231@20200625 165120 | cleverwc:20200827~20311231@20200827 164240')
+[5] 0.03s rows=1 cols=['DIVISION_ID', 'USER_ID', 'DELEGATEE_ID', 'FROM_DATE', 'TO_DATE', 'CREATION_DATE']
+    ('40', 'chahg', '/', '20261103', '20271231', '2026-11-03 17:31:00')
+[6] 0.12s rows=2 cols=['DIVISION_ID', 'APPROVAL_USER', 'REQ_CNT']
+    ('40', 'chahg', 398)
+    ('81', 'yhleea', 14)
+[7] 1.7s rows=2 cols=['TABLE_NAME', 'CONSTRAINT_NAME', 'CONSTRAINT_TYPE', 'COLS']
+    ('SCM_ADM_USER_M', 'PK_SCM_ADM_USER_M', 'P', 'USER_ID')
+    ('SSP_ANL_SHIP_CONFIRM_CHG_REQ', 'PK_SSP_ANL_SHIP_CONFIRM_CHG_REQ', 'P', 'CHANGE_REQ_NO')
+[8] 0.12s rows=3 cols=['OWNER', 'OBJECT_NAME', 'OBJECT_TYPE', 'STATUS', 'LAST_DDL_TIME']
+    ('SCM_MGR', 'PKG_SSP0003', 'PACKAGE', 'VALID', '2026-11-24 13:55:22')
+    ('SCM_MGR', 'PKG_SSP0003', 'PACKAGE BODY', 'VALID', '2026-11-24 13:55:25')
+    ('SCMP_APP', 'PKG_SSP0003', 'SYNONYM', 'VALID', '2026-10-13 07:26:35')

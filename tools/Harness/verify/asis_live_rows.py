@@ -8,9 +8,11 @@
 판정  조건이 같을 때만 판정한다(조건이 다르면 건수가 달라도 오류가 아니므로 행을 만들지 않고 사유만 남긴다)
       같음(건수 같고 키도 같음)                         → PASS
       TO-BE 0건 · AS-IS 1건 이상                        → FAIL  (데이터 없음)
-      양쪽 다 있는데 공통 키 0                          → FAIL  (아예 다른 데이터)
+      AS-IS 0건 · TO-BE 1건 이상                        → FAIL  (데이터 없음 · R72 2026-11-25)
+      양쪽 다 있는데 공통 키 0                          → REVIEW (AS-IS, TO-BE DB 데이터 차이 · R40 2026-11-24)
       건수 차이가 소량 = |차이| ≤ max(ABS, PCT × 큰 쪽)  → REVIEW(판정필요)
-      그보다 큰 차이                                    → FAIL
+      그보다 큰 차이                                    → REVIEW (AS-IS, TO-BE DB 데이터 차이 · R40 2026-11-24)
+      python tools/Harness/verify/asis_live_rows.py --selftest  → classify 자체 시험
       건수는 같은데 키 일부가 다름                       → REVIEW
       소량 기준 기본값 ABS=10건 · PCT=5%  (환경변수 VERIFY_LIVE_ROWS_ABS · VERIFY_LIVE_ROWS_PCT 로 바꾼다)
 산출  Doc/verify/<ID>/a1_live.csv 에 '<시트> · AS-IS 실구동' 행 추가(eg_ingest 가 A1 행으로 반입 · 다시 돌리면 그 행만 교체)
@@ -41,11 +43,35 @@ def classify(a, t, common=None, asis_only=None, tobe_only=None):
     keys = '' if common is None else f' · 키 대조: 공통 {common:,} · AS-IS 에만 {asis_only or 0:,} · TO-BE 에만 {tobe_only or 0:,}'
     if a == t and (common is None or (not asis_only and not tobe_only)): return 'PASS', base + ' — 같음' + keys
     if t == 0 and a > 0: return 'FAIL', base + ' — TO-BE 에 데이터가 없음(조치 필요)' + keys
-    if common is not None and common == 0 and a > 0 and t > 0: return 'FAIL', base + ' — 양쪽 모두 데이터가 있지만 같은 키가 하나도 없음(아예 다른 데이터 · 조치 필요)' + keys
+    # 2026-11-25 R72(사용자 11-13 14:25): 한쪽 데이터 없음 = 조치필요. AS-IS 0건 · TO-BE 1건 이상도 FAIL. 아래 소량 판정은 양쪽 1건 이상일 때만 탄다
+    if a == 0 and t > 0: return 'FAIL', base + ' — AS-IS 에 데이터가 없음(조치 필요)' + keys
+    # 2026-11-24 R40(사용자 11-11 16:49): 양쪽 조회가 된 값 차이 = AS-IS, TO-BE DB 데이터 차이 → 판정필요. FAIL 은 조회 실패, 조회 불가(위 TO-BE 0행)만
+    if common is not None and common == 0 and a > 0 and t > 0: return 'REVIEW', base + ' — 양쪽 모두 데이터가 있지만 같은 키가 하나도 없음(AS-IS, TO-BE DB 데이터 차이 · 판정필요)' + keys
     d = abs(a - t)
     if a == t: return 'REVIEW', base + ' — 건수는 같지만 일부 키가 다름(판정필요)' + keys
     if d <= lim: return 'REVIEW', base + f' — 건수 차이 {d:,}건(소량 기준 {lim:,}건 이하 = max({ABS}건, {PCT * 100:g}%) · 판정필요: 두 DB 의 데이터 시점 차이일 수 있음)' + keys
-    return 'FAIL', base + f' — 건수 차이 {d:,}건(소량 기준 {lim:,}건 초과 · 조치 필요)' + keys
+    return 'REVIEW', base + f' — 건수 차이 {d:,}건(소량 기준 {lim:,}건 초과 · AS-IS, TO-BE DB 데이터 차이 · 판정필요)' + keys
+
+
+def selftest():
+    """classify 자체 시험(변이 사례 포함). 0 = 통과"""
+    cases = [
+        ((100, 100, 100, 0, 0), 'PASS'),
+        ((100, 0), 'FAIL'),                      # TO-BE 0행 = 조회 불가
+        ((0, 5), 'FAIL'),                        # AS-IS 0행 · TO-BE 소량(R72, 종전 REVIEW)
+        ((0, 0), 'PASS'),                        # 양쪽 0행 = 같음
+        ((100, 100, 0, 100, 100), 'REVIEW'),     # 공통 키 0 = DB 데이터 차이(R40, 종전 FAIL)
+        ((1000, 500), 'REVIEW'),                 # 소량 기준 초과 건수 차이(R40, 종전 FAIL)
+        ((100, 95), 'REVIEW'),                   # 소량 차이
+        ((100, 100, 90, 10, 10), 'REVIEW'),      # 건수 같고 키 일부 다름
+    ]
+    bad = 0
+    for args, exp in cases:
+        got = classify(*args)[0]
+        ok = got == exp; bad += 0 if ok else 1
+        print(f"{'OK  ' if ok else 'FAIL'} classify{args} = {got} (기대 {exp})")
+    print(f'selftest {len(cases) - bad}/{len(cases)}')
+    return 1 if bad else 0
 
 
 def key_counts(mid, sheet, a, t):
@@ -61,6 +87,7 @@ def key_counts(mid, sheet, a, t):
 
 def main():
     if len(sys.argv) < 2: print(__doc__); return 2
+    if sys.argv[1] == '--selftest': return selftest()
     mid = sys.argv[1].upper(); vd = P('Doc', 'verify', mid); od = os.path.join(vd, 'asis_live'); os.makedirs(od, exist_ok=True)
     rec = {'menu_id': mid, 'sheet': '', 'asis_sp': '', 'verdict': '', 'asis_rows': '', 'tobe_rows': '', 'detail': '', 'note': ''}
 

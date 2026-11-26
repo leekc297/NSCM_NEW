@@ -1212,7 +1212,10 @@ export const PeriodField = ({
                 maxdate={startMaxValue}
                 onChange={
                   ((date: Dayjs | null) => {
-                    onChange(date?.format(outFormat) ?? '', end);
+                    // 백스페이스로 비우면 picker 가 null 이 아니라 '무효 dayjs' 를 주기도 한다 →
+                    //   date?.format() 이 "Invalid Date" 문자열을 내보내 조회 파라미터가 오염된다.
+                    //   무효/빈 값이면 기존 값(start)을 유지한다 → controlled picker 라 화면도 이전 값으로 복원.
+                    onChange(date && date.isValid() ? date.format(outFormat) : start, end);
                   }) as never
                 }
               />
@@ -1229,7 +1232,8 @@ export const PeriodField = ({
                 mindate={endMinValue}
                 onChange={
                   ((date: Dayjs | null) => {
-                    onChange(start, date?.format(outFormat) ?? '');
+                    // 무효/빈 값이면 기존 값(end) 유지 → 이전 값으로 복원(위 From 피커와 동일, "Invalid Date" 유출 방지).
+                    onChange(start, date && date.isValid() ? date.format(outFormat) : end);
                   }) as never
                 }
               />

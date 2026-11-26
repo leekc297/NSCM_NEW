@@ -14,7 +14,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -61,7 +61,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -125,7 +133,7 @@
           "specs": [
             {
               "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
-              "ok": false,
+              "ok": true,
               "tags": [
                 "authcrud"
               ],
@@ -135,7 +143,7 @@
                   "annotations": [
                     {
                       "type": "authcrud",
-                      "description": "tobeGroups=ADMIN|GUEST|SSP Planner menuAccess=Y expected=UPLOAD_SAVE|UPLOAD|SEARCH|SEARCH_ROUTEID|SEARCH_CITY|INSERT|SAVE|DELETE dataset=ADMIN matrix=-"
+                      "description": "tobeGroups=ADMIN|GUEST|SSP Planner menuAccess=Y expected=UPLOAD_SAVE|UPLOAD|SEARCH|SEARCH_ROUTEID|SEARCH_CITY|DELETE|INSERT|SAVE dataset=ADMIN matrix=-"
                     },
                     {
                       "type": "cascade",
@@ -143,11 +151,11 @@
                     },
                     {
                       "type": "crud",
-                      "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · 예외: TimeoutError: locator.click: Timeout 5000ms exceeded."
+                      "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 필수 칸 채움(T166): LT_TYPE(미사용 후보 없음 → 첫 후보), LT_TYPE=AVERAGE, FROM_COUNTRY=CA, FROM_CITY=CAWND, TRANSPORT_MODE=FERRY, PRIORITY=5, D_COUNTRY=-, D_PORT_CODE=-, A_PORT_NAME=E2E_JOOYONTEOU, A_COUNTRY=-, A_PORT_CODE=-, SHIPPING_COMPANY=E2E_JOOYONTEOU, TO_COUNTRY=CA, TO_CITY=CAWND · 마커 칸 D_PORT_NAME · 묶음 필수 [Working Days] 7칸(DAYS_MON~DAYS_SUN) 중 DAYS_MON=Y 채운 뒤 재저장(T599) · 묶음 = 머리글 'departure days'(문구 이름과 낱말 1개 겹침 · T636) · 1차 문구 '[Working Days] 값은 필수 입력 항목입니다.' · 마커 저장 응답: route/SAVE:200 요청={\"activeFlag\":\"I\",\"routeId\":\"\",\"fromCountry\":\"CA\",\"fromCity\":\"CAWND\",\"fromCityName\":\"WINDSOR, CANADA\",\"transportMode\":\"F 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":1,\"CODE\": | route/SEARCH:200 알림=성공적으로 저장되었습니다. · 화면 삭제 시도 예외: TimeoutError: locator.click: Timeout 10000ms exceeded."
                     },
                     {
                       "type": "authcrud",
-                      "description": "jooyong026 div=40 mode=insert save=true insert=true delete=true editable=null saved=false found=false cleaned=true restored=true"
+                      "description": "jooyong026 div=40 mode=insert save=true insert=true delete=true editable=null saved=true found=true cleaned=true restored=true"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -157,48 +165,17 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 37007,
-                      "error": {
-                        "message": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:120",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                          "column": 120,
-                          "line": 50
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 48 |\u001b[39m       \u001b[36mif\u001b[39m (expEdit \u001b[33m!=\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m&&\u001b[39m out\u001b[33m.\u001b[39meditable \u001b[33m!=\u001b[39m \u001b[36mnull\u001b[39m) expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39meditable\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(expEdit)\u001b[33m;\u001b[39m\n \u001b[90m 49 |\u001b[39m       \u001b[36mif\u001b[39m (expSave \u001b[33m===\u001b[39m \u001b[36mtrue\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 50 |\u001b[39m         \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39mmode \u001b[33m===\u001b[39m \u001b[32m'insert'\u001b[39m) { expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39msaved\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39mfound\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 재조회 후 신규 행 존재`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect(out\u001b[33m.\u001b[39mcleaned\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 마커 행 정리 완료`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m }\n \u001b[90m    |\u001b[39m                                                                                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 51 |\u001b[39m         \u001b[36melse\u001b[39m \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39mmode \u001b[33m===\u001b[39m \u001b[32m'edit-save'\u001b[39m) { expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39meditable\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 허용 계정 편집 가능 셀 존재`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39meditable) { expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39msaved\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39mfound\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 재조회 후 수정값 반영`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect(out\u001b[33m.\u001b[39mrestored\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 원래 값 복원 저장·확인`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m } }\n \u001b[90m 52 |\u001b[39m       } \u001b[36melse\u001b[39m \u001b[36mif\u001b[39m (expSave \u001b[33m===\u001b[39m \u001b[36mfalse\u001b[39m) {\n \u001b[90m 53 |\u001b[39m         \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39meditable \u001b[33m!=\u001b[39m \u001b[36mnull\u001b[39m) expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39meditable\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 비허용 계정 셀 편집 불가`\u001b[39m)\u001b[33m.\u001b[39mtoBeFalsy()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                            "column": 120,
-                            "line": 50
-                          },
-                          "message": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                        ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:120"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                            "column": 186,
-                            "line": 50
-                          },
-                          "message": "Error: [jooyong026] 재조회 후 신규 행 존재\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                                                                                          ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:186"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 65856,
+                      "errors": [],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:02:21.985Z",
+                      "startTime": "2026-11-25T16:16:50.338Z",
                       "annotations": [
                         {
                           "type": "authcrud",
-                          "description": "tobeGroups=ADMIN|GUEST|SSP Planner menuAccess=Y expected=UPLOAD_SAVE|UPLOAD|SEARCH|SEARCH_ROUTEID|SEARCH_CITY|INSERT|SAVE|DELETE dataset=ADMIN matrix=-"
+                          "description": "tobeGroups=ADMIN|GUEST|SSP Planner menuAccess=Y expected=UPLOAD_SAVE|UPLOAD|SEARCH|SEARCH_ROUTEID|SEARCH_CITY|DELETE|INSERT|SAVE dataset=ADMIN matrix=-"
                         },
                         {
                           "type": "cascade",
@@ -206,120 +183,23 @@
                         },
                         {
                           "type": "crud",
-                          "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · 예외: TimeoutError: locator.click: Timeout 5000ms exceeded."
+                          "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=Y found=Y updated=Y cleaned=Y restored=Y saveCalls=2 · 필수 칸 채움(T166): LT_TYPE(미사용 후보 없음 → 첫 후보), LT_TYPE=AVERAGE, FROM_COUNTRY=CA, FROM_CITY=CAWND, TRANSPORT_MODE=FERRY, PRIORITY=5, D_COUNTRY=-, D_PORT_CODE=-, A_PORT_NAME=E2E_JOOYONTEOU, A_COUNTRY=-, A_PORT_CODE=-, SHIPPING_COMPANY=E2E_JOOYONTEOU, TO_COUNTRY=CA, TO_CITY=CAWND · 마커 칸 D_PORT_NAME · 묶음 필수 [Working Days] 7칸(DAYS_MON~DAYS_SUN) 중 DAYS_MON=Y 채운 뒤 재저장(T599) · 묶음 = 머리글 'departure days'(문구 이름과 낱말 1개 겹침 · T636) · 1차 문구 '[Working Days] 값은 필수 입력 항목입니다.' · 마커 저장 응답: route/SAVE:200 요청={\"activeFlag\":\"I\",\"routeId\":\"\",\"fromCountry\":\"CA\",\"fromCity\":\"CAWND\",\"fromCityName\":\"WINDSOR, CANADA\",\"transportMode\":\"F 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"MSG\":\"SUCCESS\",\"RESULT_CNT\":1,\"CODE\": | route/SEARCH:200 알림=성공적으로 저장되었습니다. · 화면 삭제 시도 예외: TimeoutError: locator.click: Timeout 10000ms exceeded."
                         },
                         {
                           "type": "authcrud",
-                          "description": "jooyong026 div=40 mode=insert save=true insert=true delete=true editable=null saved=false found=false cleaned=true restored=true"
+                          "description": "jooyong026 div=40 mode=insert save=true insert=true delete=true editable=null saved=true found=true cleaned=true restored=true"
                         }
                       ],
                       "attachments": [
                         {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\trace.zip"
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\video.webm"
                         }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                        "column": 120,
-                        "line": 50
-                      }
-                    },
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 37342,
-                      "error": {
-                        "message": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:120",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                          "column": 120,
-                          "line": 50
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 48 |\u001b[39m       \u001b[36mif\u001b[39m (expEdit \u001b[33m!=\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m&&\u001b[39m out\u001b[33m.\u001b[39meditable \u001b[33m!=\u001b[39m \u001b[36mnull\u001b[39m) expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39meditable\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(expEdit)\u001b[33m;\u001b[39m\n \u001b[90m 49 |\u001b[39m       \u001b[36mif\u001b[39m (expSave \u001b[33m===\u001b[39m \u001b[36mtrue\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 50 |\u001b[39m         \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39mmode \u001b[33m===\u001b[39m \u001b[32m'insert'\u001b[39m) { expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39msaved\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39mfound\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 재조회 후 신규 행 존재`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect(out\u001b[33m.\u001b[39mcleaned\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 마커 행 정리 완료`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m }\n \u001b[90m    |\u001b[39m                                                                                                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 51 |\u001b[39m         \u001b[36melse\u001b[39m \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39mmode \u001b[33m===\u001b[39m \u001b[32m'edit-save'\u001b[39m) { expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39meditable\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 허용 계정 편집 가능 셀 존재`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39meditable) { expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39msaved\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39mfound\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 재조회 후 수정값 반영`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m expect(out\u001b[33m.\u001b[39mrestored\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 원래 값 복원 저장·확인`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m } }\n \u001b[90m 52 |\u001b[39m       } \u001b[36melse\u001b[39m \u001b[36mif\u001b[39m (expSave \u001b[33m===\u001b[39m \u001b[36mfalse\u001b[39m) {\n \u001b[90m 53 |\u001b[39m         \u001b[36mif\u001b[39m (out\u001b[33m.\u001b[39meditable \u001b[33m!=\u001b[39m \u001b[36mnull\u001b[39m) expect\u001b[33m.\u001b[39msoft(out\u001b[33m.\u001b[39meditable\u001b[33m,\u001b[39m \u001b[32m`[${acc.id}] 비허용 계정 셀 편집 불가`\u001b[39m)\u001b[33m.\u001b[39mtoBeFalsy()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                            "column": 120,
-                            "line": 50
-                          },
-                          "message": "Error: [jooyong026] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                        ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:120"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                            "column": 186,
-                            "line": 50
-                          },
-                          "message": "Error: [jooyong026] 재조회 후 신규 행 존재\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                                                                                          ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts:50:186"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-11-20T00:03:03.003Z",
-                      "annotations": [
-                        {
-                          "type": "authcrud",
-                          "description": "tobeGroups=ADMIN|GUEST|SSP Planner menuAccess=Y expected=UPLOAD_SAVE|UPLOAD|SEARCH|SEARCH_ROUTEID|SEARCH_CITY|INSERT|SAVE|DELETE dataset=ADMIN matrix=-"
-                        },
-                        {
-                          "type": "cascade",
-                          "description": "jooyong026 div=40 선택=false 후보=[] 권한=[EE_ST,EE_UC,EE_HM,EE_HG,EE_HD,82,81_UC,81_ST,81_HM,81_HG,81_HD,81,40,EE] 권한밖=0 대표포함=null 연동=- 비고=Division 콤보 칸을 찾지 못함(라벨 Div/Division/Div.)"
-                        },
-                        {
-                          "type": "crud",
-                          "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · 예외: TimeoutError: locator.click: Timeout 5000ms exceeded."
-                        },
-                        {
-                          "type": "authcrud",
-                          "description": "jooyong026 div=40 mode=insert save=true insert=true delete=true editable=null saved=false found=false cleaned=true restored=true"
-                        }
-                      ],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0005.authcrud.spec.ts",
-                        "column": 120,
-                        "line": 50
-                      }
+                      ]
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "04b98d5a9242fed8d896-fda7ed2ec9e38befa811",
@@ -347,7 +227,7 @@
                   "annotations": [
                     {
                       "type": "authcrud",
-                      "description": "tobeGroups=SCP Planner menuAccess=Y expected=SEARCH|SEARCH_CITY|SEARCH_ROUTEID dataset=SCP Planner matrix=-"
+                      "description": "tobeGroups=SCP Planner menuAccess=Y expected=SEARCH|SEARCH_ROUTEID|SEARCH_CITY dataset=SCP Planner matrix=-"
                     },
                     {
                       "type": "cascade",
@@ -367,19 +247,19 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6892,
+                      "duration": 6048,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:03:45.115Z",
+                      "startTime": "2026-11-25T16:17:58.757Z",
                       "annotations": [
                         {
                           "type": "authcrud",
-                          "description": "tobeGroups=SCP Planner menuAccess=Y expected=SEARCH|SEARCH_CITY|SEARCH_ROUTEID dataset=SCP Planner matrix=-"
+                          "description": "tobeGroups=SCP Planner menuAccess=Y expected=SEARCH|SEARCH_ROUTEID|SEARCH_CITY dataset=SCP Planner matrix=-"
                         },
                         {
                           "type": "cascade",
@@ -394,7 +274,13 @@
                           "description": "dana.robot div=40 mode=no-save save=false insert=false delete=false editable=false saved=false found=false cleaned=true restored=true"
                         }
                       ],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\artifacts\\SCP0005.authcrud-SCP0005-권-e7cc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -412,11 +298,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-20T00:02:21.546Z",
-    "duration": 93481.08799999999,
-    "expected": 1,
+    "startTime": "2026-11-25T16:16:49.869Z",
+    "duration": 77515.698,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

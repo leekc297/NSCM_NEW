@@ -27,6 +27,14 @@ import * as path from 'node:path';
 }
 const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'e2e.config.json'), 'utf8').replace(/^\uFEFF/, ''));
 const results = process.env.E2E_RESULTS || cfg.resultsDir;
+// 2026-11-20 사용자 지시: TO-BE 실측 화면 방식(창 없이 실행·창 띄우기·녹화) — tools/Harness/harness.json e2eView = hidden|window|record (실행 한 번만 = 환경변수 E2E_VIEW)
+//   window = Chrome 창을 띄우고 동작 사이 e2eSlowMoMs(기본 300ms) 지연 · 작업자 1개 / record = 창 없이 실행하고 시험마다 동영상(<results>/video/<시각>_<pid>/*.webm) / hidden = 종전
+const harnessCfg = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')); } catch { return {}; } })();
+const VIEW = ['hidden', 'window', 'record'].includes(String(process.env.E2E_VIEW || harnessCfg.e2eView || '').toLowerCase()) ? String(process.env.E2E_VIEW || harnessCfg.e2eView).toLowerCase() : 'hidden';
+const SLOWMO = Number(harnessCfg.e2eSlowMoMs ?? 300) || 0;
+// 2026-11-20 사용자 지시 '중단된 실행도 녹화를 보관 폴더로': Playwright 는 전역 준비 전에 결과 폴더를 비우므로, 설정을 읽는 이 시점에 지난(중단) 실행의 녹화를 옮긴다.
+//   실행 관리 프로세스에서만(작업자 프로세스는 TEST_WORKER_INDEX 가 있음 — 지금 실행 중인 녹화를 건드리지 않게)
+if (VIEW === 'record' && !process.env.TEST_WORKER_INDEX) { try { require('./video_keep.js').rescue(path.join(results, 'artifacts')); } catch { /* 보관 실패 = 녹화만 잃음 · 실행은 계속 */ } }
 // 2026-10-21: 경로 대소문자 통일 — VS Code(Vibe_Manager)가 'c:\…' 로 실행하면 설정의 'C:\…' 스펙 폴더와 드라이브 문자가 달라
 //   @playwright/test 가 두 경로로 두 번 로드돼 "Requiring @playwright/test second time" 로 시작조차 못 했다(SCP0100 체인).
 //   testDir 은 이 파일(__dirname) 기준 상대경로로 다시 만들어 같은 표기를 쓴다.
@@ -36,14 +44,17 @@ export default defineConfig({
   timeout: 180_000,
   expect: { timeout: 20_000 },
   retries: 1,
-  workers: 2,
+  workers: VIEW === 'window' ? 1 : 2,   // 창 띄우기 = 창 1개씩(2026-11-20)
   fullyParallel: false,
   reporter: [['list'], ['json', { outputFile: path.join(results, 'results.json') }], ['html', { outputFolder: path.join(results, 'html'), open: 'never' }]],
   use: {
     baseURL: process.env.E2E_FE || cfg.feUrl,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'off',
+    // 녹화 = 시험마다 동영상(webm · Playwright 전용 ffmpeg — 2026-11-20 사용자 지시로 받음: node node_modules/playwright-core/cli.js install ffmpeg) · video_keep.js 가 실행 끝마다 보관
+    video: VIEW === 'record' ? { mode: 'on', size: { width: 1280, height: 720 } } : 'off',
+    headless: VIEW !== 'window',
+    launchOptions: VIEW === 'window' && SLOWMO > 0 ? { slowMo: SLOWMO } : {},
     // 2026-10-31: 1600 폭에서는 SCP0111 처럼 메타 FIXED_FLAG 로 정적 컬럼 21개(1415px)가 전부 고정되는 그리드의 스크롤 영역이 0 에 가까워(client 1383)
     //   월 컬럼이 렌더되지 않아 D1/E1/H13 동적 컬럼 측정이 불가했다(viewRange c-1~-1). 사용자 모니터(FHD+)에 맞춰 넓게 — 고정 폭 ↔ 뷰포트 경고는 H12 가 따로 낸다
     //   2026-10-31 2560 은 그리드 프로브·K1·W4c 가 극단적으로 느려져 타임아웃 → FHD(1920×1080). 고정 영역이 가시 폭을 넘는 그리드는 probe.unfreezeIfNeeded 가 측정 동안 고정을 푼다
@@ -55,6 +66,8 @@ export default defineConfig({
     navigationTimeout: 60_000,
   },
   outputDir: path.join(results, 'artifacts'),
+  // 2026-11-20 녹화 보관: 실행마다 outputDir 가 비워지므로 끝날 때 동영상을 <results>/video/<시각>_<pid>/ 로 옮긴다(e2eView=record 일 때만)
+  ...(VIEW === 'record' ? { globalTeardown: path.join(__dirname, 'video_keep.js') } : {}),
   // 2026-11-06 플랜 3-2: 스냅샷 골든 위치 — toHaveScreenshot('<ID>/snap/golden/<key>.png') → Doc/verify/<ID>/snap/golden/<key>.png (testDir=Doc/e2e/specs 기준 ../../verify)
   //   승인은 snap_approve.py 가 한다(--update-snapshots 금지 · 승인 게이트 우회)
   snapshotPathTemplate: '{testDir}/../../verify/{arg}{ext}',

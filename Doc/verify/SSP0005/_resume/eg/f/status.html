@@ -1,0 +1,45 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>SSP0005 건수 현황</title><style>
+:root{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+@media (prefers-color-scheme:dark){:root{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}}
+:root[data-theme=light]{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+:root[data-theme=dark]{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}
+*{box-sizing:border-box}
+body{margin:0;padding:14px 16px;background:var(--bg);color:var(--fg);font:13px/1.5 'Malgun Gothic',system-ui,sans-serif;max-width:760px}
+.hd{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}.hd b{font-size:15px}.hd span{color:var(--mut);font-size:12px}
+.kpi{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.kpi div{flex:1;padding:6px 10px;border-left:1px solid var(--line)}.kpi div:first-child{border-left:0}
+.kpi i{display:block;font-style:normal;color:var(--mut);font-size:11px}.kpi em{font-style:normal;font-size:18px;font-weight:600}
+.kpi .FAIL em{color:var(--fail)}.kpi .판정필요 em{color:var(--rev)}.kpi .미검증 em{color:var(--unv)}.kpi .PASS em{color:var(--pass)}
+table{border-collapse:collapse;width:100%;margin-top:12px}
+th,td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th{color:var(--mut);font-weight:400;font-size:12px}th:first-child,td:first-child{text-align:left}
+td.bar{width:34%;padding-left:12px}
+.bar div{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--soft)}
+.bar span{height:100%}
+.c-PASS{background:var(--pass)}.c-FAIL{background:var(--fail)}.c-판정필요{background:var(--rev)}.c-미검증{background:var(--unv)}.c-해당없음{background:var(--na)}
+td.FAIL{color:var(--fail);font-weight:600}td.판정필요{color:var(--rev)}td.미검증{color:var(--unv)}
+tr.sum td{font-weight:600;border-bottom:0}
+h3{font-size:13px;margin:16px 0 4px}
+ul{margin:0;padding-left:18px}li{margin:1px 0}li code{color:var(--mut);font-size:12px}
+.line{margin-top:12px;color:var(--fg)}.line b{font-weight:600}.warn{color:var(--unv)}
+.src{margin-top:14px;color:var(--mut);font-size:11px}
+</style></head><body>
+<div class="hd"><b>SSP0005 ShipmentWorkingDay</b><span>CheckList v7 · 생성 2026-11-20 09:57</span></div>
+<div class="kpi"><div><i>전체</i><em>1,445</em></div><div class="PASS"><i>PASS</i><em>359</em></div><div class="FAIL"><i>FAIL</i><em>5</em></div><div class="판정필요"><i>판정필요</i><em>20</em></div><div class="미검증"><i>미검증</i><em>257</em></div><div class="해당없음"><i>해당없음</i><em>804</em></div></div>
+<table><tr><th>축</th><th>전체</th><th>PASS</th><th>FAIL</th><th>판정필요</th><th>미검증</th><th>해당없음</th><th></th></tr>
+<tr><td>1.디자인·다국어</td><td>198</td><td class="">66</td><td class="">0</td><td class="판정필요">1</td><td class="미검증">7</td><td class="">124</td><td class="bar"><div><span class="c-PASS" style="width:33.3%" title="PASS 66"></span><span class="c-판정필요" style="width:0.5%" title="판정필요 1"></span><span class="c-미검증" style="width:3.5%" title="미검증 7"></span><span class="c-해당없음" style="width:62.6%" title="해당없음 124"></span></div></td></tr>
+<tr><td>2.AS-IS 로직</td><td>167</td><td class="">41</td><td class="">0</td><td class="">0</td><td class="미검증">27</td><td class="">99</td><td class="bar"><div><span class="c-PASS" style="width:24.6%" title="PASS 41"></span><span class="c-미검증" style="width:16.2%" title="미검증 27"></span><span class="c-해당없음" style="width:59.3%" title="해당없음 99"></span></div></td></tr>
+<tr><td>3.SMOKE</td><td>565</td><td class="">148</td><td class="FAIL">3</td><td class="판정필요">19</td><td class="미검증">117</td><td class="">278</td><td class="bar"><div><span class="c-PASS" style="width:26.2%" title="PASS 148"></span><span class="c-FAIL" style="width:0.5%" title="FAIL 3"></span><span class="c-판정필요" style="width:3.4%" title="판정필요 19"></span><span class="c-미검증" style="width:20.7%" title="미검증 117"></span><span class="c-해당없음" style="width:49.2%" title="해당없음 278"></span></div></td></tr>
+<tr><td>4.CRUD</td><td>368</td><td class="">31</td><td class="FAIL">2</td><td class="">0</td><td class="미검증">64</td><td class="">271</td><td class="bar"><div><span class="c-PASS" style="width:8.4%" title="PASS 31"></span><span class="c-FAIL" style="width:0.5%" title="FAIL 2"></span><span class="c-미검증" style="width:17.4%" title="미검증 64"></span><span class="c-해당없음" style="width:73.6%" title="해당없음 271"></span></div></td></tr>
+<tr><td>5.권한별 CRUD</td><td>30</td><td class="">6</td><td class="">0</td><td class="">0</td><td class="미검증">10</td><td class="">14</td><td class="bar"><div><span class="c-PASS" style="width:20.0%" title="PASS 6"></span><span class="c-미검증" style="width:33.3%" title="미검증 10"></span><span class="c-해당없음" style="width:46.7%" title="해당없음 14"></span></div></td></tr>
+<tr><td>분류 없음</td><td>117</td><td class="">67</td><td class="">0</td><td class="">0</td><td class="미검증">32</td><td class="">18</td><td class="bar"><div><span class="c-PASS" style="width:57.3%" title="PASS 67"></span><span class="c-미검증" style="width:27.4%" title="미검증 32"></span><span class="c-해당없음" style="width:15.4%" title="해당없음 18"></span></div></td></tr>
+<tr class="sum"><td>합계</td><td>1,445</td><td>359</td><td>5</td><td>20</td><td>257</td><td>804</td><td></td></tr></table>
+<div class="line">FE 대조표 <b>73</b>행 (구현 0, 미구현 <b class="">0</b>), AS-IS 액션 대조표 <b>149</b>행 (상태 빈칸 <b class="warn">148</b>)</div>
+<h3>조치 필요 1건</h3><ul><li>MSG00135 <code>E4 T-57fe96b8</code></li></ul>
+<div class="src">출처: SSP0005_ShipmentWorkingDay_CheckList_v7.xlsx 11-20 09:36, __asis-mapping__.md 10-01 09:14, __asis-actions__.md 10-23 11:29, checklist_counts.json 11-20 09:36, work_ledger_summary.json 11-20 09:29</div>
+</body></html>

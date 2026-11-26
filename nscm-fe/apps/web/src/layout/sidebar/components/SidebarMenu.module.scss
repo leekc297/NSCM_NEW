@@ -14,7 +14,8 @@
     overflow: hidden;
     color: $commonTextBasic;
     .title {
-      &.isOpen {
+      // 펼침 여부가 아니라 활성 메뉴일 때만 강조색. 비활성 그룹은 .menuLink 기본색(#1f1f1f) 유지.
+      &.isActive {
         color: $commonTextPrimary;
       }
     }

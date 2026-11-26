@@ -1,0 +1,90 @@
+{
+ "definition": "End Customer, Sales Site 별 Customer FCST 업로드 단위(Upload UOM, Upload Bucket Type)와 사용 여부를 기간별로 관리하는 화면",
+ "overview": [
+  "End Customer, Sales Site 별로 Customer FCST 를 올리는 단위(Upload UOM, Upload Bucket Type)와 기간별 사용 여부를 정하는 기준정보 화면임",
+  "위쪽 조회 조건과 Customer FCST 그리드 1개로 구성됨. 그리드 오른쪽에 조회 조건 Bucket 기준 날짜 칸이 이어짐",
+  "Div, Bucket 선택 → Search → Insert → End Customer, Sales Site, Measure, Upload UOM, Upload Bucket Type 입력 → 날짜 칸 값 입력 → Save 순서로 작업함",
+  "End Customer, Sales Site 는 Sales Site 화면에 등록한 값 중에서 고름"
+ ],
+ "pages": [
+  {
+   "title": "Customer FCST Master",
+   "keyPoint": "같은 End Customer, Sales Site 의 같은 날짜 칸에는 Y 를 1행만 둠. 겹치면 \"동일 구간에 하나의 Y만 가능합니다.\" 메시지가 뜨고 입력이 취소됨.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.14,
+     "y": 0.155
+    },
+    {
+     "no": 2,
+     "x": 0.6,
+     "y": 0.248
+    },
+    {
+     "no": 3,
+     "x": 0.18,
+     "y": 0.248
+    },
+    {
+     "no": 4,
+     "x": 0.52,
+     "y": 0.33
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div, Bucket: 필수. Bucket 은 Daily, Weekly, Monthly 중 고르며 기본값은 Weekly",
+      "End Customer, Sales Site, Active: 기본값 ALL"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8): 새 행의 Div 는 조회 조건 Div 값, Active 는 Y 로 채워짐",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Customer FCST 그리드",
+     "lines": [
+      "필수 입력: End Customer, Sales Site, Measure, Upload UOM, Upload Bucket Type, Active(제목 앞 빨간 점)",
+      "Upload UOM: Pack, Module, Cell 중 고름",
+      "신규 행의 키 값이 기존 행과 겹치면 \"동일 구간에 하나의 Y만 가능합니다.\" 메시지가 뜨고 입력이 취소됨"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "날짜 칸",
+     "lines": [
+      "제목 위 줄은 연도와 주차(202646), 아래 줄은 그 주 시작일(11/9)",
+      "Daily: 이번 주 월요일부터 오늘+12개월까지 표시됨",
+      "Weekly: 이번 주부터 오늘+30개월이 속한 주까지 표시됨",
+      "Monthly: 이번 달부터 오늘+30개월이 속한 달까지 표시됨"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0007",
+ "uiName": "Customer FCST Master",
+ "menuPath": "DM> Demand Master> Customer FCST Master",
+ "captures": [
+  "captures/DMF0007.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0007/",
+  "Doc/asisfacts/screens/DMF0007/"
+ ],
+ "buttons": [
+  "customerFcst:DELETE",
+  "customerFcst:INSERT",
+  "customerFcst:SAVE",
+  "customerFcst:SEARCH"
+ ]
+}

@@ -1,0 +1,969 @@
+{
+ "screen": "DMF0044",
+ "calls": [
+  {
+   "cls": "DM0002_TitleSetForm_Popup",
+   "method": "btnMeasure_Click",
+   "asis_ref": "DMF0044_Sales_Reports.cs:1409",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnMeasure",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"DMF0044\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "EXPR",
+     "arg": "siMain.SheetName"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "DMF0044_Sales_Reports.cs:1411",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "DMF0044_United_VersionPopup",
+   "method": "btnSPVer_Click",
+   "asis_ref": "DMF0044_Sales_Reports.cs:1151",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnSPVer",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "clbDivision.ControlValues",
+   "period_args": [],
+   "args": [
+    {
+     "param": "strDiv",
+     "kind": "CONTROL",
+     "arg": "clbDivision.ControlValues"
+    },
+    {
+     "param": "strType",
+     "kind": "CONTROL",
+     "arg": "clbType.ControlValues"
+    }
+   ],
+   "results": [
+    "spversion"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "DMF0044_Sales_Reports.cs:1154",
+     "target": "txtSPVersion.Text",
+     "value": "pop.sVersions"
+    }
+   ]
+  },
+  {
+   "cls": "DM0002_ItembyDivisionPopupEx",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "DMF0044_Sales_Reports.cs:1319",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "ITEM_ID",
+    "guard": "if (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID)) ▸ if (sITEM_ID != \"기타매출\")"
+   },
+   "multi": "false",
+   "div_arg": "sDiv",
+   "period_args": [
+    "\"\""
+   ],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "VAR",
+     "arg": "sDiv"
+    },
+    {
+     "param": "_DeptID",
+     "kind": "VAR",
+     "arg": "sTeam"
+    },
+    {
+     "param": "_EndCustomer",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    },
+    {
+     "param": "_ScmSiteId",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    },
+    {
+     "param": "_ItemID",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "DMF0044_Sales_Reports.cs:1320",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "DMF0044_Sales_Reports.cs:1323",
+     "target": "siMain.SetText",
+     "value": "(e.Row, e.Column, popItem.ItemID)"
+    },
+    {
+     "ref": "DMF0044_Sales_Reports.cs:1324",
+     "target": "siMain.SetText",
+     "value": "(e.Row, siMain.GetColumnIndex(DefColumns.NICK_NAME), popItem.ItemName)"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "DM0002_TitleSetForm_Popup": {
+   "cls": "DM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "DMF0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "152",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id",
+      "p_division_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "DM0002_TitleSetForm_Popup.cs:244",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:191",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:209",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:210",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:188",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:206",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:615",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:618",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "DMF0044_United_VersionPopup": {
+   "cls": "DMF0044_United_VersionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0044_United_VersionPopup.cs",
+   "title": "Sales Reports Popup",
+   "conds": [
+    {
+     "name": "MvMonth",
+     "type": "UsrMonthPicker",
+     "label": " layoutControl_MVDate",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "DMF0044_United_VersionPopup.Designer.cs:38",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if ((clbType.ControlValues == \"SP_W\") || (clbType.ControlValues == \"BP_M\") || (clbType.ControlValues == \"SP_M\"))",
+       "ref": "DMF0044_United_VersionPopup.cs:537",
+       "method": "ControlDisplay"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "else of ((clbType.ControlValues == \"SP_W\") || (clbType.ControlValues == \"BP_M\") || (clbType.ControlValues == \"SP_M\"))",
+       "ref": "DMF0044_United_VersionPopup.cs:575",
+       "method": "ControlDisplay"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "else of (chkMV.Checked == true)",
+       "ref": "DMF0044_United_VersionPopup.cs:722",
+       "method": "chkMV_CheckedChanged"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "BasicDate",
+     "type": "UsrDatePicker",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "DMF0044_United_VersionPopup.Designer.cs:43",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "DMF0044_United_VersionPopup.cs:126",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "else of ((clbType.ControlValues == \"SP_W\") || (clbType.ControlValues == \"BP_M\") || (clbType.ControlValues == \"SP_M\"))",
+       "ref": "DMF0044_United_VersionPopup.cs:572",
+       "method": "ControlDisplay"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "else of (chkResult.Checked == true)",
+       "ref": "DMF0044_United_VersionPopup.cs:315",
+       "method": "chkResult_CheckedChanged"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCombo",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "DMF0044_United_VersionPopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "DMF0044_United_VersionPopup.cs:120",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "drpPeriod",
+     "type": "UsrDateRangePicker",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DMF0044_United_VersionPopup.Designer.cs:45",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtDesc",
+     "type": "UsrMultiLineEditor",
+     "label": "Description",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DMF0044_United_VersionPopup.Designer.cs:47",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbType",
+     "type": "UsrCombo",
+     "label": "Type",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DMF0044_United_VersionPopup.Designer.cs:48",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnVerCopy",
+     "text": "Version Copy",
+     "visible": true
+    },
+    {
+     "name": "btnVerDel",
+     "text": "Version Delete",
+     "visible": true
+    },
+    {
+     "name": "btnTranCancel",
+     "text": "Transfer Cancel",
+     "visible": true
+    },
+    {
+     "name": "btnTransfer",
+     "text": "Transfer",
+     "visible": true
+    },
+    {
+     "name": "btnVerCre",
+     "text": "Version Create",
+     "visible": true
+    },
+    {
+     "name": "btnOK",
+     "text": "OK",
+     "visible": true
+    },
+    {
+     "name": "btnClose",
+     "text": "Close",
+     "visible": true
+    },
+    {
+     "name": "usrButton1",
+     "text": "Find",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "DMF0044_MOBILE_REPORT_CREATE",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0044_MOBILE_REPORT_CREATE.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_version_no",
+      "p_version_type",
+      "p_action_type",
+      "p_created_by",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "n_delete_count",
+      "n_merge_count",
+      "yyyy"
+     ],
+     "method": "DMF0044_MOBILE_REPORT_CREATE",
+     "ref": "DMF0044_United_VersionPopup.cs:589",
+     "save": true
+    },
+    {
+     "sp": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0044_SAVE_SALES_PLAN_VERSION_COPY.sql",
+     "order_known": true,
+     "order_keys": "measure",
+     "order_line": "2266",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_version_no",
+      "p_version_description",
+      "p_created_by",
+      "p_result_date",
+      "p_action_type",
+      "p_mv_plan_yyyymm",
+      "p_update_yn",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "n_delete_count",
+      "n_merge_count",
+      "v_version_type",
+      "v_Ori_Version"
+     ],
+     "method": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+     "ref": "DMF0044_United_VersionPopup.cs:638",
+     "save": true
+    },
+    {
+     "sp": "str_",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+     "ref": "DMF0044_United_VersionPopup.cs:638",
+     "save": false
+    },
+    {
+     "sp": "DMF0044_GET_SALES_VERSION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0044_GET_SALES_VERSION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "CONVERT(CHAR(8), CREATION_DATE, 112) DESC, VERSION_NO",
+     "order_line": "68",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_sdt",
+      "p_edt",
+      "p_version_type",
+      "p_Description"
+     ],
+     "method": "FindData",
+     "ref": "DMF0044_United_VersionPopup.cs:233",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_LOOKUP_VALUES",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_LOOKUP_VALUES.sql",
+     "order_known": true,
+     "order_keys": "L.DISPLAY_SEQ",
+     "order_line": "26",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_lookup_type"
+     ],
+     "method": "GetLookupData",
+     "ref": "DMF0044_United_VersionPopup.cs:364",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_LOOKUP_VALUES",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_LOOKUP_VALUES.sql",
+     "order_known": true,
+     "order_keys": "L.DISPLAY_SEQ",
+     "order_line": "26",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_lookup_type"
+     ],
+     "method": "GetLookupValues",
+     "ref": "DMF0044_United_VersionPopup.cs:294",
+     "save": false
+    },
+    {
+     "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0000_GET_COMMON_SPREAD_TITLE.sql",
+     "order_known": true,
+     "order_keys": "SEQ, SORT_ORDER_NO",
+     "order_line": "204",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_created_by",
+      "p_program_id",
+      "p_sheet_name",
+      "p_division_id",
+      "i_Count"
+     ],
+     "method": "GetSpdTitle",
+     "ref": "DMF0044_United_VersionPopup.cs:274",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:246",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION_ID), siMain.GetMaxColumnIndex(), true)",
+     "guard": "try"
+    }
+   ],
+   "color": [
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:699",
+     "method": "spdMain_CellClick",
+     "raw": "if (i == e.Row) { // 0번 컬럼은 Div 라서 Merge 가 되어있어서 헷갈려서 제외함. siMain.SetBGColor(e.Row, 1, e.Row, siMain.GetMaxColumnIndex(), System.Drawing.Color.FromArgb(215, 227",
+     "guard": "if (e.ColumnHeader == false) ▸ for (i <= siMain.GetMaxRowIndex())"
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:702",
+     "method": "spdMain_CellClick",
+     "raw": "siMain.SetBGColor(e.Row, 1, e.Row, siMain.GetMaxColumnIndex(), System.Drawing.Color.FromArgb(215, 227, 188))",
+     "guard": "if (e.ColumnHeader == false) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ if (i == e.Row)"
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:707",
+     "method": "spdMain_CellClick",
+     "raw": "siMain.SetBGColor(i, 1, i, siMain.GetMaxColumnIndex(), System.Drawing.Color.FromArgb(255, 255, 255))",
+     "guard": "if (e.ColumnHeader == false) ▸ for (i <= siMain.GetMaxRowIndex()) ▸ else of (i == e.Row)"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:493",
+     "method": "btnClose_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:484",
+     "method": "btnOK_Click",
+     "raw": "if (iSelectedRow != -1) { sVersions = siMain.GetValue(iSelectedRow, siMain.GetColumnIndex(DefColumns.VERSION_NO)).ToString(); this.Close(); }",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:487",
+     "method": "btnOK_Click",
+     "raw": "this.Close()",
+     "guard": "if (iSelectedRow != -1)"
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:351",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "if ((clbType.ControlValues == \"REPORT_BP_M\") || (clbType.ControlValues == \"REPORT_SP_W\")) { sVersions = siMain.GetValue(e.Row, siMain.GetColumnIndex(DefColumns.",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:354",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": "if ((clbType.ControlValues == \"REPORT_BP_M\") || (clbType.ControlValues == \"REPORT_SP_W\"))"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { 1 })",
+    "MessageHelper.GMessageBox(dsMain.Tables[0].Rows[0][0].ToString())",
+    "MessageHelper.GMessageBoxForException(ex)",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { 1 })",
+    "MessageHelper.GMessageBox(dsMain.Tables[0].Rows[0][0].ToString())",
+    "MessageHelper.GMessageBoxForException(ex)",
+    "MessageHelper.GMessageBoxForException(ex)",
+    "MessageHelper.GMessageBox(\"MSG00195\")",
+    "MessageHelper.GMessageBox(\"MSG00319\")",
+    "MessageHelper.GMessageBox(\"MSG00318\")",
+    "MessageHelper.GMessageBox(\"MSG00314\")",
+    "MessageHelper.GMessageBox(\"MSG00016\")"
+   ],
+   "period_use": [
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:228",
+     "method": "FindData",
+     "raw": "drpPeriod.Value1.ToString(\"yyyyMMdd\")",
+     "guard": "try"
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:229",
+     "method": "FindData",
+     "raw": "drpPeriod.Value2.ToString(\"yyyyMMdd\")",
+     "guard": "try"
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:236",
+     "method": "FindData",
+     "raw": "request.Parameters[\"p_sdt\"] = sStartDate",
+     "guard": "try"
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:237",
+     "method": "FindData",
+     "raw": "request.Parameters[\"p_edt\"] = sEndDate",
+     "guard": "try"
+    },
+    {
+     "ref": "DMF0044_United_VersionPopup.cs:124",
+     "method": "InitControls",
+     "raw": "drpPeriod.InitValue = sStartDate + \":\" + sEndDate",
+     "guard": ""
+    }
+   ],
+   "from": "factpack"
+  },
+  "DM0002_ItembyDivisionPopupEx": {
+   "cls": "DM0002_ItembyDivisionPopupEx",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_ItembyDivisionPopupEx.cs",
+   "title": "Model by DivisionPopup",
+   "conds": [
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DM0002_ItembyDivisionPopupEx.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "(중첩 블록)",
+       "ref": "DM0002_ItembyDivisionPopupEx.cs:309",
+       "method": "InitControls"
+      },
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "(중첩 블록)",
+       "ref": "DM0002_ItembyDivisionPopupEx.cs:317",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "clbScmSite",
+     "type": "UsrCheckedList",
+     "label": "Sales Site",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DM0002_ItembyDivisionPopupEx.Designer.cs:42",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "(중첩 블록)",
+       "ref": "DM0002_ItembyDivisionPopupEx.cs:319",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProject",
+     "type": "UsrMultiLineEditor",
+     "label": "Project",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DM0002_ItembyDivisionPopupEx.Designer.cs:44",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "(중첩 블록)",
+       "ref": "DM0002_ItembyDivisionPopupEx.cs:318",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "clbTeam",
+     "type": "UsrCheckedList",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DM0002_ItembyDivisionPopupEx.Designer.cs:45",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "(중첩 블록)",
+       "ref": "DM0002_ItembyDivisionPopupEx.cs:320",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "clbEndCustomer",
+     "type": "UsrCheckedList",
+     "label": "End Customer",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DM0002_ItembyDivisionPopupEx.Designer.cs:46",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "(중첩 블록)",
+       "ref": "DM0002_ItembyDivisionPopupEx.cs:321",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "DMF0002_GET_ITEM_BY_DIVISION_POPUPEx",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx.sql",
+     "order_known": true,
+     "order_keys": "I.DIVISION_ID",
+     "order_line": "330",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer",
+      "p_project_code",
+      "p_scm_site_id",
+      "p_item_id",
+      "p_mdmActive_Sw"
+     ],
+     "method": "FindData",
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:418",
+     "save": false
+    },
+    {
+     "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0000_GET_COMMON_SPREAD_TITLE.sql",
+     "order_known": true,
+     "order_keys": "SEQ, SORT_ORDER_NO",
+     "order_line": "204",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_created_by",
+      "p_program_id",
+      "p_sheet_name",
+      "p_division_id",
+      "i_Count"
+     ],
+     "method": "GetSpdTitle",
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:510",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:597",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_SITE_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_SITE_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "A.SITE_DESCRIPTION",
+     "order_line": "45",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer"
+     ],
+     "method": "GetDivisionbyScmSite",
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:611",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_TEAM_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_TEAM_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id"
+     ],
+     "method": "GetTeambyDivision",
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:628",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_CUSTOMER_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_CUSTOMER_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id"
+     ],
+     "method": "GetEndCustomerbyDivision",
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:642",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:438",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:180",
+     "method": "Form_Load",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:483",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:486",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DM0002_ItembyDivisionPopupEx.cs:500",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00147\");"
+   ],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

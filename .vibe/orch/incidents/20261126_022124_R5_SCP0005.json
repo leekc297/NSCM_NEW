@@ -1,0 +1,91 @@
+{
+  "id": "20261126_022124_R5_SCP0005",
+  "at": "2026-11-26T02:21:24+09:00",
+  "ms": 1795627284056,
+  "rule": "R5",
+  "ruleName": "진행 없음",
+  "title": "진행 없음. 미검증 해소 게이트 — 해소 확인 결과(unverified_settle.json) 처리 대상 전체 해소 전이면 남은 행·사유를 적고 오류(재검증 안 함) 로그 10분 무출력",
+  "screen": "SCP0005",
+  "sig": "R5|미검증 해소 게이트 — 해소 확인 결과(unverified_settle.json) 처리 대상 전체 해소 전이면 남은 행·사유를 적고 오류(재검증 안 함)",
+  "count": 1,
+  "repeat": null,
+  "detail": "PID 39192 · 실행 69분째",
+  "evidence": {
+    "log": ".vibe\\logs\\2026-11-26T01-11-56_SCP0005_6_______________________unverified_settle.json_________________________________________.log",
+    "pid": 39192,
+    "quiet_sec": 605,
+    "log_quiet_sec": 605,
+    "trace_quiet_sec": null,
+    "waits": []
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T02:34:54+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-26T02:37:53+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 중단, 사용자 확인 필요 · 원인 engine: SCP0005 7단계 안의 sqllog_calls.py 가 02:11:19 부터 849.6초 동안 출력 없이 돌다 rc=0 으로 끝남(로그 768~775행). 스크립트가 5,000행 묶음 조회를 끝낼 때까지 출력하지 않는 구조(tools/Harness/verify/sqllog_calls.py:183-190, 출력 207행)라 감시기 무출력 600초 기준을 넘음. 체인은 멈추지 않았고 02:36:44 에도 로그가 쓰임. SCP0005 회차별 소요가 166초에서 849초로 늘었고 호출 건수(373 → 1,012건)와 같이 늘어남. PA · 수정 1개 파일 · 개선안 등록 20261126023752_INC(승인 대기)",
+      "grade": "B",
+      "log": ".vibe\\logs\\2026-11-26T02-35-00_claude_orch.log",
+      "sec": 168,
+      "turns": 34,
+      "costUsd": 1.2885257000000003,
+      "files": [
+        "tools/Harness/verify/sqllog_calls.py"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:13:22+09:00",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "원인 고쳐짐 확인: sqllog_calls.py:240, :243 묶음마다 진행 줄 출력(무출력 10분 판정 대상 아님), 개선안 20261126023752_INC"
+    }
+  ],
+  "agent": {
+    "cause_class": "engine",
+    "cause": "SCP0005 7단계 안의 sqllog_calls.py 가 02:11:19 부터 849.6초 동안 출력 없이 돌다 rc=0 으로 끝남(로그 768~775행). 스크립트가 5,000행 묶음 조회를 끝낼 때까지 출력하지 않는 구조(tools/Harness/verify/sqllog_calls.py:183-190, 출력 207행)라 감시기 무출력 600초 기준을 넘음. 체인은 멈추지 않았고 02:36:44 에도 로그가 쓰임. SCP0005 회차별 소요가 166초에서 849초로 늘었고 호출 건수(373 → 1,012건)와 같이 늘어남. PARAMS 행별 읽기(193행)를 원인 후보로 보지만 미측정.",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "사건 로그 1,191행 시점 tail, [시간] 줄에서 100초 넘는 단계 추출, 11-25~26 로그의 sqllog_calls.py 소요와 읽은 행 수 대조",
+        "result": "무출력 단계 = sqllog_calls.py 849.6초. SCP0005 회차별 225, 166, 267, 456, 379, 849초. SCP0028 17.1초, SSP0014 59.9초"
+      },
+      {
+        "grade": "A",
+        "what": "읽기 전용 측정 스크립트 .vibe/orch/tmp/diag_sqllog_20261126.py 작성(조회 계획, 5,000행 묶음 조회 시간, PARAMS 읽기 시간)",
+        "result": "Python 실행 승인 거절로 미실행"
+      },
+      {
+        "grade": "B",
+        "what": "sqllog_calls.py 에 묶음마다 진행 1줄 출력 추가(flush, 묶음 번호, LOG_SEQ 범위, 후보 건수, 경과 초). 백업 sqllog_calls.py.bak_20261126_orch",
+        "result": "정적 확인: t_start, step, rows 가 반복문 전에 정의됨(172~185행). 출력 소비처 run_verify.py:1432 는 출력을 해석하지 않음. 구문 검사와 자체 시험은 미실행"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/sqllog_calls.py",
+      "tools/Harness/verify/sqllog_calls.py.bak_20261126_orch",
+      ".vibe/orch/tmp/diag_sqllog_20261126.py"
+    ],
+    "verify": "미실행(ERROR). 2026-11-26 02:36~02:37 python -m py_compile, sqllog_calls.py --selftest, 측정 스크립트 실행이 권한 승인 단계에서 거절됨. 정적 읽기 확인만 함(172~195행)",
+    "status": "need-user",
+    "next_for_user": "1) python -m py_compile tools/Harness/verify/sqllog_calls.py 와 python tools/Harness/verify/sqllog_calls.py --selftest 실행(통과 못 하면 .bak_20261126_orch 로 되돌림) 2) python -u .vibe/orch/tmp/diag_sqllog_20261126.py 실행 결과를 VMO 에 전달하면 속도 보완안을 올림. 현재 SCP0005 체인은 진행 중이라 다시 실행하지 않음",
+    "proposal": {
+      "title": "sqllog_calls.py 소요 증가 원인 측정 뒤 PARAMS 읽기 방식 보완",
+      "level": "L2",
+      "levelWhy": "같은 서명 과거 사건 0건, 이번 1건. SCP0005 회차별 소요가 166초에서 849초로 늘었으나 재발 사건이 없어 L3 조건(재발 2건 이상)에 해당하지 않음",
+      "evidence": ".vibe/logs/2026-11-26T01-11-56_SCP0005_6_...unverified_settle.json...log:771-775(20,485행, 호출 1,012건, 849.6초). 2026-11-25T00-56-02_SCP0005_1 로그 825·829행(41,189행, 373건, 225.4초). 행 수와 소요가 비례하지 않고 호출 건수와 같이 늘어남. sqllog_calls.py:193 이 후보 행마다 r[3].read() 를 호출함",
+      "targets": [
+        "tools/Harness/verify/sqllog_calls.py"
+      ],
+      "before_after": "전: 후보 행마다 PARAMS 를 따로 읽음(193행). 후: 측정에서 PARAMS 읽기 비중이 확인되면 조회 단계에서 문자열로 받음(fetch_lobs 끔 또는 DBMS_LOB.SUBSTR). 읽는 행과 판정 결과는 같게 유지",
+      "verify": "diag_sqllog_20261126.py 로 전후 묶음 1개 소요 비교, sqllog_calls.py --selftest 통과, 같은 시각대 --since/--until 로 전후 sqllog_calls.json 의 calls 건수와 seq 목록 일치 확인",
+      "rollback": "tools/Harness/verify/sqllog_calls.py.bak_20261126_orch 를 원래 이름으로 복사"
+    }
+  },
+  "proposal": "20261126023752_INC",
+  "snap": "20261126_022124_R5_SCP0005"
+}

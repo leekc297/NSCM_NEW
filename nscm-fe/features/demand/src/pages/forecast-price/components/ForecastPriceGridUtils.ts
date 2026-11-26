@@ -5,7 +5,7 @@ import isoWeek from '@foundation/isoWeek';
 import { type EditTracker } from '@foundation/utils';
 
 import { NON_GROUPING_BINDINGS } from '../forecast-price.constants';
-import { isPastPeriodLocked } from '../utils/forecast-price.editLock';
+import { isPastPeriodLocked, thisWeekMondayYmd } from '../utils/forecast-price.editLock';
 
 dayjs.extend(isoWeek);
 
@@ -204,6 +204,86 @@ export const divideByMonth = (
     editTracker.storeChange(dataItem, lastWeek.week, dataItem[lastWeek.week], newWeekVal);
     dataItem[lastWeek.week] = newWeekVal;
   }
+};
+
+// 실적 차감 Monthly 배분을 쓰는 사업부 (2026-11-24 현업 요청 - 81 계열 전체:
+//   81, 81_UC, 81_HM, 81_ST, 81_HD, 81_HG). 40·82 는 위 divideByMonth(캘린더 비율 배분)를 그대로 쓴다.
+export const isActualAwareMonthSplit = (divisionId: WijmoPrimitive | undefined): boolean =>
+  String(divisionId ?? '')
+    .trim()
+    .startsWith('81');
+
+// Month column 분배 로직 (실적 차감형) - AS-IS DMF0003_MktFcst.cs L3504~3807 방식.
+//   1. 금주 월요일 이전 일자는 건드리지 않고, 화면에 보이는 값(실적)만 합산한다.
+//   2. (월 값 - 실적 합) 을 금주 월요일 이후 버킷요일 수로 나눈다 (C# 정수 / 와 % = trunc).
+//   3. 나머지는 마지막 버킷요일에 더한다. 버킷요일이 아닌 열린 일자는 0.
+//   4. 열린 기간에 버킷요일이 없으면 기본 배분요일(defaultBucket)로 다시 고른다 (AS-IS bMonthAll 분기).
+//   주의: AS-IS 는 기본 배분요일도 없으면 0 나누기로 멈춘다. 여기서는 입력값이 사라지지 않도록
+//     마지막 열린 일자에 전액을 넣는다.
+//   음수(실적 합 > 월 값) 검증(AS-IS MSG00225)은 2026-11-24 결정으로 넣지 않는다.
+export const divideByMonthAfterActual = (
+  binding: string,
+  dataItem: WijmoRowItem,
+  newValue: WijmoPrimitive,
+  monthMap: Map<string, Set<string>>,
+  weekMap: Map<string, Set<string>>,
+  editTracker: EditTracker,
+  defaultBucket?: string,
+  today = new Date()
+) => {
+  const cutoff = thisWeekMondayYmd(today);
+  const monthlySum = toNumber(newValue);
+  const divisionDefault =
+    defaultBucket ?? (dataItem['DIVISION_ID'] === '40' ? DEFAULT_BUCKET_40 : DEFAULT_BUCKET_ETC);
+  const bucketValue = dataItem['BUCKET'];
+  const rowBucket =
+    bucketValue == null || bucketValue === '' || bucketValue === '0000000'
+      ? divisionDefault
+      : String(bucketValue);
+
+  // 월에 속한 주차별 열린 일자 + 실적 합계
+  let actualSum = 0;
+  const openWeeks: { week: string; dates: string[] }[] = [];
+  monthMap.get(binding)?.forEach(week => {
+    const openDates: string[] = [];
+    weekMap.get(week)?.forEach(dateColumn => {
+      if (dateColumn.slice(2) < cutoff) actualSum += toNumber(dataItem[dateColumn]);
+      else openDates.push(dateColumn);
+    });
+    if (openDates.length > 0) openWeeks.push({ week, dates: openDates.sort() });
+  });
+  openWeeks.sort((a, b) => (a.dates[0] < b.dates[0] ? -1 : 1));
+  const openDates = openWeeks.flatMap(w => w.dates);
+  if (openDates.length === 0) return;
+
+  const pickBucketDates = (bits: string) =>
+    openDates.filter(d => bits.charAt(dowSunFirst(d.split('_')[1])) === '1');
+  let bucketDates = pickBucketDates(rowBucket);
+  if (bucketDates.length === 0) bucketDates = pickBucketDates(divisionDefault);
+  if (bucketDates.length === 0) bucketDates = [openDates[openDates.length - 1]];
+
+  const target = monthlySum - actualSum;
+  const dailyQty = Math.trunc(target / bucketDates.length);
+  const remnant = target - dailyQty * bucketDates.length;
+  const lastBucketDate = bucketDates[bucketDates.length - 1];
+  const bucketSet = new Set(bucketDates);
+
+  openDates.forEach(dateColumn => {
+    const value = !bucketSet.has(dateColumn)
+      ? 0
+      : dateColumn === lastBucketDate
+        ? dailyQty + remnant
+        : dailyQty;
+    editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], value);
+    dataItem[dateColumn] = value;
+  });
+
+  // 열린 주의 주 합계 = 그 주 열린 일자 합. 지난 주 W_ 는 실적 표시값 그대로 둔다.
+  openWeeks.forEach(({ week, dates }) => {
+    const weekSum = dates.reduce((sum, d) => sum + toNumber(dataItem[d]), 0);
+    editTracker.storeChange(dataItem, week, dataItem[week], weekSum);
+    dataItem[week] = weekSum;
+  });
 };
 
 // Week column 분배 로직

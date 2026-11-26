@@ -1,0 +1,94 @@
+{
+  "id": "20261121100244_REVIEW_2",
+  "at": "2026-11-21T10:02:44+09:00",
+  "ms": 1795222964862,
+  "source": "review",
+  "status": "applied",
+  "sig": "admit lock expired rn",
+  "title": "입장 잠금(_run.admit.lock)은 유효 시각(until)이 지났으면 사건 없이 정리",
+  "evidence": "집계 incidents topRepeats R9|_run.admit.lock 12회, 12건 모두 resolved. 사건 12건의 잠금 시작부터 감지까지 걸린 시간 5~223분(.vibe/orch/incidents/20261119_215503_R9_ALL ~ 20261121_015252_R9_ALL)으로 모두 입장 유지 시간 verifyAdmitRampSec 120초가 지남. run_verify.py:1528 은 until 이 지나거나 주인이 없으면 잠금을 스스로 지우고 들어가는 설계이고, 쥔 실행은 끝날 때 파일을 지우지 않음. 그래서 정상 종료 뒤에도 파일이 남아 R9 가 됨. 예: 11-20 21:52:13 SCP0028 S8.checklistRun OK 뒤 21:52:23 R9(20261120_215223_R9_ALL)",
+  "targets": [
+    "tools/VibeManager/orch-watch.js"
+  ],
+  "before_after": "_run.admit.lock 주인 PID 가 없으면 R9 사건, VMO 가 삭제 → 잠금 파일의 until 이 지났거나 주인 PID 가 없으면 사건 없이 지우고 lockdel 기록 1줄만 남김(stopCleanLock 과 같은 방식). until 이 남았는데 주인이 없을 때만 종전대로 R9",
+  "verify": "node tools/VibeManager/test/run_all.js 통과. until 이 지난 _run.admit.lock 표본(주인 PID 없음)으로 감시 tick 1회를 돌렸을 때 R9 사건 0건, 파일 삭제, lockdel 기록 1줄",
+  "rollback": "orch-watch.js 를 반영 전 .bak 로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "감시기 오탐 1종. 잠금 설계와 감시 판정 기준이 다름",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T10:16:26+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T10:19:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self1016"
+    },
+    {
+      "at": "2026-11-21T10:19:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T10:28:07+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T10:28:07+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 1) node %TEMP%/admchk/t.js tools/VibeManager (시각 2026-11-21 10:2x KST, 표본 until 10:13:07+09:00) 출력: 'expired: R9/R2 incidents = 0 | file exists = false | lockdel rows = 1 {\"key\":\"admitExpired\",\"lockPid\":999971,\"until\":\"2026-11-21T10:13:07+09:00\"}' / 'until remaining: R9 incidents = 1 | lockdel rows  · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-21T10-19-53_claude_orch.log",
+      "sec": 290,
+      "costUsd": 1.0300682,
+      "files": [
+        "tools/VibeManager/orch-watch.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:27+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795223786510,
+  "autoFp": "39a6a2dce1",
+  "applyStartMs": 1795223993799,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self1016",
+  "needsReload": true,
+  "appliedMs": 1795224487969,
+  "synced": [
+    "orch-watch.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-watch.js"
+    ],
+    "verify_result": "1) node %TEMP%/admchk/t.js tools/VibeManager (시각 2026-11-21 10:2x KST, 표본 until 10:13:07+09:00) 출력: 'expired: R9/R2 incidents = 0 | file exists = false | lockdel rows = 1 {\"key\":\"admitExpired\",\"lockPid\":999971,\"until\":\"2026-11-21T10:13:07+09:00\"}' / 'until remaining: R9 incidents = 1 | lockdel rows = 1'. 2) node tools/VibeManager/test/run_all.js 출력: 'ALL OK  파일 62/62  PASS 864  FAIL 0  200.8s', RESULT at 2026-11-21T01:21:11.064Z (t_orch_lock_repeat.js PASS 11, t_orch_watch.js PASS 29)",
+    "note": "orch-watch.js 에 admitCleanLock() 추가, 죽은 잠금 루프에서 R9 판정 전에 호출. 대상 = _run.admit.lock, 주인 PID 없음, until 경과. 처리 = 파일 삭제, 장부 lockdel 1줄(premise key admitExpired, lockPid, until), 사건 없음. until 이 남았는데 주인 없음 = 종전대로 R9. 주인 PID 가 살아 있으면 until 이 지났어도 지우지 않음. 주인이 살아 있으면 R9 가 생기지 않고, orch-ledger.js 의 lockdel 사후 검증이 주인 생존을 '전제 틀림'으로 판정하기 때문. until 없는 입장 잠금은 종전대로 stopCleanLock 또는 R9 로 처리함(t_orch_lock_repeat.js 29행 표본 PASS)."
+  },
+  "snap": "prop_20261121100244_REVIEW_2",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

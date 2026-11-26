@@ -23,11 +23,14 @@ public sealed class Site
     public List<string> GuardLabels;
     public Dictionary<string, List<string>> ReqParams = new(StringComparer.OrdinalIgnoreCase);
     public List<long> ReqParamSeqs = new();
+    // 2026-11-25 Roslyn 의미 분석: 값별 조건(매개변수 판정 연언 · ValueCond 형식). 전파 때 호출자 인자로 평가해 타지 않는 값을 뺀다
+    public Dictionary<string, List<string>> ValueConds;
 
     public Site Clone()
     {
         var c = (Site)MemberwiseClone();
         c.Values = new(Values); c.Values2 = new(Values2);
+        c.ValueConds = ValueConds?.ToDictionary(k => k.Key, v => new List<string>(v.Value));
         c.ReqParams = ReqParams.ToDictionary(k => k.Key, v => new List<string>(v.Value), StringComparer.OrdinalIgnoreCase);
         c.ReqParamSeqs = new(ReqParamSeqs);
         c.GuardLabels = GuardLabels == null ? null : new(GuardLabels);
@@ -45,6 +48,8 @@ public sealed class CallRec
     public List<List<string>> Args = new();
     public List<string> ArgNames = new();
     public bool IsCtor;
+    // 2026-11-25 Roslyn 의미 분석: 의미 모델이 특정한 호출 대상 메서드 선언 위치 '파일|줄'(소스 메서드일 때만, 없으면 null = 종전 이름 기준)
+    public string SemTarget;
     public int GuardIdx = -1;
     public string GuardName;
     public List<string> GuardLabels;

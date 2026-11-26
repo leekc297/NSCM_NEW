@@ -15,7 +15,7 @@
 | `DeleteButton`(Click, `.cs` 본문 주석 1줄 NO-OP) | `hotkeyConfig.delete = () => undefined` | 구현(NO-OP 파리티, 버튼은 `SCM_ADM_MNU_BTN_MPG_M` 등록으로 노출 유지) |
 | `EditButton`(잠금토글, buttonGuards #2/#3) | 미구현 — 표준 DataGrid 상시편집 모델로 임시 대체 | **미구현(사용자 결정 대기, design 01 §5#4)** — customButtons 에도 없음, 후속 필요 시 별도 작업 |
 | `ExcelButton` | `SubTitle excelFileName='ShipmentPlanSemi'` | 구현(표준 컴포넌트) |
-| `btnFix`(`BtnFix_Click`, 가드 CanUpdate/IsLock/`Get_IsSaveYn`, confirm 없음) | `handleFix` — hasButton+rows.length+canOperate 가드, confirm 없이 즉시 저장 | 부분구현 — CanUpdate/IsLock 개별 가드 대신 `canOperate`(PlanType FN/TE) 1개로 축약, `SCP0013_GET_PLAN_TYPE_SAVE_YN` 판정은 procedures.d.ts 미등록(convert-sp 후속)이라 미검증(ERROR) |
+| `btnFix`(`BtnFix_Click`, 가드 CanUpdate/IsLock/`Get_IsSaveYn`, confirm 없음, `SaveData_FixInfo` 에서 `SCM0002_RejectReasonPopup("Fix Reason")` 사유 입력 .cs:3965-3980) | `handleFix` — hasButton+rows.length+canOperate 가드 후 `components/FixReasonModal`(사유 필수·100자, 취소 시 미저장) → OK 사유로 저장(2026-11-23, 이전엔 사유 'FIX' 고정·팝업 누락) | 부분구현 — CanUpdate/IsLock 개별 가드 대신 `canOperate`(PlanType FN/TE) 1개로 축약, `SCP0013_GET_PLAN_TYPE_SAVE_YN` 판정은 procedures.d.ts 미등록(convert-sp 후속)이라 미검증(ERROR) |
 | `btnUnfix`(Fix 와 동일 가드 + MSG00016 confirm) | `handleUnfix` — 동일 가드 + `setAlert({type:'confirm', ...})` | 구현(Fix/Unfix confirm 유무 차이 재현) |
 | `btnNew`(`SCM0002_ShipmentPlanInsertPopup`) | `handleNew` — 가드만 재현, 팝업은 미오픈(안내 alert) | **미구현(의도적 보류)** — SCM0002_ShipmentPlanInsertPopup 은 이 activity 의 design/00~03 분석범위 밖 별도 AS-IS 화면이라 추측 구현 금지(anti-simplification §1). 별도 design 서브태스크 선행 필요 |
 | btnFix/Unfix/New 공통 disabled(`Set_FixButtonEnabled`, planType FN/TE 또는 planSeq≠max) | `canOperate = !isLockedPlanType` | 부분구현 — planSeq≠max 축은 Form 이 항상 자동 최댓값을 유지한다는 전제로 생략(§ShipmentPlanSemi.tsx 주석 근거) |
@@ -53,7 +53,7 @@
 | Fix 하이라이트(O_RC3) | `formatItemHandler`(fixedDayBindings/fixedWeekStarts) | 구현 |
 | 인접 정보컬럼 세로 병합(R-I, Freeze=measure_label) | `col.allowMerging` 토글 loop | 구현 |
 | 정보컬럼 전건 잠금(R-J) | `isMainCellEditable`의 `dynColKindOf(binding)===null → false` | 구현 |
-| BOD 신규행 삽입(`InsertRow`, 4조건+T/S 2갈래) | 미구현 | **미구현** — `SCM0002_GetBODPopup` 대응 팝업이 design/00~03 분석범위 밖(전용 서브 분석 필요), anti-simplification §1 위반 방지 위해 보류 |
+| BOD 신규행 삽입(`InsertRow` .cs:3609-3838, T/S 2갈래 `GetNewInsertRowIndex` .cs:3858-3928) | `utils/shipment-plan-semi.insert.ts` `buildInsertedRows`/`getNewInsertRowIndex` + 공용 `BodMasterModal`(type=1, `SCM0002_BOD_SEMI_POPUP_GET`) | 구현(2026-11-23) — 셀클릭 게이트(.cs:4683-4706: TRANSPORT_MODE/T0_SITE_DESCRIPTION·값 길이>2·편집가능·Bucket≠Monthly·미수정 행) 는 그리드 click 핸들러+`canOpenBodPopup`, 잠금 Plan Type 은 페이지에서 차단. 삽입 행 저장은 `buildInsertSaveRows`(P_ACTIVE_FLAG 'I', Daily AMEND 값 없음 MSG01243). 삽입 행엔 DEPT_DAY 가 없어 Weekly 비-81 삽입 행은 잠김(AS-IS dt2 도 미포함 — 파리티) |
 | 저장 셀단위 검증(MSG00084/MSG00317) | `cellEditEndedHandler`의 `isQtyInRange` | 구현(문구/로직 불일치 AS-IS 그대로 재현 — 0 허용) |
 
 ## 4. 그리드 동작 파리티 게이트 대조 (`grid-behavior-parity.md`)
@@ -81,7 +81,7 @@
 
 1. **EditButton 잠금토글 UX**(design 01 §5#4) — AS-IS 명시적 토글 vs TO-BE 표준 상시편집 모델, 사용자 결정 대기.
 2. **New(Insert Plan) 팝업**(`SCM0002_ShipmentPlanInsertPopup`) — 가드만 재현, 팝업 자체는 별도 AS-IS 화면 분석 필요.
-3. **BOD 신규행 삽입 팝업**(`SCM0002_GetBODPopup`, `InsertRow` T/S 2갈래) — 별도 AS-IS 화면 분석 필요.
+3. ~~**BOD 신규행 삽입 팝업**~~ — 2026-11-23 구현(§3 표 참조).
 4. **W26/W52/WLast 프리셋 버튼** — 보조 SP 2종 TO-BE 미배포(convert-sp 후속, SCP0009 와 공유 가능성).
 5. **Weekly "중복 주차 컬럼" 방어 잠금**(`LockRange2`, `.cs:3447`) — design 문서 자체가 재현조건 미상으로 확인필요 남김.
 

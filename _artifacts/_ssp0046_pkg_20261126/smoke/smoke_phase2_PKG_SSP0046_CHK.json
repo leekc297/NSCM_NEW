@@ -1,0 +1,367 @@
+{
+ "run_at": "2026-11-26 11:24:10",
+ "proc_m_vs_args": {
+  "P_SSP0046_GET_BODITEM_FOR_PRJROUTE_POPUP": [
+   5,
+   5
+  ],
+  "P_SSP0046_GET_BUCKET_TYPE_CODE": [
+   2,
+   2
+  ],
+  "P_SSP0046_GET_COMMON_SPREAD_TITLE": [
+   8,
+   8
+  ],
+  "P_SSP0046_GET_COMMON_SPREAD_TITLE_EX": [
+   7,
+   7
+  ],
+  "P_SSP0046_GET_CUSTOMER_BY_DIVISION": [
+   4,
+   4
+  ],
+  "P_SSP0046_GET_ITEM_BY_DIVISION_POPUPEX": [
+   9,
+   9
+  ],
+  "P_SSP0046_GET_PROJECT_BY_DIVISION_POPUPEX": [
+   8,
+   8
+  ],
+  "P_SSP0046_GET_SHIPMENT_REQUEST": [
+   13,
+   13
+  ],
+  "P_SSP0046_GET_SITE_BY_DIVISION": [
+   5,
+   5
+  ],
+  "P_SSP0046_GET_SPREAD_TITLE": [
+   7,
+   7
+  ],
+  "P_SSP0046_GET_TEAM_BY_DIVISION": [
+   3,
+   3
+  ],
+  "P_SSP0046_SAVE_SHIPMENT_REQUEST": [
+   15,
+   15
+  ]
+ },
+ "cases": [
+  {
+   "proc": "GET_BUCKET_TYPE_CODE",
+   "param": [],
+   "TOBE": {
+    "rows": 3,
+    "cols": 2,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.0,
+    "first": [
+     "DAILY",
+     "Daily"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 3,
+    "cols": 2
+   }
+  },
+  {
+   "proc": "GET_TEAM_BY_DIVISION",
+   "param": [
+    "81"
+   ],
+   "TOBE": {
+    "rows": 86,
+    "cols": 2,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.2,
+    "first": [
+     "70000345",
+     "자동차.마케팅.마케팅3.독일마케팅2팀"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 30,
+    "cols": 2
+   }
+  },
+  {
+   "proc": "GET_CUSTOMER_BY_DIVISION",
+   "param": [
+    "81",
+    "ALL"
+   ],
+   "TOBE": {
+    "rows": 148,
+    "cols": 2,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.2,
+    "first": [
+     "ANDURIL",
+     "ANDURIL"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 154,
+    "cols": 2
+   }
+  },
+  {
+   "proc": "GET_SITE_BY_DIVISION",
+   "param": [
+    "81",
+    "ALL",
+    "ALL"
+   ],
+   "TOBE": {
+    "rows": 453,
+    "cols": 2,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.2,
+    "first": [
+     "Aeonus_KR_GUN",
+     "Aeonus_KR_GUN"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 453,
+    "cols": 2
+   }
+  },
+  {
+   "proc": "GET_BODITEM_FOR_PRJROUTE_POPUP",
+   "param": [
+    "81",
+    "AMCOME782-A1-0K0",
+    ""
+   ],
+   "TOBE": {
+    "rows": 24,
+    "cols": 27,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.2,
+    "first": [
+     "81",
+     "WA00-P",
+     "81",
+     "PLANT",
+     "LGESWA Pack WA00",
+     "Aeonus_KR_GUN"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 24,
+    "cols": 27
+   }
+  },
+  {
+   "proc": "GET_ITEM_BY_DIVISION_POPUPEX",
+   "param": [
+    "81",
+    "ALL",
+    "ALL",
+    "",
+    "ALL",
+    "AMC",
+    "P"
+   ],
+   "TOBE": {
+    "rows": 239,
+    "cols": 17,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 10.6,
+    "first": [
+     "81",
+     "81",
+     "A15CS2008",
+     "E54 CS 통합PJT",
+     "CS Enertech_KR_OSN",
+     "CS Enertech_KR_OSN"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "ERROR": "('HYT00', '[HYT00] [Microsoft][ODBC Driver 17 for SQL Server]Query timeout expired (0) (SQLExecDirectW)')"
+   }
+  },
+  {
+   "proc": "GET_ITEM_BY_DIVISION_POPUPEX",
+   "param": [
+    "82",
+    "ALL",
+    "ALL",
+    "",
+    "ALL",
+    "",
+    "P"
+   ],
+   "TOBE": {
+    "ERROR": "DPY-4024: call timeout of 180000 ms exceeded"
+   },
+   "ASIS(dev DB)": {
+    "ERROR": "('HYT00', '[HYT00] [Microsoft][ODBC Driver 17 for SQL Server]Query timeout expired (0) (SQLExecDirectW)')"
+   }
+  },
+  {
+   "proc": "GET_PROJECT_BY_DIVISION_POPUPEX",
+   "param": [
+    "81",
+    "ALL",
+    "ALL",
+    "ALL",
+    "",
+    "N"
+   ],
+   "TOBE": {
+    "rows": 833,
+    "cols": 13,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 2.5,
+    "first": [
+     "81",
+     "81",
+     "A15BW7001",
+     "12V DSS",
+     "MARKETING_COMPLETE",
+     "LGC_BIZ_200"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 447,
+    "cols": 13
+   }
+  },
+  {
+   "proc": "GET_PROJECT_BY_DIVISION_POPUPEX",
+   "param": [
+    "81",
+    "ALL",
+    "ALL",
+    "ALL",
+    "",
+    "Y"
+   ],
+   "TOBE": {
+    "rows": 3,
+    "cols": 13,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.1,
+    "first": [
+     "81",
+     "81",
+     "기타매출",
+     "기타매출",
+     "None",
+     "None"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 3,
+    "cols": 13
+   }
+  },
+  {
+   "proc": "GET_COMMON_SPREAD_TITLE",
+   "param": [
+    "",
+    "",
+    "admin",
+    "SSP0046",
+    "ItemPopup",
+    "81"
+   ],
+   "TOBE": {
+    "rows": 0,
+    "cols": 22,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.1,
+    "first": null
+   },
+   "ASIS(dev DB)": {
+    "rows": 0,
+    "cols": 22
+   }
+  },
+  {
+   "proc": "GET_COMMON_SPREAD_TITLE_EX",
+   "param": [
+    "",
+    "",
+    "admin",
+    "SSP0046",
+    "ProjectPopup"
+   ],
+   "TOBE": {
+    "rows": 13,
+    "cols": 22,
+    "result": [
+     [
+      "0",
+      "SUCCESS"
+     ]
+    ],
+    "sec": 0.1,
+    "first": [
+     "SSP0046",
+     "ProjectPopup",
+     "DIVISION_ID",
+     "Division Code",
+     "1",
+     "None"
+    ]
+   },
+   "ASIS(dev DB)": {
+    "rows": 13,
+    "cols": 22
+   }
+  }
+ ]
+}

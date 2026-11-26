@@ -1,0 +1,412 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "(?:(?:^| )검증엔진\\ SSP0014\\ @trace\\ BTN\\ 팝업\\ 경로\\(F4·E4·G1\\)\\ =\\ AS\\-IS\\ 버튼\\ →\\ 팝업\\ →\\ OK\\ →\\ 후속\\ 메서드(?: @\\S+)*$|(?:^| )정합검증\\ SSP0014\\ @verify\\ CRUD\\ —\\ 필수\\ 공란\\ 실제\\ 저장\\ 시도\\(E3\\)\\ →\\ 필수\\ 채워\\ 실제\\ 저장·재조회·값\\ 보존·정리\\(F1·F2·F4·F6\\)(?: @\\S+)*$|(?:^| )정합검증\\ SSP0014\\ @verify\\ 언어\\ 전환\\ 문구\\ 덤프\\(I2\\)(?: @\\S+)*$|(?:^| )정합검증\\ SSP0014\\ @verify\\ 문서\\ 시나리오(?: @\\S+)*$|(?:^| )정합검증\\ SSP0014\\ @verify\\ 저장\\ 세부\\(F1·F6\\)\\ —\\ 컬럼별\\ 왕복·0\\ 값\\ 저장(?: @\\S+)*$)",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SSP0014/e2e/serial/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\serial\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 SSP0014 @trace",
+          "file": "_trace.spec.ts",
+          "line": 347,
+          "column": 6,
+          "specs": [
+            {
+              "title": "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 525,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:31:38.352Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\serial\\artifacts\\_trace-검증엔진-SSP0014-trace--3723e-AS-IS-버튼-→-팝업-→-OK-→-후속-메서드-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-9e63d527db533b49cb2d",
+              "file": "_trace.spec.ts",
+              "line": 2866,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SSP0014 @verify",
+          "file": "_verify.spec.ts",
+          "line": 290,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=N editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=N saveCalls=2 · 수정 저장 경로 강제(edit-save) · 팝업 입력 칸 USER_ID: 다른 행 실제 값 'njlilian' 로 시험 · [1s] 수정 입력 완료 · [61s] 저장 응답 USER_CHECK:200 알림=SSP Planner 권한이 없는 사용자 입니다 .\nUser ID : njlilian · [61s] 저장 전 검증 차단 'njlilian'(SSP Planner 권한이 없는 사용자 입니다 .\nUser ID : njlilian) → 'luping' 재시도 · [66s] 저장 응답 USER_CHECK:200 | SAVE:200 | SEARCH:200 알림=1개의 데이터가 저장되었습니다. · [67s] 재조회 · 행 식별 정확 일치 0 → 근접 일치 r0(저장으로 함께 바뀐 칸: USER_NAME '이련'→'육평') · [68s] 행 찾기 0 · 행 [40|Cell|AZ Mobile Assy-Cell] USER_ID: 'eunjin.choi' → 'luping' 저장 성공 · 재조회 값 'luping' 반영 확인 · [72s] 원복 입력 · [73s] 원복 저장 응답 · 원복 'eunjin.choi' 저장 성공 · 재조회 값 '(행 식별 0건)' 미복원 — 수동 확인 필요"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 98524,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:31:43.395Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=N editable=Y inserted=N saved=Y found=Y updated=Y cleaned=Y restored=N saveCalls=2 · 수정 저장 경로 강제(edit-save) · 팝업 입력 칸 USER_ID: 다른 행 실제 값 'njlilian' 로 시험 · [1s] 수정 입력 완료 · [61s] 저장 응답 USER_CHECK:200 알림=SSP Planner 권한이 없는 사용자 입니다 .\nUser ID : njlilian · [61s] 저장 전 검증 차단 'njlilian'(SSP Planner 권한이 없는 사용자 입니다 .\nUser ID : njlilian) → 'luping' 재시도 · [66s] 저장 응답 USER_CHECK:200 | SAVE:200 | SEARCH:200 알림=1개의 데이터가 저장되었습니다. · [67s] 재조회 · 행 식별 정확 일치 0 → 근접 일치 r0(저장으로 함께 바뀐 칸: USER_NAME '이련'→'육평') · [68s] 행 찾기 0 · 행 [40|Cell|AZ Mobile Assy-Cell] USER_ID: 'eunjin.choi' → 'luping' 저장 성공 · 재조회 값 'luping' 반영 확인 · [72s] 원복 입력 · [73s] 원복 저장 응답 · 원복 'eunjin.choi' 저장 성공 · 재조회 값 '(행 식별 0건)' 미복원 — 수동 확인 필요"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0014-verif-50786-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2e20b47c3b519bc55d95",
+              "file": "_verify.spec.ts",
+              "line": 1021,
+              "column": 7
+            },
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 73194,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[저장 세부] T64 저장 키 컬럼 제외 3: DIVISION_ID,FROM_SITE,ITEM_ID\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:34:30 USER_ID r0 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 16:34:39 USER_ID 끝\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:33:24.775Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0014-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a8ec1bc70c6e4126b9be",
+              "file": "_verify.spec.ts",
+              "line": 1707,
+              "column": 7
+            },
+            {
+              "title": "언어 전환 문구 덤프(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 27784,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] SSP0014 I2: 언어 시험 계정 bindy122678 로 로그인(다른 화면 대기 없음)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:34:42.415Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0014-verify-언어-전환-문구-덤프-I2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1e3362acbac3faf339fc",
+              "file": "_verify.spec.ts",
+              "line": 2445,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 123771,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] SSP0014 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 01:35:18\n"
+                        },
+                        {
+                          "text": "[langacct] SSP0014 시나리오 [자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림: 언어 시험 계정 bindy122678 로 로그인(다른 화면 대기 없음)\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0014 '[자동] CN 언어 조회 건수 총/건 표기' 시작 01:36:51\n"
+                        },
+                        {
+                          "text": "[langacct] SSP0014 시나리오 [자동] CN 언어 조회 건수 총/건 표기: 언어 시험 계정 bindy122678 로 로그인(다른 화면 대기 없음)\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0014 '[자동] 조회 중 Loading 토스트 없음' 시작 01:37:10\n"
+                        },
+                        {
+                          "text": "[시나리오] SSP0014 '[자동] 조회조건 콤보 4종 = 콤보' 시작 01:37:17\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:35:14.682Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\serial\\artifacts\\_verify-정합검증-SSP0014-verify-문서-시나리오-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7e66a47e3fafe8a1fb3c",
+              "file": "_verify.spec.ts",
+              "line": 2774,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T16:31:37.010Z",
+    "duration": 346927.769,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "id": "20261125050137_SELF",
+  "at": "2026-11-25T05:01:37+09:00",
+  "ms": 1795550497452,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|useraxis|checklisttime|effms filter|verify why form rn",
+  "title": "CheckList 시간 목적 L4 판정을 효력 뒤 근거와 1판 실측으로 바꿈(검증 기대값 재설정)",
+  "evidence": "orch-ladder.js:104 L4-2 는 u.at 7일 안 지적만 셈, 같은 파일 77, 87-94행 L3 는 effMsOf 로 효력 뒤 근거만 셈. 지난 반영(2026-11-25 04:48~04:54)에서 t_orch_ladder.js 새 표본 6건 반영 전 FAIL, 반영 뒤 PASS 47. 실패한 v3 는 기대값 '실측 대기'의 전제(효력 뒤 실행 0건)가 events.jsonl 4401~4487행 chain.end 5건(2026-11-25 03:19~03:26)으로 깨진 것이 원인이고, 새 코드는 그 실행을 근거로 open 을 유지함(개념 문서 .vibe/orch/vision/concept_20261124_L4_useraxis_checklistTime.md 의 '효력 뒤 1판 초과 = 참'). 현재 ladder.json 925행 why '같은 목적 키 지적 4건 ≥ 3'. (반영 실패한 20261124000457_VISION 를 고친 안 · 원인 안의 v3 기대값('실측 대기')이 반영 시점에 틀림. 전제 '효력 뒤 실행 0건'이 events.jsonl 4401, 4408, 4417, 4424, 4487행 chain.end 5건(2026-11-25 03:19~03:26, 근거 조회 2026-11-24 00:03 뒤)으로 깨짐. 반영 코드는 v1 시험 통과(반영 전 새 표본 6건 FAIL 04:52:12 → 반영 뒤 PASS 47 04:52:16). 실원장 사본 갱신(04:53:29)은 개념대로 '효력 뒤 실행 5건 중 1판 초과 4건'으로 open 판정. 현재 ladder.json 925행 why '같은 목적 키 지적 4건 ≥ 3', 950행 status open. 판정 코드 tools/VibeManager/orch-ladder.js:104(효력 시각 거름 없음).)",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "지금: L4|useraxis|checklistTime 을 7일 안 같은 목적 키 지적 건수(3건)로 판정함. 같은 목적 개선안 효력 시각과 CheckList 실측은 보지 않음 → 바꾼 뒤: 같은 목적 L4 개선안(묶음 목적 키, sig 토큰, purpose 중 하나 일치)이 있으면 효력 시각 뒤 지적(l4UserAxisMin) 또는 효력 뒤 chain.end 1판 초과(l4RunOverMin 기본 1, 1판 = 같은 runId 첫 ':--docs' step.end, 없으면 체인 전체)만 근거로 셈. 효력 뒤 실행 0건 = status wait '실측 대기: 다음 CheckList 1회 필요', 효력 전 = '효력 대기', 두 경우 진단 대상에서 뺌. 조건이 사라진 wait 묶음은 resolved. 같은 목적 개선안이 없는 축은 종전 기준 유지. 시험 t_orch_ladder.js 에 표본 6건 추가(효력 전 지적 제외, 효력 뒤 지적 3건, 효력 뒤 1판 초과 1건, 효력 뒤 실행 0건 wait, 1판 20분 wait → resolved, 같은 목적 개선안 없음 종전 판정).",
+  "verify": "1) node tools/VibeManager/test/t_orch_ladder.js: 반영 전 기존 표본 41건 PASS(2026-11-25 04:50 반영한 Claude 기록, 이번 미측정), 새 표본 6건은 반영 전 코드에서 FAIL → 반영 뒤 기대 PASS 47, FAIL 0. 2) 반영 뒤 ladder 갱신에서 L4|useraxis|checklistTime 의 why 문구: 반영 전 '같은 목적 키 지적 N건 ≥ 3' 형식(현재 ladder.json 925행) → 반영 뒤 기대 '같은 목적 개선안 20261123000419_VISION 효력(…) 뒤 지적 N건 … 효력 뒤 실행 M건 중 1판 초과 K건 … 효력 전 지적 J건 제외' 형식. status 값은 효력 뒤 실행 유무에 달려 있어 기대값으로 두지 않음(효력 뒤 1판 초과가 있으면 open, 실행 0건이면 wait).",
+  "rollback": "백업 태그 또는 git checkout HEAD -- tools/VibeManager/orch-ladder.js tools/VibeManager/test/t_orch_ladder.js",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T05:02:33+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T05:06:26+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0502"
+    },
+    {
+      "at": "2026-11-25T05:06:28+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T05:12:29+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 orch-ladder.js"
+    },
+    {
+      "at": "2026-11-25T05:12:29+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 2건. 2026-11-25 05:06:38~05:08:23. v1: 반영 전 기존 41건 PASS, FAIL 0(05:06:46). 새 표본 6건은 반영 전 코드로 FAIL 6, 'SOME FAIL'(05:07:58). 반영 뒤 PASS 47, FAIL 0, 'ALL PASS'(05:07:33). v2: 실원장 사본 갱신에서 why '같은 목적 키 지적 4건 ≥ 3' → '같은 목적 개선안 20261123000419_VISION 효력(2026-11-23 15:58) 뒤 지적 1건(기준 3) · 효력 뒤 실행 5건 중 1판 초과 4건(기준  · 변경 18개 파일 · 대상 목록 밖 변경 16개: Doc/verify/SCP0005/diff/P_SCP0005_GET_COUNTRY_CITY__7.md, Doc/verify/SCP0005/diff/P_SCP0005_GET_COUNTRY_CITY__9.md, Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__10.md, Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__2.csv, Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__2.md, Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__3.csv",
+      "log": ".vibe\\logs\\2026-11-25T05-06-28_claude_orch.log",
+      "sec": 134,
+      "costUsd": 1.7643548999999996,
+      "files": [
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_COUNTRY_CITY__7.md",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_COUNTRY_CITY__9.md",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__10.md",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__2.csv",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__2.md",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__3.csv",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__3.md",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__4.md",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__5.md",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__6.csv",
+        "Doc/verify/SCP0005/diff/P_SCP0005_GET_DISTRIBUTION_ROUTE__6.md",
+        "Doc/verify/SCP0005/diff/diff_summary.csv",
+        "Doc/verify/SCP0005/sqllog_calls.json",
+        "tools/Harness/rules/param_map.csv",
+        "tools/Harness/rules/sp_pair.csv",
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/test/t_orch_ladder.js"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "kind": "fix",
+  "repairOf": "20261124000457_VISION",
+  "repairRoot": "20261124000457_VISION",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795550553063,
+  "autoFp": "b3dc35808f",
+  "applyStartMs": 1795550788779,
+  "verifyJudge": {
+    "at": "2026-11-25T05:08:45+09:00",
+    "verified": true,
+    "text": "실행 통과 2건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0502",
+  "needsReload": false,
+  "hotLoaded": [
+    "orch-ladder.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795551149155,
+  "synced": [
+    "orch-ladder.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_ladder.js. 반영 전 코드: 기존 41건 PASS, FAIL 0(05:06:46). 새 표본 6건은 반영 전 코드(orch-ladder.js.bak_20261125_self0502, HEAD 와 같음)로 실행 시 FAIL 6, 'SOME FAIL'(05:07:58). ① why '같은 목적 키 지적 3건 ≥ 3', 원장 st open, ④ st open. 반영 뒤: PASS 47, FAIL 0, 'ALL PASS'(05:07:33). ① wait true, label '실측 대기: 다음 CheckList 1회 필요'. ② 근거 U60, U61, U62(효력 전 3건 제외). ③ 'CheckList SCP0028 1판 40분(목표 30분)'. ④ 원장 resolved. ⑤ '같은 목적 키 지적 3건 ≥ 3 · 같은 목적 반영 개선안 없음'"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node .vibe/tmp/ladder_copy_update.js(실원장 사본에서 scan → update, 2026-11-25 05:08, 실원장 ladder.json 은 쓰지 않음). 반영 전 why '같은 목적 키 지적 4건 ≥ 3'(ladder.json 925행), status open. 반영 뒤 why '같은 목적 개선안 20261123000419_VISION 효력(2026-11-23 15:58) 뒤 지적 1건(기준 3) · 효력 뒤 실행 5건 중 1판 초과 4건(기준 1) · 효력 전 지적 3건 제외', status open(1판 SCP0005 114분, SSP0014 84분, SCP0028 80분, SSP0005 1판 없음 체인 전체 143분). 기대 형식과 일치"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "2026-11-25 05:06:38~05:08:23. v1: 반영 전 기존 41건 PASS, FAIL 0(05:06:46). 새 표본 6건은 반영 전 코드로 FAIL 6, 'SOME FAIL'(05:07:58). 반영 뒤 PASS 47, FAIL 0, 'ALL PASS'(05:07:33). v2: 실원장 사본 갱신에서 why '같은 목적 키 지적 4건 ≥ 3' → '같은 목적 개선안 20261123000419_VISION 효력(2026-11-23 15:58) 뒤 지적 1건(기준 3) · 효력 뒤 실행 5건 중 1판 초과 4건(기준 1) · 효력 전 지적 3건 제외', status open → open",
+    "note": "반영 내용은 지난 반영 실패 직전 사본(orch-ladder.js.bak_prerestore_20261125_045406, t_orch_ladder.js.bak_prerestore_20261125_045406)과 같음. 개선안 before_after 와 hunk 단위로 대조함. 복사 뒤 대상 파일과 사본 차이 0. 새 표본 FAIL 확인을 위해 orch-ladder.js 를 반영 전 코드로 잠시 바꿔 시험을 돌린 뒤 새 코드로 되돌림. 실원장 ladder.json 은 쓰지 않음(VMO 갱신 대상). 추가 확인 후보: 중지된 실행의 1판을 실측 근거로 셀지 미확인. 걸린 시간 1분 45초. 오래 걸린 단계 = 반영 전 코드 시험(셸 권한 차단으로 명령 4번 다시 냄)."
+  },
+  "snap": "prop_20261125050137_SELF"
+}

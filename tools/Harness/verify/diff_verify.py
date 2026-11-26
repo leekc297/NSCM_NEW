@@ -247,9 +247,16 @@ def main():
         print(__doc__); return 2
     mid = args[0].upper()
     vd = P('Doc', 'verify', mid); od = os.path.join(vd, 'diff'); os.makedirs(od, exist_ok=True)
-    for f in glob.glob(os.path.join(od, '*')):
-        try: os.remove(f)
-        except OSError: pass
+    # 2026-11-25 행 단위 해소(row_run): --procs=이름,이름 = 그 SP(AS-IS SP · TO-BE PROC · PROC 짧은 이름)의 호출만 다시 비교하고 다른 호출의 지난 결과(diff_summary.csv 행, md·csv)는 그대로 둔다
+    only = {x.strip().upper() for a in sys.argv[1:] if a.startswith('--procs=') for x in a[8:].split(',') if x.strip()}
+    keep_rows = []
+    if only:
+        keep_rows = [r for r in rd(os.path.join(od, 'diff_summary.csv')) if not ({(r.get('asis_sp') or '').upper(), (r.get('tobe_proc') or '').upper(), re.sub(r'^PKG_\w+\.', '', r.get('tobe_proc') or '').upper()} & only)]
+        print(f"[diff_verify] {mid}: 고른 SP {','.join(sorted(only))} 호출만 다시 비교 · 다른 호출 지난 결과 {len(keep_rows)}행 유지", flush=True)
+    else:
+        for f in glob.glob(os.path.join(od, '*')):
+            try: os.remove(f)
+            except OSError: pass
     calls, src_kind = load_calls(mid)
     pm_rows = rd(P('Doc', 'tobefacts', 'db', 'proc_meta.csv'))
     proc_of = {}
@@ -285,6 +292,13 @@ def main():
     if calls:
         ca = dbconn.connect('asis', cfg)  # readOnly(write 미지정) — 쓰기 시도 자체가 거부된다
         ct = dbconn.connect('tobe', cfg)
+        # 2026-11-20 VMO R5(SCP0028 #47 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP p_to_site='' AS-IS 832초+ 무응답): 호출 1건 상한 = DB 5분 기준(11-12 사용자 지시)
+        #   초과 시 예외 → 아래 except 가 ERR(미검증)로 남기고 다음 호출로 진행. 상한은 env DIFF_QTIMEOUT(초)로 바꾼다
+        _qt = int(os.environ.get('DIFF_QTIMEOUT') or 300)
+        try: ca.timeout = _qt  # pyodbc 문장 상한(초)
+        except Exception: pass
+        try: ct.call_timeout = _qt * 1000  # oracledb 왕복 상한(ms)
+        except Exception: pass
     sqllog = load_sqllog(mid)
     hdr = f"- 실행 {now} · AS-IS {dbconn.describe('asis', cfg)} (readOnly) · TO-BE {dbconn.describe('tobe', cfg)} (매 호출 rollback) · 호출 원천 {src_kind}"
     try:
@@ -307,6 +321,8 @@ def main():
             pair = pairs.get(proc.upper()) if proc else None
             sp = (pair or {}).get('asis_sp', '')
             short = re.sub(r'^PKG_\w+\.', '', proc) or f"{c['sheet']}_{c['btn']}"
+            if only and not ({proc.upper(), sp.upper(), short.upper()} & only):
+                continue
             md = [f"# {mid} · {sp or '(AS-IS 짝 없음)'} ↔ {proc or '(PROC_M 배선 없음)'}", '', hdr, f"- 호출 #{n} sheet={c['sheet']} btn={c['btn']} user={c.get('user', '')} FE 응답 행 {c.get('rows_fe', '')} · 원천 {c['src']}",
                   f"- TO-BE 인자(FE 본문): `{json.dumps(body, ensure_ascii=False)[:1500]}`"]
             row = {'call_no': n, 'sheet': c['sheet'], 'btn': c['btn'], 'asis_sp': sp, 'tobe_proc': proc, 'set': 1, 'params_tobe': json.dumps(body, ensure_ascii=False)[:800], 'measured_at': now, 'md': ''}
@@ -408,18 +424,26 @@ def main():
                         em = dbconn.mask(str(ex), cfg).splitlines()[0][:300]
                         # 2026-11-11 CR-101(사용자 결정): TO-BE 조회 자체가 실패한 것만 오류로 도출 — Oracle 오류(ORA-·PLS-)면 ERR_TOBE(FAIL), 그 밖(AS-IS·도구 쪽)은 ERR(미검증)
                         tb = bool(re.search(r'ORA-\d{5}|PLS-\d{5}|ALL_ARGUMENTS 에 ', em))
+                        # 2026-11-20 T524(SCP0028 AD-21ed1ed9 외 3행 · 호출 #47 SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 'I' · From Site 30개): AS-IS DEV MSSQL 이 상한 안에 결과를 못 냄(HYT00).
+                        #   21:59 실측 From Site 'HQ07-A' 1개도 150초 초과(MI00-P 14.6초 2145행) — 후보 1175품목 × To Site 129 행마다 스칼라 함수 3개. 다시 돌려도 같은 결과라 '재실행' 이 아니다.
+                        #   → 시간 초과를 표시해 분류표가 결정 목록(AS-IS 실행 시간 초과)으로 보낸다. 같은 SP 다른 인자 판정 건수를 붙인다(대체 근거 · 판정은 ERROR 유지)
+                        if not tb and re.search(r'HYT00|Query timeout expired', em):
+                            same = [x for x in summary if (x.get('tobe_proc') or '').upper() == proc.upper() and x.get('verdict') in ('PASS', 'DIFF', 'ROWS_ONLY')]
+                            em = f"[AS-IS 실행 시간 초과 {_qt}초] AS-IS DEV DB 가 이 인자로 상한 안에 결과를 내지 못함(같은 SP 다른 인자 판정 {len(same)}건: " + ', '.join(f"#{x.get('call_no')} {x.get('verdict')}" for x in same[:6]) + ') · ' + em
                         row.update(verdict='ERR_TOBE' if tb else 'ERR', note=('TO-BE 조회 실패 — ' if tb else '') + em); md.append(f"- {row['verdict']}: {row['note']}")
             mp = os.path.join(od, f'{short}__{n}.md')
             with open(mp, 'w', encoding='utf-8') as f: f.write('\n'.join(md) + '\n')
             row['md'] = os.path.relpath(mp, ROOT)
             summary.append(row)
-            print(f"[{row['verdict']}] #{n} {c['sheet']}/{c['btn']} {sp or '-'} ↔ {proc or '-'} · {row.get('note', '')[:140]}")
+            print(f"[{row['verdict']}] #{n} {c['sheet']}/{c['btn']} {sp or '-'} ↔ {proc or '-'} · {row.get('note', '')[:140]}", flush=True)
     finally:
         for cx in (ca, ct):
             try:
                 if cx is not None: cx.rollback(); cx.close()
             except Exception:
                 pass
+    if only:
+        summary = sorted(keep_rows + summary, key=lambda r: int(r.get('call_no') or 0))
     sp_ = os.path.join(od, 'diff_summary.csv')
     with open(sp_, 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, fieldnames=SUM_COLS); w.writeheader(); w.writerows([{k: r.get(k, '') for k in SUM_COLS} for r in summary])

@@ -1,0 +1,106 @@
+{
+ "rule_id": "D3",
+ "hash": "aad85f8d45b5df35",
+ "groups": [
+  {
+   "rows": [
+    "T-119be376"
+   ],
+   "why": "Δ10 checks how the Insert/Delete toolbar buttons are shown under button permissions, which is a different element and expectation from every other row."
+  },
+  {
+   "rows": [
+    "T-2e6c3e63"
+   ],
+   "why": "D01 checks that column 0 is hidden, which is a different check from conditional locking based on row values."
+  },
+  {
+   "rows": [
+    "T-39793869"
+   ],
+   "why": "Δ2 traces that edit mode starts ON by default, and no other row checks this."
+  },
+  {
+   "rows": [
+    "T-4def2d25"
+   ],
+   "why": "Δ11 checks the edit gate on paste (pastingCell), so the trigger action is different from the other rows."
+  },
+  {
+   "rows": [
+    "T-5a056b57"
+   ],
+   "why": "P05 traces the SaveButton location (cs:360), which is a different button and a check that the code exists."
+  },
+  {
+   "rows": [
+    "T-8af7f375"
+   ],
+   "why": "V04 checks the MSG00135 message for not being in edit mode, and no other row has this message or expectation."
+  },
+  {
+   "rows": [
+    "T-90f0831a"
+   ],
+   "why": "P04 traces the EditButton location (cs:346), which is a different button from P05."
+  },
+  {
+   "rows": [
+    "T-d6b26b0f"
+   ],
+   "why": "This traces only the COMPANY_ID column (5 table rows). The ASIS lock row covers COMPANY and DIVISION together, so the scope differs and I left them unmerged because I wasn't sure."
+  },
+  {
+   "rows": [
+    "T-fc2ae9de"
+   ],
+   "why": "This traces only the DIVISION_ID column (2 table rows), which is a different column from COMPANY_ID."
+  },
+  {
+   "rows": [
+    "V-1f2690f4"
+   ],
+   "why": "In spdMain, LockColumn locks the COMPANY through DIVISION column range together, which differs in scope from the single-column trace rows."
+  },
+  {
+   "rows": [
+    "V-4a7ffdbe"
+   ],
+   "why": "This checks the SwitchLock() toggle, which differs from the fixed column lock (LockColumn) in both method and expected result."
+  },
+  {
+   "rows": [
+    "V-53dea99a"
+   ],
+   "why": "This uses the DMF0003 defect type to check exposure of FCST Type options by permission plus limits on input Measures by Site type, and no other row has the same targets."
+  },
+  {
+   "rows": [
+    "V-cfb051cc"
+   ],
+   "why": "This is the DMF0082 defect type for controlling each input Measure in the Current version, and its conditions and expected result differ from the other DMF0082 row."
+  },
+  {
+   "rows": [
+    "V-de89fa49"
+   ],
+   "why": "This uses the SCP0006 defect type to check that every column of a CA1 row turns white (not editable) after a double-click, which is a different trigger and expectation."
+  },
+  {
+   "rows": [
+    "V-fadc273a"
+   ],
+   "why": "This checks Measure combo options for a new row only, and its expected option list differs from V-fb542790's, so they stay separate."
+  },
+  {
+   "rows": [
+    "V-fb542790"
+   ],
+   "why": "This checks AS From Site activation plus Measure options under Div 81, which has different conditions and expected results from the new-row Measure combo row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:06:22",
+ "cost": 0.0733871
+}

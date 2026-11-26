@@ -1,0 +1,45 @@
+{
+  "id": "20261124000237_VISION",
+  "at": "2026-11-24T00:02:37+09:00",
+  "ms": 1795446157218,
+  "source": "vision",
+  "status": "superseded",
+  "sig": "ln|purpose|vmo가n분간격으로열린문제를진단조치함",
+  "title": "개념 재정립: VMO 진행의 정의(기록 → 상태 전이)와 need-user 계약",
+  "evidence": ".vibe/orch/selfcheck/result.json at 2026-11-24T00:00:24 S7, S13 · orch-usercheck.js:80(actions 0건만 셈) · orch-agent.js:301-303(drain 들어온 사건만 '담당 아님' 기록) · orch-selfcheck.js:236(need-user 는 warn 표시만), :690(newIncidents 또는 하루 1회) · incidents 20261120_094734_R5_SCP0028, 20261120_094237_R3_SSP0005 actions '원인 engine' 인데 need-user · 20261120183740_VISION history 2026-11-23 12:11:10 반영 실패(24시간 실가동 검증) · orch-worklist.js 호출 0건 · concept_20261120, concept_20261122 _L4_useraxis_vmoCadence.md · 진단 사다리 묶음 L4|purpose|VMO가10분간격으로열린문제를진단조치함 · 문서 .vibe/orch/vision/concept_20261124_L4_purpose_VMO_10_.md",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-worklist.js",
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-events.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_worklist.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/Harness/harness.json"
+  ],
+  "before_after": "지금: VMO 는 새 일에 1번 반응하고, 사건에 기록 1건이 생기거나 need-user 가 되면 일이 끝난 것으로 보며, U3 감시는 기록 0건만 센다. 새 개념: 열린 일마다 상태, 담당, 다음 행동, 시한을 두고 진행은 상태 전이로만 세며, need-user 는 사용자 행동이 기록된 일에만 허용하고 원인이 VM, VMO 코드인 일은 VMO 가 fix 개선안으로 이어 간다.",
+  "verify": "1) 재현 시험: 사건 줄 20261123_171236_R12_ALL, 20261123_115110_R12_ALL 에 '담당 아님' 기록만 넣고 60분 경과 → U3 fail 유지, 자가진단 진단 호출 1회 · 2) 재현 시험: 20261120_094734_R5_SCP0028, 20261120_094237_R3_SSP0005 사건 줄 → need-user 아님, fix 개선안 2건 생성 · 3) 재현 시험: 20261120_201206_R5_SCP0028(실행 끝남) → 확인 기록 뒤 닫힘 · 4) node tools/VibeManager/test/run_all.js 통과 · 실가동 관찰은 반영 뒤 첫 Overall Review 판정으로 확인하고 개선안 검증 항목에 넣지 않음",
+  "rollback": "단계마다 .bak_<날짜>_concept 백업과 백업 태그로 복원. harness.json orch 장부 사용 키 false 면 지금 경로(기록 기준 U3, need-user 끝 상태)로 동작",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "Overall Review 같은 목적 '어긋남' 3회 연속(2026-11-21 12:03:59, 11-22 14:05:38, 11-23 14:54:12). L3 이후 조치(20261123121302_SELF, 효력 2026-11-23 21:20:34) 뒤에도 2026-11-24 00:00:24 S13 U3 fail(R12 4건 408~729분, 미반영 개선안 40건), S7 need-user 4건 76~86시간",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T09:29:44+09:00",
+      "by": "VMO",
+      "what": "L4 단계 원장 20261124000718_VISION 단계 4 으로 흡수(같은 축 원장 열림). 이 안은 따로 반영하지 않음"
+    }
+  ],
+  "plain": {
+    "what": "VMO 가 문제에 메모를 남긴 것만으로 일을 끝낸 것으로 치지 않습니다. 원인 확인, 조치, 확인, 닫힘 중 실제로 단계가 넘어가야 진행으로 봅니다. 사용자에게 넘기는 일은 사용자가 할 행동이 적힌 것만 남고, VM 자체 결함은 VMO 가 고침 안으로 이어 갑니다.",
+    "risk": "다시 진단하는 횟수가 늘어 시간당 Claude 호출 상한 6회에 걸릴 수 있습니다. 걸리면 화면에 '상한 대기'로 보입니다.",
+    "undo": "VM 환경설정(harness.json)의 장부 사용 값을 끄면 지금 방식으로 돌아갑니다. 단계마다 백업이 있어 파일 단위로 되돌릴 수 있습니다."
+  },
+  "kind": "fix",
+  "supersededBy": "20261124000718_VISION",
+  "absorbedInto": "20261124000718_VISION"
+}

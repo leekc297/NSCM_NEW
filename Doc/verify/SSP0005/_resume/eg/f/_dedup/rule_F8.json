@@ -1,0 +1,41 @@
+{
+ "rule_id": "F8",
+ "hash": "4eee9e46659159f5",
+ "groups": [
+  {
+   "rows": [
+    "V-49200bb3",
+    "V-a5337212"
+   ],
+   "why": "둘 다 기존 행을 수정 저장할 때 같은 감사 컬럼(Created/Updated By·Date)을 확인하고, 기대 결과도 Created 불변 · Updated By/Date 갱신으로 같다."
+  },
+  {
+   "rows": [
+    "V-99b4da5e"
+   ],
+   "why": "Created와 Updated를 모두 저장 계정·저장 시각으로 기대하므로 사실상 신규 저장 상태를 확인하는 행이고, 수정 저장(Created 불변)과 상태·기대가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-5be74c34"
+   ],
+   "why": "원장 감사 컬럼이 아니라 이력 테이블 행의 값을 확인하므로 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-61634625"
+   ],
+   "why": "Auth Request 시점에 Approval Date가 생성되지 않는지를 확인하는 행으로, 대상 컬럼과 조건이 다른 행들과 다르다."
+  },
+  {
+   "rows": [
+    "V-b731ade9"
+   ],
+   "why": "Reject 후 재요청한 건의 Reject Reason 초기화와 Request Date 산출을 확인하므로 대상과 상태가 다른 행들과 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:07:35",
+ "cost": 0.0448283
+}

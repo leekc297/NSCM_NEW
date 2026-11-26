@@ -1,8 +1,8 @@
 {
- "baseline": "c62b4200c55116910b659b2f5bcc7fd61e109a7b",
- "baselineInfo": "c62b4200c 2026-11-20 11:16 Jeongyun Park fix(SCP0011): 입력 차단·편집 잠금·조회조건 AS-IS 패리티",
- "applied": "2026-11-20T11:28:39",
- "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261120\\README.md",
+ "baseline": "6f99270c01ed7c3b2f42b1379d9922ea42f75342",
+ "baselineInfo": "6f99270c0 2026-11-26 09:30 Jungwon Ha fix(SSP0003): ERP 전송 실패 시 승인이 저장되지 않도록 AS-IS 순서로 변경",
+ "applied": "2026-11-26T10:07:18",
+ "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126\\README.md",
  "baselineBeApplied": "2026-11-12T10:30:49",
  "reportBe": "_artifacts\\_backup\\NSCMBE_PRE_COMMON_20261112\\README.md",
  "baselineBe": "3e1e0a081018e7121c5e7c323c3785532097f201",
@@ -116,6 +116,24 @@
    "from": "06e7d22ded01a46846c08a0d9c65d0d497111081",
    "applied": "2026-11-20T11:28:39",
    "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261120\\README.md"
+  },
+  {
+   "baseline": "9ab0f885f6165d5eb57e0be6405a92ee41ab88a8",
+   "from": "c62b4200c55116910b659b2f5bcc7fd61e109a7b",
+   "applied": "2026-11-23T11:17:11",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261123\\README.md"
+  },
+  {
+   "baseline": "2e27252dba3f3f64e74dff86c485f39285b7439d",
+   "from": "9ab0f885f6165d5eb57e0be6405a92ee41ab88a8",
+   "applied": "2026-11-24T14:44:05",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261124\\README.md"
+  },
+  {
+   "baseline": "6f99270c01ed7c3b2f42b1379d9922ea42f75342",
+   "from": "2e27252dba3f3f64e74dff86c485f39285b7439d",
+   "applied": "2026-11-26T10:07:18",
+   "report": "_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126\\README.md"
   }
  ]
 }

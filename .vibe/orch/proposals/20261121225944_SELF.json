@@ -1,0 +1,100 @@
+{
+  "id": "20261121225944_SELF",
+  "at": "2026-11-21T22:59:44+09:00",
+  "ms": 1795269584667,
+  "source": "self",
+  "status": "applied",
+  "sig": "errlog prefix info legacy",
+  "title": "수정 전에 남은 정상 처리 기록(중지 뒤 잠금 정리, AI 편집만 되돌림)을 오류 집계에서 제외",
+  "evidence": "diag_in.json errors 9종 중 6종이 정상 처리 기록임. .vibe/orch/vm_errors.jsonl 3~8줄(lockStopClean, 2026-11-20 14:13, 14:24)과 13, 14, 18, 19, 34줄(restore, 16:21~18:56)에 info 필드 없음. 9줄부터는 lockStopClean 에 \"info\":true 있음. 수정 반영은 CHANGELOG.md:452(14:47 중지 뒤 잠금 정리 기록 제외), :228(19:13 AI 편집만 되돌린 기록 제외). orch-errlog.js:89 는 r.info === true 만 거르므로 수정 전 줄은 11-27 까지 7일 집계에 남음. 남은 2종 'Invalid time value'(vm_errors.jsonl 1, 2줄)는 orch-state.js:106 lockAt 으로 고쳐졌고(CHANGELOG.md:475) 이 안의 대상이 아님",
+  "targets": [
+    "tools/VibeManager/orch-errlog.js",
+    "tools/VibeManager/test/t_orch_errlog.js"
+  ],
+  "before_after": "orch-errlog.js:89 stats() 가 r.info === true 만 건너뜀 → info 필드가 없어도 fn === 'lockStopClean' 인 줄과, fn === 'restore' 이면서 msg 를 ' / ' 로 나눈 조각마다 /AI 편집 \\d+건만 되돌림\\(반영 전과 같음\\)$/ 에 맞는 줄은 건너뜀. t_orch_errlog.js 에 info 없는 lockStopClean 1줄, info 없는 정상 restore 1줄은 집계 제외, '되돌림 실패' 조각이 섞인 restore 1줄은 집계되는 시험 3건 추가",
+  "verify": "node -e \"const e=require('./tools/VibeManager/orch-errlog');e.init('.vibe');const s=e.stats(Date.now()-7*864e5);console.log(s.length, s.map(x=>x.fn).join(','))\" 실행 → 출력에 lockStopClean, restore 없음, 'tick,chainBusy' 2종만 남음",
+  "rollback": "tools/VibeManager/orch-errlog.js, tools/VibeManager/test/t_orch_errlog.js 를 반영 전 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "기록 표시 문제 1건. 두 기록 모두 수정이 이미 반영됨(orch-watch.js:141 info: true, orch-improve.js:209 info 조건). 수정 전에 쓰인 줄만 남아 있어 재발 조건(고친 뒤 다시 남) 해당 없음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T23:00:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T23:04:03+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 871, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self2300"
+    },
+    {
+      "at": "2026-11-21T23:04:05+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T23:08:05+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 874, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T23:08:05+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 23:04:31 실행. node -e \"const e=require('./tools/VibeManager/orch-errlog');e.init('.vibe');const s=e.stats(Date.now()-7*864e5);console.log(s.length, s.map(x=>x.fn).join(','))\" 출력 '2 tick,chainBusy' (lockStopClean, restore 없음). 추가 확인 node tools/VibeManager/test/t_orch_errlog.js tools/VibeMan · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-21T23-04-05_claude_orch.log",
+      "sec": 36,
+      "costUsd": 0.5385066000000001,
+      "files": [
+        "tools/VibeManager/orch-errlog.js",
+        "tools/VibeManager/test/t_orch_errlog.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:26+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S5",
+  "selfKey": "errors: orch-watch.lockStopClean 3종, orch-improve.restore 3종",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795269631203,
+  "autoFp": "4abb4e6f38",
+  "applyStartMs": 1795269845089,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 874, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self2300",
+  "needsReload": true,
+  "appliedMs": 1795270085476,
+  "synced": [
+    "orch-errlog.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-errlog.js",
+      "tools/VibeManager/test/t_orch_errlog.js"
+    ],
+    "verify_result": "2026-11-21 23:04:31 실행. node -e \"const e=require('./tools/VibeManager/orch-errlog');e.init('.vibe');const s=e.stats(Date.now()-7*864e5);console.log(s.length, s.map(x=>x.fn).join(','))\" 출력 '2 tick,chainBusy' (lockStopClean, restore 없음). 추가 확인 node tools/VibeManager/test/t_orch_errlog.js tools/VibeManager 출력 'PASS info 없는 lockStopClean = stats 제외', 'PASS info 없는 정상 restore = stats 제외', 'PASS 실패 조각 섞인 restore = stats 집계', 'ALL PASS'",
+    "note": "vm_errors.jsonl 39줄 대조 결과 info 없는 lockStopClean 3~8줄 6건과 restore 13, 14, 18, 19, 35줄 5건이 집계에서 빠짐. 개선안 evidence 의 restore 34줄은 현재 파일에서 35줄임. repairScope DB_ONLY 는 FE·BE 수정만 막으므로 tools/VibeManager 수정은 막히지 않음. 설치 폴더와 CHANGELOG.md 는 건드리지 않음."
+  },
+  "snap": "prop_20261121225944_SELF",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

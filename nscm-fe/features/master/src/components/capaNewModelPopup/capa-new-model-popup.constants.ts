@@ -187,7 +187,7 @@ export const MSG = {
   PRIORITY_RANGE: 'MSG01037', // {0}~{1} 사이의 수를 입력하세요.
   SAVE_RESULT: 'MSG00002', // 저장 성공 → "Saved successfully." AS-IS MSG00004("{0}개 저장")는 TO-BE에서 "No changes to save."라 의미 오매칭 — MSG00002로 교정(2026-11-03; TO-BE에 건수 문구 미대응)
   SAVE_ERROR: 'MSG00284', // 실행중 에러가 발생했습니다.
-  NO_CHANGE: 'MSG00133', // 수정한 내용이 없습니다.
+  NO_CHANGE: 'MSG00004', // 수정한 내용이 없습니다. (AS-IS MSG00133 은 TO-BE 미등록 → 같은 문구 MSG00004)
   MAIL_SENT: 'MSG01335', // Success to send requestion e-mail.
   NO_CHECKED_ROWS: 'MSG00021', // 체크된 행이 없습니다.
 } as const;

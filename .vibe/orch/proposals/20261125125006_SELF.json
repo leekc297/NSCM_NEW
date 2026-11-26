@@ -1,0 +1,45 @@
+{
+  "id": "20261125125006_SELF",
+  "at": "2026-11-25T12:50:06+09:00",
+  "ms": 1795578606233,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/analysis/ssp_it_precheck/lookup_merge_gen.py|생성되는nmssql파일머리주석에mssql쪽mnmnmn실행방법쿼리하나씩c",
+  "title": "사용자 지시 R225 같은 문제: tools/Analysis/ssp_it_precheck/lookup_merge_gen.py:72 생성되는 2/4 MSSQL 파일 머리 주석에 MSSQL 쪽 [M1], [M3], [M2] 실행 방법(쿼리 하나씩 Ctrl+Enter)이 없음. 한 탭 여러 쿼리 ",
+  "evidence": "규칙 R225 \"사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음\" (원래 지시 2026-11-25 11:42 \"Cannot execute more than one query in one tab. Try to use multiple tabs for simultaneous query execution.\") · tools/Analysis/ssp_it_precheck/lookup_merge_gen.py:72 -- 사용 : [M1] 건수 확인 → [M2] 실행 → 결과 열 SQL_TEXT 전체 복사 → Oracle QA 에서 스크립트 실행(DBeaver Alt+X · SQL Developer F5)",
+  "targets": [
+    "tools/Analysis/ssp_it_precheck/lookup_merge_gen.py"
+  ],
+  "before_after": "HEAD 문자열 72행 앞에 '-- 실행 : MSSQL 쪽은 DBeaver 에서 쿼리 하나씩(커서를 쿼리 안에 두고 Ctrl+Enter). [M2] 는 한 쿼리라 Alt+X 로 실행하지 않음' 줄을 넣고 2/4 파일을 다시 생성함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Analysis/ssp_it_precheck/lookup_merge_gen.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:46:52+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · tools/Analysis/ssp_it_precheck/lookup_merge_gen.py:72 HEAD 에 '-- 실행 : MSSQL 쪽은 DBeaver 에서 쿼리 하나씩(Ctrl+Enter). [M2] 는 한 쿼리라 Alt+X 로 실행하지 않음' 줄 추가 · Doc/통합테스트_SSP/SSP_LOOKUP_이관_2_MERGE생성_MSSQL_20261125.sql 재생성(백업 .bak_20261126_sb, diff = 5행 1줄 추가만, 기존 파일이 수정 전 생성기 출력과 같음 cmp 확인) · py_compile OK · MSSQL 실행 미확인 · 2026-11-26 15:46"
+    }
+  ],
+  "plain": {
+    "what": "사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음 규칙을 tools/Analysis/ssp_it_precheck/lookup_merge_gen.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R225|tools/Analysis/ssp_it_precheck/lookup_merge_gen.py",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675612470
+}

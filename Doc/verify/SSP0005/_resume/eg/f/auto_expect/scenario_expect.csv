@@ -1,0 +1,9 @@
+﻿menu_id,name,steps,msg_re,no_save,no_editor,rule,source,user,pattern_id,basis,key
+SSP0005,[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림,lang:KO;search;save,[가-힣].*(수정|변경|없습니다),Y,,I1,자동 생성 P01 · btn_auth SAVE,,P01,btn_auth SAVE,I1|lang-ko-save
+SSP0005,[자동] CN 언어 조회 건수 총/건 표기,"lang:CN;search;pagetext:(总|共|合计)\s*[\d,]+\s*(条|行|件|个)",,,,I1,자동 생성 P02 · btn_auth SEARCH,,P02,btn_auth SEARCH,I1|lang-cn-count
+SSP0005,[자동] 조회 중 Loading 토스트 없음,noload,,,,H10,자동 생성 P03 · btn_auth SEARCH,,P03,btn_auth SEARCH,H10|noload
+SSP0005,[자동] 선택 행 위로 Insert,search;insertat:3,,,,D6,자동 생성 P05 · btn_auth INSERT · D6 확정 요구(O2),,P05,btn_auth INSERT · D6 확정 요구(O2),D6|insertat
+SSP0005,[자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음,search;type:@DYN=7;btn:Save;nomsgre:필수|required|mandatory,,,,E4,"자동 생성 P12 · AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · 필수 오탐 유형(DM-215)",,P12,"AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · 필수 오탐 유형(DM-215)",E4|req-fp
+SSP0005,[자동] 당주 구분선(rail) = 이번 주(Weekly),search;rail:W@mon,,,,H2,자동 생성 P18 · AS-IS W_ 칸 접두 검사 14건,,P18,AS-IS W_ 칸 접두 검사 14건,H2|rail
+SSP0005,[자동] 값 있는 편집 구간 수량 셀 편집,"search;type:@DYNVAL=123;cell:~,@LAST=123",,,,D2,"자동 생성 P19 · AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · SAVE",,P19,"AS-IS 동적 칸 {'D': 51, 'M': 18, 'W': 14} · SAVE",D2|dynval-edit
+SSP0005,[자동] 조회조건 콤보 2종 = 콤보,iscombo:Div;iscombo:Plant\ Site,,,,B1,"자동 생성 P21 · 조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plant Site",,P21,"조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plant Site",B1|iscombo|div + B1|iscombo|plant\site

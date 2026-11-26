@@ -160,11 +160,12 @@ export const ConstraintOfShipmentQtyForm = ({ initData, onSearch }: Props) => {
               />
             </Grid>
             {/* Item ID — 직접 입력 · 지우기 + 돋보기(MaterialByDivisionModal, design 02 §4.6). AS-IS txtItemId 텍스트
-                칸(갭분석 C-06·표-06). 입력값은 조회 조건이자 찾기 창 초기 조건. 라벨은 AS-IS Model/Nickname(LBL.ITEM_ID=LBL00618). */}
+                칸(갭분석 C-06·표-06). 입력값은 조회 조건이자 찾기 창 초기 조건. 라벨은 표준화 예외로
+                Model(LBL.ITEM_ID=LBL00669) — 조회 내용에 Nickname 이 없다(고객 테스트 요청 2026-11-23). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.ITEM_ID, '_Model/Nickname')}
+                label={t(LBL.ITEM_ID, '_Model')}
                 labelAlign='right'
                 render={() => (
                   <InputField

@@ -1,0 +1,58 @@
+// 사용자 지시 규칙 체계 시험(2026-11-23): learn 의 fix-request → user_rules.json · 그림 붙은 프롬프트 · 소급(rulesOnly) · 점검(sweep) → 개선안
+//   사용: node test/t_orch_userrule.js <VibeManager 폴더>   (가짜 Claude, 가짜 개선안 모듈 · 실제 Claude 호출 없음)
+const path = require('path'); const fs = require('fs'); const os = require('os');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'urule-')); const vibeDir = path.join(root, '.vibe'); const vm = path.join(root, 'vm');
+const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
+W('tools/Harness/harness.json', JSON.stringify({ orch: { userRuleEveryHours: 24 } }));
+W('vm/user_checks.json', JSON.stringify({ about: '', coveredUntil: '', items: [{ id: 'U1', detector: 'progressShown', status: 'active', symptom: 's' }] }));
+const rules0 = JSON.parse(fs.readFileSync(path.join(dir, 'user_rules.json'), 'utf8'));
+W('vm/user_rules.json', JSON.stringify({ about: '', categories: rules0.categories, items: [] }));
+// 세션 기록: 문자열 프롬프트 1, 그림 붙은 프롬프트(content 배열) 1, 도구 결과(제외) 1
+const t0 = Date.parse('2026-11-23T07:00:00Z'); const line = (ms, content) => JSON.stringify({ type: 'user', entrypoint: 'claude-vscode', timestamp: new Date(ms).toISOString(), message: { role: 'user', content } });
+W('sess/a.jsonl', [line(t0, 'VMW 의 작성일 칸만 흰 배경이라 튑니다. 보완해주세요'),
+  line(t0 + 60000, [{ type: 'text', text: '하단의 캡처 파일 선택 부분이 잘립니다' }, { type: 'image', source: { type: 'base64', data: 'x' } }]),
+  line(t0 + 120000, [{ type: 'tool_result', content: 'ok' }])].join('\n') + '\n');
+const p = { root, vibeDir };
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+let claudeOut = null; const prompts = []; const added = [];
+const agent = { withLock: async (id, fn) => fn(), say: () => { }, lastJsonBlock: t => JSON.parse(t), runClaude: async pr => { prompts.push(pr); return { ok: true, code: 0, ms: 1000, log: 'x.log', text: JSON.stringify(claudeOut) }; } };
+const imp = { add: (o, src) => { if (added.some(a => a.sig === o.sig)) return { dup: 'x' }; added.push(Object.assign({ src }, o)); return { id: `P${added.length}` }; } };
+const ur = require(path.join(dir, 'orch-userrule')); ur.init({ paths: () => p, vmDir: vm, mods: { 'orch-agent': agent, 'orch-improve': imp } });
+const uc = require(path.join(dir, 'orch-usercheck')); uc.init({ paths: () => p, vmDir: vm, sessionDirs: [path.join(root, 'sess')], mods: { 'orch-agent': agent, 'orch-improve': imp, 'orch-userrule': ur, 'orch-history': { redact: s => s } }, events: () => [] });
+(async () => {
+  // 1) 프롬프트 읽기: 그림 붙은 프롬프트 포함, 도구 결과 제외
+  const ps = uc.pendingPrompts(0);
+  chk('그림 붙은 프롬프트도 읽음(글 부분), 도구 결과 제외', ps.length === 2 && /잘립니다/.test(ps[1].text), JSON.stringify(ps.map(x => x.text)));
+  // 2) learn: fix-request → 규칙, 지적 아님에 넣지 않음
+  claudeOut = { items: [{ n: 1, kind: 'fix-request', category: 'ui-look', rule: '웹뷰 입력칸은 모든 type 이 테마 입력 배경을 씀', scope: 'VM 웹뷰 CSS', check: 'input[type=text] 만 꾸민 곳' },
+    { n: 2, kind: 'fix-request', category: 'ui-space', rule: '영역 내용이 늘어도 잘리지 않고 영역 안에서 스크롤함', scope: 'VM 웹뷰', check: 'overflow hidden + 고정 높이' }] };
+  const r1 = await uc.learn(true);
+  const RL = ur.ledger(); const lj = JSON.parse(fs.readFileSync(path.join(vibeDir, 'orch', 'usercheck', 'learn.json'), 'utf8'));
+  chk('learn: 보완 지시 2건 = 규칙 R1, R2(유형 포함)', r1.rules === 2 && RL.items.length === 2 && RL.items[0].category === 'ui-look' && RL.items[1].id === 'R2', JSON.stringify(r1));
+  chk('learn: 보완 지시는 지적 아님 목록에 없음', !(lj.excluded || []).length, JSON.stringify(lj.excluded));
+  chk('learn 지시문: fix-request 분류, 규칙 유형, 기존 규칙 목록 포함', /fix-request/.test(prompts[0]) && /\[규칙 유형\]/.test(prompts[0]) && /ui-look/.test(prompts[0]));
+  // 3) 같은 규칙 = 인용만 더함
+  const d = ur.addRule({ at: '2026-11-23 17:00', quote: '다시 지적', rule: '웹뷰 입력칸은 모든 type 이 테마 입력 배경을 씀', category: 'ui-look' });
+  chk('같은 규칙 = 새로 만들지 않고 인용 추가', d.dup && d.id === 'R1' && ur.ledger().items.length === 2 && ur.ledger().items[0].also.length === 1);
+  // 4) 소급(rulesOnly): 지적 원장(U), coveredUntil 그대로
+  const before = fs.readFileSync(path.join(vm, 'user_checks.json'), 'utf8');
+  claudeOut = { items: [{ n: 1, kind: 'issue', detector: 'progressShown', rule: '작업 카드 진행 글은 로그가 늘면 같이 바뀜', category: 'flow', scope: 'jobs.js', check: '-' }] };
+  const r2 = await uc.backfill(true);
+  chk('소급: 규칙만 더하고 지적 원장, coveredUntil 그대로', r2.ok && r2.rules === 1 && fs.readFileSync(path.join(vm, 'user_checks.json'), 'utf8') === before && ur.ledger().items.length === 3, JSON.stringify(r2));
+  // 5) 점검: 새 규칙 = 점검 대상 → 개선안(경로 처리)
+  chk('점검 필요(새 규칙)', ur.sweepDue().due === true && ur.sweepDue().rules.length === 3);
+  claudeOut = { items: [{ rule: 'R1', file: 'orchestra.js', line: 120, quote: 'input[type=text]{', what: 'date 칸 기본 배경', fix: 'input[type=date] 도 같은 CSS' },
+    { rule: 'R2', file: 'tools/DbConn/x.py', line: 3, quote: 'q', what: 'w', fix: 'f' },
+    { rule: 'R2', file: 'C:/abs/x.js', line: 1, what: '저장소 밖' }, { rule: 'R9', file: 'jobs.js', line: 1, what: '없는 규칙' }] };
+  const s1 = await ur.sweep(false);
+  chk('점검: 남은 곳 2건(저장소 밖, 없는 규칙 제외), 개선안 2건', s1.ok && s1.found === 2 && s1.added === 2, JSON.stringify(s1));
+  chk('개선안 대상 경로: 파일 이름 = tools/VibeManager/, 저장소 경로 = 그대로', added[0].targets[0] === 'tools/VibeManager/orchestra.js' && added[1].targets[0] === 'tools/DbConn/x.py');
+  chk('개선안 = 자가진단(self) S13, selfKey S13|R1|파일, impact fix', added[0].src === 'self' && added[0].check === 'S13' && added[0].selfKey === 'S13|R1|tools/VibeManager/orchestra.js' && added[0].impact === 'fix');
+  chk('점검 지시문: 규칙 유형 이름, 유형 점검 범위 포함', /화면 모양/.test(prompts[prompts.length - 1]) && /유형 점검 범위/.test(prompts[prompts.length - 1]));
+  chk('점검 뒤 = 주기 전', ur.sweepDue().due === false && ur.sweepDue().why === '주기 전');
+  const s2 = await ur.sweep(true); chk('같은 곳 다시 찾으면 개선안 중복 없음', s2.ok && s2.added === 0 && s2.dup === 2, JSON.stringify(s2));
+  const st = JSON.parse(fs.readFileSync(path.join(vibeDir, 'orch', 'userrule', 'state.json'), 'utf8')); st.lastMs = Date.now() - 25 * 3600000; fs.writeFileSync(path.join(vibeDir, 'orch', 'userrule', 'state.json'), JSON.stringify(st));
+  chk('24시간 지나면 전체 다시 점검', ur.sweepDue().due === true && /주기/.test(ur.sweepDue().why));
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})();

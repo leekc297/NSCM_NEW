@@ -1,0 +1,5 @@
+﻿UPDATE SCM_FP_PLAN_H SET
+             SSP_FLAG = 'N'
+           , SSP_CREATE_TIME = GETDATE()
+      WHERE  INSTANCE_ID = @MASTER_ID
+      AND    PLAN_ID     = @PLAN_ID

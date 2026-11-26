@@ -1,0 +1,29 @@
+{
+  "id": "20261120_180236_R12_ALL_2",
+  "at": "2026-11-20T18:02:36+09:00",
+  "ms": 1795165356054,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U21 같은 원인 반영 실패 2회 doc_style.py 소스 검사에서 JS 주석과 잘못 짝지은 백틱 구간",
+  "screen": "",
+  "sig": "R12|S13|U21|title|doc_style.py 소스 검사에서 JS 주석과 잘못 짝지은 백틱 구간 제외|2",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261119232523_SELF 11-19 23:45, 20261119232523_SELF 11-19 23:55 · 마지막 '반영 실패. 검증 실패: 2026-11-19 23:54~23:55 실행. python -m py_compile tools/Docs/doc_sty'",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U21|title|doc_style.py 소스 검사에서 JS 주석과 잘못 짝지은 백틱 구간 제외|2",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T00:02:16+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

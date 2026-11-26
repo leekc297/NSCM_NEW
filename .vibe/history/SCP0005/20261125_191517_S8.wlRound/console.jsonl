@@ -1,0 +1,15 @@
+{"t":1795601717978,"m":{"type":"out","stream":"task","text":"▶ 해소 원장 점검 — 🧪 미검증 보완 회차 끝: 이번 회차 닫힌 행, 열린 행, 다음 회차 여부(unverified_worklist.json continue) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005 --wl-round\n","cls":"cmd"}}
+{"t":1795601718316,"m":{"type":"out","stream":"task","text":"[해소 원장] 1회차 끝: 이번 회차 닫힘 29 · 열린 행 0() · AI 후보 열림 0 · 반복 끝(열린 행 0)\n","cls":""}}
+{"t":1795601718318,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T19-15-17_SCP0005_2_______________________________________________________unverified_worklist.json_continue_.log\n","cls":"ok"}}
+{"t":1795601718405,"m":{"type":"fb","state":"step","id":1,"no":3,"status":"OK","code":0,"sec":0,"repairs":0}}
+{"t":1795601718412,"m":{"type":"out","stream":"task","text":"✅ [3/4] 3. 해소 원장 점검 (닫힌 행 · 열린 행) — OK (exit 0) · 0s\n","cls":"ok"}}
+{"t":1795601718413,"m":{"type":"out","stream":"task","text":"\n── [4/4] 4. 미검증 해소 게이트 (해소 원장 열린 행 0 · 남으면 행별 시도 횟수 보고)\n","cls":"cmd"}}
+{"t":1795601718416,"m":{"type":"fb","state":"step","id":1,"no":4,"status":"RUN"}}
+{"t":1795601718438,"m":{"type":"out","stream":"task","text":"▶ 미검증 해소 게이트 — 해소 확인 결과(unverified_settle.json) 처리 대상 전체 해소 전이면 남은 행·사유를 적고 오류(재검증 안 함) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005 --gate\n","cls":"cmd"}}
+{"t":1795601718619,"m":{"type":"out","stream":"task","text":"[OK] 미검증 해소 게이트 통과: 해소 원장 33행 중 열린 행 0 · 닫힘·결정 29 · AI 후보 열림 0(판정 영향 없음, 보완 후보)\n","cls":""}}
+{"t":1795601718636,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T19-15-18_SCP0005_3_______________________unverified_settle.json_________________________________________.log\n","cls":"ok"}}
+{"t":1795601718735,"m":{"type":"fb","state":"step","id":1,"no":4,"status":"OK","code":0,"sec":0,"repairs":0}}
+{"t":1795601718743,"m":{"type":"out","stream":"task","text":"✅ [4/4] 4. 미검증 해소 게이트 (해소 원장 열린 행 0 · 남으면 행별 시도 횟수 보고) — OK (exit 0) · 0s\n","cls":"ok"}}
+{"t":1795601718747,"m":{"type":"out","stream":"task","text":"\n체인 완료: 4단계 중 OK 4 · 3364s\n   실행 주체: Script 3단계 · AI Agent 1회\n   → Doc\\gen\\SCP0005\\FULLRUN.md\n","cls":"ok"}}
+{"t":1795601718747,"m":{"type":"chat","role":"meta","text":"실행 주체: Script 3단계 · AI Agent 1회"}}
+{"t":1795601718765,"m":{"type":"fb","state":"end","id":1,"ok":true,"warn":false,"summary":"체인 완료: 4단계 중 OK 4 · 3364s","sec":3364}}

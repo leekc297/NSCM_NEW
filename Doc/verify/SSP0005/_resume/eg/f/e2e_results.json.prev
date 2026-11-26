@@ -1,0 +1,102 @@
+[
+ {
+  "row_id": "V-dd7c2ad9",
+  "result": "판정필요",
+  "evidence": "[재실측 스냅샷 조회조건] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\\verify\\SSP0005\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(13줄 · formItem 공통 조상) · 시각 순서 3칸 · 전제 Div 40 · calls 0 · rows -1 · 기대원천 ASIS:plan.json fields/condOrder(search_cond.csv tobe_seq · AS-IS 라벨)",
+  "tobe_ref": "E2E @snap 조회조건",
+  "cond": "0035a8eb",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "expect_src": "ASIS:plan.json fields/condOrder(search_cond.csv tobe_seq · AS-IS 라벨)",
+  "evidence_ref": "Doc\\verify\\SSP0005\\snap\\received\\조회조건_Div_40.aria.yml",
+  "precond": {
+   "div": "40",
+   "calls": 0,
+   "rows": -1,
+   "viewport": ""
+  }
+ },
+ {
+  "row_id": "V-d9d87624",
+  "result": "판정필요",
+  "evidence": "[재실측 스냅샷 버튼] 골든 없음(승인 전) · 골든 없음 — 수신본 Doc\\verify\\SSP0005\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(10줄) · 보이는 버튼 KOR,이 이민용,Home,SSP Working Day,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Bulk Update,Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel · 전제 Div 40 · calls 0 · rows -1 · 기대원천 ASIS:plan.json buttons/menuBtnCodes(AS-IS 버튼 메서드 · btn_auth)",
+  "tobe_ref": "E2E @snap 버튼",
+  "cond": "5bade736",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  },
+  "expect_src": "ASIS:plan.json buttons/menuBtnCodes(AS-IS 버튼 메서드 · btn_auth)",
+  "evidence_ref": "Doc\\verify\\SSP0005\\snap\\received\\버튼_Div_40.aria.yml",
+  "precond": {
+   "div": "40",
+   "calls": 0,
+   "rows": -1,
+   "viewport": ""
+  }
+ },
+ {
+  "row_id": "V-34e1b890",
+  "result": "PASS",
+  "evidence": "[재실측 스냅샷 헤더] 기준 Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt ↔ 실측 일치 · 골든 Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt 와 일치 · 헤더 3행 · 칸 362 · 전제 Div - · calls 4 · rows 435 · 기대원천 ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
+  "tobe_ref": "E2E @snap 헤더",
+  "cond": "9260f978",
+  "mctx": {
+   "calls": 4,
+   "rows": 435,
+   "req": 0
+  },
+  "expect_src": "ASIS:plan.json expectedCols/headerSpec(SHEET_COLUMNS · AS-IS SetSheetHeaderColumn)",
+  "evidence_ref": "Doc\\verify\\SSP0005\\snap\\golden\\헤더_Shipment_Working_Day.txt",
+  "precond": {
+   "div": "",
+   "calls": 4,
+   "rows": 435,
+   "viewport": ""
+  }
+ },
+ {
+  "row_id": "V-735f7065",
+  "result": "PASS",
+  "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1920.png ↔ 실측 일치 · 골든 화면샷과 일치(maxDiffPixelRatio 0.002) · 전제 Div - · calls 4 · rows 435 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "tobe_ref": "E2E @snap 화면샷",
+  "cond": "76e850b6",
+  "mctx": {
+   "calls": 4,
+   "rows": 435,
+   "req": 0
+  },
+  "expect_src": "RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence_ref": "Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1920.png",
+  "precond": {
+   "div": "",
+   "calls": 4,
+   "rows": 435,
+   "viewport": 1920
+  }
+ },
+ {
+  "row_id": "V-dc1a965d",
+  "result": "PASS",
+  "evidence": "[재실측 스냅샷 화면샷] 기준 Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1366.png ↔ 실측 일치 · 골든 화면샷과 일치(maxDiffPixelRatio 0.002) · 전제 Div - · calls 4 · rows 435 · 기대원천 RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "tobe_ref": "E2E @snap 화면샷",
+  "cond": "dd9a0f7d",
+  "mctx": {
+   "calls": 4,
+   "rows": 435,
+   "req": 0
+  },
+  "expect_src": "RULE:디자인 룰 H4(레이아웃) — 골든은 사용자 승인본",
+  "evidence_ref": "Doc\\verify\\SSP0005\\snap\\golden\\화면샷_1366.png",
+  "precond": {
+   "div": "",
+   "calls": 4,
+   "rows": 435,
+   "viewport": 1366
+  }
+ }
+]

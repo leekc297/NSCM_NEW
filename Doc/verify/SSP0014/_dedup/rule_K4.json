@@ -1,148 +1,112 @@
 {
  "rule_id": "K4",
- "hash": "716bdeba015a1098",
+ "hash": "b97361a04067c1a2",
  "groups": [
   {
    "rows": [
     "EG-491aab9d"
    ],
-   "why": "DELETE 버튼, Div 40, SSP Viewer 계정, 조회 전에 비노출을 확인한다. 이 Div·계정 조합을 가진 다른 행은 없다."
+   "why": "DELETE 버튼·Div 40·Viewer 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-82d3ad01"
    ],
-   "why": "SAVE 버튼, Div 40, SSP Viewer 계정, 조회 전에 비노출을 확인한다. 이 Div·계정 조합을 가진 다른 행은 없다."
+   "why": "SAVE 버튼·Div 40·Viewer 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-85124084"
    ],
-   "why": "DELETE 버튼, Div 81, SSP Viewer 계정, 조회 전에 비노출을 확인한다. Div 40 행과는 권한 컨텍스트가 달라 묶지 않는다."
+   "why": "DELETE 버튼·Div 81·Viewer 계정 조합이며, Div가 다르면 권한 상태도 달라 단독으로 둔다."
   },
   {
    "rows": [
     "EG-8a5014ea"
    ],
-   "why": "INSERT 버튼, Div 82, SSP Planner 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "INSERT 버튼·Div 82·Planner 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-a1193caf"
    ],
-   "why": "SAVE 버튼, Div 40, SSP Planner 계정, 조회 전에 노출을 확인한다. 기대 결과가 노출이라 비노출 행과 다르다."
+   "why": "SAVE 버튼·Div 40·Planner 계정에서 노출을 기대하는 행이며, 같은 Div·역할 조합의 행이 없다."
   },
   {
    "rows": [
     "EG-a81cf0b7"
    ],
-   "why": "SAVE 버튼, Div 81, SSP Planner 계정, 조회 전에 노출을 확인한다. Div가 달라 다른 노출 행과 묶지 않는다."
+   "why": "SAVE 버튼·Div 81·Planner 계정에서 노출을 기대하는 행이며, Div가 다르면 측정 조건도 달라 단독으로 둔다."
   },
   {
    "rows": [
     "EG-a8e6921e"
    ],
-   "why": "INSERT 버튼, Div 81, SSP Viewer 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "INSERT 버튼·Div 81·Viewer 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-ab70a9e0"
    ],
-   "why": "DELETE 버튼, Div 81, SSP Planner 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "DELETE 버튼·Div 81·Planner 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-abcd171b"
    ],
-   "why": "SAVE 버튼, Div 82, SSP Planner 계정, 조회 전에 노출을 확인한다. Div가 달라 다른 노출 행과 묶지 않는다."
+   "why": "SAVE 버튼·Div 82·Planner 계정에서 노출을 기대하는 행이며, 같은 조합의 행이 없다."
   },
   {
    "rows": [
     "EG-ad147d3c"
    ],
-   "why": "INSERT 버튼, Div 40, SSP Planner 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "INSERT 버튼·Div 40·Planner 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-b5f2ab1e"
    ],
-   "why": "DELETE 버튼, Div 82, SSP Planner 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "DELETE 버튼·Div 82·Planner 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-c6605add"
    ],
-   "why": "INSERT 버튼, Div 40, SSP Viewer 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "INSERT 버튼·Div 40·Viewer 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-cd0151e0"
    ],
-   "why": "INSERT 버튼, Div 81, SSP Planner 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "INSERT 버튼·Div 81·Planner 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-cd873563"
    ],
-   "why": "DELETE 버튼, Div 40, SSP Planner 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "DELETE 버튼·Div 40·Planner 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "EG-edb6afcc"
    ],
-   "why": "SAVE 버튼, Div 81, SSP Viewer 계정, 조회 전에 비노출을 확인한다. 이 조합을 가진 다른 행은 없다."
+   "why": "SAVE 버튼·Div 81·Viewer 계정 조합이며, 같은 조합의 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "T-c5923350"
    ],
-   "why": "대조표 17행의 화면 전체 버튼 구성을 추적하는 행이다. 개별 버튼이나 Div 노출을 측정하는 행과 성질이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-1adc78a7"
-   ],
-   "why": "Condition(F6) 저장 시 Period 제외 여부를 보는 행이다. 대상이 버튼 노출이 아닌 조회조건 저장이라 다른 행과 묶을 수 없다."
-  },
-  {
-   "rows": [
-    "V-3aa3a80d"
-   ],
-   "why": "Edit 버튼 누락을 오류로 보지 않는 판정 기준(확정 규칙)이다. 무엇을 측정하는 행이 아니므로 단독으로 둔다."
+   "why": "대조표 추적 행은 버튼 노출이 아니라 화면 전체의 대조표 구성을 확인하므로 다른 성질이라 묶지 않는다."
   },
   {
    "rows": [
     "V-3bb51520"
    ],
-   "why": "Div 40 버튼 바 접근성 트리를 승인 골든과 비교하는 스냅샷 확인이다. 개별 버튼 노출 판정과 방법이 달라 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-7c98aee0"
-   ],
-   "why": "Div 40 신규행 Insert 상태에서 Currency 고정, 중복 메시지, 행 추가 위치, Delete 존재를 함께 본다. 상태와 기대가 다른 행과 다르다."
-  },
-  {
-   "rows": [
-    "V-8efd43f7"
-   ],
-   "why": "모든 Div에서 공통 버튼 노출이 조회와 무관하게 OPEN 시 Division 권한으로 정해지는지 보는 일반 규칙이다. 특정 버튼·Div·계정을 보는 EG 행과 대상이 같다고 확신할 수 없어 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-924a173e"
-   ],
-   "why": "Data Type이 Cutoff Data일 때 Delete 비노출을 본다. 조건이 달라 다른 Delete 행과 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-aea2e384"
-   ],
-   "why": "Price Batch Input 버튼 비노출을 본다. 다른 행에 나오지 않는 버튼이다."
+   "why": "Div 40 버튼 바 접근성 트리를 승인 골든과 대조하는 스냅샷 검사라서 개별 버튼 권한 노출 행과 측정 방법·기대가 다르다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:17:42",
- "cost": 0.0982378
+ "at": "2026-11-25 02:13:58",
+ "cost": 0.07532969999999999
 }

@@ -56,7 +56,12 @@ import { normalizeVersionIds, useSalesFuturePriceStore } from './useSalesFutureP
 import { isEditableDivision } from './utils/editableDivision';
 import { thisWeekMonday, yyyymmddOf } from './utils/futurePriceDate';
 import { groupKeyOf, originalGroupKeyOf, toStr } from './utils/futurePriceGroup';
-import { type PeriodAxisRow, periodBindingsOf, weeklyDatesByMonthOf } from './utils/periodAxis';
+import {
+  type PeriodAxisRow,
+  periodBindingsOf,
+  periodColumnWidthOf,
+  weeklyDatesByMonthOf,
+} from './utils/periodAxis';
 import { buildSiteEndCustomerMap } from './utils/salesPriceAutoMap';
 
 // AS-IS DMF0020_SalesFuturePrice.cs (3,969줄 Forms.UIL/Master 정본) — 메인 화면
@@ -225,6 +230,8 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!axisFrom && !!axisTo,
   });
   const periodBindings = useMemo(() => periodBindingsOf(axisRows), [axisRows]);
+  // 동적 컬럼 너비 — 시간축 SP 의 COLUMN_WIDTH(2026-11-22 추가). 없으면 그리드 기본 너비.
+  const periodColumnWidth = useMemo(() => periodColumnWidthOf(axisRows), [axisRows]);
 
   // ⭐ 환율 데이터 (SP PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO — ExchangeRateModal 동일 소스).
   //   LOC 편집 시 KRW/USD/RTF 형제 measure 를 환율 재계산(AS-IS GetExchangeRate)해 3쌍 전송하기 위함.
@@ -953,6 +960,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         exchangeRateMap={exchangeRateMap}
         siteEndCustomerMap={siteEndCustomerMap}
         periodBindings={periodBindings}
+        periodColumnWidth={periodColumnWidth}
         onPopupCellDblClick={handlePopupCellDblClick}
       />
 

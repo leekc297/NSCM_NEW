@@ -1,0 +1,33 @@
+{
+  "id": "J20261120_191752",
+  "itemLabel": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "kind": "chain",
+  "status": "done",
+  "mode": "par",
+  "maxPar": 3,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "createdAt": "2026-11-20T19:17:52+09:00",
+  "startedAt": "2026-11-20T19:17:52+09:00",
+  "endedAt": "2026-11-21T01:55:50+09:00",
+  "note": "",
+  "screens": [
+    {
+      "id": "SCP0028",
+      "status": "done",
+      "step": "",
+      "actor": "",
+      "sec": 18572,
+      "summary": "체인 완료: 14단계 중 OK 14 · 18572s",
+      "why": "",
+      "md": "Doc\\gen\\SCP0028\\FULLRUN.md",
+      "startedAt": "2026-11-20T20:46:18+09:00",
+      "endedAt": "2026-11-21T01:55:50+09:00",
+      "tries": 2,
+      "prog": "",
+      "actorNote": "실행 주체: Script 11단계 · AI Agent 3회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 24회 호출 · 952행 · 11.62 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261120_191752\\SCP0028.log"
+    }
+  ],
+  "resumable": 0
+}

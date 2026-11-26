@@ -15,18 +15,35 @@ import csv, datetime, hashlib, json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 csv.field_size_limit(10 ** 8)
 FIELDS = ('row_id', 'rule_id', 'target', 'condition', 'expected')
+# 2026-11-26 측정 결과로 만들어지는 행은 지문에서 뺌(SCP0005 J20261125_210634: 실행 3회 모두 '원장이 바뀜' → AS-IS 실측 7.5~8.4분 매번 다시)
+#   EG- = 팝업·권한·정적 검사기 결과(eg_ingest) · ES- = E2E 4종 결과(e2e_suite_ingest) · AD- = AS-IS↔TO-BE 차등 결과(diff_ingest, AS-IS 실측 뒤에 만들어짐)
+MEASURED_PREFIX = ('EG-', 'ES-', 'AD-')
 
 
-def ledger_fp(mid, root=ROOT):
+def _rows(mid, root=ROOT):
     p = os.path.join(root, 'Doc', 'verify', mid.upper(), 'verify_ledger.csv')
     try:
         with open(p, encoding='utf-8-sig', newline='') as f:
-            rows = sorted(tuple((r.get(k) or '').strip() for k in FIELDS) for r in csv.DictReader(f))
+            return sorted(tuple((r.get(k) or '').strip() for k in FIELDS) for r in csv.DictReader(f) if not (r.get('row_id') or '').startswith(MEASURED_PREFIX))
     except OSError:
-        return ''
-    if not rows:
-        return ''
+        return []
+
+
+def _h(rows):
     return hashlib.sha1(json.dumps(rows, ensure_ascii=False).encode('utf-8')).hexdigest()[:16]
+
+
+def ledger_fp(mid, root=ROOT):
+    rows = _rows(mid, root)
+    return _h(rows) if rows else ''
+
+
+def ledger_parts(mid, root=ROOT):
+    """묶음별 지문 {'V|GENERAL': fp, …}(행 ID 앞 글자 | 출처 대신 rule_id 앞 글자) — 지문이 어긋날 때 어느 묶음이 바뀌었는지 알리는 용도"""
+    by = {}
+    for r in _rows(mid, root):
+        by.setdefault(r[0].split('-')[0] + '|' + (r[1][:1] or '-'), []).append(r)
+    return {k: _h(v) for k, v in sorted(by.items())}
 
 
 def _path(mid, root=ROOT):
@@ -47,7 +64,7 @@ def record(mid, kind, ref='', root=ROOT):
         cur = json.load(open(p, encoding='utf-8'))
     except (OSError, ValueError):
         pass
-    cur[kind] = {'fp': ledger_fp(mid, root), 'at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'ref': ref}
+    cur[kind] = {'fp': ledger_fp(mid, root), 'parts': ledger_parts(mid, root), 'at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'ref': ref}
     os.makedirs(os.path.dirname(p), exist_ok=True)
     tmp = p + '.tmp'; json.dump(cur, open(tmp, 'w', encoding='utf-8'), ensure_ascii=False, indent=1); os.replace(tmp, p)
     return cur[kind]
@@ -61,7 +78,9 @@ def same(mid, kind, root=ROOT):
     if not rec.get('fp'):
         return False, '직전 실측에 원장 지문 기록 없음(2026-11-20 이전 실측) — 한 번 새로 재고 지문을 남김'
     if rec['fp'] != now:
-        return False, f"원장이 바뀜(실측 때 {rec['fp']} → 지금 {now})"
+        old = rec.get('parts') or {}; cur = ledger_parts(mid, root)
+        diff = sorted(k for k in set(old) | set(cur) if old.get(k) != cur.get(k)) if old else []
+        return False, f"원장이 바뀜(실측 때 {rec['fp']} → 지금 {now}" + (f" · 바뀐 묶음 {', '.join(diff[:8])}" if diff else '') + ')'
     return True, f"원장 같음({now} · 실측 {rec.get('at', '')})"
 
 
@@ -85,6 +104,10 @@ def selftest():
         w([dict(base[0], result='FAIL', evidence='y')]); chk('판정 결과만 바뀜 = 재사용', same('X0001', 'basic', d)[0] is True)
         w([dict(base[0], condition='c2')]); r = same('X0001', 'basic', d); chk('검증 항목 조건이 바뀜 = 새로 잼', r[0] is False and '원장이 바뀜' in r[1])
         chk('종류별 기록(bundle 없음)', same('X0001', 'bundle', d)[0] is False)
+        w([dict(base[0], condition='c2')]); record('X0001', 'basic', 'run2', d)
+        w([dict(base[0], condition='c2'), {'row_id': 'EG-1', 'rule_id': 'F8', 'target': 'x 저장 감사 칸 T|1', 'condition': '', 'expected': ''}, {'row_id': 'AD-1', 'rule_id': 'A1', 'target': 'x', 'condition': '', 'expected': ''}])
+        chk('측정 결과 행(EG-·ES-·AD-)이 늘어도 = 재사용', same('X0001', 'basic', d)[0] is True)
+        w([dict(base[0], condition='c3')]); r = same('X0001', 'basic', d); chk('바뀐 묶음 표시', r[0] is False and '바뀐 묶음 V|A' in r[1])
     finally:
         shutil.rmtree(d, ignore_errors=True)
     print('ALL PASS' if ok else 'SOME FAIL'); return 0 if ok else 1

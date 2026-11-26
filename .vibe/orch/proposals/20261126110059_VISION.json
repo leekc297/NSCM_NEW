@@ -1,0 +1,45 @@
+{
+  "id": "20261126110059_VISION",
+  "at": "2026-11-26T11:00:59+09:00",
+  "ms": 1795658459029,
+  "source": "vision",
+  "status": "superseded",
+  "sig": "concept|effect time|hot reinit",
+  "title": "개념 재정립: VMO 자가 보완의 효력 시점(창 다시 로드 기다림 → VMO 점검 모듈은 반영 즉시 다시 읽고 다시 init, 창 로드는 화면·체인 파일만)",
+  "evidence": "목적 원문: '자가 진단은 VM 의 현상태를 자기가 점검하고 진단해서 보완이 필요하면 보완을 진행해야 합니다'(feedback_vmo_self_repair_auto_20261119), '사람이 확인해서 따로 하기 전에 자가진단을 통해서 진행하는 것이 가장 큰 목적중에 하나'(feedback_vmo_self_heal_restart_20261120). 지금 개념: orch-selfcheck.js:31 HOT_MODULES 6개만 바로 다시 읽고, 나머지 .js 는 makeReloadGate(139-153행) 알림 뒤 사용자 창 로드를 기다림. 효력 시각 = 반영 뒤 첫 창 로드(orch-improve.js:94-107). 어긋난 근거: 11-26 00:00~10:55 자동 반영 38회 중 감지기 모듈 orch-usercheck.js(10:50), orch-selfcheck.js(10:25), orch-worklist.js(10:25)가 staleFiles 에 남음. 그 사이 VMO 는 옛 코드로 S13 fail 8 을 올림. 창 로드 횟수 11-23 13회, 11-24 10회, 11-25 5회, 11-26 0회. 대안 A = 체인 0개이고 입력 없을 때 자동 창 로드(11-19 사용자 결정 '창 다시 로드는 자동으로 하지 않음'을 뒤집음). 대안 B = 다시 읽기 대상에 init 을 가진 감지·점검 모듈(orch-usercheck.js)을 넣고, hotReload 가 저장해 둔 init 인자로 다시 init. 권장 B: 사용자 결정을 바꾸지 않고 VMO 점검 반영분이 바로 효력을 가짐",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_hotreload.js"
+  ],
+  "before_after": "지금 개념: VMO 가 고친 점검 모듈 대부분은 사용자가 창을 다시 로드해야 효력을 가지고, 그 전까지 VMO 는 옛 판정으로 같은 문제를 다시 올림 → 새 개념: 모듈 안 상태가 init 인자뿐인 VMO 점검 모듈은 반영 즉시 다시 읽고 같은 인자로 다시 init 해 효력 시각 = 반영 시각. 창 로드 대기는 화면, 체인, 타이머를 쥔 파일만 남고, codeInfo staleFiles 는 다시 읽은 모듈을 빼고 셈",
+  "verify": "node tools/VibeManager/test/t_orch_hotreload.js 에 표본 추가(init 을 가진 모듈이 hotReload 뒤 paths 를 유지하고 새 함수 결과를 냄). 반영 전 digest7d.code staleFiles 18개 중 orch-usercheck.js 포함 → 반영 뒤 orch-usercheck.js 를 고친 다음 hotLoaded 에 들고 staleFiles 에서 빠짐. orch-worklist.js 포함 여부는 모듈 상태 확인 뒤 결정(반영 전 미측정)",
+  "rollback": "harness.json orch.hotReload false 로 종전 동작(다시 읽지 않고 .js 전부 창 로드 대상). 또는 대상 파일 .bak 복원 뒤 VMO Fixes 탭 되돌리기",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "L3 조치 20261122130655_REVIEW_2(분석 모듈 바로 다시 읽기)와 L4 조치 20261123000946_VISION(반영 완료와 효력 시작 분리)을 반영한 뒤에도 같은 조건이 참. waitingReload 34, 가장 오래된 것 11-25 22:27, 11-26 창 로드 0회(activations.jsonl 마지막 11-25 20:55:34)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:24:25+09:00",
+      "by": "VMO",
+      "what": "L4 단계 원장 20261124000718_VISION 단계 6 으로 흡수(같은 축 원장 열림). 이 안은 따로 반영하지 않음"
+    }
+  ],
+  "plain": {
+    "what": "VMO 가 자기 점검 규칙을 고치면 창 다시 로드를 기다리지 않고 바로 새 규칙으로 점검함. 화면과 체인 쪽 수정은 지금처럼 창 다시 로드 뒤 적용",
+    "risk": "다시 읽은 모듈이 init 값을 잃으면 사용자 지적 점검(S13)이 멈춤. 다시 읽기 실패 때는 옛 모듈을 그대로 두는 종전 처리(orch-selfcheck.js:124)를 씀",
+    "undo": "환경설정 hotReload 를 끄면 종전처럼 창 다시 로드 뒤에만 적용됨"
+  },
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795677865237,
+  "autoFp": "6c52250d60",
+  "supersededBy": "20261124000718_VISION",
+  "absorbedInto": "20261124000718_VISION"
+}

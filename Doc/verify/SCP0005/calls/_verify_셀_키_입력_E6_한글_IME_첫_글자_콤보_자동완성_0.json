@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1516,
+  "at": "2026-11-25T16:23:24.846Z",
+  "user": "fran.d.k",
+  "test": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 565,
+  "at": "2026-11-25T16:23:27.774Z",
+  "user": "fran.d.k",
+  "test": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성"
+ }
+]

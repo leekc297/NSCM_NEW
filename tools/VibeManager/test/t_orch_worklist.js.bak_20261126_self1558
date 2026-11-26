@@ -1,0 +1,76 @@
+// orch-agent drain 시험(개선안 20261123121302_SELF, 2026-11-23). 실제 Claude 호출 없음
+//   agentRules 밖 R12 사건 = '에이전트 담당 아님' 기록 1건(종전 무기록 건너뜀) · 다시 넣어도 1건 · 사건은 열림 유지
+//   장부 순환(개선안 20261124093730_SELF, L4 단계 원장 20261124000718_VISION 단계 3): orch-selfcheck.js worklistCycle → orch-worklist.js tick → 진단 1회 → noteDiag
+//     2026-11-24 00:00:24 S13|U3|idleInc 4건(20261123_115110_R12_ALL 729분 등, 조치 기록 0건) 재현 = 진단 간격 안에는 넘기지 않고, 간격 60분이 차면 진단 1회와 사건마다 기록 1건, 바로 다음 tick 은 0회
+//   사용: node test/t_orch_worklist.js <VibeManager 폴더>
+const path = require('path'); const fs = require('fs'); const os = require('os'); const cp = require('child_process');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+
+if (process.argv[3] === '--cycle') { // orch-selfcheck worklistCycle + 실제 orch-worklist(사건·개선안·에이전트 모듈은 가짜, Claude 호출 없음)
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'wl-cycle-')); const vibeDir = path.join(root, '.vibe');
+  fs.mkdirSync(path.join(root, 'tools', 'Harness'), { recursive: true }); fs.mkdirSync(path.join(vibeDir, 'orch'), { recursive: true });
+  const hj = path.join(root, 'tools', 'Harness', 'harness.json'); const setCfg = o => fs.writeFileSync(hj, JSON.stringify({ orch: Object.assign({ worklistDueMin: 60, selfDiagGapMin: 60, agentRules: ['R1'] }, o) }));
+  setCfg({});
+  const p = { root, vibeDir }; const MIN = 60000; const T = Date.parse('2026-11-24T00:00:24+09:00');
+  const AGES = { '20261123_115110_R12_ALL': 729, '20261123_141335_R12_ALL_3': 587, '20261123_161917_R12_ALL': 461, '20261123_171236_R12_ALL': 408 };
+  const incs = Object.entries(AGES).map(([id, m]) => ({ id, rule: 'R12', status: 'open', title: `${id} 시험`, ms: T - m * MIN, actions: [] }));
+  const watch = { list: () => incs, get: id => incs.find(i => i.id === id) || null, update: (id, patch, act) => { const i = incs.find(x => x.id === id); if (!i) return false; if (patch) Object.assign(i, patch); if (act) i.actions.push(Object.assign({ at: new Date().toISOString() }, act)); return true; } };
+  const WL = require(path.join(dir, 'orch-worklist')); WL.init({ paths: () => p, mods: { 'orch-watch': watch, 'orch-improve': { list: () => [] }, 'orch-agent': { status: () => ({ busy: false, on: true }) }, 'orch-ledger': null, 'orch-ladder': null } });
+  const SC = require(path.join(dir, 'orch-selfcheck')); SC.init({ paths: () => p, vmDir: dir, timer: false, incidents: false, autoSync: false });
+  let calls = []; const diag = async (manual, o) => { calls.push(o && o.incidents); return { ok: true, added: 0, dups: 0 }; };
+  const tagged = i => i.actions.filter(a => String(a.what || '').startsWith(WL.TAG)).length;
+  (async () => {
+    // 1) 마지막 진단 59분 전 = 진단 간격 안 → 넘기지 않음(기다리는 사유 '진단 간격')
+    let r = await SC.worklistCycle({ now: T, worklist: WL, diagnose: diag, lastDiagMs: T - 59 * MIN, chainBusy: false });
+    chk('cycle: 진단 간격 60분 안 = 진단 0회, 기록 0건', calls.length === 0 && incs.every(i => tagged(i) === 0), JSON.stringify(r.items.map(i => i.wait)));
+    chk('cycle: 4건 모두 장부에 담당 자가진단 진단', r.items.filter(i => i.owner === 'selfdiag').length === 4);
+    // 2) 1분 뒤 간격 60분 참 → 진단 1회(사건 4건 묶음) + 사건마다 기록 1건
+    r = await SC.worklistCycle({ now: T + MIN, worklist: WL, diagnose: diag, lastDiagMs: T - 59 * MIN, chainBusy: false });
+    chk('cycle: 간격이 차면 진단 1회에 사건 4건', calls.length === 1 && (calls[0] || []).length === 4, JSON.stringify(calls));
+    chk('cycle: 사건마다 조치 기록 1건', r.noted === 4 && incs.every(i => tagged(i) === 1), JSON.stringify(incs.map(i => tagged(i))));
+    // 3) 바로 다음 tick(1분 뒤) = 기록 뒤 시한 60분 안 → 진단 0회 추가
+    r = await SC.worklistCycle({ now: T + 2 * MIN, worklist: WL, diagnose: diag, lastDiagMs: T + MIN, chainBusy: false });
+    chk('cycle: 다음 tick 진단 추가 0회, 기록 1건 유지', calls.length === 1 && incs.every(i => tagged(i) === 1));
+    // 4) 진단 보류(에이전트 바쁨) = 기록 남기지 않음
+    const inc5 = { id: 'T_busy_R12', rule: 'R12', status: 'open', title: '보류 시험', ms: T, actions: [] }; incs.push(inc5);
+    r = await SC.worklistCycle({ now: T + 3 * MIN, worklist: WL, diagnose: async () => ({ busy: true }), lastDiagMs: T - 120 * MIN, chainBusy: false });
+    chk('cycle: 진단 보류면 조치 기록 0건', r.noted === 0 && tagged(inc5) === 0 && (r.diagIds || []).join() === 'T_busy_R12', JSON.stringify(r.diagIds));
+    // 5) 끄기 = 종전 경로
+    setCfg({ worklistEnabled: false }); r = await SC.worklistCycle({ now: T + 200 * MIN, worklist: WL, diagnose: diag, lastDiagMs: 0, chainBusy: false });
+    chk('cycle: worklistEnabled false = 장부 순환 안 함', r && r.off === true && calls.length === 1);
+    try { SC.dispose(); } catch { } try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+    console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+  })().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });
+  return;
+}
+
+if (process.argv[3] === '--drain') { // 실제 orch-watch + orch-agent(R12 는 Claude 까지 가지 않음)
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'wl-drain-')); const vibeDir = path.join(root, '.vibe');
+  fs.mkdirSync(path.join(root, 'tools', 'Harness'), { recursive: true }); fs.mkdirSync(path.join(vibeDir, 'orch'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: { agentEnabled: true, agentRules: ['R1'] } }));
+  const p = { root, vibeDir, claude: 'none', claudeModel: '' };
+  const watch = require(path.join(dir, 'orch-watch')); const agent = require(path.join(dir, 'orch-agent'));
+  watch.init(p, { noReloadSweep: true }); agent.init({ paths: () => p, serverSvc: null, loadQuick: () => [], restoreDelayMs: 600000 });
+  (async () => {
+    const inc = watch.raise('R12', { screen: '', sig: 'R12|S13|U13|t', key: 'S13', title: 'VM 자가진단 S13 시험', evidence: {} });
+    await new Promise(r => setTimeout(r, 400)); agent.enqueue(inc.id, false); await new Promise(r => setTimeout(r, 400));
+    const acts = (watch.get(inc.id) || {}).actions || [];
+    chk('drain: agentRules 밖 R12 = 담당 아님 기록 1건(종전 0건)', acts.filter(a => /^에이전트 담당 아님/.test(a.what)).length === 1, JSON.stringify(acts));
+    agent.enqueue(inc.id, false); await new Promise(r => setTimeout(r, 400));
+    chk('drain: 다시 넣어도 담당 아님 기록은 1건 유지', ((watch.get(inc.id) || {}).actions || []).filter(a => /^에이전트 담당 아님/.test(a.what)).length === 1);
+    chk('drain: 사건은 열림 유지', (watch.get(inc.id) || {}).status === 'open');
+    try { agent.dispose(); } catch { } try { watch.dispose(); } catch { } try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+    console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+  })().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });
+  return;
+}
+
+// drain 은 자식 프로세스로 돌림(실제 모듈 상태를 이 프로세스와 섞지 않음)
+const ch = cp.spawnSync(process.execPath, [__filename, dir, '--drain'], { encoding: 'utf8', timeout: 60000, windowsHide: true });
+for (const ln of String(ch.stdout || '').split(/\r?\n/)) if (/^(PASS|FAIL) /.test(ln)) console.log(ln);
+chk('drain 자식 시험 통과', ch.status === 0, String(ch.stderr || '').slice(-400));
+const cy = cp.spawnSync(process.execPath, [__filename, dir, '--cycle'], { encoding: 'utf8', timeout: 60000, windowsHide: true });
+for (const ln of String(cy.stdout || '').split(/\r?\n/)) if (/^(PASS|FAIL) /.test(ln)) console.log(ln);
+chk('장부 순환 자식 시험 통과', cy.status === 0, String(cy.stderr || '').slice(-400));
+console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

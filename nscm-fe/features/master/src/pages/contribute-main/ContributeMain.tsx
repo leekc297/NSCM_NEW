@@ -18,7 +18,14 @@ import { SearchBar } from './components/SearchBar';
 import { MENU_ID, SHEETS, VALIDATION_MSG } from './contribute-main.constants';
 import type { MainRow, SpreadTitleRow } from './types';
 import { useContributeMainStore } from './useContributeMainStore';
-import { findDataGuard, formatPeriodLabel, validChk, validChk2 } from './utils/validators';
+import {
+  findDataGuard,
+  formatPeriodLabel,
+  RATIO_MAX,
+  RATIO_MIN,
+  validChk,
+  validChk2,
+} from './utils/validators';
 
 export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -138,16 +145,23 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
       // 어느 기간이 몇으로 합산됐는지 붙인다 — 화면에 보이는 달은 100 인데 스크롤 밖의 다른 달이
       //   걸린 경우, 기간 없이 "100% 가 아닙니다" 만 뜨면 사용자가 오탐과 구분할 수 없다.
       //   월별 12개월 검사 실패(monthCount)는 같은 메시지라 "값이 있는 달 수/12" 를 붙여 구분한다.
+      //   칸별 범위(0~100) 검사 실패(cellValue)는 MSG01037 에 그 칸 값을 붙인다(예: "(2026-01: -50.00)").
       const detail =
         v1.period != null
-          ? ` (${formatPeriodLabel(v1.period)}: ${(v1.sum ?? 0).toFixed(2)})`
+          ? ` (${formatPeriodLabel(v1.period)}: ${(v1.cellValue ?? v1.sum ?? 0).toFixed(2)})`
           : v1.monthCount != null
             ? ` (${v1.monthCount}/12)`
             : '';
+      // 칸별 범위 검사는 MSG01037("{0}~{1} 사이의 수를 입력하세요."), 합계·12개월 검사는 MSG01306.
+      const message =
+        v1.msgCode === VALIDATION_MSG.CELL_OUT_OF_RANGE
+          ? t(VALIDATION_MSG.CELL_OUT_OF_RANGE, '_{0}~{1} 사이의 수를 입력하세요.')
+              .replace('{0}', String(RATIO_MIN))
+              .replace('{1}', String(RATIO_MAX))
+          : t(VALIDATION_MSG.RATIO_OUT_OF_RANGE, '_입력한 데이터가 100을 초과하거나 미만입니다.');
       void setAlert({
         type: 'alert',
-        content:
-          t(VALIDATION_MSG.RATIO_OUT_OF_RANGE, '_입력한 데이터가 100을 초과하거나 미만입니다.') + detail,
+        content: message + detail,
       });
       return;
     }

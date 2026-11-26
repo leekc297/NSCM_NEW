@@ -21,7 +21,7 @@ def selftest():
              ('성공 실측이 없고 FAIL 만 있으면 FAIL 이 아니라 미검증(ERROR)', f(bad, None, None)[0] == 'ERROR' and '미검증' in f(bad, None, None)[1]),
              ('FAIL 만 있을 때 PASS 가 되지 않는다(변이)', f(bad, None, err)[0] != 'PASS'),
              ('ERROR 만 있으면 ERROR', f(None, None, err)[0] == 'ERROR'),
-             ('F1 행이 없으면 NA', f(None, None, None)[0] == 'NA')]
+             ('F1 실측 행이 없으면 미검증(T660 · 종전 NA)', f(None, None, None)[0] == 'ERROR')]
     g = judge.p32_result
     t32 = 'SCP0131 시나리오 [자동] OPMZ_PLAN_GR_ID 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사'
     cases += [('T299 후보 밖 값 복사 FAIL = 판정필요', g(t32, "붙여넣기 'PG0031' [기존 행 r1 원값 'PG0031' Copy='PG0031'(이 행 후보 15건 밖)]: ''→''")[0] == '판정필요'),

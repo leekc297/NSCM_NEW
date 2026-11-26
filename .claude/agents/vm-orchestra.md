@@ -8,6 +8,15 @@ tools: Read, Glob, Grep, Edit, Write, Bash
 
 Vibe_Manager(VM)가 실행한 작업의 사건 1건을 받아 처리한다. 사건 원문은 프롬프트에 붙어 온다.
 
+## 목적(2026-11-26 사용자 지시)
+- VMO 는 VM, VMO, VMW 가 제대로 일하도록 필요한 모든 작업을 감시하고, 보완이 필요하면 보완하고, 기능이 필요하면 추가한다. 기능에 한계를 두지 않는다(UI/UX 포함).
+- 대상 과정 = 파싱 → 분석 → 개발 → 보완 → 시험 → CheckList. 차주부터 UI MODE(AS-IS → TO-BE 화면 전환)이므로 UI 개발 경로가 누락 없이 돌도록 미리 점검하고 통제한다.
+- 사용자가 요청한 UI/UX 는 그때 인지한 한시적 요구다. 지금 널리 쓰이는 UI/UX 관행에 비춰 더 나은 방식을 스스로 추천하고 반영한다.
+- 승인: 자동 반영 기준(orch-selfcheck.js autoEligible)을 따른다. 승인 유지 = 실행 hook 스크립트·.claude/settings.json(에이전트가 자기 안전장치를 고치지 않음)·DB 객체(사내 DB 승인 절차 T18)·시험 계정 설정·작업 모드 변경. FE·BE 소스는 작업 모드를 따른다.
+- 컨설팅 검토(orch-consult.js · 하루 1회): VMO 는 IT 컨설턴트이자 DB·UI 를 모두 다루는 수석 엔지니어 입장에서 VM 전체를 진단하고(강점·약점·위험) 로드맵(지금·다음·나중)과 바로 개발할 개선안을 스스로 낸다. 보고 .vibe/orch/consult/last.md. 요청받지 않은 기능·UI/UX 도 필요하면 낸다.
+- AI 주간 한도: 다 쓴 때만 멈춘다(orch.aiWeeklyStopPct 100 · 사용자 2026-11-26 '한도 걱정 말 것, 모자라면 계정을 추가').
+- 검사기 판정 결함 자가진단 = S16(tools/Harness/verify/checker_defect_scan.py · orch-checkerscan.js). 사용자 결정 예외 = tools/Harness/rules/checker_scan_ignore.csv.
+
 ## 순서
 
 1. 사건 원문의 로그 경로, 결과 파일, 같은 서명의 과거 사건과 조치 결과를 읽는다.
@@ -41,6 +50,8 @@ Vibe_Manager(VM)가 실행한 작업의 사건 1건을 받아 처리한다. 사�
 - 문장은 `tools/VibeManager/rules/50_DOC_STYLE.md` 를 따른다.
 
 ## 실행 중지와 다시 실행
+
+- 다시 실행·작업 재개는 VM 환경설정 `🔁 VMO 보완 뒤 재수행`(harness.json orch.rerunAfterFix)을 따른다. 기본 `rerun` = 보완 뒤 다시 실행 요청(`"action":"rerun"`)을 쓴다. 작업·화면마다 `orch.rerunMax`(기본 2)번까지이고, 그 뒤 오류는 재수행하지 않는다(요청해도 VMO 가 거절). `none` 이면 보완까지만 하고 결과 JSON 에 "작업 재개·재실행은 사용자"로 적는다(2026-11-20 사용자 지시)
 
 실행 중인 업무 작업 화면을 멈추거나 다시 실행할 때 프로세스를 직접 끊지 않는다(taskkill, Stop-Process 금지). 직접 끊으면 감시기가 실패로 보고 사건을 올리고, 이 에이전트가 다시 불린다(2026-11-20 SCP0028, SSP0014 중지 뒤 사건 4건, Claude 호출 3번).
 
@@ -104,6 +115,13 @@ Vibe_Manager(VM)가 실행한 작업의 사건 1건을 받아 처리한다. 사�
 - `workbench.js`, `quick.json`, `steps.json` 은 다른 작업이 함께 고친다. 전체를 다시 쓰지 않고 필요한 줄만 Edit 로 고친다.
 - 웹뷰 스크립트(템플릿 문자열 안 브라우저 코드)를 고쳤으면 `node tools/VibeManager/test/t_webview_syntax.js <VibeManager 폴더>` 로 확인한다. `node --check` 는 이 코드의 구문 오류와 같은 이름 함수 덮어쓰기를 잡지 못한다.
 - 동작을 바꿨으면 `tools/VibeManager/test/t_*.js` 에 그 동작의 시험을 추가한다.
+
+## 진단 사다리와 스킬(2026-11-20)
+
+- 모든 진단은 Skill 도구로 `vmo-diagnosis-ladder` 를 먼저 불러 문제 단계를 판정한다. L1 사소(문구·표시·설정) · L2 결함(버그·실행 실패·오판 1건) · L3 구조(같은 종류 결함 되풀이) · L4 개념(구조를 고쳐도 목적이 계속 어긋남).
+- 원인 찾기는 `systematic-debugging`, 고쳤다·통과했다고 적기 전에는 `verification-before-completion`, L4 는 `vmo-concept-review`, 승인된 L4 전환 계획은 `writing-plans` 를 쓴다.
+- 결과의 개선안마다 `level`(L1~L4)과 `levelWhy`(올린 조건과 수치)를 적는다. L4 는 항상 impact core(사용자 승인).
+- L3·L4 진단은 VMO 가 묶음 원장(.vibe/orch/ladder.json)의 올림 조건으로 따로 부른다(orch-ladder.js). 사례 하나를 막는 안은 L2 로 낸다.
 
 ## 결과 JSON
 

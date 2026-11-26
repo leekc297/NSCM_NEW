@@ -1,0 +1,107 @@
+// 체인 반복 묶음 시험(2026-11-20 CheckList 한 번 실행 구조): loops while 조건이 참인 동안 회차를 덧붙여 실행 · 거짓이면 끝 · 분류 결과가 갱신되지 않으면 끝 · late 단계는 끝에 1회 · 재개 때 회차 유지
+//   사용: node test/t_chain_runner.js <VibeManager 폴더>
+const Module = require('module'); const path = require('path'); const fs = require('fs'); const os = require('os');
+const toasts = [];
+const vs = new Proxy({}, { get: (t, k) => {
+  if (k === 'window') return new Proxy({}, { get: (t2, k2) => (...a) => { if (/^show/.test(String(k2))) toasts.push(`${String(k2)}: ${a[0]}`); return Promise.resolve(undefined); } });
+  if (k === 'commands') return { executeCommand: () => Promise.resolve(), registerCommand: () => ({ dispose() { } }) };
+  if (k === 'workspace') return { getConfiguration: () => ({ get: () => undefined }), workspaceFolders: [] };
+  if (k === 'Uri') return { file: f => ({ fsPath: f }), parse: s => s };
+  if (k === 'ViewColumn') return { Active: 1, Beside: 2 };
+  return function () { };
+} });
+const orig = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vs : orig.call(this, r, ...a); };
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'chain-')); const vibeDir = path.join(root, '.vibe');
+const W = (rel, s) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); return f; };
+W('tools/Harness/harness.json', JSON.stringify({ repairScope: 'DB_FE', llmReview: false }));
+W('.vibe/quick.json', JSON.stringify({ groups: [] }));
+const okJs = W('tools/t/ok.js', "const fs=require('fs'),path=require('path');const id=process.argv[2];const d=path.join(process.cwd(),'out');fs.mkdirSync(d,{recursive:true});fs.writeFileSync(path.join(d,id+'.txt'),'made');console.log('[INFO] made '+id);");
+const badJs = W('tools/t/bad.js', "console.log('[FAIL] 선행 자료 없음: files.csv');process.exit(6);");
+const fake = W('.vibe/fake_claude.js', `
+const fs=require('fs'),path=require('path');let inp='';let done=false;process.stdin.on('data',d=>{inp+=d;if(inp.includes('\\n'))go();});
+function go(){if(done)return;done=true;const out=o=>console.log(JSON.stringify(o));fs.appendFileSync(path.join('.vibe','calls.txt'),'call\\n');
+ out({type:'system',subtype:'init',session_id:'s1'});out({type:'assistant',message:{content:[{type:'text',text:'보완 완료'}]}});
+ out({type:'result',is_error:false,num_turns:1,duration_ms:5,total_cost_usd:0.01,session_id:'s1'});}
+`);
+const fakeCmd = W('.vibe/fake_claude.cmd', `@node "${fake}" %*\r\n`);
+const tasks = {
+  'T.ok': { id: 'T.ok', title: '산출물 만들기', kind: 'node', script: okJs, args: ['${input:id}'], cwd: root },
+  'T.bad': { id: 'T.bad', title: '실패하는 작업', kind: 'node', script: badJs, args: [], cwd: root },
+};
+const p = { root, vibeDir, extDir: dir, genDir: path.join(root, 'Doc', 'gen'), outDir: path.join(root, 'Doc', 'asisfacts'), tobeDir: path.join(root, 'nscm-fe'), promptsDir: path.join(root, 'prompts'), node: 'node', python: 'python', powershell: 'powershell', claude: fakeCmd, claudeModel: '', permissionMode: 'bypassPermissions', language: 'ko' };
+const records = [];
+const api = {
+  ctx: { workspaceState: { get: () => { throw new Error('창 없는 실행기가 workspaceState 를 읽음'); }, update: () => { throw new Error('창 없는 실행기가 workspaceState 를 씀'); } }, extensionPath: dir },
+  paths: () => p, loadSteps: () => ({}), findTask: id => tasks[id] || null,
+  collectInputs: async (task, preset) => Object.assign({}, p, { inputs: Object.assign({}, preset || {}) }),
+  subst: (text, vars) => String(text == null ? '' : text).replace(/\$\{(input:)?([A-Za-z0-9_]+)\}/g, (m, isIn, n) => isIn ? (vars.inputs && vars.inputs[n] != null ? vars.inputs[n] : '') : (vars[n] != null ? String(vars[n]) : m)),
+  buildArgs: (task, vars) => (task.args || []).map(a => api.subst(a, vars)).filter(x => x !== ''),
+  openPath: () => { }, pageDirOf: () => '', menuSections: () => [], claudeEnv: () => ({}),
+  runTaskById: async () => 0, record: (k, note) => records.push(`${k}: ${note}`), afterTask: () => { },
+};
+const { ChainRunner } = require(path.join(dir, 'chain-runner'));
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+const R = rel => fs.readFileSync(path.join(root, rel), 'utf8');
+const events = () => { try { return R('.vibe/orch/events.jsonl').trim().split('\n').map(l => JSON.parse(l)); } catch { return []; } };
+const calls = () => { try { return R('.vibe/calls.txt').trim().split('\n').length; } catch { return 0; } };
+// measure: 남은 수 n 을 tri.json 에 씀(continue = n>0). fix: 아무것도 안 함(횟수만). re: n 을 1 줄이고 tri.json 갱신. docs: 횟수만
+const mJs = W('tools/t/m.js', "const fs=require('fs');fs.writeFileSync('n.txt',process.argv[2]);fs.writeFileSync('tri.json',JSON.stringify({continue:Number(process.argv[2])>0?1:0}));fs.appendFileSync('log.txt','M ');");
+const fixJs = W('tools/t/fix.js', "const fs=require('fs');fs.appendFileSync('log.txt','F ');if(fs.existsSync('slow.flag'))setTimeout(()=>process.exit(0),8000);");
+const reJs = W('tools/t/re.js', "const fs=require('fs');if(fs.existsSync('norewrite.flag')){fs.appendFileSync('log.txt','R- ');process.exit(0)}const n=Math.max(0,Number(fs.readFileSync('n.txt','utf8'))-1);fs.writeFileSync('n.txt',String(n));fs.writeFileSync('tri.json',JSON.stringify({continue:n>0?1:0}));fs.appendFileSync('log.txt','R ');");
+const docJs = W('tools/t/doc.js', "require('fs').appendFileSync('log.txt','D ');");
+Object.assign(tasks, { 'T.m': { id: 'T.m', title: '측정', kind: 'node', script: mJs, args: ['${input:n}'], cwd: root }, 'T.fix': { id: 'T.fix', title: '보완', kind: 'node', script: fixJs, args: [], cwd: root },
+  'T.re': { id: 'T.re', title: '부분 재측정', kind: 'node', script: reJs, args: [], cwd: root }, 'T.docs': { id: 'T.docs', title: '문서', kind: 'node', script: docJs, args: [], cwd: root } });
+const mk = n => ({ kind: 'chain', label: '반복 시험', chainId: 'tloop', loops: { fix: { while: { file: '${root}/tri.json', key: 'continue', gt: 0 } } }, steps: [
+  { task: 'T.m', title: '1. 측정', args: [String(n)] }, { task: 'T.fix', title: '2. 보완', loop: 'fix' }, { task: 'T.re', title: '3. 부분 재측정', loop: 'fix' }, { task: 'T.docs', title: '4. 문서', late: true }] });
+const log = () => { try { return R('log.txt').trim(); } catch { return ''; } };
+const clear = () => { for (const f of ['log.txt', 'tri.json', 'n.txt', 'slow.flag', 'norewrite.flag']) try { fs.unlinkSync(path.join(root, f)); } catch { } };
+const wbm = require(path.join(dir, 'workbench'));
+const mkR = id => new ChainRunner(api, { id, jobId: '', autoAnswer: false, onLog: () => { }, onStep: () => { }, onNote: () => { } });
+(async () => {
+  let a = await mkR('lp0001').run(mk(2));
+  chk('남은 2 → 2회차 반복 뒤 문서 1회', a.status === 'OK' && log() === 'M F R F R D', log() + ' ' + a.status);
+  chk('단계 결과: 3회차는 건너뜀(반복 끝)', (a.steps || []).length === 8 && a.steps.filter(x => x.status === 'SKIP').length === 2 && /반복 끝/.test(a.steps[5].note || ''), JSON.stringify((a.steps || []).map(x => x.status)));
+  clear(); a = await mkR('lp0002').run(mk(0));
+  chk('남은 0 → 반복 없이 문서', log() === 'M D' && a.status === 'OK', log());
+  clear(); W('norewrite.flag', '1'); a = await mkR('lp0003').run(mk(3));
+  chk('분류 결과가 갱신되지 않으면 1회차 뒤 끝(무한 반복 없음)', log() === 'M F R- D', log());
+  chk('끝 사유 기록', (a.steps || []).some(x => /갱신하지 않음/.test(x.note || '')));
+  // first: 1회차만 다른 키(처리 대상 actionable 이 있으면 continue 0 이어도 시작)
+  clear(); const m2 = W('tools/t/m2.js', "const fs=require('fs');fs.writeFileSync('n.txt','1');fs.writeFileSync('tri.json',JSON.stringify({continue:0,actionable:1}));fs.appendFileSync('log.txt','M ');");
+  tasks['T.m2'] = { id: 'T.m2', title: '측정(정체 표시)', kind: 'node', script: m2, args: [], cwd: root };
+  const c2 = mk(0); c2.steps[0] = { task: 'T.m2', title: '1. 측정' }; c2.loops.fix.first = { key: 'actionable' };
+  a = await mkR('lp0005').run(c2);
+  chk('first 키: 1회차는 처리 대상이 있으면 시작, 2회차부터 while 키', log() === 'M F R D', log());
+  // 2026-11-20 사용자 지시 '검사기 보완에 미검증 건수 표기': 회차 단계 이름에 분류 결과의 미검증(after.total)·처리 대상(actionable) 건수
+  clear(); const m3 = W('tools/t/m3.js', "const fs=require('fs');fs.writeFileSync('n.txt','1');fs.writeFileSync('tri.json',JSON.stringify({continue:1,actionable:13,after:{total:30,actionable:13}}));fs.appendFileSync('log.txt','M ');");
+  tasks['T.m3'] = { id: 'T.m3', title: '측정(건수)', kind: 'node', script: m3, args: [], cwd: root };
+  const c3 = mk(0); c3.steps[0] = { task: 'T.m3', title: '1. 측정' }; let lg3 = ''; a = await new ChainRunner(api, { id: 'lp0006', jobId: '', autoAnswer: false, onLog: t => { lg3 += String(t); }, onStep: () => { }, onNote: () => { } }).run(c3);
+  const nm = ['', (lg3.match(/2\. 보완[^\n]*?처리 대상 \d+건/) || [''])[0], (lg3.match(/3\. 부분 재측정[^\n]*?처리 대상 \d+건/) || [''])[0]];
+  chk('회차 단계 이름에 미검증·처리 대상 건수', nm[1] === '2. 보완 · 미검증 30건 · 처리 대상 13건' && nm[2] === '3. 부분 재측정 · 미검증 30건 · 처리 대상 13건', JSON.stringify(nm));
+  chk('건수 표기는 원래 체인 정의를 바꾸지 않음', c3.steps[1].title === '2. 보완', c3.steps[1].title);
+  // 2026-11-25 사용자 2단계: 재검증·문서(ifLoopRan) = 해소 반복이 1회차라도 돌았을 때만, 반복 뒤 1회. 회차 상한 max
+  const mk2 = n => { const c = mk(n); c.steps[3] = { task: 'T.docs', title: '4. 재검증·문서', late: true, ifLoopRan: 'fix', skipNote: '미검증 해소 반복 없음' }; return c; };
+  clear(); a = await mkR('lp0007').run(mk2(0));
+  chk('처리 대상 0 → 반복 없음 → 재검증·문서 건너뜀', log() === 'M' && (a.steps || []).some(x => x.status === 'SKIP' && /미검증 해소 반복 없음/.test(x.note || '')), log());
+  clear(); a = await mkR('lp0008').run(mk2(2));
+  chk('처리 대상 2 → 해소 반복 2회차 뒤 재검증·문서 1회', log() === 'M F R F R D', log());
+  clear(); const c9 = mk2(9); c9.loops.fix.max = 3; a = await mkR('lp0009').run(c9);
+  chk('회차 상한 max 3 → 3회차 뒤 재검증(무한 반복 없음)', log() === 'M F R F R F R D', log());
+  // 실제 체인 정의(quick.json): 반복 = 보완 준비, 🧪, 게이트, 해소 확인 재측정 · 재검증·문서 = late + ifLoopRan · max 5
+  const q = JSON.parse(fs.readFileSync(path.join(dir, 'quick.json'), 'utf8')); const chains = []; const walk = x => { if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') { if (x.chainId === 'checklist' || x.chainId === 'checklist-delta') chains.push(x); Object.values(x).forEach(walk); } }; walk(q);
+  chk('quick.json CheckList 체인 2종 = 해소 반복 안에 재검증 없음, 반복 뒤 해소 게이트(실패면 멈춤) → 재검증 1회', chains.length === 2 && chains.every(c => { const lp = c.steps.filter(s => s.loop === 'fix'); const lt = c.steps.filter(s => s.late); return lp.length === 4 && lp[3].task === 'S8.checklistSettle' && !lp.some(s => s.task === 'S8.checklistDelta') && lt.length === 3 && lt.every(s => s.ifLoopRan === 'fix') && lt[0].task === 'S8.unverifiedGate' && !lt[0].optional && lt[1].task === 'S8.checklistDelta' && c.loops.fix.max === 5; }), chains.map(c => c.steps.map(s => s.task || s.claudeOf).join('>')).join(' | '));
+  const cr = fs.readFileSync(path.join(dir, '..', 'Harness', 'verify', 'checklist_run.py'), 'utf8');
+  chk('checklist_run: 1단계 자동 재측정(--no-rerun 없음) + --settle 은 전체로 넓히지 않고, 못 재면 continue 0', !/run\(\['py', ur, mid, '--no-rerun'\]\)/.test(cr) && /run\(\['py', ur, mid\] \+ \(\['--settle'\] if a\.settle else \[\]\)\)/.test(cr) && /if a\.settle and not settle_measured/.test(cr) && /j\['continue'\] = 0/.test(cr));
+  // 재개: 2회차 보완 단계에서 끊김 → 재개하면 2회차 보완부터, 앞 단계는 다시 안 돎
+  clear(); const r1 = mkR('lp0004'); const pr = r1.run(mk(2));
+  const t0 = Date.now(); while (Date.now() - t0 < 15000 && log() !== 'M F R') await new Promise(r => setTimeout(r, 50));
+  W('slow.flag', '1'); while (Date.now() - t0 < 20000 && log() !== 'M F R F') await new Promise(r => setTimeout(r, 50));
+  r1.stop(); wbm.abortRunningChains('시험: 창 다시 로드'); await pr;
+  const rec = wbm.resumable(p, { screen: 'lp0004' })[0];
+  chk('끊긴 기록에 회차 수 있음', rec && rec.loopRounds && rec.loopRounds.fix >= 2 && rec.resumeFrom === 4, JSON.stringify(rec && { lr: rec.loopRounds, from: rec.resumeFrom }));
+  fs.unlinkSync(path.join(root, 'slow.flag')); fs.writeFileSync(path.join(root, 'log.txt'), '');
+  const b = await mkR('lp0004').run(mk(2), { resume: rec });
+  chk('재개 = 2회차 보완부터 끝까지(측정·1회차 다시 안 돎)', b.status === 'OK' && log() === 'F R D', log() + ' ' + b.status + ' ' + (b.summary || ''));
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

@@ -1,7 +1,7 @@
 ﻿lang,result,why
 KO,PASS,KO 문구 18건 일치 · 사전에 없는 문구 29건
 EN,PASS,EN 문구 18건 일치 · 사전에 없는 문구 29건
-EN 데이터,ERROR,[확인 대상] 그리드 칸 한글 SHIPPING_COMPANY 6행 — 명칭 칸이면 언어 미반영
+EN 데이터,PASS,그리드 8079행 · 명칭 대상 칸 한글 0(앞 200행) · 제외(사용자 입력 문자 칸 · 메타 SHIPPING_COMPANY 6행 = Distribution Route O 컨트롤 없음(문자) · T580)
 CN,FAIL,CN 화면에 다른 언어 문구 1건: 'Condition'→'条件'(버튼) · 사전에 없는 문구 29건
-CN 데이터,ERROR,[확인 대상] 그리드 칸 한글 SHIPPING_COMPANY 6행 — 명칭 칸이면 언어 미반영
+CN 데이터,PASS,그리드 8079행 · 명칭 대상 칸 한글 0(앞 200행) · 제외(사용자 입력 문자 칸 · 메타 SHIPPING_COMPANY 6행 = Distribution Route O 컨트롤 없음(문자) · T580)
 조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)

@@ -1,0 +1,29 @@
+# SCP0028 미검증 행별 조치 · 라운드 4(2026-11-20 16:49, CheckList 16:06 원장)
+
+- 입력: 원장 verify_ledger.csv(16:06:41), 분류 unverified_triage.*(16:06:50)
+- 원장 미검증 53행 = 처리 대상 14(엔진 12, 판단 2) + 집계 39. AI 검토 행 1(EG-ac06e957) 포함 표 15행
+- 집계 39행은 하위 행을 따라가서 표에 넣지 않음
+- 지난 라운드 표는 _unverified_plan.md.r3_20261120
+
+| 묶음 | 행 ID | 규칙 | 원인(실측 근거) | 조치(고칠 파일) |
+|---|---|---|---|---|
+| P1 일괄 입력 팝업 필수 칸 | V-4c3670c9 | K3 | popk3run.ts takePopAlert 가 알림 닫기 단추를 확인·OK·Close·닫기 로만 찾음. 알림 단추는 'Confirm'(원장 증거 'From Site 값은 필수 입력 항목입니다. Confirm'). 못 찾으면 Escape 를 누르는데 CustomDialog.tsx:283 MuiDialog 에 onClose 가 없어 알림이 남고 From Site 콤보 클릭이 막힘 → 'From Site 후보 목록 안 열림'. 같은 팝업 콤보는 eg_popup 에서 후보 30건 열림 | tools/E2E/lib/popk3run.ts 알림 닫기 단추에 Confirm 추가 |
+| P1 | V-cbcda052 | K3 | 위와 같음 | 위와 같음 |
+| P1 | V-729c8d58 | K3 | 위와 같음 | 위와 같음 |
+| P1 | EG-6cc339e1 | H6 | eg_popup.spec.ts runCall 이 0행이면 Search 1회만 누르고 필수 알림 뒤 조건을 채우지 않음(증거 '자동 조회 6건 · Search 0건 · 행 0 · 알림 From Site value is required'). 'I' 진입 자동 조회 없음과 From Site 필수는 AS-IS 와 같음(SCP0028_Shipment_Lot_Size.cs:270, 팝업 FindData 가드) | Doc/e2e/specs/eg_popup.spec.ts 0행이면 popk3run 의 필수 칸 채우기(fillPopRows)를 같이 씀 |
+| P1 | EG-273588ca | M3 | 위와 같음 | 위와 같음 |
+| P2 일괄 삭제 결과 메시지 | V-86e7f1e2 | G1 | _trace.spec.ts 'BTN 팝업 경로' 가 가짜 응답 형식을 PREV(e2e_results.json)와 원장 증거에서만 찾음. run_verify.py:928 이 E2E 시작 때 e2e_results.json 을 .prev 로 옮기고, 원장은 E2E 전에 다시 만들어 표본이 없음. 표본은 e2e_results.json.prev T-0159f9dc(실행 20261120143011)에 있음. respSample 을 그 문자열로 돌리면 RESULT_CODE 'S' 응답을 찾고 else 분기 'F' 사본도 만듦(node 16:4x) | Doc/e2e/specs/_trace.spec.ts 표본 원천에 e2e_results.json.prev 추가 |
+| P2 | V-a89007be | G1 | 위와 같음 | 위와 같음 |
+| P2 | T-0caf6c62 | E4 | 위와 같음 | 위와 같음 |
+| P2 | T-4677b9e5 | E4 | 위와 같음 | 위와 같음 |
+| P3 일괄 입력 SP 골든 | V-8da88867 | A7 | 인자 = 팝업 체크 행 목록(cs:278~280). TO-BE 호출 기록 0건: BTN 시험 실행 URL 에 main/INSERT 없음(e2e_test_kind.jsonl 06:13Z urls), 호출 포착은 popup/SEARCH 384, 384, 1행만. BTN 시험의 T-6b9a8ce8 판정은 F4 일반 시험이 먼저 쓴 NA(단추 이름 INSERT 를 저장으로 봄, sp_pair kind LOG)에 병합 규칙(_trace.spec.ts:76)으로 가려져 구동 실패 사유가 남지 않음 | Doc/e2e/specs/_trace.spec.ts F4 저장 판단에 sp_pair 종류 반영, tools/DbConn/golden.py 팝업 행 표본(AS-IS 팝업 SaveData 가 체크 행 DIVISION_ID 등 5칸을 쉼표로 묶음, SCM0002_ShipmentLotSizePopup.cs:330~347)으로 인자 채움 |
+| P4 From Site 후보 | V-dd4f9db4 | G1 | 후보는 코드('AU000062_81-P'), 라벨 칸 FROM_SITE_DESCRIPTION 은 설명. 코드 칸 FROM_SITE 는 그리드 칸 목록에 없고 행 데이터에만 있음(calls/_grid_main.json cols 15개에 FROM_SITE 없음, sample 행 FROM_SITE 'HQ07-A'). T499 condColForOpts 는 probe.allBindings(그리드 칸)만 훑음 | tools/E2E/lib/probe.ts 행 데이터 키 목록 추가, tools/E2E/lib/smoke-extra.ts condColForOpts 가 행 데이터 키까지 훑음 |
+| P5 수정 행 배경색 | V-a99ddb18 | H2 | h2RuntimeEdit 가 LOT_SIZE·INCREMENT 를 '' 로 만들 때 probe.setByEditor(편집기 value='' 후 finishEditing)를 씀. 결과 '1' 유지, 실패 표시 없음(증거 'LOT_SIZE '1'→''' 2회). 숫자 칸 편집기에 빈 값을 넣는 경로가 값을 지우지 않음 | Doc/e2e/specs/_trace.spec.ts h2RuntimeEdit 빈 값은 셀 더블클릭 → 전체 선택 → Delete → Enter 로 지우고 다시 읽음 |
+| P6 Model 팝업 교체 | EG-ac06e957 | G4 | AI 검토 룰등록 권장. 2026-10-08 사용자 지시는 SCP0028 과 출하 변경 요청 4화면 소스 주석에만 있음(ShipmentLotSize.tsx:362~372, ShipmentChangeRequest.tsx:950 등 5곳). 전 SCP 화면 일반 규칙 근거 없음 | 결정 목록 R4-D1(화면 설계 결정 등록 여부) |
+| P6 | T-2c20a3fc | A6 | 대조표 행이 AS-IS 팝업 SP PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 을 적음. TO-BE 는 COM0013 팝업이라 이 SP 호출 0건(K3 증거 'Model/Nickname' 아이콘 → materialByDivision/SEARCH) | 결정 목록 R4-D1 |
+| P6 | T-fad117f6 | F4 | 위와 같음 | 결정 목록 R4-D1 |
+
+## 행 수 대조
+
+- 원장 ERROR 53 = 표 14행(EG-ac06e957 제외) + 집계 39
+- EG-ac06e957 은 원장 판정필요, AI 검토 행이라 표에 넣음

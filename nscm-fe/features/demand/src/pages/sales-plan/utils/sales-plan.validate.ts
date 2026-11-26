@@ -2,7 +2,7 @@
 //   전체 매트릭스 = __asis-mapping__.md. anti-simplification: 각 가드에 AS-IS 라인 근거 주석 보존).
 //   근거(라인 = AS-IS DMF0021_SalesPlan.cs):
 //     V-S1 Division 권한 (FindData L1513 — AS-IS MSG00097 의도 = 권한 Division 0건 → TO-BE MSG00667) / V-S2 기간 역전 (L1474 MSG00108) /
-//     V-S3 3년 초과 — 종료일 = 시작일+3년 보정 후 차단 (L1481 MSG00164. 주석은 "2년"이나 코드 = 3년) /
+//     V-S3 2년 초과 — 종료일 = 시작일+2년 보정 후 차단 (MSG01505, 2026-11-25. 종전 AS-IS L1481 3년 MSG00164) /
 //     V-E3 Bucket 변경 차단 — 변경분 존재 시 (cboBucketType_Click L5475 AS-IS MSG00227 → MSG00680) /
 //     V-V1 필수 13종 division 분기 (SaveData L2198~2239 — AS-IS MSG00002 용법 → 사내 MSG00429 재매핑) /
 //     V-V3 변경 0건 (MSG00004 '수정한 내용이 없습니다') — Catch_Up 음수(MSG00085)·라인 변경 0건
@@ -44,16 +44,16 @@ export const useSalesPlanValidation = () => {
       });
       return { ok: false, msgId: MSG.PERIOD_INVERTED };
     }
-    // #41 — 3년 초과 (L1481 drpPeriod.Value1.AddYears(3) < Value2 — 종료일 보정 후 차단)
+    // #41 — 2년 초과 (2026-11-25 2년 제한. 종전 AS-IS L1481 drpPeriod.Value1.AddYears(3) < Value2 — 종료일 보정 후 차단)
     const startY = Number(start.slice(0, 4));
     if (start && end && Number.isFinite(startY)) {
-      const limit = String(startY + 3) + start.slice(4);
+      const limit = String(startY + 2) + start.slice(4); // 시작일 + 2년
       if (end > limit) {
         void setAlert({
           type: 'alert',
-          content: t(MSG.PERIOD_MAX_3YEAR, '_조회 기간은 3년 이내로 입력해주세요.'),
+          content: t(MSG.PERIOD_MAX_2YEAR, '_조회 기간은 2년 이내로 입력해주세요.'),
         });
-        return { ok: false, msgId: MSG.PERIOD_MAX_3YEAR, adjustedEnd: limit };
+        return { ok: false, msgId: MSG.PERIOD_MAX_2YEAR, adjustedEnd: limit };
       }
     }
     return { ok: true };

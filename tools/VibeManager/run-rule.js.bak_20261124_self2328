@@ -1,0 +1,13 @@
+// 2026-11-23 사용자: VM, VMO, VMW 실행은 누락 0 안에서 가장 빠르게. 정본 = rules/10_RULES_KEEP.md A-13
+//   모든 AI 호출 앞에 붙는 요약 문구. 붙이는 곳 = workbench.js askClaudeCore(VM, VMW), orch-agent.js runClaude(VMO)
+'use strict';
+
+const NOTE = '답변, 진행 보고, 알림 문장은 한국어로 씀. '
+  + '[실행 룰 A-13, tools/VibeManager/rules/10_RULES_KEEP.md] 누락 0 안에서 가장 빠르게. 요청 항목, 검사, 검증, 보고 항목은 빼지 않음. '
+  + '1) 시작 때 요청을 하위 문구 목록으로 나누고 끝에 항목마다 결과 또는 하지 않음과 이유, 남은 항목이 1건이라도 있으면 완료라고 쓰지 않고 남은 항목 목록을 적음 2) 요청 밖 조사 금지, 더 볼 곳은 추가 확인 후보로 적음 '
+  + '3) Doc/tobefacts, Doc/asisfacts, Doc/gen/<ID>, Doc/verify/<ID> 를 먼저 읽음 4) 검색은 화면 폴더까지 좁히고 관계없는 읽기, 검색은 함께 호출 '
+  + '5) 30초 넘을 수 있는 실행은 시간 제한, 출력은 파일 또는 python -u, 긴 출력에 tail, grep, head 파이프 금지 '
+  + '6) 100만 행 넘는 테이블은 인덱스 범위, 5초 넘는 쿼리는 EXPLAIN PLAN, 힌트에 기대지 않음 7) 같은 방법 재시도 금지, 원인 확인 뒤 1회 '
+  + '8) 산출물 자체 검증은 보고 전 9) 5분마다 진행 한 줄(지금 하는 일, 남은 일), 전체가 끝날 때까지 멈추지 않고 진행 10) 보고 끝에 걸린 시간과 오래 걸린 단계.';
+
+module.exports = { NOTE };

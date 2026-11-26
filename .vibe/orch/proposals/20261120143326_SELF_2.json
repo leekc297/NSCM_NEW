@@ -51,6 +51,11 @@
         "tools/VibeManager/test/t_orch_errlog.js",
         "Doc/verify/SCP0028/touched_rows.json"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:30+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T14:57:09+09:00"
     }
   ],
   "plain": {
@@ -89,5 +94,7 @@
     "verify_result": "node tools/VibeManager/test/t_orch_errlog.js → PASS 11, FAIL 0, ALL PASS('info 기록 = 파일 기록 · stats 제외' 포함) · node tools/VibeManager/test/t_orch_lock_repeat.js → PASS 11, FAIL 0, ALL PASS('처리 기록 errlog' PASS) · 2026-11-20 14:44:34",
     "note": "orch-watch.js stopCleanLock rec 에 info: true 추가. orch-errlog.js stats() 가 info === true 줄을 건너뜀. vm_errors.jsonl 기록과 activations 기록은 유지함. 작업 모드와 hook 차단 없음."
   },
-  "snap": "prop_20261120143326_SELF_2"
+  "snap": "prop_20261120143326_SELF_2",
+  "effectiveMs": 1795154229226,
+  "effectiveAt": "2026-11-20T14:57:09+09:00"
 }

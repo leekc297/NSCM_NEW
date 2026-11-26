@@ -1,0 +1,84 @@
+{
+ "definition": "모듈별 SMS 발송 항목(Category)과 발송 주기, 언어별 SMS 문구, 수신자를 관리하는 화면",
+ "overview": [
+  "모듈별 SMS 알림 항목(Category)의 발송 주기와 시각, 언어별 SMS 문구, 수신자를 관리하는 화면임",
+  "위쪽 조회 조건, Category 그리드, 아래 Message Setup, Receiver Setup 탭으로 구성됨",
+  "Category 등록, 저장 → 행 선택 → Message Setup 탭에 Language, SMS Content 입력 → Receiver Setup 탭에 수신자 지정 순으로 작업함"
+ ],
+ "pages": [
+  {
+   "title": "SMS Setup",
+   "keyPoint": "",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.135,
+     "y": 0.144
+    },
+    {
+     "no": 2,
+     "x": 0.606,
+     "y": 0.204
+    },
+    {
+     "no": 3,
+     "x": 0.162,
+     "y": 0.204
+    },
+    {
+     "no": 4,
+     "x": 0.272,
+     "y": 0.498
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Module: 기본값 ALL. COMMON, DM 등 모듈 코드로 거름",
+      "Active: 기본값 Y. Y 또는 N 중 선택",
+      "Search(F5) 를 누르면 Category 목록과 총 건수(예: 총 35 건)가 나옴"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 행 추가, 삭제 표시, 저장",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Category 그리드",
+     "lines": [
+      "필수 입력: Module, Active, Main, Sub1, Sub2(제목 앞 빨간 점)",
+      "Category: SMS 발송 항목 이름(예: Batch Job Error, MKT FCST WEEKLY CUTOFF)",
+      "Active: Y 또는 N",
+      "Main: 발송 주기(예: 일 1회, Real Time)",
+      "Sub1, Sub2: Main 아래 세부 주기와 발송 시각(예: 9시)"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Message Setup, Receiver Setup 탭",
+     "lines": [
+      "위 그리드에서 고른 Category 의 문구와 수신자가 탭에 나옴. 탭 이름 옆 괄호 숫자는 등록 건수",
+      "Message Setup: Language(필수), SMS Content(필수) 입력. Category 칸은 위 그리드 값이 나오며 입력 불가",
+      "Language: 언어 코드(예: Korean). SMS Content 는 노란 칸으로 수정 가능(예: Batch Job Error 발생)",
+      "Receiver Setup: 선택한 Category 의 SMS 수신자 탭"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0020",
+ "uiName": "SMS Setup",
+ "menuPath": "SYSTEM> 메뉴 미등록> SMS Setup",
+ "captures": [
+  "captures/SYS0020.png"
+ ],
+ "facts": [],
+ "buttons": []
+}

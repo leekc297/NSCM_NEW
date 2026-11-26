@@ -1,0 +1,154 @@
+{
+  "id": "20261124040952_SELF_2",
+  "at": "2026-11-24T04:09:52+09:00",
+  "ms": 1795460992333,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/jobs.js|실행전vmw상세는stepnames조건부단계포함전체를대기단계로모두보임",
+  "title": "사용자 지시 R110 같은 문제: tools/VibeManager/jobs.js:417 실행 전 VMW 상세는 stepNames(조건부 단계 포함 전체)를 대기 단계로 모두 보임",
+  "evidence": "규칙 R110 \"체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함\" (원래 지시 2026-11-19 09:13 \"VM CHECKLIST작업 시 최초부터 3단계 보완까지를 전체 STEP 으로 표기되는데, CHECKLIST 작업만 진행하고, 필요시 추가 STEP 이 추가되도록 해주세요.\") · tools/VibeManager/jobs.js:417 L=((it&&it.stepNames)||[]).map(function(n,i){ return {no:i+1,name:n,actor:'',st:'wait'}; });",
+  "targets": [
+    "tools/VibeManager/jobs.js"
+  ],
+  "before_after": "job-runner.js:51 stepNames 를 만들 때 optional 또는 조건(ifJsonGt, ifPrevRan, askUser) 단계를 빼거나 cond 표시를 넘기고, flowOf 는 cond 가 아닌 단계만 그림",
+  "verify": "node --check tools/VibeManager/jobs.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/jobs.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T22:54:09+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T22:58:09+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self2254"
+    },
+    {
+      "at": "2026-11-25T22:58:15+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T23:08:05+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 job-runner.js, jobs.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T23:08:05+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 미측정(편집 전 실행 명령이 셸 구문 거부로 실행 안 됨) → 반영 뒤 node --check 2파일 SYNTAX_OK, run_all 87/87 PASS 1422 FAIL 0, t_webview_syntax ALL PASS · 2026-11-25 23:03:29 · 변경 37개 파일 · 대상 목록 밖 변경 36개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/e2e_test_kind.jsonl, Doc/verify/SCP0005/eg/auth/e2e.json, Doc/verify/SCP0005/eg/auth/results.json, Doc/verify/SCP0005/eg/popup/popup_results.json, Doc/verify/SCP0005/eg/popup/popup_rowsets.json",
+      "log": ".vibe\\logs\\2026-11-25T22-58-16_claude_orch.log",
+      "sec": 336,
+      "costUsd": 0.7749852000000003,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0005/eg/auth/e2e.json",
+        "Doc/verify/SCP0005/eg/auth/results.json",
+        "Doc/verify/SCP0005/eg/popup/popup_results.json",
+        "Doc/verify/SCP0005/eg/popup/popup_rowsets.json",
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/jobs.js",
+        "Doc/e2e/_run.acct.32444.json",
+        "Doc/e2e/_run.acct.35332.json",
+        "Doc/verify/SCP0005/calls/eg_auth_Div_순회_조건_활성_노출_버튼_헤더_재구성_조회_파라미터_401_기본값_0.json",
+        "Doc/verify/SCP0005/calls/eg_auth_Insert_그룹_차단_Sort_유지_선택_행_위_병합_그룹_위_0.json",
+        "Doc/verify/SCP0005/calls/eg_auth_개인화_저장_후_동작_EG395_저장_요청을_서버로_보내지_않고_화면_반응만_0.json",
+        "Doc/verify/SCP0005/calls/eg_auth_개인화_후보_Div_순회_Measure_후보_컬럼_필수_표시_UI_Category_Div_별__0.json",
+        "Doc/verify/SCP0005/calls/eg_auth_계정_순회_메뉴_트리_직접_접근_Div_후보_자동_선택_조회_전_버튼_행_범위_0.json",
+        "Doc/verify/SCP0005/calls/eg_auth_헤더_병합_AS-IS_ColumnHeaderSpan_TO-BE_병합_헤더_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_CELL_SCP0005_3_SCM0002_CitybyCountry_CELL_FROM_COU_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_CELL_SCP0005_4_SCP0005_DistributionRoutePopup_CELL_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_CORNERS_SCP0005_0_ExcelUploadForm2_BTN_btnEaxel_Up_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_CORNERS_SCP0005_1_SCM0002_CitybyCountry_BTN_btnFro_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_CORNERS_SCP0005_2_SCM0002_CitybyCountry_BTN_btnToS_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_MAIN_SCP0005_0_ExcelUploadForm2_BTN_btnEaxel_Uploa_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_MAIN_SCP0005_1_SCM0002_CitybyCountry_BTN_btnFromSr_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_MAIN_SCP0005_2_SCM0002_CitybyCountry_BTN_btnToSrch_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_MAIN_SCP0005_3_SCM0002_CitybyCountry_CELL_FROM_COU_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_MAIN_SCP0005_4_SCP0005_DistributionRoutePopup_CELL_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_PICK_SCP0005_3_SCM0002_CitybyCountry_CELL_FROM_COU_0.json",
+        "Doc/verify/SCP0005/calls/eg_popup__eg-popup_PICK_SCP0005_4_SCP0005_DistributionRoutePopup_CELL_0.json",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-03787-umnHeaderSpan-↔-TO-BE-병합-헤더-chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-092ce-S-규칙-GROUP·행-값-·룩업-시간창-×-계정-chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-3085d--Sort-유지-·-선택-행-위-·-병합-그룹-위-chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-35792--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-4a3c3-더-재구성-·-조회-파라미터-·-401-·-기본값-chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-53e35-컬럼-필수-표시-UI-Category-Div-별--chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-78acc--—-칸-설정-보유-미보유-계정-정렬-EG032--chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-81ceb-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium.webm",
+        "Doc/verify/SCP0005/eg/auth/video/20261125_230106_40788/eg_auth-E03-Division·권한-SC-f47d1-G380-—-세션-메뉴-없음-상태의-FE-첫-화면-chromium.webm"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:14+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함 규칙을 tools/VibeManager/jobs.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R110|tools/VibeManager/jobs.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795614848952,
+  "autoFp": "d5cb83b19b",
+  "applyStartMs": 1795615095858,
+  "verifyJudge": {
+    "at": "2026-11-25T23:03:56+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self2254",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "job-runner.js",
+    "jobs.js"
+  ],
+  "appliedMs": 1795615685586,
+  "synced": [
+    "job-runner.js",
+    "jobs.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "반영 뒤 실행. node --check tools/VibeManager/jobs.js, job-runner.js → SYNTAX_OK · node tools/VibeManager/test/run_all.js → 'ALL OK  파일 87/87  PASS 1422  FAIL 0  255.9s' · node tools/VibeManager/test/t_webview_syntax.js → 'ALL PASS'(jobs(ko), jobs(en) 스크립트 구문 PASS)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/jobs.js",
+      "tools/VibeManager/job-runner.js"
+    ],
+    "verify_result": "반영 전 미측정(편집 전 실행 명령이 셸 구문 거부로 실행 안 됨) → 반영 뒤 node --check 2파일 SYNTAX_OK, run_all 87/87 PASS 1422 FAIL 0, t_webview_syntax ALL PASS · 2026-11-25 23:03:29",
+    "note": "jobs.js:423 flowOf 의 실행 전 대기 목록에서 조건부 단계(stepConds=true)를 뺌, 단계 번호는 원래 순서 유지. before_after 에 적힌 job-runner.js:51 에 stepConds(optional, ifJsonGt, ifPrevRan, ifLoopRan, askUser, loop, late, workbench.js:1171 isCond 와 같은 기준 + optional) 추가. jobs.js 만으로는 조건부 여부를 알 수 없어 job-runner.js 51행을 함께 고침. 되돌리기 = 두 파일 .bak 복원 또는 51행 stepConds 제거. 백업, 설치 폴더, CHANGELOG 는 건드리지 않음."
+  },
+  "snap": "prop_20261124040952_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

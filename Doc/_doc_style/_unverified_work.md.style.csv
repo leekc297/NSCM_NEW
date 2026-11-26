@@ -1,11 +1,9 @@
-﻿시트,위치,규칙,걸린 표현,고치는 법,문장
-,L5,기호,v(09:29 · ERROR 278행) · unverif,가운뎃점 나열 → 쉼표,- 입력: 원장 verify_ledger.csv(09:29 · ERROR 278행) · unverified_triage.csv(09:36:54 · 313행 = ERROR 278 + AI 검토 35) · 처리 목록 _unverified_plan.md
-,L5,기호,9:36:54 · 313행 = ERROR 278 + AI 검토 35) · 처리 목록 _,가운뎃점 나열 → 쉼표,- 입력: 원장 verify_ledger.csv(09:29 · ERROR 278행) · unverified_triage.csv(09:36:54 · 313행 = ERROR 278 + AI 검토 35) · 처리 목록 _unverified_plan.md
-,L18,기호,T470 7건 · 음성 3건) · SSP0005,가운뎃점 나열 → 쉼표,- 확인: selftest 91/91(T470 7건 · 음성 3건) · SSP0005 17행 reason_claim 근거 17건
-,L31,기호,## 묶음 5 · 재실행 9행(EG022 Div 선택 8 · EG271 1,가운뎃점 나열 → 쉼표,### 묶음 5 · 재실행 9행(EG022 Div 선택 8 · EG271 1)
-,L46,기호,Site 9행 · Insert/Delete 비노출 15행 · 기준정보 대조,가운뎃점 나열 → 쉼표,- Plant Site 9행 · Insert/Delete 비노출 15행 · 기준정보 대조 범위 4행 · 초기값·후보 2행 · MSG00135 1행 · 스냅샷 2행 · 대조표 X-LOC 2행: _unverified_decisions.md
-,L46,기호,값·후보 2행 · MSG00135 1행 · 스냅샷 2행,가운뎃점 나열 → 쉼표,- Plant Site 9행 · Insert/Delete 비노출 15행 · 기준정보 대조 범위 4행 · 초기값·후보 2행 · MSG00135 1행 · 스냅샷 2행 · 대조표 X-LOC 2행: _unverified_decisions.md
-,L47,기호,(FACT 8 · B7 4) · 검사기 미착수,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09
-,L47,기호,TRACE 1 · A1 TRACE 2 · J2 1 ·,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09
-,L47,기호,· J2 1 · E4 ASIS 2 · B3 1 ·,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09
-,L47,기호,· B3 1 · A7 1 · E2 1 ·,가운뎃점 나열 → 쉼표,- 추출기 미착수 12행(FACT 8 · B7 4) · 검사기 미착수 11행(A6 TRACE 1 · A1 TRACE 2 · J2 1 · E4 ASIS 2 · B3 1 · A7 1 · E2 1 · G1 2): 결정 목록 D-08·D-09
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장,분류
+,L13,용어,| 필터 단위 시험 3건. 겹,단위 시험·자동 시험 코드 → 테스트 코드·테스트 케이스 + 테스트 파일명(규칙 19),"| A route 시트 중복 행(T451) | 50 | sheet_columns.csv SCP0005 시트 3개(Distribution Route 39, route 33, POPUP 16). 화면 컬럼 메타 조회 키 'Distribution Route'(useDistributionRouteStore.ts:113~117). `_index.csv` dts_sheets 빈 값 | `tools/E2E/lib/nscm.ts` recordMetaSheets, `tools/Harness/verify/ledger.py` T451 | 필터 단위 시험 3건. 겹침 비율 기준 검토 결과 DMF0005 purchase_81·82, DMF0043 versionPopup, SCM0016 batchLogHist 를 잘못 묶어 버림(쓰지 않음) |",문장
+,L19,용어,| 정규식 단위 시험 5건 |,단위 시험·자동 시험 코드 → 테스트 코드·테스트 케이스 + 테스트 파일명(규칙 19),| G FPTextBox 팝업 칸(T456) | 4 | ledger.py T114 분기 CELL=- 만 일반 텍스트. SpreadInfo.cs:1387~1389 CELL 빈 값 → FPTextBox. InsertRow 잠금 칸(cs:950~954)에 FROM_COUNTRY·FROM_CITY 없음 | `tools/Harness/verify/ledger.py` _plain | 정규식 단위 시험 5건 |,문장
+,L48,기호,재조회 OK · 원복 OK · 행 식별 =,가운뎃점 나열 → 쉼표,"- 라운드 1 보완 실측 확인(재검 E2E): T454 T-6d14c72c FAIL '10초 동안 대화상자 0 · 서버 호출 0 · 편집기 없음 — 팝업 열리지 않음'. T453 From/To City 4행 PASS(대화상자 9·28행, 조건 값 ''→'AATES'), From/To Country 4행 FAIL '검색 단추 없음'. T452 FROM_COUNTRY r6996 'PL'→'CN' 재조회 OK · 원복 OK · 행 식별 = ROUTE_ID '5942'. 사실 검토 09:05 에 LT 숫자 칸 FACT 5행 없음(T450)",문장
+,L59,기호,2행 = 실측 · 저장 왕복 4행 = 실측 · FACT 2행,가운뎃점 나열 → 쉼표,- 다음 CheckList 판정(미측정): Country 조건 4행 = 같은 묶음 단추로 실측(통과 또는 오류) · G4 btnFromSrch·btnToSrch 2행 = 실측 · 저장 왕복 4행 = 실측 · FACT 2행 사라짐(사실 검토 재생성 때) · 그 밖 라운드 1 판정 경로 그대로,문장
+,L93,기호,IL·판정필요 → 재판정:,문장을 잇는 화살표 삭제 — 문장으로 풀어 쓰기(순서·변경 전후 표기 'A → B' 는 허용),"- FAIL·판정필요 → 재판정: AD 3행(읽기 전용 재조회 PASS), EG 정렬 4행(PASS 3, NA 1), EG 팝업 2행, E3 1행, G1 1행, I2 2행, L1 1행, X-REASON 1행",문장
+,L109,기호,~ 08:1x · 체인 회차 3 · 일괄 보완),가운뎃점 나열 → 쉼표,## 라운드 5 (2026-11-25 07:45 ~ 08:1x · 체인 회차 3 · 일괄 보완),문장
+,L121,기호,"3, 1496 · mapping_trace.py:1245 · facts_c",가운뎃점 나열 → 쉼표,"| W4 | 4 | judge 가 팝업·셀 이벤트 SP 의 A6 TRACE 행에 정렬 재료를 붙이지 않음(T605, T606, T608). setListBox ALL 행 미해석(T607) | judge.py:383, 1496 · mapping_trace.py:1245 · facts_combosrc.py:349~616 | judge_popup 22/22, mapping_trace 108/108, 사본 원장 ERROR 3 → PASS 2·NA 1, SCP0005 combo_src 1행 |",문장
+,L133,기호,s*` 가 됨 → Edit,문장을 잇는 화살표 삭제 — 문장으로 풀어 쓰기(순서·변경 전후 표기 'A → B' 는 허용),- 사고: T600 첫 패치가 셸 경유로 역슬래시가 반으로 줄어 정규식이 `^\s*` 대신 `^s*` 가 됨 → Edit 로 바로잡고 파일 문자열 대조 시험 통과. 이후 패치는 Edit 또는 파일 쓰기로만,문장

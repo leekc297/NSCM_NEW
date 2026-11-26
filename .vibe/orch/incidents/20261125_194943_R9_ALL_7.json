@@ -1,0 +1,37 @@
+{
+  "id": "20261125_194943_R9_ALL_7",
+  "at": "2026-11-25T19:49:43+09:00",
+  "ms": 1795603783832,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.langacct.fran.d.k.lock (PID 24996 없음)",
+  "screen": "",
+  "sig": "R9|_run.langacct.fran.d.k.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-25T10:37:22.842Z · 인자 e2e-read SCP0005",
+  "evidence": {
+    "file": "Doc/e2e/_run.langacct.fran.d.k.lock",
+    "pid": 24996
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-25T19:50:33+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.langacct.fran.d.k.lock (PID 24996 없음 재확인)",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-25T19:55:28+09:00",
+      "by": "VMO 사후 검증",
+      "what": "잠금 삭제 판정: 맞음. 잠금 주인 PID 24996 없음 확인"
+    }
+  ],
+  "vmoCheck": {
+    "entry": "I20261125_195033_13",
+    "verdict": "ok",
+    "at": "2026-11-25T19:55:28+09:00"
+  }
+}

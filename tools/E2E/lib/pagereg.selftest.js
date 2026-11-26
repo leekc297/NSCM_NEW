@@ -4,7 +4,7 @@ const ROOT = path.join(__dirname, '..', '..', '..');
 const ts = require(path.join(ROOT, 'nscm-fe', 'node_modules', 'typescript'));
 const src = fs.readFileSync(path.join(__dirname, 'pagereg.ts'), 'utf8');
 const m = { exports: {} }; new Function('module', 'exports', 'require', ts.transpileModule(src, { compilerOptions: { module: 'commonjs', target: 'es2020' } }).outputText)(m, m.exports, require);
-const { pageReg, emptyAnswered } = m.exports;
+const { pageReg, emptyAnswered, waitReason, noteWait, WAIT_WHY_MAX } = m.exports;
 let fail = 0; const chk = (n, c) => { console.log(c ? 'PASS' : 'FAIL', n); if (!c) fail++; };
 const now = Date.now(); const iso = ms => new Date(ms).toISOString();
 const page = {}; const t0 = now - 5000;
@@ -24,4 +24,15 @@ set([C({ at: iso(now - 120000) })]); chk('최근 60초 안 조회 응답 없음 
 set([C({ btn: 'SAVE' })]); chk('저장 응답만 있음 = false', emptyAnswered(page, t0) === false);
 set([C(), C({ btn: 'SAVE', rows: 3 })]); chk('저장 응답은 판정에서 제외 = true', emptyAnswered(page, t0) === true);
 chk('page 기록 없음 = false', emptyAnswered({}, t0) === false);
+// 2026-11-20 20261120162234_SELF: 대기 사유 함수 waitReason, 기록 함수 noteWait(시험당 40건, 넘으면 waitWhyDrop)
+set([C({ done: false })]); chk('사유: 응답 처리 중 = notDone', waitReason(page, t0) === 'notDone');
+set([C()], { pendingProc: 1 }); chk('사유: 진행 중 요청 = pending', waitReason(page, t0) === 'pending');
+set([C()]); chk('사유: 0행 확정 = empty', waitReason(page, t0) === 'empty');
+chk('사유: 기록 없음 = noReg', waitReason({}, t0) === 'noReg');
+set([C({ rows: 5 })]); chk('사유: 행 있는 응답 = rows', waitReason(page, t0) === 'rows');
+set([C({ rowsSure: false })]); chk('사유: 행 수 못 셈 = notSure', waitReason(page, t0) === 'notSure');
+set([C()]); chk('사유 empty 와 emptyAnswered true 일치', (waitReason(page, t0) === 'empty') === emptyAnswered(page, t0));
+set([C()]); for (let i = 0; i < 41; i++) noteWait(page, { why: 'notDone', sec: 1, rows: 0, capSec: 120, capHit: false });
+chk('기록 40건, 41건째는 waitWhyDrop 1', WAIT_WHY_MAX === 40 && pageReg.get(page).waitWhy.length === 40 && pageReg.get(page).waitWhyDrop === 1);
+const pg2 = {}; noteWait(pg2, { why: 'noReg', sec: 1, rows: 0, capSec: 120, capHit: false }); chk('기록 없는 page = 남기지 않음', pageReg.get(pg2) === undefined);
 console.log(fail ? `SOME FAIL ${fail}` : 'ALL PASS'); process.exit(fail ? 1 : 0);

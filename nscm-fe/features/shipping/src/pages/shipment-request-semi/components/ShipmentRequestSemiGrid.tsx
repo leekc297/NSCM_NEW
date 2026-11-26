@@ -361,6 +361,23 @@ export const ShipmentRequestSemiGrid = ({
       if (clamped !== raw) editor.value = String(clamped);
     };
     g.cellEditEnding.addHandler(clampQtyOnCommit);
+    // 붙여넣기는 에디터를 거치지 않아 위 클램프가 발화하지 않는다 — 11자리 이상이 그대로 저장돼
+    //   ORA-01438(QTY NUMBER(20,10))로 실패하던 경로(2026-11-23 테스트 이슈 #235). 붙여넣은 값을 같은 범위로 자른다.
+    const clampQtyOnPaste = (sender: FlexGridType, ev: CellRangeEventArgs) => {
+      const binding = sender.columns[ev.col]?.binding ?? '';
+      if (!isPivotBinding(binding)) return;
+      const value = sender.getCellData(ev.row, ev.col, false) as unknown;
+      const raw =
+        typeof value === 'number'
+          ? value
+          : typeof value === 'string' && value.trim() !== ''
+            ? Number(value.replace(/,/g, ''))
+            : NaN;
+      if (!Number.isFinite(raw)) return;
+      const clamped = Math.min(PIVOT_QTY_MAX, Math.max(PIVOT_QTY_MIN, raw));
+      if (clamped !== raw) sender.setCellData(ev.row, ev.col, clamped);
+    };
+    g.pastedCell.addHandler(clampQtyOnPaste);
 
     // ── ITEM_ID(Model) 재선택 → 종속 5칸 클리어 + BOD 재선택 강제(R11 / S58~S63) ──
     //   AS-IS 는 신규행·편집모드에서만 반응한다(BG15~BG17). TO-BE 는 모드가 없어 신규행 조건만 남는다.
@@ -430,6 +447,7 @@ export const ShipmentRequestSemiGrid = ({
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
         g.cellEditEnding?.removeHandler(clampQtyOnCommit);
+        g.pastedCell?.removeHandler(clampQtyOnPaste);
         g.cellEditEnded?.removeHandler(cellEditEndedHandler);
         g.hostElement?.removeEventListener('click', clickHandler);
         g.hostElement?.removeEventListener('dblclick', dblClickHandler);

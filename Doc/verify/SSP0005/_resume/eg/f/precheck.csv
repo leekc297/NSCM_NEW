@@ -1,0 +1,12 @@
+﻿check,target,result,detail,todo
+R1 AS-IS 사실 묶음,endpoints.csv,PASS,12행,
+R1 AS-IS 사실 묶음,controls.csv,PASS,20행,
+R1 AS-IS 사실 묶음,events.csv,PASS,9행,
+R1 AS-IS 사실 묶음,actions.csv,PASS,336행,
+R1 AS-IS 사실 묶음,grid_columns_asis.csv,PASS,3행,
+R2 AS-IS SP 원문,4개,PASS,화면 호출 SP 전부 원문 있음,
+R3 AS-IS 호출 해석,12행,PASS,풀리지 않은 호출 0,
+R4 AS-IS 컬럼 메타,SCM_MST_SHEET_COLUMNS,PASS,2행,
+R5 분석 문서,3종,PASS,있음,
+R6 TO-BE 사내 DB · M2 FE 호출 배선,(식이 풀리지 않은 호출),ERROR,"[측정 경로 없음] 시트·버튼이 식이라 대조 불가 3곳: ShipmentWorkingDay.tsx:121, ShipmentWorkingDay.tsx:288, useShipmentWorkingDayStore.ts:240",FE 호출의 시트·버튼을 MNU_BTN_MPG_M 에 등록
+R6 TO-BE 사내 DB,13항목,INFO,meta_live_check 13항목 중 FAIL·ERROR 1,

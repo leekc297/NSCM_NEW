@@ -1,139 +1,7 @@
 {
  "screen": "SSP0014",
- "made": "2026-11-20 07:58",
- "checklist": {
-  "version": 7,
-  "total": 1984,
-  "totals": {
-   "PASS": 1085,
-   "FAIL": 16,
-   "판정필요": 23,
-   "미검증": 123,
-   "해당없음": 737
-  },
-  "axes": [
-   {
-    "axis": "1.디자인·다국어",
-    "total": 250,
-    "PASS": 158,
-    "FAIL": 1,
-    "판정필요": 0,
-    "미검증": 7,
-    "해당없음": 84
-   },
-   {
-    "axis": "2.AS-IS 로직",
-    "total": 196,
-    "PASS": 109,
-    "FAIL": 0,
-    "판정필요": 0,
-    "미검증": 4,
-    "해당없음": 83
-   },
-   {
-    "axis": "3.SMOKE",
-    "total": 564,
-    "PASS": 260,
-    "FAIL": 4,
-    "판정필요": 21,
-    "미검증": 70,
-    "해당없음": 209
-   },
-   {
-    "axis": "4.CRUD",
-    "total": 425,
-    "PASS": 134,
-    "FAIL": 10,
-    "판정필요": 0,
-    "미검증": 25,
-    "해당없음": 256
-   },
-   {
-    "axis": "5.권한별 CRUD",
-    "total": 30,
-    "PASS": 9,
-    "FAIL": 1,
-    "판정필요": 1,
-    "미검증": 5,
-    "해당없음": 14
-   },
-   {
-    "axis": "분류 없음",
-    "total": 519,
-    "PASS": 415,
-    "FAIL": 0,
-    "판정필요": 1,
-    "미검증": 12,
-    "해당없음": 91
-   }
-  ],
-  "action": [
-   [
-    "V-d43543e2",
-    "J4",
-    "SSP0014 탭 이름"
-   ],
-   [
-    "V-a70af79e",
-    "G2",
-    "조회조건 User ID(Name)"
-   ],
-   [
-    "V-45fe7803",
-    "F1",
-    "SSP0014 화면"
-   ],
-   [
-    "V-d62e8e18",
-    "H11",
-    "SSP0014 저장 중 로딩"
-   ]
-  ],
-  "review": [
-   [
-    "V-c951c278",
-    "B2",
-    "조회조건 From Site"
-   ],
-   [
-    "V-d74917d5",
-    "J4",
-    "그룹ID별 메뉴·버튼 권한(MENU AUTH, BTN AUTH) 운영데이터 동기화"
-   ],
-   [
-    "V-830447ce",
-    "B2",
-    "[DMF0006 결함 유형] 조회조건 Team, 그리드 Team/End Customer/Sales Site 콤보"
-   ],
-   [
-    "T-1055a120",
-    "A1",
-    "D00-1-018 · §1 btnItemId / UsrButton(SCM0002)"
-   ],
-   [
-    "T-9e13b4a5",
-    "A1",
-    "D00-2-001 · §2 cboDivision / SelectedIndexChanged(FromSite 재조회)"
-   ],
-   [
-    "T-d8a44750",
-    "A1",
-    "D00-2-002 · §2 btnItemId / Click(SCM0002 팝업)"
-   ],
-   [
-    "EG-b255a2c0",
-    "A6",
-    "SSP0014 문자 정렬 PKG_SSP0014.P_SSP0014_GET_MODEL_PIC"
-   ]
-  ],
-  "ledger": {
-   "FAIL": 5,
-   "미검증": 244,
-   "PASS": 48,
-   "판정필요": 3
-  },
-  "unverified_sheet_rows": 468
- },
+ "made": "2026-11-25 02:55",
+ "checklist": null,
  "fe_mapping": {
   "total": 69,
   "by_state": {
@@ -150,105 +18,15 @@
    "빈칸": 190
   }
  },
- "counts": {
-  "menu_id": "SSP0014",
-  "unverified_sheet": 468,
-  "unverified_by_reason": {
-   "측정못함": 122,
-   "상속생략": 344,
-   "대상불명": 1,
-   "승인대기(스냅샷)": 1
-  },
-  "direct_unmeasured": 149
+ "counts": null,
+ "ledger": null,
+ "pending_recheck": {
+  "fixed_at": "2026-11-25 02:54",
+  "ledger_at": "2026-11-25 02:17",
+  "note": "미검증 해소 보완 2026-11-25 02:54 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)"
  },
- "ledger": {
-  "menu_id": "SSP0014",
-  "generated": "2026-11-20T07:33:09",
-  "instances": 499,
-  "done": 430,
-  "open": 69,
-  "by_type": {
-   "W3": 10,
-   "W5": 2,
-   "W6": 1,
-   "W7": 23,
-   "W9": 33
-  },
-  "by_owner": {
-   "FE": 4,
-   "DB": 1,
-   "사람판정": 4,
-   "화면 FE": 1,
-   "하네스": 2,
-   "E2E": 1,
-   "사람 판정 / AS-IS 원문 확인 → 재판정": 23,
-   "하네스·환경": 33
-  },
-  "suspect_not_implemented": 0,
-  "by_check": {
-   "F1": {
-    "W3": 1
-   },
-   "F2": {
-    "W3": 1
-   },
-   "F6": {
-    "W3": 1
-   },
-   "F4": {
-    "W3": 2,
-    "W9": 2
-   },
-   "X-REASON": {
-    "W3": 4
-   },
-   "X-ROW": {
-    "W3": 1,
-    "W9": 2
-   },
-   "A6": {
-    "W5": 1
-   },
-   "G5": {
-    "W5": 1
-   },
-   "H6": {
-    "W6": 1,
-    "W9": 5
-   },
-   "B2": {
-    "W7": 1
-   },
-   "A1": {
-    "W7": 17
-   },
-   "X-LOC": {
-    "W7": 4
-   },
-   "M4": {
-    "W7": 1
-   },
-   "B4": {
-    "W9": 2
-   },
-   "K4": {
-    "W9": 1
-   },
-   "E4": {
-    "W9": 4
-   },
-   "G1": {
-    "W9": 17
-   }
-  }
- },
- "pending_recheck": null,
  "name": "ShipmentModelPIC",
  "sources": [
-  {
-   "file": "Doc/UI_CHECKLIST/SSP0014_ShipmentModelPic_CheckList_v7.xlsx",
-   "time": "2026-11-20 07:43"
-  },
   {
    "file": "nscm-fe/features/shipping/src/pages/shipment-model-pic/__asis-mapping__.md",
    "time": "2026-10-14 09:26"
@@ -256,14 +34,6 @@
   {
    "file": "Doc/asisfacts/screens/SSP0014/__asis-actions__.md",
    "time": "2026-10-23 11:29"
-  },
-  {
-   "file": "Doc/verify/SSP0014/checklist_counts.json",
-   "time": "2026-11-20 07:43"
-  },
-  {
-   "file": "Doc/verify/SSP0014/work_ledger_summary.json",
-   "time": "2026-11-20 07:33"
   }
  ]
 }

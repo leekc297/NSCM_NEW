@@ -2,7 +2,7 @@
 //   정적 AST 로 TO-BE 핸들러 본문(beginningEdit·dataMap·cellEditEnded)을 추출하는 대신, 실제 동작을 직접 묻는다.
 //   원형 = Doc/e2e/specs/SCP0007.insertflow.spec.ts(시범). 저장은 하지 않는다 — 값 입력 프로브는 화면을 닫으면 버려진다.
 import type { Page } from '@playwright/test';
-import { emptyAnswered } from './pagereg';
+import { emptyAnswered, waitReason, noteWait } from './pagereg';
 
 // 보이는 첫 Wijmo 그리드 컨트롤(lib/nscm.ts gridColumnsMeta 와 같은 탐색: $WJ-CTRL 또는 columns 보유 속성)
 // 2026-11-01: 한 화면에 그리드가 여럿(상단 메인 + 하단 시트)이면 첫 그리드만 보여 하위 시트 컬럼을 못 쟀다(DMF0004 Sales Customer) — pickGrid 로 지정하면 그 컬럼을 가진 그리드를 쓴다. 지정 없으면 종전과 같음
@@ -54,10 +54,16 @@ export const probe = {
   /** 전체 컬럼 binding(숨김 포함) */
   allBindings: (p: Page) =>
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return null; const o = []; for (let i = 0; i < c.columns.length; i++) { const x = c.columns[i]; if (x.binding) o.push(String(x.binding)); } return o; })()`) as Promise<string[] | null>,
+  /** 2026-11-20 T513: 행 데이터 키(그리드 칸에 없는 필드 포함 · 앞 50행 합집합) — 조회조건 코드 칸이 그리드 칸이 아니고 행 데이터에만 있는 화면(SCP0028 FROM_SITE) */
+  dataKeys: (p: Page) =>
+    p.evaluate(`(() => { const c = ${CTL}; if (!c || !c.collectionView) return null; const ks = new Set(); for (const d of c.collectionView.items.slice(0, 50)) if (d && typeof d === 'object') for (const k of Object.keys(d)) if (!k.startsWith('_') && !k.startsWith('$')) ks.add(k); return [...ks]; })()`) as Promise<string[] | null>,
   rowCount: (p: Page) => p.evaluate(`(() => { const c = ${CTL}; return c ? c.rows.length : -1; })()`) as Promise<number>,
   /** 그리드에 행이 찰 때까지 **시간 상한**으로 대기(기본 120s) → 마지막 행 수. 2026-10-29: 횟수 상한(240회×500ms)은 부하 시 evaluate 1회가 수 초라 15분 테스트 타임아웃을 넘겼다(SCP0111 B1·B2 G1 루프) */
   //   2026-11-20 CheckList 속도 개선 B1: 서버가 조회 응답을 0행으로 끝냈으면 상한까지 기다리지 않는다(SSP0005 한 실행에 이 대기 3,732초 · 조회 응답 0.8초). 조건은 lib/pagereg.ts emptyAnswered. 모르면 종전대로 상한까지
-  waitRows: async (p: Page, ms = 120_000, pollMs = 500): Promise<number> => { const t0 = Date.now(); let n = await probe.rowCount(p); while (n <= 0 && Date.now() - t0 < ms) { if (emptyAnswered(p, t0)) { await p.waitForTimeout(1500); n = await probe.rowCount(p); if (n <= 0 && emptyAnswered(p, t0)) return n; } await p.waitForTimeout(pollMs); n = await probe.rowCount(p); } return n; },
+  //   2026-11-20 20261120162234_SELF: 한 번이라도 기다렸으면 마지막 사유(pagereg.waitReason · 0행 확정 뒤 행이 찬 경우 emptyThenRows)·대기 초·행 수·상한을 page 기록 waitWhy 에 쌓는다(fixtures/test.ts 가 _test_timing.jsonl 에 씀). 대기 동작은 그대로
+  waitRows: async (p: Page, ms = 120_000, pollMs = 500): Promise<number> => { const t0 = Date.now(); let n = await probe.rowCount(p); if (n > 0) return n; let why = ''; let ett = false;
+    const fin = (rows: number) => { const sec = Math.round((Date.now() - t0) / 100) / 10; noteWait(p, { why: ett && rows > 0 ? 'emptyThenRows' : (why || waitReason(p, t0)), sec, rows, capSec: Math.round(ms / 1000), capHit: rows <= 0 && Date.now() - t0 >= ms }); return rows; };
+    while (n <= 0 && Date.now() - t0 < ms) { if (emptyAnswered(p, t0)) { await p.waitForTimeout(1500); n = await probe.rowCount(p); if (n <= 0 && emptyAnswered(p, t0)) { why = 'empty'; return fin(n); } if (n > 0) ett = true; } else why = waitReason(p, t0); await p.waitForTimeout(pollMs); n = await probe.rowCount(p); } if (n > 0) why = why || 'rows'; return fin(n); },
   /** CRUD_TYPE='I' 신규행 수 */
   newRowCount: (p: Page) =>
     p.evaluate(`(() => { const c = ${CTL}; if (!c) return -1; let n = 0; for (let r = 0; r < c.rows.length; r++) { const d = c.rows[r].dataItem; if (d && d.CRUD_TYPE === 'I') n++; } return n; })()`) as Promise<number>,
@@ -179,8 +185,11 @@ export const probe = {
       return items.map(it => ({ v: String(dm.getDisplayValue(it[dm.selectedValuePath])), attrs: Object.fromEntries(few.map(k => [k, it[k] == null ? '' : String(it[k])])) })); })()`) as Promise<{ v: string; attrs: Record<string, string> }[]>,
   /** 셀 DOM 클래스(편집 표시 판정 H2) — 화면에 스크롤 후 읽는다 */
   cellClasses: (p: Page, row: number, binding: string) =>
-    p.evaluate(`(() => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null; c.scrollIntoView(${row}, col.index);
-      const el = c.cells.getCellElement(${row}, col.index); if (!el) return null;
+    // 2026-11-26 SCP0005 T-1ed30566(LT_SUM H2): 스크롤 직후 셀이 아직 안 그려져 null → '현재 그리드에 없음' 해당없음으로 잘못 남음. cellCenter 와 같이 최대 10회 다시 그린 뒤 읽음
+    p.evaluate(`(async () => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null; c.scrollIntoView(${row}, col.index);
+      let el = c.cells.getCellElement(${row}, col.index);
+      for (let k = 0; k < 10 && !el; k++) { try { c.scrollIntoView(${row}, col.index); c.refresh(false); } catch { /* 다시 그리기 실패는 다음 회차에서 */ } await new Promise(r => requestAnimationFrame(r)); await new Promise(r => setTimeout(r, 120)); el = c.cells.getCellElement(${row}, col.index); }
+      if (!el) return null;
       const bg = String(el.style.backgroundColor || getComputedStyle(el).backgroundColor || '').replace(/\\s+/g, '');
       return String(el.className) + (/^(rgb\\(255,248,205\\)|#fff8cd)$/i.test(bg) && !/wj-cell-editable/.test(el.className) ? ' wj-cell-editable--inline-bg' : ''); })()`) as Promise<string | null>,
   // ↑ 2026-11-06(SCP0084 H2 허위 FAIL 2건): 화면이 편집 셀을 클래스(.wj-cell-editable) 대신 인라인 배경색 #fff8cd(hook #95 표준 편집 노랑 = .wj-cell-editable 과 같은 색)

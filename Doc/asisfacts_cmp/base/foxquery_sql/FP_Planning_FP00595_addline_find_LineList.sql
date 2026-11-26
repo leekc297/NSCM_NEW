@@ -1,0 +1,94 @@
+﻿SELECT DISTINCT 
+             A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID
+           , A.OPERATION_ID, A.LINE_ID, A.ELECTRODE_TYPE
+           , ISNULL(B.LINE_NAME,'-') AS LINE_NAME
+           , B.LOCATION
+           , ISNULL(B.PROD_VERSION_TYPE,'GENERAL') AS PROD_VERSION_TYPE
+           , E.EQUIPMENT_ID
+      FROM   SCM_ITEM_LINE_ASSIGN_M A WITH(NOLOCK)
+      INNER JOIN SCM_LINE_M B WITH(NOLOCK)
+      ON     A.COMPANY_ID     = B.COMPANY_ID
+      AND    A.DIVISION_ID    = B.DIVISION_ID
+      AND    A.SITE_ID        = B.SITE_ID
+      AND    A.PLANT_ID       = B.PLANT_ID
+      AND    A.FACTORY_ID     = B.FACTORY_ID
+      AND    A.OPERATION_ID   = B.OPERATION_ID
+      AND    A.LINE_ID        = B.LINE_ID
+      AND    A.ELECTRODE_TYPE = B.ELECTRODE_TYPE
+      @CTRL_CONFIRM
+      --{
+       -- var sql="";
+        
+       -- if($data.CONFIRM_AREA == "PLAN GROUP")  sql="INNER JOIN ";
+       -- else                                    sql="LEFT OUTER JOIN ";
+        
+       -- sql;
+      --}
+      (
+          SELECT A.SEGMENT2 AS PLAN_GROUP_ID
+          FROM   SCM_SYS_LOOKUP_VALUE A WITH(NOLOCK)
+          WHERE  A.LOOKUP_TYPE_CODE = 'INSTANCE_PLANNING_GROUP'
+          AND    A.ACTIVE_FLAG = 'Y'
+          and    A.SEGMENT1    = @INSTANCE_ID
+      ) C
+      ON     B.MODEL_TYPE     = C.PLAN_GROUP_ID
+      INNER JOIN (
+          SELECT DISTINCT B.COMPANY_ID, B.DIVISION_ID, B.SITE_ID, B.OPERATION_ID
+          FROM   FP_INSTANCE_OPERATION_V A WITH(NOLOCK), SCM_OPERATION_M B WITH(NOLOCK)
+          WHERE  A.COMPANY_ID   = B.COMPANY_ID
+          AND    A.DIVISION_ID  = B.DIVISION_ID
+          AND    A.SITE_ID      = B.SITE_ID
+          AND    A.OPERATION_ID = B.OPERATION_ID
+          AND    A.INSTANCE_ID  = @INSTANCE_ID
+          AND 	 B.DIVISION_ID  = @DIVISION_ID
+          AND    B.SITE_ID      = @SITE_ID
+          AND    A.AMEND_FLAG   = 'Y'
+          AND    B.ACTIVE_FLAG  = 'Y'
+      ) D
+      ON     A.COMPANY_ID     = D.COMPANY_ID
+      AND    A.DIVISION_ID    = D.DIVISION_ID
+      AND    A.SITE_ID        = D.SITE_ID
+      AND    A.OPERATION_ID   = D.OPERATION_ID
+      INNER JOIN SCM_EQUIPMENT_M E WITH(NOLOCK)
+      ON  A.COMPANY_ID     = E.COMPANY_ID
+      AND A.DIVISION_ID    = E.DIVISION_ID
+      AND A.SITE_ID        = E.SITE_ID
+      AND A.PLANT_ID       = E.PLANT_ID
+      AND A.FACTORY_ID     = E.FACTORY_ID
+      AND A.OPERATION_ID   = E.OPERATION_ID
+      AND A.LINE_ID        = E.LINE_ID
+      AND A.ELECTRODE_TYPE = E.ELECTRODE_TYPE
+      WHERE  A.DIVISION_ID    = @DIVISION_ID
+      AND    A.SITE_ID        = @SITE_ID
+      AND    A.ITEM_ID        = @ITEM_ID
+      @CTRL_LINE_LT
+     -- [AND    A.LINE_ID LIKE '%' +  @LINE_ID + '%']
+      AND    A.ACTIVE_FLAG    = 'Y'
+      AND    B.ACTIVE_FLAG    = 'Y'
+      AND    A.MONTH          = SUBSTRING(CONVERT(VARCHAR,@DATE,112),1,6)
+      AND		 A.PRIORITY NOT IN ('0','9')
+      AND    EXISTS (
+			        	SELECT 1
+			        	FROM   FP_USER_ROLE_INFO_V BB WITH(NOLOCK)
+			        	WHERE  A.COMPANY_ID     = BB.COMPANY_ID
+			        	AND    A.DIVISION_ID    = BB.DIVISION_ID
+			        	AND    A.SITE_ID        = BB.SITE_ID
+			        	AND    A.PLANT_ID       = BB.PLANT_ID
+					    AND    A.FACTORY_ID     = BB.FACTORY_ID
+					    AND    A.OPERATION_ID   = BB.OPERATION_ID
+					    AND    A.LINE_ID        = BB.LINE_ID
+			        	AND    BB.USER_ID       = @USER_ID
+			        	AND	   BB.SAVE_FLAG	  = 'Y'
+				    )
+      ORDER BY A.FACTORY_ID, A.OPERATION_ID, A.LINE_ID, LINE_NAME, LOCATION
+    
+--{--SCRIPT RAW
+
+--        var param = $data.param;
+--        var param2 = $jdbc.queryList("FP00595_addLine","find_instanceType",param);
+        
+--        param.CONFIRM_AREA = param2[0].confirm_area;
+        
+--        $data.querySet1 = $jdbc.queryList("FP00595_addLine","find_LineList",param);
+      
+--}

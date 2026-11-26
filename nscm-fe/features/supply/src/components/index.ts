@@ -7,3 +7,4 @@ export * from './SalesReportPopup';
 export * from './SupplyPopupGallery';
 export * from './PlanVersionCascade';
 export * from './newPlanModal';
+export * from './bodMasterModal';

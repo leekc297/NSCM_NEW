@@ -325,8 +325,8 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "USER_CHECK",
-        "SEARCH"
+        "SEARCH",
+        "USER_CHECK"
       ],
       "matrix": [],
       "expectedDivs": [
@@ -338,9 +338,9 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "EDIT",
-      "SEARCH",
       "SAVE",
-      "USER_CHECK"
+      "USER_CHECK",
+      "SEARCH"
     ],
     "CAPA Planner": [
       "SEARCH",
@@ -349,8 +349,8 @@
     ],
     "DM ADMIN": [
       "SAVE",
-      "USER_CHECK",
-      "SEARCH"
+      "SEARCH",
+      "USER_CHECK"
     ],
     "DM Planner": [
       "USER_CHECK",
@@ -358,14 +358,14 @@
       "SEARCH"
     ],
     "DM Planner (W/S)": [
-      "SEARCH",
-      "SAVE",
-      "USER_CHECK"
-    ],
-    "DM Viewer": [
       "SAVE",
       "USER_CHECK",
       "SEARCH"
+    ],
+    "DM Viewer": [
+      "USER_CHECK",
+      "SEARCH",
+      "SAVE"
     ],
     "FP Planner": [
       "SEARCH",
@@ -374,55 +374,55 @@
       "EDIT"
     ],
     "FP Viewer": [
-      "SAVE",
       "USER_CHECK",
+      "SAVE",
       "SEARCH"
     ],
     "SCM PI Admin": [
+      "EDIT",
       "SEARCH",
       "USER_CHECK",
-      "SAVE",
-      "EDIT"
+      "SAVE"
     ],
     "SCM Viewer": [
-      "SEARCH",
       "SAVE",
+      "SEARCH",
       "USER_CHECK"
     ],
     "SCP Planner": [
+      "SAVE",
       "SEARCH",
       "USER_CHECK",
-      "SAVE",
       "EDIT"
     ],
     "SCP Tester": [
+      "SAVE",
       "SEARCH",
       "USER_CHECK",
-      "EDIT",
-      "SAVE"
+      "EDIT"
     ],
     "SSP ADMIN": [
       "USER_CHECK",
-      "SAVE",
-      "SEARCH"
+      "SEARCH",
+      "SAVE"
     ],
     "SSP Planner": [
-      "EDIT",
-      "SEARCH",
-      "SAVE",
-      "USER_CHECK"
-    ],
-    "SSP Viewer": [
       "USER_CHECK",
+      "EDIT",
       "SAVE",
       "SEARCH"
+    ],
+    "SSP Viewer": [
+      "SEARCH",
+      "USER_CHECK",
+      "SAVE"
     ]
   },
   "menuBtnCodes": [
     "EDIT",
-    "SEARCH",
     "SAVE",
-    "USER_CHECK"
+    "USER_CHECK",
+    "SEARCH"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

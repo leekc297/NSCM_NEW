@@ -29,7 +29,7 @@ export const VERSION_AXIS = 'MF' as const;
 /** 버전 선택 상한 — 초과 시 MSG00255 (AS-IS btnVersion_Click L1657 + 팝업 SetItem 이중) */
 export const VERSION_MAX_SELECT = 2;
 
-/** 기간 상한(년) — AS-IS FindData L688 `AddYears(2)` (⚠ MSG00164 문구는 '3년' — 로직 파리티 우선, 제약 A-03) */
+/** 기간 상한(년) — AS-IS FindData L688 `AddYears(2)`. 문구는 2년 MSG01505 (2026-11-24, 종전 '3년' MSG00164) */
 export const PERIOD_LIMIT_YEARS = 2;
 
 /**
@@ -49,7 +49,7 @@ export const QTY_DIVISOR_OPTIONS = [
 export const MSG = {
   DIVISION_REQUIRED: 'MSG00097', // Division 을 선택하세요. (A-01)
   PERIOD_INVALID: 'MSG00108', // 조회 기간이 잘못되었습니다 (시작일 > 종료일). (A-02)
-  PERIOD_LIMIT: 'MSG00164', // 기간 상한 초과 — 종료일 자동 보정 (A-03)
+  PERIOD_LIMIT: 'MSG01505', // 조회 기간은 2년 이내로 입력해주세요. — 종료일 자동 보정 (A-03, 2026-11-24 종전 MSG00164 '3년')
   VERSION_MAX: 'MSG00255', // 버전은 최대 2개까지 선택할 수 있습니다. (P-02/P-03)
 } as const;
 

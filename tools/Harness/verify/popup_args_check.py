@@ -282,6 +282,36 @@ def host_label(srcs, usage):
     return ''
 
 
+def sem_prefetch(acts):
+    """2026-11-25 사용자 지시 'VM 의 AS-IS 파서에도 의미 분석 연결': 팝업 호출·팝업 속성 대입에 쓰인 이름 하나짜리 인자를
+    한 번에 asis_sem.values 로 조회 → {(파일, 줄, 이름): 값}. 끔(ASIS_SEM_OFF=1)·실패 = 빈 결과(종전 정규식 판정)"""
+    if os.environ.get('ASIS_SEM_OFF') == '1':
+        return {}
+    try:
+        import asis_sem
+    except Exception:
+        return {}
+    qs = set()
+    for a in acts:
+        if a.get('kind') not in ('POPUP', 'UI_PROP', 'VALUE_SET', 'DATA_OP') or not a.get('value') or not a.get('file'):
+            continue
+        t = a['value'].strip()
+        if t.startswith('(') and t.endswith(')'):
+            t = t[1:-1]
+        for x in split_top(t):
+            x = x.strip()
+            if re.fullmatch(r'[A-Za-z_]\w*', x) and x not in ('true', 'false', 'null', 'this'):
+                qs.add((a['file'], int(a['line'] or 0), x))
+    if not qs:
+        return {}
+    try:
+        got = asis_sem.values(sorted(qs))
+    except Exception as e:
+        print(f'[WARN] popup_args_check: 의미 분석 조회 실패({type(e).__name__}: {str(e)[:100]})')
+        return {}
+    return {k: v for k, v in got.items() if v}
+
+
 def asis_popups(aid):
     """AS-IS 팝업 호출 → [{cls_method, file, line, popup, var, args:[(param, arg, source_kind, source, concept)], result_concepts}]"""
     acts = read_csv(P('Doc', 'asisfacts', 'screens', aid, 'actions.csv'))
@@ -292,6 +322,7 @@ def asis_popups(aid):
     for a in acts:
         by_m.setdefault((a['class'], a['method']), []).append(a)
     src_cache, out = {}, []
+    sem = sem_prefetch(acts)
 
     def src_lines(rel):
         if rel not in src_cache:
@@ -326,7 +357,7 @@ def asis_popups(aid):
             if lm and lm.group(1) not in var_cls and any(re.match(r'^' + re.escape(lm.group(1)) + r'\.(ShowDialog|Show|Form_Load)$', p['target']) for p in pops):
                 var_cls[lm.group(1)] = lm.group(3)
 
-        def resolve(arg, line):
+        def resolve(arg, line, file=''):
             arg = arg.strip()
             if re.fullmatch(r'"[^"]*"|true|false|null|-?\d+(\.\d+)?|string\.Empty|String\.Empty|CAppSetting\.\w+|"?"?', arg):
                 return 'LITERAL', arg, ''
@@ -342,6 +373,16 @@ def asis_popups(aid):
                         cand = dm.group(1)
                     elif t == arg and lo.get('value'):
                         cand = lo['value']
+                if cand is None:
+                    # 2026-11-25 의미 분석: 같은 메서드 지역 대입에 없으면(필드·매개변수·다른 메서드 대입) Roslyn 의미 모델 값으로 원천 식을 찾는다
+                    sv = sem.get((file, line, arg))
+                    if sv and sv['status'] == 'OK' and len(sv['values']) == 1:
+                        v = sv['values'][0]
+                        if '{' not in v:
+                            return 'LITERAL', '"' + v + '"', ''
+                        vm_ = re.fullmatch(r'\{\?(.+)\}', v)
+                        if vm_ and '{' not in vm_.group(1):
+                            cand = vm_.group(1)
                 if cand is None:
                     return 'VAR', arg, concept(arg)
                 src_expr = cand
@@ -383,12 +424,12 @@ def asis_popups(aid):
             pnames = popup_params(pcls, how, len(args))
             items = []
             for k, arg in enumerate(args):
-                kind, srcd, cpt = resolve(arg, int(a['line']))
+                kind, srcd, cpt = resolve(arg, int(a['line']), a['file'])
                 pname = how[1:] if how.startswith('=') else (pnames[k] if k < len(pnames) else f"#{k + 1}")
                 cands = {c for c in (cpt, concept(arg), concept(pname)) if c}
                 items.append({'param': pname, 'arg': arg, 'kind': kind, 'source': srcd, 'concept': cpt or concept(pname), 'cands': cands})
             out.append({'cls': cls, 'method': meth, 'file': os.path.basename(a['file']), 'line': a['line'], 'popup': pcls, 'how': how,
-                        'items': items, 'results': results})
+                        'items': items, 'results': results, 'src': '\n'.join(src_lines(a['file']))})
     return out
 
 
@@ -480,6 +521,103 @@ def state_literal_trace(srcs, u, it, lit, rel):
     return None
 
 
+def asis_str_value(expr, src, depth=0):
+    """2026-11-25 T620(SCP0005 V-a6bb7234 ExcelUploadForm2 인자 #2 this.spdMain.ActiveSheet.SheetName):
+    AS-IS 인자 식 → 실행 때 문자열 값. (값, [근거 줄]) · 못 풀면 None
+      "리터럴" · <상수>(static/const string 선언 값이 하나) · <그리드>.ActiveSheet.SheetName(그 그리드 AddSheet(그리드, 시트명, …) 시트명이 하나 ·
+      SheetName 재대입 없음 — 프레임워크 BaseForm.InitSpread 가 Designer 시트를 지우고 AddSheet 시트만 남김)"""
+    e = (expr or '').strip()
+    if depth > 3 or not e:
+        return None
+    s = strip_comments(src)
+    m = re.fullmatch(r'"([^"]*)"', e)
+    if m:
+        return m.group(1), []
+    m = re.fullmatch(r'(?:this\.)?(\w+)\.ActiveSheet\.SheetName', e)
+    if m:
+        g = re.escape(m.group(1))
+        if re.search(r'\b' + g + r'\b[\w.\[\]()]*\.SheetName\s*=(?!=)', s):
+            return None
+        names = {}
+        for am in re.finditer(r'\bAddSheet\(\s*(?:this\.)?' + g + r'\s*,\s*([^,()]+?)\s*,', s):
+            names.setdefault(am.group(1).strip(), line_of(s, am.start()))
+        if len(names) != 1:
+            return None
+        nm, ln = next(iter(names.items()))
+        r = asis_str_value(nm, src, depth + 1)
+        return (r[0], [f"AddSheet({m.group(1)}, {nm}) :{ln}"] + r[1]) if r else None
+    m = re.fullmatch(r'(?:this\.)?(?:\w+\.)*(\w+)', e)
+    if m:
+        defs = {(dm.group(1), line_of(s, dm.start())) for dm in re.finditer(
+            r'\b(?:const\s+|static\s+(?:readonly\s+)?)string\s+' + re.escape(m.group(1)) + r'\s*=\s*"([^"]*)"\s*;', s)}
+        if len({v for v, _ in defs}) == 1:
+            v, ln = sorted(defs, key=lambda x: x[1])[0]
+            return v, [f"{e} = \"{v}\" :{ln}"]
+    return None
+
+
+REQ_RX = re.compile(r'\b\w*(?:[Cc]lient|[Aa]pi|axios|http)\s*\.\s*(?:get|post|put|patch|delete|request)\s*(?:<[\w<>,\s\[\]|.]*>)?\s*\(|\bfetch\s*\(')
+
+
+def tobe_value_trace(srcs, u, value, rel):
+    """T620: AS-IS 인자 값이 TO-BE 모달 사용처 props 에 없을 때 — 모달 정의 파일(없으면 사용처에 넘긴 콜백)의 요청 호출(apiClient.post( … ) 등) 인자에
+    그 값 리터럴 또는 그 값을 담은 상수(const N = 'V' · 객체 상수 N[키]/N.키 = 'V')가 쓰이면 (요청 위치, 상수 위치) · 없으면 None"""
+    if not value or len(value) < 3:
+        return None
+    mf, ms = modal_source(srcs, u['modal'])
+    pool = dict(srcs)
+    if mf:
+        pool[mf] = strip_comments(ms)
+    lit = r"(['\"`])" + re.escape(value) + r"\1"
+    uses = []  # (사용 정규식, 상수 위치)
+    for f, s in pool.items():
+        for lm in re.finditer(lit, s):
+            cm = None
+            for c in re.finditer(r'\bconst\s+([A-Za-z_]\w*)\b[^=;]*?=\s*', s[:lm.start()]):
+                cm = c
+            if not cm:
+                continue
+            loc = f"{rel(f)}:{line_of(s, lm.start())}"
+            mid_ = s[cm.end():lm.start()]
+            if not mid_.strip():
+                uses.append((r'\b' + re.escape(cm.group(1)) + r'\b(?!\s*[\[.])', loc)); continue
+            ob = cm.end() + len(mid_) - len(mid_.lstrip())
+            if s[ob:ob + 1] != '{' or balanced(s, ob) < lm.end():
+                continue
+            km = re.search(r'(?:^|[,{])\s*(\[\s*([\w.]+)\s*\]|[\'"]?(\w+)[\'"]?)\s*:\s*$', s[ob:lm.start()])
+            if not km:
+                continue
+            key = km.group(2) or km.group(3)
+            k_rx = re.escape(key)
+            n_rx = re.escape(cm.group(1))
+            uses.append((r'\b' + n_rx + r'\s*(?:\[\s*' + k_rx + r'\s*\]|\?*\.\s*' + k_rx + r'\b)', loc))
+    if not uses:
+        return None
+    areas = []
+    if mf:
+        areas.append((mf, pool[mf], 0, len(pool[mf])))
+    us = srcs.get(u['file'], '')
+    if us:
+        for k, v in u.get('attrs', {}).items():
+            if re.match(r'^on[A-Z]', k) and v:
+                st = us.find(v, u.get('pos', 0))
+                if st >= 0:
+                    areas.append((u['file'], us, st, st + len(v)))
+    for f, s, a0, a1 in areas:
+        for rm in REQ_RX.finditer(s, a0, a1):
+            en = balanced(s, rm.end() - 1, '(', ')')
+            if en < 0:
+                continue
+            body = s[rm.end():en - 1]
+            if re.search(lit, body):
+                return f"{rel(f)}:{line_of(s, rm.start())}", f"리터럴 '{value}'"
+            for rx, loc in uses:
+                um = re.search(rx, body)
+                if um:
+                    return f"{rel(f)}:{line_of(s, rm.start())}", f"{um.group(0)} = '{value}' ({loc})"
+    return None
+
+
 def selftest():
     cases = [('같음', judge_literal('_mdmActive_Sw', '"Y"', ('mdmActiveSw', "'Y'"))[0], 'PASS'), ('다름', judge_literal('_mdmActive_Sw', '"Y"', ('mdmActiveSw', "'N'"))[0], 'FAIL'), ('미전달', judge_literal('_mdmActive_Sw', '"Y"', None)[0], 'ERROR'), ('변수 전달', judge_literal('_mdmActive_Sw', '"Y"', ('a', 'state.x'))[0], 'NA'), ('플래그 아님', judge_literal('sProgramID', '"DMF0003"', None)[0], 'NA'), ('빈 값', judge_literal('sw', '""', None)[0], 'NA')]
     # T489 상태 사슬: useState 상태 → 여는 처리 setS('I') → mode={S ?? 'I'} → 모달 actionFlag: mode
@@ -492,6 +630,17 @@ def selftest():
               ('상태 사슬 값 없음', (state_literal_trace({'page.tsx': page_, 'BM.tsx': modal_}, u_, it_, 'X', rel_) or ('없음',))[0], 'FAIL'),
               ('모달이 같은 개념 키로 안 씀', (state_literal_trace({'page.tsx': page_, 'BM.tsx': modal_.replace('actionFlag', 'other')}, u_, it_, 'D', rel_) or ('없음',))[0], '없음'),
               ('open 이 상태 참조 안 함', (state_literal_trace({'page.tsx': page_, 'BM.tsx': modal_}, dict(u_, open='flag'), it_, 'D', rel_) or ('없음',))[0], '없음')]
+    # T620 AS-IS 인자 식 → 실행 때 값 · TO-BE 모달 요청 인자 상수 대조
+    cs_ = 'struct S { public static string shtA = "Sheet A"; }\nvoid C() { this.AddSheet(spdX, S.shtA, S.shtA, 2, 1, 30); }\n'
+    cases += [('시트 이름 풀이', (asis_str_value('this.spdX.ActiveSheet.SheetName', cs_) or ('없음',))[0], 'Sheet A'),
+              ('시트 2개면 못 풂', (asis_str_value('this.spdX.ActiveSheet.SheetName', cs_ + 'void D() { AddSheet(spdX, "B", "B", 1, 1); }') or ('없음',))[0], '없음'),
+              ('시트 이름 재대입이면 못 풂', (asis_str_value('spdX.ActiveSheet.SheetName', cs_ + 'spdX.ActiveSheet.SheetName = x;') or ('없음',))[0], '없음')]
+    con_ = "export enum SH { A = 'a', B = 'b' }\nexport const SN: Record<SH, string> = {\n  [SH.A]: 'Sheet A',\n  [SH.B]: 'Sheet B',\n};\n"
+    md_ = "export const UM = () => { const go = () => apiClient.post<Record<string, unknown>>(`/${ID}/${SN[SH.A]}/UPLOAD/excel-upload`, fd); };\n"
+    uu_ = {'modal': 'UM', 'file': 'page.tsx', 'pos': 0, 'attrs': {}}
+    cases += [('모달 요청 상수 같은 값', 'PASS' if tobe_value_trace({'c.ts': con_, 'UM.tsx': md_}, uu_, 'Sheet A', rel_) else '없음', 'PASS'),
+              ('모달 요청 상수 다른 키', 'PASS' if tobe_value_trace({'c.ts': con_, 'UM.tsx': md_.replace('SH.A', 'SH.B')}, uu_, 'Sheet A', rel_) else '없음', '없음'),
+              ('모달 요청에 값 없음', 'PASS' if tobe_value_trace({'c.ts': con_, 'UM.tsx': md_}, uu_, 'Sheet C', rel_) else '없음', '없음')]
     bad = 0
     for nm, got, want in cases:
         k = got == want
@@ -581,6 +730,13 @@ def main():
                 continue
             hit = next((tparams[c] for c in it['cands'] if c in tparams), None)
             if not hit:
+                # T620: 사용처 props 에 없으면 AS-IS 인자 식을 실행 때 값으로 풀고(시트 이름·문자열 상수) 모달 요청 인자에서 같은 값을 찾는다 · 못 찾으면 종전 판정
+                av_ = asis_str_value(it['arg'], pc.get('src', ''))
+                tv_ = tobe_value_trace(srcs, u, av_[0], rel) if av_ else None
+                if tv_:
+                    rows.append(base(**common, verdict='PASS', tobe_key='(모달 요청 인자)', tobe_value=tv_[1][:120],
+                                     note=f"AS-IS {it['arg']} = '{av_[0]}'({pc['file']} {' · '.join(av_[1])}) → TO-BE {u['modal']} 요청 {tv_[0]} 에 {tv_[1]} 전달 (같은 값 — 모달 내부 상수, T620)"))
+                    continue
                 # 2026-11-20 T406(SSP0014 T-3a730d4a · 결정 D7): TO-BE 모달이 이 화면 폴더 밖 공용 모달이면 '모달이 받는 인자만 연동'은 확정 TO-BE 룰 CR-096
                 #   (AS-IS SCM_SITE_ID 필터 등 그 밖 인자 미전달은 오류 아님 · 사용자 결정 2026-11-06). 화면 폴더 안 모달은 종전대로 사람 확인
                 shared_ = not any(re.search(r'\b(?:function|const|class)\s+' + re.escape(u['modal']) + r'\b', s) for s in srcs.values())
@@ -611,7 +767,7 @@ def main():
         for k, v, prop in u['params']:
             if k == '(spread)':
                 rows.append(base(side='TOBE', pair=pid, tobe_ref=tref, tobe_modal=u['modal'], tobe_key=k, tobe_value=v[:120], host_label=hl,
-                                 verdict='NA', note='펼침 인자(...) — 기계 해석 불가, 사람 확인(W7)'))
+                                 verdict='ERROR', note='[미검증] 펼침 인자(...) — 기계 해석 불가, 사람 확인(W7)'))  # 2026-11-26 T660
                 continue
             if k in asis_fail:
                 continue  # ASIS 축 FAIL 과 같은 인자 — 1건으로

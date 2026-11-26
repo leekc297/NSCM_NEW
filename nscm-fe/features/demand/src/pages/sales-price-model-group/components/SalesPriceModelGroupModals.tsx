@@ -42,6 +42,9 @@ interface Props {
   originalStaticColumns: RawFlexGridColumnConfig[];
   onColumnSettingSaved: () => void;
   onBatchSaved: () => void;
+  // Exchange Rate 팝업 User Define 저장 권한(편집 사업부 && exchange 시트 SAVE)과 저장 후 닫을 때의 재조회.
+  exchangeCanSave: boolean;
+  onExchangeSaved: () => void;
 }
 
 // ColumnLayoutModal 행 — 표시 여부는 그리드와 같은 visible 기준.
@@ -78,6 +81,8 @@ export const SalesPriceModelGroupModals = ({
   originalStaticColumns,
   onColumnSettingSaved,
   onBatchSaved,
+  exchangeCanSave,
+  onExchangeSaved,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -169,7 +174,7 @@ export const SalesPriceModelGroupModals = ({
         open={itemCell.open}
         modalClose={itemCell.close}
         setSelectedValue={(itemIds, _name, _class, _nick, _type, deptId) =>
-          // 고른 Model 의 Model Group(앞 12자리)과 Team(SCM_MST_SITE_ITEM.DEPT_ID)을 넣는다(설계서 R45 · I50).
+          // 고른 Model 의 Model Group(첫 '-' 앞, 없으면 앞 12자리)과 Team(SCM_MST_SITE_ITEM.DEPT_ID)을 넣는다(설계서 R45 · I50).
           applyToBundle({ MDL_GR: modelGroupsOf(itemIds)[0] ?? '', DEPT_ID: deptId ?? '' })
         }
         preSearchParams={{ ...cellPreSearch, itemId: '' } as never}
@@ -190,6 +195,8 @@ export const SalesPriceModelGroupModals = ({
         modalClose={exchangeRate.close}
         divisionId={divisionId}
         defaultPeriod={exchangePeriod}
+        canSave={exchangeCanSave}
+        onSavedClose={onExchangeSaved}
       />
     </>
   );

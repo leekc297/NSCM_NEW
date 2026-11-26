@@ -5,5 +5,16 @@
  "orch-selfcheck.chainBusy | Invalid time value": "2026-11-20T13:56:17+09:00",
  "orch-watch.lockStopClean | 중지 뒤 잠금 정리: Doc/eNe/_run.admit.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)": "2026-11-20T14:13:17+09:00",
  "orch-watch.lockStopClean | 중지 뒤 잠금 정리: Doc/eNe/_run.dbwin.<ID>.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)": "2026-11-20T14:13:17+09:00",
- "orch-watch.lockStopClean | 중지 뒤 잠금 정리: Doc/eNe/_run.verify.<ID>.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)": "2026-11-20T14:13:17+09:00"
+ "orch-watch.lockStopClean | 중지 뒤 잠금 정리: Doc/eNe/_run.verify.<ID>.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)": "2026-11-20T14:13:17+09:00",
+ "orch-improve.restore | N_VISION_N probe.ts AI 편집 N건만 되돌림(반영 전과 같음) / pagereg.ts AI 편집 N건만 되돌림(반영 전과 같음)": "2026-11-20T16:21:36+09:00",
+ "orch-improve.restore | N_SELF orch-usercheck.js AI 편집 N건만 되돌림(반영 전과 같음) / user_checks.json AI 편집 N건만 되돌림(반영 전과 같음) / t_orch_usercheck.js AI 편집 N건만 되돌림(반영 전과 같음)": "2026-11-20T16:38:06+09:00",
+ "orch-improve.restore | N_SELF orch-history.js AI 편집 N건만 되돌림(반영 전과 같음) / t_orch_history.js AI 편집 N건만 되돌림(반영 전과 같음)": "2026-11-20T18:23:55+09:00",
+ "orch-improve.restore | N_SELF_N orch-improve.js AI 편집 N건만 되돌림(반영 전과 같음) / t_orch_improve.js AI 편집 N건만 되돌림(반영 전과 같음)": "2026-11-20T18:34:32+09:00",
+ "orch-history.writeMd | UNKNOWN: unknown error, open '<path>'": "2026-11-23T15:00:12+09:00",
+ "job-runner.listener | p is not defined": "2026-11-23T18:06:42+09:00",
+ "orch-improve.changelogSelf | UNKNOWN: unknown error, open '<path>'": "2026-11-23T18:54:58+09:00",
+ "orch-improve.restoreSkipped | N_SELF 되돌리지 않은 파일 tools/VibeManager/orch-selfcheck.js, tools/VibeManager/orch-improve.js(반영 뒤 다른 쪽이 고침)": "2026-11-23T21:51:30+09:00",
+ "orch-improve.restore | N_SELF orch-selfcheck.js AI 편집만 되돌리지 못함(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM/tools/VibeManager; grep -n -E \"styleBase|gate\\(|restoreTargets\\(cur\\)|selfPre|module.exports|apply-s). 반영 뒤 다른 쪽이 고쳐 사본으로": "2026-11-23T21:51:30+09:00",
+ "orch-improve.writeJson | UNKNOWN: unknown error, open '<path>'": "2026-11-25T01:24:06+09:00",
+ "orch-watch.writeJson | UNKNOWN: unknown error, open '<path>'": "2026-11-25T02:30:54+09:00"
 }

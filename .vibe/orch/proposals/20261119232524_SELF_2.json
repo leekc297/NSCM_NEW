@@ -47,6 +47,11 @@
         "tools/Harness/gate_baseline.tsv",
         "tools/VibeManager/extension.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T00:29:31+09:00"
     }
   ],
   "plain": {
@@ -82,5 +87,7 @@
     "verify_result": "python tools/Docs/doc_style.py tools/VibeManager/extension.js --out .vibe/orch/selfcheck/doc_style --quiet (2026-11-20 00:03:02 실행, exit 1). 출력 '문장 145 | 위반 32 | 수식어 1 번역투 1 기호 29 추상어 1'. extension.js.style.csv 의 L50, L51, L227, L229, L230, L261, L272, L296, L321, L324, L333, L595, L616, L713, L720, L771 위치에 줄표 행과 수식어 행 0건. L305 줄표 행도 0건. L328 과 L331 에는 ★, ❌ 기호 행만 남음(고치지 않는 상태 기호).",
     "note": "줄표 18곳을 마침표나 쉼표로 바꾸고 '(모두 PASS)' 를 '(PASS)' 로 바꿈. 남은 32행 = 주석 구간(L348, L382, L416, L438, L507, L555), 화살표(L322, L323, L329), 정규식 속 기호(L457, L458, L493), ★/❌ 기호(L328, L331), 대시보드 HTML 문구 L628 의 '모두' 1건과 줄표 1건, L738 추상어 1건. L628 과 L738 은 이번 근거 목록에 없어서 고치지 않음. 작업 모드와 저장소 hook 차단 없음."
   },
-  "snap": "prop_20261119232524_SELF_2"
+  "snap": "prop_20261119232524_SELF_2",
+  "effectiveMs": 1795102171012,
+  "effectiveAt": "2026-11-20T00:29:31+09:00"
 }

@@ -1,0 +1,173 @@
+{
+  "id": "20261124031642_SELF_4",
+  "at": "2026-11-24T03:16:42+09:00",
+  "ms": 1795457802567,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/make_verify_docs.py|checklist검사규칙설명과n행판정설명문구에대조표가나옴",
+  "title": "사용자 지시 R100 같은 문제: tools/Harness/verify/make_verify_docs.py:322 CheckList 검사 규칙 설명과 554~556행 판정 설명 문구에 '대조표' 가 나옴",
+  "evidence": "규칙 R100 \"사용자에게 주는 산출물(시험 Excel, CheckList)의 시트명, 열 이름은 일반 사용자가 아는 업무 용어(GAP 등)로 쓰고 내부 용어(대조표)를 쓰지 않음\" (원래 지시 2026-11-18 11:36 \"그리고 테스트 SHEET 생성 시 대조표 라는 단어가 일반 사용자들에게는 익숙하지 않아서, GAP분석 대조표의 의미가 AS-IS 와 TO-BE 에 대한 대조라는 의미이면 GAP SHEET 로 대체하고, UI 에 대한 전체 목록이라는 의미이면 일반 사용자들에게 익숙한 다른 용어로 변경했으\") · tools/Harness/verify/make_verify_docs.py:322 'X-NOTIMPL': '대조표에 미구현으로 적힌 동작을 화면에서 재현', ... 'X-LOC': '대조표의 구현 위치 기록', 'X-REASON': '대조표 제외·해당없음 사유 기록',",
+  "targets": [
+    "tools/Harness/verify/make_verify_docs.py"
+  ],
+  "before_after": "사용자에게 보이는 문자열의 '대조표' 를 'GAP' 으로 바꿈. 213행, 347행 정규식은 원장 근거 문자열을 찾는 용도라 그대로 둠",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/make_verify_docs.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T20:57:37+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T21:02:01+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1413, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self2057"
+    },
+    {
+      "at": "2026-11-25T21:02:06+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T21:15:22+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T21:15:22+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 2026-11-25 21:02:33(run_all RESULT at 기준) ALL OK 87/87 PASS 1422 FAIL 0 → 반영 뒤 2026-11-25 21:06:48 시작 ALL OK 87/87 PASS 1422 FAIL 0. 추가 확인 python ast.parse = PY_SYNTAX_OK · 변경 69개 파일 · 대상 목록 밖 변경 68개: .claude/hooks/README.md, CLAUDE.md, Doc/_rules_consolidation/RULESET_MASTER.md, Doc/_rules_v2/00_INDEX.md, Doc/_rules_v2/_categories/00_CATEGORY_MAP.md, Doc/_rules_v2/_categories/12_process_ops.md",
+      "log": ".vibe\\logs\\2026-11-25T21-02-06_claude_orch.log",
+      "sec": 539,
+      "costUsd": 0.6858861999999999,
+      "files": [
+        ".claude/hooks/README.md",
+        "CLAUDE.md",
+        "Doc/_rules_consolidation/RULESET_MASTER.md",
+        "Doc/_rules_v2/00_INDEX.md",
+        "Doc/_rules_v2/_categories/00_CATEGORY_MAP.md",
+        "Doc/_rules_v2/_categories/12_process_ops.md",
+        "Doc/e2e/results/SCP0005/_summary.csv",
+        "Doc/e2e/results/SCP0005/_summary.md",
+        "Doc/e2e/results/SCP0005/_test_timing.jsonl",
+        "Doc/e2e/results/SCP0005/artifacts/SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium/error-context.md",
+        "Doc/e2e/results/SCP0005/artifacts/SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium/test-failed-1.png",
+        "Doc/e2e/results/SCP0005/html/index.html",
+        "Doc/e2e/results/SCP0005/results.json",
+        "Doc/e2e/results/SCP0005/shots/SCP0005_common.png",
+        "Doc/e2e/results/SCP0005/shots/SCP0005_cond.png",
+        "Doc/e2e/results/SCP0005/shots/SCP0005_open.png",
+        "Doc/e2e/results/SCP0005/shots/SCP0005_searched.png",
+        "Doc/e2e/results/_summary.csv",
+        "Doc/e2e/results/_summary.md",
+        "Doc/e2e/specs/SCP0005.auth.spec.ts",
+        "Doc/e2e/specs/SCP0005.authcrud.spec.ts",
+        "Doc/e2e/specs/SCP0005.crud.spec.ts",
+        "Doc/e2e/specs/SCP0005.plan.json",
+        "Doc/e2e/specs/SCP0005.smoke.spec.ts",
+        "Doc/tobefacts/db/_export_log.md",
+        "Doc/tobefacts/db/btn_auth.csv",
+        "Doc/tobefacts/db/user_group_menu.csv",
+        "Doc/tobefacts/db/user_group_user.csv",
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0005/open_check.json",
+        "Doc/verify/SCP0005/opinion_intake.json",
+        "Doc/verify/SCP0005/prereq.json",
+        "Doc/verify/SCP0005/run_mode.json",
+        "Doc/verify/SCP0005/screen_sync.json",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/E2E/accounts.json",
+        "tools/E2E/users.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/make_verify_docs.py",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/rules/30_HOOK_DISPOSITION.csv",
+        "tools/VibeManager/user_rules.json",
+        "Doc/db/probe_20261125_210801.md",
+        "Doc/e2e/_run.acct.36836.json",
+        "Doc/e2e/_run.acct.39976.json",
+        "Doc/e2e/_run.acct.46300.json",
+        "Doc/e2e/_run.dbwin.SCP0005.lock",
+        "Doc/e2e/_run.e2e.SCP0005.lock",
+        "Doc/e2e/results/SCP0005/video/20261125_210810_47836_중단/.playwright-artifacts-1_page@09d0f68de953869426b7a35262178bdc.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_210810_47836_중단/SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_210935_47836/SCP0005.smoke-SCP0005-Dist-ab368--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_210935_47836/SCP0005.smoke-SCP0005-Dist-ddf13-·Columns·Search-Area·Manual-chromium.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_210935_47836/SCP0005.smoke-SCP0005-Dist-fe05f-기준표-순서-·-Checkbox-Radio-디자인-chromium.webm",
+        "Doc/verify/SCP0005/_cl_resume.json",
+        "Doc/verify/SCP0005/_resume/pre/_manifest.json",
+        "Doc/verify/SCP0005/_resume/pre/f/db_orphan_sessions.csv",
+        "Doc/verify/SCP0005/_resume/pre/f/open_check.json",
+        "Doc/verify/SCP0005/_resume/pre/f/opinion_intake.csv",
+        "Doc/verify/SCP0005/_resume/pre/f/opinion_intake.json",
+        "Doc/verify/SCP0005/_resume/pre/f/prereq.json",
+        "Doc/verify/SCP0005/_resume/pre/f/run_mode.json",
+        "Doc/verify/SCP0005/_resume/pre/f/screen_sync.json",
+        "Doc/verify/SCP0005/_resume/pre/f/status.html",
+        "Doc/verify/SCP0005/_resume/pre/f/status.json",
+        "Doc/verify/SCP0005/_resume/progress.json",
+        "Doc/verify/SCP0005/_resume/refuse.json",
+        "Doc/verify/SCP0005/calls/_open_화면_열기_1회_0.json",
+        "Doc/verify/SCP0005/e2e/open/video/20261125_210758_35884/_open-진입-확인-SCP0005-open-화면-열기-1회-chromium.webm"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "사용자에게 주는 산출물(시험 Excel, CheckList)의 시트명, 열 이름은 일반 사용자가 아는 업무 용어(GAP 등)로 쓰고 내부 용어(대조표)를 쓰지 않음 규칙을 tools/Harness/verify/make_verify_docs.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R100|tools/Harness/verify/make_verify_docs.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795607857047,
+  "autoFp": "e33517afa4",
+  "applyStartMs": 1795608126218,
+  "verifyJudge": {
+    "at": "2026-11-25T21:11:14+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self2057",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795608922253,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 87/87 PASS 1422 FAIL 0 236.5s' → 반영 뒤 'ALL OK 파일 87/87 PASS 1422 FAIL 0 244.3s'. 고친 파일은 웹뷰 파일이 아님(.py). t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/make_verify_docs.py"
+    ],
+    "verify_result": "반영 전 2026-11-25 21:02:33(run_all RESULT at 기준) ALL OK 87/87 PASS 1422 FAIL 0 → 반영 뒤 2026-11-25 21:06:48 시작 ALL OK 87/87 PASS 1422 FAIL 0. 추가 확인 python ast.parse = PY_SYNTAX_OK",
+    "note": "사용자에게 보이는 문자열 7곳의 '대조표' → 'GAP'(338행 X-NOTIMPL, X-LOC, X-REASON 설명, 360행 FAIL_MEAN X-NOTIMPL, 565, 570, 572, 575, 576행 판정 설명). 개선안의 322행, 554~556행은 지금 파일의 338행, 565~576행임. 남긴 곳 10곳: 정규식과 startswith 비교 229, 363, 557, 564, 953행(개선안의 213행, 347행이 지금 229행, 363행, 원장 근거 문자열 비교용)과 주석, docstring 324, 437, 810, 918, 968행."
+  },
+  "snap": "prop_20261124031642_SELF_4"
+}

@@ -6,9 +6,9 @@
   "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
   "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
   "status": 200,
-  "rows": 8613,
-  "dur": 503,
-  "at": "2026-11-20T00:06:52.587Z",
+  "rows": 8614,
+  "dur": 332,
+  "at": "2026-11-24T18:08:08.172Z",
   "user": "minyonglee1",
   "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
  },
@@ -19,9 +19,9 @@
   "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
   "status": 200,
-  "rows": 7672,
-  "dur": 687,
-  "at": "2026-11-20T00:06:59.481Z",
+  "rows": 7711,
+  "dur": 532,
+  "at": "2026-11-24T18:08:15.869Z",
   "user": "minyonglee1",
   "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
  },
@@ -32,9 +32,9 @@
   "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"82\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
   "status": 200,
-  "rows": 1763,
-  "dur": 188,
-  "at": "2026-11-20T00:07:07.082Z",
+  "rows": 1793,
+  "dur": 248,
+  "at": "2026-11-24T18:08:24.725Z",
   "user": "minyonglee1",
   "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
  }

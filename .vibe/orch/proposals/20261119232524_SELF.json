@@ -50,6 +50,11 @@
         "tools/VibeManager/workbench.js",
         "tools/VibeManager/test/t_webview_syntax.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T00:29:31+09:00"
     }
   ],
   "plain": {
@@ -87,5 +92,7 @@
     "verify_result": "node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 실행, 2026-11-19 23:58 직전. workbench(ko) 스크립트 1개 구문 PASS, 같은 이름 함수 선언 없음 PASS. workbench(en) 같은 2항목 PASS. 전체 18항목 PASS, FAIL 0, ALL PASS. 시각 출처 date 2026-11-19 23:58:02",
     "note": "workbench.js 는 module.exports 다음 줄에 _html 1줄만 Edit 로 추가함. 시험의 모의 wb 는 { claudeSession: '' } 임. html 이 읽는 wb 필드가 claudeSession 1개이고, Proxy 모의 객체는 문자열 변환 오류(Cannot convert object to primitive value)로 FAIL 2건이 나서 바꿈. repairScope DB_ONLY 의 차단 범위는 nscm-fe, nscm-be 라 이번 수정과 무관함. hook 차단 없음. .bak, 설치 폴더, CHANGELOG.md 는 건드리지 않음."
   },
-  "snap": "prop_20261119232524_SELF"
+  "snap": "prop_20261119232524_SELF",
+  "effectiveMs": 1795102171012,
+  "effectiveAt": "2026-11-20T00:29:31+09:00"
 }

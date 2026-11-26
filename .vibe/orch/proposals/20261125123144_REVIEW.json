@@ -1,0 +1,43 @@
+{
+  "id": "20261125123144_REVIEW",
+  "at": "2026-11-25T12:31:44+09:00",
+  "ms": 1795577504187,
+  "source": "review",
+  "status": "applied",
+  "sig": "digest|stopcause|사용자 button",
+  "title": "작업 목록 화면을 Workbench 에서 중지한 실행을 집계에서 중지 단추로 셈",
+  "evidence": "집계 2026-11-25T12:27:57 CheckList 체인 stopped 22 중 other 9, button 2. events.jsonl:4401, 4408, 4417, 4424 chain.end 4줄(J20261125_005600 SCP0005, SCP0028, SSP0005, SSP0014, 11-25 03:19) stopBy '사용자'. 같은 runId 의 user.stop(events.jsonl:4397, 4404, 4413, 4420) by '사용자', why 'Workbench 창에서 중지'. 이 값은 workbench.js:625 mirrorStop 이 job-runner.stopScreen(scr, '사용자', 'Workbench 창에서 중지') 로 넘긴 것임. orch-improve.js:152 causeOf 가 '중지 단추', '작업 목록 중지'만 button 으로 보고 '사용자'는 other 로 보냄",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_run_end.js"
+  ],
+  "before_after": "causeOf: by '사용자'(why 'Workbench 창에서 중지') → other → button. t_run_end.js 에 by '사용자' user.stop 과 같은 runId chain.end 표본 1건, 기대 stoppedBy.button 1 추가",
+  "verify": "node -e \"const d=require('./tools/VibeManager/orch-improve').digest(7);const c=d.chains.find(x=>x.chain==='checklist');console.log(c.stoppedBy.other,c.stoppedBy.button)\" 반영 전 other 9, button 2(12:27:57 집계, 이 세션 직접 실행 미측정) → 반영 뒤 기대 other 5, button 6. node tools/VibeManager/test/t_run_end.js 시험 수 반영 전 미측정 → 반영 뒤 +1",
+  "rollback": "orch-improve.js causeOf 의 '사용자' 조건과 t_run_end.js 추가 표본을 지움",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "중지 주체 문자열 1종('사용자')이 분류표에 없어 생긴 집계 결함 1건. 같은 종류 재발 기록 없음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-D2",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:49:18+09:00",
+      "by": "S-D2",
+      "what": "반영 완료(세션 직접 보완) · orch-improve.js:148, 151 causeOf 에 by '사용자' + why 'Workbench 창에서 중지' = button, stopBy 끝 기록은 같은 runId user.stop 의 why 까지 봄 · test/t_run_end.js ⑪ 표본 ALL PASS 53건(반영 전 50건) 2026-11-26 15:48:44 · 실측 digest(7) checklist 체인 other 9 → 5, button 2 → 6(15:48:20)"
+    }
+  ],
+  "plain": {
+    "what": "Workbench 에서 작업 화면을 멈춘 횟수가 원인 불명이 아니라 중지 단추로 집계됨",
+    "risk": "다른 경로에서 '사용자'로 남긴 중지까지 중지 단추로 세어짐",
+    "undo": "집계 분류 한 줄을 지우면 예전 집계로 돌아감"
+  },
+  "kind": "fix",
+  "claimedBy": "S-D2",
+  "waitNote": "",
+  "appliedMs": 1795675758906
+}

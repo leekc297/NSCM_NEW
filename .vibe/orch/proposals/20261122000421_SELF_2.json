@@ -1,0 +1,100 @@
+{
+  "id": "20261122000421_SELF_2",
+  "at": "2026-11-22T00:04:21+09:00",
+  "ms": 1795273461679,
+  "source": "self",
+  "status": "applied",
+  "sig": "ladder applyfail skip superseded applied",
+  "title": "L3 반영 실패 집계에서 고친 안이 반영 완료된 대체 안 제외",
+  "evidence": "orch-ladder.js:47 applied 만 제외. 232523_SELF superseded → 001936_SELF_2 applied. 묶음 firstAt 2026-11-20T18:35:19, lastSeenAt 2026-11-22T00:00:31, status open · 진단 사다리 묶음 L3|applyfail|doc_style.py",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "변경 전: orch-ladder.js:47 status 'applied' 인 안만 건너뜀 → 변경 후: status 'superseded' 이고 supersededBy 를 따라간 마지막 안이 'applied' 이면 건너뜀. 실패 횟수 기준값(l3ApplyFailMin)과 7일 범위, ENV_FAIL 제외는 그대로",
+  "verify": "t_orch_ladder.js 에 재현 시험 추가: 232523_SELF(superseded, 실패 이력 2건, supersededBy 001936_SELF_2) + 001936_SELF_2(applied) 로 scan() 실행 → 'L3|applyfail|doc_style.py' 없음. supersededBy 안이 apply-failed 인 경우는 묶음 유지. node tools/VibeManager/test/run_all.js 통과. 반영 뒤 다음 ladder 갱신에서 .vibe/orch/ladder.json 의 이 묶음 status resolved",
+  "rollback": "tools/VibeManager/orch-ladder.js.bak_<날짜>_self<시각> 로 복원, 또는 개선안 탭 되돌리기 버튼",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "원인 해소(SELF_2 11-20 01:15 반영 완료) 뒤에도 같은 묶음이 2일 넘게 열려 L3 진단이 되풀이됨. applied 제외와 같은 취지의 집계 결함",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-22T00:21:34+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-22T00:24:59+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 884, FAIL 0), 정의 정합 통과 · 백업 태그 20261122_self0021"
+    },
+    {
+      "at": "2026-11-22T00:25:01+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-22T00:29:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 886, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-22T00:29:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-22 00:25:31 node tools/VibeManager/test/t_orch_ladder.js 실행. 'PASS L3 반영 실패: 대체된 안의 고친 안이 반영 완료 = 묶음 없음(doc_style.py)', 'PASS L3 반영 실패: 고친 안이 반영 실패 = 묶음 유지(sup_fail.js)', 기존 'PASS L3 반영 실패 2건(workbench.js)' 유지, 마지막 줄 'ALL PASS'(22건 PASS). scan 결과 키 목록에 L3|applyfail|doc_style.py 없음, L3|applyf · 변경 2개 파일",
+      "log": ".vibe\\logs\\2026-11-22T00-25-01_claude_orch.log",
+      "sec": 45,
+      "costUsd": 0.6538064000000001,
+      "files": [
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/test/t_orch_ladder.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:25+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795274494155,
+  "autoFp": "724133b83f",
+  "applyStartMs": 1795274701702,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 886, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261122_self0021",
+  "needsReload": true,
+  "appliedMs": 1795274951544,
+  "synced": [
+    "orch-ladder.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "2026-11-22 00:25:31 node tools/VibeManager/test/t_orch_ladder.js 실행. 'PASS L3 반영 실패: 대체된 안의 고친 안이 반영 완료 = 묶음 없음(doc_style.py)', 'PASS L3 반영 실패: 고친 안이 반영 실패 = 묶음 유지(sup_fail.js)', 기존 'PASS L3 반영 실패 2건(workbench.js)' 유지, 마지막 줄 'ALL PASS'(22건 PASS). scan 결과 키 목록에 L3|applyfail|doc_style.py 없음, L3|applyfail|sup_fail.js 있음. run_all.js 는 VMO 가 반영 뒤 실행. 수정 전 코드로 새 시험이 실패하는지 확인하는 명령은 권한 승인에 걸려 미실행.",
+    "note": "orch-ladder.js L3-4 반영 실패 집계에 doneByChain 추가: superseded 안은 supersededBy 를 끝까지 따라가 마지막 안이 applied 이면 건너뜀, 순환 연결은 seen 집합으로 멈춤. l3ApplyFailMin, 7일 범위, ENV_FAIL 제외는 그대로. .vibe/orch/ladder.json 의 L3|applyfail|doc_style.py 가 resolved 로 바뀌는지는 다음 사다리 갱신 뒤 확인 필요(미확인)."
+  },
+  "snap": "prop_20261122000421_SELF_2",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

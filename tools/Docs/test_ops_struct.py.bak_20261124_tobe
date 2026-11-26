@@ -1,0 +1,72 @@
+# -*- coding: utf-8 -*-
+"""ops_struct.py 규칙 시험(2026-11-24 운영자 매뉴얼 확정 구성). 실제 DB, PPT 생성 없음. 출력 줄 = PASS/FAIL, 끝 = ALL PASS/SOME FAIL"""
+import os, sys, re
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ops_struct as OS
+
+ok = True
+
+
+def chk(name, cond, extra=''):
+    global ok
+    print(('PASS' if cond else 'FAIL'), name, extra)
+    ok = ok and bool(cond)
+
+
+# 스케줄 해독
+d = OS.sched_info({'freq_type': '4', 'freq_interval': '1', 'freq_subday_type': '1', 'freq_subday_interval': '0', 'freq_recurrence_factor': '0', 'active_start_time': '60000', 'active_end_time': '235959', 'enabled': '1'})
+chk('매일 06:00 = 매일, 시각 1개, 6시 칸', d['days'] == '매일' and d['times'] == ['06:00'] and d['hours'] == [6], str(d))
+w = OS.sched_info({'freq_type': '8', 'freq_interval': '4', 'freq_subday_type': '1', 'freq_subday_interval': '0', 'freq_recurrence_factor': '1', 'active_start_time': '1500', 'active_end_time': '235959', 'enabled': '0'})
+chk('매주 화 00:15 = 화', w['days'] == '화' and w['times'] == ['00:15'] and not w['on'], str(w))
+h = OS.sched_info({'freq_type': '4', 'freq_interval': '1', 'freq_subday_type': '8', 'freq_subday_interval': '1', 'freq_recurrence_factor': '0', 'active_start_time': '0', 'active_end_time': '125959', 'enabled': '1'})
+chk('1시간마다 00~12시 = 반복 구간 13칸', h['hours'] == list(range(13)) and '1시간마다' in h['every'] and not h['times'], str(h))
+
+# 프로세스 기본 묶음
+chk('CUTOFF = 컷오프', OS.proc_of('0_P_5TH_NERP_CUTOFF_DM', []) == '컷오프')
+chk('MAIL = 메일과 SMS 알림', OS.proc_of('JOB.PR_DM_DNM_ESS_MAIL', ['PR_DM_DNM_ESS_MAIL_SEND']) == '메일과 SMS 알림')
+chk('XIF_ERP_..._R = 인터페이스 수신', OS.proc_of('JOB.X', ['PR_DM_XIF_ERP_NSD0001_R']) == '인터페이스 수신')
+chk('시스템 프로시저 sp_start_job = 실행 SP 아님', bool(OS.SYS_SP.match('SP_START_JOB')) and not OS.SYS_SP.match('PR_DM_X'))
+
+# SP 본문 읽기/쓰기(커서 이름 제외)
+OS.sp_body = lambda n: """CREATE PROCEDURE PR_T AS
+DECLARE CUR_LOOP CURSOR FOR SELECT A FROM DM_SRC_TABLE
+-- INSERT INTO DM_COMMENTED
+INSERT INTO DM_DST_TABLE (A) SELECT A FROM DM_SRC_TABLE S JOIN SCM_MST_SITE M ON 1 = 1
+UPDATE T SET A = 1 FROM DM_UPD_TABLE T
+FETCH NEXT FROM CUR_LOOP INTO @A
+DELETE FROM #TMP_X"""
+wr, rd = OS.sp_io('PR_T')
+chk('쓰기 = INSERT, UPDATE 대상(주석, 임시 테이블 제외)', 'DM_DST_TABLE' in wr and 'DM_COMMENTED' not in wr and not any(x.startswith('#') for x in wr), str(wr))
+chk('읽기 = FROM, JOIN(커서 이름 제외)', 'DM_SRC_TABLE' in rd and 'SCM_MST_SITE' in rd and 'CUR_LOOP' not in rd, str(rd))
+
+# 구성, 검사
+F = {'S': [{'id': 'DMF0004', 'name': 'Sales Site', 'top': 'Demand', 'group': 'Demand Master', 'writes': 'DM_MST_SALES_SITE', 'reads': ''}],
+     'J': [{'job': 'JOB.A', 'process': '컷오프', 'desc': '', 'schedule': '매일, 06:00', 'steps': '1', 'exec': 'PR_A', 'ext': '', 'enabled': '0'},
+           {'job': 'JOB.B', 'process': '계획 생성', 'desc': 'AS-IS 설명', 'schedule': '스케줄 없음', 'steps': '1', 'exec': 'PR_B', 'ext': 'ERP(SAP)', 'enabled': '0'}],
+     'T': [{'job': 'JOB.A', 'jobOn': '0', 'on': '0', 'days': '매일', 'every': '', 'times': '06:00', 'hours': '6'}], 'L': [], 'SPT': [{'sp': 'PR_A', 'found': 'Y', 'writes': 'DM_PLN_X', 'reads': ''}],
+     'TB': [{'table': 'DM_PLN_X', 'kind': '계획', 'screenWrites': '', 'screenReads': '', 'batchWrites': 'PR_A', 'batchReads': ''}],
+     'B': [{'job': 'JOB.A', 'step': '1', 'stepName': 'S1', 'exec': 'PR_A'}], 'E': []}
+plan = {'mods': ['DM'], 'key': 'DM'}
+chs = OS.compose(plan, F, {'chapters': [{'id': 'C14', 'slides': [{'kind': 'text', 'title': 'x', 'lines': ['홍길동 010'], 'src': ['Doc']}]}]}, 'DM')
+c14 = [c for c in chs if c['id'] == 'C14'][0]['slides']
+chk('C14 연락처 = 모양만(빈 표 10행, content 의 C14 는 무시)', len(c14) == 1 and c14[0]['kind'] == 'table' and all(all(x == '' for x in r) for r in c14[0]['rows']) and len(c14[0]['rows']) == 10 and c14[0]['columns'] == OS.CONTACT_COLS)
+c6 = [c for c in chs if c['id'] == 'C6'][0]['slides']
+chk('C6 실행표 = 개발 DB 사용 여부와 상관없이 스케줄 표시', any(s['kind'] == 'timeline' and s['rows'][0]['on'] for s in c6))
+c5 = [c for c in chs if c['id'] == 'C5'][0]['slides'][0]
+chk('C5 잡 목록 = 사용 여부 칸 없음, 잡 전부', '개발 DB 사용' not in c5['columns'] and len(c5['rows']) == 2)
+ids = [c['id'] for c in chs]
+chk('장 순서 = OPS(C1..C15, 부록 A)', ids == [x[0] for x in OS.OPS], str(ids))
+
+fails, sm = OS.check(plan, F, {'chapters': [{'id': 'C14', 'slides': [{'kind': 'text'}]}]}, lambda *a: None, lambda t, f: None)
+chk('검사: AI 장 빠짐 8개', sum(1 for f in fails if f.startswith('장 빠짐')) == len(OS.AI_REQ), str(len(fails)))
+chk('검사: 프로세스 간지 빠짐(컷오프, 계획 생성)', any('간지 빠짐: 컷오프' in f for f in fails) and any('간지 빠짐: 계획 생성' in f for f in fails))
+chk('검사: screenNotes, jobNotes(설명 없는 잡), tableNotes 빠짐', any(f.startswith('screenNotes 빠짐 1개') for f in fails) and any('jobNotes 빠짐 1개' in f and 'JOB.A' in f for f in fails) and any(f.startswith('tableNotes 빠짐 1개') for f in fails), str(fails))
+chk('검사: C14 에 내용을 쓰면 실패', any(f.startswith('C14') for f in fails))
+good = {'screenNotes': {'DMF0004': '판매 사이트 기준 정보 등록'}, 'jobNotes': {'JOB.A': '컷오프 실행'}, 'tableNotes': {'DM_PLN_X': '계획 결과'},
+        'chapters': [{'id': c, 'slides': ([{'kind': 'divider', 'title': '컷오프'}, {'kind': 'flow', 'title': 'f', 'nodes': [{'id': 'a'}], 'edges': [], 'src': ['Doc']},
+                                            {'kind': 'divider', 'title': '계획 생성'}, {'kind': 'flow', 'title': 'g', 'nodes': [{'id': 'b'}], 'edges': [], 'src': ['Doc']}] if c == 'C3'
+                                           else [{'kind': 'text', 'title': 't', 'lines': ['확인함'], 'src': ['Doc']}])} for c in OS.AI_REQ]}
+fails2, _ = OS.check(plan, F, good, lambda *a: None, lambda t, f: None)
+chk('검사: 다 채우면 실패 0', not fails2, str(fails2))
+print('ALL PASS' if ok else 'SOME FAIL')
+sys.exit(0 if ok else 1)

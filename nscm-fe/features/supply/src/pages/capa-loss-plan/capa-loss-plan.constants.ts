@@ -479,7 +479,7 @@ export const MSG = {
   NO_PERMISSION: 'MSG00096', // "No permission." (AS-IS MSG00096 동일 의미, L-22)
   SAVE_SUCCESS: 'MSG00002', // "Saved successfully."/"정상적으로 저장되었습니다." (사용자 지시 2026-11-11 — AS-IS 건수 메시지 MSG00672 대신 평문)
   SAVE_FAIL: 'MSG00006', // "Failed to save." (AS-IS MSG00006 동일 의미)
-  NO_CHANGES: 'MSG00133', // "No modifications have been made." (AS-IS MSG00133 동일 의미)
+  NO_CHANGES: 'MSG00004', // 수정한 내용이 없습니다. (AS-IS MSG00133 은 TO-BE 미등록 → 같은 문구 MSG00004)
 } as const;
 
 // ====================================================================================

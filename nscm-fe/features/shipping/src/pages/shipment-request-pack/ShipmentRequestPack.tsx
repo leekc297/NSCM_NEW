@@ -642,7 +642,7 @@ export const ShipmentRequestPack = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     const detail = String(result?.o_rc2?.[0]?.ERR_MESSAGE ?? '');
-    await setAlert({ type: 'alert', content: detail || t('MSG00042', '_System error occurred.') });
+    await setAlert({ type: 'alert', content: detail || t('MSG01075', '_System error. Capture the screen and pass it on to the system manager.') });
   };
 
   // 메인(Pack/Cell) 저장 선검증(AS-IS SaveData cs:1581/1584/1637) — 필수값(V4)·중복입력(V5)·음수수량(V6).

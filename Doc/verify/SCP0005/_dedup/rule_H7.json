@@ -1,67 +1,47 @@
 {
  "rule_id": "H7",
- "hash": "a2e8794f89dd61da",
+ "hash": "be2b7e0981a150a1",
  "groups": [
-  {
-   "rows": [
-    "V-4a34f3cb",
-    "V-cc83ee2c"
-   ],
-   "why": "Both rows check the same Excel Download target and expect the same result: code columns show their Name and the columns match the screen. Only the source differs (GENERAL vs CONFIRMED)."
-  },
-  {
-   "rows": [
-    "V-8bcaae64",
-    "V-f853f3e7"
-   ],
-   "why": "Both rows target the shared Excel Download template module and expect the same thing: no borders, frozen header and frozen fixed=Y columns. The DEFECT row only adds exception wording for other screen types."
-  },
-  {
-   "rows": [
-    "V-cc79160a",
-    "V-f5a19f28"
-   ],
-   "why": "Both rows check the header of the Excel template (양식) download on this screen and expect the same 2-row merged header."
-  },
   {
    "rows": [
     "V-66a27ad5"
    ],
-   "why": "It checks only the frozen header row, which is narrower than the full template rule (borders and frozen columns too), so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a0689c02"
    ],
-   "why": "It is a combined baseline covering Name display, header merge, freeze panes and borders all at once, so it matches no other row exactly."
+   "why": "단독"
   },
   {
    "rows": [
     "V-bcd9437c"
    ],
-   "why": "It checks only that the file's headers match the columns shown on screen, which is narrower than the combined Name-plus-columns rule."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-e83db9dd"
+    "V-cc79160a"
    ],
-   "why": "It checks only that combo cells show the Name, which is narrower than the combined Name-plus-columns rule."
+   "why": "단독"
   },
   {
    "rows": [
     "V-dede5a25"
    ],
-   "why": "It only says number formatting is applied and names no format or condition, so it differs from the row that specifies the exact format and red negatives."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-2d6b5b2a"
+    "V-e83db9dd"
    ],
-   "why": "It checks one specific case: the #,##0.000 format with red negatives in the month cells, under specific search conditions, so it stays alone."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:43:46",
- "cost": 0.0658218
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:33:46",
+ "cost": 0,
+ "open": 0
 }

@@ -36,6 +36,33 @@ powershell -NoProfile -ExecutionPolicy Bypass -File run.ps1
 | switch 디스패치 | `switch(param) case X:` 안의 sink에는 가드가 붙고, 호출 인자가 case와 일치할 때만 연결. 예: `Data.Common(Data.Type.YesOrNo)` → `CommonData.YesOrNo` |
 | BIZ | `FoxBizRequest("CommonData","CommonDataList")` → `[FoxBizMethod]` 메서드 → 내부 sink에 요청 파라미터를 이름으로 치환 |
 
+## Roslyn 의미 분석 (2026-11-25, `src/Semantic.cs`)
+추출 뒤·전파 전에 범위 안 파일(`asisfacts.json` `semanticScreens` 화면ID 접두, `semanticAlwaysPaths` 경로 접두)을 csproj 별 `CSharpCompilation`(Compile 항목, ProjectReference, HintPath DLL, .NET Framework 참조 어셈블리)으로 다시 본다. 빌드는 하지 않는다.
+- 호출 대상 특정(`CallRec.SemTarget`): 같은 이름 메서드가 여럿이면 의미 모델이 고른 메서드로만 전파. 외부 DLL 메서드로 확정되면 소스의 같은 이름 메서드로 전파하지 않음(예: DM 화면 `FoxDataClient` = `TheOne.ServiceModel.Data`, 소스 PseudoFoxClient 아님). 저장소 소스로 만드는 DLL 은 같은 시그니처면 허용
+- 값 보완: 상수(다른 프로젝트 포함), `string.Empty`, 지역변수 경로별 정의(람다 바깥 변수 포함), 필드·자동 속성, 메서드 반환. 열거형은 숫자로 바꾸지 않음(switch 가드 대조용)
+- 값별 조건(`Site.ValueConds`): 매개변수(또는 생성자 매개변수로 정해지는 속성)에 대한 문자열 판정 아래의 값은 전파 때 호출자 인자로 평가해 타지 않는 값을 뺌
+- 결과가 문법 해석보다 덜 풀리면 바꾸지 않음. 전후 = `semantic_report.csv`, 컴파일 현황 = `semantic_projects.csv`, 요약 = `_run.log` 의 `semantic:` 줄
+- 직접 SQL 실행 수집: `sinks.propertyAssign` 에 `CommandText` 추가(SP 직접 호출 → `NOT_IN_FOXQUERY`)
+- DM 44화면 전후(2026-11-25): BIZ_MATCH 3,167 → 869(가짜 PseudoDataClient 연결 2,296 제거), WRAPS_FOX_REQUEST 1,166 → 0, UNRESOLVED 8 → 1, MATCH 1,168 그대로. 대조 = `Doc/asisfacts_cmp/compare.py`
+- 범위 확대(2026-11-25 18:53): `semanticScreens` = DMF·SCP·SSP. SCP·SSP 전후 BIZ_MATCH 3,809 → 1,021, WRAPS_FOX_REQUEST 1,686 → 184, UNRESOLVED 18 → 2, NOT_IN_FOXQUERY 58 → 31, MATCH 1,509 그대로. BIZ 후보가 하나로 정해진 PseudoDataClient 지점 180곳 모두 쿼리 ID 접두(fp) 규칙과 일치
+- 요청 파라미터 대입 `req.Parameters["pagePath"] = request.QueryId`: request 가 요청 객체 매개변수이고 속성이 생성자 인자로 정해지면 매개변수 자리표시자로 둠 → 전파 때 호출자의 요청 객체로 바뀜(WRAPS_FOX_REQUEST)
+
+### 의미 분석 일괄 조회 `resolve` (2026-11-25, 검사 하네스용)
+`dotnet _bin/AsisFacts.dll resolve --config asisfacts.json --in 요청.csv --result 결과.csv`
+- 요청 열: id, file(asisRoot 상대), line, expr(그 줄의 식 원문), kind
+  - `value`(기본): 값 후보(`{p:이름}` 매개변수 의존, `{?식}` 미결정)
+  - `defs`: 식이 가리키는 변수·필드·속성·매개변수에 값을 넣는 오른쪽 식(local·init·assign·caller)
+  - `target`: 호출식의 호출 대상 소스 메서드 선언 위치와 매개변수 이름
+- Python 도우미 = `tools/Harness/verify/asis_sem.py`(파일 sha256 기준 캐시 `Doc/verify/_asis_sem_cache.json`, `ASIS_SEM_OFF=1` 이면 끔)
+- 사용처: `facts_combosrc.py` — 정규식이 원천 대입을 못 찾은 변수를 `defs` 로 찾고, 등록되지 않은 원천 함수는 `target` + `sites.csv` 로 그 메서드 안 SP·요청 파라미터를 원천으로 씀. DM·SCP·SSP 34화면 같은 입력 끔/켬 대조: 콤보 원천 미해결 65 → 61(SCP0100 6 → 2)
+- `facts_lockrules.py` 에도 비교 우변 상수 조회를 붙여 같은 대조를 했으나 RAW 241 → 241(바뀐 조건 0행, 좌변이 런타임 컨트롤 값)이라 되돌림
+- 2026-11-25 20:42 나머지 추출기 연결(끔/켬 같은 입력 대조 · 효과 0 은 되돌림)
+  - `facts_defcols.py` 연결: 같은 이름이 클래스마다 다른 값(충돌)인 Def* 상수를 사실 행의 파일 기준 `value` 로 확정(`defcol_alias_sem.csv`). DM·SCP·SSP 남는 혼합 이름 1,548 → 834곳, 충돌 725 → 11곳(DMF0003 555 → 127)
+  - `popup_args_check.py` 연결: 팝업 인자 변수가 같은 메서드 지역 대입에 없으면 `value` 로 원천 식 확정(`sem_prefetch`). 32화면 FAIL 79 → 76, NA 738 → 735, PASS 391 → 399, 원천 표기만 바뀐 행 100(변수 → 컨트롤·셀)
+  - `facts_popup.py` 연결: 팝업 클래스의 `FoxDataRequest(변수)` SP 이름을 `asis_sem.fox_endpoints` 로 확정. 팝업·Framework 비리터럴 110곳 중 82곳 확정. 208화면 SP 칸 1,756 → 1,876(86화면 223칸 변경). 인자 원천 종류도 popup_args 와 같이 바뀜
+  - `gen_param_map.py`: 팝업·Framework 변수 SP 이름 보조 조회를 붙였으나 sp_pair 249·param_map 2,243 행 변화 0 이라 되돌림
+  - 연결 안 함(측정 근거): `facts_gridcols` 미확정 123칸 = 런타임 값 · `facts_cellrules` Def* 참조 955 중 못 찾음 0 · `facts_sortrules` 코드 정렬 누락 = SQL 문자열·LINQ(SQL 정렬은 이미 의미 분석 엔드포인트로 읽음)
+
 ## 출력 (outDir)
 | 파일 | 내용 |
 |---|---|

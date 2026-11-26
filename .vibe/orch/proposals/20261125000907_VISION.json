@@ -1,0 +1,194 @@
+{
+  "id": "20261125000907_VISION",
+  "at": "2026-11-25T00:09:07+09:00",
+  "ms": 1795532947327,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ln|useraxis|reloadresume|resume ledger single source",
+  "title": "개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로",
+  "evidence": "user_checks U13, U16, U17, U18, U23 원문. ladder.json L3,usercheck,U13/U16/U18/U23 resolved, L4,struct,usercheck,U13 resolved 11-21 15:05. CHANGELOG.md:417-425(11-23 18:46), :986-995(U23), :1019-1025(18:3x 1단계부터 재개), :1125-1127(R14 재개 체인 오판 중지). job-runner.js:86-88(decorate 가 s.resume 삭제), workbench.js:121-134, :1101, :2975(창별 조회 기준), run_verify.py:402-413(_resume 별도 기록). events.jsonl chain.resume 2줄(마지막 11-20 20:46:19), progress.cut 1줄(11-23 18:46:32 screen ''), resume.refuse 0줄. selfcheck/result.json 11-25 00:06:21 U13, U16, U18, U23 실패 0. · 진단 사다리 묶음 L4|useraxis|reloadResume · 문서 .vibe/orch/vision/concept_20261125_L4_useraxis_reloadResume.md",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/jobs.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-watch.js",
+    "tools/Harness/verify/run_verify.py",
+    "tools/VibeManager/test/t_chain_resume.js",
+    "tools/VibeManager/test/t_job_resume.js",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "지금: 끊긴 실행 하나를 chain_progress, job.json 의 s.resume, 측정 도구 _resume 이 따로 들고, VMW, Workbench, VMO 가 각자 다른 열쇠로 찾아 보여 줌. 새 개념: 끊긴 실행은 runId 계보 하나로 chain_progress 원장에만 상태를 쓰고, 세 창은 같은 조회 함수로 원장을 읽기만 하며, 단계 안 재개 지점은 원장에 참조로 둠.",
+  "verify": "1) t_chain_resume 에 11-23 18:46 기록(WB1_1795427182442_ai, screen '') 재현을 넣고, 화면 ID 빈 기록이 생기지 않음을 확인. 2) 11-20 18:35 J20261120_180409 순서(입장 대기 중 화면 갱신) 재현 시험에서 재개가 4/8 단계부터 시작. 3) 원장 1개로 VMW, Workbench, VMO 조회 runId 집합이 같음. 4) t_orch_ledger 16:06 R14 사고 재현에서 재개 체인을 멈추지 않음. 5) run_all 전체 PASS. 6) 창 다시 로드 1회 뒤 원장 cut 1건이 ui.json job, wb 보고에 같은 runId 로 있음. 7) 11-27 까지 실사용 재개 1회 이상에서 U13, U16, U17, U23 감지기 실패 0.",
+  "rollback": "단계마다 대상 파일을 .bak_<날짜>_resumeledger 로 남기고, 문제가 나면 그 사본으로 복원(설치 폴더도 같은 태그). 원장에는 필드만 더하므로 옛 코드가 새 기록을 읽어도 무시함. 반영은 실행 중 체인 0개일 때만 하고, run_verify.py 단계는 CheckList 체인이 끝난 뒤 반영.",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "같은 목적 키(reloadResume) 사용자 지적 7일 5건(U13, U16, U17, U18, U23)으로 l4UserAxisMin 3 이상. L3 묶음 U13, U16, U18, U23 과 L4 struct U13 은 해결됐지만, 11-23 18:46 에 같은 형태(재개 기록이 VMO 에만 보임)가 다시 남(CHANGELOG.md:417-425).",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T12:31:13+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T12:35:08+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 3 · 백업 태그 20261126_self1231"
+    },
+    {
+      "at": "2026-11-26T12:35:12+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T12:50:49+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1468, FAIL 0), 정의 정합 통과, 문장 규칙 위반 3 → 3 · 설치 폴더 복사 5개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 job-runner.js, jobs.js, orch-usercheck.js, orch-watch.js, workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T12:50:49+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 2건(합격 판정에서 뺌): v6 6) 창 다시 로드 1회 뒤 원장 cut 1건이 ui.json job, wb 보고에 같은 runId 로 있음. (실제 VS Code 창 다시 로드 1회가 필요함. 보고 경로(jobs.js 카드 runIds, Workben) / v7 7) 11-27 까지 실사용 재개 1회 이상에서 U13, U16, U17, U23 감지기 실패 0. (11-27까지 실사용 재개 1회 이상 경과가 필요함)"
+    },
+    {
+      "at": "2026-11-26T12:50:49+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 4건, 실행 못 함 2건, 게이트 판정 1건. 2026-11-26 12:39~12:46 실행. t_chain_resume FAIL 4 → ALL PASS(12:44:44). t_job_resume FAIL 3 → ALL PASS, 재개 첫 단계 4/8(12:45:06). t_orch_ledger 16:06 재현 FAIL 1 → ALL PASS(12:45:06). t_orch_usercheck ALL PASS(원장 U13, U16, U23 표본 7건). t_webview_syntax ALL PASS(12:45:10). run_verify 원장 대조 자기 시험 5건 ALL PASS · 변경 11개 파일 · 대상 목록 밖 변경 2개: tools/VibeManager/test/t_orch_ledger.js, tools/Harness/plan_state.json",
+      "log": ".vibe\\logs\\2026-11-26T12-35-12_claude_orch.log",
+      "sec": 692,
+      "costUsd": 6.5429558,
+      "files": [
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/jobs.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_chain_resume.js",
+        "tools/VibeManager/test/t_job_resume.js",
+        "tools/VibeManager/test/t_orch_ledger.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/workbench.js",
+        "tools/Harness/plan_state.json"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:01+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "창을 다시 로드해 끊긴 작업은 기록 한 곳에서만 관리합니다. VMW, Workbench, VMO 세 창은 그 기록을 똑같이 읽어 보여 줍니다. 한 창에만 재개가 보이거나, 재개했는데 처음부터 다시 도는 일을 없애는 것이 목표입니다.",
+    "risk": "작업이 도는 중에 바꾸면 화면 표시가 잠시 어긋날 수 있습니다. 그래서 실행 중인 작업이 없을 때만 반영하고, CheckList 측정 도구 쪽은 체인이 끝난 뒤 바꿉니다.",
+    "undo": "바꾼 파일마다 남긴 사본으로 되돌립니다. 기록에는 항목만 더하므로 되돌린 뒤에도 기존 재개 기록을 그대로 씁니다."
+  },
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795663873166,
+  "autoFp": "91cbefde44",
+  "applyStartMs": 1795664112618,
+  "postChecks": [
+    {
+      "n": 6,
+      "text": "6) 창 다시 로드 1회 뒤 원장 cut 1건이 ui.json job, wb 보고에 같은 runId 로 있음.",
+      "why": "실제 VS Code 창 다시 로드 1회가 필요함. 보고 경로(jobs.js 카드 runIds, Workbench wbResume 보고, ui.json 저장)와 감지기 대조는 t_orch_usercheck 원장 표본 7건 PASS",
+      "status": "open",
+      "at": "2026-11-26T12:46:48+09:00"
+    },
+    {
+      "n": 7,
+      "text": "7) 11-27 까지 실사용 재개 1회 이상에서 U13, U16, U17, U23 감지기 실패 0.",
+      "why": "11-27까지 실사용 재개 1회 이상 경과가 필요함",
+      "status": "open",
+      "at": "2026-11-26T12:46:48+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-26T12:46:48+09:00",
+    "verified": true,
+    "text": "실행 통과 4건, 실행 못 함 2건, 게이트 판정 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1468, FAIL 0), 정의 정합 통과, 문장 규칙 위반 3 → 3"
+  },
+  "selfTag": "20261126_self1231",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "job-runner.js",
+    "jobs.js",
+    "orch-usercheck.js",
+    "orch-watch.js",
+    "workbench.js"
+  ],
+  "appliedMs": 1795665049437,
+  "synced": [
+    "job-runner.js",
+    "jobs.js",
+    "orch-usercheck.js",
+    "orch-watch.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node test/t_chain_resume.js: 반영 전 FAIL 4건(빈 화면 기록 1건, screen '' progress.cut 1줄) → 반영 뒤 ALL PASS, 빈 기록 0건, progress.cut '' 0줄, progress.refuse 기록, 12:44:44"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node test/t_job_resume.js: 8단계 체인 4/8 에서 끊고 입장 대기 중 get 갱신 뒤 재개. 반영 전 재개 표시 job.json 저장 FAIL → 반영 뒤 PASS. chain.resume resumeFrom 4, 재개 실행 첫 단계 [4,5,6,7,8], 1~3단계 1회, 12:45:06"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "t_job_resume 집합 시험: 반영 전 ledgerView 없음 FAIL 2건 → 반영 뒤 VMO 3건 = Workbench 화면별 합 3건, VMW 2건 = 같은 작업 VMO 집합, 빈 화면 기록 제외 PASS"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "node test/t_orch_ledger.js ⑩-3: 반영 전 재개 체인 R14 1건 FAIL → 반영 뒤 0건 PASS. 계보 없는 대조 체인 R14 1건 유지. ALL PASS 12:45:06"
+      },
+      {
+        "n": 6,
+        "result": "blocked",
+        "note": "실제 VS Code 창 다시 로드 1회가 필요함. 보고 경로(jobs.js 카드 runIds, Workbench wbResume 보고, ui.json 저장)와 감지기 대조는 t_orch_usercheck 원장 표본 7건 PASS"
+      },
+      {
+        "n": 7,
+        "result": "blocked",
+        "note": "11-27까지 실사용 재개 1회 이상 경과가 필요함"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/jobs.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/orch-watch.js",
+      "tools/Harness/verify/run_verify.py",
+      "tools/VibeManager/test/t_chain_resume.js",
+      "tools/VibeManager/test/t_job_resume.js",
+      "tools/VibeManager/test/t_orch_usercheck.js",
+      "tools/VibeManager/test/t_orch_ledger.js"
+    ],
+    "verify_result": "2026-11-26 12:39~12:46 실행. t_chain_resume FAIL 4 → ALL PASS(12:44:44). t_job_resume FAIL 3 → ALL PASS, 재개 첫 단계 4/8(12:45:06). t_orch_ledger 16:06 재현 FAIL 1 → ALL PASS(12:45:06). t_orch_usercheck ALL PASS(원장 U13, U16, U23 표본 7건). t_webview_syntax ALL PASS(12:45:10). run_verify 원장 대조 자기 시험 5건 ALL PASS. 회귀 t_wb_resultdone, t_resume_inner, t_job_autodel, t_chain_loop, t_chain_abort, t_job_mirror ALL PASS(12:46:04). node --check 5개, py_compile 통과",
+    "note": "작업 모드 DB_ONLY, 대상 파일 수정 차단 없음. 시작 때 실행 중 CheckList 0개, chain_progress 기록 0건. t_orch_ledger.js 는 targets 밖이나 검증 4번이 그 시험에 재현을 넣으라고 해 수정함. U17 은 user_checks.json 상태 pending-detector 로 둠(대상 밖), 같은 감지 함수 resumedJobShown 에 원장 대조 반영됨. 원장 기록 삭제 방식(재개 시작, 정상 종료 때 삭제)은 유지하고 계보는 resumedFrom 과 사건 줄로 남김. plan_state 9개 등록, 9개 끝, 기록 비움. 소요 약 11분(12:35:25~12:46:09), 가장 오래 걸린 단계 = 코드 읽기 약 4분"
+  },
+  "snap": "prop_20261125000907_VISION",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

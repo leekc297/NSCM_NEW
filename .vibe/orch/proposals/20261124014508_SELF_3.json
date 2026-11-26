@@ -1,0 +1,139 @@
+{
+  "id": "20261124014508_SELF_3",
+  "at": "2026-11-24T01:45:08+09:00",
+  "ms": 1795452308398,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/make_verify_docs.py|설명첫줄이분류유형판정으로시작하고lstrip가를지움같은틀이n행저장외과n",
+  "title": "사용자 지시 R87 같은 문제: tools/Harness/verify/make_verify_docs.py:697 설명 첫 줄이 '[분류 / 유형 / 판정]' 으로 시작하고 lstrip('○● ') 가 '●' 를 지움. 같은 틀이 701행(저장 외)과 720행(정리 파일 없는",
+  "evidence": "규칙 R87 \"CheckList 오류 행 설명 첫 줄 오류명 앞에 '● ' 를 붙임\" (원래 지시 2026-11-17 13:28 \"사용자의견 추가하였습니다. 비어있거나 오류로 확인 된 부분은 유지해주세요. 오류아님으로 판정한 부분은 검사엔진 확인해서 보완해주세요. 이해안되어 상세 설명 요청한 부분에 대해서는 이해되도록 다시 알려주세요. 설명의 첫부분에 오류명을 표기하는데, 앞에 '● ' 을 붙여 주세요.\") · tools/Harness/verify/make_verify_docs.py:697 lines = ['[' + tg + '] ' + s['title'].strip().lstrip('○● ').strip(), '위치 : ' + ...",
+  "targets": [
+    "tools/Harness/verify/make_verify_docs.py"
+  ],
+  "before_after": "세 곳 첫 줄 앞에 '● ' 를 붙임(예: '● [' + tg + '] ' + 오류명). 중복 방지로 lstrip 은 유지. 문서 생성 뒤 설명 칸 첫 줄이 '● ' 로 시작하지 않는 행 0건을 확인함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/make_verify_docs.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T08:37:36+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T08:39:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0837"
+    },
+    {
+      "at": "2026-11-24T08:39:03+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T08:47:24+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 검증 실패: 실행한 항목 실패 1건(v1). 반영 전 2026-11-24 08:39:23(KST) run_all.js ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤 08:43:14 SOME FAIL 71/74 PASS 1157 FAIL 4. 실패 3파일은 삭제 승인 판정 테스트이며 같은 시간대 다른 작업이 orch-selfcheck.js 를 수정함. python -m py_comp · 대상 파일 1개 복원(make_verify_docs.py AI 편집 3건만 되돌림(반영 전과 같음)) · 대상 밖 변경 tools/VibeManager/orch-selfcheck.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-24T08-39-03_claude_orch.log",
+      "sec": 496,
+      "costUsd": 0.7662395999999999,
+      "files": [
+        "tools/Harness/verify/make_verify_docs.py",
+        "tools/VibeManager/orch-selfcheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T09:38:19+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T09:38:19+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-24T09:50:32+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-24T09:54:08+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 76/76개 파일 통과(PASS 1204, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0950"
+    },
+    {
+      "at": "2026-11-24T09:54:10+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T10:05:38+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 76/76개 파일 통과(PASS 1204, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T10:05:38+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. run_all.js 반영 전 76/76 PASS 1204 FAIL 0 → 반영 뒤 76/76 PASS 1204 FAIL 0 (2026-11-24 10:01:45). python -m py_compile make_verify_docs.py = COMPILE_OK · 변경 4개 파일 · 대상 목록 밖 변경 3개: tools/Harness/gate_baseline.tsv, tools/Analysis/ssp_it_precheck/scn_rows.py, tools/Analysis/ssp_it_precheck/split_sheet.ps1",
+      "log": ".vibe\\logs\\2026-11-24T09-54-10_claude_orch.log",
+      "sec": 468,
+      "costUsd": 0.6019872000000001,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/make_verify_docs.py",
+        "tools/Analysis/ssp_it_precheck/scn_rows.py",
+        "tools/Analysis/ssp_it_precheck/split_sheet.ps1"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 오류 행 설명 첫 줄 오류명 앞에 '● ' 를 붙임 규칙을 tools/Harness/verify/make_verify_docs.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R87|tools/Harness/verify/make_verify_docs.py",
+  "kind": "fix",
+  "needsApproval": "파일 삭제(생성물 아님)",
+  "applyStartMs": 1795481650220,
+  "verifyJudge": {
+    "at": "2026-11-24T10:02:00+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 76/76 PASS 1204 FAIL 0 212.6s'(2026-11-24T00:54:29Z) → 반영 뒤 'ALL OK 파일 76/76 PASS 1204 FAIL 0 210.3s'(2026-11-24 10:01:45). .py 수정이라 t_webview_syntax.js 단독 실행은 대상 아님(run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/make_verify_docs.py"
+    ],
+    "verify_result": "run_all.js 반영 전 76/76 PASS 1204 FAIL 0 → 반영 뒤 76/76 PASS 1204 FAIL 0 (2026-11-24 10:01:45). python -m py_compile make_verify_docs.py = COMPILE_OK",
+    "note": "697·701·720행 첫 줄 앞에 '● ' 추가함. 697·701행 lstrip('○● ') 유지, 720행은 t.lstrip('○● ') 로 중복 방지 추가함. 문서 생성 뒤 설명 첫 줄 '● ' 미시작 0건 확인은 CheckList 실행이 필요한 반영 뒤 확인 항목이라 미실행. 추가 확인 후보 = 설명 칸을 읽는 llm_*.py 등이 첫 글자 '[' 에 의존하는지(범위 밖, 미확인)"
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 76/76개 파일 통과(PASS 1204, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0950",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795482338102,
+  "synced": [],
+  "snap": "prop_20261124014508_SELF_3"
+}

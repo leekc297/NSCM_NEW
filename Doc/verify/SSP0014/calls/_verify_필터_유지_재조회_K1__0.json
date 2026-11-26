@@ -6,9 +6,9 @@
   "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
   "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
   "status": 200,
-  "rows": 8613,
-  "dur": 676,
-  "at": "2026-11-20T00:15:05.327Z",
+  "rows": 8614,
+  "dur": 324,
+  "at": "2026-11-24T18:04:14.502Z",
   "user": "minyonglee1",
   "test": "필터 유지 재조회(K1)"
  },
@@ -19,9 +19,9 @@
   "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
   "status": 200,
-  "rows": 7672,
-  "dur": 874,
-  "at": "2026-11-20T00:15:08.695Z",
+  "rows": 7711,
+  "dur": 358,
+  "at": "2026-11-24T18:04:17.827Z",
   "user": "minyonglee1",
   "test": "필터 유지 재조회(K1)"
  },
@@ -32,9 +32,9 @@
   "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
   "status": 200,
-  "rows": 7672,
-  "dur": 1602,
-  "at": "2026-11-20T00:15:12.968Z",
+  "rows": 7711,
+  "dur": 697,
+  "at": "2026-11-24T18:04:21.345Z",
   "user": "minyonglee1",
   "test": "필터 유지 재조회(K1)"
  }

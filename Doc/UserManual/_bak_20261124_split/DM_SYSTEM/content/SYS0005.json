@@ -1,0 +1,100 @@
+{
+ "definition": "DB 프로시저 목록과 프로시저별 파라미터 이름, 입출력 구분, 데이터 형식, 순서를 등록하는 화면",
+ "overview": [
+  "스키마별 DB 프로시저 목록과 프로시저별 파라미터 이름, 입출력 구분, 데이터 형식, 순서를 등록하는 화면임",
+  "위쪽 조회 조건, 프로시저 목록 그리드, 아래 파라미터 그리드로 구성됨. Insert, Delete 버튼 없이 Save(F7) 만 씀",
+  "Schema, Procedure Name 으로 조회 → 프로시저 행 선택 → 아래 그리드에서 DB 값과 등록값 비교 → 수정 후 Save(F7) 순으로 작업함"
+ ],
+ "pages": [
+  {
+   "title": "Proc. Setting",
+   "keyPoint": "Parameter Name, Input/Output, Data Type, Sort Order 를 DB Parameter Name, DB Input/Output, DB Data Type, DB Sort Order 와 맞춘 뒤 저장함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.134,
+     "y": 0.14
+    },
+    {
+     "no": 2,
+     "x": 0.7,
+     "y": 0.193
+    },
+    {
+     "no": 3,
+     "x": 0.134,
+     "y": 0.208
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Schema: 공통 코드 DbSchema 목록에서 복수 선택(캡처 SCM_MGR). 처음 값 ALL",
+      "Procedure Name: 찾을 프로시저 이름 입력. 처음 값 빈칸",
+      "Update YN: ALL, Y, N 중 선택. 처음 값 ALL"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Save(F7): 커서가 있는 그리드의 변경분을 저장함. Insert, Delete 버튼 없음",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "프로시저 목록 그리드",
+     "lines": [
+      "Schema, Procedure Name: 필수(제목 앞 빨간 점). 프로시저 소유 스키마와 이름",
+      "Update YN, RegStatus YN: Y 또는 N",
+      "Created By, Creation Date, Updated By, Update Date: 등록, 수정 이력",
+      "행을 고르면 그 프로시저의 파라미터가 아래 그리드에 조회됨. 캡처는 조회 전 상태"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Proc. Setting",
+   "keyPoint": "Parameter Name, Input/Output, Data Type, Sort Order 를 DB Parameter Name, DB Input/Output, DB Data Type, DB Sort Order 와 맞춘 뒤 저장함.",
+   "markers": [
+    {
+     "no": 4,
+     "x": 0.134,
+     "y": 0.589
+    }
+   ],
+   "sections": [
+    {
+     "no": 4,
+     "title": "파라미터 그리드",
+     "lines": [
+      "Schema, Procedure Name: 위 그리드에서 고른 프로시저",
+      "DB Parameter Name, DB Input/Output, DB Data Type, DB Sort Order: DB 프로시저에 정의된 값",
+      "Parameter Name, Input/Output, Data Type: 필수. 등록할 파라미터 이름, 입출력 구분, 데이터 형식",
+      "Sort Order: 파라미터 순서",
+      "Created By, Creation Date, Updated By, Update Date: 등록, 수정 이력"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "SYSTEM",
+ "id": "SYS0005",
+ "uiName": "Proc Setting",
+ "menuPath": "SYSTEM> System> Proc Setting",
+ "captures": [
+  "captures/SYS0005.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0005/"
+ ],
+ "buttons": [
+  "procInfo:SAVE",
+  "procInfo:SEARCH",
+  "procList:SAVE",
+  "procList:SEARCH"
+ ]
+}

@@ -1,0 +1,115 @@
+{
+  "id": "20261124064958_SELF_4",
+  "at": "2026-11-24T06:49:58+09:00",
+  "ms": 1795470598753,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|tlsdcnavn줄hcnavn줄와본문사이에경계막대크기조절이없음or",
+  "title": "사용자 지시 R179 같은 문제: tools/VibeManager/orchestra.js:355 .tls, .dc-nav(365줄), .hc-nav(368줄)와 본문 사이에 경계 막대 크기 조절이 없음(orchestra.js 에 pointermove, col",
+  "evidence": "규칙 R179 \"웹뷰에서 좌우 또는 상하로 나뉜 영역은 경계 막대를 끌어 크기를 조절할 수 있게 함\" (원래 지시 2026-11-20 18:32 \"VMW 에 SPLIT BAR 을 두어서 왼쪽/오른쪽의 사이즈를 조정할 수 있도록 해주세요\") · tools/VibeManager/orchestra.js:355 .tls{width:220px;flex:none;position:sticky;top:0;",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "영역과 본문 사이에 막대 요소를 두고 pointerdown, pointermove 로 width 를 바꿔 setState 로 보관함(jobs.js, workbench.js 의 split 처리 재사용)",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T08:49:56+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T08:53:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0850"
+    },
+    {
+      "at": "2026-11-26T08:53:55+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T09:06:49+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T09:06:49+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check: 통과(2026-11-26 08:54) → 통과(08:58) · run_all.js: 'ALL OK 파일 88/88 PASS 1424 FAIL 0 227.9s' → 'ALL OK 파일 88/88 PASS 1424 FAIL 0 228.3s'(09:02:39) · t_webview_syntax.js: ALL PASS(PASS 19) → ALL PASS(PASS 19) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T08-53-55_claude_orch.log",
+      "sec": 539,
+      "costUsd": 0.8781835,
+      "files": [
+        "tools/VibeManager/orchestra.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:05+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰에서 좌우 또는 상하로 나뉜 영역은 경계 막대를 끌어 크기를 조절할 수 있게 함 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R179|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795650595886,
+  "autoFp": "aca00c0ff6",
+  "applyStartMs": 1795650835676,
+  "verifyJudge": {
+    "at": "2026-11-26T09:02:58+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1424, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0850",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795651609199,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js 통과 · node tools/VibeManager/test/run_all.js 'ALL OK 파일 88/88 PASS 1424 FAIL 0' · node tools/VibeManager/test/t_webview_syntax.js 'ALL PASS'(PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "node --check: 통과(2026-11-26 08:54) → 통과(08:58) · run_all.js: 'ALL OK 파일 88/88 PASS 1424 FAIL 0 227.9s' → 'ALL OK 파일 88/88 PASS 1424 FAIL 0 228.3s'(09:02:39) · t_webview_syntax.js: ALL PASS(PASS 19) → ALL PASS(PASS 19)",
+    "note": "사건, 개선안, 약자 사전, 자가진단, 이력 탭의 영역과 본문 사이에 막대 추가. sideApply 가 막대를 넣고 저장된 너비(vscode.setState sideW)를 적용함. 끌기는 workbench.js .lsplit 방식(setPointerCapture), 최소 140px, 최대 탭 폭 60%, 두 번 누르면 기본 너비로 돌아감. 영역을 접거나 창 폭이 820px 이하면 막대 숨김. 막대를 끄는 동작 확인은 창 다시 로드 뒤 필요(미확인)."
+  },
+  "snap": "prop_20261124064958_SELF_4",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

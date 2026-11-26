@@ -1,2 +1,0 @@
-req_id,scope,area,asis_label,tobe_label,match,note
-CR-092,SCP;SSP,조회조건;그리드;팝업 그리드,Valid,Active,exact,"사용자 지시 2026-10-30: SCP·SSP 컬럼·조회조건 명칭 Valid → Active 일괄. AS-IS 'Valid'(또는 'Valid*') ↔ TO-BE 'Active' 는 오류 아님(PASS). TO-BE 에 'Valid' 가 남아 있으면 Active 로 변경 대상(CR-092 FAIL · 보완 = SHEET_COLUMNS.COLUMN_LABEL_NAME 메타 UPDATE / 조회조건 기준표 tobe_name·Form 라벨). 비교 = '*'·대소문자·공백 무시한 전체 일치. 'Valid From/To'·'Route Valid'·'BOD Valid' 같은 복합 명칭은 이 행의 대상이 아님(사용자 확인 뒤 행 추가)"

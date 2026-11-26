@@ -162,56 +162,56 @@ ERP_ATTR3,Y,NONE,Y,,,,,siSub,Shipment Change Request Confirm Detail
 STATUS_DETAIL,Y,NONE,Y,,,,,siSub,Shipment Change Request Confirm Detail
 REJECT_REASON,Y,NONE,Y,,,,,siSub,Shipment Change Request Confirm Detail
 CHK,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ERP_SO_NO,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-PROJECT_NAME,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-FCST_TYPE,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ITEM_ID,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-FROM_SITE_DESCRIPTION,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-TO_SITE_DESCRIPTION,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-INCOTERMS,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-LT_DAY,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ETD,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ETA,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-TRANSPORT_MODE,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-SHIPMENT_DATE,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-SHIPMENT_CONFIRM_QTY,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_LT_DAY,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_ETD,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_ETA,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_TRANSPORT_MODE,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_SHIPMENT_DATE,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_SHIPMENT_CONFIRM_QTY,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-REMARKS2,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-REMARKS,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-REMARKS3,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-CONFIRM_ID,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-FROM_SITE,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-TO_SITE,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ROUTE_ID,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-BOD_ID,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-D_COUNTRY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-D_PORT_CODE,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-A_COUNTRY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-A_PORT_CODE,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-CUSTOMER_LT,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-TO_COUNTRY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-TO_CITY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_ROUTE,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_BOD_ID,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_D_COUNTRY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_D_PORT_CODE,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_A_COUNTRY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_A_PORT_CODE,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_CUSTOMER_LT,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_TO_COUNTRY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_TO_CITY,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_INCOTERMS,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-CHANGE_REQ_NO,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_YN,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-DIVISION_ID,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-NEW_BASE_CONFIRM_YN,N,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ERP_ATTR1,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ERP_ATTR2,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-ERP_ATTR3,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-STATUS_DETAIL,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
-REJECT_REASON,Y,NONE,Y,,,,,this,Shipment Change Request Confirm Detail
+ERP_SO_NO,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+PROJECT_NAME,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+FCST_TYPE,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+ITEM_ID,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+FROM_SITE_DESCRIPTION,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+TO_SITE_DESCRIPTION,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+INCOTERMS,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+LT_DAY,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+ETD,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+ETA,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+TRANSPORT_MODE,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+SHIPMENT_DATE,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+SHIPMENT_CONFIRM_QTY,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_LT_DAY,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_ETD,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_ETA,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_TRANSPORT_MODE,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_SHIPMENT_DATE,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_SHIPMENT_CONFIRM_QTY,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+REMARKS2,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+REMARKS,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+REMARKS3,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+CONFIRM_ID,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+FROM_SITE,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+TO_SITE,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+ROUTE_ID,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+BOD_ID,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+D_COUNTRY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+D_PORT_CODE,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+A_COUNTRY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+A_PORT_CODE,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+CUSTOMER_LT,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+TO_COUNTRY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+TO_CITY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_ROUTE,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_BOD_ID,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_D_COUNTRY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_D_PORT_CODE,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_A_COUNTRY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_A_PORT_CODE,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_CUSTOMER_LT,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_TO_COUNTRY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_TO_CITY,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_INCOTERMS,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+CHANGE_REQ_NO,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_YN,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+DIVISION_ID,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+NEW_BASE_CONFIRM_YN,N,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+ERP_ATTR1,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+ERP_ATTR2,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+ERP_ATTR3,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+STATUS_DETAIL,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail
+REJECT_REASON,Y,NONE,N,,잠금 (FindData_Sub:835 조회 결과 바인딩 블록의 잠금 · EditButton 해제 없음),,기존행 SSP0003_ShipmentChangeRequestConfirm:835 LockColumn(조회 후 잠금),this,Shipment Change Request Confirm Detail

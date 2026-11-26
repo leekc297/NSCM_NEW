@@ -1,0 +1,16 @@
+﻿SELECT 
+ 'SELECT B.PARAM_VALUE AS P,INSERT_TIME AS TIME,*  FROM '+ char(10)
+ + '('+ char(10)
+ + 'SELECT * FROM '+ char(10)
+ + '('+ char(10)
+ + 'SELECT * FROM [TH_UIS_SQL_LOG] WITH (NOLOCK)'+ char(10)
+ + 'WHERE insert_id  = '''+@USER_ID+''''+ char(10)
+ + ') A'+ char(10)
+ + 'WHERE A.QUERY_ID = ''FP\Common\Utility'' '+ char(10)
+ + 'AND A.PROG_ID = ''note'''+ char(10)
+ + 'AND A.JOB_TYPE = ''read'''+ char(10)
+ + 'AND A.ATTRIBUTE1 = ''GeneralExecuteQuery'''+ char(10)
+ + ') B'+ char(10)
+ + 'where PARAM_VALUE LIKE N''LOGTYPE : ' + @LOGTYPE + '%'''+ char(10)
+ + 'ORDER BY INSERT_TIME desc'+ char(10)
+AS SQL

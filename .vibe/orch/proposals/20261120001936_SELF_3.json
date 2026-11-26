@@ -72,6 +72,11 @@
         "tools/VibeManager/orch-selfcheck.js",
         "tools/VibeManager/test/t_orch_selfapply.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:33+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T05:34:50+09:00"
     }
   ],
   "plain": {
@@ -122,5 +127,7 @@
     "verify_result": "2026-11-20 05:21:06 node tools/VibeManager/test/t_orch_selfapply.js: ALL PASS, FAIL 0, '7일이 지나면 남은 로그도 삭제 · 반영 완료' PASS(이력 문구 '반영 완료, 생성물 삭제 1개'). 2026-11-20 05:21:43 python tools/Docs/doc_style.py 대상 JS 7개: prompt-panel.js 위반 1(L140 웹뷰, 걸린 곳은 L164 주석 'Enter 전송 · Shift+Enter 줄바꿈'), orch-selfcheck.js 0, flow-panel.js 0, chain-runner.js 0, tabview.js 0, history.js 이모지 4(L153 ⚠, L164 ⚠, L167 💬, L172 💬), server-service.js 상태 기호 17. 같은 시각 node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager: ALL PASS.",
     "note": "작업 모드 DB_ONLY(harness.json:15), 대상이 tools/VibeManager 라 차단 없음. 개선안 기대와 다른 점은 history.js 이모지 잔존이 3행이 아니라 4행인 것(L153 '· ⚠ 작업후 미기록'). 개선안이 이모지를 고치지 않는 것으로 정해 두었으므로 그대로 둠. 줄표·가운뎃점·틀·추측 어미는 지정 대상 파일에서 주석 외 0건. history.js:164 추측 어미 '섞일 수 있습니다' → '섞여 있으면 구분하지 못합니다'. server-service.js git diff 66줄 중 이번 수정은 3군데(L266 틀, L273, L280 줄표), 나머지는 이 작업 전부터 있던 미커밋 변경. orch-selfcheck.js, t_orch_selfapply.js 는 Git 미추적 파일. 임시 출력 폴더 .vibe/tmp_ds1, .vibe/tmp_ds2 삭제함."
   },
-  "snap": "prop_20261120001936_SELF_3"
+  "snap": "prop_20261120001936_SELF_3",
+  "effectiveMs": 1795120490865,
+  "effectiveAt": "2026-11-20T05:34:50+09:00"
 }

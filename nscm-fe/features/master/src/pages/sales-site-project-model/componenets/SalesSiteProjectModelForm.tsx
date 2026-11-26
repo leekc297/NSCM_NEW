@@ -366,12 +366,13 @@ export const SalesSiteProjectModelForm = ({
                 )}
               />
             </Grid>
-            <Grid size={3} className={commonStyles.customGrid}>
+            {/* Active 는 다른 콤보와 완전히 같은 폭이어야 하므로 plain Grid(block) 셀에 둔다.
+                customGrid(flex) 로 감싸면 flex 컨텍스트에서 필드가 더 넓게 계산돼 혼자 커진다. */}
+            <Grid size={3}>
               <FormItem
                 label={t('LBL00007', '_Active')}
                 labelAlign='right'
                 required
-                width='100%'
                 className={commonStyles.formItem}
                 render={() => (
                   <CustomDropdown
@@ -391,28 +392,25 @@ export const SalesSiteProjectModelForm = ({
                   />
                 )}
               />
-              {searchParams.divisionId !== '40' && (
-                <FormItem
-                  render={() => (
-                    <div className={commonStyles.customCheckbox}>
-                      <Checkbox
-                        checked={openPurchaseGrid}
-                        sx={{ marginLeft: '15px' }}
-                        onChange={checked => {
-                          if (!checked) setActiveTab(SHEET_INDEX.PRODUCTION);
-                          setOpenPurchaseGrid(checked);
-                        }}
-                      />
-                      <Label labelText={t('LBL00316', '_Detail')} depth='sub' />
-                    </div>
-                  )}
-                />
-              )}
             </Grid>
-            {/* 40 전용 체크박스 두 개 — 값만 조회 SP 로 넘기고 거르는 일은 SP 가 한다.
-                표시 조건 · 인자 이름은 constants NULL_FILTER_LABEL 주석 참조. */}
-            {showNullFilters && (
-              <Grid size={3} className={commonStyles.customGrid}>
+            {/* Active 오른쪽 체크박스 — 비-40 은 Detail, 40 은 널필터 두 개(값만 조회 SP 로 넘기고
+                거르는 일은 SP 가 한다. 인자 이름은 constants NULL_FILTER_LABEL 주석 참조).
+                별도 size=3 셀이라 Active 와의 기본 간격은 그리드 columnGap(24px)인데, marginLeft -12px
+                로 당겨 Active 드롭다운 바로 옆 12px 로 맞춘다(Active 폭은 건드리지 않는다). */}
+            <Grid size={3} className={commonStyles.customGrid} sx={{ marginLeft: '-12px' }}>
+              {searchParams.divisionId !== '40' && (
+                <div className={commonStyles.customCheckbox}>
+                  <Checkbox
+                    checked={openPurchaseGrid}
+                    onChange={checked => {
+                      if (!checked) setActiveTab(SHEET_INDEX.PRODUCTION);
+                      setOpenPurchaseGrid(checked);
+                    }}
+                  />
+                  <Label labelText={t('LBL00316', '_Detail')} depth='sub' />
+                </div>
+              )}
+              {showNullFilters && (
                 <div className={styles.nullFilters}>
                   <div className={commonStyles.customCheckbox}>
                     <Checkbox
@@ -429,8 +427,8 @@ export const SalesSiteProjectModelForm = ({
                     <Label labelText={NULL_FILTER_LABEL.projectInfoYn} depth='sub' />
                   </div>
                 </div>
-              </Grid>
-            )}
+              )}
+            </Grid>
           </>
         }
       />

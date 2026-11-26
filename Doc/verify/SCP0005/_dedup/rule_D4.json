@@ -1,97 +1,65 @@
 {
  "rule_id": "D4",
- "hash": "be2669ccd4a81920",
+ "hash": "efeae845d0a2f07a",
  "groups": [
   {
    "rows": [
-    "V-5b14302f",
-    "V-5b557318"
+    "EG-378a5255"
    ],
-   "why": "Both rows check the same thing: inserting while a filter or sort is applied. The condition and expected result (new row above the selected row, sort/filter kept, new row editable) are identical; only the source differs (GENERAL vs CONFIRMED)."
-  },
-  {
-   "rows": [
-    "V-379253e5",
-    "V-c1ccecb8"
-   ],
-   "why": "Both check the Div of a row inserted before search and the grid reset when the Div search condition changes. The condition and expected result are identical; only the source differs."
-  },
-  {
-   "rows": [
-    "EG-378a5255",
-    "EG-f2f2daea"
-   ],
-   "why": "Both check inserting above a merged group on SCP0005 with the same expected result ('insert above the group if AS-IS has a merge'). Only the rule ID differs (EG140 vs EG319)."
-  },
-  {
-   "rows": [
-    "V-643df3e2"
-   ],
-   "why": "The condition says 'after Insert' and doesn't say 'before search', and the expected result is worded as 'unsaved rows = 0'. Since the state differs from V-379253e5/V-c1ccecb8, it stays alone to be safe."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-921c3695"
    ],
-   "why": "Checks where the new row lands relative to the selected row (r2). This is a different expected result from EG-f4e71201 (sort kept), even though both are EG126."
-  },
-  {
-   "rows": [
-    "EG-f4e71201"
-   ],
-   "why": "Checks only that sort is kept after Insert with LT_TYPE asc applied. It has no filter or editability checks, so its scope differs from the V-5b14302f group."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-d0d86872"
    ],
-   "why": "Checks header merging (ColumnHeaderSpan), which is unrelated to Insert."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-f2f2daea"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-f4e71201"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-4efc64fc"
    ],
-   "why": "Trace row checking that the new row stays visible under a filter in the implementation (keepRowVisibleUnderFilter), which is a different property."
+   "why": "단독"
   },
   {
    "rows": [
     "T-7076810a"
    ],
-   "why": "Trace row checking that GridAction.addRow/removeRow exist in the implementation."
+   "why": "단독"
   },
   {
    "rows": [
     "T-96a334c6"
    ],
-   "why": "Trace row checking the Insert hotkey binding (hotkeyConfig.insert)."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-21cea7e5"
+    "V-643df3e2"
    ],
-   "why": "Checks this screen's elements for the SYS0016 defect type (Module combo, Active default, etc.). The targets and expected results are different."
-  },
-  {
-   "rows": [
-    "V-2d10e884"
-   ],
-   "why": "Checks the To Site combo and City mapping when inserting before search, which are different elements."
-  },
-  {
-   "rows": [
-    "V-2e0a2c4f"
-   ],
-   "why": "Checks the Team and Measure columns on a new row with FCST Type=ETC, which are different columns."
-  },
-  {
-   "rows": [
-    "V-e6747200"
-   ],
-   "why": "Checks Insert on the message-settings tab at the bottom of the screen, which is a different area."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:39:21",
- "cost": 0.0748981
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:32:24",
+ "cost": 0,
+ "open": 0
 }

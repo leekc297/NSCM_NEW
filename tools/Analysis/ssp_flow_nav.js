@@ -147,7 +147,7 @@
   function buildUi() {
     pop = document.createElement('div'); pop.id = 'navpop';
     pop.innerHTML = '<div class="np-bar"><button class="np-back" title="상세 창에서 바로 전에 보던 항목">◀ 이전</button><span class="np-title"></span>' +
-      '<button class="np-jump" title="이 항목이 있는 탭·위치로 이동(돌아올 때는 오른쪽 아래 「이전 위치」)">본문에서 보기 ↗</button><button class="np-close" title="닫기(Esc)">✕</button></div><div class="np-body"></div>';
+      '<button class="np-jump" title="이 항목이 있는 절로 이동(돌아올 때는 오른쪽 아래 「이전 위치」)">본문에서 보기 ↗</button><button class="np-close" title="닫기(Esc)">✕</button></div><div class="np-body"></div>';
     document.body.appendChild(pop);
     popBody = $('.np-body', pop); popTitle = $('.np-title', pop); popBack = $('.np-back', pop);
     $('.np-close', pop).onclick = closePop;
@@ -198,20 +198,21 @@
   function closePop() { pop.classList.remove('on'); popStack = []; }
 
   /* ── 이동 · 이전 위치 ─────────────────────────────────── */
-  function state() { var s = $('#scrSel'); return { tab: tabs().findIndex(function (t) { return t.classList.contains('on'); }), scr: s ? s.value : null, y: window.scrollY, x: window.scrollX }; }
-  function refreshBack() { backBtn.style.display = navStack.length ? 'block' : 'none'; backBtn.textContent = '◀ 이전 위치' + (navStack.length > 1 ? ' (' + navStack.length + ')' : ''); backBtn.title = '이동하기 전에 보던 탭·위치로 돌아갑니다'; }
+  function state() { var s = $('#scrSel'), c = window.SSPShell ? window.SSPShell.cur() : {}; return { item: c.id, pick: c.pick, scr: s ? s.value : null, y: window.scrollY, x: window.scrollX }; }   // 2026-11-23 화면 틀: 탭 번호 대신 목차 항목
+  function refreshBack() { backBtn.style.display = navStack.length ? 'block' : 'none'; backBtn.textContent = '◀ 이전 위치' + (navStack.length > 1 ? ' (' + navStack.length + ')' : ''); backBtn.title = '이동하기 전에 보던 절과 위치로 돌아갑니다'; }
   function flash(el) { el.classList.add('navflash'); setTimeout(function () { el.classList.remove('navflash'); }, 2200); }
   function jump(k) {
     var it = reg.get(k); if (!it) return;
     navStack.push(state()); refreshBack();
-    var sec = tabOf(it.el), idx = tabs().indexOf(sec); if (idx >= 0) window.show(idx);
+    var sec = tabOf(it.el); if (window.SSPShell) window.SSPShell.reveal(it.el);
+    var fd = it.el.closest('details.fold'); if (fd) fd.open = true;
     var scr = it.el.closest('.scr'); if (scr && window.pickScr) window.pickScr(scr.dataset.id);
     var tgt = it.kind === 'scr' ? it.el : it.el;
-    setTimeout(function () { var bar = $('.scrbar', sec), off = (bar ? bar.offsetHeight : 0) + 12; var y = tgt.getBoundingClientRect().top + window.scrollY - off; window.scrollTo(0, Math.max(0, y)); flash(tgt); }, 30);
+    setTimeout(function () { var bar = $('.scrbar', sec), cr = $('#crumb'), pb = $('#pickbar'), off = (bar && bar.offsetParent ? bar.offsetHeight : 0) + (cr ? cr.offsetHeight : 0) + (pb && pb.offsetParent ? pb.offsetHeight : 0) + 12; var y = tgt.getBoundingClientRect().top + window.scrollY - off; window.scrollTo(0, Math.max(0, y)); flash(tgt); }, 30);
   }
   function goBack() {
     var s = navStack.pop(); refreshBack(); if (!s) return;
-    if (s.tab >= 0) window.show(s.tab);
+    if (s.item && window.SSPShell) window.SSPShell.go(s.item, { keep: 1, pick: s.pick });
     if (s.scr !== null && window.pickScr) window.pickScr(s.scr, 1);
     setTimeout(function () { window.scrollTo(s.x, s.y); }, 30);
   }
@@ -219,11 +220,8 @@
   window.SSPNav = {
     init: function () {
       buildRegistry(); buildUi(); tagNodes();
-      var show0 = window.show;
-      window.show = function (i) { show0(i); var t = tabs()[i]; if (t) linkify(t); };
-      var cur = tabs().findIndex(function (t) { return t.classList.contains('on'); }); if (cur >= 0) linkify(tabs()[cur]);
       window.SSPNav.size = reg.size;
     },
-    open: openPop, jump: jump, back: goBack, reg: reg
+    open: openPop, jump: jump, back: goBack, reg: reg, linkify: linkify
   };
 })();

@@ -1,0 +1,29 @@
+{
+  "id": "20261123_111954_R12_ALL",
+  "at": "2026-11-23T11:19:54+09:00",
+  "ms": 1795400394023,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 2건",
+  "screen": "",
+  "sig": "R12|S13|U21|count|20261121000933_SELF|1795399786000",
+  "count": 1,
+  "repeat": null,
+  "detail": "개선안 2개 · 마지막 11-23 11:09 20261121000933_SELF '반영 실패. 검증 실패: ① node tools/VibeManager/test/t_orch_ladder_recur_time.js tools/Vi' · 20261122130655_REVIEW_4 11-22 13:37, 20261121000933_SELF 11-23 11:09",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U21|count|20261121000933_SELF|1795399786000",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T11:37:31+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

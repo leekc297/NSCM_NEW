@@ -51,6 +51,12 @@ export const WaterfallShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) 
 
   const [measureModalOpen, setMeasureModalOpen] = useState(false);
 
+  // Condition(F6) 저장 제외 — Ver.(versionNos)는 저장하지 않는다(AS-IS ConditionNotUseList.Add(clbVersion), cs:184).
+  const conditionParam = useMemo(() => {
+    const { versionNos: _versionNos, ...rest } = searchParams;
+    return rest;
+  }, [searchParams]);
+
   // p_sheet_name 파생값 — OperationGroup=='A' ? 'CELL' : 'ELECTRODE' (§4.2, 고정값 전달 금지).
   const sheetName = searchParams.operationGroup === 'A' ? 'CELL' : 'ELECTRODE';
 
@@ -217,7 +223,7 @@ export const WaterfallShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) 
         dataCount={visibleData.length}
         excelFileName='WaterfallShipmentPlanSemi'
         useHotkey={true}
-        searchParam={searchParams}
+        searchParam={conditionParam}
         hotkeyConfig={hotkeyConfig}
         customButtons={customButtons}
         // Sum(isSumChecked, SUM 컬럼 토글)을 그리드 건수 오른쪽(afterCount)으로 배치(사용자 지시 2026-11-18,

@@ -188,6 +188,11 @@
         "Doc/verify/SSP0014/llm_usage.csv",
         "tools/VibeManager/test/t_orch_watch_skip_notarget.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:33+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:08:27+09:00"
     }
   ],
   "auto": true,
@@ -216,5 +221,7 @@
     "verify_result": "2026-11-20 06:12:21 실행. node --check tools/VibeManager/orch-watch.js 통과. node test/t_orch_watch_skip_notarget.js PASS 4(대상 아님 상세 2회 = 사건 0건, 사건 파일 0건, 반복 집계 0건, 다른 상세 = R1 다음 R2). node test/run_all.js ALL OK 파일 28/28 PASS 353 FAIL 0 110.1s",
     "note": "failure() 첫 줄에 NOTARGET_RE 검사 추가. 해당 상세면 noteSig·raise 를 부르지 않고 orch-events 에 type 'notice'(what '대상 아님(TO-BE 화면 없음)') 1줄만 남기고 null 반환. 문구는 tools/Harness/verify/prereq.py:220 원문과 일치 확인. 작업 모드 DB_ONLY 이지만 tools/VibeManager 는 차단 대상 아님. 설치 폴더와 CHANGELOG.md 는 건드리지 않음"
   },
-  "snap": "prop_20261120005146_INC"
+  "snap": "prop_20261120005146_INC",
+  "effectiveMs": 1795136907899,
+  "effectiveAt": "2026-11-20T10:08:27+09:00"
 }

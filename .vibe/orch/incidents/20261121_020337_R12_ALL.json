@@ -1,0 +1,29 @@
+{
+  "id": "20261121_020337_R12_ALL",
+  "at": "2026-11-21T02:03:37+09:00",
+  "ms": 1795194217055,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U24 미검증 해소 뒤 처리 대상 남음 SCP0028",
+  "screen": "",
+  "sig": "R12|S13|U24|SCP0028|20261121_005227_claude",
+  "count": 1,
+  "repeat": null,
+  "detail": "해소 전 미검증 12(처리 대상 1, 11-21 00:52) → 해소 단계 11/11 11-21 00:52~11-21 01:01(J20261120_191752) → 재측정 11-21 01:01 미검증 5 · 처리 대상(unverified_triage.json actionable) 2 · 분류 검사기공백 1, 집계 4 · issues F5 2, E1 4, G1 8, H2 13, H6 14, A1 1, X-ROW 7, E4 1",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U24|SCP0028|20261121_005227_claude",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T20:55:37+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

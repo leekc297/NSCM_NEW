@@ -1,0 +1,224 @@
+{
+  "id": "20261123000946_VISION",
+  "at": "2026-11-23T00:09:46+09:00",
+  "ms": 1795360186257,
+  "source": "vision",
+  "status": "applied",
+  "sig": "applied vs effective reload judge",
+  "title": "개념 재정립: 개선안 '반영 완료'와 '효력 시작(창 로드)'을 나누고 VMO 판정은 효력 시각부터 셈",
+  "evidence": "ladder.json L4|struct|applyfail|doc_style.py why에 '효력' 문구 없음, 설치본 orch-ladder.js:89, :92 는 '효력' 문구를 씀. 20261119232523_SELF history 반영 실패 11-19 23:45:08, 23:55:28. 11-22 00:21 뒤 doc_style.py 대상 '반영 실패.' 0건(11-23 00:06 조회). 000421_SELF, 000421_SELF_2, 140537_VISION needsReload true, activations.jsonl 마지막 VM 로드 11-21 01:59:17. 로드 대기 applied 개선안 17건. orch-improve.js:315 appliedMs·needsReload 기록, orch-ladder.js:64 effMsOf, :86-87 appliedMs 기준 structWatchDays, orch-improve.js:76 staleFiles · 진단 사다리 묶음 L4|struct|applyfail|doc_style.py · 문서 .vibe/orch/vision/concept_20261123_L4_struct_applyfail_doc_style.py.md",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "지금: 개선안이 파일을 바꾸고 게이트를 통과한 시각(appliedMs)을 고친 시점으로 보고 재발 감시, L3·L4 올림, 7일 관찰을 셈. 실행 중 코드가 창 로드 전 옛 판이어도 판정과 AI 진단을 계속함 → 새 개념: 반영 완료(파일)와 효력 시작(needsReload 면 반영 뒤 첫 창 로드)을 따로 기록하고, 재발·올림·관찰·반영 실패 집계는 효력 시각 뒤 근거만 셈. 판정 코드가 설치본보다 오래됐으면 L3·L4 AI 진단을 보류하고 로드 대기 건수를 화면에 표시함",
+  "verify": "반영 전 값: ladder.json L4|struct|applyfail|doc_style.py status open, L4|struct|edits|workbench.js status open, 로드 대기 applied 개선안 17건(11-23 00:06). 시험: (1) t_orch_improve.js 재현 시험, 000421_SELF(needsReload, appliedMs 11-22 00:21)와 activations 마지막 11-21 01:59:17 입력 → effectiveMs 없음 (2) t_orch_ladder.js 재현 시험, 사례 1, 3 근거 입력 → scan() 결과에 두 L4 키 없음, 효력 뒤 반영 실패 2건 입력 → L4 유지 (3) staleFiles 에 orch-ladder.js 가 든 입력 → L3·L4 AI 진단 호출 0, dayRuns 증가 0. node tools/VibeManager/test/run_all.js 통과. 창 다시 로드 뒤 ladder.json 두 묶음 status open → resolved",
+  "rollback": "VMO 가 만든 .bak_<날짜>_self<시각> 사본으로 대상 6개 파일 복원, 또는 개선안 탭 되돌리기. effectiveMs 필드는 읽는 코드를 되돌리면 무시됨",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "구조 개선안 20261122000421_SELF 반영(11-22 00:21) 뒤 3일 안에 L3|applyfail|doc_style.py 가 다시 참이 되어 L4 로 올라감(ladder.json firstAt 11-22 00:21:31). 같은 꼴 L4|struct|edits|workbench.js 1건 더. 근거 반영 실패 2건(11-19 23:45, 23:55)은 구조 개선안보다 앞섬. 이 오판을 막는 수정 3건이 창 로드 대기(마지막 로드 11-21 01:59:17)라 실행 중 코드에 없음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T11:22:26+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:22:33+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T11:22:33+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:22:38+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T11:22:48+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:22:52+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T11:23:04+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:23:08+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T19:22:51+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T19:26:35+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1122, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self1922"
+    },
+    {
+      "at": "2026-11-23T19:26:38+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T19:48:44+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1131, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 4개 · CHANGELOG 절 추가 · 바로 다시 읽음 orch-ladder.js · 창 다시 로드 뒤 적용 orch-improve.js, orch-selfcheck.js, orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T19:48:44+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v4 창 다시 로드 뒤 ladder.json 두 묶음 status open → resolved (창 다시 로드 뒤 확인)"
+    },
+    {
+      "at": "2026-11-23T19:48:44+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건, 반영 뒤 확인 1건. 반영 전(11-23 19:27 조회): ladder.json L4|struct|applyfail|doc_style.py resolved, L4|struct|edits|workbench.js resolved(11-23 10:53, 개선안 작성 시점 00:06 의 open 과 다름), 마지막 창 로드 11-23 18:46:46, 로드 대기 applied 1건(개선안 기재 17건과 다름). t_orch_ladder.js 37 PASS, t_orch_improve.js ALL PASS, 효력 시험 (1)~(3) 없음. run_all.js  · 변경 32개 파일 · 대상 목록 밖 변경 26개: _artifacts/_deploy_packages/_cloud_state/DMF0082.json, tools/Harness/gate_baseline.tsv, Doc/verify/DMF0082/CLOUD_RTF_3ROW_CHECK_20261123.sql, Doc/verify/DMF0082/rtf3/ASIS_LIVE_DMF0082_GET_MAIN_DATA.sql, Doc/verify/DMF0082/rtf3/q9.py, Doc/verify/DMF0082/rtf3/repro.sql",
+      "log": ".vibe\\logs\\2026-11-23T19-26-40_claude_orch.log",
+      "sec": 1109,
+      "costUsd": 3.9716522999999997,
+      "files": [
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/orchestra.js",
+        "tools/VibeManager/test/t_orch_improve.js",
+        "tools/VibeManager/test/t_orch_ladder.js",
+        "Doc/verify/DMF0082/CLOUD_RTF_3ROW_CHECK_20261123.sql",
+        "Doc/verify/DMF0082/rtf3/ASIS_LIVE_DMF0082_GET_MAIN_DATA.sql",
+        "Doc/verify/DMF0082/rtf3/q9.py",
+        "Doc/verify/DMF0082/rtf3/repro.sql",
+        "_artifacts/_apply_corporate/DMF0082_RTF3ROW_20261123/02_BACKUP_PKG_DMF0082_BODY_STEP1.ASIS.sql",
+        "_artifacts/_apply_corporate/DMF0082_RTF3ROW_20261123/03_PKG_DMF0082_BODY_RTF3ROW_FINAL.sql",
+        "_artifacts/_apply_corporate/DMF0082_RTF3ROW_20261123/apply_rtf3row_spr_revert.py",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261123_1929/00_README.md",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261123_1929/A_DB/00_PRECHECK_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261123_1929/A_DB/05_BACKUP_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261123_1929/A_DB/20_PKG_PKG_DMF0082.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261123_1929/A_DB/40_GRANT_DMF0082.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261123_1929/A_DB/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261123_1929/A_DB/99_ROLLBACK.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104A__PACKAGE.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104A__PACKAGE_BODY.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104B__PACKAGE.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104B__PACKAGE_BODY.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104C__PACKAGE.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104C__PACKAGE_BODY.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104__PACKAGE.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082_1104__PACKAGE_BODY.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082__PACKAGE.sql",
+        "_artifacts/_deploy_packages/_cloud_state/DMF0082/built_src/DMF0082_CLOUD_DB_MOD_20261123_1929/PKG_DMF0082__PACKAGE_BODY.sql"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:21+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T21:20:34+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VMO 가 고친 내용은 VS Code 창을 다시 로드해야 실제로 돎. 지금은 파일만 바꾸면 고친 것으로 셈해서, 고치기 전 오류를 고친 뒤 재발로 보고 개념 재정립까지 올렸음. 바꾸면 창 로드 뒤부터 재발을 세고, 개선안 탭에 '반영 완료, 로드 대기 N건'이 보임",
+    "risk": "창을 오래 다시 로드하지 않으면 그동안 고친 항목의 재발 감시와 L3·L4 진단이 보류됨. 화면 진입 실패 같은 L2 사건 처리는 그대로 돎",
+    "undo": "개선안 탭 되돌리기 버튼, 또는 .bak 사본 복원 뒤 창 다시 로드"
+  },
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795429371269,
+  "autoFp": "3ba9fc303a",
+  "applyStartMs": 1795429598406,
+  "postChecks": [
+    {
+      "n": 4,
+      "text": "창 다시 로드 뒤 ladder.json 두 묶음 status open → resolved",
+      "why": "창 다시 로드 뒤 확인",
+      "status": "open",
+      "at": "2026-11-23T19:45:12+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-23T19:45:12+09:00",
+    "verified": true,
+    "text": "실행 통과 3건, 반영 뒤 확인 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1131, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1922",
+  "needsReload": true,
+  "hotLoaded": [
+    "orch-ladder.js"
+  ],
+  "reloadFiles": [
+    "orch-improve.js",
+    "orch-selfcheck.js",
+    "orchestra.js"
+  ],
+  "appliedMs": 1795430924355,
+  "synced": [
+    "orch-improve.js",
+    "orch-ladder.js",
+    "orch-selfcheck.js",
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node test/t_orch_improve.js: 48 PASS, ALL PASS. '효력 (1) needsReload 안, 반영 뒤 창 로드 없음(kind 줄 제외) → effectiveMs 없음 · 효력 전 null · 로드 대기 1건' {eff:null,n0:0,w0:{n:1,oldestAt:2026-11-22T00:21:04}}. 창 로드 추가 뒤 effectiveMs = 로드 시각, 다시 반영하면 옛 effectiveMs 버림도 PASS"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "node test/t_orch_ladder.js: 41 PASS, ALL PASS. '효력 (2) 사례 1, 3 근거 입력 → L4|struct|applyfail|doc_style.py, L4|struct|edits|workbench.js 없음 · L3 에 효력 전 보류' PASS. '효력 (2) 반대: 창 로드 뒤 반영 실패 2건 → L4|struct|applyfail|doc_style.py 유지 · 근거 = 효력 뒤 2건' PASS"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "t_orch_ladder.js '효력 (3) staleFiles 에 orch-ladder.js → AI 진단 호출 0 · dayRuns 증가 0' PASS {calls:0, held:2, dayRuns 13 → 13, hold.files:[orch-ladder.js]}. 반대 시험(판정 코드 아닌 파일만) 진단 진행 PASS. node test/run_all.js: 'ALL OK 파일 72/72 PASS 1131 FAIL 0 208.8s' (반영 전에는 미실행). t_webview_syntax.js 19 PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/orchestra.js",
+      "tools/VibeManager/test/t_orch_improve.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "반영 전(11-23 19:27 조회): ladder.json L4|struct|applyfail|doc_style.py resolved, L4|struct|edits|workbench.js resolved(11-23 10:53, 개선안 작성 시점 00:06 의 open 과 다름), 마지막 창 로드 11-23 18:46:46, 로드 대기 applied 1건(개선안 기재 17건과 다름). t_orch_ladder.js 37 PASS, t_orch_improve.js ALL PASS, 효력 시험 (1)~(3) 없음. run_all.js 반영 전 미실행. 반영 뒤(19:28~19:34): t_orch_improve.js 48 PASS(효력 시험 4건 추가), t_orch_ladder.js 41 PASS(효력 시험 5건 추가), run_all.js 'ALL OK 파일 72/72 PASS 1131 FAIL 0 208.8s', t_webview_syntax.js 19 PASS, doc_style.py 대상 .js 4개 위반 0 → 0. v4(창 다시 로드 뒤 ladder.json 두 묶음 상태)는 반영 뒤 확인 항목이라 미실행. 두 묶음은 반영 전 이미 resolved 라 v4 기대값은 'resolved 유지'.",
+    "note": "개선안 작성 시점(11-23 00:06) 뒤 11-23 18:46 창 로드로 반영 전 값이 바뀜. 시험 (2) 의 L4 미발생 부분은 반영 전 저장소 코드로도 통과하는 재현 시험이고, 원래 문제는 실행 중 옛 판 코드였음. 시험 (1), (3) 은 새 함수와 보류 동작이 없으면 실패하나, 수정을 빼고 돌린 실패 확인은 미실행. 작업 모드 DB_ONLY 는 FE·BE 대상이라 tools/VibeManager 수정을 막지 않았음. 설치 폴더와 CHANGELOG.md 는 건드리지 않음. 임시 파일(.vibe/tmp_style_000946, .vibe/tmp_runall_000946.txt)은 삭제함."
+  },
+  "snap": "prop_20261123000946_VISION",
+  "effectiveMs": 1795436434041,
+  "effectiveAt": "2026-11-23T21:20:34+09:00"
+}

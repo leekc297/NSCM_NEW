@@ -1,4 +1,4 @@
-# 사업부별 Shipment Plan 산출 흐름 — 2026-11-16 18:43 생성
+# 사업부별 Shipment Plan 산출 흐름 — 2026-11-23 13:44 생성
 
 > 원천(사용자 제공 2026-11-11 · 사본 `Doc/asisfacts/ref_ssp/src/`): `(20261111) 사업부별 Shipment Plan 산출 흐름도.pptx`(슬라이드 10) · `(20261111) 사업부별 Shipment Plan 산출 로직.xlsx`(요약 · 산출 흐름 · 단계별 상세 · 기준정보 설정). 생성 = `tools/Analysis/ssp_shipplan.py`
 > 자료 기준 = SCP FINAL → 출하요청 → 사업부별 일 산출(40 · 81·82 · 전극 · Packer) → 확정 · ERP 송신 — TO-BE(Oracle) 본문에서 정리한 산출 로직이다. 문구는 원문 그대로 옮겼고, AS-IS SP 본문과의 대조는 §7 에 따로 적었다.

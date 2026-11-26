@@ -42,8 +42,9 @@ interface Props {
  * `P_SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING` 으로 전송한다.
  *
  * 컬럼은 admin `SCM_MST_SHEET_COLUMNS`(SHEET_NAME='Warehouse Item Mapping', 16행 실측)를 그대로
- * 쓴다. 편집잠금은 WhCapa 시트와 동일 `isCellEditable`(ALWAYS_LOCKED_COLUMNS 공유) — 단
- * ITEM_ID 는 POPUP_ONLY_COLUMNS 로 항상 편집 차단, 더블클릭만 허용(design 03 §1.2 gridSignals#19).
+ * 쓴다. 편집잠금은 WhCapa 시트와 동일 `isCellEditable`(ALWAYS_LOCKED_COLUMNS 공유) — ITEM_ID 는
+ * admin 메타 Cell Object 타입(FPTextModal)대로 key-in·더블클릭 팝업을 모두 허용한다(사용자 지시
+ * 2026-11-23 — AS-IS 팝업 전용 하드코딩 제거, design 03 §1.2 gridSignals#19 deviation).
  *
  * STOR_LOC_NAME 은 division 에 '81_UC' 가 포함될 때만 표시(AS-IS `.cs:512-532` `SetVisibleSheetColumns`
  * — `SetVisibleSheetColumn(STOR_LOC_NAME, 80, true/false)`로 너비를 직접 덮어씀). admin 메타는
@@ -262,6 +263,8 @@ export const WarehouseItemMappingGrid = ({
         gridRef={gridRef}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
+        // cascade(연동 편집) 화면 — undo 시 cellEditEnded 재발화로 연동 셀까지 복원(순수 집계/파생, clear·부작용 없음 확인).
+        reapplyEditOnUndo
         itemsSource={rows}
         staticColumns={columns}
         allowMerging={AllowMerging.None}

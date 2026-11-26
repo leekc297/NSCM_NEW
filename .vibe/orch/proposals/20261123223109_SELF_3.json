@@ -1,0 +1,110 @@
+{
+  "id": "20261123223109_SELF_3",
+  "at": "2026-11-23T22:31:09+09:00",
+  "ms": 1795440669426,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/run rule.js|ai지시문에결정이필요하면멈추지않고권장안으로진행하고회신양식에질문을적음문장과",
+  "title": "사용자 지시 R47 같은 문제: tools/VibeManager/run-rule.js:5 AI 지시문에 '결정이 필요하면 멈추지 않고 권장안으로 진행하고 회신 양식에 질문을 적음' 문장과 회신 양식 경로가 없음. rules/*.md 에서 '중간 질문'",
+  "evidence": "규칙 R47 \"결정이 필요한 질문은 작업을 멈추지 않고 진행하면서 회신 양식으로 받음\" (원래 지시 2026-11-11 17:26 \"계속 진행중이죠? 계속 진행해주시고, 혹시 회신이나 결정이 필요하면 작업은 진행하면서 회신 받는 폼으로 질문해주세요. 그냥 위의 상태창에 보여주는 것은 계속 잘 진행되는 것으로 인지하겠습니다.\") · tools/VibeManager/run-rule.js:5 const NOTE = '[실행 룰 A-13, tools/VibeManager/rules/10_RULES_KEEP.md] 누락 0 안에서 가장 빠르게. 요청 항목, 검사, 검증, 보고 항목은 빼지 않음. '",
+  "targets": [
+    "tools/VibeManager/run-rule.js"
+  ],
+  "before_after": "NOTE 에 '결정이 필요한 질문은 작업을 멈추지 않고 권장안으로 진행하고 결정 목록(회신 양식 파일 경로)에 적음' 항목을 추가함. 10_RULES_KEEP.md A-13 에 같은 항목과 경로를 둠",
+  "verify": "node --check tools/VibeManager/run-rule.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/run-rule.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T23:28:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T23:32:09+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self2328"
+    },
+    {
+      "at": "2026-11-24T23:32:11+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T23:44:19+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 run-rule.js"
+    },
+    {
+      "at": "2026-11-24T23:44:19+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check run-rule.js 반영 전 통과 → 반영 뒤 통과 · node test/run_all.js 반영 전 83/83 PASS 1349 FAIL 0 (2026-11-24T14:32:34Z) → 반영 뒤 83/83 PASS 1349 FAIL 0 (2026-11-24T14:36:39Z) · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/rules/10_RULES_KEEP.md",
+      "log": ".vibe\\logs\\2026-11-24T23-32-11_claude_orch.log",
+      "sec": 504,
+      "costUsd": 0.7474639000000001,
+      "files": [
+        "tools/VibeManager/rules/10_RULES_KEEP.md",
+        "tools/VibeManager/run-rule.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "결정이 필요한 질문은 작업을 멈추지 않고 진행하면서 회신 양식으로 받음 규칙을 tools/VibeManager/run-rule.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R47|tools/VibeManager/run-rule.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795530500874,
+  "autoFp": "2a3eba2c0f",
+  "applyStartMs": 1795530731716,
+  "verifyJudge": {
+    "at": "2026-11-24T23:40:38+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self2328",
+  "needsReload": false,
+  "hotLoaded": [
+    "run-rule.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795531459885,
+  "synced": [
+    "run-rule.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/run-rule.js: 반영 전 출력 없음(통과) → 반영 뒤 출력 없음(통과), NOTE.includes('결정 목록(회신 양식 Doc/verify/_TWO_SCREENS_DECISIONS.md)')=true 길이 739 · node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 83/83 PASS 1349 FAIL 0 221.2s'(2026-11-24T14:32:34Z) → 반영 뒤 'ALL OK 파일 83/83 PASS 1349 FAIL 0 220.7s'(2026-11-24T14:36:39Z) · run-rule.js 는 웹뷰 파일 아님, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/run-rule.js",
+      "tools/VibeManager/rules/10_RULES_KEEP.md"
+    ],
+    "verify_result": "node --check run-rule.js 반영 전 통과 → 반영 뒤 통과 · node test/run_all.js 반영 전 83/83 PASS 1349 FAIL 0 (2026-11-24T14:32:34Z) → 반영 뒤 83/83 PASS 1349 FAIL 0 (2026-11-24T14:36:39Z)",
+    "note": "run-rule.js NOTE 에 11) 결정 질문은 멈추지 않고 권장안으로 진행, 결정 목록(회신 양식 Doc/verify/_TWO_SCREENS_DECISIONS.md)에 항목, 선택, 근거, 되돌리는 방법 기록 추가. 10_RULES_KEEP.md A-13 에 12번(규칙 R47, 사용자 2026-11-11) 추가함. 회신 양식 경로는 메모리 feedback_no_midway_questions_batch_at_end_20261116 기준이고 파일 있음 확인. CHANGELOG.md, 설치 폴더, .bak 은 지시대로 건드리지 않음. 걸린 시간 약 9분, 오래 걸린 단계 run_all 2회(221.2초, 220.7초)."
+  },
+  "snap": "prop_20261123223109_SELF_3"
+}

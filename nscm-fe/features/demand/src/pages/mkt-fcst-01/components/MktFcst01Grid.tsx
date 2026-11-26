@@ -7,6 +7,7 @@ import {
   type DataMap,
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
+  GroupRow,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useCallback, useEffect, useMemo, useRef } from 'react';
@@ -84,6 +85,14 @@ import {
 import { getDynKey, HierarchicalMergeManager } from '../utils/mkt-fcst-01.merge';
 import { dispatchRecalc, dowIndexOfCode, type RecalcAccessor } from '../utils/mkt-fcst-01.recalc';
 import { parseSspSyncMap, type SspSyncState } from '../utils/mkt-fcst-01.sspSync';
+
+// 동적(기간) 컬럼 너비 = 프로시저(GET_SPREAD_TITLE) COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+const DYN_COL_DEFAULT_WIDTH = 90;
+const spColumnWidth = (raw: string | number | null | undefined): number | undefined => {
+  const n = Number(String(raw ?? '').trim());
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
 
 // [DMF0003_01] Prod. Country · Prod. Country Option 편집 판정 (요건 14 · 15, 사용자 결정 2026-11-06).
 //   칸 설정 입력 구분(IO = 신규 행만)과 무관하게 화면이 직접 판정한다 — 기존 행도 고칠 수 있어야 한다.
@@ -728,6 +737,8 @@ export const MktFcst01Grid = ({
     sort: number;
     /** SP 수신 순서. 정렬 tie-break + 헤더 2단 그룹 배치 기준 (mainDynamicColumns 참조). */
     seq: number;
+    /** SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+    width?: number;
   };
   // ⭐ 헤더 드릴다운(2026-07-03, AS-IS spdMain_CellDoubleClick 헤더 분기 L3416~3455) —
   //   AS-IS 는 전 버킷 컬럼이 스프레드에 상존하고 SetSpreadColumn 이 표시만 제어. 1:1 로
@@ -781,6 +792,7 @@ export const MktFcst01Grid = ({
             leaf: r.COLUMN_LABEL_NAME ?? '',
             sort: Number(r.SORT_ORDER_NO ?? 0),
             seq: i,
+            width: spColumnWidth(r.COLUMN_WIDTH),
           }))
           // ⭐ 동률 tie-break 은 반드시 SP 수신 순서(seq) — binding 문자열로 깨면 안 된다.
           //   월 경계 분할 주는 A/B 두 행이 같은 주(BASIS_START_DATE 동일)라 SORT_ORDER_NO 가 완전히
@@ -949,7 +961,7 @@ export const MktFcst01Grid = ({
         align: 'right',
         format: '#,##0.###',
         aggregate: Aggregate.Sum,
-        width: 90,
+        width: m.width ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,
@@ -2190,6 +2202,55 @@ export const MktFcst01Grid = ({
     };
   }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
 
+  // 하단 합계 줄 (2026-11-25 요청 - 원천 DMF0003 MktFcstGrid 2026-11-24 반영분과 같은 방식).
+  //   기간 칸(M_/W_/D_)만 Aggregate.Sum, 첫 번째 보이는 정적 칸에 라벨 'Sum'. 메저 구분 없이 보이는 행을 모두
+  //   더한다(요청자 확인 - 메저는 필터로 걸러 본다). 집계는 CollectionView 가 필터 적용 뷰로 계산하므로 필터로
+  //   숨긴 행은 빠지고, 셀 수정 뒤 다시 그릴 때 새 값으로 계산된다. 조회 결과가 없으면 footer 를 뺀다.
+  //   공용 DataGrid 가 컬럼을 다시 만들면 aggregate 가 사라질 수 있어 updatedLayout 마다 다시 건다
+  //   (바뀐 것이 없으면 invalidate 하지 않는다 - 재진입 루프 방지).
+  useEffect(() => {
+    const g = (gridRef as { current: FlexGridType<MktFcst01Row> | null } | null)?.current;
+    if (!g) return;
+    if (rows.length === 0) {
+      if (g.columnFooters.rows.length > 0) g.columnFooters.rows.clear();
+      return;
+    }
+    const isPeriodBinding = (binding: string): boolean => /^[MWD]_/.test(binding);
+    let labeledCol: Column | null = null;
+    const applyFooter = () => {
+      let changed = false;
+      if (g.columnFooters.rows.length === 0) {
+        g.columnFooters.rows.push(new GroupRow());
+        changed = true;
+      }
+      for (let i = 0; i < g.columns.length; i++) {
+        const col = g.columns[i];
+        const want = isPeriodBinding(col.binding ?? '') ? Aggregate.Sum : Aggregate.None;
+        if (col.aggregate !== want) {
+          col.aggregate = want;
+          changed = true;
+        }
+      }
+      const labelIdx = g.columns.findIndex(c => c.isVisible && !isPeriodBinding(c.binding ?? ''));
+      const labelCol = labelIdx >= 0 ? g.columns[labelIdx] : null;
+      if (labelCol && labelCol !== labeledCol) {
+        g.columnFooters.setCellData(0, labelIdx, 'Sum', false, false);
+        labeledCol = labelCol;
+        changed = true;
+      }
+      if (changed) g.invalidate(true);
+    };
+    g.updatedLayout.addHandler(applyFooter);
+    applyFooter();
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyFooter);
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [rows, mainStaticColumns, mainDynamicColumns, gridRef]);
+
   return (
     <>
       <DataGrid<MktFcst01Row>
@@ -2197,6 +2258,10 @@ export const MktFcst01Grid = ({
         // 필터 인스턴스는 DataGrid 소유 — 위 F4 Filter effect 주석 참고.
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
+        // 결정적(집계형) cascade 화면 — 셀 하나 수정이 W/D/M 집계 셀을 함께 set 하므로, undo 시 cellEditEnded 를
+        //   재발화해 그 연동 셀들도 되돌린 값으로 재계산·복원한다(원천 DMF0003 2026-11-25 반영분과 같음,
+        //   DataGrid reapplyEditOnUndo 주석 참고).
+        reapplyEditOnUndo
         staticColumns={mainStaticColumns}
         dynamicColumns={mainDynamicColumns}
         comboParams={gridComboParams}
@@ -2212,7 +2277,7 @@ export const MktFcst01Grid = ({
         //   반면 grid.allowSorting 이 truthy 면 wijmo _MouseHandler._mousedown 이 컬럼 헤더 클릭 시
         //   열 전체 선택(_mouseSelect)을 건너뛴다. 헤더 클릭 = 열 전체 선택으로 통일하기 위해 뺀다.
         allowMerging={AllowMerging.All}
-        useAggregationRow={false}
+        useAggregationRow={false} // 공용 집계행 대신 위 '하단 합계 줄' effect 가 데이터 있을 때만 넣는다(2026-11-25)
       />
     </>
   );

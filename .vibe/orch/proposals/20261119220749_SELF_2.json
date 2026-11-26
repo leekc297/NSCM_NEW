@@ -86,6 +86,11 @@
         "tools/VibeManager/test/t_orch_history.js",
         "tools/VibeManager/test/t_orch_selfcheck.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-19T22:53:54+09:00"
     }
   ],
   "self": true,
@@ -117,5 +122,7 @@
     "orch-history.js",
     "orch-selfcheck.js"
   ],
-  "snap": "prop_20261119220749_SELF_2"
+  "snap": "prop_20261119220749_SELF_2",
+  "effectiveMs": 1795096434389,
+  "effectiveAt": "2026-11-19T22:53:54+09:00"
 }

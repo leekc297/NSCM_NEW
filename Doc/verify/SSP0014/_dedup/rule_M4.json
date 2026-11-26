@@ -1,299 +1,269 @@
 {
  "rule_id": "M4",
- "hash": "c8bc360e15d33f69",
+ "hash": "0b7b419899543fd5",
  "groups": [
-  {
-   "rows": [
-    "V-c0083206",
-    "V-e1d40690"
-   ],
-   "why": "대상(팝업 입력 컬럼), 상태(팝업 선택 직후), 기대(선택 즉시 셀에 값 표시)가 모두 같아 출처(DEFECT/CONFIRMED)만 다른 같은 검사다."
-  },
   {
    "rows": [
     "EG-08b5ad21"
    ],
-   "why": "조회조건 Model 팝업의 선택 모드를 보는 행이고 기대가 AS-IS 기준 다중 선택이라, 그리드 Model 셀의 단일 선택(V-6eaf64de)과 대상도 기대도 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-0c29651d"
    ],
-   "why": "MAIL_USER2 컬럼의 PERIOD_BACK 검사로, 다른 컬럼과는 대상 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-10b8b4e0"
    ],
-   "why": "조회조건 Model 팝업에서 더블클릭 결과가 OK 결과와 같은지 보는 고유 검사로, V-9663c552는 그리드 신규 행의 공용 팝업 자동 채움이라 대상이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-23c35e27"
    ],
-   "why": "USER_ID 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-24f3e087"
    ],
-   "why": "TEAM_LEADER 컬럼의 PERIOD_BACK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-2bf73d5d"
    ],
-   "why": "PART_LEADER 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-36dd0932"
    ],
-   "why": "TEAM_LEADER 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-4770c03a"
    ],
-   "why": "TEAM_LEADER 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-54a919d6"
    ],
-   "why": "MAIL_USER1 컬럼의 PERIOD_BACK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-5ccc8cbe"
    ],
-   "why": "MAIL_USER4 컬럼의 PERIOD_BACK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-6fc9abde"
    ],
-   "why": "PART_LEADER 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-7147c9b4"
    ],
-   "why": "USER_ID 컬럼의 PERIOD_BACK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-791992f5"
    ],
-   "why": "MAIL_USER3 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-83f4dfa1"
    ],
-   "why": "USER_ID 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-8b9f3f3e"
    ],
-   "why": "MAIL_USER5 컬럼의 PERIOD_BACK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-8caf94d5"
    ],
-   "why": "MAIL_USER2 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-98354308"
    ],
-   "why": "MAIL_USER1 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-9ed4d21c"
    ],
-   "why": "MAIL_USER2 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-a2a935e2"
    ],
-   "why": "MAIL_USER1 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-ad619cd4"
    ],
-   "why": "MAIL_USER5 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-b8fecede"
    ],
-   "why": "PART_LEADER 컬럼의 PERIOD_BACK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-bc0d452d"
    ],
-   "why": "MAIL_USER5 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-c9886d6c"
    ],
-   "why": "조회조건 Model 팝업의 PERIOD_BACK 검사로 대상 요소가 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-cb8a7092"
    ],
-   "why": "MAIL_USER3 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-d44cae79"
    ],
-   "why": "MAIL_USER3 컬럼의 PERIOD_BACK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-e84d090d"
    ],
-   "why": "MAIL_USER4 컬럼의 SELECT_MODE 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-ed65159c"
    ],
-   "why": "조회조건 Model 팝업의 PICK_OK 검사로 대상 요소가 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-f3c3ca4d"
    ],
-   "why": "MAIL_USER4 컬럼의 PICK_OK 검사로 대상 컬럼이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-134766e0"
    ],
-   "why": "대조표 A#3 항목의 구현 위치 추적이라 동작 검사 행과 성질이 다르고, 비슷한 추적 행(T-7747eb3e)과도 대조표 항목이 달라 확신이 없어 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-1d8c306f"
    ],
-   "why": "btnItemId 버튼의 대조표 추적으로 대상이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-380c7614"
    ],
-   "why": "SsoUserModal 모달의 대조표 추적으로 대상이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-458a2579"
    ],
-   "why": "MAIL_USER5 컬럼의 대조표 추적(구현 위치 실존 확인)이라 동작 검사 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-52cfc2c8"
    ],
-   "why": "MAIL_USER4 컬럼의 대조표 추적이라 동작 검사 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-52e5f553"
    ],
-   "why": "ProgressForm 항목의 대조표 추적으로 대상이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-61c96bd9"
    ],
-   "why": "USER_ID 컬럼의 대조표 추적이라 동작 검사 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-7747eb3e"
    ],
-   "why": "대조표 D00-2-003 항목의 구현 위치 추적으로, A#3 추적과 대조표 항목이 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-82ee0051"
    ],
-   "why": "ItemByDivisionModal 모달의 대조표 추적으로 대상이 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-898ecb7b"
    ],
-   "why": "PART_LEADER 컬럼의 대조표 추적이라 동작 검사 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-9b55fed0"
    ],
-   "why": "MAIL_USER1 컬럼의 대조표 추적이라 동작 검사 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-9e030d2f"
    ],
-   "why": "SpdMain_CellDoubleClick 진입점(ENTRY)이 소스에 있는지 보는 추적이라 대상 종류가 고유하다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-ae30c0b4"
    ],
-   "why": "TEAM_LEADER 컬럼의 대조표 추적이라 동작 검사 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-d4186ca4"
    ],
-   "why": "MAIL_USER3 컬럼의 대조표 추적이라 동작 검사 행과 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-df989ae3"
    ],
-   "why": "MAIL_USER2 컬럼의 대조표 추적이라 동작 검사 행과 성질이 다르다."
-  },
-  {
-   "rows": [
-    "V-6eaf64de"
-   ],
-   "why": "그리드 Model 셀 팝업의 단일 선택 강제 검사로, 조회조건 Model의 다중 선택(EG-08b5ad21)과 대상도 기대도 다르다."
-  },
-  {
-   "rows": [
-    "V-9663c552"
-   ],
-   "why": "신규 행에서 공용 팝업을 OK로 확정할 때와 더블클릭으로 확정할 때 자동 채움 결과가 같은지 보는 검사로, 조회조건 Model 검사(EG-10b8b4e0)와 상태도 대상도 다르다."
-  },
-  {
-   "rows": [
-    "V-9b1d629d"
-   ],
-   "why": "Exchange Rate 팝업을 닫을 때 편집 폐기와 재조회를 보는 검사로, 이 화면의 다른 행과 대상이 다르다."
-  },
-  {
-   "rows": [
-    "V-b0dafefc"
-   ],
-   "why": "팝업을 선택 없이 닫았을 때 기존 값이 유지되는지 보는 고유 기대이다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 09:42:30",
- "cost": 0.17307440000000002
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:42",
+ "cost": 0,
+ "open": 0
 }

@@ -1,0 +1,18 @@
+{
+ "id": "SCP0028",
+ "group": null,
+ "edit": false,
+ "division": "",
+ "sheet": "",
+ "acts": [],
+ "skipped": [
+  {
+   "control": "btnDelete",
+   "why": "저장 계열 분기로 이어짐",
+   "scenarios": 5
+  }
+ ],
+ "at": "2026-11-21 01:45:50.908",
+ "error": "화면 열기 실패: InvalidOperationException: ProgramID not in this user's menu: SCP0028",
+ "restart": true
+}

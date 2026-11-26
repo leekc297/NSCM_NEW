@@ -1,0 +1,963 @@
+{
+ "screen": "SCP0093",
+ "calls": [
+  {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "method": "BtnItemId_Click",
+   "asis_ref": "SCP0093_DIO_Trend_Report.cs:2877",
+   "trigger": {
+    "kind": "COND",
+    "control": "btnItemId",
+    "input": "txtItemId",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": "Model / Nick Name"
+   },
+   "multi": "true",
+   "div_arg": "division",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "division"
+    },
+    {
+     "param": "_ScmSiteId",
+     "kind": "LITERAL",
+     "arg": "sScmSite"
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "LITERAL",
+     "arg": "sProject"
+    },
+    {
+     "param": "_ItemID",
+     "kind": "CONTROL",
+     "arg": "sItemId"
+    }
+   ],
+   "results": [
+    "item"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0093_DIO_Trend_Report.cs:2878",
+     "target": "popItem.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0093_DIO_Trend_Report.cs:2881",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "method": "btnMeasure_Click",
+   "asis_ref": "SCP0093_DIO_Trend_Report.cs:2892",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnMeasure",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"SCP0093\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "LITERAL",
+     "arg": "measure"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0093_DIO_Trend_Report.cs:2893",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0093_DioTrendReportPopup",
+   "method": "openPopup",
+   "asis_ref": "SCP0093_DIO_Trend_Report.cs:2553",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "openPopup",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "category_dv",
+     "kind": "EXPR",
+     "arg": "GetParamCategory().ToString()"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0093_DIO_Trend_Report.cs:2568",
+     "raw": "FindData()"
+    }
+   ],
+   "back": []
+  }
+ ],
+ "classes": {
+  "SCM0002_ItembyDivisionPopup": {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+   "title": "Model by DivisionPopup",
+   "conds": [
+    {
+     "name": "txtItemID",
+     "type": "UsrMultiLineEditor",
+     "label": "Model",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:164",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbScmSite",
+     "type": "UsrCheckedList",
+     "label": "Site",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:166",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProject",
+     "type": "UsrMultiLineEditor",
+     "label": "Project",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:165",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME",
+     "order_line": "64",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_project_code",
+      "p_scm_site_id",
+      "p_item_id"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:242",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:384",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_SITE_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_SITE_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "A.SITE_DESCRIPTION",
+     "order_line": "45",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer"
+     ],
+     "method": "GetDivisionbyScmSite",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:398",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:264",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:278",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:302",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:305",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:319",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCM0002_TitleSetForm_Popup": {
+   "cls": "SCM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "115",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "SCM0002_TitleSetForm_Popup.cs:287",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:235",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:253",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:167",
+     "method": "SetFixColumnStatus",
+     "raw": "svSource.Cells[r, c].BackColor = Color.WhiteSmoke;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:254",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:232",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:250",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:676",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_TitleSetForm_Popup.cs:679",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCP0093_DioTrendReportPopup": {
+   "cls": "SCP0093_DioTrendReportPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0093_DIO_Trend_Report/POPUP/SCP0093_DioTrendReportPopup.cs",
+   "title": "Dio Trend Report Popup",
+   "conds": [
+    {
+     "name": "cboDivision",
+     "type": "UsrCombo",
+     "label": "Div",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0093_DioTrendReportPopup.cs:176",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtItemId",
+     "type": "UsrTextBox",
+     "label": "Model / Nick Name",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:43",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtYYYYMM",
+     "type": "UsrTextBox",
+     "label": "Work Month",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:45",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0093_DioTrendReportPopup.cs:185",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "monthPicker",
+     "type": "UsrMonthPicker",
+     "label": "Copy Month",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:47",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cboDioReason",
+     "type": "UsrCombo",
+     "label": "Dio 초과 사유",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:48",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtCellGroup",
+     "type": "UsrTextBox",
+     "label": "Cell Group",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:49",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtPlanStartYYYYMMDD",
+     "type": "UsrTextBox",
+     "label": "Plan Date",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:50",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCP0093_DioTrendReportPopup.cs:190",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtPrice",
+     "type": "UsrTextBox",
+     "label": "적용 단가",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0093_DioTrendReportPopup.Designer.cs:51",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnCopy",
+     "text": "Copy",
+     "visible": true
+    },
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    },
+    {
+     "name": "btnItemId",
+     "text": "",
+     "visible": true
+    },
+    {
+     "name": "btnSearch",
+     "text": "Search",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0093_GET_DIO_TREND_",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindCopyData",
+     "ref": "SCP0093_DioTrendReportPopup.cs:549",
+     "save": false
+    },
+    {
+     "sp": "SCP0093_GET_DIO_TREND_DATA_REASON",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0093_GET_DIO_TREND_DATA_REASON.sql",
+     "order_known": true,
+     "order_keys": "DIVISION_ID",
+     "order_line": "280",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_start_yyyymmdd",
+      "p_yyyymm",
+      "p_category_dv",
+      "p_division_id",
+      "p_item_id",
+      "P_AGGR_DV",
+      "p_cell_group",
+      "p_dio_reason",
+      "debug_mode",
+      "CELL_CNT"
+     ],
+     "method": "FindCopyData",
+     "ref": "SCP0093_DioTrendReportPopup.cs:553",
+     "save": false
+    },
+    {
+     "sp": "SCP0093_GET_DIO_TREND_",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindData",
+     "ref": "SCP0093_DioTrendReportPopup.cs:388",
+     "save": false
+    },
+    {
+     "sp": "SCP0093_GET_DIO_TREND_DATA_REASON",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0093_GET_DIO_TREND_DATA_REASON.sql",
+     "order_known": true,
+     "order_keys": "DIVISION_ID",
+     "order_line": "280",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_start_yyyymmdd",
+      "p_yyyymm",
+      "p_category_dv",
+      "p_division_id",
+      "p_item_id",
+      "P_AGGR_DV",
+      "p_cell_group",
+      "p_dio_reason",
+      "debug_mode",
+      "CELL_CNT"
+     ],
+     "method": "FindData",
+     "ref": "SCP0093_DioTrendReportPopup.cs:392",
+     "save": false
+    },
+    {
+     "sp": "SCP0093_GET_DIO_TREND_",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "FindPrice",
+     "ref": "SCP0093_DioTrendReportPopup.cs:448",
+     "save": false
+    },
+    {
+     "sp": "SCP0093_GET_DIO_TREND_DATA_PRICE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0093_GET_DIO_TREND_DATA_PRICE.sql",
+     "order_known": true,
+     "order_keys": "CELL_GROUP",
+     "order_line": "111",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_start_yyyymmdd",
+      "p_yyyymm",
+      "p_from_yyyymm",
+      "p_to_yyyymm",
+      "p_division_id",
+      "p_cell_group",
+      "p_item_id",
+      "P_AGGR_DV",
+      "P_CATEGORY",
+      "p_user_id",
+      "debug_mode",
+      "SEARCH_COUNT",
+      "SEARCH_yyyymmdd"
+     ],
+     "method": "FindPrice",
+     "ref": "SCP0093_DioTrendReportPopup.cs:452",
+     "save": false
+    },
+    {
+     "sp": "SCP0093_GET_DIO_TREND_DATA_PRICE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0093_GET_DIO_TREND_DATA_PRICE.sql",
+     "order_known": true,
+     "order_keys": "CELL_GROUP",
+     "order_line": "111",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_plan_start_yyyymmdd",
+      "p_yyyymm",
+      "p_from_yyyymm",
+      "p_to_yyyymm",
+      "p_division_id",
+      "p_cell_group",
+      "p_item_id",
+      "P_AGGR_DV",
+      "P_CATEGORY",
+      "p_user_id",
+      "debug_mode",
+      "SEARCH_COUNT",
+      "SEARCH_yyyymmdd"
+     ],
+     "method": "GetListPrice",
+     "ref": "SCP0093_DioTrendReportPopup.cs:506",
+     "save": false
+    },
+    {
+     "sp": "SCP0084_GET_MONTH_RANGE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0084_GET_MONTH_RANGE.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_month"
+     ],
+     "method": "GetMonthRange",
+     "ref": "SCP0093_DioTrendReportPopup.cs:839",
+     "save": false
+    },
+    {
+     "sp": "CELL_GROUP",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "GetPrice",
+     "ref": "SCP0093_DioTrendReportPopup.cs:1277",
+     "save": false
+    },
+    {
+     "sp": "cell_group",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "GetPrice",
+     "ref": "SCP0093_DioTrendReportPopup.cs:1277",
+     "save": false
+    },
+    {
+     "sp": "UNIT_PRICE_LAST",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "GetPrice",
+     "ref": "SCP0093_DioTrendReportPopup.cs:1277",
+     "save": false
+    },
+    {
+     "sp": "PR_SCM_SYS_LOG_BATCH",
+     "src": "Doc/asisfacts/db/modules/dbo.PR_SCM_SYS_LOG_BATCH.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_program_name",
+      "p_log_type",
+      "p_log_count",
+      "p_log_message",
+      "p_description",
+      "p_event_date"
+     ],
+     "method": "SCM_SYS_LOG_BATCH",
+     "ref": "SCP0093_DioTrendReportPopup.cs:717",
+     "save": true
+    },
+    {
+     "sp": "SCP0093_SAVE_DIO_REPORT_REASON",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0093_SAVE_DIO_REPORT_REASON.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_active_flag",
+      "p_plan_start_yyyymmdd",
+      "p_yyyymm",
+      "p_category_dv",
+      "p_division_id",
+      "p_cell_group",
+      "p_aggr_dv",
+      "p_item_id",
+      "p_dio_reason",
+      "p_quantity",
+      "p_amount",
+      "p_remark",
+      "p_user_id",
+      "recv_active_flag",
+      "max_loop_cnt",
+      "mst_loop_cnt",
+      "v_delimiter",
+      "v_active_flag",
+      "v_plan_start_yyyymmdd",
+      "v_yyyymm",
+      "v_division_id",
+      "v_cell_group",
+      "v_aggr_dv",
+      "v_item_id",
+      "v_dio_reason",
+      "v_quantity",
+      "v_amount",
+      "v_remark",
+      "v_category_dv",
+      "n_quantity",
+      "n_amount",
+      "n_quantity_sum",
+      "n_amount_sum",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_err_code"
+     ],
+     "method": "SaveData",
+     "ref": "SCP0093_DioTrendReportPopup.cs:650",
+     "save": true
+    },
+    {
+     "sp": "GSCM_SCP_MASTER_SVC",
+     "src": "",
+     "order_known": false,
+     "order_keys": "",
+     "order_line": "",
+     "like": null,
+     "upper": null,
+     "comma": null,
+     "params": [],
+     "method": "SaveData",
+     "ref": "SCP0093_DioTrendReportPopup.cs:653",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:571",
+     "method": "FindCopyData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:410",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:471",
+     "method": "FindPrice",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:294",
+     "method": "SetEditGrid",
+     "raw": "if (fps.Name == \"spdMain\") { prg.Show(); siMain = GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex); siMain.SwitchLock(); siMain.LockColumn(siMain.GetColumnIndex",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:301",
+     "method": "SetEditGrid",
+     "raw": "siMain.LockColumn(siMain.GetColumnIndex(DefColumns.YYYYMM), siMain.GetColumnIndex(DefColumns.YYYYMM), true)",
+     "guard": "try ▸ if (fps.Name == \"spdMain\")"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:302",
+     "method": "SetEditGrid",
+     "raw": "siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION_ID), siMain.GetColumnIndex(DefColumns.DIVISION_ID), true)",
+     "guard": "try ▸ if (fps.Name == \"spdMain\")"
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:358",
+     "method": "CloseButton",
+     "raw": "if (isChange) this.DialogResult = DialogResult.OK; else this.DialogResult = DialogResult.None;",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:359",
+     "method": "CloseButton",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (isChange)"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:361",
+     "method": "CloseButton",
+     "raw": "this.DialogResult = DialogResult.None",
+     "guard": "else of (isChange)"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:363",
+     "method": "CloseButton",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:680",
+     "method": "SaveData",
+     "raw": "if (tranResult == \"S\") { // {0}개의 데이터가 저장되었습니다. MessageHelper.GMessageBox(\"MSG00004\", new object[] { tran.DataSet.Tables[0].Rows[0][1] }); //저장결과메시지 isChange = ",
+     "guard": "try ▸ if (iCount > 0) ▸ if (tran.Success)"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:685",
+     "method": "SaveData",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "try ▸ if (iCount > 0) ▸ if (tran.Success) ▸ if (tranResult == \"S\")"
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:898",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Find: FindData(); break; case ButtonListType.Save: SaveData(); break; case ButtonListType.Close: this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0093_DioTrendReportPopup.cs:907",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00017\")",
+    "MessageBox.Show(ex.Message)",
+    "MessageHelper.GMessageBox(\"MSG00012\")",
+    "MessageHelper.GMessageBox(checkMessage_001)",
+    "MessageBox.Show(checkMessage_copy, this.Text, MessageBoxButtons.YesNo)",
+    "MessageHelper.GMessageBox(\"MSG00004\", new object[] { tran.DataSet.Tables[0].Rows[0][1] })",
+    "MessageHelper.GMessageBox(\"MSG00006\")",
+    "MessageHelper.GMessageBox(\"MSG00017\")",
+    "MessageHelper.GMessageBox(\"MSG00284\", null)"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

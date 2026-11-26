@@ -1,0 +1,101 @@
+{
+ "definition": "Lookup Type 과 Type 별 Lookup Values 를 등록하고 관리하는 화면. 등록한 값은 화면 콤보와 기준값으로 쓰임",
+ "overview": [
+  "화면 콤보와 업무 기준값으로 쓰는 Lookup Type 과 Type 별 Lookup Values 를 등록하는 관리자 화면임",
+  "위쪽 조회 조건, 위 Lookup Type 그리드, 아래 Lookup Values 그리드로 구성됨",
+  "Lookup Type 행 등록과 Segment 이름 입력 → Save → Lookup Type 행 선택 → Lookup Values 에서 Insert 로 값 추가 → Save 순서로 작업함",
+  "Lookup Type SYSTEM 값은 System 조회 조건 콤보에 쓰임. ADD_DEMAND_PERIOD 처럼 Division 별 기준값은 Segment 칸에 Division ID 를 넣어 관리함"
+ ],
+ "pages": [
+  {
+   "title": "Lookup",
+   "keyPoint": "Lookup 값을 바꾸면 그 Lookup Type 을 쓰는 화면 콤보 값이 바뀜. Lookup Type, Segment1~5 가 같은 행이 있으면 저장 때 \"중복된 키가 존재합니다.\" 메시지가 뜸.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.133,
+     "y": 0.14
+    },
+    {
+     "no": 2,
+     "x": 0.607,
+     "y": 0.191
+    },
+    {
+     "no": 3,
+     "x": 0.208,
+     "y": 0.191
+    },
+    {
+     "no": 4,
+     "x": 0.205,
+     "y": 0.757
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Lookup Type: Type 이름을 직접 입력함. 비워 두면 전체 Type 이 조회됨",
+      "System: Lookup Type SYSTEM 에 등록된 값(SCP, SSP, DM, COMMON 등)이 콤보에 나옴. ALL 은 전체",
+      "Active: Y, N 중 선택. 처음 값은 Y"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 커서가 있는 그리드(Lookup Type 또는 Lookup Values)에 적용됨",
+      "Lookup Type 행을 고르지 않고 Lookup Values 에서 Insert 하면 \"먼저 Lookup Type을 선택해 주세요.\" 메시지가 뜸",
+      "저장이 끝나면 \"성공적으로 저장되었습니다.\" 메시지가 뜸",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Lookup Type 그리드",
+     "lines": [
+      "필수 입력: Lookup Type, System, Active, Segment1~5(제목 앞 빨간 점)",
+      "Description: Type 용도를 적음(예: Plan End 이후 추가 DEMAND 반영구간)",
+      "Segment1~5: Lookup Values 의 Segment 칸 이름을 적음. 쓰지 않는 Segment 는 \"-\" 로 둠",
+      "Attribute1~15: Type 별 추가 속성 이름을 적음",
+      "Insert 로 추가한 행은 Active 가 Y 로 채워짐",
+      "행을 클릭하면 그 Type 의 값이 아래 Lookup Values 에 조회됨"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Lookup Values 그리드",
+     "lines": [
+      "위에서 고른 Lookup Type 의 값 목록. 캡처는 ADD_DEMAND_PERIOD 3건",
+      "Segment 칸 제목은 위 그리드의 Segment 이름으로 나옴(캡처: DIVISION_ID, ADD PERIOD)",
+      "필수 입력: Lookup Type, Segment 칸, Active",
+      "Insert 로 추가한 행은 Segment1~5 가 \"-\", Active 가 Y, Display Seq 가 0 으로 채워짐",
+      "Segment 값을 고쳐도 원래 Segment 값으로 행을 찾아 수정됨. 같은 키가 이미 있으면 \"중복된 키가 존재합니다.\" 메시지가 뜸",
+      "Created By, Creation Date, Updated By, Update Date 는 흰 칸으로 입력 불가"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0010",
+ "uiName": "Lookup",
+ "menuPath": "SYSTEM> Admin> Lookup",
+ "captures": [
+  "captures/SYS0010.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0010/"
+ ],
+ "buttons": [
+  "lookupDetail:DELETE",
+  "lookupDetail:INSERT",
+  "lookupDetail:SAVE",
+  "lookupDetail:SEARCH",
+  "lookupMaster:DELETE",
+  "lookupMaster:INSERT",
+  "lookupMaster:SAVE",
+  "lookupMaster:SEARCH"
+ ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "20261123_151447_R12_ALL",
+  "at": "2026-11-23T15:14:47+09:00",
+  "ms": 1795414487021,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_resume_inner.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_resume_inner.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 19 · FAIL 2 · FAIL 재개 = --resume sess-ai + 재개 문구 + 원래 지시 [{\"args\":\"-p --input-format stream-json --output-format stream-json --verbose --permission-mode bypassPermissions --allowedTools Read,Edit,Write,Glob,Grep,Ba / FAIL 재개: 첫 실행 생략 · 2회차 AI(재개 문구) → 재실행 → 3회차 AI → 재실행 {\"n\":4,\"cd\":[{\"args\":\"-p --input-format stream-json --output-format stream-json --verbose --permission-mode bypassPermissions --allowedTools Read, / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_resume_inner.js",
+    "file": "t_resume_inner.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T15:28:47+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

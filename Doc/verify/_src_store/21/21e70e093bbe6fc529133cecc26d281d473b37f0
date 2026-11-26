@@ -1,0 +1,14 @@
+// 2026-11-20 A1 진입 확인 선행(CheckList 속도 개선 플랜): 본 시험 전에 화면을 한 번 열어 본다.
+//   SCP0028·SSP0014(11-20)는 화면이 열리지 않은 채 시험 80개(화면 열기마다 66초)와 AI 판정 검토(묶음 224개)를 다 돌았다 → 열리지 않으면 run_verify 가 측정을 시작하지 않는다.
+//   결과 = Doc/verify/<ID>/open_check.json { ok, at, url, authorized, notFound, beDown, feError, user }
+//   실행: run_verify.py 가 VERIFY_ID 를 주고 `playwright test _open --grep @open` 으로 부른다
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { test } from '../../../tools/E2E/fixtures/test';
+
+const ID = (process.env.VERIFY_ID || '').toUpperCase();
+const ROOT = path.join(__dirname, '..', '..', '..');
+
+test.describe(`진입 확인 ${ID} @open`, () => {
+  test.describe.configure({ retries: 0 });
+  test.skip(!ID, 'VERIFY_ID 없음');

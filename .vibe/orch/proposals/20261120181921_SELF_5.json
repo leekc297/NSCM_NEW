@@ -1,0 +1,97 @@
+{
+  "id": "20261120181921_SELF_5",
+  "at": "2026-11-20T18:19:21+09:00",
+  "ms": 1795166361829,
+  "source": "self",
+  "status": "applied",
+  "sig": "registry set vmo rerun",
+  "title": "Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성)",
+  "evidence": "S4 inventory_check REGISTRY: 도구 261, 등록부에 없는 도구 1 '(미등록) tools/Harness/verify/set_vmo_rerun.py'. scripts/rules/inventory_check.py:6, :318 = --write-registry 가 tools/Harness/README.md 의 TOOL-REGISTRY 표식 사이를 자동 생성. README.md 에 set_vmo_rerun 0건(grep)",
+  "targets": [
+    "tools/Harness/README.md"
+  ],
+  "before_after": "README.md 등록부 구간 도구 260개 → python scripts/rules/inventory_check.py --write-registry 로 다시 생성해 261개(set_vmo_rerun.py 행 추가). 구간 밖 문장은 그대로",
+  "verify": "python scripts/rules/inventory_check.py → REGISTRY 통과, 미등록 0",
+  "rollback": "tools/Harness/README.md 를 반영 태그 .bak_ 사본으로 되돌림",
+  "impact": "fix",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T01:55:53+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T01:59:18+09:00",
+      "by": "VMO",
+      "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    },
+    {
+      "at": "2026-11-21T02:03:37+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T02:07:03+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self0203"
+    },
+    {
+      "at": "2026-11-21T02:07:05+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T02:11:05+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T02:11:05+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-21 02:07:25~02:07:30 실행. python scripts/rules/inventory_check.py --write-registry 출력 '등록부 갱신 → tools\\Harness\\README.md', git diff --stat 9행 추가 4행 삭제, 변경 위치 150~428행으로 TOOL-REGISTRY 표식(149·455행) 안. python scripts/rules/inventory_check.py 출력 '[OK] REGISTRY: 도구 261 · 등록부에 없는 도구 0 · 등록부에만 있고 파일  · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-21T02-07-05_claude_orch.log",
+      "sec": 36,
+      "costUsd": 0.49760560000000004,
+      "files": [
+        "tools/Harness/README.md"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S4",
+  "selfKey": "S4|inv|REGISTRY",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 2,
+  "autoMs": 1795194217321,
+  "autoFp": "c6429aab11",
+  "applyStartMs": 1795194425287,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 864, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self0203",
+  "needsReload": false,
+  "appliedMs": 1795194665000,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/Harness/README.md"
+    ],
+    "verify_result": "2026-11-21 02:07:25~02:07:30 실행. python scripts/rules/inventory_check.py --write-registry 출력 '등록부 갱신 → tools\\Harness\\README.md', git diff --stat 9행 추가 4행 삭제, 변경 위치 150~428행으로 TOOL-REGISTRY 표식(149·455행) 안. python scripts/rules/inventory_check.py 출력 '[OK] REGISTRY: 도구 261 · 등록부에 없는 도구 0 · 등록부에만 있고 파일 없는 것 0'. 같은 실행 마지막 줄 '== FAIL — STAGE_WARN ==' 은 run_verify.py STAGES 예정 수 경고(단계 7 세부 실행 51 ≠ 예정 42, 단계 8 0 ≠ 1)로 개선안 범위 밖",
+    "note": "개선안은 등록부 260개 → 261개로 적었으나 반영 전 머리말 집계는 256개였음. 다시 생성하면서 set_vmo_rerun.py 외 미등록 4행(asis_view.py, trace_gif.py, video_keep.js, set_live_view.py) 추가, 기존 3행(db_orphan_sessions.py, e2e_shard.py, server_guard.py) 호출처 칸 갱신. STAGE_WARN 은 범위 밖이라 고치지 않음"
+  },
+  "snap": "prop_20261120181921_SELF_5"
+}

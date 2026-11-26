@@ -13,6 +13,13 @@ export interface NoticeImageUploadResult {
   fileName: string;
 }
 
+export interface NoticeAttachment {
+  fileId: string;
+  fileName: string;
+  size: number;
+  ext: string;
+}
+
 export interface ComboOption {
   CODE: string;
   NAME: string;

@@ -1,0 +1,78 @@
+{
+  "id": "20261124232610_SELF",
+  "at": "2026-11-24T23:26:10+09:00",
+  "ms": 1795530370815,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|workbench프롬프트로claude가cloudpkgpy를돌려패키지를만들",
+  "title": "사용자 지시 R193 같은 문제: tools/VibeManager/workbench.js:969 Workbench 프롬프트로 Claude 가 cloud_pkg.py 를 돌려 패키지를 만들면 도구 출력의 '@@LINK 📄 이관 n.' 줄을 처리하지 않음. 이",
+  "evidence": "규칙 R193 \"클라우드 이관 패키지를 제공하면 README 링크를 주고 VS Code 편집기와 탐색기가 그 패키지 위치를 가리키게 함\" (원래 지시 2026-11-24 11:50 \"클라우드 이관 패키지 생성 및 제공시에는 VSCode Explorer 에서 열 수 있도록 READMD.md 파일을 링크형태로 제공하거나 Explorer 에서 자동으로 해당 폴더를 가리키도록 해주세요. / 클라우드 이관 pkg 제공 시 vscode explorer 에서 자신의 위치로 이동\") · tools/VibeManager/workbench.js:969 if (t && t.includes('@@HTML')) this.postHtmlMarks(p, t);",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "askClaudeCore 의 tool_result 처리(966~969줄)에서 spawnStream 과 같은 정규식 /^@@LINK\\s+([^|]+)\\|(.+)$/ 으로 링크를 모으고, close(996줄)에서 code 0 이고 링크가 있으면 revealCloudReadme(p, links, this.quiet) 를 부름. README 는 열지 않고 이관 파일 링크만 Flow 보드에 붙임(R196)",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T11:02:15+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T11:06:29+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 · 백업 태그 20261126_self1102"
+    },
+    {
+      "at": "2026-11-26T11:06:34+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T11:19:59+09:00",
+      "by": "VMO",
+      "what": "게이트 판정 보류. 반영 중에 AI 가 고치지 않은 파일이 바뀜(다른 작업): tools/Harness/gate_baseline.tsv, tools/VibeManager/WORKLOG.md · 새로 어긋난 항목 1건은 개선안 실패로 세지 않음 · 대상 파일 1개 되돌림(workbench.js AI 편집 3건만 되돌림(반영 전과 같음)) · 10분 뒤 다시 시도"
+    },
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:51:07+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · workbench.js askClaudeCore tool_result 에서 @@LINK 줄 수집(aiLinks), close code 0 이면 revealCloudReadme + Console 메타 줄(README 안 엶). run_all 88/88 PASS 1500 FAIL 0(15:50:45), t_webview_syntax ALL PASS, 설치 폴더 복사 15:50:57"
+    }
+  ],
+  "plain": {
+    "what": "클라우드 이관 패키지를 제공하면 README 링크를 주고 VS Code 편집기와 탐색기가 그 패키지 위치를 가리키게 함 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R193|tools/VibeManager/workbench.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": false,
+  "autoTries": 1,
+  "autoMs": 1795658534189,
+  "autoFp": "f066fd8b94",
+  "applyStartMs": 1795658794524,
+  "verifyJudge": {
+    "at": "2026-11-26T11:15:51+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "waitNote": "",
+  "claimedBy": "3acd3c",
+  "appliedMs": 1795675867840
+}

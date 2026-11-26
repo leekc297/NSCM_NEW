@@ -82,7 +82,17 @@ interface DynColLeaf {
   periodLabel: string;
   leafLabel: string;
   rbuCode: string;
+  /** 제목 SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+  width?: number;
 }
+
+// 동적(기간 · 법인) 컬럼 너비 = 제목 프로시저 COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+const DYN_COL_DEFAULT_WIDTH = 80;
+const spColumnWidth = (raw: unknown): number | undefined => {
+  const n = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw.trim()) : NaN;
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
 
 /** 동적 칸 키(M#YYYYMM#RBU_xxxx / Y#YYYY#RBU_xxxx)인가. */
 const isDynamicKey = (key: string, prefix: string) =>
@@ -154,6 +164,7 @@ export const buildDynamicColumns = (
         periodLabel,
         leafLabel,
         rbuCode: corp ?? '',
+        width: spColumnWidth(title?.COLUMN_WIDTH),
       };
     })
     .sort((a, b) => {
@@ -182,7 +193,7 @@ export const buildDynamicColumns = (
         {
           binding: leaf.binding,
           header: leaf.leafLabel,
-          width: 80,
+          width: leaf.width ?? DYN_COL_DEFAULT_WIDTH,
           align: 'right',
           // 구분 컬럼은 문자 컬럼 — 숫자 서식(n2) 을 걸면 wijmo 가 값을 숫자로 파싱/표시한다.
           // dataType 을 명시하지 않으면 itemsSource 첫 값으로 추론돼 빈 데이터일 때 Number 로

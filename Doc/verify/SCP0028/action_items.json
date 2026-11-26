@@ -24,9 +24,39 @@
   "same": []
  },
  {
+  "row_id": "V-97b0fc4e",
+  "rule_id": "H6",
+  "target": "new SCM0002_ItembyDivisionPopup()",
+  "same": [
+   "EG-2644dff3"
+  ]
+ },
+ {
+  "row_id": "V-a9485a6a",
+  "rule_id": "H6",
+  "target": "popItem.Form_Load(true, division, sScmSite, sProject, sItemId)",
+  "same": [
+   "V-c4a9dc2c"
+  ]
+ },
+ {
   "row_id": "T-b3755ed5",
   "rule_id": "A1",
   "target": "PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+  "same": []
+ },
+ {
+  "row_id": "V-a89007be",
+  "rule_id": "G1",
+  "target": "MSG00284",
+  "same": [
+   "T-4677b9e5"
+  ]
+ },
+ {
+  "row_id": "V-a99ddb18",
+  "rule_id": "H2",
+  "target": "siMain.SetBGColor",
   "same": []
  },
  {
@@ -52,5 +82,23 @@
   "rule_id": "E1",
   "target": "",
   "folded_into": "V-57fd6f09"
+ },
+ {
+  "row_id": "EG-2644dff3",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-97b0fc4e"
+ },
+ {
+  "row_id": "V-c4a9dc2c",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-a9485a6a"
+ },
+ {
+  "row_id": "T-4677b9e5",
+  "rule_id": "G1",
+  "target": "",
+  "folded_into": "V-a89007be"
  }
 ]

@@ -9,6 +9,7 @@ import {
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useCallback, useEffect, useMemo, type MutableRefObject } from 'react';
 
+import { CELL_CONTROL_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import { CustomMergeManager, ensureTopLeftMergeManager, GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
@@ -141,6 +142,51 @@ export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month, detail
     };
   }, [gridRef, staticColumns, data]);
 
+  // 정수 표시 — 메타 DATA_SCALE_NUMBER=0 숫자 컬럼(Amount(KRW)·Amount·6개월 수량)은 AS-IS 가 정수로 표시한다.
+  //   공용 getFormat 은 scale 0 을 falsy 로 보고 포맷을 안 걸어 소수가 그대로 보이므로(예 351,993,683.27)
+  //   화면에서 'n0' 를 건다. updatedLayout 마다 재적용(columnGroups 재대입 시 포맷 초기화).
+  const integerBindings = useMemo(
+    () =>
+      new Set(
+        staticColumns
+          .filter(c => c.cellCtrlObjTpCd === CELL_CONTROL_TYPE.NUMBER && c.scale === 0)
+          .map(c => c.colNm)
+      ),
+    [staticColumns]
+  );
+  // 엑셀도 정수 서식 — excelDownload 는 컬럼 format 을 안 넘기므로 _excelFormat 으로 준다.
+  const gridColumns = useMemo(
+    () =>
+      staticColumns.map(c => (integerBindings.has(c.colNm) ? { ...c, _excelFormat: '#,##0' } : c)),
+    [staticColumns, integerBindings]
+  );
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const apply = () => {
+      let changed = false;
+      for (const col of g.columns) {
+        if (col.binding && integerBindings.has(col.binding) && col.format !== 'n0') {
+          col.format = 'n0';
+          changed = true;
+        }
+        // GPLM Cell Conversion factor — 메타 서식 NULL 이라 AS-IS 는 원값 그대로(0.333333·0.0625·10080) 표시.
+        //   무서식이면 wijmo 가 소수 2자리로 잘라(0.33) 표시하므로 'g6'(최대 6자리·후행 0 제거·천단위 없음)로 맞춘다.
+        //   SP 값은 소수 6자리 이내(CELL_CF 6자리 문자열·BOM ROUND 6).
+        if (col.binding === 'GPLM_CELL_CONVERSION_FACTOR' && col.format !== 'g6') {
+          col.format = 'g6';
+          changed = true;
+        }
+      }
+      if (changed) g.invalidate(true);
+    };
+    g.updatedLayout.addHandler(apply);
+    apply();
+    return () => {
+      g.updatedLayout?.removeHandler(apply);
+    };
+  }, [gridRef, gridColumns, data, integerBindings]);
+
   // Detail 토글 — 상세 22컬럼 show/hide(AS-IS chkDetail SetLayout VisibleColumns, cs:425~448). 공용 DataGrid 가
   //   updatedLayout 마다 메타 visible 을 재적용하므로 그 뒤에 다시 씌운다(형제 ending-inventory 동형). 명시 컬럼만
   //   건드리고 나머지는 메타 visible 유지. 변경 있을 때만 invalidate(루프 방지).
@@ -237,7 +283,7 @@ export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month, detail
       gridFilterRef={gridFilterRef}
       initialized={handleInitialized}
       itemsSource={data}
-      staticColumns={staticColumns}
+      staticColumns={gridColumns}
       // 읽기전용 Report — AS-IS Save NO-OP(cs:248~249)·Edit 실효0(MEMO 부재)·조회직후 전컬럼 LockColumn(cs:320).
       //   그리드 레벨 isReadOnly 로 셀 편집 차단 + CRUD status rowHeader 제거(DataGrid 기본은 편집가능).
       isReadOnly

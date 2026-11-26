@@ -120,9 +120,10 @@ export const useScpBomStore = createPersistedStoreWithTab<State & Action>(
           `/admin/menu/${MENU_ID}/column`,
           { sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }
         );
-        // SCP_PLAN_YN 은 메타가 'S' 여도 편집 가능하게 'M' 으로 고정 (사용자 요청 2026-10-14, DB 미변경).
+        // SCP_PLAN_YN 은 메타가 'S' 여도 편집 가능하게 고정 (사용자 요청 2026-10-14, DB 미변경).
+        //   필수(M) 가 아닌 선택(O) — AS-IS 는 필수 체크 없이 빈 값도 저장한다(사용자 결정 2026-11-20).
         const next = (res.data.result ?? []).map(c =>
-          c.colNm === ROW_LOCK_COLUMN ? { ...c, inputTpCd: CELL_INPUT_EDIT_TYPE.MANDATORY } : c
+          c.colNm === ROW_LOCK_COLUMN ? { ...c, inputTpCd: CELL_INPUT_EDIT_TYPE.OPTIONAL } : c
         );
         if (next.length > 0) {
           set(state => {

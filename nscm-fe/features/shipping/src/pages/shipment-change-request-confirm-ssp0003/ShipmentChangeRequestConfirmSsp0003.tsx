@@ -22,8 +22,11 @@ import {
   ALL,
   CHANGE_TYPE,
   DELEGATE_COLUMNS,
+  ERP_IF_ERROR,
+  ERP_IF_NO_DATA,
+  ERP_IF_PARTIAL_ERROR,
   ERP_IF_PATH,
-  ERP_IF_SUCCESS,
+  ERP_IF_PI_FAIL,
   LBL,
   MASTER_USER_COLUMNS,
   MENU_ID,
@@ -49,6 +52,7 @@ import {
   countChk,
   decideChangeStatus,
   isChkEditable,
+  parseErpErrors,
 } from './utils/shipmentChangeRequestConfirmSsp0003Save';
 
 const str = (v: unknown): string =>
@@ -245,53 +249,205 @@ export const ShipmentChangeRequestConfirmSsp0003 = ({ tabId, title }: PageProps<
   };
 
   /**
-   * ERP 실시간 송신 — AS-IS FN_ERP_UIWebService 의 TO-BE 등가.
-   * 송신 조건은 AS-IS 그대로다. 승인('A')은 무조건 송신(cs:1984 GetErpIFCheckNew),
-   * 반려·자기반려·D/O반려는 마스터 CHANGE_TYPE 이 'C' 일 때만(cs:1841/1913/1949 `if (_sChangeType == ChangeType_C)`).
-   * 3번째 인자 _sStatus 는 승인만 'A', 나머지는 공란이다(cs:1837/1909 `_sStatus = ""` · cs:1959 `_sStatus = "A"`).
+   * ERP 실시간 송신 — AS-IS `CallClient.FN_ERP_UIWebService(reqNo, changeType, status)` 의 TO-BE 등가.
+   *   BE 공통창구 → nscm-if `POST /api/if/send/NSD0100`. 결과만 돌려준다(안내·보상은 호출부가 한다).
+   *   호출 자체 실패는 AS-IS catch 블록과 같이 'C_E' 다.
    */
-  const sendErpIf = async (
+  const callErpIf = async (
     changeReqNo: string,
-    masterChangeType: string,
-    saveStatus: string
-  ): Promise<void> => {
-    const isApproval = saveStatus === SAVE_STATUS.APPROVED;
-    if (!isApproval && masterChangeType !== CHANGE_TYPE.CONFIRM) return;
-    if (!changeReqNo) return;
-
-    let eType = '';
-    let eMessage = '';
+    erpChangeType: string,
+    shipmentStatus: string
+  ): Promise<{ eType: string; eMessage: string }> => {
     try {
       const res = await apiClient.post<{ E_TYPE?: unknown; E_MESSAGE?: unknown }>(ERP_IF_PATH, {
         CHANGE_REQ_NO: changeReqNo,
-        CHANGE_TYPE: erpChangeTypeOf(masterChangeType, saveStatus),
-        SHIPMENT_STATUS: isApproval ? SAVE_STATUS.APPROVED : '',
+        CHANGE_TYPE: erpChangeType,
+        SHIPMENT_STATUS: shipmentStatus,
       });
-      if (isFail(res)) {
-        eType = 'C_E'; // 호출 실패 = AS-IS catch 블록(RtFlag='C_E')
-      } else {
-        eType = str(res.data?.result?.E_TYPE);
-        eMessage = str(res.data?.result?.E_MESSAGE);
-      }
+      if (isFail(res)) return { eType: ERP_IF_PI_FAIL, eMessage: '' };
+      return {
+        eType: str(res.data?.result?.E_TYPE),
+        eMessage: str(res.data?.result?.E_MESSAGE),
+      };
     } catch {
-      eType = 'C_E';
+      return { eType: ERP_IF_PI_FAIL, eMessage: '' };
     }
-
-    if (!eType || eType === ERP_IF_SUCCESS) return; // 성공은 별도 안내 없음(AS-IS else 분기)
-
-    // AS-IS RtFlag 분기 — 'S_E'(일부 성공)는 AS-IS 가 bFlag=true 로 진행하되 누적 에러를 MSG00197 로 알린다.
-    const content =
-      eType === 'F'
-        ? t(MSG.ERP_SYSTEM_ERROR, '__System error. Request No : {0}').replace('{0}', changeReqNo)
-        : eType === 'C_E'
-          ? t(MSG.ERP_PI_FAIL, '__An error occurred while transferring data.')
-          : t(MSG.ERP_ISSUE, '__ERP cannot be processed due to an ISSUE. {0}').replace(
-              '{0}',
-              eMessage
-            );
-    void setAlert({ type: 'alert', content });
   };
 
+  /** ERP 인터페이스 테이블 적재 — `P_SSP0003_SAVE_REQ_IF_CHECK`. 실패·예외는 false. */
+  const stageErpIf = async (
+    changeReqNo: string,
+    changeStatus: string,
+    erpChangeType: string,
+    partialApproval: boolean,
+    timeZone: string
+  ): Promise<boolean> => {
+    try {
+      const res = await apiClient.post<{ code?: unknown }, Record<string, string>>(
+        `/${MENU_ID}/main/${SAVE_BTN.IF_CHECK}/call-proc`,
+        {
+          changeRequestNo: changeReqNo,
+          changeStatus,
+          timeZone,
+          changeType: erpChangeType,
+          partialApproval: partialApproval ? 'T' : 'F',
+        }
+      );
+      return !isFail(res);
+    } catch {
+      return false;
+    }
+  };
+
+  /** 보상 SP 호출(초안 되돌림·ERP 거절 내역 적재). 실패해도 흐름은 잇는다 — AS-IS 도 결과를 보지 않는다. */
+  const callCompensate = async (btn: string, payload: Record<string, string>): Promise<void> => {
+    try {
+      await apiClient.post<{ code?: unknown }, Record<string, string>>(
+        `/${MENU_ID}/main/${btn}/call-proc`,
+        payload
+      );
+    } catch {
+      // 보상 실패는 사용자 안내(MSG01208/MSG01215)에 이미 포함된다.
+    }
+  };
+
+  /**
+   * 승인 경로 ERP 연쇄 — AS-IS `GetErpIFCheckNew("A")`(cs:1317~1492).
+   *   ① IF_CHECK('A') 적재 → ② ERP 송신 → ③ 결과 처리. 반환 ok 가 false 면 호출부가 확정을 'E' 로 저장한다(cs:2021~2024).
+   *     S·그 외      → ok
+   *     S_E          → 거절 CONFIRM 초안 되돌림 + 거절 내역 적재 + MSG00197. ok(거절분은 확정에서 뺀다)
+   *     E            → 위와 같고 ok=false
+   *     F · C_E      → IF_CHECK('R') 재적재 + 취소 송신('C') + MSG00204. ok=false
+   *     적재 실패    → ok=false (AS-IS 는 무안내. TO-BE 는 MSG00204 로 알린다)
+   */
+  const runApprovalErpChain = async (
+    changeReqNo: string,
+    masterChangeType: string,
+    partialApproval: boolean,
+    userId: string,
+    timeZone: string
+  ): Promise<{ ok: boolean; rejectedIds: string[] }> => {
+    const erpChangeType = erpChangeTypeOf(masterChangeType, SAVE_STATUS.APPROVED);
+    const systemError = (): void =>
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.ERP_SYSTEM_ERROR, '__System error. Request No : {0}').replace(
+          '{0}',
+          changeReqNo
+        ),
+      });
+
+    const staged = await stageErpIf(
+      changeReqNo,
+      SAVE_STATUS.APPROVED,
+      erpChangeType,
+      partialApproval,
+      timeZone
+    );
+    if (!staged) {
+      systemError();
+      return { ok: false, rejectedIds: [] };
+    }
+
+    const erp = await callErpIf(changeReqNo, erpChangeType, SAVE_STATUS.APPROVED);
+
+    if (erp.eType === ERP_IF_ERROR || erp.eType === ERP_IF_PARTIAL_ERROR) {
+      const errors = parseErpErrors(erp.eMessage);
+      if (errors.length > 0) {
+        await callCompensate(SAVE_BTN.DELETE_BY_CONFIRM, {
+          confirmId: errors.map(e => e.confirmId).join('^'),
+          changeRequestNo: changeReqNo,
+          delFlag: 'D',
+          userId,
+          timeZone,
+          ifSendFlag: 'Y',
+          changeType: CHANGE_TYPE.CONFIRM,
+        });
+        await callCompensate(SAVE_BTN.ERP_ERROR_CONFIRM, {
+          changeRequestNo: errors.map(() => changeReqNo).join('^'),
+          confirmId: errors.map(e => e.confirmId).join('^'),
+          eType: ERP_IF_ERROR,
+          eMessage: errors.map(e => e.message).join('^'),
+          userId,
+        });
+      }
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.ERP_ISSUE, '__ERP cannot be processed due to an ISSUE. {0}').replace(
+          '{0}',
+          errors.length > 0
+            ? errors.map(e => `${e.confirmId}:${e.message}`).join('\n')
+            : erp.eMessage
+        ),
+      });
+      return {
+        ok: erp.eType === ERP_IF_PARTIAL_ERROR,
+        rejectedIds: errors.map(e => e.confirmId),
+      };
+    }
+
+    if (erp.eType === ERP_IF_NO_DATA || erp.eType === ERP_IF_PI_FAIL) {
+      // cs:1416~1440 — 적재를 반려('R')로 다시 돌리고 ERP 로 취소를 보낸 뒤 안내한다.
+      await stageErpIf(changeReqNo, SAVE_STATUS.REJECT, erpChangeType, false, timeZone);
+      await callErpIf(changeReqNo, CHANGE_TYPE.CONFIRM, '');
+      systemError();
+      return { ok: false, rejectedIds: [] };
+    }
+
+    return { ok: true, rejectedIds: [] };
+  };
+
+  /**
+   * 반려·자기반려·D/O 반려 경로 ERP 연쇄 — AS-IS `GetErpIFCheck(status)`(cs:1246~1316).
+   *   호출 조건은 호출부가 본다(마스터 CHANGE_TYPE 'C' 일 때만, cs:1846/1918/1986).
+   *   실패하면 안내만 하고 false — 호출부는 확정을 저장하지 않는다(cs:1848 `if (bFlag) SaveData`).
+   */
+  const runRejectErpChain = async (
+    changeReqNo: string,
+    masterChangeType: string,
+    saveStatus: string,
+    timeZone: string
+  ): Promise<boolean> => {
+    const erpChangeType = erpChangeTypeOf(masterChangeType, saveStatus);
+    const staged = await stageErpIf(changeReqNo, saveStatus, erpChangeType, false, timeZone);
+    if (!staged) return false; // AS-IS: result_code 가 'S' 가 아니면 송신·저장 없이 끝난다
+
+    const erp = await callErpIf(changeReqNo, erpChangeType, '');
+    if (erp.eType === ERP_IF_ERROR) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.ERP_ISSUE, '__ERP cannot be processed due to an ISSUE. {0}').replace(
+          '{0}',
+          erp.eMessage
+        ),
+      });
+      return false;
+    }
+    if (erp.eType === ERP_IF_NO_DATA) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.ERP_SYSTEM_ERROR, '__System error. Request No : {0}').replace(
+          '{0}',
+          changeReqNo
+        ),
+      });
+      return false;
+    }
+    if (erp.eType === ERP_IF_PI_FAIL) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.ERP_PI_FAIL, '__An error occurred while transferring data.'),
+      });
+      return false;
+    }
+    return true;
+  };
+
+  /**
+   * 저장 — AS-IS 순서 그대로다(2026-11-25 재배치. 종전은 확정을 먼저 저장해 ERP 송신 실패를 되돌리지 못했다).
+   *   승인(cs:2020~2024)        : 상세저장 → IF_CHECK → ERP 송신 → 결과가 좋으면 확정 'A', 아니면 확정 'E'
+   *   반려·자기반려·D/O(cs:1845~1849 등): 상세저장 → (CHANGE_TYPE 'C' 일 때만 IF_CHECK → ERP 송신) → 성공일 때만 확정
+   */
   const doSave = async (saveStatus: string): Promise<void> => {
     const subList = subRows as unknown as Record<string, unknown>[];
     const checkedSet = new Set(checkedIds);
@@ -299,6 +455,7 @@ export const ShipmentChangeRequestConfirmSsp0003 = ({ tabId, title }: PageProps<
     const changeStatus = decideChangeStatus(saveStatus, count); // A→A/R/P, 그 외 status
     const changeReqNo = str(row?.[MASTER_USER_COLUMNS.CHANGE_REQ_NO]);
     const userId = sesUserId;
+    const isApproval = saveStatus === SAVE_STATUS.APPROVED;
     // 사용자 TZ(SCM_ADM_USER_M.TMZ_CD) — AS-IS 가 p_time_zone 으로 넘기던 값.
     //   주의: 이 화면은 값을 넘겨도 **현재 동작 변화가 없다**. PKG_SSP0003 의 FN_MULTY_TIME 호출이
     //   전부 주석 처리(`/*FN_MULTY_TIME(@p_time_zone)*/`)돼 APPROVAL_TIME·LAST_UPDATE_DATE 가 모두
@@ -322,16 +479,53 @@ export const ShipmentChangeRequestConfirmSsp0003 = ({ tabId, title }: PageProps<
       return;
     }
 
-    // 2) Confirm(CONFIRM/_40) — 체크행 NEW_* per-row payload, division 앞2 '40' 라우팅(SAVE vs SAVE_40)
-    const { payload, is40 } = buildConfirmPayload(subList, checkedSet, saveStatus, changeStatus, {
-      changeReqNo,
-      rejectReason,
-      changeType,
-      delegatee,
-      delegateeDept,
-      userId,
-      timeZone,
-    });
+    // 2) ERP 연쇄(IF_CHECK 적재 → 실시간 송신) — 확정 저장보다 **먼저** 한다. 결과가 확정 상태를 정한다.
+    let confirmAction: string = saveStatus;
+    let rejectedIds = new Set<string>();
+    let erpOk = true;
+    if (isApproval) {
+      const chain = await runApprovalErpChain(
+        changeReqNo,
+        changeType,
+        changeStatus === SAVE_STATUS.PARTIAL,
+        userId,
+        timeZone
+      );
+      erpOk = chain.ok;
+      rejectedIds = new Set(chain.rejectedIds);
+      if (!chain.ok) confirmAction = SAVE_STATUS.ERP_FAIL; // cs:2024 SaveData("E")
+    } else if (changeType === CHANGE_TYPE.CONFIRM) {
+      const ok = await runRejectErpChain(changeReqNo, changeType, saveStatus, timeZone);
+      if (!ok) {
+        // AS-IS 는 확정을 저장하지 않고 끝낸다. 상세(DE)만 저장된 상태라 목록을 다시 읽어 보여 준다.
+        clearDetail();
+        void refetchMain?.();
+        return;
+      }
+    }
+
+    // 3) Confirm(CONFIRM/_40) — 승인은 체크행 NEW_* per-row payload(ERP 가 거절한 CONFIRM 은 뺀다, cs:1055~1066),
+    //    'E'·반려 계열은 NEW_* 공란 + division 행0. division 앞2 '40' 라우팅(SAVE vs SAVE_40).
+    const confirmCount = countChk(
+      subList.filter(r => !rejectedIds.has(str(r[SUB_COL.CONFIRM_ID]))),
+      checkedSet
+    );
+    const { payload, is40 } = buildConfirmPayload(
+      subList,
+      checkedSet,
+      confirmAction,
+      decideChangeStatus(confirmAction, confirmCount),
+      {
+        changeReqNo,
+        rejectReason,
+        changeType,
+        delegatee,
+        delegateeDept,
+        userId,
+        timeZone,
+        excludeIds: rejectedIds,
+      }
+    );
     const resSave = await apiClient.post<{ code?: unknown }, Record<string, string>>(
       `/${MENU_ID}/main/${is40 ? SAVE_BTN.SAVE_40 : SAVE_BTN.SAVE}/call-proc`,
       payload
@@ -340,60 +534,10 @@ export const ShipmentChangeRequestConfirmSsp0003 = ({ tabId, title }: PageProps<
       void setAlert({ type: 'alert', content: t(MSG.SAVE_FAIL, '__Failed to save.') });
       return;
     }
-    // 3) ERP 인터페이스 테이블 적재 — AS-IS GetErpIFCheck(cs:1263)·GetErpIFCheckNew(cs:1335) 가
-    //    액션 종류와 무관하게 `SSP0003_SAVE_..._IF_CHECK` 를 **실제 액션 상태로** 부른다.
-    //    SP 도 양쪽을 다 처리한다(DB 실측 2026-10-25, PKG_SSP0003 BODY 1800~1915):
-    //      1850 `IF P_CHANGE_STATUS = 'A'` → 1858 PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(V_STATUS,…)  변경확정 'B'/'C'
-    //                                        1861 부분승인이면 P_SSP0003_ERP_IFSEQ_MERGE(…,'D')
-    //      1864 `ELSE /*변경 Reject*/`      → 1873 PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH('D', …)      반려 적재
-    //    종전 TO-BE 는 승인일 때만 불러 반려 'D' 행이 쌓이지 않았다. 그 상태로 송신하면 XIF 에 대상이 없어
-    //    result=N → E_TYPE=F 로 "시스템 오류" 가 잘못 뜬다. 그래서 AS-IS 대로 전 액션에서 부른다.
-    //    partialApproval 은 승인 경로만 'T' 가 될 수 있다(AS-IS GetErpIFCheck 는 'F' 고정, cs:1268).
-    //    확정(CONFIRM)은 이미 저장됐으므로 적재 실패는 경고만 한다(롤백 안 함).
-    let erpStaged = true;
-    try {
-      const resIf = await apiClient.post<{ code?: unknown }, Record<string, string>>(
-        `/${MENU_ID}/main/${SAVE_BTN.IF_CHECK}/call-proc`,
-        {
-          changeRequestNo: changeReqNo,
-          changeStatus: saveStatus, // 'A' | 'R' | 'S' | 'O' — SP 가 'A' 외를 반려로 분기한다
-          timeZone,
-          changeType,
-          partialApproval:
-            saveStatus === SAVE_STATUS.APPROVED && changeStatus === SAVE_STATUS.PARTIAL ? 'T' : 'F',
-        }
-      );
-      erpStaged = !isFail(resIf);
-    } catch {
-      erpStaged = false; // 확정은 성공 — 적재 실패만 별도 경고
-    }
 
-    // 4) ERP 실시간 송신 — AS-IS GetErpIFCheck(cs:1279)·GetErpIFCheckNew(cs:1356)
-    //    `FN_ERP_UIWebService(changeReqNo, sChangeType, _sStatus)` 의 TO-BE 등가.
-    //    BE 공통창구 → nscm-if `POST /api/if/send/NSD0100`(config.nscm-if.routes). 응답은 AS-IS 와 같은
-    //    { E_TYPE, E_MESSAGE }(E_TYPE=RtFlag, E_MESSAGE=ReErrorMsg '^' 구분 `confirmId:msg`).
-    //    확정(CONFIRM)은 이미 저장됐으므로 송신 실패는 안내만 한다(롤백 없음).
-    //
-    //    미이식 — AS-IS A→E fallback 과 실패 보상(design 04 SSP0003-16 잔여):
-    //      AS-IS 는 ① 상세저장 → ② IF_CHECK → ③ ERP 송신 → ④ **송신 결과를 보고** 확정저장(성공 A/P, 실패 E)
-    //      순서다(cs:1983~1987). TO-BE 는 ②와 ④가 뒤바뀌어 확정이 먼저 저장되므로 'E' 로 되돌릴 수 없다.
-    //      보상 SP 는 **배포돼 있다**(DB 실측 2026-10-25 ALL_OBJECTS: SCM_SSP_DELETE_SHIPMENT_REQUEST_
-    //      DRAFTING_BY_CONFIRM · SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM 모두 PROCEDURE VALID).
-    //      즉 남은 것은 SP 부재가 아니라 **저장 순서 재배치**이고, 트랜잭션 경계가 바뀌므로 별도 결정이 필요하다.
-    if (erpStaged) {
-      await sendErpIf(changeReqNo, changeType, saveStatus);
-    }
-
-    if (erpStaged) {
+    // 성공 안내는 ERP 연쇄가 깨끗이 끝났을 때만 — 실패·일부 거절은 위에서 이미 사유를 알렸다.
+    if (erpOk && rejectedIds.size === 0) {
       void setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '__Saved.') });
-    } else {
-      void setAlert({
-        type: 'alert',
-        content: t(
-          MSG.ERP_IF_FAIL,
-          'Approved and saved, but the ERP interface result could not be confirmed. Please contact the administrator if needed.'
-        ),
-      });
     }
     // 컨펌(승인/반려) 완료 → 하단 디테일 그리드·폼·체크 초기화(사용자 지시 2026-10-01).
     //   clearDetail 이 SUB/DELEGATE 필터를 undefined 로 비워 디테일 조회가 꺼지고 그리드가 비워진다.

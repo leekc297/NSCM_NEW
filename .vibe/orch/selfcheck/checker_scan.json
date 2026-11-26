@@ -1,0 +1,890 @@
+{
+ "at": "2026-11-26 16:04:36",
+ "ledgers": 58,
+ "rows": 117085,
+ "fingerprint": "1c0994780e6d46ec",
+ "detectors": [
+  {
+   "id": "K1",
+   "name": "한 글자 칸 이름(정규식 잘림 흔적)",
+   "rows": 94,
+   "screens": [
+    "DMF0020",
+    "DMF0068",
+    "SCP0108",
+    "SSP0024"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0020",
+     "row_id": "V-cbfae26c",
+     "rule_id": "D1",
+     "result": "NOT_RUN",
+     "target": "Sales Price Template.M0 (M0)",
+     "evidence": ""
+    },
+    {
+     "menu_id": "DMF0068",
+     "row_id": "V-aeec1a24",
+     "rule_id": "D1",
+     "result": "NOT_RUN",
+     "target": "ContributeSalesList.M1 (M1)",
+     "evidence": ""
+    },
+    {
+     "menu_id": "SCP0108",
+     "row_id": "V-3937c66e",
+     "rule_id": "A5",
+     "result": "ERROR",
+     "target": "CUTOFF.DV (DV)",
+     "evidence": "[측정 경로 누락] 탭 'CUTOFF' 전환 실패(Division 순회 포함) — 이 시트 컬럼 미측정"
+    },
+    {
+     "menu_id": "SSP0024",
+     "row_id": "T-4589d2bb",
+     "rule_id": "D1",
+     "result": "PASS",
+     "target": "POST_OPER_LT / Post Oper.LT(Day",
+     "evidence": "기존행 r0 POST_OPER_LT 편집=false (AS-IS 잠금) | 신규행 r0 POST_OPER_LT 편집=false (AS-IS 잠금)"
+    }
+   ]
+  },
+  {
+   "id": "K2",
+   "name": "같은 문구 반복(판정마다 누적)",
+   "rows": 1058,
+   "screens": [
+    "DMF0005",
+    "SCP0005",
+    "SCP0007",
+    "SCP0016",
+    "SCP0020",
+    "SCP0033",
+    "SCP0037",
+    "SCP0041",
+    "SCP0084",
+    "SCP0104",
+    "SCP0108",
+    "SCP0111",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0020",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-b9ba5caf",
+     "rule_id": "SC1",
+     "result": "ERROR",
+     "target": "DMF0005 화면",
+     "evidence": " | [미검증] 검사기(check.js SC1·smoke 기준표 순서)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(check.js SC1·smoke 기준표 순서)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0005",
+     "row_id": "V-a0689c02",
+     "rule_id": "H7",
+     "result": "PASS",
+     "target": "SCP0005 화면",
+     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'DistributionRoute_20261126_011442.xlsx' 7313B | E2E smoke 공통 'Excel 다운로드' [OK] 'DistributionRoute_20261126_011442.xlsx' 7313B"
+    },
+    {
+     "menu_id": "SCP0007",
+     "row_id": "V-4ef6a2ea",
+     "rule_id": "H7",
+     "result": "PASS",
+     "target": "SCP0007 화면",
+     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'BOD_20261114_073632.xlsx' 7253B | E2E smoke 공통 'Excel 다운로드' [OK] 'BOD_20261114_073632.xlsx' 7253B"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "V-2e2a7392",
+     "rule_id": "J2",
+     "result": "ERROR",
+     "target": "SCP0016 화면",
+     "evidence": " | [미검증] 검사기(auth·authcrud spec)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(auth·authcrud spec)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-d0db9c44",
+     "rule_id": "H7",
+     "result": "PASS",
+     "target": "SCP0020 화면",
+     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'TactTime_20261114_095944.xlsx' 6593B | E2E smoke 공통 'Excel 다운로드' [OK] 'TactTime_20261114_095944.xlsx' 6593B"
+    },
+    {
+     "menu_id": "SCP0033",
+     "row_id": "V-2934470e",
+     "rule_id": "H7",
+     "result": "PASS",
+     "target": "SCP0033 화면",
+     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'ShipmentSemiDeptDay_20261114_111033.xlsx' 6496B | E2E smoke 공통 'Excel 다운로드' [OK] 'ShipmentSemiDeptDay_20261114_111033.xlsx' 6496B"
+    }
+   ]
+  },
+  {
+   "id": "K3",
+   "name": "재지 못한 행의 해당없음(미검증 원칙 위반 후보)",
+   "rows": 921,
+   "screens": [
+    "DMF0005",
+    "SCP0005",
+    "SCP0007",
+    "SCP0016",
+    "SCP0020",
+    "SCP0033",
+    "SCP0037",
+    "SCP0041",
+    "SCP0084",
+    "SCP0096",
+    "SCP0104",
+    "SCP0111",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0020",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-e0e9e53f",
+     "rule_id": "H13",
+     "result": "NA",
+     "target": "production.ENERGE_WH (Energy(Wh))",
+     "evidence": "ENERGE_WH: 음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음(데이터 조건 · 검사기 한계 아님)"
+    },
+    {
+     "menu_id": "SCP0005",
+     "row_id": "V-6221c680",
+     "rule_id": "E4",
+     "result": "NA",
+     "target": "MSG00107",
+     "evidence": "[대표 측정] 같은 확인 대표 T-a696588b 측정 결과(Doc/verify/SCP0005/dup_groups.csv): MSG00107: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (intPRIORITY < 1)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)"
+    },
+    {
+     "menu_id": "SCP0007",
+     "row_id": "V-eae7455b",
+     "rule_id": "MS1",
+     "result": "NA",
+     "target": "MSG00106",
+     "evidence": "AS-IS MSG00106 '기간은 연속적으로 입력하여야 합니다.' → 같은 문구의 TO-BE ID MSG01133 '기간은 연속적으로 입력하여야 합니다.' — TO-BE 코드(FE bod 폴더 · PKG)에 MSG00106/MSG01133 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "V-6a3d49b3",
+     "rule_id": "H13",
+     "result": "NA",
+     "target": "Waterfall Shipment Plan.BOH (BOH (To Site))",
+     "evidence": "BOH: 음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음(데이터 조건 · 검사기 한계 아님)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-7155a3c9",
+     "rule_id": "MS1",
+     "result": "NA",
+     "target": "MSG00199",
+     "evidence": "AS-IS MSG00199 '작업중인 데이터가 있습니다. 작업 완료후 사용하세요.' → 같은 문구의 TO-BE ID MSG01210 '작업중인 데이터가 있습니다. 작업 완료후 사용하세요.' — TO-BE 코드(FE tact-time 폴더 · PKG)에 MSG00199/MSG01210 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
+    },
+    {
+     "menu_id": "SCP0033",
+     "row_id": "V-b66ffc3a",
+     "rule_id": "E4",
+     "result": "NA",
+     "target": "MSG00059",
+     "evidence": "MSG00059: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (siMain.ActiveSheet.RowCount <= 0)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)"
+    }
+   ]
+  },
+  {
+   "id": "K4",
+   "name": "결과와 증거 어긋남",
+   "rows": 2,
+   "screens": [
+    "SCP0096"
+   ],
+   "samples": [
+    {
+     "menu_id": "SCP0096",
+     "row_id": "V-d8f314e2",
+     "rule_id": "H2",
+     "result": "FAIL",
+     "target": "SCP0096 시나리오 [자동] 당주 구분선(rail) = 이번 주(Weekly)",
+     "evidence": "[선행 결함 종속 V-eb856b69] AS-IS W_ 칸은 chkSum.Checked 일 때 표시(SCP0096_Shipment_Working_Day_OSP.cs:355) · TO-BE 'SCP0096 체크박스 Sum' FAIL 로 이 칸이 화면에 없어 AS-IS 동작 없음 · 조치 = V-eb856b69 보완(같은 원인) · [측정 경로 없음] [자동] 당주 구분선(rail) = 이번 주(Weekly): W_ 동적 칸 없음 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출1·요청6 → rail:2행·신규0·"
+    }
+   ]
+  },
+  {
+   "id": "K5",
+   "name": "칸 값 없음 'COL(X) 없음'(다른 그리드 측정 흔적)",
+   "rows": 199,
+   "screens": [
+    "SCP0020",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-bc9e4c4c",
+     "rule_id": "D1",
+     "result": "ERROR",
+     "target": "Plant.LANE_QTY (Slitting Lane)",
+     "evidence": "[조건 평가 불가] 신규행 LANE_QTY: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 InsertButton:811 조건 평가 불가: COL(OPERATION_GROUP_ID) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    },
+    {
+     "menu_id": "SSP0015",
+     "row_id": "V-c1a6024b",
+     "rule_id": "D1",
+     "result": "ERROR",
+     "target": "Shipment Confirm Detail.DIVISION_ID (Div)",
+     "evidence": "[조건 평가 불가] 기존행 DIVISION_ID: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 EditButton:1938 조건 평가 불가: COL(ERP_STATUS) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    },
+    {
+     "menu_id": "SSP0021",
+     "row_id": "V-4acbe6ca",
+     "rule_id": "D1",
+     "result": "ERROR",
+     "target": "Shipment Plan Detail.DIVISION_ID (Div)",
+     "evidence": "[조건 평가 불가] 기존행 DIVISION_ID: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 EditButton:2473 조건 평가 불가: COL(ERP_STATUS) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    },
+    {
+     "menu_id": "SSP0023",
+     "row_id": "V-a5fc2e61",
+     "rule_id": "D1",
+     "result": "ERROR",
+     "target": "Shipment Plan Detail.DIVISION_ID (Div)",
+     "evidence": "[조건 평가 불가] 기존행 DIVISION_ID: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 EditButton:2283 조건 평가 불가: COL(ERP_STATUS) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    },
+    {
+     "menu_id": "SSP0060",
+     "row_id": "V-ed64f41c",
+     "rule_id": "D1",
+     "result": "ERROR",
+     "target": "Shipment Plan Detail.DIVISION_ID (Div)",
+     "evidence": "[조건 평가 불가] 기존행 DIVISION_ID: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 EditButton:2862 조건 평가 불가: COL(ERP_STATUS) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    }
+   ]
+  }
+ ],
+ "clusters": [
+  {
+   "rule_id": "D1",
+   "result": "ERROR",
+   "sig": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:# · if (siDetail != null && ",
+   "rows": 687,
+   "screens": [
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "SSP0015",
+     "row_id": "V-af128757",
+     "target": "Hold stock.DIVISION_ID (Div)",
+     "evidence": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:7694 · if (siDetail != null && siDetail.IsLock(siDetail.SheetName) == false && siDetail.ActiveSheet.SheetName == SpdSheet.shtBolckS…)) 를 검사기가 맞추지 못함(시트·선택 행 조건) · 시도: 없음 · 신규행 검사 미측정"
+    },
+    {
+     "menu_id": "SSP0021",
+     "row_id": "V-d9932af6",
+     "target": "Hold stock.DIVISION_ID (Div)",
+     "evidence": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:2193 · if (siDetail != null && siDetail.IsLock(siDetail.SheetName) == false && siDetail.ActiveSheet.SheetName == SpdSheet.shtHoldSt…)) 를 검사기가 맞추지 못함(시트·선택 행 조건) · 시도: [전제 T312] 보이는 그리드 행 수 27, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음 "
+    },
+    {
+     "menu_id": "SSP0023",
+     "row_id": "V-4c08fe1e",
+     "target": "Shipment Plan Detail.DIVISION_ID (Div)",
+     "evidence": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:1902 · if (siDetail != null && siDetail.IsLock(siDetail.SheetName) == false && siDetail.ActiveSheet.SheetName == SpdSheet.shtPlanDe…)) 를 검사기가 맞추지 못함(시트·선택 행 조건) · 시도: [전제 T312] 보이는 그리드 행 수 308, 0 · 탭 0개 / '그리드 0' 첫 행 선택 후 Insert → 신규 행 없음"
+    }
+   ]
+  },
+  {
+   "rule_id": "X-ROW",
+   "result": "ERROR",
+   "sig": "진입점 집계 #검사 — <C>:# (미실행 검사가 남아 판정필요)",
+   "rows": 290,
+   "screens": [
+    "DMF0006",
+    "DMF0014",
+    "DMF0035",
+    "DMF0040",
+    "DMF0045",
+    "DMF0048",
+    "DMF0053",
+    "DMF0068",
+    "DMF0072",
+    "DMF0074",
+    "SCP0007",
+    "SCP0016",
+    "SCP0020",
+    "SCP0028",
+    "SCP0041",
+    "SCP0084",
+    "SCP0100",
+    "SCP0108",
+    "SSP0003",
+    "SSP0005",
+    "SSP0014",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0006",
+     "row_id": "T-55232420",
+     "target": "DMF0006_CustomerModelMapping.Form_Load",
+     "evidence": "진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요)"
+    },
+    {
+     "menu_id": "DMF0014",
+     "row_id": "T-1559bb7b",
+     "target": "DMF0014_CustFcstUpload.CreateSpread",
+     "evidence": "진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요)"
+    },
+    {
+     "menu_id": "DMF0035",
+     "row_id": "T-5784740c",
+     "target": "DMF0035_MktFcstWaterfall.CreateSpread",
+     "evidence": "진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요)"
+    }
+   ]
+  },
+  {
+   "rule_id": "X-LOC",
+   "result": "ERROR",
+   "sig": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 290,
+   "screens": [
+    "SCP0016",
+    "SCP0020",
+    "SCP0037",
+    "SCP0041",
+    "SCP0108",
+    "SCP0131",
+    "SSP0003",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "SCP0016",
+     "row_id": "T-3ba7861f",
+     "target": "3 · BtnProject_Click(1304)",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "T-0b8653ba",
+     "target": "1 Layout · usrLayoutControl1 / layoutControlGroup1 (orphan dead)",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0037",
+     "row_id": "T-85e253f9",
+     "target": "2 · cboDivision.SelectedIndexChanged",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "rule_id": "D1",
+   "result": "ERROR",
+   "sig": "기존행 r# <C> 편집=false — 기대: AS-IS 편집 기대 없음(AS-IS 컬럼 아님 또는 facts_lockrules 미실행) — TO-BE 신설 컬럼",
+   "rows": 228,
+   "screens": [
+    "DMF0005",
+    "SCP0020",
+    "SCP0041",
+    "SCP0127",
+    "SSP0003",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-bfc69cdc",
+     "target": "purchase.DIVISION_ID (Div.)",
+     "evidence": "기존행 r0 DIVISION_ID 편집=false — 기대: AS-IS 편집 기대 없음(AS-IS 컬럼 아님 또는 facts_lockrules 미실행) — TO-BE 신설 컬럼이면 확정 규칙으로 판정 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-481edd07",
+     "target": "Packer.DIVISION_ID (Div*)",
+     "evidence": "기존행 r0 DIVISION_ID 편집=false — 기대: AS-IS 편집 기대 없음(AS-IS 컬럼 아님 또는 facts_lockrules 미실행) — TO-BE 신설 컬럼이면 확정 규칙으로 판정 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0041",
+     "row_id": "V-a5963ae0",
+     "target": "Osp Stock.DIVISION_ID (Div*)",
+     "evidence": "기존행 r0 DIVISION_ID 편집=false — 기대: AS-IS 편집 기대 없음(AS-IS 컬럼 아님 또는 facts_lockrules 미실행) — TO-BE 신설 컬럼이면 확정 규칙으로 판정 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "rule_id": "D1",
+   "result": "ERROR",
+   "sig": "[조건 평가 불가] 기존행 <C>: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r#: 규칙 EditButton:# 조건 평가 불가: <C>(<C>",
+   "rows": 158,
+   "screens": [
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "SSP0015",
+     "row_id": "V-c1a6024b",
+     "target": "Shipment Confirm Detail.DIVISION_ID (Div)",
+     "evidence": "[조건 평가 불가] 기존행 DIVISION_ID: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 EditButton:1938 조건 평가 불가: COL(ERP_STATUS) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    },
+    {
+     "menu_id": "SSP0021",
+     "row_id": "V-4acbe6ca",
+     "target": "Shipment Plan Detail.DIVISION_ID (Div)",
+     "evidence": "[조건 평가 불가] 기존행 DIVISION_ID: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 EditButton:2473 조건 평가 불가: COL(ERP_STATUS) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    },
+    {
+     "menu_id": "SSP0023",
+     "row_id": "V-a5fc2e61",
+     "target": "Shipment Plan Detail.DIVISION_ID (Div)",
+     "evidence": "[조건 평가 불가] 기존행 DIVISION_ID: AS-IS 조건부 잠금 규칙을 행 값으로 평가하지 못함 — r0: 규칙 EditButton:2283 조건 평가 불가: COL(ERP_STATUS) 없음 (계정 minyonglee1 그룹 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/DM Viewer/JV Planner/SCP Planner admin=true)"
+    }
+   ]
+  },
+  {
+   "rule_id": "C6",
+   "result": "ERROR",
+   "sig": "원천 <C> 기존행 편집 불가(신규행·기존행·앞 #행 모두) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 125,
+   "screens": [
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "SSP0015",
+     "row_id": "V-9969647d",
+     "target": "siDetail.SetValue",
+     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SSP0021",
+     "row_id": "V-8a0eaea6",
+     "target": "EDIT_MAIN",
+     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SSP0023",
+     "row_id": "V-9a53e0c2",
+     "target": "EDIT_MAIN",
+     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "rule_id": "C3",
+   "result": "ERROR",
+   "sig": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:# · if (siDetail != null && ",
+   "rows": 124,
+   "screens": [
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "SSP0015",
+     "row_id": "T-80c9dacb",
+     "target": "ETA",
+     "evidence": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:7694 · if (siDetail != null && siDetail.IsLock(siDetail.SheetName) == false && siDetail.ActiveSheet.SheetName == SpdSheet.shtBolckS…)) 를 검사기가 맞추지 못함 · 신규행 검사 미측정"
+    },
+    {
+     "menu_id": "SSP0021",
+     "row_id": "T-65450d90",
+     "target": "TRANSPORT_MODE / Trans Mode",
+     "evidence": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:2193 · if (siDetail != null && siDetail.IsLock(siDetail.SheetName) == false && siDetail.ActiveSheet.SheetName == SpdSheet.shtHoldSt…)) 를 검사기가 맞추지 못함 · 신규행 검사 미측정"
+    },
+    {
+     "menu_id": "SSP0023",
+     "row_id": "T-c5f3a162",
+     "target": "TRANSPORT_MODE / Trans Mode",
+     "evidence": "[측정 경로 없음] 조회 후 Insert 했으나 신규행 없음 — AS-IS Insert 전제(InsertRow:1902 · if (siDetail != null && siDetail.IsLock(siDetail.SheetName) == false && siDetail.ActiveSheet.SheetName == SpdSheet.shtPlanDe…)) 를 검사기가 맞추지 못함 · 신규행 검사 미측정"
+    }
+   ]
+  },
+  {
+   "rule_id": "X-REASON",
+   "result": "ERROR",
+   "sig": "제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 117,
+   "screens": [
+    "SCP0016",
+    "SCP0020",
+    "SCP0033",
+    "SCP0041",
+    "SCP0122",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "SCP0016",
+     "row_id": "T-6c909b37",
+     "target": "D00-4b-003 · §4b SaveButton / toolbarOverride / Save",
+     "evidence": "제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "T-4d52c3ba",
+     "target": "COMMON:UC-03 · 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도",
+     "evidence": "제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0033",
+     "row_id": "T-bfb5958d",
+     "target": "D00-3-003 · §3 VisibleTab / (true)",
+     "evidence": "제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "rule_id": "H2",
+   "result": "ERROR",
+   "sig": " | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W#)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(",
+   "rows": 114,
+   "screens": [
+    "SCP0020",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-8ebf79bf",
+     "target": "siExcept.SetBGColor",
+     "evidence": " | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SSP0015",
+     "row_id": "V-9fa723b2",
+     "target": "siMain.SetBGColor2",
+     "evidence": " | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | "
+    },
+    {
+     "menu_id": "SSP0021",
+     "row_id": "V-c076198d",
+     "target": "siMain.ActiveSheet.SetActiveCell",
+     "evidence": " | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | "
+    }
+   ]
+  },
+  {
+   "rule_id": "A7",
+   "result": "ERROR",
+   "sig": " | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 ",
+   "rows": 104,
+   "screens": [
+    "DMF0005",
+    "SCP0016",
+    "SCP0020",
+    "SCP0033",
+    "SCP0037",
+    "SCP0041",
+    "SCP0084",
+    "SCP0108",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-0dd175ec",
+     "target": "SCM0001_GET_LOOKUP_VALUES",
+     "evidence": " | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "V-05926782",
+     "target": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+     "evidence": " | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-72aadc89",
+     "target": "SCP0020_GET_TACT_TIME_OSP",
+     "evidence": " | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "rule_id": "X-LOC",
+   "result": "판정필요",
+   "sig": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요",
+   "rows": 100,
+   "screens": [
+    "DMF0035",
+    "DMF0040",
+    "DMF0048",
+    "DMF0053",
+    "DMF0072",
+    "DMF0074",
+    "SCP0100",
+    "SSP0005",
+    "SYS0010",
+    "SYS0014"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0035",
+     "row_id": "T-a5d844b6",
+     "target": "mktFcstWaterfall · PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요"
+    },
+    {
+     "menu_id": "DMF0040",
+     "row_id": "T-46fa7d3d",
+     "target": "FilterTeambyDivision (#1) · Division",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요"
+    },
+    {
+     "menu_id": "DMF0048",
+     "row_id": "T-564a9f44",
+     "target": "DB SP · `_artifacts/_deploy_packages/DMF0048_SALES_MONITORING_20260704/01_SP/`",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요"
+    }
+   ]
+  },
+  {
+   "rule_id": "X-ROW",
+   "result": "ERROR",
+   "sig": "진입점 집계 #검사 — <C>:# · <C>:#",
+   "rows": 96,
+   "screens": [
+    "DMF0005",
+    "DMF0006",
+    "DMF0045",
+    "DMF0048",
+    "DMF0072",
+    "SCP0005",
+    "SCP0007",
+    "SCP0020",
+    "SCP0028",
+    "SCP0033",
+    "SCP0037",
+    "SCP0100",
+    "SCP0108",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0005",
+    "SSP0014",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "T-25df7678",
+     "target": "DMF0005_SaleSite_PjtModelMapping.InitControls",
+     "evidence": "진입점 집계 17검사 — PASS:11 · ERROR:6"
+    },
+    {
+     "menu_id": "DMF0006",
+     "row_id": "T-ac9f5b96",
+     "target": "DMF0006_CustomerModelMapping.clbDivision_SelectedIndexChanged",
+     "evidence": "진입점 집계 13검사 — NOT_RUN:10 · ERROR:3"
+    },
+    {
+     "menu_id": "DMF0045",
+     "row_id": "T-603a1299",
+     "target": "DMF0045_ShipmentRequest.EditButton",
+     "evidence": "진입점 집계 17검사 — NOT_RUN:15 · ERROR:2"
+    }
+   ]
+  },
+  {
+   "rule_id": "X-ROW",
+   "result": "ERROR",
+   "sig": "진입점 집계 #검사 — <C>:#",
+   "rows": 93,
+   "screens": [
+    "DMF0005",
+    "SCP0007",
+    "SCP0020",
+    "SCP0028",
+    "SCP0033",
+    "SCP0041",
+    "SCP0084",
+    "SCP0108",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "T-1b67519f",
+     "target": "DMF0005_SaleSite_PjtModelMapping.shtSubDataModel_Changed",
+     "evidence": "진입점 집계 7검사 — ERROR:7"
+    },
+    {
+     "menu_id": "SCP0007",
+     "row_id": "T-8f578a07",
+     "target": "SCP0007_BOD.SpdMain_TopChange",
+     "evidence": "진입점 집계 1검사 — ERROR:1"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "T-8032b4bc",
+     "target": "SCP0020_TactTime.CheckDigitValueEntered",
+     "evidence": "진입점 집계 6검사 — ERROR:6"
+    }
+   ]
+  },
+  {
+   "rule_id": "G2",
+   "result": "ERROR",
+   "sig": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W#) | [미검증] 검사기(_ve",
+   "rows": 90,
+   "screens": [
+    "DMF0005",
+    "SCP0016",
+    "SCP0020",
+    "SCP0033",
+    "SCP0037",
+    "SCP0041",
+    "SCP0108",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-1e9995cb",
+     "target": "조회조건 chkProjectInfo",
+     "evidence": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "V-2ffa024a",
+     "target": "조회조건 PJT",
+     "evidence": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-d3a11873",
+     "target": "조회조건 Model/Nickname",
+     "evidence": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "rule_id": "C3",
+   "result": "ERROR",
+   "sig": "원천 <C> 기존행 편집 불가(신규행·기존행·앞 #행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아",
+   "rows": 86,
+   "screens": [
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "SSP0015",
+     "row_id": "V-88e855fb",
+     "target": "EDIT_MAIN",
+     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SSP0021",
+     "row_id": "V-23e634c8",
+     "target": "EDIT_MAIN",
+     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SSP0023",
+     "row_id": "V-0f42c0f3",
+     "target": "EDIT_MAIN",
+     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    }
+   ]
+  }
+ ],
+ "ignored": {
+  "결함 유형 행 직접 일치 실측 없음 = 해당없음 유지(2026-10-29 허위 FAIL 방지 · VMO 20": 7294,
+  "같은 결정(다른 대상 PASS 를 물려받지 않음 = 해당없음 유지)": 3041,
+  "대조표(__asis-mapping__.md) 서술 보강 항목 — 검사기 판정 결함 아님(문서 작성 대상)": 783
+ },
+ "ignore_file": "tools/Harness/rules/checker_scan_ignore.csv"
+}

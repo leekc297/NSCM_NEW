@@ -1,0 +1,108 @@
+{
+  "id": "20261121000234_VISION",
+  "at": "2026-11-21T00:02:34+09:00",
+  "ms": 1795186954358,
+  "source": "vision",
+  "status": "superseded",
+  "sig": "ln|struct|usercheck|un|recur symptom only",
+  "title": "개념 재정립: 사용자 지적 재발 = 효력 뒤 새로 생긴 증상 사건만(U13 옛 기록 warn 순환 해소)",
+  "evidence": "orch-ladder.js:60 itemMs 대체 순서(it.ms → state itemMs → 점검 시각 → 지금) · orch-ladder.js:61-63 항목 수준 무시 · orch-usercheck.js:184-190 ms 없는 warn 'S13,U13,old' · CHANGELOG.md:39 시험 기대 '옛 기록 warn 1건(003352, 054831, 060728)' · .vibe/orch/usercheck/state.json itemMs 1795186329940(11-20 23:52:09) · diag_in.json, result.json U13 키 'S13,U13,old' 1개(2026-11-21 00:01:02 grep) · jobs/J20261120_003352/job.json createdAt 00:33:52 status interrupted note 'VS Code 종료로 중단됨' · J20261120_054831 05:48:31, J20261120_060728 06:07:28 interrupted · 진단 사다리 묶음 L4|struct|usercheck|U13 · 문서 .vibe/orch/vision/concept_20261121_L4_struct_usercheck_U13.md",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-dict.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js"
+  ],
+  "before_after": "지금: S13 에 그 지적 항목이 1건이라도 걸리고 항목 시각(없으면 감지기 첫 기록, 점검 시각, 지금)이 효력 뒤면 수준과 무관하게 재발로 센다. 새 개념: 원문 증상이 반영 효력 뒤 실제로 일어난 사건(fail, 사건 발생 ms 필수)만 재발로 세고, 판정 근거 부족 warn 은 L1 기록 정리 대상으로 돌린다.",
+  "verify": "① 지금 result.json, state.json 재생 시 L3,usercheck,U13 과 L4,struct,usercheck,U13 후보 0건 ② 효력 뒤 chain.end(aborted) ms 표본에 30분 재실행 없음 = L3 1건 ③ ms 없는 증상 항목 = 재발 0건, '판정 근거 없음' 항목 1건 ④ U8, U21 전환 전후 사다리 후보 대조표에서 증상 사건이 있는 후보 누락 0건 ⑤ node tools/VibeManager/test/run_all.js FAIL 0, 구문 검사, 정의 정합 통과",
+  "rollback": "VMO 개선안 탭 되돌리기 버튼 또는 대상 파일 .bak_<태그>(설치 폴더 같은 태그). ladder.json 원장은 지우지 않음",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "L3 구조 개선안 20261120184524_SELF 반영(11-20 20:19) 뒤 3일 안 같은 묶음 다시 참(orch-ladder.js:74-75 조건). 재발 근거는 warn 'S13,U13,old' 1건이고 fail 0건. 재발 판정 규칙 자체가 목적과 어긋남",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T12:27:49+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T12:31:14+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 966, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1227"
+    },
+    {
+      "at": "2026-11-23T12:31:16+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T12:46:23+09:00",
+      "by": "VMO",
+      "what": "반영 실패. 게이트에서 새로 어긋난 항목 1건: S2 t_orch_usercheck.js 실패: exit 1 · PASS 137 · FAIL 1 · FAIL U3 장부 막힘 2건 = 실패 1항목(S13|U3|worklist) [] / SOME FAIL · 구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 978, FAIL 2), 정의 정합 통과 · 대상 파일 5개 복원(orch-ladder.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM/tools/VibeManager; python - <<'EOF'\nimport io\np='orch-usercheck.js'\ns=io.open(p,encoding='utf-8').re). 덮기 전 파일 tools/VibeManager/orch-ladder.js.bak_prerestore_20261123_124623 / orch-usercheck.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM/tools/VibeManager; python - <<'EOF'\nimport io\np='test/t_orch_ladder_recur_time.js'\ns=io.open(p,encod). 덮기 전 파일 tools/VibeManager/orch-usercheck.js.bak_prerestore_20261123_124623 / orch-dict.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM/tools/VibeManager; python - <<'EOF'\nimport io\np='orch-us) · 대상 밖 변경 tools/VibeManager/test/t_orch_ladder.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-23T12-31-18_claude_orch.log",
+      "sec": 501,
+      "costUsd": 2.6715351,
+      "files": [
+        "tools/VibeManager/orch-dict.js",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_ladder.js",
+        "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+        "tools/VibeManager/test/t_orch_usercheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T12:47:52+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 안을 고쳐 20261123124752_SELF 로 다시 올림(자동 반영). 원인 tools/VibeManager/orch-improve.js:302 가 반영 전·뒤 게이트 항목(gate().detail, orch-selfcheck.js:332)을 문자열 전체로 비교함. S2 항목 문자열에 PASS 건수가 들어감(orch-selfcheck.js:75). 반영 전 12:31 로그(.vibe/logs/2026-11-23T12-31-18_claude_orch.log:33) 'S2 t_orch_usercheck.js 실패: exit 1 · PASS 133 · FAIL 1', 반영 뒤 12:46 result.json:842 'PASS 137 · FAIL 1', 실패 내용은 같은 'U3 장부 막힘(S13|U3|worklist)'. 개선안이 시험 4건을 추가해 PASS 만 늘었는데 새로 어긋난 항목 1건으로 셈. 개선안 검증 ①~⑤ 는 반영 결과에서 통과함. 같은 안을 retry 하면 PASS 건수가 또 달라져 같은 이유로 실패함"
+    }
+  ],
+  "plain": {
+    "what": "VMO 가 '사용자 지적이 고친 뒤 다시 났다'고 판단하는 기준을 바꿉니다. 고친 뒤 실제로 같은 문제가 일어난 경우만 다시 났다고 보고, 고치기 전에 생긴 옛 작업 기록(11-20 새벽 중단 작업 3건) 때문에 생긴 알림은 정리 대상으로만 보여 줍니다. 이번처럼 실제 문제 없이 승인 요청이 올라오는 일이 줄어듭니다.",
+    "risk": "감지기가 문제 발생 시각을 남기지 못하면 실제 재발을 놓칠 수 있어, 시각 없는 항목은 '판정 근거 없음'으로 따로 표시합니다. 다른 지적(U8, U21)의 판정이 바뀌는지 전환 전후로 대조합니다.",
+    "undo": "개선안 탭의 되돌리기 버튼으로 이전 판정 규칙으로 돌아갑니다. 진단 기록은 지우지 않습니다."
+  },
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795404469405,
+  "autoFp": "f0e828a0fa",
+  "applyStartMs": 1795404676960,
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/orch-dict.js",
+      "tools/VibeManager/test/t_orch_usercheck.js",
+      "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "2026-11-23 12:32:21 반영 전 실제 기록 재생(Temp/vmo_replay/replay.js · result.json 12:31:14): L3|usercheck|U13 0, L4|struct|usercheck|U13 0, 후보 9건(L3 usercheck U3, U21 포함) → 12:35:28 반영 뒤 같은 재생: U13 L3 0, L4 0, 후보 9건 같음(①, ④). node test/t_orch_ladder_recur_time.js 12:34:48: PASS 11 → PASS 19 ALL PASS. ⑥ 옛 기록 warn kind basis, itemMs 없음, L3·L4 0건, L1|nobasis|U13 1건, L1 fresh 제외. ⑦ chain.end(aborted) 40분 재실행 없음 = symptom ms=중단 시각, L3|usercheck|U13 1건(②). ⑧ ms 없는 증상 = L3 0건, L1 1건 '증상 항목에 사건 시각(ms) 없음'(③). U8, U21 ①~⑤ 11건 PASS(④). node test/t_orch_usercheck.js: PASS 133 FAIL 1 → PASS 137 FAIL 1(반영 전부터 있던 U3 장부 막힘). node test/t_orch_ladder.js 12:35:49: U9 표본 수정 전 FAIL 3 → 수정 뒤 PASS 24 ALL PASS. node --check 5개 파일 SYNTAX_OK. node test/run_all.js 12:35:54: 파일 64/66, PASS 978, FAIL 2(t_orch_usercheck U3 장부 막힘, t_orch_worklist sc.worklistCycle 예외 = 반영 전부터 어긋난 항목)(⑤). 정의 정합 미실행(VMO 게이트 몫)",
+    "note": "범위 밖 수정 1건: test/t_orch_ladder.js:36 U9 표본에 level 'fail'과 ms 추가. 종전 개념(ms 없으면 지금)을 전제로 한 표본이라 새 개념에서 FAIL 3건이 남. 이 수정 없이는 검증 ⑤를 통과할 수 없음. 사건 ms 를 추가한 감지기 U3(idleInc, stuckProp, review = 기준을 넘은 시각), U4, U6, U9, U10, U11, U22. 사건 ms 없는 증상 감지기(U1, U14~U16, U18, U19)는 효력 뒤 증상도 L3 대신 L1 판정 근거 없음으로 표시됨(개념 문서 위험 항목). 지금 state.json U3 stuckProp itemMs 는 종전 규칙 값이고 다음 S13 점검에서 새 값으로 바뀜. HEAD 버전으로 새 시험이 실패하는지 대조는 권한 확인에 막혀 미실행. 작업 모드 DB_ONLY 는 tools/VibeManager 수정을 막지 않았음"
+  },
+  "gate": {
+    "ok": false,
+    "text": "구문 검사 30개 파일 통과, 시험 64/66개 파일 통과(PASS 978, FAIL 2), 정의 정합 통과",
+    "newBad": [
+      "S2 t_orch_usercheck.js 실패: exit 1 · PASS 137 · FAIL 1 · FAIL U3 장부 막힘 2건 = 실패 1항목(S13|U3|worklist) [] / SOME FAIL"
+    ]
+  },
+  "repair": {
+    "at": "2026-11-23T12:47:52+09:00",
+    "decision": "revise",
+    "cause": "tools/VibeManager/orch-improve.js:302 가 반영 전·뒤 게이트 항목(gate().detail, orch-selfcheck.js:332)을 문자열 전체로 비교함. S2 항목 문자열에 PASS 건수가 들어감(orch-selfcheck.js:75). 반영 전 12:31 로그(.vibe/logs/2026-11-23T12-31-18_claude_orch.log:33) 'S2 t_orch_usercheck.js 실패: exit 1 · PASS 133 · FAIL 1', 반영 뒤 12:46 result.json:842 'PASS 137 · FAIL 1', 실패 내용은 같은 'U3 장부 막힘(S13|U3|worklist)'. 개선안이 시험 4건을 추가해 PASS 만 늘었는데 새로 어긋난 항목 1건으로 셈. 개선안 검증 ①~⑤ 는 반영 결과에서 통과함. 같은 안을 retry 하면 PASS 건수가 또 달라져 같은 이유로 실패함",
+    "reason": "",
+    "log": ".vibe\\logs\\2026-11-23T12-46-50_claude_orch.log",
+    "costUsd": 0.6986241,
+    "sec": 62
+  },
+  "supersededBy": "20261123124752_SELF"
+}

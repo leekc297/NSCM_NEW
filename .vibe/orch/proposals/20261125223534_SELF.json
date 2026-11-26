@@ -1,0 +1,45 @@
+{
+  "id": "20261125223534_SELF",
+  "at": "2026-11-25T22:35:34+09:00",
+  "ms": 1795613734036,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/_rules_consolidation/ruleset_master.md|n실행hook표에n개만있음settingsjson연결n개중checkwo",
+  "title": "사용자 지시 R233 같은 문제: Doc/_rules_consolidation/RULESET_MASTER.md:432 §6.1 실행 hook 표에 8개만 있음. settings.json 연결 14개 중 check-work-mode, check-rules-read, check-pl",
+  "evidence": "규칙 R233 \"hook 룰 문서나 실행 hook 을 추가, 변경하면 같은 작업에서 hook 카탈로그(RULESET_MASTER.md §4, 00_INDEX.md §B.3)와 카운트, .claude/hooks/README.md 에 같이 등재함\" (원래 지시 2026-11-25 20:59 \"hook 카탈로그 미등재도 고쳐주세요\") · Doc/_rules_consolidation/RULESET_MASTER.md:432 프로그램이 자동 차단하는 것은 8종(차단 7 + 비차단 1)뿐** *(2026-11-13 실측: `.claude/hooks` 10 스크립트[차단 9 + 첨부 1] + `tools/Harness/hooks` 3 = `settings.json` 연결 13",
+  "targets": [
+    "Doc/_rules_consolidation/RULESET_MASTER.md"
+  ],
+  "before_after": "§6.1 표에 6개 행(스크립트, 이벤트, 강제 내용, Exit)을 settings.json 기준으로 추가함. 432행 개수를 11 스크립트 + 하네스 3 = 연결 14로 고치고 456행 '7종'도 같은 값으로 맞춤",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/_rules_consolidation/RULESET_MASTER.md.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:50:02+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · Doc/_rules_consolidation/RULESET_MASTER.md:432 자동 실행 14종(차단 12 + 비차단 2) = .claude/hooks 11 + 하네스 3 = settings.json 연결 14, §6.1 표 445~450행에 check-work-mode, check-rules-read, check-plan-before-test, check-asis-harness, harness-gen-context, harness-stop-gate 6행 추가(표 14행), 462행 §6.3 '7종'을 14종, .sh 5종으로 고침 · settings.json hooks 배열 python 실측 · CRLF 유지, diff 5줄 변경 · 2026-11-26 15:50"
+    }
+  ],
+  "plain": {
+    "what": "hook 룰 문서나 실행 hook 을 추가, 변경하면 같은 작업에서 hook 카탈로그(RULESET_MASTER.md §4, 00_INDEX.md §B.3)와 카운트, .claude/hooks/README.md 에 같이 등재함 규칙을 Doc/_rules_consolidation/RULESET_MASTER.md 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R233|Doc/_rules_consolidation/RULESET_MASTER.md",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675802755
+}

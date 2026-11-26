@@ -1,0 +1,66 @@
+{
+  "id": "20261126153056_SELF_2",
+  "at": "2026-11-26T15:30:56+09:00",
+  "ms": 1795674656384,
+  "source": "self",
+  "status": "pending",
+  "sig": "userrule|rn|tools/harness/verify/mapping_trace.py|dncn사이트표본sitetypesjson을만드는스크립트가tools에없고s",
+  "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/mapping_trace.py:2331 D3·C2 사이트 표본 site_types.json 을 만드는 스크립트가 tools 에 없고 SCP0007 1화면에만 있음, strTO_SITE_TYPE 분기가 ",
+  "evidence": "규칙 R241 \"검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함\" (원래 지시 2026-11-26 14:38 \"sheet_nav 생성기도 만들어서 상세 시트 진입 보완해줘\") · tools/Harness/verify/mapping_trace.py:2331 stp = os.path.join(DOC, 'verify', MENU, 'site_types.json')  # TO site 의 SITE_TYPE 분기(strTO_SITE_TYPE) — TO-BE SCM_MST_SITE 표본",
+  "targets": [
+    "tools/Harness/verify/mapping_trace.py"
+  ],
+  "before_after": "AS-IS 원문에 SITE_TYPE 분기가 있는 화면마다 TO-BE SCM_MST_SITE 를 조회해 site_types.json 을 쓰는 생성기를 만들고 run_verify facts 단계에서 부름",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/mapping_trace.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "site_types.json 생성기 신설(TO-BE SCM_MST_SITE 조회 설계)이 필요한 별도 작업(4ec206 보고)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:52:05+09:00",
+      "by": "Claude Code 세션",
+      "what": "맡음 해제"
+    },
+    {
+      "at": "2026-11-26T15:52:41+09:00",
+      "by": "Claude Code 세션",
+      "what": "사용자 판단 대기로 보류(자동 반영 안 함) · site_types.json 생성기 신설(TO-BE SCM_MST_SITE 조회 설계)이 필요한 별도 작업(4ec206 보고)"
+    },
+    {
+      "at": "2026-11-26T07:05:38.268Z",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "hold 보강: coreAutoApply true 라 autoWaitMs, reason 으로 자동 반영 고르기에서 뺌"
+    },
+    {
+      "at": "2026-11-26T16:13:43+09:00",
+      "by": "Claude Code 세션",
+      "what": "맡음 해제"
+    },
+    {
+      "at": "2026-11-26T16:13:59+09:00",
+      "by": "사용자(세션 4ec206 대리 기록)",
+      "what": "보류 해제 — 사용자 지시 2026-11-26 16:1x(승인 가이드 완화 · 기능적인 부분은 VMO 가 스스로 보완): 자동 반영 대상으로 되돌림"
+    }
+  ],
+  "plain": {
+    "what": "검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함 규칙을 tools/Harness/verify/mapping_trace.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R241|tools/Harness/verify/mapping_trace.py",
+  "kind": "fix",
+  "waitNote": "",
+  "impactWas": "fix",
+  "needsApproval": "",
+  "reason": "사람 판단 필요: site_types.json 생성기 신설(TO-BE SCM_MST_SITE 조회 설계)이 필요한 별도 작업(4ec206 보고)"
+}

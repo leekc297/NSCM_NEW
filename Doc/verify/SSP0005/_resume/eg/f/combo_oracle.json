@@ -1,0 +1,29 @@
+{
+ "mid": "SSP0005",
+ "asis_id": "SSP0005",
+ "account": "minyonglee1",
+ "group": "ADMIN",
+ "results": [
+  {
+   "kind": "SEARCH",
+   "target": "Div",
+   "label": "Division",
+   "scenario": "화면 초기(선택 없음=ALL)",
+   "tobe_n": 8,
+   "asis_src": "UP_FX_GetCommonDataList MyDivision @InitControls (SSP0005_ShipmentWorkingDay.cs:164 ← SSP0005_ShipmentWorkingD)",
+   "asis_n": 8,
+   "rep": "NAME",
+   "branches": 1,
+   "asis_only": [],
+   "tobe_only": [],
+   "asis_only_n": 0,
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 8건 집합 일치",
+   "b3": "PASS",
+   "b3_why": "공통 8건이 ORDER BY ['ATTRIBUTE1'] 키 순서(동률 내부 순서는 기준 없음)",
+   "g7": "PASS",
+   "g7_why": "AS-IS 표시 NAME (UsrCheckedList.DataSource → row[1]=NAME) = TO-BE 표시 NAME (CODE≠NAME 후보 8/8건 확인)"
+  }
+ ]
+}

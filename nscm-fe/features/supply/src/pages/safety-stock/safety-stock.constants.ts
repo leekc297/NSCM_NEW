@@ -80,12 +80,17 @@ export const LBL = {
 // AS-IS `.cs:704-711` DateTime.ParseExact(v_from_yyyymmdd/v_to_yyyymmdd,"yyyyMMdd",null) catch
 //   블록에서 발생(MSG00219 날짜 대소비교와 별개 — 형식 자체 파싱 실패 가드). GAP-05 재확인 완료
 //   (본 회차 AS-IS 원문 직접 read), safetyStockSaveValidation.ts 에 배선.
+// DATE_RANGE_INVALID·NO_CHANGE 는 AS-IS 코드(MSG00219·MSG00004)를 그대로 쓰지 않는다 — AS-IS MSG00219 는
+//   TO-BE(SCM_ADM_MSG_M·locale) 미등록이라 같은 문구(2줄 포함)의 등록 코드 MSG01230 으로 매핑하고,
+//   NO_CHANGE 는 가짜 MSG_NO_CHANGE(미등록, `_` fallback 노출) 대신 "수정한 내용이 없습니다." 동일문구
+//   등록 코드 MSG00004 로 매핑한다(DB·locale 실측 2026-11-23, asis-msg-code-missing-reuse 규약).
 export const MSG = {
   REQUIRED_FIELDS: 'MSG00001', // 9개 필수값(value_type/division/plan_gr/site/item/stage/from~to/qty/valid_yn) 공백
   DUPLICATE_EXISTS: 'MSG00428', // 기존 동일건 존재 시(삭제 아니면) 저장 차단(AS-IS MSG00260 재번호 → MSG00428)
   INVALID_DATE_FORMAT: 'MSG00611', // From/To 날짜 형식 파싱 실패(.cs:704-711 catch) — MSG00219 대소비교와 별개
-  DATE_RANGE_INVALID: 'MSG00219', // From > To 날짜 역전 차단
+  DATE_RANGE_INVALID: 'MSG01230', // From > To 날짜 역전 차단(AS-IS MSG00219 미등록 → 동일문구 MSG01230 매핑)
   QTY_NEGATIVE: 'MSG00085', // 적용수량 음수 차단
+  QTY_OVER_MAX: 'MSG00460', // 적용수량 Int32 상한(2,147,483,647) 초과 차단 — AS-IS Convert.ToInt32 OverflowException 재현
   ITEM_NOT_FOUND: 'MSG00458', // 대상 Item 존재하지 않음
-  NO_CHANGE: 'MSG_NO_CHANGE',
+  NO_CHANGE: 'MSG00004', // 수정 없이 저장 시(AS-IS MSG00004 "수정한 내용이 없습니다." 동일문구 등록 코드)
 } as const;

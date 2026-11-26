@@ -13,11 +13,9 @@
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
-| button:FindButton | FindButton > FindData_Main | 644 | {?string.Empty} | UNRESOLVED |  |
 | button:FindButton | FindButton > FindData_Main | 644 | SCP.SCP0133_GET_WAREHOUSE_CAPACITY | MATCH | SP SCP0133_GET_WAREHOUSE_CAPACITY |
 | button:FindButton | FindButton > FindData_Main | 644 | SCP.SCP0133_GET_WAREHOUSE_ITEM_MAPPING | MATCH | SP SCP0133_GET_WAREHOUSE_ITEM_MAPPING |
 | button:SaveButton | SaveButton > SaveData_WhCapa > GetSearchInfo | 250 | SCP.SCP0133_GET_SEARCH_INFO | MATCH | SP SCP0133_GET_SEARCH_INFO |
-| button:SaveButton | SaveButton > SaveData_ItemMapping > FindData_Main | 644 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > SaveData_ItemMapping > FindData_Main | 644 | SCP.SCP0133_GET_WAREHOUSE_CAPACITY | MATCH | SP SCP0133_GET_WAREHOUSE_CAPACITY |
 | button:SaveButton | SaveButton > SaveData_ItemMapping > FindData_Main | 644 | SCP.SCP0133_GET_WAREHOUSE_ITEM_MAPPING | MATCH | SP SCP0133_GET_WAREHOUSE_ITEM_MAPPING |
 | button:SaveButton | SaveButton > SaveData_WhCapa | 878 | SCP.SCP0133_SAVE_WAREHOUSE_CAPACITY | MATCH | SP SCP0133_SAVE_WAREHOUSE_CAPACITY |
@@ -29,7 +27,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?string.Empty} | UNRESOLVED | 1 |  |  |  |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 2 |  |  |  |
 | SCP.SCP0133_GET_SEARCH_INFO | MATCH | 1 | SP SCP0133_GET_SEARCH_INFO | EXEC:SCP0133_GET_SEARCH_INFO, SELECT:SCP_OPMZ_PLAN_GR_M, INSERT:#SCM_SITE, SELECT:SCM_MST_SITE, SELECT:SCM_MST_SITE_ITEM, SELECT:#SCM_SITE, SELECT:SCP_OPMZ_WAREHOUSE_CAPACITY, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:SCP_MST_FINAL_ITEM |  |
 | SCP.SCP0133_GET_WAREHOUSE_CAPACITY | MATCH | 1 | SP SCP0133_GET_WAREHOUSE_CAPACITY | EXEC:SCP0133_GET_WAREHOUSE_CAPACITY, SELECT:SCP_OPMZ_WAREHOUSE_CAPACITY, REF:STRING_SPLIT |  |
@@ -91,10 +88,9 @@
 | LayoutControlGroup | 1 | layoutControlGroup2 |
 | UsrConditionPanel | 1 | pnlCondition |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 644 | FindData_Main | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

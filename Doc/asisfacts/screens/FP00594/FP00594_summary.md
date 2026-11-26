@@ -562,6 +562,10 @@
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:357 |
 | this | Load | Form_Load | .ctor:101 |
 | this | Load | Form_Load | .ctor:162 |
+| this.btnSet | Click | btnSet_Click | InitializeComponent:369 |
+| this.btnOK | Click | btnOK_Click | InitializeComponent:407 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:436 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:437 |
 | this.dtpPeriod | ValueChanged | dtpPeriod_ValueChanged | InitializeComponent:178 |
 | this.btnSave | Click | btnSave_Click | InitializeComponent:254 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:306 |
@@ -570,10 +574,6 @@
 | this.btnUpload | Click | btnUpload_Click | InitializeComponent:429 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:536 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:537 |
-| this.btnSet | Click | btnSet_Click | InitializeComponent:369 |
-| this.btnOK | Click | btnOK_Click | InitializeComponent:407 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:436 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:437 |
 | this | Load | Form_Load | .ctor:197 |
 | cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:260 |
 | mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:261 |
@@ -636,7 +636,7 @@
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 | LayoutControlItem | 85 | layoutControlItem2, layoutControlItem4, layoutControlItem5, layoutControlItem6, layoutControlItem3, layoutControlItem7, layoutControlItem1, lblMPPWPP, layoutControlItem5, layoutControlItem7, layoutControlItem1, layoutControlItem1, layoutControlItem3, layoutControlItem4, layoutControlItem2 … |
-| UsrButton | 33 | btnSave, btnClose, btnFind, btnDownload, btnUpload, btnExport, btnClose, btnSql, btnLine, btnMaterial, btnClose, btnSave, btnSave, btnClose, btnFind … |
+| UsrButton | 33 | btnSave, btnClose, btnFind, btnDownload, btnUpload, btnExport, btnClose, btnSql, btnLine, btnMaterial, btnClose, btnSave, btnSet, btnOK, btnSave … |
 | UsrLabel | 21 | usrLabel1, lblTitle, labelMppWPP, usrLabel16, usrLabel15, usrLabel14, usrLabel13, usrLabel12, usrLabel11, usrLabel10, usrLabel9, usrLabel8, usrLabel7, usrLabel4, usrLabel2 … |
 | UsrTextBox | 20 | txtNickName, txtMaterial, txtModel, txtLocation, txtItem, txtElectrodType, txtBuilding, txtModel, txtOperation, txtNickName, txtQty, txtLine, txtItemType, txtVersion, txtLine … |
 | CheckBox | 17 | chk_engine_outqty, chk_engine_inqty, chk_inventory, chk_result, chk_outqty, chk_inqty, chk_mpp_outqty, chk_mpp_inqty, chk_wpp_outqty, chk_wpp_inqty, chk_past_sales, chk_sales, chk_cell, chk_uom, chk_total_2 … |

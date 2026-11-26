@@ -1,0 +1,114 @@
+{
+  "id": "20261123172600_SELF_3",
+  "at": "2026-11-23T17:26:00+09:00",
+  "ms": 1795422360407,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|ctrla대상이파일탭dtab뿐이라log탭의logfelogbelogn",
+  "title": "사용자 지시 R4 같은 문제: tools/VibeManager/workbench.js:2633 Ctrl+A 대상이 파일 탭(.dtab)뿐이라 Log 탭의 #log, #felog, #belog(2034~2036, .logbody)에서 Ctrl+A 를 누르면 ",
+  "evidence": "규칙 R4 \"웹뷰에서 글을 보여 주는 영역(파일 보기, 로그, 결과 표)에서 Ctrl+A 는 그 영역만 선택. VS Code 본체가 보내는 execCommand('selectAll') 경로도 같음. 입력칸과 편집 칸은 기본 동작\" (원래 지시 2026-11-23 15:46 \"해당 파일에서 편집모드로 들어가지 않더라도 CTRL+A 시 자신의 파일만 전체 선택되도록 하고 싶습니다.\") · tools/VibeManager/workbench.js:2633 document.addEventListener('pointerdown',e=>{const p=e.target.closest&&e.target.closest('.dtab');SEL_T=p?Object.values(TABS).find(x=>x.pane===p)||null:null;},true);",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "pointerdown 대상에 .logbody 를 넣고, selFile 이 마지막으로 누른 로그 창의 범위만 선택하게 함. execCommand('selectAll') 감싸기(2645)도 같은 판단을 씀. 입력칸과 textarea 는 기본 동작으로 둠",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T23:19:14+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T23:22:51+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261123_self2319"
+    },
+    {
+      "at": "2026-11-23T23:22:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T23:34:48+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T23:34:48+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-23 실행(반영 전 run_all 종료 14:23:22Z, 반영 뒤 확인 23:30:58 로컬). node --check: 반영 전 오류 없음 → 반영 뒤 오류 없음. run_all.js: 74/74 PASS 1161 FAIL 0 → 74/74 PASS 1161 FAIL 0. t_webview_syntax.js: ALL PASS → ALL PASS · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-23T23-22-53_claude_orch.log",
+      "sec": 498,
+      "costUsd": 0.7563284,
+      "files": [
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:36+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰에서 글을 보여 주는 영역(파일 보기, 로그, 결과 표)에서 Ctrl+A 는 그 영역만 선택. VS Code 본체가 보내는 execCommand('selectAll') 경로도 같음. 입력칸과 편집 칸은 기본 동작 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R4|tools/VibeManager/workbench.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795443554081,
+  "autoFp": "af64e1aee8",
+  "applyStartMs": 1795443773823,
+  "verifyJudge": {
+    "at": "2026-11-23T23:31:14+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261123_self2319",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795444488941,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/workbench.js 출력 없음(반영 전 → 반영 뒤 같음) · node tools/VibeManager/test/run_all.js 'ALL OK  파일 74/74  PASS 1161  FAIL 0  213.4s' → 'ALL OK  파일 74/74  PASS 1161  FAIL 0  214.7s' · node tools/VibeManager/test/t_webview_syntax.js 'ALL PASS'(PASS 19) → 'ALL PASS', 'PASS workbench(ko): 스크립트 1개 구문', 'PASS workbench(en): 스크립트 1개 구문'"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-23 실행(반영 전 run_all 종료 14:23:22Z, 반영 뒤 확인 23:30:58 로컬). node --check: 반영 전 오류 없음 → 반영 뒤 오류 없음. run_all.js: 74/74 PASS 1161 FAIL 0 → 74/74 PASS 1161 FAIL 0. t_webview_syntax.js: ALL PASS → ALL PASS",
+    "note": "pointerdown 에서 .dtab 이 아닌 .logbody 를 누르면 SEL_L 에 그 로그 창을 기록함. selFile 은 SEL_L 이 보이는 동안 그 창 범위만 선택하고, 아니면 종전 파일 탭(SEL_T) 처리를 함. execCommand('selectAll') 감싸기는 selFile 을 그대로 써서 같은 판단을 따름. 링크로 탭을 열 때 SEL_L=null 처리함. 입력칸, textarea, select, contentEditable 은 keydown 에서 종전대로 기본 동작. 웹뷰 실화면 Ctrl+A 확인은 창 다시 로드 뒤 확인 항목이라 실행하지 않음."
+  },
+  "snap": "prop_20261123172600_SELF_3",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

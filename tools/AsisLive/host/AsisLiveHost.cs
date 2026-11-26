@@ -101,6 +101,7 @@ static class AsisLiveHost
             case "act": Act(a, res); break;
             case "sweep": Sweep(a, res); break;
             case "cell": Cell(a, res); break;
+            case "keyinput": KeyInput(a, res); break;
             case "cellstate": CellState(a, res); break;
             case "popup_ok": PopupOk(a, res); break;
             case "maximize": { var mf = MainForm(); if (mf == null) throw new InvalidOperationException("main form not ready"); res["state"] = OnUi(mf, () => { mf.WindowState = FormWindowState.Maximized; return mf.WindowState.ToString(); }); Thread.Sleep(800); res["size"] = OnUi(mf, () => mf.Width + "x" + mf.Height); break; }
@@ -167,6 +168,10 @@ static class AsisLiveHost
         while (DateTime.Now < until && (lf = FindForm("LogInForm")) == null) { if (MainForm() != null) { res["note"] = "main already open"; return; } Thread.Sleep(200); }
         if (lf == null) throw new TimeoutException("LogInForm not shown");
         Thread.Sleep(500);
+        // 2026-11-24: 실측 계정 지정(user=). 로그인 창에 남은 마지막 ID(예 WJDF = Guest, 메뉴 5개)로 들어가 실측 대상이 0개가 된 사고 방지
+        string want = Str(a, "user", "");
+        res["prevUserId"] = OnUi(lf, () => { var c = lf.Controls.Find("txtUserID", true).FirstOrDefault(); return c == null ? null : c.Text; });
+        if (want != "") OnUi<object>(lf, () => { var c = lf.Controls.Find("txtUserID", true).FirstOrDefault(); if (c == null) throw new InvalidOperationException("txtUserID not found"); c.Text = want; return null; });
         res["userId"] = OnUi(lf, () => { var c = lf.Controls.Find("txtUserID", true).FirstOrDefault(); return c == null ? null : c.Text; });
         bool to;
         OnUi<object>(lf, () => { var b = lf.Controls.Find("btnOK", true).FirstOrDefault(); if (b == null) throw new InvalidOperationException("btnOK not found"); Call(b, "PerformClick"); return null; }, timeout * 1000, out to);
@@ -438,6 +443,94 @@ static class AsisLiveHost
             }
             o["after"] = S(Call(sh, "GetText", row, col)); o["action_after"] = S(Call(sh, "GetText", row, 0));
             try { o["is_change"] = Convert.ToBoolean(Get(child, "IsChange")); } catch { }
+            return o;
+        });
+        foreach (var kv in d) res[kv.Key] = kv.Value;
+    }
+    // 2026-11-25 숫자 칸 키 입력 실측(ledger R33 E1·H13 계약 num_input.json): row=<행> col=<열 번호·Tag·DataField> keys=<입력 글자 '|' 구분, 기본 -1|1.5|ab>
+    //   글자마다 편집기(EditingControl)에 WM_CHAR 를 보내 사용자가 친 것과 같은 키 처리(KeyPress 거부·자릿수 제한)를 거친다. 편집을 끝내면(EditMode=false) 화면 Change 처리도 돈다.
+    //   입력마다 편집기 글자(typed)·편집 끝난 뒤 셀 글자(after)·값(value)을 적고, 입력 전 값으로 되돌린다(SetValue · 변경 표시 열 0 도 되돌림). 저장하지 않는다.
+    //   음수 글자색 = 열 CellType.NegativeRed(참이면 Color.Red) · 아니면 값 -1 을 넣은 셀의 합성 스타일 ForeColor(GetStyleInfo) — 넣은 값은 되돌린다
+    static void KeyInput(Dictionary<string, string> a, Dictionary<string, object> res)
+    {
+        var m = MainForm(); if (m == null) throw new InvalidOperationException("main form not ready");
+        var child = Target(m, a); if (child == null) throw new InvalidOperationException("no active screen");
+        int row = Int(a, "row", 0); string colKey = Str(a, "col", ""); var keys = Str(a, "keys", "-1|1.5|ab").Split('|');
+        var d = OnUi(child, () =>
+        {
+            var o = new Dictionary<string, object>();
+            var spd = PickSpread(child, a); if (spd == null) throw new InvalidOperationException("no grid on screen");
+            var sh = Get(spd, "ActiveSheet"); if (sh == null) throw new InvalidOperationException("no active sheet");
+            int rows = Convert.ToInt32(Get(sh, "RowCount")), cols = Convert.ToInt32(Get(sh, "ColumnCount"));
+            if (row < 0 || row >= rows) throw new InvalidOperationException("row out of range: " + row + " / " + rows);
+            var colsObj = Get(sh, "Columns"); int col;
+            if (!int.TryParse(colKey, out col))
+            {
+                col = -1;
+                for (int c = 0; c < cols; c++) { var co = Item(colsObj, c); if (string.Equals(S(Get(co, "Tag")), colKey, StringComparison.OrdinalIgnoreCase) || string.Equals(S(Get(co, "DataField")), colKey, StringComparison.OrdinalIgnoreCase)) { col = c; break; } }
+                if (col < 0) throw new InvalidOperationException("column not found: " + colKey);
+            }
+            var colO = Item(colsObj, col); var cell = Item2(Get(sh, "Cells"), row, col);
+            o["grid"] = spd.Name; o["sheet"] = S(Get(sh, "SheetName")); o["row"] = row; o["col"] = col; o["tag"] = S(Get(colO, "Tag")); o["data_field"] = S(Get(colO, "DataField"));
+            object ct = null; try { ct = Get(cell, "CellType"); } catch { } if (ct == null) try { ct = Get(colO, "CellType"); } catch { }
+            o["cell_type"] = ct == null ? null : ct.GetType().Name;
+            var ctp = new Dictionary<string, object>();
+            if (ct != null) foreach (var pn in new[] { "DecimalPlaces", "MinimumValue", "MaximumValue", "NegativeRed", "NegativeFormat", "FixedPoint", "ShowSeparator", "MaximumLength" }) { var pv = SafeS(() => Get(ct, pn)); if (pv != null) ctp[pn] = pv; }
+            o["cell_type_props"] = ctp;
+            bool locked = false; try { locked = Convert.ToBoolean(Get(cell, "Locked")); } catch { }
+            o["locked"] = locked;
+            object v0 = null; try { v0 = Call(sh, "GetValue", row, col); } catch { }
+            string t0 = SafeS(() => Call(sh, "GetText", row, col)), a0 = SafeS(() => Call(sh, "GetText", row, 0));
+            o["before"] = t0; o["action_before"] = a0;
+            Action restore = () =>
+            {
+                try { if (Convert.ToBoolean(Get(spd, "EditMode"))) SetP(spd, "EditMode", false); } catch { }
+                try { Call(sh, "SetValue", row, col, v0); } catch { }
+                try { Call(sh, "SetValue", row, 0, a0); } catch { }
+            };
+            var det = new List<object>();
+            foreach (var k in keys)
+            {
+                var e = new Dictionary<string, object> { { "key", k } };
+                try
+                {
+                    Call(sh, "SetActiveCell", row, col);
+                    SetP(spd, "EditMode", true);
+                    var ec = Get(spd, "EditingControl") as Control;
+                    if (ec == null) { e["error"] = "편집기 안 열림"; }
+                    else
+                    {
+                        e["editor"] = ec.GetType().Name;
+                        try { var tb = ec as TextBoxBase; if (tb != null) tb.SelectAll(); else ec.Text = ""; } catch { }
+                        foreach (char ch in k) SendMessage(ec.Handle, 0x0102 /*WM_CHAR*/, (IntPtr)ch, IntPtr.Zero);
+                        e["typed"] = ec.Text;
+                        SetP(spd, "EditMode", false);
+                        e["after"] = SafeS(() => Call(sh, "GetText", row, col)); e["value"] = SafeS(() => Call(sh, "GetValue", row, col));
+                    }
+                }
+                catch (Exception ex) { e["error"] = (ex.InnerException ?? ex).Message; }
+                restore();
+                det.Add(e);
+            }
+            o["inputs"] = det;
+            // 음수 글자색
+            string nr = ctp.ContainsKey("NegativeRed") ? S(ctp["NegativeRed"]) : null;
+            if (string.Equals(nr, "True", StringComparison.OrdinalIgnoreCase)) { o["negative_color"] = "rgb(255, 0, 0)"; o["negative_color_how"] = "CellType.NegativeRed=True(FarPoint 음수 글자 Color.Red)"; }
+            else
+            {
+                try
+                {
+                    Call(sh, "SetValue", row, col, -1);
+                    MethodInfo gsi = sh.GetType().GetMethods(BF).FirstOrDefault(x => x.Name == "GetStyleInfo" && x.GetParameters().Length == 2 && x.GetParameters().All(q => q.ParameterType == typeof(int)));
+                    object fc = null; if (gsi != null) { var si = gsi.Invoke(sh, new object[] { row, col }); if (si != null) fc = Get(si, "ForeColor"); }
+                    if (fc == null || (fc is System.Drawing.Color && ((System.Drawing.Color)fc).IsEmpty)) { fc = Get(spd, "ForeColor"); o["negative_color_how"] = "NegativeRed=" + (nr ?? "없음") + " · 셀 스타일 글자색 비어 그리드 ForeColor"; }
+                    else o["negative_color_how"] = "NegativeRed=" + (nr ?? "없음") + " · 값 -1 셀 합성 스타일 ForeColor(GetStyleInfo)";
+                    if (fc is System.Drawing.Color) { var c = (System.Drawing.Color)fc; o["negative_color"] = "rgb(" + c.R + ", " + c.G + ", " + c.B + ")"; o["negative_color_name"] = ColorName(c); }
+                }
+                catch (Exception ex) { o["negative_color_error"] = (ex.InnerException ?? ex).Message; }
+                restore();
+            }
+            o["after_restore"] = SafeS(() => Call(sh, "GetText", row, col)); o["action_after_restore"] = SafeS(() => Call(sh, "GetText", row, 0));
             return o;
         });
         foreach (var kv in d) res[kv.Key] = kv.Value;
@@ -803,8 +896,11 @@ static class AsisLiveHost
             string txt = OnUi(pp, () => { var sb = new StringBuilder(pp.Text); var st = new Stack<Control>(); st.Push(pp); while (st.Count > 0) { var x = st.Pop(); foreach (Control k in x.Controls) { if (!string.IsNullOrEmpty(k.Text) && sb.Length < 1500) sb.Append(" | ").Append(k.Text); st.Push(k); } } pp.Close(); return sb.ToString(); });
             throw new InvalidOperationException("popup has no rows: " + pp.GetType().Name + " :: " + txt);
         }
+        // 2026-11-24 R71: 행 선택 중 예외(SetItem 없음, 열 없음, SetItem 호출 실패)가 나도 팝업을 닫는다(finally ForceClose)
         res["picked"] = OnUi(pp, () =>
         {
+          try
+          {
             var sh = Get(spd, "ActiveSheet"); int cols = Convert.ToInt32(Get(sh, "ColumnCount"));
             var colHeader = Get(sh, "ColumnHeader"); var hcells = colHeader == null ? null : Get(colHeader, "Cells"); int hrows = colHeader == null ? 0 : Convert.ToInt32(Get(colHeader, "RowCount"));
             int vcol = -1, vloose = -1; var heads = new List<string>();
@@ -830,6 +926,8 @@ static class AsisLiveHost
             string val = fv == null ? null : S(fv.GetValue(pp));
             pp.Close();
             return new Dictionary<string, object> { { "how", how }, { "value", val }, { "row", pick }, { "rows", rows }, { "top", top }, { "version_col", vcol }, { "version_header", vcol >= 0 ? heads[vcol] : null } };
+          }
+          finally { if (!pp.IsDisposed) ForceClose(pp); }
         });
         Thread.Sleep(500);
     }

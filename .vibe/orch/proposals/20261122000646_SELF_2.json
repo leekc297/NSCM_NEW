@@ -1,0 +1,170 @@
+{
+  "id": "20261122000646_SELF_2",
+  "at": "2026-11-22T00:06:46+09:00",
+  "ms": 1795273606231,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|edits|sn count defect only",
+  "title": "반복 수정 집계(S9)와 L3 올림 조건을 결함 수정 절만 세도록 변경",
+  "evidence": "orch-history.js:292, :296~298, orch-ladder.js:40~41, orch-selfcheck.js:201. CHANGELOG.md 절 제목 분류: 중지, 종료, 재개 22절, 문구 6절, 그 밖 72절(:193, :205, :1602 등) · 진단 사다리 묶음 L3|edits|workbench.js",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/test/t_orch_history.js"
+  ],
+  "before_after": "변경 전: CHANGELOG 절에 파일 이름이 나오면 모두 1건. 변경 후: 절마다 종류를 나눔. 결함은 '결함', '원인', '오판', '사건', INC/SELF 근거가 있는 절, 요청은 사용자 지시 인용만 있고 원인 줄이 없는 절, 문구는 S11 근거 절. repeatFiles 에 defect, request, style 건수를 따로 두고, L3 edits 묶음은 defect 건수로만 올림. 요청, 문구 건수는 표시만 함.",
+  "verify": "t_orch_history.js 에 표본 추가: 이번 CHANGELOG.md 의 workbench.js 절로 defect 22 근처, request 72 근처, style 6 근처 분류 결과를 직접 분류와 대조(어긋난 절은 목록 출력). orch-ladder scan 에서 workbench.js 묶음이 defect 건수로 올라오는지 확인. node test/run_all.js FAIL 0",
+  "rollback": "VMO 창 개선안 탭의 되돌리기 버튼, 또는 orch-history.js, orch-ladder.js .bak_ 사본 복원",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "진단 사다리 L3 올림 조건 '같은 파일 7일 4번 넘게 수정'의 측정이 기능 요청 72절을 포함해 76건이 됨. 결함 재발 절은 22절. 올림 기준 변경이라 판단이 서지 않아 core",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T16:21:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T16:24:47+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 34개 파일 통과, 시험 66/69개 파일 통과(PASS 1047, FAIL 6), 정의 정합 통과 · 반영 전부터 어긋난 항목 3건 · 백업 태그 20261123_self1621"
+    },
+    {
+      "at": "2026-11-23T16:24:50+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T16:30:58+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 3개(orch-history.js AI 편집 4건만 되돌림(반영 전과 같음) / orch-ladder.js AI 편집 1건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-23T16:35:34+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T16:39:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 34개 파일 통과, 시험 64/70개 파일 통과(PASS 1037, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 5건 · 백업 태그 20261123_self1635"
+    },
+    {
+      "at": "2026-11-23T16:39:02+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T16:52:26+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 3개(orch-history.js AI 편집 4건만 되돌림(반영 전과 같음) / orch-ladder.js AI 편집 4건만 되돌림(반영 전과 같음) / t_orch_history.js AI 편집 2건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-23T16:59:27+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T17:03:10+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 35개 파일 통과, 시험 69/71개 파일 통과(PASS 1076, FAIL 2), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1659"
+    },
+    {
+      "at": "2026-11-23T17:03:14+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T17:12:26+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 35개 파일 통과, 시험 69/71개 파일 통과(PASS 1080, FAIL 2), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-23T17:12:26+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 2건, 게이트 판정 1건. 2026-11-23 17:05:12 반영 전 v2: workbench.js 묶음 90건(전 종류, repeatFiles total 103 = 경로 중복 계산 포함). 17:08 반영 뒤 v1: t_orch_history.js ALL PASS(표본 96절, 어긋남 7절 목록 출력, 집계 시험 w.js 결함 5 요청 6 문구 1). 17:08:06 반영 뒤 v2: workbench.js 결함 31건으로 올림(요청 46, 문구 6 표시만), t_orch_ladder.js ALL PASS. 반영 전 → 반영 뒤 = 90 → 31 · 변경 9개 파일 · 대상 목록 밖 변경 6개: tools/Harness/gate_baseline.tsv, Doc/UserManual/DM/content/DMF0004.json, Doc/UserManual/SYSTEM/content/SYS0002.json, Doc/UserManual/SYSTEM/content/SYS0011.json, Doc/UserManual/SYSTEM/content/SYS0012.json, Doc/UserManual/SYSTEM/content/SYS0014.json",
+      "log": ".vibe\\logs\\2026-11-23T17-03-15_claude_orch.log",
+      "sec": 320,
+      "costUsd": 2.9926504,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-history.js",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/test/t_orch_history.js",
+        "Doc/UserManual/DM/content/DMF0004.json",
+        "Doc/UserManual/SYSTEM/content/SYS0002.json",
+        "Doc/UserManual/SYSTEM/content/SYS0011.json",
+        "Doc/UserManual/SYSTEM/content/SYS0012.json",
+        "Doc/UserManual/SYSTEM/content/SYS0014.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:25+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T17:37:58+09:00"
+    }
+  ],
+  "plain": {
+    "what": "같은 파일을 자주 고쳤다는 경고를 요청한 기능 추가가 아닌 고장 수정만 세어 냄",
+    "risk": "분류가 틀리면 고장 재발 경고가 늦게 나오거나 빠짐",
+    "undo": "VMO 개선안 탭의 되돌리기 단추로 종전 세는 방식으로 돌림"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795420767067,
+  "autoFp": "c4885ffa93",
+  "applyStartMs": 1795420994638,
+  "interrupted": true,
+  "verifyJudge": {
+    "at": "2026-11-23T17:08:38+09:00",
+    "verified": true,
+    "text": "실행 통과 2건, 게이트 판정 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 35개 파일 통과, 시험 69/71개 파일 통과(PASS 1080, FAIL 2), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1659",
+  "needsReload": true,
+  "appliedMs": 1795421546781,
+  "synced": [
+    "orch-history.js",
+    "orch-ladder.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node test/t_orch_history.js → ALL PASS(17:08). 실 CHANGELOG.md workbench.js 절 96개 · 직접 분류 defect 32/request 58/style 6 · 규칙 분류 33/57/6 · 어긋남 7절 출력(:65 :176 :660 :742 :1164 :1681 :1701) · 문구 6절 일치. 제안의 22/72/6 은 절 제목 기준(100절) 추정이고 직접 분류는 32/58/6. 반영 전 = 분류 기능 없음(fix 필드 없음)"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "실 CHANGELOG 사본 임시 폴더 collect → S9 항목(orch-selfcheck.js:201 형식) → orch-ladder scan. 반영 전 17:05:12 L3|edits|workbench.js '7일 반복 수정 90건'(종류 무관) → 반영 뒤 17:08:06 '7일 결함 수정 31건 · 요청 46건, 문구 6건(표시만)', why '결함 수정 31건 ≥ 4'. node test/t_orch_ladder.js ALL PASS(stats.json 없을 때 S9 건수 사용)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-history.js",
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/test/t_orch_history.js"
+    ],
+    "verify_result": "2026-11-23 17:05:12 반영 전 v2: workbench.js 묶음 90건(전 종류, repeatFiles total 103 = 경로 중복 계산 포함). 17:08 반영 뒤 v1: t_orch_history.js ALL PASS(표본 96절, 어긋남 7절 목록 출력, 집계 시험 w.js 결함 5 요청 6 문구 1). 17:08:06 반영 뒤 v2: workbench.js 결함 31건으로 올림(요청 46, 문구 6 표시만), t_orch_ladder.js ALL PASS. 반영 전 → 반영 뒤 = 90 → 31",
+    "note": "repeatFiles 항목 = count(결함 7일), defect, request, style, all(종전 count), total, kinds. 한 절에 같은 파일 이름이 경로만 달리 2번 나오면 2건으로 세던 것을 1건으로 고침(workbench.js 103 → 96). L3 → L4 올림의 edits 근거(editsAfter)도 결함 절 일자만 셈. orch-selfcheck.js 는 대상 밖이라 S9 문구 '변경 기록 N건' 그대로이며 N 은 결함 건수. 어긋남 7절 중 3절은 '- 원인' 줄이 있는 요청, 3절은 REVIEW·VISION 개선안 또는 개선안 없는 결함 수정, 1절(:742)은 개선안 없는 결함 수정. v3(run_all.js) 미실행(VMO 게이트)."
+  },
+  "snap": "prop_20261122000646_SELF_2",
+  "effectiveMs": 1795423078586,
+  "effectiveAt": "2026-11-23T17:37:58+09:00"
+}

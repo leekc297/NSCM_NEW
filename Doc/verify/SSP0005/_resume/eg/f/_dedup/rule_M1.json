@@ -1,0 +1,105 @@
+{
+ "rule_id": "M1",
+ "hash": "7ad5a98e48c53137",
+ "groups": [
+  {
+   "rows": [
+    "V-0ba12adf",
+    "V-b66ba540"
+   ],
+   "why": "Both rows target the same Excel Upload Validation messages (Sales Site/Project/Model) under the same multi-item error condition and expect every real cause shown per row and item, word for word."
+  },
+  {
+   "rows": [
+    "V-00d0275a",
+    "V-8e2c9933"
+   ],
+   "why": "Both rows click the same Excel Form button and expect the template file to download right away with no popup."
+  },
+  {
+   "rows": [
+    "V-7b19ede7"
+   ],
+   "why": "This rule treats the popup as the default and makes the no-popup case a user decision, so its expected result differs from the no-popup download rows."
+  },
+  {
+   "rows": [
+    "V-476e5fe6"
+   ],
+   "why": "Only this row checks that the template contains no data."
+  },
+  {
+   "rows": [
+    "V-8e606b1e"
+   ],
+   "why": "Only this row checks the template's 2-row merged header, matching AS-IS."
+  },
+  {
+   "rows": [
+    "V-10125ce9"
+   ],
+   "why": "Only this row checks the template bucket unit (Monthly) and that M0~M12 are blank."
+  },
+  {
+   "rows": [
+    "V-0a3d62f0"
+   ],
+   "why": "Only this row checks, before any search, that the template's input bucket follows the Main Period."
+  },
+  {
+   "rows": [
+    "V-29f75c3c"
+   ],
+   "why": "Only this row checks the Search action inside the Excel Form popup, which is a different element."
+  },
+  {
+   "rows": [
+    "V-91bdcb5e",
+    "V-f93e78da"
+   ],
+   "why": "Both rows upload a file whose header does not match the template and expect the upload to be blocked with no save and a notice to the user."
+  },
+  {
+   "rows": [
+    "V-cea02470",
+    "V-a29ba8ca"
+   ],
+   "why": "Both rows upload after changing a template column name (Division→Div) and expect a user-facing notice plus a limit of one attached file."
+  },
+  {
+   "rows": [
+    "V-2da50bea",
+    "V-ae7f59fd"
+   ],
+   "why": "Both rows press OK after uploading a file with error rows and expect the 2-step upload window to block the save and show the error-row block message."
+  },
+  {
+   "rows": [
+    "V-3268a2e5"
+   ],
+   "why": "This row checks pressing OK after a successful upload and expects the data saved to the DB, a different state from the error case."
+  },
+  {
+   "rows": [
+    "V-584e88cc"
+   ],
+   "why": "Only this row checks the MSG00684 confirm box when the window is cancelled or closed after a clean check but before saving."
+  },
+  {
+   "rows": [
+    "V-a32d148d"
+   ],
+   "why": "Only this row checks the \"Please Input QTY\" message when the quantity is missing."
+  },
+  {
+   "rows": [
+    "V-c4878401"
+   ],
+   "why": "This row checks uploading and saving the Key and Period From/To columns along with per-row messages, which is a different set of elements from the other message rows."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:10:21",
+ "cost": 0.09200419999999998
+}

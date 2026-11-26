@@ -1,232 +1,119 @@
 {
  "rule_id": "E1",
- "hash": "1c47d61a407dcbdc",
+ "hash": "435108ca477a2239",
  "groups": [
-  {
-   "rows": [
-    "V-007ddaec"
-   ],
-   "why": "This is a DMF0044 defect type (computed value over the digit limit, with a specific message format). No other row checks the same element with the same expected result, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-0267c456"
-   ],
-   "why": "The meta defines a separate sheet named 'route' with different labels (e.g. 'Sum'), so I can't confirm it is the same grid as Distribution Route.LT_SUM. It stays alone."
-  },
-  {
-   "rows": [
-    "V-031c14fe"
-   ],
-   "why": "This is LT_VOYAGE in the popup, which is a different element from the main grid's LT_VOYAGE. It stays alone."
-  },
   {
    "rows": [
     "V-0bbe47b0"
    ],
-   "why": "This is LT_SUM in the Distribution Route grid. The route and POPUP versions of LT_SUM are different elements, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-149e8c37"
    ],
-   "why": "This only checks that a negative LT_VOYAGE is kept out of the save request. The column rows expect the whole rule (decimals, letters, max value), so the expected results differ and it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-1695d2c6"
    ],
-   "why": "Two_SEGMENT_COST is the only row for this column. It stays alone."
-  },
-  {
-   "rows": [
-    "V-1a711069"
-   ],
-   "why": "This is a DMF0044 defect type (SQL error on save after paste, 15-digit integer overflow). Its expected result differs from V-007ddaec, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-37908d70"
-   ],
-   "why": "This is LT_ARRIVAL_INLAND on the separately defined 'route' sheet. I can't confirm that sheet is the same grid as Distribution Route, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-3cf460b3"
-   ],
-   "why": "This is a DMF0082 defect type (integer vs. 3 decimal places for MKT_FCST and Unit_Price). It doesn't match a specific element on this screen, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-48dc6872"
    ],
-   "why": "This is SHIP_DOC_PREPARATION_DATE in the Distribution Route grid. I can't confirm it is the same grid as the route sheet, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-4ab7e891"
-   ],
-   "why": "This is a general DMF0082 check that QTY ≥ 0. The target element isn't specific to this screen, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-52fae0d0"
-   ],
-   "why": "This is LT_VOYAGE on the route sheet, labelled 'Sea/Air Ferry'. That label differs from 'Voyage' in Distribution Route, so I can't confirm they are the same and it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6b6afd25"
    ],
-   "why": "This is PRIORITY in the Distribution Route grid (max 99). I can't confirm it is the same grid as the route sheet, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-7255622e"
    ],
-   "why": "This is LT_LAY_OFF_CLEARANCE in the Distribution Route grid. I can't confirm it is the same grid as route or POPUP, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-7c5eafbc"
-   ],
-   "why": "This is LT_WAIT_SHIPPING on the route sheet. I can't confirm it is the same grid as Distribution Route, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-83f0ce16"
-   ],
-   "why": "This is LT_LAY_OFF_CLEARANCE on the route sheet. I can't confirm it is the same grid as Distribution Route, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-85979f1f"
    ],
-   "why": "This is LT_VOYAGE in the Distribution Route grid. Its label differs from the route sheet version, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-901f78dd"
-   ],
-   "why": "This is LT_LAY_OFF_CLEARANCE in the popup, which is a different element from the main grid. It stays alone."
-  },
-  {
-   "rows": [
-    "V-94024409"
-   ],
-   "why": "This is LT_DEPARTURE_INLAND on the route sheet. I can't confirm it is the same grid as Distribution Route, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-a16c3b7e"
-   ],
-   "why": "This is LT_ARRIVAL_INLAND in the popup, which is a different element from the main grid. It stays alone."
-  },
-  {
-   "rows": [
-    "V-a882d140"
-   ],
-   "why": "This is LT_SUM in the popup, which is a different element from the main grid's LT_SUM. It stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-aa0e05de"
    ],
-   "why": "One_SEGMENT_COST is the only row for this column. It stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-abc38fe4"
    ],
-   "why": "This only checks that a negative LT_LAY_OFF_CLEARANCE is kept out of the save request. The column rows expect more than that, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-b13048b7"
    ],
-   "why": "This only checks that a negative PRIORITY is kept out of the save request. The column rows expect more than that, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-b74fc4c1"
-   ],
-   "why": "This is LT_DEPARTURE_INLAND in the popup, which is a different element from the main grid. It stays alone."
-  },
-  {
-   "rows": [
-    "V-b96a2166"
-   ],
-   "why": "This is LT_WAIT_SHIPPING in the popup, which is a different element from the main grid. It stays alone."
-  },
-  {
-   "rows": [
-    "V-bb975315"
-   ],
-   "why": "This is a general defect type: integer-only quantity and day columns must reject decimals. It doesn't point to a specific element on this screen, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c0c3df84"
    ],
-   "why": "This only checks that a negative LT_WAIT_SHIPPING is kept out of the save request. The column rows expect more than that, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-c38f009d"
-   ],
-   "why": "This is SHIP_DOC_PREPARATION_DATE on the route sheet, where the meta type is FPDateText. That differs from Distribution Route, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c455c60d"
    ],
-   "why": "This is LT_ARRIVAL_INLAND in the Distribution Route grid. I can't confirm it is the same grid as route or POPUP, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-caa77d38"
    ],
-   "why": "Three_SEGMENT_COST is the only row for this column. It stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d1252f42"
    ],
-   "why": "This is LT_WAIT_SHIPPING in the Distribution Route grid. I can't confirm it is the same grid as route or POPUP, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d8325e81"
    ],
-   "why": "This is LT_DEPARTURE_INLAND in the Distribution Route grid. I can't confirm it is the same grid as route or POPUP, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d8f3b3bb"
    ],
-   "why": "This only checks that a negative LT_DEPARTURE_INLAND is kept out of the save request. The column rows expect more than that, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e5608755"
    ],
-   "why": "This only checks that a negative SHIP_DOC_PREPARATION_DATE is kept out of the save request. The column rows expect more than that, so it stays alone."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f7efa838"
    ],
-   "why": "This only checks that a negative LT_ARRIVAL_INLAND is kept out of the save request. The column rows expect more than that, so it stays alone."
-  },
-  {
-   "rows": [
-    "V-ff61fe4e"
-   ],
-   "why": "This is PRIORITY on the route sheet. I can't confirm it is the same grid as Distribution Route, so it stays alone."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:40:45",
- "cost": 0.23881830000000004
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 07:40:38",
+ "cost": 0,
+ "open": 0
 }

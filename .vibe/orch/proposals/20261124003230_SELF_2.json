@@ -1,0 +1,138 @@
+{
+  "id": "20261124003230_SELF_2",
+  "at": "2026-11-24T00:32:30+09:00",
+  "ms": 1795447950327,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/steps.json|snl분류에snlivechecksnlivesnlivescreen등n개가",
+  "title": "사용자 지시 R78 같은 문제: tools/VibeManager/steps.json:141 S1L 분류에 S1.liveCheck, S1.live, S1.liveScreen 등 27개가 단독 작업으로만 정의됨. 묶음 정의(chain)가 없어 트리에서 전체",
+  "evidence": "규칙 R78 \"차례로 실행해야 하는 여러 단계 메뉴는 메뉴 1개로 묶고, 그 메뉴를 실행하면 전체 과정을 끝까지 수행함\" (원래 지시 2026-11-14 01:16 \"VM AS-IS 실측 부터 AS-IS 실측 묶음 까지를 하나의 AS-IS 실측 하나의 메뉴로 생성하고 AS-IS 실측 메뉴 실행하면 전체 과정을 수행할 수 있도록 해주세요. 사용자는 상세 프로세스를 각각 수행할 수 없습니다.\") · tools/VibeManager/steps.json:141 \"id\": \"S1L\",",
+  "targets": [
+    "tools/VibeManager/steps.json"
+  ],
+  "before_after": "S1L 에 quick.json '🎥 AS-IS 실측' 과 같은 단계 목록(S1.liveCheck → S1.liveRuleMap → S1.liveScreen → … → S1.liveScenSpec)을 chain 으로 추가함. 체인이 부르는 작업은 hidden(상세)으로 표시함. 단계 목록은 한 곳에서만 정의하고 두 메뉴가 같이 참조함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/steps.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T05:29:37+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T05:33:25+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self0529"
+    },
+    {
+      "at": "2026-11-25T05:33:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T05:52:01+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T05:52:01+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1367 FAIL 0 255s'(2026-11-24T20:38:23Z) → 반영 뒤 'ALL OK 파일 84/84 PASS 1367 FAIL 0 252.2s'(2026-11-25 05:43:03~05:47:16). node 대조: 'chain asislive quick label 🎥 AS-IS 실측 chain steps 12 hidden 12 tasks 27', 'missing hidden [] extra hid · 변경 33개 파일 · 대상 목록 밖 변경 32개: Doc/asisfacts/screens/SCP0005/cell_rules.csv, Doc/asisfacts/screens/SCP0005/color_rules.csv, Doc/e2e/specs/_verify.spec.ts, Doc/e2e/specs/eg_popup.spec.ts, Doc/golden/SCP0005/SCP0005_GET_DISTRIBUTION_ROUTEID.md, Doc/golden/SCP0005/_summary.csv",
+      "log": ".vibe\\logs\\2026-11-25T05-33-27_claude_orch.log",
+      "sec": 844,
+      "costUsd": 1.1783879000000004,
+      "files": [
+        "Doc/asisfacts/screens/SCP0005/cell_rules.csv",
+        "Doc/asisfacts/screens/SCP0005/color_rules.csv",
+        "Doc/e2e/specs/_verify.spec.ts",
+        "Doc/e2e/specs/eg_popup.spec.ts",
+        "Doc/golden/SCP0005/SCP0005_GET_DISTRIBUTION_ROUTEID.md",
+        "Doc/golden/SCP0005/_summary.csv",
+        "Doc/golden/SCP0005/_summary.md",
+        "Doc/golden/_summary.csv",
+        "Doc/golden/_summary.md",
+        "Doc/golden/golden_cases.csv",
+        "Doc/verify/SCP0005/snap/snap_validate.csv",
+        "Doc/verify/SCP0005/status.html",
+        "Doc/verify/SCP0005/status.json",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/DbConn/gen_golden_cases.py",
+        "tools/DbConn/golden.py",
+        "tools/E2E/lib/condcol.ts",
+        "tools/E2E/lib/saveprobe.ts",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/facts_cellrules.py",
+        "tools/Harness/verify/facts_lockrules.py",
+        "tools/Harness/verify/judge.py",
+        "tools/Harness/verify/mapping_trace.py",
+        "tools/VibeManager/steps.json",
+        "Doc/golden/SCP0005/SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID.cols.csv",
+        "Doc/golden/SCP0005/SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID.md",
+        "Doc/golden/SCP0005/SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID.order.csv",
+        "Doc/golden/SCP0005/SCP0005_GET_DISTRIBUTION_ROUTEID.cols.csv",
+        "Doc/golden/SCP0005/SCP0005_GET_DISTRIBUTION_ROUTEID.order.csv",
+        "tools/E2E/lib/condcol.selftest.js",
+        "tools/E2E/lib/rowlink.ts",
+        "tools/E2E/lib/saveerr.selftest.js",
+        "tools/E2E/lib/saveerr.ts"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "차례로 실행해야 하는 여러 단계 메뉴는 메뉴 1개로 묶고, 그 메뉴를 실행하면 전체 과정을 끝까지 수행함 규칙을 tools/VibeManager/steps.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R78|tools/VibeManager/steps.json",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795552176780,
+  "autoFp": "cbedd4f9d6",
+  "applyStartMs": 1795552407750,
+  "verifyJudge": {
+    "at": "2026-11-25T05:47:36+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self0529",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795553521228,
+  "synced": [
+    "steps.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 2026-11-24T20:38:23Z 'ALL OK 파일 84/84 PASS 1367 FAIL 0 255s' → 반영 뒤 2026-11-25 05:47 'ALL OK 파일 84/84 PASS 1367 FAIL 0 252.2s'. steps.json 은 웹뷰 파일 아님, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/steps.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1367 FAIL 0 255s'(2026-11-24T20:38:23Z) → 반영 뒤 'ALL OK 파일 84/84 PASS 1367 FAIL 0 252.2s'(2026-11-25 05:43:03~05:47:16). node 대조: 'chain asislive quick label 🎥 AS-IS 실측 chain steps 12 hidden 12 tasks 27', 'missing hidden [] extra hidden [] chain task not in S1L []'",
+    "note": "S1L 에 chain=asislive, chainNote 추가함. quick.json 체인 12단계 작업에 hidden:true 추가함. 단계 목록은 quick.json 한 곳에만 있음. extension.js:366 stepChainItem 이 step.chain 을 읽어 트리 '▶ 전체 실행' 에 연결함. hidden 을 읽는 코드는 없음(표시 메타). git diff 의 S8.unverifiedGate, S8.checklistSettle 추가는 다른 작업의 기존 미커밋 변경이며 건드리지 않음."
+  },
+  "snap": "prop_20261124003230_SELF_2"
+}

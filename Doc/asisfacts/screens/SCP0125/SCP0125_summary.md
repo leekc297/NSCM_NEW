@@ -15,7 +15,6 @@
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
-| button:FindButton | FindButton > FindData_Main | 659 | {?string.Empty} | UNRESOLVED |  |
 | button:FindButton | FindButton > FindData_Main | 659 | SCP.SCP0125_GET_MKT_FCST_ADJ | MATCH | SP SCP0125_GET_MKT_FCST_ADJ |
 | button:FindButton | FindButton > FindData_Main | 659 | SCP.SCP0125_GET_STOCK_ADJ | MATCH | SP SCP0125_GET_STOCK_ADJ |
 | button:FindButton | FindButton > FindData_Main | 659 | SCP.SCP0125_GET_STOCK_ADJ_UC | MATCH | SP SCP0125_GET_STOCK_ADJ_UC |
@@ -23,7 +22,6 @@
 | button:FindButton | FindButton > FindData_Main | 659 | SCP.SCP0125_GET_STOCK_ELEC_PLNT_UC | MATCH | SP SCP0125_GET_STOCK_ELEC_PLNT_UC |
 | button:FindButton | FindButton > FindData_Main | 659 | SCP.SCP0125_GET_MKT_FCST_ELEC_DEMAND | MATCH | SP SCP0125_GET_MKT_FCST_ELEC_DEMAND |
 | button:FindButton | FindButton > FindData_Main | 659 | SCP.SCP0125_GET_STOCK_SECOND_OCV | MATCH | SP SCP0125_GET_STOCK_SECOND_OCV |
-| button:SaveButton | SaveButton > Save_Data > Save_SecondOcv > FindData_Main | 659 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Save_SecondOcv > FindData_Main | 659 | SCP.SCP0125_GET_MKT_FCST_ADJ | MATCH | SP SCP0125_GET_MKT_FCST_ADJ |
 | button:SaveButton | SaveButton > Save_Data > Save_SecondOcv > FindData_Main | 659 | SCP.SCP0125_GET_STOCK_ADJ | MATCH | SP SCP0125_GET_STOCK_ADJ |
 | button:SaveButton | SaveButton > Save_Data > Save_SecondOcv > FindData_Main | 659 | SCP.SCP0125_GET_STOCK_ADJ_UC | MATCH | SP SCP0125_GET_STOCK_ADJ_UC |
@@ -45,7 +43,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?string.Empty} | UNRESOLVED | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 5 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | SCP.SCP0125_GET_MKT_FCST_ADJ | MATCH | 1 | SP SCP0125_GET_MKT_FCST_ADJ | EXEC:SCP0125_GET_MKT_FCST_ADJ, SELECT:DM_PLN_NET_DEMAND, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_OPMZ_DMD_ADJ, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
 | SCP.SCP0125_GET_MKT_FCST_ELEC_DEMAND | MATCH | 1 | SP SCP0125_GET_MKT_FCST_ELEC_DEMAND | EXEC:SCP0125_GET_MKT_FCST_ELEC_DEMAND, SELECT:SCP_ANL_PRODUCTION_PLAN, SELECT:SCM_MST_ITEM_SN, SELECT:SCP_OPMZ_DMD_ELEC |  |
@@ -113,10 +110,9 @@
 | SheetView | 1 | spdMain_Sheet1 |
 | ImageList | 1 | imageList1 |
 
-## 7. 확인 필요 (1건)
+## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 659 | FindData_Main | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

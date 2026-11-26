@@ -1,0 +1,16 @@
+{"t":1795628403400,"m":{"type":"out","stream":"task","text":"▶ 퇴행 확인 — 이번 해소에서 row_run 이 돈 시험만 행 제한 없이 1회, 판정이 나 있던 행이 미검증으로 바뀌었는지 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/row_run.py SCP0005 --regress auto\n","cls":"cmd"}}
+{"t":1795628403669,"m":{"type":"out","stream":"task","text":"[INFO] 퇴행 확인: 2026-11-26 02:40:02 뒤 row_run 이 돌린 시험 없음\n","cls":""}}
+{"t":1795628403670,"m":{"type":"out","stream":"task","text":"■ 종료 exit 3, 로그 .vibe\\logs\\2026-11-26T02-40-03_SCP0005_7_________________row_run_________________1__________________________.log\n","cls":"bad"}}
+{"t":1795628403679,"m":{"type":"out","stream":"task","text":"✖ 실패 원인(표식 줄 없음, 마지막 출력):\n   [INFO] 퇴행 확인: 2026-11-26 02:40:02 뒤 row_run 이 돌린 시험 없음\n","cls":"bad"}}
+{"t":1795628403679,"m":{"type":"chat","role":"meta","text":"✖ 퇴행 확인 — 이번 해소에서 row_run 이 돈 시험만 행 제한 없이 1회, 판정이 나 있던 행이 미검증으로 바뀌었는지 실패 (exit 3)\n[INFO] 퇴행 확인: 2026-11-26 02:40:02 뒤 row_run 이 돌린 시험 없음\n로그: .vibe\\logs\\2026-11-26T02-40-03_SCP0005_7_________________row_run_________________1__________________________.log"}}
+{"t":1795628403735,"m":{"type":"out","stream":"task","text":"종료코드 3 경고(검사기 게이트, Doc/verify/_regress_report.md · coverage.csv) → 판정 계속\n","cls":"warn"}}
+{"t":1795628403736,"m":{"type":"fb","state":"step","id":1,"no":12,"status":"WARN","code":0,"sec":1,"repairs":0}}
+{"t":1795628403740,"m":{"type":"out","stream":"task","text":"✅ [8/8] 8. 퇴행 확인 (이번 보완에서 돈 시험만 행 제한 없이 1회 · 판정 난 행이 미검증으로 바뀌었는지) — WARN (exit 0) · 1s\n","cls":"ok"}}
+{"t":1795628403742,"m":{"type":"fb","state":"add","id":1,"step":{"no":13,"name":"9. 문서 갱신 (행 단위 해소 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)","kind":"task","optional":false}}}
+{"t":1795628403742,"m":{"type":"out","stream":"task","text":"\n── [9/9] 9. 문서 갱신 (행 단위 해소 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)\n","cls":"cmd"}}
+{"t":1795628403743,"m":{"type":"fb","state":"step","id":1,"no":13,"status":"RUN"}}
+{"t":1795628404391,"m":{"type":"out","stream":"task","text":"🔌 선행 확인: BE 8080 · FE 5173 기동 중(LISTEN)\n","cls":"ok"}}
+{"t":1795628404392,"m":{"type":"chat","role":"meta","text":"🔌 E2E 선행: BE·FE 기동 확인"}}
+{"t":1795628404397,"m":{"type":"out","stream":"task","text":"▶ CheckList 수행 — run_verify 전체(AI 검토 포함: 사용자의견 처리·AS-IS 사실 검토·판정 검토·설명 문장) → 미검증 분류(unverified_triage) · 🔎 CheckList 체인 1단계 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005 --docs\n","cls":"cmd"}}
+{"t":1795628404503,"m":{"type":"out","stream":"task","text":"[작업 1/1] 문서 생성(CheckList · ActionItemList · UI 테스트 · 회귀 점검) — 판정은 지난 단계 결과 그대로\n","cls":""}}
+{"t":1795628404503,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SCP0005 --resume-docs\n","cls":""}}

@@ -1,0 +1,37 @@
+{
+  "id": "20261121_005246_R9_ALL",
+  "at": "2026-11-21T00:52:46+09:00",
+  "ms": 1795189966088,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.admit.lock (PID 14184 없음)",
+  "screen": "",
+  "sig": "R9|_run.admit.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-20T14:53:20.672Z · 인자 SCP0028",
+  "evidence": {
+    "file": "Doc/e2e/_run.admit.lock",
+    "pid": 14184
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T00:52:46+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.admit.lock (PID 14184 없음 재확인)",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-21T01:01:39+09:00",
+      "by": "VMO 사후 검증",
+      "what": "잠금 삭제 판정: 맞음. 잠금 주인 PID 14184 없음 확인"
+    }
+  ],
+  "vmoCheck": {
+    "entry": "I20261121_005246_10",
+    "verdict": "ok",
+    "at": "2026-11-21T01:01:39+09:00"
+  }
+}

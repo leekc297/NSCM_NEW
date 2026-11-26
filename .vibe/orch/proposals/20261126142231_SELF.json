@@ -1,0 +1,45 @@
+{
+  "id": "20261126142231_SELF",
+  "at": "2026-11-26T14:22:31+09:00",
+  "ms": 1795670551514,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/judge.py|읽기전용그리드판단이메인시트editexpectcsv만보고editexpect",
+  "title": "사용자 지시 R238 같은 문제: tools/Harness/verify/judge.py:2851 읽기 전용 그리드 판단이 메인 시트 edit_expect.csv 만 보고 edit_expect_sheets.csv 를 보지 않아, 다른 시트에 편집 가능한 칸이 ",
+  "evidence": "규칙 R238 \"검사기는 스프레드 컨트롤 하나에 시트가 여럿이면 편집 잠금 규칙과 편집 기대를 시트마다 따로 해석하고 판정함\" (원래 지시 2026-11-26 13:54 \"다중 시트 편집 기대도 시트별로 보완해줘\") · tools/Harness/verify/judge.py:2851 if _ee and all((x.get('existing_row') or '') == 'N' and (x.get('new_row') or '') == 'NONE' for x in _ee):",
+  "targets": [
+    "tools/Harness/verify/judge.py"
+  ],
+  "before_after": "_ee 에 같은 폴더의 edit_expect_sheets.csv 행을 더해(CHK 제외) 모든 시트가 existing_row=N, new_row=NONE 일 때만 읽기 전용으로 봄. 또는 시트별로 판단해 그 시트 행에만 NA 를 적용함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/judge.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:47:23+09:00",
+      "by": "4ec206",
+      "what": "반영 완료(세션 직접 보완) · judge.py 읽기 전용 그리드 판별(_ee)에 edit_expect_sheets.csv 합침(시트별 기대까지 전부 N·NONE 일 때만) · 현재 사실 기준 SCP0100 1화면이 읽기 전용에서 빠짐(다른 시트 편집 칸) · py_compile OK · 2026-11-26 15:5x"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 스프레드 컨트롤 하나에 시트가 여럿이면 편집 잠금 규칙과 편집 기대를 시트마다 따로 해석하고 판정함 규칙을 tools/Harness/verify/judge.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R238|tools/Harness/verify/judge.py",
+  "kind": "fix",
+  "claimedBy": "4ec206",
+  "waitNote": "",
+  "appliedMs": 1795675643212
+}

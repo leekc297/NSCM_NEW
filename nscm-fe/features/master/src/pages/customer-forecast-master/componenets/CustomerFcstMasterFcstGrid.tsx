@@ -44,12 +44,21 @@ export const CustomerFcstMasterFcstGrid = ({
   // 안 따라간다 (2026-08-25 정리 — GRID_CASCADE_FILTERS / GRID_CASCADE_CLEAR 제거).
   // 규약은 columnMapping.filterComboRowsByRowItem / DataGrid.findStaleComboCells 참조.
 
-  // 중복 검사 위반 — MSG00136 안내 후 방금 들어온 값을 되돌린다(AS-IS SetText ""). 기존 행은
+  // 중복 검사 위반 — 안내 후 방금 들어온 값을 되돌린다(AS-IS SetText ""). 기존 행은
   //   EditTracker 에 되돌림을 기록해 수정상태(M) 판정이 어긋나지 않게 한다. 신규 행은 I 그대로다.
-  const alertDuplicate = () => {
+  //   안내 문구는 위반 종류로 나눈다. 같은 구간 Y 중복은 MSG00136, 신규 행 키 중복은 MSG01427.
+  //   AS-IS 는 키 중복에도 MSG00136 을 띄웠으나 같은 데이터를 고른 상황과 맞지 않아 바꿨다(2026-11-22 개선 요청).
+  const alertPeriodDuplicate = () => {
     void useMessageStore.getState().setAlert({
       type: 'alert',
       content: t('MSG00136', '_동일 구간에 하나의 Y만 가능합니다.'),
+    });
+  };
+
+  const alertRowKeyDuplicate = () => {
+    void useMessageStore.getState().setAlert({
+      type: 'alert',
+      content: t('MSG01427', '_중복된 항목이 있습니다.'),
     });
   };
 
@@ -57,9 +66,10 @@ export const CustomerFcstMasterFcstGrid = ({
     sender: FlexGrid<ResponseData<MENU_ID, SHEET_NAME>>,
     dataItem: ResponseData<MENU_ID, SHEET_NAME>,
     binding: string,
-    revertTo: string
+    revertTo: string,
+    alert: () => void
   ) => {
-    alertDuplicate();
+    alert();
     if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT && dataItem.CRUD_TYPE !== CRUD_TYPE.DELETE) {
       editTrackerRef.current?.storeChange(dataItem, binding, dataItem[binding], revertTo);
     }
@@ -90,14 +100,14 @@ export const CustomerFcstMasterFcstGrid = ({
     // ② 신규 행 키 셀(Division / End Customer / Sales Site / Group / Measure) — 5키 같은 행이 또 있으면 취소
     if (isRowKeyBinding(binding)) {
       if (hasDuplicateRowKey(allRows, dataItem)) {
-        rejectCell(sender, dataItem, binding, '');
+        rejectCell(sender, dataItem, binding, '', alertRowKeyDuplicate);
         return;
       }
       // 신규 행은 날짜 칸이 전부 Y 로 들어가 ③ 이 돌지 않는다. 키가 정해지는 이 시점에 같은 구간 Y 가
       //   겹치면 안내만 하고 값은 둔다 — 사용자가 겹친 주를 N 으로 고치게 한다. 고치지 않으면 저장 직전
       //   검사(CustomerFcstMaster handleSave)가 막는다(갭분석 F-03, 사용자 결정 2026-10-21).
       if (dataItem.CRUD_TYPE === CRUD_TYPE.INSERT && hasOtherYInAnyPeriod(allRows, dataItem)) {
-        alertDuplicate();
+        alertPeriodDuplicate();
       }
       return;
     }
@@ -105,7 +115,7 @@ export const CustomerFcstMasterFcstGrid = ({
     // ③ 날짜 칸에 Y — 4키 같은 행 중 같은 칸이 Y 인 행이 또 있으면 취소(N 으로)
     if (isDateBinding(binding)) {
       if (dataItem[binding] === 'Y' && hasOtherYInPeriod(allRows, dataItem, binding)) {
-        rejectCell(sender, dataItem, binding, 'N');
+        rejectCell(sender, dataItem, binding, 'N', alertPeriodDuplicate);
       }
       return;
     }

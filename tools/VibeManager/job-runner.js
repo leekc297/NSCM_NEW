@@ -8,6 +8,7 @@
 //   · 끝나면 .vibe/jobs/<작업번호>/SUMMARY.md(화면별 결과·소요·실패 원인 1줄)
 //   사건 기록: job.start · job.item.start · job.item.end · job.end (.vibe/orch/events.jsonl)
 'use strict';
+const dfmt = require('./date-fmt'); // 2026-11-23 사용자: VM 일자 = Windows 일자 형식
 const fs = require('fs');
 const path = require('path');
 let errlog = { note() { return null; }, init() { return ''; } }; try { errlog = require('./orch-errlog'); } catch { } // 2026-11-19 자가진단 Q1: 삼키던 오류를 .vibe/orch/vm_errors.jsonl 에 남긴다
@@ -30,9 +31,11 @@ const P = () => api.paths();
 const jobsDir = () => path.join(P().vibeDir, 'jobs');
 const jobDir = id => path.join(jobsDir(), id);
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
+const LG = () => { try { const l = require('./orch-ledger'); if (!l.ready()) l.init({ paths: () => P() }); return l; } catch (e) { return { note() { return ''; }, observing() { return false; }, tick() { return {}; }, stats() { return { byRule: {}, falses: [], observe: {}, total: 0, overdue: 0 }; } }; } }; // 2026-11-20 개입 장부(orch-ledger.js)
 function evt(type, data) { try { if (orchEv) { orchEv.init(P().vibeDir); orchEv.emit(type, data); } } catch { } }
 function emit(jobId, kind, data) { for (const fn of listeners) { try { fn(jobId, kind, data); } catch (ex) { errlog.note('job-runner', 'listener', ex); } } }
-function save(job) { try { fs.mkdirSync(jobDir(job.id), { recursive: true }); fs.writeFileSync(path.join(jobDir(job.id), 'job.json'), JSON.stringify(job, null, 2), 'utf8'); } catch (ex) { errlog.note('job-runner', 'save', ex); } emit(job.id, 'job', job); }
+const noResume = (k, v) => (k === 'resumable' || k === 'resume' ? undefined : v); // 재개 원장: 재개 표시(s.resume, job.resumable)는 원장에서 읽는 값이라 job.json 에 저장하지 않음
+function save(job) { try { fs.mkdirSync(jobDir(job.id), { recursive: true }); fs.writeFileSync(path.join(jobDir(job.id), 'job.json'), JSON.stringify(job, noResume, 2), 'utf8'); } catch (ex) { errlog.note('job-runner', 'save', ex); } emit(job.id, 'job', job); }
 const normId = s => String(s || '').trim().toUpperCase();
 /** 붙여 넣은 글에서 화면 ID 뽑기(중복 제거 · 순서 유지) */
 function parseIds(text) { const out = []; for (const m of String(text || '').toUpperCase().matchAll(/\b[A-Z]{2,4}\d{4}[A-Z]?\b/g)) if (!out.includes(m[0])) out.push(m[0]); return out; }
@@ -45,35 +48,63 @@ function batchItems() {
   return loadQuickItems().filter(it => it.batch === true && ChainRunner.supports(it)).map(it => {
     const gen = isGenItem(it);
     return { label: it.label, label_en: it.label_en || '', kind: it.kind, hint: it.hint || '', gen, disabled: gen && db, why: gen && db ? 'DB MODE: 화면을 만들거나 고치는 업무는 UI/DB MODE 에서만 실행' : '', newScreen: !!it.newScreen, selfAdmit: isSelfAdmit(it),
-      hasAsk: stepsOf(it).some(st => !!st.askUser), askText: (stepsOf(it).find(st => !!st.askUser) || {}).askUser || '', steps: stepsOf(it).length, claudeSteps: stepsOf(it).filter(st => !st.task).length };
+      unit: it.unit === 'module' ? 'module' : 'screen', modules: Array.isArray(it.modules) ? it.modules : [], moduleLabels: it.moduleLabels || {}, jobInputs: Array.isArray(it.jobInputs) ? it.jobInputs : [], // 2026-11-23 사용자 매뉴얼: 모듈 단위 업무 + 입력 칸
+      hasAsk: stepsOf(it).some(st => !!st.askUser), askText: (stepsOf(it).find(st => !!st.askUser) || {}).askUser || '', steps: stepsOf(it).length, stepNames: stepsOf(it).map(st => String(st.title || (st.task ? st.task : (st.claudeOf || 'AI Agent'))).slice(0, 80)), stepConds: stepsOf(it).map(st => !!(st.optional || st.ifJsonGt || st.ifPrevRan || st.ifLoopRan || st.askUser || st.loop || st.late)), claudeSteps: stepsOf(it).filter(st => !st.task).length };
   });
 }
 // 화면을 만들거나 고치는 업무인가 — 생성 체인(workbench.isGenChain) 또는 quick.json 항목의 "uiWork": true
 function isGenItem(it) { try { return it.uiWork === true || (it.kind === 'chain' && require('./workbench').isGenChain(it)); } catch { return it.uiWork === true; } }
 function stepsOf(it) { return it.kind === 'chain' ? (it.steps || []) : it.kind === 'claude' ? (it.flow || []) : []; }
 function findItem(label) { return loadQuickItems().find(x => x.label === label) || null; }
+// 2026-11-26 R130 개선안 20261124040954_SELF_4: VMW 실행기도 Workbench 에서 고른 모델을 씀. 활성 창 → 보이는 창 → 마지막에 연 창 순서로 getState().model. 없으면 '' (실행기가 설정값 p.claudeModel 사용)
+function wbModel() {
+  try {
+    const ws = [...require('./workbench')._mirror.panels()].filter(w => w && w.getState); if (!ws.length) return '';
+    const pick = ws.find(w => w.panel && w.panel.active) || ws.find(w => w.panel && w.panel.visible) || ws[ws.length - 1];
+    return String((pick.getState() || {}).model || '').trim();
+  } catch (e) { errlog.note('job-runner', 'wbModel', e); return ''; }
+}
 
 /** 작업 만들기. opts: itemLabel · screens[] · onFail('continue'|'stop') · autoAnswer(bool) · mode('seq') · maxPar */
 function create(opts) {
   const item = findItem(opts.itemLabel); if (!item) throw new Error(`업무 항목 없음: ${opts.itemLabel}`);
   if (!ChainRunner.supports(item)) throw new Error(`창 없이 실행할 수 없는 종류: ${item.kind}`);
   { let db = false; try { db = !!require('./workbench').workMode(P()).db; } catch { } if (db && isGenItem(item)) throw new Error('DB MODE: 화면을 만들거나 고치는 업무는 UI/DB MODE 에서만 실행'); }
-  const ids = []; for (const s of opts.screens || []) { const id = normId(s); if (/^[A-Z]{2,4}\d{4}[A-Z]?$/.test(id) && !ids.includes(id)) ids.push(id); }
-  if (!ids.length) throw new Error('화면이 없습니다');
+  const ids = []; const modUnit = item.unit === 'module'; const mods = (item.modules || []).map(normId);
+  for (const s of opts.screens || []) { const id = normId(s); if ((modUnit ? mods.includes(id) : /^[A-Z]{2,4}\d{4}[A-Z]?$/.test(id)) && !ids.includes(id)) ids.push(id); }
+  if (!ids.length) throw new Error(modUnit ? '모듈이 없습니다' : '화면이 없습니다');
+  // 2026-11-23 사용자: 모듈 2개 이상 = 문서 1개(순서 DM, SCP, SSP, SYSTEM = item.modules 순서) → 단위 1개 'DM_SYSTEM'
+  // 2026-11-26 개선안 20261126120156_SELF: 사용자 매뉴얼(usermanual), 운영자 매뉴얼(opsmanual) = 모듈마다 문서 1개(item.modules 순서로 단위를 나눔). lookupmig, perfbatch 묶음은 그대로
+  const splitMods = modUnit && /^(usermanual|opsmanual)$/.test(String(item.chainId || ''));
+  if (splitMods && ids.length > 1) { const ord = mods.filter(m => ids.includes(m)); ids.length = 0; ids.push(...ord); }
+  if (modUnit && !splitMods && item.combine === true && ids.length > 1) { const one = mods.filter(m => ids.includes(m)).join('_'); ids.length = 0; ids.push(one); }
+  // 2026-11-23 사용자 매뉴얼: 업무 입력값(jobInputs) 검사 → 단위(모듈)마다 item.inputsFile 에 씀(체인 단계 스크립트가 읽음)
+  const inputs = {}; for (const f of item.jobInputs || []) { const raw = (opts.inputs || {})[f.name]; // 2026-11-23 multi = 파일 여러 개(경로 목록)
+    const v = f.multi ? (Array.isArray(raw) ? raw : String(raw == null ? '' : raw).split(String.fromCharCode(10))).map(x => String(x).trim()).filter(Boolean) : String(raw == null ? '' : raw).trim();
+    if ((f.multi ? !v.length : !v) && f.optional !== true) throw new Error(`입력 빠짐: ${f.label || f.name}`);
+    if (f.type === 'file') for (const x of f.multi ? v : (v ? [v] : [])) if (!fs.existsSync(x)) throw new Error(`파일 없음: ${f.label || f.name} = ${x}`);
+    if ((f.type === 'checks' || f.type === 'select') && Array.isArray(f.options)) { const ok = f.options.map(o => String(o.v)); for (const x of f.multi ? v : (v ? [v] : [])) if (!ok.includes(String(x))) throw new Error(`고를 수 없는 값: ${f.label || f.name} = ${x}`); } // 2026-11-24 선택형 입력
+    inputs[f.name] = v; }
   let id = `J${stamp()}`; let n = 1; while (fs.existsSync(jobDir(id)) || jobs.has(id)) id = `J${stamp()}_${++n}`;
-  const job = { id, itemLabel: item.label, kind: item.kind, status: 'idle', mode: opts.mode === 'par' ? 'par' : 'seq', maxPar: Math.max(1, Number(opts.maxPar) || 1), onFail: opts.onFail === 'stop' ? 'stop' : 'continue', autoAnswer: opts.autoAnswer === true,
-    createdAt: nowLocal(), startedAt: '', endedAt: '', note: '', screens: ids.map(sid => ({ id: sid, status: 'wait', step: '', actor: '', sec: 0, summary: '', why: '', md: '', startedAt: '', endedAt: '', tries: 0 })) };
+  const job = { id, itemLabel: item.label, kind: item.kind, status: 'idle', mode: opts.mode === 'par' ? 'par' : 'seq', maxPar: Math.max(1, Number(opts.maxPar) || 1), onFail: opts.onFail === 'stop' ? 'stop' : 'continue', autoAnswer: opts.autoAnswer === true, model: String(opts.model || '').trim() || wbModel(), // 2026-11-26 R130: 작업을 만들 때 Workbench 모델 저장
+    unit: modUnit ? 'module' : 'screen', inputs, createdAt: nowLocal(), startedAt: '', endedAt: '', note: '', screens: ids.map(sid => ({ id: sid, status: 'wait', step: '', actor: '', sec: 0, summary: '', why: '', md: '', startedAt: '', endedAt: '', tries: 0 })) };
+  if (item.inputsFile && Object.keys(inputs).length) for (const u of ids) {
+    const f = path.join(P().root, String(item.inputsFile).replace(/\$\{id\}/g, u)); fs.mkdirSync(path.dirname(f), { recursive: true });
+    fs.writeFileSync(f, JSON.stringify(Object.assign({ jobId: id, module: u, at: nowLocal() }, inputs), null, 1), 'utf8');
+  }
   jobs.set(id, { job, runners: new Map(), loop: null, logs: new Map() }); save(job);
   return job;
 }
 // 2026-11-20 작업 재개: 창 다시 로드로 끊긴 화면의 체인 진행 기록(workbench.resumable) → s.resume = { from, of, at, label }. 화면 카드와 작업 재개 단추가 쓴다
-function resumeMap(jobId) { const m = {}; try { for (const r of require('./workbench').resumable(P(), { job: jobId })) if (!m[r.screen]) m[r.screen] = r; } catch (e) { errlog.note('job-runner', 'resumeMap', e); } return m; }
-function decorate(job) { if (!job || !job.screens) return job; const m = resumeMap(job.id); for (const s of job.screens) { const r = s.status === 'wait' ? m[s.id] : null; if (r) { let pl = { text: '', restart: false }; try { pl = require('./workbench').resumePlan(P(), api, r); } catch (e) { errlog.note('job-runner', 'resumePlan', e); } s.resume = { from: r.resumeFrom, of: r.steps, at: String(r.interruptedAt || '').replace('T', ' ').slice(5, 16), label: r.label, what: pl.text, restart: pl.restart }; } /* 2026-11-20 이어갈 지점 · 재시작 여부 */ else delete s.resume; } job.resumable = job.screens.filter(s => s.resume).length; return job; }
+// 개선안 20261125000907_VISION 재개 원장: 재개 표시는 원장(workbench.ledgerView 'vmw')에서 매번 읽는다. 화면 상태(대기 여부)와 상관없고 job.json 에는 저장하지 않는다(save 가 뺌).
+//   종전 = 화면 상태가 '대기'일 때만 붙이고 아니면 지워 저장 → 입장 대기 중 화면 갱신이 표시를 지움(2026-11-20 18:35 J20261120_180409). 지금 실행 중인 화면만 표시하지 않음
+function resumeMap(jobId) { const m = {}; try { for (const r of require('./workbench').ledgerView(P(), 'vmw', jobId)) if (!m[r.screen]) m[r.screen] = r; } catch (e) { errlog.note('job-runner', 'resumeMap', e); } return m; }
+function decorate(job) { if (!job || !job.screens) return job; const m = resumeMap(job.id); const h = jobs.get(job.id); for (const s of job.screens) { const r = !(h && h.runners && h.runners.has(s.id)) && !DONE.has(s.status) ? m[s.id] : null; if (r) { let pl = { text: '', restart: false }; try { pl = require('./workbench').resumePlan(P(), api, r); } catch (e) { errlog.note('job-runner', 'resumePlan', e); } s.resume = { runId: r.runId, from: r.resumeFrom, of: r.steps, at: dfmt.fmtDT(r.interruptedAt || ''), label: r.label, what: pl.text, restart: pl.restart }; } /* 2026-11-20 이어갈 지점 · 재시작 여부 */ else delete s.resume; } job.resumable = job.screens.filter(s => s.resume).length; return job; }
 function get(id) { const h = jobs.get(id); if (h) return decorate(h.job); const j = readJson(path.join(jobDir(id), 'job.json'), null); if (j) { adopt(j); return decorate(j); } return null; }
 // 파일에서 읽은 작업을 메모리에 올린다. 실행 중으로 적혀 있으면 이 프로세스가 돌리던 것이 아니므로 '중단됨'으로 바꾼다
 function adopt(job) {
   if (jobs.has(job.id)) return jobs.get(job.id).job;
-  if (/^(running|pausing)$/.test(job.status)) { job.status = 'interrupted'; job.interruptedAt = nowLocal(); job.note = 'VS Code 창을 닫거나 다시 로드해 중단됨. 이어서 실행으로 남은 화면을 실행'; for (const s of job.screens) if (!DONE.has(s.status)) { if (s.status === 'run' || s.status === 'admit' || s.status === 'busy') { s.status = 'wait'; s.step = ''; s.summary = '중단됨. 다시 실행 대상'; } } }
+  if (/^(running|pausing)$/.test(job.status)) { job.status = 'interrupted'; job.interruptedAt = nowLocal(); job.note = 'VS Code 창을 닫거나 다시 로드해 중단됨. 이어서 실행으로 남은 화면을 실행'; for (const s of job.screens) if (!DONE.has(s.status)) { if (s.status === 'run' || s.status === 'admit' || s.status === 'busy') { if (s.flow) for (const f of s.flow.steps || []) if (f.st === 'run' || f.st === 'repair') f.st = 'cut'; s.status = 'wait'; s.step = ''; s.summary = '중단됨. 다시 실행 대상'; } } }
   // 2026-11-20 S13 U9 실측: 창 다시 로드(dispose)는 작업 상태만 '중단됨'으로 바꾸고 화면 7개(J20261120_003352·054831·060728)를 '실행 중'으로 남겼다 → 불러올 때 화면 상태도 맞춘다
   let fixed = false; if (/^(interrupted|stopped|done)$/.test(job.status)) for (const s of job.screens) if (s.status === 'run' || s.status === 'admit' || s.status === 'busy') { const st = job.status === 'stopped'; s.status = st ? 'cancel' : 'wait'; s.step = ''; s.prog = ''; s.actor = ''; s.summary = st ? '중지됨' : '중단됨. 다시 실행 대상'; fixed = true; }
   jobs.set(job.id, { job, runners: new Map(), loop: null, logs: new Map() });
@@ -114,22 +145,31 @@ function progText(pg) { if (!pg) return ''; return [pg.delta, pg.stage && `단�
 async function runOne(h, s) {
   const job = h.job; const item = findItem(job.itemLabel);
   if (!item) { s.status = 'skip'; s.summary = 'quick.json 에 업무 항목이 없음'; s.endedAt = nowLocal(); save(job); return; }
-  const t0 = Date.now(); s.status = 'run'; s.startedAt = nowLocal(t0); s.endedAt = ''; s.summary = ''; s.why = ''; s.step = ''; s.actor = ''; s.prog = ''; s.tries = (s.tries || 0) + 1; save(job); const pg = {}; let pgSaved = 0;
+  const t0 = Date.now(); s.status = 'run'; s.startedAt = nowLocal(t0); s.endedAt = ''; s.summary = ''; s.why = ''; s.step = ''; s.actor = ''; s.prog = ''; s.unv = null; s.tries = (s.tries || 0) + 1; s.flow = { at: nowLocal(t0), steps: [] }; save(job); const pg = {}; let pgSaved = 0; /* 2026-11-23 사용자: VMW 카드를 누르면 단계별 진행(상세 프로세스)을 봄. s.flow.steps = [{ no, name, actor, st(wait|run|repair|ok|warn|hold|fail|skip|notrun), start, end, sec, round, rounds, subs, prog }] */ const closeSub = f => { const L = f.subs || []; const x = L[L.length - 1]; if (x && !x.end) { x.end = nowLocal(); x.sec = x.ms ? Math.round((Date.now() - x.ms) / 1000) : null; } }; const flowStep = no => { const L = s.flow.steps; let f = L.find(x => x.no === no); if (!f) { f = { no, name: '', actor: '', st: 'wait' }; L.push(f); L.sort((a, b) => a.no - b.no); } return f; };
   evt('job.item.start', { job: job.id, screen: s.id, label: job.itemLabel, try: s.tries });
   const logF = path.join(jobDir(job.id), `${s.id}.log`); let ws = null; try { ws = fs.createWriteStream(logF, { flags: 'a' }); ws.write(`\n===== ${nowLocal(t0)} ${job.itemLabel} · ${s.id} (시도 ${s.tries}) =====\n`); } catch { ws = null; }
-  const runner = new ChainRunner(api, { id: s.id, jobId: job.id, autoAnswer: job.autoAnswer, name: `${job.id}:${s.id}`,
-    onLog: (text) => { if (ws) try { ws.write(text); } catch { } pushLog(h, s.id, text); emit(job.id, 'log', { screen: s.id, text }); if (parseProg(pg, text)) { s.prog = progText(pg); if (Date.now() - pgSaved > 2000) { pgSaved = Date.now(); s.sec = Math.round((Date.now() - t0) / 1000); save(job); } } },
-    onStep: st => { if (st.kind === 'step' && (st.status === 'RUN' || st.status === 'REPAIR')) { for (const k of Object.keys(pg)) delete pg[k]; s.prog = ''; s.step = `[${st.no}] ${st.name}${st.status === 'REPAIR' ? ' (보완)' : ''}`; s.actor = st.status === 'REPAIR' ? 'claude' : st.actor; s.sec = Math.round((Date.now() - t0) / 1000); save(job); } },
+  const runner = new ChainRunner(api, { id: s.id, jobId: job.id, autoAnswer: job.autoAnswer, model: job.model || wbModel(), name: `${job.id}:${s.id}`, // 2026-11-26 R130: 모델 미저장 옛 작업은 지금 Workbench 모델
+    onLog: (text) => { if (ws) try { ws.write(text); } catch { } pushLog(h, s.id, text); emit(job.id, 'log', { screen: s.id, text }); { const u = unvOf(text); if (u) { s.unv = u; save(job); } } if (parseProg(pg, text)) { s.prog = progText(pg); { const cur = s.flow.steps.find(x => x.st === 'run' || x.st === 'repair'); if (cur) cur.prog = s.prog; } if (Date.now() - pgSaved > 2000) { pgSaved = Date.now(); s.sec = Math.round((Date.now() - t0) / 1000); save(job); } } },
+    onStep: st => { try { if (st.kind === 'start') { s.flow.steps = (st.steps || []).map(x => ({ no: x.no, name: x.name, actor: x.actor, st: 'wait' })); save(job); } else if (st.kind === 'add') { const f = flowStep(st.no); f.name = st.name || f.name; f.actor = st.actor || f.actor; save(job); } else if (st.kind === 'sub') { const f = flowStep(st.no); closeSub(f); f.subs = (f.subs || []).concat([{ name: String(st.name || '').slice(0, 160), at: nowLocal(), ms: Date.now() }]); if (f.subs.length > 40) { const cut = f.subs.splice(0, f.subs.length - 40); f.subDropped = { n: ((f.subDropped || {}).n || 0) + cut.length, sec: ((f.subDropped || {}).sec || 0) + cut.reduce((a, x) => a + (x.sec || 0), 0) }; } save(job); } /* 2026-11-26 R234(개선안 20261126083525_SELF): 하위 단계마다 끝 시각과 소요(sec). 40개를 넘으면 앞 기록 수와 소요 합을 subDropped 에 남김 */ else if (st.kind === 'step') { const f = flowStep(st.no); if (st.name) f.name = st.name; if (st.actor && !f.actor) f.actor = st.actor; const S = String(st.status || ''); if (S === 'RUN') { f.st = 'run'; f.start = nowLocal(); f.end = ''; f.sec = null; f.prog = ''; } else if (S === 'REPAIR') { f.st = 'repair'; f.round = st.round || ((f.round || 0) + 1); f.rounds = st.rounds || f.rounds; if (!f.start) f.start = nowLocal(); f.prog = ''; } else { f.st = ({ OK: 'ok', WARN: 'warn', HOLD: 'hold', FAIL: 'fail', SKIP: 'skip', NOT_RUN: 'notrun', CANCEL: 'fail' })[S] || S.toLowerCase(); f.end = nowLocal(); closeSub(f); if (st.sec != null) f.sec = st.sec; if (st.code != null) f.code = st.code; f.prog = ''; if (S !== 'RUN') save(job); } } } catch (e) { errlog.note('job-runner', 'flow', e); } if (st.kind === 'step' && (st.status === 'RUN' || st.status === 'REPAIR')) { for (const k of Object.keys(pg)) delete pg[k]; s.prog = ''; s.step = `[${st.no}] ${st.name}${st.status === 'REPAIR' ? ' (보완)' : ''}`; s.actor = st.status === 'REPAIR' ? 'claude' : st.actor; s.sec = Math.round((Date.now() - t0) / 1000); save(job); } },
     onNote: text => { pushLog(h, s.id, `ℹ ${text}\n`); if (ws) try { ws.write(`ℹ ${text}\n`); } catch { } } });
-  h.runners.set(s.id, runner);
-  let rec = null; if (s.resume) { rec = resumeMap(job.id)[s.id] || null; delete s.resume; } // 2026-11-20 작업 재개: 끊긴 단계부터
-  if (rec) { let pl = null; try { pl = require('./workbench').resumePlan(P(), api, rec); } catch { /* 문구만 */ } const t = `↻ ${pl && pl.restart ? '작업 재시작' : '작업 재개'}: ${pl ? pl.text : `${rec.resumeFrom}/${rec.steps} 단계부터`}(끊긴 시각 ${String(rec.interruptedAt || '').replace('T', ' ').slice(0, 16)})\n`; pushLog(h, s.id, t); if (ws) try { ws.write(t); } catch { } }
+  h.runners.set(s.id, runner); wbRunChanged(s.id);
+  // 2026-11-20 18:3x 결함 정정: 종전에는 화면 표시 s.resume 이 있을 때만 재개 기록을 썼다. 부하 입장 대기(admit) 동안 VMW 화면 갱신(get → decorate)이
+  //   '대기' 아닌 상태라며 s.resume 을 지워 재개 기록을 못 찾고 처음부터 돌았다(J20261120_180409 · 18:35:49 시작, 기록 SCP0028_1795165449104 단계 4/8 · 시험 80/81 이 남음).
+  //   → 실행할 때 그 작업·화면의 끊긴 기록을 직접 찾는다. 쓰지 않는 같은 작업·화면의 다른 끊긴 기록은 지운다(VMO 에 재개 대기와 실행 중이 함께 보이던 것)
+  let rec = null; delete s.resume;
+  try {
+    const wb = require('./workbench'); const all = wb.resumable(P(), { job: job.id }).filter(r => String(r.screen || '').toUpperCase() === s.id);
+    rec = all[0] || null; // 최신 기록(resumable 은 updatedMs 내림차순)
+    for (const r of all.slice(1)) { try { wb._progDel(P(), r.runId, 'resume'); } catch { /* 이미 없음 */ } evt('job.resume.drop', { job: job.id, screen: s.id, runId: r.runId, why: '같은 작업·화면의 더 최근 기록으로 재개' }); }
+  } catch (e) { errlog.note('job-runner', 'resumeLookup', e); }
+  if (rec) { let pl = null; try { pl = require('./workbench').resumePlan(P(), api, rec); } catch { /* 문구만 */ } const t = `↻ ${pl && pl.restart ? '작업 재시작' : '작업 재개'}: ${pl ? pl.text : `${rec.resumeFrom}/${rec.steps} 단계부터`}(끊긴 시각 ${dfmt.fmtDT(rec.interruptedAt || '')})\n`; pushLog(h, s.id, t); if (ws) try { ws.write(t); } catch { } }
   let r; try { r = await runner.run(item, rec ? { resume: rec } : undefined); } catch (e) { r = { ok: false, status: 'FAIL', summary: `예외: ${e.message}`, sec: Math.round((Date.now() - t0) / 1000) }; }
-  h.runners.delete(s.id); runner.dispose(); if (ws) try { ws.end(`\n===== 끝 ${nowLocal()} ${r.status} =====\n`); } catch { }
+  h.runners.delete(s.id); wbRunChanged(s.id); runner.dispose(); if (ws) try { ws.end(`\n===== 끝 ${nowLocal()} ${r.status} =====\n`); } catch { }
   const map = { OK: 'done', WARN: 'warn', HOLD: 'hold', FAIL: 'fail', CANCEL: 'cancel', BLOCKED: 'skip', UNSUPPORTED: 'skip' };
   s.status = map[r.status] || 'fail'; if (job.status === 'interrupted' && (r.status === 'CANCEL' || r.status === 'FAIL')) s.status = 'wait'; /* 2026-11-20 작업 재개: 창 다시 로드로 끊긴 화면은 취소가 아니라 다시 실행 대상 */ s.sec = r.sec != null ? r.sec : Math.round((Date.now() - t0) / 1000); s.endedAt = nowLocal(); s.step = ''; s.actor = ''; s.prog = '';
   s.summary = String(r.summary || '').split('\n')[0].slice(0, 300); s.actorNote = r.actorNote || ''; s.md = r.md || ''; s.why = r.fail && r.fail.why ? String(r.fail.why).split('\n')[0].slice(0, 300) : '';
   s.log = path.relative(P().root, logF);
+  s.outputs = outputsOf(item, s.id, t0); if (item.outputs && (s.status === 'done' || s.status === 'warn') && !s.outputs.length) { s.status = 'warn'; s.why = '완료했으나 이번 실행에서 만든 산출물 파일 없음(' + item.outputs.join(', ') + ')'; }
   if (job.status === 'interrupted' && s.status === 'wait') { s.summary = '중단됨(창 다시 로드). 작업 재개 대상'; s.why = ''; }
   // 2026-11-20 VMO 자가 보완 뒤 다시 실행(requeueScreen): 중지로 끝난 화면을 대기로 돌린다. 루프가 같은 작업 안에서 다시 시작한다
   if (h.stopReq && h.stopReq.has(s.id)) { const q = h.stopReq.get(s.id); h.stopReq.delete(s.id); s.status = 'cancel'; s.summary = `중지(${q.by || '요청'}): ${q.why || ''}`.trim(); s.why = ''; }
@@ -141,7 +181,7 @@ async function runOne(h, s) {
 // ── P9: 동시 실행 기준 ──
 //   기준값: tools/E2E/e2e.config.json 의 verifyLoadCpuMax(80) · verifyLoadMemFreeMinMB(3072) · verifyAdmitRampSec(120) — CheckList 부하 입장과 같은 값.
 //   tools/Harness/harness.json orch 절로 덮어쓸 수 있다: jobMaxPar(동시 화면 상한 기본 3) · jobMaxClaude(동시 Claude 세션 기본 2) · jobLoadCpuMax · jobLoadMemFreeMinMB · jobRampSec · jobPollMs
-const JDEF = { jobMaxPar: 5, // 2026-11-20 사용자 지시: 업무 작업창 최대 동시 5화면
+const JDEF = { jobMaxPar: 3, // 2026-11-20 11:18 사용자 지시(R159): 동시 최대 기본값 5 → 3, PC 부하 입장 조건과 함께 적용
    jobMaxClaude: 2, jobPollMs: 5000, jobBusyPollMs: 15000 };
 function loadCfg() {
   const p = P(); const e2e = readJson(path.join(p.root, 'tools', 'E2E', 'e2e.config.json'), {}); const h = readJson(path.join(p.root, 'tools', 'Harness', 'harness.json'), {}); const o = (h && h.orch) || {};
@@ -200,6 +240,17 @@ async function loop(h) {
   emit(job.id, 'end', summaryOf(job));
 }
 
+/** 2026-11-23 사용자: 완료 뒤 산출물 위치를 알 수 있게. item.outputs 패턴(${id}, 파일 이름의 *) 중 이번 실행(t0 뒤)에 만든 파일 → 저장소 기준 경로 목록 */
+function outputsOf(item, id, t0) {
+  const out = [];
+  for (const pat of (item && item.outputs) || []) {
+    const rel = String(pat).replace(/\$\{id\}/g, id); const dir = path.join(P().root, path.dirname(rel)); const base = path.basename(rel);
+    const re = new RegExp('^' + base.split('*').map(x => x.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$', 'i');
+    let names = []; try { names = fs.readdirSync(dir); } catch { names = []; }
+    for (const n of names) { if (!re.test(n)) continue; const f = path.join(dir, n); let st; try { st = fs.statSync(f); } catch { continue; } if (st.isFile() && st.mtimeMs >= t0 - 2000) out.push(path.relative(P().root, f).split(path.sep).join('/')); }
+  }
+  return out;
+}
 function writeSummary(job) {
   try {
     const c = summaryOf(job).counts; const tot = job.screens.reduce((a, s) => a + (s.sec || 0), 0);
@@ -208,6 +259,8 @@ function writeSummary(job) {
       `- 결과: ${Object.entries(c).map(([k, v]) => `${STATUS_KO[k] || k} ${v}`).join(' · ')}`, `- 실패 처리: ${job.onFail === 'stop' ? '첫 실패에서 중단' : '실패 화면 표시 후 계속'} · 승인 단계 답: ${job.autoAnswer ? '실행' : '실행 안 함'}`];
     const esc = s => String(s || '').replace(/\|/g, '/').replace(/\r?\n/g, ' ');
     const rows = job.screens.map((s, i) => `| ${i + 1} | ${s.id} | ${STATUS_KO[s.status] || s.status} | ${s.sec || 0} | ${esc(s.why || s.summary)} | ${esc(s.actorNote)} | ${s.md ? esc(s.md.replace(/\\/g, '/')) : ''} |`);
+    const outs = job.screens.flatMap(s => (s.outputs || []).map(o => `- ${s.id}: [${o.split('/').pop()}](${o})`));
+    if (outs.length) meta.push('', '## 산출물', ...outs);
     fs.writeFileSync(path.join(jobDir(job.id), 'SUMMARY.md'), [head, '', ...meta, '', '| # | 화면 | 결과 | 소요(초) | 요약·실패 원인 | 실행 주체 | 실행 기록 |', '|---|---|---|---|---|---|---|', ...rows, ''].join('\n'), 'utf8');
   } catch (ex) { errlog.note('job-runner', 'loop', ex); }
 }
@@ -218,23 +271,28 @@ function start(id) { const j = get(id); const h = jobs.get(id); if (!j || !h) re
 /** 2026-11-20 사용자 지시 'VMO 가 화면이 열리지 않은 것을 캐치해서 원인을 찾고 해결한 뒤 정상 기동되게': VMO 가 원인을 고친 뒤 그 화면 실행을 다시 시작한다.
  *  실행 중이면 그 화면 실행만 멈추고(감시기에는 user.stop 으로 알려 실패 사건을 만들지 않음) 끝나면 대기로 돌려 같은 작업에서 다시 실행.
  *  실행 중이 아니고 실패로 끝났으면 대기로 돌려 작업을 다시 시작. 같은 화면은 작업마다 maxHeal(2)번까지. 반환 { job, how } 또는 { none: 사유 } */
-function requeueScreen(screen, why, maxHeal = 2) {
+function requeueScreen(screen, why, maxHeal) {
+  { let pend = []; try { pend = require('./workbench').planPending(P().root); } catch (e) { errlog.note('job-runner', 'planPending', e); } if (pend.length) return { none: `계획 구현 항목 ${pend.length}건 남음(${pend.slice(0, 6).join(', ')}). 구현을 끝낸 뒤 재수행` }; } // 2026-11-26 R230(개선안 20261125211759_SELF_2): 재수행 횟수(healed)를 올리지 않음
+  if (maxHeal == null) { try { maxHeal = require('./orch-ledger').rerunMax(); } catch { maxHeal = 2; } } // 2026-11-20 재수행 한도(orch.rerunMax · 기본 2): 3번째 오류면 그 작업 화면은 재수행 안 함
   for (const h of jobs.values()) {
     const s = h.job.screens.find(x => x.id === screen); if (!s) continue;
-    if ((s.healed || 0) >= maxHeal) return { none: `같은 작업에서 이미 ${s.healed}번 다시 실행함`, job: h.job.id };
+    if ((s.healed || 0) >= maxHeal) { if (!s.healStop) { s.healStop = true; s.summary = `재수행 한도 ${maxHeal}회 도달. 이 작업은 재수행하지 않음(${String(why || '').slice(0, 120)})`; save(h.job); evt('job.item.rerunLimit', { job: h.job.id, screen, healed: s.healed, max: maxHeal, why: String(why || '').slice(0, 200) }); } return { none: `재수행 한도 ${maxHeal}회 도달(같은 작업에서 이미 ${s.healed}번 다시 실행함). 이 작업은 재수행하지 않음`, job: h.job.id }; }
     const r = h.runners.get(screen);
-    if (r) { if (!h.requeue) h.requeue = new Map(); h.requeue.set(screen, why); evt('user.stop', { wb: `${h.job.id}:${screen}`, screen, by: 'VMO' }); try { r.stop(); } catch (e) { errlog.note('job-runner', 'requeueScreen', e); } return { job: h.job.id, how: 'stop-requeue' }; }
+    if (r) { if (!h.requeue) h.requeue = new Map(); h.requeue.set(screen, why); try { r.stop({ by: 'VMO', why: `다시 실행: ${String(why || '').slice(0, 160)}` }); /* 개선안 20261122000646_SELF: user.stop 은 workbench.endRun 이 1줄 */ } catch (e) { errlog.note('job-runner', 'requeueScreen', e); } return { job: h.job.id, how: 'stop-requeue' }; }
     if (s.status === 'fail' || s.status === 'cancel') { s.status = 'wait'; s.healed = (s.healed || 0) + 1; s.summary = `VMO 자가 보완 뒤 다시 실행: ${why}`; s.why = ''; save(h.job); evt('job.item.requeue', { job: h.job.id, screen, why, healed: s.healed }); let how = 'requeue'; if (!h.loop) { begin(h); how = 'restart'; } else if (h.job.status !== 'running') { how = 'restart'; h.loop.then(() => { if (!h.loop && s.status === 'wait') begin(h); }); } /* 끝나는 중인 루프는 끝난 뒤 다시 시작 */ return { job: h.job.id, how }; }
   }
   return { none: '이 화면을 실행 중이거나 실패로 끝난 작업 없음' };
 }
 /** 2026-11-20 화면 하나만 중지(사용자 지적: 에이전트가 taskkill 로 끊어 실패 사건 4건 · Claude 3번 더 호출). 감시기에 user.stop 을 남기고 그 화면 실행만 멈춘다. 작업의 다른 화면은 계속.
  *  반환 { job } 또는 { none: 사유 } */
+/** 2026-11-25: 이 화면을 실행 중인 VMW 작업이 있나(Workbench 중지 단추 표시) */
+function runningScreen(screen) { const k = String(screen || '').toUpperCase(); for (const h of jobs.values()) if (h.runners && h.runners.has(k)) return h.job.id; return ''; }
+function wbRunChanged(screen) { try { require('./workbench')._jobRunChanged(screen); } catch (e) { errlog.note('job-runner', 'wbRunChanged', e); } }
 function stopScreen(screen, by, why) {
   for (const h of jobs.values()) {
     const r = h.runners.get(screen); if (!r) continue;
     if (!h.stopReq) h.stopReq = new Map(); h.stopReq.set(screen, { by, why });
-    evt('user.stop', { wb: `${h.job.id}:${screen}`, screen, by: by || '요청' }); try { r.stop(); } catch (e) { errlog.note('job-runner', 'stopScreen', e); }
+    try { r.stop({ by: by || '요청', why: why || '' }); /* 개선안 20261122000646_SELF: user.stop 은 workbench.endRun 이 1줄 */ } catch (e) { errlog.note('job-runner', 'stopScreen', e); }
     return { job: h.job.id };
   }
   return { none: '이 화면을 실행 중인 VMW 작업 없음' };
@@ -249,19 +307,31 @@ function pollRequests() {
     const f = path.join(dir, nm); let q = null; try { q = JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch (e) { errlog.note('job-runner', 'pollRequests.read', e); }
     const scr = q && String(q.screen || '').toUpperCase(); let res;
     if (!scr) res = { none: '요청 형식 오류(screen 없음)' };
-    else if (q.action === 'rerun') res = requeueScreen(scr, `${q.by || '요청'}: ${q.why || '다시 실행 요청'}`);
+    else if (q.action === 'rerun') res = LG().rerunAllowed && LG().rerunAllowed() ? requeueScreen(scr, `${q.by || '요청'}: ${q.why || '다시 실행 요청'}`) : { none: `${LG().RERUN_NOTE || '재수행 설정 = 수행 없음'}. 다시 실행은 사용자` }; // 2026-11-20 재수행 설정
     else res = stopScreen(scr, q.by || '요청', q.why || '');
+    if (scr && res && !res.none) LG().note({ kind: q.action === 'rerun' ? 'requeue' : 'stop', rule: String(q.rule || 'agent'), inc: q.inc || '', screen: scr, job: res.job || '', by: q.by || '요청', premise: { key: q.action === 'rerun' ? 'screenOpensAfterFix' : 'agentRequest', why: String(q.why || '').slice(0, 200) } });
     try { fs.writeFileSync(path.join(dir, nm.replace(/\.json$/, '.done.json')), JSON.stringify(Object.assign({ at: nowLocal(), request: q }, res), null, 1), 'utf8'); fs.unlinkSync(f); } catch (e) { errlog.note('job-runner', 'pollRequests.write', e); }
     evt('job.request', { screen: scr, action: (q && q.action) || 'stop', by: q && q.by, result: res.none ? `안 함: ${res.none}` : (res.how || 'stop'), job: res.job || '' }); n++;
   }
   return n;
 }
+/** 2026-11-20 VMO 오판 복구(orch-ledger onFalse): VMO 가 잘못 멈춘 화면을 '중단됨, 재개 가능'으로 되돌린다. 실행은 시작하지 않는다 */
+function restoreInterrupted(jobId, screen, why) {
+  const j = get(jobId); const h = jobs.get(jobId); if (!j || !h || h.loop) return false; const s = h.job.screens.find(x => x.id === String(screen || '').toUpperCase()); if (!s) return false;
+  if (!/^(cancel|fail|wait)$/.test(s.status)) return false;
+  s.status = 'wait'; s.summary = String(why || '').slice(0, 300); s.endedAt = ''; s.step = ''; s.prog = '';
+  h.job.status = 'interrupted'; h.job.interruptedAt = nowLocal(); h.job.note = String(why || '').slice(0, 300); h.job.endedAt = ''; save(h.job);
+  evt('job.restore', { job: jobId, screen: s.id, why: String(why || '').slice(0, 200) }); emit(jobId, 'end', summaryOf(h.job)); return true;
+}
+/** 2026-11-20 재수행 한도 공용: 작업·화면의 VMO 재수행 횟수와 1회 더하기 */
+function healCount(jobId, screen) { const j = get(jobId); const s = j && j.screens.find(x => x.id === String(screen || '').toUpperCase()); return s ? (s.healed || 0) : 0; }
+function noteHeal(jobId, screen) { const h = jobs.get(jobId); const s = h && h.job.screens.find(x => x.id === String(screen || '').toUpperCase()); if (!s) return false; s.healed = (s.healed || 0) + 1; save(h.job); return true; }
 /** 실패·중지 화면만 다시 */
 function retryFailed(id) { const j = get(id); const h = jobs.get(id); if (!j || !h || h.loop) return false; let n = 0; for (const s of j.screens) if (s.status === 'fail' || s.status === 'cancel') { s.status = 'wait'; s.summary = '다시 실행 대상'; s.why = ''; n++; } if (!n) return false; return begin(h); }
 /** 일시 중지: 실행 중 화면은 끝까지, 새 화면은 시작 안 함 */
 function pause(id) { const h = jobs.get(id); if (!h || !h.loop || h.job.status !== 'running') return false; h.job.status = 'pausing'; h.job.note = '일시 중지. 실행 중 화면이 끝나면 멈춤'; save(h.job); return true; }
 /** 중지: 실행 중 화면도 중지 */
-function stop(id) { const h = jobs.get(id); if (!h) return false; if (!h.loop) { if (/^(idle|paused|interrupted)$/.test(h.job.status)) { h.job.status = 'stopped'; save(h.job); } return true; } h.job.status = 'stopped'; h.job.note = '사용자 중지'; for (const [sid, r] of h.runners) { evt('user.stop', { wb: `${id}:${sid}`, screen: sid, job: id, ms: Date.now() }); /* 2026-11-20 감시기에 사용자 중지를 알려 R1, R11 사건을 만들지 않음 */ try { r.stop(); } catch { } } save(h.job); return true; }
+function stop(id) { const h = jobs.get(id); if (!h) return false; if (!h.loop) { if (/^(idle|paused|interrupted)$/.test(h.job.status)) { h.job.status = 'stopped'; save(h.job); } return true; } h.job.status = 'stopped'; h.job.note = '사용자 중지'; for (const [, r] of h.runners) { try { r.stop({ by: '작업 목록 중지', why: 'job.stop' }); } catch (e) { errlog.note('job-runner', 'stop', e); } } /* 2026-11-20 감시기에 사용자 중지를 알려 R1, R11 사건을 만들지 않음 · 개선안 20261122000646_SELF: user.stop(runId, by) 은 workbench.endRun 이 1줄 */ save(h.job); return true; }
 /** VMO가 공통 원인(서버 이상 · TCP 연결 수)으로 작업을 잠시 멈출 때 — 실행 중 화면은 끝까지, 새 화면은 시작 안 함 */
 function pauseAll(why, incId) { let n = 0; for (const h of jobs.values()) if (h.loop && h.job.status === 'running') { h.job.status = 'pausing'; h.job.pausedBy = 'orch'; h.job.pausedInc = incId || ''; h.job.note = `VMO 일시 중지: ${why}`; save(h.job); n++; } return n; }
 /** VMO가 멈춘 작업을 다시 진행(원인 사건이 해결됐을 때). incId 를 주면 그 사건으로 멈춘 작업만 */
@@ -270,7 +340,7 @@ function resumeOrch(incId) {
   for (const h of jobs.values()) {
     const j = h.job; if (j.pausedBy !== 'orch' || (incId && j.pausedInc && j.pausedInc !== incId)) continue;
     if (h.loop && j.status === 'pausing') { j.status = 'running'; j.note = 'VMO 조치 완료. 이어서 진행'; j.pausedBy = ''; save(j); n++; }
-    else if (!h.loop && j.status === 'paused') { j.pausedBy = ''; j.note = 'VMO 조치 완료. 이어서 진행'; if (begin(h)) n++; }
+    else if (!h.loop && j.status === 'paused') { j.pausedBy = ''; if (LG().rerunAllowed && LG().rerunAllowed()) { j.note = 'VMO 조치 완료. 이어서 진행'; if (begin(h)) n++; } else { j.note = `VMO 조치 완료. 이어서 실행은 사용자(${LG().RERUN_NOTE || '재수행 설정 = 수행 없음'})`; save(j); emit(j.id, 'end', summaryOf(j)); } } // 2026-11-20 재수행 설정
   }
   return n;
 }
@@ -278,7 +348,7 @@ function resumeOrch(incId) {
 function attachWatch(watch) {
   return watch.on((inc, isNew) => {
     try {
-      if (isNew && (inc.rule === 'R6' || inc.rule === 'R8')) { const n = pauseAll(`${inc.rule} ${inc.title}`, inc.id); if (n) watch.update(inc.id, {}, { by: 'VMO', what: `VMW 작업 ${n}건 일시 중지(실행 중 화면은 끝까지)` }); }
+      if (isNew && (inc.rule === 'R6' || inc.rule === 'R8')) { if (LG().observing(inc.rule)) return; const n = pauseAll(`${inc.rule} ${inc.title}`, inc.id); if (n) { watch.update(inc.id, {}, { by: 'VMO', what: `VMW 작업 ${n}건 일시 중지(실행 중 화면은 끝까지)` }); LG().note({ kind: 'pause', rule: inc.rule, inc: inc.id, target: `${n}건`, premise: { key: 'ruleRaised' } }); } }
       else if (!isNew && (inc.rule === 'R6' || inc.rule === 'R8') && (inc.status === 'resolved' || inc.status === 'closed')) { if ([...jobs.values()].some(h => h.job.pausedBy === 'orch' && h.job.pausedInc === inc.id)) resumeOrch(inc.id); }
     } catch (ex) { errlog.note('job-runner', 'attachWatch', ex); }
   });
@@ -300,7 +370,7 @@ async function sweepInterrupted(hours) {
     const j = h ? h.job : readJson(f, null); if (!j || j.status !== 'interrupted') continue;
     if (!j.interruptedAt) { let mt = Date.now(); try { mt = fs.statSync(f).mtimeMs; } catch { } j.interruptedAt = nowLocal(mt); save(j); }
     const t = Date.parse(j.interruptedAt); if (!(t > 0) || Date.now() - t < hh * 3600000) continue;
-    const r = await remove(id); if (r.ok) { out.push({ id, at: j.interruptedAt, hours: hh }); evt('job.autodelete', { job: id, interruptedAt: j.interruptedAt, hours: hh, progress: r.progress }); } else errlog.note('job-runner', 'sweepInterrupted', `${id} 삭제 실패: ${r.why}`);
+    const r = await remove(id); if (r.ok) { LG().note({ kind: 'delete', rule: 'keepHours', job: id, target: `.vibe/jobs/${id}`, premise: { key: 'interruptedOlderThan', hours: hh, interruptedAt: j.interruptedAt } }); out.push({ id, at: j.interruptedAt, hours: hh }); evt('job.autodelete', { job: id, interruptedAt: j.interruptedAt, hours: hh, progress: r.progress }); } else errlog.note('job-runner', 'sweepInterrupted', `${id} 삭제 실패: ${r.why}`);
   }
   return out;
 }
@@ -309,15 +379,17 @@ async function sweepInterrupted(hours) {
 function tidyRecent() { let names = []; try { names = fs.readdirSync(jobsDir()).filter(n => /^J\d{8}_\d{6}/.test(n)).sort().reverse().slice(0, 30); } catch { return 0; } let n = 0; for (const id of names) { if (jobs.has(id)) continue; const j = readJson(path.join(jobDir(id), 'job.json'), null); if (!j || !/^(interrupted|stopped|done)$/.test(j.status) || !(j.screens || []).some(s => /^(run|admit|busy)$/.test(s.status))) continue; adopt(j); n++; } return n; }
 function init(wbApi) { api = wbApi; setTimeout(() => { try { tidyRecent(); } catch (e) { errlog.note('job-runner', 'tidyRecent', e); } }, 3000); if (!reqTimer) { reqTimer = setInterval(() => { try { pollRequests(); } catch (e) { errlog.note('job-runner', 'pollRequests', e); } }, 2000); if (reqTimer.unref) reqTimer.unref(); }
   if (!sweepTimer) { const sw = () => sweepInterrupted().catch(e => errlog.note('job-runner', 'sweepInterrupted', e)); setTimeout(sw, 5000); sweepTimer = setInterval(sw, 3600000); if (sweepTimer.unref) sweepTimer.unref(); } } // 켤 때 5초 뒤 + 1시간마다 중단 작업 자동 삭제
-function dispose() { if (reqTimer) { clearInterval(reqTimer); reqTimer = null; } if (sweepTimer) { clearInterval(sweepTimer); sweepTimer = null; } for (const h of jobs.values()) if (h.loop) { h.job.status = 'interrupted'; h.job.interruptedAt = nowLocal(); h.job.note = 'VS Code 종료로 중단됨'; for (const [scr, r] of h.runners) { evt('user.stop', { wb: `${h.job.id}:${scr}`, screen: scr, job: h.job.id, by: 'VS Code 종료', why: 'vscode.dispose', ms: Date.now() }); /* 개선안 20261120005403_INC: stop() 과 같은 필드(job, ms) + why */ try { r.stop(); } catch { } } /* 2026-11-20 05:14 실측: 창 다시 로드로 끊긴 SCP0005, SSP0005 가 실패 사건 R2, R11 4건으로 올라와 에이전트가 Claude 를 불렀다 → 사용자 중지로 알림 */ try { fs.writeFileSync(path.join(jobDir(h.job.id), 'job.json'), JSON.stringify(h.job, null, 2), 'utf8'); } catch { } } }
+function dispose() { if (reqTimer) { clearInterval(reqTimer); reqTimer = null; } if (sweepTimer) { clearInterval(sweepTimer); sweepTimer = null; } for (const h of jobs.values()) if (h.loop) { h.job.status = 'interrupted'; h.job.interruptedAt = nowLocal(); h.job.note = 'VS Code 종료로 중단됨'; for (const [, r] of h.runners) { try { r.stop({ sync: true, by: 'VS Code 종료', why: 'vscode.dispose' }); } catch { } } /* 개선안 20261120005403_INC · 개선안 20261122000646_SELF: user.stop(runId, job, by, why) 은 workbench.endRun 이 1줄 */ /* 2026-11-20 19:08 실측: 비동기 taskkill 은 확장 호스트가 먼저 끝나 18:47 실행이 고아로 남음 · 2026-11-20 05:14 실측: 창 다시 로드로 끊긴 SCP0005, SSP0005 가 실패 사건 R2, R11 4건으로 올라와 에이전트가 Claude 를 불렀다 → 사용자 중지로 알림 */ try { fs.writeFileSync(path.join(jobDir(h.job.id), 'job.json'), JSON.stringify(h.job, noResume, 2), 'utf8'); } catch { } } }
 
 /** 2026-11-20 사용자 지시 '삭제 = 중지 후 삭제 · 목록에서 완전 삭제 · 재개 불가': 실행 중이면 중지하고 루프가 끝난 뒤 작업 폴더(job.json, 화면 로그, SUMMARY)와 그 작업의 체인 진행 기록을 지운다. 반환 { ok, why } */
 async function remove(id) {
   if (!/^J\d{8}_\d{6}/.test(String(id || ''))) return { ok: false, why: '작업 번호 형식 아님' };
   const h = jobs.get(id);
   if (h && h.loop) { stop(id); const t0 = Date.now(); while (h.loop && Date.now() - t0 < 120000) await new Promise(r => setTimeout(r, 300)); if (h.loop) return { ok: false, why: '중지가 120초 안에 끝나지 않아 삭제하지 않음. 잠시 뒤 다시 삭제' }; }
-  let progN = 0; try { const d = path.join(P().vibeDir, 'orch', 'chain_progress'); for (const n of fs.readdirSync(d)) { if (!n.endsWith('.json')) continue; try { const r = JSON.parse(fs.readFileSync(path.join(d, n), 'utf8')); if (r && r.job === id) { fs.unlinkSync(path.join(d, n)); progN++; } } catch { /* 깨진 기록 건너뜀 */ } } } catch { /* 기록 폴더 없음 */ }
+  let progN = 0; try { const d = path.join(P().vibeDir, 'orch', 'chain_progress'); for (const n of fs.readdirSync(d)) { if (!n.endsWith('.json')) continue; try { const r = JSON.parse(fs.readFileSync(path.join(d, n), 'utf8')); if (r && r.job === id) { fs.unlinkSync(path.join(d, n)); progN++; evt('progress.drop', { runId: r.runId || n.replace(/\.json$/, ''), screen: r.screen || '', job: id, why: 'jobRemove' }); } } catch { /* 깨진 기록 건너뜀 */ } } } catch { /* 기록 폴더 없음 */ }
   try { fs.rmSync(jobDir(id), { recursive: true, force: true }); } catch (e) { return { ok: false, why: `작업 폴더 삭제 실패: ${e.message}` }; }
   jobs.delete(id); evt('job.delete', { job: id, progress: progN }); emit(id, 'end', { id, deleted: true }); return { ok: true, progress: progN };
 }
-module.exports = { sweepInterrupted, keepHours, remove, decorate, resumeMap, tidyRecent, stopScreen, pollRequests, requeueScreen, parseProg, progText, init, dispose, on, create, get, list, start, retryFailed, pause, stop, pauseAll, resumeOrch, attachWatch, loadCfg, isSelfAdmit, admitWhy, logOf, running, batchItems, findItem, parseIds, summaryOf, STATUS_KO, JOB_KO, DONE };
+// 2026-11-20 사용자 지시 'VMW 카드에도 미검증 건수 표기': Workbench 체인 회차 판단 줄 '↻ 반복 n회차 진행|없음(반복 끝): … · 미검증 N건 · 처리 대상 M건'(이번 측정 분류 결과일 때만 건수가 붙음)
+function unvOf(text) { const m = /↻ 반복 (\d+)회차 (진행|없음)[^\n]*?미검증 (\d+)건 · 처리 대상 (\d+)건/.exec(String(text || '')); if (!m) return null; return { round: Number(m[1]), go: m[2] === '진행', total: Number(m[3]), actionable: Number(m[4]), at: nowLocal() }; }
+module.exports = { runningScreen, unvOf,  healCount, noteHeal, restoreInterrupted, sweepInterrupted, keepHours, remove, decorate, resumeMap, tidyRecent, stopScreen, pollRequests, requeueScreen, parseProg, progText, init, dispose, on, create, get, list, start, retryFailed, pause, stop, pauseAll, resumeOrch, attachWatch, loadCfg, isSelfAdmit, admitWhy, logOf, running, batchItems, findItem, parseIds, summaryOf, STATUS_KO, JOB_KO, DONE };

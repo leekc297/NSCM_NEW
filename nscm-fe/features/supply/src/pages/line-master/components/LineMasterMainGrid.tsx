@@ -83,7 +83,9 @@ export const LineMasterMainGrid = ({
   const insertOnlyDataMaps = useMemo<Record<string, DataMap | null>>(() => {
     const build = (source: Record<string, unknown>[]): DataMap | null => {
       if (source.length === 0) return null;
-      const map = new DataMap(source, 'CODE', 'NAME');
+      // 표시값 = CODE — AS-IS Insert_Row(cs:598) dtPlantRowIns NAME 에 CODE 를 넣어 콤보가 코드로 보인다.
+      //   사이트명은 옆 SITE_DESCRIPTION 칸에 파생된다.
+      const map = new DataMap(source, 'CODE', 'CODE');
       const allDisplayValues = map.getDisplayValues.bind(map) as (item?: unknown) => string[];
       map.getDisplayValues = (item?: unknown): string[] => {
         // 행 컨텍스트 없는 호출(필터 패널 등)은 전체 유지 — 비우면 필터가 죽는다.
@@ -96,7 +98,7 @@ export const LineMasterMainGrid = ({
         const div = toCellStr(row.DIVISION_ID);
         return [
           ...new Set(
-            source.filter(r => !div || str(r.DIVISION_ID) === div).map(r => str(r.NAME))
+            source.filter(r => !div || str(r.DIVISION_ID) === div).map(r => str(r.CODE))
           ),
         ];
       };
@@ -205,6 +207,8 @@ export const LineMasterMainGrid = ({
       initialized={g => setGrid(g as unknown as FlexGridType)}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
+      // cascade(연동 편집) 화면 — undo 시 cellEditEnded 재발화로 연동 셀까지 복원(순수 집계/파생, clear·부작용 없음 확인).
+      reapplyEditOnUndo
       itemsSource={rows as unknown as WijmoRowItem[]}
       staticColumns={columns}
       // Plant(조회 전용) 시트만 셀 병합 — 선행 동일값(Div/Site/Building/Operation 등) 연속 행을

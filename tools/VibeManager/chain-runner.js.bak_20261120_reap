@@ -1,0 +1,79 @@
+// 2026-11-19 VMO P7: ChainRunner — 화면 1개의 메뉴 항목(체인·작업)을 창 없이 실행한다.
+//   실행기 본체는 workbench.js 의 WB(체인 _runChain · 작업 runTaskStreaming · Claude askClaude)를 그대로 쓴다(createRunner).
+//   Workbench 창과 같은 코드가 돌기 때문에 quick.json 체인 정의·조건 키워드·FULLRUN.md 형식·사건 기록이 같다.
+//   이 모듈은 출력 대상을 창 대신 호출자(업무 작업창·파일)로 돌리고 결과를 한 객체로 돌려준다.
+//
+//   const r = new ChainRunner(api, { id: 'SCP0111', jobId, autoAnswer: false, onLog, onStep, onNote });
+//   const res = await r.run(item);   // item = quick.json 항목(kind chain | task | claude+flow)
+//   res = { ok, status('OK'|'WARN'|'HOLD'|'FAIL'|'CANCEL'|'BLOCKED'|'UNSUPPORTED'), sec, summary, actorNote, md, fail, steps, code }
+'use strict';
+const path = require('path');
+
+// P9: 동시 Claude 세션 상한 — 업무 작업의 실행기 전부가 함께 쓰는 대기열. 상한은 tools/Harness/harness.json orch.jobMaxClaude(기본 2)를 그때그때 읽는다
+function makeGate(limitFn) {
+  let active = 0; const waiters = [];
+  const pump = () => { while (waiters.length && active < Math.max(1, Number(limitFn()) || 1)) { active++; const w = waiters.shift(); let done = false; w(() => { if (done) return; done = true; active--; pump(); }); } };
+  return { acquire: () => new Promise(res => { waiters.push(res); pump(); }), busy: () => active >= Math.max(1, Number(limitFn()) || 1), limit: () => Math.max(1, Number(limitFn()) || 1), active: () => active, waiting: () => waiters.length };
+}
+let gateRoot = '';
+const claudeGate = makeGate(() => { try { const h = JSON.parse(require('fs').readFileSync(path.join(gateRoot, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')); return (h.orch && h.orch.jobMaxClaude) || 2; } catch { return 2; } });
+
+class ChainRunner {
+  /** api = extension.js wbApi() · opts: id · jobId · autoAnswer · model · permissionMode · name · onLog(text, cls, stream) · onStep({kind, ...}) · onNote(text) */
+  constructor(api, opts) {
+    opts = opts || {};
+    this.api = api; this.id = String(opts.id || '').toUpperCase(); this.opts = opts; this.running = false; this.stopped = false;
+    this.step = null;                      // 지금 단계 { no, name, actor, status }
+    const workbench = require('./workbench');
+    try { gateRoot = api.paths().root; } catch { }
+    this.wb = workbench.createRunner(api, { id: this.id, jobId: opts.jobId, autoAnswer: opts.autoAnswer, model: opts.model, permissionMode: opts.permissionMode, name: opts.name, claudeGate: opts.noGate ? null : claudeGate, sink: m => this._onMsg(m) });
+  }
+  _onMsg(m) {
+    const o = this.opts;
+    try {
+      if (m.type === 'out') { if (o.onLog) o.onLog(m.text, m.cls || '', m.stream || 'task'); }
+      else if (m.type === 'fb') {
+        if (m.state === 'start') { this.plan = (m.steps || []).map(s => ({ no: s.no, name: s.name, actor: s.kind === 'claude' ? 'claude' : 'script' })); if (o.onStep) o.onStep({ kind: 'start', title: m.title, steps: this.plan }); }
+        else if (m.state === 'add') { const s = m.step || {}; (this.plan = this.plan || []).push({ no: s.no, name: s.name, actor: s.kind === 'claude' ? 'claude' : 'script' }); if (o.onStep) o.onStep({ kind: 'add', no: s.no, name: s.name, actor: s.kind === 'claude' ? 'claude' : 'script' }); }
+        else if (m.state === 'step') { const s = (this.plan || []).find(x => x.no === m.no) || { no: m.no, name: '', actor: '' }; this.step = (m.status === 'RUN' || m.status === 'REPAIR') ? { no: s.no, name: s.name, actor: m.status === 'REPAIR' ? 'claude' : s.actor, status: m.status } : null; if (o.onStep) o.onStep({ kind: 'step', no: m.no, name: s.name, actor: s.actor, status: m.status, code: m.code, sec: m.sec }); }
+        else if (m.state === 'sub') { if (o.onStep) o.onStep({ kind: 'sub', no: m.no, name: m.name }); }
+        else if (m.state === 'end') { if (o.onStep) o.onStep({ kind: 'end', ok: m.ok, warn: m.warn, summary: m.summary, sec: m.sec }); }
+      }
+      else if (m.type === 'chat' && m.role === 'meta') { if (o.onNote) o.onNote(m.text || ''); }
+      else if (m.type === 'chat' && m.role === 'assistant') { if (o.onLog) o.onLog(String(m.text || '') + '\n', '', 'claude'); }
+      else if (m.type === 'chat' && m.role === 'tool') { if (o.onLog) o.onLog(`  · ${m.text || ''}\n`, 'warn', 'claude'); }
+    } catch { }
+  }
+  /** 이 항목을 창 없이 돌릴 수 있는가 — 체인 · 작업(task) · flow 가 있는 Claude 메뉴 */
+  static supports(item) { return !!item && (item.kind === 'chain' || item.kind === 'task' || (item.kind === 'claude' && Array.isArray(item.flow) && item.flow.length > 0)); }
+  async run(item, opts) {
+    const workbench = require('./workbench'); const p = this.api.paths(); const wb = this.wb; const t0 = Date.now();
+    if (!this.id) return { ok: false, status: 'BLOCKED', summary: '화면 ID 없음', sec: 0 };
+    if (!ChainRunner.supports(item)) return { ok: false, status: 'UNSUPPORTED', summary: `창 없이 실행할 수 없는 종류: ${item && item.kind}`, sec: 0 };
+    this.running = true; this.stopped = false;
+    try {
+      if (item.kind === 'task') {
+        const code = await wb.runTaskStreaming(p, item.task, this.id, { noConfirm: true, inFlow: true });
+        const sec = Math.round((Date.now() - t0) / 1000);
+        if (code == null) return { ok: false, status: this.stopped ? 'CANCEL' : 'BLOCKED', code: null, sec, summary: this.stopped ? '중지' : '실행 안 됨(작업 없음, 작업 모드 차단, 입력 취소)' };
+        const okCodes = Array.isArray(item.okCodes) ? item.okCodes : [];
+        const ok = code === 0 || okCodes.includes(code); const fw = ok ? null : wb.takeFail(code);
+        return { ok, status: ok ? (code === 0 ? 'OK' : 'WARN') : (this.stopped ? 'CANCEL' : 'FAIL'), code, sec, summary: ok ? `완료 (exit ${code})` : `실패 (exit ${code})${fw ? ` — ${String(fw.why).split('\n')[0]}` : ''}`, fail: ok ? null : { no: 1, name: item.label, status: 'FAIL', why: fw ? fw.why : '' }, log: fw ? fw.log : '' };
+      }
+      const chain = item.kind === 'chain' ? item : { label: item.label, chainId: item.flowId || 'menuFlow', steps: item.flow };
+      wb.lastRun = null; wb.lastBlock = '';
+      await wb.runChain(p, chain, this.id, workbench.effectiveHarness(undefined, null, item, this.id), opts && opts.resume ? { resume: opts.resume } : undefined); // 2026-11-20 작업 재개
+      const lr = wb.lastRun; const sec = Math.round((Date.now() - t0) / 1000);
+      if (!lr) return { ok: false, status: this.stopped ? 'CANCEL' : 'BLOCKED', sec, summary: this.stopped ? '중지' : (wb.lastBlock || '체인이 시작되지 않음(단계 없음 · 작업 모드 차단)') };
+      const status = lr.fail ? (this.stopped ? 'CANCEL' : lr.fail.status) : lr.hold ? 'HOLD' : lr.warn ? 'WARN' : 'OK';
+      return { ok: lr.ok, status, sec, summary: lr.summary, actorNote: lr.actorNote, md: lr.md, fail: lr.fail, steps: lr.steps, repairs: lr.repairs };
+    } catch (e) {
+      return { ok: false, status: 'FAIL', sec: Math.round((Date.now() - t0) / 1000), summary: `예외: ${e.message}`, fail: { no: 0, name: item.label, status: 'FAIL', why: e.message } };
+    } finally { this.running = false; this.step = null; }
+  }
+  /** 실행 중인 프로세스·Claude 를 중지한다(서버는 서버 서비스 소유라 영향 없음) */
+  stop() { this.stopped = true; try { this.wb.stopAll(); } catch { } }
+  dispose() { try { if (this.running) this.wb.stopAll(); } catch { } this.wb.sink = null; }
+}
+
+module.exports = { ChainRunner, claudeGate, makeGate };

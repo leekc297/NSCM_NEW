@@ -1,0 +1,31 @@
+{
+ "menu_id": "SSP0005",
+ "at": "2026-11-11 15:01:10",
+ "seconds": 68,
+ "rc": 0,
+ "summary_time": "2026-11-11 15:02:18",
+ "ran": true,
+ "note": "run-e2e smoke 종료코드 1",
+ "gates": [
+  {
+   "gate": "F1 실행 증빙",
+   "result": "PASS",
+   "detail": "smoke 3행"
+  },
+  {
+   "gate": "F2 화면 열림",
+   "result": "PASS",
+   "detail": "열림 직후 콘솔 오류 43건 중 치명 0"
+  },
+  {
+   "gate": "F3 조회 1회",
+   "result": "PASS",
+   "detail": "기준 조회 call-proc 2건 [OK]"
+  },
+  {
+   "gate": "F4 smoke 세부(참고)",
+   "result": "INFO",
+   "detail": "세부 검사 FAIL 1/3행 — CheckList 판정 대상(게이트 제외): Error: As-is 병합 헤더 리터럴 노출 [Company, Division, SUM]"
+  }
+ ]
+}

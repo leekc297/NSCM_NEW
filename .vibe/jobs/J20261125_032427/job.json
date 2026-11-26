@@ -1,0 +1,61 @@
+{
+  "id": "J20261125_032427",
+  "itemLabel": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "kind": "chain",
+  "status": "done",
+  "mode": "par",
+  "maxPar": 5,
+  "onFail": "continue",
+  "autoAnswer": false,
+  "unit": "screen",
+  "inputs": {},
+  "createdAt": "2026-11-25T03:24:27+09:00",
+  "startedAt": "2026-11-25T03:24:27+09:00",
+  "endedAt": "2026-11-25T03:26:05+09:00",
+  "note": "",
+  "screens": [
+    {
+      "id": "SCP0005",
+      "status": "fail",
+      "step": "",
+      "actor": "",
+      "sec": 98,
+      "summary": "✖ 체인 중단: 1/2 '1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용) — 원인: [FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)' FAIL · 완료 0단계 · 98s",
+      "why": "[FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)",
+      "md": "Doc\\gen\\SCP0005\\FULLRUN.md",
+      "startedAt": "2026-11-25T03:24:27+09:00",
+      "endedAt": "2026-11-25T03:26:05+09:00",
+      "tries": 1,
+      "prog": "",
+      "unv": null,
+      "flow": {
+        "at": "2026-11-25T03:24:27+09:00",
+        "steps": [
+          {
+            "no": 1,
+            "name": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용)",
+            "actor": "script",
+            "st": "fail",
+            "start": "2026-11-25T03:24:27+09:00",
+            "end": "2026-11-25T03:26:05+09:00",
+            "sec": 98,
+            "prog": "",
+            "code": 3
+          },
+          {
+            "no": 2,
+            "name": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+            "actor": "script",
+            "st": "notrun",
+            "end": "2026-11-25T03:26:05+09:00",
+            "prog": ""
+          }
+        ]
+      },
+      "actorNote": "실행 주체: Script 1단계 · AI Agent 0회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 0회 호출 · 0행 · 0.00 USD(상한 없음)",
+      "log": ".vibe\\jobs\\J20261125_032427\\SCP0005.log",
+      "outputs": []
+    }
+  ],
+  "resumable": 0
+}

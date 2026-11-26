@@ -1,0 +1,69 @@
+{
+ "screen": "SCP0102",
+ "calls": [
+  {
+   "cls": "SCP0005_DistributionRoutePopup",
+   "method": "OpenDistributionRouteHistory",
+   "asis_ref": "SCP0102_BOD_Validation_Report.cs:536",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "OpenDistributionRouteHistory",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "ROUTE_ID",
+     "kind": "VAR",
+     "arg": "route_id"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": []
+  }
+ ],
+ "classes": {
+  "SCP0005_DistributionRoutePopup": {
+   "cls": "SCP0005_DistributionRoutePopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCP0005_DistributionRoutePopup.cs",
+   "title": "DistributionRoute History",
+   "conds": [],
+   "buttons": [],
+   "sps": [
+    {
+     "sp": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID.sql",
+     "order_known": true,
+     "order_keys": "from_country,from_city, TO_COUNTRY, TO_CITY, PRIORITY",
+     "order_line": "131",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_route_id"
+     ],
+     "method": "FindData",
+     "ref": "SCP0005_DistributionRoutePopup.cs:171",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

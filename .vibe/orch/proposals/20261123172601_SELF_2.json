@@ -1,0 +1,114 @@
+{
+  "id": "20261123172601_SELF_2",
+  "at": "2026-11-23T17:26:01+09:00",
+  "ms": 1795422361221,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/jobs.js|vmw동시실행기본값이n으로고정됨n줄parseintn설정상한jobmax",
+  "title": "사용자 지시 R12 같은 문제: tools/VibeManager/jobs.js:265 VMW 동시 실행 기본값이 3으로 고정됨(341줄 parseInt(...)||3). 설정 상한 jobMaxPar 5(job-runner.js:165)와 부하 판정",
+  "evidence": "규칙 R12 \"동시 실행 입장은 고정 개수 대신 PC 부하(CPU, 여유 메모리)로 정하고, 부하 초과나 같은 자원을 쓰는 작업은 대기 후 실행함\" (원래 지시 2026-11-05 20:30 \"VM 에서 E2E 동시 상한 3개 를 풀어주세요.\") · tools/VibeManager/jobs.js:265 <span class=\"mini\" title=\"${T('동시에 돌릴 최대 화면 수', 'Max screens at once')}\">${T('최대', 'max')}<input type=\"text\" id=\"mp\" value=\"3\"></span>",
+  "targets": [
+    "tools/VibeManager/jobs.js"
+  ],
+  "before_after": "init 때 mp 값을 CFG.maxPar 로 채우고 341줄 대체값도 CFG.maxPar 로 바꿈. 실제 입장은 job-runner admitWhy(CPU, 여유 메모리)가 정하게 둠",
+  "verify": "node --check tools/VibeManager/jobs.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/jobs.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T01:21:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T01:24:52+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self0121"
+    },
+    {
+      "at": "2026-11-24T01:24:55+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T01:36:28+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 jobs.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-24T01:36:28+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check jobs.js: no output → no output. run_all.js: 74/74 PASS 1161 FAIL 0 → 74/74 PASS 1161 FAIL 0 (RESULT at 2026-11-23T16:25:22Z → 2026-11-23T16:29:04Z). t_webview_syntax.js: ALL PASS 19 → ALL PASS 19. Grep after the edit: no '||3)' left in jobs.js; $('mp').value= set at line 457. · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T01-24-55_claude_orch.log",
+      "sec": 477,
+      "costUsd": 0.6324058,
+      "files": [
+        "tools/VibeManager/jobs.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:36+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "동시 실행 입장은 고정 개수 대신 PC 부하(CPU, 여유 메모리)로 정하고, 부하 초과나 같은 자원을 쓰는 작업은 대기 후 실행함 규칙을 tools/VibeManager/jobs.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R12|tools/VibeManager/jobs.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795450876254,
+  "autoFp": "e91b850f28",
+  "applyStartMs": 1795451095112,
+  "verifyJudge": {
+    "at": "2026-11-24T01:32:54+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self0121",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "jobs.js"
+  ],
+  "appliedMs": 1795451788785,
+  "synced": [
+    "jobs.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/jobs.js: no output before or after. node tools/VibeManager/test/run_all.js: 'ALL OK 파일 74/74 PASS 1161 FAIL 0' before (212.6s) and after (212.3s). node tools/VibeManager/test/t_webview_syntax.js: 19 PASS, 'ALL PASS' before and after, including jobs(ko/en) script syntax and no duplicate function names."
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/jobs.js"
+    ],
+    "verify_result": "node --check jobs.js: no output → no output. run_all.js: 74/74 PASS 1161 FAIL 0 → 74/74 PASS 1161 FAIL 0 (RESULT at 2026-11-23T16:25:22Z → 2026-11-23T16:29:04Z). t_webview_syntax.js: ALL PASS 19 → ALL PASS 19. Grep after the edit: no '||3)' left in jobs.js; $('mp').value= set at line 457.",
+    "note": "Line numbers in the proposal (265, 341) do not match the current file. The input box is at line 304 and the fallback was in two places, lines 384 (paintPar) and 488 (create message). Both fallbacks changed from ||3 to ||CFG.maxPar. Line 457: on init, after CFG=m.cfg, $('mp').value=String(CFG.maxPar) was added. The HTML start value value=\"3\" at line 304 was left as is because init replaces it. Admission is still decided by job-runner admitWhy (CPU, free memory), which was not changed."
+  },
+  "snap": "prop_20261123172601_SELF_2",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

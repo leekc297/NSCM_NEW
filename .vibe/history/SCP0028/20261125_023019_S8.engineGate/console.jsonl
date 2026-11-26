@@ -1,0 +1,12 @@
+{"t":1795541419122,"m":{"type":"out","stream":"task","text":"▶ 검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/engine_gate.py SCP0028 --check\n","cls":"cmd"}}
+{"t":1795541454420,"m":{"type":"out","stream":"task","text":"[OK] 검사기 변경 8개 · 엔진 게이트 통과: Doc/e2e/specs/_verify.spec.ts, tools/E2E/lib/langacct.ts, tools/E2E/lib/nscm.ts, tools/Harness/rules/param_map.csv, tools/Harness/rules/sp_pair.csv, tools/Harness/verify/facts_sortrules.py, tools/Harness/verify/gen_param_map.py, tools/Harness/verify/judge.py\n","cls":""}}
+{"t":1795541454432,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T02-30-19_SCP0028_9________________--mark______________________________--check________________engine_selfcheck__________________________Doc_verify__engine_changes.jsonl_.log\n","cls":"ok"}}
+{"t":1795541454515,"m":{"type":"fb","state":"step","id":2,"no":5,"status":"OK","code":0,"sec":35,"repairs":0}}
+{"t":1795541454518,"m":{"type":"out","stream":"task","text":"✅ [5/5] 5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) · 미검증 71건 · 처리 대상 66건 — OK (exit 0) · 35s\n","cls":"ok"}}
+{"t":1795541454519,"m":{"type":"fb","state":"add","id":2,"step":{"no":6,"name":"6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 71건 · 처리 대상 66건","kind":"task","optional":true}}}
+{"t":1795541454519,"m":{"type":"out","stream":"task","text":"\n── [6/6] 6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 71건 · 처리 대상 66건\n","cls":"cmd"}}
+{"t":1795541454520,"m":{"type":"fb","state":"step","id":2,"no":6,"status":"RUN"}}
+{"t":1795541455196,"m":{"type":"out","stream":"task","text":"🔌 선행 확인: BE 8080 · FE 5173 기동 중(LISTEN)\n","cls":"ok"}}
+{"t":1795541455196,"m":{"type":"chat","role":"meta","text":"🔌 E2E 선행: BE·FE 기동 확인"}}
+{"t":1795541455204,"m":{"type":"out","stream":"task","text":"▶ CheckList 수정분 재점검 — 지난 실행 뒤 바뀐 소스(FE 화면·공용, PROC, 메타, 검사기) 범위만 다시 측정(delta_scope: 기준선 대조 + AI 판단, 직전 미해결 행 규칙 포함) → 미검증 분류 · 기준선 없음·넓은 변경이면 전체 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0028 --delta --no-docs\n","cls":"cmd"}}
+{"t":1795541455564,"m":{"type":"out","stream":"task","text":"[작업 1/3] 수정분 범위 결정(delta_scope · 소스 기준선 대조 + AI 판단)\n","cls":""}}

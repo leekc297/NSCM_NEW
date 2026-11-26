@@ -53,6 +53,11 @@
         "tools/VibeManager/test/t_orch_usercheck.js",
         "tools/VibeManager/user_checks.json"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:31+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T13:55:28+09:00"
     }
   ],
   "self": true,
@@ -85,5 +90,7 @@
     "verify_result": "node test/t_orch_usercheck.js C:/Projects/NSCM/tools/VibeManager (2026-11-20 12:05:36) → ALL PASS. 시험 43건 통과, U14 통과·실패 표본 7건 포함(빈 이름 2건 실패, 이름 채움 통과, ID 와 같은 이름 실패, 웹뷰 보고 실패·통과, 메뉴 파일 없음 경고)",
     "note": "DETECTORS.screenNameMissing 추가. 목록 원본은 flow-panel targets, 24시간 안 job.json screens[].id, ui.json scr.blank 보고이고 이름 기준은 Doc/tobefacts/db/menu.csv mnu_id → mnu_desc임. 메뉴 파일이 없으면 warn. noteUi 에 tab 'scr' 보고 처리 추가함. jobs.js 웹뷰가 보고를 보내는 코드는 targets 밖이라 넣지 않았고 지금은 앞의 두 원본으로 판정함. 목록 이름을 메뉴에서 채우는 코드는 flow-panel.js:39-40 에 이미 있음. 실제 저장소 데이터로는 감지기를 실행하지 않음(flow-panel.js 가 vscode 모듈을 불러와 확장 밖에서 실행 불가). 작업 모드 DB_ONLY 이지만 tools/VibeManager 는 FE·BE 대상이 아니라 hook 차단 없음"
   },
-  "snap": "prop_20261120114810_SELF_2"
+  "snap": "prop_20261120114810_SELF_2",
+  "effectiveMs": 1795150528179,
+  "effectiveAt": "2026-11-20T13:55:28+09:00"
 }

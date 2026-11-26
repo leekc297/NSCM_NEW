@@ -18,7 +18,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -65,7 +65,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -127,14 +135,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5746,
+                  "duration": 21586,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:13:49.255Z",
+                  "startTime": "2026-11-25T17:01:07.142Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-46c18-adForm2-BTN-btnEaxel-Upload-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -142,7 +156,49 @@
           ],
           "id": "85feec5f8d5a0014d343-10dc9f2ef8975978ad08",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup CORNERS SCP0005 #0 ExcelUploadForm2 BTN:btnEaxel_Upload",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11963,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T17:01:32.582Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CORNERS-2ad50-adForm2-BTN-btnEaxel-Upload-chromium\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-d12505cdd92a56700da6",
+          "file": "eg_popup.spec.ts",
+          "line": 1098,
           "column": 9
         },
         {
@@ -163,14 +219,27 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5710,
+                  "duration": 50792,
                   "errors": [],
-                  "stdout": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/248 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:13:58.182Z",
+                  "startTime": "2026-11-25T17:01:47.172Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-5594e-tybyCountry-BTN-btnFromSrch-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -178,7 +247,49 @@
           ],
           "id": "85feec5f8d5a0014d343-36bd474b012394269406",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup CORNERS SCP0005 #1 SCM0002_CitybyCountry BTN:btnFromSrch",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13581,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T17:02:40.699Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CORNERS-c95a2-tybyCountry-BTN-btnFromSrch-chromium\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-f33d7a6fe39307445518",
+          "file": "eg_popup.spec.ts",
+          "line": 1098,
           "column": 9
         },
         {
@@ -199,14 +310,27 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5481,
+                  "duration": 50776,
                   "errors": [],
-                  "stdout": [],
+                  "stdout": [
+                    {
+                      "text": "[F4 진단-목록] egp checked=1/248 · 첫 체크 칸 item checked=false ind=true\n"
+                    },
+                    {
+                      "text": "[F4 진단] egp 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n"
+                    }
+                  ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:14:06.236Z",
+                  "startTime": "2026-11-25T17:02:57.014Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-23234-CitybyCountry-BTN-btnToSrch-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -214,7 +338,49 @@
           ],
           "id": "85feec5f8d5a0014d343-906f1cc8ea7980b739a8",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
+          "column": 9
+        },
+        {
+          "title": "@eg-popup CORNERS SCP0005 #2 SCM0002_CitybyCountry BTN:btnToSrch",
+          "ok": true,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14162,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-25T17:03:50.431Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CORNERS-2ebae-CitybyCountry-BTN-btnToSrch-chromium\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-ec36a801834179517dcb",
+          "file": "eg_popup.spec.ts",
+          "line": 1098,
           "column": 9
         },
         {
@@ -235,21 +401,27 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 52720,
+                  "duration": 50556,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/248 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
+                      "text": "[F4 진단] egp 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:14:13.986Z",
+                  "startTime": "2026-11-25T17:04:06.812Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-8fda3-byCountry-CELL-FROM-COUNTRY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -257,7 +429,7 @@
           ],
           "id": "85feec5f8d5a0014d343-1092056dd61097a578d8",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
@@ -278,14 +450,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16634,
+                  "duration": 23792,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:15:09.271Z",
+                  "startTime": "2026-11-25T17:04:59.932Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SC-2efb0-byCountry-CELL-FROM-COUNTRY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -293,7 +471,7 @@
           ],
           "id": "85feec5f8d5a0014d343-2909d89a901366b6809f",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
@@ -314,14 +492,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10795,
+                  "duration": 10007,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:15:28.314Z",
+                  "startTime": "2026-11-25T17:05:25.981Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SC-65b04-byCountry-CELL-FROM-COUNTRY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -329,7 +513,7 @@
           ],
           "id": "85feec5f8d5a0014d343-e2b1340c5e573950476e",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
@@ -350,14 +534,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 20148,
+                  "duration": 20592,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:15:41.470Z",
+                  "startTime": "2026-11-25T17:05:38.180Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-1a544-ionRoutePopup-CELL-ROUTE-ID-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -365,7 +555,7 @@
           ],
           "id": "85feec5f8d5a0014d343-b495c373db6baa8f2d69",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
@@ -386,14 +576,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 20163,
+                  "duration": 20570,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:16:03.778Z",
+                  "startTime": "2026-11-25T17:06:00.937Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SC-237c9-ionRoutePopup-CELL-ROUTE-ID-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -401,7 +597,7 @@
           ],
           "id": "85feec5f8d5a0014d343-109be23a1f49f10d81c1",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
@@ -422,14 +618,20 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12264,
+                  "duration": 12564,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:16:26.132Z",
+                  "startTime": "2026-11-25T17:06:23.635Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SC-ca70d-ionRoutePopup-CELL-ROUTE-ID-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
@@ -437,11 +639,11 @@
           ],
           "id": "85feec5f8d5a0014d343-d5e1ef74c6b15c4f9a04",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup MAIN SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY",
+          "title": "@eg-popup MAIN SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -458,33 +660,39 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 53115,
+                  "duration": 51715,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/248 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
+                      "text": "[F4 진단] egp 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:16:40.797Z",
+                  "startTime": "2026-11-25T17:06:38.341Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-6e9f6-itybyCountry-CELL-FROM-CITY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-108d0318e527bd570ce2",
+          "id": "85feec5f8d5a0014d343-70beb3f28f3e842fe22e",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup PICK SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY",
+          "title": "@eg-popup PICK SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -501,26 +709,32 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16518,
+                  "duration": 23662,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:17:36.394Z",
+                  "startTime": "2026-11-25T17:07:32.353Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SC-6b326-itybyCountry-CELL-FROM-CITY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-e93d88f3a8f2f29be58e",
+          "id": "85feec5f8d5a0014d343-741b91a1b447ac939bf5",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup CELL SCP0005 #100 (TO-BE 메타 팝업) CELL:FROM_CITY",
+          "title": "@eg-popup CELL SCP0005 #5 SCM0002_CitybyCountry CELL:FROM_CITY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -537,26 +751,32 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10383,
+                  "duration": 9758,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:17:55.217Z",
+                  "startTime": "2026-11-25T17:07:58.380Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SC-a8cb9-itybyCountry-CELL-FROM-CITY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-dd8fb2513d62ba28dda0",
+          "id": "85feec5f8d5a0014d343-1c545b5005c9159edbd2",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup MAIN SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "title": "@eg-popup MAIN SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -573,33 +793,39 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 52055,
+                  "duration": 51796,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/248 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
+                      "text": "[F4 진단] egp 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:18:07.911Z",
+                  "startTime": "2026-11-25T17:08:10.361Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-21e3b--CitybyCountry-CELL-TO-CITY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-941fb26a8c4dad9c93f6",
+          "id": "85feec5f8d5a0014d343-ed7414d87945565c518e",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup PICK SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "title": "@eg-popup PICK SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -616,26 +842,32 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16495,
+                  "duration": 23948,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:19:02.484Z",
+                  "startTime": "2026-11-25T17:09:04.435Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SC-eb16f--CitybyCountry-CELL-TO-CITY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-b62d70882e6870fe67d1",
+          "id": "85feec5f8d5a0014d343-4f4b8d73ced1a2d5f54c",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup CELL SCP0005 #101 (TO-BE 메타 팝업) CELL:TO_COUNTRY",
+          "title": "@eg-popup CELL SCP0005 #6 SCM0002_CitybyCountry CELL:TO_CITY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -652,26 +884,32 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10832,
+                  "duration": 10339,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:19:21.543Z",
+                  "startTime": "2026-11-25T17:09:30.617Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SC-1a530--CitybyCountry-CELL-TO-CITY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-86985cb0001ff2773b5a",
+          "id": "85feec5f8d5a0014d343-49231b0ac2cb412e7c92",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup MAIN SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "title": "@eg-popup MAIN SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -688,33 +926,39 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 52769,
+                  "duration": 50905,
                   "errors": [],
                   "stdout": [
                     {
-                      "text": "[F4 진단-목록] egp checked=1/258 · 첫 체크 칸 item checked=false ind=true\n"
+                      "text": "[F4 진단-목록] egp checked=1/248 · 첫 체크 칸 item checked=false ind=true\n"
                     },
                     {
-                      "text": "[F4 진단] egp 값 목록 259 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 2 · filter=function items=2 src=89431\n"
+                      "text": "[F4 진단] egp 값 목록 249 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 56 · filter=function items=56 src=89417\n"
                     }
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:19:34.779Z",
+                  "startTime": "2026-11-25T17:09:43.218Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-MAIN-SC-6f094-tybyCountry-CELL-TO-COUNTRY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-5db38f1dfd3fda4b9a41",
+          "id": "85feec5f8d5a0014d343-c6b4f8489b946b3051bd",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup PICK SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "title": "@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -731,26 +975,32 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16633,
+                  "duration": 23765,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:20:29.948Z",
+                  "startTime": "2026-11-25T17:10:36.403Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-PICK-SC-11d4b-tybyCountry-CELL-TO-COUNTRY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-2341077df54cb8fc949c",
+          "id": "85feec5f8d5a0014d343-58d8c4e6f2115b4da736",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         },
         {
-          "title": "@eg-popup CELL SCP0005 #102 (TO-BE 메타 팝업) CELL:TO_CITY",
+          "title": "@eg-popup CELL SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY",
           "ok": true,
           "tags": [
             "eg-popup"
@@ -767,22 +1017,28 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11152,
+                  "duration": 10127,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-19T22:20:48.980Z",
+                  "startTime": "2026-11-25T17:11:02.384Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\popup\\artifacts\\eg_popup--eg-popup-CELL-SC-1f275-tybyCountry-CELL-TO-COUNTRY-chromium\\video.webm"
+                    }
+                  ]
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "85feec5f8d5a0014d343-4e9d52bb649c8b4dabb6",
+          "id": "85feec5f8d5a0014d343-a5d409fed790962bd2ff",
           "file": "eg_popup.spec.ts",
-          "line": 956,
+          "line": 1098,
           "column": 9
         }
       ]
@@ -790,9 +1046,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T22:13:48.778Z",
-    "duration": 434062.984,
-    "expected": 18,
+    "startTime": "2026-11-25T17:01:06.416Z",
+    "duration": 608521.882,
+    "expected": 21,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

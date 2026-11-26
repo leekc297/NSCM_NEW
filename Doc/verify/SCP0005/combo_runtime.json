@@ -1,5 +1,5 @@
 {
- "at": "2026-11-20T00:21:55.199Z",
+ "at": "2026-11-25T16:31:36.372Z",
  "search": {
   "Valid": {
    "label": "Valid",
@@ -500,9 +500,9 @@
   }
  },
  "rr": {
-  "grid": "20261120090620",
-  "combos": "20261120090620",
-  "search": "20261120061910"
+  "grid": "20261126011249",
+  "combos": "20261126011249",
+  "search": "20261126011249"
  },
  "combos": [
   {
@@ -524,7 +524,32 @@
      "v": "N"
     }
    ],
-   "user": "minyonglee1"
+   "user": "brightboy"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LtType\",\"mnuId\":\"SCP0005\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AVERAGE",
+     "v": "AVERAGE"
+    },
+    {
+     "c": "MIN",
+     "v": "MIN"
+    },
+    {
+     "c": "MAX",
+     "v": "MAX"
+    }
+   ],
+   "user": "brightboy"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
@@ -557,32 +582,7 @@
      "v": "RAIL"
     }
    ],
-   "user": "minyonglee1"
-  },
-  {
-   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
-   "body": "{\"comboId\":\"LtType\",\"mnuId\":\"SCP0005\",\"validYn\":\"'Y'\"}",
-   "status": 200,
-   "n": 3,
-   "keys": [
-    "CODE",
-    "NAME"
-   ],
-   "rows": [
-    {
-     "c": "AVERAGE",
-     "v": "AVERAGE"
-    },
-    {
-     "c": "MIN",
-     "v": "MIN"
-    },
-    {
-     "c": "MAX",
-     "v": "MAX"
-    }
-   ],
-   "user": "minyonglee1"
+   "user": "brightboy"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
@@ -615,7 +615,7 @@
      "v": "RAIL"
     }
    ],
-   "user": "minyonglee1"
+   "user": "brightboy"
   }
  ]
 }

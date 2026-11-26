@@ -1,0 +1,41 @@
+{
+  "id": "20261126162413_SELF_2",
+  "at": "2026-11-26T16:24:13+09:00",
+  "ms": 1795677853903,
+  "source": "self",
+  "status": "pending",
+  "sig": "userrule|rn|tools/vibemanager/orch selfcheck.js|승인대상n종hooksettingsjsondb시험계정작업모드밖인orchse",
+  "title": "사용자 지시 R248 같은 문제: tools/VibeManager/orch-selfcheck.js:538 승인 대상 5종(hook, settings.json, DB, 시험 계정, 작업 모드) 밖인 orch-selfcheck.js·orch-improve.js 의 자동 ",
+  "evidence": "규칙 R248 \"VMO 작업 범위 제한은 승인 대상(hook, settings.json, DB, 시험 계정, 작업 모드)만 두고 그 밖의 보완, 기능 추가는 스스로 진행함\" (원래 지시 2026-11-26 16:03 \"여기서 특정한 일은 하면 안된다던지 하는 것은 없습니다 .\") · tools/VibeManager/orch-selfcheck.js:538 if (changesApprovalRule(pr, ts)) return { ok: false, why: 'VM 핵심 규칙 변경(VMO 자동 반영, 승인 기준) = 사용자 승인' };",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js"
+  ],
+  "before_after": "538 분기를 coreAuto 가 꺼졌을 때만 타게 바꿈(if (!coreAuto && changesApprovalRule(pr, ts))). 5종 판정(AUTO_DENY, touchesWorkMode, settings.json, .sql)은 그대로 둠",
+  "verify": "node --check tools/VibeManager/orch-selfcheck.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-selfcheck.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:26:23+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    }
+  ],
+  "plain": {
+    "what": "VMO 작업 범위 제한은 승인 대상(hook, settings.json, DB, 시험 계정, 작업 모드)만 두고 그 밖의 보완, 기능 추가는 스스로 진행함 규칙을 tools/VibeManager/orch-selfcheck.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R248|tools/VibeManager/orch-selfcheck.js",
+  "kind": "fix",
+  "needsApproval": "VM 핵심 규칙 변경(VMO 자동 반영, 승인 기준) = 사용자 승인",
+  "claimedBy": "3acd3c",
+  "autoWaitMs": 1795706783221,
+  "waitNote": "Claude Code 세션 3acd3c 가 직접 보완 중"
+}

@@ -1,0 +1,384 @@
+# -*- coding: utf-8 -*-
+"""운영자 매뉴얼 구성 규칙(2026-11-24 사용자 확정). ops_manual.py 가 부름.
+
+  장 구성(OPS): 업무 개요, 전체 업무 흐름, 프로세스 구조, UI 메뉴 구조, 배치 잡 구조, 시간대별 실행표, 데이터 구조, 인터페이스,
+  일상 운영 점검표, 장애 대응, 로그와 모니터링, 기준 정보 관리, 권한과 메뉴 관리, 연락처와 담당 부서, 변경 이력과 산출물, 부록 A 잡별 배치 흐름도.
+  - 배치 기준 = AS-IS(SQL Server Agent 잡). TO-BE 실행 방식은 사용자가 확인 뒤 바꿈.
+  - 연락처와 담당 부서 = 장표와 표 모양만(빈 칸). 내용을 채우지 않음.
+  - 본문은 업무 프로세스 단위로 묶고, 잡별 상세 흐름도는 부록 A.
+  - 담당: ai = AI 단계가 content/chapters.json 에 씀 · gen = 생성기가 사실 자료로 만듦(AI 는 notes 로 설명만 보탬, 장 앞에 장표를 더할 수 있음) · layout = 모양만
+"""
+import os, re, csv, glob
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+BATCH = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'batch')
+DDL_DIR = os.path.join(ROOT, 'Doc', '_legacy_source', 'DB_DDL')
+OPS = [
+    ('C1', '업무 개요', 'ai'), ('C2', '전체 업무 흐름', 'ai'), ('C3', '프로세스 구조', 'ai'), ('C4', 'UI 메뉴 구조', 'gen'),
+    ('C5', '배치 잡 구조', 'gen'), ('C6', '시간대별 실행표', 'gen'), ('C7', '데이터 구조', 'gen'), ('C8', '인터페이스', 'gen'),
+    ('C9', '일상 운영 점검표', 'ai'), ('C10', '장애 대응', 'ai'), ('C11', '로그와 모니터링', 'ai'), ('C12', '기준 정보 관리', 'ai'),
+    ('C13', '권한과 메뉴 관리', 'ai'), ('C14', '연락처와 담당 부서', 'layout'), ('C15', '변경 이력과 산출물', 'gen'), ('A', '부록 A. 잡별 배치 흐름도', 'gen'),
+]
+AI_REQ = [c for c, _, o in OPS if o == 'ai']
+# 업무 프로세스 기본 묶음(잡 이름 + 실행 SP 기준, 위에서부터 첫 일치). AI 가 content.processOf 로 바꿀 수 있음
+PROC_RULES = [('컷오프', r'CUTOFF'), ('메일과 SMS 알림', r'MAIL|SMS'), ('인터페이스 수신', r'_XIF_\w*?_R(?:_|\b)|EDI|NERP|_R\b'),
+              ('인터페이스 송신', r'_XIF_\w*?_S(?:_|\b)|_S\b|SEND\b'), ('분석과 KPI', r'_ANL_|KPI|SUMMARY'), ('기준 정보 동기화', r'_MST_|SYNC|4MCC|MAPPING'),
+              ('계획 생성', r'_PLN_|FCST|PLAN'), ('기타', r'')]
+PROC_ORDER = ['기준 정보 동기화', '인터페이스 수신', '계획 생성', '컷오프', '인터페이스 송신', '분석과 KPI', '메일과 SMS 알림', '기타']
+DOW = ['일', '월', '화', '수', '목', '금', '토']
+TBL_KIND = [(r'XIF|_DNM_|_IF\b|_IF_', '인터페이스'), (r'_PLN_', '계획'), (r'_MST_|LOOKUP', '기준 정보'), (r'_ANL_|KPI', '분석'), (r'LOG', '로그'), (r'_BPS_', '사업 계획')]
+CONTACT_COLS = ['구분', '시스템', '담당 부서', '담당자', '연락처', '비고']
+NOTE_KEYS = ('screenNotes', 'jobNotes', 'tableNotes', 'processOf', 'processOrder')
+SYS_SP = re.compile(r'^SP_|^XP_', re.I)  # SQL Server 시스템 프로시저(sp_start_job, sp_executesql)
+NO_DESC = re.compile(r'^\s*$|설명이 없습니다|No description', re.I)
+SQL_KW = {'SELECT', 'WHERE', 'SET', 'VALUES', 'TOP', 'WITH', 'AS', 'ON', 'AND', 'OR', 'NOT', 'NULL', 'EXISTS', 'OPENQUERY', 'DUAL', 'INSERTED', 'DELETED', 'OUTPUT', 'STRING_SPLIT', 'OPENJSON'}
+
+
+def rcsv(f):
+    try:
+        with open(f, encoding='utf-8-sig', newline='') as fh:
+            return list(csv.DictReader(fh))
+    except Exception:
+        return []
+
+
+def wcsv(path, rows, cols):
+    with open(path, 'w', encoding='utf-8-sig', newline='') as fh:
+        w = csv.DictWriter(fh, fieldnames=cols, extrasaction='ignore'); w.writeheader()
+        for r in rows:
+            w.writerow(r)
+
+
+def srcp(key, n):
+    """근거 경로(저장소 기준). OPS_MANUAL_OUT 이면 그 폴더 기준"""
+    base = os.environ.get('OPS_MANUAL_OUT') or os.path.join(ROOT, 'Doc', 'OpsManual')
+    return os.path.relpath(os.path.join(base, key, 'facts', n), ROOT).replace(os.sep, '/')
+
+
+def proc_of(job, execs):
+    s = (job + ' ' + ' '.join(execs)).upper()
+    for name, rx in PROC_RULES:
+        if not rx or re.search(rx, s):
+            return name
+    return '기타'
+
+
+def hhmm(v):
+    try:
+        v = int(v)
+    except Exception:
+        return ''
+    return f'{v // 10000:02d}:{(v // 100) % 100:02d}'
+
+
+def sched_info(s):
+    """msdb.sysschedules 한 줄 → { days, every, times, hours, on }"""
+    try:
+        ft, fi, st, si = int(s['freq_type']), int(s['freq_interval']), int(s['freq_subday_type']), int(s['freq_subday_interval'])
+        rf = int(s.get('freq_recurrence_factor') or 0); a, b = int(s['active_start_time']), int(s['active_end_time'])
+    except Exception:
+        return {'days': '해독 불가', 'every': '', 'times': [], 'hours': [], 'on': s.get('enabled') == '1'}
+    days = {1: '1회', 4: '매일' if fi == 1 else f'{fi}일마다', 8: (f'{rf}주마다 ' if rf > 1 else '') + ','.join(d for i, d in enumerate(DOW) if fi & (1 << i)),
+            16: f'매월 {fi}일', 32: '매월 상대일', 64: 'Agent 시작 때', 128: '유휴 때'}.get(ft, f'freq_type {ft}')
+    if st in (2, 4, 8):
+        unit = {2: '초', 4: '분', 8: '시간'}[st]
+        return {'days': days, 'every': f'{si}{unit}마다 {hhmm(a)}~{hhmm(b)}', 'times': [], 'hours': list(range(a // 10000, b // 10000 + 1)), 'on': s.get('enabled') == '1'}
+    return {'days': days, 'every': '', 'times': [hhmm(a)], 'hours': [a // 10000], 'on': s.get('enabled') == '1'}
+
+
+# ───────────────────────── AS-IS SP 본문(읽기, 쓰기 테이블) ─────────────────────────
+_DDL = None
+
+
+def ddl_index():
+    """AS-IS SP DDL 파일(Doc/_legacy_source/DB_DDL/AsIs_*SP*_DDL.sql) → { SP이름: (파일, 시작, 끝) }"""
+    global _DDL
+    if _DDL is not None:
+        return _DDL
+    _DDL = {}
+    for f in sorted(glob.glob(os.path.join(DDL_DIR, 'AsIs_*SP*_DDL.sql'))):
+        try:
+            t = open(f, encoding='utf-8', errors='ignore').read()
+        except Exception:
+            continue
+        ms = list(re.finditer(r'(?im)^\s*CREATE\s+(?:OR\s+ALTER\s+)?PROC(?:EDURE)?\s+(?:\[?\w+\]?\.)?\[?(\w+)\]?', t))
+        for i, m in enumerate(ms):
+            _DDL.setdefault(m.group(1).upper(), (f, m.start(), ms[i + 1].start() if i + 1 < len(ms) else len(t)))
+    return _DDL
+
+
+_TXT = {}
+
+
+def sp_body(name):
+    ix = ddl_index().get(name.upper())
+    if not ix:
+        return ''
+    f, a, b = ix
+    if f not in _TXT:
+        _TXT[f] = open(f, encoding='utf-8', errors='ignore').read()
+    return _TXT[f][a:b]
+
+
+def tbl_names(rx, body):
+    out = set()
+    for m in re.finditer(rx, body):
+        n = m.group(1).upper()
+        if n.startswith(('#', '@')) or n in SQL_KW or len(n) < 4 or '_' not in n:
+            continue
+        out.add(n)
+    return out
+
+
+def sp_io(name):
+    """SP 본문 문자열 기준 쓰기, 읽기 테이블(INSERT, UPDATE, MERGE, DELETE, TRUNCATE = 쓰기 · FROM, JOIN = 읽기). 본문 없으면 (None, None)"""
+    b = re.sub(r'(?s)/\*.*?\*/', ' ', sp_body(name)); b = re.sub(r'--[^\n]*', ' ', b)
+    if not b.strip():
+        return None, None
+    w = tbl_names(r'(?is)\b(?:INSERT\s+(?:INTO\s+)?|UPDATE\s+|MERGE\s+(?:INTO\s+)?|DELETE\s+(?:FROM\s+)?|TRUNCATE\s+TABLE\s+)(?:\[?\w+\]?\.)?(?:\[?\w+\]?\.)?\[?([#@]?\w+)\]?', b)
+    cur = {m.upper() for m in re.findall(r'(?is)\bDECLARE\s+(\w+)\s+(?:INSENSITIVE\s+|SCROLL\s+)*CURSOR\b', b)}  # 커서 이름 = 테이블 아님
+    r = tbl_names(r'(?is)(?<!FETCH\s)(?<!NEXT\s)\b(?:FROM|JOIN)\s+(?:\[?\w+\]?\.)?(?:\[?\w+\]?\.)?\[?([#@]?\w+)\]?', b) - w - cur
+    return sorted(w - cur), sorted(r)
+
+
+# ───────────────────────── 사실 수집(prep) ─────────────────────────
+def collect(d, plan, S, B, common_rx):
+    """facts/jobs.csv, timeline.csv, job_links.csv, sp_tables.csv, tables.csv. 반환 요약 dict"""
+    jobs_meta = {j['name']: j for j in rcsv(os.path.join(BATCH, 'agent_jobs.csv'))}
+    hist = {h['job_name']: h for h in rcsv(os.path.join(BATCH, 'agent_jobhistory_summary.csv'))}
+    sch = {}
+    for s in rcsv(os.path.join(BATCH, 'agent_schedules.csv')):
+        sch.setdefault(s['job_name'], []).append(s)
+    mods_jobs = {}
+    for b in B:
+        mods_jobs.setdefault(b['job'], []).append(b)
+    steps_cmd = {}
+    for st in rcsv(os.path.join(BATCH, 'agent_jobsteps.csv')):
+        if st['job_name'] in mods_jobs:
+            steps_cmd.setdefault(st['job_name'], []).append(st.get('command') or '')
+    J, T, L, SPT = [], [], [], {}
+    for job, st in mods_jobs.items():
+        execs = [x for b in st for x in b['exec'].split(', ') if x and not SYS_SP.match(x)]
+        meta = jobs_meta.get(job, {}); h = hist.get(job, {})
+        J.append({'job': job, 'module': st[0]['module'], 'process': proc_of(job, execs), 'enabled': meta.get('enabled', ''), 'desc': (meta.get('description') or '').replace('\r', ' ').replace('\n', ' ')[:300],
+                  'schedule': st[0]['schedule'], 'steps': len(st), 'exec': ', '.join(dict.fromkeys(execs)), 'ext': next((b['ext'] for b in st if b['ext']), ''),
+                  'runs': h.get('runs', ''), 'failed': h.get('failed', ''), 'lastOutcome': st[-1]['lastOutcome'], 'lastRun': st[-1]['lastRun']})
+        for s in sch.get(job, []) or [{}]:
+            if not s:
+                T.append({'job': job, 'jobOn': meta.get('enabled', ''), 'on': '', 'days': '스케줄 없음', 'every': '', 'times': '', 'hours': ''}); continue
+            i = sched_info(s)
+            T.append({'job': job, 'jobOn': meta.get('enabled', ''), 'on': '1' if i['on'] else '0', 'days': i['days'], 'every': i['every'], 'times': ' '.join(i['times']), 'hours': ' '.join(str(x) for x in i['hours'])})
+        for cmd in steps_cmd.get(job, []):
+            for m in re.finditer(r"(?i)sp_start_job\s+(?:@job_name\s*=\s*)?N?'([^']+)'", cmd):
+                L.append({'from': job, 'to': m.group(1), 'how': 'sp_start_job'})
+        for sp in dict.fromkeys(execs):
+            if sp not in SPT:
+                w, r = sp_io(sp)
+                SPT[sp] = {'sp': sp, 'found': 'Y' if w is not None else 'N', 'writes': ' '.join(w or []), 'reads': ' '.join(r or [])}
+    tables = {}
+
+    def tb(n):
+        return tables.setdefault(n, {'table': n, 'kind': next((k for rx, k in TBL_KIND if re.search(rx, n)), '기타'), 'screenWrites': set(), 'screenReads': set(), 'batchWrites': set(), 'batchReads': set()})
+    for s in S:
+        for t in s['writes'].split():
+            if not common_rx.search(t):
+                tb(t)['screenWrites'].add(s['id'])
+        for t in s['reads'].split():
+            if not common_rx.search(t) and t in tables:
+                tables[t]['screenReads'].add(s['id'])
+    for sp in SPT.values():
+        for t in sp['writes'].split():
+            if not common_rx.search(t):
+                tb(t)['batchWrites'].add(sp['sp'])
+    for sp in SPT.values():
+        for t in sp['reads'].split():
+            if t in tables:
+                tables[t]['batchReads'].add(sp['sp'])
+    for s in S:  # 쓰는 곳이 생긴 뒤 화면 읽기 다시
+        for t in s['reads'].split():
+            if t in tables:
+                tables[t]['screenReads'].add(s['id'])
+    TB = [{k: (' '.join(sorted(v)) if isinstance(v, set) else v) for k, v in x.items()} for x in sorted(tables.values(), key=lambda x: (x['kind'], x['table']))]
+    wcsv(os.path.join(d, 'facts', 'jobs.csv'), J, ['job', 'module', 'process', 'enabled', 'desc', 'schedule', 'steps', 'exec', 'ext', 'runs', 'failed', 'lastOutcome', 'lastRun'])
+    wcsv(os.path.join(d, 'facts', 'timeline.csv'), T, ['job', 'jobOn', 'on', 'days', 'every', 'times', 'hours'])
+    wcsv(os.path.join(d, 'facts', 'job_links.csv'), L, ['from', 'to', 'how'])
+    wcsv(os.path.join(d, 'facts', 'sp_tables.csv'), list(SPT.values()), ['sp', 'found', 'writes', 'reads'])
+    wcsv(os.path.join(d, 'facts', 'tables.csv'), TB, ['table', 'kind', 'screenWrites', 'screenReads', 'batchWrites', 'batchReads'])
+    return {'jobs': len(J), 'schedules': len(T), 'links': len(L), 'sps': len(SPT), 'spFound': sum(1 for x in SPT.values() if x['found'] == 'Y'), 'tables': len(TB),
+            'processes': sorted({j['process'] for j in J}, key=lambda p: PROC_ORDER.index(p) if p in PROC_ORDER else 99)}
+
+
+def facts(d):
+    f = lambda n: rcsv(os.path.join(d, 'facts', n))
+    return {'S': f('screens.csv'), 'J': f('jobs.csv'), 'T': f('timeline.csv'), 'L': f('job_links.csv'), 'SPT': f('sp_tables.csv'), 'TB': f('tables.csv'), 'B': f('batch.csv'), 'E': f('flow_edges.csv')}
+
+
+def processes(F, content):
+    po = (content or {}).get('processOf') or {}
+    for j in F['J']:
+        j['process'] = po.get(j['job']) or j['process']
+    order = list((content or {}).get('processOrder') or []) + [p for p in PROC_ORDER]
+    names = []
+    for j in F['J']:
+        if j['process'] not in names:
+            names.append(j['process'])
+    return sorted(names, key=lambda p: order.index(p) if p in order else 99)
+
+
+# ───────────────────────── 자동 초안(AI 장) ─────────────────────────
+def auto_draft(plan, F, key):
+    src = lambda n: srcp(key, n)
+    procs = processes(F, None); chs = []
+    chs.append({'id': 'C1', 'title': '1. 업무 개요', 'slides': [{'kind': 'text', 'title': '1. 업무 개요', 'lines': ['작성 필요(AI 단계)'], 'src': [src('screens.csv'), src('jobs.csv')]}]})
+    nodes = [{'id': p, 'label': p, 'sub': f'잡 {sum(1 for j in F["J"] if j["process"] == p)}개'} for p in procs]
+    chs.append({'id': 'C2', 'title': '2. 전체 업무 흐름', 'slides': [{'kind': 'flow', 'title': '2. 전체 업무 흐름', 'nodes': nodes, 'edges': [{'from': procs[i], 'to': procs[i + 1], 'label': ''} for i in range(len(procs) - 1)], 'notes': ['작성 필요(AI 단계)'], 'src': [src('jobs.csv'), src('flow_edges.csv')]}]})
+    sl = []
+    for p in procs:
+        js = [j for j in F['J'] if j['process'] == p]
+        sl.append({'kind': 'divider', 'title': p})
+        sl.append({'kind': 'flow', 'title': f'3. 프로세스 구조 - {p}', 'nodes': [{'id': j['job'], 'label': j['job'][:40], 'sub': j['schedule'][:30]} for j in js[:15]], 'edges': [], 'notes': ['작성 필요(AI 단계)'], 'src': [src('jobs.csv'), src('sp_tables.csv')]})
+    chs.append({'id': 'C3', 'title': '3. 프로세스 구조', 'slides': sl})
+    for cid, t, o in OPS:
+        if o == 'ai' and cid not in ('C1', 'C2', 'C3'):
+            n = cid[1:]
+            chs.append({'id': cid, 'title': f'{n}. {t}', 'slides': [{'kind': 'text', 'title': f'{n}. {t}', 'lines': ['작성 필요(AI 단계)'], 'src': [src('jobs.csv')]}]})
+    return {'key': key, 'auto': True, 'screenNotes': {}, 'jobNotes': {}, 'tableNotes': {}, 'processOf': {}, 'processOrder': procs, 'chapters': chs}
+
+
+# ───────────────────────── 생성기 장(gen, layout) ─────────────────────────
+def gen_chapter(cid, plan, F, content, key):
+    src = lambda n: srcp(key, n)
+    sn = content.get('screenNotes') or {}; jn = content.get('jobNotes') or {}; tn = content.get('tableNotes') or {}
+    S, J, T, L, TB = F['S'], F['J'], F['T'], F['L'], F['TB']
+    if cid == 'C4':
+        sl = []
+        for top in dict.fromkeys(s['top'] for s in S):
+            gs = list(dict.fromkeys(s['group'] for s in S if s['top'] == top)); hub = f'top:{top}'
+            sl.append({'kind': 'flow', 'layout': 'hub', 'title': f'4. UI 메뉴 구조 - {top}', 'nodes': [{'id': g, 'label': g, 'sub': f'화면 {sum(1 for s in S if s["group"] == g and s["top"] == top)}개'} for g in gs] + [{'id': hub, 'label': top, 'sub': 'Level1', 'hub': True}],
+                       'edges': [{'from': hub, 'to': g, 'label': ''} for g in gs], 'src': [src('screens.csv')]})
+        sl.append({'kind': 'table', 'title': '4. UI 메뉴 구조 - 화면 목록', 'columns': ['Level1', 'Level2', '화면 ID', '화면명', '저장 대상 테이블', '역할'],
+                   'rows': [[s['top'], s['group'], s['id'], s['name'], ' '.join(s['writes'].split()[:4]) or '조회 전용', sn.get(s['id'], '')] for s in S], 'src': [src('screens.csv')]})
+        return sl
+    if cid == 'C5':
+        # 사용 여부 칸 없음: AS-IS 추출 원천 = 개발 DB(LGCE_SCMDEV) 라 90개 잡 전부 '사용 안 함'(운영 미확인)
+        rows = [[j['job'], j['process'], j['schedule'][:50], j['steps'], j['exec'][:60], (j['desc'] if not NO_DESC.search(j['desc']) else jn.get(j['job'], ''))[:80]] for j in J]
+        sl = [{'kind': 'table', 'title': '5. 배치 잡 구조 - 잡 목록', 'columns': ['잡', '프로세스', '스케줄', '단계', '실행 SP', '설명'], 'rows': rows, 'src': [src('jobs.csv')]}]
+        if L:
+            ns = list(dict.fromkeys([x['from'] for x in L] + [x['to'] for x in L]))
+            sl.append({'kind': 'flow', 'title': '5. 배치 잡 구조 - 잡 호출 관계', 'nodes': [{'id': n, 'label': n[:40], 'sub': ''} for n in ns], 'edges': [{'from': x['from'], 'to': x['to'], 'label': 'sp_start_job'} for x in L], 'src': [src('job_links.csv')]})
+        return sl
+    if cid == 'C6':
+        # AS-IS 잡 추출 원천 = 개발 DB(LGCE_SCMDEV, Doc/asisfacts/db/batch/_extract_log.md). 사용 여부는 개발 DB 값이라 실행표, 요약에 쓰지 않음(운영 미확인)
+        bands = [(0, 6), (6, 12), (12, 18), (18, 24)]; on = [t for t in T if t['days'] != '스케줄 없음']
+        cnt = [[sum(1 for t in on if any(a <= int(h) < b for h in t['hours'].split())) for a, b in bands]]
+        sl = [{'kind': 'table', 'title': '6. 시간대별 실행표 - 시간대 요약', 'columns': ['구분'] + [f'{a:02d}~{b:02d}시' for a, b in bands] + ['스케줄 없음'],
+               'rows': [['스케줄 수'] + [str(x) for x in cnt[0]] + [str(sum(1 for t in T if t['days'] == '스케줄 없음'))]], 'src': [src('timeline.csv')]}]
+        rows = sorted(T, key=lambda t: (t['days'] == '스케줄 없음', int((t['hours'].split() or ['99'])[0]), t['job']))
+        sl.append({'kind': 'timeline', 'title': '6. 시간대별 실행표', 'rows': [{'job': t['job'], 'days': t['days'], 'every': t['every'], 'times': t['times'].split(), 'hours': [int(h) for h in t['hours'].split()], 'on': True} for t in rows], 'src': [src('timeline.csv')]})
+        return sl
+    if cid == 'C7':
+        return [{'kind': 'table', 'title': '7. 데이터 구조 - 테이블', 'columns': ['테이블', '구분', '쓰는 화면', '읽는 화면', '쓰는 배치 SP', '역할'],
+                 'rows': [[t['table'], t['kind'], t['screenWrites'][:30], t['screenReads'][:30], t['batchWrites'][:40], tn.get(t['table'], '')[:60]] for t in TB], 'src': [src('tables.csv'), src('sp_tables.csv')]}]
+    if cid == 'C8':
+        ext = {}
+        for j in J:
+            if j['ext']:
+                ext.setdefault(j['ext'], []).append(j)
+        ext = {x: v for x, v in ext.items() if x not in plan['mods']}
+        hub = 'NSCM_' + '_'.join(plan['mods'])
+        nodes = [{'id': x, 'label': x, 'sub': f'잡 {len(v)}개'} for x, v in ext.items()] + [{'id': hub, 'label': 'NSCM ' + ', '.join(plan['mods']), 'sub': 'AS-IS 배치 기준', 'hub': True}]
+        edges = []
+        for x, v in ext.items():
+            rc = [j for j in v if j['process'] == '인터페이스 수신']; sd = [j for j in v if j not in rc]
+            if rc:
+                edges.append({'from': x, 'to': hub, 'label': ', '.join(j['exec'].split(', ')[0] for j in rc[:2])})
+            if sd:
+                edges.append({'from': hub, 'to': x, 'label': ', '.join(j['exec'].split(', ')[0] for j in sd[:2])})
+        tbl = [[x, j['job'], j['process'], j['schedule'][:40], j['exec'][:60]] for x, v in ext.items() for j in v]
+        return [{'kind': 'flow', 'layout': 'hub', 'title': '8. 인터페이스 구성도', 'nodes': nodes, 'edges': edges, 'src': [src('jobs.csv')]},
+                {'kind': 'table', 'title': '8. 인터페이스 - 잡 목록', 'columns': ['외부 시스템', '잡', '구분', '스케줄', '실행 SP'], 'rows': tbl or [['해당 없음', '', '', '', '']], 'src': [src('jobs.csv')]}]
+    if cid == 'C14':
+        return [{'kind': 'table', 'title': '14. 연락처와 담당 부서', 'columns': CONTACT_COLS, 'rows': [[''] * len(CONTACT_COLS) for _ in range(10)], 'src': [], 'layoutOnly': True}]
+    if cid == 'C15':
+        rows = []
+        pre = {'DM': ('DMF', 'DMD'), 'SCP': ('SCP',), 'SSP': ('SSP',), 'SYSTEM': ('SYS',)}
+        ids = [s['id'] for s in S]
+        for label, pat in (('화면분석서', 'Doc/화면분석서/*'), ('화면설계서', 'Doc/화면설계서/*'), ('UI CheckList', 'Doc/UI_CHECKLIST/*'), ('사용자 매뉴얼', 'Doc/UserManual/*/*.pptx'), ('운영자 매뉴얼', 'Doc/OpsManual/*/*.pptx')):
+            fs = [f for f in glob.glob(os.path.join(ROOT, pat)) if any(os.path.basename(f).upper().startswith(p) for m in plan['mods'] for p in pre[m]) or any(i in f for i in ids) or any(f'{os.sep}{m}' in f for m in plan['mods'])]
+            rows.append([label, pat, str(len(fs))])
+        return [{'kind': 'table', 'title': '15. 변경 이력과 산출물 - 산출물', 'columns': ['구분', '경로', '건수'], 'rows': rows, 'src': ['Doc']}]
+    if cid == 'A':
+        spt = {x['sp']: x for x in F['SPT']}; sl = []
+        for p in processes(F, content):
+            js = [j for j in J if j['process'] == p]
+            if not js:
+                continue
+            sl.append({'kind': 'divider', 'title': f'부록 A. {p}'})
+            for j in js:
+                st = [b for b in F['B'] if b['job'] == j['job']]
+                nodes = [{'id': f's{b["step"]}', 'label': (b['stepName'] or b['exec'])[:30], 'sub': b['exec'][:32]} for b in st]
+                w = sorted({t for b in st for x in b['exec'].split(', ') if x in spt for t in spt[x]['writes'].split()})
+                sl.append({'kind': 'flow', 'title': f'A. {p} - {j["job"]}', 'nodes': nodes, 'edges': [{'from': nodes[i]['id'], 'to': nodes[i + 1]['id'], 'label': ''} for i in range(len(nodes) - 1)],
+                           'notes': [f'스케줄: {j["schedule"][:80]}'] + ([f'쓰는 테이블: {", ".join(w[:8])}'] if w else []) + ([jn.get(j['job'])] if jn.get(j['job']) else []), 'src': [src('batch.csv'), src('sp_tables.csv')]})
+        return sl
+    return []
+
+
+def compose(plan, F, content, key):
+    """최종 장 순서. ai 장 = content 의 장, gen 장 = content 의 같은 id 장표(앞) + 생성기 장표, layout = 모양만"""
+    by = {c.get('id'): c for c in (content or {}).get('chapters', [])}
+    chs = []
+    for cid, t, o in OPS:
+        n = '' if cid == 'A' else f'{cid[1:]}. '
+        slides = list((by.get(cid) or {}).get('slides') or []) if o != 'layout' else []
+        if o in ('gen', 'layout'):
+            if not (cid == 'C8' and slides):
+                slides += gen_chapter(cid, plan, F, content or {}, key)
+        chs.append({'id': cid, 'title': f'{n}{t}' if cid != 'A' else t, 'owner': o, 'slides': slides})
+    return chs
+
+
+# ───────────────────────── 검사 규칙 ─────────────────────────
+def check(plan, F, content, check_slide, style_texts):
+    fails = []; c = content or {}
+    by = {x.get('id'): x for x in c.get('chapters', [])}
+    for cid in AI_REQ:
+        ch = by.get(cid)
+        if not ch or not [s for s in ch.get('slides', []) if s.get('kind') != 'divider']:
+            fails.append(f'장 빠짐 {cid} {dict((a, b) for a, b, _ in OPS)[cid]}')
+    procs = processes(F, c)
+    c3 = (by.get('C3') or {}).get('slides', [])
+    divs = [s.get('title', '') for s in c3 if s.get('kind') == 'divider']
+    for p in procs:
+        if p not in divs:
+            fails.append(f'C3 프로세스 간지 빠짐: {p}(잡 {sum(1 for j in F["J"] if j["process"] == p)}개)')
+    cur = None; seen_flow = set()
+    for s in c3:
+        if s.get('kind') == 'divider':
+            cur = s.get('title')
+        elif s.get('kind') == 'flow' and cur:
+            seen_flow.add(cur)
+    for p in procs:
+        if p in divs and p not in seen_flow:
+            fails.append(f'C3 {p}: 흐름도 없음')
+    sn = c.get('screenNotes') or {}; jn = c.get('jobNotes') or {}; tn = c.get('tableNotes') or {}
+    ms = [s['id'] for s in F['S'] if not str(sn.get(s['id'], '')).strip()]
+    if ms:
+        fails.append(f'screenNotes 빠짐 {len(ms)}개(UI 메뉴 구조 역할 칸): {", ".join(ms[:15])}')
+    mj = [j['job'] for j in F['J'] if NO_DESC.search(j['desc']) and not str(jn.get(j['job'], '')).strip()]
+    if mj:
+        fails.append(f'jobNotes 빠짐 {len(mj)}개(AS-IS 설명 없는 잡): {", ".join(mj[:10])}')
+    mt = [t['table'] for t in F['TB'] if (t['screenWrites'] or t['batchWrites']) and not str(tn.get(t['table'], '')).strip()]
+    if mt:
+        fails.append(f'tableNotes 빠짐 {len(mt)}개(쓰는 곳이 있는 테이블): {", ".join(mt[:15])}')
+    texts = [str(v) for k in ('screenNotes', 'jobNotes', 'tableNotes') for v in (c.get(k) or {}).values()]
+    allids = {s['id'] for s in F['S']}; jobs = {j['job'] for j in F['J']}; seen = {'screens': set(), 'jobs': set()}
+    for cid in AI_REQ + ['C8', 'C15']:
+        for i, s in enumerate((by.get(cid) or {}).get('slides', []), 1):
+            if s.get('kind') == 'divider':
+                continue
+            check_slide(f'{cid}-{i} {s.get("title", "")}', s, allids, jobs, seen, texts, fails)
+    if by.get('C14') and by['C14'].get('slides'):
+        fails.append('C14 연락처와 담당 부서 = 모양만 생성(내용 쓰지 않음). chapters.json 에서 C14 장표를 뺌')
+    style_texts(texts, fails)
+    return fails, {'procs': len(procs), 'screenNotes': len(F['S']) - len(ms), 'screens': len(F['S']), 'jobNotes': len(mj), 'tableNotes': len(mt), 'tables': len(F['TB'])}

@@ -1,0 +1,801 @@
+{
+ "screen": "SCP0126",
+ "calls": [
+  {
+   "cls": "SCP0126_NoWork_BatchPopup",
+   "method": "BtnBatchSave_Click",
+   "asis_ref": "SCP0126_CAPA.cs:4209",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnBatchSave",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Batch Save",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "division",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "division"
+    },
+    {
+     "param": "scmSite",
+     "kind": "VAR",
+     "arg": "dtPlantId"
+    },
+    {
+     "param": "LineAll",
+     "kind": "VAR",
+     "arg": "dtLineAll"
+    }
+   ],
+   "results": [],
+   "after": [
+    {
+     "ref": "SCP0126_CAPA.cs:4214",
+     "raw": "FindData_Main()"
+    }
+   ],
+   "back": [
+    {
+     "ref": "SCP0126_CAPA.cs:4210",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "ExcelUploadForm",
+   "method": "BtnExcelUpload_Click",
+   "asis_ref": "SCP0126_CAPA.cs:4192",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnExcelUpload",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "Excel upload",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "#1",
+     "kind": "LITERAL",
+     "arg": "\"SCP0126\""
+    },
+    {
+     "param": "#2",
+     "kind": "EXPR",
+     "arg": "this.spdMain.ActiveSheet.SheetName"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0126_CAPA.cs:4194",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0126_CAPA.cs:4070",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "ITEM_ID",
+    "guard": "if (!e.ColumnHeader) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID))"
+   },
+   "multi": "true",
+   "div_arg": "division",
+   "period_args": [],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "CONTROL",
+     "arg": "division"
+    },
+    {
+     "param": "_ScmSiteId",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    },
+    {
+     "param": "_ProjectCode",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    },
+    {
+     "param": "_ItemID",
+     "kind": "LITERAL",
+     "arg": "\"\""
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0126_CAPA.cs:4071",
+     "target": "popItem.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0126_CAPA.cs:4074",
+     "target": "sItemId",
+     "value": "popItem.ItemID"
+    },
+    {
+     "ref": "SCP0126_CAPA.cs:4075",
+     "target": "sNickName",
+     "value": "popItem.NickName"
+    },
+    {
+     "ref": "SCP0126_CAPA.cs:4090",
+     "target": "popupWeek.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0126_CAPA.cs:4108",
+     "target": "weekName",
+     "value": "popupWeek.CurrentWeek"
+    }
+   ]
+  },
+  {
+   "cls": "SCP0126_SingleDatePopup",
+   "method": "SpdMain_CellDoubleClick",
+   "asis_ref": "SCP0126_CAPA.cs:4089",
+   "trigger": {
+    "kind": "CELL",
+    "control": "SpdMain",
+    "column": "WEEK_NAME",
+    "guard": "if (!e.ColumnHeader) ▸ else of (e.Column == siMain.GetColumnIndex(DefColumns.ITEM_ID)) ▸ if (e.Column == siMain.GetColumnIndex(\"WEEK_NAME\"))"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "headerColor",
+     "kind": "EXPR",
+     "arg": "Color.Transparent"
+    },
+    {
+     "param": "changeImmediately",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0126_CAPA.cs:4090",
+     "target": "popupWeek.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0126_CAPA.cs:4108",
+     "target": "weekName",
+     "value": "popupWeek.CurrentWeek"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCP0126_NoWork_BatchPopup": {
+   "cls": "SCP0126_NoWork_BatchPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_NoWork_BatchPopup.cs",
+   "title": "No Work Batch Save Popup",
+   "conds": [
+    {
+     "name": "txtWeek",
+     "type": "UsrTextBox",
+     "label": "Week",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0126_NoWork_BatchPopup.Designer.cs:42",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "drpPeriod",
+     "type": "UsrDateRangePicker3",
+     "label": "Period",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0126_NoWork_BatchPopup.Designer.cs:54",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCP0126_NoWork_BatchPopup.cs:526",
+     "save": false
+    },
+    {
+     "sp": "SCP0126_GET_CAPA_SEARCH_INFO",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0126_GET_CAPA_SEARCH_INFO.sql",
+     "order_known": true,
+     "order_keys": "DISPLAY_SEQ",
+     "order_line": "239",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetSearchInfo",
+     "ref": "SCP0126_NoWork_BatchPopup.cs:152",
+     "save": false
+    },
+    {
+     "sp": "SCP0126_SAVE_NO_WORK_BATCH",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0126_SAVE_NO_WORK_BATCH.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_line_id",
+      "p_start_date",
+      "p_end_date",
+      "p_seq",
+      "p_off_time",
+      "p_type",
+      "p_desc",
+      "p_user_id",
+      "v_working_time",
+      "recv_seq",
+      "v_startdate",
+      "v_enddate",
+      "v_plant",
+      "v_line",
+      "v_seq",
+      "v_off_time",
+      "v_type",
+      "v_desc",
+      "v_last_updated_by",
+      "v_delimiter",
+      "max_loop_cnt",
+      "mst_loop_cnt",
+      "v_program_name",
+      "v_log_type",
+      "n_log_count",
+      "v_log_message",
+      "v_description",
+      "d_event_date",
+      "v_data_dup_cnt",
+      "v_err_code",
+      "v_err_message",
+      "cnt",
+      "WEEK_CNT"
+     ],
+     "method": "SaveData",
+     "ref": "SCP0126_NoWork_BatchPopup.cs:411",
+     "save": true
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:246",
+     "method": "EditButton",
+     "raw": "siMain.LockColumn(siMain.GetColumnIndex(DefColumns.SEQ), siMain.GetColumnIndex(DefColumns.SEQ), true)",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:247",
+     "method": "EditButton",
+     "raw": "siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DAY_OF_WEEK), siMain.GetColumnIndex(DefColumns.DAY_OF_WEEK), true)",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:294",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:206",
+     "method": "RefreshLine",
+     "raw": "dtLine = DBUtils.Filter(dtLineAll, \"DIVISION_ID = '\" + division + \"'\" + filterPlantId, true)",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:206",
+     "method": "RefreshLine",
+     "raw": "DBUtils.Filter(dtLineAll, \"DIVISION_ID = '\" + division + \"'\" + filterPlantId, true)",
+     "guard": ""
+    }
+   ],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:515",
+     "method": "SCP0126_NoWork_BatchPopup_FormClosing",
+     "raw": "if (isEdit) this.DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:515",
+     "method": "SCP0126_NoWork_BatchPopup_FormClosing",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": "if (isEdit)"
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:461",
+     "method": "SaveData",
+     "raw": "if (isEdit) this.Close();",
+     "guard": "finally"
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:461",
+     "method": "SaveData",
+     "raw": "this.Close()",
+     "guard": "finally ▸ if (isEdit)"
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:484",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00330\")",
+    "MessageHelper.GMessageBox(\"MSG00344\")",
+    "MessageHelper.GMessageBox(\"MSG00061\", new object[] { \"Line\" })",
+    "MessageHelper.GMessageBox(\"{0} \\r\\n소수점 최대 10자리까지 입력가능합니다. \", new object[] { args + off_time })",
+    "MessageHelper.GMessageBox(\"MSG00050\", new object[] { args + off_time })",
+    "MessageHelper.GMessageBox(\"MSG00020\")",
+    "MessageHelper.GMessageBox(errorMsg)"
+   ],
+   "period_use": [
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:125",
+     "method": "InitControls",
+     "raw": "drpPeriod.InitValue = GetDayRange()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:321",
+     "method": "SaveData",
+     "raw": "DateTime dtFrom = drpPeriod.ValueStart;",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:322",
+     "method": "SaveData",
+     "raw": "DateTime dtTo = drpPeriod.ValueEnd;",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:353",
+     "method": "SaveData",
+     "raw": "drpPeriod.Text1.Replace(\"-\", \"\")",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0126_NoWork_BatchPopup.cs:354",
+     "method": "SaveData",
+     "raw": "drpPeriod.Text2.Replace(\"-\", \"\")",
+     "guard": "try"
+    }
+   ],
+   "from": "factpack"
+  },
+  "ExcelUploadForm": {
+   "cls": "ExcelUploadForm",
+   "in_pack": true,
+   "file": "01.Framework/GSCM.Windows.Forms/UI/ExcelUploadForm.cs",
+   "title": "ExcelUpload",
+   "conds": [],
+   "buttons": [],
+   "sps": [],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "ExcelUploadForm.cs:93",
+     "method": "InitSheet",
+     "raw": "si.LockColumn(0, si.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "ExcelUploadForm.cs:101",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[0].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm.cs:102",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[2].BackColor = Color.LightGray;",
+     "guard": ""
+    },
+    {
+     "ref": "ExcelUploadForm.cs:103",
+     "method": "InitSheet",
+     "raw": "si.Sheet().Columns[4].BackColor = Color.LightGray;",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "ExcelUploadForm.cs:205",
+     "method": "OnSave_Click",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "ExcelUploadForm.cs:218",
+     "method": "OnClose_Click",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\");",
+    "if (MessageHelper.GMessageBox(\"MSG00195\") == DialogResult.No)"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCM0002_ItembyDivisionPopup": {
+   "cls": "SCM0002_ItembyDivisionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+   "title": "Model by DivisionPopup",
+   "conds": [
+    {
+     "name": "txtItemID",
+     "type": "UsrMultiLineEditor",
+     "label": "Model",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:40",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:41",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:164",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbScmSite",
+     "type": "UsrCheckedList",
+     "label": "Site",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:42",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:166",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "txtProject",
+     "type": "UsrMultiLineEditor",
+     "label": "Project",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCM0002_ItembyDivisionPopup.Designer.cs:44",
+     "disabled_code": {
+      "prop": "Enabled",
+      "value": "false",
+      "guard": "",
+      "ref": "SCM0002_ItembyDivisionPopup.cs:165",
+      "method": "InitControls"
+     },
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCM0002_GET_ITEM_BY_DIVISION_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql",
+     "order_known": true,
+     "order_keys": "D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME",
+     "order_line": "64",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_division_id",
+      "p_project_code",
+      "p_scm_site_id",
+      "p_item_id"
+     ],
+     "method": "FindData",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:242",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [],
+     "method": "GetDivision",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:384",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_SITE_BY_DIVISION",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_SITE_BY_DIVISION.sql",
+     "order_known": true,
+     "order_keys": "A.SITE_DESCRIPTION",
+     "order_line": "45",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_dept_id",
+      "p_end_customer"
+     ],
+     "method": "GetDivisionbyScmSite",
+     "ref": "SCM0002_ItembyDivisionPopup.cs:398",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:264",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:278",
+     "method": "FindData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:302",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:305",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "SCM0002_ItembyDivisionPopup.cs:319",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "SCP0126_SingleDatePopup": {
+   "cls": "SCP0126_SingleDatePopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_SingleDatePopup.cs",
+   "title": "Week Select",
+   "conds": [
+    {
+     "name": "cmb_Months",
+     "type": "ComboBox",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0126_SingleDatePopup.designer.cs:47",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "cmb_Years",
+     "type": "ComboBox",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "SCP0126_SingleDatePopup.designer.cs:48",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [],
+   "sps": [],
+   "merge": [],
+   "lock": [],
+   "color": [
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:97",
+     "method": ".ctor",
+     "raw": "dataGridViewCellStyle.BackColor = pn_Controls.BackColor = pn_Header.BackColor = headerColor",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:97",
+     "method": ".ctor",
+     "raw": "pn_Controls.BackColor = pn_Header.BackColor = headerColor",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:97",
+     "method": ".ctor",
+     "raw": "pn_Header.BackColor = headerColor",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:240",
+     "method": "AddGridViewColumns",
+     "raw": "column.HeaderCell.Style.BackColor = Color.LightGray",
+     "guard": "for (i < WEEK_LEN+1)"
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:408",
+     "method": "FillCells",
+     "raw": "dgv_Dates.Rows[i].Cells[0].Style.BackColor = Color.LightGray",
+     "guard": "try ▸ for (i < ROW_LEN) ▸ else of ((nrDay > DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month) && nrMonth == _c"
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:458",
+     "method": "FillCells",
+     "raw": "dgv_Dates.Rows[i].Cells[x].Style.BackColor = Color.Green",
+     "guard": "try ▸ for (i < ROW_LEN) ▸ else of ((nrDay > DateTime.DaysInMonth(_currentDate.Year, _currentDate.Month) && nrMonth == _c"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:632",
+     "method": "btnCancel_Click",
+     "raw": "this.DialogResult = DialogResult.Cancel",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:633",
+     "method": "btnCancel_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:625",
+     "method": "btnOK_Click",
+     "raw": "this.DialogResult = DialogResult.OK",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:627",
+     "method": "btnOK_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:619",
+     "method": "exitButton_Click",
+     "raw": "this.DialogResult = DialogResult.Abort",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:620",
+     "method": "exitButton_Click",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:708",
+     "method": "dgv_Dates_SelectionChanged",
+     "raw": "_weekStart = weekStartDate.ToString(\"yyyyMMdd\", enUS)",
+     "guard": "try"
+    },
+    {
+     "ref": "SCP0126_SingleDatePopup.cs:709",
+     "method": "dgv_Dates_SelectionChanged",
+     "raw": "_weekEnd = weekStartDate.AddDays(6).ToString(\"yyyyMMdd\", enUS)",
+     "guard": "try"
+    }
+   ],
+   "from": "factpack"
+  }
+ }
+}

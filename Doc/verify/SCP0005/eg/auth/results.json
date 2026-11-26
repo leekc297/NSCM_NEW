@@ -17,7 +17,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -64,7 +64,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -112,7 +120,7 @@
         {
           "title": "E03 Division·권한 SCP0005 @eg-auth",
           "file": "eg_auth.spec.ts",
-          "line": 85,
+          "line": 96,
           "column": 6,
           "specs": [
             {
@@ -133,7 +141,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4927,
+                      "duration": 5263,
                       "errors": [],
                       "stdout": [
                         {
@@ -142,9 +150,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:21:07.276Z",
+                      "startTime": "2026-11-25T17:01:07.193Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-4a3c3-더-재구성-·-조회-파라미터-·-401-·-기본값-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -152,7 +166,7 @@
               ],
               "id": "fce9d8edbd378244cae8-ea705cfd067b7e85a37f",
               "file": "eg_auth.spec.ts",
-              "line": 92,
+              "line": 103,
               "column": 7
             },
             {
@@ -173,7 +187,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 85734,
+                      "duration": 79230,
                       "errors": [],
                       "stdout": [
                         {
@@ -207,19 +221,19 @@
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCP Planner 12s\n"
+                          "text": "[eg_auth] SCP/81/SCP Planner 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM Viewer 10s\n"
+                          "text": "[eg_auth] SCP/81/SCM Viewer 9s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SCP/81/SCM PI Admin 10s\n"
+                          "text": "[eg_auth] SCP/81/SCM PI Admin 8s\n"
                         },
                         {
                           "text": "[eg_auth] SCP0005 {\"EG382 PASS\":1,\"EG366 NA\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -236,9 +250,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:21:15.223Z",
+                      "startTime": "2026-11-25T17:01:16.610Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-81ceb-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -246,7 +266,7 @@
               ],
               "id": "fce9d8edbd378244cae8-edb2908ec1af67bbf854",
               "file": "eg_auth.spec.ts",
-              "line": 249,
+              "line": 261,
               "column": 7
             },
             {
@@ -267,7 +287,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4886,
+                      "duration": 5307,
                       "errors": [],
                       "stdout": [
                         {
@@ -276,9 +296,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:22:44.220Z",
+                      "startTime": "2026-11-25T17:02:38.805Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-53e35-컬럼-필수-표시-UI-Category-Div-별--chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -286,7 +312,7 @@
               ],
               "id": "fce9d8edbd378244cae8-0cf3d2413a0300974a05",
               "file": "eg_auth.spec.ts",
-              "line": 380,
+              "line": 394,
               "column": 7
             },
             {
@@ -307,7 +333,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 21884,
+                      "duration": 21135,
                       "errors": [],
                       "stdout": [
                         {
@@ -319,9 +345,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:22:51.922Z",
+                      "startTime": "2026-11-25T17:02:47.059Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-3085d--Sort-유지-·-선택-행-위-·-병합-그룹-위-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -329,7 +361,7 @@
               ],
               "id": "fce9d8edbd378244cae8-8911c967232e12f059a2",
               "file": "eg_auth.spec.ts",
-              "line": 431,
+              "line": 445,
               "column": 7
             },
             {
@@ -350,7 +382,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 227,
+                      "duration": 281,
                       "errors": [],
                       "stdout": [
                         {
@@ -359,9 +391,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:23:16.708Z",
+                      "startTime": "2026-11-25T17:03:11.038Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-092ce-S-규칙-GROUP·행-값-·룩업-시간창-×-계정-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -369,7 +407,7 @@
               ],
               "id": "fce9d8edbd378244cae8-0df5529d037f335b9ec3",
               "file": "eg_auth.spec.ts",
-              "line": 513,
+              "line": 527,
               "column": 7
             },
             {
@@ -390,7 +428,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7313,
+                      "duration": 6457,
                       "errors": [],
                       "stdout": [
                         {
@@ -399,9 +437,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:23:20.553Z",
+                      "startTime": "2026-11-25T17:03:14.290Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-03787-umnHeaderSpan-↔-TO-BE-병합-헤더-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -409,7 +453,7 @@
               ],
               "id": "fce9d8edbd378244cae8-3801d9b2caf8995bb0b3",
               "file": "eg_auth.spec.ts",
-              "line": 583,
+              "line": 597,
               "column": 7
             },
             {
@@ -430,7 +474,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 293,
+                      "duration": 265,
                       "errors": [],
                       "stdout": [
                         {
@@ -439,9 +483,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:23:31.063Z",
+                      "startTime": "2026-11-25T17:03:23.531Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-78acc--—-칸-설정-보유-미보유-계정-정렬-EG032--chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -449,7 +499,7 @@
               ],
               "id": "fce9d8edbd378244cae8-c071c5118b1bb00e08c4",
               "file": "eg_auth.spec.ts",
-              "line": 599,
+              "line": 613,
               "column": 7
             },
             {
@@ -470,7 +520,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6826,
+                      "duration": 6450,
                       "errors": [],
                       "stdout": [
                         {
@@ -479,9 +529,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:23:34.743Z",
+                      "startTime": "2026-11-25T17:03:26.606Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-35792--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -489,7 +545,7 @@
               ],
               "id": "fce9d8edbd378244cae8-badcc2f5fb3954009aab",
               "file": "eg_auth.spec.ts",
-              "line": 642,
+              "line": 656,
               "column": 7
             },
             {
@@ -510,7 +566,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 8138,
+                      "duration": 7819,
                       "errors": [],
                       "stdout": [
                         {
@@ -522,9 +578,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T22:23:44.767Z",
+                      "startTime": "2026-11-25T17:03:35.848Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SC-f47d1-G380-—-세션-메뉴-없음-상태의-FE-첫-화면-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -532,7 +594,7 @@
               ],
               "id": "fce9d8edbd378244cae8-e8290c7116e8e730ae1a",
               "file": "eg_auth.spec.ts",
-              "line": 667,
+              "line": 681,
               "column": 7
             }
           ]
@@ -542,8 +604,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T22:21:06.624Z",
-    "duration": 169929,
+    "startTime": "2026-11-25T17:01:06.415Z",
+    "duration": 160328.79400000002,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

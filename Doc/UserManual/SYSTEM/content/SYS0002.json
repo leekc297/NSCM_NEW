@@ -1,0 +1,78 @@
+{
+ "definition": "SCM 사용자 계정의 기본 정보, 부서, Language, Time Zone, 사용 여부를 등록하고 관리하는 화면",
+ "overview": [
+  "SCM 에 로그인하는 사용자 계정을 등록하고 부서, Language, Time Zone, Permanent YN, Active 값을 관리하는 관리자 화면임",
+  "위쪽 조회 조건, User 그리드, User ID 사용자 찾기 팝업, Dept ID 부서 찾기 팝업, Assign Group 조회 팝업으로 구성됨",
+  "Search 로 조회 → Insert 로 행 추가 → User ID, Dept ID 를 팝업에서 고르고 콤보 값 입력 → Save 순서로 작업함",
+  "사용자를 권한 그룹에 넣는 작업은 Group User(SYS0014)에서 하고, 결과는 Assign Group 의 View 팝업에서 확인함"
+ ],
+ "pages": [
+  {
+   "title": "User",
+   "keyPoint": "User ID 는 사용자 찾기 팝업에서 고른 값으로 등록함. 권한 그룹 지정은 Group User(SYS0014)에서 하고 Assign Group 은 조회만 됨.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.137,
+     "y": 0.135
+    },
+    {
+     "no": 2,
+     "x": 0.606,
+     "y": 0.185
+    },
+    {
+     "no": 3,
+     "x": 0.166,
+     "y": 0.196
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "User ID(Name), Dept ID(Name): 찾을 값을 직접 입력함",
+      "User Group: 권한 그룹 목록에서 고름. 처음 값은 ALL",
+      "Active: 사용 여부 Y 또는 N 을 고름. 처음 값은 Y"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert(F8), Delete(F9), Save(F7): 그리드에 행을 추가, 삭제 표시한 뒤 Save 로 저장함",
+      "Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "User 그리드",
+     "lines": [
+      "필수 입력: User ID, User Name, Language, Time Zone, Permanent YN, Active(제목 앞 빨간 점)",
+      "User ID: 새 행에서 더블클릭하면 사용자 찾기 팝업이 열려 SSO 사용자를 고름",
+      "Dept ID: 더블클릭하면 부서 찾기 팝업이 열림. Dept Name 은 부서 이름",
+      "Assign Group: View 를 누르면 사용자가 속한 Group 목록 팝업이 열림. Close 만 있음",
+      "Language, Time Zone, Permanent YN, Active: 노란 칸. 콤보에서 고름",
+      "Last Login, Created By, Creation Date, Last Updated By, Last Update Date: 입력 불가. 바꿀 수 없는 칸을 더블클릭하면 \"변경이 불가한 데이터입니다.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0002",
+ "uiName": "User",
+ "menuPath": "SYSTEM> Admin> User",
+ "captures": [
+  "captures/SYS0002.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0002/"
+ ],
+ "buttons": [
+  "userMgmt:DELETE",
+  "userMgmt:INSERT",
+  "userMgmt:SAVE",
+  "userMgmt:SEARCH"
+ ]
+}

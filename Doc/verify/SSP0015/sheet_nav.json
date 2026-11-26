@@ -1,0 +1,142 @@
+{
+ "sheets": {
+  "Shipment Confirm Detail": {
+   "drill": {
+    "base": "Shipment PSI(Mobility & IT)",
+    "row": {
+     "MEASURE": "SHIP_CONFIRM"
+    },
+    "cell": {
+     "tag": "D_"
+    },
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8145 SpdMain_CellDoubleClick"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "W/H stock": {
+   "drill": {
+    "base": "Shipment PSI(Mobility & IT)",
+    "row": {
+     "MEASURE": "WH_STOCK"
+    },
+    "cell": {},
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8168 SpdMain_CellDoubleClick"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Hold stock": {
+   "drill": {
+    "base": "Shipment PSI(Mobility & IT)",
+    "row": {
+     "MEASURE": "MES_FCS_RELEASE"
+    },
+    "cell": {
+     "col": "FIGURE"
+    },
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8189 SpdMain_CellDoubleClick"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Stock Detail": {
+   "drill": {
+    "base": "Shipment PSI(Mobility & IT)",
+    "row": {
+     "MEASURE": "WH_STOCK"
+    },
+    "cell": {
+     "col": "FIGURE"
+    },
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8212 SpdMain_CellDoubleClick"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "SCS Stock Detail": {
+   "drill": {
+    "base": "Shipment PSI(Packer)",
+    "row": {
+     "MEASURE": "WH_STOCK"
+    },
+    "cell": {
+     "col": "FIGURE"
+    },
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8374 SpdMain_CellDoubleClick"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Stock Location Detail": {
+   "drill": {
+    "base": "Shipment PSI(Packer)",
+    "row": {
+     "MEASURE": "BALANCE"
+    },
+    "cell": {
+     "col": "FIGURE"
+    },
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8398 SpdMain_CellDoubleClick"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "W/H stock Detail": {
+   "drill": {
+    "base": "Shipment PSI(Mobility & IT)",
+    "row": {
+     "MEASURE": "WH_STOCK"
+    },
+    "cell": {},
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8171 SpdMain_CellDoubleClick → FindData_WHstock:3878",
+    "tab": "W/H stock Detail"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Hold stock Detail": {
+   "drill": {
+    "base": "Shipment PSI(Mobility & IT)",
+    "row": {
+     "MEASURE": "MES_FCS_RELEASE"
+    },
+    "cell": {
+     "col": "FIGURE"
+    },
+    "rest": [],
+    "src": "SSP0015_ShipmentPSI.cs:8193 SpdMain_CellDoubleClick → FindData_block_stock:4101",
+    "tab": "Hold stock Detail"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Shipment Request Detail": {
+   "tabsearch": {
+    "tab": "Shipment Request Detail",
+    "button": "Search",
+    "ctl": "btnSearch",
+    "src": "SSP0015_ShipmentPSI.cs:8466 BtnSearch_Click ← this.btnSearch.Click"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "WH In Plan Detail": {
+   "tabsearch": {
+    "tab": "WH In Plan Detail",
+    "button": "Search",
+    "ctl": "btnSearch",
+    "src": "SSP0015_ShipmentPSI.cs:8522 BtnSearch_Click ← this.btnSearch.Click"
+   },
+   "_gen": "sheet_nav_gen"
+  },
+  "Shipment Result": {
+   "tabsearch": {
+    "tab": "Shipment Result",
+    "button": "Search",
+    "ctl": "btnSearch",
+    "src": "SSP0015_ShipmentPSI.cs:8530 BtnSearch_Click ← this.btnSearch.Click"
+   },
+   "_gen": "sheet_nav_gen"
+  }
+ },
+ "_doc": "시트 이동 사실. drill 항목은 tools/Harness/verify/sheet_nav_gen.py 가 AS-IS 그리드 더블클릭 → ChangeSheet 원문에서 만든다(_gen). 그 밖은 사람이 적은 항목"
+}

@@ -1,0 +1,37 @@
+{
+ "proposal": {
+  "id": "20261120115806_VISION_2",
+  "title": "행 대기(waitRows)가 상한까지 기다린 사유를 시험 소요 기록에 남김",
+  "evidence": "Doc/verify/SSP0005/_test_timing.jsonl run 2026-11-19T21:12:18Z: wait@probe.ts:60 6,566초(E2E 143.3분 중 109.4분), 37개 시험, 최대 714초. B1(pagereg.ts emptyAnswered) 반영 05:30 뒤 실행인데 생략이 일어났는지 기록 없음. run_timing.json SSP0005 e2e 143.7분",
+  "targets": [
+   "tools/E2E/lib/probe.ts",
+   "tools/E2E/lib/pagereg.ts"
+  ],
+  "before_after": "waitRows 가 행 수만 돌려주고 대기 사유는 남기지 않음 → emptyAnswered 가 false 인 마지막 사유(요청 진행 중, 최근 조회 응답 없음, rowsSure 아님, 행 수 1 이상)와 대기 초, 결과 행 수를 _test_timing.jsonl 의 waitWhy 항목에 기록함. 대기 동작과 상한 120초는 그대로 둠",
+  "verify": "tools/E2E 형식 검사(tsc --noEmit) 통과. 다음 CheckList 실행 뒤 _test_timing.jsonl 에서 wait@probe.ts:60 이 있는 시험마다 waitWhy 가 채워졌는지 건수 대조, 기대 = wait@probe.ts:60 있는 시험 수와 같음",
+  "sig": "waitrows reason log"
+ },
+ "result": {
+  "applied": true,
+  "verified": false,
+  "changed_files": [
+   "tools/E2E/lib/pagereg.ts",
+   "tools/E2E/lib/probe.ts"
+  ],
+  "verify_result": "2026-11-20 16:21 node tools/E2E/node_modules/typescript/bin/tsc --noEmit -p tools/E2E/tsconfig.json 출력 없음(통과, npx 는 권한 없어 로컬 tsc 직접 실행). node tools/E2E/lib/pagereg.selftest.js 14건 PASS, ALL PASS. 다음 CheckList 뒤 waitWhy 건수 대조는 미실행",
+  "note": "_test_timing.jsonl 기록 줄은 tools/E2E/fixtures/test.ts:72-76 에서 만듦. targets 밖이라 수정 안 함. 현 상태로는 waitWhy 가 pageReg(Nscm 객체)에만 쌓이고 jsonl 에는 0건 기록됨. 반영하려면 test.ts 에 import { pageReg } from '../lib/pagereg' 추가, 75행 parts/reqs 뒤에 waitWhy: pageReg.get(n.page)?.waitWhy || [], waitWhyDrop: pageReg.get(n.page)?.waitWhyDrop || 0 추가 필요(추가 승인 대상). emptyAnswered 판정 조건, 대기 동작, 상한 120초 변경 없음. waitWhy 항목 = why(noReg, early, pending, reqGap, noResp, notDone, notSure, rows, settle, empty, emptyThenRows), sec, rows, cap, full. 시험당 40건 넘으면 waitWhyDrop 에 건수만 셈"
+ },
+ "gate": null,
+ "history": [
+  "14:43:46 사용자 지시(Claude Code 세션 분류): 권장안 승인. 분류 fix: 행 대기 사유 기록 추가(대기 동작·상한 그대로). 사용자 지시 11-20 '버그성이나 시스템 관련 항목은 권장안으로 처리'. VMO 자동 반영(게이트 통과 조건)으로 반영",
+  "16:08:08 VMO 자동(게이트 통과 조건): 승인",
+  "16:11:34 VMO: 반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기",
+  "16:16:11 VMO 자동(게이트 통과 조건): 승인",
+  "16:19:25 VMO: 반영 전 게이트: 구문 검사 27개 파일 통과, 시험 53/53개 파일 통과(PASS 679, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1616",
+  "16:19:27 VMO: 반영 시작",
+  "16:21:36 VMO: 반영 실패. 검증 실패: 2026-11-20 16:21 node tools/E2E/node_modules/typescript/bin/tsc --noEmit -p tools/E2E/tsconfig.json 출력 없음(통과, npx 는 권한 없어 로컬 tsc 직접 실행). node tools/E2E/lib/pagereg.selftest.js 14건 PASS, ALL PASS. 다음 C · 대상 파일 2개 복원(probe.ts AI 편집 3건만 되돌림(반영 전과 같음) / pagereg.ts AI 편집 3건만 되돌림(반영 전과 같음)) · 대상 밖 변경 tools/VibeManager/CHANGELOG.md 는 그대로 남음"
+ ],
+ "tries": 2,
+ "depth": 0,
+ "root": "20261120115806_VISION_2"
+}

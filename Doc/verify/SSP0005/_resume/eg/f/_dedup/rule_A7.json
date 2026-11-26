@@ -1,0 +1,190 @@
+{
+ "rule_id": "A7",
+ "hash": "76baacbbc534aed0",
+ "groups": [
+  {
+   "rows": [
+    "AD-2839e16a"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #16(20261120~, divisionId 81,40,82,81_UC,81_HM, AA00)은 인자 조합이 고유해 다른 호출과 조회조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-4208330d"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #10(20261120~, divisionId 81, AA00)은 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-48ddc572"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #13(20261120~, divisionId 81,40,82, AA00)은 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-4bd484b6"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #20은 fromYyyymmdd=Invalid Date이고 divisionId가 81_HG 단독이라 #21과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-50475f0e"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #12(divisionId 40,81)는 순서가 다른 #14(81,40)와 인자가 다르므로 확신이 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "AD-6559b063"
+   ],
+   "why": "CALENDAR_3SPAN 호출 #19는 startYyyymmdd=Invalid Date라 다른 calendar 호출과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-7a84b996"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #15(divisionId 81,40,82,81_UC)는 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-7cb7135a"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #4(from 20241120, 전 사업부, AA00)는 시작일이 다른 #3·#7과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-7d976420"
+   ],
+   "why": "SCM0001_GET_SCP_PERIOD 호출 #1의 실제 결과 값 대조 행이고, 기대에 공란 컬럼 0 확인이 따로 명시되지 않아 SP 행 V-d8993ea0과 기대가 완전히 같다고 할 수 없다."
+  },
+  {
+   "rows": [
+    "AD-9407e4e3"
+   ],
+   "why": "CALENDAR_3SPAN 호출 #2(20261120~)는 기간이 다른 calendar 호출과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-94457780"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #18(divisionId 81~81_HD 7개)은 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-9cd9a90b"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #8은 companyId=AB00이라 #3(AA00)·#9(AC00)와 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-9f2c80df"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #23(from 20241120, divisionId 81)은 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-aebc11df"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #22(from 20211120, divisionId 81)는 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-b4b0e70e"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #21은 Invalid Date에 전 사업부라 #20(81_HG)과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-bd09d1a5"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #14(divisionId 81,40)는 #12(40,81)와 인자 문자열이 달라 확신이 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "AD-c4eeda40"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #9는 companyId=AC00이라 다른 회사 호출과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-cbf8ffd9"
+   ],
+   "why": "CALENDAR_3SPAN 호출 #5(20241120~)는 기간이 다른 calendar 호출과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-cd94b738"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #7(from 20211120, 전 사업부, AA00)은 시작일이 다른 #3·#4와 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-cdd2ce97"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #3(from 20261120, 전 사업부, AA00)은 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-d7318362"
+   ],
+   "why": "CALENDAR_3SPAN 호출 #6(20211120~)은 기간이 다른 calendar 호출과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "AD-e6e9c4e1"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #11(divisionId 40)은 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "AD-fe3af2df"
+   ],
+   "why": "SHIPMENT_WORKING_DAY 호출 #17(divisionId 81~81_ST 6개)은 인자 조합이 고유하다."
+  },
+  {
+   "rows": [
+    "V-15ea5285"
+   ],
+   "why": "CALENDAR_3SPAN의 프로시저 단위 공란 컬럼 0 확인은 호출이 4건이라 특정 호출 행 하나와 같다고 할 수 없고, 기대에 공란 컬럼 확인이 더 들어 있다."
+  },
+  {
+   "rows": [
+    "V-9138bb6e"
+   ],
+   "why": "SHIPMENT_WORKING_DAY의 프로시저 단위 공란 컬럼 0 확인은 호출이 여러 건이라 특정 호출 행과 같다고 할 수 없다."
+  },
+  {
+   "rows": [
+    "V-d8993ea0"
+   ],
+   "why": "SCM0001_GET_SCP_PERIOD의 공란 컬럼 0 확인은 AD-7d976420의 값 일치 기대(CR-105로 판정 제외)와 기대가 달라 확신이 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-3d3f2f54"
+   ],
+   "why": "RTF Measure AMT를 DEMAND LOC 기준으로 계산하는지 확인하는 행으로, 대상 요소와 기대가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-471eebd8"
+   ],
+   "why": "다른 화면(DMF0035) 결함 유형을 옮긴 일반 규칙이라 이 화면의 특정 프로시저나 호출로 대상을 정할 수 없다."
+  },
+  {
+   "rows": [
+    "V-d0bdd9d8"
+   ],
+   "why": "값 불일치를 판정필요로 두는 CR-101 확정 규칙으로, 해당없음 처리로 대체한 V-de89c795와 기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-de89c795"
+   ],
+   "why": "값·행 집합 차이를 해당없음으로 빼는 CR-105 확정 규칙으로, 판정필요로 두는 V-d0bdd9d8과 기대가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:05:02",
+ "cost": 0.1923556
+}

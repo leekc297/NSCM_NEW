@@ -10,10 +10,10 @@
   color: $navTopBgSwitchHolder;
   border: 0;
   outline: 0;
-  background-color: $commonBgPrimary;
+  background-color: var(--nav-brand-bg);
   cursor: pointer;
   &:hover {
-    background-color: #3ab3bf;
+    background-color: var(--nav-brand-bg-hover);
   }
   .icon {
     width: 20px;

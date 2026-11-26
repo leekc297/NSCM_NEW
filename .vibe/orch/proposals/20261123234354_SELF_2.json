@@ -1,0 +1,143 @@
+{
+  "id": "20261123234354_SELF_2",
+  "at": "2026-11-23T23:43:54+09:00",
+  "ms": 1795445034558,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|quickjsonpromptn건중ndocstylemd를참조하는것은n",
+  "title": "사용자 지시 R76 같은 문제: tools/VibeManager/quick.json:366 quick.json prompt 8건 중 50_DOC_STYLE.md 를 참조하는 것은 546, 577 2건. 366, 1378, 1390, 1526, 1548,",
+  "evidence": "규칙 R76 \"VM, VMW, VMO 가 띄운 AI 의 답변, 보고와 생성기가 만드는 문서 문장은 문장 규칙 18개(~/.claude/CLAUDE.md, rules/50_DOC_STYLE.md)를 따름\" (원래 지시 2026-11-13 18:06 \"네.. .적용해주세요.. .클로드코드와 VM 전체에 적용되도록 해주세요.\") · tools/VibeManager/quick.json:366 \"prompt\": \"화면 ${id} 의 CheckList 미검증을 해소한다(2026-11-18 사용자 지시: ...",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "run-rule.js NOTE 에 문장 규칙을 넣으면 6건이 함께 해결됨. NOTE 를 고치지 않으면 각 prompt 끝에 '보고와 가이드 문장 = tools/VibeManager/rules/50_DOC_STYLE.md' 1줄을 더함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T04:27:52+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T04:31:39+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self0427"
+    },
+    {
+      "at": "2026-11-25T04:31:41+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T04:44:47+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T04:44:47+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK  파일 84/84  PASS 1361  FAIL 0' (2026-11-25 04:36:06) → 반영 뒤 'ALL OK  파일 84/84  PASS 1361  FAIL 0' (2026-11-25 04:40:40). quick.json 안에서 50_DOC_STYLE 을 참조하는 prompt 3/9 → 9/9 (Grep count), json.loads 파싱 통과 · 변경 38개 파일 · 대상 목록 밖 변경 37개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_verify_CRUD_필수_공란_실제_저장_시도_E3_필수_채워_실제_저장_재조회_값_보존_정리_F1_F2_F4_F6__0.json, Doc/verify/SCP0005/calls/_verify_Excel_2단계_차단_M1__0.json, Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json, Doc/verify/SCP0005/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json, Doc/verify/SCP0005/calls/_verify_언어_전환_문구_덤프_I2__0.json",
+      "log": ".vibe\\logs\\2026-11-25T04-31-41_claude_orch.log",
+      "sec": 555,
+      "costUsd": 0.9087249,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_verify_CRUD_필수_공란_실제_저장_시도_E3_필수_채워_실제_저장_재조회_값_보존_정리_F1_F2_F4_F6__0.json",
+        "Doc/verify/SCP0005/calls/_verify_Excel_2단계_차단_M1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_Excel_양식_업로드_M1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json",
+        "Doc/verify/SCP0005/calls/_verify_언어_전환_문구_덤프_I2__0.json",
+        "Doc/verify/SCP0005/calls/_verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보__0.json",
+        "Doc/verify/SCP0005/calls/_verify_저장_경로_F1_실패_H10_취소_H11_로딩_F2_붙여넣기__0.json",
+        "Doc/verify/SCP0005/calls/_verify_저장_세부_F1_F6_컬럼별_왕복_0_값_저장_0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0005/e2e/shots/verify_Excel_양식_업로드_M1.png",
+        "Doc/verify/SCP0005/e2e/shots/verify_저장_경로_F1_실패_H10_취소_H11_로딩_F2_붙여넣기.png",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "Doc/verify/SCP0005/lang_texts.json",
+        "tools/VibeManager/quick.json",
+        "Doc/e2e/_run.acct.32324.json",
+        "Doc/e2e/_run.acct.48576.json",
+        "Doc/e2e/_run.langacct.bindy122678.lock",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_snap--snap-스냅샷-형상-검사-snap-조회조건-팝업-정적-aria-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_trace-검증엔진-SCP0005-trace-A6-조회-결과-행-순서-AS-IS-ORDER-BY-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_trace-검증엔진-SCP0005-trace-D6-Insert-위치·상태-AS-IS-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_verify-정합검증-SCP0005-verif-e5ddd-계·기간-이상값·정렬-Copy-A10·N1·K1--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_verify-정합검증-SCP0005-verify-Sum-체크박스-A3--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_verify-정합검증-SCP0005-verify-기간-조건-글자·역전-E2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_verify-정합검증-SCP0005-verify-실전송-건수-A1--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_verify-정합검증-SCP0005-verify-이름·ID-조건-건수-A1--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read12/video/20261125_043147_41232/_verify-정합검증-SCP0005-verify-합계-값-A3--chromium.webm",
+        "Doc/verify/SCP0005/e2e/results_read12.json",
+        "Doc/verify/SCP0005/e2e/serial/bad_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank2_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/blank_result_SCP0005.png",
+        "Doc/verify/SCP0005/e2e/serial/form2_SCP0005.xlsx",
+        "Doc/verify/SCP0005/e2e/serial/form_SCP0005.xlsx",
+        "Doc/verify/SCP0005/touched_rows.json"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "VM, VMW, VMO 가 띄운 AI 의 답변, 보고와 생성기가 만드는 문서 문장은 문장 규칙 18개(~/.claude/CLAUDE.md, rules/50_DOC_STYLE.md)를 따름 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R76|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795548472306,
+  "autoFp": "8f999ec02f",
+  "applyStartMs": 1795548701369,
+  "verifyJudge": {
+    "at": "2026-11-25T04:40:58+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self0427",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795549487172,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 실행. 반영 전(2026-11-25 04:36:06 종료) 'ALL OK  파일 84/84  PASS 1361  FAIL 0  229.9s' → 반영 뒤(04:40:40 종료) 'ALL OK  파일 84/84  PASS 1361  FAIL 0  228.3s'. t_webview_syntax.js 반영 전과 반영 뒤 모두 'OK   t_webview_syntax.js  PASS 19'"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK  파일 84/84  PASS 1361  FAIL 0' (2026-11-25 04:36:06) → 반영 뒤 'ALL OK  파일 84/84  PASS 1361  FAIL 0' (2026-11-25 04:40:40). quick.json 안에서 50_DOC_STYLE 을 참조하는 prompt 3/9 → 9/9 (Grep count), json.loads 파싱 통과",
+    "note": "50_DOC_STYLE 미참조 prompt 6건(448, 1713, 1725, 1872, 1894, 1910행)에 '보고와 가이드 문장은 tools/VibeManager/rules/50_DOC_STYLE.md 문장 규칙 18개를 따른다.' 1줄 추가. 1713행은 뒤에 수정 항목이 이어 붙는 구조라 '(실측 내용을 지어내지 않는다).' 뒤에 넣음. run-rule.js NOTE 는 targets 밖이라 고치지 않음(NOTE 12항에 이미 있음). 개선안 작성 뒤 파일이 바뀌어 줄 번호가 개선안 본문(366, 1378 등)과 다름."
+  },
+  "snap": "prop_20261123234354_SELF_2"
+}

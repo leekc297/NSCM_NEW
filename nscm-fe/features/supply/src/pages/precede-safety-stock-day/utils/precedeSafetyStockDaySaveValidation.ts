@@ -62,10 +62,11 @@ export const validatePrecedeSafetyStockDayRow = (
     return { msgId: MSG.TYPE_APPLY_DAY_NEGATIVE, message: '_Day 는 0 이상이어야 합니다.' };
   }
 
-  // #6 MSG00458 — 품목 미존재는 여기(행별 동기 검증)서 다루지 않는다. AS-IS 는 Division 유효 품목
-  //   집합(dtItemAll)과 ITEM_ID 를 대조하는데, 그 집합은 비동기 조회가 필요하므로 저장 흐름에서
-  //   findInvalidItemIdRow(utils/precedeSafetyStockDayItemValidation.ts)로 별도 검증한다.
-  //   (공백 ITEM_ID 는 위 #1 필수검증이 선처리하므로 중복 가드하지 않는다.)
+  // #6 MSG00458 — 품목 미존재는 여기(행별 동기 검증)서 다루지 않는다. SAVE SP(PKG_SCP0127.P_SCP0127_SAVE
+  //   BODY:348~363)가 SCM_MST_ITEM_SN(품목원장) OR SCP_OPMZ_VIRTUAL_BOM(가상 BOM) 존재를 검사해 없으면
+  //   ORA-20010(MSG00458)로 거부하고, 그 거부는 submitPrecedeSafetyStockDaySave 의 RESULT_CODE 판정으로
+  //   알럿된다 — FE 사전검증(COM0013 품목원장만)은 가상 BOM 모델을 오차단해(테스트 No.4) 제거했다.
+  //   (공백 ITEM_ID 는 위 #1 필수검증이 선처리한다.)
 
   return null;
 };

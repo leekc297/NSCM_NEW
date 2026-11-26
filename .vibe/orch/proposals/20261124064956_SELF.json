@@ -1,0 +1,120 @@
+{
+  "id": "20261124064956_SELF",
+  "at": "2026-11-24T06:49:56+09:00",
+  "ms": 1795470596427,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orch ladder.js|자가진단사다리하루진단수상한기본n건이남아있고harnessjson에키가없어그",
+  "title": "사용자 지시 R140 같은 문제: tools/VibeManager/orch-ladder.js:13 자가진단 사다리 하루 진단 수 상한 기본 3건이 남아 있고, harness.json 에 키가 없어 그대로 적용되며, 207줄 'ladder.dayRuns >= c",
+  "evidence": "규칙 R140 \"VMO 자동 반영과 자가 보완은 하루 건수 상한을 두지 않고 대상이 생기면 반영함\" (원래 지시 2026-11-19 23:41 \"하루 상한 6건은 어디서 설정했나요? 하루 상한 지금은 해제해주세요.\") · tools/VibeManager/orch-ladder.js:13 ladderMaxPerDay: 3, ladderDayGapHours: 24 };",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js"
+  ],
+  "before_after": "DEF 기본값을 0(상한 없음)으로 바꾸고 207줄 조건을 'c.ladderMaxPerDay > 0 && ladder.dayRuns >= c.ladderMaxPerDay' 로 바꿈. orch-selfcheck.js:337 '|| 3' 문구도 같은 값으로 맞춤",
+  "verify": "node --check tools/VibeManager/orch-ladder.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-ladder.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T04:41:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T04:45:25+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0441"
+    },
+    {
+      "at": "2026-11-26T04:45:29+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T04:57:54+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 바로 다시 읽음 orch-ladder.js · 창 다시 로드 뒤 적용 orch-selfcheck.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T04:57:54+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 04:45:44 반영 전: node --check OK, run_all ALL OK 87/87 PASS 1422 FAIL 0 → 2026-11-26 04:49:51 반영 뒤: node --check OK, run_all ALL OK 87/87 PASS 1422 FAIL 0 · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/orch-selfcheck.js",
+      "log": ".vibe\\logs\\2026-11-26T04-45-29_claude_orch.log",
+      "sec": 511,
+      "costUsd": 0.6410370000000001,
+      "files": [
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/orch-selfcheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:09+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VMO 자동 반영과 자가 보완은 하루 건수 상한을 두지 않고 대상이 생기면 반영함 규칙을 tools/VibeManager/orch-ladder.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R140|tools/VibeManager/orch-ladder.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795635692049,
+  "autoFp": "0125f1b7c1",
+  "applyStartMs": 1795635929752,
+  "verifyJudge": {
+    "at": "2026-11-26T04:54:04+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0441",
+  "needsReload": true,
+  "hotLoaded": [
+    "orch-ladder.js"
+  ],
+  "reloadFiles": [
+    "orch-selfcheck.js"
+  ],
+  "appliedMs": 1795636674447,
+  "synced": [
+    "orch-ladder.js",
+    "orch-selfcheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orch-ladder.js(orch-selfcheck.js 같이 확인): 반영 전 OK → 반영 뒤 OK. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 87/87 PASS 1422 FAIL 0 227.7s' → 반영 뒤 'ALL OK 파일 87/87 PASS 1422 FAIL 0 228.5s'(t_orch_ladder PASS 47, t_orch_selfcheck PASS 32). 웹뷰 파일 아님, t_webview_syntax.js 해당 없음"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/orch-selfcheck.js"
+    ],
+    "verify_result": "2026-11-26 04:45:44 반영 전: node --check OK, run_all ALL OK 87/87 PASS 1422 FAIL 0 → 2026-11-26 04:49:51 반영 뒤: node --check OK, run_all ALL OK 87/87 PASS 1422 FAIL 0",
+    "note": "orch-ladder.js:13 DEF.ladderMaxPerDay 3 → 0(상한 없음). 상한 조건은 207줄이 아닌 248줄에 있어 248줄을 'c.ladderMaxPerDay > 0 && ladder.dayRuns >= c.ladderMaxPerDay' 로 바꿈. orch-selfcheck.js:337 '|| 3' 제거, 상한 0 이면 '다음 점검 때 진단' 만 표시(before_after 명시 범위). orchestra.js:802 의 ladderMaxPerDay 사용처는 범위 밖이라 열지 않음, 추가 확인 후보."
+  },
+  "snap": "prop_20261124064956_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "20261121_020337_R12_ALL_2",
+  "at": "2026-11-21T02:03:37+09:00",
+  "ms": 1795194217100,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U24 미검증 해소 뒤 처리 대상 남음 SSP0014",
+  "screen": "",
+  "sig": "R12|S13|U24|SSP0014|20261120_074336_claude",
+  "count": 1,
+  "repeat": null,
+  "detail": "해소 전 미검증 127(처리 대상 68, 11-20 07:43) → 해소 단계 2/2 11-20 07:43~11-20 08:38(J20261120_060728) → 재측정 11-20 08:38 미검증 42 · 처리 대상(unverified_triage.json actionable) 11 · 분류 판단 2, 미분류 1, 검사기공백 5, 데이터전제 2, 집계 30, 스냅샷승인 1, 계정 1 · issues H11 1, G2 3, K1 3",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U24|SSP0014|20261120_074336_claude",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T06:11:24+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,17 +1,47 @@
 [
  {
-  "row_id": "V-a70af79e",
-  "rule_id": "G2",
-  "target": "조회조건 User ID(Name)",
+  "row_id": "V-27dc9413",
+  "rule_id": "H6",
+  "target": "new SCM0002_ItembyDivisionPopup()",
+  "same": [
+   "V-c8cc2ced",
+   "V-808a747c",
+   "EG-dc100d71"
+  ]
+ },
+ {
+  "row_id": "V-ddcfd35a",
+  "rule_id": "H6",
+  "target": "popItem.ShowDialog()",
   "same": []
  },
  {
-  "row_id": "EG-1250673f",
-  "rule_id": "K1",
-  "target": "SSP0014 팝업 UserInfoPopup CELL:PART_LEADER GRID_FILTER_COUNT",
+  "row_id": "V-ceb0b8e0",
+  "rule_id": "H6",
+  "target": "new UserInfoPopup()",
   "same": [
-   "EG-4543f990",
-   "EG-08be1b0d"
+   "V-b877a560",
+   "V-d914f74d",
+   "V-12db2bb2",
+   "V-076a035a",
+   "V-9fb60038",
+   "V-0d152377",
+   "V-e214666a",
+   "V-5b76aa66",
+   "V-853fe327",
+   "V-bb93253d",
+   "V-4aa26436",
+   "V-44f0058d",
+   "V-605cd346",
+   "V-d39aabc2",
+   "V-f3bd4268",
+   "EG-2ed0d75b",
+   "EG-fc6d04ac",
+   "EG-dff23bec",
+   "EG-44a30740",
+   "EG-4b9ecb8b",
+   "EG-4129ef6d",
+   "EG-f7021f11"
   ]
  },
  {
@@ -21,15 +51,153 @@
   "same": []
  },
  {
-  "row_id": "EG-4543f990",
-  "rule_id": "K1",
+  "row_id": "V-c8cc2ced",
+  "rule_id": "H6",
   "target": "",
-  "folded_into": "EG-1250673f"
+  "folded_into": "V-27dc9413"
  },
  {
-  "row_id": "EG-08be1b0d",
-  "rule_id": "K1",
+  "row_id": "V-808a747c",
+  "rule_id": "H6",
   "target": "",
-  "folded_into": "EG-1250673f"
+  "folded_into": "V-27dc9413"
+ },
+ {
+  "row_id": "EG-dc100d71",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-27dc9413"
+ },
+ {
+  "row_id": "V-b877a560",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-d914f74d",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-12db2bb2",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-076a035a",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-9fb60038",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-0d152377",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-e214666a",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-5b76aa66",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-853fe327",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-bb93253d",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-4aa26436",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-44f0058d",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-605cd346",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-d39aabc2",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "V-f3bd4268",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "EG-2ed0d75b",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "EG-fc6d04ac",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "EG-dff23bec",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "EG-44a30740",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "EG-4b9ecb8b",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "EG-4129ef6d",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
+ },
+ {
+  "row_id": "EG-f7021f11",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-ceb0b8e0"
  }
 ]

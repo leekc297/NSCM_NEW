@@ -134,8 +134,14 @@ describe('isMainCellEditable', () => {
 describe('computeIsEditable', () => {
   const statusRow = (extra: PlanStatusRow): PlanStatusRow => extra;
 
-  it('O_RC2 가 비어있으면(Daily) 게이트 적용 대상이 아니라 통과한다', () => {
-    expect(computeIsEditable([], 'PR', '1')).toBe(true);
+  it('O_RC2 가 비어있으면 N(AS-IS L3531)', () => {
+    expect(computeIsEditable([], 'PR', '1')).toBe(false);
+  });
+
+  it('IS_EDITABLE=N 이면 N(AS-IS L3544)', () => {
+    expect(computeIsEditable([statusRow({ IS_EDITABLE: 'N', PLAN_TYPE: 'PR', PLAN_TYPE_SEQ: 0 })], 'PR', '1')).toBe(
+      false
+    );
   });
 
   it('FN/TE 는 다음 단계 존재 여부와 무관하게 항상 잠금', () => {
@@ -156,12 +162,12 @@ describe('computeIsEditable', () => {
     expect(computeIsEditable(rows, 'PR', '1')).toBe(false);
   });
 
-  it('PR: MA 가 생성돼 있어도 전부 실패(-1)면 Y', () => {
+  it('PR: MA 가 생성돼 있으면 전부 실패(-1)여도 N(AS-IS 실동작 — Y 로 바꾸는 분기 없음)', () => {
     const rows = [
       statusRow({ PLAN_TYPE: 'PR', PLAN_TYPE_SEQ: 0 }),
       statusRow({ PLAN_TYPE: 'MA', PLAN_TYPE_SEQ: 1, PLAN_STATUS: -1 }),
     ];
-    expect(computeIsEditable(rows, 'PR', '1')).toBe(true);
+    expect(computeIsEditable(rows, 'PR', '1')).toBe(false);
   });
 
   it('MA: SE 미생성이면 현재(MA) 행의 CONFIRM_YN 을 본다', () => {
@@ -176,6 +182,23 @@ describe('computeIsEditable', () => {
       statusRow({ PLAN_TYPE: 'SE', PLAN_TYPE_SEQ: 2, PLAN_STATUS: 1 }),
     ];
     expect(computeIsEditable(rows, 'MA', '2')).toBe(false);
+  });
+
+  it('MA: SE 없이 FN 이 생성돼 있으면 N(81 계열 — MA 다음 바로 FN)', () => {
+    const rows = [
+      statusRow({ PLAN_TYPE: 'MA', PLAN_TYPE_SEQ: 1, PLAN_SEQ: '1', CONFIRM_YN: 'Y' }),
+      statusRow({ PLAN_TYPE: 'FN', PLAN_TYPE_SEQ: 3, PLAN_STATUS: 1 }),
+    ];
+    expect(computeIsEditable(rows, 'MA', '1')).toBe(false);
+    expect(computeIsEditable([statusRow({ PLAN_TYPE: 'PR', PLAN_TYPE_SEQ: 0 }), rows[1]], 'PR', '1')).toBe(false);
+  });
+
+  it('TE(PLAN_TYPE_SEQ 없음)만 있으면 다음 단계로 보지 않는다', () => {
+    const rows = [
+      statusRow({ PLAN_TYPE: 'MA', PLAN_TYPE_SEQ: 1, PLAN_SEQ: '1', CONFIRM_YN: 'Y' }),
+      statusRow({ PLAN_TYPE: 'TE' }),
+    ];
+    expect(computeIsEditable(rows, 'MA', '1')).toBe(true);
   });
 
   it('SE: FN 미생성이면 confirm_yn 과 무관하게 Y', () => {

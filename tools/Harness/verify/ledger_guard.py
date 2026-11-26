@@ -89,7 +89,15 @@ def main():
             now = cur.fetchone()[0]
             p = os.path.join(ROOT, 'Doc', 'verify', mid, 'crud_keys.json')
             data = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else []
-            data.append({'keys': {k: vals[k] for k in sp['keys']}, 'saved_before': now.isoformat(), 'snapshots': snaps})
+            # 2026-11-25 T640: 저장 뒤 정리 위임(crud.ts deferDbCleanup) — _ago_sec = 저장 시작 뒤 지난 초(DB 시각에서 뺌) · _account = 저장한 계정(cleanup·F8 감사 기대값)
+            ago = int(vals.get('_ago_sec') or 0)
+            ent = {'keys': {k: vals[k] for k in sp['keys']}, 'saved_before': (now - datetime.timedelta(seconds=ago)).isoformat(), 'snapshots': snaps}
+            if vals.get('_account'):
+                ent['account'] = str(vals['_account'])
+            # T640: 마커 칸·값 — 키가 다른 연쇄 행(SCP0005 이력 표 ROUTE_ID 0 행)도 마커 + 저장 계정 + 저장 시각으로 정리
+            if vals.get('_marker_col') and vals.get('_marker'):
+                ent['marker'] = {'col': str(vals['_marker_col']).upper(), 'value': str(vals['_marker'])}
+            data.append(ent)
             json.dump(data, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
             print(json.dumps({'ok': True, 'recorded': len(data)}, ensure_ascii=False))
             return 0

@@ -256,7 +256,7 @@ export const EE_DIVISION = 'EE';
 // ====================================================================================
 export const MSG = {
   REQUIRED_DIVISION: 'MSG00097', // 조회 필수(Division) — "Division 을 선택하세요."
-  NO_CHANGES: 'MSG00133', // 변경 없음 — bolChang_Flag==false ("수정한 내용이 없습니다")
+  NO_CHANGES: 'MSG00004', // 변경 없음 — bolChang_Flag==false ("수정한 내용이 없습니다", AS-IS MSG00133 → TO-BE MSG00004)
   SAVE_CONFIRM: 'MSG00001', // 저장 확인 다이얼로그 "Would you like to save it?" (AS-IS 번호 MSG00012). iter-3 GAP-11: TO-BE MSG00012='Maximum of 10 tabs allowed.' 오매핑을 실측(EN/KO.json) 정문구 MSG00001 로 수정
   SAVE_SUCCESS: 'MSG00672', // 저장 성공(건수)
   SAVE_FAIL: 'MSG00003', // 저장 실패
@@ -293,7 +293,7 @@ export const MSG = {
   //   (erp_status='C' = DO 생성됨 변경 차단. MSG00189 는 TO-BE 미등록)
   ERP_STATUS_LOCKED: 'MSG01202',
   // 아래 2종은 **TO-BE 등가 미등록**(역조회 0건) — AS-IS 번호 유지 + 영문 fallback. SSP0200 도 동일.
-  REASON_CODE_REQUIRED: 'MSG00287', // Reason Detail 입력 전 Reason Code 필수
+  REASON_CODE_REQUIRED: 'MSG01291', // Reason Detail 입력 전 Reason Code 필수 (AS-IS MSG00287 → TO-BE MSG01291)
   FROM_SITE_REQUIRED: 'MSG01126', // To Site/Incoterms 선행 필수(From Site 등)
   // AS-IS MSG00293(TransMode 후보 없음) -> 근사 MSG01296 'BOD (Trans mode, Incoterms) information
   //   corresponding to Div, From Site, To Site is invalid.' MSG00293 전용 등가는 TO-BE 미등록이라

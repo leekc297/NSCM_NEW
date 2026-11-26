@@ -31,6 +31,17 @@ def rid(mid, *parts):
 INPUT_TEST_MARK = 'E2E 입력 시험 중 포착된 호출'
 
 
+def order_na(sort_rows, sp):
+    """T533(2026-11-25 SSP0014 A6 13행 · AI 검토 검사기오판): 정적 정렬 검사(sort_check.csv)가 이 AS-IS SP 를 NA 로 둔 경우
+    (AS-IS·TO-BE 모두 ORDER BY 없음 + 저장·검증 SP / 그리드 비바인딩 / 1행 집계 = TO-BE 룰 CR-075 ③) 차등 ORDER 는 기대 순서가 없다 → NA 사유.
+    sort_check 행이 없거나 하나라도 NA 가 아니거나 AS-IS 키가 있으면 '' (종전 판정 유지)"""
+    t = (sp or '').split('.')[-1].upper()
+    rs = [r for r in sort_rows if (r.get('sp') or '').split('.')[-1].upper() == t]
+    if not rs or any(r.get('verdict') != 'NA' or (r.get('asis_keys') or '').strip() or (r.get('tobe_order_by') or '').strip() for r in rs):
+        return ''
+    return f"[CR-075 ③ · sort_check NA] AS-IS {rs[0].get('asis_file', '')}:{rs[0].get('asis_line', '')} ORDER BY 없음 · TO-BE {rs[0].get('tobe_proc', '')} ORDER BY 없음 · {rs[0].get('note', '')} — 기대 순서 없음, 순서 대조 대상 아님 · "
+
+
 def judged_procs(summ):
     return {(s.get('tobe_proc') or '').upper() for s in summ if s.get('verdict') in ('PASS', 'DIFF', 'ROWS_ONLY', 'COLS') and s.get('tobe_proc')}
 
@@ -48,6 +59,13 @@ def selftest():
              ('T471 정상 인자 판정 호출이 없으면 행 유지', is_input_test_dup(sm[2], j) is False),
              ('T471 입력 시험 아닌 미해결 인자 = 행 유지', is_input_test_dup(sm[3], j) is False),
              ('T471 판정 호출 = 행 유지', is_input_test_dup(sm[0], j) is False)]
+    sr = [{'sp': 'X_GET_USER_ID_CHECK', 'verdict': 'NA', 'asis_keys': '', 'tobe_order_by': '', 'note': '저장·검증 SP'},
+          {'sp': 'X_GET_LIST', 'verdict': 'FAIL', 'asis_keys': '', 'tobe_order_by': '', 'note': 'CR-075'},
+          {'sp': 'X_GET_TWO', 'verdict': 'NA', 'asis_keys': '', 'tobe_order_by': ''}, {'sp': 'X_GET_TWO', 'verdict': 'PASS', 'asis_keys': 'A', 'tobe_order_by': 'A'}]
+    cases += [('T533 sort_check NA(양쪽 ORDER BY 없음) = 차등 ORDER NA 사유', order_na(sr, 'dbo.X_GET_USER_ID_CHECK').startswith('[CR-075 ③')),
+              ('T533 sort_check FAIL = 종전 판정 유지(변이)', order_na(sr, 'X_GET_LIST') == ''),
+              ('T533 분기 하나라도 NA 아님 = 종전 판정 유지(변이)', order_na(sr, 'X_GET_TWO') == ''),
+              ('T533 sort_check 행 없음 = 종전 판정 유지(변이)', order_na(sr, 'X_NONE') == '')]
     bad = sum(1 for _, ok in cases if not ok)
     for n, ok in cases: print(('PASS ' if ok else 'FAIL ') + n)
     print(f'selftest {len(cases) - bad}/{len(cases)}')
@@ -69,6 +87,7 @@ def main():
         r_ = csv.DictReader(f); fields = r_.fieldnames; rows = [r for r in r_ if not r['row_id'].startswith('AD-')]
     out = []
     judged = judged_procs(summ)
+    sort_rows = rd(os.path.join(vd, 'sort_check.csv'))  # T533 — 정적 정렬 검사 NA(CR-075 ③) 를 차등 ORDER 에 반영
     for s in summ:
         if not s.get('asis_sp') and s.get('verdict') == 'SKIP' and not s.get('tobe_proc'):
             continue  # 배선·포착 자체가 없는 호출은 원장 행을 만들지 않는다(미검증 사유는 diff_summary 에 남음)
@@ -90,6 +109,9 @@ def main():
             if item == 'ORDER' and (v == 'PASS' or (v == 'DIFF' and s.get('order'))):
                 # 2026-11-18 미검증 해소(SCP0096 ORDER 허위 FAIL 4): 값 차이(DIFF) 호출도 순서는 따로 잰 결과(order 칸)로 판정한다 — 종전 DIFF=FAIL 일괄
                 res = vm.get(s.get('order') or 'NA', 'NA')
+            ona = order_na(sort_rows, s.get('asis_sp')) if (item == 'ORDER' and res not in ('PASS', 'NA')) else ''
+            if ona:
+                res = 'NA'
             if item == 'COLSET' and v in ('PASS', 'DIFF', 'ROWS_ONLY') and (s.get('cols_only_a') or s.get('cols_only_t')):
                 res = vm.get('COLS', '판정필요')
             if not res:
@@ -110,7 +132,7 @@ def main():
             # 2026-11-16 CR-105(사용자 결정): 값·행 집합 차이는 DB 데이터 차이라 판정에서 뺀다 — 해당없음에 근거를 붙인다(근거 없는 해당없음 금지)
             if save_skip: base_ev = '[저장 SP — 조회 결과 대조 대상 아님(쓰기 SP 실행 금지) · 저장 동작은 저장 검사에서 판정] ' + base_ev if not base_ev.startswith('[저장 SP') else base_ev
             cr105 = '[CR-105] 값·행 집합 차이는 AS-IS DEV 와 사내 DB 데이터 차이 — 판정 제외(컬럼 집합·정렬·조건 로직으로 판정) · ' if (res == 'NA' and item in ('KEYSET', 'VALUES')) else ''
-            out.append({'row_id': r['row_id'], 'result': res, 'evidence': (f"[{item}] " + cr105 + base_ev)[:1500], 'tobe_ref': f"DB @diff {item}",
+            out.append({'row_id': r['row_id'], 'result': res, 'evidence': (f"[{item}] " + cr105 + ona + base_ev)[:1500], 'tobe_ref': f"DB @diff {item}",
                         'mctx': {'calls': 1, 'rows': int(s.get('tobe_rows') or 0) if str(s.get('tobe_rows') or '').isdigit() else 0, 'req': 0},
                         'expect_src': f"ASIS:{sp}", 'evidence_ref': s.get('md', ''), 'precond': {'params': (s.get('params_tobe') or '')[:300]}})
     _buf = io.StringIO(newline='')

@@ -1,0 +1,43 @@
+{
+  "id": "SSP0020",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SSP0020] · AS-IS 액션 대조표: Doc/asisfacts/screens/SSP0020/__asis-actions__.md · Doc/asisfacts/screens/SSP0020/ · VALIDATION 취합(검증 작업 대조 원천)",
+  "start": "2026-11-25T15:39:31+09:00",
+  "end": "2026-11-25T15:47:35+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\shipping\\src\\pages\\delegate",
+      "files": 12
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SSP0020",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SSP0020",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "SSP0020 의 저장 로직에서 어떤 경우에 '/' 로 위임자가 저장될 요소가 있는지 확인 해주세요. 현재의 로직이 문제인지? 아니면 기존 데이터가 잘못 들어 있는 것인지 확인 이 필요합니다. \nSSP0003 의 조회 시 중복으로 보이는 원인이 DELEGATE 에 2건이 등록되어 있어서 그런 것이고, 그중 '/' 로 등록된 데이터가 존재하고 있습니다. ",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T15-39-31_claude_wb3.log"
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-11-25T15:47:35+09:00",
+  "changed": []
+}

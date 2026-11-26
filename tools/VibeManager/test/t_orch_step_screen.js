@@ -22,5 +22,16 @@ chk('SSP0005 20000초 = R3 1건', r3().length === 1 && r3()[0].screen === 'SSP00
 chk('R3 서명 = 단계|화면', r3().length === 1 && r3()[0].sig === 'R3|S8.checklistRun|SSP0005', r3()[0] && r3()[0].sig);
 const stats = JSON.parse(fs.readFileSync(path.join(p.vibeDir, 'orch', 'step_stats.json'), 'utf8'));
 chk('통계 키 화면별 분리', Array.isArray(stats['S8.checklistRun|SSP0005']) && Array.isArray(stats['S8.checklistRun|SCP0028']) && !stats['S8.checklistRun'], JSON.stringify(Object.keys(stats)));
+// 개선안 20261122130655_REVIEW_3: 6단계 문서 생성(--docs) 표본을 1단계 측정 표본과 나눔
+//   통계를 비운 뒤 SCP0028 측정 3953초 3건 + --docs 200초 1건 → 측정 키 표본 3개, 문서 생성 키 표본 1개, R3 0건
+fs.writeFileSync(path.join(p.vibeDir, 'orch', 'step_stats.json'), '{}');
+const r3Before = r3().length;
+for (const s of [3953, 3953, 3953]) step('SCP0028', s);
+w.onEvent({ ms: Date.now(), type: 'step.end', wb: `J${++run}:SCP0028`, runId: `R${run}`, no: 18, screen: 'SCP0028', status: 'OK', name: '6. 문서 생성', task: 'S8.checklistRun', stepKey: 'S8.checklistRun:--docs', ms_run: 200 * 1000, chainLabel: 'CheckList', actor: 'script' });
+const st2 = JSON.parse(fs.readFileSync(path.join(p.vibeDir, 'orch', 'step_stats.json'), 'utf8'));
+const scp = st2['S8.checklistRun|SCP0028'] || [], docs = st2['S8.checklistRun:--docs|SCP0028'] || [];
+chk('측정 키 표본에 문서 생성 200초 없음', scp.length === 3 && scp.every(x => x === 3953000), JSON.stringify(scp));
+chk('문서 생성 키 표본 1개', docs.length === 1 && docs[0] === 200000, JSON.stringify(docs));
+chk('--docs 추가 뒤 R3 0건', r3().length === r3Before, JSON.stringify(r3().slice(r3Before).map(x => x.title)));
 w.dispose(); st.dispose(); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
 console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

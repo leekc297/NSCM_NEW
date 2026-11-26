@@ -1,24 +1,47 @@
-import { FORECAST_INFO, FORECAST_LOGIC } from '../demand-as-dashboard.mock';
+import { useTranslation } from 'react-i18next';
+
+import { useTabProcQuery } from '@shared/hooks';
+
+import { MENU_ID, SHEETS } from '../demand-as-dashboard.constants';
+import { LBL } from '../demand-as-dashboard.labels';
 import styles from '../DemandAsDashboard.module.scss';
 
-export const ForecastInfo = () => {
+import { mapForecastInfo } from './forecastInfo.map';
+
+interface ForecastInfoProps {
+  tabId: string;
+  filters: { yyyymmdd: string };
+}
+
+export const ForecastInfo = ({ tabId, filters }: ForecastInfoProps) => {
+  const { t } = useTranslation();
+  const { data } = useTabProcQuery<MENU_ID, typeof SHEETS.FORECAST_INFO>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.FORECAST_INFO,
+    tabId,
+    filters,
+    enabled: !!filters,
+  });
+
+  const { logic, info } = mapForecastInfo(data?.o_rc1 ?? []);
+
   return (
     <div className={styles.panel}>
       <div className={styles.panelHead}>
-        <span className={styles.panelTitle}>Forecast Logic &amp; Info</span>
+        <span className={styles.panelTitle}>{t(...LBL.forecastInfoTitle)}</span>
       </div>
       <div className={styles.panelBody}>
         <div className={styles.logicWrap}>
           <ul className={styles.logicList}>
-            {FORECAST_LOGIC.map(item => (
+            {logic.map(item => (
               <li key={item}>{item}</li>
             ))}
           </ul>
           <div className={styles.infoTable}>
-            {FORECAST_INFO.map(info => (
-              <div key={info.label} className={styles.infoRow}>
-                <div className={styles.infoKey}>{info.label}</div>
-                <div className={styles.infoVal}>{info.value}</div>
+            {info.map(row => (
+              <div key={row.label} className={styles.infoRow}>
+                <div className={styles.infoKey}>{row.label}</div>
+                <div className={styles.infoVal}>{row.value}</div>
               </div>
             ))}
           </div>

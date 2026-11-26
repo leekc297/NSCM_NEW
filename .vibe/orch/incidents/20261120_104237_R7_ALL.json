@@ -16,7 +16,7 @@
     "source": "orch",
     "cls": "응답 중 종료"
   },
-  "status": "need-user",
+  "status": "resolved",
   "notice": false,
   "actions": [
     {
@@ -24,6 +24,11 @@
       "by": "VMO",
       "what": "Claude 종료 분류 응답 중 종료. stderr 와 로그(.vibe\\logs\\2026-11-20T10-39-40_claude_orch.log) 확인",
       "grade": "A"
+    },
+    {
+      "at": "2026-11-26T16:13:22+09:00",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "11-20 10:42 1회 응답 중 종료. 원인 확인용 로그 .vibe/logs/2026-11-20T10-39-40_claude_orch.log. 6일 지난 1회성 사건이라 닫음(같은 사건은 새로 올라오면 새 사건으로 추적)"
     }
   ]
 }

@@ -372,9 +372,9 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetMeasure | Measure:130, InitControl:152, Measure:167, InitControl:235, CheckAndGetMeasure:443 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | SetFilter | InitControls:182, InitControls:183, InitControls:184, InitControls:185, InitControls:205, InitControls:206, InitControls:221, GetBasisTime:288 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
 | GetCheckedListValue | InitControls:204, InitControls:221, SetChangeControl:311, SetChangeControl:318, SetChangeControl:324, SetChangeControl:330, SetChangeControl:339, SetChangeControl:344 | CString.GetCheckedListValue | CODE |
+| GetMeasure | CheckAndGetMeasure:443, Measure:130, InitControl:152, Measure:167, InitControl:235 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | EditQuery | RefreshHeader:485, Query:682 | FPExtensions.EditQuery | ROW_ID |
 | GetChanges | Save_Data:1303 | FPExtensions.GetChanges | ROW_ID |
 | SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:1803 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
@@ -386,10 +386,6 @@
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
 | this | Load | Form_Load | .ctor:116 |
 | cboInstance | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:367 |
 | clbPlanner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:368 |
@@ -416,6 +412,10 @@
 | bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:4177 |
 | memo_menu | Click | onMemoMenu | spdMain_CellClick:4189 |
 | bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:4203 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:345 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:382 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:407 |

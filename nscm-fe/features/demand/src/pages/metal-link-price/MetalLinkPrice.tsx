@@ -13,7 +13,7 @@ import {
   restoreGridFilter,
   restoreGridSort,
 } from '@foundation/utils';
-import { Alert, MainTitle, SubTitle } from '@shared/components';
+import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 
@@ -399,7 +399,8 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           }
         }}
       />
-      <Alert />
+      {/* 알림창은 MDIContainer 의 전역 <Alert /> 하나가 그린다. 이 화면에 두던 복제본은 같은 전역 저장소를
+          봐서 알림이 두 겹으로 열렸고, 탭을 떠날 때 전역 확인창까지 취소로 닫았다(2026-11-22 제거). */}
     </>
   );
 };

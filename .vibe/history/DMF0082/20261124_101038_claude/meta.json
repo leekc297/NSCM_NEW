@@ -1,0 +1,35 @@
+{
+  "id": "DMF0082",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0082] · Doc/gen/DMF0082/CHECK.md · Doc/gen/DMF0082/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0082/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-24T10:10:38+09:00",
+  "end": "2026-11-24T10:13:19+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\forecast-price",
+      "files": 44
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0082",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "81_UC 에 대해서 MONTHLY 기준으로 당월부터 MKT_FCST을 수정하고 싶을 때는, 기준월을 -1 개월을 던지면 가능한가요?",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "afterMode": "end",
+  "afterAt": "2026-11-24T10:13:19+09:00",
+  "changed": []
+}

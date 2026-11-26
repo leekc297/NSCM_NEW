@@ -552,6 +552,27 @@ export const sortComboDisplayNames = (names: string[]): string[] =>
 export const orderComboDisplayNames = (names: string[]): string[] => [...names];
 
 /**
+ * 콤보 셀 표시를 AS-IS FarPoint ComboBox 와 맞춘다 — 셀 코드가 콤보 목록(색인)에 없으면
+ * 코드 원문 대신 **빈 칸**으로 보인다. 예: 원장이 VALID_YN='N'(비활성)으로 콤보에서 빠진
+ * 코드를 참조하는 기존 행(실측 SCP0127 PG0031='E78_E79A_E77A', VALID_YN='N'). AS-IS 는
+ * 그 값을 목록에서 못 찾아 빈 칸으로 두는데, Wijmo DataMap.getDisplayValue 기본값은 미색인
+ * 키를 '그 키 그대로' 돌려줘 내부 코드(PG0031)가 사용자에게 노출됐다(사용자 신고 2026-11-24).
+ *
+ * 색인에 **있는** 코드는 종전대로 NAME 을 보인다 — 행 후보 밖(cascade 로 좁혀진 드롭다운에
+ * 안 뜨는) 코드라도 전체 색인에 있으면 이름이 안 깨지는 기존 설계를 그대로 유지한다. 바꾸는
+ * 것은 '전체 색인에도 없는 코드'의 표시뿐이고, 셀의 실제 저장값은 건드리지 않는다(표시 전용).
+ */
+const blankUnknownCodeDisplay = (wjDataMap: DataMap, rows: ComboResponse[]): void => {
+  const knownCodes = new Set(rows.map(row => safeString(row.CODE).trim()));
+  const base = wjDataMap.getDisplayValue.bind(wjDataMap);
+  wjDataMap.getDisplayValue = (key: unknown) => {
+    const code = safeString(key).trim();
+    if (code === '') return '';
+    return knownCodes.has(code) ? base(key) : '';
+  };
+};
+
+/**
  * 필터 방식(PARAM10 이 'D' 가 아님) 콤보의 DataMap.
  *
  * PARAM9 가 있으면 신규행만 그 콤보를 본다. 색인(CODE<->NAME)에는 두 콤보를 다 넣는다 -
@@ -586,6 +607,9 @@ const getDataMap = (
       ).map(item => item.NAME)
     );
   };
+
+  // 색인에 없는 코드(비활성 등)는 코드 원문 대신 빈 칸으로 — AS-IS FarPoint 콤보 파리티.
+  blankUnknownCodeDisplay(wjDataMap, allRows);
 
   return wjDataMap;
 };
@@ -643,6 +667,10 @@ const getRowParamDataMap = (column: RawFlexGridColumnConfig): DataMap | undefine
         rowItem ? pickRowParamCandidates(rowItem) : allRows
       ).map(item => wjDataMap.getDisplayValue(item.CODE))
     );
+
+  // 색인에 없는 코드(비활성 등)는 코드 원문 대신 빈 칸으로 — AS-IS FarPoint 콤보 파리티.
+  //   후보(allRows)는 모두 색인에 있어 getDisplayValues 의 NAME 산출에는 영향이 없다.
+  blankUnknownCodeDisplay(wjDataMap, allRows);
 
   return wjDataMap;
 };

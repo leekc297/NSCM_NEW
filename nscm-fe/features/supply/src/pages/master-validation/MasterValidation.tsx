@@ -211,18 +211,25 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
     [findMenuPath, navigate]
   );
 
-  // 마스터 행 선택(QUERY/OPEN 외 셀) — CONSTRAINTS01 파싱으로 PlanGroup 조건 잠금(R18) +
-  //   detail sheet 프리뷰 전환(조회 없이 뷰만, R15).
-  const handleRowSelect = useCallback(
+  // 마스터 셀 클릭 공통(QUERY/OPEN 포함) — CONSTRAINTS01 파싱으로 PlanGroup 조건 잠금/해제(R18).
+  //   AS-IS SpdMain_CellClick(cs:1011~1040)은 QUERY/OPEN/기타 분기 뒤 항상 Enabled 를 재설정한다.
+  const handleCellClick = useCallback(
     (row: MasterValidationRow) => {
       setPlanGroupLocked(isPlanGroupLocked(row.CONSTRAINTS01));
+    },
+    [setPlanGroupLocked]
+  );
+
+  // 마스터 행 선택(QUERY/OPEN 외 셀) — detail sheet 프리뷰 전환(조회 없이 뷰만, R15).
+  const handleRowSelect = useCallback(
+    (row: MasterValidationRow) => {
       const spec = VALIDATION_MAP[row.VALIDATION_TYPE];
       if (!spec) return;
       void fetchDetailColumns(spec.sheet, spec.adminSheetName);
       // 셀 클릭 = 디테일 탭 프리뷰 전환(조회 없이, AS-IS cs:1000~1001 ChangeActiveSheet). 기존 조회결과는 보존.
       setActiveSheet(spec.sheet);
     },
-    [fetchDetailColumns, setPlanGroupLocked]
+    [fetchDetailColumns]
   );
 
   // 디테일 탭 전환 — 해당 sheet 로 활성 전환 + 컬럼 메타 확보(AS-IS sheet 탭 클릭 등가, 조회는 QUERY 로만).
@@ -326,6 +333,7 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
             onQuery={handleQuery}
             onOpen={handleOpen}
             onRowSelect={handleRowSelect}
+            onCellClick={handleCellClick}
             gotFocus={() => setFocusDetail(false)}
           />
         </Panel>

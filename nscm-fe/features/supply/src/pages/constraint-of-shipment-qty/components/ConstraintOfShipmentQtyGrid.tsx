@@ -108,7 +108,7 @@ export const ConstraintOfShipmentQtyGrid = ({
     g.updatedView.addHandler(updatedViewHandler);
 
     // 편집 white-list(design 03 §1/§3) — 편집권한 없음(잠금)/권한 있음(편집)/신규행 부분편집
-    //   3상태를 isCellEditable 이 판정(isEditMode 인자 = canEdit 권한). ITEM_ID 는 항상 인라인 편집 금지(팝업 전용).
+    //   3상태를 isCellEditable 이 판정(isEditMode 인자 = canEdit 권한). ITEM_ID 는 키 입력 + 팝업 둘 다 허용.
     const beginningEditHandler = (
       sender: FlexGrid,
       e: { cancel: boolean; row: number; col: number }
@@ -173,8 +173,9 @@ export const ConstraintOfShipmentQtyGrid = ({
     g.hostElement.addEventListener('keydown', keydownHandler, true);
 
     // ITEM_ID 셀 더블클릭 -> MaterialByDivisionModal(design 03 §1 #4, gridSignals#13).
-    //   편집취소는 beginningEdit 이 이미 처리(isCellEditable('ITEM_ID')=false, convert-core §5-16).
-    //   편집 권한이 없으면 신규 행 외에는 열지 않는다(AS-IS .cs:1003).
+    //   편집 권한이 없으면 신규 행 외에는 열지 않는다(AS-IS .cs:1003). ITEM_ID 는 키 입력도 되는 칸이라
+    //   더블클릭이 셀 편집기도 함께 연다 — 팝업 선택값을 열린 편집기의 이전 값이 덮어쓰지 않도록
+    //   팝업을 열기 전에 편집을 취소한다.
     const dblclickHandler = (ev: MouseEvent) => {
       const ht = g.hitTest(ev);
       if (ht.cellType !== CellType.Cell) return;
@@ -182,6 +183,7 @@ export const ConstraintOfShipmentQtyGrid = ({
       if (!isItemPopupCell(binding)) return;
       const row = g.rows[ht.row]?.dataItem as Record<string, unknown> | undefined;
       if (!row || (!isEditMode && !isNewRow(row))) return;
+      if (g.activeEditor) g.finishEditing(true);
       setClickedRow(ht.row);
       setOpenItem(true);
     };

@@ -1,0 +1,34 @@
+{
+ "menu_id": "SSP0014",
+ "at": "2026-11-25 03:00:55",
+ "ledger": "Doc/verify/SSP0014/verify_ledger.csv",
+ "ledger_rows": 1068,
+ "elements": 72,
+ "items": 959,
+ "status": {
+  "확정": 559,
+  "대상 아님": 368,
+  "판단 대기": 32
+ },
+ "family_rows": 710,
+ "family": {
+  "same": 109,
+  "element": 69,
+  "screen": 131,
+  "absent_confirmed": 361,
+  "absent_wait": 30
+ },
+ "rules_applied": 247,
+ "rules_quote_fail": 0,
+ "user_fixed": 0,
+ "live_links": 34,
+ "live_wait": 28,
+ "ai": {
+  "calls": 0,
+  "cached": 37,
+  "failed": 0,
+  "cost": 0.0,
+  "nochange": 0
+ },
+ "batches": 37
+}

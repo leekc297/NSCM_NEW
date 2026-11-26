@@ -1,10 +1,10 @@
 {
- "lastMs": 1795152806634,
- "lastAt": "2026-11-20T14:33:26+09:00",
+ "lastMs": 1795356435898,
+ "lastAt": "2026-11-22T23:07:15+09:00",
  "manual": false,
- "log": ".vibe\\logs\\2026-11-20T14-28-54_claude_orch.log",
- "sec": 272,
- "costUsd": 2.3110516,
- "lastResult": "개선안 5건 등록",
- "summary": "새로 확인한 결함은 잠금 시각 변환 오류(orch-state.js:104, server_guard.py:92 글자 at)와 정상 잠금 정리가 오류로 집계되는 문제이고, 반복 수정 파일은 CHANGELOG 절을 from 일자부터 대조했으나(workbench.js 80절, orchestra.js 34절, orch-watch.js 29절, extension.js 21절, job-runner.js 19절, orch-selfcheck.js 15절) 절마다 기능이 달라 한 원인으로 묶지 못함(orch-watch.js 약 10절이 중지 알림 전달 보완인데 모두 반영 끝남), failed 의 R2 반복 집계 안은 06:06 끊긴 반영 때 이미 들어가 시험을 통과하는 상태라 다시 올리지 않고 사람 판단으로 둠. S11 이번 미제출: workbench.js 210건(L132 DB MODE 지시문 9건, L1446 웹뷰 템플릿 34건, L1806~L3426 144건, ✖ ▶ 상태 표식 22건, 🛠️ 1건), 오탐이거나 메뉴 라벨이라 대상 아님: extension.js 1, history.js 2, jobs.js 1(메뉴 아이콘), orchestra.js 1(HTML 머리), "
+ "log": ".vibe\\logs\\2026-11-22T23-03-45_claude_orch.log",
+ "sec": 210,
+ "costUsd": 2.1022198000000003,
+ "lastResult": "개선안 3건 등록, 중복 1건 제외",
+ "summary": "S13 U3 실패는 R12 사건에 조치 기록이 붙지 않는 점(orch-agent.js:298, harness.json:42 agentRules 에 R12 없음)과 U3 판정의 자기 참조(orch-usercheck.js:68)가 맞물려 생긴 결함이라 L2 로 1건 올림. 오류 기록 9종 가운데 Invalid time value 2종은 orch-state.js:104~112 lockAt(CHANGELOG :553 개선안 20261120143326_SELF)에서, lockStopClean 3종과 restore 4종은 반영된 안 '정상 처리 기록 오류 집계 제외'(CHANGELOG :72)에서 이미 고쳐져 올리지 않음. S11 위반은 workbench.js 1개 파일 142건이고 이번에 50건(L3222~L3474)을 올림. 못 올린 것은 workbench.js 92건(L144 1, L761~L1047 5, L1610 HTML 문자열 32 중 정규식과 svg 키 같은 코드 식별자 포함, L2776~L2778 2, L3488~L3676 52). repeatFiles 는 CHANGELOG 331절 가운데 11-20 05:31~11-22 15:04 사이 120절 제목만 "
 }

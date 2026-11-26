@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Checkbox } from '@shared/lges';
 
+import { getAttachmentDownloadUrl, useHomeNoticeAttachments } from './noticeAttachments';
 import { sanitizeNoticeHtml, getSafeNoticeImageSource } from './noticeContent';
 import styles from './NoticePreviewModal.module.scss';
 import { formatNoticeDateTime, type HomeNotice } from './useHomeNotices';
@@ -35,13 +36,15 @@ export const NoticePreviewModal = ({
   onNext,
 }: NoticePreviewModalProps) => {
   const [hideToday, setHideToday] = useState(false);
-  const [isZoomed, setIsZoomed] = useState(false);
+  // 확대해서 볼 이미지 src(없으면 null). 본문 이미지 더블클릭·배너 이미지 클릭으로 연다.
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const { data: attachments } = useHomeNoticeAttachments(String(notice.NOTICE_ID ?? ''));
 
   // 공지가 바뀌면(이전/다음) 창 상태를 초기화하고 본문을 맨 위로
   useEffect(() => {
     setHideToday(false);
-    setIsZoomed(false);
+    setZoomedImage(null);
     bodyRef.current?.scrollTo({ top: 0 });
   }, [notice.NOTICE_ID]);
 
@@ -49,20 +52,26 @@ export const NoticePreviewModal = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       // 확대 중이면 ESC 는 확대만 닫는다(팝업은 유지)
       if (event.key === 'Escape') {
-        if (isZoomed) setIsZoomed(false);
+        if (zoomedImage) setZoomedImage(null);
         else onClose(hideToday);
         return;
       }
-      if (isZoomed) return;
+      if (zoomedImage) return;
       if (event.key === 'ArrowLeft') onPrev?.();
       if (event.key === 'ArrowRight') onNext?.();
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onClose, hideToday, isZoomed, onPrev, onNext]);
+  }, [onClose, hideToday, zoomedImage, onPrev, onNext]);
 
   const safeContent = sanitizeNoticeHtml(notice.NOTICE_CONTENT);
   const imageSource = getSafeNoticeImageSource(notice.NOTICE_IMAGE);
+
+  // 본문 이미지 클릭 → 원본(전체) 크기로 확대
+  const handleContentClick = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target;
+    if (target instanceof HTMLImageElement && target.src) setZoomedImage(target.src);
+  };
 
   return createPortal(
     <div
@@ -99,7 +108,11 @@ export const NoticePreviewModal = ({
         {/* 본문 — 테두리 박스 안에서만 스크롤 */}
         <div className={styles.body} ref={bodyRef}>
           {safeContent ? (
-            <div className={styles.content} dangerouslySetInnerHTML={{ __html: safeContent }} />
+            <div
+              className={styles.content}
+              onClick={handleContentClick}
+              dangerouslySetInnerHTML={{ __html: safeContent }}
+            />
           ) : (
             <p className={styles.empty}>등록된 내용이 없습니다.</p>
           )}
@@ -110,7 +123,7 @@ export const NoticePreviewModal = ({
               <button
                 type='button'
                 className={styles.imageButton}
-                onClick={() => setIsZoomed(true)}
+                onClick={() => setZoomedImage(imageSource)}
                 aria-label='이미지 확대'
               >
                 <img
@@ -121,7 +134,28 @@ export const NoticePreviewModal = ({
               </button>
             </div>
           )}
+
         </div>
+
+        {/* 첨부파일 — 본문 박스와 별개로 하단에 분리된 영역 */}
+        {attachments && attachments.length > 0 && (
+          <div className={styles.attachmentsSection}>
+            <span className={styles.attachmentsLabel}>첨부파일</span>
+            <ul className={styles.attachmentList}>
+              {attachments.map(att => (
+                <li key={att.fileId}>
+                  <a
+                    className={styles.attachmentLink}
+                    href={getAttachmentDownloadUrl(att.fileId)}
+                    download={att.fileName}
+                  >
+                    {att.fileName}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className={styles.meta}>
           <span className={styles.metaDate}>
@@ -144,18 +178,14 @@ export const NoticePreviewModal = ({
       </div>
 
       {/* 이미지 확대 — 화면 전체. 아무 곳이나 클릭하면 닫힌다 */}
-      {isZoomed && imageSource && (
+      {zoomedImage && (
         <button
           type='button'
           className={styles.zoomOverlay}
           aria-label='이미지 확대 닫기'
-          onClick={() => setIsZoomed(false)}
+          onClick={() => setZoomedImage(null)}
         >
-          <img
-            className={styles.zoomImage}
-            src={imageSource}
-            alt={notice.IMAGE_FILE_NM || notice.NOTICE_TITLE}
-          />
+          <img className={styles.zoomImage} src={zoomedImage} alt={notice.NOTICE_TITLE} />
         </button>
       )}
     </div>,

@@ -70,6 +70,12 @@ const applyDateColumnTypes = (g: FlexGrid): void => {
   }
 };
 
+// PRIORITY 자릿수 상한 — AS-IS FarPoint 숫자셀 MaximumValue=99999999999999(14자리). 메타
+//   DATA_MAX_LENGTH 가 비어 있어 화면에서 편집기 입력칸 maxLength 로 키인을 막고 붙여넣기도 같은 상한으로
+//   막는다(사용자 지시 2026-11-23). 주의: 컬럼 maxLength 를 쓰면 wijmo 가 붙여넣기 값을 pastingCell 전에
+//   14자로 잘라 넣어 초과값이 잘린 채 들어가므로, 컬럼이 아닌 편집기(prepareCellForEdit)에만 건다.
+const PRIORITY_MAX_DIGITS = 14;
+
 // 행 타입 조건부 잠금 셀 판정(AS-IS EditButton cs:295-305). beginningEdit(편집 차단)과
 //   formatItem(편집 스타일 제거)이 이 술어를 공유해 AS-IS 노랑(편집)/흰색(잠금) 패턴을 맞춘다.
 //   비-Warranty 행(opGroup≠'W') → LOCK_ON_NON_WARRANTY(PLANT_SITE_ID~VALID_YN) 잠금.
@@ -360,6 +366,23 @@ export const ProjectRouteWarrantyGrid = ({
     [swapPlantCombo, plantComboDivision, setAlert, t]
   );
 
+  // 붙여넣기 잠금 — 붙여넣기는 beginningEdit 를 거치지 않아(공용 pastingCell 게이트는 메타 INPUT_TP_CD 만
+  //   판정) 행-조건부 잠금 셀(R-L2/R-L3, 예: 비-Warranty·기존행 PRIORITY)과 팝업전용 셀에 값이 들어갔다.
+  //   beginningEdit 와 같은 술어로 pastingCell 도 막는다(사용자 신고 2026-11-23). 단방향 — 이미 막힌 셀은 그대로.
+  const pastingCellHandler = useCallback((s: FlexGrid<MainRow>, e: CellRangeEventArgs) => {
+    if (e.cancel) return;
+    const binding = s.columns[e.col]?.binding ?? '';
+    const row = s.rows[e.row]?.dataItem as MainRow | undefined;
+    if ((POPUP_ONLY_COLUMNS as readonly string[]).includes(binding) || isRowTypeLockedCell(binding, row))
+      e.cancel = true;
+    // PRIORITY 소수·14자리 초과 붙여넣기 차단 — 키인 차단과 짝(AS-IS 정수 고정·14자리 셀).
+    //   e.data = 붙여넣을 셀 문자열.
+    else if (binding === 'PRIORITY') {
+      const pasted = String(e.data ?? '');
+      if (pasted.includes('.') || pasted.replace(/\D/g, '').length > PRIORITY_MAX_DIGITS) e.cancel = true;
+    }
+  }, []);
+
   // 그리드 생성 시 1회(initialized, grid 확정 보장) — 모든 셀 렌더링 훅을 여기서 건다.
   //   주의: 이들을 useEffect([gridRef])로 걸면 안 된다. gridRef.current 는 wijmo 비동기 mount 라
   //   첫 pass 에서 undefined → early-return 하고, ref deps 는 안 바뀌어 재실행되지 않는다
@@ -376,10 +399,27 @@ export const ProjectRouteWarrantyGrid = ({
       attachDivisionDataMap(grid);
       grid.updatedLayout.addHandler(applyDateColumnTypes);
       applyDateColumnTypes(grid);
+      grid.prepareCellForEdit.addHandler((s, e) => {
+        if (s.columns[e.col]?.binding === 'PRIORITY' && s.activeEditor)
+          s.activeEditor.maxLength = PRIORITY_MAX_DIGITS;
+      });
       grid.formatItem.addHandler(formatItemHandler);
       grid.beginningEdit.addHandler(beginningEditHandler);
+      grid.pastingCell.addHandler(pastingCellHandler);
+      // PRIORITY 소수점 키인 차단 — AS-IS FarPoint 숫자셀은 정수 고정(FixedPoint)이라 '.' 이 안 들어간다.
+      //   TO-BE 메타(scale NULL)는 기본 에디터라 소수가 입력되므로, 편집 중/편집 시작 키 모두 캡처 단계에서
+      //   막는다(사용자 지시 2026-11-23).
+      grid.hostElement.addEventListener(
+        'keypress',
+        e => {
+          if (e.key !== '.') return;
+          const col = grid.editRange?.col ?? grid.selection.col;
+          if (grid.columns[col]?.binding === 'PRIORITY') e.preventDefault();
+        },
+        true
+      );
     },
-    [attachDivisionDataMap, formatItemHandler, beginningEditHandler]
+    [attachDivisionDataMap, formatItemHandler, beginningEditHandler, pastingCellHandler]
   );
   // 콤보가 grid mount 이후 도착하는 경우 — 변경 시 즉시 DataMap 부착.
   useEffect(() => {

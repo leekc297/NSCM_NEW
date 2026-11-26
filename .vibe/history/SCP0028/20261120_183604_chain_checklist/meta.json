@@ -1,0 +1,18 @@
+{
+  "id": "SCP0028",
+  "task": "chain_checklist",
+  "scope": "none",
+  "note": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "start": "2026-11-20T18:36:04+09:00",
+  "end": "2026-11-20T18:46:22+09:00",
+  "exit": 1,
+  "sources": [],
+  "source": "menu",
+  "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "text": "1. 1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 권장안 적용)\n2. 2. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관)\n3. 3. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완)\n4. 4. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록)\n5. 5. 부분 재측정 (보완으로 바뀐 검사기와 남은 미해결 규칙만 → 재분류 · 권장안 적용)\n6. 6. 문서 생성 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 1회)",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261120_180409",
+  "afterMode": "end",
+  "changed": []
+}

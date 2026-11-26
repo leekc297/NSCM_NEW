@@ -59,8 +59,16 @@ export const validateSafetyStockRow = (
     return { msgId: MSG.DATE_RANGE_INVALID, message: '_Valid From 이 Valid To 보다 클 수 없습니다.' };
   }
 
-  // MSG00085(line728) — 적용수량(APL_QTY) 음수.
+  // 적용수량(APL_QTY) 수치 가드 — AS-IS SaveData(.cs:725)는 `Convert.ToInt32(v_apl_qty)`로 변환하므로
+  //   Int32 상한(2,147,483,647) 초과는 OverflowException 으로 저장 중단(MSG00460 "정수값만 입력가능합니다!"),
+  //   음수는 변환 후 `< 0` 비교로 차단(MSG00085). 변환 예외가 비교보다 먼저 터지므로 상한을 먼저 검사한다.
+  //   number 셀 입력 자릿수 cap(SafetyStockGrid)이 정밀도 손실(17자리→9,007,199,254,740,991 변조)을 1차로
+  //   막고, 붙여넣기 등 우회 입력은 이 저장검증이 이중 안전망이다(csharp-int-to-js 메모리, 자매 SCP0131 동형).
   const qty = Number(row.APL_QTY);
+  if (!Number.isNaN(qty) && qty > 2147483647) {
+    return { msgId: MSG.QTY_OVER_MAX, message: '_정수값만 입력가능합니다!' };
+  }
+  // MSG00085(line728) — 적용수량(APL_QTY) 음수.
   if (!Number.isNaN(qty) && qty < 0) {
     return { msgId: MSG.QTY_NEGATIVE, message: '_수량은 0 이상이어야 합니다.' };
   }

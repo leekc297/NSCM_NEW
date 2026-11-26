@@ -1,0 +1,864 @@
+using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace AsisFacts;
+
+/// <summary>
+/// 2026-11-25 사용자 지시 'Roslyn 의미 분석으로 DM 파서 보완'.
+/// 문법 트리만 보던 값 해석(Resolver)에 Roslyn 의미 모델(CSharpCompilation + SemanticModel)을 더한다.
+///   - csproj 마다 컴파일을 만든다(Compile 항목 · ProjectReference · HintPath DLL · .NET Framework 참조 어셈블리). 빌드는 하지 않는다
+///   - 심볼로 값을 따라간다: const(다른 프로젝트 포함) · string.Empty · 지역변수(경로별 정의) · 필드/자동 속성(컴파일 전체 대입) · 메서드 반환 · 매개변수(호출 지점)
+///   - 지역변수 정의가 if 조건 아래에 있고 그 조건이 매개변수(또는 매개변수의 속성)에 대한 문자열 판정이면 값별 조건(ValueConds)으로 남긴다.
+///     전파(Linker.Derive) 때 호출자 인자로 조건을 평가해 타지 않는 값을 뺀다. 예: FoxDataClient.ExecuteDataSet 의 !request.QueryId.ToLower().StartsWith("fp")
+///   - 결과가 문법 해석보다 덜 풀렸으면 바꾸지 않는다. 바꾼 지점은 semantic_report.csv 에 전후 값을 남긴다
+/// </summary>
+public sealed class SemanticHost
+{
+    readonly string _root;
+    readonly CSharpParseOptions _popt;
+    readonly Dictionary<string, string> _dllIndex;              // 파일명 → 전체 경로 (asisRoot 아래 DLL)
+    readonly ConcurrentDictionary<string, MetadataReference> _metaCache = new(StringComparer.OrdinalIgnoreCase);
+    readonly Dictionary<string, CSharpCompilation> _comp = new(StringComparer.OrdinalIgnoreCase);   // csproj 상대경로 → 컴파일
+    readonly Dictionary<string, (CSharpCompilation c, SyntaxTree t)> _fileModel = new(StringComparer.OrdinalIgnoreCase);
+    readonly HashSet<string> _building = new(StringComparer.OrdinalIgnoreCase);
+    public readonly List<string[]> ProjectStats = new();       // csproj, trees, refs, missing_refs, errors, unresolved_types
+
+    /// <summary>저장소 소스로 만드는 어셈블리 이름(csproj AssemblyName). 이 이름의 DLL 로 묶인 호출은 외부가 아니라 소스 메서드</summary>
+    public readonly HashSet<string> RepoAssemblies = new(StringComparer.OrdinalIgnoreCase);
+
+    public SemanticHost(string root, CSharpParseOptions popt)
+    {
+        _root = root; _popt = popt;
+        foreach (var cp in Directory.EnumerateFiles(root, "*.csproj", SearchOption.AllDirectories))
+        {
+            var mt = Regex.Match(File.ReadAllText(cp), "<AssemblyName>([^<]+)</AssemblyName>");
+            RepoAssemblies.Add(mt.Success ? mt.Groups[1].Value.Trim() : Path.GetFileNameWithoutExtension(cp));
+        }
+        _dllIndex = new(StringComparer.OrdinalIgnoreCase);
+        foreach (var f in Directory.EnumerateFiles(root, "*.dll", SearchOption.AllDirectories))
+        {
+            var n = Path.GetFileName(f);
+            if (!_dllIndex.ContainsKey(n)) _dllIndex[n] = f;
+        }
+    }
+
+    MetadataReference Meta(string path) => _metaCache.GetOrAdd(path, p => MetadataReference.CreateFromFile(p));
+
+    static string FrameworkDir(string ver)
+    {
+        var baseDir = @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework";
+        var d = Path.Combine(baseDir, string.IsNullOrEmpty(ver) ? "v4.8" : ver);
+        if (!Directory.Exists(d)) d = Path.Combine(baseDir, "v4.8");
+        return Directory.Exists(d) ? d : null;
+    }
+
+    /// <summary>csproj(asisRoot 상대경로) 의 컴파일. 없거나 못 만들면 null</summary>
+    public CSharpCompilation Compilation(string csprojRel)
+    {
+        if (string.IsNullOrEmpty(csprojRel)) return null;
+        lock (_comp)
+        {
+            if (_comp.TryGetValue(csprojRel, out var c)) return c;
+            if (!_building.Add(csprojRel)) return null;   // 순환 참조
+        }
+        CSharpCompilation comp = null;
+        try { comp = Build(csprojRel); }
+        catch (Exception ex) { lock (ProjectStats) ProjectStats.Add(new[] { csprojRel, "0", "0", "0", "build-fail: " + ex.Message, "" }); }
+        lock (_comp) { _comp[csprojRel] = comp; _building.Remove(csprojRel); }
+        return comp;
+    }
+
+    CSharpCompilation Build(string csprojRel)
+    {
+        var full = Path.Combine(_root, csprojRel);
+        var dir = Path.GetDirectoryName(full)!;
+        XDocument x;   // csproj 안 XML 금지 문자 참조(&#xB; 등)도 허용해 읽음
+        using (var xr = System.Xml.XmlReader.Create(full, new System.Xml.XmlReaderSettings { CheckCharacters = false, DtdProcessing = System.Xml.DtdProcessing.Ignore })) x = XDocument.Load(xr);
+        var ns = x.Root!.Name.Namespace;
+        string ver = x.Descendants(ns + "TargetFrameworkVersion").Select(e => e.Value.Trim()).FirstOrDefault();
+        var trees = new List<SyntaxTree>();
+        foreach (var ci in x.Descendants(ns + "Compile"))
+        {
+            var inc = (string)ci.Attribute("Include");
+            if (string.IsNullOrEmpty(inc) || inc.Contains('*')) continue;
+            var p = Path.GetFullPath(Path.Combine(dir, inc));
+            if (!File.Exists(p)) continue;
+            var (text, _) = TextIO.Read(p);
+            trees.Add(CSharpSyntaxTree.ParseText(text, _popt, path: SourceScan.Rel(_root, p)));
+        }
+        var refs = new List<MetadataReference>(); int missing = 0;
+        var fw = FrameworkDir(ver);
+        if (fw != null)
+        {
+            foreach (var f in Directory.EnumerateFiles(fw, "*.dll")) refs.Add(Meta(f));
+            var fac = Path.Combine(fw, "Facades");
+            if (Directory.Exists(fac)) foreach (var f in Directory.EnumerateFiles(fac, "*.dll")) refs.Add(Meta(f));
+        }
+        var fwNames = new HashSet<string>(fw == null ? Array.Empty<string>() : Directory.EnumerateFiles(fw, "*.dll").Select(Path.GetFileNameWithoutExtension), StringComparer.OrdinalIgnoreCase);
+        foreach (var r in x.Descendants(ns + "Reference"))
+        {
+            var name = ((string)r.Attribute("Include") ?? "").Split(',')[0].Trim();
+            if (name.Length == 0 || fwNames.Contains(name)) continue;
+            var hint = r.Element(ns + "HintPath")?.Value;
+            string path = null;
+            if (!string.IsNullOrEmpty(hint))
+            {
+                var hp = Path.IsPathRooted(hint) ? hint : Path.GetFullPath(Path.Combine(dir, hint));
+                if (File.Exists(hp)) path = hp;
+            }
+            if (path == null && _dllIndex.TryGetValue(name + ".dll", out var ip)) path = ip;
+            if (path == null) { missing++; continue; }
+            try { refs.Add(Meta(path)); } catch { missing++; }
+        }
+        foreach (var pr in x.Descendants(ns + "ProjectReference"))
+        {
+            var inc = (string)pr.Attribute("Include");
+            if (string.IsNullOrEmpty(inc)) continue;
+            var p = Path.GetFullPath(Path.Combine(dir, inc));
+            if (!File.Exists(p)) { missing++; continue; }
+            var sub = Compilation(SourceScan.Rel(_root, p));
+            if (sub != null) refs.Add(sub.ToMetadataReference()); else missing++;
+        }
+        var opts = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true, nullableContextOptions: NullableContextOptions.Disable);
+        var comp = CSharpCompilation.Create(Path.GetFileNameWithoutExtension(full), trees, refs, opts);
+        var errs = comp.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error).ToList();
+        lock (ProjectStats) ProjectStats.Add(new[] { csprojRel, trees.Count.ToString(), refs.Count.ToString(), missing.ToString(), errs.Count.ToString(),
+            errs.Count(d => d.Id is "CS0246" or "CS0234" or "CS0103" or "CS1061").ToString() });
+        return comp;
+    }
+
+    /// <summary>파일(asisRoot 상대경로)의 의미 모델. 파일이 그 csproj 컴파일에 없으면(빌드에서 빠진 사본) 그 프로젝트 참조만 붙인 단독 컴파일</summary>
+    public (SemanticModel model, SyntaxTree tree) ModelOf(string fileRel, string csprojRel)
+    {
+        lock (_fileModel)
+            if (_fileModel.TryGetValue(fileRel, out var fm)) return fm.c == null ? (null, null) : (fm.c.GetSemanticModel(fm.t), fm.t);
+        var comp = Compilation(csprojRel);
+        SyntaxTree tree = comp?.SyntaxTrees.FirstOrDefault(t => string.Equals(t.FilePath, fileRel, StringComparison.OrdinalIgnoreCase));
+        if (comp != null && tree == null)
+        {
+            var (text, _) = TextIO.Read(Path.Combine(_root, fileRel));
+            tree = CSharpSyntaxTree.ParseText(text, _popt, path: fileRel);
+            comp = CSharpCompilation.Create("loose_" + Path.GetFileNameWithoutExtension(fileRel), new[] { tree }, comp.References.Append(comp.ToMetadataReference()), comp.Options);
+        }
+        lock (_fileModel) _fileModel[fileRel] = (comp, tree);
+        return comp == null ? (null, null) : (comp.GetSemanticModel(tree), tree);
+    }
+
+    public SemanticModel ModelFor(Compilation comp, SyntaxTree t) => comp.GetSemanticModel(t);
+}
+
+/// <summary>값 후보 + 그 값이 나오는 조건(매개변수 판정 연언, 없으면 무조건)</summary>
+public sealed class SemVal
+{
+    public string Value;
+    public List<string> Conds = new();   // ValueCond.Encode 형식, 비어 있으면 무조건
+}
+
+/// <summary>매개변수 기반 문자열 판정 하나: P{idx}:{name}|acc|fn|op|lit|neg</summary>
+public static class ValueCond
+{
+    public static string Encode(int idx, string name, string acc, string fn, string op, string lit, bool neg) => $"{idx}|{name}|{acc}|{fn}|{op}|{lit}|{(neg ? 1 : 0)}";
+
+    /// <summary>호출자 인자 값으로 조건 평가: true/false/null(판정 불가). 인자가 호출자 매개변수 하나로만 이어지면 remap 에 새 조건을 준다</summary>
+    public static bool? Eval(string cond, Func<int, string, List<string>> args, out string remap)
+    {
+        remap = null;
+        var p = cond.Split('|');
+        if (p.Length < 7) return null;
+        int.TryParse(p[0], out var idx);
+        var av = args(idx, p[1]);
+        if (av == null || av.Count == 0) return null;
+        if (av.Count == 1 && Val.HasParam(av[0]) && !Val.HasUnknown(av[0]))
+        {
+            var pp = Val.Params(av[0]).ToList();
+            if (pp.Count == 1 && Val.Show(av[0]) == "{p:" + pp[0].name + "}") { remap = Encode(pp[0].idx, pp[0].name, p[2], p[3], p[4], p[5], p[6] == "1"); return null; }
+            return null;
+        }
+        bool any = false, anyNull = false;
+        foreach (var a in av)
+        {
+            var s = Access(a, p[2]);
+            if (s == null) { anyNull = true; continue; }
+            if (p[3] == "lower") s = s.ToLowerInvariant(); else if (p[3] == "upper") s = s.ToUpperInvariant(); else if (p[3] == "trim") s = s.Trim();
+            bool r = p[4] switch
+            {
+                "StartsWith" => s.StartsWith(p[5], StringComparison.Ordinal),
+                "EndsWith" => s.EndsWith(p[5], StringComparison.Ordinal),
+                "Contains" => s.Contains(p[5], StringComparison.Ordinal),
+                "Equals" => s == p[5],
+                _ => false
+            };
+            if (p[6] == "1") r = !r;
+            any |= r;
+        }
+        if (any) return true;
+        return anyNull ? null : false;
+    }
+
+    static readonly Regex CtorText = new("^\\{\\?new\\s+[\\w.]+\\s*\\((.*)\\)\\}$", RegexOptions.Singleline);
+
+    /// <summary>acc = "" → 인자 값 그대로 · "ctorN" → 'new T(...)' 의 N번째 인자 리터럴</summary>
+    static string Access(string arg, string acc)
+    {
+        if (acc == "") return Val.IsLiteral(arg) ? arg : null;
+        if (!acc.StartsWith("ctor")) return null;
+        int.TryParse(acc[4..], out var n);
+        var m = CtorText.Match(Val.Show(arg));
+        if (!m.Success) return null;
+        var e = SyntaxFactory.ParseExpression("f(" + m.Groups[1].Value + ")") as InvocationExpressionSyntax;
+        if (e == null || n >= e.ArgumentList.Arguments.Count) return null;
+        return e.ArgumentList.Arguments[n].Expression is LiteralExpressionSyntax l && l.IsKind(SyntaxKind.StringLiteralExpression) ? l.Token.ValueText : null;
+    }
+}
+
+/// <summary>의미 모델 기반 문자열 값 해석</summary>
+public sealed class SemResolver
+{
+    readonly HashSet<string> _requestTypes;
+    readonly Dictionary<Compilation, Dictionary<ISymbol, List<(ExpressionSyntax rhs, SyntaxTree t)>>> _assignIx = new();
+    public SemResolver(IEnumerable<string> requestTypes) { _requestTypes = new HashSet<string>(requestTypes, StringComparer.Ordinal); }
+
+    sealed class Ctx
+    {
+        public Dictionary<IParameterSymbol, (ExpressionSyntax e, SemanticModel m, Ctx c)> Bind = new(SymbolEqualityComparer.Default);
+        public HashSet<string> Seen = new(StringComparer.Ordinal);
+    }
+
+    public List<SemVal> Resolve(ExpressionSyntax e, SemanticModel m) => R(e, m, new Ctx(), 0, top: true);
+
+    /// <summary>2026-11-25 정의 찾기(검사 하네스 resolve kind=defs): 식이 가리키는 변수·필드·속성·매개변수에 값을 넣는 오른쪽 식 전부.
+    ///   지역변수 = 사용 지점에 닿는 정의 · 필드/속성 = 선언 초기값 + 이 컴파일 전체 대입 · 매개변수 = 호출 지점 인자</summary>
+    public List<(ExpressionSyntax rhs, string how)> Defs(ExpressionSyntax e, SemanticModel m)
+    {
+        var outs = new List<(ExpressionSyntax, string)>();
+        var si = m.GetSymbolInfo(e); var sym = si.Symbol ?? (si.CandidateSymbols.Length == 1 ? si.CandidateSymbols[0] : null);
+        switch (sym)
+        {
+            case ILocalSymbol l: foreach (var d in LocalDefs(e, l, m)) outs.Add((d.rhs, "local")); break;
+            case IParameterSymbol p when p.ContainingSymbol is IMethodSymbol pm:
+                foreach (var c in CallSites(m.Compilation, pm)) { var a = ArgFor(c.inv, p); if (a != null) outs.Add((a, "caller")); }
+                break;
+            case IFieldSymbol or IPropertySymbol:
+                foreach (var r in sym.DeclaringSyntaxReferences)
+                {
+                    var n = r.GetSyntax();
+                    var init = (n as VariableDeclaratorSyntax)?.Initializer?.Value ?? (n as PropertyDeclarationSyntax)?.Initializer?.Value;
+                    if (init != null) outs.Add((init, "init"));
+                }
+                foreach (var (rhs, _) in Assigns(m.Compilation, sym)) outs.Add((rhs, "assign"));
+                break;
+        }
+        return outs;
+    }
+
+    static List<SemVal> One(string v) => new() { new SemVal { Value = v } };
+    static List<SemVal> Unk(SyntaxNode e) => One(Val.Unknown(e.ToString()));
+
+    List<SemVal> R(ExpressionSyntax e, SemanticModel m, Ctx ctx, int depth, bool top = false)
+    {
+        if (e == null) return One(Val.Unknown("null"));
+        if (depth > 10) return Unk(e);
+        try
+        {
+            // 열거형 멤버는 숫자로 바꾸지 않는다(문법 해석의 'Type.Member' 표기가 switch 가드 대조에 쓰임)
+            if (m.GetTypeInfo(e).Type?.TypeKind != TypeKind.Enum)
+            {
+                var cv = m.GetConstantValue(e);
+                if (cv.HasValue) return One(cv.Value is string s ? s : Convert.ToString(cv.Value, System.Globalization.CultureInfo.InvariantCulture) ?? "");
+            }
+        }
+        catch { }
+        switch (e)
+        {
+            case ParenthesizedExpressionSyntax p: return R(p.Expression, m, ctx, depth + 1);
+            case CastExpressionSyntax c: return R(c.Expression, m, ctx, depth + 1);
+            case BinaryExpressionSyntax b when b.IsKind(SyntaxKind.AddExpression): return Cross(R(b.Left, m, ctx, depth + 1), R(b.Right, m, ctx, depth + 1));
+            case BinaryExpressionSyntax b when b.IsKind(SyntaxKind.CoalesceExpression): return Union(R(b.Left, m, ctx, depth + 1), R(b.Right, m, ctx, depth + 1));
+            case ConditionalExpressionSyntax c: return Union(R(c.WhenTrue, m, ctx, depth + 1), R(c.WhenFalse, m, ctx, depth + 1));
+            case InterpolatedStringExpressionSyntax istr:
+                {
+                    var acc = One("");
+                    foreach (var part in istr.Contents)
+                        acc = part switch
+                        {
+                            InterpolatedStringTextSyntax t => Cross(acc, One(t.TextToken.ValueText)),
+                            InterpolationSyntax ins => Cross(acc, R(ins.Expression, m, ctx, depth + 1)),
+                            _ => acc
+                        };
+                    return acc;
+                }
+            case ObjectCreationExpressionSyntax oc:
+                {
+                    var tn = oc.Type.ToString(); var simple = tn.Contains('.') ? tn[(tn.LastIndexOf('.') + 1)..] : tn;
+                    if (_requestTypes.Contains(simple) && oc.ArgumentList?.Arguments.Count > 0)
+                    {
+                        var a0 = R(oc.ArgumentList.Arguments[0].Expression, m, ctx, depth + 1);
+                        var rest = oc.ArgumentList.Arguments.Skip(1).Select(a => a.ToString());
+                        return a0.Select(v => new SemVal { Value = Val.Unknown($"new {tn}({(Val.IsLiteral(v.Value) ? "\"" + v.Value + "\"" : Val.Show(v.Value))}{string.Concat(rest.Select(r => ", " + r))})"), Conds = v.Conds }).ToList();
+                    }
+                    return Unk(e);
+                }
+            case InvocationExpressionSyntax inv: return Invocation(inv, m, ctx, depth);
+            case IdentifierNameSyntax or MemberAccessExpressionSyntax or ThisExpressionSyntax: return Symbol(e, m, ctx, depth, top);
+        }
+        return Unk(e);
+    }
+
+    List<SemVal> Invocation(InvocationExpressionSyntax inv, SemanticModel m, Ctx ctx, int depth)
+    {
+        var sym = m.GetSymbolInfo(inv).Symbol as IMethodSymbol ?? m.GetSymbolInfo(inv).CandidateSymbols.OfType<IMethodSymbol>().FirstOrDefault();
+        var args = inv.ArgumentList.Arguments;
+        if (sym != null && sym.ContainingType?.SpecialType == SpecialType.System_String)
+        {
+            var recv = inv.Expression is MemberAccessExpressionSyntax ma ? ma.Expression : null;
+            switch (sym.Name)
+            {
+                case "Format" when sym.IsStatic && args.Count >= 1:
+                    {
+                        var fmts = R(args[0].Expression, m, ctx, depth + 1); var av = args.Skip(1).Select(a => R(a.Expression, m, ctx, depth + 1)).ToList();
+                        var outs = new List<SemVal>();
+                        foreach (var f in fmts)
+                        {
+                            if (!Val.IsLiteral(f.Value)) { outs.Add(new SemVal { Value = Val.Unknown(inv.ToString()) }); continue; }
+                            var acc = One(""); int last = 0;
+                            foreach (Match mm in Regex.Matches(f.Value, @"\{(\d+)(?:[^}]*)\}"))
+                            {
+                                acc = Cross(acc, One(f.Value[last..mm.Index]));
+                                var i = int.Parse(mm.Groups[1].Value);
+                                acc = Cross(acc, i < av.Count ? av[i] : One(Val.Unknown(mm.Value)));
+                                last = mm.Index + mm.Length;
+                            }
+                            outs.AddRange(Cross(acc, One(f.Value[last..])));
+                        }
+                        return outs;
+                    }
+                case "Concat" when sym.IsStatic:
+                    { var acc = One(""); foreach (var a in args) acc = Cross(acc, R(a.Expression, m, ctx, depth + 1)); return acc; }
+                case "ToUpper" or "ToUpperInvariant" when recv != null: return Map(R(recv, m, ctx, depth + 1), v => v.ToUpperInvariant());
+                case "ToLower" or "ToLowerInvariant" when recv != null: return Map(R(recv, m, ctx, depth + 1), v => v.ToLowerInvariant());
+                case "Trim" when recv != null && args.Count == 0: return Map(R(recv, m, ctx, depth + 1), v => v.Trim());
+                case "ToString" when recv != null: return R(recv, m, ctx, depth + 1);
+            }
+        }
+        // 소스 메서드: 반환식을 매개변수 결합으로 해석
+        if (sym != null && sym.DeclaringSyntaxReferences.Length > 0 && sym.ReturnType?.SpecialType == SpecialType.System_String)
+        {
+            var key = "M:" + sym.ToDisplayString() + "@" + inv.SpanStart;
+            if (!ctx.Seen.Add(key)) return Unk(inv);
+            var decl = sym.DeclaringSyntaxReferences[0].GetSyntax() as BaseMethodDeclarationSyntax;
+            var comp = m.Compilation;
+            if (decl == null || !comp.ContainsSyntaxTree(decl.SyntaxTree)) { ctx.Seen.Remove(key); return Unk(inv); }
+            var dm = comp.GetSemanticModel(decl.SyntaxTree);
+            var sub = new Ctx(); sub.Seen = ctx.Seen;
+            for (int i = 0; i < sym.Parameters.Length && i < args.Count; i++) sub.Bind[sym.Parameters[i]] = (args[i].Expression, m, ctx);
+            var rets = new List<SemVal>();
+            if (decl is MethodDeclarationSyntax md && md.ExpressionBody != null) rets.AddRange(R(md.ExpressionBody.Expression, dm, sub, depth + 1));
+            if (decl.Body != null)
+                foreach (var rs in decl.Body.DescendantNodes().OfType<ReturnStatementSyntax>().Where(r => r.Expression != null && !r.Ancestors().Any(a => a is AnonymousFunctionExpressionSyntax || a is LocalFunctionStatementSyntax)))
+                    rets.AddRange(R(rs.Expression, dm, sub, depth + 1));
+            ctx.Seen.Remove(key);
+            return rets.Count > 0 ? Dedup(rets) : Unk(inv);
+        }
+        return Unk(inv);
+    }
+
+    List<SemVal> Symbol(ExpressionSyntax e, SemanticModel m, Ctx ctx, int depth, bool top)
+    {
+        var si = m.GetSymbolInfo(e);
+        var sym = si.Symbol ?? (si.CandidateSymbols.Length == 1 ? si.CandidateSymbols[0] : null);
+        // 다른 객체(매개변수·지역변수 등)의 인스턴스 필드·속성은 그 객체가 무엇인지 모르므로 전역 대입으로 따라가지 않는다(this·base·정적 멤버만)
+        if (sym is IFieldSymbol or IPropertySymbol && !sym.IsStatic && e is MemberAccessExpressionSyntax rma && rma.Expression is not (ThisExpressionSyntax or BaseExpressionSyntax)
+            && !(sym is IFieldSymbol { IsConst: true }))
+            return Unk(e);
+        switch (sym)
+        {
+            case IFieldSymbol f when f.IsConst && f.HasConstantValue: return One(Convert.ToString(f.ConstantValue, System.Globalization.CultureInfo.InvariantCulture) ?? "");
+            case IFieldSymbol f when f.ContainingType?.SpecialType == SpecialType.System_String && f.Name == "Empty": return One("");
+            case ILocalSymbol l: return Local(e, l, m, ctx, depth, top);
+            case IParameterSymbol p:
+                {
+                    if (ctx.Bind.TryGetValue(p, out var b)) return R(b.e, b.m, b.c, depth + 1);
+                    // 매개변수 재대입이 없으면 템플릿 자리표시자(문법 해석과 같은 번호 = 선언 위치)
+                    var mdecl = e.Ancestors().OfType<BaseMethodDeclarationSyntax>().FirstOrDefault();
+                    var idx = mdecl?.ParameterList.Parameters.IndexOf(x => x.Identifier.Text == p.Name) ?? p.Ordinal;
+                    var defs = LocalDefs(e, p, m);
+                    var r = One(Val.Param(idx, p.Name));
+                    foreach (var d in defs) r.AddRange(R(d.rhs, m, ctx, depth + 1));
+                    return Dedup(r);
+                }
+            case IFieldSymbol f: return Member(e, f, m, ctx, depth);
+            case IPropertySymbol pr:
+                {
+                    var decl = pr.DeclaringSyntaxReferences.Length > 0 ? pr.DeclaringSyntaxReferences[0].GetSyntax() as PropertyDeclarationSyntax : null;
+                    if (decl?.ExpressionBody != null && m.Compilation.ContainsSyntaxTree(decl.SyntaxTree)) return R(decl.ExpressionBody.Expression, m.Compilation.GetSemanticModel(decl.SyntaxTree), ctx, depth + 1);
+                    var getter = decl?.AccessorList?.Accessors.FirstOrDefault(a => a.IsKind(SyntaxKind.GetAccessorDeclaration));
+                    if (getter?.Body == null && getter?.ExpressionBody == null && decl != null) return Member(e, pr, m, ctx, depth);   // 자동 속성 = 대입 추적
+                    var ret = getter?.ExpressionBody?.Expression ?? getter?.Body?.Statements.OfType<ReturnStatementSyntax>().FirstOrDefault()?.Expression;
+                    if (ret != null && m.Compilation.ContainsSyntaxTree(ret.SyntaxTree)) return R(ret, m.Compilation.GetSemanticModel(ret.SyntaxTree), ctx, depth + 1);
+                    return Unk(e);
+                }
+        }
+        return Unk(e);
+    }
+
+    /// <summary>필드·자동 속성: 선언 초기값 + 컴파일 전체 대입(생성자 매개변수에서 온 값은 그 생성자 호출 지점까지)</summary>
+    List<SemVal> Member(ExpressionSyntax e, ISymbol f, SemanticModel m, Ctx ctx, int depth)
+    {
+        var key = "F:" + f.ToDisplayString();
+        if (!ctx.Seen.Add(key)) return Unk(e);
+        var outs = new List<SemVal>();
+        foreach (var r in f.DeclaringSyntaxReferences)
+        {
+            var n = r.GetSyntax();
+            var init = (n as VariableDeclaratorSyntax)?.Initializer?.Value ?? (n as PropertyDeclarationSyntax)?.Initializer?.Value;
+            if (init != null && m.Compilation.ContainsSyntaxTree(init.SyntaxTree)) outs.AddRange(R(init, m.Compilation.GetSemanticModel(init.SyntaxTree), ctx, depth + 1));
+        }
+        foreach (var (rhs, t) in Assigns(m.Compilation, f))
+        {
+            var am = m.Compilation.GetSemanticModel(t);
+            // 대입 오른쪽이 그 메서드의 매개변수면 그 메서드의 호출 지점 인자들
+            if (am.GetSymbolInfo(rhs).Symbol is IParameterSymbol ps && ps.ContainingSymbol is IMethodSymbol pm)
+            {
+                var calls = CallSites(m.Compilation, pm);
+                if (calls.Count == 0) outs.Add(new SemVal { Value = Val.Unknown(rhs.ToString()) });
+                foreach (var (arg, cm) in calls.Select(c => (ArgFor(c.inv, ps), c.m)))
+                    outs.AddRange(arg == null ? One(Val.Unknown("default:" + ps.Name)) : R(arg, cm, new Ctx { Seen = ctx.Seen }, depth + 1));
+            }
+            else outs.AddRange(R(rhs, am, new Ctx { Seen = ctx.Seen }, depth + 1));
+        }
+        ctx.Seen.Remove(key);
+        return outs.Count > 0 ? Dedup(outs) : Unk(e);
+    }
+
+    static ExpressionSyntax ArgFor(SyntaxNode call, IParameterSymbol ps)
+    {
+        var al = call switch { InvocationExpressionSyntax i => i.ArgumentList, ObjectCreationExpressionSyntax o => o.ArgumentList, _ => null };
+        if (al == null) return null;
+        var named = al.Arguments.FirstOrDefault(a => a.NameColon?.Name.Identifier.Text == ps.Name);
+        if (named != null) return named.Expression;
+        var pos = ps.Ordinal - (ps.ContainingSymbol is IMethodSymbol { IsExtensionMethod: true } && call is InvocationExpressionSyntax { Expression: MemberAccessExpressionSyntax } ? 1 : 0);
+        return pos >= 0 && pos < al.Arguments.Count && al.Arguments[pos].NameColon == null ? al.Arguments[pos].Expression : null;
+    }
+
+    List<(SyntaxNode inv, SemanticModel m)> CallSites(Compilation comp, IMethodSymbol target)
+    {
+        var outs = new List<(SyntaxNode, SemanticModel)>();
+        foreach (var t in comp.SyntaxTrees)
+        {
+            var sm = comp.GetSemanticModel(t);
+            foreach (var n in t.GetRoot().DescendantNodes().Where(n => n is InvocationExpressionSyntax || n is ObjectCreationExpressionSyntax))
+            {
+                var name = n is InvocationExpressionSyntax iv ? (iv.Expression is MemberAccessExpressionSyntax ma ? ma.Name.Identifier.Text : iv.Expression is IdentifierNameSyntax id ? id.Identifier.Text : "") : ".ctor";
+                if (target.MethodKind == MethodKind.Constructor ? name != ".ctor" : name != target.Name) continue;
+                if (SymbolEqualityComparer.Default.Equals((sm.GetSymbolInfo(n).Symbol as IMethodSymbol)?.OriginalDefinition, target.OriginalDefinition)) outs.Add((n, sm));
+            }
+        }
+        return outs;
+    }
+
+    List<(ExpressionSyntax rhs, SyntaxTree t)> Assigns(Compilation comp, ISymbol f)
+    {
+        Dictionary<ISymbol, List<(ExpressionSyntax, SyntaxTree)>> ix;
+        lock (_assignIx)
+            if (!_assignIx.TryGetValue(comp, out ix))
+            {
+                ix = new(SymbolEqualityComparer.Default);
+                foreach (var t in comp.SyntaxTrees)
+                {
+                    var sm = comp.GetSemanticModel(t);
+                    foreach (var a in t.GetRoot().DescendantNodes().OfType<AssignmentExpressionSyntax>().Where(a => a.IsKind(SyntaxKind.SimpleAssignmentExpression)))
+                    {
+                        var s = sm.GetSymbolInfo(a.Left).Symbol;
+                        if (s is not (IFieldSymbol or IPropertySymbol)) continue;
+                        s = s.OriginalDefinition;
+                        if (!ix.TryGetValue(s, out var l)) ix[s] = l = new();
+                        l.Add((a.Right, t));
+                    }
+                }
+                _assignIx[comp] = ix;
+            }
+        return ix.TryGetValue(f.OriginalDefinition, out var r) ? r : new();
+    }
+
+    // ───── 지역변수: 사용 지점에 닿는 정의만 + 정의별 if 조건 ─────
+    sealed record Def(ExpressionSyntax rhs, StatementSyntax stmt, int pos);
+
+    static List<Def> LocalDefs(SyntaxNode use, ISymbol sym, SemanticModel m)
+    {
+        // 범위 = 변수가 선언된 메서드(람다 안에서 바깥 지역변수를 쓰는 경우 바깥 메서드 · 예 DMF0046 FindData 의 procdName)
+        var declNode = sym.DeclaringSyntaxReferences.Length > 0 && sym is ILocalSymbol ? sym.DeclaringSyntaxReferences[0].GetSyntax() : use;
+        var body = declNode.AncestorsAndSelf().FirstOrDefault(a => a is BaseMethodDeclarationSyntax || a is AccessorDeclarationSyntax || a is LocalFunctionStatementSyntax || a is AnonymousFunctionExpressionSyntax);
+        if (body == null || !body.Span.Contains(use.Span)) body = use.Ancestors().FirstOrDefault(a => a is BaseMethodDeclarationSyntax || a is AccessorDeclarationSyntax || a is LocalFunctionStatementSyntax || a is AnonymousFunctionExpressionSyntax);
+        if (body == null) return new();
+        var defs = new List<Def>();
+        foreach (var n in body.DescendantNodes())
+        {
+            if (n is VariableDeclaratorSyntax v && v.Initializer != null && SymbolEqualityComparer.Default.Equals(m.GetDeclaredSymbol(v), sym))
+                defs.Add(new Def(v.Initializer.Value, v.FirstAncestorOrSelf<StatementSyntax>(), v.SpanStart));
+            else if (n is AssignmentExpressionSyntax a && a.IsKind(SyntaxKind.SimpleAssignmentExpression) && SymbolEqualityComparer.Default.Equals(m.GetSymbolInfo(a.Left).Symbol, sym))
+                defs.Add(new Def(a.Right, a.FirstAncestorOrSelf<StatementSyntax>(), a.SpanStart));
+        }
+        // 사용 지점 앞 정의만. 루프 안 사용이면 뒤 정의도 닿을 수 있어 모두 남김
+        bool inLoop = use.Ancestors().TakeWhile(a => a != body).Any(a => a is ForStatementSyntax or ForEachStatementSyntax or WhileStatementSyntax or DoStatementSyntax);
+        if (!inLoop) defs = defs.Where(d => d.pos < use.SpanStart).ToList();
+        // 사용 지점까지 반드시 지나는 뒤 정의(사용 지점을 품은 블록에 바로 놓인 문장)가 있으면 그 앞 정의는 덮임
+        var killers = defs.Where(d => d.stmt?.Parent is BlockSyntax blk && use.Ancestors().Contains(blk) && d.stmt is ExpressionStatementSyntax or LocalDeclarationStatementSyntax).ToList();
+        if (!inLoop && killers.Count > 0) { var last = killers.Max(d => d.pos); defs = defs.Where(d => d.pos >= last).ToList(); }
+        return defs;
+    }
+
+    List<SemVal> Local(ExpressionSyntax use, ILocalSymbol l, SemanticModel m, Ctx ctx, int depth, bool top)
+    {
+        var key = "L:" + l.Name + "@" + use.SpanStart;
+        if (!ctx.Seen.Add(key)) return Unk(use);
+        var outs = new List<SemVal>();
+        var defs = LocalDefs(use, l, m);
+        foreach (var d in defs)
+        {
+            var conds = new List<string>(); bool unknownCond = false;
+            // 이 정의 뒤에 else 없는 if 하나 아래에서 다시 대입되면(사용 지점까지 반드시 지나는 블록의 if) 이 정의는 그 조건이 거짓일 때만 남는다
+            var over = new List<(ExpressionSyntax, bool)>();
+            foreach (var d2 in defs.Where(x => x.pos > d.pos))
+            {
+                var ic = IfConds(d2.stmt, use).ToList();
+                if (ic.Count == 1 && ic[0].Item1.Parent is IfStatementSyntax ifs && ifs.Else == null && ifs.Parent is BlockSyntax ob && use.Ancestors().Contains(ob) && ifs.SpanStart > d.pos)
+                    over.Add((ic[0].Item1, !ic[0].Item2));
+            }
+            foreach (var (cond, pol) in IfConds(d.stmt, use).Concat(over))
+            {
+                var c = Cond(cond, m, pol, out var constVal);
+                if (constVal == false) { conds = null; break; }       // 타지 않는 분기
+                if (constVal == true) continue;
+                if (c != null) conds.Add(c); else unknownCond = true;
+            }
+            if (conds == null) continue;
+            foreach (var v in R(d.rhs, m, ctx, depth + 1))
+                outs.Add(new SemVal { Value = v.Value, Conds = unknownCond ? new() : conds.Concat(v.Conds).ToList() });
+        }
+        ctx.Seen.Remove(key);
+        if (outs.Count == 0) return Unk(use);
+        // 같은 값이 다른 조건으로도 나오면 조건 없음
+        return outs.GroupBy(o => o.Value).Select(g => g.Count() == 1 ? g.First() : new SemVal { Value = g.Key }).ToList();
+    }
+
+    /// <summary>정의 문장에서 사용 지점과의 공통 조상 사이의 if 조건(참 분기 = true)</summary>
+    static IEnumerable<(ExpressionSyntax, bool)> IfConds(SyntaxNode def, SyntaxNode use)
+    {
+        if (def == null) yield break;
+        var useAnc = new HashSet<SyntaxNode>(use.AncestorsAndSelf());
+        SyntaxNode prev = def;
+        foreach (var a in def.Ancestors())
+        {
+            if (useAnc.Contains(a)) yield break;
+            if (a is IfStatementSyntax ifs) yield return (ifs.Condition, ifs.Statement == prev || ifs.Statement.Contains(prev));
+            else if (a is ElseClauseSyntax) { }
+            prev = a;
+        }
+    }
+
+    /// <summary>if 조건 → 매개변수 판정 조건 문자열. 상수면 constVal. 해석 못 하면 null</summary>
+    string Cond(ExpressionSyntax c, SemanticModel m, bool pol, out bool? constVal)
+    {
+        constVal = null;
+        try { var cv = m.GetConstantValue(c); if (cv.HasValue && cv.Value is bool b) { constVal = b == pol; return null; } } catch { }
+        bool neg = !pol;
+        while (c is PrefixUnaryExpressionSyntax pu && pu.IsKind(SyntaxKind.LogicalNotExpression)) { neg = !neg; c = pu.Operand; }
+        while (c is ParenthesizedExpressionSyntax pp) c = pp.Expression;
+        ExpressionSyntax subj = null; string op = null; string lit = null;
+        if (c is InvocationExpressionSyntax inv && inv.Expression is MemberAccessExpressionSyntax ma && inv.ArgumentList.Arguments.Count >= 1
+            && ma.Name.Identifier.Text is "StartsWith" or "EndsWith" or "Contains" or "Equals")
+        {
+            var lv = m.GetConstantValue(inv.ArgumentList.Arguments[0].Expression);
+            if (!lv.HasValue || lv.Value is not string ls) return null;
+            subj = ma.Expression; op = ma.Name.Identifier.Text; lit = ls;
+        }
+        else if (c is BinaryExpressionSyntax be && (be.IsKind(SyntaxKind.EqualsExpression) || be.IsKind(SyntaxKind.NotEqualsExpression)))
+        {
+            var rv = m.GetConstantValue(be.Right);
+            if (!rv.HasValue || rv.Value is not string rs) return null;
+            subj = be.Left; op = "Equals"; lit = rs; if (be.IsKind(SyntaxKind.NotEqualsExpression)) neg = !neg;
+        }
+        if (subj == null) return null;
+        string fn = "";
+        if (subj is InvocationExpressionSyntax fi && fi.Expression is MemberAccessExpressionSyntax fma && fi.ArgumentList.Arguments.Count == 0)
+        {
+            fn = fma.Name.Identifier.Text switch { "ToLower" or "ToLowerInvariant" => "lower", "ToUpper" or "ToUpperInvariant" => "upper", "Trim" => "trim", _ => null };
+            if (fn == null) return null;
+            subj = fma.Expression;
+        }
+        // 지역변수면 단일 정의로 한 번 따라감
+        if (m.GetSymbolInfo(subj).Symbol is ILocalSymbol loc)
+        {
+            var d = LocalDefs(subj, loc, m);
+            if (d.Count != 1) return null;
+            subj = d[0].rhs;
+        }
+        string acc = "";
+        if (subj is MemberAccessExpressionSyntax sma && m.GetSymbolInfo(sma).Symbol is IPropertySymbol prop)
+        {
+            var ci = CtorParamOf(prop, m.Compilation);
+            if (ci < 0) return null;
+            acc = "ctor" + ci; subj = sma.Expression;
+        }
+        if (m.GetSymbolInfo(subj).Symbol is not IParameterSymbol ps) return null;
+        var mdecl = subj.Ancestors().OfType<BaseMethodDeclarationSyntax>().FirstOrDefault();
+        var idx = mdecl?.ParameterList.Parameters.IndexOf(x => x.Identifier.Text == ps.Name) ?? ps.Ordinal;
+        return ValueCond.Encode(idx, ps.Name, acc, fn, op, lit, neg);
+    }
+
+    /// <summary>속성이 그 타입 생성자의 몇 번째 매개변수로 정해지는가(모든 생성자에서 같은 번호) → 번호, 아니면 -1</summary>
+    internal static int CtorParamOf(IPropertySymbol prop, Compilation comp)
+    {
+        int found = -1;
+        foreach (var ctor in prop.ContainingType.InstanceConstructors)
+            foreach (var r in ctor.DeclaringSyntaxReferences)
+            {
+                if (r.GetSyntax() is not ConstructorDeclarationSyntax cd || cd.Body == null || !comp.ContainsSyntaxTree(cd.SyntaxTree)) continue;
+                var sm = comp.GetSemanticModel(cd.SyntaxTree);
+                foreach (var a in cd.Body.DescendantNodes().OfType<AssignmentExpressionSyntax>())
+                    if (SymbolEqualityComparer.Default.Equals(sm.GetSymbolInfo(a.Left).Symbol, prop) && sm.GetSymbolInfo(a.Right).Symbol is IParameterSymbol p)
+                    {
+                        if (found >= 0 && found != p.Ordinal) return -1;
+                        found = p.Ordinal;
+                    }
+            }
+        return found;
+    }
+
+    // ───── 값 목록 연산 ─────
+    static List<SemVal> Map(List<SemVal> a, Func<string, string> f) => a.Select(v => new SemVal { Value = Val.IsLiteral(v.Value) ? f(v.Value) : v.Value, Conds = v.Conds }).ToList();
+    static List<SemVal> Union(List<SemVal> a, List<SemVal> b) => Dedup(a.Concat(b).ToList());
+    static List<SemVal> Dedup(List<SemVal> a) => a.GroupBy(v => v.Value).Select(g => g.Count() == 1 ? g.First() : new SemVal { Value = g.Key }).Take(Val.MaxCandidates).ToList();
+    static List<SemVal> Cross(List<SemVal> a, List<SemVal> b)
+    {
+        var r = new List<SemVal>();
+        foreach (var x in a) foreach (var y in b) { r.Add(new SemVal { Value = x.Value + y.Value, Conds = x.Conds.Concat(y.Conds).Distinct().ToList() }); if (r.Count >= Val.MaxCandidates) return r; }
+        return r;
+    }
+}
+
+static class SepListExt
+{
+    public static int IndexOf<T>(this SeparatedSyntaxList<T> l, Func<T, bool> f) where T : SyntaxNode { for (int i = 0; i < l.Count; i++) if (f(l[i])) return i; return -1; }
+}
+
+/// <summary>추출 뒤 · 전파 전: 범위 안 sink·호출 인자 중 문법 해석이 덜 풀린 것을 의미 모델로 다시 푼다</summary>
+public static class SemanticRefine
+{
+    static int Unknowns(IEnumerable<string> vals) => vals.Count(Val.HasUnknown);
+
+    public static void Run(Config cfg, string root, List<SourceFile> files, List<Site> sites, List<CallRec> calls, List<string> log, string outDir)
+    {
+        var scope = cfg.semanticScreens ?? new List<string>();
+        var always = cfg.semanticAlwaysPaths ?? new List<string>();
+        if (scope.Count == 0 && always.Count == 0) return;
+        var byRel = files.ToDictionary(f => f.RelPath, StringComparer.OrdinalIgnoreCase);
+        bool InScope(string rel) => byRel.TryGetValue(rel, out var sf) && (scope.Any(p => (sf.ScreenId ?? "").StartsWith(p, StringComparison.OrdinalIgnoreCase)) || always.Any(p => rel.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
+        var host = new SemanticHost(root, CsIndex.ParseOptions(cfg));
+        var rv = new SemResolver(cfg.semanticRequestTypes ?? new List<string> { "FoxDataRequest" });
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var rep = new List<string[]>();
+        int tried = 0, improved = 0, guarded = 0, noModel = 0, noNode = 0;
+
+        // (1) sink 값: 미해결 자리표시자가 있는 사이트 + 지역변수 하나로 값이 정해지는 사이트(값별 조건 대상)
+        foreach (var s in sites.Where(s => !s.Commented && s.Active && s.SiteKind != "derived" && InScope(s.File)))
+        {
+            // 요청 파라미터 대입 'req.Parameters["pagePath"] = request.QueryId': request 가 요청 객체 매개변수이고 속성이 생성자 인자로 정해지면
+            //   매개변수 자리표시자로 둔다 → 전파 때 호출자의 요청 객체(new FoxDataRequest("X"))로 바뀌어 원 생성 지점에서 해석된다(WRAPS_FOX_REQUEST)
+            if (s.SiteKind == "reqparam" && s.Values.Count == 1 && Val.HasUnknown(s.Values[0]))
+            {
+                var (rm, rt) = host.ModelOf(s.File, byRel[s.File].Project);
+                var asg = rt?.GetRoot().DescendantNodes().OfType<AssignmentExpressionSyntax>().FirstOrDefault(a => LineOf(a) == s.Line && a.Left is ElementAccessExpressionSyntax ea
+                            && ea.ArgumentList.Arguments.Count == 1 && ea.ArgumentList.Arguments[0].Expression is LiteralExpressionSyntax lt && lt.Token.ValueText == s.Target);
+                if (rm != null && asg?.Right is MemberAccessExpressionSyntax rma && rm.GetSymbolInfo(rma.Expression).Symbol is IParameterSymbol rps
+                    && rm.GetSymbolInfo(rma).Symbol is IPropertySymbol rprop && (cfg.semanticRequestTypes ?? new()).Contains(rps.Type.Name) && SemResolver.CtorParamOf(rprop, rm.Compilation) >= 0)
+                {
+                    var md = rma.Ancestors().OfType<BaseMethodDeclarationSyntax>().FirstOrDefault();
+                    var pi = md?.ParameterList.Parameters.IndexOf(x => x.Identifier.Text == rps.Name) ?? rps.Ordinal;
+                    var before0 = Val.Join(s.Values);
+                    s.Values = new List<string> { Val.Param(pi, rps.Name) }; improved++; tried++;
+                    rep.Add(new[] { s.Seq.ToString(), s.File, s.Line.ToString(), s.Member, s.Kind, s.Target, before0, Val.Join(s.Values), "", "semantic(reqparam)" });
+                }
+                continue;
+            }
+            bool unk = s.Values.Any(Val.HasUnknown) || s.Values2.Any(Val.HasUnknown);
+            bool multi = s.Values.Count > 1 && s.Values.All(Val.IsLiteral) && s.SiteKind is "ctor" or "invoke";
+            if (!unk && !multi) continue;
+            var (m, t) = host.ModelOf(s.File, byRel[s.File].Project);
+            if (m == null) { noModel++; continue; }
+            var (e1, e2) = SinkArgs(t, s);
+            if (e1 == null) { noNode++; continue; }
+            tried++;
+            var before = Val.Join(s.Values) + (s.Values2.Count > 0 ? " ¦ " + Val.Join(s.Values2) : "");
+            var v1 = Safe(() => rv.Resolve(e1, m));
+            var v2 = e2 != null ? Safe(() => rv.Resolve(e2, m)) : null;
+            bool changed = false;
+            if (v1 != null && (Unknowns(v1.Select(x => x.Value)) < Unknowns(s.Values) || (Unknowns(v1.Select(x => x.Value)) == Unknowns(s.Values) && v1.Any(x => x.Conds.Count > 0))))
+            {
+                s.Values = v1.Select(x => x.Value).Distinct().ToList();
+                var conds = v1.Where(x => x.Conds.Count > 0).ToDictionary(x => x.Value, x => x.Conds);
+                if (conds.Count > 0) { s.ValueConds = conds; guarded++; }
+                changed = true;
+            }
+            if (v2 != null && Unknowns(v2.Select(x => x.Value)) < Unknowns(s.Values2)) { s.Values2 = v2.Select(x => x.Value).Distinct().ToList(); changed = true; }
+            if (changed) improved++;
+            rep.Add(new[] { s.Seq.ToString(), s.File, s.Line.ToString(), s.Member, s.Kind, s.Target, before,
+                Val.Join(s.Values) + (s.Values2.Count > 0 ? " ¦ " + Val.Join(s.Values2) : ""),
+                s.ValueConds == null ? "" : string.Join(" ; ", s.ValueConds.Select(kv => kv.Key + " ⇐ " + string.Join(" & ", kv.Value))), changed ? "semantic" : "unchanged" });
+        }
+        // (2) 호출 인자: 요청 객체·문자열 인자 중 미해결인 것
+        int cTried = 0, cImproved = 0;
+        int targeted = 0, targetedMeta = 0;
+        foreach (var c in calls.Where(c => InScope(c.File)))
+        {
+            var (m, t) = host.ModelOf(c.File, byRel[c.File].Project);
+            if (m == null) continue;
+            var inv = t.GetRoot().DescendantNodes().Where(n => (n is InvocationExpressionSyntax || n is ObjectCreationExpressionSyntax) && LineOf(n) == c.Line)
+                       .FirstOrDefault(n => CalleeName(n) == c.Callee && ArgList(n)?.Arguments.Count == c.Args.Count);
+            if (inv == null) continue;
+            // 호출 대상 특정(소스 메서드): 선언 파일|줄 — 전파가 같은 이름 다른 오버로드로 새지 않게
+            if (m.GetSymbolInfo(inv).Symbol is IMethodSymbol ts)
+            {
+                var sig = (ts.ContainingType?.ToDisplayString() ?? "") + "." + (ts.MethodKind == MethodKind.Constructor ? ".ctor" : ts.Name) + "/" + string.Join(",", ts.Parameters.Select(p => p.Name));
+                if (ts.DeclaringSyntaxReferences.Length == 1)
+                {
+                    var dn = ts.DeclaringSyntaxReferences[0].GetSyntax();
+                    c.SemTarget = "src|" + dn.SyntaxTree.FilePath + "|" + (dn.GetLocation().GetLineSpan().StartLinePosition.Line + 1) + "|" + sig;
+                    targeted++;
+                }
+                else if (ts.DeclaringSyntaxReferences.Length == 0)
+                {
+                    // 저장소 소스로 만드는 DLL(참조가 프로젝트가 아닌 DLL 로 걸린 경우)이면 같은 시그니처의 소스 메서드로 전파 허용
+                    if (RepoAsm(host, ts)) c.SemTarget = "sig|||" + sig;
+                    // 외부 DLL 메서드로 확정 = 이름이 같은 소스 메서드로 전파하지 않음. 예: DM 화면 client.ExecuteDataSet → TheOne.ServiceModel.Data.FoxDataClient(using), 소스 PseudoFoxClient 아님
+                    else { c.SemTarget = "meta|||" + sig; targetedMeta++; }
+                }
+            }
+            if (!c.Args.Any(a => a != null && a.Any(Val.HasUnknown))) continue;
+            cTried++;
+            bool ch = false;
+            var al = ArgList(inv)!;
+            for (int i = 0; i < c.Args.Count; i++)
+            {
+                if (c.Args[i] == null || !c.Args[i].Any(Val.HasUnknown)) continue;
+                var at = m.GetTypeInfo(al.Arguments[i].Expression).Type;   // 문자열·요청 객체 인자만(열거형·기타 객체는 종전 문법 표기 유지)
+                if (at == null || !(at.SpecialType == SpecialType.System_String || (cfg.semanticRequestTypes ?? new()).Contains(at.Name))) continue;
+                var v = Safe(() => rv.Resolve(al.Arguments[i].Expression, m));
+                if (v == null) continue;
+                var nv = v.Select(x => x.Value).Distinct().ToList();
+                if (Unknowns(nv) < Unknowns(c.Args[i]) || (nv.Count > c.Args[i].Count && Unknowns(nv) <= Unknowns(c.Args[i]) && nv.Any(x => x.Contains("(\"")))) { c.Args[i] = nv; ch = true; }
+            }
+            if (ch) cImproved++;
+        }
+        log.Add($"semantic: projects {host.ProjectStats.Count}, sink tried {tried}, improved {improved}, value guards {guarded}, no model {noModel}, node not found {noNode}, call targets {targeted}(external {targetedMeta}), call args tried {cTried}, improved {cImproved}, {sw.Elapsed.TotalSeconds:0.0}s");
+        Console.WriteLine(log[^1]);
+        using (var w = new CsvOut(Path.Combine(outDir, "semantic_report.csv"), "seq", "file", "line", "member", "kind", "target", "before", "after", "value_conds", "result"))
+            foreach (var r in rep) w.Row(r);
+        using (var w = new CsvOut(Path.Combine(outDir, "semantic_projects.csv"), "csproj", "trees", "refs", "missing_refs", "errors", "unresolved_symbol_errors"))
+            foreach (var r in host.ProjectStats.OrderBy(r => r[0])) w.Row(r);
+    }
+
+    static bool RepoAsm(SemanticHost host, IMethodSymbol ts) => ts.ContainingAssembly != null && host.RepoAssemblies.Contains(ts.ContainingAssembly.Name);
+
+    static List<SemVal> Safe(Func<List<SemVal>> f) { try { return f(); } catch { return null; } }
+    static int LineOf(SyntaxNode n) => n.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+    static ArgumentListSyntax ArgList(SyntaxNode n) => n switch { InvocationExpressionSyntax i => i.ArgumentList, ObjectCreationExpressionSyntax o => o.ArgumentList, _ => null };
+    static string CalleeName(SyntaxNode n) => n switch
+    {
+        InvocationExpressionSyntax i => i.Expression is MemberAccessExpressionSyntax ma ? ma.Name.Identifier.Text : i.Expression is IdentifierNameSyntax id ? id.Identifier.Text : i.Expression is GenericNameSyntax g ? g.Identifier.Text : "",
+        ObjectCreationExpressionSyntax o => o.Type is QualifiedNameSyntax q ? q.Right.Identifier.Text : o.Type is GenericNameSyntax gn ? gn.Identifier.Text : o.Type.ToString(),
+        _ => ""
+    };
+
+    /// <summary>사이트 → 값 식(1번째·2번째). ctor/invoke = 인자, prop/reqparam = 대입 오른쪽</summary>
+    static (ExpressionSyntax, ExpressionSyntax) SinkArgs(SyntaxTree t, Site s)
+    {
+        var nodes = t.GetRoot().DescendantNodes().Where(n => LineOf(n) == s.Line).ToList();
+        string raw0 = (s.Raw ?? "").Length > 40 ? s.Raw[..40] : s.Raw ?? "";
+        if (s.SiteKind is "ctor" or "invoke")
+        {
+            var n = nodes.Where(x => (x is ObjectCreationExpressionSyntax || x is InvocationExpressionSyntax) && CalleeName(x).EndsWith(s.Target.Contains('.') ? s.Target[(s.Target.LastIndexOf('.') + 1)..] : s.Target))
+                         .OrderByDescending(x => raw0.Length > 0 && x.ToString().StartsWith(raw0, StringComparison.Ordinal)).FirstOrDefault();
+            var al = n == null ? null : ArgList(n);
+            if (al == null || al.Arguments.Count == 0) return (null, null);
+            return (al.Arguments[0].Expression, al.Arguments.Count > 1 && s.Kind == "biz" ? al.Arguments[1].Expression : null);
+        }
+        if (s.SiteKind is "prop")
+        {
+            var a = nodes.OfType<AssignmentExpressionSyntax>().FirstOrDefault(x => x.Left.ToString().EndsWith(s.Target));
+            return (a?.Right, null);
+        }
+        return (null, null);
+    }
+}
+
+/// <summary>
+/// 2026-11-25 사용자 지시 'VM 의 AS-IS 파서에도 의미 분석 누락이면 추가': 검사 하네스 사실 추출기(facts_*.py 등 원본을 정규식으로 읽는 도구)가
+/// 정규식으로 못 푼 값을 의미 모델로 다시 푸는 일괄 조회 명령.
+///   AsisFacts resolve --in 요청.csv --result 결과.csv
+///   요청 열: id, file(asisRoot 상대경로), line(1부터), expr(그 줄에 있는 식 원문, 공백 차이 무시), kind(value 기본 · defs = 값을 넣는 문장 찾기)
+///   결과 열: id, file, line, expr, status(OK·NOT_FOUND·NO_MODEL·NO_DEF·ERROR), values(value = ' || ' 구분 값 · defs = 오른쪽 식 원문), unknowns, conds, def_file, def_line, def_how(local·init·assign·caller)
+/// </summary>
+public static class ResolveCmd
+{
+    static string Norm(string s) => Regex.Replace(s ?? "", @"\s+", "");
+
+    public static int Run(Config cfg, string root, string inCsv, string outCsv)
+    {
+        if (inCsv == null || outCsv == null || !File.Exists(inCsv)) { Console.Error.WriteLine("resolve --in 요청.csv --result 결과.csv"); return 2; }
+        var csprojs = SourceScan.Enumerate(cfg, root, ".csproj");
+        var projMap = SourceScan.ProjectMap(root, csprojs);
+        var host = new SemanticHost(root, CsIndex.ParseOptions(cfg));
+        var rv = new SemResolver(cfg.semanticRequestTypes ?? new List<string> { "FoxDataRequest" });
+        var reqs = CsvIn.Read(inCsv).ToList();
+        int ok = 0;
+        using var w = new CsvOut(outCsv, "id", "file", "line", "expr", "status", "values", "unknowns", "conds", "def_file", "def_line", "def_how");
+        void Put(params object[] v) => w.Row(v.Concat(Enumerable.Repeat((object)"", 11 - v.Length)).ToArray());   // 값 조회 행은 정의 열 3개를 비워 열 수를 맞춤
+        foreach (var r in reqs)
+        {
+            string G(string k) => r.TryGetValue(k, out var v) ? v : "";
+            var file = G("file").Replace('/', '\\'); int.TryParse(G("line"), out var line); var expr = G("expr");
+            try
+            {
+                var full = Path.Combine(root, file);
+                if (!File.Exists(full)) { Put(G("id"), file, line, expr, "NOT_FOUND", "", "", "파일 없음"); continue; }
+                var (m, t) = host.ModelOf(file, SourceScan.NearestProject(projMap, full, root));
+                if (m == null) { Put(G("id"), file, line, expr, "NO_MODEL", "", "", ""); continue; }
+                var want = Norm(expr);
+                var node = t.GetRoot().DescendantNodes().OfType<ExpressionSyntax>()
+                            .Where(n => n.GetLocation().GetLineSpan().StartLinePosition.Line + 1 == line && Norm(n.ToString()) == want)
+                            .OrderBy(n => n.Span.Length).FirstOrDefault();
+                if (node == null) { Put(G("id"), file, line, expr, "NOT_FOUND", "", "", "그 줄에 같은 식 없음"); continue; }
+                if (G("kind") == "target")   // 호출 대상 메서드 선언 위치·매개변수 이름(소스 메서드만)
+                {
+                    var inv = node as InvocationExpressionSyntax ?? node.AncestorsAndSelf().OfType<InvocationExpressionSyntax>().FirstOrDefault();
+                    var ts = inv == null ? null : m.GetSymbolInfo(inv).Symbol as IMethodSymbol;
+                    var dn = ts?.DeclaringSyntaxReferences.Length == 1 ? ts.DeclaringSyntaxReferences[0].GetSyntax() : null;
+                    if (dn == null) { Put(G("id"), file, line, expr, "NO_DEF", "", "", ts == null ? "호출 대상 못 정함" : "소스 없는 메서드 " + ts.ToDisplayString()); continue; }
+                    Put(G("id"), file, line, expr, "OK", string.Join(",", ts.Parameters.Select(x => x.Name)), "", ts.ContainingType?.ToDisplayString() + "." + ts.Name,
+                        dn.SyntaxTree.FilePath, dn.GetLocation().GetLineSpan().StartLinePosition.Line + 1, "target");
+                    ok++; continue;
+                }
+                if (G("kind") == "defs")
+                {
+                    var defs = rv.Defs(node, m);
+                    if (defs.Count == 0) Put(G("id"), file, line, expr, "NO_DEF", "", "", "", "", "", "");
+                    foreach (var (rhs, how) in defs)
+                        Put(G("id"), file, line, expr, "OK", rhs.ToString(), "", "", rhs.SyntaxTree.FilePath, rhs.GetLocation().GetLineSpan().StartLinePosition.Line + 1, how);
+                    ok++; continue;
+                }
+                var vals = rv.Resolve(node, m);
+                var vs = vals.Select(v => v.Value).Distinct().ToList();
+                Put(G("id"), file, line, expr, "OK", Val.Join(vs), vs.Count(Val.HasUnknown), string.Join(" ; ", vals.Where(v => v.Conds.Count > 0).Select(v => Val.Show(v.Value) + " ⇐ " + string.Join(" & ", v.Conds))));
+                ok++;
+            }
+            catch (Exception ex) { Put(G("id"), file, line, expr, "ERROR", "", "", ex.GetType().Name + ": " + ex.Message); }
+        }
+        Console.WriteLine($"resolve: 요청 {reqs.Count}, 해석 {ok}, 컴파일 {host.ProjectStats.Count} → {outCsv}");
+        return 0;
+    }
+}

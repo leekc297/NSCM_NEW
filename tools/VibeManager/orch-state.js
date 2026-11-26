@@ -36,14 +36,23 @@ function apply(ev) {
   if (t === 'proc.start' && ev.screen && ev.ms) { const k = `${String(ev.screen).toUpperCase()}|${ev.label || ''}`; if ((lastStart.get(k) || 0) < ev.ms) lastStart.set(k, ev.ms); }
   if (t === 'proc.start') procs.set(kProc(ev), { label: ev.label, screen: ev.screen || '', wb: ev.wb, stream: ev.stream, pid: ev.childPid, owner: ev.pid, t0: ev.ms, log: ev.log || '', server: !!ev.server });
   else if (t === 'proc.end') procs.delete(kProc(ev));
-  else if (t === 'chain.start') chains.set(ev.runId, { screen: ev.screen, chain: ev.chain, label: ev.chainLabel, wb: ev.wb, job: ev.job || '', owner: ev.pid, t0: ev.ms, shown: ev.shown, total: ev.steps || 0, plan: Array.isArray(ev.plan) ? ev.plan.map(x => ({ no: x.no, task: x.task, actor: x.actor })) : [], step: null, done: [] }); // total · plan = 상황판 단계 막대(2026-11-20)
+  else if (t === 'chain.start') chains.set(ev.runId, { screen: ev.screen, chain: ev.chain, label: ev.chainLabel, wb: ev.wb, job: ev.job || '', owner: ev.pid, t0: ev.ms, shown: ev.shown, total: ev.shown != null ? (Number(ev.shown) || 0) : (ev.steps || 0), plan: Array.isArray(ev.plan) ? ev.plan.map(x => ({ no: x.no, task: x.task, actor: x.actor, cond: !!x.cond })) : [], step: null, done: [] }); // total · plan = 상황판 단계 막대(2026-11-20)
+  // 개선안 20261124040951_SELF_3(규칙 R110): 단계 총수 = 실행이 정해진 단계(ev.shown). 조건부 단계(미검증 보완·재수행)는 chain.add 사건이 올 때 1씩(또는 ev.n) 늘린다.
+  //   종전 = ev.steps(조건부 단계까지 넣은 정의 전체)라 CheckList 만 도는 체인도 3단계 보완까지 총수에 들어감. shown 이 없는 옛 사건은 steps 그대로
+  else if (t === 'chain.add') { const c = chains.get(ev.runId); if (c) { c.total = (c.total || 0) + (Number(ev.n) > 0 ? Number(ev.n) : 1); if (ev.no != null && !c.plan.some(x => x.no === ev.no)) c.plan.push({ no: ev.no, task: ev.task || '', actor: ev.actor || '', cond: true }); } }
   else if (t === 'step.start') { const c = chains.get(ev.runId); if (c) c.step = { no: ev.no, name: ev.name, actor: ev.actor, task: ev.task, t0: ev.ms }; }
+  else if (t === 'chain.resume') { const c = chains.get(ev.runId); if (c) { if (ev.shown != null) c.total = Number(ev.shown) || c.total; c.resumeFrom = ev.resumeFrom || 0; c.resumedFrom = ev.resumedFrom || ''; c.done = (Array.isArray(ev.carried) ? ev.carried : []).map(x => ({ no: x.no, status: x.status, actor: x.actor, carried: true })).concat(c.done.filter(x => !x.carried)); } } // 2026-11-20 재개: 앞 단계 = 이전 실행 결과
+  else if (t === 'chain.unv') { const c = chains.get(ev.runId); if (c) c.unv = { round: ev.round || 1, go: !!ev.go, total: ev.total || 0, actionable: ev.actionable || 0, human: ev.human || 0, at: ev.at || '' }; } // 2026-11-20 미검증 건수(VMO 카드)
   else if (t === 'step.end') { const c = chains.get(ev.runId); if (c) { c.step = null; c.done.push({ no: ev.no, status: ev.status, actor: ev.actor }); } }
   else if (t === 'chain.end') chains.delete(ev.runId);
   else if (t === 'claude.start') claudes.set(kClaude(ev), { screen: ev.screen || '', wb: ev.wb, label: ev.label || '', source: ev.source || '', pid: ev.childPid, owner: ev.pid, t0: ev.ms });
   else if (t === 'claude.end') claudes.delete(kClaude(ev));
   else if (t === 'wait.start') waits.set(kWait(ev), { kind: ev.kind, screen: ev.screen || '', why: ev.why || '', pid: ev.pid, t0: ev.ms, max_sec: ev.max_sec || null, blocker_pid: ev.blocker_pid || null });
   else if (t === 'wait.end') waits.delete(kWait(ev));
+  // 개선안 20261121100244_REVIEW: 기록을 다시 읽을 때 wait.gone(kind, screen, waiter_pid 일치 대기) · proc.gone(screen, start_ms 일치 실행)을 목록에서 지운다.
+  //   종전 = 지우지 않아 새 VM 의 sweep 이 같은 죽은 대기·실행을 다시 꺼내 같은 기록을 또 씀(실측: events.jsonl wait.gone 21줄 중 고유 4개 · proc.gone 37줄 중 고유 7개)
+  else if (t === 'wait.gone') { for (const [k, v] of waits) if (v.kind === ev.kind && (v.screen || '') === (ev.screen || '') && v.pid === ev.waiter_pid) waits.delete(k); }
+  else if (t === 'proc.gone') { for (const [k, v] of procs) if (String(v.screen || '').toUpperCase() === String(ev.screen || '').toUpperCase() && v.t0 === ev.start_ms) procs.delete(k); }
   else if (t === 'job.start') jobs.set(ev.job, { label: ev.label || '', total: ev.total || 0, done: 0, running: 0, t0: ev.ms, owner: ev.pid });
   else if (t === 'job.item.start') { const j = jobs.get(ev.job); if (j) j.running++; }
   else if (t === 'job.item.end') { const j = jobs.get(ev.job); if (j) { j.running = Math.max(0, j.running - 1); j.done++; } }
@@ -133,7 +142,7 @@ function snapshot() {
   const now = Date.now(); const age = t0 => Math.max(0, Math.round((now - t0) / 1000));
   return {
     at: now,
-    chains: [...chains.entries()].map(([id, c]) => ({ runId: id, screen: c.screen, label: c.label, wb: c.wb, job: c.job, sec: age(c.t0), shown: c.shown, doneN: c.done.length, total: c.total || 0, plan: c.plan || [], done: c.done.map(x => ({ no: x.no, status: x.status })), step: c.step ? { no: c.step.no, name: c.step.name, actor: c.step.actor, sec: age(c.step.t0) } : null })),
+    chains: [...chains.entries()].map(([id, c]) => ({ runId: id, screen: c.screen, label: c.label, wb: c.wb, job: c.job, sec: age(c.t0), shown: c.shown, doneN: c.done.length, total: c.total || 0, plan: c.plan || [], done: c.done.map(x => ({ no: x.no, status: x.status, carried: !!x.carried })), doneNew: c.done.filter(x => !x.carried).length, resumeFrom: c.resumeFrom || 0, unv: c.unv || null, step: c.step ? { no: c.step.no, name: c.step.name, actor: c.step.actor, sec: age(c.step.t0) } : null })),
     procs: [...procs.values()].filter(v => !v.server).map(v => ({ label: v.label, screen: v.screen, wb: v.wb, pid: v.pid, sec: age(v.t0), log: v.log })),
     claudes: [...claudes.values()].map(v => ({ screen: v.screen, wb: v.wb, label: v.label, source: v.source, pid: v.pid, sec: age(v.t0) })),
     waits: [...waits.values()].filter(v => pidAlive(v.pid)).map(v => ({ kind: v.kind, screen: v.screen, why: v.why, sec: age(v.t0), max_sec: v.max_sec, blocker_pid: v.blocker_pid })),
@@ -153,8 +162,9 @@ function init(p) {
   if (orchEv) { orchEv.init(vibeDir); orchEv.on(apply); try { tailPos = fs.statSync(orchEv.file()).size; } catch { tailPos = 0; } }
   sampleCpu();
   tailTimer = setInterval(() => { tailTick(); sampleCpu(); sampleTcp(); touchWaits(); }, 2000);
+  try { if (!p.noUsageApi) require('./claude-usage').start(vibeDir); } catch { } // 2026-11-24 사용자(B): AI 주간 한도 = 사용량 조회(1분 주기는 429 → 10분 주기)
 }
-function dispose() { if (tailTimer) { clearInterval(tailTimer); tailTimer = null; } started = false; }
+function dispose() { if (tailTimer) { clearInterval(tailTimer); tailTimer = null; } try { require('./claude-usage').stop(); } catch { } started = false; }
 
 
 // ── 2026-11-20 상황판 하단 '시간별 흐름' 차트 자료: 최근 minutes 분 동안 화면(줄)마다 무엇이 언제 돌았는지 ──

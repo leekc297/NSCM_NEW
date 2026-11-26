@@ -1,0 +1,106 @@
+{
+ "rule_id": "G6",
+ "hash": "e3e0a36d29691bee",
+ "groups": [
+  {
+   "rows": [
+    "T-3033cfc8"
+   ],
+   "why": "Δ6 is a trace-table row about leaving empty `D_` cell changes out of the save request. No other row targets the same element."
+  },
+  {
+   "rows": [
+    "T-3fcc372a"
+   ],
+   "why": "Trace-table check for the cboInputValue (Input Value) condition. It confirms the trace entry, so it is a different kind of check from measuring the actual default."
+  },
+  {
+   "rows": [
+    "T-485b5ce9"
+   ],
+   "why": "C12 is a trace-table row about the `btnInput` button. No other row targets the same element."
+  },
+  {
+   "rows": [
+    "T-4ca17d7e"
+   ],
+   "why": "B04 is a trace-table row about the `Data.Common(YesOrNo)` source location. It checks a different property from any other row."
+  },
+  {
+   "rows": [
+    "T-5436b9c0"
+   ],
+   "why": "Trace-table check for the cboCompany condition. No other row targets Company."
+  },
+  {
+   "rows": [
+    "T-b4703e42"
+   ],
+   "why": "Trace-table check for the drpPeriod date-range condition. It is not the same check as the Year default rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-bd9b7b34"
+   ],
+   "why": "C09 is a trace-table row about the layout item `layoutControlItem10` (TextVisible=false). No other row targets the same element."
+  },
+  {
+   "rows": [
+    "T-cc61811c"
+   ],
+   "why": "Trace-table check for the clbDivision condition. It confirms the trace entry and does not measure the actual default, so it is not grouped with V-9c955342."
+  },
+  {
+   "rows": [
+    "T-d4a25387"
+   ],
+   "why": "Trace-table check for the cboDayWeek condition. No other row targets the same element."
+  },
+  {
+   "rows": [
+    "V-3b7b3c3e"
+   ],
+   "why": "Checks the state right after Division changes and expects Version to be non-empty. That state and expected result both differ from V-71c19a66, which checks the Ver. default on entry."
+  },
+  {
+   "rows": [
+    "V-5b329f48"
+   ],
+   "why": "Checks the count of required conditions the checker filled in automatically. That is a different target and expected result from every other row."
+  },
+  {
+   "rows": [
+    "V-71c19a66"
+   ],
+   "why": "Checks that Ver. defaults to empty for Div 81/81_JV. Its state and expected result are the opposite of V-3b7b3c3e, which expects Version to be non-empty."
+  },
+  {
+   "rows": [
+    "V-9c955342"
+   ],
+   "why": "Checks the initial defaults right after opening the screen: Division not empty and Year set to the current year. V-c4c2a3b4 checks only Year, so the targets are not the same and these are kept apart."
+  },
+  {
+   "rows": [
+    "V-b819009a"
+   ],
+   "why": "Checks that the Reset Condition button restores the defaults after the conditions have been changed. Both the target (a button) and the state differ from the other rows."
+  },
+  {
+   "rows": [
+    "V-c4c2a3b4"
+   ],
+   "why": "Checks only that Year defaults to the current year. It is a single-element check and does not have the same expected result as V-9c955342, which also checks Division, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-c9c36f93"
+   ],
+   "why": "Checks that no other query arguments change on a repeat query. That is a different target and expected result from every other row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:08:12",
+ "cost": 0.07226170000000001
+}

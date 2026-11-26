@@ -1,0 +1,102 @@
+{
+ "definition": "사용자 그룹별 메뉴 사용 권한과 화면 버튼 사용 권한을 지정하는 화면",
+ "overview": [
+  "권한 그룹별로 쓸 수 있는 메뉴와 화면 버튼을 Auth Y, N 으로 지정하는 관리자 화면임",
+  "왼쪽 Group Info, 오른쪽 위 Menu Item Info, 오른쪽 아래 Search Auth Info 그리드로 구성됨. 조회 조건 영역과 Insert, Delete 버튼 없음",
+  "Group Info 에서 그룹 선택 → Menu Item Info 에서 화면별 Auth 입력 → Save → 화면 선택 → Search Auth Info 에서 버튼별 Auth 입력 → Save 순서로 작업함",
+  "Group Info 그룹은 Group(SYS0007)에서 등록한 그룹임. Menu Item Info 화면은 Menu(SYS0003) Level 3 에 등록한 화면임"
+ ],
+ "pages": [
+  {
+   "title": "Group Menu",
+   "keyPoint": "Auth 값이 그룹 사용자의 메뉴, 버튼 사용 권한이 됨. 저장 전 Group Info, Menu Item Info 에서 고른 행을 확인함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.835,
+     "y": 0.142
+    },
+    {
+     "no": 2,
+     "x": 0.121,
+     "y": 0.175
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "버튼",
+     "lines": [
+      "조회 조건 영역 없음. 화면을 열면 Group Info 가 조회됨",
+      "Save(F7): 커서가 있는 그리드의 변경분을 저장함",
+      "Sort(F3), Filter(F4) 는 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "Group Info",
+     "lines": [
+      "Group ID, Group Name 목록. 제목 옆에 총 건수 표시(캡처 20건)",
+      "행을 고르면 그 그룹의 메뉴 권한이 Menu Item Info 에 조회됨"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Group Menu",
+   "keyPoint": "Auth 값이 그룹 사용자의 메뉴, 버튼 사용 권한이 됨. 저장 전 Group Info, Menu Item Info 에서 고른 행을 확인함.",
+   "markers": [
+    {
+     "no": 3,
+     "x": 0.345,
+     "y": 0.175
+    },
+    {
+     "no": 4,
+     "x": 0.345,
+     "y": 0.748
+    }
+   ],
+   "sections": [
+    {
+     "no": 3,
+     "title": "Menu Item Info",
+     "lines": [
+      "Level 1 Desc, Level 2 Desc: 메뉴 1단계, 2단계 이름. 같은 값은 셀을 합쳐 표시함",
+      "Level 3 Menu, Title: 화면 ID 와 화면 이름(예: DMF0004 Sales Site)",
+      "Auth: 필수(제목 앞 빨간 점). 노란 칸에 Y 또는 N 입력",
+      "Created By, Creation Date, Last Updated By, Last Update Date: 등록, 수정 이력. 입력 불가",
+      "행을 고르면 그 화면의 버튼 권한이 Search Auth Info 에 조회됨"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Search Auth Info",
+     "lines": [
+      "Level 3 Menu, Title: Menu Item Info 에서 고른 화면",
+      "Sheet Name: 화면 안 그리드 구분(예: DMF0004 의 bucket, customer, location, site)",
+      "Button: 그리드별 버튼 코드(SAVE, SEARCH, INSERT, DELETE)",
+      "Auth: 필수. 버튼마다 Y 또는 N 입력"
+     ]
+    }
+   ]
+  }
+ ],
+ "reusedFrom": "SYSTEM",
+ "id": "SYS0008",
+ "uiName": "Group Menu",
+ "menuPath": "SYSTEM> System> Group Menu",
+ "captures": [
+  "captures/SYS0008.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0008/"
+ ],
+ "buttons": [
+  "button:SAVE",
+  "button:SEARCH",
+  "group:SEARCH",
+  "menu:SAVE",
+  "menu:SEARCH"
+ ]
+}

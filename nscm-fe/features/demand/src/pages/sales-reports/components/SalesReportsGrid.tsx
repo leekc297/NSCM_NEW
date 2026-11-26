@@ -33,6 +33,15 @@ import {
   type SetKeyMap,
 } from '../utils/sales-reports.merge';
 
+// 동적(월) 컬럼 너비 = 프로시저(GET_SPREAD_TITLE) COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+//   기본 225 = 2026-08-21 사용자 지시로 90 에서 넓힌 값(40 사업부 소수 10자리 잘림 방지).
+const DYN_COL_DEFAULT_WIDTH = 225;
+const spColumnWidth = (raw: string | number | null | undefined): number | undefined => {
+  const n = Number(String(raw ?? '').trim());
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
 // ⭐ DMF0044 SalesReportsGrid — business-plan Grid 축약 (M_ 단일축 · **1단 헤더**[월 라벨 '2025-01'] ·
 //   배분/롤업 없음 · 2행 Measure 블록은 행 데이터 차원 — Grid 는 셀 편집만).
 //   편집 게이트 = evalSalesReportCell 4변수 매트릭스 (EDIT_FLAG×Measure×Div×시점 + ALL 차단).
@@ -253,7 +262,14 @@ const SalesReportsGridComponent = ({
   //     **iColumnHeaderRowCount = 1** 을 넘긴다(2단 화면은 DMF0072/DMF0074 처럼 2를 넘긴다).
   //     실제로 `DMF0044_GET_SPREAD_TITLE` 의 동적 컬럼은 LARGE/SMALL/COLUMN_LABEL_NAME 이 모두
   //     `2025-01` 동일값이라, 2단으로 묶으면 '2025-01' 그룹 아래 '2025-01' 1개짜리가 12개 생겼다.
-  type DynColMeta = { binding: string; label: string; sort: number; scale: number };
+  type DynColMeta = {
+    binding: string;
+    label: string;
+    sort: number;
+    scale: number;
+    /** SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+    width?: number;
+  };
   const dynColMetas = useMemo<DynColMeta[]>(() => {
     const titleRows = (spreadTitle ?? []).filter(r => dynKindOf(String(r.COLUMN_NAME ?? '')));
     if (titleRows.length > 0) {
@@ -272,6 +288,7 @@ const SalesReportsGridComponent = ({
           //   가 있으면 그 값(실측: 40 → 10), 없으면 '3' 을 준다(81 계열·82 = 3).
           //   ⇒ **화면에 10 을 상수로 박으면 81/82 가 AS-IS 3자리와 어긋난다.** 메타를 그대로 쓴다.
           scale: scaleOf(r.DATA_SCALE_NUMBER),
+          width: spColumnWidth(r.COLUMN_WIDTH),
         }))
         .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
@@ -332,7 +349,8 @@ const SalesReportsGridComponent = ({
         // 폭 90 -> 225 (사용자 지시 2026-08-21, 종전의 2.5배). 소수 자릿수 고정(REQ:CHAT-20260820-3)
         //   으로 division 40 은 10자리가 항상 붙어 90px 에서는 대부분 셀이 잘려 보였다.
         //   allowResizing 이 켜져 있어 사용자가 개별로 다시 줄일 수 있다.
-        width: 225,
+        //   2026-11-22 부터 SP COLUMN_WIDTH 를 먼저 쓰고, 없을 때만 225(DYN_COL_DEFAULT_WIDTH).
+        width: m.width ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,

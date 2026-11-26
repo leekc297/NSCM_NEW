@@ -1,0 +1,533 @@
+{"t":1795542979082,"m":{"type":"out","stream":"task","text":"▶ CheckList 수정분 재점검 — 지난 실행 뒤 바뀐 소스(FE 화면·공용, PROC, 메타, 검사기) 범위만 다시 측정(delta_scope: 기준선 대조 + AI 판단, 직전 미해결 행 규칙 포함) → 미검증 분류 · 기준선 없음·넓은 변경이면 전체 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SSP0014 --delta --no-docs\n","cls":"cmd"}}
+{"t":1795542989171,"m":{"type":"out","stream":"task","text":"[작업 1/3] 수정분 범위 결정(delta_scope · 소스 기준선 대조 + AI 판단)\n","cls":""}}
+{"t":1795542989173,"m":{"type":"out","stream":"task","text":"[수정분 범위] full · 직전 미검증 행 127행(규칙 13개) · FAIL·판정필요 64행은 그 행을 판정하는 검사기·소스가 바뀌지 않으면 1차 결과 유지 · 규칙 대응을 코드로 못 찾는 시험 1개 바뀜: 문서 시나리오\n","cls":""}}
+{"t":1795542989175,"m":{"type":"out","stream":"task","text":"[INFO] 수정분 재점검 → 전체기능 재점검으로 실행: 직전 미검증 행 127행(규칙 13개) · FAIL·판정필요 64행은 그 행을 판정하는 검사기·소스가 바뀌지 않으면 1차 결과 유지 · 규칙 대응을 코드로 못 찾는 시험 1개 바뀜: 문서 시나리오\n","cls":""}}
+{"t":1795542989175,"m":{"type":"out","stream":"task","text":"[작업 2/3] CheckList 전체(run_verify)\n","cls":""}}
+{"t":1795542989175,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SSP0014\n","cls":""}}
+{"t":1795542997800,"m":{"type":"out","stream":"task","text":"== 화면 소스 Download & Merge SSP0014 · DB MODE · 대상 nscm-fe/features/shipping/src/pages/shipment-model-pic · 2026-11-25 02:56:37 ==\n","cls":""}}
+{"t":1795542997801,"m":{"type":"out","stream":"task","text":"[세부 1/2] 공통 최신 받기 + 파일별 판정(미리보기 · 파일 변경 없음)\n","cls":""}}
+{"t":1795542997975,"m":{"type":"out","stream":"task","text":"⬇️ git fetch common …\n","cls":""}}
+{"t":1795543000542,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543000542,"m":{"type":"out","stream":"task","text":"기준선 2e27252db → 최신 7507d22d3 2026-11-24 17:28 BeomJu fix: 11/24 수정사항 적용 · 신규 커밋 11\n","cls":""}}
+{"t":1795543000542,"m":{"type":"out","stream":"task","text":"[FE] 대상 0건 분류 중 …\n","cls":""}}
+{"t":1795543000543,"m":{"type":"out","stream":"task","text":"⚠ DB MODE — 로컬 소스 보호 안 함: 내 편집본도 공통 원문으로 덮어씁니다\n","cls":""}}
+{"t":1795543000743,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543000744,"m":{"type":"out","stream":"task","text":"분류 결과\n","cls":""}}
+{"t":1795543000744,"m":{"type":"out","stream":"task","text":"     13  동일\n","cls":""}}
+{"t":1795543000744,"m":{"type":"out","stream":"task","text":"  → 적용: 공통 채택/신규 0 · 병합 0 · 삭제 0 · 로컬 유지 0 · 변경 없음 13 · 결정 대기 0\n","cls":""}}
+{"t":1795543000744,"m":{"type":"out","stream":"task","text":"  [FE] 공통 채택/신규 0 · 병합 0 · 삭제 0 · 로컬 유지 0 · 결정 대기 0\n","cls":""}}
+{"t":1795543000744,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543000744,"m":{"type":"out","stream":"task","text":"미리보기 → C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261125_025637.md\n","cls":""}}
+{"t":1795543000754,"m":{"type":"out","stream":"task","text":"[OK] SSP0014 화면 소스 최신 — 공통 7507d22d3 2026-11-24 17:28 BeomJu fix: 11/24 수정사항 적용 과 같음(파일 13건)\n","cls":""}}
+{"t":1795543001426,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543001427,"m":{"type":"out","stream":"task","text":"Running 1 test using 1 worker\n","cls":""}}
+{"t":1795543001429,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543009136,"m":{"type":"out","stream":"task","text":"[진입 확인] SSP0014 열림 · http://127.0.0.1:5173/view/SSP0014\n","cls":""}}
+{"t":1795543009418,"m":{"type":"out","stream":"task","text":"  ok 1 [chromium] › ..\\..\\Doc\\e2e\\specs\\_open.spec.ts:15:7 › 진입 확인 SSP0014 @open › 화면 열기 1회 (4.9s)\n","cls":""}}
+{"t":1795543009643,"m":{"type":"out","stream":"task","text":"[TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\open\\video\\20261125_025649_12188\n","cls":""}}
+{"t":1795543009645,"m":{"type":"out","stream":"task","text":"@@LINK 🎬 TO-BE 녹화|C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\open\\video\\20261125_025649_12188\n","cls":""}}
+{"t":1795543009645,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543009645,"m":{"type":"out","stream":"task","text":"  1 passed (8.3s)\n","cls":""}}
+{"t":1795543009662,"m":{"type":"out","stream":"task","text":"[selfcheck] quick · 14.4초 · PY_COMPILE 0(신규 0) · PY_UNDEF 0(신규 0) · CTRL_CHARS 0(신규 0) · JS_SYNTAX 0(신규 0) · SPEC_SIZE 0(신규 0)\n","cls":""}}
+{"t":1795543009662,"m":{"type":"out","stream":"task","text":"[selfcheck] PASS → Doc/verify/_engine_selfcheck.json\n","cls":""}}
+{"t":1795543009662,"m":{"type":"out","stream":"task","text":"== UI CheckList SSP0014 (AS-IS SSP0014) ==\n","cls":""}}
+{"t":1795543009663,"m":{"type":"out","stream":"task","text":"[시간] 진입 확인 · 8.8s · 열림\n","cls":""}}
+{"t":1795543010464,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795543010471,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543010471,"m":{"type":"out","stream":"task","text":"[단계 1/8] 사전 작업(DB·Fact Pack·메타·스펙·smoke)\n","cls":""}}
+{"t":1795543012040,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543012041,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\prereq.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543012100,"m":{"type":"out","stream":"task","text":"== UI CheckList 사전 작업 점검 SSP0014 (AS-IS SSP0014)\n","cls":""}}
+{"t":1795543012100,"m":{"type":"out","stream":"task","text":"  $ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\DbConn\\probe.py\n","cls":""}}
+{"t":1795543013183,"m":{"type":"out","stream":"task","text":"    [OK] asis: As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV — DB=LGCE_SCMDEV server=zio now=2026-11-25 02:56:52 · SP 2456 (0.6s)\n","cls":""}}
+{"t":1795543013183,"m":{"type":"out","stream":"task","text":"    [OK] tobe: To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 — DB=ZIOUI1 host=localhost schema=SCM_MGR now=2026-11-25 02:56:53 · PKG/PROC 1082 · 사용 메뉴 189 (0.4s)\n","cls":""}}
+{"t":1795543013183,"m":{"type":"out","stream":"task","text":"    리포트: C:\\Projects\\NSCM\\Doc\\db\\probe_20261125_025653.md\n","cls":""}}
+{"t":1795543013185,"m":{"type":"out","stream":"task","text":"[세부 1/10] DB 접속(AS-IS MSSQL · TO-BE Oracle) — OK\n","cls":""}}
+{"t":1795543013186,"m":{"type":"out","stream":"task","text":"[OK] DB 접속(AS-IS MSSQL · TO-BE Oracle) — 전부 접속\n","cls":""}}
+{"t":1795543013186,"m":{"type":"out","stream":"task","text":"[세부 2/10] AS-IS Fact Pack(SSP0014) — OK\n","cls":""}}
+{"t":1795543013187,"m":{"type":"out","stream":"task","text":"[OK] AS-IS Fact Pack(SSP0014) — controls.csv, actions.csv, files.csv, endpoints.csv 있음\n","cls":""}}
+{"t":1795543013187,"m":{"type":"out","stream":"task","text":"[세부 3/10] TO-BE DB 메타(Doc/tobefacts/db) — OK\n","cls":""}}
+{"t":1795543013187,"m":{"type":"out","stream":"task","text":"[OK] TO-BE DB 메타(Doc/tobefacts/db) — 2.0시간 전 export(기준 12시간)\n","cls":""}}
+{"t":1795543013190,"m":{"type":"out","stream":"task","text":"[세부 4/10] TO-BE 화면 인덱스(Doc/tobefacts/screens) — OK\n","cls":""}}
+{"t":1795543013190,"m":{"type":"out","stream":"task","text":"[OK] TO-BE 화면 인덱스(Doc/tobefacts/screens) — nscm-fe\\features\\shipping\\src\\pages\\shipment-model-pic · 인덱스 최신\n","cls":""}}
+{"t":1795543013190,"m":{"type":"out","stream":"task","text":"[세부 5/10] FE 대조표(__asis-mapping__.md) — OK\n","cls":""}}
+{"t":1795543013190,"m":{"type":"out","stream":"task","text":"[OK] FE 대조표(__asis-mapping__.md) — nscm-fe\\features\\shipping\\src\\pages\\shipment-model-pic\\__asis-mapping__.md\n","cls":""}}
+{"t":1795543013196,"m":{"type":"out","stream":"task","text":"[세부 6/10] 조회조건 기준표(search_cond.csv) — OK\n","cls":""}}
+{"t":1795543013196,"m":{"type":"out","stream":"task","text":"[OK] 조회조건 기준표(search_cond.csv) — 화면 행 있음\n","cls":""}}
+{"t":1795543013201,"m":{"type":"out","stream":"task","text":"[세부 7/10] 골든 케이스(golden_cases.csv) — OK\n","cls":""}}
+{"t":1795543013201,"m":{"type":"out","stream":"task","text":"[OK] 골든 케이스(golden_cases.csv) — 3건 있음\n","cls":""}}
+{"t":1795543013205,"m":{"type":"out","stream":"task","text":"[세부 8/10] E2E plan(Doc/gen/<ID>/e2e_plan.json) — OK\n","cls":""}}
+{"t":1795543013205,"m":{"type":"out","stream":"task","text":"[OK] E2E plan(Doc/gen/<ID>/e2e_plan.json) — 있음\n","cls":""}}
+{"t":1795543013205,"m":{"type":"out","stream":"task","text":"[세부 9/10] E2E 스펙(Doc/e2e/specs/<ID>.*) — OK\n","cls":""}}
+{"t":1795543013205,"m":{"type":"out","stream":"task","text":"[OK] E2E 스펙(Doc/e2e/specs/<ID>.*) — 최신\n","cls":""}}
+{"t":1795543013311,"m":{"type":"out","stream":"task","text":"  $ cmd /c C:\\Projects\\NSCM\\tools\\E2E\\run-e2e.cmd smoke SSP0014\n","cls":""}}
+{"t":1795543097294,"m":{"type":"out","stream":"task","text":"    Playwright smoke SSP0014  running - output goes to the log file\n","cls":""}}
+{"t":1795543097294,"m":{"type":"out","stream":"task","text":"    # E2E 결과 — 2026-11-25 02:58\n","cls":""}}
+{"t":1795543097294,"m":{"type":"out","stream":"task","text":"    \n","cls":""}}
+{"t":1795543097295,"m":{"type":"out","stream":"task","text":"    테스트 6 · PASS 6 · FAIL 0 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795543097295,"m":{"type":"out","stream":"task","text":"    → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0014\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795543097295,"m":{"type":"out","stream":"task","text":"    log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_025653_smoke.log\n","cls":""}}
+{"t":1795543097297,"m":{"type":"out","stream":"task","text":"[세부 10/10] smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용) — DONE\n","cls":""}}
+{"t":1795543097299,"m":{"type":"out","stream":"task","text":"[DONE] smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용) — smoke 3건 실행 · rc=0 · 84s · cts\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_025653_smoke.log FE 5173 / BE 8080 responding Playwright smoke SSP0014 running - output goes to the log file # E2E 결과 — 2026-11-25\n","cls":""}}
+{"t":1795543097304,"m":{"type":"out","stream":"task","text":"== 사전 작업 {'OK': 9, 'DONE': 1} → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\prereq.json\n","cls":""}}
+{"t":1795543097305,"m":{"type":"out","stream":"task","text":"[시간] prereq.py · 시작 02:56:52 · 85.3s · rc=0\n","cls":""}}
+{"t":1795543097390,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543097390,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\opinion_intake.py SSP0014\n","cls":""}}
+{"t":1795543106911,"m":{"type":"out","stream":"task","text":"[의견 처리] 사용자의견 1건(원장에 있는 행 0) · 처리 기록 0건(이번에 닫힘 0) · 새로 처리할 의견 0건\n","cls":""}}
+{"t":1795543106912,"m":{"type":"out","stream":"task","text":"[의견 처리] 기록 0건 · 엔진 보완·룰 등록 대상(열림) 0건 · 구분  · 비용 $0.0000\n","cls":""}}
+{"t":1795543106951,"m":{"type":"out","stream":"task","text":"[시간] opinion_intake.py · 시작 02:58:17 · 9.6s · rc=0\n","cls":""}}
+{"t":1795543107035,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543107035,"m":{"type":"out","stream":"task","text":"$ run-e2e.cmd crud SSP0014 --mode admin\n","cls":""}}
+{"t":1795543108896,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795543108911,"m":{"type":"out","stream":"task","text":"RUNID 20261125_025827 - log C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_025827_crud.log\n","cls":""}}
+{"t":1795543109156,"m":{"type":"out","stream":"task","text":"FE 5173 / BE 8080 responding\n","cls":""}}
+{"t":1795543115836,"m":{"type":"out","stream":"task","text":"Playwright crud SSP0014  running - output goes to the log file\n","cls":""}}
+{"t":1795543200206,"m":{"type":"out","stream":"task","text":"# E2E 결과 — 2026-11-25 03:00\n","cls":""}}
+{"t":1795543200206,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543200207,"m":{"type":"out","stream":"task","text":"테스트 6 · PASS 6 · FAIL 0 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795543200207,"m":{"type":"out","stream":"task","text":"→ C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0014\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795543200207,"m":{"type":"out","stream":"task","text":"log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_025827_crud.log\n","cls":""}}
+{"t":1795543200235,"m":{"type":"out","stream":"task","text":"[OK] crud: 실행 · 전부 PASS · 1건 · 93.2s\n","cls":""}}
+{"t":1795543200251,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543200251,"m":{"type":"out","stream":"task","text":"$ run-e2e.cmd auth SSP0014 --mode admin\n","cls":""}}
+{"t":1795543201928,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795543201940,"m":{"type":"out","stream":"task","text":"RUNID 20261125_030000 - log C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_030000_auth.log\n","cls":""}}
+{"t":1795543202109,"m":{"type":"out","stream":"task","text":"FE 5173 / BE 8080 responding\n","cls":""}}
+{"t":1795543209231,"m":{"type":"out","stream":"task","text":"Playwright auth SSP0014  running - output goes to the log file\n","cls":""}}
+{"t":1795543218990,"m":{"type":"out","stream":"task","text":"# E2E 결과 — 2026-11-25 03:00\n","cls":""}}
+{"t":1795543218990,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543218991,"m":{"type":"out","stream":"task","text":"테스트 6 · PASS 6 · FAIL 0 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795543218991,"m":{"type":"out","stream":"task","text":"→ C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0014\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795543219002,"m":{"type":"out","stream":"task","text":"log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_030000_auth.log\n","cls":""}}
+{"t":1795543219062,"m":{"type":"out","stream":"task","text":"[OK] auth: 실행 · 전부 PASS · 1건 · 18.8s\n","cls":""}}
+{"t":1795543219083,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543219084,"m":{"type":"out","stream":"task","text":"$ run-e2e.cmd authcrud SSP0014 --mode admin\n","cls":""}}
+{"t":1795543220745,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795543220756,"m":{"type":"out","stream":"task","text":"RUNID 20261125_030019 - log C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_030019_authcrud.log\n","cls":""}}
+{"t":1795543220934,"m":{"type":"out","stream":"task","text":"FE 5173 / BE 8080 responding\n","cls":""}}
+{"t":1795543227630,"m":{"type":"out","stream":"task","text":"Playwright authcrud SSP0014  running - output goes to the log file\n","cls":""}}
+{"t":1795543237918,"m":{"type":"out","stream":"task","text":"# E2E 결과 — 2026-11-25 03:00\n","cls":""}}
+{"t":1795543237918,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543237918,"m":{"type":"out","stream":"task","text":"테스트 6 · PASS 6 · FAIL 0 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795543237919,"m":{"type":"out","stream":"task","text":"→ C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0014\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795543237931,"m":{"type":"out","stream":"task","text":"log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0014\\run_20261125_030019_authcrud.log\n","cls":""}}
+{"t":1795543237998,"m":{"type":"out","stream":"task","text":"[OK] authcrud: 실행 · 전부 PASS · 1건 · 18.9s\n","cls":""}}
+{"t":1795543237998,"m":{"type":"out","stream":"task","text":"[e2e_suite] SSP0014: crud 실행 · 전부 PASS · auth 실행 · 전부 PASS · authcrud 실행 · 전부 PASS → Doc\\verify\\SSP0014\\e2e_suite.json\n","cls":""}}
+{"t":1795543242109,"m":{"type":"out","stream":"task","text":"[시간] 단계 pre 끝 · 3.9분\n","cls":""}}
+{"t":1795543242109,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543242110,"m":{"type":"out","stream":"task","text":"[단계 2/8] AS-IS 사실 보강·자동 기대 행·검증 원장 — 세부 17개\n","cls":""}}
+{"t":1795543243100,"m":{"type":"out","stream":"task","text":"[세부 1/17] facts_defcols.py\n","cls":""}}
+{"t":1795543243100,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543243100,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_defcols.py SSP0014\n","cls":""}}
+{"t":1795543243145,"m":{"type":"out","stream":"task","text":"[facts_defcols] SSP0014: 컬럼 상수 이름 → 값 0곳(0종)\n","cls":""}}
+{"t":1795543243152,"m":{"type":"out","stream":"task","text":"[시간] facts_defcols.py · 시작 03:00:43 · 0.1s · rc=0\n","cls":""}}
+{"t":1795543243152,"m":{"type":"out","stream":"task","text":"[세부 2/17] facts_gridcols.py\n","cls":""}}
+{"t":1795543243152,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543243152,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_gridcols.py SSP0014\n","cls":""}}
+{"t":1795543243189,"m":{"type":"out","stream":"task","text":"SSP0014: 그리드 컬럼 선언 21행 (CODE 0 · META 21) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\grid_columns_asis.csv · 프레임워크 기본값 12행 → Doc/asisfacts/framework/spreadinfo_defaults.csv\n","cls":""}}
+{"t":1795543243195,"m":{"type":"out","stream":"task","text":"[시간] facts_gridcols.py · 시작 03:00:43 · 0.0s · rc=0\n","cls":""}}
+{"t":1795543243195,"m":{"type":"out","stream":"task","text":"[세부 3/17] facts_dyncols.py\n","cls":""}}
+{"t":1795543243195,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543243195,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_dyncols.py SSP0014\n","cls":""}}
+{"t":1795543243287,"m":{"type":"out","stream":"task","text":"SSP0014: 동적 컬럼 패밀리 0건 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\dyn_columns.csv\n","cls":""}}
+{"t":1795543243287,"m":{"type":"out","stream":"task","text":"[시간] facts_dyncols.py · 시작 03:00:43 · 0.1s · rc=0\n","cls":""}}
+{"t":1795543243287,"m":{"type":"out","stream":"task","text":"[세부 4/17] facts_cellclear.py\n","cls":""}}
+{"t":1795543243288,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543243288,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_cellclear.py SSP0014\n","cls":""}}
+{"t":1795543245019,"m":{"type":"out","stream":"task","text":"SSP0014: 셀 초기화 0건(무조건 0·조건부 0·컬럼 미해석 0) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\cell_clear.csv\n","cls":""}}
+{"t":1795543245023,"m":{"type":"out","stream":"task","text":"[시간] facts_cellclear.py · 시작 03:00:43 · 1.8s · rc=0\n","cls":""}}
+{"t":1795543245024,"m":{"type":"out","stream":"task","text":"[세부 5/17] facts_cellrules.py\n","cls":""}}
+{"t":1795543245024,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543245025,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_cellrules.py SSP0014\n","cls":""}}
+{"t":1795543245071,"m":{"type":"out","stream":"task","text":"SSP0014: 21컬럼 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\cell_rules.csv\n","cls":""}}
+{"t":1795543245079,"m":{"type":"out","stream":"task","text":"[시간] facts_cellrules.py · 시작 03:00:45 · 0.1s · rc=0\n","cls":""}}
+{"t":1795543245079,"m":{"type":"out","stream":"task","text":"[세부 6/17] facts_lockrules.py\n","cls":""}}
+{"t":1795543245079,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543245080,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_lockrules.py SSP0014\n","cls":""}}
+{"t":1795543246811,"m":{"type":"out","stream":"task","text":"SSP0014: 잠금 규칙 7건(미해석 1) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\lock_rules.csv\n","cls":""}}
+{"t":1795543246811,"m":{"type":"out","stream":"task","text":"  조건부 배경색 규칙 0건 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\color_rules.csv\n","cls":""}}
+{"t":1795543246812,"m":{"type":"out","stream":"task","text":"  편집 기대 21컬럼 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\edit_expect.csv (메인 시트 Shipment Model PIC, 클래스 SSP0014_ShipmentModelPIC, Insert 경로 .Insert 없음, 기존행 기본 N)\n","cls":""}}
+{"t":1795543246821,"m":{"type":"out","stream":"task","text":"[시간] facts_lockrules.py · 시작 03:00:45 · 1.7s · rc=0\n","cls":""}}
+{"t":1795543246822,"m":{"type":"out","stream":"task","text":"[세부 7/17] facts_combosrc.py\n","cls":""}}
+{"t":1795543246822,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543246822,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_combosrc.py SSP0014\n","cls":""}}
+{"t":1795543246935,"m":{"type":"out","stream":"task","text":"SSP0014: 콤보 원천 8행(바인딩 8 · 미해결 0) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\combo_src.csv\n","cls":""}}
+{"t":1795543246942,"m":{"type":"out","stream":"task","text":"[시간] facts_combosrc.py · 시작 03:00:46 · 0.1s · rc=0\n","cls":""}}
+{"t":1795543246943,"m":{"type":"out","stream":"task","text":"[세부 8/17] facts_combovalues.py\n","cls":""}}
+{"t":1795543246943,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543246943,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_combovalues.py SSP0014\n","cls":""}}
+{"t":1795543247123,"m":{"type":"out","stream":"task","text":"SSP0014: 콤보 원천 2종 — 값 확보 1 · 미해석 1 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\combo_values.json\n","cls":""}}
+{"t":1795543247137,"m":{"type":"out","stream":"task","text":"[시간] facts_combovalues.py · 시작 03:00:46 · 0.2s · rc=0\n","cls":""}}
+{"t":1795543247139,"m":{"type":"out","stream":"task","text":"[세부 9/17] facts_sortrules.py\n","cls":""}}
+{"t":1795543247139,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543247139,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_sortrules.py SSP0014\n","cls":""}}
+{"t":1795543248828,"m":{"type":"out","stream":"task","text":"SSP0014: SP 3 → 정렬 규칙 1 (SQL 1 · GRID 0 · CODE 0) · ORDER BY 없는 SP 2 → Doc/asisfacts/screens/SSP0014/sort_rules.csv\n","cls":""}}
+{"t":1795543248838,"m":{"type":"out","stream":"task","text":"[시간] facts_sortrules.py · 시작 03:00:47 · 1.7s · rc=0\n","cls":""}}
+{"t":1795543248838,"m":{"type":"out","stream":"task","text":"[세부 10/17] facts_prereq.py\n","cls":""}}
+{"t":1795543248838,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543248838,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_prereq.py SSP0014\n","cls":""}}
+{"t":1795543250553,"m":{"type":"out","stream":"task","text":"SSP0014: 선행 칸 0건(행 전체 0·칸 지정 0·미해석 0) → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\cell_prereq.csv\n","cls":""}}
+{"t":1795543250562,"m":{"type":"out","stream":"task","text":"[시간] facts_prereq.py · 시작 03:00:48 · 1.7s · rc=0\n","cls":""}}
+{"t":1795543250563,"m":{"type":"out","stream":"task","text":"[세부 11/17] facts_popup_meta.py\n","cls":""}}
+{"t":1795543250564,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543250564,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe -I C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_popup_meta.py SSP0014\n","cls":""}}
+{"t":1795543250916,"m":{"type":"out","stream":"task","text":"SSP0014 columns 21 measures 0 titleset 0 no_personal []\n","cls":""}}
+{"t":1795543250934,"m":{"type":"out","stream":"task","text":"[시간] facts_popup_meta.py · 시작 03:00:50 · 0.4s · rc=0\n","cls":""}}
+{"t":1795543250934,"m":{"type":"out","stream":"task","text":"[세부 12/17] facts_append_tables.py\n","cls":""}}
+{"t":1795543250935,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543250935,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe -I C:\\Projects\\NSCM\\tools\\Harness\\verify\\facts_append_tables.py SSP0014\n","cls":""}}
+{"t":1795543250994,"m":{"type":"out","stream":"task","text":"SSP0014: 저장 SP INSERT 표 1개 · 그중 저장마다 새 키 행 표 0개 → C:\\Projects\\NSCM\\Doc\\asisfacts\\screens\\SSP0014\\append_tables.csv\n","cls":""}}
+{"t":1795543251001,"m":{"type":"out","stream":"task","text":"[시간] facts_append_tables.py · 시작 03:00:50 · 0.1s · rc=0\n","cls":""}}
+{"t":1795543251001,"m":{"type":"out","stream":"task","text":"[세부 13/17] llm_facts.py\n","cls":""}}
+{"t":1795543251001,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543251001,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\llm_facts.py SSP0014\n","cls":""}}
+{"t":1795543251081,"m":{"type":"out","stream":"task","text":"[사실 검토] AS-IS SSP0014 · 추출본 6개(81행) · 원문 2개 · 프롬프트 2118자\n","cls":""}}
+{"t":1795543251089,"m":{"type":"out","stream":"task","text":"[사실 검토] 후보 0건 · 원문 인용 확인 0건 · 캐시 · 비용 $0.0000\n","cls":""}}
+{"t":1795543251097,"m":{"type":"out","stream":"task","text":"[시간] llm_facts.py · 시작 03:00:51 · 0.1s · rc=0\n","cls":""}}
+{"t":1795543251097,"m":{"type":"out","stream":"task","text":"[세부 14/17] gen_expect.py\n","cls":""}}
+{"t":1795543251097,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543251097,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\gen_expect.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543251282,"m":{"type":"out","stream":"task","text":"SSP0014: 자동 행 4 {'P01': 1, 'P02': 1, 'P03': 1, 'P21': 1} · env -(sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건)\n","cls":""}}
+{"t":1795543251282,"m":{"type":"out","stream":"task","text":"합계 4행 · 화면 1\n","cls":""}}
+{"t":1795543251298,"m":{"type":"out","stream":"task","text":"[시간] gen_expect.py · 시작 03:00:51 · 0.2s · rc=0\n","cls":""}}
+{"t":1795543251298,"m":{"type":"out","stream":"task","text":"[세부 15/17] scenario_env.py\n","cls":""}}
+{"t":1795543251298,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543251299,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\scenario_env.py SSP0014\n","cls":""}}
+{"t":1795543251460,"m":{"type":"out","stream":"task","text":"[실측 2026-11-25 03:00:51] SSP0014: Div조건 있음 · 기본 Div -(sheet_columns 단일 Division 칸 없음) · 계정 Div 40,81,82 · 필수조건 Div,Operation group · 마지막 관측 조회 최대 7710행\n","cls":""}}
+{"t":1795543251477,"m":{"type":"out","stream":"task","text":"[시간] scenario_env.py · 시작 03:00:51 · 0.2s · rc=0\n","cls":""}}
+{"t":1795543251477,"m":{"type":"out","stream":"task","text":"[세부 16/17] ledger.py\n","cls":""}}
+{"t":1795543251478,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543251478,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\ledger.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543253437,"m":{"type":"out","stream":"task","text":"  적용성: N 104 · UNKNOWN 16 · Y 723\n","cls":""}}
+{"t":1795543253446,"m":{"type":"out","stream":"task","text":"SSP0014: 1068행 → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\verify_ledger.csv\n","cls":""}}
+{"t":1795543253446,"m":{"type":"out","stream":"task","text":"  RULE_SCREEN 133 · SP 4 · SEARCH 59 · COLUMN 98 · MSG 4 · ASIS 60 · DEFECT 48 · GENERAL 552 · CONFIRMED 110\n","cls":""}}
+{"t":1795543253460,"m":{"type":"out","stream":"task","text":"[시간] ledger.py · 시작 03:00:51 · 2.0s · rc=0\n","cls":""}}
+{"t":1795543253462,"m":{"type":"out","stream":"task","text":"[세부 17/17] criteria_build.py\n","cls":""}}
+{"t":1795543253463,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543253463,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\criteria_build.py SSP0014\n","cls":""}}
+{"t":1795543253635,"m":{"type":"out","stream":"task","text":"[기준 정리 SSP0014] 원장 1068행 · 요소 72개(BTN 7 · COL 21 · COND 10 · MSG 24 · POPUP 1 · SCREEN 1 · SP 8) · 검사엔진 행 358(요소 연결 213) · 결함 유형 행 710 · 실측 연결 11/34 · AI 묶음 37개\n","cls":""}}
+{"t":1795543253679,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 1/37 규칙 A1,A10,A2,A3,A4 · 기억\n","cls":""}}
+{"t":1795543253685,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 2/37 규칙 A5 · 기억\n","cls":""}}
+{"t":1795543253686,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 3/37 규칙 A5,A6,A7,A8,A9,B1 · 기억\n","cls":""}}
+{"t":1795543253695,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 5/37 규칙 B4 · 기억\n","cls":""}}
+{"t":1795543253702,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 4/37 규칙 B2,B3 · 기억\n","cls":""}}
+{"t":1795543253707,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 7/37 규칙 B6,B7,B8 · 기억\n","cls":""}}
+{"t":1795543253715,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 8/37 규칙 C1,C2 · 기억\n","cls":""}}
+{"t":1795543253721,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 6/37 규칙 B4,B5 · 기억\n","cls":""}}
+{"t":1795543253722,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 9/37 규칙 C3,C4,C5 · 기억\n","cls":""}}
+{"t":1795543253732,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 10/37 규칙 D1,D2 · 기억\n","cls":""}}
+{"t":1795543253737,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 12/37 규칙 E1,E2,E3 · 기억\n","cls":""}}
+{"t":1795543253743,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 11/37 규칙 D3,D4,D5,D6,DB-SYN · 기억\n","cls":""}}
+{"t":1795543253751,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 14/37 규칙 F1 · 기억\n","cls":""}}
+{"t":1795543253756,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 15/37 규칙 F1,F2,F3 · 기억\n","cls":""}}
+{"t":1795543253762,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 16/37 규칙 F4,F5 · 기억\n","cls":""}}
+{"t":1795543253768,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 13/37 규칙 E4,E5,E6,E7 · 기억\n","cls":""}}
+{"t":1795543253773,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 18/37 규칙 G1,G10 · 기억\n","cls":""}}
+{"t":1795543253780,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 19/37 규칙 G2,G3 · 기억\n","cls":""}}
+{"t":1795543253786,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 20/37 규칙 G4 · 기억\n","cls":""}}
+{"t":1795543253792,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 21/37 규칙 G5,G6,G7,G8 · 기억\n","cls":""}}
+{"t":1795543253798,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 17/37 규칙 F6,F7,F8 · 기억\n","cls":""}}
+{"t":1795543253804,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 23/37 규칙 H3 · 기억\n","cls":""}}
+{"t":1795543253810,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 22/37 규칙 G9,H1,H10,H11,H12,H2 · 기억\n","cls":""}}
+{"t":1795543253815,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 24/37 규칙 H4 · 기억\n","cls":""}}
+{"t":1795543253821,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 26/37 규칙 H6 · 기억\n","cls":""}}
+{"t":1795543253827,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 27/37 규칙 H7,H8,H9 · 기억\n","cls":""}}
+{"t":1795543253833,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 28/37 규칙 I1,I2,I3,I4 · 기억\n","cls":""}}
+{"t":1795543253838,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 29/37 규칙 J1,J2,J3 · 기억\n","cls":""}}
+{"t":1795543253843,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 30/37 규칙 J4,K1 · 기억\n","cls":""}}
+{"t":1795543253850,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 25/37 규칙 H5 · 기억\n","cls":""}}
+{"t":1795543253855,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 32/37 규칙 K3,K4,K5,K6,L1 · 기억\n","cls":""}}
+{"t":1795543253861,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 33/37 규칙 L2,M1 · 기억\n","cls":""}}
+{"t":1795543253867,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 34/37 규칙 M2 · 기억\n","cls":""}}
+{"t":1795543253873,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 35/37 규칙 M3 · 기억\n","cls":""}}
+{"t":1795543253874,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 36/37 규칙 M3,M4,MS1 · 기억\n","cls":""}}
+{"t":1795543253875,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 31/37 규칙 K2 · 기억\n","cls":""}}
+{"t":1795543253876,"m":{"type":"out","stream":"task","text":"  · 기준 정리 묶음 37/37 규칙 N1,SC1 · 기억\n","cls":""}}
+{"t":1795543255697,"m":{"type":"out","stream":"task","text":"[기준 정리 SSP0014] 기준 항목 959 · 확정 559 · 대상 아님 368 · 판단 대기 32 · 합침 109 · 대상 아님 361 · 판단 대기 58 · 룰 결합 247 · AI 호출 0(기억 37 · 실패 0)\n","cls":""}}
+{"t":1795543255698,"m":{"type":"out","stream":"task","text":"@@LINK 📐 기준 원장|Doc/verify/SSP0014/criteria/criteria.md\n","cls":""}}
+{"t":1795543255724,"m":{"type":"out","stream":"task","text":"[시간] criteria_build.py · 시작 03:00:53 · 2.3s · rc=0\n","cls":""}}
+{"t":1795543255954,"m":{"type":"out","stream":"task","text":"[시간] 단계 facts 끝 · 0.2분\n","cls":""}}
+{"t":1795543255954,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543255956,"m":{"type":"out","stream":"task","text":"[단계 3/8] 정적 검사·골든·대조표 추적 — 세부 10개\n","cls":""}}
+{"t":1795543256934,"m":{"type":"out","stream":"task","text":"[세부 1/10] syn_check.py\n","cls":""}}
+{"t":1795543256934,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543256935,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\syn_check.py SSP0014\n","cls":""}}
+{"t":1795543273379,"m":{"type":"out","stream":"task","text":"SSP0014: 검사 13 · 문제 0\n","cls":""}}
+{"t":1795543273412,"m":{"type":"out","stream":"task","text":"[시간] syn_check.py · 시작 03:00:56 · 16.5s · rc=0\n","cls":""}}
+{"t":1795543273415,"m":{"type":"out","stream":"task","text":"[세부 2/10] syn_fix.py — 건너뜀(앱 계정 접근 불가 객체 없음)\n","cls":""}}
+{"t":1795543273417,"m":{"type":"out","stream":"task","text":"[세부 3/10] sort_check.py\n","cls":""}}
+{"t":1795543273417,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543273417,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\sort_check.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543277679,"m":{"type":"out","stream":"task","text":"SSP0014: 정렬 대조 3행 — NA 2 · PASS 1 (TO-BE 원문 ZIOUI1 2026-11-25 03:01 조회) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\sort_check.csv\n","cls":""}}
+{"t":1795543277679,"m":{"type":"out","stream":"task","text":"  [NA] SSP0014_GET_USER_ID_CHECK → PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK | AS-IS  | TO-BE  | AS-IS·TO-BE 모두 ORDER BY 없음 — 저장·검증 SP(이름 _CHECK) — 결과 순서 대상 아님(CR-075 ③)\n","cls":""}}
+{"t":1795543277679,"m":{"type":"out","stream":"task","text":"  [NA] SSP0014_SAVE_SHIPMENT_MODEL_PIC → PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC | AS-IS  | TO-BE  | AS-IS·TO-BE 모두 ORDER BY 없음 — 저장·검증 SP(이름 _SAVE) — 결과 순서 대상 아님(CR-075 ③)\n","cls":""}}
+{"t":1795543277698,"m":{"type":"out","stream":"task","text":"[시간] sort_check.py · 시작 03:01:13 · 4.3s · rc=0\n","cls":""}}
+{"t":1795543277700,"m":{"type":"out","stream":"task","text":"[세부 4/10] align_check.py\n","cls":""}}
+{"t":1795543277700,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543277700,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\align_check.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543279588,"m":{"type":"out","stream":"task","text":"SSP0014: H1 정렬 21컬럼 — {'PASS': 21} · 시트 대응 Shipment Model PIC→SSP0014/Shipment Model PIC → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\align_check.csv\n","cls":""}}
+{"t":1795543279618,"m":{"type":"out","stream":"task","text":"[시간] align_check.py · 시작 03:01:17 · 1.9s · rc=0\n","cls":""}}
+{"t":1795543279618,"m":{"type":"out","stream":"task","text":"[세부 5/10] popup_args_check.py\n","cls":""}}
+{"t":1795543279618,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543279619,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\popup_args_check.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543295179,"m":{"type":"out","stream":"task","text":"SSP0014: G5 팝업 인자 — AS-IS 호출 25 · TO-BE 사용처 2 · 짝 25 · 조회조건 필드 6 → {'FAIL': 9, 'ERROR': 8, 'NA': 11, 'PASS': 5} → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\popup_args.csv\n","cls":""}}
+{"t":1795543295179,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295179,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295180,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295180,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295180,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295180,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295181,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295181,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295181,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295181,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295181,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295181,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295182,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295182,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295182,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal ssoUserYn: 고정 플래그 SSOUserYN AS-IS false ↔ TO-BE ssoUserYn=N\n","cls":""}}
+{"t":1795543295183,"m":{"type":"out","stream":"task","text":"  [ERROR] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:538 SsoUserModal : [확인 대상] AS-IS 고정 플래그 SingleSelectYn=true 를 TO-BE 팝업에 전달 안 함 — 팝업 기본값이 같은지 확인\n","cls":""}}
+{"t":1795543295183,"m":{"type":"out","stream":"task","text":"  [FAIL] nscm-fe/features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx:549 MaterialByDivisionModal preSearchParams.operationGroup: 연동 누락: Operation group(operationGroup='') — 화면 조회조건 Operation group(searchCondition.operationGroup) 이 있는데 팝업 조건 operationGroup 에 고정값 전달 · 팝업이 조회조건과 연동되지 않음(CR-0\n","cls":""}}
+{"t":1795543295189,"m":{"type":"out","stream":"task","text":"[시간] popup_args_check.py · 시작 03:01:19 · 15.6s · rc=0\n","cls":""}}
+{"t":1795543295190,"m":{"type":"out","stream":"task","text":"[세부 6/10] popup_data_check.py\n","cls":""}}
+{"t":1795543295191,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543295192,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\popup_data_check.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543297467,"m":{"type":"out","stream":"task","text":"SSP0014: M3 팝업 데이터 — AS-IS 개인화 팝업 없음 → 대상 0 → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\popup_data.csv\n","cls":""}}
+{"t":1795543297475,"m":{"type":"out","stream":"task","text":"[시간] popup_data_check.py · 시작 03:01:35 · 2.3s · rc=0\n","cls":""}}
+{"t":1795543297477,"m":{"type":"out","stream":"task","text":"[세부 7/10] f10_check.py\n","cls":""}}
+{"t":1795543297477,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543297477,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\f10_check.py SSP0014\n","cls":""}}
+{"t":1795543297975,"m":{"type":"out","stream":"task","text":"SSP0014: 저장 PROC 1건 — PKG_SSP0014.P_SSP0014_SAVE_MODEL_PIC=PASS → Doc\\verify\\SSP0014\\f10_check.csv\n","cls":""}}
+{"t":1795543297995,"m":{"type":"out","stream":"task","text":"[시간] f10_check.py · 시작 03:01:37 · 0.5s · rc=0\n","cls":""}}
+{"t":1795543297995,"m":{"type":"out","stream":"task","text":"[세부 8/10] golden.py\n","cls":""}}
+{"t":1795543297995,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543297996,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\DbConn\\golden.py SSP0014\n","cls":""}}
+{"t":1795543298045,"m":{"type":"out","stream":"task","text":"As-is: As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV\n","cls":""}}
+{"t":1795543298045,"m":{"type":"out","stream":"task","text":"To-Be: To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1\n","cls":""}}
+{"t":1795543300998,"m":{"type":"out","stream":"task","text":"[PASS] SSP0014:SSP0014_GET_SHIPMENT_MODEL_PIC\n","cls":""}}
+{"t":1795543301252,"m":{"type":"out","stream":"task","text":"[SKIP] SSP0014:SSP0014_SAVE_SHIPMENT_MODEL_PIC\n","cls":""}}
+{"t":1795543301787,"m":{"type":"out","stream":"task","text":"[PASS] SSP0014:SSP0014_GET_USER_ID_CHECK\n","cls":""}}
+{"t":1795543301808,"m":{"type":"out","stream":"task","text":"요약: PASS 50 · COLS 0 · ROWS 0 · DIFF 19 · ERR 0 · SKIP 209 → C:\\Projects\\NSCM\\Doc\\golden\\_summary.md\n","cls":""}}
+{"t":1795543301827,"m":{"type":"out","stream":"task","text":"[시간] golden.py · 시작 03:01:37 · 3.8s · rc=0\n","cls":""}}
+{"t":1795543301829,"m":{"type":"out","stream":"task","text":"[세부 9/10] b7_check.py\n","cls":""}}
+{"t":1795543301829,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543301830,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\b7_check.py SSP0014 --asis SSP0014\n","cls":""}}
+{"t":1795543303940,"m":{"type":"out","stream":"task","text":"SSP0014: B7(a) NA — 저장 SP SSP0014_SAVE_SHIPMENT_MODEL_PIC 대상 SSP_MST_MODEL_USER 와 콤보 원천 8종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\b7_check.json\n","cls":""}}
+{"t":1795543303953,"m":{"type":"out","stream":"task","text":"[시간] b7_check.py · 시작 03:01:41 · 2.1s · rc=0\n","cls":""}}
+{"t":1795543303955,"m":{"type":"out","stream":"task","text":"[세부 10/10] mapping_trace.py\n","cls":""}}
+{"t":1795543303955,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543303955,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\mapping_trace.py SSP0014 --asis SSP0014 --to-ledger\n","cls":""}}
+{"t":1795543308545,"m":{"type":"out","stream":"task","text":"원장 편입: TRACE 403행(원장 연결 없던 검사 인스턴스) — X-LOC:77 X-ROW:28 A1:22 E4:21 A5:20 D3:20 G1:19 H5:18 H2:18 X-REASON:16 M4:15 D1:15 → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\verify_ledger.csv\n","cls":""}}
+{"t":1795543308564,"m":{"type":"out","stream":"task","text":"SSP0014: 대조표 470행(FE 93 · 액션 377) → 인스턴스 511 — 행 미검증 405 · 검증완료 49 · 해당없음 15 · FAIL 1 | 인스턴스 NOT_RUN 222 · PASS 134 · ERROR 91 · NA 39 · REVIEW 21 · NOPATH 3 · FAIL 1 → Doc/verify/SSP0014/mapping_trace.md\n","cls":""}}
+{"t":1795543308576,"m":{"type":"out","stream":"task","text":"[시간] mapping_trace.py · 시작 03:01:43 · 4.6s · rc=0\n","cls":""}}
+{"t":1795543308755,"m":{"type":"out","stream":"task","text":"[시간] 단계 static 끝 · 0.9분\n","cls":""}}
+{"t":1795543308755,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795543308756,"m":{"type":"out","stream":"task","text":"[단계 4/8] E2E 검증엔진(@verify·@trace) · tier all\n","cls":""}}
+{"t":1795543313759,"m":{"type":"out","stream":"task","text":"[INFO] SSP0014 E2E 시작 — 실행 중 2개(SCP0028,SSP0005) · CPU 35%(기준 <80) · 여유 메모리 8980MB(기준 ≥3072) · 다음 화면 입장은 120초 뒤부터(부하 반영)\n","cls":""}}
+{"t":1795543316149,"m":{"type":"out","stream":"task","text":"[INFO] TCP 항목 621개(Get-NetTCPConnection)\n","cls":""}}
+{"t":1795543320102,"m":{"type":"out","stream":"task","text":"[INFO] E2E 나눠 실행: 시험 81개 = 읽기 77개(연관 기능 묶음 64개, 지난 소요 합 78.1분) + 차례 4개(쓰기 또는 처음 보는 시험)\n","cls":""}}
+{"t":1795543320102,"m":{"type":"out","stream":"task","text":"[INFO] 읽기 작업자 최대 10개 = min(설정 e2eReadPar 10, 쓸 수 있는 계정 10개, 묶음 64개) · 계정 minyonglee1, hyerakim, imadei, jaehun_cho, jeremy.shin, jhpark9, jongykim2, jssbae, jungug, jungyu9.kim · 늘리는 기준 CPU < 80%, 여유 메모리 >= 3072MB, 늘린 뒤 20초 대기\n","cls":""}}
+{"t":1795543320103,"m":{"type":"out","stream":"task","text":"Running 81 tests using up to 10 workers(읽기) + 1 worker(차례)\n","cls":""}}
+{"t":1795543320107,"m":{"type":"out","stream":"task","text":"[작업자 1 · 계정 minyonglee1] 일 1: 시험 3개 · 지난 소요 합 6.9분 · 남은 묶음 63개\n","cls":""}}
+{"t":1795543320993,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] Running 3 tests using 1 worker\n","cls":""}}
+{"t":1795543344380,"m":{"type":"out","stream":"task","text":"[작업자 2 · 계정 hyerakim] 일 2: 시험 1개 · 지난 소요 합 5.3분 · 남은 묶음 62개\n","cls":""}}
+{"t":1795543345902,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] Running 1 test using 1 worker\n","cls":""}}
+{"t":1795543347106,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543369088,"m":{"type":"out","stream":"task","text":"[작업자 3 · 계정 imadei] 일 3: 시험 2개 · 지난 소요 합 5.3분 · 남은 묶음 61개\n","cls":""}}
+{"t":1795543371762,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795543373606,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [langacct] imadei: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543393583,"m":{"type":"out","stream":"task","text":"[작업자 4 · 계정 jaehun_cho] 일 4: 시험 2개 · 지난 소요 합 4.0분 · 남은 묶음 60개\n","cls":""}}
+{"t":1795543394577,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795543396110,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543418404,"m":{"type":"out","stream":"task","text":"[작업자 5 · 계정 jeremy.shin] 일 5: 시험 2개 · 지난 소요 합 6.8분 · 남은 묶음 58개\n","cls":""}}
+{"t":1795543419536,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795543421013,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] [langacct] jeremy.shin: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543431161,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\combo_runtime.json — UNKNOWN\n","cls":""}}
+{"t":1795543437445,"m":{"type":"out","stream":"task","text":"  ok 1 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2571:7 › 정합검증 SSP0014 @verify › 필터 항목·연속 조회 본문(K1·G6) (1.9m)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543443802,"m":{"type":"out","stream":"task","text":"[부하 조절] 작업자 5개 유지 · CPU 82.8% · 여유 메모리 4553MB (늘리는 기준 CPU < 80%, 메모리 >= 3072MB)\n","cls":""}}
+{"t":1795543449319,"m":{"type":"out","stream":"task","text":"  ok 2 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2607:7 › 정합검증 SSP0014 @verify › 동적 칸 정렬·방향키 응답(K1·L1) (8.7s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543459131,"m":{"type":"out","stream":"task","text":"[작업자 6 · 계정 jhpark9] 일 6: 시험 2개 · 지난 소요 합 6.1분 · 남은 묶음 56개\n","cls":""}}
+{"t":1795543459625,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795543461479,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9] [langacct] jhpark9: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543463810,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795543473160,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795543480026,"m":{"type":"out","stream":"task","text":"  ok 3 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3241:7 › 정합검증 SSP0014 @verify › 필터 유지 재조회(K1) (27.3s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543480676,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [TO-BE 녹화] 녹화 파일 3개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read1\\video\\20261125_030440_41944\n","cls":""}}
+{"t":1795543480677,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   3 passed (2.7m)\n","cls":""}}
+{"t":1795543483338,"m":{"type":"out","stream":"task","text":"[작업자 7 · 계정 jongykim2] 일 7: 시험 2개 · 지난 소요 합 5.3분 · 남은 묶음 54개\n","cls":""}}
+{"t":1795543484399,"m":{"type":"out","stream":"task","text":"[작업자 7 jongykim2] Running 2 tests using 1 worker\n","cls":""}}
+{"t":1795543485559,"m":{"type":"out","stream":"task","text":"[작업자 7 jongykim2] [langacct] jongykim2: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543507796,"m":{"type":"out","stream":"task","text":"[작업자 1 · 계정 minyonglee1] 일 8: 시험 3개 · 지난 소요 합 4.4분 · 남은 묶음 52개\n","cls":""}}
+{"t":1795543508787,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] Running 3 tests using 1 worker\n","cls":""}}
+{"t":1795543517419,"m":{"type":"out","stream":"task","text":"  ok 4 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2275:7 › 정합검증 SSP0014 @verify › Excel 2단계 차단(M1) (4.9s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543525017,"m":{"type":"out","stream":"task","text":"  ok 5 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2289:7 › 정합검증 SSP0014 @verify › Excel 양식·업로드(M1) (4.8s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543527881,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543532717,"m":{"type":"out","stream":"task","text":"[작업자 8 · 계정 jssbae] 일 9: 시험 4개 · 지난 소요 합 4.8분 · 남은 묶음 49개\n","cls":""}}
+{"t":1795543534129,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] Running 4 tests using 1 worker\n","cls":""}}
+{"t":1795543536024,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543554543,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [langacct] imadei: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543573058,"m":{"type":"out","stream":"task","text":"[부하 조절] 작업자 8개 유지 · CPU 100.0% · 여유 메모리 266MB (늘리는 기준 CPU < 80%, 메모리 >= 3072MB)\n","cls":""}}
+{"t":1795543577310,"m":{"type":"out","stream":"task","text":"  ok 6 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3962:7 › 정합검증 SSP0014 @verify › 조회조건 콤보 후보 품질(B1·B2) (48.6s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543577694,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543590822,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] 기존행 편집(D1) 6s\n","cls":""}}
+{"t":1795543592491,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] 신규행 8s\n","cls":""}}
+{"t":1795543592562,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] 입력 프로브 행 8s\n","cls":""}}
+{"t":1795543592562,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] 연쇄 프로브 행 8s\n","cls":""}}
+{"t":1795543592562,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] 콤보 후보+재편집 8s\n","cls":""}}
+{"t":1795543592563,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] E1 8s\n","cls":""}}
+{"t":1795543592563,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] H13 8s\n","cls":""}}
+{"t":1795543592563,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] E2 8s\n","cls":""}}
+{"t":1795543608551,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [TO-BE 녹화] 녹화 파일 3개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read8\\video\\20261125_030634_45812\n","cls":""}}
+{"t":1795543608551,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   3 passed (1.4m)\n","cls":""}}
+{"t":1795543608551,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [inRow] CREATION_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n","cls":""}}
+{"t":1795543608552,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] [langacct] jeremy.shin: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543608555,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [inRow] LAST_UPDATE_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n","cls":""}}
+{"t":1795543608557,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] C3 21s\n","cls":""}}
+{"t":1795543608558,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] D5 21s\n","cls":""}}
+{"t":1795543608559,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] K5 21s\n","cls":""}}
+{"t":1795543608560,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] H2 21s\n","cls":""}}
+{"t":1795543608562,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] A2 22s\n","cls":""}}
+{"t":1795543608563,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] C2 22s\n","cls":""}}
+{"t":1795543608565,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] C6 22s\n","cls":""}}
+{"t":1795543608565,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] E5 22s\n","cls":""}}
+{"t":1795543659093,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [lap] E7 30s\n","cls":""}}
+{"t":1795543659093,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [search] 조회 요청 없음 — 알림 'There is data being modified. Would you like to retrieve it? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795543659094,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [search] 조회 요청 없음 — 알림 'There is data being modified. Would you like to retrieve it? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795543659094,"m":{"type":"out","stream":"task","text":"[작업자 1 · 계정 minyonglee1] 일 10: 시험 5개 · 지난 소요 합 4.4분 · 남은 묶음 46개\n","cls":""}}
+{"t":1795543659094,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] Running 5 tests using 1 worker\n","cls":""}}
+{"t":1795543659094,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9] [langacct] jhpark9: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543659094,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [search] 조회 요청 없음 — 알림 'There is data being modified. Would you like to retrieve it? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795543659097,"m":{"type":"out","stream":"task","text":"  ok 7 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1580:7 › 검증엔진 SSP0014 @trace › W4c 정밀 판정 — 판정필요 해소 (2.0m)  [작업자 2 hyerakim]\n","cls":""}}
+{"t":1795543659099,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read2\\video\\20261125_030734_31668\n","cls":""}}
+{"t":1795543659099,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim]   1 passed (5.2m)\n","cls":""}}
+{"t":1795543659099,"m":{"type":"out","stream":"task","text":"  ok 8 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:359:65 › 정합검증 SSP0014 @verify › 그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2) (1.2m)  [작업자 4 jaehun_cho]\n","cls":""}}
+{"t":1795543659099,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543672591,"m":{"type":"out","stream":"task","text":"  ok 9 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1024:7 › 검증엔진 SSP0014 @trace › W4 E4 업무 검증 메시지 = AS-IS(저장 차단) (9.8s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543672592,"m":{"type":"out","stream":"task","text":"[작업자 7 jongykim2] [langacct] jongykim2: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543672592,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [search] 조회 요청 없음 — 알림 'There is data being modified. Would you like to retrieve it? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795543672593,"m":{"type":"out","stream":"task","text":"  ok 10 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2262:7 › 정합검증 SSP0014 @verify › 조회조건 겹침(H4) (7.3s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543674063,"m":{"type":"out","stream":"task","text":"  ok 11 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:953:7 › 정합검증 SSP0014 @verify › 그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지 (1.1m)  [작업자 5 jeremy.shin]\n","cls":""}}
+{"t":1795543674344,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] [langacct] jeremy.shin: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543682525,"m":{"type":"out","stream":"task","text":"  ok 12 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2516:7 › 정합검증 SSP0014 @verify › 텍스트 부분 삭제·Insert 행 Div 변경(E6·D1) (7.1s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543694451,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [search] 조회 요청 없음 — 알림 'There is data being modified. Would you like to retrieve it? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795543698356,"m":{"type":"out","stream":"task","text":"[부하 조절] 작업자 7개 유지 · CPU 98.1% · 여유 메모리 4787MB (늘리는 기준 CPU < 80%, 메모리 >= 3072MB)\n","cls":""}}
+{"t":1795543698422,"m":{"type":"out","stream":"task","text":"  ok 13 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:1842:7 › 정합검증 SSP0014 @verify › 저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기) (2.3m)  [작업자 3 imadei]\n","cls":""}}
+{"t":1795543698705,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [langacct] imadei: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543706242,"m":{"type":"out","stream":"task","text":"  ok 14 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2547:7 › 정합검증 SSP0014 @verify › 레이아웃·조회 묶음(H4·N1·G1·L2) (20.0s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543708866,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9] [search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n","cls":""}}
+{"t":1795543712686,"m":{"type":"out","stream":"task","text":"  ok 15 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2126:7 › 정합검증 SSP0014 @verify › 입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보) (1.1m)  [작업자 6 jhpark9]\n","cls":""}}
+{"t":1795543712847,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9] [langacct] jhpark9: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543717797,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543725120,"m":{"type":"out","stream":"task","text":"  ok 16 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3755:7 › 정합검증 SSP0014 @verify › 셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성 (15.2s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543726951,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [TO-BE 녹화] 녹화 파일 5개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read10\\video\\20261125_030846_37272\n","cls":""}}
+{"t":1795543726953,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   5 passed (1.4m)\n","cls":""}}
+{"t":1795543728633,"m":{"type":"out","stream":"task","text":"  ok 17 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:483:7 › 검증엔진 SSP0014 @trace › C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태 (58.4s)  [작업자 7 jongykim2]\n","cls":""}}
+{"t":1795543729991,"m":{"type":"out","stream":"task","text":"[작업자 7 jongykim2] [langacct] jongykim2: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543731232,"m":{"type":"out","stream":"task","text":"  ok 18 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:325:7 › 정합검증 SSP0014 @verify › 조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2) (10.1s)  [작업자 8 jssbae]\n","cls":""}}
+{"t":1795543731347,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543743289,"m":{"type":"out","stream":"task","text":"[작업자 1 · 계정 minyonglee1] 일 11: 시험 4개 · 지난 소요 합 4.9분 · 남은 묶음 42개\n","cls":""}}
+{"t":1795543756716,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] Running 4 tests using 1 worker\n","cls":""}}
+{"t":1795543767821,"m":{"type":"out","stream":"task","text":"[작업자 2 · 계정 hyerakim] 일 12: 시험 5개 · 지난 소요 합 3.9분 · 남은 묶음 38개\n","cls":""}}
+{"t":1795543769499,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] Running 5 tests using 1 worker\n","cls":""}}
+{"t":1795543771053,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543777650,"m":{"type":"out","stream":"task","text":"  ok 19 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:373:7 › 검증엔진 SSP0014 @trace › A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈 (16.6s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543801181,"m":{"type":"out","stream":"task","text":"  ok 20 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1160:7 › 검증엔진 SSP0014 @trace › W4 M4 팝업 선택값 반영 = AS-IS (19.7s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543808007,"m":{"type":"out","stream":"task","text":"[작업자 9 · 계정 jungug] 일 13: 시험 6개 · 지난 소요 합 4.2분 · 남은 묶음 33개\n","cls":""}}
+{"t":1795543809161,"m":{"type":"out","stream":"task","text":"[작업자 9 jungug] Running 6 tests using 1 worker\n","cls":""}}
+{"t":1795543810816,"m":{"type":"out","stream":"task","text":"[작업자 9 jungug] [langacct] jungug: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543821960,"m":{"type":"out","stream":"task","text":"  ok 21 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3117:7 › 정합검증 SSP0014 @verify › 정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3) (17.1s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543832819,"m":{"type":"out","stream":"task","text":"[작업자 10 · 계정 jungyu9.kim] 일 14: 시험 9개 · 지난 소요 합 4.3분 · 남은 묶음 26개\n","cls":""}}
+{"t":1795543836630,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543852226,"m":{"type":"out","stream":"task","text":"  ok 22 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:4205:7 › 정합검증 SSP0014 @verify › Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수 (26.4s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543852227,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [TO-BE 녹화] 녹화 파일 4개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read11\\video\\20261125_031052_47836\n","cls":""}}
+{"t":1795543852228,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   4 passed (1.6m)\n","cls":""}}
+{"t":1795543853357,"m":{"type":"out","stream":"task","text":"[작업자 10 jungyu9.kim] Running 9 tests using 1 worker\n","cls":""}}
+{"t":1795543853947,"m":{"type":"out","stream":"task","text":"  ok 23 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2225:7 › 정합검증 SSP0014 @verify › Division 컬럼(A5) (14.1s)  [작업자 4 jaehun_cho]\n","cls":""}}
+{"t":1795543854851,"m":{"type":"out","stream":"task","text":"[작업자 10 jungyu9.kim] [langacct] jungyu9.kim: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543855206,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] [langacct] jeremy.shin: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543856398,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read4\\video\\20261125_031056_34968\n","cls":""}}
+{"t":1795543856400,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho]   2 passed (7.7m)\n","cls":""}}
+{"t":1795543857925,"m":{"type":"out","stream":"task","text":"[부하 조절] 작업자 9개 유지 · CPU 94.2% · 여유 메모리 6946MB (늘리는 기준 CPU < 80%, 메모리 >= 3072MB)\n","cls":""}}
+{"t":1795543872762,"m":{"type":"out","stream":"task","text":"[작업자 1 · 계정 minyonglee1] 일 15: 시험 9개 · 지난 소요 합 4.3분 · 남은 묶음 17개\n","cls":""}}
+{"t":1795543875243,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] Running 9 tests using 1 worker\n","cls":""}}
+{"t":1795543879593,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [langacct] imadei: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543886224,"m":{"type":"out","stream":"task","text":"  ok 24 [chromium] › ..\\..\\Doc\\e2e\\specs\\_snap.spec.ts:70:7 › @snap 스냅샷 형상 검사 › @snap 조회조건 패널·버튼 바 aria ×Div (5.9s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543893682,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9] [langacct] jhpark9: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543894599,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795543895550,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\snap\\received\\팝업_Model_Nickname.aria.yml — UNKNOWN\n","cls":""}}
+{"t":1795543899457,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] [F4 진단-목록] k3pop0 checked=1/36 · 첫 체크 칸 item checked=false ind=true\n","cls":""}}
+{"t":1795543900295,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] [F4 진단] k3pop0 값 목록 37 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 4689 · filter=function items=4689 src=23434\n","cls":""}}
+{"t":1795543903972,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795543910849,"m":{"type":"out","stream":"task","text":"[작업자 7 jongykim2] [langacct] jongykim2: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543912170,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543912170,"m":{"type":"out","stream":"task","text":"[작업자 4 · 계정 jaehun_cho] 일 16: 시험 18개 · 지난 소요 합 3.4분 · 남은 묶음 0개\n","cls":""}}
+{"t":1795543913671,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795543915274,"m":{"type":"out","stream":"task","text":"  ok 25 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3091:7 › 정합검증 SSP0014 @verify › 월 Bucket 합계(F1) (11.4s)  [작업자 3 imadei]\n","cls":""}}
+{"t":1795543917003,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] Running 18 tests using 1 worker\n","cls":""}}
+{"t":1795543917741,"m":{"type":"out","stream":"task","text":"  ok 26 [chromium] › ..\\..\\Doc\\e2e\\specs\\_snap.spec.ts:126:7 › @snap 스냅샷 형상 검사 › @snap 조회조건 팝업 정적 aria (28.0s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543917917,"m":{"type":"out","stream":"task","text":"  ok 27 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3550:7 › 정합검증 SSP0014 @verify › 그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회 (59.1s)  [작업자 5 jeremy.shin]\n","cls":""}}
+{"t":1795543942666,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read3\\video\\20261125_031205_1640\n","cls":""}}
+{"t":1795543942666,"m":{"type":"out","stream":"task","text":"[작업자 3 imadei]   2 passed (9.3m)\n","cls":""}}
+{"t":1795543942666,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read5\\video\\20261125_031208_38964\n","cls":""}}
+{"t":1795543942666,"m":{"type":"out","stream":"task","text":"[작업자 5 jeremy.shin]   2 passed (8.5m)\n","cls":""}}
+{"t":1795543942667,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543942669,"m":{"type":"out","stream":"task","text":"  ok 28 [chromium] › ..\\..\\Doc\\e2e\\specs\\_snap.spec.ts:149:7 › @snap 스냅샷 형상 검사 › @snap 화면샷 패널+헤더 띠 1920/1366 (9.6s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543942671,"m":{"type":"out","stream":"task","text":"  ok 29 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:2751:7 › 검증엔진 SSP0014 @trace › G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼 (6.1s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543947557,"m":{"type":"out","stream":"task","text":"  ok 30 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2474:7 › 정합검증 SSP0014 @verify › 병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3) (27.6s)  [작업자 8 jssbae]\n","cls":""}}
+{"t":1795543947557,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543951342,"m":{"type":"out","stream":"task","text":"  ok 31 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2583:7 › 정합검증 SSP0014 @verify › 조회조건 초기값·Division 변경 뒤 Version(G6) (6.5s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543951986,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543962301,"m":{"type":"out","stream":"task","text":"  ok 32 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2593:7 › 정합검증 SSP0014 @verify › Team 값 덤프(B8) (7.0s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543966965,"m":{"type":"out","stream":"task","text":"  ok 33 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3182:7 › 정합검증 SSP0014 @verify › 선택 조회 복수·단일·전체 왕복(G2·B6) (1.2m)  [작업자 6 jhpark9]\n","cls":""}}
+{"t":1795543967071,"m":{"type":"out","stream":"task","text":"  ok 34 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:447:7 › 검증엔진 SSP0014 @trace › G6 조회조건 초기값 = AS-IS 로드 문장 (10.9s)  [작업자 2 hyerakim]\n","cls":""}}
+{"t":1795543967283,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795543967769,"m":{"type":"out","stream":"task","text":"  ok 35 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:4100:7 › 정합검증 SSP0014 @verify › 조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9) (52.9s)  [작업자 7 jongykim2]\n","cls":""}}
+{"t":1795543975371,"m":{"type":"out","stream":"task","text":"  ok 36 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2645:7 › 정합검증 SSP0014 @verify › 버튼 경로 메시지·모달 조건(E4·B3·B4·G4) (7.3s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543982279,"m":{"type":"out","stream":"task","text":"[작업자 7 jongykim2] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read7\\video\\20261125_031302_37712\n","cls":""}}
+{"t":1795543982282,"m":{"type":"out","stream":"task","text":"[작업자 7 jongykim2]   2 passed (8.3m)\n","cls":""}}
+{"t":1795543983186,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9] [TO-BE 녹화] 녹화 파일 2개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read6\\video\\20261125_031303_36884\n","cls":""}}
+{"t":1795543983188,"m":{"type":"out","stream":"task","text":"[작업자 6 jhpark9]   2 passed (8.7m)\n","cls":""}}
+{"t":1795543986300,"m":{"type":"out","stream":"task","text":"  ok 37 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2701:7 › 정합검증 SSP0014 @verify › 편집 모드 구분(D1) (7.5s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543991747,"m":{"type":"out","stream":"task","text":"[작업자 9 jungug] [langacct] jungug: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795543995935,"m":{"type":"out","stream":"task","text":"  ok 38 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:3041:7 › 정합검증 SSP0014 @verify › 셀 편집 표시·값 유지(A2·F6) (6.8s)  [작업자 1 minyonglee1]\n","cls":""}}
+{"t":1795543996816,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1] [TO-BE 녹화] 녹화 파일 9개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read15\\video\\20261125_031316_45168\n","cls":""}}
+{"t":1795543996818,"m":{"type":"out","stream":"task","text":"[작업자 1 minyonglee1]   9 passed (2.1m)\n","cls":""}}
+{"t":1795544003722,"m":{"type":"out","stream":"task","text":"  ok 39 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:962:7 › 검증엔진 SSP0014 @trace › W4 D3 행 조건부 잠금 = AS-IS lock_rules (8.7s)  [작업자 9 jungug]\n","cls":""}}
+{"t":1795544003975,"m":{"type":"out","stream":"task","text":"[작업자 9 jungug] [langacct] jungug: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544035803,"m":{"type":"out","stream":"task","text":"[작업자 10 jungyu9.kim] [langacct] jungyu9.kim: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544049530,"m":{"type":"out","stream":"task","text":"[작업자 10 jungyu9.kim] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\snap\\results.json — UNKNOWN\n","cls":""}}
+{"t":1795544059534,"m":{"type":"out","stream":"task","text":"  x 40 [chromium] › ..\\..\\Doc\\e2e\\specs\\_snap.spec.ts:106:7 › @snap 스냅샷 형상 검사 › @snap 그리드 헤더 텍스트(모델) ×시트 (10.2s)  [작업자 10 jungyu9.kim]\n","cls":""}}
+{"t":1795544070521,"m":{"type":"out","stream":"task","text":"[작업자 10 jungyu9.kim] [langacct] jungyu9.kim: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544109605,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544112717,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\dyn_facts.json — UNKNOWN\n","cls":""}}
+{"t":1795544121428,"m":{"type":"out","stream":"task","text":"  ok 41 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:2497:7 › 검증엔진 SSP0014 @trace › W9 대조표 미구현 행 실측 (8.7s)  [작업자 4 jaehun_cho]\n","cls":""}}
+{"t":1795544121680,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544125815,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544138071,"m":{"type":"out","stream":"task","text":"  ok 42 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2598:7 › 정합검증 SSP0014 @verify › Insert 행 Division(D4) (9.1s)  [작업자 8 jssbae]\n","cls":""}}
+{"t":1795544138207,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544148021,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544167687,"m":{"type":"out","stream":"task","text":"  ok 43 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:570:7 › 검증엔진 SSP0014 @trace › W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행) (11.1s)  [작업자 2 hyerakim]\n","cls":""}}
+{"t":1795544167689,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544184740,"m":{"type":"out","stream":"task","text":"[작업자 9 jungug] [langacct] jungug: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544196547,"m":{"type":"out","stream":"task","text":"  ok 44 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:1551:7 › 검증엔진 SSP0014 @trace › D6 Insert 위치·상태 = AS-IS (8.7s)  [작업자 9 jungug]\n","cls":""}}
+{"t":1795544196782,"m":{"type":"out","stream":"task","text":"[작업자 9 jungug] [langacct] jungug: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544251319,"m":{"type":"out","stream":"task","text":"[작업자 10 jungyu9.kim] [langacct] jungyu9.kim: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544260896,"m":{"type":"out","stream":"task","text":"  ok 45 [chromium] › ..\\..\\Doc\\e2e\\specs\\_snap.spec.ts:106:7 › @snap 스냅샷 형상 검사 › @snap 그리드 헤더 텍스트(모델) ×시트 (retry #1) (6.7s)  [작업자 10 jungyu9.kim]\n","cls":""}}
+{"t":1795544261786,"m":{"type":"out","stream":"task","text":"[작업자 10 jungyu9.kim] [langacct] jungyu9.kim: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544302406,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544305895,"m":{"type":"out","stream":"task","text":"  ok 46 [chromium] › ..\\..\\Doc\\e2e\\specs\\_trace.spec.ts:2688:7 › 검증엔진 SSP0014 @trace › H2 조건부 배경색 = AS-IS 행 조건(color_rules) (494ms)  [작업자 4 jaehun_cho]\n","cls":""}}
+{"t":1795544306033,"m":{"type":"out","stream":"task","text":"[작업자 4 jaehun_cho] [langacct] jaehun_cho: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n","cls":""}}
+{"t":1795544319045,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [langacct] jssbae: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544343240,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [langacct] hyerakim: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n","cls":""}}
+{"t":1795544346596,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795544352600,"m":{"type":"out","stream":"task","text":"  ok 47 [chromium] › ..\\..\\Doc\\e2e\\specs\\_verify.spec.ts:2632:7 › 정합검증 SSP0014 @verify › Division별 조회 오류·콤보 이름(F4·A2) (28.7s)  [작업자 8 jssbae]\n","cls":""}}
+{"t":1795544358195,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae] [TO-BE 녹화] 녹화 파일 4개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read9\\video\\20261125_031913_28444\n","cls":""}}
+{"t":1795544358202,"m":{"type":"out","stream":"task","text":"[작업자 8 jssbae]   4 passed (13.7m)\n","cls":""}}
+{"t":1795544358582,"m":{"type":"out","stream":"task","text":"[작업자 2 hyerakim] [파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e_results.json — UNKNOWN\n","cls":""}}
+{"t":1795544363961,"m":{"type":"out","stream":"task","text":"■ 종료 exit 1, 중지됨(사용자 지시), 로그 .vibe\\logs\\2026-11-25T02-56-19_SSP0014_14_CheckList_________________________FE________PROC_____________________delta_scope___________AI_________________________________________________.log\n","cls":"warn"}}
+{"t":1795544363962,"m":{"type":"chat","role":"meta","text":"⏹ CheckList 수정분 재점검 — 지난 실행 뒤 바뀐 소스(FE 화면·공용, PROC, 메타, 검사기) 범위만 다시 측정(delta_scope: 기준선 대조 + AI 판단, 직전 미해결 행 규칙 포함) → 미검증 분류 · 기준선 없음·넓은 변경이면 전체 중지됨(사용자 지시) (exit 1)\n로그: .vibe\\logs\\2026-11-25T02-56-19_SSP0014_14_CheckList_________________________FE________PROC_____________________delta_scope___________AI_________________________________________________.log"}}
+{"t":1795544364059,"m":{"type":"fb","state":"step","id":4,"no":6,"status":"CANCEL","code":1,"sec":1386,"repairs":0}}
+{"t":1795544364061,"m":{"type":"out","stream":"task","text":"✖ [6/6] 6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 127건 · 처리 대상 139건 — CANCEL (exit 1) · 1386s\n","cls":"bad"}}
+{"t":1795544364067,"m":{"type":"out","stream":"task","text":"\n✖ 체인 중단: 6/6 '6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 127건 · 처리 대상 139건 — 취소 사유: 사용자 중지' CANCEL · 완료 5단계 · 8604s\n   실행 주체: Script 5단계 · AI Agent 1회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 56회 호출 · 1459행 · 17.74 USD(상한 없음)\n   → Doc\\gen\\SSP0014\\FULLRUN.md\n","cls":"bad"}}
+{"t":1795544364067,"m":{"type":"chat","role":"meta","text":"실행 주체: Script 5단계 · AI Agent 1회 · AI Agent 단계 건너뜀 1 · AI 검토 켬, 이번 실행 56회 호출 · 1459행 · 17.74 USD(상한 없음)"}}
+{"t":1795544364070,"m":{"type":"fb","state":"end","id":4,"ok":false,"warn":false,"summary":"✖ 체인 중단: 6/6 '6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용) · 미검증 127건 · 처리 대상 139건 — 취소 사유: 사용자 중지' CANCEL · 완료 5단계 · 8604s","sec":8604}}

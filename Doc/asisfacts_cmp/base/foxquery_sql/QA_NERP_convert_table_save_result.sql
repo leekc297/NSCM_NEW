@@ -1,0 +1,1 @@
+﻿update znerp_dev_item_schedule set success_cnt = @CNT where SEQ = @SEQ

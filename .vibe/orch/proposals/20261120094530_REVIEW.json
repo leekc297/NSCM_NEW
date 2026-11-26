@@ -118,6 +118,11 @@
         "tools/Harness/_verify_next/make_verify_docs.py",
         "tools/Harness/_verify_next/run_verify.py"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:32+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:08:27+09:00"
     }
   ],
   "plain": {
@@ -152,5 +157,7 @@
     "verify_result": "1) 2026-11-20 09:55:44 node tools/VibeManager/test/t_orch_improve.js: ALL PASS 23건. 추가 시험 3건 PASS(단계 S8.stopTest n 2 fail 1 stopped 1, 체인 ok 0 stopped 1, 프로세스 n 3 fail 1 stopped 2, 화면 없는 기존 실패 fail 1 stopped 0). 2) 2026-11-20 09:56:04 실제 .vibe/orch/events*.jsonl 사본으로 digest(7) 재집계(임시 폴더, 저장소 digest.json 은 쓰지 않음): events 694, S8.checklistRun n 15 fail 3 stopped 8, chains checklist n 11 ok 0 stopped 8, procFails 'CheckList 수행' n 15 fail 3 stopped 8 exits {1:2, 6:1}. 3) 2026-11-20 09:56:19 node tools/VibeManager/test/run_all.js: ALL OK 파일 32/32 PASS 392 FAIL 0 (128.7s)",
     "note": "step.end, chain.end, proc.end 에 screen 필드가 있음을 events.jsonl 에서 확인함. 중지 판정 = 같은 screen 의 job.item.end status cancel, user.stop, proc.end stopped=true 중 하나가 앞뒤 60초 안에 있거나 이벤트 자체가 stopped=true 일 때. procFails 는 fail 또는 stopped 가 있는 항목을 보여줌. S8.checklistRun n 이 14 → 15 가 된 것은 09:53:06 이후 재수행 OK 1건이 더해진 때문이며 fail 과 stopped 값은 기대값과 같음. 임시 재집계 폴더 C:/Users/LG/AppData/Local/Temp/vmo_digest_replay 는 작업 폴더 밖이라 삭제 승인이 없어 남아 있음. 저장소 .vibe/orch/digest.json 은 고치지 않음"
   },
-  "snap": "prop_20261120094530_REVIEW"
+  "snap": "prop_20261120094530_REVIEW",
+  "effectiveMs": 1795136907899,
+  "effectiveAt": "2026-11-20T10:08:27+09:00"
 }

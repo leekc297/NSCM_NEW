@@ -1,0 +1,35 @@
+{
+  "id": "DMF0082",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0082] · Doc/gen/DMF0082/CHECK.md · Doc/gen/DMF0082/DOD.md · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0082/__asis-actions__.md · Doc/asi",
+  "start": "2026-11-23T09:15:12+09:00",
+  "end": "2026-11-23T09:30:54+09:00",
+  "exit": 1,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\forecast-price",
+      "files": 44
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0082",
+      "files": 0
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "as-is 캡쳐본을 보면 usd 는 비어있는데, krw 단가가 미래구간과 유사하게 나옵니다. 하지만 to-be 에서는 usd 단가는 비어있고, krw 에 표기된 단가는 미래구간의 단가로 보입니다. 문제에 대해서 확인이 필요한데, 과거구간 krw 금액이 잘못들어간 것인지? 과거구간 단가 계산을 잘못한것인지 확인해주세요.",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "afterMode": "end",
+  "afterAt": "2026-11-23T09:30:54+09:00",
+  "changed": []
+}

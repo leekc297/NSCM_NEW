@@ -1,0 +1,9 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장,분류
+,L2,기호,없는 감지기 · VMO 화면 표시 보고(noteUi) · 사람 프롬프트,가운뎃점 나열 → 쉼표,"//   감지기 18종 통과/실패 표본(U13 reloadResumeMissing, U14 screenNameMissing, U15 logTabShown, U16 resumedJobShown, U18 resumeRestartFromStart, U19 chainAfterFail, U21 applyFailRepeat, U22 promptSerialize, U23 workbenchResumeProgress, U24 unverifiedResolveIncomplete, U25 partialRemeasureSlow, U27 aiUsageStale, U29 asisLiveLogin, U30 remeasureWithoutResolve 포함) · 원장에 없는 감지기 · VMO 화면 표시 보고(noteUi) · 사람 프롬프트 수집(sdk-cli 제외, 작업 중 끼운 메시지 포함) · 학습(가짜 Claude)",문장
+,L141,기호,U10 없음 · fail = U10 경고 + detail '1단계' · stopped,가운뎃점 나열 → 쉼표,// 개선안 20261120131344_SELF: chain.end 뒤 2초 안 같은 작업·화면 job.item.end cancel = U10 없음 · fail = U10 경고 + detail '1단계' · stopped:true = U10 없음,문장
+,L151,기호,목록 이름 빔 · ID 와 같음 · 웹뷰 보고 ·,가운뎃점 나열 → 쉼표,// U14 VMW 화면 목록 명칭 빠짐: 메뉴 이름 있는데 목록 이름 빔 · ID 와 같음 · 웹뷰 보고 · 메뉴 없음,문장
+,L164,기호,0 = 실패 · 송출 있음 = 아님 · 꺼짐 = 아님,가운뎃점 나열 → 쉼표,// U15 FE LOG 탭 송출 0줄: 기준 → 60초 뒤 파일 늘어남 + 송출 0 = 실패 · 송출 있음 = 아님 · 꺼짐 = 아님 · 기록 없음 = 경고 · VM 기동 로그 파일,문장
+,L164,기호,꺼짐 = 아님 · 기록 없음 = 경고 · VM 기동 로,가운뎃점 나열 → 쉼표,// U15 FE LOG 탭 송출 0줄: 기준 → 60초 뒤 파일 늘어남 + 송출 0 = 실패 · 송출 있음 = 아님 · 꺼짐 = 아님 · 기록 없음 = 경고 · VM 기동 로그 파일,문장
+,L184,기호,없음 = 경고 · 보고에 있음 = 아님 · 2분 안 =,가운뎃점 나열 → 쉼표,// U16 재개 작업 VMW 목록 표시(개선안 20261120151817_SELF): 중단(interrupted) 뒤 chain.start · 다시 실행 중(user.stop vscode.dispose 뒤 job.start) · 보고 없음 = 경고 · 보고에 있음 = 아님 · 2분 안 = 보류 · 재개 없음 = 아님,문장
+,L201,기호,"From 연결 · 첫 step.start 1 = 실패, 4 = 아님 · 연결 없이 같",가운뎃점 나열 → 쉼표,"//   ① 단계 번호: 끊긴 기록 4/8단계 → (원본 기록 지워짐) 재개 실행 resumedFrom 연결 · 첫 step.start 1 = 실패, 4 = 아님 · 연결 없이 같은 창 chain.start 로 찾음",문장
+,L388,기호,nextMs · 주기 = nextMs - lastTry · 기준 min(,가운뎃점 나열 → 쉼표,"// U27 AI 주간 한도 값 오래됨(개선안 20261124230634_SELF): .vibe/orch/ai_usage_state.json lastTry, lastOk, err, nextMs · 주기 = nextMs - lastTry · 기준 min(주기 x 2, 20분)",문장

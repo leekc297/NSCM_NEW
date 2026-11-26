@@ -1,22 +1,16 @@
 {
  "rule_id": "H12",
- "hash": "4e3f8d396ef841ef",
+ "hash": "20033cfd9fc812aa",
  "groups": [
   {
    "rows": [
     "V-38b1bd2b"
    ],
-   "why": "SCP0005 화면 시트의 FIXED_FLAG=Y 컬럼(ROUTE_ID)이 좌측에 고정되는지 확인하는 이 화면 고유의 행이다."
-  },
-  {
-   "rows": [
-    "V-dd2575ef"
-   ],
-   "why": "DMF0048 결함을 일반화한 행으로, 대상 시트('Sales Monitoring'의 DIVISION_ID~MEASURE)와 조회조건(IM_US_TXT, Monthly, 가로 스크롤)이 SCP0005 행과 다르다. 기대 결과도 '코드 고정 금지'까지 포함하므로 같은 측정으로 볼 수 없어 따로 둔다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:42:34",
- "cost": 0.036459899999999996
+ "why": "행 1건",
+ "by": "코드",
+ "at": "2026-11-25 02:33:40",
+ "cost": 0
 }

@@ -250,6 +250,11 @@ def resolve_source(call, args, cat):
         idx, keys, _, _ = SSP_INNER[col]
         return call, 'SSP_BIGFILTER', col, [('@GROUP_ID', 'UserInfoContext.Current["NowGroupID"]'), ('@USER_ID', 'UserInfoContext.Current.UserId')] \
             + [(f'Filter.{k}', f'Filter["{k}"]') for k in keys], ''
+    if call.startswith('sem:'):   # 2026-11-25 의미 분석: 호출 대상 메서드 안 SP(args = [('SP', 키), ('@파라미터', 식)…])
+        sp_ = next((e for n_, e in args if n_ == 'SP'), '')
+        ps_ = [(n_, e) for n_, e in args if n_ != 'SP']
+        code_ = next((e.strip('"') for _n, e in ps_ if re.fullmatch(r'"[^"]*"', e)), '')
+        return call[4:], sp_, code_, ps_, '' if sp_ and '{' not in sp_ else f'{call[4:]} 안 SP 미결정(의미 분석)'
     if call.startswith('local:'):
         return local_source(call[6:], args)
     if call.startswith('static:'):
@@ -294,6 +299,100 @@ def local_source(name, args):
     return resolve_source(call, [pv.get(x, x) for x in a], CAT)
 
 
+# 2026-11-25 T607(SCP0005 FACT-708ae4ce cboValidYN): clsCtrl.setListBox(dtValidYN, cboValidYN, true, "CODE", "NAME")(SCP0005_DistributionRoute.cs:204) 는
+#   CControl.setListBox(DataTable, ComboBox, bool blnAllFlag, string, string)(CControl.cs:344~) 오버로드로, blnAllFlag=true 면 원천 사본 0번에
+#   모든 칸 = CConstVariable.FlagAll("ALL" · CConstVariable.cs:42) 행을 넣는다(Decimal 칸은 0). 종전엔 바인딩 인자만 읽어 Y/N 만 기대 후보로 남았다.
+#   오버로드는 원문에서 고른다: 인자 수 · 컨트롤 형(Designer new 문장 → 프레임워크 클래스 상속 사슬, 가장 가까운 형) · 4번째 인자 리터럴 형(bool/int/string).
+#   본문이 if (플래그) 안에서 NewRow + CConstVariable.X 대입 + Rows.InsertAt(행, 0) 이면 그 행을 added_rows(pos 0)로, 다른 setListBox 로 넘기면 그 오버로드를 따라간다.
+#   한계(미반영): Items.Add(CAppSetting.StringALL) 형 오버로드(CheckedListBox·ComboBox 3인자)와 플래그가 변수인 호출 · 수신 객체가 CControl 로 확인되지 않는 호출
+_LBX = {}
+
+
+def _const_of(cls, name):
+    """프레임워크 Class/<cls>.cs 의 static/const 문자열 상수 값 → (값, 'cls.cs:줄') · 못 찾으면 None"""
+    key = ('C', cls, name)
+    if key not in _LBX:
+        t = read_text(os.path.join(CLS, f'{cls}.cs'))
+        m = re.search(r'\b(?:static|const)\s+(?:readonly\s+)?string\s+' + re.escape(name) + r'\s*=\s*"((?:[^"\\]|\\.)*)"\s*;', t)
+        _LBX[key] = (m.group(1), f'{cls}.cs:{t.count(chr(10), 0, m.start()) + 1}') if m else None
+    return _LBX[key]
+
+
+def _listbox_overloads():
+    """CControl.cs setListBox 오버로드 → [{'params': [(형, 이름)], 'body', 'lines'}]"""
+    if 'O' not in _LBX:
+        t = strip_comments(read_text(os.path.join(CLS, 'CControl.cs')))
+        out = []
+        for m in re.finditer(r'\bpublic\s+void\s+setListBox\s*\(([^)]*)\)\s*\{', t):
+            dep, i = 1, m.end()
+            while i < len(t) and dep:
+                dep += {'{': 1, '}': -1}.get(t[i], 0); i += 1
+            ps = [tuple(p.split()[-2:]) for p in m.group(1).split(',') if len(p.split()) >= 2]
+            out.append({'params': ps, 'body': t[m.end():i - 1], 'lines': f"CControl.cs:{t.count(chr(10), 0, m.start()) + 1}-{t.count(chr(10), 0, i) + 1}"})
+        _LBX['O'] = out
+    return _LBX['O']
+
+
+def _fw_bases():
+    """GSCM.Windows.Forms 클래스 → 기반 클래스(마지막 이름) — class X : Base"""
+    if 'B' not in _LBX:
+        b = {}
+        for dp, _dn, fns in os.walk(os.path.dirname(CLS)):
+            for fn in fns:
+                if fn.endswith('.cs') and not fn.endswith('.Designer.cs'):
+                    for m in re.finditer(r'\bclass\s+(\w+)\s*:\s*([\w.]+)', read_text(os.path.join(dp, fn))):
+                        b.setdefault(m.group(1), m.group(2).split('.')[-1])
+        _LBX['B'] = b
+    return _LBX['B']
+
+
+def _arg_kind(a):
+    a = a.strip()
+    return 'bool' if a in ('true', 'false') else 'int' if re.fullmatch(r'-?\d+', a) else 'string' if a.startswith('"') else ''
+
+
+def _pick_overload(ctype, args):
+    """C# 오버로드 해석(이 화면 호출에 필요한 범위): 인자 수 · 컨트롤 형 상속 사슬에서 가장 가까운 형 · 4번째 인자 리터럴 형. 하나로 정해지지 않으면 None"""
+    chain, bs, c = [], _fw_bases(), ctype
+    while c and c not in chain and len(chain) < 8:
+        chain.append(c); c = bs.get(c)
+    cand = [o for o in _listbox_overloads() if len(o['params']) == len(args) and len(o['params']) >= 3]
+    for ct in chain:
+        hit = [o for o in cand if o['params'][1][0].split('.')[-1] == ct]
+        if len(hit) > 1 and len(args) >= 4:
+            k = _arg_kind(args[3])
+            hit = [o for o in hit if k and o['params'][3][0] == k]
+        if hit:
+            return hit[0] if len(hit) == 1 else None
+    return None
+
+
+def listbox_all_row(ctype, args, depth=0):
+    """setListBox(dt, ctrl, true, …) 가 원천 사본에 넣는 '전체' 행 → {'CODE','NAME','pos','ref'} · 넣지 않거나 확인 못 하면 None(T607)"""
+    o = _pick_overload(ctype, args) if depth < 3 else None
+    if not o or args[2].strip() != 'true':
+        return None
+    flag = o['params'][2][1]
+    m = re.search(r'\bif\s*\(\s*' + re.escape(flag) + r'\s*\)\s*\{', o['body'])
+    if m:
+        dep, i = 1, m.end()
+        while i < len(o['body']) and dep:
+            dep += {'{': 1, '}': -1}.get(o['body'][i], 0); i += 1
+        blk = o['body'][m.end():i]
+        rv = re.search(r'\b(\w+)\s*=\s*\w+\.NewRow\s*\(\s*\)', blk)
+        cv = re.search(r'=\s*CConstVariable\.(\w+)\s*;', blk)
+        if rv and cv and re.search(r'\.Rows\.InsertAt\s*\(\s*' + re.escape(rv.group(1)) + r'\s*,\s*0\s*\)', blk):
+            val = _const_of('CConstVariable', cv.group(1))
+            if val is None:
+                return None
+            return {'CODE': val[0], 'NAME': val[0], 'pos': 0, 'ref': f"{o['lines']} blnAllFlag=true → 0번 행 모든 칸 CConstVariable.{cv.group(1)}=\"{val[0]}\"({val[1]} · Decimal 칸은 0)"}
+    d = re.search(r'\bsetListBox\s*\(\s*(\w+)\s*,\s*(\w+)\s*,\s*' + re.escape(flag) + r'\s*,([^;]*)\)\s*;', o['body'])
+    if d:   # 다른 오버로드로 넘김(예 int·string 기본값 오버로드 → 5인자) — 넘기는 인자의 형은 원문 상수 이름으로 판단(CDefineColumn.* = string)
+        rest = [('"x"' if re.fullmatch(r'[A-Z]\w*\.\w+', x.strip()) else x) for x in d.group(3).split(',')]
+        return listbox_all_row(ctype, [args[0], args[1], 'true'] + rest, depth + 1)
+    return None
+
+
 def designer_labels(text):
     """Designer.cs — layoutControlItem.Control = ctrl / .Text = "라벨" → {ctrl: 라벨}"""
     ctrl_of, text_of = {}, {}
@@ -307,6 +406,34 @@ def designer_labels(text):
             out[ctrl] = text_of[item].strip()
     for m in re.finditer(r'this\.(\w+)\.(?:LabelText|Caption|TitleText)\s*=\s*"([^"]*)";', text):
         out.setdefault(m.group(1), m.group(2).strip())
+    return out
+
+
+_SITES = None
+
+
+def sem_target_source(t, rhs):
+    """호출 대상 메서드(t) 안의 SP 호출 지점 → [('SP', 키), ('@요청파라미터', 식)…]. 매개변수 자리표시자 {p:이름} 은 호출 인자 식으로 바꾼다"""
+    global _SITES
+    if _SITES is None:
+        _SITES = {}
+        for r in read_csv(os.path.join(ROOT, 'Doc', 'asisfacts', 'sites.csv')):
+            if r.get('active') == '1' and r.get('commented') != '1' and r.get('site_kind') in ('ctor', 'invoke', 'prop'):
+                _SITES.setdefault((r['file'], r['member_line']), []).append(r)
+    rows = _SITES.get((t['file'], str(t['line'])), [])
+    if not rows:
+        return None
+    m = re.match(r'[\w.]+\s*\((.*)\)\s*$', rhs.strip(), re.S)
+    args, _ = split_args(m.group(1) + ')') if m else ([], '')
+    pmap = {p: (args[i] if i < len(args) else '') for i, p in enumerate(t['params'])}
+    r = rows[0]
+    sp = r['values'].split(' || ')[0]
+    out = [('SP', sp)]
+    for kv in (r.get('req_params') or '').split('; '):
+        if '=' in kv:
+            k, v = kv.split('=', 1)
+            pm = re.fullmatch(r'\{p:(\w+)\}', v.strip())
+            out.append((f'@{k}', pmap.get(pm.group(1), v) if pm else v))
     return out
 
 
@@ -335,6 +462,7 @@ def main():
         scan_locals(t)
         texts.append((rel, t))
     inline = {}  # 바인딩 인자에 원천 호출을 바로 넣은 경우(SetCellTypeCombo(…, Data.Common(…))) → 가상 변수
+    bind_add = {}  # T607 바인딩(대상, 위치) → setListBox 가 넣는 '전체' 행
     _all = '\n'.join(alltxt)
     _dead = {}
 
@@ -402,6 +530,14 @@ def main():
                 if dead_private(method_at(m.start())):
                     continue  # T438: 어디서도 부르지 않는 private 메서드 안 바인딩(예 SCP0028 ClearUsrCheckedList cs:149~156) = 화면 동작 아님
                 binds.append(('SEARCH', args[1].replace('this.', ''), '', as_var(args[0], f'{base}:{line(m.start())}'), f'{base}:{line(m.start())}', method_at(m.start())))
+                # T607: blnAllFlag=true 로 '전체' 행을 넣는 오버로드면 그 행을 이 바인딩의 added_rows 로(수신 객체가 CControl 이고 컨트롤 형이 원문에서 확인될 때만)
+                recv = re.search(r'(\w+)\s*$', t[:m.start()])
+                ctl = args[1].replace('this.', '').strip()
+                ctm = re.search(r'\b' + re.escape(ctl) + r'\s*=\s*new\s+([\w.]+)\s*\(', _all) or re.search(r'\b([\w.]+)\s+' + re.escape(ctl) + r'\s*[;=]', _all)
+                if len(args) >= 3 and recv and ctm and re.search(r'\bCControl\s+' + re.escape(recv.group(1)) + r'\b|\b' + re.escape(recv.group(1)) + r'\s*=\s*new\s+CControl\s*\(', _all):
+                    ar = listbox_all_row(ctm.group(1).split('.')[-1], args)
+                    if ar:
+                        bind_add.setdefault((args[1].replace('this.', ''), f'{base}:{line(m.start())}'), []).append({**ar, 'ref': f'{base}:{line(m.start())} setListBox(…, true, …) → ' + ar['ref']})
         # 2026-11-20 T438(SCP0028 FACT-78289eda): 컨트롤.DataBind(Data.Type.X, isALL[, p1…]) = Data.Common(X, isALL, p1…) 바인딩(UsrComboBox.cs:34~44).
         #   종전엔 setListBox 만 읽어 cboValid.DataBind(Data.Type.YesOrNo, true)(SCP0028 cs:135) 같은 조회조건 콤보 원천이 빠졌다(GSCM 전체 약 80건)
         for m in re.finditer(r'\b(\w+)\.DataBind\s*\(', t):
@@ -456,6 +592,11 @@ def main():
     #   (SpreadInfo.cs:1453-1478 · 1950-1990 comboParamsList 우선)
     params = {b[1]: b[3] for b in binds if b[0] == 'PARAM'}
     dtypes = {k.upper(): k for k in list(cat['types'].get('Data', {})) + cat.get('enum', {}).get('Data', [])}
+    # T567(2026-11-25 SCP0005 B4 V-82d97d20·V-5bcb735c): 화면이 SetSheetHeaderColumn*(siObj, n …) 로 시트를 만들면 프레임워크가 SHEET_COLUMNS ATTRIBUTE1~5 를
+    #   Data.Common(eDataType, false, sParam1…sParam5) 인자로 넘긴다(SpreadInfo.cs:1975~1981 · 2312 · 2660 · 3020 · 14575 같은 문장). CreateSheetHeaderColumn 경로(SpreadInfo.cs:1478)만 인자 없음.
+    #   종전엔 인자 없이 Data.Common(Type) 한 변수로 합쳐 LT_TYPE·TRANSPORT_MODE 가 빈 인자 LookupCommon(AS-IS 0건)이 됐다. 인자 있는 컬럼은 인자별 가상 변수로 나눈다.
+    #   한계: Measure·MeasureGroup(COLUMN_NAME MEASURE·MEASURE_GROUP) 분기는 종전대로(인자 PROGRAM_ID·SHEET_NAME 미반영)
+    hdr_attr = any(re.search(r'\.SetSheetHeaderColumn\w*\s*\(', t_) for _r, t_ in texts)
     for r in read_csv(os.path.join(sdir, 'dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv')):
         if (r.get('CELL_CONTROL_OBJECT_TYPE_CODE') or '') != 'FPComboBox' or (r.get('VALID_YN') or 'Y') != 'Y':
             continue
@@ -468,6 +609,12 @@ def main():
             binds.append(('GRID', col, r.get('COLUMN_LABEL_NAME') or '', params[ct], ref, 'SheetMeta'))
         elif ct.upper() in dtypes:
             key = f'<meta Data.Type.{dtypes[ct.upper()]}>'
+            attrs = [(r.get(f'ATTRIBUTE{i}') or '') for i in range(1, 6)]
+            if hdr_attr and any(a.strip() for a in attrs) and not (ct.upper() in ('MEASURE', 'MEASUREGROUP') and col.upper() in ('MEASURE', 'MEASURE_GROUP')):
+                key = f"<meta Data.Type.{dtypes[ct.upper()]} {'|'.join(attrs).rstrip('|')}>"
+                inline[key] = [('Data.Common', [f'Data.Type.{dtypes[ct.upper()]}', 'false'] + [json.dumps(a, ensure_ascii=False) for a in attrs], ref + ' ATTRIBUTE1~5 · SpreadInfo.cs:1975-1981')]
+                binds.append(('GRID', col, r.get('COLUMN_LABEL_NAME') or '', key, ref, 'SheetMeta'))
+                continue
             inline[key] = [('Data.Common', [f'Data.Type.{dtypes[ct.upper()]}'], ref)]
             binds.append(('GRID', col, r.get('COLUMN_LABEL_NAME') or '', key, ref, 'SheetMeta'))
         else:
@@ -485,12 +632,68 @@ def main():
                 out.append((c, a, r0, fl + [f'{expr} @{r} ({up}→{var})']))
         return out
 
+    # 2026-11-25 사용자 지시 'VM 의 AS-IS 파서에도 의미 분석 추가': 정규식으로 원천 대입을 못 찾은 변수는 Roslyn 의미 모델(asis_sem.defs)로
+    #   값을 넣는 문장을 찾는다(다른 메서드·partial 파일의 필드 대입, 생성자·매개변수로 들어온 값 포함). 찾은 오른쪽 식은 종전 원천 해석(as_var → resolve_source)에 그대로 넣는다.
+    #   도구 실패면 종전 결과 그대로(미해결 사유 유지)
+    sem_note = {}
+    rel_of = {os.path.basename(r): r for r in files}
+    need = []
+    for kind, target, label, var, ref, meth in binds:
+        v0 = var.replace('this.', '').strip()
+        mref = re.fullmatch(r'(.+\.cs):(\d+)', ref or '')
+        if chain(var) or not mref or v0.startswith('<') or not re.fullmatch(r'\w+', v0) or mref.group(1) not in rel_of:
+            continue
+        need.append((var, (rel_of[mref.group(1)], int(mref.group(2)), v0)))
+    if need:
+        try:
+            import asis_sem
+            got = asis_sem.defs([q for _v, q in need])
+            follow = []; tgt_q = []
+            for var, q in need:
+                for d in got.get(q) or []:
+                    rref = f"{os.path.basename(d['file'])}:{d['line']} (의미 분석 {d['how']})"
+                    rhs = d['rhs'].strip()
+                    if re.fullmatch(r'(this\.)?\w+', rhs):
+                        filt_of.setdefault(var, []).append((rhs.replace('this.', ''), '대입(의미 분석)', rref))
+                        follow.append((rhs.replace('this.', ''), (d['file'], d['line'], rhs)))
+                        continue
+                    k = as_var(rhs, rref)
+                    if k in inline and inline[k] and not resolve_source(inline[k][0][0], inline[k][0][1], cat)[4].startswith('원천 함수'):   # 종전 해석이 아는 원천
+                        inline.setdefault(var, []).extend(inline[k])
+                    else:
+                        tgt_q.append((var, rref, rhs, (d['file'], d['line'], rhs)))
+            # 원천 래퍼가 등록되지 않은 호출(ScpUtils.GetLookupValues 등): 의미 분석으로 호출 대상 메서드를 특정하고,
+            #   그 메서드 안의 SP 호출 지점(AsisFacts sites.csv · 의미 분석 반영본)의 SP 와 요청 파라미터를 원천으로 쓴다. 매개변수 값은 호출 인자로 바꾼다
+            if tgt_q:
+                tg = asis_sem.target([q for *_x, q in tgt_q])
+                for var, rref, rhs, q in tgt_q:
+                    t_ = tg.get(q)
+                    src_ = sem_target_source(t_, rhs) if t_ else None
+                    if src_:
+                        inline.setdefault(var, []).append((f"sem:{t_['sig']}", src_, rref))
+                    else:
+                        sem_note.setdefault(var, []).append(f'{rref}: {rhs[:80]}')
+            # 한 단계 더: 대입 오른쪽이 다른 변수면 그 변수의 정의
+            if follow:
+                got2 = asis_sem.defs([q for _v, q in follow if not chain(_v)])
+                for v2, q in follow:
+                    for d in got2.get(q) or []:
+                        rref = f"{os.path.basename(d['file'])}:{d['line']} (의미 분석 {d['how']})"
+                        k = as_var(d['rhs'].strip(), rref)
+                        if k in inline:
+                            inline.setdefault(v2, []).extend(inline[k])
+            print(f"{sid}: 의미 분석 정의 조회 {asis_sem.LAST['requested']}건(캐시 {asis_sem.LAST['cached']}) · 원천 찾음 {sum(1 for v, _q in need if chain(v))}/{len(need)}"
+                  + (f" · 오류 {asis_sem.LAST['error'][:120]}" if asis_sem.LAST['error'] else ''))
+        except Exception as e:  # 도구 실패 = 종전 정규식 결과
+            print(f'[WARN] {sid}: 의미 분석 정의 조회 실패({type(e).__name__}: {str(e)[:120]}) — 종전 결과 유지')
+
     rows = []
     for kind, target, label, var, ref, meth in binds:
         srcs = chain(var)
         if not srcs:
             rows.append({'target_kind': kind, 'target': target, 'label': label or labels.get(target, ''), 'method': meth, 'var': var, 'filters': '',
-                         'wrapper': '', 'sp': '', 'code': '', 'args': '[]', 'unresolved': f'{var} 원천 대입 미발견(필드 초기화·외부 주입 확인)', 'ref': ref})
+                         'wrapper': '', 'sp': '', 'code': '', 'args': '[]',
+                         'unresolved': f'{var} 원천 대입 미발견(필드 초기화·외부 주입 확인)' + (f" · 의미 분석 대입 {len(sem_note[var])}건(원천 호출 아님): " + ' | '.join(sem_note[var][:3]) if sem_note.get(var) else ''), 'ref': ref})
             continue
         for call, args, sref, fl in srcs:
             w, sp, code, ps, un = resolve_source(call, args, cat)
@@ -499,7 +702,7 @@ def main():
             rows.append({'target_kind': kind, 'target': target, 'label': label or labels.get(target, ''), 'method': meth, 'var': var,
                          'filters': ' ▸ '.join(fl), 'wrapper': w, 'sp': sp, 'code': code,
                          'args': json.dumps([{'n': n, 'expr': e} for n, e in ps], ensure_ascii=False), 'unresolved': un, 'ref': f'{ref} ← {sref}',
-                         'added_rows': json.dumps(added_of[var], ensure_ascii=False) if added_of.get(var) and sp != 'STATIC' else ''})
+                         'added_rows': json.dumps(_add, ensure_ascii=False) if (_add := (added_of[var] if added_of.get(var) and sp != 'STATIC' else []) + bind_add.get((target, ref), [])) else ''})  # T607: 바인딩이 넣는 '전체' 행은 원천 종류(STATIC 포함)와 무관하게 뒤에(0번 삽입)
     seen, uniq = set(), []
     for r in rows:
         k = tuple(r[c] for c in ('target_kind', 'target', 'method', 'var', 'sp', 'code', 'filters', 'args'))

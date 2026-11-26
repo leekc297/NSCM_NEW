@@ -1,0 +1,136 @@
+{
+  "id": "20261124005702_SELF_3",
+  "at": "2026-11-24T00:57:02+09:00",
+  "ms": 1795449422847,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/run rule.js|vmvmwvmo의모든ai호출앞에붙는문구에사용자에게묻는질문과보고는업무단어로",
+  "title": "사용자 지시 R81 같은 문제: tools/VibeManager/run-rule.js:5 VM, VMW, VMO 의 모든 AI 호출 앞에 붙는 문구에 '사용자에게 묻는 질문과 보고는 업무 단어로, 선택지마다 결과' 지시가 없음",
+  "evidence": "규칙 R81 \"사용자에게 묻는 질문과 보고는 내부 도구, 검사기 용어 대신 사용자가 아는 화면, 업무 단어로 쓰고 선택지마다 결과를 적음\" (원래 지시 2026-11-16 09:29 \"방금의 경우에도 CHK 행 선택기 라고 하는 것에 대해서 제가 어떤 의미인지를 모르는데 답을 원하는 상황이라 권장안으로 그냥 실행 할 수 밖에 없었습니다.\") · tools/VibeManager/run-rule.js:5 const NOTE = '[실행 룰 A-13, tools/VibeManager/rules/10_RULES_KEEP.md] 누락 0 안에서 가장 빠르게. ...",
+  "targets": [
+    "tools/VibeManager/run-rule.js"
+  ],
+  "before_after": "NOTE 에 11) 항목 추가: 질문, 보고에 검사기 내부 이름(CHK, 선택기, 규칙 번호, 판정 코드)을 쓰지 않고 화면ID, 화면 문구, 업무 단어로 씀. 선택지마다 고르면 바뀌는 판정, 파일, 화면을 1줄로 적음. 10_RULES_KEEP.md A-13 정본도 같이 맞춤",
+  "verify": "node --check tools/VibeManager/run-rule.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/run-rule.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T06:10:44+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T06:14:36+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0610"
+    },
+    {
+      "at": "2026-11-25T06:14:39+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T06:27:02+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 run-rule.js"
+    },
+    {
+      "at": "2026-11-25T06:27:02+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 → 반영 뒤. node --check run-rule.js: 통과 → 통과. run_all.js: 'ALL OK 파일 84/84 PASS 1367 FAIL 0 227.4s' (at 2026-11-24T21:15:12Z) → 'ALL OK 파일 84/84 PASS 1367 FAIL 0 226.5s' (at 2026-11-24T21:19:11Z). 반영 뒤 require('./tools/VibeManager/run-rule.js').NOTE 에 '13) 사용자에게 묻는 질문' 있음(true), 길이 930자 · 변경 28개 파일 · 대상 목록 밖 변경 27개: Doc/e2e/results/SCP0005/_summary.csv, Doc/e2e/results/SCP0005/_summary.md, Doc/e2e/results/SCP0005/_test_timing.jsonl, Doc/e2e/results/SCP0005/html/index.html, Doc/e2e/results/SCP0005/results.json, Doc/e2e/results/SCP0005/shots/SCP0005_crud.png",
+      "log": ".vibe\\logs\\2026-11-25T06-14-41_claude_orch.log",
+      "sec": 509,
+      "costUsd": 0.7364308999999999,
+      "files": [
+        "Doc/e2e/results/SCP0005/_summary.csv",
+        "Doc/e2e/results/SCP0005/_summary.md",
+        "Doc/e2e/results/SCP0005/_test_timing.jsonl",
+        "Doc/e2e/results/SCP0005/html/index.html",
+        "Doc/e2e/results/SCP0005/results.json",
+        "Doc/e2e/results/SCP0005/shots/SCP0005_crud.png",
+        "Doc/e2e/results/_summary.csv",
+        "Doc/e2e/results/_summary.md",
+        "Doc/e2e/specs/SCP0005.auth.spec.ts",
+        "Doc/e2e/specs/SCP0005.authcrud.spec.ts",
+        "Doc/e2e/specs/SCP0005.crud.spec.ts",
+        "Doc/e2e/specs/SCP0005.plan.json",
+        "Doc/e2e/specs/SCP0005.smoke.spec.ts",
+        "Doc/tobefacts/db/_export_log.md",
+        "Doc/tobefacts/db/btn_auth.csv",
+        "Doc/tobefacts/db/user_group_user.csv",
+        "tools/E2E/accounts.json",
+        "tools/E2E/users.json",
+        "tools/VibeManager/rules/10_RULES_KEEP.md",
+        "tools/VibeManager/run-rule.js",
+        "Doc/e2e/_run.acct.2764.json",
+        "Doc/e2e/_run.acct.36028.json",
+        "Doc/e2e/_run.acct.39568.json",
+        "Doc/e2e/_run.e2e.SCP0005.lock",
+        "Doc/e2e/results/SCP0005/video/20261125_062055_39280/SCP0005.crud-SCP0005-Distr-5574c-은-셀-수정-Save→재조회→원복-Save→재조회-chromium-retry1.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_062055_39280/SCP0005.crud-SCP0005-Distr-5574c-은-셀-수정-Save→재조회→원복-Save→재조회-chromium.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_062121_6984/SCP0005.auth-SCP0005-권한-au-384eb-근-·-버튼-노출-·-Division-데이터-범위-chromium.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_062121_6984/SCP0005.auth-SCP0005-권한-au-c09f3-근-·-버튼-노출-·-Division-데이터-범위-chromium.webm"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "사용자에게 묻는 질문과 보고는 내부 도구, 검사기 용어 대신 사용자가 아는 화면, 업무 단어로 쓰고 선택지마다 결과를 적음 규칙을 tools/VibeManager/run-rule.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R81|tools/VibeManager/run-rule.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795554644320,
+  "autoFp": "cadda7963d",
+  "applyStartMs": 1795554879540,
+  "verifyJudge": {
+    "at": "2026-11-25T06:23:12+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0610",
+  "needsReload": false,
+  "hotLoaded": [
+    "run-rule.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795555622621,
+  "synced": [
+    "run-rule.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/run-rule.js: 반영 전 출력 없음(통과) → 반영 뒤 출력 없음(통과). node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1367 FAIL 0 227.4s' → 반영 뒤 'ALL OK 파일 84/84 PASS 1367 FAIL 0 226.5s'. run-rule.js 는 웹뷰 파일 아님. run_all 안의 t_webview_syntax.js PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/run-rule.js",
+      "tools/VibeManager/rules/10_RULES_KEEP.md"
+    ],
+    "verify_result": "반영 전 → 반영 뒤. node --check run-rule.js: 통과 → 통과. run_all.js: 'ALL OK 파일 84/84 PASS 1367 FAIL 0 227.4s' (at 2026-11-24T21:15:12Z) → 'ALL OK 파일 84/84 PASS 1367 FAIL 0 226.5s' (at 2026-11-24T21:19:11Z). 반영 뒤 require('./tools/VibeManager/run-rule.js').NOTE 에 '13) 사용자에게 묻는 질문' 있음(true), 길이 930자",
+    "note": "기존 NOTE 에 11) 결정 목록, 12) 문장 규칙이 이미 있어 새 항목 번호를 13) 으로 씀. 10_RULES_KEEP.md A-13 에 하위 14번 추가, 요약 문구 13) 표기. 10_RULES_KEEP.md 는 targets 밖이고 before_after 문구 'A-13 정본도 같이 맞춤' 을 근거로 고침. .bak, 설치 폴더, CHANGELOG.md 손대지 않음"
+  },
+  "snap": "prop_20261124005702_SELF_3"
+}

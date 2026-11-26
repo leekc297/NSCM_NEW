@@ -1,5 +1,5 @@
 {
- "at": "2026-11-19T21:34:13.121Z",
+ "at": "2026-11-24T17:50:27.927Z",
  "search": {
   "Div": {
    "label": "Div",
@@ -20,59 +20,27 @@
  },
  "grid": {},
  "rr": {
-  "search": "20261120061215",
-  "combos": "20261120061215"
+  "search": "20261125005659",
+  "combos": "20261125005659"
  },
  "combos": [
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
    "body": "{\"comboId\":\"Company_SSP0005\",\"mnuId\":\"SSP0005\"}",
    "status": 200,
-   "n": 25,
+   "n": 17,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "AA00",
-     "v": "AA통합테스트"
-    },
-    {
-     "c": "AB00",
-     "v": "AB통합테스트"
-    },
-    {
-     "c": "AC00",
-     "v": "AC통합테스트"
-    },
-    {
      "c": "AE00",
      "v": "LGES Arizona ESS Inc."
     },
     {
-     "c": "AH00",
-     "v": "AH통합테스트"
-    },
-    {
-     "c": "AJ00",
-     "v": "AJ통합테스트"
-    },
-    {
-     "c": "AK00",
-     "v": "AK통합테스트"
-    },
-    {
-     "c": "AP00",
-     "v": "AP통합테스트"
-    },
-    {
      "c": "AU00",
      "v": "LG CHEM AUSTRAILIA PTY LT"
-    },
-    {
-     "c": "AV00",
-     "v": "AV통합테스트"
     },
     {
      "c": "AZ00",
@@ -135,52 +103,28 @@
      "v": "LGES Wroclaw Sp. z o.o."
     }
    ],
-   "user": "minyonglee1"
+   "user": "sanghyunbyun"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0005\"}",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0005\"}",
    "status": 200,
-   "n": 8,
+   "n": 2,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "81",
-     "v": "81 Automotive Battery"
+     "c": "Y",
+     "v": "Y"
     },
     {
-     "c": "40",
-     "v": "40 Mobility & IT Battery"
-    },
-    {
-     "c": "82",
-     "v": "82 ESS Battery"
-    },
-    {
-     "c": "81_UC",
-     "v": "81_UC Automotive Battery(UC)"
-    },
-    {
-     "c": "81_HM",
-     "v": "81_HM Automotive Battery(HM)"
-    },
-    {
-     "c": "81_ST",
-     "v": "81_ST Automotive Battery(ST)"
-    },
-    {
-     "c": "81_HD",
-     "v": "81_HD Automotive Battery(HD)"
-    },
-    {
-     "c": "81_HG",
-     "v": "81_HG Automotive Battery(HG)"
+     "c": "N",
+     "v": "N"
     }
    ],
-   "user": "minyonglee1"
+   "user": "sanghyunbyun"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
@@ -229,78 +173,70 @@
      "v": "Sun"
     }
    ],
-   "user": "minyonglee1"
+   "user": "sanghyunbyun"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo",
-   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SSP0005\"}",
+   "body": "{\"comboId\":\"MyDivision\",\"mnuId\":\"SSP0005\"}",
    "status": 200,
-   "n": 2,
+   "n": 8,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "Y",
-     "v": "Y"
+     "c": "81",
+     "v": "81 Automotive Battery"
     },
     {
-     "c": "N",
-     "v": "N"
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
     }
    ],
-   "user": "minyonglee1"
+   "user": "sanghyunbyun"
   },
   {
    "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
    "body": "{\"comboId\":\"Company_SSP0005\",\"mnuId\":\"SSP0005\",\"validYn\":\"'Y'\"}",
    "status": 200,
-   "n": 25,
+   "n": 17,
    "keys": [
     "CODE",
     "NAME"
    ],
    "rows": [
     {
-     "c": "AA00",
-     "v": "AA통합테스트"
-    },
-    {
-     "c": "AB00",
-     "v": "AB통합테스트"
-    },
-    {
-     "c": "AC00",
-     "v": "AC통합테스트"
-    },
-    {
      "c": "AE00",
      "v": "LGES Arizona ESS Inc."
     },
     {
-     "c": "AH00",
-     "v": "AH통합테스트"
-    },
-    {
-     "c": "AJ00",
-     "v": "AJ통합테스트"
-    },
-    {
-     "c": "AK00",
-     "v": "AK통합테스트"
-    },
-    {
-     "c": "AP00",
-     "v": "AP통합테스트"
-    },
-    {
      "c": "AU00",
      "v": "LG CHEM AUSTRAILIA PTY LT"
-    },
-    {
-     "c": "AV00",
-     "v": "AV통합테스트"
     },
     {
      "c": "AZ00",
@@ -363,7 +299,7 @@
      "v": "LGES Wroclaw Sp. z o.o."
     }
    ],
-   "user": "minyonglee1"
+   "user": "sanghyunbyun"
   }
  ]
 }

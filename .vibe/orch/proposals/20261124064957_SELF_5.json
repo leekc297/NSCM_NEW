@@ -1,0 +1,115 @@
+{
+  "id": "20261124064957_SELF_5",
+  "at": "2026-11-24T06:49:57+09:00",
+  "ms": 1795470597935,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/job runner.js|동시실행상한기본값이n임toolsharnessharnessjsonnjob",
+  "title": "사용자 지시 R159 같은 문제: tools/VibeManager/job-runner.js:169 동시 실행 상한 기본값이 5임. tools/Harness/harness.json:58 \"jobMaxPar\": 5 가 덮어써 실제 적용값도 5",
+  "evidence": "규칙 R159 \"동시 실행 상한 기본값은 3으로 두고 PC 부하 입장 조건과 함께 적용함\" (원래 지시 2026-11-20 11:18 \"동시의 최대를 Default 를 5에서 3으로 변경해주세요.\") · tools/VibeManager/job-runner.js:169 const JDEF = { jobMaxPar: 5, // 2026-11-20 사용자 지시: 업무 작업창 최대 동시 5화면",
+  "targets": [
+    "tools/VibeManager/job-runner.js"
+  ],
+  "before_after": "JDEF jobMaxPar 를 3으로, harness.json orch.jobMaxPar 를 3으로 바꾸고 168줄 주석과 맞춤",
+  "verify": "node --check tools/VibeManager/job-runner.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/job-runner.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T07:27:48+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T07:31:41+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0727"
+    },
+    {
+      "at": "2026-11-26T07:31:44+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T07:44:23+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 job-runner.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T07:44:23+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 07:31:59~07:40:09 실행. JDEF.jobMaxPar 5 → 3(178줄). node --check 통과 → 통과. run_all.js PASS 1423 FAIL 0 → PASS 1423 FAIL 0, 87/87 → 87/87. t_job_par.js PASS 16 FAIL 0 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T07-31-45_claude_orch.log",
+      "sec": 520,
+      "costUsd": 0.6398711,
+      "files": [
+        "tools/VibeManager/job-runner.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:07+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "동시 실행 상한 기본값은 3으로 두고 PC 부하 입장 조건과 함께 적용함 규칙을 tools/VibeManager/job-runner.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R159|tools/VibeManager/job-runner.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795645668058,
+  "autoFp": "1e17e8463e",
+  "applyStartMs": 1795645904737,
+  "verifyJudge": {
+    "at": "2026-11-26T07:40:29+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1423, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0727",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "job-runner.js"
+  ],
+  "appliedMs": 1795646663632,
+  "synced": [
+    "job-runner.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/job-runner.js → CHECK_OK(반영 전 07:31:59, 반영 뒤 07:36:20) · node tools/VibeManager/test/run_all.js → 반영 전 'ALL OK 파일 87/87 PASS 1423 FAIL 0 227.6s', 반영 뒤 'ALL OK 파일 87/87 PASS 1423 FAIL 0 227.4s'(07:40:09) · t_webview_syntax.js 는 run_all 안에서 PASS 19, 웹뷰 파일 아님"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/job-runner.js"
+    ],
+    "verify_result": "2026-11-26 07:31:59~07:40:09 실행. JDEF.jobMaxPar 5 → 3(178줄). node --check 통과 → 통과. run_all.js PASS 1423 FAIL 0 → PASS 1423 FAIL 0, 87/87 → 87/87. t_job_par.js PASS 16 FAIL 0",
+    "note": "harness.json orch.jobMaxPar(61줄 값 5)는 targets 밖이라 고치지 않음. 이 값이 기본값을 덮어써서 지금 적용되는 상한은 5로 남음. 3으로 적용하려면 harness.json 61줄 5 → 3 을 별도 승인으로 반영해야 함. 177줄 주석은 이미 '기본 3' 이라 178줄 주석만 R159 와 맞춤"
+  },
+  "snap": "prop_20261124064957_SELF_5",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

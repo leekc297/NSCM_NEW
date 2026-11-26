@@ -1,0 +1,143 @@
+{
+  "id": "20261121120359_VISION",
+  "at": "2026-11-21T12:03:59+09:00",
+  "ms": 1795230239647,
+  "source": "vision",
+  "status": "applied",
+  "sig": "ln|purpose|checklisttime|remeasure unit row",
+  "title": "개념 재정립: CheckList 재측정 단위(미해결 행의 규칙 전체 → 바뀐 검사기가 판정하는 행과 그 행을 만든 시험)",
+  "evidence": "목적 원문: 'CHECKLIST 는 10분에서 진짜 길어야 30분 내에 종료되어야 한다', '부분 재측정이 1차보다 시간이 더 많이 소요된 사유도 보완해주세요'(U25). 지금 개념: quick.json:120 '처리 대상이 남는 동안 [보완 준비 → 검증 보완 → 검사기 게이트 → 부분 재측정] 반복', quick.json:193-204 loops.fix max 0, delta_scope.py:115-117 직전 FAIL, 판정필요, 미검증 행의 규칙 전체를 재측정 범위에 넣음. 어긋난 근거: events.jsonl:2001 부분 재측정 3회 196.6분(전체 309.5분의 63.5%), _test_timing.jsonl 1회차 부분 재측정 시험 76개 42.6분 대 전체 측정 81개 43.7분, delta_scope.json 11-21 01:01 미해결 79행이 규칙 13개로 넓어짐. 대안 A: 재측정 단위를 행으로 바꿈. 보완으로 바뀐 검사기가 판정하는 행과 미검증(ERROR) 행만, 그 행을 만든 시험만 다시 돌림. 검사기와 화면 소스가 바뀌지 않은 FAIL, 판정필요 행은 1차 결과를 둠(1차에서 둔 PASS 1246행과 같은 기준). 대안 B: 회차를 1회로 묶음. 1차 미검증 전체를 한 번의 검증 보완에서 처리하고(U24) 재측정 1회 뒤 새 미검증만 2회차. 권장 A: 소요의 63.5%가 재측정이고 회차 수와 상관없이 회차당 50~81분이 듦. B 는 회차를 줄이지만 회차당 시간은 그대로임. 반증: A 적용 뒤 같은 화면에서 행 단위 재측정 결과와 전체 재측정 결과를 ledger_diff.py 로 대조해 차이가 1건이라도 나오면 A 는 판정 결과를 바꾸므로 버림",
+  "targets": [
+    "tools/Harness/verify/delta_scope.py",
+    "tools/Harness/verify/run_verify.py",
+    "tools/VibeManager/quick.json",
+    ".vibe/orch/vision/concept_20261121_L4_purpose_checklistTime.md"
+  ],
+  "before_after": "지금 개념: 보완 회차마다 직전 미해결 행이 속한 규칙 전체와 그 규칙의 시험 전부를 다시 잼 → 새 개념: 보완 회차마다 바뀐 검사기가 판정하는 행과 미검증 행만, 그 행을 만든 시험만 다시 재고, 나머지 행은 1차 결과를 그대로 둠",
+  "verify": "1) 승인 뒤 writing-plans 로 전환 계획 작성. 2) 시험 화면 1개(SCP0028)에서 행 단위 부분 재측정 1회와 전체 재측정 1회를 같은 시각대에 돌리고 python tools/Harness/verify/ledger_diff.py 로 대조해 차이 0건 확인. 3) events.jsonl 의 다음 SCP0028 체인 chain.end 에서 S8.checklistDelta 회차당 sec 가 1차 측정 sec 보다 작음 확인. 4) python tools/Harness/verify/delta_scope.py --selftest 통과",
+  "rollback": "delta_scope.py, run_verify.py, quick.json 을 전환 전 커밋으로 되돌리면 규칙 단위 재측정으로 돌아감. 원장(verify_ledger.csv)은 실행마다 새로 써서 남는 변경 없음",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "같은 목적(CheckList 30분) 사용자 지적 7일 3건(U2 11-20 03:48, U24 11-20 23:44, U25 11-20 23:48). Overall Review 2회 연속 어긋남(11-20 11:58, 11-21 11:59). 구조 개선(11-20 05:30 B1 대기 제거, 중복 정리 AI, 11-20 두 범위 합치기) 반영 뒤에도 SCP0028 309.5분",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T14:49:04+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T14:52:35+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 32개 파일 통과, 시험 66/68개 파일 통과(PASS 1022, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1449"
+    },
+    {
+      "at": "2026-11-23T14:52:38+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T14:56:33+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T15:00:04+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 32개 파일 통과, 시험 66/68개 파일 통과(PASS 1022, FAIL 7), 정의 정합 통과 · 반영 전부터 어긋난 항목 2건 · 백업 태그 20261123_self1456"
+    },
+    {
+      "at": "2026-11-23T15:00:06+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T15:10:34+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 32개 파일 통과, 시험 66/68개 파일 통과(PASS 1022, FAIL 7), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-23T15:10:34+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 4) python tools/Harness/verify/delta_scope.py --selftest : 반영 전 PASS 11건 'ALL PASS'(2026-11-23 15:00:38) → 반영 뒤 PASS 20건 'ALL PASS'(2026-11-23 15:05). 새 항목 출력 줄: 'PASS 직전 미검증 행 규칙만 코드로 넣음 · FAIL 행 규칙은 1차 결과 유지', 'PASS 시험 고르기 — 대상 행의 출처를 고르는 시험만', 'PASS 행 단위 불가 — 규칙 단위 판정 파일 · 범위 불일치 · 직전 원장 없음'. 추가  · 변경 6개 파일 · 대상 목록 밖 변경 3개: tools/Harness/gate_baseline.tsv, Doc/_doc_style/CLOUD_SAVE_ERROR_LOG_20261123_1437.sql.style.csv, Doc/verify/DMF0082/CLOUD_SAVE_ERROR_LOG_20261123_1437.sql",
+      "log": ".vibe\\logs\\2026-11-23T15-00-08_claude_orch.log",
+      "sec": 416,
+      "costUsd": 5.034502399999997,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/delta_scope.py",
+        "tools/Harness/verify/run_verify.py",
+        "tools/VibeManager/quick.json",
+        "Doc/_doc_style/CLOUD_SAVE_ERROR_LOG_20261123_1437.sql.style.csv",
+        "Doc/verify/DMF0082/CLOUD_SAVE_ERROR_LOG_20261123_1437.sql"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:26+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T15:48:13+09:00"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 보완 뒤 다시 재는 범위가 '미해결 항목이 속한 검사 종류 전체'에서 '보완으로 결과가 바뀔 수 있는 항목'으로 줄어 화면 1개 소요가 줄어듦",
+    "risk": "항목과 시험의 연결이 틀리면 다시 재야 할 항목을 1차 결과로 두게 되어 CheckList 판정이 AS-IS 와 달라질 수 있어, 전체 재측정과 대조해 차이 0건일 때만 씀",
+    "undo": "바꾼 검사 도구 3개를 전환 전 판으로 되돌리면 종전처럼 검사 종류 전체를 다시 잼"
+  },
+  "needsApproval": "VM 근간 로직 변경(impact core) = 사용자 승인 뒤 반영",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 2,
+  "autoMs": 1795413393681,
+  "autoFp": "4bf20f4c9e",
+  "applyStartMs": 1795413606576,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 32개 파일 통과, 시험 66/68개 파일 통과(PASS 1022, FAIL 7), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1456",
+  "needsReload": true,
+  "appliedMs": 1795414234680,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "전환 계획을 대상 파일 .vibe/orch/vision/concept_20261121_L4_purpose_checklistTime.md 에 작성(2026-11-23 15:06)"
+      },
+      {
+        "n": 2,
+        "result": "blocked",
+        "note": "미실행. SCP0028 행 단위 부분 재측정 1회와 전체 재측정 1회가 필요함. CheckList 재수행은 사용자 실행 대상(vm-orchestra 지킬 것). 실행 뒤 python tools/Harness/verify/ledger_diff.py 로 대조, 차이 1건이라도 나오면 되돌림"
+      },
+      {
+        "n": 3,
+        "result": "blocked",
+        "note": "미실행. 다음 SCP0028 체인의 events.jsonl chain.end 가 있어야 S8.checklistDelta 회차당 sec 를 잴 수 있음"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "python tools/Harness/verify/delta_scope.py --selftest : 반영 전 PASS 11건 ALL PASS(15:00) → 반영 뒤 PASS 20건 ALL PASS(15:05)"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/delta_scope.py",
+      "tools/Harness/verify/run_verify.py",
+      "tools/VibeManager/quick.json",
+      ".vibe/orch/vision/concept_20261121_L4_purpose_checklistTime.md"
+    ],
+    "verify_result": "4) python tools/Harness/verify/delta_scope.py --selftest : 반영 전 PASS 11건 'ALL PASS'(2026-11-23 15:00:38) → 반영 뒤 PASS 20건 'ALL PASS'(2026-11-23 15:05). 새 항목 출력 줄: 'PASS 직전 미검증 행 규칙만 코드로 넣음 · FAIL 행 규칙은 1차 결과 유지', 'PASS 시험 고르기 — 대상 행의 출처를 고르는 시험만', 'PASS 행 단위 불가 — 규칙 단위 판정 파일 · 범위 불일치 · 직전 원장 없음'. 추가 확인(15:05): python -m py_compile run_verify.py delta_scope.py → PY_OK, quick.json JSON.parse → JSON_OK. SCP0028 원장(1882행, 시험 76개) 읽기 실측: 종전 규칙 14개·행 639·시험 35개 → 새 범위 규칙 단위 규칙 2개(F4, H11)·행 36·시험 11개 → 행 단위 대상 행 6·시험 5개. 1) 전환 계획 작성함. 2) 3) 미실행(CheckList 실행 필요, 사용자 실행 뒤 확인). 소요 시간 미측정",
+    "note": "verified true 는 반영할 때 실행할 수 있는 1번, 4번 통과 기준임. 2번(전체 재측정과 ledger_diff 대조 차이 0건)과 3번(회차당 sec)은 미실행이라 새 개념 채택 여부는 2번 결과로 정함. 행과 시험 대응은 e2e_results.json 에 시험 제목 기록이 없어 judge.test_ownership 의 출처 비교(judge.py 905~911행 T61 과 같은 근거)로 함. 대응을 모르는 규칙(whole_rules, 원장 비교로 더한 규칙, 판정 파일에 없는 규칙, 시험을 못 찾은 규칙)은 종전 규칙 단위. 승인 대상 밖이라 고치지 않은 것: tools/VibeManager/steps.json:1557 제목의 '직전 미해결 행 규칙 포함' 문구, quick.json 120·122·216·218행 hint·confirm 문구, checklist_run.py --recheck 경로(종전 규칙 단위). 작업 모드 DB_ONLY, 저장소 hook 차단 없음. 실측용 임시 스크립트 2개가 저장소 밖 %TEMP%\\vmo_probe 에 남음(삭제 명령 권한 차단). 프롬프트에 붙은 SCP0028 신규 개발 절차 hook 안내는 이번 일(개선안 반영)과 무관해 실행하지 않음"
+  },
+  "snap": "prop_20261121120359_VISION",
+  "effectiveMs": 1795416493363,
+  "effectiveAt": "2026-11-23T15:48:13+09:00"
+}

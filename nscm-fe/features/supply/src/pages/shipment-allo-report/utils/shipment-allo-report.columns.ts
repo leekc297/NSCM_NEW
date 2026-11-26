@@ -13,6 +13,14 @@ import { PIVOT_KIND } from '../shipment-allo-report.types';
 const s = (v: unknown): string => (typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '');
 const n = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : Number(v) || 0);
 
+// AS-IS 셀 반올림 — 월/소계/GAP 셀은 NumberCellType DecimalPlaces=0(SetReNumerCellType(-9999999999, 0),
+//   cs:197~255)이고, AS-IS 는 값을 누적·합산할 때 셀 Value 가 아니라 화면 Text(정수로 반올림된 표시값)를
+//   다시 읽어 더한다(cs:857·912 누적, 928 소계, 1079/1081 GAP, 1094 Total, 1149 요약). 그래서 소수 수량
+//   (SHIP_PLAN_AMEND 에 실재)이 있으면 셀마다 반올림된 정수로 소계·GAP·요약이 계산된다. TO-BE 가 소수 원값을
+//   그대로 합산하면 표시는 같아도 소계/GAP/요약이 1~2씩 어긋났다(테스트 이슈 "소수점 표시 기준·GAP 차이").
+//   .NET decimal 표시 반올림은 0.5 를 0 에서 먼 쪽으로 올린다(MidpointRounding.AwayFromZero).
+const roundAway = (v: number): number => Math.sign(v) * Math.round(Math.abs(v));
+
 // AS-IS 정적 DEPT_ID/SITE_ID 는 폭0(비노출) — TeamRow 키(4키)는 텍스트 값으로 매칭한다(design 03 §4.1,
 // SITE_ID/DEPT_ID 는 값 매칭에 안 쓰임 — SITE_NAME/DEPT_NAME 텍스트 비교로 행을 찾는 AS-IS 그대로).
 export const rowKeyOf = (r: {
@@ -188,7 +196,9 @@ export const fillPivotValues = (
       const month = monthByYyyymm.get(yyyymm);
       if (!month) return;
       const binding = month.kind === PIVOT_KIND.BASE ? `M_${month.yyMM}_${sub}` : `M_${month.yyMM}`;
-      row[binding] = n(row[binding]) + n(entry.QTY);
+      // AS-IS: 셀 표시값(반올림 정수) + 이번 수량 → 다시 셀에 넣고 표시는 반올림(cs:857-859). 매 누적마다
+      //   반올림한 값을 저장하면 다음 누적이 읽는 값(표시값)과 최종 표시값이 AS-IS 와 같아진다.
+      row[binding] = roundAway(n(row[binding]) + n(entry.QTY));
     });
   };
 

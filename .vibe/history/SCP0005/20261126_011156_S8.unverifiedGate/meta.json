@@ -1,0 +1,21 @@
+{
+  "id": "SCP0005",
+  "task": "S8.unverifiedGate",
+  "scope": "none",
+  "note": "checklist_run.py SCP0005",
+  "start": "2026-11-26T01:11:56+09:00",
+  "end": "2026-11-26T02:40:02+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "chain",
+  "label": "미검증 해소 게이트 — 해소 확인 결과(unverified_settle.json) 처리 대상 전체 해소 전이면 남은 행·사유를 적고 오류(재검증 안 함)",
+  "text": "",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261125_210634",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-26T01-11-56_SCP0005_6_______________________unverified_settle.json_________________________________________.log"
+  ],
+  "afterMode": "end",
+  "changed": []
+}

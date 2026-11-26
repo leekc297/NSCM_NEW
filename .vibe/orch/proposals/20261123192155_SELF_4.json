@@ -1,0 +1,104 @@
+{
+  "id": "20261123192155_SELF_4",
+  "at": "2026-11-23T19:21:55+09:00",
+  "ms": 1795429315787,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/ene/specs/_verify.spec.ts|hn음수글자색을기존음수데이터행에서먼저재고사용자가를입력한직후의색은음수데이",
+  "title": "사용자 지시 R33 같은 문제: Doc/e2e/specs/_verify.spec.ts:639 H13 음수 글자색을 기존 음수 데이터 행에서 먼저 재고, 사용자가 '-'를 입력한 직후의 색은 음수 데이터가 없을 때만 잼. 빨강 판정도 범위(probe.ts:",
+  "evidence": "규칙 R33 \"검사기는 그리드 편집 컬럼의 입력 제한(정수, 음수 허용, 음수 글자색)과 조회조건 팝업의 LIKE 검색을 AS-IS 실측과 대조해 차이를 조치필요로 판정함\" (원래 지시 2026-11-10 10:43 \"SSP0024 CHECKLIST 에서 아래 2개 항목의 오류로 확인되는데 조치 필요 항목에 나오지 않습니다. 검사엔진 보완 요청 합니다. 1) GRID COLUMN - Pancake Roll Length, Steelcrate/Cut - 정수만 입력(-입력 가능, -입력 시 FontCol\") · Doc/e2e/specs/_verify.spec.ts:639 for (const c0 of cands) { const rs = await probe.findRowsByValue(p, `d => { const v = Number(String(d[${JSON.stringify(c0)}] ?? '').replace(/,/g, '')); return !isNaN(v) && v < 0; }`, 1); if (rs.length",
+  "targets": [
+    "Doc/e2e/specs/_verify.spec.ts"
+  ],
+  "before_after": "편집 가능한 행에 키 입력으로 '-1'을 넣은 뒤 색을 재는 측정을 항상 추가하고, 데이터 행 측정과 따로 기록한다. 기대 색은 AS-IS 실측값이나 NegativeRed 원문 색을 근거에 적고, 범위 판정은 그 값과 비교한다.",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/e2e/specs/_verify.spec.ts.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T05:29:18+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T05:32:55+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0529"
+    },
+    {
+      "at": "2026-11-24T05:32:57+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T05:45:59+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T05:45:59+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 PASS 1161, FAIL 0, 74/74 (2026-11-24 05:33:25) → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213s' (05:41:49). t_webview_syntax.js PASS 19 → PASS 19. 추가 확인: _verify.spec.ts 를 TypeScript 변환기로 읽힌 결과 diag 0 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T05-32-57_claude_orch.log",
+      "sec": 565,
+      "costUsd": 1.0844439,
+      "files": [
+        "Doc/e2e/specs/_verify.spec.ts"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "검사기는 그리드 편집 컬럼의 입력 제한(정수, 음수 허용, 음수 글자색)과 조회조건 팝업의 LIKE 검색을 AS-IS 실측과 대조해 차이를 조치필요로 판정함 규칙을 Doc/e2e/specs/_verify.spec.ts 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R33|Doc/e2e/specs/_verify.spec.ts",
+  "needsApproval": "자동 범위 밖 Doc/e2e/specs/_verify.spec.ts",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795465758309,
+  "autoFp": "f57e155ae6",
+  "applyStartMs": 1795465977415,
+  "verifyJudge": {
+    "at": "2026-11-24T05:42:24+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0529",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795466759755,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213.2s'(2026-11-24 05:33:25) → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213s'(05:41:49). t_webview_syntax.js 는 run_all.js 안에서 실행되어 반영 전과 뒤 모두 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "Doc/e2e/specs/_verify.spec.ts"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 PASS 1161, FAIL 0, 74/74 (2026-11-24 05:33:25) → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213s' (05:41:49). t_webview_syntax.js PASS 19 → PASS 19. 추가 확인: _verify.spec.ts 를 TypeScript 변환기로 읽힌 결과 diag 0",
+    "note": "H13 블록(_verify.spec.ts:638~)을 고침. (가) 기존 음수 데이터 행 측정과 (나) 편집 가능 행 키 입력 '-1' 직후 측정을 항상 둘 다 하고 근거에 따로 적음. 키 입력 편집기가 안 열릴 때만 편집기 대입. 측정 뒤 복원하며 신규 행도 시험 전 값으로 되돌림. 기대색은 규칙 기대값의 AS-IS 실측 색(rgb·#hex), 없으면 NegativeRed 원문 색 Color.Red rgb(255,0,0)을 쓰고 근거에 적음. 범위는 기대색 기준 R±105, G±110, B±110 으로 기존 isRedColor 와 같은 범위임. 판정은 둘 중 FAIL 이 있으면 FAIL, PASS 가 있으면 PASS, 그 밖에 ERROR 가 있으면 ERROR, 나머지 NA. 개선안 제목의 '데이터 없을 때만'과 before_after 의 '항상 추가'가 달라 승인 범위인 before_after 를 따름. 실화면 H13 판정은 CheckList 재수행(사용자 실행) 때 확인 대상이며 미측정."
+  },
+  "snap": "prop_20261123192155_SELF_4"
+}

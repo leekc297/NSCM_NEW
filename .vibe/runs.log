@@ -2154,3 +2154,327 @@ checklist 작업 시 전체 미검증에 대해서 일괄 미검증 제거 후 c
 2026-11-20T14:56:34+09:00	S8.checklistRun	end	1	
 2026-11-20T14:58:16+09:00	workbench	start		chain:checklist: SCP0028
 2026-11-20T14:58:18+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-20T15:20:18+09:00	workbench	start		quick: ⬆️ Source Backup 
+2026-11-20T16:06:50+09:00	S8.checklistRun	end	0	
+2026-11-20T16:06:51+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --mark
+2026-11-20T16:06:52+09:00	S8.engineGate	end	0	
+2026-11-20T16:39:22+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-20T16:39:22+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --mark
+2026-11-20T16:39:23+09:00	S8.engineGate	end	0	
+2026-11-20T16:57:16+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --check
+2026-11-20T16:57:44+09:00	S8.engineGate	end	0	
+2026-11-20T16:57:45+09:00	S8.checklistDelta	start		S8.checklistDelta: checklist_run.py SCP0028 --delta --no-docs
+2026-11-20T17:36:38+09:00	S8.checklistDelta	end	1	
+2026-11-20T17:58:53+09:00	workbench	start		quick: 🎛️ VS Code 설정 (vibeManager) SCP0028
+2026-11-20T18:04:09+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-20T18:04:10+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-20T18:12:00+09:00	workbench	start		quick: 🧠 AI 검토 (켜기 / 끄기) 
+2026-11-20T18:12:20+09:00	workbench	start		quick: 🔁 VMO 보완 뒤 재수행 (재수행 / 수행 없음) 
+2026-11-20T18:34:05+09:00	S8.checklistRun	end	1	
+2026-11-20T18:36:04+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-20T18:36:05+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-20T18:46:22+09:00	S8.checklistRun	end	1	
+2026-11-20T18:47:05+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-20T18:47:06+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-20T18:57:25+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-20T18:57:26+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-20T19:06:55+09:00	S8.checklistRun	end	1	
+2026-11-20T19:17:52+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-20T19:17:53+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-20T20:44:16+09:00	S8.checklistRun	end	1	
+2026-11-20T20:46:18+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-20T20:46:20+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-20T21:52:13+09:00	S8.checklistRun	end	0	
+2026-11-20T21:52:13+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --mark
+2026-11-20T21:52:14+09:00	S8.engineGate	end	0	
+2026-11-20T22:16:09+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --check
+2026-11-20T22:16:55+09:00	S8.engineGate	end	0	
+2026-11-20T22:16:55+09:00	S8.checklistDelta	start		S8.checklistDelta: checklist_run.py SCP0028 --delta --no-docs
+2026-11-20T23:38:22+09:00	S8.checklistDelta	end	0	
+2026-11-20T23:38:22+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --mark
+2026-11-20T23:38:23+09:00	S8.engineGate	end	0	
+2026-11-20T23:47:37+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --check
+2026-11-20T23:48:11+09:00	S8.engineGate	end	0	
+2026-11-20T23:48:12+09:00	S8.checklistDelta	start		S8.checklistDelta: checklist_run.py SCP0028 --delta --no-docs
+2026-11-21T00:52:26+09:00	S8.checklistDelta	end	0	
+2026-11-21T00:52:26+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --mark
+2026-11-21T00:52:27+09:00	S8.engineGate	end	0	
+2026-11-21T01:01:08+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --check
+2026-11-21T01:01:36+09:00	S8.engineGate	end	0	
+2026-11-21T01:01:37+09:00	S8.checklistDelta	start		S8.checklistDelta: checklist_run.py SCP0028 --delta --no-docs
+2026-11-21T01:52:29+09:00	S8.checklistDelta	end	0	
+2026-11-21T01:52:30+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --docs
+2026-11-21T01:55:50+09:00	S8.checklistRun	end	0	
+2026-11-22T13:17:13+09:00	workbench	start		quick: 🎨 FE Start 
+2026-11-22T13:22:56+09:00	workbench	start		prompt: 첨부의 오류에 대해서 원인을 확인해서 보완 방법을 제시해주세요. 
+2026-11-22T13:24:49+09:00	workbench	start		prompt: 첨부 의 오류에 대하여 오류 확인 및 보완 요청 
+2026-11-22T13:31:01+09:00	workbench	start		prompt: DMF0048에 대한 조치와 DMF0014 도 같이 보완 조치 해주세요. 
+그리고 2개 화면에 대해서 남은 확인에 대한 부분도 조치 요청 합니다.
+2026-11-22T13:33:46+09:00	workbench	start		prompt:inject: DMF0048 의 DAILY 건수 초과 에 대해서는 사전 ALTERT 띄우도록 해주세요. 
+2026-11-22T14:16:55+09:00	workbench	start		prompt: 결론적으로 단가가 실제로 없으면 금액도 없는 걸루 처리되는거죠?
+2026-11-22T14:35:39+09:00	workbench	start		prompt: 클라우드 QA 에서는 조회 됩니다. 클라우드 LIVE 에서 조회가 되지 않습니다. 클라우드  LIVE 에서 왜 조회가 안되는지 검증 QUERY 제공해주세요.
+2026-11-22T14:54:31+09:00	workbench	start		prompt: 결과 아래와 같이 보냅니다.
+
+  
+
+DB_NAME                                                                                            
+2026-11-23T08:59:29+09:00	workbench	start		prompt: 첨부 이미지를 보면 W25, W46 주차에 USD 값이 비어 있고, KRW 에 USD 값이 들어 있습니다. W48, W49 주차에 표기된 형태가 정상인데, 원인 확인 요청 합니다. 
+2026-11-23T09:15:11+09:00	workbench	start		prompt: as-is 캡쳐본을 보면 usd 는 비어있는데, krw 단가가 미래구간과 유사하게 나옵니다. 하지만 to-be 에서는 usd 단가는 비어있고, krw 에 표기된 단가는 미래구간의 단가로 보입니다. 문제에 대해서 확인
+2026-11-23T09:18:34+09:00	workbench	start		prompt:inject: 40 divison 은 이상없습니다. 81 division 이 이렇게 보입니다. 
+2026-11-23T09:30:55+09:00	workbench	start		prompt: 1. 그리고 기존 as-is 의 경우에 81, 82 divison 에 대해서 원화금액에 대한 환율은 batch 에서 처리하고 있었는지 확인해주세요.
+2. 최근 월 USD 원화 금액이 외화 금액과 같게 오는 이유 을 
+2026-11-23T10:02:04+09:00	workbench	start		prompt:  AS-IS 의 실적구간에 대해서 환율 적용안되어 있는데 COMPANY_ID : MI00에 대해서 어느 단계에서 원화을 가져오는지 확인 요청 들입니다. MI00 의 경우 SALES_AMOUNT_SUM COLUMN 을
+2026-11-23T10:09:58+09:00	workbench	start		prompt: LOOKUP UI 에서 PR_DM_DNM_SALES_RESULT_IF 이 LOOKUP_TYPE 으로는 데이터가 조회가 안되는데, 어디에 데이터가 있다는 건가요?
+2026-11-23T11:17:15+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge c62b4200c→9ab0f885f exit 0
+2026-11-23T11:17:15+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 
+2026-11-23T11:24:48+09:00	workbench	start		quick: ⬆️ Source Backup push exit 1
+2026-11-23T11:24:48+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start 
+2026-11-23T12:49:33+09:00	workbench	start		prompt: ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
+2026-11-23T14:30:29+09:00	workbench	start		prompt: 클라우드, 운영에서 저장  시 SQL ERROR 오류 발생한 이력 LOG 로 찾아서 원인 확인 할 수 있도록 검증QUERY 제공해주세요.
+2026-11-23T14:50:49+09:00	workbench	start		prompt:inject: 클로드 코드에서 속도가 느긴 원인을 찾아서 보완조치 하였으나, 현재 세션에는 적용전 입니다. 
+2026-11-23T15:10:13+09:00	workbench	start		prompt: -- =====================================================================================
+-- DMF0082 Forecast & Price 저장 
+2026-11-23T15:14:37+09:00	workbench	start		prompt: 무슨 내용을 보여주고 있는 건가요? 
+클라우드, 운영에서 DMF0082 에서 SQL ERROR 발생분에 대해서 조회하고 원인을 확인하고자 하는 것 입니다. 
+2026-11-23T15:16:11+09:00	workbench	start		prompt:inject: SQL ERROR 에 대해서 SQL ERROR 발생을 찾아서 원인에 대한 보완을 하고자 합니다. 다시 한번 검증 쿼리 필요하면 다시 제공해주세요. 
+2026-11-23T15:19:36+09:00	workbench	start		prompt: 위의 쿼리에 대한 결과 아래와 같이 회신합니다. 
+
+-- DMF0082 'Sql Error' 발생 목록과 원인 (클라우드 QA, LIVE 에서 전체 F5)
+-- 조회만 함. 기간은 SYSDATE - 30 을 바꿈
+
+
+2026-11-23T15:21:08+09:00	workbench	start		prompt:inject: DMF0082 의 단가 저장 시 SQL ERROR 이 발생하였습니다. 저장 시 오류가 발생한 이력이 없는지 확인해주세요. 
+2026-11-23T15:23:21+09:00	workbench	start		prompt: 오류가 발생한 USER_ID 를 확인할 수 있나요?
+2026-11-23T15:27:58+09:00	workbench	start		prompt: 클라우드 운영에서 DMF0082 에 한정하지 않고, 사용자 regina28 을 기준으로 오류 발생 내역을 찾는 검증쿼리 제공해주세요. 
+2026-11-23T15:31:34+09:00	workbench	start		prompt: 동일 아이디로 로그인 및 화면 오픈 이력이나 NSCM 사용이력 전체 조회하는 쿼리로 다시 제공해주세요.
+2026-11-23T15:59:05+09:00	workbench	start		prompt: 이전에 생성했던 클라우드 확인 검증 쿼리 다시 제공해주세요. 
+2026-11-23T16:31:50+09:00	workbench	start		prompt: 마지막 작업했던 파일 링크로 다시 제공해주세요. 
+2026-11-23T17:00:49+09:00	workbench	start		chain:usermanual: DM
+2026-11-23T17:00:49+09:00	UM.prep	start		UM.prep: user_manual.py prep --module DM
+2026-11-23T17:00:51+09:00	UM.prep	end	0	
+2026-11-23T17:02:24+09:00	workbench	start		prompt: LOOKUP GET_ADMIN_GROUP_MEASURE 의 MEASURE 'SCM_FCST' 에 TUE 을 입력하고 FROM_TIME 을 비우고, TO-TIME 만 입력하는 경우에 어떻게 동작하나요? 아니면 오류가 
+2026-11-23T17:02:49+09:00	workbench	start		chain:usermanual: SYSTEM
+2026-11-23T17:02:49+09:00	UM.prep	start		UM.prep: user_manual.py prep --module SYSTEM
+2026-11-23T17:02:52+09:00	UM.prep	end	0	
+2026-11-23T17:10:43+09:00	UM.check	start		UM.check: user_manual.py check --module SYSTEM
+2026-11-23T17:10:44+09:00	UM.check	end	0	
+2026-11-23T17:10:44+09:00	UM.build	start		UM.build: user_manual.py build --module SYSTEM
+2026-11-23T17:10:45+09:00	UM.build	end	0	
+2026-11-23T17:13:36+09:00	UM.check	start		UM.check: user_manual.py check --module DM
+2026-11-23T17:13:36+09:00	UM.check	end	0	
+2026-11-23T17:13:36+09:00	UM.build	start		UM.build: user_manual.py build --module DM
+2026-11-23T17:13:38+09:00	UM.build	end	0	
+2026-11-23T18:01:03+09:00	workbench	start		chain:usermanual: DM_SYSTEM
+2026-11-23T18:01:03+09:00	UM.prep	start		UM.prep: user_manual.py prep --module DM_SYSTEM
+2026-11-23T18:01:07+09:00	UM.prep	end	0	
+2026-11-23T18:06:40+09:00	UM.check	start		UM.check: user_manual.py check --module DM_SYSTEM
+2026-11-23T18:06:40+09:00	UM.check	end	0	
+2026-11-23T18:06:40+09:00	UM.build	start		UM.build: user_manual.py build --module DM_SYSTEM
+2026-11-23T18:06:42+09:00	UM.build	end	0	
+2026-11-23T18:44:09+09:00	workbench	start		prompt: 저장 시 오류 발생합니다. MASTER 에서 보면 CELL/CAR  데이터 있는 것 같은데.. 사내기준으로 확인해주세요. 그리고 필요하면 클라우드에서 실행할 수 있도록 쿼리 제공해주세요.
+2026-11-23T18:46:22+09:00	workbench	start		prompt: 정상 확인 했습니다.
+2026-11-23T19:08:38+09:00	workbench	start		prompt: 클라우드에서 버전을 선택해서 조회했을 때 RTF(R+P) 가 3ROW 씩 조회되는 현상이 발생됩니다. 사내확인 후 클라우드 검증 쿼리 제공해주세요. 
+2026-11-23T19:08:56+09:00	workbench	start		prompt:inject: 첨부가 누락되어 캡쳐본 첨부합니다.
+2026-11-23T19:18:45+09:00	workbench	start		prompt:   
+
+SHEET_NAME                                                                                                          
+2026-11-23T19:20:33+09:00	workbench	start		prompt: 진행해주세요.
+2026-11-24T10:02:51+09:00	workbench	start		prompt: 81_UC DIVISION MONTHLY BUCKET 으로 조회 시 4개월의 입력불가 항목을 QUERY에서 제어하나요? FE에서 제어하나요?
+2026-11-24T10:10:38+09:00	workbench	start		prompt: 81_UC 에 대해서 MONTHLY 기준으로 당월부터 MKT_FCST을 수정하고 싶을 때는, 기준월을 -1 개월을 던지면 가능한가요?
+2026-11-24T10:15:00+09:00	workbench	start		prompt: 81_UC 에 대해서 MONTHLY 일때 기준월을 현재월의 -1월로 해서 던져주도록 PKG 변경해주세요. 
+2026-11-24T10:18:48+09:00	workbench	start		prompt:inject: 사내 PKG 에 기준월이 반영되어 있나요? 
+2026-11-24T10:28:09+09:00	workbench	start		prompt:inject: 패키지에서 81UC 의 MONTHLY 일때 기준월만 현재월의 -1 개월로 전달하는 것으로 해서 클라우드 이관  패키지 제공해주세요
+2026-11-24T10:56:51+09:00	workbench	start		prompt: AS-IS 소스와 DB 내용을 찾아서 기준월을 전달할 때 현재월 +3 개월을 기준으로 전달해서 수정불가로 처리되는 내용이 동일하게 존재하는지 확인해주세요. 
+2026-11-24T11:16:41+09:00	workbench	start		prompt: MONTHLY BUCKET 에서 4개월간 입력불가에 대해서 AS-IS 의 변경된 DB 정보를 다시 찾아서 확인해주세요. 사용자는 81 DIVISION 에 대해서 당월부터 입력이 가능하다고 의견을 주고 있습니다. 지금
+2026-11-24T11:26:26+09:00	workbench	start		prompt: AS-IS에서는 DMF0003 에서 81 DIVISION 을 편집했었습니다. DMF0003 의 MONTYLY BUCKET 에서 편집가능 여부에 대해서 확인해주세요. +3개월 규정이 있는지.
+2026-11-24T11:32:57+09:00	workbench	start		prompt: 40 DIVISION 에 대해서는 MONTHLY 일때 당월 +3개월 을 기준월로, 
+81, 81 JV  일때는 당월부터 편집 가능 하도록 변경하고자 합니다. 
+PKG 변경 진행해주세요. 
+2026-11-24T11:38:45+09:00	workbench	start		prompt:inject: 81, 81 JV 에 대해서 당월부터 편집 가능 하도록 하는 것이 표준 RULE 이나, 임시조치로 81, 81 JV 에 대해서 익월부터 편집 가능 하도록 적용해주세요. UI 버그 수정 후 당월부터 편집 가능하도록 다
+2026-11-24T11:51:54+09:00	workbench	start		prompt: 클라우드 이관 pkg 제공 시 vscode explorer 에서 자신의 위치로 이동하도록 하는 기능도 vm 에 구현되나요? 
+2026-11-24T11:54:05+09:00	workbench	start		prompt: 진행해주세요. 
+2026-11-24T13:07:16+09:00	workbench	start		chain:opsmanual: DM
+2026-11-24T13:07:16+09:00	OM.prep	start		OM.prep: ops_manual.py prep --module DM
+2026-11-24T13:07:19+09:00	OM.prep	end	0	
+2026-11-24T13:17:14+09:00	OM.check	start		OM.check: ops_manual.py check --module DM
+2026-11-24T13:17:14+09:00	OM.check	end	0	
+2026-11-24T13:17:14+09:00	OM.build	start		OM.build: ops_manual.py build --module DM
+2026-11-24T13:17:16+09:00	OM.build	end	0	
+2026-11-24T13:33:54+09:00	workbench	start		prompt: 사내오라클에서 81, 81 JV 에대해서 당월도 수정가능하도록 PKG 변경해주세요. 
+2026-11-24T14:36:35+09:00	workbench	start		prompt: table에 context 의 길이가 varchar2(4000) 으로 설정되어 있습니다. 이미지도 넣을 수 있어야 하고, 사이즈도 더 커야할 것같은데, clob  로 변경 하면 될까요? 어떻게 하는게 좋을 지, db
+2026-11-24T14:44:10+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 9ab0f885f→2e27252db exit 0
+2026-11-24T14:44:10+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 
+2026-11-24T14:44:31+09:00	workbench	start		prompt: 방금 새로 받은 소스에 fe 는 수정되어 있을 것으로 예상되는데 확인해주세요. 
+2026-11-24T14:45:58+09:00	workbench	start		prompt:inject: fe 소스가 수정되었으면 db 변경 적용해주세요. 
+2026-11-24T14:56:32+09:00	workbench	start		prompt: BE 소스도 최신으로 받아야 하면 이야기해주세요. 
+2026-11-24T15:01:57+09:00	workbench	start		prompt: 클라우드 이관 PKG 에 CLOB 로 COLUMN 속성 변경하는 부분이 누락된 것 같은데 확인해주세요. 
+2026-11-24T16:56:26+09:00	workbench	start		quick: ⬆️ Source Backup push exit 1
+2026-11-24T18:45:13+09:00	workbench	start		chain:asislive: DMF0082
+2026-11-24T18:45:14+09:00	S1.liveCheck	start		S1.liveCheck: asis_env_check.py DMF0082
+2026-11-24T18:45:19+09:00	S1.liveCheck	end	0	
+2026-11-24T18:45:21+09:00	S1.liveRuleMap	start		S1.liveRuleMap: asis_live_rule_map.py 
+2026-11-24T18:45:23+09:00	S1.liveRuleMap	end	0	
+2026-11-24T18:45:24+09:00	S1.liveScreen	start		S1.liveScreen: asis_live_screen.py DMF0082
+2026-11-24T18:45:58+09:00	S1.liveScreen	end	3	
+2026-11-24T18:45:59+09:00	workbench	start		quick: 🎥 AS-IS 실측 DMF0082
+2026-11-24T19:57:03+09:00	workbench	start		prompt: clob 관련 오늘 작업했던 클라우드 이관폴더 위치 알려주세요.
+2026-11-24T21:04:46+09:00	workbench	start		prompt: 클라우드 이관 목록 다시 제공해주세요. 
+2026-11-24T21:26:03+09:00	workbench	start		prompt: 클라우드 이관 목록을 다시 제공해주세요. 
+2026-11-24T21:50:55+09:00	workbench	start		prompt: 클라우드 이관 목록을 다시 제시해주세요
+2026-11-25T00:56:00+09:00	workbench	start		chain:checklist: SCP0005
+2026-11-25T00:56:00+09:00	workbench	start		chain:checklist: SCP0028
+2026-11-25T00:56:00+09:00	workbench	start		chain:checklist: SSP0005
+2026-11-25T00:56:00+09:00	workbench	start		chain:checklist: SSP0014
+2026-11-25T00:56:02+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --no-docs
+2026-11-25T00:56:02+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --no-docs
+2026-11-25T00:56:02+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SSP0005 --no-docs
+2026-11-25T00:56:02+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SSP0014 --no-docs
+2026-11-25T02:12:39+09:00	S8.checklistRun	end	0	
+2026-11-25T02:12:40+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0028 --docs
+2026-11-25T02:15:44+09:00	S8.checklistRun	end	0	
+2026-11-25T02:15:44+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --mark
+2026-11-25T02:15:46+09:00	S8.engineGate	end	0	
+2026-11-25T02:17:55+09:00	S8.checklistRun	end	0	
+2026-11-25T02:17:56+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SSP0014 --docs
+2026-11-25T02:19:33+09:00	S8.checklistRun	end	0	
+2026-11-25T02:19:33+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SSP0014 --mark
+2026-11-25T02:30:19+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0028 --check
+2026-11-25T02:30:54+09:00	S8.engineGate	end	0	
+2026-11-25T02:30:55+09:00	S8.checklistDelta	start		S8.checklistDelta: checklist_run.py SCP0028 --delta --no-docs
+2026-11-25T02:30:59+09:00	S8.engineGate	end	0	
+2026-11-25T02:47:03+09:00	S8.checklistRun	end	0	
+2026-11-25T02:47:04+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --docs
+2026-11-25T02:49:37+09:00	S8.checklistRun	end	0	
+2026-11-25T02:49:37+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0005 --mark
+2026-11-25T02:55:19+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SSP0014 --check
+2026-11-25T02:56:17+09:00	S8.engineGate	end	0	
+2026-11-25T02:56:19+09:00	S8.checklistDelta	start		S8.checklistDelta: checklist_run.py SSP0014 --delta --no-docs
+2026-11-25T02:56:29+09:00	S8.engineGate	end	0	
+2026-11-25T03:19:19+09:00	S8.checklistRun	end	1	
+2026-11-25T03:19:23+09:00	S8.checklistDelta	end	1	
+2026-11-25T03:19:27+09:00	S8.checklistDelta	end	1	
+2026-11-25T03:24:27+09:00	workbench	start		chain:checklist: SCP0005
+2026-11-25T03:24:28+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --no-docs
+2026-11-25T03:26:05+09:00	S8.checklistRun	end	3	
+2026-11-25T03:29:04+09:00	workbench	start		chain:checklist: SCP0005
+2026-11-25T03:29:04+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --no-docs
+2026-11-25T05:25:00+09:00	S8.checklistRun	end	0	
+2026-11-25T05:25:01+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --docs
+2026-11-25T05:27:05+09:00	S8.checklistRun	end	0	
+2026-11-25T05:27:05+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0005 --mark
+2026-11-25T05:27:08+09:00	S8.engineGate	end	0	
+2026-11-25T06:11:46+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0005 --check
+2026-11-25T06:12:19+09:00	S8.engineGate	end	0	
+2026-11-25T06:12:20+09:00	S8.checklistSettle	start		S8.checklistSettle: checklist_run.py SCP0005 --settle --no-docs
+2026-11-25T07:45:31+09:00	S8.checklistSettle	end	0	
+2026-11-25T07:45:31+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0005 --mark
+2026-11-25T07:45:32+09:00	S8.engineGate	end	0	
+2026-11-25T08:14:24+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0005 --check
+2026-11-25T08:15:26+09:00	S8.engineGate	end	0	
+2026-11-25T08:15:27+09:00	S8.checklistSettle	start		S8.checklistSettle: checklist_run.py SCP0005 --settle --no-docs
+2026-11-25T13:31:15+09:00	workbench	start		prompt: 클라우드에서 조회 시 시간이 많이 걸립니다. 클라우드에서 조회 쿼리 점검 할 수있도록 점검 쿼리 제공해주세요.
+2026-11-25T14:03:49+09:00	workbench	start		prompt: 3. 번이 계속 수행 중입니다.
+2026-11-25T14:05:14+09:00	workbench	start		prompt: 결과 회신 합니다.
+
+  
+
+Session이(가) 변경되었습니다. 
+
+  
+
+경과 시간: 00:00:00.033 
+
+===== 1-1. 접속 DB ===== 
+
+  
+
+DB_NAME 
+
+----------------
+2026-11-25T14:09:28+09:00	workbench	start		prompt:inject: 진행중인가요?
+2026-11-25T14:10:59+09:00	workbench	start		prompt: 클라우드 분석 내용이 안보입니다..
+2026-11-25T14:22:36+09:00	workbench	start		prompt: 
+Session이(가) 변경되었습니다.
+
+경과 시간: 00:00:00.032
+===== 1. 클라우드 PKG_DMF0045 PACKAGE BODY 원문 =====
+
+      LINE
+----------
+TEXT  
+2026-11-25T14:29:59+09:00	workbench	start		prompt:inject: 진행중인가요?
+2026-11-25T14:58:42+09:00	workbench	start		prompt: 클라우드에서 05 실행시에도 오류 발생, 20 실행 시 아래 오류 발생 합니다. 
+
+> FOUND 보완 구간 1345~1361줄 
+
+  
+
+DECLARE 
+
+* 
+
+오류 발생 행: 1: 
+
+ORA-01031: 권한이
+2026-11-25T15:08:06+09:00	workbench	start		prompt: 회신 합니다 
+
+  
+
+LOGIN_USER                                                                                                 
+2026-11-25T15:24:48+09:00	workbench	start		prompt: 조회 시 2행 3행이 동일 데이터가 조회되는데, 데이터 문제인지, 쿼리문제인지 사내에서 먼저 확인 후 클라우드 에서 확인할 수 있는 점검 쿼리 제공해주세요 
+2026-11-25T15:33:18+09:00	workbench	start		prompt: 결과 회신합니다.
+
+  
+
+DIVISION_ID                    CHANGE_REQ_NO        CHANGE_REQ_STATUS    V REQUEST_USER                  
+2026-11-25T15:39:31+09:00	workbench	start		prompt: SSP0020 의 저장 로직에서 어떤 경우에 '/' 로 위임자가 저장될 요소가 있는지 확인 해주세요. 현재의 로직이 문제인지? 아니면 기존 데이터가 잘못 들어 있는 것인지 확인 이 필요합니다. 
+SSP0003 의 조
+2026-11-25T15:50:50+09:00	workbench	start		prompt: '/' 데이터 조회 후 일괄 삭제처리 할 수 있도록 해주세요. '/' 일괄 삭제해도 되는지 확인후 진행해주세요. 클라우드에서도 지울 수 있도록 쿼리 제공해주세요
+2026-11-25T18:19:14+09:00	workbench	start		chain:unverifiedFix: SCP0005
+2026-11-25T18:19:15+09:00	S8.unverified	start		S8.unverified: unverified_resolve.py SCP0005
+2026-11-25T18:19:15+09:00	S8.unverified	end	0	
+2026-11-25T19:15:17+09:00	S8.wlRound	start		S8.wlRound: checklist_run.py SCP0005 --wl-round
+2026-11-25T19:15:18+09:00	S8.wlRound	end	0	
+2026-11-25T19:15:18+09:00	S8.unverifiedGate	start		S8.unverifiedGate: checklist_run.py SCP0005 --gate
+2026-11-25T19:15:18+09:00	S8.unverifiedGate	end	0	
+2026-11-25T19:41:23+09:00	workbench	start		chain:unverifiedFix: SCP0005
+2026-11-25T19:41:24+09:00	S8.unverified	start		S8.unverified: unverified_resolve.py SCP0005
+2026-11-25T19:41:25+09:00	S8.unverified	end	0	
+2026-11-25T19:43:20+09:00	workbench	start		prompt: 제가 의문이 생기는 지점은 방금 미검증 해소를 해서 미검증 41을 처리했는데, 지금 실행한 미검증 해소에 미검증이 103건으로 표기되는 이유가 무었인지 확인해주세요.?
+2026-11-25T19:48:43+09:00	workbench	start		prompt: SCP0005 미검증 해소 중단해주세요. 
+2026-11-25T19:53:29+09:00	workbench	start		prompt: 첫번째 미검증 해소시 미검증 권수 41건이였는데 두번째 미검증 건수 103건 으로 확인된 이유에 대해서 알려주세요.
+2026-11-25T20:15:19+09:00	workbench	start		prompt: 전체행과 대상 건수가 달라진 이유가 무엇인가요?
+2026-11-25T21:06:34+09:00	workbench	start		chain:checklist: SCP0005
+2026-11-25T21:06:35+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --no-docs
+2026-11-25T22:36:28+09:00	S8.checklistRun	end	0	
+2026-11-25T22:36:29+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --docs
+2026-11-25T22:40:36+09:00	S8.checklistRun	end	0	
+2026-11-25T22:40:36+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0005 --mark
+2026-11-25T22:40:37+09:00	S8.engineGate	end	0	
+2026-11-25T23:37:51+09:00	S8.engineGate	start		S8.engineGate: engine_gate.py SCP0005 --check
+2026-11-25T23:38:27+09:00	S8.engineGate	end	0	
+2026-11-25T23:38:27+09:00	S8.wlRound	start		S8.wlRound: checklist_run.py SCP0005
+2026-11-26T01:11:56+09:00	S8.wlRound	end	0	
+2026-11-26T01:11:56+09:00	S8.unverifiedGate	start		S8.unverifiedGate: checklist_run.py SCP0005
+2026-11-26T02:40:02+09:00	S8.unverifiedGate	end	0	
+2026-11-26T02:40:03+09:00	S8.rowRegress	start		S8.rowRegress: row_run.py SCP0005 --regress auto
+2026-11-26T02:40:03+09:00	S8.rowRegress	end	3	
+2026-11-26T02:40:04+09:00	S8.checklistRun	start		S8.checklistRun: checklist_run.py SCP0005 --docs
+2026-11-26T02:41:21+09:00	S8.checklistRun	end	0	
+2026-11-26T10:07:24+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 2e27252db→6f99270c0 exit 0
+2026-11-26T10:07:24+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 
+2026-11-26T13:24:11+09:00	workbench	start		prompt: 조회조건의 SUM CHECK 시 표시되는 UNIT PRICE MEASURE 는 수량이 존재할 때는 SUM COLUMN에 영향을 미치도록 해주세요. MKT_FCST, SCM_FCST, RTF 등의 숫자 MEASURE 
+2026-11-26T14:00:06+09:00	workbench	start		prompt: 클라우드에서 20 실행 시 아래 오류 발생 
+
+> SKIP  PACKAGE PKG_DMF0082 — 이미 사내와 같음 · 원문 무변경 
+
+  
+
+  
+
+PL/SQL 프로시저가 성공적으로 완료되었습니다. 
+
+  
+
+D
+2026-11-26T16:34:04+09:00	workbench	start		quick: 👥 E2E 사용자 관리 (users.json) SCP0005

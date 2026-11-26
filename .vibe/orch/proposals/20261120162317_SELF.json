@@ -1,0 +1,140 @@
+{
+  "id": "20261120162317_SELF",
+  "at": "2026-11-20T16:23:17+09:00",
+  "ms": 1795159397835,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|chainafterfail",
+  "title": "사용자 지적 감지기 추가 U19 chainAfterFail: SCP0028 체인이 단계 오류로 끝난 뒤 VMW 목록에서 사라졌는데 체인이 다음 단계를 계속 띄우고, VMO 가 그 오류를 감지·자가 보완하지",
+  "evidence": "사용자 지적(2026-11-20T16:20:43+09:00) \"수행중이던 SCP0028 이 오류발생하면서 종료 했는데, 오류 발생후에 VMW 에도 프로세스가 보이지 않는데, 체인에 의해서 다음 스텝이 계속 돌고 있는 것 같습니다. 오류 시 다음 스텝이 수행되지 않도록 보완이 되어야 하는 것이 첫번째이고, 두번째로 검사엔진보완 작업에서 오류가 발생하면 VMO 가 모니터링 해서 자체 보완을 해야할 것 같은데, 어떻게 수행이 되는지 궁금합니다. VMO 는 이런 경우에 사용자가 아무 지시를 하지 않아도, 버그나 오류를 확인하면 자체보완을 해야합니다. 반드시 해야 합니다. 그럴려고 VMO 을 만든거에요\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 chainAfterFail 없음 → 추가. 판정: 같은 runId 에서 step.end status=FAIL(stopped 아님) 기록 뒤에 step.start, proc.start, claude.start 가 새로 기록되고 그 단계가 체인 정의상 실패 뒤 실행 단계(보완 루프의 failFrom, repairs 대상)가 아니면 fail. 같은 시점에 VMW job.json 상태가 실행 중이 아니거나 목록에 화면이 없는데 state.snapshot().chains 에 그 체인이 살아 있으면 fail 로 같이 올림. 실패 사건(R1, R2) 이 열린 뒤 VMO 진단·자가 보완 기록이 없으면 vmoCadence(U7) 와 묶어 표시 · 읽을 기록: .vibe/orch/events.jsonl 의 step.end(status, runId, no, stopped, failFrom, repairs), step.start, proc.start, claude.start(runId, wb, screen) · .vibe/jobs/<job>/job.json(status, screens[].state) · orch-state 체인 스냅샷 · .vibe/orch/incidents 의 R1·R2 와 VMO 진단 기록. user_checks.json U19 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T16:32:40+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T16:35:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 27개 파일 통과, 시험 53/54개 파일 통과(PASS 688, FAIL 1), 정의 정합 통과 · 반영 전부터 어긋난 항목 1건 · 백업 태그 20261120_self1632"
+    },
+    {
+      "at": "2026-11-20T16:35:58+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T16:38:06+09:00",
+      "by": "VMO",
+      "what": "반영 실패. Claude exit 1 · 대상 파일 3개 복원(orch-usercheck.js AI 편집 1건만 되돌림(반영 전과 같음) / user_checks.json AI 편집 1건만 되돌림(반영 전과 같음) / t_orch_usercheck.js AI 편집 2건만 되돌림(반영 전과 같음)) · 대상 밖 변경 tools/Harness/gate_baseline.tsv, tools/VibeManager/test/t_orch_selfapply.js 는 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-20T16-35-59_claude_orch.log",
+      "sec": 124,
+      "costUsd": null,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_selfapply.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    },
+    {
+      "at": "2026-11-20T16:39:54+09:00",
+      "by": "VMO",
+      "what": "반영 실패 진단: 환경 문제로 판단해 다시 시도. 원인 16:38:03 claude.end exit 1, stoppedBy 'VS Code 종료', hasResult false(.vibe/orch/events.jsonl:1211). stoppedBy 값은 tools/VibeManager/orch-agent.js:372 dispose() 가 넣음. VM pid 25680 → 30948(16:38:52 정기 자가진단 이벤트, events.jsonl:1214). 중지 직전 16:37:59 t_orch_usercheck.js ALL PASS, PASS 78건(.vibe/logs/2026-11-20T16-35-59_claude_orch.log). 이 로그의 Edit·Write 4건은 대상 파일에만 있고 gate_baseline.tsv, t_orch_selfapply.js 편집 기록 0건. t_orch_selfapply.js 실패는 16:35:56 반영 전 게이트부터 있던 항목(events.jsonl:1208)"
+    },
+    {
+      "at": "2026-11-20T16:40:05+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T16:43:24+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 27개 파일 통과, 시험 55/55개 파일 통과(PASS 695, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self1640"
+    },
+    {
+      "at": "2026-11-20T16:43:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T16:48:32+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 27개 파일 통과, 시험 55/55개 파일 통과(PASS 704, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T16:48:32+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 16:44:58 node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS. U19 표본 9건 PASS(실패 표본: FAIL 뒤 다음 단계, Claude 시작 / VMW 작업 끝인데 체인 살아 있음 / 실패 사건 90분 조치 없음. 통과 표본: 중지 실패, 같은 단계 보완 회차와 VMO 호출, onFail 정의 단계, 다시 실행 뒤 기록, VMW 실행 중, 사건 조치 있음) · 변경 4개 파일 · 대상 목록 밖 변경 1개: tools/Harness/gate_baseline.tsv",
+      "log": ".vibe\\logs\\2026-11-20T16-43-28_claude_orch.log",
+      "sec": 107,
+      "costUsd": 1.2634521999999997,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:30+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T17:58:19+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U19",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795160405545,
+  "autoFp": "7998f05147",
+  "result": {
+    "applied": true,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "2026-11-20 16:44:58 node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS. U19 표본 9건 PASS(실패 표본: FAIL 뒤 다음 단계, Claude 시작 / VMW 작업 끝인데 체인 살아 있음 / 실패 사건 90분 조치 없음. 통과 표본: 중지 실패, 같은 단계 보완 회차와 VMO 호출, onFail 정의 단계, 다시 실행 뒤 기록, VMW 실행 중, 사건 조치 있음)",
+    "note": "DETECTORS 에 chainAfterFail(U19) 추가. 판정 3가지: 같은 runId 에서 step.end FAIL(stopped 아님) 뒤 같은 창 다음 chain.start 전에 다른 번호 step.start 또는 proc.start, claude.start(source orch 제외)가 기록되면 fail. 같은 단계 번호(보완 회차), chain.start plan 의 onFail, afterFail 단계는 뺌. 실패 1분 뒤 job.json 이 실행 중이 아니거나 화면이 목록에 없는데 orch-state 체인 스냅샷에 그 체인이 있으면 fail. 위 실패 건의 R1, R2 사건이 selfDiagGapMin 넘게 actions 0건으로 열려 있으면 fail(U7 vmoCadence 와 같은 공백으로 표시). user_checks.json U19 pending-detector → active. workbench.js 1068줄, 1248줄 기준 FAIL, CANCEL 뒤 남은 단계는 NOT_RUN 으로 끝남. events.jsonl 기준 SCP0028_1795154296871 은 2단계 CANCEL(stopped true)로 끝나고 16:39 새 실행 SCP0028_1795160362395 가 시작됨. FAIL 뒤 계속 실행 기록은 미확인. user_checks.json 을 python 으로 고치는 명령은 Contains Unicode whitespace 로 막혀 Edit 로 고침. repairScope DB_ONLY 는 FE, BE 수정만 막음. 저장소 hook 이 막은 수정 없음"
+  },
+  "repair": {
+    "at": "2026-11-20T16:39:54+09:00",
+    "decision": "retry",
+    "cause": "16:38:03 claude.end exit 1, stoppedBy 'VS Code 종료', hasResult false(.vibe/orch/events.jsonl:1211). stoppedBy 값은 tools/VibeManager/orch-agent.js:372 dispose() 가 넣음. VM pid 25680 → 30948(16:38:52 정기 자가진단 이벤트, events.jsonl:1214). 중지 직전 16:37:59 t_orch_usercheck.js ALL PASS, PASS 78건(.vibe/logs/2026-11-20T16-35-59_claude_orch.log). 이 로그의 Edit·Write 4건은 대상 파일에만 있고 gate_baseline.tsv, t_orch_selfapply.js 편집 기록 0건. t_orch_selfapply.js 실패는 16:35:56 반영 전 게이트부터 있던 항목(events.jsonl:1208)",
+    "reason": "반영 중 VS Code 종료로 Claude 가 결과를 내기 전에 중지됨. 같은 안을 다시 반영함",
+    "log": ".vibe\\logs\\2026-11-20T16-38-53_claude_orch.log",
+    "costUsd": 0.6775936,
+    "sec": 62
+  },
+  "retryN": 1,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 27개 파일 통과, 시험 55/55개 파일 통과(PASS 704, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self1640",
+  "needsReload": true,
+  "appliedMs": 1795160912697,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "snap": "prop_20261120162317_SELF",
+  "effectiveMs": 1795165099422,
+  "effectiveAt": "2026-11-20T17:58:19+09:00"
+}

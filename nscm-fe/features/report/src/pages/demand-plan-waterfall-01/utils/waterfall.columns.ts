@@ -46,7 +46,12 @@ export interface DynColMeta {
   dayCode: string;
   sort: number;
   seq: number;
+  /** SP COLUMN_WIDTH(px) — 2026-11-22 동적 컬럼 너비 프로시저 관리. 없으면 undefined → DYN_COL_DEFAULT_WIDTH */
+  width?: number;
 }
+
+/** 동적(기간) 컬럼 기본 너비 — TITLE SP 가 COLUMN_WIDTH 를 주지 않을 때만 쓴다(2026-11-22 이전 고정값). */
+const DYN_COL_DEFAULT_WIDTH = 90;
 
 /**
  * VERSION_NO / MEASURE 는 메타상 VISIBLE_FLAG='N' 이어도 waterfall 의 핵심 행 축이다
@@ -194,13 +199,17 @@ export const buildDynColMetas = (
         dayCode: str(row.DAY_CODE),
         sort: num(row.SORT_ORDER_NO),
         seq,
+        // 프로시저 COLUMN_WIDTH 최우선(양수만). MKT FCST · Sales Plan · Biz Plan 세 구분 공통.
+        width: num(row.COLUMN_WIDTH) > 0 ? num(row.COLUMN_WIDTH) : undefined,
       };
       return meta;
     })
     .filter((m): m is DynColMeta => m !== null);
 
 /** 컬럼그룹 재생성 억제용 서명 — 조회마다 배열 참조가 바뀌어도 내용이 같으면 rebuild 하지 않는다 */
-export const dynKeySig = (metas: DynColMeta[]): string => metas.map(m => m.binding).join(',');
+//   너비도 서명에 넣는다 — 같은 컬럼 목록이라도 SP 너비가 바뀌면 다시 만들어야 반영된다.
+export const dynKeySig = (metas: DynColMeta[]): string =>
+  metas.map(m => `${m.binding}:${m.width ?? ''}`).join(',');
 
 /**
  * 초기 표시 규칙 (hook #103 §1-2) — **config 에 직접 반영**한다.
@@ -280,7 +289,7 @@ export const buildDynamicColumns = ({
       align: 'right',
       format,
       aggregate: Aggregate.Sum,
-      width: 90,
+      width: m.width ?? DYN_COL_DEFAULT_WIDTH,
       allowDragging: false,
       allowMerging: false,
       allowResizing: true,

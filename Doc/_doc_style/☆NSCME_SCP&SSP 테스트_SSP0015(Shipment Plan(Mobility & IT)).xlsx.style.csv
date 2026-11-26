@@ -1,0 +1,19 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장,분류
+공통요건,D4,번역투,사업부마다 보여지는 컬럼이,이중 피동 → '~된' · '보인' · '쓰인',사업부마다 보여지는 컬럼이 다른지 확인하고 As-is와 동일한지 확인,문장
+공통요건,D5,번역투,보여지는 data,이중 피동 → '~된' · '보인' · '쓰인',보여지는 data가 같은지 확인 (다른 경우는 분석필요),문장
+공통요건,D17,수식어,BE에서는 기본적으로 EDIT 상,삭제,각 GRID에서 AS-IS에서 EDIT(F2)를 눌렀을때 EDIT 되는 컬럼이 TO-BE에서는 기본적으로 EDIT 상태로 조회 되는지,문장
+공통요건,D20,번역투,팝업이 있는 경우 동일하게,'~의 경우' → '~은' · '~이면' · '~할 때',Combo / 팝업이 있는 경우 동일하게 구성되는지,문장
+공통요건,D24,번역투,-in이 되는 경우 Combo,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - Combo에서 key-in이 되는 경우 Combo 내에서 없는 값이면 초기화 되기,문장
+공통요건,D25,번역투,-in이 되는 경우 잘못된 값,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - 팝업 컬럼에 key-in이 되는 경우 잘못된 값이면 Validation 하기. As-is에서 동작 비교 필수,문장
+검증내역,G8,기호,LE=NULL · SpreadInfo.cs:1433-1439/1497 · GSCM/01,가운뎃점 나열 → 쉼표,"[그리드] Shipment PSI(IT & Mobile).FIGURE (Figure)
+[오류] 셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 다르게 나왔음
+- AS-IS : FIGURE: AS-IS NUMBER
+- TO-BE : dataType=String, dataMap=N, AS-IS NUMBER 에디터가 아님
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SHEET_COLUMNS Shipment PSI(Packer).FIGURE CELL=FPNumber SCALE=NULL · SpreadInfo.cs:1433-1439/1497 · GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:4369 · TO-BE SHEET_COLUMNS Shipment PSI(IT & Mobile).FIGURE VISIBLE=Y INPUT_TP_CD=S CELL=-",문장
+검증내역,G9,기호,LE=NULL · SpreadInfo.cs:1433-1439/1497 · GSCM/01,가운뎃점 나열 → 쉼표,"[그리드] Shipment PSI(Mobility & IT).FIGURE (Figure)
+[오류] 셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 다르게 나왔음
+- AS-IS : FIGURE: AS-IS NUMBER
+- TO-BE : dataType=Object, dataMap=N, AS-IS NUMBER 에디터가 아님
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SHEET_COLUMNS Shipment PSI(Packer).FIGURE CELL=FPNumber SCALE=NULL · SpreadInfo.cs:1433-1439/1497 · GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:4369 · TO-BE SHEET_COLUMNS Shipment PSI(Mobility & IT).FIGURE VISIBLE=Y INPUT_TP_CD=S CELL=-",문장

@@ -103,7 +103,8 @@ const initSearch: SearchCondition = {
   divisionId: '',
   mdfType: REPORT_TYPE.SP_W, // 기본 Report Type (AS-IS clbType MDF_TYPE 첫 항목)
   yyyy: dayjs().format('YYYY'), // 기본 당해년 (AS-IS usrYear 기본값)
-  planResult: PLAN_RESULT.PLAN, // 기본 Plan (AS-IS clbPlanResult SelectedIndex=0 L207)
+  // 기본 ALL (2026-11-22 개선 요청). 종전 기본 Plan = AS-IS clbPlanResult SelectedIndex=0 L207.
+  planResult: PLAN_RESULT.ALL,
   versionNo: '', // ⭐ United 팝업 주입 전까지 조회 차단 (MSG00283)
   versionLabel: '',
 };

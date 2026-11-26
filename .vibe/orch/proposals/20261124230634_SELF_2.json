@@ -1,0 +1,117 @@
+{
+  "id": "20261124230634_SELF_2",
+  "at": "2026-11-24T23:06:34+09:00",
+  "ms": 1795529194912,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|asislivelogin",
+  "title": "사용자 지적 감지기 추가 U29 asisLiveLogin: AS-IS 실측 중 오류 발생(로그인 계정이 남은 ID 로 Guest 접속)",
+  "evidence": "사용자 지적(2026-11-24T18:46:43+09:00) \"as-is 실측 중 오류 확인해서 보완해줘\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 asisLiveLogin 없음 → 추가. 판정: AS-IS 실측 로그의 로그인 사용자가 harness.json asisLiveUser 와 다르거나 Guest 이거나 메뉴 수가 50 미만 · 읽을 기록: AS-IS 실측 실행 로그(로그인 사용자, 메뉴 수 줄), tools/Harness/harness.json asisLiveUser. 로그 경로 미확인. user_checks.json U29 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T10:43:22+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T10:47:53+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1441, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 · 백업 태그 20261126_self1043"
+    },
+    {
+      "at": "2026-11-26T10:47:58+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T10:55:13+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 → 1 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-usercheck.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T10:55:13+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager: 반영 전 ALL PASS(U29 시험 0건) → 반영 뒤 ALL PASS(U29 시험 9건 PASS, 기존 시험 전부 PASS), 2026-11-26 10:50:36 date 기준 · 변경 4개 파일 · 대상 목록 밖 변경 1개: _artifacts/_ssp0046_pkg_20261126/smoke_ssp0046.py",
+      "log": ".vibe\\logs\\2026-11-26T10-47-58_claude_orch.log",
+      "sec": 172,
+      "costUsd": 1.3818484000000002,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json",
+        "_artifacts/_ssp0046_pkg_20261126/smoke_ssp0046.py"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:03+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U29",
+  "kind": "detector",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795657401683,
+  "autoFp": "9aca7137cc",
+  "applyStartMs": 1795657678384,
+  "verifyJudge": {
+    "at": "2026-11-26T10:50:56+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 1 → 1"
+  },
+  "selfTag": "20261126_self1043",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-usercheck.js"
+  ],
+  "appliedMs": 1795658113096,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager 실행. 반영 전 ALL PASS(U29 시험 없음) → 반영 뒤 ALL PASS. 통과 표본 'U29 기준 계정 jaeuk.shin · 메뉴 273개 = 아님', 실패 표본 'U29 11-24 18:45 재현(WJDF · Guest · 메뉴 5개) = 실패 1건(DMF0082, SCP0005 제외)', 'U29 기준 계정이지만 메뉴 12개 = 실패(권한 부족)', 'PASS 원장 U29 asisLiveLogin active · DETECTORS 에 있음'"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager: 반영 전 ALL PASS(U29 시험 0건) → 반영 뒤 ALL PASS(U29 시험 9건 PASS, 기존 시험 전부 PASS), 2026-11-26 10:50:36 date 기준",
+    "note": "로그 경로 = Doc/asislive/<화면ID>/latest.json → run_dir/run.json(user_id, prev_user_id, main.user, main.menu_count, asis_live_run.py start_session·save_run 이 기록). 기준 계정 = tools/Harness/harness.json asisLiveUser(없으면 jaeuk.shin). 원장 U29 params { minMenu 50, lookbackH 24 }, status active. 11-24 18:45 실패 실측 폴더는 저장소에 없어 표본으로 재현함. 설치 폴더, CHANGELOG 미변경."
+  },
+  "snap": "prop_20261124230634_SELF_2",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

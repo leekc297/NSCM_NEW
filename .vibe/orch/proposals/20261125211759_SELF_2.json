@@ -1,0 +1,45 @@
+{
+  "id": "20261125211759_SELF_2",
+  "at": "2026-11-25T21:17:59+09:00",
+  "ms": 1795609079379,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/job runner.js|vmo자가보완뒤재수행stoprequestsrerunrequeuescree",
+  "title": "사용자 지시 R230 같은 문제: tools/VibeManager/job-runner.js:260 VMO 자가 보완 뒤 재수행(stop_requests rerun → requeueScreen)이 남은 구현 항목을 보지 않고 화면을 다시 실행함",
+  "evidence": "규칙 R230 \"승인된 계획의 구현 항목이 남아 있으면 화면 측정, 통합 시험을 시작하지 않고 구현을 먼저 끝냄(plan_state.py 기록, check-plan-before-test hook)\" (원래 지시 2026-11-25 20:35 \"방금의 경우에도 아직 잔여 작업이 D2, D3, D4 가 있는데 SCP0005 를 돌렸다는 점이 잘못된 점 입니다. 필요한 작업이 있으면 먼저 전체를 진행하고 테스트를 진행하도록 하게 해주세요. 이부분은 RULE, HOOK, 하네스에도 등록해서 반복되는 실수를 하지 않도록 해주세요.\") · tools/VibeManager/job-runner.js:260 function requeueScreen(screen, why, maxHeal) {",
+  "targets": [
+    "tools/VibeManager/job-runner.js"
+  ],
+  "before_after": "requeueScreen 첫 줄에서 plan_state.py status 결과에 남은 항목이 있으면 { none: '계획 구현 항목 N건 남음. 구현을 끝낸 뒤 재수행' } 을 돌려주고 재수행 횟수(healed)를 올리지 않음. 295줄 done.json 결과에 그 사유가 그대로 남게 둠",
+  "verify": "node --check tools/VibeManager/job-runner.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/job-runner.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:51:08+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · job-runner.js requeueScreen 첫 줄에서 planPending 남은 항목이 있으면 { none } 반환(healed 안 올림). run_all 88/88 PASS 1500 FAIL 0(15:50:45), t_webview_syntax ALL PASS, 설치 폴더 복사 15:50:57"
+    }
+  ],
+  "plain": {
+    "what": "승인된 계획의 구현 항목이 남아 있으면 화면 측정, 통합 시험을 시작하지 않고 구현을 먼저 끝냄(plan_state.py 기록, check-plan-before-test hook) 규칙을 tools/VibeManager/job-runner.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R230|tools/VibeManager/job-runner.js",
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795675868075
+}

@@ -1,0 +1,412 @@
+{
+ "screen": "DMF0043",
+ "calls": [
+  {
+   "cls": "DM0002_TitleSetForm_Popup",
+   "method": "btnColumn_Click",
+   "asis_ref": "DMF0043_Contribute_View.cs:525",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnColumn",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "",
+   "div_arg": "\"40\"",
+   "period_args": [],
+   "args": [
+    {
+     "param": "sProgramID",
+     "kind": "LITERAL",
+     "arg": "\"DMF0043\""
+    },
+    {
+     "param": "sSheetName",
+     "kind": "EXPR",
+     "arg": "SpdSheet.shtMain"
+    },
+    {
+     "param": "isColumn",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "sDivisionId",
+     "kind": "LITERAL",
+     "arg": "\"40\""
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "DMF0043_Contribute_View.cs:526",
+     "target": "frm.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "DMF0043_VersionPopup",
+   "method": "btnSPVer_Click",
+   "asis_ref": "DMF0043_Contribute_View.cs:512",
+   "trigger": {
+    "kind": "BTN",
+    "control": "btnSPVer",
+    "input": "",
+    "column": "",
+    "guard": "",
+    "button_text": "",
+    "cond_label": ""
+   },
+   "multi": "true",
+   "div_arg": "sDivision",
+   "period_args": [
+    "sStartDate",
+    "sEndDate"
+   ],
+   "args": [
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "_Code",
+     "kind": "LITERAL",
+     "arg": "\"SP\""
+    },
+    {
+     "param": "_DivisionID",
+     "kind": "LITERAL",
+     "arg": "sDivision"
+    },
+    {
+     "param": "sStartDate",
+     "kind": "VAR",
+     "arg": "sStartDate"
+    },
+    {
+     "param": "sEndDate",
+     "kind": "VAR",
+     "arg": "sEndDate"
+    }
+   ],
+   "results": [
+    "version"
+   ],
+   "after": [],
+   "back": [
+    {
+     "ref": "DMF0043_Contribute_View.cs:513",
+     "target": "popVersion.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "DMF0043_Contribute_View.cs:518",
+     "target": "txtVersion.Text",
+     "value": "popVersion.sVersions"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "DM0002_TitleSetForm_Popup": {
+   "cls": "DM0002_TitleSetForm_Popup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0002_TitleSetForm_Popup.cs",
+   "title": "TitleSetForm",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "usrButtonList2",
+     "text": "",
+     "visible": false
+    },
+    {
+     "name": "usrButtonList1",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "DMF0002_GET_TITLESET_POPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0002_GET_TITLESET_POPUP.sql",
+     "order_known": true,
+     "order_keys": "b.sort_order_no;",
+     "order_line": "152",
+     "like": false,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "p_program_id",
+      "p_sheet_name",
+      "p_column_type",
+      "p_user_id",
+      "p_division_id"
+     ],
+     "method": "GetTitleSet",
+     "ref": "DM0002_TitleSetForm_Popup.cs:244",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:191",
+     "method": "InitSheet",
+     "raw": "spdBase.Sheets[0].Columns[0, spdBase.Sheets[0].ColumnCount - 1].Locked = true;",
+     "guard": ""
+    },
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:209",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[0, spdUser.Sheets[0].Columns[\"COLUMN_LABEL_NAME\"].Index].Locked = true;",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:210",
+     "method": "InitSheet",
+     "raw": "spdUser.Sheets[0].Columns[spdUser.Sheets[0].Columns[\"USER_SORT_METHOD_CODE\"].Index, spdUser.Sheets[0].Columns[\"SUB_TOTAL_FLAG\"].Index].BackColor = ControlColor.",
+     "guard": ""
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:188",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, false);",
+     "guard": ""
+    },
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:206",
+     "method": "InitSheet",
+     "raw": "si.AddCheckColumn(\"Sub Total\", \"SUB_TOTAL_FLAG\", FPMerge.None, 40, _isSubTotal, FPHAlign.Center, FPVAlign.Center);",
+     "guard": ""
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:615",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DM0002_TitleSetForm_Popup.cs:618",
+     "method": "usrButtonList1_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00020\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00093\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });",
+    "MessageHelper.GMessageBox(\"MSG00006\", new object[] { _sTitleSetType == \"C\" ? \"Column\" : \"Measure\" });"
+   ],
+   "period_use": [],
+   "from": "source"
+  },
+  "DMF0043_VersionPopup": {
+   "cls": "DMF0043_VersionPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0043_VersionPopup.cs",
+   "title": "Version Popup",
+   "conds": [
+    {
+     "name": "clbDivision",
+     "type": "UsrCheckedList",
+     "label": "Division",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "DMF0043_VersionPopup.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "drpPeriod",
+     "type": "UsrDateRangePicker",
+     "label": "",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DMF0043_VersionPopup.Designer.cs:43",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    },
+    {
+     "name": "clbType",
+     "type": "UsrCombo",
+     "label": "Report Type",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "DMF0043_VersionPopup.Designer.cs:44",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0043_GET_CONT_VIEW_VERSIONPOPUP.sql",
+     "order_known": true,
+     "order_keys": "CODE DESC, VERSION_NO DESC",
+     "order_line": "49",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_division_id",
+      "p_version_type",
+      "p_description"
+     ],
+     "method": "FindData",
+     "ref": "DMF0043_VersionPopup.cs:230",
+     "save": false
+    },
+    {
+     "sp": "SCM0001_GET_LOOKUP_VALUES",
+     "src": "Doc/asisfacts/db/modules/dbo.SCM0001_GET_LOOKUP_VALUES.sql",
+     "order_known": true,
+     "order_keys": "L.DISPLAY_SEQ",
+     "order_line": "26",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_lookup_type"
+     ],
+     "method": "GetLookupData",
+     "ref": "DMF0043_VersionPopup.cs:376",
+     "save": false
+    },
+    {
+     "sp": "DM0000_GET_COMMON_SPREAD_TITLE",
+     "src": "Doc/asisfacts/db/modules/dbo.DM0000_GET_COMMON_SPREAD_TITLE.sql",
+     "order_known": true,
+     "order_keys": "SEQ, SORT_ORDER_NO",
+     "order_line": "152",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_start_yyyymmdd",
+      "p_end_yyyymmdd",
+      "p_created_by",
+      "p_program_id",
+      "p_sheet_name",
+      "i_Count"
+     ],
+     "method": "GetSpdTitle",
+     "ref": "DMF0043_VersionPopup.cs:318",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "DMF0043_VersionPopup.cs:250",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "DMF0043_VersionPopup.cs:353",
+     "method": "SetItem",
+     "raw": "this.Close()",
+     "guard": "if (cellRange.LongLength > 0)"
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:285",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Find: FindData(); break; case ButtonListType.OK: SetItem(); this.Close(); break; case ButtonListType.Close: t",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:292",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.OK:"
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:295",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:309",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": ""
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00279\")",
+    "MessageHelper.GMessageBox(\"MSG00279\")"
+   ],
+   "period_use": [
+    {
+     "ref": "DMF0043_VersionPopup.cs:212",
+     "method": "FindData",
+     "raw": "drpPeriod.Value1.ToString(\"yyyyMMdd\")",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:213",
+     "method": "FindData",
+     "raw": "drpPeriod.Value2.ToString(\"yyyyMMdd\")",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:235",
+     "method": "FindData",
+     "raw": "request.Parameters[\"p_start_yyyymmdd\"] = sStartDate",
+     "guard": "lambda"
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:236",
+     "method": "FindData",
+     "raw": "request.Parameters[\"p_end_yyyymmdd\"] = sEndDate",
+     "guard": "lambda"
+    },
+    {
+     "ref": "DMF0043_VersionPopup.cs:108",
+     "method": "Form_Load",
+     "raw": "drpPeriod.InitValue = sStartDate + \":\" + sEndDate",
+     "guard": ""
+    }
+   ],
+   "from": "factpack"
+  }
+ }
+}

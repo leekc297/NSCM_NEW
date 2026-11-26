@@ -51,6 +51,11 @@
         "tools/VibeManager/orch-watch.js",
         "tools/VibeManager/test/t_orch_watch.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:33+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T05:34:50+09:00"
     }
   ],
   "auto": true,
@@ -80,5 +85,7 @@
     "verify_result": "2026-11-20 05:27:00 실행. node --check job-runner.js, orch-watch.js = 통과(CHECK_OK). node test/t_orch_watch.js = PASS 21, FAIL 0, ALL PASS. 추가 시험 '작업 목록 중지 뒤 R1, R11 0건' = 0건 PASS. node test/t_job_runner.js = PASS 29, ALL PASS. node test/run_all.js = 파일 27/27, PASS 341, FAIL 0, 110.9s(완료 2026-11-19T20:27:03Z = 2026-11-20 05:27:03 KST)",
     "note": "job-runner.js:255 stop(): h.runners 의 [sid, r] 마다 r.stop() 앞에서 evt('user.stop', { wb: `${id}:${sid}`, screen: sid, job: id, ms }) 를 남김. orch-watch.js:121 R11 조건에 !userStopped(ev.wb) 추가(개선안 기준 120행, 현재 파일 121행). orch-watch.js:150 의 chain.end 는 원래도 userStopped 면 checkChecklist 전에 return 하므로 이번 사건의 원인은 job-runner 가 user.stop 을 남기지 않은 것이고, 121행 조건은 같은 경우를 한 번 더 막음. 작업 모드와 hook 차단 없음. 백업, 설치 폴더, CHANGELOG 는 건드리지 않음."
   },
-  "snap": "prop_20261120003742_INC"
+  "snap": "prop_20261120003742_INC",
+  "effectiveMs": 1795120490865,
+  "effectiveAt": "2026-11-20T05:34:50+09:00"
 }

@@ -1,0 +1,45 @@
+﻿scenario_id,unit,why,type,axes,entry,src
+SCP0005-S440de6,정적,도달 경로 없음 · 원문 SCP0005_DistributionRoute.cs:162,기타,OTHER,,SCP0005_DistributionRoute.cs:162
+SCP0005-Sa5b6f5,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:1297,저장,SHEET+DATA,button:SaveButton,SCP0005_DistributionRoute.cs:1297
+SCP0005-S6631ce,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:1306,저장,SHEET+DATA+STATE,button:SaveButton,SCP0005_DistributionRoute.cs:1306
+SCP0005-S049e07,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:1314,저장,SHEET+DATA+STATE,button:SaveButton,SCP0005_DistributionRoute.cs:1314
+SCP0005-S207f89,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:233,저장,NONE,event:Form_Load | event:this.Load,SCP0005_DistributionRoute.cs:233
+SCP0005-Sd7efec,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SCP0005_DistributionRoute.cs:220,초기,NONE,event:Form_Load | event:this.Load,SCP0005_DistributionRoute.cs:220
+SCP0005-S357315,동적,실행 값 필요 축 OTHER,기타,OTHER,button:EditButton,SCP0005_DistributionRoute.cs:319
+SCP0005-S23a879,동적,서버 호출 관찰 필요 SCP.SCP0005_GET_DISTRIBUTION_ROUTE,조회,NONE,button:FindButton | button:SaveButton | event:btnEaxel_Upload_Click | event:this.btnEaxel_Upload.Click,SCP0005_DistributionRoute.cs:393
+SCP0005-S878f53,동적,서버 호출 관찰 필요 SCP.SCP0005_GET_DISTRIBUTION_ROUTEID,조회,NONE,button:FindButton,SCP0005_DistributionRoute.cs:481
+SCP0005-S60f544,정적,도달 경로 없음 · 원문 SCP0005_DistributionRoute.cs:1207,조회,NONE,,SCP0005_DistributionRoute.cs:1207
+SCP0005-Sfc5051,동적,서버 호출 관찰 필요 SCP.SCP0005_GET_COUNTRY_CITY,조회,NONE,button:FindButton,SCP0005_DistributionRoute.cs:911
+SCP0005-S12c82a,정적,도달 경로 없음 · 원문 SCP0005_DistributionRoute.cs:1187,조회,NONE,,SCP0005_DistributionRoute.cs:1187
+SCP0005-Sa4f5dd,정적,도달 경로 없음 · 원문 SCP0005_DistributionRoute.cs:1195,조회,NONE,,SCP0005_DistributionRoute.cs:1195
+SCP0005-Scb8db3,정적,도달 경로 없음 · 원문 SCP0005_DistributionRoute.cs:1217,조회,NONE,,SCP0005_DistributionRoute.cs:1217
+SCP0005-Sfc19ed,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SCP0005_DistributionRoute.cs:203,초기,NONE,event:Form_Load | event:this.Load,SCP0005_DistributionRoute.cs:203
+SCP0005-Sf64d30,동적,실행 값 필요 축 DATA+SHEET,초기,SHEET+DATA,button:FindButton | button:SaveButton | event:Form_Load | event:btnEaxel_Upload_Click,SCP0005_DistributionRoute.cs:245
+SCP0005-Scf2b6f,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:944,저장,SHEET+DATA+STATE,button:InsertButton,SCP0005_DistributionRoute.cs:944
+SCP0005-S47c9e4,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:736,저장,SHEET+DATA+STATE,button:SaveButton,SCP0005_DistributionRoute.cs:736
+SCP0005-S5ed74a,정적,저장 분기 · SP 원문 대조 SCP.SCP0005_SAVE_DISTRIBUTION_ROUTE,저장,SHEET+DATA+STATE,button:SaveButton,SCP0005_DistributionRoute.cs:752
+SCP0005-S8c62a4,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:801,저장,SHEET+DATA+STATE,button:SaveButton,SCP0005_DistributionRoute.cs:801
+SCP0005-S726b65,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:813,저장,SHEET+DATA+STATE,button:SaveButton,SCP0005_DistributionRoute.cs:813
+SCP0005-S535399,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:873,저장,SHEET+DATA+STATE,button:SaveButton,SCP0005_DistributionRoute.cs:873
+SCP0005-S9b79d9,동적,실행 값 필요 축 DATA,연쇄,DATA,button:FindButton | button:InsertButton | button:SaveButton | event:btnEaxel_Upload_Click,SCP0005_DistributionRoute.cs:590
+SCP0005-S00448f,동적,실행 값 필요 축 DATA+SHEET,연쇄,SHEET+DATA,button:FindButton | button:SaveButton | event:btnEaxel_Upload_Click | event:this.btnEaxel_Upload.Click,SCP0005_DistributionRoute.cs:560
+SCP0005-S759102,동적,실행 값 필요 축 DATA+SHEET,연쇄,SHEET+DATA,button:FindButton | button:SaveButton | event:btnEaxel_Upload_Click | event:this.btnEaxel_Upload.Click,SCP0005_DistributionRoute.cs:569
+SCP0005-Sc07271,정적,저장 분기 · SP 원문 대조 SCP0005_DistributionRoute.cs:376,저장,NONE,event:btnEaxel_Upload_Click | event:this.btnEaxel_Upload.Click,SCP0005_DistributionRoute.cs:376
+SCP0005-Sd6fc80,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SCP0005_DistributionRoute.cs:344,팝업,NONE,event:btnFromSrch_Click | event:this.btnFromSrch.Click,SCP0005_DistributionRoute.cs:344
+SCP0005-Sfc760a,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:btnFromSrch_Click | event:this.btnFromSrch.Click,SCP0005_DistributionRoute.cs:350
+SCP0005-S55ebc4,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SCP0005_DistributionRoute.cs:362,팝업,NONE,event:btnToSrch_Click | event:this.btnToSrch.Click,SCP0005_DistributionRoute.cs:362
+SCP0005-Sad92f9,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:btnToSrch_Click | event:this.btnToSrch.Click,SCP0005_DistributionRoute.cs:368
+SCP0005-S9dcdc7,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1007
+SCP0005-S6fd597,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1009
+SCP0005-S7186c8,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1012
+SCP0005-S0b9ff3,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1017
+SCP0005-S716dcb,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1022
+SCP0005-S53ae08,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1027
+SCP0005-Sa8af86,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1036
+SCP0005-Sd1bc49,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1045
+SCP0005-Sa4344e,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMainDataModel_Changed,SCP0005_DistributionRoute.cs:1055
+SCP0005-S657802,동적,실행 값 필요 축 OTHER,팝업,OTHER,event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,SCP0005_DistributionRoute.cs:1095
+SCP0005-Sb99d39,동적,실행 값 필요 축 SHEET+STATE,팝업,SHEET+STATE,event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,SCP0005_DistributionRoute.cs:1138
+SCP0005-S12f25e,동적,실행 값 필요 축 SHEET+STATE,연쇄,SHEET+STATE,event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,SCP0005_DistributionRoute.cs:1152
+SCP0005-S9bf568,동적,실행 값 필요 축 SHEET+STATE,연쇄,SHEET+STATE,event:spdMain.CellDoubleClick | event:spdMain_CellDoubleClick,SCP0005_DistributionRoute.cs:1158
+SCP0005-S5bc1f8,동적,서버 호출 관찰 필요 SCP.SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID,조회,NONE,button:FindButton | event:Form_Load | event:this.Load,SCP0005_DistributionRoutePopup.cs:167

@@ -1,0 +1,9 @@
+DB ('localhost', '2026-11-25 15:26:51')
+== Q1 header rows (0.02s) cols=['DIVISION_ID', 'FROM_SITE', 'CHANGE_REQ_NO', 'CHANGE_REQ_STATUS', 'CHANGE_TYPE', 'VALID_YN', 'REQUEST_USER', 'APPROVAL_USER', 'DELEGATEE_USER', 'RT', 'ORIGIN_FROM_DIVISION_ID']
+== Q2 header PK (1.09s) cols=['CONSTRAINT_NAME', 'CONSTRAINT_TYPE', 'COLS']
+('PK_SCM_ADM_USER_M', 'P', 'USER_ID')
+('PK_SSP_ANL_SHIP_CONFIRM_CHG_REQ', 'P', 'CHANGE_REQ_NO')
+== Q3 delegate rows for approval user (0.04s) cols=['DIVISION_ID', 'USER_ID', 'DELEGATEE_ID', 'FROM_DATE', 'TO_DATE', 'VALID_YN']
+== Q4 user dup (0.02s) cols=['USER_ID', 'CNT']
+== Q5 DE rows (0.02s) cols=['DIVISION_ID', 'CHANGE_REQ_NO', 'ITEM_ID', 'TO_SITE', 'COUNT(*)']
+== Q6 header dup in whole table (4.3s) cols=['DIVISION_ID', 'CHANGE_REQ_NO', 'CNT']

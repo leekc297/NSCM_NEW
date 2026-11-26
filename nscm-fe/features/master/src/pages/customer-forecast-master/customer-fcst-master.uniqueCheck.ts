@@ -3,8 +3,9 @@ import { safeString } from '@foundation/utils';
 
 /**
  * Customer FCST Master(DMF0007) 중복 검사 두 가지 — AS-IS DMF0007_CustFcstMaster.cs
- * shtMainFCSTDataModel_Changed(L1202~1465) 1:1. 위반 시 MSG00136 「동일 구간에 하나의 Y만 가능합니다.」
- * 후 입력을 취소한다(AS-IS SetText "").
+ * shtMainFCSTDataModel_Changed(L1202~1465) 1:1. 위반 시 안내 후 입력을 취소한다(AS-IS SetText "").
+ * 안내 문구: ① 은 MSG01427 「중복된 항목이 있습니다.」, ② 는 MSG00136 「동일 구간에 하나의 Y만 가능합니다.」.
+ * AS-IS 는 ① 에도 MSG00136 을 띄웠으나 같은 데이터를 고른 상황과 맞지 않아 ① 만 바꿨다(2026-11-22 개선 요청).
  *
  *   ① 행 키 중복(L1222~1256): 신규(I) 행의 키 셀(Division, End Customer, Sales Site, Group, Measure)이
  *      바뀌었을 때, Division·End Customer·Sales Site·Group 네 칸이 다 차 있으면 그리드 전체에서
@@ -88,11 +89,18 @@ export const hasOtherYInAnyPeriod = (rows: readonly KeyRow[], row: KeyRow): bool
   );
 
 /**
- * 저장 직전 검사 — 신규·수정 행 중 ① 또는 ② 에 걸리는 행이 하나라도 있으면 true.
+ * 저장 직전 검사 — 신규·수정 행 중 ① 또는 ② 에 걸리는 행이 있으면 그 종류를 돌려준다.
+ *   ① 키 중복을 먼저 본다. 키가 같은 행은 날짜 칸도 겹치기 쉬워 ② 로 먼저 판정하면 원인과 다른
+ *   안내가 뜬다. 호출부는 'rowKey' 면 MSG01427, 'period' 면 MSG00136 을 띄운다.
  *   변경 없는 행끼리의 겹침(원장에 이미 있던 중복)은 보지 않는다. 그 때문에 무관한 저장까지 막지 않기 위해서다.
  */
-export const hasUniqueViolation = (
+export type UniqueViolation = 'rowKey' | 'period' | null;
+
+export const findUniqueViolation = (
   rows: readonly KeyRow[],
   dirtyRows: readonly KeyRow[]
-): boolean =>
-  dirtyRows.some(row => hasDuplicateRowKey(rows, row) || hasOtherYInAnyPeriod(rows, row));
+): UniqueViolation => {
+  if (dirtyRows.some(row => hasDuplicateRowKey(rows, row))) return 'rowKey';
+  if (dirtyRows.some(row => hasOtherYInAnyPeriod(rows, row))) return 'period';
+  return null;
+};

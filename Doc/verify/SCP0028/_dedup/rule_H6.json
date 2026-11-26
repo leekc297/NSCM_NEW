@@ -1,220 +1,221 @@
 {
  "rule_id": "H6",
- "hash": "02765e4254717d3c",
+ "hash": "0c8757a23542f5ff",
  "groups": [
   {
    "rows": [
     "EG-2219b2fc"
    ],
-   "why": "ItembyDivisionPopup(Model 조건 진입)의 섹션 타이틀 위치 검사로, 같은 팝업·같은 항목을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-2644dff3"
    ],
-   "why": "ItembyDivisionPopup의 버튼 순서 검사로, 같은 팝업에 같은 항목을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-2e65bc91"
    ],
-   "why": "ShipmentLotSizePopup Delete('D') 진입의 가로줄 검사로, Input('I') 진입과는 상태(자동조회 여부, 행 수)가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-31faacc6"
    ],
-   "why": "Delete 진입 팝업의 No. 폭 검사로, 기대값(27px, 383행)이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-52c5fc68"
    ],
-   "why": "Input 진입 팝업의 버튼 순서 검사로, Delete 진입과는 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-6be7f873"
    ],
-   "why": "ItembyDivisionPopup의 No. 폭 검사로, 기대값(34px, 9616행)이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-6cc339e1"
    ],
-   "why": "Input 진입 팝업의 조회 건수 검사로, 이 진입은 자동조회가 없어 Delete 진입과 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-89799316"
    ],
-   "why": "ItembyDivisionPopup의 조회 건수 검사로, 대상 팝업이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-8d104ad6"
    ],
-   "why": "Delete 진입 팝업의 버튼 순서 검사로, Input 진입과는 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-a1a860f0"
    ],
-   "why": "Input 진입 팝업의 No. 컬럼 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-af67cddc"
    ],
-   "why": "Delete 진입 팝업의 No. 컬럼 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-b0d10a90"
    ],
-   "why": "ItembyDivisionPopup의 No. 컬럼 검사로, 대상 팝업이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-b2b9b2fb"
    ],
-   "why": "Input 진입 팝업의 섹션 타이틀 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-b3b6c195"
    ],
-   "why": "Input 진입 팝업의 No. 폭 검사로, 기대값(13px, 0행)이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-cfb36dbd"
    ],
-   "why": "ItembyDivisionPopup의 가로줄 검사로, 대상 팝업이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-e04489c3"
    ],
-   "why": "Delete 진입 팝업의 섹션 타이틀 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-f28038e7"
    ],
-   "why": "Input 진입 팝업의 가로줄 검사로, 같은 상태·같은 항목을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-f3ab83c2"
    ],
-   "why": "Delete 진입 팝업의 조회 건수 검사로, Input 진입과는 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-0855373f"
    ],
-   "why": "To Site 조건 하나를 추적하는 대조표 행으로, 같은 대상을 보는 다른 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-1417e33a"
    ],
-   "why": "툴바 Delete 버튼이 보이지만 동작하지 않는지를 추적하는 행으로, 다른 행과 확인하는 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-31170afd"
    ],
-   "why": "팝업 검색영역 배치와 Find 버튼 구현을 추적하는 행으로, 대상 요소가 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-449b82ac"
    ],
-   "why": "From Site 조건을 추적하는 대조표 행으로, To Site와는 다른 조건이다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-505b6f16"
    ],
-   "why": "D/I 진입 시 자동조회 여부를 추적하는 행으로, 팝업 표준 외형 검사와 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-c7a94f1d"
    ],
-   "why": "TRANS_MODE_CODE 컬럼 메타를 추적하는 행으로, 대상 컬럼이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-e691090a"
    ],
-   "why": "팝업 조회 프로시저의 파라미터 6개를 추적하는 행으로, 대상이 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-fa46d98c"
    ],
-   "why": "팝업 OK(SaveData)의 메시지 분기를 추적하는 행으로, 대상과 기대가 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-5123358d"
    ],
-   "why": "ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6cb6bfa8"
    ],
-   "why": "'D' 모드 Form_Load 지점이다. 기대값이 세 항목을 합친 것이어서 개별 규칙 행과 같다고 보기 어려워 단독으로 두었다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-97b0fc4e"
    ],
-   "why": "ItembyDivisionPopup 생성 지점이다. 기대값이 세 항목을 합친 것이어서 개별 규칙 행과 묶기에 확신이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-a9485a6a"
    ],
-   "why": "ItembyDivisionPopup의 Form_Load 지점으로, 생성 지점과 같은 진입인지 확신할 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-aa6bec9e"
    ],
-   "why": "ShipmentLotSizePopup 생성 지점으로, Input 진입과 Delete 진입 중 어느 쪽인지 알 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c2d97238"
    ],
-   "why": "ShipmentLotSizePopup 생성 지점이다. V-aa6bec9e와 문장은 같지만 다른 진입(I/D)일 수 있어 묶지 않았다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c4a9dc2c"
    ],
-   "why": "ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d41bec0d"
    ],
-   "why": "'I' 모드 Form_Load 지점으로, 'D' 모드와는 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d816896f"
    ],
-   "why": "ShowDialog 호출이 세 곳인데 어느 팝업·어느 모드인지 알 수 없어 단독으로 두었다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 13:01:39",
- "cost": 0.12715839999999998
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:06:40",
+ "cost": 0,
+ "open": 0
 }

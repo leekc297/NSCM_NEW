@@ -1,0 +1,38 @@
+# SCP0028 미검증 행별 조치 · 라운드 5(2026-11-20 22:13, CheckList 21:51 원장)
+
+- 입력: 원장 verify_ledger.csv(21:51), 분류 unverified_triage.*(21:52:13)
+- 원장 미검증 30행 = 처리 대상 8(엔진 4, 자동 4) + 집계 22. AI 검토 행 5(T-fc9d26c9, EG-017a5164, V-8e065123, EG-2644dff3, EG-ac06e957) 포함 표 13행
+- 집계 22행은 하위 행을 따라가서 표에 넣지 않음
+- 지난 라운드 표는 _unverified_plan.md.r4_20261120
+
+| 묶음 | 행 ID | 규칙 | 원인(실측 근거) | 조치(고칠 파일) |
+|---|---|---|---|---|
+| Q1 표시 컬럼 숨김 정보 | T-fc9d26c9 | A5 | 원장 condition 칸 상한 3000자를 맞추는 단계 ('asisVisible', 4)가 컬럼 18개 중 앞 4개(CREATED_BY, CREATION_DATE, DIVISION_ID, FROM_SITE)만 남김. TO_SITE, TRANS_MODE_CODE(메타 VISIBLE_FLAG N, dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv)는 숨김 정보가 빠져 _trace.spec A5 가 표시 컬럼으로 셈(AS-IS 17 ↔ TO-BE 15) | tools/Harness/verify/mapping_trace.py 줄이기 전 손실 없는 압축(전 Division 같은 값은 문자열 하나), 잘리면 asisVisCut 표시. Doc/e2e/specs/_trace.spec.ts A5 2곳 visOf 로 읽고 잘린 정보는 ERROR (T520) |
+| Q2 To Site 결과 컬럼 | V-8e065123 | G1 | 후보는 코드, 라벨 컬럼 TO_SITE_DESCRIPTION 은 설명이라 겹침 0. T499 condColForOpts 가 전 컬럼에서 겹침 최다 컬럼을 골라 FROM_SITE 선택(같은 사이트 코드 집합). 결과 25행 FROM_SITE 'HQ07-A' 를 조건 밖 값으로 봄 | tools/E2E/lib/condcol.ts pickCondCol 라벨 갈래 컬럼 우선, smoke-extra.ts condColForOpts label 인자, _trace.spec.ts 호출에 라벨 전달 (T521) |
+| Q3 팝업 정렬 대조 | EG-017a5164 | B3 | tools/E2E/lib/popupprobe.ts orderCheck 가 공백·기호를 지우고 비교. 'Renault AS HQ_FR_RHE'(191행) → 'Renault AS_FR_FNS'(192행)는 11번째 글자 공백 0x20 < 밑줄 0x5F 로 오름차순인데 'renaultashq' > 'renaultasfr' 로 위반 판정. AS-IS SP ORDER BY(dbo.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP.sql:97) 순서와 같음 | popupprobe.ts orderCheck 기호를 남긴 비교도 위반일 때만 위반 (T522) |
+| Q4 팝업 단추 순서 증거 | EG-2644dff3 | H6 | 판정은 OK, Close 위치만 씀(eg_popup.spec.ts:264). 증거에 조회영역 Open, Search 를 같이 적어 비교 대상이 섞인 것처럼 보임. Close, OK 순서는 CR-005 와 다르고 CR-100 은 공통 팝업도 단추 순서를 종전대로 검사함(confirmed_requirements.csv:101). AI 검토의 'SCP0007 사용자 정정'은 라운드 3 에서 OK 먼저인 팝업 건으로 확인(_unverified_work.md 라운드 3 P2a) | Doc/e2e/specs/eg_popup.spec.ts 증거를 확인·닫기 순서와 비교 제외 단추로 나눔, 판정 FAIL 유지 (T523). 결함 여부는 결정 R3-D1 이월, FE_GUIDE_20261120_1320.md |
+| Q5 일괄 입력 팝업 0행 | T-6b9a8ce8 | F4 | _trace.spec drivePopupPath 가 필수 알림 뒤 From Site 첫 후보 'AU000062_81-P' 만 넣고 0행이면 멈춤. 같은 팝업 'HQ05-W' 는 966행(diff P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP__24.md PASS) | _trace.spec.ts 0행이면 같은 칸 다음 후보를 더해 최대 8개까지 다시 조회, pickComboNth 신설 (T525) |
+| Q6 수정 행 배경색 | V-a99ddb18 | H2 | 편집기 value='' 와 키보드 지움(T512) 2경로 뒤에도 LOT_SIZE·INCREMENT '1'(21:51 증거). 공용 그리드 숫자 규칙 isValueAllowed 는 빈 값 허용(numberInputRule.ts:34~36, DataGrid.tsx:1505~1509). 빈 값이 남는 원인은 화면 실행 없이 미확인 | _trace.spec.ts h2RuntimeEdit 셀 선택 Delete, Backspace 경로 추가. 4경로가 다 실패하면 '[전제 상태 TO-BE 입력 불가]' ERROR 로 남기고 분류표 16행으로 결정 목록 (T526) |
+| Q7 AS-IS 시간 초과 | AD-21ed1ed9 | A1 | 호출 #47 popup/SEARCH 'I', From Site 30개, To Site 빈 값. AS-IS DEV 가 300초 상한(diff_verify.py:290) 안에 못 냄(HYT00). 21:59 실측 From Site 'HQ07-A' 1개도 150초 초과, 'MI00-P' 14.6초 2145행. HQ07-A 후보 = 품목 1175 × To Site 129, 행마다 스칼라 함수 3개. 재실행으로 풀리지 않음 | tools/Harness/verify/diff_verify.py 시간 초과 표시와 같은 SP 다른 인자 판정 건수 기록 (T524), unverified_classes.csv 15행 '사람' 분류 → 결정 R5-D2 |
+| Q7 | AD-a0aa4a91 | A5 | 위와 같음 | 위와 같음 |
+| Q7 | AD-b11d5ca1 | A6 | 위와 같음 | 위와 같음 |
+| Q7 | AD-a8ff4f94 | A7 | 위와 같음 | 위와 같음 |
+| Q8 Model 팝업 교체 | EG-ac06e957 | G4 | AI 검토 룰등록 권장. 2026-10-08 사용자 지시는 5화면 소스 주석에만 있음(라운드 4 확인). SCP 전체 일반 규칙 근거 없음 | 결정 R4-D1 이월 |
+| Q8 | T-2c20a3fc | A6 | 대조표 행의 AS-IS 팝업 SP PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 호출 0건. TO-BE 는 COM0013 팝업 | 결정 R4-D1 이월 |
+| Q8 | T-fad117f6 | F4 | 위와 같음 | 결정 R4-D1 이월 |
+
+## 행 수 대조
+
+- 원장 ERROR 30 = 표 8행(T-6b9a8ce8, V-a99ddb18, T-2c20a3fc, T-fad117f6, AD 4행) + 집계 22
+- 표의 나머지 5행(T-fc9d26c9, V-8e065123 원장 PASS, EG-017a5164 판정필요, EG-2644dff3 FAIL, EG-ac06e957 판정필요)은 AI 검토 행
+
+## 처리 결과
+
+| 행 | 처리 | 남은 사유 |
+|---|---|---|
+| T-fc9d26c9, V-8e065123, EG-017a5164 | 검사기 수정 | 없음 |
+| EG-2644dff3 | 증거 문구 수정, 판정 FAIL 유지 | R3-D1 결함 확정 여부 |
+| T-6b9a8ce8 | 검사기 수정 | 없음 |
+| V-a99ddb18 | 검사기 경로 추가 | 4경로가 다 실패하면 R5-D3 |
+| AD 4행 | 증거 표시·분류 | AS-IS DEV 성능(R5-D2) |
+| EG-ac06e957, T-2c20a3fc, T-fad117f6 | 처리 안 함 | R4-D1 |

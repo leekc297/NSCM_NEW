@@ -106,4 +106,7 @@ export const LBL = {
 export const MSG = {
   NO_AUTHORITY: 'MSG00667', // L1 권한 Division 0건 — 조회영역 잠금 안내(TO-BE "No authority assigned." 실측 코드)
   REQUIRED_PERIOD: 'MSG00013', // Period 필수(조회 가드 cs:390/394) — "Please enter the required fields."
+  // AS-IS DateUtil.Check_PeriodDate(cs:394) 파리티 — 문구 역조회 확정(ora.py 실측, [[asis-check-perioddate-371-max-period-parity]]).
+  INVALID_PERIOD: 'MSG01135', // 시작 > 종료 — AS-IS MSG00108 → TO-BE "The start date can not be later than the end date."
+  MAX_PERIOD: 'MSG01187', // 최대기간 = From + 1년 + 7일(371) — AS-IS MSG00172 → TO-BE "Maximum Period is From Date + {0}."
 } as const;

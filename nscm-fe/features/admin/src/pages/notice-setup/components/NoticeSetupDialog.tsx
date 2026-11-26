@@ -1,5 +1,5 @@
 import dayjs, { type Dayjs } from 'dayjs';
-import { type ChangeEvent, type DragEvent } from 'react';
+import { useEffect, useRef, type ChangeEvent } from 'react';
 
 import { CustomDialog, CustomDropdown } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -8,9 +8,16 @@ import { useMessageStore } from '@shared/stores';
 
 import { COMBO_ID } from '../notice-setup.constants';
 import type { ComboOption } from '../notice-setup.types';
-import { getSafeNoticeImageSource } from '../notice-setup.util';
+import { formatFileSize, getAttachmentDownloadUrl } from '../notice-setup.util';
+import { useAttachmentUpload } from '../useAttachmentUpload';
+import { useNoticeAttachmentsQuery } from '../useNoticeAttachments';
 import { useNoticeImageUpload } from '../useNoticeImageUpload';
 import { useNoticeSetupStore } from '../useNoticeSetupStore';
+
+// 첨부파일 최대 개수
+const MAX_ATTACHMENTS = 10;
+// 첨부파일 1개 최대 용량(서버 multipart 상한과 동일) — 업로드 전 사전 차단용
+const MAX_ATTACHMENT_SIZE = 500 * 1024 * 1024;
 
 import { NoticeRichTextEditor } from './NoticeRichTextEditor';
 import styles from './NoticeSetupDialog.module.scss';
@@ -31,8 +38,33 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
   const closeEditor = useNoticeSetupStore(state => state.closeEditor);
   const openDraftPreview = useNoticeSetupStore(state => state.openDraftPreview);
   const setAlert = useMessageStore(state => state.setAlert);
+  const attachments = useNoticeSetupStore(state => state.attachments);
+  const addAttachments = useNoticeSetupStore(state => state.addAttachments);
+  const removeAttachment = useNoticeSetupStore(state => state.removeAttachment);
+  const setAttachments = useNoticeSetupStore(state => state.setAttachments);
+  const { data: loadedAttachments } = useNoticeAttachmentsQuery(
+    String(draft.NOTICE_ID ?? ''),
+    isEditorOpen && dialogMode === 'edit'
+  );
+  // 편집 열 때 서버 첨부를 "그 공지당 한 번만" 스토어에 싣는다. 이후 사용자가 추가/삭제한 목록을
+  // 덮어쓰지 않도록(방금 업로드한 파일이 사라지지 않도록) 이미 실은 공지면 재설정하지 않는다.
+  const loadedNoticeIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!isEditorOpen || dialogMode !== 'edit') {
+      loadedNoticeIdRef.current = null;
+      return;
+    }
+    if (!loadedAttachments) return;
+    const noticeId = String(draft.NOTICE_ID ?? '');
+    if (loadedNoticeIdRef.current === noticeId) return;
+    loadedNoticeIdRef.current = noticeId;
+    setAttachments(loadedAttachments);
+  }, [isEditorOpen, dialogMode, loadedAttachments, draft.NOTICE_ID, setAttachments]);
 
+  // 본문 인라인 이미지 업로드(에디터에 전달) — 첨부와 별개 엔드포인트(/file/image-upload)
   const { mutateAsync: uploadImage, isPending: isImageUploading } = useNoticeImageUpload();
+  // 첨부파일 업로드(/file/upload, 임의 종류·최대 500MB)
+  const { mutateAsync: uploadAttachment, isPending: isAttachmentUploading } = useAttachmentUpload();
 
   // 이전 comboId 'Module'/'SubModule' 은 SCM_ADM_CMBO_SQL_M 에 등록되지 않아 신규 등록 시
   // module 선택 콤보가 항상 빈 목록이었다(2026-09-11). mail-setup 표준으로 교체.
@@ -51,57 +83,56 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
   // 2026-09-16 사용자 요구 - Module:Sub Module 은 1:1 매핑이라 입력 칸을 없애고 Module 선택 시
   // 매핑되는 Sub Module 을 자동으로 draft 에 채워 저장한다 (rawSubModules 는 CMBO 원본, PARENT_CODE=Module).
   const rawSubModules = (subModules as ComboOption[] | undefined) ?? [];
-  const imageSource = getSafeNoticeImageSource(draft.NOTICE_IMAGE);
   const startDateValue = draft.START_DATE ? dayjs(draft.START_DATE) : null;
   const endDateValue = draft.END_DATE ? dayjs(draft.END_DATE) : null;
 
-  const uploadImageFile = async (file: File, input?: HTMLInputElement) => {
-    const resetInput = () => {
-      if (input) input.value = '';
-    };
+  const handleAttachmentChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
+    const files = Array.from(input.files ?? []);
+    input.value = '';
+    if (files.length === 0 || isAttachmentUploading) return;
 
-    if (isImageUploading) {
-      resetInput();
+    const remaining = MAX_ATTACHMENTS - attachments.length;
+    if (remaining <= 0) {
+      void setAlert({
+        type: 'alert',
+        content: `첨부파일은 최대 ${MAX_ATTACHMENTS}개까지 등록할 수 있습니다.`,
+      });
       return;
     }
 
-    try {
-      const uploadedImage = await uploadImage(file);
-      setDraft({
-        NOTICE_IMAGE: uploadedImage.fileId,
-        IMAGE_FILE_NM: uploadedImage.fileName,
-      });
-    } catch (error) {
-      void setAlert({
-        type: 'alert',
-        content:
-          error instanceof Error && error.message
-            ? error.message
-            : t('MSG00003', '_Image upload failed.'),
-      });
-    } finally {
-      resetInput();
-    }
-  };
-
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const input = event.currentTarget;
-    const file = input.files?.[0];
-    if (!file) return;
-
-    void uploadImageFile(file, input);
-  };
-
-  const handleImageDragOver = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = isImageUploading ? 'none' : 'copy';
-  };
-
-  const handleImageDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    if (isImageUploading) return;
-    const file = event.dataTransfer.files[0];
-    if (file) void uploadImageFile(file);
+    const targets = files.slice(0, remaining);
+    // 대용량(최대 500MB) 파일이 병렬로 몰리지 않도록 순차 업로드한다.
+    await targets.reduce(async (prev, file) => {
+      await prev;
+      // 500MB 초과는 서버에 보내기 전에 막는다(전송 낭비·불명확한 500 방지).
+      if (file.size > MAX_ATTACHMENT_SIZE) {
+        void setAlert({
+          type: 'alert',
+          content: `${file.name} : 첨부파일은 최대 500MB까지 가능합니다.`,
+        });
+        return;
+      }
+      try {
+        const uploaded = await uploadAttachment(file);
+        addAttachments([
+          {
+            fileId: uploaded.fileId,
+            fileName: uploaded.fileName,
+            size: uploaded.size,
+            ext: uploaded.ext,
+          },
+        ]);
+      } catch (error) {
+        void setAlert({
+          type: 'alert',
+          content:
+            error instanceof Error && error.message
+              ? error.message
+              : t('MSG00003', '_Upload failed.'),
+        });
+      }
+    }, Promise.resolve());
   };
 
   const handleDateChange = (field: 'START_DATE' | 'END_DATE', date: Dayjs | null) => {
@@ -316,62 +347,63 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
                     />
                   )}
                 />
-                <div className={styles.imageField}>
-                  <span className={styles.imageLabel}>{t('LBL00410', '_Image')}</span>
-                  <div
-                    className={styles.imageUploadArea}
-                    role='group'
-                    aria-label={t('LBL00410', '_Image')}
-                    onDragOver={handleImageDragOver}
-                    onDrop={handleImageDrop}
-                  >
-                    <div className={styles.imageThumbnail}>
-                      {imageSource ? (
-                        <img src={imageSource} alt={draft.IMAGE_FILE_NM} />
-                      ) : (
-                        <span>{t('LBL00411', '_No Image')}</span>
-                      )}
+                <div className={styles.attachmentField}>
+                  {/* TODO i18n: 'Attachment'·'Select files' 라벨은 LBL 코드 등록 후 t() 로 교체 */}
+                  <span className={styles.attachmentLabel}>Attachment</span>
+                  <div className={styles.attachmentArea}>
+                    <div className={styles.attachmentActions}>
+                      <input
+                        id='notice-attachment-upload'
+                        className={styles.fileInput}
+                        type='file'
+                        multiple
+                        disabled={isAttachmentUploading}
+                        onChange={handleAttachmentChange}
+                      />
+                      <label
+                        className={styles.fileSelectButton}
+                        htmlFor='notice-attachment-upload'
+                        aria-disabled={isAttachmentUploading}
+                      >
+                        {isAttachmentUploading ? 'Uploading...' : 'Select files'}
+                      </label>
                     </div>
-                    <div className={styles.imageMeta}>
-                      <span className={styles.fileName}>
-                        {draft.IMAGE_FILE_NM || t('LBL00393', '_No file selected')}
-                      </span>
-                      <div className={styles.imageActions}>
-                        <input
-                          id='notice-image-upload'
-                          className={styles.fileInput}
-                          type='file'
-                          accept='.jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp'
-                          disabled={isImageUploading}
-                          onChange={handleImageChange}
-                        />
-                        <label
-                          className={styles.fileSelectButton}
-                          htmlFor='notice-image-upload'
-                          aria-disabled={isImageUploading}
-                        >
-                          {isImageUploading
-                            ? t('LBL00416', '_Uploading...')
-                            : t('LBL00406', '_Select image')}
-                        </label>
-                        {draft.IMAGE_FILE_NM && (
-                          <button
-                            type='button'
-                            className={styles.fileRemoveButton}
-                            disabled={isImageUploading}
-                            onClick={() => setDraft({ NOTICE_IMAGE: '', IMAGE_FILE_NM: '' })}
-                          >
-                            {t('LBL00407', '_Remove')}
-                          </button>
-                        )}
-                      </div>
-                    </div>
+                    {attachments.length === 0 ? (
+                      <span className={styles.fileName}>{t('LBL00393', '_No file selected')}</span>
+                    ) : (
+                      <ul className={styles.attachmentList}>
+                        {attachments.map(attachment => (
+                          <li key={attachment.fileId} className={styles.attachmentItem}>
+                            <a
+                              className={styles.attachmentName}
+                              href={getAttachmentDownloadUrl(attachment.fileId)}
+                              download={attachment.fileName}
+                            >
+                              {attachment.fileName}
+                            </a>
+                            <span className={styles.attachmentSize}>
+                              {formatFileSize(attachment.size)}
+                            </span>
+                            <button
+                              type='button'
+                              className={styles.fileRemoveButton}
+                              onClick={() => removeAttachment(attachment.fileId)}
+                            >
+                              {t('LBL00407', '_Remove')}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
                 <div className={styles.contentField}>
                   <span className={styles.contentLabel}>{t('LBL00386', '_Notice Content *')}</span>
                   <div className={styles.editorField}>
-                    <NoticeRichTextEditor />
+                    <NoticeRichTextEditor
+                      uploadImage={uploadImage}
+                      isImageUploading={isImageUploading}
+                    />
                   </div>
                 </div>
               </div>

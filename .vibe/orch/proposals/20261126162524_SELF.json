@@ -1,0 +1,32 @@
+{
+  "id": "20261126162524_SELF",
+  "at": "2026-11-26T16:25:24+09:00",
+  "ms": 1795677924964,
+  "source": "self",
+  "status": "pending",
+  "sig": "lnplan cacgbbceaaahbi_vision step g",
+  "title": "VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 6",
+  "evidence": "L4 단계 원장 20261124000718_VISION 단계 6/6 · 문서 .vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md · 흡수한 안 20261126110059_VISION",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/orch-worklist.js"
+  ],
+  "before_after": "지금 개념: VMO 가 고친 점검 모듈 대부분은 사용자가 창을 다시 로드해야 효력을 가지고, 그 전까지 VMO 는 옛 판정으로 같은 문제를 다시 올림 → 새 개념: 모듈 안 상태가 init 인자뿐인 VMO 점검 모듈은 반영 즉시 다시 읽고 같은 인자로 다시 init 해 효력 시각 = 반영 시각. 창 로드 대기는 화면, 체인, 타이머를 쥔 파일만 남고, codeInfo staleFiles 는 다시 읽은 모듈을 빼고 셈 · 흡수한 안 20261126110059_VISION 변경: 지금 개념: VMO 가 고친 점검 모듈 대부분은 사용자가 창을 다시 로드해야 효력을 가지고, 그 전까지 VMO 는 옛 판정으로 같은 문제를 다시 올림 → 새 개념: 모듈 안 상태가 init 인자뿐인 VMO 점검 모듈은 반영 즉시 다시 읽고 같은 인자로 다시 init 해 효력 시각 = 반영 시각. 창 로드 대기는 화면, 체인, 타이머를 쥔 파일만 남고, codeInfo staleFiles 는 다시 읽은 모듈을 빼고 셈 · 상세 = .vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md 전환 절 단계 6",
+  "verify": "node tools/VibeManager/test/t_orch_hotreload.js 에 표본 추가(init 을 가진 모듈이 hotReload 뒤 paths 를 유지하고 새 함수 결과를 냄). 반영 전 digest7d.code staleFiles 18개 중 orch-usercheck.js 포함 → 반영 뒤 orch-usercheck.js 를 고친 다음 hotLoaded 에 들고 staleFiles 에서 빠짐. orch-worklist.js 포함 여부는 모듈 상태 확인 뒤 결정(반영 전 미측정)",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 지금 방식 복귀. 단계마다 반영 백업 태그와 .bak_<날짜>_concept 백업으로 파일 복원. plans.json 은 삭제해도 개선안 원본에 영향 없음",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261124000718_VISION 단계 6",
+  "incident": "",
+  "screen": "",
+  "history": [],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261124000718_VISION|6",
+  "kind": "fix",
+  "plan": "20261124000718_VISION",
+  "planStep": 6
+}

@@ -1,2 +1,2 @@
-﻿set,asis_rows,tobe_rows,common_rows,asis_only,tobe_only,uniq_rows,order,first_mismatch,sentinel_cols,null_order_cols,capped
-1,8036,8036,8034,2,2,8034,DIFF,"r2722: AS-IS=['196', 'KR', 'KRCOJ', 'CHONGJU,KOREA, REPUB', 'SEA', 'SEA'] ↔ TO-BE=['88', 'KR', 'KRCOJ', 'CHONGJU,KOREA, REPUB', 'AIR', 'AIR']","lt_type(1685행 AS-IS ''↔TO-BE '/'),shipping_company(334행 AS-IS ''↔TO-BE '/'),a_port_name(8행 AS-IS ''↔TO-BE '/')",,
+﻿set,asis_rows,tobe_rows,common_rows,asis_only,tobe_only,uniq_rows,order,first_mismatch,sentinel_cols,null_order_cols,capped,order_basis
+1,8076,8079,8076,0,3,8076,PASS,,"lt_type(1685행 AS-IS ''↔TO-BE '/'),shipping_company(334행 AS-IS ''↔TO-BE '/'),a_port_name(8행 AS-IS ''↔TO-BE '/')",,,"AS-IS ORDER BY 키 FROM_COUNTRY,FROM_CITY,TO_COUNTRY,TO_CITY,PRIORITY"

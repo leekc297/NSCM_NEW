@@ -1,31 +1,59 @@
-/* 홈 공지 팝업(apps/web pages/NoticePreviewModal.module.scss)과 같은 형태.
-   색/여백을 바꿀 때는 두 파일을 함께 맞춘다. */
-:global(.MuiDialog-paper):has(.preview) {
+/* 홈 공지 팝업(apps/web pages/NoticePreviewModal.module.scss)과 같은 커스텀 오버레이 형태.
+   창/헤더/본문/첨부/메타 chrome 을 홈 팝업과 맞춘다 — 색/여백을 바꿀 때는 두 파일을 함께 맞춘다.
+   단 편집 다이얼로그(MUI, z-index ~1300) 위에서 열릴 수 있어 z-index 를 그보다 높게 둔다. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* 반투명 배경 — 뒤 화면을 덮어 팝업에 포커스를 준다. 클릭 시 닫기 */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+
+/* 창 — 제목 / 본문(스크롤) / 첨부 / 게시기간. 내용·이미지와 무관하게 750×750 고정. */
+.window {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 750px;
+  height: 750px;
+  max-width: 100%;
+  max-height: calc(100vh - 48px);
   padding: 16px 18px 14px;
-  overflow: hidden;
+  border: 1px solid #dde0df;
   border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
 }
 
-/* 기본 헤더(파란 그라데이션)를 걷어내고 흰 배경 + 남색 제목으로 */
-:global(#draggable-dialog-title):has(.headerTitle) {
-  width: 100%;
-  height: auto;
-  min-height: 0;
-  margin: 0;
-  padding: 0 0 12px;
-  background: none;
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 12px;
 }
 
-.headerTitle {
+.title {
+  flex: 1;
   min-width: 0;
   margin: 0;
-  overflow: hidden;
   color: #004170;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.45;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-word;
 }
 
 /* 제목 앞 말머리 점(파랑) */
@@ -43,19 +71,25 @@
   margin-right: 4px;
 }
 
-.preview {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  flex-direction: column;
-  margin: 0;
-  color: #24272c;
+.close {
+  flex-shrink: 0;
+  padding: 0 2px;
+  border: none;
+  background: none;
+  color: #8a8d8b;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    color: #1f2220;
+  }
 }
 
 /* 본문 — 회색 테두리 박스. 내용이 길면 여기서만 스크롤 */
 .body {
   flex: 1;
-  min-height: 0;
+  min-height: 120px;
   padding: 14px 16px;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -133,6 +167,12 @@
   a {
     color: #315ccb;
   }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
 }
 
 .emptyContent {
@@ -175,7 +215,63 @@
   word-break: break-all;
 }
 
-/* 게시기간(좌) + "오늘 하루 열지 않기"(우) — 본문 박스 바로 아래 */
+/* 첨부파일 — 본문 박스와 별개로 하단에 분리된 영역 */
+.attachmentsSection {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 120px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  overflow-y: auto;
+  border: 1px solid #dde0df;
+  border-radius: 6px;
+  background-color: #fbfcfb;
+}
+
+.attachmentsLabel {
+  color: #4f555d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.attachmentList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attachmentItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.attachmentLink {
+  min-width: 0;
+  overflow: hidden;
+  color: #2f6fed;
+  font-size: 13px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.attachmentSize {
+  flex: 0 0 auto;
+  color: #8a929c;
+  font-size: 11px;
+}
+
+/* 게시기간(좌) + "오늘 하루 열지 않기"(우) — 본문/첨부 아래 */
 .meta {
   display: flex;
   align-items: center;
@@ -195,11 +291,11 @@
   white-space: nowrap;
 }
 
-/* 이미지 확대 — 화면 전체를 덮고 원본 비율 유지. MUI Dialog(z-index 1300) 위에 떠야 한다 */
+/* 이미지 확대 — 화면 전체를 덮고 원본 비율 유지. 편집 다이얼로그/미리보기 위에 떠야 한다 */
 .zoomOverlay {
   position: fixed;
   inset: 0;
-  z-index: 1400;
+  z-index: 1500;
   display: flex;
   align-items: center;
   justify-content: center;

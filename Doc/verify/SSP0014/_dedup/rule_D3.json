@@ -1,208 +1,173 @@
 {
  "rule_id": "D3",
- "hash": "1ff958e795137582",
+ "hash": "2e22b5e5a5ce485a",
  "groups": [
   {
    "rows": [
     "EG-164de834"
    ],
-   "why": "SCM0002_ItembyDivisionPopup의 Model 조건 잠금은 다른 팝업이라 같은 요소를 보는 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-228b04e4"
    ],
-   "why": "UserInfoPopup MAIL_USER2 컬럼 잠금이며, 같은 LockColumn 호출을 근거로 하지만 컬럼이 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-265a8e09"
    ],
-   "why": "UserInfoPopup MAIL_USER5 컬럼 잠금이라 다른 컬럼 행과 요소가 다르다."
-  },
-  {
-   "rows": [
-    "EG-33f155b6"
-   ],
-   "why": "UserInfoPopup MAIL_USER4 컬럼 잠금이라 다른 컬럼 행과 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-41a5e55c"
    ],
-   "why": "UserInfoPopup TEAM_LEADER 컬럼 잠금이며, 메인 그리드의 TEAM_LEADER_NAME과는 화면과 컬럼이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-6d381c4d"
    ],
-   "why": "UserInfoPopup MAIL_USER3 컬럼 잠금이라 다른 컬럼 행과 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-870c086e"
    ],
-   "why": "UserInfoPopup USER_ID 컬럼 잠금이라 다른 컬럼 행과 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-a88c1c35"
    ],
-   "why": "UserInfoPopup MAIL_USER1 컬럼 잠금이라 다른 컬럼 행과 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-f6457b37"
    ],
-   "why": "UserInfoPopup PART_LEADER 컬럼 잠금이며, 메인 그리드의 PART_LEADER_NAME과는 화면과 컬럼이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-0a7e6009"
    ],
-   "why": "CREATION_DATE 대조표 추적 행이며, 이 컬럼만 따로 잠그는 ASIS 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-0c4853b7"
    ],
-   "why": "NICK_NAME 추적 행이고, ASIS V-1d2188ca는 DIVISION~NICK_NAME 범위 잠금이라 대상 범위가 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4549a6c9"
    ],
-   "why": "USER_NAME 추적 행은 '행 값 기반 조건부 잠금'을 기대하는데 ASIS V-e0a4fa54는 무조건 LockColumn이라 기대가 같다고 확신할 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-4b962dfa"
    ],
-   "why": "FROM_SITE 대조표 추적 행이며, 같은 컬럼을 같은 기대로 보는 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-51d77725"
    ],
-   "why": "DIVISION_ID 추적 행이고, ASIS V-1d2188ca는 DIVISION~NICK_NAME 범위 잠금이라 대상이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-641c82b6"
    ],
-   "why": "B-1~B-7은 AS-IS와 무관한 해당없음 추적 행이라 성질이 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-64340978"
    ],
-   "why": "CREATED_BY 단일 컬럼 추적 행이고, V-42676f72는 CREATED_BY~LAST_UPDATE_DATE 범위 무조건 잠금이라 대상과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-689a2d80"
    ],
-   "why": "LAST_UPDATE_DATE 단일 컬럼 추적 행이고, V-42676f72의 범위 잠금과는 대상과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-947e39a4"
    ],
-   "why": "OPERATION_GROUP 대조표 추적 행이며, 같은 컬럼을 보는 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-a5bb033f"
    ],
-   "why": "PART_LEADER_NAME 조건부 잠금 추적 행이고, V-8d2245fa는 무조건 LockColumn이라 기대가 같다고 확신할 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-d0378a55"
    ],
-   "why": "TEAM_LEADER_NAME 조건부 잠금 추적 행이고, V-d26ee8f9는 무조건 LockColumn이라 기대가 같다고 확신할 수 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-d7d85c1c"
    ],
-   "why": "메인 그리드 ITEM_ID(Model) 컬럼 추적 행이며, 팝업 Model 조회조건(EG-164de834)과는 요소가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-e77bb353"
    ],
-   "why": "LAST_UPDATED_BY 대조표 추적 행이며, 같은 컬럼을 보는 행이 없다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-1d2188ca"
    ],
-   "why": "spdMain DIVISION~NICK_NAME 범위 LockColumn이며, 같은 범위를 보는 행이 없다."
-  },
-  {
-   "rows": [
-    "V-38f0b904"
-   ],
-   "why": "DMF0003 결함 유형 FCST Type 콤보와 Measure 권한 확인으로, 다른 행과 대상과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-42676f72"
    ],
-   "why": "spdMain CREATED_BY~LAST_UPDATE_DATE 범위 LockColumn이며, 같은 범위를 보는 행이 없다."
-  },
-  {
-   "rows": [
-    "V-62be4d0f"
-   ],
-   "why": "DMF0082 Div 81 Sales Site 유형별 AS From Site 활성 여부 확인으로, V-7732eab2와 조건과 기대가 달라 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-7590ef5e"
-   ],
-   "why": "신규 행 Measure 콤보 후보 확인이며, 신규 행 상태와 기대가 다른 행과 다르다."
-  },
-  {
-   "rows": [
-    "V-7732eab2"
-   ],
-   "why": "DMF0082 Current 버전 입력 Measure와 AS From Site 목록 통제 확인으로, V-62be4d0f와 조건과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-8d2245fa"
    ],
-   "why": "spdMain PART_LEADER_NAME 단일 컬럼의 무조건 LockColumn이라 조건부 잠금 추적 행과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-ab0aa69e"
    ],
-   "why": "SwitchLock 호출 확인으로, 특정 컬럼 잠금 행과 방법이 다르다."
-  },
-  {
-   "rows": [
-    "V-d1369ed5"
-   ],
-   "why": "SCP0006 결함 유형 CA1 행 전체 색상(편집 불가) 확인으로, 다른 행과 대상과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-d26ee8f9"
    ],
-   "why": "spdMain TEAM_LEADER_NAME 단일 컬럼의 무조건 LockColumn이라 조건부 잠금 추적 행과 기대가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e0a4fa54"
    ],
-   "why": "spdMain USER_NAME 단일 컬럼의 무조건 LockColumn이라 조건부 잠금 추적 행과 기대가 다르다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:12:59",
- "cost": 0.14751299999999998
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:24",
+ "cost": 0,
+ "open": 0
 }

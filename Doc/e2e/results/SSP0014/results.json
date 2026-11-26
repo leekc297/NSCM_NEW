@@ -14,7 +14,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -61,7 +61,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -135,7 +143,7 @@
                   "annotations": [
                     {
                       "type": "authcrud",
-                      "description": "tobeGroups=GUEST|SSP Viewer menuAccess=Y expected=USER_CHECK|SEARCH dataset=SSP Viewer matrix=-"
+                      "description": "tobeGroups=GUEST|SSP Viewer menuAccess=Y expected=SEARCH|USER_CHECK dataset=SSP Viewer matrix=-"
                     },
                     {
                       "type": "cascade",
@@ -158,16 +166,16 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6560,
+                      "duration": 6352,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-19T23:42:09.695Z",
+                      "startTime": "2026-11-24T18:00:28.502Z",
                       "annotations": [
                         {
                           "type": "authcrud",
-                          "description": "tobeGroups=GUEST|SSP Viewer menuAccess=Y expected=USER_CHECK|SEARCH dataset=SSP Viewer matrix=-"
+                          "description": "tobeGroups=GUEST|SSP Viewer menuAccess=Y expected=SEARCH|USER_CHECK dataset=SSP Viewer matrix=-"
                         },
                         {
                           "type": "cascade",
@@ -182,7 +190,13 @@
                           "description": "kijung03.kim div=40 mode=no-save save=false insert=false delete=false editable=false saved=false found=false cleaned=true restored=true"
                         }
                       ],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0014\\artifacts\\SSP0014.authcrud-SSP0014-권-994a9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -200,8 +214,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T23:42:09.255Z",
-    "duration": 9847.156,
+    "startTime": "2026-11-24T18:00:28.039Z",
+    "duration": 9689.007000000001,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

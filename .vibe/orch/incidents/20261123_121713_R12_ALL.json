@@ -1,0 +1,29 @@
+{
+  "id": "20261123_121713_R12_ALL",
+  "at": "2026-11-23T12:17:13+09:00",
+  "ms": 1795403833524,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_orch_usercheck.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_orch_usercheck.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 133 · FAIL 1 · FAIL U3 장부 막힘 2건 = 실패 1항목(S13|U3|worklist) [] / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_orch_usercheck.js",
+    "file": "t_orch_usercheck.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T19:12:12+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

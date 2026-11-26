@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, SearchArea, sortOptionsBy } from '@shared/components';
+import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -46,7 +46,7 @@ export const PlanActivityMgmtForm = ({ onSearch }: Props) => {
 
   const divisionOptions = toComboOptions(divisions);
   // 필터형 cascade — 선택 Division 으로 옵션 좁힘(AS-IS DBUtils.Filter DIVISION_ID='...', design 02 §3).
-  //   NAME(label) 정렬은 CustomDropdown sortBy='label'(AS-IS 2025-10-20 OPMZ_PLAN_GR_NAME 정렬 등가).
+  //   NAME 정렬은 콤보 SQL ORDER BY 를 그대로 쓴다(AS-IS 2025-10-20 OPMZ_PLAN_GR_NAME 정렬 등가).
   //   Division 무선택이면 후보 0(AS-IS RefreshPlanGroupByDivision DIVISION_ID='' 필터 -> 0건 등가).
   const planGroupOptions = sc.divisionId
     ? toComboOptions((planGroups ?? []).filter(row => str(row.DIVISION_ID) === sc.divisionId))
@@ -74,9 +74,9 @@ export const PlanActivityMgmtForm = ({ onSearch }: Props) => {
   }, [noAuthDivision, hasDivision, firstDivision, setDivision]);
 
   // PlanGroup — 선택 Division 으로 필터된 옵션의 첫 항목(Division 기본선택 후 cascade 로 채워진다).
-  //   주의: CustomDropdown 이 sortBy='label' 로 표시만 정렬하므로, 기본선택도 같은 정렬의 첫 항목을
-  //   골라야 "보이는 첫째"와 일치한다(raw [0] 은 서버순서라 어긋남 — ESS_NAM 앞 ESS_NB 선택 사고).
-  const firstPlanGroup = sortOptionsBy(planGroupOptions, 'label')[0];
+  //   순서는 콤보 SQL 의 ORDER BY FN_ASIS_SORT_KEY(OPMZ_PLAN_GR_NAME) 그대로다(AS-IS 문자열 정렬 등가).
+  //   FE sortBy='label' 은 숫자를 자연정렬해 E62B 가 E129A 앞에 오는 등 AS-IS 와 어긋나 쓰지 않는다.
+  const firstPlanGroup = planGroupOptions[0];
   const firstPlanGroupValue = firstPlanGroup?.value;
   const firstPlanGroupLabel = firstPlanGroup?.label;
   const hasPlanGroup = planGroupOptions.some(o => o.value === sc.planGroupId);
@@ -153,7 +153,6 @@ export const PlanActivityMgmtForm = ({ onSearch }: Props) => {
               render={() => (
                 <CustomDropdown
                   disabled={noAuthDivision}
-                  sortBy='label'
                   value={sc.planGroupId}
                   options={planGroupOptions}
                   onChange={(_, picked) => {

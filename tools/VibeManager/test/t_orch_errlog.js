@@ -21,6 +21,23 @@ const lines = () => { try { return fs.readFileSync(errlog.file(), 'utf8').trim()
   const ri = errlog.note('orch-watch', 'lockStopClean', '중지 뒤 잠금 정리: Doc/e2e/x.lock', { kind: 'lock.stopclean', info: true });
   const si = errlog.stats(0);
   chk('info 기록 = 파일 기록 · stats 제외', !!ri && lines().length === 3 && lines()[2].info === true && si.length === 2 && !si.some(x => x.fn === 'lockStopClean'), JSON.stringify(si.map(x => x.sig)));
+  // 개선안 20261120181921_SELF_3: AI 편집만 되돌린 정상 처리(orch-improve.restore, info) = stats 제외 · 실패 있는 되돌림 = 집계
+  const rr = errlog.note('orch-improve', 'restore', '20261120115806_VISION_3 probe.ts AI 편집 2건만 되돌림(반영 전과 같음)', { info: true });
+  const sr = errlog.stats(0);
+  chk('되돌림 정상 처리 info = stats 제외', !!rr && lines().length === 4 && lines()[3].info === true && sr.length === 2 && !sr.some(x => x.fn === 'restore'), JSON.stringify(sr.map(x => x.sig)));
+  errlog.note('orch-improve', 'restore', '20261120143327_SELF orch-usercheck.js 되돌리기 실패: 사본 없음');
+  const sf = errlog.stats(0);
+  chk('되돌림 실패 = stats 집계', lines().length === 5 && sf.length === 3 && sf.some(x => x.fn === 'restore'), JSON.stringify(sf.map(x => x.sig)));
+  // 개선안 20261121225944_SELF: info 필드 생기기 전 기록(info 없음)도 정상 처리면 stats 제외 · 실패 조각 섞이면 집계
+  errlog.note('orch-watch', 'lockStopClean', '중지 뒤 잠금 정리: Doc/e2e/_run.admit.lock (PID 39556 없음 · 화면 SCP0028)');
+  const sl = errlog.stats(0);
+  chk('info 없는 lockStopClean = stats 제외', lines().length === 6 && lines()[5].info === undefined && sl.length === 3 && !sl.some(x => x.fn === 'lockStopClean'), JSON.stringify(sl.map(x => x.sig)));
+  errlog.note('orch-improve2', 'restore', '20261120162317_SELF orch-usercheck.js AI 편집 1건만 되돌림(반영 전과 같음) / user_checks.json AI 편집 1건만 되돌림(반영 전과 같음)');
+  const so = errlog.stats(0);
+  chk('info 없는 정상 restore = stats 제외', lines().length === 7 && lines()[6].info === undefined && so.length === 3 && !so.some(x => x.mod === 'orch-improve2'), JSON.stringify(so.map(x => x.sig)));
+  errlog.note('orch-improve3', 'restore', '20261120181921_SELF orch-history.js AI 편집 1건만 되돌림(반영 전과 같음) / t_orch_history.js 되돌림 실패: 사본 없음');
+  const sm = errlog.stats(0);
+  chk('실패 조각 섞인 restore = stats 집계', lines().length === 8 && sm.length === 4 && sm.some(x => x.mod === 'orch-improve3'), JSON.stringify(sm.map(x => x.sig)));
   // 감시기 tick 안 예외 → 파일에 남는다(종전 빈 catch)
   watch.init(p, {}); const sweep = st.sweep; st.sweep = () => { throw new Error('injected sweep failure'); };
   watch.tick(); st.sweep = sweep;

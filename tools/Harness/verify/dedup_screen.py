@@ -26,6 +26,7 @@ COLS = ['rule_id', 'group_id', 'row_id', 'rep_row_id', 'source', 'target', 'size
 SRC_RANK = {s: i for i, s in enumerate(['RULE_SCREEN', 'COLUMN', 'SEARCH', 'SP', 'ASIS', 'ASIS_DIFF', 'MSG', 'TRACE', 'CONFIRMED', 'DEFECT', 'GENERAL'])}
 UNMEASURED = ('ERROR', 'NOT_RUN', '판정필요', '')
 MEASURED = ('PASS', 'FAIL', 'NA')
+INHERIT = ('PASS', 'FAIL')   # 2026-11-26 개선안 20261126115652_SELF_3(R235): 상속은 대표 PASS·FAIL 만. 대표가 해당없음이면 구성원은 미검증으로 두고 직접 잼
 
 
 def P(*a):
@@ -158,7 +159,7 @@ def apply(mid, rows):
         ev = r.get('evidence') or ''
         if ev.startswith('[중복 정리]'):  # 지난 상속은 다시 계산
             r['result'] = 'NOT_RUN'; ev = ''; r['evidence'] = ''
-        if (r.get('result') or '') in UNMEASURED and rep.get('result') in MEASURED:
+        if (r.get('result') or '') in UNMEASURED and rep.get('result') in INHERIT:
             r['result'] = rep['result']; r['evidence'] = f"[중복 정리] 대표 {rep_id} 결과 상속(AI 판단 Doc/verify/{mid}/dedup_screen.csv): " + (rep.get('evidence') or '')[:800]
             r['tobe_ref'] = f'중복 정리(대표 {rep_id})'; n += 1
         elif r.get('result') in MEASURED and rep.get('result') in MEASURED and r['result'] != rep['result']:
@@ -263,6 +264,8 @@ def selftest():
         chk('미측정 구성원 = 대표 결과 상속 2행 · 직접 측정이 다른 행 = 그대로(결과 다름 1)', n == 2 and diff == 1 and rows[1]['result'] == 'PASS' and rows[1]['evidence'].startswith('[중복 정리] 대표 V-3') and rows[2]['result'] == 'FAIL' and rows[4]['result'] == 'ERROR')
         rows[0]['result'] = 'ERROR'; n, diff = apply('X', rows)
         chk('대표가 미측정으로 바뀌면 지난 상속을 지움', rows[1]['result'] == 'NOT_RUN' and n == 0)
+        rows[0]['result'] = 'NA'; n, diff = apply('X', rows)
+        chk('대표가 해당없음이면 상속 없음(구성원 미검증 유지)', rows[1]['result'] == 'NOT_RUN' and n == 0)
     finally:
         vdir = old_v; shutil.rmtree(d, ignore_errors=True)
     res = judge_rule('X', 'A1', items, '', ask=lambda p: {'ok': True, 'data': {'groups': [{'rows': ['T-1', 'V-2', 'V-3']}, {'rows': ['V-4']}]}})

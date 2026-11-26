@@ -51,7 +51,24 @@ AS-IS `siMain.SmartColMerge()`(cs:362)는 인자 없이 호출되고 per-column 
 PLANT_ID …)에 선두 기간 컬럼(YYYYMM/YYYYMMDD)을 더해 적용했다. 공용 CustomMergeManager 는 좌측 누적
 키 방식이라 선두 연속 컬럼에만 유효하다(비선두 컬럼 사이에 병합 대상이 끼면 사이 값도 같아야 병합).
 
-## Excel 이원 컬럼(_XLS) 정책 (design 03 §3 #38~41,58~59) — 보류(Hard Boundary 밖·별도 PR)
+## Excel 이원 컬럼(_XLS) 정책 (design 03 §3 #38~41,58~59) — 이식(2026-11-24), Yellow 만 제외
+
+이식 내용(2026-11-24, 사용자 지적: 환산계수가 텍스트 1.000000·환산수량 정수서식·CF 3칸 누락):
+- 화면 컬럼은 스왑하지 않는다(사용자 지시 — 화면/`_XLS` SP 값이 동일, 차이는 엑셀 자릿수·숫자타입뿐).
+- `EndingInventoryGrid.tsx` gridColumns `_excelFormat`: 짝이 되는 `<컬럼>_XLS` 메타 DATA_SCALE_NUMBER 를
+  따른다 — QUANTITY·AMOUNT_KRW·UNIT_PRICE_KRW·AMOUNT·UNIT_PRICE·CELL_CONVER_FACTOR 5자리,
+  CELL_CONVER_QUANTITY 7자리. `_XLS` 짝이 없는 FPNumber 는 자기 메타 scale(없으면 `#,##0`).
+- 헤더 보호: CF 3컬럼 메타 소분류 '검증 컬럼'을 비운다(남으면 전체 헤더가 2단으로 바뀜).
+- 공용 `gridAction.ts` formatItem: `_excelFormat` 지정 컬럼의 숫자 문자열(환산계수 SP 문자 '1.000000')을
+  숫자로 바꿔 숫자 셀로 쓴다(opt-in — 미지정 화면 불변).
+- CELL_CF/CELL_CF_BOM/USE_CELL_CF_BOM: 메타 DEFAULT_FLAG=N → BE display=false 라 그리드에 생성조차 안 됐다.
+  gridColumns 에서 display=true·visible=false 로 만들어 두고, handleExcel 이 export 직전 visible=true →
+  끝나면 복원(constants `EXCEL_SHOW_COLUMNS`, cs:925~953).
+- 공용 `gridAction.ts` excelDownload: 재구성 Column 의 visible 을 바인딩 컬럼이면 true 로(아래 제약 1 해소 —
+  flatColumnGroups 는 이미 화면 표시 컬럼만이라 다른 화면 출력 불변).
+- USE_CELL_CF_BOM='Y' Yellow 는 공용 export 배경색 제거 정책(아래 제약 2)으로 미이식.
+
+이하는 이식 전 기록(보류 판단 근거).
 
 AS-IS `SetSheetVisible`/`ExportExcelData`(cs:684~813)는 다운로드 시 표시 2자리 컬럼(CELL_CONVER_FACTOR/
 QUANTITY)을 숨기고 `_XLS`(CELL_CONVER_FACTOR_XLS/QUANTITY_XLS, 5/7자리)를 보이게 스왑 + 내부 CF 컬럼

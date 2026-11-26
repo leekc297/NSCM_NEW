@@ -74,6 +74,22 @@ export const isInsertFrozenDay = (binding: string, todayPlus10Ymd: string): bool
   return m[1] < todayPlus10Ymd;
 };
 
+// R4 마감(frozen) D_ 셀 판정 — 셀 잠금(evalShipmentDynCell)과 저장 전 frozen 가드(validateFrozenCells)가
+//   같은 기준을 쓰도록 한 곳에 둔다. 신규행(I)이 From Site 미선택이면 '오늘+10일' 컷오프(cs 1022),
+//   그 외(기존행, From Site 가 채워진 신규행)는 행별 SHIP_FROZEN 선두 D_(cs 540).
+export const isFrozenDayCell = (
+  binding: string,
+  row: ShipmentRequestRow | undefined,
+  dOrderedDayBindings: readonly string[],
+  insertFrozenCutoffYmd: string
+): boolean => {
+  const action = typeof row?.CRUD_TYPE === 'string' ? row.CRUD_TYPE : '';
+  const hasFromSite = typeof row?.FROM_SITE === 'string' && row.FROM_SITE.trim() !== '';
+  return action === 'I' && !hasFromSite
+    ? isInsertFrozenDay(binding, insertFrozenCutoffYmd)
+    : isFrozenLeadingDay(binding, row, dOrderedDayBindings);
+};
+
 // 동적 셀(M_/W_/D_) 편집 가능 여부 — R1(버킷)×R2(measure)×R3(행 액션)×R4(frozen) 종합.
 //   formatItem(음영/편집색) + beginningEdit(cancel) 공유. calendar cutoff 없음(위 헤더 참조).
 export const evalShipmentDynCell = (params: {
@@ -97,11 +113,7 @@ export const evalShipmentDynCell = (params: {
   // 신규행(I): From Site 미선택이면 '오늘+10일' 플랫(cs 1022). BOD 팝업으로 From Site 가 채워지면
   //   그 사이트의 SHIP_FROZEN(SCM_MST_SITE)으로 교체 — 기존행과 동일한 isFrozenLeadingDay 를 탄다
   //   (applyToInsertRow 가 SHIP_FROZEN 세팅 + 선두 frozen D_ clear). 기존행: 항상 SHIP_FROZEN 선두 D_.
-  const hasFromSite = typeof row?.FROM_SITE === 'string' && row.FROM_SITE.trim() !== '';
-  const frozen =
-    action === 'I' && !hasFromSite
-      ? isInsertFrozenDay(binding, insertFrozenCutoffYmd)
-      : isFrozenLeadingDay(binding, row, dOrderedDayBindings);
+  const frozen = isFrozenDayCell(binding, row, dOrderedDayBindings, insertFrozenCutoffYmd);
   // 음영(Gray) = 마감(frozen) D_ 셀 뿐이다. AS-IS cs 486/540 은 회색(242,242,242)을 Frozen 선두 구간에만
   //   칠하고, 집계/시스템 measure 행이라고 기간열 전체를 회색으로 덮지 않는다(공통 measure 는 ToSite~Requestor
   //   정적열만 연파랑). `!inputMeasure` 를 음영에 넣으면 Frozen 이후까지 회색이 번져 AS-IS 와 어긋난다

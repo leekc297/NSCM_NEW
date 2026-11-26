@@ -1,0 +1,14 @@
+﻿SELECT SITE_ID AS CODE
+           , '(' + SITE_ID + ')' + CASE WHEN SITE_NAME = '' OR SITE_NAME IS NULL THEN SITE_ID ELSE SITE_NAME END AS NAME
+      FROM  SCM_SITE_M A WITH(NOLOCK)
+      WHERE 1 = 1
+      AND  EXISTS (
+        	SELECT 1 
+        	FROM   FP_USER_ROLE_INFO_V B WITH(NOLOCK)
+        	WHERE  A.COMPANY_ID  = B.COMPANY_ID
+        	AND    A.SITE_ID     = B.SITE_ID
+        	AND    B.USER_ID     = @USER_ID
+      )
+      AND A.SITE_ID IN ('A003','A004') -- 미국, 폴란드 전용... 20200723
+      GROUP BY A.SITE_ID, A.SITE_NAME
+      ORDER BY A.SITE_ID ASC

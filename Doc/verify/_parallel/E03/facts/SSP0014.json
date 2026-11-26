@@ -1,6 +1,6 @@
 {
 "id": "SSP0014",
-"at": "2026-11-20 09:30:51",
+"at": "2026-11-25 01:50:36",
 "asis": {
 "insertStmts": [],
 "headerSpan": [],
@@ -104,6 +104,42 @@
 ],
 "btnAuth": [
 {
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
 "user_gr_id": "ADMIN",
 "sht_nm": "main",
 "mnu_btn_cd": "EDIT",
@@ -112,53 +148,89 @@
 {
 "user_gr_id": "ADMIN",
 "sht_nm": "main",
-"mnu_btn_cd": "SAVE",
+"mnu_btn_cd": "USER_CHECK",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
+"user_gr_id": "SSP Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "ADMIN",
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "USER_CHECK",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "CAPA Planner",
+"user_gr_id": "SCP Tester",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Tester",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "CAPA Planner",
+"user_gr_id": "SCP Tester",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "CAPA Planner",
+"user_gr_id": "SCP Tester",
 "sht_nm": "main",
 "mnu_btn_cd": "USER_CHECK",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "DM ADMIN",
+"user_gr_id": "FP Planner",
 "sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
 },
 {
-"user_gr_id": "DM ADMIN",
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "DM ADMIN",
+"user_gr_id": "FP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
 "sht_nm": "main",
 "mnu_btn_cd": "USER_CHECK",
 "use_yn": "Y"
@@ -166,12 +238,6 @@
 {
 "user_gr_id": "DM Planner",
 "sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
@@ -182,10 +248,28 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "DM Planner (W/S)",
+"user_gr_id": "FP Viewer",
 "sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
 },
 {
 "user_gr_id": "DM Planner (W/S)",
@@ -202,12 +286,6 @@
 {
 "user_gr_id": "DM Viewer",
 "sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
@@ -218,69 +296,57 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "FP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "EDIT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
+"user_gr_id": "SSP Viewer",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "FP Planner",
+"user_gr_id": "SSP Viewer",
 "sht_nm": "main",
 "mnu_btn_cd": "USER_CHECK",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "FP Viewer",
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "main",
+"mnu_btn_cd": "USER_CHECK",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
 "use_yn": "N"
 },
 {
-"user_gr_id": "FP Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "USER_CHECK",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM PI Admin",
-"sht_nm": "main",
-"mnu_btn_cd": "EDIT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM PI Admin",
+"user_gr_id": "SSP Viewer",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
-"use_yn": "Y"
+"use_yn": "N"
 },
 {
-"user_gr_id": "SCM PI Admin",
+"user_gr_id": "SSP ADMIN",
 "sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCM PI Admin",
-"sht_nm": "main",
-"mnu_btn_cd": "USER_CHECK",
+"mnu_btn_cd": "SAVE",
 "use_yn": "Y"
 },
 {
@@ -290,73 +356,19 @@
 "use_yn": "N"
 },
 {
-"user_gr_id": "SCM Viewer",
+"user_gr_id": "DM ADMIN",
 "sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
 },
 {
-"user_gr_id": "SCM Viewer",
-"sht_nm": "main",
-"mnu_btn_cd": "USER_CHECK",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "EDIT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
+"user_gr_id": "CAPA Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "USER_CHECK",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "main",
-"mnu_btn_cd": "EDIT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "main",
-"mnu_btn_cd": "USER_CHECK",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP ADMIN",
+"user_gr_id": "CAPA Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
@@ -368,46 +380,34 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "EDIT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP Planner",
-"sht_nm": "main",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP Planner",
+"user_gr_id": "CAPA Planner",
 "sht_nm": "main",
 "mnu_btn_cd": "USER_CHECK",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP Viewer",
+"user_gr_id": "FP Viewer",
 "sht_nm": "main",
 "mnu_btn_cd": "SAVE",
 "use_yn": "N"
 },
 {
-"user_gr_id": "SSP Viewer",
+"user_gr_id": "DM Viewer",
+"sht_nm": "main",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
 "sht_nm": "main",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP Viewer",
+"user_gr_id": "DM Planner (W/S)",
 "sht_nm": "main",
-"mnu_btn_cd": "USER_CHECK",
-"use_yn": "Y"
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
 }
 ],
 "columns": [
@@ -694,9 +694,9 @@
 }
 ],
 "now": {
-"now_": "2026-11-20 09:30",
-"dow": "FRI",
-"hm": "0930"
+"now_": "2026-11-25 01:50",
+"dow": "WED",
+"hm": "0150"
 },
 "titleset": {
 "tobeRows": 0,

@@ -1,6 +1,6 @@
 # SSP0014 · SSP0014_GET_USER_ID_CHECK ↔ PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK
 
-- 실행: 2026-11-20 08:43:11
+- 실행: 2026-11-25 03:01:41
 - 파라미터: `{"p_user_id": "bpark416"}`
 - 종류: GET
 

@@ -1,0 +1,46 @@
+{
+ "screen": "SCP0005",
+ "generated": "2026-11-25 01:04:01",
+ "vars": {
+  "dtTransMode": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:clbTransMode"
+   ],
+   "ref": "SCP0005_DistributionRoute.cs:203 ← SCP0005_DistributionRoute.cs:49",
+   "rows": [
+    {
+     "CODE": "AIR",
+     "NAME": "AIR"
+    },
+    {
+     "CODE": "FRY",
+     "NAME": "FERRY"
+    },
+    {
+     "CODE": "RAI",
+     "NAME": "RAIL"
+    },
+    {
+     "CODE": "SEA",
+     "NAME": "SEA"
+    },
+    {
+     "CODE": "TRK",
+     "NAME": "TRUCK"
+    }
+   ]
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:LT_TYPE",
+    "GRID:TRANSPORT_MODE"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/LT_TYPE ← SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/TRANSPORT_MODE",
+   "rows": []
+  }
+ }
+}

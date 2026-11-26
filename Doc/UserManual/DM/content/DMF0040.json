@@ -1,0 +1,101 @@
+{
+ "definition": "현재(Current) MKT FCST 와 지정한 이전 버전의 MKT FCST 를 행 단위로 나란히 놓고 차이를 비교하는 화면",
+ "overview": [
+  "현재 MKT FCST(Current)와 이전 MKT FCST 버전을 같은 Model 행에 붙여 기간별 수량 차이를 보는 조회 화면임",
+  "위쪽 조회 조건과 펼침 조건, Comparison 그리드로 구성됨. Version 팝업, Column Setting 창을 씀",
+  "Div, Period 를 정하고 Version 팝업에서 비교 버전을 1~2개 골라 조회 → Difference 행에서 변동 확인 → 차이 난 행만 볼 때 Diff.Only 체크 후 다시 조회함"
+ ],
+ "pages": [
+  {
+   "title": "MKT FCST Comparison (1/2)",
+   "keyPoint": "",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.141,
+     "y": 0.142
+    },
+    {
+     "no": 2,
+     "x": 0.73,
+     "y": 0.34
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 비우고 조회하면 \"Division 을 선택하세요.\" 메시지가 뜸",
+      "Team, End Customer, Sales Site, Biz. Type, Item Type: ALL 또는 값을 골라 조회함. Project 는 Div 40 에서 입력 불가",
+      "Period: 필수. 시작일이 종료일보다 늦으면 \"조회 기간이 잘못되었습니다 (시작일 > 종료일).\" 메시지가 뜸. 기간은 2년 이내로 지정함",
+      "Version.: 필수. 돋보기 버튼으로 버전 팝업을 열어 고름. 비우면 \"버전을 선택하세요.\", 3개 이상 고르면 \"버전은 최대 2개까지 선택할 수 있습니다.\" 메시지가 뜸",
+      "Model/Nickname, Owner: 돋보기 버튼으로 찾아 넣음. QTY 콤보로 수량 단위를 고름(기본 QTY/1)",
+      "Diff.Only: 체크하면 Current 와 버전 값이 다른 행만 조회됨. Sum 은 Bucket 이 Only Weekly 이면 고를 수 없음"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Column Setting 아이콘: 컬럼 표시 순서와 표시 여부를 사용자별로 저장함",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "MKT FCST Comparison (2/2)",
+   "keyPoint": "",
+   "markers": [
+    {
+     "no": 3,
+     "x": 0.173,
+     "y": 0.34
+    },
+    {
+     "no": 4,
+     "x": 0.418,
+     "y": 0.34
+    }
+   ],
+   "sections": [
+    {
+     "no": 3,
+     "title": "Comparison 그리드",
+     "lines": [
+      "Div, End Customer, Sales Site, Model, Nick Name, SCP Use, OWNER 가 앞쪽에 고정되고 같은 값은 셀이 합쳐짐",
+      "값은 조회만 할 수 있고 입력, 저장은 없음",
+      "맨 아래 합계 행에 기간별 합계가 나옴"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Measure, 기간 컬럼",
+     "lines": [
+      "Measure 열에 Current, 선택한 버전(MF_W_ 로 시작), Difference 행이 차례로 나옴",
+      "Difference 는 Current 값에서 버전 값을 뺀 값임. 0 은 파란색, 음수는 빨간색으로 표시됨",
+      "기간 컬럼은 Bucket 단위로 만들어지고 기간마다 SUM 이 나옴(Monthly 이면 2026-10, 2026-11 등)"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0040",
+ "uiName": "MKT FCST Comparison",
+ "menuPath": "DM> Waterfall> MKT FCST Comparison",
+ "captures": [
+  "captures/DMF0040.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0040/",
+  "Doc/asisfacts/screens/DMF0040/"
+ ],
+ "buttons": [
+  "mktFcstComparison:SEARCH",
+  "spreadTitle:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH",
+  "version:SEARCH"
+ ]
+}

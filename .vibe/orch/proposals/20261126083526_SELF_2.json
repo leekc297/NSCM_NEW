@@ -1,0 +1,45 @@
+{
+  "id": "20261126083526_SELF_2",
+  "at": "2026-11-26T08:35:26+09:00",
+  "ms": 1795649726339,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/timing_report.py|소요집계가runverify기록timingcsvruntimingjsonte",
+  "title": "사용자 지시 R234 같은 문제: tools/Harness/verify/timing_report.py:117 소요 집계가 run_verify 기록(_timing.csv, run_timing.json, _test_timing.jsonl)만 읽음. AI 검토 세션(llm_u",
+  "evidence": "규칙 R234 \"CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림\" (원래 지시 2026-11-26 08:13 \"vm 에서 실행한 scp0005 의 checklist 작업에 전체 5시간34분 소요되었습니다. 현재 scp0005에 대한 checklist 건수현황 알려주세요. 그리고 5시간34분이 소요된 부분에 대해서 전체 세션별로 시간을 분리해서 많이 시간이 소요된 부분을 분석해서 개선할 수 있도록\") · tools/Harness/verify/timing_report.py:117 stage_part(d, every)",
+  "targets": [
+    "tools/Harness/verify/timing_report.py"
+  ],
+  "before_after": "llm_usage.csv(at-ms 로 시작 계산, kind 별 합), events.jsonl 의 해당 화면 step.end, step.sub, claude.end 를 읽는 구간을 추가하고, 체인 실제 경과와 구간 합의 차이를 '단계 밖' 시간으로 함께 출력함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/timing_report.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:01:42+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/timing_report.py load_events·chains_of·chain_part·llm_part 추가. events.jsonl 그 화면 chain.start·chain.end·step.end·step.sub·claude.end, llm_usage.csv(시작 = at - ms, kind 별 합), 체인 실제 경과 - 단계 합 = 단계 밖 출력. SCP0005 실행 확인: 체인 SCP0005_1795608394751 334.8분, 단계 9개 합 334.8분, 단계 밖 0.0분, AI 세션 144건 36.1분. py_compile OK. 2026-11-26 16:01:42"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 1화면 소요가 목표(checklistTargetMin)를 넘으면 단계, 하위 단계, AI 세션별 시작, 종료 시각과 소요를 나눠 기록하고 소요 상위 구간을 정합성이 같은 방법의 속도 개선 대상으로 올림 규칙을 tools/Harness/verify/timing_report.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R234|tools/Harness/verify/timing_report.py",
+  "kind": "fix",
+  "claimedBy": "S-A",
+  "waitNote": "",
+  "appliedMs": 1795676502582
+}

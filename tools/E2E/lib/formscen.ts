@@ -1,16 +1,19 @@
 // 폼 저장형 화면 시나리오 실행기(2026-11-16 · SSP0020 미검증 0 작업)
 //   대상: 그리드 셀 편집이 아니라 조회영역 입력 + 버튼으로 저장·해제하는 화면. 그리드 셀 위반 입력(W3)이 측정 경로를 못 만드는 E4·F 계열 행을 잰다.
 //   입력: Doc/verify/<ID>/form_scenarios.json (화면 사실 — 근거는 AS-IS 원문 행. 실행기는 화면을 가리지 않는다)
+//     2026-11-26 R241(VMO 20261126153056_SELF_3): 생성기 tools/Harness/verify/form_scen_gen.py 가 AS-IS 원문(메시지 가드·입력칸·저장 SP)에서 만든다(run_verify facts 단계).
+//     사람이 쓴 파일(_gen 키 없음, SSP0020)은 생성기가 덮지 않고 대조만 한다. 생성분 단계의 fuzzy = AS-IS 컨트롤 이름에서 얻은 라벨(TO-BE 칸 라벨과 앞부분 일치 1건일 때만 씀)
 //   단계: text(라벨 칸 입력) · period(기간 두 칸) · multi(다중 선택 none|keep|first) · click(버튼) · dialog(ok|cancel) · search · checkall(행 머리 전체 선택) · wait
 //   판정: 기대 문구(AS-IS 메시지 문구) 포함 여부 + 저장 요청 수. 저장 요청은 allowSave 시나리오만 서버에 보낸다(그 밖은 호출부가 route 로 차단)
 import type { Page } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { branchBody, persistRespSamples, respSample } from './btnpopup';
 import type { Nscm } from './nscm';
 import { probe } from './probe';
 
-export type FStep = { op: 'text' | 'period' | 'multi' | 'click' | 'dialog' | 'search' | 'checkall' | 'checkrows' | 'wait' | 'tab' | 'expectButton' | 'selectAllToggle' | 'fieldButton' | 'expectDialogInput' | 'dialogPickFirst' | 'expectField'; visible?: boolean; not?: string; where?: Record<string, string>; label?: string; value?: string; from?: string; to?: string; mode?: 'none' | 'keep' | 'first' | 'all'; name?: string; how?: 'ok' | 'cancel'; ms?: number };
-export type FScen = { id: string; msg: string; meth: string; asis_line: string; asis_text: string; asis_text_alt?: string[]; kind: 'dynamic' | 'unreachable' | 'error_branch'; basis?: string; phase?: 'setup' | 'teardown'; rowsAfterMin?: number; rowsAfterMax?: number; matchAfter?: { where: Record<string, string>; min?: number; max?: number }; delayMs?: number; checks?: { msgCountEqualsMatch?: boolean; audit?: Record<string, string>; maxMs?: number; loading?: boolean; noConfirm?: boolean }; covers?: { rule: string; target: string; aspect: string }[]; allowSave?: boolean; expectSave?: number; steps?: FStep[]; expectRowsMin?: number; note?: string };
+export type FStep = { op: 'text' | 'period' | 'multi' | 'click' | 'dialog' | 'search' | 'checkall' | 'checkrows' | 'wait' | 'tab' | 'expectButton' | 'selectAllToggle' | 'fieldButton' | 'expectDialogInput' | 'dialogPickFirst' | 'expectField' | 'file' | 'date' | 'pick' | 'require' | 'requireCells'; file?: string; size?: number; nth?: number; index?: number; sep?: string; idx?: number; eq?: string; notIn?: string[]; fake?: boolean; join?: 'any' | 'all'; cells?: { r: number; c: number; op: 'eq' | 'ne'; v: string }[]; note?: string; fuzzy?: boolean; visible?: boolean; not?: string; where?: Record<string, string>; label?: string; value?: string; from?: string; to?: string; mode?: 'none' | 'keep' | 'first' | 'all'; name?: string; how?: 'ok' | 'cancel'; ms?: number };
+export type FScen = { id: string; msg: string; meth: string; asis_line: string; asis_text: string; asis_text_alt?: string[]; kind: 'dynamic' | 'unreachable' | 'error_branch'; basis?: string; phase?: 'setup' | 'teardown'; rowsAfterMin?: number; rowsAfterMax?: number; matchAfter?: { where: Record<string, string>; min?: number; max?: number }; delayMs?: number; checks?: { msgCountEqualsMatch?: boolean; audit?: Record<string, string>; maxMs?: number; loading?: boolean; noConfirm?: boolean }; covers?: { rule: string; target: string; aspect: string }[]; allowSave?: boolean; expectSave?: number; steps?: FStep[]; expectRowsMin?: number; note?: string; needs?: string[]; fakeSave?: { literal?: string } };
 export type Aspect = { ok: boolean | null; note: string };
 export type FRes = { id: string; msg: string; meth: string; result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; why: string; shown: string; saves: number; ms?: number; aspects?: Record<string, Aspect> };
 
@@ -31,12 +34,46 @@ const today = (off = 0) => { const d = new Date(baseMs() + off * 86400000); cons
 let VARS: Record<string, string> = {};
 const LAST_CLICK: { ms: number; loading: boolean | null } = { ms: -1, loading: null };
 let SAMPLE_LOADING = false;
+
+// ── 실저장 대신 실제 성공 응답 표본(2026-11-26 R241 3차 · form_scen_gen fakeSave) ─────────────────────────────
+//   단추(click fake)를 누른 뒤 브라우저의 xhr·fetch 요청은 서버로 보내지 않는다: '<sheet>/<btn>/call-proc' 중 Doc/verify/<ID>/resp_samples.json 에
+//   같은 시트·버튼 실제 성공 응답이 있으면 그 표본으로 답하고(AS-IS 성공 값 literal 이 있으면 그 값을 가진 표본만), 나머지는 막는다(_trace T502·T503 과 같은 원천)
+type FakeState = { on: boolean; literal: string; hits: string[]; noSample: string; samples: string[] };
+const FAKE: FakeState = { on: false, literal: '', hits: [], noSample: '', samples: [] };
+let FAKE_PAGE: Page | null = null;
+const fakeHandler = async (rt: import('@playwright/test').Route) => {
+  const rq = rt.request(); const ty = rq.resourceType();
+  if (ty !== 'xhr' && ty !== 'fetch') { await rt.continue().catch(() => undefined); return; }
+  const mm = /\/([^/]+)\/([^/]+)\/([^/]+)\/call-proc/.exec(rq.url()); const sheet = mm ? decodeURIComponent(mm[2]) : ''; const btn = mm ? decodeURIComponent(mm[3]) : '';
+  const smp = mm ? respSample(FAKE.samples, sheet, btn) : null; const bb = smp ? (FAKE.literal ? branchBody(smp, FAKE.literal, false)?.body : smp) : null;
+  if (bb) { FAKE.hits.push(`${sheet}/${btn}`); await rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(bb) }).catch(() => undefined); return; }
+  if (mm && !FAKE.noSample) FAKE.noSample = `${sheet}/${btn} 실제 응답 표본${smp ? `에 성공 값 '${FAKE.literal}' 칸 없음` : ' 없음'}`;
+  await rt.abort('blockedbyclient').catch(() => undefined);
+};
+async function fakeOn(p: Page) {
+  if (FAKE.on) return;
+  const id = (process.env.VERIFY_ID || '').toUpperCase(); const root = path.resolve(__dirname, '..', '..', '..');
+  FAKE.samples = id ? persistRespSamples([], path.join(root, 'Doc', 'verify', id, 'resp_samples.json')) : [];
+  FAKE.on = true; FAKE_PAGE = p; await p.route('**/*', fakeHandler);
+}
+async function fakeOff() { if (FAKE.on && FAKE_PAGE) await FAKE_PAGE.unroute('**/*', fakeHandler).catch(() => undefined); FAKE.on = false; FAKE_PAGE = null; }
 /** 시나리오 파일 vars + 실행 계정(@ME) */
 export function setVars(v: Record<string, string>) { VARS = v || {}; }
 const tok = (v: string | undefined) => { const m = /^@TODAY([+-]\d+)?$/.exec(v || ''); if (m) return today(Number(m[1] || 0)); const k = /^@(\w+)$/.exec(v || ''); return k && VARS[k[1]] !== undefined ? VARS[k[1]] : (v ?? ''); };
 
 function item(p: Page, label: string) {
   return p.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: p.locator(':scope > :first-child', { hasText: new RegExp(`^\\s*\\*?\\s*${escRe(label)}\\.?\\s*\\*?\\s*$`, 'i') }) }).first();
+}
+
+/** 생성분 단계(fuzzy) 라벨 — 같은 라벨 칸이 없으면 조회영역 칸 라벨 중 앞부분이 서로 일치하는 칸이 1개일 때 그 칸(AS-IS 'Division' ↔ TO-BE 'Div'). 0개·2개 이상이면 원래 라벨(칸 없음 → 측정 경로 없음) */
+async function itemFor(p: Page, st: FStep) {
+  const lab = st.label || ''; const it0 = item(p, lab);
+  if (!st.fuzzy || (await it0.count().catch(() => 0))) return { it: it0, label: lab };
+  const cn = (t: string) => t.replace(/\*/g, '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+  const want = cn(lab); if (want.length < 3) return { it: it0, label: lab };
+  const labs = (await p.locator('[class*="_formItem_"] > :first-child, [class*="formItem"] > :first-child').allInnerTexts().catch(() => [] as string[])).map(t => t.replace(/\s+/g, ' ').replace(/\*/g, '').trim()).filter(Boolean);
+  const hit = [...new Set(labs)].filter(t => { const c = cn(t); return c.length >= 3 && (c.startsWith(want) || want.startsWith(c)); });
+  return hit.length === 1 ? { it: item(p, hit[0]), label: hit[0] } : { it: it0, label: lab };
 }
 
 const normV = (v: unknown) => String(v ?? '').toLowerCase().replace(/[^a-z0-9가-힣_]/g, '');
@@ -73,6 +110,7 @@ export async function runStep(nscm: Nscm, st: FStep): Promise<string> {
     if (await b.isDisabled().catch(() => false)) return `버튼 '${st.name}' 비활성`;
     const LSEL = '[role="progressbar"], .MuiCircularProgress-root, .MuiLinearProgress-root, [class*="spinner" i], [class*="loading" i]:not([class*="loaded"])';
     const base0 = SAMPLE_LOADING ? await p.locator(LSEL).count().catch(() => 0) : 0;
+    if (st.fake) await fakeOn(p);   // 2026-11-26 R241 3차: 이 단추 뒤 서버 호출 = 표본 응답 또는 막음(실저장 없음)
     const t0 = Date.now(); await b.click({ timeout: 10_000 }).catch(() => undefined);
     let seen: boolean | null = SAMPLE_LOADING ? false : null; let got = -1;
     const lim = st.ms ?? 1_200; const msgLoc = p.locator('[role="dialog"], [role="alertdialog"], [role="alert"], .MuiSnackbar-root');
@@ -142,11 +180,63 @@ export async function runStep(nscm: Nscm, st: FStep): Promise<string> {
     if (!(await h.isVisible({ timeout: 3_000 }).catch(() => false))) return '행 머리 전체 선택 체크 없음';
     await h.check({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(400); return '';
   }
+  if (st.op === 'require') {
+    // 2026-11-26 R241 3차: 화면 상태 조건(AS-IS 필드 값 등)을 그 조건이 숨기는 칸의 표시 여부로 확인 — 다르면 이 화면 상태에서는 잴 수 없음(측정 경로 없음)
+    await nscm.expandSearchArea().catch(() => undefined);
+    const { it: rq } = await itemFor(p, st); const vis = await rq.isVisible({ timeout: 2_000 }).catch(() => false);
+    return vis === (st.visible !== false) ? '' : `[전제 다름] '${st.label}' 칸 ${vis ? '보임' : '안 보임'}(이 시나리오 전제 ${st.visible !== false ? '보임' : '안 보임'} · ${st.note || ''})`;
+  }
+  if (st.op === 'requireCells') {
+    // 2026-11-26 R241 3차: 앞선 그리드 칸 검사를 통과하는 값인지 실행 때 확인(열린 대화상자 안 그리드 우선, 없으면 화면 그리드) — 아니면 측정 경로 없음
+    const conds = JSON.stringify(st.cells || []); const join = st.join === 'any' ? 'any' : 'all';
+    const r = await p.evaluate(`(() => { const dl = [...document.querySelectorAll('[role="dialog"]')].filter(d => d.offsetParent !== null).pop();
+      const host = (dl && dl.querySelector('.wj-flexgrid')) || null; const ctlOf = el => { if (!el) return null; let c = el['$WJ-CTRL']; if (!c || !c.columns) for (const k of Object.getOwnPropertyNames(el)) { const v = el[k]; if (v && typeof v === 'object' && v.columns) { c = v; break; } } return c || null; };
+      const c = ctlOf(host) || ${probe.CTL_SRC}; if (!c) return null; const cs = ${conds};
+      const vals = cs.map(q => { try { const v = c.getCellData(q.r, q.c, true); return v == null ? '' : String(v); } catch (e) { return null; } });
+      return { vals, ok: cs.map((q, i) => vals[i] !== null && (q.op === 'eq' ? vals[i] === q.v : vals[i] !== q.v)) }; })()`).catch(() => null) as { vals: (string | null)[]; ok: boolean[] } | null;
+    if (!r) return '[전제 다름] 그리드 없음(앞선 그리드 칸 검사 통과 여부를 잴 수 없음)';
+    const pass = join === 'any' ? r.ok.some(Boolean) : r.ok.every(Boolean);
+    return pass ? '' : `[전제 다름] 그리드 칸 값 ${JSON.stringify(r.vals)} 이 앞선 검사 통과 조건 아님(${st.note || ''})`;
+  }
+  if (st.op === 'pick') {
+    // 2026-11-26 R241 3차: 콤보 항목 고르기 — index(전체 항목 제외 순번) · sep/idx/eq(항목 이름을 sep 로 나눈 idx 번째 조각이 eq) · notIn(그 조각이 목록에 없는 첫 항목)
+    await nscm.expandSearchArea().catch(() => undefined);
+    const { it: pk } = await itemFor(p, st); if (!(await pk.isVisible({ timeout: 3_000 }).catch(() => false))) return `조회영역 칸 '${st.label}' 없음`;
+    const clr = pk.locator('button[aria-label="Clear"]').first(); await pk.hover().catch(() => undefined);
+    if (await clr.count()) { await clr.click({ timeout: 3_000, force: true }).catch(() => undefined); await p.waitForTimeout(300); }
+    const combo = pk.locator('[role="combobox"]').first(); await combo.click({ timeout: 3_000 }).catch(() => undefined);
+    const opts = p.locator('.MuiAutocomplete-popper [role="option"], [role="listbox"] [role="option"]'); await opts.first().waitFor({ state: 'visible', timeout: 4_000 }).catch(() => undefined);
+    const texts = (await opts.allInnerTexts().catch(() => [] as string[])).map(s => s.replace(/\s+/g, ' ').trim());
+    const isAll = (t: string) => /^\(?(all|전체|select all)\)?$/i.test(t);
+    const part = (t: string) => (st.sep ? (t.split(st.sep)[st.idx ?? 0] || '') : t).trim();
+    const cand = texts.map((t, i) => ({ t, i })).filter(q => q.t && !isAll(q.t));
+    const hit = st.index !== undefined ? cand[st.index] : st.eq !== undefined ? cand.find(q => part(q.t) === st.eq) : st.notIn ? cand.find(q => !st.notIn!.includes(part(q.t))) : cand[0];
+    if (!hit) { await p.keyboard.press('Escape').catch(() => undefined); return `'${st.label}' 에 조건 맞는 항목 없음(항목 ${cand.length}개 · 조건 ${JSON.stringify({ index: st.index, eq: st.eq, notIn: st.notIn })})`; }
+    await opts.nth(hit.i).click({ timeout: 3_000 }).catch(() => undefined); await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(500);
+    return '';
+  }
+  if (st.op === 'file') {
+    // 2026-11-26 R241 생성분(form_scen_gen 파일 크기·확장자 검사): 단추를 눌러 열린 파일 선택 창에 시험 파일(이름·바이트 수)을 넣는다. 선택 창이 안 열리면 측정 경로 없음
+    const b = nscm.subButton(st.name || ''); if (!(await b.isVisible({ timeout: 3_000 }).catch(() => false))) return `버튼 '${st.name}' 없음`;
+    const [fc] = await Promise.all([p.waitForEvent('filechooser', { timeout: 8_000 }).catch(() => null), b.click({ timeout: 5_000 }).catch(() => undefined)]);
+    if (!fc) return `버튼 '${st.name}' 을 눌러도 파일 선택 창이 열리지 않음`;
+    await fc.setFiles({ name: st.file || 'zq_formscen.txt', mimeType: 'application/octet-stream', buffer: Buffer.alloc(Math.max(1, st.size ?? 16), 0x41) }).catch(() => undefined);
+    await p.waitForTimeout(st.ms ?? 1_500); return '';
+  }
   await nscm.expandSearchArea().catch(() => undefined);
-  const it = item(p, st.label || ''); if (!(await it.isVisible({ timeout: 3_000 }).catch(() => false))) return `조회영역 칸 '${st.label}' 없음`;
+  const { it } = await itemFor(p, st); if (!(await it.isVisible({ timeout: 3_000 }).catch(() => false))) return `조회영역 칸 '${st.label}' 없음${st.fuzzy ? '(생성분 라벨 — TO-BE 칸 라벨과 앞부분 일치 1건 아님)' : ''}`;
   if (st.op === 'text') {
     const inp = it.locator('input:not([type="hidden"]):not([role="combobox"]), textarea').first(); if (!(await inp.count())) return `'${st.label}' 입력칸 없음`;
     await inp.fill(tok(st.value), { timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(200); return '';
+  }
+  if (st.op === 'date') {
+    // 2026-11-26 R241 생성분: 날짜 칸 1개(시작·끝 칸이 따로인 화면의 끝 칸) — 기간 칸과 같은 입력 방식
+    const e = it.locator('input:not([type="hidden"])').nth(st.nth ?? 0); if (!(await e.count())) return `'${st.label}' 날짜 칸(${(st.nth ?? 0) + 1}번째 입력) 없음`;
+    const v = tok(st.value); await e.click({ timeout: 5_000 }).catch(() => undefined); await p.keyboard.press('Control+a').catch(() => undefined);
+    if (v) await p.keyboard.type(v.replace(/\D/g, ''), { delay: 30 }); else await p.keyboard.press('Delete').catch(() => undefined);
+    await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(250);
+    const got = await e.inputValue().catch(() => '');
+    return got.replace(/\D/g, '') === v.replace(/\D/g, '') ? '' : `'${st.label}' 날짜 입력 불일치: 기대 ${v} 실제 ${got}`;
   }
   if (st.op === 'period') {
     const ins = it.locator('input:not([type="hidden"])'); if ((await ins.count()) < 2) return `'${st.label}' 기간 칸 2개 아님(${await ins.count()})`;
@@ -183,18 +273,24 @@ export async function runFormScen(nscm: Nscm, sc: FScen, saves: () => number, ro
   const base = { id: sc.id, msg: sc.msg, meth: sc.meth };
   if (sc.kind === 'unreachable') return { ...base, result: 'NA', why: `${sc.msg}: 도달 불가(AS-IS 원문 근거) — ${sc.basis || ''} · ${sc.asis_line}`, shown: '', saves: 0 };
   if (sc.kind === 'error_branch') return { ...base, result: 'NA', why: `${sc.msg}: 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · ${sc.basis || ''} · ${sc.asis_line}`, shown: '', saves: 0 };
+  const missV = (sc.needs || []).filter(k => VARS[k] === undefined || VARS[k] === '');  // 2026-11-26 R241: 생성분이 앞선 검사 통과값으로 쓰는 vars 가 없으면 '@이름' 글자를 넣지 않고 미검증
+  if (missV.length) return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: 앞선 검사 통과값 vars 미지정 ${missV.join(', ')} — Doc/verify/<ID>/form_vars.json`, shown: '', saves: 0 };
   if (rowCount && (sc.expectRowsMin || 0) > 0) { const n0 = await rowCount(); if (n0 < (sc.expectRowsMin || 0)) return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: 전제 행 ${n0}행(필요 ${sc.expectRowsMin}행 이상) — 준비 시나리오(setup) 실행 여부 확인`, shown: '', saves: 0 }; }
   const p = nscm.page; await nscm.clearDialogs(); const s0 = saves(); let shown = ''; let clickMs = -1; let loadingSeen: boolean | null = null; const expFail: string[] = []; SAMPLE_LOADING = !!(sc.checks && sc.checks.loading);
   for (let k = 0; k < 32 && (await shownText(p, 250)); k++) { await nscm.clearDialogs(); await p.waitForTimeout(250); }  // 앞 시나리오의 토스트가 남아 이번 문구로 읽히지 않게
+  await fakeOff(); FAKE.literal = sc.fakeSave?.literal || ''; FAKE.hits = []; FAKE.noSample = '';
   for (const st of sc.steps || []) {
     const before = st.op === 'click' ? '' : '';
     const err = await runStep(nscm, st);
     if (err && err.startsWith('FAIL:')) { expFail.push(err.slice(5)); continue; }
-    if (err) return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: ${err}`, shown, saves: saves() - s0 };
-    if (st.op === 'click') { const t = await shownText(p, 5_000); if (t) shown = shown ? `${shown} | ${t}` : t; }
+    if (err) { await fakeOff(); return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: ${err}`, shown, saves: saves() - s0 }; }
+    if (st.op === 'click' || st.op === 'file') { const t = await shownText(p, 5_000); if (t) shown = shown ? `${shown} | ${t}` : t; }  // file = 파일 선택 뒤 검사 문구(2026-11-26)
     if (st.op === 'click' && clickMs < 0) clickMs = LAST_CLICK.ms; if (st.op === 'click' && LAST_CLICK.loading !== null) loadingSeen = LAST_CLICK.loading;
     void before;
   }
+  const fk = { hits: [...FAKE.hits], noSample: FAKE.noSample }; await fakeOff();
+  if (sc.fakeSave && !fk.hits.length && fk.noSample) { await nscm.clearDialogs(); return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: 실저장 대신 쓸 ${fk.noSample}(Doc/verify/<ID>/resp_samples.json) — 요청은 막음(서버 미전송) · 화면 문구 '${shown.slice(0, 80)}'`, shown, saves: 0 }; }
+  if (sc.fakeSave) shown = shown ? `${shown} [표본 응답 ${fk.hits.join(', ') || '없음'}]` : shown;
   const attempted = saves() - s0; await nscm.clearDialogs();
   const exp = (sc.asis_text || '').replace(/\{\d+\}/g, '').replace(/\\n\\r|\\r\\n|\\n/g, ' ').trim();
   const clean = (t: string) => (t || '').replace(/\{\d+\}/g, '').replace(/\\n\\r|\\r\\n|\\n/g, ' ').trim();

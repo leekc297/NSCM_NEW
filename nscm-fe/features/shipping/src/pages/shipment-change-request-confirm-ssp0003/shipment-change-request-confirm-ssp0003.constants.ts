@@ -205,6 +205,10 @@ export const SAVE_BTN = {
   //   (change_status='A' -> PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH). AS-IS 가 컨펌 시 인터페이스 테이블까지
   //   쌓던 단계(사용자 확인 2026-10-01). A→E fallback(외부 ERP 웹서비스)은 BE/ERP 소관 미이식(design 04 SSP0003-16).
   IF_CHECK: 'IF_CHECK', // P_SSP0003_SAVE_REQ_IF_CHECK
+  // ERP 송신 실패 보상(2026-11-25) — AS-IS GetErpIFCheckNew(cs:1385·1468). SSP0200 과 같은 API 를 이 화면 메뉴에 등록해 쓴다
+  //   (등록 SQL: DOC/Test/_DB의뢰/23_SSP0003_ERP송신실패_보상_버튼등록.sql). 미등록 환경은 403 — 되돌림 없이 안내만 뜬다.
+  DELETE_BY_CONFIRM: 'DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM', // SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM
+  ERP_ERROR_CONFIRM: 'ERP_ERROR_CONFIRM', // SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM
 } as const;
 
 // ====================================================================================
@@ -247,6 +251,11 @@ export const MSG = {
 //   E_MESSAGE = AS-IS ReErrorMsg('^' 구분 `confirmId:msg`). 자매 SSP0200/SSP0015 와 같은 축이다.
 export const ERP_IF_PATH = '/common/web-service/erpIf/call';
 export const ERP_IF_SUCCESS = 'S'; // E_TYPE 정상 — AS-IS else 분기(cs:1301)
+// AS-IS RtFlag 값(CallClient.cs) — 승인은 GetErpIFCheckNew(cs:1361~1440), 반려 계열은 GetErpIFCheck(cs:1284~1301) 가 가른다.
+export const ERP_IF_ERROR = 'E'; // ERP 가 전건 거절
+export const ERP_IF_PARTIAL_ERROR = 'S_E'; // 일부 성공·일부 거절
+export const ERP_IF_NO_DATA = 'F'; // 전송 대상 없음·서버 오류
+export const ERP_IF_PI_FAIL = 'C_E'; // SAP PI(= nscm-if) 호출 실패
 
 // AS-IS 마스터 CHANGE_TYPE 원값 — cs:85~90 struct ChangeType.
 export const CHANGE_TYPE = { NEW: 'N', CONFIRM: 'C', PLAN: 'P' } as const;

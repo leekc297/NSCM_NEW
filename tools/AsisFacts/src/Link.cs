@@ -109,7 +109,7 @@ public sealed class Linker
 
             // (2) 파라미터 의존 sink → 호출자 쪽으로 전파
             // 키 결정 값(엔드포인트 ID·BIZ 메서드·키 파라미터)이 파라미터에 의존할 때만 호출자 쪽으로 전파
-            bool hasParam = s.Values.Any(Val.HasParam) || s.Values2.Any(Val.HasParam) || s.GuardIdx >= 0
+            bool hasParam = s.Values.Any(Val.HasParam) || s.Values2.Any(Val.HasParam) || s.GuardIdx >= 0 || s.ValueConds != null
                          || s.ReqParams.Where(kv => _keyParams.Contains(kv.Key)).Any(kv => kv.Value.Any(Val.HasParam));
             if (!hasParam) continue;
             if (!methodsAt.TryGetValue((s.File, s.MemberLine), out var mi)) continue;
@@ -119,6 +119,15 @@ public sealed class Linker
                 if (mi.Name == ".ctor" ? !c.IsCtor : c.IsCtor) continue;
                 if (c.Args.Count < mi.RequiredParams || c.Args.Count > mi.ParamNames.Count) continue;
                 if (!ReceiverCompatible(c, mi)) continue;
+                // 2026-11-25 Roslyn 의미 분석: 의미 모델이 호출 대상을 특정한 호출은 그 메서드 선언(파일·줄)과 같을 때만 전파(같은 이름 오버로드 혼동 제거)
+                if (c.SemTarget != null)
+                {
+                    var st = c.SemTarget.Split('|', 4);   // 종류|파일|줄|시그니처
+                    if (st[0] == "meta") continue;                                  // 외부 DLL 메서드: 소스 템플릿 아님
+                    bool samePlace = st[0] == "src" && st[1] == s.File && st[2] == s.MemberLine.ToString();
+                    bool sameSig = st[3] == $"{mi.ClassFull}.{mi.Name}/{string.Join(",", mi.ParamNames)}";   // 같은 클래스·메서드의 다른 경로 사본
+                    if (!samePlace && !sameSig) continue;
+                }
                 var caller = new Site { File = c.File, ClassSimple = c.ClassSimple, ClassFull = c.ClassSimple, Member = c.Member, MemberLine = c.MemberLine, Line = c.Line };
                 // switch 가드: 호출자 인자가 case 라벨과 맞지 않으면 그 분기는 타지 않음
                 int newGuardIdx = -1; string newGuardName = null; string guardHit = null;
@@ -199,6 +208,30 @@ public sealed class Linker
         d.SiteKind = "derived";
         d.File = at.File; d.ClassSimple = at.ClassSimple; d.ClassFull = at.ClassFull; d.Member = at.Member; d.MemberLine = at.MemberLine; d.Line = at.Line;
         d.Values = tpl.Values.SelectMany(v => Val.Substitute(v, args)).Distinct().Take(Val.MaxCandidates).ToList();
+        d.ValueConds = null;
+        if (tpl.ValueConds != null)
+        {
+            // 2026-11-25 Roslyn 의미 분석: 값별 조건을 호출자 인자로 평가. 거짓이 확정된 값은 이 호출 경로에서 타지 않으므로 뺀다.
+            //   인자가 호출자 매개변수 하나로 이어지면 조건을 그 매개변수로 옮겨 다음 전파에서 평가. 판정 못 하면 값은 남기고 조건은 버린다(누락 방지)
+            var keep = new List<string>(); var nc = new Dictionary<string, List<string>>();
+            foreach (var v in tpl.Values)
+            {
+                var subs = Val.Substitute(v, args);
+                if (!tpl.ValueConds.TryGetValue(v, out var cl)) { keep.AddRange(subs); continue; }
+                bool drop = false; var rem = new List<string>();
+                foreach (var c in cl)
+                {
+                    var r = ValueCond.Eval(c, args, out var re);
+                    if (r == false) { drop = true; break; }
+                    if (r == null && re != null) rem.Add(re);
+                }
+                if (drop) continue;
+                keep.AddRange(subs);
+                if (rem.Count > 0) foreach (var sv in subs) nc[sv] = rem;
+            }
+            if (keep.Count > 0) d.Values = keep.Distinct().Take(Val.MaxCandidates).ToList();
+            d.ValueConds = nc.Count > 0 ? nc : null;
+        }
         d.Values2 = tpl.Values2.SelectMany(v => Val.Substitute(v, args)).Distinct().Take(Val.MaxCandidates).ToList();
         foreach (var k in d.ReqParams.Keys.ToList())
             d.ReqParams[k] = d.ReqParams[k].SelectMany(v => Val.Substitute(v, args)).Distinct().Take(Val.MaxCandidates).ToList();

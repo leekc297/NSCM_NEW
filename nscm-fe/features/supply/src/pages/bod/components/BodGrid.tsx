@@ -500,8 +500,14 @@ export const BodGrid = ({
       }
     };
 
+    // 붙여넣기에도 같은 행단위 잠금을 건다 — Wijmo 붙여넣기는 beginningEdit 를 거치지 않고
+    // pastingCell 만 발생시킨다. AS-IS 는 LockRange 로 셀 자체를 잠가 붙여넣기도 막힌다.
     grid.beginningEdit.addHandler(handler);
-    return () => grid.beginningEdit.removeHandler(handler);
+    grid.pastingCell.addHandler(handler);
+    return () => {
+      grid.beginningEdit.removeHandler(handler);
+      grid.pastingCell.removeHandler(handler);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, gridReady]);
 

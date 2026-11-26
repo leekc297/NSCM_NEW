@@ -34,7 +34,7 @@ export const useMktFcst01Validation = () => {
   const setToast = useMessageStore.getState().setToast;
 
   // ===== 조회조건 (FindData L1207~1233 — validation.md #29~32) =====
-  //   #31 MSG00108 기간 역전 / #32 MSG00164 기간 3년 초과.
+  //   #31 MSG00108 기간 역전 / #32 MSG01505 기간 2년 초과(2026-11-24, 종전 MSG00164 3년).
   //   #29 MSG00097 Division 필수 — 이 화면은 82 만 조회하므로(SEARCHABLE_DIVISIONS) 82 권한이 없는
   //   계정은 Division 이 공란으로 남는다. 공란 그대로 SP 를 부르지 않게 여기서 막는다.
   const validateFind = (c: SearchCondition): ValidationResult => {
@@ -65,17 +65,17 @@ export const useMktFcst01Validation = () => {
       });
       return { ok: false, msgId: MSG.PERIOD_INVERTED };
     }
-    // #32 — AS-IS L1230 drpPeriod.Value1.AddYears(3) < Value2 → MSG00164 (기간 3년 이내).
-    //   ⭐ 일자 기준 정밀 판정(연도 정수 비교 아님): 시작일 + 3년(YYYYMMDD) 보다 종료일이 크면 초과.
+    // #32 — 기간 2년 이내(2026-11-24 결정). Monthly 로 조회해도 일자 데이터까지 받는 화면이라 2년으로 제한한다
+    //   (AS-IS L1230 은 AddYears(3) + MSG00164). 일자 기준 판정: 시작일 + 2년(YYYYMMDD) 보다 종료일이 크면 초과.
     const startY = Number(start.slice(0, 4));
     if (Number.isFinite(startY)) {
-      const limit = String(startY + 3) + start.slice(4); // 시작일 + 3년
+      const limit = String(startY + 2) + start.slice(4); // 시작일 + 2년
       if (end > limit) {
         void setAlert({
           type: 'alert',
-          content: t(MSG.PERIOD_MAX_3YEAR, '_조회 기간은 3년 이내로 입력해주세요.'),
+          content: t(MSG.PERIOD_MAX_2YEAR, '_조회 기간은 2년 이내로 입력해주세요.'),
         });
-        return { ok: false, msgId: MSG.PERIOD_MAX_3YEAR };
+        return { ok: false, msgId: MSG.PERIOD_MAX_2YEAR };
       }
     }
     return { ok: true };

@@ -808,6 +808,42 @@ def resolve_names(names, mst, asis, tobe_cx, rows, rep, probe):
     return {}
 
 
+def _edit_dist(a, b):
+    a, b = a.lower(), b.lower()
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
+def pair_added_by_name(unknown_texts, asis_unmatched_codes, added_rows, max_dist=2):
+    """T537(2026-11-25 SSP0014 V-62f2170d B4 · AI 검토 검사기오판): AS-IS 화면이 직접 넣은 콤보 항목(added_rows · 'W:Warrnaty' cs:183)은
+    표시명만으로 짝지어 TO-BE 표시 'Warranty' 를 코드로 못 바꿨다. 하드코딩 항목에 한해 TO-BE 에서 못 바꾼 표시값과 AS-IS 쪽 짝 없는 하드코딩 코드의
+    이름이 철자 max_dist 자 이내(4자 이상 · 서로 유일)면 같은 코드로 본다. 반환 {TO-BE 표시값: (코드, AS-IS 이름)}"""
+    cand = [(str(a.get('CODE', '')), str(a.get('NAME', ''))) for a in (added_rows or []) if str(a.get('CODE', '')) in set(asis_unmatched_codes)]
+    out = {}
+    for t in unknown_texts:
+        hit = [(c, n) for c, n in cand if len(t) >= 4 and len(n) >= 4 and _edit_dist(t, n) <= max_dist]
+        if len(hit) == 1 and sum(1 for u in unknown_texts if _edit_dist(u, hit[0][1]) <= max_dist) == 1:
+            out[t] = hit[0]
+    return out
+
+
+def split_all_rows(rows, tobe_all):
+    """T612(2026-11-25 SCP0005 V-052d2add B4 Valid): 조회조건 TO-BE 후보는 전체 항목(ALL_WORDS: ALL·SELECT ALL·전체)을 빼고 비교하는데
+    AS-IS 원천 행(T607 setListBox(…, true) 의 0번 'ALL' 행 · DB 원천이 돌려준 'ALL' 행)은 빼지 않아 'ALL' 이 AS-IS만 차이로 남았다(원천 STATIC 은 마스터가 없어 설명 불가).
+    AS-IS 전체 항목 코드를 TO-BE 화면 후보의 전체 항목 유무와 대조한다. tobe_all = TO-BE 화면 후보 중 전체 항목 문구 목록(None = 대조 대상 아님 · 그리드).
+    반환 (양쪽에 있어 비교에서 뺄 AS-IS 코드 목록, TO-BE 에 전체 항목이 없어 차이로 남길 AS-IS 코드 목록)"""
+    if tobe_all is None:
+        return [], []
+    a_all = list(dict.fromkeys(str(r.get('CODE', '')) for r in rows
+                               if ALL_WORDS.match(str(r.get('CODE') or '').strip()) or ALL_WORDS.match(str(r.get('NAME') or '').strip())))
+    return (a_all, []) if tobe_all else ([], a_all)
+
+
 def match_rep(asis_rows, texts):
     """TO-BE 표시 문구가 AS-IS 의 어떤 표현(CODE·NAME·'CODE NAME')과 맞는지 — 가장 많이 맞는 표현 선택"""
     reps = {'CODE': lambda r: r['CODE'], 'NAME': lambda r: r['NAME'], 'CODE NAME': lambda r: f"{r['CODE']} {r['NAME']}",
@@ -853,7 +889,7 @@ def main():
                     item = {'CODE': str(a.get('CODE', '')), 'NAME': str(a.get('NAME', ''))}
                     pos = int(a.get('pos', -1))
                     rows.insert(pos, item) if 0 <= pos <= len(rows) else rows.append(item)
-                meta = {**meta, 'added': [f"{a.get('CODE')}:{a.get('NAME')} @{a.get('ref', '')}" for a in add]}
+                meta = {**meta, 'added': [f"{a.get('CODE')}:{a.get('NAME')} @{a.get('ref', '')}" for a in add], 'added_rows': add}
             return rows, meta
 
         def _run_source0(r, ctx):
@@ -937,8 +973,8 @@ def main():
                 return []
             return [x['CODE'] for x in rows]
 
-        def judge(kind, target, label, cands, tobe_texts, tobe_codes, ctx, scenario):
-            """한 대상 — 후보 원천(cands) 중 시나리오에 맞는 것을 실행해 TO-BE 와 비교"""
+        def judge(kind, target, label, cands, tobe_texts, tobe_codes, ctx, scenario, tobe_all=None):
+            """한 대상 — 후보 원천(cands) 중 시나리오에 맞는 것을 실행해 TO-BE 와 비교 · tobe_all = TO-BE 후보에서 뺀 전체 항목 문구(T612, 조회조건만)"""
             rec = {'kind': kind, 'target': target, 'label': label, 'scenario': scenario, 'tobe_n': len(tobe_texts)}
             pairs = {(x['sp'], x['code'], x['filters'], x['args']) for x in cands}
             if not cands:
@@ -954,16 +990,23 @@ def main():
             if not ok:
                 rec.update(b4='판정필요', b3='판정필요', why='AS-IS 원천 실행 불가 — ' + ' / '.join(o[3] for o in outs)[:300]); return rec
             # 여러 원천(행 값 분기) — TO-BE 와 가장 가까운 원천 하나로 판정하고, 분기 원천임을 기록
-            best = None
+            best = None; name_pair = {}; all_split = {}
             for x, rows, meta, _ in ok:
                 rep_name, rep = match_rep(rows, tobe_texts)
                 a_keys = [r['CODE'] for r in rows]
+                all_split[id(x)] = split_all_rows(rows, tobe_all)  # T612 전체 항목은 TO-BE 쪽과 같은 기준으로 비교에서 뺀다
+                if all_split[id(x)][0]:
+                    a_keys = [k for k in a_keys if k not in set(all_split[id(x)][0])]
                 if tobe_codes is not None:
                     t_keys = tobe_codes
                 else:
                     by_text = {rep(r): r['CODE'] for r in rows}
                     # 표시값 = 코드 표현이면 AS-IS 에 없는 항목도 그 문구가 곧 코드(설명 단계로 넘긴다)
                     t_keys = [by_text.get(t, t if rep_name == 'CODE' else f'?{t}') for t in tobe_texts]
+                    if meta and meta.get('added_rows') and any(k.startswith('?') for k in t_keys):  # T537 하드코딩 항목 코드 기준 대응
+                        _pp = pair_added_by_name([k[1:] for k in t_keys if k.startswith('?')], [k for k in a_keys if k not in set(t_keys)], meta['added_rows'])
+                        if _pp:
+                            t_keys = [_pp[k[1:]][0] if k.startswith('?') and k[1:] in _pp else k for k in t_keys]; name_pair[id(x)] = _pp
                 if os.environ.get('B4_MUTATE') == '1' and len(set(t_keys) & set(a_keys)) > 1:
                     gone = next(k for k in t_keys if k in set(a_keys))
                     t_keys = [k for k in t_keys if k != gone]  # 변이 시험(2026-10-28): AS-IS 후보 1개를 TO-BE 에서 뺌 → B4 FAIL 이어야
@@ -993,6 +1036,9 @@ def main():
                         t_only = [rs.get(k[1:], k) if k.startswith('?') else k for k in t_only]
                         ex.update(explain(list(rs.values()), 'tobe_only', mst, asis, tcx, probe))
                         rec.update(tobe_only=t_only[:40], resolved={n: c for n, c in list(rs.items())[:20]})
+                for k in all_split[id(x)][1]:  # T612 AS-IS 전체 항목이 TO-BE 후보에 없음 — 마스터로 설명할 차이가 아님(판정필요 유지)
+                    if k in ex:
+                        ex[k] = f"설명 불가(AS-IS 전체 항목 '{k}' 이 TO-BE 화면 후보에 없음 — TO-BE 후보에 ALL·SELECT ALL·전체 항목 없음)"
                 unk = [k for k in t_only if k.startswith('?')]
                 cond = {k: v for k, v in ex.items() if v.startswith('조건 차이')}
                 noexp = {k: v for k, v in ex.items() if not v.startswith(('데이터 차이', '조건 차이'))}
@@ -1025,6 +1071,12 @@ def main():
                     rec['b4'] = 'PASS'; rec['why'] = f'차이 {len(ex)}건 모두 데이터 차이(AS-IS DEV↔사내 시점) — 조건 동일'
             if len(pairs) > 1:
                 rec['why'] += f' · 분기 원천 {len(pairs)}종 중 가장 가까운 원천 기준(분기 선택은 C2 행에서 판정)'
+            if all_split[id(x)][0]:  # T612
+                rec['asis_all'] = all_split[id(x)][0]
+                rec['why'] += f" · 전체 항목 AS-IS {all_split[id(x)][0]} ↔ TO-BE {list(tobe_all)} 양쪽 있음(비교에서 양쪽 다 뺌)"
+            if name_pair.get(id(x)):  # T537
+                rec['added_name_pair'] = {t: f'{c}:{n}' for t, (c, n) in name_pair[id(x)].items()}
+                rec['why'] += ' · AS-IS 화면 하드코딩 항목 코드 기준 대응: ' + ', '.join(f"코드 {c} AS-IS '{n}' ↔ TO-BE '{t}'(표시명 철자 {_edit_dist(t, n)}자 차이)" for t, (c, n) in name_pair[id(x)].items())
             # B3 순서 — 공통 항목만(중복 제거한 표시 순서)
             common = list(dict.fromkeys(k for k in t_keys if k in set(a_keys)))
             if os.environ.get('B3_MUTATE') == '1' and len(common) > 1:
@@ -1210,7 +1262,8 @@ def main():
             codes, hit = to_codes(texts)
             ctx = {k: v for k, v in sctx.items() if not k.endswith('.' + role(name))} if role(name) else dict(sctx)  # 자기 자신의 선택값으로는 거르지 않는다
             results.append(judge('SEARCH', name, lab, cands, texts, codes if hit > 0 else None, ctx,
-                                 f"화면 초기(선택 {', '.join(sel_desc) or '없음=ALL'})"))
+                                 f"화면 초기(선택 {', '.join(sel_desc) or '없음=ALL'})",
+                                 tobe_all=[t.strip() for t in d.get('opts', []) if ALL_WORDS.match(t.strip())]))
         # 상위 값으로 좁힌 하위 후보(EG081) — C1 시험 덤프의 상위 값을 ctx 에 넣어 AS-IS 원천을 재실행
         _cf = os.path.join(ROOT, 'Doc', 'verify', mid, 'combo_cascade.json')
         for cd in (json.load(open(_cf, encoding='utf-8')) if os.path.exists(_cf) else []):
@@ -1228,7 +1281,8 @@ def main():
             for r in src:
                 if r['target_kind'] == 'SEARCH' and r['label'] == label_of(cd['parent']):
                     ctx[f"ctrl.{r['target']}"] = pc[0]
-            results.append(judge('CASCADE', cd['child'], lab, cands, texts, codes if hit > 0 else None, ctx, f"상위 {cd['parent']}={pc[0]}"))
+            results.append(judge('CASCADE', cd['child'], lab, cands, texts, codes if hit > 0 else None, ctx, f"상위 {cd['parent']}={pc[0]}",
+                                 tobe_all=[t.strip() for t in cd.get('opts', []) if t.strip() and ALL_WORDS.match(t.strip())]))
         # 상위 셀 값별 하위 셀 후보(EG088) — C2 시험 덤프의 원천 값을 행 문맥에 넣어 AS-IS 원천을 재실행
         _seen_gc = set()
         for gc in rt.get('gridCascade') or []:
@@ -1293,6 +1347,21 @@ def selftest():
             chk(name, 'no-error', 'KeyError')
         except KeyError:
             chk(name, 'KeyError', 'KeyError')
+    # T537 하드코딩 항목 철자 차이 대응
+    ad = [{'CODE': 'W', 'NAME': 'Warrnaty', 'ref': 'X.cs:183'}]
+    chk('T537 Warrnaty ↔ Warranty = 코드 W', pair_added_by_name(['Warranty'], ['W'], ad), {'Warranty': ('W', 'Warrnaty')})
+    chk('T537 변이: 철자 3자 이상 차이 = 대응 없음', pair_added_by_name(['Warehouse'], ['W'], ad), {})
+    chk('T537 변이: AS-IS 코드가 이미 짝 있음 = 대응 없음', pair_added_by_name(['Warranty'], [], ad), {})
+    chk('T537 변이: DB 원천 항목(하드코딩 아님) = 대응 없음', pair_added_by_name(['Warranty'], ['W'], []), {})
+    chk('T537 변이: 짧은 이름 = 대응 없음', pair_added_by_name(['Ab'], ['A'], [{'CODE': 'A', 'NAME': 'Ac'}]), {})
+    # T612 조회조건 전체 항목 — TO-BE 쪽과 같은 기준으로 AS-IS 전체 항목을 대조
+    yn = [{'CODE': 'ALL', 'NAME': 'ALL'}, {'CODE': 'Y', 'NAME': 'Y'}, {'CODE': 'N', 'NAME': 'N'}]
+    chk('T612 양쪽 전체 항목 = 비교에서 뺌', split_all_rows(yn, ['ALL']), (['ALL'], []))
+    chk('T612 TO-BE 문구 SELECT ALL·전체 도 전체 항목', split_all_rows(yn, ['전체']), (['ALL'], []))
+    chk('T612 변이: TO-BE 전체 항목 없음 = 차이로 남김', split_all_rows(yn, []), ([], ['ALL']))
+    chk('T612 변이: 그리드(대조 대상 아님) = 손대지 않음', split_all_rows(yn, None), ([], []))
+    chk('T612 변이: AS-IS 전체 항목 없음 = 뺄 것 없음', split_all_rows(yn[1:], ['ALL']), ([], []))
+    chk('T612 NAME 만 전체(CODE 빈값)', split_all_rows([{'CODE': '', 'NAME': '전체'}, {'CODE': 'A', 'NAME': 'A'}], ['ALL']), ([''], []))
     rows = [{'DIVISION_ID': '81', 'CODE': '20260601'}, {'DIVISION_ID': '81', 'CODE': '20260608'}, {'DIVISION_ID': '40', 'CODE': '20260601'}]
     vals = {'division': '81', 'sList': q + '20260608' + q}
     exp_ = lambda e, x: expand_concat(e, vals.__getitem__)  # noqa: E731

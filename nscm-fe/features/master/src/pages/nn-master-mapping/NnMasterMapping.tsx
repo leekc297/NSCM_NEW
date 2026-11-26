@@ -190,8 +190,9 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     const dirty = rows.filter(r => r.CRUD_TYPE === CRUD_TYPE.INSERT || r.CRUD_TYPE === 'M');
     if (dirty.length === 0) {
       // 변경/신규 없음 → toast + 공통 메시지("수정한 내용이 없습니다") (DMF0004~0007/0020 과 동일 규약.
-      //   필수 검증 실패는 modal alert 유지).
-      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
+      //   필수 검증 실패는 modal alert 유지). 코드는 MSG00004 — 종전 'MSG_NO_CHANGE' 는 SCM_ADM_MSG_M 에
+      //   없는 코드라 기본 문구('_' 접두)가 그대로 노출됐다(2026-11-22 개선 요청).
+      setToast({ type: 'error', message: t('MSG00004', '_수정한 내용이 없습니다.') });
       return;
     }
 

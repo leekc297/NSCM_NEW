@@ -1,0 +1,112 @@
+{
+  "id": "20261122000421_SELF",
+  "at": "2026-11-22T00:04:21+09:00",
+  "ms": 1795273461600,
+  "source": "self",
+  "status": "applied",
+  "sig": "verify rule baseline target scoped",
+  "title": "개선안 verify 작성 규칙 공용화: 반영 전 측정값 대비 변화, targets 로만 달라지는 값만 기대값으로",
+  "evidence": "orch-selfcheck.js:355, :464, orch-improve.js:156, orch-vision.js:77 verify 규칙에 반영 전 측정, 대상 한정 조건 없음. orch-improve.js:268-271 verified false 면 되돌림. 사례 232523_SELF(tabview.js:134 대상 밖), 181921_SELF, 094530_REVIEW_4, 115806_VISION_2 result.note 의 'targets 밖'. 성공 틀 CHANGELOG.md:11, :67, :425 · 진단 사다리 묶음 L3|applyfail|doc_style.py",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-vision.js",
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "변경 전: 각 프롬프트가 verify 를 '확인 명령과 기대 결과'로만 지시(orch-selfcheck.js:355 등), 반영 지시(orch-improve.js:232-241)는 verify 를 그대로 실행해 참거짓만 냄 → 변경 후: orch-improve.js 에 IMPACT_RULE 과 같은 공용 상수 VERIFY_RULE 1개를 두고 orch-selfcheck.js:355, :464, orch-improve.js 상시 분석, orch-vision.js, orch-ladder.js structPrompt 가 같은 상수를 씀. 내용은 (1) 기대값은 개선안 작성 때 지금 값을 재서 '반영 전 N → 반영 뒤 기대'로 적는다 (2) 기대값은 targets 변경으로만 달라지는 값(빠져야 할 행, 남아야 할 행)으로 적고, targets 밖 파일 상태에 걸린 절대값(위반 0 등)은 적지 않는다. 반영 지시에는 'verify 를 편집 전에 한 번 돌려 반영 전 값을 verify_result 에 같이 적는다'를 넣음. 판정 기준(verified false 면 되돌림)과 단계 순서는 그대로",
+  "verify": "node tools/VibeManager/test/t_orch_improve.js 에 시험 추가: (a) 자가진단, 상시 분석, Overall Review, 반영 실패 진단, L3 진단 프롬프트 5종에 VERIFY_RULE 문자열이 들어감 (b) 반영 프롬프트에 '편집 전에' 문구가 들어감. 재현 시험: 232523_SELF 의 evidence, targets, before_after 를 넣어 자가진단 프롬프트를 만들고, 프롬프트에 '대상 밖 파일 상태에 걸린 절대값을 적지 않는다'가 들어 있는지 확인. node tools/VibeManager/test/run_all.js 통과. 반영 뒤 7일 동안 history 에 '반영 실패. 검증 실패' 가 있고 result.note 에 'targets 밖' 또는 '범위 밖'이 있는 개선안 0건(proposals 폴더 grep)",
+  "rollback": "VMO 가 만든 .bak_<날짜>_self<시각> 사본으로 대상 5개 파일 복원, 또는 개선안 탭 되돌리기 버튼",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 원인의 반영 실패(verify 기대값이 targets 밖 상태에 의존) 4건, 출처 self, review, vision 3종. doc_style.py 묶음 2건은 그중 1건의 시도 2회",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-22T00:07:34+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-22T00:10:59+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 877, FAIL 0), 정의 정합 통과 · 백업 태그 20261122_self0007"
+    },
+    {
+      "at": "2026-11-22T00:11:01+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-22T00:21:04+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 884, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 4개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-22T00:21:04+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 반영 전(2026-11-22 00:11:30): node tools/VibeManager/test/t_orch_improve.js → 'ALL PASS', 새 시험 7종 없음. 4개 소스의 VERIFY_RULE 0회. proposals 중 '반영 실패. 검증 실패'와 'targets 밖|범위 밖'이 함께 있는 파일 8건. 반영 뒤(00:13:45): node tools/VibeManager/test/t_orch_improve.js → PASS 36, 'ALL PASS'. 추가 7종 PASS: 'VERIFY_RULE: 반영 전 값 → · 변경 5개 파일",
+      "log": ".vibe\\logs\\2026-11-22T00-11-01_claude_orch.log",
+      "sec": 399,
+      "costUsd": 2.1726197999999997,
+      "files": [
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/orch-vision.js",
+        "tools/VibeManager/test/t_orch_improve.js",
+        "tools/VibeManager/orch-ladder.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:25+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T10:55:36+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795273654063,
+  "autoFp": "23aa2688a1",
+  "applyStartMs": 1795273861381,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 63/63개 파일 통과(PASS 884, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261122_self0007",
+  "needsReload": true,
+  "appliedMs": 1795274464474,
+  "synced": [
+    "orch-improve.js",
+    "orch-ladder.js",
+    "orch-selfcheck.js",
+    "orch-vision.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/orch-vision.js",
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/test/t_orch_improve.js"
+    ],
+    "verify_result": "반영 전(2026-11-22 00:11:30): node tools/VibeManager/test/t_orch_improve.js → 'ALL PASS', 새 시험 7종 없음. 4개 소스의 VERIFY_RULE 0회. proposals 중 '반영 실패. 검증 실패'와 'targets 밖|범위 밖'이 함께 있는 파일 8건. 반영 뒤(00:13:45): node tools/VibeManager/test/t_orch_improve.js → PASS 36, 'ALL PASS'. 추가 7종 PASS: 'VERIFY_RULE: 반영 전 값 → 반영 뒤 기대 · 대상 밖 …', '자가진단 지시문에 VERIFY_RULE(재현 232523_SELF 입력)', '반영 실패 진단 지시문에 VERIFY_RULE', 'Overall Review 지시문에 VERIFY_RULE', 'L3 진단 지시문에 VERIFY_RULE', '상시 분석 지시문에 VERIFY_RULE', '반영 지시문에 편집 전 verify 실행(반영 전 값)'. node tools/VibeManager/test/run_all.js(00:13:56~00:17:17) → 'ALL OK  파일 63/63  PASS 884  FAIL 0  201.2s'. node --check 5개 파일 → SYNTAX_OK. VERIFY_RULE 사용 횟수: orch-improve.js 3, orch-selfcheck.js 4, orch-vision.js 1, orch-ladder.js 1. proposals grep은 지금 8건(모두 반영 전에 생긴 안)이고, '반영 뒤 7일 0건' 조건은 관찰 기간이 지나야 잴 수 있어 미측정임",
+    "note": "orch-selfcheck.js 의 지시문 2종은 시험에서 확인하려고 diagPrompt(c, rel), repairPrompt(rel) 함수로 분리해 module.exports 에 더함. 문구는 그대로이고 verify 규칙 1줄만 VERIFY_RULE 로 바꿈. orch-improve.js 는 VERIFY_RULE, VERIFY_PRE 를 내보냄. 반영 지시문의 VERIFY_PRE 는 자동 반영, 승인 반영 두 경우에 들어감. 반영 뒤 7일 관찰(proposals grep 0건)은 2026-11-29 뒤에 재야 함(지금 8건). CHANGELOG, 설치 폴더, .bak 은 건드리지 않음"
+  },
+  "snap": "prop_20261122000421_SELF",
+  "effectiveMs": 1795398936883,
+  "effectiveAt": "2026-11-23T10:55:36+09:00"
+}

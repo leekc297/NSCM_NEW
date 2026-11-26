@@ -1,59 +1,52 @@
 {
  "rule_id": "DB-SYN",
- "hash": "156588948a407e72",
+ "hash": "b91d322076962472",
  "groups": [
-  {
-   "rows": [
-    "V-89afd97d",
-    "V-903f28b4"
-   ],
-   "why": "Both rows check that the DB objects SCMP_APP uses (PKG, tables/views, synonyms, privileges) and the menu, PROC_M and SHEET_COLUMNS metadata exist and are VALID. Both expect a missing or broken object to stop the test and show up under 'action needed' item 1 instead of as a defect."
-  },
   {
    "rows": [
     "EG-7159be79"
    ],
-   "why": "This row runs a static check on PKG_SSP0014 for TB_FX_* references and a valid ATTRIBUTE9 combo SQL_ID. No other row checks both of these on the same package."
-  },
-  {
-   "rows": [
-    "V-408cbf90"
-   ],
-   "why": "This row checks TB_FX_* user-table references in other packages (PKG_DMF0003 and others) and also expects the SCM_ADM_* tables to be used. Its target and expected result differ from the PKG_SSP0014 check."
+   "why": "PKG_SSP0014 소스와 메타를 정적으로 점검해 TB_FX_* 참조가 0건인지, ATTRIBUTE9가 실제 콤보 SQL_ID인지 보는 행이라 다른 행과 대상도 기대 결과도 다르다."
   },
   {
    "rows": [
     "T-34d5b51b"
    ],
-   "why": "This trace row only follows the separate SP PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK (row 3 of the comparison sheet), so no other row has the same target."
+   "why": "대상이 PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK라는 개별 SP로, 다른 TRACE 행의 객체와 다르다."
   },
   {
    "rows": [
     "T-40339ab5"
    ],
-   "why": "This trace row only follows the separate SP PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP (row 1 of the comparison sheet)."
+   "why": "대상이 PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP이라는 다른 패키지의 개별 SP여서 묶을 행이 없다."
   },
   {
    "rows": [
     "T-447b36eb"
    ],
-   "why": "This trace row follows the ProgressForm(FindData/SaveData) row element, which is a different element type from the SP trace rows."
+   "why": "SP가 아니라 ProgressForm(FindData/SaveData) 행(ROW) 요소를 추적하는 행이라 다른 행과 요소가 다르다."
   },
   {
    "rows": [
     "T-7e9aebc2"
    ],
-   "why": "This trace row only follows the lookup SP SSP0014_GET_SHIPMENT_MODEL_PIC (row 4 of the comparison sheet)."
+   "why": "대상이 조회 SP인 SSP0014_GET_SHIPMENT_MODEL_PIC여서 저장 SP 등 다른 객체와 다르다."
   },
   {
    "rows": [
     "T-a910edb5"
    ],
-   "why": "This trace row only follows the save SP SSP0014_SAVE_SHIPMENT_MODEL_PIC (row 2 of the comparison sheet), which is a different object from the lookup SP."
+   "why": "대상이 저장 SP인 SSP0014_SAVE_SHIPMENT_MODEL_PIC여서 조회 SP 등 다른 객체와 다르다."
+  },
+  {
+   "rows": [
+    "V-89afd97d"
+   ],
+   "why": "화면 전체의 사전 조건(BE 계정 객체의 존재·VALID 여부와 메뉴·PROC_M·SHEET_COLUMNS 메타, 실패 시 차단)을 보는 행이라 개별 객체를 추적하는 TRACE 행과 성질이 달라 묶지 않는다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:13:12",
- "cost": 0.06291780000000001
+ "at": "2026-11-25 02:13:35",
+ "cost": 0.047911699999999995
 }

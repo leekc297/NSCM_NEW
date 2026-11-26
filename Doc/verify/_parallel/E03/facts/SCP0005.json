@@ -1,6 +1,6 @@
 {
 "id": "SCP0005",
-"at": "2026-11-20 07:21:06",
+"at": "2026-11-26 02:01:02",
 "asis": {
 "insertStmts": [
 {
@@ -141,438 +141,6 @@
 ],
 "btnAuth": [
 {
-"user_gr_id": "ADMIN",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "CAPA Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Planner (W/S)",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "DM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "history",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "FP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
 "user_gr_id": "SCM PI Admin",
 "sht_nm": "Distribution Route",
 "mnu_btn_cd": "UPLOAD",
@@ -627,99 +195,69 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "history",
+"user_gr_id": "ADMIN",
+"sht_nm": "route",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCM Viewer",
+"user_gr_id": "SCP Planner",
 "sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
 },
 {
-"user_gr_id": "SCM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCM Viewer",
+"user_gr_id": "ADMIN",
 "sht_nm": "route",
 "mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCM Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_CITY",
+"user_gr_id": "ADMIN",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCM Viewer",
+"user_gr_id": "ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
 "sht_nm": "route",
 "mnu_btn_cd": "SEARCH_ROUTEID",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCP Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
+"user_gr_id": "ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
 },
 {
-"user_gr_id": "SCP Planner",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Planner",
+"user_gr_id": "ADMIN",
 "sht_nm": "history",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SCP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
+"user_gr_id": "ADMIN",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
 },
 {
 "user_gr_id": "SCP Planner",
 "sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH",
+"mnu_btn_cd": "SEARCH_ROUTEID",
 "use_yn": "Y"
 },
 {
@@ -730,45 +268,15 @@
 },
 {
 "user_gr_id": "SCP Planner",
-"sht_nm": "route",
-"mnu_btn_cd": "SEARCH_ROUTEID",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Tester",
 "sht_nm": "history",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
 "user_gr_id": "SCP Tester",
-"sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SCP Tester",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
 },
 {
 "user_gr_id": "SCP Tester",
@@ -789,33 +297,81 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "Distribution Route",
-"mnu_btn_cd": "UPLOAD_SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP ADMIN",
+"user_gr_id": "SCM Viewer",
 "sht_nm": "history",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP ADMIN",
+"user_gr_id": "SCM Viewer",
 "sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
 },
 {
 "user_gr_id": "SSP ADMIN",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
 "use_yn": "N"
 },
 {
@@ -825,19 +381,67 @@
 "use_yn": "N"
 },
 {
-"user_gr_id": "SSP ADMIN",
-"sht_nm": "route",
+"user_gr_id": "FP Viewer",
+"sht_nm": "history",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP ADMIN",
+"user_gr_id": "FP Viewer",
 "sht_nm": "route",
 "mnu_btn_cd": "SEARCH_CITY",
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP ADMIN",
+"user_gr_id": "FP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
 "sht_nm": "route",
 "mnu_btn_cd": "SEARCH_ROUTEID",
 "use_yn": "Y"
@@ -875,12 +479,6 @@
 {
 "user_gr_id": "SSP Planner",
 "sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "Y"
-},
-{
-"user_gr_id": "SSP Planner",
-"sht_nm": "route",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
@@ -897,15 +495,63 @@
 "use_yn": "Y"
 },
 {
-"user_gr_id": "SSP Viewer",
+"user_gr_id": "DM Viewer",
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
 "sht_nm": "Distribution Route",
 "mnu_btn_cd": "UPLOAD",
 "use_yn": "N"
 },
 {
-"user_gr_id": "SSP Viewer",
+"user_gr_id": "DM ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
 "sht_nm": "Distribution Route",
 "mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
 "use_yn": "N"
 },
 {
@@ -917,24 +563,6 @@
 {
 "user_gr_id": "SSP Viewer",
 "sht_nm": "route",
-"mnu_btn_cd": "DELETE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "INSERT",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP Viewer",
-"sht_nm": "route",
-"mnu_btn_cd": "SAVE",
-"use_yn": "N"
-},
-{
-"user_gr_id": "SSP Viewer",
-"sht_nm": "route",
 "mnu_btn_cd": "SEARCH",
 "use_yn": "Y"
 },
@@ -948,6 +576,378 @@
 "user_gr_id": "SSP Viewer",
 "sht_nm": "route",
 "mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "history",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_CITY",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "Distribution Route",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "route",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SEARCH_ROUTEID",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "route",
+"mnu_btn_cd": "SAVE",
 "use_yn": "Y"
 }
 ],
@@ -2039,9 +2039,9 @@
 }
 ],
 "now": {
-"now_": "2026-11-20 07:21",
-"dow": "FRI",
-"hm": "0721"
+"now_": "2026-11-26 02:00",
+"dow": "THU",
+"hm": "0200"
 },
 "titleset": {
 "tobeRows": 0,
@@ -2191,6 +2191,7 @@
 "SSP0024",
 "SSP0025",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SYS0011",
@@ -2388,6 +2389,7 @@
 "SSP0025",
 "SSP0026",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SSP0201",
@@ -2521,6 +2523,7 @@
 "SSP0025",
 "SSP0026",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SSP0201",
@@ -2730,6 +2733,7 @@
 "SSP0025",
 "SSP0026",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SSP0201",
@@ -2944,6 +2948,7 @@
 "SSP0025",
 "SSP0026",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SSP0201",
@@ -3127,6 +3132,7 @@
 "SSP0024",
 "SSP0025",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SYS0011",
@@ -3260,6 +3266,7 @@
 "SSP0025",
 "SSP0026",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SSP0201",
@@ -3435,6 +3442,7 @@
 "SSP0025",
 "SSP0026",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SSP0201",
@@ -3582,6 +3590,7 @@
 "SSP0025",
 "SSP0026",
 "SSP0045",
+"SSP0046",
 "SSP0060",
 "SSP0200",
 "SSP0201",

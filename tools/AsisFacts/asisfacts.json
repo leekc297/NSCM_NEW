@@ -5,6 +5,9 @@
   "preprocessorSymbols": [
     "TRACE"
   ],
+  "semanticScreens": [ "DMF", "SCPF", "DM", "SCP", "SSP", "SCM", "FPC", "FP", "NSD", "NMM", "NPP", "NLE", "NEIF", "GSD", "FDM", "FM", "MM" ],
+  "semanticAlwaysPaths": [ "01.Framework\\", "03.BIZ\\", "06.UIL\\" ],
+  "semanticRequestTypes": [ "FoxDataRequest" ],
   "excludeDirs": [
     "bin",
     "obj",
@@ -117,6 +120,10 @@
       },
       {
         "property": "SelectQueryId",
+        "kind": "fox"
+      },
+      {
+        "property": "CommandText",
         "kind": "fox"
       }
     ],

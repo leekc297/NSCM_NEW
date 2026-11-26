@@ -17,7 +17,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -64,7 +64,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -133,7 +141,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 18470,
+                      "duration": 15708,
                       "errors": [],
                       "stdout": [
                         {
@@ -142,9 +150,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:30:52.550Z",
+                      "startTime": "2026-11-24T16:50:38.150Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-15d38-더-재구성-·-조회-파라미터-·-401-·-기본값-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -173,35 +187,35 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 74513,
+                      "duration": 52779,
                       "errors": [],
                       "stdout": [
                         {
-                          "text": "[eg_auth] SSP/40/SSP Planner 16s\n"
+                          "text": "[eg_auth] SSP/40/SSP Planner 10s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/40/SSP Viewer 14s\n"
+                          "text": "[eg_auth] SSP/40/SSP Viewer 10s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/81/SSP Planner 13s\n"
+                          "text": "[eg_auth] SSP/81/SSP Planner 10s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/81/SSP Viewer 14s\n"
+                          "text": "[eg_auth] SSP/81/SSP Viewer 11s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
                         },
                         {
-                          "text": "[eg_auth] SSP/82/SSP Planner 17s\n"
+                          "text": "[eg_auth] SSP/82/SSP Planner 10s\n"
                         },
                         {
                           "text": "[eg_auth] SSP0014 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
@@ -212,9 +226,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:31:14.944Z",
+                      "startTime": "2026-11-24T16:50:57.890Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-8ed67-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -243,7 +263,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 11832,
+                      "duration": 10091,
                       "errors": [],
                       "stdout": [
                         {
@@ -252,9 +272,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:32:33.977Z",
+                      "startTime": "2026-11-24T16:51:54.286Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-0b920-컬럼-필수-표시-UI-Category-Div-별--chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -283,7 +309,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 8212,
+                      "duration": 6395,
                       "errors": [],
                       "stdout": [
                         {
@@ -292,9 +318,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:32:50.025Z",
+                      "startTime": "2026-11-24T16:52:08.425Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-cc5aa--Sort-유지-·-선택-행-위-·-병합-그룹-위-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -323,7 +355,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 271,
+                      "duration": 493,
                       "errors": [],
                       "stdout": [
                         {
@@ -332,9 +364,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:33:03.105Z",
+                      "startTime": "2026-11-24T16:52:17.580Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-00e0d-S-규칙-GROUP·행-값-·룩업-시간창-×-계정-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -363,7 +401,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7812,
+                      "duration": 6255,
                       "errors": [],
                       "stdout": [
                         {
@@ -372,9 +410,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:33:07.620Z",
+                      "startTime": "2026-11-24T16:52:21.784Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-4e58f-umnHeaderSpan-↔-TO-BE-병합-헤더-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -403,7 +447,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 247,
+                      "duration": 308,
                       "errors": [],
                       "stdout": [
                         {
@@ -412,9 +456,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:33:19.619Z",
+                      "startTime": "2026-11-24T16:52:31.447Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-8902c--—-칸-설정-보유-미보유-계정-정렬-EG032--chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -443,7 +493,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7431,
+                      "duration": 6676,
                       "errors": [],
                       "stdout": [
                         {
@@ -452,9 +502,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:33:26.058Z",
+                      "startTime": "2026-11-24T16:52:34.821Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-6bdb3--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -483,7 +539,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10932,
+                      "duration": 8557,
                       "errors": [],
                       "stdout": [
                         {
@@ -495,9 +551,15 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T00:33:38.969Z",
+                      "startTime": "2026-11-24T16:52:44.455Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-SS-4fda2-G380-—-세션-메뉴-없음-상태의-FE-첫-화면-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -515,8 +577,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-20T00:30:51.952Z",
-    "duration": 183866.239,
+    "startTime": "2026-11-24T16:50:37.299Z",
+    "duration": 139953.54799999998,
     "expected": 9,
     "skipped": 0,
     "unexpected": 0,

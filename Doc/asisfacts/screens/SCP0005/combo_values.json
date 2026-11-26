@@ -1,6 +1,6 @@
 {
  "screen": "SCP0005",
- "generated": "2026-11-20 09:03:57",
+ "generated": "2026-11-26 01:18:11",
  "vars": {
   "dtTransMode": {
    "sp": "UP_FX_GetCommonDataList",
@@ -32,15 +32,57 @@
     }
    ]
   },
-  "<meta Data.Type.LookupCommon>": {
+  "<meta Data.Type.LookupCommon LT_TYPE>": {
    "sp": "UP_FX_GetCommonDataList",
    "code": "LookupCommon",
    "targets": [
-    "GRID:LT_TYPE",
+    "GRID:LT_TYPE"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/LT_TYPE ← SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/LT_TYPE ATTRIBUTE1~5 · SpreadInfo.cs:1975-1981",
+   "rows": [
+    {
+     "CODE": "AVERAGE",
+     "NAME": "AVERAGE"
+    },
+    {
+     "CODE": "MIN",
+     "NAME": "MIN"
+    },
+    {
+     "CODE": "MAX",
+     "NAME": "MAX"
+    }
+   ]
+  },
+  "<meta Data.Type.LookupCommon TRANSPORT_MODE_CODE>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
     "GRID:TRANSPORT_MODE"
    ],
-   "ref": "SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/LT_TYPE ← SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/TRANSPORT_MODE",
-   "rows": []
+   "ref": "SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/TRANSPORT_MODE ← SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/TRANSPORT_MODE ATTRIBUTE1~5 · SpreadInfo.cs:1975-1981",
+   "rows": [
+    {
+     "CODE": "AIR",
+     "NAME": "AIR"
+    },
+    {
+     "CODE": "FRY",
+     "NAME": "FERRY"
+    },
+    {
+     "CODE": "RAI",
+     "NAME": "RAIL"
+    },
+    {
+     "CODE": "SEA",
+     "NAME": "SEA"
+    },
+    {
+     "CODE": "TRK",
+     "NAME": "TRUCK"
+    }
+   ]
   }
  }
 }

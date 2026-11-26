@@ -1,0 +1,114 @@
+{
+  "id": "20261123225519_SELF",
+  "at": "2026-11-23T22:55:19+09:00",
+  "ms": 1795442119465,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/asislive/asis_live_run.py|기본실측measure가조회필수조건채움popuppick데이터찾기asisli",
+  "title": "사용자 지시 R71 같은 문제: tools/AsisLive/asis_live_run.py:364 기본 실측 measure() 가 조회, 필수 조건 채움(popup_pick), 데이터 찾기(asis_live_datafind) 뒤 남은 팝업 폼을 닫지 않음. c",
+  "evidence": "규칙 R71 \"AS-IS 런처가 띄운 팝업, 경고창, 외부 프로그램(Excel) 창은 값을 확인하고 기록한 뒤 닫음\" (원래 지시 2026-11-13 09:41 \"현재 런처로 실행된 POPUP 창이 너무 많은데 닫기처리 한번 해도 될까요? 아니면 그대로 놔둬야 하나요? 런처로 실행 시 POPUP 차이나 경고창을 띄운 후 확인하고나면 POPUP 창이나 경고창을 닫으면 안되나요? POPUP 이 너무 많이 띄워져 있습니다.\") · tools/AsisLive/asis_live_run.py:364 run[\"dialogs\"] = host.send(\"dialogs\", timeout=20, **{\"from\": dlg0}).get(\"dialogs\", [])\n    if close_after:\n        rc = rec(\"close_screen\", host.send(\"close_screen\", timeout=60))\n        if rc.get(\"op",
+  "targets": [
+    "tools/AsisLive/asis_live_run.py"
+  ],
+  "before_after": "dialogs 기록 뒤 host.send(\"sweep\") 를 불러 닫은 창 목록을 run[\"popups_closed\"] 에 기록함. close_screen 뒤 한 번 더 sweep 하고, left 또는 dialogs_open 이 0 이 아니면 run[\"close_left\"] 에 넣어 asis_live_batch.py:144 가 세션을 새로 띄우게 함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/AsisLive/asis_live_run.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T08:39:26+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T08:39:26+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-24T08:47:33+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-24T08:51:04+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1165, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0847"
+    },
+    {
+      "at": "2026-11-24T08:51:06+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T09:03:17+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 75/75개 파일 통과(PASS 1173, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T09:03:17+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 2026-11-23T23:51:31Z 'SOME FAIL 파일 73/74 PASS 1163 FAIL 2' → 반영 뒤 2026-11-23T23:55:42Z 'ALL OK 파일 75/75 PASS 1173 FAIL 0'. 추가로 python ast.parse 실행 결과 PY_SYNTAX_OK · 변경 6개 파일 · 대상 목록 밖 변경 5개: Doc/_doc_style/10_RULES_KEEP.md.style.csv, tools/VibeManager/orch-usercheck.js, tools/VibeManager/rules/10_RULES_KEEP.md, tools/VibeManager/orch-userrule.js, tools/VibeManager/test/t_orch_ccwork.js",
+      "log": ".vibe\\logs\\2026-11-24T08-51-06_claude_orch.log",
+      "sec": 513,
+      "costUsd": 0.7137216,
+      "files": [
+        "Doc/_doc_style/10_RULES_KEEP.md.style.csv",
+        "tools/AsisLive/asis_live_run.py",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/rules/10_RULES_KEEP.md",
+        "tools/VibeManager/orch-userrule.js",
+        "tools/VibeManager/test/t_orch_ccwork.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "AS-IS 런처가 띄운 팝업, 경고창, 외부 프로그램(Excel) 창은 값을 확인하고 기록한 뒤 닫음 규칙을 tools/AsisLive/asis_live_run.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R71|tools/AsisLive/asis_live_run.py",
+  "kind": "fix",
+  "needsApproval": "자동 범위 밖 tools/AsisLive/asis_live_run.py",
+  "applyStartMs": 1795477866821,
+  "verifyJudge": {
+    "at": "2026-11-24T08:59:44+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 75/75개 파일 통과(PASS 1173, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0847",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795478597222,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 뒤 'ALL OK 파일 75/75 PASS 1173 FAIL 0 224.4s' (t_webview_syntax.js PASS 19 포함). 반영 전 'SOME FAIL 파일 73/74 PASS 1163 FAIL 2' (t_chain_loop.js 1개 파일, asis_live_run.py와 별개 파일)"
+      }
+    ],
+    "changed_files": [
+      "tools/AsisLive/asis_live_run.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 2026-11-23T23:51:31Z 'SOME FAIL 파일 73/74 PASS 1163 FAIL 2' → 반영 뒤 2026-11-23T23:55:42Z 'ALL OK 파일 75/75 PASS 1173 FAIL 0'. 추가로 python ast.parse 실행 결과 PY_SYNTAX_OK",
+    "note": "measure()에서 dialogs 기록 뒤 sweep을 부르고 닫은 창을 run['popups_closed']에 기록함. close_after일 때 close_screen 뒤 sweep을 한 번 더 부르고, 실패하거나 left 또는 dialogs_open이 0이 아니면 run['close_left']를 채워 asis_live_batch.py:144가 세션을 새로 띄움. 런처 실화면에서 팝업이 닫히는지는 AS-IS 런처 실측이 필요해 미확인."
+  },
+  "snap": "prop_20261123225519_SELF"
+}

@@ -1,445 +1,352 @@
 {
  "rule_id": "D5",
- "hash": "96b242a378707e21",
+ "hash": "ade00fcaa8559211",
  "groups": [
   {
    "rows": [
-    "V-002bab9e",
-    "V-c5a4ea26"
+    "EG-002ce789"
    ],
-   "why": "'route' 시트는 TO-BE 의 메인 그리드(SHEETS.ROUTE)라서, 두 행 모두 메인 그리드의 같은 LT_LAY_OFF_CLEARANCE 컬럼을 보고 NUMBER(소수 0자리)를 기대한다."
+   "why": "Checks the popup identity of the TO_COUNTRY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "V-342f19d6",
-    "V-7051c2da"
+    "EG-073b7c41"
    ],
-   "why": "두 행 모두 메인 그리드의 같은 SHIP_DOC_PREPARATION_DATE 컬럼을 보고 NUMBER(소수 0자리)를 기대하며, 라벨 철자(Data/Date)만 다르다."
+   "why": "Checks the popup icon on the TO_CITY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "V-297f3c25",
-    "V-7d335934"
+    "EG-0f890cb0"
    ],
-   "why": "두 행 모두 메인 그리드의 같은 LT_WAIT_SHIPPING 컬럼을 보고 NUMBER(소수 0자리)를 기대한다."
+   "why": "Checks the popup identity of the FROM_CITY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "V-3477a440",
-    "V-ecc08d6c"
+    "EG-22785298"
    ],
-   "why": "두 행 모두 메인 그리드의 같은 LT_VOYAGE 컬럼을 보고 NUMBER(소수 0자리)를 기대하며, 라벨만 AS-IS(Voyage)와 TO-BE(Sea/Air Ferry)로 다르다."
+   "why": "Checks that the FROM_CITY cell accepts typed input. This is a different aspect from the cell type or icon checks on the same column."
   },
   {
    "rows": [
-    "V-5353e6a6",
-    "V-f09fbbc3"
+    "EG-379146ee"
    ],
-   "why": "두 행 모두 메인 그리드의 같은 PRIORITY 컬럼을 보고 NUMBER(소수 0자리)를 기대한다."
-  },
-  {
-   "rows": [
-    "V-d3bc69e7",
-    "V-f019ccce"
-   ],
-   "why": "두 행 모두 메인 그리드의 같은 LT_DEPARTURE_INLAND 컬럼을 보고 NUMBER(소수 0자리)를 기대한다."
-  },
-  {
-   "rows": [
-    "V-bcffd950",
-    "V-e612a8b3"
-   ],
-   "why": "두 행 모두 메인 그리드의 같은 LT_ARRIVAL_INLAND 컬럼을 보고 NUMBER(소수 0자리)를 기대한다."
-  },
-  {
-   "rows": [
-    "V-945baf3b",
-    "V-d5bacd18"
-   ],
-   "why": "두 행 모두 메인 그리드의 같은 LT_TYPE 컬럼을 보고 COMBO 에디터를 기대한다."
-  },
-  {
-   "rows": [
-    "V-4e2d9ae2",
-    "V-e27e5863"
-   ],
-   "why": "두 행 모두 메인 그리드의 같은 VALID_YN 컬럼을 보고 COMBO 에디터를 기대한다."
-  },
-  {
-   "rows": [
-    "EG-29efa07f"
-   ],
-   "why": "TO_CITY 셀 아이콘 표시 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the popup identity of the btnToSrch button. The button is a different element from the cells."
   },
   {
    "rows": [
     "EG-3cc6c061"
    ],
-   "why": "FROM_COUNTRY 셀 유형(FPModal/FPTextModal) 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
-  },
-  {
-   "rows": [
-    "EG-3f437c38"
-   ],
-   "why": "FROM_CITY 셀 유형 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the editor type of the FROM_COUNTRY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
     "EG-4041a815"
    ],
-   "why": "ROUTE_ID 셀 아이콘 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks that the ROUTE_ID cell has no icon. Both the column and the expected result differ from the other icon checks."
   },
   {
    "rows": [
-    "EG-43bee320"
+    "EG-4486fdaa"
    ],
-   "why": "FROM_CITY 팝업 동일성(IDENTITY) 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks that the TO_COUNTRY cell accepts typed input. No other row checks the same element in the same way."
   },
   {
    "rows": [
     "EG-4a7a07b6"
    ],
-   "why": "FROM_COUNTRY 셀 아이콘 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the popup icon on the FROM_COUNTRY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "EG-5255ab3f"
+    "EG-7622b502"
    ],
-   "why": "TO_COUNTRY 키인 가능 여부 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the popup identity of the btnFromSrch button. The button is a different element from btnToSrch and from the cells."
   },
   {
    "rows": [
-    "EG-58e85136"
+    "EG-7f465a85"
    ],
-   "why": "TO_CITY 셀 유형 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the popup icon on the FROM_CITY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "EG-5bbfc1f8"
+    "EG-8e2f8c30"
    ],
-   "why": "TO_COUNTRY 셀 아이콘 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the ExcelUpload popup from the Upload button. Both the element and the popup differ from every other row."
   },
   {
    "rows": [
-    "EG-5d8c4f98"
+    "EG-954a091e"
    ],
-   "why": "FROM_CITY 키인 가능 여부 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
-  },
-  {
-   "rows": [
-    "EG-5fa6f156"
-   ],
-   "why": "TO_CITY 팝업 동일성 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the popup icon on the TO_COUNTRY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
     "EG-9c573043"
    ],
-   "why": "ROUTE_ID 셀 유형 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
-  },
-  {
-   "rows": [
-    "EG-a9f6ceb4"
-   ],
-   "why": "TO_COUNTRY 셀 유형 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the popup editor type of the ROUTE_ID cell. This is a different column from the City by Country checks."
   },
   {
    "rows": [
     "EG-b33a4891"
    ],
-   "why": "FROM_COUNTRY 키인 가능 여부 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks that the FROM_COUNTRY cell accepts typed input. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-b6fc0877"
+   ],
+   "why": "Checks the editor type of the FROM_CITY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
     "EG-b7b794bd"
    ],
-   "why": "FROM_COUNTRY 팝업 동일성(City by Country) 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the popup identity of the FROM_COUNTRY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "EG-bc5585f1"
+    "EG-bc580d74"
    ],
-   "why": "TO_CITY 키인 가능 여부 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks that the TO_CITY cell accepts typed input. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "EG-cfc8aef7"
+    "EG-e57dea5a"
    ],
-   "why": "FROM_CITY 셀 아이콘 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the editor type of the TO_CITY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
-    "EG-ed76cdbd"
+    "EG-ec002ba4"
    ],
-   "why": "TO_COUNTRY 팝업 동일성 확인은 다른 행과 컬럼이나 확인 항목이 겹치지 않는다."
+   "why": "Checks the editor type of the TO_COUNTRY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-facf6bbd"
+   ],
+   "why": "Checks the popup identity of the TO_CITY cell. No other row checks the same element in the same way."
   },
   {
    "rows": [
     "T-11e33e2b"
    ],
-   "why": "대조표 추적 행이라 컬럼 에디터 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that LT_ARRIVAL_INLAND is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
   },
   {
    "rows": [
     "T-12c712b9"
    ],
-   "why": "대조표 추적 행이라 컬럼 에디터 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that LT_DEPARTURE_INLAND is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
   },
   {
    "rows": [
     "T-12ee95f6"
    ],
-   "why": "대조표 추적 행이라 컬럼 에디터 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that SHIP_DOC_PREPARATION_DATE is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
   },
   {
    "rows": [
     "T-1304cbda"
    ],
-   "why": "대조표 추적 행이라 ROUTE_ID 의 EG 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that ROUTE_ID is implemented in the source, which is a different property from the popup rule check, so it stays separate."
   },
   {
    "rows": [
     "T-18397f43"
    ],
-   "why": "Excel 다운로드 시 콤보 Name 출력을 추적하는 행이라 겹치는 대상이 없다."
+   "why": "This trace row covers the common UC-05 rule (Excel download shows names instead of codes for combo columns). No other row covers it."
   },
   {
    "rows": [
     "T-1b8b97d2"
    ],
-   "why": "대조표 추적 행이라 FROM_COUNTRY 의 EG 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that FROM_COUNTRY is implemented in the source, which is a different property from the rule checks, so it stays separate."
   },
   {
    "rows": [
     "T-31b65ccf"
    ],
-   "why": "대조표 추적 행이라 컬럼 에디터 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that LT_LAY_OFF_CLEARANCE is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
   },
   {
    "rows": [
     "T-3f944e06"
    ],
-   "why": "대조표 추적 행이라 컬럼 에디터 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that LT_VOYAGE is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
   },
   {
    "rows": [
     "T-6b3ff049"
    ],
-   "why": "FROM_CITY_NAME 추적 행은 겹치는 대상이 없다."
+   "why": "This trace row checks that FROM_CITY_NAME is implemented in the source. No other row covers that column."
   },
   {
    "rows": [
     "T-89ecb063"
    ],
-   "why": "대조표 추적 행이라 TO_COUNTRY 의 EG 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that TO_COUNTRY is implemented in the source, which is a different property from the rule checks, so it stays separate."
   },
   {
    "rows": [
     "T-91dc93c9"
    ],
-   "why": "대조표 추적 행이라 TO_CITY 의 EG 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that TO_CITY is implemented in the source, which is a different property from the rule checks, so it stays separate."
   },
   {
    "rows": [
     "T-caac23c7"
    ],
-   "why": "대조표 추적 행이라 컬럼 에디터 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that LT_WAIT_SHIPPING is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
   },
   {
    "rows": [
     "T-d9a6a9d2"
    ],
-   "why": "대조표 추적 행이라 컬럼 에디터 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that PRIORITY is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
   },
   {
    "rows": [
     "T-e527ded3"
    ],
-   "why": "SetImageCell 소스 진입점을 추적하는 행이라 겹치는 대상이 없다."
+   "why": "This trace row checks that the SetImageCell method exists in the source. No other row checks it."
   },
   {
    "rows": [
     "T-ed37789b"
    ],
-   "why": "CreateSpread 소스 진입점을 추적하는 행이라 겹치는 대상이 없다."
+   "why": "This trace row checks that the CreateSpread method exists in the source. No other row checks it."
   },
   {
    "rows": [
     "T-f3926879"
    ],
-   "why": "대조표 추적 행이라 FROM_CITY 의 EG 측정 행과 확인하는 성질이 달라 단독으로 둔다."
+   "why": "This trace row checks that FROM_CITY is implemented in the source, which is a different property from the rule checks, so it stays separate."
   },
   {
    "rows": [
     "T-f67ec136"
    ],
-   "why": "SetSpreadColumn 소스 진입점을 추적하는 행이라 겹치는 대상이 없다."
+   "why": "This trace row checks that the SetSpreadColumn method exists in the source. No other row checks it."
   },
   {
    "rows": [
-    "V-0e90cdaa"
+    "V-09c27e18"
    ],
-   "why": "팝업 그리드의 LT_VOYAGE 라서 메인 그리드 컬럼과 다른 요소다."
+   "why": "Checks the DATETIME editor on LAST_UPDATE_DATE. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-104fdb50"
+    "V-297f3c25"
    ],
-   "why": "메인 그리드 DAYS_WED 는 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the NUMBER editor on LT_WAIT_SHIPPING. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-1512199d"
+    "V-2dedda7a"
    ],
-   "why": "다른 화면 결함 유형(Menu Type 등 코드성 컬럼)이라 이 화면 요소와 직접 일치하는 행이 없다."
+   "why": "Checks the COMBO editor on DAYS_FRI. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-28b9a0ac"
+    "V-347067d8"
    ],
-   "why": "메인 그리드 DAYS_FRI 는 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the COMBO editor on DAYS_SAT. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-396ed79c"
+    "V-3477a440"
    ],
-   "why": "팝업 그리드의 DAYS_MON 이라 메인 그리드 컬럼과 다른 요소다."
+   "why": "Checks the NUMBER editor on LT_VOYAGE. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-40358621"
+    "V-47637f19"
    ],
-   "why": "메인 그리드 DAYS_SAT 는 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the COMBO editor on DAYS_SUN. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-697eff0f"
+    "V-4e2d9ae2"
    ],
-   "why": "팝업 그리드의 LT_DEPARTURE_INLAND 라서 메인 그리드 컬럼과 다른 요소다."
+   "why": "Checks the COMBO editor on VALID_YN. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-6d55ffd3"
+    "V-7051c2da"
    ],
-   "why": "메인 그리드 DAYS_SUN 은 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the NUMBER editor on SHIP_DOC_PREPARATION_DATE. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-71fe636d"
+    "V-776eeeaf"
    ],
-   "why": "메인 그리드 DAYS_THU 는 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the COMBO editor on DAYS_THU. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-78a4d98a"
+    "V-945baf3b"
    ],
-   "why": "메인 그리드 DAYS_TUE 는 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the COMBO editor on LT_TYPE. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-7de79720"
+    "V-b5ead96f"
    ],
-   "why": "팝업 그리드의 DAYS_WED 라서 메인 그리드 컬럼과 다른 요소다."
+   "why": "Checks the COMBO editor on DAYS_MON. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-825b837b"
+    "V-c1a8331e"
    ],
-   "why": "팝업 그리드의 LT_WAIT_SHIPPING 이라 메인 그리드 컬럼과 다른 요소다."
-  },
-  {
-   "rows": [
-    "V-93870804"
-   ],
-   "why": "팝업 그리드의 DAYS_SUN 이라 메인 그리드 컬럼과 다른 요소다."
-  },
-  {
-   "rows": [
-    "V-a2ee4e89"
-   ],
-   "why": "팝업 그리드의 LAST_UPDATE_DATE 라서 메인 그리드 컬럼과 다른 요소다."
-  },
-  {
-   "rows": [
-    "V-a5dc16b0"
-   ],
-   "why": "메인 그리드 LAST_UPDATE_DATE 는 같은 요소를 보는 다른 행이 없다."
-  },
-  {
-   "rows": [
-    "V-a9bfbdf2"
-   ],
-   "why": "팝업 그리드의 LT_ARRIVAL_INLAND 라서 메인 그리드 컬럼과 다른 요소다."
-  },
-  {
-   "rows": [
-    "V-b4469cc4"
-   ],
-   "why": "팝업 그리드의 DAYS_THU 라서 메인 그리드 컬럼과 다른 요소다."
-  },
-  {
-   "rows": [
-    "V-b997615c"
-   ],
-   "why": "팝업 그리드의 DAYS_TUE 라서 메인 그리드 컬럼과 다른 요소다."
+   "why": "Checks the COMBO editor on DAYS_TUE. This column differs from every other row's column."
   },
   {
    "rows": [
     "V-c475aa8d"
    ],
-   "why": "메인 그리드 TRANSPORT_MODE 는 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the COMBO editor on TRANSPORT_MODE. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-c66b08c0"
+    "V-c5a4ea26"
    ],
-   "why": "팝업 그리드의 LT_LAY_OFF_CLEARANCE 라서 메인 그리드 컬럼과 다른 요소다."
+   "why": "Checks the NUMBER editor on LT_LAY_OFF_CLEARANCE. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-ce11e55b"
+    "V-d26cbc63"
    ],
-   "why": "DMF0021 결함 유형은 신규 행 상태의 여러 동작을 묶은 기대라서 다른 행과 일치하지 않는다."
+   "why": "Checks the COMBO editor on DAYS_WED. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-d6849286"
+    "V-d3bc69e7"
    ],
-   "why": "팝업 그리드의 DAYS_FRI 라서 메인 그리드 컬럼과 다른 요소다."
+   "why": "Checks the NUMBER editor on LT_DEPARTURE_INLAND. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-e43f5bf5"
+    "V-e612a8b3"
    ],
-   "why": "DMF0020 결함 유형은 콤보·COL_LIST·Measure 위치를 함께 보는 복합 기대라서 다른 행과 일치하지 않는다."
+   "why": "Checks the NUMBER editor on LT_ARRIVAL_INLAND. This column differs from every other row's column."
   },
   {
    "rows": [
     "V-eca92661"
    ],
-   "why": "메인 그리드 CREATION_DATE 는 같은 요소를 보는 다른 행이 없다."
+   "why": "Checks the DATETIME editor on CREATION_DATE. This column differs from every other row's column."
   },
   {
    "rows": [
-    "V-eea0e77a"
+    "V-f09fbbc3"
    ],
-   "why": "팝업 그리드의 DAYS_SAT 라서 메인 그리드 컬럼과 다른 요소다."
-  },
-  {
-   "rows": [
-    "V-f420c726"
-   ],
-   "why": "메인 그리드 DAYS_MON 은 같은 요소를 보는 다른 행이 없다."
-  },
-  {
-   "rows": [
-    "V-fd176236"
-   ],
-   "why": "그리드 전체의 콤보·팝업 구성을 보는 포괄 확정 규칙이라 개별 컬럼 행과 대상 범위가 다르다."
+   "why": "Checks the NUMBER editor on PRIORITY. This column differs from every other row's column."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:40:18",
- "cost": 0.2871975
+ "at": "2026-11-25 22:31:04",
+ "cost": 0.16972629999999997
 }

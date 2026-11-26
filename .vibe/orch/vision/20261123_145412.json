@@ -1,0 +1,77 @@
+{
+ "at": "2026-11-23T14:54:12+09:00",
+ "summary": "목적 11건 중 어긋남 6, 맞음 2, 미확인 3입니다. '버그, 시스템 개선안은 묻지 않고 자동 반영' 목적이 11-21, 11-22, 11-23 3회 연속 어긋나 L4 로 판정했고 개념 재정립안 1건을 올립니다. 11-23 반영 시작 12건 중 코드 반영 완료는 1건이고, 반영 실패 뒤 대상 밖에 남은 시험 파일이 다음 게이트를 흐리는 구조 문제를 L3 안 1건으로 올립니다.",
+ "purposes": [
+  {
+   "purpose": "CheckList 화면 1개 10분, 길어야 30분 안에 끝남",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md, user_checks.json U2, U25",
+   "verdict": "어긋남",
+   "evidence": "digest7d S8.checklistRun 26건 중앙값 1862.6초(31.0분), p90 12908.3초. checklistTiming SSP0005 209.3분, SCP0005 136.7분, SSP0014 74.8분. events.jsonl 마지막 CheckList chain.end 는 2001줄(SCP0028, 11-21 01:55, ms_run 18571542)이고 그 뒤 CheckList 체인 시작과 종료 0건이라 새 측정 없음. vision 20261120, 20261121, 20261122 에 이어 4회 연속 어긋남(L4). 같은 목적 개념 재정립안 2건이 이미 있음(20261123000419_VISION 반영 실패 5회, 20261121120359_VISION 승인 뒤 14:49 자동 승인 기록)이라 새로 올리지 않음"
+  },
+  {
+   "purpose": "속도 개선은 판정 결과가 같은 대체 방법만 씀",
+   "source": "memory/feedback_checklist_speed_accuracy_first_20261120.md",
+   "verdict": "미확인",
+   "evidence": "11-21 01:55 뒤 CheckList 실행 0건. 20261123000419_VISION result 에 'ledger_diff.py 대조 = CheckList 실행(사용자 실행)이 필요해 미실행', '동시 실행은 채택 조건(차이 0건)을 확인하지 못해 run_verify.py 에 넣지 않음' 기록. 원장 대조 결과는 이번 점검에서 미확인"
+  },
+  {
+   "purpose": "버그, 시스템 개선안은 묻지 않고 권장안으로 자동 반영(11-23 부터 core 포함)",
+   "source": "memory/feedback_vmo_approval_core_only_20261120.md, user_checks.json U3",
+   "verdict": "어긋남",
+   "evidence": "selfcheck S13 'U3 자동 반영 대상인데 반영 안 된 개선안 13건'(result.json 14:48). proposals 이력 11-23 집계(이번 조회 14:5x): 승인 28, 반영 전 게이트 15, 반영 시작 12, 반영 실패 13, 반영 보류 16, 반영 완료 5(그중 생성물 삭제 4, 코드 1 = 20261123000456_SELF_2). 20261121000933_SELF_2 는 13:01~14:09 에 승인 → 게이트 → 보류를 5회 되풀이. 그 뒤에 등록된 20261123121302_SELF, 122722_SELF, 124752_SELF 는 history 0건으로 120~155분 대기. vision 20261121, 20261122 에 이어 3회 연속 어긋남(L4)"
+  },
+  {
+   "purpose": "자가진단이 점검에서 멈추지 않고 보완까지 스스로 진행하고, 반영 실패는 원인을 찾아 보완",
+   "source": "memory/feedback_vmo_self_repair_auto_20261119.md, user_checks.json U21",
+   "verdict": "어긋남",
+   "evidence": "S13 'U21 VMO 반영 실패 24시간 9건', 'U21 같은 원인 반영 실패 5회'(20261123000419_VISION 11:31, 13:13, 13:34, 13:46, 14:05). 7일 반영 실패 이력 58건 중 23건에 '대상 밖 변경 … 그대로 남음' 문구. 실패 진단은 동작함: 11:20, 12:13, 12:27, 12:47 에 고친 안 4건 등록. 고친 안 4건 중 반영 완료 0건"
+  },
+  {
+   "purpose": "VMO 자가 보완 반영이 실행 중인 VM 에 효력을 냄",
+   "source": "memory/feedback_vmo_self_repair_auto_20261119.md",
+   "verdict": "어긋남",
+   "evidence": "digest7d code: loadedAt 11-23 13:49:59, 그 뒤 바뀐 파일 5개(orch-agent.js 14:19, orch-improve.js 14:17, orch-verify.js 14:16, prompt-relate.js 14:19, workbench.js 14:40). 14:22 CHANGELOG '개선안 검증을 항목으로 나누고 합격 판정을 코드가 함'은 실행 중 코드에 없음. 같은 내용 안 20261123000946_VISION, 20261122130655_REVIEW_2 가 대기 중이라 새로 올리지 않음"
+  },
+  {
+   "purpose": "VMO 가 10분 간격으로 열린 문제를 진단, 조치함",
+   "source": "user_checks.json U3, U7",
+   "verdict": "어긋남",
+   "evidence": "S13 'U3 조치 기록 없는 열린 사건 3건'(151~177분), S7 미해결 사건 4건(need-user, 67~77시간: 20261120_201206_R5_SCP0028, 20261120_104237_R7_ALL, 20261120_094734_R5_SCP0028, 20261120_094237_R3_SSP0005). 열린 일 순환 안 20261120183740_VISION 은 12:11 반영 실패, 고친 안 20261123121302_SELF 대기 중이라 새로 올리지 않음"
+  },
+  {
+   "purpose": "VM 고정 문구가 문장 규칙을 지킴",
+   "source": "memory/feedback_sentence_rule_3_20261113.md",
+   "verdict": "어긋남",
+   "evidence": "S11 workbench.js 문장 규칙 위반 119건. 4회 연속 어긋남. 개념 재정립안 2건(20261122140538_VISION, 20261123000643_VISION)이 대기 중이라 새로 올리지 않음"
+  },
+  {
+   "purpose": "체인 실행 중에도 감시와 진단을 멈추지 않고, 화면 진입 실패를 감지부터 다시 실행까지 사람 없이 닫음",
+   "source": "memory/feedback_vmo_self_heal_restart_20261120.md, user_checks.json U4, U5",
+   "verdict": "미확인",
+   "evidence": "incidents7d byRule 에 R13 0건, CheckList 체인은 11-21 01:55 뒤 0건이라 이번 기간 새 근거 없음"
+  },
+  {
+   "purpose": "VMO 보완 뒤 재수행(작업, 화면마다 2번까지, 3번째 오류면 재수행 안 함)",
+   "source": "memory/feedback_vmo_rerun_after_fix_20261120.md",
+   "verdict": "미확인",
+   "evidence": "harness.json orch.rerunAfterFix 'rerun', rerunMax 2 로 설정값은 지시와 같음. digest7d steps repairs 0, 11-21 뒤 체인 실행 0건이라 동작 근거 없음"
+  },
+  {
+   "purpose": "VMO 개입이 오판 없이 동작함",
+   "source": "user_checks.json U20",
+   "verdict": "맞음",
+   "evidence": "interventions7d total 65, falses 0건, overdue 0. selfcheck S14 ok 0건"
+  },
+  {
+   "purpose": "하루 1회 Overall Review 수행",
+   "source": "memory/feedback_vmo_user_issue_selfcheck_20261120.md",
+   "verdict": "맞음",
+   "evidence": ".vibe/orch/vision 에 20261120_115806, 20261121_120359, 20261122_140538 결과 파일 있음. 이번 실행 11-23 14:50"
+  }
+ ],
+ "proposals": [
+  "20261123145412_VISION",
+  "20261123145412_VISION_2"
+ ],
+ "log": ".vibe\\logs\\2026-11-23T14-50-00_claude_orch.log"
+}

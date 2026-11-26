@@ -65,11 +65,8 @@ pre.mermaid g.node.k-ST rect{fill:#e0f2f4!important;stroke:#1f7a8c!important}
 .kleg{display:inline-flex;gap:12px;margin-left:6px}.kleg span i{display:inline-block;width:12px;height:12px;border:1.5px solid;margin-right:4px;vertical-align:-2px}
 
 /* 2026-11-16 읽기 보완: 탭 버튼 고정 · 목차 · 긴 표 스크롤 · 한눈에 보기 카드 */
-nav{position:sticky;top:0;z-index:30;background:#fafafa;padding:8px 0 0;border-bottom:1px solid #d6dbe1;margin-bottom:6px}
-nav button{font-size:14px;border-radius:4px 4px 0 0}
 .scrbar{top:var(--navh,52px)!important}
 h3,h4{scroll-margin-top:calc(var(--navh,52px) + 12px)}
-section.tab h3{border-left:5px solid #1f6feb;padding:4px 10px;background:#eef3fb}
 .toc{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:4px 0 14px;padding:8px 10px;background:#fff;border:1px solid #d6dbe1;border-radius:6px;font-size:13px}
 .toc b{margin-right:4px;color:#444}
 .toc a{color:#0b57d0;text-decoration:none;padding:2px 9px;border:1px solid #c9d6ee;border-radius:12px;background:#f5f8fe;white-space:nowrap}

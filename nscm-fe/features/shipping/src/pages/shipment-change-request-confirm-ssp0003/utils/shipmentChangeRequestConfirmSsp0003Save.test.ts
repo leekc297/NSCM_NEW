@@ -5,6 +5,9 @@ import { SAVE_STATUS, SUB_COL } from '../shipment-change-request-confirm-ssp0003
 import {
   buildConfirmPayload,
   buildDeConfirmPayload,
+  countChk,
+  decideChangeStatus,
+  parseErpErrors,
 } from './shipmentChangeRequestConfirmSsp0003Save';
 
 // SSP0003 승인 저장 payload 계약 테스트 — 지키는 것은 **다행 CLOB 인자의 행 구분자**다.
@@ -305,5 +308,47 @@ describe('buildConfirmPayload — 다행 구분자', () => {
       CONFIRM_CTX
     );
     expect(is40).toBe(true);
+  });
+});
+
+// ERP 송신 실패 처리(2026-11-25) — AS-IS 는 송신 결과를 본 뒤 확정을 저장한다(cs:2020~2024).
+//   성공 → 'A' / 일부 거절(S_E) → 'A' 인데 거절 CONFIRM 제외 / 전건 거절·호출 실패 → 'E'.
+describe('ERP 송신 실패 확정 payload', () => {
+  it('E 확정은 NEW_* 를 비우고 division 은 행0 단일, changeStatus 는 E 다(cs:2024 SaveData E)', () => {
+    const { payload } = buildConfirmPayload(
+      twoRows,
+      allChecked,
+      SAVE_STATUS.ERP_FAIL,
+      decideChangeStatus(SAVE_STATUS.ERP_FAIL, countChk(twoRows, allChecked)),
+      CONFIRM_CTX
+    );
+    expect(payload.changeStatus).toBe('E');
+    expect(payload.newConfirmId).toBe('');
+    expect(payload.newQty).toBe('');
+    expect(payload.divisionId).toBe('10');
+  });
+
+  it('ERP 가 거절한 CONFIRM 은 승인 payload 에서 빠지고 base·행0 값은 전체 행 기준이다(cs:1055~1066)', () => {
+    const { payload } = buildConfirmPayload(twoRows, allChecked, SAVE_STATUS.APPROVED, 'A', {
+      ...CONFIRM_CTX,
+      excludeIds: new Set(['C001']),
+    });
+    expect(payload.newConfirmId).toBe('C002');
+    expect(payload.confirmId).toBe('C001'); // base 는 거절된 행이어도 그대로
+    expect(payload.itemId).toBe('IT1');
+  });
+
+  it('거절 CONFIRM 을 뺀 건수로 상태를 정한다 — 남은 행이 전부 체크면 A', () => {
+    const rest = twoRows.filter(r => r[SUB_COL.CONFIRM_ID] !== 'C001');
+    expect(decideChangeStatus(SAVE_STATUS.APPROVED, countChk(rest, allChecked))).toBe('A');
+  });
+
+  it('ReErrorMsg 를 CONFIRM_ID:메시지 로 자른다 — 끝 ^ 와 CONFIRM_ID 없는 조각은 버린다', () => {
+    expect(parseErpErrors('C001:no stock^C002:locked: by user^')).toEqual([
+      { confirmId: 'C001', message: 'no stock' },
+      { confirmId: 'C002', message: 'locked: by user' },
+    ]);
+    expect(parseErpErrors('')).toEqual([]);
+    expect(parseErpErrors('just text')).toEqual([]);
   });
 });

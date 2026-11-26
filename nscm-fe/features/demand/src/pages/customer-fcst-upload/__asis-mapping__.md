@@ -45,7 +45,7 @@ Framework Auto-Events (F-key override):
 | 1 (InitControls Div40 분기) | EndCustomer 콤보 소스 분기 | 콤보 EndCustomer 단일 등록분 + DIVISION_ID 클라 필터 (AS-IS 양분기 모두 EndCustomerByDivision 호출로 수렴 — .cs L261/268 동일) |
 | 2·3 (FindData Div 필수 MSG00097) | 조회 차단 | validateFind — MSG00097 |
 | 4 (FindData 기간역전 MSG00108) | 〃 | validateFind — MSG00108 |
-| 5 (FindData 2년 초과 MSG00164) | AddYears(2) | validateFind — 시작+2년 초과 차단. **AS-IS 문구(3년)/조건(2년) 불일치 1:1 보존** |
+| 5 (FindData 2년 초과 MSG00164) | AddYears(2) | validateFind — 시작+2년 초과 차단. 문구는 2년 신규 메시지 MSG01505 로 교체(AS-IS 문구 3년/조건 2년 불일치 해소, 2026-11-22 개선 요청) |
 | 6 (SaveData 결과 메시지 MSG00004) | 저장 응답 표시 | handleSave — confirm(MSG00004) + 성공 toast(MSG00606) + 오류 alert(SP O_RESULT/message) |
 | 7 (SaveData 변경없음 MSG00152) | iCount=0 | handleSave — entries 0건 시 MSG00152 |
 | 8·9 (cboDivision 81/82 분기 — Project 활성) | lblProject/btnProject Enabled | 디자인 유지 결정으로 PJT 필드 상시 노출 (AS-IS 는 81/82 만 활성) — 조회 SP 가 Div40 에서 projectCode 무시하므로 동작 등가 |
@@ -100,7 +100,7 @@ Framework Auto-Events (F-key override):
 | 변경 없음 | MSG00152 | MSG00152 |
 | Division 필수 | MSG00097 | MSG00097 |
 | 기간 역전 | MSG00108 | MSG00108 |
-| 기간 상한 | MSG00164 (2년 조건/3년 문구) | MSG00164 — 불일치 1:1 보존 |
+| 기간 상한 | MSG00164 (2년 조건/3년 문구) | MSG01505 「조회 기간은 2년 이내로 입력해주세요.」 — 조건과 문구 일치(2026-11-22) |
 | INSERT 차단 | MSG00380 | MSG00380 |
 | 업로드 완료 | (공통 폼) | MSG00265 |
 | 업로드 모달 라벨 | (공통 폼 Term) | LBL00346 + **신규 LBL00754~759** (Upload Result/Success/Error/Total/Error Detail/Excel File — MSG_M+json 3종 등록) |

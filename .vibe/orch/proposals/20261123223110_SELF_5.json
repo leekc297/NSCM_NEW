@@ -1,0 +1,107 @@
+{
+  "id": "20261123223110_SELF_5",
+  "at": "2026-11-23T22:31:10+09:00",
+  "ms": 1795440670721,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/run_verify.py|checklist시작때db감시를켜지만끝날때끄는호출이없음ensurewatc",
+  "title": "사용자 지시 R65 같은 문제: tools/Harness/verify/run_verify.py:878 CheckList 시작 때 DB 감시를 켜지만 끝날 때 끄는 호출이 없음. ensure_watch 는 부모가 끝나도 계속 도는 독립 프로세스(db_orphan_s",
+  "evidence": "규칙 R65 \"DB 세션 감시는 CheckList 와 E2E 시험을 시작할 때 자동으로 켜지고 끝나면 꺼짐\" (원래 지시 2026-11-12 11:31 \"로컬 be 재기동은 be 소스 변경에 따라서 진행한것 확인, db 감시의 경우에는 checklist 수행이나 e2e 테스트 시에 자동 동작하도록 요청, 카카오톡 알림은 무시해주세요.\") · tools/Harness/verify/run_verify.py:878 subprocess.run([py, os.path.join(HERE, 'db_orphan_sessions.py'), '--ensure-watch'], timeout=90)",
+  "targets": [
+    "tools/Harness/verify/run_verify.py"
+  ],
+  "before_after": "db_orphan_sessions.py 에 --stop-watch(pid 파일의 감시 프로세스 종료)를 추가함. run_verify.py 의 마지막 post 단계 뒤 finally 에서 이번 실행이 켠 감시만 끔. 다른 CheckList 가 실행 중이면 끄지 않음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/run_verify.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T09:33:25+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T09:37:21+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self0933"
+    },
+    {
+      "at": "2026-11-25T09:37:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T09:51:16+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T09:51:16+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전(2026-11-25 09:42 측정) ALL OK 84/84 PASS 1374 FAIL 0 → 반영 뒤(09:47:04) ALL OK 84/84 PASS 1374 FAIL 0. 추가: py_compile 2파일 COMPILE_OK, --stop-watch --pid 1 → '유지 ... (pid 33860)가 이번 실행이 켠 감시(pid 1)가 아님', 가짜 잠금 → others_with_fake ['ZZTEST(pid 33860)'] · others_ · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/Harness/verify/db_orphan_sessions.py",
+      "log": ".vibe\\logs\\2026-11-25T09-37-28_claude_orch.log",
+      "sec": 592,
+      "costUsd": 1.1201436999999999,
+      "files": [
+        "tools/Harness/verify/db_orphan_sessions.py",
+        "tools/Harness/verify/run_verify.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "DB 세션 감시는 CheckList 와 E2E 시험을 시작할 때 자동으로 켜지고 끝나면 꺼짐 규칙을 tools/Harness/verify/run_verify.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R65|tools/Harness/verify/run_verify.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795566805208,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795567047708,
+  "verifyJudge": {
+    "at": "2026-11-25T09:47:25+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self0933",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795567876435,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 230.2s' → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 230.3s'. 웹뷰 파일 아님(t_webview_syntax.js 는 run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/run_verify.py",
+      "tools/Harness/verify/db_orphan_sessions.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전(2026-11-25 09:42 측정) ALL OK 84/84 PASS 1374 FAIL 0 → 반영 뒤(09:47:04) ALL OK 84/84 PASS 1374 FAIL 0. 추가: py_compile 2파일 COMPILE_OK, --stop-watch --pid 1 → '유지 ... (pid 33860)가 이번 실행이 켠 감시(pid 1)가 아님', 가짜 잠금 → others_with_fake ['ZZTEST(pid 33860)'] · others_except [], 시험용 대기 프로세스 → '[DB 감시] 종료(pid 19588)' rc 0 pidfile_exists False",
+    "note": "db_orphan_sessions.py 는 targets 에 없으나 before_after 에 --stop-watch 추가가 적혀 있어 승인 범위로 보고 고침. 실행 중 감시 pid 33860 은 끄지 않음. 시험 중 Doc/verify/_db_watch.log 에 pid 19588 종료 줄 1줄 기록됨. 남은 경우: CheckList 2개가 겹치면 감시를 켠 쪽이 먼저 끝날 때 끄지 않고, 나중 쪽은 자기가 켠 감시가 아니라서 끄지 않아 감시가 남음(개선안 범위 밖). 실제 CheckList 실행 확인은 안 함."
+  },
+  "snap": "prop_20261123223110_SELF_5"
+}

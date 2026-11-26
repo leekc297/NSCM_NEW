@@ -84,7 +84,8 @@ export const EtcSalesReportsForm = ({
                   versionLabel: '',
                   mdfType: REPORT_TYPE.SP_W,
                   yyyy: dayjs().format('YYYY'),
-                  planResult: PLAN_RESULT.PLAN,
+                  // 사업부를 바꾸면 기본값 ALL 로 되돌린다(2026-11-22 개선 요청 — 종전 Plan).
+                  planResult: PLAN_RESULT.ALL,
                 });
                 onDivisionChange();
               });

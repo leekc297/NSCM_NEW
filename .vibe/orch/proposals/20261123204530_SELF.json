@@ -1,0 +1,104 @@
+{
+  "id": "20261123204530_SELF",
+  "at": "2026-11-23T20:45:30+09:00",
+  "ms": 1795434330077,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/rules/n_rules_keep.md|crncrncrn등n행이룰본문을직접정의하고정본toberules",
+  "title": "사용자 지시 R38 같은 문제: tools/VibeManager/rules/10_RULES_KEEP.md:152 CR-073, CR-075, CR-077 등 8행이 룰 본문을 직접 정의하고 정본 TOBE_RULES_DIFF.md 를 참조하지 않음(이 폴더에서 TOBE_RUL",
+  "evidence": "규칙 R38 \"TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함\" (원래 지시 2026-11-11 14:28 \"1. 'AS-IS 와 달라도 오류 아님'인지 'TO-BE 개발 규칙' 의 경우 별도의 MD 파일로 일괄 관리할 수 있도록 보완 요청 (현재의 MD 파일에 분산되어 있으면 취합해서 관리 요청) 2. M1 진행해주세요. 3. 2개 항목은 차후 결정 예정.\") · tools/VibeManager/rules/10_RULES_KEEP.md:152 | H19 | **필수 표시 '*' 라벨 = TO-BE 생략 허용(CR-077, 사용자 판정 2026-10-29 SCP0020 조치 필요 6번)** — AS-IS 라벨 'Line*' ↔ TO-BE 'Line' 처럼 '*' 를 뺀 문구가 같으면 오류 아님",
+  "targets": [
+    "tools/VibeManager/rules/10_RULES_KEEP.md"
+  ],
+  "before_after": "8행의 CR 본문을 'CR-077, 정본 Doc/_rules_consolidation/TOBE_RULES_DIFF.md' 참조 한 줄로 바꿈. 정본에 없는 내용은 confirmed_requirements.csv 에 추가한 뒤 tobe_rule_registry.py --build 로 다시 생성함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/rules/10_RULES_KEEP.md.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T06:50:19+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T06:53:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0650"
+    },
+    {
+      "at": "2026-11-24T06:53:58+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T07:07:10+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T07:07:10+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 PASS 1161 FAIL 0 (2026-11-23T21:54:17Z) → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 214.3s' (2026-11-24 07:03:13). 반영 뒤 grep: D3 CR-073, D4 CR-072, E11 CR-071·CR-098, F6 CR-070, H15 CR-075, H16 CR-076, H19 CR-077, H21 CR-092 모두 정본 경로 참조 한 줄 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T06-53-59_claude_orch.log",
+      "sec": 574,
+      "costUsd": 1.3966499999999997,
+      "files": [
+        "tools/VibeManager/rules/10_RULES_KEEP.md"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함 규칙을 tools/VibeManager/rules/10_RULES_KEEP.md 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R38|tools/VibeManager/rules/10_RULES_KEEP.md",
+  "needsApproval": "룰 문서 tools/VibeManager/rules/10_RULES_KEEP.md",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795470619413,
+  "autoFp": "887bdaec4b",
+  "applyStartMs": 1795470838986,
+  "verifyJudge": {
+    "at": "2026-11-24T07:03:35+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0650",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795471630215,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.8s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 214.3s'. 웹뷰 파일 아님. t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/rules/10_RULES_KEEP.md"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 PASS 1161 FAIL 0 (2026-11-23T21:54:17Z) → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 214.3s' (2026-11-24 07:03:13). 반영 뒤 grep: D3 CR-073, D4 CR-072, E11 CR-071·CR-098, F6 CR-070, H15 CR-075, H16 CR-076, H19 CR-077, H21 CR-092 모두 정본 경로 참조 한 줄",
+    "note": "8행(D3, D4, E11, F6, H15, H16, H19, H21) CR 본문을 정본 참조로 바꿈. CR-071·072·073·077·092·098 은 TOBE_RULES_DIFF.md 16~26행, CR-070·075·076 은 생성기가 TOBE_DEV 로 분류해 TOBE_RULES_DEV.md 83~85행에 있어 그 문서를 참조함. 9건 모두 confirmed_requirements.csv 에 있어 CSV 추가와 tobe_rule_registry.py --build 재실행은 하지 않음. 구현 위치(공용 SubTitle 게이트, syn_fix, _synonym_history.csv, label_alias.csv)는 행에 남김. R38 검출 코드는 tools/VibeManager/*.js 에서 찾지 못해 미확인(추가 확인 후보: VMO S13 결과). 걸린 시간 약 10분, 대부분 run_all 2회(212.8s, 214.3s)."
+  },
+  "snap": "prop_20261123204530_SELF"
+}

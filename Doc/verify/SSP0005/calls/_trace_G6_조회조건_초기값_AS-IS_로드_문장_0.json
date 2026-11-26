@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 114,
+  "at": "2026-11-24T16:51:59.285Z",
+  "user": "seongwon.j",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 111,
+  "at": "2026-11-24T16:51:59.441Z",
+  "user": "seongwon.j",
+  "test": "G6 조회조건 초기값 = AS-IS 로드 문장"
+ }
+]

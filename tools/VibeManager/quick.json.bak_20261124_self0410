@@ -1,0 +1,2112 @@
+{
+  "$comment": "Vibe_Manager 워크벤치·사이드바 전체 메뉴 항목. kind: terminal(명령 실행) | task(steps.json 작업 id) | claude(프롬프트를 Claude 세션에 전송) | open(파일). ${id} = 패널의 화면ID 입력값, ${root} = 프로젝트 루트",
+  "groups": [
+    {
+      "title": "UI 분석·생성·보완 (ID 필요)",
+      "items": [
+        {
+          "label": "🔬 AS-IS 파싱·분석 (Fact Pack)",
+          "batch": true,
+          "kind": "task",
+          "task": "S1.packone",
+          "needsId": true,
+          "outputs": [
+            "Doc/asisfacts/screens/${id}/${id}_summary.md"
+          ],
+          "label_en": "🔬 Parse AS-IS Source (Fact Pack)",
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭"
+        },
+        {
+          "label": "🎥 AS-IS 실측",
+          "batch": true,
+          "label_en": "🎥 AS-IS Live Run",
+          "kind": "chain",
+          "chainId": "asislive",
+          "needsId": true,
+          "outputs": [
+            "Doc/asislive/${id}/screen_bundle.json",
+            "Doc/asislive/${id}/scenario_compare.csv",
+            "Doc/asislive/${id}/scenarios_spec.csv"
+          ],
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "hint": "AS-IS 런처를 띄워 화면 1개의 실측 전 과정을 순서대로 실행함. 환경 점검 → 기본 실측(필수 조건 최근 값) → 소스 분기 시나리오 → 버튼, 조건 값, 셀 클릭, 셀 입력 분기 실행 → Division·그룹 값 실행 → 저장 정의 초안 → TO-BE 조건 시나리오 반복 → 저장 시나리오 → 대조표. 저장 시나리오는 Doc/asislive/<ID>/save_scenario.json 이 있는 화면만 실행하고 AS-IS 개발 DB 에 저장한 뒤 원래 값으로 복원함. 24시간 안에 끝난 런처 실측은 재사용함. 결과 = Doc/asislive/<ID>, 단계별 결과 = Doc/gen/<ID>/FULLRUN.md.",
+          "steps": [
+            {
+              "task": "S1.liveCheck",
+              "title": "AS-IS 실행 환경 점검",
+              "optional": true
+            },
+            {
+              "task": "S1.liveRuleMap",
+              "title": "관찰 문구 → TO-BE 룰 대응표 갱신",
+              "optional": true
+            },
+            {
+              "task": "S1.liveScreen",
+              "title": "런처 실측(기본 실측 → 소스 분기 시나리오 → 버튼·조건 값·셀 클릭·셀 입력 분기 → Division·그룹 값 → 저장 정의 초안 → 대조)",
+              "okCodes": [
+                2
+              ],
+              "okNote": "실측 단계 일부 실패 — Doc/asislive/<ID>/screen_bundle.json 의 단계별 rc"
+            },
+            {
+              "task": "S1.liveScen",
+              "title": "TO-BE 조건 시나리오 반복(TO-BE 조건을 AS-IS 화면에 넣어 재측정)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/verify/${id}/calls"
+              ]
+            },
+            {
+              "task": "S1.liveSaveDry",
+              "title": "저장 시나리오 연습(저장 안 함)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/asislive/${id}/save_scenario.json"
+              ]
+            },
+            {
+              "task": "S1.liveSave",
+              "title": "저장 시나리오 실행(저장 → 인자 포착 → 복원)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/asislive/${id}/save_scenario.json"
+              ],
+              "ifOk": "S1.liveSaveDry"
+            },
+            {
+              "task": "S1.liveSaveCmp",
+              "title": "AS-IS↔TO-BE 저장 인자 대조",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/asislive/${id}/save_scenario.json"
+              ]
+            },
+            {
+              "task": "S1.liveScenCov",
+              "title": "분기 시나리오 실행 현황",
+              "optional": true
+            },
+            {
+              "task": "S1.liveCond",
+              "title": "AS-IS↔TO-BE 조회 조건 대조",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/verify/${id}/calls"
+              ]
+            },
+            {
+              "task": "S1.liveScenCmp",
+              "title": "분기별 AS-IS↔TO-BE 대조",
+              "optional": true
+            },
+            {
+              "task": "S1.liveScenMatrix",
+              "title": "그룹·Division 별 비교표",
+              "optional": true
+            },
+            {
+              "task": "S1.liveScenSpec",
+              "title": "분기 시나리오 명세(전 분기)",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "label": "🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+          "batch": true,
+          "kind": "chain",
+          "needsId": true,
+          "label_en": "🔎 CheckList full re-check (Test: E2E smoke·crud·auth·authcrud · AS-IS vs TO-BE → CheckList · fix list)",
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "hint": "DB MODE 면 먼저 화면 FE 페이지 폴더를 Source Download & Merge 규칙으로 최신화. 한 번 실행으로 끝까지(2026-11-20, 2026-11-23 순서 변경): 1 측정 1회(E2E 4종 포함 → 판정 → 미검증 분류 → 사용자 판정 대상은 AI 권장안으로 판정필요 처리) → 2 문서 1판(30분 목표 구간 끝) → 처리 대상(검사기 보완·재측정으로 풀리는 미검증)이 남는 동안 [3 보완 준비 → 4 검증 보완(🧪 미검증 해소) → 5 검사기 게이트 → 6 부분 재측정 → 7 문서 갱신] 반복. 반복은 처리 대상이 0 이 되거나 같은 보완으로 더 줄지 않으면 끝남(회차 상한 없음). 권한 시험 계정 = users.json screens[<ID>].mode, 없으면 admin(계정 1개).",
+          "chainId": "checklist",
+          "outputs": [
+            "Doc/UI_CHECKLIST/${id}_*_CheckList_v*.xlsx",
+            "Doc/UI_CHECKLIST/${id}_*_ActionItemList_v*.xlsx",
+            "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_${id}(*).xlsx"
+          ],
+          "confirm": "DB MODE 면 먼저 화면 FE 페이지 폴더를 Source Download & Merge 규칙으로 최신화. 한 번 실행으로 끝까지(2026-11-20, 2026-11-23 순서 변경): 1 측정 1회(E2E 4종 포함 → 판정 → 미검증 분류 → 사용자 판정 대상은 AI 권장안으로 판정필요 처리) → 2 문서 1판(30분 목표 구간 끝) → 처리 대상(검사기 보완·재측정으로 풀리는 미검증)이 남는 동안 [3 보완 준비 → 4 검증 보완(🧪 미검증 해소) → 5 검사기 게이트 → 6 부분 재측정 → 7 문서 갱신] 반복. 반복은 처리 대상이 0 이 되거나 같은 보완으로 더 줄지 않으면 끝남(회차 상한 없음). 권한 시험 계정 = users.json screens[<ID>].mode, 없으면 admin(계정 1개).",
+          "steps": [
+            {
+              "task": "S8.checklistRun",
+              "title": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 권장안 적용)",
+              "okCodes": [
+                10
+              ],
+              "verify": {
+                "type": "fileExists",
+                "fresh": true,
+                "file": "${root}/Doc/verify/${id}/unverified_triage.json"
+              },
+              "args": [
+                "${input:ids}",
+                "--no-docs"
+              ]
+            },
+            {
+              "task": "S8.checklistRun",
+              "args": [
+                "${input:ids}",
+                "--docs"
+              ],
+              "title": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+              "okCodes": [
+                10
+              ]
+            },
+            {
+              "task": "S8.engineGate",
+              "args": [
+                "${input:ids}",
+                "--mark"
+              ],
+              "title": "3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관)",
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "claudeOf": "🧪 미검증 해소",
+              "title": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완)",
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "task": "S8.engineGate",
+              "args": [
+                "${input:ids}",
+                "--check"
+              ],
+              "title": "5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록)",
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "task": "S8.checklistDelta",
+              "args": [
+                "${input:ids}",
+                "--delta",
+                "--no-docs"
+              ],
+              "title": "6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용)",
+              "okCodes": [
+                10
+              ],
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "task": "S8.checklistRun",
+              "args": [
+                "${input:ids}",
+                "--docs"
+              ],
+              "title": "7. 문서 갱신 (이번 회차 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)",
+              "okCodes": [
+                10
+              ],
+              "loop": "fix"
+            }
+          ],
+          "loops": {
+            "fix": {
+              "first": {
+                "key": "actionable"
+              },
+              "while": {
+                "file": "${root}/Doc/verify/${id}/unverified_triage.json",
+                "key": "continue",
+                "gt": 0
+              },
+              "max": 0
+            }
+          }
+        },
+        {
+          "label": "🔁 CheckList 수정분 재점검 (지난 실행 뒤 바뀐 소스 범위만 → CheckList·ActionItemList)",
+          "batch": true,
+          "kind": "chain",
+          "needsId": true,
+          "label_en": "🔁 CheckList changed-only re-check (only what changed since the last run)",
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "hint": "지난 실행 뒤 바뀐 소스 범위만 다시 측정. 한 번 실행으로 끝까지(2026-11-20, 2026-11-23 순서 변경): 1 수정분 재측정 → 2 문서 1판(30분 목표 구간 끝) → 처리 대상이 남는 동안 [3 보완 준비 → 4 검증 보완 → 5 검사기 게이트 → 6 부분 재측정 → 7 문서 갱신] 반복. 기준선 없음·넓은 변경이면 전체기능 재점검으로 실행.",
+          "chainId": "checklist-delta",
+          "outputs": [
+            "Doc/UI_CHECKLIST/${id}_*_CheckList_v*.xlsx",
+            "Doc/UI_CHECKLIST/${id}_*_ActionItemList_v*.xlsx",
+            "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_${id}(*).xlsx"
+          ],
+          "confirm": "지난 실행 뒤 바뀐 소스 범위만 다시 측정. 한 번 실행으로 끝까지(2026-11-20, 2026-11-23 순서 변경): 1 수정분 재측정 → 2 문서 1판(30분 목표 구간 끝) → 처리 대상이 남는 동안 [3 보완 준비 → 4 검증 보완 → 5 검사기 게이트 → 6 부분 재측정 → 7 문서 갱신] 반복. 기준선 없음·넓은 변경이면 전체기능 재점검으로 실행.",
+          "steps": [
+            {
+              "task": "S8.checklistDelta",
+              "title": "1. CheckList 수정분 재점검 (바뀐 소스 범위만 재측정 → 미검증 분류 · 권장안 적용)",
+              "okCodes": [
+                10
+              ],
+              "verify": {
+                "type": "fileExists",
+                "fresh": true,
+                "file": "${root}/Doc/verify/${id}/unverified_triage.json"
+              },
+              "args": [
+                "${input:ids}",
+                "--delta",
+                "--no-docs"
+              ]
+            },
+            {
+              "task": "S8.checklistRun",
+              "args": [
+                "${input:ids}",
+                "--docs"
+              ],
+              "title": "2. 문서 1판 (CheckList · ActionItemList · UI 테스트 · 회귀 점검 · 30분 목표 구간 끝)",
+              "okCodes": [
+                10
+              ]
+            },
+            {
+              "task": "S8.engineGate",
+              "args": [
+                "${input:ids}",
+                "--mark"
+              ],
+              "title": "3. 검사기 보완 준비 (화면 간 보완 순서 잠금 · 검사기 사본 보관)",
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "claudeOf": "🧪 미검증 해소",
+              "title": "4. 검증 보완 (미검증 처리 대상 → 검사엔진 신설·보완)",
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "task": "S8.engineGate",
+              "args": [
+                "${input:ids}",
+                "--check"
+              ],
+              "title": "5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록)",
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "task": "S8.checklistDelta",
+              "args": [
+                "${input:ids}",
+                "--delta",
+                "--no-docs"
+              ],
+              "title": "6. 부분 재측정 (보완으로 바뀐 검사기가 판정하는 행과 미검증 행, 그 행의 시험만 → 재분류 · 권장안 적용)",
+              "okCodes": [
+                10
+              ],
+              "optional": true,
+              "loop": "fix"
+            },
+            {
+              "task": "S8.checklistRun",
+              "args": [
+                "${input:ids}",
+                "--docs"
+              ],
+              "title": "7. 문서 갱신 (이번 회차 결과로 CheckList · ActionItemList · UI 테스트 · 회귀 점검)",
+              "okCodes": [
+                10
+              ],
+              "loop": "fix"
+            }
+          ],
+          "loops": {
+            "fix": {
+              "first": {
+                "key": "actionable"
+              },
+              "while": {
+                "file": "${root}/Doc/verify/${id}/unverified_triage.json",
+                "key": "continue",
+                "gt": 0
+              },
+              "max": 0
+            }
+          }
+        },
+        {
+          "label": "🧪 미검증 해소",
+          "batch": true,
+          "label_en": "🧪 CheckList Unverified Fix",
+          "kind": "claude",
+          "needsId": true,
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "flow": [
+            {
+              "task": "S8.unverified",
+              "title": "1. 미검증 분류 (원장 미검증 행 → 담당·처리 방법 · 자동 재측정)"
+            },
+            {
+              "claudeOf": "🧪 미검증 해소",
+              "title": "2. 검사엔진 보완 (처리 대상 전체 → 일괄 신설·보완 · 처리 대상이 있을 때만)",
+              "optional": true,
+              "ifJsonGt": {
+                "file": "${root}/Doc/verify/${id}/unverified_triage.json",
+                "key": "actionable",
+                "gt": 0,
+                "skipNote": "미검증 처리 대상 없음"
+              }
+            },
+            {
+              "task": "S8.checklistRecheck",
+              "title": "3. CheckList 재수행 (사용자 승인 때만)",
+              "okCodes": [
+                10
+              ],
+              "optional": true,
+              "ifPrevRan": true,
+              "skipNote": "검사엔진 보완을 하지 않음",
+              "askUser": "화면 ${id} 미검증 해소(검사엔진 보완)가 끝났습니다. CheckList 를 다시 수행할까요?",
+              "askYes": "CheckList 재수행"
+            }
+          ],
+          "flowId": "unverifiedFix",
+          "outputs": [
+            "Doc/verify/${id}/unverified_triage.md",
+            "Doc/verify/${id}/_unverified_work.md",
+            "Doc/verify/${id}/_unverified_decisions.md"
+          ],
+          "hint": "메뉴에서 실행하면 1. 미검증 분류 → 2. 검사엔진 보완(처리 대상이 있을 때만) 순서로 진행하고, 끝나면 CheckList 재수행 여부를 묻습니다. 승인할 때만 3. CheckList 재수행. 🔎 CheckList 체인에서 이어질 때는 묻지 않고 CheckList 를 다시 수행합니다. 판정을 낮추거나 NA 로 돌리지 않음.",
+          "prompt": "화면 ${id} 의 CheckList 미검증을 해소한다(2026-11-18 사용자 지시: CheckList 를 돌렸을 때 미검증이 생기면 따로 요청하지 않아도 검사엔진을 만들거나 보완해서 검증까지 진행). 중간에 사용자에게 묻지 않고 끝까지 진행하며, 판단이 필요한 것은 결정 목록에 모아 마지막에 보고한다.\n\n[0 입력] Doc/verify/${id}/unverified_triage.md 와 unverified_triage.csv(행별 유형·담당·처리 방법·증거), unverified_triage.json(전후 건수), unverified_history.csv(라운드 기록)를 먼저 읽는다. 파일이 없거나 원장(Doc/verify/${id}/verify_ledger.csv)보다 오래됐으면 python tools/Harness/verify/unverified_resolve.py ${id} --no-rerun 으로 다시 만든다. 이전 라운드 기록(Doc/verify/${id}/_unverified_work.md)이 있으면 이어서 진행하고 같은 시도를 되풀이하지 않는다. 기준 원장 Doc/verify/${id}/criteria/criteria.md(AS-IS 파싱·실측·TO-BE 룰을 화면 요소에 묶은 기준 · 판단 대기 · 대상 아님)를 같이 읽는다. 참고: Doc/verify/_checker_defects.md(검사기 결함 유형 T1~), Doc/verify/_tobe_rule_registry.md(TO-BE 룰 원장), Doc/verify/_ENGINE_MASTER.md 끝(최근 엔진 작업), tools/Harness/README.md 도구 등록부.\n\n[1 전체 목록 먼저] 고치기 전에 담당이 엔진·대조표·판단·자동(재실행)인 행 전부(유형 미분류 포함)를 행마다 조치(고칠 검사기 파일 · 원인 · 판단·사람 행은 결정 목록)와 함께 Doc/verify/${id}/_unverified_plan.md 에 표로 쓴다. 목록에 없는 행이 남지 않게 원장 미검증 행 수와 목록 행 수를 맞춘다. 집계 행은 하위 행을 따라가므로 따로 고치지 않는다. 담당 사람(스냅샷 승인·시험 계정)·보완(선행 결함: 화면 기능 누락 FAIL 뒤에만 잴 수 있는 행) 행은 처리하지 않고 결정 목록에만 적는다(스냅샷은 snap_validate.py 대조 결과를 붙인다). 같은 유형·같은 규칙 묶음은 원인이 하나이므로 묶음 단위로 원인을 찾고 한 번에 고친다. 처리 순서는 행 수가 많은 묶음부터. 2026-11-20 사용자 지시(미검증 1회 해소): 목록의 모든 행을 이번 라운드에 처리한다. '다음 라운드 대상'으로 넘기지 않는다. 처리하지 못한 행은 _unverified_plan.md 에 행마다 사유(막힌 파일·원인·필요한 결정)를 적는다. 묶음이 서로 다른 검사기 파일을 고치면 Agent 도구로 묶음별 하위 에이전트에 나눠 동시에 맡긴다(같은 파일을 고치는 묶음은 한 에이전트 · 하위 에이전트가 고친 내용은 직접 다시 확인).\n\n[2 원인 확인] 묶음마다 증거 문구에 나온 검사기(스크립트·스펙 테스트)와 그 실행 기록(Doc/verify/${id} 의 결과 파일, Playwright 결과, 로그)을 열어 왜 측정하지 못했는지 실측으로 확인한다. 원인을 추측으로 적지 않는다. 화면 결함인지 검사기 한계인지 구분한다.\n- 검사기공백(측정 경로·코드 없음, 해석 불가, 시나리오 없음): 그 규칙을 판정하는 검사기를 신설하거나 기존 검사기의 측정 경로를 넓힌다.\n- 데이터전제(조회 행 부족, 0행, 편집 가능한 행 없음, 저장 요청 없음): 검사기가 조회조건·Division·행 선택을 바꿔 전제를 스스로 만들게 한다(전 후보 순회 · 0행 탭을 오류 없음으로 보지 않음).\n- 차등짝(KEYSET·VALUES·COLSET·ORDER): sp_pair.csv 짝, gen_param_map 인자, 원천 SP 대응을 보강하고 diff 단계 검사기를 다시 돌린다.\n- 대조표사유: 대조표 행의 근거(룰·지시·AS-IS 원문·이동 위치)를 원문에서 찾아 보강한다. 대조표 파일 수정은 tools/Harness/harness.json repairScope 범위 안에서만 하고, DB_ONLY 면 가이드만 남긴다.\n- 판단: 2026-11-20 부터 판단 행은 CheckList 1단계의 AI 판정 검토(llm_review.py)가 판정필요와 같이 먼저 본다. 근거가 확인된 행은 판정이 이미 바뀌었고, 결론이 안 난 행은 담당 '결정'으로 분류돼 이 목록에 없다(결정 목록에만 적는다). 목록에 남은 판단 행은 TO-BE 룰 원장과 AS-IS 원문에서 근거를 찾는다. 룰 근거가 있으면 그 룰을 판정 경로(검사기·규칙표)에 넣어 기계 판정이 되게 하고, 근거가 없으면 결정 목록에 남긴다.\n- 재실행(담당 자동 · 시간 초과·측정 경로 실패·결과 기록 없음): 체인 1단계는 --no-rerun 이라 이 행을 다시 재지 않는다. 실패 로그(Playwright 결과·_run 로그)에서 실패 지점을 확인하고, 같은 실패가 반복될 원인(선택자·대기·전제 데이터)이 검사기에 있으면 고친다. 일시 실패로 확인되면 목록에 근거를 적고 3단계 재수행에 맡긴다. 직전 라운드에도 같은 실패였던 행은 분류기가 담당 엔진으로 넘긴다.\n- 미분류: 원인을 확인한 뒤 tools/Harness/verify/unverified_classes.csv 에 유형 정규식을 더하고 위 처리 중 맞는 것을 한다.\n- AI검토(유형이 'AI검토:' 로 시작 · 2026-11-19 사용자 지시 'CheckList 판단에 클로드코드 활용'): 미검증 행이 아니어도 처리 대상이다. 판정 검토(Doc/verify/${id}/llm_review.csv · llm_review.md), 사용자의견 처리(opinion_intake.csv), AS-IS 사실 추출 검토(llm_facts.csv)가 원문 인용 확인과 함께 가린 행이다. 처리 방법 칸의 고칠 곳·근거를 출발점으로 원문을 직접 다시 확인한다(검토 답을 그대로 믿지 않는다). 검사기오판 = 원인(파일:줄)을 찾아 검사기를 고치고 Doc/verify/_checker_defects.md 에 유형(T번호)을 적는다. 추출오류(행 ID FACT-) = 추출기(tools/Harness/verify/facts_*.py · tools/AsisFacts)를 고친다. 사실 파일을 손으로 고치지 않는다. 룰등록·의견-룰등록 = 전 화면에 쓸 일반 규칙이면 tools/Harness/rules/confirmed_requirements.csv 에 다음 번호로 등록하고(origin 에 '사용자의견' 또는 'AI 판정 검토'와 화면·행 ID) 판정 경로에 넣은 뒤 python tools/Harness/verify/tobe_rule_registry.py --build 와 --check 를 통과시킨다. 이 화면만의 결정이면 결정 목록에 적는다(설계 결정은 사람 확인이 있어야 적용된다). 의견-엔진오판 = 사용자가 오류 아님으로 적은 행이다. 행을 사용자판정으로 덮는 데서 끝내지 않고 검사엔진 원인을 고친다. 원문 확인 결과 결함이 맞으면 고치지 않고 결정 목록에 재현 조건과 함께 적는다. llm_review.csv·opinion_intake.csv·llm_facts.csv 는 고치지 않는다(다음 CheckList 가 다시 만든다).\n\n[3 보완 원칙]\n- 고치는 대상은 공용 검사엔진(tools/Harness/verify, tools/E2E, Doc/e2e/specs 의 공용 스펙·생성기, 규칙표 csv)이다. 화면 ID·시트명·컬럼명·라벨을 검사기에 고정하지 않는다(화면 독립). 다른 화면에도 같은 유형이 있으면 같이 풀리게 만든다.\n- 화면 FE(nscm-fe)·BE(nscm-be)·AS-IS 원본 소스는 고치지 않는다. 화면 결함으로 확인되면 FAIL 이 되게 측정하고, 고칠 곳은 가이드로만 남긴다.\n- 판정을 낮추지 않는다. 재지 못한 행을 NA·PASS 로 바꾸지 않는다. NA 는 원문·메타 근거가 있을 때만. 기대값을 실측값에 맞춰 바꾸지 않는다.\n- 저장 시험은 기존 규칙을 따른다(VERIFY_NO_SAVE=1 이면 저장 안 함, 저장 직전 대상 행 기록 후 복원, 다른 사용자 행·사용자 설정을 덮어쓰지 않음). DB 는 내가 연 세션만 다룬다.\n- 다른 세션이 같은 엔진 파일을 고칠 수 있으므로 공용 파일은 수정 직전에 다시 읽고 필요한 부분만 고친다.\n- 고친 뒤 python tools/Harness/verify/engine_selfcheck.py 를 통과시킨다(실패하면 다음 단계로 가지 않고 고친다). 새 도구를 만들면 python scripts/rules/inventory_check.py --write-registry 로 등록부를 갱신한다. 새 검사기 결함 유형은 Doc/verify/_checker_defects.md 에, 작업 기록은 Doc/verify/_ENGINE_MASTER.md 끝에 덧붙인다.\n\n[4 일괄 진행 · 재측정 없음 — 2026-11-18 사용자: \"전체 목록을 보고, 필요한 작업을 일괄로 먼저 한 후에 미검사 없이 전체 검증 절차를 거친다\"] 보완은 [1]에서 만든 목록 전체를 한 번에 끝낸다. 묶음마다 run_verify --only 나 개별 검사기 재실행으로 확인하지 않는다(확인은 검사기 자기 시험·단위 함수 시험·engine_selfcheck 로만). CheckList(run_verify.py · checklist_run.py)는 직접 실행하지 않는다(2026-11-19 사용자: 진행 단계가 Console 보드에 보여야 함). 🔎 CheckList 체인에서 불렸으면 체인이 다음 단계로 CheckList 를 다시 수행하고, 🧪 메뉴에서 직접 실행했으면 VM 이 사용자에게 CheckList 재수행을 묻고 승인할 때만 수행한다. [5 기록·보고] Doc/verify/${id}/_unverified_work.md 에 라운드별로 묶음마다 원인(실측 근거), 고친 파일:라인, 재측정 명령과 결과(전후 상태), 남은 사유를 적는다. 결정 목록은 Doc/verify/${id}/_unverified_decisions.md 에 같은 결정끼리 묶은 한 표로 쓴다(열 = 정할 내용, 행 수, 행 ID, 권장안, 근거 경로:줄). 권장안은 원문 근거가 있는 쪽으로 적고 근거가 없으면 '근거 없음'으로 적는다. 담당 '결정' 행(unverified_triage.csv)과 기준 원장 판단 대기 항목(criteria.md)을 같이 넣는다. 검사기를 고쳤으면 끝날 때 python tools/Harness/verify/pending_recheck.py ${id} --mark 로 보완 표식을 남기고(고친 것이 없으면 남기지 않음) python tools/Harness/verify/unverified_resolve.py ${id} --no-rerun 으로 행 목록을 갱신한다. 2026-11-19 사용자: 보완 뒤에는 보완 전 CheckList 건수(원장 미검증 수·담당별 남은 수·'미검증' 시트 행 수·FAIL·판정필요)를 보고·현황판에 쓰지 않는다. 보고에는 고친 검사기 목록, 행별로 다음 CheckList 에서 바뀔 판정(미측정 표시), 결정 목록 건수를 적고 '건수는 CheckList 재수행 뒤 표시'라고 적는다. 고친 검사기가 없으면 지금 원장 건수를 그대로 적는다. 시각은 date 실행값만 쓴다."
+        },
+        {
+          "label": "📋 TestResultList (CheckList 결과 → 그룹별 테스트 내역·결과 Excel · 캡처 포함)",
+          "batch": true,
+          "label_en": "📋 TestResultList (CheckList result → grouped test details · results Excel with captures)",
+          "kind": "chain",
+          "chainId": "testreport",
+          "needsId": true,
+          "outputs": [
+            "Doc/테스트결과서/${id}_*_테스트결과서_v*.xlsx"
+          ],
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "hint": "CheckList 작업 뒤 사용자가 읽는 TestResultList(2026-10-30 · 지금은 별도 기능, 차후 CheckList 에 포함 예정). 1) CheckList 가 없거나 FE 소스·PKG·메타가 바뀌어 오래됐으면 E2E 포함 CheckList 전체를 먼저 실행(최신이면 건너뜀) 2) 그 결과를 Doc/테스트결과서/<ID>_<화면명>_테스트결과서_v<n>.xlsx 로 — 요약(그룹별 통과·실패·확인 필요·미검증·해당 없음) · 테스트결과(영역 → 검사 규칙 → 항목, Excel 개요로 접기 · 테스트 내역·기대·실제 상세·설명·겪는 일) · 실패 상세(캡처 포함) · 실행 테스트 · 화면 캡처 · 용어 설명. 항목·결과 분포는 같은 실행의 CheckList 와 1:1.",
+          "steps": [
+            {
+              "task": "S1.live",
+              "title": "AS-IS 실측 (런처 구동 → 화면 열기·조회·캡처·호출 수집 — 실측이 없을 때만)",
+              "optional": true,
+              "ifMissing": [
+                "${root}/Doc/asislive/${id}/latest.json"
+              ]
+            },
+            {
+              "task": "S8.verifyIfStale",
+              "title": "CheckList 최신 확인 — 없거나 오래됐으면 E2E 포함 전체 실행(최신이면 건너뜀)"
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S8.report",
+              "title": "TestResultList Excel (Doc/테스트결과서)"
+            }
+          ]
+        },
+        {
+          "label": "📝 문서 생성 (분석서·설계서·테스트 → MD + Excel)",
+          "batch": true,
+          "label_en": "📝 Documents (analysis · design · test → MD + Excel)",
+          "kind": "chain",
+          "chainId": "docs",
+          "needsId": true,
+          "outputs": [
+            "Doc/화면설계서/${id}_*_화면설계서_v*.xlsx",
+            "Doc/화면분석서/${id}_*_UI분석서_v*.xlsx",
+            "Doc/단위테스트/${id}_*_TestCases4_v*.xlsx"
+          ],
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "hint": "화면 ID 하나로 문서를 끝까지 — 생성 절차는 거치지 않는다(이 PC·다른 PC 에서 이미 만든 UI 도 그대로 문서화). AS-IS 파싱(없을 때만) → 문서 사전 준비(TO-BE 파싱·TO-BE 메타를 소스보다 오래됐으면 다시) → 분석서·설계서·테스트 MD(Agent) → 대조표(없을 때만) → Excel(화면설계서·UI분석서·TestCases4·대조표, Doc/화면설계서 · Doc/화면분석서 · Doc/단위테스트, 버전 +1)",
+          "steps": [
+            {
+              "task": "S1.packone",
+              "title": "AS-IS 파싱 (Fact Pack — 없을 때만)",
+              "ifMissing": [
+                "${root}/Doc/asisfacts/screens/${id}/${id}_summary.md"
+              ],
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/asisfacts/screens/${id}/${id}_summary.md"
+              }
+            },
+            {
+              "task": "S1.live",
+              "title": "AS-IS 실측 (런처 구동 → 화면 열기·조회·캡처·호출 수집 — 실측이 없을 때만)",
+              "optional": true,
+              "ifMissing": [
+                "${root}/Doc/asislive/${id}/latest.json"
+              ]
+            },
+            {
+              "task": "S3.prep",
+              "title": "문서 사전 준비 — TO-BE 파싱·메타 최신화 (생성 절차 없이 · UI 가 이미 있으면 그대로 문서화)"
+            },
+            {
+              "task": "S3.agent",
+              "title": "문서 생성 (분석서·설계서·테스트 MD, Agent)"
+            },
+            {
+              "task": "S1.recon",
+              "title": "대조표 갱신 (이 화면 행이 없을 때만)",
+              "ifMissing": [
+                {
+                  "file": "${root}/Doc/recon/대사표_화면.csv",
+                  "has": "${id}"
+                }
+              ],
+              "optional": true
+            },
+            {
+              "task": "S3.xlsx",
+              "title": "문서 Excel (설계서·분석서·테스트·대조표)"
+            }
+          ]
+        },
+        {
+          "label": "📘 사용자 매뉴얼 (모듈별 PPT: 양식 샘플 + 최신 UI 캡처)",
+          "label_en": "📘 User manual (PPT per module: template + latest UI captures)",
+          "batch": true,
+          "kind": "chain",
+          "chainId": "usermanual",
+          "needsId": true,
+          "unit": "module",
+          "modules": [
+            "DM",
+            "SCP",
+            "SSP",
+            "SYSTEM"
+          ],
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "hint": "고른 모듈(DM, SCP, SSP, SYSTEM)을 한 문서로(2개 이상이면 DM, SCP, SSP, SYSTEM 순서로 1개 파일). 양식 = 사용자 매뉴얼 샘플(표지, 개정이력, Menu Hierarchy, 화면 장표 모양), 내용 = 최신 UI 캡처 파일. UI 목록과 장표 순서 = 캡처 파일 화면 목록, 메뉴 계층도 = 사내 메뉴(SCM_ADM_MNU_M). 결과 = Doc/UserManual/<모듈 묶음>/SCM_IM_사용자매뉴얼_<모듈 묶음>_v<버전>.pptx(예 DM_SYSTEM), 끝나면 카드와 알림에 파일 위치",
+          "jobInputs": [
+            {
+              "name": "author",
+              "label": "작성자",
+              "label_en": "Author",
+              "default": "조재훈"
+            },
+            {
+              "name": "date",
+              "label": "작성일",
+              "label_en": "Date",
+              "type": "date"
+            },
+            {
+              "name": "version",
+              "label": "Version",
+              "label_en": "Version",
+              "default": "Ver 1.0"
+            },
+            {
+              "name": "sample",
+              "label": "매뉴얼 양식",
+              "label_en": "Manual template",
+              "type": "file",
+              "filters": {
+                "PowerPoint": [
+                  "pptx"
+                ]
+              }
+            },
+            {
+              "name": "captures",
+              "label": "최신 UI 캡처(여러 개)",
+              "label_en": "Latest UI captures (multiple)",
+              "type": "file",
+              "filters": {
+                "PowerPoint, Word, ZIP, 그림": [
+                  "pptx",
+                  "docx",
+                  "zip",
+                  "png",
+                  "jpg"
+                ]
+              },
+              "multi": true
+            }
+          ],
+          "steps": [
+            {
+              "task": "UM.prep",
+              "title": "준비: 사내 메뉴, 최신 UI 캡처 추출, 화면별 초안"
+            },
+            {
+              "claude": "사용자 매뉴얼 ${id} 모듈 화면별 내용 작성. 대상 = Doc/UserManual/${id}/plan.json 의 order 화면 전부 + content/_LAYOUT.json, content/_COMMON.json. content/<화면ID>.json 에 pages 와 overview 가 이미 있으면 건너뜀(끊긴 뒤 이어서 하기). pages 만 있으면 overview 만 씀.\n기준: 내용은 최신 UI 캡처가 기준. 양식 샘플 매뉴얼의 글은 쓰지 않음. 화면마다 아래 순서.\n1) content/<화면ID>.json 의 captures 그림을 Read 로 열어 화면을 봄.\n2) facts 폴더의 <화면ID>_summary.md, controls.csv, events.csv, messages.csv 와 buttons 로 조회 조건, 버튼, 그리드 컬럼, 편집 가능 칸, 필수 칸, 저장 검증, 자동으로 채워지는 값, 팝업, 연결 화면을 확인해 캡처 설명을 보탬. 소스 전체 grep 금지(facts 폴더 안만).\n3) content/<화면ID>.json 에 씀(다른 키는 그대로 둠):\n   definition = UI 정의 1줄(화면이 관리하는 대상과 용도)\n   overview = 화면 설명 3~5줄 배열. UI 정의보다 자세히: 무슨 업무에 쓰는 화면인지, 화면 구성(조회 영역, 그리드, 탭, 팝업), 주로 하는 일의 순서, 앞뒤로 쓰는 화면과 주고받는 데이터. 장표에서 ● 화면명 다음, 조회 조건 설명 앞에 나옴\n   pages = [{title, keyPoint, markers:[{no,x,y}], sections:[{no,title,lines:[]}]}]\n   markers x, y = 캡처 그림 안 위치 비율(왼쪽 위 0,0 ~ 오른쪽 아래 1,1). 번호 원이 가리킬 영역의 왼쪽 위 바로 옆. 글자나 버튼을 가리지 않는 빈 자리. sections 의 no 와 markers 의 no 는 1:1.\n   sections = 조회 조건부터 캡처에 보이는 영역 순서(조회 조건 → 버튼 → 위 그리드 → 아래 탭, 그리드). 화면 설명은 sections 에 넣지 않음(overview). 영역마다 2~6줄. 화면에 있는 것만 씀.\n   keyPoint = 놓치면 업무에 문제가 생기는 점이나 예외 처리가 있을 때만 1~2줄(저장 전 꼭 확인할 값, 다른 화면에 주는 영향, 예외 규칙). 평범한 화면이면 빈 값 \"\". 이미 쓴 keyPoint 도 overview 를 쓸 때 이 기준으로 다시 보고 맞지 않으면 \"\" 로 비움.\n   설명이 30줄을 넘으면 pages 를 2개로 나눔(같은 캡처, 섹션 나눠 담기).\n4) 내용을 풍성하게: 컬럼마다 뜻과 입력 규칙, 콤보 값 출처, 저장 시 확인하는 조건, 메시지가 뜨는 경우까지 facts 에 근거가 있으면 적음. 근거가 없는 동작은 쓰지 않음.\n5) 문장: tools/VibeManager/rules/50_DOC_STYLE.md 규칙. 줄 끝은 '~함', '~됨', 명사형으로 통일. 수식어, 번역투, 추측 어미, 줄표, 장식 기호 금지. 화면 라벨, 버튼, 컬럼 이름은 캡처 표기 그대로(영문). 업무 담당자가 쓴 매뉴얼처럼 짧게 씀. 'AI', '자동 생성된' 같은 말을 쓰지 않음.\n_LAYOUT: captures 에 대표 화면 캡처 1개(captures/<화면ID>.png), labels = [{text,x,y}] 로 영역 이름표. text 는 영문(예 Top Menu, Menu Tree, Screen Tab, Title & Breadcrumb, Search Condition, Buttons, Data Grid, Detail Tab & Grid). x, y = 이름표 왼쪽 위 비율 좌표(영역 위 빈 자리, 이름표끼리 겹치지 않게).\n_COMMON: 캡처에 보이는 공통 버튼과 기능(Search, Insert, Delete, Save, Sort, Filter, Condition, Reset Condition, Excel, Search Area 접기, 즐겨찾기, 탭 닫기 등) sections + markers. captures 에 쓴 캡처 1개.\n끝나면 python tools/Docs/user_manual.py check --module ${id} 를 실행해 [FAIL] 0 을 확인. 남으면 그 항목을 고치고 다시 실행.",
+              "title": "화면별 내용 작성(캡처 보고 번호 위치, 설명, Key Point)"
+            },
+            {
+              "task": "UM.check",
+              "title": "내용 검사(빠진 화면, 번호 위치, 문장 규칙)",
+              "repair": {
+                "claudeOf": "📘 사용자 매뉴얼 내용 보완 (check 실패 항목)",
+                "rounds": 2
+              }
+            },
+            {
+              "task": "UM.build",
+              "title": "PPTX 생성과 결과 검사"
+            }
+          ],
+          "inputsFile": "Doc/UserManual/${id}/_inputs.json",
+          "combine": true,
+          "outputs": [
+            "Doc/UserManual/${id}/SCM_IM_사용자매뉴얼_${id}_v*.pptx"
+          ]
+        },
+        {
+          "label": "📘 사용자 매뉴얼 내용 보완 (check 실패 항목)",
+          "label_en": "📘 User manual content fix",
+          "kind": "claude",
+          "needsId": true,
+          "sub": "분석·문서",
+          "sub_en": "Analysis & Docs",
+          "sub_icon": "🔭",
+          "hint": "사용자 매뉴얼 업무의 내용 검사 실패 항목 보완(체인 수선 단계가 부름). ID = 모듈(DM, SCP, SSP, SYSTEM)",
+          "prompt": "python tools/Docs/user_manual.py check --module ${id} 를 실행해 [FAIL] 항목을 확인하고 고침. 기준과 문장 규칙은 아래와 같음.\n사용자 매뉴얼 ${id} 모듈 화면별 내용 작성. 대상 = Doc/UserManual/${id}/plan.json 의 order 화면 전부 + content/_LAYOUT.json, content/_COMMON.json. content/<화면ID>.json 에 pages 와 overview 가 이미 있으면 건너뜀(끊긴 뒤 이어서 하기). pages 만 있으면 overview 만 씀.\n기준: 내용은 최신 UI 캡처가 기준. 양식 샘플 매뉴얼의 글은 쓰지 않음. 화면마다 아래 순서.\n1) content/<화면ID>.json 의 captures 그림을 Read 로 열어 화면을 봄.\n2) facts 폴더의 <화면ID>_summary.md, controls.csv, events.csv, messages.csv 와 buttons 로 조회 조건, 버튼, 그리드 컬럼, 편집 가능 칸, 필수 칸, 저장 검증, 자동으로 채워지는 값, 팝업, 연결 화면을 확인해 캡처 설명을 보탬. 소스 전체 grep 금지(facts 폴더 안만).\n3) content/<화면ID>.json 에 씀(다른 키는 그대로 둠):\n   definition = UI 정의 1줄(화면이 관리하는 대상과 용도)\n   overview = 화면 설명 3~5줄 배열. UI 정의보다 자세히: 무슨 업무에 쓰는 화면인지, 화면 구성(조회 영역, 그리드, 탭, 팝업), 주로 하는 일의 순서, 앞뒤로 쓰는 화면과 주고받는 데이터. 장표에서 ● 화면명 다음, 조회 조건 설명 앞에 나옴\n   pages = [{title, keyPoint, markers:[{no,x,y}], sections:[{no,title,lines:[]}]}]\n   markers x, y = 캡처 그림 안 위치 비율(왼쪽 위 0,0 ~ 오른쪽 아래 1,1). 번호 원이 가리킬 영역의 왼쪽 위 바로 옆. 글자나 버튼을 가리지 않는 빈 자리. sections 의 no 와 markers 의 no 는 1:1.\n   sections = 조회 조건부터 캡처에 보이는 영역 순서(조회 조건 → 버튼 → 위 그리드 → 아래 탭, 그리드). 화면 설명은 sections 에 넣지 않음(overview). 영역마다 2~6줄. 화면에 있는 것만 씀.\n   keyPoint = 놓치면 업무에 문제가 생기는 점이나 예외 처리가 있을 때만 1~2줄(저장 전 꼭 확인할 값, 다른 화면에 주는 영향, 예외 규칙). 평범한 화면이면 빈 값 \"\". 이미 쓴 keyPoint 도 overview 를 쓸 때 이 기준으로 다시 보고 맞지 않으면 \"\" 로 비움.\n   설명이 30줄을 넘으면 pages 를 2개로 나눔(같은 캡처, 섹션 나눠 담기).\n4) 내용을 풍성하게: 컬럼마다 뜻과 입력 규칙, 콤보 값 출처, 저장 시 확인하는 조건, 메시지가 뜨는 경우까지 facts 에 근거가 있으면 적음. 근거가 없는 동작은 쓰지 않음.\n5) 문장: tools/VibeManager/rules/50_DOC_STYLE.md 규칙. 줄 끝은 '~함', '~됨', 명사형으로 통일. 수식어, 번역투, 추측 어미, 줄표, 장식 기호 금지. 화면 라벨, 버튼, 컬럼 이름은 캡처 표기 그대로(영문). 업무 담당자가 쓴 매뉴얼처럼 짧게 씀. 'AI', '자동 생성된' 같은 말을 쓰지 않음.\n_LAYOUT: captures 에 대표 화면 캡처 1개(captures/<화면ID>.png), labels = [{text,x,y}] 로 영역 이름표. text 는 영문(예 Top Menu, Menu Tree, Screen Tab, Title & Breadcrumb, Search Condition, Buttons, Data Grid, Detail Tab & Grid). x, y = 이름표 왼쪽 위 비율 좌표(영역 위 빈 자리, 이름표끼리 겹치지 않게).\n_COMMON: 캡처에 보이는 공통 버튼과 기능(Search, Insert, Delete, Save, Sort, Filter, Condition, Reset Condition, Excel, Search Area 접기, 즐겨찾기, 탭 닫기 등) sections + markers. captures 에 쓴 캡처 1개.\n끝나면 python tools/Docs/user_manual.py check --module ${id} 를 실행해 [FAIL] 0 을 확인. 남으면 그 항목을 고치고 다시 실행."
+        },
+        {
+          "label": "🚀 ID 하나로 전체 (파싱→실측→분석→생성→CheckList→오류분 자동보완→재판정→TestResultList→문서)",
+          "batch": true,
+          "label_en": "🚀 Whole flow by ID (parse → AS-IS live → analysis → build → CheckList → auto-fix → re-check → TestResultList → docs)",
+          "kind": "chain",
+          "chainId": "full",
+          "newScreen": true,
+          "needsId": true,
+          "outputs": [
+            "Doc/asisfacts/screens/${id}/${id}_summary.md",
+            "Doc/UI_CHECKLIST/${id}_*_CheckList_v*.xlsx",
+            "Doc/UI_CHECKLIST/${id}_*_ActionItemList_v*.xlsx",
+            "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_${id}(*).xlsx",
+            "Doc/테스트결과서/${id}_*_테스트결과서_v*.xlsx",
+            "Doc/화면설계서/${id}_*_화면설계서_v*.xlsx",
+            "Doc/화면분석서/${id}_*_UI분석서_v*.xlsx",
+            "Doc/단위테스트/${id}_*_TestCases4_v*.xlsx"
+          ],
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱",
+          "hint": "순차 실행: AS-IS 파싱(매번) → AS-IS 실측(환경 점검 → 룰 대응표 → 런처 실측 묶음, 24시간 안의 정상 실측은 재사용) → 문서 생성(MD) → 새 화면 pipeline 8단계 → FE 게이트 → CheckList(E2E 포함) → AS-IS 실측 보강(TO-BE 조건 반복, 저장 시나리오 연습·실행. 저장 시나리오는 save_scenario.json 이 있는 화면만) → 🧯 오류분 자동 보완 → CheckList 재판정(남으면 보완·재판정 최대 2회) → TestResultList → 문서 Excel → 클라우드 이관 파일. 실패 단계에서 멈추고 Doc/gen/<ID>/FULLRUN.md 에 기록(2026-11-18 실측·TestResultList 단계 추가)",
+          "confirm": "화면 ID 하나로 파싱 → 문서(MD) → 새 화면 pipeline 7단계(골격·등록SQL·PKG·FE수선·PKG이식·E2E스펙·대조표) → CheckList(E2E 포함) → 🧯 오류분 자동 보완(Claude · fixlist 조치 필요 행) → CheckList 재판정(조치 필요가 남으면 보완·재판정 반복, 최대 2회) → 문서 Excel 을 순서대로 실행합니다. 실패 단계에서 중단, FULLRUN.md 기록.",
+          "steps": [
+            {
+              "task": "S1.packone",
+              "title": "AS-IS 파싱·분석 (Fact Pack)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/asisfacts/screens/${id}/${id}_summary.md"
+              }
+            },
+            {
+              "task": "S1.liveCheck",
+              "title": "AS-IS 실행 환경 점검",
+              "optional": true
+            },
+            {
+              "task": "S1.liveRuleMap",
+              "title": "관찰 문구 → TO-BE 룰 대응표 갱신",
+              "optional": true
+            },
+            {
+              "task": "S1.liveScreen",
+              "title": "AS-IS 런처 실측(기본 실측 → 소스 분기 시나리오 → 버튼·조건 값·셀 클릭·셀 입력 분기 → Division·그룹 값 → 저장 정의 초안 → 대조) — 24시간 안의 정상 실측은 재사용",
+              "okCodes": [
+                2
+              ],
+              "okNote": "실측 단계 일부 실패 — Doc/asislive/<ID>/screen_bundle.json 의 단계별 rc",
+              "optional": true
+            },
+            {
+              "task": "S3.agent",
+              "title": "문서 생성 (분석서·설계서… MD, Agent)"
+            },
+            {
+              "task": "S8.precheck",
+              "title": "신규 화면 사전 점검 (생성 입력 구비 여부 실측 — AS-IS 사실·SP 원문·컬럼 메타·분석 문서·사내 DB)",
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 1/8 FE 골격 생성·적용 (gen --apply)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "1"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 2/8 Oracle 메타 등록 SQL (gen-register-sql)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "2"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 3/8 Oracle PKG 골격 (gen-pkg)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "3"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 4/8 FE 수선 루프 (Claude ×3 + 게이트)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "4"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 5/8 PKG 이식 루프 (Claude ×3 + check-pkg)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "5"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 6/8 E2E 스펙 생성 (gen-e2e)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "6"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 7/8 대조표 갱신 (recon)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "7"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 8/8 사내 DB 반영 확인 (PKG 파일↔사내 원문 비교 · 메뉴·배선·PROC·인자·컬럼·콤보 실측 — 적용은 하지 않음)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "8"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S8.feGate",
+              "title": "FE 게이트 (실제 브라우저로 화면 열기·치명 콘솔 오류 0·기준 조회 1회)",
+              "optional": true
+            },
+            {
+              "task": "S8.verify",
+              "title": "CheckList (생성 후 — AS-IS vs TO-BE → CheckList·ActionItemList · 다음 자동 보완이 조치 필요 항목을 일괄 보완)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/verify/${id}/fixlist.csv"
+              }
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S1.liveScen",
+              "title": "AS-IS 실측 보강: TO-BE 조건 시나리오 반복(TO-BE 조건을 AS-IS 화면에 넣어 재측정) (생성 화면 CheckList 뒤)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/verify/${id}/calls"
+              ]
+            },
+            {
+              "task": "S1.liveSaveDry",
+              "title": "AS-IS 실측 보강: 저장 시나리오 연습(저장 안 함) (생성 화면 CheckList 뒤)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/asislive/${id}/save_scenario.json"
+              ]
+            },
+            {
+              "task": "S1.liveSave",
+              "title": "AS-IS 실측 보강: 저장 시나리오 실행(저장 → 인자 포착 → 복원) (생성 화면 CheckList 뒤)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/asislive/${id}/save_scenario.json"
+              ],
+              "ifOk": "S1.liveSaveDry"
+            },
+            {
+              "claudeOf": "🧯 자동 보완",
+              "title": "생성 화면 자동 보완 (Claude · 게이트·CheckList·대조표·As-is 원문 기준, 찾아서 끝까지)"
+            },
+            {
+              "task": "S8.verify",
+              "title": "CheckList 재판정 (보완 후) — 조치 필요 행이 남으면 🧯 오류분 자동 보완 → 재판정 반복(최대 2회)",
+              "verify": {
+                "type": "checklistOpen"
+              },
+              "repair": {
+                "claudeOf": "🧯 자동 보완",
+                "rounds": 2,
+                "on": "verify"
+              },
+              "okCodes": [
+                10
+              ]
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S8.report",
+              "title": "TestResultList Excel (최종 CheckList 결과 → Doc/테스트결과서)"
+            },
+            {
+              "task": "S3.xlsx",
+              "title": "문서 Excel (설계서·분석서·테스트)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/화면설계서"
+              }
+            },
+            {
+              "task": "S5.cloudStage",
+              "title": "클라우드 이관 파일 사전 생성 (작업 모드 기준 수정본·전체 — 메뉴에서 바로 취합)",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "label": "🧩 새 화면 (from AS-IS) → 개발부터 테스트까지",
+          "batch": true,
+          "label_en": "🧩 New Screen (from AS-IS) → build through test",
+          "kind": "chain",
+          "chainId": "new-asis-full",
+          "newScreen": true,
+          "needsId": true,
+          "outputs": [
+            "Doc/asisfacts/screens/${id}/${id}_summary.md",
+            "Doc/UI_CHECKLIST/${id}_*_CheckList_v*.xlsx",
+            "Doc/UI_CHECKLIST/${id}_*_ActionItemList_v*.xlsx",
+            "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_${id}(*).xlsx",
+            "Doc/테스트결과서/${id}_*_테스트결과서_v*.xlsx",
+            "Doc/화면설계서/${id}_*_화면설계서_v*.xlsx",
+            "Doc/화면분석서/${id}_*_UI분석서_v*.xlsx",
+            "Doc/단위테스트/${id}_*_TestCases4_v*.xlsx"
+          ],
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱",
+          "hint": "AS-IS 파싱(매번) → AS-IS 실측(환경 점검 → 룰 대응표 → 런처 실측 묶음, 24시간 안의 정상 실측은 재사용) → 새 화면 pipeline → FE 게이트 → CheckList(E2E 포함) → AS-IS 실측 보강(TO-BE 조건 반복, 저장 시나리오) → 🧯 오류분 자동 보완 → CheckList 재판정(남으면 보완·재판정 최대 2회) → TestResultList → 문서 Excel (2026-11-18 파싱·실측·TestResultList 단계 추가)",
+          "confirm": "파싱·AS-IS 분석을 제외하고 새 화면 pipeline 7단계 → CheckList(E2E 포함) → 🧯 오류분 자동 보완(Claude) → CheckList 재판정(조치 필요가 남으면 보완·재판정 반복, 최대 2회) → 문서 Excel 을 순서대로 실행합니다.",
+          "steps": [
+            {
+              "task": "S1.packone",
+              "title": "AS-IS 파싱·분석 (Fact Pack)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/asisfacts/screens/${id}/${id}_summary.md"
+              }
+            },
+            {
+              "task": "S1.liveCheck",
+              "title": "AS-IS 실행 환경 점검",
+              "optional": true
+            },
+            {
+              "task": "S1.liveRuleMap",
+              "title": "관찰 문구 → TO-BE 룰 대응표 갱신",
+              "optional": true
+            },
+            {
+              "task": "S1.liveScreen",
+              "title": "AS-IS 런처 실측(기본 실측 → 소스 분기 시나리오 → 버튼·조건 값·셀 클릭·셀 입력 분기 → Division·그룹 값 → 저장 정의 초안 → 대조) — 24시간 안의 정상 실측은 재사용",
+              "okCodes": [
+                2
+              ],
+              "okNote": "실측 단계 일부 실패 — Doc/asislive/<ID>/screen_bundle.json 의 단계별 rc",
+              "optional": true
+            },
+            {
+              "task": "S8.precheck",
+              "title": "신규 화면 사전 점검 (생성 입력 구비 여부 실측 — AS-IS 사실·SP 원문·컬럼 메타·분석 문서·사내 DB)",
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 1/8 FE 골격 생성·적용 (gen --apply)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "1"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 2/8 Oracle 메타 등록 SQL (gen-register-sql)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "2"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 3/8 Oracle PKG 골격 (gen-pkg)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "3"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 4/8 FE 수선 루프 (Claude ×3 + 게이트)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "4"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 5/8 PKG 이식 루프 (Claude ×3 + check-pkg)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "5"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 6/8 E2E 스펙 생성 (gen-e2e)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "6"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 7/8 대조표 갱신 (recon)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "7"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 8/8 사내 DB 반영 확인 (PKG 파일↔사내 원문 비교 · 메뉴·배선·PROC·인자·컬럼·콤보 실측 — 적용은 하지 않음)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--phase",
+                "8"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S8.feGate",
+              "title": "FE 게이트 (실제 브라우저로 화면 열기·치명 콘솔 오류 0·기준 조회 1회)",
+              "optional": true
+            },
+            {
+              "task": "S8.verify",
+              "title": "CheckList (생성 후 — AS-IS vs TO-BE → CheckList·ActionItemList · 다음 자동 보완이 조치 필요 항목을 일괄 보완)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/verify/${id}/fixlist.csv"
+              }
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S1.liveScen",
+              "title": "AS-IS 실측 보강: TO-BE 조건 시나리오 반복(TO-BE 조건을 AS-IS 화면에 넣어 재측정) (생성 화면 CheckList 뒤)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/verify/${id}/calls"
+              ]
+            },
+            {
+              "task": "S1.liveSaveDry",
+              "title": "AS-IS 실측 보강: 저장 시나리오 연습(저장 안 함) (생성 화면 CheckList 뒤)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/asislive/${id}/save_scenario.json"
+              ]
+            },
+            {
+              "task": "S1.liveSave",
+              "title": "AS-IS 실측 보강: 저장 시나리오 실행(저장 → 인자 포착 → 복원) (생성 화면 CheckList 뒤)",
+              "optional": true,
+              "ifExists": [
+                "${root}/Doc/asislive/${id}/save_scenario.json"
+              ],
+              "ifOk": "S1.liveSaveDry"
+            },
+            {
+              "claudeOf": "🧯 자동 보완",
+              "title": "생성 화면 자동 보완 (Claude · 게이트·CheckList·대조표·As-is 원문 기준, 찾아서 끝까지)"
+            },
+            {
+              "task": "S8.verify",
+              "title": "CheckList 재판정 (보완 후) — 조치 필요 행이 남으면 🧯 오류분 자동 보완 → 재판정 반복(최대 2회)",
+              "verify": {
+                "type": "checklistOpen"
+              },
+              "repair": {
+                "claudeOf": "🧯 자동 보완",
+                "rounds": 2,
+                "on": "verify"
+              },
+              "okCodes": [
+                10
+              ]
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S8.report",
+              "title": "TestResultList Excel (최종 CheckList 결과 → Doc/테스트결과서)"
+            },
+            {
+              "task": "S3.xlsx",
+              "title": "문서 Excel (설계서·분석서·테스트)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/화면설계서"
+              }
+            },
+            {
+              "task": "S5.cloudStage",
+              "title": "클라우드 이관 파일 사전 생성 (작업 모드 기준 수정본·전체 — 메뉴에서 바로 취합)",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "label": "📏 새 화면 (from 설계서) → 개발부터 테스트까지",
+          "batch": true,
+          "label_en": "📏 New Screen (from Design Doc) → build through test",
+          "kind": "chain",
+          "chainId": "new-design-full",
+          "newScreen": true,
+          "needsId": true,
+          "outputs": [
+            "Doc/UI_CHECKLIST/${id}_*_CheckList_v*.xlsx",
+            "Doc/UI_CHECKLIST/${id}_*_ActionItemList_v*.xlsx",
+            "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_${id}(*).xlsx",
+            "Doc/테스트결과서/${id}_*_테스트결과서_v*.xlsx",
+            "Doc/화면설계서/${id}_*_화면설계서_v*.xlsx",
+            "Doc/화면분석서/${id}_*_UI분석서_v*.xlsx",
+            "Doc/단위테스트/${id}_*_TestCases4_v*.xlsx"
+          ],
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱",
+          "hint": "화면설계서 우선 pipeline → FE 게이트 → CheckList(E2E 포함) → 🧯 오류분 자동 보완 → CheckList 재판정(남으면 보완·재판정 최대 2회) → TestResultList → 문서 Excel (AS-IS 원본이 없는 화면이라 파싱·실측 없음 · 2026-11-18 TestResultList 단계 추가)",
+          "confirm": "화면설계서 우선 pipeline 7단계 → CheckList(E2E 포함) → 🧯 오류분 자동 보완(Claude) → CheckList 재판정(조치 필요가 남으면 보완·재판정 반복, 최대 2회) → 문서 Excel 을 순서대로 실행합니다.",
+          "steps": [
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 1/8 FE 골격 생성·적용 (gen --apply)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "1"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 2/8 Oracle 메타 등록 SQL (gen-register-sql)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "2"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 3/8 Oracle PKG 골격 (gen-pkg)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "3"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 4/8 FE 수선 루프 (Claude ×3 + 게이트)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "4"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 5/8 PKG 이식 루프 (Claude ×3 + check-pkg)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "5"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 6/8 E2E 스펙 생성 (gen-e2e)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "6"
+              ]
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 7/8 대조표 갱신 (recon)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "7"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S5.pipeline",
+              "title": "새 화면 8/8 사내 DB 반영 확인 (PKG 파일↔사내 원문 비교 · 메뉴·배선·PROC·인자·컬럼·콤보 실측 — 적용은 하지 않음)",
+              "args": [
+                "${input:id}",
+                "--max",
+                "3",
+                "--design",
+                "${outDir}/agent/${input:id}/screen_design.md",
+                "--phase",
+                "8"
+              ],
+              "optional": true
+            },
+            {
+              "task": "S8.feGate",
+              "title": "FE 게이트 (실제 브라우저로 화면 열기·치명 콘솔 오류 0·기준 조회 1회)",
+              "optional": true
+            },
+            {
+              "task": "S8.verify",
+              "title": "CheckList (생성 후 — AS-IS vs TO-BE → CheckList·ActionItemList · 다음 자동 보완이 조치 필요 항목을 일괄 보완)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/verify/${id}/fixlist.csv"
+              }
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "claudeOf": "🧯 자동 보완",
+              "title": "생성 화면 자동 보완 (Claude · 게이트·CheckList·대조표·As-is 원문 기준, 찾아서 끝까지)"
+            },
+            {
+              "task": "S8.verify",
+              "title": "CheckList 재판정 (보완 후) — 조치 필요 행이 남으면 🧯 오류분 자동 보완 → 재판정 반복(최대 2회)",
+              "verify": {
+                "type": "checklistOpen"
+              },
+              "repair": {
+                "claudeOf": "🧯 자동 보완",
+                "rounds": 2,
+                "on": "verify"
+              },
+              "okCodes": [
+                10
+              ]
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S8.report",
+              "title": "TestResultList Excel (최종 CheckList 결과 → Doc/테스트결과서)"
+            },
+            {
+              "task": "S3.xlsx",
+              "title": "문서 Excel (설계서·분석서·테스트)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/화면설계서"
+              }
+            },
+            {
+              "task": "S5.cloudStage",
+              "title": "클라우드 이관 파일 사전 생성 (작업 모드 기준 수정본·전체 — 메뉴에서 바로 취합)",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "kind": "task",
+          "needsId": true,
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱",
+          "label": "☁️ 클라우드 이관 패키지(수정본)",
+          "label_en": "☁️ Cloud Package (modified)",
+          "task": "S5.cloudMod",
+          "hint": "이관 완료 표시 이후 바뀐 것 전부(적용 전까지 누적 — 대상 누락 없음). 변경이 없으면 기존 폴더를 알려 준다. 환경설정 작업 모드를 따른다 — DB MODE = PKG·GTT·META·MENU·문구·콤보 / UI/DB MODE = 여기에 FE·BE 포함. 결정적 빌더(tools/CloudPkg/cloud_pkg.py · Claude 미사용) · 미리 만든 묶음이 최신이면 복사만, 아니면 즉시 생성 · 사내 리허설 포함 · 클라우드에는 실행하지 않음"
+        },
+        {
+          "kind": "task",
+          "needsId": true,
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱",
+          "label": "☁️ 클라우드 이관 패키지(전체)",
+          "label_en": "☁️ Cloud Package (full)",
+          "task": "S5.cloudFull",
+          "hint": "수정본이 아닌 전체(모든 SQL 멱등). 환경설정 작업 모드를 따른다 — DB MODE = PKG·GTT·META·MENU·문구·콤보 / UI/DB MODE = 여기에 FE·BE 포함. 결정적 빌더 · 사내 리허설 포함 · 클라우드에는 실행하지 않음"
+        },
+        {
+          "kind": "task",
+          "needsId": true,
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱",
+          "label": "☁️ 클라우드 이관 완료 표시",
+          "label_en": "☁️ Mark Cloud Package Applied",
+          "task": "S5.cloudApplied",
+          "hint": "클라우드 적용을 마친 뒤 누른다. 마지막 생성 패키지를 이관 기준선으로 확정해 다음 수정본은 그 이후 변경분만 담는다. DB·클라우드에 아무것도 실행하지 않는다"
+        },
+        {
+          "label": "👀 META 미리보기",
+          "kind": "task",
+          "task": "S5.regrun",
+          "needsId": true,
+          "label_en": "👀 META Preview",
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "✅ META 커밋",
+          "kind": "task",
+          "task": "S5.regcommit",
+          "needsId": true,
+          "label_en": "✅ META Commit",
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "↩️ 되돌리기(PKG,META,MENU)",
+          "kind": "task",
+          "task": "S5.revertcommit",
+          "needsId": true,
+          "label_en": "↩️ Revert (PKG, META, MENU)",
+          "sub": "생성",
+          "sub_en": "Build",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "🛠️ 수동 보완",
+          "kind": "claude",
+          "needsId": true,
+          "hint": "이미 구현된 화면의 보완 전용 — new-screen/pipeline/repair-loop 을 돌리지 않는다. 1.9.13: 바로 실행하지 않고 채팅 입력창에 프롬프트를 채워 둔다 → 맨 아래 [보완 요청] 에 수정 내용을 적고 전송",
+          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이다. [보완 기준 문서 — CheckList(2026-10-23)] Doc/verify/${id}/fixlist.csv(= Doc/UI_CHECKLIST/${id}_*_ActionItemList_v<최신>.xlsx 의 기계용 사본, tools/Harness/verify/run_verify.py 산출)가 있으면 그 목록이 이번 보완의 기준이다 — 행마다 현상(실측)·기대(정답 O1 AS-IS 동작/O2 확정 규칙/O3 기능 무결성 + AS-IS 근거 file:line)·보완 계층·검증 ID 가 있다. **[일괄 보완 대상 — 2026-10-28]** (수동 보완: 맨 아래 [보완 요청] 에 사용자가 항목을 적었으면 이 일괄 문단은 적용하지 않는다 — 적힌 항목만 수정하고 fixlist 의 다른 행은 수정하지 않는다.) [보완 요청] 에 항목이 없을 때의 일괄 대상 = Doc/verify/${id}/fixlist.csv 의 action_needed=Y 행 전부(= CheckList '조치 필요' 시트와 같은 행 · 상속 FAIL 포함 · 중복 제외). 한 행도 빠뜨리지 않고 repairScope 범위 안에서 보완하고, 범위 밖 행(공통 컴포넌트 등)은 가이드로 남긴다 — 행마다 처리 결과(보완/가이드/보류+사유)를 보고에 적는다. action_needed=N 행(판정필요 등)은 참고(확인 후 필요하면 포함). CheckList 결과(fixlist.csv)가 없으면 이 문단은 건너뛰고 기존 방식대로 진행한다. **수동 보완에서는 보완 후 CheckList 를 다시 돌리지 않는다**(run_verify.py 실행 금지 · CheckList·ActionItemList 새 버전 생성 금지 — 재판정은 사용자가 확인 후 🔎 CheckList 메뉴로 직접 실행). 보완 범위는 실행 시점에 tools/Harness/harness.json 의 repairScope 를 읽어 정한다(`python tools/Harness/verify/set_scope.py` 로 확인): DB_ONLY = 보완 계층 'DB 메타'·'DB 객체(PKG/SP)' 행만 적용하고 '화면 FE' 행은 파일을 수정하지 않고 가이드(파일:라인·변경 전/후·검증법)만 남긴다 / DB_FE = 'DB 메타'·'DB 객체'에 더해 '화면 FE' 행(features/**/pages/<화면>)까지 적용한다. '공통 컴포넌트'(@shared·@foundation) 행은 어느 설정에서도 수정하지 않고 가이드와 영향 화면만, '사람판정' 행은 적용하지 않고 판단 요청만 남긴다. 행마다 계층 판단 근거를 다시 확인한다(메타로 해결되면 FE 대신 메타 — DB 객체 수정 우선). 처리 결과는 fixlist.csv 의 status(적용·보류 — '검증완료' 는 쓰지 않는다: 종결은 각 행 close_evidence(종결 근거) 열의 기계 재판정 PASS 또는 사람 판정으로만 인정, 보완 세션의 자기 보고는 근거가 아니다)·change(변경 요지) 열에 기록한다(재판정은 하지 않는다). 보고에는 적용 당시 repairScope 값과 범위 밖으로 남긴 행(보완 ID)을 적는다. 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지). 먼저 Read: tools/VibeManager/rules/10_RULES_KEEP.md · (SCP·SSP 화면) tools/VibeManager/rules/40_SEARCH_COND.md 의 `#### ${id}` 절 = 조회조건 순서·사용여부·To-Be 명칭 기준(하네스가 이미 적용 — 순서·제외를 되돌리지 말 것, 게이트 SC1·SC2) · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv, Form_Load/InitControls 초기값 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL)의 `git status`/`git diff HEAD --stat`. 커밋본 대비 후퇴(삭제된 파일·대조표 축소)가 보이면 먼저 보고하고 복원 여부를 묻는다. 그 다음 아래 [보완 요청] 을 처리하되, 보완은 DB 객체 수정 우선·FE/BE 는 지정 지점만 수정하며, 끝나면 `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` 결과(DoD B22~B25·M06/M07 포함)를 붙인다. [보완 요청] 이 비어 있으면 Doc/verify/${id}/fixlist.csv 가 있을 때 그 목록(repairScope 범위 안 행)을 보완 요청으로 삼고, 없으면 작업하지 말고 '보완 요청을 입력해 주세요(또는 🔎 CheckList을 먼저 실행)' 한 줄로만 답한다. [이관 파일 사전 생성] 작업이 끝나면 `python tools/CloudPkg/cloud_pkg.py ${id} --stage` 를 실행해 클라우드 이관 파일(4종)을 미리 만들어 둔다 — 실패해도 보완 결과에는 영향 없음(결과 한 줄만 보고).\n\n[보완 요청] **DB 를 고치면 파일도 같이(룰 H14)**: 사내 ZIOUI1 의 PKG/SP·META 를 수정·적용했으면 같은 작업 안에서 Doc/gen/${id}/${id}_PKG.sql(바꾼 멤버를 사내 ALL_SOURCE 재조회본으로) · ${id}_registration.sql(바꾼 META 행) 도 같은 내용으로 갱신한다(공용 PKG 멤버는 Doc/gen/${id}/<공용PKG>_<멤버>_${id}.sql). 파일과 사내 DB 가 어긋나면 META 커밋이 사내 수정을 되돌릴 수 있다. [AS-IS 실측 참고 — 2026-11-12] Doc/asislive/${id}/latest.json 이 있으면 그 파일의 run_dir 폴더에서 summary.md(현행 프로그램을 실제로 실행한 기록 — 호출 SP·인자·건수 · 조회조건 라벨·필수·열렸을 때 값 · 그리드의 실제 컬럼)와 shots/*.png(실제 화면)을 AS-IS 동작의 근거로 읽는다. 정적 분석 사실(Doc/asisfacts)과 어긋나면 실측이 실제 동작이다. 실측 조건은 AS-IS 화면이 열릴 때의 기본값이라 TO-BE 시험 조건과 다를 수 있다 — 값·건수 대조의 근거로 쓸 때는 조건이 같은지 먼저 확인한다. 파일이 없으면 이 문단은 적용하지 않는다(실측 내용을 지어내지 않는다).\n\n수동 보완인 만큼 이번에는 아래 항목만 수정한다. fixlist 일괄 보완은 하지 않는다.\n1) ",
+          "label_en": "🛠️ Manual Fix",
+          "sub": "보완",
+          "sub_en": "Fix",
+          "sub_icon": "🪛",
+          "prefill": true
+        },
+        {
+          "label": "🧯 자동 보완",
+          "kind": "claude",
+          "needsId": true,
+          "hint": "이미 구현된 화면 — 부족한 것을 스스로 찾아(게이트·DoD·CheckList·대조표) 순서대로 고치고 결과 보고. 환경설정 작업 모드를 따른다 — UI/DB MODE = DB + 화면 FE 직접 보완 / DB MODE = DB·META 만 직접 보완하고 FE·BE 는 가이드(Doc/verify/<ID>/FE_GUIDE_*.md). 골격 재생성 금지. 커밋본 후퇴만 먼저 묻는다",
+          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이며, 이번 작업은 사용자 요청을 기다리지 않고 **부족한 것을 스스로 찾아 끝까지 보완**하는 것이다(이 메뉴 선택 = 해당 화면 FE 페이지 폴더 수정 승인). 단, repairScope=DB_ONLY 이면 이 메뉴의 FE 수정 승인은 적용되지 않는다 — 화면 FE 는 가이드만 남긴다(설정이 우선). [보완 기준 문서 — CheckList(2026-10-23)] Doc/verify/${id}/fixlist.csv(= Doc/UI_CHECKLIST/${id}_*_ActionItemList_v<최신>.xlsx 의 기계용 사본, tools/Harness/verify/run_verify.py 산출)가 있으면 그 목록이 이번 보완의 기준이다 — 행마다 현상(실측)·기대(정답 O1 AS-IS 동작/O2 확정 규칙/O3 기능 무결성 + AS-IS 근거 file:line)·보완 계층·검증 ID 가 있다. **[일괄 보완 대상 — 2026-10-28]** 이번 보완의 일괄 대상 = Doc/verify/${id}/fixlist.csv 의 action_needed=Y 행 전부(= CheckList '조치 필요' 시트와 같은 행 · 상속 FAIL 포함 · 중복 제외). 한 행도 빠뜨리지 않고 repairScope 범위 안에서 보완하고, 범위 밖 행(공통 컴포넌트 등)은 가이드로 남긴다 — 행마다 처리 결과(보완/가이드/보류+사유)를 보고에 적는다. action_needed=N 행(판정필요 등)은 참고(확인 후 필요하면 포함). CheckList 결과(fixlist.csv)가 없으면 보완을 시작하지 않고 멈춘 뒤 \"CheckList 결과 없음 — 🔎 CheckList 먼저 실행 필요\" 로 보고한다(2026-11-18 사용자: 자동 보완은 CheckList 기준으로만). [같은 원인 묶음 — 2026-11-18] Doc/verify/${id}/action_summary.csv(row_id·group·title·tag·where·asis·tobe·gap·action)가 있으면 먼저 읽는다. 같은 group 의 행은 원인이 하나이므로 한 번에 고치고(파일·메타를 group 단위로 한 번 수정), 처리 결과는 묶인 행마다 따로 적는다. title·asis·tobe·gap·action 은 원인 설명의 출발점이며, 고치기 전에 원문·실측으로 다시 확인한다. 파일이 없으면 fixlist 행 단위로 진행한다. CheckList 의 사용자판정·사용자의견(Doc/verify/_user_verdicts_direct.csv 포함)은 fixlist 에 반영돼 있다. 사용자가 오류 아님으로 판정한 행은 고치지 않는다. 보완이 끝나면 CheckList 를 다시 돌려(python tools/Harness/verify/run_verify.py ${id}) 조치 필요 행이 해소됐는지 확인한다(CheckList 는 소스를 고치지 않는다 — 소스 수정은 이 보완 절차에서만). 보완 범위는 실행 시점에 tools/Harness/harness.json 의 repairScope 를 읽어 정한다(`python tools/Harness/verify/set_scope.py` 로 확인): DB_ONLY = 보완 계층 'DB 메타'·'DB 객체(PKG/SP)' 행만 적용하고 '화면 FE' 행은 파일을 수정하지 않고 가이드(파일:라인·변경 전/후·검증법)만 남긴다 / DB_FE = 'DB 메타'·'DB 객체'에 더해 '화면 FE' 행(features/**/pages/<화면>)까지 적용한다. '공통 컴포넌트'(@shared·@foundation) 행은 어느 설정에서도 수정하지 않고 가이드와 영향 화면만, '사람판정' 행은 적용하지 않고 판단 요청만 남긴다. 행마다 계층 판단 근거를 다시 확인한다(메타로 해결되면 FE 대신 메타 — DB 객체 수정 우선). 처리 결과는 fixlist.csv 의 status(적용·보류 — '검증완료' 는 쓰지 않는다: 종결은 각 행 close_evidence(종결 근거) 열의 기계 재판정 PASS 또는 사람 판정으로만 인정, 보완 세션의 자기 보고는 근거가 아니다)·change(변경 요지) 열에 기록하고, 끝나면 `python tools/Harness/verify/run_verify.py ${id}`(서버 미기동이면 --skip-e2e)로 재판정해 CheckList·ActionItemList 새 버전을 만든다. 보고에는 적용 당시 repairScope 값과 범위 밖으로 남긴 행(보완 ID)을 적는다. 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지, 대조표 __asis-mapping__.md 는 재생성하지 말고 행을 추가·갱신만). [0 준비] Read: tools/VibeManager/rules/10_RULES_KEEP.md · (SCP·SSP 화면) tools/VibeManager/rules/40_SEARCH_COND.md 의 `#### ${id}` 절 = 조회조건 순서·사용여부·To-Be 명칭 기준(하네스가 이미 적용 — 순서·제외를 되돌리지 말 것, 게이트 SC1·SC2) · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv — Form_Load/InitControls 초기값·버튼 핸들러·검증 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL). 페이지 폴더의 `git status`/`git diff HEAD --stat` 에서 커밋본 대비 후퇴(삭제된 파일·대조표 축소)가 보이면 **이것만은 고치기 전에 보고하고 복원 여부를 묻고 멈춘다**. [1 진단] `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` (BLOCK/WARN · DoD B01~B25 · M06/M07) · `node tools/Harness/check-pkg.js ${id}`(Doc/gen/${id}/${id}_PKG.sql 이 있을 때) · 대조표의 미구현/부분 행 · As-is 원문에 있는데 페이지에 없는 조회조건·버튼·검증·초기값 · **Grid 동적 컬럼 원천**(Fact Pack summary §2 의 GetSpdTitle 등 타이틀 SP · §4-2 InitSpreadDateColumn · §11 DB루프 → To-Be 가 사내 배선 타이틀 시트(proc_meta.csv)를 실제 조회하는지, RESPONSE_SET 응답 키가 proc_params.csv OUT COL_NM 안에 있는지 = check.js B26·B27, 대조표 §6 동적 컬럼 행 누락 = M08, '구현' 행인데 사내 배선 시트 미조회 = M09(구현 근거 불일치), E2E smoke 어노테이션 dynamic). 판정 근거는 BE 원문(nscm-be BaseService/GeneralServiceImpl)·메타 CSV·As-is 원문만 쓴다 · **그리드 헤더·개인화 모달(2026-10-21)**: As-is `SetSheetHeaderColumn(_SI, N)`·`ColumnHeaderSpan(…,\"Qty\")` 행 수/리터럴/행 높이(20~30px) ↔ To-Be columnGroups leaf 라벨·헤더 총 높이(check.js **H01** headerRowHeight 재적용, E2E smoke `header` 어노테이션 — 리터럴 Qty 칸은 월마다 분리·leaf 행이 그룹 행보다 높아야 함 **H05**) · 커스텀 MergeManager 는 인스턴스 필드 없이(**H06**, Wijmo copy 단언) · **FE 를 고친 뒤에는 화면을 실제로 열어 콘솔 오류(Assertion failed in Wijmo 등) 0 을 확인**(E2E smoke `console` 어노테이션)와 공용 ColumnLayoutModal 의 `fallbackColumns`(**H02**) · 조회조건 체크박스는 한 customCheckbox 컨테이너에 모음(**H03**, 기준 DMF0082 MktFcstForm) · As-is 라디오는 @shared/lges RadioGroup+Radio 로(드롭다운 대체 금지, **H04**) — 대조표가 '구현' 이어도 라이브 실측(헤더 행 수·모달 목록 건수)으로 다시 판정하고 어긋나면 '부분' 으로 정정한 뒤 고친다.  — 페이지 주석·대조표·register.json·e2e_plan 의 서술은 이전 작업자의 가정이므로 근거로 쓰지 않는다(SCP0096 o_rc1_columns 사고). 찾은 항목 전부를 번호 목록(출처·근거 포함)으로 먼저 적는다 — 하나도 빼지 않는다. [2 보완] 목록 순서대로 전부 처리한다. 원칙: DB 객체(PKG/SP/메타) 수정 우선, FE/BE 는 해당 지점만 최소 수정, 공용(shared/foundation) 변경 금지, 상대경로 import·any·console.log·inline style 금지, 조회 filter 키는 proc_params.csv 의 IN COL_NM 과 일치시킨다. 동적 헤더(B27)는 사내 배선 타이틀 시트를 SHEETS 에 추가하고 useTabProcQuery 로 조회기간(proc_params IN COL_NM)을 넘겨 o_rc1 행(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)으로 헤더를 만든다 — 같은 시트명을 이미 조회하는 기존 페이지를 grep 해 그 패턴을 따르고, 대조표 해당 행·단위테스트 fixture·잘못된 근거 주석도 함께 정정한다. 응답 키(RESPONSE_SET)는 proc_params OUT COL_NM(대소문자 그대로)만 쓴다(B26). 대조표에는 '## §6 동적 컬럼' 섹션을 만들어 타이틀 SP 행과 As-is DB루프 컬럼 생성 행(요지 '<메서드> / <라인> (DB루프 컬럼 생성 ← 타이틀 SP 결과셋)')을 추가하고(M08), 근거가 맞지 않는 '구현' 행은 실제 구현으로 바꾼 뒤 위치를 갱신한다(M09). FE 수정 뒤 `node tools/E2E/gen-e2e.js --all` 로 스펙을 재생성해 동적 컬럼 판정(정적 메타 밖 binding ≥1 · 타이틀 시트 호출)을 포함시킨다. 처리할 수 없는 항목(원천 미확보·사람 판단 필요·사내 DB 적용 필요)은 건너뛰지 말고 사유와 함께 '미처리'로 남긴다. [3 검증] check.js --final 을 다시 돌려 BLOCK 0 과 DoD 변화를 확인하고, 대조표 상태를 갱신한다. [4 보고] 처리 항목(파일:라인 · 변경 전/후 요약) · 미처리 항목(사유) · 게이트 전/후 수치 · 런타임(조회·저장 E2E)은 미검증임을 명시해 한국어로 보고한다. 중간에 사용자 입력을 기다리지 않는다(커밋본 후퇴 발견 시만 예외).\n\n[보완 진단 · 정해진 보완 먼저 — 2026-11-20 사용자 지시 'UI 보완 과정에 AI 적용 · 불필요한 AI 사용 제거'] 보완 전에 `python tools/Harness/verify/port_review.py ${id} --diag` 로 원인 묶음마다 고칠 계층·위치(파일:줄 인용 확인)·정해진 보완 처방을 받는다(Doc/verify/${id}/repair_diag.md). 처방(recipe)이 있는 묶음은 `python tools/Harness/verify/repair_apply.py ${id}` (dry-run 확인 뒤 --apply)로 먼저 풀고, 남은 묶음만 직접 고친다. 진단의 위치 인용이 확인 안 된(verified N) 묶음은 원문을 직접 확인한 뒤 고친다. 보완 뒤 확인은 전체 재수행 대신 `python tools/Harness/verify/checklist_run.py ${id} --delta` (바뀐 소스 범위만 재측정)로 한다. [원인 계층 실측 — 2026-11-11] 보완 전에 `python tools/Harness/verify/diagnose_layer.py ${id}` 를 실행하고 Doc/verify/${id}/layer_diagnosis.csv 를 읽는다. 그 파일에서 원인 계층이 확정된 행은 fixlist 의 기본 계층이 아니라 확정된 계층(메타·PKG·FE)에서 고친다. \"미확정\" 행은 원인을 서술로 단정하지 말고, 그 행을 직접 실행·조회해 확인한 값만 근거로 쓴다. [AS-IS 실측 참고 — 2026-11-12] Doc/asislive/${id}/latest.json 이 있으면 그 파일의 run_dir 폴더에서 summary.md(현행 프로그램을 실제로 실행한 기록 — 호출 SP·인자·건수 · 조회조건 라벨·필수·열렸을 때 값 · 그리드의 실제 컬럼)와 shots/*.png(실제 화면)을 AS-IS 동작의 근거로 읽는다. 정적 분석 사실(Doc/asisfacts)과 어긋나면 실측이 실제 동작이다. 실측 조건은 AS-IS 화면이 열릴 때의 기본값이라 TO-BE 시험 조건과 다를 수 있다 — 값·건수 대조의 근거로 쓸 때는 조건이 같은지 먼저 확인한다. 파일이 없으면 이 문단은 적용하지 않는다(실측 내용을 지어내지 않는다).",
+          "label_en": "🧯 Auto Fix",
+          "sub": "보완",
+          "sub_en": "Fix",
+          "sub_icon": "🪛",
+          "preTask": "S8.verifyIfStale",
+          "postTask": "S5.cloudStage",
+          "preTaskRequired": true
+        },
+        {
+          "label": "🚒 자동보완 (CheckList → 오류분 보완 → 재판정 반복 → 문서)",
+          "batch": true,
+          "label_en": "🚒 Auto Fix (CheckList → fix failures → re-check loop → docs)",
+          "kind": "chain",
+          "chainId": "autofix-full",
+          "needsId": true,
+          "outputs": [
+            "Doc/UI_CHECKLIST/${id}_*_CheckList_v*.xlsx",
+            "Doc/UI_CHECKLIST/${id}_*_ActionItemList_v*.xlsx",
+            "Doc/UI_TEST(SCP&SSP)/☆NSCME_SCP&SSP 테스트_${id}(*).xlsx",
+            "Doc/화면설계서/${id}_*_화면설계서_v*.xlsx",
+            "Doc/화면분석서/${id}_*_UI분석서_v*.xlsx",
+            "Doc/단위테스트/${id}_*_TestCases4_v*.xlsx"
+          ],
+          "sub": "보완",
+          "sub_en": "Fix",
+          "sub_icon": "🪛",
+          "hint": "CheckList(최신이 아닐 때만 · E2E 포함) → 🧯 오류분(fixlist 조치 필요 행) 자동 보완 → CheckList 재판정 — 조치 필요 행이 남으면 다시 보완·재판정(최대 2회) → 문서 Excel → 클라우드 이관 파일. 2026-11-04 E2E 4단계 메뉴 단계 폐지(E2E 는 CheckList 안에서 실행) · 2026-11-11 보완 전 원인 계층 진단·판정 스냅샷, 재판정 뒤 종결·회귀 비교 단계 추가",
+          "confirm": "CheckList(최신이 아닐 때만) → 🧯 오류분 자동 보완(Claude · 골격 재생성 금지 · 작업 모드 범위) → CheckList 재판정(조치 필요가 남으면 보완·재판정 반복, 최대 2회) → 문서 Excel 을 순서대로 실행합니다.",
+          "steps": [
+            {
+              "task": "S1.live",
+              "title": "AS-IS 실측 (런처 구동 → 화면 열기·조회·캡처·호출 수집 — 실측이 없을 때만)",
+              "optional": true,
+              "ifMissing": [
+                "${root}/Doc/asislive/${id}/latest.json"
+              ]
+            },
+            {
+              "task": "S8.verifyIfStale",
+              "title": "CheckList — 최신이 아닐 때만 실행 (보완 전 · E2E 포함 · 최신이면 건너뜀 · 실패하거나 결과가 없으면 체인 중단)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/verify/${id}/fixlist.csv"
+              }
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S8.diagnose",
+              "title": "원인 계층 진단 (조치 필요 행 — 메타·PKG·FE 중 원인을 실측)",
+              "optional": true,
+              "okCodes": [
+                2
+              ]
+            },
+            {
+              "task": "S8.repairSnapshot",
+              "title": "보완 전 판정 스냅샷 (종결·회귀 비교 기준)",
+              "optional": true
+            },
+            {
+              "claudeOf": "🧯 자동 보완",
+              "title": "오류분 자동 보완 (Claude · CheckList 조치 필요 행 · 작업 모드 범위)"
+            },
+            {
+              "task": "S8.verify",
+              "title": "CheckList 재판정 (보완 후) — 조치 필요 행이 남으면 🧯 오류분 자동 보완 → 재판정 반복(최대 2회)",
+              "verify": {
+                "type": "checklistOpen"
+              },
+              "repair": {
+                "claudeOf": "🧯 자동 보완",
+                "rounds": 2,
+                "on": "verify"
+              },
+              "okCodes": [
+                10
+              ]
+            },
+            {
+              "task": "S8.unverified",
+              "title": "미검증 해소 (전체 목록 → 🧪 검사엔진 일괄 보완 → CheckList 전체 재실행 → 재분류, 최대 2회 · 남아도 체인 계속)",
+              "optional": true,
+              "verify": {
+                "type": "unverifiedOpen"
+              },
+              "repair": {
+                "claudeOf": "🧪 미검증 해소",
+                "rounds": 2,
+                "on": "verify",
+                "rerunTask": "S8.verify",
+                "rerunOkCodes": [
+                  10
+                ]
+              },
+              "args": [
+                "${input:ids}",
+                "--no-rerun"
+              ]
+            },
+            {
+              "task": "S8.repairCompare",
+              "title": "보완 결과 증명 (보완 전 ↔ 재판정 — 종결·미종결·회귀 수)",
+              "optional": true
+            },
+            {
+              "task": "S3.xlsx",
+              "title": "문서 Excel (설계서·분석서·테스트)",
+              "verify": {
+                "type": "fileExists",
+                "file": "${root}/Doc/화면설계서"
+              }
+            },
+            {
+              "task": "S5.cloudStage",
+              "title": "클라우드 이관 파일 사전 생성 (작업 모드 기준 수정본·전체 — 메뉴에서 바로 취합)",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "label": "🔗 PKG 변환 (AS-IS>>TO-BE)",
+          "kind": "claude",
+          "needsId": true,
+          "prompt": "tools/Harness/prompts/port_pkg.md 를 읽고 화면 ${id} 의 Doc/gen/${id}/${id}_PKG.sql 이식을 마무리해줘. 끝나면 node tools/Harness/check-pkg.js ${id} 로 확인. CheckList 결과 Doc/verify/${id}/fixlist.csv 가 있으면 action_needed=Y 행 중 보완 계층 'DB 객체(PKG/SP)'·'DB 메타' 행을 이번 이식에서 함께 해소하고(행마다 처리 결과 보고), 없으면 이식만 진행한다. 끝나면 CheckList 를 다시 돌려 해소 여부를 확인한다. [AS-IS 실측 참고 — 2026-11-12] Doc/asislive/${id}/latest.json 이 있으면 그 파일의 run_dir 폴더에서 summary.md(현행 프로그램을 실제로 실행한 기록 — 호출 SP·인자·건수 · 조회조건 라벨·필수·열렸을 때 값 · 그리드의 실제 컬럼)와 shots/*.png(실제 화면)을 AS-IS 동작의 근거로 읽는다. 정적 분석 사실(Doc/asisfacts)과 어긋나면 실측이 실제 동작이다. 실측 조건은 AS-IS 화면이 열릴 때의 기본값이라 TO-BE 시험 조건과 다를 수 있다 — 값·건수 대조의 근거로 쓸 때는 조건이 같은지 먼저 확인한다. 파일이 없으면 이 문단은 적용하지 않는다(실측 내용을 지어내지 않는다).",
+          "label_en": "🔗 PKG Conversion (AS-IS >> TO-BE)",
+          "sub": "보완",
+          "sub_en": "Fix",
+          "sub_icon": "🪛",
+          "preTask": "S8.verifyIfStale",
+          "postTask": "S5.cloudStage",
+          "proofTasks": [
+            "S8.pkgGate"
+          ]
+        },
+        {
+          "kind": "claude",
+          "needsId": true,
+          "label": "🩺 PKG 보완",
+          "label_en": "🩺 PKG Fix",
+          "sub": "보완",
+          "sub_en": "Fix",
+          "sub_icon": "🪛",
+          "preTask": "S8.verifyIfStale",
+          "postTask": "S5.cloudStage",
+          "hint": "PKG 오류 수정 — 컴파일 오류·실행 오류(ORA-)·CheckList DB 객체 행을 사내에서 재현·수정·검증(FE/BE 는 가이드만) · 끝나면 클라우드 이관 파일 사전 생성",
+          "prompt": "화면 ${id} 의 **PKG 오류 보완**(이 메뉴 선택 = 사내 오라클 ZIOUI1 의 해당 화면 PKG/SP 수정·적용 승인 · FE/BE 파일 수정 금지 — 필요하면 가이드만). [0 준비] Read: Doc/_rules_v2/hooks/oracle-db-workflow.md · Doc/_rules_v2/hooks/db-source-refresh-before-work.md · tools/VibeManager/rules/10_RULES_KEEP.md. 작업 기준 원문 = 사내에서 지금 새로 조회한 ALL_SOURCE + LAST_DDL_TIME(로컬 파일·기억 기준 금지). 대상 = PKG_${id} + 이 화면이 호출하는 PKG/SP(Doc/tobefacts/db/proc_meta.csv·proc_params.csv 의 ${id} 행 · 사내 SCM_ADM_API_M/PROC_M 실측). [1 진단 — 찾은 오류를 번호 목록(출처·근거)으로 먼저 적는다] ① 컴파일: ALL_OBJECTS STATUS · ALL_ERRORS(PACKAGE/BODY) · 참조 객체 INVALID/누락(ALL_DEPENDENCIES) · 참조 테이블 컬럼 누락(ORA-00904) ② 실행: 화면이 부르는 프로시저를 FE 실전송 파라미터(BE 로그·E2E 결과 Doc/e2e/results/${id}/(없으면 Doc/e2e/results)·fixlist 재현값)로 직접 실행해 ORA-/결과 CODE 오류 재현 — 저장 SP 는 사내 E2E 원장 규칙(원장에 없는 키만·끝나면 정리) ③ Doc/verify/${id}/fixlist.csv 의 보완 계층 'DB 객체(PKG/SP)' 행 중 action_needed=Y ④ BE 로그(nscm-be logs)의 이 화면 API ORA- 오류. [2 보완] 오류마다 원인을 확인하고 사내에 직접 수정·적용한다(사내 쓰기 상시 허용). 규칙: MSSQL 키워드 잔존 0 · 빈값 센티널 '/'(NVL 양변) · DATE 명시 포맷 · GTT 는 DELETE · 동적 SQL 바인드 · 성능 문제는 #129 순서표 먼저. 공용 PKG 멤버·standalone PROC 는 이 화면 몫만 고치고 Doc/gen/${id}/<공용PKG>_<멤버>_${id}.sql 로 남긴다. **DB 를 고치면 파일도 같이(룰 H14)**: Doc/gen/${id}/${id}_PKG.sql 을 사내 ALL_SOURCE 재조회본으로 갱신. [3 검증] 컴파일 VALID + ALL_ERRORS 0 · 진단 ②의 같은 파라미터로 재실행해 오류 해소 확인 · 끝나면 CheckList(python tools/Harness/verify/run_verify.py ${id}, 서버 미기동이면 --skip-e2e)로 재판정. [4 보고] 오류별 원인 · 수정 전/후(객체·멤버·라인) · 검증 결과(실행 증빙) · 미해결(사유) · FE/BE 가 필요한 항목은 가이드(파일:라인·변경 전/후·이유·검증법). 중간에 사용자 입력을 기다리지 않는다. [이관 파일 사전 생성] 작업이 끝나면 `python tools/CloudPkg/cloud_pkg.py ${id} --stage` 를 실행해 클라우드 이관 파일(4종)을 미리 만들어 둔다 — 실패해도 보완 결과에는 영향 없음(결과 한 줄만 보고). [AS-IS 실측 참고 — 2026-11-12] Doc/asislive/${id}/latest.json 이 있으면 그 파일의 run_dir 폴더에서 summary.md(현행 프로그램을 실제로 실행한 기록 — 호출 SP·인자·건수 · 조회조건 라벨·필수·열렸을 때 값 · 그리드의 실제 컬럼)와 shots/*.png(실제 화면)을 AS-IS 동작의 근거로 읽는다. 정적 분석 사실(Doc/asisfacts)과 어긋나면 실측이 실제 동작이다. 실측 조건은 AS-IS 화면이 열릴 때의 기본값이라 TO-BE 시험 조건과 다를 수 있다 — 값·건수 대조의 근거로 쓸 때는 조건이 같은지 먼저 확인한다. 파일이 없으면 이 문단은 적용하지 않는다(실측 내용을 지어내지 않는다).",
+          "proofTasks": [
+            "S8.pkgGate"
+          ]
+        },
+        {
+          "kind": "claude",
+          "needsId": true,
+          "label": "🧾 META 생성 및 보완",
+          "label_en": "🧾 META Create & Fix",
+          "sub": "보완",
+          "sub_en": "Fix",
+          "sub_icon": "🪛",
+          "preTask": "S8.verifyIfStale",
+          "postTask": "S5.cloudStage",
+          "hint": "META 가 없으면 신규 생성, 있으면 변경된 PKG(ALL_ARGUMENTS)·UI(시트·버튼·그리드·문구)에 맞게 보완 — 사내 적용·재조회 검증 · 끝나면 클라우드 이관 파일 사전 생성",
+          "prompt": "화면 ${id} 의 **META 생성 및 보완**(이 메뉴 선택 = 사내 ZIOUI1 META 쓰기 승인 · FE/BE 파일 수정 금지 — 필요하면 가이드만). 대상 = META 7영역(SCM_ADM_API_M · SCM_ADM_PROC_M · SCM_ADM_MNU_M · SCM_ADM_MNU_BTN_MPG_M · SCM_ADM_USER_GR_MNU_MPG_M · SCM_ADM_USER_GR_MNU_BTN_MPG_M · SCM_MST_SHEET_COLUMNS(+SHEET_MEASURE)) + 메뉴명·MSG/LBL(SCM_ADM_MSG_M) + 화면이 부르는 콤보. [0 준비] Read: Doc/_rules_v2/hooks/oracle-db-workflow.md · Doc/_rules_v2/hooks/ui-dynamic-property-management.md · Doc/_rules_v2/hooks/menu-button-dynamic-fetch.md · Doc/_rules_v2/hooks/ui-category-setup-column-meta.md · tools/VibeManager/rules/10_RULES_KEEP.md. 사내에서 이 화면 META 행을 지금 조회한다(사전 대조 먼저 — 기존 행·같은 API_URL·MNU 전 행·그룹 대소문자 무시). [1 판정] 영역마다 — 행이 없으면 **신규 생성**, 있으면 **현재 PKG·UI 와 대조해 보완**: PROC_M ↔ 사내 ALL_ARGUMENTS(파라미터 이름·IN/OUT·순서 · COL_NM 규칙 = 사내 현행 IN camelCase(P_ 제거)/OUT 소문자/O_RESULT_CURSOR→PROC_RESULT · SORT_ORD) · API_M.API_URL ↔ 실제 존재하는 PKG 멤버 · MNU_BTN_MPG_M ↔ FE 페이지가 쓰는 시트명·버튼 코드(useTabProcQuery/SHEETS·procedures.d.ts) · 그룹 메뉴/버튼 권한 행(공통버튼 노출 CR-070) · SHEET_COLUMNS ↔ FE 그리드 binding·SP 결과 컬럼(INPUT_TP_CD 단일 원천 · CELL_CONTROL 화이트리스트 · 임의 UI Category 데이터 생성 금지) · MSG/LBL ↔ FE 가 쓰는 코드(문구로 기존 ID 재사용, 없으면 01001+ 채번 · KO=EN 정렬). 영역별 신규/수정/유지 표를 먼저 적는다. [2 적용] 사내에 직접 적용 — MERGE ON 키 = PK 실측 · NOT NULL 인벤토리(desc) 선행 · 감사 컬럼 admin · MSG_M 은 INSERT … NOT EXISTS 전용 · 적용 직전 재조회(중복·타 작업자 변경 확인) · 기존 운영 행 삭제 금지(필요하면 사유와 함께 보고만). **DB 를 고치면 파일도 같이(룰 H14)**: Doc/gen/${id}/${id}_registration.sql 을 사내 현행 미러(멱등·비파괴)로 갱신. [3 검증] 적용 후 재조회로 영역별 건수·값 확인 · 화면 조회/버튼이 META 로 배선되는지(BE 해석 경로와 같은 키) · CheckList 재판정(python tools/Harness/verify/run_verify.py ${id}, 서버 미기동이면 --skip-e2e). [4 보고] 영역별 신규/수정/유지 건수와 행 목록 · 판단 근거 · 미처리(사유) · FE 가 맞춰야 할 항목은 가이드. 중간에 사용자 입력을 기다리지 않는다. [이관 파일 사전 생성] 작업이 끝나면 `python tools/CloudPkg/cloud_pkg.py ${id} --stage` 를 실행해 클라우드 이관 파일(4종)을 미리 만들어 둔다 — 실패해도 보완 결과에는 영향 없음(결과 한 줄만 보고). [AS-IS 실측 참고 — 2026-11-12] Doc/asislive/${id}/latest.json 이 있으면 그 파일의 run_dir 폴더에서 summary.md(현행 프로그램을 실제로 실행한 기록 — 호출 SP·인자·건수 · 조회조건 라벨·필수·열렸을 때 값 · 그리드의 실제 컬럼)와 shots/*.png(실제 화면)을 AS-IS 동작의 근거로 읽는다. 정적 분석 사실(Doc/asisfacts)과 어긋나면 실측이 실제 동작이다. 실측 조건은 AS-IS 화면이 열릴 때의 기본값이라 TO-BE 시험 조건과 다를 수 있다 — 값·건수 대조의 근거로 쓸 때는 조건이 같은지 먼저 확인한다. 파일이 없으면 이 문단은 적용하지 않는다(실측 내용을 지어내지 않는다).",
+          "proofTasks": [
+            "S8.metaLive"
+          ]
+        }
+      ],
+      "title_en": "UI Analysis · Build · Fix (needs ID)",
+      "subs": [
+        {
+          "key": "분석·문서",
+          "title": "분석·문서",
+          "title_en": "Analysis & Docs",
+          "icon": "🔭"
+        },
+        {
+          "key": "생성",
+          "title": "생성",
+          "title_en": "Build",
+          "icon": "🧱"
+        },
+        {
+          "key": "보완",
+          "title": "보완",
+          "title_en": "Fix",
+          "icon": "🪛"
+        }
+      ]
+    },
+    {
+      "title": "Overview & Reports",
+      "items": [
+        {
+          "label": "🧰 Workbench",
+          "kind": "command",
+          "command": "vibeManager.openWorkbench",
+          "label_en": "🧰 Workbench"
+        },
+        {
+          "label": "➕ 새 창 (멀티)",
+          "kind": "command",
+          "command": "vibeManager.openWorkbenchNew",
+          "label_en": "➕ New Window (multi)"
+        },
+        {
+          "label": "🗂️ VMW (업무 작업 · 화면 여러 개 일괄)",
+          "kind": "command",
+          "command": "vibeManager.openJobs",
+          "label_en": "🗂️ Jobs (many screens)",
+          "hint": "업무 1개(문서 생성, CheckList 등)를 골라 화면 여러 개에 순차 실행. 이어서 실행, 실패분만 다시"
+        },
+        {
+          "label": "🎼 VMO (기능, 감시)",
+          "kind": "command",
+          "command": "vibeManager.openOrchestra",
+          "label_en": "🎼 VMO",
+          "hint": "서버, Source Download, Source Backup, BE/FE Log, 상황판, 사건, 개선안, 에이전트"
+        },
+        {
+          "label": "🛰️ 전환 흐름 대시보드",
+          "kind": "command",
+          "command": "vibeManager.openDashboard",
+          "hint": "전체 단계 상태·게이트 요약 webview",
+          "label_en": "🛰️ Migration Flow Dashboard"
+        },
+        {
+          "label": "📶 FLOW 진척",
+          "kind": "flowtab",
+          "label_en": "📶 FLOW Progress",
+          "hint": "화면별 단계 진척(파싱→…→E2E 4단계)을 Workbench 탭으로 연다(1.9.0: 고정 탭에서 제외, 닫을 수 있음)"
+        },
+        {
+          "label": "🕒 Revision (일자별/화면별 · 수정 전후 비교)",
+          "kind": "command",
+          "command": "vibeManager.openHistory",
+          "label_en": "🕒 Revision (by date/screen · before/after diff)"
+        },
+        {
+          "label": "🧾 Task History (메뉴·프롬프트 실행 내역)",
+          "kind": "command",
+          "command": "vibeManager.openTaskHistory",
+          "label_en": "🧾 Task History (menu & prompt runs)"
+        },
+        {
+          "label": "💻 새 Claude 터미널",
+          "kind": "command",
+          "command": "vibeManager.claudeNew",
+          "hint": "워크벤치 밖에서 Claude Code CLI 를 직접 띄움",
+          "label_en": "💻 New Claude Terminal"
+        },
+        {
+          "label": "👤 계정 확인",
+          "kind": "task",
+          "task": "S7.probe",
+          "label_en": "👤 Check Accounts"
+        },
+        {
+          "label": "📋 대조표",
+          "kind": "task",
+          "task": "S1.recondash",
+          "label_en": "📋 Reconciliation Table"
+        },
+        {
+          "label": "📈 E2E 리포트",
+          "kind": "task",
+          "task": "S7.html",
+          "label_en": "📈 E2E Report"
+        },
+        {
+          "label": "📜 이관 룰셋",
+          "kind": "open",
+          "path": "${root}\\tools\\VibeManager\\rules\\10_RULES_KEEP.md",
+          "label_en": "📜 Migration Rule Set"
+        },
+        {
+          "label": "📑 조회조건 기준 (SCP·SSP)",
+          "kind": "open",
+          "path": "${root}\\tools\\VibeManager\\rules\\40_SEARCH_COND.md",
+          "hint": "SCP·SSP 화면별 조회조건 순서·사용여부·To-Be 명칭 + 정렬원칙·명칭/팝업 통일 RULE. 새 화면 생성(하네스 gen)이 자동 적용하고 게이트 SC1·SC2 로 검사. 원천 xlsx 가 바뀌면: python tools/Harness/refs/build_search_cond.py",
+          "label_en": "📑 Search Condition Standard (SCP·SSP)"
+        },
+        {
+          "label": "🧾 대조표 검증 커버리지 (전 화면)",
+          "kind": "open",
+          "path": "${root}\\Doc\\verify\\_trace_all.md",
+          "hint": "v2 — 대조표 전 행(FE __asis-mapping__ + AS-IS 액션 진입점·전 문장)이 검증 대상. 검증완료·FAIL·미구현·미검증(NOT_RUN 미실행 · NOPATH 실행 경로 없음 · TODO 검사기 미구현) · 검사별 TODO/NOPATH = 검증 엔진 구현 우선순위 · FE 대조표 없음 · 시노님/권한. 화면별 = Doc/verify/<ID>/mapping_trace.md · work_ledger.md(작업 원장 — PASS 외 전부 할 일 W1~W9). 갱신: python tools/Harness/verify/trace_all.py (🔎 UI CheckList은 화면 단위 자동 — @trace 포함)",
+          "label_en": "🧾 Reconciliation Verification Coverage (all screens)"
+        },
+        {
+          "label": "📊 Agent 게이트 집계",
+          "kind": "command",
+          "command": "vibeManager.gateReport",
+          "hint": "Doc/asisfacts/agent/*/_gate.csv 집계 — PASS/FAIL · 미실행 화면",
+          "label_en": "📊 Agent Gate Summary"
+        },
+        {
+          "label": "📂 산출물 폴더 (Doc/asisfacts)",
+          "kind": "command",
+          "command": "vibeManager.openOutputFolder",
+          "label_en": "📂 Output Folder (Doc/asisfacts)"
+        }
+      ],
+      "title_en": "Overview & Reports"
+    },
+    {
+      "title": "Server(Start/Finish)",
+      "area": "common",
+      "items": [
+        {
+          "label": "🔄 BE & FE Finish & Start",
+          "kind": "multi",
+          "hint": "BE(8080)·FE(5173) 재기동 — 종료(포트 해제 확인, 최대 20초) 후 기동. 포트가 비지 않거나 보호 프로세스(VPN 등)가 점유하면 기동 생략",
+          "items": [
+            "🟥 BE Finish",
+            "🟧 FE Finish",
+            "☕ BE Start",
+            "🎨 FE Start"
+          ],
+          "label_en": "🔄 BE & FE Finish & Start",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "🔁 BE & FE Start",
+          "kind": "multi",
+          "hint": "BE(8080) + FE(5173) 동시 기동 — 각각 기동 완료 메시지를 확인",
+          "items": [
+            "☕ BE Start",
+            "🎨 FE Start"
+          ],
+          "label_en": "🔁 BE & FE Start",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "☕ BE Start",
+          "kind": "terminal",
+          "name": "NSCM BE",
+          "cwd": "${root}\\nscm-be",
+          "cmd": ".\\gradlew.bat bootRun -I ..\\tools\\CommonSync\\be_sso.init.gradle --args=\"--spring.profiles.active=local\"",
+          "port": 8080,
+          "ready": "Started ScpApplication in ([\\d.]+) seconds",
+          "readyTimeoutSec": 300,
+          "hint": "8080 · gradlew.bat bootRun (local 프로파일) · 완료 = 'Started ScpApplication' · 약 80초. 이 PC 는 NoDefaultCurrentDirectoryInExePath 라 .\\gradlew.bat 로 경로 명시. -I be_sso.init.gradle = 로컬 build.gradle 에서 주석 처리된 SSO jar 6개 연결(2026-11-14 SsoService 컴파일 오류 대응)",
+          "label_en": "☕ BE Start",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "🎨 FE Start",
+          "kind": "terminal",
+          "name": "NSCM FE",
+          "cwd": "${root}\\nscm-fe\\apps\\web",
+          "cmd": "..\\..\\..\\tools\\Env\\fe_start.cmd",
+          "port": 5173,
+          "ready": "Local:\\s+\\S*http://127\\.0\\.0\\.1:\\S*5173",
+          "readyTimeoutSec": 120,
+          "hint": "http://127.0.0.1:5173 · vite.cmd 직접 호출(pnpm 금지) · 완료 = 'Local: http://127.0.0.1:5173/'",
+          "label_en": "🎨 FE Start",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "🛑 BE & FE Finish",
+          "kind": "multi",
+          "hint": "BE(8080) + FE(5173) 종료 — 포트가 비워질 때까지 확인",
+          "items": [
+            "🟥 BE Finish",
+            "🟧 FE Finish"
+          ],
+          "label_en": "🛑 BE & FE Finish",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "🟥 BE Finish",
+          "kind": "server-stop",
+          "name": "NSCM BE",
+          "port": 8080,
+          "expectProc": "java|cmd|powershell|pwsh",
+          "hint": "8080 점유 프로세스(java) 종료 + 워크벤치에서 띄운 gradlew 트리 종료 → 포트 해제 확인. VPN 프로세스(F5FltSrv 등)는 절대 종료하지 않음",
+          "label_en": "🟥 BE Finish",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "🟧 FE Finish",
+          "kind": "server-stop",
+          "name": "NSCM FE",
+          "port": 5173,
+          "expectProc": "node|cmd|powershell|pwsh",
+          "hint": "5173 점유 프로세스(node/vite) 종료 + 워크벤치에서 띄운 트리 종료 → 포트 해제 확인",
+          "label_en": "🟧 FE Finish",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "🌐 Open Browser(NSCM)",
+          "kind": "browser",
+          "url": "http://127.0.0.1:5173/",
+          "hint": "FE 접속 (USER_ID minyonglee1)",
+          "label_en": "🌐 Open Browser (NSCM)",
+          "sub": "To-Be",
+          "sub_en": "To-Be",
+          "sub_icon": "🧱"
+        },
+        {
+          "label": "▶ AS-IS IIS & Launcher Start",
+          "label_en": "▶ AS-IS IIS & Launcher Start",
+          "kind": "multi",
+          "items": [
+            "🖥 AS-IS IIS Start",
+            "🪟 AS-IS Launcher"
+          ],
+          "hint": "AS-IS 로컬 실행 — IIS Express(8086) 기동 후 포트가 열리면 GSCM.Launcher.exe 실행. IIS 가 이미 떠 있으면 기동은 건너뛰고 런처만 실행",
+          "sub": "As-Is",
+          "sub_en": "As-Is",
+          "sub_icon": "📦"
+        },
+        {
+          "label": "🖥 AS-IS IIS Start",
+          "label_en": "🖥 AS-IS IIS Start",
+          "kind": "terminal",
+          "name": "ASIS IIS",
+          "cwd": "${root}\\tools\\AsisLocal",
+          "cmd": ".\\asis_iis.cmd",
+          "port": 8086,
+          "ready": "IIS Express.*(running|실행)|Successfully registered URL",
+          "readyTimeoutSec": 90,
+          "hint": "http://localhost:8086 · IIS Express(사이트 AsisLocal · GSCM\\_asis_local\\applicationhost.config) · 8086 이 이미 열려 있으면 기동 생략",
+          "sub": "As-Is",
+          "sub_en": "As-Is",
+          "sub_icon": "📦"
+        },
+        {
+          "label": "🪟 AS-IS Launcher",
+          "label_en": "🪟 AS-IS Launcher",
+          "kind": "app",
+          "name": "ASIS Launcher",
+          "path": "${root}\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\GSCM.Launcher.exe",
+          "waitPort": 8086,
+          "waitSec": 90,
+          "proc": "GSCM.Launcher.exe",
+          "requireConfig": {
+            "file": "ClientConfig.xml",
+            "address": "GSCM",
+            "baseUrl": "http://localhost:8086/"
+          },
+          "hint": "GSCM.Launcher.exe 실행 — 먼저 8086(IIS) 이 열려 있는지, ClientConfig.xml 접속 주소가 http://localhost:8086/ 인지 확인(다르면 실행 안 함 · 재빌드하면 원본 서버 주소로 되돌아감)",
+          "sub": "As-Is",
+          "sub_en": "As-Is",
+          "sub_icon": "📦"
+        }
+      ],
+      "title_en": "Server (Start/Finish)"
+    },
+    {
+      "title": "Git(Upload/Download)",
+      "area": "common",
+      "items": [
+        {
+          "label": "⬇️🔀 Source Download & Merge",
+          "kind": "git-common-sync",
+          "cwd": "${root}\\nscm-fe",
+          "remote": "common",
+          "hint": "공통소스(eunjoo-hwang/nscm-fe · 다운로드 전용) → nscm-fe apps·features·packages·public·configs 반영. 환경설정 작업 모드를 따른다 — UI/DB MODE = 로컬 소스 보호(내가 안 고친 파일 = 공통 원문 · 내 편집본 = 유지 또는 3-way · 충돌 = 내 소스 유지) / DB MODE = 로컬 소스 보호 안 함(내 편집본도 공통 원문으로 덮어씀 · 공통에 없는 로컬 전용 파일은 유지). 미리보기 → 확인 → 적용 · 백업·README·기준선(tools/CommonSync/state.json)",
+          "label_en": "⬇️🔀 Source Download & Merge"
+        },
+        {
+          "label": "⬇️🔀 Source Download & Merge(BE)",
+          "kind": "git-common-sync-be",
+          "cwd": "${root}\\nscm-be",
+          "remote": "common",
+          "hint": "공통소스의 BE(nscm-be/src)만 내려받는다 — 필요할 때만 실행(FE 는 위 메뉴). 환경설정 작업 모드를 따른다(UI/DB MODE = 내 편집본 유지·3-way / DB MODE = 공통 원문으로 덮어씀). 로컬 작업환경 보호는 모드와 무관: 환경 파일(application·config·mybatis-config·logback·CORS)과 로컬 필수 유지 소스(be_local_keep.txt)는 로컬 그대로 · 로컬 기동용 설정은 없는 키만 보충 · build.gradle 등 src 밖 쓰기 차단 · 로컬 ID 로그인(/user/login) 점검에 실패하면 아무것도 바꾸지 않고 중단. 로컬은 SSO 에 접속하지 않는다. 받은 뒤 BE 재기동 필요.",
+          "label_en": "⬇️🔀 Source Download & Merge(BE)"
+        },
+        {
+          "label": "📤 Source Upload(UI)",
+          "kind": "git-upload-ui",
+          "needsId": true,
+          "cwd": "${root}\\nscm-fe",
+          "remote": "common",
+          "baseBranch": "main",
+          "hint": "화면 ID 하나의 FE 소스(페이지 폴더 + 그 화면을 참조하는 변경 파일)를 공통소스 Git(eunjoo-hwang/nscm-fe) 에 feat/<id>-<날짜> 브랜치로 업로드 — 공통 최신 위에 파일별 \"내 작업분\"만: 신규·공통 무변경 파일 = 전체 / 공통도 바뀐 파일 = 내 수정분만 3-way(d.ts = 이 화면 메뉴 키 블록만 · locales = 키 단위) / 동일·내 편집 없음(옛 판본)·충돌 = 제외. 판정표 UPLOAD_PREP.md · 원격 설정은 바꾸지 않음(push URL no_push 유지)",
+          "label_en": "📤 Source Upload (UI)"
+        },
+        {
+          "label": "👁️ Source Update Status",
+          "kind": "git-status",
+          "cwd": "${root}",
+          "hint": "git status -s + 최근 커밋 5건",
+          "label_en": "👁️ Source Update Status"
+        },
+        {
+          "label": "🌐 다국어 JSON 재생성",
+          "kind": "task",
+          "task": "S2.genI18n",
+          "hint": "pnpm gen 과 같은 내용(gen:icons → gen:i18n)을 pnpm 없이 실행 — 로컬 BE(127.0.0.1:8080) 메시지만 사용. 로컬 BE 가 메시지를 안 주면 아무것도 바꾸지 않고 중단(목데이터 덮어쓰기 방지). 산출 nscm-fe/public/locales/{KO,EN,CN}.json · 전후 키 수 보고",
+          "label_en": "🌐 Regenerate i18n JSON"
+        }
+      ],
+      "title_en": "Git (Upload/Download)"
+    },
+    {
+      "title": "환경설정",
+      "area": "common",
+      "items": [
+        {
+          "label": "🔌 DB 접속 (.env.asis)",
+          "kind": "open",
+          "path": "${root}\\.env.asis",
+          "label_en": "🔌 DB Connection (.env.asis)"
+        },
+        {
+          "label": "🗄️ AS-IS (asisfacts.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\AsisFacts\\asisfacts.json",
+          "label_en": "🗄️ AS-IS (asisfacts.json)"
+        },
+        {
+          "label": "🏗️ TO-BE (tobefacts.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\TobeFacts\\tobefacts.json",
+          "label_en": "🏗️ TO-BE (tobefacts.json)"
+        },
+        {
+          "label": "🔩 하네스 (harness.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\Harness\\harness.json",
+          "label_en": "🔩 Harness (harness.json)"
+        },
+        {
+          "label": "🧭 작업 모드 (DB MODE / UI/DB MODE)",
+          "kind": "work-mode",
+          "label_en": "🧭 Work Mode (DB MODE / UI/DB MODE)",
+          "hint": "UI/DB MODE = FE·BE·DB 제약 없이 개발·수정 · Git Download & Merge 때 로컬 소스 보호 / DB MODE = DB·META 만 개발·수정, FE·BE 는 가이드만 · Git Download & Merge 때 로컬 소스 보호 안 함. 클라우드 이관 범위·자동 보완도 이 값을 따른다. CheckList 는 모드와 무관하게 전체 수행"
+        },
+        {
+          "label": "🧠 AI 검토 (켜기 / 끄기)",
+          "kind": "task",
+          "task": "S8.llmReview",
+          "label_en": "🧠 AI Review (On / Off)",
+          "hint": "CheckList 수행 때 Claude Code 로 사용자의견 처리, AS-IS 사실 추출 검토, 판정 검토, 설명 문장 작성을 할지 정한다. 끄면 검사엔진 판정만 하고 지난 AI 검토 결과도 판정에 넣지 않는다. 값은 tools/Harness/harness.json llmReview. 모델은 워크벤치에서 고른 모델을 쓴다. 사용량 Doc/verify/_llm_usage.csv"
+        },
+        {
+          "label": "🔁 VMO 보완 뒤 재수행 (재수행 / 수행 없음)",
+          "label_en": "🔁 VMO rerun after fix (rerun / none)",
+          "kind": "task",
+          "task": "S8.vmoRerun"
+        },
+        {
+          "label": "🖥️ AS-IS 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",
+          "kind": "task",
+          "task": "S8.asisView",
+          "label_en": "🖥️ AS-IS Live View (Hidden / Window / Record)",
+          "hint": "AS-IS 실측(런처 실행기)을 창 없이 실행할지, 창을 띄울지, 녹화할지 정한다. 창 없이 실행 = 실행기 창을 화면 밖으로 옮김(조작·화면 사진은 같음 · 창이 처음 뜰 때 잠깐 보임). 녹화 = 창 없이(투명 창) 1초마다 화면을 찍어 동영상 저장(<실행 폴더>/record.webm · Playwright 전용 ffmpeg). 값은 tools/Harness/harness.json asisLiveView · 기본 창 띄우기"
+        },
+        {
+          "label": "🌐 TO-BE 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",
+          "kind": "task",
+          "task": "S8.tobeView",
+          "label_en": "🌐 TO-BE Live View (Hidden / Window / Record)",
+          "hint": "TO-BE 실측(Playwright)을 창 없이 실행할지, Chrome 창을 띄울지, 녹화할지 정한다. 창 띄우기 = 동작 사이 300ms 지연 · 작업자 1개라 CheckList 가 길어짐. 녹화 = 창 없이 실행하고 시험마다 동영상(webm · 1280×720)을 <E2E 결과 폴더>/video/<시각>_<pid>/ 에 남김(Playwright 전용 ffmpeg). 값은 tools/Harness/harness.json e2eView · 기본 창 없이 실행"
+        },
+        {
+          "label": "🎭 E2E (e2e.config.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\E2E\\e2e.config.json",
+          "label_en": "🎭 E2E (e2e.config.json)"
+        },
+        {
+          "label": "🧾 환경 요약 (env.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\VibeManager\\rules\\env.json",
+          "label_en": "🧾 Environment Summary (env.json)"
+        },
+        {
+          "label": "🩺 DB 접속 확인 (probe)",
+          "kind": "task",
+          "task": "S2.probe",
+          "label_en": "🩺 Check DB Connection (probe)"
+        },
+        {
+          "label": "🧪 환경 점검 (node·python·claude …)",
+          "kind": "command",
+          "command": "vibeManager.checkEnv",
+          "label_en": "🧪 Environment Check (node · python · claude …)"
+        },
+        {
+          "label": "🔧 환경 노트",
+          "kind": "open",
+          "path": "${root}\\tools\\VibeManager\\rules\\00_ENV.md",
+          "label_en": "🔧 Environment Notes"
+        },
+        {
+          "label": "✎ 단계 정의 (steps.json)",
+          "kind": "command",
+          "command": "vibeManager.editSteps",
+          "label_en": "✎ Step Definitions (steps.json)"
+        },
+        {
+          "label": "🎛️ VS Code 설정 (vibeManager)",
+          "kind": "command",
+          "command": "vibeManager.openSettings",
+          "label_en": "🎛️ VS Code Settings (vibeManager)"
+        },
+        {
+          "label": "📒 실행 기록 (runs.log)",
+          "kind": "command",
+          "command": "vibeManager.openTaskLog",
+          "label_en": "📒 Run Log (runs.log)"
+        },
+        {
+          "label": "⬆️ Source Backup",
+          "kind": "git-upload",
+          "credUser": "leekc297",
+          "cwd": "${root}",
+          "remote": "origin",
+          "branch": "main",
+          "hint": "전체 백업 — leekc297/NSCM_NEW · git add -A → commit \"BACKUP_YYYYMMDD_HH24MISS\"(자동, 확인 없음) → push origin main (1.9.9)",
+          "label_en": "⬆️ Source Backup",
+          "autoMessage": "BACKUP_${ts}"
+        },
+        {
+          "label": "👥 E2E 사용자 관리 (users.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\E2E\\users.json",
+          "hint": "E2E 계정 명부 — Division 별 역할 계정(DM Admin/Planner/Planner(W/S)/Viewer/SCP Planner) + ADMIN 계정(DM/SCP/SSP). 저장하면 다음 스펙 생성부터 반영(run-e2e.cmd 가 로그인 가능 여부 확인)",
+          "label_en": "👥 E2E Users (users.json)"
+        }
+      ],
+      "title_en": "Settings"
+    }
+  ]
+}

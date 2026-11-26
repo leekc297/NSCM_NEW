@@ -1,219 +1,227 @@
 {
  "rule_id": "D3",
- "hash": "045ce100a6236cb9",
+ "hash": "6badb93ab9f0fd04",
  "groups": [
   {
    "rows": [
-    "T-0d3d2195",
-    "T-9e0c91e1"
+    "EG-049fd719"
    ],
-   "why": "같은 LT_SUM 대조표(LEDGER) 행으로, 대상·조건·기대가 글자까지 같은 중복이다."
+   "why": "단독"
   },
   {
    "rows": [
-    "T-22caebf2",
-    "T-a31072df"
+    "EG-4bae9e44"
    ],
-   "why": "같은 TO_CITY_NAME 대조표(LEDGER) 행으로, 대상·조건·기대가 글자까지 같은 중복이다."
+   "why": "단독"
   },
   {
    "rows": [
-    "T-5b9d8476",
-    "T-d5f72102"
+    "EG-760f2d1a"
    ],
-   "why": "같은 FROM_CITY_NAME 대조표(LEDGER) 행으로, 대상·조건·기대가 글자까지 같은 중복이다."
+   "why": "단독"
   },
   {
    "rows": [
-    "T-6d3c5051",
-    "T-b15c7e0b"
+    "EG-7e12e338"
    ],
-   "why": "같은 CREATED_BY~LAST_UPDATE_DATE 대조표(LEDGER) 행으로, 대상·조건·기대가 글자까지 같은 중복이다."
-  },
-  {
-   "rows": [
-    "T-9411d4db",
-    "T-e20a41ea"
-   ],
-   "why": "같은 ROUTE_ID 대조표(LEDGER) 행으로, 대상·조건·기대가 글자까지 같은 중복이다."
-  },
-  {
-   "rows": [
-    "EG-4f575a93"
-   ],
-   "why": "TO-BE 메타 팝업의 TO_COUNTRY 셀 잠금으로, 다른 셀과 대상이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "EG-7fd57229"
-   ],
-   "why": "TO-BE 메타 팝업의 TO_CITY 셀 잠금으로, 다른 셀과 대상이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "EG-8b2bb32b"
-   ],
-   "why": "TO-BE 메타 팝업의 FROM_CITY 셀 잠금으로, 다른 셀과 대상이 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "EG-c2f24c4b"
    ],
-   "why": "SCM0002_CitybyCountry 팝업 전체 컬럼 잠금으로, 팝업과 기대가 달라 단독으로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-f4127496"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-0d3d2195"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-16fdbb31"
    ],
-   "why": "TO_CITY_NAME 컬럼 메타 추적(COL)이라 ASIS 잠금 행이나 LEDGER 행과 성질이 다르다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-22caebf2"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-4d6968dd"
    ],
-   "why": "CREATED_BY 컬럼 메타 추적(COL)이라 성질이 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-54443f17"
    ],
-   "why": "LT_SUM 컬럼 메타 추적(COL)이라 LEDGER나 ASIS 잠금 행과 성질이 다르다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-5b9d8476"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-6d3c5051"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-6e22d50d"
    ],
-   "why": "FROM_CITY_NAME 컬럼 메타 추적(COL)이라 성질이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "T-756fb65b"
-   ],
-   "why": "ROUTE_ID 컬럼 메타 추적(COL)이라 성질이 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "T-e3506ea3"
-   ],
-   "why": "LAST_UPDATE_DATE 컬럼 메타 추적(COL)이라 성질이 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-74322736"
    ],
-   "why": "SwitchLock 대조표 추적 행으로, ASIS 동작 잠금(V-9b7a0ed3)과 확인하는 성질이 달라 묶지 않는다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-756fb65b"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-88b5e7e0"
    ],
-   "why": "EditButton을 상시편집으로 대체한 구현 추적 행이라 단독으로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-9411d4db"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-9e0c91e1"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-a31072df"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-b15c7e0b"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-d5f72102"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-e20a41ea"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "T-e3506ea3"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-fa093381"
    ],
-   "why": "R16/R17 클라이언트 검증 색칠 구현 추적 행이라 잠금 대상과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-0710f52d"
    ],
-   "why": "FROM_CITY_NAME 컬럼 전체 잠금(LockColumn)으로, 신규행 LockRange와 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-91cd2c2a"
-   ],
-   "why": "신규행(insCell) FROM_CITY_NAME 잠금(LockRange)으로, 컬럼 전체 잠금과 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-1a0fa33c"
    ],
-   "why": "LT_SUM 컬럼 전체 잠금(LockColumn)으로, 신규행 잠금과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-5c63c0d5"
-   ],
-   "why": "신규행 LT_SUM 잠금(LockRange)으로, 컬럼 전체 잠금과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-6f578dc6"
-   ],
-   "why": "ROUTE_ID 컬럼 전체 잠금(LockColumn)으로, 신규행 잠금과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-bcb36c1c"
-   ],
-   "why": "신규행 ROUTE_ID 잠금(LockRange)으로, 컬럼 전체 잠금과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-90dcaf82"
-   ],
-   "why": "TO_CITY_NAME 컬럼 전체 잠금(LockColumn)으로, 신규행 잠금과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-c8bc3ed7"
-   ],
-   "why": "신규행 TO_CITY_NAME 잠금(LockRange)으로, 컬럼 전체 잠금과 상태가 다르다."
-  },
-  {
-   "rows": [
-    "V-ef32dd17"
-   ],
-   "why": "CREATED_BY~LAST_UPDATE_DATE 컬럼 전체 잠금(LockColumn)으로, 신규행 잠금과 상태가 다르다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-45343874"
    ],
-   "why": "신규행 CREATED_BY~LAST_UPDATE_DATE 잠금(LockRange)으로, 컬럼 전체 잠금과 상태가 다르다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-5c63c0d5"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-6f578dc6"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-90dcaf82"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "V-91cd2c2a"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "V-9b7a0ed3"
    ],
-   "why": "ASIS SwitchLock 편집모드 잠금 동작 확인 행이라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-2aa3541f"
+    "V-bcb36c1c"
    ],
-   "why": "DMF0082 결함 유형 중 Current 버전 Measure·AS From Site 권한 통제 행으로, 조건과 기대가 다른 행과 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-6ddef1fb"
+    "V-c8bc3ed7"
    ],
-   "why": "DMF0082 결함 유형 중 Div 81 Sales Site 유형별 AS From Site 활성 행으로, 조건과 기대가 V-2aa3541f와 다르다."
+   "why": "단독"
   },
   {
    "rows": [
-    "V-4123f5d5"
+    "V-ef32dd17"
    ],
-   "why": "SCP0006 결함 유형 CA1 행 색상 확인으로, 대상과 기대가 다르다."
-  },
-  {
-   "rows": [
-    "V-6950c57b"
-   ],
-   "why": "DMF0003 결함 유형 FCST Type 콤보 권한 확인으로, 대상과 기대가 다르다."
-  },
-  {
-   "rows": [
-    "V-6d39b409"
-   ],
-   "why": "신규행 Measure 콤보 후보 확인(D3-G01)으로, 상태와 기대가 다른 행과 다르다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:39:25",
- "cost": 0.1525574
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 05:17:56",
+ "cost": 0,
+ "open": 0
 }

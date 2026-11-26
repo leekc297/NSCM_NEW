@@ -68,6 +68,11 @@
         "tools/VibeManager/orchestra.js",
         "tools/VibeManager/prompt-panel.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:30+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T14:12:47+09:00"
     }
   ],
   "self": true,
@@ -114,5 +119,7 @@
     "verify_result": "2026-11-20 14:09:40. node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager 실행 결과 ALL PASS. python tools/Docs/doc_style.py 대상 8개 파일 --out .vibe/orch/selfcheck/doc_style --quiet 실행 결과 종료코드 1, 위반 8건. 위치는 orchestra.js L13, history.js L167·L172, orch-usercheck.js L354, orch-dict.js L52, orch-vision.js L63·L65·L67 이고 제외 목록과 일치함. orch-usercheck.js L223 없음.",
     "note": "시작 시점 doc_style.py 위반 24건. 이전 안 20261120131344_SELF_2 수정분이 원래대로 돌아가 있어 before_after 의 '이전 안 그대로' 범위를 다시 고침. orchestra.js L380·L381·L419·L452·L455, history.js L153·L164, orch-agent.js L272, orch-watch.js L91, orch-usercheck.js L223·L323, orch-dict.js L50, prompt-panel.js L164, orch-vision.js L65 'A가 아니라 B' 틀. orch-vision.js L65 의 정합성 1건은 제외 목록이라 그대로 둠. 시험 파일에서 바꾼 구분 기호를 비교하는 곳은 grep 결과 없음."
   },
-  "snap": "prop_20261120135025_SELF"
+  "snap": "prop_20261120135025_SELF",
+  "effectiveMs": 1795151567000,
+  "effectiveAt": "2026-11-20T14:12:47+09:00"
 }

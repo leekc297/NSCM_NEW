@@ -1,0 +1,142 @@
+{
+  "id": "20261123234354_SELF",
+  "at": "2026-11-23T23:43:54+09:00",
+  "ms": 1795445034394,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/run rule.js|vmvmwvmo모든ai호출앞에붙는공통지시문에문장규칙ndocstylemd",
+  "title": "사용자 지시 R76 같은 문제: tools/VibeManager/run-rule.js:5 VM, VMW, VMO 모든 AI 호출 앞에 붙는 공통 지시문에 문장 규칙(50_DOC_STYLE.md) 참조 없음. 메뉴, 체인 경로(workbench.js a",
+  "evidence": "규칙 R76 \"VM, VMW, VMO 가 띄운 AI 의 답변, 보고와 생성기가 만드는 문서 문장은 문장 규칙 18개(~/.claude/CLAUDE.md, rules/50_DOC_STYLE.md)를 따름\" (원래 지시 2026-11-13 18:06 \"네.. .적용해주세요.. .클로드코드와 VM 전체에 적용되도록 해주세요.\") · tools/VibeManager/run-rule.js:5 const NOTE = '[실행 룰 A-13, tools/VibeManager/rules/10_RULES_KEEP.md] 누락 0 안에서 가장 빠르게. 요청 항목, 검사, 검증, 보고 항목은 빼지 않음. '",
+  "targets": [
+    "tools/VibeManager/run-rule.js"
+  ],
+  "before_after": "NOTE 끝에 '11) 답변, 보고, 문서 문장은 tools/VibeManager/rules/50_DOC_STYLE.md 문장 규칙 18개를 따름' 1줄을 더함. 10_RULES_KEEP.md A-13 정본 문구도 같이 맞춤",
+  "verify": "node --check tools/VibeManager/run-rule.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/run-rule.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T04:11:50+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T04:15:40+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0411"
+    },
+    {
+      "at": "2026-11-25T04:15:42+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T04:27:44+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 run-rule.js"
+    },
+    {
+      "at": "2026-11-25T04:27:44+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-25 04:16:04 반영 전: node --check CHECK_OK, run_all 'ALL OK 파일 84/84 PASS 1361 FAIL 0' → 2026-11-25 04:19:58 반영 뒤: node --check CHECK_OK, NOTE 끝 '12) 답변, 보고, 문서 문장은 tools/VibeManager/rules/50_DOC_STYLE.md 문장 규칙 18개를 따름.' 확인, run_all 'ALL OK 파일 84/84 PASS 1361 FAIL 0 224.6s' · 변경 34개 파일 · 대상 목록 밖 변경 33개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/a1_live.json, Doc/verify/SCP0005/calls/_grid_main.json, Doc/verify/SCP0005/calls/_verify_실전송_건수_A1__0.json, Doc/verify/SCP0005/calls/_verify_조회_전_합계_기간_이상값_정렬_Copy_A10_N1_K1__0.json, Doc/verify/SCP0005/calls/_verify_합계_값_A3__0.json",
+      "log": ".vibe\\logs\\2026-11-25T04-15-42_claude_orch.log",
+      "sec": 495,
+      "costUsd": 0.6271312,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/a1_live.json",
+        "Doc/verify/SCP0005/calls/_grid_main.json",
+        "Doc/verify/SCP0005/calls/_verify_실전송_건수_A1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_조회_전_합계_기간_이상값_정렬_Copy_A10_N1_K1__0.json",
+        "Doc/verify/SCP0005/calls/_verify_합계_값_A3__0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "tools/VibeManager/rules/10_RULES_KEEP.md",
+        "tools/VibeManager/run-rule.js",
+        "Doc/e2e/_run.acct.14408.json",
+        "Doc/e2e/_run.acct.44036.json",
+        "Doc/e2e/_run.acct.48576.json",
+        "Doc/verify/SCP0005/calls/_verify_Excel_다운로드_내용_H7__0.json",
+        "Doc/verify/SCP0005/calls/_verify_Sort_F3_Filter_F4_버튼_단축키_K1_정렬_3단_토글_필터_UI_적용_해제_행수_0.json",
+        "Doc/verify/SCP0005/calls/_verify_고정_컬럼_H12_동적_헤더_A9_로딩_표시_H11_팝업_Enter_G10_특수_버튼_M2__0.json",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_041652_9288/_trace-검증엔진-SCP0005-trace--fb421--K4-버튼-구성-·-X-REOPEN-닫기·재오픈-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_041652_9288/_trace-검증엔진-SCP0005-trace-D3-조건부-잠금-AS-IS-조건-만족-계정·Division--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_041652_9288/_trace-검증엔진-SCP0005-trace-W4-D3-행-조건부-잠금-AS-IS-lock-rules-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_041652_9288/_trace-검증엔진-SCP0005-trace-W4-E4-업무-검증-메시지-AS-IS-저장-차단--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_041652_9288/_verify-정합검증-SCP0005-verif-11c73-1-—-정렬-3단-토글·필터-UI·적용-해제-행수-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_041652_9288/_verify-정합검증-SCP0005-verif-d62ee-천-대조-a-·재진입-재조회-시-콤보-재조회-b--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read11/video/20261125_042210_47676/_verify-정합검증-SCP0005-verif-6bab0-11-·팝업-Enter-G10-·특수-버튼-M2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read11/video/20261125_042210_47676/_verify-정합검증-SCP0005-verify-Excel-다운로드-내용-H7--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read11/video/20261125_042210_47676/_verify-정합검증-SCP0005-verify-Insert-행-Division-D4--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read11/video/20261125_042210_47676/_verify-정합검증-SCP0005-verify-선택-조회-복수·단일·전체-왕복-G2·B6--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read11/video/20261125_042210_47676/_verify-정합검증-SCP0005-verify-셀-편집-표시·값-유지-A2·F6--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read11/video/20261125_042210_47676/_verify-정합검증-SCP0005-verify-조회-전-버튼-전제조건-D4-·-화면-진입-다국어-I2--chromium.webm",
+        "Doc/verify/SCP0005/e2e/read11/video/20261125_042210_47676/_verify-정합검증-SCP0005-verify-편집-모드-구분-D1--chromium.webm",
+        "Doc/verify/SCP0005/e2e/results_read10.json",
+        "Doc/verify/SCP0005/e2e/results_read11.json",
+        "Doc/verify/SCP0005/e2e/shots/verify_고정_컬럼_H12_동적_헤더_A9_로딩_표시_H11_팝업_Enter_G10_특수_버튼_M2.png"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "VM, VMW, VMO 가 띄운 AI 의 답변, 보고와 생성기가 만드는 문서 문장은 문장 규칙 18개(~/.claude/CLAUDE.md, rules/50_DOC_STYLE.md)를 따름 규칙을 tools/VibeManager/run-rule.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R76|tools/VibeManager/run-rule.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795547510493,
+  "autoFp": "b054a692dc",
+  "applyStartMs": 1795547742849,
+  "verifyJudge": {
+    "at": "2026-11-25T04:24:00+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1361, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0411",
+  "needsReload": false,
+  "hotLoaded": [
+    "run-rule.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795548464678,
+  "synced": [
+    "run-rule.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/run-rule.js → CHECK_OK(반영 전 04:16:04, 반영 뒤 04:19:58). node tools/VibeManager/test/run_all.js → 반영 전 'ALL OK 파일 84/84 PASS 1361 FAIL 0 224.4s' → 반영 뒤 'ALL OK 파일 84/84 PASS 1361 FAIL 0 224.6s'. run-rule.js 는 웹뷰 파일 아님(t_webview_syntax.js 는 run_all 안에서 PASS 19)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/run-rule.js",
+      "tools/VibeManager/rules/10_RULES_KEEP.md"
+    ],
+    "verify_result": "2026-11-25 04:16:04 반영 전: node --check CHECK_OK, run_all 'ALL OK 파일 84/84 PASS 1361 FAIL 0' → 2026-11-25 04:19:58 반영 뒤: node --check CHECK_OK, NOTE 끝 '12) 답변, 보고, 문서 문장은 tools/VibeManager/rules/50_DOC_STYLE.md 문장 규칙 18개를 따름.' 확인, run_all 'ALL OK 파일 84/84 PASS 1361 FAIL 0 224.6s'",
+    "note": "개선안은 '11)' 로 적었으나 NOTE 11) 이 결정 목록 항목이라 12) 로 붙임. 10_RULES_KEEP.md A-13 에 13번(규칙 R76, 요약 문구 12)) 추가. 임시 출력 파일 .vibe/runall_before.txt, runall_after.txt 삭제함. 걸린 시간 04:16:04~04:23:47, 오래 걸린 단계 run_all 2회(224.4초, 224.6초)"
+  },
+  "snap": "prop_20261123234354_SELF"
+}

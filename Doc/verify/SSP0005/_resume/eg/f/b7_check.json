@@ -1,0 +1,64 @@
+{
+ "menu_id": "SSP0005",
+ "asis_id": "SSP0005",
+ "generated": "2026-11-25 01:17:44",
+ "a": {
+  "verdict": "NA",
+  "note": "저장 SP SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW 대상 SSP_MST_SHIP_CALENDAR 와 콤보 원천 5종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "save_tables": [
+   "SSP_MST_SHIP_CALENDAR"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "clbDivision",
+    "label": "Division",
+    "src": "UP_FX_GetCommonDataList @Code=MyDivision 분기",
+    "tables": [
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboCompany",
+    "label": "Company",
+    "src": "UP_FX_GetCommonDataList @Code=Company 분기",
+    "tables": [
+     "SCM_MST_COMPANY_SN"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboDayWeek",
+    "label": "Day of the week",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboInputValue",
+    "label": "Input Value",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "COMPANY_ID",
+    "label": "Company",
+    "src": "UP_FX_GetCommonDataList @Code=Company 분기",
+    "tables": [
+     "SCM_MST_COMPANY_SN"
+    ],
+    "overlap": []
+   }
+  ]
+ }
+}

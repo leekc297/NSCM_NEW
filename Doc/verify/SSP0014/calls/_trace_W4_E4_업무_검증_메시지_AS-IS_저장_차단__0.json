@@ -6,9 +6,9 @@
   "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
   "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
   "status": 200,
-  "rows": 8613,
-  "dur": 374,
-  "at": "2026-11-19T23:45:55.872Z",
+  "rows": 8614,
+  "dur": 416,
+  "at": "2026-11-24T18:07:31.833Z",
   "user": "minyonglee1",
   "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
  },
@@ -19,9 +19,9 @@
   "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
   "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
   "status": 200,
-  "rows": 7672,
-  "dur": 486,
-  "at": "2026-11-19T23:46:01.275Z",
+  "rows": 7711,
+  "dur": 477,
+  "at": "2026-11-24T18:07:37.300Z",
   "user": "minyonglee1",
   "test": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
  }

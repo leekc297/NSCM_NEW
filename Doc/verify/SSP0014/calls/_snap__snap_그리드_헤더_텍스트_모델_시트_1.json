@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "COM0010",
+  "sheet": "ssoUser",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0010/ssoUser/SEARCH/call-proc",
+  "postData": "{\"user\":\"\",\"ssoUserYn\":\"N\"}",
+  "status": 200,
+  "rows": 8614,
+  "dur": 387,
+  "at": "2026-11-24T18:17:36.072Z",
+  "user": "jungyu9.kim",
+  "test": "@snap 그리드 헤더 텍스트(모델) ×시트"
+ },
+ {
+  "menu": "SSP0014",
+  "sheet": "main",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0014/main/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"operationGroup\":\"\",\"fromSite\":\"\",\"validYn\":\"\",\"itemId\":\"\",\"userId\":\"\",\"language\":\"KO\"}",
+  "status": 200,
+  "rows": 7711,
+  "dur": 451,
+  "at": "2026-11-24T18:17:39.624Z",
+  "user": "jungyu9.kim",
+  "test": "@snap 그리드 헤더 텍스트(모델) ×시트"
+ }
+]

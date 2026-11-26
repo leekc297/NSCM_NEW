@@ -1,0 +1,298 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "(?:(?:^| )정합검증\\ SSP0014\\ @verify\\ 그리드\\ 컬럼\\ 프로브\\ —\\ 표시\\(A5\\)·기존행/신규행\\ 편집\\(D1\\)·입력\\ 후\\ 재편집·콤보\\ 후보\\(B1·B2\\)·숫자\\(E1\\)·날짜\\(E2\\)·다국어\\(I2\\)(?: @\\S+)*$|(?:^| )정합검증\\ SSP0014\\ @verify\\ Division\\ 컬럼\\(A5\\)(?: @\\S+)*$)",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SSP0014/e2e/read4/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read4\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SSP0014 @verify",
+          "file": "_verify.spec.ts",
+          "line": 290,
+          "column": 6,
+          "specs": [
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 71205,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] jaehun_cho: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n"
+                        },
+                        {
+                          "text": "[langacct] jaehun_cho: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n"
+                        },
+                        {
+                          "text": "[lap] 기존행 편집(D1) 6s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 8s\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 8s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 8s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 8s\n"
+                        },
+                        {
+                          "text": "[lap] E1 8s\n"
+                        },
+                        {
+                          "text": "[lap] H13 8s\n"
+                        },
+                        {
+                          "text": "[lap] E2 8s\n"
+                        },
+                        {
+                          "text": "[lap] C3 21s\n"
+                        },
+                        {
+                          "text": "[lap] D5 21s\n"
+                        },
+                        {
+                          "text": "[lap] K5 21s\n"
+                        },
+                        {
+                          "text": "[lap] H2 21s\n"
+                        },
+                        {
+                          "text": "[lap] A2 22s\n"
+                        },
+                        {
+                          "text": "[lap] C2 22s\n"
+                        },
+                        {
+                          "text": "[lap] C6 22s\n"
+                        },
+                        {
+                          "text": "[lap] E5 22s\n"
+                        },
+                        {
+                          "text": "[lap] E7 30s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] CREATION_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] LAST_UPDATE_DATE: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2026-11-24T18:03:15.157Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read4\\artifacts\\_verify-정합검증-SSP0014-verif-f3e75-1·B2-·숫자-E1-·날짜-E2-·다국어-I2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7d4d2994ed37e691a2ec",
+              "file": "_verify.spec.ts",
+              "line": 359,
+              "column": 65
+            },
+            {
+              "title": "Division 컬럼(A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14123,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] jaehun_cho: 다른 실행(pid 45408 · e2e-read SSP0014)이 이 계정 언어를 바꾸는 중 — 끝날 때까지 로그인 대기\n"
+                        },
+                        {
+                          "text": "[langacct] jaehun_cho: 다른 실행(pid 45408)의 언어 시험이 180초 넘게 계속 — 로그인 진행\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T18:07:35.575Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0014\\e2e\\read4\\artifacts\\_verify-정합검증-SSP0014-verify-Division-컬럼-A5--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0d2291685265f675d949",
+              "file": "_verify.spec.ts",
+              "line": 2225,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T18:03:14.057Z",
+    "duration": 462333.491,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

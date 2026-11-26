@@ -25,13 +25,21 @@ export function judgeBadUpload(s: { button: boolean; fileInput: boolean; calls: 
 }
 
 /** 필수 칸('*' 머리글)을 비운 파일 업로드 — 저장 요청은 시험이 가로채 서버에 가지 않는다 (EG153) */
-export function judgeBlankUpload(s: { hasForm: boolean; button: boolean; req: string[]; fileInput: boolean; calls: number; msg: string }): J {
+// 2026-11-25 T601(SCP0005 E3 V-087d756b): rows = 업로드 응답 행 상태(m1upload.uploadStatuses) + AS-IS 기대 상태(필수 검사 문구와 그 뒤 덮어쓰는 문구 · m1upload.overwriteChain).
+//   AS-IS ExcelUploadForm2 는 필수 칸이 비면 팝업 없이 결과 그리드 행 상태로 알린다(Validation_Check_<ID>) · 같은 파일의 다른 칸 값('E2E')이 뒤 검사(요일·숫자)에서 상태를 덮는다 → 그 문구도 AS-IS 기대 상태.
+export function judgeBlankUpload(s: { hasForm: boolean; button: boolean; req: string[]; fileInput: boolean; calls: number; msg: string; rows?: { statuses: string[]; total: number | null; ok: number | null; err: number | null; allowed: string[]; ref: string } }): J {
   if (!s.button) return { result: 'NA', why: 'Excel Upload 버튼 없음' };
   if (!s.hasForm) return { result: 'ERROR', why: '[측정 경로 없음] 양식을 못 받아 필수 칸 비운 파일을 못 만듦' };
   if (!s.req.length) return { result: 'NA', why: "양식 머리글에 '*' 필수 표시 없음" };
   if (!s.fileInput) return { result: 'ERROR', why: '[측정 경로 없음] 업로드 버튼을 눌러도 파일 입력을 찾지 못함' };
   const ora = /ORA-\d{5}[^"/]{0,80}/.exec(s.msg);
   if (ora && !/ORA-20\d{3}[^/]*필수/.test(s.msg)) { const all = s.msg.match(/ORA-\d{5}/g) || []; const pos = /"(?:SCM_MGR\.)?(PKG_\w+)", (\d+)행/.exec(s.msg); return { result: 'FAIL', why: `필수 ${s.req.length}칸 빈 파일에 필수 안내 대신 SQL 오류 — ${[...new Set(all)].join(', ')}${pos ? ` · ${pos[1]} ${pos[2]}행` : ''}` }; }
+  const R = s.rows; if (R && R.statuses.length && R.allowed.length && s.calls === 0) {
+    const out = R.statuses.filter(x => !R.allowed.includes(x)); const ev = `업로드 결과 행 상태 [${[...new Set(R.statuses)].join(', ')}] · ERROR_COUNT ${R.err ?? '?'} · SUCCESS_COUNT ${R.ok ?? '?'} · TOTAL_COUNT ${R.total ?? '?'} · AS-IS 기대 상태 [${R.allowed.join(', ')}](${R.ref}) · 적재 요청 0건`;
+    if (out.length) return { result: 'FAIL', why: `필수 ${s.req.length}칸 빈 파일 — 행 상태 '${out.join(', ')}' 가 AS-IS 기대 상태 밖 · ${ev}` };
+    if ((R.ok ?? 0) > 0) return { result: 'FAIL', why: `필수 ${s.req.length}칸 빈 파일인데 성공 행 ${R.ok}건 · ${ev}` };
+    if (R.total != null && R.err === R.total && R.total > 0) return { result: 'PASS', why: `필수 ${s.req.length}칸 빈 파일 → 행 상태로 오류 표시·적재 차단 · ${ev} · 화면 문구 '${s.msg.replace(/\s+/g, ' ').trim().slice(0, 80)}'` };
+  }
   if (/필수|required|입력.*(하세요|주세요)|mandatory|값은/i.test(s.msg)) return { result: 'PASS', why: `필수 ${s.req.length}칸 빈 파일 차단 · 문구 '${s.msg.slice(0, 80)}'` };
   if (s.calls > 0) return { result: 'ERROR', why: `[확인 대상] 필수 ${s.req.length}칸 빈 파일 저장 호출 ${s.calls}건 · 필수 안내 없음 — 업무 테이블 잔존 확인 · 문구 '${s.msg.replace(/\s+/g, ' ').trim().slice(0, 160)}'` };
   return { result: 'FAIL', why: `필수 ${s.req.length}칸 빈 파일 — 저장 요청도 필수 안내도 없음 · 문구 '${s.msg.replace(/\s+/g, ' ').trim().slice(0, 200)}'` };

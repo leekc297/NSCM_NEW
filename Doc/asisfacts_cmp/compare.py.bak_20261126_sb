@@ -1,0 +1,52 @@
+# -*- coding: utf-8 -*-
+"""2026-11-25 Roslyn 의미 분석 전후 대조(DM 화면) — base(의미 분석 끔) vs sem(켬), 같은 코드·같은 원본"""
+import csv, collections, os, sys
+H = os.path.dirname(os.path.abspath(__file__))
+csv.field_size_limit(10 ** 9)
+
+
+PFX = tuple((sys.argv[1] if len(sys.argv) > 1 else 'DMF').split(','))
+SEM = sys.argv[2] if len(sys.argv) > 2 else 'sem'
+
+
+def load(d):
+    rows = list(csv.DictReader(open(os.path.join(H, d, 'endpoint_usage.csv'), encoding='utf-8-sig')))
+    return [r for r in rows if r['screen_id'].startswith(PFX) and r['active'] == '1' and r['commented'] != '1']
+
+
+b, s = load('base'), load(SEM)
+print('대상 화면 접두', PFX, '· 비교', 'base vs', SEM)
+print('활성 호출 행  base', len(b), ' sem', len(s))
+cb, cs = collections.Counter(r['status'] for r in b), collections.Counter(r['status'] for r in s)
+print('%-22s %8s %8s %8s' % ('status', 'base', 'sem', 'diff'))
+for k in sorted(set(cb) | set(cs)):
+    print('%-22s %8d %8d %+8d' % (k, cb[k], cs[k], cs[k] - cb[k]))
+
+
+def dual(rows):
+    g = collections.defaultdict(set)
+    for r in rows:
+        if r['key'].endswith('.PseudoDataClient'):
+            g[(r['file'], r['line'], r['member'])].add(r['key'])
+    return sum(1 for v in g.values() if len(v) > 1), len(g)
+
+
+print('BIZ PseudoDataClient 호출 지점: 후보 2개로 갈라진 지점 / 전체  base %d/%d  sem %d/%d' % (dual(b) + dual(s)))
+key = lambda r: (r['file'], r['line'], r['key'])
+mb = {key(r) for r in b if r['status'] in ('MATCH', 'MATCH_BARE', 'BIZ_MATCH') and not r['key'].endswith('FPCommonDataBLL.PseudoDataClient')}
+ms = {key(r) for r in s if r['status'] in ('MATCH', 'MATCH_BARE', 'BIZ_MATCH')}
+lost = sorted(mb - ms); gained = sorted(ms - mb)
+print('base 에서 맞았는데 sem 에서 사라진 (파일,줄,키) %d건' % len(lost))
+for x in lost[:30]:
+    print('  -', x)
+print('sem 에서 새로 맞은 (파일,줄,키) %d건' % len(gained))
+for x in gained[:40]:
+    print('  +', x)
+fp = [r for r in s if r['key'].endswith('FPCommonDataBLL.PseudoDataClient')]
+print('sem 에 남은 FPCommonDataBLL.PseudoDataClient %d건' % len(fp))
+for r in fp[:10]:
+    print('  ', r['screen_id'], r['file'][-50:], r['line'], r['candidate'][:80])
+un = [r for r in s if r['status'] in ('UNRESOLVED', 'MATCH_PATTERN')]
+print('sem UNRESOLVED·MATCH_PATTERN %d건' % len(un))
+for r in un:
+    print('  ', r['status'], r['screen_id'], r['file'][-55:], r['line'], r['member'], '|', r['candidate'][:90])

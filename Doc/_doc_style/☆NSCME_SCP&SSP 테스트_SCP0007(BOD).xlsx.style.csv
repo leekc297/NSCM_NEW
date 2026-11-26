@@ -1,0 +1,32 @@
+﻿시트,위치,규칙,걸린 표현,고치는 법,문장,분류
+공통요건,D4,번역투,사업부마다 보여지는 컬럼이,이중 피동 → '~된' · '보인' · '쓰인',사업부마다 보여지는 컬럼이 다른지 확인하고 As-is와 동일한지 확인,문장
+공통요건,D5,번역투,보여지는 data,이중 피동 → '~된' · '보인' · '쓰인',보여지는 data가 같은지 확인 (다른 경우는 분석필요),문장
+공통요건,D17,수식어,BE에서는 기본적으로 EDIT 상,삭제,각 GRID에서 AS-IS에서 EDIT(F2)를 눌렀을때 EDIT 되는 컬럼이 TO-BE에서는 기본적으로 EDIT 상태로 조회 되는지,문장
+공통요건,D20,번역투,팝업이 있는 경우 동일하게,'~의 경우' → '~은' · '~이면' · '~할 때',Combo / 팝업이 있는 경우 동일하게 구성되는지,문장
+공통요건,D24,번역투,-in이 되는 경우 Combo,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - Combo에서 key-in이 되는 경우 Combo 내에서 없는 값이면 초기화 되기,문장
+공통요건,D25,번역투,-in이 되는 경우 잘못된 값,'~의 경우' → '~은' · '~이면' · '~할 때',Grid - 팝업 컬럼에 key-in이 되는 경우 잘못된 값이면 Validation 하기. As-is에서 동작 비교 필수,문장
+검증내역,G7,기호,LE=NULL · SpreadInfo.cs:1433-1439/1497 · GSCM/01,가운뎃점 나열 → 쉼표,"[그리드] bod.AFTER_LEAD_TIME (Additional Lead Time)
+[오류] bod.'Additional Lead Time'(AFTER_LEAD_TIME) (Additional Lead Time): AS-IS 와 다르게 나왔음
+- 측정 기록 : 'Additional Lead Time'(AFTER_LEAD_TIME) 1번째 행 값 '-1' 글자색 rgb(0, 0, 0), 음수가 빨강이 아님(AS-IS NegativeRed=true, TO-BE 그리드 formatter 음수 글자색 처리 확인)
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SHEET_COLUMNS BOD.AFTER_LEAD_TIME CELL=FPNumber SCALE=NULL · SpreadInfo.cs:1433-1439/1497 · GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:4369 · TO-BE SHEET",문장
+검증내역,G8,기호,LE=NULL · SpreadInfo.cs:1433-1439/1497 · TO-BE S,가운뎃점 나열 → 쉼표,"[그리드] bod.FROM_YYYYMMDD (FROM*)
+[오류] 날짜 셀 입력 검증(존재하지 않는 날짜 차단): AS-IS 와 다르게 나왔음
+- 측정 기록 : 신규행 1번째 행 'FROM'(FROM_YYYYMMDD): '2026-10-33' 입력 → 값 '2026-10-33' (입력 전 '2026-11-09'), 존재하지 않는 날짜가 그대로 저장 대상(AS-IS 날짜 셀은 거부)
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SHEET_COLUMNS BOD.FROM_YYYYMMDD CELL=FPDate SCALE=NULL · SpreadInfo.cs:1433-1439/1497 · TO-BE SHEET_COLUMNS bod.FROM_YYYYMMDD VISIBLE=Y INPUT_TP_CD=O CELL=FPDateText",문장
+검증내역,G9,기호,LE=NULL · SpreadInfo.cs:1433-1439/1497 · TO-BE S,가운뎃점 나열 → 쉼표,"[그리드] bod.TO_YYYYMMDD (TO*)
+[오류] 날짜 셀 입력 검증(존재하지 않는 날짜 차단): AS-IS 와 다르게 나왔음
+- 측정 기록 : 신규행 1번째 행 'TO'(TO_YYYYMMDD): '2026-10-33' 입력 → 값 '2026-10-33' (입력 전 '2099-12-27'), 존재하지 않는 날짜가 그대로 저장 대상(AS-IS 날짜 셀은 거부)
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SHEET_COLUMNS BOD.TO_YYYYMMDD CELL=FPDate SCALE=NULL · SpreadInfo.cs:1433-1439/1497 · TO-BE SHEET_COLUMNS bod.TO_YYYYMMDD VISIBLE=Y INPUT_TP_CD=O CELL=FPDateText",문장
+검증내역,G10,수식어,te 값이 실제로 바뀔 때만,삭제,"[그리드] INCOTERMS_SSP,INCOTERMS
+[오류] 값을 바꾸지 않고 셀을 닫았을 때 연관 칸이 그대로 남는지: AS-IS 와 다르게 나왔음
+- 측정 기록 : To Site 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → Incoterms 'DAP'→'', SSP Incoterms 'DAP'→'', 값이 바뀌지 않았는데 Incoterms 가 지워짐(AS-IS SetCityCode 는 Site 값이 실제로 바뀔 때만 재계산)
+- 참고 : 같은 문제가 3곳에서 나왔음(INCOTERMS_SSP,INCOTERMS) 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SCP0007_BOD.cs:1411 SCP0007_BOD.SetCityCode",문장
+검증내역,G14,수식어,E) 값이 실제로 바뀔 때만,삭제,"[GAP] TO_SITE_CODE / To Site
+[오류] 값을 바꾸지 않고 셀을 닫았을 때 연관 칸이 그대로 남는지: AS-IS 와 다르게 나왔음
+- 측정 기록 : 'From Site'(FROM_SITE_CODE) 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → 'To Site'(TO_SITE_CODE) 'AU00'→'', 값을 바꾸지 않았는데 'To Site'(TO_SITE_CODE) 이 지워짐(AS-IS 는 'From Site'(FROM_SITE_CODE) 값이 실제로 바뀔 때만 'To Site'(TO_SITE_CODE) 을 다시 계산)
+- 참고 : 직전 실행에서도 같은 결과였음(2회 연속).
+- AS-IS 근거 : SCP0007_BOD.cs:1121 SCP0007_BOD.cs:1123 SCP0007_BOD.cs:1125 SCP0007_BOD.cs:1127 SCP0007_BOD.cs:1142 SCP0007_BOD.cs:1146 SCP0007_BOD.cs:1150 S",문장

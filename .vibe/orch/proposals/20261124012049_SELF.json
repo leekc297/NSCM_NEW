@@ -1,0 +1,155 @@
+{
+  "id": "20261124012049_SELF",
+  "at": "2026-11-24T01:20:49+09:00",
+  "ms": 1795450849035,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|workbench산출물목록이checklist폴더를직접적음",
+  "title": "사용자 지시 R83 같은 문제: tools/VibeManager/workbench.js:467 Workbench 산출물 목록이 CheckList 폴더를 직접 적음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/VibeManager/workbench.js:467 [path.join(p.root, 'Doc', 'UI_CHECKLIST'), '📋']",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "harness.json paths.checklistDir를 읽는 공용 함수(예: docPaths(root).checklist)로 바꾸고 extension.js와 같이 씀",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T06:36:43+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T06:40:34+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 · 백업 태그 20261125_self0636"
+    },
+    {
+      "at": "2026-11-25T06:40:36+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T06:50:23+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 workbench.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T06:50:23+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-25 06:41:15 반영 전 node --check CHECK_OK → 06:41:39 반영 뒤 CHECK_OK, docPaths(root).checklist = C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST(기존 경로와 같음) · run_all.js 반영 전 미측정 → 반영 뒤 ALL OK 파일 84/84 PASS 1367 FAIL 0 232.7s · t_webview_syntax.js 반영 전 미측정 → 반영 뒤 ALL PASS · 변경 41개 파일 · 대상 목록 밖 변경 40개: Doc/e2e/results/SCP0005/_summary.csv, Doc/e2e/results/SCP0005/_summary.md, Doc/e2e/results/SCP0005/_test_timing.jsonl, Doc/e2e/results/SCP0005/html/index.html, Doc/e2e/results/SCP0005/results.json, Doc/e2e/results/SCP0005/shots/SCP0005_authcrud_dana.robot.png",
+      "log": ".vibe\\logs\\2026-11-25T06-40-36_claude_orch.log",
+      "sec": 324,
+      "costUsd": 0.8009202,
+      "files": [
+        "Doc/e2e/results/SCP0005/_summary.csv",
+        "Doc/e2e/results/SCP0005/_summary.md",
+        "Doc/e2e/results/SCP0005/_test_timing.jsonl",
+        "Doc/e2e/results/SCP0005/html/index.html",
+        "Doc/e2e/results/SCP0005/results.json",
+        "Doc/e2e/results/SCP0005/shots/SCP0005_authcrud_dana.robot.png",
+        "Doc/e2e/results/_summary.csv",
+        "Doc/e2e/results/_summary.md",
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/a1_live.json",
+        "Doc/verify/SCP0005/calls/_grid_main.json",
+        "Doc/verify/SCP0005/calls/_trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행__0.json",
+        "Doc/verify/SCP0005/calls/_verify_실전송_건수_A1__0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/dyn_facts.json",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "tools/VibeManager/workbench.js",
+        "Doc/e2e/_run.acct.15544.json",
+        "Doc/e2e/_run.acct.33828.json",
+        "Doc/e2e/_run.acct.38496.json",
+        "Doc/e2e/_run.acct.39368.json",
+        "Doc/e2e/_run.acct.44508.json",
+        "Doc/e2e/_run.acct.45940.json",
+        "Doc/e2e/_run.acct.48704.json",
+        "Doc/e2e/_run.langacct.bindy122678.lock",
+        "Doc/e2e/_run.langacct.brightboy.lock",
+        "Doc/e2e/_run.langacct.candoism.lock",
+        "Doc/e2e/_run.langacct.cnsytchoi.lock",
+        "Doc/e2e/_run.langacct.crjung.lock",
+        "Doc/e2e/_run.langacct.donghoon.lee.lock",
+        "Doc/e2e/_run.langacct.fran.d.k.lock",
+        "Doc/e2e/_run.langacct.heeyoung123.lock",
+        "Doc/e2e/_run.langacct.hoonlee_cns.lock",
+        "Doc/e2e/results/SCP0005/html/data/0135dccf8ac478c91106eb8b9f07290c04aeb858.md",
+        "Doc/e2e/results/SCP0005/html/data/141ec480a00772ae205f244d807712f2397855bb.png",
+        "Doc/e2e/results/SCP0005/html/data/4918786c1b8c3fc98b3dc538fe4a8c7f25038496.md",
+        "Doc/e2e/results/SCP0005/html/data/df768905fc5e9dbc451a40f9923a153d8ab47cd5.png",
+        "Doc/e2e/results/SCP0005/video/20261125_064050_8476/SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_064050_8476/SCP0005.authcrud-SCP0005-권-5dbc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium.webm",
+        "Doc/e2e/results/SCP0005/video/20261125_064050_8476/SCP0005.authcrud-SCP0005-권-e7cc9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium.webm"
+      ]
+    },
+    {
+      "at": "2026-11-25T09:28:48+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T09:27:55+09:00"
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/VibeManager/workbench.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795556203163,
+  "autoFp": "f651d9ddec",
+  "applyStartMs": 1795556436843,
+  "verifyJudge": {
+    "at": "2026-11-25T06:46:05+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1367, FAIL 0), 정의 정합 통과, 문장 규칙 위반 2 → 2"
+  },
+  "selfTag": "20261125_self0636",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "workbench.js"
+  ],
+  "appliedMs": 1795557023007,
+  "synced": [
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/workbench.js: 반영 전 06:41:15 CHECK_OK → 반영 뒤 06:41:39 CHECK_OK · node tools/VibeManager/test/run_all.js: 반영 전 미측정(권한 확인 차단) → 반영 뒤 'ALL OK  파일 84/84  PASS 1367  FAIL 0  232.7s'(.vibe/logs/run_all_self20261124012049.txt) · node tools/VibeManager/test/t_webview_syntax.js: 반영 전 미측정 → 반영 뒤 'ALL PASS'"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/workbench.js"
+    ],
+    "verify_result": "2026-11-25 06:41:15 반영 전 node --check CHECK_OK → 06:41:39 반영 뒤 CHECK_OK, docPaths(root).checklist = C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST(기존 경로와 같음) · run_all.js 반영 전 미측정 → 반영 뒤 ALL OK 파일 84/84 PASS 1367 FAIL 0 232.7s · t_webview_syntax.js 반영 전 미측정 → 반영 뒤 ALL PASS",
+    "note": "workbench.js:266 docPaths(root) 추가(harness.json paths.checklistDir → checklistDir → 기본 Doc/UI_CHECKLIST 순서, 실행 시점마다 읽음). 산출물 목록의 경로를 docPaths(p.root).checklist 로 바꿈. module.exports 에 docPaths 추가. harness.json 에 paths.checklistDir 키 없음, targets 밖이라 추가 안 함(현재 기본값으로 동작). extension.js 는 targets 밖이라 고치지 않음, UI_CHECKLIST 를 직접 적은 줄 없음. 추가 확인 후보: harness.json paths.checklistDir 등록, extension.js 를 docPaths 로 바꾸기."
+  },
+  "snap": "prop_20261124012049_SELF",
+  "effectiveMs": 1795566475935,
+  "effectiveAt": "2026-11-25T09:27:55+09:00"
+}

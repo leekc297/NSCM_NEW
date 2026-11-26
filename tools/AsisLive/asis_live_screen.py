@@ -8,7 +8,9 @@
 순서  ① 대상 여부(제외 화면이면 근거를 적고 끝)  ② 로컬 서버(8086) 응답
       ③ 기본 실측: 열기 → 필수 조건 최근 값 → 조회 → 화면·그리드 덤프·캡처·서버 호출   (asis_live_batch.py --fill recent --only <ID>)
       ④ 소스 분기 시나리오 도출·기준 연결                                               (asis_live_scen_src.py <ID>)
-      ⑤ 버튼 분기 실행: 조회·팝업 분기의 버튼 누르기 → 팝업·메시지·Excel 기록 후 닫기      (asis_live_scen_run.py <ID>)
+      ④-1 분기 판정 단위(정적·정적 우선·동적) 분류 → scen_units.csv · scen_only_<단계>.txt   (2026-11-24 R79 · classify)
+      ⑤ 버튼 분기 실행: 조회·팝업 분기의 버튼 누르기 → 팝업·메시지·Excel 기록 후 닫기      (asis_live_scen_run.py <ID> --only=<동적 분기 목록>)
+         ⑤~⑪ 런처 단계는 그 단계의 동적 분기만 넘기고, 0건이면 런처를 띄우지 않는다. 정적 분기는 scenarios_cov.csv 의 static_judge 열 = '정적 판정'
       ⑥ 분기 실행 현황                                                                   (asis_live_scen_cov.py <ID>)
       ⑦ TO-BE 조회 조건과 대조(TO-BE 호출 기록이 있을 때만)                              (asis_live_cond.py <ID>)
       ⑧ 분기별 AS-IS 실행 결과 ↔ TO-BE 대조표 판정 대조 · TO-BE 룰로 정의된 차이는 오류 아님   (asis_live_scen_cmp.py <ID>)
@@ -127,6 +129,76 @@ def step(steps, name, args, timeout=2400):
     return rc
 
 
+# 2026-11-24 규칙 R79(사용자 지시 11-16): 정적으로 판정할 수 있는 분기는 정적으로, 런처는 동적 확인이 필요한 분기만.
+#   분기마다 판정 단위를 붙인다(scenarios_src.csv 열 기준 · 산출 Doc/asislive/<ID>/scen_units.csv)
+#     정적      도달 경로 없음(UNREACHED) · 저장 분기(이 묶음은 저장을 누르지 않음, SP 원문 대조) · 조건 없는 초기 분기(기본 실측 덤프 + 원문)
+#     정적 우선  서버 호출이 없고 분기 조건이 Division·그룹·조회 조건 값뿐(guard 원문·메타 값으로 판정) · 원문 위치(src)가 없으면 동적
+#     동적      서버 호출 관찰점이 있거나 분기 조건이 행·셀 값, 화면 상태, 시트, 해석 못 한 조건(DATA·STATE·SHEET·OTHER)
+#   런처 단계에는 그 단계 진입 경로의 동적 분기만 넘긴다(--only=<목록 파일>). 동적 분기가 0건인 단계는 런처를 띄우지 않는다.
+#   분류 파일이 없으면(소스 분기 도출 실패) 종전대로 전 단계를 실행한다.
+STATIC_AX = {"NONE", "DIVISION", "AUTH", "COND"}
+RUN_KIND = {   # 단계 → 그 단계가 실행하는 진입 경로·축(진입 문자열 entry · 축 axes 기준)
+    "run": lambda r: "button:" in r["entry"],
+    "conds": lambda r: "COND" in r["ax"] or bool(re.search(r"event:[^|]*(CheckedChanged|SelectedIndexChanged|EditValueChanged|ValueChanged|ComboCloseUp)", r["entry"])),
+    "cells": lambda r: bool(re.search(r"event:[^|]*(Cell\w*Click|CellDoubleClick|DoubleClick|ButtonClicked|ComboSelChange|_Click)", r["entry"])),
+    "input": lambda r: "SHEET" in r["ax"] or bool(re.search(r"event:[^|]*(EditMode\w*|LeaveCell|EnterCell|TextChanged|_Change\b|SelectionChanged|Validat\w*)", r["entry"])),
+    "event": lambda r: bool(re.search(r"event:[^|]*(Key(Down|Press|Up)|Scroll|ClipboardPasted|Paste)", r["entry"])),
+    "values": lambda r: bool(r["ax"] & {"DIVISION", "AUTH", "COND"}),
+}
+
+
+def unit_of(r):
+    """분기 1행 → (판정 단위, 근거)"""
+    ax = set(x for x in (r.get("axes") or "").split("+") if x); eps = (r.get("endpoints") or "").strip(); src = (r.get("src") or "").strip(" :")
+    if (r.get("status") or "") == "UNREACHED": return "정적", "도달 경로 없음 · 원문 %s" % src
+    if (r.get("type") or "") == "저장": return "정적", "저장 분기 · SP 원문 대조 %s" % (eps or src)
+    if (r.get("type") or "") == "초기" and ax <= {"NONE"}: return "정적", "조건 없는 초기 분기 · 기본 실측 덤프 + 원문 %s" % src
+    if eps: return "동적", "서버 호출 관찰 필요 %s" % eps[:120]
+    if ax and ax <= STATIC_AX and src: return "정적 우선", "분기 조건 %s · guard 원문·메타 값 대조 %s" % ("+".join(sorted(ax)), src)
+    return "동적", "실행 값 필요 축 %s" % ("+".join(sorted(ax)) or "없음")
+
+
+def classify(mid):
+    """scenarios_src.csv → scen_units.csv · 단계별 동적 분기 목록 파일. 반환 {단계: (건수, 목록 파일 상대 경로)} · 분류 못 하면 None"""
+    import csv
+    p = P("Doc", "asislive", mid, "scenarios_src.csv")
+    if not os.path.exists(p): return None
+    with open(p, encoding="utf-8-sig", newline="") as f: rows = list(csv.DictReader(f))
+    if not rows: return None
+    out = []; dyn = []
+    for r in rows:
+        u, why = unit_of(r); out.append({"scenario_id": r.get("scenario_id"), "unit": u, "why": why, "type": r.get("type"), "axes": r.get("axes"), "entry": r.get("entry"), "src": r.get("src")})
+        if u == "동적": dyn.append({"id": r.get("scenario_id") or "", "entry": r.get("entry") or "", "ax": set((r.get("axes") or "").split("+"))})
+    d = P("Doc", "asislive", mid)
+    with open(os.path.join(d, "scen_units.csv"), "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(out[0].keys())); w.writeheader(); w.writerows(out)
+    res = {}
+    for k, fn in RUN_KIND.items():
+        ids = [x["id"] for x in dyn if fn(x)]; rel = "/".join(("Doc", "asislive", mid, "scen_only_%s.txt" % k))
+        with open(P(*rel.split("/")), "w", encoding="utf-8") as f: f.write("\n".join(ids))
+        res[k] = (len(ids), rel)
+    c = {u: sum(1 for x in out if x["unit"] == u) for u in ("정적", "정적 우선", "동적")}
+    print("[판정 단위] %s 분기 %d · 정적 %d · 정적 우선 %d · 동적 %d · 단계별 동적 %s" % (mid, len(out), c["정적"], c["정적 우선"], c["동적"], " ".join("%s %d" % (k, v[0]) for k, v in res.items())), flush=True)
+    return res
+
+
+def mark_cov(mid):
+    """scenarios_cov.csv 에 판정 단위 열을 붙인다(cov 열은 그대로). 정적·정적 우선 분기 = '정적 판정' + 원문·메타 대조 근거"""
+    import csv
+    pc = P("Doc", "asislive", mid, "scenarios_cov.csv"); pu = P("Doc", "asislive", mid, "scen_units.csv")
+    if not (os.path.exists(pc) and os.path.exists(pu)): return
+    with open(pu, encoding="utf-8-sig", newline="") as f: um = {r["scenario_id"]: r for r in csv.DictReader(f)}
+    with open(pc, encoding="utf-8-sig", newline="") as f: rows = list(csv.DictReader(f))
+    if not rows: return
+    for r in rows:
+        u = um.get(r.get("scenario_id") or "") or {}
+        r["unit"] = u.get("unit", ""); r["unit_why"] = u.get("why", "")
+        r["static_judge"] = "정적 판정" if r["unit"] in ("정적", "정적 우선") else ""
+    keys = [k for k in rows[0].keys() if k not in ("unit", "unit_why", "static_judge")] + ["unit", "unit_why", "static_judge"]
+    with open(pc, "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=keys); w.writeheader(); w.writerows(rows)
+
+
 def save(mid, out):
     d = P("Doc", "asislive", mid); os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, "screen_bundle.json"), "w", encoding="utf-8") as f: json.dump(out, f, ensure_ascii=False, indent=1)
@@ -159,7 +231,8 @@ def main():
             # 런처를 쓰지 않는 단계는 매번 다시 한다 — CheckList 가 방금 새로 만든 대조표 추적·차등 검증 결과와 맞대야 하기 때문(11-13 SCP0028 전체 실행에서 재사용 시 대조가 빠진 것 보정)
             T = lambda n: os.path.join("tools", "AsisLive", n); st2 = []
             step(st2, "소스 분기 시나리오·대조표 연결 갱신", [T("asis_live_scen_src.py"), mid], 600)
-            step(st2, "분기 실행 현황", [T("asis_live_scen_cov.py"), mid], 600)
+            classify(mid)
+            step(st2, "분기 실행 현황", [T("asis_live_scen_cov.py"), mid], 600); mark_cov(mid)
             if os.path.isdir(P("Doc", "verify", mid, "calls")): step(st2, "TO-BE 조회 조건 대조", [T("asis_live_cond.py"), mid], 600)
             step(st2, "분기별 AS-IS↔TO-BE 대조(TO-BE 룰 조회 포함)", [T("asis_live_scen_cmp.py"), mid], 600)
             step(st2, "그룹·Division 별 비교표", [T("asis_live_scen_matrix.py"), mid], 600)
@@ -199,20 +272,29 @@ def main():
         if rc_b in (3, 5) or not opened:
             out.update(status="ERROR", note="기본 실측 실패(rc %s) — 화면을 열지 못했거나 환경 미비" % rc_b); save(mid, out); print("[ERROR] " + out["note"]); return 3
         step(st, "소스 분기 시나리오 도출", [T("asis_live_scen_src.py"), mid], 600)
-        step(st, "분기 실행 현황(실행 전)", [T("asis_live_scen_cov.py"), mid], 600)
+        units = classify(mid); out["units"] = {k: v[0] for k, v in units.items()} if units else None
+        step(st, "분기 실행 현황(실행 전)", [T("asis_live_scen_cov.py"), mid], 600); mark_cov(mid)
         if buttons:
-            step(st, "버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기)", [T("asis_live_scen_run.py"), mid])
+            def dstep(kind, name, args, timeout=2400):
+                """동적 분기만 런처로 실행 — 그 단계의 동적 분기가 0건이면 런처를 띄우지 않는다(분류 못 했으면 종전대로 실행)"""
+                if units is None: return step(st, name, args, timeout)
+                n, rel = units[kind]
+                if not n:
+                    st.append({"step": name, "rc": None, "sec": 0, "note": "동적 분기 0건 — 정적 판정(Doc/asislive/%s/scen_units.csv) · 런처 실행 안 함" % mid})
+                    print("\n[실측 %d] %s — 동적 분기 0건, 정적 판정 · 런처 실행 안 함" % (len(st), name), flush=True); return None
+                return step(st, "%s · 동적 분기 %d건" % (name, n), args + ["--only=" + rel], timeout)
+            dstep("run", "버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기)", [T("asis_live_scen_run.py"), mid])
             # "수정모드가 아니므로 …" 메시지를 낸 버튼은 수정 모드에서 다시 눌러야 그 분기가 실행된다(없으면 런처를 띄우지 않고 끝난다 · 닫을 때 저장하지 않음)
-            step(st, "버튼 분기 실행 — 수정 모드 재실행", [T("asis_live_scen_run.py"), mid, "--edit"])
-            step(st, "조건 값 변경 분기 실행(콤보·체크 상자·체크 목록)", [T("asis_live_scen_run.py"), mid, "--conds"])
-            step(st, "셀 클릭·더블클릭 분기 실행(조건식이 요구하면 수정 모드에서 한 번 더)", [T("asis_live_scen_run.py"), mid, "--cells"])
-            step(st, "셀 값 입력·시트 전환 분기 실행(수정 모드 첫 행 입력, 저장 없이 닫음)", [T("asis_live_scen_input.py"), mid])
-            step(st, "스크롤·키 입력·붙여넣기 분기 실행(처리기 직접 호출, 저장 없이 닫음)", [T("asis_live_scen_event.py"), mid])
-            step(st, "조건식에서 도출한 Division·그룹·조회 조건 값으로 실행", [T("asis_live_scen_values.py"), mid, "--run"], 3600)
+            dstep("run", "버튼 분기 실행 — 수정 모드 재실행", [T("asis_live_scen_run.py"), mid, "--edit"])
+            dstep("conds", "조건 값 변경 분기 실행(콤보·체크 상자·체크 목록)", [T("asis_live_scen_run.py"), mid, "--conds"])
+            dstep("cells", "셀 클릭·더블클릭 분기 실행(조건식이 요구하면 수정 모드에서 한 번 더)", [T("asis_live_scen_run.py"), mid, "--cells"])
+            dstep("input", "셀 값 입력·시트 전환 분기 실행(수정 모드 첫 행 입력, 저장 없이 닫음)", [T("asis_live_scen_input.py"), mid])
+            dstep("event", "스크롤·키 입력·붙여넣기 분기 실행(처리기 직접 호출, 저장 없이 닫음)", [T("asis_live_scen_event.py"), mid])
+            dstep("values", "조건식에서 도출한 Division·그룹·조회 조건 값으로 실행", [T("asis_live_scen_values.py"), mid, "--run"], 3600)
             step(st, "저장 정의 초안 생성(SP 원문·DB 키·그리드 열)", [T("asis_live_save_draft.py"), mid], 600)
             if not os.path.exists(P("Doc", "asislive", mid, "save_scenario.json")):
                 step(st, "저장 정의 초안 연습 실행(셀 입력·변경 표시 확인, 저장 안 함)", [T("asis_live_save.py"), mid, "--draft", "--dry"])
-        step(st, "분기 실행 현황", [T("asis_live_scen_cov.py"), mid], 600)
+        step(st, "분기 실행 현황", [T("asis_live_scen_cov.py"), mid], 600); mark_cov(mid)
         if os.path.isdir(P("Doc", "verify", mid, "calls")): step(st, "TO-BE 조회 조건 대조", [T("asis_live_cond.py"), mid], 600)
         else: st.append({"step": "TO-BE 조회 조건 대조", "rc": None, "sec": 0, "note": "TO-BE 호출 기록(Doc/verify/%s/calls) 없음 — 건너뜀" % mid})
         step(st, "분기별 AS-IS↔TO-BE 대조(TO-BE 룰 조회 포함)", [T("asis_live_scen_cmp.py"), mid], 600)

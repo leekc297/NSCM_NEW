@@ -1,0 +1,130 @@
+{
+  "id": "20261125034940_SELF",
+  "at": "2026-11-25T03:49:40+09:00",
+  "ms": 1795546180441,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|testresultlistnid하나로전체nfromasis",
+  "title": "사용자 지시 R218 같은 문제: tools/VibeManager/quick.json:495 📋 TestResultList(495), 🚀 ID 하나로 전체(1068, 1133), 🧩 from AS-IS(1334, 1399), 📏 from 설계서(1",
+  "evidence": "규칙 R218 \"CheckList 미검증 = 1단계 측정 안 자동 재측정(--no-rerun 금지) / 2단계 반복 = 🧪 보완 → 게이트 → 처리 대상 행 규칙만 해소 확인 재측정 / 재검증은 미검증 전체 해소 뒤에만(해소 게이트: 처리 대상 0 또는 전체 재측정으로만 잴 행만 남음). 해소 못 하고 반복이 끝나면 재검증 없이 남은 행·사유 보고\" (원래 지시 2026-11-25 03:07 \"미검증 건수에 대해서 해소를 하지 않고 재검증이 진행되는 현상이 반복되고 있습니다. … 미검증에 대한 해소 이전에 checklist 단계에서도 미검증을 자체적으로 보완할 수 있게 하는 것이 1단계이고, 2단계로 미검증해소단계에서는 도출된 미검증에 대해서는 전체 미검증에 대한 해소를 한후\") · tools/VibeManager/quick.json:495 \"rerunTask\": \"S8.verify\", ... \"args\": [\"${input:ids}\", \"--no-rerun\"]",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "args 의 --no-rerun 을 뺌. repair.rerunTask 를 S8.checklistSettle(--settle --no-docs)로 바꾸고, 반복이 끝난 뒤 S8.unverifiedGate → S8.verify 1회 순서로 둠(🔎 CheckList 체인 2종 loops.fix 구조와 같게)",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T14:00:16+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T14:05:00+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self1400"
+    },
+    {
+      "at": "2026-11-26T14:05:06+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T14:20:23+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-26T14:20:23+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 88/88 PASS 1481 FAIL 0 (2026-11-26 14:06 KST) → 반영 뒤 ALL OK 88/88 PASS 1481 FAIL 0 (2026-11-26 14:11~14:15 KST). quick.json 점검(node JSON.parse): S8.unverified 수선 단계 9곳, --no-rerun 9 → 0, rerunTask S8.checklistRecheck 9 → 0, S8.checklistSettle 0 → 9 · 변경 25개 파일 · 대상 목록 밖 변경 24개: Doc/e2e/specs/_trace.spec.ts, Doc/verify/_ENGINE_MASTER.md, Doc/verify/_checker_defects.md, Doc/verify/_engine_selfcheck.json, tools/Harness/gate_baseline.tsv, Doc/PERF_점검/BATCH/SSP/BATCH_재실행_PR_SSP_ANL_SHIP_PLAN_40_HQ00_20261126.sql",
+      "log": ".vibe\\logs\\2026-11-26T14-05-06_claude_orch.log",
+      "sec": 658,
+      "costUsd": 1.8326781999999997,
+      "files": [
+        "Doc/e2e/specs/_trace.spec.ts",
+        "Doc/verify/_ENGINE_MASTER.md",
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/quick.json",
+        "Doc/PERF_점검/BATCH/SSP/BATCH_재실행_PR_SSP_ANL_SHIP_PLAN_40_HQ00_20261126.sql",
+        "Doc/PERF_점검/BATCH/SSP/SHIP_PLAN_40_3SP_로컬개선요소_20261126.md",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/APPLIED_OPERATIONS.md",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/PR_SSP_ANL_SHIP_PLAN_40.ASIS.meta",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/PR_SSP_ANL_SHIP_PLAN_40.ASIS.sql",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/PR_SSP_ANL_SHIP_PLAN_40.TOBE.sql",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/build_owmsmax.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/build_package_owmsmax.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/cons.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/eq2.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_OWMSMAX_20261126/rehearse.py",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/00_README.md",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/A_DB/00_PRECHECK.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/A_DB/05_BACKUP.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/A_DB/20_REPLACE_PR_SSP_ANL_SHIP_PLAN_40.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/A_DB/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/A_DB/95_COMPARE_OWMSMAX.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/A_DB/99_ROLLBACK.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/_hash.txt"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 미검증 = 1단계 측정 안 자동 재측정(--no-rerun 금지) / 2단계 반복 = 🧪 보완 → 게이트 → 처리 대상 행 규칙만 해소 확인 재측정 / 재검증은 미검증 전체 해소 뒤에만(해소 게이트: 처리 대상 0 또는 전체 재측정으로만 잴 행만 남음). 해소 못 하고 반복이 끝나면 재검증 없이 남은 행·사유 보고 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R218|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795669216416,
+  "autoFp": "1546d4bc69",
+  "applyStartMs": 1795669506461,
+  "verifyJudge": {
+    "at": "2026-11-26T14:16:09+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261126_self1400",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795670423899,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 88/88 PASS 1481 FAIL 0 260.4s'(2026-11-26T05:06:37Z 시작) → 반영 뒤 'ALL OK 파일 88/88 PASS 1481 FAIL 0 254.3s'(2026-11-26T05:11:25Z 시작). t_webview_syntax.js 는 run_all 안에서 PASS 19(quick.json 은 웹뷰 파일 아님)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 88/88 PASS 1481 FAIL 0 (2026-11-26 14:06 KST) → 반영 뒤 ALL OK 88/88 PASS 1481 FAIL 0 (2026-11-26 14:11~14:15 KST). quick.json 점검(node JSON.parse): S8.unverified 수선 단계 9곳, --no-rerun 9 → 0, rerunTask S8.checklistRecheck 9 → 0, S8.checklistSettle 0 → 9, 바로 뒤 S8.unverifiedGate → S8.verify 0 → 9곳. t_chain_args 체인 단계 args 49곳 → 58곳, 작업 정의 옵션을 모두 잃은 단계 0",
+    "note": "반영 체인: testreport 1, full 2, new-asis-full 2, new-design-full 2, autofix-full 2. 게이트 = optional + ifJsonGt(unverified_settle.json actionable > -1, 이번 체인에서 해소 확인 재측정을 했을 때만). 재검증 S8.verify = optional + okCodes 10 + ifJsonGt(unverified_settle.json ready > 0, 해소 게이트 통과 때만 1회). 기존 desc '남아도 체인 계속'을 따라 게이트 실패 시 체인을 멈추지 않음(🔎 CheckList 체인 2종은 게이트 실패 시 멈춤). 하지 않은 것: --no-docs 는 repair.rerunTask 에 인자 칸이 없어 넣지 못함. steps.json S8.checklistSettle 기본 인자는 --settle 하나이고 승인 대상 밖이라 고치지 않음(추가 확인 후보). 시험 출력 파일 .vibe/orch/vmo_verify_before_20261125034940.txt, .vibe/orch/vmo_verify_after_20261125034940.txt. CHANGELOG, 설치 폴더 미수정."
+  },
+  "snap": "prop_20261125034940_SELF"
+}

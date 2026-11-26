@@ -3,29 +3,29 @@
  "rules": [
   {
    "rule_id": "A1",
-   "rows": 77,
-   "measured": 46,
+   "rows": 84,
+   "measured": 26,
    "inherited": 3,
-   "not_run_error": 0,
+   "not_run_error": 15,
    "review": 16,
-   "na": 12,
-   "na_pct": 15.6,
+   "na": 24,
+   "na_pct": 28.6,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "KEYSET CR-105 값·행 집합 차이는×10 | TO-BE 에서만 부르는 SP — AS-IS 화면·×1 | AI 검토 TOBE룰: PR_GET_MNU_BT×1"
+   "na_reasons": "KEYSET CR-105 값·행 집합 차이는×20 | TO-BE 에서만 부르는 SP — AS-IS 화면·×1 | AI 검토 TOBE룰: PR_GET_MNU_BT×1 | 조회 SP 인자 'p_division_id', '×1"
   },
   {
    "rule_id": "A5",
-   "rows": 62,
-   "measured": 49,
+   "rows": 68,
+   "measured": 40,
    "inherited": 10,
-   "not_run_error": 0,
+   "not_run_error": 15,
    "review": 0,
    "na": 3,
-   "na_pct": 4.8,
+   "na_pct": 4.4,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 Measure 버튼 · 실제 버튼·설정 창 없×2 | 기대 Div 별 DEFAULT 컬럼 차이 · 실제×1"
+   "na_reasons": "기대 Measure 버튼 · 실제 버튼·설정 창 없×2 | 기대 Div 별 DEFAULT 컬럼 차이 · 실제×1 | COLSET 차등 검증 #3 popup/SE×1 | COLSET 차등 검증 #4 popup/SE×1"
   },
   {
    "rule_id": "A8",
@@ -51,7 +51,7 @@
    "na_pct": 50.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "조회 1940행 뒤에도 합계 행 없음 — 합계 없는×1"
+   "na_reasons": "조회 1990행 뒤에도 합계 행 없음 — 합계 없는×1"
   },
   {
    "rule_id": "B1",
@@ -82,15 +82,15 @@
   {
    "rule_id": "B3",
    "rows": 12,
-   "measured": 6,
+   "measured": 7,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 6,
-   "na_pct": 50.0,
+   "na": 5,
+   "na_pct": 41.7,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "Insert 무동작 = AS-IS 파리티(AS-IS×3 | 화면 초기(선택 Division*=81) AS-×2 | 기대 팝업 목록 순서 = AS-IS ORDER BY×1"
+   "na_reasons": "Insert 무동작 = AS-IS 파리티(AS-IS×3 | 화면 초기(선택 Division*=81) AS-×2"
   },
   {
    "rule_id": "B4",
@@ -108,8 +108,8 @@
   {
    "rule_id": "B6",
    "rows": 9,
-   "measured": 7,
-   "inherited": 1,
+   "measured": 8,
+   "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 1,
@@ -186,12 +186,12 @@
   {
    "rule_id": "D3",
    "rows": 23,
-   "measured": 2,
+   "measured": 3,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 21,
-   "na_pct": 91.3,
+   "na": 20,
+   "na_pct": 87.0,
    "feature_present": "N",
    "suspect_na100": "",
    "na_reasons": "행 집계 — 대조표 Query(ds) FindDat×1 | 행 집계 — 대조표 SwitchLock (cs:23×1 | 행 집계 — 대조표 LockColumn(DIV..T×1 | LOT_SIZE: AS-IS 에 행 조건 잠금(lo×1"
@@ -211,8 +211,8 @@
   },
   {
    "rule_id": "D5",
-   "rows": 14,
-   "measured": 13,
+   "rows": 13,
+   "measured": 12,
    "inherited": 1,
    "not_run_error": 0,
    "review": 0,
@@ -233,20 +233,20 @@
    "na_pct": 100.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "AS-IS Insert 빈 구현(AS-IS Inse×2 | AS-IS 신규 행 없음 AS-IS Insert×1 | 조회 1940행 · r1 셀 클릭 후 Insert×1"
+   "na_reasons": "AS-IS Insert 빈 구현(AS-IS Inse×2 | AS-IS 신규 행 없음 AS-IS Insert×1 | 조회 1990행 · r1 셀 클릭 후 Insert×1"
   },
   {
    "rule_id": "E1",
-   "rows": 6,
+   "rows": 4,
    "measured": 4,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 2,
-   "na_pct": 33.3,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "Insert 무동작 = AS-IS 파리티(실행 문장×2"
+   "na_reasons": ""
   },
   {
    "rule_id": "E2",
@@ -277,9 +277,9 @@
   {
    "rule_id": "E4",
    "rows": 34,
-   "measured": 8,
+   "measured": 9,
    "inherited": 0,
-   "not_run_error": 2,
+   "not_run_error": 1,
    "review": 0,
    "na": 24,
    "na_pct": 70.6,
@@ -342,9 +342,9 @@
   {
    "rule_id": "F4",
    "rows": 17,
-   "measured": 10,
+   "measured": 11,
    "inherited": 1,
-   "not_run_error": 6,
+   "not_run_error": 5,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
@@ -380,16 +380,16 @@
   },
   {
    "rule_id": "G1",
-   "rows": 26,
-   "measured": 16,
-   "inherited": 0,
-   "not_run_error": 10,
+   "rows": 29,
+   "measured": 22,
+   "inherited": 7,
+   "not_run_error": 0,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "| 미검증 검사기(smoke 조회조건 동작·_×2 | 멀티선택 From Site 'AU000062_8×1 | 행 집계 — 대조표 `SetChangedContro×1 | 행 집계 — 대조표 FindButton (cs) '×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "G3",
@@ -407,22 +407,22 @@
   {
    "rule_id": "G4",
    "rows": 21,
-   "measured": 9,
-   "inherited": 7,
-   "not_run_error": 2,
+   "measured": 10,
+   "inherited": 8,
+   "not_run_error": 0,
    "review": 0,
    "na": 3,
    "na_pct": 14.3,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 AS-IS Div·GROUP 분기 문장 · 실×2 | 기대 Year·Version 초기값 문장 · 실제×1 | 행 집계 — 대조표 `SetChangedContro×1 | 측정 경로 없음 AS-IS btnDelete 클×1"
+   "na_reasons": "기대 AS-IS Div·GROUP 분기 문장 · 실×2 | 기대 Year·Version 초기값 문장 · 실제×1"
   },
   {
    "rule_id": "G5",
    "rows": 29,
-   "measured": 5,
-   "inherited": 2,
-   "not_run_error": 6,
+   "measured": 8,
+   "inherited": 5,
+   "not_run_error": 0,
    "review": 0,
    "na": 16,
    "na_pct": 55.2,
@@ -446,15 +446,15 @@
   {
    "rule_id": "H2",
    "rows": 32,
-   "measured": 15,
-   "inherited": 0,
-   "not_run_error": 12,
+   "measured": 16,
+   "inherited": 11,
+   "not_run_error": 0,
    "review": 0,
    "na": 5,
    "na_pct": 15.6,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "Insert 무동작 = AS-IS 파리티(실행 문장×4 | DIVISION_ID 현재 그리드에 없음×1 | 측정 경로 없음 계정 minyonglee1(그룹×1 | 행 집계 — 대조표 Query(ds) FindDat×1"
+   "na_reasons": "Insert 무동작 = AS-IS 파리티(실행 문장×4 | DIVISION_ID 현재 그리드에 없음×1"
   },
   {
    "rule_id": "H3",
@@ -472,15 +472,15 @@
   {
    "rule_id": "H4",
    "rows": 30,
-   "measured": 25,
+   "measured": 26,
    "inherited": 0,
    "not_run_error": 0,
    "review": 1,
-   "na": 4,
-   "na_pct": 13.3,
+   "na": 3,
+   "na_pct": 10.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 축소 → 조건·버튼 간섭 없음 · 실제 리사이×2 | 기대 가로만 조절 → 세로 불변 · 실제 리사이즈×1 | 기대 최대 조절 → 뷰포트 제한 · 실제 리사이즈×1"
+   "na_reasons": "기대 가로만 조절 → 세로 불변 · 실제 리사이즈×1 | 기대 최대 조절 → 뷰포트 제한 · 실제 리사이즈×1 | 기대 축소 → 조건·버튼 간섭 없음 · 실제 리사이×1"
   },
   {
    "rule_id": "H5",
@@ -498,15 +498,15 @@
   {
    "rule_id": "H6",
    "rows": 36,
-   "measured": 13,
-   "inherited": 4,
-   "not_run_error": 12,
+   "measured": 16,
+   "inherited": 14,
+   "not_run_error": 0,
    "review": 0,
-   "na": 7,
-   "na_pct": 19.4,
+   "na": 6,
+   "na_pct": 16.7,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 섹션 타이틀 = 테두리 밖 · 실제 타이틀×3 | AS-IS 팝업 문장 'new SCM0002_Shi×2 | AS-IS 팝업 문장 'popItem.Form_Lo×2 | AS-IS 팝업 문장 'popItem.ShowDia×2"
+   "na_reasons": "기대 섹션 타이틀 = 테두리 밖 · 실제 타이틀×3 | 검사 대상 아님: AS-IS 팝업 연결 없음. cl×2 | 검사 대상 아님: AS-IS 팝업 연결 없음. TR×1"
   },
   {
    "rule_id": "H7",
@@ -523,29 +523,29 @@
   },
   {
    "rule_id": "H10",
-   "rows": 3,
+   "rows": 2,
    "measured": 1,
-   "inherited": 1,
-   "not_run_error": 0,
-   "review": 0,
-   "na": 1,
-   "na_pct": 33.3,
-   "feature_present": "",
-   "suspect_na100": "",
-   "na_reasons": "LOT_SIZE r3 → 12799 · 확인창 없음×1"
-  },
-  {
-   "rule_id": "I1",
-   "rows": 3,
-   "measured": 2,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 1,
+   "na_pct": 50.0,
+   "feature_present": "",
+   "suspect_na100": "",
+   "na_reasons": "LOT_SIZE r3 → 24839 · 확인창 없음×1"
+  },
+  {
+   "rule_id": "I1",
+   "rows": 3,
+   "measured": 1,
+   "inherited": 0,
+   "not_run_error": 1,
+   "review": 0,
+   "na": 1,
    "na_pct": 33.3,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "설계 결정(GAP USER-1 · DD-215 ·×1"
+   "na_reasons": "설계 결정(GAP USER-1 · DD-215 ·×1 | 측정 경로 없음 KO 변경 없이 저장 → KO×1"
   },
   {
    "rule_id": "I2",
@@ -575,29 +575,29 @@
   },
   {
    "rule_id": "K1",
-   "rows": 13,
-   "measured": 10,
+   "rows": 14,
+   "measured": 13,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 3,
-   "na_pct": 23.1,
+   "na": 1,
+   "na_pct": 7.1,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "동적 기간 칸 없음(정규식 ^WMDY?_?\\d{×1 | 기대 팝업 그리드 Sort · 실제 행 0 · 정렬×1 | 기대 팝업 Filter · 실제 행 0 · 필터 대×1"
+   "na_reasons": "동적 기간 칸 없음(정규식 ^WMDY?_?\\d{×1"
   },
   {
    "rule_id": "K2",
-   "rows": 2,
+   "rows": 1,
    "measured": 0,
    "inherited": 0,
-   "not_run_error": 0,
+   "not_run_error": 1,
    "review": 0,
-   "na": 2,
-   "na_pct": 100.0,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "E2E smoke 공통 'Columns 컬럼 설정'×1 | 기대 Column 버튼 · 실제 버튼 없음 · AS×1"
+   "na_reasons": "검증엔진 무판정 검증엔진 테스트 '컬럼 설정 필×1"
   },
   {
    "rule_id": "K4",
@@ -628,28 +628,28 @@
   {
    "rule_id": "M3",
    "rows": 6,
-   "measured": 2,
-   "inherited": 1,
-   "not_run_error": 3,
+   "measured": 3,
+   "inherited": 3,
+   "not_run_error": 0,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "AS-IS 팝업 문장 'new SCM0002_Shi×2 | 기대 팝업 조회 오류 없음 · 데이터 있음(No P×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "M4",
    "rows": 14,
    "measured": 2,
-   "inherited": 0,
-   "not_run_error": 5,
+   "inherited": 5,
+   "not_run_error": 0,
    "review": 0,
    "na": 7,
    "na_pct": 50.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "AI 검토 검사기오판: AS-IS Input 버×1 | AI 검토 검사기오판: AS-IS Delete×1 | AI 검토 검사기오판: From Site 조회조×1 | AI 검토 검사기오판: To Site 조회조건은×1"
+   "na_reasons": "검사 대상 아님: AS-IS 팝업 선택값 반영 없음×2 | 검사 대상 아님: AS-IS 팝업 연결 없음. cl×2 | 검사 대상 아님: AS-IS 팝업 연결 없음. TR×1 | 기대 팝업 기간 → 메인 Period 반영 · 실제×1"
   },
   {
    "rule_id": "SC1",
@@ -668,14 +668,14 @@
    "rule_id": "DB-SYN",
    "rows": 13,
    "measured": 2,
-   "inherited": 6,
-   "not_run_error": 5,
+   "inherited": 11,
+   "not_run_error": 0,
    "review": 0,
    "na": 0,
    "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "행 집계 — 대조표 Query(ds) FindDat×1 | 행 집계 — 대조표 SaveButton SaveDa×1 | 실측T-52d59336: 검사기(syn_chec×1 | 행 집계 — 대조표 팝업 Form_Load `//F×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "G03-WIRE",
@@ -707,8 +707,8 @@
    "rule_id": "X-ROW",
    "rows": 21,
    "measured": 0,
-   "inherited": 9,
-   "not_run_error": 7,
+   "inherited": 15,
+   "not_run_error": 1,
    "review": 0,
    "na": 5,
    "na_pct": 23.8,
@@ -758,9 +758,9 @@
   {
    "rule_id": "G2",
    "rows": 9,
-   "measured": 4,
+   "measured": 5,
    "inherited": 0,
-   "not_run_error": 1,
+   "not_run_error": 0,
    "review": 0,
    "na": 4,
    "na_pct": 44.4,
@@ -823,15 +823,15 @@
   {
    "rule_id": "K3",
    "rows": 5,
-   "measured": 4,
+   "measured": 5,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
-   "na": 1,
-   "na_pct": 20.0,
+   "na": 0,
+   "na_pct": 0.0,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "기대 단축키 · 실제 행 0 · 근거×1"
+   "na_reasons": ""
   },
   {
    "rule_id": "L1",
@@ -887,29 +887,29 @@
   },
   {
    "rule_id": "A6",
-   "rows": 47,
-   "measured": 26,
+   "rows": 53,
+   "measured": 21,
    "inherited": 1,
-   "not_run_error": 3,
-   "review": 1,
-   "na": 16,
-   "na_pct": 34.0,
+   "not_run_error": 19,
+   "review": 0,
+   "na": 12,
+   "na_pct": 22.6,
    "feature_present": "Y",
    "suspect_na100": "",
-   "na_reasons": "ORDER 차등 검증 #9 main/SEAR×1 | ORDER 차등 검증 #16 main/SEA×1 | ORDER 차등 검증 #18 main/SEA×1 | ORDER 차등 검증 #23 main/SEA×1"
+   "na_reasons": "ORDER 차등 검증 #18 main/SEA×1 | ORDER 차등 검증 #20 main/SEA×1 | ORDER 차등 검증 #23 main/SEA×1 | ORDER 차등 검증 #25 main/SEA×1"
   },
   {
    "rule_id": "A7",
-   "rows": 37,
-   "measured": 26,
+   "rows": 43,
+   "measured": 19,
    "inherited": 0,
-   "not_run_error": 1,
+   "not_run_error": 15,
    "review": 0,
-   "na": 10,
-   "na_pct": 27.0,
+   "na": 9,
+   "na_pct": 20.9,
    "feature_present": "",
    "suspect_na100": "",
-   "na_reasons": "VALUES CR-105 값·행 집합 차이는×10 | | 미검증 검사기(tools/DbConn/go×1"
+   "na_reasons": "VALUES CR-105 값·행 집합 차이는×9 | VALUES 차등 검증 #3 popup/SE×1 | VALUES 차등 검증 #4 popup/SE×1 | VALUES 차등 검증 #30 popup/S×1"
   },
   {
    "rule_id": "B7",
@@ -978,8 +978,8 @@
   },
   {
    "rule_id": "G8",
-   "rows": 3,
-   "measured": 3,
+   "rows": 4,
+   "measured": 4,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,
@@ -1069,21 +1069,21 @@
   },
   {
    "rule_id": "MS1",
-   "rows": 11,
+   "rows": 10,
    "measured": 6,
-   "inherited": 1,
+   "inherited": 0,
    "not_run_error": 0,
    "review": 0,
    "na": 4,
-   "na_pct": 36.4,
+   "na_pct": 40.0,
    "feature_present": "",
    "suspect_na100": "",
    "na_reasons": "같은 메시지 MSG00004 — V-43018ae×2 | AS-IS MSG00284 '실행중 에러가 발생했습×1 | 같은 메시지 MSG00133 — V-6102c1f×1"
   },
   {
    "rule_id": "G9",
-   "rows": 3,
-   "measured": 3,
+   "rows": 4,
+   "measured": 4,
    "inherited": 0,
    "not_run_error": 0,
    "review": 0,

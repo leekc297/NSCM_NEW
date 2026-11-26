@@ -1,0 +1,45 @@
+{
+  "id": "20261126142231_SELF_3",
+  "at": "2026-11-26T14:22:31+09:00",
+  "ms": 1795670551978,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/gen_expect.py|소수자릿수를컬럼이름으로만모아첫행메인시트값만남기고다른시트의같은이름편집칸에도",
+  "title": "사용자 지시 R238 같은 문제: tools/Harness/verify/gen_expect.py:353 소수 자릿수를 컬럼 이름으로만 모아 첫 행(메인 시트) 값만 남기고, 다른 시트의 같은 이름 편집 칸에도 그 자릿수로 기대값을 만듦",
+  "evidence": "규칙 R238 \"검사기는 스프레드 컨트롤 하나에 시트가 여럿이면 편집 잠금 규칙과 편집 기대를 시트마다 따로 해석하고 판정함\" (원래 지시 2026-11-26 13:54 \"다중 시트 편집 기대도 시트별로 보완해줘\") · tools/Harness/verify/gen_expect.py:353 dec.setdefault(c['column'].upper(), (n, c))",
+  "targets": [
+    "tools/Harness/verify/gen_expect.py"
+  ],
+  "before_after": "dec 키를 (정규화한 시트, 컬럼)으로 바꾸고 edit_cols 행의 sheet_name 으로 찾음. 그 시트 행이 없을 때만 컬럼 이름 첫 행으로 대체함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/gen_expect.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:59:23+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/gen_expect.py:344 sheet_key 추가, :348 p_decimal 자릿수 키를 (정규화 시트, 컬럼)으로 바꾸고 edit_cols sheet_name 으로 찾음, 그 시트 규칙 행이 없을 때만 컬럼 이름 첫 행 대체. py_compile OK, 파일 selftest 없음, 가짜 S 시험 3칸(Main.QTY 2자리 생성, Sub_Sheet.QTY 0자리 미생성, Other.RATE 대체 3자리) 확인. 2026-11-26 15:59:23"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 스프레드 컨트롤 하나에 시트가 여럿이면 편집 잠금 규칙과 편집 기대를 시트마다 따로 해석하고 판정함 규칙을 tools/Harness/verify/gen_expect.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R238|tools/Harness/verify/gen_expect.py",
+  "kind": "fix",
+  "claimedBy": "S-A",
+  "waitNote": "",
+  "appliedMs": 1795676363336
+}

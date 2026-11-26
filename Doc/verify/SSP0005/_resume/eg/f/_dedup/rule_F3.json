@@ -1,0 +1,59 @@
+{
+ "rule_id": "F3",
+ "hash": "68199a46d44e9f15",
+ "groups": [
+  {
+   "rows": [
+    "V-6ac126ba",
+    "V-c3f6f87e"
+   ],
+   "why": "Both rows check the same element, a grid combo cell, the same way: they paste a value that is not in the candidate list. Both expect that value to be refused and kept out of the save."
+  },
+  {
+   "rows": [
+    "T-f1230888"
+   ],
+   "why": "This trace row checks that a row exists in the comparison table for the whole screen, so its target and purpose differ from the value-level paste checks."
+  },
+  {
+   "rows": [
+    "V-3877cc93"
+   ],
+   "why": "This row checks several things on new-row input together: copy/paste, Korean first-letter input, autocomplete and merged cells. Its expectation is broader than any single row, so it stays on its own."
+  },
+  {
+   "rows": [
+    "V-42b30b79"
+   ],
+   "why": "This row checks whether a pasted value counts as a change and is saved exactly once, which no other row expects."
+  },
+  {
+   "rows": [
+    "V-5f46d3dc"
+   ],
+   "why": "This row checks a paste that exceeds the allowed digits and expects a validation message to block it, which is a different expectation from the other rows."
+  },
+  {
+   "rows": [
+    "V-7e36c00e"
+   ],
+   "why": "This row checks that a multi-row paste is fully saved in the Exchange Rate popup, which is a different element and expectation."
+  },
+  {
+   "rows": [
+    "V-a9a43704"
+   ],
+   "why": "This row checks pasting into the Team popup column, where the code must come with the name and required-field validation must not misfire, which is a different column and expectation."
+  },
+  {
+   "rows": [
+    "V-af14b50c"
+   ],
+   "why": "This is the only row that checks merged-cell handling on paste by itself. Its overlap with V-3877cc93 is partial, so it stays separate."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:07:12",
+ "cost": 0.054369900000000006
+}

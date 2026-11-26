@@ -1,0 +1,14 @@
+header chahg [('chahg', 4672, '20200218', '20261120')]
+SP 20261101 20261120 0.42 s rows 970 [('0', 'SUCCESS')]
+dup req_no 345 distinct 625
+R20261120555051 2 approval chahg identical_rows False deleg [('gwonjung', 'Q'), ('/', 'Q')]
+R20261120555040 2 approval chahg identical_rows False deleg [('gwonjung', 'Q'), ('/', 'Q')]
+R20261120555038 2 approval chahg identical_rows False deleg [('/', 'Q'), ('gwonjung', 'Q')]
+R20261120555035 2 approval chahg identical_rows False deleg [('/', 'Q'), ('gwonjung', 'Q')]
+R20261120555032 2 approval chahg identical_rows True deleg [(None, 'A'), (None, 'A')]
+R20261120555031 2 approval chahg identical_rows True deleg [(None, 'A'), (None, 'A')]
+R20261120555026 2 approval chahg identical_rows True deleg [(None, 'A'), (None, 'A')]
+R20261120555025 2 approval chahg identical_rows True deleg [(None, 'A'), (None, 'A')]
+R20261120555024 2 approval chahg identical_rows True deleg [(None, 'A'), (None, 'A')]
+R20261120555023 2 approval chahg identical_rows True deleg [(None, 'A'), (None, 'A')]
+dup approval users Counter({'chahg': 690})

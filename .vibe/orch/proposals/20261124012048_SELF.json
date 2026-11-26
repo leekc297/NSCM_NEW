@@ -1,0 +1,119 @@
+{
+  "id": "20261124012048_SELF",
+  "at": "2026-11-24T01:20:48+09:00",
+  "ms": 1795450848100,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/verify_if_stale.py|checklist폴더를직접적음",
+  "title": "사용자 지시 R83 같은 문제: tools/Harness/verify/verify_if_stale.py:72 CheckList 폴더를 직접 적음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/Harness/verify/verify_if_stale.py:72 xs = glob.glob(os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', f'{mid}_*_CheckList_v*.xlsx'))",
+  "targets": [
+    "tools/Harness/verify/verify_if_stale.py"
+  ],
+  "before_after": "doc_paths.checklist_dir()로 바꿈",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/verify_if_stale.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T12:16:09+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T12:20:03+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1216"
+    },
+    {
+      "at": "2026-11-25T12:20:07+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T12:25:21+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T12:25:21+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v1 node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js (node tools/VibeManager/test/run_all.js 실행이 도구 권한 확인 단계에서 막혀 )"
+    },
+    {
+      "at": "2026-11-25T12:25:21+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 못 함 1건. 미실행: node tools/VibeManager/test/run_all.js 권한 차단(2026-11-25 12:20 이후). 반영 전 값 미측정 → 반영 뒤 값 미측정. 정적 확인: harness.json checklistDir 키 0건이라 checklist_dir() 반환값 = ROOT/Doc/UI_CHECKLIST(변경 전 경로와 같음) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T12-20-08_claude_orch.log",
+      "sec": 78,
+      "costUsd": 0.6898017999999999,
+      "files": [
+        "tools/Harness/verify/verify_if_stale.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/Harness/verify/verify_if_stale.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/Harness/verify/verify_if_stale.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795576568652,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795576807865,
+  "postChecks": [
+    {
+      "n": 1,
+      "text": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+      "why": "node tools/VibeManager/test/run_all.js 실행이 도구 권한 확인 단계에서 막혀 반영 전, 반영 뒤 모두 미실행(권한 차단). 웹뷰 파일 변경 없음이라 t_webview_syntax.js 대상 아님",
+      "status": "open",
+      "at": "2026-11-25T12:21:31+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-25T12:21:31+09:00",
+    "verified": true,
+    "text": "실행 못 함 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1216",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795577121646,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "blocked",
+        "note": "node tools/VibeManager/test/run_all.js 실행이 도구 권한 확인 단계에서 막혀 반영 전, 반영 뒤 모두 미실행(권한 차단). 웹뷰 파일 변경 없음이라 t_webview_syntax.js 대상 아님"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/verify_if_stale.py"
+    ],
+    "verify_result": "미실행: node tools/VibeManager/test/run_all.js 권한 차단(2026-11-25 12:20 이후). 반영 전 값 미측정 → 반영 뒤 값 미측정. 정적 확인: harness.json checklistDir 키 0건이라 checklist_dir() 반환값 = ROOT/Doc/UI_CHECKLIST(변경 전 경로와 같음)",
+    "note": "doc_paths 모듈이 저장소에 없어 같은 파일에 checklist_dir() 추가(harness.json paths.checklistDir, 기본 Doc/UI_CHECKLIST, make_verify_docs.py:38-53 와 같은 방식). :72 glob 이 checklist_dir() 사용. 구문 검사와 run_all.js 는 VMO 반영 뒤 확인 필요"
+  },
+  "snap": "prop_20261124012048_SELF"
+}

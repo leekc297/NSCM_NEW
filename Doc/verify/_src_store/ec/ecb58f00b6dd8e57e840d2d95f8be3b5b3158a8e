@@ -1,0 +1,323 @@
+// 화면 정합검증(@verify) — Doc/verify/<ID>/verify_ledger.csv 의 E2E 행을 실행해 결과를 Doc/verify/<ID>/e2e_results.json 에 쓴다(2026-10-23).
+//   생성기(gen-e2e.js) 산출 스펙이 아니라 원장 구동 범용 스펙이다. 화면 = 환경변수 VERIFY_ID (없으면 전체 skip).
+//   저장(Save)은 하지 않는다 — 입력 프로브 값은 화면을 닫으면 버려진다(사내 DB 무변경).
+//   판정: 기대값은 원장(AS-IS 근거)에서 읽는다. 기대가 '조건부'·'판정필요'면 실측만 남기고 판정필요로 둔다(추측 PASS 금지).
+import { measurable } from '../../../tools/E2E/lib/precond';
+import { fillPrereq } from '../../../tools/E2E/lib/prereq';  // 2026-11-09 T176 선행 칸(AS-IS 사용자 순서) — 신규행 측정 전 채움
+import type { Nscm } from '../../../tools/E2E/lib/nscm';
+import { execFileSync } from 'node:child_process';
+import { diffSnap, judgeAudit, judgeHistory, judgeHistValues, judgeMaxValue, judgeRowCount, judgeSaveTime, judgeTwice, linkedSummary, type Snap } from '../../../tools/E2E/lib/savecheck';  // 저장 전후 DB 대조(E05 · 2026-10-31)
+import { cellRoundTrip, classifyNoCall, editableValueRow, nextOf, notePrecheck, saveDurs, twoRowSave, typeCell, typeRaw, recordTouched } from '../../../tools/E2E/lib/saveprobe';  // 저장 세부 프로브(E05 · 2026-10-31)
+import { asisBlankDefault, judgeBadInput, judgeBlankReject, judgeDecimal } from '../../../tools/E2E/lib/inputcheck';
+import { judgeDynPeriod, periodOf } from '../../../tools/E2E/lib/dynperiod';
+import { judgeSum } from '../../../tools/E2E/lib/sumcheck';
+import { judgeDivCols, judgeLayout, type Rect } from '../../../tools/E2E/lib/viewcheck';
+import { judgeBadUpload, judgeForm, type Sheet, judgeBlankUpload, judgeFormBucket, judgeFormTwoRow, judgeUploadBlock } from '../../../tools/E2E/lib/excelcheck';
+import { judgeFilterKeep } from '../../../tools/E2E/lib/filterkeep';
+import { judgeCellClear, judgeSubClear } from '../../../tools/E2E/lib/cellclear';
+import { judgeCodeName, judgeFreeze, judgeHeaders, judgeNumFmt } from '../../../tools/E2E/lib/exceldl';
+import { judgeOpen, judgeSearchBtn, judgeTabName, judgeInitVals, judgePeriodGarbage, judgePeriodReverse, judgeVersionAfterDiv } from '../../../tools/E2E/lib/shellcheck';
+import { judgeFormAction, colDates, judgeSaveRows, judgeDynLock, judgeFrozen, judgeWeekEdge, judgeScenario, labelNext, NOT_APPLICABLE_TAG, parseSteps, reqHas } from '../../../tools/E2E/lib/scenario';
+import { judgeColOrder, judgeCountLabel, judgeSentinel, judgeEditMode, judgeEditAfterSearch, judgeZeroShow, judgePeriodColor, judgeCondRange, judgeNameIdCount, judgeSumToggle, judgeNumFormat, judgeTextShown, judgeCheckImmediate, judgeMetaWidth } from '../../../tools/E2E/lib/griddisp';
+import { judgeAllRound, judgeBlankExisting, judgeDivCands, judgeInsertDiv, judgeInsertInState, judgeLike, judgePasteBad, judgePasteCode, judgeSelected, judgeTextDelete } from '../../../tools/E2E/lib/rowstate';
+import { emptyOverrideLine, judgeHierMerge, judgeMergeDelete, judgeMergeInput, judgeNewRowMerge, judgeRestore } from '../../../tools/E2E/lib/mergecheck';
+import { judgeBtnClick } from '../../../tools/E2E/lib/extrabtn';
+import { judgeDocUi } from '../../../tools/E2E/lib/docui';
+import { acquireLangExclusive, releaseLang, markLangChanging, langRestored } from '../../../tools/E2E/lib/langlock';  // 2026-11-10 T189 언어 전환 잠금
+import { takeLangAccount, markLangOrig, releaseLangAccount, type LangAcct } from '../../../tools/E2E/lib/langacct';  // 2026-11-19 사용자: 언어 전환 시험 = 다른 세션이 쓰지 않는 ADMIN 계정(users.json adminPool) — 다른 화면 E2E 를 기다리지 않음
+/** 2026-11-19: 언어 전환 시험 계정으로 로그인 — 없으면 null(종전 방식). 끊긴 시험이 남긴 언어(staleOrig)는 언어 설정 API 로 먼저 되돌린다 */
+async function enterLangAccount(nscm: { page: import('@playwright/test').Page; loginAs: (u: string) => Promise<unknown> }, tag: string): Promise<LangAcct | null> { const la = takeLangAccount(tag); if (!la) { console.log(`[langacct] ${tag}: 쓸 수 있는 언어 시험 계정 없음 — 기본 계정으로 다른 화면 대기(종전 방식)`); return null; } try { await nscm.loginAs(la.user); } catch (e) { releaseLangAccount(la.user, true); console.log(`[langacct] ${tag}: ${la.user} 로그인 실패 — 기본 계정으로(종전 방식) · ${String(e).slice(0, 120)}`); return null; } if (la.staleOrig) { const st = await nscm.page.evaluate(async (lc: string) => { try { const r = await fetch('/api/user/session/lang-cd', { method: 'POST', credentials: 'include', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ langCd: lc }) }); return r.status; } catch { return 0; } }, la.staleOrig).catch(() => 0); await nscm.page.reload({ waitUntil: 'domcontentloaded' }).catch(() => undefined); await nscm.page.waitForTimeout(2_000); console.log(`[langacct] ${tag}: ${la.user} 끊긴 시험이 남긴 언어를 원래 ${la.staleOrig} 로 되돌림(HTTP ${st})`); } console.log(`[langacct] ${tag}: 언어 시험 계정 ${la.user} 로 로그인(다른 화면 대기 없음)`); return la; }
+/** 2026-11-19: 언어 시험 계정 마무리 — 머리글이 원래 언어가 아니면 언어 설정 API 로 되돌린 뒤 잠금 정리, 기본 계정으로 다시 로그인 */
+async function leaveLangAccount(nscm: { page: import('@playwright/test').Page; loginAs: (u: string) => Promise<unknown> }, la: LangAcct, origCode: string, origName: string, base: string): Promise<string> { const hdr = async () => ((await nscm.page.locator('header').getByText(/^(KOR|ENG|CHN)$/).first().innerText({ timeout: 5_000 }).catch(() => '')) || '').trim(); let now = await hdr(); if (origCode && origName && now !== origName) { const st = await nscm.page.evaluate(async (lc: string) => { try { const r = await fetch('/api/user/session/lang-cd', { method: 'POST', credentials: 'include', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ langCd: lc }) }); return r.status; } catch { return 0; } }, origCode).catch(() => 0); await nscm.page.reload({ waitUntil: 'domcontentloaded' }).catch(() => undefined); await nscm.page.waitForTimeout(2_500); now = await hdr(); console.log(`[langacct] ${la.user}: 원래 언어 ${origCode} 로 되돌림 재시도(API HTTP ${st}) → ${now}`); } releaseLangAccount(la.user, !origName || now === origName); if (base) await nscm.loginAs(base).catch(() => undefined); return now; }
+let LANG_BUSY_AT = 0;  // 2026-11-12 T252: 시나리오 lang 단계가 '다른 화면 실행 중' 으로 잠금을 못 얻은 시각 — 10분 안의 다음 lang 단계는 20초만 기다린다(대기로 테스트 제한을 다 쓰지 않게)
+import { badPeriod, badPeriodName, judgeCodeShown, judgeDivSearches, judgeDynSort, judgeKeyTrend, judgePeriodSweep, judgeSortedCopyHide, judgeSumBefore } from '../../../tools/E2E/lib/disp2';
+import { judgeAllSearch, judgeBodyDiff, judgeCandDash, judgeFilterItems, judgeHeaderFit, judgeHeaderHeight, judgeScroll, judgeTypingStable } from '../../../tools/E2E/lib/layout2';
+import { judgeEditorText, judgeKeepQty, judgeMonthSum } from '../../../tools/E2E/lib/celledit';
+import { judgeApplied, judgeDefaultBtn, judgeNoChangeOk, judgeRequiredLocked, judgeRequiredRed, judgeRequiredShown } from '../../../tools/E2E/lib/colsetting';
+import { judgeFill } from '../../../tools/E2E/lib/cellfill';
+import { judgeCancel, judgePaste, judgeSaveFail, judgeSpinner } from '../../../tools/E2E/lib/savepath';
+import { asisDeleteNewOnly, asisInsertGuard, asisInsertNoop, judgeDup, judgeRequired } from '../../../tools/E2E/lib/newrow';
+import { labelVariants, msgTexts } from '../../../tools/E2E/lib/labeltrans';  // 2026-11-20 T435 메뉴 메시지 코드 번역 글자(탭 이름)
+import { aliasFor, loadLabelAliases, stdAlias } from '../../../tools/E2E/lib/labelalias';  // 2026-11-19 조회조건 명칭 변경 룰(CR-092 Valid→Active)
+import { asisInsertSheet, asisSaveSheet } from '../../../tools/E2E/lib/insertpre';  // 2026-11-10 T190 Insert 전제 시트
+import { pickSheetGrid, gridSheetsResolved, nSh as nShId } from '../../../tools/E2E/lib/sheetid';  // 2026-11-10 T203 그리드 시트 확정
+import { dialogCount, pickRows, waitPopRows, waitPopup } from '../../../tools/E2E/lib/popupprobe';
+import { judgePopK3, popK3Keys, type PopK3 } from '../../../tools/E2E/lib/popk3';  // 2026-11-20 T496 팝업 그리드 K3 판정
+import { asisPopCalls, condPopupArgs, popK3Measure } from '../../../tools/E2E/lib/popk3run';  // 2026-11-20 T496·T498 팝업 측정
+import * as fs from 'node:fs';
+import { createHash } from 'node:crypto';
+import * as path from 'node:path';
+
+import { test } from '../../../tools/E2E/fixtures/test';
+import { withFileLock, PHASE as E2E_PHASE } from '../../../tools/E2E/lib/writeguard';  // 2026-11-20 D1 동시 실행: 결과 파일 잠금 · 단계
+// 2026-11-10 T212: 이번 테스트에서 호출된 저장(sheet/btn) → PROC_M 프로시저 → AS-IS 저장 SP 이름(P_ 제거) → append_tables.csv root 로 '저장마다 새 키 행' 표
+// 2026-11-10 T224: 수정 저장 시험이 AS-IS Save 대상 시트 그리드를 편집하도록 — 탭 열기 → 시트 그리드 확정(probe) → DOM 기본 그리드 지정(nscm.forceGrid).
+//   반환 = 근거 문구('' = AS-IS Save 시트가 하나로 정해지지 않음 → 종전 동작) · 호출부는 시험 끝에 unfocusSaveSheet 로 되돌린다
+async function focusSaveSheet(nscm: Nscm, id: string): Promise<string> {
+  const ss = asisSaveSheet(id); if (!ss.sheet) return '';
+  const p = nscm.page; await clickSheetTab(nscm, ss.sheet).catch(() => false); await p.waitForTimeout(600);
+  const psg = await pickSheetGrid(p, id, ss.sheet).catch(() => ({ ok: false, how: '시트 판정 오류' }));
+  if (!psg.ok) { await probe.pickGrid(p, null).catch(() => undefined); return `AS-IS Save 대상 '${ss.sheet}'(${ss.ref}) 그리드 확정 실패 — ${psg.how}`; }
+  if ((await probe.rowCount(p).catch(() => 0)) <= 0) { await nscm.search().catch(() => undefined); await probe.waitRows(p, 60_000).catch(() => undefined); await nscm.clearDialogs(); await clickSheetTab(nscm, ss.sheet).catch(() => false); await p.waitForTimeout(600); await pickSheetGrid(p, id, ss.sheet).catch(() => undefined); }
+  const g = (await gridSheetsResolved(p, id).catch(() => [])).find(z => nShId(z.sheet) === nShId(ss.sheet)); const idx = g ? await nscm.indexOfGridWith(g.cols.slice(0, 40)) : -1;
+  nscm.forceGrid = idx >= 0 ? idx : null;
+  return `AS-IS Save 대상 시트 '${ss.sheet}'(${ss.ref}) 그리드에서 측정 · ${psg.how} · DOM 그리드 #${idx}(T224)`;
+}
+async function unfocusSaveSheet(nscm: Nscm): Promise<void> { nscm.forceGrid = null; await probe.pickGrid(nscm.page, null).catch(() => undefined); }
+
+function appendTablesOf(id: string, calls: { sheet?: string; btn?: string }[], insOnly = false): Map<string, string> {  /* insOnly=true: 새 키 여부와 무관하게 이 저장 체인의 INSERT 표 전체(T222) */
+  const out = new Map<string, string>();
+  try {
+    const pm = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'tobefacts', 'db', 'proc_meta.csv'), 'utf8').replace(/^﻿/, '')).filter(r => (r.menu_id || '').toUpperCase() === id.toUpperCase());
+    const roots = new Set(calls.filter(c => /^(SAVE|INS|UPD|DEL)/i.test(c.btn || '')).map(c => pm.find(r => r.sheet === c.sheet && r.btn === c.btn)?.proc_nm || '').filter(Boolean).map(n => n.toUpperCase().replace(/^P_/, '')));
+    const ap = path.join(ROOT, 'Doc', 'asisfacts', 'screens', id, 'append_tables.csv');
+    if (roots.size && fs.existsSync(ap)) for (const r of parseCsv(fs.readFileSync(ap, 'utf8').replace(/^﻿/, ''))) { if (!roots.has((r.root || '').toUpperCase())) continue; const k = (r.key_src || '').trim(); if (k || insOnly) out.set((r.table || '').toUpperCase(), `${r.sp}:${r.line} ${k || 'INSERT'}`); }
+  } catch { /* 사실 없음 — 종전 판정 */ }
+  return out;
+}
+import { dropdownOptions, parseCsv, probe } from '../../../tools/E2E/lib/probe';
+import { crudCycle } from '../../../tools/E2E/lib/crud';
+import { useScreenLookups, loadAccountCtx, evalRules, groupCtx, parseRules, ruleColumns, type CondCtx } from '../../../tools/E2E/lib/condeval';
+import { CFG } from '../../../tools/E2E/lib/nscm';
+import { clickSheetTab, openSheetPopup, ensureRows, sweepCondCombos, findRowAcrossDivisions, widenFrom, setCondByLabel, findCondAny, sheetNav, isSplitPeriod, pickSplitMonth } from '../../../tools/E2E/lib/smoke-extra';
+
+/** 도구 오류 문구를 판정 증거로 남길 때 — Playwright 색상 제어문자(\x1b[2m 등)·공백 정리 후 자름.
+ *  2026-10-30 SCP0100: 제어문자가 원장 → xlsx 로 흘러가 CheckList 생성이 IllegalCharacterError 로 중단(검사기 결함 T10). */
+function errText(e: unknown, max: number): string {
+  // eslint-disable-next-line no-control-regex
+  return String(e).replace(/\x1b\[[0-9;]*[A-Za-z]/g, '').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+const ID = (process.env.VERIFY_ID || '').toUpperCase();
+const VERIFY_ALIASES = loadLabelAliases(ID);  // 2026-11-19 TO-BE 명칭 변경 룰(label_alias.csv · CR-092), 조회조건 칸 찾기에 씀
+useScreenLookups(ID);  // 2026-11-18 INLOOKUP 원자(공통 코드 값)
+const ROOT = path.resolve(__dirname, '..', '..', '..');
+// 2026-11-04 W8-2: 화면별 기대 행 = 손 행(Doc/verify/<name>) + 자동 행(Doc/verify/<ID>/auto_expect/<name> · gen_expect.py — 손 행과 같은 패턴 키는 생성 때 이미 뺐다) · 자동 행 = 기본 켜짐(2026-11-05 사용자 지시) · VERIFY_AUTO=0 이면 손 행만
+// 2026-11-05 W8-5: 데이터 전제 프로필(Doc/verify/<ID>/scenario_env.json · scenario_env.py) — 0행 ERROR 근거에 전제 사실 한 줄(원인 추정 아님)
+const envLine = (): string => { try { const j = JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'verify', ID, 'scenario_env.json'), 'utf8')); const acc = Object.keys(j.divisions_accounts || {}).join(',') || '없음'; const req = (j.required_conds || []).map((x: { label: string }) => x.label).join(',') || '없음'; const mx = j.observed && j.observed.max_rows_after_search != null ? `${j.observed.max_rows_after_search}행(${String(j.observed.source || '').slice(0, 40)})` : '미측정'; return ` · [전제] Div조건 ${j.division_cond && j.division_cond.present ? '있음' : '없음'} · 기본 Div ${(j.default && j.default.division) || '-'} · 계정 Div ${acc} · 필수조건 ${req} · 이전 관측 최대 ${mx}${(j.warnings || []).length ? ' · ⚠ ' + j.warnings.join('; ') : ''}`; } catch { return ' · [전제] 프로필 없음(scenario_env.py 미실행)'; } };
+const readExpect = (name: string): Record<string, string>[] => { const h = path.join(ROOT, 'Doc', 'verify', name); const a = path.join(ROOT, 'Doc', 'verify', ID, 'auto_expect', name); return [...(fs.existsSync(h) ? parseCsv(fs.readFileSync(h, 'utf8')) : []), ...(fs.existsSync(a) && process.env.VERIFY_AUTO !== '0' ? parseCsv(fs.readFileSync(a, 'utf8')) : [])]; };
+const DIR = path.join(ROOT, 'Doc', 'verify', ID);
+const LEDGER = path.join(DIR, 'verify_ledger.csv');
+const OUT = process.env.CL_RESULTS || path.join(DIR, 'e2e_results.json');  // CL_RESULTS = CheckList 자기검증(변이) 실행의 별도 결과 파일(2026-10-28)
+const CL_SELFTEST = !!(process.env.CL_MUTATE || process.env.CL_SELFTEST_BASE);  // 자기검증 기준선 실행도 공식 산출물 미기록  // 변이 실행 = 공식 산출물(combo_runtime·dyn_facts) 미기록
+
+// 2026-11-09 T176: 실행 식별 — 결과 병합의 '확정 판정을 판정필요로 덮지 않음' 은 같은 실행 안에서만(이전 실행의 낡은 FAIL 이 재측정을 막던 결함 · SSP0025 V-1cd2a756)
+const RUN_ID = process.env.VERIFY_RUN_ID || '';
+type Res = { row_id: string; result: 'PASS' | 'FAIL' | '판정필요' | 'ERROR' | 'NA'; evidence: string; tobe_ref?: string; cond?: string; mctx?: { calls: number; rows: number; req: number }; run?: string };
+const results: Res[] = [];
+const rows = ID && fs.existsSync(LEDGER) ? parseCsv(fs.readFileSync(LEDGER, 'utf8')) : [];
+const flush = () => withFileLock(OUT, () => {  // 2026-11-20 D1: 동시 실행 작업자끼리 읽고-합치고-쓰기 구간이 겹치지 않게
+  const prev: Res[] = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
+  // 정밀 검증 엔진(_trace.spec @trace)이 이미 판정한 행은 범용 @verify 가 덮지 않는다 — Playwright 가 파일을 알파벳 순(_trace → _verify)으로 돌려 엔진 결과가 되돌아가던 결함(2026-10-27)
+  const isTag = (t?: string) => /^E2E @verify \S/.test(t || ''); const ded = new Set(rows.filter(x => x.note === '전용').map(x => x.row_id)); /* 전용 행 = 전용 시험(TAG) 결과가 우선 — 규칙 단위 일괄 판정·@trace 가 덮으면 전용 시험이 무의미(2026-11-02 T32 재발 · SCP0028 체인) */ const m = new Map(prev.map(r => [r.row_id, r])); for (const r of results) { const ex = m.get(r.row_id); if (r.tobe_ref === 'E2E @verify 버튼 모달' && r.result !== 'ERROR') { m.set(r.row_id, r); continue; } /* 2026-11-18 미검증 해소(SCP0096): 버튼 경로 메시지 전용 시험의 실측(PASS·FAIL)은 @trace 의 '해당 동작 시나리오에서 판정'(판정필요)보다 우선 */ if (ded.has(r.row_id)) { if (isTag(r.tobe_ref)) { m.set(r.row_id, r); continue; } if (ex && isTag(ex.tobe_ref)) continue; } if (ex && !(r.tobe_ref || '').startsWith('E2E @verify CRUD') && ((ex.tobe_ref || '').startsWith('E2E @trace') || (['PASS', 'FAIL', 'NA'].includes(ex.result) && ['판정필요', 'ERROR'].includes(r.result) && (!RUN_ID || ex.run === RUN_ID)))) continue; m.set(r.row_id, r); }  // 'E2E @verify CRUD' = 저장 SP TRACE F4 를 실저장으로 판정한 결과 — _trace 의 '저장 경로' NA 를 덮는다(2026-10-28)  // 확정 판정은 판정필요로 덮지 않음(2026-10-28)
+  // 2026-11-13 점검: Windows 에서 다른 프로세스가 결과 파일을 잠깐 잡으면 "UNKNOWN: unknown error, open …e2e_results.json" 로 기록이 통째로 빠졌다(11-11 DMF0005 · 11-12 SCP0028 10회) → 짧게 기다려 최대 5회 다시 쓴다
+  { const body = JSON.stringify([...m.values()], null, 1); for (let k = 0; ; k++) { try { fs.writeFileSync(OUT, body, 'utf8'); break; } catch (e) { if (k >= 4) throw e; Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 300 * (k + 1)); } } }
+});
+// W1(2026-10-24): 콤보 후보 실측 덤프 — combo_oracle.py 가 AS-IS 원천 실행 결과와 비교(B4 집합·B3 순서)
+const RT_P = path.join(DIR, 'combo_runtime.json');
+const RT: { at: string; search: Record<string, unknown>; grid: Record<string, unknown>; combos: unknown[]; gridCascade?: unknown[] } = { at: new Date().toISOString(), search: {}, grid: {}, combos: [] };
+// CRUD 실제 저장 안전장치(2026-10-24) — cleanup_spec.json keyset 정의 화면은 저장 전 빈 키 확인(ledger_guard.py check) · 스냅샷 기록(record)
+const KEYSPEC: { keys: string[]; vary?: string[]; prefer?: Record<string, string> } | null = (() => {
+  try { const j = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'verify', 'cleanup_spec.json'), 'utf8'))[ID]; return j && j.mode === 'keyset' ? j : null; } catch { return null; }
+})();
+// 2026-11-06 T64: 기존행 수정 저장 시험은 저장 키 컬럼(cleanup_spec keys)을 편집 대상으로 고르지 않는다 — 키를 바꾸면 (a) 업무 키 중복 검증에 막히고
+//   (SCP0122 OPMZ_ACTV_SEQ '신규 입력 데이터 중 중복된 데이터') (b) 복원기가 바뀐 키를 못 따라가 사내 DB 에 남는다(SCP0131 PG0031→PG0001 · SCP0122 A007→A001, 11-06 수동 복원).
+const SAVE_KEYS = new Set<string>(((): string[] => { try { const j = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'verify', 'cleanup_spec.json'), 'utf8'))[ID]; return (j && Array.isArray(j.keys) ? j.keys : []).map((s: string) => String(s).toUpperCase()); } catch { return []; } })());
+const isSaveKey = (b: string) => SAVE_KEYS.has(String(b || '').toUpperCase());
+// 마지막으로 기록(record)한 저장 키 — 저장 후 화면 자동 재조회로 신규행 자리가 다른 행이 되므로 재조회 판정은 이 값으로 찾는다(2026-10-25)
+let lastRecordedKeys: Record<string, string> = {};
+const guard = (mode: 'check' | 'record' | 'suggest', vals: Record<string, string>): { ok: boolean; free?: boolean; why?: string } => {
+  if (mode === 'record') lastRecordedKeys = { ...vals };
+  try { return JSON.parse(execFileSync('python', [path.join(ROOT, 'tools', 'Harness', 'verify', 'ledger_guard.py'), mode, ID, JSON.stringify(vals)], { encoding: 'utf8', timeout: 60_000 })); }
+  catch (e) { return { ok: false, free: false, why: `가드 실행 실패 ${String(e).slice(0, 120)}` }; }
+};
+const addCombos = (list: { body: string }[]) => { const seen = new Set((RT.combos as { body: string }[]).map(c => c.body)); for (const c of list) if (!seen.has(c.body)) { seen.add(c.body); RT.combos.push(c); } };
+const flushRt = () => withFileLock(RT_P, () => {
+  if (!ID) return;
+  const prev = fs.existsSync(RT_P) ? JSON.parse(fs.readFileSync(RT_P, 'utf8')) : { search: {}, grid: {}, combos: [] };
+  // 이번 실행에서 채운 구역은 통째로 교체(이전 실행의 낡은 항목이 섞이지 않게 — 2026-10-24 Sales Site 잔존), 비어 있는 구역만 이전 값 유지(--grep 부분 실행)
+  // 2026-11-19 SCP0096 재수행 2(--only F6,X-REASON): 부분 실행이 주 조회조건(Div·Plant Site)만 채워 search 구역을 통째로 바꾸면서
+  //   Bulk Update 창 콤보(Day of the week·Input Value) 항목이 지워졌다 → B3 2행 '실행 경로 없음'. 부분 실행(VERIFY_ONLY)이면 항목 단위로 합친다(이번에 잰 항목만 바꿈)
+  // 2026-11-20 D1: 같은 실행(VERIFY_RUN_ID)의 다른 작업자가 이미 쓴 구역(prev.rr[구역] === RUN_ID)은 통째로 바꾸지 않고 항목 단위로 합친다. 지난 실행이 남긴 구역은 종전대로 바꾼다
+  const partial = !!process.env.VERIFY_ONLY;
+  const rr: Record<string, string> = (prev && prev.rr) || {}; const sameRun = (k: string) => !!RUN_ID && rr[k] === RUN_ID;
+  const pick2 = <T,>(cur: T, old: T) => (cur && Object.keys(cur as object).length ? (partial && old && typeof old === 'object' ? ({ ...(old as object), ...(cur as object) } as T) : cur) : old);
+  fs.writeFileSync(CL_SELFTEST ? path.join(process.env.E2E_RESULTS || DIR, 'combo_runtime.json') : RT_P, JSON.stringify({ at: RT.at, search: (sameRun('search') && Object.keys(RT.search).length ? { ...prev.search, ...RT.search } : pick2(RT.search, prev.search)), grid: (sameRun('grid') && Object.keys(RT.grid).length ? { ...prev.grid, ...RT.grid } : pick2(RT.grid, prev.grid)), rr: { ...rr, ...(Object.keys(RT.search).length ? { search: RUN_ID } : {}), ...(Object.keys(RT.grid).length ? { grid: RUN_ID } : {}), ...(RT.combos.length ? { combos: RUN_ID } : {}) }, combos: RT.combos.length ? ((partial || sameRun('combos')) ? [...(prev.combos || []).filter((c: { body: string }) => !(RT.combos as { body: string }[]).some(x => x.body === c.body)), ...RT.combos] : RT.combos) : prev.combos, gridCascade: (RT.gridCascade || []).length ? RT.gridCascade : prev.gridCascade }, null, 1), 'utf8');
+});
+const COND_HASH = new Map(rows.map(r => [r.row_id, createHash('sha1').update(String(r.condition || ''), 'utf8').digest('hex').slice(0, 8)]));  // 측정 시점의 검사 조건(2026-10-29)
+// 2026-11-06 사용자 지시: TO-BE 화면 편집기 생성 오류(Wijmo assert 등)는 오류 항목(FAIL)으로 알린다 — probe.editable 이 삼킨 예외 중 이 컬럼 것(읽으면 비워짐)
+const editorErrOf = async (pg: import('@playwright/test').Page, b: string): Promise<string> => { const all = await probe.editorErrors(pg).catch(() => [] as string[]); const mine = all.filter(z => z.startsWith(b + ':')); return mine.length ? mine[0].replace(/\s+/g, ' ').slice(0, 160) : ''; };
+// P1(2026-11-06 근본 보완): 측정 맥락 — 이 테스트에서 지금까지 나간 call-proc 수·조회 응답 최대 행·필수 조건 자동 채움 횟수. judge 가 '측정 전제 미충족' FAIL 을 ERROR 로 돌리는 근거
+const CUR: { nscm: Nscm | null } = { nscm: null };
+// 2026-11-13 점검(SCP0104 '문서 시나리오' 12:23 SyntaxError "Invalid regular expression: /^+\b/i"): 시나리오 btn/download 단계의 버튼 값은 정규식 계약이지만
+//   자동 행(gen_expect P15)이 버튼 글자를 그대로 넣어('+' · 'Insert(Multi)') 정규식 예외로 테스트 전체가 죽거나 엉뚱한 버튼을 찾았다.
+//   ① 정규식으로 못 읽으면 글자 그대로 일치 ② 끝이 단어 문자가 아니면 \b 를 붙이지 않는다('+'·')' 뒤에는 단어 경계가 없어 영원히 불일치).
+const btnRe = (a: string): RegExp => { const tail = /\w$/.test(a) ? '\\b' : ''; try { return new RegExp(`^${a}${tail}`, 'i'); } catch { return new RegExp(`^${a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}${tail}`, 'i'); } };
+const mctxOf = () => { const n = CUR.nscm; if (!n) return undefined; const rows = n.calls.reduce((m, c) => Math.max(m, c.rows == null ? -1 : Number(c.rows)), -1); return { calls: n.calls.length, rows, req: (n as unknown as { requiredNotes?: string[] }).requiredNotes?.length || 0 }; };
+// 2026-11-06 T108(SCP0127 4·5번 허위 FAIL · 사용자 "AS-IS 와 동일하게 편집 가능"): 날짜 칸의 'Assertion failed in Wijmo: Date expected' 는 프로브가 빈 셀에 startEditing 을 부른 경로에서만 난다 —
+//   실제 사용자 경로(더블클릭 → 20991231 입력)로 값이 날짜로 들어가면 편집 정상. 값이 안 바뀌면 그대로 화면 오류.
+const dateEditorReallyWorks = async (n: Nscm, row: number, b: string, ee: string): Promise<boolean> => {
+  if (!/Date expected/i.test(ee)) return false;
+  const pg = n.page; const before = String((await probe.displayText(pg, row, b)) ?? '');
+  const ty = await typeCell(n, row, b, '20991231').catch(() => ({ ok: false, how: '' }));
+  const after = String((await probe.displayText(pg, row, b)) ?? '');
+  const ok = ty.ok || /2099/.test(after);
+  if (ok && before && before !== after) await typeCell(n, row, b, before.replace(/\D/g, '')).catch(() => undefined);
+  return ok;
+};
+// 2026-11-07 T142: 스냅샷 행(_snap.spec 전용)은 규칙 묶음 판정이 덮지 않는다(_trace.spec 과 같은 계약)
+const SNAP_IDS = new Set(rows.filter(r => /스냅샷/.test(r.target || '')).map(r => r.row_id));
+const put = (row_id: string, result: Res['result'], evidence: string, tobe_ref = 'E2E @verify') => { if (SNAP_IDS.has(row_id)) return; results.push({ row_id, result, evidence: evidence.slice(0, 900), tobe_ref, cond: COND_HASH.get(row_id), mctx: mctxOf(), run: RUN_ID }); };
+const binding = (target: string) => (/^[^.]+\.([A-Z0-9_]+)/.exec(target) || [])[1] || '';
+const pick = (pred: (r: Record<string, string>) => boolean) => rows.filter(pred);
+// 2026-11-20 T500(SCP0028 V-04302ccf [DMF0049 결함 유형] 신규 입력 그리드 복사/붙여넣기·한글·자동완성·병합 셀): K3 행이지만 신규행 키 입력 항목이라 E6 시험이 잰다(K3 시험은 건너뜀)
+const E6_IN_K3 = (x: Record<string, string>) => x.rule_id === 'K3' && x.source !== 'RULE_SCREEN' && /한글|자동완성|IME/.test(`${x.target} ${x.expected}`);
+const NO_SAVE = !!process.env.VERIFY_NO_SAVE; const NO_SAVE_WHY = '[저장 미실행] VERIFY_NO_SAVE — 이 화면은 정리 정의(cleanup_spec)가 없어 사내 DB 실저장 검사를 하지 않았다(미측정)';
+// 화면 안 탭(plan.mainSheets) — 1개 이하면 [''] (단일 시트 경로)
+const nrmSheet = (t: string) => (t || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+// CR-100(2026-11-10 · T178) 대상 = TO-BE 메타 셀 팝업 컬럼(FPModal·FPTextModal) — eg_popup 이 쓰는 같은 메타 사본
+const META_MODAL_COLS: Set<string> = (() => { try { const mj = JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'verify', '_parallel', 'E02', 'facts', `${ID}.meta.json`), 'utf8')) as { columns?: { COLUMN_NAME?: string; CELL_CONTROL_OBJECT_TYPE_CODE?: string }[] }; return new Set((mj.columns || []).filter(c => /FP(Text)?Modal/i.test(c.CELL_CONTROL_OBJECT_TYPE_CODE || '')).map(c => String(c.COLUMN_NAME || '').toUpperCase())); } catch { return new Set<string>(); } })();
+const SHEET_LIST: string[] = (() => { try { const n = ((JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')).mainSheets || []) as { name: string }[]).map(x => x.name).filter(Boolean); return n.length > 1 ? n : ['']; } catch { return ['']; } })();
+// 2026-10-30 WP1 동적(런타임) 컬럼 행 — 원장 note {"dyn":{"re","family"}} (ledger.py ← facts_dyncols). target 의 '<DYNAMIC:…>' 은 실행 시 정규식으로 실제 binding 을 고른다
+const dynOf = (x: Record<string, string>): { re: string; family: string } | null => { try { const j = JSON.parse((x.note || '').replace(/\s\[잠금 해석 실패\].*$/s, '')); return j && j.dyn && j.dyn.re ? { re: j.dyn.re, family: j.dyn.family } : null; } catch { return null; } };
+// 2026-10-30 WP2 계정 컨텍스트(화면 리터럴 없음) — plan.json accounts 의 로그인 계정 속성(admin·groups·tobeGroups) 으로 AS-IS GROUP 조건을 평가
+const ACCOUNT = (process.env.E2E_ACCOUNT || CFG.defaultAccount || '').toLowerCase();
+// 로그인 계정이 plan.accounts 에 없으면(기본 계정 ≠ 표본 계정 · 2026-10-30 SCP0111 v12: minyonglee1 이 jooyong026 만 담긴 plan 에 없어 admin=false 로 D1 PASS 오판) accounts.json 풀 → TO-BE 메타 user_group_user.csv 순으로 그룹을 찾고,
+// 그래도 없으면 group 비움 + unknown=true → judgeCond 가 GROUP 규칙을 ERROR('계정 그룹 미확인') 로 낸다(PASS/FAIL 오판 금지)
+const ACCT_CTX = loadAccountCtx(ID, ACCOUNT);
+const isMainSheetCall = (sheet: string) => {
+  try { const plan = JSON.parse(fs.readFileSync(path.join(ROOT, 'Doc', 'e2e', 'specs', `${ID}.plan.json`), 'utf8')); const ms: string[] = plan.mainSheets || (plan.mainSheet ? [plan.mainSheet] : []); if (ms.length) return ms.includes(sheet); } catch { /* plan 없음 */ }
+  const first = (rows.find(r => r.source === 'SP' && /SEARCH/i.test(r.condition || '') && r.target) || {}).target || '';
+  return !first || first.toLowerCase().includes((sheet || '').toLowerCase());
+};
+
+const searchedDiv = (body?: string) => { try { const j = JSON.parse(body || '{}'); const v = j.divisionId ?? j.data?.divisionId; return v == null ? '' : String(v); } catch { return ''; } };
+// AS-IS 액션(guard·지역 변수 추적용) — 원장과 같은 화면 ID 의 Fact Pack
+const ACTS_P = path.join(ROOT, 'Doc', 'asisfacts', 'screens', ID, 'actions.csv');
+const ACTS = ID && fs.existsSync(ACTS_P) ? parseCsv(fs.readFileSync(ACTS_P, 'utf8')) : [];
+// 2026-11-19 T341: AS-IS 화면 소스의 DeleteButton 빈 재정의 위치('파일:줄' · 없으면 '') — 병합 셀 Delete 판정 근거(mergecheck.emptyOverrideLine)
+const asisNoDeleteAt = (): string => { for (const f of [...new Set(ACTS.map(z => z.file).filter(Boolean))]) { const rel = String(f).replace(/\\/g, '/'); const sp = [path.join(ROOT, 'GSCM', rel), path.join(ROOT, 'GSCM_20260512', rel)].find(q => fs.existsSync(q)); if (!sp) continue; const ln = emptyOverrideLine(fs.readFileSync(sp, 'utf8'), 'DeleteButton'); if (ln) return `${path.basename(sp)}:${ln} DeleteButton`; } return ''; };
+const methodOf = (asisRef: string) => (/\.(\w+)(?:\s|$)/.exec(asisRef.split('·')[0].trim()) || [])[1] || '';
+/**
+ * 연쇄·cascade 의 원천 컬럼 — ① guard 체인('▸')의 가장 안쪽 'e.Column == …DefColumns.X' (바깥 'else of' 제외)
+ *  ② 임의 변수와 컬럼 인덱스 비교 'i == …GetColumnIndex(DefColumns.X)' ③ guard 의 지역 변수(strX)를 같은 메서드에서 GetText/GetValue(…DefColumns.X) 로 세팅한 경우
+ */
+function resolveSrc(condition: string, asisRef: string): string {
+  const segs = condition.split('▸').map(s => s.trim());
+  const inner = segs.filter(s => /e\.Column\s*==/.test(s) && !/^else of/.test(s)).pop() || '';
+  const m1 = /e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)/.exec(inner); if (m1) return m1[1];
+  const m2 = /\b\w+\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)/.exec(segs.filter(s => !/^else of/.test(s)).join(' ')); if (m2) return m2[1];
+  const meth = methodOf(asisRef);
+  for (const v of new Set(condition.match(/\bstr[A-Z_][A-Za-z0-9_]*\b/g) || [])) {
+    const a = ACTS.find(x => x.method === meth && x.target === v && /DefColumns\.[A-Z0-9_]+/.test(x.value + x.raw));
+    const m3 = a && /DefColumns\.([A-Z0-9_]+)/.exec(a.value + a.raw); if (m3) return m3[1];
+  }
+  return '';
+}
+/**
+ * 조회조건 라벨 → 그 항목의 콤보박스(2026-10-24 W1). 라벨은 정확 일치 → 접두 일치('Div' ↔ 'Division', 3자 이상) 순.
+ * 라벨과 콤보가 같은 입력 항목인지 확인 — 가장 가까운 공통 조상에 콤보가 1개뿐이어야 한다(텍스트/팝업형 라벨이 옆 항목 콤보를 집던 오인 방지)
+ */
+async function findSearchBox(nscm: { visibleFirst: (l: import('@playwright/test').Locator, max?: number) => Promise<import('@playwright/test').Locator | null> }, p: import('@playwright/test').Page, name: string) {
+  const area = (await nscm.visibleFirst(p.locator('[class*="searchArea"], [class*="SearchArea"]'))) || p.locator('body');
+  const esc = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  let lab = await nscm.visibleFirst(area.getByText(new RegExp(`^\\s*\\*?\\s*${esc}\\s*\\.?\\s*\\*?\\s*$`, 'i')));
+  let labText = name;
+  if (!lab) {
+    const n0 = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const texts = (await area.locator('label, span, div, p').evaluateAll(els => els.filter(e => e.children.length === 0 && (e as HTMLElement).offsetParent !== null)
+      .map(e => (e.textContent || '').trim()).filter(t => t && t.length <= 40))).filter((t, i, a) => a.indexOf(t) === i);
+    const hit = texts.find(t => { const n1 = t.toLowerCase().replace(/[^a-z0-9]/g, ''); return n1.length >= 3 && (n0.startsWith(n1) || n1.startsWith(n0)); });
+    if (hit) { labText = hit; lab = await nscm.visibleFirst(area.getByText(hit, { exact: true })); }
+  }
+  // 2026-11-19 미검증 해소(SCP0028 조회조건 Valid 8행): TO-BE 명칭 변경 룰(label_alias.csv · CR-092 SCP·SSP 'Valid' → 'Active')이 있으면 바뀐 라벨로 찾는다.
+  //   종전에는 AS-IS 라벨만 찾아 'Active' 칸을 못 찾고 B2·B3·B4·B6·G1·G7·H5 가 실행되지 않았다(명칭 일치 판정은 H5 · _trace 가 같은 별칭표로 함)
+  if (!lab) { const al = aliasFor(name, VERIFY_ALIASES) || stdAlias(name); /* T434 기준표 표준 명칭 */ if (al) { const esc2 = al.tobe_label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); lab = await nscm.visibleFirst(area.getByText(new RegExp(`^\\s*\\*?\\s*${esc2}\\s*\\.?\\s*\\*?\\s*$`, 'i'))); if (lab) labText = al.tobe_label; } }
+  if (!lab) return { box: null, labText, why: `조회조건 라벨 '${name}' 를 조회조건 영역에서 못 찾음 — 명칭 차이는 H5 행에서 판정` };
+  let holder = lab.locator('xpath=ancestor::*[.//*[@role="combobox"]][1]');
+  let n = await holder.locator('[role="combobox"]').count().catch(() => 0);
+  // 2026-11-18 미검증 해소(SCP0096 Plant Site B1~B7·G7 6행): 조회조건 영역 클래스가 없으면 body 에서 찾는데, 열린 왼쪽 메뉴의 같은 이름 메뉴 항목('Plant Site')을
+  //   먼저 집어 '콤보 2개'로 판정했다 → 메뉴(nav·aside)·그리드(wj-flexgrid) 안 글자는 건너뛰고, 보이는 같은 라벨 중 가장 가까운 조상에 콤보가 1개인 것을 고른다
+  if (n !== 1) {
+    const all = area.getByText(new RegExp(`^\\s*\\*?\\s*${labText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\.?\\s*\\*?\\s*$`, 'i'));
+    const cnt = Math.min(await all.count().catch(() => 0), 12);
+    for (let i = 0; i < cnt; i++) {
+      const c = all.nth(i);
+      const skip = await c.evaluate(e => !(e as HTMLElement).offsetParent || !!e.closest('nav, aside, [class*="sidebar"], [class*="Sidebar"], .wj-flexgrid')).catch(() => true);
+      if (skip) continue;
+      const h = c.locator('xpath=ancestor::*[.//*[@role="combobox"]][1]');
+      const k = await h.locator('[role="combobox"]').count().catch(() => 0);
+      if (k === 1) { holder = h; n = 1; break; }
+    }
+  }
+  if (n !== 1) return { box: null, labText, why: `'${labText}' 항목에 콤보 없음(텍스트/팝업형 — 가장 가까운 콤보가 다른 항목 소속 ${n}개)` };
+  return { box: holder.locator('[role="combobox"]').first(), labText, why: '' };
+}
+
+/** 콤보의 현재 선택 표시(칩·입력값) — AS-IS 실행 상태(앞 조건 선택값) 재현용 */
+async function selectedOf(box: import('@playwright/test').Locator): Promise<string[]> {
+  return box.evaluate(el => {
+    const root = el.closest('.MuiAutocomplete-root') || el.parentElement || el;
+    const clean = (t: string) => t.replace(/[​ ]/g, ' ').trim(); // 미선택(ALL) 표시는 제로폭 공백
+    const chips = [...root.querySelectorAll('.MuiChip-label')].map(x => clean(x.textContent || '')).filter(Boolean);
+    if (chips.length) return chips;
+    const v = (el as HTMLInputElement).value ?? '';
+    return clean(v) ? [clean(v)] : [clean((root as HTMLElement).innerText)].filter(Boolean);
+  }).catch(() => [] as string[]);
+}
+
+/**
+ * AS-IS 조건부 잠금 기대 평가 — 기대문 '잠금 when <guard> | 해제 when <guard> …' 중 그리드 행 값으로 계산 가능한 절만 평가한다.
+ *  평가 가능: GetText/GetValue(<행>, …DefColumns.X)…(==|!=) "V"  ·  'else of (…)' = 부정. 그 밖(지역 변수·룩업 dr[…])은 평가하지 않는다(추측 금지)
+ *  반환: { locked, by } — 평가 가능한 절이 서로 모순이면 null
+ */
+async function evalCondLock(expected: string, rowVal: (col: string) => Promise<string>): Promise<{ locked: boolean; by: string } | null> {
+  const clauses = expected.replace(/^조건부\s*—\s*/, '').split(' | ').map(s => s.trim());
+  const res: { locked: boolean; by: string }[] = [];
+  for (const cl of clauses) {
+    const m = /^(잠금|해제) when (.*)$/.exec(cl); if (!m) continue;
+    const neg = /^else of/.test(m[2]);
+    const g = /Get(?:Text|Value)\(\s*[\w.+\s-]+,\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)\s*\)\s*\)(?:\.ToString\(\))?\s*(==|!=)\s*"([^"]*)"/.exec(m[2]);
+    if (!g) continue;
+    const v = (await rowVal(g[1])).trim();
+    let hold = g[2] === '==' ? v === g[3] : v !== g[3]; if (neg) hold = !hold;
+    if (hold) res.push({ locked: m[1] === '잠금', by: `${g[1]}='${v}' ${neg ? 'not ' : ''}${g[2]} '${g[3]}'` });
+  }
+  if (!res.length) return null;
+  return res.every(r => r.locked === res[0].locked) ? res[0] : null;
+}
+
+test.describe(`정합검증 ${ID} @verify`, () => {
+  test.describe.configure({ retries: 0 }); // 테스트끼리 독립 — 한 테스트 실패가 다른 판정을 막지 않게(serial 금지)
+  test.skip(!ID || !rows.length, `VERIFY_ID 없음 또는 원장 없음: ${LEDGER}`);
+  // P7(b) 2026-11-06: 필수 조건 자동 채움(nscm.search 가 '필수 입력' 알림을 후보로 채워 넘긴 것)을 모아 원장 행에 기록 — 기본값·ALL 처리 결함을 우회해 PASS 로 만들지 않게
+  const REQ_NOTES = new Set<string>();
+  // 2026-11-20 작업 재개(R3): 필수 조건 자동 채움 기록을 시험마다 같은 실행 공용 파일(_req_notes_<RID>.json)에 더한다, 프로세스가 끊겨도 앞 시험 기록이 남고, 다시 돈 실행이 이어서 모은다
+  const REQ_FP = path.join(DIR, `_req_notes_${RUN_ID || 'run'}.json`);
+  const saveReqNotes = () => { if (!ID || CL_SELFTEST || !REQ_NOTES.size) return; withFileLock(REQ_FP, () => { const cur: string[] = fs.existsSync(REQ_FP) ? JSON.parse(fs.readFileSync(REQ_FP, 'utf8')) : []; const all = [...new Set([...cur, ...REQ_NOTES])]; if (all.length !== cur.length) fs.writeFileSync(REQ_FP, JSON.stringify(all), 'utf8'); }); };
+  const reqNotesAll = (): string[] => { try { return [...new Set([...(fs.existsSync(REQ_FP) ? JSON.parse(fs.readFileSync(REQ_FP, 'utf8')) as string[] : []), ...REQ_NOTES])]; } catch { return [...REQ_NOTES]; } };
+  test.afterEach(({ nscm }) => { for (const n of ((nscm as unknown as { requiredNotes?: string[] } | null)?.requiredNotes || [])) REQ_NOTES.add(n); try { saveReqNotes(); } catch (e) { console.log(`[req_notes] 기록 실패: ${String(e).slice(0, 120)}`); } });  // 2026-11-13 점검: 로그인 픽스처가 시간 초과로 없으면 nscm = null, 종전엔 여기서 TypeError 가 겹쳐 났다(11-13 SCP0104, SSP0020, SSP0021 8회)
+  test.afterEach(() => { try { flush(); } catch (e) { console.log(`[flush] 테스트 뒤 결과 기록 실패: ${String(e).slice(0, 120)}`); } try { flushRt(); } catch (e) { console.log(`[flushRt] 테스트 뒤 콤보 실측 기록 실패: ${String(e).slice(0, 120)}`); } });  // 2026-11-20 작업 재개(R3): 콤보 실측(combo_runtime.json)도 시험마다 같은 실행 병합(종전 = 프로세스 끝 1회, 끊기면 사라짐)  // 2026-11-12 T270: 테스트마다 결과를 파일에, 뒤 테스트가 멈춰 작업자가 죽어도 앞 결과가 남는다(DMF0005 608행 소실)
+  // 2026-11-20 D1: 나눠 실행(E2E_SHARD)이면 작업자마다 본 시험이 달라 이 프로세스의 REQ_NOTES 만으로 판정할 수 없다 → 같은 실행 공용 파일에 모으고 판정은 run_verify 가 모든 작업자가 끝난 뒤 한다(finalize_req_notes · 같은 문구)
+  // 2026-11-20 작업 재개(R3): 판정은 같은 실행 공용 파일 전체(앞 작업자, 끊기기 전 프로세스 포함)로 한다. 전체 실행은 E2E 가 끝난 뒤 run_verify 가 같은 문구로 다시 확정(e2e_shard.finalize_req_notes)
+  test.afterAll(() => { if (process.env.E2E_SHARD) { saveReqNotes(); flush(); flushRt(); return; } const notes = reqNotesAll(); const rq = pick(y => y.source === 'RULE_SCREEN' && /필수 조건 자동 채움/.test(y.target))[0]; if (rq) put(rq.row_id, notes.length ? '판정필요' : 'PASS', notes.length ? `[필수 조건 자동 채움 ${notes.length}건, 검사기가 우회한 필수 알림] ${notes.slice(0, 5).join(' | ')} → 그 조건의 기본값(ALL 등), 필수 처리가 결함인지 사람 판정` : '필수 조건 자동 채움 0건, 조회가 기본값으로 바로 됨'); flush(); flushRt(); });
+
+  // 2026-10-30 테스트결과서: 이 테스트에서 FAIL 로 기록한 행이 있으면 테스트 종료 시점 화면을 저장하고 행 ↔ 파일 색인을 남긴다(Doc/verify/<ID>/e2e/shots/).
+  //   판정에는 영향 없음(캡처 실패는 삼킨다) · 스펙별 색인 파일(index_verify.json)로 병렬 워커 간 쓰기 충돌을 피한다 · 캡처는 '종료 시점' 이라 실패 순간과 다를 수 있음을 색인 note 에 남긴다.
+  let shotMark = 0;
+  test.beforeEach(({ nscm }) => { CUR.nscm = nscm; shotMark = results.length; });
+  test.afterEach(async ({ page }, testInfo) => {
+    const fails = results.slice(shotMark).filter(r => r.result === 'FAIL');
+    if (!fails.length) return;
+    try {
+      const dir = path.join(DIR, 'e2e', 'shots'); fs.mkdirSync(dir, { recursive: true });
+      const slug = testInfo.title.replace(/[^\w가-힣]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 60) || 'test';
+      const file = `verify_${slug}.png`;
+      await page.screenshot({ path: path.join(dir, file), fullPage: false, timeout: 15_000 });
+      const idxP = path.join(dir, 'index_verify.json');
+      withFileLock(idxP, () => {  // 2026-11-20 D1 동시 실행 잠금
+      const idx: Record<string, unknown> = fs.existsSync(idxP) ? JSON.parse(fs.readFileSync(idxP, 'utf8')) : {};
+      for (const r of fails) idx[r.row_id] = { file, test: testInfo.title, at: new Date().toISOString().slice(0, 19).replace('T', ' '), note: '테스트 종료 시점 화면(실패 순간과 다를 수 있음)' };
+      fs.writeFileSync(idxP, JSON.stringify(idx, null, 1), 'utf8'); });
+    } catch { /* 캡처 실패는 판정에 영향 없음 */ }
+  });

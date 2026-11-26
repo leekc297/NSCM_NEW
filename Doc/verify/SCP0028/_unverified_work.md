@@ -144,3 +144,176 @@
 - 다른 세션 겹침: judge.py 에 다른 세션의 미커밋 'AI 권장안 되돌리기' 블록 있음(건드리지 않음). T490~T495 는 다른 세션 사용
 - 시험 데이터: TO-BE 저장, 삭제 없음. 사내 오라클 읽기만(PKG_SCP0028 예외 분기, MATERIAL SP ORDER BY, 시노님). 재생성 산출물: i18n_static.csv, sort_check.csv, syn_check.csv, popup_args.csv, Doc/golden INPUT md
 - FE 가이드: FE_GUIDE_20261120_1320.md 1건(Model 팝업 단추 순서). doc_style 위반 0. fixlist.csv 에 EG-2644dff3 행 없음(지금 원장 PASS)이라 고치지 않음
+
+## 2026-11-20 라운드 4 (16:39 ~ 16:5x · CheckList 16:06 원장 · 일괄 보완)
+
+- 입력: 원장 `verify_ledger.csv`(16:06:41), 분류 `unverified_triage.*`(16:06:50). 원장 미검증 53 = 엔진 12, 판단 2, 집계 39. AI 검토 행 1(EG-ac06e957) 포함 처리 대상 15
+- 행별 조치 표 `_unverified_plan.md`(15행, 묶음 6개). 결정 목록 `_unverified_decisions.md`(R4-D1~D3, R3-D7~D13 이월). 지난 라운드 표는 `*.r3_20261120`
+- 하위 에이전트 1개(golden.py). 고친 내용은 T514 표식, py_compile, ⑤단계 조건 코드로 다시 확인함
+- 재측정: run_verify, Playwright 실행 안 함. 확인은 판정 함수 재현(node), tsc, selftest, engine_selfcheck
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|---|
+| P1 일괄 입력 팝업 0행 | 5 | 필수 알림 단추 'Confirm' 이 popk3run 닫기 목록에 없음. Escape 는 basic CustomDialog(CustomDialog.tsx:283, onClose 없음)가 무시해 알림이 남고 From Site 콤보가 안 열림. eg_popup runCall 은 0행 필수 알림 뒤 채우기 단계 없음 | tools/E2E/lib/popk3run.ts takePopAlert·fillPopRows export, Doc/e2e/specs/eg_popup.spec.ts:547~550 (T510) | tsc 0, popk3.selftest 40/40 |
+| P2 일괄 삭제 메시지 | 4 | run_verify.py:928 이 E2E 시작 때 결과 파일을 .prev 로 옮김. 표본은 e2e_results.json.prev T-0159f9dc. respSample·branchBody 를 그 문자열로 돌려 'S' 응답과 'F' 사본 생성 확인 | Doc/e2e/specs/_trace.spec.ts 표본 원천 .prev (T511) | node 재현, tsc 0, btnpopup.selftest 30/30 |
+| P3 일괄 입력 SP 골든 | 1 | BTN 시험 실행 URL 에 main/INSERT 없음. T-6b9a8ce8 은 F4 일반 시험이 단추 이름 INSERT 로 저장 경로 NA 를 써 BTN 시험 결과가 병합 규칙에 가려짐. 골든 인자 원천은 TO-BE 호출 기록뿐 | _trace.spec.ts spPairKind·F4 저장 판단(T511), tools/DbConn/golden.py ⑤단계 팝업 행 표본(T514) | py_compile 0, getter→칸 5종 시험. popup_rowsets.json btnInput 0행이라 지금은 ERROR 유지 |
+| P4 From Site 후보 | 1 | FROM_SITE 는 그리드 칸이 아니고 행 데이터에만 있음(calls/_grid_main.json). T499 는 그리드 칸만 훑음 | tools/E2E/lib/probe.ts dataKeys, smoke-extra.ts condColForOpts (T513) | 기록 표본 20행 pickCondCol: 종전 없음 → FROM_SITE 'HQ07-A' |
+| P5 수정 행 배경색 | 1 | 편집기 value='' 경로로 LOT_SIZE·INCREMENT '1' 유지(증거 2회) | _trace.spec.ts h2RuntimeEdit 키보드 지움 (T512) | tsc 0 |
+
+### 고치지 않고 결정 목록으로 보낸 행
+
+- R4-D1 3행(EG-ac06e957, T-2c20a3fc, T-fad117f6): Model 팝업 COM0013 교체 룰 등록 범위. 사용자 지시 2026-10-08 기록은 5화면 소스 주석뿐이라 자동 등록 안 함
+
+### 다음 CheckList 에서 바뀔 판정(미측정)
+
+- 미검증 → 실측(통과 또는 오류): P1 5행(EG-6cc339e1 은 R4-D3 대로 FAIL 가능), P2 4행, P4 V-dd4f9db4, P5 V-a99ddb18(빈 값이 화면에서 안 들어가면 사유를 붙인 미검증)
+- V-8da88867: T510 으로 Input 팝업 행이 popup_rowsets.json 에 남으면 골든 실행, 남지 않으면 미검증 유지
+- T-6b9a8ce8: 해당없음 → BTN 팝업 경로 실측(통과·오류·미검증)
+- 다른 화면: 'Confirm' 알림이 뜨는 팝업의 K3·H6·M3, 행 데이터에만 있는 코드 칸을 쓰는 다중 선택 조회조건, 단추 이름이 INS 류인 GET·LOG PROC 의 F4 행
+
+### 점검
+
+- engine_selfcheck PASS(16:56:26 · TSC 0 · SELFTEST_JS 34 · PY 65)
+- inventory_check --write-registry 실행(등록부 tools/Harness/README.md)
+- 줄바꿈: popk3run.ts, eg_popup.spec.ts, _trace.spec.ts, probe.ts, smoke-extra.ts CRLF 유지(LF 단독 0). golden.py LF 유지
+- 백업 `*.bak_20261120_scp28u4`(popk3run, probe, smoke-extra, eg_popup.spec, _trace.spec, golden)
+- 시험 데이터: TO-BE 저장, 삭제, DB 조회 없음
+- FE 가이드: 없음(이번 라운드 화면 결함 확정 0건)
+
+## 2026-11-20 라운드 5 (21:52 ~ 22:15 · CheckList 21:51 원장 · 일괄 보완)
+
+- 입력: 원장 `verify_ledger.csv`(21:51), 분류 `unverified_triage.*`(21:52:13). 원장 미검증 30 = 엔진 4, 자동 4, 집계 22. AI 검토 행 5 포함 처리 대상 13
+- 행별 조치 표 `_unverified_plan.md`(13행, 묶음 8개). 결정 목록 `_unverified_decisions.md`(R4-D1, R5-D2, R5-D3, R3-D1, R4-D3, 기준 원장 판단 대기 18·58). 지난 라운드 표는 `*.r4_20261120`
+- 하위 에이전트 안 씀(묶음 8개 중 7개가 _trace.spec.ts 또는 그 lib 를 같이 고침)
+- 재측정: run_verify, Playwright 실행 안 함. 확인은 selftest, 원장 사본 to_ledger 드라이런, py_compile, engine_selfcheck
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|---|
+| Q1 표시 컬럼 | 1 | mapping_trace.py 조건 줄이기 ('asisVisible', 4) 가 숨김 정보 앞 4컬럼만 남김. TO_SITE, TRANS_MODE_CODE 메타 VISIBLE_FLAG N(dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv) | mapping_trace.py 줄이기 전 압축·asisVisCut, _trace.spec.ts visOf·A5 2곳 (T520) | 원장 사본 to_ledger: T-fc9d26c9 asisVisible 18/18, condition 854자. 실제 원장 md5 그대로 |
+| Q2 To Site | 1 | condColForOpts 가 FROM_SITE 를 고름(증거 'FROM_SITE 값 조건 밖 HQ07-A') | condcol.ts, smoke-extra.ts, _trace.spec.ts (T521) | popk3.selftest 43/43 |
+| Q3 팝업 정렬 | 1 | orderCheck 기호 제거 비교. 'Renault AS HQ_FR_RHE' → 'Renault AS_FR_FNS' 위반 판정 | popupprobe.ts (T522) | popk3.selftest 48/48(종전 코드면 첫 사례 violAt 1) |
+| Q4 단추 순서 증거 | 1 | 판정은 OK·Close 위치만 씀. 증거에 Open, Search 같이 적음. CR-005·CR-100 대로 FAIL 맞음 | eg_popup.spec.ts (T523) | tsc 0 |
+| Q5 일괄 입력 팝업 | 1 | 필수 칸 첫 후보 AU000062_81-P 만 넣고 0행이면 멈춤. HQ05-W 966행(diff #24) | _trace.spec.ts drivePopupPath·pickComboNth (T525) | tsc 0 |
+| Q6 수정 행 배경색 | 1 | 편집기·키보드 지움 뒤 '1' 유지(21:51 증거). numberInputRule.ts:34~36 빈 값 허용이라 원인 미확인 | _trace.spec.ts h2RuntimeEdit 경로 2개 추가·입력 불가 표시, unverified_classes.csv 16행 (T526) | tsc 0, unverified_resolve selftest OK |
+| Q7 AS-IS 시간 초과 | 4 | #47 'I' From Site 30개 AS-IS 300초 초과. 21:59 실측 HQ07-A 1개 150초 초과, MI00-P 14.6초 2145행. HQ07-A 품목 1175 × To Site 129, 스칼라 함수 3개 | diff_verify.py 시간 초과 표시 (T524), unverified_classes.csv 15행 | unverified_resolve selftest OK, py_compile 0 |
+| Q8 Model 팝업 교체 | 3 | 라운드 4 와 같음 | 없음 | 결정 R4-D1 |
+
+### 다음 CheckList 에서 바뀔 판정(미측정)
+
+- T-fc9d26c9: AI 검토 PASS → 검사기 PASS(AS-IS 표시 15 ⊆ TO-BE 15)
+- V-8e065123: AI 검토 PASS → 검사기 실측(TO_SITE 로 대조, 통과 또는 오류)
+- EG-017a5164: 판정필요 → PASS(다른 위반 행이 있으면 판정필요 유지)
+- EG-2644dff3: FAIL 유지(증거 문구만 바뀜)
+- T-6b9a8ce8: 미검증 → 실측(INPUT SP 호출 통과 또는 오류)
+- V-a99ddb18: 미검증 → 실측, 또는 '[전제 상태 TO-BE 입력 불가]' 미검증(담당 사람 · 결정 R5-D3)
+- AD 4행: 미검증 유지, 담당 자동 → 사람(결정 R5-D2)
+- 집계 22행: 하위 행을 따라감
+- 다른 화면: ENTRY 행 숨김 정보가 잘렸던 화면의 A5(종전 PASS·FAIL 이 바뀔 수 있음), 같은 코드 집합 칸이 둘인 다중 선택 조건(From/To), 기호가 섞인 팝업 정렬 키, AS-IS 시간 초과 차등 행 분류
+
+### 점검
+
+- engine_selfcheck PASS(22:12:53 · TSC 0 · SELFTEST_JS 34 · PY 65 · RULE_REGISTRY 0)
+- 새 도구 파일 없음(inventory_check 실행 안 함)
+- 줄바꿈: mapping_trace.py, _trace.spec.ts, condcol.ts, smoke-extra.ts, popupprobe.ts, eg_popup.spec.ts, popk3.selftest.js CRLF 유지. diff_verify.py LF 유지
+- 백업 `*.bak_20261120_scp28u5`(mapping_trace, _trace.spec, condcol, smoke-extra, popupprobe, eg_popup.spec, diff_verify, unverified_classes.csv, unverified_resolve, popk3run, popk3.selftest)
+- 시험 데이터: TO-BE 저장·삭제 없음. AS-IS DEV MSSQL 읽기만(팝업 SP 2회 실행 21:57~21:59, sys.indexes·건수 조회). mapping_trace SCP0028 재실행으로 mapping_trace*.csv·md 다시 만듦
+- FE 가이드: 없음(이번 라운드 화면 결함 확정 0건)
+
+## 2026-11-20 라운드 6 (23:38 ~ 23:47 · CheckList 23:38 원장 · 일괄 보완)
+
+- 입력: 원장 `verify_ledger.csv`(23:38:10), 분류 `unverified_triage.*`(23:38:21). 원장 미검증 12 = 엔진 2, 사람 4, 집계 6. AI 검토 행 2 포함 표 8행
+- 라운드 5 결과(23:38 원장, 실행 20261120221708): T-6b9a8ce8 PASS(main/INSERT 200 · 6행), T-fc9d26c9 PASS(표시 15 ⊆ 15), EG-017a5164 PASS(위반 없음 966행), V-a99ddb18 FAIL(빈 값 입력됨 · Save 뒤 'M' 유지), AD 4행 담당 사람(T524 표시 적용)
+- 하위 에이전트 안 씀(고칠 묶음 1개)
+- 재측정: run_verify, Playwright 실행 안 함. 확인은 popk3.selftest, engine_selfcheck
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|---|
+| S1 To Site | 1 | T521 뒤 22:17 실행에서도 FROM_SITE 대조. 라벨 칸 TO_SITE_DESCRIPTION(sheet_columns.csv 'To Site')과 라벨 갈래 칸 TO_SITE 모두 읽은 후보와 겹침 0 이라 pickCondCol 이 전 칸 최다 겹침 FROM_SITE 를 고름. 겹침 0 이유는 칸별 값 기록이 없어 미확인 | condcol.ts chooseCondCol, smoke-extra.ts condColForOpts, _trace.spec.ts 증거 '대조 칸 근거' (T527) | popk3.selftest 52/52, engine_selfcheck PASS(23:46:26) |
+| S2 Model 팝업 | 3 + 집계 6 | 라운드 4 와 같음 | 없음 | 결정 R4-D1 |
+| S3 AS-IS 시간 초과 | 4 | 호출 #48 AS-IS 300초 초과 | 없음 | 결정 R5-D2 |
+
+### 다음 CheckList 에서 바뀔 판정(미측정)
+
+- V-8e065123: AI 검토 PASS → 검사기 실측(TO_SITE 로 대조, 통과 또는 오류). 증거에 대조 칸 근거가 남음
+- 나머지 7행과 집계 6행: 결정 전까지 미검증 유지
+- 다른 화면: 라벨 칸(설명)과 코드 칸이 따로 있고 다른 조건 칸이 같은 코드 집합을 갖는 다중 선택 조건
+
+### 점검
+
+- engine_selfcheck PASS(23:46:26 · TSC 0 · SELFTEST_JS 34 · PY 65)
+- 새 도구 파일 없음
+- 줄바꿈: condcol.ts, smoke-extra.ts, _trace.spec.ts, popk3.selftest.js CRLF 유지
+- 백업 `*.bak_20261120_scp28u6`(_trace.spec, smoke-extra, condcol, popk3.selftest)
+- 시험 데이터: TO-BE·AS-IS DB 쓰기·조회 없음
+- FE 가이드: 없음. V-a99ddb18 FAIL 은 보완 단계 대상(fixlist.csv 13:10 판에는 없음)
+
+## 2026-11-21 라운드 7 (00:52 ~ 01:00 · CheckList 00:52 원장 · 일괄 보완)
+
+- 입력: 원장 `verify_ledger.csv`(00:52:26), 분류 `unverified_triage.*`(00:52:26). 원장 미검증 0. AI 검토 행 2(V-4633ca25 엔진, EG-ac06e957 결정)
+- 라운드 6 결과: V-8e065123 PASS(TO_SITE 대조 5행 일치). 증거 '읽은 후보 14개와 겹침 0' 으로 T527 원인 확인(콤보 후보를 앞 14개만 읽음)
+- 직전 결정 12행은 decide_apply 가 권장안 적용(recommended 12)
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일 | 확인 |
+|---|---|---|---|---|
+| U1 저장 중 로딩 | 1 | AI 검토가 AS-IS cs:661 new FoxAsyncProxy(this) 를 인용하며 'AS-IS 진행 표시 없음' 으로 PASS 반영. powershell.exe 로 TheOne.Windows.Forms.4.5.dll 의 FoxAsyncProxy 를 만들어 ShowProgress 읽음 = True(00:5x). AS-IS 소스 06.UIL 'ShowProgress = false' 765곳, 'true' 1곳 | llm_review.py asis_progress_on·decide H11 막음 (T528) | llm_review selftest OK(2건 추가), 실제 인용으로 막음 확인, engine_selfcheck PASS(00:59:51) |
+| U2 Model 팝업 | 1 | R4-D1 권장안 적용(판정필요) | 없음 | 결정 R4-D1 |
+
+### 다음 CheckList 에서 바뀔 판정(미측정)
+
+- V-4633ca25: AI 검토 PASS → 판정필요(시험 검사 CM-003). 결정 R7-D1
+- EG-ac06e957: 판정필요 유지
+- 다른 화면: H11 저장 중 로딩 행에서 AI 검토가 'AS-IS 진행 표시 없음' 으로 낮춘 행(AS-IS 가 FoxAsyncProxy 기본값·ProgressForm 을 쓰는 화면)
+
+### 점검
+
+- engine_selfcheck PASS(00:59:51)
+- 새 도구 파일 없음. 백업 llm_review.py.bak_20261121_scp28u7. 줄바꿈 LF 유지
+- 시험 데이터: DB 접근 없음. AS-IS DLL 은 읽기만(리플렉션 객체 생성 1회, 파일 변경 없음)
+- FE 가이드: 없음
+
+## 2026-11-25 라운드 1 (02:15 ~ 02:3x · CheckList 02:10:34 원장 · 일괄 보완)
+
+- 입력: unverified_triage.*(02:10:34, 원장과 같은 시각이라 재생성 안 함). 원장 ERROR 71 = 처리 대상 65 + 집계 6. AI 검토 2행 추가해 표 73행(_unverified_plan.md)
+- 11-21 라운드 7 뒤 새로 생긴 행 64건(차등 60, E4·I1·K2 검사기공백 3, A6 판단 1)
+
+### 묶음별 원인과 고친 곳
+
+| 묶음 | 행 | 원인(실측 근거) | 고친 파일:줄 (결함 유형) | 확인 |
+|---|---|---|---|---|
+| B1 팝업 조회 SP 짝 | 60 | diff/P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP__3.md 'SKIP: sp_pair.csv 에 이 TO-BE proc 의 AS-IS 짝 없음'. sp_pair.csv SCP0028 3행에 팝업 SP 없음. endpoints.csv SP 4행이 화면 cs 만. 화면 cs:270 new SCM0002_ShipmentLotSizePopup() → 팝업 cs:284 FoxDataRequest("SCM.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP"). 인자 6개 이름 대응 1:1(db_params.csv ↔ proc_params.csv) | tools/Harness/verify/gen_param_map.py _uil_class_files, popup_class_sps 신설, framework_sps 끝에서 호출, 짝 note '팝업 경유 호출' (T529) | popup_class_sps('SCP0028', TO-BE 호출 이름) → 1건 근거 'SCP0028_Shipment_Lot_Size.cs:270 new SCM0002_ShipmentLotSizePopup() → GSCM\06.UIL\GSCM.SCM.Popup.UIL\SCM0002_ShipmentLotSizePopup.cs:284', 없는 이름 0건 |
+| B2 팝업 SP 정렬 | 1(T-c6aefa56) | sort_rules.csv SP 3행(팝업 SP 없음). facts_sortrules.run 이 endpoints.csv·actions.csv 만 읽음. sort_check 는 체인 1단계(run_verify.py:1030)라 diff 단계 gen_param_map(:1364)보다 먼저 돎 | tools/Harness/verify/facts_sortrules.py popup_sps 신설(이 화면 proc_meta PROC 이름의 AS-IS SP 중 팝업 원문 호출 확인분), run 에서 SP 목록에 더함 (T529) | popup_sps → 1건, sp_rules 팝업 SP ORDER BY 2분기(dbo.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP.sql:61, :97 키 DIVISION_ID, OPERATION_GROUP_ID, FROM_SITE, TO_SITE, ITEM_ID), facts_sortrules --selftest 3/3 |
+| B3 계정 지정 시나리오 언어 단계 | 2(V-1f64fec6, V-ca2072cf) | 증거 '다른 화면 E2E 동시 실행(SCP0005,SSP0005,SSP0014) — 계정 언어 전환 생략(T200) · 계정 dana.robot'. _verify.spec.ts 시나리오는 e.user 가 있으면 언어 시험 계정(SLA)을 안 잡고, lang 단계가 acquireLangExclusive(다른 화면 E2E 0개 조건)를 기다리다 실패. 실행별 로그인 계정 기록이 없어 같은 계정 충돌인지 가릴 수 없었음 | tools/E2E/lib/langacct.ts noteLogin, accountBusy, takeLangAccountFor, waitLangHolder 신설. tools/E2E/lib/nscm.ts loginAs 앞 waitLangHolder, 성공 뒤 noteLogin. Doc/e2e/specs/_verify.spec.ts 시나리오 지정 계정 로그인 뒤 takeLangAccountFor 로 SLA 설정(끝의 기존 원복·releaseLangAccount 경로 사용) (T530) | engine_selfcheck TSC 0 |
+| B4 K2 무판정 | 1(V-b685dddf) | 원장 applicable=N, applicable_why 'COLUMN_SETTING: actions.csv TitleSet|btnColumn 0건'. judge.py:906~916 무판정 단계가 applicable 을 안 보고 ERROR 로 바꿈. judge.py:3308 적용성 단계는 NOT_RUN 행만 NA 처리 | tools/Harness/verify/judge.py 무판정 단계에 applicable=N 제외 (T531) | py_compile, engine_selfcheck |
+
+### 고치지 않고 결정 목록으로 보낸 행
+
+- T-fad117f6(F4): TO-BE SCP0028 이 PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP 을 부르지 않음(callProc SCM0002, SCP0033, SSP0019). 대상 SP 는 R4-D1 결정에 따름. F4 행 집계 4행은 mapping_trace_instances.csv 의 F4 요소 ERROR 1개(이 행)를 따라감
+- V-4633ca25(H11 AI검토:검사기오판): 원문 다시 확인. cs:661 new FoxAsyncProxy(this), ShowProgress=false 없음. 조회 cs:344, 411 은 false 로 끔. AI 검토 근거가 원문과 다르고 T528 막음으로 판정필요 유지. 검사기 수정 없음, R7-D1
+- EG-ac06e957(G4 AI검토:룰등록): R4-D1
+- T-4cec401b(X-ROW checkValidSize 진입점 6검사 중 ERROR 1): 하위 검사 이름 미확인. 집계 행이라 따로 고치지 않음
+
+### 다음 CheckList 에서 바뀔 판정(미측정)
+
+| 행 | 지금 | 다음 CheckList 예상 경로 |
+|---|---|---|
+| AD-* 60행(A1, A5, A6, A7) | ERROR(짝 없음 SKIP) | diff_verify 가 AS-IS SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP 을 실행해 KEYSET, COLSET, ORDER, VALUES 판정. AS-IS DEV DB 300초 초과 호출은 R5-D2 |
+| T-c6aefa56(A6) | ERROR | sort_check 가 팝업 SP 정렬 2분기를 TO-BE ORDER BY 와 대조 |
+| V-1f64fec6(E4), V-ca2072cf(I1) | ERROR | dana.robot 을 다른 실행이 안 쓰면 언어 전환 뒤 측정. 쓰면 종전처럼 다른 화면 대기 |
+| V-b685dddf(K2) | ERROR | NA '대상 없음 — COLUMN_SETTING: actions.csv TitleSet|btnColumn 0건' |
+| 집계 V-86208af2, T-4cec401b, F4 4행 | ERROR | 하위 행을 따라감 |
+
+### 점검
+
+- python tools/Harness/verify/engine_selfcheck.py: PASS 44.5초(PY_COMPILE 0, TSC 0, SELFTEST_JS 34, SELFTEST_PY 66, DB 필요 2개 미실행)
+- 새 도구 파일 없음(기존 파일에 함수 추가)이라 inventory_check --write-registry 실행 안 함
+- 줄바꿈: nscm.ts, _verify.spec.ts CRLF 유지. langacct.ts, gen_param_map.py, facts_sortrules.py, judge.py LF 유지
+- 백업 `*.bak_20261125_scp28u8`(gen_param_map, facts_sortrules, judge, langacct, nscm, _verify.spec)
+- CheckList, 개별 검사기 재실행 안 함(지시 [4]). DB 쓰기 없음

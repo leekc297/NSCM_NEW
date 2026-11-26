@@ -274,7 +274,8 @@ def build(r, short, repro='', same='', mean='', keep_old=False):
     res = r.get('result') or ''
     if res not in ('FAIL', '판정필요'): return short + repro + same
     d = build_core(r)
-    title = d.get('title') or ((mean + (' — AS-IS 와 다르게 나왔습니다' if res == 'FAIL' else ' — 기계가 결론을 내지 못했습니다')) if mean else (soft(re.sub(r"^\[[^\]]*\]\s*", '', r.get('target') or ''), 80) + (' — AS-IS 와 다르게 나왔습니다' if res == 'FAIL' else ' — 기계가 결론을 내지 못했습니다')) if re.match(r'^(사람 확인 필요|[A-Z]+\d*: )', short or '') else soft(short, 200))
+    loc = soft(re.sub(r"^\[[^\]]*\]\s*", '', r.get('target') or ''), 80)   # 2026-11-25 R84: mean 분기에도 대상 위치를 붙임(target 이 비면 붙이지 않음)
+    title = d.get('title') or ((mean + (' (' + loc + ')' if loc and loc not in mean else '') + (' — AS-IS 와 다르게 나왔습니다' if res == 'FAIL' else ' — 기계가 결론을 내지 못했습니다')) if mean else (loc + (' — AS-IS 와 다르게 나왔습니다' if res == 'FAIL' else ' — 기계가 결론을 내지 못했습니다')) if re.match(r'^(사람 확인 필요|[A-Z]+\d*: )', short or '') else soft(short, 200))
     if not keep_old:
         return build_gap(r, d, title, repro, same)
     out = [f"{title}" + ('' if res == 'FAIL' else ' (확인 필요)')]   # 2026-11-17 사용자 지시: 첫 줄 = [위치 / 성격 / 수정 대상](make_verify_docs 가 앞에 붙임) + 오류명

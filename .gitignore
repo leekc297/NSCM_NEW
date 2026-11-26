@@ -224,3 +224,13 @@ Doc/e2e/_run.lock
 # Playwright 실행 산출물(trace/zip/webm, 2026-11-05) — 100MB 초과 trace 로 GitHub push 거부(GH001, 11-03~11-05 백업 3회) · 재생성 가능
 Doc/verify/**/artifacts/
 **/.playwright-artifacts-*/
+
+# Source Backup push HTTP 500(2026-11-23). 미push 커밋에 SCP0028 e2e/video 242파일 1007M · .vibe/orch/snap 디스크 27G · 재생성 가능 생성물
+.vibe/orch/snap/
+Doc/verify/*/e2e/video/
+# 2026-11-26: e2e/read<번호>/video, eg/popup/video 아래 영상이 계속 커밋됨(BACKUP_20261126_163406 에 SCP0005 read1 영상 212MB 등, 추적 .webm 1534개) → Doc/verify 아래 모든 video 폴더와 .webm
+Doc/verify/**/video/
+Doc/verify/**/*.webm
+# 2026-11-26: AS-IS 사실 비교 결과(run_cmp.sh, compare.py 생성) calls.csv 170MB, props.csv 132MB = GitHub 100MB 제한 초과
+Doc/asisfacts_cmp/*/calls.csv
+Doc/asisfacts_cmp/*/props.csv

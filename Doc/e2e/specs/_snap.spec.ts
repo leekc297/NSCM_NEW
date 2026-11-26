@@ -64,6 +64,7 @@ const afterSearch = async (nscm: import('../../../tools/E2E/lib/nscm').Nscm) => 
 test.describe('@snap 스냅샷 형상 검사', () => {
   test.skip(!ID || !plan, 'VERIFY_ID·plan.json 필요');
   test.beforeAll(() => { if (ID) ensureDirs(ID); });
+  test.afterEach(() => { try { flush(); } catch (e) { console.log(`[flush] 스냅샷 결과 기록 실패: ${String(e).slice(0, 120)}`); } });  // 2026-11-20 작업 재개(R3): 스냅샷 결과(snap/results.json, e2e_results.json)를 시험마다 기록(종전 = 프로세스 끝 1회, 끊기면 사라짐)
   test.afterAll(() => flush());
 
   test('@snap 조회조건 패널·버튼 바 aria ×Div', async ({ nscm }) => {

@@ -3,7 +3,12 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './notice-setup.constants';
-import type { NoticeDialogMode, NoticeSearchParams, NoticeSetupRow } from './notice-setup.types';
+import type {
+  NoticeAttachment,
+  NoticeDialogMode,
+  NoticeSearchParams,
+  NoticeSetupRow,
+} from './notice-setup.types';
 import { createEmptyNotice, sanitizeNoticeHtml } from './notice-setup.util';
 
 interface NoticeSetupState {
@@ -16,6 +21,8 @@ interface NoticeSetupState {
   isPreviewOpen: boolean;
   dialogMode: NoticeDialogMode;
   draft: NoticeSetupRow;
+  // 업로드된 첨부파일 목록(아직 공지에 영속되지 않은 세션 상태). 영속화는 후속 단계(DB/SP)에서 배선한다.
+  attachments: NoticeAttachment[];
   previewNotice?: NoticeSetupRow;
   previewHideToday: boolean;
 }
@@ -30,6 +37,9 @@ interface NoticeSetupAction {
   openEditEditor: (notice: NoticeSetupRow) => void;
   closeEditor: () => void;
   setDraft: (draft: Partial<NoticeSetupRow>) => void;
+  addAttachments: (items: NoticeAttachment[]) => void;
+  removeAttachment: (fileId: string) => void;
+  setAttachments: (items: NoticeAttachment[]) => void;
   openPreview: (notice: NoticeSetupRow) => void;
   openDraftPreview: () => void;
   closePreview: () => void;
@@ -52,6 +62,7 @@ const createInitialState = (): NoticeSetupState => ({
   isPreviewOpen: false,
   dialogMode: 'create',
   draft: createEmptyNotice(),
+  attachments: [],
   previewNotice: undefined,
   previewHideToday: false,
 });
@@ -124,6 +135,7 @@ export const useNoticeSetupStore = createPersistedStoreWithTab<
       set(state => {
         state.dialogMode = 'create';
         state.draft = createEmptyNotice();
+        state.attachments = [];
         state.isEditorOpen = true;
       });
     },
@@ -134,6 +146,8 @@ export const useNoticeSetupStore = createPersistedStoreWithTab<
           ...notice,
           NOTICE_CONTENT: sanitizeNoticeHtml(notice.NOTICE_CONTENT),
         };
+        // 기존 공지의 첨부 목록은 후속 단계(DB/SP 조회)에서 채운다. 현재는 세션 업로드만 보관.
+        state.attachments = [];
         state.isEditorOpen = true;
       });
     },
@@ -141,11 +155,27 @@ export const useNoticeSetupStore = createPersistedStoreWithTab<
       set(state => {
         state.isEditorOpen = false;
         state.draft = createEmptyNotice();
+        state.attachments = [];
       });
     },
     setDraft: draft => {
       set(state => {
         state.draft = { ...state.draft, ...draft };
+      });
+    },
+    addAttachments: items => {
+      set(state => {
+        state.attachments = [...state.attachments, ...items];
+      });
+    },
+    removeAttachment: fileId => {
+      set(state => {
+        state.attachments = state.attachments.filter(item => item.fileId !== fileId);
+      });
+    },
+    setAttachments: items => {
+      set(state => {
+        state.attachments = items;
       });
     },
     openPreview: notice => {

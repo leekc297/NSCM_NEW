@@ -8,6 +8,7 @@
 //   P_SCP0009_SAVE_ANL_SHIP_FG_FIX_DATASET_JSON 를 가리킨다(design/05_register.sql 끝의 G2 블록, 래퍼는
 //   07_sp_json_wrapper.sql). 서버는 요청 본문의 `data` 객체 배열을 JSON 문자열로 바꿔 CLOB 로 넘기고, 래퍼는
 //   아래 SaveCellRow 키(camelCase, 대소문자 구분)를 JSON_TABLE 로 읽는다.
+import { CRUD_TYPE } from '@foundation/constants';
 import type { EditTracker } from '@foundation/utils';
 
 import { dynColKindOf } from './shipment-plan-fg.editLock';
@@ -82,6 +83,7 @@ export const buildSaveRows = (
   const rows: SaveCellRow[] = [];
   tracker.getOriginalValues().forEach((changed, row) => {
     const r = row as unknown as Record<string, unknown>;
+    if (r.CRUD_TYPE === CRUD_TYPE.INSERT) return; // 삽입 행은 buildInsertSaveRows 가 'I' 로 따로 만든다
     Object.keys(changed).forEach(binding => {
       if (!dynColKindOf(binding)) return; // 정보컬럼은 편집 대상이 아니므로(§0) 저장 후보에서 제외
       const yyyymmdd = binding.slice(2, 10); // D_yyyymmdd/W_.../M_yyyymm — design 03 §4.4 P_YYYYMMDD

@@ -23,8 +23,11 @@
 | event:dsdm.Changed | spdMain_Changed | 2493 | biz:CommonData.CommonDataList [code=DefaultBucketDay] | BIZ_MATCH |  |
 | event:dsdm.Changed | spdMain_Changed | 2579 | biz:CommonData.CommonDataList [code=DefaultBucketDay] | BIZ_MATCH |  |
 | button:FindButton | FindButton > FindData_BIZ | 181 | biz:Authentication.DoAuthentication | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData_BIZ | 187 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | button:FindButton | FindButton > FindData_BIZ | 195 | biz:GSCM_DM_Report_BLL.BLL_DM_REORT_M | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData_BIZ | 197 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | button:FindButton | FindButton > FindData_BIZ | 207 | biz:GSCM_DM_Report_BLL.BLL_DM_REORT_M | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData_BIZ | 209 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | button:FindButton | FindButton > FindData | 806 | DM.DM0003_GET_MKT_FCST_DATA_SML_40 | MATCH | SP DM0003_GET_MKT_FCST_DATA_SML_40 |
 | button:FindButton | FindButton > FindData > InitSpread > GetSpdTitle | 3384 | DM.DM0003_GET_SPREAD_TITLE_40 | MATCH | SP DM0003_GET_SPREAD_TITLE_40 |
 | button:FindButton | FindButton > FindData > InitSpread > GetSpdTitle | 3388 | DM.DM0003_GET_SPREAD_TITLE_SML_40 | MATCH | SP DM0003_GET_SPREAD_TITLE_SML_40 |
@@ -74,6 +77,7 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
+| {?request.QueryId}#{?serviceUri} | UNRESOLVED | 3 |  |  |  |
 | biz:Authentication.DoAuthentication | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=DefaultBucketDay] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | biz:CommonData.CommonDataList [code=EndCustomerByDivision40] | BIZ_MATCH | 6 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE_ITEM, UP_FX_GetCommonDataList:SELECT:SCM_MST_SSO_USER_INFO, UP_FX_GetCommonDataList:SELECT:SCM_MST_SSO_DEPT_INFO, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
@@ -168,12 +172,15 @@
 | ImageList | 1 | imageList1 |
 | UsrTextBox | 1 | usrTextBox1 |
 
-## 7. 확인 필요 (3건)
+## 7. 확인 필요 (6건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 285 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 286 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 287 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 187 | FindData_BIZ | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
+| 197 | FindData_BIZ | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
+| 209 | FindData_BIZ | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

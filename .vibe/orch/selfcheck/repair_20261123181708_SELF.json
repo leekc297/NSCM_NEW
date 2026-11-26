@@ -1,0 +1,68 @@
+{
+ "proposal": {
+  "id": "20261123181708_SELF",
+  "title": "VMO 반영 게이트에 대상 파일 문장 규칙 전후 비교 추가(나눈 1조각, hook 등록 제외)",
+  "evidence": "원안 20261122140538_VISION 반영 실패 원인 = .claude/settings.json 쓰기 권한 거부(2026-11-23 18:12:47). 같은 반영에서 게이트 코드는 시험 통과(t_orch_improve 문장 게이트 2건 PASS 18:11:47). 복원 뒤 orch-improve.js styleGate 0건, t_orch_improve.js 문장 게이트 시험 0건(grep 2026-11-23). 반영됐던 코드 사본 orch-selfcheck.js.bak_prerestore_20261123_181247:339-367(styleScan, styleDiff, styleGate, isStyleTarget), orch-improve.js.bak_prerestore_20261123_181247:326-333, t_orch_improve.js.bak_prerestore_20261123_181247:17, 152-156. 세션 hook(style-hook 진입점, settings.json 등록)은 hook 대상이라 사용자 승인 안으로 따로 올림 (반영 실패한 20261122140538_VISION 를 고친 안 · 원인 반영 Claude 가 .claude/settings.json Edit 권한 거부로 hook 줄을 넣지 못해 applied false 를 냄(repair_20261122140538_VISION.json result.note, 2026-11-23 18:12:47). orch-improve.js:277 지시대로 applied false 를 냈고 orch-improve.js:316-319 가 applied !== true 로 반영 실패 처리 후 대상 3개를 복원함. 코드 변경은 문장 게이트 시험 2건 PASS(18:11:47)로 통과함. hook, 설정 파일 대상을 코드 수정 안과 섞은 것이 원인이고 vm-orchestra.md:95 는 이런 대상을 따로 올리도록 정함)",
+  "targets": [
+   "tools/VibeManager/orch-selfcheck.js",
+   "tools/VibeManager/orch-improve.js",
+   "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "전: 개선안 반영 게이트는 구문, test/run_all.js, 정의 정합만 봄. 고친 파일에 새 문장 위반이 생겨도 반영됨. 후: orch-selfcheck.js 에 styleScan, styleDiff, styleGate, isStyleTarget 추가(style-hook 진입점 제외). orch-improve.js approve 가 반영 직후 tools/VibeManager 바로 아래 .js 대상 파일의 위반 수를 스냅샷과 비교해 새 위반 1건 이상이면 apply-failed 로 처리하고 대상 파일을 복원함. cur.styleGate 에 ok, added, text 기록. bak_prerestore_20261123_181247 사본 3개의 해당 부분을 기준으로 옮기고 .claude/settings.json 은 건드리지 않음",
+  "verify": "① grep -c styleGate tools/VibeManager/orch-improve.js: 반영 전 0 → 반영 뒤 기대 1 이상. ② grep -c '문장 게이트' tools/VibeManager/test/t_orch_improve.js: 반영 전 0 → 반영 뒤 기대 2. ③ node tools/VibeManager/test/t_orch_improve.js tools/VibeManager 의 문장 게이트 시험: 반영 전 미측정(시험 없음) → 반영 뒤 기대 2건 PASS(줄표 든 문자열 = apply-failed, added 1, workbench.js 복원 / 줄표 없는 문자열 = applied, added 0). ④ grep -c style-hook .claude/settings.json: 반영 전 0 → 반영 뒤 기대 0",
+  "sig": "docstyle|apply gate|splitn rn",
+  "check": "",
+  "selfKey": ""
+ },
+ "result": {
+  "applied": true,
+  "already_applied": false,
+  "verified": true,
+  "verify_items": [
+   {
+    "n": 1,
+    "result": "pass",
+    "note": "grep -c styleGate tools/VibeManager/orch-improve.js: 반영 전 0 → 반영 뒤 2"
+   },
+   {
+    "n": 2,
+    "result": "pass",
+    "note": "grep -c '문장 게이트' tools/VibeManager/test/t_orch_improve.js: 반영 전 0 → 반영 뒤 2"
+   },
+   {
+    "n": 3,
+    "result": "pass",
+    "note": "node test/t_orch_improve.js . (tools/VibeManager 에서 실행): 반영 전 시험 없음 → 문장 게이트 2건 PASS. 줄표 든 문자열 = apply-failed, added 1, 위반 0 → 1, workbench.js 1개 복원 / 줄표 없는 문자열 = applied, added 0. 전체 PASS 51, FAIL 0, ALL PASS"
+   },
+   {
+    "n": 4,
+    "result": "pass",
+    "note": "grep -c style-hook .claude/settings.json: 반영 전 0 → 반영 뒤 0"
+   }
+  ],
+  "changed_files": [
+   "tools/VibeManager/orch-selfcheck.js",
+   "tools/VibeManager/orch-improve.js",
+   "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "verify_result": "반영 전 2026-11-23 21:42:37: v1 0, v2 0, v4 0, v3 시험 없음. 반영 뒤 21:43:39~21:43:53: v1 2, v2 2, v4 0, v3 node test/t_orch_improve.js . = PASS 51, FAIL 0, ALL PASS(문장 게이트 2건 PASS: {ok:false, added:1, text:'workbench.js 위반 0 → 1'} / {ok:true, added:0, text:'workbench.js 위반 0 → 0'})",
+  "note": "bak_prerestore_20261123_181247 사본의 styleScan, styleDiff, styleGate, isStyleTarget 를 옮김. styleHook, hookBefore 와 .claude/settings.json 은 손대지 않음. 반영 실패 처리는 지금 소스의 실패 처리에 맞춰 revertOutside 를 함께 부름. orch-selfcheck.js gate() 에 다른 개선안(20261123000643_VISION)의 문장 규칙 비교(styleTargets, styleCount)가 이미 있어 자가 보완 반영 때 문장 검사가 두 번 돎. 범위 밖이라 고치지 않음(추가 확인 후보)."
+ },
+ "gate": {
+  "ok": false,
+  "text": "구문 검사 36개 파일 통과, 시험 72/74개 파일 통과(PASS 1159, FAIL 2), 정의 정합 통과, 문장 규칙 위반 0 → 0",
+  "newBad": [
+   "S2 t_orch_selfcheck.js 실패: exit 1 · PASS 31 · FAIL 1 · FAIL 위반 1건 넣은 가짜 개선안 = 게이트 S11 새로 어긋남 · 반영 실패 · a.js 되돌림 [\"apply-failed\",null,[\"반영 시작\",\"반영 실패. 문장 규칙 새 위반 1건(tools/VibeManager/rules/50_DOC_STYLE.md): tools/VibeManager/a.js 위반 0 → 1(새 표현 기호 · 를 저장함 — / SOME FAIL"
+  ]
+ },
+ "history": [
+  "21:38:42 VMO 자동(게이트 통과 조건): 승인",
+  "21:42:24 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1155, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261123_self2138",
+  "21:42:27 VMO: 반영 시작",
+  "21:51:30 VMO: 반영 실패. 게이트에서 새로 어긋난 항목 1건: S2 t_orch_selfcheck.js 실패: exit 1 · PASS 31 · FAIL 1 · FAIL 위반 1건 넣은 가짜 개선안 = 게이트 S11 새로 어긋남 · 반영 실패 · a.js 되돌림 [\"apply-failed\",null,[\"반영 시작\",\"반영 실패. 문장 규칙 새 위반 1건(tools/VibeManager/rules/50_DOC_STYLE.md): tools/VibeManager/a.js 위반 0 → 1(새 표현 기호 · 를 저장함 — / SOME FAIL · 구문 검사 36개 파일 통과, 시험 72/74개 파일 통과(PASS 1159, FAIL 2), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 대상 파일 1개 복원(orch-selfcheck.js AI 편집만 되돌리지 못함(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM/tools/VibeManager; grep -n -E \"styleBase|gate\\(|restoreTargets\\(cur\\)|selfPre|module.exports|apply-s). 반영 뒤 다른 쪽이 고쳐 사본으로 덮지 않음 / orch-improve.js AI 편집만 되돌리지 못함(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM/tools/VibeManager; grep -n -E \"styleBase|gate\\(|restoreTargets\\(cur\\)|selfPre|module.exports|apply-s). 반영 뒤 다른 쪽이 고쳐 사본으로 덮지 않음 / t_orch_improve.js 사본으로 복원(셸 명령으로 이 파일을 쓴 흔적: cd /c/Projects/NSCM/tools/VibeManager; grep -n -E \"styleBase|gat",
+  "21:57:06 Claude Code 세션(사용자 지시): 21:51 실패 뒤 orch-selfcheck.js, orch-improve.js 에 남은 이 안의 AI 편집(되돌리지 못함, 확인 필요)을 반영 전 사본(백업 태그 20261123_self2138)으로 걷어냄. 같은 시각 사용자 지시(자동 승인 범위 넓힘) 변경만 다시 넣음. 남아 있던 파일 사본 = *.bak_20261123_aileft. t_orch_selfcheck 통과 확인"
+ ],
+ "tries": 1,
+ "depth": 1,
+ "root": "20261122140538_VISION"
+}

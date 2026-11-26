@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VMO 글래스 시안</title>
+<!-- 2026-11-20 VMO 프리미엄 글래스모피즘 시안. 적용 전 확인용. 값은 예시이며 실제 데이터 아님 -->
+<style>
+:root{
+  --bg0:#070b16;--bg1:#0c1326;
+  --a1:#4f8cff;--a2:#9b6bff;--a3:#22d3c5;--a4:#ff7ab6;
+  --fg:#e8edf8;--mut:#93a0bd;--mut2:#6d7895;
+  --ok:#3ee6a0;--warn:#ffc35a;--bad:#ff6b7d;
+  --gl:rgba(255,255,255,.055);--gl2:rgba(255,255,255,.09);--gl3:rgba(255,255,255,.14);
+  --edge1:rgba(255,255,255,.34);--edge2:rgba(255,255,255,.04);
+  --sh:0 18px 50px -12px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.25);
+  --hi:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.03);
+  --r:18px;
+  --f:"Pretendard","Segoe UI Variable","Segoe UI","Malgun Gothic",system-ui,sans-serif;
+  --mono:"Cascadia Code","JetBrains Mono",Consolas,monospace;
+}
+:root[data-theme="light"]{
+  --bg0:#e9eefb;--bg1:#f4f6fd;
+  --fg:#18203a;--mut:#56617f;--mut2:#7b86a3;
+  --ok:#0fa36c;--warn:#c98400;--bad:#e0344d;
+  --gl:rgba(255,255,255,.52);--gl2:rgba(255,255,255,.68);--gl3:rgba(255,255,255,.85);
+  --edge1:rgba(255,255,255,.95);--edge2:rgba(255,255,255,.25);
+  --sh:0 18px 46px -14px rgba(40,60,120,.28),0 2px 8px rgba(40,60,120,.08);
+  --hi:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.3);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--f);font-size:12.5px;color:var(--fg);background:var(--bg0);overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* 배경: 오로라 + 미세 노이즈 */
+.aur{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,var(--bg1),var(--bg0) 70%)}
+.aur i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
+:root[data-theme="light"] .aur i{mix-blend-mode:multiply;opacity:.32}
+.aur i:nth-child(1){width:620px;height:620px;left:-140px;top:-220px;background:var(--a1)}
+.aur i:nth-child(2){width:540px;height:540px;right:-160px;top:-120px;background:var(--a2);animation-duration:32s}
+.aur i:nth-child(3){width:460px;height:460px;left:34%;bottom:-260px;background:var(--a3);opacity:.35;animation-duration:38s}
+.aur i:nth-child(4){width:300px;height:300px;right:16%;bottom:8%;background:var(--a4);opacity:.22;animation-duration:44s}
+@keyframes drift{to{transform:translate(60px,40px) scale(1.08)}}
+.aur::after{content:"";position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+@media (prefers-reduced-motion:reduce){.aur i{animation:none}}
+
+/* 유리 기본 */
+.g{position:relative;background:linear-gradient(155deg,var(--gl2),var(--gl) 55%);border-radius:var(--r);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);box-shadow:var(--sh),var(--hi)}
+.g::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;background:linear-gradient(150deg,var(--edge1),var(--edge2) 40%,var(--edge2) 70%,rgba(255,255,255,.16));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.g::after{content:"";position:absolute;inset:0 0 auto 0;height:46%;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.07),transparent);opacity:.9}
+
+.app{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;padding:12px 14px 14px;gap:12px}
+
+/* 상단 */
+.top{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-radius:16px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px;letter-spacing:.4px}
+.logo{width:26px;height:26px;border-radius:9px;background:conic-gradient(from 210deg,var(--a1),var(--a2),var(--a3),var(--a1));box-shadow:0 0 18px -2px var(--a2),inset 0 1px 0 rgba(255,255,255,.5);position:relative}
+.logo::after{content:"";position:absolute;inset:6px;border-radius:5px;background:rgba(10,14,30,.55);backdrop-filter:blur(4px)}
+.tabs{display:flex;gap:2px;padding:4px;border-radius:13px;background:rgba(0,0,0,.18);box-shadow:inset 0 1px 2px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.05);position:relative}
+:root[data-theme="light"] .tabs{background:rgba(255,255,255,.35);box-shadow:inset 0 1px 2px rgba(40,60,120,.12),inset 0 0 0 1px rgba(255,255,255,.6)}
+.tab{position:relative;z-index:1;border:0;background:transparent;color:var(--mut);font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:color .2s;white-space:nowrap}
+.tab:hover{color:var(--fg)}
+.tab.on{color:var(--fg)}
+.tab .n{font-size:10px;font-weight:700;padding:0 6px;border-radius:8px;background:linear-gradient(135deg,var(--a4),#ff9b6b);color:#fff;line-height:16px}
+.tab .n.b{background:linear-gradient(135deg,var(--a1),var(--a2))}
+.ind{position:absolute;z-index:0;top:4px;bottom:4px;border-radius:9px;background:linear-gradient(160deg,rgba(255,255,255,.2),rgba(255,255,255,.07));box-shadow:0 4px 14px -4px rgba(79,140,255,.6),inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.12);transition:left .35s cubic-bezier(.3,1.3,.5,1),width .35s cubic-bezier(.3,1.3,.5,1)}
+:root[data-theme="light"] .ind{background:linear-gradient(160deg,#fff,rgba(255,255,255,.75));box-shadow:0 4px 14px -6px rgba(60,90,200,.45),inset 0 0 0 1px rgba(255,255,255,.9)}
+.sp{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;background:var(--gl);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);white-space:nowrap}
+.pill.ai{background:linear-gradient(135deg,rgba(155,107,255,.28),rgba(79,140,255,.18));box-shadow:inset 0 0 0 1px rgba(155,107,255,.45)}
+.pill.mode{background:linear-gradient(135deg,rgba(34,211,197,.24),rgba(34,211,197,.08));box-shadow:inset 0 0 0 1px rgba(34,211,197,.4)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--mut2);display:inline-block;flex:none}
+.dot.ok{background:var(--ok);box-shadow:0 0 0 3px rgba(62,230,160,.18),0 0 10px var(--ok)}
+.dot.warn{background:var(--warn);box-shadow:0 0 0 3px rgba(255,195,90,.18),0 0 10px var(--warn)}
+.dot.bad{background:var(--bad);box-shadow:0 0 0 3px rgba(255,107,125,.2),0 0 10px var(--bad)}
+.dot.pulse{animation:pl 1.8s ease-in-out infinite}
+@keyframes pl{50%{opacity:.45}}
+.sw{display:flex;align-items:center;gap:7px;border:0;background:transparent;color:var(--fg);font:inherit;font-weight:700;font-size:11px;cursor:pointer;padding:0 2px}
+.sw .tk{width:36px;height:20px;border-radius:999px;background:linear-gradient(135deg,var(--a3),var(--a1));box-shadow:inset 0 1px 2px rgba(0,0,0,.3),0 0 14px -3px var(--a3);position:relative}
+.sw .tk i{position:absolute;top:2px;left:18px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.ib{width:30px;height:30px;border-radius:10px;border:0;cursor:pointer;color:var(--fg);background:var(--gl);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);display:grid;place-items:center}
+.ib:hover{background:var(--gl3)}
+
+/* 본문 */
+.pane{display:none;flex:1;min-height:0;overflow:auto;padding:2px 2px 4px}
+.pane.on{display:flex;flex-direction:column;gap:12px}
+.pane::-webkit-scrollbar{width:8px}.pane::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:8px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.k{padding:14px 15px 13px;border-radius:16px;overflow:hidden;min-height:104px;display:flex;flex-direction:column;gap:6px}
+.k .kl{font-size:11px;color:var(--mut);font-weight:600;display:flex;align-items:center;gap:7px}
+.k .kv{font-size:28px;font-weight:750;letter-spacing:-.5px;line-height:1;font-variant-numeric:tabular-nums}
+.k .kv small{font-size:12px;font-weight:600;color:var(--mut);margin-left:3px;letter-spacing:0}
+.k .ks{font-size:11px;color:var(--mut2)}
+.k .glow{position:absolute;right:-30px;top:-40px;width:120px;height:120px;border-radius:50%;filter:blur(30px);opacity:.45;pointer-events:none}
+.k.c1 .glow{background:var(--ok)}.k.c2 .glow{background:var(--a1)}.k.c3 .glow{background:var(--a2)}.k.c4 .glow{background:var(--warn)}.k.c5 .glow{background:var(--bad)}.k.c6 .glow{background:var(--a3)}
+.spark{height:22px;margin-top:auto}
+
+.grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:12px;align-items:start}
+.card{padding:14px 16px 15px}
+.card h2{margin:0 0 12px;font-size:12.5px;font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
+.card h2 small{font-weight:500;color:var(--mut);font-size:11px}
+.card h2 .sp{flex:1}
+.btn{border:0;cursor:pointer;font:inherit;font-size:11px;font-weight:650;color:var(--fg);padding:5px 11px;border-radius:9px;background:var(--gl2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.12)}
+.btn:hover{background:var(--gl3)}
+.btn.pri{color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 6px 18px -6px var(--a2),inset 0 1px 0 rgba(255,255,255,.35)}
+
+/* 실행 중 */
+.run{display:flex;flex-direction:column;gap:10px}
+.ri{padding:11px 12px;border-radius:13px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+:root[data-theme="light"] .ri{background:rgba(255,255,255,.45);box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
+.ri .rt{display:flex;align-items:center;gap:8px;font-weight:650}
+.ri .rt .id{font-family:var(--mono);font-size:11.5px;padding:1px 7px;border-radius:6px;background:rgba(79,140,255,.18);color:#a9c6ff}
+:root[data-theme="light"] .ri .rt .id{color:#2c5bd6}
+.ri .rt .t{margin-left:auto;font-size:11px;color:var(--mut);font-variant-numeric:tabular-nums}
+.steps{display:flex;gap:4px;margin:10px 0 6px}
+.steps i{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.08)}
+.steps i.d{background:linear-gradient(90deg,var(--ok),#7cf2c4)}
+.steps i.r{background:linear-gradient(90deg,var(--a1),var(--a2));box-shadow:0 0 12px -1px var(--a2);position:relative;overflow:hidden}
+.steps i.r::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:sh 1.6s linear infinite;transform:translateX(-100%)}
+@keyframes sh{to{transform:translateX(100%)}}
+.ri .rs{display:flex;gap:8px;font-size:11px;color:var(--mut)}
+.tag{font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:999px}
+.tag.ai{background:rgba(155,107,255,.2);color:#c9b3ff}.tag.sc{background:rgba(34,211,197,.18);color:#7eeee4}
+:root[data-theme="light"] .tag.ai{color:#6b3fe0}:root[data-theme="light"] .tag.sc{color:#0d8d83}
+
+/* 링 */
+.rings{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.ring{--v:50;--c:var(--ok);width:86px;height:86px;margin:0 auto;border-radius:50%;background:conic-gradient(var(--c) calc(var(--v)*1%),rgba(255,255,255,.08) 0);display:grid;place-items:center;position:relative;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--c) 45%,transparent))}
+.ring::before{content:"";position:absolute;inset:8px;border-radius:50%;background:linear-gradient(160deg,rgba(20,28,52,.92),rgba(12,18,36,.92));box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+:root[data-theme="light"] .ring::before{background:linear-gradient(160deg,#fff,#eef2fc)}
+.ring b{position:relative;font-size:17px;font-variant-numeric:tabular-nums}
+.ring b small{font-size:10px;color:var(--mut);font-weight:600}
+.rl{margin-top:7px;font-size:11px;color:var(--mut);font-weight:600}
+.rl em{display:block;font-style:normal;font-size:10.5px;color:var(--mut2);font-weight:500}
+
+/* 목록 */
+.list{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:8px 2px;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px}
+:root[data-theme="light"] .li{border-bottom-color:rgba(40,60,120,.08)}
+.li:last-child{border-bottom:0}
+.li .tm{font-family:var(--mono);font-size:11px;color:var(--mut)}
+.li .ar{font-size:11px;color:var(--mut)}
+
+/* 타임라인 */
+.tl{position:relative;display:flex;flex-direction:column;gap:9px;padding-top:4px}
+.tlr{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:center}
+.tlr span{font-family:var(--mono);font-size:11px;color:var(--mut)}
+.tlt{position:relative;height:16px;border-radius:6px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.tlt i{position:absolute;top:2px;bottom:2px;border-radius:4px}
+.tlt i.s{background:linear-gradient(90deg,#1fb7ab,var(--a3))}
+.tlt i.c{background:linear-gradient(90deg,var(--a2),#c19bff);box-shadow:0 0 10px -2px var(--a2)}
+.tlt i.w{background:repeating-linear-gradient(135deg,rgba(255,195,90,.55) 0 4px,rgba(255,195,90,.25) 4px 8px)}
+.tlt i.f{background:linear-gradient(90deg,#ff4d64,var(--bad));box-shadow:0 0 10px -2px var(--bad)}
+.leg{display:flex;gap:12px;font-size:11px;color:var(--mut);font-weight:500}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.seg{display:flex;padding:3px;border-radius:10px;background:rgba(0,0,0,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+:root[data-theme="light"] .seg{background:rgba(255,255,255,.4)}
+.seg button{border:0;background:transparent;color:var(--mut);font:inherit;font-size:11px;font-weight:650;padding:3px 9px;border-radius:7px;cursor:pointer}
+.seg button.on{color:var(--fg);background:var(--gl3);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+.axis{display:grid;grid-template-columns:76px 1fr;gap:10px;font-family:var(--mono);font-size:10px;color:var(--mut2)}
+.axis div{display:flex;justify-content:space-between}
+
+/* 사건 · 개선안 */
+.kan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.col h3{margin:0 0 10px;font-size:12px;display:flex;align-items:center;gap:8px}
+.col h3 .cnt{font-size:10.5px;padding:0 7px;border-radius:999px;background:var(--gl2);line-height:18px}
+.ev{padding:11px 12px;border-radius:13px;margin-bottom:9px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);border-left:3px solid var(--c,var(--mut2))}
+:root[data-theme="light"] .ev{background:rgba(255,255,255,.55)}
+.ev .eh{display:flex;gap:8px;align-items:center;font-weight:650}
+.ev .eh code{font-family:var(--mono);font-size:10.5px;padding:1px 6px;border-radius:5px;background:rgba(255,255,255,.08)}
+.ev p{margin:6px 0 0;color:var(--mut);font-size:11.5px;line-height:1.5}
+.ev .ef{display:flex;gap:6px;margin-top:9px}
+.prop{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:13px 15px;margin-bottom:10px}
+.prop .lv{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff}
+.prop h4{margin:0 0 4px;font-size:12.5px}
+.prop p{margin:0;color:var(--mut);font-size:11.5px}
+
+/* 상태 */
+.hgrid{display:grid;grid-template-columns:260px 1fr;gap:12px}
+.score{display:grid;place-items:center;padding:20px 0 14px}
+.score .ring{width:150px;height:150px}
+.score .ring::before{inset:12px}
+.score .ring b{font-size:34px}
+.chk{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ci{padding:12px;border-radius:13px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);display:flex;gap:10px;align-items:flex-start}
+:root[data-theme="light"] .ci{background:rgba(255,255,255,.5)}
+.ci b{display:block;font-size:12px;margin-bottom:3px}
+.ci span{font-size:11px;color:var(--mut)}
+
+/* 에이전트 · 로그 */
+.agent{display:grid;grid-template-columns:1fr;grid-template-rows:1fr auto;gap:12px;flex:1;min-height:0}
+.console{padding:14px 16px;overflow:auto;font-family:var(--mono);font-size:11.8px;line-height:1.65}
+.console .u{color:#a9c6ff}.console .ok{color:var(--ok)}.console .w{color:var(--warn)}.console .m{color:var(--mut)}
+:root[data-theme="light"] .console .u{color:#2c5bd6}
+.bubble{display:flex;gap:10px;margin:0 0 12px;font-family:var(--f);font-size:12.5px;line-height:1.55}
+.bubble .av{flex:none;width:26px;height:26px;border-radius:9px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2))}
+.bubble.me .av{background:linear-gradient(135deg,#3a4566,#566089)}
+.bubble .bx{padding:9px 12px;border-radius:13px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);max-width:760px}
+:root[data-theme="light"] .bubble .bx{background:rgba(255,255,255,.6)}
+.inp{display:flex;align-items:flex-end;gap:10px;padding:10px 10px 10px 16px;border-radius:18px}
+.inp textarea{flex:1;border:0;background:transparent;color:var(--fg);font:inherit;resize:none;height:44px;outline:0;padding-top:6px}
+.inp textarea::placeholder{color:var(--mut2)}
+.send{width:38px;height:38px;border-radius:12px;border:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 8px 20px -6px var(--a2),inset 0 1px 0 rgba(255,255,255,.35);display:grid;place-items:center}
+.lsub{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ls{border:0;cursor:pointer;font:inherit;font-size:11.5px;font-weight:650;color:var(--mut);background:transparent;padding:5px 11px;border-radius:9px;display:flex;align-items:center;gap:6px}
+.ls.on{color:var(--fg);background:var(--gl3);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+
+/* 기능 */
+.fn{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tile{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:12px;border:0;cursor:pointer;text-align:left;color:var(--fg);font:inherit;font-size:12px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .15s,background .15s,box-shadow .15s}
+:root[data-theme="light"] .tile{background:rgba(255,255,255,.5)}
+.tile:hover{transform:translateY(-2px);background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 1px rgba(155,107,255,.5),0 10px 24px -12px var(--a2)}
+.tile .ti{flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:15px;background:linear-gradient(150deg,rgba(255,255,255,.18),rgba(255,255,255,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.tile small{display:block;color:var(--mut);font-size:10.5px;margin-top:1px}
+
+.note{font-size:11px;color:var(--mut2);text-align:center;padding:2px 0 0}
+@media (max-width:1200px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr 1fr}.fn{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}.grid,.kan,.hgrid,.fn,.chk{grid-template-columns:1fr}.tabs{overflow-x:auto}.app{padding:10px 16px}}
+
+/* 2026-11-20 v2 은은한 색감: 강조색 채도 낮춤, 빛무리·번짐·빛남 줄임 */
+:root{--a1:#7393d6;--a2:#9486cc;--a3:#6fb3ad;--a4:#c98fa8;--ok:#6cc79f;--warn:#d6b06a;--bad:#d9808b;--bg0:#0a0e19;--bg1:#101626}
+:root[data-theme="light"]{--a1:#6f8ccc;--a2:#8c80c2;--a3:#5fa49e;--a4:#c2869f;--ok:#3f9a74;--warn:#a8812f;--bad:#bf5d6a;--bg0:#eef1f8;--bg1:#f6f7fb}
+.aur i{opacity:.26;filter:blur(90px)}
+.aur i:nth-child(3){opacity:.16}.aur i:nth-child(4){opacity:.1}
+:root[data-theme="light"] .aur i{opacity:.16}
+.k .glow{opacity:.16;filter:blur(40px)}
+.ring{filter:none}
+.dot.ok,.dot.warn,.dot.bad{box-shadow:0 0 0 3px color-mix(in srgb,currentColor 0%,transparent)}
+.dot.ok{box-shadow:0 0 0 3px rgba(108,199,159,.14)}.dot.warn{box-shadow:0 0 0 3px rgba(214,176,106,.14)}.dot.bad{box-shadow:0 0 0 3px rgba(217,128,139,.14)}
+.logo{box-shadow:inset 0 1px 0 rgba(255,255,255,.4);opacity:.85}
+.tab .n{background:rgba(201,143,168,.32);color:var(--fg)}
+.tab .n.b{background:rgba(115,147,214,.32)}
+.ind{box-shadow:0 3px 10px -5px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.1)}
+.pill.ai{background:rgba(148,134,204,.14);box-shadow:inset 0 0 0 1px rgba(148,134,204,.28)}
+.pill.mode{background:rgba(111,179,173,.12);box-shadow:inset 0 0 0 1px rgba(111,179,173,.26)}
+.sw .tk{background:linear-gradient(135deg,#5f9a95,#6680b8);box-shadow:inset 0 1px 2px rgba(0,0,0,.3)}
+.btn.pri{background:linear-gradient(135deg,rgba(115,147,214,.75),rgba(148,134,204,.75));box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.send{background:linear-gradient(135deg,rgba(115,147,214,.8),rgba(148,134,204,.8));box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.steps i.d{background:rgba(108,199,159,.65)}
+.steps i.r{background:rgba(115,147,214,.75);box-shadow:none}
+.steps i.r::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent)}
+.tlt i.s{background:rgba(111,179,173,.6)}.tlt i.c{background:rgba(148,134,204,.65);box-shadow:none}.tlt i.f{background:rgba(217,128,139,.7);box-shadow:none}
+.tlt i.w{background:repeating-linear-gradient(135deg,rgba(214,176,106,.4) 0 4px,rgba(214,176,106,.15) 4px 8px)}
+.ri .rt .id{background:rgba(115,147,214,.14);color:#b3c3e6}
+.tag.ai{background:rgba(148,134,204,.16);color:#c3bbe2}.tag.sc{background:rgba(111,179,173,.15);color:#a8d3cf}
+.tile:hover{box-shadow:inset 0 0 0 1px rgba(148,134,204,.35),0 8px 20px -14px rgba(0,0,0,.6)}
+.bubble .av{background:linear-gradient(135deg,rgba(115,147,214,.8),rgba(148,134,204,.8))}
+.console .u{color:#a8bce6}
+.prop .lv{opacity:.8}
+</style>
+</head>
+<body>
+<div class="aur"><i></i><i></i><i></i><i></i></div>
+<div class="app">
+
+<header class="top g">
+  <div class="brand"><span class="logo"></span>VMO</div>
+  <nav class="tabs" id="tabs">
+    <span class="ind" id="ind"></span>
+    <button class="tab on" data-t="board">Overview</button>
+    <button class="tab" data-t="inc">Events<span class="n">3</span></button>
+    <button class="tab" data-t="prop">Fixes<span class="n b">2</span></button>
+    <button class="tab" data-t="self">Health</button>
+    <button class="tab" data-t="hist">History</button>
+    <button class="tab" data-t="agent">Agent</button>
+    <button class="tab" data-t="log">Logs <span class="dot ok"></span><span class="dot ok"></span></button>
+    <button class="tab" data-t="task">기능</button>
+  </nav>
+  <span class="sp"></span>
+  <span class="pill"><span class="dot ok pulse"></span>실행 2</span>
+  <span class="pill ai">AI 검토 켬</span>
+  <span class="pill mode">DB MODE</span>
+  <button class="ib" id="theme" title="밝게, 어둡게 바꾸기" aria-label="테마 바꾸기"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+  <button class="sw" role="switch" aria-checked="true"><span class="tk"><i></i></span>ON</button>
+</header>
+
+<!-- Overview -->
+<section class="pane on" id="board">
+  <div class="kpis">
+    <div class="k g c1"><span class="glow"></span><div class="kl"><span class="dot ok"></span>BE 서버</div><div class="kv">가동<small>8080</small></div><div class="ks">응답 120ms</div></div>
+    <div class="k g c6"><span class="glow"></span><div class="kl"><span class="dot ok"></span>FE 서버</div><div class="kv">가동<small>5173</small></div><div class="ks">Vite</div></div>
+    <div class="k g c2"><span class="glow"></span><div class="kl">실행 중 체인</div><div class="kv">2<small>/ 최대 3</small></div><svg class="spark" viewBox="0 0 120 22" preserveAspectRatio="none"><path d="M0 18 L15 14 L30 16 L45 9 L60 11 L75 6 L90 8 L105 4 L120 6" fill="none" stroke="#7393d6" stroke-opacity=".8" stroke-width="2"/></svg></div>
+    <div class="k g c3"><span class="glow"></span><div class="kl">오늘 AI Agent 호출</div><div class="kv">47<small>회</small></div><div class="ks">반영 31 · 무변화 16</div></div>
+    <div class="k g c4"><span class="glow"></span><div class="kl">대기</div><div class="kv">1<small>건</small></div><div class="ks">부하 입장 대기 4분</div></div>
+    <div class="k g c5"><span class="glow"></span><div class="kl">열린 사건</div><div class="kv">3<small>건</small></div><div class="ks">R12 2 · R14 1</div></div>
+  </div>
+
+  <div class="grid">
+    <section class="card g">
+      <h2>지금 실행 중 <small>2건</small><span class="sp"></span><small>18:12 갱신</small></h2>
+      <div class="run">
+        <div class="ri"><div class="rt"><span class="id">SCP0028</span>🔎 CheckList<span class="t">52분 경과</span></div>
+          <div class="steps"><i class="d"></i><i class="d"></i><i class="d"></i><i class="r"></i><i></i><i></i></div>
+          <div class="rs"><span class="tag sc">Script</span>4. 게이트 · 5. 부분 재측정 대기</div></div>
+        <div class="ri"><div class="rt"><span class="id">SSP0014</span>🧪 미검증 해소<span class="t">12분 경과</span></div>
+          <div class="steps"><i class="d"></i><i class="r"></i><i></i></div>
+          <div class="rs"><span class="tag ai">AI Agent</span>2. 검증 보완 · 도구 호출 38회</div></div>
+      </div>
+    </section>
+    <section class="card g">
+      <h2>부하 <small>동시 실행 입장 기준</small></h2>
+      <div class="rings">
+        <div><div class="ring" style="--v:46;--c:var(--ok)"><b>46<small>%</small></b></div><div class="rl">CPU<em>기준 80% 미만</em></div></div>
+        <div><div class="ring" style="--v:71;--c:var(--warn)"><b>9.4<small>GB</small></b></div><div class="rl">여유 메모리<em>기준 3GB 이상</em></div></div>
+        <div><div class="ring" style="--v:40;--c:var(--a1)"><b>4<small>/10</small></b></div><div class="rl">E2E 작업자<em>계정 4개 사용</em></div></div>
+      </div>
+    </section>
+    <section class="card g">
+      <h2>대기와 잠금 <small>1건</small></h2>
+      <div class="list">
+        <div class="li"><span class="tm">18:08</span><span>SCP0005 CheckList 입장 대기</span><span class="ar">CPU 82%</span></div>
+        <div class="li"><span class="tm">17:55</span><span>verify SCP0028 잠금</span><span class="ar">PID 21844</span></div>
+        <div class="li"><span class="tm">17:40</span><span>langacct hyerakim 잠금</span><span class="ar">언어 시험</span></div>
+      </div>
+    </section>
+    <section class="card g" style="grid-column:span 2">
+      <h2>시간별 흐름 <small>최근 3시간</small><span class="sp"></span>
+        <span class="leg"><span><i style="background:var(--a3)"></i>Script</span><span><i style="background:var(--a2)"></i>AI Agent</span><span><i style="background:var(--warn)"></i>대기</span><span><i style="background:var(--bad)"></i>실패</span></span>
+        <span class="seg"><button>60분</button><button class="on">3시간</button><button>12시간</button></span></h2>
+      <div class="tl">
+        <div class="tlr"><span>SCP0028</span><div class="tlt"><i class="s" style="left:2%;width:34%"></i><i class="c" style="left:37%;width:12%"></i><i class="s" style="left:50%;width:4%"></i><i class="s" style="left:56%;width:30%"></i></div></div>
+        <div class="tlr"><span>SSP0014</span><div class="tlt"><i class="w" style="left:10%;width:8%"></i><i class="s" style="left:19%;width:41%"></i><i class="c" style="left:88%;width:11%"></i></div></div>
+        <div class="tlr"><span>SCP0005</span><div class="tlt"><i class="s" style="left:4%;width:22%"></i><i class="f" style="left:27%;width:3%"></i><i class="w" style="left:92%;width:8%"></i></div></div>
+        <div class="tlr"><span>VMO</span><div class="tlt"><i class="c" style="left:30%;width:2%"></i><i class="c" style="left:61%;width:3%"></i><i class="c" style="left:80%;width:2%"></i></div></div>
+        <div class="axis"><span></span><div><span>15:15</span><span>16:00</span><span>16:45</span><span>17:30</span><span>18:15</span></div></div>
+      </div>
+    </section>
+    <section class="card g">
+      <h2>Overall Review<span class="sp"></span><button class="btn">Fixes</button><button class="btn pri">지금 점검</button></h2>
+      <div class="list">
+        <div class="li"><span class="tm">11:58</span><span>CheckList 1단계 소요 96~137분, AI 도구 32~34%</span><span class="ar">개선안 2</span></div>
+        <div class="li"><span class="tm">11:58</span><span>재점검 범위 = 전체 재수행 3화면</span><span class="ar">반영됨</span></div>
+      </div>
+    </section>
+  </div>
+  <div class="note">시안 화면입니다. 값은 예시이며 실제 데이터가 아닙니다.</div>
+</section>
+
+<!-- Events -->
+<section class="pane" id="inc">
+  <div class="kan">
+    <div class="col"><h3><span class="dot bad"></span>열림 <span class="cnt">2</span></h3>
+      <div class="ev g" style="--c:var(--bad)"><div class="eh"><code>R12</code>같은 오류 반복<span class="sp"></span><span class="tm" style="color:var(--mut);font-size:11px">17:36</span></div><p>SCP0005 5단계 부분 재측정 E2E 3회 연속 timeout(_verify.spec.ts:2383)</p><div class="ef"><button class="btn pri">원인 보기</button><button class="btn">닫기</button></div></div>
+      <div class="ev g" style="--c:var(--warn)"><div class="eh"><code>R14</code>중지 누수<span class="sp"></span><span class="tm" style="color:var(--mut);font-size:11px">16:02</span></div><p>작업 목록 중지 뒤 node 프로세스 2개 남음</p><div class="ef"><button class="btn">원인 보기</button></div></div>
+    </div>
+    <div class="col"><h3><span class="dot warn"></span>조치 중 <span class="cnt">1</span></h3>
+      <div class="ev g" style="--c:var(--a2)"><div class="eh"><code>S8</code>단계 지연<span class="sp"></span></div><p>SSP0014 3단계 검증 보완 40분 초과 · AI Agent 확인 중</p></div>
+    </div>
+    <div class="col"><h3><span class="dot ok"></span>해결 <span class="cnt">5</span></h3>
+      <div class="ev g" style="--c:var(--ok)"><div class="eh"><code>R11</code>체인 실패 제목<span class="sp"></span></div><p>이번 체인 결과만 쓰도록 수정 · 재발 0회</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Fixes -->
+<section class="pane" id="prop">
+  <div class="prop g"><span class="lv" style="background:linear-gradient(135deg,var(--a2),var(--a1))">L3</span><div><h4>재점검을 규칙 단위 부분 실행으로</h4><p>EG-, ES-, ASIS_DIFF 행이 있으면 전체 재수행하던 조건 제거 · core · 승인 필요</p></div><div style="display:flex;gap:6px"><button class="btn">미리보기</button><button class="btn pri">승인</button></div></div>
+  <div class="prop g"><span class="lv" style="background:linear-gradient(135deg,#1fb7ab,var(--a3))">L2</span><div><h4>판정 검토 묶음 캐시 키 축소</h4><p>캐시 적중 206회 중 1회 → 행 내용과 룰 문장만 키로 · fix · 자동 반영됨</p></div><div><span class="pill"><span class="dot ok"></span>반영 18:03</span></div></div>
+</section>
+
+<!-- Health -->
+<section class="pane" id="self">
+  <div class="hgrid">
+    <section class="card g"><h2>자가진단 <small>S1~S12</small></h2><div class="score"><div class="ring" style="--v:83;--c:var(--ok)"><b>10<small>/12</small></b></div><div class="rl" style="margin-top:12px">어긋난 항목 2 · 17:58 점검</div></div><div style="display:flex;gap:6px;justify-content:center"><button class="btn pri">지금 점검</button><button class="btn">지금 진단</button></div></section>
+    <section class="card g"><h2>점검 항목<span class="sp"></span><button class="btn">설치 폴더 동기화</button></h2>
+      <div class="chk">
+        <div class="ci"><span class="dot ok"></span><div><b>S1 설치본 일치</b><span>파일 41개 같음</span></div></div>
+        <div class="ci"><span class="dot ok"></span><div><b>S2 체인 정의</b><span>quick.json 오류 0</span></div></div>
+        <div class="ci"><span class="dot bad"></span><div><b>S5 중지 누수</b><span>남은 프로세스 2</span></div></div>
+        <div class="ci"><span class="dot ok"></span><div><b>S6 문장 규칙</b><span>위반 0</span></div></div>
+        <div class="ci"><span class="dot warn"></span><div><b>S9 미확인 변경</b><span>다시 로드 필요 3</span></div></div>
+        <div class="ci"><span class="dot ok"></span><div><b>S12 시험 실행</b><span>JS 34 · PY 65 통과</span></div></div>
+      </div></section>
+  </div>
+</section>
+
+<!-- History -->
+<section class="pane" id="hist">
+  <section class="card g"><h2>작업 이력 <small>오늘 24건</small><span class="sp"></span><button class="btn">지금 수집</button><button class="btn">WORKLOG.md</button></h2>
+    <div class="list">
+      <div class="li"><span class="tm">18:00</span><span>E2E 읽기 시험 작업자 최대 10 · 계정별 병렬</span><span class="ar">엔진 · 파일 4</span></div>
+      <div class="li"><span class="tm">17:25</span><span>E2E 동시 실행 결함, 읽기 목록에 조회 기록 추가</span><span class="ar">엔진 · 파일 2</span></div>
+      <div class="li"><span class="tm">16:57</span><span>스펙 머리말 변경도 코드로 범위</span><span class="ar">엔진 · 파일 1</span></div>
+      <div class="li"><span class="tm">14:20</span><span>작업창 늦은 행을 단계 카드 안 묶음으로</span><span class="ar">VM · 파일 1</span></div>
+    </div></section>
+</section>
+
+<!-- Agent -->
+<section class="pane" id="agent">
+  <div class="agent">
+    <div class="console g">
+      <div class="bubble me"><span class="av">나</span><div class="bx">SCP0005 5단계가 왜 반복 실패하는지 확인해줘</div></div>
+      <div class="bubble"><span class="av">VMO</span><div class="bx">로그 3건을 확인했습니다. 세 번 모두 _verify.spec.ts:2383 개인화 저장 시험에서 90초 제한을 넘었습니다. 개선안 1건을 올렸습니다.</div></div>
+      <div><span class="m">18:10:02</span> <span class="u">Read</span> Doc/verify/SCP0005/e2e/serial.log</div>
+      <div><span class="m">18:10:05</span> <span class="u">Grep</span> timeout · 3건</div>
+      <div><span class="m">18:10:09</span> <span class="ok">개선안 등록</span> 20261120181009_INC</div>
+    </div>
+    <div class="inp g"><textarea placeholder="VMO 에이전트에게 질문, 지시 (Enter 전송, Shift+Enter 줄바꿈)"></textarea><span class="pill">acceptEdits</span><button class="send" aria-label="전송"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5.5M6 11.5l6-6 6 6"/></svg></button></div>
+  </div>
+</section>
+
+<!-- Logs -->
+<section class="pane" id="log">
+  <section class="card g" style="flex:1;display:flex;flex-direction:column">
+    <div class="lsub"><button class="ls on">☕ BE Log <span class="dot ok"></span></button><button class="ls">🎨 FE Log <span class="dot ok"></span></button><button class="ls">📋 Task Log</button><span class="sp"></span><span class="seg"><button class="on">BE</button><button class="on">FE</button></span></div>
+    <div class="console" style="padding:4px 2px;flex:1">
+      <div><span class="m">18:12:01.204</span> INFO  c.l.n.scp.Scp0028Controller : search 182ms rows=1,204</div>
+      <div><span class="m">18:12:03.881</span> INFO  c.l.n.common.LookupController : lookup 21ms</div>
+      <div><span class="m">18:12:07.415</span> <span class="w">WARN</span>  o.s.w.s.h.HandlerMappingIntrospector : cache miss</div>
+      <div><span class="m">18:12:09.002</span> INFO  c.l.n.ssp.Ssp0014Service : call-proc PKG_SSP0014.P_SEARCH 1.4s</div>
+    </div>
+  </section>
+</section>
+
+<!-- 기능 -->
+<section class="pane" id="task">
+  <div class="fn">
+    <section class="card g"><h2>Server <small>4개</small></h2><div class="tiles">
+      <button class="tile"><span class="ti">☕</span><span>BE Start<small>gradlew bootRun</small></span></button>
+      <button class="tile"><span class="ti">🎨</span><span>FE Start<small>vite</small></span></button>
+      <button class="tile"><span class="ti">⏹</span><span>BE Finish</span></button>
+      <button class="tile"><span class="ti">⏹</span><span>FE Finish</span></button></div></section>
+    <section class="card g"><h2>Git <small>2개</small></h2><div class="tiles">
+      <button class="tile"><span class="ti">⬇</span><span>Source Download<small>Download &amp; Merge</small></span></button>
+      <button class="tile"><span class="ti">⬆</span><span>Source Backup<small>NSCM_NEW</small></span></button></div></section>
+    <section class="card g"><h2>환경설정 <small>3개</small></h2><div class="tiles">
+      <button class="tile"><span class="ti">⚙</span><span>작업 모드<small>DB MODE</small></span></button>
+      <button class="tile"><span class="ti">🖥</span><span>AS-IS 실측 화면<small>녹화</small></span></button>
+      <button class="tile"><span class="ti">🌐</span><span>TO-BE 실측 화면<small>녹화</small></span></button></div></section>
+  </div>
+</section>
+
+</div>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.tab'),ind=document.getElementById('ind');
+  function place(b){ind.style.left=b.offsetLeft+'px';ind.style.width=b.offsetWidth+'px';}
+  tabs.forEach(function(b){b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.toggle('on',x===b);});
+    document.querySelectorAll('.pane').forEach(function(p){p.classList.toggle('on',p.id===b.dataset.t);});
+    place(b);
+  });});
+  window.addEventListener('load',function(){place(document.querySelector('.tab.on'));});
+  window.addEventListener('resize',function(){place(document.querySelector('.tab.on'));});
+  document.getElementById('theme').addEventListener('click',function(){
+    var r=document.documentElement;r.dataset.theme=r.dataset.theme==='light'?'dark':'light';
+  });
+  document.querySelectorAll('.seg button').forEach(function(b){b.addEventListener('click',function(){b.parentNode.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});});});
+})();
+</script>
+</body>
+</html>

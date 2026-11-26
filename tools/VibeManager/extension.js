@@ -76,7 +76,7 @@ function pathsCompute() {
     outDir: abs(c.get('outDir') || 'Doc/asisfacts'), tobeDir: abs(c.get('tobeDir') || 'nscm-fe'), tobeOutDir: abs(c.get('tobeOutDir') || 'Doc/tobefacts'),
     rulesDir: abs(c.get('rulesDir') || 'tools/Harness/rules'), gapDir: abs(c.get('gapDir') || 'Doc/gap'), genDir: abs(c.get('genDir') || 'Doc/gen'),
     vibeDir: path.join(root, '.vibe'), extDir: ctx.extensionPath, promptsDir: path.join(abs(c.get('harnessDir') || 'tools/Harness'), 'prompts'),
-    dbconnDir: abs(c.get('dbconnDir') || 'tools/DbConn'), reconDir: abs(c.get('reconDir') || 'tools/Recon'), e2eDir: abs(c.get('e2eDir') || 'tools/E2E'), dbOutDir: abs('Doc/db'), reconOutDir: abs('Doc/recon'), e2eOutDir: abs('Doc/e2e'), goldenDir: abs('Doc/golden'),
+    dbconnDir: abs(c.get('dbconnDir') || 'tools/DbConn'), reconDir: abs(c.get('reconDir') || 'tools/Recon'), e2eDir: abs(c.get('e2eDir') || 'tools/E2E'), dbOutDir: abs('Doc/db'), reconOutDir: abs('Doc/recon'), e2eOutDir: abs('Doc/e2e'), goldenDir: abs('Doc/golden'), checklistDir: (() => { try { return require('./workbench').docPaths(root).checklist; } catch { return abs('Doc/UI_CHECKLIST'); } })(), /* 2026-11-26 R83(개선안 20261124012049_SELF_3): steps.json ${checklistDir} = harness.json paths.checklistDir */
     python: c.get('pythonCommand') || 'python', powershell: c.get('powershell') || 'powershell', node: c.get('nodeCommand') || 'node', claude: (() => { const s = (c.get('claudeCommand') || '').trim(); return s && s !== 'claude' ? s : resolveClaude().file; })(), claudeModel: c.get('claudeModel') || '', modelList: Array.isArray(c.get('modelList')) ? c.get('modelList') : [], permissionMode: c.get('defaultPermissionMode') || 'bypassPermissions',
     language: (c.get('language') === 'ko' ? 'ko' : 'en'), // 1.8.3: 메뉴·라벨 언어 (기본 en)
     claudeDelay: Number(c.get('claudeStartupDelayMs') || 6000), agentDriver: c.get('agentDriver') || 'claude-cli', agentModel: c.get('agentModel') || 'claude-opus-5-5', // 1.8.5: 기본 Opus 5.5 (이전 sonnet-4-5)
@@ -151,7 +151,7 @@ function recordRun(id, info) {
   const r = runs(); r[id] = Object.assign({}, r[id] || {}, info); ctx.workspaceState.update(RUNS_KEY, r);
   try { const p = paths(); if (!p.root) return; fs.mkdirSync(p.vibeDir, { recursive: true }); fs.appendFileSync(path.join(p.vibeDir, 'runs.log'), `${history.nowLocal()}\t${id}\t${info.event || ''}\t${info.exitCode == null ? '' : info.exitCode}\t${info.note || ''}\n`, 'utf8'); } catch (_) { }
 }
-function fmtTime(ms) { if (!ms) return ''; const d = new Date(ms); const z = n => String(n).padStart(2, '0'); return `${d.getMonth() + 1}/${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; }
+function fmtTime(ms) { if (!ms) return ''; return require('./date-fmt').fmtDT(ms); }
 
 // ───────────────────────── 입력 수집 ─────────────────────────
 async function collectInputs(task, preset) {
@@ -163,7 +163,7 @@ async function collectInputs(task, preset) {
       const pick = await vscode.window.showQuickPick(inp.options.map(o => typeof o === 'string' ? { label: o } : { label: o.value || o.label, description: o.description || '' }), { placeHolder: inp.prompt || inp.name, ignoreFocusOut: true });
       if (!pick) return null; vars.inputs[inp.name] = pick.label; continue;
     }
-    const v = await vscode.window.showInputBox({ prompt: inp.prompt || inp.name, value: inp.default || workbench.currentId() || ctx.workspaceState.get('vibeManager.lastId', ''), ignoreFocusOut: true, validateInput: s => (inp.required !== false && !s.trim()) ? '값을 입력하세요' : null });
+    const v = await (/^ids?$/.test(inp.name) ? (o => require('./id-input').askId(vscode, o)) : (o => vscode.window.showInputBox(o)))({ prompt: inp.prompt || inp.name, value: inp.default || workbench.currentId() || ctx.workspaceState.get('vibeManager.lastId', ''), ignoreFocusOut: true, validateInput: s => (inp.required !== false && !s.trim()) ? '값을 입력하세요' : null });
     if (v == null) return null; vars.inputs[inp.name] = v.trim();
     if (/^ids?$/.test(inp.name)) ctx.workspaceState.update('vibeManager.lastId', v.trim().split(/\s+/)[0]);
   }
@@ -242,7 +242,8 @@ async function runClaude(task, vars) {
   const term = vscode.window.createTerminal({ name: `Vibe: ${task.id}${id ? ' ' + id : ''}`, cwd: p.root }); term.show(true);
   const model = (p.claudeModel ? ` --model ${p.claudeModel}` : '') + ` --permission-mode ${p.permissionMode}`;
   const genNotes = id ? `Doc/gen/${id}/GEN_NOTES.md` : '';
-  const instruction = `${rel} 를 읽고 그 지시대로 화면 ${id} 작업을 해주세요.${genNotes ? ` 메모: ${genNotes}.` : ''} TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`;
+  let ruleNote = ''; try { ruleNote = require('./run-rule').NOTE + ' '; } catch (ex) { try { require('./orch-errlog').note('extension', 'runClaude.runRule', ex); } catch { /* 기록 실패 = 그대로 진행 */ } } // 2026-11-24 개선안 20261123204531_SELF: 실행 룰 A-13(진행 보고·끝까지 진행)을 claude 터미널 실행 앞에도 붙임(workbench.js 970행 방식)
+  const instruction = `${ruleNote}${rel} 를 읽고 그 지시대로 화면 ${id} 작업을 해주세요.${genNotes ? ` 메모: ${genNotes}.` : ''} TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`;
   const cl = /\s/.test(p.claude) ? `& "${p.claude}"` : p.claude; // PowerShell 터미널 — 공백 경로는 호출 연산자
   if (task.headless) term.sendText(`${cl} -p${model} "${instruction.replace(/"/g, '\\"')}"`);
   else { term.sendText(`${cl}${model}`); setTimeout(() => term.sendText(instruction), p.claudeDelay); }
@@ -306,7 +307,7 @@ async function gateReport() {
   if (!fs.existsSync(agentDir)) { vscode.window.showWarningMessage('Agent 결과가 없습니다.'); return; }
   const s = agentGateSummary(agentDir); const indexFile = path.join(p.outDir, 'screens', '_index.csv');
   const all = fs.existsSync(indexFile) ? readCsv(indexFile).map(r => r.screen_id).filter(id => id && !p.excludeScreens.some(re => re.test(id))) : null;
-  const lines = [`# Agent 게이트 집계, ${new Date().toLocaleString()}`, '', `- 실행 화면 ${s.total}${all ? ` / 대상 ${all.length} (미실행 ${all.length - s.total})` : ''}`, `- PASS ${s.pass} · FAIL ${s.fail}`, '', '| 화면ID | 상태 | 문서 | 상세 | 실패 항목 | 시각 |', '|---|---|---:|---|---|---|'];
+  const lines = [`# Agent 게이트 집계, ${require('./date-fmt').fmtDT(Date.now())}`, '', `- 실행 화면 ${s.total}${all ? ` / 대상 ${all.length} (미실행 ${all.length - s.total})` : ''}`, `- PASS ${s.pass} · FAIL ${s.fail}`, '', '| 화면ID | 상태 | 문서 | 상세 | 실패 항목 | 시각 |', '|---|---|---:|---|---|---|'];
   for (const i of s.items) lines.push(`| ${i.id} | ${i.status === 'PASS' ? '✅ PASS' : '❌ ' + i.status} | ${i.docs}/8 | ${i.detail} | ${i.checks.join('<br>')} | ${fmtTime(i.mtime.getTime())} |`);
   if (all && all.length > s.total) { const done = new Set(s.items.map(i => i.id)); lines.push('', `## 미실행 화면 (${all.filter(id => !done.has(id)).length})`, '', all.filter(id => !done.has(id)).join(', ')); }
   const dir = path.join(p.vibeDir, 'reports'); fs.mkdirSync(dir, { recursive: true }); const file = path.join(dir, `agent_gates_${history.nowLocal().slice(0, 10)}.md`);
@@ -315,7 +316,7 @@ async function gateReport() {
 
 // ───────────────────────── 프로그램 ID 로 단계 작업 ─────────────────────────
 async function quickScreen() {
-  const id = await vscode.window.showInputBox({ prompt: '화면(프로그램) ID', value: ctx.workspaceState.get('vibeManager.lastId', 'DMF0052'), ignoreFocusOut: true });
+  const id = await require('./id-input').askId(vscode, { prompt: '화면(프로그램) ID', value: ctx.workspaceState.get('vibeManager.lastId', 'DMF0052'), ignoreFocusOut: true });
   if (!id) return; const ID = id.trim().toUpperCase(); ctx.workspaceState.update('vibeManager.lastId', ID); if (dodTree) dodTree.refresh();
   const p = paths(); const has = f => fs.existsSync(f);
   const st = { pack: has(path.join(p.outDir, 'screens', ID)), agent: has(path.join(p.outDir, 'agent', ID, '_gate.csv')), gen: has(path.join(p.genDir, ID, 'GEN_NOTES.md')), };
@@ -346,6 +347,11 @@ class StepsProvider {
     const p = paths(); vscode.commands.executeCommand('setContext', 'vibeManager.noRoot', !p.root); if (!p.root) return [];
     const vars = Object.assign({}, p, { inputs: {} });
     if (!el) return loadSteps().map(s => { const st = stepStatus(s, vars); const it = new vscode.TreeItem(L(s, 'title'), st.state === 'pass' ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.Expanded); it.description = st.text; it.tooltip = s.detail || ''; it.iconPath = stateIcon(st.state); it.contextValue = 'step'; it.step = s; return it; });
+    // 2026-11-25 R78(20261124003230_SELF): 단계 맨 앞 '▶ 전체 실행' 1개(quick.json 체인을 runQuick 으로) · 상세 작업은 접힌 '상세 단계' 아래로
+    if (el.step && !el.stepDetail) { const q = stepChainItem(el.step); if (q) {
+      const all = new vscode.TreeItem('▶ 전체 실행', vscode.TreeItemCollapsibleState.None); all.description = L(q); all.tooltip = `순서대로 끝까지 수행 (체인 ${q.chainId})`; all.iconPath = new vscode.ThemeIcon('run-all'); all.contextValue = 'quick'; all.command = { command: 'vibeManager.runQuick', title: '전체 실행', arguments: [q] };
+      const det = new vscode.TreeItem('상세 단계', vscode.TreeItemCollapsibleState.Collapsed); det.description = `${(el.step.tasks || []).length}개 · 단독 실행`; det.iconPath = new vscode.ThemeIcon('list-tree'); det.contextValue = 'stepDetail'; det.step = el.step; det.stepDetail = true;
+      return [all, det]; } }
     if (el.step) { const r = runs(); return (el.step.tasks || []).map(t => {
       const it = new vscode.TreeItem(L(t, 'title'), vscode.TreeItemCollapsibleState.None); const g = t.gate ? evalGate(t.gate, vars) : null; const run = r[t.id]; const parts = [];
       if (g) parts.push(g.detail); if (run && run.time) parts.push(`최근 ${fmtTime(run.time)}${run.exitCode != null ? (run.exitCode === 0 ? ' ✓' : ` ✗${run.exitCode}`) : ''}`);
@@ -353,6 +359,12 @@ class StepsProvider {
       it.iconPath = g ? stateIcon(g.ran || g.ok ? (g.ok ? 'pass' : 'fail') : 'idle') : kindIcon(t.kind); it.contextValue = 'task'; it.task = t; it.command = { command: 'vibeManager.runTask', title: '실행', arguments: [it] }; return it; }); }
     return [];
   }
+}
+// 단계 → quick.json 체인. steps.json 에 chain(체인 ID)이 있으면 그 값, 없으면 아래 기본값
+const STEP_CHAIN = { S1L: 'asislive', S3: 'docs', S8: 'checklist', S9: 'autofix-full', S10: 'testreport' };
+function stepChainItem(step) {
+  const cid = step && (step.chain || STEP_CHAIN[step.id]); if (!cid) return null;
+  try { const p = paths(); return (promptPanel.loadQuick(p.extDir, p.root).groups || []).flatMap(g => g.items || []).find(x => x && x.kind === 'chain' && x.chainId === cid) || null; } catch (e) { log(`단계 체인 찾기 실패(${cid}): ${e.message}`); return null; }
 }
 function stateIcon(state) { switch (state) { case 'pass': return new vscode.ThemeIcon('pass-filled', new vscode.ThemeColor('testing.iconPassed')); case 'fail': return new vscode.ThemeIcon('error', new vscode.ThemeColor('testing.iconFailed')); case 'partial': return new vscode.ThemeIcon('circle-large-filled', new vscode.ThemeColor('testing.iconQueued')); case 'none': return new vscode.ThemeIcon('circle-outline'); default: return new vscode.ThemeIcon('circle-large-outline'); } }
 function kindIcon(kind) { return new vscode.ThemeIcon({ claude: 'sparkle', powershell: 'terminal-powershell', node: 'terminal', open: 'go-to-file', browser: 'globe', gateReport: 'checklist', agentBatch: 'run-all', diff: 'diff' }[kind] || 'play'); }
@@ -453,11 +465,14 @@ class DodProvider {
       items.push(grp('AS-IS 실측', 'device-desktop', 'live', bd ? `${bd.status} · ${bd.at || ''}${bd.reused ? ' · 재사용' : ''}` : '미실측', bd ? (bd.status === 'OK' || bd.status === 'NA') : undefined));
       const fg = js('fe_gate.json'), pg = js('pkg_gate.json'); const mlc = (() => { try { return readCsv(path.join(vd, 'meta_live_check.csv')); } catch { return null; } })();
       const gcnt = arr => { const g = (arr || []).filter(x => x && x.result); const f = g.filter(x => x.result === 'FAIL').length; return `${g.length - f}/${g.length}${f ? ` FAIL ${f}` : ''}`; };
-      const gok = [fg && fg.gates, pg && pg.gates, mlc].filter(Boolean);
-      items.push(grp('화면·PKG·메타 게이트', 'shield', 'gate', [fg ? `FE ${gcnt(fg.gates)}` : 'FE 미실행', pg ? `PKG ${gcnt(pg.gates)}` : 'PKG 미실행', mlc ? `메타 ${gcnt(mlc)}` : '메타 미실행'].join(' · '), gok.length ? gok.every(a => !a.some(x => x.result === 'FAIL')) : undefined));
+      // 개선안 20261124043432_SELF(규칙 R135 · 2026-11-19 사용자 지시): DB MODE = FE 소스가 변경 대상 아님 → FE 게이트를 판정에서 뺌('DB MODE: 대상 아님', 통과로 셈).
+      //   UI/DB MODE = flow-panel stageStatus 가 gate_baseline.tsv 이후 바뀐 파일 없음으로 본 화면(gateTip 'UI/DB MODE:')만 FE 판정에서 뺌. 모드를 못 읽으면 종전 판정.
+      let feSkip = ''; try { const wm = workbench.workMode(p); if (wm && wm.db) feSkip = 'DB MODE: 대상 아님'; else if (wm && /^UI\/DB MODE:/.test(flowPanel.stageStatus(p, ID).gateTip || '')) feSkip = 'UI/DB MODE: 기준선 이후 변경 없음'; } catch { feSkip = ''; }
+      const gok = [feSkip ? null : fg && fg.gates, pg && pg.gates, mlc].filter(Boolean);
+      items.push(grp('화면·PKG·메타 게이트', 'shield', 'gate', [feSkip ? `FE ${feSkip}` : fg ? `FE ${gcnt(fg.gates)}` : 'FE 미실행', pg ? `PKG ${gcnt(pg.gates)}` : 'PKG 미실행', mlc ? `메타 ${gcnt(mlc)}` : '메타 미실행'].join(' · '), gok.length ? gok.every(a => !a.some(x => x.result === 'FAIL')) : undefined));
       items.push(grp('테스트 결과·문서', 'beaker', 'out', '', undefined));
       items.push(grp('완료 정의(DoD · 하네스 게이트)', 'checklist', 'dod', m ? `${m[1]}/${m[2]}` : '미판정. 게이트 실행', m ? m[1] === m[2] : undefined, true));
-      items.push(grp('FE 게이트(check.js --final)', 'shield', 'chk', b ? `BLOCK ${b[1]} / WARN ${b[2]}` : '미실행', b ? b[1] === '0' : undefined, true));
+      items.push(grp('FE 게이트(check.js --final)', 'shield', 'chk', feSkip ? feSkip : b ? `BLOCK ${b[1]} / WARN ${b[2]}` : '미실행', feSkip ? true : b ? b[1] === '0' : undefined, true));
       items.push(grp('PKG 게이트(check-pkg.js)', 'database', 'pkg', pb ? `BLOCK ${pb[1]} / WARN ${pb[2]}` : '미실행', pb ? pb[1] === '0' : undefined, true));
       items.push(grp('파이프라인·테스트·신뢰도', 'rocket', 'pipe', pipe ? (/✅/.test(pipe.split('\n')[0]) ? 'PASS' : '사람 확인 필요') + ` · 신뢰도 ${conf}` : `신뢰도 ${conf}`, pipe ? /✅/.test(pipe.split('\n')[0]) : undefined, true));
       return items;
@@ -494,7 +509,7 @@ class DodProvider {
       try { const rows = readCsv(path.join(vd2, 'meta_live_check.csv')); for (const r of rows) items.push(leaf(`메타 ${r.check} ${r.target}`.slice(0, 100), r.result === 'PASS' ? 'pass-filled' : r.result === 'FAIL' ? 'error' : 'circle-outline', `${r.result} · ${String(r.detail || '').slice(0, 80)}`)); } catch { items.push(leaf('메타 게이트 미실행', 'info')); }
       return items; }
     if (el.group === 'out') { const r = paths().root; const items = [];
-      for (const [lb, dir, re] of [['TestResultList', path.join(r, 'Doc', '테스트결과서'), new RegExp(`^${ID}_.*\\.xlsx$`)], ['UI 테스트 Excel', path.join(r, 'Doc', 'UI_TEST(SCP&SSP)'), new RegExp(`_${ID}\\(.*\\.xlsx$`)], ['화면설계서', path.join(r, 'Doc', '화면설계서'), new RegExp(`${ID}.*\\.xlsx$`)], ['화면분석서', path.join(r, 'Doc', '화면분석서'), new RegExp(`${ID}.*\\.xlsx$`)], ['단위테스트', path.join(r, 'Doc', '단위테스트'), new RegExp(`${ID}.*\\.xlsx$`)]]) {
+      for (const [lb, dir, re] of [['TestResultList', path.join(r, 'Doc', '테스트결과서'), new RegExp(`^${ID}_.*\\.xlsx$`)], ['UI 테스트 Excel', workbench.docPaths(r).uiTest || path.join(r, 'Doc', 'UI_TEST(SCP&SSP)'), new RegExp(`_${ID}\\(.*\\.xlsx$`)], ['화면설계서', path.join(r, 'Doc', '화면설계서'), new RegExp(`${ID}.*\\.xlsx$`)], ['화면분석서', path.join(r, 'Doc', '화면분석서'), new RegExp(`${ID}.*\\.xlsx$`)], ['단위테스트', path.join(r, 'Doc', '단위테스트'), new RegExp(`${ID}.*\\.xlsx$`)]]) {
         const f = latestOf(dir, re); items.push(f ? openFile(leaf(lb, 'file', path.basename(f)), f) : leaf(lb, 'circle-outline', '없음')); }
       items.push(Object.assign(leaf('🚀 ID 하나로 전체 (파싱 → 실측 → 생성 → CheckList → 보완 → TestResultList → 문서)', 'play'), { command: { command: 'vibeManager.qFullChain', title: '실행' } }));
       return items; }
@@ -584,7 +599,7 @@ class MenuProvider {
 }
 function flat(o, pre = '', out = []) { for (const [k, v] of Object.entries(o || {})) { const key = pre ? pre + '.' + k : k; if (v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length && out.length < 200) flat(v, key, out); else out.push([key, Array.isArray(v) ? `[${v.length}]` : v]); } return out; }
 async function checkEnv() {
-  const p = paths(); const lines = [`# 환경 점검 ${new Date().toLocaleString()}`, ''];
+  const p = paths(); const lines = [`# 환경 점검 ${require('./date-fmt').fmtDT(Date.now())}`, ''];
   const tryCmd = (cmd, args) => { try { return cp.execFileSync(cmd, args, { encoding: 'utf8', timeout: 15000, shell: process.platform === 'win32' }).trim().split(/\r?\n/)[0]; } catch (e) { return `✗ ${e.message.split('\n')[0]}`; } };
   lines.push(`- node: ${tryCmd(p.node, ['--version'])}`, `- dotnet: ${tryCmd('dotnet', ['--version'])}`, `- python: ${tryCmd('python', ['--version'])}`, `- git: ${tryCmd('git', ['--version'])}`, `- claude: ${tryCmd(p.claude, ['--version'])}`, '');
   for (const [l, f] of [['As-is 파서', path.join(p.toolsDir, 'run.ps1')], ['To-Be 파서', path.join(p.root, 'tools', 'TobeFacts', 'run.ps1')], ['하네스', path.join(p.harnessDir, 'gen.js')], ['typescript(nscm-fe)', path.join(p.tobeDir, 'node_modules', 'typescript', 'lib', 'typescript.js')], ['As-is Fact Pack', path.join(p.outDir, 'screens', '_index.csv')], ['To-Be Fact', path.join(p.tobeOutDir, 'screens', '_index.csv')], ['클라우드 메타 CSV', path.join(p.tobeOutDir, 'db', 'proc_meta.csv')]]) lines.push(`- ${l}: ${fs.existsSync(f) ? '✓' : '✗ 없음'} \`${f}\``);
@@ -639,7 +654,7 @@ body{font-family:var(--vscode-font-family);color:var(--vscode-foreground);backgr
 .detail{font-size:12px;color:var(--idle);margin:6px 0 8px 34px}ul{list-style:none;margin:0;padding:0 0 0 34px}.task{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--idle);flex:none}.task.ok .dot{background:var(--ok)}.task.fail .dot{background:var(--fail)}.task.plain .dot{background:transparent;border:1px solid var(--idle)}.title{flex:1}.meta{font-size:11px;color:var(--idle);white-space:nowrap}
 button{background:var(--vscode-button-secondaryBackground);color:var(--vscode-button-secondaryForeground);border:0;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px}button:hover{background:var(--vscode-button-background);color:var(--vscode-button-foreground)}.top{display:flex;gap:8px;align-items:center;margin-bottom:16px}.top .sp{flex:1}</style></head><body>
-<div class="top"><div><h1>NSCM 전환 작업 흐름</h1><p class="sub">Vibe_Manager v1.0, 루트 <code>${esc(p.root)}</code>, 단계 정의 <code>${esc(stepsFile())}</code></p></div><div class="sp"></div><button id="quick">⚡ 프로그램 ID 로 작업</button><button id="refresh">↻ 다시 판정</button></div>
+<div class="top"><div><h1>NSCM 전환 작업 흐름</h1><p class="sub">Vibe Manager ${esc(require('./package.json').version)}, 루트 <code>${esc(p.root)}</code>, 단계 정의 <code>${esc(stepsFile())}</code></p></div><div class="sp"></div><button id="quick">⚡ 프로그램 ID 로 작업</button><button id="refresh">↻ 다시 판정</button></div>
 <div class="spine"><b>공통 Fact 스키마(척추)</b>. As-is 파서(1)와 To-Be 파서(2)가 같은 CSV 스키마로 출력하고, 문서(3), GAP(4), 하네스(5), 룰 보완(6)이 이 스키마와 rules/*.csv 만 읽는다. 단계마다 완료 기준은 건수·0건으로 기계 판정.</div>
 ${stepHtml}
 <script>const vscode=acquireVsCodeApi();document.querySelectorAll('button[data-id]').forEach(b=>b.addEventListener('click',()=>vscode.postMessage({type:'run',id:b.dataset.id})));document.getElementById('refresh').addEventListener('click',()=>vscode.postMessage({type:'refresh'}));document.getElementById('quick').addEventListener('click',()=>vscode.postMessage({type:'quick'}));</script></body></html>`;
@@ -781,7 +796,11 @@ function activate(context) {
           Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager: 창 다시 로드로 끊긴 작업 재개 가능 ${rs.length}건(VMW 작업 ${jobsN} · Workbench 체인 ${wbN}). 끊긴 단계부터 다시 실행할 수 있습니다`, ...(jobsN ? ['VMW 열기'] : []), ...(wbN ? ['Workbench 열기'] : []))).then(a => { if (a === 'VMW 열기') vscode.commands.executeCommand('vibeManager.openJobs'); else if (a === 'Workbench 열기') vscode.commands.executeCommand('vibeManager.openWorkbench'); });
         } catch (e) { log(`재개 알림 실패: ${e.message}`); } }, 8000);
         require('./orch-vision').init({ paths, settings: () => ({ visionEnabled: cfg().get('orch.visionEnabled') !== false, visionEveryDays: Number(cfg().get('orch.visionEveryDays')) || 1 }), notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO. ${String(text).slice(0, 200)}`, '개선안 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'prop'); }); } });
-        require('./orch-selfcheck').init({ paths, notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO 자가진단. ${String(text).slice(0, 200)}`, '자가진단 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'self'); }, () => { }); } });
+        // 개선안 20261122130655_REVIEW_2: busy = 실행 중 체인(workbench liveChains) 있음 · subscribeChainEnd = events chain.end 구독 · notifyReload = 실행 중 체인 0개일 때 창 다시 로드 알림 1회
+        require('./orch-selfcheck').init({ paths, notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO 자가진단. ${String(text).slice(0, 200)}`, '자가진단 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'self'); }, () => { }); },
+          busy: () => { const m = workbench._liveChains; return !!(m && m.size > 0); },
+          subscribeChainEnd: fn => { const off = require('./orch-events').on(ev => { if (ev && ev.type === 'chain.end') setTimeout(fn, 1000); }); const iv = setInterval(fn, 60000); if (iv.unref) iv.unref(); return () => { try { off(); } catch { } clearInterval(iv); }; }, // 단일 질문 실행(workbench.js:846)은 chain.end 가 없어 60초 확인을 같이 둠
+          notifyReload: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO. ${String(text).slice(0, 240)}`, 'Reload Window')).then(a => { if (a) vscode.commands.executeCommand('workbench.action.reloadWindow'); }, () => { }); } });
       } catch (e) { log(`자가진단 시작 실패: ${e.message}`); }
       if (cfg().get('orch.autoOpen') !== false) setTimeout(() => { try { workbench.openOrchestra(wbApi(), { background: true }); } catch (e) { log(`VMO 창 열기 실패: ${e.message}`); } }, 1500);
     }

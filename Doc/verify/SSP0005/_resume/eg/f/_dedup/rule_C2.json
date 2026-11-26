@@ -1,0 +1,94 @@
+{
+ "rule_id": "C2",
+ "hash": "857f130a61197c7c",
+ "groups": [
+  {
+   "rows": [
+    "T-c39d86be"
+   ],
+   "why": "TRACE 행으로 SpdMain_Changed 진입점이 소스에 실제로 있는지 추적하는 행이라 화면 동작 검증 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-d6496580"
+   ],
+   "why": "TRACE 행으로 CboDayWeek_SelectedIndexChanged 진입점을 추적하는 행이며 대상 요소도 다른 TRACE 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-0f87eaa4"
+   ],
+   "why": "Sales Site Company 변경 후 새 후보가 나오는지와 키인 수정이 한 번에 저장되는지를 보는 행이라, 후보 밖 값 차단을 보는 V-2bd2f2c9와 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-15988174"
+   ],
+   "why": "신규 행에서 Measure 후보만 보는 행이라, AS From Site 활성 여부까지 함께 보는 V-7c913b62와 대상 요소와 기대 결과의 범위가 다르다."
+  },
+  {
+   "rows": [
+    "V-1e3a50a3"
+   ],
+   "why": "Div 40 저장 시점에 관계 불일치 차단과 Active N 유지를 보는 행이라, cascade 후보만 보는 V-4992dfb8과 상태와 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-2bd2f2c9"
+   ],
+   "why": "콤보 셀에 후보 밖 값을 키인하면 막히는지를 보는 행이라, 변경 후 반영을 기대하는 V-0f87eaa4와 기대 결과가 반대 성격이다."
+  },
+  {
+   "rows": [
+    "V-4663428b"
+   ],
+   "why": "신규 행에서 End Customer, Sales Company, Sales Site 세 상위 셀의 cascade를 모두 묶어 보는 행이라, 일부 경로만 다루는 V-99529cb7·V-68d270b3과 대상 범위와 상태가 일치하지 않아 확신이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-4992dfb8"
+   ],
+   "why": "Div 40의 Cust Group→End Customer→Sales Site 경로와 후보 중복 0을 보는 행이라 다른 cascade 행과 대상 경로가 다르다."
+  },
+  {
+   "rows": [
+    "V-663b94ce"
+   ],
+   "why": "Insert 신규 행에서 Div 셀을 바꿀 수 있는지와 하위 Site 후보가 다시 구성되는지를 보는 행이라 대상 셀이 다르다."
+  },
+  {
+   "rows": [
+    "V-68d270b3"
+   ],
+   "why": "Div 40 외 조건에서 End Customer→Sold-to Customer 한 경로만 보는 확정 규칙이라 조건과 대상 범위가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-7c913b62"
+   ],
+   "why": "Div 81에서 Sales Site 유형별 AS From Site 활성 여부와 Measure 후보(SCM_FCST 비노출)를 함께 보는 행이라 다른 Measure 행과 조건과 기대 결과가 다르다."
+  },
+  {
+   "rows": [
+    "V-8d3f3851"
+   ],
+   "why": "Div 82 저장 검증 팝업 뒤 AS From Site를 입력했을 때 W35~W38 수량이 유지되는지를 보는 행이라 대상과 기대 결과가 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "V-99529cb7"
+   ],
+   "why": "Sales Company→Plant, Sales Site→Company/Plant 경로만 보는 확정 규칙이며 신규 행 조건이 없어, V-4663428b와 상태와 범위가 일치하는지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-c21c3162"
+   ],
+   "why": "Current 버전에서 Div와 권한별로 입력 Measure 통제와 AS From Site 목록을 보는 행이라 조건과 기대 결과가 다른 Measure 행보다 넓고 서로 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:06:00",
+ "cost": 0.0861405
+}

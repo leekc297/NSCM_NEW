@@ -34,6 +34,14 @@ import type {
 import styles from '../SalesMonitoring.module.scss';
 import { dynKindOf, getDynKey, HierarchicalMergeManager } from '../utils/sales-monitoring.merge';
 
+// 동적(기간) 컬럼 너비 = 프로시저(GET_SPREAD_TITLE) COLUMN_WIDTH 최우선, 없거나 0 이면 화면 기본 너비
+//   (2026-11-22 동적 컬럼 너비 30% 확대 — 너비를 프로시저에서 관리). 양수만 채택한다.
+const DYN_COL_DEFAULT_WIDTH = 90;
+const spColumnWidth = (raw: string | number | null | undefined): number | undefined => {
+  const n = Number(String(raw ?? '').trim());
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+};
+
 // 동적 컬럼 kind 서열 — M(월)=0 상위 … D(일)=2 하위 (AS-IS SetSpreadColumn 표시 매트릭스 판정)
 const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
 
@@ -185,6 +193,8 @@ export const SalesMonitoringGrid = ({
     small: string;
     leaf: string;
     sort: number;
+    /** SP COLUMN_WIDTH(px). 없으면 undefined → DYN_COL_DEFAULT_WIDTH. */
+    width?: number;
   };
   const dynColMetas = useMemo<DynColMeta[]>(() => {
     const titleRows = (spreadTitle ?? []).filter(r => !!dynKindOf(r.COLUMN_NAME ?? ''));
@@ -197,6 +207,7 @@ export const SalesMonitoringGrid = ({
           small: r.SMALL_CLASS_LABEL_NAME ?? '',
           leaf: r.COLUMN_LABEL_NAME ?? '',
           sort: Number(r.SORT_ORDER_NO ?? 0),
+          width: spColumnWidth(r.COLUMN_WIDTH),
         }))
         .sort((a, b) => a.sort - b.sort || a.binding.localeCompare(b.binding));
     }
@@ -291,7 +302,7 @@ export const SalesMonitoringGrid = ({
         header: m.kind === 'D' ? m.leaf || m.small || 'SUM' : 'SUM',
         align: 'right',
         format: 'n3',
-        width: 90,
+        width: m.width ?? DYN_COL_DEFAULT_WIDTH,
         allowDragging: true,
         allowMerging: false,
         allowResizing: true,
@@ -499,18 +510,43 @@ export const SalesMonitoringGrid = ({
   useEffect(() => {
     let raf = 0;
     let attached: FlexGridType<SalesMonitoringRow> | null = null;
+    // 헤더 행별 목표 높이. 3단인데 보이는 동적 칸이 월(M_)뿐이면 2단 · 3단이 모두 'SUM' 이라 세로 병합된다
+    //   → 24 / 12 / 12 로 나눠 보이는 두 줄(년월 · SUM)을 24 : 24 로 맞춘다(2026-11-23 요청: 총 48 유지, 반반).
+    //   주 · 일 칸이 보이면 세 줄이 모두 따로 보이므로 16 / 16 / 16 그대로.
+    const targetHeights = (g: FlexGridType<SalesMonitoringRow>, rowCount: number): number[] => {
+      if (rowCount === 3) {
+        let hasDyn = false;
+        let hasSubBucket = false;
+        for (let i = 0; i < g.columns.length; i++) {
+          const col = g.columns[i];
+          if (!col.visible) continue;
+          const kind = dynKindOf(col.binding ?? '');
+          if (!kind) continue;
+          hasDyn = true;
+          if (kind !== 'M') {
+            hasSubBucket = true;
+            break;
+          }
+        }
+        if (hasDyn && !hasSubBucket) return [24, 12, 12];
+      }
+      const per = Math.max(1, Math.round(48 / rowCount));
+      return Array.from({ length: rowCount }, () => per);
+    };
     const normalize = (g: FlexGridType<SalesMonitoringRow>) => {
       const hdr = g.columnHeaders?.rows;
       if (!hdr || hdr.length === 0) return;
-      const per = Math.max(1, Math.round(48 / hdr.length));
+      const targets = targetHeights(g, hdr.length);
+      // defaultSize 는 마지막 행 높이로 둔다 — 행마다 height 를 명시하므로 표시에는 쓰이지 않는다.
+      const base = targets[targets.length - 1];
       let changed = false;
-      if (Math.round(hdr.defaultSize) !== per) {
-        hdr.defaultSize = per;
+      if (Math.round(hdr.defaultSize) !== base) {
+        hdr.defaultSize = base;
         changed = true;
       }
       for (let i = 0; i < hdr.length; i++) {
-        if (Math.round(hdr[i].height ?? 0) !== per) {
-          hdr[i].height = per;
+        if (Math.round(hdr[i].height ?? 0) !== targets[i]) {
+          hdr[i].height = targets[i];
           changed = true;
         }
       }

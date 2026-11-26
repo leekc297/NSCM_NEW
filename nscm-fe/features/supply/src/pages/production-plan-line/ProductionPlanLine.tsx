@@ -614,6 +614,7 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
           adminColumns={staticColumns[SHEETS.MAIN]}
           editInfoMap={editInfoMap}
           fixCellSet={fixCellSet}
+          canSave={hasButton('SAVE')}
           onFocus={() => undefined}
         />
       </div>

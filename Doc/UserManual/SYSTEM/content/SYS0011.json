@@ -1,0 +1,122 @@
+{
+ "definition": "로그인 계정으로 Authority 와 Division 을 골라 권한을 신청하고, 신청한 권한의 승인 결과를 확인하는 화면",
+ "overview": [
+  "로그인한 계정으로 업무에 쓸 Authority 와 Division 을 신청하고 승인 결과를 확인하는 화면임",
+  "위쪽 Authority 그리드, Division 그리드와 아래 User Info, My Authority List 로 구성됨",
+  "Authority 1건 클릭 → Division 체크 → Add 로 신청 행 저장 → My Authority List 에서 행 체크 → Request 순서로 작업함",
+  "요청한 행은 Auth Approval(SYS0012)에서 승인 또는 반려되고 결과가 Approval Result 에 나옴"
+ ],
+ "pages": [
+  {
+   "title": "Auth Request",
+   "keyPoint": "Add 로 저장만 한 행은 승인 요청이 되지 않으므로 Request 를 눌러야 함. Request 전에 User Info 의 Language, Time Zone 을 채움.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.835,
+     "y": 0.135
+    },
+    {
+     "no": 2,
+     "x": 0.194,
+     "y": 0.174
+    },
+    {
+     "no": 3,
+     "x": 0.625,
+     "y": 0.174
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "Request 버튼",
+     "lines": [
+      "Request: My Authority List 에서 체크한 행을 승인 요청함. 요청되면 \"요청되었습니다.\" 메시지가 뜸",
+      "목록에 행이 없으면 \"등록된 요청 권한이 없습니다.\", 체크한 행이 없으면 \"요청 권한을 선택해 주십시오.\" 메시지가 뜸",
+      "체크한 행이 이미 요청 상태이면 \"Selected rows are already in REQUEST status.\" 메시지가 뜸",
+      "Language 또는 Time Zone 이 비어 있으면 \"Please select Language.\", \"Please select Time Zone.\" 메시지가 뜸",
+      "Sort(F3), Filter(F4), Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "Authority 그리드",
+     "lines": [
+      "신청할 수 있는 권한 그룹 목록. Authority 는 그룹 이름, Desc 는 설명이며 입력 불가",
+      "Add 전에 신청할 Authority 행 1건을 클릭해 고름. 고르지 않고 Add 하면 \"Please select an Authority row.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Division 그리드",
+     "lines": [
+      "Div., Div. Name 목록. 체크박스로 Division 을 1건 이상 고름",
+      "체크한 Division 없이 Add 하면 \"Please check at least one Division checkbox.\" 메시지가 뜸"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Auth Request",
+   "keyPoint": "Add 로 저장만 한 행은 승인 요청이 되지 않으므로 Request 를 눌러야 함. Request 전에 User Info 의 Language, Time Zone 을 채움.",
+   "markers": [
+    {
+     "no": 4,
+     "x": 0.168,
+     "y": 0.596
+    },
+    {
+     "no": 5,
+     "x": 0.416,
+     "y": 0.594
+    }
+   ],
+   "sections": [
+    {
+     "no": 4,
+     "title": "User Info",
+     "lines": [
+      "User ID, User Name, Department: 로그인한 계정 정보가 채워지며 입력 불가",
+      "Language, Time Zone: 필수(라벨 앞 빨간 점). 콤보에서 고름"
+     ]
+    },
+    {
+     "no": 5,
+     "title": "My Authority List",
+     "lines": [
+      "로그인 계정이 신청한 권한 목록. Authority, Div. Name, Request Date, Approval Result, Reject Reason, Approval User, Approval Date 가 나오며 입력 불가",
+      "Add: 위에서 고른 Authority 1건과 체크한 Division 조합으로 행을 만들어 저장함. 저장되면 \"성공적으로 저장되었습니다.\" 메시지가 뜸",
+      "Delete: 체크한 행을 삭제함. 삭제되면 \"삭제되었습니다.\" 메시지가 뜸",
+      "Approval Result: 요청 중이면 REQUESTING, 승인되면 APPROVED, 반려되면 REJECT 로 나옴. 반려된 행은 Reject Reason 에 사유가 나옴",
+      "Approval User, Approval Date: Auth Approval 에서 처리한 사람과 일시"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "SYS0011",
+ "uiName": "Auth Request",
+ "menuPath": "SYSTEM> Auth Mgmt> Auth Request",
+ "captures": [
+  "captures/SYS0011.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/SYS0011/"
+ ],
+ "buttons": [
+  "authority:SEARCH",
+  "division:RETRIEVE",
+  "division:SEARCH",
+  "main:RETRIEVE",
+  "myAuth:ADD",
+  "myAuth:DELETE",
+  "myAuth:REQUEST",
+  "myAuth:RETRIEVE",
+  "myAuthorityList:SAVE",
+  "myAuthorityList:SEARCH",
+  "userInfo:RETRIEVE",
+  "userInfo:SAVE",
+  "userInfo:SEARCH"
+ ]
+}

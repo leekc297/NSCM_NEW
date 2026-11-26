@@ -1,0 +1,45 @@
+{
+  "id": "20261125102947_SELF_3",
+  "at": "2026-11-25T10:29:47+09:00",
+  "ms": 1795570187960,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/analysis/ssp_it_precheck/scn_rows.py|사전점검시트에사용자가실행할명령의시험일이n으로고정돼gensql",
+  "title": "사용자 지시 R221 같은 문제: tools/Analysis/ssp_it_precheck/scn_rows.py:31 사전점검 시트에 사용자가 실행할 명령의 시험일이 20261123으로 고정돼, gen_sql_files.py 실행 명령 파일의 [0-1] 블록(사용자가 정한 시험일",
+  "evidence": "규칙 R221 \"여러 쿼리, 실행 명령을 사용자에게 주는 생성기는 종류별(Oracle, MSSQL, 실행 명령) 1파일로 모으고 실행 단위마다 위에 내용 주석을 달며 Oracle, MSSQL 판을 같은 형태로 만들고 기준일 같은 인자는 사용자 지정값으로 채운 뒤 사내 DB 실행 또는 문법 검사를 거쳐 제공함\" (원래 지시 2026-11-25 10:05 \"재컴파일 완료했습니다. SSP 통합테스트 시나리오에 추가한 사전점검 단계의 ORACLE QUERY 을 하나의 파일로 생성하고, 각각의 실행 파일위에 주석으로 해당 파일의 내용 표기해주세요. MSSQL QUERY 도 동일한 형태로 하나의 파일로 생성해주세요. 파일 생성 시 PLAN_DAT\") · tools/Analysis/ssp_it_precheck/scn_rows.py:31    BEGIN PR_SCM_MST_PLAN(P_PLAN_CYCLE => 'DAILY', P_PLAN_NAME => '20261123'); END;\\n",
+  "targets": [
+    "tools/Analysis/ssp_it_precheck/scn_rows.py"
+  ],
+  "before_after": "scn_rows.py가 시험일을 인자로 받아 f-string으로 P_PLAN_NAME에 넣음. 날짜가 들어가는 다른 실행 명령 문구도 같은 값을 쓰게 함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Analysis/ssp_it_precheck/scn_rows.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:44:00+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · tools/Analysis/ssp_it_precheck/scn_rows.py:10~16 TEST_DATE = 둘째 인자(시험일 YYYYMMDD), 없으면 [FAIL] 종료 코드 2 · 39줄 P_PLAN_NAME 을 f-string {TEST_DATE} 로 · 날짜 들어간 실행 명령은 이 1곳뿐(BEGIN 문 3곳 확인) · py_compile OK, 인자 20261127 실행 결과 json 이 원본과 P_PLAN_NAME 값만 다름 확인 · 2026-11-26 15:43"
+    }
+  ],
+  "plain": {
+    "what": "여러 쿼리, 실행 명령을 사용자에게 주는 생성기는 종류별(Oracle, MSSQL, 실행 명령) 1파일로 모으고 실행 단위마다 위에 내용 주석을 달며 Oracle, MSSQL 판을 같은 형태로 만들고 기준일 같은 인자는 사용자 지정값으로 채운 뒤 사내 DB 실행 또는 문법 검사를 거쳐 제공함 규칙을 tools/Analysis/ssp_it_precheck/scn_rows.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R221|tools/Analysis/ssp_it_precheck/scn_rows.py",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675440108
+}

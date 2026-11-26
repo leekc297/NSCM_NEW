@@ -47,6 +47,67 @@ def normalize(text, cmap):
     return RX_TOKEN.sub(rep, text), cnt
 
 
+def sem_rows(text, names, rel_src, class_file):
+    """2026-11-25 사용자 지시 'VM 의 AS-IS 파서에도 의미 분석 연결': 같은 이름이 클래스마다 다른 값으로 선언돼(충돌) 이름만으로 못 바꾼 상수를
+    사실 파일 행(file 열 · 없으면 class 열로 찾은 파일)마다 Roslyn 의미 모델(asis_sem.values)로 실제 심볼 값을 받아 바꾼다.
+    값이 대문자·숫자·밑줄 하나로 정해질 때만 바꾼다. → (바꾼 본문, {(파일, 이름): (값, 건수)})"""
+    import io as _io
+    try:
+        import asis_sem
+    except Exception:
+        return text, {}
+    rows = list(csv.reader(_io.StringIO(text)))
+    if not rows:
+        return text, {}
+    hdr = rows[0]
+    fi = hdr.index('file') if 'file' in hdr else -1
+    ci = hdr.index('class') if 'class' in hdr else -1
+
+    def file_of(r):
+        if fi >= 0 and fi < len(r):
+            return r[fi]
+        return class_file.get(r[ci], '') if 0 <= ci < len(r) else ''
+    need = set()
+    for r in rows[1:]:
+        f = file_of(r)
+        if not f or f not in rel_src:
+            continue
+        for cell in r:
+            for m in RX_TOKEN.finditer(cell):
+                if m.group(2) in names:
+                    need.add((f, m.group(0)))
+    if not need:
+        return text, {}
+    qs = []
+    for f, tok in sorted(need):
+        lines = rel_src[f].split('\n')
+        ln = next((i for i, t in enumerate(lines, 1) if re.search(r'(?<![\w.])' + re.escape(tok) + r'\b', t.split('//')[0])), 0)
+        if ln:
+            qs.append((f, ln, tok))
+    got = asis_sem.values(qs) if qs else {}
+    val = {}
+    for (f, _ln, tok), v in got.items():
+        if v and v['status'] == 'OK' and len(v['values']) == 1 and re.fullmatch(r'[A-Z0-9_]+', v['values'][0]):
+            val[(f.replace('/', chr(92)), tok)] = v['values'][0]
+    cnt = {}
+    for r in rows[1:]:
+        f = file_of(r).replace('/', chr(92))
+        for i, cell in enumerate(r):
+            def rep(m, f=f):
+                v = val.get((f, m.group(0)))
+                if not v or m.group(2) not in names:
+                    return m.group(0)
+                k = (f, m.group(0)); c = cnt.get(k, (v, 0)); cnt[k] = (v, c[1] + 1)
+                return f'{m.group(1)}.{v}'
+            r[i] = RX_TOKEN.sub(rep, cell)
+    if not cnt:
+        return text, {}
+    out = _io.StringIO()
+    w = csv.writer(out, quoting=csv.QUOTE_ALL, lineterminator='\r\n')
+    w.writerows(rows)
+    return out.getvalue(), cnt
+
+
 def selftest():
     src = [('A.cs', 'public static string EditFlag = "EDIT_FLAG";\n public static string ITEM_ID = "ITEM_ID";\n public static string Title = "Sales Site"; // 컬럼 아님\n const string Measure = "MEASURE";'),
            ('B.cs', 'public static string Measure = "MEASURE";\n public static string Kind = "KIND_A";'), ('C.cs', 'public static string Kind = "KIND_B";')]
@@ -95,6 +156,20 @@ def main():
         with open(fp, encoding='utf-8', errors='replace') as f:
             texts.append((os.path.basename(rel), f.read()))
     cmap, clash = decl_map(texts)
+    # 2026-11-25 의미 분석: 충돌 이름을 행 단위로 풀 때 쓰는 원문(파일 열 표기 그대로) · 클래스 → 파일
+    rel_src = {}
+    for rel in rels:
+        fp = next((os.path.join(ROOT, b, rel) for b in ('GSCM', 'GSCM_20260512') if os.path.exists(os.path.join(ROOT, b, rel))), None)
+        if fp:
+            with open(fp, encoding='utf-8', errors='replace') as f:
+                rel_src[rel.replace('/', chr(92))] = f.read()
+    class_file = {}
+    with open(ap, encoding='utf-8-sig', newline='') as f:
+        for r in csv.DictReader(f):
+            if r.get('class') and r.get('file'):
+                class_file.setdefault(r['class'], set()).add(r['file'].replace('/', chr(92)))
+    class_file = {k: next(iter(v)) for k, v in class_file.items() if len(v) == 1}
+    sem_total = {}
     total = {}; changed = []
     for fn in FILES:
         fp = os.path.join(sdir, fn)
@@ -103,6 +178,15 @@ def main():
         with open(fp, encoding='utf-8-sig', newline='') as f:
             old = f.read()
         new, cnt = normalize(old, cmap)
+        if clash and os.environ.get('ASIS_SEM_OFF') != '1':
+            try:
+                new, scnt = sem_rows(new, set(clash), rel_src, class_file)
+            except Exception as e:  # 도구 실패 = 종전 결과(이름만으로 바꾼 것까지)
+                print(f'[WARN] facts_defcols {mid}: 의미 분석 행 정규화 실패({type(e).__name__}: {str(e)[:100]})'); scnt = {}
+            for (ff, tok), (v, c) in scnt.items():
+                nm = tok.split('.', 1)[1]
+                cnt[nm] = cnt.get(nm, 0) + c
+                sem_total[(ff, tok)] = (v, sem_total.get((ff, tok), (v, 0))[1] + c)
         for k, v in cnt.items():
             total[k] = total.get(k, 0) + v
         if cnt and not check:
@@ -121,6 +205,14 @@ def main():
                 for m in RX_TOKEN.finditer(f.read()):
                     if not re.fullmatch(r'[A-Z0-9_]+', m.group(2)):
                         left[m.group(2)] = left.get(m.group(2), 0) + 1
+    if sem_total and not check:   # 의미 분석으로 바꾼 충돌 이름(파일마다 값이 다를 수 있어 파일 열 포함)
+        with open(os.path.join(sdir, 'defcol_alias_sem.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+            w = csv.writer(f); w.writerow(['file', 'member', 'value', 'count'])
+            for (ff, tok), (v, c) in sorted(sem_total.items()):
+                w.writerow([ff, tok, v, c])
+    for k in list(total):
+        if k not in cmap:   # 의미 분석으로만 바꾼 이름은 defcol_alias.csv(이름 하나 = 값 하나) 대상 아님
+            total.pop(k)
     if total and not check:
         outp = os.path.join(sdir, 'defcol_alias.csv'); prev = {}
         if os.path.exists(outp):
@@ -130,11 +222,12 @@ def main():
             prev[k] = {'member': k, 'value': cmap[k][0], 'count': str(int((prev.get(k) or {}).get('count') or 0) + v), 'declared_at': cmap[k][1]}
         with open(outp, 'w', encoding='utf-8-sig', newline='') as f:
             w = csv.DictWriter(f, fieldnames=['member', 'value', 'count', 'declared_at']); w.writeheader(); w.writerows(sorted(prev.values(), key=lambda r: r['member']))
-    n = sum(total.values())
+    n = sum(total.values()) + sum(c for _v, c in sem_total.values())
     print(f"[facts_defcols] {mid}: 컬럼 상수 이름 → 값 {n}곳({len(total)}종){' — 바꿀 것 있음(쓰지 않음)' if check and n else ''}"
           + (f" · {', '.join(changed)}" if changed else '')
           + (f" · 그대로 둔 혼합 이름 {sum(left.values())}곳({len(left)}종 · 선언 없음/컬럼 이름 꼴 아님/충돌 {len(clash)}종)" if left else '')
-          + (f' · 원문 못 찾음 {len(missing)}개' if missing else ''))
+          + (f' · 원문 못 찾음 {len(missing)}개' if missing else '')
+          + (f" · 의미 분석으로 충돌 이름 {sum(c for _v, c in sem_total.values())}곳({len(sem_total)}종·파일별) 값 확정" if sem_total else ''))
     if total:
         print('   ' + ' · '.join(f'{k}→{cmap[k][0]} {v}' for k, v in sorted(total.items(), key=lambda kv: -kv[1])[:10]))
     return 2 if (check and n) else 0

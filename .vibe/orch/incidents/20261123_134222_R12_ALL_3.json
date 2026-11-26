@@ -1,0 +1,29 @@
+{
+  "id": "20261123_134222_R12_ALL_3",
+  "at": "2026-11-23T13:42:22+09:00",
+  "ms": 1795408942188,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S3 설치본 차이: workbench.js 내용 다름",
+  "screen": "",
+  "sig": "R12|S3|workbench.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "저장소 433977바이트 2026-11-23T13:36 / 설치본 433794바이트 2026-11-23T11:44",
+  "evidence": {
+    "check": "S3",
+    "key": "S3|workbench.js",
+    "file": "workbench.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T14:25:28+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S3 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

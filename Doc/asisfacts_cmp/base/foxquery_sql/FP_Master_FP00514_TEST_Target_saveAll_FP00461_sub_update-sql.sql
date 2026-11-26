@@ -1,0 +1,53 @@
+﻿BEGIN 
+						
+						MERGE INTO SCM_PACK_WORKER_LIMIT_M AS A
+						USING (SELECT @COMPANY_ID AS COMPANY_ID, @DIVISION_ID AS DIVISION_ID, @SITE_ID AS SITE_ID, @PLANT_ID AS PLANT_ID, @WORK_DATE AS WORK_DATE) AS B
+						ON (A.COMPANY_ID = B.COMPANY_ID AND A.DIVISION_ID = B.DIVISION_ID AND A.SITE_ID = B.SITE_ID AND A.PLANT_ID = B.PLANT_ID AND A.WORK_DATE = B.WORK_DATE)
+						WHEN MATCHED THEN
+  						UPDATE SET
+    						WORKER_QTY = @WORKER_QTY,
+    						UPDATE_ID = @USER_ID, UPDATE_TIME = dbo.SYSDATE1()
+						WHEN NOT MATCHED THEN
+  						INSERT (
+    						COMPANY_ID,DIVISION_ID,SITE_ID,PLANT_ID,WORK_DATE, WORKER_QTY,
+    						INSERT_ID,INSERT_TIME,UPDATE_ID,UPDATE_TIME
+  						)
+  						VALUES (
+    						@COMPANY_ID, @DIVISION_ID, @SITE_ID, @PLANT_ID, @WORK_DATE, @WORKER_QTY,
+    						@USER_ID, dbo.SYSDATE1(), @USER_ID, dbo.SYSDATE1()
+  						)
+						;
+						
+						INSERT INTO HIS_PACK_WORKER_LIMIT_M (
+    						  COMPANY_ID
+    						 ,DIVISION_ID
+    						 ,SITE_ID
+    						 ,PLANT_ID
+    						 ,WORK_DATE
+    						 ,WORKER_QTY
+    						 ,INSERT_ID
+    						 ,INSERT_TIME
+    						 ,UPDATE_ID
+    						 ,UPDATE_TIME
+    						 ,JOB_USER_ID, JOB_TIME, JOB_TYPE
+						)
+						SELECT COMPANY_ID
+    						  ,DIVISION_ID
+    						  ,SITE_ID
+    						  ,PLANT_ID
+    						  ,WORK_DATE
+    						  ,WORKER_QTY
+    						  ,INSERT_ID
+    						  ,INSERT_TIME
+    						  ,UPDATE_ID
+    						  ,UPDATE_TIME
+    						  ,@USER_ID, dbo.SYSDATE1(), 'UPDATE'
+						FROM   SCM_PACK_WORKER_LIMIT_M A WITH(NOLOCK)
+						WHERE  COMPANY_ID   = @COMPANY_ID
+						AND    DIVISION_ID  = @DIVISION_ID
+						AND    SITE_ID      = @SITE_ID
+						AND    PLANT_ID     = @PLANT_ID
+						AND    WORK_DATE    = @WORK_DATE
+						;
+						
+						END;

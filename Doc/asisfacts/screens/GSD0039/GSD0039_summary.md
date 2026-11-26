@@ -11,10 +11,13 @@
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
+| unreached:(진입점 미연결) | FN_GSD0039 | 57 | dbo.PR_GSCM_XIF_DM_GSD0039_R | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | FN_GSD0039 | 57 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.PR_GSCM_XIF_DM_GSD0039_R] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | FN_GSD0039 | 57 | {?definition_path}#dbo.PR_GSCM_XIF_DM_GSD0039_R | UNRESOLVED |  |
+| unreached:(진입점 미연결) | FN_GSD0039 | 75 | dbo.PR_GSCM_XIF_DM_GSD0039_R | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | FN_GSD0039 | 75 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.PR_GSCM_XIF_DM_GSD0039_R] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | FN_GSD0039 | 75 | {?definition_path}#dbo.PR_GSCM_XIF_DM_GSD0039_R | UNRESOLVED |  |
+| unreached:(진입점 미연결) | FN_GSD0039 | 92 | dbo.PR_GSCM_XIF_DM_GSD0039_R | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | FN_GSD0039 | 92 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.PR_GSCM_XIF_DM_GSD0039_R] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | FN_GSD0039 | 92 | {?definition_path}#dbo.PR_GSCM_XIF_DM_GSD0039_R | UNRESOLVED |  |
 
@@ -23,6 +26,7 @@
 |---|---|---:|---|---|---|
 | {?definition_path}#dbo.PR_GSCM_XIF_DM_GSD0039_R | UNRESOLVED | 3 |  |  |  |
 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.PR_GSCM_XIF_DM_GSD0039_R] | BIZ_MATCH | 3 |  |  |  |
+| dbo.PR_GSCM_XIF_DM_GSD0039_R | NOT_IN_FOXQUERY | 3 |  |  | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:XIF_ERP_EDI_MST_CUST_MAT_R, INSERT:XIF_ERP_EDI_MST_MODEL_R, INSERT:XIF_ERP_EDI_MST_STRUCT_R, INSERT:SCM_SYS_LOG_BATCH |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -40,9 +44,12 @@
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 
-## 7. 확인 필요 (3건)
+## 7. 확인 필요 (6건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 57 | FN_GSD0039 | dbo.PR_GSCM_XIF_DM_GSD0039_R | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:XIF_ERP_EDI_MST_CUST_MAT_R, INSERT:XIF_ERP_EDI_MST_MODEL_R, INSERT:XIF_ERP_EDI_MST_STRUCT_R, INSERT:SCM_SYS_LOG_BATCH · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 75 | FN_GSD0039 | dbo.PR_GSCM_XIF_DM_GSD0039_R | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:XIF_ERP_EDI_MST_CUST_MAT_R, INSERT:XIF_ERP_EDI_MST_MODEL_R, INSERT:XIF_ERP_EDI_MST_STRUCT_R, INSERT:SCM_SYS_LOG_BATCH · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 92 | FN_GSD0039 | dbo.PR_GSCM_XIF_DM_GSD0039_R | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:XIF_ERP_EDI_MST_CUST_MAT_R, INSERT:XIF_ERP_EDI_MST_MODEL_R, INSERT:XIF_ERP_EDI_MST_STRUCT_R, INSERT:SCM_SYS_LOG_BATCH · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 57 | FN_GSD0039 | {?definition_path}#dbo.PR_GSCM_XIF_DM_GSD0039_R | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 75 | FN_GSD0039 | {?definition_path}#dbo.PR_GSCM_XIF_DM_GSD0039_R | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 92 | FN_GSD0039 | {?definition_path}#dbo.PR_GSCM_XIF_DM_GSD0039_R | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |

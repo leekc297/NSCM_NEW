@@ -1,0 +1,55 @@
+{
+  "id": "20261126153056_SELF_3",
+  "at": "2026-11-26T15:30:56+09:00",
+  "ms": 1795674656645,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/ene/lib/formscen.ts|폼저장형시나리오formscenariosjson을만드는스크립트가없고sspn",
+  "title": "사용자 지시 R241 같은 문제: tools/E2E/lib/formscen.ts:21 폼 저장형 시나리오 form_scenarios.json 을 만드는 스크립트가 없고 SSP0020 1화면 수작업 파일만 있음, 다른 폼 저장형 화면은 @formse",
+  "evidence": "규칙 R241 \"검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함\" (원래 지시 2026-11-26 14:38 \"sheet_nav 생성기도 만들어서 상세 시트 진입 보완해줘\") · tools/E2E/lib/formscen.ts:21 const f = path.join(root, 'Doc', 'verify', id, 'form_scenarios.json');",
+  "targets": [
+    "tools/E2E/lib/formscen.ts"
+  ],
+  "before_after": "AS-IS 원문(폼 입력칸, 저장 핸들러)에서 form_scenarios.json 을 만드는 생성기를 두고 run_verify 가 E2E 앞에서 부름. SSP0020 수작업본은 생성 결과 대조 시험 입력으로 씀",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/E2E/lib/formscen.ts.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-C",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:40:04+09:00",
+      "by": "Claude Code 세션",
+      "what": "맡음 해제"
+    },
+    {
+      "at": "2026-11-26T15:52:46+09:00",
+      "by": "S-C",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:04:55+09:00",
+      "by": "S-C",
+      "what": "반영 완료(세션 직접 보완) · 생성기 tools/Harness/verify/form_scen_gen.py 신규(AS-IS 메시지 가드·입력칸·저장 SP·조회 SP 원문에서 form_scenarios.json 생성, 사람이 쓴 파일은 덮지 않고 form_scen_gen.json 에 대조). run_verify.py 1013~1016 facts 단계에서 sheet_nav_gen 다음에 호출(단계 예정 수 18 → 19). formscen.ts: 생성분 라벨 앞부분 일치(itemFor), vars 미지정 = ERROR. 검사: --selftest PASS(SSP0020 수작업 24건 중 Save 사슬 15건 판정·단계·matchAfter 일치, 보류 0건) · --all --dry 445화면 중 폼 저장 단추 38화면, 새 활성 파일 0건 · tools/E2E tsc exit 0(15:57:32~15:57:43) · run_all.js 88/88 PASS 1503 FAIL 0(16:02:34) · pyflakes 0건 · 2026-11-26 16:04:55. Playwright 실측 미실행"
+    }
+  ],
+  "plain": {
+    "what": "검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함 규칙을 tools/E2E/lib/formscen.ts 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R241|tools/E2E/lib/formscen.ts",
+  "kind": "fix",
+  "waitNote": "",
+  "claimedBy": "S-C",
+  "appliedMs": 1795676695196
+}

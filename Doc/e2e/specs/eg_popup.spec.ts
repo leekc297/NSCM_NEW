@@ -12,7 +12,8 @@ import type { Nscm } from '../../../tools/E2E/lib/nscm';
 import { CFG } from '../../../tools/E2E/lib/nscm';
 import { parseCsv, probe } from '../../../tools/E2E/lib/probe';
 import { labelVariants } from '../../../tools/E2E/lib/labeltrans';  // 2026-11-19 라벨 코드 다른 언어 글자
-import { ensureRows } from '../../../tools/E2E/lib/smoke-extra';
+import { ensureRows, findRowAcrossDivisions } from '../../../tools/E2E/lib/smoke-extra';
+import { fillPopRows, takePopAlert } from '../../../tools/E2E/lib/popk3run';  // 2026-11-20 T510 0행 팝업 필수 칸 채우기
 import { applyPopDomMutations, cellPoint, clickPopHeader, closePopup, dialogCount, dragPopup, hasMut, installPopMutations, mainColumn, mainPopRoot, mainPopTrigger, mainPopupConds, measure, orderCheck, pickRows, PopNet, popDisplay, popRowCount, popRows, popSearch, POPMUT, resizePopup, selectedRows, setText, filterByF4, sortByF3, settle, tagTop, waitPopRows, waitPopup, type PopCond, type PopMeasure } from '../../../tools/E2E/lib/popupprobe';
 
 const ID = (process.env.VERIFY_ID || '').toUpperCase();
@@ -108,7 +109,47 @@ function condLabels(c: Call): string[] {
   const suf = (ctl || '').replace(/^(btn|txt|clb|cbo)/i, '');
   // 팝업 클래스 이름 토큰(접두 화면 ID·Popup 접미 제거) — AS-IS 버튼 문구가 비어 있는 버튼(btnSPVer)을 TO-BE 조회조건 칸에 대응시키는 보조 후보
   const clsToks = c.cls.replace(/^[A-Z]+\d+_/, '').replace(/Popup(Ex)?$/i, '').replace(/([a-z])([A-Z])/g, '$1 $2').split(/[\s_]+/).filter(t => t.length >= 4 && !/^(United|Form|Input|Select|Multi|Division|Divis|Set)$/i.test(t));
-  return [...(planF?.labels || []), planF?.label || '', c.trigger.cond_label || '', suf, ...clsToks].filter(Boolean);
+  // T569(2026-11-25 SCP0005 M3 EG-f670f773·EG-75f112d6): AS-IS 버튼(btnFromSrch)이 팝업 값으로 채우는 조회조건 컨트롤(c.back 'txtFromCity.Text = popCity.City' cs:350~351)의
+  //   TO-BE 라벨도 후보로 둔다. TO-BE 는 버튼 대신 그 칸의 돋보기 단추(From City)로 같은 팝업을 연다. 종전 후보(FromSrch·Cityby·Country)는 TO-BE 칸 라벨과 맞지 않아 '비노출' ERROR
+  const filled = (c.back || []).map(b => (/^(?:this\.)?(\w+)\.(?:Text|Value|EditValue|SelectedValue)$/.exec(b.target || '') || [])[1]).filter((x): x is string => !!x);
+  const filledLabels = filled.flatMap(ctl2 => { const f = (PLAN?.fields || []).find(q => (q.asis || '').toLowerCase() === ctl2.toLowerCase() && !q.excluded); return f ? [...(f.labels || []), f.label || ''] : []; });
+  return [...(planF?.labels || []), planF?.label || '', c.trigger.cond_label || '', suf, ...clsToks, ...filledLabels].filter(Boolean);
+}
+/** AS-IS 버튼 트리거의 TO-BE 이름 후보(버튼 문구 · 화면 계획 라벨 · 컨트롤 이름 · 측정 언어 글자) */
+function btnNames(c: Call): string[] {
+  const names = c.trigger.kind === 'INSERT' ? ['Insert'] : [c.trigger.button_text || '', (PLAN?.buttons || []).find(b => (b.asis || '').toLowerCase() === c.trigger.control.toLowerCase())?.label || '', c.trigger.control.replace(/^btn/i, '')].filter(Boolean);
+  // 2026-11-19 SCP0028 EG-5ca14a48: 측정 계정 언어(KO)로 보이는 같은 라벨 코드 글자('Input' ↔ '입력')도 찾는다(메시지 원장 · labeltrans.ts)
+  for (const n of [...names]) for (const v of labelVariants(n)) if (!names.includes(v)) names.push(v);
+  return names;
+}
+/** AS-IS 버튼(BTN·INSERT)에 대응하는 TO-BE 화면 버튼 — 누르지 않고 찾기만 함(openPopup · runCorners 공용 · 2026-11-25 T644) */
+async function btnLocator(nscm: Nscm, c: Call): Promise<{ b: import('@playwright/test').Locator; how: string } | null> {
+  const p = nscm.page; const k = c.trigger.kind; const names = btnNames(c);
+  for (const n of names) {
+    const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*');
+    const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${esc}(\\(F\\d+\\))?$`, 'i') })).catch(() => null);
+    if (b) return { b, how: `버튼 '${n}'` };
+  }
+  // 2026-11-16 SCP0104 EG-dcf17ea8: AS-IS 글자 버튼(btnColumn 'Column')이 TO-BE 에서 아이콘 버튼이 되면 접근 이름은 툴팁('Column Setting' · CapaLineAssign.tsx:582~583)이다 → 이름이 그 단어로 시작하는 버튼도 찾는다
+  for (const n of names) {
+    const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*');
+    const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${esc}\\s+\\S.*$`, 'i') })).catch(() => null);
+    if (b) { const nm = ((await b.getAttribute('aria-label').catch(() => '')) || (await b.getAttribute('title').catch(() => '')) || '').trim(); return { b, how: `버튼 '${n}' → TO-BE '${nm || n}'` }; }
+  }
+  // T569(2026-11-25 SCP0005 M3 EG-6a0f18bc): AS-IS 버튼 문구 'Upload'(btnEaxel_Upload · cs:376 ExcelUploadForm2) ↔ TO-BE 'Excel Upload'. TO-BE 이름이 AS-IS 문구 단어를 그대로 품고
+  //   TO-BE 이름 단어가 모두 여는 팝업 클래스 이름 단어(Excel·Upload, Form·Popup 제외)면 같은 버튼으로 본다. 클래스 단어 밖이면 대응 안 함(Save ↔ Batch Save, Form ↔ Excel Form 방지)
+  if (k === 'BTN') {
+    const clsW = new Set(c.cls.replace(/^[A-Z]+\d+_/, '').replace(/([a-z])([A-Z])/g, '$1 $2').split(/[\s_\d]+/).map(w => w.toLowerCase()).filter(w => w.length >= 3 && !['form', 'popup'].includes(w)));
+    const texts = [...new Set((await p.getByRole('button').allInnerTexts().catch(() => [] as string[])).map(t => t.trim().replace(/\s*\(F\d+\)$/i, '').trim()).filter(t => !!t && t.length <= 40))];
+    for (const n of names) {
+      const nw = n.toLowerCase().split(/[\s_]+/).filter(Boolean); if (!nw.length) continue;
+      const t = texts.find(tx => { const tw = tx.toLowerCase().split(/\s+/); if (tw.length <= nw.length) return false; for (let s0 = 0; s0 + nw.length <= tw.length; s0++) { if (nw.every((w, j) => tw[s0 + j] === w)) { const rest = tw.filter((_, j) => j < s0 || j >= s0 + nw.length); return rest.length > 0 && tw.every(w => clsW.has(w)); } } return false; });
+      if (!t) continue;
+      const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*')}(\\(F\\d+\\))?$`, 'i') })).catch(() => null);
+      if (b) return { b, how: `버튼 '${n}' → TO-BE '${t}'(팝업 ${c.cls} 이름 단어)` };
+    }
+  }
+  return null;
 }
 async function openPopup(nscm: Nscm, c: Call, state: { popup: boolean }): Promise<Opened> {
   const p = nscm.page; const k = c.trigger.kind;
@@ -129,20 +170,10 @@ async function openPopup(nscm: Nscm, c: Call, state: { popup: boolean }): Promis
     return { dlg: null, how: 'COND', why: `조회영역 팝업형 칸 [${pc.map(x => x.label).join(', ')}] 중 라벨 [${condLabels(c).join(', ')}] 없음` };
   }
   if (k === 'BTN' || k === 'INSERT') {
-    const names = k === 'INSERT' ? ['Insert'] : [c.trigger.button_text || '', (PLAN?.buttons || []).find(b => (b.asis || '').toLowerCase() === c.trigger.control.toLowerCase())?.label || '', c.trigger.control.replace(/^btn/i, '')].filter(Boolean);
-    // 2026-11-19 SCP0028 EG-5ca14a48: 측정 계정 언어(KO)로 보이는 같은 라벨 코드 글자('Input' ↔ '입력')도 찾는다(메시지 원장 · labeltrans.ts)
-    for (const n of [...names]) for (const v of labelVariants(n)) if (!names.includes(v)) names.push(v);
-    for (const n of names) {
-      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*');
-      const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${esc}(\\(F\\d+\\))?$`, 'i') })).catch(() => null);
-      if (b) { await b.click({ timeout: 5_000 }).catch(() => undefined); return { dlg: await waitPopup(p, TAG, before), how: `버튼 '${n}'`, why: '' }; }
-    }
-    // 2026-11-16 SCP0104 EG-dcf17ea8: AS-IS 글자 버튼(btnColumn 'Column')이 TO-BE 에서 아이콘 버튼이 되면 접근 이름은 툴팁('Column Setting' · CapaLineAssign.tsx:582~583)이다 → 이름이 그 단어로 시작하는 버튼도 찾는다
-    for (const n of names) {
-      const esc = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*');
-      const b = await nscm.visibleFirst(p.getByRole('button', { name: new RegExp(`^${esc}\\s+\\S.*$`, 'i') })).catch(() => null);
-      if (b) { const nm = ((await b.getAttribute('aria-label').catch(() => '')) || (await b.getAttribute('title').catch(() => '')) || '').trim(); await b.click({ timeout: 5_000 }).catch(() => undefined); return { dlg: await waitPopup(p, TAG, before), how: `버튼 '${n}' → TO-BE '${nm || n}'`, why: '' }; }
-    }
+    // 2026-11-25 T644: 버튼 찾기를 btnLocator 로 뺌(테두리 실측 runCorners 와 같은 대응 규칙)
+    const bl = await btnLocator(nscm, c);
+    if (bl) { await bl.b.click({ timeout: 5_000 }).catch(() => undefined); return { dlg: await waitPopup(p, TAG, before), how: bl.how, why: '' }; }
+    const names = btnNames(c);
     // AS-IS 버튼이 TO-BE 에서 조회조건 칸 아이콘으로 옮겨진 경우
     if (k === 'BTN') { const r = await viaCond(); if (r) return { ...r, how: `(AS-IS 버튼 → TO-BE 칸) ${r.how}` }; }
     const all = await nscm.page.getByRole('button').allInnerTexts().catch(() => [] as string[]);
@@ -152,8 +183,15 @@ async function openPopup(nscm: Nscm, c: Call, state: { popup: boolean }): Promis
     const col = c.trigger.column; if (!col) return { dlg: null, how: 'CELL', why: `AS-IS 팝업 셀 컬럼 해석 불가(guard: ${c.trigger.guard.slice(0, 120)})` };
     if (/sub/i.test(c.trigger.control)) return { dlg: null, how: 'CELL', why: `AS-IS 보조 그리드(${c.trigger.control}) 팝업 — 보조 그리드 프로브 경로 미구현` };
     const all = (await probe.allBindings(p)) || [];
-    if (!all.includes(col)) return { dlg: null, how: 'CELL', why: `컬럼 ${col} 이 현재 그리드에 없음(바인딩 ${all.length}개 — Division·개인화·시트 차이 가능)` };
-    const ex = await probe.findRow(p, 'existing');
+    let ex: { row: number } | null = null; let divVia = '';
+    if (!all.includes(col)) {
+      // 2026-11-26 사용자 '팝업 셀도 Division 순회로 보완': 이 Division 그리드에 없는 팝업 셀 = Division 후보를 차례로 골라 그 컬럼·기존 행이 있는 Division 에서 연다
+      const fd = await findRowAcrossDivisions(nscm, async () => { const a = (await probe.allBindings(p)) || []; if (!a.includes(col)) return -1; const e2 = await probe.findRow(p, 'existing'); return e2 ? e2.row : -1; })
+        .catch(e => ({ row: -1, via: `순회 오류 ${String((e as Error)?.message || e).slice(0, 80)}` }));
+      if (fd.row < 0) return { dlg: null, how: 'CELL', why: `컬럼 ${col} 이 그리드에 없음(바인딩 ${all.length}개) · ${fd.via.slice(0, 200)}` };
+      ex = { row: fd.row }; divVia = fd.via.slice(0, 120); console.log(`[${TAG}] 팝업 셀 ${col}: ${divVia}`);
+    }
+    ex = ex || await probe.findRow(p, 'existing');
     if (!ex) return { dlg: null, how: 'CELL', why: '조회 0행 — 셀 더블클릭 불가' };
     const pt = await probe.cellCenter(p, ex.row, col);
     if (!pt) return { dlg: null, how: 'CELL', why: `${col} 셀 위치 확인 불가` };
@@ -238,6 +276,13 @@ const OK_RX = /^(확인|OK|Confirm|Select|선택|Apply|적용)$/i; const CL_RX =
 // AS-IS 트리거 버튼 → TO-BE 공용 모달 컴포넌트(tools/Harness/rules/tobe_catalog.csv asis_types 'button:^btnX$') — 2026-11-06
 const CATALOG: { name: string; rx: RegExp }[] = (() => { try { return parseCsv(fs.readFileSync(path.join(ROOT, 'tools', 'Harness', 'rules', 'tobe_catalog.csv'), 'utf8').replace(/^\uFEFF/, '')).flatMap(r => String(r.asis_types || '').split(/[|;]/).map(t => t.trim()).filter(t => /^button:/.test(t)).map(t => { try { return { name: r.name, rx: new RegExp(t.replace(/^button:/, ''), 'i') }; } catch { return null; } }).filter((x): x is { name: string; rx: RegExp } => !!x)); } catch { return []; } })();
 function catalogModalFor(c: Call): string | null { const ctl = c.trigger.control || ''; if (c.trigger.kind !== 'BTN' && !/^btn/i.test(ctl)) return null; const hit = CATALOG.find(e => e.rx.test(ctl)); return hit ? hit.name : null; }
+// T569(2026-11-25 SCP0005 D5 EG-b7b794bd): 셀 더블클릭 팝업(트리거 CELL)은 위 버튼 대응표에 걸리지 않아 AS-IS 제목 'City by Country' ↔ TO-BE 'Region Popup' 토큰 비교만 하고 FAIL 이었다.
+//   TO-BE 룰 공용 모달 대응표(Doc/_rules_v2/_tobe/10_popup_modal.md §1 '| # | Modal | AS-IS 원본 |' · 6행 RegionModal ← SCM0002_CitybyCountry)를 AS-IS 팝업 클래스로 찾는다(트리거 무관)
+const RULE_MODAL: Map<string, { modal: string; ref: string }> = (() => {
+  const m = new Map<string, { modal: string; ref: string }>(); const rel = 'Doc/_rules_v2/_tobe/10_popup_modal.md';
+  try { fs.readFileSync(path.join(ROOT, ...rel.split('/')), 'utf8').split(/\r?\n/).forEach((ln, i) => { const r = /^\|\s*\d+\s*\|\s*`(\w+)`\s*\|([^|]*)\|/.exec(ln); if (!r) return; for (const q of r[2].matchAll(/`(\w+)`/g)) if (!m.has(q[1])) m.set(q[1], { modal: r[1], ref: `${rel}:${i + 1}` }); }); } catch { /* 룰 문서 없음 */ }
+  return m;
+})();
 function checkStatic(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k: Klass) {
   // 제목 — 문서 SCPSSP-16 · 공통 I2
   const ttlBad = !m.title ? '제목 없음' : m.underscore.length ? `'_' 폴백 [${m.underscore.join(', ')}]` : m.codes.length ? `코드 노출 [${m.codes.join(', ')}]` : /^_/.test(m.title) ? `제목 '_' 접두 '${m.title}'` : '';
@@ -251,6 +296,12 @@ function checkStatic(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k:
     const b = m.title.toLowerCase(); const hit = compToks.filter(t => b.includes(t));
     put('IDENTITY', ['EG135'], m.title ? 'PASS' : 'ERROR', `AS-IS 팝업 '${k.title}'(${c.cls}) → TO-BE 룰 공용 모달 ${comp}(tobe_catalog.csv 대응표)`, m.title ? `TO-BE 제목 '${m.title}' · 대응 컴포넌트 ${comp} · 제목 토큰 일치 [${hit.join(',')}] — AS-IS 와 달라도 TO-BE 룰 대체라 오류 아님` : '[측정 경로 없음] 모달 제목 없음', `${c.asis_ref} · tools/Harness/rules/tobe_catalog.csv`);
   }
+  else if (RULE_MODAL.has(c.cls)) {
+    // T569: 대응 모달 이름 단어(RegionModal → region)가 TO-BE 제목에 있으면 같은 팝업, 없으면 다른 모달이 열린 것(FAIL · 근거 = 룰 문서 줄)
+    const rm = RULE_MODAL.get(c.cls)!; const compToks = rm.modal.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase().split(/\s+/).filter(t => t.length >= 3 && !['modal', 'by'].includes(t));
+    const b = m.title.toLowerCase(); const hit = compToks.filter(t => b.includes(t));
+    put('IDENTITY', ['EG135'], !m.title ? 'ERROR' : hit.length ? 'PASS' : 'FAIL', `AS-IS 팝업 '${k.title}'(${c.cls}) → TO-BE 룰 공용 모달 ${rm.modal}(제목 단어 [${compToks.join(',')}])`, m.title ? `TO-BE 제목 '${m.title}' · 제목 단어 일치 [${hit.join(',')}]${hit.length ? ' — AS-IS 제목과 달라도 TO-BE 룰 공용 모달 대체' : ' — 대응 모달 단어 없음'}` : '[측정 경로 없음] 모달 제목 없음', `${c.asis_ref} · ${rm.ref}`);
+  }
   else {
     const toks = (s: string) => s.toLowerCase().split(/[^a-z0-9가-힣]+/).filter(t => t.length >= 3 && !['popup', 'the', 'and', 'for', 'list', 'select'].includes(t));
     const a = toks(asisT); const b = toks(m.title); const hit = a.filter(t => b.some(u => u.includes(t) || t.includes(u)));
@@ -260,7 +311,10 @@ function checkStatic(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k:
   }
   // 버튼 순서 — 문서 DM-C6
   const okI = m.buttons.findIndex(b => OK_RX.test(b.text)); const clI = m.buttons.findIndex(b => CL_RX.test(b.text));
-  if (okI >= 0 && clI >= 0) put('BTN_ORDER', ['EG342'], okI < clI ? 'PASS' : 'FAIL', '버튼 순서 OK → CLOSE', `버튼 [${m.buttons.map(b => b.text).join(', ')}]`, '문서 DM-C6');
+  // 2026-11-20 T523(SCP0028 EG-2644dff3): 증거에 팝업 안 전 버튼(조회영역 Open·Search 포함)을 적어 비교 대상이 섞인 것처럼 보였다 — 판정은 OK·CLOSE 두 버튼 위치만 쓴다.
+  //   증거를 확인·닫기 버튼 순서와 나머지 버튼으로 나눠 적는다(판정 바뀜 없음 · CR-100 은 공통 팝업도 버튼 순서는 종전대로 검사)
+  const pairTxt = m.buttons.filter(b => OK_RX.test(b.text) || CL_RX.test(b.text)).map(b => b.text); const restTxt = m.buttons.filter(b => !OK_RX.test(b.text) && !CL_RX.test(b.text)).map(b => b.text);
+  if (okI >= 0 && clI >= 0) put('BTN_ORDER', ['EG342'], okI < clI ? 'PASS' : 'FAIL', '버튼 순서 OK → CLOSE', `확인·닫기 버튼 순서 [${pairTxt.join(', ')}]${restTxt.length ? ` · 비교 제외(조회영역 등) [${restTxt.join(', ')}]` : ''}`, '문서 DM-C6 · CR-005');
   else put('BTN_ORDER', ['EG342'], 'NA', '버튼 순서 OK → CLOSE', `OK/CLOSE 한 쌍 아님 — 버튼 [${m.buttons.map(b => b.text).join(', ')}]`, '');
   // No.·건수·공통 그리드 — 문서 DM-C8·DM-179
   if (!m.grids.length) { put('NO_COL', ['EG342'], 'NA', 'No. 컬럼 1개·건수 표시', '팝업에 그리드 없음', ''); return; }
@@ -285,7 +339,9 @@ const condMultiWant = new Map<string, { want: boolean; type: string; ref: string
 // ─── 조건 칸: 존재·입력 가능·라벨·Div 고정 ───
 function checkConds(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k: Klass, mainDiv: string) {
   const asis = (k.conds || []).filter(x => x.visible_designer && !x.hidden_code && x.label && !/layoutControl|^\s*$/i.test(x.label));
-  if (!k.in_pack) { put('COND_LIST', ['EG278', 'EG330'], 'ERROR', 'AS-IS 조건 칸 ↔ TO-BE', 'AS-IS 원문을 찾지 못함', ''); return; }
+  // 2026-11-25 T572(SCP0005 G4 EG-addb9943): 원문을 못 찾은 까닭이 남지 않았다. 사실 파일(E02 facts)이 공용 프레임워크 팝업(GSCM/01.Framework, 예 ExcelUploadForm2)을 찾지 않아 in_pack=false.
+  //   판정은 ERROR 그대로(측정 불가) · 클래스·사실 출처를 적어 사실 파일 보완 대상(facts_popup.py src_index)으로 분류되게 한다
+  if (!k.in_pack) { put('COND_LIST', ['EG278', 'EG330'], 'ERROR', 'AS-IS 조건 칸 ↔ TO-BE', `AS-IS 원문을 찾지 못함 · 팝업 클래스 ${c.cls} · 사실 출처 ${(k as { from?: string }).from || '없음'}(Fact Pack·원문 색인 둘 다 없음) · 호출 ${c.asis_ref}`, ''); return; }
   const findTo = (lab: string) => { const a = nrm(lab); const al = a === 'division' ? ['div', 'division'] : a === 'div' ? ['div', 'division'] : [a]; return m.conds.find(x => al.includes(nrm(x.label))) || m.conds.find(x => x.label && (nrm(x.label).includes(a) || a.includes(nrm(x.label)))); };
   const missing: string[] = []; const mismatch: string[] = [];
   for (const a of asis) {
@@ -313,10 +369,28 @@ function checkConds(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, k: 
 }
 
 // ─── 기간 — 메인 Period ↔ 팝업 Period ───
+// 2026-11-25 T571: AS-IS 메인 클래스(호출 줄 파일 이름)의 날짜·기간 컨트롤 — null = 사실 파일 없음
+function asisMainDateCtls(c: Call): { cls: string; ctls: string[] } | null {
+  const cls = (c.asis_ref || '').split(':')[0].replace(/\.cs$/i, '').split(/[\\/]/).pop() || '';
+  if (!cls) return null;
+  try {
+    const rows = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', (process.env.VERIFY_ASIS || ID).toUpperCase(), 'controls.csv'), 'utf8').replace(/^﻿/, ''));
+    const mine = rows.filter(r => r.class === cls);
+    if (!mine.length) return null;
+    return { cls, ctls: mine.filter(r => /Date|Month|Period|Calendar|Week/i.test(r.type || '')).map(r => r.name) };
+  } catch { return null; }
+}
 function checkPeriod(put: ReturnType<typeof makePut>, m: PopMeasure, c: Call, main: string[]) {
   const pc = m.conds.find(x => x.kind === 'period');
   if (!pc) { put('PERIOD', ['EG287', 'EG431'], 'NA', '팝업 Period = 메인 Period', `팝업에 기간 칸 없음 — 조건 [${m.conds.map(x => x.label).join(', ')}]`, ''); return; }
-  if (main.length < 2) { put('PERIOD', ['EG287', 'EG431'], '판정필요', '팝업 Period = 메인 Period', `메인 기간 칸 못 읽음 · 팝업 [${pc.values.join(' ~ ')}]`, ''); return; }
+  // 2026-11-25 T571(SCP0005 G5 EG-6fba2eee): 메인 화면에 기간 조회조건이 없는데도 '팝업 Period = 메인 Period' 를 걸어 판정필요로 남았다.
+  //   AS-IS 메인 클래스 컨트롤(controls.csv)에 날짜·기간 컨트롤 0건 + AS-IS 호출 인자에 기간 값 없음 + TO-BE 메인 기간 칸 0 일 때만 NA(근거 = 호출 줄). 사실 파일이 없으면 종전 판정필요
+  if (main.length < 2) {
+    const perArg = c.period_args.length > 0 || c.args.some(a => /date|period|month|week|dtp|drp|yyyymm/i.test(a.arg));
+    const mc = asisMainDateCtls(c);
+    if (!perArg && mc && !mc.ctls.length) { put('PERIOD', ['EG287', 'EG431'], 'NA', '팝업 Period = 메인 Period', `메인 기간 조회조건 없음(TO-BE 메인 기간 칸 0 · AS-IS ${mc.cls} 날짜·기간 컨트롤 0건 · controls.csv) · AS-IS 호출 인자 [${c.args.map(a => a.arg).join(', ')}] 기간 값 없음 · 팝업 [${pc.values.join(' ~ ')}]`, `${c.asis_ref}`); return; }
+    put('PERIOD', ['EG287', 'EG431'], '판정필요', '팝업 Period = 메인 Period', `메인 기간 칸 못 읽음 · 팝업 [${pc.values.join(' ~ ')}]${mc ? ` · AS-IS ${mc.cls} 날짜 컨트롤 [${mc.ctls.slice(0, 4).join(', ')}] · 기간 인자 ${perArg}` : ' · AS-IS controls.csv 없음'}`, ''); return;
+  }
   const mon = (v: string) => (v.replace(/\D/g, '').slice(0, 6));
   const same = mon(pc.values[0] || '') === mon(main[0]) && mon(pc.values[1] || '') === mon(main[1]);
   const passed = c.period_args.length > 0 || c.args.some(a => a.kind === 'CONTROL' && /date|period|from|to|month/i.test(a.arg));
@@ -385,7 +459,14 @@ async function checkFilter(nscm: Nscm, net: PopNet, dlg: Locator, put: ReturnTyp
     if (v.length >= 4) {
       const sub = v.slice(1, Math.max(3, v.length - 1));
       const lk = await run(sub);
-      if (lk && !lk.timedOut) { const ok = lk.n >= ex.n && lk.n > 0 && rowHas(lk.d, sub); put('FILTER_LIKE', ['EG261', 'EG432', 'EG338'], sp?.like === false ? (ok ? 'PASS' : 'NA') : ok ? 'PASS' : 'FAIL', `부분 문자열 '${sub}' → 포함 행(≥ ${ex.n})`, `${lk.n}행 · 전행 포함 ${rowHas(lk.d, sub)} · AS-IS LIKE=${sp?.like}`, sp?.like ? basis : '문서 DM-181·DM-212'); }
+      if (lk && !lk.timedOut) {
+        const ok = lk.n >= ex.n && lk.n > 0 && rowHas(lk.d, sub);
+        // R33: AS-IS 팝업 SP LIKE 여부와 TO-BE 부분 일치 결과를 맞춰 봄 — 다르면 FAIL(조치필요) · AS-IS 미판독(null)이면 판정필요
+        const likeVerdict = !sp ? (ok ? 'PASS' : 'FAIL') : sp.like === true ? (ok ? 'PASS' : 'FAIL') : sp.like === false ? (ok ? 'FAIL' : 'PASS') : '판정필요';
+        const likeExpect = !sp ? `부분 문자열 '${sub}' → 포함 행(≥ ${ex.n})` : sp.like === true ? `AS-IS LIKE 부분 일치 — '${sub}' → 포함 행(≥ ${ex.n})` : sp.like === false ? `AS-IS LIKE 없음(일치 조회) — '${sub}' 부분 문자열로 조회되지 않아야 함` : `AS-IS LIKE 여부 미확인 — '${sub}' 부분 문자열`;
+        const likeBasis = !sp ? '문서 DM-181·DM-212' : sp.like === false ? `${sp.src}${sp.ref ? ` · ${sp.ref}` : ''} (AS-IS ${sp.sp} LIKE 없음)` : sp.like === true ? basis : `${sp.src} (AS-IS ${sp.sp} LIKE 판독 실패)`;
+        put('FILTER_LIKE', ['EG261', 'EG432', 'EG338'], likeVerdict, likeExpect, `${lk.n}행 · 전행 포함 ${rowHas(lk.d, sub)} · TO-BE 부분 일치=${ok} · AS-IS LIKE=${sp ? sp.like : '원문 없음'}`, likeBasis);
+      }
       else put('FILTER_LIKE', ['EG261', 'EG432', 'EG338'], 'ERROR', `부분 문자열 '${sub}'`, lk ? '시간 초과' : '입력 실패', '');
     } else put('FILTER_LIKE', ['EG261', 'EG432', 'EG338'], 'NA', '부분 문자열', `값 '${v}' 길이 부족`, '');
     // 대소문자
@@ -543,6 +624,9 @@ async function runCall(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
   let sNote = `자동 조회 ${au.recs.length}건${au.timedOut ? '(시간 초과)' : ''}`;
   const bad = au.recs.filter(r => r.status >= 400);
   if (n <= 0) { const s = await popSearch(p, o.dlg, net, 60_000); n = await waitPopRows(p, TAG, 5_000); sNote += ` · Search ${s.clicked ? s.recs.length + '건' : '버튼 없음'}${s.timedOut ? '(시간 초과)' : ''}`; bad.push(...s.recs.filter(r => r.status >= 400)); if (s.timedOut) put('LOAD', [], 'ERROR', '팝업 Search 응답', `60초 안에 응답 없음 — 부하 가능(측정 불가)`, ''); }
+  // 2026-11-20 T510(SCP0028 H6 EG-6cc339e1 · M3 EG-273588ca '자동 조회 6건 · Search 0건 · 행 0 · 알림 From Site value is required'): 0행 + 필수 알림이면
+  //   알림을 닫고 popk3run.fillPopRows(다시 Search → 알림이 가리킨 팝업 콤보 후보를 차례로 골라 Search, 최대 6개)로 행을 만든 뒤 잰다. AS-IS 도 'I' 진입 자동 조회 없음 · From Site 필수(사용자 입력 전제)
+  if (n <= 0) { const al0 = await takePopAlert(p, TAG); if (al0) { const m1 = net.mark(); const f = await withLimit(fillPopRows(p, o.dlg, TAG, net), 240_000, { rows: 0, fill: '필수 칸 채우기 시간 초과(240초)' }); n = f.rows > 0 ? f.rows : await waitPopRows(p, TAG, 3_000); bad.push(...net.since(m1).filter(r => r.status >= 400)); sNote += ` · 필수 알림 '${al0.slice(0, 60)}' → ${f.fill || '채움 없음'}`; } }
   await applyPopDomMutations(p, TAG);
   const al = await dlg_alert(nscm);
   const noPerm = /no permission|권한이 없|권한없/i.test(al) || au.recs.some(r => /no permission/i.test(JSON.stringify(r.rows || '')));
@@ -606,6 +690,27 @@ async function runPick(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
     if (pa && pb && !pa.check && !pb.check) {
       await p.mouse.click(pa.x, pa.y); await p.keyboard.down('Control'); await p.mouse.click(pb.x, pb.y); await p.keyboard.up('Control'); await p.waitForTimeout(250);
       const sel = await selectedRows(p, TAG); const mode = m1?.grids[0]?.selectionMode;
+      // T569(2026-11-25 SCP0005 M4 EG-50fe3754): AS-IS _bMultiSelect=false 는 그리드 여러 행 선택을 막지 않고 OK 때 활성 행 1건 값만 돌려준다(SCM0002_CitybyCountry.cs:315~322,
+      //   true 면 선택 행 값을 ',' 로 이어 붙임 cs:279~305). 선택 표시 행 수만 재서 FAIL 이었다 → 단일 기대인데 2행 이상 선택되면 행 2·3 을 Ctrl 선택해 OK 하고
+      //   대상 칸 값이 1건(',' 없음 · 그 행 값)이면 PASS, ',' 로 여러 값이면 FAIL. 행 2·3 을 쓰는 까닭 = 뒤 PICK_OK(행 1 선택)의 전후 값 비교를 흐리지 않기 위해. 3행 미만이면 종전 판정
+      if (wantSingle && sel >= 2 && n >= 3 && o1.dlg) {
+        await closePopup(p, o1.dlg).catch(() => false); await nscm.clearDialogs().catch(() => undefined); await p.waitForTimeout(300);
+        o1 = await open(); if (!o1.dlg) { put('SELECT_MODE', ['EG341', 'EG446', 'EG166'], 'ERROR', `AS-IS _bMultiSelect=${c.multi} → OK 값 1건`, '[측정 실패] 팝업 다시 열기 실패', `${c.asis_ref}`); return; }
+        const qb = await cellPoint(p, TAG, 1), qc = await cellPoint(p, TAG, 2); const okB = o1.dlg.getByRole('button', { name: OK_RX }).first();
+        let got = ''; let how = '행 2·3 위치 또는 OK 버튼 못 찾음';
+        if (qb && qc && !qb.check && !qc.check && await okB.isVisible().catch(() => false)) {
+          await p.mouse.click(qb.x, qb.y); await p.keyboard.down('Control'); await p.mouse.click(qc.x, qc.y); await p.keyboard.up('Control'); await p.waitForTimeout(250);
+          const sel2 = await selectedRows(p, TAG);
+          await okB.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(800); await nscm.clearDialogs().catch(() => undefined);
+          const still = await o1.dlg.isVisible().catch(() => false);
+          if (still) await closePopup(p, o1.dlg).catch(() => false); else got = await readTarget(nscm, c, o1);
+          how = `Ctrl+클릭 행 2·3(선택 ${sel2}행) → OK · 팝업 ${still ? '안 닫힘' : '닫힘'}`;
+        }
+        const vals = (r?: Record<string, string>) => Object.values(r || {}).map(v => String(v ?? '').trim()).filter(Boolean);
+        const inRow = vals(rows1[1]).includes(got) || vals(rows1[2]).includes(got);
+        put('SELECT_MODE', ['EG341', 'EG446', 'EG166'], !got ? 'ERROR' : got.includes(',') ? 'FAIL' : inRow ? 'PASS' : 'ERROR', `AS-IS _bMultiSelect=${c.multi} → OK 때 1건 값만 칸에`, `선택 표시 Ctrl+클릭 2행 → ${sel}행 · selectionMode=${mode} · ${how} · 칸 '${got}'${got && !got.includes(',') && !inRow ? ' — [측정 실패] 행 2·3 값과 맞지 않음' : ''}`, `${c.asis_ref} · 문서 GAPPI-27`);
+        o1 = await open(); if (!o1.dlg) return;
+      } else
       put('SELECT_MODE', ['EG341', 'EG446', 'EG166'], wantSingle ? (sel <= 1 ? 'PASS' : 'FAIL') : (sel >= 2 ? 'PASS' : 'FAIL'), `AS-IS _bMultiSelect=${c.multi} → ${wantSingle ? '단일(Ctrl 2행 불가)' : '다중'}`, `Ctrl+클릭 2행 → 선택 ${sel}행 · selectionMode=${mode}`, `${c.asis_ref} · 문서 GAPPI-27`);
     } else put('SELECT_MODE', ['EG341', 'EG446', 'EG166'], wantSingle ? 'FAIL' : 'PASS', `AS-IS _bMultiSelect=${c.multi}`, `행 체크박스 ${pa?.check ? '있음' : '없음'} — 체크 다중 선택 팝업`, `${c.asis_ref} · 문서 GAPPI-27`);
   } else put('SELECT_MODE', ['EG341', 'EG446', 'EG166'], 'NA', '단일/다중 선택 구분', `AS-IS 인자 없음(multi='${c.multi}') 또는 행 ${n}`, '');
@@ -615,13 +720,35 @@ async function runPick(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
   const mainBefore = await mainPeriod(nscm);
   // OK 경로
   const before = await readTarget(nscm, c, o1);
+  // 2026-11-25 T570(SCP0005 M4 EG-36b4c687·EG-ea747acf): 전후 값이 달라졌는지만 봐서, 고른 행의 값이 현재 값과 같으면(국가 'AD' → 'AD') 반영돼도 FAIL 이었다.
+  //   ① 현재 칸 값이 없는 행(없으면 메인 행 값과 다른 칸이 있는 행)을 고른다 ② CELL 은 메인 같은 행 전체를 전후로 읽어, 바뀐 칸이 고른 행의 값이면 반영으로 본다(AS-IS 가 여러 칸을 같이 채움, 예 SCP0005 cs:1150~1159)
+  //   ③ 칸 값 = 고른 행 값인데 어느 칸도 안 바뀌면 반영 여부를 가릴 수 없다 → ERROR(측정 불가). 화면 독립(컬럼 이름 고정 없음)
+  const rowBefore = c.trigger.kind === 'CELL' && o1.row != null ? await probe.rowItem(p, o1.row).catch(() => null) : null;
+  const rvals = (r?: Record<string, string> | null) => Object.values(r || {}).map(v => String(v ?? '').trim()).filter(Boolean);
+  const curVals = new Set(rvals(rowBefore));
+  let pickIdx = before ? rows1.findIndex(r => !rvals(r).includes(before.trim())) : 0;
+  if (pickIdx < 0) pickIdx = rows1.findIndex(r => rvals(r).some(v => !curVals.has(v)));
+  if (pickIdx < 0) pickIdx = 0;
   await nscm.page.waitForTimeout(100);
-  const pk = await pickRows(p, o1.dlg, TAG, [0], 'ok');
+  const pk = await pickRows(p, o1.dlg, TAG, [pickIdx], 'ok');
   if (!pk.closed && await o1.dlg.isVisible().catch(() => false)) await closePopup(p, o1.dlg).catch(() => false);
   await nscm.clearDialogs().catch(() => undefined); await p.waitForTimeout(400);
-  const afterOk = await readTarget(nscm, c, o1);
-  const keyFromRow = rows1[0] ? Object.entries(rows1[0]).filter(([, v]) => v && afterOk && (afterOk === v || afterOk.includes(v))).map(([kk]) => kk) : [];
-  put('PICK_OK', ['EG093'], afterOk && afterOk !== before ? 'PASS' : c.trigger.kind === 'COND' || c.trigger.kind === 'CELL' ? (pk.okText ? (keyFromRow.length ? 'FAIL' : 'ERROR') : '판정필요') : 'NA', 'OK → 대상 칸에 선택 값', `대상 '${before}' → '${afterOk}' · OK 버튼 '${pk.okText}' · 닫힘 ${pk.closed} · 대응 컬럼 [${keyFromRow.slice(0, 5).join(',')}]`, c.asis_ref);
+  let afterOk = await readTarget(nscm, c, o1);
+  const pickRow = rows1[pickIdx]; const pickVals = rvals(pickRow);
+  // 2026-11-25 T645(SCP0005 EG-f36911c9 TO_CITY 'ADCAN'→'ADCAN' · 고른 1행 = ADALV(popup_rowsets call 6)): 칸 값이 그대로면 3초까지 다시 읽는다(셀 편집 종료·코드 조회 같은 비동기 반영)
+  let waited = 0;
+  while (afterOk === before && !pickVals.includes((afterOk || '').trim()) && waited < 3_000) { await p.waitForTimeout(500); waited += 500; afterOk = await readTarget(nscm, c, o1); }
+  // 대응 컬럼 = 칸 값과 같은 값을 가진 고른 행 칸(완전 일치 먼저 · 없을 때만 부분 일치) — 'ADCAN' 이 국가 'AD' 를 품어 COUNTRY 로 잡히던 것 방지
+  const exactKeys = pickRow ? Object.entries(pickRow).filter(([, v]) => v && afterOk && afterOk === v).map(([kk]) => kk) : [];
+  const keyFromRow = exactKeys.length ? exactKeys : pickRow ? Object.entries(pickRow).filter(([, v]) => v && afterOk && afterOk.includes(v)).map(([kk]) => kk) : [];
+  const rowAfter = rowBefore && o1.row != null ? await probe.rowItem(p, o1.row).catch(() => null) : null;
+  const refl = rowBefore && rowAfter ? Object.keys(rowAfter).filter(kk => String(rowAfter[kk] ?? '').trim() !== String(rowBefore[kk] ?? '').trim() && pickVals.includes(String(rowAfter[kk] ?? '').trim())) : [];
+  const sameAsPick = c.trigger.kind === 'CELL' && !!afterOk && afterOk === before && pickVals.includes(afterOk.trim());
+  const okRes: Row['result'] = afterOk && afterOk !== before ? 'PASS' : sameAsPick ? (refl.length ? 'PASS' : 'ERROR') : c.trigger.kind === 'COND' || c.trigger.kind === 'CELL' ? (pk.okText ? (keyFromRow.length ? 'FAIL' : 'ERROR') : '판정필요') : 'NA';
+  const okNote = sameAsPick ? (refl.length ? ` · 칸 값 = 고른 행(${pickIdx + 1}행) 값 · 같은 행 반영 칸 [${refl.slice(0, 6).map(kk => `${kk} '${rowBefore?.[kk] ?? ''}'→'${rowAfter?.[kk] ?? ''}'`).join(', ')}]` : ` — [측정 불가] 고른 행(${pickIdx + 1}행) 값이 현재 값과 같고 같은 행에 바뀐 칸 없음(후보 ${rows1.length}행)`) : '';
+  // T645: 반영 안 됨(FAIL·ERROR)이면 재현 근거 — 고른 행 값 · 같은 메인 행 바뀐 칸 · 다시 읽은 시간
+  const failNote = okRes === 'FAIL' || okRes === 'ERROR' ? ` · 고른 행 값 ${JSON.stringify(Object.fromEntries(Object.entries(pickRow || {}).slice(0, 6)))} · 메인 행 바뀐 칸 [${rowBefore && rowAfter ? Object.keys(rowAfter).filter(kk => String(rowAfter[kk] ?? '') !== String(rowBefore[kk] ?? '')).slice(0, 8).map(kk => `${kk} '${rowBefore[kk] ?? ''}'→'${rowAfter[kk] ?? ''}'`).join(', ') || '없음' : '미측정'}] · 다시 읽음 ${waited}ms` : '';
+  put('PICK_OK', ['EG093'], okRes, 'OK → 대상 칸에 선택 값', `대상 '${before}' → '${afterOk}' · 고른 행 ${pickIdx + 1} · OK 버튼 '${pk.okText}' · 닫힘 ${pk.closed} · 대응 컬럼 [${keyFromRow.slice(0, 5).join(',')}]${okNote}${failNote}`, c.asis_ref);
   const mainAfter = await mainPeriod(nscm);
   if (backPer.length && popPer.length >= 2 && mainAfter.length >= 2) {
     const mon = (v: string) => v.replace(/\D/g, '');
@@ -630,7 +757,7 @@ async function runPick(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
   } else put('PERIOD_BACK', ['EG447'], 'NA', '팝업 기간 → 메인 Period 반영', `AS-IS 기간 대입 ${backPer.length}건 · 팝업 기간 ${popPer.length} · 메인 기간 ${mainAfter.length}`, '');
   // 표시 형식(설명 미부착) — 칸 값 ↔ 행의 값
   if (c.trigger.kind === 'COND' && afterOk) {
-    const paren = /[()（）]/.test(afterOk); const exact = rows1[0] ? Object.values(rows1[0]).includes(afterOk) : false;
+    const paren = /[()（）]/.test(afterOk); const exact = pickRow ? Object.values(pickRow).includes(afterOk) : false;  /* 2026-11-25 T570: 고른 행 기준 */
     put('PICK_FORMAT', ['EG273', 'EG295', 'EG251'], exact ? 'PASS' : paren ? 'FAIL' : '판정필요', '칸 표시 = 선택 행의 키 값만(설명 미부착)', `칸 '${afterOk}' · 행 값 일치 ${exact} · 괄호 ${paren}`, '문서 DM-95·GAP-332');
   }
   // 조회 — 선택값이 메인 조회 요청에 깨끗한 키로
@@ -669,7 +796,7 @@ async function runPick(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
     const hc2 = hasCheck;
     if (hc2) { put('PICK_DBL', ['EG093'], 'NA', '더블클릭 = OK 동일', '행 체크박스 다중 선택 팝업 — 더블클릭 확정 경로 아님', ''); await closePopup(p, o2.dlg); }
     else {
-      const pd = await pickRows(p, o2.dlg, TAG, [0], 'dbl');
+      const pd = await pickRows(p, o2.dlg, TAG, [pickIdx], 'dbl');  /* 2026-11-25 T570: OK 경로와 같은 행 */
       if (!pd.closed && await o2.dlg.isVisible().catch(() => false)) { put('PICK_DBL', ['EG093'], '판정필요', '더블클릭 → OK 와 같은 결과', `더블클릭 후 닫히지 않음 — AS-IS 더블클릭 확정 여부 ${(k_close(c).length ? k_close(c)[0].ref : 'facts 없음')}`, ''); await closePopup(p, o2.dlg); }
       // 2026-11-07 T133(SCP0131 PICK_DBL 허위 FAIL): OK 경로가 ERROR(대상 '' — PICK_OK 측정 실패)면 비교 기준이 없다 → FAIL 이 아니라 ERROR
       else { await p.waitForTimeout(300); const afterDbl = await readTarget(nscm, c, o2); put('PICK_DBL', ['EG093'], !afterOk ? 'ERROR' : afterDbl === afterOk ? 'PASS' : 'FAIL', !afterOk ? '[측정 실패] OK 경로 결과 없음(PICK_OK 측정 실패) — 더블클릭 결과 대조 불가' : `더블클릭 결과 = OK 결과('${afterOk}')`, `더블클릭 '${afterDbl}'`, '문서 GAP-19'); }
@@ -683,10 +810,19 @@ const k_close = (c: Call) => (facts.classes[c.cls]?.close_after || []).filter(x 
 async function runCorners(nscm: Nscm, state: { popup: boolean }, i: number, c: Call) {
   const put = makePut(i, c); const p = nscm.page; const pr = await prepare(nscm, c);
   if (!pr.ok) { put('CORNERS', ['EG286', 'EG340'], 'ERROR', '버튼 전 영역', pr.why, ''); return; }
-  if (c.trigger.kind !== 'COND') { put('CORNERS', ['EG286', 'EG340'], 'NA', '조회조건 팝업 버튼 전 영역', `트리거 ${c.trigger.kind}`, ''); return; }
+  if (c.trigger.kind !== 'COND' && c.trigger.kind !== 'BTN') { put('CORNERS', ['EG286', 'EG340'], 'NA', '조회조건 팝업 버튼 전 영역', `트리거 ${c.trigger.kind}`, ''); return; }
   const pc = await mainPopupConds(nscm); const want = condLabels(c).map(nrm); const hit = pc.find(x => want.includes(nrm(x.label))) || pc.find(x => want.some(w => w.length >= 4 && (nrm(x.label).includes(w) || w.includes(nrm(x.label)))));
-  if (!hit) { put('CORNERS', ['EG286', 'EG340'], 'ERROR', '버튼 전 영역', '칸 못 찾음', ''); return; }
-  const t = await mainPopTrigger(p, hit.idx); const bb = await t.boundingBox().catch(() => null);
+  // 2026-11-25 T644(SCP0005 V-fe802ac0 'From City 검색 버튼 · 버튼 끝(테두리) 클릭'): AS-IS 버튼(btnFromSrch) 팝업은 트리거가 BTN 이라 전 영역 실측을 건너뛰었다.
+  //   BTN 은 openPopup 과 같은 순서로 TO-BE 대응을 찾는다 — 조회조건 칸 아이콘(AS-IS 버튼 → TO-BE 칸) → 같은 이름 버튼. 둘 다 없으면 NA(팝업 열림 자체는 MAIN 이 판정)
+  let t: import('@playwright/test').Locator | null = null; let tobe = '';
+  if (hit) { t = await mainPopTrigger(p, hit.idx); tobe = `칸 '${hit.label}'`; }
+  else if (c.trigger.kind === 'BTN') {
+    const bl = await btnLocator(nscm, c);  // openPopup 과 같은 대응(완전 일치 · 툴팁 앞 낱말 · 팝업 클래스 이름 단어)
+    if (bl) { t = bl.b; tobe = `버튼 '${((await bl.b.innerText().catch(() => '')) || '').trim().replace(/\s*\(F\d+\)$/i, '') || bl.how}'`; }
+    else { put('CORNERS', ['EG286', 'EG340'], 'NA', '버튼 전 영역', `AS-IS 버튼 ${c.trigger.control} 의 TO-BE 조회조건 칸·대응 버튼 없음(후보 [${btnNames(c).join('/')}]) — 팝업 열림은 MAIN 판정`, ''); return; }
+  }
+  if (!t) { put('CORNERS', ['EG286', 'EG340'], 'ERROR', '버튼 전 영역', '칸 못 찾음', ''); return; }
+  const bb = await t.boundingBox().catch(() => null);
   if (!bb) { put('CORNERS', ['EG286', 'EG340'], 'ERROR', '버튼 전 영역', '버튼 위치 불명', ''); return; }
   const pts = [['좌상', bb.x + 1, bb.y + 1], ['우상', bb.x + bb.width - 1, bb.y + 1], ['좌하', bb.x + 1, bb.y + bb.height - 1], ['우하', bb.x + bb.width - 1, bb.y + bb.height - 1], ['중앙', bb.x + bb.width / 2, bb.y + bb.height / 2]] as const;
   const res: string[] = []; let miss = 0;
@@ -697,7 +833,7 @@ async function runCorners(nscm: Nscm, state: { popup: boolean }, i: number, c: C
     res.push(`${nm}:${d ? '열림' : '안 열림'}`); if (!d) miss++;
     if (d) { await closePopup(p, d).catch(() => false); await p.waitForTimeout(300); }
   }
-  put('CORNERS', ['EG286', 'EG340'], miss ? 'FAIL' : 'PASS', '버튼 테두리 포함 전 영역 클릭 → 팝업 열림', `${res.join(' · ')} · 버튼 ${Math.round(bb.width)}x${Math.round(bb.height)}`, '문서 SCPSSP-4');
+  put('CORNERS', ['EG286', 'EG340'], miss ? 'FAIL' : 'PASS', '버튼 테두리 포함 전 영역 클릭 → 팝업 열림', `TO-BE ${tobe} · ${res.join(' · ')} · 버튼 ${Math.round(bb.width)}x${Math.round(bb.height)}`, '문서 SCPSSP-4');
 }
 
 // ─── 메인 텍스트 → 팝업 조건 전달 ───
@@ -795,6 +931,13 @@ async function runCell(nscm: Nscm, net: PopNet, state: { popup: boolean }, i: nu
   // 2026-11-19 SSP0014 미검증 해소(T351): 공용 그리드는 팝업 아이콘을 셀 자식 요소가 아니라 CSS 가상 요소로 그린다(_grid.scss .wj-cell-popup::after · .is-popup::after) —
   //   자식 svg·button 만 보던 탓에 아이콘이 보이는 칸도 '아이콘 false' 판정필요(8행). 셀 클래스 + ::after 계산 스타일(content·mask·배경 이미지)도 본다
   const icon = await p.evaluate(`(() => { const c = ${probe.CTL_SRC}; const col = c && c.columns.getColumn(${JSON.stringify(col)}); const el = col && c.cells.getCellElement(${row}, col.index); if (!el) return null; if (el.querySelector('svg, button, [class*="icon"], [class*="Icon"]')) return true; const a = getComputedStyle(el, '::after'); const has = a && a.content && a.content !== 'none' && a.content !== 'normal' && (a.content !== '""' || (a.maskImage && a.maskImage !== 'none') || (a.webkitMaskImage && a.webkitMaskImage !== 'none') || (a.backgroundImage && a.backgroundImage !== 'none')); return !!has && /wj-cell-popup|is-popup/.test(el.className); })()`).catch(() => null) as boolean | null;
+  // T565(2026-11-25 SCP0005 D5 EG-4041a815): AS-IS 팝업 아이콘 셀 = 코드가 배경 이미지 TextCellType 을 대입한 칸(cell_rules.csv cell_image=Y · facts_cellrules T565 · SetImageCell cs:590~595)만.
+  //   ROUTE_ID 는 더블클릭 팝업은 있으나 노란 배경(cs:569)만 칠하고 아이콘 없음 → 아이콘 false 는 AS-IS 와 같다(PASS). 이미지 칸인데 아이콘 false 면 FAIL.
+  //   화면에 이미지 칸 사실이 하나도 없거나 cell_image 열이 없는 옛 사실 파일이면 종전대로(판정필요)
+  const crImg = (() => { try { const rows = parseCsv(fs.readFileSync(path.join(ROOT, 'Doc', 'asisfacts', 'screens', (process.env.VERIFY_ASIS || ID).toUpperCase(), 'cell_rules.csv'), 'utf8').replace(/^﻿/, '')); return rows.length && 'cell_image' in rows[0] ? rows : null; } catch { return null; } })();
+  const imgRows = (crImg || []).filter(x => x.cell_image === 'Y'); const imgHit = imgRows.find(x => (x.column || '').toUpperCase() === col.toUpperCase());
+  if (icon !== null && !icon && imgRows.length) put('CELL_ICON', ['EG137'], imgHit ? 'FAIL' : 'PASS', imgHit ? 'AS-IS 아이콘 셀(배경 이미지 TextCellType) → 팝업 셀 아이콘 표시' : `AS-IS 아이콘 셀 [${imgRows.map(x => x.column).join(',')}] 에 ${col} 없음 → 아이콘 없음`, `아이콘 ${icon} · 셀 클래스 '${String(cls).slice(0, 160)}' · 메타 [${ctlTypes.join(',')}]`, `cell_rules.csv ${(imgHit || imgRows[0]).ref.split(' · ').filter(s => /CellType=/.test(s)).join(' · ').slice(0, 160)}`);
+  else
   put('CELL_ICON', ['EG137'], icon === null ? 'ERROR' : icon ? 'PASS' : '판정필요', '팝업 셀 아이콘 표시', `아이콘 ${icon} · 셀 클래스 '${String(cls).slice(0, 160)}' · 메타 [${ctlTypes.join(',')}]`, '');
   // Delete — 값 삭제 허용(문서 DM-18)
   const v0 = (await probe.value(p, row, col)) ?? '';
@@ -955,7 +1098,8 @@ if (ID) for (const [i, c] of facts.calls.entries()) {
     if (mode === 'TITLESET' && !isTs) return;
     if (isTs && mode !== 'TITLESET' && mode !== 'MAIN') return;
     if (mode === 'CELL' && kd !== 'CELL') return;
-    if ((mode === 'CORNERS' || mode === 'TEXT') && kd !== 'COND') return;
+    if (mode === 'TEXT' && kd !== 'COND') return;
+    if (mode === 'CORNERS' && kd !== 'COND' && kd !== 'BTN') return;  // T644: AS-IS 버튼 팝업(TO-BE 조회조건 칸 아이콘·같은 이름 버튼)도 전 영역 실측
     if (mode === 'PICK' && kd !== 'COND' && kd !== 'CELL') return;
     if (mode === 'SAVE' && !(facts.classes[c.cls]?.sps || []).some(q => q.save) && !(facts.classes[c.cls]?.buttons || []).some(q => /save|저장/i.test(q.text + q.name))) return;
     test(`@eg-popup ${mode} ${title}`, async ({ nscm }) => {

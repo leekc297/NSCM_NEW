@@ -1,0 +1,28 @@
+{
+ "proposal": {
+  "id": "20261124021155_SELF_6",
+  "title": "사용자 지시 R96 같은 문제: tools/VibeManager/history.js:133 Workbench 탭을 못 열 때 extension.js:701이 띄우는 Revision 단독 창(history.open, :98)에 검색칸이 없음. Workbe",
+  "evidence": "규칙 R96 \"기록 목록을 보이는 웹뷰 탭(Revision, Task History, VMO 활동 목록 등)은 탭마다 검색칸을 둠\" (원래 지시 2026-11-17 15:47 \"workbencn 의 Revision, Task History 는 각각 검색 기능을 추가해주세요.\") · tools/VibeManager/history.js:133 <div class=\"tabs\"><button class=\"sec${mode === 'screen' ? ' on' : ''}\" data-m=\"screen\">화면별</button><button class=\"sec${mode === 'date' ? ' on' : ''}\" data-m=\"date\">일자별</button><button class=\"sec\" id=\"",
+  "targets": [
+   "tools/VibeManager/history.js"
+  ],
+  "before_after": "단독 창 tabs 줄에 :177과 같은 input.hq를 넣고, 띄어쓰기로 나눈 단어가 모두 들어간 항목만 보이게 함(대소문자 무시). 검색어는 panel._q에 기억해 render 뒤에도 유지함",
+  "verify": "node --check tools/VibeManager/history.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "sig": "userrule|rn|tools/vibemanager/history.js|workbench탭을못열때extensionjsn이띄우는revision",
+  "check": "S13",
+  "selfKey": "S13|R96|tools/VibeManager/history.js"
+ },
+ "result": null,
+ "gate": null,
+ "history": [
+  "09:17:26 VMO 자동(게이트 통과 조건): 승인",
+  "09:27:56 VMO: 반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기",
+  "18:05:54 VMO 자동(게이트 통과 조건): 승인",
+  "18:10:12 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1413, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self1805",
+  "18:10:17 VMO: 반영 시작",
+  "18:13:17 VMO: 반영 실패. Claude exit 1 · 대상 파일 1개 복원 · 대상 밖 변경 tools/AsisFacts/agent.ps1, tools/AsisFacts/run.ps1, tools/AsisFacts/src/Program.cs, tools/Harness/gate_baseline.tsv, Doc/asisfacts_cmp/req_test.csv, Doc/asisfacts_cmp/res_test.csv 는 AI 가 고치지 않아 그대로 남음"
+ ],
+ "tries": 2,
+ "depth": 0,
+ "root": "20261124021155_SELF_6"
+}

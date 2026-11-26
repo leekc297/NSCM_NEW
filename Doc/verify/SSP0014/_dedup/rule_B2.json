@@ -1,77 +1,53 @@
 {
  "rule_id": "B2",
- "hash": "6ed44fb493c87d78",
+ "hash": "8bde14a5811b4a23",
  "groups": [
-  {
-   "rows": [
-    "V-0a7c8441",
-    "V-788e51ee"
-   ],
-   "why": "Both check the same grid combos (End Customer and Sold-to Customer) on a newly inserted row, with the same expected result: no duplicates, sorted, and not empty. Only the source and wording differ."
-  },
-  {
-   "rows": [
-    "V-cc82c56f"
-   ],
-   "why": "It checks only the End Customer combo, not Sold-to, and expects 0 blank rows rather than a non-empty combo, so it differs from the group above and stays alone."
-  },
-  {
-   "rows": [
-    "V-225a8aab"
-   ],
-   "why": "It checks the Cust Group→End Customer→Sales Site cascade and value reset, which goes beyond a duplicate check and makes the expected result different."
-  },
-  {
-   "rows": [
-    "V-830447ce"
-   ],
-   "why": "It checks that Team candidates follow the Div selection and covers Team, End Customer and Sales Site together, so its targets and expected result differ."
-  },
   {
    "rows": [
     "V-288052e4"
    ],
-   "why": "It is the only row for the Operation Group grid column on a new row. The search condition is a different element."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6af959b7"
    ],
-   "why": "It is the only row for the Operation group search condition. The grid column is a different element."
+   "why": "단독"
   },
   {
    "rows": [
     "V-70b4bd92"
    ],
-   "why": "It is the only row for the Active search condition. The VALID_YN grid column is a different element."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c2336a72"
    ],
-   "why": "It is the only row for the Div search condition."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c8ca1844"
    ],
-   "why": "It is the only row for the From Site grid column on a new row. The search condition is a different element."
+   "why": "단독"
   },
   {
    "rows": [
     "V-c951c278"
    ],
-   "why": "It is the only row for the From Site search condition, which is multi-select. The grid column is a different element."
+   "why": "단독"
   },
   {
    "rows": [
     "V-e4b056e1"
    ],
-   "why": "It is the only row for the VALID_YN (Active) grid column on a new row. The search condition is a different element."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:11:36",
- "cost": 0.052393100000000005
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-25 02:13:18",
+ "cost": 0,
+ "open": 0
 }

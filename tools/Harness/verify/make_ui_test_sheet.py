@@ -44,7 +44,33 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 P = lambda *a: os.path.join(ROOT, *a)
 
-OUTDIR = P('Doc', 'UI_TEST(SCP&SSP)')
+
+
+def _harness_paths():
+    """개선안 20261124012048_SELF_3(R83): 산출물 폴더 = harness.json paths 1곳(make_verify_docs·criteria_build·verify_if_stale 와 같은 값)"""
+    try:
+        with open(P('tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            hp = (json.load(f) or {}).get('paths')
+    except (OSError, ValueError):
+        hp = None
+    return hp if isinstance(hp, dict) else {}
+
+
+def _abs(d):
+    return os.path.normpath(d if os.path.isabs(d) else os.path.join(ROOT, d))
+
+
+def ui_test_dir():
+    """시험 Excel 폴더 = harness.json paths.uiTestDir · 없으면 Doc/UI_TEST(SCP&SSP)"""
+    return _abs(_harness_paths().get('uiTestDir') or 'Doc/UI_TEST(SCP&SSP)')
+
+
+def checklist_dir():
+    """CheckList 폴더 = harness.json paths.checklistDir · 없으면 Doc/UI_CHECKLIST"""
+    return _abs(_harness_paths().get('checklistDir') or 'Doc/UI_CHECKLIST')
+
+
+OUTDIR = ui_test_dir()
 TEMPLATE = os.path.join(HERE, 'templates', 'ui_test_template.xlsx')
 PREFIX = '☆NSCME_SCP&SSP 테스트_'
 EXTRA = '_추가항목'
@@ -74,7 +100,7 @@ def safe_name(s):
 
 def latest_checklist(mid):
     best, bn = None, -1
-    for f in glob.glob(P('Doc', 'UI_CHECKLIST', f'{mid}_*_CheckList_v*.xlsx')):
+    for f in glob.glob(os.path.join(glob.escape(checklist_dir()), f'{mid}_*_CheckList_v*.xlsx')):
         m = re.search(r'_v(\d+)\.xlsx$', f)
         if m and int(m.group(1)) > bn and not os.path.basename(f).startswith('~$'):
             best, bn = f, int(m.group(1))
@@ -247,7 +273,7 @@ def build(mid, checklist=None):
     """반환 (rc, 안내 문장). rc 0 = 기록 또는 기록할 것 없음, 1 = 실패"""
     mid = mid.upper()
     if not mid.startswith(TARGET_PREFIX):
-        return 0, f'UI 테스트 Sheet: 대상 아님({mid} · SCP·SSP 화면만 Doc/UI_TEST(SCP&SSP) 에 생성)'
+        return 0, f'UI 테스트 Sheet: 대상 아님({mid} · SCP·SSP 화면만 {os.path.relpath(OUTDIR, ROOT)} 에 생성)'
     checklist = checklist or latest_checklist(mid)
     if not checklist or not os.path.exists(checklist):
         return 1, f'UI 테스트 Sheet: ERROR CheckList 파일 없음({mid})'

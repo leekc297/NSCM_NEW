@@ -1,0 +1,98 @@
+{
+  "id": "20261121001846_SELF",
+  "at": "2026-11-21T00:18:46+09:00",
+  "ms": 1795187926083,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|partialremeasureslow",
+  "title": "사용자 지적 감지기 추가 U25 partialRemeasureSlow: 부분 재측정 소요가 1차 전체 측정 소요보다 김",
+  "evidence": "사용자 지적(2026-11-20T23:48:21+09:00) \"부분 재측정이 1차보다 시간이 더 많이 소요된 사유도 보완해주세요\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js"
+  ],
+  "before_after": "DETECTORS 에 partialRemeasureSlow 없음 → 추가. 판정: 같은 화면, 같은 체인에서 부분 재측정 단계 소요(종료-시작)가 1차 checklistRun 측정 단계 소요 이상이면 issue. 재측정 대상 행 수가 1차 행 수보다 적은데 소요가 같거나 길면 범위 축소가 적용되지 않은 것으로 판정함 · 읽을 기록: .vibe/history/<ID>/*_S8.checklistRun/meta.json (시작, 종료 시각), 같은 체인의 부분 재측정 단계 meta.json (시작, 종료 시각, 대상 행 수. 파일명과 필드명 미확인), Doc/verify/<ID>/run_verify.result.json (started, ts). user_checks.json U25 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-21T00:39:42+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-21T00:43:07+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 846, FAIL 0), 정의 정합 통과 · 백업 태그 20261121_self0039"
+    },
+    {
+      "at": "2026-11-21T00:43:09+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-21T00:48:51+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 853, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-21T00:48:51+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. node C:/Projects/NSCM/tools/VibeManager/test/t_orch_usercheck.js C:/Projects/NSCM/tools/VibeManager 실행. 마지막 줄 'ALL PASS', FAIL 줄 0. U25 표본 7개 PASS: 'PASS U25 부분 재측정 81분 ≥ 1차 66분 · 대상 행 789/1886 = 실패(e2e 0→47.1분 사유 표시)', 'PASS U25 부분 재측정 20분 < 1차 66분 = 아님', 'PASS U25 delta_scope mode full(전체 재측정) = 판 · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-21T00-43-10_claude_orch.log",
+      "sec": 133,
+      "costUsd": 1.4287006,
+      "files": [
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/user_checks.json"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:27+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-21T01:59:17+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U25",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795189182037,
+  "autoFp": "271f8e72e6",
+  "applyStartMs": 1795189389476,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 62/62개 파일 통과(PASS 853, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261121_self0039",
+  "needsReload": true,
+  "appliedMs": 1795189731223,
+  "synced": [
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/VibeManager/test/t_orch_usercheck.js"
+    ],
+    "verify_result": "node C:/Projects/NSCM/tools/VibeManager/test/t_orch_usercheck.js C:/Projects/NSCM/tools/VibeManager 실행. 마지막 줄 'ALL PASS', FAIL 줄 0. U25 표본 7개 PASS: 'PASS U25 부분 재측정 81분 ≥ 1차 66분 · 대상 행 789/1886 = 실패(e2e 0→47.1분 사유 표시)', 'PASS U25 부분 재측정 20분 < 1차 66분 = 아님', 'PASS U25 delta_scope mode full(전체 재측정) = 판정 안 함', 'PASS U25 delta_scope 시각이 다른 실행 것 = 실패, 행 수 기록 없음 표시', 'PASS U25 부분 재측정 진행 중(end 없음) = 판정 안 함', 'PASS U25 다른 job 의 부분 재측정 = 판정 안 함', 'PASS U25 체인 시작 24시간 지남 = 판정 안 함'. 시각 2026-11-21T00:45:07+0900",
+    "note": "부분 재측정 단계 = .vibe/history/<ID>/*_S8.checklistDelta/meta.json(start, end, job) 확인. 대상 행 수 = Doc/verify/<ID>/delta_scope.json rows_in, rows_keep(at 이 재측정 단계 시작 2분 전~끝 안일 때만 사용, mode full 은 판정 제외). 구간 사유 = run_timing.json stage_min 비교. 실제 기록 SCP0028 11-20: 1차 20:46:20~21:52:13(wall 65.8분), 부분 재측정 22:16:55~23:38:22(wall 81.3분), 재측정에 1차에 없던 e2e 47.1분 포함. 감지기는 현상 표시만 하고 재측정 속도 보완은 이번 범위 밖. repairScope DB_ONLY 는 FE·BE 대상이라 tools/VibeManager 수정은 막히지 않음"
+  },
+  "snap": "prop_20261121001846_SELF",
+  "effectiveMs": 1795193957740,
+  "effectiveAt": "2026-11-21T01:59:17+09:00"
+}

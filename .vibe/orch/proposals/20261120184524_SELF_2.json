@@ -1,0 +1,107 @@
+{
+  "id": "20261120184524_SELF_2",
+  "at": "2026-11-20T18:45:24+09:00",
+  "ms": 1795167924999,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|usercheck|un|progress drop ledger",
+  "title": "재개 기록(chain_progress) 쓰기·지우기에 사유 사건 남김: progress.write(interrupted) · progress.drop(resume, userDrop, ttl, jobRemove, normalEnd)",
+  "evidence": "workbench.js:33(progDel 무기록), :95, :1051, :1279, :2789, :2806 · job-runner.js:341 · snap/prop_20261120131344_SELF_2/before.json:392 와 snap/prop_20261120135025_SELF/before.json:440 대조 · events.jsonl 에 SCP0028_1795143055371 삭제 줄 없음(grep 결과 :863-974 만) · 진단 사다리 묶음 L3|usercheck|U13",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/test/t_chain_resume.js",
+    "tools/VibeManager/test/t_job_autodel.js"
+  ],
+  "before_after": "변경 전: progDel(p, runId) 가 파일만 지우고 사건 줄 없음. abortRunningChains 의 interruptedAt 기록도 사건 줄 없음. 변경 후: progDel(p, runId, why) 가 지운 뒤 evt('progress.drop', { runId, screen, job, why }) 를 남김. why 는 resume(:1051, :2789), userDrop(:2806), ttl(:95), jobRemove(job-runner.js:341), normalEnd(:1279) 중 하나. abortRunningChains(:107) 는 evt('progress.cut', { runId, screen, job, resumeFrom }) 를 남김. 실행 동작은 그대로임.",
+  "verify": "t_chain_resume.js 에 사례별 사건 줄 확인을 추가합니다. 다시 로드 흉내(r.stop + abortRunningChains) 뒤 progress.cut 1줄, 재개 시작 뒤 progress.drop why resume 1줄, resumeDrop 뒤 why userDrop 1줄, 정상 종료 뒤 why normalEnd 1줄이 나와야 합니다. t_job_autodel.js 에는 기한 삭제 why ttl 와 작업 삭제 why jobRemove 확인을 추가합니다. 전체 시험 FAIL 0. 반영 뒤 실제로 창을 다시 로드해 events.jsonl 에 progress.cut 줄이 끊긴 runId 수만큼 생기는지 봅니다.",
+  "rollback": "VMO 개선안 탭 되돌리기, 또는 workbench.js, job-runner.js 와 시험 2개 파일 .bak_<태그> 복원",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "기능 이후 사례 J20261120_115055 의 재개 기록이 13:54~14:08 사이에 사라졌는데, 기록을 지우는 곳 5군데가 사건 줄을 남기지 않아 사용자 삭제, 재개 시작, 기한 삭제, 결함을 구별할 수 없습니다. 같은 구별 불가가 U13, U16, U18 판정 전부에 걸립니다(orch-usercheck.js:145, :227, :251).",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-20T20:21:29+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-20T20:24:53+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 805, FAIL 0), 정의 정합 통과 · 백업 태그 20261120_self2021"
+    },
+    {
+      "at": "2026-11-20T20:24:55+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-20T20:30:12+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 812, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 적용은 VS Code 창 다시 로드 뒤"
+    },
+    {
+      "at": "2026-11-20T20:30:12+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 2026-11-20 20:26:23 실행: node test/t_chain_resume.js . → 'PASS 다시 로드 뒤 progress.cut 1줄(runId · 화면 · job · 2단계부터)' 'PASS 재개 시작 뒤 progress.drop why resume 1줄(끊긴 runId)' 'PASS 재개 체인 정상 종료 뒤 progress.drop why normalEnd 1줄' 'PASS resumeDrop 처리기 = progDel(p, rec.runId, 'userDrop')' 'PASS resumeDrop 뒤 progr · 변경 4개 파일",
+      "log": ".vibe\\logs\\2026-11-20T20-24-56_claude_orch.log",
+      "sec": 110,
+      "costUsd": 1.1071914,
+      "files": [
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/test/t_chain_resume.js",
+        "tools/VibeManager/test/t_job_autodel.js",
+        "tools/VibeManager/workbench.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:28+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T20:45:03+09:00"
+    }
+  ],
+  "plain": {
+    "what": "창 다시 로드로 끊긴 작업의 '이어서 실행' 기록이 언제, 왜 지워졌는지 사건 기록에 한 줄씩 남깁니다.",
+    "risk": "events.jsonl 줄 수가 재개 기록을 쓰고 지울 때마다 1줄씩 늘어납니다. 실행 동작은 바뀌지 않습니다.",
+    "undo": "개선안 탭 되돌리기 버튼 또는 .bak 파일 복원"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795173689291,
+  "autoFp": "6feb2b9c61",
+  "applyStartMs": 1795173895372,
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 29개 파일 통과, 시험 60/60개 파일 통과(PASS 812, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261120_self2021",
+  "needsReload": true,
+  "appliedMs": 1795174212201,
+  "synced": [
+    "job-runner.js",
+    "workbench.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "changed_files": [
+      "tools/VibeManager/workbench.js",
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/test/t_chain_resume.js",
+      "tools/VibeManager/test/t_job_autodel.js"
+    ],
+    "verify_result": "2026-11-20 20:26:23 실행: node test/t_chain_resume.js . → 'PASS 다시 로드 뒤 progress.cut 1줄(runId · 화면 · job · 2단계부터)' 'PASS 재개 시작 뒤 progress.drop why resume 1줄(끊긴 runId)' 'PASS 재개 체인 정상 종료 뒤 progress.drop why normalEnd 1줄' 'PASS resumeDrop 처리기 = progDel(p, rec.runId, 'userDrop')' 'PASS resumeDrop 뒤 progress.drop why userDrop 1줄 · 기록 없음' 'ALL PASS'(17건 PASS, FAIL 0). node test/t_job_autodel.js . → 'PASS 작업 삭제 = progress.drop why jobRemove 1줄(SCP0028_A · 작업 번호)' 'PASS 기한 삭제 = progress.drop why ttl 1줄(SCP0028_W1) · 남긴 기록(SCP0028_W2) 사건 없음' 'ALL PASS'(19건 PASS, FAIL 0). 전체 시험(test/run_all.js)은 지시대로 VMO 가 반영 뒤 실행함. 창 다시 로드 뒤 events.jsonl progress.cut 줄 수 확인은 미실행(서버·창 조작 금지), 미확인",
+    "note": "progDel 은 파일을 지웠을 때만 사건을 남김(없는 기록 삭제 = 사건 없음, false 반환). 사용자 중지도 정상 종료와 같은 코드 줄이라 why normalEnd 로 기록됨. 개선안에 없던 job-runner.js:133 같은 작업·화면 이전 기록 삭제에도 why resume 을 넘김(기존 job.resume.drop 사건 유지). 창 다시 로드 확인은 반영 뒤 사용자 또는 VMO 가 실행 필요"
+  },
+  "snap": "prop_20261120184524_SELF_2",
+  "effectiveMs": 1795175103931,
+  "effectiveAt": "2026-11-20T20:45:03+09:00"
+}

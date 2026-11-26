@@ -1,0 +1,580 @@
+{
+"menu": "SCP0016",
+"columns": [
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "DIVISION_ID",
+"COLUMN_LABEL_NAME": "Div",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 1
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "BIZ_TYPE_NAME",
+"COLUMN_LABEL_NAME": "Operation Group",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 2
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "ITEM_ID",
+"COLUMN_LABEL_NAME": "Model",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 3
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "NICK_NAME",
+"COLUMN_LABEL_NAME": "Nick Name",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 4
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "ELECTRODE_TYPE",
+"COLUMN_LABEL_NAME": "Electrode Type",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"SORT_ORDER_NO": 5
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "ORIGIN_TO_DIVISION_ID",
+"COLUMN_LABEL_NAME": "Origin To Div",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"SORT_ORDER_NO": 6
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "TO_SITE_NAME",
+"COLUMN_LABEL_NAME": "To Site",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 7
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "BOH",
+"COLUMN_LABEL_NAME": "BOH (To Site)",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPNumber",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 8
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "INCOTERMS",
+"COLUMN_LABEL_NAME": "Incoterms",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 9
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "DEPT_NAME_KO",
+"COLUMN_LABEL_NAME": "Team",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"SORT_ORDER_NO": 10
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "PROJECT_CODE",
+"COLUMN_LABEL_NAME": "PJT Code",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 11
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "PROJECT_NAME",
+"COLUMN_LABEL_NAME": "PJT",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"SORT_ORDER_NO": 12
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "PROJECT_OWNER",
+"COLUMN_LABEL_NAME": "PJT Owner",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"SORT_ORDER_NO": 13
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "ITEM_TYPE",
+"COLUMN_LABEL_NAME": "Item Type",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"SORT_ORDER_NO": 14
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "ORIGIN_FROM_DIVISION_ID",
+"COLUMN_LABEL_NAME": "Origin From Div",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"SORT_ORDER_NO": 15
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "FROM_SITE_NAME",
+"COLUMN_LABEL_NAME": "From Site",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 16
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "TRANSPORT_MODE",
+"COLUMN_LABEL_NAME": "Trans Mode",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 17
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "LT_DAY",
+"COLUMN_LABEL_NAME": "L/T(Day)",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 18
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "VERSION_NO",
+"COLUMN_LABEL_NAME": "Ver.",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 19
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "BOD_ID",
+"COLUMN_LABEL_NAME": "bod_id",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 80
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "TO_YYYYMMDD",
+"COLUMN_LABEL_NAME": "to_yyyymmdd",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 80
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "KEY_IDX",
+"COLUMN_LABEL_NAME": "KEY_IDX",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 80
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "FROM_SITE",
+"COLUMN_LABEL_NAME": "from_site",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 80
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "MEASURE_ORDER_NO",
+"COLUMN_LABEL_NAME": "MEASURE_ORDER_NO",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 80
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "TO_SITE",
+"COLUMN_LABEL_NAME": "to_site",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 80
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "BIZ_TYPE",
+"COLUMN_LABEL_NAME": "biz_type",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 80
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "MEASURE",
+"COLUMN_LABEL_NAME": "measure",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "N",
+"VISIBLE_FLAG": "N",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 90
+},
+{
+"SHEET_NAME": "Waterfall Shipment Plan",
+"COLUMN_NAME": "MEASURE_LABEL",
+"COLUMN_LABEL_NAME": "Measure",
+"CELL_CONTROL_OBJECT_TYPE_CODE": "FPTextBox",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"VISIBLE_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"SORT_ORDER_NO": 999
+}
+],
+"measures": [
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "MKT_FCST",
+"COLUMN_LABEL_NAME": "MKT FCST",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 1
+},
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "INTRANSIT",
+"COLUMN_LABEL_NAME": "Intransit",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 2
+},
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "WH_IN_TOTAL",
+"COLUMN_LABEL_NAME": "WH In Total",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 3
+},
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "BALANCE",
+"COLUMN_LABEL_NAME": "Balance",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "Y",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 4
+},
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "WH_IN",
+"COLUMN_LABEL_NAME": "WH In",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 5
+},
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "SHIP_REQ",
+"COLUMN_LABEL_NAME": "Ship Req",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 6
+},
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "SHIP_PLAN",
+"COLUMN_LABEL_NAME": "Ship Plan",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 7
+},
+{
+"SHEET_NAME": "Shipment Plan FG",
+"COLUMN_NAME": "SHIP_PLAN_AMEND",
+"COLUMN_LABEL_NAME": "Ship Plan Amend",
+"DIVISION_ID": "",
+"DEFAULT_FLAG": "Y",
+"USER_SELECTABLE_FLAG": "N",
+"VALID_YN": "Y",
+"SORT_ORDER_NO": 8
+}
+],
+"titleset": [
+{
+"USER_ID": "lucky-alex",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "lucky-alex",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "minyonglee1",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "minyonglee1",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 19
+},
+{
+"USER_ID": "popiel",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "popiel",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "wangyucnb",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "wangyucnb",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "zhangjiali",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "zhangjiali",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "jooyong026",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "jooyong026",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "testa",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "testa",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "coeogus",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "coeogus",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "jeeeun",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "jeeeun",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "dana.robot",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "dana.robot",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "kang_huichan",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "kang_huichan",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "jsh96",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "jsh96",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "jaeuk.shin",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "jaeuk.shin",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "bottle",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "bottle",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+},
+{
+"USER_ID": "jinseon_ahn",
+"SHEET_NAME": "Shipment Plan FG",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "M",
+"N": 8
+},
+{
+"USER_ID": "jinseon_ahn",
+"SHEET_NAME": "Waterfall Shipment Plan",
+"USER_INQUIRY_COLUMN_TYPE_CODE": "C",
+"N": 21
+}
+],
+"no_personal_accounts": [],
+"account": "",
+"account_personal": []
+}

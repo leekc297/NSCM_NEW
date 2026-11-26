@@ -1,0 +1,378 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "(?:(?:^| )정합검증\\ SSP0005\\ @verify\\ CRUD\\ —\\ 필수\\ 공란\\ 실제\\ 저장\\ 시도\\(E3\\)\\ →\\ 필수\\ 채워\\ 실제\\ 저장·재조회·값\\ 보존·정리\\(F1·F2·F4·F6\\)(?: @\\S+)*$|(?:^| )정합검증\\ SSP0005\\ @verify\\ 신규행\\ 검증\\(E3\\ 컬럼별\\ 필수·E4\\ 키\\ 중복\\)(?: @\\S+)*$)",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SSP0005/e2e/read5/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read5\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SSP0005 @verify",
+          "file": "_verify.spec.ts",
+          "line": 290,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 905039,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 900000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 900000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 900000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                            "column": 43,
+                            "line": 653
+                          },
+                          "message": "Error: locator.count: Target page, context or browser has been closed\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:653\n\n  651 |     const total = await this.page.getByText(/Total\\s*[:：]?\\s*[\\d,]+|총\\s*[\\d,]+\\s*건/i).first().innerText({ timeout: 1_000 }).catch(() => '');\n  652 |     const m = total.match(/([\\d,]+)/); if (m) return Number(m[1].replace(/,/g, ''));\n> 653 |     return g.locator('.wj-cells .wj-row').count();\n      |                                           ^\n  654 |   }\n  655 |   async gridColumnValues(colHeader: string, i = 0): Promise<string[]> {\n  656 |     const headers = await this.gridHeaders(i); const ci = headers.findIndex(h => h.toLowerCase() === colHeader.toLowerCase());\n    at Nscm.gridRowCount (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:653:43)\n    at crudCycle (C:\\Projects\\NSCM\\tools\\E2E\\lib\\crud.ts:61:25)\n    at editSaveProbe (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1147:19)\n    at crudBody (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1208:7)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1699:11"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 1번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 3번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AZ00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 4번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"EG00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 5번째 → 1행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"GM00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조회조건 'Company' 5번째 후보 대안 조회(Div SELECT:0행 · Div 81:0행 · Div 40:0행 · Div 82:0행 · Div 81_UC:0행 · Div 81_HM:0행 · Div 81_ST:0행 · Div 81_HD:0행 · Div 81_HG:0행 · Company 'LGES Arizona ESS Inc.'(후보 14개 중 1번째):0행 · Company 'LG CHEM AUSTRAILIA PTY LT'(후보 14개 중 2번째:0행 · Company 'LGES Arizona, Inc.'(후보 14개 중 3번째):0행 · Company 'LG Ensol Europe GmbH'(후보 14개 중 4번째):0행 · Company 'Ultium Cells LLC'(후보 14개 중 5번째):1행)\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 기본 조회 0행 · 대안 Div SELECT:0행 · Div 81:0행 · Div 40:0행 · Div 82:0행 · Div 81_UC:0행 · Div 81_HM:0행 · Div 81_ST:0행 · Div 81_HD:0행 전부 0행\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:32:13.984Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read5\\artifacts\\_verify-정합검증-SSP0005-verif-bff2a-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read5\\artifacts\\_verify-정합검증-SSP0005-verif-bff2a-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read5\\artifacts\\_verify-정합검증-SSP0005-verif-bff2a-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read5\\artifacts\\_verify-정합검증-SSP0005-verif-bff2a-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read5\\artifacts\\_verify-정합검증-SSP0005-verif-bff2a-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-dab0f671b1990e920917",
+              "file": "_verify.spec.ts",
+              "line": 1021,
+              "column": 7
+            },
+            {
+              "title": "신규행 검증(E3 컬럼별 필수·E4 키 중복)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 519614,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 1번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"AE00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 4번째 → 0행 · 본문 {\"fromYyyymmdd\":\"20261125\",\"toYyyymmdd\":\"20271121\",\"divisionId\":\"81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG\",\"companyId\":\"EG00\",\"debugMode\":\"F\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Company 5번째 → 1행 · 본문 {\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-24T16:47:31.994Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SSP0005\\e2e\\read5\\artifacts\\_verify-정합검증-SSP0005-verify-신규행-검증-E3-컬럼별-필수·E4-키-중복--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b3dd090f10e0fb4fbd5d",
+              "file": "_verify.spec.ts",
+              "line": 1962,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T16:32:12.430Z",
+    "duration": 1443105.983,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

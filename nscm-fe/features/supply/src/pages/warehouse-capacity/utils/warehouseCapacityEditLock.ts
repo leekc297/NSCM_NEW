@@ -17,17 +17,13 @@ export const ALWAYS_LOCKED_COLUMNS = [
   'PRE_KEY_VALUES',
 ] as const;
 
-// ITEM_ID(Warehouse Item Mapping 시트) — 팝업 선택 전용, 직접 타이핑 편집 아님(design 03 §1.2,
-//   gridSignals#19 SetText). beginningEdit 에서 취소하고 dblClick 이 팝업을 연다.
-export const POPUP_ONLY_COLUMNS = ['ITEM_ID'] as const;
-
 /**
- * 셀 편집 가능 여부. ALWAYS_LOCKED_COLUMNS/POPUP_ONLY_COLUMNS 만 예외 없이 잠금, 그 외 컬럼은
- * 조회 직후에도 바로 편집 가능(EditButton 토글 어포던스 미이식).
+ * 셀 편집 가능 여부. ALWAYS_LOCKED_COLUMNS 만 예외 없이 잠금, 그 외 컬럼은 조회 직후에도 바로
+ * 편집 가능(EditButton 토글 어포던스 미이식). ITEM_ID 는 admin 메타 Cell Object 타입(FPTextModal)
+ * 대로 key-in 과 더블클릭 팝업을 모두 허용한다(사용자 지시 2026-11-23 — AS-IS 팝업 전용 하드코딩 제거).
  */
 export const isCellEditable = (binding: string): boolean => {
   if ((ALWAYS_LOCKED_COLUMNS as readonly string[]).includes(binding)) return false;
-  if ((POPUP_ONLY_COLUMNS as readonly string[]).includes(binding)) return false;
   return true;
 };
 

@@ -31,7 +31,6 @@
 | event:dsdmPack.Changed | spdMain_Changed | 1771 | biz:CommonData.CommonDataList [code=DefaultBucketDay] | BIZ_MATCH |  |
 | event:dsdmPack.Changed | spdMain_Changed | 1833 | biz:CommonData.CommonDataList [code=DefaultBucketDay] | BIZ_MATCH |  |
 | button:EditButton | EditButton > GetSSPUserCheck | 2339 | SSP.SSP0002_GET_USER_INFO_LIST | MATCH | SP SSP0002_GET_USER_INFO_LIST |
-| button:FindButton | FindButton > FindData | 297 | {?string.Empty} | UNRESOLVED |  |
 | button:FindButton | FindButton > FindData | 297 | SSP.SSP0046_GET_BODITEM_FOR_PRJROUTE_POPUP | MATCH | SP SSP0046_GET_BODITEM_FOR_PRJROUTE_POPUP |
 | button:FindButton | FindButton > FindData | 368 | SSP.SSP0046_GET_PROJECT_BY_DIVISION_POPUPEX | MATCH | SP SSP0046_GET_PROJECT_BY_DIVISION_POPUPEX |
 | button:FindButton | FindButton > FindData | 386 | SSP.SSP0046_GET_ITEM_BY_DIVISION_POPUPEx | MATCH | SP SSP0046_GET_ITEM_BY_DIVISION_POPUPEx |
@@ -60,7 +59,6 @@
 | event:this.Load | Form_Load > InitControls | 223 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 232 | biz:CommonData.CommonDataList [code=Measure] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 241 | biz:CommonData.CommonDataList [code=EndCustomerByDivision40] | BIZ_MATCH |  |
-| event:this.Load | Form_Load > FindData | 297 | {?string.Empty} | UNRESOLVED |  |
 | event:this.Load | Form_Load > FindData | 297 | SSP.SSP0046_GET_BODITEM_FOR_PRJROUTE_POPUP | MATCH | SP SSP0046_GET_BODITEM_FOR_PRJROUTE_POPUP |
 | event:this.Load | Form_Load > FindData | 368 | SSP.SSP0046_GET_PROJECT_BY_DIVISION_POPUPEX | MATCH | SP SSP0046_GET_PROJECT_BY_DIVISION_POPUPEX |
 | event:this.Load | Form_Load > FindData | 386 | SSP.SSP0046_GET_ITEM_BY_DIVISION_POPUPEx | MATCH | SP SSP0046_GET_ITEM_BY_DIVISION_POPUPEx |
@@ -86,7 +84,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?string.Empty} | UNRESOLVED | 1 |  |  |  |
 | biz:CommonData.CommonDataList [code=DefaultBucketDay] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | biz:CommonData.CommonDataList [code=EndCustomerByDivision40] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE_ITEM, UP_FX_GetCommonDataList:SELECT:SCM_MST_SSO_USER_INFO, UP_FX_GetCommonDataList:SELECT:SCM_MST_SSO_DEPT_INFO, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GetCommonDataList:REF:STRING_SPLIT |
 | biz:CommonData.CommonDataList [code=FCST_TYPE] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, UP_FX_GETCOMMONDATALIST_DM:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
@@ -206,10 +203,9 @@
 | ImageList | 1 | imageList1 |
 | SplitContainer | 1 | splMain |
 
-## 7. 확인 필요 (2건)
+## 7. 확인 필요 (1건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 297 | FindData | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 576 | GetScmSitebyDivision | SSP.SSP0046__GET_SITE_BY_DIVISION | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)

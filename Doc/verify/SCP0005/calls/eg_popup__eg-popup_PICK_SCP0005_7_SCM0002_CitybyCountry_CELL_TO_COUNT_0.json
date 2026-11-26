@@ -1,0 +1,80 @@
+[
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1421,
+  "at": "2026-11-25T17:10:40.606Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY"
+ },
+ {
+  "menu": "SCP0005",
+  "sheet": "route",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
+  "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
+  "status": 200,
+  "rows": 8080,
+  "dur": 461,
+  "at": "2026-11-25T17:10:44.429Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1343,
+  "at": "2026-11-25T17:10:46.504Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1381,
+  "at": "2026-11-25T17:10:50.007Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1447,
+  "at": "2026-11-25T17:10:54.299Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY"
+ },
+ {
+  "menu": "COM0001",
+  "sheet": "region",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
+  "postData": "{\"country\":\"\",\"city\":\"\"}",
+  "status": 200,
+  "rows": 89418,
+  "dur": 1364,
+  "at": "2026-11-25T17:10:58.790Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup PICK SCP0005 #7 SCM0002_CitybyCountry CELL:TO_COUNTRY"
+ }
+]

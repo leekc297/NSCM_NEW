@@ -1,0 +1,109 @@
+{
+  "id": "20261123225519_SELF_2",
+  "at": "2026-11-23T22:55:19+09:00",
+  "ms": 1795442119643,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/asislive/host/asislivehost.cs|popuppick이행을고르다예외setitem없음열없음setitem호출실패",
+  "title": "사용자 지시 R71 같은 문제: tools/AsisLive/host/AsisLiveHost.cs:829 PopupPick 이 행을 고르다 예외(SetItem 없음, 열 없음, SetItem 호출 실패)가 나면 pp.Close() 전에 throw 해 Version 팝",
+  "evidence": "규칙 R71 \"AS-IS 런처가 띄운 팝업, 경고창, 외부 프로그램(Excel) 창은 값을 확인하고 기록한 뒤 닫음\" (원래 지시 2026-11-13 09:41 \"현재 런처로 실행된 POPUP 창이 너무 많은데 닫기처리 한번 해도 될까요? 아니면 그대로 놔둬야 하나요? 런처로 실행 시 POPUP 차이나 경고창을 띄운 후 확인하고나면 POPUP 창이나 경고창을 닫으면 안되나요? POPUP 이 너무 많이 띄워져 있습니다.\") · tools/AsisLive/host/AsisLiveHost.cs:829 else { if (fv == null || vcol < 0) throw new InvalidOperationException(\"popup has no SetItem and no version column/field\"); fv.SetValue(pp, top[pick]); how = \"field\"; }",
+  "targets": [
+    "tools/AsisLive/host/AsisLiveHost.cs"
+  ],
+  "before_after": "res[\"picked\"] 람다 본문을 try { … } finally { if (!pp.IsDisposed) ForceClose(pp); } 로 감싸 실패해도 닫음. 호출부 두 파일은 popup_pick 결과가 ok 가 아니면 host.send(\"sweep\") 를 불러 닫은 창을 fills 기록에 남김",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/AsisLive/host/AsisLiveHost.cs.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T08:39:35+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T08:39:35+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-24T09:03:23+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-24T09:07:12+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 75/75개 파일 통과(PASS 1173, FAIL 0), 정의 정합 통과 · 백업 태그 20261124_self0903"
+    },
+    {
+      "at": "2026-11-24T09:07:17+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T09:19:35+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 75/75개 파일 통과(PASS 1173, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-24T09:19:35+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 75/75 PASS 1173 FAIL 0 (2026-11-24T00:08:02Z) → 반영 뒤 ALL OK 75/75 PASS 1173 FAIL 0 (2026-11-24 09:15:36 KST). git diff --stat: AsisLiveHost.cs 5 insertions · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T09-07-17_claude_orch.log",
+      "sec": 512,
+      "costUsd": 0.6542117999999998,
+      "files": [
+        "tools/AsisLive/host/AsisLiveHost.cs"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "AS-IS 런처가 띄운 팝업, 경고창, 외부 프로그램(Excel) 창은 값을 확인하고 기록한 뒤 닫음 규칙을 tools/AsisLive/host/AsisLiveHost.cs 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R71|tools/AsisLive/host/AsisLiveHost.cs",
+  "kind": "fix",
+  "needsApproval": "자동 범위 밖 tools/AsisLive/host/AsisLiveHost.cs",
+  "applyStartMs": 1795478837135,
+  "verifyJudge": {
+    "at": "2026-11-24T09:15:54+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 75/75개 파일 통과(PASS 1173, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261124_self0903",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795479575725,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 75/75 PASS 1173 FAIL 0 219.8s'(2026-11-24T00:08:02Z) → 반영 뒤 'ALL OK 파일 75/75 PASS 1173 FAIL 0 220.6s'(2026-11-24 09:15 KST). 웹뷰 파일 수정 없음, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/AsisLive/host/AsisLiveHost.cs"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 75/75 PASS 1173 FAIL 0 (2026-11-24T00:08:02Z) → 반영 뒤 ALL OK 75/75 PASS 1173 FAIL 0 (2026-11-24 09:15:36 KST). git diff --stat: AsisLiveHost.cs 5 insertions",
+    "note": "PopupPick res[\"picked\"] 람다 본문을 try/finally 로 감싸 finally 에서 !pp.IsDisposed 면 ForceClose(pp) 호출. before_after 의 호출부 두 파일(asis_live_fill.py:202, asis_live_datafind.py:258·313 popup_pick 실패 시 sweep 호출)은 targets 에 없어 고치지 않음. 추가 확인 후보: 두 파일을 targets 에 넣은 개선안. C# 컴파일은 VMO 반영 뒤 구문 검사 대상"
+  },
+  "snap": "prop_20261123225519_SELF_2"
+}

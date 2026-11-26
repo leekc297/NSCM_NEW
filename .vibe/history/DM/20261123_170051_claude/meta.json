@@ -1,0 +1,25 @@
+{
+  "id": "DM",
+  "task": "claude",
+  "scope": "both",
+  "note": "[2/4] 화면별 내용 작성(캡처 보고 번호 위치, 설명, Key Point)",
+  "start": "2026-11-23T17:00:51+09:00",
+  "end": "2026-11-23T17:13:35+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DM",
+      "files": 0
+    }
+  ],
+  "source": "chain",
+  "label": "[2/4] 화면별 내용 작성(캡처 보고 번호 위치, 설명, Key Point)",
+  "text": "사용자 매뉴얼 DM 모듈 화면별 내용 작성. 대상 = Doc/UserManual/DM/plan.json 의 order 화면 전부 + content/_LAYOUT.json, content/_COMMON.json. content/<화면ID>.json 에 pages 가 이미 있으면 건너뜀(끊긴 뒤 이어서 하기).\n기준: 내용은 최신 UI 캡처가 기준. 양식 샘플 매뉴얼의 글은 쓰지 않음. 화면마다 아래 순서.\n1) content/<화면ID>.json 의 captures 그림을 Read 로 열어 화면을 봄.\n2) facts 폴더의 <화면ID>_summary.md, controls.csv, events.csv, messages.csv 와 buttons 로 조회 조건, 버튼, 그리드 컬럼, 편집 가능 칸, 필수 칸, 저장 검증, 자동으로 채워지는 값, 팝업, 연결 화면을 확인해 캡처 설명을 보탬. 소스 전체 grep 금지(facts 폴더 안만).\n3) content/<화면ID>.json 에 씀(다른 키는 그대로 둠):\n   definition = UI 정의 1줄(화면이 관리하는 대상과 용도)\n   pages = [{title, keyPoint, markers:[{no,x,y}], sections:[{no,title,lines:[]}]}]\n   markers x, y = 캡처 그림 안 위치 비율(왼쪽 위 0,0 ~ 오른쪽 아래 1,1). 번호 원이 가리킬 영역의 왼쪽 위 바로 옆. 글자나 버튼을 가리지 않는 빈 자리. sections 의 no 와 markers 의 no 는 1:1.\n   sections = 캡처에 보이는 영역 순서(조회 조건 → 버튼 → 위 그리드 → 아래 탭, 그리드). 영역마다 2~6줄. 화면에 있는 것만 씀.\n   keyPoint = 업무상 지켜야 할 점 1~2줄(저장 전 확인할 값, 다른 화면에 주는 영향).\n   설명이 30줄을 넘으면 pages 를 2개로 나눔(같은 캡처, 섹션 나눠 담기).\n4) 내용을 풍성하게: 컬럼마다 뜻과 입력 규칙, 콤보 값 출처, 저장 시 확인하는 조건, 메시지가 뜨는 경우까지 facts 에 근거가 있으면 적음. 근거가 없는 동작은 쓰지 않음.\n5) 문장: tools/VibeManager/rules/50_DOC_STYLE.md 규칙. 줄 끝은 '~함', '~됨', 명사형으로 통일. 수식어, 번역투, 추측 어미, 줄표, 장식 기호 금지. 화면 라벨, 버튼, 컬럼 이름은 캡처 표기 그대로(영문). 업무 담당자가 쓴 매뉴얼처럼 짧게 씀. 'AI', '자동 생성된' 같은 말을 쓰지 않음.\n_LAYOUT: captures 에 대표 화면 캡처 1개(captures/<화면ID>.png), labels = [{text,x,y,w,h}] 로 메뉴, 화면 탭, 조회 조건, 버튼, 그리드 영역 이름표(비율 좌표).\n_COMMON: 캡처에 보이는 공통 버튼과 기능(Search, Insert, Delete, Save, Sort, Filter, Condition, Reset Condition, Excel, Search Area 접기, 즐겨찾기, 탭 닫기 등) sections + markers. captures 에 쓴 캡처 1개.\n끝나면 python tools/Docs/user_manual.py check --module DM 를 실행해 [FAIL] 0 을 확인. 남으면 그 항목을 고치고 다시 실행.",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "J20261123_170049",
+  "afterMode": "end",
+  "afterAt": "2026-11-23T17:13:35+09:00",
+  "changed": []
+}

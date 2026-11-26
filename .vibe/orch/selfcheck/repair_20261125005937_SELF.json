@@ -1,0 +1,53 @@
+{
+ "proposal": {
+  "id": "20261125005937_SELF",
+  "title": "VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 1",
+  "evidence": "L4 단계 원장 20261125000616_VISION 단계 1/4 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_VM_.md",
+  "targets": [
+   "tools/VibeManager/orch-ladder.js"
+  ],
+  "before_after": "목적 묶음 연속 계산에서 같은 목적 키의 반영 L4 안 효력 시각 전 판정을 뺌. 1차 안을 plans.json 에 넣음 · 상세 = .vibe/orch/vision/concept_20261125_L4_purpose_VM_.md 전환 절 단계 1",
+  "verify": "시험 '반영 L4 효력 전 판정 4건 → 묶음 안 올림', '효력 뒤 어긋남 3건 → 올림' PASS. ladder.json 이 묶음을 resolved 또는 보류로 표시함.",
+  "sig": "lnplan cacgbbcfaaagbg_vision step b",
+  "check": "L4plan",
+  "selfKey": "L4plan|20261125000616_VISION|1"
+ },
+ "result": {
+  "applied": true,
+  "already_applied": false,
+  "verified": true,
+  "verify_items": [
+   {
+    "n": 1,
+    "result": "pass",
+    "note": "node vmo_t/t.js (임시 시험 6건). 반영 전 bak_20261126_self1252 = PASS 1 FAIL 5('반영 L4 효력 전 판정 4건 → 묶음 안 올림' FAIL, '효력 뒤 어긋남 3건 → 올림' FAIL). 반영 뒤 = PASS 6 FAIL 0(두 시험 PASS, 효력 뒤 2건 안 올림, 같은 목적 안 없음 종전 유지, 효력 시각 없음 wait, (S11) 덧붙임 키 묶음 PASS). node --check SYNTAX_OK"
+   },
+   {
+    "n": 2,
+    "result": "pass",
+    "note": "node vmo_t/real.js 실데이터 읽기 전용 scan. 반영 전과 반영 뒤 모두 purpose 후보 0건. ladder.json L4|purpose|VM고정문구가문장규칙을지킴 status resolved, statusLabel 'L4 원장 20261125000616_VISION 진행 중(진단 안 함)', resolvedAt 2026-11-26T11:20:11+09:00. 반영 전에도 resolved였음"
+   }
+  ],
+  "changed_files": [
+   "tools/VibeManager/orch-ladder.js"
+  ],
+  "verify_result": "2026-11-26 12:58~13:00 실행. node --check orch-ladder.js SYNTAX_OK. 시험 반영 전 PASS 1 FAIL 5 → 반영 뒤 PASS 6 FAIL 0. 실데이터 scan purpose 후보 0 → 0. ladder.json 해당 묶음 resolved(11-26 11:20:11) → resolved",
+  "note": "L4-1 목적 연속 계산에서 같은 목적 반영 L4 안(묶음 키, purpose, plans.json axis 원장의 proposal/related/absorbed)의 효력 시각 전 판정을 뺌(세지도, 끊지도 않음). 효력 시각이 없으면 wait '효력 대기'. 끄기 harness.json orch.l4PurposeEffFilter false. 1차 안 20261123000643_VISION 은 plans.json 원장 20261125000616_VISION related 에 이미 있어 plans.json 은 고치지 않음. test/t_orch_ladder.js 는 targets 밖이라 시험을 넣지 않음(임시 시험 파일은 저장소 밖 %TEMP%/vmo_t). git, cp 실행 승인 대기로 반영 전 코드는 VMO 백업 bak_20261126_self1252 를 직접 읽어 시험함. 추가 확인 후보: 목적 라벨 문구가 바뀌면 묶음 키가 달라져 연속 횟수가 처음부터 다시 셈(normPurpose)"
+ },
+ "gate": {
+  "ok": false,
+  "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1468, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1",
+  "newBad": [
+   "S11 orch-ladder.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/orch-ladder.js.style.csv)"
+  ]
+ },
+ "history": [
+  "12:52:13 VMO 자동(게이트 통과 조건): 승인",
+  "12:56:17 VMO: 반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1468, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self1252",
+  "12:56:22 VMO: 반영 시작",
+  "13:04:35 VMO: 반영 실패. 게이트에서 새로 어긋난 항목 1건: S11 orch-ladder.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/orch-ladder.js.style.csv) · 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1468, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1 · 대상 파일 1개 복원(orch-ladder.js AI 편집 1건만 되돌림(반영 전과 같음))"
+ ],
+ "tries": 1,
+ "depth": 0,
+ "root": "20261125005937_SELF"
+}

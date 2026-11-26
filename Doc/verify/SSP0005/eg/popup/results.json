@@ -18,7 +18,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -65,7 +65,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -105,8 +113,8 @@
   "suites": [],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-19T23:36:07.392Z",
-    "duration": 604.6399999999999,
+    "startTime": "2026-11-24T18:17:28.294Z",
+    "duration": 821.8839999999991,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

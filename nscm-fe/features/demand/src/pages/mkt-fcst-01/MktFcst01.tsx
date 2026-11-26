@@ -481,10 +481,10 @@ export const MktFcst01 = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleSearch = () => {
     const vr = validation.validateFind(sc);
     if (!vr.ok) {
-      // AS-IS FindData L1228~1234: 기간 3년 초과(MSG00164) 시 경고 후 종료일을 시작일+2년으로
+      // 기간 2년 초과(MSG01505, 2026-11-24 종전 AS-IS FindData L1228~1234 3년) 시 경고 후 종료일을 시작일+2년으로
       //   자동 보정하고 조회는 중단한다(drpPeriod.Value2 = Value1.AddYears(2)). 보정값은 폼에
       //   반영돼 사용자가 그대로 재조회할 수 있다. 경고 표시는 validateFind 가 이미 수행.
-      if (vr.msgId === MSG.PERIOD_MAX_3YEAR) {
+      if (vr.msgId === MSG.PERIOD_MAX_2YEAR) {
         // customParseFormat 플러그인 미로드라 ISO(YYYY-MM-DD)로 파싱한다(MktFcst01Grid dayjs 사용과 동일).
         //   start 는 validateFind 의 /^\d{8}$/ 통과값이라 8자리 보장.
         const start = String(sc.startYyyymmdd ?? '');

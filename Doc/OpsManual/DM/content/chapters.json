@@ -1,0 +1,1850 @@
+{
+ "key": "DM",
+ "screenNotes": {
+  "DMF0004": "Sales Site, 고객, 위치, 버킷 변환 기준 정보 등록. SCM_MST_SITE, SCM_MST_SITE_CUSTOMER, DM_MST_BUCKET_CONVERSION 저장",
+  "DMF0005": "Sales Site 프로젝트 모델 등록. SCM_MST_SITE_ITEM 저장, 변경 이력 SCM_MST_SITE_ITEM_H",
+  "DMF0005_01": "ESS 사업부 Sales Site 프로젝트 모델 등록. DMF0005 와 같은 테이블 저장",
+  "DMF0006": "고객 모델 매핑 DM_MST_CUSTOMER_MODEL 등록",
+  "DMF0007": "고객 FCST 기준 DM_MST_CUSTOMER_FCST 등록. 저장 때 DM_PLN_MKT_FCST 함께 저장",
+  "DMF0020": "판가 SCM_MST_FUTURE_PRICE, 환율 DM_MST_EXCHANGE_RATE, 확정 판가 DM_PLN_CFM_SELLING_PRICE 등록",
+  "DMF0020_01": "ESS 사업부 판가, 환율 등록. DMF0020 과 같은 테이블 저장",
+  "DMF0083": "모델 그룹 판가 SCM_MST_FUTURE_PRICE_MDL_GR, 환율 DM_MST_EXCHANGE_RATE 등록",
+  "DMF0043": "기여율 버전과 비율 DM_MST_CONTRIBUTE_VER, DM_MST_CONTRIBUTE_RATIO_MST, DM_MST_CONTRIBUTE_RATIO_DTL 등록",
+  "DMF0043_01": "기여율 기준 판매 조회. 저장 테이블 없음(개인화 컬럼만)",
+  "DMF0008": "ERP EDI 기준 정보 검증, 보정. SCM_MST_SITE, SCM_MST_SITE_ITEM 과 이력 저장",
+  "DMF0072": "N:N 고객 모델 매핑 DM_CUST_MODEL_MAPPING_M 등록",
+  "DMF0003": "MKT FCST 입력. DM_PLN_MKT_FCST, PR 상세 DM_PLN_PR_DETAIL, MKT PSI 저장",
+  "DMF0003_01": "ESS 사업부 MKT FCST 입력. DMF0003 과 같은 테이블 저장",
+  "DMF0048": "Sales Plan 과 출하 실적 비교 조회. 저장 테이블 없음(개인화 컬럼만)",
+  "DMF0014": "고객 FCST 엑셀 업로드. DM_PLN_CUSTOMER_PSI 와 이력 저장",
+  "DMF0042": "사업 계획 DM_PLN_BP_FCST 입력, 사업 계획 컷오프 DM_PLN_BP_FCST_C 생성",
+  "DMF0044": "Sales Report 버전 생성, 조회. DM_MDF_VERSION, DM_PLN_SALES_PLAN_REPORT_C 저장",
+  "DMF0049": "기타 매출 Report DM_PLN_SALES_ETC_REPORT_C 저장, 조회",
+  "DMF0074": "Metal Link 판가 엑셀 업로드. DM_BPS_METAL_LINK_PRICE 와 이력 저장",
+  "DMF0082": "MKT FCST 와 판가 통합 관리. DM_PLN_MKT_FCST, DM_PLN_CFM_SELLING_PRICE, SCM_MST_FUTURE_PRICE 저장",
+  "DMF0021": "Sales Plan 입력. DM_PLN_SALES_PLAN, DM_PLN_SALES_ETC_PLAN, DM_PLN_CFM_MKT_DEMAND_PLAN 저장",
+  "DMF0021_01": "ESS 사업부 Sales Plan 입력. DMF0021 과 같은 테이블 저장",
+  "DMF0035": "MKT FCST, Sales Plan 버전별 변동 조회. 버전 DM_MST_VERSION 저장",
+  "DMF0040": "MKT FCST 버전 비교 조회. 저장 테이블 없음(개인화 컬럼만)",
+  "DMF0068": "수주 관리 목록 저장, 삭제(JSON 저장 프로시저)",
+  "DMF0053": "고객 FCST 버전별 변동 조회. 저장 테이블 없음(개인화 컬럼만)",
+  "DMF0035_01": "ESS 사업부 Waterfall 조회. DMF0035 와 같은 테이블 저장",
+  "DMD0001": "Report Dashboard 조회. 저장 버튼 없음"
+ },
+ "jobNotes": {
+  "JOB_DMF0070_AUTO_PR_REQUEST": "MKT FCST 기준 PR 요청 대상 생성. DM_PLN_PR_DETAIL, DM_PLN_AUTO_PR_CHECK 저장함",
+  "JOB_DMF0070_AUTO_PR_REQUEST_MAIL": "PR 요청 대상 추출 뒤 메일 발송. DM_PLN_AUTO_PR_CHECK 갱신함",
+  "JOB_DMF0070_DIFF_QTY_MAIL_SEND_AUTO": "MKT FCST 수량 차이 발생 건 메일 발송. 저장 테이블 없음",
+  "JOB_LGCE_SCMPROD_PR_DM_PLN_ADJUSTED_MKT_FCST_R_TO_MKT_FCST": "PLM 조정 FCST(XIF_PLM_ADJUSTED_MKT_FCST_R_SN) 수신 뒤 DM_PLN_MKT_FCST 반영. 1시간마다",
+  "JOB_LGCE_SCMPROD_PR_DM_PLN_MKT_FCST_TO_XIF_PLM_PLAN_S": "MKT FCST 를 PLM 송신 테이블 XIF_PLM_DM_PLN_MKT_FCST_PLAN_S 로 보냄. 매일 01:00",
+  "JOB_PR_DM_4MCC_SCM_MST": "프로젝트, 사이트, 사이트 품목 기준 정보를 4MCC 송신 테이블 3개로 보냄",
+  "JOB_PR_DM_ANL_KPI_RTF_SALES": "Sales Plan 컷오프 기준 RTF 판매 KPI DM_ANL_KPI_RTF_SALES 생성",
+  "JOB_PR_DM_ANL_MKT_PSI_DATA": "MKT PSI DM_ANL_MKT_PSI 생성 뒤 DW 송신 테이블 2개로 보냄",
+  "JOB_PR_DM_BI_FULFILL_CURRENT": "Sales Plan 실적 기준 Fulfillment 현재분 DM_DNM_FULFILL 생성",
+  "JOB_PR_DM_BI_FULFILL_GEN": "Sales Plan 컷오프 기준 Fulfillment DM_DNM_FULFILL 생성",
+  "JOB_PR_DM_BI_FULFILL_VMI": "MKT FCST 컷오프 기준 VMI Fulfillment DM_DNM_FULFILL 생성",
+  "JOB_PR_DM_BPS_INTERFACE": "Metal Link 판가 컷오프 뒤 Sales Plan, 기타 판매, Metal Link 판가를 BPS 송신 테이블 3개로 보냄",
+  "JOB_PR_DM_CHECK_BEFOREHAND_SMS_SEND": "DM 배치 미실행, 오류 JOB 확인 뒤 SMS 발송. 5분마다",
+  "JOB_PR_DM_CUST_DEMAND_ANL_SUMMARY": "81 사업부 6개(81, UC, HM, ST, HD, HG) 고객 수요 요약 DM_CUST_DEMAND_ANL_SUMMARY 생성",
+  "JOB_PR_DM_CUST_MODEL_MAPPING_IF": "ERP 고객 모델 매핑 수신 뒤 DM_CUST_MODEL_MAPPING_M 저장",
+  "JOB_PR_DM_CUTOFF_DATA_CLEANSING": "주간 컷오프 보관 기간이 지난 컷오프, 버전 데이터 정리",
+  "JOB_PR_DM_DNM_EDI_CALLOFF": "EDI Call-off 수신 뒤 고객 FCST 이력 DM_PLN_CUST_FCST_H 기록. 하루 여러 번",
+  "JOB_PR_DM_DNM_EDI_CUTOFF": "EDI Call-off 일 컷오프 DM_DNM_EDI_CALLOFF_ITEM_C 생성. 매일 06:15",
+  "JOB_PR_DM_DNM_ERP_EDI_MST_SUMMARY_MAIL_SEND": "ERP EDI 기준 정보 누락 요약 메일 발송. 매일 08:00",
+  "JOB_PR_DM_DNM_ESS_MAIL": "ESS 메일 발송 JOB. 단계 PR_DM_DNM_ESS_MAIL_SEND 가 TO-BE 객체에 없음(확인 필요)",
+  "JOB_PR_DM_DNM_EXCHANGE_RATE_MAIL_SEND": "환율 DM_MST_EXCHANGE_RATE 등록 현황 메일 발송. 수 23:40",
+  "JOB_PR_DM_DNM_SALES_RESULT": "ERP 매출 실적 수신 뒤 DM_DNM_SALES_RESULT_IF 저장. 하루 여러 번",
+  "JOB_PR_DM_HI_RATIO_CREATE_BATCH": "HI 고객 FCST 입력, MKT FCST 변경, 매출 입력 지표 3개 생성",
+  "JOB_PR_DM_HI_STANDARD_CREATE_BATCH": "HI 사이트 품목 매핑 DM_HI_SITE_ITEM_MAPPING 생성. 매일 04:00",
+  "JOB_PR_DM_IF_CHECK_SMS_SEND": "ERP 수신 테이블 3개 수신 여부 확인 뒤 SMS 발송. 1시간마다",
+  "JOB_PR_DM_MST_CUST_FCST_WEEKLY_ROLLING_MON_TOTAL": "월요일 주간 롤링 9단계. 고객 FCST 롤링, MKT FCST, Sales Plan 결과 이동, 81, 82 MKT FCST 롤링",
+  "JOB_PR_DM_MST_EDI_CUST_MATERIAL_INFO": "ERP EDI 고객 자재 정보 수신 뒤 DM_MST_EDI_CUST_MATERIAL_INFO 저장. 1시간마다",
+  "JOB_PR_DM_MST_EDI_UNLOADING_POINT": "ERP EDI 하역지 수신 뒤 DM_MST_EDI_UNLOADING_POINT 저장. 1시간마다",
+  "JOB_PR_DM_MST_FINAL_ITEM_BOM_UPDATE_BATCH": "최종 품목 BOM 기준으로 SCM_MST_SITE_ITEM 갱신. 1시간마다",
+  "JOB_PR_DM_PLN_ESS_VMI_REFRESH": "ESS VMI MKT FCST 갱신. 월 07:50, 08:50",
+  "JOB_PR_DM_SM_JOB": "NERP RFC 호출 뒤 자재 문서 SCM_DNM_MAT_DOCUMENT 반영. 일요일 4회",
+  "JOB_PR_DM_SSP_SYNC": "SSP 출하 확정, 출고 실적 기준 DM_PLN_MKT_FCST_CONFIRM 동기화",
+  "JOB_PR_DM_TO_XIF_DM_SSPM_CELL_CAR_S": "사이트 품목 Cell Car 정보를 XIF_DM_SSPM_CELL_CAR_S_SN 으로 보냄",
+  "JOB_PR_DM_UNLOGIN_MAIL_SEND": "3개월 미접속자 권한 회수 메일 발송. 매일 04:00",
+  "JOB_RFC_PR_DM_PLN_XIF_ERP_MDF_TO_DM_MDF_RESULT": "NERP RFC 로 MDF 수신 뒤 DM_PLN_MDF_RESULT 저장. 매일 07:00",
+  "JOB_RFC_XIF_ERP_MATERIAL_DOCUMENT_DM_R": "NERP RFC 로 자재 문서 수신 뒤 SCM_DNM_MAT_DOCUMENT 이동. 매일 07:15",
+  "JOB_SCMPROD_PLAN_FINAL_40_CREATION": "40 사업부 SCP 계획 엔진 제어 PR_SCP_ENG_CONTROL 뒤 MKT FCST 수량 균형 생성",
+  "JOB_SCMPROD_PLAN_FINAL_81_CREATION": "81 사업부 SCP 계획 엔진 제어 PR_SCP_ENG_CONTROL 뒤 MKT FCST 수량 균형 생성",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_40": "MKT FCST 주간 컷오프(MF_W). 대상 40 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_82": "MKT FCST 주간 컷오프(MF_W). 대상 82 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TOTAL_MOBILE": "MKT FCST 일 컷오프(MF_D) 사업부별 단계 실행. 40 사업부 판가 반영 단계 포함",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_2": "MKT FCST 주간 컷오프(MF_W). 대상 81 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HD": "MKT FCST 주간 컷오프(MF_W). 대상 81_HD 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HG": "MKT FCST 주간 컷오프(MF_W). 대상 81_HG 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HM": "MKT FCST 주간 컷오프(MF_W). 대상 81_HM 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_ST": "MKT FCST 주간 컷오프(MF_W). 대상 81_ST 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_UC": "MKT FCST 주간 컷오프(MF_W). 대상 81_UC 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST": "SCM FCST 주간 컷오프(SF_W). 대상 40 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81": "SCM FCST 주간 컷오프(SF_W). 대상 81 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_HD": "SCM FCST 주간 컷오프(SF_W). 대상 81_HD 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_HG": "SCM FCST 주간 컷오프(SF_W). 대상 81_HG 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_HM": "SCM FCST 주간 컷오프(SF_W). 대상 81_HM 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_ST": "SCM FCST 주간 컷오프(SF_W). 대상 81_ST 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_UC": "SCM FCST 주간 컷오프(SF_W). 대상 81_UC 사업부",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_TOTAL": "MKT FCST 일 컷오프(MF_D) 사업부별 단계 실행. 40 사업부 판가 반영 단계 포함",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40": "40 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81": "81 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성, 판가 없는 RTF 메일",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HD": "81_HD 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성, 판가 없는 RTF 메일",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HG": "81_HG 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성, 판가 없는 RTF 메일",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HM": "81_HM 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성, 판가 없는 RTF 메일",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_ST": "81_ST 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성, 판가 없는 RTF 메일",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_UC": "81_UC 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성, 판가 없는 RTF 메일",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_82": "82 사업부 Sales Plan 컷오프. RTF 확인, 수량 균형 생성, 판가 없는 RTF 메일"
+ },
+ "tableNotes": {
+  "DM_PLN_AUTO_PR_CHECK": "PR Request 자동 메일 대상 점검 결과",
+  "DM_PLN_BP_FCST": "사업 계획 수량, 금액",
+  "DM_PLN_BP_FCST_C": "사업 계획 컷오프본",
+  "DM_PLN_BP_FCST_C_KEEP": "DM_PLN_BP_FCST 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_BP_FCST_H": "DM_PLN_BP_FCST 변경 이력",
+  "DM_PLN_BP_FCST_REPORT_C": "사업 계획 Report 버전",
+  "DM_PLN_CFM_MKT_DEMAND_PLAN": "확정 MKT 수요 계획",
+  "DM_PLN_CFM_MKT_DEMAND_PLAN_C": "확정 MKT 수요 계획 컷오프 버전",
+  "DM_PLN_CFM_MKT_DEMAND_PLAN_C_KEEP": "DM_PLN_CFM_MKT_DEMAND_PLAN 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_CFM_MKT_DEMAND_PLAN_H": "DM_PLN_CFM_MKT_DEMAND_PLAN 변경 이력",
+  "DM_PLN_CFM_SELLING_PRICE": "확정 판가",
+  "DM_PLN_CFM_SELLING_PRICE_C": "확정 판가 컷오프 버전",
+  "DM_PLN_CFM_SELLING_PRICE_C_KEEP": "DM_PLN_CFM_SELLING_PRICE 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_CFM_SELLING_PRICE_H": "DM_PLN_CFM_SELLING_PRICE 변경 이력",
+  "DM_PLN_CUSTOMER_PSI": "고객 FCST 업로드 PSI",
+  "DM_PLN_CUSTOMER_PSI_H": "DM_PLN_CUSTOMER_PSI 변경 이력",
+  "DM_PLN_CUST_FCST_H": "고객 FCST 버전 기록, DMF0053 조회 원천",
+  "DM_PLN_DEMANDID_PEGGING": "수요 ID 페깅",
+  "DM_PLN_MDF_RESULT": "ERP MDF 실적",
+  "DM_PLN_MKT_FCST": "MKT FCST 수량",
+  "DM_PLN_MKT_FCST_C": "MKT FCST 수량 컷오프 버전",
+  "DM_PLN_MKT_FCST_CONFIRM": "SSP 동기화 확정 수주와 출하, 매출 실적",
+  "DM_PLN_MKT_FCST_C_KEEP": "DM_PLN_MKT_FCST 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_MKT_FCST_H": "DM_PLN_MKT_FCST 변경 이력",
+  "DM_PLN_MKT_FCST_RESULT": "MKT FCST 지난 주차 실적",
+  "DM_PLN_MKT_FCST_RESULT_C": "MKT FCST 지난 주차 실적 컷오프 버전",
+  "DM_PLN_MKT_FCST_RESULT_C_KEEP": "DM_PLN_MKT_FCST_RESULT 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_NET_DEMAND": "순수요",
+  "DM_PLN_PR_DETAIL": "PR Request 상세",
+  "DM_PLN_SALES_ETC_PLAN": "기타 매출 계획",
+  "DM_PLN_SALES_ETC_PLAN_C": "기타 매출 계획 컷오프 버전",
+  "DM_PLN_SALES_ETC_PLAN_H": "DM_PLN_SALES_ETC_PLAN 변경 이력",
+  "DM_PLN_SALES_ETC_REPORT_C": "기타 매출 Report 버전",
+  "DM_PLN_SALES_ETC_REPORT_H": "DM_PLN_SALES_ETC_REPORT 변경 이력",
+  "DM_PLN_SALES_PLAN": "Sales Plan 수량, 금액",
+  "DM_PLN_SALES_PLAN_C": "Sales Plan 수량, 금액 컷오프 버전",
+  "DM_PLN_SALES_PLAN_C_KEEP": "DM_PLN_SALES_PLAN 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_SALES_PLAN_H": "DM_PLN_SALES_PLAN 변경 이력",
+  "DM_PLN_SALES_PLAN_REPORT_C": "Sales Report 버전",
+  "DM_PLN_SALES_PLAN_REPORT_C_KEEP": "DM_PLN_SALES_PLAN_REPORT 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_SALES_PLAN_REPORT_H": "Sales Report 변경 이력",
+  "DM_PLN_SALES_PLAN_RESULT": "Sales Plan 지난 주차 실적",
+  "DM_PLN_SALES_PLAN_RESULT_C": "Sales Plan 지난 주차 실적 컷오프 버전",
+  "DM_PLN_SALES_PLAN_RESULT_C_KEEP": "DM_PLN_SALES_PLAN_RESULT 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "DM_PLN_SALES_REPORT_EXCHANGE_C": "Sales Report 버전별 환율",
+  "DM_MST_BUCKET_CONVERSION": "Sales Site별 버킷 변환 기준",
+  "DM_MST_CONTRIBUTE_RATIO_DTL": "기여율 상세",
+  "DM_MST_CONTRIBUTE_RATIO_MST": "기여율 마스터",
+  "DM_MST_CONTRIBUTE_VER": "기여율 버전",
+  "DM_MST_CUSTOMER_FCST": "고객 FCST 기준",
+  "DM_MST_CUSTOMER_FCST_C": "고객 FCST 기준 컷오프 버전",
+  "DM_MST_CUSTOMER_MODEL": "고객 모델 매핑",
+  "DM_MST_EDI_CUST_MATERIAL_INFO": "ERP EDI 고객 자재 정보",
+  "DM_MST_EDI_UNLOADING_POINT": "ERP EDI 하역지 정보",
+  "DM_MST_EXCHANGE_RATE": "환율",
+  "DM_MST_EXCHANGE_RATE_C": "환율 컷오프 버전",
+  "DM_MST_EXCHANGE_RATE_H": "환율 변경 이력",
+  "DM_MST_VERSION": "DM 버전 목록(VERSION_NO, VERSION_TYPE)",
+  "SCM_MST_FUTURE_PRICE": "판가",
+  "SCM_MST_FUTURE_PRICE_C": "판가 컷오프 버전",
+  "SCM_MST_FUTURE_PRICE_C_KEEP": "SCM_MST_FUTURE_PRICE 컷오프 장기 보관, PR_DM_CUTOFF_DATA_CLEANSING 이 옮김",
+  "SCM_MST_FUTURE_PRICE_H": "SCM_MST_FUTURE_PRICE 변경 이력",
+  "SCM_MST_FUTURE_PRICE_MDL_GR": "모델 그룹별 판가",
+  "SCM_MST_LOCATION": "위치 마스터",
+  "SCM_MST_PLAN_DETAIL": "SCP 계획 기준 상세",
+  "SCM_MST_SITE": "Sales Site 마스터",
+  "SCM_MST_SITE_CUSTOMER": "Sales Site별 고객",
+  "SCM_MST_SITE_H": "SCM_MST_SITE 변경 이력",
+  "SCM_MST_SITE_ITEM": "Sales Site별 프로젝트 모델",
+  "SCM_MST_SITE_ITEM_H": "SCM_MST_SITE_ITEM 변경 이력",
+  "DM_BP_EXCHANGE_RATE": "사업 계획 환율",
+  "DM_BP_EXCHANGE_RATE_C": "사업 계획 환율 컷오프본",
+  "DM_CUST_MODEL_MAPPING_M": "N:N 고객 모델 매핑",
+  "DM_HI_CUST_FCST_INPUT": "HI 고객 FCST 입력 집계",
+  "DM_HI_MKT_FCST_CHANGE": "HI MKT FCST 변동 집계",
+  "DM_HI_SALES_INPUT": "HI 매출 입력 집계",
+  "DM_HI_SITE_ITEM_MAPPING": "HI Site 품목 매핑",
+  "DM_HI_SITE_ITEM_MAPPING_ROWDATA": "HI Site 품목 매핑 원 데이터",
+  "DM_MDF_VERSION": "Report 버전 목록",
+  "SCP_OPMZ_PLAN_CTRL_ACTV_M": "SCP 계획 엔진 제어 활동",
+  "SCP_OPMZ_PLAN_CTRL_ACTV_RUN_M": "SCP 계획 엔진 제어 실행 이력",
+  "SCP_OPMZ_PLAN_M": "SCP 계획 엔진 계획 마스터",
+  "DM_ANL_KPI_RTF_SALES": "RTF 대비 매출 KPI",
+  "DM_ANL_KPI_SALES_ACCURACY": "매출 계획 정확도 KPI",
+  "DM_ANL_KPI_SUMMARY": "KPI 요약",
+  "DM_ANL_MKT_PSI": "고객수요증감분석 기초값",
+  "DM_ANL_MKT_PSI_DETAIL": "고객수요증감분석 상세",
+  "DM_CUST_DEMAND_ANL_SUMMARY": "자동차 사업부 고객수요분석 요약",
+  "DM_BPS_METAL_LINK_PRICE": "Metal Link 판가",
+  "DM_BPS_METAL_LINK_PRICE_C": "메탈 연동 판가 컷오프, DMF0074 조회 원천",
+  "DM_BPS_METAL_LINK_PRICE_H": "Metal Link 판가 변경 이력",
+  "DM_DNM_EDI_CALLOFF_ITEM_C": "EDI Call-off 품목 컷오프 버전",
+  "DM_DNM_FULFILL": "BI 공급 충족 데이터",
+  "DM_DNM_ITEM_CODE_CHANGE_HISTORY": "품목 코드 변경 이력",
+  "DM_DNM_SALES_RESULT_IF": "ERP 매출 실적",
+  "SCM_DNM_MAT_DOCUMENT": "ERP 자재 문서",
+  "SCM_DNM_MAT_DOCUMENT_H": "SCM_DNM_MAT_DOCUMENT 변경 이력",
+  "XIF_BPS_METAL_LINK_PRICE_S_SN": "BPS 송신 메탈 연동 판가",
+  "XIF_BPS_SALES_ETC_PLAN_S_SN": "BPS 송신 기타 매출 계획",
+  "XIF_BPS_SALES_PLAN_S_SN": "BPS 송신 Sales Plan",
+  "XIF_CUST_DEMAND_MAPPING_MST_R_SN": "ERP 수신 N:N 고객 수요 매핑",
+  "XIF_DM_ANL_MKT_PSI_DETAIL_DW_S_SN": "DW 송신 고객수요증감 상세",
+  "XIF_DM_ANL_MKT_PSI_DW_S_SN": "DW 송신 고객수요증감",
+  "XIF_DM_SSPM_CELL_CAR_S_SN": "EnSemble 송신 SSPM Cell 차량",
+  "XIF_ERP_EDI_CUST_MATERIAL_INFO_R_SN": "ERP 수신 EDI 고객 자재 정보",
+  "XIF_ERP_EDI_UNLOADING_POINT_R_SN": "ERP 수신 EDI 하역지",
+  "XIF_ERP_FI_MDF_R_SN": "ERP 수신 MDF 실적",
+  "XIF_ERP_MATERIAL_DOCUMENT_DM_R_SN": "ERP 수신 DM 자재 문서",
+  "XIF_ERP_MATERIAL_DOCUMENT_R_SN": "ERP 수신 자재 문서",
+  "XIF_ERP_SALES_RESULT_R_SN": "ERP 수신 매출 실적",
+  "XIF_PLM_ADJUSTED_MKT_FCST_R_SN": "PLM 조정 FCST 수신 I/F",
+  "XIF_PLM_DM_PLN_MKT_FCST_PLAN_S": "PLM 송신 MKT FCST",
+  "XIF_SCM_MST_PROJECT_4MCC_S_SN": "4MCC 프로젝트 송신 I/F",
+  "XIF_SCM_MST_SITE_4MCC_S_SN": "4MCC 사이트 송신 I/F",
+  "XIF_SCM_MST_SITE_ITEM_4MCC_S_SN": "4MCC 사이트 품목 송신 I/F"
+ },
+ "processOf": {
+  "JOB_DMF0070_AUTO_PR_REQUEST": "PR 자동 요청",
+  "JOB_DMF0070_AUTO_PR_REQUEST_MAIL": "PR 자동 요청",
+  "JOB_DMF0070_DIFF_QTY_MAIL_SEND_AUTO": "PR 자동 요청",
+  "JOB_LGCE_SCMPROD_PR_DM_PLN_ADJUSTED_MKT_FCST_R_TO_MKT_FCST": "인터페이스 수신",
+  "JOB_LGCE_SCMPROD_PR_DM_PLN_MKT_FCST_TO_XIF_PLM_PLAN_S": "인터페이스 송신",
+  "JOB_PR_DM_4MCC_SCM_MST": "기준 정보 동기화",
+  "JOB_PR_DM_ANL_KPI_RTF_SALES": "분석과 KPI",
+  "JOB_PR_DM_ANL_MKT_PSI_DATA": "분석과 KPI",
+  "JOB_PR_DM_BI_FULFILL_CURRENT": "분석과 KPI",
+  "JOB_PR_DM_BI_FULFILL_GEN": "분석과 KPI",
+  "JOB_PR_DM_BI_FULFILL_VMI": "분석과 KPI",
+  "JOB_PR_DM_BPS_INTERFACE": "인터페이스 송신",
+  "JOB_PR_DM_CHECK_BEFOREHAND_SMS_SEND": "메일과 SMS 알림",
+  "JOB_PR_DM_CUST_DEMAND_ANL_SUMMARY": "분석과 KPI",
+  "JOB_PR_DM_CUST_MODEL_MAPPING_IF": "기준 정보 동기화",
+  "JOB_PR_DM_CUTOFF_DATA_CLEANSING": "MKT FCST 컷오프",
+  "JOB_PR_DM_DNM_EDI_CALLOFF": "인터페이스 수신",
+  "JOB_PR_DM_DNM_EDI_CUTOFF": "MKT FCST 컷오프",
+  "JOB_PR_DM_DNM_ERP_EDI_MST_SUMMARY_MAIL_SEND": "메일과 SMS 알림",
+  "JOB_PR_DM_DNM_ESS_MAIL": "메일과 SMS 알림",
+  "JOB_PR_DM_DNM_EXCHANGE_RATE_MAIL_SEND": "메일과 SMS 알림",
+  "JOB_PR_DM_DNM_SALES_RESULT": "인터페이스 수신",
+  "JOB_PR_DM_HI_RATIO_CREATE_BATCH": "분석과 KPI",
+  "JOB_PR_DM_HI_STANDARD_CREATE_BATCH": "기준 정보 동기화",
+  "JOB_PR_DM_IF_CHECK_SMS_SEND": "메일과 SMS 알림",
+  "JOB_PR_DM_MST_CUST_FCST_WEEKLY_ROLLING_MON_TOTAL": "주간 롤링 시작",
+  "JOB_PR_DM_MST_EDI_CUST_MATERIAL_INFO": "기준 정보 동기화",
+  "JOB_PR_DM_MST_EDI_UNLOADING_POINT": "기준 정보 동기화",
+  "JOB_PR_DM_MST_FINAL_ITEM_BOM_UPDATE_BATCH": "기준 정보 동기화",
+  "JOB_PR_DM_PLN_ESS_VMI_REFRESH": "주간 롤링 시작",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_40": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_82": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TOTAL_MOBILE": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_2": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HD": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HG": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HM": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_ST": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_UC": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_HD": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_HG": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_HM": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_ST": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST_81_UC": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_TOTAL": "MKT FCST 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40": "Sales Plan 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81": "Sales Plan 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HD": "Sales Plan 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HG": "Sales Plan 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_HM": "Sales Plan 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_ST": "Sales Plan 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_UC": "Sales Plan 컷오프",
+  "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_82": "Sales Plan 컷오프",
+  "JOB_PR_DM_SM_JOB": "인터페이스 수신",
+  "JOB_PR_DM_SSP_SYNC": "인터페이스 수신",
+  "JOB_PR_DM_TO_XIF_DM_SSPM_CELL_CAR_S": "인터페이스 송신",
+  "JOB_PR_DM_UNLOGIN_MAIL_SEND": "메일과 SMS 알림",
+  "JOB_RFC_PR_DM_PLN_XIF_ERP_MDF_TO_DM_MDF_RESULT": "인터페이스 수신",
+  "JOB_RFC_XIF_ERP_MATERIAL_DOCUMENT_DM_R": "인터페이스 수신",
+  "JOB_SCMPROD_PLAN_FINAL_40_CREATION": "계획 확정(SCP 연계)",
+  "JOB_SCMPROD_PLAN_FINAL_81_CREATION": "계획 확정(SCP 연계)"
+ },
+ "processOrder": [
+  "기준 정보 동기화",
+  "인터페이스 수신",
+  "주간 롤링 시작",
+  "MKT FCST 컷오프",
+  "Sales Plan 컷오프",
+  "계획 확정(SCP 연계)",
+  "인터페이스 송신",
+  "분석과 KPI",
+  "PR 자동 요청",
+  "메일과 SMS 알림"
+ ],
+ "chapters": [
+  {
+   "id": "C1",
+   "title": "1. 업무 개요",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "1. 업무 개요",
+     "src": [
+      "Doc/OpsManual/DM/facts/screens.csv",
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "lines": [
+      "맡는 업무: 고객 수요(MKT FCST)와 판매 계획(Sales Plan) 입력, 주간 컷오프, 판가와 환율 관리",
+      "화면: 사용 메뉴 29개. Demand Master 12개, Demand Plan 11개, Waterfall 5개, Report 1개",
+      "배치: TO-BE JOB 63개(SCM_MGR DBMS_SCHEDULER), 단계 113개, 실행 프로시저 54개",
+      "받는 데이터: ERP EDI Call-off, 매출 실적, 자재 문서, MDF, PLM 조정 FCST, SSP 출하 확정",
+      "보내는 데이터: PLM 계획, BPS 판매 계획과 Metal Link 판가, 4MCC 기준 정보, SSPM Cell Car, DW MKT PSI",
+      "SCP 연계: PLAN_FINAL JOB이 PR_SCP_ENG_CONTROL 로 SCP_OPMZ_PLAN_M 저장 뒤 MKT FCST 수량 균형 생성",
+      "사용 여부: 사내 TO-BE JOB ENABLED 값은 운영 반영 전 값임. 운영 사용 여부 미확인"
+     ]
+    },
+    {
+     "kind": "flow",
+     "title": "1. 업무 개요 - 주간 계획 주기",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv"
+     ],
+     "nodes": [
+      {
+       "id": "w1",
+       "label": "주간 롤링",
+       "sub": "월 00:00 MON_TOTAL 9단계. 고객 FCST, 결과 이동"
+      },
+      {
+       "id": "w2",
+       "label": "MKT FCST 컷오프",
+       "sub": "월 15:00~화 11:50 MF_W, SF_W 사업부별"
+      },
+      {
+       "id": "w3",
+       "label": "계획 확정",
+       "sub": "화 15:30, 목 01:30 40 사업부, 수 06:20 81 사업부"
+      },
+      {
+       "id": "w4",
+       "label": "Sales Plan 컷오프",
+       "sub": "화 18:00 40, 수, 금 81 사업부, 목, 금 03:00 82"
+      },
+      {
+       "id": "w5",
+       "label": "BPS 송신",
+       "sub": "금 22:00 BPS_INTERFACE"
+      },
+      {
+       "id": "w6",
+       "label": "컷오프 정리",
+       "sub": "토 00:45 CUTOFF_DATA_CLEANSING"
+      }
+     ],
+     "edges": [
+      {
+       "from": "w1",
+       "to": "w2",
+       "label": ""
+      },
+      {
+       "from": "w2",
+       "to": "w3",
+       "label": ""
+      },
+      {
+       "from": "w3",
+       "to": "w4",
+       "label": ""
+      },
+      {
+       "from": "w4",
+       "to": "w5",
+       "label": ""
+      },
+      {
+       "from": "w5",
+       "to": "w6",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "MKT FCST 일 컷오프(MF_D) = 화 00:15 TUE_TOTAL, 일, 수, 목, 금, 토 00:00 TOTAL_MOBILE",
+      "시각 = TO-BE JOB 스케줄(ALL_SCHEDULER_JOBS, ALL_SCHEDULER_SCHEDULES)"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "CT",
+   "title": "TO-BE 변경 사항과 개선점",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "TO-BE 변경 사항과 개선점",
+     "src": [
+      "Doc/OpsManual/DM/facts/tobe_rules.csv"
+     ],
+     "lines": [
+      "조회 즉시 편집: 편집 버튼 없이 조회 직후 편집 가능 칸 노랑 표시(CR-084, CR-093, CR-103)",
+      "개인화 컬럼: 사용자별 컬럼, Measure 구성과 순서 저장. 없으면 사업부 기본 구성(CR-001, CR-058)",
+      "조회 조건 저장: Condition(F6) 저장, Reset Condition 은 서버 저장본만 삭제(CR-029, CR-094)",
+      "저장 검증: 필수 칸 빈 행 저장 차단, 어떤 칸이 필수인지 안내(CR-090, CR-091)",
+      "엑셀 업로드: 파일 1개, 양식 머리글 대조 뒤 불일치면 차단, 행별 원인 메시지(CR-017, CR-035, CR-036)",
+      "공통 버튼: 권한 있는 버튼만 노출, 권한 = 사용자 보유 그룹 합집합(CR-070, CR-102)",
+      "배치: Oracle DBMS_SCHEDULER JOB 63개로 바꿈. 이력 = USER_SCHEDULER_JOB_RUN_DETAILS"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "TO-BE 변경 사항과 개선점 - 운영 영향",
+     "src": [
+      "Doc/OpsManual/DM/facts/tobe_rules.csv",
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ],
+     "columns": [
+      "구분",
+      "AS-IS",
+      "TO-BE",
+      "운영 영향"
+     ],
+     "rows": [
+      [
+       "화면 편집",
+       "Edit(F2) 버튼으로 편집 모드",
+       "조회 직후 편집(CR-084)",
+       "편집 모드 문의 없어짐"
+      ],
+      [
+       "컬럼 구성",
+       "화면 고정 컬럼",
+       "사용자별 개인화, 사업부 기본(CR-001)",
+       "컬럼 안 보임 문의 = 컬럼 설정 먼저 확인"
+      ],
+      [
+       "조회 조건",
+       "화면 닫으면 초기화",
+       "조회 조건 저장(CR-029)",
+       "조건 이상 문의 = Reset Condition 안내"
+      ],
+      [
+       "메뉴 노출",
+       "권한 그룹 1개 기준",
+       "보유 그룹 합집합(CR-102), 연결 메뉴만(CR-026)",
+       "권한 = SYS0008 Group Menu 확인"
+      ],
+      [
+       "배치 실행",
+       "AS-IS 배치 스케줄러",
+       "DBMS_SCHEDULER JOB 63개",
+       "재실행 = DBMS_SCHEDULER.RUN_JOB"
+      ],
+      [
+       "배치 로그",
+       "AS-IS JOB 이력",
+       "SCM_SYS_LOG_BATCH, JOB_RUN_DETAILS",
+       "로그 위치 2곳 확인"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C2",
+   "title": "2. 전체 업무 흐름",
+   "slides": [
+    {
+     "kind": "flow",
+     "title": "2. 전체 업무 흐름",
+     "src": [
+      "Doc/OpsManual/DM/facts/flow_edges.csv",
+      "Doc/OpsManual/DM/facts/tables.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv",
+      "Doc/OpsManual/DM/facts/jobs.csv"
+     ],
+     "nodes": [
+      {
+       "id": "n1",
+       "label": "기준 정보 등록",
+       "sub": "DMF0004, DMF0005, DMF0006, DMF0007 / JOB_PR_DM_4MCC_SCM_MST"
+      },
+      {
+       "id": "n2",
+       "label": "판가, 환율",
+       "sub": "DMF0020, DMF0082, DMF0083"
+      },
+      {
+       "id": "n3",
+       "label": "MKT FCST 입력",
+       "sub": "DMF0003, DMF0014 / JOB_PR_DM_DNM_EDI_CALLOFF"
+      },
+      {
+       "id": "n4",
+       "label": "MKT FCST 컷오프",
+       "sub": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_TOTAL"
+      },
+      {
+       "id": "n5",
+       "label": "Sales Plan",
+       "sub": "DMF0021 / JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81"
+      },
+      {
+       "id": "n6",
+       "label": "결과 전달",
+       "sub": "JOB_PR_DM_BPS_INTERFACE, PLM, SCP PLAN_FINAL"
+      },
+      {
+       "id": "n7",
+       "label": "분석",
+       "sub": "DMF0035, DMF0044, DMF0048 / JOB_PR_DM_ANL_MKT_PSI_DATA"
+      }
+     ],
+     "edges": [
+      {
+       "from": "n1",
+       "to": "n3",
+       "label": "DM_MST_CUSTOMER_FCST"
+      },
+      {
+       "from": "n2",
+       "to": "n5",
+       "label": "DM_PLN_CFM_SELLING_PRICE"
+      },
+      {
+       "from": "n3",
+       "to": "n4",
+       "label": "DM_PLN_MKT_FCST"
+      },
+      {
+       "from": "n4",
+       "to": "n5",
+       "label": "DM_PLN_MKT_FCST_C"
+      },
+      {
+       "from": "n5",
+       "to": "n6",
+       "label": "DM_PLN_SALES_PLAN_C"
+      },
+      {
+       "from": "n4",
+       "to": "n7",
+       "label": "DM_PLN_MKT_FCST_RESULT_C"
+      },
+      {
+       "from": "n5",
+       "to": "n7",
+       "label": "DM_PLN_SALES_PLAN_RESULT_C"
+      }
+     ],
+     "notes": [
+      "PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING 이 DM_PLN_MKT_FCST 를 읽어 DM_PLN_MKT_FCST_C 저장함",
+      "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE 가 DM_PLN_MKT_FCST_C 를 읽어 DM_PLN_SALES_PLAN_C 저장함",
+      "PR_DM_BPS_SALES_PLAN_S 가 DM_PLN_SALES_PLAN_C 를 읽어 XIF_BPS_SALES_PLAN_S_SN 저장함"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C3",
+   "title": "3. 프로세스 구조",
+   "slides": [
+    {
+     "kind": "divider",
+     "title": "기준 정보 동기화"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 기준 정보 동기화",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "ERP 매핑 수신",
+       "sub": "매일 11:10 PR_DM_CUST_MODEL_MAPPING_IF → DM_CUST_MODEL_MAPPING_M"
+      },
+      {
+       "id": "s1",
+       "label": "EDI 기준 수신",
+       "sub": "1시간마다 EDI 고객 자재, 하역지 2개 JOB"
+      },
+      {
+       "id": "s2",
+       "label": "BOM 반영",
+       "sub": "1시간마다 SCM_MST_SITE_ITEM 갱신"
+      },
+      {
+       "id": "s3",
+       "label": "HI 매핑",
+       "sub": "매일 04:00 DM_HI_SITE_ITEM_MAPPING"
+      },
+      {
+       "id": "s4",
+       "label": "4MCC 송신",
+       "sub": "매일 00:30 XIF_SCM_MST_*_4MCC_S_SN 3개"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "label": ""
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "관련 화면 = DMF0004, DMF0005, DMF0006, DMF0008, DMF0072"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - 기준 정보 동기화 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "SCM_SYS_LOG_BATCH PROGRAM_NAME 별 ERROR",
+       "0건",
+       "수신 I/F 테이블 건수 확인 뒤 JOB RUN_JOB"
+      ],
+      [
+       "DMF0008 EDI 기준 정보 검증 화면",
+       "누락 0건",
+       "DMF0008 에서 사이트 품목 보정"
+      ],
+      [
+       "XIF_SCM_MST_*_4MCC_S_SN 송신 건수",
+       "매일 00:30 이후 증가",
+       "JOB_PR_DM_4MCC_SCM_MST 재실행"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "인터페이스 수신"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 인터페이스 수신",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "NERP RFC 호출",
+       "sub": "PR_SCM_SYS_RFC_CALL_NERP. 07:00 MDF, 07:15 자재 문서"
+      },
+      {
+       "id": "s1",
+       "label": "XIF 수신 테이블",
+       "sub": "XIF_ERP_FI_MDF_R_SN, XIF_ERP_MATERIAL_DOCUMENT_DM_R_SN"
+      },
+      {
+       "id": "s2",
+       "label": "DM 테이블 이동",
+       "sub": "DM_PLN_MDF_RESULT, SCM_DNM_MAT_DOCUMENT"
+      },
+      {
+       "id": "s3",
+       "label": "EDI Call-off",
+       "sub": "매일 03:20 외 여러 번 DM_PLN_CUST_FCST_H 기록"
+      },
+      {
+       "id": "s4",
+       "label": "수신 확인 SMS",
+       "sub": "1시간마다 PR_DM_IF_CHECK_SMS_SEND"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "label": ""
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "매출 실적 = JOB_PR_DM_DNM_SALES_RESULT 하루 여러 번",
+      "PLM 조정 FCST = 1시간마다, SSP 동기화 = 월 07:50"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - 인터페이스 수신 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "XIF_ERP_SALES_RESULT_R_SN 등 수신 3개 테이블",
+       "SMS 미발송",
+       "NERP RFC 로그 SCM_SYS_LOG_BATCH 확인"
+      ],
+      [
+       "DM_PLN_MDF_RESULT CREATE_DATE",
+       "매일 07:00 이후 당일분",
+       "JOB_RFC_PR_DM_PLN_XIF_ERP_MDF_TO_DM_MDF_RESULT RUN_JOB"
+      ],
+      [
+       "SCM_DNM_MAT_DOCUMENT 건수",
+       "매일 07:15 이후 증가",
+       "JOB_RFC_XIF_ERP_MATERIAL_DOCUMENT_DM_R 2단계 순서로 재실행"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "주간 롤링 시작"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 주간 롤링 시작",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "고객 FCST 롤링",
+       "sub": "월 00:00 1단계 DM_MST_CUSTOMER_FCST_C"
+      },
+      {
+       "id": "s1",
+       "label": "결과 이동",
+       "sub": "2~5단계 81, 82 MKT FCST, Sales Plan 결과 이동"
+      },
+      {
+       "id": "s2",
+       "label": "MKT FCST 롤링",
+       "sub": "6~7단계 81, 82 사업부"
+      },
+      {
+       "id": "s3",
+       "label": "40 판가 반영",
+       "sub": "8단계 PR_DM_PLN_CFM_TO_MKT_FCST_ALL"
+      },
+      {
+       "id": "s4",
+       "label": "ESS VMI 갱신",
+       "sub": "월 07:50, 08:50 PR_DM_PLN_ESS_VMI_REFRESH"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "label": ""
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "JOB = JOB_PR_DM_MST_CUST_FCST_WEEKLY_ROLLING_MON_TOTAL 9단계, 단계마다 PR_SCM_SYS_LOG_BATCH 기록"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - 주간 롤링 시작 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "DM_MST_CUSTOMER_FCST_C 최신 CUTOFF_DATE",
+       "이번 주 월요일",
+       "MON_TOTAL 1단계부터 다시 실행"
+      ],
+      [
+       "JOB_RUN_DETAILS STATUS",
+       "SUCCEEDED",
+       "실패 단계 확인 뒤 그 단계 프로시저 직접 실행"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "MKT FCST 컷오프"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - MKT FCST 컷오프",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "월 MF_W 40, 82",
+       "sub": "월 15:00, 16:00 사업부 주간 컷오프"
+      },
+      {
+       "id": "s1",
+       "label": "화 MF_D",
+       "sub": "화 00:15 TUE_TOTAL 10단계. 전 사업부"
+      },
+      {
+       "id": "s2",
+       "label": "화 MF_W 81",
+       "sub": "04:00~04:10, 10:00~10:10 81 사업부 6개"
+      },
+      {
+       "id": "s3",
+       "label": "SF_W SCM FCST",
+       "sub": "월 17:30 40, 화 11:00~11:50 81 사업부 6개"
+      },
+      {
+       "id": "s4",
+       "label": "EDI 일 컷오프",
+       "sub": "매일 06:15 DM_DNM_EDI_CALLOFF_ITEM_C"
+      },
+      {
+       "id": "s5",
+       "label": "정리",
+       "sub": "토 00:45 CUTOFF_DATA_CLEANSING"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "label": ""
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "label": ""
+      },
+      {
+       "from": "s4",
+       "to": "s5",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "프로시저 = PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING. 결과 = DM_PLN_MKT_FCST_C, DM_PLN_MKT_FCST_RESULT_C",
+      "일 컷오프(MF_D) = 일, 수, 목, 금, 토 00:00 TOTAL_MOBILE 9단계"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - MKT FCST 컷오프 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "DM_PLN_MKT_FCST_C 사업부별 CUTOFF_TYPE MF_W 최신 CUTOFF_YYYYMMDD",
+       "이번 주 일자",
+       "그 사업부 JOB RUN_JOB"
+      ],
+      [
+       "DM_MST_VERSION VERSION_TYPE MF_W, SF_W",
+       "이번 주 버전 1건",
+       "DMF0035 버전 조회로 확인"
+      ],
+      [
+       "DM_DNM_EDI_CALLOFF_ITEM_C CUTOFF_YYYYMMDD",
+       "당일",
+       "JOB_PR_DM_DNM_EDI_CUTOFF RUN_JOB"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "Sales Plan 컷오프"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - Sales Plan 컷오프",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "RTF 확인",
+       "sub": "1단계 RTF Check, PR_SCM_SYS_LOG_BATCH"
+      },
+      {
+       "id": "s1",
+       "label": "수량 균형 생성",
+       "sub": "2단계 PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE"
+      },
+      {
+       "id": "s2",
+       "label": "판가 없는 RTF 메일",
+       "sub": "3단계 PR_DM_DNM_SALES_PRICE_EXIST_MAIL_SEND(40 제외)"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "사업부 JOB 8개: 40 화 18:00, 81 6개 수, 금, 82 목, 금 03:00",
+      "결과 = DM_PLN_SALES_PLAN_C, DM_PLN_SALES_PLAN_RESULT_C, DM_PLN_SALES_ETC_PLAN_C"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - Sales Plan 컷오프 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "DM_PLN_SALES_PLAN_C 사업부별 CUTOFF_TYPE SP_W 최신 CUTOFF_YYYYMMDD",
+       "이번 주 일자",
+       "그 사업부 JOB RUN_JOB"
+      ],
+      [
+       "판가 없는 RTF 메일 수신 건수",
+       "0건",
+       "DMF0020, DMF0082 판가 등록 뒤 3단계 다시 실행"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "계획 확정(SCP 연계)"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 계획 확정(SCP 연계)",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "SCP 엔진 제어",
+       "sub": "PR_SCP_ENG_CONTROL → SCP_OPMZ_PLAN_M, SCM_MST_PLAN_DETAIL"
+      },
+      {
+       "id": "s1",
+       "label": "MKT FCST 수량 균형",
+       "sub": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE → DM_PLN_MKT_FCST"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "40 사업부 = 화 15:30, 목 01:30 JOB_SCMPROD_PLAN_FINAL_40_CREATION",
+      "81 사업부 = 수 06:20 JOB_SCMPROD_PLAN_FINAL_81_CREATION"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - 계획 확정(SCP 연계) 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "SCP_OPMZ_PLAN_CTRL_ACTV_RUN_M 실행 이력",
+       "JOB 시각 이후 1건",
+       "SCP 담당과 엔진 상태 확인 뒤 RUN_JOB"
+      ],
+      [
+       "DM_PLN_CFM_MKT_DEMAND_PLAN 갱신 일자",
+       "JOB 시각 이후",
+       "Sales Plan 컷오프 완료 여부 먼저 확인"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "인터페이스 송신"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 인터페이스 송신",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "Metal Link 컷오프",
+       "sub": "금 22:00 PR_DM_METAL_LINK_CUTOFF"
+      },
+      {
+       "id": "s1",
+       "label": "BPS 송신",
+       "sub": "XIF_BPS_SALES_PLAN_S_SN, XIF_BPS_SALES_ETC_PLAN_S_SN"
+      },
+      {
+       "id": "s2",
+       "label": "Metal Link 송신",
+       "sub": "XIF_BPS_METAL_LINK_PRICE_S_SN"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "PLM = 매일 01:00 XIF_PLM_DM_PLN_MKT_FCST_PLAN_S_SN",
+      "SSPM Cell Car = 매일 06:40 XIF_DM_SSPM_CELL_CAR_S_SN"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - 인터페이스 송신 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "BPS 송신 3개 테이블 건수",
+       "금 22:00 이후 증가",
+       "Sales Plan 컷오프 결과 확인 뒤 JOB_PR_DM_BPS_INTERFACE RUN_JOB"
+      ],
+      [
+       "SCM_SYS_LOG_BATCH PR_DM_METAL_LINK_CUTOFF",
+       "ERROR 0건",
+       "DMF0074 Metal Link 판가 업로드 확인"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "분석과 KPI"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 분석과 KPI",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "MKT PSI",
+       "sub": "매일 06:00 DM_ANL_MKT_PSI, DW 송신"
+      },
+      {
+       "id": "s1",
+       "label": "RTF 판매 KPI",
+       "sub": "화 06:00 DM_ANL_KPI_RTF_SALES"
+      },
+      {
+       "id": "s2",
+       "label": "HI 지표",
+       "sub": "화 04:00 DM_HI_* 3개"
+      },
+      {
+       "id": "s3",
+       "label": "고객 수요 요약",
+       "sub": "수 08:00 81 사업부 6단계"
+      },
+      {
+       "id": "s4",
+       "label": "Fulfillment",
+       "sub": "매일 06:30, 07:00, 07:30, 23:30 DM_DNM_FULFILL"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "label": ""
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "분석 결과 조회 화면 = DMF0035, DMF0040, DMF0044, DMF0048, DMF0053"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - 분석과 KPI 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "DM_ANL_MKT_PSI LAST_UPDATE_DATE",
+       "당일 06:00 이후",
+       "JOB_PR_DM_ANL_MKT_PSI_DATA RUN_JOB"
+      ],
+      [
+       "DM_DNM_FULFILL DATA_TYPE 별 건수",
+       "JOB 3개 모두 당일분 있음",
+       "Sales Plan, MKT FCST 컷오프 결과 확인"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "PR 자동 요청"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - PR 자동 요청",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "PR 요청 생성",
+       "sub": "월 01:00 DMF0070_AUTO_PR_REQUEST → DM_PLN_PR_DETAIL"
+      },
+      {
+       "id": "s1",
+       "label": "PR 요청 메일",
+       "sub": "화 01:00 DM_PLN_AUTO_PR_CHECK 대상 메일"
+      },
+      {
+       "id": "s2",
+       "label": "수량 차이 메일",
+       "sub": "12시간마다 DMF0070_DIFF_QTY_MAIL_SEND_AUTO"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "PR 상세는 DMF0003, DMF0082 에서 조회함"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - PR 자동 요청 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "DM_PLN_AUTO_PR_CHECK 대상 건수",
+       "월 01:00 이후 생성",
+       "DMF0070_AUTO_PR_REQUEST 직접 실행"
+      ],
+      [
+       "SCM_ADM_SMS_MAIL_SEND_LOG SEND_MAIL_ERROR_LOG_DESC",
+       "빈 값",
+       "SYS0017 Mail Setup 수신자 확인"
+      ]
+     ]
+    },
+    {
+     "kind": "divider",
+     "title": "메일과 SMS 알림"
+    },
+    {
+     "kind": "flow",
+     "title": "3. 프로세스 구조 - 메일과 SMS 알림",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "s0",
+       "label": "배치 미실행 확인",
+       "sub": "5분마다 PR_DM_CHECK_BEFOREHAND_SMS_SEND"
+      },
+      {
+       "id": "s1",
+       "label": "오류 JOB 확인",
+       "sub": "PR_DM_CHECK_JOB_ERROR_SMS_SEND"
+      },
+      {
+       "id": "s2",
+       "label": "I/F 수신 확인",
+       "sub": "1시간마다 PR_DM_IF_CHECK_SMS_SEND"
+      },
+      {
+       "id": "s3",
+       "label": "기준 정보 메일",
+       "sub": "매일 08:00 EDI 요약, 수 23:40 환율"
+      },
+      {
+       "id": "s4",
+       "label": "미접속자 메일",
+       "sub": "매일 04:00 PR_DM_UNLOGIN_MAIL_SEND"
+      }
+     ],
+     "edges": [
+      {
+       "from": "s0",
+       "to": "s1",
+       "label": ""
+      },
+      {
+       "from": "s1",
+       "to": "s2",
+       "label": ""
+      },
+      {
+       "from": "s2",
+       "to": "s3",
+       "label": ""
+      },
+      {
+       "from": "s3",
+       "to": "s4",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "수신자 = SYS0017 Mail Setup, SCM0007 SMS Setup(SCM_ADM_RECIPIENT_* 테이블)",
+      "JOB_PR_DM_DNM_ESS_MAIL 단계 프로시저 TO-BE 객체 없음(확인 필요)"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "3. 프로세스 구조 - 메일과 SMS 알림 운영 포인트",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "확인",
+      "정상",
+      "이상일 때 조치"
+     ],
+     "rows": [
+      [
+       "SCM_ADM_SMS_MAIL_SEND_LOG SEND_DATE 최신",
+       "5분 안",
+       "JOB_PR_DM_CHECK_BEFOREHAND_SMS_SEND STATE 확인"
+      ],
+      [
+       "SEND_MAIL_ERROR_LOG_DESC",
+       "빈 값",
+       "수신자, 메일 서버 설정 확인"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C9",
+   "title": "9. 일상 운영 점검표",
+   "slides": [
+    {
+     "kind": "table",
+     "title": "9. 일상 운영 점검표 - 매일",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "주기",
+      "확인 시각",
+      "점검 항목",
+      "확인 쿼리",
+      "정상 기준",
+      "이상할 때 볼 곳"
+     ],
+     "rows": [
+      [
+       "일",
+       "08:30",
+       "JOB 상태",
+       "SELECT JOB_NAME, ENABLED, STATE, NEXT_RUN_DATE, FAILURE_COUNT FROM USER_SCHEDULER_JOBS WHERE JOB_NAME LIKE 'JOB%DM%' OR JOB_NAME LIKE 'JOB_DMF%'",
+       "STATE SCHEDULED, FAILURE_COUNT 0",
+       "로그와 모니터링 장 보는 순서"
+      ],
+      [
+       "일",
+       "08:30",
+       "당일 실패 실행",
+       "SELECT JOB_NAME, STATUS, ERROR#, ACTUAL_START_DATE, ADDITIONAL_INFO FROM USER_SCHEDULER_JOB_RUN_DETAILS WHERE ACTUAL_START_DATE >= TRUNC(SYSDATE) AND STATUS <> 'SUCCEEDED'",
+       "0행",
+       "ADDITIONAL_INFO, SCM_SYS_LOG_BATCH"
+      ],
+      [
+       "일",
+       "08:30",
+       "배치 오류 로그",
+       "SELECT PROGRAM_NAME, LOG_TYPE, SQL_ERR_CODE, SQL_ERR_MSG, EVENT_DATE FROM SCM_SYS_LOG_BATCH WHERE EVENT_DATE >= TRUNC(SYSDATE) AND LOG_TYPE = 'ERROR' ORDER BY EVENT_DATE DESC FETCH FIRST 50 ROWS ONLY",
+       "0행",
+       "PROGRAM_NAME 의 JOB 단계"
+      ],
+      [
+       "일",
+       "06:30",
+       "EDI 일 컷오프",
+       "SELECT MAX(CUTOFF_YYYYMMDD), COUNT(*) FROM DM_DNM_EDI_CALLOFF_ITEM_C WHERE CUTOFF_YYYYMMDD = TO_CHAR(SYSDATE,'YYYYMMDD')",
+       "당일 1건 이상",
+       "JOB_PR_DM_DNM_EDI_CUTOFF"
+      ],
+      [
+       "일",
+       "09:00",
+       "메일, SMS 발송 오류",
+       "SELECT USE_TYPE_CODE, SEND_DATE, SEND_MAIL_ERROR_LOG_DESC FROM SCM_ADM_SMS_MAIL_SEND_LOG WHERE SEND_DATE >= TRUNC(SYSDATE) AND SEND_MAIL_ERROR_LOG_DESC IS NOT NULL",
+       "0행",
+       "SYS0017, SCM0007 수신자"
+      ]
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "9. 일상 운영 점검표 - 주간",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "주기",
+      "확인 시각",
+      "점검 항목",
+      "확인 쿼리",
+      "정상 기준",
+      "이상할 때 볼 곳"
+     ],
+     "rows": [
+      [
+       "주",
+       "화 12:00",
+       "MKT FCST 주간 컷오프",
+       "SELECT DIVISION_ID, CUTOFF_TYPE, MAX(CUTOFF_YYYYMMDD) FROM DM_PLN_MKT_FCST_C WHERE CUTOFF_TYPE IN ('MF_W','MF_D','SF_W') GROUP BY DIVISION_ID, CUTOFF_TYPE",
+       "사업부별 MF_W, SF_W 이번 주 일자",
+       "MKT FCST 컷오프 프로세스"
+      ],
+      [
+       "주",
+       "금 16:00",
+       "Sales Plan 컷오프",
+       "SELECT DIVISION_ID, CUTOFF_TYPE, MAX(CUTOFF_YYYYMMDD) FROM DM_PLN_SALES_PLAN_C WHERE CUTOFF_TYPE IN ('SP_W','SP_D') GROUP BY DIVISION_ID, CUTOFF_TYPE",
+       "사업부별 SP_W 이번 주 일자",
+       "Sales Plan 컷오프 프로세스"
+      ],
+      [
+       "주",
+       "토 09:00",
+       "BPS 송신",
+       "SELECT COUNT(*) FROM XIF_BPS_SALES_PLAN_S_SN",
+       "금 22:00 이후 증가",
+       "JOB_PR_DM_BPS_INTERFACE"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C10",
+   "title": "10. 장애 대응",
+   "slides": [
+    {
+     "kind": "table",
+     "title": "10. 장애 대응",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "columns": [
+      "증상",
+      "확인",
+      "조치",
+      "재실행"
+     ],
+     "rows": [
+      [
+       "배치 실패",
+       "USER_SCHEDULER_JOB_RUN_DETAILS ERROR#, ADDITIONAL_INFO",
+       "원인 데이터 보정",
+       "DBMS_SCHEDULER.RUN_JOB('<TO-BE JOB>')"
+      ],
+      [
+       "컷오프 누락",
+       "DM_PLN_MKT_FCST_C, DM_PLN_SALES_PLAN_C 최신 CUTOFF_YYYYMMDD",
+       "사업부 JOB STATE, ENABLED 확인",
+       "사업부 JOB 단독 RUN_JOB"
+      ],
+      [
+       "I/F 미수신",
+       "PR_DM_IF_CHECK_SMS_SEND SMS, XIF 수신 테이블 건수",
+       "NERP RFC 로그 SCM_SYS_LOG_BATCH 확인",
+       "RFC JOB 1단계부터 RUN_JOB"
+      ],
+      [
+       "화면 저장 오류",
+       "SCM_COM_SQL_LOG EXCEPTION(LOG_SEQ 범위)",
+       "저장 프로시저 오류 메시지 확인",
+       "해당 없음"
+      ],
+      [
+       "장시간 쿼리",
+       "SCM_COM_SQL_LOG ELAPSED_MS",
+       "5분 이상 알림, 30분 이상 사용자 세션만 KILL",
+       "해당 없음"
+      ]
+     ]
+    },
+    {
+     "kind": "flow",
+     "title": "10. 장애 대응 - 다단계 JOB 재실행 순서",
+     "src": [
+      "Doc/OpsManual/DM/facts/batch.csv",
+      "Doc/OpsManual/DM/facts/sp_tables.csv"
+     ],
+     "nodes": [
+      {
+       "id": "r1",
+       "label": "실패 단계 확인",
+       "sub": "SCM_SYS_LOG_BATCH PROGRAM_NAME, EVENT_DATE"
+      },
+      {
+       "id": "r2",
+       "label": "원인 보정",
+       "sub": "입력 데이터, 기준 정보 보정"
+      },
+      {
+       "id": "r3",
+       "label": "실패 단계 실행",
+       "sub": "batch.csv 단계 순서 그 단계 프로시저 직접 실행"
+      },
+      {
+       "id": "r4",
+       "label": "다음 단계 실행",
+       "sub": "남은 단계 순서대로. 전 단계 재실행 = RUN_JOB"
+      },
+      {
+       "id": "r5",
+       "label": "결과 확인",
+       "sub": "컷오프 테이블 CUTOFF_YYYYMMDD, 송신 테이블 건수"
+      }
+     ],
+     "edges": [
+      {
+       "from": "r1",
+       "to": "r2",
+       "label": ""
+      },
+      {
+       "from": "r2",
+       "to": "r3",
+       "label": ""
+      },
+      {
+       "from": "r3",
+       "to": "r4",
+       "label": ""
+      },
+      {
+       "from": "r4",
+       "to": "r5",
+       "label": ""
+      }
+     ],
+     "notes": [
+      "다단계 JOB = MON_TOTAL 9단계, TUE_TOTAL 10단계, TOTAL_MOBILE 9단계, CUST_DEMAND_ANL_SUMMARY 6단계"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C11",
+   "title": "11. 로그와 모니터링",
+   "slides": [
+    {
+     "kind": "text",
+     "title": "11. 로그와 모니터링 - 보는 순서",
+     "src": [
+      "Doc/OpsManual/DM/facts/jobs.csv",
+      "Doc/OpsManual/DM/facts/timeline.csv",
+      "Doc/OpsManual/DM/facts/columns.csv",
+      "tools/VibeManager/rules/10_RULES_KEEP.md"
+     ],
+     "lines": [
+      "1. JOB 상태: USER_SCHEDULER_JOBS STATE, ENABLED, NEXT_RUN_DATE, FAILURE_COUNT",
+      "2. 실행 결과: USER_SCHEDULER_JOB_RUN_DETAILS STATUS, ERROR#, ADDITIONAL_INFO",
+      "3. JOB 로그: USER_SCHEDULER_JOB_LOG OPERATION, STATUS",
+      "4. 배치 단계 로그: SCM_SYS_LOG_BATCH PROGRAM_NAME, LOG_TYPE(START, END, ERROR), SQL_ERR_MSG, SQL_BACKTRACE",
+      "5. 화면 SQL 로그: SCM_COM_SQL_LOG 는 LOG_SEQ 범위로 먼저 좁힌 뒤 SQL_ID, ELAPSED_MS, EXCEPTION 조회",
+      "6. 메일, SMS: SCM_ADM_SMS_MAIL_SEND_LOG SEND_DATE, SEND_MAIL_ERROR_LOG_DESC"
+     ]
+    },
+    {
+     "kind": "table",
+     "title": "11. 로그와 모니터링 - 조회 예시",
+     "src": [
+      "Doc/OpsManual/DM/facts/columns.csv"
+     ],
+     "columns": [
+      "대상",
+      "쿼리"
+     ],
+     "rows": [
+      [
+       "JOB 실행 이력",
+       "SELECT JOB_NAME, STATUS, ERROR#, ACTUAL_START_DATE, RUN_DURATION FROM USER_SCHEDULER_JOB_RUN_DETAILS WHERE JOB_NAME = 'JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_TOTAL' ORDER BY ACTUAL_START_DATE DESC FETCH FIRST 10 ROWS ONLY"
+      ],
+      [
+       "배치 단계 로그",
+       "SELECT PROGRAM_NAME, LOG_TYPE, LOG_MESSAGE, SQL_ERR_MSG, EVENT_DATE FROM SCM_SYS_LOG_BATCH WHERE EVENT_DATE >= SYSDATE - 1 AND PROGRAM_NAME LIKE 'PR_DM_PLN%' ORDER BY EVENT_DATE DESC"
+      ],
+      [
+       "화면 SQL 로그",
+       "SELECT LOG_SEQ, SQL_ID, ELAPSED_MS, EXCEPTION FROM SCM_COM_SQL_LOG WHERE LOG_SEQ > (SELECT MAX(LOG_SEQ) - 5000 FROM SCM_COM_SQL_LOG) AND EXCEPTION IS NOT NULL"
+      ],
+      [
+       "장시간 화면 SQL",
+       "SELECT LOG_SEQ, SQL_ID, ELAPSED_MS, CREATED_BY FROM SCM_COM_SQL_LOG WHERE LOG_SEQ > (SELECT MAX(LOG_SEQ) - 5000 FROM SCM_COM_SQL_LOG) AND ELAPSED_MS > 300000"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C12",
+   "title": "12. 기준 정보 관리",
+   "slides": [
+    {
+     "kind": "table",
+     "title": "12. 기준 정보 관리 - 등록 순서",
+     "src": [
+      "Doc/OpsManual/DM/facts/screens.csv",
+      "Doc/OpsManual/DM/facts/flow_edges.csv",
+      "Doc/OpsManual/DM/facts/tables.csv"
+     ],
+     "columns": [
+      "순서",
+      "화면",
+      "등록 테이블",
+      "빠지면 생기는 증상"
+     ],
+     "rows": [
+      [
+       "1",
+       "DMF0004 Sales Site",
+       "SCM_MST_SITE, SCM_MST_SITE_CUSTOMER, DM_MST_BUCKET_CONVERSION",
+       "DMF0003, DMF0082 조회 버킷 변환 누락"
+      ],
+      [
+       "2",
+       "DMF0006 Customer Model Mapping",
+       "DM_MST_CUSTOMER_MODEL",
+       "DMF0005, DMF0014 고객 모델 후보 없음"
+      ],
+      [
+       "3",
+       "DMF0072 N:N Master Mapping",
+       "DM_CUST_MODEL_MAPPING_M",
+       "EDI 고객 FCST 기록 누락"
+      ],
+      [
+       "4",
+       "DMF0005 Sales Site Project Model",
+       "SCM_MST_SITE_ITEM",
+       "MKT FCST 행 생성 안 됨"
+      ],
+      [
+       "5",
+       "DMF0007 Customer FCST Master",
+       "DM_MST_CUSTOMER_FCST",
+       "주간 롤링 1단계 대상 없음"
+      ],
+      [
+       "6",
+       "DMF0020, DMF0083 판가, 환율",
+       "SCM_MST_FUTURE_PRICE, DM_MST_EXCHANGE_RATE",
+       "판가 없는 RTF 메일 발생"
+      ],
+      [
+       "7",
+       "DMF0043 Contribution Rate",
+       "DM_MST_CONTRIBUTE_RATIO_MST, DTL",
+       "기여율 판매 조회 빈 값"
+      ],
+      [
+       "8",
+       "DMF0008 ERP EDI Master Validation",
+       "SCM_MST_SITE_ITEM 보정",
+       "ERP EDI 요약 메일 누락 건 남음"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "C13",
+   "title": "13. 권한과 메뉴 관리",
+   "slides": [
+    {
+     "kind": "table",
+     "title": "13. 권한과 메뉴 관리 - 등록 순서",
+     "src": [
+      "Doc/OpsManual/DM/facts/admin_screens.csv"
+     ],
+     "columns": [
+      "순서",
+      "작업",
+      "화면",
+      "저장 테이블"
+     ],
+     "rows": [
+      [
+       "1",
+       "메뉴 추가",
+       "SYS0003 Menu",
+       "SCM_ADM_MNU_M"
+      ],
+      [
+       "2",
+       "메뉴 버튼 등록",
+       "SYS0009 Menu Button",
+       "SCM_ADM_MNU_BTN_MPG_M"
+      ],
+      [
+       "3",
+       "권한 그룹 등록",
+       "SYS0007 Group",
+       "SCM_ADM_USER_GR_M"
+      ],
+      [
+       "4",
+       "그룹 메뉴, 버튼 권한",
+       "SYS0008 Group Menu",
+       "SCM_ADM_USER_GR_MNU_MPG_M, SCM_ADM_USER_GR_MNU_BTN_MPG_M"
+      ],
+      [
+       "5",
+       "그룹 사용자, 단위 권한",
+       "SYS0014 Group User",
+       "SCM_ADM_USER_GR_MPG_M, SCM_ADM_USER_GR_UNIT_AUTH_MPG_M"
+      ],
+      [
+       "6",
+       "사용자 등록",
+       "SYS0002 User",
+       "SCM_ADM_USER_M"
+      ],
+      [
+       "7",
+       "권한 요청, 승인",
+       "SYS0011, SYS0012",
+       "SCM_ADM_USER_GR_MPG_M"
+      ]
+     ]
+    },
+    {
+     "kind": "text",
+     "title": "13. 권한과 메뉴 관리 - 확인 사항",
+     "src": [
+      "Doc/OpsManual/DM/facts/admin_screens.csv",
+      "Doc/OpsManual/DM/facts/tobe_rules.csv"
+     ],
+     "lines": [
+      "메뉴 노출: 상위 메뉴까지 USE_YN Y, 사용 중 그룹 1개 이상 연결된 메뉴만 보임(CR-026). DMF0022 는 상위 Waterfall USE_YN N 이라 안 보임",
+      "권한 판정: 사용자가 가진 그룹 권한 합집합(CR-102)",
+      "버튼 노출: SCM_ADM_USER_GR_MNU_BTN_MPG_M 버튼 권한이 있을 때만(CR-070)",
+      "메일, SMS 수신자: SYS0017 Mail Setup, SCM0007 SMS Setup",
+      "미접속자: JOB_PR_DM_UNLOGIN_MAIL_SEND 가 3개월 미접속자 권한 회수 메일 발송"
+     ]
+    }
+   ]
+  }
+ ]
+}

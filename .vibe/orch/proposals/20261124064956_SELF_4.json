@@ -1,0 +1,115 @@
+{
+  "id": "20261124064956_SELF_4",
+  "at": "2026-11-24T06:49:56+09:00",
+  "ms": 1795470596957,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/history.js|화면id를가진이력행n줄n줄hit행에그화면workbench를여는연결",
+  "title": "사용자 지시 R151 같은 문제: tools/VibeManager/history.js:116 화면 ID 를 가진 이력 행(116줄, 158줄 hit 행)에 그 화면 WORKBENCH 를 여는 연결 아이콘이 없음",
+  "evidence": "규칙 R151 \"화면별 작업을 보이는 목록(VMO 상황판, VMW 목록, 이력)은 항목 오른쪽에 그 화면 WORKBENCH 를 여는 연결 아이콘을 둠\" (원래 지시 2026-11-20 09:51 \"VMO 상황판의 지금 실행 중 항목의 오른쪽에 UI 별 작업의 경우 WORKBENCH 연결 아이콘을 추가해주세요.\") · tools/VibeManager/history.js:116 const row = it => `<div class=\"it${it.dir === sel ? ' sel' : ''}\" data-dir=\"${esc(it.dir)}\"><b>${esc(it.id)}</b>",
+  "targets": [
+    "tools/VibeManager/history.js"
+  ],
+  "before_after": "it.id 가 NOID 가 아니면 행 오른쪽에 ↗ 단추(data-wb=it.id)를 두고, 누르면 openWb 메시지로 workbench.openForScreen(api, id) 를 부름(jobs.js:114 와 같은 경로)",
+  "verify": "node --check tools/VibeManager/history.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/history.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T05:47:34+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T05:51:28+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0547"
+    },
+    {
+      "at": "2026-11-26T05:51:32+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T06:04:25+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 history.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T06:04:25+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 → 반영 뒤: node --check SYNTAX_OK → SYNTAX_OK · run_all ALL OK 87/87 PASS 1422 FAIL 0 (2026-11-26 05:52:11) → ALL OK 87/87 PASS 1422 FAIL 0 (2026-11-26 05:56:28) · t_webview_syntax PASS 19 ALL PASS (05:55:59) → PASS 19 ALL PASS (06:00:16) · 자기 시험 innerHtml: SCP0028 행 ↗ 1건, data-wb=SCP0028 true, _공 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T05-51-32_claude_orch.log",
+      "sec": 540,
+      "costUsd": 1.0832337,
+      "files": [
+        "tools/VibeManager/history.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:08+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "화면별 작업을 보이는 목록(VMO 상황판, VMW 목록, 이력)은 항목 오른쪽에 그 화면 WORKBENCH 를 여는 연결 아이콘을 둠 규칙을 tools/VibeManager/history.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R151|tools/VibeManager/history.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795639654471,
+  "autoFp": "18cabb932e",
+  "applyStartMs": 1795639892250,
+  "verifyJudge": {
+    "at": "2026-11-26T06:00:36+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0547",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "history.js"
+  ],
+  "appliedMs": 1795640665135,
+  "synced": [
+    "history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/history.js → SYNTAX_OK · node tools/VibeManager/test/run_all.js → ALL OK 파일 87/87 PASS 1422 FAIL 0 (227.3s) · node tools/VibeManager/test/t_webview_syntax.js → PASS 19 ALL PASS"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/history.js"
+    ],
+    "verify_result": "반영 전 → 반영 뒤: node --check SYNTAX_OK → SYNTAX_OK · run_all ALL OK 87/87 PASS 1422 FAIL 0 (2026-11-26 05:52:11) → ALL OK 87/87 PASS 1422 FAIL 0 (2026-11-26 05:56:28) · t_webview_syntax PASS 19 ALL PASS (05:55:59) → PASS 19 ALL PASS (06:00:16) · 자기 시험 innerHtml: SCP0028 행 ↗ 1건, data-wb=SCP0028 true, _공통 행 0건",
+    "note": "단독 이력 창 행(html) = a.wb 단추 + openWb 메시지 → workbench.openForScreen(api, id). Workbench History 탭 행(innerHtml) = 클릭 처리가 범위 밖 workbench.js bindHist 에 있어 단추 inline onclick 으로 기존 'orch:openWb'(workbench.js:3406 → openForScreen) 를 보냄, stopPropagation 으로 행 선택 막음. 실제 창 클릭 확인은 설치 폴더 복사, 창 다시 로드 뒤 미확인."
+  },
+  "snap": "prop_20261124064956_SELF_4",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

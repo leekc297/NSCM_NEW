@@ -17,6 +17,7 @@ import {
   findDuplicateKey,
   findMissingRequired,
   findNegativeCells,
+  findOverMaxCells,
 } from '../utils/shipmentRequestSemi.save';
 
 const str = (v: unknown): string =>
@@ -80,10 +81,22 @@ export const useShipmentRequestSemiSave = ({
         });
         return;
       }
+      // 자릿수 초과(정수부 10자리 초과) — SP 가 ORA-01438 로 실패하기 전에 셀 표시 + 안내 후 중단.
+      const overMax = findOverMaxCells(cells);
+      if (overMax.length > 0) {
+        onNegativeCells(overMax); // 같은 InvalidColor 표시 경로를 쓴다(해당 셀 배경 강조)
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.QTY_MAX, {
+            defaultValue: 'You have exceeded the number of digits you can enter.',
+          }),
+        });
+        return;
+      }
 
       savingRef.current = true;
       try {
-        const res = await apiClient.post<{ o_rc1?: { RESULT_CODE?: string; MSG?: string }[] }>(
+        const res = await apiClient.post<{ o_rc1?: { RESULT_CODE?: string; MSG?: string; ERR_MESSAGE?: string }[] }>(
           `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
           buildSavePayload(cells, sessionUserId ?? '')
         );
@@ -99,7 +112,11 @@ export const useShipmentRequestSemiSave = ({
         const code = str(result?.RESULT_CODE);
         if (code === 'N') {
           // SP 가 BOD 유효성 실패로 반환한 서버 메시지를 그대로 보여 준다(V04).
-          void setAlert({ type: 'alert', content: str(result?.MSG) || systemError() });
+          //   SP 'N' 행의 문구 컬럼은 MSG 가 아니라 ERR_MESSAGE 다(PKG_SSP0045 실측) — 둘 다 본다.
+          void setAlert({
+            type: 'alert',
+            content: str(result?.ERR_MESSAGE) || str(result?.MSG) || systemError(),
+          });
           return;
         }
         if (code !== 'S') {

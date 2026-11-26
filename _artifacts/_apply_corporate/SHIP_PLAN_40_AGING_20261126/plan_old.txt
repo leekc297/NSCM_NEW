@@ -1,0 +1,162 @@
+SQL_ID  6paffgyfdsh16, child number 0
+-------------------------------------
+SELECT /*+ GATHER_PLAN_STATISTICS */ /* AGING_OLD_142724 */ 
+A.DIVISION_ID, A.SCM_SITE_ID, A.ITEM_ID, A.LOT_ID, A.QTY, A.WIPHOLD_YN, 
+A.SPECIAL_YN, A.UNHOLD_EXP_DATE   FROM SCM_DNM_STOCK_AGING_V A        
+JOIN ( SELECT C.DIVISION_ID, C.SITE_ID , MAX(C.CUTOFF_DATE) AS 
+CUTOFF_DATE                 FROM SCM_DNM_STOCK_AGING_V C                
+WHERE C.CUTOFF_DATE >  SYSDATE - 5                  AND C.DIVISION_ID = 
+:d                GROUP BY C.DIVISION_ID, C.SITE_ID ) B     ON 
+A.DIVISION_ID = B.DIVISION_ID    AND A.SITE_ID     = B.SITE_ID    AND 
+A.CUTOFF_DATE = B.CUTOFF_DATE
+ 
+Plan hash value: 2137442388
+ 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                         | Name                                | Starts | E-Rows | A-Rows |   A-Time   | Buffers | Reads  |  OMem |  1Mem | Used-Mem |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                                  |                                     |      1 |        |      0 |00:00:12.26 |    7938 |   2125 |       |       |          |
+|*  1 |  HASH JOIN                                        |                                     |      1 |  11566 |      0 |00:00:12.26 |    7938 |   2125 |   823K|   823K|  192K (0)|
+|   2 |   VIEW                                            |                                     |      1 |  11566 |      0 |00:00:12.26 |    7938 |   2125 |       |       |          |
+|   3 |    HASH GROUP BY                                  |                                     |      1 |  11566 |      0 |00:00:12.26 |    7938 |   2125 |  2736K|  1068K|          |
+|   4 |     VIEW                                          | SCM_DNM_STOCK_AGING_V               |      1 |  11566 |      0 |00:00:12.26 |    7938 |   2125 |       |       |          |
+|   5 |      UNION-ALL                                    |                                     |      1 |  11566 |      0 |00:00:12.26 |    7938 |   2125 |       |       |          |
+|   6 |       NESTED LOOPS OUTER                          |                                     |      1 |  11565 |      0 |00:00:12.25 |    7064 |   2125 |       |       |          |
+|*  7 |        HASH JOIN RIGHT OUTER                      |                                     |      1 |  11565 |      0 |00:00:12.25 |    7064 |   2125 |  1009K|  1009K| 1685K (0)|
+|*  8 |         COLLECTION ITERATOR PICKLER FETCH         | FN_GET_SCP_EXC_ITEM_ASSY_MAP        |      1 |     82 |    255 |00:00:00.11 |    4932 |      0 |       |       |          |
+|*  9 |         HASH JOIN RIGHT OUTER                     |                                     |      1 |  11565 |      0 |00:00:12.14 |    2132 |   2125 |  2171K|  2171K|  727K (0)|
+|  10 |          VIEW                                     |                                     |      1 |     12 |      1 |00:00:00.01 |       4 |      1 |       |       |          |
+|  11 |           HASH GROUP BY                           |                                     |      1 |     12 |      1 |00:00:00.01 |       4 |      1 |  1016K|  1016K|          |
+|* 12 |            TABLE ACCESS BY INDEX ROWID BATCHED    | SCM_ADM_LOOKUP_MASTER_DETAIL        |      1 |     12 |      1 |00:00:00.01 |       4 |      1 |       |       |          |
+|* 13 |             INDEX RANGE SCAN                      | PK_SCM_ADM_LOOKUP_MASTER_DETAIL     |      1 |     17 |      1 |00:00:00.01 |       3 |      1 |       |       |          |
+|* 14 |          HASH JOIN RIGHT OUTER                    |                                     |      1 |  11565 |      0 |00:00:12.14 |    2128 |   2124 |  1068K|  1068K|  448K (0)|
+|  15 |           VIEW                                    |                                     |      1 |      1 |      1 |00:00:00.01 |       4 |      0 |       |       |          |
+|  16 |            HASH GROUP BY                          |                                     |      1 |      1 |      1 |00:00:00.01 |       4 |      0 |   924K|   924K|          |
+|  17 |             TABLE ACCESS BY INDEX ROWID BATCHED   | FP_FORMATION_SHORTER_LT_M           |      1 |      1 |      1 |00:00:00.01 |       4 |      0 |       |       |          |
+|* 18 |              INDEX FULL SCAN                      | PK_FP_FORMATION_SHORTER_LT_M        |      1 |      1 |      1 |00:00:00.01 |       3 |      0 |       |       |          |
+|  19 |           TABLE ACCESS BY INDEX ROWID BATCHED     | SCM_AGING_STOCK_H                   |      1 |  11565 |      0 |00:00:12.14 |    2124 |   2124 |       |       |          |
+|* 20 |            INDEX RANGE SCAN                       | IDX01_SCM_AGING_STOCK_H             |      1 |  11565 |      0 |00:00:12.14 |    2124 |   2124 |       |       |          |
+|* 21 |        INDEX UNIQUE SCAN                          | PK_SCP_MST_FINAL_ITEM               |      0 |      1 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  22 |       NESTED LOOPS                                |                                     |      1 |      1 |      0 |00:00:00.01 |     874 |      0 |       |       |          |
+|  23 |        NESTED LOOPS OUTER                         |                                     |      1 |      4 |      0 |00:00:00.01 |     874 |      0 |       |       |          |
+|* 24 |         HASH JOIN OUTER                           |                                     |      1 |      4 |      0 |00:00:00.01 |     874 |      0 |   820K|   820K|  209K (0)|
+|* 25 |          HASH JOIN OUTER                          |                                     |      1 |      4 |      0 |00:00:00.01 |     874 |      0 |   877K|   877K|69632  (0)|
+|  26 |           JOIN FILTER CREATE                      | :BF0000                             |      1 |      4 |      0 |00:00:00.01 |     874 |      0 |       |       |          |
+|* 27 |            HASH JOIN OUTER                        |                                     |      1 |      4 |      0 |00:00:00.01 |     874 |      0 |   899K|   899K|69632  (0)|
+|  28 |             JOIN FILTER CREATE                    | :BF0001                             |      1 |      4 |      0 |00:00:00.01 |     874 |      0 |       |       |          |
+|  29 |              NESTED LOOPS                         |                                     |      1 |      4 |      0 |00:00:00.01 |     874 |      0 |       |       |          |
+|  30 |               NESTED LOOPS                        |                                     |      1 |   1066 |      0 |00:00:00.01 |     874 |      0 |       |       |          |
+|* 31 |                COLLECTION ITERATOR PICKLER FETCH  | FN_GET_JV_REAL_ESS_VIRTUAL_LINE_MAP |      1 |     82 |      0 |00:00:00.01 |     874 |      0 |       |       |          |
+|* 32 |                INDEX RANGE SCAN                   | IDX01_SCM_AGING_STOCK_H             |      0 |     13 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 33 |               TABLE ACCESS BY INDEX ROWID         | SCM_AGING_STOCK_H                   |      0 |      1 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  34 |             VIEW                                  |                                     |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  35 |              HASH GROUP BY                        |                                     |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |  1016K|  1016K|          |
+|  36 |               JOIN FILTER USE                     | :BF0001                             |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 37 |                TABLE ACCESS BY INDEX ROWID BATCHED| SCM_ADM_LOOKUP_MASTER_DETAIL        |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 38 |                 INDEX RANGE SCAN                  | PK_SCM_ADM_LOOKUP_MASTER_DETAIL     |      0 |     17 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  39 |           VIEW                                    |                                     |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  40 |            HASH GROUP BY                          |                                     |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |   924K|   924K|          |
+|  41 |             JOIN FILTER USE                       | :BF0000                             |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  42 |              TABLE ACCESS BY INDEX ROWID BATCHED  | FP_FORMATION_SHORTER_LT_M           |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  43 |               INDEX FULL SCAN                     | PK_FP_FORMATION_SHORTER_LT_M        |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  44 |          COLLECTION ITERATOR PICKLER FETCH        | FN_GET_SCP_EXC_ITEM_ASSY_MAP        |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  45 |         TABLE ACCESS BY INDEX ROWID               | SCP_MST_FINAL_ITEM                  |      0 |      1 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 46 |          INDEX UNIQUE SCAN                        | PK_SCP_MST_FINAL_ITEM               |      0 |      1 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 47 |        TABLE ACCESS BY INDEX ROWID                | SCM_ITEM_M                          |      0 |        |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 48 |         INDEX UNIQUE SCAN                         | PK_SCM_ITEM_M                       |      0 |      1 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  49 |   VIEW                                            | SCM_DNM_STOCK_AGING_V               |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  50 |    UNION-ALL                                      |                                     |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 51 |     HASH JOIN RIGHT OUTER                         |                                     |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |  3642K|  1666K|          |
+|  52 |      TABLE ACCESS FULL                            | SCP_MST_FINAL_ITEM                  |      0 |  36809 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 53 |      HASH JOIN RIGHT OUTER                        |                                     |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |  1722K|  1722K|          |
+|  54 |       COLLECTION ITERATOR PICKLER FETCH           | FN_GET_SCP_EXC_ITEM_ASSY_MAP        |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 55 |       HASH JOIN RIGHT OUTER                       |                                     |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |   991K|   991K|          |
+|  56 |        VIEW                                       |                                     |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  57 |         HASH GROUP BY                             |                                     |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |   924K|   924K|          |
+|  58 |          TABLE ACCESS BY INDEX ROWID BATCHED      | FP_FORMATION_SHORTER_LT_M           |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  59 |           INDEX FULL SCAN                         | PK_FP_FORMATION_SHORTER_LT_M        |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 60 |        HASH JOIN RIGHT OUTER                      |                                     |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |  1506K|  1506K|          |
+|  61 |         VIEW                                      |                                     |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  62 |          HASH GROUP BY                            |                                     |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |  1016K|  1016K|          |
+|* 63 |           TABLE ACCESS BY INDEX ROWID BATCHED     | SCM_ADM_LOOKUP_MASTER_DETAIL        |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 64 |            INDEX RANGE SCAN                       | PK_SCM_ADM_LOOKUP_MASTER_DETAIL     |      0 |     17 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  65 |         TABLE ACCESS FULL                         | SCM_AGING_STOCK_H                   |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 66 |     HASH JOIN                                     |                                     |      0 |      2 |      0 |00:00:00.01 |       0 |      0 |  2656K|  1037K|          |
+|* 67 |      HASH JOIN OUTER                              |                                     |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |  2443K|  1057K|          |
+|* 68 |       HASH JOIN RIGHT OUTER                       |                                     |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |  1722K|  1722K|          |
+|  69 |        COLLECTION ITERATOR PICKLER FETCH          | FN_GET_SCP_EXC_ITEM_ASSY_MAP        |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 70 |        HASH JOIN RIGHT OUTER                      |                                     |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |   991K|   991K|          |
+|  71 |         VIEW                                      |                                     |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  72 |          HASH GROUP BY                            |                                     |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |   924K|   924K|          |
+|  73 |           TABLE ACCESS BY INDEX ROWID BATCHED     | FP_FORMATION_SHORTER_LT_M           |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  74 |            INDEX FULL SCAN                        | PK_FP_FORMATION_SHORTER_LT_M        |      0 |    161 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 75 |         HASH JOIN RIGHT OUTER                     |                                     |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |  1506K|  1506K|          |
+|  76 |          VIEW                                     |                                     |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  77 |           HASH GROUP BY                           |                                     |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |  1016K|  1016K|          |
+|* 78 |            TABLE ACCESS BY INDEX ROWID BATCHED    | SCM_ADM_LOOKUP_MASTER_DETAIL        |      0 |     12 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 79 |             INDEX RANGE SCAN                      | PK_SCM_ADM_LOOKUP_MASTER_DETAIL     |      0 |     17 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 80 |          HASH JOIN                                |                                     |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |  1622K|  1622K|          |
+|  81 |           COLLECTION ITERATOR PICKLER FETCH       | FN_GET_JV_REAL_ESS_VIRTUAL_LINE_MAP |      0 |   8168 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  82 |           TABLE ACCESS FULL                       | SCM_AGING_STOCK_H                   |      0 |   7704K|      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|  83 |       TABLE ACCESS FULL                           | SCP_MST_FINAL_ITEM                  |      0 |  36809 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+|* 84 |      TABLE ACCESS FULL                            | SCM_ITEM_M                          |      0 |  59548 |      0 |00:00:00.01 |       0 |      0 |       |       |          |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - access("A"."DIVISION_ID"="B"."DIVISION_ID" AND "A"."SITE_ID"="B"."SITE_ID" AND "A"."CUTOFF_DATE"="B"."CUTOFF_DATE")
+   7 - access("A"."COMPANY_ID"="KOKBF$"."COMPANY_ID" AND "A"."DIVISION_ID"="KOKBF$"."DIVISION_ID" AND "A"."SITE_ID"="KOKBF$"."SITE_ID" AND "A"."PLANT_ID"="KOKBF$"."PLANT_ID" 
+              AND "KOKBF$"."SCP_EXC_ITEM_ID"=TRIM("A"."ITEM_ID"))
+   8 - filter("KOKBF$"."DIVISION_ID"=:D)
+   9 - access("FX"."OPERATION_ID"="A"."OPERATION_ID")
+  12 - filter("VALID_YN"='Y')
+  13 - access("LOOKUP_TYPE"='FCS_INVENTORY_EXCEPTION_OPERATION')
+  14 - access("A"."COMPANY_ID"="D"."COMPANY_ID" AND "A"."DIVISION_ID"="D"."DIVISION_ID" AND "A"."SITE_ID"="D"."SITE_ID" AND "A"."PLANT_ID"="D"."PLANT_ID" AND 
+              "A"."FACTORY_ID"="D"."FACTORY_ID" AND "A"."LINE_ID"="D"."LINE_ID" AND "A"."ITEM_ID"="D"."ITEM_ID")
+  18 - access("D"."DIVISION_ID"=:D)
+       filter("D"."DIVISION_ID"=:D)
+  20 - access("A"."DIVISION_ID"=:D)
+       filter(INTERNAL_FUNCTION("A"."CUTOFF_DATE")-1>SYSDATE@!-5)
+  21 - access("FI"."DIVISION_ID"=:D AND "FI"."ITEM_ID"=TRIM(NVL("KOKBF$"."CELL_ASSY_ITEM_ID","A"."ITEM_ID")))
+  24 - access("A"."COMPANY_ID"="KOKBF$"."COMPANY_ID" AND "A"."DIVISION_ID"="KOKBF$"."DIVISION_ID" AND "A"."SITE_ID"="KOKBF$"."SITE_ID" AND "A"."PLANT_ID"="KOKBF$"."PLANT_ID" 
+              AND "KOKBF$"."SCP_EXC_ITEM_ID"=TRIM("A"."ITEM_ID"))
+  25 - access("A"."COMPANY_ID"="D"."COMPANY_ID" AND "A"."DIVISION_ID"="D"."DIVISION_ID" AND "A"."SITE_ID"="D"."SITE_ID" AND "A"."PLANT_ID"="D"."PLANT_ID" AND 
+              "A"."FACTORY_ID"="D"."FACTORY_ID" AND "A"."LINE_ID"="D"."LINE_ID" AND "A"."ITEM_ID"="D"."ITEM_ID")
+  27 - access("FX"."OPERATION_ID"="A"."OPERATION_ID")
+  31 - filter("KOKBF$"."VL_DIVISION_ID"=:D)
+  32 - access("A"."DIVISION_ID"="KOKBF$"."RL_DIVISION_ID" AND "A"."SITE_ID"="KOKBF$"."RL_SITE_ID" AND "A"."PLANT_ID"="KOKBF$"."RL_PLANT_ID" AND 
+              "A"."FACTORY_ID"="KOKBF$"."RL_FACTORY_ID")
+       filter(INTERNAL_FUNCTION("A"."CUTOFF_DATE")-1>SYSDATE@!-5)
+  33 - filter(("A"."LINE_ID"="KOKBF$"."RL_LINE_ID" AND "A"."COMPANY_ID"="KOKBF$"."RL_COMPANY_ID"))
+  37 - filter("VALID_YN"='Y')
+  38 - access("LOOKUP_TYPE"='FCS_INVENTORY_EXCEPTION_OPERATION')
+  46 - access("FI"."DIVISION_ID"="A"."DIVISION_ID" AND "FI"."ITEM_ID"=TRIM(NVL("KOKBF$"."CELL_ASSY_ITEM_ID","A"."ITEM_ID")))
+  47 - filter("VI"."SCP_OPERATION_GROUP"='A')
+  48 - access("VI"."ITEM_ID"=CASE  WHEN (RTRIM("FI"."PACKER_PLAN_ITEM_ID") IS NULL) THEN TRIM(NVL("KOKBF$"."CELL_ASSY_ITEM_ID","A"."ITEM_ID")) ELSE "FI"."PACKER_PLAN_ITEM_ID" 
+              END  AND "VI"."COMPANY_ID"="KOKBF$"."VL_COMPANY_ID" AND "VI"."DIVISION_ID"=:D AND "VI"."SITE_ID"="KOKBF$"."VL_SITE_ID")
+       filter("VI"."DIVISION_ID"="KOKBF$"."VL_DIVISION_ID")
+  51 - access("FI"."DIVISION_ID"="A"."DIVISION_ID" AND "FI"."ITEM_ID"=TRIM(NVL("KOKBF$"."CELL_ASSY_ITEM_ID","A"."ITEM_ID")))
+  53 - access("A"."COMPANY_ID"="KOKBF$"."COMPANY_ID" AND "A"."DIVISION_ID"="KOKBF$"."DIVISION_ID" AND "A"."SITE_ID"="KOKBF$"."SITE_ID" AND "A"."PLANT_ID"="KOKBF$"."PLANT_ID" 
+              AND "KOKBF$"."SCP_EXC_ITEM_ID"=TRIM("A"."ITEM_ID"))
+  55 - access("A"."COMPANY_ID"="D"."COMPANY_ID" AND "A"."DIVISION_ID"="D"."DIVISION_ID" AND "A"."SITE_ID"="D"."SITE_ID" AND "A"."PLANT_ID"="D"."PLANT_ID" AND 
+              "A"."FACTORY_ID"="D"."FACTORY_ID" AND "A"."LINE_ID"="D"."LINE_ID" AND "A"."ITEM_ID"="D"."ITEM_ID")
+  60 - access("FX"."OPERATION_ID"="A"."OPERATION_ID")
+  63 - filter("VALID_YN"='Y')
+  64 - access("LOOKUP_TYPE"='FCS_INVENTORY_EXCEPTION_OPERATION')
+  66 - access("VI"."COMPANY_ID"="KOKBF$"."VL_COMPANY_ID" AND "VI"."DIVISION_ID"="KOKBF$"."VL_DIVISION_ID" AND "VI"."SITE_ID"="KOKBF$"."VL_SITE_ID" AND "VI"."ITEM_ID"=CASE  
+              WHEN (RTRIM("FI"."PACKER_PLAN_ITEM_ID") IS NULL) THEN TRIM(NVL("KOKBF$"."CELL_ASSY_ITEM_ID","A"."ITEM_ID")) ELSE "FI"."PACKER_PLAN_ITEM_ID" END  AND 
+              SUBSTR("ITEM_ID",1,12)=SUBSTR(CASE  WHEN RTRIM("FI"."PACKER_PLAN_ITEM_ID") IS NULL THEN TRIM(NVL("KOKBF$"."CELL_ASSY_ITEM_ID","A"."ITEM_ID")) ELSE "FI"."PACKER_PLAN_ITEM_ID" 
+              END ,1,12))
+  67 - access("FI"."DIVISION_ID"="A"."DIVISION_ID" AND "FI"."ITEM_ID"=TRIM(NVL("KOKBF$"."CELL_ASSY_ITEM_ID","A"."ITEM_ID")))
+  68 - access("A"."COMPANY_ID"="KOKBF$"."COMPANY_ID" AND "A"."DIVISION_ID"="KOKBF$"."DIVISION_ID" AND "A"."SITE_ID"="KOKBF$"."SITE_ID" AND "A"."PLANT_ID"="KOKBF$"."PLANT_ID" 
+              AND "KOKBF$"."SCP_EXC_ITEM_ID"=TRIM("A"."ITEM_ID"))
+  70 - access("A"."COMPANY_ID"="D"."COMPANY_ID" AND "A"."DIVISION_ID"="D"."DIVISION_ID" AND "A"."SITE_ID"="D"."SITE_ID" AND "A"."PLANT_ID"="D"."PLANT_ID" AND 
+              "A"."FACTORY_ID"="D"."FACTORY_ID" AND "A"."LINE_ID"="D"."LINE_ID" AND "A"."ITEM_ID"="D"."ITEM_ID")
+  75 - access("FX"."OPERATION_ID"="A"."OPERATION_ID")
+  78 - filter("VALID_YN"='Y')
+  79 - access("LOOKUP_TYPE"='FCS_INVENTORY_EXCEPTION_OPERATION')
+  80 - access("A"."COMPANY_ID"="KOKBF$"."RL_COMPANY_ID" AND "A"."DIVISION_ID"="KOKBF$"."RL_DIVISION_ID" AND "A"."SITE_ID"="KOKBF$"."RL_SITE_ID" AND 
+              "A"."PLANT_ID"="KOKBF$"."RL_PLANT_ID" AND "A"."FACTORY_ID"="KOKBF$"."RL_FACTORY_ID" AND "A"."LINE_ID"="KOKBF$"."RL_LINE_ID")
+  84 - filter("VI"."SCP_OPERATION_GROUP"='A')
+ 

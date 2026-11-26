@@ -1,0 +1,119 @@
+{
+  "id": "20261125034940_SELF_3",
+  "at": "2026-11-25T03:49:40+09:00",
+  "ms": 1795546180805,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|미검증해소지시문이바뀌기전구조n단계norerunn단계재수행를안내해ai가처리",
+  "title": "사용자 지시 R218 같은 문제: tools/VibeManager/quick.json:448 🧪 미검증 해소 지시문이 바뀌기 전 구조(1단계 --no-rerun, 3단계 재수행)를 안내해 AI가 처리 대상 행을 전체 재검증으로 넘김",
+  "evidence": "규칙 R218 \"CheckList 미검증 = 1단계 측정 안 자동 재측정(--no-rerun 금지) / 2단계 반복 = 🧪 보완 → 게이트 → 처리 대상 행 규칙만 해소 확인 재측정 / 재검증은 미검증 전체 해소 뒤에만(해소 게이트: 처리 대상 0 또는 전체 재측정으로만 잴 행만 남음). 해소 못 하고 반복이 끝나면 재검증 없이 남은 행·사유 보고\" (원래 지시 2026-11-25 03:07 \"미검증 건수에 대해서 해소를 하지 않고 재검증이 진행되는 현상이 반복되고 있습니다. … 미검증에 대한 해소 이전에 checklist 단계에서도 미검증을 자체적으로 보완할 수 있게 하는 것이 1단계이고, 2단계로 미검증해소단계에서는 도출된 미검증에 대해서는 전체 미검증에 대한 해소를 한후\") · tools/VibeManager/quick.json:448 재실행(담당 자동 · 시간 초과·측정 경로 실패·결과 기록 없음): 체인 1단계는 --no-rerun 이라 이 행을 다시 재지 않는다 ... 일시 실패로 확인되면 목록에 근거를 적고 3단계 재수행에 맡긴다.",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "문구를 바꿈: '1단계가 자동 재측정을 했는데도 남은 행이다. 원인을 고치거나 결정 목록에 사유를 적고, 확인은 체인의 해소 확인 재측정(--settle)이 한다'. '3단계 재수행에 맡긴다'는 지움",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T14:44:27+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T14:49:08+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self1444"
+    },
+    {
+      "at": "2026-11-26T14:49:15+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T15:02:54+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 1개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-26T15:02:54+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 88/88 PASS 1481 FAIL 0(05:49:43Z) → 반영 뒤 88/88 PASS 1481 FAIL 0(05:54:07Z). Grep quick.json '3단계 재수행에 맡긴다' 1건(477행) → 0건, '해소 확인 재측정(--settle)이 한다' 0건 → 1건(477행) · 변경 14개 파일 · 대상 목록 밖 변경 13개: tools/Harness/gate_baseline.tsv, Doc/PERF_점검/BATCH/SSP/SHIP_PLAN_40_3SP_로컬개선요소_20261126.md, _artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/APPLIED_OPERATIONS.md, _artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/build_package_perf2.py, _artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/rehearse2.py, _artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/00_README.md",
+      "log": ".vibe\\logs\\2026-11-26T14-49-16_claude_orch.log",
+      "sec": 555,
+      "costUsd": 0.7373224,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/quick.json",
+        "Doc/PERF_점검/BATCH/SSP/SHIP_PLAN_40_3SP_로컬개선요소_20261126.md",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/APPLIED_OPERATIONS.md",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/build_package_perf2.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/rehearse2.py",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_OWMSMAX_CLOUD_20261126/00_README.md",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/00_README.md",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/00_PRECHECK.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/05_BACKUP.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/20_REPLACE_PR_SSP_ANL_SHIP_PLAN_40.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/99_ROLLBACK.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/_hash.txt"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 미검증 = 1단계 측정 안 자동 재측정(--no-rerun 금지) / 2단계 반복 = 🧪 보완 → 게이트 → 처리 대상 행 규칙만 해소 확인 재측정 / 재검증은 미검증 전체 해소 뒤에만(해소 게이트: 처리 대상 0 또는 전체 재측정으로만 잴 행만 남음). 해소 못 하고 반복이 끝나면 재검증 없이 남은 행·사유 보고 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R218|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795671867281,
+  "autoFp": "fdad4bae85",
+  "applyStartMs": 1795672155667,
+  "verifyJudge": {
+    "at": "2026-11-26T14:58:37+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261126_self1444",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795672974908,
+  "synced": [
+    "quick.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 88/88 PASS 1481 FAIL 0 255.7s'(2026-11-26T05:49:43Z) → 반영 뒤 'ALL OK 파일 88/88 PASS 1481 FAIL 0 252.7s'(2026-11-26T05:54:07Z). t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 88/88 PASS 1481 FAIL 0(05:49:43Z) → 반영 뒤 88/88 PASS 1481 FAIL 0(05:54:07Z). Grep quick.json '3단계 재수행에 맡긴다' 1건(477행) → 0건, '해소 확인 재측정(--settle)이 한다' 0건 → 1건(477행)",
+    "note": "quick.json 477행 재실행 항목 수정. '체인 1단계는 --no-rerun 이라' 문구는 편집 전부터 없었고, 앞 문장은 개선안 문구('1단계가 자동 재측정을 했는데도 남은 행이다')로 바꿈. '일시 실패로 확인되면 목록에 근거를 적고 3단계 재수행에 맡긴다'는 '원인을 고치거나 결정 목록에 사유를 적고, 확인은 체인의 해소 확인 재측정(--settle)이 한다'로 바꿈. 걸린 시간: 테스트 2회 약 8.5분(255.7초, 252.7초)"
+  },
+  "snap": "prop_20261125034940_SELF_3"
+}

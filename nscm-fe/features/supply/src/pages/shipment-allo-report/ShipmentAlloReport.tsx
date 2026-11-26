@@ -360,38 +360,31 @@ export const ShipmentAlloReport = ({ tabId, title }: PageProps<typeof MENU_ID>) 
         searchParam={sc}
       />
 
-      {/* AS-IS 구조: Main/Gap 탭(tabControl1) → 각 탭 안에 FpSpread 시트탭 "Shipment(Allo) Report" →
-          그 안에 그리드. 중첩 탭으로 재현한다(안쪽은 단일 시트탭). */}
+      {/* Main/Gap 탭(AS-IS tabControl1) 바로 아래에 그리드. AS-IS 는 각 탭 안에 FpSpread 시트탭
+          "Shipment(Allo) Report" 가 한 겹 더 있었으나, 시트가 하나뿐이라 의미 없는 중복 표시여서
+          제거했다(테스트 이슈 "화면 구성 확인", 사용자 지시 2026-11-24). */}
       <TabWrapper activeTabIndex={activeTabIndex} setActiveTabIndex={setActiveTabIndex} persist>
         <TabItem label={t('', { defaultValue: 'Main' })}>
-          <TabWrapper>
-            <TabItem label='Shipment(Allo) Report'>
-              <ShipmentAlloReportGrid
-                rows={mainRows}
-                adminColumns={staticColumns}
-                months={months}
-                isGapTab={false}
-                gridRef={mainGridRef}
-                gridFilterRef={mainFilterRef}
-                editTrackerRef={mainTrackerRef}
-              />
-            </TabItem>
-          </TabWrapper>
+          <ShipmentAlloReportGrid
+            rows={mainRows}
+            adminColumns={staticColumns}
+            months={months}
+            isGapTab={false}
+            gridRef={mainGridRef}
+            gridFilterRef={mainFilterRef}
+            editTrackerRef={mainTrackerRef}
+          />
         </TabItem>
         <TabItem label={t('', { defaultValue: 'Gap' })}>
-          <TabWrapper>
-            <TabItem label='Shipment(Allo) Report'>
-              <ShipmentAlloReportGrid
-                rows={gapRows}
-                adminColumns={staticColumns}
-                months={gapMonths}
-                isGapTab={true}
-                gridRef={gapGridRef}
-                gridFilterRef={gapFilterRef}
-                editTrackerRef={gapTrackerRef}
-              />
-            </TabItem>
-          </TabWrapper>
+          <ShipmentAlloReportGrid
+            rows={gapRows}
+            adminColumns={staticColumns}
+            months={gapMonths}
+            isGapTab={true}
+            gridRef={gapGridRef}
+            gridFilterRef={gapFilterRef}
+            editTrackerRef={gapTrackerRef}
+          />
         </TabItem>
       </TabWrapper>
     </>

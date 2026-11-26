@@ -1,0 +1,29 @@
+{
+  "id": "20261120_202031_R12_ALL",
+  "at": "2026-11-20T20:20:31+09:00",
+  "ms": 1795173631471,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S8 개선안 효과: 개선안 반영 뒤 같은 사건 1건: R5 진행 없음 판정에 E2E 산출물 수정 시각 반영",
+  "screen": "",
+  "sig": "R12|S8|20261119205920_INC",
+  "count": 1,
+  "repeat": null,
+  "detail": "개선안 20261119205920_INC 반영 2026-11-19T23:20 · 재발 20261120_201206_R5_SCP0028",
+  "evidence": {
+    "check": "S8",
+    "key": "S8|20261119205920_INC",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-21T02:03:37+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S8 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

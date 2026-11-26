@@ -14,7 +14,7 @@
     "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
@@ -61,7 +61,15 @@
           "baseURL": "http://127.0.0.1:5173",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
-          "video": "off",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
           "viewport": {
             "width": 1920,
             "height": 1080
@@ -158,12 +166,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 7250,
+                      "duration": 7657,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-11-20T01:00:55.685Z",
+                      "startTime": "2026-11-24T16:00:17.591Z",
                       "annotations": [
                         {
                           "type": "authcrud",
@@ -182,7 +190,13 @@
                           "description": "kijung03.kim div=40 mode=no-save save=false insert=false delete=false editable=null saved=false found=false cleaned=true restored=true"
                         }
                       ],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0005\\artifacts\\SSP0005.authcrud-SSP0005-권-19cc0-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\video.webm"
+                        }
+                      ]
                     }
                   ],
                   "status": "expected"
@@ -200,8 +214,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-20T01:00:55.275Z",
-    "duration": 10572.025,
+    "startTime": "2026-11-24T16:00:17.066Z",
+    "duration": 11336.235,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

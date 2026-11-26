@@ -1,0 +1,45 @@
+{
+  "id": "20261126115652_SELF_5",
+  "at": "2026-11-26T11:56:52+09:00",
+  "ms": 1795661812894,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/inn_lang_check.py|언어별버튼문구를하나도읽지못한경우bylang이비었거나목록이모두빈경우에도해당",
+  "title": "사용자 지시 R236 같은 문제: tools/Harness/verify/i18n_lang_check.py:133 언어별 버튼 문구를 하나도 읽지 못한 경우(by_lang 이 비었거나 목록이 모두 빈 경우)에도 해당없음으로 둠. 같은 화면의 조회 실측이 있어도 해당없음이 남음",
+  "evidence": "규칙 R236 \"검사기는 해당없음 근거와 같은 실행의 다른 실측(표시=Y, E2E PASS·FAIL)이 같은 시트, 같은 컬럼에서 어긋나면 해당없음 대신 미검증으로 둠\" (원래 지시 2026-11-26 11:26 \"네, 넣어줘\") · tools/Harness/verify/i18n_lang_check.py:133 return 'NA', '조회 버튼 없음'",
+  "targets": [
+    "tools/Harness/verify/i18n_lang_check.py"
+  ],
+  "before_after": "by_lang 이 비었거나 버튼 목록이 모두 비면 ERROR '[측정 경로 없음]' 으로 둠. 해당없음은 메뉴 버튼 메타에 SEARCH 가 없다고 확인한 때만 씀",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/i18n_lang_check.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-A",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:57:06+09:00",
+      "by": "S-A",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/i18n_lang_check.py judge_search_btn(has_search 인자): 버튼 문구 0건·목록 모두 빈 값 = ERROR [측정 경로 없음], 해당없음은 SCM_ADM_MNU_BTN_MPG_M SEARCH 없음 확인 때만. main 에 메타 조회 추가(SCP0005 SEARCH 2행 조회 확인). selftest 4 → 8건(버튼) OK, 전체 14/14. 2026-11-26 15:57:06"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 해당없음 근거와 같은 실행의 다른 실측(표시=Y, E2E PASS·FAIL)이 같은 시트, 같은 컬럼에서 어긋나면 해당없음 대신 미검증으로 둠 규칙을 tools/Harness/verify/i18n_lang_check.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R236|tools/Harness/verify/i18n_lang_check.py",
+  "kind": "fix",
+  "claimedBy": "S-A",
+  "waitNote": "",
+  "appliedMs": 1795676226276
+}

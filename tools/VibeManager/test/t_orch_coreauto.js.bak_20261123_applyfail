@@ -1,0 +1,35 @@
+// orch-selfcheck.js autoEligible: 2026-11-23 사용자 지시 'fix 하위 승인대상 목록 = 자동승인 대상'(harness.json orch.coreAutoApply)
+//   사용: node test/t_orch_coreauto.js <VibeManager 폴더>
+const path = require('path'); const fs = require('fs'); const os = require('os');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'coreauto-')); const vibeDir = path.join(root, '.vibe');
+const hj = path.join(root, 'tools', 'Harness', 'harness.json'); fs.mkdirSync(path.dirname(hj), { recursive: true });
+const setCfg = o => fs.writeFileSync(hj, JSON.stringify({ orch: Object.assign({ agentEnabled: false }, o) }));
+setCfg({ coreAutoApply: true });
+const sc = require(path.join(dir, 'orch-selfcheck')); sc.init({ paths: () => ({ root, vibeDir, extDir: path.join(root, 'inst') }), timer: false, autoSync: false, inventory: false, docStyle: false });
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+const E = pr => sc.autoEligible(Object.assign({ title: '안' }, pr));
+// 2026-11-23 승인 대기 표본
+let e = E({ id: '20261120183740_VISION', source: 'vision', impact: 'core', targets: ['tools/VibeManager/orch-selfcheck.js', 'tools/VibeManager/orch-worklist.js(신규)', 'tools/Harness/harness.json', 'tools/VibeManager/test/t_orch_worklist.js(신규)'] });
+chk('vision core + harness.json + (신규) 대상 = 자동(code)', e.ok === true && e.kind === 'code', JSON.stringify(e));
+e = E({ id: '20261122140538_VISION', source: 'vision', impact: 'core', targets: ['tools/VibeManager/orch-improve.js', '.claude/settings.json'] });
+chk('.claude/settings.json 대상 = 자동', e.ok === true, JSON.stringify(e));
+e = E({ id: '20261121120359_VISION', source: 'vision', impact: 'core', targets: ['tools/Harness/verify/run_verify.py', '.vibe/orch/vision/concept_x.md'] });
+chk('개념 문서(.vibe/orch/vision) 대상 = 자동', e.ok === true, JSON.stringify(e));
+e = E({ source: 'self', impact: 'fix', title: 'BE 로컬 일자 로그 3개 삭제', targets: ['nscm-be/logs/nscm.20261110.log', 'nscm-be/logs/nscm.20261112.log'] });
+chk('BE 로그 삭제 = 자동(delete)', e.ok === true && e.kind === 'delete', JSON.stringify(e));
+// 승인 유지
+chk('FE 대상 = 승인', E({ impact: 'core', targets: ['nscm-fe/apps/web/src/a.tsx'] }).ok === false);
+chk('BE 소스 대상 = 승인', E({ impact: 'fix', targets: ['nscm-be/src/main/java/A.java'] }).ok === false);
+chk('DB 객체 = 승인', /DB 객체/.test(E({ targets: ['tools/Harness/x.sql'] }).why));
+chk('룰 문서 = 승인', /룰 문서/.test(E({ targets: ['tools/VibeManager/rules/10.md'] }).why));
+chk('hook 폴더 = 승인', /hook/.test(E({ targets: ['.claude/hooks/x.ps1'] }).why) || E({ targets: ['.claude/hooks/x.ps1'] }).ok === false);
+chk('시험 계정 설정 = 승인', /시험 계정/.test(E({ targets: ['tools/E2E/e2e.config.json'] }).why));
+chk('작업 모드 변경 = 승인', /작업 모드/.test(E({ targets: ['tools/Harness/harness.json'], before_after: 'repairScope DB_ONLY → DB_FE' }).why));
+chk('코드 파일 삭제 = 승인', E({ title: 'a.js 파일 삭제', targets: ['tools/VibeManager/a.js'] }).ok === false);
+// 끄면 종전 동작
+setCfg({ coreAutoApply: false });
+chk('coreAutoApply false = core 승인(종전)', /근간/.test(E({ source: 'self', impact: 'core', targets: ['tools/VibeManager/a.js'] }).why));
+chk('coreAutoApply false = harness.json 승인(종전)', /설정 파일/.test(E({ source: 'self', impact: 'fix', targets: ['tools/Harness/harness.json'] }).why));
+try { sc.dispose(); } catch { } try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

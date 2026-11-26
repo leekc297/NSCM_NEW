@@ -9,7 +9,7 @@ TO-BE: `nscm-fe/features/supply/src/pages/plan-activity-mgmt/`
 | AS-IS | 라인 | TO-BE | 비고 |
 |---|---|---|---|
 | `BLUtils.GetDivision(false,"")` → `Division_SCP` | cs:40,126 | `PlanActivityMgmtForm` `COMBO.DIVISION` `useTabComboQueries({comboId:'Division_SCP',mnuId})` | EE 포함(WithoutEE 클라필터 금지). MyDivision 재사용 금지 |
-| `GetPlanGroupByUserID()` Tables[3] → `PlanGroup_SCP_ALL` | cs:53,129,174 | `COMBO.PLAN_GROUP` 全件 + 클라 `DIVISION_ID` 필터 + `sortBy='label'` | 필터형 cascade, NAME 정렬(AS-IS 2025-10-20) |
+| `GetPlanGroupByUserID()` Tables[3] → `PlanGroup_SCP_ALL` | cs:53,129,174 | `COMBO.PLAN_GROUP` 全件 + 클라 `DIVISION_ID` 필터 + 콤보 SQL `ORDER BY FN_ASIS_SORT_KEY(NAME)` 순서 그대로 | 필터형 cascade, NAME 정렬(AS-IS 2025-10-20) |
 | `Data.Common(LookupCommon,false,"OPMZ_PRS_CD")` | cs:47,127 | `COMBO.PROCESS` `{comboId:'LookupCommon',lookupType:'OPMZ_PRS_CD'}` | 정적, cascade 없음 |
 | `ClbDivision_SelectedIndexChanged`→`RefreshPlanGroupByDivision`+`ClearDataSource` | cs:544,169-175,548 | `setSearchParams({divisionId, planGroupId:''})` → PlanGroup 재필터 + `filters` 비움(그리드 clear) | design 01 L3 |
 | `CboPlanGroup_SelectedIndexChanged`→`ClearDataSource` | cs:551-554 | `setSearchParams({planGroupId})` → `filters` 비움 | design 01 L4 |

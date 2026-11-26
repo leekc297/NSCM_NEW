@@ -1,0 +1,11 @@
+{"t":1795617471865,"m":{"type":"out","stream":"task","text":"▶ 검사기 보완 구간 보호 — --mark: 화면 간 보완 순서 잠금 + 검사기 파일 사본 · --check: 바뀐 검사기 엔진 게이트(engine_selfcheck), 실패면 보완 전으로 되돌림 + 변경 기록(Doc/verify/_engine_changes.jsonl) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/engine_gate.py SCP0005 --check\n","cls":"cmd"}}
+{"t":1795617507166,"m":{"type":"out","stream":"task","text":"[OK] 검사기 변경 11개 · 엔진 게이트 통과: Doc/e2e/specs/_trace.spec.ts, Doc/e2e/specs/eg_popup.spec.ts, tools/E2E/lib/btnpopup.ts, tools/E2E/lib/crud.ts, tools/Harness/verify/cleanup_marker.py, tools/Harness/verify/eg_ingest.py, tools/Harness/verify/judge.py, tools/Harness/verify/ledger_guard.py\n","cls":""}}
+{"t":1795617507181,"m":{"type":"out","stream":"task","text":"■ 종료 exit 0, 로그 .vibe\\logs\\2026-11-25T23-37-51_SCP0005_4________________--mark______________________________--check________________engine_selfcheck__________________________Doc_verify__engine_changes.jsonl_.log\n","cls":"ok"}}
+{"t":1795617507251,"m":{"type":"fb","state":"step","id":1,"no":5,"status":"OK","code":0,"sec":35,"repairs":0}}
+{"t":1795617507255,"m":{"type":"out","stream":"task","text":"✅ [5/5] 5. 검사기 게이트 (엔진 점검 · 실패면 보완 전으로 되돌림 · 변경 기록) — OK (exit 0) · 35s\n","cls":"ok"}}
+{"t":1795617507257,"m":{"type":"fb","state":"add","id":1,"step":{"no":6,"name":"6. 해소 원장 점검 (이번 회차 닫힌 행 · 열린 행 · 다음 회차 여부)","kind":"task","optional":false}}}
+{"t":1795617507257,"m":{"type":"out","stream":"task","text":"\n── [6/6] 6. 해소 원장 점검 (이번 회차 닫힌 행 · 열린 행 · 다음 회차 여부)\n","cls":"cmd"}}
+{"t":1795617507259,"m":{"type":"fb","state":"step","id":1,"no":6,"status":"RUN"}}
+{"t":1795617507271,"m":{"type":"out","stream":"task","text":"▶ 해소 원장 점검 — 🧪 미검증 보완 회차 끝: 이번 회차 닫힌 행, 열린 행, 다음 회차 여부(unverified_worklist.json continue) \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/checklist_run.py SCP0005\n","cls":"cmd"}}
+{"t":1795617507531,"m":{"type":"out","stream":"task","text":"[작업 1/2] CheckList 전체(run_verify)\n","cls":""}}
+{"t":1795617507531,"m":{"type":"out","stream":"task","text":"$ C:\\Projects\\NSCM\\tools\\Harness\\verify\\run_verify.py SCP0005\n","cls":""}}

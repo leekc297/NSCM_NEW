@@ -1,0 +1,24 @@
+# SCP0028 미검증 행별 조치 · 라운드 7(2026-11-21 00:53, CheckList 00:52 원장)
+
+- 입력: 원장 verify_ledger.csv(11-21 00:52:26), 분류 unverified_triage.*(00:52:26)
+- 원장 미검증 0행. AI 검토 행 2(V-4633ca25 담당 엔진, EG-ac06e957 담당 결정)
+- 직전 결정 12행(R4-D1 3행, R5-D2 4행, 집계 6행 중 해당분)은 체인 1단계 decide_apply 가 권장안을 적용함(unverified_triage.json recommended 12)
+- 라운드 6 대상 V-8e065123 은 PASS. 증거 '대조 칸 근거: 라벨 To Site 갈래 코드 칸 TO_SITE(읽은 후보 14개와 겹침 0)' 로 T527 원인(콤보 후보를 14개만 읽음) 확인
+- 지난 라운드 표는 _unverified_plan.md.r6_20261120
+
+| 묶음 | 행 ID | 규칙 | 원인(실측 근거) | 조치(고칠 파일) |
+|---|---|---|---|---|
+| U1 저장 중 로딩 AI 반영 | V-4633ca25 | H11 | 검사기 실측: 저장 1.5초 지연 동안 로딩 표시 0회, 조회 대조군 34회(시험 검사 CM-003 trial 이라 판정필요). AI 검토가 'AS-IS SaveData 에는 진행 표시 없음' 으로 PASS 반영. 원문 확인: AS-IS 저장 cs:661 `new FoxAsyncProxy(this)` 이고 ShowProgress 를 끄지 않음. TheOne.Windows.Forms.4.5.dll 리플렉션(00:5x)으로 FoxAsyncProxy.ShowProgress 기본값 True 확인. AS-IS 는 저장 중 진행 창을 띄움. AI 검토의 전제가 원문과 다름 | tools/Harness/verify/llm_review.py asis_progress_on 신설, H11 행에서 인용한 AS-IS 줄에 진행 표시가 있으면 PASS·NA 반영 막음 (T528). 판정필요로 돌아가면 결정 R7-D1 |
+| U2 Model 팝업 교체 | EG-ac06e957 | G4 | 담당 결정. R4-D1 권장안 적용됨(판정필요) | 결정 R4-D1 |
+
+## 행 수 대조
+
+- 원장 ERROR 0 = 표 0행 + 집계 0
+- 표 2행은 AI 검토 행(V-4633ca25 원장 PASS, EG-ac06e957 원장 판정필요)
+
+## 처리 결과
+
+| 행 | 처리 | 남은 사유 |
+|---|---|---|
+| V-4633ca25 | 검사기(AI 반영 조건) 수정 | 다음 CheckList 에서 판정필요로 돌아가면 R7-D1 |
+| EG-ac06e957 | 처리 안 함 | R4-D1 |

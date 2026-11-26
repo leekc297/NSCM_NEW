@@ -6,9 +6,31 @@
   "same": []
  },
  {
-  "row_id": "V-dac80ff3",
-  "rule_id": "L1",
-  "target": "조회조건 텍스트 입력 중 그리드",
+  "row_id": "V-2ca073e5",
+  "rule_id": "N1",
+  "target": "SCP0005 센티널 표시",
+  "same": []
+ },
+ {
+  "row_id": "V-0810a59e",
+  "rule_id": "H2",
+  "target": "FROM_CITY",
+  "same": [
+   "V-17e451a7",
+   "V-c099fa4f",
+   "V-e63ff383"
+  ]
+ },
+ {
+  "row_id": "V-4e4af2a4",
+  "rule_id": "F1",
+  "target": "SCP0005 컬럼별 저장 왕복",
+  "same": []
+ },
+ {
+  "row_id": "T-6d14c72c",
+  "rule_id": "M3",
+  "target": "SCP0005_DistributionRoutePopup",
   "same": []
  },
  {
@@ -18,15 +40,79 @@
   "same": []
  },
  {
-  "row_id": "V-7ccb8dd4",
-  "rule_id": "K3",
-  "target": "[결함 유형 묶음 K3-G01 · 1건] 그리드 Ctrl+클릭 다중 선택(팝업 그리드 포함)",
+  "row_id": "V-7cdbda05",
+  "rule_id": "H6",
+  "target": "popCity.ShowDialog()",
+  "same": [
+   "V-c9dc5aa7"
+  ]
+ },
+ {
+  "row_id": "EG-09469e15",
+  "rule_id": "H6",
+  "target": "SCP0005 팝업 SCM0002_CitybyCountry BTN:btnToSrch BTN_ORDER",
+  "same": [
+   "EG-24dc66b9"
+  ]
+ },
+ {
+  "row_id": "V-616b4d31",
+  "rule_id": "H6",
+  "target": "popCity.Form_Load(true, sCountry, sCity)",
   "same": []
  },
  {
-  "row_id": "V-3134fc3e",
+  "row_id": "V-087d756b",
+  "rule_id": "E3",
+  "target": "SCP0005 Excel 필수 칸 빈 업로드",
+  "same": []
+ },
+ {
+  "row_id": "T-2c4e7c8a",
+  "rule_id": "E4",
+  "target": "MSG00265",
+  "same": []
+ },
+ {
+  "row_id": "V-b4651880",
+  "rule_id": "H2",
+  "target": "siMain.SetBGColor",
+  "same": []
+ },
+ {
+  "row_id": "T-ece1c98b",
   "rule_id": "E4",
   "target": "MSG00043",
   "same": []
+ },
+ {
+  "row_id": "V-17e451a7",
+  "rule_id": "H2",
+  "target": "",
+  "folded_into": "V-0810a59e"
+ },
+ {
+  "row_id": "V-c099fa4f",
+  "rule_id": "H2",
+  "target": "",
+  "folded_into": "V-0810a59e"
+ },
+ {
+  "row_id": "V-e63ff383",
+  "rule_id": "H2",
+  "target": "",
+  "folded_into": "V-0810a59e"
+ },
+ {
+  "row_id": "V-c9dc5aa7",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-7cdbda05"
+ },
+ {
+  "row_id": "EG-24dc66b9",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "EG-09469e15"
  }
 ]

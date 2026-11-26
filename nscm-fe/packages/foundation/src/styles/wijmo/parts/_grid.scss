@@ -75,19 +75,34 @@
     }
 
     // 필수컬럼 빨간점 스타일, 강민재 추가
+    // 조회조건 라벨(디자인시스템 Label)의 필수 점처럼 글자 바로 왼쪽 위(윗첨자)에 붙인다.
+    // 단일단 헤더: text-align:center 블록이라 ::before 가 기본 inline 이면 width/height 가
+    //   무시되어 점이 0 크기로 안 보인다. inline-block 으로 크기를 주고 vertical-align:top 으로
+    //   글자 윗줄(좌측 상단)에 붙인다.
+    // 다단(merged, .wj-colgroup) 헤더: 셀이 여러 단 높이의 flex(align-items:center)라
+    //   ::before 가 flex 아이템이 된다. align-self 를 center 로 둬야 글자 옆에 붙는다.
+    //   (flex-start 면 여러 단 높이 셀의 꼭대기로 날아가 글자와 멀어진다.)
     &.is-required {
       &::before {
         content: '';
-        position: absolute;
-        left: 4px;
-        top: 50%;
-        transform: translateY(-50%);
+        display: inline-block;
+        align-self: center;
+        vertical-align: top;
         width: 4px;
         height: 4px;
+        margin-right: 1px;
         border-radius: 50%;
         background-color: $wj-required-column;
         pointer-events: none; // 헤더 클릭 방해 방지
       }
+    }
+
+    // 다단(merged) 헤더는 셀이 여러 단 높이의 flex(글자 세로 중앙)라, align-self:center 면
+    // 점도 글자와 함께 셀 정중앙에 온다. 글자 윗줄(좌측 상단)에 맞추려면 중앙에서 위로
+    // 끌어올려야 하는데, 셀이 높아 잘리지 않으므로 margin-bottom 으로 올린다
+    // (flex center 정렬은 아래 여백만큼 아이템을 위로 밀어준다). 단일단 비-flex 셀은 해당 없음.
+    &.wj-colgroup.is-required::before {
+      margin-bottom: 10px;
     }
 
     // 정렬 가능한 헤더 셀 스타일 - 강민재 추가
@@ -775,6 +790,45 @@
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   pointer-events: auto; // 툴팁 위로 마우스 이동 가능하게
+}
+
+/* 선택 영역 요약 상태바 — 전체 화면 오른쪽 하단에 고정된 전역 단일 바(AS-IS 파리티, 커서 툴팁 대체).
+   body 에 1개만 두고(DataGrid.tsx globalSummaryBar) 선택이 있을 때만 display:flex 로 띄운다. 여러 그리드가
+   있어도 마지막에 선택한 그리드 하나의 요약만 보인다. 선택이 없으면 display:none(JS 에서 토글). */
+.grid-selection-summary-bar {
+  position: fixed;
+  // 뷰 좌우 여백(mdiContent padding 30px)에 맞춰 그리드 오른쪽 끝과 정렬한다(혼자 더 오른쪽으로 삐지지 않게).
+  right: 30px;
+  bottom: 6px;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  height: 24px;
+  padding: 0 4px;
+  // 팝업처럼 안 보이게 — 뷰 배경(흰색)과 동일, 그림자·테두리·라운드 없음(요약 텍스트만 하단에 얹힌다).
+  background: #fff;
+  font-size: 12px;
+  line-height: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none; // 아래 그리드/스크롤바 클릭 방해 방지
+
+  .gsb-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .gsb-label {
+    color: #666;
+  }
+  .gsb-value {
+    font-weight: 600;
+    color: #b00020;
+    min-width: 24px;
+    text-align: right;
+  }
 }
 
 /* 그리드 콤보 셀 - 한글 조합 중 자동완성 미리보기 (DataGrid.tsx showComposingPreview).

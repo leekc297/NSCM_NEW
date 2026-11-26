@@ -1,0 +1,92 @@
+{
+  "id": "20261125_032605_R1_SCP0005",
+  "at": "2026-11-25T03:26:05+09:00",
+  "ms": 1795544765255,
+  "rule": "R1",
+  "ruleName": "실행 실패",
+  "title": "1. CheckList 측정 (E2E 4종 포함 · AS-IS vs TO-BE → 판정 · AI 판정 검토 → 미검증 분류 · 자동 재측정 · 권장안 적용) 실패 (exit 3) — 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList)",
+  "screen": "SCP0005",
+  "sig": "S8.checklistRun | [FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python <path>",
+  "count": 1,
+  "repeat": {
+    "same": 1,
+    "all": 1,
+    "screens": [
+      "SCP0005"
+    ],
+    "dup": false
+  },
+  "detail": "[FAIL] 엔진 변경 게이트 실패 — 검증 도구를 고친 뒤 다시 실행(python tools/Harness/verify/engine_selfcheck.py)\nTraceback (most recent call last):\nKeyError: 'order'",
+  "evidence": {
+    "runId": "SCP0005_1795544667372",
+    "task": "S8.checklistRun",
+    "actor": "script",
+    "failFrom": "run",
+    "repairs": 0
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-25T03:26:05+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 시작(원인 확인)"
+    },
+    {
+      "at": "2026-11-25T03:29:30+09:00",
+      "by": "VMO",
+      "what": "Claude 조치 중단, 사용자 확인 필요 · 원인 engine: 03:03 unverified_classes.csv 편집본 첫 3바이트가 UTF-8 BOM(편집 전 백업 .bak_20261125_scp05u3 은 BOM 없음). unverified_resolve.py:38 이 encoding='utf-8' 로 열어 첫 열 이름이 BOM 붙은 order 가 되어 :40 KeyError: 'order'. llm_review.py:65~72 가 같은 로더 예외를 받아 selftest FAIL, 엔진 변경 게이트 SELFTEST_PY 신규 2건으로 차단(실행 로그 3~21줄). · 수정 1개 파일 · 허용 범위 밖 파일 변경 1개: Doc/e2e/_run.dbwin.SCP0005.lock",
+      "grade": "B",
+      "log": ".vibe\\logs\\2026-11-25T03-26-12_claude_orch.log",
+      "sec": 195,
+      "turns": 35,
+      "costUsd": 1.2527477,
+      "files": [
+        "tools/Harness/verify/unverified_resolve.py"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:13:22+09:00",
+      "by": "Claude Code 세션 3acd3c",
+      "what": "원인 고쳐짐 확인: unverified_resolve.py:39, :56 utf-8-sig 로 읽음(BOM 첫 열 KeyError 해소)"
+    }
+  ],
+  "agent": {
+    "cause_class": "engine",
+    "cause": "03:03 unverified_classes.csv 편집본 첫 3바이트가 UTF-8 BOM(편집 전 백업 .bak_20261125_scp05u3 은 BOM 없음). unverified_resolve.py:38 이 encoding='utf-8' 로 열어 첫 열 이름이 BOM 붙은 order 가 되어 :40 KeyError: 'order'. llm_review.py:65~72 가 같은 로더 예외를 받아 selftest FAIL, 엔진 변경 게이트 SELFTEST_PY 신규 2건으로 차단(실행 로그 3~21줄).",
+    "actions": [
+      {
+        "grade": "A",
+        "what": "실행 로그, 분류표 현재본과 백업 첫 바이트 비교, llm_review.py 로더 호출 경로 확인",
+        "result": "현재본만 BOM 있음 확인"
+      },
+      {
+        "grade": "B",
+        "what": "unverified_resolve.py 백업(.bak_20261125_orch) 뒤 load_classes 를 encoding='utf-8-sig' 로 변경",
+        "result": "두 selftest OK"
+      },
+      {
+        "grade": "B",
+        "what": "Doc/verify/_checker_defects.md 백업(.bak_20261125_orch) 뒤 T538 추가",
+        "result": "기록함"
+      },
+      {
+        "grade": "A",
+        "what": ".vibe/orch/stop_requests/orch_20261125_032605_SCP0005.json rerun 요청",
+        "result": "done.json 03:29:04 job J20261125_005600 how restart"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/unverified_resolve.py",
+      "Doc/verify/_checker_defects.md",
+      ".vibe/orch/stop_requests/orch_20261125_032605_SCP0005.json"
+    ],
+    "verify": "python tools/Harness/verify/unverified_resolve.py --selftest → OK. python tools/Harness/verify/llm_review.py --selftest → SELFTEST OK. python tools/Harness/verify/engine_selfcheck.py(2026-11-25 03:27:27~03:28:28) → PASS, SELFTEST_PY 0(신규 0), selftest PY 66개 실행. 재실행한 SCP0005 CheckList 결과는 미확인.",
+    "status": "resolved",
+    "next_for_user": "다시 실행 중인 SCP0005 CheckList 결과 확인",
+    "proposal": null,
+    "level": "L2",
+    "levelWhy": "같은 서명 과거 사건 0건, 원인이 파일 1개(unverified_resolve.py:38) 읽기 인코딩. L3 올림 조건(재발 2건 이상, 같은 파일 7일 4회 넘는 수정) 해당 없음"
+  },
+  "snap": "20261125_032605_R1_SCP0005"
+}

@@ -30,6 +30,7 @@ import { useSalesPriceModelGroupStore } from './useSalesPriceModelGroupStore';
 import { showAlert } from './utils/sales-price-model-group.util';
 import { buildExchangeRateMap } from './utils/sales-price-model-group.util';
 import {
+  periodColumnWidthOf,
   periodKeysOf,
   thisWeekMonday,
   weeksByMonthOf,
@@ -110,7 +111,7 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => ({ divisionId: division, fromYyyymmdd, toYyyymmdd }),
     [division, fromYyyymmdd, toYyyymmdd]
   );
-  const { data: exchangeData } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
+  const { data: exchangeData, refetch: refetchExchange } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
     procedureAction: PROC_ACTION.EXCHANGE_RATE as BUTTON_TYPE,
@@ -127,6 +128,8 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
   const axisRows = axisData?.o_rc1 as unknown as PeriodAxisRow[] | undefined;
   const periodKeys = useMemo(() => periodKeysOf(axisRows), [axisRows]);
+  // 동적 컬럼 너비 — 시간축 SP 의 COLUMN_WIDTH. 없으면 그리드 기본 너비.
+  const periodColumnWidth = useMemo(() => periodColumnWidthOf(axisRows), [axisRows]);
   const weeksByMonth = useMemo(() => weeksByMonthOf(axisRows), [axisRows]);
   const rateMap = useMemo(
     () => buildExchangeRateMap(exchangeData?.o_rc1 as unknown as ExchangeRateRow[] | undefined),
@@ -288,7 +291,8 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
                 },
               ]
             : []),
-          // Exchange Rate — 아이콘 버튼, Column Setting 앞(UI-02, 원천 DMF0020 과 같은 순서). 팝업이 main / EXCHANGE_RATE 를 부른다.
+          // Exchange Rate — 아이콘 버튼, Column Setting 앞(UI-02, 원천 DMF0020 과 같은 순서). 버튼 노출은 종전대로 main / EXCHANGE_RATE
+          //   권한으로 정하고, 팝업 조회 · User Define 저장은 exchange 시트로 한다(2026-11-23).
           ...(hasButton(PROC_ACTION.EXCHANGE_RATE, SHEETS.MAIN)
             ? [
                 {
@@ -320,6 +324,7 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
         data={rows}
         staticColumns={staticColumns[SHEETS.MAIN]}
         periodKeys={periodKeys}
+        periodColumnWidth={periodColumnWidth}
         bucketType={searchParams.bucketType}
         divisionId={division}
         monday={thisWeekMonday()}
@@ -349,6 +354,17 @@ export const SalesPriceModelGroup = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
         onBatchSaved={() => {
           if (applied) void refetch();
+        }}
+        // Exchange Rate 팝업 User Define 저장 — Sales Price(ESS) DMF0020_01 과 같은 조건(편집 사업부 && exchange SAVE 권한).
+        exchangeCanSave={editable && hasButton('SAVE', SHEETS.EXCHANGE)}
+        // 환율이 바뀌었다 — 저장 프로시저가 Model Group 판가(KRW · USD)를 다시 계산했고 LOC 입력 시 쓰는 환산 환율도 바뀌었다.
+        //   메인은 항상 다시 조회하고 저장 안 한 메인 수정은 버린다(DMF0020_01 과 같은 결정 2026-11-11). 조회 전이면 건너뛴다.
+        onExchangeSaved={() => {
+          void refetchExchange();
+          if (!applied) return;
+          editTrackerRef.current?.clearChanges();
+          setInsertCount(0);
+          void refetch();
         }}
       />
       <ProgressIndicator shape='circular' placement='parent' open={saving || isLoading || isFetching} />

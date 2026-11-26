@@ -155,3 +155,4 @@
 ,wijmo-merge-row-data-only,,,KEEP-RULE,"10_RULES_KEEP 요지 → 하네스 프롬프트(new_screen/port_pkg) 주입, 일부 M: 사람 확인",게이트로 100% 기계화되진 않지만 생성·이식 시 지켜야 함,
 154,search-condition-labelless-toggle-input-column,🆄/🅖,T01/T01M/T05 (조회조건·팝업 조회조건의 Radio/CheckBox),KEEP-RULE,10_RULES_KEEP E12 (하네스 프롬프트 주입),2026-11-13 전수 점검 등재 — 처분 근거 = 10_RULES_KEEP.md E12 행이 이미 hook #154 v2 를 싣고 있음,조회조건 Radio/CheckBox 디자인 v2 = 좌측 라벨 열(조건명) + 입력 열 시작선(컨트롤)
 155,search-area-bulk-input-button-popup,🆄/🅖,T01/T01M/T05 (AS-IS 조회영역에 그리드 일괄 입력 묶음이 있는 화면),KEEP-RULE,10_RULES_KEEP E14 (하네스 프롬프트 주입),2026-11-13 전수 점검 등재 — 처분 근거 = 10_RULES_KEEP.md E14 행이 이미 hook #155 를 싣고 있음,조회영역 일괄 입력(Input 버튼) = 버튼 영역 버튼 + 입력 팝업(정본 SCP0096)
+157,plan-complete-before-test,🅒,"T00~T21 · 승인된 계획을 구현한 뒤 시험·측정할 때",KEEP-GATE,"실행 hook check-plan-before-test.ps1 · tools/Harness/plan_state.py · VM run-rule.js 14 · 10_RULES_KEEP A-16",2026-11-25 신설 — 남은 계획 항목이 있으면 시험 명령을 실행 hook 이 거부,계획한 구현을 다 끝낸 뒤 시험

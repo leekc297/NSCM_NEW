@@ -58,6 +58,11 @@
         "Doc/verify/SCP0028/llm_cache.json",
         "Doc/verify/SCP0028/llm_usage.csv"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:32+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:42:53+09:00"
     }
   ],
   "plain": {
@@ -97,5 +102,7 @@
     "verify_result": "node tools/VibeManager/test/t_orch_agent.js (2026-11-20 10:25:12 실행) 15건 ALL PASS. 새 시험: 결과 줄 없이 exit 1 → claude.end {exit:1, hasResult:false, lastType:'tool_progress:Bash', stoppedBy:''} 기록 확인, R7 제목 '결과 줄 없이 끊김(마지막 tool_progress:Bash)', stoppedBy 있는 끝 기록은 R7 없음. node tools/VibeManager/test/run_all.js (2026-11-20T01:25:24Z = 10:25:24 KST 완료) ALL OK 파일 35/35 PASS 446 FAIL 0 (t_orch_agent_real.js, t_orch_agent_diag.js 는 run_all 이 건너뜀)",
     "note": "claude.end exit 는 실제 코드 그대로 기록함. hasResult, lastType(stream 줄 type 에 tool_name 또는 subtype 을 붙임), stoppedBy('시간 초과', '중지 요청'=Workbench 중지 단추 stop(), 'VS Code 종료'=dispose) 추가. orch-watch R7 은 stoppedBy 있으면 제외(SRC_OF R7 도 같음). 분류 '결과 줄 없이 끊김(마지막 <lastType>)' 추가, 사건 서명은 'R7|결과 줄 없이 끊김'으로 묶음. digest claude 에 timedOut, stopped, noResult 추가. stoppedBy 없는 지난 기록은 같은 src와 pid 의 'VS Code 종료' user.stop 뒤 15초 안이면 stopped 로 셈(06:06:06 exit 1 은 PID 42120 orch 호출이 dispose 로 끊긴 것을 events.jsonl 에서 확인). 범위 밖 미수정: orch-state.js:161 실행 흐름 표시는 exit 값으로 실패 색을 정하므로 시간 초과 호출이 실패 색으로 나옴. 작업 모드 DB_ONLY 이나 대상이 tools/VibeManager 라 hook 차단 없음"
   },
-  "snap": "prop_20261120094530_REVIEW_3"
+  "snap": "prop_20261120094530_REVIEW_3",
+  "effectiveMs": 1795138973072,
+  "effectiveAt": "2026-11-20T10:42:53+09:00"
 }

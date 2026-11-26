@@ -237,8 +237,8 @@ function start(p, it, cwd, name, say) {
     post({ type: 'server', name, ok, sec });
     evt('server.state', { name, port: it.port || null, state: ok ? 'ready' : 'failed', ms_boot: Date.now() - t0, msg: String(msg || '').slice(0, 300), source: 'start' });
     if (ok) { s.ready = true; saveReg(); if (it.port) { const pv = states[it.port] || {}; states[it.port] = Object.assign({ port: it.port, label: LABEL[it.port] || `포트 ${it.port}`, state: 'listen', since: Date.now(), owner: 'vm', name }, pv, { bootSec: sec, owner: 'vm', name }); } pollOnce(); }
-    if (ok) vscode.window.showInformationMessage(`Vibe_Manager ${name} 기동 완료 (${sec}s)${it.port ? ` · 포트 ${it.port}` : ''}`);
-    else Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ${name} ${String(msg).split('\n')[0]}`, 'Log 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', stream === 'be' ? 'belog' : stream === 'fe' ? 'felog' : 'board'); }, () => { });
+    // 기동 완료 알림 = 웹뷰 note(post type 'server') 한 경로만(R142). VS Code 알림은 실패 경고만 남김
+    if (!ok) Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ${name} ${String(msg).split('\n')[0]}`, 'Log 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', stream === 'be' ? 'belog' : stream === 'fe' ? 'felog' : 'board'); }, () => { });
   };
   const onLine = ln => {
     out(stream, ln + '\n');
@@ -293,7 +293,7 @@ async function stop(p, it, name, say) {
   let freed = !it.port;
   for (let i = 0; it.port && i < 20; i++) { await new Promise(r => setTimeout(r, 1000)); if (!portOwnerInfo(it.port)) { freed = true; break; } }
   const sec = Math.round((Date.now() - t0) / 1000);
-  if (freed) { out(stream, `${name} 종료 완료 (${sec}s)${it.port ? `, 포트 ${it.port} 해제` : ''}\n`, 'ok'); post({ type: 'server', name, state: 'stopped', sec }); vscode.window.showInformationMessage(`Vibe_Manager ${name} 종료 완료 (${sec}s)`); }
+  if (freed) { out(stream, `${name} 종료 완료 (${sec}s)${it.port ? `, 포트 ${it.port} 해제` : ''}\n`, 'ok'); post({ type: 'server', name, state: 'stopped', sec }); }   // 종료 완료 알림 = 웹뷰 note 한 경로만(R142)
   else { const still = portOwnerInfo(it.port); out(stream, `${name} 종료 요청 후 ${sec}s, 포트 ${it.port} 아직 점유: ${still ? still.name + ' ' + still.pid : '?'}\n`, 'bad'); vscode.window.showWarningMessage(`Vibe_Manager ${name}: 포트 ${it.port} 가 아직 점유 중입니다 (${still ? still.name + ' ' + still.pid : '?'}).`); }
   evt('server.state', { name, port: it.port || null, state: freed ? 'stopped' : 'stop-failed', ms_stop: Date.now() - t0, source: 'stop' });
   pollOnce();

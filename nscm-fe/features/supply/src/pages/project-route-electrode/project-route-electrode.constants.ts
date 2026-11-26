@@ -127,7 +127,7 @@ export const MSG = {
   REQUIRE_DIVISION: 'MSG00097', // 권한 division 없음(R-AUTH, design/01 §2.7)
   SAVE_RESULT: 'MSG00002', // 저장 성공 → "Saved successfully."(design/03 §4.2 "S"=성공). AS-IS MSG00004는 TO-BE에서 "No changes to save."라 의미 오매칭 — MSG00002로 교정(2026-11-03)
   SAVE_ERROR: 'MSG00006', // 저장 에러(O_RESULT_CODE≠S, design/03 §4.2)
-  NO_CHANGE: 'MSG00133', // 수정 내용 없음
+  NO_CHANGE: 'MSG00004', // 수정 내용 없음 (AS-IS MSG00133 → TO-BE MSG00004)
   // Edit 진입 시 데이터 없음(R-EDIT, cs:428~432). AS-IS MSG00259 는 TO-BE 미등록 → 문구기준 재매핑
   //   MSG00662("Edit mode is available after search." 3언어 등록)로 통일(자매 SCP0048 G-6 선례).
   EDIT_NO_DATA: 'MSG00662',

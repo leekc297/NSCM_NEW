@@ -1,0 +1,236 @@
+{
+ "screen": "DMF0069",
+ "calls": [
+  {
+   "cls": "DMF0003_CustDemandAnalysis",
+   "method": "spd3_CellClick_1",
+   "asis_ref": "DMF0069_HistoryDataManagingBoard.cs:890",
+   "trigger": {
+    "kind": "OTHER",
+    "control": "spd3_CellClick_1",
+    "column": "",
+    "guard": ""
+   },
+   "multi": "",
+   "div_arg": "pDivision",
+   "period_args": [
+    "pEndCustomer"
+   ],
+   "args": [
+    {
+     "param": "DIVISION_ID",
+     "kind": "VAR",
+     "arg": "pDivision"
+    },
+    {
+     "param": "END_CUSTOMER",
+     "kind": "EXPR",
+     "arg": "pEndCustomer"
+    },
+    {
+     "param": "PROJECT_CODE",
+     "kind": "EXPR",
+     "arg": "pProjectCode"
+    },
+    {
+     "param": "YYYYMM",
+     "kind": "VAR",
+     "arg": "pYYYYMM"
+    },
+    {
+     "param": "EDI_QTY",
+     "kind": "VAR",
+     "arg": "pEdiQty"
+    },
+    {
+     "param": "MEASURE",
+     "kind": "LITERAL",
+     "arg": "pMeasure"
+    },
+    {
+     "param": "MKT_FCST",
+     "kind": "VAR",
+     "arg": "pMktFcst"
+    },
+    {
+     "param": "FIRSTWEEK",
+     "kind": "EXPR",
+     "arg": "FirstWeeked(DateTime.Now)"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "DMF0069_HistoryDataManagingBoard.cs:891",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "DMF0069_HistoryDataManagingBoard.cs:995",
+     "target": "popup.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "DMF0003_CustDemandAnalysis": {
+   "cls": "DMF0003_CustDemandAnalysis",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0003_CustDemandAnalysis.cs",
+   "title": "Customer Demand Analysis System",
+   "conds": [],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "UP_FX_GetCommonDataList_DM",
+     "src": "Doc/asisfacts/db/modules/dbo.UP_FX_GetCommonDataList_DM.sql",
+     "order_known": true,
+     "order_keys": "DISPLAY_SEQ",
+     "order_line": "564",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "CODE",
+      "PARAM1",
+      "PARAM2",
+      "PARAM3",
+      "PARAM4",
+      "PARAM5",
+      "AuthTypeParaSite"
+     ],
+     "method": "GetSPlant",
+     "ref": "DMF0003_CustDemandAnalysis.cs:893",
+     "save": false
+    },
+    {
+     "sp": "UP_FX_GetCommonDataList_DM",
+     "src": "Doc/asisfacts/db/modules/dbo.UP_FX_GetCommonDataList_DM.sql",
+     "order_known": true,
+     "order_keys": "DISPLAY_SEQ",
+     "order_line": "564",
+     "like": true,
+     "upper": false,
+     "comma": true,
+     "params": [
+      "CODE",
+      "PARAM1",
+      "PARAM2",
+      "PARAM3",
+      "PARAM4",
+      "PARAM5",
+      "AuthTypeParaSite"
+     ],
+     "method": "GetSLOC",
+     "ref": "DMF0003_CustDemandAnalysis.cs:911",
+     "save": false
+    },
+    {
+     "sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0003_GET_DM_ANL_MKT_PSI_DPINIT.sql",
+     "order_known": true,
+     "order_keys": "SEQ;",
+     "order_line": "154",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_project_code",
+      "p_yyyymm",
+      "p_created_by",
+      "p_end_customer"
+     ],
+     "method": "Select_DpInit_Data",
+     "ref": "DMF0003_CustDemandAnalysis.cs:1136",
+     "save": false
+    },
+    {
+     "sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+     "src": "Doc/asisfacts/db/modules/dbo.DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT.sql",
+     "order_known": true,
+     "order_keys": "SEQ;",
+     "order_line": "88",
+     "like": false,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "p_division_id",
+      "p_project_code",
+      "p_yyyymm",
+      "p_created_by",
+      "p_end_customer"
+     ],
+     "method": "Select_DpResult_Data",
+     "ref": "DMF0003_CustDemandAnalysis.cs:1500",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "DMF0003_CustDemandAnalysis.cs:1371",
+     "method": "Select_DpInit_Data",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), false);",
+     "guard": ""
+    },
+    {
+     "ref": "DMF0003_CustDemandAnalysis.cs:1672",
+     "method": "Select_DpResult_Data",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), false);",
+     "guard": ""
+    }
+   ],
+   "color": [
+    {
+     "ref": "DMF0003_CustDemandAnalysis.cs:1377",
+     "method": "Select_DpInit_Data",
+     "raw": "siMain.ActiveSheet.Cells[i, j].BackColor = Color.LightYellow;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DMF0003_CustDemandAnalysis.cs:1678",
+     "method": "Select_DpResult_Data",
+     "raw": "siMain.ActiveSheet.Cells[i, j].BackColor = Color.LightYellow;",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DMF0003_CustDemandAnalysis.cs:1784",
+     "method": "sheetSetting",
+     "raw": "siMain.ActiveSheet.Cells[i, j].BackColor = Color.LightYellow;",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "DMF0003_CustDemandAnalysis.cs:335",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    },
+    {
+     "ref": "DMF0003_CustDemandAnalysis.cs:583",
+     "method": "SaveData",
+     "raw": "this.Close();",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

@@ -12,6 +12,7 @@ const path = require('path'); const cp = require('child_process');
 let errlog = { note() { return null; } }; try { errlog = require('./orch-errlog'); } catch { /* 오류 기록 모듈 없음 */ }
 let getPaths = null; let started = false; let notifier = null; const busy = new Set(); const feed = [];
 const P = () => getPaths();
+const LG = () => { try { const l = require('./orch-ledger'); if (!l.ready()) l.init({ paths: () => P() }); return l; } catch (e) { return { note() { return ''; }, observing() { return false; }, tick() { return {}; }, stats() { return { byRule: {}, falses: [], observe: {}, total: 0, overdue: 0 }; } }; } }; // 2026-11-20 개입 장부(orch-ledger.js)
 const RESOLVE = /Failed to resolve import "@shared\/([A-Za-z0-9_-]+)"/;
 
 function say(text, o) { feed.unshift(Object.assign({ at: new Date().toISOString(), text }, o || {})); if (feed.length > 100) feed.length = 100; try { require('./orch-events').emit('heal', Object.assign({ text }, o || {})); } catch { /* 사건 기록 실패는 무시 */ } }
@@ -37,14 +38,20 @@ async function handleStop(inc, deps) {
   const watch = deps.watch || require('./orch-watch'); const state = deps.state || require('./orch-state'); const agent = deps.agent || require('./orch-agent');
   const ev = inc.evidence || {}; const wb = ev.wb; const key = `R14|${wb}`; if (wb == null || busy.has(key)) return { healed: false, why: wb == null ? '창 정보 없음' : '같은 창 처리 중' };
   busy.add(key);
-  const give = why => { watch.update(inc.id, {}, { by: 'VMO 자가 복구', grade: 'A', what: `${why}. 에이전트 진단으로 넘김(중지 경로 결함)` }); say(`${inc.screen} 중지 뒤 계속 실행 자가 복구 못 함: ${why}`, { screen: inc.screen, inc: inc.id }); try { agent.enqueue(inc.id, false); } catch (e) { errlog.note('orch-heal', 'enqueueStop', e); } return { healed: false, why }; };
+  const give = why => { watch.update(inc.id, { status: 'open' }, { by: 'VMO 자가 복구', grade: 'A', what: `${why}. 에이전트 진단으로 넘김(중지 경로 결함)` }); /* 2026-11-20: 상태를 열림으로 되돌려야 에이전트 drain 이 받음(종전 '조치 중'으로 남아 진단 안 됨) */ say(`${inc.screen} 중지 뒤 계속 실행 자가 복구 못 함: ${why}`, { screen: inc.screen, inc: inc.id }); try { agent.enqueue(inc.id, false); } catch (e) { errlog.note('orch-heal', 'enqueueStop', e); } return { healed: false, why }; };
   try {
-    const snap = state.snapshot(); const pids = [...snap.procs.filter(p => p.wb === wb).map(p => p.pid), ...(snap.claudes || []).filter(c => c.wb === wb).map(c => c.pid)].filter(Boolean);
+    const snap = state.snapshot();
+    // 2026-11-20 멈추기 전 확인: 사건의 체인이 중지 시각 뒤에 시작한 새 실행(재개 · 다시 실행)이면 감시 오판 → 멈추지 않고 닫음(16:06 SCP0028 재개 실행을 멈춘 사고)
+    const ch0 = snap.chains.find(c => c.runId === ev.runId);
+    if (ch0 && ev.stopMs && Date.now() - (ch0.sec || 0) * 1000 > ev.stopMs + 2000) { const what = `감시 오판: 체인 ${ev.runId} 은 중지(${new Date(ev.stopMs).toTimeString().slice(0, 8)}) 뒤에 시작한 새 실행. 멈추지 않음`; watch.update(inc.id, { status: 'resolved', resolvedBy: 'VMO 자가 복구', falsePositive: true }, { by: 'VMO 자가 복구', grade: 'A', what }); errlog.note('orch-heal', 'r14FalsePositive', what); say(`${inc.screen} ${what}`, { screen: inc.screen, inc: inc.id, ok: true }); return { healed: true, why: what, falsePositive: true }; }
+    const pids = [...snap.procs.filter(p => p.wb === wb).map(p => p.pid), ...(snap.claudes || []).filter(c => c.wb === wb).map(c => c.pid)].filter(Boolean);
+    let prog0 = null; try { prog0 = JSON.parse(require('fs').readFileSync(path.join(P().vibeDir, 'orch', 'chain_progress', `${ev.runId}.json`), 'utf8')); } catch { prog0 = null; /* 진행 기록 없음 = 되돌릴 재개 기록 없음 */ }
+    LG().note({ kind: 'stop', rule: 'R14', inc: inc.id, screen: inc.screen, job: ev.job || '', runId: ev.runId || '', target: wb, by: 'VMO 자가 복구', premise: { key: 'chainStartedBeforeStop', runId: ev.runId || '', stopMs: ev.stopMs || 0 }, undo: prog0 ? { how: 'resume', prog: prog0 } : null });
     watch.update(inc.id, { status: 'acting' }, { by: 'VMO 자가 복구', grade: 'A', what: `중지된 체인이 계속 실행 중. 프로세스 ${pids.length}개 종료(PID ${pids.join(', ') || '없음'}) · 체인 중지 다시 요청` });
     const killed = []; for (const pid of pids) if (await (deps.kill || killTree)(pid)) killed.push(pid);
     let how = '';
     if (ev.job) { try { const jr = deps.jobRunner || require('./job-runner'); const r = jr.stopScreen(inc.screen, 'VMO 자가 복구', `R14 ${inc.id}`); how = `VMW 작업 ${ev.job} 화면 중지 ${r && r.none ? '대상 없음' : '요청'}`; } catch (e) { how = `VMW 작업 중지 실패 ${e.message}`; } }
-    else if (typeof wb === 'number') { try { const ok = (deps.stopInst || require('./workbench').stopInst)(wb); how = ok ? `VM#${wb} 창 중지 요청` : `VM#${wb} 창 없음`; } catch (e) { how = `창 중지 실패 ${e.message}`; } }
+    else if (typeof wb === 'number') { try { const ok = (deps.stopInst || require('./workbench').stopInst)(wb, 'VMO 자가 복구'); how = ok ? `VM#${wb} 창 중지 요청` : `VM#${wb} 창 없음`; } catch (e) { how = `창 중지 실패 ${e.message}`; } }
     const count0 = inc.count || 1;
     await new Promise(r => setTimeout(r, deps.recheckMs != null ? deps.recheckMs : 30000));
     const after = watch.get(inc.id) || inc; const alive = state.snapshot().chains.some(c => c.runId === ev.runId);
@@ -63,7 +70,7 @@ async function handle(inc, deps) {
   const watch = deps.watch || require('./orch-watch'); const jr = deps.jobRunner || require('./job-runner'); const agent = deps.agent || require('./orch-agent');
   const scr = inc.screen; if (!scr || busy.has(scr)) return { healed: false, why: busy.has(scr) ? '같은 화면 처리 중' : '화면 없음' };
   busy.add(scr);
-  const give = why => { watch.update(inc.id, {}, { by: 'VMO 자가 복구', grade: 'A', what: `코드로 풀지 못함: ${why}. 에이전트 조치로 넘김` }); say(`${scr} 자가 복구 못 함: ${why}`, { screen: scr, inc: inc.id }); try { agent.enqueue(inc.id, false); } catch (e) { errlog.note('orch-heal', 'enqueue', e); } return { healed: false, why }; };
+  const give = why => { watch.update(inc.id, { status: 'open' }, { by: 'VMO 자가 복구', grade: 'A', what: `코드로 풀지 못함: ${why}. 에이전트 조치로 넘김` }); say(`${scr} 자가 복구 못 함: ${why}`, { screen: scr, inc: inc.id }); try { agent.enqueue(inc.id, false); } catch (e) { errlog.note('orch-heal', 'enqueue', e); } return { healed: false, why }; };
   try {
     const fe = inc.evidence && inc.evidence.fe; const m = fe && RESOLVE.exec(fe.msg || '');
     if (!m) return give(fe ? `FE 변환 오류가 공용 파일 빠짐이 아님(${String(fe.msg).slice(0, 120)})` : 'FE 변환 오류 없음. 메뉴 권한, BE, 계정 확인 필요');
@@ -73,7 +80,9 @@ async function handle(inc, deps) {
     if (r.code !== 0) return give(`공용 파일 받기 실패(exit ${r.code}): ${r.out.split(/\r?\n/).filter(l => /ERROR|⛔/.test(l)).slice(-2).join(' / ').slice(0, 300)}`);
     const again = await (deps.feCheck || watch.feCompileError)(scr);
     if (again) return give(`받은 뒤에도 FE 변환 오류: ${again.file} ${String(again.msg).slice(0, 160)}`);
-    const rq = jr.requeueScreen(scr, `공용 파일 @shared/${m[1]} 받음(R13 ${inc.id})`);
+    const rerunOk = LG().rerunAllowed ? LG().rerunAllowed() : false; // 2026-11-20 재수행 설정(기본 수행 없음)
+    const rq = rerunOk ? jr.requeueScreen(scr, `공용 파일 @shared/${m[1]} 받음(R13 ${inc.id})`) : { none: `${LG().RERUN_NOTE || '재수행 설정 = 수행 없음'}. 작업 재개·재실행은 사용자` };
+    if (!rq.none) LG().note({ kind: 'requeue', rule: 'R13', inc: inc.id, screen: scr, job: rq.job || '', by: 'VMO 자가 복구', premise: { key: 'screenOpensAfterFix', fix: `@shared/${m[1]}` } });
     const what = `해결: @shared/${m[1]} 받음 · 화면 파일 변환 오류 0 확인 · ${rq.none ? `다시 실행 안 함(${rq.none})` : `VMW 작업 ${rq.job} 에서 ${scr} 다시 실행(${rq.how === 'stop-requeue' ? '진행 중 실행을 멈추고 다시' : '대기로 돌림'})`}`;
     watch.update(inc.id, { status: 'resolved', resolvedBy: 'VMO 자가 복구' }, { by: 'VMO 자가 복구', grade: 'A', what });
     say(`${scr} ${what}`, { screen: scr, inc: inc.id, ok: true }); if (notifier) try { notifier(inc, what); } catch (e) { errlog.note('orch-heal', 'notify', e); }
@@ -85,7 +94,11 @@ async function handle(inc, deps) {
 function init(o) {
   if (started) return; started = true; getPaths = o.paths; notifier = o.notify || null;
   const watch = o.watch || require('./orch-watch');
-  watch.on((inc, isNew) => { if (isNew && claims(inc)) handle(inc, o).catch(e => errlog.note('orch-heal', 'on', e)); });
+  watch.on((inc, isNew) => {
+    if (!isNew || !claims(inc)) return;
+    if (LG().observing(inc.rule)) { try { watch.update(inc.id, {}, { by: 'VMO', what: `${inc.rule} 관찰 모드: 자가 복구하지 않음(오판 확정 뒤 개선안 반영 완료 때까지 · Health S14)` }); } catch (e) { errlog.note('orch-heal', 'observe', e); } return; }
+    handle(inc, o).catch(e => errlog.note('orch-heal', 'on', e));
+  });
 }
 function dispose() { started = false; }
 function feedList() { return feed.slice(); }

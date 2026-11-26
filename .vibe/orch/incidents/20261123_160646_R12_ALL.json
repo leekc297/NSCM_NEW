@@ -1,0 +1,29 @@
+{
+  "id": "20261123_160646_R12_ALL",
+  "at": "2026-11-23T16:06:46+09:00",
+  "ms": 1795417606288,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_wb_late.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_wb_late.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 1 · FAIL 4 · FAIL AI Agent 단계(3) 카드 안 접는 묶음에 이어진 작업 없음 / FAIL 묶음은 접힌 상태로 시작(details 닫힘)  / FAIL 메타·HTML 보기도 단계 카드 안  / FAIL 체인 끝난 뒤 행 = 종전대로 대화 영역  / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_wb_late.js",
+    "file": "t_wb_late.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T16:35:34+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

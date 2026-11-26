@@ -1,0 +1,121 @@
+{
+ "definition": "Division 별 End Customer, Sales Site, Model 단위로 MKT FCST 수량을 일, 주, 월 Bucket 으로 입력하고 Balance 를 확인하는 화면",
+ "overview": [
+  "End Customer, Sales Site, Project, Model 단위로 MKT FCST 수량을 기간별로 입력하고 RTF[R+P] 와 비교한 Balance 를 확인하는 수요 계획 화면임",
+  "위쪽 조회 조건, 왼쪽 MKT FCST 그리드, 오른쪽 기간 수량 영역으로 구성됨. 일자 칸 우클릭 메뉴에서 Request PR, View PR, History 팝업을 엶",
+  "Div, Period, Bucket 을 고르고 Search(F5) → 노란 칸에 수량 입력 또는 Insert(F8) 로 행 추가 → Save(F7) 순서로 작업함",
+  "Customer FCST Upload(DMF0014)에서 올린 고객 FCST 가 MKT FCST 데이터로 넘어옴. 저장한 MKT FCST 수량은 Sales Plan(DMF0021) 데이터에 반영됨"
+ ],
+ "pages": [
+  {
+   "title": "MKT FCST",
+   "keyPoint": "Insert 한 행이 있으면 Bucket 을 바꿀 수 없으므로 먼저 저장함. 고객향 사이트에 FCST Type 을 AS 또는 WS 로 넣으면 AS From Site 를 채워야 저장됨.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.157,
+     "y": 0.148
+    },
+    {
+     "no": 2,
+     "x": 0.573,
+     "y": 0.247
+    },
+    {
+     "no": 3,
+     "x": 0.175,
+     "y": 0.247
+    },
+    {
+     "no": 4,
+     "x": 0.628,
+     "y": 0.495
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "조회 조건",
+     "lines": [
+      "Div: 필수. 권한이 있는 Division 만 콤보에 나옴. 비우고 조회하면 \"Division 을 선택하세요.\" 메시지가 뜸",
+      "Team, End Customer: Div 에 속한 값만 나옴. Sales Site 는 고른 End Customer 기준으로 나옴",
+      "Sender Code: EDI 송신처 목록임. Div 82 에서는 회색으로 막혀 있음",
+      "Period: 필수. 시작일이 종료일보다 늦으면 조회되지 않음. 3년을 넘으면 \"조회 기간은 3년 이내로 입력해주세요.\" 메시지가 뜸",
+      "Bucket: Daily, Weekly, Monthly 중 선택. Insert 한 행이 있으면 \"Insert 된 행이 있어 Bucket 을 변경할 수 없습니다.\" 메시지가 뜸"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "버튼",
+     "lines": [
+      "Insert 왼쪽 아이콘 2개: Column Setting, Measure 선택. 고른 컬럼과 Measure 는 사용자별로 저장됨",
+      "Insert(F8): 새 행을 추가함. Measure 기본값은 MKT_FCST_RP 임",
+      "Delete(F9): 새로 추가한 행만 지울 수 있음. 조회된 행을 고르면 \"Only new rows can be deleted.\" 메시지가 뜸",
+      "Save(F7): \"저장 하시겠습니까?\" 확인 뒤 저장함. 바꾼 내용이 없으면 \"수정한 내용이 없습니다.\" 메시지가 뜸",
+      "Sort, Filter, Condition, Reset Condition, Excel 은 공통 기능과 같음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "MKT FCST 그리드",
+     "lines": [
+      "필수 입력(제목 앞 빨간 점): Div, Sales Site, Project Code, Model, Incoterms, FCST Type, Customs Handbook, Measure",
+      "필수 값이 비면 \"{0} 값은 필수 입력 항목입니다.\" 메시지가 뜸",
+      "같은 Division, Project, Item, 일자, Measure 조합이 이미 있으면 중복 메시지가 뜨고 저장되지 않음",
+      "AS From Site: 고객향 사이트에 FCST Type 을 AS 또는 WS 로 넣으면 필수. ALL 로는 저장할 수 없음",
+      "Measure: 모델마다 MKT FCST[R+P], RTF[R+P], Balance 행이 묶여 나옴"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "기간 수량 영역",
+     "lines": [
+      "Bucket 에 맞춰 일, 주, 월 단위 컬럼이 만들어짐",
+      "노란 칸에 수량을 입력함. 소수점은 입력되지 않고 정수로 저장됨",
+      "실적보다 작은 수량을 넣으면 \"실적 수량보다 작은 숫자를 넣을 수 없습니다.\" 메시지가 뜸",
+      "Balance 의 음수는 빨간 글자로 표시됨",
+      "일자 칸 우클릭 메뉴: Request PR, View PR, Add History, View History. 셀을 고르지 않으면 \"선택된 셀이 없습니다.\" 메시지가 뜸",
+      "SCP Planner, DM Planner 권한은 정해진 수정 가능 시간에만 수정할 수 있음"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0003",
+ "uiName": "MKT FCST",
+ "menuPath": "DM> Demand Plan> MKT FCST",
+ "captures": [
+  "captures/DMF0003.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0003/",
+  "Doc/asisfacts/screens/DMF0003/",
+  "Doc/gen/DMF0003/"
+ ],
+ "buttons": [
+  "Mkt Fcst:COLUMN_SETUP",
+  "Mkt Fcst:DELETE",
+  "Mkt Fcst:EXCEL",
+  "Mkt Fcst:INSERT",
+  "Mkt Fcst:MEASURE_SELECT",
+  "Mkt Fcst:SAVE",
+  "Mkt Fcst:SEARCH",
+  "car:SEARCH",
+  "carProperty:SEARCH",
+  "carTitle:SEARCH",
+  "custDemand:SAVE",
+  "custDemandInit:SEARCH",
+  "custDemandResult:SEARCH",
+  "dayRange:SEARCH",
+  "prHistory:SEARCH",
+  "prPopup:SAVE",
+  "prPopup:SEARCH",
+  "psi:SEARCH",
+  "psiLogic:SEARCH",
+  "psiTitle:SEARCH",
+  "spreadTitle:SEARCH",
+  "sspCompare:SEARCH",
+  "titleSet:SAVE",
+  "titleSet:SEARCH"
+ ]
+}

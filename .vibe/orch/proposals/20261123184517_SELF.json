@@ -1,0 +1,114 @@
+{
+  "id": "20261123184517_SELF",
+  "at": "2026-11-23T18:45:17+09:00",
+  "ms": 1795427117086,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/recheck.js|화면에보이는note문구일자를n줄stamp의yyyymmddhhmm고정형식으",
+  "title": "사용자 지시 R27 같은 문제: tools/VibeManager/recheck.js:17 화면에 보이는 note 문구 일자를 8줄 stamp 의 YYYY-MM-DD HH:mm 고정 형식으로 만듦",
+  "evidence": "규칙 R27 \"VM 화면, 알림, 결과 요약, 생성 문서에 보이는 일자는 Windows 짧은 날짜 형식(date-fmt.js fmtDate, fmtDT, 웹뷰 fmtD)으로 보임. 저장 값은 바꾸지 않음\" (원래 지시 2026-11-23 17:55 \"VM의 모든 일자는 윈도우의 일자 FORMAT 에 맞도록 해주세요. 현재 윈도우는 YYYY-MM-DD 로 표기하고 있습니다.\") · tools/VibeManager/recheck.js:17 return { fixedAt: stamp(fx), ledgerAt: stamp(lt), note: `미검증 해소 보완 ${stamp(fx)} · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)` };",
+  "targets": [
+    "tools/VibeManager/recheck.js"
+  ],
+  "before_after": "note 문구 안 일자만 date-fmt.js fmtDT(fx) 로 바꿈. fixedAt, ledgerAt 저장 값은 그대로 둠",
+  "verify": "node --check tools/VibeManager/recheck.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/recheck.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T02:29:17+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T02:32:53+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self0229"
+    },
+    {
+      "at": "2026-11-24T02:32:55+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T02:48:17+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 recheck.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-24T02:48:17+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전(2026-11-23T17:33:26Z): node --check 통과, run_all ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤(2026-11-23T17:44Z): node --check 통과, run_all ALL OK 74/74 PASS 1161 FAIL 0. 표본 호출 pendingRecheck note='미검증 해소 보완 2026-11-23 18:05 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)', fixedAt='2026-11-23 18:05', ledg · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-24T02-32-55_claude_orch.log",
+      "sec": 706,
+      "costUsd": 0.7397585999999999,
+      "files": [
+        "tools/VibeManager/recheck.js"
+      ]
+    },
+    {
+      "at": "2026-11-24T23:00:35+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-24T11:08:32+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VM 화면, 알림, 결과 요약, 생성 문서에 보이는 일자는 Windows 짧은 날짜 형식(date-fmt.js fmtDate, fmtDT, 웹뷰 fmtD)으로 보임. 저장 값은 바꾸지 않음 규칙을 tools/VibeManager/recheck.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R27|tools/VibeManager/recheck.js",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795454956796,
+  "autoFp": "4507a753c3",
+  "applyStartMs": 1795455175551,
+  "verifyJudge": {
+    "at": "2026-11-24T02:44:43+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 74/74개 파일 통과(PASS 1161, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self0229",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "recheck.js"
+  ],
+  "appliedMs": 1795456097473,
+  "synced": [
+    "recheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/recheck.js 출력 없음(통과, 반영 전과 반영 뒤 모두). node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 74/74 PASS 1161 FAIL 0 212.6s' → 반영 뒤 'ALL OK 파일 74/74 PASS 1161 FAIL 0 213s'. 웹뷰 파일 아님. run_all 안의 t_webview_syntax.js PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/recheck.js"
+    ],
+    "verify_result": "반영 전(2026-11-23T17:33:26Z): node --check 통과, run_all ALL OK 74/74 PASS 1161 FAIL 0 → 반영 뒤(2026-11-23T17:44Z): node --check 통과, run_all ALL OK 74/74 PASS 1161 FAIL 0. 표본 호출 pendingRecheck note='미검증 해소 보완 2026-11-23 18:05 · CheckList 재수행 전(보완 전 건수는 표시하지 않음, 재수행 뒤 표시)', fixedAt='2026-11-23 18:05', ledgerAt='2020-01-01 00:00'(저장 형식 유지)",
+    "note": "note 문구 일자만 stamp(fx) → fmtDT(fx)로 변경하고 require('./date-fmt') 1줄을 추가함. 첫 Edit에서 '·' 뒤 공백 1칸이 빠져 복원 후 재검증함. 현재 Windows 형식이 YYYY-MM-DD라 표시 문구는 반영 전후 같음. 다른 형식 표시는 미확인"
+  },
+  "snap": "prop_20261123184517_SELF",
+  "effectiveMs": 1795486112212,
+  "effectiveAt": "2026-11-24T11:08:32+09:00"
+}

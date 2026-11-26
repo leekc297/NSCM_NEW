@@ -1,0 +1,26 @@
+﻿scenario_id,unit,why,type,axes,entry,src
+SCP0028-Seb6c4c,정적,도달 경로 없음 · 원문 SCP0028_Shipment_Lot_Size.cs:154,기타,OTHER,,SCP0028_Shipment_Lot_Size.cs:154
+SCP0028-S207f89,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:176,저장,NONE,event:Form_Load | event:this.Load,SCP0028_Shipment_Lot_Size.cs:176
+SCP0028-Sc79aa7,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SCP0028_Shipment_Lot_Size.cs:232,연쇄,NONE,button:EditButton | event:btnInput_Click | event:this.btnInput.Click,SCP0028_Shipment_Lot_Size.cs:232
+SCP0028-S5bc1f8,동적,서버 호출 관찰 필요 SCP.SCP0028_GET_SHIPMENT_LOT_SIZE,조회,NONE,button:FindButton | button:SaveButton | event:btnDelete_Click | event:this.btnDelete.Click,SCP0028_Shipment_Lot_Size.cs:322
+SCP0028-S05c3ca,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:464,저장,NONE,event:btnDelete_Click | event:this.btnDelete.Click,SCP0028_Shipment_Lot_Size.cs:464
+SCP0028-S2cb343,정적,저장 분기 · SP 원문 대조 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE,저장,DATA,event:btnDelete_Click | event:this.btnDelete.Click,SCP0028_Shipment_Lot_Size.cs:511
+SCP0028-Sf13d18,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:544,저장,DATA,event:btnDelete_Click | event:this.btnDelete.Click,SCP0028_Shipment_Lot_Size.cs:544
+SCP0028-Sa551fe,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:553,저장,DATA,event:btnDelete_Click | event:this.btnDelete.Click,SCP0028_Shipment_Lot_Size.cs:553
+SCP0028-S1b67fd,동적,서버 호출 관찰 필요 SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,조회,NONE,event:btnInput_Click | event:this.btnInput.Click,SCP0028_Shipment_Lot_Size.cs:397
+SCP0028-Sfc19ed,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SCP0028_Shipment_Lot_Size.cs:134,초기,NONE,event:Form_Load | event:this.Load,SCP0028_Shipment_Lot_Size.cs:134
+SCP0028-S96bd28,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SCP0028_Shipment_Lot_Size.cs:185,초기,NONE,button:FindButton | button:SaveButton | event:Form_Load | event:btnDelete_Click,SCP0028_Shipment_Lot_Size.cs:185
+SCP0028-Sd13698,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:594,저장,SHEET+DATA+STATE,button:SaveButton,SCP0028_Shipment_Lot_Size.cs:594
+SCP0028-S914d83,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:608,저장,SHEET+DATA+STATE,button:SaveButton,SCP0028_Shipment_Lot_Size.cs:608
+SCP0028-Sa6a4a5,정적,저장 분기 · SP 원문 대조 SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE,저장,SHEET+DATA+STATE,button:SaveButton,SCP0028_Shipment_Lot_Size.cs:659
+SCP0028-S7c0414,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:691,저장,SHEET+DATA+STATE,button:SaveButton,SCP0028_Shipment_Lot_Size.cs:691
+SCP0028-S0fc852,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:700,저장,SHEET+DATA+STATE,button:SaveButton,SCP0028_Shipment_Lot_Size.cs:700
+SCP0028-S5dcee3,정적,조건 없는 초기 분기 · 기본 실측 덤프 + 원문 SCP0028_Shipment_Lot_Size.cs:166,초기,NONE,event:ClbDivision_SelectedIndexChanged | event:Form_Load | event:cboDivision.SelectedIndexChanged | event:this.Load,SCP0028_Shipment_Lot_Size.cs:166
+SCP0028-Sb39c49,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SCP0028_Shipment_Lot_Size.cs:721,연쇄,NONE,event:spdMain.TopChange,SCP0028_Shipment_Lot_Size.cs:721
+SCP0028-S773b60,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:298,저장,NONE,event:btnDelete_Click | event:this.btnDelete.Click,SCP0028_Shipment_Lot_Size.cs:298
+SCP0028-Sae81a6,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SCP0028_Shipment_Lot_Size.cs:270,팝업,NONE,event:btnInput_Click | event:this.btnInput.Click,SCP0028_Shipment_Lot_Size.cs:270
+SCP0028-Sea1449,정적 우선,분기 조건 NONE · guard 원문·메타 값 대조 SCP0028_Shipment_Lot_Size.cs:246,팝업,NONE,event:btnItemId_Click | event:this.btnItemId.Click,SCP0028_Shipment_Lot_Size.cs:246
+SCP0028-Sec3442,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:btnItemId_Click | event:this.btnItemId.Click,SCP0028_Shipment_Lot_Size.cs:256
+SCP0028-S6638fb,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:764,저장,DATA,button:SaveButton,SCP0028_Shipment_Lot_Size.cs:764
+SCP0028-S5c2dba,정적,저장 분기 · SP 원문 대조 SCP0028_Shipment_Lot_Size.cs:771,저장,DATA,button:SaveButton,SCP0028_Shipment_Lot_Size.cs:771
+SCP0028-S5fcb37,동적,실행 값 필요 축 OTHER,연쇄,OTHER,event:dsdm.Changed | event:spdMain_Change,SCP0028_Shipment_Lot_Size.cs:735

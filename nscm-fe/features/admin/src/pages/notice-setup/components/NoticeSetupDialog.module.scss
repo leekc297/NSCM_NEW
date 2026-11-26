@@ -285,6 +285,87 @@
   white-space: nowrap;
 }
 
+// 첨부파일 섹션 - 라벨 + 세로로 쌓이는 업로드 영역(선택 버튼 + 파일 목록)
+.attachmentField {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 8px;
+  row-gap: 6px;
+}
+
+.attachmentLabel {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  color: #4f555d;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.attachmentArea {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-column: 2;
+  grid-row: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1.5px dashed #b8bec5;
+  border-radius: 8px;
+  background: #fafbfc;
+
+  &:focus-within {
+    border-color: #5c7cfa;
+    background: #f7f9ff;
+  }
+}
+
+.attachmentActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.attachmentList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attachmentItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.attachmentName {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: #2f6fed;
+  font-size: 12px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.attachmentSize {
+  flex: 0 0 auto;
+  color: #8a929c;
+  font-size: 11px;
+}
+
 .buttonRow {
   display: flex;
   flex-shrink: 0;
@@ -304,14 +385,16 @@
     grid-column: auto;
   }
   .imageField,
-  .contentField {
+  .contentField,
+  .attachmentField {
     grid-template-columns: 1fr;
   }
 
   // 데스크톱은 라벨·박스가 같은 row 에서 나란히 배치되지만, 모바일은 세로로 다시 쌓는다
   // (grid-row 를 명시적으로 되돌려야 함 - 데스크톱 기본값이 둘 다 row 1 이라 그대로 두면 겹침).
   .imageLabel,
-  .contentLabel {
+  .contentLabel,
+  .attachmentLabel {
     grid-column: 1;
     grid-row: 1;
     align-self: start;
@@ -319,7 +402,8 @@
   }
 
   .imageUploadArea,
-  .editorField {
+  .editorField,
+  .attachmentArea {
     grid-column: 1;
     grid-row: 2;
   }

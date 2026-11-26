@@ -1,0 +1,78 @@
+{
+ "menu_id": "SSP0005",
+ "asis_id": "SSP0005",
+ "generated": "2026-11-25 00:59:22",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SSP0005)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "DONE",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "107시간 지난 메타 → 다시 export · rc=0 · 18s · _meta.csv 1542행 proc_params.csv 8722행 sheet_columns.csv 17286행 sheet_measures.csv 1763행 combo_sql.csv 747행 menu.csv 218행 msg_master.csv 5252행 btn_auth.csv 14892행 user_group.csv 23행 user_group_user.csv 13090행 user_group_menu.csv 2214행 users.csv 8613행 division.csv 14행 unit_auth.csv 25062행 tables.csv 5887행 columns.csv 18756행 procs_catalog.csv 2091행 완료: C:\\Projects\\NSCM\\Doc\\tobefacts\\db (성공 17 / 실패 0)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-working-day · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "OK",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-working-day\\__asis-mapping__.md"
+  },
+  {
+   "key": "search_cond",
+   "what": "조회조건 기준표(search_cond.csv)",
+   "status": "OK",
+   "producer": "tools/Harness/refs/build_search_cond.py(원천 = 사용자 xlsx)",
+   "evidence": "화면 행 있음"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "4건 있음 · TO-BE PROC 미매칭 1건(SSP0005:SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 0s · SSP0005 테스트 모드 admin (users.json screens) → 계정 1: kijung03.kim SSP0005 → SSP0005 smoke/crud(read-only)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 28화면/33행) ⚠ SSP0005: 명부(users.json admins)에 SSP ADMIN 계정이 없어 ADMIN 검증 생략"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 92s · failed [chromium] › ..\\..\\Doc\\e2e\\specs\\SSP0005.smoke.spec.ts:11:7 › SSP0005 ShipmentWorkingDay 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 2 passed (1.4m) # E2E 결과 — 2026-11-25 00:59 테스트 6 · PASS 4 · FAIL 2 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SSP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SSP0005\\run_20261125_005750_smoke.log"
+  }
+ ]
+}

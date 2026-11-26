@@ -1,0 +1,29 @@
+{
+  "id": "20261120_163556_R12_ALL",
+  "at": "2026-11-20T16:35:56+09:00",
+  "ms": 1795160156186,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_orch_selfapply.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_orch_selfapply.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 40 · FAIL 1 · FAIL 끊긴 반영 정리: 시작 전 = 다시 대기 · 반영 중 = 반영 실패(중단됨) [2,\"pending\",\"pending\"] / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_orch_selfapply.js",
+    "file": "t_orch_selfapply.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T16:43:24+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

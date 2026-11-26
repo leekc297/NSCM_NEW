@@ -19,7 +19,10 @@
    "asis_only_n": 0,
    "tobe_only_n": 0,
    "b4": "PASS",
-   "why": "후보 2건 집합 일치",
+   "why": "후보 2건 집합 일치 · 전체 항목 AS-IS ['ALL'] ↔ TO-BE ['ALL'] 양쪽 있음(비교에서 양쪽 다 뺌)",
+   "asis_all": [
+    "ALL"
+   ],
    "b3": "PASS",
    "b3_why": "고정 목록 순서 일치: TO-BE ['Y', 'N'] / AS-IS ['Y', 'N']",
    "g7": "NA",
@@ -53,28 +56,19 @@
    "scenario": "신규행()",
    "tobe_n": 3,
    "asis_src": "UP_FX_GetCommonDataList LookupCommon @SheetMeta (SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/LT_TYPE ← S)",
-   "asis_n": 0,
+   "asis_n": 3,
    "rep": "CODE",
    "branches": 1,
    "asis_only": [],
-   "tobe_only": [
-    "AVERAGE",
-    "MIN",
-    "MAX"
-   ],
+   "tobe_only": [],
    "asis_only_n": 0,
-   "tobe_only_n": 3,
-   "explain": {
-    "AVERAGE": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "MIN": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "MAX": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)"
-   },
-   "b4": "판정필요",
-   "why": "AS-IS 0건 vs TO-BE 3건 · 차이 3건 설명 불가: AVERAGE: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); MIN: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); MAX: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 3건 집합 일치",
    "b3": "PASS",
-   "b3_why": "공통 0건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)",
-   "active": "NA",
-   "active_why": "비활성 행 없음(활성 0건) — 정책 판정 대상 아님"
+   "b3_why": "공통 3건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)",
+   "active": "PASS",
+   "active_why": "비활성 1건 후보에 없음"
   },
   {
    "kind": "GRID_EX",
@@ -83,28 +77,19 @@
    "scenario": "기존행()",
    "tobe_n": 3,
    "asis_src": "UP_FX_GetCommonDataList LookupCommon @SheetMeta (SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/LT_TYPE ← S)",
-   "asis_n": 0,
+   "asis_n": 3,
    "rep": "CODE",
    "branches": 1,
    "asis_only": [],
-   "tobe_only": [
-    "AVERAGE",
-    "MIN",
-    "MAX"
-   ],
+   "tobe_only": [],
    "asis_only_n": 0,
-   "tobe_only_n": 3,
-   "explain": {
-    "AVERAGE": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "MIN": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "MAX": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)"
-   },
-   "b4": "판정필요",
-   "why": "AS-IS 0건 vs TO-BE 3건 · 차이 3건 설명 불가: AVERAGE: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); MIN: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); MAX: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 3건 집합 일치",
    "b3": "PASS",
-   "b3_why": "공통 0건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)",
-   "active": "NA",
-   "active_why": "비활성 행 없음(활성 0건) — 정책 판정 대상 아님"
+   "b3_why": "공통 3건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)",
+   "active": "PASS",
+   "active_why": "비활성 1건 후보에 없음"
   },
   {
    "kind": "GRID",
@@ -113,32 +98,17 @@
    "scenario": "신규행()",
    "tobe_n": 5,
    "asis_src": "UP_FX_GetCommonDataList LookupCommon @SheetMeta (SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/TRANSPORT_M)",
-   "asis_n": 0,
-   "rep": "CODE",
+   "asis_n": 5,
+   "rep": "NAME",
    "branches": 1,
    "asis_only": [],
-   "tobe_only": [
-    "AIR",
-    "FRY",
-    "TRK",
-    "SEA",
-    "RAI"
-   ],
+   "tobe_only": [],
    "asis_only_n": 0,
-   "tobe_only_n": 5,
-   "explain": {
-    "AIR": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "FRY": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "TRK": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "SEA": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "RAI": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)"
-   },
-   "b4": "판정필요",
-   "why": "AS-IS 0건 vs TO-BE 5건 · 차이 5건 설명 불가: AIR: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); FRY: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); TRK: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); SEA: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); RAI: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 5건 집합 일치",
    "b3": "PASS",
-   "b3_why": "공통 0건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)",
-   "active": "NA",
-   "active_why": "비활성 행 없음(활성 0건) — 정책 판정 대상 아님"
+   "b3_why": "공통 5건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)"
   },
   {
    "kind": "GRID_EX",
@@ -147,32 +117,17 @@
    "scenario": "기존행()",
    "tobe_n": 5,
    "asis_src": "UP_FX_GetCommonDataList LookupCommon @SheetMeta (SCM_MST_SHEET_COLUMNS SCP0005/Distribution Route/TRANSPORT_M)",
-   "asis_n": 0,
-   "rep": "CODE",
+   "asis_n": 5,
+   "rep": "NAME",
    "branches": 1,
    "asis_only": [],
-   "tobe_only": [
-    "AIR",
-    "FRY",
-    "TRK",
-    "SEA",
-    "RAI"
-   ],
+   "tobe_only": [],
    "asis_only_n": 0,
-   "tobe_only_n": 5,
-   "explain": {
-    "AIR": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "FRY": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "TRK": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "SEA": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
-    "RAI": "설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)"
-   },
-   "b4": "판정필요",
-   "why": "AS-IS 0건 vs TO-BE 5건 · 차이 5건 설명 불가: AIR: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); FRY: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); TRK: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); SEA: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음); RAI: 설명 불가(공통 후보 없음 — 마스터 조건 해석을 검증할 기준 행 없음)",
+   "tobe_only_n": 0,
+   "b4": "PASS",
+   "why": "후보 5건 집합 일치",
    "b3": "PASS",
-   "b3_why": "공통 0건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)",
-   "active": "NA",
-   "active_why": "비활성 행 없음(활성 0건) — 정책 판정 대상 아님"
+   "b3_why": "공통 5건이 ORDER BY ['DISPLAY_SEQ'] 키 순서(동률 내부 순서는 기준 없음)"
   },
   {
    "kind": "GRID",

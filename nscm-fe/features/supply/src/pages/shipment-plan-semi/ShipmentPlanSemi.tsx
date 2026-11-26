@@ -1,7 +1,12 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MaterialByDivisionModal, MeasureSelectModal } from 'features/master/src/components';
-import { NewPlanModal, type NewPlanContext } from 'features/supply/src/components';
+import {
+  BodMasterModal,
+  type BodMasterPick,
+  NewPlanModal,
+  type NewPlanContext,
+} from 'features/supply/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -13,6 +18,7 @@ import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shar
 import { Checkbox } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
+import { FixReasonModal } from './components/FixReasonModal';
 import { ShipmentPlanSemiForm } from './components/ShipmentPlanSemiForm';
 import { ShipmentPlanSemiGrid, type SpreadTitleRow } from './components/ShipmentPlanSemiGrid';
 import { useShipmentPlanSemiValidation } from './hooks/useShipmentPlanSemiValidation';
@@ -28,7 +34,14 @@ import {
 } from './shipment-plan-semi.constants';
 import type { FixInfoRow, MainRow } from './shipment-plan-semi.types';
 import { useShipmentPlanSemiStore } from './useShipmentPlanSemiStore';
-import { isDivision81Series } from './utils/shipment-plan-semi.editLock';
+import { computePlanEditable, dynColKindOf, isDivision81Series, pickField } from './utils/shipment-plan-semi.editLock';
+import {
+  bodCallerKeys,
+  buildInsertedRows,
+  buildInsertSaveRows,
+  callerRowsOf,
+  isInsertedRow,
+} from './utils/shipment-plan-semi.insert';
 import {
   buildFixRows,
   buildSaveRows,
@@ -75,6 +88,7 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openItem, setOpenItem] = useState(false);
   const [openMeasureSetup, setOpenMeasureSetup] = useState(false);
   const [openNewPlan, setOpenNewPlan] = useState(false);
+  const [openFixReason, setOpenFixReason] = useState(false);
 
   const { data: mainData } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -91,21 +105,29 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.CALENDAR],
   });
 
-  const mainRows = useMemo<MainRow[]>(() => (mainData as { o_rc1?: MainRow[] })?.o_rc1 ?? [], [mainData]);
+  const fetchedRows = useMemo<MainRow[]>(() => (mainData as { o_rc1?: MainRow[] })?.o_rc1 ?? [], [mainData]);
+  // BOD 팝업으로 삽입한 행이 들어간 배열(AS-IS InsertRow). 재조회하면 버린다.
+  const [insertedRows, setInsertedRows] = useState<MainRow[] | null>(null);
+  useEffect(() => setInsertedRows(null), [mainData]);
+  const mainRows = insertedRows ?? fetchedRows;
+  const [bodTarget, setBodTarget] = useState<Record<string, unknown> | null>(null);
   const fixInfoRows = useMemo<FixInfoRow[]>(
     () => (mainData as { o_rc3?: FixInfoRow[] })?.o_rc3 ?? [],
     [mainData]
   );
-  // plan-level 편집가능 — GET SP o_rc2 IS_EDITABLE(플랜 시작주 < 이번주 월요일이면 'N', PKG_SCP0010 L2951).
-  //   AS-IS grid 잠금/Get_IsSaveYn 상당. 값 없으면 보수적으로 false(편집불가).
-  // const planEditable = useMemo(
-  //   () => ((mainData as { o_rc2?: { IS_EDITABLE?: string }[] })?.o_rc2?.[0]?.IS_EDITABLE ?? 'N') === 'Y',
-  //   [mainData]
-  // );
-  // QA 테스트용 잠금 해제(2026-10-15): SP 는 플랜 시작주가 이번주보다 과거면 IS_EDITABLE='N' 을 준다.
-  //   QA 플랜 배치가 돌지 않아 최신 플랜이 과거주(EE 0928, 그 외 0824)라 전 셀이 잠겨 테스트가 안 된다.
-  //   테스트 끝나면 위 주석 해제하고 아래 줄 삭제.
-  const planEditable = true;
+  // plan-level 편집가능 — AS-IS GetIsEditable(.cs:1330) 전체 이식. o_rc2 의 IS_EDITABLE(과거주 플랜 'N',
+  //   PKG_SCP0010 L2947) + FN/TE + 다음 단계 플랜 생성 여부 + MA 확정여부. 'N' 이면 그리드 전 셀 잠금.
+  //   판정 기준 plan 은 조회 시점 확정값(applied*)이다(AS-IS FindData_Main 파라미터와 동일).
+  const planEditable = useMemo(
+    () =>
+      computePlanEditable(
+        (mainData as { o_rc2?: Record<string, unknown>[] })?.o_rc2 ?? [],
+        appliedPlanStartYyyymmdd,
+        appliedPlanType,
+        appliedPlanSeq
+      ),
+    [mainData, appliedPlanStartYyyymmdd, appliedPlanType, appliedPlanSeq]
+  );
   const spreadTitle = useMemo<SpreadTitleRow[]>(
     () => (calendarData as { o_rc1?: SpreadTitleRow[] })?.o_rc1 ?? [],
     [calendarData]
@@ -265,10 +287,14 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });
     //   return;
     // }
-    // Fix 는 confirm 없이 즉시 실행(design 01 §2 #2 가드체인 통과 후 즉시 저장) — 저장 SP 는
-    //   PROC_M 등록 완료(iter-2, ora.py 재실측 확인), E2E 런타임(브라우저 왕복)만 미검증(ERROR,
-    //   __asis-mapping__.md 명시. iter-2 gap-audit SCP0010-G-08).
-    void saveFixDataset('FIX', 'FIX');
+    // Fix 는 confirm 없이 사유 팝업(AS-IS SCM0002_RejectReasonPopup("Fix Reason"), .cs:3965-3980)을 연다 —
+    //   OK 확정 시에만 입력 사유로 저장, 취소 시 저장하지 않는다. 선택 셀 검사는 AS-IS 와 같이 팝업 뒤(saveFixDataset).
+    setOpenFixReason(true);
+  };
+
+  const handleFixReasonConfirm = (reason: string) => {
+    setOpenFixReason(false);
+    void saveFixDataset('FIX', reason);
   };
 
   const handleUnfix = () => {
@@ -378,7 +404,8 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     const grid = mainGridRef.current;
     grid?.finishEditing();
     const tracker = mainTrackerRef.current;
-    if (!tracker?.hasChanges()) {
+    const hasInsert = mainRows.some(r => isInsertedRow(r as unknown as Record<string, unknown>));
+    if (!tracker?.hasChanges() && !hasInsert) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes.') });
       return;
     }
@@ -392,15 +419,37 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   appliedPlanType,
     //   appliedPlanSeq
     // );
-    const rows = buildSaveRows(
-      tracker,
-      useSessionStore.getState().session.userId ?? '',
-      '',
-      appliedPlanType,
-      appliedPlanSeq,
-      '',
-      isWeeklySave ? 'WEEKLY' : 'DAILY'
-    );
+    const inserted = buildInsertSaveRows(mainRows as unknown as Record<string, unknown>[], {
+      userId: useSessionStore.getState().session.userId ?? '',
+      timeZone: '',
+      planType: appliedPlanType,
+      seq: appliedPlanSeq,
+      weekly: isWeeklySave,
+      dynBindings: (grid?.columns ?? []).map(c => c.binding ?? '').filter(b => !!dynColKindOf(b)),
+    });
+    if (!inserted.ok) {
+      // 기본 문구를 함께 넘긴다 — 키만 넘기면 locales(KO.json)에 MSG 키가 생성되지 않은 환경에서
+      //   i18next 키 타입 검사(TS2345)로 빌드가 깨진다(2026-11-23 이관 서버 실사고).
+      const insertFailText: Record<typeof inserted.msg, string> = {
+        [MSG.QTY_NEGATIVE]: '_Quantity must be 0 or greater.',
+        [MSG.QTY_MAX]: '_You have exceeded the number of digits you can enter.',
+        [MSG.INSERT_ROW_NO_VALUE]: '_Inserted Row must register at least one value.',
+      };
+      void setAlert({ type: 'alert', content: t(inserted.msg, insertFailText[inserted.msg]) });
+      return;
+    }
+    const rows = [
+      ...buildSaveRows(
+        tracker,
+        useSessionStore.getState().session.userId ?? '',
+        '',
+        appliedPlanType,
+        appliedPlanSeq,
+        '',
+        isWeeklySave ? 'WEEKLY' : 'DAILY'
+      ),
+      ...inserted.rows,
+    ];
     if (rows.length === 0) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes.') });
       return;
@@ -444,8 +493,25 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '_Saved successfully.') });
-    tracker.clearChanges();
+    tracker?.clearChanges();
+    setInsertedRows(null);
     setFilter();
+  };
+
+  // BOD 팝업 — AS-IS SpdMain_CellClick(.cs:4683-4706). 잠긴 Plan Type 이면 열지 않는다.
+  const handleBodCellClick = (row: Record<string, unknown>) => {
+    if (isLockedPlanType) return;
+    setBodTarget(row);
+  };
+  const handleBodSelect = (picks: BodMasterPick[]) => {
+    if (!bodTarget) return;
+    setInsertedRows(
+      buildInsertedRows(mainRows as unknown as Record<string, unknown>[], bodTarget, picks) as unknown as MainRow[]
+    );
+  };
+  const bodStr = (key: string): string => {
+    const v = bodTarget ? pickField(bodTarget, key) : '';
+    return typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
   };
 
   // hotkeyConfig — DeleteButton 은 AS-IS 본문이 주석처리된 1줄뿐인 NO-OP 확정(design 01 §2 판정표,
@@ -530,6 +596,7 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
         planEditable={planEditable}
         chkSum={sc.chkSum}
         onFocus={() => undefined}
+        onBodCellClick={handleBodCellClick}
       />
 
       {/* Model/Nickname 공용 검색 — 메1(MaterialByDivisionModal COM0013, SCP0013 동일 패턴, 사용자 지시
@@ -583,6 +650,28 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
         context={newPlanContext}
         menuId={MENU_ID}
         onSaved={handleNewPlanSaved}
+      />
+      {/* BOD Master 팝업 — AS-IS SCM0002_GetBODPopup(type 1 = SEMI). 선택 BOD 로 SHIP 행을 삽입한다(InsertRow). */}
+      <FixReasonModal open={openFixReason} onClose={() => setOpenFixReason(false)} onConfirm={handleFixReasonConfirm} />
+      <BodMasterModal
+        open={!!bodTarget}
+        modalClose={() => setBodTarget(null)}
+        type={1}
+        menuId={MENU_ID}
+        params={{
+          divisionId: bodStr('DIVISION_ID'),
+          bodId: bodStr('BOD_ID'),
+          fromSite: bodStr('FROM_SITE'),
+          toSite: bodStr('TO_SITE'),
+          planStartYyyymmdd: appliedPlanStartYyyymmdd,
+          operGrp: bodStr('OPERATION_GROUP'),
+          itemId: bodStr('ITEM_ID'),
+          originFromDivisionId: bodStr('ORIGIN_FROM_DIVISION_ID'),
+        }}
+        callerKeys={
+          bodTarget ? bodCallerKeys(callerRowsOf(mainRows as unknown as Record<string, unknown>[], bodTarget)) : []
+        }
+        onSelect={handleBodSelect}
       />
     </>
   );

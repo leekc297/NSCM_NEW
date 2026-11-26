@@ -1,0 +1,34 @@
+{
+  "id": "20261125_072813_R12_ALL",
+  "at": "2026-11-25T07:28:13+09:00",
+  "ms": 1795559293436,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S4 정의 정합: inventory_check VM_JSON",
+  "screen": "",
+  "sig": "R12|S4|inv|VM_JSON",
+  "count": 1,
+  "repeat": null,
+  "detail": "단계 10 · 작업 145 · 메뉴 항목 81 · 체인 13 · 깨진 참조 1 - S8.folder path 없음: ${checklistDir}",
+  "evidence": {
+    "check": "S4",
+    "key": "S4|inv|VM_JSON",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-25T07:28:13+09:00",
+      "by": "VMO",
+      "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    },
+    {
+      "at": "2026-11-25T07:34:57+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S4 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

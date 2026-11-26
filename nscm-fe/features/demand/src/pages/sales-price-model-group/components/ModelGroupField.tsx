@@ -92,6 +92,8 @@ export const ModelGroupField = ({
         }
         multiCheckbox
         callFromCell={false}
+        // 헤더 문구 — 2026-11-25 요청 'Model Group Pop-up'. 이 화면 한 곳만 써서 라벨 채번 없이 문자열로 둔다.
+        headerTitle='Model Group Pop-up'
       />
     </Grid>
   );

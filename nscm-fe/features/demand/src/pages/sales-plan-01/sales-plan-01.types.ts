@@ -53,6 +53,6 @@ export interface ValidationResult {
   msgId?: string;
   detail?: string;
   rowIdx?: number;
-  // MSG00164 — 3년 초과 시 AS-IS 는 종료일을 시작일+3년으로 보정 후 차단 (호출측이 반영)
+  // MSG01505 — 2년 초과 시 종료일을 시작일+2년으로 보정 후 차단 (호출측이 반영. 종전 AS-IS 3년 MSG00164)
   adjustedEnd?: string;
 }

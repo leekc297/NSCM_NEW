@@ -544,7 +544,7 @@
 | GetPlanner | row | NAME, DEFAULT_CHECK |
 | GoEditMode | Filter | PLAN_TYPE |
 | GoEditMode | row | DATA_TYPE, CATEGORY_ID, EDIT_YN |
-| InitControls | Filter | PLAN_TYPE, PLAN_DATE, UI_END_DATE, CURR_DATE, BUCKET_FROM, BUCKET_TO, MPP_WPP, TOP_ITEM_ID, MASTER_ID, INSTANCE_ID, FP_PLAN_DATE, NICK_NAME, OPERATON_ID, DIVISION_ID, PRODTYPE_ID, ITEM_TYPE, ITEM_ID, FACTORY_ID, ELECTRODE_TYPE, LOCATION, SITE_ID, PLANT_ID, OPERATION_ID, LINE_ID, MARKET |
+| InitControls | Filter | PLAN_TYPE, PLAN_DATE, UI_END_DATE, CURR_DATE, BUCKET_FROM, BUCKET_TO, MPP_WPP, MASTER_ID, INSTANCE_ID, TOP_ITEM_ID, FP_PLAN_DATE, NICK_NAME, OPERATON_ID, DIVISION_ID, PRODTYPE_ID, ITEM_TYPE, ITEM_ID, FACTORY_ID, ELECTRODE_TYPE, LOCATION, SITE_ID, PLANT_ID, OPERATION_ID, LINE_ID, MARKET |
 | InitControls | dtInstance.Rows[cbo_plan_group.SelectedIndex] | USE_WOW_STATUS, CONFIRM_AREA, IS_SAME_PLAN_ID |
 | InitControls | InitRow | NICK_NAME, OPERATION_ID, PRODUCTION_TYPE, ITEM_TYPE, TOP_ITEM_ID, ITEM_ID, FACTORY_ID, ELECTRODE_TYPE, LOCATION, MARKET |
 | InsertButton | Filter | PLAN_TYPE, IS_LATEST_PLAN |
@@ -643,15 +643,6 @@
 | this.rdoMpp | CheckedChanged | rdoMpp_CheckedChanged | InitializeComponent:502 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:640 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:641 |
-| this | Load | Form_Load | .ctor:158 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:152 |
-| this.btnDownload | Click | btnDownload_Click | InitializeComponent:192 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:245 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:246 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:274 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:354 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:355 |
-| this | Load | Form_Load | .ctor:95 |
 | this | Load | Form_Load | .ctor:140 |
 | cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:361 |
 | mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:362 |
@@ -676,6 +667,15 @@
 | bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:4345 |
 | memo_menu | Click | onMemoMenu | spdMain_CellClick:4357 |
 | bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:4371 |
+| this | Load | Form_Load | .ctor:158 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:152 |
+| this.btnDownload | Click | btnDownload_Click | InitializeComponent:192 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:245 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:246 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:274 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:354 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:355 |
+| this | Load | Form_Load | .ctor:95 |
 | this | Load | Form_Load | .ctor:110 |
 | cbo_market | SelectedIndexChanged | cbo_market_changed | InitEvent:284 |
 | cbo_prodtype | SelectedIndexChanged | cbo_prodtype_changed | InitEvent:285 |
@@ -867,8 +867,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: AutoExcelPopup, InvalidExcel, MaterialPopup, Amend, LinePopup
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:225, SetSheetHeaderColumn_FP@SetSpreadInit:163, SetSheetHeaderColumn_FP@RefreshHeaderOnly:722, SetSheetHeaderColumn_FP@SetSpreadInit:155
+- 코드에서 생성하는 시트: AutoExcelPopup, Amend, InvalidExcel, MaterialPopup, LinePopup
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@RefreshHeaderOnly:722, SetSheetHeaderColumn_FP@SetSpreadInit:225, SetSheetHeaderColumn_FP@SetSpreadInit:163, SetSheetHeaderColumn_FP@SetSpreadInit:155
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

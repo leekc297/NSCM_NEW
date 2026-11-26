@@ -1,0 +1,29 @@
+{
+  "id": "20261120_153113_R12_ALL_3",
+  "at": "2026-11-20T15:31:13+09:00",
+  "ms": 1795156273782,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U13 창 다시 로드 뒤 재실행 없음 SCP0028",
+  "screen": "",
+  "sig": "R12|S13|U13|r5|20261120_145830_R5_ALL|SCP0028",
+  "count": 1,
+  "repeat": null,
+  "detail": "20261120_145830_R5_ALL 11-20 14:58 끊긴 🔎 CheckList (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) 뒤 33분째 같은 화면 chain.start 없음",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U13|r5|20261120_145830_R5_ALL|SCP0028",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-20T16:49:06+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+﻿method,line,api,scope,locked,lock_expr,columns,expand,cond,guard,control,raw
+AfterFindData,1166,LockColumn,ALL_ROWS,Y,,DIVISION_ID;CELL_GROUP;OPERATION_ID;MEASURE_GROUP;PRODUCT_LEVEL1;PRODUCT_LEVEL2;PRODUCT_LEVEL3;MEASURE_UI;MEASURE_NAME;FROM_SITE;TO_SITE;INCOTERMS;ITEM_ID;VARIOUS_KEY;CELL_CF,ALL,,,_SI,"_SI.LockColumn(0, _SI.GetMaxColumnIndex(), true)"

@@ -18,6 +18,8 @@ interface Props {
   onQuery: (row: MasterValidationRow) => void;
   onOpen: (row: MasterValidationRow) => void;
   onRowSelect: (row: MasterValidationRow) => void;
+  // 모든 셀 클릭 공통(QUERY/OPEN 포함) — CONSTRAINTS01 조회조건 잠금 재계산.
+  onCellClick: (row: MasterValidationRow) => void;
   gotFocus?: () => void;
 }
 
@@ -32,6 +34,7 @@ export const MasterValidationMasterGrid = ({
   onQuery,
   onOpen,
   onRowSelect,
+  onCellClick,
   gotFocus,
 }: Props) => {
   // QUERY/OPEN 컬럼은 데이터 바인딩이 없는 액션셀 — formatItem 으로 버튼(FPButton 등가, design 03 §1.1)을
@@ -77,6 +80,9 @@ export const MasterValidationMasterGrid = ({
     if (ht.cellType !== CellType.Cell || ht.row < 0) return;
     const row = grid.rows[ht.row]?.dataItem as MasterValidationRow | undefined;
     if (!row) return;
+    // 조회조건 잠금은 QUERY/OPEN 포함 모든 셀 클릭마다 재계산(AS-IS SpdMain_CellClick cs:1011~1040 은
+    //   분기 뒤 공통 수행 — 다른 행 QUERY 클릭 시에도 잠금 해제).
+    onCellClick(row);
     const binding = grid.columns[ht.col]?.binding;
     if (binding === 'QUERY') {
       if ((row.PROCEDURE_NAME ?? '').trim() !== '' && row.PROCEDURE_NAME !== '-') onQuery(row);

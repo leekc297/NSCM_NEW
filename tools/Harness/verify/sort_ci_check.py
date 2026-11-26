@@ -45,11 +45,16 @@ def check_part(part):
     return ci, nf
 
 
-def judge(parts, is_text, nullable=lambda k: True):
-    """parts ORDER BY 키 원문 · is_text(key) True 문자 / False 비문자 / None 모름"""
+def judge(parts, is_text, nullable=lambda k: True, moot=None):
+    """parts ORDER BY 키 원문 · is_text(key) True 문자 / False 비문자 / None 모름
+    2026-11-25 T546 moot(k, part, need) → (ok, 근거 문구, 'src'|'data'|'') · need 'ci'(대소문자 무시) / 'nf'(NULL 먼저) 가 원문에 없을 때만 부른다.
+      src  = 쓰기 경로 전부 UPPER 증명(원문 인용) → 그 칸은 대소문자 차이가 생길 수 없음
+      data = TO-BE 원본 표 실측(소문자·NULL 0행) → 실측 기준 차이 없음
+      판정: 남은 누락 있음 = 판정필요(종전) · data 근거 사용 = PASS(데이터 실측 명시) · src 근거만 = NA(근거 인용) · 근거 미사용 = PASS(종전)"""
     if not parts:
         return 'NA', 'ORDER BY 없음'
     bad, unk, n, tie, cut, done = [], [], 0, [], [], set()
+    basis, kinds = {}, set()
     for p in parts:
         # 2026-11-20 T384(SSP0014 EG-b255a2c0): 괄호가 닫히지 않은 키 = 원문 잘림(sort_check.csv 300자) — 잘린 글자로 판정하지 않고 따로 적는다
         if p.count('(') != p.count(')'):
@@ -69,18 +74,31 @@ def judge(parts, is_text, nullable=lambda k: True):
         if k in done:
             tie.append(k); continue
         n += 1
+        if moot is not None:  # T546 원문에 없는 항목 = 원본 표 근거(쓰기 경로 UPPER · 데이터 실측)로 차이 발생 여부 확인
+            for need in [x for x, ok in (('ci', ci), ('nf', nf)) if not ok]:
+                ok_, why_, kind_ = moot(k, p, need)
+                if why_:
+                    basis.setdefault(why_, []).append(k)
+                if ok_:
+                    kinds.add(kind_)
+                    ci, nf = (True, nf) if need == 'ci' else (ci, True)
         miss = [x for x, ok in (('대소문자 무시', ci), ('NULL 먼저', nf)) if not ok]
         if miss:
             bad.append(f"{k}({'·'.join(miss)} 없음)")
         else:
             done.add(k)
+    btxt = (' · 근거: ' + ' / '.join(f"{'·'.join(dict.fromkeys(ks))} {w}" for w, ks in basis.items())) if basis else ''  # T546
     tail = (f" · 자료형 모름 {len(unk)}건({', '.join(unk[:4])})" if unk else '') + (f" · 동률 해소 키 {len(tie)}건({', '.join(tie[:4])})" if tie else '')         + (f" · [측정 경로 누락] 원문 잘림 {len(cut)}건({', '.join(cut[:4])}) — 판정 제외" if cut else '')
     if bad:
-        return '판정필요', f'[SORT 기준 차이 → 판정필요] 문자 키 {len(bad)}/{n}건 AS-IS 콜레이션과 다를 수 있음: {", ".join(bad[:6])}{tail}'
+        return '판정필요', f'[SORT 기준 차이 → 판정필요] 문자 키 {len(bad)}/{n}건 AS-IS 콜레이션과 다를 수 있음: {", ".join(bad[:6])}{tail}{btxt}'
     if cut:
-        return 'ERROR', f'문자 키 {n}건 대소문자 무시·NULL 먼저{tail}'
+        return 'ERROR', f'문자 키 {n}건 대소문자 무시·NULL 먼저{tail}{btxt}'
     if not n:
         return 'NA', f'문자 정렬 키 없음{tail}'
+    if 'data' in kinds:  # T546 실측 근거 사용 = PASS(데이터 실측 명시 · 데이터가 바뀌면 다시 재야 함)
+        return 'PASS', f'문자 키 {n}건 대소문자 무시·NULL 먼저 — ORDER BY 에 없는 항목은 TO-BE 원본 표 데이터 실측으로 차이 0 확인(CR-075 ④){tail}{btxt}'
+    if 'src' in kinds:  # T546 원문 근거만 = 정렬 차이 발생 불가 → NA
+        return 'NA', f'문자 키 {n}건 — ORDER BY 에 없는 항목은 원문 근거로 차이 발생 불가(CR-075 ④ 대상 아님){tail}{btxt}'
     return 'PASS', f'문자 키 {n}건 대소문자 무시·NULL 먼저{tail}'
 
 
@@ -106,7 +124,7 @@ def stmt_before(body, order_by):
     return flat[flat.rfind(';', 0, i) + 1:i]
 
 
-def key_source(stmt, part):
+def key_source(stmt, part, _depth=0):
     """2026-11-20 T433(SCP0028 EG-78281d4c A6 'NULL 먼저 없음' 판정필요): 정렬 키 → (원본 표, 원본 칸, 바깥 조인 여부).
     키에 별칭이 있으면(A.COL) 그 별칭, 없으면 문장 안 'X.COL AS KEY' · 'X.KEY,' 선택 목록에서 별칭을 찾는다.
     별칭이 표 이름에 붙어 있을 때만 결과를 낸다(부분 질의·표 함수 별칭은 None). 바깥 조인 'X.c(+)' · LEFT/RIGHT/FULL JOIN 이면 outer=True"""
@@ -132,9 +150,199 @@ def key_source(stmt, part):
         if t.group(1).upper() not in _KW:
             tm = t
     if not tm:
-        return None
+        # 2026-11-25 T546 (SCP0005 EG-9afd4a78·EG-89828767·EG-e6b3240d): 별칭이 부분 질의 '( SELECT … ) T' 이면 원본 표를 못 찾아
+        #   같은 이름 칸 아무 표의 NULL 가능 여부로 판정했다 → 안쪽 SELECT 에서 같은 칸을 다시 추적(3단까지). 못 찾으면 종전대로 None
+        dm = None
+        for d in re.finditer(r'\)\s*(?:AS\s+)?' + re.escape(al) + r'\b(?!\s*\.)', stmt, re.I):
+            dm = d
+        if not dm or _depth >= 3:
+            return None
+        e, dep, st0 = dm.start(), 0, -1
+        for i in range(e, -1, -1):
+            if stmt[i] == ')':
+                dep += 1
+            elif stmt[i] == '(':
+                dep -= 1
+                if dep == 0:
+                    st0 = i; break
+        inner = stmt[st0 + 1:e] if st0 >= 0 else ''
+        if not re.match(r'\s*SELECT\b', inner, re.I):
+            return None
+        sub = key_source(inner, col, _depth + 1)
+        if not sub:
+            return None
+        douter = bool(re.search(r'\b' + re.escape(al) + r'\.\w+\s*\(\+\)', stmt, re.I)) or bool(re.search(r'\b(LEFT|RIGHT|FULL)\s+(OUTER\s+)?JOIN\s*$', stmt[:st0], re.I))
+        return sub[0], sub[1], sub[2] or douter
     outer = bool(re.search(r'\b' + re.escape(al) + r'\.\w+\s*\(\+\)', stmt, re.I)) or bool(re.search(r'\b(LEFT|RIGHT|FULL)\s+(OUTER\s+)?JOIN\s+' + re.escape(tm.group(1)) + r'\s+' + re.escape(al) + r'\b', stmt, re.I))
     return tm.group(1).upper().split('.')[-1], col, outer
+
+
+# 2026-11-25 T546 (SCP0005 EG-9afd4a78·EG-89828767 A6 문자 정렬 '대소문자 무시 없음'): 정렬 키 원본 칸의 쓰기 경로(INSERT·UPDATE)가 전부 UPPER 면
+#   그 칸에는 소문자가 저장될 수 없어 대소문자 무시 여부가 순서를 바꾸지 못한다. AS-IS 원문(Doc/asisfacts/db/modules) · TO-BE 원문(ALL_SOURCE) 양쪽에서
+#   그 표에 쓰는 문장을 모두 찾아 칸 값 식이 UPPER(…)·대문자 리터럴·NULL 인지 본다. 해석 못 한 쓰기(MERGE·SELECT INTO·칸 목록 없는 INSERT)가 하나라도 있거나
+#   한쪽 쓰기가 0곳이면 증명 실패(종전 판정 · 데이터 실측으로 넘어감).
+_STOP_SET = {'WHERE', 'FROM', 'OUTPUT', 'RETURNING', 'END', 'IF', 'ELSE', 'BEGIN', 'INSERT', 'UPDATE', 'DELETE', 'SELECT', 'EXEC', 'EXECUTE', 'DECLARE', 'RETURN', 'COMMIT', 'MERGE', 'OPEN', 'WHILE'}
+_TOKRX = re.compile(r"N?'(?:[^']|'')*'|\(|\)|;|\b\w+\b")
+
+
+def _tblrx(t):
+    return r'(?<![\w$#.\[])(?:\[?\w+\]?\.)?\[?' + re.escape(t) + r'\]?(?![\w$#])'
+
+
+def _strip_keep(t):
+    """주석 제거(줄 수 유지) · 문자열은 남긴다"""
+    t = re.sub(r'/\*.*?\*/', lambda m: '\n' * m.group(0).count('\n'), t or '', flags=re.S)
+    return re.sub(r'--[^\n]*', '', t)
+
+
+def _top_stop(s, stops):
+    """최상위(괄호·CASE 밖) 첫 stops 낱말 또는 ';' 위치 · 없으면 len(s)"""
+    dep = case = 0
+    for m in _TOKRX.finditer(s):
+        tk = m.group(0); up = tk.upper()
+        if tk == '(':
+            dep += 1
+        elif tk == ')':
+            dep -= 1
+            if dep < 0:
+                return m.start()
+        elif dep == 0 and up == 'CASE':
+            case += 1
+        elif dep == 0 and up == 'END' and case:
+            case -= 1
+        elif dep == 0 and not case and (tk == ';' or up in stops):
+            return m.start()
+    return len(s)
+
+
+def _split_top(s):
+    out, dep, cur, q = [], 0, '', False
+    for ch in s:
+        if ch == "'":
+            q = not q
+        if not q:
+            dep += (ch == '(') - (ch == ')')
+            if ch == ',' and dep == 0:
+                out.append(cur); cur = ''; continue
+        cur += ch
+    out.append(cur)
+    return [x.strip() for x in out]
+
+
+def _close(s, i):
+    dep, q = 0, False
+    for j in range(i, len(s)):
+        ch = s[j]
+        if ch == "'":
+            q = not q
+        elif not q and ch == '(':
+            dep += 1
+        elif not q and ch == ')':
+            dep -= 1
+            if dep == 0:
+                return j
+    return -1
+
+
+def _is_upper(e):
+    e = (e or '').strip()
+    if re.fullmatch(r'(?i)NULL', e) or re.fullmatch(r"N?'[^a-z']*'", e):
+        return True
+    m = re.match(r'(?i)UPPER\s*\(', e)
+    return bool(m) and _close(e, m.end() - 1) == len(e) - 1
+
+
+def _set_sites(t, start, col, ln, at):
+    body = t[start:]
+    items = _split_top(body[:_top_stop(body, _STOP_SET)])
+    out = []
+    for it in items:
+        m = re.match(r'(?s)\s*(?:[\w\[\]"]+\.)?[\["]?(\w+)[\]"]?\s*=\s*(.*)$', it)
+        if m and m.group(1).upper() == col:
+            out.append((ln(at), 'UPDATE', m.group(2).strip()))
+        elif not m and re.search(r'\b' + re.escape(col) + r'\b', it, re.I):
+            out.append((ln(at), 'UPDATE', None))
+    return out
+
+
+def write_sites(text, table, col):
+    """원문 text 에서 table.col 에 값을 쓰는 곳 → [(줄, 종류, 값 식 · 해석 실패 None)] (그 칸을 안 쓰는 문장은 빠짐)"""
+    t = _strip_keep(text); T = _tblrx(table); C = col.upper(); out = []
+    ln = lambda i: t.count('\n', 0, i) + 1
+    for m in re.finditer(r'(?i)\bINSERT\s+(?:INTO\s+)?' + T, t):
+        k = re.match(r'\s*\(', t[m.end():])
+        if not k:
+            out.append((ln(m.start()), 'INSERT', None)); continue
+        p0 = m.end() + k.end() - 1; p1 = _close(t, p0)
+        if p1 < 0:
+            out.append((ln(m.start()), 'INSERT', None)); continue
+        cols = [re.sub(r'[\[\]"\s]', '', x).split('.')[-1].upper() for x in _split_top(t[p0 + 1:p1])]
+        if C not in cols:
+            continue
+        rest = t[p1 + 1:]
+        v = re.match(r'(?is)\s*VALUES\s*\(', rest)
+        if v:
+            q0 = p1 + 1 + v.end() - 1; q1 = _close(t, q0)
+            items = _split_top(t[q0 + 1:q1]) if q1 > 0 else []
+        else:
+            sm = re.match(r'(?is)\s*SELECT\s+(?:DISTINCT\s+)?', rest)
+            if not sm:
+                out.append((ln(m.start()), 'INSERT', None)); continue
+            b = rest[sm.end():]
+            items = [re.sub(r'(?is)\s+(?:AS\s+)?"?\w+"?$', '', x) if re.search(r'\)\s*(?:AS\s+)?"?\w+"?$|\s+AS\s+"?\w+"?$', x, re.I) else x
+                     for x in _split_top(b[:_top_stop(b, {'FROM', 'WHERE', 'UNION', 'GROUP', 'ORDER'} | (_STOP_SET - {'END'}))])]
+        if len(items) != len(cols):
+            out.append((ln(m.start()), 'INSERT', None)); continue
+        out.append((ln(m.start()), 'INSERT', items[cols.index(C)]))
+    for m in re.finditer(r'(?i)\bUPDATE\s+' + T + r'(?:\s+(?:AS\s+)?(?!SET\b)\w+)?\s+SET\b', t):
+        out += _set_sites(t, m.end(), C, ln, m.start())
+    for m in re.finditer(r'(?i)\bUPDATE\s+(\w+)\s+SET\b', t):  # MSSQL 'UPDATE 별칭 SET … FROM 표 별칭'
+        al = m.group(1)
+        if al.upper() == table.upper():
+            continue
+        seg = t[m.end():m.end() + _top_stop(t[m.end():], {'INSERT', 'UPDATE', 'DELETE', 'MERGE'})]
+        if re.search(r'(?is)\bFROM\b.*?' + T + r'\s+(?:AS\s+)?' + re.escape(al) + r'\b', seg):
+            out += _set_sites(t, m.end(), C, ln, m.start())
+    for m in re.finditer(r'(?i)\bMERGE\s+(?:INTO\s+)?' + T, t):
+        out.append((ln(m.start()), 'MERGE', None))
+    for m in re.finditer(r'(?i)\bINTO\s+' + T, t):
+        if not re.search(r'(?i)\b(INSERT|MERGE)\s+$', t[max(0, m.start() - 30):m.start()]):
+            out.append((ln(m.start()), 'SELECT INTO', None))
+    return out
+
+
+def upper_proof(table, col, asis_docs, tobe_docs):
+    """asis_docs·tobe_docs = [(인용 이름, 원문)] → (증명 여부, 근거 문구)"""
+    res, bad = {}, []
+    for side, docs in (('AS-IS', asis_docs), ('TO-BE', tobe_docs)):
+        by = {}
+        for name, txt in docs:
+            for line, kind, e in write_sites(txt, table, col):
+                by.setdefault(name, []).append(line)
+                if e is None or not _is_upper(e):
+                    bad.append(f"{side} {name}:{line} {kind} {(e or '해석 실패')[:40]}")
+        res[side] = by
+    cite = ' · '.join(f"{side} 쓰기 {sum(len(v) for v in by.values())}곳(" + ', '.join(f"{n}:{','.join(map(str, ls))}" for n, ls in by.items()) + ')' for side, by in res.items())
+    if bad:
+        return False, f"UPPER 아닌 쓰기 {len(bad)}곳({'; '.join(bad[:3])}) · {cite}"
+    if not all(res.values()):
+        return False, f"쓰기 경로 못 찾은 쪽 있음 · {cite}"
+    return True, f"쓰기 경로 전부 UPPER — {cite}"
+
+
+def unbound_lookup(proc_sheets, grid_cols, result_cols):
+    """2026-11-25 T549 (SCP0005 EG-58b590c3 P_SCP0005_GET_COUNTRY_CITY): CR-075 ③ '그리드에 바인딩되지 않는 룩업·보조 SP 는 대상 아님'.
+    proc_sheets = PROC_M 시트 · grid_cols = {시트: 칸 nkey 집합}(SHEET_COLUMNS · 이 메뉴 전 시트) · result_cols = 결과 칸 nkey 집합(골든 실측)
+    PROC_M 시트가 모두 그리드 메타를 갖고, 결과 칸이 이 메뉴 어느 그리드 칸과도 겹치지 않을 때만 사유 문구 · 아니면 ''"""
+    if not proc_sheets or not result_cols or not grid_cols:
+        return ''
+    if any(s not in grid_cols for s in proc_sheets):
+        return ''
+    allc = set().union(*grid_cols.values())
+    if result_cols & allc:
+        return ''
+    return (f"그리드 비바인딩 룩업 SP — 결과 칸 {sorted(result_cols)} 가 이 메뉴 SHEET_COLUMNS {len(allc)}칸(PROC_M 시트 {sorted(proc_sheets)} 포함)과 겹침 0 "
+            f"→ 그리드에 표시되지 않음(TO-BE 룰 CR-075 ③ 대상 아님)")
 
 
 def selftest():
@@ -154,6 +362,36 @@ def selftest():
           ('T433 문장 못 찾음', key_source('', 'A.X'), None)]
     cases += [(n, (('PASS' if got == want else 'NG'), repr(got)), 'PASS') for n, got, want in ks]
     cases.append(('T433 키 원문 넘김', judge(["NLSSORT(CUST, 'NLS_SORT=BINARY_CI')"], t, lambda k, p='': not p), 'PASS'))
+    # 2026-11-25 T546 부분 질의 별칭 · 쓰기 경로 UPPER · 실측 근거 판정 / T549 그리드 비바인딩
+    dq = "OPEN C FOR SELECT T.COLA , (SELECT S.NAM FROM CITY S WHERE S.CODE = T.COLA) AS COLA_NM FROM (SELECT X.COLA , X.COLB FROM TBL X WHERE X.ID = N) T ORDER BY T.COLA , T.COLB NULLS FIRST"
+    sq = stmt_before('PROCEDURE P IS BEGIN ' + dq + '; END;', 'ORDER BY T.COLA , T.COLB NULLS FIRST')
+    lj = "OPEN C FOR SELECT T.COLA FROM ZZZ LEFT JOIN (SELECT X.COLA FROM TBL X) T ON ZZZ.KEY1 = T.COLA ORDER BY T.COLA"
+    asis = ("CREATE PROC P AS\nUPDATE dbo.TBL\n SET A = UPPER(@a) -- , A = @a\n , B = @b\n WHERE ID = @id\n"
+            "/* INSERT INTO TBL (A) VALUES (@a) */\nINSERT\n INTO dbo.TBL (ID, A, B) VALUES (NEXT VALUE FOR S, UPPER(@a ), @b)\n"
+            "INSERT INTO TBL_H (A) VALUES (@a)\nUPDATE r SET r.B = @b FROM TBL r WHERE r.ID = 1\n")
+    tobe = "INSERT INTO TBL (ID, A) SELECT 1, UPPER(V.A) AS A FROM DUAL;\nUPDATE TBL SET A = CASE WHEN 1=1 THEN UPPER(X) END WHERE 1=1;"
+    ks2 = [('T546 부분 질의 별칭 → 안쪽 원본 표', key_source(sq, 'T.COLA'), ('TBL', 'COLA', False)),
+           ('T546 부분 질의 바깥 조인', key_source(lj, 'T.COLA'), ('TBL', 'COLA', True)),
+           ('T546 AS-IS 쓰기 A = UPPER 2곳(주석·다른 표 제외)', [(k_, _is_upper(e)) for _, k_, e in write_sites(asis, 'TBL', 'A')], [('INSERT', True), ('UPDATE', True)]),
+           ('T546 AS-IS 쓰기 B = 원값 3곳(별칭 UPDATE 포함)', sorted((k_, _is_upper(e)) for _, k_, e in write_sites(asis, 'TBL', 'B')), [('INSERT', False), ('UPDATE', False), ('UPDATE', False)]),
+           ('T546 줄 번호', [l_ for l_, _, _ in write_sites(asis, 'TBL', 'A')], [7, 2]),
+           ('T546 증명 A(양쪽 UPPER)', upper_proof('TBL', 'A', [('a.sql', asis)], [('PKG', tobe.split(';')[0])])[0], True),
+           ('T546 TO-BE CASE 식 = UPPER 아님(변이)', upper_proof('TBL', 'A', [('a.sql', asis)], [('PKG', tobe)])[0], False),
+           ('T546 TO-BE 쓰기 0곳 = 증명 실패', upper_proof('TBL', 'A', [('a.sql', asis)], [])[0], False),
+           ('T546 MERGE = 해석 실패', upper_proof('TBL', 'A', [('a.sql', asis)], [('PKG', 'MERGE INTO TBL T USING D ON (1=1)')])[0], False),
+           ('T549 결과 칸 겹침 0 = 비바인딩', bool(unbound_lookup({'route'}, {'route': {'fromcity'}, 'POPUP': {'routeid'}}, {'country', 'city'})), True),
+           ('T549 겹침 있음 = 대상', unbound_lookup({'route'}, {'route': {'fromcity', 'city'}}, {'country', 'city'}), ''),
+           ('T549 PROC_M 시트에 그리드 메타 없음 = 모름', unbound_lookup({'history'}, {'route': {'x'}}, {'a'}), ''),
+           ('T549 결과 칸 모름 = 모름', unbound_lookup({'route'}, {'route': {'x'}}, set()), '')]
+    cases += [(n, (('PASS' if got == want else 'NG'), repr(got)), 'PASS') for n, got, want in ks2]
+    m_src = lambda k, p, need: (True, 'UPPER 증명', 'src') if need == 'ci' else (False, '', '')
+    m_dat = lambda k, p, need: (True, '실측 0행', 'data')
+    m_no = lambda k, p, need: (False, '실측 3행', '')
+    cases += [('T546 대소문자=UPPER 증명 · NOT NULL = NA', judge(['T.CUST'], t, lambda k, p='': False, m_src), 'NA'),
+              ('T546 UPPER 증명 · NULL 칸 근거 없음 = 판정필요 유지', judge(['T.CUST'], t, lambda k, p='': True, m_src), '판정필요'),
+              ('T546 데이터 실측 0 = PASS', judge(['T.CUST', 'T.SITE'], t, lambda k, p='': True, m_dat), 'PASS'),
+              ('T546 실측 >0 = 판정필요 유지(변이)', judge(['T.CUST'], t, lambda k, p='': True, m_no), '판정필요'),
+              ('T546 원문 래퍼 있으면 moot 안 부름', judge(['UPPER(CUST) NULLS FIRST'], t, lambda k, p='': True, m_no), 'PASS')]
     bad = 0
     for n, got, want in cases:
         ok = got[0] == want
@@ -209,6 +447,88 @@ def main(mid):
             cur.execute("select count(*) from all_tab_columns where column_name = :1 and nullable = 'Y'", [k])
             return cur.fetchone()[0] > 0
 
+        # 2026-11-25 T546 원본 표 근거: 쓰기 경로 UPPER(AS-IS modules · TO-BE ALL_SOURCE) · TO-BE 원본 표 데이터 실측(읽기 전용 COUNT)
+        import glob as _g, datetime as _dt
+        _asis_files = _g.glob(os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'modules', '*.sql'))
+        _docs, _meas, _proof, _srcs = {}, {}, {}, {}
+
+        def docs_of(tb):
+            if tb not in _docs:
+                a_, t_ = [], []
+                for f in _asis_files:
+                    try:
+                        tx = open(f, encoding='utf-8-sig', errors='replace').read()
+                    except OSError:
+                        continue
+                    if tb in tx.upper():
+                        a_.append((os.path.relpath(f, ROOT).replace(os.sep, '/'), tx))
+                try:  # 표 이름이 나오는 줄이 전부 읽기(FROM·JOIN·',' 뒤 표)인 객체는 원문을 받지 않는다(쓰기 낱말·애매한 줄이 하나라도 있으면 받음)
+                    cur.execute("select owner, name, type, text from all_source where upper(text) like :1 and owner not in ('SYS','SYSTEM','PUBLIC','XDB','MDSYS','CTXSYS','ORDSYS','WMSYS')", ['%' + tb + '%'])
+                    rd = re.compile(r'^\s*(?:(?:FROM|JOIN|,)\s+|.*\b(?:FROM|JOIN)\s+)' + _tblrx(tb) + r'(?:\s+\w+)?\s*(?:/\*.*\*/)?\s*$', re.I)
+                    objs = {}
+                    for ow, nm, ty, tx in cur.fetchall():
+                        tx = tx or ''
+                        hit = bool(re.search(r'(?i)\b(INSERT|UPDATE|MERGE|INTO)\b', tx)) or not (rd.match(tx) or re.match(r'^\s*--', tx))
+                        objs[(ow, nm, ty)] = objs.get((ow, nm, ty), False) or hit
+                    for (ow, nm, ty), need in objs.items():
+                        if not need:
+                            continue
+                        if (ow, nm, ty) not in _srcs:
+                            cur.execute('select text from all_source where owner = :1 and name = :2 and type = :3 order by line', [ow, nm, ty])
+                            _srcs[(ow, nm, ty)] = ''.join(x[0] or '' for x in cur.fetchall())
+                        t_.append((f'{nm}({ty})', _srcs[(ow, nm, ty)]))
+                except Exception:
+                    t_ = []
+                _docs[tb] = (a_, t_)
+            return _docs[tb]
+
+        def measure(tb, col):
+            if (tb, col) not in _meas:
+                _meas[(tb, col)] = None
+                if re.fullmatch(r'[A-Z_][A-Z0-9_$#]*', tb) and re.fullmatch(r'[A-Z_][A-Z0-9_$#]*', col):
+                    try:
+                        cur.execute(f'select count(*), count(case when {col} is null then 1 end), count(case when {col} <> upper({col}) then 1 end) from {tb}')
+                        _meas[(tb, col)] = tuple(cur.fetchone()) + (_dt.datetime.now().strftime('%Y-%m-%d %H:%M'),)
+                    except Exception:
+                        _meas[(tb, col)] = None
+            return _meas[(tb, col)]
+
+        def moot(k, part, need):
+            src = key_source(stmt_now['s'], part)
+            if not src:
+                return False, '', ''
+            tb, col, outer = src
+            m = measure(tb, col)
+            if need == 'nf':
+                if outer:
+                    return False, f'바깥 조인 쪽 {tb} — NULL 가능', ''
+                if m and m[0] > 0 and m[1] == 0:
+                    return True, f'NULL 0행(TO-BE {tb} 전 {m[0]}행 데이터 실측 {m[3]} · 표는 NULL 허용)', 'data'
+                return False, (f'NULL {m[1]}/{m[0]}행(TO-BE {tb} 데이터 실측 {m[3]})' if m else f'TO-BE {tb} 데이터 실측 실패'), ''
+            if (tb, col) not in _proof:
+                _proof[(tb, col)] = upper_proof(tb, col, *docs_of(tb))
+            ok, cite = _proof[(tb, col)]
+            if ok and (m is None or m[2] == 0):
+                return True, f'{tb} {cite}' + (f' · 소문자 0/{m[0]}행 실측 {m[3]}' if m else ' · 데이터 실측 실패'), 'src'
+            if m and m[0] > 0 and m[2] == 0:
+                return True, f'소문자 0행(TO-BE {tb} 전 {m[0]}행 데이터 실측 {m[3]}) · 쓰기 경로 증명 못 함: {cite[:160]}', 'data'
+            return False, (f'소문자 {m[2]}/{m[0]}행(TO-BE {tb} 데이터 실측 {m[3]})' if m else f'TO-BE {tb} 데이터 실측 실패') + f' · {cite[:160]}', ''
+
+        # 2026-11-25 T549 CR-075 ③ 그리드 비바인딩 룩업 판별 재료(PROC_M · SHEET_COLUMNS · 골든 결과 칸)
+        _pmf = os.path.join(ROOT, 'Doc', 'tobefacts', 'db', 'proc_meta.csv'); _scf = os.path.join(ROOT, 'Doc', 'tobefacts', 'db', 'sheet_columns.csv')
+        _pm = [x for x in csv.DictReader(open(_pmf, encoding='utf-8-sig')) if (x.get('menu_id') or '').upper() == mid] if os.path.exists(_pmf) else []
+        _gc = {}
+        if os.path.exists(_scf):
+            for x in csv.DictReader(open(_scf, encoding='utf-8-sig')):
+                if (x.get('program_id') or '').upper() == mid:
+                    _gc.setdefault(x.get('sheet_name') or '', set()).add(re.sub(r'[^a-z0-9]', '', (x.get('column_name') or '').lower()))
+
+        def result_cols(sp):
+            f = os.path.join(ROOT, 'Doc', 'golden', mid, f'{sp}.cols.csv')
+            if not sp or not os.path.exists(f):
+                return set()
+            return {re.sub(r'[^a-z0-9]', '', (x.get('column') or '').lower()) for x in csv.DictReader(open(f, encoding='utf-8-sig')) if str(x.get('set')) == '1'}
+
         def is_text(k):
             if not k:
                 return None
@@ -228,8 +548,12 @@ def main(mid):
             if not (r.get('asis_keys') or '').strip() and re.search(r'AS-IS 에 없던 ORDER BY', r.get('note') or ''):
                 res.append({'proc': proc, 'result': 'NA', 'why': f"AS-IS SP {r.get('sp') or ''} 에 ORDER BY 없음 — 대소문자·NULL 위치를 대조할 AS-IS 정렬 기준 없음 · TO-BE 정렬 추가는 sort_check(CR-075) 판정: {(r.get('note') or '')[:120]}", 'order_by': ob[:400]})
                 continue
+            lk = unbound_lookup({x.get('sheet') or '' for x in _pm if (x.get('proc') or '').upper() == proc.upper()}, _gc, result_cols(r.get('sp') or ''))
+            if lk:  # T549 CR-075 ③
+                res.append({'proc': proc, 'result': 'NA', 'why': lk + f" · 결과 칸 원천 Doc/golden/{mid}/{r.get('sp') or ''}.cols.csv", 'order_by': ob[:400]})
+                continue
             stmt_now['s'] = stmt_before(proc_body(proc), ob)
-            v, why = judge(split_keys(ob), is_text, nullable)
+            v, why = judge(split_keys(ob), is_text, nullable, moot)
             res.append({'proc': proc, 'result': v, 'why': why, 'order_by': ob[:400]})
     with open(os.path.join(ROOT, 'Doc', 'verify', mid, 'sort_ci.csv'), 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, fieldnames=COLS)

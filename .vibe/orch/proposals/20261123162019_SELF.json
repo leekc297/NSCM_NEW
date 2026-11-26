@@ -1,0 +1,123 @@
+{
+  "id": "20261123162019_SELF",
+  "at": "2026-11-23T16:20:19+09:00",
+  "ms": 1795418419849,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|resume|all or nothing fingerprint rn",
+  "title": "재개 거부를 사건으로 남기고 소스 지문을 단계별로 나눔(1조각: run_verify.py 만)",
+  "evidence": "repair_20261121000933_SELF_2.json verify_items 1~5 통과(임시 하네스 ZZRSTEST 16:13~16:14) · 게이트 실패 = result.json 16:15:11 S4 'run_verify.py:451 x.py', S2 PASS 138→142 문구 차이(orch-improve.js:326 글자 그대로 비교) · inventory_check.py:212-221 (반영 실패한 20261121000933_SELF_2 를 고친 안 · 원인 ① tools/Harness/verify/run_verify.py 반영본 451줄에 따옴표로 감싼 'x.py' 문자열이 들어감. scripts/rules/inventory_check.py:212-221 은 '#' 로 시작하지 않는 줄에서 '  # ' 앞의 '<이름>.py' 를 도구 파일 참조로 세서 CHAIN_FILES '없는 파일 1 - run_verify.py:451 x.py' 가 됨(.vibe/orch/selfcheck/result.json 2026-11-23T16:15:11, S4). 지금 복원된 run_verify.py 에는 'x.py' 0건. ② S2 t_orch_usercheck.js 실패(U3 장부 막힘 S13|U3|worklist)는 반영 전부터 있었음(repair 기록 verify_items 7: 반영 전 PASS 138 FAIL 1). tools/VibeManager/orch-improve.js:326 이 반영 전후 실패 문구를 글자 그대로 비교하고, 문구에 PASS 건수가 들어 있음. t_orch_usercheck.js 에 시험 4개를 더해 PASS 138 → 142 로 바뀌자 같은 실패가 새로 어긋난 항목으로 세어짐(16:18:42 기)",
+  "targets": [
+    "tools/Harness/verify/run_verify.py"
+  ],
+  "before_after": "변경 전: rs_stage_done 이 화면 FE, @shared, 엔진 py, E2E lib, specs 를 해시 1개로 기록함. 재개 때 하나라도 다르면 _resume 을 지우고 1/8단계부터 실행함. 남는 사유는 '[재개 거부]' 1줄이고 바뀐 파일 목록 없음. 변경 후: ① 재개 거부와 신호 없음 지점에서 Doc/verify/<ID>/_resume/refuse.json 과 events.jsonl 에 resume.refuse(단계, 사유 코드 source_fp, source_fp_stage, no_signal, 바뀐 파일 목록)를 남김. ② 단계 지문 = run() 의 $ 스크립트 + run() 밖 subprocess 스크립트 + import 모듈 + 브라우저 단계(pre, e2e, eg)의 FE, @shared, specs, E2E lib. 재개 때 바뀐 파일을 쓰는 첫 단계부터 다시 돌고 앞 단계는 유지함. run_verify.py 자체가 바뀌면 처음부터 실행함. 단계 지문이 없는 이전 progress.json 은 종전 단일 지문으로 판정함. 건너뛴 단계 줄은 '[이어서] 단계 i/8 …' 로 찍음. ③ 주석과 문자열에 따옴표로 감싼 '<이름>.py' 형태의 가짜 파일명을 쓰지 않음(inventory CHAIN_FILES 가 셈). orch-usercheck.js, t_orch_usercheck.js 는 이번 조각에서 고치지 않음(U18 거부 사유 보고는 다음 조각).",
+  "verify": "① python -u scripts/rules/inventory_check.py 의 CHAIN_FILES '없는 파일' 목록에 run_verify.py 줄: 반영 전 미측정 → 반영 뒤 기대 0줄(run_verify.py 에서 새로 생긴 항목 없음). ② 임시 하네스(가짜 화면 ZZRSTEST, 실행 뒤 Doc/verify/ZZRSTEST 삭제)로 eg 까지 끝나고 diff 에서 끊긴 progress.json 을 만든 뒤 diff_verify.py 해시만 바꾸고 VM_RESUME=1 로 실행: 반영 전 미측정 → 반영 뒤 기대 '[재개] … 끊긴 단계 diff' 와 '[단계 6/8]' 출력, '[단계 1/8]' 0줄, resume.refuse 0줄. ③ 같은 상태에서 run_verify.py 해시만 바꿈: 반영 뒤 기대 '[단계 1/8]' 출력, resume.refuse 1줄(code source_fp, 바뀐 파일 run_verify.py). ④ VM_RESUME 없이 실행: 반영 뒤 기대 resume.refuse 1줄(code no_signal). ⑤ node tools/VibeManager/test/t_orch_usercheck.js 의 PASS 건수: 반영 전 미측정 → 반영 뒤 기대 반영 전과 같음(대상 밖 파일, 건수 변화 0).",
+  "rollback": "tools/Harness/verify/run_verify.py 를 반영 전 사본(백업 태그)으로 되돌림. 반영 뒤 생긴 Doc/verify/<ID>/_resume/refuse.json 은 지워도 종전 동작에 영향 없음.",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T21:23:42+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T21:27:24+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1150, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self2123"
+    },
+    {
+      "at": "2026-11-23T21:27:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T21:36:32+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1150, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-23T21:36:32+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 5건. 2026-11-23 21:30:24 반영 전: inventory CHAIN_FILES 참조 132 없는 파일 0, t_orch_usercheck PASS 136 FAIL 0. 21:31:58~21:32:07 하네스: v2 '[이어서] 단계 1/8~5/8' 뒤 '[단계 6/8]', '[단계 1/8]' 0줄, refuse 0줄. v3 '[단계 1/8]' + resume.refuse 1줄 source_fp(run_verify.py). v4 resume.refuse 1줄 no_signal. 21:32:13 반영 뒤: CHAIN_FILES  · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/Harness/gate_baseline.tsv",
+      "log": ".vibe\\logs\\2026-11-23T21-27-28_claude_orch.log",
+      "sec": 316,
+      "costUsd": 1.8423436,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/run_verify.py"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261121000933_SELF_2",
+  "repairRoot": "20261121000933_SELF_2",
+  "repairDepth": 1,
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795436621938,
+  "autoFp": "05f304f3e8",
+  "applyStartMs": 1795436847048,
+  "verifyJudge": {
+    "at": "2026-11-23T21:32:47+09:00",
+    "verified": true,
+    "text": "실행 통과 5건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1150, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self2123",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795437392527,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "python -u scripts/rules/inventory_check.py: 반영 전 '[OK] CHAIN_FILES: 체인 3개 파일의 도구 참조 132 · 없는 파일 0'(21:30:24) → 반영 뒤 '[OK] CHAIN_FILES: 체인 3개 파일의 도구 참조 137 · 없는 파일 0'(21:32:13). run_verify.py 줄 0줄. 종료코드 1은 반영 전후 같음, 전후 출력 차이는 시각, 참조 수, STAGE_WARN 수정 시각 3줄"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "임시 하네스 v2(가짜 화면 ZZRSTEST, pre~eg 끝 + diff 끊김, 단계 지문 파일 수 pre 156 facts 35 static 22 e2e 144 eg 155, diff_verify.py 해시만 바꿈, VM_RESUME=1) 21:31:58: '[재개] ZZRSTEST 실행 ID 20261123213158 이어서, 끝난 단계 pre,facts,static,e2e,eg, 끊긴 단계 diff', '[이어서] 단계 1/8~5/8', '[단계 6/8] 차등 검증', '$ … sqllog_calls.py'. '[단계 1/8]' 0줄, resume.refuse 사건 0줄, refuse.json 없음. 반영 전 미측정"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "하네스 v3(run_verify.py 해시만 바꿈, VM_RESUME=1) 21:32:05: '[재개 거부] ZZRSTEST: 소스 지문이 다름(바뀐 파일 run_verify.py) → 처음부터 실행', '[단계 1/8] 사전 작업', resume.refuse 1줄 code source_fp changed [tools/Harness/verify/run_verify.py], refuse.json source_fp"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "하네스 v4(VM_RESUME 없음) 21:32:07: '[재개 거부] ZZRSTEST: 재개 신호 없음(VM_RESUME=1, --resume 없음) → 처음부터 실행', '[단계 1/8]', resume.refuse 1줄 code no_signal stage diff, refuse.json no_signal"
+      },
+      {
+        "n": 5,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_usercheck.js: 반영 전 rc 0 PASS 136 FAIL 0 ALL PASS(21:30:24) → 반영 뒤 rc 0 PASS 136 FAIL 0 ALL PASS(21:32:13), 건수 변화 0"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/run_verify.py"
+    ],
+    "verify_result": "2026-11-23 21:30:24 반영 전: inventory CHAIN_FILES 참조 132 없는 파일 0, t_orch_usercheck PASS 136 FAIL 0. 21:31:58~21:32:07 하네스: v2 '[이어서] 단계 1/8~5/8' 뒤 '[단계 6/8]', '[단계 1/8]' 0줄, refuse 0줄. v3 '[단계 1/8]' + resume.refuse 1줄 source_fp(run_verify.py). v4 resume.refuse 1줄 no_signal. 21:32:13 반영 뒤: CHAIN_FILES 참조 137 없는 파일 0, t_orch_usercheck PASS 136 FAIL 0, py_compile ok. 하네스 실행 뒤 Doc/verify/ZZRSTEST, .vibe/tmp_rs_orch 없음 확인",
+    "note": "16:06 반영 기록(.vibe/logs/2026-11-23T16-06-50_claude_orch.log)의 run_verify.py 편집 8건을 다시 적용함. 게이트 실패 원인인 rs_deps 설명 속 따옴표 'x.py' 문구는 따옴표 없는 표현으로 바꿈. 주석에 따옴표로 감싼 가짜 파일명 금지 문구를 넣음. orch-usercheck.js, t_orch_usercheck.js, source_snap.py 는 고치지 않음(다음 조각). 작업 모드 DB_ONLY, 대상이 FE·BE 밖이라 hook 차단 없음. 임시 파일(.vibe/tmp_rs_harness.py 등)은 지움. 실제 CheckList 재수행은 하지 않음. 걸린 시간 21:27:35~21:32:22(4분 47초), 가장 오래 걸린 단계 = 지난 반영 편집을 로그에서 찾는 단계(21:27:35~21:30:24)"
+  },
+  "snap": "prop_20261123162019_SELF"
+}

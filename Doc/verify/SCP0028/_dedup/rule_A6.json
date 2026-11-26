@@ -1,292 +1,328 @@
 {
  "rule_id": "A6",
- "hash": "9e6f6cd1c58a9679",
+ "hash": "9cf7fe8a91488a46",
  "groups": [
-  {
-   "rows": [
-    "AD-072c6abe"
-   ],
-   "why": "Call #1 checks main-query row order with only divisionId=81; no other row uses these exact arguments."
-  },
-  {
-   "rows": [
-    "AD-da8bcdf7"
-   ],
-   "why": "Call #2 uses divisionId=40, so its query result differs from every other call."
-  },
-  {
-   "rows": [
-    "AD-9a169e92"
-   ],
-   "why": "Call #4 uses valid=Y, so its query result differs from every other call."
-  },
-  {
-   "rows": [
-    "AD-b6e03e8a"
-   ],
-   "why": "Call #5 uses valid=N, so its query result differs from every other call."
-  },
-  {
-   "rows": [
-    "AD-62e23a4b"
-   ],
-   "why": "Call #6 uses divisionId=82, so its query result differs from every other call."
-  },
-  {
-   "rows": [
-    "AD-34e30c64"
-   ],
-   "why": "Call #7 uses operationGroup=P, so its query result differs from every other call."
-  },
-  {
-   "rows": [
-    "AD-d8bd10b2"
-   ],
-   "why": "Call #8 uses operationGroup=A, so its query result differs from every other call."
-  },
-  {
-   "rows": [
-    "AD-2af1bd7e"
-   ],
-   "why": "Call #9 uses a single fromSite value, so its query result differs from every other call."
-  },
-  {
-   "rows": [
-    "AD-b6390373"
-   ],
-   "why": "Call #10 uses a multi-value fromSite on the main query, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-4c7a11a9"
-   ],
-   "why": "Call #11 uses transMode=AIR, a different condition from the other calls."
-  },
   {
    "rows": [
     "AD-03fd5b01"
    ],
-   "why": "Call #12 uses all five transMode values, a different condition from the other calls."
+   "why": "호출 #12 메인 조회(fromSite 다중)의 결과 순서로, 조회조건이 달라 결과 집합이 다르므로 단독으로 둔다."
   },
   {
    "rows": [
-    "AD-a44b9f91"
+    "AD-072c6abe"
    ],
-   "why": "Call #13 uses a single toSite value, a different condition from the other calls."
+   "why": "호출 #1 메인 조회(조건 비움)의 결과 순서로, 다른 호출과 조회조건이 다르므로 단독으로 둔다."
   },
   {
    "rows": [
-    "AD-bbcfd07e"
+    "AD-0b566aea"
    ],
-   "why": "Call #14 uses a multi-value toSite, a different condition from the other calls."
+   "why": "호출 #27 메인 조회(itemId=CPP1015U-B1-00)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
-    "AD-cde75381"
+    "AD-0e7943c1"
    ],
-   "why": "Call #15 uses divisionId=81_UC, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-9abf4233"
-   ],
-   "why": "Call #16 uses divisionId=81_HM, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-8ee9253d"
-   ],
-   "why": "Call #17 uses divisionId=81_ST, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-7307a8c7"
-   ],
-   "why": "Call #18 uses divisionId=81_HD, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-7abad1a0"
-   ],
-   "why": "Call #19 uses divisionId=81_HG, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-eb77d44f"
-   ],
-   "why": "Call #20 uses transMode=AIR,FRY, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-e8b7b67e"
-   ],
-   "why": "Call #21 uses the uppercase itemId ACEP2065I-B1; it is not certain to return the same result as the lowercase search in #22, so it stays separate."
-  },
-  {
-   "rows": [
-    "AD-18433a5d"
-   ],
-   "why": "Call #22 uses the lowercase itemId acep2065i-b1, a different condition that checks case-insensitive searching."
-  },
-  {
-   "rows": [
-    "AD-638f7dd3"
-   ],
-   "why": "Call #23 uses the partial itemId CEP2065I-B, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-e50c244e"
-   ],
-   "why": "Call #24 uses two itemId values, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-5220bfed"
-   ],
-   "why": "Call #25 uses itemId=E2E, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-31b656ab"
-   ],
-   "why": "Call #40 uses itemId AAEF1001I-A1-000, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-7abe0c89"
-   ],
-   "why": "Popup call #3 uses actionFlag=D with no other conditions; no other row uses these exact arguments."
-  },
-  {
-   "rows": [
-    "AD-65516749"
-   ],
-   "why": "Popup call #27 uses itemId APVCC517H-A4, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-c14d317b"
-   ],
-   "why": "Popup call #28 uses the partial itemId PVCC517H-A, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-bf0f8fdd"
-   ],
-   "why": "Popup call #29 uses a lowercase itemId, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-d4749e15"
-   ],
-   "why": "Popup call #30 uses two itemId values, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-a75595d7"
-   ],
-   "why": "Popup call #31 uses a single fromSite value, a different condition from the other calls."
-  },
-  {
-   "rows": [
-    "AD-afab4d83"
-   ],
-   "why": "Popup call #32's arguments are cut off, so it cannot be confirmed equal to #33 or #34 and stays separate."
-  },
-  {
-   "rows": [
-    "AD-6e5cd70c"
-   ],
-   "why": "Popup call #33's arguments are cut off, so it cannot be confirmed equal to #32 or #34 and stays separate."
+   "why": "호출 #41 팝업 조회(I, 소문자 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
     "AD-125dcd3f"
    ],
-   "why": "Popup call #34's arguments are cut off, so it cannot be confirmed equal to #32 or #33 and stays separate."
+   "why": "호출 #34 팝업 조회(D, fromSite=HQ05-W)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-13db7f49"
+   ],
+   "why": "호출 #42 팝업 조회(I, itemId 2건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-244b08bb"
+   ],
+   "why": "호출 #4 팝업 조회(I, fromSite=HQ05-W)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-2af1bd7e"
+   ],
+   "why": "호출 #9 메인 조회(operationGroup=P)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
     "AD-305c8e11"
    ],
-   "why": "Popup call #35 uses operationGroup=P plus a multi-value fromSite, a different condition from the other calls."
+   "why": "호출 #35 팝업 조회의 결과 순서로, 인자가 잘려 있어 #36·#37과 같은 조건인지 확인할 수 없으므로 단독으로 둔다."
   },
   {
    "rows": [
-    "V-cb9cf45f"
+    "AD-34e30c64"
    ],
-   "why": "Checks the main SP's ORDER BY key order both in the code and in the end-to-end (E2E) results; this differs in kind from the per-call order comparisons."
+   "why": "호출 #7 메인 조회(valid=N)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
-    "EG-78281d4c"
+    "AD-36e52665"
    ],
-   "why": "Checks how the text sort keys are compared (ignore case, NULLs first), which is a different expected result."
+   "why": "호출 #37 팝업 조회의 결과 순서로, 인자가 잘려 있어 #35·#36과 같은 조건인지 확인할 수 없으므로 단독으로 둔다."
   },
   {
    "rows": [
-    "V-871ad348"
+    "AD-4c7a11a9"
    ],
-   "why": "Checks that the INPUT SP, which has no ORDER BY, did not get an extra sort added, which is a different target and expected result."
+   "why": "호출 #11 메인 조회(fromSite=MI03-P)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-5220bfed"
+   ],
+   "why": "호출 #25 메인 조회(itemId=ACPP1015U-B1-001)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-62e23a4b"
+   ],
+   "why": "호출 #6 메인 조회(valid=Y)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-638f7dd3"
+   ],
+   "why": "호출 #23 메인 조회(itemId=APCAN0981A)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-6e5cd70c"
+   ],
+   "why": "호출 #33 팝업 조회(D, itemId 2건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-7307a8c7"
+   ],
+   "why": "호출 #18 메인 조회(divisionId=81_HM)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-7abad1a0"
+   ],
+   "why": "호출 #19 메인 조회(divisionId=81_ST)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-7abe0c89"
+   ],
+   "why": "호출 #3 팝업 조회(D, 조건 비움)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-84391a07"
+   ],
+   "why": "호출 #39 팝업 조회(I, itemId=APVCC519H-A1)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-8ee9253d"
+   ],
+   "why": "호출 #17 메인 조회(divisionId=81_UC)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-9abf4233"
+   ],
+   "why": "호출 #16 메인 조회(toSite 다중)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-9d1865fa"
+   ],
+   "why": "호출 #40 팝업 조회(I, 부분 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-a44b9f91"
+   ],
+   "why": "호출 #13 메인 조회(transMode=AIR)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-a6692d80"
+   ],
+   "why": "호출 #28 메인 조회(itemId 2건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-a75595d7"
+   ],
+   "why": "호출 #31 팝업 조회(D, 부분 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-afab4d83"
+   ],
+   "why": "호출 #32 팝업 조회(D, 소문자 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-b43f90c6"
+   ],
+   "why": "호출 #29 메인 조회(itemId=E2E)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-b6390373"
+   ],
+   "why": "호출 #10 메인 조회(operationGroup=A)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-b6e03e8a"
+   ],
+   "why": "호출 #5 메인 조회(divisionId=40)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-bbcfd07e"
+   ],
+   "why": "호출 #14 메인 조회(transMode 5건)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-cde75381"
+   ],
+   "why": "호출 #15 메인 조회(toSite=HKI_KR_WJU)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-d1ba0b6b"
+   ],
+   "why": "호출 #38 팝업 조회(operationGroup=P, fromSite 다중)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-d410c886"
+   ],
+   "why": "호출 #47 메인 조회(itemId=AAEF1001I-A1-000)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-d4749e15"
+   ],
+   "why": "호출 #30 팝업 조회(D, itemId=APVCC517H-A4)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-d8bd10b2"
+   ],
+   "why": "호출 #8 메인 조회(divisionId=82)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-e50c244e"
+   ],
+   "why": "호출 #24 메인 조회(transMode=AIR,FRY)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-e8b7b67e"
+   ],
+   "why": "호출 #21 메인 조회(divisionId=81_HG)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-eb77d44f"
+   ],
+   "why": "호출 #20 메인 조회(divisionId=81_HD)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-f0d1102c"
+   ],
+   "why": "호출 #26 메인 조회(소문자 itemId)의 결과 순서로, 조회조건이 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "AD-f8013ee3"
+   ],
+   "why": "호출 #36 팝업 조회의 결과 순서로, 인자가 잘려 있어 #35·#37과 같은 조건인지 확인할 수 없으므로 단독으로 둔다."
   },
   {
    "rows": [
     "EG-3da46b0f"
    ],
-   "why": "Checks a pair of accounts with and without TITLESET_USER, which has nothing to do with sort order."
+   "why": "정렬이 아니라 권한(TITLESET_USER) 계정쌍을 확인하는 행이라 다른 행과 성질이 다르므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-78281d4c"
+   ],
+   "why": "문자 키의 대소문자 무시·NULL 먼저(콜레이션)를 기대하는 행이라 키 순서 동일 여부와 기대 결과가 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-073acab9"
    ],
-   "why": "Trace row confirming the INPUT SP's comparison-table entry exists in the source, so it is not grouped."
+   "why": "_INPUT SP 대조표 행의 구현 위치 실존을 추적하는 행이라 V-871ad348과 확인 성질이 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-2c20a3fc"
    ],
-   "why": "Trace row confirming that the ITEM_BY_DIVISION_POPUP SP's implementation exists in the source."
+   "why": "SCM0002 품목 팝업 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-427c462f"
    ],
-   "why": "Trace row confirming that the main SP's sort implementation exists in the source; the trace rule keeps it out of the V row's group."
+   "why": "메인 SP 대조표 41행의 구현 위치 실존을 추적하는 행이라 V-cb9cf45f의 정렬 실측과 성질이 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-653f1a5d"
    ],
-   "why": "Trace row confirming that the MATERIAL_BY_DIVISION SP's implementation exists in the source."
+   "why": "SCM0002 자재 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-6dc0e2d5"
    ],
-   "why": "Trace row confirming that the PR_GET_MNU_BTN_AUTH implementation exists in the source."
+   "why": "버튼 권한 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-c6aefa56"
    ],
-   "why": "Trace row confirming that the popup SP's implementation exists in the source; it differs in kind from the popup's per-call order checks."
+   "why": "팝업 SP의 대조표 추적 행이며 대상 SP가 고유하므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-e57376d2"
    ],
-   "why": "Trace row confirming where the popup's auto-search on load is implemented."
+   "why": "팝업 Form_Load 자동조회(D만 진입 자동조회)를 추적하는 행이라 대상 요소가 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-f4dca6bb"
    ],
-   "why": "Trace row confirming that the FindData o_rc1 binding exists in the source."
+   "why": "FindData의 o_rc1 바인딩 구현 위치를 추적하는 행이라 대상 요소가 다르므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-871ad348"
+   ],
+   "why": "_INPUT SP가 ORDER BY 없이 임의 정렬을 추가하지 않았는지 확인하는 행이라 기대 결과가 고유하므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-cb9cf45f"
+   ],
+   "why": "메인 SP의 ORDER BY 6개 키 동일 여부(정적)와 E2E 실측을 확인하는 행이며, 호출별 AD 행과 측정 단위가 달라 단독으로 둔다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 13:00:29",
- "cost": 0.2023606
+ "at": "2026-11-25 02:06:43",
+ "cost": 0.23964839999999998
 }

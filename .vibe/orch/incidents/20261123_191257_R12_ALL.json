@@ -1,0 +1,29 @@
+{
+  "id": "20261123_191257_R12_ALL",
+  "at": "2026-11-23T19:12:57+09:00",
+  "ms": 1795428777522,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S5 실행 오류: orch-improve.changelogSelf 오류 1회(새 서명)",
+  "screen": "",
+  "sig": "R12|S5|orch-improve.changelogSelf | UNKNOWN: unknown error, open '<path>'",
+  "count": 1,
+  "repeat": null,
+  "detail": "UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\tools\\VibeManager\\CHANGELOG.md' · at Object.writeFileSync (node:fs:2496:20) < at changelogSelf (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-improve.js:381:8) · 마지막 2026-11-23T18:54:58+09:00",
+  "evidence": {
+    "check": "S5",
+    "key": "S5|orch-improve.changelogSelf | UNKNOWN: unknown error, open '<path>'",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T19:18:21+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S5 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -29,6 +29,29 @@ def selftest():
              ('다른 메서드의 같은 이름 변수 = 빈 값', c('popItem.ShowDialog()', v, 'btnOther_Click') == ''),
              ('충돌 변수 = 빈 값', c('pop.ShowDialog()', v, 'A') == ''),
              ('팝업 아님 = 빈 값', c('siMain.SetValue(i, 1, x)', v, 'A') == '')]
+    # 2026-11-25 T605: 팝업·셀 이벤트 SP 의 A6 TRACE 판정필요 → 정적 정렬 대조 + 골든 순서 결합(judge.a6_offpath_verdict)
+    o = judge.a6_offpath_verdict
+    pair = [{'menu_id': 'X', 'asis_sp': 'X_GET_A', 'tobe_proc': 'PKG_X.P_X_GET_A'}]
+    scp = [{'menu_id': 'X', 'sp': 'X_GET_A', 'tobe_proc': 'PKG_X.P_X_GET_A', 'asis_keys': 'K1', 'tobe_keys': 'K1', 'verdict': 'PASS', 'note': '분기 키 순서 동일'}]
+    scf = [{**scp[0], 'verdict': 'FAIL', 'note': '1번째 키부터 다름'}]
+    cip = [{'proc': 'PKG_X.P_X_GET_A', 'result': 'PASS', 'why': '문자 키 대소문자 무시'}]
+    ci3 = [{'proc': 'PKG_X.P_X_GET_A', 'result': 'NA', 'why': '그리드 비바인딩 룩업 SP — (TO-BE 룰 CR-075 ③ 대상 아님)'}]
+    cir = [{'proc': 'PKG_X.P_X_GET_A', 'result': '판정필요', 'why': '소문자 행 있음'}]
+    g1 = [{'screen': 'X', 'kind': 'GET', 'asis_sp': 'X_GET_A', 'tobe_proc': 'PKG_X.P_X_GET_A', 'verdict': 'PASS', 'asis_rows': '1', 'tobe_rows': '1', 'common_rows': '1', 'order': 'NA'}]
+    g5 = [{**g1[0], 'common_rows': '5', 'asis_rows': '5', 'tobe_rows': '5'}]
+    gd = [{**g5[0], 'order': 'DIFF'}]
+    gp = [{**g5[0], 'order': 'PASS'}]
+    cases += [('T605 정적 PASS + 골든 순서 NA(공통 1행) = PASS · 둘 다 인용', o('X_GET_A', 'X', scp, cip, g1, pair)[0] == 'PASS' and 'sort_check' in o('X_GET_A', 'X', scp, cip, g1, pair)[1] and 'order.csv' in o('X_GET_A', 'X', scp, cip, g1, pair)[1]),
+              ('T605 TO-BE PROC 이름으로도 찾음(짝 표)', o('PKG_X.P_X_GET_A', 'X', scp, cip, gp, pair)[0] == 'PASS'),
+              ('T605 골든 순서 NA 공통 5행 = PASS 아님(변이)', o('X_GET_A', 'X', scp, cip, g5, pair)[0] == ''),
+              ('T605 골든 없음 = 정적만으로 PASS 아님(변이)', o('X_GET_A', 'X', scp, cip, [], pair)[0] == ''),
+              ('T605 골든만 있고 정적 대조 없음 = PASS 아님(변이)', o('X_GET_A', 'X', [], [], g1, pair)[0] == ''),
+              ('T605 sort_ci 판정필요 = PASS 아님(변이)', o('X_GET_A', 'X', scp, cir, g1, pair)[0] == ''),
+              ('T605 CR-075 ③ NA = NA · 룰 인용', o('X_GET_A', 'X', scp, ci3, g1, pair, 'rules.csv:76')[0] == 'NA' and 'CR-075 ③' in o('X_GET_A', 'X', scp, ci3, g1, pair, 'rules.csv:76')[1]),
+              ('T605 정적 FAIL = FAIL(CR-075 ③ 보다 우선)', o('X_GET_A', 'X', scf, ci3, g1, pair)[0] == 'FAIL'),
+              ('T605 골든 순서 DIFF = FAIL', o('X_GET_A', 'X', scp, cip, gd, pair)[0] == 'FAIL'),
+              ('T605 재료 없음 = None', o('X_GET_B', 'X', scp, cip, g1, pair) is None),
+              ('T605 다른 화면 재료는 쓰지 않음', o('X_GET_A', 'Y', scp, cip, g1, pair) is None)]
     bad = 0
     for n, ok in cases:
         print(('PASS ' if ok else 'FAIL ') + n); bad += (not ok)

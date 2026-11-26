@@ -1,0 +1,29 @@
+{
+  "id": "20261123_161842_R12_ALL",
+  "at": "2026-11-23T16:18:42+09:00",
+  "ms": 1795418322012,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S4 정의 정합: inventory_check CHAIN_FILES",
+  "screen": "",
+  "sig": "R12|S4|inv|CHAIN_FILES",
+  "count": 1,
+  "repeat": null,
+  "detail": "체인 3개 파일의 도구 참조 138 · 없는 파일 1 - run_verify.py:451 x.py",
+  "evidence": {
+    "check": "S4",
+    "key": "S4|inv|CHAIN_FILES",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-23T16:24:46+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S4 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

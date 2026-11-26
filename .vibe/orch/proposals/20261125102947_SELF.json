@@ -1,0 +1,127 @@
+{
+  "id": "20261125102947_SELF",
+  "at": "2026-11-25T10:29:47+09:00",
+  "ms": 1795570187614,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/analysis/ssp_it_precheck/dbeaver.py|검증쿼리시트에넣는쿼리의시험일계획시작일기본값이n으로고정돼사용자",
+  "title": "사용자 지시 R221 같은 문제: tools/Analysis/ssp_it_precheck/dbeaver.py:14 검증쿼리 시트에 넣는 쿼리의 시험일·계획 시작일 기본값이 2026-11-23으로 고정돼 사용자가 정한 날로 바뀌지 않음(BASE 18줄, PLAN_DEFAULT ",
+  "evidence": "규칙 R221 \"여러 쿼리, 실행 명령을 사용자에게 주는 생성기는 종류별(Oracle, MSSQL, 실행 명령) 1파일로 모으고 실행 단위마다 위에 내용 주석을 달며 Oracle, MSSQL 판을 같은 형태로 만들고 기준일 같은 인자는 사용자 지정값으로 채운 뒤 사내 DB 실행 또는 문법 검사를 거쳐 제공함\" (원래 지시 2026-11-25 10:05 \"재컴파일 완료했습니다. SSP 통합테스트 시나리오에 추가한 사전점검 단계의 ORACLE QUERY 을 하나의 파일로 생성하고, 각각의 실행 파일위에 주석으로 해당 파일의 내용 표기해주세요. MSSQL QUERY 도 동일한 형태로 하나의 파일로 생성해주세요. 파일 생성 시 PLAN_DAT\") · tools/Analysis/ssp_it_precheck/dbeaver.py:14 T = '20261123'; T1 = '20261122'   # 시트에 적는 기본값 = 시험일 예시 · 시험일 - 1",
+  "targets": [
+    "tools/Analysis/ssp_it_precheck/dbeaver.py"
+  ],
+  "before_after": "고정값 T, T1을 지우고 build()가 시험일을 인자로 받게 한 뒤 PLAN_DEFAULT, BASE, PLAN_NOTE를 그 값으로 만듦. gen_sql_files.py 15~20줄의 교체 코드를 이 모듈로 옮겨 생성기가 한 경로만 쓰게 함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Analysis/ssp_it_precheck/dbeaver.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:04:21+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T15:08:56+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self1504"
+    },
+    {
+      "at": "2026-11-26T15:09:00+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T15:22:51+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-26T15:22:51+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 88/88 PASS 1481 FAIL 0 251.2s'(2026-11-26T06:09:36Z) → 반영 뒤 'ALL OK 파일 88/88 PASS 1481 FAIL 0 248.4s'(2026-11-26 15:18). 자기 시험: py_compile 2파일 통과, D.build(test_date='20261210') 25행에서 20261123 0건, 20261122 0건, VQ-45 '20261210' AS P_PLAN_START(계획 · 변경 23개 파일 · 대상 목록 밖 변경 22개: Doc/verify/_ENGINE_MASTER.md, Doc/verify/_checker_defects.md, Doc/verify/_engine_selfcheck.json, tools/E2E/lib/smoke-extra.ts, tools/Harness/gate_baseline.tsv, Doc/PERF_점검/BATCH/SSP/BATCH_재실행_PR_SSP_ANL_SHIP_PLAN_40_HQ00_20261126.sql",
+      "log": ".vibe\\logs\\2026-11-26T15-09-01_claude_orch.log",
+      "sec": 586,
+      "costUsd": 1.0195078000000002,
+      "files": [
+        "Doc/verify/_ENGINE_MASTER.md",
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Analysis/ssp_it_precheck/dbeaver.py",
+        "tools/E2E/lib/smoke-extra.ts",
+        "tools/Harness/gate_baseline.tsv",
+        "Doc/PERF_점검/BATCH/SSP/BATCH_재실행_PR_SSP_ANL_SHIP_PLAN_40_HQ00_20261126.sql",
+        "Doc/PERF_점검/BATCH/SSP/SHIP_PLAN_40_3SP_로컬개선요소_20261126.md",
+        "Doc/verify/DMF0004/sheet_nav.json",
+        "Doc/verify/DMF0008/sheet_nav.json",
+        "Doc/verify/SSP0015/sheet_nav.json",
+        "Doc/verify/SSP0021/sheet_nav.json",
+        "Doc/verify/SSP0023/sheet_nav.json",
+        "Doc/verify/SSP0060/sheet_nav.json",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/APPLIED_OPERATIONS.md",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/build_patch_perf2.py",
+        "_artifacts/_apply_corporate/SHIP_PLAN_40_AGING_20261126/rehearse3.py",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/00_README.md",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/00_PRECHECK.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/15_DIFF_SOURCE.sql",
+        "_artifacts/_deploy_packages/SSP_SHIP_PLAN_40_PERF2_CLOUD_20261126/A_DB/20_PATCH_PR_SSP_ANL_SHIP_PLAN_40.sql",
+        "tools/Analysis/ssp_it_precheck/gen_sql_files.py",
+        "tools/Harness/verify/sheet_nav_gen.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "여러 쿼리, 실행 명령을 사용자에게 주는 생성기는 종류별(Oracle, MSSQL, 실행 명령) 1파일로 모으고 실행 단위마다 위에 내용 주석을 달며 Oracle, MSSQL 판을 같은 형태로 만들고 기준일 같은 인자는 사용자 지정값으로 채운 뒤 사내 DB 실행 또는 문법 검사를 거쳐 제공함 규칙을 tools/Analysis/ssp_it_precheck/dbeaver.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R221|tools/Analysis/ssp_it_precheck/dbeaver.py",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795673060714,
+  "autoFp": "dbaaed257b",
+  "applyStartMs": 1795673340949,
+  "verifyJudge": {
+    "at": "2026-11-26T15:18:50+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1481, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261126_self1504",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795674171158,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 실행. 반영 전(2026-11-26 15:09) ALL OK 파일 88/88 PASS 1481 FAIL 0 → 반영 뒤(15:18) ALL OK 파일 88/88 PASS 1481 FAIL 0. t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Analysis/ssp_it_precheck/dbeaver.py",
+      "tools/Analysis/ssp_it_precheck/gen_sql_files.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 88/88 PASS 1481 FAIL 0 251.2s'(2026-11-26T06:09:36Z) → 반영 뒤 'ALL OK 파일 88/88 PASS 1481 FAIL 0 248.4s'(2026-11-26 15:18). 자기 시험: py_compile 2파일 통과, D.build(test_date='20261210') 25행에서 20261123 0건, 20261122 0건, VQ-45 '20261210' AS P_PLAN_START(계획 시작일 = 시험일), VQ-48과 VQ-55 '20261209'(시험일 - 1), lint 걸림 0건, 인자 없이 호출하면 실행일 20261126/20261125",
+    "note": "고정값 T, T1을 지우고 set_test_date(시험일)로 PLAN_DEFAULT, PLAN_NOTE, BASE 를 만듦. build()에 test_date 인자를 추가하고 비우면 실행일을 씀. gen_sql_files.py 15~20줄의 교체 코드를 지우고 D.set_test_date(T), D.build(v9, test_date=T) 한 경로로 바꿈(before_after 의 이동 대상이라 해당 줄만 고침). 범위 밖이라 두었음: OVERRIDE_MS VQ-41 의 DECLARE '20261123' 문구(변환할 때 시험일로 바뀌어 결과에 남지 않음, 자기 시험 0건), build(test=True) 의 자료 일자 20261009/20261001. gen_sql_files.py 실제 실행은 xlsx 와 JSON 입력이 필요해 하지 않았고 다음에 볼 곳으로 남김"
+  },
+  "snap": "prop_20261125102947_SELF"
+}

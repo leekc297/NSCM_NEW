@@ -152,7 +152,7 @@ export const BodItemModal = ({ open, modalClose, row, planDate, onSelect }: Prop
     // wijmo selectedItems 는 any[] 라 행 타입으로 좁힌다.
     const picked = grid?.selectedItems?.[0] as BodItemPopupRow | undefined;
     if (!picked) {
-      void setAlert({ type: 'alert', content: t('MSG00071', 'No rows selected.') });
+      void setAlert({ type: 'alert', content: t('MSG01104', 'No rows selected.') });
       return;
     }
     pick(picked);

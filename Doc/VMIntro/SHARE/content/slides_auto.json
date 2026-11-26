@@ -1,0 +1,394 @@
+{
+ "audience": "SHARE",
+ "title": "Vibe Manager 소개",
+ "slides": [
+  {
+   "kind": "cover",
+   "title": "Vibe Manager",
+   "subtitle": "GSCM → NSCM 전환 자동화 도구",
+   "tag": "사내 공유"
+  },
+  {
+   "kind": "agenda",
+   "title": "목차",
+   "items": [
+    "품질과 자가 개선",
+    "미래 로드맵"
+   ]
+  },
+  {
+   "kind": "cards",
+   "title": "목적: 웹 개발자가 아닌 사람도 웹 화면을 만듦",
+   "cards": [
+    {
+     "head": "누가",
+     "items": [
+      "웹 개발자가 아닌 일반 사용자",
+      "Vibe 도구(VM)로 웹 화면 개발"
+     ]
+    },
+    {
+     "head": "무엇을",
+     "items": [
+      "사람이 손보지 않아도 쓰는 산출물",
+      "산출물 수준 95% 이상 목표"
+     ]
+    },
+    {
+     "head": "어떻게",
+     "items": [
+      "VMO 자가 진단, 자가 보완",
+      "쓸수록 산출물 수준이 오름"
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "columns",
+   "title": "추진 배경: 바이브 코딩 산출물은 사람 손을 거쳐야 쓸 수 있음",
+   "left": {
+    "head": "지금의 바이브 코딩",
+    "items": [
+     "산출물 수준 60~70%",
+     "나머지는 개발자가 손봐야 사용 가능",
+     "오류를 찾고 고치는 일은 사람 몫",
+     "웹 개발을 모르는 사용자는 결과를 고칠 수 없음"
+    ]
+   },
+   "right": {
+    "head": "VM 이 푸는 방식",
+    "items": [
+     "AS-IS 사실, 규칙, 검사 기준을 먼저 세움",
+     "규칙대로 만들고 CheckList 로 스스로 판정",
+     "VMO 가 오류를 찾아 보완하고 다시 실행",
+     "목표 산출물 수준 95% 이상"
+    ]
+   }
+  },
+  {
+   "kind": "table",
+   "title": "일반 바이브 코딩과 다른 점",
+   "table": {
+    "columns": [
+     "구분",
+     "일반 바이브 코딩",
+     "VM"
+    ],
+    "rows": [
+     [
+      "산출물 수준",
+      "60~70%",
+      "95% 이상(목표)"
+     ],
+     [
+      "사람 보정",
+      "개발자 보정 필요",
+      "보정 없이 사용(목표)"
+     ],
+     [
+      "개발 주체",
+      "웹 개발자",
+      "일반 사용자(현업)"
+     ],
+     [
+      "품질 기준",
+      "프롬프트와 사람 판단",
+      "AS-IS 사실 원장, 규칙 문서, 실행 hook, CheckList"
+     ],
+     [
+      "오류 개선",
+      "사람이 찾아 고침",
+      "VMO 자가 진단, 자가 보완, 다시 실행"
+     ],
+     [
+      "반복할수록",
+      "같은 실수 반복",
+      "사용자 지적을 규칙으로 쌓아 재발 방지"
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "cards",
+   "title": "창 3개가 역할을 나눠 함께 움직임",
+   "cards": [
+    {
+     "head": "VM",
+     "text": "메뉴와 체인 실행. 화면 단위 분석, 개발, 검증, 보완"
+    },
+    {
+     "head": "VMW",
+     "text": "업무 작업. 화면 묶음 처리, 모듈별 문서와 매뉴얼"
+    },
+    {
+     "head": "VMO",
+     "text": "감시와 자가 진단. 사건 감지, 원인, 보완, 다시 실행"
+    }
+   ]
+  },
+  {
+   "kind": "process",
+   "title": "화면 하나를 파싱부터 보완까지 한 흐름으로 처리함",
+   "steps": [
+    {
+     "name": "AS-IS 파싱",
+     "text": "원본 소스, DB 에서 사실 추출"
+    },
+    {
+     "name": "AS-IS 실측",
+     "text": "실제 화면을 띄워 동작 기록"
+    },
+    {
+     "name": "분석서, 설계서",
+     "text": "화면별 문서 생성"
+    },
+    {
+     "name": "개발",
+     "text": "React, Spring Boot, Oracle"
+    },
+    {
+     "name": "CheckList",
+     "text": "AS-IS 대조 판정"
+    },
+    {
+     "name": "보완",
+     "text": "DB 객체 우선 수정 후 재판정"
+    }
+   ]
+  },
+  {
+   "kind": "section",
+   "title": "품질과 자가 개선"
+  },
+  {
+   "kind": "kpi",
+   "title": "규칙과 검사로 품질을 지킴",
+   "kpis": [
+    {
+     "fact": "rule.hooks"
+    },
+    {
+     "fact": "rule.exec"
+    },
+    {
+     "fact": "rule.tobe"
+    },
+    {
+     "fact": "vm.tests"
+    }
+   ]
+  },
+  {
+   "kind": "process",
+   "title": "VMO 가 스스로 진단하고 보완해 산출물 수준을 올림",
+   "lead": "사람이 오류를 찾고 고치지 않아도 VMO 오케스트라 에이전트가 개선을 이어감",
+   "steps": [
+    {
+     "name": "자가 진단",
+     "text": "실행 실패, 지연, 반복 오류 감지"
+    },
+    {
+     "name": "원인 분석",
+     "text": "로그, 단계 기록 분석"
+    },
+    {
+     "name": "자가 보완",
+     "text": "자동 등급은 바로 반영"
+    },
+    {
+     "name": "다시 실행",
+     "text": "그 화면 체인 재수행"
+    },
+    {
+     "name": "규칙화",
+     "text": "같은 문제 재발 방지"
+    }
+   ],
+   "kpis": [
+    {
+     "fact": "vmo.incidents"
+    },
+    {
+     "fact": "vmo.proposals"
+    },
+    {
+     "fact": "vmo.applied"
+    }
+   ]
+  },
+  {
+   "kind": "kpi",
+   "title": "산출물을 같은 규칙으로 만듦",
+   "kpis": [
+    {
+     "fact": "out.analysis"
+    },
+    {
+     "fact": "out.design"
+    },
+    {
+     "fact": "out.user_manual"
+    },
+    {
+     "fact": "out.ops_manual"
+    }
+   ]
+  },
+  {
+   "kind": "kpi",
+   "title": "한 화면에서 분석, 개발, 검증, 보완까지 이어서 실행함",
+   "kpis": [
+    {
+     "fact": "menu.items"
+    },
+    {
+     "fact": "vmw.jobs"
+    },
+    {
+     "fact": "out.checklist_screens"
+    },
+    {
+     "fact": "vmo.applied"
+    }
+   ]
+  },
+  {
+   "kind": "kpi",
+   "title": "예상 효과: 개발자 5.4명 몫의 공수를 VM 이 처리함",
+   "lead": "예상(가정 기반 계산, 실측 아님). 가정값은 VMW 입력에서 바꿈",
+   "kpis": [
+    {
+     "fact": "est.replace",
+     "note": "수작업 대비"
+    },
+    {
+     "fact": "est.saved_md",
+     "note": "전환 대상 화면 137개 기준"
+    },
+    {
+     "fact": "est.replace_vs_vibe_lo",
+     "note": "바이브 코딩 대비 추가(하한), 상한 2.0명"
+    }
+   ],
+   "items": [
+    "계산: 화면 137개 × 화면당 10 MD = 수작업 1,370 MD. VM 사람 보정 = 수작업 × (1 − 95%) = 68.5 MD",
+    "개발자 1명 = 12개월 × 20일 = 240 MD. 대체 = (수작업 − VM 보정) ÷ 1명 공수",
+    "바이브 코딩 사람 보정 = 수작업 × (1 − 70~60%) = 411~548 MD"
+   ]
+  },
+  {
+   "kind": "section",
+   "title": "미래 로드맵"
+  },
+  {
+   "kind": "table",
+   "title": "AS-IS 언어와 TO-BE 기술을 골라 전환하는 구조로 넓힘",
+   "table": {
+    "columns": [
+     "구분",
+     "지금",
+     "확장 대상"
+    ],
+    "rows": [
+     [
+      "AS-IS 화면",
+      "C#.NET WinForms",
+      "PowerBuilder, Visual Basic 6, MiPlatform, XPlatform, Nexacro, Delphi"
+     ],
+     [
+      "AS-IS DB",
+      "MS-SQL",
+      "Oracle, Sybase, Informix, DB2"
+     ],
+     [
+      "TO-BE 화면",
+      "React 18",
+      "React, Vue, Angular, Nexacro N, WebSquare"
+     ],
+     [
+      "TO-BE 서버",
+      "Spring Boot 3.5",
+      "Spring Boot, .NET, Node.js"
+     ],
+     [
+      "TO-BE DB",
+      "Oracle 19c",
+      "Oracle, PostgreSQL, MySQL, MS-SQL"
+     ],
+     [
+      "공통 기준",
+      "AS-IS 사실 원장, CheckList",
+      "언어별 파서 + 공통 중간 표현(화면, 이벤트, SP, 메타)"
+     ]
+    ]
+   }
+  },
+  {
+   "kind": "roadmap",
+   "title": "미래 로드맵: 어떤 4GL, X-Platform 화면도 고른 TO-BE 로 전환",
+   "phases": [
+    {
+     "head": "지금",
+     "when": "진행 중",
+     "items": [
+      "C#.NET WinForms → React, Spring Boot, Oracle",
+      "AS-IS 사실 원장, CheckList 판정, VMO 자가 보완"
+     ]
+    },
+    {
+     "head": "1단계",
+     "when": "파서 확장",
+     "items": [
+      "PowerBuilder(PBL, DataWindow) 파서",
+      "Visual Basic(FRM, BAS) 파서",
+      "MiPlatform, XPlatform(XML 화면, 스크립트) 파서"
+     ]
+    },
+    {
+     "head": "2단계",
+     "when": "공통 중간 표현",
+     "items": [
+      "화면, 그리드, 이벤트, SP 호출을 언어와 무관한 형식으로 저장",
+      "CheckList, 분석서를 중간 표현 기준으로 생성"
+     ]
+    },
+    {
+     "head": "3단계",
+     "when": "TO-BE 선택",
+     "items": [
+      "화면 기술: React, Vue, Nexacro N 중 선택",
+      "서버, DB 기술 선택",
+      "기술별 생성 규칙과 검사 규칙 묶음"
+     ]
+    },
+    {
+     "head": "4단계",
+     "when": "전환 서비스",
+     "items": [
+      "프로젝트마다 AS-IS, TO-BE 조합 설정",
+      "같은 검증 흐름으로 품질 확인"
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "list",
+   "title": "다음 계획",
+   "items": [
+    "작성 필요(AI 단계): 다음 계획"
+   ]
+  },
+  {
+   "kind": "list",
+   "title": "도입 방법",
+   "items": [
+    "작성 필요(AI 단계): 도입 방법"
+   ]
+  },
+  {
+   "kind": "closing",
+   "title": "Q&A",
+   "subtitle": "Vibe Manager 2.0.1"
+  }
+ ]
+}

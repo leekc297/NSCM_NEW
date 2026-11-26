@@ -73,6 +73,11 @@
         "Doc/verify/SSP0014/e2e_test_kind.jsonl",
         "tools/VibeManager/test/t_orch_watch_gone.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:33+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:08:27+09:00"
     }
   ],
   "auto": true,
@@ -103,5 +108,7 @@
     "verify_result": "node test/t_orch_watch_gone.js . → PASS 5, ALL PASS (명령 끝 화면 ID 추출, R5 사건 0건, proc.gone 1건, screen SSP0005, 더 늦은 실행 없으면 종전 알림 1건). node test/run_all.js . → ALL OK 파일 29/29 PASS 359 FAIL 0 110.2s. 확인 시각 2026-11-20 06:30:32",
     "note": "orch-state.js: proc.start screen 빈 값이면 cmd 끝 화면 ID(screenFromCmd) 사용, 화면·label별 마지막 proc.start 시각 기록(laterStart, export 추가). orch-watch.js tick: sweep 결과 중 proc 이고 initMs 이전 시작이고 같은 화면·label 의 더 늦은 proc.start 가 있으면 R5 사건과 창 로드 알림 대신 proc.gone 기록(screen, label, owner, childPid, start_ms, later_ms, log)만 남김. 작업 모드 DB_ONLY 이나 대상이 FE·BE 아님, hook 차단 없음. .bak, 설치 폴더, CHANGELOG.md 손대지 않음"
   },
-  "snap": "prop_20261120005532_INC"
+  "snap": "prop_20261120005532_INC",
+  "effectiveMs": 1795136907899,
+  "effectiveAt": "2026-11-20T10:08:27+09:00"
 }

@@ -102,6 +102,11 @@
         "Doc/verify/SCP0028/calls/_trace_W4d_잔여_판정필요_실측_0.json",
         "Doc/verify/SCP0028/snap/diff/팝업_Model.txt"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:31+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T16:11:34+09:00"
     }
   ],
   "plain": {
@@ -139,5 +144,7 @@
     "verify_result": "2026-11-20 15:10:53 node test/t_orch_improve.js . → ALL PASS 27건(추가 시험 'Claude 1단계 실행 뒤 abort 된 체인 → claudeRan 1, 끝 기록 없음 0', 'chain.start 만 있는 체인 → 끝 기록 없음 1' 통과). 2026-11-20 15:11:00~15:13:41 node test/run_all.js → ALL OK 파일 52/52 PASS 642 FAIL 0",
     "note": "abortRunningChains 가 abortCounts(lv.prog) 로 prog.res 의 actor 별 실행 수와 끊길 때 돌던 단계(curActor)를 세어 claudeRan, scriptRan, claudeSkipped, rows 를 기록함. 단계 시작 때 prog.res 항목에 actor, task 를, prog 에 curActor, curTask 를 저장함. digest 는 runId 로 chain.start 와 chain.end 를 맞춰 체인별 noEnd, noEndLive(주인 VM 프로세스 살아 있음), noEndScreens 와 전체 chainsNoEnd 를 셈. 설치 폴더, CHANGELOG.md, .bak 은 손대지 않음"
   },
-  "snap": "prop_20261120115806_VISION"
+  "snap": "prop_20261120115806_VISION",
+  "effectiveMs": 1795158694757,
+  "effectiveAt": "2026-11-20T16:11:34+09:00"
 }

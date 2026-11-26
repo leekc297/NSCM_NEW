@@ -1,377 +1,407 @@
 {
  "rule_id": "A5",
- "hash": "dc77b93ea9e126ef",
+ "hash": "4b60572df0e2ad49",
  "groups": [
+  {
+   "rows": [
+    "EG-87c80432",
+    "EG-b60a525b"
+   ],
+   "why": "Both rows check the same Measure button for all Divisions and expect the same result ('Measure 버튼'); only the rule ID (EG022/EG402) differs."
+  },
+  {
+   "rows": [
+    "AD-0a4372ab"
+   ],
+   "why": "Popup call #37 has its own arguments, and the truncated fromSite value cannot be confirmed to match any other call."
+  },
+  {
+   "rows": [
+    "AD-0f45ca72"
+   ],
+   "why": "Popup call #38 has its own arguments (operationGroup=P)."
+  },
   {
    "rows": [
     "AD-1758a5a7"
    ],
-   "why": "단독"
+   "why": "Main call #9 has its own arguments (operationGroup=P)."
   },
   {
    "rows": [
     "AD-1e8379a1"
    ],
-   "why": "단독"
+   "why": "Popup call #34 has its own arguments (fromSite=HQ05-W, actionFlag=D)."
   },
   {
    "rows": [
     "AD-21405464"
    ],
-   "why": "단독"
+   "why": "Main call #23 has its own arguments (itemId=APCAN0981A)."
+  },
+  {
+   "rows": [
+    "AD-28733ab0"
+   ],
+   "why": "Main call #47 has its own arguments (itemId=AAEF1001I-A1-000)."
   },
   {
    "rows": [
     "AD-2a517e33"
    ],
-   "why": "단독"
+   "why": "Main call #16 has its own arguments (multi-value toSite)."
   },
   {
    "rows": [
     "AD-2cd9480f"
    ],
-   "why": "단독"
+   "why": "Main call #15 has its own arguments (toSite=HKI_KR_WJU)."
   },
   {
    "rows": [
     "AD-2d4079e6"
    ],
-   "why": "단독"
+   "why": "Popup call #30 has its own arguments (itemId=APVCC517H-A4, D)."
   },
   {
    "rows": [
     "AD-2d8b9b41"
    ],
-   "why": "단독"
+   "why": "Main call #7 has its own arguments (valid=N)."
   },
   {
    "rows": [
     "AD-3526dace"
    ],
-   "why": "단독"
+   "why": "Main call #1 uses the default arguments (divisionId=81, all other conditions empty)."
+  },
+  {
+   "rows": [
+    "AD-35cdafc7"
+   ],
+   "why": "Popup call #42 has its own arguments (two itemIds, actionFlag=I)."
   },
   {
    "rows": [
     "AD-3d85319a"
    ],
-   "why": "단독"
+   "why": "Main call #18 has its own arguments (divisionId=81_HM)."
   },
   {
    "rows": [
-    "AD-42c0eee6"
+    "AD-43541b17"
    ],
-   "why": "단독"
+   "why": "Main call #28 has its own arguments (two itemIds)."
+  },
+  {
+   "rows": [
+    "AD-4bc0f704"
+   ],
+   "why": "Main call #26 has its own arguments (lowercase itemId)."
   },
   {
    "rows": [
     "AD-4bc8f42f"
    ],
-   "why": "단독"
-  },
-  {
-   "rows": [
-    "AD-4f41edbb"
-   ],
-   "why": "단독"
+   "why": "Main call #6 has its own arguments (valid=Y)."
   },
   {
    "rows": [
     "AD-55237e4e"
    ],
-   "why": "단독"
+   "why": "Main call #11 has its own arguments (fromSite=MI03-P)."
   },
   {
    "rows": [
     "AD-617bf24c"
    ],
-   "why": "단독"
+   "why": "Main call #14 has its own arguments (five transModes)."
   },
   {
    "rows": [
     "AD-6ed5f21c"
    ],
-   "why": "단독"
+   "why": "Main call #12 has its own arguments (multi-value fromSite)."
+  },
+  {
+   "rows": [
+    "AD-790518bd"
+   ],
+   "why": "Main call #29 has its own arguments (itemId=E2E)."
   },
   {
    "rows": [
     "AD-7e2c444a"
    ],
-   "why": "단독"
+   "why": "Main call #10 has its own arguments (operationGroup=A)."
   },
   {
    "rows": [
-    "AD-802e6862"
+    "AD-81f9457d"
    ],
-   "why": "단독"
-  },
-  {
-   "rows": [
-    "AD-8474ca57"
-   ],
-   "why": "단독"
+   "why": "Popup call #39 has its own arguments (itemId=APVCC519H-A1, I)."
   },
   {
    "rows": [
     "AD-886d8c26"
    ],
-   "why": "단독"
+   "why": "Popup call #32 has its own arguments (lowercase itemId, D)."
   },
   {
    "rows": [
     "AD-8bf40bb8"
    ],
-   "why": "단독"
-  },
-  {
-   "rows": [
-    "AD-9ac444dc"
-   ],
-   "why": "단독"
+   "why": "Main call #25 has its own arguments (itemId=ACPP1015U-B1-001)."
   },
   {
    "rows": [
     "AD-9c0ca10d"
    ],
-   "why": "단독"
+   "why": "Main call #21 has its own arguments (divisionId=81_HG)."
   },
   {
    "rows": [
     "AD-a87e4641"
    ],
-   "why": "단독"
+   "why": "Popup call #3 has its own arguments (all empty, actionFlag=D)."
   },
   {
    "rows": [
     "AD-aaa1e40c"
    ],
-   "why": "단독"
+   "why": "Main call #19 has its own arguments (divisionId=81_ST)."
+  },
+  {
+   "rows": [
+    "AD-adc62326"
+   ],
+   "why": "Popup call #36 has its own arguments, and the truncated fromSite value cannot be confirmed to match any other call."
   },
   {
    "rows": [
     "AD-aedc14d0"
    ],
-   "why": "단독"
+   "why": "Main call #5 has its own arguments (divisionId=40), and it checks the result-set column set, not the displayed grid columns."
   },
   {
    "rows": [
     "AD-b097262d"
    ],
-   "why": "단독"
+   "why": "Popup call #35 has its own arguments, and the truncated fromSite value cannot be confirmed to match any other call."
   },
   {
    "rows": [
-    "AD-c8ace316"
+    "AD-c828d1ef"
    ],
-   "why": "단독"
+   "why": "Main call #27 has its own arguments (partial itemId)."
   },
   {
    "rows": [
     "AD-d7e8e8dc"
    ],
-   "why": "단독"
+   "why": "Popup call #33 has its own arguments (two itemIds, D)."
   },
   {
    "rows": [
     "AD-d8d8d288"
    ],
-   "why": "단독"
+   "why": "Main call #20 has its own arguments (divisionId=81_HD)."
+  },
+  {
+   "rows": [
+    "AD-d9428c6a"
+   ],
+   "why": "Popup call #41 has its own arguments (lowercase itemId, I)."
   },
   {
    "rows": [
     "AD-dd13845e"
    ],
-   "why": "단독"
+   "why": "Main call #24 has its own arguments (transMode=AIR,FRY)."
   },
   {
    "rows": [
     "AD-e38b49fc"
    ],
-   "why": "단독"
+   "why": "Main call #8 has its own arguments (divisionId=82), and it checks the result-set column set, not the displayed grid columns."
   },
   {
    "rows": [
-    "AD-e8fdfe2f"
+    "AD-e4f51c47"
    ],
-   "why": "단독"
+   "why": "Popup call #4 has its own arguments (fromSite=HQ05-W, I)."
   },
   {
    "rows": [
     "AD-ecbe5161"
    ],
-   "why": "단독"
+   "why": "Main call #17 has its own arguments (divisionId=81_UC)."
   },
   {
    "rows": [
     "AD-ef929e9b"
    ],
-   "why": "단독"
+   "why": "Main call #13 has its own arguments (transMode=AIR)."
+  },
+  {
+   "rows": [
+    "AD-f2a6cb89"
+   ],
+   "why": "Popup call #40 has its own arguments (partial itemId, I)."
   },
   {
    "rows": [
     "AD-fcd3cf86"
    ],
-   "why": "단독"
+   "why": "Popup call #31 has its own arguments (partial itemId, D)."
   },
   {
    "rows": [
     "EG-13d34768"
    ],
-   "why": "단독"
-  },
-  {
-   "rows": [
-    "EG-87c80432"
-   ],
-   "why": "단독"
-  },
-  {
-   "rows": [
-    "EG-a37537bf"
-   ],
-   "why": "단독"
+   "why": "Checks the Division value in the query body for Div 40; the other Div 40 rows expect something different."
   },
   {
    "rows": [
     "EG-a5d95def"
    ],
-   "why": "단독"
+   "why": "Checks the Division value in the query body for Div 81; the Div 81 column-display row expects something different."
   },
   {
    "rows": [
-    "EG-b60a525b"
+    "EG-a37537bf"
    ],
-   "why": "단독"
+   "why": "Checks that the header matches the original after switching 81→40→81, which is a different expectation from Div default column differences."
   },
   {
    "rows": [
     "EG-f4a61ba4"
    ],
-   "why": "단독"
+   "why": "Checks DEFAULT column differences between Div 81 and Div 40, which no other row expects."
   },
   {
    "rows": [
     "T-2173d3e1"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the SwitchLock implementation (canEdit) exists."
   },
   {
    "rows": [
     "T-2696413d"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the SmartColMerge implementation exists."
   },
   {
    "rows": [
     "T-333f0c00"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the checkValidSize implementation exists."
   },
   {
    "rows": [
     "T-504dde67"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the LockColumn implementation exists."
   },
   {
    "rows": [
     "T-66d50cfd"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the default-value revert implementation exists."
   },
   {
    "rows": [
     "T-69768704"
    ],
-   "why": "단독"
+   "why": "Trace row for the LOT_SIZE column metadata."
   },
   {
    "rows": [
     "T-74c096a6"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the INSERT/DELETE button visibility gate exists."
   },
   {
    "rows": [
     "T-7f8e5dae"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the popup OK SaveData implementation exists."
   },
   {
    "rows": [
     "T-b4d82292"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the required-field check implementation exists."
   },
   {
    "rows": [
     "T-d98b1bc1"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the new-row-only Delete implementation exists."
   },
   {
    "rows": [
     "T-e1e924a8"
    ],
-   "why": "단독"
+   "why": "Trace row for the VALID_YN column metadata."
   },
   {
    "rows": [
     "T-e56e8da0"
    ],
-   "why": "단독"
+   "why": "Trace row for the INCREMENT column metadata."
   },
   {
    "rows": [
     "T-ed99a75c"
    ],
-   "why": "단독"
+   "why": "Trace row for the SPLIT_YN column metadata."
   },
   {
    "rows": [
     "T-fc9d26c9"
    ],
-   "why": "단독"
+   "why": "Trace row matching the CreateSpread entry to the AS-IS column list."
   },
   {
    "rows": [
     "T-ff3fb8d5"
    ],
-   "why": "단독"
+   "why": "Trace row confirming the query binding implementation exists."
   },
   {
    "rows": [
     "V-08715b17"
    ],
-   "why": "단독"
+   "why": "Checks the displayed grid columns for Div 81 only."
   },
   {
    "rows": [
     "V-118f6d1e"
    ],
-   "why": "단독"
-  },
-  {
-   "rows": [
-    "V-49982211"
-   ],
-   "why": "단독"
-  },
-  {
-   "rows": [
-    "V-6ee36520"
-   ],
-   "why": "단독"
+   "why": "Checks the displayed grid columns for Div 40 only."
   },
   {
    "rows": [
     "V-fcbaeab9"
    ],
-   "why": "단독"
+   "why": "Checks the displayed grid columns for Div 82 only."
+  },
+  {
+   "rows": [
+    "V-49982211"
+   ],
+   "why": "Checks overall screen rules (default columns with no personalization, required columns, rebuild on Div switch), which no other row expects together."
+  },
+  {
+   "rows": [
+    "V-6ee36520"
+   ],
+   "why": "Checks column order after a search, which is a different expectation from the column set."
   }
  ],
- "why": "미측정 행 없음 — 중복 판단 생략",
- "by": "코드",
- "at": "2026-11-20 12:59:56",
- "cost": 0,
- "open": 0
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 02:06:40",
+ "cost": 0.2622946
 }

@@ -1,0 +1,45 @@
+{
+  "id": "20261126130851_SELF",
+  "at": "2026-11-26T13:08:51+09:00",
+  "ms": 1795666131189,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/ene/specs/_verify.spec.ts|다음시험들이nscmsearch뒤rowcount만보고ensurerows나d",
+  "title": "사용자 지시 R237 같은 문제: Doc/e2e/specs/_verify.spec.ts:1027 다음 시험들이 nscm.search() 뒤 rowCount 만 보고 ensureRows 나 Division 순회를 부르지 않아, 0행이면 바로 판정필요나 ERRO",
+  "evidence": "규칙 R237 \"검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠\" (원래 지시 2026-11-26 11:48 \"팝업 셀 33행도 Division 순회로 보완해줘 나한테 회신 받지 않고 계속 보완 대상 확인해서 보완해줄 수 업산요?\") · Doc/e2e/specs/_verify.spec.ts:1027 if (!col || !ex) { put(x.row_id, '판정필요', `팝업 셀 해석 불가 또는 조회 0행 (col=${col || '-'})`); continue; }",
+  "targets": [
+    "Doc/e2e/specs/_verify.spec.ts"
+  ],
+  "before_after": "각 시험의 첫 조회 직후 다른 시험(1105, 1938줄)처럼 await ensureRows(nscm, 3, ID) 를 넣음. 4226줄은 화면을 다시 열 때마다 메모 키가 같으므로 재시도 비용이 늘지 않음. 끝까지 0행인 결과는 판정필요 대신 ERROR(미검증)로 적고 via 를 근거로 붙임",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/e2e/specs/_verify.spec.ts.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "4ec206",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:52:05+09:00",
+      "by": "4ec206",
+      "what": "반영 완료(세션 직접 보완) · _verify.spec.ts G5 첫 조회 뒤 0행이면 ensureRows · 0행 판정필요→ERROR · G1 조건 시험 기본 조회 0행이면 ensureRows 뒤에도 0행일 때 ERROR · playwright --list SCP0005 _verify 62개 · engine_selfcheck PASS(TSC 0) 2026-11-26 15:51"
+    }
+  ],
+  "plain": {
+    "what": "검사기는 행이 있어야 측정할 수 있는 항목(조회 그리드, 팝업 셀, 붙여넣기, 편집 컬럼)이 0행이면 Division 후보를 순회해 데이터가 있는 조건으로 다시 측정하고 끝까지 0행이면 미검증으로 둠 규칙을 Doc/e2e/specs/_verify.spec.ts 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R237|Doc/e2e/specs/_verify.spec.ts",
+  "kind": "fix",
+  "claimedBy": "4ec206",
+  "waitNote": "",
+  "appliedMs": 1795675925753
+}

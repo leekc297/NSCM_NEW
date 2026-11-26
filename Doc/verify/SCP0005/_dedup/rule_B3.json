@@ -1,226 +1,161 @@
 {
  "rule_id": "B3",
- "hash": "10d01b1dfd37ffd5",
+ "hash": "8f1d2d01b6c2446a",
  "groups": [
   {
    "rows": [
     "EG-064cf785"
    ],
-   "why": "FROM_COUNTRY 셀의 CitybyCountry 팝업 정렬이다. 다른 팝업 셀과 대상이 다르고, 기대도 'ORDER BY 없음'으로 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "EG-334fdc63"
+    "EG-149f6e98"
    ],
-   "why": "TO_CITY 셀 팝업 정렬로, 다른 셀의 팝업과 대상 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "EG-d5dc785f"
+    "EG-5565f54d"
    ],
-   "why": "FROM_CITY 셀 팝업 정렬로, 다른 셀의 팝업과 대상 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
-    "EG-e6babac5"
+    "EG-8811734a"
    ],
-   "why": "TO_COUNTRY 셀 팝업 정렬로, 다른 셀의 팝업과 대상 요소가 달라 단독으로 둔다."
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-8b32e4eb"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-96e9cc9b"
+   ],
+   "why": "단독"
+  },
+  {
+   "rows": [
+    "EG-a02446d0"
+   ],
+   "why": "단독"
   },
   {
    "rows": [
     "T-2180dd9d"
    ],
-   "why": "GetBodType 진입점의 실존·연결 여부를 추적하는 TRACE 행이라 성질이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-492d748e"
    ],
-   "why": "GetToSitebyDivision 진입점을 추적하는 TRACE 행이라 성질이 달라 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-5b4e278e"
    ],
-   "why": "GetTransMode 진입점을 추적하는 TRACE 행이다. 소스 위치를 확인하는 성질이라 조회조건 Trans Mode의 정렬 측정과 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-61cd91d6"
    ],
-   "why": "GetDivision 진입점을 추적하는 TRACE 행이라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-8bac6275"
    ],
-   "why": "GetData_Country 진입점을 추적하는 TRACE 행(대조표 11행)이라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "T-c2ef6d9c"
    ],
-   "why": "GetFromSitebyDivision 진입점을 추적하는 TRACE 행이라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-061e58cc"
    ],
-   "why": "메인 그리드 DAYS_MON 컬럼이다. POPUP.DAYS_MON과는 화면 요소(그리드 vs 팝업)가 달라 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-0ba430fb"
-   ],
-   "why": "팝업 DAYS_WED 컬럼으로, 메인 그리드 컬럼과 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-1afae957"
    ],
-   "why": "Distribution Route.VALID_YN(Active*)이다. route.VALID_YN(Active)와 그리드명·라벨이 달라 같은 요소인지 확신할 수 없어 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-22e07ccc"
-   ],
-   "why": "팝업 DAYS_MON 컬럼으로, 메인 그리드 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-26317d5c"
-   ],
-   "why": "Sales Site 화면 결함이다. 기대(빈 콤보 아님)가 B3-G01 일반화 행(빈 행 0건)과 달라 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-329e0540"
-   ],
-   "why": "route.VALID_YN(Active)이다. Distribution Route.VALID_YN(Active*)와 같은 요소인지 확신할 수 없어 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-350d17b4"
    ],
-   "why": "메인 그리드 DAYS_SAT 컬럼으로, 다른 컬럼이나 팝업 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-41363139"
-   ],
-   "why": "팝업 DAYS_FRI 컬럼으로, 메인 그리드 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-48f83c32"
-   ],
-   "why": "SYS0010의 Lookup Display Seq 결함 유형으로, 기대 기준(Display Seq)이 고유해 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-4f15fd8b"
    ],
-   "why": "메인 그리드 DAYS_THU 컬럼으로, 다른 컬럼이나 팝업 컬럼과 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-4fff3c67"
    ],
-   "why": "메인 그리드 DAYS_TUE 컬럼으로, 다른 컬럼이나 팝업 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-51f6d595"
-   ],
-   "why": "route.LT_TYPE(L/T Type)이다. Distribution Route.LT_TYPE(L/T Type*)와 그리드명·라벨이 달라 확신할 수 없어 묶지 않는다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-557b295d"
    ],
-   "why": "조회조건 Trans Mode로, 그리드 TRANSPORT_MODE 컬럼(신규행)과 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-59c4a246"
    ],
-   "why": "메인 그리드 DAYS_WED 컬럼으로, 다른 컬럼이나 팝업 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-636aba4a"
-   ],
-   "why": "DMF0048 일반화 행으로, 조회조건 Team·End Customer 등을 표시명 순으로 정렬하는지 보며 기대가 원천 정렬과 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-662ecc0f"
-   ],
-   "why": "팝업 DAYS_THU 컬럼으로, 메인 그리드 컬럼과 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-6e245b0e"
    ],
-   "why": "메인 그리드 DAYS_FRI 컬럼으로, 다른 컬럼이나 팝업 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-800b7f86"
-   ],
-   "why": "B3-G01 일반화 행으로, 기대(빈 행 0·중복 0·원천 정렬)가 Sales Site 결함 행과 달라 묶지 않는다."
-  },
-  {
-   "rows": [
-    "V-95896bae"
-   ],
-   "why": "팝업 DAYS_SAT 컬럼으로, 메인 그리드 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-9ca5d11f"
-   ],
-   "why": "DMF0049 버전 팝업 정렬로, 기대(Version명 DESC)가 고유해 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-cb561109"
    ],
-   "why": "메인 그리드 DAYS_SUN 컬럼으로, 다른 컬럼이나 팝업 컬럼과 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-db26c0f6"
    ],
-   "why": "그리드 TRANSPORT_MODE 컬럼(신규행)으로, 조회조건 Trans Mode와 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-ea38505c"
-   ],
-   "why": "팝업 DAYS_SUN 컬럼으로, 메인 그리드 컬럼과 요소가 달라 단독으로 둔다."
-  },
-  {
-   "rows": [
-    "V-ee68c575"
-   ],
-   "why": "팝업 DAYS_TUE 컬럼으로, 메인 그리드 컬럼과 요소가 달라 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-f5b7589b"
    ],
-   "why": "Distribution Route.LT_TYPE(L/T Type*)이다. route.LT_TYPE과 같은 요소인지 확신할 수 없어 단독으로 둔다."
+   "why": "단독"
   },
   {
    "rows": [
     "V-ffae7ea6"
    ],
-   "why": "조회조건 Valid로, 그리드 VALID_YN 컬럼(신규행)과 요소·상태가 달라 단독으로 둔다."
+   "why": "단독"
   }
  ],
- "why": "",
- "by": "AI",
- "at": "2026-11-20 07:38:06",
- "cost": 0.12778299999999998
+ "why": "미측정 행 없음 — 중복 판단 생략",
+ "by": "코드",
+ "at": "2026-11-26 02:36:23",
+ "cost": 0,
+ "open": 0
 }

@@ -148,3 +148,7 @@ export const CELL_CF_YELLOW_COLUMNS: readonly string[] = [
   COL.CELL_CONVER_QUANTITY,
 ];
 export const CELL_CF_YELLOW = '#ffff00';
+
+// 엑셀 내려받기에만 추가로 보이는 검증 컬럼 — AS-IS ExportExcelData(cs:925~953)가 CELL_CF 3컬럼을
+//   보이게 해 내보낸다(메타 VISIBLE_FLAG=N, 화면에서는 숨김 유지).
+export const EXCEL_SHOW_COLUMNS: readonly string[] = ['CELL_CF', 'CELL_CF_BOM', COL.USE_CELL_CF_BOM];

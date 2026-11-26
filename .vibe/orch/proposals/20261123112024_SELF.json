@@ -1,0 +1,186 @@
+{
+  "id": "20261123112024_SELF",
+  "at": "2026-11-23T11:20:24+09:00",
+  "ms": 1795400424897,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|usercheck|detector counted as fix rn",
+  "title": "사용자 지적 재발 판정에서 감지기 추가 개선안을 수정본에서 빼고, 근거 로그가 지워져 사라진 항목은 resolved 대신 근거 삭제로 표시(기존 사다리 시험 P4 표본 대상 파일 정정 포함)",
+  "evidence": "orch-ladder.js:61-63 · proposals/20261120151817_SELF_2.json:7, :10-14 · incidents/20261120_185744_R12_ALL.json:19, :25 · 진단 사다리 묶음 L3|usercheck|U18 · 직전 반영 실패 repair_20261121000933_SELF.json(11-23 11:09:46): t_orch_ladder.js:17 P4 targets 가 감지기 파일이라 :49, :55, :65 FAIL 3건 (반영 실패한 20261121000933_SELF 를 고친 안 · 원인 범위 밖 시험 tools/VibeManager/test/t_orch_ladder.js:17 의 가짜 개선안 P4('U9 감지 보완', targets orch-usercheck.js 하나)가 새 규칙에서 감지기 개선안으로 분류돼 fixed 에서 빠짐. 그래서 :49 'L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)'이 FAIL 함. :55·:65 하루 상한 시험 2건은 진단 대상 수(c1)를 세는 시험이라 같은 원인으로 함께 FAIL 함. 기록: 11-23 11:09:07 run_all 'PASS 952 FAIL 3'(FAIL 3건 모두 t_orch_ladder.js), 11:09 반영 Claude 가 임시 사본에서 P4 targets 만 orchestra.js 로 바꿔 ALL PASS 확인. 안의 targets 에 t_orch_ladder.js 가 빠져 있어 반영 Claude 가 고치지 못함. 대상 파일 누락에 해당함)",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "변경 전: selfKey 에 uid 가 있는 applied 개선안 전부를 fixed 로 셈. sig 가 sn|newdet 이거나 targets 가 감지기 파일(orch-usercheck.js, user_checks.json, test/)뿐인 개선안도 들어감. S13 항목이 사라지면 resolved 처리함. t_orch_ladder.js:17 P4 targets = ['tools/VibeManager/orch-usercheck.js']. 변경 후: 감지기 추가, 감지기 수정 개선안은 fixed 에서 뺌. 감지기 개선안만 효력이 난 뒤 걸린 항목은 L2|usercheck-first|<uid> '첫 감지(동작 수정 없음)'로 냄. 항목이 사라질 때 근거 파일(.vibe/jobs/<job>/<화면>.log)이 없으면 status gone, statusLabel '근거 삭제'. t_orch_ladder.js:17 P4 는 동작 수정 개선안 표본이므로 title 'U9 동작 보완', targets ['tools/VibeManager/orchestra.js'] 로 바꿈. 시험 판정문(:49, :55, :65)은 그대로 둠",
+  "verify": "① node tools/VibeManager/test/t_orch_ladder_recur_time.js tools/VibeManager: 반영 전 미측정(11-23 11:04:46 반영 Claude 기록 ⑥⑦⑧ FAIL) → 반영 뒤 기대 ⑥ 'L2|usercheck-first|U18' 나오고 L3|usercheck|U18 없음, ⑦ L3 근거에 T_FAKE_BEH 만 남음, ⑧ job 폴더 없음 → gone 근거 삭제, job 로그 있음 → resolved, FAIL 0. ② node tools/VibeManager/test/t_orch_ladder.js tools/VibeManager: 반영 전 미측정 → 반영 뒤 기대 'PASS L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)', 하루 상한 시험 :55, :65 PASS 유지, 이 파일 FAIL 0",
+  "rollback": "백업 태그 사본으로 orch-ladder.js, orch-usercheck.js, test/t_orch_ladder_recur_time.js, test/t_orch_ladder.js 4개 파일 복원",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T11:20:26+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:23:54+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 64/64개 파일 통과(PASS 949, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self1120"
+    },
+    {
+      "at": "2026-11-23T11:24:47+09:00",
+      "by": "VMO",
+      "what": "반영 보류. 사건 조치 중. 다시 승인 필요"
+    },
+    {
+      "at": "2026-11-23T11:37:32+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T11:40:57+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 29개 파일 통과, 시험 64/65개 파일 통과(PASS 963, FAIL 5), 정의 정합 통과 · 반영 전부터 어긋난 항목 1건 · 백업 태그 20261123_self1137"
+    },
+    {
+      "at": "2026-11-23T11:41:00+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T11:46:48+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 4개(orch-ladder.js AI 편집 4건만 되돌림(반영 전과 같음) / orch-usercheck.js AI 편집 1건만 되돌림(반영 전과 같음) / t_orch_ladder_recur_time.js AI 편집 2건만 되돌림(반영 전과 같음) / t_orch_ladder.js AI 편집 1건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-23T19:55:51+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T19:59:26+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1131, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self1955"
+    },
+    {
+      "at": "2026-11-23T19:59:29+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T20:06:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1137, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 바로 다시 읽음 orch-ladder.js · 창 다시 로드 뒤 적용 orch-usercheck.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T20:06:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 6건. ① node tools/VibeManager/test/t_orch_ladder_recur_time.js tools/VibeManager: 반영 전(2026-11-23 20:00:43) PASS 11 ALL PASS, ⑥⑦⑧ 시험 없음 → 반영 뒤(20:01:41) PASS 17 ALL PASS. 'PASS ⑥ … L3|usercheck|U18 없음 L2|usercheck-first|U18', 'PASS ⑦ … T_FAKE_BEH', 'PASS ⑧ job 폴더 없음 → gone 근거 삭제(resolved 아님) gone 근거 삭제', · 변경 5개 파일 · 대상 목록 밖 변경 1개: tools/VibeManager/WORKLOG.md",
+      "log": ".vibe\\logs\\2026-11-23T19-59-30_claude_orch.log",
+      "sec": 182,
+      "costUsd": 1.8139784,
+      "files": [
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/orch-ladder.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/test/t_orch_ladder.js",
+        "tools/VibeManager/test/t_orch_ladder_recur_time.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:21+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T21:20:34+09:00"
+    }
+  ],
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "repairOf": "20261121000933_SELF",
+  "repairRoot": "20261121000933_SELF",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 2,
+  "autoMs": 1795431350839,
+  "autoFp": "55ce866cac",
+  "applyStartMs": 1795431569223,
+  "interrupted": true,
+  "verifyJudge": {
+    "at": "2026-11-23T20:02:35+09:00",
+    "verified": true,
+    "text": "실행 통과 6건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 72/72개 파일 통과(PASS 1137, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self1955",
+  "needsReload": true,
+  "hotLoaded": [
+    "orch-ladder.js"
+  ],
+  "reloadFiles": [
+    "orch-usercheck.js"
+  ],
+  "appliedMs": 1795431971958,
+  "synced": [
+    "orch-ladder.js",
+    "orch-usercheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_ladder_recur_time.js tools/VibeManager: 반영 전 20:00:43 PASS 11 ALL PASS(⑥⑦⑧ 시험 없음) → 반영 뒤 20:01:41 PASS 17 ALL PASS"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "같은 실행의 ⑥⑦⑧ 6건 PASS, FAIL 0"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "'PASS ⑥ 감지기 추가 개선안 20261120151817_SELF_2 + S13 항목 → L3|usercheck|U18 없음 L2|usercheck-first|U18', 'PASS ⑥ L2|usercheck-first|U18 첫 감지(동작 수정 없음) 1건'"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "'PASS ⑦ L3 근거에 감지기 추가 개선안은 빠지고 동작 수정 개선안만 T_FAKE_BEH'"
+      },
+      {
+        "n": 5,
+        "result": "pass",
+        "note": "'PASS ⑧ job 폴더 없음 → gone 근거 삭제(resolved 아님) gone 근거 삭제', 'PASS ⑧ job 로그 있음 → resolved resolved', ALL PASS"
+      },
+      {
+        "n": 6,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_ladder.js tools/VibeManager: 반영 전 20:00:44 ALL PASS → P4 정정만 한 뒤 20:01:42 'FAIL U23 fail · 반영 개선안 효력 뒤 = L3|usercheck|U23 유지'(:100 U23P 표본도 감지기 파일 하나만 고친 개선안) → U23P 표본을 동작 수정 개선안으로 정정한 뒤 20:02:00 PASS 41 ALL PASS. 'PASS L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)', 하루 상한 :55 'PASS 하루 상한 2', :65 'PASS 상한을 올리면 남은 L3 진단' 유지"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/orch-ladder.js",
+      "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+      "tools/VibeManager/test/t_orch_ladder.js"
+    ],
+    "verify_result": "① node tools/VibeManager/test/t_orch_ladder_recur_time.js tools/VibeManager: 반영 전(2026-11-23 20:00:43) PASS 11 ALL PASS, ⑥⑦⑧ 시험 없음 → 반영 뒤(20:01:41) PASS 17 ALL PASS. 'PASS ⑥ … L3|usercheck|U18 없음 L2|usercheck-first|U18', 'PASS ⑦ … T_FAKE_BEH', 'PASS ⑧ job 폴더 없음 → gone 근거 삭제(resolved 아님) gone 근거 삭제', 'PASS ⑧ job 로그 있음 → resolved resolved'. ② node tools/VibeManager/test/t_orch_ladder.js tools/VibeManager: 반영 전(20:00:44) ALL PASS → 1차 반영 뒤(20:01:42) SOME FAIL 1건 'FAIL U23 fail · 반영 개선안 효력 뒤 = L3|usercheck|U23 유지' → U23P 표본 정정 뒤(20:02:00) PASS 41 ALL PASS. 'PASS L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)', 'PASS 하루 상한 2: 2건만 진단 · L4 먼저 · 나머지 대기', 'PASS 상한을 올리면 남은 L3 진단 · 이미 진단한 L4 는 24시간 안 다시 안 함'",
+    "note": "orch-usercheck.js: isDetectorProposal(sig sn|newdet 또는 targets 가 orch-usercheck.js, user_checks.json, test/ 뿐), evidenceFile, evidenceGone 추가·내보냄. orch-ladder.js scan L3-5: 감지기 개선안을 fixed 에서 뺌. 감지기 개선안만 효력이 난 뒤 걸린 항목 = L2|usercheck-first|<uid> '첫 감지(동작 수정 없음)'(tick 의 기존 L2 건너뜀으로 AI 진단 안 함). S13 근거에 key 실음. update: 사라진 묶음의 S13 근거 파일(.vibe/jobs/<job>/<화면>.log)이 없으면 status gone, statusLabel '근거 삭제', goneFiles 기록. 다시 열리면 이 표시를 지움. summary 에 statusLabel 추가. t_orch_ladder.js:17 P4 = title 'U9 동작 보완', targets ['tools/VibeManager/orchestra.js']. 개선안 before_after 에 없던 정정 1건: t_orch_ladder.js:100 U23P('사용자 지적 감지기 추가 U23', targets orch-usercheck.js 하나)가 P4 와 같은 원인으로 감지기 개선안으로 분류돼 :110 이 FAIL 함. 대상 파일 안의 표본 데이터라 title 'U23 재개 진행 표시 동작 보완', targets ['tools/VibeManager/workbench.js'] 로 바꿈. 판정문(:49, :55, :65, :110)은 그대로 둠. 범위 밖으로 판단하면 이 한 줄만 되돌리면 되고, 그러면 :110 FAIL. 구문 검사, run_all, 정의 정합은 지시대로 실행하지 않음(VMO 가 반영 뒤 실행). 걸린 시간 약 3분(19:59 시작은 기록 없음, 첫 date 20:00:43 기준 추정 → 20:02:00). 가장 오래 걸린 단계 = 직전 반영 로그(.vibe/logs/2026-11-23T11-03-49_claude_orch.log)에서 코드를 찾아 꺼내기"
+  },
+  "snap": "prop_20261123112024_SELF",
+  "effectiveMs": 1795436434041,
+  "effectiveAt": "2026-11-23T21:20:34+09:00"
+}

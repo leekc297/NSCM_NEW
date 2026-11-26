@@ -1,7 +1,7 @@
 {
  "id": "SSP0005",
  "asis": "SSP0005",
- "at": "2026-11-20 10:02:04",
+ "at": "2026-11-25 01:04:06",
  "has_asis": true,
  "tobe_cols": 2,
  "buttons": [
@@ -62,8 +62,10 @@
    ]
   },
   "p_dirty": {
-   "rows": 1,
-   "why_not": []
+   "rows": 0,
+   "why_not": [
+    "DM-52 제외: AS-IS 버튼 btnInput(Input) Click 핸들러에 편집 중 차단 메시지 없음(CR-022 = 차단 메시지 코드 규칙)"
+   ]
   },
   "p_clear": {
    "rows": 0,
@@ -137,8 +139,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 9,
-   "used": 9
+   "rows": 8,
+   "used": 8
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -149,7 +151,7 @@
    "used": 0
   }
  },
- "rows": 9,
- "rows_used": 9,
+ "rows": 8,
+ "rows_used": 8,
  "dup_of_hand": 0
 }

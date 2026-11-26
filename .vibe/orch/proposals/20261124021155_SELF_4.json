@@ -1,0 +1,130 @@
+{
+  "id": "20261124021155_SELF_4",
+  "at": "2026-11-24T02:11:55+09:00",
+  "ms": 1795453915595,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|vmo상단nhnvmo탭n개vm기능아이콘chip이좁은창에서두줄로줄바꿈됨",
+  "title": "사용자 지시 R93 같은 문제: tools/VibeManager/orchestra.js:32 VMO 상단(:461 h1 VMO + 탭 8개 + VM 기능 아이콘 + chip)이 좁은 창에서 두 줄로 줄바꿈됨. :76, :235, :401, :412의 .t",
+  "evidence": "규칙 R93 \"웹뷰 상단 제목과 기능 아이콘은 한 줄에 두고 줄바꿈되지 않음\" (원래 지시 2026-11-17 14:55 \"VM 아이콘을 기능 icon 과 같은 line 으로 맨 왼쪽에 위치시키고 싶은데, 2개의 라인으로 나오고 있습니다. 보완해주세요.\") · tools/VibeManager/orchestra.js:32 .top{display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid var(--b);flex-wrap:wrap}",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "flex-wrap:nowrap으로 바꾸고 탭 묶음에 min-width:0, overflow-x:auto를 줌. h1과 아이콘은 flex:none으로 한 줄 맨 왼쪽에 고정함",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T08:39:14+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T08:43:36+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0839"
+    },
+    {
+      "at": "2026-11-25T08:43:41+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T08:55:49+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T08:55:49+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 → 반영 뒤: node --check 오류 없음 → CHECK_OK(2026-11-25 08:48:04) · run_all.js PASS 1374 FAIL 0(226.8s, 2026-11-24T23:44:00Z) → PASS 1374 FAIL 0(223.8s) · t_webview_syntax.js ALL PASS → ALL PASS · 변경 16개 파일 · 대상 목록 밖 변경 15개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_trace_A6_조회_결과_행_순서_AS-IS_ORDER_BY_0.json, Doc/verify/SCP0005/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json, Doc/verify/SCP0005/calls/_verify_그리드_더블클릭_팝업_인자_G5_AS-IS_가_팝업에_넘기는_셀_값이_TO-BE_팝업_조회_요청에_들어가는지_0.json, Doc/verify/SCP0005/combo_runtime.json, Doc/verify/SCP0005/dyn_facts.json",
+      "log": ".vibe\\logs\\2026-11-25T08-43-42_claude_orch.log",
+      "sec": 499,
+      "costUsd": 0.6130985,
+      "files": [
+        "Doc/verify/SCP0005/_test_timing.jsonl",
+        "Doc/verify/SCP0005/calls/_trace_A6_조회_결과_행_순서_AS-IS_ORDER_BY_0.json",
+        "Doc/verify/SCP0005/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json",
+        "Doc/verify/SCP0005/calls/_verify_그리드_더블클릭_팝업_인자_G5_AS-IS_가_팝업에_넘기는_셀_값이_TO-BE_팝업_조회_요청에_들어가는지_0.json",
+        "Doc/verify/SCP0005/combo_runtime.json",
+        "Doc/verify/SCP0005/dyn_facts.json",
+        "Doc/verify/SCP0005/e2e/shots/index_verify.json",
+        "Doc/verify/SCP0005/e2e/shots/verify_그리드_더블클릭_팝업_인자_G5_AS_IS_가_팝업에_넘기는_셀_값이_TO_BE_팝업_조회_요청에_들어가는지.png",
+        "Doc/verify/SCP0005/e2e_results.json",
+        "Doc/verify/SCP0005/e2e_test_kind.jsonl",
+        "tools/VibeManager/orchestra.js",
+        "Doc/e2e/_run.acct.39216.json",
+        "Doc/e2e/_run.acct.39612.json",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_084510_32112/_trace-검증엔진-SCP0005-trace-W4b-H3·F5·F3·M3·J1·H4-chromium.webm",
+        "Doc/verify/SCP0005/e2e/read10/video/20261125_084510_32112/_verify-정합검증-SCP0005-verif-d4ddd--셀-값이-TO-BE-팝업-조회-요청에-들어가는지-chromium.webm",
+        "Doc/verify/SCP0005/e2e/results_read10.json"
+      ]
+    },
+    {
+      "at": "2026-11-25T09:28:44+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T09:27:55+09:00"
+    }
+  ],
+  "plain": {
+    "what": "웹뷰 상단 제목과 기능 아이콘은 한 줄에 두고 줄바꿈되지 않음 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R93|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795563554232,
+  "autoFp": "9379798ab8",
+  "applyStartMs": 1795563821229,
+  "verifyJudge": {
+    "at": "2026-11-25T08:52:04+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0839",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795564549300,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js = CHECK_OK · node tools/VibeManager/test/run_all.js = ALL OK 파일 84/84 PASS 1374 FAIL 0 223.8s · node tools/VibeManager/test/t_webview_syntax.js = ALL PASS(탭 순서 board,inc,prop,self,hist,agent,dict,log, 스크립트가 찾는 id 가 HTML 에 있음)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "반영 전 → 반영 뒤: node --check 오류 없음 → CHECK_OK(2026-11-25 08:48:04) · run_all.js PASS 1374 FAIL 0(226.8s, 2026-11-24T23:44:00Z) → PASS 1374 FAIL 0(223.8s) · t_webview_syntax.js ALL PASS → ALL PASS",
+    "note": ".top flex-wrap wrap → nowrap(:32, :412) · 탭 8개를 span.tabs 로 감싸고 min-width:0, overflow-x:auto, 스크롤바 숨김 · h1, isep, vmi, chip, ib, tgl 에 flex:none, white-space:nowrap · VM 기능 아이콘 펼침 메뉴가 잘리지 않도록 vmi 는 탭 묶음 밖에 둠 · 좁은 창 한 줄 표시는 창 다시 로드 뒤 확인 필요(미확인)"
+  },
+  "snap": "prop_20261124021155_SELF_4",
+  "effectiveMs": 1795566475935,
+  "effectiveAt": "2026-11-25T09:27:55+09:00"
+}

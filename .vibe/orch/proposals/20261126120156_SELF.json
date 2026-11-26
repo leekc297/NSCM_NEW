@@ -1,0 +1,119 @@
+{
+  "id": "20261126120156_SELF",
+  "at": "2026-11-26T12:01:56+09:00",
+  "ms": 1795662116541,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/job runner.js test/t_um_job.js test/t_om_job.js|매뉴얼모듈별단위분리 rn",
+  "title": "사용자 매뉴얼, 운영자 매뉴얼 업무에서 모듈을 여러 개 고르면 모듈마다 문서를 따로 만듦(job-runner 와 시험 2개 같이 수정)",
+  "evidence": "원래 지시 2026-11-24 12:59 'dm, system 2개를 동시 선택해서 하나의 사용자 메뉴얼로 작성했습니다. 2개의 메뉴얼로 분리해주세요.' · tools/VibeManager/job-runner.js:74 if (modUnit && item.combine === true && ids.length > 1) 가 모듈을 'DM_SYSTEM' 하나로 묶음 · quick.json:655 usermanual, :766 opsmanual 이 combine true(:740, :835) · 지난 반영(2026-11-26 11:44~11:54)은 job-runner 수정만 해서 t_um_job.js:45, t_om_job.js:43 이 실패함 (반영 실패한 20261124232611_SELF 를 고친 안 · 원인 tools/VibeManager/test/t_um_job.js:45, tools/VibeManager/test/t_om_job.js:43 이 combine: true 업무(t_um_job.js:23, t_om_job.js:22)에서 모듈 2개를 단위 1개 DM_SYSTEM 으로 기대함. 2026-11-26 11:50 반영 뒤 run_all 86/88, 실패 2건이 이 두 시험임(11:44 반영 전 88/88 PASS 1449). 시험 파일이 targets 에 없어 기대값을 고치지 못함)",
+  "targets": [
+    "tools/VibeManager/job-runner.js",
+    "tools/VibeManager/test/t_um_job.js",
+    "tools/VibeManager/test/t_om_job.js"
+  ],
+  "before_after": "job-runner.js:74 에서 chainId 가 usermanual, opsmanual 이면 combine 이 true 여도 묶지 않고, item.modules 순서로 고른 모듈마다 단위 1개를 만듦. lookupmig, perfbatch 의 묶음은 그대로 둠. t_um_job.js:45~57 기대값을 'DM_SYSTEM' 단위 1개에서 'DM','SYSTEM' 단위 2개로 바꿈. _inputs.json 은 Doc/UserManual/DM, Doc/UserManual/SYSTEM 에 하나씩 생기고 module 값은 DM, SYSTEM 임. 산출물은 모듈마다 SCM_IM_사용자매뉴얼_<모듈>_v1.0.pptx 이고 out/<모듈>.txt 도 모듈마다 확인함. t_om_job.js:43~47 도 같은 방식으로 Doc/OpsManual/<모듈> 에 단위 2개를 기대하게 바꿈",
+  "verify": "node tools/VibeManager/test/t_um_job.js tools/VibeManager · 반영 전 미측정(시험 소스의 확인 16건, 11:44 run_all 에서 통과) → 반영 뒤 기대 ALL PASS, '모듈 2개' 확인이 단위 DM,SYSTEM 으로 PASS · node tools/VibeManager/test/t_om_job.js tools/VibeManager · 반영 전 미측정(확인 6건) → 반영 뒤 기대 ALL PASS, 단위 DM,SYSTEM, 산출물 Doc/OpsManual/DM, Doc/OpsManual/SYSTEM 2개 · node tools/VibeManager/test/t_lk_job.js tools/VibeManager · 반영 전 ALL PASS(11:50 기록, 그룹 2개 = 묶음 SSP_DM) → 반영 뒤 기대 ALL PASS 유지 · node tools/VibeManager/test/t_perf_job.js tools/VibeManager · 반영 전 ALL PASS(11:50 기록) → 반영 뒤 기대 ALL PASS 유지",
+  "rollback": "백업 태그에서 job-runner.js, test/t_um_job.js, test/t_om_job.js 3개를 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T12:02:12+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T12:06:14+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self1202"
+    },
+    {
+      "at": "2026-11-26T12:06:19+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T12:11:35+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 job-runner.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T12:11:35+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 반영 전 12:06:39~12:06:42: t_um 16/16 PASS(단위 DM_SYSTEM), t_om 6/6 PASS(DM_SYSTEM), t_lk ALL PASS(SSP_DM), t_perf ALL PASS → 반영 뒤 12:07:13~12:07:18: t_um ALL PASS(단위 DM,SYSTEM, _inputs.json module DM, SYSTEM, out/DM.txt 'DM|조재훈|Ver 1.0|2026.11.23', out/SYSTEM.txt 'SYSTEM|조재훈|Ver 1.0|2026.11. · 변경 3개 파일",
+      "log": ".vibe\\logs\\2026-11-26T12-06-19_claude_orch.log",
+      "sec": 78,
+      "costUsd": 0.8413567,
+      "files": [
+        "tools/VibeManager/job-runner.js",
+        "tools/VibeManager/test/t_om_job.js",
+        "tools/VibeManager/test/t_um_job.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:29:59+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R200|tools/VibeManager/job-runner.js",
+  "kind": "fix",
+  "repairOf": "20261124232611_SELF",
+  "repairRoot": "20261124232611_SELF",
+  "repairDepth": 1,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795662132557,
+  "autoFp": "a177d3f188",
+  "applyStartMs": 1795662379246,
+  "verifyJudge": {
+    "at": "2026-11-26T12:07:41+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 88/88개 파일 통과(PASS 1449, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self1202",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "job-runner.js"
+  ],
+  "appliedMs": 1795662695545,
+  "synced": [
+    "job-runner.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_um_job.js tools/VibeManager: 반영 전 16/16 PASS(단위 DM_SYSTEM) → 반영 뒤 16/16 ALL PASS, 'PASS 모듈 2개 = 단위 2개 DM, SYSTEM ... DM,SYSTEM', 산출물 [[Doc/UserManual/DM/SCM_IM_사용자매뉴얼_DM_v1.0.pptx],[Doc/UserManual/SYSTEM/SCM_IM_사용자매뉴얼_SYSTEM_v1.0.pptx]] · node tools/VibeManager/test/t_om_job.js tools/VibeManager: 반영 전 6/6 PASS(DM_SYSTEM) → 반영 뒤 6/6 ALL PASS, 'PASS 모듈 2개 = 단위 2개 DM, SYSTEM', 산출물 Doc/OpsManual/DM/SCM_OM_운영자매뉴얼_DM_v1.0.pptx, Doc/OpsManual/SYSTEM/SCM_OM_운영자매뉴얼_SYSTEM_v1.0.pptx · node tools/VibeManager/test/t_lk_job.js tools/VibeManager: 반영 전 ALL PASS → 반영 뒤 ALL PASS, 'PASS 그룹 2개 = 묶음 1개 SSP_DM(정의 순서) SSP_DM' · node tools/VibeManager/test/t_perf_job.js tools/VibeManager: 반영 전 ALL PASS → 반영 뒤 ALL PASS(18건)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/job-runner.js",
+      "tools/VibeManager/test/t_um_job.js",
+      "tools/VibeManager/test/t_om_job.js"
+    ],
+    "verify_result": "2026-11-26 반영 전 12:06:39~12:06:42: t_um 16/16 PASS(단위 DM_SYSTEM), t_om 6/6 PASS(DM_SYSTEM), t_lk ALL PASS(SSP_DM), t_perf ALL PASS → 반영 뒤 12:07:13~12:07:18: t_um ALL PASS(단위 DM,SYSTEM, _inputs.json module DM, SYSTEM, out/DM.txt 'DM|조재훈|Ver 1.0|2026.11.23', out/SYSTEM.txt 'SYSTEM|조재훈|Ver 1.0|2026.11.23'), t_om ALL PASS(단위 DM,SYSTEM, 산출물 Doc/OpsManual/DM, Doc/OpsManual/SYSTEM 2개), t_lk ALL PASS(묶음 SSP_DM 유지), t_perf ALL PASS",
+    "note": "job-runner.js 에서 chainId usermanual, opsmanual 이면 combine 을 무시하고 item.modules 순서로 모듈마다 단위 1개를 만듦(splitMods). lookupmig, perfbatch 는 묶음 그대로. 개선안이 가리킨 74행은 현재 파일 76행임. .bak, CHANGELOG, 설치 폴더, run_all 은 지시대로 손대지 않음"
+  },
+  "snap": "prop_20261126120156_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

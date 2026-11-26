@@ -1,0 +1,115 @@
+{
+  "id": "20261124043432_SELF",
+  "at": "2026-11-24T04:34:32+09:00",
+  "ms": 1795462472148,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/extension.js|사이드바화면트리fe게이트항목과n줄화면pkg메타게이트묶음이dbmode에",
+  "title": "사용자 지시 R135 같은 문제: tools/VibeManager/extension.js:460 사이드바 화면 트리 FE 게이트 항목과 457줄 '화면·PKG·메타 게이트' 묶음이 DB MODE 에서도 FE 판정으로 실패·미실행을 표시함",
+  "evidence": "규칙 R135 \"DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함\" (원래 지시 2026-11-19 18:51 \"현재는 DB MODE로만 작업을 해서 현재의 소스가 최신 소스이고 변경대상이 아닌것으로 STATUS 변경하고 싶어요. 게이트 대상에서도 제외하고 싶어요. 차후 UI/DB MODE 일때는 게이트 대상이 되면 될 것 같아요.\") · tools/VibeManager/extension.js:460 items.push(grp('FE 게이트(check.js --final)', 'shield', 'chk', b ? `BLOCK ${b[1]} / WARN ${b[2]}` : '미실행', b ? b[1] === '0' : undefined, true));",
+  "targets": [
+    "tools/VibeManager/extension.js"
+  ],
+  "before_after": "workbench.workMode(p).db 이면 설명을 'DB MODE: 대상 아님', 판정값을 true 로 두고 457줄 gok 계산에서 FE(fg)를 뺌. UI/DB MODE 는 기준선 이후 바뀐 화면만 판정",
+  "verify": "node --check tools/VibeManager/extension.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/extension.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T04:11:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T04:15:28+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self0411"
+    },
+    {
+      "at": "2026-11-26T04:15:32+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T04:24:17+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 extension.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T04:24:17+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 반영 전 04:15:51 node --check CHECK_OK, run_all.js 는 권한 확인으로 실행 못 함(반영 전 값 미측정) → 반영 뒤 04:16:20 node --check CHECK_OK, run_all.js ALL OK 87/87 PASS 1422 FAIL 0 228s (RESULT at 2026-11-25T19:16:21Z) · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-26T04-15-32_claude_orch.log",
+      "sec": 291,
+      "costUsd": 0.8014164,
+      "files": [
+        "tools/VibeManager/extension.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:30:10+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "plain": {
+    "what": "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함 규칙을 tools/VibeManager/extension.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R135|tools/VibeManager/extension.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795633891330,
+  "autoFp": "283445a911",
+  "applyStartMs": 1795634132520,
+  "verifyJudge": {
+    "at": "2026-11-26T04:20:28+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self0411",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "extension.js"
+  ],
+  "appliedMs": 1795634657477,
+  "synced": [
+    "extension.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/extension.js 출력 CHECK_OK(04:16:20) · node tools/VibeManager/test/run_all.js 출력 'ALL OK  파일 87/87  PASS 1422  FAIL 0  228s' · t_webview_syntax.js PASS 19(run_all 안에서 실행)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/extension.js"
+    ],
+    "verify_result": "반영 전 04:15:51 node --check CHECK_OK, run_all.js 는 권한 확인으로 실행 못 함(반영 전 값 미측정) → 반영 뒤 04:16:20 node --check CHECK_OK, run_all.js ALL OK 87/87 PASS 1422 FAIL 0 228s (RESULT at 2026-11-25T19:16:21Z)",
+    "note": "extension.js:466~475. workbench.workMode(p).db 이면 FE 게이트 항목 설명 'DB MODE: 대상 아님', 판정 true, '화면·PKG·메타 게이트' gok 에서 fe_gate 제외. UI/DB MODE 는 flowPanel.stageStatus gateTip 'UI/DB MODE:'(gate_baseline.tsv 이후 변경 없음) 화면만 FE 판정 제외. fe_gate.json 이 있는 화면은 stageStatus 가 gateTip 을 덮어써 종전대로 판정(flow-panel.js 범위 밖, 98줄 주석의 사용자 판정 대상). 사이드바 표시 확인은 창 다시 로드 필요로 미확인."
+  },
+  "snap": "prop_20261124043432_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

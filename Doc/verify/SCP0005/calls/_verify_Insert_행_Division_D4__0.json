@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 1901,
-  "at": "2026-11-20T00:41:48.787Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1509,
+  "at": "2026-11-25T16:24:36.545Z",
+  "user": "candoism",
   "test": "Insert 행 Division(D4)"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 796,
-  "at": "2026-11-20T00:41:51.306Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 709,
+  "at": "2026-11-25T16:24:39.579Z",
+  "user": "candoism",
   "test": "Insert 행 Division(D4)"
  }
 ]

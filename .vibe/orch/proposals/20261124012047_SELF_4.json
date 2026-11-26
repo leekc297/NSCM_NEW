@@ -1,0 +1,106 @@
+{
+  "id": "20261124012047_SELF_4",
+  "at": "2026-11-24T01:20:47+09:00",
+  "ms": 1795450847823,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/regress.py|n줄에uichecklist와옛docchecklist경로를직접적음n줄",
+  "title": "사용자 지시 R83 같은 문제: tools/Harness/verify/regress.py:41 41, 42줄에 UI_CHECKLIST와 옛 Doc/CheckList 경로를 직접 적음. 7줄 주석에도 남음",
+  "evidence": "규칙 R83 \"산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음\" (원래 지시 2026-11-16 14:59 \"VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고\") · tools/Harness/verify/regress.py:41 pats = [os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', '*_CheckList_v*.xlsx'), os.path.join(ROOT, 'Doc', 'UI_CHECKLIST', 'old', '*_CheckList_v*.xlsx'),",
+  "targets": [
+    "tools/Harness/verify/regress.py"
+  ],
+  "before_after": "doc_paths에서 checklistDir와 legacyChecklistDirs를 받아 패턴을 만듦",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/regress.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T11:40:04+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T11:44:05+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1140"
+    },
+    {
+      "at": "2026-11-25T11:44:08+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T11:56:38+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T11:56:38+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. run_all.js 반영 전 84/84 PASS 1374 FAIL 0 → 반영 뒤 84/84 PASS 1374 FAIL 0 (2026-11-25 11:44 → 11:48 KST). python 확인 regress._checklist_dirs() = ['C:\\\\Projects\\\\NSCM\\\\Doc\\\\UI_CHECKLIST'] · 변경 2개 파일 · 대상 목록 밖 변경 1개: tools/Harness/gate_baseline.tsv",
+      "log": ".vibe\\logs\\2026-11-25T11-44-08_claude_orch.log",
+      "sec": 513,
+      "costUsd": 0.7934483,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/regress.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음 규칙을 tools/Harness/verify/regress.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R83|tools/Harness/verify/regress.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795574403927,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795574648267,
+  "verifyJudge": {
+    "at": "2026-11-25T11:52:46+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1140",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795575398217,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 227.5s'(2026-11-25T02:44:42Z) → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 224.7s'(2026-11-25T02:48:43Z). t_webview_syntax.js 는 run_all 안에서 PASS 19 · 대상 regress.py 는 웹뷰 파일 아님"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/regress.py"
+    ],
+    "verify_result": "run_all.js 반영 전 84/84 PASS 1374 FAIL 0 → 반영 뒤 84/84 PASS 1374 FAIL 0 (2026-11-25 11:44 → 11:48 KST). python 확인 regress._checklist_dirs() = ['C:\\\\Projects\\\\NSCM\\\\Doc\\\\UI_CHECKLIST']",
+    "note": "harvest() 의 Doc/UI_CHECKLIST, 옛 Doc/CheckList 하드코딩 4패턴 → _checklist_dirs()(harness.json paths.checklistDir 없으면 Doc/UI_CHECKLIST + legacyChecklistDirs) 각 폴더와 old 패턴으로 변경. 7줄 docstring 도 같이 수정. harness.json 에 paths 키 없음 → 현재 읽는 폴더 Doc/UI_CHECKLIST 1개. 옛 Doc/CheckList 폴더는 없음(11:44 확인 · xlsx 0건)이라 harvest 결과 변화 없음. Doc/화면분석서 패턴 2개는 개선안 범위 밖이라 유지."
+  },
+  "snap": "prop_20261124012047_SELF_4"
+}

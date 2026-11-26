@@ -1,0 +1,112 @@
+{
+  "id": "20261124040955_SELF_2",
+  "at": "2026-11-24T04:09:55+09:00",
+  "ms": 1795460995553,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/harness.json|켜고끄는키snapautoapprovellmreviewleandedupge",
+  "title": "사용자 지시 R131 같은 문제: tools/Harness/harness.json:16 켜고 끄는 키 snapAutoApprove, llmReviewLean, dedupGeneral, dedupScreen, orch.agentEnabled, r14E",
+  "evidence": "규칙 R131 \"harness.json 에서 켜고 끄는 기능 설정은 VM 환경설정 화면에 항목을 둠\" (원래 지시 2026-11-19 16:51 \"VM 환경설정에 AI 검토 켜고 끄는 항목 추가해주세요\") · tools/Harness/harness.json:16 \"snapAutoApprove\": true,",
+  "targets": [
+    "tools/Harness/harness.json"
+  ],
+  "before_after": "quick.json 환경설정 그룹에 '🧠 AI 검토'(2016행)와 같은 틀(set_* 스크립트, 켜기/끄기 옵션)로 키별 항목을 추가함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/harness.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T03:36:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T03:40:24+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self0336"
+    },
+    {
+      "at": "2026-11-26T03:40:27+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T03:54:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 2개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-26T03:54:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 87/87 PASS 1422 FAIL 0 (03:41) → 반영 뒤 ALL OK 87/87 PASS 1422 FAIL 0 (03:46). 추가 확인: set_harness_flag.py --selftest SELFTEST OK 7건, 키 6개 현재 값 켬, quick.json task 22개 중 steps.json 누락 0, 새 항목 6개 연결 · 변경 3개 파일 · 대상 목록 밖 변경 3개: tools/VibeManager/quick.json, tools/VibeManager/steps.json, tools/Harness/verify/set_harness_flag.py",
+      "log": ".vibe\\logs\\2026-11-26T03-40-28_claude_orch.log",
+      "sec": 591,
+      "costUsd": 1.2269515,
+      "files": [
+        "tools/VibeManager/quick.json",
+        "tools/VibeManager/steps.json",
+        "tools/Harness/verify/set_harness_flag.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "harness.json 에서 켜고 끄는 기능 설정은 VM 환경설정 화면에 항목을 둠 규칙을 tools/Harness/harness.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R131|tools/Harness/harness.json",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795631790845,
+  "autoFp": "18a1410b83",
+  "applyStartMs": 1795632027922,
+  "verifyJudge": {
+    "at": "2026-11-26T03:50:22+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 87/87개 파일 통과(PASS 1422, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261126_self0336",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795632851366,
+  "synced": [
+    "quick.json",
+    "steps.json"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전(2026-11-26 03:41 KST) ALL OK 파일 87/87 PASS 1422 FAIL 0 → 반영 뒤(03:46 KST) ALL OK 파일 87/87 PASS 1422 FAIL 0. t_webview_syntax.js 는 run_all 안에서 PASS 19(quick.json·steps.json 은 웹뷰 파일 아님)"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/set_harness_flag.py",
+      "tools/VibeManager/steps.json",
+      "tools/VibeManager/quick.json"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 ALL OK 87/87 PASS 1422 FAIL 0 (03:41) → 반영 뒤 ALL OK 87/87 PASS 1422 FAIL 0 (03:46). 추가 확인: set_harness_flag.py --selftest SELFTEST OK 7건, 키 6개 현재 값 켬, quick.json task 22개 중 steps.json 누락 0, 새 항목 6개 연결",
+    "note": "quick.json 환경설정 그룹 '🧠 AI 검토' 아래에 같은 틀(set_* 스크립트 + ON/OFF/STATUS 옵션)로 키별 항목 6개 추가. harness.json 은 스크립트가 값만 읽고 고치지 않음. harness.json 의 orch.enabled false→true 1줄 차이는 이번 작업 전부터 있던 변경. 창 다시 로드 뒤 환경설정 화면 표시는 미확인."
+  },
+  "snap": "prop_20261124040955_SELF_2"
+}

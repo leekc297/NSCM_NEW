@@ -1,4 +1,5 @@
 ﻿kind,key,finding,detail
+ppt_table,슬라이드 8 표 4 ↔ 계획기준 표 40 열,재고 I/F 표와 사업부 열의 테이블 이름 차이,표에만 SCM_DNM_SCS_STOCK · 열에만 SSP_DNM_OWMS_STOCK
 job,JOB.PR_SCM_DNM_EXFACTORY_RESULT,운영 목록에만,매일 종일 1시간마다
 job,JOB.PR_SCM_MST_SLOC,운영 목록에만,"월, 화, 수, 목, 금, 토, 일 08:00"
 job,JOB.PR_DM_SSP_SYNC,DEV msdb 에만,
@@ -783,4 +784,7 @@ ppt,슬라이드 2 PR_SSP_ANL_SHIP_REQ_FG,PPT 원천 테이블 — 본문 읽기
 ppt,슬라이드 4 PR_SSP_ANL_SHIP_PLAN_CUTOFF_FP_AUTO,PPT 대상 테이블 — 본문 쓰기에 없음,SSP_ANL_OWMS_STOCK_C2
 ppt,슬라이드 4 PR_SSP_ANL_SHIP_PLAN_CUTOFF_FP_AUTO,PPT 원천 테이블 — 본문 읽기에 없음,SSP_DNM_OWMS_STOCK
 ppt,슬라이드 5 PR_SSP_ANL_SHIP_PLAN_EE,PPT 원천 테이블 — 본문 읽기에 없음,SCP_OPT_SHIPMENT_PLAN_PEGGING_V
-ppt,슬라이드 9 PR_SSP_PLN_FP_SHIP_TARGET_ALL,PPT 대상 테이블 — 본문 쓰기에 없음,XIF_FP_SSP_SALES_EXFACTORY_S
+ppt,슬라이드 10 PR_SSP_PLN_FP_SHIP_TARGET_ALL,PPT 대상 테이블 — 본문 쓰기에 없음,XIF_FP_SSP_SALES_EXFACTORY_S
+plan_basis,"슬라이드 8 81,82 PR_SSP_ANL_SHIP_PLAN_CUTOFF",PLAN_YYYYMMDD 호출 측 인자라 본문만으로 판정 불가(미확인 · 호출 측 PR_SSP_PLN_SHIP_PLAN_CUTOFF),SYSDATE - 1 / 인자 @p_plan_start_yyyymmdd → 호출 측 인자라 본문만으로 판정 불가(미확인 · 호출 측 PR_SSP_PLN_SHIP_PLAN_CUTOFF)
+plan_basis,"슬라이드 8 81,82 PR_SSP_ANL_SHIP_PLAN_CUTOFF",계획구간 시작 호출 측 인자라 본문만으로 판정 불가(미확인 · 호출 측 PR_SSP_PLN_SHIP_PLAN_CUTOFF),SYSDATE - 1 / 인자 @p_plan_start_yyyymmdd → 호출 측 인자라 본문만으로 판정 불가(미확인 · 호출 측 PR_SSP_PLN_SHIP_PLAN_CUTOFF)
+plan_basis,슬라이드 8 EE PR_SSP_ANL_SHIP_PLAN_EE,계획구간 시작 본문에 대입문 없음(미대조),SYSDATE -1 / (※ 데이터는 전 주 월요일부터 존재 = FP 과거실적?) / - → 본문에 대입문 없음(미대조)

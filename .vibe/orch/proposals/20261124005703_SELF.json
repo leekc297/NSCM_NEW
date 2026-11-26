@@ -1,0 +1,108 @@
+{
+  "id": "20261124005703_SELF",
+  "at": "2026-11-24T00:57:03+09:00",
+  "ms": 1795449423137,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/decisions.py|결정목록질문이규칙번호ruleid로시작하고선택지가pfn판정코드와eviden",
+  "title": "사용자 지시 R81 같은 문제: tools/Harness/verify/decisions.py:119 결정 목록 질문이 규칙 번호(rule_id)로 시작하고 선택지가 P, F, N 판정 코드와 evidence_ref, evidence_quote 같은 내부 열 이름",
+  "evidence": "규칙 R81 \"사용자에게 묻는 질문과 보고는 내부 도구, 검사기 용어 대신 사용자가 아는 화면, 업무 단어로 쓰고 선택지마다 결과를 적음\" (원래 지시 2026-11-16 09:29 \"방금의 경우에도 CHK 행 선택기 라고 하는 것에 대해서 제가 어떤 의미인지를 모르는데 답을 원하는 상황이라 권장안으로 그냥 실행 할 수 밖에 없었습니다.\") · tools/Harness/verify/decisions.py:119 'question': f\"{r['rule_id']} {r['target'][:50]} — 실측대로가 AS-IS 와 같은가?\", 'options': 'P=같다(PASS) · F=결함(FAIL) · N=해당없음(사유) · ...",
+  "targets": [
+    "tools/Harness/verify/decisions.py"
+  ],
+  "before_after": "질문을 규칙 사전(detect_rules.csv)의 업무 설명과 화면 위치로 만듦. 선택지는 '같다: CheckList 에 정상으로 표시', '다르다: 오류로 표시하고 보완 대상에 올림', '해당없음: 사유와 함께 제외' 형태로 결과를 붙임",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/decisions.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T10:30:00+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T10:33:48+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1030"
+    },
+    {
+      "at": "2026-11-25T10:33:51+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T10:46:40+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T10:46:40+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 219s'(10:34:20 KST) → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 219.8s'(10:38:54 KST). python import 확인: question_of({'rule_id':'A1','target':'Grid Plan Qty'}) = \"Grid Plan Qty 의 '조회 건수 AS-IS 일치' 실측 결과가 AS-IS 와 같은가?\", answer · 변경 4개 파일 · 대상 목록 밖 변경 3개: tools/Harness/gate_baseline.tsv, Doc/통합테스트_SSP/SCM_MST_PLAN_일계획ID_점검쿼리_20261125.sql, tools/Analysis/ssp_it_precheck/planid_check.py",
+      "log": ".vibe\\logs\\2026-11-25T10-33-51_claude_orch.log",
+      "sec": 541,
+      "costUsd": 0.8674375000000001,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/decisions.py",
+        "Doc/통합테스트_SSP/SCM_MST_PLAN_일계획ID_점검쿼리_20261125.sql",
+        "tools/Analysis/ssp_it_precheck/planid_check.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "사용자에게 묻는 질문과 보고는 내부 도구, 검사기 용어 대신 사용자가 아는 화면, 업무 단어로 쓰고 선택지마다 결과를 적음 규칙을 tools/Harness/verify/decisions.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R81|tools/Harness/verify/decisions.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795570200334,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795570431328,
+  "verifyJudge": {
+    "at": "2026-11-25T10:42:57+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1030",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795571200873,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 ALL OK 파일 84/84 PASS 1374 FAIL 0(2026-11-25T01:34:20Z) → 반영 뒤 ALL OK 파일 84/84 PASS 1374 FAIL 0(2026-11-25T01:38:54Z). 포함된 t_webview_syntax.js PASS 19 → PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/decisions.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 219s'(10:34:20 KST) → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 219.8s'(10:38:54 KST). python import 확인: question_of({'rule_id':'A1','target':'Grid Plan Qty'}) = \"Grid Plan Qty 의 '조회 건수 AS-IS 일치' 실측 결과가 AS-IS 와 같은가?\", answer_code(같다,다르다,해당없음,p,F,n,'') = ['P','F','N','P','F','N','']",
+    "note": "질문 = 화면 위치(target) + detect_rules.csv 규칙 이름. 사전에 없으면 결정 목록 묶음 이름. 선택지 = 같다(CheckList 정상 표시), 다르다(오류 표시, 보완 대상), 해당없음(사유 적으면 제외). answer 칸은 같다, 다르다, 해당없음과 기존 P, F, N 을 받음. decisions.md 표는 규칙 번호 열을 빼고 질문 열을 씀. 원장 반영 조건(by 필수, AI 근거 확인)은 바꾸지 않음. 기존 decisions.csv 는 다시 만들지 않음"
+  },
+  "snap": "prop_20261124005703_SELF"
+}

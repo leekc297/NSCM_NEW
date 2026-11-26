@@ -112,8 +112,10 @@ export const MSG = {
   QTY_NEGATIVE: 'MSG00225', // Quantity must be 0 or greater.(구 MSG00084 미등록 — production-plan-line 미러링)
   QTY_MAX: 'MSG00165', // You have exceeded the number of digits you can enter.(구 MSG00317 미등록 — production-plan-line 미러링)
   PERIOD_FROM_REQUIRED: 'MSG01488', // 기간 시작일 필수 — AS-IS MSG00171 대응, 신규 채번 등록(G21b)
-  PERIOD_OVER_365: 'MSG01187', // 조회기간 초과 {0}일 — AS-IS MSG00172 대응, 신규 채번 등록(G21b)
+  PERIOD_OVER_MAX: 'MSG01187', // Maximum Period is From Date + {0}. — AS-IS MSG00172 대응(인자 '584')
+  PERIOD_FROM_AFTER_TO: 'MSG01135', // The start date can not be later than the end date. — AS-IS MSG00108 동일 문구
   NO_CHANGE: 'MSG00004', // 변경사항 없음(공용) — useProcMutation 표준 경로 사용 시 해당없음
+  INSERT_ROW_NO_VALUE: 'MSG01243', // Inserted Row must register at least one value.(BOD 삽입 행 값 없음 — AS-IS MSG00233 대응, 2026-11-20 조회)
   // New Plan 팝업(SCM0002_ShipmentPlanInsertPopup) — AS-IS ID 가 TO-BE 에 없거나 다른 문구라 대체한 ID(2026-10-07 SCM_ADM_MSG_M 조회).
   //   대응표: .atlas/gscm-design/SCM0002/design/00_checklist.md §4.
   SYSTEM_ERROR: 'MSG01075', // System error. Capture the screen...(AS-IS MSG00042 는 TO-BE 미등록)

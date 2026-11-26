@@ -1,0 +1,105 @@
+{
+  "id": "20261123225519_SELF_3",
+  "at": "2026-11-23T22:55:19+09:00",
+  "ms": 1795442119819,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/asis_live_rows.py|한쪽데이터없음을toben건만조치필요로판정함asisn건toben건이상이고차",
+  "title": "사용자 지시 R72 같은 문제: tools/Harness/verify/asis_live_rows.py:44 한쪽 데이터 없음을 TO-BE 0건만 조치필요로 판정함. AS-IS 0건, TO-BE 1건 이상이고 차이가 소량 기준(10건) 이하면 47줄에서 REVIEW(판정",
+  "evidence": "규칙 R72 \"검사기는 AS-IS 실구동 값과 TO-BE 값의 건수 차이가 소량이면 판정필요로, 값이 다르거나 한쪽에 데이터가 없으면 조치필요로 판정함\" (원래 지시 2026-11-13 14:25 \"실구동 값의 경우에 건수차이가 소량 날때는 판단필요 항목으로, 아예 데이터가 다르거나 없으면 조치필요 항목으로 분류해주세요. VM CHECKLIST 실행 시 AS-IS 실구동 런처 자동구동해서 필요한 데이터 취합하도록 해주세요.\") · tools/Harness/verify/asis_live_rows.py:44 if t == 0 and a > 0: return 'FAIL', base + ' — TO-BE 에 데이터가 없음(조치 필요)' + keys",
+  "targets": [
+    "tools/Harness/verify/asis_live_rows.py"
+  ],
+  "before_after": "44줄 다음에 if a == 0 and t > 0: return 'FAIL', base + ' — AS-IS 에 데이터가 없음(조치 필요)' + keys 를 추가함. 소량 판정(47줄)은 양쪽 모두 1건 이상일 때만 타게 함. 독스트링 판정 표에 같은 줄을 추가함",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/asis_live_rows.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T09:52:07+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T09:56:02+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self0952"
+    },
+    {
+      "at": "2026-11-25T09:56:08+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T10:08:10+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T10:08:10+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 84/84 PASS 1374 FAIL 0 (2026-11-25T00:56:25Z) → 반영 뒤 84/84 PASS 1374 FAIL 0 (2026-11-25 10:04:12). 추가 확인 python -u tools/Harness/verify/asis_live_rows.py --selftest 반영 뒤 'selftest 8/8', 'classify(0, 5) = FAIL (기대 FAIL)', 'classify(0, 0) = PASS (기대 PASS)'. · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T09-56-09_claude_orch.log",
+      "sec": 497,
+      "costUsd": 0.5913634000000001,
+      "files": [
+        "tools/Harness/verify/asis_live_rows.py"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "검사기는 AS-IS 실구동 값과 TO-BE 값의 건수 차이가 소량이면 판정필요로, 값이 다르거나 한쪽에 데이터가 없으면 조치필요로 판정함 규칙을 tools/Harness/verify/asis_live_rows.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R72|tools/Harness/verify/asis_live_rows.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795567926154,
+  "autoFp": "df966385fa",
+  "applyStartMs": 1795568168592,
+  "verifyJudge": {
+    "at": "2026-11-25T10:04:28+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 84/84개 파일 통과(PASS 1374, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self0952",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795568890302,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 84/84 PASS 1374 FAIL 0 229.4s'(2026-11-25T00:56:25Z) → 반영 뒤 'ALL OK 파일 84/84 PASS 1374 FAIL 0 223.7s'(2026-11-25 10:04:12). 웹뷰 파일 아님, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/asis_live_rows.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 84/84 PASS 1374 FAIL 0 (2026-11-25T00:56:25Z) → 반영 뒤 84/84 PASS 1374 FAIL 0 (2026-11-25 10:04:12). 추가 확인 python -u tools/Harness/verify/asis_live_rows.py --selftest 반영 뒤 'selftest 8/8', 'classify(0, 5) = FAIL (기대 FAIL)', 'classify(0, 0) = PASS (기대 PASS)'. 반영 전 selftest 는 PowerShell 호출 차단으로 미측정",
+    "note": "개선안이 가리킨 44줄 다음에 AS-IS 0건 · TO-BE 1건 이상 = FAIL(조치 필요) 줄 추가. 한쪽 0건은 앞의 두 FAIL 줄, 양쪽 0건은 PASS 줄에서 끝나므로 소량 판정은 양쪽 1건 이상일 때만 탐. 독스트링 판정 표에 1줄, selftest 에 (0,5)=FAIL · (0,0)=PASS 2건 추가. 개선안의 47줄은 현재 파일에서 소량 판정 49줄(반영 뒤 51줄)에 해당함. .bak · 설치 폴더 · CHANGELOG 수정 없음"
+  },
+  "snap": "prop_20261123225519_SELF_3"
+}

@@ -48,13 +48,31 @@ def read_csv(path):
         return list(csv.DictReader(f))
 
 
+# T555(2026-11-25 SCP0005 D1·E1 POPUP 33행): 다른 폼(팝업 클래스)이 만드는 AS-IS 시트가 T451 에서 남아 본 그리드 E2E 측정값이 그 시트 메타 행에 붙었다.
+#   소속 = grid_code.csv AddSheet 의 class. 그 class 가 다른 class 의 actions.csv POPUP 'new <class>' 로 열리는 팝업 폼이면 팝업 소속 시트
+def popup_owned_sheets(sdir):
+    """AS-IS 시트 중 AddSheet 하는 class 가 전부 팝업 폼(다른 class 가 new 로 여는 폼)인 시트 이름 집합(원문 그대로)"""
+    owners = {}
+    for r in read_csv(os.path.join(sdir, 'grid_code.csv')):
+        if r.get('kind') == 'SHEET' and r.get('api') == 'AddSheet' and (r.get('sheet_hint') or '').strip() and r.get('class'):
+            owners.setdefault(r['sheet_hint'].strip(), set()).add(r['class'])
+    pop = set()
+    for x in read_csv(os.path.join(sdir, 'actions.csv')):
+        if x.get('kind') != 'POPUP':
+            continue
+        m = re.match(r'new\s+(?:[\w.]+\.)?(\w+)\s*$', (x.get('target') or '').strip())
+        if m and m.group(1) != x.get('class'):
+            pop.add(m.group(1))
+    return {s for s, cl in owners.items() if cl and cl <= pop}
+
+
 def rid(*parts):
     return 'V-' + hashlib.sha1('|'.join(parts).encode('utf-8')).hexdigest()[:8]
 
 
 def col_from_args(value):
     """GetColumnIndex(DefColumns.X) 인자에서 컬럼명 목록"""
-    return re.findall(r'DefColumns\.([A-Z0-9_]+)', value or '')
+    return re.findall(r'DefColumns\.([A-Z0-9_]+)(?![a-z])', value or '')
 
 
 def main():
@@ -77,12 +95,12 @@ def main():
     rows = []
     seen = set()
 
-    def add(source, rule_id, target, condition='', expected='', asis_ref='', area='', oracle='', method='', defect_ref='', note='', family=''):
+    def add(source, rule_id, target, condition='', expected='', asis_ref='', area='', oracle='', method='', defect_ref='', note='', family='', id_condition=None):
         if note == '전용' and not asis_ref:  # 전용 검사는 3개 문서 결함 유형(_engine_gap.csv)에서 나왔다 — FAIL 계약의 기대값 출처(2026-11-02 근거 없어 FAIL 이 ERROR 로 내려감)
             asis_ref = '결함원장 유형(Doc/verify/_engine_gap.csv)'
         r = rules.get(rule_id, {})
         fam = family or r.get('family', rule_id[:1])
-        key = (source, rule_id, target, condition, asis_ref, defect_ref)
+        key = (source, rule_id, target, condition if id_condition is None else id_condition, asis_ref, defect_ref)  # 2026-11-25 T579-b: id_condition = 행 ID 고정용(종전 조건)
         if key in seen:
             return
         seen.add(key)
@@ -452,17 +470,41 @@ def main():
 
     # 2026-11-16 SCP0104: AS-IS 잠금 원문을 사람이 읽어 적은 편집 기대(Doc/verify/<ID>/edit_expect_manual.csv · 시트+컬럼 키) — 자동 해석(edit_expect.csv)이 '해석 못 한 잠금'·시트 누락으로 남긴 칸을 원문 근거로 채운다. 있으면 자동 해석보다 우선
     ee_manual = {(re.sub(r'[^a-z0-9]', '', (r.get('sheet') or '').lower()), (r.get('column') or '').upper()): dict(r, asis_visible='', ambiguous='', control='') for r in read_csv(P('Doc', 'verify', mid, 'edit_expect_manual.csv'))}
+    # 2026-11-26 T658: 메인 밖 시트의 편집 기대(facts_lockrules edit_expect_sheets.csv · 그 시트 컨트롤의 잠금 문장 · SHEET 조건을 그 시트로 접음)
+    #   종전엔 메인 밖 시트 칸이 전부 'AS-IS 편집 기대 없음'(판정필요 → 미검증)이었다(다중 시트 10화면 D1 455행)
+    ee_sheet = {(re.sub(r'[^a-z0-9]', '', (r.get('sheet') or '').lower()), (r.get('column') or '').upper()): r for r in read_csv(os.path.join(sdir, 'edit_expect_sheets.csv'))}
+    #   TO-BE 시트 이름 → AS-IS 시트 이름(정규화). ① 같은 이름 ② '<AS-IS 시트>_<Division>'(DMF0005 production_40 · Division = grid_effective 의 Division 열 이름)
+    #   ③ AS-IS 메타 시트 1개 · TO-BE 시트 1개(SCP0127 'main' ↔ 'PRECEDE / SAFETY STOCK DAY'). 셋 다 아니면 TO-BE 이름 그대로
+    _nz = lambda s: re.sub(r'[^a-z0-9]', '', (s or '').lower())
+    _asis_sh = {_nz(m_.get('SHEET_NAME')) for m_ in read_csv(os.path.join(sdir, 'dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv')) if (m_.get('PROGRAM_ID') or '').upper() == asis_id and m_.get('VALID_YN', 'Y') != 'N'} - {''}
+    _ge0 = read_csv(os.path.join(sdir, 'grid_effective.csv'))
+    _div_keys = {k.lower() for k in (_ge0[0].keys() if _ge0 else []) if re.fullmatch(r'(?:\d{2}|EE)(?:_[A-Za-z]{2})?', k or '')}
+    _tobe_sh = {_nz(r.get('sheet_name')) for r in read_csv(P('Doc', 'tobefacts', 'db', 'sheet_columns.csv')) if r.get('program_id', '').upper() == mid and r.get('valid_yn', 'Y') != 'N'} - {''}
+
+    def asis_sheet(sheet):
+        sn = _nz(sheet)
+        if sn in _asis_sh:
+            return sn
+        m_ = re.fullmatch(r'(.+?)_((?:\d{2}|ee)(?:_[a-z]{2})?)', (sheet or '').strip().lower())
+        if m_ and m_.group(2) in _div_keys and _nz(m_.group(1)) in _asis_sh:
+            return _nz(m_.group(1))
+        if len(_asis_sh) == 1 and len(_tobe_sh) == 1:
+            return next(iter(_asis_sh))
+        return sn
 
     def ee_for(col, sheet):
         """시트별 편집 기대 — 잠금 문장의 스프레드 컨트롤(siMain·siExcept…) 토큰과 TO-BE 시트명을 맞춘다
         (2026-10-29: SCP0020 siExcept 의 LINE_ID 신규행 잠금이 Plant/Packer/Tact Time 시트 D1 에 적용돼 허위 FAIL). 컨트롤 분리 정보가 없으면 통합 기대"""
         _m = ee_manual.get((re.sub(r'[^a-z0-9]', '', (sheet or '').lower()), (col or '').upper()))
         if _m: return _m
+        _as = asis_sheet(sheet)  # T658
+        _s = ee_sheet.get((_as, (col or '').upper()))
+        if _s: return _s
         by = ee_ctl.get(col, {})
         # 규칙이 해석된 시트(edit_expect.sheet)가 있고 TO-BE 시트와 다르면 기대를 쓰지 않는다 — 같은 컬럼명(QTY)이 다른 시트에도 있을 때 교차 오염(2026-10-31 SCP0041)
         base = ee.get(col, {})
         es = re.sub(r'[^a-z0-9]', '', (base.get('sheet') or '').lower()) if base else ''
-        if base and es and sheet and es != re.sub(r'[^a-z0-9]', '', sheet.lower()):
+        if base and es and sheet and es != _as:
             return {}
         if not by:
             return base
@@ -478,9 +520,14 @@ def main():
     for x in read_csv(os.path.join(sdir, 'actions.csv')):
         if (x['class'], x['method']) in dead: continue
         if x['kind'] == 'POPUP' and 'DoubleClick' in x['method']:
-            for c in re.findall(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)', x['guard']):
+            for c in re.findall(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)(?![a-z])', x['guard']):
                 popup_cols[c] = f"{os.path.basename(x['file'])}:{x['line']} {x['method']}"
-    cr = {r['column']: r for r in read_csv(os.path.join(sdir, 'cell_rules.csv'))}
+    # 2026-11-25 T579-a(U1 T540 후속): cell_rules.csv 가 (시트, 칸) 단위 — 같은 칸이 주 시트와 팝업 시트(POPUP · 맨 뒤 정렬)에 둘 다 있다(SCP0005 DAYS_*·LT_SUM 등).
+    #   칸 이름 dict 는 마지막 행(팝업 시트)을 골랐다 → (시트, 칸) 으로 찾고, 없으면 그 칸의 첫 행(주 시트 먼저)
+    cr, _cr_sc = {}, {}
+    for _r in read_csv(os.path.join(sdir, 'cell_rules.csv')):
+        cr.setdefault(_r['column'], _r); _cr_sc.setdefault(((_r.get('sheet') or '').strip().upper(), _r['column']), _r)
+    _cr_of = lambda sheet, col: _cr_sc.get(((sheet or '').strip().upper(), col.upper())) or _cr_sc.get(((sheet or '').strip().upper(), col)) or cr.get(col.upper()) or cr.get(col) or {}
     cols = [r for r in read_csv(P('Doc', 'tobefacts', 'db', 'sheet_columns.csv')) if r.get('program_id', '').upper() == mid and r.get('valid_yn', 'Y') != 'N']
     # TO-BE 화면이 실제로 조회하는 시트만(대소문자 그대로) — 메타에는 'Production'/'production'/'production_40' 같은 잔존 변형 시트가 있다(2026-10-23 DMF0005 2,099행)
     used = set()
@@ -497,19 +544,103 @@ def main():
         except Exception:  # noqa: BLE001 — 기록 없음 = 종전 동작
             _ms = []
         _nzs = lambda x: re.sub(r'[^a-z0-9]', '', (x or '').lower())  # noqa: E731
-        _asis_sh = {_nzs(r.get('sheet')) for r in read_csv(os.path.join(sdir, 'grid_columns_asis.csv'))}
+        # T555(2026-11-25 SCP0005 D1·E1 POPUP 33행): AS-IS 시트라도 팝업 폼 소속(popup_owned_sheets)이고 TO-BE 화면이 조회하지 않았으면 본 그리드 측정값을 붙이지 않게 뺀다.
+        #   팝업 자체 유무는 M3 팝업 행(대조표 T-·eg-popup EG-)이 판정한다. TO-BE 가 그 시트를 조회하면(_ms 포함) 그대로 남는다
+        _pop_sh = {_nzs(s) for s in popup_owned_sheets(sdir)}
+        _asis_sh = {_nzs(r.get('sheet')) for r in read_csv(os.path.join(sdir, 'grid_columns_asis.csv'))} - _pop_sh
         if _ms and any(c['sheet_name'] in _ms for c in cols):
             _drop = {c['sheet_name'] for c in cols if c['sheet_name'] not in _ms and _nzs(c['sheet_name']) not in _asis_sh}
             if _drop:
                 print(f"[ledger] T451 컬럼 메타 미조회 시트 제외 {sorted(_drop)} (조회 기록 {_ms})")
                 cols = [c for c in cols if c['sheet_name'] not in _drop]
+    # R33(2026-11-24 SELF_5 · 원 지시 2026-11-10 SSP0024 Pancake Roll Length·Steelcrate/Cut): E1 입력 제한·H13 음수 글자색 기대값 = AS-IS 실측.
+    #   정적 cell_rules 만으로 기대를 만들면 '정수만·음수 허용·음수 빨강' 차이가 조치필요에 오르지 않았다.
+    #   실측 계약: Doc/asislive/<ID>/latest.json → run_dir 의 num_input.json {"columns":[{sheet,column,key_input:{"-1":값|null,"1.5":…,"ab":…},negative_color}]}
+    #   또는 grids.json sheets[].columns[] 의 key_input·negative_color(tag = 컬럼명). null = 입력 거부. 실측 없음 = 미검증(ERROR)
+    def _live_num_load():
+        out, why = {}, ''
+        for _id in dict.fromkeys((asis_id, mid)):
+            try:
+                with open(P('Doc', 'asislive', _id, 'latest.json'), encoding='utf-8') as f: _lt = json.load(f)
+            except (OSError, ValueError):
+                continue
+            _rd = P(*(_lt.get('run_dir') or '').split('/'))
+            try:
+                with open(os.path.join(_rd, 'run.json'), encoding='utf-8') as f: _st = (json.load(f) or {}).get('status')
+            except (OSError, ValueError):
+                _st = ''
+            if _st != 'OK':
+                why = f"AS-IS 실측 {_lt.get('run_dir')} 상태 {_st or '없음'}"; continue
+            _src = []
+            try:
+                with open(os.path.join(_rd, 'num_input.json'), encoding='utf-8') as f:
+                    _src += [(x.get('sheet') or '', x.get('column') or '', x) for x in (json.load(f) or {}).get('columns') or []]
+            except (OSError, ValueError):
+                pass
+            try:
+                with open(os.path.join(_rd, 'grids.json'), encoding='utf-8') as f:
+                    for _g in (json.load(f) or {}).get('grids') or []:
+                        for _s in _g.get('sheets') or []:
+                            _src += [(_s.get('name') or '', x.get('tag') or x.get('data_field') or '', x) for x in _s.get('columns') or [] if 'key_input' in x or 'negative_color' in x]
+            except (OSError, ValueError):
+                pass
+            for _sh, _cn, x in _src:
+                if _cn:
+                    out.setdefault(_cn.upper(), {}).setdefault(_sh.upper(), {**x, '_run': _lt.get('run_dir')})
+            if out:
+                return out, ''
+            why = f"AS-IS 실측 {_lt.get('run_dir')} 에 숫자 키 입력·음수 글자색 기록 없음"
+        return out, why or 'AS-IS 실측(latest.json) 없음'
+    _live_num, _live_num_why = _live_num_load()
+
+    def _live_num_for(sheet, col):
+        _m = _live_num.get((col or '').upper()) or {}
+        return _m.get((sheet or '').upper()) or (next(iter(_m.values())) if len(_m) == 1 else None)
+
+    def _live_e1_expect(lv):
+        _ki = lv.get('key_input') if isinstance(lv.get('key_input'), dict) else None
+        if not _ki:
+            return ''
+        return 'AS-IS 실측 키 입력 ' + ' · '.join(f"'{k}'→{'거부' if v in (None, '') else repr(str(v))}" for k, v in _ki.items()) + ' — 같은 키 입력 결과가 다르면 오류'
+
+    def _live_num_dyn(sheet, binding_re):
+        """동적 컬럼 패밀리 = binding 정규식에 맞는 실측 컬럼 중 키 입력 기록이 있는 첫 컬럼"""
+        try:
+            _rx = re.compile(binding_re) if binding_re else None
+        except re.error:
+            _rx = None
+        if not _rx:
+            return None
+        for _cn in sorted(_live_num):
+            if _rx.search(_cn) or _rx.search(_cn.lower()):
+                _m = _live_num[_cn]
+                return _m.get((sheet or '').upper()) or next(iter(_m.values()))
+        return None
+
+    def add_live_num(rule_id, t, static_expected, ref, lv, note=''):
+        if rule_id == 'E1':
+            exp = _live_e1_expect(lv or {})
+        else:
+            _nc = (lv or {}).get('negative_color')
+            exp = f"음수 값 셀 글자색 = AS-IS 실측 {_nc}" if _nc else ''
+        if exp:
+            add('COLUMN', rule_id, t, expected=f"{exp} (정적 규칙: {static_expected})", asis_ref=f"AS-IS 실측 {lv.get('_run')} · {ref}", area='그리드', note=note)
+            return
+        _n0 = len(rows)
+        add('COLUMN', rule_id, t, expected=f"AS-IS 실측 없음 — 정적 규칙: {static_expected}", asis_ref=ref, area='그리드',
+            note=((note + ' ') if note else '') + f"[AS-IS 실측 없음] {_live_num_why or '이 컬럼 실측 기록 없음'}")
+        if len(rows) == _n0:
+            return  # 같은 키 행이 이미 있음(add 중복 제거)
+        rows[-1]['result'] = 'ERROR'
+        rows[-1]['evidence'] =f"[미측정] AS-IS 숫자 키 입력('-1'·'1.5'·'ab')·음수 글자색 실측 없음({_live_num_why or '이 컬럼 기록 없음'}) — 기대값 없음, AS-IS Live Run 실측 뒤 재판정"
+
     for c in cols:
         sheet, col = c['sheet_name'], c['column_name']
         t = f"{sheet}.{col} ({c.get('column_label_name', '')})"
         ctl = c.get('cell_control_object_type_code', '')
         itp = c.get('input_tp_cd', '')
         e = ee_for(col.upper(), sheet)
-        rule = cr.get(col.upper(), {})
+        rule = _cr_of(sheet, col)  # T579-a
         tobe = f"TO-BE SHEET_COLUMNS {sheet}.{col} VISIBLE={c.get('visible_flag')} INPUT_TP_CD={itp or '-'} CELL={ctl or '-'}"
         if e.get('asis_visible') and e['asis_visible'] != c.get('visible_flag'):
             add('COLUMN', 'A5', t, expected=f"표시 여부 = AS-IS VISIBLE_FLAG '{e['asis_visible']}' (TO-BE '{c.get('visible_flag')}')", asis_ref=f"AS-IS SHEET_COLUMNS · {tobe}", area='그리드')
@@ -521,7 +652,7 @@ def main():
             if e and col.upper() in popup_cols and e[k] == 'Y':
                 # T114(2026-11-06 SCP0131 ITEM_ID): AS-IS 셀이 일반 텍스트 셀(cell_rules TEXT · CELL=-)이고 편집 가능(e[k]=Y)이면 AS-IS 도 직접 입력이 된다
                 #   (더블클릭 팝업은 보조 입력) → '직접 편집 차단' 기대가 아니라 '팝업 보조 입력' — TO-BE 가 직접+팝업이든 팝업 전용(CR-072)이든 정상(잘못된 값 처리는 E7)
-                _acr = cr.get(col.upper()) or cr.get(col) or {}
+                _acr = _cr_of(sheet, col)  # T579-a
                 # T456(2026-11-20 SCP0005 D1 FROM_COUNTRY·FROM_CITY 4행 허위 FAIL): 메타 CELL 이 비면 프레임워크가 FPTextBox(기본 텍스트 칸)로 정한다(SpreadInfo.cs:1387~1389)
                 #   → CELL=FPTextBox 도 일반 텍스트 셀. 종전엔 CELL=- 만 일반으로 봐 '직접 편집 차단' 기대를 만들었다
                 _plain = (_acr.get('cell_type') or 'TEXT').upper() in ('TEXT', '', 'FPTEXTBOX') and re.search(r'CELL=(-|FPTextBox)(?!\w)', _acr.get('ref') or 'CELL=-') is not None
@@ -553,9 +684,16 @@ def main():
         if (rule.get('cell_type') or '') not in ('', 'TEXT', 'COMBO', 'NUMBER', 'DATE', 'DATETIME', 'CHECK', 'NUMBER_TEXT', 'FPTextBox', 'FPDateText'):
             add('COLUMN', 'K5', t, expected=f"특수 편집기 AS-IS {rule['cell_type']} — 입력 값 보존·서식 동작 정상(에디터 열림·값 확정·재표시)", asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
         if rule.get('cell_type') == 'NUMBER':
-            add('COLUMN', 'E1', t, expected=f"소수 {rule.get('decimals') or 0}자리{' · 정수만(소수·문자 거부)' if rule.get('fixed_point') == 'Y' else ''} · 최소 {rule.get('min') or '-'} · 최대 {rule.get('max') or '-'} · 천단위 {rule.get('separator') or 'N'} — 규칙 밖 값 거부",
-                asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
+            add_live_num('E1', t, f"소수 {rule.get('decimals') or 0}자리{' · 정수만(소수·문자 거부)' if rule.get('fixed_point') == 'Y' else ''} · 최소 {rule.get('min') or '-'} · 최대 {rule.get('max') or '-'} · 천단위 {rule.get('separator') or 'N'} — 규칙 밖 값 거부",
+                f"{rule.get('ref')} · {tobe}", _live_num_for(sheet, col))
             add('COLUMN', 'H8', t, expected=f"숫자 표시 = 천단위 {rule.get('separator') or 'N'} · 소수 {rule.get('decimals') or 0}자리", asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
+        elif rule.get('cell_type') == 'NUMBER_TEXT':
+            # 2026-11-25 T579-c(SCP0005 E1 V-0bbe47b0·V-aa0e05de·V-1695d2c6·V-caa77d38 LT_SUM·One/Two/Three_SEGMENT_COST): AS-IS 메타 FPNumberText =
+            #   SpreadInfo.cs:1502~1504 AddNumTextColumn → 4747~4751 `new NumberCellType()`(소수·최소·최대 지정 없음) = 숫자 칸. 종전 '숫자 규칙 없음 · 판정필요' 표시라
+            #   _verify.spec.ts:588 이 실행하지 않았다 → 숫자 아닌 값 거부를 기대로 둔다. 소수 자리·범위는 NumberCellType 기본값이라 원문으로 확정 못 함(미확인)
+            #   asis_ref 는 종전 값(tobe)을 유지해 행 ID 를 바꾸지 않는다 — 원문 근거는 기대 문장에
+            add('COLUMN', 'E1', t, expected=f"숫자 칸(AS-IS {rule.get('ref') or 'FPNumberText'} → SpreadInfo.cs:1502-1504 AddNumTextColumn → 4747-4751 NumberCellType · 소수 미지정 · 최소 -·최대 - = 기본값 미확인) — 숫자 아닌 값('ab') 거부",
+                asis_ref=tobe, area='그리드')
         elif re.search(r'Number|Num|Double|Int|Percent', ctl, re.I):
             add('COLUMN', 'E1', t, expected='AS-IS 숫자 규칙 없음 — TO-BE 숫자 컬럼, 확정 규칙으로 판정', asis_ref=tobe, area='그리드', note='판정필요')
         if rule.get('cell_type') in ('DATE', 'DATETIME'):
@@ -566,7 +704,7 @@ def main():
         add('COLUMN', 'H2', t, expected='편집 가능=노랑 / 입력불가=흰색 (표준 3색)', asis_ref=tobe, area='그리드')
         # H13 음수 글자색(2026-10-30 WP7) — AS-IS NumberCellType.NegativeRed=true(프레임워크 기본, cell_rules negative_red) ↔ TO-BE 그리드 formatter(paintNegativeText 류)
         if rule.get('cell_type') == 'NUMBER' and rule.get('negative_red') == 'Y':
-            add('COLUMN', 'H13', t, expected='음수 값 셀 글자색 = 빨강(AS-IS NumberCellType.NegativeRed=true)', asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
+            add_live_num('H13', t, '음수 값 셀 글자색 = 빨강(AS-IS NumberCellType.NegativeRed=true)', f"{rule.get('ref')} · {tobe}", _live_num_for(sheet, col))
 
     # 3-a) 런타임(동적) 컬럼 패밀리(2026-10-30 WP1 · 검사기 결함 T15) — SHEET_COLUMNS 메타에 없는 월/주 피벗 컬럼. facts_dyncols → dyn_columns.csv · 잠금 기대 = edit_expect '<DYNAMIC:…>' 행
     #   target = "<시트>.<DYNAMIC:패밀리>" · note 에 binding 정규식(JSON) — _verify.spec 이 실행 시 대표 컬럼(값 있는 행·빈 행)을 골라 정적 컬럼과 같은 판정 함수로 측정
@@ -589,10 +727,11 @@ def main():
         if ct in ('NUMBER', 'DATE', 'DATETIME', 'COMBO', 'CHECK'):
             add('COLUMN', 'D5', t, expected=f"에디터 = AS-IS {ct}" + (f" (소수 {dcol.get('decimals') or 0}자리)" if ct == 'NUMBER' else ''), asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
         if ct == 'NUMBER':
-            add('COLUMN', 'E1', t, expected=f"소수 {dcol.get('decimals') or 0}자리{' · 정수만(소수·문자 거부)' if dcol.get('fixed_point') == 'Y' else ''} · 천단위 {dcol.get('separator') or 'N'} — 규칙 밖 값 거부", asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
+            add_live_num('E1', t, f"소수 {dcol.get('decimals') or 0}자리{' · 정수만(소수·문자 거부)' if dcol.get('fixed_point') == 'Y' else ''} · 천단위 {dcol.get('separator') or 'N'} — 규칙 밖 값 거부", f"{ref0} · {tobe}",
+                _live_num_dyn(sheet, dcol.get('binding_regex', '')), note=dyn_note)
             add('COLUMN', 'H8', t, expected=f"숫자 표시 = 천단위 {dcol.get('separator') or 'N'} · 소수 {dcol.get('decimals') or 0}자리", asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
             if dcol.get('negative_red') == 'Y':
-                add('COLUMN', 'H13', t, expected='음수 값 셀 글자색 = 빨강(AS-IS NumberCellType.NegativeRed=true)', asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
+                add_live_num('H13', t, '음수 값 셀 글자색 = 빨강(AS-IS NumberCellType.NegativeRed=true)', f"{ref0} · {tobe}", _live_num_dyn(sheet, dcol.get('binding_regex', '')), note=dyn_note)
         add('COLUMN', 'H2', t, expected='편집 가능=노랑 / 입력불가=흰색 (표준 3색)', asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
 
     # 3-b) H1 가로 정렬 — AS-IS 그리드 컬럼(메타·코드 FPHAlign) 전 컬럼 (2026-10-27 · align_check.py 가 판정)
@@ -624,7 +763,7 @@ def main():
         # T370(2026-11-19 SCP0005 미검증 해소): DataTable 칸 대입 'dt.Rows[nRow][DefColumns.X] = 값' 은 칸 이름이 값이 아니라 대상 쪽에 있다 —
         #   종전엔 대상이 원문 그대로('dt.Rows[nRow][DefColumns.LT_SUM]') 남아 C3 '원천 컬럼 분기 해석 불가'·C6 '대상 값을 채우지 못해' 로 끝났다(SCP0005·SCP0007 8문장)
         if not cnames and k == 'GRID_SET' and re.search(r'\]\s*\[\s*Def[A-Z]\w*\.[A-Z0-9_]+\s*\]$', tgt or ''):
-            cnames = re.findall(r'Def[A-Z]\w*\.([A-Z0-9_]+)', tgt)
+            cnames = re.findall(r'Def[A-Z]\w*\.([A-Z0-9_]+)(?![A-Za-z0-9_…])', tgt)
         popup_cls = 'Popup' in cls
         area = '팝업' if popup_cls else '그리드'
         if k == 'GRID_LOCK':
@@ -634,7 +773,7 @@ def main():
             rule_id = 'D4' if m == 'InsertButton' else 'C2'
             add('ASIS', rule_id, ','.join(cnames) or tgt, condition=guard[:600], expected=f"셀 콤보 후보 = AS-IS {val[:160]}", asis_ref=loc, area=area)
             if 'Clipboard' in m:
-                add('ASIS', 'F3', ','.join(cnames) or tgt, condition=guard[:600], expected='붙여넣기 입력에도 같은 콤보·연쇄 적용', asis_ref=loc, area=area)
+                add('ASIS', 'F3', ','.join(cnames) or tgt, condition=guard[:600], expected='붙여넣기 입력에도 같은 콤보·CASCADE 적용', asis_ref=loc, area=area)
         elif k == 'GRID_SET' and re.search(r'ComboSel|Changed|Clipboard|SetCityCode|EditChange', m) and re.search(r'[.](ForeColor|BackColor|Border)$', tgt):
             # 2026-11-11 T247: 값 변경 핸들러 안의 '셀 색·테두리' 대입은 값 연쇄(C3·C6)가 아니라 표시 규칙(H2 배경·글자색) — 종전엔 C3 로 넣어 '원천 컬럼 분기 해석 불가' 판정필요로 남았다(전 화면 76행)
             add('ASIS', 'H2', ','.join(col_from_args(tgt)) or tgt, condition=guard[:600], expected=f"조건 충족 시 셀 표시(색·테두리) {tgt.split('.')[-1]} = {val[:160]}", asis_ref=loc, area=area)
@@ -643,9 +782,11 @@ def main():
             add('ASIS', 'A5', ','.join(col_from_args(tgt)) or tgt, condition=guard[:600], expected=f"조건 충족 시 컬럼 표시 여부 = {val[:80]}", asis_ref=loc, area=area)
         elif k == 'GRID_SET' and re.search(r'ComboSel|Changed|Clipboard|SetCityCode|EditChange', m):
             # 빈 값 대입은 '채움' 이 아니다(EG085 — 초기화 판정은 cell_clear 전용 행) · 2026-11-01 이전에는 비워야 정상인 칸을 '대상 빈 값' FAIL 로 보았다
-            if not re.search(r',\s*(""|string\.Empty|String\.Empty|null)\s*\)\s*$', val): add('ASIS', 'C3', ','.join(cnames) or tgt, condition=guard[:600], expected=f"연쇄 자동 채움 {tgt}{val[:160]}", asis_ref=loc, area=area)
+            # 2026-11-25 T579-b(U1 · SCP0005 C3 V-eab82e73 LT_VOYAGE): guard 625자(cs:1027)를 600자로 잘라 가장 안쪽 'if (e.Column == …' 조각이 빠졌고,
+            #   _verify resolveSrc 가 바깥 if 의 첫 칸(LT_ARRIVAL_INLAND)을 원천으로 잡았다 → C3·C6 조건은 자르지 않는다. 행 ID 는 종전 600자 조건으로 유지
+            if not re.search(r',\s*(""|string\.Empty|String\.Empty|null)\s*\)\s*$', val): add('ASIS', 'C3', ','.join(cnames) or tgt, condition=guard, id_condition=guard[:600], expected=f"CASCADE 자동 채움 {tgt}{val[:160]}", asis_ref=loc, area=area)
             # 연쇄는 '값 변경' 때만 — 원천 편집기를 열었다 그냥 닫아도 대상이 초기화되면 결함(2026-10-23 SCP0007 From Site Esc → To Site 공란 실측)
-            add('ASIS', 'C6', ','.join(cnames) or tgt, condition=guard[:600], expected='원천 셀을 값 변경 없이 편집 종료(Esc·Tab)하면 대상 셀 값 유지', asis_ref=loc, area=area)
+            add('ASIS', 'C6', ','.join(cnames) or tgt, condition=guard, id_condition=guard[:600], expected='원천 셀을 값 변경 없이 편집 종료(Esc·Tab)하면 대상 셀 값 유지', asis_ref=loc, area=area)  # T579-b
         elif k == 'GRID_SET' and m == 'InsertButton':
             add('ASIS', 'D4', ','.join(cnames) or tgt, condition=guard[:600], expected=f"신규행 기본값 {val[:160]}", asis_ref=loc, area=area)
         elif k == 'MESSAGE':

@@ -136,6 +136,11 @@
         "Doc/verify/_src_store/eb/ebfe35a978dfdbc009f348c720d71a1a138bb862",
         "tools/VibeManager/WORKLOG.md"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:32+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T10:08:27+09:00"
     }
   ],
   "self": true,
@@ -169,5 +174,7 @@
     "verify_result": "2026-11-20 07:43:28 실행. 1) node tools/VibeManager/test/t_chain_abort.js: PASS 7, ALL PASS(chain.end aborted 1건, ok false, why 'VM 창 종료로 중단', 앞에 user.stop wb 3, 다시 불러도 1건). 2) node --check workbench.js, extension.js 통과(check_ok). 3) node tools/VibeManager/test/run_all.js(at 2026-11-19T22:43:33Z = 07:43:33 KST): ALL OK 파일 32/32, PASS 387, FAIL 0. 새 실패 파일 0개. 반영 전부터 실패로 적힌 t_wb_logname.js 도 이번 실행에서 PASS 10.",
     "note": "workbench.js 24-35·944·1126-1127·3346-3347줄의 liveChains, abortRunningChains 가 개선안 내용과 같아 그대로 둠. t_chain_abort.js 도 기존 파일 그대로 사용. extension.js deactivate 782줄 job-runner.dispose 다음, orch-selfcheck·orch-watch 정리 앞에 abortRunningChains 호출 1줄 추가. 작업 모드 DB_ONLY 는 FE·BE 만 막아 tools/VibeManager 수정은 막히지 않음. t_wb_logname.js 가 통과로 바뀐 원인은 이 작업 밖이며 미확인."
   },
-  "snap": "prop_20261120065425_SELF"
+  "snap": "prop_20261120065425_SELF",
+  "effectiveMs": 1795136907899,
+  "effectiveAt": "2026-11-20T10:08:27+09:00"
 }

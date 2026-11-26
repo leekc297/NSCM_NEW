@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "SSP0005",
+  "sheet": "Shipment Working Day",
+  "btn": "GET_SCP_PERIOD",
+  "url": "http://127.0.0.1:5173/api/SSP0005/Shipment%20Working%20Day/GET_SCP_PERIOD/call-proc",
+  "postData": "{\"fromDate\":\"\",\"offsetMonth\":\"\",\"timeZone\":\"\"}",
+  "status": 200,
+  "rows": 2,
+  "dur": 93,
+  "at": "2026-11-24T16:53:58.635Z",
+  "user": "seongwon.j",
+  "test": "Excel 2단계 차단(M1)"
+ },
+ {
+  "menu": "SSP0005",
+  "sheet": "calendar",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/SSP0005/calendar/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261125\",\"endYyyymmdd\":\"20271121\"}",
+  "status": 200,
+  "rows": 437,
+  "dur": 112,
+  "at": "2026-11-24T16:53:58.776Z",
+  "user": "seongwon.j",
+  "test": "Excel 2단계 차단(M1)"
+ }
+]

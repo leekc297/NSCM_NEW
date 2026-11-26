@@ -1,0 +1,15 @@
+16256c16256
+<              , CASE WHEN p_division_id = '81_UC'                                     -- 2026.11.24 POJ 사업부 81_UC 는 M+4 입력 제한 해제 (START)
+---
+>              , CASE WHEN p_division_id LIKE '81%'                                    -- 2026.11.24 [E20261124-DMF0082DIVCUTOFF] 81, 81 JV(81_HD, 81_HG, 81_HM, 81_ST, 81_UC) = 당월부터 입력 (START)
+16258,16262c16258,16261
+<                     -- [E20261124-DMF0082UCCUTOFF-RESTORE] 임시 작업(2026-11-24). 복원 방법:
+<                     --   ① POJ 판(2026-11-24 10:14:35)으로 되돌림 = 바로 위 THEN 줄을 아래 줄로 교체
+<                     --        THEN CAST(NULL AS VARCHAR2(8))   /* 경계 미전달 = 월 단위 입력 제한 없음 */
+<                     --   ② 전 사업부 M+3 경계로 되돌림 = CASE WHEN p_division_id = '81_UC' 줄부터 END AS M3_CUTOFF_DATE 줄까지 지우고 위 '--' 로 막힌 TO_CHAR(ADD_MONTHS(TRUNC(SYSDATE, 'MM'), 3), ...) 줄 주석을 푼다
+<                     --   원문 백업 = _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/00_BACKUP_PKG_DMF0082_BODY.ASIS.sql (POJ 판)
+---
+>                     -- [E20261124-DMF0082DIVCUTOFF] 사용자 요청 2026-11-24: 40 = 당월 + 3개월까지 잠금, 81 계열 = 당월부터 입력. 82 는 요청 범위 밖이라 종전(+3개월) 유지
+>                     --   근거 = AS-IS 81 사업부 입력 화면 DMF0003 Monthly 는 당주 월요일이 속한 월부터 편집, +3개월 규정 없음 (DMF0003_MktFcst.cs:2957~2971)
+>                     --   종전(11:34 판) = CASE WHEN p_division_id = '81_UC' (81_UC 만 당월부터). 원문 백업 = _artifacts/_apply_corporate/DMF0082_MONTH_EDIT_DIV_20261124/00_BACKUP_PKG_DMF0082_BODY.ASIS.sql
+>                     --   POJ 판(81_UC = 경계 미전달) 백업 = _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/00_BACKUP_PKG_DMF0082_BODY.ASIS.sql

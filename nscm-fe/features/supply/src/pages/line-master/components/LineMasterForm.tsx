@@ -227,7 +227,8 @@ export const LineMasterForm = ({ onSearch }: Props) => {
                     // TO-BE 공통: Division(싱글 콤보) 변경 = Division/기간/날짜 외 조회조건 초기화 + 그리드 초기화.
                     //   편집중(dirty)이면 MSG00704 confirm 후에만 적용 — 조회 버튼이 타는 공통 가드와 동일(51d4e9fa).
                     //   콤보는 controlled(value=sc.divisionId)라 취소 시 이전 Division 으로 자동 복귀.
-                    //   (이 화면은 기간/날짜 조회조건이 없어 Division 만 유지하고 나머지 전부 초기화.)
+                    //   Valid(Active)는 독립 조건이라 유지 — AS-IS ClbDivision_SelectedIndexChanged →
+                    //   SetChangedControl(cs:219) 은 PlantSite/Building/Operation/Line 만 재바인딩하고 cboValid 는 건드리지 않음.
                     void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
                       if (!ok) return;
                       set({
@@ -236,7 +237,6 @@ export const LineMasterForm = ({ onSearch }: Props) => {
                         buildingIds: [],
                         operationIds: [],
                         lineIds: [],
-                        valid: 'ALL',
                       });
                       clearFilters();
                     });

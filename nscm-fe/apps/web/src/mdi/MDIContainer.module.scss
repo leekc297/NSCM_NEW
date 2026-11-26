@@ -7,7 +7,9 @@
   width: 100%;
   height: calc(100% - 34px);
   min-height: 400px; /* 내용이 없어도 최소 높이 유지 */
-  padding: 17px 30px;
+  /* 하단 패딩을 늘려(기본 17→36) 화면 오른쪽 하단에 고정되는 선택요약 바(.grid-selection-summary-bar,
+     높이 28px) 가 그리드 내용과 겹치지 않을 공간을 확보한다. */
+  padding: 17px 30px 36px;
   display: flex;
   flex-direction: column;
   transition: none;

@@ -1,0 +1,110 @@
+{
+ "definition": "고객이 보낸 Customer FCST 수량을 Excel 양식으로 올리고 Division, Sales Site, Customer Model 단위로 조회하는 화면",
+ "overview": [
+  "고객에게서 받은 Customer FCST 수량을 정해진 Excel 양식으로 올려 저장하고 Division, Sales Site, Customer Model 단위로 조회하는 화면임",
+  "위쪽 조회 조건, 주차별 수량 그리드, Excel Upload 팝업으로 구성됨. Excel Upload 팝업은 Excel File, Upload Result, Error Detail 영역으로 나뉨",
+  "Search(F5) 뒤 Excel Form 으로 양식을 받아 노란 칸에 수량을 넣음. Excel Upload 팝업에서 파일을 골라 OK 를 누르고 Error Detail 에 나온 행은 고쳐 다시 올림",
+  "저장한 Customer FCST 는 MKT FCST 데이터로 넘어가 MKT FCST(DMF0003) 화면에서 쓰임"
+ ],
+ "pages": [
+  {
+   "title": "Customer FCST Upload (Excel Upload)",
+   "keyPoint": "그리드에서 행을 직접 Insert 할 수 없고 Excel Upload 로만 올림. 올린 파일의 각 행은 하루 이상의 일자에 수량이 있어야 함.",
+   "markers": [
+    {
+     "no": 1,
+     "x": 0.172,
+     "y": 0.226
+    },
+    {
+     "no": 2,
+     "x": 0.753,
+     "y": 0.226
+    },
+    {
+     "no": 3,
+     "x": 0.219,
+     "y": 0.305
+    },
+    {
+     "no": 4,
+     "x": 0.209,
+     "y": 0.38
+    },
+    {
+     "no": 5,
+     "x": 0.899,
+     "y": 0.197
+    }
+   ],
+   "sections": [
+    {
+     "no": 1,
+     "title": "Excel File",
+     "lines": [
+      "Excel Upload 버튼을 누르면 열림. 클립 아이콘을 눌러 파일을 고름. 10MB 까지 올릴 수 있음",
+      "파일은 Excel Form 버튼으로 받은 양식을 씀. Div 는 화면 조회 조건 값으로 고정되며 Search 뒤 Excel Download 로 받음",
+      "양식의 노란 칸만 값을 넣을 수 있고 회색 칸은 넣을 수 없음",
+      "필수 컬럼: Division, Sales Site, Plant Site, Customer Project, Customer Model, Incoterms, FCST Type, Customs Handbook, Measure Group, Measure, Upload UOM",
+      "Project, Model 은 선택 입력임"
+     ]
+    },
+    {
+     "no": 2,
+     "title": "OK, Cancel",
+     "lines": [
+      "OK: 고른 파일을 올리고 저장함. 끝나면 \"Excel 업로드가 완료되었습니다. 재조회합니다.\" 메시지가 뜨고 화면이 다시 조회됨",
+      "수량이 입력된 일자가 하나도 없는 행이 있으면 저장되지 않음",
+      "Cancel: 올리지 않고 팝업을 닫음"
+     ]
+    },
+    {
+     "no": 3,
+     "title": "Upload Result",
+     "lines": [
+      "Success, Error, Total 에 올린 행 건수가 표시됨"
+     ]
+    },
+    {
+     "no": 4,
+     "title": "Error Detail",
+     "lines": [
+      "오류가 난 행이 No 순서로 나옴. 파일을 고친 뒤 다시 올림"
+     ]
+    },
+    {
+     "no": 5,
+     "title": "조회 조건과 그리드",
+     "lines": [
+      "Div: 필수. 권한이 있는 Division 이 없으면 \"권한을 가진 Division이 없습니다.\" 메시지가 뜸",
+      "조회 기간 시작일이 종료일보다 늦으면 \"시작일자가 종료일자보다 늦을 수 없습니다.\" 메시지가 뜸",
+      "조회 기간이 3년을 넘으면 \"조회 기간은 3년 이내로 입력해주세요.\" 메시지가 뜸",
+      "기간 컬럼은 W01, 20260101 처럼 주차와 시작 일자로 표시되며 수량은 정수로 표시됨"
+     ]
+    }
+   ]
+  }
+ ],
+ "id": "DMF0014",
+ "uiName": "Customer FCST Upload",
+ "menuPath": "DM> Demand Plan> Customer FCST Upload",
+ "captures": [
+  "captures/DMF0014.png"
+ ],
+ "facts": [
+  "Doc/tobefacts/screens/DMF0014/",
+  "Doc/asisfacts/screens/DMF0014/"
+ ],
+ "buttons": [
+  "FCST Upload:DELETE",
+  "FCST Upload:EXCEL",
+  "FCST Upload:FORM_DATA",
+  "FCST Upload:INSERT",
+  "FCST Upload:SAVE",
+  "FCST Upload:SEARCH",
+  "FCST Upload:UPLOAD",
+  "FCST Upload:UPLOAD_SAVE",
+  "dayRange:SEARCH",
+  "spreadTitle:SEARCH"
+ ]
+}

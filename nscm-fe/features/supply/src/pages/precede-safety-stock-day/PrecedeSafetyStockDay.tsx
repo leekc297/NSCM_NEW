@@ -15,10 +15,6 @@ import { MENU_ID, MSG, SHEETS } from './precede-safety-stock-day.constants';
 import { usePrecedeSafetyStockDayStore } from './usePrecedeSafetyStockDayStore';
 import { missingRequiredSearchLabel, toGridDate } from './utils/precede-safety-stock-day.util';
 import { precedeSafetyStockDayInsertDefaults } from './utils/precedeSafetyStockDayEditLock';
-import {
-  fetchValidItemIds,
-  findInvalidItemIdRow,
-} from './utils/precedeSafetyStockDayItemValidation';
 import { submitPrecedeSafetyStockDaySave } from './utils/precedeSafetyStockDaySaveRequest';
 import {
   findDuplicatePrecedeSafetyStockDayRows,
@@ -156,7 +152,9 @@ export const PrecedeSafetyStockDay = ({ tabId, title }: PageProps<MENU_ID>) => {
     const allRows = gridRef.current?.collectionView?.sourceCollection ?? [];
     const dirtyRows = allRows.filter(row => row.CRUD_TYPE);
     if (dirtyRows.length === 0) {
-      setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_수정한 내용이 없습니다.') });
+      // AS-IS "수정한 내용이 없습니다." = TO-BE 등록 MSG00004(DB 실측 KO 동일). 종전의 MSG_NO_CHANGE 는
+      //   미등록 코드라 fallback 리터럴('_'접두)이 그대로 노출됐다(테스트 No.8).
+      setToast({ type: 'error', message: t(MSG.NO_CHANGE_SAVE, '_수정한 내용이 없습니다.') });
       return;
     }
 
@@ -191,41 +189,11 @@ export const PrecedeSafetyStockDay = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    // #6 MSG00458 — 품목 미존재. AS-IS SaveData(.cs:730~735) dtItemAll 대조 재현. Division별 유효 품목
-    //   집합(품목 팝업 COM0013 과 동일 원천)을 조회해 입력 ITEM_ID 를 대조한다(삭제행 제외). 그리드
-    //   DIVISION_ID 는 조회 Division 에 잠겨 보통 1건이나, 혹시 여러 Division 이 섞여도 각각 조회한다.
-    const divisionIds = [
-      ...new Set(
-        dirtyRows
-          .filter(row => row.CRUD_TYPE !== 'D')
-          .map(row => String(row.DIVISION_ID ?? ''))
-          .filter(Boolean)
-      ),
-    ];
-    let validByDivision: Map<string, Set<string>>;
-    try {
-      const entries = await Promise.all(
-        divisionIds.map(async divisionId => [divisionId, await fetchValidItemIds(divisionId)] as const)
-      );
-      validByDivision = new Map(entries);
-    } catch {
-      // 유효 품목 조회 실패 시 저장을 진행하지 않는다 — SP 가 무효 품목을 거르지 않아(사용자 신고
-      //   2026-11-03) FE 가 유일한 방어선이므로, 검증을 못 한 채 통과시키지 않는다(console 금지 룰).
-      void setAlert({ type: 'alert', content: t('', '_품목 검증 중 오류가 발생했습니다.') });
-      return;
-    }
-    const invalidItem = findInvalidItemIdRow(dirtyRows, validByDivision);
-    if (invalidItem) {
-      void setAlert({
-        type: 'alert',
-        content: t(invalidItem.msgId, '_MODEL:{0}\r\n유효하지 않은 모델입니다!').replace(
-          '{0}',
-          invalidItem.itemId
-        ),
-      });
-      return;
-    }
-
+    // #6 MSG00458(품목 미존재)는 FE 사전검증하지 않고 SP 에 맡긴다 — SAVE SP(PKG_SCP0127.P_SCP0127_SAVE,
+    //   BODY:348~363 실측)가 SCM_MST_ITEM_SN(품목원장) OR SCP_OPMZ_VIRTUAL_BOM(가상 BOM) 존재를 검사해
+    //   없으면 ORA-20010(MSG00458)로 거부하고, 그 거부는 submitSave→submitPrecedeSafetyStockDaySave 의
+    //   RESULT_CODE 판정으로 알럿된다. 종전 FE 사전검증(COM0013 품목원장만 조회)은 가상 BOM 모델을
+    //   원장에 없다는 이유로 잘못 막았다(테스트 No.4, AMDAU0702A) — SP 가 유일·정합 판정원이라 제거.
     saveWithValidation(dirtyRows, staticColumns, rows => void submitSave(rows), dirtyRows);
   };
 

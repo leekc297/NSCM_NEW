@@ -276,6 +276,15 @@ def main():
         add(f"MBS|{x.get('combo_id')}|{x.get('division')}|{x.get('site_type')}", 'B5', f"{mid} 사이트 유형별 Measure 후보 {x.get('combo_id')} {x.get('division')} {x.get('site_type')}", f"Sales Site 표본 {x.get('site')}(VMI/비축/고객향) 로 편집 Measure 콤보 SQL 실행", 'VMI→VMI_In_Req · 비축→AS_In_Req(VMI 제외) · 고객향→둘 다 제외 · MKT_FCST 계열 포함', x.get('combo_id', ''), x.get('result', 'ERROR'), x.get('why', ''), 'measure-by-site')
     for x in clv:  # EG075 콤보 응답 ↔ DB 최신 후보(B7)
         add(f"CL|{x.get('combo_id')}|{(x.get('body') or '')[:120]}", 'B7', f"{mid} 콤보 후보 최신성 {x.get('combo_id')}", f"요청 본문 그대로 DB 재실행(최신 원문 SQL) {(x.get('body') or '')[:100]}", '응답 코드 집합 = DB 실행 코드 집합(외부 변경 즉시 반영)', x.get('combo_id', ''), x.get('result', 'ERROR'), x.get('why', ''), 'combo-live')
+    # 2026-11-25 T641(SCP0005 9917·7305·9438): 같은 행의 감사 판정이 여러 줄(이번 시험 변경 PASS + 기록 시각 이전 변경 NA)이면 마지막 줄(NA)이 이겼다 →
+    #   행마다 FAIL > ERROR > PASS > NA 순으로 하나로 모은다(이번 시험 변경 판정이 이전 변경 해당없음에 묻히지 않게)
+    _sac_rank = {'FAIL': 4, 'ERROR': 3, 'PASS': 2, 'NA': 1}
+    _sac_one = {}
+    for x in sac:
+        t = x.get('target', '')
+        if t not in _sac_one or _sac_rank.get(x.get('result', 'ERROR'), 3) > _sac_rank.get(_sac_one[t].get('result', 'ERROR'), 3):
+            _sac_one[t] = x
+    sac = list(_sac_one.values())
     for x in sac:  # EG183 저장 뒤 감사 칸
         add(f"SAC|{x.get('target')}", 'F8', f"{mid} 저장 감사 칸 {x.get('target')}", '시험 저장 직전(AS OF) ↔ 저장 뒤 행', '수정 시 생성 칸 불변 · 값 변경 시 수정 칸 갱신', x.get('target', ''), x.get('result', 'ERROR'), x.get('why', ''), 'save-audit-cols')
     for x in acl:  # EG213 전 컬럼 선택 조회

@@ -1,0 +1,116 @@
+{
+  "id": "20261124014507_SELF_2",
+  "at": "2026-11-24T01:45:07+09:00",
+  "ms": 1795452307824,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/harness/verify/make_verify_docs.py|fail판정필요행에서plaindetailbuild예외가나면asistobe",
+  "title": "사용자 지시 R84 같은 문제: tools/Harness/verify/make_verify_docs.py:721 FAIL, 판정필요 행에서 plain_detail.build 예외가 나면 AS-IS, TO-BE, GAP 줄 없이 한 줄 설명만 나감",
+  "evidence": "규칙 R84 \"CheckList 오류 행 설명은 간결한 오류명, 대상 위치(조회조건 항목 또는 탭, 그리드, 컬럼), AS-IS 표기·동작, TO-BE 표기·동작, GAP 순서로 씀\" (원래 지시 2026-11-17 09:34 \"SCP0104 에 대해서 사용자의견 추가하였습니다. DB 객체에 대해서는 보완 해주세요. 중복제거도 해주세요. 그리고 설명 부분을 조금 더 쉽게 정리해주면 좋을 것 같아요. 먼저, 오류명에 대해서 1차 정의 (현재보다 조금 더 간결하게) 그리고 오류가 정확하게 어떤 항목인지, 조회조건이\") · tools/Harness/verify/make_verify_docs.py:721     except Exception:\n        pass\n    return short + repro + sim + same",
+  "targets": [
+    "tools/Harness/verify/make_verify_docs.py"
+  ],
+  "before_after": "예외 때도 plain_detail.build_gap(r, {}, short) 로 4줄 틀을 채움. 그것도 실패하면 ' - AS-IS : 미확인', ' - TO-BE : 미측정', ' - GAP : 설명 생성 실패' 줄을 붙이고 _NO_SUMMARY 에 row_id 추가",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/Harness/verify/make_verify_docs.py.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T14:17:25+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T14:21:37+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1404, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1417"
+    },
+    {
+      "at": "2026-11-25T14:21:44+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T14:36:03+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1404, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T14:36:03+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node tools/VibeManager/test/run_all.js: 반영 전 2026-11-25T05:22:05Z ALL OK 86/86 PASS 1404 FAIL 0 → 반영 뒤 2026-11-25T05:26:31Z ALL OK 86/86 PASS 1404 FAIL 0 · 변경 12개 파일 · 대상 목록 밖 변경 11개: tools/Harness/gate_baseline.tsv, _artifacts/_apply_corporate/DMF0045_BOH_PERF_20261125/PKG_DMF0045_BODY.ASIS.sql, _artifacts/_apply_corporate/DMF0045_BOH_PERF_20261125/PKG_DMF0045_BODY.TOBE.sql, _artifacts/_apply_corporate/DMF0045_BOH_PERF_20261125/apply_boh_once.py, _artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/00_PRECHECK_CLOUD.sql, _artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/05_BACKUP_CLOUD.sql",
+      "log": ".vibe\\logs\\2026-11-25T14-21-44_claude_orch.log",
+      "sec": 557,
+      "costUsd": 0.7025785,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/make_verify_docs.py",
+        "_artifacts/_apply_corporate/DMF0045_BOH_PERF_20261125/PKG_DMF0045_BODY.ASIS.sql",
+        "_artifacts/_apply_corporate/DMF0045_BOH_PERF_20261125/PKG_DMF0045_BODY.TOBE.sql",
+        "_artifacts/_apply_corporate/DMF0045_BOH_PERF_20261125/apply_boh_once.py",
+        "_artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/00_PRECHECK_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/05_BACKUP_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/20_PKG_PKG_DMF0045.sql",
+        "_artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/30_META_DMF0045.sql",
+        "_artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/40_GRANT_DMF0045.sql",
+        "_artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/DMF0045_CLOUD_DB_MOD_20261125_1429/A_DB/99_ROLLBACK.sql"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "CheckList 오류 행 설명은 간결한 오류명, 대상 위치(조회조건 항목 또는 탭, 그리드, 컬럼), AS-IS 표기·동작, TO-BE 표기·동작, GAP 순서로 씀 규칙을 tools/Harness/verify/make_verify_docs.py 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R84|tools/Harness/verify/make_verify_docs.py",
+  "kind": "fix",
+  "waitNote": "",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795583844630,
+  "autoFp": "6cf1bdfb5a",
+  "applyStartMs": 1795584104155,
+  "verifyJudge": {
+    "at": "2026-11-25T14:31:05+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1404, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1417",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795584963541,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/run_all.js 반영 전 'ALL OK 파일 86/86 PASS 1404 FAIL 0 252.4s', 반영 뒤 'ALL OK 파일 86/86 PASS 1404 FAIL 0 256.8s'. 웹뷰 파일 아님, t_webview_syntax.js 는 run_all 안에서 PASS 19"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/make_verify_docs.py"
+    ],
+    "verify_result": "node tools/VibeManager/test/run_all.js: 반영 전 2026-11-25T05:22:05Z ALL OK 86/86 PASS 1404 FAIL 0 → 반영 뒤 2026-11-25T05:26:31Z ALL OK 86/86 PASS 1404 FAIL 0",
+    "note": "_explain except 절(make_verify_docs.py:740): 결과가 FAIL 또는 판정필요인 행에서 plain_detail.build_gap(r, {}, short) 로 AS-IS, TO-BE, GAP 4줄을 채움. build_gap 도 실패하면 ' - AS-IS : 미확인', ' - TO-BE : 미측정', ' - GAP : 설명 생성 실패' 줄을 붙이고 _NO_SUMMARY 에 row_id 추가. 지시대로 파이썬 구문 검사는 실행하지 않음(VMO 반영 뒤 실행)."
+  },
+  "snap": "prop_20261124014507_SELF_2"
+}

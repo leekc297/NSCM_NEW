@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 2115,
-  "at": "2026-11-20T00:06:38.999Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1797,
+  "at": "2026-11-25T16:24:59.508Z",
+  "user": "cnsytchoi",
   "test": "@snap 그리드 헤더 텍스트(모델) ×시트"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 760,
-  "at": "2026-11-20T00:06:41.715Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 677,
+  "at": "2026-11-25T16:25:02.110Z",
+  "user": "cnsytchoi",
   "test": "@snap 그리드 헤더 텍스트(모델) ×시트"
  }
 ]

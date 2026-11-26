@@ -1,0 +1,43 @@
+{
+  "id": "SSP0020",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SSP0020] · AS-IS 액션 대조표: Doc/asisfacts/screens/SSP0020/__asis-actions__.md · Doc/asisfacts/screens/SSP0020/ · VALIDATION 취합(검증 작업 대조 원천)",
+  "start": "2026-11-25T15:50:50+09:00",
+  "end": "2026-11-25T15:55:44+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\shipping\\src\\pages\\delegate",
+      "files": 12
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SSP0020",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SSP0020",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "'/' 데이터 조회 후 일괄 삭제처리 할 수 있도록 해주세요. '/' 일괄 삭제해도 되는지 확인후 진행해주세요. 클라우드에서도 지울 수 있도록 쿼리 제공해주세요",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T15-50-50_claude_wb3.log"
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-11-25T15:55:44+09:00",
+  "changed": []
+}

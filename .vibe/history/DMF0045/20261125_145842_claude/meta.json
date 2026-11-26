@@ -1,0 +1,38 @@
+{
+  "id": "DMF0045",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 DMF0045] · AS-IS 액션 대조표: Doc/asisfacts/screens/DMF0045/__asis-actions__.md · Doc/asisfacts/screens/DMF0045/ · 룰: tools/VibeManager/rules",
+  "start": "2026-11-25T14:58:42+09:00",
+  "end": "2026-11-25T15:05:38+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\DMF0045",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\DMF0045",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "source": "prompt",
+  "label": "",
+  "text": "클라우드에서 05 실행시에도 오류 발생, 20 실행 시 아래 오류 발생 합니다. \n\n> FOUND 보완 구간 1345~1361줄 \n\n  \n\nDECLARE \n\n* \n\n오류 발생 행: 1: \n\nORA-01031: 권한이 불충분합니다 \n\nORA-06512:  97행 \n\n  \n\nhttps://docs.oracle.com/error-help/db/ora-01031/ \n\n  \n\n  \n\nMore Details : \n\nhttps://docs.oracle.com/error-help/db/ora-01031/ \n\nhttps://docs.oracle.com/error-help/db/ora-06512/ \n\n경과 시간: 00:00:00.338 \n\n ",
+  "user": "LG",
+  "host": "LEE-03",
+  "job": "",
+  "logs": [
+    "C:\\Projects\\NSCM\\.vibe\\logs\\2026-11-25T14-58-42_claude_wb1.log"
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-11-25T15:05:38+09:00",
+  "changed": []
+}

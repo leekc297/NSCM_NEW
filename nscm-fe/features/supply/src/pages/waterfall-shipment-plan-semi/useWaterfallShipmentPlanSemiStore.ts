@@ -240,6 +240,8 @@ export const useWaterfallShipmentPlanSemiStore = createPersistedStoreWithTab<
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in initSearchParams)) continue; // SearchParams 필드만 allowlist
+          // Ver. 는 복원하지 않는다(AS-IS ConditionNotUseList.Add(clbVersion), cs:184) — 과거 저장분 무시.
+          if (paramNm === 'versionNos') continue;
           const def = initSearchParams[paramNm as keyof SearchParams];
           const value = paramCtn ?? '';
           if (Array.isArray(def)) patch[paramNm] = value === '' ? [] : value.split(',');

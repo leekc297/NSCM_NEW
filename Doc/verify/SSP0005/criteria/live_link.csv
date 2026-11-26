@@ -1,0 +1,35 @@
+﻿elem_key,kind,item,asis_static,asis_live,tobe,verdict,status,src
+SP:SCM0001_GET_SCP_PERIOD,실측-파싱 대조,SCM0001_GET_SCP_PERIOD,SSP0005_ShipmentWorkingDay.cs:941 GetDayRange,1회 · 구간 load,,MATCH,확정,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+SP:SCP0009_GET_SHEET_CALENDAR_3SPAN,실측-파싱 대조,SCP0009_GET_SHEET_CALENDAR_3SPAN,SSP0005_ShipmentWorkingDay.cs:925 GetSpdTitle,5회 · 구간 find/load,,MATCH,확정,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+SP:SQL: SELECT *,실측-파싱 대조,SQL: SELECT *,,1회,,INLINE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+SP:SSP0005_GET_SHIPMENT_WORKING_DAY,실측-파싱 대조,SSP0005_GET_SHIPMENT_WORKING_DAY,SSP0005_ShipmentWorkingDay.cs:403 FindData_Main,4회 · 구간 find,,MATCH,확정,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+SP:SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,실측-파싱 대조,SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,SSP0005_ShipmentWorkingDay.cs:535 SaveData_Main,0회,,NOT_CALLED,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,(선언 ↔ 실측),20개,24개,,INFO,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,BaseRibbonCtl,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,Change,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,cbo,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,chkAll,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,clb,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,dp1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,dp2,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,dtp,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,lbl,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,panel1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlMain,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,statusStripBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,txt,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtTextKeyin,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboDayWeek,Y,Day of the week,,LIVE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnInput,Y,Input,,LIVE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,drpPeriod,Y,Period* [필수],,LIVE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbDivision,Y,Div,,LIVE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboInputValue,Y,Input Value,,LIVE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboCompany,Y,Company,,LIVE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,spdMain/Shipment Working Day,정적 컬럼 사실 3행(시트 미지정 포함),컬럼 363(보임 362) · 헤더 3단 · 행 0 · 고정 3,,LIVE,판단 대기,Doc/verify/SSP0005/asis_live/live_vs_static.csv
+,조회 인자,.,,,,NO_PAIR,판단 대기,Doc/asislive/SSP0005/cond_compare.csv
+COL:COMPANY_ID,조회 인자,SSP0005_GET_SHIPMENT_WORKING_DAY.company_id,,AA00,AA00,SAME,확정,Doc/asislive/SSP0005/cond_compare.csv
+,조회 인자,SSP0005_GET_SHIPMENT_WORKING_DAY.debug_mode,,F,F,SAME,확정,Doc/asislive/SSP0005/cond_compare.csv
+COL:DIVISION_ID,조회 인자,SSP0005_GET_SHIPMENT_WORKING_DAY.division_id,,"81,40,82,81_UC,81_HM,81_HD,81_HG","81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",DIFF,판단 대기,Doc/asislive/SSP0005/cond_compare.csv
+,조회 인자,SSP0005_GET_SHIPMENT_WORKING_DAY.from_yyyymmdd,,20260520,20261113,DIFF,판단 대기,Doc/asislive/SSP0005/cond_compare.csv
+,조회 인자,SSP0005_GET_SHIPMENT_WORKING_DAY.to_yyyymmdd,,20270514,20271107,DIFF,판단 대기,Doc/asislive/SSP0005/cond_compare.csv

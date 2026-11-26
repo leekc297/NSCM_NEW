@@ -1,0 +1,83 @@
+{
+ "rule_id": "MS1",
+ "hash": "8c220245702670b1",
+ "groups": [
+  {
+   "rows": [
+    "V-7d4216b5",
+    "V-856556ec"
+   ],
+   "why": "Both check that AS-IS MSG00134 maps to a TO-BE MSG_ID with the same meaning, on the same path (the BRANCH branch of BtnInput_Click), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-8dc55bb2"
+   ],
+   "why": "Checks MSG00134 on the main BtnInput_Click path, not the BRANCH branch; a different trigger branch may point to a different TO-BE location, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-4dc413ec"
+   ],
+   "why": "Checks MSG00093 on the BRANCH branch of BtnInput_Click; the branch differs from the main-path row V-bd1ca9b3, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-bd1ca9b3"
+   ],
+   "why": "Checks MSG00093 on the main BtnInput_Click path; the trigger branch differs from the BRANCH row, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-53876f15"
+   ],
+   "why": "Checks MSG00004 on the main SaveData_Main path; the trigger branch differs from the BRANCH row V-ae415773, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-ae415773"
+   ],
+   "why": "Checks MSG00004 on the BRANCH branch of SaveData_Main; the branch differs from the main-path row, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-6b564042"
+   ],
+   "why": "MSG00050 appears in only one row, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-81708a92"
+   ],
+   "why": "MSG00135 appears in only one row, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-1bffe614"
+   ],
+   "why": "Checks that the message codes shown by a no-change Save are registered in SCM_ADM_MSG_M for KO/EN/CN, which is a different property from MSG ID mapping, so it stays separate."
+  },
+  {
+   "rows": [
+    "V-3e3d6839"
+   ],
+   "why": "Covers several combined actions (empty-condition Search, start date after end date, Save) and different messages, so it does not match any single row's element and expected result exactly."
+  },
+  {
+   "rows": [
+    "V-4ccb1afb"
+   ],
+   "why": "Checks the MSG00684 confirmation when cancelling the shared upload window before saving, which is a different element (the upload popup), so it stays separate."
+  },
+  {
+   "rows": [
+    "V-90dd7256"
+   ],
+   "why": "Checks multilingual display of MSG00701 when OK is pressed with nothing selected in the Version popup, which is a different element and expected result, so it stays separate."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:10:27",
+ "cost": 0.0713485
+}

@@ -218,7 +218,8 @@ export const qtyScaleOf = (row: GridRowData): number =>
     : NON_ELECTRODE_SCALE;
 
 // 동일 SO 부분선택 검출 (C10 / MSG00247) — 선택 건수와 그룹 전체 건수가 다르면 부분선택이다.
-export const hasPartialSoSelection = (rows: GridRowData[], selected: GridRowData[]): boolean => {
+// 반환값 = 부분선택된 첫 SO 번호(없으면 '') — AS-IS 는 이 SO 번호를 MSG00247({0})에 넘긴다.
+export const findPartialSoSelection = (rows: GridRowData[], selected: GridRowData[]): string => {
   const selectedBySo = new Map<string, number>();
   for (const row of selected) {
     const soNo = str(row[SO_GROUP_KEY]);
@@ -227,7 +228,7 @@ export const hasPartialSoSelection = (rows: GridRowData[], selected: GridRowData
   }
   for (const [soNo, count] of selectedBySo) {
     const total = rows.filter(r => str(r[SO_GROUP_KEY]) === soNo).length;
-    if (total !== count) return true;
+    if (total !== count) return soNo;
   }
-  return false;
+  return '';
 };

@@ -1,232 +1,232 @@
 {
  "rule_id": "X-ROW",
- "hash": "20956375e538fef6",
+ "hash": "0bb17dad4448d603",
  "groups": [
   {
    "rows": [
     "T-004bd1d4"
    ],
-   "why": "Popup.CreateSpread는 팝업 스프레드 생성 진입점으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "팝업 CreateSpread 진입점만 확인하는 행이고, 같은 진입점을 다루는 다른 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "T-09365c5b"
    ],
-   "why": "Popup.FindData는 팝업 조회 데이터 진입점이라 메인 FindDataMain/FindDataReceive와 대상과 상태가 달라 단독으로 둔다."
+   "why": "팝업 FindData 진입점만 확인하는 행이고, 같은 대상을 다루는 다른 행이 없어 단독으로 둔다."
   },
   {
    "rows": [
     "T-0aa76ea9"
    ],
-   "why": "메인 InitSpread는 메인 스프레드 초기화 진입점이라 팝업 InitSpread와 대상이 달라 단독으로 둔다."
+   "why": "본화면 InitSpread 진입점이다. 같은 대조표 2행을 가리키는 행이 더 있지만 대상 메서드가 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-13477bf4"
    ],
-   "why": "GetDivision은 Division 조회조건 콤보 바인딩 진입점이며, 대조표 2행을 공유하는 다른 메서드와도 대상 요소가 달라 묶지 않는다."
+   "why": "GetDivision 진입점이다. 같은 대조표 2행을 가리키는 행이 더 있지만 대상 요소가 달라 단독으로 둔다."
   },
   {
    "rows": [
     "T-15a2b255"
    ],
-   "why": "GetData_Country는 Country 데이터 조회 진입점으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "GetData_Country 진입점만 확인하며, 같은 대상을 다루는 다른 행이 없다."
   },
   {
    "rows": [
     "T-16589a1d"
    ],
-   "why": "CSafeSetText는 AS-IS 진입점이 연결되지 않은 메서드라 기대 결과의 성질이 달라 단독으로 둔다."
+   "why": "CSafeSetText는 AS-IS 진입점 미연결(dead) 상태로 표시되어 있어 성질이 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-1a5e50b8"
    ],
-   "why": "spdMainDataModel_Changed는 메인 그리드 값 변경 이벤트로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "spdMainDataModel_Changed 이벤트 진입점만 확인하는 행이다."
   },
   {
    "rows": [
     "T-30600d17"
    ],
-   "why": "SetSpreadColumn은 컬럼 설정 진입점이라 같은 8행인 엑셀 업로드 버튼과 대상이 달라 단독으로 둔다."
+   "why": "SetSpreadColumn 진입점이다. 같은 대조표 8행인 엑셀 업로드 버튼 행과 대상이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-30dac365"
    ],
-   "why": "CheckValid는 저장 전 유효성 검사 진입점으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "CheckValid 진입점만 확인하는 행이다."
   },
   {
    "rows": [
     "T-328ca31e"
    ],
-   "why": "GetTransMode는 진입점이 연결되지 않은 TransMode 조회 메서드라 다른 콤보 메서드와 대상이 달라 단독으로 둔다."
+   "why": "GetTransMode는 dead 표시된 진입점이고 대상도 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-3bee5a7f"
    ],
-   "why": "btnEaxel_Upload_Click은 엑셀 업로드 버튼으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "엑셀 업로드 버튼 클릭은 다른 행과 겹치지 않는 고유 버튼 동작이다."
   },
   {
    "rows": [
     "T-432b276b"
    ],
-   "why": "FindDataMain은 메인 조회 결과를 확인하며, 같은 11행인 더블클릭 이벤트와 대상이 달라 단독으로 둔다."
+   "why": "FindDataMain 진입점이다. 같은 대조표 11행인 더블클릭 행과 대상이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-584ba68a"
    ],
-   "why": "GetToSitebyDivision은 진입점이 연결되지 않은 To Site 조회 메서드라 From Site 조회와 다른 요소로 보고 단독으로 둔다."
+   "why": "GetToSitebyDivision은 dead 표시된 진입점이고 대상도 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-5b7e5eac"
    ],
-   "why": "GetFromSitebyDivision은 진입점이 연결되지 않은 From Site 조회 메서드라 To Site 조회와 다른 요소로 보고 단독으로 둔다."
+   "why": "GetFromSitebyDivision은 dead 표시된 진입점이고 대상도 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-643aee5e"
    ],
-   "why": "메인 CreateSpread는 메인 스프레드 생성 진입점이라 팝업 CreateSpread와 대상이 달라 단독으로 둔다."
+   "why": "본화면 CreateSpread 진입점이라 팝업 CreateSpread 행과 상태가 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-66ab592c"
    ],
-   "why": "InsertButton은 행 추가 버튼 진입점으로, 같은 1행을 공유하는 다른 메서드와도 대상이 달라 단독으로 둔다."
+   "why": "InsertButton 진입점이다. 같은 대조표 1행을 가리키는 다른 행들과 대상이 달라 단독으로 둔다."
   },
   {
    "rows": [
     "T-6cba9e4a"
    ],
-   "why": "Popup.Dispose는 팝업 해제 진입점으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "팝업 Dispose 진입점만 확인하는 행이다."
   },
   {
    "rows": [
     "T-6e66d073"
    ],
-   "why": "InitEvent는 이벤트 연결 진입점으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "InitEvent 진입점이며, 다른 대조표 1행 행들과 대상이 다르다."
   },
   {
    "rows": [
     "T-70884df3"
    ],
-   "why": "Popup.FindButton은 팝업의 조회 버튼이라 메인 FindButton과 대상이 달라 단독으로 둔다."
+   "why": "팝업 FindButton 진입점이라 본화면 FindButton 행과 화면이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-7831ca26"
    ],
-   "why": "메인 Form_Load는 화면 로드 진입점이라 팝업 Form_Load와 대상이 달라 단독으로 둔다."
+   "why": "본화면 Form_Load 진입점이라 팝업 Form_Load 행과 화면이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-7d40a434"
    ],
-   "why": "InsertRow는 신규 행 생성 진입점이라 InsertButton과 확인 단계가 달라 단독으로 둔다."
+   "why": "InsertRow 진입점만 확인하는 행이다."
   },
   {
    "rows": [
     "T-7e05d758"
    ],
-   "why": "GetBodType은 진입점이 연결되지 않은 BOD Type 조회 메서드로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "GetBodType은 dead 표시된 진입점이고 대상도 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-895bac8f"
    ],
-   "why": "btnFromSrch_Click은 From 검색 버튼이라 To 검색 버튼과 다른 요소로 보고 단독으로 둔다."
+   "why": "From 검색 버튼 클릭이라 To 검색 버튼 행과 버튼이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-8c16dae2"
    ],
-   "why": "메인 DefineProperty는 메인 속성 정의 진입점이라 팝업 DefineProperty와 대상이 달라 단독으로 둔다."
+   "why": "본화면 DefineProperty 진입점이라 팝업 DefineProperty 행과 화면이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-93407f88"
    ],
-   "why": "InitControls는 컨트롤 초기화 진입점으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "InitControls 진입점만 확인하는 행이다."
   },
   {
    "rows": [
     "T-9bf7f55b"
    ],
-   "why": "Popup.DefineProperty는 팝업 속성 정의 진입점이라 메인 DefineProperty와 대상이 달라 단독으로 둔다."
+   "why": "팝업 DefineProperty 진입점이라 본화면 DefineProperty 행과 화면이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-9e212130"
    ],
-   "why": "btnToSrch_Click은 To 검색 버튼이라 From 검색 버튼과 다른 요소로 보고 단독으로 둔다."
+   "why": "To 검색 버튼 클릭이라 From 검색 버튼 행과 버튼이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-a04ad1dd"
    ],
-   "why": "btnExcel_Form은 Visibility=Never로 숨김 상태를 확인하는 행이라, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "btnExcel_Form은 Visibility=Never로 숨겨진 버튼이라 확인 성질이 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-a12fee3f"
    ],
-   "why": "SaveData는 저장 동작을 확인하며, 같은 5행을 공유하는 다른 메서드와도 대상이 달라 단독으로 둔다."
+   "why": "SaveData 진입점만 확인하는 행이다."
   },
   {
    "rows": [
     "T-b28fc636"
    ],
-   "why": "Popup.InitSpread는 팝업 스프레드 초기화 진입점이라 메인 InitSpread와 대상이 달라 단독으로 둔다."
+   "why": "팝업 InitSpread 진입점이라 본화면 InitSpread 행과 화면이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-b336df47"
    ],
-   "why": "checkCtiyCode는 진입점이 연결되지 않은 도시 코드 검사 메서드로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "checkCtiyCode는 dead 표시된 진입점이고 대상도 다르므로 단독으로 둔다."
   },
   {
    "rows": [
     "T-d6110a41"
    ],
-   "why": "spdMain_CellDoubleClick은 그리드 더블클릭 이벤트라 같은 11행인 FindDataMain과 대상이 달라 단독으로 둔다."
+   "why": "spdMain 셀 더블클릭 이벤트만 확인하는 행이다."
   },
   {
    "rows": [
     "T-d920ea16"
    ],
-   "why": "메인 FindButton은 메인 조회 버튼이라 팝업 FindButton과 대상이 달라 단독으로 둔다."
+   "why": "본화면 FindButton 진입점이라 팝업 FindButton 행과 화면이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-daa63418"
    ],
-   "why": "SetImageCell은 이미지 셀 설정 진입점으로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "SetImageCell 진입점만 확인하는 행이다."
   },
   {
    "rows": [
     "T-e71343b5"
    ],
-   "why": "FindDataReceive는 조회 결과 수신 진입점이라 FindDataMain과 확인 단계가 달라 단독으로 둔다."
+   "why": "FindDataReceive 진입점이며 FindDataMain 행과 대상이 다르다."
   },
   {
    "rows": [
     "T-ec7da311"
    ],
-   "why": "Popup.Form_Load는 팝업 로드 진입점이라 메인 Form_Load와 대상이 달라 단독으로 둔다."
+   "why": "팝업 Form_Load 진입점이라 본화면 Form_Load 행과 화면이 달라 묶지 않는다."
   },
   {
    "rows": [
     "T-f440761d"
    ],
-   "why": "Popup..ctor는 팝업 생성자로, 같은 요소를 확인하는 다른 행이 없어 단독으로 둔다."
+   "why": "팝업 생성자 진입점만 확인하는 행이다."
   }
  ],
  "why": "",
  "by": "AI",
- "at": "2026-11-20 07:46:08",
- "cost": 0.1498978
+ "at": "2026-11-26 02:36:47",
+ "cost": 0.1360848
 }

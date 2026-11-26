@@ -107,5 +107,28 @@ fp = setup('n.json', '{"a":1}\n'); fs.writeFileSync(path.join(root, 'n.json'), '
 r = run('n.json', logOf([edit(fp, '"a":1', '"a":2')]), () => true);
 chk('JSON 되돌림', r.how === 'undo' && JSON.parse(read('n.json')).a === 1, r.why);
 
+// 15 2026-11-24 개선안 20261123215513_INC: 셸 쓰기 판정 = 그 파일을 쓰는 조각만. 실제 오판 명령 3개(21:42 grep · 21:42 node 리디렉션 · 13:13 awk|grep|head)
+const REAL_READ = [
+  ['21:42 grep(정규식 안 cp)', "cd /c/Projects/NSCM/tools/VibeManager; grep -n -E \"styleBase|gate\\(|restoreTargets\\(cur\\)|selfPre|module.exports|apply-style|readText|^const cp|require\\('child_process'\\)\" orch-improve.js orch-selfcheck.js test/t_orch_improve.js | head -60; sed -n 368,380p orch-selfcheck.js.bak_prerestore_20261123_181247; grep -n \"module.exports\" orch-selfcheck.js.bak_prerestore_20261123_181247", ['tools/VibeManager/orch-improve.js', 'tools/VibeManager/orch-selfcheck.js', 'tools/VibeManager/test/t_orch_improve.js']],
+  ['21:42 node 시험 출력 리디렉션', 'timeout 600 node test/t_orch_improve.js . > ../../.vibe/t_oi_20261123.txt 2>&1; echo done; date', ['tools/VibeManager/test/t_orch_improve.js', 'tools/VibeManager/orch-improve.js']],
+  ['13:13 awk|grep|head', "cd /c/Projects/NSCM; awk 'NR>=1291 && NR<=1420' tools/Harness/verify/run_verify.py | grep -n \"triage\\|unverified\" | head; sed -n 140,180p tools/VibeManager/quick.json", ['tools/VibeManager/quick.json', 'tools/Harness/verify/run_verify.py']],
+];
+for (const [n, c, rels] of REAL_READ) for (const rel of rels) chk(`실제 읽기 명령 = 쓰기 아님: ${n} · ${path.basename(rel)}`, U.shellWritesFile(c, rel) === false);
+const WR = 'tools/VibeManager/orch-improve.js';
+const WRITE_CASES = ['sed -i s/a/b/ orch-improve.js', 'cp x orch-improve.js', 'echo x > orch-improve.js', 'node -e "fs.writeFileSync(\'tools/VibeManager/orch-improve.js\', s)"',
+  "cat > tools/VibeManager/orch-improve.js <<'EOF'\nx\nEOF", "python - <<'EOF'\nopen('tools/VibeManager/orch-improve.js','w').write(s)\nEOF", 'bash -c "sed -i s/a/b/ orch-improve.js"',
+  'powershell -Command "Set-Content -Path C:\\x\\orch-improve.js -Value 1"', 'Set-Content C:\\Projects\\NSCM\\tools\\VibeManager\\orch-improve.js $t', "(Get-Content orch-improve.js) -replace 'a','b' | Set-Content orch-improve.js",
+  'Out-File -FilePath orch-improve.js', 'Add-Content -Path orch-improve.js -Value x', 'git checkout -- tools/VibeManager/orch-improve.js', 'git restore orch-improve.js', 'git checkout .', 'rm -rf tools/VibeManager', 'Remove-Item tools\\VibeManager\\orch-improve.js',
+  'mv orch-improve.js y', 'Move-Item a orch-improve.js', 'Copy-Item a -Destination tools/VibeManager/orch-improve.js', 'echo x >> orch-improve.js', 'node t.js 2>&1 | tee orch-improve.js', 'find . -name orch-improve.js -delete', 'rm *.js', 'perl -pi -e s/a/b/ orch-improve.js'];
+for (const c of WRITE_CASES) chk(`쓰기 명령 = 쓰기: ${c.split('\n')[0].slice(0, 60)}`, U.shellWritesFile(c, WR) === true);
+const READ_CASES = ["cat x <<EOF\ncp a orch-improve.js\nEOF", 'Get-Content orch-improve.js | Select-String cp', 'git diff orch-improve.js', 'rm ../../.vibe/t.txt; grep -c x orch-improve.js', 'cp orch-improve.js /tmp/b',
+  'sed -n 1,5p orch-improve.js > /dev/null', 'ls *.js > list.txt', 'node --check tools/VibeManager/orch-improve.js && echo OK', 'grep -n "writeFile" orch-improve.js', "grep -E 'a > b|rm x' orch-improve.js"];
+for (const c of READ_CASES) chk(`읽기 명령 = 쓰기 아님: ${c.split('\n')[0].slice(0, 60)}`, U.shellWritesFile(c, WR) === false);
+// 재현: 읽기 셸 명령 + AI 편집 → AI 편집만 되돌림(종전 = 셸 쓰기 흔적으로 건너뜀)
+fp = setup('orch-improve.js', 'const g = 1;\n');
+fs.writeFileSync(path.join(root, 'orch-improve.js'), 'const g = 2;\n');
+r = run('orch-improve.js', logOf([{ tool: 'Bash', input: { command: REAL_READ[0][1] } }, edit(fp, 'const g = 1;', 'const g = 2;')]), () => false);
+chk('실제 grep 명령 + AI 편집 = undo', r.how === 'undo' && read('orch-improve.js') === 'const g = 1;\n', `${r.how} ${r.why}`);
+
 try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
 console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

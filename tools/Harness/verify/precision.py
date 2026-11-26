@@ -3,7 +3,7 @@
 
   python tools/Harness/verify/precision.py <ID>        # Doc/verify/<ID>/precision.csv + 전역 Doc/verify/_precision.csv(그 화면 행만 교체 · 원자 쓰기)
 
-판별 = CheckList 각 판(Doc/UI_CHECKLIST · old · 옛 Doc/CheckList · 옛 Doc/화면분석서, make_verify_docs.prior_docs 와 같은 탐색)의 '조치 필요' 시트.
+판별 = CheckList 각 판(설정 checklistDir 와 옛 폴더 목록, make_verify_docs.prior_docs 와 같은 탐색)의 '조치 필요' 시트.
   조치필요(action_needed) = 그 시트의 검증 ID 행 수
   실결함(confirmed_defect) = 사용자의견 class ∈ {실제오류확인}(regress.cls) ∪ 그 행이 _user_verdicts_direct.csv 에 verdict=FAIL 로 있음
   허위(false_positive)     = class ∈ {판정오류, 대상아님, 중복} ∪ direct verdict ∈ {PASS, NA, SKIP}

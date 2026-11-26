@@ -6,10 +6,10 @@
   "url": "http://127.0.0.1:5173/api/COM0001/region/SEARCH/call-proc",
   "postData": "{\"country\":\"\",\"city\":\"\"}",
   "status": 200,
-  "rows": 89432,
-  "dur": 2207,
-  "at": "2026-11-20T00:09:22.347Z",
-  "user": "minyonglee1",
+  "rows": 89418,
+  "dur": 1601,
+  "at": "2026-11-25T16:24:04.996Z",
+  "user": "bindy122678",
   "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
  },
  {
@@ -19,10 +19,10 @@
   "url": "http://127.0.0.1:5173/api/SCP0005/route/SEARCH/call-proc",
   "postData": "{\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"\"}",
   "status": 200,
-  "rows": 8037,
-  "dur": 1878,
-  "at": "2026-11-20T00:09:27.253Z",
-  "user": "minyonglee1",
+  "rows": 8080,
+  "dur": 529,
+  "at": "2026-11-25T16:24:09.902Z",
+  "user": "bindy122678",
   "test": "W4 D3 행 조건부 잠금 = AS-IS lock_rules"
  }
 ]

@@ -1,9 +1,0 @@
-rank,prefix,fail_allowed,note
-1,USER_VERDICT,Y,사용자 판정(CheckList 사용자판정 열 · _user_verdicts_direct.csv) — 최상위
-2,ASIS:,Y,AS-IS 실행 결과·원문(.cs:line · SP · golden/diff 결과 · plan.json 의 AS-IS 유래 기대) — 2026-11-06 사용자 원칙 1순위 오라클
-3,DOC:,Y,문서 결함 행(단위테스트·GAP · defects_classified src-no)
-4,META:,Y,TO-BE 메타 표(SHEET_COLUMNS · search_cond · TB_FX_ · msgmap 등)
-5,CONTRACT:,Y,공용 컴포넌트 계약(common_contract.csv CC-nnn)
-6,RULE:,Y,TO-BE 룰·설계 결정(CR-0xx · KEEP Hnn · DD-nnn · 확정규칙 req_id) — 원문 ID 필수
-7,GENERAL,N,일반화된 룰 문구만 있고 원천 ID 없음 — FAIL 발행 불가(판정필요)
-8,,N,기대값 원천 없음 — FAIL 발행 불가(ERROR 증거 부족)

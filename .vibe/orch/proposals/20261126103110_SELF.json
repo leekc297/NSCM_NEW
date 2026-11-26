@@ -1,0 +1,153 @@
+{
+  "id": "20261126103110_SELF",
+  "at": "2026-11-26T10:31:10+09:00",
+  "ms": 1795656670873,
+  "source": "self",
+  "status": "applied",
+  "sig": "lnplan cacgbbceaaahbi_vision step e",
+  "title": "VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 4",
+  "evidence": "L4 단계 원장 20261124000718_VISION 단계 4/5 · 문서 .vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md · 흡수한 안 20261124000237_VISION",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-worklist.js",
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-events.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_worklist.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/Harness/harness.json"
+  ],
+  "before_after": "20261124000237_VISION 내용(상태 전이 진행, need-user 계약) 하위 안 · 흡수한 안 20261124000237_VISION 변경: 지금: VMO 는 새 일에 1번 반응하고, 사건에 기록 1건이 생기거나 need-user 가 되면 일이 끝난 것으로 보며, U3 감시는 기록 0건만 센다. 새 개념: 열린 일마다 상태, 담당, 다음 행동, 시한을 두고 진행은 상태 전이로만 세며, need-user 는 사용자 행동이 기록된 일에만 허용하고 원인이 VM, VMO 코드인 일은 VMO 가 fix 개선안으로 이어 간다. · 상세 = .vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md 전환 절 단계 4",
+  "verify": "S7 need-user 4건이 담당 사용자 또는 VMO 로 장부에 오름.",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 지금 방식 복귀. 단계마다 반영 백업 태그와 .bak_<날짜>_concept 백업으로 파일 복원. plans.json 은 삭제해도 개선안 원본에 영향 없음",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261124000718_VISION 단계 4",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:58:35+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T16:03:31+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 37개 파일 통과, 시험 88/88개 파일 통과(PASS 1503, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self1558"
+    },
+    {
+      "at": "2026-11-26T16:03:39+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T16:15:11+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 38개 파일 통과, 시험 89/89개 파일 통과(PASS 1529, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 6개 · CHANGELOG 기록 실패 · 창 다시 로드 뒤 적용 orch-agent.js, orch-selfcheck.js, orch-usercheck.js, orch-worklist.js, orch-checkerscan.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T16:15:11+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-26 16:05:28 반영 전 v1 0/4(4건 담당 에이전트 또는 코드 조치, 기다리는 사유 사용자 확인) → 16:09:23 반영 뒤 v1 4/4(사용자 1건 20261120_201206_R5_SCP0028, VMO 3건). node --check 6개 파일 통과, harness.json JSON 통과, t_orch_worklist.js ALL PASS, t_orch_usercheck.js PASS 190 FAIL 0, doc_style.py 바뀐 4개 파일 위반 0 · 변경 18개 파일 · 대상 목록 밖 변경 11개: Doc/verify/_engine_selfcheck.json, tools/Harness/gate_baseline.tsv, tools/Harness/verify/checklist_run.py, tools/VibeManager/CHANGELOG.md, Doc/verify/SSP0020/form_scen_gen.json, tools/Harness/rules/checker_scan_ignore.csv",
+      "log": ".vibe\\logs\\2026-11-26T16-03-40_claude_orch.log",
+      "sec": 407,
+      "costUsd": 3.5622423000000003,
+      "files": [
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/harness.json",
+        "tools/Harness/verify/checklist_run.py",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/orch-usercheck.js",
+        "tools/VibeManager/orch-worklist.js",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "tools/VibeManager/test/t_orch_worklist.js",
+        "Doc/verify/SSP0020/form_scen_gen.json",
+        "tools/Harness/rules/checker_scan_ignore.csv",
+        "tools/Harness/verify/checker_defect_scan.py",
+        "tools/Harness/verify/form_scen_gen.py",
+        "tools/VibeManager/claim_proposal.js",
+        "tools/VibeManager/orch-checkerscan.js",
+        "tools/VibeManager/test/t_checkerscan.js"
+      ]
+    },
+    {
+      "at": "2026-11-26T16:29:59+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-26T16:29:09+09:00"
+    }
+  ],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261124000718_VISION|4",
+  "kind": "fix",
+  "plan": "20261124000718_VISION",
+  "planStep": 4,
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795676314409,
+  "autoFp": "181e1d4a68",
+  "applyStartMs": 1795676619918,
+  "verifyJudge": {
+    "at": "2026-11-26T16:10:34+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 38개 파일 통과, 시험 89/89개 파일 통과(PASS 1529, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self1558",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-agent.js",
+    "orch-selfcheck.js",
+    "orch-usercheck.js",
+    "orch-worklist.js",
+    "orch-checkerscan.js"
+  ],
+  "appliedMs": 1795677311381,
+  "synced": [
+    "orch-agent.js",
+    "orch-selfcheck.js",
+    "orch-usercheck.js",
+    "orch-worklist.js",
+    "CHANGELOG.md",
+    "orch-checkerscan.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node s7verify.js(실제 사건 파일 4건 + 실제 orch-worklist.build + 실제 개선안 파일 조회): 16:05:28 반영 전 0/4(owner agent, agent, code, agent, wait 사용자 확인) → 16:09:23 반영 뒤 4/4(094734_R5 vmo, 094237_R3 vmo, 104237_R7 vmo, 201206_R5 user). 시험 t_orch_worklist.js ALL PASS(계약 표본 12건), t_orch_usercheck.js PASS 190 FAIL 0"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-worklist.js",
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/test/t_orch_worklist.js",
+      "tools/VibeManager/test/t_orch_usercheck.js",
+      "tools/Harness/harness.json"
+    ],
+    "verify_result": "2026-11-26 16:05:28 반영 전 v1 0/4(4건 담당 에이전트 또는 코드 조치, 기다리는 사유 사용자 확인) → 16:09:23 반영 뒤 v1 4/4(사용자 1건 20261120_201206_R5_SCP0028, VMO 3건). node --check 6개 파일 통과, harness.json JSON 통과, t_orch_worklist.js ALL PASS, t_orch_usercheck.js PASS 190 FAIL 0, doc_style.py 바뀐 4개 파일 위반 0",
+    "note": "need-user 계약: 사용자 행동 기록(agent.next_for_user)이 있고 원인이 VM 코드가 아닌 사건만 담당 사용자. 원인이 VM, VMO 코드이거나 행동 기록이 없거나 개선안이 붙은 사건은 담당 VMO. 시한을 넘기면 장부가 다시 열어 에이전트(R12 는 자가진단 진단)에 계약 지시와 함께 넘김. U3 감시: '에이전트 담당 아님' 기록만 있는 사건 = 진척 없음, VMO 담당 need-user 사건이 마지막 기록 뒤 120분 넘게 그대로면 S13|U3|needUserVmo 실패. 반영 중 고침: 원인 판정은 agent.cause 만 봄(201206 사건이 기록 글의 tools/VibeManager/CHANGELOG.md 부기로 VMO 가 되던 오판), 끝난 개선안이 붙은 사건 = 대기 없이 확인 뒤 닫기. 끄기 = harness.json orch.needUserContract false. orch-ladder.js, orch-events.js, orchestra.js 는 이번 단계 변경을 쓰는 곳이 없어 고치지 않음. git diff --stat 은 권한 승인이 필요해 실행 못 함. 실가동에서 VMO 가 사건을 다시 넘긴 뒤 개선안이 나오는지는 미확인(단계 5 관찰)"
+  },
+  "snap": "prop_20261126103110_SELF",
+  "effectiveMs": 1795678149282,
+  "effectiveAt": "2026-11-26T16:29:09+09:00"
+}

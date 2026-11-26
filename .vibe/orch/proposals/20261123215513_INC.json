@@ -1,0 +1,126 @@
+{
+  "id": "20261123215513_INC",
+  "at": "2026-11-23T21:55:13+09:00",
+  "ms": 1795438513027,
+  "source": "incident",
+  "status": "applied",
+  "sig": "되돌림에서 셸 쓰기 판정을 그 파일을 쓰는 명령으로 좁힘 읽기 명령 오판 제거",
+  "title": "되돌림에서 셸 쓰기 판정을 그 파일을 쓰는 명령으로 좁힘(읽기 명령 오판 제거)",
+  "evidence": "tools/VibeManager/orch-undo.js:13 SHELL_WRITE, :69 basename 포함 + SHELL_WRITE.test(명령 전체). .vibe/logs/2026-11-23T21-42-29_claude_orch.log 셸 명령 2개 match 'cp'@141(grep -E \"...^const cp...\" orch-improve.js orch-selfcheck.js), ' > .'@41(node test/t_orch_improve.js . > ../../.vibe/t_oi_20261123.txt). proposals/20261123181708_SELF.json history 21:51:30 'AI 편집만 되돌리지 못함(셸 명령으로 이 파일을 쓴 흔적 ...)'. proposals/20261123000419_VISION.json 13:13:05 awk|grep|head 같은 오판",
+  "targets": [
+    "tools/VibeManager/orch-undo.js",
+    "tools/VibeManager/test/t_orch_undo.js"
+  ],
+  "before_after": "전: 명령 문자열 전체에 파일 basename 이 있고 SHELL_WRITE 가 어디든 맞으면 쓰기로 판정. 후: 명령을 ;, &&, ||, | 로 나누고 따옴표 안 문자열(정규식·검색어)을 지운 조각마다 판정. 그 조각의 쓰기 대상(> 와 >> 뒤 경로, sed -i·perl -i 대상, cp·mv·Copy-Item·Move-Item 의 마지막 경로, Set-Content·Out-File·Add-Content 의 -Path 또는 첫 경로, rm·Remove-Item 대상, git checkout/restore 대상)에 basename 이 있을 때만 쓰기로 판정. 대상을 정할 수 없는 쓰기 형태(node -e 안 writeFile 등)는 종전처럼 쓰기로 봄",
+  "verify": "1) t_orch_undo.js 에 실제 명령 3개를 표본으로 넣음: 21:42 grep 명령, 21:42 node 리디렉션 명령, 13:13 awk|grep|head 명령. 판정 = 쓰기 아님. 2) 쓰기 표본 'sed -i s/a/b/ orch-improve.js', 'cp x orch-improve.js', 'echo x > orch-improve.js', 'node -e \"fs.writeFileSync(...orch-improve.js...)\"' 판정 = 쓰기. 3) node tools/VibeManager/test/run_all.js 반영 전과 같은 FAIL 목록. 4) readOps + planUndo 로 2026-11-23T21-42-29_claude_orch.log 와 반영 전 사본을 넣은 재현에서 orch-selfcheck.js, orch-improve.js 판정 how = undo",
+  "rollback": "tools/VibeManager/orch-undo.js 와 test/t_orch_undo.js 를 반영 전 백업 태그 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "같은 함수 orch-undo.js:69 의 오판 2건(13:13 awk|grep|head → 사본 전체 복원, 21:51 grep 정규식 'cp'·다른 파일 '>' → 건너뜀). 고친 뒤 재발한 이력 없음, 사례 하나의 판정 결함이라 L2",
+  "incident": "20261123_181345_R12_ALL_2",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-24T10:21:30+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-24T10:25:07+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1210, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261124_self1021"
+    },
+    {
+      "at": "2026-11-24T10:25:09+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-24T10:33:53+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1253, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 바로 다시 읽음 orch-undo.js"
+    },
+    {
+      "at": "2026-11-24T10:33:53+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건, 게이트 판정 1건. 반영 전 10:26:34 측정: 읽기 표본 7건 중 쓰기 6건, 쓰기 표본 4건 중 쓰기 4건, 재현 2파일 how = skip(셸 명령으로 이 파일을 쓴 흔적: grep -n -E ...). 반영 뒤 10:29:16 측정: 읽기 표본 쓰기 0건, 쓰기 표본 쓰기 4건, 재현 orch-selfcheck.js how = undo 'AI 편집 2건만 되돌림(반영 전과 같음)', orch-improve.js how = undo 'AI 편집 1건만 되돌림(반영 전과 같음)'. 10:29:42 node tools/VibeManager/tes · 변경 15개 파일 · 대상 목록 밖 변경 13개: tools/Harness/gate_baseline.tsv, Doc/_doc_style/APPLIED_OPERATIONS.md.style.csv, _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/02_BACKUP_PKG_DMF0082_BODY_STEP1.ASIS.sql, _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/03_PKG_DMF0082_BODY_UC_CUTOFF_FINAL.sql, _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/APPLIED_OPERATIONS.md, _artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/apply_uc_cutoff_note.py",
+      "log": ".vibe\\logs\\2026-11-24T10-25-10_claude_orch.log",
+      "sec": 299,
+      "costUsd": 1.6640574000000001,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-undo.js",
+        "tools/VibeManager/test/t_orch_undo.js",
+        "Doc/_doc_style/APPLIED_OPERATIONS.md.style.csv",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/02_BACKUP_PKG_DMF0082_BODY_STEP1.ASIS.sql",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/03_PKG_DMF0082_BODY_UC_CUTOFF_FINAL.sql",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/APPLIED_OPERATIONS.md",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/apply_uc_cutoff_note.py",
+        "_artifacts/_apply_corporate/DMF0082_UC_CUTOFF_20261124/verify_uc_cutoff.py",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261124_1029/A_DB/00_PRECHECK_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261124_1029/A_DB/05_BACKUP_CLOUD.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261124_1029/A_DB/20_PKG_PKG_DMF0082.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261124_1029/A_DB/40_GRANT_DMF0082.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261124_1029/A_DB/90_VERIFY.sql",
+        "_artifacts/_deploy_packages/DMF0082_CLOUD_DB_MOD_20261124_1029/A_DB/99_ROLLBACK.sql"
+      ]
+    }
+  ],
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795483290347,
+  "autoFp": "9ffff02cda",
+  "applyStartMs": 1795483509996,
+  "verifyJudge": {
+    "at": "2026-11-24T10:30:11+09:00",
+    "verified": true,
+    "text": "실행 통과 3건, 게이트 판정 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 77/77개 파일 통과(PASS 1253, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261124_self1021",
+  "needsReload": false,
+  "hotLoaded": [
+    "orch-undo.js"
+  ],
+  "reloadFiles": [],
+  "appliedMs": 1795484033006,
+  "synced": [
+    "orch-undo.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "t_orch_undo.js 15번에 21:42 grep, 21:42 node 리디렉션, 13:13 awk|grep|head 실제 명령을 넣음. node tools/VibeManager/test/t_orch_undo.js tools/VibeManager 결과 PASS 61건, ALL PASS(10:29:42). 측정 스크립트 기준 읽기 표본 7건 중 쓰기 판정 6건 → 0건"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "'sed -i s/a/b/ orch-improve.js', 'cp x orch-improve.js', 'echo x > orch-improve.js', 'node -e \"fs.writeFileSync(...orch-improve.js...)\"' 판정 반영 전 쓰기 4건 → 반영 뒤 쓰기 4건. t_orch_undo.js 쓰기 표본 25건 PASS"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "readOps(.vibe/logs/2026-11-23T21-42-29_claude_orch.log) + 반영 전 사본(.vibe/orch/snap/prop_20261123181708_SELF/files)에 로그 AI 편집을 앞으로 적용한 임시 폴더에서 restoreFile(wholeOk=false) 실행. orch-selfcheck.js skip → undo(2건, 반영 전과 같음), orch-improve.js skip → undo(1건, 반영 전과 같음)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-undo.js",
+      "tools/VibeManager/test/t_orch_undo.js"
+    ],
+    "verify_result": "반영 전 10:26:34 측정: 읽기 표본 7건 중 쓰기 6건, 쓰기 표본 4건 중 쓰기 4건, 재현 2파일 how = skip(셸 명령으로 이 파일을 쓴 흔적: grep -n -E ...). 반영 뒤 10:29:16 측정: 읽기 표본 쓰기 0건, 쓰기 표본 쓰기 4건, 재현 orch-selfcheck.js how = undo 'AI 편집 2건만 되돌림(반영 전과 같음)', orch-improve.js how = undo 'AI 편집 1건만 되돌림(반영 전과 같음)'. 10:29:42 node tools/VibeManager/test/t_orch_undo.js tools/VibeManager → PASS 61건, 'ALL PASS'. node --check orch-undo.js 통과",
+    "note": "SHELL_WRITE 상수와 export 는 orch-usercheck.js:655 가 쓰므로 그대로 둠. 새 함수 shellWritesFile, shellSegments 를 export 에 추가함. 판정 대상: 리디렉션 > 와 >>, sed -i, perl -i, cp, mv, Copy-Item, Move-Item(마지막 경로, -Destination), Set-Content, Add-Content, Out-File, tee(-Path, -FilePath 또는 첫 경로), rm, Remove-Item(재귀면 디렉터리 포함), git checkout/restore. 대상을 정할 수 없는 쓰기(node, python 인라인 코드와 heredoc 입력의 writeFile·open w, [IO.File]::Write, git apply/stash, xargs 쓰기 명령, find -delete/-exec)는 종전처럼 파일 이름이 있으면 쓰기. bash -c, powershell -Command, cmd /c 안 명령은 다시 나눠 판정. 추가 확인 후보: orch-usercheck.js:655 는 종전 SHELL_WRITE 판정을 그대로 씀(이번 범위 밖). v3 은 VMO 게이트 항목이라 실행 안 함. 임시 측정 파일 .vibe/t_undo_* 삭제함"
+  },
+  "snap": "prop_20261123215513_INC"
+}

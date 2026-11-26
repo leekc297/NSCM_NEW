@@ -1,0 +1,115 @@
+{
+  "id": "20261123223109_SELF_5",
+  "at": "2026-11-23T22:31:09+09:00",
+  "ms": 1795440669746,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|vmo입력창안내문구가길고한글문구가따로있음vm입력창은짧은영문한줄workbe",
+  "title": "사용자 지시 R64 같은 문제: tools/VibeManager/orchestra.js:547 VMO 입력창 안내 문구가 길고 한글 문구가 따로 있음. VM 입력창은 짧은 영문 한 줄(workbench.js:407 'Enter to send · Shift+",
+  "evidence": "규칙 R64 \"프롬프트를 받는 모든 입력창의 입력 전 안내 문구(placeholder)는 짧은 한 줄로 씀\" (원래 지시 2026-11-12 11:07 \"VM 프롬프트 창 에 입력전에 나오는 가이드 메세지를 SIMPLE 하게 변경해 주세요. (영문으로)\") · tools/VibeManager/orchestra.js:547 <textarea id=\"agIn\" placeholder=\"${T('VMO 에이전트에게 질문, 지시 (Enter 전송, Shift+Enter 줄바꿈, ↑↓ 이전 입력)', 'Ask the VMO agent (Enter to send, Shift+Enter for newline)')}\"></textarea>",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "placeholder 를 workbench.js 사전 'ph' 와 같은 짧은 영문 한 줄로 바꿈. 이전 입력 단축키 설명은 title 로 옮김",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T00:09:36+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T00:13:24+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261125_self0009"
+    },
+    {
+      "at": "2026-11-25T00:13:26+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T00:25:33+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orchestra.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-25T00:25:33+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. node --check orchestra.js 종료코드 0 → 0 · run_all.js 'PASS 1349 FAIL 0' → 'PASS 1349 FAIL 0'(83/83 파일) · t_webview_syntax.js 'ALL PASS' → 'ALL PASS' · 반영 뒤 검증 종료 2026-11-25 00:21:36 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T00-13-28_claude_orch.log",
+      "sec": 501,
+      "costUsd": 0.5656552000000001,
+      "files": [
+        "tools/VibeManager/orchestra.js"
+      ]
+    },
+    {
+      "at": "2026-11-25T03:24:34+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-25T03:23:43+09:00"
+    }
+  ],
+  "plain": {
+    "what": "프롬프트를 받는 모든 입력창의 입력 전 안내 문구(placeholder)는 짧은 한 줄로 씀 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R64|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795532976610,
+  "autoFp": "edd50555c1",
+  "applyStartMs": 1795533206575,
+  "verifyJudge": {
+    "at": "2026-11-25T00:21:51+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 83/83개 파일 통과(PASS 1349, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261125_self0009",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orchestra.js"
+  ],
+  "appliedMs": 1795533933378,
+  "synced": [
+    "orchestra.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node --check tools/VibeManager/orchestra.js: 반영 전 OK → 반영 뒤 OK(종료코드 0). node tools/VibeManager/test/run_all.js: 반영 전 'ALL OK  파일 83/83  PASS 1349  FAIL 0  220.8s' → 반영 뒤 'ALL OK  파일 83/83  PASS 1349  FAIL 0  221s'. 웹뷰 파일이라 node tools/VibeManager/test/t_webview_syntax.js 도 실행: 반영 전 'ALL PASS'(19항목) → 반영 뒤 'ALL PASS'"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orchestra.js"
+    ],
+    "verify_result": "node --check orchestra.js 종료코드 0 → 0 · run_all.js 'PASS 1349 FAIL 0' → 'PASS 1349 FAIL 0'(83/83 파일) · t_webview_syntax.js 'ALL PASS' → 'ALL PASS' · 반영 뒤 검증 종료 2026-11-25 00:21:36",
+    "note": "orchestra.js:547 agIn placeholder 를 T(한글, 영문) 두 줄에서 workbench.js:407 사전 ph 와 같은 영문 한 줄 'Enter to send · Shift+Enter for new line' 로 바꿈. 단축키 설명(Enter 전송, Shift+Enter 줄바꿈, ↑↓ 이전 입력)은 title 속성으로 옮김. .bak, CHANGELOG, 설치 폴더 건드리지 않음. 측정용 임시 출력 파일 4개(.vibe/ra_*.txt, wv_*.txt)는 삭제함"
+  },
+  "snap": "prop_20261123223109_SELF_5",
+  "effectiveMs": 1795544623686,
+  "effectiveAt": "2026-11-25T03:23:43+09:00"
+}

@@ -16,11 +16,11 @@
        Doc/verify/<ID>/unverified_triage.md    유형 → 규칙 묶음(같은 원인 묶음), 엔진 보완 세션이 읽는 작업 목록
        Doc/verify/<ID>/unverified_triage.json  전후 건수 · 담당별 남은 수(actionable = 엔진+대조표+판단+미분류+자동 남음) · 사람 확인 수
        Doc/verify/<ID>/unverified_history.csv  실행마다 1줄(라운드·전후 건수)
-  VM 체인: 🔎 CheckList → 이 도구(검증 unverifiedOpen) → actionable 이 남으면 🧪 미검증 해소(Claude · 검사엔진 보완) → 이 도구 재실행(최대 2회)
+  VM 체인(2026-11-25 2단계): 🔎 CheckList → 이 도구(자동 재측정 포함) → 처리 대상이 남는 동안 [🧪 미검증 해소 → 게이트 → checklist_run.py --settle(처리 대상 행 규칙만 재측정 → 이 도구)] 반복(최대 5회차) → 재검증 1회
   이 도구는 판정을 바꾸지 않는다. ERROR 를 NA·PASS 로 고치지 않고, 측정을 다시 하거나 남은 일을 목록으로 만든다.
   종료코드 0 = 분류·기록 완료(미검증이 남아도 0, 남은 수는 json), 3 = 원장 없음
 """
-import argparse, collections, csv, datetime, json, os, re, subprocess, sys
+import argparse, collections, csv, datetime, json, os, re, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 csv.field_size_limit(10 ** 8)
@@ -35,7 +35,8 @@ def now():
 
 def load_classes(path=CLASSES_CSV):
     out = []
-    with open(path, encoding='utf-8') as fh:
+    # 2026-11-25 VMO: 편집기가 BOM 을 붙여 저장하면 첫 열 이름이 '﻿order' 가 되어 KeyError(SCP0005 사건 20261125_032605) → utf-8-sig
+    with open(path, encoding='utf-8-sig') as fh:
         for r in csv.DictReader(fh):
             out.append(dict(r, rx=re.compile(r['pattern']), order=int(r['order'])))
     return sorted(out, key=lambda r: r['order'])
@@ -163,6 +164,282 @@ def judge_rows_to_decision(mid, tri):
     return n
 
 
+DEC_ID = re.compile(r'^[A-Z][A-Z0-9]*-[0-9a-f]{6,}$')
+
+
+def read_decisions(mid):
+    """세션이 쓴 결정 목록 Doc/verify/<ID>/_unverified_decisions.md 표 → {row_id: {'id', 'what', 'rec', 'ref'}}
+       표 머리 = | 결정 | 정할 내용 | 행 수 | 행 ID | 권장안 | 근거 경로:줄 | (🧪 미검증 해소 프롬프트 형식). 행 ID 칸의 실제 행 ID 만 읽고 '외 N건'·파일 경로는 버림"""
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, '_unverified_decisions.md')
+    try:
+        lines = open(p, encoding='utf-8-sig').read().splitlines()
+    except OSError:
+        return {}
+    out = {}; head = None
+    for ln in lines:
+        if not ln.lstrip().startswith('|'):
+            head = None; continue
+        cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+        if head is None:
+            if any('행 ID' in c for c in cells) and any('권장' in c for c in cells):
+                head = {k: i for i, k in enumerate(cells)}
+            continue
+        if set(''.join(cells)) <= set('-: '):
+            continue
+        g = lambda key: next((cells[i] for k, i in head.items() if key in k and i < len(cells)), '')
+        rec = g('권장')
+        if not rec or rec.startswith('근거 없음'):
+            continue   # 권장안이 없으면 권장안으로 풀 수 없음 → 종전 담당 유지
+        for rid in re.split(r'[,\s]+', g('행 ID')):
+            rid = rid.strip('`*')
+            if DEC_ID.match(rid):
+                out.setdefault(rid, {'id': g('결정'), 'what': g('정할 내용')[:300], 'rec': rec[:300], 'ref': g('근거')[:300]})
+    return out
+
+
+def decision_rows(mid, tri, remap=None, rows=None):
+    """2026-11-20 사용자 지시 '1차 30개 미검증을 한번에 처리하지 못한 사유 보완'(SCP0028 실측 4원인 중 ①②③④):
+       ① 세션 결정 목록에 권장안과 함께 적힌 행 → 담당 '결정'(종전 = 분류기가 결정 목록을 안 읽어 '엔진'으로 남고 회차마다 처리 대상)
+       ③ AS-IS 시간초과 행 중 같은 SP 다른 인자 판정에 PASS 가 있는 행 → 담당 '결정'(권장 = 같은 SP 다른 인자 판정으로 갈음)
+       ② 집계 행: 같은 규칙의 대조표 요소 미검증 행이 모두 '결정'이고 ERROR 요소 수가 그 행 수와 같으면 → 담당 '결정'(그 결정을 따라감)
+       담당 '결정' 행은 decide_apply 가 권장안을 적용('판정필요')한다. 반환 = 옮긴 행 수"""
+    dec = read_decisions(mid); n = 0
+    if remap:   # 2026-11-25 행 ID 가 바뀐 결정 행을 지금 ID 로
+        dec = {remap(k): v for k, v in dec.items()}
+    for t in tri:
+        if t.get('actor') in ('결정', '집계', '가이드', '보완'):
+            continue
+        d = dec.get(t['row_id'])
+        if d:
+            t['actor'] = '결정'; t['_dec'] = d; n += 1
+            t['remedy'] = (f"세션 결정 목록 {d['id']}: {d['what']} → 권장안 {d['rec']} 적용(판정필요) · 근거 {d['ref']}")[:900]
+            continue
+        if t.get('class') == 'AS-IS시간초과' and not t.get('_ai'):
+            m = re.search(r'같은 SP 다른 인자 판정 (\d+)건: ([^)]*)\)', t.get('evidence') or '')
+            if m and re.search(r'#\d+ PASS', m.group(2)):
+                t['actor'] = '결정'; n += 1
+                t['_dec'] = {'id': 'AS-IS시간초과', 'what': 'AS-IS DEV DB 가 300초 안에 결과를 못 내는 호출', 'rec': f'같은 SP 다른 인자 판정({m.group(1)}건: {m.group(2)[:120]})으로 갈음',
+                             'ref': (t.get('evidence') or '')[:200]}
+                t['remedy'] = ('AS-IS 시간초과 · 같은 SP 다른 인자 판정에 PASS 있음 → 권장안 적용(판정필요). AS-IS 개발 DB 조치(승인)로 다시 잴지는 사용자 코멘트 · ' + (t.get('remedy') or ''))[:900]
+    # ② 집계 행
+    trace = [t for t in tri if not t.get('_ai') and t.get('source') == 'TRACE' and t.get('actor') != '집계']
+    for t in tri:
+        if t.get('actor') != '집계' or t.get('_ai'):
+            continue
+        m = re.search(r'의 (\S+) \d+요소: ([^(]*)', t.get('evidence') or '')
+        if not m:
+            continue
+        cnt = dict((k, int(v)) for k, v in re.findall(r'([A-Z_]+):(\d+)', m.group(2)))
+        if set(cnt) - {'PASS', 'NA', 'NOPATH', 'ERROR'} or not cnt.get('ERROR'):
+            continue
+        same = [x for x in trace if x.get('rule_id') == t.get('rule_id')]
+        if same and len(same) == cnt['ERROR'] and all(x.get('actor') == '결정' for x in same):
+            ids = ', '.join(x['row_id'] for x in same); ds = sorted({(x.get('_dec') or {}).get('id', '') for x in same} - {''})
+            t['actor'] = '결정'; n += 1
+            t['_dec'] = {'id': ', '.join(ds) or '결정', 'what': f'하위 요소 {ids} 의 결정을 따라감', 'rec': (same[0].get('_dec') or {}).get('rec', '판정필요'), 'ref': ids}
+            t['remedy'] = (f"집계 · ERROR 요소 {cnt['ERROR']}개 = 결정 행 {ids}({', '.join(ds)}) → 같은 권장안 적용(판정필요)")[:900]
+    if rows is not None:
+        n += same_target_decisions(mid, tri, rows, dec)
+    # ④ AI 검토 행(원장은 이미 AI 판정 반영)이 결정 목록에 있으면 처리 대상에서 뺌 — 원장은 그대로
+    for t in tri:
+        if t.get('_ai') and t.get('actor') == '엔진' and t['row_id'] in dec:
+            d = dec[t['row_id']]; t['actor'] = '결정'; t['_dec'] = d; n += 1
+            t['remedy'] = (f"AI 검토 행 · 세션 결정 목록 {d['id']}: 권장안 {d['rec']} · 원장은 AI 판정 그대로")[:900]
+    return n
+
+
+ROWKEY_JSON = 'row_keys.json'
+DEC_SAME_TARGET = ('검사기공백', '데이터전제', '미분류', '재실행')
+
+
+def row_key(r):
+    """행 ID 가 바뀌어도 같은 검사로 보는 키 = 출처 · 규칙 · 대상(2026-11-25 SCP0005 R4-D12: 셀 규칙 시트별 읽기로 30행 ID 가 바뀌어 결정·이력이 끊김)"""
+    tg = re.sub(r'\s+', ' ', (r.get('target') or '')).strip()
+    return f"{r.get('source', '')}|{(r.get('rule_id') or '').upper()}|{tg}" if tg else ''
+
+
+def id_bridge(mid, rows):
+    """옛 행 ID → 지금 행 ID. 지난 실행이 남긴 row_keys.json(행 ID → 키)과 지금 원장의 키가 하나로 맞을 때만 잇는다(키가 여러 행이면 잇지 않음).
+       지금 원장 키를 저장해 다음 실행이 쓴다. 반환 = 함수(옛 ID → 지금 ID 또는 같은 ID)"""
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, ROWKEY_JSON)
+    try:
+        old = json.load(open(p, encoding='utf-8'))
+    except (OSError, ValueError):
+        old = {}
+    cur_ids = {r.get('row_id') for r in rows}
+    by_key = collections.defaultdict(list)
+    for r in rows:
+        k = row_key(r)
+        if k:
+            by_key[k].append(r.get('row_id'))
+    merged = dict(old); merged.update({r.get('row_id'): row_key(r) for r in rows if row_key(r)})
+    try:
+        json.dump(merged, open(p, 'w', encoding='utf-8'), ensure_ascii=False)
+    except OSError:
+        pass
+
+    def f(rid):
+        if rid in cur_ids or rid not in old:
+            return rid
+        c = by_key.get(old[rid]) or []
+        return c[0] if len(c) == 1 else rid
+    return f
+
+
+def same_target_decisions(mid, tri, rows, dec):
+    """2026-11-25 사용자(SCP0005 A6 행 3개 = 결정 R4-D2 와 같은 SP 인데 ID 가 달라 다시 엔진 담당): 결정 목록 행과 대상(target)이 같은
+       '측정 불가' 유형 행(검사기공백·데이터전제·미분류·재실행)을 같은 결정으로 옮긴다. 권장안 적용 = 판정필요(판정을 낮추지 않음). 반환 = 옮긴 행 수"""
+    by_id = {r.get('row_id'): r for r in rows}
+    tg = {}
+    for rid, d in dec.items():
+        r = by_id.get(rid)
+        t_ = re.sub(r'\s+', ' ', (r.get('target') or '')).strip() if r else ''
+        if len(t_) >= 6:
+            tg.setdefault(t_, d)
+    n = 0
+    for t in tri:
+        if t.get('_ai') or t.get('actor') not in WORK_ACTORS or t.get('class') not in DEC_SAME_TARGET:
+            continue
+        d = tg.get(re.sub(r'\s+', ' ', t.get('target') or '').strip())
+        if d:
+            t['actor'] = '결정'; t['_dec'] = d; n += 1
+            t['remedy'] = (f"결정 목록 {d['id']} 와 대상이 같은 측정 불가 행: {d['what']} → 권장안 {d['rec']} 적용(판정필요) · 근거 {d['ref']}")[:900]
+    return n
+
+
+def prev_fix_failed(mid, tri, remap):
+    """2026-11-25 사용자(SCP0005 라운드 3 '고침' 165행 중 76행이 다음 측정에서도 미검증): 직전 🧪 조치표(_unverified_plan.md)에서 '고침'인데 지금도 처리 대상인 행에
+       '직전 보완 실패'와 직전 고친 곳을 적는다(🧪 가 같은 고침을 되풀이하지 않게). 반환 = 표시한 행 수"""
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, '_unverified_plan.md')
+    try:
+        lines = open(p, encoding='utf-8-sig').read().splitlines()
+    except OSError:
+        return 0
+    fixed = {}; head = None
+    for ln in lines:
+        if not ln.lstrip().startswith('|'):
+            head = None; continue
+        cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+        if head is None:
+            if any(c.replace(' ', '').lower() in ('row_id', '행id') for c in cells) and any('결과' in c for c in cells):
+                head = {k.replace(' ', '').lower(): i for i, k in enumerate(cells)}
+            continue
+        if set(''.join(cells)) <= set('-: '):
+            continue
+        ri = head.get('row_id', head.get('행id')); rs = next((i for k, i in head.items() if '결과' in k), None)
+        why = next((i for k, i in head.items() if '사유' in k or '고친' in k), None)
+        if ri is None or rs is None or ri >= len(cells) or rs >= len(cells):
+            continue
+        if cells[rs].startswith('고침'):
+            rid = remap(cells[ri].strip('`* '))
+            fixed[rid] = (cells[why] if why is not None and why < len(cells) else '')[:200]
+    n = 0
+    for t in tri:
+        if t['row_id'] in fixed and t.get('actor') in WORK_ACTORS + ('자동',):
+            t['prev_fail'] = 'Y'; n += 1
+            t['remedy'] = (f"직전 보완 실패(직전 조치표 '고침': {fixed[t['row_id']]}) → 같은 고침을 되풀이하지 않고 이번 측정 증거로 다른 원인 확인 · " + (t.get('remedy') or ''))[:900]
+    return n
+
+
+# ============================================================== 해소 원장(2026-11-25 사용자 승인 플랜 '행 단위 해소' P2)
+#   CheckList 측정(원장 전체 재생성) 1회마다 미검증 행 목록을 고정한다. 그 뒤 분류를 다시 돌려도 새 행은 넣지 않는다(목록이 늘지 않음 = 반복이 끝남).
+#   행이 닫히는 경우 = 원장 판정이 미검증이 아님(row_run 재측정·결정 적용) 또는 시도 한도(검사기 유형 2회) 뒤 결정. AI 가 '고침'이라 적는 것으로는 닫히지 않음
+WORKLIST = 'unverified_worklist.csv'
+WL_FIELDS = ['key', 'row_id', 'rule_id', 'source', 'target', 'class', 'actor', 'kind', 'close_by', 'tries', 'state', 'closed_by', 'result', 'note', 'at']
+TRY_MAX = 2
+KIND_OF_ACTOR = {'자동': '재측정', '결정': '결정', '보완': '화면선행', '사람': '사람', '가이드': '가이드', '집계': '집계', '다음측정': '다음측정'}
+CLOSE_BY = {'재측정': '그 행 재측정(row_run)으로 판정', '데이터전제': '전제 데이터를 만들어 재측정, 없으면 DB 조회 증거와 함께 결정', '결정': '결정 목록 권장안 적용(판정필요)',
+            '화면선행': '선행 FAIL 행에 연결(화면 기능 보완 뒤 측정)', '사람': '사람 확인(스냅샷 승인 등)', '가이드': 'FE 가이드(DB MODE)', '집계': '하위 행을 따라감',
+            '검사기': f'검사기 수정 → 그 행 재측정(row_run)으로 판정. {TRY_MAX}회 뒤에도 미검증이면 시도 기록과 함께 결정', 'AI후보': '검사기 수정 → 그 행 재측정(row_run). 판정은 검사엔진만',
+            '다음측정': '다음 CheckList 측정에서 봄'}
+
+
+def wl_kind(t):
+    if t.get('_ai') or str(t.get('class') or '').startswith('AI검토'):
+        return 'AI후보' if t.get('actor') in WORK_ACTORS else KIND_OF_ACTOR.get(t.get('actor'), 'AI후보')
+    if t.get('class') == '데이터전제':
+        return '데이터전제'
+    return KIND_OF_ACTOR.get(t.get('actor'), '검사기')
+
+
+def wl_read(mid):
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, WORKLIST)
+    meta = {}
+    try:
+        meta = json.load(open(p.replace('.csv', '.json'), encoding='utf-8'))
+    except (OSError, ValueError):
+        pass
+    return _read(p), meta
+
+
+def wl_write(mid, rows, meta):
+    vd = os.path.join(ROOT, 'Doc', 'verify', mid); os.makedirs(vd, exist_ok=True)
+    with open(os.path.join(vd, WORKLIST), 'w', encoding='utf-8-sig', newline='') as fh:
+        w = csv.DictWriter(fh, fieldnames=WL_FIELDS, extrasaction='ignore'); w.writeheader(); w.writerows(rows)
+    opened = [r for r in rows if r['state'] == 'open' and r['kind'] not in ('집계', 'AI후보', '다음측정')]
+    meta = dict(meta, menu_id=mid, at=now(), total=len(rows), open=len(opened), open_ai=sum(1 for r in rows if r['state'] == 'open' and r['kind'] == 'AI후보'),
+                by_kind=dict(collections.Counter(r['kind'] for r in opened)), closed=sum(1 for r in rows if r['state'] != 'open'))
+    json.dump(meta, open(os.path.join(vd, WORKLIST.replace('.csv', '.json')), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    return meta
+
+
+def worklist_sync(mid, tri, rows, run_mode):
+    """분류 결과 → 해소 원장. 원장 전체 재생성(run_mode full) 판이 바뀌었으면 새로 고정, 아니면 기존 행 상태만 갱신(새 행은 넣지 않음)"""
+    old, meta = wl_read(mid)
+    remap = id_bridge(mid, rows) if rows is not None else (lambda x: x)
+    led = {r.get('row_id'): r for r in rows or []}
+    base = run_mode.get('at') if run_mode.get('mode') == 'full' else None
+    fresh = not old or (base and meta.get('base') != base)
+    by_t = {t['row_id']: t for t in tri}
+    if fresh:
+        out = []
+        for t in tri:
+            k = wl_kind(t)
+            out.append({'key': row_key(led.get(t['row_id']) or t) or t['row_id'], 'row_id': t['row_id'], 'rule_id': t.get('rule_id', ''), 'source': t.get('source', ''), 'target': (t.get('target') or '')[:200],
+                        'class': t.get('class', ''), 'actor': t.get('actor', ''), 'kind': k, 'close_by': CLOSE_BY.get(k, ''), 'tries': 0,
+                        'state': 'open' if k not in ('결정', '다음측정') else 'decided', 'closed_by': '' if k not in ('결정',) else '결정 적용', 'result': 'ERROR', 'note': (t.get('remedy') or '')[:300], 'at': now()})
+        meta = {'base': base or meta.get('base') or now(), 'created': now(), 'round': 0, 'closed_seen': sum(1 for w in out if w['state'] != 'open')}
+        print(f'[해소 원장] 새로 고정: {len(out)}행 · Doc/verify/{mid}/{WORKLIST}', flush=True)
+        return wl_write(mid, out, meta)
+    out = []; new_n = 0; seen = set()
+    for w in old:
+        rid = remap(w['row_id']); w['row_id'] = rid; seen.add(rid)
+        r = led.get(rid); t = by_t.get(rid)
+        if w['state'] == 'open':
+            if w['kind'] == 'AI후보':
+                pass   # AI 후보 행은 row_run 이 재측정했을 때만 닫음(worklist_update)
+            elif r is not None and (r.get('result') or '') not in ('ERROR', ''):
+                w['state'] = 'closed'; w['closed_by'] = w.get('closed_by') or '원장 판정'; w['result'] = r.get('result') or ''
+            elif t is not None and t.get('actor') == '결정' and w['kind'] != '결정':
+                w['state'] = 'decided'; w['closed_by'] = '결정 적용'; w['note'] = (t.get('remedy') or '')[:300]
+        out.append(w)
+    new_n = sum(1 for t in tri if t['row_id'] not in seen)
+    meta['new_after_base'] = new_n
+    if new_n:
+        print(f'[해소 원장] 고정 뒤 새로 생긴 미검증 {new_n}행은 넣지 않음(다음 CheckList 측정에서 봄)', flush=True)
+    return wl_write(mid, out, meta)
+
+
+def worklist_update(mid, results, count=True):
+    """row_run 결과 반영 — 시도 횟수 +1, 미검증 아니면 닫음, 검사기 유형 TRY_MAX 회 뒤 미검증이면 결정(시도 기록)"""
+    rows, meta = wl_read(mid)
+    if not rows:
+        return None
+    res = {o['row_id']: o for o in results}
+    for w in rows:
+        o = res.get(w['row_id'])
+        if not o or w['state'] != 'open':
+            continue
+        w['tries'] = int(w.get('tries') or 0) + (1 if count else 0); w['result'] = o.get('after', ''); w['at'] = now()
+        if o.get('state') == '닫힘':
+            w['state'] = 'closed'; w['closed_by'] = f"row_run {o.get('run', '')} 판정 {o.get('after', '')}"
+        elif w['kind'] in ('검사기', '데이터전제', '재측정') and w['tries'] >= TRY_MAX:
+            w['state'] = 'decided'; w['closed_by'] = f'시도 {w["tries"]}회 뒤 미검증 → 결정(시도 기록: row_run.jsonl)'
+    m = wl_write(mid, rows, meta)
+    print(f"[해소 원장] 열린 행 {m['open']} · 닫힘·결정 {m['closed']} / {m['total']}", flush=True)
+    return m
+
+
 def _read(p):
     try:
         with open(p, encoding='utf-8-sig', newline='') as fh:
@@ -174,16 +451,37 @@ def _read(p):
 def counts(tri):
     unv = [t for t in tri if not t.get('_ai')]   # 미검증(ERROR) 행 — 건수 표시는 이것만
     ai = len(tri) - len(unv)
+    ai_work = sum(1 for t in tri if t.get('_ai') and t.get('actor') in WORK_ACTORS)   # 2026-11-20: 결정 목록으로 넘긴 AI 검토 행은 처리 대상 아님
     by_actor = collections.Counter(t['actor'] for t in unv)
     by_class = collections.Counter(t['class'] for t in unv)
-    actionable = sum(by_actor[a] for a in WORK_ACTORS) + by_actor['자동'] + ai
+    actionable = sum(by_actor[a] for a in WORK_ACTORS) + by_actor['자동'] + ai_work
     return {'total': len(unv), 'by_actor': dict(by_actor), 'by_class': dict(by_class), 'actionable': actionable, 'ai_review': ai,
             'human': by_actor['사람'], 'aggregate': by_actor['집계'], 'blocked': by_actor['보완'], 'guide': by_actor['가이드'], 'decide': by_actor['결정']}  # 보완 = 선행 FAIL(화면 기능 누락) 뒤에만 잴 수 있는 행
 
 
-def run(cmd, cwd=None):
+def timing_add(mid, stage, tool, t0, rc, root=None):
+    """2026-11-26 개선안 20261126083525_SELF_4(R234): Doc/verify/<ID>/_timing.csv(run_verify 와 같은 열 run_at,stage,tool,start,sec,rc)에 1행 덧붙임 + '[시간]' 줄. 기록 실패는 진행을 멈추지 않음"""
+    sec = round(time.time() - t0, 1); st = time.strftime('%H:%M:%S', time.localtime(t0))
+    print(f'[시간] {stage} · 시작 {st} · {sec}초 · rc={rc}', flush=True)
+    try:
+        d = os.path.join(root or ROOT, 'Doc', 'verify', mid); os.makedirs(d, exist_ok=True)
+        fp = os.path.join(d, '_timing.csv'); new = not os.path.exists(fp)
+        with open(fp, 'a', encoding='utf-8-sig' if new else 'utf-8', newline='') as f:
+            w = csv.writer(f)
+            if new:
+                w.writerow(['run_at', 'stage', 'tool', 'start', 'sec', 'rc'])
+            w.writerow([time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t0)), stage, tool, st, sec, rc])
+    except OSError as e:
+        print(f'[WARN] _timing.csv 기록 실패({e})', flush=True)
+
+
+def run(cmd, cwd=None, mid=None, stage=None):
     print('$ ' + ' '.join(str(c) for c in cmd), flush=True)
-    return subprocess.call(cmd, cwd=cwd or ROOT)
+    t0 = time.time()
+    rc = subprocess.call(cmd, cwd=cwd or ROOT)
+    if mid and stage:
+        timing_add(mid, stage, os.path.basename(str(cmd[1] if len(cmd) > 1 else cmd[0])), t0, rc)
+    return rc
 
 
 def rerun(mid, tri, state):
@@ -201,10 +499,12 @@ def rerun(mid, tri, state):
         return None
     res = {'rules': rules, 'e2e_kinds': kinds, 'rc': None}
     py = sys.executable
-    if kinds:
-        res['e2e_rc'] = run([py, os.path.join(HERE, 'e2e_suite.py'), mid, '--kinds', ','.join(kinds), '--force'])
-    if rules:
-        rc = run([py, os.path.join(HERE, 'run_verify.py'), mid, '--only', ','.join(rules)])
+    # 2026-11-25 행 단위 해소: 종전 run_verify --only(규칙 전체 + 사전 작업, SCP0005 해소 확인 93분) 대신 그 행만 다시 잼(row_run.py, 같은 반입 순서)
+    if rules or kinds:
+        os.environ['ROW_RUN_NOCOUNT'] = '1'   # CheckList 안 자체 해소 = 측정만, 검사기 수정 시도 횟수에 넣지 않음
+        rc = run([py, os.path.join(HERE, 'row_run.py'), mid, ','.join(t['row_id'] for t in auto)], mid=mid, stage='해소:row_run')
+        os.environ.pop('ROW_RUN_NOCOUNT', None)
+        rc = 0 if rc == 2 else rc   # 2 = 재었으나 미검증 남음(정상 종료)
         res['rc'] = rc
         if rc == 4:
             print(f'[ERROR] 같은 화면({mid}) CheckList 실행 중이라 재측정 못 함(미검증 유지)', flush=True)
@@ -255,6 +555,7 @@ def main():
     ap.add_argument('menu_id')
     ap.add_argument('--no-rerun', action='store_true', help='분류만 하고 자동 재측정은 하지 않음')
     ap.add_argument('--round', type=int, default=0, help='VM 체인 라운드 표시용(0 = 첫 실행)')
+    ap.add_argument('--settle', action='store_true', help='2026-11-25 해소 확인 재측정 뒤 분류: 이번에 새로 생긴 AI 검토 행은 다음 CheckList 전체 측정으로 넘김(처리 대상 아님)')
     a = ap.parse_args()
     mid = a.menu_id.upper()
     vd = os.path.join(ROOT, 'Doc', 'verify', mid)
@@ -336,7 +637,25 @@ def main():
             if t['actor'] == '대조표':
                 t['actor'] = '가이드'; t['remedy'] = 'DB MODE(repairScope DB_ONLY): 대조표(FE 폴더) 수정 불가, FE 가이드(FE_GUIDE_*.md)로 남기고 결정 목록에 적음 · 재수행으로 줄지 않아 처리 대상에서 뺌'
     ai_n = ai_review_rows(mid, tri)
+    remap = id_bridge(mid, rows)   # 2026-11-25 옛 행 ID → 지금 행 ID(결정 목록·직전 조치표)
+    defer_n = 0
+    if a.settle:
+        # 2026-11-25 사용자(SCP0005 해소 확인 재측정이 AI 판정 검토를 다시 돌려 처리 대상 9행이 새로 생김): 해소 확인에서 새로 생긴 AI 검토 행은
+        #   이번 해소 반복의 처리 대상이 아님 → 담당 '다음측정'(다음 CheckList 전체 측정이 다시 봄). 미검증(ERROR) 행은 그대로 처리 대상
+        _pv = {remap(r['row_id']) for r in _read(os.path.join(vd, 'unverified_triage.csv')) if r.get('actor') in WORK_ACTORS + ('자동',)}
+        for t in tri:
+            if t.get('_ai') and t.get('actor') in WORK_ACTORS and t['row_id'] not in _pv:
+                t['actor'] = '다음측정'; defer_n += 1
+                t['remedy'] = ('해소 확인 재측정에서 새로 생긴 AI 판정 검토 행 → 다음 CheckList 전체 측정에서 처리 · ' + (t.get('remedy') or ''))[:900]
+        if defer_n:
+            print(f'[INFO] 해소 확인 재측정에서 새로 생긴 AI 판정 검토 행 {defer_n}행 → 다음 CheckList 전체 측정으로 넘김(처리 대상 아님)', flush=True)
     dec_n = judge_rows_to_decision(mid, tri)   # 2026-11-20 C1
+    sdec_n = decision_rows(mid, tri, remap, rows)   # 2026-11-20 사용자 지시 '1차 미검증을 한번에 처리하지 못한 사유 보완': 결정 목록·AS-IS 시간초과·결정만 따라가는 집계 → 결정
+    if sdec_n:
+        print(f'[INFO] 결정 목록·AS-IS 시간초과·결정 집계 {sdec_n}행 → 담당 결정(권장안 적용 대상, 처리 대상에서 뺌)', flush=True)
+    pf_n = prev_fix_failed(mid, tri, remap)
+    if pf_n:
+        print(f'[INFO] 직전 조치표에서 고침인데 지금도 처리 대상인 행 {pf_n}행 → 직전 보완 실패 표시(같은 고침 되풀이 금지)', flush=True)
     # 2026-11-20 사용자 지시 '사용자판정도 우선 권장안으로 진행, 차후 판정필요 항목으로 필요할 때만 코멘트': 담당 '결정' 행에 AI 권장안 적용(decide_apply.py).
     #   적용한 행은 원장 결과가 '판정필요'가 되어 미검증에서 빠진다. 고칠 곳이 검사기인 행은 담당 '엔진'으로 되돌린다. 원장을 고쳤으면 원장 시각을 다시 읽는다(반복 중단 판정이 이 변경을 재측정으로 보지 않게)
     rec_c = {}
@@ -349,10 +668,14 @@ def main():
         except Exception as _e:
             print(f'[WARN] 권장안 적용 생략: {type(_e).__name__}: {str(_e)[:160]}', flush=True)
     after = counts(tri); after['recommended'] = rec_c.get('applied', 0)
+    try:
+        wl = worklist_sync(mid, tri, read_ledger(mid)[0], rm)
+    except Exception as _e:
+        wl = None; print(f'[WARN] 해소 원장 기록 실패: {type(_e).__name__}: {str(_e)[:160]}', flush=True)
     print('[세부 3/3] 기록: ' + ('보완 전 원장이라 건수 표시 생략, 건수는 CheckList 재수행 뒤 표시' if prc else f'미검증 {before["total"]} → {after["total"]}행, 처리 대상 {after["actionable"]}(AI 판정 검토가 가린 엔진 보완 대상 {ai_n} 포함), 사람 확인 {after["human"]}, 결정 목록 {after["decide"]}(판단 행 중 AI 검토로 결론 안 남 {dec_n}), 집계 {after["aggregate"]}'), flush=True)
     os.makedirs(vd, exist_ok=True)
     with open(os.path.join(vd, 'unverified_triage.csv'), 'w', encoding='utf-8-sig', newline='') as fh:
-        w = csv.DictWriter(fh, fieldnames=['row_id', 'source', 'rule_id', 'target', 'class', 'actor', 'remedy', 'evidence'], extrasaction='ignore')
+        w = csv.DictWriter(fh, fieldnames=['row_id', 'source', 'rule_id', 'target', 'class', 'actor', 'remedy', 'evidence', 'prev_fail'], extrasaction='ignore')
         w.writeheader(); w.writerows(tri)
     md = group_md(mid, tri, before, after, rr, rnd) if not prc else (
         f'# {mid} 미검증 분류 · {now()} · 라운드 {rnd}\n\n- {prc["note"]}\n- 원장 {prc["ledger_at"]} 은 보완 전 판이라 건수를 싣지 않음. CheckList 재수행 뒤 다시 만듦\n'
@@ -378,10 +701,10 @@ def main():
     #   직전 처리 대상 행 ID 가 있으면 행 단위로 본다 — 직전 처리 대상 중 하나라도 풀렸으면 진전(계속), 하나도 안 풀렸으면 중단. 새로 생긴 행은 다음 보완 대상으로 넘긴다
     stalled, resolved_ids, new_ids = progress(prev_act_ids, cur_act_ids, prev_act, after['actionable'], prev_meta.get('ledger_mtime') not in (None, lmt))
     cont = 1 if after['actionable'] and not stalled else 0
-    out = {'menu_id': mid, 'at': now(), 'round': rnd, 'ledger': os.path.relpath(lp, ROOT), 'before': before, 'after': after,
+    out = {'menu_id': mid, 'at': now(), 'round': rnd, 'ledger': os.path.relpath(lp, ROOT), 'before': before, 'after': after, 'worklist': wl,
            'actionable': after['actionable'], 'human': after['human'], 'rerun': rr, 'unverified_sheet': sheet,
            'ledger_mtime': lmt, 'prev_actionable': prev_act, 'continue': cont, 'stalled': stalled,
-           'resolved_actionable': sorted(resolved_ids), 'new_actionable': sorted(new_ids), 'pending_recheck': prc,
+           'resolved_actionable': sorted(resolved_ids), 'new_actionable': sorted(new_ids), 'pending_recheck': prc, 'prev_fix_failed': pf_n, 'deferred_ai': defer_n,
            'note': '미검증 시트(원장 NA 중 직접 실측 없음)는 참고 수치. 처리 대상은 원장 ERROR 행'}
     json.dump(out, open(os.path.join(vd, 'unverified_triage.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     hp = os.path.join(vd, 'unverified_history.csv'); new = not os.path.exists(hp)
@@ -424,6 +747,8 @@ def selftest():
              ('제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인', '대조표'),
              ('[미측정] E2E crud 결과 기록 없음', '자동'),
              ('Navigation timeout of 30000 ms exceeded', '자동'),
+             ('[KEYSET] [차등 검증 #47] popup/SEARCH · 판정 ERR · [AS-IS 실행 시간 초과 300초] AS-IS DEV DB 가 이 인자로 상한 안에 결과를 내지 못함 · HYT00 Query timeout expired', '사람'),  # T524
+             ('[전제 상태 TO-BE 입력 불가] LOT_SIZE 빈 값을 4경로 모두 받지 않음', '사람'),  # T526
              ('알 수 없는 새 사유', '엔진')]
     bad = []
     for ev, want in cases:
@@ -438,6 +763,32 @@ def selftest():
                             ('처리 대상 0 = 중단 아님', progress({'A'}, set(), 1, 0, True)[0], False)]:
         if got != want:
             bad.append(f'{name} → {got}(기대 {want})')
+    # 2026-11-20 결정 목록 · AS-IS 시간초과 · 결정 집계 → 담당 결정(SCP0028 1회차 30행 중 12행이 남은 원인 보완)
+    import tempfile
+    d0 = tempfile.mkdtemp(); g0 = globals(); r0 = g0['ROOT']
+    try:
+        g0['ROOT'] = d0; vd = os.path.join(d0, 'Doc', 'verify', 'ZZ0001'); os.makedirs(vd)
+        open(os.path.join(vd, '_unverified_decisions.md'), 'w', encoding='utf-8').write(
+            '| 결정 | 정할 내용 | 행 수 | 행 ID | 권장안 | 근거 경로:줄 |\n|---|---|---|---|---|---|\n'
+            '| R1-D1 | 팝업 교체 룰 | 2 | T-aaaaaa01, EG-bbbbbb02 | 등록 | a.md:1 |\n| R1-D2 | 미정 | 1 | T-cccccc03 | 근거 없음. 미확인 | b.md:2 |\n')
+        tri = [{'row_id': 'T-aaaaaa01', 'source': 'TRACE', 'rule_id': 'F4', 'class': '검사기공백', 'actor': '엔진', 'remedy': '', 'evidence': ''},
+               {'row_id': 'T-cccccc03', 'source': 'TRACE', 'rule_id': 'A6', 'class': '검사기공백', 'actor': '엔진', 'remedy': '', 'evidence': ''},
+               {'row_id': 'T-dddddd04', 'source': 'TRACE', 'rule_id': 'F4', 'class': '집계', 'actor': '집계', 'remedy': '', 'evidence': '행 집계 — 대조표 X 의 F4 7요소: PASS:6 · ERROR:1'},
+               {'row_id': 'T-eeeeee05', 'source': 'TRACE', 'rule_id': 'A6', 'class': '집계', 'actor': '집계', 'remedy': '', 'evidence': '행 집계 — 대조표 X 의 A6 6요소: PASS:4 · ERROR:1 · NA:1'},
+               {'row_id': 'AD-ffffff06', 'source': 'ASIS_DIFF', 'rule_id': 'A1', 'class': 'AS-IS시간초과', 'actor': '사람', 'remedy': '',
+                'evidence': '[AS-IS 실행 시간 초과 300초] AS-IS DEV DB 가 이 인자로 상한 안에 결과를 내지 못함(같은 SP 다른 인자 판정 3건: #3 PASS, #4 ROWS_ONLY) · HYT00'},
+               {'row_id': 'AD-ffffff07', 'source': 'ASIS_DIFF', 'rule_id': 'A1', 'class': 'AS-IS시간초과', 'actor': '사람', 'remedy': '',
+                'evidence': '[AS-IS 실행 시간 초과 300초] (같은 SP 다른 인자 판정 1건: #4 ROWS_ONLY) · HYT00'},
+               {'row_id': 'EG-bbbbbb02', 'source': 'RULE_SCREEN', 'rule_id': 'G4', 'class': 'AI검토:룰등록', 'actor': '엔진', 'remedy': '', 'evidence': '', '_ai': True}]
+        decision_rows('ZZ0001', tri); a = {t['row_id']: t['actor'] for t in tri}
+        for name, ok in [('결정 목록 행 → 결정', a['T-aaaaaa01'] == '결정'), ('권장안 근거 없음 → 종전 담당', a['T-cccccc03'] == '엔진'),
+                         ('ERROR 요소 = 결정 행 수 → 집계도 결정', a['T-dddddd04'] == '결정'), ('같은 규칙에 결정 아닌 요소 있음 → 집계 유지', a['T-eeeeee05'] == '집계'),
+                         ('AS-IS 시간초과 + 다른 인자 PASS → 결정', a['AD-ffffff06'] == '결정'), ('AS-IS 시간초과 + PASS 없음 → 사람 유지', a['AD-ffffff07'] == '사람'),
+                         ('결정 목록 AI 검토 행 → 결정 · 처리 대상에서 빠짐', a['EG-bbbbbb02'] == '결정' and counts(tri)['actionable'] == 1)]:
+            if not ok:
+                bad.append(name)
+    finally:
+        g0['ROOT'] = r0
     return bad
 
 

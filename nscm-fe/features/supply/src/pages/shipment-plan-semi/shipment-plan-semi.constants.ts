@@ -96,6 +96,7 @@ export const MSG = {
   QTY_NEGATIVE: 'MSG00225', // Quantity must be 0 or greater.(구 MSG00084 TO-BE 미등록 — gap-resolve iter-1 실측, production-plan-line/shipment-plan-fg 미러링)
   QTY_MAX: 'MSG00165', // You have exceeded the number of digits you can enter.(구 MSG00317 TO-BE 미등록 — 동일 미러링)
   NO_CHANGE: 'MSG00004', // 변경사항 없음(공용)
+  INSERT_ROW_NO_VALUE: 'MSG01243', // BOD 팝업 삽입 SHIP_PLAN_AMEND 행에 값이 하나도 없을 때(자매 shipment-plan-fg 동일 코드)
   SELECT_FIX_DATE: 'MSG01262', // "선택된 일자가 없습니다. Fix/Unfix할 일자를 선택하여 주세요." — 선택 셀 기반 Fix/Unfix 에서 대상 일자 0건일 때(AS-IS selCells<1 MSG00134 / iCount<=0 MSG00252 를 단일 안내로 통일, 자매 SCP0013 동일 코드. DB 실측 2026-10-13)
 } as const;
 
@@ -112,6 +113,7 @@ export const LBL = {
   NEW: 'LBL01028', // New
   FIX: 'LBL00771', // Fix
   UNFIX: 'LBL00772', // Unfix
+  CLOSE: 'LBL00627', // Close (Fix 사유 팝업, 자매 shipment-plan-fg 동일)
   SEARCH: 'LBL00112', // Search (표준 LBL00112)
   DIVISION: 'LBL00001', // Division (표준 LBL00001)
   OPERATION_GROUP: 'LBL00027', // Operation group

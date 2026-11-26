@@ -16,8 +16,23 @@ export interface PeriodAxisRow {
   BASIS_YYYYMM: string; // yyyymm
   WEEK_NAME?: string; // 'W36' 등 — 헤더는 그리드가 binding 에서 다시 계산하므로 여기선 쓰지 않는다
   DATE_SHORT1_NAME?: string; // 'MMDD'
-  [key: string]: string | undefined;
+  COLUMN_WIDTH?: string | number; // 동적 컬럼 너비(px) — 2026-11-22 프로시저에 추가(전 행 같은 값)
+  [key: string]: string | number | undefined;
 }
+
+/**
+ * 시간축 행 → 동적 컬럼 너비(px). 프로시저 COLUMN_WIDTH 중 첫 양수 값을 쓰고, 없으면 undefined
+ *   (그리드가 화면 기본 너비를 쓴다). 프로시저는 모든 행에 같은 너비를 내려준다.
+ */
+export const periodColumnWidthOf = (
+  rows: readonly PeriodAxisRow[] | undefined
+): number | undefined => {
+  for (const r of rows ?? []) {
+    const n = Number(String(r.COLUMN_WIDTH ?? '').trim());
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return undefined;
+};
 
 const YMD = /^\d{8}$/;
 const YM = /^\d{6}$/;

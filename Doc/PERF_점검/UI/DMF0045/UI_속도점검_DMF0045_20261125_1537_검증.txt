@@ -1,0 +1,24 @@
+속도 점검 쿼리 로컬 검증 2026-11-25 15:38:10
+방식 : 파일의 쿼리를 사내 ZIOUI1 에서 차례로 실행(조회. 재실행 블록 뒤 ROLLBACK)
+ZIOUI1 ('2026-11-25 15:37:56', 'SCM_MGR')
+[U0-0] ALTER SESSION SET CURRENT_SCHEMA = SCM_MGR
+[U0-1] 1.1초 · 2행 · 첫 행 ('PKG_DMF0045', 'PACKAGE', 'VALID', '2026-11-17 17:17:12', 63, 63, 'Y')
+[U0] 0.8초 · 1행 · 첫 행 (6659685, 7159684, datetime.datetime(2026, 11, 19, 14, 6, 20, 622802), datetime.datetime(2026, 11, 25, 15, 28, 18, 487778))
+[U1] 1.3초 · 3행 · 첫 행 ('PKG_DMF0045.P_DMF0045_GET_SHIPMENT_REQUEST', 5, 5645, 13275, 17682, 0, datetime.datetime(2026, 11, 24, 9, 37, 35, 509362))
+[U2] 1.3초 · 10행 · 첫 행 (7046465, datetime.datetime(2026, 11, 24, 9, 37, 35, 509362), 17682, 0, 'minyonglee1', "{call PKG_DMF0045.P_DMF0045_GET_SHIPMENT_REQUEST( 'Pack Biz', '81', 'ALL', 'ALL', 'ALL', 'ALL', '', '', '2026112
+[U3] 0.2초 · 4행 · 첫 행 ('SEARCH', 'Pack Biz', 10, 3.3, 18, 3.3, 18, 0, datetime.datetime(2026, 11, 24, 9, 37, 38))
+[U4-0] ALTER SESSION DISABLE COMMIT IN PROCEDURE
+[U4-1] 3.9초 · V_12 ROWS = 520 , COLS = 87 | V_13 ROWS = 1 , COLS = 2 | PROC_SEC  = 3.67 | FETCH_SEC = 0.10 | TOTAL_SEC = 3.77
+[U4-2] 0.1초 · V_6 ROWS = 86 , COLS = 22 | V_7 ROWS = 1 , COLS = 2 | PROC_SEC  = 0.00 | FETCH_SEC = 0.00 | TOTAL_SEC = 0.00
+[U4-M1] 0.6초 · 0행
+[U4-M2] 1.3초 · 55행 · 첫 행 ('PKG_DMF0045', 882, 'gpmpycv1n0v3c', 1, 0, 0.12, 11718, 536, '2026-11-25 15:37:00', 'INSERT INTO GT_DMF0045_PLAN ( DIVISION_ID, ITEM_ID, FROM_SIT')
+[U4-M3] 0.7초 · 0행
+[U4-M4] 0.7초 · 0행
+[U5] 0.0초 · 13행 · 첫 행 ('GT_DMF0045_BOH', 0)
+[U6] 0.7초 · 20행 · 첫 행 ('PKG_DMF0045', 1786, 'fyuxrwdmq2w4q', 0, 15, 35.84, 2.39, 35.19, 8492498, 62, 291916, 931827531, datetime.datetime(2026, 11, 25, 14, 27, 29), 'UPDATE GT_DMF0045_PIVOT A SET A.BOD_ID = (SELECT BOD_ID 
+[U7] 1.0초 · 530행 · 첫 행 ('SQL_ID  fyuxrwdmq2w4q, child number 0',)
+[U8] 0.5초 · 20행 · 첫 행 ('SCP_ANL_PRODUCTION_PLAN', 122407445, 2431752, datetime.datetime(2026, 11, 24, 20, 55, 35), 'NO')
+[U8-1] 0.1초 · 14행 · 첫 행 ('DM_PLN_MKT_FCST', 'IDX_DM_PLN_MKT_FCST_N1', 'DIVISION_ID, MEASURE, YYYYMMDD', 'VALID')
+[U9] ROLLBACK
+[U9-1] ALTER SESSION ENABLE COMMIT IN PROCEDURE
+결과 : PASS · 실패 0건

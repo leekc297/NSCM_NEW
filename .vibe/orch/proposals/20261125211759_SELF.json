@@ -1,0 +1,45 @@
+{
+  "id": "20261125211759_SELF",
+  "at": "2026-11-25T21:17:59+09:00",
+  "ms": 1795609079117,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/workbench.js|체인시작때남은구현항목을보지않아계획항목이남은상태에서도checklist측정r",
+  "title": "사용자 지시 R230 같은 문제: tools/VibeManager/workbench.js:1156 체인 시작 때 남은 구현 항목을 보지 않아 계획 항목이 남은 상태에서도 CheckList 측정(run_verify, checklist_run, row_run) 단",
+  "evidence": "규칙 R230 \"승인된 계획의 구현 항목이 남아 있으면 화면 측정, 통합 시험을 시작하지 않고 구현을 먼저 끝냄(plan_state.py 기록, check-plan-before-test hook)\" (원래 지시 2026-11-25 20:35 \"방금의 경우에도 아직 잔여 작업이 D2, D3, D4 가 있는데 SCP0005 를 돌렸다는 점이 잘못된 점 입니다. 필요한 작업이 있으면 먼저 전체를 진행하고 테스트를 진행하도록 하게 해주세요. 이부분은 RULE, HOOK, 하네스에도 등록해서 반복되는 실수를 하지 않도록 해주세요.\") · tools/VibeManager/workbench.js:1156 async _runChain(p, item, id, harness, opts) {",
+  "targets": [
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "_runChain 앞부분(1160줄 DB MODE 차단 뒤)에서 단계 script 가 run_verify|checklist_run|row_run 이면 python tools/Harness/plan_state.py status 를 실행하고, 남은 항목이 있으면 this.lastBlock 에 남은 항목 목록을 적고 return 함. 차단 사유는 체인 이력과 Console 에 1줄 남김",
+  "verify": "node --check tools/VibeManager/workbench.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/workbench.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:51:07+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · workbench.js planPending(plan_state.json 남은 항목) + _runChain 에서 측정 스크립트(run_verify, checklist_run, row_run) 단계가 있으면 차단, lastBlock, 사건 chain.block. run_all 88/88 PASS 1500 FAIL 0(15:50:45), t_webview_syntax ALL PASS, 설치 폴더 복사 15:50:57"
+    }
+  ],
+  "plain": {
+    "what": "승인된 계획의 구현 항목이 남아 있으면 화면 측정, 통합 시험을 시작하지 않고 구현을 먼저 끝냄(plan_state.py 기록, check-plan-before-test hook) 규칙을 tools/VibeManager/workbench.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R230|tools/VibeManager/workbench.js",
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795675867959
+}

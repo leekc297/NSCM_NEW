@@ -1,0 +1,158 @@
+{
+  "id": "20261123145412_VISION",
+  "at": "2026-11-23T14:54:12+09:00",
+  "ms": 1795413252705,
+  "source": "vision",
+  "status": "applied",
+  "sig": "concept|autoapplyorder|queue lock before gate",
+  "title": "개념 재정립: 자동 반영 차례(가장 오래된 안 1건을 매번 처음부터 시도 → 반영 차례 장부로 자리부터 잡고, 막힌 안은 뒤로 돌림)",
+  "evidence": "목적 원문: \"버그성이나 시스템 관련 항목은 권장안으로 처리해주세요. 사용자승인의 경우는 최소화되어야 합니다.\"(feedback_vmo_approval_core_only_20261120), \"VMO 가 자동반영 기록이 00:59 분 이후에 어떤 것도 발생시키지 않았습니다.\"(user_checks U3). 지금 개념: orch-selfcheck.js:519 가 대기 안을 등록 시각 순으로 놓고 :523 이 맨 앞 1건만 고름. orch-improve.js:292 가 게이트(구문, 시험, 정합)를 먼저 돌리고 :300 withLock 에서 에이전트 자리를 요청함. 자리가 없으면(orch-agent.js:361 busy) :305 가 대기로 되돌리고 orch-selfcheck.js:531 이 시도 표시를 지워 다음 주기에 같은 안을 다시 고름. 어긋난 사례: ① 20261121000933_SELF_2 승인 → 게이트 → 보류 5회(13:01, 13:15, 13:42, 13:50, 14:06), 같은 시각 사용자 승인 안 20261123000419_VISION 이 에이전트를 씀(13:04~13:13, 13:17~13:34, 13:44, 13:52~14:05). ② 7일 '반영 보류. 사건 조치 중' 16건(6개 안), 그중 게이트 뒤 보류의 게이트 소요 합 1994초(proposals history 집계). ③ 뒤에 등록된 고친 안 3건(121302, 122722, 124752)은 history 0건, 120~155분 대기(result.json S13). 124752 는 게이트 비교 결함(orch-improve.js:302)을 고치는 안이라 다른 안의 실패 원인인데 차례가 맨 뒤임. ④ 11-23 반영 시작 12건 중 코드 반영 완료 1건. 대안 A: 게이트 앞에서 자리 확인만 추가(보류 중 게이트 소요는 없어지나 맨 앞 안이 막히면 뒤 안이 계속 대기). 대안 B(권장): 반영 차례 장부. 사용자 승인 안과 자동 안을 한 줄에 넣고, 에이전트 자리를 잡은 뒤 게이트를 돌림. 보류, 겹침, 실패한 안은 줄 뒤로 보내고 다음 안을 진행. 실패 원인을 고치는 안(repairOf)은 같은 원인으로 실패한 안보다 앞에 둠. 권장 이유: 사례 ①~③ 이 B 에서만 함께 풀림. 반증: B 반영 뒤에도 S13 U3 미반영 건수가 줄지 않고 보류 이력이 0건이면 원인은 차례가 아닌 반영 실패율이며, 그때는 아래 L3 안과 검증 항목 분리(14:22 반영분) 효력을 먼저 확인해야 함. 미확인: 게이트 1회 소요 실측 분포(이력의 승인~게이트 간격 3분 26초~3분 32초 5건만 확인), 사용자 승인 5회가 재승인 단추 사용인지 여부",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/orch-agent.js",
+    "tools/VibeManager/test/t_orch_selfapply.js",
+    "tools/VibeManager/test/t_orch_improve.js",
+    ".vibe/orch/vision/concept_20261123_L4_purpose_autoApplyOrder.md"
+  ],
+  "before_after": "지금: 등록 시각이 가장 이른 안 1건을 주기마다 골라 게이트를 돌린 뒤 에이전트 자리를 요청하고, 자리가 없으면 처음으로 되돌려 같은 안을 다시 고름 → 새 개념: 승인된 안을 반영 차례 장부 한 줄에 두고, 에이전트 자리를 잡은 뒤에만 게이트와 반영을 시작하며, 막힌 안은 줄 뒤로 보내고 실패 원인을 고치는 안을 앞에 둠",
+  "verify": "1) node tools/VibeManager/test/t_orch_selfapply.js tools/VibeManager 에 시험 3건 추가: 에이전트가 바쁠 때 게이트 호출 0회, 맨 앞 안이 보류되면 다음 안을 고름, repairOf 안이 원래 안과 같은 원인 실패 안보다 먼저 나옴. 반영 전 미측정(이번 점검에서 node 실행 권한 없음, 해당 시험 없음) → 반영 뒤 기대 3건 PASS. 2) proposals history 에서 '반영 전 게이트' 바로 다음 줄이 '반영 보류. 사건 조치 중'인 쌍: 반영 전 11-23 하루 8쌍(000933_SELF_2 5, 112024_SELF 1, 230716_SELF_2 2) → 반영 시각 뒤 새 이력에서 기대 0쌍. 3) 창 로드 뒤 result.json S13 'U3 자동 반영 대상인데 반영 안 된 개선안': 반영 전 13건 → 기대값은 반영 뒤 확인 항목으로 둠(반영 시점에 잴 수 없음)",
+  "rollback": "대상 5개 파일을 반영 전 사본(.bak_<날짜>_orchprop)으로 복원. 차례 장부 파일을 지우면 종전 방식(등록 시각 순 1건)으로 돌아감",
+  "impact": "core",
+  "level": "L4",
+  "levelWhy": "Overall Review 에서 목적 '버그, 시스템 개선안은 권장안으로 자동 반영'이 20261121_120359, 20261122_140538, 이번(11-23)까지 3회 연속 어긋남. L3 조치(11-21 삭제 안 판정 수정, 11-23 coreAutoApply) 반영 뒤에도 S13 U3 미반영 13건",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-23T21:05:53+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-23T21:09:33+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1146, FAIL 0), 정의 정합 통과 · 백업 태그 20261123_self2105"
+    },
+    {
+      "at": "2026-11-23T21:09:36+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-23T21:18:55+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1150, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 3개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-agent.js, orch-improve.js, orch-selfcheck.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-23T21:18:55+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v4 3) 창 로드 뒤 result.json S13 'U3 자동 반영 대상인데 반영 안 된 개선안': 반영 전 13건 → 기대값은 반영 뒤 확인 항목으로 둠(반영 시점에 잴 수 없음) (S13 U3 미반영 건수는 창 다시 로드 뒤 result.json 에서만 잴 수 있음(반영 전 13건))"
+    },
+    {
+      "at": "2026-11-23T21:18:55+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건, 실행 못 함 1건. 2026-11-23 21:10~21:14. t_orch_selfapply.js 반영 전 PASS 41 ALL PASS → 반영 뒤 PASS 44 ALL PASS(추가 3건 PASS). t_orch_improve.js 반영 뒤 ALL PASS('PASS 반영은 자리를 잡은 채 진행: 반영 중 다른 일 = busy · 끝나면 자리 놓음'). '반영 전 게이트' 다음 '반영 보류. 사건 조치 중' 쌍: 11-23 하루 9쌍 → 반영 시각(21:11) 뒤 0쌍. node --check 3개 파일 통과. S13 U3 13건은 창 다시 로드  · 변경 5개 파일",
+      "log": ".vibe\\logs\\2026-11-23T21-09-38_claude_orch.log",
+      "sec": 330,
+      "costUsd": 2.7126452000000008,
+      "files": [
+        "tools/VibeManager/orch-agent.js",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "tools/VibeManager/test/t_orch_improve.js",
+        "tools/VibeManager/test/t_orch_selfapply.js"
+      ]
+    },
+    {
+      "at": "2026-11-23T21:21:20+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-23T21:20:34+09:00"
+    }
+  ],
+  "plain": {
+    "what": "VMO 가 개선안을 반영할 때 한 건이 막히면 뒤 건이 모두 기다리던 것을, 막힌 건은 뒤로 돌리고 다음 건부터 반영하도록 바꿉니다. 다른 실패의 원인을 고치는 안을 먼저 반영합니다.",
+    "risk": "반영 순서가 등록 순서와 달라져, 앞 안을 전제로 쓴 뒤 안이 먼저 들어가면 그 안이 반영 실패로 나옵니다. 실패하면 종전처럼 대상 파일을 되돌립니다.",
+    "undo": "VMO 개선안 탭에서 이 안을 되돌리면 종전 순서(등록 순 1건씩)로 돌아갑니다."
+  },
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795435552790,
+  "autoFp": "a529d07d9a",
+  "applyStartMs": 1795435776470,
+  "postChecks": [
+    {
+      "n": 4,
+      "text": "3) 창 로드 뒤 result.json S13 'U3 자동 반영 대상인데 반영 안 된 개선안': 반영 전 13건 → 기대값은 반영 뒤 확인 항목으로 둠(반영 시점에 잴 수 없음)",
+      "why": "S13 U3 미반영 건수는 창 다시 로드 뒤 result.json 에서만 잴 수 있음(반영 전 13건)",
+      "status": "open",
+      "at": "2026-11-23T21:15:11+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-23T21:15:11+09:00",
+    "verified": true,
+    "text": "실행 통과 3건, 실행 못 함 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 73/73개 파일 통과(PASS 1150, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261123_self2105",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-agent.js",
+    "orch-improve.js",
+    "orch-selfcheck.js"
+  ],
+  "appliedMs": 1795436335290,
+  "synced": [
+    "orch-agent.js",
+    "orch-improve.js",
+    "orch-selfcheck.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_selfapply.js tools/VibeManager: 반영 전 PASS 41건 ALL PASS(21:10:51) → 반영 뒤 PASS 44건 ALL PASS(21:14:15). 추가 3건: 'PASS 에이전트가 바쁠 때 = 게이트 호출 0회 · Claude 호출 0회 · 시도로 세지 않음', 'PASS 맨 앞 안이 보류되면 다음 주기에 다음 안을 고름', 'PASS repairOf 안이 원래 안과 같은 원인으로 실패한 안보다 먼저 나옴(등록은 늦어도)'. 같이 고친 t_orch_improve.js 도 ALL PASS(21:13:38). red 확인(변경 전 코드에서 실패하는지)은 미실행"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "proposals history 집계(node pairs.js . 2026-11-23T00:00, 21:10:15): 11-23 하루 9쌍 {000933_SELF_2 5, 230716_SELF_2 2, 121120359_VISION 1, 112024_SELF 1}. 개선안 기록 8쌍과 1쌍 차이(121120359_VISION 추가)"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "node pairs.js . 2026-11-23T21:11(21:14:43): 반영 시각 뒤 새 이력 0쌍. 새 이력이 아직 없는 시점의 값이며 실제 효과는 시간 경과 뒤 같은 집계로 확인 필요"
+      },
+      {
+        "n": 4,
+        "result": "blocked",
+        "note": "S13 U3 미반영 건수는 창 다시 로드 뒤 result.json 에서만 잴 수 있음(반영 전 13건)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-agent.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/test/t_orch_selfapply.js",
+      "tools/VibeManager/test/t_orch_improve.js",
+      ".vibe/orch/vision/concept_20261123_L4_purpose_autoApplyOrder.md"
+    ],
+    "verify_result": "2026-11-23 21:10~21:14. t_orch_selfapply.js 반영 전 PASS 41 ALL PASS → 반영 뒤 PASS 44 ALL PASS(추가 3건 PASS). t_orch_improve.js 반영 뒤 ALL PASS('PASS 반영은 자리를 잡은 채 진행: 반영 중 다른 일 = busy · 끝나면 자리 놓음'). '반영 전 게이트' 다음 '반영 보류. 사건 조치 중' 쌍: 11-23 하루 9쌍 → 반영 시각(21:11) 뒤 0쌍. node --check 3개 파일 통과. S13 U3 13건은 창 다시 로드 뒤 확인",
+    "note": "작업 모드 DB_ONLY 이지만 대상이 tools/VibeManager 와 .vibe 라 막히지 않음. 시험 첫 실행에서 '맨 앞 안 보류' 1건 FAIL: 시험 sig 'order-1', 'order-2' 가 normSig(orch-improve.js:33)로 같은 서명이 되어 중복 처리됨 → sig 를 'order-first', 'order-second' 로 바꿔 통과. 장부 파일 = .vibe/orch/selfcheck/apply_order.json(지우면 등록 시각 순, repairOf 우선은 남음). 반영 중에는 게이트 시간(약 100~200초)만큼 사건 조치와 대화가 대기함"
+  },
+  "snap": "prop_20261123145412_VISION",
+  "effectiveMs": 1795436434041,
+  "effectiveAt": "2026-11-23T21:20:34+09:00"
+}

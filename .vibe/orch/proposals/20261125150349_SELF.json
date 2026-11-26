@@ -1,0 +1,45 @@
+{
+  "id": "20261125150349_SELF",
+  "at": "2026-11-25T15:03:49+09:00",
+  "ms": 1795586629022,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|batchjob점검쿼리업무안내가오류확인만적고블록별소요n초확인을적지않음n",
+  "title": "사용자 지시 R226 같은 문제: tools/VibeManager/quick.json:938 BATCHJOB 점검 쿼리 업무 안내가 오류 확인만 적고 블록별 소요 5초 확인을 적지 않음. 978줄 UI 점검 안내도 같음",
+  "evidence": "규칙 R226 \"생성기가 사용자에게 주는 점검 쿼리는 V$, ASH, DBA_HIST 같은 큰 뷰를 시간 범위 조건과 인덱스 범위로 먼저 줄여 읽고, 5초 넘는 블록은 제공 전 EXPLAIN PLAN 이나 사내 DB 실행으로 소요를 확인함\" (원래 지시 2026-11-25 13:44 \"제공 해준 쿼리의 L8 이 너무 오래 수행되고 있네요...\") · tools/VibeManager/quick.json:938 \"hint\": \"... 끝나면 ZIOUI1 에서 쿼리를 한 번씩 실행해 오류를 확인. 모듈은 결과 폴더 구분. ...\"",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "938, 978줄 안내 문구에 '블록별 소요를 재고 5초 넘는 블록은 실행계획을 확인해 범위를 줄인 뒤 제공' 을 추가함. perf_check.py verify 수정과 같이 반영",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T15:37:29+09:00",
+      "by": "S-B",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T15:41:35+09:00",
+      "by": "S-B",
+      "what": "반영 완료(세션 직접 보완) · tools/VibeManager/quick.json:1094 perfbatch, 1137 perfui hint 에 '블록별 소요를 재고 5초 넘는 블록은 실행계획(EXPLAIN PLAN)을 확인해 범위를 줄인 뒤 제공' 추가(개선안의 938, 978줄은 지금 1094, 1137줄) · JSON 파싱 OK, 설치 폴더 marisoft.vibe-manager-2.0.1/quick.json 복사 cmp 일치 · 2026-11-26 15:41"
+    }
+  ],
+  "plain": {
+    "what": "생성기가 사용자에게 주는 점검 쿼리는 V$, ASH, DBA_HIST 같은 큰 뷰를 시간 범위 조건과 인덱스 범위로 먼저 줄여 읽고, 5초 넘는 블록은 제공 전 EXPLAIN PLAN 이나 사내 DB 실행으로 소요를 확인함 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R226|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "claimedBy": "S-B",
+  "waitNote": "",
+  "appliedMs": 1795675295123
+}

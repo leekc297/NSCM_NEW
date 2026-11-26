@@ -1,0 +1,269 @@
+{
+ "screen": "SCP0080",
+ "calls": [
+  {
+   "cls": "CommonDataSCPPopup",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0080_GroupCodeManagement.cs:1657",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "GROUP_CODE5",
+    "guard": "if (_si.GetColumnTag(e.Column).Equals(DefColumns.GROUP_CODE5))"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "findAtLoad",
+     "kind": "LITERAL",
+     "arg": "true"
+    },
+    {
+     "param": "multiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0080_GroupCodeManagement.cs:1662",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0080_GroupCodeManagement.cs:1687",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "UserInfoPopup",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0080_GroupCodeManagement.cs:1658",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "GROUP_CODE5",
+    "guard": "if (_si.GetColumnTag(e.Column).Equals(DefColumns.GROUP_CODE5))"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "DataType",
+     "kind": "EXPR",
+     "arg": "Data_SCP.Type.RTFGubun"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0080_GroupCodeManagement.cs:1662",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0080_GroupCodeManagement.cs:1687",
+     "target": "popup.StartPosition",
+     "value": "FormStartPosition.CenterParent"
+    }
+   ]
+  },
+  {
+   "cls": "UserInfoPopup",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0080_GroupCodeManagement.cs:1688",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "PIC_ID",
+    "guard": "else of (_si.GetColumnTag(e.Column).Equals(DefColumns.GROUP_CODE5)) ▸ if (_si.GetColumnTag(e.Column).Equals(DefColumns.PIC_ID))"
+   },
+   "multi": "",
+   "div_arg": "",
+   "period_args": [],
+   "args": [
+    {
+     "param": "Language",
+     "kind": "EXPR",
+     "arg": "UserInfoContext.Current[UserInfoProperites.Language].ToString()"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": []
+  }
+ ],
+ "classes": {
+  "CommonDataSCPPopup": {
+   "cls": "CommonDataSCPPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SystemMgmt.UIL/CommonDataSCPPopup.cs",
+   "title": "Common Popup",
+   "conds": [
+    {
+     "name": "txtSearch",
+     "type": "UsrTextBox",
+     "label": "Name(Code)",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "CommonDataSCPPopup.Designer.cs:38",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "CommonDataSCPPopup.cs:167",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "CommonDataSCPPopup.cs:235",
+     "method": "SpdMain_CellClick1",
+     "raw": "if (siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == type",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "CommonDataSCPPopup.cs:223",
+     "method": "OkButtonClick",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "CommonDataSCPPopup.cs:225",
+     "method": "OkButtonClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  },
+  "UserInfoPopup": {
+   "cls": "UserInfoPopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SystemMgmt.UIL/UserInfoPopup.cs",
+   "title": "UserInfoPopup",
+   "conds": [
+    {
+     "name": "txtSearch",
+     "type": "UsrTextBox",
+     "label": "User ID(Name)",
+     "visible_designer": true,
+     "disabled_designer": false,
+     "ref": "UserInfoPopup.Designer.cs:37",
+     "disabled_code": null,
+     "disabled_guarded": [],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "UP_FX_GetUserInfoList",
+     "src": "Doc/asisfacts/db/modules/dbo.UP_FX_GetUserInfoList.sql",
+     "order_known": true,
+     "order_keys": "",
+     "order_line": "",
+     "like": true,
+     "upper": false,
+     "comma": false,
+     "params": [
+      "Search",
+      "Language",
+      "SSOUserYN"
+     ],
+     "method": "FindData",
+     "ref": "UserInfoPopup.cs:177",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "UserInfoPopup.cs:188",
+     "method": "FindData",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [
+    {
+     "ref": "UserInfoPopup.cs:215",
+     "method": "SpdMain_CellClick",
+     "raw": "if (siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType != null && siMain.ActiveSheet.ColumnHeader.Cells[e.Row, e.Column].CellType.GetType() == type",
+     "guard": "(중첩 블록)"
+    }
+   ],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "UserInfoPopup.cs:263",
+     "method": "OkButtonClick",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:264",
+     "method": "OkButtonClick",
+     "raw": "this.Close();",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:287",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "DialogResult = DialogResult.OK;",
+     "guard": ""
+    },
+    {
+     "ref": "UserInfoPopup.cs:288",
+     "method": "SpdMain_CellDoubleClick",
+     "raw": "this.Close();",
+     "guard": ""
+    }
+   ],
+   "messages": [],
+   "period_use": [],
+   "from": "source"
+  }
+ }
+}

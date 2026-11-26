@@ -60,6 +60,11 @@
         "tools/VibeManager/test/t_job_autodel.js",
         "tools/VibeManager/test/t_orch_state_locks.js"
       ]
+    },
+    {
+      "at": "2026-11-23T21:21:30+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-20T14:57:09+09:00"
     }
   ],
   "plain": {
@@ -99,5 +104,7 @@
     "verify_result": "node tools/VibeManager/test/t_orch_state_locks.js 실행(2026-11-20 14:37:44). 4건 PASS, ALL PASS, 예외 0건. started 값: 글자 '2026-11-20 13:55:00', 초 '2026-11-18T11:06:40.000Z', 밀리초 '2026-11-18T11:06:40.123Z', 깨진 값 ''",
     "note": "orch-state.js:98 에 lockAt(at) 추가. locks() 가 new Date(j.at*1000).toISOString() 대신 lockAt(j.at) 를 씀. 숫자 1e11 이상 = 밀리초, 미만 = 초, Date.parse 로 읽히는 글자 = 그대로, 그 밖 = ''. 시험 파일은 저장소에 없어 새로 만듦. 설치 폴더, CHANGELOG.md, .bak 은 건드리지 않음"
   },
-  "snap": "prop_20261120143326_SELF"
+  "snap": "prop_20261120143326_SELF",
+  "effectiveMs": 1795154229226,
+  "effectiveAt": "2026-11-20T14:57:09+09:00"
 }

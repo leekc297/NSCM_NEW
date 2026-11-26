@@ -1,83 +1,82 @@
 {
  "rule_id": "B3",
- "hash": "ba774f67e3598c89",
+ "hash": "3b7ad3391c81d6ab",
  "groups": [
   {
    "rows": [
     "EG-017a5164"
    ],
-   "why": "단독"
+   "why": "Checks the order of the SCM0002_ShipmentLotSizePopup results through the Input button. It is not grouped with the Delete button row because the button is a different element."
   },
   {
    "rows": [
     "EG-c93ee43e"
    ],
-   "why": "단독"
+   "why": "Checks the order of the SCM0002_ShipmentLotSizePopup results through the Delete button. The expected ORDER BY matches the Input row, but the button is different, so it stays alone."
   },
   {
    "rows": [
     "EG-fdb1b3d4"
    ],
-   "why": "단독"
+   "why": "Checks the order of the Model condition in a different popup, SCM0002_ItembyDivisionPopup, and its expected ORDER BY is also different, so it stays alone."
   },
   {
    "rows": [
     "V-04de073e"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the To Site search condition."
   },
   {
    "rows": [
     "V-1032c717"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the OPERATION_GROUP_ID column for a new row. It is not grouped with the Operation Group search condition because one is a grid column and the other is a search condition."
   },
   {
    "rows": [
     "V-4b4a7ae3"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the VALID_YN column for a new row. It is not grouped with the Valid search condition because one is a grid column and the other is a search condition."
   },
   {
    "rows": [
     "V-4bcc5430"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the Operation Group search condition."
   },
   {
    "rows": [
     "V-55f0d272"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the SPLIT_YN column for a new row."
   },
   {
    "rows": [
     "V-565e08ec"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the Trans Mode search condition."
   },
   {
    "rows": [
     "V-567a4264"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the Division search condition."
   },
   {
    "rows": [
     "V-b974dfd5"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the From Site search condition."
   },
   {
    "rows": [
     "V-d081074c"
    ],
-   "why": "단독"
+   "why": "Only this row checks the candidate order of the Valid search condition."
   }
  ],
- "why": "미측정 행 없음 — 중복 판단 생략",
- "by": "코드",
- "at": "2026-11-20 12:59:56",
- "cost": 0,
- "open": 0
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 21:41:46",
+ "cost": 0.047789
 }

@@ -34,7 +34,7 @@ import {
 import { resolveBizHeaderBinding, walkHeaderDrill } from '../utils/waterfall.drill';
 import { currentPeriodBindings } from '../utils/waterfall.headerColors';
 import { WaterfallMergeManager } from '../utils/waterfall.merge';
-import { dynKindOf } from '../utils/waterfall.periods';
+import { dynKindOf, rankOf } from '../utils/waterfall.periods';
 
 // DMF0035 통합 Waterfall 그리드 — 공용 DataGrid(@shared) 기반 (2026-09-04 OLAP 제거).
 //   메인 SP 커서는 wide(고정컬럼 + 기간컬럼)라 **unpivot 없이 그대로 바인딩**한다.
@@ -242,6 +242,25 @@ export const DemandPlanWaterfall01Grid = ({
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
+    const headerTargetsOf = (grid: typeof g, rowCount: number): number[] => {
+      if (rowCount === 3) {
+        let hasDyn = false;
+        let hasLower = false;
+        for (let i = 0; i < grid.columns.length; i += 1) {
+          const col = grid.columns[i];
+          if (!col.visible) continue;
+          const rank = rankOf(gubun, dynKindOf(col.binding ?? ''));
+          if (rank === null) continue;
+          hasDyn = true;
+          if (rank !== 0) {
+            hasLower = true;
+            break;
+          }
+        }
+        if (hasDyn && !hasLower) return [24, 12, 12];
+      }
+      return Array.from({ length: rowCount }, () => HEADER_TOTAL_HEIGHT / rowCount);
+    };
     const applyHeaderHeight = () => {
       const rows = g.columnHeaders?.rows;
       if (!rows || rows.length === 0) return;
@@ -249,16 +268,20 @@ export const DemandPlanWaterfall01Grid = ({
       //   검색조건 전이 중(동적 컬럼 제거 직후 등)에는 dynMetas 기반 예측 tier 와
       //   wijmo 가 실제로 만든 tier 수가 어긋난다 — 예측이 1단(48)인데 실제는 빈 tier 가
       //   남아 2단이면 48×2=96px 로 헤더가 배로 커진다(div40+SALES 재세팅 실측 2026-09-17).
-      const targetHeight = HEADER_TOTAL_HEIGHT / rows.length;
+      //   3단인데 보이는 기간 칸이 모두 최상위 합계(rank 0)면 2단 · 3단이 'SUM' 으로 세로 병합된다
+      //   (WaterfallMergeManager) → 24 / 12 / 12 로 나눠 보이는 두 줄을 24 : 24 로 맞춘다
+      //   (2026-11-23 요청: 총 48 유지, 펼치기 전 반반). 드릴로 하위 칸이 보이면 세 줄이 따로 보이므로 균등 분배.
+      const targets = headerTargetsOf(g, rows.length);
+      const base = targets[targets.length - 1];
       let changed = false;
       for (let i = 0; i < rows.length; i += 1) {
-        if (Math.round(rows[i].height ?? rows.defaultSize) !== targetHeight) {
-          rows[i].height = targetHeight;
+        if (Math.round(rows[i].height ?? rows.defaultSize) !== Math.round(targets[i])) {
+          rows[i].height = targets[i];
           changed = true;
         }
       }
-      if (Math.round(rows.defaultSize) !== targetHeight) {
-        rows.defaultSize = targetHeight;
+      if (Math.round(rows.defaultSize) !== Math.round(base)) {
+        rows.defaultSize = base;
         changed = true;
       }
       if (changed) g.invalidate(true);
@@ -272,7 +295,7 @@ export const DemandPlanWaterfall01Grid = ({
         /* unmount race */
       }
     };
-  }, [gridRef, staticColumns, dynamicColumns, headerRowHeight]);
+  }, [gridRef, staticColumns, dynamicColumns, headerRowHeight, gubun]);
 
   // ── 계층 병합 (AS-IS SmartColMerge + 헤더 스팬) — DMF0003 HierarchicalMergeManager 표준 이식 ──
   //   공용 DataGrid 가 기본 설치하는 CustomMergeManager 는 헤더를 **값 기준**으로 묶어서

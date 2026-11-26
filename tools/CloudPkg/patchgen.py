@@ -181,6 +181,10 @@ DECLARE
     PROCEDURE hunk(k PLS_INTEGER) IS
     BEGIN
         v_cnt := cnt(v_new, v_o);
+        IF v_cnt = 0 AND cnt(v_new, v_n) = 1 THEN   -- 이 구간은 클라우드에 이미 반영됨(앞 패키지 적용분) → 건너뜀 · 최종 조립 결과 = 사내 원문 검사는 그대로
+            DBMS_OUTPUT.PUT_LINE('> 변경 ' || k || ' 이미 반영 · 건너뜀');
+            RETURN;
+        END IF;
         IF v_cnt <> 1 THEN
             RAISE_APPLICATION_ERROR(-20011, '중단 — {typ} {name} 변경 ' || k || ' 기준 문구 ' || v_cnt || '건(1 기대) · 클라우드 원문이 기준본과 다름 → 전체 메뉴 패키지 사용. 원문 무변경');
         END IF;

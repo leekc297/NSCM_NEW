@@ -104,7 +104,7 @@
 | 4 | visible | VisibleTab(true) 단일 시트 탭(cs:216) | 단일 DataGrid·탭 없음(design 01 R6) → 미구현 확정 |
 | 5 | lock | SwitchLock EDIT 토글(cs:345) | 미이식(asis_to_tobe §11) — INPUT_TP_CD 메타 상시 재현 |
 | 6 | lock | LockColumn DIVISION_ID~ECO_CODE(cs:349) | INPUT_TP_CD='S' 메타 소비(SORT1~15) — 상수 이식 0(hook #130) |
-| 7 | lock | Rows[i].Locked 조건부 행잠금(cs:359) | isRowLocked(SCP_PLAN_YN 비 Y/N) → beginningEdit cancel(EDITABLE_COLUMNS 포함 전 셀) |
+| 7 | lock | Rows[i].Locked 조건부 행잠금(cs:359) | isRowLocked(SCP_PLAN_YN 비 Y/N) → beginningEdit cancel(EDITABLE_COLUMNS 포함 전 셀). 판정은 조회 시점 고정(markRowLocks) — AS-IS 는 편집 진입 때 1회 잠그고, 편집 중 SCP YN 을 지운 행도 필수 체크 없이 빈 값 저장(SaveData_Main cs:460-485, SP UPDATE 무가드). TO-BE 도 지운 행을 저장(SCP_PLAN_YN inputTpCd M→O). 사용자 결정 2026-11-20 |
 | 8 | color | 잠금행 BackColor=LockColor(cs:360) | ScpBomGrid formatItem — isRowLocked 행 배경 ROW_LOCK_BG(Gray, hook #95) |
 | 9 | dataSource | Query(ds) 조회 바인딩(cs:471) | useTabProcQuery data.o_rc(RESPONSE_KEY) → DataGrid itemsSource |
 | 10 | lock | LockColumn(0,Max) 조회직후 전잠금(cs:472) | TO-BE 기본 읽기전용 + M 3종만 편집(메타) 동일 → 별도 불요 |

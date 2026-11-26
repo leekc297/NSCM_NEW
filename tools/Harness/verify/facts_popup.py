@@ -69,21 +69,68 @@ def sp_facts(sp):
     return r
 
 
+def enclosing_cond(rel, line, rx):
+    """T568: 원문 GSCM/<rel> 의 line 을 감싼 if 블록 중 rx 에 맞는 가장 안쪽 조건(괄호 전체 · 여러 줄). 못 찾으면 ''"""
+    fp = os.path.join(ROOT, 'GSCM', rel.replace('\\', os.sep))
+    if not line or not os.path.exists(fp):
+        return ''
+    lines = strip_cs(open(fp, encoding='utf-8-sig', errors='replace').read().split('\n'))
+    d, i = 0, min(line, len(lines)) - 1
+    while i >= 1 and i >= line - 400:
+        ln = lines[i - 1]
+        d += ln.count('}') - ln.count('{')
+        if d < 0:
+            d = 0
+            # 블록을 여는 '{' — 머리 줄은 이 줄 또는 위로 문장 경계 전까지
+            j, head = i, ''
+            while j >= 1 and j >= i - 8:
+                head = lines[j - 1] + ' ' + head
+                if re.search(r'\bif\s*\(', lines[j - 1]):
+                    break
+                if j != i and lines[j - 1].strip().endswith((';', '}')):
+                    head = ''
+                    break
+                j -= 1
+            mi = re.search(r'\bif\s*\(', head)
+            if mi:
+                k, dep, out = mi.end(), 1, ''
+                while k < len(head) and dep:
+                    dep += {'(': 1, ')': -1}.get(head[k], 0)
+                    if dep:
+                        out += head[k]
+                    k += 1
+                if re.search(rx, out):
+                    return re.sub(r'\s+', ' ', out).strip()
+            i = j
+        i -= 1
+    return ''
+
+
 def classify_trigger(p, ctl_names, acts_main):
     m = p['method']
     if re.search(r'DoubleClick', m, re.I):
         # 호출 줄 guard 체인에서 DefColumns.X 추출 — 같은 메서드 같은 줄 행의 guard 를 쓴다
         guard = ''
+        afile = ''
         for a in acts_main:
             if a['method'] == m and a['line'] == p['line']:
                 guard = a.get('guard', '') or guard
-        hits = re.findall(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*(?:[\w.]*DefColumns\.)?"?([A-Za-z0-9_]+)"?', guard)
+                afile = a.get('file', '') or afile
+        # T568(2026-11-25 SCP0005 G4·B3 6행): `if (e.Column == …FROM_CITY || … FROM_COUNTRY || … TO_CITY || … TO_COUNTRY)`(cs:1112~1116) 이 네 칸 모두 같은 팝업을 여는데
+        #   마지막 칸(FROM_COUNTRY) 하나만 호출로 남겼고 actions.csv guard 가 '…' 로 잘려 TO_* 칸도 빠졌다 → 나머지 칸은 '(TO-BE 메타 팝업)' 호출이 되어 AS-IS 원문 연결 없음(ERROR).
+        #   가장 안쪽 e.Column 조건의 칸 전부(columns)를 남기고, 잘린 조건은 원문(GSCM/<file>)에서 호출 줄을 감싼 if 조건을 다시 읽는다. 칸마다 호출 1건(run)
+        rx_ec = r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*(?:[\w.]*DefColumns\.)?"?([A-Za-z0-9_]+)"?'
+        seg = next((g for g in reversed(guard.split('▸')) if re.search(rx_ec, g)), '')
+        if '…' in seg and afile:
+            seg = enclosing_cond(afile, int(p['line'] or 0), rx_ec) or seg
+        cols = list(dict.fromkeys(re.findall(rx_ec, seg)))
+        hits = re.findall(rx_ec, guard)  # 종전 대표 칸(guard 마지막 칸) 유지
         if not hits:
-            hits = re.findall(r'DefColumns\.([A-Z0-9_]+)', guard)
+            hits = re.findall(r'DefColumns\.([A-Z0-9_]+)(?![a-z])', guard)
         if not hits:
             hits = re.findall(r'==\s*"([A-Z0-9_]+)"', guard)
         col = hits[-1] if hits else ''
-        return {'kind': 'CELL', 'control': (m.split('_')[0]), 'column': col, 'guard': guard[:400]}
+        return {'kind': 'CELL', 'control': (m.split('_')[0]), 'column': col, 'guard': guard[:400], 'columns': cols if len(cols) > 1 else []}
     mm = re.match(r'(?i)(btn\w+?)_(Click|ButtonClick)$', m)
     if mm:
         c = mm.group(1)
@@ -187,11 +234,12 @@ _SRC_IDX = {}
 
 def src_index():
     if not _SRC_IDX:
-        base = os.path.join(ROOT, 'GSCM', '06.UIL')
-        for dp, _, fs in os.walk(base):
-            for f in fs:
-                if f.endswith('.cs') and not f.endswith('.Designer.cs'):
-                    _SRC_IDX.setdefault(f[:-3], os.path.join(dp, f))
+        # 2026-11-25 T572(SCP0005 EG-addb9943): 공용 팝업 ExcelUploadForm2 원문이 GSCM/01.Framework 에 있어 in_pack=false·원문 없음 → 06.UIL 다음으로 01.Framework 도 찾음(06.UIL 우선) · .designer.cs 소문자도 제외
+        for base in (os.path.join(ROOT, 'GSCM', '06.UIL'), os.path.join(ROOT, 'GSCM', '01.Framework')):
+            for dp, _, fs in os.walk(base):
+                for f in fs:
+                    if f.endswith('.cs') and not f.lower().endswith('.designer.cs'):
+                        _SRC_IDX.setdefault(f[:-3], os.path.join(dp, f))
         _SRC_IDX.setdefault('__built__', '')
     return _SRC_IDX
 
@@ -234,6 +282,7 @@ def src_records(cls):
     rel = os.path.relpath(fp, os.path.join(ROOT, 'GSCM')).replace('/', '\\')
     lines = strip_cs(open(fp, encoding='utf-8-sig', errors='replace').read().split('\n'))
     A, method, base = [], '', None
+    sem_wait = []
     for i, ln in enumerate(lines, 1):
         m = re.match(r'\s*(?:private|public|protected|internal)\s+(?:override\s+|static\s+|async\s+|virtual\s+)*[\w<>\[\],]+\s+(\w+)\s*\(', ln)
         if m:
@@ -249,11 +298,27 @@ def src_records(cls):
         ep = re.search(r'new\s+FoxDataRequest\(\s*"([^"]+)"', st)
         if ep:
             A.append({'method': method, 'file': rel, 'line': str(i), 'kind': 'ENDPOINT', 'target': '', 'value': ep.group(1), 'endpoint': ep.group(1), 'guard': guard, 'raw': st})
+        elif re.search(r'new\s+FoxDataRequest\(\s*[A-Za-z_]', st):
+            sem_wait.append((len(A), i, method, guard, st))   # 2026-11-25 SP 이름이 변수·상수 = 아래 의미 분석으로 채움
         as_ = re.match(r'(\w+(?:\.\w+)*)\s*=\s*(.+?);\s*$', st)
         kind = 'STATE' if as_ else 'EXPR'
         if re.search(r'ShowMessage|MessageBox\.Show|MSG\d{5}', st):
             kind = 'MESSAGE'
         A.append({'method': method, 'file': rel, 'line': str(i), 'kind': kind, 'target': as_.group(1) if as_ else '', 'value': as_.group(2) if as_ else '', 'endpoint': '', 'guard': guard, 'raw': st})
+    if sem_wait:
+        # 2026-11-25 사용자 지시 'VM 의 AS-IS 파서에도 의미 분석 연결': FoxDataRequest(sProcedureName) 처럼 SP 이름을 변수로 넘기면
+        #   Roslyn 의미 모델(asis_sem.fox_endpoints)로 값을 받아 ENDPOINT 행을 넣는다(후보 여럿이면 모두 · 못 풀면 종전대로 없음)
+        try:
+            import asis_sem
+            fx = dict((ln, []) for _k, ln, _m, _g, _s in sem_wait)
+            for ln, sp in asis_sem.fox_endpoints([rel]).get(rel.replace('/', '\\'), []):
+                if ln in fx:
+                    fx[ln].append(sp)
+        except Exception as e:
+            print(f'[WARN] facts_popup {cls}: 의미 분석 실패({type(e).__name__}: {str(e)[:100]})'); fx = {}
+        for k, ln, mth, gd, st in reversed(sem_wait):
+            for sp in reversed(fx.get(ln, [])):
+                A.insert(k, {'method': mth, 'file': rel, 'line': str(ln), 'kind': 'ENDPOINT', 'target': '', 'value': sp, 'endpoint': sp, 'guard': gd, 'raw': st, 'via': 'sem'})
     P, C = [], []
     dp = fp[:-3] + '.Designer.cs'
     if os.path.exists(dp):
@@ -299,6 +364,7 @@ def run(aid):
     pops = asis_popups(aid)
     classes = {}
     calls = []
+    extra = []  # T568
     seen = set()
     for p in pops:
         am = [a for a in acts if a['class'] == p['cls']]
@@ -313,20 +379,24 @@ def run(aid):
                 if x['class'] == p['cls'] and x['prop'] == 'Control' and x['value'].replace('this.', '').strip() == inp:
                     lbl = next((y for y in props if y['class'] == p['cls'] and y['target'] == x['target'] and y['prop'] == 'Text'), None)
             tr['cond_label'] = unq(lbl['value']) if lbl else ''
-        ckey = (p['popup'], tr['kind'], tr.get('control'), tr.get('column'), p['method'])
-        if ckey in seen:
-            continue
-        seen.add(ckey)
-        multi = next((i for i in p['items'] if re.search(r'multi', i['param'], re.I)), None)
-        pdiv = next((i for i in p['items'] if re.search(r'div', i['param'], re.I)), None)
-        pper = [i for i in p['items'] if re.search(r'period|from|to|date|start|end', i['param'], re.I)]
-        calls.append({'cls': p['popup'], 'method': p['method'], 'asis_ref': f"{p['file']}:{p['line']}", 'trigger': tr,
-                      'multi': (multi or {}).get('arg', '') if (multi or {}).get('kind') == 'LITERAL' else '',
-                      'div_arg': (pdiv or {}).get('arg', ''), 'period_args': [i['arg'] for i in pper],
-                      'args': [{'param': i['param'], 'kind': i['kind'], 'arg': i['arg'][:80]} for i in p['items']],
-                      'results': sorted(p.get('results') or []), 'after': main_sort_after(p, am),
-                      'back': [{'ref': f"{os.path.basename(a['file'])}:{a['line']}", 'target': a['target'], 'value': (a['value'] or '')[:80]} for a in am
-                               if a['method'] == p['method'] and int(a['line'] or 0) > int(p['line'] or 0) and a['target'] and re.search(r'(?i)\b(pop\w*|frm\w*|f[A-Z]\w*)\.', a['value'] or '')][:12]})
+        # T568(2026-11-25 SCP0005 G4·B3 6행): 같은 조건으로 같은 팝업을 여는 칸 전부(trigger.columns). 종전 칸은 그 자리, 더한 칸은 호출 목록 끝(extra)에 둔다
+        #   (E2E 행 ID = 호출 번호 + 트리거 · 종전 호출 번호를 바꾸지 않는다)
+        cols_ = tr.pop('columns', []) or []
+        for n_, tr in enumerate([tr] + [dict(tr, column=c_) for c_ in cols_ if c_ != tr.get('column')]):
+            ckey = (p['popup'], tr['kind'], tr.get('control'), tr.get('column'), p['method'])
+            if ckey in seen:
+                continue
+            seen.add(ckey)
+            multi = next((i for i in p['items'] if re.search(r'multi', i['param'], re.I)), None)
+            pdiv = next((i for i in p['items'] if re.search(r'div', i['param'], re.I)), None)
+            pper = [i for i in p['items'] if re.search(r'period|from|to|date|start|end', i['param'], re.I)]
+            (extra if n_ else calls).append({'cls': p['popup'], 'method': p['method'], 'asis_ref': f"{p['file']}:{p['line']}", 'trigger': tr,
+                          'multi': (multi or {}).get('arg', '') if (multi or {}).get('kind') == 'LITERAL' else '',
+                          'div_arg': (pdiv or {}).get('arg', ''), 'period_args': [i['arg'] for i in pper],
+                          'args': [{'param': i['param'], 'kind': i['kind'], 'arg': i['arg'][:80]} for i in p['items']],
+                          'results': sorted(p.get('results') or []), 'after': main_sort_after(p, am),
+                          'back': [{'ref': f"{os.path.basename(a['file'])}:{a['line']}", 'target': a['target'], 'value': (a['value'] or '')[:80]} for a in am
+                                   if a['method'] == p['method'] and int(a['line'] or 0) > int(p['line'] or 0) and a['target'] and re.search(r'(?i)\b(pop\w*|frm\w*|f[A-Z]\w*)\.', a['value'] or '')][:12]})
         if p['popup'] not in classes:
             k = popup_class(p['popup'], acts, props, ctrls)
             if not k.get('in_pack'):
@@ -336,6 +406,7 @@ def run(aid):
             else:
                 k['from'] = 'factpack'
             classes[p['popup']] = k
+    calls.extend(extra)
     os.makedirs(OUT, exist_ok=True)
     j = {'screen': aid, 'calls': calls, 'classes': classes}
     with open(os.path.join(OUT, f'{aid}.json'), 'w', encoding='utf-8') as f:

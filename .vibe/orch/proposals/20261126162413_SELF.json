@@ -1,0 +1,40 @@
+{
+  "id": "20261126162413_SELF",
+  "at": "2026-11-26T16:24:13+09:00",
+  "ms": 1795677853511,
+  "source": "self",
+  "status": "pending",
+  "sig": "userrule|rn|tools/vibemanager/orch selfcheck.js|claimproposaljs는applyfailed안도맡게하지만claim조",
+  "title": "사용자 지시 R244 같은 문제: tools/VibeManager/orch-selfcheck.js:600 claim_proposal.js 는 apply-failed 안도 맡게 하지만(claim 조건 /^(pending|apply-failed)$/) 실패 원인 진단 고",
+  "evidence": "규칙 R244 \"병렬로 나눌 수 있는 VM 개선 작업은 하위 세션 여러 개에 나눠 맡기고 세션이 맡은 개선안은 맡음 표시(claimedBy, autoWaitMs)로 VMO 자동 반영과 겹치지 않게 함\" (원래 지시 2026-11-26 15:35 \"병렬로 펼쳐서 진행할 수 있는 작업이면 하위에 세션 멀티로 추가해서 진행할 수 있도록 해주세요.\") · tools/VibeManager/orch-selfcheck.js:600 const pick = propList().filter(p => p.status === 'apply-failed' && repairDue(p) && !p.reason && autoEligible(p).kind === 'code').sort(...)[0];",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js"
+  ],
+  "before_after": "const claimed = p => !!p.claimedBy && Number(p.autoWaitMs) > Date.now(); 를 두고 600 filter 와 660 apply-failed 분기에 && !claimed(p) 를 더함(orch-usercheck.js 120 과 같은 조건). t_orch_selfapply.js 에 apply-failed + claimedBy 안이 골라지지 않는 시험 1건 추가",
+  "verify": "node --check tools/VibeManager/orch-selfcheck.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-selfcheck.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:26:23+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    }
+  ],
+  "plain": {
+    "what": "병렬로 나눌 수 있는 VM 개선 작업은 하위 세션 여러 개에 나눠 맡기고 세션이 맡은 개선안은 맡음 표시(claimedBy, autoWaitMs)로 VMO 자동 반영과 겹치지 않게 함 규칙을 tools/VibeManager/orch-selfcheck.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R244|tools/VibeManager/orch-selfcheck.js",
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "autoWaitMs": 1795706783214,
+  "waitNote": "Claude Code 세션 3acd3c 가 직접 보완 중"
+}

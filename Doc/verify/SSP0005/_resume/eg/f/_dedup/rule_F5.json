@@ -1,0 +1,72 @@
+{
+ "rule_id": "F5",
+ "hash": "55d4bb59f11cbd66",
+ "groups": [
+  {
+   "rows": [
+    "V-07108bad",
+    "V-575a77b7"
+   ],
+   "why": "Both rows check the same Delete button and CRUD Status D Flag on the same Active-column screen, and both expect Delete to remove only new rows and show no D Flag on existing rows."
+  },
+  {
+   "rows": [
+    "V-7de57eeb",
+    "V-dc12a2e8"
+   ],
+   "why": "Both rows edit a value and then restore the original, and both expect the edit (M) status to clear on restore."
+  },
+  {
+   "rows": [
+    "V-a5233fef"
+   ],
+   "why": "The other merged-cell Delete row (V-3c38de72) also expects a Delete response-time limit, so its expected result differs and this row stays alone."
+  },
+  {
+   "rows": [
+    "V-3c38de72"
+   ],
+   "why": "Besides the merged-cell D display, this row expects Delete to respond within a time limit, so no other row has the same expected result."
+  },
+  {
+   "rows": [
+    "V-690b97a6"
+   ],
+   "why": "This row expects existing rows to show D and be deleted from the DB on Save, which differs from the Active-screen rule where existing rows show no D Flag."
+  },
+  {
+   "rows": [
+    "V-f0070ff6"
+   ],
+   "why": "This row combines the Insert required-field check and success-toast check with no D Flag on Delete, so it checks different elements and expects different results than the other rows."
+  },
+  {
+   "rows": [
+    "V-d1f540b3"
+   ],
+   "why": "This row deletes a row right after input, expects D or cancel, and checks that bulk save has no SQL Error, so its state and expected result differ."
+  },
+  {
+   "rows": [
+    "V-b7b156f8"
+   ],
+   "why": "This row checks moving users between the left and right grids by double-click and saving them, which is a different element from CRUD Status display."
+  },
+  {
+   "rows": [
+    "V-2b612c39"
+   ],
+   "why": "This screen rule covers status display after delete, merged rows and cancel all at once, so its target is wide and it can't be matched exactly to one specific row."
+  },
+  {
+   "rows": [
+    "T-3c282728"
+   ],
+   "why": "This is a comparison-table trace row whose check is a different kind of thing, so it isn't grouped with any measurement row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 09:07:25",
+ "cost": 0.0576074
+}

@@ -1,0 +1,22 @@
+﻿SELECT COUNT(*) AS CNT
+      FROM   FP_AMEND_DAILY_PLAN_R A WITH(NOLOCK)
+      WHERE  A.INSTANCE_ID     = @INSTANCE_ID
+      AND    A.FP_PLAN_ID      = @FP_PLAN_ID
+      AND    A.DIVISION_ID     = @DIVISION_ID
+      AND    A.SITE_ID         = @SITE_ID
+      AND    A.PLANT_ID        = @PLANT_ID
+      AND    A.ITEM_ID         = @ITEM_ID
+      --AND    A.TOP_ITEM_ID     = @TOP_ITEM_ID
+      AND    A.OPERATION_ID    = @OPERATION_ID
+      AND    A.FACTORY_ID      = @FACTORY_ID
+      AND    A.PRODUCTION_TYPE = @PRODUCTION_TYPE
+      AND    A.MARKET          = @MARKET
+      AND    A.LINE_ID         = @LINE_ID
+      AND    A.ELECTRODE_TYPE  = @ELECTRODE_TYPE
+      AND    A.EQUIPMENT_ID    = @EQUIPMENT_ID
+      AND    CONVERT(VARCHAR, A.PLAN_DATE, 112)    = @DATE
+      AND    A.WORK_REQUEST_MODEL_ID = @WORK_REQUEST_MODEL_ID
+      AND    A.VERSION               = @VERSION
+      AND    A.PROD_SEQ              = @PROD_SEQ
+      AND    A.PLM_EC_NO             = @PLM_EC_NO
+      AND    A.ADJUST_IN_QTY_BATCH > 0

@@ -1,0 +1,29 @@
+{
+  "id": "20261125_081127_R12_ALL",
+  "at": "2026-11-25T08:11:27+09:00",
+  "ms": 1795561887645,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_chain_loop.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_chain_loop.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 14 · FAIL 1 · FAIL checklist_run: 1단계 자동 재측정(--no-rerun 없음) + --settle 은 전체로 넓히지 않고, 못 재면 continue 0  / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_chain_loop.js",
+    "file": "t_chain_loop.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-25T08:15:51+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

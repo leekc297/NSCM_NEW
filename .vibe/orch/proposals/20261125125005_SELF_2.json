@@ -1,0 +1,113 @@
+{
+  "id": "20261125125005_SELF_2",
+  "at": "2026-11-25T12:50:05+09:00",
+  "ms": 1795578605784,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|doc/통합테스트_ssp/ssp_lookup_이관_n_복원_oracle_n.sql|머리주석에dbeaver실행방법ctrlenter또는altx이없음",
+  "title": "사용자 지시 R225 같은 문제: Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql:4 머리 주석에 DBeaver 실행 방법(Ctrl+Enter 또는 Alt+X)이 없음",
+  "evidence": "규칙 R225 \"사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음\" (원래 지시 2026-11-25 11:42 \"Cannot execute more than one query in one tab. Try to use multiple tabs for simultaneous query execution.\") · Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql:4 -- 순서 : [R1] → [R2] → [R3] → [R4] 차례로 실행 → [R5] 확인 → COMMIT(맞지 않으면 ROLLBACK)",
+  "targets": [
+    "Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql"
+  ],
+  "before_after": "5행 아래에 '-- 실행 : DBeaver 에서 문장 하나씩 Ctrl+Enter([R1]~[R4] 순서) 또는 [R1]~[R5] 를 골라 Alt+X. 자동 커밋을 끄고 실행' 줄을 넣음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-25T16:12:29+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-25T16:16:29+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과 · 백업 태그 20261125_self1612"
+    },
+    {
+      "at": "2026-11-25T16:16:32+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-25T16:21:03+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-25T16:21:03+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v1 node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js (node tools/VibeManager/test/run_all.js 실행 시 'This PowerShell)"
+    },
+    {
+      "at": "2026-11-25T16:21:03+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 못 함 1건. run_all.js 반영 전 → 반영 뒤 = 미실행(권한 차단) → 미실행(권한 차단). 편집 확인: Grep '^-- 실행 :' 결과 6행 1건 '-- 실행 : DBeaver 에서 문장 하나씩 Ctrl+Enter([R1]~[R4] 순서) 또는 [R1]~[R5] 를 골라 Alt+X. 자동 커밋을 끄고 실행'. 시각 2026-11-25 16:16:59 · 변경 1개 파일",
+      "log": ".vibe\\logs\\2026-11-25T16-16-32_claude_orch.log",
+      "sec": 38,
+      "costUsd": 0.5276411,
+      "files": [
+        "Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음 규칙을 Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R225|Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql",
+  "kind": "fix",
+  "needsApproval": "DB 객체 Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql",
+  "applyStartMs": 1795590992000,
+  "postChecks": [
+    {
+      "n": 1,
+      "text": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+      "why": "node tools/VibeManager/test/run_all.js 실행 시 'This PowerShell command contains multiple operations. The following part requires approval: node tools/VibeManager/test/run_all.js' 로 권한 차단. Bash 실행도 같은 승인",
+      "status": "open",
+      "at": "2026-11-25T16:17:12+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-25T16:17:12+09:00",
+    "verified": true,
+    "text": "실행 못 함 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 36개 파일 통과, 시험 86/86개 파일 통과(PASS 1406, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261125_self1612",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795591263766,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "blocked",
+        "note": "node tools/VibeManager/test/run_all.js 실행 시 'This PowerShell command contains multiple operations. The following part requires approval: node tools/VibeManager/test/run_all.js' 로 권한 차단. Bash 실행도 같은 승인 요구로 차단. 반영 전, 반영 뒤 모두 미실행. 대상이 SQL 파일이라 t_webview_syntax.js 는 대상 아님"
+      }
+    ],
+    "changed_files": [
+      "Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql"
+    ],
+    "verify_result": "run_all.js 반영 전 → 반영 뒤 = 미실행(권한 차단) → 미실행(권한 차단). 편집 확인: Grep '^-- 실행 :' 결과 6행 1건 '-- 실행 : DBeaver 에서 문장 하나씩 Ctrl+Enter([R1]~[R4] 순서) 또는 [R1]~[R5] 를 골라 Alt+X. 자동 커밋을 끄고 실행'. 시각 2026-11-25 16:16:59",
+    "note": "머리 주석 5행 아래에 실행 방법 줄 1줄만 추가함. SQL 본문은 그대로 둠. 지시에 따라 .bak 은 만들지 않음. run_all.js 는 승인 뒤 VMO 가 실행해야 함. 반영 전 값은 이미 잴 수 없음"
+  },
+  "snap": "prop_20261125125005_SELF_2"
+}

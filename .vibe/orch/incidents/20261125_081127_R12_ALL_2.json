@@ -1,0 +1,34 @@
+{
+  "id": "20261125_081127_R12_ALL_2",
+  "at": "2026-11-25T08:11:27+09:00",
+  "ms": 1795561887696,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성)",
+  "screen": "",
+  "sig": "R12|S8|20261120181921_SELF_5",
+  "count": 1,
+  "repeat": null,
+  "detail": "개선안 20261120181921_SELF_5 반영 2026-11-21T02:11 · 점검 항목 S4|inv|REGISTRY 가 2026-11-25T08:04 점검에 다시 나옴",
+  "evidence": {
+    "check": "S8",
+    "key": "S8|20261120181921_SELF_5",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-25T08:20:47+09:00",
+      "by": "VMO",
+      "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    },
+    {
+      "at": "2026-11-25T08:21:14+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S8 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}
