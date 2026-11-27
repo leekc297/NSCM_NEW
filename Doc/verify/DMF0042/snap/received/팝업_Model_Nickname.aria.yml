@@ -1,0 +1,42 @@
+- dialog:
+  - heading "Model / Nickname" [level=2]
+  - img
+  - text: Div
+  - combobox [disabled]: 40 Mobility & IT Battery
+  - button "Open" [disabled]
+  - img
+  - text: Team
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: End Customer
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: Sales Site
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: Model/Nickname
+  - textbox
+  - button "Search"
+  - paragraph
+  - grid:
+    - rowgroup:
+      - row "No Div. Team End Customer Sales Site Model Item Type Nick Name Module Type Currency Deselect All Rows":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Team"
+        - columnheader "End Customer"
+        - columnheader "Sales Site"
+        - columnheader "Model"
+        - columnheader "Item Type"
+        - columnheader "Nick Name"
+        - columnheader "Module Type"
+        - columnheader "Currency"
+        - gridcell "Deselect All Rows":
+          - checkbox "Deselect All Rows" [checked=mixed]
+    - rowgroup:
+      - row {데이터 행}
+    - row "Deselect All Rows"
+  - status
+  - text: "0"
+  - button "Close"
+  - button "OK"

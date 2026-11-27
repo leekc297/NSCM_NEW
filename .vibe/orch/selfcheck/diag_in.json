@@ -1,272 +1,151 @@
 {
- "at": "2026-11-26T16:22:54+09:00",
- "checks": [
+ "at": "2026-11-27T03:12:49+09:00",
+ "openIncidents": [
   {
-   "id": "S3",
-   "name": "설치본 차이",
-   "status": "fail",
-   "count": 7,
-   "at": "2026-11-26T16:22:54+09:00",
-   "info": {
-    "compared": 64,
-    "diff": 6,
-    "missing": 1
-   },
-   "items": [
-    {
-     "level": "fail",
-     "what": "jobs.js 내용 다름",
-     "detail": "저장소 85773바이트 2026-11-26T16:19 / 설치본 85588바이트 2026-11-26T15:50",
-     "key": "S3|jobs.js",
-     "file": "jobs.js"
-    },
-    {
-     "level": "fail",
-     "what": "orch-dict.js 내용 다름",
-     "detail": "저장소 19595바이트 2026-11-26T16:12 / 설치본 19143바이트 2026-11-26T07:02",
-     "key": "S3|orch-dict.js",
-     "file": "orch-dict.js"
-    },
-    {
-     "level": "fail",
-     "what": "orch-history.js 내용 다름",
-     "detail": "저장소 45335바이트 2026-11-26T16:20 / 설치본 45240바이트 2026-11-23T17:07",
-     "key": "S3|orch-history.js",
-     "file": "orch-history.js"
-    },
-    {
-     "level": "fail",
-     "what": "orch-improve.js 내용 다름",
-     "detail": "저장소 73826바이트 2026-11-26T16:20 / 설치본 73646바이트 2026-11-26T15:56",
-     "key": "S3|orch-improve.js",
-     "file": "orch-improve.js"
-    },
-    {
-     "level": "fail",
-     "what": "orch-vision.js 내용 다름",
-     "detail": "저장소 20127바이트 2026-11-26T16:13 / 설치본 18013바이트 2026-11-23T19:03",
-     "key": "S3|orch-vision.js",
-     "file": "orch-vision.js"
-    },
-    {
-     "level": "fail",
-     "what": "orch-watch.js 내용 다름",
-     "detail": "저장소 54450바이트 2026-11-26T16:20 / 설치본 54365바이트 2026-11-26T12:43",
-     "key": "S3|orch-watch.js",
-     "file": "orch-watch.js"
-    },
-    {
-     "level": "fail",
-     "what": "fs-retry.js 설치본에 없음",
-     "detail": "저장소 1084바이트 2026-11-26T16:20",
-     "key": "S3|fs-retry.js",
-     "file": "fs-retry.js"
-    }
-   ]
-  },
+   "id": "20261127_002648_R12_ALL",
+   "rule": "R12",
+   "key": "",
+   "sig": "R12|S13|U11|20261126153056_SELF",
+   "title": "VM 자가진단 S13 사용자 지적: U11 반영 실패 개선안 6시간 방치",
+   "at": "2026-11-27T00:26:48+09:00",
+   "status": "open"
+  }
+ ],
+ "checks": [
   {
    "id": "S6",
    "name": "미확인 추적",
    "status": "warn",
-   "count": 544,
-   "at": "2026-11-26T16:22:48+09:00",
+   "count": 628,
+   "at": "2026-11-27T03:12:36+09:00",
    "info": {
-    "total": 544,
-    "open": 544,
+    "total": 628,
+    "open": 628,
     "confirmed": 0,
     "dropped": 0,
-    "reloadOpen": 385,
-    "reloadLoaded": 314
+    "reloadOpen": 425,
+    "reloadLoaded": 384
    },
    "items": [
     {
      "level": "warn",
-     "what": "2026-11-26 Claude Code 세션 묶음 S-B: VMO 미반영 개선안 10건 처리",
-     "detail": "사내 ZIOUI1, MSSQL 실행(DB 접속 시험 안 함).",
-     "key": "S6|CL:2026-11-26:j14q6g#eb78739525"
-    },
-    {
-     "level": "warn",
-     "what": "2026-11-26 Claude Code 세션 묶음 S-B: VMO 미반영 개선안 10건 처리",
-     "detail": "Doc/asisfacts 운영 출력 재생성 안 함.",
-     "key": "S6|CL:2026-11-26:j14q6g#25a53a08cd"
-    },
-    {
-     "level": "warn",
-     "what": "2026-11-26 Claude Code 세션 묶음 S-B: VMO 미반영 개선안 10건 처리",
+     "what": "2026-11-27 VMO 자가 보완: 설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음",
      "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:j14q6g#03a4c87e73"
+     "key": "S6|CL:2026-11-27:11l2d8q#03a4c87e73"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 미반영 개선안 병렬 보완: 묶음 S-A 검사 하네스 12건",
-     "detail": "DB 실행 미실행",
-     "key": "S6|CL:2026-11-26:1celpp5#00b691650e"
+     "what": "2026-11-27 VMO 자가 보완: 설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음",
+     "detail": "반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042, DMF0005 재지 못한 해당없음(설계 결정) 행 수 감소 확인, Doc/verify/<ID>/design_decisions_applied.csv 적용 행 수 비교..",
+     "key": "S6|CL:2026-11-27:11l2d8q#d5ba45ec03"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 form_scen_gen.py",
-     "detail": "Playwright 실측 미실행.",
-     "key": "S6|CL:2026-11-26:1kk0p95#34c5bf6a3d"
-    },
-    {
-     "level": "warn",
-     "what": "2026-11-26 Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 form_scen_gen.py",
-     "detail": "수작업본에만 있는 9건(시트 탭 B01, 팝업 P01, 머리글 체크 B02, UnSet 사슬 F12·E14·E15·E15c, 2회차 F09b·F13b)은 생성 범위 밖임.",
-     "key": "S6|CL:2026-11-26:1kk0p95#80d65189f1"
-    },
-    {
-     "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 사용자 지시 R221 같은 문제: tools/Analysis/ssp_it_precheck",
+     "what": "2026-11-27 VMO 자가 보완: 조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임",
      "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:j03iuj#03a4c87e73"
+     "key": "S6|CL:2026-11-27:8fi02c#03a4c87e73"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 미반영 개선안 병렬 보완: 묶음 S-D2 7건",
+     "what": "2026-11-27 VMO 자가 보완: 조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임",
+     "detail": "반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042 H5 같은 문구 반복 8행 → 0행 확인..",
+     "key": "S6|CL:2026-11-27:8fi02c#6a816d12df"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-27 VMO 자가 보완: 반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 ",
+     "detail": "개선안 확인: 2026-11-27 00:59:14 반영 전: node tools/VibeManager/test/t_orch_improve.js → ALL PASS, PASS 55건, 쓰기 실패 주입 시험 없음(미측정).",
+     "key": "S6|CL:2026-11-27:1tdy1t0#a9811e8e4f"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-27 VMO 자가 보완: 반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 ",
      "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:v2eowa#03a4c87e73"
+     "key": "S6|CL:2026-11-27:1tdy1t0#03a4c87e73"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 미반영 개선안 병렬 보완: 묶음 S-D2 7건",
-     "detail": "plan_state.py clear 로 지운 계획은 항목 기록이 없어 U31 이 판정하지 못함",
-     "key": "S6|CL:2026-11-26:v2eowa#b68d0eb27b"
+     "what": "2026-11-27 U11 반영 실패 방치 판정에서 사용자 판단 대기 안 제외",
+     "detail": "실행 중 VMO 판정(창 다시 로드 뒤 S13 에서 U11 fail 사라지는지 확인) · 그 뒤 창 로드 기록 없음",
+     "key": "S6|CL:2026-11-27:1bnrdur#1dc57f9b6f"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 미반영 개선안 병렬 보완: 조정과 묶음 D1 9건",
+     "what": "2026-11-27 S-C 8차: DMF0042 CheckList 결과로 폼 저장형 생성기·실행기 보완",
+     "detail": "변경 2~4 의 화면 동작(G16 NA, G17·G18 MSG00108·MSG00276 문구).",
+     "key": "S6|CL:2026-11-27:bnq12v#fc3a7f48d6"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-27 S-C 8차: DMF0042 CheckList 결과로 폼 저장형 생성기·실행기 보완",
+     "detail": "다음 DMF0042 CheckList 실행 때 확인.",
+     "key": "S6|CL:2026-11-27:bnq12v#e1da3b1720"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-26 VMO 자가 보완: 반복 지시 집계에서 VMO 승인, 되돌리기 기록 줄의 인용은 사용자 지시로 세지 않음",
      "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:1mv30lj#03a4c87e73"
+     "key": "S6|CL:2026-11-26:qdowy7#03a4c87e73"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 미반영 개선안 병렬 보완: 조정과 묶음 D1 9건",
-     "detail": "하위 세션 S-A, S-B, S-C, S-D2 와 4ec206 결과는 각 세션 보고 뒤 확인",
-     "key": "S6|CL:2026-11-26:1mv30lj#deea630327"
+     "what": "2026-11-26 S-Z 10차: 설치 폴더에 직접 복사한 분석 모듈을 정기 점검 때 다시 읽음",
+     "detail": "orch-selfcheck.js 는 HOT 모듈이 아니라 창 다시 로드 뒤 적용. · 그 뒤 창 로드 기록 없음",
+     "key": "S6|CL:2026-11-26:wxmfym#712a7ea653"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 Claude Code 세션 묶음 S-C: VMO 미반영 개선안 3건 처리",
-     "detail": "Playwright 실측은 미실행.",
-     "key": "S6|CL:2026-11-26:b1w1xh#4849ae3fc5"
+     "what": "2026-11-26 S-Z 10차: 설치 폴더에 직접 복사한 분석 모듈을 정기 점검 때 다시 읽음",
+     "detail": "그 전까지 호스트의 orch-ladder.js 도 19:09 전 코드라 001528_VISION 재계획은 창 다시 로드 뒤. · 그 뒤 창 로드 기록 없음",
+     "key": "S6|CL:2026-11-26:wxmfym#4e2fee34eb"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 사용자 지시 R218 같은 문제: tools/VibeManager/quick.json:4",
+     "what": "2026-11-26 VMO 자가 보완: 삭제 안을 반영할 때 지울 로그, 백업 파일을 반영 전 사본(.bak_, 스냅샷)으로 복",
      "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:10glbdj#03a4c87e73"
+     "key": "S6|CL:2026-11-26:pc18qf#03a4c87e73"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 사용자 지시 R218 같은 문제: tools/VibeManager/quick.json:4",
+     "what": "2026-11-26 U21 반영 실패 집계에서 고친 안이 반영 완료된 실패 제외",
+     "detail": "VMO 실행 중 U21 판정(창 다시 로드 뒤 자가진단 S13 에서 확인) · 그 뒤 창 로드 기록 없음",
+     "key": "S6|CL:2026-11-26:1mfloui#ccca3baef2"
+    },
+    {
+     "level": "warn",
+     "what": "2026-11-26 VMO 자가 보완: 창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 ",
      "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:1iceh98#03a4c87e73"
+     "key": "S6|CL:2026-11-26:14xsfvj#03a4c87e73"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 사용자 지시 R74 같은 문제: tools/VibeManager/quick.json:16",
-     "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:1igxyfg#03a4c87e73"
+     "what": "2026-11-26 VMO 자가 보완: 창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 ",
+     "detail": "반영 뒤 확인 1건: 사건 파일 중 sig R5|reloadcut|36504 반영 전 8건 → 반영 뒤 창 다시 로드 1회 뒤에도 8건 유지.. · 그 뒤 창 로드 기록 없음",
+     "key": "S6|CL:2026-11-26:14xsfvj#c625ec3cc2"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: VM 고정 문구 문장 규칙 2차 단계 1 다시 올림(목적 묶음 연속 계산에서 같은 목적 ",
-     "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:1lxbd89#03a4c87e73"
+     "what": "2026-11-26 중지 원인 '기타' 경로 기록, 점검 도중 VM 파일 변경 회차 사건 보류",
+     "detail": "실데이터 digest(7) 의 stoppedOther 내용(창 다시 로드 뒤 VMO 집계에서 확인), 실제 점검 도중 파일 변경 때 사건 보류 동작 · 그 뒤 창 로드 기록 없음",
+     "key": "S6|CL:2026-11-26:1smo28y#952746000b"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로",
-     "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:1hv8wto#03a4c87e73"
+     "what": "2026-11-26 자가진단 S10 로그 증가 속도와 가벼운 주기 편입",
+     "detail": "BE 로그 수준 조정과 로그 파일 정리는 사용자 판단(BE 설정 logback-spring.xml, 파일 삭제)",
+     "key": "S6|CL:2026-11-26:gjnb69#eae229eead"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로",
-     "detail": "반영 뒤 확인 2건: 6) 창 다시 로드 1회 뒤 원장 cut 1건이 ui.json job, wb 보고에 같은 runId 로 있음. · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:1hv8wto#4c07c122eb"
+     "what": "2026-11-26 자가진단 S2 오래 걸린 시험 기록",
+     "detail": "S2 결과에 파일별 시간이 남지 않아 오래 걸린 시험 미확인",
+     "key": "S6|CL:2026-11-26:1uyci8j#bcac28b3d2"
     },
     {
      "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로",
-     "detail": "/ 7) 11-27 까지 실사용 재개 1회 이상에서 U13, U16, U17, U23 감지기 실패 0..",
-     "key": "S6|CL:2026-11-26:1hv8wto#a173676b81"
-    },
-    {
-     "level": "warn",
-     "what": "2026-11-26 VMO 자가 보완: 사용자 지시 R210 같은 문제: tools/VibeManager/quick.json:5",
-     "detail": "VS Code 실화면(창 다시 로드 필요). · 그 뒤 창 로드 기록 없음",
-     "key": "S6|CL:2026-11-26:1s31lxa#03a4c87e73"
-    }
-   ]
-  },
-  {
-   "id": "S7",
-   "name": "VMO 자기 상태",
-   "status": "warn",
-   "count": 3,
-   "at": "2026-11-26T16:22:48+09:00",
-   "info": {
-    "lastTickAt": "2026-11-26T16:22:42+09:00",
-    "started": true,
-    "incidents7d": 352,
-    "byRule": {
-     "R15": 0,
-     "R1": 7,
-     "R2": 15,
-     "R3": 1,
-     "R4": 1,
-     "R5": 25,
-     "R6": 2,
-     "R7": 21,
-     "R8": 0,
-     "R13": 0,
-     "R9": 52,
-     "R10": 0,
-     "R11": 16,
-     "R12": 243,
-     "R14": 2
-    },
-    "zeroRules": [
-     "R15",
-     "R8",
-     "R13",
-     "R10"
-    ],
-    "acted": 350,
-    "resolved": 348,
-    "needUser": 1,
-    "stale": 3,
-    "agent": {
-     "on": true,
-     "enabled": true,
-     "busy": false,
-     "queued": 0,
-     "askQueued": 0,
-     "perHour": 0,
-     "maxPerHour": 6
-    },
-    "eventsBytes": 2014784
-   },
-   "items": [
-    {
-     "level": "warn",
-     "what": "미해결 사건 74시간째: 20261123_140326_R12_ALL_3",
-     "detail": "R12 VM 자가진단 S13 사용자 지적: U3 조치 기록 없는 열린 사건 1건 · 상태 open",
-     "key": "S7|stale|20261123_140326_R12_ALL_3"
-    },
-    {
-     "level": "warn",
-     "what": "미해결 사건 77시간째: 20261123_115110_R12_ALL",
-     "detail": "R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 12건 · 상태 open",
-     "key": "S7|stale|20261123_115110_R12_ALL"
-    },
-    {
-     "level": "warn",
-     "what": "미해결 사건 77시간째: 20261123_112448_R1_ALL",
-     "detail": "R1 ⬆️ Source Backup 3/3 push 실패 (exit 1) · 상태 need-user",
-     "key": "S7|stale|20261123_112448_R1_ALL"
+     "what": "2026-11-26 자가진단 S2 오래 걸린 시험 기록",
+     "detail": "20:34 게이트 4021초 원인.",
+     "key": "S6|CL:2026-11-26:1uyci8j#bc57b1870d"
     }
    ]
   },
@@ -275,96 +154,96 @@
    "name": "반복 수정",
    "status": "warn",
    "count": 24,
-   "at": "2026-11-26T16:22:48+09:00",
+   "at": "2026-11-27T03:12:37+09:00",
    "info": {
-    "collectedAt": "2026-11-26T16:16:23+09:00",
-    "repeatFiles": 30,
+    "collectedAt": "2026-11-27T02:12:50+09:00",
+    "repeatFiles": 21,
     "repeatAsks": 40
    },
    "items": [
     {
      "level": "warn",
-     "what": "workbench.js 7일 안 변경 기록 55건",
-     "detail": "2026-11-20 부터, 전체 141건, 세션 수정 432건",
+     "what": "workbench.js 7일 안 변경 기록 31건",
+     "detail": "2026-11-17 부터, 전체 132건, 세션 수정 465건",
      "key": "S9|file|workbench.js",
      "file": "workbench.js"
     },
     {
      "level": "warn",
-     "what": "orchestra.js 7일 안 변경 기록 27건",
-     "detail": "2026-11-20 부터, 전체 63건, 세션 수정 114건",
-     "key": "S9|file|orchestra.js",
-     "file": "orchestra.js"
-    },
-    {
-     "level": "warn",
-     "what": "quick.json 7일 안 변경 기록 25건",
-     "detail": "2026-11-20 부터, 전체 90건, 세션 수정 72건",
-     "key": "S9|file|quick.json",
-     "file": "quick.json"
-    },
-    {
-     "level": "warn",
-     "what": "orch-usercheck.js 7일 안 변경 기록 24건",
-     "detail": "2026-11-20 부터, 전체 33건, 세션 수정 99건",
-     "key": "S9|file|orch-usercheck.js",
-     "file": "orch-usercheck.js"
-    },
-    {
-     "level": "warn",
-     "what": "t_orch_usercheck.js 7일 안 변경 기록 20건",
-     "detail": "2026-11-20 부터, 전체 23건, 세션 수정 56건",
+     "what": "t_orch_usercheck.js 7일 안 변경 기록 23건",
+     "detail": "2026-11-20 부터, 전체 29건, 세션 수정 64건",
      "key": "S9|file|t_orch_usercheck.js",
      "file": "t_orch_usercheck.js"
     },
     {
      "level": "warn",
-     "what": "job-runner.js 7일 안 변경 기록 16건",
-     "detail": "2026-11-20 부터, 전체 32건, 세션 수정 37건",
-     "key": "S9|file|job-runner.js",
-     "file": "job-runner.js"
+     "what": "orch-usercheck.js 7일 안 변경 기록 22건",
+     "detail": "2026-11-20 부터, 전체 43건, 세션 수정 108건",
+     "key": "S9|file|orch-usercheck.js",
+     "file": "orch-usercheck.js"
     },
     {
      "level": "warn",
-     "what": "orch-watch.js 7일 안 변경 기록 16건",
-     "detail": "2026-11-19 부터, 전체 34건, 세션 수정 95건",
-     "key": "S9|file|orch-watch.js",
-     "file": "orch-watch.js"
-    },
-    {
-     "level": "warn",
-     "what": "user_checks.json 7일 안 변경 기록 15건",
-     "detail": "2026-11-20 부터, 전체 20건, 세션 수정 25건",
+     "what": "user_checks.json 7일 안 변경 기록 13건",
+     "detail": "2026-11-20 부터, 전체 20건, 세션 수정 26건",
      "key": "S9|file|user_checks.json",
      "file": "user_checks.json"
     },
     {
      "level": "warn",
-     "what": "jobs.js 7일 안 변경 기록 14건",
-     "detail": "2026-11-20 부터, 전체 33건, 세션 수정 40건",
-     "key": "S9|file|jobs.js",
-     "file": "jobs.js"
-    },
-    {
-     "level": "warn",
-     "what": "orch-improve.js 7일 안 변경 기록 11건",
-     "detail": "2026-11-19 부터, 전체 38건, 세션 수정 138건",
+     "what": "orch-improve.js 7일 안 변경 기록 12건",
+     "detail": "2026-11-20 부터, 전체 48건, 세션 수정 165건",
      "key": "S9|file|orch-improve.js",
      "file": "orch-improve.js"
     },
     {
      "level": "warn",
+     "what": "orch-watch.js 7일 안 변경 기록 12건",
+     "detail": "2026-11-20 부터, 전체 35건, 세션 수정 100건",
+     "key": "S9|file|orch-watch.js",
+     "file": "orch-watch.js"
+    },
+    {
+     "level": "warn",
+     "what": "orchestra.js 7일 안 변경 기록 11건",
+     "detail": "2026-11-20 부터, 전체 63건, 세션 수정 123건",
+     "key": "S9|file|orchestra.js",
+     "file": "orchestra.js"
+    },
+    {
+     "level": "warn",
+     "what": "job-runner.js 7일 안 변경 기록 10건",
+     "detail": "2026-11-20 부터, 전체 31건, 세션 수정 37건",
+     "key": "S9|file|job-runner.js",
+     "file": "job-runner.js"
+    },
+    {
+     "level": "warn",
+     "what": "_test_timing.jsonl 7일 안 변경 기록 10건",
+     "detail": "2026-11-20 부터, 전체 19건, 세션 수정 0건",
+     "key": "S9|file|_test_timing.jsonl",
+     "file": "_test_timing.jsonl"
+    },
+    {
+     "level": "warn",
      "what": "orch-ladder.js 7일 안 변경 기록 9건",
-     "detail": "2026-11-20 부터, 전체 17건, 세션 수정 77건",
+     "detail": "2026-11-20 부터, 전체 23건, 세션 수정 78건",
      "key": "S9|file|orch-ladder.js",
      "file": "orch-ladder.js"
     },
     {
      "level": "warn",
-     "what": "steps.json 7일 안 변경 기록 9건",
-     "detail": "2026-11-20 부터, 전체 42건, 세션 수정 6건",
-     "key": "S9|file|steps.json",
-     "file": "steps.json"
+     "what": "e2e_results.json 7일 안 변경 기록 9건",
+     "detail": "2026-11-20 부터, 전체 14건, 세션 수정 0건",
+     "key": "S9|file|e2e_results.json",
+     "file": "e2e_results.json"
+    },
+    {
+     "level": "warn",
+     "what": "orch-history.js 7일 안 변경 기록 8건",
+     "detail": "2026-11-20 부터, 전체 12건, 세션 수정 37건",
+     "key": "S9|file|orch-history.js",
+     "file": "orch-history.js"
     },
     {
      "level": "warn",
@@ -377,6 +256,18 @@
      "what": "같은 지시 13건",
      "detail": "VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\\Projects\\NSCM\\Doc\\CheckList 폴더에서 C:\\Projects\\NSCM\\Doc\\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고",
      "key": "S9|ask|733486eb1f"
+    },
+    {
+     "level": "warn",
+     "what": "같은 지시 10건",
+     "detail": "계속 개선항목 찾아서 진행해주세요",
+     "key": "S9|ask|8ad12d3e90"
+    },
+    {
+     "level": "warn",
+     "what": "같은 지시 6건",
+     "detail": "계속 개선항목 찾아서 진행해줘",
+     "key": "S9|ask|ee2615e0cb"
     },
     {
      "level": "warn",
@@ -401,18 +292,6 @@
      "what": "같은 지시 5건",
      "detail": "SSP0024 CHECKLIST 에서 아래 2개 항목의 오류로 확인되는데 조치 필요 항목에 나오지 않습니다. 검사엔진 보완 요청 합니다. 1) GRID COLUMN - Pancake Roll Length, Steelcrate/Cut - 정수만 입력(-입력 가능, -입력 시 FontCol",
      "key": "S9|ask|7012e7ef7d"
-    },
-    {
-     "level": "warn",
-     "what": "같은 지시 4건",
-     "detail": "VMW 도 같은 글래스모피즘으로 적용해주세요",
-     "key": "S9|ask|109a3837b6"
-    },
-    {
-     "level": "warn",
-     "what": "같은 지시 4건",
-     "detail": "CheckList 오류 행 설명은 간결한 오류명, 대상 위치(조회조건 항목 또는 탭, 그리드, 컬럼), AS-IS 표기·동작, TO-BE 표기·동작, GAP 순서로 씀",
-     "key": "S9|ask|01ed264a76"
     }
    ]
   },
@@ -420,36 +299,36 @@
    "id": "S10",
    "name": "용량",
    "status": "warn",
-   "count": 12,
-   "at": "2026-11-25T23:09:14+09:00",
+   "count": 13,
+   "at": "2026-11-26T23:09:30+09:00",
    "info": {
-    "logsGB": 34.2,
-    "logFiles": 2054,
+    "logsGB": 49.8,
+    "logFiles": 2186,
     "bigFiles": 1,
-    "bakRepo": 1078,
-    "bakInstalled": 736,
-    "snapDirs": 254,
-    "beLogsGB": 120.6,
+    "bakRepo": 1434,
+    "bakInstalled": 947,
+    "snapDirs": 319,
+    "beLogsGB": 136,
     "beLogFiles": 35,
-    "beBigFiles": 11,
-    "diskFreeGB": 1299.9
+    "beBigFiles": 12,
+    "diskFreeGB": 1262
    },
    "items": [
     {
      "level": "warn",
-     "what": ".vibe/logs/2026-11-23T11-24-48_NSCM_BE.log 32GB",
-     "detail": "마지막 수정 2026-11-25T23:08",
+     "what": ".vibe/logs/2026-11-23T11-24-48_NSCM_BE.log 47.5GB",
+     "detail": "마지막 수정 2026-11-26T22:25",
      "key": "S10|log|2026-11-23T11-24-48_NSCM_BE.log",
      "file": ".vibe/logs/2026-11-23T11-24-48_NSCM_BE.log",
-     "gb": 32
+     "gb": 47.5
     },
     {
      "level": "warn",
-     "what": "nscm-be/logs/nscm.log 31.9GB",
-     "detail": "마지막 수정 2026-11-25T23:08:14+09:00 · BE 로컬 파일 로그(logback-spring.xml local FILE, config-local.yml logging.file.path ./logs) · 정리와 로그 수준 조정은 사용자 승인 대상",
-     "key": "S10|belog|nscm.log",
-     "file": "nscm-be/logs/nscm.log",
-     "gb": 31.9
+     "what": "nscm-be/logs/nscm.20261125.log 36GB",
+     "detail": "마지막 수정 2026-11-25T23:59:59+09:00 · BE 로컬 파일 로그(logback-spring.xml local FILE, config-local.yml logging.file.path ./logs) · 정리와 로그 수준 조정은 사용자 승인 대상",
+     "key": "S10|belog|nscm.20261125.log",
+     "file": "nscm-be/logs/nscm.20261125.log",
+     "gb": 36
     },
     {
      "level": "warn",
@@ -474,6 +353,14 @@
      "key": "S10|belog|nscm.20261120.log",
      "file": "nscm-be/logs/nscm.20261120.log",
      "gb": 17.9
+    },
+    {
+     "level": "warn",
+     "what": "nscm-be/logs/nscm.log 11.5GB",
+     "detail": "마지막 수정 2026-11-26T22:25:35+09:00 · BE 로컬 파일 로그(logback-spring.xml local FILE, config-local.yml logging.file.path ./logs) · 정리와 로그 수준 조정은 사용자 승인 대상",
+     "key": "S10|belog|nscm.log",
+     "file": "nscm-be/logs/nscm.log",
+     "gb": 11.5
     },
     {
      "level": "warn",
@@ -534,82 +421,27 @@
    ]
   },
   {
-   "id": "S11",
-   "name": "고정 문구",
-   "status": "warn",
-   "count": 8,
-   "at": "2026-11-26T16:22:47+09:00",
-   "info": {
-    "files": 39,
-    "violations": 8,
-    "report": ".vibe/orch/selfcheck/doc_style"
-   },
-   "items": [
-    {
-     "level": "warn",
-     "what": "orch-checkerscan.js 문장 규칙 위반 5건",
-     "detail": "수식어 1 번역투 1 기호 3",
-     "key": "S11|orch-checkerscan.js",
-     "file": "orch-checkerscan.js"
-    },
-    {
-     "level": "warn",
-     "what": "orch-vision.js 문장 규칙 위반 3건",
-     "detail": "수식어 1 기호 2 | 제외 1",
-     "key": "S11|orch-vision.js",
-     "file": "orch-vision.js"
-    }
-   ]
-  },
-  {
-   "id": "S2",
-   "name": "시험",
-   "status": "fail",
-   "count": 1,
-   "at": "2026-11-26T16:22:45+09:00",
-   "info": {
-    "files": 89,
-    "ok": 88,
-    "pass": 1527,
-    "fail": 2,
-    "sec": 320.9,
-    "skipped": [
-     "t_orch_agent_real.js",
-     "t_orch_agent_diag.js"
-    ]
-   },
-   "items": [
-    {
-     "level": "fail",
-     "what": "t_orch_agent.js 실패",
-     "detail": "exit 1 · PASS 13 · FAIL 2 · FAIL 결과 줄 없이 exit 1 → claude.end exit 1 · hasResult false · lastType · stoppedBy 빈 값 {} / FAIL R7 분류 = 결과 줄 없이 끊김(마지막 tool_progress:Bash) Claude 비정상 종료 (exit 1). 결과 줄 없이 끊김(마지막 assistant) / SOME FAIL",
-     "key": "S2|t_orch_agent.js",
-     "file": "t_orch_agent.js"
-    }
-   ]
-  },
-  {
    "id": "S13",
    "name": "사용자 지적",
    "status": "fail",
-   "count": 9,
-   "at": "2026-11-26T16:22:54+09:00",
+   "count": 2,
+   "at": "2026-11-27T03:12:48+09:00",
    "info": {
-    "ledger": 31,
-    "active": 27,
+    "ledger": 33,
+    "active": 29,
     "per": {
      "U1": 0,
-     "U2": 1,
-     "U3": 2,
+     "U2": 0,
+     "U3": 0,
      "U4": 0,
-     "U5": 2,
+     "U5": 0,
      "U6": 0,
-     "U7": 2,
+     "U7": 0,
      "U8": 0,
      "U9": 0,
      "U10": 0,
-     "U11": 0,
-     "U13": 1,
+     "U11": 1,
+     "U13": 0,
      "U14": 0,
      "U15": 0,
      "U16": 0,
@@ -620,253 +452,47 @@
      "U22": 0,
      "U23": 0,
      "U24": 0,
-     "U25": 0
+     "U25": 0,
+     "U27": 0,
+     "U29": 0,
+     "U30": 0,
+     "U31": 0,
+     "U32": 0,
+     "U33": 0
     },
-    "coveredUntil": "2026-11-26T16:10:37+09:00",
-    "lastLearnAt": "2026-11-26T16:17:29+09:00",
-    "lastLearn": "새 프롬프트 20건: 기존 감지기 0 · 새 감지기 개선안 0 · 사용자 지시 규칙 10(같은 규칙 1) · 지적 아님 9",
-    "newPrompts": 2,
+    "coveredUntil": "2026-11-27T00:57:39+09:00",
+    "lastLearnAt": "2026-11-27T01:05:56+09:00",
+    "lastLearn": "새 프롬프트 1건: 기존 감지기 0 · 새 감지기 개선안 0 · 사용자 지시 규칙 0(같은 규칙 0) · 지적 아님 1",
+    "newPrompts": 0,
     "learnStarted": false,
     "userRule": {
-     "rules": 251,
-     "active": 251,
-     "lastAt": "2026-11-26T15:30:55+09:00",
-     "lastResult": "규칙 3개 점검: 남은 곳 7, 개선안 7, 이미 올라간 안 0",
+     "rules": 258,
+     "active": 258,
+     "lastAt": "2026-11-26T19:22:36+09:00",
+     "lastResult": "규칙 3개 점검: 남은 곳 4, 개선안 4, 이미 올라간 안 0",
      "due": {
-      "due": true,
-      "rules": [
-       {
-        "id": "R242",
-        "at": "2026-11-26 15:11",
-        "quote": "다른 보완 대상도 계속 찾아서 고쳐줘",
-        "rule": "검사기 결함을 하나 고치면 같은 유형 결함을 전 화면 원장과 같은 종류 측정 함수에서 이어 찾아 고침",
-        "category": "omission",
-        "scope": "tools/E2E/lib/*.ts(smoke-extra.ts 와 같은 측정 함수), tools/Harness/verify/*.py, Doc/verify/<ID>/verify_ledger.csv 전 화면",
-        "check": "python tools/Harness/verify/checker_defect_scan.py 결과에서 같은 유형(K1~K5) 행이 다른 화면에 남았는지 확인함. 고친 측정 함수와 같은 호출 형태를 tools/E2E/lib 에서 검색함",
-        "fixedIn": "Claude Code 2026-11-26T15:11 tools/E2E/lib/smoke-extra.ts / Claude Code 2026-11-26T15:23 tools/Harness/verify/facts_lockrules.py",
-        "status": "active",
-        "also": [
-         "2026-11-26T15:23:02+09:00 다른 보완 대상도 계속 찾아서 고쳐줘"
-        ]
-       },
-       {
-        "id": "R243",
-        "at": "2026-11-26 15:32",
-        "quote": "루프 변수 잠금 786칸도 해석하게 보완해줘",
-        "rule": "검사기는 편집 잠금 규칙을 루프 변수(for 반복 칸 번호, 컬럼 배열)로 지정한 칸도 반복 범위를 펼쳐 칸마다 해석하고 끝까지 해석하지 못한 칸은 미검증으로 둠",
-        "category": "omission",
-        "scope": "tools/Harness/verify/facts_lockrules.py, run_verify.py, judge.py, grid_absent_guard.py, 다른 facts_*.py 의 AS-IS 원문 칸 지정 해석부",
-        "check": "facts_lockrules.py 출력에서 칸 번호가 변수 이름으로 남은 규칙 수를 셈. 원장 증거에 '해석 불가', '해석 실패' 가 있는 편집 잠금 행 수를 화면별로 셈(checker_defect_scan K3)",
-        "fixedIn": "Claude Code 2026-11-26T15:32 tools/Harness/verify/facts_lockrules.py, tools/Harness/verify/run_verify.py, tools/Harness/verify/judge.py, tools/Harness/verify/grid_absent_guard.py",
-        "status": "active"
-       },
-       {
-        "id": "R244",
-        "at": "2026-11-26 15:35",
-        "quote": "병렬로 펼쳐서 진행할 수 있는 작업이면 하위에 세션 멀티로 추가해서 진행할 수 있도록 해주세요.",
-        "rule": "병렬로 나눌 수 있는 VM 개선 작업은 하위 세션 여러 개에 나눠 맡기고 세션이 맡은 개선안은 맡음 표시(claimedBy, autoWaitMs)로 VMO 자동 반영과 겹치지 않게 함",
-        "category": "flow",
-        "scope": "tools/VibeManager/claim_proposal.js, orchestra.js, orch-selfcheck.js, orch-agent.js, steps.json, user_rules.json, .vibe/orch/proposals/*.json",
-        "check": "Claude Code 세션 작업 이력에서 고친 파일이 개선안 대상 파일과 같은데 그 개선안에 claimedBy 가 없는 건을 셈. orch-selfcheck.js 자동 반영 고르기가 autoWaitMs 미래 값인 안을 빼는지 확인함",
-        "fixedIn": "Claude Code 2026-11-26T15:35 tools/VibeManager/claim_proposal.js, orchestra.js, steps.json, user_rules.json, orch-selfcheck.js",
-        "status": "active"
-       },
-       {
-        "id": "R245",
-        "at": "2026-11-26 15:53",
-        "quote": "지금처럼 해당없음 유지",
-        "rule": "검사기는 결함 유형 행에 직접 일치하는 실측이 없으면 해당없음을 유지하고 미검증으로 바꾸지 않음",
-        "category": "omission",
-        "scope": "tools/Harness/verify/judge.py, unverified_resolve.py, checker_defect_scan.py(K3 탐지 예외), tools/Harness/rules/checker_scan_ignore.csv",
-        "check": "judge.py 에서 결함 유형 행의 해당없음을 미검증으로 바꾸는 분기를 검색함. checker_defect_scan.py K3 결과에 결함 유형 행이 올라오는지 확인함",
-        "fixedIn": "Claude Code 2026-11-26T15:53 tools/Harness/verify/judge.py",
-        "status": "active"
-       },
-       {
-        "id": "R246",
-        "at": "2026-11-26 16:01",
-        "quote": "VMO 에서 지금 하고 잇는 보완 작업을 자가검진해서 보완진행하도록 해주세요. 그리고 사용자 승인이 아닌 자동승인 대상으로 지정해서 보완되도록 해주세요",
-        "rule": "VMO 는 Claude Code 세션이 손으로 반복하는 보완 작업(검사기 결함 찾기, 수정)을 자가진단 탐지기로 옮기고 그 결과 개선안을 자동 승인으로 반영함",
-        "category": "flow",
-        "scope": "tools/VibeManager/orch-selfcheck.js, orch-checkerscan.js(S16), orch-userrule.js, tools/Harness/verify/checker_defect_scan.py, .vibe/orch/history/worklog.jsonl",
-        "check": "worklog.jsonl 에서 세션이 같은 종류 파일(tools/Harness/verify/*.py)을 3회 이상 고친 작업 중 대응 자가진단 탐지기가 없는 유형을 셈. 그 유형 개선안의 autoEligible 값을 확인함",
-        "fixedIn": "",
-        "status": "active"
-       },
-       {
-        "id": "R247",
-        "at": "2026-11-26 16:03",
-        "quote": "VMO 의 목적은 VM, VMO, VMW 가 제대로 일할 수 있도록 필요한 모든 작업을 모니터링하고 보완이 필요하면 보완하고 기능 추가가 필요하면 기능을 추가하도록 해주세요.",
-        "rule": "VMO 는 VM, VMO, VMW 가 띄운 작업 전체를 감시하고 보완이 필요하면 보완하며 기능이 모자라면 기능을 추가함",
-        "category": "flow",
-        "scope": ".claude/agents/vm-orchestra.md, tools/VibeManager/orch-watch.js, orch-selfcheck.js, orch-agent.js, rules/10_RULES_KEEP.md",
-        "check": "VMW 업무 종류(jobs.js 목록)마다 orch-watch.js 감시 규칙과 자가진단 항목이 1개 이상 있는지 대조함. 개선안 종류에 기능 추가가 0건인지 확인함",
-        "fixedIn": "",
-        "status": "active"
-       },
-       {
-        "id": "R248",
-        "at": "2026-11-26 16:03",
-        "quote": "여기서 특정한 일은 하면 안된다던지 하는 것은 없습니다 .",
-        "rule": "VMO 작업 범위 제한은 승인 대상(hook, settings.json, DB, 시험 계정, 작업 모드)만 두고 그 밖의 보완, 기능 추가는 스스로 진행함",
-        "category": "flow",
-        "scope": "tools/Harness/harness.json orch 승인 분류, tools/VibeManager/orch-selfcheck.js(autoEligible 판정), orch-checkerscan.js, tools/Harness/rules/checker_scan_ignore.csv, checker_defect_scan.py",
-        "check": "autoEligible 판정 코드에서 위 5종 밖 대상(tools/, Doc/, VM 웹뷰 소스)을 승인 대상으로 분류하는 조건을 검색함. 자가진단 탐지기 중 대상 범위를 막는 예외 목록을 확인함",
-        "fixedIn": "Claude Code 2026-11-26T16:03 tools/Harness/rules/checker_scan_ignore.csv, tools/Harness/verify/checker_defect_scan.py",
-        "status": "active"
-       },
-       {
-        "id": "R249",
-        "at": "2026-11-26 16:04",
-        "quote": "VM의 목적인 파싱부터 분석, 개발, 보완, 테스트 그리고 이를 확인하는 CHECKLIST 절차까지 를 완벽하게 진행하기 위해서 필요한 모든 것을 스스로 찾아서 보완할 수 있도록 VMO 의 기능을 보완해주세요. 특히 사용자승인에 대한 가이드를 완하해서 가능하면 스스로 기능적인 부분에서 필요하면 보완을 진행하도록 해주세요",
-        "rule": "VMO 자가진단은 파싱, 분석, 개발, 보완, 시험, CheckList 단계마다 결함 탐지기를 두고 찾은 기능 보완은 승인 대상 5종이 아니면 자동 반영함",
-        "category": "omission",
-        "scope": "tools/VibeManager/orch-checkerscan.js(CheckList 판정 결함 S16), orch-selfcheck.js, 단계별 산출물(Doc/asisfacts, Doc/tobefacts, Doc/gen/<ID>, Doc/verify/<ID>), tools/Harness/harness.json",
-        "check": "orch-selfcheck.js 자가진단 항목(S1~S16)을 6개 단계에 대응시켜 탐지기가 없는 단계를 셈. 지금은 CheckList 판정(S16)만 원장 탐지기가 있음",
-        "fixedIn": "Claude Code 2026-11-26T16:04 tools/VibeManager/orch-checkerscan.js",
-        "status": "active"
-       },
-       {
-        "id": "R250",
-        "at": "2026-11-26 16:08",
-        "quote": "그리고 이것까지를 적용한 후에 추가적으로 스스로 판단해서  VM, VMO, VMW 의 기능 개선 및 기능 추가를 위해서 필요한 작업을 진행할 수 있도록 해주세요. \n계속 DB MODE 로 CHECKLIST 작업에 대한 개선을 집중해서 하고 있는데, 차주부터는 UI MODE로 AS-IS 에서 TO-BE 전환을 진행할 예정입니다. 이부분에 대해서도 사전에 필요한 부분을 최대한 보완해서 UI 개발이 완벽하게 진행될 수 있도록 VMO 가 컨트롤 할 수 있도록 기능 추가 및 보완 해주세요",
-        "rule": "VMO 는 예정된 작업 모드 전환(UI MODE)에 맞춰 그 모드 실행 경로(UI 생성, UI 보완, 종료 전 게이트, 재판정)를 미리 점검하고 모자란 기능을 보완함",
-        "category": "flow",
-        "scope": "tools/Harness/new-screen.ps1, tools/Harness/hooks(check-asis-harness, harness-stop-gate), steps.json UI 생성, UI 보완 체인, tools/VibeManager/job-runner.js, chain-runner.js, orch-selfcheck.js",
-        "check": "UI 생성, UI 보완 체인 단계를 DB MODE 에서 건너뛰는 분기와 UI MODE 에서 쓰는 게이트를 나열해 최근 실행 기록이 없는 단계를 셈. new-screen.ps1 을 화면 1개에 읽기 전용으로 돌려 골격 생성 오류를 확인함",
-        "fixedIn": "",
-        "status": "active"
-       },
-       {
-        "id": "R251",
-        "at": "2026-11-26 16:10",
-        "quote": "VMO 의 기능 에 한계는 없다라고 전달했습니다. \n이는 VMO 의 UI/UX 도 마찬가지 입니다. 더 나은 UI/UX 을 추천하고 싶으면 추천해주세요. 그것도 VMO 가 스스로 해주면 좋을 것 같아요. 제가 UI/UX 에 대해서 요청 하는 부분은 제가 인지하고 있는 한시적인 부분을 가지고 요청 하는 것입니다. VMO 가 현재의 기술적인 부분의 발전을 고려해서 많은 사용자들이 추천하는 UI/UX 을 VM에 적용하도록 추천해주면 좋겠어요",
-        "rule": "VMO 는 VM 웹뷰 UI/UX 를 현재 널리 쓰는 패턴과 비교한 개선안을 스스로 올리고 큰 디자인 변경은 컨셉 시안 HTML 을 먼저 보임",
-        "category": "ui-look",
-        "scope": "tools/VibeManager/workbench.js, orchestra.js, jobs.js, flow-panel.js, menu-view.js, prompt-panel.js, history.js, tabview.js, orch-dict.js(새 자가진단 코드 등재), orch-selfcheck.js",
-        "check": "orch-selfcheck.js 에 UI/UX 점검 항목이 있는지 확인함. .vibe/orch/proposals 에서 ui-look, ui-space 개선안 중 VMO 가 스스로 올린 안의 수를 셈. 새 코드가 orch-dict.js 에 등재됐는지 대조함(R154)",
-        "fixedIn": "Claude Code 2026-11-26T16:10 orch-dict.js",
-        "status": "active"
-       }
-      ],
-      "why": "새 규칙 R242, R243, R244, R245, R246, R247, R248, R249, R250, R251"
+      "due": false,
+      "why": "주기 전"
      }
     },
-    "userRuleStarted": true
+    "userRuleStarted": false
    },
    "items": [
     {
-     "level": "warn",
-     "what": "U2 CheckList SCP0005 1판 94분(목표 30분) · 체인 전체 335분",
-     "detail": "2026-11-26 02:41 끝 · 🔎 CheckList 전체기능 재점검 (테스트: E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItemList) · 목표 구간 = 측정 1회와 문서 1판 · 오래 걸린 구간(Doc/verify/SCP0005/run_timing.json 2026-11-26 02:40:04): docs make_verify_docs.py 0.3분, docs make_verify_docs.py 0.2분, docs regress.py 0분",
-     "key": "S13|U2|SCP0005",
-     "uid": "U2",
-     "quote": "화면1개에 대한 CHECKLIST 작업이 4시간 이상 소요된다는건 필요한 시점에 CHECKLIST 작업을 돌려서 볼 수 없다는 것과 동일합니다"
-    },
-    {
      "level": "fail",
-     "what": "U3 조치 기록 없는 열린 사건 1건",
-     "detail": "20261123_115110_R12_ALL R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 12건 (4592분)",
-     "key": "S13|U3|idleInc",
-     "uid": "U3",
-     "quote": "VMO 가 자동반영 기록이 00:59 분 이후에 어떤 것도 발생시키지 않았습니다. 이것도 왜 10분 간격으로 모니터링 해서 새로운 문제점을 도출하지 않았는지"
-    },
-    {
-     "level": "fail",
-     "what": "U3 자동 반영 대상인데 반영 안 된 개선안 1건",
-     "detail": "20261126110059_VISION 개념 재정립: VMO 자가 보완의 효력 시점(창 다시 로드 기다림 → VMO 점검 모듈은 반영 즉시 다시 읽 (322분)",
-     "key": "S13|U3|stuckProp",
-     "uid": "U3",
-     "quote": "VMO 가 자동반영 기록이 00:59 분 이후에 어떤 것도 발생시키지 않았습니다. 이것도 왜 10분 간격으로 모니터링 해서 새로운 문제점을 도출하지 않았는지"
-    },
-    {
-     "level": "warn",
-     "what": "U13 U13 판정 근거 없음(중단 사건 줄 없음)",
-     "detail": "중단 작업 1건 J20261125_005600 · events.jsonl 에 chain.end(aborted), user.stop(vscode.dispose) 줄 없음(재개 기록 기능 이전 기록)",
-     "key": "S13|U13|old",
-     "uid": "U13",
-     "quote": "VM 에서 작업을 진행하다가 reload 작업을 하면 작업하던 모든 task 가 중지됩니다. reload  후 작업을 재개할 수 없나요? 작업을 재개할 수 있으면 VM 업무 작업에 표기하고 작업재개 버턴 활성화 되도"
+     "what": "U11 반영 실패 개선안 9시간 방치",
+     "detail": "20261126153056_SELF 사용자 지시 R241 같은 문제: tools/Harness/verify/ledger.py:472 편집 기대 보정이 사람이 적은 edit_expe · 재진단 없음",
+     "key": "S13|U11|20261126153056_SELF",
+     "uid": "U11",
+     "quote": "반영 실패 항목은 자동으로 다시 반영하나요?"
     },
     {
      "level": "fail",
      "what": "U21 VMO 반영 실패 24시간 6건",
-     "detail": "개선안 6개 · 마지막 2026-11-26 13:04 20261125005937_SELF '반영 실패. 게이트에서 새로 어긋난 항목 1건: S11 orch-ladder.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/' · 20261124064956_SELF_3 2026-11-26 05:31, 20261124064957_SELF_3 2026-11-26 06:56, 20261124064958_SELF_3 2026-11-26 08:33, 20261124232611_SELF 2026-11-26 11:54, 20261125005937_SELF 2026-11-26 13:04",
-     "key": "S13|U21|count|20261125005937_SELF|1795665875000",
+     "detail": "원인 부류 문장 규칙 4, 검증 1, 실행 끊김 1 · 개선안 6개 · 마지막 2026-11-26 18:17 20261126153056_SELF '반영 실패. Claude exit 1 · 대상 파일 1개 복원 · 대상 밖 변경 Doc/verify/_llm_usage.csv, tools/Ha' · 20261124064957_SELF_3 2026-11-26 06:56, 20261124064958_SELF_3 2026-11-26 08:33, 20261124232611_SELF 2026-11-26 11:54, 20261125005937_SELF 2026-11-26 13:04, 20261126153056_SELF 2026-11-26 18:17",
+     "key": "S13|U21|count|20261126153056_SELF|1795684661000",
      "uid": "U21",
      "quote": "추가적으로 VMO 작업에 대해서 자가 보완 반영 실패, 개선안 반영 실패 등 반영 실패 메세지가 발생하는데 이것도 원인을 찾아서 보완해주세요. \n\nVMO 가 자기 오판을 스스로 알아내는 판단은 아직 약합니다. 이번에"
-    },
-    {
-     "level": "warn",
-     "what": "U27 감지기 U27 파일 반영됨, 창 다시 로드 뒤 실행",
-     "detail": "원장 detector aiUsageStale 정의가 orch-usercheck.js 파일에 있고 실행 중 DETECTORS 에 없음",
-     "key": "S13|U27|reload",
-     "uid": "U27"
-    },
-    {
-     "level": "warn",
-     "what": "U29 감지기 U29 파일 반영됨, 창 다시 로드 뒤 실행",
-     "detail": "원장 detector asisLiveLogin 정의가 orch-usercheck.js 파일에 있고 실행 중 DETECTORS 에 없음",
-     "key": "S13|U29|reload",
-     "uid": "U29"
-    },
-    {
-     "level": "warn",
-     "what": "U30 감지기 U30 파일 반영됨, 창 다시 로드 뒤 실행",
-     "detail": "원장 detector remeasureWithoutResolve 정의가 orch-usercheck.js 파일에 있고 실행 중 DETECTORS 에 없음",
-     "key": "S13|U30|reload",
-     "uid": "U30"
-    },
-    {
-     "level": "warn",
-     "what": "U31 감지기 U31 파일 반영됨, 창 다시 로드 뒤 실행",
-     "detail": "원장 detector testBeforePlanDone 정의가 orch-usercheck.js 파일에 있고 실행 중 DETECTORS 에 없음",
-     "key": "S13|U31|reload",
-     "uid": "U31"
-    }
-   ]
-  },
-  {
-   "id": "S15",
-   "name": "진단 사다리",
-   "status": "warn",
-   "count": 5,
-   "at": "2026-11-26T16:22:54+09:00",
-   "info": {
-    "L3": 4,
-    "L4": 1,
-    "dayRuns": 3,
-    "total": 30
-   },
-   "items": [
-    {
-     "level": "warn",
-     "what": "L3 진단 대기: 사용자 지적 U21 이 고친 뒤 다시 걸림",
-     "detail": "올림 조건 반영 완료 1건 효력(2026-11-21 01:59) 뒤 2026-11-26 13:04 재발 · 감지기 개선안 1건 제외 · 하루 진단 상한 3건 또는 다음 점검 때 진단",
-     "key": "S15|wait|L3|usercheck|U21"
-    },
-    {
-     "level": "warn",
-     "what": "L3 진단 대기: orchestra.js 7일 결함 수정 27건 · 요청 30건, 문구 2건(표시만)",
-     "detail": "올림 조건 결함 수정 27건 ≥ 4(상위 3개) · 요청 30건, 문구 2건(표시만) · 하루 진단 상한 3건 또는 다음 점검 때 진단",
-     "key": "S15|wait|L3|edits|orchestra.js"
-    },
-    {
-     "level": "warn",
-     "what": "개념 재정립 승인 대기: 개념 재정립: CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함)",
-     "detail": "개선안 20261126001222_VISION · 문서 .vibe/orch/vision/concept_20261126_L4_useraxis_checklistTime.md",
-     "key": "S15|l4|L4|useraxis|checklistTime"
-    },
-    {
-     "level": "warn",
-     "what": "L2 진단 대기: 사용자 지적 U3 첫 감지(동작 수정 없음)",
-     "detail": "올림 조건 감지기 개선안 1건 효력(2026-11-23 10:55) 뒤 2026-11-26 16:15 첫 감지 · 동작 수정 개선안 반영 없음 · 하루 진단 상한 3건 또는 다음 점검 때 진단",
-     "key": "S15|wait|L2|usercheck-first|U3"
-    },
-    {
-     "level": "warn",
-     "what": "L3 진단 대기: quick.json 7일 결함 수정 25건 · 요청 29건, 문구 0건(표시만)",
-     "detail": "올림 조건 결함 수정 25건 ≥ 4(상위 3개) · 요청 29건, 문구 0건(표시만) · 하루 진단 상한 3건 또는 다음 점검 때 진단",
-     "key": "S15|wait|L3|edits|quick.json"
     }
    ]
   }
@@ -877,14 +503,15 @@
    "mod": "orch-history",
    "fn": "writeMd",
    "msg": "UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\tools\\VibeManager\\WORKLOG.md'",
-   "count": 10,
+   "count": 11,
    "firstAt": "2026-11-23T15:00:12+09:00",
    "firstMs": 1795413612446,
-   "lastAt": "2026-11-26T15:15:23+09:00",
-   "lastMs": 1795673723067,
+   "lastAt": "2026-11-26T20:35:35+09:00",
+   "lastMs": 1795692935175,
    "stack": [
     "at Object.writeFileSync (node:fs:2496:20)",
-    "at collect (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-history.js:376:70)",
+    "at Object.writeFileSyncRetry (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\fs-retry.js:9:21)",
+    "at collect (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-history.js:381:89)",
     "at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"
    ]
   },
@@ -960,6 +587,24 @@
    ]
   },
   {
+   "sig": "orch-ladder.writeJson | UNKNOWN: unknown error, open '<path>'",
+   "mod": "orch-ladder",
+   "fn": "writeJson",
+   "msg": "UNKNOWN: unknown error, open 'C:\\Projects\\NSCM\\.vibe\\orch\\ladder.json'",
+   "count": 3,
+   "firstAt": "2026-11-26T16:31:54+09:00",
+   "firstMs": 1795678314801,
+   "lastAt": "2026-11-26T18:18:55+09:00",
+   "lastMs": 1795684735226,
+   "stack": [
+    "at Object.writeFileSync (node:fs:2496:20)",
+    "at Object.writeFileSyncRetry (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\fs-retry.js:9:21)",
+    "at writeJson (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-ladder.js:22:111)",
+    "at update (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-ladder.js:213:3)",
+    "at Object.tick (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\orch-ladder.js:270:79)"
+   ]
+  },
+  {
    "sig": "orch-watch.tick | Invalid time value",
    "mod": "orch-watch",
    "fn": "tick",
@@ -1023,227 +668,163 @@
  "repeatFiles": [
   {
    "file": "workbench.js",
-   "count": 55,
-   "from": "2026-11-20",
-   "defect": 55,
-   "request": 48,
-   "style": 7,
-   "all": 95,
-   "total": 141,
+   "count": 31,
+   "from": "2026-11-17",
+   "defect": 31,
+   "request": 54,
+   "style": 6,
+   "all": 86,
+   "total": 132,
    "kinds": {
-    "defect": 68,
-    "request": 66,
-    "style": 7
+    "defect": 39,
+    "request": 87,
+    "style": 6
    },
-   "edits": 432
-  },
-  {
-   "file": "orchestra.js",
-   "count": 27,
-   "from": "2026-11-20",
-   "defect": 27,
-   "request": 30,
-   "style": 2,
-   "all": 52,
-   "total": 63,
-   "kinds": {
-    "defect": 27,
-    "request": 34,
-    "style": 2
-   },
-   "edits": 114
-  },
-  {
-   "file": "quick.json",
-   "count": 25,
-   "from": "2026-11-20",
-   "defect": 25,
-   "request": 29,
-   "style": 0,
-   "all": 43,
-   "total": 90,
-   "kinds": {
-    "defect": 30,
-    "request": 60,
-    "style": 0
-   },
-   "edits": 72
-  },
-  {
-   "file": "orch-usercheck.js",
-   "count": 24,
-   "from": "2026-11-20",
-   "defect": 24,
-   "request": 7,
-   "style": 2,
-   "all": 33,
-   "total": 33,
-   "kinds": {
-    "defect": 24,
-    "request": 7,
-    "style": 2
-   },
-   "edits": 99
+   "edits": 465
   },
   {
    "file": "t_orch_usercheck.js",
-   "count": 20,
+   "count": 23,
    "from": "2026-11-20",
-   "defect": 20,
-   "request": 3,
+   "defect": 23,
+   "request": 5,
    "style": 0,
-   "all": 23,
-   "total": 23,
+   "all": 28,
+   "total": 29,
    "kinds": {
-    "defect": 20,
-    "request": 3,
+    "defect": 24,
+    "request": 5,
     "style": 0
    },
-   "edits": 56
+   "edits": 64
+  },
+  {
+   "file": "orch-usercheck.js",
+   "count": 22,
+   "from": "2026-11-20",
+   "defect": 22,
+   "request": 18,
+   "style": 2,
+   "all": 42,
+   "total": 43,
+   "kinds": {
+    "defect": 22,
+    "request": 19,
+    "style": 2
+   },
+   "edits": 108
+  },
+  {
+   "file": "user_checks.json",
+   "count": 13,
+   "from": "2026-11-20",
+   "defect": 13,
+   "request": 6,
+   "style": 0,
+   "all": 19,
+   "total": 20,
+   "kinds": {
+    "defect": 14,
+    "request": 6,
+    "style": 0
+   },
+   "edits": 26
+  },
+  {
+   "file": "orch-improve.js",
+   "count": 12,
+   "from": "2026-11-20",
+   "defect": 12,
+   "request": 24,
+   "style": 3,
+   "all": 38,
+   "total": 48,
+   "kinds": {
+    "defect": 14,
+    "request": 31,
+    "style": 3
+   },
+   "edits": 165
+  },
+  {
+   "file": "orch-watch.js",
+   "count": 12,
+   "from": "2026-11-20",
+   "defect": 12,
+   "request": 13,
+   "style": 2,
+   "all": 26,
+   "total": 35,
+   "kinds": {
+    "defect": 15,
+    "request": 18,
+    "style": 2
+   },
+   "edits": 100
+  },
+  {
+   "file": "orchestra.js",
+   "count": 11,
+   "from": "2026-11-20",
+   "defect": 11,
+   "request": 38,
+   "style": 2,
+   "all": 50,
+   "total": 63,
+   "kinds": {
+    "defect": 11,
+    "request": 50,
+    "style": 2
+   },
+   "edits": 123
   },
   {
    "file": "job-runner.js",
-   "count": 16,
+   "count": 10,
    "from": "2026-11-20",
-   "defect": 16,
-   "request": 11,
+   "defect": 10,
+   "request": 16,
    "style": 1,
-   "all": 27,
-   "total": 32,
+   "all": 26,
+   "total": 31,
    "kinds": {
-    "defect": 17,
-    "request": 14,
+    "defect": 11,
+    "request": 19,
     "style": 1
    },
    "edits": 37
   },
   {
-   "file": "orch-watch.js",
-   "count": 16,
-   "from": "2026-11-19",
-   "defect": 16,
-   "request": 13,
-   "style": 2,
-   "all": 31,
-   "total": 34,
-   "kinds": {
-    "defect": 18,
-    "request": 14,
-    "style": 2
-   },
-   "edits": 95
-  },
-  {
-   "file": "user_checks.json",
-   "count": 15,
+   "file": "_test_timing.jsonl",
+   "count": 10,
    "from": "2026-11-20",
-   "defect": 15,
-   "request": 4,
-   "style": 0,
+   "defect": 10,
+   "request": 3,
+   "style": 6,
    "all": 19,
-   "total": 20,
+   "total": 19,
    "kinds": {
-    "defect": 16,
-    "request": 4,
-    "style": 0
+    "defect": 10,
+    "request": 3,
+    "style": 6
    },
-   "edits": 25
-  },
-  {
-   "file": "jobs.js",
-   "count": 14,
-   "from": "2026-11-20",
-   "defect": 14,
-   "request": 15,
-   "style": 0,
-   "all": 28,
-   "total": 33,
-   "kinds": {
-    "defect": 15,
-    "request": 18,
-    "style": 0
-   },
-   "edits": 40
-  },
-  {
-   "file": "orch-improve.js",
-   "count": 11,
-   "from": "2026-11-19",
-   "defect": 11,
-   "request": 19,
-   "style": 3,
-   "all": 33,
-   "total": 38,
-   "kinds": {
-    "defect": 11,
-    "request": 24,
-    "style": 3
-   },
-   "edits": 138
+   "edits": 0
   },
   {
    "file": "orch-ladder.js",
    "count": 9,
    "from": "2026-11-20",
    "defect": 9,
-   "request": 5,
-   "style": 2,
-   "all": 16,
-   "total": 17,
-   "kinds": {
-    "defect": 9,
-    "request": 6,
-    "style": 2
-   },
-   "edits": 77
-  },
-  {
-   "file": "steps.json",
-   "count": 9,
-   "from": "2026-11-20",
-   "defect": 9,
-   "request": 12,
-   "style": 0,
-   "all": 16,
-   "total": 42,
-   "kinds": {
-    "defect": 13,
-    "request": 29,
-    "style": 0
-   },
-   "edits": 6
-  },
-  {
-   "file": "orch-selfcheck.js",
-   "count": 9,
-   "from": "2026-11-19",
-   "defect": 9,
-   "request": 21,
-   "style": 2,
-   "all": 32,
-   "total": 36,
-   "kinds": {
-    "defect": 10,
-    "request": 24,
-    "style": 2
-   },
-   "edits": 81
-  },
-  {
-   "file": "10_RULES_KEEP.md",
-   "count": 9,
-   "from": "2026-11-22",
-   "defect": 9,
-   "request": 7,
-   "style": 0,
-   "all": 16,
+   "request": 10,
+   "style": 3,
+   "all": 22,
    "total": 23,
    "kinds": {
     "defect": 9,
-    "request": 14,
-    "style": 0
+    "request": 11,
+    "style": 3
    },
-   "edits": 28
+   "edits": 78
   },
   {
    "file": "e2e_results.json",
@@ -1260,6 +841,70 @@
     "style": 3
    },
    "edits": 0
+  },
+  {
+   "file": "orch-history.js",
+   "count": 8,
+   "from": "2026-11-20",
+   "defect": 8,
+   "request": 2,
+   "style": 0,
+   "all": 10,
+   "total": 12,
+   "kinds": {
+    "defect": 9,
+    "request": 3,
+    "style": 0
+   },
+   "edits": 37
+  },
+  {
+   "file": "orch-selfcheck.js",
+   "count": 8,
+   "from": "2026-11-20",
+   "defect": 8,
+   "request": 29,
+   "style": 3,
+   "all": 40,
+   "total": 49,
+   "kinds": {
+    "defect": 11,
+    "request": 35,
+    "style": 3
+   },
+   "edits": 112
+  },
+  {
+   "file": "t_orch_ladder.js",
+   "count": 7,
+   "from": "2026-11-22",
+   "defect": 7,
+   "request": 6,
+   "style": 2,
+   "all": 15,
+   "total": 15,
+   "kinds": {
+    "defect": 7,
+    "request": 6,
+    "style": 2
+   },
+   "edits": 21
+  },
+  {
+   "file": "quick.json",
+   "count": 7,
+   "from": "2026-11-19",
+   "defect": 7,
+   "request": 37,
+   "style": 0,
+   "all": 44,
+   "total": 93,
+   "kinds": {
+    "defect": 12,
+    "request": 81,
+    "style": 0
+   },
+   "edits": 73
   }
  ],
  "repeatAsks": [
@@ -1293,6 +938,34 @@
     "CL:2026-11-25:1prfp5j",
     "CL:2026-11-25:d80t9f",
     "CL:2026-11-25:1f51678"
+   ]
+  },
+  {
+   "text": "계속 개선항목 찾아서 진행해주세요",
+   "count": 10,
+   "ids": [
+    "CL:2026-11-26:1i8tuze",
+    "CL:2026-11-26:5bk9fs",
+    "CL:2026-11-26:1yjidgb",
+    "CL:2026-11-26:8zlqte",
+    "CL:2026-11-26:1l8ga10",
+    "CL:2026-11-26:14q7r5s",
+    "CL:2026-11-26:6nz4az",
+    "CL:2026-11-26:1f0g5hn",
+    "CL:2026-11-26:hj4lz0",
+    "CL:2026-11-26:zzo9c"
+   ]
+  },
+  {
+   "text": "계속 개선항목 찾아서 진행해줘",
+   "count": 6,
+   "ids": [
+    "CL:2026-11-26:g66s3i",
+    "CL:2026-11-26:19fhbby",
+    "CL:2026-11-26:1lvpetw",
+    "CL:2026-11-26:178nhef",
+    "CL:2026-11-26:muh5xb",
+    "CL:2026-11-26:1o2ztip"
    ]
   },
   {
@@ -1337,6 +1010,16 @@
     "CL:2026-11-24:1rbt8aj",
     "CL:2026-11-24:1qbcxvb",
     "CL:2026-11-24:1ciz8im"
+   ]
+  },
+  {
+   "text": "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요",
+   "count": 4,
+   "ids": [
+    "CL:2026-11-26:1s5vw4e",
+    "CL:2026-11-26:1yjidgb",
+    "CL:2026-11-26:vzbmjb",
+    "CL:2026-11-26:178nhef"
    ]
   },
   {
@@ -1395,517 +1078,500 @@
     "CL:2026-11-26:1ihqrxe",
     "CL:2026-11-26:1bhdik6"
    ]
-  },
-  {
-   "text": "VMW 에 SPLIT BAR 을 두어서 왼쪽/오른쪽의 사이즈를 조정할 수 있도록 해주세요",
-   "count": 3,
-   "ids": [
-    "CL:2026-11-26:jv97yf",
-    "CL:2026-11-26:19kcd83",
-    "CL:nodate:14qvrrp"
-   ]
-  },
-  {
-   "text": "VMO 상황판의 지금 실행 중 항목의 오른쪽에 UI 별 작업의 경우 WORKBENCH 연결 아이콘을 추가해주세요.",
-   "count": 3,
-   "ids": [
-    "CL:2026-11-26:7hkq76",
-    "CL:2026-11-26:1x53jv7",
-    "CL:2026-11-20:4ajc2y"
-   ]
-  },
-  {
-   "text": "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함",
-   "count": 3,
-   "ids": [
-    "CL:2026-11-26:114bynx",
-    "CL:2026-11-26:kojk45",
-    "CL:2026-11-24:1jddxbc"
-   ]
   }
  ],
  "unverifiedOpen": [
   {
-   "id": "CL:2026-11-26:j14q6g",
-   "date": "2026-11-26",
-   "title": "Claude Code 세션 묶음 S-B: VMO 미반영 개선안 10건 처리",
-   "text": "사내 ZIOUI1, MSSQL 실행(DB 접속 시험 안 함).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:j14q6g",
-   "date": "2026-11-26",
-   "title": "Claude Code 세션 묶음 S-B: VMO 미반영 개선안 10건 처리",
-   "text": "Doc/asisfacts 운영 출력 재생성 안 함.",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:j14q6g",
-   "date": "2026-11-26",
-   "title": "Claude Code 세션 묶음 S-B: VMO 미반영 개선안 10건 처리",
+   "id": "CL:2026-11-27:11l2d8q",
+   "date": "2026-11-27",
+   "title": "VMO 자가 보완: 설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1celpp5",
-   "date": "2026-11-26",
-   "title": "VMO 미반영 개선안 병렬 보완: 묶음 S-A 검사 하네스 12건",
-   "text": "DB 실행 미실행",
+   "id": "CL:2026-11-27:11l2d8q",
+   "date": "2026-11-27",
+   "title": "VMO 자가 보완: 설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음",
+   "text": "반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042, DMF0005 재지 못한 해당없음(설계 결정) 행 수 감소 확인, Doc/verify/<ID>/design_decisions_applied.csv 적용 행 수 비교..",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1kk0p95",
-   "date": "2026-11-26",
-   "title": "Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 form_scen_gen.py",
-   "text": "Playwright 실측 미실행.",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:1kk0p95",
-   "date": "2026-11-26",
-   "title": "Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 form_scen_gen.py",
-   "text": "수작업본에만 있는 9건(시트 탭 B01, 팝업 P01, 머리글 체크 B02, UnSet 사슬 F12·E14·E15·E15c, 2회차 F09b·F13b)은 생성 범위 밖임.",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:j03iuj",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R221 같은 문제: tools/Analysis/ssp_it_precheck/dbeaver_test.py:12 --out으로 엑셀 시트(fill_v9.ps1)에 넣을 쿼리 행을 만들면서 시험일 인자를 받",
+   "id": "CL:2026-11-27:8fi02c",
+   "date": "2026-11-27",
+   "title": "VMO 자가 보완: 조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:v2eowa",
-   "date": "2026-11-26",
-   "title": "VMO 미반영 개선안 병렬 보완: 묶음 S-D2 7건",
+   "id": "CL:2026-11-27:8fi02c",
+   "date": "2026-11-27",
+   "title": "VMO 자가 보완: 조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임",
+   "text": "반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042 H5 같은 문구 반복 8행 → 0행 확인..",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-27:1tdy1t0",
+   "date": "2026-11-27",
+   "title": "VMO 자가 보완: 반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 기록 때 다시 씀",
+   "text": "개선안 확인: 2026-11-27 00:59:14 반영 전: node tools/VibeManager/test/t_orch_improve.js → ALL PASS, PASS 55건, 쓰기 실패 주입 시험 없음(미측정).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-27:1tdy1t0",
+   "date": "2026-11-27",
+   "title": "VMO 자가 보완: 반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 기록 때 다시 씀",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:v2eowa",
-   "date": "2026-11-26",
-   "title": "VMO 미반영 개선안 병렬 보완: 묶음 S-D2 7건",
-   "text": "plan_state.py clear 로 지운 계획은 항목 기록이 없어 U31 이 판정하지 못함",
+   "id": "CL:2026-11-27:1bnrdur",
+   "date": "2026-11-27",
+   "title": "U11 반영 실패 방치 판정에서 사용자 판단 대기 안 제외",
+   "text": "실행 중 VMO 판정(창 다시 로드 뒤 S13 에서 U11 fail 사라지는지 확인)",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1mv30lj",
+   "id": "CL:2026-11-27:bnq12v",
+   "date": "2026-11-27",
+   "title": "S-C 8차: DMF0042 CheckList 결과로 폼 저장형 생성기·실행기 보완",
+   "text": "변경 2~4 의 화면 동작(G16 NA, G17·G18 MSG00108·MSG00276 문구).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-27:bnq12v",
+   "date": "2026-11-27",
+   "title": "S-C 8차: DMF0042 CheckList 결과로 폼 저장형 생성기·실행기 보완",
+   "text": "다음 DMF0042 CheckList 실행 때 확인.",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:qdowy7",
    "date": "2026-11-26",
-   "title": "VMO 미반영 개선안 병렬 보완: 조정과 묶음 D1 9건",
+   "title": "VMO 자가 보완: 반복 지시 집계에서 VMO 승인, 되돌리기 기록 줄의 인용은 사용자 지시로 세지 않음",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1mv30lj",
+   "id": "CL:2026-11-26:wxmfym",
    "date": "2026-11-26",
-   "title": "VMO 미반영 개선안 병렬 보완: 조정과 묶음 D1 9건",
-   "text": "하위 세션 S-A, S-B, S-C, S-D2 와 4ec206 결과는 각 세션 보고 뒤 확인",
+   "title": "S-Z 10차: 설치 폴더에 직접 복사한 분석 모듈을 정기 점검 때 다시 읽음",
+   "text": "orch-selfcheck.js 는 HOT 모듈이 아니라 창 다시 로드 뒤 적용.",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:b1w1xh",
+   "id": "CL:2026-11-26:wxmfym",
    "date": "2026-11-26",
-   "title": "Claude Code 세션 묶음 S-C: VMO 미반영 개선안 3건 처리",
-   "text": "Playwright 실측은 미실행.",
+   "title": "S-Z 10차: 설치 폴더에 직접 복사한 분석 모듈을 정기 점검 때 다시 읽음",
+   "text": "그 전까지 호스트의 orch-ladder.js 도 19:09 전 코드라 001528_VISION 재계획은 창 다시 로드 뒤.",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:10glbdj",
+   "id": "CL:2026-11-26:pc18qf",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R218 같은 문제: tools/VibeManager/quick.json:448 🧪 미검증 해소 지시문이 바뀌기 전 구조(1단계 --no-rerun, 3단계 재수행)를 안내해 AI가 처리 대상 행을 전",
+   "title": "VMO 자가 보완: 삭제 안을 반영할 때 지울 로그, 백업 파일을 반영 전 사본(.bak_, 스냅샷)으로 복사하지 않음",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1iceh98",
+   "id": "CL:2026-11-26:1mfloui",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R218 같은 문제: tools/VibeManager/quick.json:495 📋 TestResultList(495), 🚀 ID 하나로 전체(1068, 1133), 🧩 from AS-IS(1334",
+   "title": "U21 반영 실패 집계에서 고친 안이 반영 완료된 실패 제외",
+   "text": "VMO 실행 중 U21 판정(창 다시 로드 뒤 자가진단 S13 에서 확인)",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:14xsfvj",
+   "date": "2026-11-26",
+   "title": "VMO 자가 보완: 창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 살리지 않음",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1igxyfg",
+   "id": "CL:2026-11-26:14xsfvj",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R74 같은 문제: tools/VibeManager/quick.json:1647 워크벤치 메뉴 이름에 AI 제품명이 있고, 영문 label_en 도 \"💻 New Claude Terminal\" 임",
+   "title": "VMO 자가 보완: 창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 살리지 않음",
+   "text": "반영 뒤 확인 1건: 사건 파일 중 sig R5|reloadcut|36504 반영 전 8건 → 반영 뒤 창 다시 로드 1회 뒤에도 8건 유지..",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:1smo28y",
+   "date": "2026-11-26",
+   "title": "중지 원인 '기타' 경로 기록, 점검 도중 VM 파일 변경 회차 사건 보류",
+   "text": "실데이터 digest(7) 의 stoppedOther 내용(창 다시 로드 뒤 VMO 집계에서 확인), 실제 점검 도중 파일 변경 때 사건 보류 동작",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:gjnb69",
+   "date": "2026-11-26",
+   "title": "자가진단 S10 로그 증가 속도와 가벼운 주기 편입",
+   "text": "BE 로그 수준 조정과 로그 파일 정리는 사용자 판단(BE 설정 logback-spring.xml, 파일 삭제)",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:1uyci8j",
+   "date": "2026-11-26",
+   "title": "자가진단 S2 오래 걸린 시험 기록",
+   "text": "S2 결과에 파일별 시간이 남지 않아 오래 걸린 시험 미확인",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:1uyci8j",
+   "date": "2026-11-26",
+   "title": "자가진단 S2 오래 걸린 시험 기록",
+   "text": "20:34 게이트 4021초 원인.",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:1uyci8j",
+   "date": "2026-11-26",
+   "title": "자가진단 S2 오래 걸린 시험 기록",
+   "text": "다음 게이트부터 info.slow 로 확인",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:hqokpl",
+   "date": "2026-11-26",
+   "title": "VMO 자가 보완: 사용자 지시 R256 같은 문제: tools/VibeManager/workbench.js:3397 VMO 단추 분기가 접수, 대기, 실패를 웹뷰로 돌려보내지 않음. incAgent 는 대기열에 넣어도 대기 표시가 없",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1lxbd89",
+   "id": "CL:2026-11-26:g66s3i",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: VM 고정 문구 문장 규칙 2차 단계 1 다시 올림(목적 묶음 연속 계산에서 같은 목적 반영 L4 안 효력 전 판정 제외, 새 문구 가운뎃점 나열 없이)",
+   "title": "묶음 S-Z 9차: 사용자 지적 점검의 세션 기록 다시 읽기 줄임",
+   "text": "19:27~20:34 확장 프로세스 CPU 원인(이번 변경으로 줄어드는지 미측정).",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:g66s3i",
+   "date": "2026-11-26",
+   "title": "묶음 S-Z 9차: 사용자 지적 점검의 세션 기록 다시 읽기 줄임",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1hv8wto",
+   "id": "CL:2026-11-26:1n7bc1",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로",
+   "title": "사용자 지적 감지기 U33 consultNoResponse 와 컨설팅 사건 기록",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1hv8wto",
+   "id": "CL:2026-11-26:1n7bc1",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로",
-   "text": "반영 뒤 확인 2건: 6) 창 다시 로드 1회 뒤 원장 cut 1건이 ui.json job, wb 보고에 같은 runId 로 있음.",
+   "title": "사용자 지적 감지기 U33 consultNoResponse 와 컨설팅 사건 기록",
+   "text": "실제 컨설팅 요청 때 사건이 남는지는 다시 로드 뒤 VMO 컨설팅 단추로 확인",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1hv8wto",
+   "id": "CL:2026-11-26:1s5vw4e",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로",
-   "text": "/ 7) 11-27 까지 실사용 재개 1회 이상에서 U13, U16, U17, U23 감지기 실패 0..",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:1s31lxa",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R210 같은 문제: tools/VibeManager/quick.json:527 사용자 매뉴얼(527줄), 운영자 매뉴얼(634줄) 업무에 출력 형식 선택 항목(formats)이 없음. VM 소개 자료(",
+   "title": "묶음 S-Z 8차: 환경설정 작업 종료 뒤 개선안 이어 진행 항목",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:wysg5h",
+   "id": "CL:2026-11-26:1i8tuze",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 매뉴얼, 운영자 매뉴얼 업무에서 모듈을 여러 개 고르면 모듈마다 문서를 따로 만듦(job-runner 와 시험 2개 같이 수정)",
+   "title": "자동 개선 반복: 재시도 실패 기록, 측정 산출물 집계 제외, 실행 중 삭제 시험, 흔들리던 시험",
+   "text": "VS Code 실화면(창 다시 로드 필요)",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:1w74cjd",
+   "date": "2026-11-26",
+   "title": "묶음 S-Z 6차: 검사기 결함 탐지 오탐, 설정 정합 hook 키, 계획 원장 쓰기 실패",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1343phv",
+   "id": "CL:2026-11-26:1w74cjd",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R198 같은 문제: tools/VibeManager/history.js:246 녹화(console.jsonl)가 있는 실행도 텍스트 로그 끝 40KB 와 로그 기반 Console 단추를 같이 보임. 로",
+   "title": "묶음 S-Z 6차: 검사기 결함 탐지 오탐, 설정 정합 hook 키, 계획 원장 쓰기 실패",
+   "text": "20261126001528_VISION 원장 생성은 창 다시 로드 뒤 ladder tick 에서 확인.",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:5bk9fs",
+   "date": "2026-11-26",
+   "title": "시험이 VM 폴더에 사건 파일을 남기던 결함",
+   "text": "VS Code 실화면(창 다시 로드 필요)",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:1ug8prc",
+   "date": "2026-11-26",
+   "title": "VMO 자가 보완: 반복 수정 집계에서 시험 파일은 원본과 같은 절에 있으면 세지 않음(시험 파일만 고친 절만 셈)",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:4dm645",
+   "id": "CL:2026-11-26:1yjidgb",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지적 감지기 추가 U29 asisLiveLogin: AS-IS 실측 중 오류 발생(로그인 계정이 남은 ID 로 Guest 접속)",
-   "text": "로그 경로 미확인.",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:4dm645",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지적 감지기 추가 U29 asisLiveLogin: AS-IS 실측 중 오류 발생(로그인 계정이 남은 ID 로 Guest 접속)",
+   "title": "자동 개선 반복 1차: 맡음 겹침 경고, 시험 재실행, 흔들리던 시험, 첫 점검, 반복 수정 집계",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:1j66i8i",
+   "id": "CL:2026-11-26:1yjidgb",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지적 감지기 추가 U27 aiUsageStale: AI 주간 한도가 VM 기록 발생 때만 갱신되어 VMO 감시 중 오래된 값이 보임",
+   "title": "자동 개선 반복 1차: 맡음 겹침 경고, 시험 재실행, 흔들리던 시험, 첫 점검, 반복 수정 집계",
+   "text": "반복 수정 집계 변화는 다음 이력 수집(stats.json) 뒤 S9, S15 로 확인",
+   "loaded": ""
+  },
+  {
+   "id": "CL:2026-11-26:1lvpetw",
+   "date": "2026-11-26",
+   "title": "묶음 S-Z 5차: 반영 전 준비 확인, U21 원인 부류",
    "text": "VS Code 실화면(창 다시 로드 필요).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:up2kaj",
+   "id": "CL:2026-11-26:vzbmjb",
    "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R181 같은 문제: tools/VibeManager/prompt-panel.js:141 프롬프트 웹뷰에 글래스모피즘 양식이 없음(backdrop-filter 0건)",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "title": "묶음 S-W 3차: AI 한도 기본 100, 첫 실행 지연, 상시 분석 첫 확인, Overall Review 지난 결과 + 턴 종료 자동 이어가기 hook",
+   "text": "VMO 창 Overall Review 목록 표시, 다시 로드 뒤 컨설팅 60초 첫 실행, 상시 분석 120초 첫 확인(창 다시 로드 뒤 확인).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:w0eu2v",
+   "id": "CL:2026-11-26:wfosea",
    "date": "2026-11-26",
-   "title": "CheckList 체인 소요 개선 2~7",
-   "text": "감시 타이머 미실행 ERROR 표시는 자기 분할 행만.",
+   "title": "묶음 S-D2 이어가기: 개선안 20261126153056_SELF_2 site_types.json 생성기",
+   "text": "run_verify 실행에서 생성 경로는 이번에 돌리지 않음(CheckList 실행 금지).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:w0eu2v",
+   "id": "CL:2026-11-26:wfosea",
    "date": "2026-11-26",
-   "title": "CheckList 체인 소요 개선 2~7",
-   "text": "sqllog 캐시 실제 DB 읽기(미실행), 다음 체인 단계별 소요(미측정).",
+   "title": "묶음 S-D2 이어가기: 개선안 20261126153056_SELF_2 site_types.json 생성기",
+   "text": "run_verify.py 는 대상 밖이라 안 고침",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:w0eu2v",
+   "id": "CL:2026-11-26:hjb9ui",
    "date": "2026-11-26",
-   "title": "CheckList 체인 소요 개선 2~7",
-   "text": "지문 계산이 바뀌어 다음 1회는 AS-IS 실측을 새로 함.",
+   "title": "묶음 S-Y: S6 묶음 요약, 반영 지시문 승인 문장, 화면 게이트, 작업 모드 전환 기록, U32 컨설팅 미기동, 개선 세션 자동 이어 진행",
+   "text": "못 끝낸 3파일(t_checkerscan.js, t_claim_proposal.js, t_gate_fe_page.js)은 예외로 끝났고 원인 미확인(로그에 스택 없음).",
    "loaded": ""
   },
   {
-   "id": "CL:2026-11-26:w0eu2v",
+   "id": "CL:2026-11-26:hjb9ui",
    "date": "2026-11-26",
-   "title": "CheckList 체인 소요 개선 2~7",
-   "text": "새 시험 제목 4개는 첫 실행에 '처음 보는 시험'으로 차례 실행됨.",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:1ihqrxe",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R181 같은 문제: tools/VibeManager/menu-view.js:240 메뉴 웹뷰에 글래스모피즘 양식이 없음(backdrop-filter 0건)",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:1bhdik6",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R181 같은 문제: tools/VibeManager/history.js:125 Revision 웹뷰에 글래스모피즘 양식(--g1, --gb, backdrop-filter)이 없음(backdrop-fil",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:jv97yf",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R179 같은 문제: tools/VibeManager/history.js:126 #l 과 #r 좌우 분할에 경계 막대 크기 조절이 없음(history.js 에 pointermove, col-resize",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:19kcd83",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R179 같은 문제: tools/VibeManager/orchestra.js:355 .tls, .dc-nav(365줄), .hc-nav(368줄)와 본문 사이에 경계 막대 크기 조절이 없음(orchest",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:1t520s1",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R178 같은 문제: tools/VibeManager/history.js Revision 창 왼쪽 목록(#l)에 접기와 펴기 단추가 없음(단추 문구 기호 없이)",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:a7wu2e",
-   "date": "2026-11-26",
-   "title": "CheckList 체인 6·7단계 인자 누락 수정",
-   "text": "다음 체인 실행에서 6·7단계 실제 소요(미측정), VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:1gapb84",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R159 같은 문제: tools/VibeManager/jobs.js:383 VMW 웹뷰 초기 동시 상한 기본값이 5임(init 전 표시, 입력칸 기본값)",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:lodtxg",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R159 같은 문제: tools/VibeManager/job-runner.js:169 동시 실행 상한 기본값이 5임. tools/Harness/harness.json:58 \"jobMaxPar\": 5 가",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:md7mmx",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: 사용자 지시 R158 같은 문제: tools/VibeManager/jobs.js:454 최근 선택으로 불러온 화면 중 현재 목록에 없는 화면은 명칭이 빈 값으로 들어감(flow.targets 의 menu.csv 채움",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
-   "loaded": ""
-  },
-  {
-   "id": "CL:2026-11-26:x6dj",
-   "date": "2026-11-26",
-   "title": "VMO 자가 보완: Dictionary 탭에 사용자 지시 규칙(user_rules.json) 묶음 추가, 출처와 제목 나열은 쉼표로",
-   "text": "VS Code 실화면(창 다시 로드 필요).",
+   "title": "묶음 S-Y: S6 묶음 요약, 반영 지시문 승인 문장, 화면 게이트, 작업 모드 전환 기록, U32 컨설팅 미기동, 개선 세션 자동 이어 진행",
+   "text": "VS Code 실화면(창 다시 로드 필요), Stop hook 실동작(다음 개선 세션 종료 때 확인).",
    "loaded": ""
   }
  ],
- "failed": [],
+ "failed": [
+  {
+   "id": "20261126153056_SELF",
+   "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/ledger.py:472 편집 기대 보정이 사람이 적은 edit_expect_manual.csv(SCP0104 1화면)에 기대고, 다른 화면의 '해석 못 한 잠금' 칸은 채울 수단이 없음",
+   "targets": [
+    "tools/Harness/verify/ledger.py"
+   ],
+   "tries": 3,
+   "why": "반영 실패. Claude exit 1 · 대상 파일 1개 복원 · 대상 밖 변경 Doc/verify/_llm_usage.csv, tools/Harness/gate_baseline.tsv, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-selfcheck.js, Doc/verify/DMF0042/llm_cache.json, Doc/verify/DMF0042/llm_usage.csv 는 AI 가 고치지 않아 그대로 남음"
+  }
+ ],
  "known": [
   {
-   "title": "CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 2",
+   "title": "결함 탐지기 오탐 2종(서로 다른 행 인용 묶음, '검사기 한계 아님' 부정 문구)",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 기록 때 다시 씀",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "반복 지시 집계에서 VMO 승인, 되돌리기 기록 줄의 인용은 사용자 지시로 세지 않음",
+   "status": "applied",
+   "reason": ""
+  },
+  {
+   "title": "BE 로그 백업 사본 4개 삭제(nscm-be/logs *.log.bak_20261123_self*, 54.9GB)와 스냅샷 사본 폴더 삭제",
    "status": "pending",
-   "reason": ""
+   "reason": "사람 판단 필요: 파일 영구 삭제(54.9GB, 되돌릴 수 없음)라 사용자 확인 필요. 3acd3c 세션이 22:38 사용자에게 질문함"
   },
   {
-   "title": "사용자 지시 R241 같은 문제: tools/E2E/lib/formscen.ts:21 폼 저장형 시나리오 form_scenarios.json 을 만드는 스크립트가 없고 SSP0020 1화면 수작업 파일만 있음, 다른 폼 저장형 화면은 @formse",
+   "title": "U21 반영 실패 집계에서 고친 안이 반영 완료된 실패는 빼고 셈",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/mapping_trace.py:2331 D3·C2 사이트 표본 site_types.json 을 만드는 스크립트가 tools 에 없고 SCP0007 1화면에만 있음, strTO_SITE_TYPE 분기가 ",
-   "status": "pending",
-   "reason": "사람 판단 필요: site_types.json 생성기 신설(TO-BE SCM_MST_SITE 조회 설계)이 필요한 별도 작업(4ec206 보고)"
-  },
-  {
-   "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/ledger.py:472 편집 기대 보정이 사람이 적은 edit_expect_manual.csv(SCP0104 1화면)에 기대고, 다른 화면의 '해석 못 한 잠금' 칸은 채울 수단이 없음",
-   "status": "pending",
-   "reason": "사람 판단 필요: SCP0104 수작업 edit_expect_manual 139행 중 자동 해석과 같은 것은 신규행 41행뿐. 페이지 조건(isPageSOP) 평가 구현이 먼저 필요(4ec206 보고)"
-  },
-  {
-   "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/run_verify.py:1012 시트별 데이터 조건 생성기 sheet_data_cond.py 를 run_verify 가 부르지 않아 sheet_data_cond.json 이 SCP0104 1화면",
+   "title": "삭제 안을 반영할 때 지울 로그, 백업 파일을 반영 전 사본(.bak_, 스냅샷)으로 복사하지 않음",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R240 같은 문제: tools/E2E/lib/crud.ts:311 310줄 scrollIntoView 뒤 400ms 를 한 번 기다리고 읽음, 셀이 아직 안 그려졌으면 -1 이 되어 '신규 행 위치를 찾지 못함'으로 실저장 시험",
+   "title": "측정 추가: 실행 집계의 중지 원인 '기타'마다 어떤 중지 기록으로 분류했는지 남김",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R240 같은 문제: tools/E2E/lib/popupprobe.ts:238 cellPoint 와 270줄 sortByF3 가 스크롤 뒤 200ms 를 한 번 기다리고 셀이 없으면 바로 null, 다시 그리기와 다시 읽기 없음",
+   "title": "자가진단 무거운 점검 도중 VM 파일이 바뀌면 그 회차의 구문, 시험, 정의 정합 실패는 사건으로 올리지 않고 조용해진 뒤 다시 잼",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R239 같은 문제: tools/Harness/verify/judge.py:3592 결함 유형 행에 직접 맞는 측정 행이 없는데 같은 규칙 다른 대상 행이 FAIL 이거나 PASS 뿐이면 해당없음(NA)으로 둠, 이 분기 자체 시험 없음",
-   "status": "rejected",
-   "reason": "사용자 결정(2026-11-26 15:53): 결함 유형 행 중 이 화면에 직접 일치하는 실측이 없는 행은 해당없음 유지 — 2026-10-29 허위 FAIL 방지 지시 우선, NA→ERROR 전환 안 함"
-  },
-  {
-   "title": "사용자 지시 R238 같은 문제: tools/Harness/verify/gen_expect.py:353 소수 자릿수를 컬럼 이름으로만 모아 첫 행(메인 시트) 값만 남기고, 다른 시트의 같은 이름 편집 칸에도 그 자릿수로 기대값을 만듦",
+   "title": "창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 살리지 않음",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R238 같은 문제: tools/Harness/verify/judge.py:3681 일반 텍스트 셀 집합을 시트 구분 없이 컬럼 이름으로만 만들어, 다른 시트에서 텍스트 셀인 같은 이름 컬럼 때문에 D1 FAIL 이 PASS 로 바뀜",
+   "title": "사용자 지시 R258 같은 문제: .claude/agents/vm-orchestra.md:16 에이전트 지시문의 컨설팅 설명에 주제별 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 역할 스킬 사용이 없음. 수석 엔지니어 한 사람",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R238 같은 문제: tools/Harness/verify/judge.py:2851 읽기 전용 그리드 판단이 메인 시트 edit_expect.csv 만 보고 edit_expect_sheets.csv 를 보지 않아, 다른 시트에 편집 가능한 칸이 ",
+   "title": "사용자 지시 R258 같은 문제: tools/VibeManager/orch-consult.js:59 DB 역할 기본 스킬 'db' 는 ~/.claude/skills, .claude/skills 어디에도 SKILL.md 가 없음(두 폴더에 있는 것은 fronten",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 2",
-   "status": "pending",
-   "reason": ""
-  },
-  {
-   "title": "VM 고정 문구 문장 규칙 2차 단계 1 다시 올림(목적 묶음 연속 계산에서 같은 목적 반영 L4 안 효력 전 판정 제외, 새 문구 가운뎃점 나열 없이)",
+   "title": "사용자 지시 R257 같은 문제: tools/VibeManager/quick.json:2657 VM 환경설정 그룹에 orch.autoImproveOnStop(작업 종료 뒤 대기 개선안 이어 진행)과 orch.autoImproveScope 를 켜고 끄는 항목",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R237 같은 문제: tools/Harness/verify/all_cols_check.py:36 Last Update 칸 추가 행 분리 검사가 a1_live.json 실전송 본문(Division 1개)으로만 PROC 을 실행함. 0행이면 Division 후보",
+   "title": "사용자 지시 R256 같은 문제: tools/VibeManager/workbench.js:3397 VMO 단추 분기가 접수, 대기, 실패를 웹뷰로 돌려보내지 않음. incAgent 는 대기열에 넣어도 대기 표시가 없음(drain 이 busy 면 조용히 retu",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R237 같은 문제: Doc/e2e/specs/_verify.spec.ts:1027 다음 시험들이 nscm.search() 뒤 rowCount 만 보고 ensureRows 나 Division 순회를 부르지 않아, 0행이면 바로 판정필요나 ERRO",
+   "title": "사용자 지적 감지기 추가 U33 consultNoResponse: 창 다시 로드 뒤 VMO 컨설팅을 누르고 주제를 입력했는데 화면 반응 없음",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R237 같은 문제: Doc/e2e/specs/_trace.spec.ts:1609 ensureRows 를 다 돌고도 0행이면 미검증(ERROR)이 아니라 판정필요로 적음. 1211줄 팝업 열기 전제, 1369줄 기존행 위반 입력, 1855줄 붙",
+   "title": "파일 쓰기 재시도(fs-retry)가 끝내 실패할 때 시도 수와 걸린 시간을 오류 기록에 남김",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R237 같은 문제: Doc/e2e/specs/_trace.spec.ts:3038 대조표 미구현 재현(GA~GG, 기준 기존행 ROUTE_CNT>0) 시험이 기본 조회 1회의 n0 만 쓰고 0행이면 '기준 기존행 없음(조회 0행)' 으로 진행함",
+   "title": "반복 수정 집계에서 측정 산출물 경로(Doc/verify/, Doc/e2e/results/)는 빼고 셈",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R237 같은 문제: Doc/e2e/specs/_trace.spec.ts:2749 2595줄 searchWait() 가 nscm.search() 와 rowCount 만 쓰고 ensureRows 를 부르지 않음. 기존행 INCOTERMS 편집 시",
+   "title": "설정 정합 점검(S12)이 hook 스크립트(.claude/hooks/*.js, tools/Harness/hooks/*)에서 읽는 harness.json orch 키도 '읽는 코드 있음'으로 셈",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 1",
+   "title": "시험 전체 실행기: 실행 도중 지워진 시험 파일은 실패로 세지 않고 '실행 중 삭제'로 따로 적음",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 매뉴얼, 운영자 매뉴얼 업무에서 모듈을 여러 개 고르면 모듈마다 문서를 따로 만듦(job-runner 와 시험 2개 같이 수정)",
+   "title": "계획 원장(plans.json) 쓰기 실패 때 개선안을 '단계 원장 진행'으로 바꾸지 않고, 원장 없는 진행 안을 다시 만듦",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R236 같은 문제: tools/Harness/verify/i18n_lang_check.py:133 언어별 버튼 문구를 하나도 읽지 못한 경우(by_lang 이 비었거나 목록이 모두 빈 경우)에도 해당없음으로 둠. 같은 화면의 조회 실측이 있어도 해당없음이 남음",
+   "title": "검사기 결함 탐지기 오탐 수정: 실제 두 글자 칸(M0, DV)과 화면 문구의 '.', 사용자 결정으로 만든 종속 FAIL",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R236 같은 문제: tools/Harness/verify/judge.py:3240 '칸을 찾지 못함', '칸 없음', 'TO-BE 팝업에 없음', 'not found' FAIL 을 해당없음으로 바꿀 때 같은 실행에서 같은 시트, 컬럼, 팝업을 ",
+   "title": "음수 글자색(H13) 검사: 음수 데이터 행과 편집 가능 행이 둘 다 없으면 해당없음 대신 미검증으로 판정",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R235 같은 문제: tools/Harness/verify/dedup_screen.py:161 MEASURED(28줄)에 NA 가 있어 대표가 해당없음이면 미측정 구성원이 '[중복 정리]' 해당없음을 받음",
+   "title": "VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 7",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R235 같은 문제: tools/Harness/verify/dedup_pre.py:19 해당없음, 판정필요 행을 대표로 삼아 묶고, apply(146줄)가 구성원 결과를 대표 결과로 바꿈. 사용자판정 행을 빼지 않음",
+   "title": "반복 수정 집계에서 시험 파일은 원본과 같은 절에 있으면 세지 않음(시험 파일만 고친 절만 셈)",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R235 같은 문제: tools/Harness/verify/make_verify_docs.py:805 dedup_screen.csv, dup_groups.csv 구성원을 대표와 결과만 같으면 '중복 정리' 시트로 옮김. 해당없음, 미검증 행과 사용자판정, 사용자의",
+   "title": "사건에 처리 담당(handler)과 마지막 진행 시각을 기록하고 U3 는 그 필드만 읽음",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "개념 재정립: VMO 자가 보완의 효력 시점(창 다시 로드 기다림 → VMO 점검 모듈은 반영 즉시 다시 읽고 다시 init, 창 로드는 화면·체인 파일만)",
-   "status": "pending",
-   "reason": ""
-  },
-  {
-   "title": "반영 실패 방치 판정(U11)이 '반영 실패 진단' 기록을 실패로 세는 결함 수정, 진단 stop 안은 사람 판단 대기로 분리",
+   "title": "변경 기록 종류 분류를 개선안 종류 판정 하나로 맞춤(감지기 추가 = 요청)",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "자동 반영 대기 판정(U3 stuckProp)을 대기 시간 대신 반영 줄 진행으로 판정",
+   "title": "개념 재정립: VMO 개선안 반영은 반영 전 준비 확인을 통과한 안만 시작하고, 막힌 안은 반영 실패가 아니라 대상 재진단으로 보냄",
+   "status": "superseded",
+   "reason": ""
+  },
+  {
+   "title": "사용자 지시 R255 같은 문제: tools/VibeManager/orchestra.js:831 Overall Review 카드가 vision/meta.json 마지막 1건만 그림. orch-vision.js:163 의 vision/<시각>.json 지난 결",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 4",
+   "title": "사용자 지시 R254 같은 문제: tools/VibeManager/orch-improve.js:570 상시 분석은 init 때 첫 실행이 없음. 기록이 없어도 1시간 주기나 체인 종료를 기다림",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R178 같은 문제: tools/VibeManager/history.js Revision 창 왼쪽 목록(#l)에 접기와 펴기 단추가 없음(단추 문구 기호 없이)",
+   "title": "사용자 지시 R254 같은 문제: tools/VibeManager/orch-vision.js:182 vision/meta.json 에 lastMs 가 없어도 첫 큰 그림 점검을 10분 미룸",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R234 같은 문제: tools/Harness/verify/timing_report.py:117 소요 집계가 run_verify 기록(_timing.csv, run_timing.json, _test_timing.jsonl)만 읽음. AI 검토 세션(llm_u",
+   "title": "사용자 지시 R254 같은 문제: tools/VibeManager/orch-consult.js:123 meta.json 에 lastMs 가 없어도 창을 다시 로드한 뒤 첫 컨설팅을 25분 미룸",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R234 같은 문제: tools/VibeManager/orch-usercheck.js:69 목표 초과 화면의 소요 상위 구간을 run_timing.json 마지막 기록(run_verify 도구 시간)에서만 뽑음. 같은 runId 의 step.end ms",
+   "title": "사용자 지시 R253 같은 문제: tools/VibeManager/orch-agent.js:46 harness.json 에 orch.aiWeeklyStopPct 키가 없거나 읽기에 실패하면 주간 한도 90% 에서 자가진단, 자동 보완, 컨설팅을 멈춤",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R234 같은 문제: tools/Harness/verify/unverified_resolve.py:486 미검증 해소 중 행 단위 재측정(row_run)의 시작, 종료, 소요가 파일에 남지 않음. run()(462~464행)은 시간을 재지 않고, row_run.py ",
+   "title": "사용자 지적 감지기 추가 U32 consultCadence: 창 다시 로드 뒤 VMO 컨설팅 기능이 바로 기동하지 않음",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R234 같은 문제: tools/Harness/verify/checklist_run.py:408 '[작업 k/K]' 하위 단계(수정분 범위 결정, 측정, 미검증 분류, --docs 문서 생성)를 run()(32~34행, subprocess.call 만 함)으",
+   "title": "CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) · 단계 5",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R234 같은 문제: tools/VibeManager/workbench.js:1359 하위 단계(수선 회차, 시험 기준 보정, 전체 재검증, 다시 실행, 1359~1400행)와 스크립트 출력의 '[작업 k/K]' 줄(2619행)이 화면 표시로만 가",
+   "title": "컨설팅: UI/DB MODE 에서 FE 화면 폴더를 고치는 개선안의 반영 게이트에 화면 게이트(check.js, 타입 검사와 린트 제외) 추가",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R234 같은 문제: tools/VibeManager/job-runner.js:147 하위 단계(측정, 미검증 분류, 수선 회차, 다시 실행)는 시작 시각 at 만 저장되고 끝 시각과 소요(sec)가 없음. 8개를 넘으면 앞의 기록이 잘림",
+   "title": "컨설팅: 작업 모드 전환 도구(set_scope.py)가 전환 기록을 events.jsonl 에 남기고 UI/DB MODE 전환 전 점검 결과를 출력",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "Dictionary 탭에 사용자 지시 규칙(user_rules.json) 묶음 추가, 출처와 제목 나열은 쉼표로",
+   "title": "컨설팅: 반영 지시문(IMPACT_RULE)의 사용자 승인 목록을 실제 자동 반영 기준에서 만들어 씀",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "사용자 지시 R143 같은 문제: tools/VibeManager/orch-watch.js:93 창 다시 로드로 끊긴 실행(cutRun)을 실패 사건 대신 알림으로 올림(제목 문구는 쉼표로 씀)",
+   "title": "컨설팅: 자가진단 미확인 추적(S6)을 종류와 경과일로 묶어 요약을 먼저 보여 줌",
    "status": "applied",
    "reason": ""
   },
   {
-   "title": "sqllog_calls.py 소요 증가 원인 측정 뒤 PARAMS 읽기 방식 보완",
+   "title": "컨설팅: 개선안을 맡을 때 다른 세션이 맡은 안과 대상 파일이 겹치면 경고하고 개선안 이력에 남김",
    "status": "applied",
-   "reason": ""
-  },
-  {
-   "title": "개념 재정립: 진단 사다리 반복 수정 묶음을 파일 단위에서 원인 서명 단위로",
-   "status": "pending",
    "reason": ""
   }
  ]

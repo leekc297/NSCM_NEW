@@ -3,7 +3,7 @@
   "at": "2026-11-26T16:24:13+09:00",
   "ms": 1795677853903,
   "source": "self",
-  "status": "pending",
+  "status": "applied",
   "sig": "userrule|rn|tools/vibemanager/orch selfcheck.js|승인대상n종hooksettingsjsondb시험계정작업모드밖인orchse",
   "title": "사용자 지시 R248 같은 문제: tools/VibeManager/orch-selfcheck.js:538 승인 대상 5종(hook, settings.json, DB, 시험 계정, 작업 모드) 밖인 orch-selfcheck.js·orch-improve.js 의 자동 ",
   "evidence": "규칙 R248 \"VMO 작업 범위 제한은 승인 대상(hook, settings.json, DB, 시험 계정, 작업 모드)만 두고 그 밖의 보완, 기능 추가는 스스로 진행함\" (원래 지시 2026-11-26 16:03 \"여기서 특정한 일은 하면 안된다던지 하는 것은 없습니다 .\") · tools/VibeManager/orch-selfcheck.js:538 if (changesApprovalRule(pr, ts)) return { ok: false, why: 'VM 핵심 규칙 변경(VMO 자동 반영, 승인 기준) = 사용자 승인' };",
@@ -23,6 +23,11 @@
       "at": "2026-11-26T16:26:23+09:00",
       "by": "3acd3c",
       "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:44:48+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-selfcheck.js autoEligible: 'if (!coreAuto && changesApprovalRule(...))'. coreAutoApply true 면 승인 기준 변경 안도 자동, 5종(AUTO_DENY, 작업 모드, settings.json, .sql 등) 판정 유지. t_orch_coreauto.js 기대값 R248 기준으로 고치고 coreAutoApply false 종전 시험 1건 추가. run_all 92/92 PASS 1553 FAIL 0(16:44:22), 설치 폴더 동일 확인"
     }
   ],
   "plain": {
@@ -36,6 +41,6 @@
   "kind": "fix",
   "needsApproval": "VM 핵심 규칙 변경(VMO 자동 반영, 승인 기준) = 사용자 승인",
   "claimedBy": "3acd3c",
-  "autoWaitMs": 1795706783221,
-  "waitNote": "Claude Code 세션 3acd3c 가 직접 보완 중"
+  "waitNote": "",
+  "appliedMs": 1795679088530
 }

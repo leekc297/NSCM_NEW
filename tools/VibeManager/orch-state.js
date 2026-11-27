@@ -53,6 +53,9 @@ function apply(ev) {
   //   종전 = 지우지 않아 새 VM 의 sweep 이 같은 죽은 대기·실행을 다시 꺼내 같은 기록을 또 씀(실측: events.jsonl wait.gone 21줄 중 고유 4개 · proc.gone 37줄 중 고유 7개)
   else if (t === 'wait.gone') { for (const [k, v] of waits) if (v.kind === ev.kind && (v.screen || '') === (ev.screen || '') && v.pid === ev.waiter_pid) waits.delete(k); }
   else if (t === 'proc.gone') { for (const [k, v] of procs) if (String(v.screen || '').toUpperCase() === String(ev.screen || '').toUpperCase() && v.t0 === ev.start_ms) procs.delete(k); }
+  // 개선안 20261126214604_REVIEW: 창 다시 로드로 끊긴 실행 기록(run.cut)을 받으면 같은 주인(owner)·시작 시각(t0) 항목을 지운다.
+  //   종전 = 지우는 기록이 proc.gone 뿐이라 기록을 다시 읽을 때 체인, Claude 가 되살아나 같은 알림이 VM 시작마다 다시 남(사건 8건 · 주인 36504)
+  else if (t === 'run.cut') { for (const r of (Array.isArray(ev.runs) ? ev.runs : [])) { const own = r.owner != null ? r.owner : ev.owner; const m = v => v.owner === own && v.t0 === r.t0; const map = r.what === 'chain' ? chains : r.what === 'claude' ? claudes : r.what === 'proc' ? procs : null; if (!map) continue; if (r.what === 'chain' && r.runId && map.has(r.runId) && m(map.get(r.runId))) { map.delete(r.runId); continue; } for (const [k, v] of map) if (m(v)) map.delete(k); } }
   else if (t === 'job.start') jobs.set(ev.job, { label: ev.label || '', total: ev.total || 0, done: 0, running: 0, t0: ev.ms, owner: ev.pid });
   else if (t === 'job.item.start') { const j = jobs.get(ev.job); if (j) j.running++; }
   else if (t === 'job.item.end') { const j = jobs.get(ev.job); if (j) { j.running = Math.max(0, j.running - 1); j.done++; } }
@@ -71,7 +74,7 @@ function sweep() {
     if (!dead && v.pid && !pidAlive(v.pid)) { if (!v.deadAt) v.deadAt = Date.now(); dead = Date.now() - v.deadAt > 10000; }
     if (dead) { procs.delete(k); gone.push(Object.assign({ what: 'proc' }, v)); }
   }
-  for (const [k, v] of chains) if (!pidAlive(v.owner)) { chains.delete(k); gone.push(Object.assign({ what: 'chain' }, v)); }
+  for (const [k, v] of chains) if (!pidAlive(v.owner)) { chains.delete(k); gone.push(Object.assign({ what: 'chain', runId: k }, v)); }
   for (const [k, v] of claudes) if (!pidAlive(v.owner)) { claudes.delete(k); gone.push(Object.assign({ what: 'claude' }, v)); }
   // 개선안 20261120103659_SELF: 살아 있는 대기는 seenMs(마지막 생존 확인 시각)를 갱신. 사라진 대기의 대기 시간 = seenMs - t0(이번 VM 에서 한 번도 못 봤으면 seenMs 없음)
   for (const [k, v] of waits) { if (pidAlive(v.pid)) v.seenMs = Date.now(); else { waits.delete(k); gone.push(Object.assign({ what: 'wait' }, v)); } }

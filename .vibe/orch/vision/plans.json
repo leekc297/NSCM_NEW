@@ -7,7 +7,8 @@
    "axis": "vmoCadence",
    "keys": [
     "L4|useraxis|vmoCadence",
-    "L4|purpose|VMO가10분간격으로열린문제를진단조치함"
+    "L4|purpose|VMO가10분간격으로열린문제를진단조치함",
+    "L4|struct|usercheck|U21"
    ],
    "doc": ".vibe/orch/vision/concept_20261124_L4_useraxis_vmoCadence.md",
    "targets": [
@@ -32,7 +33,8 @@
    ],
    "absorbed": [
     "20261124000237_VISION",
-    "20261126110059_VISION"
+    "20261126110059_VISION",
+    "20261126182719_VISION"
    ],
    "history": [
     {
@@ -73,6 +75,31 @@
      "at": "2026-11-26T16:25:25+09:00",
      "what": "VMO 원장 진행: 단계 6 하위 안 20261126162524_SELF 등록",
      "step": 6
+    },
+    {
+     "at": "2026-11-26T17:30:43+09:00",
+     "what": "단계 6 applied(20261126162524_SELF applied)",
+     "step": 6
+    },
+    {
+     "at": "2026-11-26T17:30:43+09:00",
+     "what": "단계 5 관찰 시작(24시간, 2026-11-27T17:30 까지)",
+     "step": 5
+    },
+    {
+     "at": "2026-11-26T18:27:21+09:00",
+     "what": "20261126182719_VISION 흡수 → 단계 7",
+     "step": 7
+    },
+    {
+     "at": "2026-11-26T18:34:14+09:00",
+     "what": "VMO 원장 진행: 단계 7 하위 안 20261126183411_SELF 등록",
+     "step": 7
+    },
+    {
+     "at": "2026-11-26T18:54:11+09:00",
+     "what": "단계 7 applied(20261126183411_SELF applied)",
+     "step": 7
     }
    ],
    "steps": [
@@ -103,7 +130,8 @@
      "status": "applied",
      "proposal": "20261124093730_SELF",
      "readyMs": 1795480650192,
-     "proposedAt": "2026-11-24T09:37:31+09:00"
+     "proposedAt": "2026-11-24T09:37:31+09:00",
+     "effMs": 1795678149282
     },
     {
      "n": 4,
@@ -127,7 +155,8 @@
       "tools/Harness/harness.json"
      ],
      "readyMs": 1795656670817,
-     "proposedAt": "2026-11-26T10:31:11+09:00"
+     "proposedAt": "2026-11-26T10:31:11+09:00",
+     "effMs": 1795678149282
     },
     {
      "n": 6,
@@ -135,7 +164,7 @@
      "change": "지금 개념: VMO 가 고친 점검 모듈 대부분은 사용자가 창을 다시 로드해야 효력을 가지고, 그 전까지 VMO 는 옛 판정으로 같은 문제를 다시 올림 → 새 개념: 모듈 안 상태가 init 인자뿐인 VMO 점검 모듈은 반영 즉시 다시 읽고 같은 인자로 다시 init 해 효력 시각 = 반영 시각. 창 로드 대기는 화면, 체인, 타이머를 쥔 파일만 남고, codeInfo staleFiles 는 다시 읽은 모듈을 빼고 셈",
      "check": "node tools/VibeManager/test/t_orch_hotreload.js 에 표본 추가(init 을 가진 모듈이 hotReload 뒤 paths 를 유지하고 새 함수 결과를 냄). 반영 전 digest7d.code staleFiles 18개 중 orch-usercheck.js 포함 → 반영 뒤 orch-usercheck.js 를 고친 다음 hotLoaded 에 들고 staleFiles 에서 빠짐. orch-worklist.js 포함 여부는 모듈 상태 확인 뒤 결정(반영 전 미측정)",
      "observe": false,
-     "status": "proposed",
+     "status": "applied",
      "absorbed": "20261126110059_VISION",
      "targets": [
       "tools/VibeManager/orch-selfcheck.js",
@@ -145,7 +174,29 @@
      ],
      "readyMs": 1795677924857,
      "proposal": "20261126162524_SELF",
-     "proposedAt": "2026-11-26T16:25:25+09:00"
+     "proposedAt": "2026-11-26T16:25:25+09:00",
+     "effMs": 1795681831213
+    },
+    {
+     "n": 7,
+     "text": "20261126182719_VISION 내용: 전: VMO 는 대상 경로 규칙만 보고 안을 반영하고, autoApplyAll 이면 사람 판단 필요로 묶인 안도 반영하며, 원인과 무관하게 반영 실패 기록을 세어 U21 을 판정함. 후: VMO 는 대상 파일 존재, 근거와 보류 사유의 고칠 파일이 targets 안에 있는지, 다른 세션 동시 편집, 사실 근거 보류의 해소를 반영 전에 확인하고, 통과하지 못한 안은 VMO 가 대상을 다시 진단해 새 안으로 올리며, U21 은 준비 확인을 통과한 뒤의 실패만 원인 부류별로 셈.",
+     "change": "전: VMO 는 대상 경로 규칙만 보고 안을 반영하고, autoApplyAll 이면 사람 판단 필요로 묶인 안도 반영하며, 원인과 무관하게 반영 실패 기록을 세어 U21 을 판정함. 후: VMO 는 대상 파일 존재, 근거와 보류 사유의 고칠 파일이 targets 안에 있는지, 다른 세션 동시 편집, 사실 근거 보류의 해소를 반영 전에 확인하고, 통과하지 못한 안은 VMO 가 대상을 다시 진단해 새 안으로 올리며, U21 은 준비 확인을 통과한 뒤의 실패만 원인 부류별로 셈.",
+     "check": "1) 재현 시험: 실제 안 20261126153056_SELF, 20261124012049_SELF_5, 20261124014508_SELF_3 json 을 준비 확인에 넣으면 3건 반영 시작 0건, 앞 2건 '대상 재진단', 마지막 1건 동시 편집 기록 입력 때 '다음 차례'. 2) 게이트 되돌림 안 20261125005937_SELF 는 준비 확인 통과. 3) node tools/VibeManager/test/run_all.js ALL PASS(반영 전 18:16 기준 PASS 1731, FAIL 0). 4) 11-26 proposals 로 applyFailRepeat 재계산 시 detail 에 원인 부류가 적히고 준비 확인에서 막힐 안은 세지 않음.",
+     "observe": false,
+     "status": "applied",
+     "absorbed": "20261126182719_VISION",
+     "targets": [
+      "tools/VibeManager/orch-selfcheck.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/orch-usercheck.js",
+      "tools/VibeManager/user_checks.json",
+      "tools/Harness/harness.json",
+      "tools/VibeManager/test/t_orch_selfapply.js"
+     ],
+     "readyMs": 1795685651601,
+     "proposal": "20261126183411_SELF",
+     "proposedAt": "2026-11-26T18:34:14+09:00",
+     "effMs": 1795686118221
     },
     {
      "n": 5,
@@ -153,9 +204,12 @@
      "change": "관찰",
      "check": "효력 시작 뒤 observeHours 동안 S13|U3|idleInc 0건, S13|U3|stuckProp 시한 초과 0건.",
      "observe": true,
-     "status": "todo",
+     "status": "observing",
      "proposal": "",
-     "readyMs": 1795677323845
+     "readyMs": 1795677323845,
+     "startMs": 1795681843079,
+     "hours": 24,
+     "endMs": 1795768243079
     }
    ],
    "lastSeenAt": "2026-11-26T10:58:10+09:00"
@@ -217,6 +271,16 @@
      "at": "2026-11-26T13:26:14+09:00",
      "what": "VMO 원장 진행: 단계 2 하위 안 20261126132614_SELF 등록",
      "step": 2
+    },
+    {
+     "at": "2026-11-26T17:20:39+09:00",
+     "what": "단계 2 applied(20261126132614_SELF applied)",
+     "step": 2
+    },
+    {
+     "at": "2026-11-26T17:20:40+09:00",
+     "what": "VMO 원장 진행: 단계 3 하위 안 20261126172039_SELF 등록",
+     "step": 3
     }
    ],
    "steps": [
@@ -238,10 +302,11 @@
      "change": "S11 점검이 이전 결과보다 늘어난 문장 위반을 fix 개선안으로 올림",
      "check": "지금 3건(workbench.js L602, L745, orch-usercheck.js L705)으로 정리 개선안 1건이 생기고, 반영 뒤 doc_style.py 위반 0, test/run_all.js PASS.",
      "observe": false,
-     "status": "proposed",
+     "status": "applied",
      "proposal": "20261126132614_SELF",
      "readyMs": 1795667174118,
-     "proposedAt": "2026-11-26T13:26:14+09:00"
+     "proposedAt": "2026-11-26T13:26:14+09:00",
+     "effMs": 1795682888402
     },
     {
      "n": 3,
@@ -249,8 +314,10 @@
      "change": "Write, Edit 뒤 tools/VibeManager/*.js 이면 그 파일 doc_style.py 전후 비교 결과를 출력함. 차단하지 않음",
      "check": "'—' 를 넣은 Edit 1건에서 경고 출력, 위반 없는 Edit 에서는 출력 없음.",
      "observe": false,
-     "status": "todo",
-     "proposal": ""
+     "status": "proposed",
+     "proposal": "20261126172039_SELF",
+     "readyMs": 1795681239681,
+     "proposedAt": "2026-11-26T17:20:40+09:00"
     },
     {
      "n": 4,
@@ -317,6 +384,46 @@
      "at": "2026-11-26T15:58:24+09:00",
      "what": "VMO 원장 진행: 단계 2 하위 안 20261126155824_SELF 등록",
      "step": 2
+    },
+    {
+     "at": "2026-11-26T17:27:43+09:00",
+     "what": "단계 2 applied(20261126155824_SELF applied)",
+     "step": 2
+    },
+    {
+     "at": "2026-11-26T17:27:44+09:00",
+     "what": "VMO 원장 진행: 단계 3 하위 안 20261126172743_SELF 등록",
+     "step": 3
+    },
+    {
+     "at": "2026-11-26T17:31:42+09:00",
+     "what": "단계 3 applied(20261126172743_SELF applied)",
+     "step": 3
+    },
+    {
+     "at": "2026-11-26T17:31:43+09:00",
+     "what": "VMO 원장 진행: 단계 4 하위 안 20261126173142_SELF 등록",
+     "step": 4
+    },
+    {
+     "at": "2026-11-26T17:38:42+09:00",
+     "what": "단계 4 applied(20261126173142_SELF applied)",
+     "step": 4
+    },
+    {
+     "at": "2026-11-26T17:38:43+09:00",
+     "what": "VMO 원장 진행: 단계 6 하위 안 20261126173842_SELF 등록",
+     "step": 6
+    },
+    {
+     "at": "2026-11-26T17:44:43+09:00",
+     "what": "단계 6 applied(20261126173842_SELF applied)",
+     "step": 6
+    },
+    {
+     "at": "2026-11-26T17:44:43+09:00",
+     "what": "단계 5 관찰 시작(24시간, 2026-11-27T17:44 까지)",
+     "step": 5
     }
    ],
    "steps": [
@@ -338,10 +445,11 @@
      "change": "orch-vision.js 입력에 checklistEffect { effAt, runsAfter: [{runId, firstDocMin, chainMin}] } 를 넣고 지시문에 규칙 1-2(효력 뒤 실행 0건 = 미확인 '실측 대기', firstDocMin > checklistTargetMin = 어긋남, 이하 = 맞음, chainMin 은 표시만) 추가",
      "check": "지시문 생성 시험에서 1-2 줄과 입력 필드 존재, events.jsonl:2001 형식 표본에서 runsAfter 0건",
      "observe": false,
-     "status": "proposed",
+     "status": "applied",
      "proposal": "20261126155824_SELF",
      "readyMs": 1795676304022,
-     "proposedAt": "2026-11-26T15:58:24+09:00"
+     "proposedAt": "2026-11-26T15:58:24+09:00",
+     "effMs": 1795681502773
     },
     {
      "n": 3,
@@ -349,8 +457,11 @@
      "change": "20261124000457_VISION 의 L4-2 효력 거름을 이 원장 단계로 흡수해 반영",
      "check": "그 안의 t_orch_ladder.js 표본(U2, U24, U25 와 효력 표본)이 L4|useraxis|checklistTime 을 내지 않음",
      "observe": false,
-     "status": "todo",
-     "proposal": ""
+     "status": "applied",
+     "proposal": "20261126172743_SELF",
+     "readyMs": 1795681663116,
+     "proposedAt": "2026-11-26T17:27:44+09:00",
+     "effMs": 1795681887268
     },
     {
      "n": 4,
@@ -358,8 +469,11 @@
      "change": "Overview 사다리 카드에 '실측 대기: 다음 CheckList 1회 필요' 표시",
      "check": "orchestra.js 렌더 시험",
      "observe": false,
-     "status": "todo",
-     "proposal": ""
+     "status": "applied",
+     "proposal": "20261126173142_SELF",
+     "readyMs": 1795681902608,
+     "proposedAt": "2026-11-26T17:31:43+09:00",
+     "effMs": 1795682313174
     },
     {
      "n": 6,
@@ -367,7 +481,7 @@
      "change": "지금: 30분 시계 범위(측정 1회와 문서 1판)를 정하고 run_timing.json 마지막 1줄과 효력 전 판정의 연속 횟수로 목적을 판정함 → 새: 효력 뒤 체인 runId 단위 1판을 단계별 소요 원장으로 판정하고, 30분을 단계 예산으로 나눠 예산을 넘은 단계만 판정 결과가 같은 대체안(ledger_diff.py 차이 0건) 대상으로 올림. 단계 밖 시간이 10%를 넘으면 미확인으로 둠",
      "check": "1) t_orch_ladder.js: 11-20~11-23 판정 4건 + 효력 2026-11-23 15:58:21 표본 → L4|purpose|CheckList화면1개10분길어야30분안에 없음, 효력 뒤 어긋남 3건 표본 → 있음(반영 전 코드 FAIL → 반영 뒤 PASS). 2) run_verify.py 자기 시험: e2e_tests ≥ 1 실행의 stage_min 에 e2e 키 존재(반영 전 11-25 표본 FAIL). 3) t_orch_vision.js: events.jsonl:4301,4309 표본에서 SCP0028_1795535760315 1판 79.8분, 단계 밖 37.9분 출력, 문서 단계 줄 3.0분을 1판으로 읽지 않음. 지시문에 규칙 1-2 줄 존재. 4) test/run_all.js 전체 통과. 5) 반영 뒤 확인(다음 실행 필요): 다음 CheckList 1회 뒤 vision 판정 JSON evidence 에 단계별 분과 단계 밖 비율 표시",
      "observe": false,
-     "status": "todo",
+     "status": "applied",
      "absorbed": "20261126000934_VISION",
      "targets": [
       "tools/VibeManager/orch-ladder.js",
@@ -377,7 +491,11 @@
       "tools/VibeManager/orchestra.js",
       "tools/VibeManager/test/t_orch_ladder.js",
       "tools/VibeManager/test/t_orch_vision.js"
-     ]
+     ],
+     "readyMs": 1795682322731,
+     "proposal": "20261126173842_SELF",
+     "proposedAt": "2026-11-26T17:38:43+09:00",
+     "effMs": 1795682664459
     },
     {
      "n": 5,
@@ -385,6 +503,241 @@
      "change": "다음 CheckList 1회 뒤 Overall Review 판정이 firstDocMin 으로 나왔는지 vision 판정 JSON 의 evidence 로 확인. 30분을 넘으면 plan_20261123000419_VISION.md 3단계(1차 측정 동시 실행, ledger_diff.py 차이 0건 조건)로 감",
      "check": "",
      "observe": true,
+     "status": "observing",
+     "proposal": "",
+     "readyMs": 1795682683921,
+     "startMs": 1795682683921,
+     "hours": 24,
+     "endMs": 1795769083921
+    }
+   ]
+  },
+  "20261126001222_VISION": {
+   "id": "20261126001222_VISION",
+   "proposal": "20261126001222_VISION",
+   "title": "개념 재정립: CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함)",
+   "axis": "checklistTime",
+   "keys": [
+    "L4|useraxis|checklistTime"
+   ],
+   "doc": ".vibe/orch/vision/concept_20261126_L4_useraxis_checklistTime.md",
+   "targets": [
+    ".vibe/orch/purpose_ledger.json",
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/Harness/plan_state.py",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/Harness/harness.json"
+   ],
+   "rollback": "harness.json orch.purposeLedger false 로 원장 판정 끔(종전 axisProps 판정). 반영 백업 사본으로 orch-ladder.js, orch-usercheck.js, plan_state.py, orchestra.js, t_orch_ladder.js 복원. .vibe/orch/purpose_ledger.json 삭제. VMO 개선안 탭 되돌리기",
+   "status": "open",
+   "at": "2026-11-26T16:50:31+09:00",
+   "ms": 1795679431757,
+   "by": "VMO 자동(게이트 통과 조건)",
+   "related": [
+    "20261124000457_VISION"
+   ],
+   "absorbed": [],
+   "history": [
+    {
+     "at": "2026-11-26T16:50:31+09:00",
+     "what": "원장 생성(단계 6개)"
+    },
+    {
+     "at": "2026-11-26T16:51:34+09:00",
+     "what": "VMO 원장 진행: 단계 1 하위 안 20261126165130_SELF 등록",
+     "step": 1
+    },
+    {
+     "at": "2026-11-26T17:38:43+09:00",
+     "what": "단계 1 applied(20261126165130_SELF applied)",
+     "step": 1
+    },
+    {
+     "at": "2026-11-26T17:38:45+09:00",
+     "what": "VMO 원장 진행: 단계 2 하위 안 20261126173844_SELF 등록",
+     "step": 2
+    },
+    {
+     "at": "2026-11-26T17:41:43+09:00",
+     "what": "단계 2 applied(20261126173844_SELF applied)",
+     "step": 2
+    },
+    {
+     "at": "2026-11-26T17:41:45+09:00",
+     "what": "VMO 원장 진행: 단계 3 하위 안 20261126174143_SELF 등록",
+     "step": 3
+    },
+    {
+     "at": "2026-11-26T17:55:07+09:00",
+     "what": "단계 3 applied(20261126174143_SELF applied)",
+     "step": 3
+    },
+    {
+     "at": "2026-11-26T17:55:09+09:00",
+     "what": "VMO 원장 진행: 단계 4 하위 안 20261126175507_SELF 등록",
+     "step": 4
+    },
+    {
+     "at": "2026-11-26T18:03:24+09:00",
+     "what": "단계 4 applied(20261126175507_SELF applied)",
+     "step": 4
+    },
+    {
+     "at": "2026-11-26T18:03:25+09:00",
+     "what": "VMO 원장 진행: 단계 5 하위 안 20261126180324_SELF 등록",
+     "step": 5
+    },
+    {
+     "at": "2026-11-26T18:23:11+09:00",
+     "what": "단계 5 applied(20261126180324_SELF applied)",
+     "step": 5
+    },
+    {
+     "at": "2026-11-26T18:23:11+09:00",
+     "what": "단계 6 관찰 시작(24시간, 2026-11-27T18:23 까지)",
+     "step": 6
+    }
+   ],
+   "steps": [
+    {
+     "n": 1,
+     "text": "목적 원장 형식과 읽기 함수. 첫 항목 = checklistTime, 개념 '행 단위 해소 + D0~D5 중복 제거', 출처 플랜 경로와 CHANGELOG 절, 효력 시각, 남은 항목. 확인 = 원장 읽기 시험에서 효력 시각과 남은 항목 수가 나옴",
+     "change": "목적 원장 형식과 읽기 함수. 첫 항목 = checklistTime, 개념 '행 단위 해소 + D0~D5 중복 제거', 출처 플랜 경로와 CHANGELOG 절, 효력 시각, 남은 항목",
+     "check": "원장 읽기 시험에서 효력 시각과 남은 항목 수가 나옴",
+     "observe": false,
+     "status": "applied",
+     "proposal": "20261126165130_SELF",
+     "readyMs": 1795679489912,
+     "proposedAt": "2026-11-26T16:51:34+09:00",
+     "effMs": 1795682038002
+    },
+    {
+     "n": 2,
+     "text": "L4-2 가 원장 효력과 VMO 개선안 효력 중 늦은 시각을 씀. 남은 항목 1건 이상이면 wait '구현 대기'. 확인 = t_orch_ladder.js 에 이번 근거(U30 11-25 02:53, events 4401~4424 표본)와 원장 효력 11-25 21:00 표본을 넣어 L4|useraxis|checklistTime 진단 대상이 나오지 않음. 효력 뒤 1판 94분 표본은 나옴",
+     "change": "L4-2 가 원장 효력과 VMO 개선안 효력 중 늦은 시각을 씀. 남은 항목 1건 이상이면 wait '구현 대기'",
+     "check": "t_orch_ladder.js 에 이번 근거(U30 11-25 02:53, events 4401~4424 표본)와 원장 효력 11-25 21:00 표본을 넣어 L4|useraxis|checklistTime 진단 대상이 나오지 않음. 효력 뒤 1판 94분 표본은 나옴",
+     "observe": false,
+     "status": "applied",
+     "proposal": "20261126173844_SELF",
+     "readyMs": 1795682322731,
+     "proposedAt": "2026-11-26T17:38:45+09:00",
+     "effMs": 1795682458039
+    },
+    {
+     "n": 3,
+     "text": "clRunsOf 가 stopped true 이면서 1판 없는 실행을 '1판 전 중지'로 따로 둠. 동시 실행 화면 수 필드 추가. 확인 = SSP0005_1795535760347 표본이 초과 근거에서 빠지고 표시에 남음",
+     "change": "clRunsOf 가 stopped true 이면서 1판 없는 실행을 '1판 전 중지'로 따로 둠. 동시 실행 화면 수 필드 추가",
+     "check": "SSP0005_1795535760347 표본이 초과 근거에서 빠지고 표시에 남음",
+     "observe": false,
+     "status": "applied",
+     "proposal": "20261126174143_SELF",
+     "readyMs": 1795682503443,
+     "proposedAt": "2026-11-26T17:41:45+09:00",
+     "effMs": 1795682789650
+    },
+    {
+     "n": 4,
+     "text": "L4-1 도 원장 효력 거름 사용. purpose 묶음과 useraxis 묶음을 목적 키 대응표로 합침. 확인 = 같은 목적 표본 2묶음이 1묶음으로 나옴",
+     "change": "L4-1 도 원장 효력 거름 사용. purpose 묶음과 useraxis 묶음을 목적 키 대응표로 합침",
+     "check": "같은 목적 표본 2묶음이 1묶음으로 나옴",
+     "observe": false,
+     "status": "applied",
+     "proposal": "20261126175507_SELF",
+     "readyMs": 1795683307831,
+     "proposedAt": "2026-11-26T17:55:09+09:00",
+     "effMs": 1795683724295
+    },
+    {
+     "n": 5,
+     "text": "사용자 세션 개념 변경 등록. orch-usercheck 학습기가 [고친 파일]에 quick.json 체인 또는 플랜 파일이 있고 목적 키가 정해지면 원장 갱신안을 냄. 확인 = 11-25 행 단위 해소 세션 표본으로 등록안 1건",
+     "change": "사용자 세션 개념 변경 등록. orch-usercheck 학습기가 [고친 파일]에 quick.json 체인 또는 플랜 파일이 있고 목적 키가 정해지면 원장 갱신안을 냄",
+     "check": "11-25 행 단위 해소 세션 표본으로 등록안 1건",
+     "observe": false,
+     "status": "applied",
+     "proposal": "20261126180324_SELF",
+     "readyMs": 1795683804784,
+     "proposedAt": "2026-11-26T18:03:25+09:00",
+     "effMs": 1795684927174
+    },
+    {
+     "n": 6,
+     "text": "D2~D4 구현이 끝나고 plan_state 남은 항목 0 이 된 뒤 다음 CheckList 1회. 그 1판 소요로 판정이 나오는지 사다리 카드로 확인",
+     "change": "D2~D4 구현이 끝나고 plan_state 남은 항목 0 이 된 뒤 다음 CheckList 1회. 그 1판 소요로 판정이 나오는지 사다리 카드로 확인",
+     "check": "",
+     "observe": true,
+     "status": "observing",
+     "proposal": "",
+     "readyMs": 1795684991173,
+     "startMs": 1795684991173,
+     "hours": 24,
+     "endMs": 1795771391173
+    }
+   ]
+  },
+  "20261126001528_VISION": {
+   "id": "20261126001528_VISION",
+   "proposal": "20261126001528_VISION",
+   "title": "개념 재정립: 진단 사다리 반복 수정 묶음을 파일 단위에서 원인 서명 단위로",
+   "axis": "",
+   "keys": [
+    "L4|struct|edits|workbench.js"
+   ],
+   "doc": ".vibe/orch/vision/concept_20261126_L4_struct_edits_workbench.js.md",
+   "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-improve.js",
+    ".claude/skills/vmo-diagnosis-ladder/SKILL.md",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_history.js"
+   ],
+   "rollback": "orch-history.js, orch-ladder.js, orch-improve.js .bak 복원. 또는 harness.json orch 파일 단위 L4 설정을 켜서 종전 올림으로 되돌림. 개선안 JSON 의 recurSig 필드는 남아도 종전 코드가 읽지 않음",
+   "status": "open",
+   "at": "2026-11-27T09:50:33+09:00",
+   "ms": 1795740633568,
+   "by": "VMO",
+   "related": [],
+   "absorbed": [],
+   "history": [
+    {
+     "at": "2026-11-27T09:50:33+09:00",
+     "what": "원장 생성(단계 3개)"
+    },
+    {
+     "at": "2026-11-27T09:50:35+09:00",
+     "what": "VMO 원장 진행: 단계 1 하위 안 20261127095034_SELF 등록",
+     "step": 1
+    }
+   ],
+   "steps": [
+    {
+     "n": 1,
+     "text": "절 종류에 propagate 추가, 고친 파일 구분. 확인 = 이번 CHANGELOG 11-24~11-26 절 21개 직접 분류와 대조(propagate 17, 결함 4)",
+     "change": "절 종류에 propagate 추가, 고친 파일 구분",
+     "check": "이번 CHANGELOG 11-24~11-26 절 21개 직접 분류와 대조(propagate 17, 결함 4)",
+     "observe": false,
+     "status": "proposed",
+     "proposal": "20261127095034_SELF",
+     "readyMs": 1795740634340,
+     "proposedAt": "2026-11-27T09:50:35+09:00"
+    },
+    {
+     "n": 2,
+     "text": "개선안 recurSig 저장. 20261122000646_SELF 에 서명 소급(endRun 대상 7곳, R14, R11, R5, user.stop runId 없음 + 실행 중). 확인 = t_run_end.js 사례 10건을 서명으로 다시 판정",
+     "change": "개선안 recurSig 저장. 20261122000646_SELF 에 서명 소급(endRun 대상 7곳, R14, R11, R5, user.stop runId 없음 + 실행 중)",
+     "check": "t_run_end.js 사례 10건을 서명으로 다시 판정",
+     "observe": false,
+     "status": "todo",
+     "proposal": ""
+    },
+    {
+     "n": 3,
+     "text": "L4 edits 길 교체. 확인 = stats.json, events.jsonl 사본으로 ladder scan 재실행. L4|struct|edits|workbench.js 미올림, 서명 재발 사본을 넣으면 올림",
+     "change": "L4 edits 길 교체",
+     "check": "stats.json, events.jsonl 사본으로 ladder scan 재실행. L4|struct|edits|workbench.js 미올림, 서명 재발 사본을 넣으면 올림",
+     "observe": false,
      "status": "todo",
      "proposal": ""
     }

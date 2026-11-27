@@ -13,36 +13,16 @@
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
 | button:FindButton | FindButton > UIFindData > Find_Data_Main | 1072 | SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL | MATCH | SP SCM0003_GET_LOOKUP_MASTER_DETAIL |
-| button:FindButton | FindButton > UIFindData > Find_Data_Main | 1074 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL")}#{?serviceUri} | UNRESOLVED |  |
-| button:FindButton | FindButton > UIFindData > Find_Data_Main | 1074 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL")}#{?serviceUri} | UNRESOLVED |  |
 | button:FindButton | FindButton > Find_Data_Sub_SMS | 1154 | SCM.SCM0006_GET_RECIPIENT_MASTER | MATCH | SP SCM0006_GET_RECIPIENT_MASTER |
-| button:FindButton | FindButton > Find_Data_Sub_SMS | 1160 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
-| button:FindButton | FindButton > Find_Data_Sub_SMS | 1160 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | button:FindButton | FindButton > Find_Data_Sub_Mail | 1193 | SCM.SCM0006_GET_RECIPIENT_MASTER | MATCH | SP SCM0006_GET_RECIPIENT_MASTER |
-| button:FindButton | FindButton > Find_Data_Sub_Mail | 1199 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
-| button:FindButton | FindButton > Find_Data_Sub_Mail | 1199 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > SaveData | 816 | SCM.SCM0003_SAVE_LOOKUP_MASTER_DETAIL | MATCH | SP SCM0003_SAVE_LOOKUP_MASTER_DETAIL |
 | button:SaveButton | SaveButton > SaveData | 896 | SCM.SCM0006_SAVE_RECIPIENT_MASTER | MATCH | SP SCM0006_SAVE_RECIPIENT_MASTER |
-| button:SaveButton | SaveButton > SaveData | 920 | {?new TheOne.ServiceModel.Data.FoxDataRequest(null)}#{?serviceUri} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > SaveData | 920 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_SAVE_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > SaveData | 1006 | SCM.SCM0006_SAVE_RECIPIENT_MASTER | MATCH | SP SCM0006_SAVE_RECIPIENT_MASTER |
-| button:SaveButton | SaveButton > SaveData | 1030 | {?new TheOne.ServiceModel.Data.FoxDataRequest(null)}#{?serviceUri} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > SaveData | 1030 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_SAVE_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > SaveData > UIFindData > Find_Data_Main | 1072 | SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL | MATCH | SP SCM0003_GET_LOOKUP_MASTER_DETAIL |
-| button:SaveButton | SaveButton > SaveData > UIFindData > Find_Data_Main | 1074 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL")}#{?serviceUri} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > SaveData > UIFindData > Find_Data_Main | 1074 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL")}#{?serviceUri} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > SaveData > Find_Data_Sub_SMS | 1154 | SCM.SCM0006_GET_RECIPIENT_MASTER | MATCH | SP SCM0006_GET_RECIPIENT_MASTER |
-| button:SaveButton | SaveButton > SaveData > Find_Data_Sub_SMS | 1160 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > SaveData > Find_Data_Sub_SMS | 1160 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > SaveData > Find_Data_Sub_Mail | 1193 | SCM.SCM0006_GET_RECIPIENT_MASTER | MATCH | SP SCM0006_GET_RECIPIENT_MASTER |
-| button:SaveButton | SaveButton > SaveData > Find_Data_Sub_Mail | 1199 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > SaveData > Find_Data_Sub_Mail | 1199 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | event:spdMain.CellClick | SpdMain_CellClick > Find_Data_Sub_SMS | 1154 | SCM.SCM0006_GET_RECIPIENT_MASTER | MATCH | SP SCM0006_GET_RECIPIENT_MASTER |
-| event:spdMain.CellClick | SpdMain_CellClick > Find_Data_Sub_SMS | 1160 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
-| event:spdMain.CellClick | SpdMain_CellClick > Find_Data_Sub_SMS | 1160 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | event:spdMain.CellClick | SpdMain_CellClick > Find_Data_Sub_Mail | 1193 | SCM.SCM0006_GET_RECIPIENT_MASTER | MATCH | SP SCM0006_GET_RECIPIENT_MASTER |
-| event:spdMain.CellClick | SpdMain_CellClick > Find_Data_Sub_Mail | 1199 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
-| event:spdMain.CellClick | SpdMain_CellClick > Find_Data_Sub_Mail | 1199 | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED |  |
 | event:this.Load | Form_Load > InitControls | 388 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | <field:dtModule> | 35 | biz:CommonData.CommonDataList [code=Module] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | <field:dtSubModule> | 36 | biz:CommonData.CommonDataList [code=SubModule] | BIZ_MATCH |  |
@@ -56,10 +36,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL")}#{?serviceUri} | UNRESOLVED | 2 |  |  |  |
-| {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 4 |  |  |  |
-| {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_SAVE_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 2 |  |  |  |
-| {?new TheOne.ServiceModel.Data.FoxDataRequest(null)}#{?serviceUri} | UNRESOLVED | 2 |  |  |  |
 | biz:CommonData.CommonDataList [code=Cycle] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | biz:CommonData.CommonDataList [code=CycleSub1] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
 | biz:CommonData.CommonDataList [code=CycleSub2_v2] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
@@ -112,19 +88,9 @@
 | UsrTextBox | 1 | usrTextBox_Seg |
 | LayoutControlGroup | 1 | layoutControlGroup1 |
 
-## 7. 확인 필요 (10건)
+## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 920 | SaveData | {?new TheOne.ServiceModel.Data.FoxDataRequest(null)}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 920 | SaveData | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_SAVE_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1030 | SaveData | {?new TheOne.ServiceModel.Data.FoxDataRequest(null)}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1030 | SaveData | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_SAVE_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1074 | Find_Data_Main | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1160 | Find_Data_Sub_SMS | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1199 | Find_Data_Sub_Mail | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1074 | Find_Data_Main | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1160 | Find_Data_Sub_SMS | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 1199 | Find_Data_Sub_Mail | {?new TheOne.ServiceModel.Data.FoxDataRequest("SCM.SCM0006_GET_RECIPIENT_MASTER")}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

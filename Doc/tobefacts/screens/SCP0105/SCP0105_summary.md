@@ -1,22 +1,22 @@
 # SCP0105 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa-speed-plan` · feature: supply · As-is Fact Pack 있음
-- 파일 23 · 엔드포인트 호출 8 (미해결 0, 주석 속 3) · 이벤트 30 · 컴포넌트 사용 53 · 하드코딩 컬럼 1 · 메시지 25
+- 파일 23 · 엔드포인트 호출 8 (미해결 0, 주석 속 3) · 이벤트 31 · 컴포넌트 사용 53 · 하드코딩 컬럼 1 · 메시지 25
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/capa-speed-plan/capa-speed-plan.constants.ts | constants | 281 |
+| features/supply/src/pages/capa-speed-plan/capa-speed-plan.constants.ts | constants | 294 |
 | features/supply/src/pages/capa-speed-plan/capa-speed-plan.types.ts | types | 108 |
-| features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | page | 308 |
+| features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | page | 333 |
 | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanColumnModal.tsx | component | 69 |
 | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanForm.tsx | component | 393 |
 | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.module.scss | component | 19 |
-| features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | component | 511 |
+| features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | component | 572 |
 | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanItemPopup.tsx | component | 38 |
 | features/supply/src/pages/capa-speed-plan/hooks/useCapaSpeedPlanCellEdit.ts | hook | 95 |
-| features/supply/src/pages/capa-speed-plan/hooks/useCapaSpeedPlanCombos.ts | hook | 309 |
+| features/supply/src/pages/capa-speed-plan/hooks/useCapaSpeedPlanCombos.ts | hook | 319 |
 | features/supply/src/pages/capa-speed-plan/hooks/useCapaSpeedPlanConditionEffects.ts | hook | 116 |
 | features/supply/src/pages/capa-speed-plan/hooks/useCapaSpeedPlanSave.ts | hook | 156 |
 | features/supply/src/pages/capa-speed-plan/index.ts | index | 2 |
@@ -34,9 +34,9 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| SCP0105/ASSEMBLY//call-proc | hook | 1 | Y | CapaSpeedPlan.tsx:86 |
-| SCP0105/ELTR//call-proc | hook | 1 | Y | CapaSpeedPlan.tsx:93 |
-| SCP0105/spreadTitle//call-proc | hook | 1 | Y | CapaSpeedPlan.tsx:101 |
+| SCP0105/ASSEMBLY//call-proc | hook | 1 | Y | CapaSpeedPlan.tsx:109 |
+| SCP0105/ELTR//call-proc | hook | 1 | Y | CapaSpeedPlan.tsx:116 |
+| SCP0105/spreadTitle//call-proc | hook | 1 | Y | CapaSpeedPlan.tsx:124 |
 | (useTabComboQueryResults) | hook | 1 | Y | useCapaSpeedPlanCombos.ts:80 |
 | /SCP0105/ASSEMBLY\|ELTR/SAVE/call-proc | http | 1 | Y | useCapaSpeedPlanSave.ts:74 |
 | /admin/menu/SCP0105/search-conditions | http | 1 | Y | useCapaSpeedPlanStore.ts:198 |
@@ -49,11 +49,12 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CapaSpeedPlanForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 262 |
-| CapaSpeedPlanForm | onOpenItemPopup | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 263 |
-| CapaSpeedPlanGrid | onCellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 294 |
-| CapaSpeedPlanColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 299 |
-| CapaSpeedPlanItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 304 |
+| CapaSpeedPlanForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 285 |
+| CapaSpeedPlanForm | onOpenItemPopup | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 286 |
+| CapaSpeedPlanGrid | onReadOnlyEditBlocked | notifyReadOnlyVersion | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 315 |
+| CapaSpeedPlanGrid | onCellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 319 |
+| CapaSpeedPlanColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 324 |
+| CapaSpeedPlanItemPopup | onClose | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 329 |
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,Number,String,clearFilters,onClose | jsx | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanColumnModal.tsx | 50 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanForm.tsx | 90 |
 | CustomDropdown | onChange | <arrow> guardDirty,setDivisionType,String | jsx | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanForm.tsx | 107 |
@@ -70,15 +71,15 @@
 | CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanForm.tsx | 332 |
 | CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanForm.tsx | 356 |
 | CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanForm.tsx | 380 |
-| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 211 |
-| grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 240 |
-| grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 283 |
-| grid | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 330 |
-| grid | cellEditEnding | cellEditEndingHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 353 |
-| editor | beforeinput | <arrow> (editor.value.slice(0,start)+inputEvent.data+editor.value.slice(end)).replaceAll,editor.value.slice,/^-?\d*\.?\d*$/.test,inputEvent.preventDefault | addEventListener | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 369 |
-| editor | input | <arrow> editor.value.replace | addEventListener | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 384 |
-| grid | prepareCellForEdit | prepareCellForEditHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 389 |
-| grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 476 |
+| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 238 |
+| grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 281 |
+| grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 328 |
+| grid | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 375 |
+| grid | cellEditEnding | cellEditEndingHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 398 |
+| editor | beforeinput | <arrow> (editor.value.slice(0,start)+inputEvent.data+editor.value.slice(end)).replaceAll,editor.value.slice,/^-?\d*\.?\d*$/.test,inputEvent.preventDefault,integerDigitCount | addEventListener | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 419 |
+| editor | input | <arrow> editor.value.replace,integerDigitCount,clampIntegerDigits | addEventListener | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 441 |
+| grid | prepareCellForEdit | prepareCellForEditHandler | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 450 |
+| grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanGrid.tsx | 537 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -115,7 +116,7 @@
 | MSG00096 | 1 |
 | MSG00606 | 1 |
 | MSG00006 | 1 |
-| MSG00133 | 1 |
+| MSG00004 | 1 |
 | LBL00605 | 3 |
 | LBL00764 | 1 |
 | LBL00765 | 1 |
@@ -135,20 +136,20 @@
 | LBL00056 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0105(11), SCP0104(4), SCP0114(2), SCP0124(1), SSP0024(1), SSP0014(1), SCM0002(1), COM0013(1), SCP0013(1), SCP0020(1)
+- 화면ID: SCP0105(18), SCP0104(5), SCP0114(2), SSP0014(2), COM0013(2), SCP0013(2), SCP0124(1), SSP0024(1), SCP0100(1), SCM0002(1), SCP0020(1)
 - SP/PKG: PKG_SCP0105(7), PKG_SCP0104(3), P_SCP0104_GET_SPREAD_TITLE(3), P_SCP0105_GET_CAPA_SPEED_PLAN_(1), P_SCP0105_SAVE_CAPA_SPEED_PLAN_(1), PKG_SCM0002(1), P_SCM0002_GET_MATERIAL_BY_DIVISION(1), SCP0104_GET_SPREAD_TITLE(1), SCP0105_GET_CAPA_SPEED_PLAN_CURRENT_ASSEMBLY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | const handleInsert = () => undefined; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 186 |
-| code | const handleDelete = () => { | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 188 |
-| code | if (!grid) return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 190 |
-| code | if (grid.rows.length === 0) return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 191 |
-| code | if (!grid.selectedRows?.length) return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 192 |
-| code | if (selected?.CRUD_TYPE !== 'I') return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 194 |
-| code | GridAction.removeRow(grid, true); | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 195 |
-| code | grid.invalidate(); | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 196 |
-| code | }; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 197 |
+| code | const handleInsert = () => undefined; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 209 |
+| code | const handleDelete = () => { | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 211 |
+| code | if (!grid) return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 213 |
+| code | if (grid.rows.length === 0) return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 214 |
+| code | if (!grid.selectedRows?.length) return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 215 |
+| code | if (selected?.CRUD_TYPE !== 'I') return; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 217 |
+| code | GridAction.removeRow(grid, true); | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 218 |
+| code | grid.invalidate(); | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 219 |
+| code | }; | features/supply/src/pages/capa-speed-plan/CapaSpeedPlan.tsx | 220 |
 | jsx | Model/Nickname 팝업 — 사용자 지시 2026-11-09: SCP0105 Material 조회조건을 SSP0014 Model/Nickname 조회조건으로 교체한다. 종전 도메인 공용 `CapaItemPopup`(SCM0002 CAPA item-by-division)을 공용 `MaterialByDivisionModal`(COM0013, PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION | features/supply/src/pages/capa-speed-plan/components/CapaSpeedPlanItemPopup.tsx | 11 |
 | endpoint | (1) 진입 — 자동조회 금지. keep-alive 잔여 filters 무효화 + 메타 1회 fetch(nscm-patterns §5-7). | features/supply/src/pages/capa-speed-plan/hooks/useCapaSpeedPlanConditionEffects.ts | 44 |
 | jsx | 개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기, 1회) — 정본 `scp-bom`/자매 `capa-line-assign`. 저장측은 page 가 `<SubTitle searchParam={sc}>` 로 이미 배선돼 있으나([[f6-save-needs-searchparam-prop]]), 복원측이 없으면 저장은 되는데 **새로고침/재진입 시 조건이 사라진다**(basic-check #3 재발 함정, [[f6-re | features/supply/src/pages/capa-speed-plan/useCapaSpeedPlanStore.ts | 172 |

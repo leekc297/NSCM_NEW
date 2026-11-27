@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/ownerModal/owner-modal.constants.ts | constants | 13 |
-| features/master/src/components/ownerModal/OwnerModal.module.scss | style | 52 |
+| features/master/src/components/ownerModal/OwnerModal.module.scss | style | 53 |
 | features/master/src/components/ownerModal/OwnerModal.tsx | page | 324 |
 | features/master/src/components/ownerModal/ownerModalStore.ts | store | 41 |
 
@@ -29,8 +29,8 @@
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 235 |
 | Button | onClick | handleSelectUsers | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 269 |
 | Button | onClick | handleCancelUsers | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 273 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 309 |
-| Button | onClick | modalClose | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 316 |
+| Button | onClick | modalClose | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 307 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 316 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -64,7 +64,9 @@
 - 화면ID: COM0004(2), DMF0005(1), DMF0082(1)
 - SP/PKG: (없음)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
-(없음)
+| kind | snippet | file | line |
+|---|---|---|---|
+| jsx | <Button appearance='outlined' priority='normal' size='medium' buttonLabel='Default' onClick={() => {}} /> | features/master/src/components/ownerModal/OwnerModal.tsx | 295 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

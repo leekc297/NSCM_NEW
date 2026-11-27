@@ -3,6 +3,6 @@
 "supply/tact-time","SCP0020","features/supply/src/pages/tact-time/components/TactTimeForm.tsx","216","jsx","<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />"
 "supply/tact-time","SCP0020","features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx","127","code","setCell('TACT_TIME', deriveTactTimeFromDaily(row.DAILY_CAPACITY));"
 "supply/tact-time","SCP0020","features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx","198","code","if (row) onRowDblClick(row);"
-"supply/tact-time","SCP0020","features/supply/src/pages/tact-time/TactTime.tsx","174","code","AS-IS: 조회된 행이 없으면 신규행 추가 불가 (cs:760/817 ActiveRowIndex<0 return)."
+"supply/tact-time","SCP0020","features/supply/src/pages/tact-time/TactTime.tsx","161","code","AS-IS: 조회된 행이 없으면 신규행 추가 불가 (cs:760/817 ActiveRowIndex<0 return)."
 "supply/tact-time","SCP0020","features/supply/src/pages/tact-time/useTactTimeStore.ts","27","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch (미등록 시 빈 배열 →"
 "supply/tact-time","SCP0020","features/supply/src/pages/tact-time/utils/tactTimeDerive.ts","30","code","if (d === null || d === 0) return 0;"

@@ -1,0 +1,76 @@
+{
+ "rule_id": "F1",
+ "hash": "cba2bbab31a3ecc0",
+ "groups": [
+  {
+   "rows": [
+    "EG-5feb5d0f"
+   ],
+   "why": "This checks only the DMF0042_SAVE_DM_BP_EXCHANGE_RATE save branch value, which no other row covers."
+  },
+  {
+   "rows": [
+    "EG-8cc542a3"
+   ],
+   "why": "This checks only the DMF0042_SAVE_DM_PLN_BP_FCST save branch value, which no other row covers."
+  },
+  {
+   "rows": [
+    "EG-ae43a4e3"
+   ],
+   "why": "This checks only the DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV save branch value, which no other row covers."
+  },
+  {
+   "rows": [
+    "ES-74b8b569"
+   ],
+   "why": "The steps match ES-cc1f107e, but this one uses the authcrud k0101 permission account, so it may run in a different context and is kept alone to be safe."
+  },
+  {
+   "rows": [
+    "ES-cc1f107e"
+   ],
+   "why": "This is the plain crud save round trip with no permission account, so it is not grouped with the authcrud row."
+  },
+  {
+   "rows": [
+    "V-1f2afd11"
+   ],
+   "why": "This only checks, for the whole screen, that the marker row reaches the DB after the success message, with no condition, so its target and method differ from the E2E round-trip rows and it is kept alone."
+  },
+  {
+   "rows": [
+    "V-267856ab"
+   ],
+   "why": "This is the only row that saves two rows at once and checks that columns did not shift."
+  },
+  {
+   "rows": [
+    "V-48f42d7f"
+   ],
+   "why": "This forces a server failure and expects a failure message, which no other row checks."
+  },
+  {
+   "rows": [
+    "V-81ebcecf"
+   ],
+   "why": "This checks Monthly-to-Daily bucket totals, a different element and condition from every other row."
+  },
+  {
+   "rows": [
+    "V-eb3408a8"
+   ],
+   "why": "This deletes an existing row and checks the D save request, a different state from the other rows."
+  },
+  {
+   "rows": [
+    "V-ef57270d"
+   ],
+   "why": "This round-trips every editable column one by one, which is a wider target than any other row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:40:50",
+ "cost": 0.0537412
+}

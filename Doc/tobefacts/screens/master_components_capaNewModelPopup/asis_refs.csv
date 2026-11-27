@@ -41,4 +41,5 @@
 "master/components/capaNewModelPopup","","features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx","125","","","235","","팝업이 열릴 때마다 호출 화면 파라미터로 초기화(AS-IS LoadData, cs L235-248)."
 "master/components/capaNewModelPopup","","features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx","141","","","1519","","LANE_QTY 컬럼은 Group='E'(Electrode) 일 때만 노출(SetColumnVisible, cs L1519-1526)."
 "master/components/capaNewModelPopup","","features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx","154","SCP0049","P_GET_NEW_MODEL","848","","FindData(cs L848-935) — P_GET_NEW_MODEL(SCP0049/newModel/SEARCH). 데이터 행은 O_RC 커서"
-"master/components/capaNewModelPopup","","features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx","213","","","1236","","RequestData(cs L1236-1334) — REQUEST_CHK 체크된 행 단위(셀 단위 아님)로 담당자 등록 요청"
+"master/components/capaNewModelPopup","","features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx","160","","","935","","Model/Material/Nick Name 을 순서대로 치환(AS-IS GMessageBox 인자 배열, SCP0049NewModelPopup.cs:935)."
+"master/components/capaNewModelPopup","","features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx","219","","","1236","","RequestData(cs L1236-1334) — REQUEST_CHK 체크된 행 단위(셀 단위 아님)로 담당자 등록 요청"

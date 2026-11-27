@@ -1,5 +1,6 @@
 ﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
 "supply/plan-activity-mgmt","SCP0122","features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx","67","SCP0129","","","","현재값 보유(has*)를 deps 에 넣어 Reset 으로 비어도 재선택되게 한다(형제 SCP0129 선례)."
+"supply/plan-activity-mgmt","SCP0122","features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx","77","","FN_ASIS_SORT_KEY","","","순서는 콤보 SQL 의 ORDER BY FN_ASIS_SORT_KEY(OPMZ_PLAN_GR_NAME) 그대로다(AS-IS 문자열 정렬 등가)."
 "supply/plan-activity-mgmt","SCP0122","features/supply/src/pages/plan-activity-mgmt/plan-activity-mgmt.constants.ts","5","SCP0122","","","","설계 근거: .atlas/gscm-design/SCP0122/design/00_checklist.md ~ 03_grid-columns.md"
 "supply/plan-activity-mgmt","SCP0122","features/supply/src/pages/plan-activity-mgmt/plan-activity-mgmt.constants.ts","6","","SCP0122_GET_PLAN_ACTIVITY_MGMT","","","- GET SP : SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT (15컬럼 반환)"
 "supply/plan-activity-mgmt","SCP0122","features/supply/src/pages/plan-activity-mgmt/plan-activity-mgmt.constants.ts","7","","SCP0122_SAVE_PLAN_ACTIVITY_MGMT","","","- SAVE SP : SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT (캐럿(^)접기 7파라미터, I/M/D 물리삭제)"

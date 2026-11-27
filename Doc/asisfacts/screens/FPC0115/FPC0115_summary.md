@@ -149,11 +149,11 @@
 ## 7. 확인 필요 (13건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 277 | InitControls | FP\{?default:part_service}\AmendMemo#find_memo_line_type | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 281 | InitControls | FP\{?default:part_service}\AmendMemo#find_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 572 | btnSave_Click | FP\{?default:part_service}\AmendMemo#delete_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 630 | btnSave_Click | FP\{?default:part_service}\PICAlarm#save_option_menu | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 694 | btnClose_Click | FP\{?default:part_service}\AmendMemo#delete_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 277 | InitControls | FP\{?default:part_service}\AmendMemo#find_memo_line_type | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 281 | InitControls | FP\{?default:part_service}\AmendMemo#find_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 886 | btnCateAdd_Click | FP\{?default:part_service}\PICAlarm#edit_cate_default_color | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 890 | btnCateAdd_Click | FP\{?default:part_service}\PICAlarm#get_cate_color | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 893 | btnCateAdd_Click | FP\{?default:part_service}\PICAlarm#edit_cate_color | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |

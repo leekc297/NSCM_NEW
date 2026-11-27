@@ -1,7 +1,7 @@
 # SCP0006 — To-Be Fact Pack 요약
 
 - page_key: `supply/project-route` · feature: supply · As-is Fact Pack 있음
-- 파일 18 · 엔드포인트 호출 11 (미해결 0, 주석 속 3) · 이벤트 38 · 컴포넌트 사용 58 · 하드코딩 컬럼 22 · 메시지 44
+- 파일 18 · 엔드포인트 호출 11 (미해결 0, 주석 속 3) · 이벤트 41 · 컴포넌트 사용 58 · 하드코딩 컬럼 22 · 메시지 44
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 22건
 
 ## 1. 파일
@@ -9,31 +9,31 @@
 |---|---|---|
 | features/supply/src/pages/project-route/components/modals/project-route-list-save-modal.constants.ts | constants | 261 |
 | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.module.scss | component | 23 |
-| features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | component | 357 |
+| features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | component | 450 |
 | features/supply/src/pages/project-route/components/ProjectRouteBomGrid.tsx | component | 56 |
 | features/supply/src/pages/project-route/components/ProjectRouteForm.tsx | component | 253 |
 | features/supply/src/pages/project-route/components/ProjectRouteMainGrid.tsx | component | 92 |
-| features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | component | 241 |
-| features/supply/src/pages/project-route/hooks/useProjectRouteValidation.ts | hook | 282 |
+| features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | component | 253 |
+| features/supply/src/pages/project-route/hooks/useProjectRouteValidation.ts | hook | 320 |
 | features/supply/src/pages/project-route/index.ts | index | 2 |
 | features/supply/src/pages/project-route/project-route.constants.ts | constants | 164 |
 | features/supply/src/pages/project-route/project-route.types.ts | types | 33 |
 | features/supply/src/pages/project-route/ProjectRoute.module.scss | style | 78 |
-| features/supply/src/pages/project-route/ProjectRoute.tsx | page | 506 |
+| features/supply/src/pages/project-route/ProjectRoute.tsx | page | 525 |
 | features/supply/src/pages/project-route/useProjectRouteStore.ts | store | 251 |
 | features/supply/src/pages/project-route/utils/projectRoute.calendar.ts | util | 45 |
-| features/supply/src/pages/project-route/utils/projectRoute.plantDerive.ts | util | 28 |
+| features/supply/src/pages/project-route/utils/projectRoute.plantDerive.ts | util | 82 |
 | features/supply/src/pages/project-route/utils/projectRoute.plantSaveRequest.ts | util | 87 |
 | features/supply/src/pages/project-route/__asis-mapping__.md | mapping | 126 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| /SCM0002_PROJECT_ROUTE_LIST_SAVE/mainList/SEARCH/call-proc | http | 1 | Y | ProjectRouteListSaveModal.tsx:118 |
-| (useTabComboQueries) | hook | 4 | Y | ProjectRouteForm.tsx:39 ProjectRouteForm.tsx:46 ProjectRouteForm.tsx:62 ProjectRoute.tsx:100 |
-| SCP0006/site//call-proc | hook | 1 | Y | ProjectRoute.tsx:105 |
-| SCP0006/bom//call-proc | hook | 1 | Y | ProjectRoute.tsx:112 |
-| SCP0006/plant//call-proc | hook | 1 | Y | ProjectRoute.tsx:119 |
+| /SCM0002_PROJECT_ROUTE_LIST_SAVE/mainList/SEARCH/call-proc | http | 1 | Y | ProjectRouteListSaveModal.tsx:124 |
+| (useTabComboQueries) | hook | 4 | Y | ProjectRouteForm.tsx:39 ProjectRouteForm.tsx:46 ProjectRouteForm.tsx:62 ProjectRoute.tsx:101 |
+| SCP0006/site//call-proc | hook | 1 | Y | ProjectRoute.tsx:106 |
+| SCP0006/bom//call-proc | hook | 1 | Y | ProjectRoute.tsx:113 |
+| SCP0006/plant//call-proc | hook | 1 | Y | ProjectRoute.tsx:120 |
 | /admin/menu/SCP0006/column | http | 1 | Y | useProjectRouteStore.ts:207 |
 | /admin/menu/SCP0006/search-conditions | http | 1 | Y | useProjectRouteStore.ts:225 |
 | /SCP0006/plant/SAVE/call-proc | http | 1 | Y | projectRoute.plantSaveRequest.ts:70 |
@@ -44,14 +44,16 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | <arrow> fetchList | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 280 |
-| InputField | onChange | <arrow> setModelId | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 308 |
-| InputField | onKeyDown | <arrow> fetchList | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 309 |
-| InputField | onChange | <arrow> setItemId | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 322 |
-| InputField | onKeyDown | <arrow> fetchList | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 323 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 341 |
-| Button | onClick | <arrow> handleSave | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 349 |
-| Button | onClick | onClose | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 350 |
+| grid.hostElement? | keydown | <arrow> GridUtils.getRow,event.preventDefault,event.stopImmediatePropagation,editTrackerRef.current?.storeChange,deriveOrgDates,(Object.keys(derived)as(keyoftypeofderived)[]).forEach | addEventListener | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 190 |
+| SearchArea | onSearch | <arrow> fetchList | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 372 |
+| InputField | onChange | <arrow> setModelId | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 400 |
+| InputField | onKeyDown | <arrow> fetchList | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 401 |
+| InputField | onChange | <arrow> setItemId | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 414 |
+| InputField | onKeyDown | <arrow> fetchList | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 415 |
+| DataGrid | initialized | handleGridInitialized | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 433 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 434 |
+| Button | onClick | <arrow> handleSave | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 442 |
+| Button | onClick | onClose | jsx | features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx | 443 |
 | DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/project-route/components/ProjectRouteBomGrid.tsx | 52 |
 | SearchArea | onSearch | noDivisionAuth ? undefined : onSearch | jsx | features/supply/src/pages/project-route/components/ProjectRouteForm.tsx | 107 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/project-route/components/ProjectRouteForm.tsx | 121 |
@@ -69,19 +71,20 @@
 | editor | beforeinput | <arrow> /\D/.test,ev.preventDefault | addEventListener | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 183 |
 | editor | input | <arrow> keepDigits | addEventListener | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 186 |
 | editor | compositionend | keepDigits | addEventListener | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 189 |
-| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 234 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 235 |
-| DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 237 |
-| ProjectRouteForm | onSearch | handleSearch | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 394 |
-| ProjectRouteMainGrid | onRowDblClick | applySiteKey | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 435 |
-| ProjectRouteMainGrid | gotFocus | <arrow> setActiveSheet | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 436 |
-| ProjectRouteBomGrid | onRowDblClick | applyBomKey | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 457 |
-| ProjectRouteBomGrid | gotFocus | <arrow> setActiveSheet | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 458 |
-| ProjectRoutePlantGrid | onRowDblClick | handlePlantDblClick | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 483 |
-| ProjectRoutePlantGrid | gotFocus | <arrow> setActiveSheet | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 484 |
-| ProjectRouteListSaveModal | onClose | <arrow> setOpenInputAllModal | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 493 |
-| ProjectRouteListSaveModal | onSaved | handleSearch | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 496 |
-| CapaNewModelPopup | onClose | <arrow> setCapaPopupParams | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 500 |
+| grid | formatItem | <arrow> isPlantCellInvalid | addHandler | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 195 |
+| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 246 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 247 |
+| DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 249 |
+| ProjectRouteForm | onSearch | handleSearch | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 413 |
+| ProjectRouteMainGrid | onRowDblClick | applySiteKey | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 454 |
+| ProjectRouteMainGrid | gotFocus | <arrow> setActiveSheet | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 455 |
+| ProjectRouteBomGrid | onRowDblClick | applyBomKey | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 476 |
+| ProjectRouteBomGrid | gotFocus | <arrow> setActiveSheet | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 477 |
+| ProjectRoutePlantGrid | onRowDblClick | handlePlantDblClick | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 502 |
+| ProjectRoutePlantGrid | gotFocus | <arrow> setActiveSheet | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 503 |
+| ProjectRouteListSaveModal | onClose | <arrow> setOpenInputAllModal | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 512 |
+| ProjectRouteListSaveModal | onSaved | handleSearch | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 515 |
+| CapaNewModelPopup | onClose | <arrow> setCapaPopupParams | jsx | features/supply/src/pages/project-route/ProjectRoute.tsx | 519 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -147,7 +150,7 @@
 | MSG01224 | 1 |
 | MSG01225 | 1 |
 | MSG01226 | 1 |
-| MSG01227 | 1 |
+| MSG01227 | 2 |
 | MSG01228 | 1 |
 | MSG01134 | 2 |
 | MSG01135 | 2 |
@@ -175,7 +178,6 @@
 | MSG01130 | 1 |
 | MSG01131 | 1 |
 | MSG01132 | 1 |
-| MSG00700 | 1 |
 | MSG01133 | 1 |
 | MSG01137 | 1 |
 | LBL01082 | 1 |
@@ -183,7 +185,7 @@
 | MSG00011 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0006(20), SYS0004(1), SCP0020(1), SCP0049(1)
+- 화면ID: SCP0006(21), SCM0002(3), COM0013(1), COM0005(1), SYS0004(1), SCP0049(1)
 - SP/PKG: PKG_SCM0002(2), SCP0006_SAVE_PROJECT_ROUTE_PLANT(2), P_SCM0002_GET_PROJECT_ROUTE_LIST_FORSAVE_POPUP(1), P_SCP0006_GET_PROJECT_ROUTE_SITE_82(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
@@ -243,8 +245,8 @@
 | code | }; | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 148 |
 | code | }, [gridRef]); | features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx | 149 |
 | endpoint | 컬럼 메타 fetch(/admin/menu/SCP0006/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 문자열 매칭). AS-IS SpreadInfo 시트명(Main/BOM Explosion/Plant Assign)이 DB SHEET_NAME 으로 배포된 것으로 본다(design/03 §0). 라이브 확인필요(design/03 §6-2). | features/supply/src/pages/project-route/project-route.constants.ts | 30 |
-| code | const plantReadOnly = (bomKey?.cellType ?? '').toUpperCase() === 'CA1'; | features/supply/src/pages/project-route/ProjectRoute.tsx | 206 |
-| endpoint | ---- mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline) ---- | features/supply/src/pages/project-route/ProjectRoute.tsx | 209 |
+| code | const plantReadOnly = (bomKey?.cellType ?? '').toUpperCase() === 'CA1'; | features/supply/src/pages/project-route/ProjectRoute.tsx | 207 |
+| endpoint | ---- mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline) ---- | features/supply/src/pages/project-route/ProjectRoute.tsx | 210 |
 | endpoint | 컬럼 메타는 admin(SCM_MST_SHEET_COLUMNS)에서 동적 fetch(ui-category hook, 하드코딩 금지). | features/supply/src/pages/project-route/useProjectRouteStore.ts | 203 |
 
 ## 10. __asis-mapping__.md 상태

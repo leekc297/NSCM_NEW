@@ -7,13 +7,13 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | component | 236 |
+| features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | component | 237 |
 | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | component | 319 |
 | features/supply/src/pages/operation-lt/hooks/useOperationLTValidation.ts | hook | 62 |
 | features/supply/src/pages/operation-lt/index.ts | index | 2 |
 | features/supply/src/pages/operation-lt/operation-lt.constants.ts | constants | 112 |
 | features/supply/src/pages/operation-lt/operation-lt.types.ts | types | 26 |
-| features/supply/src/pages/operation-lt/OperationLT.tsx | page | 212 |
+| features/supply/src/pages/operation-lt/OperationLT.tsx | page | 224 |
 | features/supply/src/pages/operation-lt/useOperationLTStore.ts | store | 195 |
 | features/supply/src/pages/operation-lt/utils/operation-lt.columns.ts | util | 36 |
 | features/supply/src/pages/operation-lt/utils/operation-lt.editLock.ts | util | 63 |
@@ -38,9 +38,9 @@
 | CustomDropdown | onChange | <arrow> onPick,str | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 118 |
 | CustomDropdown | onChange | <arrow> onPick,pickMulti | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 147 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 158 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 211 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 207 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 226 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 212 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 208 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 227 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 135 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 157 |
 | g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 215 |
@@ -48,9 +48,9 @@
 | g.hostElement | dblclick | dblclickHandler | addEventListener | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 246 |
 | g.hostElement | keydown | keydownHandler | addEventListener | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 264 |
 | DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 289 |
-| OperationLTForm | onSearch | handleSearch | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 174 |
-| OperationLTForm | onItemSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 174 |
-| OperationLTGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 194 |
+| OperationLTForm | onSearch | handleSearch | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 186 |
+| OperationLTForm | onItemSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 186 |
+| OperationLTGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 206 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -93,13 +93,13 @@
 | LBL00112 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0037(7), SCP0020(2), SCP0042(2), SCP0031(1), SCP0100(1), COM0014(1), SCP0025(1)
-- SP/PKG: SCP0037_GET_OPERATION_LT(2), PKG_SCP0037(2), SCP0037_SAVE_OPERATION_LT(1)
+- 화면ID: SCP0037(7), COM0013(3), COM0014(2), COM0008(2), SCP0020(2), SCP0042(2), SCP0031(1), SCP0100(1), SCP0025(1)
+- SP/PKG: SCP0037_GET_OPERATION_LT(2), PKG_SCP0037(2), SCP0037_SAVE_OPERATION_LT(1), P_CREATED_BY(1), P_CREATION_DATE(1), P_LAST_UPDATED_BY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | endpoint | 운영은 admin 동적 fetch(staticColumns)가 authoritative — 이 상수는 fallback 전용(하드코딩 아님). | features/supply/src/pages/operation-lt/operation-lt.constants.ts | 77 |
-| code | F6 저장 조건 복원(fetchSearchConditions)을 컬럼 메타 fetch 보다 먼저 await 한다 — fetchStaticColumns 가 | features/supply/src/pages/operation-lt/OperationLT.tsx | 87 |
+| code | F6 저장 조건 복원(fetchSearchConditions)을 컬럼 메타 fetch 보다 먼저 await 한다 — fetchStaticColumns 가 | features/supply/src/pages/operation-lt/OperationLT.tsx | 90 |
 | endpoint | ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch (실측 13행 등록됨, design 03 §1). | features/supply/src/pages/operation-lt/useOperationLTStore.ts | 21 |
 
 ## 10. __asis-mapping__.md 상태

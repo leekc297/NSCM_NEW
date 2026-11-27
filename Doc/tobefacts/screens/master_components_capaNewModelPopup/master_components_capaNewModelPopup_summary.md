@@ -10,15 +10,15 @@
 | features/master/src/components/capaNewModelPopup/capa-new-model-popup.constants.ts | constants | 194 |
 | features/master/src/components/capaNewModelPopup/capaNewModelPopup.calendar.ts | other | 40 |
 | features/master/src/components/capaNewModelPopup/capaNewModelPopup.editLock.ts | other | 172 |
-| features/master/src/components/capaNewModelPopup/CapaNewModelPopup.module.scss | style | 41 |
-| features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | page | 491 |
+| features/master/src/components/capaNewModelPopup/CapaNewModelPopup.module.scss | style | 42 |
+| features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | page | 497 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 6 | Y | CapaNewModelPopup.tsx:91 CapaNewModelPopup.tsx:93 CapaNewModelPopup.tsx:97 CapaNewModelPopup.tsx:101 CapaNewModelPopup.tsx:105 CapaNewModelPopup.tsx:111 |
-| /SCP0049/newModel/SEARCH/call-proc | http | 1 | Y | CapaNewModelPopup.tsx:167 |
-| /SCP0049/mailSend/SAVE/call-proc | http | 1 | Y | CapaNewModelPopup.tsx:254 |
+| /SCP0049/newModel/SEARCH/call-proc | http | 1 | Y | CapaNewModelPopup.tsx:173 |
+| /SCP0049/mailSend/SAVE/call-proc | http | 1 | Y | CapaNewModelPopup.tsx:260 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -26,22 +26,22 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| grid | beginningEdit | lockHandler | addHandler | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 204 |
-| grid | pastingCell | lockHandler | addHandler | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 205 |
-| SearchArea | onSearch | <arrow> fetchList | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 286 |
-| CustomDropdown | onChange | <arrow> setDivisionId,String,setGroupId,setPlantId,setFactoryId,setLineId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 297 |
-| CustomDropdown | onChange | <arrow> setGroupId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 319 |
-| CustomDropdown | onChange | <arrow> setPlantId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 334 |
-| CustomDropdown | onChange | <arrow> setFactoryId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 349 |
-| CustomDropdown | onChange | <arrow> setLineId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 364 |
-| CustomDropdown | onChange | <arrow> setOperationId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 379 |
-| InputField | onChange | <arrow> setModelId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 395 |
-| InputField | onKeyDown | <arrow> fetchList | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 396 |
-| Button | onClick | <arrow> setModelPopupOpen | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 402 |
-| InputField | onChange | <arrow> setItemId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 416 |
-| InputField | onKeyDown | <arrow> fetchList | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 417 |
-| Button | onClick | <arrow> handleRequest | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 463 |
-| Button | onClick | onClose | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 470 |
+| grid | beginningEdit | lockHandler | addHandler | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 210 |
+| grid | pastingCell | lockHandler | addHandler | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 211 |
+| SearchArea | onSearch | <arrow> fetchList | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 292 |
+| CustomDropdown | onChange | <arrow> setDivisionId,String,setGroupId,setPlantId,setFactoryId,setLineId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 303 |
+| CustomDropdown | onChange | <arrow> setGroupId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 325 |
+| CustomDropdown | onChange | <arrow> setPlantId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 340 |
+| CustomDropdown | onChange | <arrow> setFactoryId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 355 |
+| CustomDropdown | onChange | <arrow> setLineId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 370 |
+| CustomDropdown | onChange | <arrow> setOperationId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 385 |
+| InputField | onChange | <arrow> setModelId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 401 |
+| InputField | onKeyDown | <arrow> fetchList | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 402 |
+| Button | onClick | <arrow> setModelPopupOpen | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 408 |
+| InputField | onChange | <arrow> setItemId | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 422 |
+| InputField | onKeyDown | <arrow> fetchList | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 423 |
+| Button | onClick | <arrow> handleRequest | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 469 |
+| Button | onClick | onClose | jsx | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 476 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -94,7 +94,7 @@
 | MSG01037 | 1 |
 | MSG00002 | 1 |
 | MSG00284 | 1 |
-| MSG00133 | 1 |
+| MSG00004 | 1 |
 | MSG01335 | 1 |
 | MSG00021 | 1 |
 | MSG01324 | 1 |
@@ -112,7 +112,9 @@
 - 화면ID: SCP0049(8), SCP0006(3), SYS0011(1), SCP0201(1)
 - SP/PKG: PKG_SCP0049(2), PR_UI_FP01886_AUTHORITY_REQUEST(2), P_GET_SHEET_CALENDAR_POPUP(1), PKG_SYS0011(1), P_SYS0011_GET_MY_AUTH_DATA(1), P_USER_ID(1), SCP0049_GET_SHEET_CALENDAR_POPUP(1), P_GET_NEW_MODEL(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
-(없음)
+| kind | snippet | file | line |
+|---|---|---|---|
+| jsx | <Grid size={2}> <FormItem label={t('LBL00767', '_Nick Name')} labelAlign='right' render={() => ( <InputField fullWidth value={nickName} onChange={e => setNickName(e.target.value)} onKeyDown={e => e.key === 'Enter' && void fetchList()} /> )} | features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx | 428 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

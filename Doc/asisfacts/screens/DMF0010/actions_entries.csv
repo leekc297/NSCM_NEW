@@ -76,7 +76,7 @@
 "DMF0010","DMF0010_BizPlanPrice","button","DeleteButton","DeleteButton","DeleteButton","0","DeleteButton","",""
 "DMF0010","DMF0010_BizPlanPrice","button","EditButton","EditButton","EditButton","0","EditButton","",""
 "DMF0010","DMF0010_BizPlanPrice","button","EditButton","EditButton","GetValueToString","1","EditButton > GetValueToString","655","if (IsEditMode) ▸ for (iRow <= siMain.GetMaxRowIndex())"
-"DMF0010","DMF0010_BizPlanPrice","button","EditButton","EditButton","SetLockForCell","1","EditButton > SetLockForCell","658","if (IsEditMode) ▸ for (iRow <= siMain.GetMaxRowIndex()) ▸ if (this.GetValueToString(siMain, iRow, DefColumns.EDIT_FLAG) == CAppSetting.StringY)"
+"DMF0010","DMF0010_BizPlanPrice","button","EditButton","EditButton","SetLockForCell","1","EditButton > SetLockForCell","658","if (IsEditMode) ▸ for (iRow <= siMain.GetMaxRowIndex()) ▸ if (this.GetValueToString(siMain, iRow, DefColumns.EditFlag) == CAppSetting.StringY)"
 "DMF0010","DMF0010_BizPlanPrice","button","EditButton","EditButton","SetBackColor","1","EditButton > SetBackColor","675",""
 "DMF0010","DMF0010_BizPlanPrice","button","EditButton","EditButton","SetFroz","1","EditButton > SetFroz","677",""
 "DMF0010","DMF0010_BizPlanPrice","button","SaveButton","SaveButton","SaveButton","0","SaveButton","",""

@@ -1,0 +1,328 @@
+{
+ "rule_id": "D5",
+ "hash": "53a0cdcbd8bf3750",
+ "groups": [
+  {
+   "rows": [
+    "EG-03799cfb"
+   ],
+   "why": "Only row checking the icon on the MEASURE popup cell. EG-fe492487 has the same kind of check but on a different cell (ITEM_ID40), so it stays separate."
+  },
+  {
+   "rows": [
+    "EG-3702ff0b"
+   ],
+   "why": "Only row checking that the btnColumn button maps to the ColumnLayoutModal."
+  },
+  {
+   "rows": [
+    "EG-4930d168"
+   ],
+   "why": "Has the same expected result as EG-5604cefc, but this one checks the Owner search condition and that one checks Model/Nickname, so they stay separate."
+  },
+  {
+   "rows": [
+    "EG-4ae61724"
+   ],
+   "why": "Has the same expected result as EG-ce238aa4, but this one checks the Model/Nickname search condition and that one checks the ITEM_ID40 cell, so they stay separate."
+  },
+  {
+   "rows": [
+    "EG-5604cefc"
+   ],
+   "why": "Only row checking the text input on the Model/Nickname search condition."
+  },
+  {
+   "rows": [
+    "EG-648ad11f"
+   ],
+   "why": "Checks that the MEASURE cell type maps to FPModal, which differs from V-281c4075, which expects COMBO for the same column."
+  },
+  {
+   "rows": [
+    "EG-7dd31b57"
+   ],
+   "why": "Only row checking that the Owner search condition maps to the OwnerByDivisionModal."
+  },
+  {
+   "rows": [
+    "EG-ce238aa4"
+   ],
+   "why": "Only row checking which popup the ITEM_ID40 cell maps to."
+  },
+  {
+   "rows": [
+    "EG-d9eea198"
+   ],
+   "why": "Only row checking the ITEM_ID40 cell type (a different line reference from MEASURE)."
+  },
+  {
+   "rows": [
+    "EG-fe492487"
+   ],
+   "why": "Only row checking the icon on the ITEM_ID40 cell."
+  },
+  {
+   "rows": [
+    "T-0a678bbb"
+   ],
+   "why": "Trace row for a column in the price popup. Nothing else checks this column."
+  },
+  {
+   "rows": [
+    "T-10fe93a0"
+   ],
+   "why": "Trace row. Nothing else checks PROJECT_CODE."
+  },
+  {
+   "rows": [
+    "T-136e7311"
+   ],
+   "why": "Trace row that checks an entry function, not a column, so it has nothing to pair with."
+  },
+  {
+   "rows": [
+    "T-17dfb791"
+   ],
+   "why": "Trace row. Nothing else checks SCM_SITE_ID."
+  },
+  {
+   "rows": [
+    "T-1a916784"
+   ],
+   "why": "Trace row. Nothing else checks COLUMN_NAME."
+  },
+  {
+   "rows": [
+    "T-1c5eb724"
+   ],
+   "why": "Trace row for DEPT_ID, but its expected value is only a pointer to a table row, so it is not confirmed to match V-eda6f709 (COMBO). Left alone to be safe."
+  },
+  {
+   "rows": [
+    "T-2799a696"
+   ],
+   "why": "Trace row for an entry function."
+  },
+  {
+   "rows": [
+    "T-2deb2d76"
+   ],
+   "why": "Trace row. Nothing else checks CELL_PROD_SITE."
+  },
+  {
+   "rows": [
+    "T-3b2bdc77"
+   ],
+   "why": "Trace row. Nothing else checks DIVISION_ID."
+  },
+  {
+   "rows": [
+    "T-48ec57da"
+   ],
+   "why": "Trace row for MEASURE, but its expected value is only a table-row pointer and could be a different kind of check, so it is not grouped with V-281c4075."
+  },
+  {
+   "rows": [
+    "T-5205da72"
+   ],
+   "why": "Trace row. Nothing else checks SCM_SITE_ID81."
+  },
+  {
+   "rows": [
+    "T-5bc1dc29"
+   ],
+   "why": "Trace row. Nothing else checks BIZ_TYPE_NAME81."
+  },
+  {
+   "rows": [
+    "T-7523da8a"
+   ],
+   "why": "Trace row for an entry function."
+  },
+  {
+   "rows": [
+    "T-82ead777"
+   ],
+   "why": "Trace row for DEPT_ID40, but its expected value is not confirmed to match V-3c3af6ad, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-8aea9238"
+   ],
+   "why": "Trace row. Nothing else checks SMALL_CLASS_LABEL_NAME."
+  },
+  {
+   "rows": [
+    "T-8ee12379"
+   ],
+   "why": "Trace row. Nothing else checks ITEM_ID."
+  },
+  {
+   "rows": [
+    "T-9c9e93ca"
+   ],
+   "why": "Trace row. Nothing else checks COLUMN_LABEL_NAME."
+  },
+  {
+   "rows": [
+    "T-9e425a6d"
+   ],
+   "why": "Trace row. Nothing else checks DEPT_NAME_KO."
+  },
+  {
+   "rows": [
+    "T-a17adb53"
+   ],
+   "why": "Trace row. Nothing else checks SCM_SITE_ID82."
+  },
+  {
+   "rows": [
+    "T-b1658cd1"
+   ],
+   "why": "Trace row. Nothing else checks CURRENCY."
+  },
+  {
+   "rows": [
+    "T-bb6befa4"
+   ],
+   "why": "Trace row for UNIT_CURRENCY in the price popup."
+  },
+  {
+   "rows": [
+    "T-c7318ec6"
+   ],
+   "why": "Trace row for END_CUSTOMER, but its expected value is not confirmed to match V-1dac9a5c, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-e0fbf87c"
+   ],
+   "why": "Trace row for SCM_SITE_ID40, but its expected value is not confirmed to match V-96c3bfd6, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-e2aec6ed"
+   ],
+   "why": "Trace row for END_CUSTOMER40, but its expected value is not confirmed to match V-b5d71235, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-e57af649"
+   ],
+   "why": "Trace row. Nothing else checks LARGE_CLASS_LABEL_NAME."
+  },
+  {
+   "rows": [
+    "T-f2bf2c3b"
+   ],
+   "why": "Trace row. Nothing else checks EXT_INT."
+  },
+  {
+   "rows": [
+    "V-07e53186"
+   ],
+   "why": "Checks the editor on UNIT_ENERGY. Other columns have the same expected editor, but each column is a different element."
+  },
+  {
+   "rows": [
+    "V-1dac9a5c"
+   ],
+   "why": "Checks the COMBO editor on END_CUSTOMER."
+  },
+  {
+   "rows": [
+    "V-281c4075"
+   ],
+   "why": "Checks the COMBO editor on MEASURE."
+  },
+  {
+   "rows": [
+    "V-393803e7"
+   ],
+   "why": "Checks the editor on MODULE_PER_PACK."
+  },
+  {
+   "rows": [
+    "V-3c3af6ad"
+   ],
+   "why": "Checks the COMBO editor on DEPT_ID40."
+  },
+  {
+   "rows": [
+    "V-431aeec0"
+   ],
+   "why": "Checks the editor on CELL_PER_MODULE."
+  },
+  {
+   "rows": [
+    "V-67bfbb8a"
+   ],
+   "why": "Checks the editor on ENERGE_WH."
+  },
+  {
+   "rows": [
+    "V-815a1aae"
+   ],
+   "why": "Checks the COMBO editor on FCST_TYPE."
+  },
+  {
+   "rows": [
+    "V-96c3bfd6"
+   ],
+   "why": "Checks the COMBO editor on SCM_SITE_ID40."
+  },
+  {
+   "rows": [
+    "V-995465c2"
+   ],
+   "why": "Checks the editor on the dynamic LOOP columns (2 decimal places)."
+  },
+  {
+   "rows": [
+    "V-9f241389"
+   ],
+   "why": "Checks the editor on MODULE_PER_CAR."
+  },
+  {
+   "rows": [
+    "V-a97a81da"
+   ],
+   "why": "Checks the editor on CELL_PER_PACK."
+  },
+  {
+   "rows": [
+    "V-b5d71235"
+   ],
+   "why": "Checks the COMBO editor on END_CUSTOMER40, which is a different column from END_CUSTOMER."
+  },
+  {
+   "rows": [
+    "V-cd92f25e"
+   ],
+   "why": "Checks the editor on CELL_PER_CAR."
+  },
+  {
+   "rows": [
+    "V-d87ac47e"
+   ],
+   "why": "Checks the COMBO editor on PLANT_SITE_ID."
+  },
+  {
+   "rows": [
+    "V-d9b54319"
+   ],
+   "why": "Checks the COMBO editor on INCOTERMS."
+  },
+  {
+   "rows": [
+    "V-eda6f709"
+   ],
+   "why": "Checks the COMBO editor on DEPT_ID."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:40:01",
+ "cost": 0.1570492
+}

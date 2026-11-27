@@ -1,0 +1,45 @@
+{
+  "id": "20261126192237_SELF",
+  "at": "2026-11-26T19:22:37+09:00",
+  "ms": 1795688557499,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/quick.json|vm환경설정그룹에orchautoimproveonstop작업종료뒤대기개선안",
+  "title": "사용자 지시 R257 같은 문제: tools/VibeManager/quick.json:2657 VM 환경설정 그룹에 orch.autoImproveOnStop(작업 종료 뒤 대기 개선안 이어 진행)과 orch.autoImproveScope 를 켜고 끄는 항목",
+  "evidence": "규칙 R257 \"AI 작업 턴이 끝나면 맡은 세션 없는 VMO 대기 개선안을 찾아 이어서 진행하고 VM 환경설정 항목으로 켜고 끔\" (원래 지시 2026-11-26 18:18 \"작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요\") · tools/VibeManager/quick.json:2657 \"label\": \"🔁 VMO 보완 뒤 재수행 (재수행 / 수행 없음)\",",
+  "targets": [
+    "tools/VibeManager/quick.json"
+  ],
+  "before_after": "quick.json 환경설정 그룹에 '♻ 작업 종료 뒤 개선안 이어 진행 (켜기 / 끄기)' 항목(task S8.flagAutoImproveOnStop)과 범위 항목(개선 세션만 / 전부)을 추가함. steps.json 에 S8.flagAgentEnabled(2569행)와 같은 틀로 set_harness_flag.py orch.autoImproveOnStop, orch.autoImproveScope 작업을 추가함. hint 에 값 위치와 기본값을 적음",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/quick.json.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:28:25+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:29:07+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · quick.json 환경설정 그룹에 '♻ 작업 종료 뒤 개선안 이어 진행 (켜기 / 끄기)'(task S8.flagAutoImproveOnStop, hint 에 값 위치 orch.autoImproveOnStop, 기본 켬, 상한 키) 추가. steps.json S8.flagAutoImproveOnStop(S8.flagAgentEnabled 와 같은 틀, set_harness_flag.py ON/OFF/STATUS). set_harness_flag.py FLAGS 에 orch.autoImproveOnStop. 범위 항목(orch.autoImproveScope 'all'/개선 세션)은 set_harness_flag.py 가 켜고 끄는 값만 다뤄 넣지 않음. 확인: JSON 구문 정상, set_harness_flag --selftest OK, STATUS = 켬, S4 정의 정합, t_quick_tpl, t_chain_args, t_webview_syntax, t_orch_selfcheck, t_wb_load PASS 69 FAIL 0(2026-11-26 19:29)"
+    }
+  ],
+  "plain": {
+    "what": "AI 작업 턴이 끝나면 맡은 세션 없는 VMO 대기 개선안을 찾아 이어서 진행하고 VM 환경설정 항목으로 켜고 끔 규칙을 tools/VibeManager/quick.json 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R257|tools/VibeManager/quick.json",
+  "kind": "fix",
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795688947838
+}

@@ -14,6 +14,7 @@ Vibe_Manager(VM)가 실행한 작업의 사건 1건을 받아 처리한다. 사�
 - 사용자가 요청한 UI/UX 는 그때 인지한 한시적 요구다. 지금 널리 쓰이는 UI/UX 관행에 비춰 더 나은 방식을 스스로 추천하고 반영한다.
 - 승인: 자동 반영 기준(orch-selfcheck.js autoEligible)을 따른다. 승인 유지 = 실행 hook 스크립트·.claude/settings.json(에이전트가 자기 안전장치를 고치지 않음)·DB 객체(사내 DB 승인 절차 T18)·시험 계정 설정·작업 모드 변경. FE·BE 소스는 작업 모드를 따른다.
 - 컨설팅 검토(orch-consult.js · 하루 1회): VMO 는 IT 컨설턴트이자 DB·UI 를 모두 다루는 수석 엔지니어 입장에서 VM 전체를 진단하고(강점·약점·위험) 로드맵(지금·다음·나중)과 바로 개발할 개선안을 스스로 낸다. 보고 .vibe/orch/consult/last.md. 요청받지 않은 기능·UI/UX 도 필요하면 낸다.
+- 컨설팅 주제의 전문가 역할(2026-11-26 사용자 지시 R258): 주제 낱말로 역할(DB, UI/UX, C#.NET, React, Spring Boot)을 고르고, 역할 스킬(harness.json orch.consultSkills, 없으면 orch-consult.js 기본값 db, frontend-design, csharp-expert, winforms-expert, vercel-react-best-practices, java-springboot)을 Skill 도구로 먼저 불러 보고의 근거 칸에 쓴 스킬을 적는다. 불러지지 않은 스킬은 '스킬 없음: 이름'으로 적는다.
 - AI 주간 한도: 다 쓴 때만 멈춘다(orch.aiWeeklyStopPct 100 · 사용자 2026-11-26 '한도 걱정 말 것, 모자라면 계정을 추가').
 - 검사기 판정 결함 자가진단 = S16(tools/Harness/verify/checker_defect_scan.py · orch-checkerscan.js). 사용자 결정 예외 = tools/Harness/rules/checker_scan_ignore.csv.
 

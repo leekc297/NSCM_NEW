@@ -1,5 +1,5 @@
 {
- "_gen": "form_scen_gen.py 2026-11-26 16:40:18",
+ "_gen": "form_scen_gen.py 2026-11-26 17:29:40",
  "menu_id": "SSP0020",
  "asis": "SSP0020",
  "buttons": [
@@ -31,7 +31,15 @@
   "dynamic": 9,
   "pending": 0,
   "blocked": 0,
-  "delegated": 0
+  "delegated": 0,
+  "tobe_missing": 0,
+  "covered": 0,
+  "out_of_scope": 0
+ },
+ "tobe": {
+  "use": "Y",
+  "route": "shipping/shipping-master/delegate",
+  "src": "DB SCM_ADM_MNU_M 2026-11-26 17:29"
  },
  "scenarios": [
   {
@@ -447,6 +455,9 @@
  "_pending": [],
  "_blocked": [],
  "_delegated": [],
+ "_tobe_missing": [],
+ "_covered": [],
+ "_out_of_scope": [],
  "compare_manual": [
   {
    "manual": "B01",

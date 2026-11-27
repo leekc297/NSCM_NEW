@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/regionModal/region-modal.constants.ts | constants | 8 |
-| features/master/src/components/regionModal/RegionModal.module.scss | style | 20 |
+| features/master/src/components/regionModal/RegionModal.module.scss | style | 21 |
 | features/master/src/components/regionModal/RegionModal.tsx | page | 236 |
 | features/master/src/components/regionModal/regionModalStore.ts | store | 41 |
 
@@ -29,8 +29,8 @@
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/regionModal/RegionModal.tsx | 168 |
 | InputField | onChange | <arrow> setCityInput | jsx | features/master/src/components/regionModal/RegionModal.tsx | 181 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/regionModal/RegionModal.tsx | 182 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/regionModal/RegionModal.tsx | 221 |
-| Button | onClick | modalClose | jsx | features/master/src/components/regionModal/RegionModal.tsx | 228 |
+| Button | onClick | modalClose | jsx | features/master/src/components/regionModal/RegionModal.tsx | 219 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/regionModal/RegionModal.tsx | 228 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

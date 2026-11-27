@@ -1,0 +1,469 @@
+{
+  "menuId": "DMF0042",
+  "screenName": "BizPlan",
+  "feature": "demand",
+  "pageDir": "business-plan",
+  "routePath": "demand/business-plan",
+  "sheets": [
+    {
+      "sheetName": "Biz Plan",
+      "rule": "META+코드연결",
+      "columns": 63,
+      "popup": false
+    },
+    {
+      "sheetName": "Sales Price PopUp",
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": 5,
+      "popup": true
+    },
+    {
+      "sheetName": "spreadTitle",
+      "rule": "동적 헤더(기간 컬럼) — DMF0042_1_GET_SPREAD_TITLE / DMF0042_3_GET_SPREAD_TITLE / DMF0042_GET_SPREAD_TITLE / DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "InitControls",
+        "cboDivision_SelectedIndexChanged",
+        "clbTeam_SelectedIndexChanged",
+        "clbCustomer_SelectedIndexChanged",
+        "spdMain_ComboSelChange"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_",
+      "sheet": "Biz Plan",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+      "asis_sp": "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_SAVE_DM_PLN_BP_FCST",
+      "asis_sp": "DMF0042_SAVE_DM_PLN_BP_FCST",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST",
+      "sheet": "Biz Plan",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.PR_GET_DAY_RANGE",
+      "asis_sp": "PR_GET_DAY_RANGE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ],
+      "methods": [
+        "GetDayRange"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_PR_GET_DAY_RANGE",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_1_GET_SPREAD_TITLE",
+      "asis_sp": "DMF0042_1_GET_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_1_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_LOOKUP_VALUES",
+      "asis_sp": "SCM0001_GET_LOOKUP_VALUES",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:InsertButton"
+      ],
+      "methods": [
+        "GetLookupData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "asis_sp": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ],
+      "methods": [
+        "GetBizTypebyDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH",
+      "allowed_gap": "공통코드 콤보 → 등록 콤보ID(useTabComboQueries)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_GET_EXCHANGE_PRICE",
+      "asis_sp": "DMF0042_GET_EXCHANGE_PRICE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnExchangeRate.Click"
+      ],
+      "methods": [
+        "GetFuturePriceInfo"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_GET_EXCHANGE_PRICE",
+      "sheet": "Biz Plan",
+      "btn": "EXCHANGE_PRICE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+      "asis_sp": "DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSetPrice.Click"
+      ],
+      "methods": [
+        "btnSetPrice_Click"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+      "sheet": "Biz Plan",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.UP_FX_GetCommonDataList_DM",
+      "asis_sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:InsertButton",
+        "button:SaveButton",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetCellProdSite",
+        "InitSpread",
+        "InsertRow",
+        "GetSPlant",
+        "GetSLOC"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "allowed_gap": "공통 콤보 조회 → useTabComboQueries(콤보ID 등록)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_3_Get_BizPlan",
+      "asis_sp": "DMF0042_3_Get_BizPlan",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_3_GET_BIZPLAN",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0009_GET_CODE",
+      "asis_sp": "DMF0009_GET_CODE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetComboData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0009_GET_CODE",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_3_GET_SPREAD_TITLE",
+      "asis_sp": "DMF0042_3_GET_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_3_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_GET_SPREAD_TITLE",
+      "asis_sp": "DMF0042_GET_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_1_GET_DM_PLN_BUSINESS_PLAN_DATA",
+      "asis_sp": "DMF0042_1_GET_DM_PLN_BUSINESS_PLAN_DATA",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSetPrice.Click",
+        "event:this.btnExchangeRate.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_1_GET_DM_PLN_BUSINESS_PLAN_DATA",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_1_SAVE_DM_PLN_BP_FCST",
+      "asis_sp": "DMF0042_1_SAVE_DM_PLN_BP_FCST",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_1_SAVE_DM_PLN_BP_FCST",
+      "sheet": "Biz Plan",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_1_GET_BIZPLAN_INFO",
+      "asis_sp": "DMF0042_1_GET_BIZPLAN_INFO",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.spdMain.ComboSelChange"
+      ],
+      "methods": [
+        "spdMain_ComboSelChange",
+        "spdMain_CellDoubleClick"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_1_GET_BIZPLAN_INFO",
+      "sheet": "Biz Plan",
+      "btn": "BIZPLAN_INFO"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+      "asis_sp": "DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnSetPrice.Click"
+      ],
+      "methods": [
+        "btnSetPrice_Click"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV",
+      "sheet": "Biz Plan",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_1_GET_BIZPLAN_RTF",
+      "asis_sp": "DMF0042_1_GET_BIZPLAN_RTF",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_1_GET_BIZPLAN_RTF",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.",
+      "asis_sp": "",
+      "status": "NOT_IN_FOXQUERY",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_",
+      "sheet": "Biz Plan",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "asis_sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "Select_DpInit_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "sheet": "Biz Plan",
+      "btn": "DM_ANL_MKT_PSI_DPINIT"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "asis_sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "Select_DpResult_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "sheet": "Biz Plan",
+      "btn": "DM_ANL_MKT_PSI_DPRESULT"
+    },
+    {
+      "asis_endpoint": "DM.DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+      "asis_sp": "DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "InitSpread"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP",
+      "asis_sp": "DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA",
+      "asis_sp": "DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA",
+      "sheet": "Biz Plan",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0042_SAVE_DM_BP_EXCHANGE_RATE",
+      "asis_sp": "DMF0042_SAVE_DM_BP_EXCHANGE_RATE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0042.P_DMF0042_SAVE_DM_BP_EXCHANGE_RATE",
+      "sheet": "Biz Plan",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

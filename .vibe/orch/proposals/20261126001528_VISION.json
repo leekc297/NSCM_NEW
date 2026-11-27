@@ -3,7 +3,7 @@
   "at": "2026-11-26T00:15:28+09:00",
   "ms": 1795619728853,
   "source": "vision",
-  "status": "pending",
+  "status": "planned",
   "sig": "ln|struct|edits|workbench.js",
   "title": "개념 재정립: 진단 사다리 반복 수정 묶음을 파일 단위에서 원인 서명 단위로",
   "evidence": "orch-history.js:94(개선안 SELF 승인 문구 = 결함), :126~127(본문 파일 이름 모두 집계), orch-ladder.js:55~58, :140, :146(파일 전체 결함 일자로 L4). CHANGELOG.md 11-24~11-26 workbench.js 언급 결함 21절 중 'VMO 자가 보완: 사용자 지시 R## 같은 문제' 17절(:1, :39, :101, :302, :335, :349, :412, :426, :445, :452, :459, :494, :501, :704, :746, :802, :851), 중지 관련 1절(:60, 원인 = 중지 단추 표시 덮어씀). incidents 2026-11-23 이후 R14 0, R11 0, R5 1. events.jsonl 효력 뒤 user.stop 28줄 중 runId 5줄. stats.json(2026-11-26 00:09:29) 결함 48 = 11-19~11-25, 요청 48 = 11-17~11-23 · 진단 사다리 묶음 L4|struct|edits|workbench.js · 문서 .vibe/orch/vision/concept_20261126_L4_struct_edits_workbench.js.md",
@@ -23,12 +23,25 @@
   "levelWhy": "ladder.json L4|struct|edits|workbench.js: 구조 개선안 20261122000646_SELF 효력(2026-11-23 10:55) 뒤 3일 안에 같은 묶음 조건이 다시 참(효력 뒤 결함 18건 ≥ 4). 재분류 결과 21절 중 17절이 사용자 지시 반영 절이고, 구조 개선 대상(R14, R11)은 재발 0건이라 올림 개념을 고칠 대상으로 판정",
   "incident": "",
   "screen": "",
-  "history": [],
+  "history": [
+    {
+      "at": "2026-11-26T17:21:44+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "L4 단계 원장으로 진행(단계 3개, 단계마다 하위 안 반영). 원장 .vibe/orch/vision/plans.json"
+    }
+  ],
   "plain": {
     "what": "VMO 가 같은 파일을 자주 고쳤다는 이유로 '개념부터 다시 봐야 한다'고 올리던 것을 멈춤. 앞서 고친 원인이 다시 났을 때만 올림. 사용자가 시킨 수정을 다른 곳에 같은 방식으로 반영한 것은 결함으로 세지 않음",
     "risk": "재발 기준을 좁게 잡으면 같은 문제가 다른 경로로 다시 나도 VMO 가 개념 점검을 늦게 올림. 그 파일 결함 건수는 L3 표시로 계속 보임",
     "undo": "VMO 개선안 탭 되돌리기 단추 또는 백업 파일 3개 복원. 환경설정으로 종전 파일 단위 올림을 다시 켤 수 있음"
   },
   "kind": "fix",
-  "needsApproval": "자동 범위 밖 .claude/skills/vmo-diagnosis-ladder/SKILL.md"
+  "needsApproval": "자동 범위 밖 .claude/skills/vmo-diagnosis-ladder/SKILL.md",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795681303718,
+  "autoFp": "2052280baf",
+  "plan": "20261126001528_VISION"
 }

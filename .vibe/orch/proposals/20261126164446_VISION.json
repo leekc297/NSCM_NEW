@@ -1,0 +1,39 @@
+{
+  "id": "20261126164446_VISION",
+  "at": "2026-11-26T16:44:46+09:00",
+  "ms": 1795679086091,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 source backup push 실패 사건 n시간 need user 에 원인 분류와 다음 행동을 붙여 vmo 창 요약 맨 위에 보임",
+  "title": "컨설팅: Source Backup push 실패 사건(77시간 need-user)에 원인 분류와 다음 행동을 붙여 VMO 창 요약 맨 위에 보임",
+  "evidence": "S7(16:39) 미해결 사건 20261123_112448_R1_ALL '⬆️ Source Backup 3/3 push 실패 (exit 1)' need-user 77시간. 개선안 20261123113703_INC applied 뒤에도 남음. CHANGELOG.md:59 main ahead 3(8b7cff4d3 11-23 부터 미push), 원격 HTTP 500 기록. S13 U3 '사용자 행동 기록 없이 사용자 확인으로 멈춘 사건 1건(담당 VMO)'으로 같은 사건이 fail 로 계속 잡힘",
+  "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_watch.js"
+  ],
+  "before_after": "변경 전: need-user 사건이 사건 목록 안에만 있고 원인 분류 없이 'push 실패 (exit 1)'만 보임. 같은 사건을 S13 U3 가 매 점검 fail 로 셈. 변경 후: R1 Source Backup 사건에 마지막 push 로그의 원격 응답(HTTP 코드, 거부 사유 1줄)과 미push 커밋 수를 붙이고, VMO 창 요약 맨 위 '사람 확인 필요' 줄에 사건 1줄, 다음 행동 1줄('원격 상태 확인 뒤 ⬆️ Source Backup 다시 실행')을 보임. 사람 확인 줄이 보인 시각을 사건에 기록해 U3 가 '사용자에게 알렸음'과 '알리지 않음'을 나눔",
+  "verify": "반영 때: node tools/VibeManager/test/run_all.js, node tools/VibeManager/test/t_orch_watch.js. 반영 뒤: VMO 창 요약에 사건 20261123_112448_R1_ALL 줄과 HTTP 응답 표시 확인, 다음 자가진단 S13 U3 needUserVmo 항목에서 이 사건 제외 확인",
+  "rollback": "orch-watch.js, orchestra.js .bak_<tag> 복원",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:07+09:00",
+      "by": "S-W",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:00:52+09:00",
+      "by": "S-W",
+      "what": "반영 완료(세션 직접 보완) · orch-watch.js pushCause(종류 rejected, auth, size, network, server, unknown), pushInfoOf(HTTP 코드, 거부 사유 1줄, 미push 커밋 수 git rev-list @{u}..HEAD, 10분 캐시), needUserTop, markShown, raise 때 R1 Source Backup push 사건에 붙임. orchestra.js 요약 맨 위 #bNeed 사람 확인 줄(사건 1줄 + 다음 행동 1줄), 보이면 orch:needShown. workbench.js postIncidents needTop, orch:needShown 처리. orch-usercheck.js U3 needUserVmo 에서 shownAt 사건 제외. 실측: 20261123_112448_R1_ALL 로그 = server HTTP 500, 미push 4건(17:00:12). 시험 t_orch_watch PASS 35, t_orch_usercheck PASS 191, t_webview_syntax PASS 19 (2026-11-26 17:00:34). VMO 창 확인은 창 다시 로드 뒤"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-W",
+  "waitNote": "",
+  "appliedMs": 1795680052903
+}

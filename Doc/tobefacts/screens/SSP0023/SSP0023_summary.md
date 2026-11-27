@@ -10,17 +10,17 @@
 | features/shipping/src/pages/shipment-plan-electrode/components/modals/ExcelUploadModal.module.scss | component | 47 |
 | features/shipping/src/pages/shipment-plan-electrode/components/modals/ExcelUploadModal.tsx | component | 357 |
 | features/shipping/src/pages/shipment-plan-electrode/components/modals/OrderDetailModal.tsx | component | 171 |
-| features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | component | 249 |
-| features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | component | 366 |
+| features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | component | 262 |
+| features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | component | 373 |
 | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.module.scss | component | 29 |
 | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx | component | 450 |
 | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeMainGrid.tsx | component | 693 |
 | features/shipping/src/pages/shipment-plan-electrode/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.constants.ts | constants | 478 |
+| features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.constants.ts | constants | 477 |
 | features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.excelForm.ts | other | 39 |
 | features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.types.ts | types | 77 |
 | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.module.scss | style | 103 |
-| features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | page | 1077 |
+| features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | page | 1090 |
 | features/shipping/src/pages/shipment-plan-electrode/useShipmentPlanElectrodeStore.ts | store | 524 |
 | features/shipping/src/pages/shipment-plan-electrode/utils/shipment-plan-electrode.dblClickGuard.ts | util | 49 |
 | features/shipping/src/pages/shipment-plan-electrode/utils/shipment-plan-electrode.editLock.ts | util | 134 |
@@ -34,19 +34,19 @@
 |---|---|---|---|---|
 | /SSP0023/{ADMIN_SHEET_NAME[SHEETS.MAIN]}/UPLOAD/excel-upload | http | 1 | N | ExcelUploadModal.tsx:159 |
 | /SSP0023/main/GET_ORDER_DETAIL/call-proc | http,propagated | 2 | Y | OrderDetailModal.tsx:112 |
-| (useTabLookupQueries) | hook | 2 | Y | ShipmentPlanElectrodeDetailBar.tsx:60 ShipmentPlanElectrode.tsx:207 |
+| (useTabLookupQueries) | hook | 2 | Y | ShipmentPlanElectrodeDetailBar.tsx:61 ShipmentPlanElectrode.tsx:208 |
 | (useTabComboQueries) | hook | 1 | Y | ShipmentPlanElectrodeForm.tsx:73 |
-| SSP0023/main//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:146 |
-| SSP0023/calendar//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:153 |
-| SSP0023/planDetail//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:160 |
-| SSP0023/stockDetail//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:170 |
-| SSP0023/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:177 |
-| /SSP0023/main/SAVE_SHIPMENT_PLAN_SIMU/call-proc | http,propagated | 2 | Y | ShipmentPlanElectrode.tsx:379 |
-| /SSP0023/planDetail/SAVE/call-proc | http,propagated | 2 | Y | ShipmentPlanElectrode.tsx:504 |
-| {?url} | http | 1 | N | ShipmentPlanElectrode.tsx:551 |
-| {?params} | http | 1 | N | ShipmentPlanElectrode.tsx:552 |
-| /SSP0023/main/GET_SHIPMENT_PLAN_DETAIL_EXCEL/call-proc | http,propagated | 2 | Y | ShipmentPlanElectrode.tsx:708 |
-| /SSP0023/{ADMIN_SHEET_NAME[SHEETS.MAIN]}/UPLOAD_SAVE/call-proc | http | 1 | N | ShipmentPlanElectrode.tsx:758 |
+| SSP0023/main//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:147 |
+| SSP0023/calendar//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:154 |
+| SSP0023/planDetail//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:161 |
+| SSP0023/stockDetail//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:171 |
+| SSP0023/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlanElectrode.tsx:178 |
+| /SSP0023/planDetail/SAVE/call-proc | http,propagated | 2 | Y | ShipmentPlanElectrode.tsx:310 |
+| /SSP0023/main/SAVE_SHIPMENT_PLAN_SIMU/call-proc | http,propagated | 2 | Y | ShipmentPlanElectrode.tsx:317 |
+| {?url} | http | 1 | N | ShipmentPlanElectrode.tsx:564 |
+| {?params} | http | 1 | N | ShipmentPlanElectrode.tsx:565 |
+| /SSP0023/main/GET_SHIPMENT_PLAN_DETAIL_EXCEL/call-proc | http,propagated | 2 | Y | ShipmentPlanElectrode.tsx:721 |
+| /SSP0023/{ADMIN_SHEET_NAME[SHEETS.MAIN]}/UPLOAD_SAVE/call-proc | http | 1 | N | ShipmentPlanElectrode.tsx:771 |
 | /admin/menu/SSP0023/column | http,propagated | 2 | Y | useShipmentPlanElectrodeStore.ts:442 |
 | /admin/menu/SSP0023/measure | http,propagated | 2 | Y | useShipmentPlanElectrodeStore.ts:469 |
 | /admin/menu/SSP0023/search-conditions | http | 1 | Y | useShipmentPlanElectrodeStore.ts:501 |
@@ -62,25 +62,25 @@
 | Button | onClick | <arrow> handleSave | jsx | features/shipping/src/pages/shipment-plan-electrode/components/modals/ExcelUploadModal.tsx | 312 |
 | Button | onClick | <arrow> handleClose | jsx | features/shipping/src/pages/shipment-plan-electrode/components/modals/ExcelUploadModal.tsx | 316 |
 | Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-plan-electrode/components/modals/OrderDetailModal.tsx | 163 |
-| PeriodField | onChange | onShipChange | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 85 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 113 |
-| Button | onClick | onItemSearch2 | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 109 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 155 |
-| Button | onClick | onModelSearch2 | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 150 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 185 |
-| Button | onClick | onRequestorSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 181 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 203 |
-| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 227 |
-| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 242 |
+| PeriodField | onChange | onShipChange | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 86 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 120 |
+| Button | onClick | onItemSearch2 | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 110 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 168 |
+| Button | onClick | onModelSearch2 | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 157 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 198 |
+| Button | onClick | onRequestorSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 194 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 216 |
+| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 240 |
+| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 255 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 111 |
 | g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 122 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 137 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 198 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 199 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 225 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 234 |
-| g | formatItem | negativeHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 309 |
-| DataGrid | gotFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 359 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 144 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 205 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 206 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 232 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 241 |
+| g | formatItem | negativeHandler | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 316 |
+| DataGrid | gotFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 366 |
 | SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx | 140 |
 | CustomDropdown | onChange | <arrow> str,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx | 157 |
 | CustomDropdown | onChange | <arrow> setCompany,str | jsx | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx | 186 |
@@ -108,18 +108,18 @@
 | g | pastedCell | onEdited | addHandler | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeMainGrid.tsx | 573 |
 | g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeMainGrid.tsx | 633 |
 | g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeMainGrid.tsx | 643 |
-| ShipmentPlanElectrodeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 852 |
-| ShipmentPlanElectrodeForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 853 |
-| ShipmentPlanElectrodeForm | onModelSearch | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 854 |
-| ShipmentPlanElectrodeMainGrid | onConfirmDrilldown | handleConfirmDrilldown | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 895 |
-| ShipmentPlanElectrodeDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 905 |
-| ShipmentPlanElectrodeDetailBar | onItemSearch2 | <arrow> setOpenDetailItem | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 906 |
-| ShipmentPlanElectrodeDetailBar | onModelSearch2 | <arrow> setOpenDetailModel | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 907 |
-| ShipmentPlanElectrodeDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 908 |
-| ShipmentPlanElectrodeDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 927 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN]??'',columnType:TITLESET_MEASURE_TYPE,rows:(codes??[]).map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,(codes??[]).map,setAlert,t | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1038 |
-| ExcelUploadModal | onSave | handleExcelUploadSave | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1065 |
-| OrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1072 |
+| ShipmentPlanElectrodeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 865 |
+| ShipmentPlanElectrodeForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 866 |
+| ShipmentPlanElectrodeForm | onModelSearch | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 867 |
+| ShipmentPlanElectrodeMainGrid | onConfirmDrilldown | handleConfirmDrilldown | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 908 |
+| ShipmentPlanElectrodeDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 918 |
+| ShipmentPlanElectrodeDetailBar | onItemSearch2 | <arrow> setOpenDetailItem | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 919 |
+| ShipmentPlanElectrodeDetailBar | onModelSearch2 | <arrow> setOpenDetailModel | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 920 |
+| ShipmentPlanElectrodeDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 921 |
+| ShipmentPlanElectrodeDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 940 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN]??'',columnType:TITLESET_MEASURE_TYPE,rows:(codes??[]).map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,(codes??[]).map,setAlert,t | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1051 |
+| ExcelUploadModal | onSave | handleExcelUploadSave | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1078 |
+| OrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1085 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -198,8 +198,7 @@
 | MSG00225 | 1 |
 | MSG01295 | 1 |
 | MSG01201 | 1 |
-| MSG00133 | 1 |
-| MSG00004 | 1 |
+| MSG00004 | 2 |
 | MSG00703 | 1 |
 | MSG01206 | 1 |
 | MSG01081 | 1 |
@@ -256,8 +255,8 @@
 | MSG00265 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0023(19), SSP0060(17), SSP0015(13), SSP0300(6), SCP0005(5), SSP0200(5), SSP0021(4), SCP0048(3), SSP0026(2), DMF0074(1), COM0013(1), SSP0201(1), SSP0202(1), SCP0025(1), SCP0132(1)
-- SP/PKG: PKG_SSP0023(14), P_SHIP_PLAN_SIMU_ETD(7), P_SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM(4), P_SSP0023_SHIPMENT_PLAN_EXCEL_UPLOAD(3), P_ITEM_ID(3), P_NICK_NAME(3), P_SSP0300_GET_ORDER_DETAIL(2), P_DIVISION_ID(2), P_SHIP_CONFIRM_ETD(2), PKG_SSP0003(2), P_SSP0003_SAVE_REQ_IF_CHECK(2), SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL(2), P_SSP0023_GET_SHIPMENT_PLAN(2), P_MODEL_ID(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_ERP_SO_NO(1), P_CONFIRM_ID(1), P_SSP0023_GET_SHEET_CALENDAR_3SPAN(1), P_SSP0023_GET_STATUS(1), P_SSP0023_GET_SO_CNT(1), P_SSP0023_SAVE_DRAFTING(1), P_SSP0003_GET_IF_CHECK(1), SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING(1), PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(1), P_MY_MODEL_CHK(1), P_PART_LEADER_CHK(1), P_TEAM_LEADER_CHK(1), P_DELEGATEE_CHK(1), P_LOT_ID(1), P_REQUESTOR(1), SSP0023_SAVE_SHIPMENT_PLAN_SIMU(1), P_SSP0023_SAVE_SIMU(1), P_SSP0023_GET_PLAN_DETAIL_EXCEL(1), P_SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL(1), P_PROGRAM_ID(1), P_SHEET_NAME(1), P_CREATED_BY(1), P_DBL_FLAG(1), P_NON_CHK(1), PR_GET_SHEET_MEASURE_LIST(1)
+- 화면ID: SSP0023(20), SSP0060(17), SSP0015(13), SSP0300(7), SCP0005(6), SSP0200(5), SSP0021(4), COM0013(3), SCP0048(3), SSP0026(2), DMF0074(1), SSP0022(1), SSP0201(1), SSP0202(1), SSP0003(1), SCP0025(1), SCP0132(1)
+- SP/PKG: PKG_SSP0023(14), P_SHIP_PLAN_SIMU_ETD(7), P_ITEM_ID(4), P_SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM(4), P_SSP0023_SHIPMENT_PLAN_EXCEL_UPLOAD(3), P_NICK_NAME(3), P_SSP0300_GET_ORDER_DETAIL(2), P_DIVISION_ID(2), P_LOT_ID(2), P_MY_MODEL_CHK(2), P_NON_CHK(2), P_SHIP_CONFIRM_ETD(2), PKG_SSP0003(2), P_SSP0003_SAVE_REQ_IF_CHECK(2), SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL(2), P_SSP0023_GET_SHIPMENT_PLAN(2), P_MODEL_ID(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_ERP_SO_NO(1), P_CONFIRM_ID(1), P_SSP0023_GET_SHEET_CALENDAR_3SPAN(1), P_SSP0023_GET_STATUS(1), P_SSP0023_GET_SO_CNT(1), P_SSP0023_SAVE_DRAFTING(1), P_SSP0003_GET_IF_CHECK(1), SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING(1), PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(1), P_PART_LEADER_CHK(1), P_TEAM_LEADER_CHK(1), P_DELEGATEE_CHK(1), P_REQUESTOR(1), SSP0023_SAVE_SHIPMENT_PLAN_SIMU(1), P_SSP0023_SAVE_SIMU(1), P_SSP0023_GET_PLAN_DETAIL_EXCEL(1), P_SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL(1), P_PROGRAM_ID(1), P_SHEET_NAME(1), P_CREATED_BY(1), DMF0002_GET_TITLESET_POPUP(1), P_DBL_FLAG(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -266,8 +265,8 @@
 | code | }); | features/shipping/src/pages/shipment-plan-electrode/components/modals/ExcelUploadModal.tsx | 211 |
 | code | onUploaded(); | features/shipping/src/pages/shipment-plan-electrode/components/modals/ExcelUploadModal.tsx | 212 |
 | code | handleClose(); | features/shipping/src/pages/shipment-plan-electrode/components/modals/ExcelUploadModal.tsx | 213 |
-| jsx | <FunctionSearchIcon appearance='lined' onClick={onModelSearch2} /> | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 143 |
-| code | 클릭 — 더블클릭 가드 기록 전용. early return 보다 먼저 track() 한다(헤더·빈영역도 null 기록해야 | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 227 |
+| jsx | <FunctionSearchIcon appearance='lined' onClick={onModelSearch2} /> | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailBar.tsx | 150 |
+| code | 클릭 — 더블클릭 가드 기록 전용. early return 보다 먼저 track() 한다(헤더·빈영역도 null 기록해야 | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx | 234 |
 | jsx | <FunctionSearchIcon appearance='lined' onClick={onModelSearch} /> | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx | 313 |
 | jsx | <Grid size={6}> | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx | 363 |
 | code | onChange={checked => setChkSum(checked)} | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx | 379 |
@@ -275,24 +274,24 @@
 | code | 코드가 없다. 정본 paintNegativeText). 필수: 색 분기 return 앞에서 전 셀에 1회 적용해야 재활용 잔상이 | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeMainGrid.tsx | 412 |
 | code | 더블클릭 가드 기록은 early return 보다 먼저 한다(헤더·빈 영역 클릭도 null 로 남겨야 오인이 없다). | features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeMainGrid.tsx | 636 |
 | code | (AS-IS MSG00292) Simulation 저장 시 최신 Plan 아님 경고 — AS-IS 는 경고만 띄우고 저장은 계속 진행(cs:5949~5955, return 없음). | features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.constants.ts | 320 |
-| endpoint | useTabProcQuery(→apiClient.callProc)는 response.result 를 키 정규화 없이 그대로 반환하므로 | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 186 |
-| endpoint | ── mount — keep-alive 잔여 filters 무효화 + 컬럼/measure 메타 1회 fetch (np §5-7) ── | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 225 |
-| code | MSG00292 경고 후 저장을 진행하나(cs:5949~5955 return 없음), TO-BE 는 과거 Plan 편집을 editLock 으로 | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 309 |
-| code | void (async () => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 350 |
-| code | for (const row of payload) { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 352 |
-| endpoint | const res = await apiClient.post( | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 353 |
-| code | ); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 356 |
-| code | }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 362 |
-| code | mainEditTrackerRef.current?.clearChanges(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 366 |
-| code | setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 367 |
-| code | if (filters[SHEETS.MAIN]) void refetchMain(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 368 |
-| code | })(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 372 |
-| code | setSelectedValue={(items, _itemName, _itemClassName, nickName) => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 958 |
-| code | if (items) setSearchCondition({ modelId: items, nickName: nickName ?? '' }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 959 |
-| code | setSelectedValue={(items, _itemName, _itemClassName, nickName) => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 995 |
-| code | if (items) setSearchCondition({ detailModelId: items, detailNickName: nickName ?? '' }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 996 |
-| code | onUploaded={() => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1062 |
-| code | if (filters[SHEETS.MAIN]) void refetchMain(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1063 |
+| endpoint | useTabProcQuery(→apiClient.callProc)는 response.result 를 키 정규화 없이 그대로 반환하므로 | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 187 |
+| endpoint | ── mount — keep-alive 잔여 filters 무효화 + 컬럼/measure 메타 1회 fetch (np §5-7) ── | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 226 |
+| code | MSG00292 경고 후 저장을 진행하나(cs:5949~5955 return 없음), TO-BE 는 과거 Plan 편집을 editLock 으로 | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 326 |
+| code | void (async () => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 367 |
+| code | for (const row of payload) { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 369 |
+| endpoint | const res = await apiClient.post( | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 370 |
+| code | ); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 373 |
+| code | }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 379 |
+| code | mainEditTrackerRef.current?.clearChanges(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 383 |
+| code | setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 384 |
+| code | if (filters[SHEETS.MAIN]) void refetchMain(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 385 |
+| code | })(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 389 |
+| code | setSelectedValue={(items, _itemName, _itemClassName, nickName) => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 971 |
+| code | if (items) setSearchCondition({ modelId: items, nickName: nickName ?? '' }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 972 |
+| code | setSelectedValue={(items, _itemName, _itemClassName, nickName) => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1008 |
+| code | if (items) setSearchCondition({ detailModelId: items, detailNickName: nickName ?? '' }); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1009 |
+| code | onUploaded={() => { | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1075 |
+| code | if (filters[SHEETS.MAIN]) void refetchMain(); | features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx | 1076 |
 | endpoint | admin SCM_MST_SHEET_COLUMNS fetch (mount + Search — ui-dynamic-property-management §2.3). | features/shipping/src/pages/shipment-plan-electrode/useShipmentPlanElectrodeStore.ts | 436 |
 | code | 사용법: 클릭 핸들러에서 **early return 보다 먼저** track() 을 부른다(헤더·빈 영역 클릭도 null 로 | features/shipping/src/pages/shipment-plan-electrode/utils/shipment-plan-electrode.dblClickGuard.ts | 12 |
 | code | if (!tag \|\| tag.span !== ctx.activeSpan \|\| tag.bucket !== 'D') return; | features/shipping/src/pages/shipment-plan-electrode/utils/shipment-plan-electrode.save.ts | 58 |

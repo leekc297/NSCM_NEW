@@ -1,0 +1,221 @@
+// VMO 진단 사다리(2026-11-20 플랜 K2~K4): 올림 조건 · 묶음 원장 · L3 구조 진단 · L4 개념 재정립 · 하루 상한 · S15
+//   사용: node test/t_orch_ladder.js <VibeManager 폴더>
+const path = require('path'); const fs = require('fs'); const os = require('os');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ladder-')); const vibeDir = path.join(root, '.vibe'); const od = path.join(vibeDir, 'orch');
+const W = (rel, v) => { const f = path.join(root, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, typeof v === 'string' ? v : JSON.stringify(v)); return f; };
+W('tools/Harness/harness.json', { orch: { ladderMaxPerDay: 10 } });
+const p = { root, vibeDir };
+const L = require(path.join(dir, 'orch-ladder'));
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+const now = Date.now(); const loc = ms => require(path.join(dir, 'orch-events')).nowLocal(ms);
+// 개선안(가짜): 재발 묶음용 2건(같은 대상 파일), 반영 실패 2건(같은 파일)
+const props = [
+  { id: 'P1', status: 'applied', title: '감시 조건 보완 1', targets: ['tools/VibeManager/orch-watch.js'], history: [] },
+  { id: 'P2', status: 'applied', title: '감시 조건 보완 2', targets: ['tools/VibeManager/orch-watch.js'], history: [] },
+  { id: 'P3', status: 'apply-failed', title: '표시 보완', targets: ['tools/VibeManager/workbench.js'], history: [{ at: loc(now - 3600000), what: '반영 실패. 게이트' }, { at: loc(now - 1800000), what: '반영 실패. 검증 실패' }] },
+  { id: 'P4', status: 'applied', title: 'U9 동작 보완', selfKey: 'S13|U9|x', targets: ['tools/VibeManager/orch-watch.js'], history: [] }, // 개선안 20261123112024_SELF, 20261123122722_SELF: 결함 수정(kind fix) 개선안 표본(감지기 파일만 고친 안은 재발 근거 아님)
+  // 개선안 20261122000421_SELF_2 재현: 대체된 안(실패 2건) → 고친 안 반영 완료 = 묶음 없음 · 고친 안 반영 실패 = 묶음 유지
+  { id: '20261119232523_SELF', status: 'superseded', supersededBy: '20261120001936_SELF_2', title: '문장 검사 보완', targets: ['tools/Docs/doc_style.py'], history: [{ at: loc(now - 7200000), what: '반영 실패. 검증 실패' }, { at: loc(now - 3600000), what: '반영 실패. 게이트' }] },
+  { id: '20261120001936_SELF_2', status: 'applied', title: '문장 검사 보완(고친 안)', targets: ['tools/Docs/doc_style.py'], history: [] },
+  { id: 'S1', status: 'superseded', supersededBy: 'S2', title: '대체된 안', targets: ['tools/VibeManager/sup_fail.js'], history: [{ at: loc(now - 7200000), what: '반영 실패. 검증 실패' }, { at: loc(now - 3600000), what: '반영 실패. 게이트' }] },
+  { id: 'S2', status: 'apply-failed', title: '고친 안(반영 실패)', targets: ['tools/VibeManager/sup_fail.js'], history: [] },
+];
+const added = [];
+const improve = { list: () => props.concat(added), get: id => props.concat(added).find(x => x.id === id) || null, add: (o, src) => { const id = `N${added.length + 1}`; added.push(Object.assign({ id, status: 'pending', src }, o)); return { id }; } };
+let calls = []; const reply = { L3: { summary: '공통 원인 1건', causes: [{ cause: '중지 판단 기준', evidence: 'orch-watch.js:202', refuted: '재개 체인에서도 같은 판정' }], proposals: [{ title: '중지 판단을 실행 ID 시작 시각 기준으로', impact: 'fix', level: 'L3', evidence: 'x', targets: ['tools/VibeManager/orch-watch.js'], before_after: 'a → b', verify: 'v', rollback: 'r', sig: 's1' }] },
+  L4: { summary: '개념 재정립', doc: '# 개념 재정립: 시험\n## 목적(사용자 원문)\n...', proposal: { title: '개념 재정립: 중지와 재개', impact: 'fix', evidence: 'y', targets: ['tools/VibeManager/orch-watch.js'], before_after: 'c → d', verify: 'v', rollback: 'r', sig: 's2' } } };
+const agent = { withLock: (k, fn) => fn(), say() { }, lastJsonBlock: t => { const m = /```json\n([\s\S]*?)\n```/.exec(t || ''); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } },
+  runClaude: async (prompt, o) => { calls.push({ prompt, o }); const lv = /L4 개념 재정립/.test(prompt) ? 'L4' : 'L3'; return { ok: true, text: '```json\n' + JSON.stringify(reply[lv]) + '\n```', log: 'x.log', ms: 1 }; } };
+const ledger = { ready: () => true, init() { }, stats: () => ({ falses: [{ id: 'I1', at: loc(now - 7200000), rule: 'R14', kind: 'stop', screen: 'SCP0028', why: '중지 뒤 시작' }, { id: 'I2', at: loc(now - 3600000), rule: 'R14', kind: 'stop', screen: 'SSP0005', why: '중지 뒤 시작' }] }) };
+L.init({ paths: () => p, improve, agent, ledger });
+// 자가진단 결과(S8 재발 2건, S9 반복 수정, S13 지적 재발)
+W('.vibe/orch/selfcheck/result.json', { checks: {
+  S8: { items: [{ key: 'S8|P1', proposal: 'P1', what: '개선안 반영 뒤 같은 사건 2건', detail: 'd', ms: now - 60000 }, { key: 'S8|P2', proposal: 'P2', what: '자가 보완 뒤에도 남음', detail: 'd', ms: now - 60000 }] },
+  S9: { items: [{ key: 'S9|file|workbench.js', what: 'workbench.js 7일 안 변경 기록 79건' }, { key: 'S9|file|orch-watch.js', what: 'orch-watch.js 7일 안 변경 기록 40건' }, { key: 'S9|file|run_all.js', what: 'run_all.js 7일 안 변경 기록 36건' }, { key: 'S9|file|orchestra.js', what: 'orchestra.js 7일 안 변경 기록 36건' }, { key: 'S9|file|a.js', what: 'a.js 7일 안 변경 기록 3건' }] },
+  S13: { items: [{ key: 'S13|U9|z', uid: 'U9', level: 'fail', what: '중지 뒤 계속 실행 미해결', detail: 'd', ms: now - 60000 }] } } }); // 개선안 20261121000234_VISION: 재발 = 증상(fail) 사건 ms 있음
+// Overall Review 3회 연속 같은 목적 어긋남(문구 조금씩 다름)
+['20261118_100000', '20261119_100000', '20261120_100000'].forEach((n, k) => W(`.vibe/orch/vision/${n}.json`, { at: n, purposes: [{ purpose: k === 1 ? 'CheckList 화면 1개 10분, 길어야 30분 안에 끝남.' : 'CheckList 화면 1개 10분, 길어야 30분 안에 끝남', verdict: '어긋남', evidence: `실측 ${100 + k}분` }, { purpose: '감시는 체인 중에도 계속', verdict: k === 2 ? '어긋남' : '맞음' }] }));
+// 같은 축 사용자 지적 3건(7일)
+W('tools/VibeManager/user_checks.json', { items: [1, 2, 3].map(k => ({ id: `U${30 + k}`, at: loc(now - k * 86400000).slice(0, 16).replace('T', ' '), quote: `지적 ${k}`, detector: 'vmoCadence', status: 'active' })).concat([{ id: 'U40', at: loc(now).slice(0, 16).replace('T', ' '), quote: 'x', detector: 'logTabShown' }]) });
+(async () => {
+  const c1 = L.scan(); const keys = c1.map(x => x.key).sort();
+  chk('L3 재발: 같은 대상 파일(orch-watch.js) 개선안 반영 뒤 재발 2건', keys.includes('L3|recur|orch-watch.js'), keys.join(','));
+  chk('L3 반복 수정: 상위 3개 파일만(4건 미만 제외)', keys.filter(k => /^L3\|edits\|/.test(k)).length === 3 && keys.includes('L3|edits|workbench.js') && !keys.includes('L3|edits|a.js') && !keys.includes('L3|edits|orchestra.js'));
+  chk('L3 오판 2건(R14)', keys.includes('L3|false|R14'));
+  chk('L3 반영 실패 2건(workbench.js)', keys.includes('L3|applyfail|workbench.js'));
+  chk('L3 반영 실패: 대체된 안의 고친 안이 반영 완료 = 묶음 없음(doc_style.py)', !keys.includes('L3|applyfail|doc_style.py'), keys.join(','));
+  chk('L3 반영 실패: 고친 안이 반영 실패 = 묶음 유지(sup_fail.js)', keys.includes('L3|applyfail|sup_fail.js'), keys.join(','));
+  chk('L3 사용자 지적 재발(U9 · 반영 완료 개선안 있음)', keys.includes('L3|usercheck|U9'));
+  chk('L4 목적 어긋남 3회 연속(문구 차이 무시) · 1회 어긋남은 아님', keys.some(k => /^L4\|purpose\|CheckList화면1개10분/.test(k)) && !keys.some(k => /감시는체인/.test(k)), keys.filter(k => /^L4/.test(k)).join(','));
+  chk('L4 같은 축 사용자 지적 3건(vmoCadence) · 1건 축은 아님', keys.includes('L4|useraxis|vmoCadence') && !keys.includes('L4|useraxis|logTabShown'));
+  // 원장 · 진단(하루 상한 2 → L4 먼저)
+  W('tools/Harness/harness.json', { orch: { ladderMaxPerDay: 2 } }); calls = [];
+  const t1 = await L.tick();
+  chk('하루 상한 2: 2건만 진단 · L4 먼저 · 나머지 대기', t1.ran.length === 2 && t1.ran.every(r => r.level === 'L4') && t1.skipped === c1.length - 2, JSON.stringify(t1.ran.map(r => r.key)));
+  chk('진단 AI 호출 = 읽기 전용 + Skill 허용 + 개념 재정립 스킬 지시', calls.length === 2 && calls.every(x => /Skill,Read/.test(x.o.allowedTools) && x.o.permissionMode === 'default') && /vmo-concept-review/.test(calls[0].prompt), JSON.stringify(calls.map(x => x.o.allowedTools)));
+  const l4p = added.filter(a => a.level === 'L4');
+  chk('L4 결과: 개선안 impact core(AI 가 fix 라 해도) · level L4 · 출처 vision', l4p.length === 2 && l4p.every(a => a.impact === 'core' && a.src === 'vision'), JSON.stringify(l4p.map(a => [a.impact, a.level, a.src])));
+  const docs = fs.readdirSync(path.join(od, 'vision')).filter(n => /^concept_/.test(n));
+  chk('L4 결과: 개념 재정립 문서 저장', docs.length === 2 && /개념 재정립/.test(fs.readFileSync(path.join(od, 'vision', docs[0]), 'utf8')), docs.join(','));
+  const t2 = await L.tick();
+  chk('같은 날 상한 도달 = 더 진단 안 함', t2.ran.length === 0, JSON.stringify(t2));
+  W('tools/Harness/harness.json', { orch: { ladderMaxPerDay: 20 } }); calls = [];
+  const t3 = await L.tick();
+  chk('상한을 올리면 남은 L3 진단 · 이미 진단한 L4 는 24시간 안 다시 안 함', t3.ran.length === c1.length - 2 && t3.ran.every(r => r.level === 'L3') && /L3 구조 진단/.test(calls[0].prompt) && /systematic-debugging/.test(calls[0].prompt), JSON.stringify(t3.ran.map(r => r.key)));
+  chk('L3 결과: 개선안 level L3 · 출처 self', added.filter(a => a.level === 'L3').length >= 1 && added.filter(a => a.level === 'L3').every(a => a.src === 'self'));
+  // L3 → L4: 그 묶음의 구조 개선안이 반영 완료됐는데 같은 묶음이 다시 참
+  const lad = L.readLadder(); const rec = lad.bundles['L3|recur|orch-watch.js']; const pid = rec.runs.slice(-1)[0].proposal; const pr = added.find(a => a.id === pid); pr.status = 'applied'; pr.appliedMs = Date.now() - 3600000;
+  const c2 = L.scan();
+  chk('구조 개선 반영 뒤 같은 묶음 재발 = L4 로 올림', c2.some(x => x.key === 'L4|struct|recur|orch-watch.js' && x.level === 'L4' && /구조 개선안/.test(x.why)), c2.filter(x => /struct/.test(x.key)).map(x => x.key).join(','));
+  // 사라진 묶음 = resolved
+  W('.vibe/orch/selfcheck/result.json', { checks: {} }); L.update(L.scan());
+  chk('조건이 사라진 묶음 = resolved', L.readLadder().bundles['L3|recur|orch-watch.js'].status === 'resolved');
+  const sm = L.summary(); chk('요약(화면): 열린 묶음 수 · 오늘 진단 수', sm.open && typeof sm.open.L4 === 'number' && sm.dayRuns >= 2, JSON.stringify({ open: sm.open, day: sm.dayRuns }));
+  // 개선안 20261122140537_VISION: L3 → L4 올림은 구조 개선안 효력 뒤 근거만 셈
+  //   실사건 표본 ① ladder.json:522 doc_style.py(근거 11-19 23:44 · 23:54 반영 실패, 구조 개선안 반영 뒤 같은 묶음) ② needsReload 안 반영 뒤 창 로드 0회(activations 마지막 11-21 01:59)
+  const fx = name => path.join(od, name); const ladW = lad2 => fs.writeFileSync(fx('ladder.json'), JSON.stringify(lad2));
+  const VA = now - 3 * 3600000; // 구조 개선안 반영 시각
+  props.push({ id: 'SV1', status: 'applied', title: '문장 검사 반영 구조 보완', appliedMs: VA, targets: ['tools/VibeManager/orch-improve.js'], history: [] });
+  props.push({ id: 'V1', status: 'apply-failed', title: '문장 검사 보완(효력 전 실패)', targets: ['tools/Docs/doc_style2.py'], history: [{ at: loc(now - 5 * 3600000), what: '반영 실패. 검증 실패' }, { at: loc(now - 4 * 3600000), what: '반영 실패. 게이트' }] });
+  { const l = L.readLadder(); l.bundles['L3|applyfail|doc_style2.py'] = { key: 'L3|applyfail|doc_style2.py', runs: [{ ms: now - 4 * 3600000, proposal: 'SV1' }], status: 'open' }; ladW(l); }
+  const c4 = L.scan().filter(x => /doc_style2\.py$/.test(x.key));
+  chk('① 근거 시각이 구조 개선안 효력 전인 반영 실패 묶음 = L4|struct 안 나옴 · L3 에 효력 뒤 재발 없음 기록', !c4.some(x => x.key === 'L4|struct|applyfail|doc_style2.py') && c4.some(x => x.key === 'L3|applyfail|doc_style2.py' && /효력\([^)]*\) 뒤 재발 없음/.test(x.why)), JSON.stringify(c4.map(x => [x.key, x.why])));
+  props.find(x => x.id === 'V1').history.push({ at: loc(now - 2 * 3600000), what: '반영 실패. 검증 실패' }, { at: loc(now - 3600000), what: '반영 실패. 게이트' });
+  const c5 = L.scan().filter(x => /doc_style2\.py$/.test(x.key)); const s5 = c5.find(x => x.key === 'L4|struct|applyfail|doc_style2.py');
+  chk('② 효력 뒤 반영 실패 2건을 더하면 L4|struct 나옴 · 근거는 효력 뒤 2건 + 구조 개선안', !!s5 && s5.evidence.filter(e => e.src === 'apply').length === 2 && s5.evidence.some(e => e.src === 'struct'), JSON.stringify(c5.map(x => [x.key, x.evidence.length])));
+  props.push({ id: 'SV2', status: 'applied', needsReload: true, title: '표시 구조 보완(창 다시 로드 필요)', appliedMs: VA, targets: ['tools/VibeManager/workbench.js'], history: [] });
+  props.push({ id: 'V2', status: 'apply-failed', title: '표시 보완(효력 뒤 실패)', targets: ['tools/VibeManager/wb_reload.js'], history: [{ at: loc(now - 2 * 3600000), what: '반영 실패. 검증 실패' }, { at: loc(now - 3600000), what: '반영 실패. 게이트' }] });
+  { const l = L.readLadder(); l.bundles['L3|applyfail|wb_reload.js'] = { key: 'L3|applyfail|wb_reload.js', runs: [{ ms: now - 4 * 3600000, proposal: 'SV2' }], status: 'open' }; ladW(l); }
+  fs.writeFileSync(fx('activations.jsonl'), JSON.stringify({ ms: VA - 3600000, at: loc(VA - 3600000) }) + '\n');
+  const c6 = L.scan().filter(x => /wb_reload\.js$/.test(x.key));
+  chk('③ needsReload 안이고 반영 뒤 창 로드 없음 = L4 안 나옴 · L3 에 효력 전 기록', !c6.some(x => /^L4\|/.test(x.key)) && c6.some(x => x.key === 'L3|applyfail|wb_reload.js' && /효력 전/.test(x.why)), JSON.stringify(c6.map(x => [x.key, x.why])));
+  fs.appendFileSync(fx('activations.jsonl'), JSON.stringify({ ms: VA + 600000, at: loc(VA + 600000) }) + '\n');
+  const c7 = L.scan().filter(x => /wb_reload\.js$/.test(x.key));
+  chk('③-보조 반영 뒤 창 로드가 생기고 그 뒤 반영 실패 2건 = L4|struct 나옴', c7.some(x => x.key === 'L4|struct|applyfail|wb_reload.js'), JSON.stringify(c7.map(x => x.key)));
+  // 개선안 20261121000456_SELF_2: 사용자 지적 재발 = level fail 만 · norep/nomenu/err warn = nodata 묶음(L2) · 효력 뒤 2건 이상 = L3
+  //   실사건 표본 result.json:1028 S13|U16|norep|J20261120_191752(warn) · 개선안 20261120151817_SELF 효력 11-20 16:11 · U23 fail(S13|U23|wb|…)
+  { const effU = now - 5 * 3600000; fs.writeFileSync(fx('activations.jsonl'), JSON.stringify({ ms: effU }) + '\n');
+    props.push({ id: 'U16P', status: 'applied', selfKey: 'S13|U16', needsReload: true, appliedMs: effU - 1200000, title: '사용자 지적 감지기 추가 U16', targets: ['tools/VibeManager/orch-usercheck.js'], history: [] });
+    props.push({ id: 'U23P', status: 'applied', selfKey: 'S13|U23', appliedMs: effU, title: 'U23 재개 진행 표시 동작 보완', targets: ['tools/VibeManager/workbench.js'], history: [] }); // 개선안 20261123112024_SELF: 재발 판정 표본 = 동작 수정 개선안(P4 와 같은 정정)
+    props.push({ id: 'U14P', status: 'applied', selfKey: 'S13|U14', appliedMs: effU, title: '사용자 지적 감지기 추가 U14', targets: ['tools/VibeManager/orch-usercheck.js'], history: [] });
+    const u16 = { key: 'S13|U16|norep|J20261120_191752', uid: 'U16', level: 'warn', what: 'U16 VMW 재개 작업 표시 판정 못 함 J20261120_191752', detail: 'ui.json jobs 없음', ms: now - 3600000 };
+    const u23 = { key: 'S13|U23|wb|SCP0028_1', uid: 'U23', level: 'fail', what: 'U23 WORKBENCH 재개 진행 표시 보고 없음 SCP0028', detail: 'ui.json wb 없음', ms: now - 3600000 };
+    const u14a = { key: 'S13|U14|nomenu', uid: 'U14', level: 'warn', what: 'VMW 화면 명칭 판정 못 함', detail: '메뉴 파일 없음', ms: now - 3600000 };
+    const u14b = { key: 'S13|U14|err', uid: 'U14', level: 'warn', what: '감지기 오류 x', detail: 'e', ms: now - 1800000 };
+    const u9w = { key: 'S13|U9|other', uid: 'U9', level: 'warn', what: '주의(판정 자료 있음)', detail: 'd', ms: now - 60000 };
+    W('.vibe/orch/selfcheck/result.json', { checks: { S13: { items: [u16, u23, u14a, u14b, u9w] } } });
+    const c8 = L.scan(); const k8 = c8.map(x => `${x.key}:${x.level}`);
+    chk('U16 norep warn = L3|usercheck|U16 없음 · nodata U16 1건(L2)', !c8.some(x => x.key === 'L3|usercheck|U16') && c8.filter(x => x.kind === 'nodata' && /\|U16$/.test(x.key)).length === 1 && c8.some(x => x.key === 'L2|nodata|U16' && x.level === 'L2'), k8.join(','));
+    chk('U23 fail · 반영 개선안 효력 뒤 = L3|usercheck|U23 유지', c8.some(x => x.key === 'L3|usercheck|U23'), k8.join(','));
+    chk('같은 감지기 nodata 반영 뒤 2건(U14 nomenu·err) = L3|nodata|U14', c8.some(x => x.key === 'L3|nodata|U14' && x.level === 'L3') && !c8.some(x => x.key === 'L2|nodata|U14'), k8.join(','));
+    chk('nodata 키 아닌 warn(U9) = 재발도 nodata 도 아님', !c8.some(x => /\|U9$/.test(x.key)), k8.join(','));
+    calls = []; const t8 = await L.tick({ manual: true }); chk('L2 nodata 묶음 = 원장 기록 · 구조 진단 안 함', !t8.ran.some(r => r.key === 'L2|nodata|U16') && L.readLadder().bundles['L2|nodata|U16'] && L.readLadder().bundles['L2|nodata|U16'].status === 'open', JSON.stringify(t8.ran.map(r => r.key))); }
+  // 개선안 20261121120359_VISION_3: L4 사용자 지적 축 = 목적 키(purpose) 묶음 · 목적 키 없는 항목 = 감지기 이름
+  //   실원장 표본 user_checks.json U2 chainTarget · U24 unverifiedResolveIncomplete · U25 partialRemeasureSlow(목적 키 checklistTime)
+  //   U13 reloadResumeMissing · U16 U17 resumedJobShown · U18 resumeRestartFromStart · U23 workbenchResumeProgress(목적 키 reloadResume)
+  { const at = k => loc(now - k * 3600000).slice(0, 16).replace('T', ' '); const ucf = path.join(root, 'tools/VibeManager/user_checks.json'); const keep = fs.readFileSync(ucf, 'utf8');
+    const U = (id, detector, purpose, k, extra) => Object.assign({ id, at: at(k), quote: `지적 ${id}`, detector, status: 'active' }, purpose ? { purpose } : {}, extra || {});
+    W('tools/VibeManager/user_checks.json', { items: [
+      U('U2', 'chainTarget', 'checklistTime', 80), U('U24', 'unverifiedResolveIncomplete', 'checklistTime', 60), U('U25', 'partialRemeasureSlow', 'checklistTime', 59),
+      U('U13', 'reloadResumeMissing', 'reloadResume', 72), U('U16', 'resumedJobShown', 'reloadResume', 70), U('U17', 'resumedJobShown', 'reloadResume', 69, { status: 'pending-detector' }), U('U18', 'resumeRestartFromStart', 'reloadResume', 68), U('U23', 'workbenchResumeProgress', 'reloadResume', 64),
+      U('U3', 'vmoCadence', '', 80), U('U5', 'vmoCadence', '', 79), U('U7', 'vmoCadence', '', 75), // 목적 키 없음 = 감지기 이름으로 묶음
+      U('U50', 'detA', 'twoOnly', 10), U('U51', 'detB', 'twoOnly', 9), // 같은 목적 키 2건 = 기준(3건) 미만
+      U('U52', 'chainTarget', 'checklistTime', 9 * 24), // 7일 밖 = 세지 않음
+      U('U12', '', '', 5, { status: 'no-detector' }), // 목적 키도 감지기도 없음 = 묶지 않음
+    ] });
+    const c9 = L.scan().filter(x => x.kind === 'useraxis'); const k9 = c9.map(x => x.key).sort(); const g = key => c9.find(x => x.key === key);
+    chk('목적 키 checklistTime: 감지기가 다른 U2 U24 U25 = L4|useraxis|checklistTime 3건(7일 밖 U52 제외)', !!g('L4|useraxis|checklistTime') && g('L4|useraxis|checklistTime').level === 'L4' && g('L4|useraxis|checklistTime').evidence.length === 3 && ['U2', 'U24', 'U25'].every(id => g('L4|useraxis|checklistTime').evidence.some(e => e.what.startsWith(`${id} `))), k9.join(','));
+    chk('목적 키 reloadResume: U13 U16 U17 U18 U23 = L4|useraxis|reloadResume 5건', !!g('L4|useraxis|reloadResume') && g('L4|useraxis|reloadResume').evidence.length === 5 && ['U13', 'U16', 'U17', 'U18', 'U23'].every(id => g('L4|useraxis|reloadResume').evidence.some(e => e.what.startsWith(`${id} `))), k9.join(','));
+    chk('목적 키 없는 항목 = 감지기 이름이 목적 키(vmoCadence 3건 유지)', !!g('L4|useraxis|vmoCadence') && g('L4|useraxis|vmoCadence').evidence.length === 3, k9.join(','));
+    chk('목적 키 묶음 3개만: 감지기 이름 묶음(chainTarget, resumedJobShown 등) 없음 · 2건 목적 키 없음', k9.join(',') === 'L4|useraxis|checklistTime,L4|useraxis|reloadResume,L4|useraxis|vmoCadence', k9.join(','));
+    chk('묶음 근거에 감지기 이름 · 올림 사유에 목적 키 기준', /chainTarget/.test(g('L4|useraxis|checklistTime') ? g('L4|useraxis|checklistTime').evidence.map(e => e.what).join(' ') : '') && /같은 목적 키 지적 3건 ≥ 3/.test((g('L4|useraxis|checklistTime') || {}).why || ''), JSON.stringify(g('L4|useraxis|checklistTime')));
+    // 학습기(orch-usercheck.js)가 새 원장 항목에 넣는 목적 키: 원장에 있는 키만 받음 → 같은 감지기 항목의 키 → 없음
+    const UC = require(path.join(dir, 'orch-usercheck')); const led = JSON.parse(fs.readFileSync(ucf, 'utf8'));
+    chk('사다리와 학습기의 목적 키 규칙 같음(purpose → 감지기 이름 → 빈 값)', led.items.every(u => L.purposeKey(u) === UC.purposeOf(u)) && UC.purposeOf({ detector: 'vmoCadence' }) === 'vmoCadence' && UC.purposeOf({ purpose: 'checklistTime', detector: 'chainTarget' }) === 'checklistTime' && UC.purposeOf({ detector: '' }) === '');
+    chk('학습기 새 항목 목적 키: 원장에 있는 키 = 그대로 · 없는 키 = 같은 감지기 항목의 키 · 둘 다 없음 = 빈 값', UC.purposeFor(led, { purpose: 'reloadResume' }, 'newDet') === 'reloadResume' && UC.purposeFor(led, { purpose: 'madeUp' }, 'chainTarget') === 'checklistTime' && UC.purposeFor(led, { purpose: 'madeUp' }, 'vmoCadence') === '' && UC.purposeFor(led, {}, '') === '', JSON.stringify([UC.purposeFor(led, { purpose: 'reloadResume' }, 'newDet'), UC.purposeFor(led, { purpose: 'madeUp' }, 'chainTarget'), UC.purposeFor(led, { purpose: 'madeUp' }, 'vmoCadence')]));
+    fs.writeFileSync(ucf, keep); }
+  // 개선안 20261124000457_VISION: L4-2 = 같은 목적 L4 개선안 효력 뒤 근거(지적 · CheckList 1판 초과)만 셈 · 효력 뒤 실행 0건 = 실측 대기
+  //   실원장 표본 U2 11-20 03:48 · U24 11-20 23:44 · U25 11-20 23:48(목적 키 checklistTime) · 20261123000419_VISION(L4, sig ln|purpose|checklisttime|…) 반영 11-23 15:58
+  //   events.jsonl:2001 형식 chain.end(chain checklist · SCP0028 · runId · ms_run 18571542) · 7일 창 안에서 재현하려고 시각을 지금 기준 상대값으로 옮김(간격 순서 유지)
+  { const H = 3600000; const EFF = now - 30 * H; const at = ms => loc(ms).slice(0, 16).replace('T', ' '); const ucf = path.join(root, 'tools/VibeManager/user_checks.json'); const keep = fs.readFileSync(ucf, 'utf8'); const evf = fx('events.jsonl');
+    const U = (id, detector, ms) => ({ id, at: at(ms), quote: `지적 ${id}`, detector, purpose: 'checklistTime', status: 'active' });
+    const base3 = [U('U2', 'chainTarget', now - 80 * H), U('U24', 'unverifiedResolveIncomplete', now - 60 * H), U('U25', 'partialRemeasureSlow', now - 59 * H)];
+    props.push({ id: '20261123000419_VISION', status: 'applied', level: 'L4', impact: 'core', sig: 'ln|purpose|checklisttime|clock split first doc', appliedMs: EFF, title: '개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판)과 보완 회차 분리', evidence: '진단 사다리 묶음 L4|purpose|CheckList화면1개10분길어야30분안에', targets: ['tools/VibeManager/quick.json'], history: [] });
+    const chainEnd = (endMs, runId, msRun) => ({ at: loc(endMs), ms: endMs, type: 'chain.end', src: 'vm', ok: true, ms_run: msRun, rows: [{ no: 1, task: 'S8.checklistRun', actor: 'script', status: 'OK', sec: 3954 }], screen: 'SCP0028', chain: 'checklist', chainLabel: '🔎 CheckList 전체기능 재점검', runId, job: 'J1' });
+    const stepDoc = (ms, runId) => ({ ms, type: 'step.end', runId, status: 'OK', stepKey: 'checklist:2:--docs', task: 'S8.checklistRun', name: '문서 1판' });
+    const evW = arr => fs.writeFileSync(evf, arr.map(x => JSON.stringify(x)).join('\n') + '\n');
+    const uw = items => W('tools/VibeManager/user_checks.json', { items });
+    const K = 'L4|useraxis|checklistTime'; const get = cs => cs.find(x => x.key === K);
+    // ① 효력 전 지적 3건 + 효력 전 chain.end(2001 형식, 309.5분) · 효력 뒤 실행 0건 = L4 안 나옴 · 실측 대기
+    uw(base3); evW([chainEnd(EFF - 3 * 24 * H, 'SCP0028_old', 18571542)]);
+    const a1 = L.scan(); const g1 = get(a1);
+    chk('L4-2 ① U2 U24 U25(효력 전) + 20261123000419_VISION 효력 = L4|useraxis|checklistTime 진단 대상 안 나옴 · 실측 대기 후보', !!g1 && g1.wait === true && /실측 대기/.test(g1.waitLabel) && /20261123000419_VISION 효력/.test(g1.why) && /효력 뒤 실행 0건/.test(g1.why), JSON.stringify(g1 && { wait: g1.wait, label: g1.waitLabel, why: g1.why }));
+    const u1 = L.update(a1); const b1 = u1.ladder.bundles[K];
+    chk('L4-2 ① 원장 = status wait · statusLabel 실측 대기 · 진단 목록(fresh)에 없음', b1 && b1.status === 'wait' && /^실측 대기: 다음 CheckList 1회 필요/.test(b1.statusLabel || '') && !u1.fresh.some(x => x.key === K), JSON.stringify(b1 && { st: b1.status, label: b1.statusLabel }));
+    // ② 효력 뒤 지적 3건 = 나옴
+    uw(base3.concat([U('U60', 'chainTarget', now - 10 * H), U('U61', 'partialRemeasureSlow', now - 9 * H), U('U62', 'remeasureWithoutResolve', now - 8 * H)]));
+    const g2 = get(L.scan());
+    chk('L4-2 ② 효력 뒤 지적 3건 = L4|useraxis|checklistTime 나옴 · 근거 = 효력 뒤 3건(효력 전 3건 제외)', !!g2 && !g2.wait && g2.evidence.filter(e => e.src === 'user').length === 3 && ['U60', 'U61', 'U62'].every(id => g2.evidence.some(e => String(e.what).startsWith(`${id} `))) && /효력 전 지적 3건 제외/.test(g2.why), JSON.stringify(g2 && { wait: g2.wait, ev: g2.evidence.map(e => e.what), why: g2.why }));
+    // ③ 효력 전 지적 3건 + 효력 뒤 1판 초과 chain.end 1건(2001 형식, 1판 40분) = 나옴
+    uw(base3); const R2 = now - 5 * H; const T0 = R2 - 18571542;
+    evW([chainEnd(EFF - 3 * 24 * H, 'SCP0028_old', 18571542), stepDoc(T0 + 40 * 60000, 'SCP0028_new'), chainEnd(R2, 'SCP0028_new', 18571542)]);
+    const g3 = get(L.scan()); const r3 = g3 ? g3.evidence.filter(e => e.src === 'run') : [];
+    chk('L4-2 ③ 효력 뒤 1판 초과 chain.end 1건 = 나옴 · 근거 1판 40분(목표 30분)', !!g3 && !g3.wait && r3.length === 1 && /SCP0028 1판 40분\(목표 30분\)/.test(r3[0].what) && /1판 초과 1건/.test(g3.why), JSON.stringify(g3 && { wait: g3.wait, run: r3.map(e => e.what), why: g3.why }));
+    // ④ 효력 뒤 실행 1건, 1판 20분(목표 안) · 효력 뒤 지적 0건 = 묶음 없음(실측으로 해소) · 원장 resolved
+    evW([stepDoc(T0 + 20 * 60000, 'SCP0028_new'), chainEnd(R2, 'SCP0028_new', 18571542)]);
+    const a4 = L.scan(); L.update(a4);
+    chk('L4-2 ④ 효력 뒤 실행 1건 1판 20분 = 묶음 없음 · 원장 wait → resolved', !get(a4) && L.readLadder().bundles[K].status === 'resolved', JSON.stringify({ c: !!get(a4), st: L.readLadder().bundles[K].status }));
+    // ⑤ 같은 목적 개선안이 없으면 종전대로 7일 지적 건수로 나옴(다른 축 영향 없음)
+    props.find(x => x.id === '20261123000419_VISION').sig = 'ln|purpose|othertime'; evW([]);
+    const g5 = get(L.scan());
+    chk('L4-2 ⑤ 같은 목적 L4 개선안 없음 = 종전 기준(7일 지적 3건)으로 나옴', !!g5 && !g5.wait && g5.evidence.length === 3 && /같은 목적 반영 개선안 없음/.test(g5.why), JSON.stringify(g5 && g5.why));
+    props.splice(props.findIndex(x => x.id === '20261123000419_VISION'), 1); fs.rmSync(evf, { force: true }); fs.writeFileSync(ucf, keep); }
+  // 개선안 20261126131312_SELF(L4 원장 20261125000616_VISION 단계 1): 목적 연속 계산에서 같은 목적 반영 L4 안 효력 전 판정은 빼고 셈
+  //   같은 목적 L4 안 연결 = plans.json 같은 목적 원장의 related(PV1). 시각은 지금 기준 상대값
+  { const H = 3600000; const EFF = now - 40 * H; const PK = 'L4|purpose|VM고정문구가문장규칙을지킴'; const vd = path.join(od, 'vision'); const plf = path.join(vd, 'plans.json'); const plKeep = fs.existsSync(plf) ? fs.readFileSync(plf, 'utf8') : null; const made = [];
+    const run = ms => { const s = loc(ms); const n = `${s.slice(0, 19).replace(/[-:]/g, '').replace('T', '_')}.json`; made.push(n); W(`.vibe/orch/vision/${n}`, { at: s, purposes: [{ purpose: 'VM 고정 문구가 문장 규칙을 지킴', verdict: '어긋남', evidence: `시험 ${n}` }, { purpose: 'CheckList 화면 1개 10분, 길어야 30분 안에 끝남', verdict: '어긋남' }] }); };
+    [50, 49, 48, 47].forEach(h => run(now - h * H));
+    W('.vibe/orch/vision/plans.json', { plans: { PL1: { id: 'PL1', proposal: 'PL1', axis: 'VM고정문구가문장규칙을지킴', keys: [PK], status: 'open', related: ['PV1'], absorbed: [], steps: [] } } });
+    props.push({ id: 'PV1', status: 'applied', level: 'L4', impact: 'core', appliedMs: EFF, title: '개념 재정립: VM 고정 문구 문장 규칙 1차', evidence: '', targets: ['tools/Docs/doc_style.py'], history: [] });
+    const g6 = L.scan().find(x => x.key === PK); const pv = props.splice(props.findIndex(x => x.id === 'PV1'), 1)[0]; const g6o = L.scan().find(x => x.key === PK); props.push(pv);
+    chk('반영 L4 효력 전 판정 4건 → 묶음 안 올림', !g6 && !!g6o && /어긋남 4회 연속/.test(g6o.title), JSON.stringify({ with: g6 && g6.title, without: g6o && g6o.title }));
+    [30, 29, 28].forEach(h => run(now - h * H));
+    const g7 = L.scan().find(x => x.key === PK); const v7 = g7 ? g7.evidence.filter(e => e.src === 'vision') : [];
+    chk('효력 뒤 어긋남 3건 → 올림', !!g7 && !g7.wait && v7.length === 3 && v7.every(e => e.ms > EFF) && /PV1 효력/.test(g7.why) && /효력 전 판정 4건 제외/.test(g7.why) && (g7.why.match(/·/g) || []).length <= 1, JSON.stringify(g7 && { title: g7.title, why: g7.why, n: v7.length }));
+    props.splice(props.findIndex(x => x.id === 'PV1'), 1); for (const n of made) fs.rmSync(path.join(vd, n), { force: true }); if (plKeep != null) fs.writeFileSync(plf, plKeep); else fs.rmSync(plf, { force: true }); }
+  // 개선안 20261123000946_VISION: 반영 완료와 효력 시작 분리 · 효력 시각은 orch-improve.js effectiveMsOf(공용)
+  //   사례 1 = L4|struct|applyfail|doc_style.py: 근거 반영 실패 2건(232523_SELF 11-19 23:45, 23:55) · 구조 개선안 000421_SELF needsReload 반영 11-22 00:21 · 마지막 창 로드 11-21 01:59:17
+  //   사례 3 = L4|struct|edits|workbench.js: S9 반복 수정 82건 · 구조 개선안 000646_SELF needsReload 반영 11-22 00:48 · 같은 창 로드
+  //   7일 창 안에서 재현하려고 시각을 지금 기준 상대값으로 옮김(간격 유지: 실패 → 마지막 창 로드 → 반영)
+  { const IM = require(path.join(dir, 'orch-improve')); improve.effectiveMsOf = IM.effectiveMsOf;
+    const H = 3600000; const LD = now - 50 * H; const AP1 = now - 30 * H; const AP3 = AP1 + 27 * 60000;
+    fs.writeFileSync(fx('activations.jsonl'), JSON.stringify({ ms: LD, pid: 1 }) + '\n' + JSON.stringify({ ms: AP3 + 60000, kind: 'lock.stopclean' }) + '\n');
+    props.push({ id: 'C1S', status: 'applied', needsReload: true, appliedMs: AP1, title: 'verify 작성 규칙 공용화(000421_SELF)', targets: ['tools/VibeManager/orch-improve.js'], history: [] });
+    props.push({ id: 'C3S', status: 'applied', needsReload: true, appliedMs: AP3, title: '반복 수정 결함 절 집계(000646_SELF)', targets: ['tools/VibeManager/orch-ladder.js'], history: [] });
+    props.push({ id: 'C1F', status: 'apply-failed', title: '문장 검사 .js 주석 제외(232523_SELF)', targets: ['tools/Docs/doc_style.py'], history: [{ at: loc(now - 72 * H), what: '반영 실패. 검증 실패' }, { at: loc(now - 71 * H), what: '반영 실패. 게이트' }] });
+    { const l = L.readLadder(); l.bundles['L3|applyfail|doc_style.py'] = { key: 'L3|applyfail|doc_style.py', runs: [{ ms: AP1 - 60000, proposal: 'C1S' }], status: 'open' }; l.bundles['L3|edits|workbench.js'] = { key: 'L3|edits|workbench.js', runs: [{ ms: AP3 - 60000, proposal: 'C3S' }], status: 'open' }; ladW(l); }
+    W('.vibe/orch/selfcheck/result.json', { checks: { S9: { items: [{ key: 'S9|file|workbench.js', what: 'workbench.js 7일 안 변경 기록 82건' }] } } });
+    const c10 = L.scan(); const k10 = c10.map(x => x.key); const why = k => (c10.find(x => x.key === k) || {}).why || '';
+    chk('효력 (2) 사례 1, 3 근거 입력 → L4|struct|applyfail|doc_style.py, L4|struct|edits|workbench.js 없음 · L3 에 효력 전 보류', !k10.includes('L4|struct|applyfail|doc_style.py') && !k10.includes('L4|struct|edits|workbench.js') && /C1S .*효력 전/.test(why('L3|applyfail|doc_style.py')) && /C3S .*효력 전/.test(why('L3|edits|workbench.js')), k10.join(','));
+    const LD2 = AP3 + 2 * H; fs.appendFileSync(fx('activations.jsonl'), JSON.stringify({ ms: LD2, pid: 2 }) + '\n');
+    props.find(x => x.id === 'C1F').history.push({ at: loc(now - 20 * H), what: '반영 실패. 검증 실패' }, { at: loc(now - 19 * H), what: '반영 실패. 게이트' });
+    const c11 = L.scan(); const s11 = c11.find(x => x.key === 'L4|struct|applyfail|doc_style.py');
+    chk('효력 (2) 반대: 창 로드 뒤(효력 시작) 반영 실패 2건 입력 → L4|struct|applyfail|doc_style.py 유지 · 근거 = 효력 뒤 2건', !!s11 && s11.evidence.filter(e => e.src === 'apply').length === 2 && /효력/.test(s11.why), c11.map(x => x.key).join(','));
+    // (3) 판정 코드가 설치본보다 오래됨(staleFiles 에 orch-ladder.js) → L3·L4 AI 진단 호출 0, dayRuns 증가 0, 원장 hold 기록
+    improve.codeInfo = () => ({ staleFiles: [{ file: 'orch-ladder.js', mtime: 'x' }, { file: 'workbench.js', mtime: 'x' }] }); improve.reloadWait = () => ({ n: 17, oldestAt: '2026-11-21T02:10:00+09:00', ids: [] });
+    const dr0 = L.readLadder().dayRuns; calls = [];
+    const t9 = await L.tick({ manual: true }); const lad9 = L.readLadder(); const sm9 = L.summary();
+    chk('효력 (3) staleFiles 에 orch-ladder.js → AI 진단 호출 0 · dayRuns 증가 0 · 보류 건수 > 0 · 원장 hold', calls.length === 0 && t9.ran.length === 0 && t9.held > 0 && lad9.dayRuns === dr0 && lad9.hold && lad9.hold.files.join(',') === 'orch-ladder.js' && /판정 코드/.test(t9.holdWhy || ''), JSON.stringify({ calls: calls.length, t9, dr0, dr: lad9.dayRuns, hold: lad9.hold }));
+    chk('효력: 화면 요약에 로드 대기 건수 · 보류 표시', sm9.reload && sm9.reload.n === 17 && sm9.reload.oldestAt && sm9.hold && sm9.hold.files[0] === 'orch-ladder.js', JSON.stringify({ reload: sm9.reload, hold: sm9.hold }));
+    improve.codeInfo = () => ({ staleFiles: [{ file: 'workbench.js', mtime: 'x' }] }); calls = [];
+    const t10 = await L.tick({ manual: true });
+    chk('효력 (3) 반대: 판정 코드 아닌 파일만 로드 대기 → 진단 진행 · hold 지움', calls.length > 0 && t10.ran.length > 0 && !t10.held && !L.readLadder().hold, JSON.stringify({ calls: calls.length, ran: t10.ran.map(r => r.key) }));
+    delete improve.codeInfo; delete improve.reloadWait; }
+  // S15
+  const sc =require(path.join(dir, 'orch-selfcheck')); sc.init({ paths: () => p, vmDir: dir, timer: false, incidents: false, autoSync: false, inventory: false, docStyle: false });
+  const r = await sc.run(['S15'], '시험'); const k = r.checks.S15;
+  chk('S15: 개념 재정립 승인 대기 = 주의 · 집계', k && k.items.some(i => /^S15\|l4\|/.test(i.key) && i.level === 'warn') && k.info.total >= 1, JSON.stringify(k && { st: k.status, keys: k.items.map(i => i.key), info: k.info }));
+  try { sc.dispose(); } catch { } try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

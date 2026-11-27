@@ -12,7 +12,7 @@
 | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.module.scss | component | 70 |
 | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadForm.tsx | component | 396 |
 | features/demand/src/pages/customer-fcst-upload/components/CustomerFcstUploadGrid.tsx | component | 329 |
-| features/demand/src/pages/customer-fcst-upload/customer-fcst-upload.constant.ts | constants | 102 |
+| features/demand/src/pages/customer-fcst-upload/customer-fcst-upload.constant.ts | constants | 104 |
 | features/demand/src/pages/customer-fcst-upload/customer-fcst-upload.types.ts | types | 68 |
 | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | page | 627 |
 | features/demand/src/pages/customer-fcst-upload/index.ts | index | 2 |
@@ -123,7 +123,7 @@
 | LBL00091 | 1 |
 | MSG00667 | 1 |
 | MSG01135 | 1 |
-| MSG00164 | 1 |
+| MSG01505 | 1 |
 | MSG00429 | 1 |
 | MSG01169 | 1 |
 | MSG00001 | 1 |
@@ -136,8 +136,8 @@
 | LBL00346 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0048(6), DMF0082(5), DMF0014(3), DMF0007(3), DMF0021(3), DMF0003(2), DMF0020(2)
-- SP/PKG: PKG_DMF0014(12), PR_GET_DAY_RANGE(10), P_DMF0014_GET_SPREAD_TITLE(5), P_DMF0014_GET_CUST_FCST_UPLOAD_DATA(4), DMF0014_GET_EXCEL_FORM(2), P_DMF0014_GET_EXCEL_FORM_DATA(2), P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA(2), P_DMF0014_CUST_FCST_EXCEL_UPLOAD(1), FN_SCM_GET_WHERE_SQL(1)
+- 화면ID: DMF0048(7), DMF0082(5), DMF0014(4), DMF0007(3), DMF0021(3), DMF0003(2), DMF0020(2)
+- SP/PKG: PKG_DMF0014(12), PR_GET_DAY_RANGE(10), P_DMF0014_GET_SPREAD_TITLE(5), P_DMF0014_GET_CUST_FCST_UPLOAD_DATA(4), DMF0014_GET_EXCEL_FORM(2), P_DMF0014_GET_EXCEL_FORM_DATA(2), P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA(2), P_MODE(1), P_DMF0014_CUST_FCST_EXCEL_UPLOAD(1), FN_SCM_GET_WHERE_SQL(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -149,6 +149,7 @@
 | code | const handleDelete = () => undefined; | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 469 |
 | code | if (!filters[SHEETS.MAIN]) setFilters(); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 492 |
 | code | setOpenTemplateModal(true); | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 493 |
+| jsx | <CustomerFcstTemplateModal open={openTemplateModal} modalClose={() => setOpenTemplateModal(false)} divisionId={searchParams.divisionId} filters={filters[SHEETS.MAIN] as Record<string, unknown> \| undefined} staticColumns={staticColumn} /> | features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx | 581 |
 | endpoint | ⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 15행, admin 즉시 반영) | features/demand/src/pages/customer-fcst-upload/useCustomerFcstUploadStore.ts | 220 |
 
 ## 10. __asis-mapping__.md 상태

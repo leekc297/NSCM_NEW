@@ -1,8 +1,8 @@
 ﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
 DMF0042,SQL,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA.sql,365,,USER_ID,ORDER BY USER_ID,0,정적
-DMF0042,SQL,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA.sql,1010,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
-DMF0042,SQL,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA.sql,1046,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
-DMF0042,SQL,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA.sql,1065,,COLNAME,ORDER BY COLNAME,0,정적
+DMF0042,SQL,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA.sql,1010,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,ASSIGN,정적 · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님
+DMF0042,SQL,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA.sql,1046,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,ASSIGN,정적 · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님
+DMF0042,SQL,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA.sql,1065,,COLNAME,ORDER BY COLNAME,ASSIGN,정적 · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님
 DMF0042,SQL,SCM0001_GET_BIZ_TYPE_BY_DIVISION,Doc\asisfacts\db\modules\dbo.SCM0001_GET_BIZ_TYPE_BY_DIVISION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
 DMF0042,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,65,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
 DMF0042,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,78,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
@@ -37,9 +37,9 @@ DMF0042,SQL,DMF0042_1_SAVE_DM_PLN_BP_FCST,,,,,,,AS-IS SP 원문 없음(Doc/asisf
 DMF0042,SQL,DMF0042_1_SAVE_DM_PLN_BP_FCST_PRICE_CONV,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
 DMF0042,SQL,DMF0042_1_GET_BIZPLAN_INFO,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
 DMF0042,SQL,DMF0042_3_Get_BizPlan,Doc\asisfacts\db\modules\dbo.DMF0042_3_Get_BizPlan.sql,296,,USER_ID,ORDER BY USER_ID;,0,정적
-DMF0042,SQL,DMF0042_3_Get_BizPlan,Doc\asisfacts\db\modules\dbo.DMF0042_3_Get_BizPlan.sql,1388,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
-DMF0042,SQL,DMF0042_3_Get_BizPlan,Doc\asisfacts\db\modules\dbo.DMF0042_3_Get_BizPlan.sql,1424,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
-DMF0042,SQL,DMF0042_3_Get_BizPlan,Doc\asisfacts\db\modules\dbo.DMF0042_3_Get_BizPlan.sql,1435,,COLNAME,ORDER BY COLNAME;,0,정적
+DMF0042,SQL,DMF0042_3_Get_BizPlan,Doc\asisfacts\db\modules\dbo.DMF0042_3_Get_BizPlan.sql,1388,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,ASSIGN,정적 · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님
+DMF0042,SQL,DMF0042_3_Get_BizPlan,Doc\asisfacts\db\modules\dbo.DMF0042_3_Get_BizPlan.sql,1424,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,ASSIGN,정적 · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님
+DMF0042,SQL,DMF0042_3_Get_BizPlan,Doc\asisfacts\db\modules\dbo.DMF0042_3_Get_BizPlan.sql,1435,,COLNAME,ORDER BY COLNAME;,ASSIGN,정적 · 변수 대입 SELECT(결과셋 없음) — 결과 순서 규칙 아님
 DMF0042,SQL,DMF0009_GET_CODE,Doc\asisfacts\db\modules\dbo.DMF0009_GET_CODE.sql,59,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ;,0,정적
 DMF0042,SQL,DMF0009_GET_CODE,Doc\asisfacts\db\modules\dbo.DMF0009_GET_CODE.sql,194,,SEQ,ORDER BY T.SEQ;,0,정적
 DMF0042,SQL,DMF0009_GET_CODE,Doc\asisfacts\db\modules\dbo.DMF0009_GET_CODE.sql,230,,SEQ,ORDER BY SEQ;,0,정적
@@ -50,7 +50,11 @@ DMF0042,SQL,DMF0042_3_GET_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0042_3_GE
 DMF0042,SQL,DMF0042_3_GET_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0042_3_GET_SPREAD_TITLE.sql,407,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
 DMF0042,SQL,DMF0042_GET_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0042_GET_SPREAD_TITLE.sql,216,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO   ;,0,정적
 DMF0042,SQL,DMF0042_GET_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0042_GET_SPREAD_TITLE.sql,395,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO   ;,0,정적
-DMF0042,SQL,DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP,Doc\asisfacts\db\modules\dbo.DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
-DMF0042,SQL,DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
-DMF0042,SQL,DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE.sql,27,,BASIS_START_DATE,ORDER BY BASIS_START_DATE,0,정적
-DMF0042,SQL,DMF0042_SAVE_DM_BP_EXCHANGE_RATE,Doc\asisfacts\db\modules\dbo.DMF0042_SAVE_DM_BP_EXCHANGE_RATE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+DMF0042,SQL,DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP,Doc\asisfacts\db\modules\dbo.DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순) · 팝업 DMF0042_ExchangeRatePopup 소속(DMF0042_BizPlan.cs:3056 new DMF0042_ExchangeRatePopup() → DMF0042_ExchangeRatePopup.cs:397) — 화면 본체 조회 아님
+DMF0042,SQL,DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA,Doc\asisfacts\db\modules\dbo.DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순) · 팝업 DMF0042_ExchangeRatePopup 소속(DMF0042_BizPlan.cs:3056 new DMF0042_ExchangeRatePopup() → DMF0042_ExchangeRatePopup.cs:413) — 화면 본체 조회 아님
+DMF0042,SQL,DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE.sql,27,,BASIS_START_DATE,ORDER BY BASIS_START_DATE,0,정적 · 팝업 DMF0042_ExchangeRatePopup 소속(DMF0042_BizPlan.cs:3056 new DMF0042_ExchangeRatePopup() → DMF0042_ExchangeRatePopup.cs:237) — 화면 본체 조회 아님
+DMF0042,SQL,DMF0042_SAVE_DM_BP_EXCHANGE_RATE,Doc\asisfacts\db\modules\dbo.DMF0042_SAVE_DM_BP_EXCHANGE_RATE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순) · 팝업 DMF0042_ExchangeRatePopup 소속(DMF0042_BizPlan.cs:3056 new DMF0042_ExchangeRatePopup() → DMF0042_ExchangeRatePopup.cs:547) — 화면 본체 조회 아님
+DMF0042,SQL,DMF0002_GET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.DMF0002_GET_TITLESET_POPUP.sql,57,,SORT_ORDER_NO,ORDER BY b.sort_order_no;,0,정적 · 팝업 소속(DMF0042_BizPlan.cs:2872 new DM0002_TitleSetForm_Popup() → GSCM\06.UIL\GSCM.DM.Plan.UIL\POPUP\DM0002_TitleSetForm_Popup.cs:244) — 화면 본체 조회 아님
+DMF0042,SQL,DMF0002_GET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.DMF0002_GET_TITLESET_POPUP.sql,86,,SORT_ORDER_NO,ORDER BY b.sort_order_no;,0,정적 · 팝업 소속(DMF0042_BizPlan.cs:2872 new DM0002_TitleSetForm_Popup() → GSCM\06.UIL\GSCM.DM.Plan.UIL\POPUP\DM0002_TitleSetForm_Popup.cs:244) — 화면 본체 조회 아님
+DMF0042,SQL,DMF0002_GET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.DMF0002_GET_TITLESET_POPUP.sql,123,,SORT_ORDER_NO,ORDER BY b.sort_order_no;,0,정적 · 팝업 소속(DMF0042_BizPlan.cs:2872 new DM0002_TitleSetForm_Popup() → GSCM\06.UIL\GSCM.DM.Plan.UIL\POPUP\DM0002_TitleSetForm_Popup.cs:244) — 화면 본체 조회 아님
+DMF0042,SQL,DMF0002_GET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.DMF0002_GET_TITLESET_POPUP.sql,152,,SORT_ORDER_NO,ORDER BY b.sort_order_no;,0,정적 · 팝업 소속(DMF0042_BizPlan.cs:2872 new DM0002_TitleSetForm_Popup() → GSCM\06.UIL\GSCM.DM.Plan.UIL\POPUP\DM0002_TitleSetForm_Popup.cs:244) — 화면 본체 조회 아님

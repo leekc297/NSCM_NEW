@@ -3,7 +3,7 @@
   "at": "2026-11-26T16:24:13+09:00",
   "ms": 1795677853511,
   "source": "self",
-  "status": "pending",
+  "status": "applied",
   "sig": "userrule|rn|tools/vibemanager/orch selfcheck.js|claimproposaljs는applyfailed안도맡게하지만claim조",
   "title": "사용자 지시 R244 같은 문제: tools/VibeManager/orch-selfcheck.js:600 claim_proposal.js 는 apply-failed 안도 맡게 하지만(claim 조건 /^(pending|apply-failed)$/) 실패 원인 진단 고",
   "evidence": "규칙 R244 \"병렬로 나눌 수 있는 VM 개선 작업은 하위 세션 여러 개에 나눠 맡기고 세션이 맡은 개선안은 맡음 표시(claimedBy, autoWaitMs)로 VMO 자동 반영과 겹치지 않게 함\" (원래 지시 2026-11-26 15:35 \"병렬로 펼쳐서 진행할 수 있는 작업이면 하위에 세션 멀티로 추가해서 진행할 수 있도록 해주세요.\") · tools/VibeManager/orch-selfcheck.js:600 const pick = propList().filter(p => p.status === 'apply-failed' && repairDue(p) && !p.reason && autoEligible(p).kind === 'code').sort(...)[0];",
@@ -23,6 +23,11 @@
       "at": "2026-11-26T16:26:23+09:00",
       "by": "3acd3c",
       "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:44:48+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-selfcheck.js claimedNow(claimedBy, autoWaitMs 지금 뒤) 추가, 반영 실패 진단 고르기(pick)와 pend0 apply-failed 분기에 !claimedNow. test/t_claim_proposal.js 신규 7건(claim, done, release, hold, claimedNow). run_all 92/92 PASS 1553 FAIL 0(16:44:22), 설치 폴더 동일 확인"
     }
   ],
   "plain": {
@@ -35,6 +40,6 @@
   "selfKey": "S13|R244|tools/VibeManager/orch-selfcheck.js",
   "kind": "fix",
   "claimedBy": "3acd3c",
-  "autoWaitMs": 1795706783214,
-  "waitNote": "Claude Code 세션 3acd3c 가 직접 보완 중"
+  "waitNote": "",
+  "appliedMs": 1795679088411
 }

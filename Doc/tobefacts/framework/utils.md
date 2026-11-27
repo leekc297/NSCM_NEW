@@ -1,4 +1,4 @@
-# utils (274)
+# utils (283)
 
 사용 수 내림차순. **신규 화면은 여기 있는 것만 쓴다** — 없으면 사전(map_control.csv) 보완 제안이 먼저(룰 23).
 
@@ -37,7 +37,7 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **CRUD_TYPE** | `@foundation/constants` | 77 |  |  |
+| **CRUD_TYPE** | `@foundation/constants` | 81 |  |  |
 | **CRUD_MSG** | `@foundation/constants` | 20 |  | CRUD 흐름에서 공통으로 사용하는 메시지 정의입니다. |
 | **API_CONFIG** | `@foundation/constants` | 1 |  |  |
 | **CACHE_MAX_AGE** | `@foundation/lib` | 0 |  | 캐시 유지시간(8시간). gcTime 과 PersistQueryClientProvider 의 persist maxAge 를 동일하게 유지해야 영속화가 정상 동작한다(react-query: persist 하려면 gcTime >= maxAge 필요). P |
@@ -45,20 +45,20 @@ props/params:
 | **ROUTE_PATHS** | `@foundation/constants` | 0 |  | 라우트 경로 상수 화면(mnuId)별 경로 매핑은 DB 로 이관됨 — SCM_ADM_MNU_M.ROUTE_PATH (세션 메뉴 응답의 menu.routePath 를 viewRegistry.resolveView 가 해석). 여기에는 메뉴 데이터가 아닌  |
 | **ROW_NO_BINDING** | `@foundation/utils` | 0 |  | No 컬럼/헤더 — SYS0011 그리드 공통 (사용자 요구 2026-06-28), 팝업(*Modal.tsx) 그리드 공통 적용 // (2026-09-03)으로 foundation 으로 승격. // · 체크박스 없는 그리드: rowHeader 인덱스  |
 | **VOLATILE_QUERY_OPTIONS** | `@foundation/lib` | 0 |  | 콤보/룩업 전용 캐시 정책 — useCustomQueryClient 의 콤보/룩업 훅에서 스프레드한다. staleTime: 0 = 화면을 새로 열 때(fresh mount)마다 다시 받는다. MDI 는 keep-alive 라 이미 열린 탭은 리마운트되 |
-| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 83 |  |  |
-| **CELL_CONTROL_TYPE** | `@foundation/constants` | 49 |  |  |
-| **BUTTON_TYPE** | `@foundation/constants` | 20 |  |  |
+| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 85 |  |  |
+| **CELL_CONTROL_TYPE** | `@foundation/constants` | 54 |  |  |
+| **BUTTON_TYPE** | `@foundation/constants` | 19 |  |  |
 | **Hotkeys** | `@foundation/models` | 0 |  |  |
 | **HTTP_STATUS** | `@foundation/constants` | 0 |  |  |
-| **safeString** | `@foundation/utils` | 58 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
+| **safeString** | `@foundation/utils` | 59 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
 | **attachRowNoHeader** | `@foundation/utils` | 29 |  | (체크박스 없는 그리드) 기존 rowHeader 순번(1,2,3…) 컬럼의 좌상단 코너 헤더(TopLeft 패널)에 // 'No' 라벨 추가. CellType.TopLeft 로 코너 셀 직접 타겟 (formatItem 1회 부착 가드 + invalid |
-| **toGridNumber** | `@foundation/utils` | 22 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
-| **paintNegativeText** | `@foundation/utils` | 20 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
+| **toGridNumber** | `@foundation/utils` | 24 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
+| **paintNegativeText** | `@foundation/utils` | 22 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
 | **buildNoColumn** | `@foundation/utils` | 18 |  | (체크박스 그리드) No 데이터 컬럼 — itemsSource 의 ROW_NO 값 표시. |
+| **isInsertRow** | `@foundation/utils` | 18 |  | 신규 입력행(CRUD_TYPE='I') 판정 — 값이 같아도 인접 행과 병합하지 않기 위한 공통 가드. // 병합되면 owner(상단 행)가 편집을 대표해 기존 행이 함께 바뀌는 문제로 이어진다. // mkt-fcst/sales-plan 등 Hiera |
 | **withRowNo** | `@foundation/utils` | 18 |  | itemsSource 각 행에 ROW_NO(=index+1) 주입 (읽기전용 그리드라 무해). |
-| **isInsertRow** | `@foundation/utils` | 17 |  | 신규 입력행(CRUD_TYPE='I') 판정 — 값이 같아도 인접 행과 병합하지 않기 위한 공통 가드. // 병합되면 owner(상단 행)가 편집을 대표해 기존 행이 함께 바뀌는 문제로 이어진다. // mkt-fcst/sales-plan 등 Hiera |
 | **sessionTimeZone** | `@foundation/utils` | 16 |  | SP 의 `p_time_zone`(또는 콤보 `@timeZone`) 인자로 보낼 사용자 타임존 코드. AS-IS 는 로그인 때 `TB_FX_User.TimeZone` 을 `UserInfoContext` 에 담아 모든 저장 SP 에 `p_time_zon |
-| **keepRowVisibleUnderFilter** | `@foundation/utils` | 6 |  | 필터가 걸린 상태에서 추가한 신규행이 화면에서 사라지는 문제 보정. FlexGridFilter._filter 는 `grid._newAddedRowsSet`(WeakSet) 에 든 행을 조건 검사 없이 통과시킨다 — 편집한 행이 필터 때문에 눈앞에서 사 |
+| **keepRowVisibleUnderFilter** | `@foundation/utils` | 7 |  | 필터가 걸린 상태에서 추가한 신규행이 화면에서 사라지는 문제 보정. FlexGridFilter._filter 는 `grid._newAddedRowsSet`(WeakSet) 에 든 행을 조건 검사 없이 통과시킨다 — 편집한 행이 필터 때문에 눈앞에서 사 |
 | **parseComboFilterBindings** | `@foundation/utils` | 6 |  | 셀 콤보 행 단위 필터 조건 (컬럼 메타 ATTRIBUTE2) 을 파싱한다. 문법: `'행컬럼:콤보컬럼'`, 조건이 여럿이면 콤마로 잇는다. 예) `'DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER'` 형식에  |
 | **ensureTopLeftMergeManager** | `@foundation/utils` | 5 |  |  |
 | **buildLeafColumnDataMap** | `@foundation/utils` | 2 |  | 콤보 컬럼의 DataMap 을 만든다 — 행 파라미터(PARAM10='D')면 getRowParamDataMap, 아니면 getDataMap. toLeafColumn 이 컬럼 config 에 dataMap 을 굽는 것과 같은 판정이다. 공용 DataG |
@@ -104,12 +104,14 @@ props/params:
 | **normalizeDynamicColumns** | `@foundation/utils` | 0 |  | Delete 키로 숫자 셀이 안 지워지던 문제 — Wijmo Column.isRequired 기본값 null 은 // "String 이 아닌 컬럼(숫자/날짜/불리언)은 필수" 로 해석된다(Column.getIsRequired). // 그리고 Delet |
 | **orderComboDisplayNames** | `@foundation/utils` | 0 |  | 콤보 표시 순서 — 콤보 SQL 의 ORDER BY(= 서버 응답) 순서를 그대로 둔다. 클라 재정렬은 하지 않는다. AS-IS 는 SP/콤보 SQL 이 내려준 순서를 그대로 셀 콤보에 꽂으므로(SCP0128 PlanGroup 등 순서가 깨진다는 신고 |
 | **parseDate** | `@foundation/utils` | 0 |  |  |
+| **pickRowComboCandidates** | `@foundation/utils` | 0 |  | 그 행의 콤보 후보 rows — 드롭다운 표시(getDataMap/getRowParamDataMap)와 **같은 규칙**으로 뽑는다. "드롭다운에 뜨는 값 = 셀에 남을 수 있는 값" 불변식의 공용 기준이다. 반환: · 재조회형(PARAM10='D') |
 | **pinInsertedRow** | `@foundation/utils` | 0 |  | 정렬이 걸린 그리드에서 신규행이 앵커(삽입 위치 계산에 쓰인 인접 행) 옆에 "계속" 붙어 있도록 pin(신규행 → 앵커)을 등록한다. 실제 정렬 비교에 개입하는 sortConverter 설치는 `installInsertPinConverter` 가 별 |
 | **quoteComboParams** | `@foundation/models` | 0 |  |  |
 | **quoteComboValue** | `@foundation/models` | 0 |  | 공통 콤보 파라미터 값 자동 인용 (single source). // // 배경: BE BaseService.makeComboQuery 는 등록 SQL(SCM_ADM_CMBO_SQL_M)의 @키 를 bind 가 아니라 // raw 문자열로 치환한다.  |
 | **requestErrorInterceptor** | `@foundation/apis` | 0 |  |  |
 | **requestInterceptor** | `@foundation/apis` | 0 |  |  |
 | **resolveMenuLabel** | `@foundation/models` | 0 |  | 메뉴 라벨 표시용 공통 해석기 — 다국어(mnuMsgId) → mnuDesc → mnuId 순으로 폴백한다. 탭(MDITabs)과 페이지 타이틀(MainTitle)이 공유한다. 두 곳은 원래 폴백이 프로그램 ID(mnuId)라 다국어 라벨이 없는 메뉴 |
+| **resolveRowComboCode** | `@foundation/utils` | 0 |  | 드롭다운으로 콤보 셀에 커밋된 코드를 그 행의 후보 기준으로 바로잡는다. Wijmo DataMap 의 표시명->코드 역변환(getKeyValue)은 컬럼 전역 색인에서 first-CODE-wins 다. 서로 다른 코드가 같은 표시명을 쓰면(행/Divi |
 | **responseErrorInterceptor** | `@foundation/apis` | 0 |  |  |
 | **responseInterceptor** | `@foundation/apis` | 0 |  |  |
 | **revertRowChanges** | `@foundation/utils` | 0 |  | 그리드 없이 **데이터만으로** 미저장 변경을 되돌린다 — 신규행 제거 · 삭제/수정 마킹 해제 · 수정 셀 원본값 복원. 언마운트 시점처럼 wijmo 컨트롤이 이미 파괴됐을 수 있는 경로에서 쓰라고 분리했다. rows 는 화면이 넘긴 배열 그 자체를 |
@@ -117,9 +119,10 @@ props/params:
 | **rowParamValue** | `@foundation/utils` | 0 |  | 행 파라미터 값 정규화 — 조회 파라미터와 조합 키가 같은 규칙을 쓰도록 한 곳에 둔다. |
 | **setQueryErrorHandler** | `@foundation/lib` | 0 |  |  |
 | **shouldPersistQuery** | `@foundation/lib` | 0 |  | IndexedDB 영속 대상 필터(PersistQueryClientProvider 의 dehydrateOptions). 기본 규칙(성공한 쿼리만 영속)은 유지하고, 콤보/룩업만 제외한다. 제외하지 않으면 새로고침해도 옛날 콤보가 복원돼 위 staleT |
-| **apiClient** | `@foundation/apis` | 324 |  |  |
+| **todayInTimeZone** | `@foundation/utils` | 0 |  | 사용자 타임존(`tmzCd`)의 **오늘** 을 플레인 로컬 `Dayjs`(그 달력일의 자정)로 돌려준다. 달력(PeriodRangePicker)의 Today·W 버튼·"오늘" 강조가 PC 시계가 아니라 사용자 타임존 기준으로 날짜를 잡도록, 화면 최 |
+| **apiClient** | `@foundation/apis` | 332 |  |  |
 | **i18n** | `@foundation/lib` | 20 |  |  |
-| **queryClient** | `@foundation/lib` | 14 |  |  |
+| **queryClient** | `@foundation/lib` | 16 |  |  |
 | **mockApiClient** | `@foundation/apis` | 0 |  |  |
 | **primary** | `@foundation/styles` | 0 |  |  |
 | **secondary** | `@foundation/styles` | 0 |  |  |
@@ -282,6 +285,12 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
+### isInsertRow  <sub>packages/foundation/src/utils/mergeManager.ts:15</sub>
+
+```ts
+(item: Record<string, unknown>): boolean
+```
+
 ### withRowNo  <sub>packages/foundation/src/utils/gridRowNo.ts:31</sub>
 
 ```ts
@@ -328,19 +337,13 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<T> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### isInsertRow  <sub>packages/foundation/src/utils/mergeManager.ts:15</sub>
-
-```ts
-(item: Record<string, unknown>): boolean
-```
-
 ### keepRowVisibleUnderFilter  <sub>packages/foundation/src/utils/gridAction.ts:49</sub>
 
 ```ts
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, row: T): void
 ```
 
-### parseComboFilterBindings  <sub>packages/foundation/src/utils/columnMapping.ts:151</sub>
+### parseComboFilterBindings  <sub>packages/foundation/src/utils/columnMapping.ts:157</sub>
 
 ```ts
 (bindingString?: string): Record<string, string>
@@ -416,7 +419,7 @@ props/params:
 (grid: FlexGrid): void
 ```
 
-### buildLeafColumnDataMap  <sub>packages/foundation/src/utils/columnMapping.ts:652</sub>
+### buildLeafColumnDataMap  <sub>packages/foundation/src/utils/columnMapping.ts:686</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): any
@@ -428,13 +431,13 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, gridFilter?: any): boolean
 ```
 
-### rowParamValues  <sub>packages/foundation/src/utils/columnMapping.ts:241</sub>
+### rowParamValues  <sub>packages/foundation/src/utils/columnMapping.ts:247</sub>
 
 ```ts
 (bindings: Record<string, string>, rowItem: any): Record<string, string>
 ```
 
-### sortComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:532</sub>
+### sortComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:538</sub>
 
 ```ts
 (names: string[]): string[]
@@ -480,7 +483,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<string> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### stripRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:669</sub>
+### stripRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:790</sub>
 
 ```ts
 (label?: string): string
@@ -568,7 +571,7 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(row: T, binding: string, tracker: EditTracker<T>): void
 ```
 
-### filterComboRowsByRowItem  <sub>packages/foundation/src/utils/columnMapping.ts:280</sub>
+### filterComboRowsByRowItem  <sub>packages/foundation/src/utils/columnMapping.ts:286</sub>
 
 ```ts
 (comboRows: ComboResponse[], bindingString: string, rowItem: WijmoRowItem): ComboResponse[]
@@ -619,7 +622,7 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, row: T): T
 ```
 
-### isRowParamCombo  <sub>packages/foundation/src/utils/columnMapping.ts:217</sub>
+### isRowParamCombo  <sub>packages/foundation/src/utils/columnMapping.ts:223</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): boolean
@@ -847,7 +850,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<LiveColumnLike> — Iterator of values in the array.`
 - `__@unscopables@898: { readonly [x: number]: boolean; readonly length?: boolean; toString?: boolean;  — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### comboCacheKey  <sub>packages/foundation/src/utils/columnMapping.ts:200</sub>
+### comboCacheKey  <sub>packages/foundation/src/utils/columnMapping.ts:206</sub>
 
 ```ts
 (comboId: string, lookupType: string): string
@@ -917,13 +920,13 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### comboKeyOfColumn  <sub>packages/foundation/src/utils/columnMapping.ts:204</sub>
+### comboKeyOfColumn  <sub>packages/foundation/src/utils/columnMapping.ts:210</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): string
 ```
 
-### comboLookupType  <sub>packages/foundation/src/utils/columnMapping.ts:192</sub>
+### comboLookupType  <sub>packages/foundation/src/utils/columnMapping.ts:198</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): string
@@ -935,7 +938,7 @@ props/params:
 <T extends WijmoRowItem = WijmoRowItem>(row: T, binding: string, tracker: EditTracker<T>): void
 ```
 
-### filterComboRowsByCascade  <sub>packages/foundation/src/utils/columnMapping.ts:329</sub>
+### filterComboRowsByCascade  <sub>packages/foundation/src/utils/columnMapping.ts:335</sub>
 
 ```ts
 <T extends Record<string, unknown>>(comboRows: T[], row: Record<string, unknown>, rules: readonly ComboCascadeRule[]): T[]
@@ -981,7 +984,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<T> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### findStaleComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:371</sub>
+### findStaleComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:377</sub>
 
 ```ts
 (columns: RawFlexGridColumnConfig[], comboRowsByComboId: Record<string, ComboResponse[]>, row: WijmoRowItem, changedBinding: string): StaleComboCell[]
@@ -1026,7 +1029,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<RawFlexGridColumnConfig> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### findStaleRowParamComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:450</sub>
+### findStaleRowParamComboCells  <sub>packages/foundation/src/utils/columnMapping.ts:456</sub>
 
 ```ts
 (columns: RawFlexGridColumnConfig[], rowParamByBinding: Record<string, Record<string, ComboResponse[]>>, insertRowParamByBinding: Record<string, Record<string, ComboResponse[]>>, row: WijmoRowItem, changedBinding: string): RowParamStaleResult
@@ -1142,7 +1145,7 @@ props/params:
 - `toISOString: () => string — Returns a date as a string value in ISO format.`
 - `toJSON: (key?: any) => string — Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.`
 - `getVarDate: () => VarDate`
-- `__@toPrimitive@2356: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
+- `__@toPrimitive@2370: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
 
 ### formatDateTime  <sub>packages/foundation/src/utils/date.ts:9</sub>
 
@@ -1199,7 +1202,7 @@ props/params:
 - `toISOString: () => string — Returns a date as a string value in ISO format.`
 - `toJSON: (key?: any) => string — Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.`
 - `getVarDate: () => VarDate`
-- `__@toPrimitive@2356: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
+- `__@toPrimitive@2370: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
 
 ### formatNumber  <sub>packages/foundation/src/utils/number.ts:5</sub>
 
@@ -1223,7 +1226,7 @@ props/params:
 (): string
 ```
 
-### hasRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:666</sub>
+### hasRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:787</sub>
 
 ```ts
 (label?: string): boolean
@@ -1293,7 +1296,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### insertComboId  <sub>packages/foundation/src/utils/columnMapping.ts:184</sub>
+### insertComboId  <sub>packages/foundation/src/utils/columnMapping.ts:190</sub>
 
 ```ts
 (column: RawFlexGridColumnConfig): string
@@ -1585,7 +1588,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### mapRawColumnsToWijmoColumns  <sub>packages/foundation/src/utils/columnMapping.ts:782</sub>
+### mapRawColumnsToWijmoColumns  <sub>packages/foundation/src/utils/columnMapping.ts:904</sub>
 
 ```ts
 (sourceColumns: RawFlexGridColumnConfig[]): FlexGridColumnConfig[]
@@ -1630,7 +1633,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<RawFlexGridColumnConfig> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### normalizeDynamicColumns  <sub>packages/foundation/src/utils/columnMapping.ts:768</sub>
+### normalizeDynamicColumns  <sub>packages/foundation/src/utils/columnMapping.ts:890</sub>
 
 ```ts
 (columns: FlexGridColumnConfig[]): FlexGridColumnConfig[]
@@ -1675,7 +1678,7 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<FlexGridColumnConfig> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### orderComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:546</sub>
+### orderComboDisplayNames  <sub>packages/foundation/src/utils/columnMapping.ts:552</sub>
 
 ```ts
 (names: string[]): string[]
@@ -1791,6 +1794,12 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
+### pickRowComboCandidates  <sub>packages/foundation/src/utils/columnMapping.ts:702</sub>
+
+```ts
+(column: RawFlexGridColumnConfig, row: WijmoRowItem): ComboResponse[]
+```
+
 ### pinInsertedRow  <sub>packages/foundation/src/utils/gridAction.ts:582</sub>
 
 ```ts
@@ -1895,6 +1904,12 @@ props/params:
 (t: TFunction, menu: { mnuMsgId: string; mnuDesc?: string; mnuId?: string | number; }): string
 ```
 
+### resolveRowComboCode  <sub>packages/foundation/src/utils/columnMapping.ts:752</sub>
+
+```ts
+(column: RawFlexGridColumnConfig, row: WijmoRowItem, committedValue: WijmoPrimitive): string
+```
+
 ### responseErrorInterceptor  <sub>packages/foundation/src/apis/axios-interceptors.ts:51</sub>
 
 ```ts
@@ -1953,13 +1968,13 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<T> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
-### rowParamKey  <sub>packages/foundation/src/utils/columnMapping.ts:263</sub>
+### rowParamKey  <sub>packages/foundation/src/utils/columnMapping.ts:269</sub>
 
 ```ts
 (bindings: Record<string, string>, rowItem: any): string
 ```
 
-### rowParamValue  <sub>packages/foundation/src/utils/columnMapping.ts:224</sub>
+### rowParamValue  <sub>packages/foundation/src/utils/columnMapping.ts:230</sub>
 
 ```ts
 (rowItem: any, binding: string): string
@@ -1977,13 +1992,83 @@ props/params:
 (query: Query): boolean
 ```
 
+### todayInTimeZone  <sub>packages/foundation/src/utils/todayInTimeZone.ts:37</sub>
+
+```ts
+(tmzCd: string): Dayjs
+```
+
+props/params:
+
+- `toString: () => string — Returns a string representation of a string.`
+- `charAt: (pos: number) => string — Returns the character at the specified index.`
+- `charCodeAt: (index: number) => number — Returns the Unicode value of the character at the specified location.`
+- `concat: (...strings: string[]) => string — Returns a string that contains the concatenation of two or more strings.`
+- `indexOf: (searchString: string, position?: number) => number — Returns the position of the first occurrence of a substring.`
+- `lastIndexOf: (searchString: string, position?: number) => number — Returns the last occurrence of a substring in the string.`
+- `localeCompare: { (that: string): number; (that: string, locales?: string`
+- `string[], options?:  — Determines whether two strings are equivalent in the current locale. Determines whether two strings are equivalent in the current or specified locale.`
+- `match: { (regexp: string`
+- `RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string — Matches a string with a regular expression, and returns an array containing the results of that search. Matches a string or an object that supports being matche`
+- `replace: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replaces text in a string, using a regular expression or search string. Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkc`
+- `search: { (regexp: string`
+- `RegExp): number; (searcher: { [Symbol.search](string: string — Finds the first substring match in a regular expression search.`
+- `slice: (start?: number, end?: number) => string — Returns a section of a string.`
+- `split: { (separator: string`
+- `RegExp, limit?: number): string[]; (splitter: { [Symbol.s — Split a string into substrings using the specified separator and return them as an array.`
+- `substring: (start: number, end?: number) => string — Returns the substring at the specified location within a String object.`
+- `toLowerCase: () => string — Converts all the alphabetic characters in a string to lowercase.`
+- `toLocaleLowerCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Converts all alphabetic characters to lowercase, taking into account the host environment's current locale.`
+- `toUpperCase: () => string — Converts all the alphabetic characters in a string to uppercase.`
+- `toLocaleUpperCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.`
+- `trim: () => string — Removes the leading and trailing white space and line terminator characters from a string.`
+- `length: number — Returns the length of a String object.`
+- `substr: (from: number, length?: number) => string — Gets a substring beginning at the specified location and having the specified length.`
+- `valueOf: () => string — Returns the primitive value of the specified object.`
+- `codePointAt: (pos: number) => number — Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point value of the UTF-16 encoded code point starting at the string element a`
+- `includes: (searchString: string, position?: number) => boolean — Returns true if searchString appears as a substring of the result of converting this object to a String, at one or more positions that are greater than or equal`
+- `endsWith: (searchString: string, endPosition?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `normalize: { (form: "NFC"`
+- `"NFD"`
+- `"NFKC"`
+- `"NFKD"): string; (form?: string): string; } — Returns the String value result of normalizing the string into the normalization form named by form as specified in Unicode Standard Annex #15, Unicode Normaliz`
+- `repeat: (count: number) => string — Returns a String value that is made from count copies appended together. If count is 0, the empty string is returned.`
+- `startsWith: (searchString: string, position?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `anchor: (name: string) => string — Returns an `<a>` HTML anchor element and sets the name attribute to the text value`
+- `big: () => string — Returns a `<big>` HTML element`
+- `blink: () => string — Returns a `<blink>` HTML element`
+- `bold: () => string — Returns a `<b>` HTML element`
+- `fixed: () => string — Returns a `<tt>` HTML element`
+- `fontcolor: (color: string) => string — Returns a `<font>` HTML element and sets the color attribute value`
+- `fontsize: { (size: number): string; (size: string): string; } — Returns a `<font>` HTML element and sets the size attribute value`
+- `italics: () => string — Returns an `<i>` HTML element`
+- `link: (url: string) => string — Returns an `<a>` HTML element and sets the href attribute value`
+- `small: () => string — Returns a `<small>` HTML element`
+- `strike: () => string — Returns a `<strike>` HTML element`
+- `sub: () => string — Returns a `<sub>` HTML element`
+- `sup: () => string — Returns a `<sup>` HTML element`
+- `padStart: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the start (left`
+- `padEnd: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the end (right)`
+- `trimEnd: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `trimStart: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimLeft: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimRight: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `matchAll: (regexp: RegExp) => RegExpStringIterator<RegExpExecArray> — Matches a string with a regular expression, and returns an iterable of matches containing the results of that search.`
+- `replaceAll: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replace all instances of a substring in a string, using a regular expression or search string.`
+- `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
+- `__@iterator@896: () => StringIterator<string> — Iterator`
+
 ## master-common
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **MSG** | `features/master/src/components` | 267 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
-| **MSG** | `features/master/src/components` | 267 |  |  |
-| **COMBO** | `features/master/src/components` | 123 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
+| **MSG** | `features/master/src/components` | 274 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
+| **MSG** | `features/master/src/components` | 274 |  |  |
+| **COMBO** | `features/master/src/components` | 128 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
 | **REPORT_TYPE** | `features/master/src/components` | 6 |  |  |
 | **MODAL_OWNER** | `features/master/src/components` | 4 |  |  |
 | **ITEM_MODAL_CONDITION** | `features/master/src/components` | 2 |  | 팝업 검색조건 식별자 — visibleConditions prop 으로 호출 화면별 노출을 고른다. (문자열 리터럴 대신 이 상수를 쓸 것 — 오타는 "조건이 조용히 사라짐" 으로만 드러난다.) |
@@ -2049,7 +2134,7 @@ props/params:
 | **SMALL_DIVISION_WILDCARD** | `features/master/src/components` | 0 |  | 좁은 조회에서 "조건 없음"을 뜻하는 값. 넓은 조회는 빈 문자열을 조건 없음으로 받지만 좁은 쪽은 규약이 다르다. project/item 조건이 AND (EXISTS (... WHERE D.PROJECT_CODE LIKE P.TOKEN \|\| '% |
 | **VERSION_ACTION** | `features/master/src/components` | 0 |  |  |
 | **SHEET_INDEX** | `features/master/src/components` | 54 |  |  |
-| **buildComboOptions** | `features/master/src/components` | 20 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
+| **buildComboOptions** | `features/master/src/components` | 22 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
 | **toSelectedCodes** | `features/master/src/components` | 12 |  | 실제로 고른 코드만 남긴다. 전체선택('ALL')과 전체해제는 필터상 같다 - 둘 다 빈 배열이 되어 그 축이 미적용된다 (GetDMInnerTable 진입부의 'ALL' -> '' 치환과 같은 결과). |
 | **cell** | `features/master/src/components` | 5 |  | 콤보 셀 값 읽기. 콤보 응답은 컬럼에 따라 NUMBER 로 내려오기도 해서 문자열로 맞춰야 Set 비교가 성립한다 (SearchFields.cellValue 와 같은 사정). |
 | **buildSalesSiteOptions** | `features/master/src/components` | 1 |  | 'SalesSite' 콤보 -> Sales Site 드롭다운 옵션. |
@@ -2879,30 +2964,31 @@ props/params:
 | **STANDARD_COLORS** | `@shared/components` | 0 |  | 표준 색 (엑셀 "표준 색" 행). |
 | **THEME_COLORS** | `@shared/components` | 0 |  | 개인화 색 선택 팔레트/hex 유틸 (ColorPickerButton 전용). // 테마 색 기준 행 (Office 유사 10색) — 각 열마다 명도(tint/shade) 변형을 생성한다. |
 | **VARIANT_LEVELS** | `@shared/components` | 0 |  | 테마색 그리드 명도 레벨. 0 = 기준행, +값 = tint(밝게), -값 = shade(어둡게). |
-| **SHEETS** | `@shared/components` | 653 |  |  |
-| **SHEETS** | `@shared/components` | 653 |  |  |
-| **SHEETS** | `@shared/components` | 653 |  |  |
+| **SHEETS** | `@shared/components` | 673 |  |  |
+| **SHEETS** | `@shared/components` | 673 |  |  |
+| **SHEETS** | `@shared/components` | 673 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 98 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 98 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 98 |  |  |
 | **MoveType** | `@shared/components` | 0 |  |  |
-| **createPersistedStoreWithTab** | `@shared/stores` | 143 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
-| **confirmIfDirtyKey** | `@shared/stores` | 73 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
-| **tabDirtyKey** | `@shared/stores` | 73 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
-| **saveTitleSet** | `@shared/components` | 41 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
+| **createPersistedStoreWithTab** | `@shared/stores` | 146 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
+| **confirmIfDirtyKey** | `@shared/stores` | 75 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
+| **tabDirtyKey** | `@shared/stores` | 75 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
+| **saveTitleSet** | `@shared/components` | 43 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
 | **createPersistedStore** | `@shared/stores` | 26 |  | 전역 스토어 선언시 사용. 싱글톤 스토어 빌더 use...Store.getState() 사용 가능 |
-| **toColumnLayoutSettings** | `@shared/components` | 23 |  | 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환. titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width  |
-| **buildSavePayload** | `@shared/components` | 19 |  | 저장 payload 구성 — 표시 컬럼 1..n → 숨김 컬럼 후행 → 비표시 0. hiddenNames = 팝업 dual list 에서 감춘 컬럼(MEASURE 등). 사용자가 좌/우로 옮길 수 없으므로 USER_FLAG 를 항상 'Y' 로 고정한다 |
+| **toColumnLayoutSettings** | `@shared/components` | 26 |  | 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환. titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width  |
+| **buildSavePayload** | `@shared/components` | 20 |  | 저장 payload 구성 — 표시 컬럼 1..n → 숨김 컬럼 후행 → 비표시 0. hiddenNames = 팝업 dual list 에서 감춘 컬럼(MEASURE 등). 사용자가 좌/우로 옮길 수 없으므로 USER_FLAG 를 항상 'Y' 로 고정한다 |
+| **createMultilinePasteHandler** | `@shared/lib` | 20 |  | input 의 `onPaste` 핸들러 팩토리. 멀티라인일 때만 기본 붙여넣기를 막고 CSV 치환값을 commit 한다. 화면은 `inputProps={{ onPaste: createMultilinePasteHandler(() => value, nex |
 | **formatTotalCases** | `@shared/hooks` | 6 |  | TitleArea `totalCases` 에 넘길 건수 — 천 단위 쉼표(12345 → '12,345'). 디자인 시스템은 totalCases 를 서식 없이 그대로 그린다(타입은 number 지만 렌더는 children 출력뿐). 그래서 쉼표를 붙인  |
 | **fetchTitleSet** | `@shared/components` | 5 |  | 컬럼/Measure 개인화 조회 — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset/search). ⭐ 화면별 `{menuId}/titleSet/SEARCH/call-proc` 을 쓰면 SCM_ADM_MNU_BTN_MPG_ |
 | **applyGridLayout** | `@shared/components` | 4 |  | admin 컬럼 메타 위에 사용자 레이아웃(표시/순서/폭)을 덮어쓴다. sales-future-price `applyLayoutToColumns` 와 동일 계약을 공통화한 것: - 레이아웃에 있는 컬럼: visible = USER_FLAG, 폭 ove |
 | **fetchGridLayout** | `@shared/components` | 4 |  | 저장된 레이아웃 조회 + 파싱. `null` = 없음/실패 → 적용하지 않음(admin 메타 그대로). |
-| **isoWeeksOfMonth** | `@shared/lib` | 2 |  | yyyymm 의 ISO 주 분해 — 달력 순서, 월경계 주는 "월내 기여 일수"만 계상. 주 태그의 yyyymm 은 항상 입력 월 (GET_SPREAD_TITLE 월경계 분할 규약과 동일). |
+| **over52WeekPreset** | `@shared/components` | 4 |  | 동적 WLast 주 수 — DATE_WEEKLY / DATE_WEEKLY1_SCP_ALL 콤보가 함께 반환하는 PLAN_WEEKS·OVER_52W_YN 으로 // 결정한다(SCM_ADM_CMBO_SQL_M 실측). W26/W52 는 고정이고 이 값만  |
+| **isoWeeksOfMonth** | `@shared/lib` | 3 |  | yyyymm 의 ISO 주 분해 — 달력 순서, 월경계 주는 "월내 기여 일수"만 계상. 주 태그의 yyyymm 은 항상 입력 월 (GET_SPREAD_TITLE 월경계 분할 규약과 동일). |
 | **registerDirtyCheck** | `@shared/stores` | 2 |  | dirty 판정 함수를 키들에 등록한다. 반환된 함수로 해제(그리드 언마운트 시). 같은 그리드가 tab 키와 scope 키(다이얼로그 안일 때)에 동시 등록될 수 있다 — 다이얼로그의 편집분도 "탭을 닫으면 사라지는 변경" 이므로 탭 집계에 포함하는 |
 | **registerDirtyReset** | `@shared/stores` | 2 |  | 미저장 변경 되돌리기 함수를 키들에 등록한다. 등록 규약은 registerDirtyCheck 과 동일. confirm 에서 사용자가 "확인"(= 버리고 진행)을 누르면 이 함수들이 호출된다. 그리드는 DataGrid 가 자동 등록하므로, 화면은 그리드 |
 | **distributeMonthToWeeks** | `@shared/lib` | 1 |  | 룰1 — 월 수량 → 주별 배분. perDay = trunc(monthQty / 월 총일수) → 주별 = perDay × 주 월내일수. 끝자리(monthQty − Σ주별)는 마지막 주에 +/- 가산 (음수 포함 — 총합 = monthQty 보존). u |
 | **distributeWeekToDays** | `@shared/lib` | 1 |  | 룰2 — 주 수량 → 주내 일 배분. applicableMask(7bit SUN-first) 의 적용요일에 trunc 균등 배분 + 잔여 = 마지막 적용일. 적용요일이 하나도 없으면(마스크 없음·전부 0·주 범위 밖) 월요일(dow===1)에 전량 — |
-| **sortOptionsBy** | `@shared/components` | 1 |  |  |
 | **applyLevel** | `@shared/components` | 0 |  |  |
 | **attachGridContextMenu** | `@shared/components` | 0 |  | 그리드에 컨텍스트 메뉴를 설치한다. 반환 함수로 해제. 허용 영역: 컬럼 헤더(그룹 헤더 포함) / 데이터 셀. rowHeader(No·상태)·corner·빈 영역은 브라우저 기본 메뉴를 유지한다. |
 | **buildDefaultRows** | `@shared/components` | 0 |  | Default(리셋) 버튼용 행 구성 — DB 의 컬럼 기본 셋팅(SCM_MST_SHEET_COLUMNS) 그대로. buildInitialRows 와의 차이: 저장된 개인화를 일절 반영하지 않는다. 금지: Default 경로에서 buildInitial |
@@ -2927,16 +3013,19 @@ props/params:
 | **isDirtyKey** | `@shared/stores` | 0 |  | 키에 등록된 판정 중 하나라도 dirty 면 true. 판정 함수가 던져도 이탈이 막히지 않게 무시한다. |
 | **isEditableForRow** | `@shared/hooks` | 0 |  | 그 행에서 사용자가 실제로 채울 수 있는 셀인가 — GridUtils.isEditableCell 과 같은 규칙을 // grid 대신 raw 메타/행 데이터로 판정한 것이다. // 필수 표시가 있어도 편집할 수 없는 셀은 검증하지 않는다. 막아봐야 사용 |
 | **isMandatoryColumn** | `@shared/hooks` | 0 |  | 필수 컬럼 판정 — 헤더 빨간 점(dataGridUtils.formatEditableColumns)과 반드시 같은 조건이어야 한다. // 메타 등록 방식이 화면마다 둘로 갈린다: inputTpCd = M / IM, 또는 라벨(colLblNm) 끝의 ` |
+| **isMultilinePaste** | `@shared/lib` | 0 |  | 붙여넣기 텍스트가 멀티라인(개행 포함)인지. 단일값·이미 쉼표인 값은 false → 기본 붙여넣기에 맡긴다. |
 | **isScopeDirty** | `@shared/stores` | 0 |  |  |
 | **isTabDirty** | `@shared/stores` | 0 |  |  |
 | **isValidHex** | `@shared/components` | 0 |  |  |
 | **isVisibleColumn** | `@shared/components` | 0 |  | 팝업 목록에 올릴 컬럼인지 — admin 메타의 VISIBLE_FLAG(= 관리 노출 여부) 기준. ⭐ GET_TITLESET_POPUP 은 sheet 메타에 등록된 컬럼을 전부 내려주므로, 관리자가 노출 대상에서 뺀 컬럼(VISIBLE_FLAG='N |
 | **mergeInsertedRows** | `@shared/hooks` | 0 |  | 조회결과(spRows)에 신규행(insertedRows)을 anchor 위치대로 끼워 넣어 그리드 소스를 만든다. 순수 함수 — 훅과 별개로 단위 테스트 대상. |
+| **multilinePasteToCsv** | `@shared/lib` | 0 |  | 멀티라인 텍스트를 쉼표구분 문자열로 변환한다(AS-IS UsrMultiLineEditor 등가). - 개행 `\r\n` / `\r` / `\n` 모두를 구분자로 분리(엑셀·그리드 클립보드는 CRLF) - 각 줄 trim 후 공백/빈 줄 제거(끝 개행에 |
 | **normalizeHex** | `@shared/components` | 0 |  |  |
 | **overrideRows** | `@shared/components` | 0 |  | base 행에 settings 를 강제로 덮어쓴다 (Default 원복 등 — DB 값보다 우선시켜야 할 때). |
 | **parseGridLayout** | `@shared/components` | 0 |  | TitleSet 응답 → 레이아웃 행 파싱. ⭐ 사용자 저장값(USER_* 별칭) 우선 — 관리자쪽(COLUMN_WIDTH/SORT_ORDER_NO)만 읽으면 저장한 값이 영원히 안 보인다 (ColumnLayoutModal mapBeRow 와 동일 계 |
 | **parseWidth** | `@shared/components` | 0 |  |  |
 | **pushRecentColor** | `@shared/components` | 0 |  |  |
+| **readSaveRejection** | `@shared/hooks` | 0 |  |  |
 | **registerStore** | `@shared/stores` | 0 |  | 스토어가 자신을 등록할 때 사용할 함수 |
 | **registerViewActions** | `@shared/stores` | 0 |  |  |
 | **reorderRows** | `@shared/components` | 0 |  |  |
@@ -2945,6 +3034,8 @@ props/params:
 | **scopeDirtyKey** | `@shared/stores` | 0 |  | 다이얼로그 스코프 단위 키 (DialogScopeContext 의 scopeId) |
 | **serializeSavePayload** | `@shared/components` | 0 |  | 저장 payload 를 값 기준 문자열로 직렬화 — 저장에 실제로 반영되는 축(표시 여부·순서·폭·색)만 본다. 라벨/isKey 는 사용자가 못 바꾸는 표시 메타라 제외한다. buildSavePayload 가 순서를 1..n 으로 정규화하므로, 초기  |
 | **shade** | `@shared/components` | 0 |  | 검정과 factor(0..1) 비율로 섞어 어둡게. |
+| **sortOptionsBy** | `@shared/components` | 0 |  |  |
+| **spliceMultilinePaste** | `@shared/lib` | 0 |  | 현재값의 selection 구간([start, end))을 CSV 치환 결과로 대체한 새 값. 기존값 중간 삽입·끝 이어붙이기·선택영역 교체를 모두 자연스럽게 처리한다. |
 | **subscribeRecent** | `@shared/components` | 0 |  |  |
 | **tint** | `@shared/components` | 0 |  | 흰색과 factor(0..1) 비율로 섞어 밝게. |
 | **toggleDisplay** | `@shared/components` | 0 |  |  |
@@ -3212,6 +3303,12 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<ColumnLayoutRow> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
+### createMultilinePasteHandler  <sub>packages/shared/src/lib/paste.ts:54</sub>
+
+```ts
+(getCurrent: () => string, commit: (next: string) => void): (e: ClipboardEvent<HTMLInputElement>) => void
+```
+
 ### formatTotalCases  <sub>packages/shared/src/hooks/useTitleAreaLanguage.ts:23</sub>
 
 ```ts
@@ -3298,6 +3395,42 @@ props/params:
 - `sheetName: string`
 - `columnType?: string — 기본 'C'(컬럼). 자체 규약을 쓰는 기존 화면과 분리하려는 경우에만 변경.`
 - `divisionId?: string`
+
+### over52WeekPreset  <sub>packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx:73</sub>
+
+```ts
+(rows: readonly { readonly [key: string]: string; }[], selectedCode: string): number
+```
+
+props/params:
+
+- `length: number — Gets the length of the array. This is a number one higher than the highest element defined in an array.`
+- `toString: () => string — Returns a string representation of an array.`
+- `toLocaleString: { (): string; (locales: string`
+- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
+- `concat: { (...items: ConcatArray<{ readonly [key: string]: string; }>[]): { readonly [ke — Combines two or more arrays.`
+- `join: (separator?: string) => string — Adds all the elements of an array separated by the specified separator string.`
+- `slice: (start?: number, end?: number) => { readonly [key: string]: string; }[] — Returns a section of an array.`
+- `indexOf: (searchElement: { readonly [key: string]: string; }, fromIndex?: number) => numb — Returns the index of the first occurrence of a value in an array.`
+- `lastIndexOf: (searchElement: { readonly [key: string]: string; }, fromIndex?: number) => numb — Returns the index of the last occurrence of a specified value in an array.`
+- `every: { <S extends { readonly [key: string]: string; }>(predicate: (value: { readonly  — Determines whether all the members of an array satisfy the specified test.`
+- `some: (predicate: (value: { readonly [key: string]: string; }, index: number, array: r — Determines whether the specified callback function returns true for any element of an array.`
+- `forEach: (callbackfn: (value: { readonly [key: string]: string; }, index: number, array:  — Performs the specified action for each element in an array.`
+- `map: <U>(callbackfn: (value: { readonly [key: string]: string; }, index: number, arra — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
+- `filter: { <S extends { readonly [key: string]: string; }>(predicate: (value: { readonly  — Returns the elements of an array that meet the condition specified in a callback function.`
+- `reduce: { (callbackfn: (previousValue: { readonly [key: string]: string; }, currentValue — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
+- `reduceRight: { (callbackfn: (previousValue: { readonly [key: string]: string; }, currentValue — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
+- `find: { <S extends { readonly [key: string]: string; }>(predicate: (value: { readonly  — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
+- `findIndex: (predicate: (value: { readonly [key: string]: string; }, index: number, obj: rea — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
+- `entries: () => ArrayIterator<[number, { readonly [key: string]: string; }]> — Returns an iterable of key, value pairs for every entry in the array`
+- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
+- `values: () => ArrayIterator<{ readonly [key: string]: string; }> — Returns an iterable of values in the array`
+- `includes: (searchElement: { readonly [key: string]: string; }, fromIndex?: number) => bool — Determines whether an array includes a certain element, returning true or false as appropriate.`
+- `flatMap: <U, This = undefined>(callback: (this: This, value: { readonly [key: string]: st — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
+- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
+- `at: (index: number) => { readonly [key: string]: string; } — Returns the item located at the specified index.`
+- `__@iterator@896: () => ArrayIterator<{ readonly [key: string]: string; }> — Iterator of values in the array.`
+- `__@unscopables@898: { readonly [x: number]: boolean; readonly length?: boolean; toString?: boolean;  — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
 ### isoWeeksOfMonth  <sub>packages/shared/src/lib/bucket-distribution.ts:42</sub>
 
@@ -3492,52 +3625,6 @@ props/params:
 - `valueOf: () => number — Returns the primitive value of the specified object.`
 - `toLocaleString: { (locales?: string`
 - `string[], options?: NumberFormatOptions): string; (locales — Converts a number to a string by using the current or specified locale.`
-
-### sortOptionsBy  <sub>packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx:203</sub>
-
-```ts
-<T extends { value: string; label?: unknown; }>(opts: T[], sortBy?: "label"): T[]
-```
-
-props/params:
-
-- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
-- `toString: () => string — Returns a string representation of an array.`
-- `toLocaleString: { (): string; (locales: string`
-- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
-- `pop: () => T — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `push: (...items: T[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
-- `concat: { (...items: ConcatArray<T>[]): T[]; (...items: (T`
-- `ConcatArray<T>)[]): T[]; } — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
-- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
-- `reverse: () => T[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
-- `shift: () => T — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `slice: (start?: number, end?: number) => T[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
-- `sort: (compareFn?: (a: T, b: T) => number) => T[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
-- `splice: { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: numbe — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
-- `unshift: (...items: T[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
-- `indexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
-- `lastIndexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
-- `every: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Determines whether all the members of an array satisfy the specified test.`
-- `some: (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any) =>  — Determines whether the specified callback function returns true for any element of an array.`
-- `forEach: (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => vo — Performs the specified action for each element in an array.`
-- `map: <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[ — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
-- `filter: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Returns the elements of an array that meet the condition specified in a callback function.`
-- `reduce: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
-- `reduceRight: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
-- `find: { <S extends T>(predicate: (value: T, index: number, obj: T[]) => value is S, th — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
-- `findIndex: (predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any) => nu — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
-- `fill: (value: T, start?: number, end?: number) => T[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
-- `copyWithin: (target: number, start: number, end?: number) => T[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
-- `entries: () => ArrayIterator<[number, T]> — Returns an iterable of key, value pairs for every entry in the array`
-- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
-- `values: () => ArrayIterator<T> — Returns an iterable of values in the array`
-- `includes: (searchElement: T, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
-- `flatMap: <U, This = undefined>(callback: (this: This, value: T, index: number, array: T[] — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
-- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
-- `at: (index: number) => T — Returns the item located at the specified index.`
-- `__@iterator@896: () => ArrayIterator<T> — Iterator`
-- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
 ### applyLevel  <sub>packages/shared/src/components/molecules/colorPickerButton/colorUtils.ts:87</sub>
 
@@ -4451,6 +4538,76 @@ props/params:
 (column: RawFlexGridColumnConfig): boolean
 ```
 
+### isMultilinePaste  <sub>packages/shared/src/lib/paste.ts:16</sub>
+
+```ts
+(text: string): boolean
+```
+
+props/params:
+
+- `toString: () => string — Returns a string representation of a string.`
+- `charAt: (pos: number) => string — Returns the character at the specified index.`
+- `charCodeAt: (index: number) => number — Returns the Unicode value of the character at the specified location.`
+- `concat: (...strings: string[]) => string — Returns a string that contains the concatenation of two or more strings.`
+- `indexOf: (searchString: string, position?: number) => number — Returns the position of the first occurrence of a substring.`
+- `lastIndexOf: (searchString: string, position?: number) => number — Returns the last occurrence of a substring in the string.`
+- `localeCompare: { (that: string): number; (that: string, locales?: string`
+- `string[], options?:  — Determines whether two strings are equivalent in the current locale. Determines whether two strings are equivalent in the current or specified locale.`
+- `match: { (regexp: string`
+- `RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string — Matches a string with a regular expression, and returns an array containing the results of that search. Matches a string or an object that supports being matche`
+- `replace: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replaces text in a string, using a regular expression or search string. Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkc`
+- `search: { (regexp: string`
+- `RegExp): number; (searcher: { [Symbol.search](string: string — Finds the first substring match in a regular expression search.`
+- `slice: (start?: number, end?: number) => string — Returns a section of a string.`
+- `split: { (separator: string`
+- `RegExp, limit?: number): string[]; (splitter: { [Symbol.s — Split a string into substrings using the specified separator and return them as an array.`
+- `substring: (start: number, end?: number) => string — Returns the substring at the specified location within a String object.`
+- `toLowerCase: () => string — Converts all the alphabetic characters in a string to lowercase.`
+- `toLocaleLowerCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Converts all alphabetic characters to lowercase, taking into account the host environment's current locale.`
+- `toUpperCase: () => string — Converts all the alphabetic characters in a string to uppercase.`
+- `toLocaleUpperCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.`
+- `trim: () => string — Removes the leading and trailing white space and line terminator characters from a string.`
+- `length: number — Returns the length of a String object.`
+- `substr: (from: number, length?: number) => string — Gets a substring beginning at the specified location and having the specified length.`
+- `valueOf: () => string — Returns the primitive value of the specified object.`
+- `codePointAt: (pos: number) => number — Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point value of the UTF-16 encoded code point starting at the string element a`
+- `includes: (searchString: string, position?: number) => boolean — Returns true if searchString appears as a substring of the result of converting this object to a String, at one or more positions that are greater than or equal`
+- `endsWith: (searchString: string, endPosition?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `normalize: { (form: "NFC"`
+- `"NFD"`
+- `"NFKC"`
+- `"NFKD"): string; (form?: string): string; } — Returns the String value result of normalizing the string into the normalization form named by form as specified in Unicode Standard Annex #15, Unicode Normaliz`
+- `repeat: (count: number) => string — Returns a String value that is made from count copies appended together. If count is 0, the empty string is returned.`
+- `startsWith: (searchString: string, position?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `anchor: (name: string) => string — Returns an `<a>` HTML anchor element and sets the name attribute to the text value`
+- `big: () => string — Returns a `<big>` HTML element`
+- `blink: () => string — Returns a `<blink>` HTML element`
+- `bold: () => string — Returns a `<b>` HTML element`
+- `fixed: () => string — Returns a `<tt>` HTML element`
+- `fontcolor: (color: string) => string — Returns a `<font>` HTML element and sets the color attribute value`
+- `fontsize: { (size: number): string; (size: string): string; } — Returns a `<font>` HTML element and sets the size attribute value`
+- `italics: () => string — Returns an `<i>` HTML element`
+- `link: (url: string) => string — Returns an `<a>` HTML element and sets the href attribute value`
+- `small: () => string — Returns a `<small>` HTML element`
+- `strike: () => string — Returns a `<strike>` HTML element`
+- `sub: () => string — Returns a `<sub>` HTML element`
+- `sup: () => string — Returns a `<sup>` HTML element`
+- `padStart: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the start (left`
+- `padEnd: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the end (right)`
+- `trimEnd: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `trimStart: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimLeft: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimRight: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `matchAll: (regexp: RegExp) => RegExpStringIterator<RegExpExecArray> — Matches a string with a regular expression, and returns an iterable of matches containing the results of that search.`
+- `replaceAll: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replace all instances of a substring in a string, using a regular expression or search string.`
+- `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
+- `__@iterator@896: () => StringIterator<string> — Iterator`
+
 ### isScopeDirty  <sub>packages/shared/src/stores/useDirtyRegistry.ts:98</sub>
 
 ```ts
@@ -4703,6 +4860,76 @@ props/params:
 - `at: (index: number) => T — Returns the item located at the specified index.`
 - `__@iterator@896: () => ArrayIterator<T> — Iterator of values in the array.`
 - `__@unscopables@898: { readonly [x: number]: boolean; readonly length?: boolean; toString?: boolean;  — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
+
+### multilinePasteToCsv  <sub>packages/shared/src/lib/paste.ts:24</sub>
+
+```ts
+(text: string): string
+```
+
+props/params:
+
+- `toString: () => string — Returns a string representation of a string.`
+- `charAt: (pos: number) => string — Returns the character at the specified index.`
+- `charCodeAt: (index: number) => number — Returns the Unicode value of the character at the specified location.`
+- `concat: (...strings: string[]) => string — Returns a string that contains the concatenation of two or more strings.`
+- `indexOf: (searchString: string, position?: number) => number — Returns the position of the first occurrence of a substring.`
+- `lastIndexOf: (searchString: string, position?: number) => number — Returns the last occurrence of a substring in the string.`
+- `localeCompare: { (that: string): number; (that: string, locales?: string`
+- `string[], options?:  — Determines whether two strings are equivalent in the current locale. Determines whether two strings are equivalent in the current or specified locale.`
+- `match: { (regexp: string`
+- `RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string — Matches a string with a regular expression, and returns an array containing the results of that search. Matches a string or an object that supports being matche`
+- `replace: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replaces text in a string, using a regular expression or search string. Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkc`
+- `search: { (regexp: string`
+- `RegExp): number; (searcher: { [Symbol.search](string: string — Finds the first substring match in a regular expression search.`
+- `slice: (start?: number, end?: number) => string — Returns a section of a string.`
+- `split: { (separator: string`
+- `RegExp, limit?: number): string[]; (splitter: { [Symbol.s — Split a string into substrings using the specified separator and return them as an array.`
+- `substring: (start: number, end?: number) => string — Returns the substring at the specified location within a String object.`
+- `toLowerCase: () => string — Converts all the alphabetic characters in a string to lowercase.`
+- `toLocaleLowerCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Converts all alphabetic characters to lowercase, taking into account the host environment's current locale.`
+- `toUpperCase: () => string — Converts all the alphabetic characters in a string to uppercase.`
+- `toLocaleUpperCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.`
+- `trim: () => string — Removes the leading and trailing white space and line terminator characters from a string.`
+- `length: number — Returns the length of a String object.`
+- `substr: (from: number, length?: number) => string — Gets a substring beginning at the specified location and having the specified length.`
+- `valueOf: () => string — Returns the primitive value of the specified object.`
+- `codePointAt: (pos: number) => number — Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point value of the UTF-16 encoded code point starting at the string element a`
+- `includes: (searchString: string, position?: number) => boolean — Returns true if searchString appears as a substring of the result of converting this object to a String, at one or more positions that are greater than or equal`
+- `endsWith: (searchString: string, endPosition?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `normalize: { (form: "NFC"`
+- `"NFD"`
+- `"NFKC"`
+- `"NFKD"): string; (form?: string): string; } — Returns the String value result of normalizing the string into the normalization form named by form as specified in Unicode Standard Annex #15, Unicode Normaliz`
+- `repeat: (count: number) => string — Returns a String value that is made from count copies appended together. If count is 0, the empty string is returned.`
+- `startsWith: (searchString: string, position?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `anchor: (name: string) => string — Returns an `<a>` HTML anchor element and sets the name attribute to the text value`
+- `big: () => string — Returns a `<big>` HTML element`
+- `blink: () => string — Returns a `<blink>` HTML element`
+- `bold: () => string — Returns a `<b>` HTML element`
+- `fixed: () => string — Returns a `<tt>` HTML element`
+- `fontcolor: (color: string) => string — Returns a `<font>` HTML element and sets the color attribute value`
+- `fontsize: { (size: number): string; (size: string): string; } — Returns a `<font>` HTML element and sets the size attribute value`
+- `italics: () => string — Returns an `<i>` HTML element`
+- `link: (url: string) => string — Returns an `<a>` HTML element and sets the href attribute value`
+- `small: () => string — Returns a `<small>` HTML element`
+- `strike: () => string — Returns a `<strike>` HTML element`
+- `sub: () => string — Returns a `<sub>` HTML element`
+- `sup: () => string — Returns a `<sup>` HTML element`
+- `padStart: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the start (left`
+- `padEnd: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the end (right)`
+- `trimEnd: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `trimStart: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimLeft: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimRight: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `matchAll: (regexp: RegExp) => RegExpStringIterator<RegExpExecArray> — Matches a string with a regular expression, and returns an iterable of matches containing the results of that search.`
+- `replaceAll: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replace all instances of a substring in a string, using a regular expression or search string.`
+- `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
+- `__@iterator@896: () => StringIterator<string> — Iterator`
 
 ### normalizeHex  <sub>packages/shared/src/components/molecules/colorPickerButton/colorUtils.ts:38</sub>
 
@@ -5004,6 +5231,12 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
+### readSaveRejection  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:199</sub>
+
+```ts
+(result: unknown): { rejected: boolean; message: string; }
+```
+
 ### registerStore  <sub>packages/shared/src/stores/storeRegistry.ts:5</sub>
 
 ```ts
@@ -5266,6 +5499,122 @@ props/params:
 
 ```ts
 (hex: string, factor: number): string
+```
+
+props/params:
+
+- `toString: () => string — Returns a string representation of a string.`
+- `charAt: (pos: number) => string — Returns the character at the specified index.`
+- `charCodeAt: (index: number) => number — Returns the Unicode value of the character at the specified location.`
+- `concat: (...strings: string[]) => string — Returns a string that contains the concatenation of two or more strings.`
+- `indexOf: (searchString: string, position?: number) => number — Returns the position of the first occurrence of a substring.`
+- `lastIndexOf: (searchString: string, position?: number) => number — Returns the last occurrence of a substring in the string.`
+- `localeCompare: { (that: string): number; (that: string, locales?: string`
+- `string[], options?:  — Determines whether two strings are equivalent in the current locale. Determines whether two strings are equivalent in the current or specified locale.`
+- `match: { (regexp: string`
+- `RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string — Matches a string with a regular expression, and returns an array containing the results of that search. Matches a string or an object that supports being matche`
+- `replace: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replaces text in a string, using a regular expression or search string. Passes a string and {@linkcode replaceValue} to the `[Symbol.replace]` method on {@linkc`
+- `search: { (regexp: string`
+- `RegExp): number; (searcher: { [Symbol.search](string: string — Finds the first substring match in a regular expression search.`
+- `slice: (start?: number, end?: number) => string — Returns a section of a string.`
+- `split: { (separator: string`
+- `RegExp, limit?: number): string[]; (splitter: { [Symbol.s — Split a string into substrings using the specified separator and return them as an array.`
+- `substring: (start: number, end?: number) => string — Returns the substring at the specified location within a String object.`
+- `toLowerCase: () => string — Converts all the alphabetic characters in a string to lowercase.`
+- `toLocaleLowerCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Converts all alphabetic characters to lowercase, taking into account the host environment's current locale.`
+- `toUpperCase: () => string — Converts all the alphabetic characters in a string to uppercase.`
+- `toLocaleUpperCase: { (locales?: string`
+- `string[]): string; (locales?: LocalesArgument): string; } — Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.`
+- `trim: () => string — Removes the leading and trailing white space and line terminator characters from a string.`
+- `length: number — Returns the length of a String object.`
+- `substr: (from: number, length?: number) => string — Gets a substring beginning at the specified location and having the specified length.`
+- `valueOf: () => string — Returns the primitive value of the specified object.`
+- `codePointAt: (pos: number) => number — Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point value of the UTF-16 encoded code point starting at the string element a`
+- `includes: (searchString: string, position?: number) => boolean — Returns true if searchString appears as a substring of the result of converting this object to a String, at one or more positions that are greater than or equal`
+- `endsWith: (searchString: string, endPosition?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `normalize: { (form: "NFC"`
+- `"NFD"`
+- `"NFKC"`
+- `"NFKD"): string; (form?: string): string; } — Returns the String value result of normalizing the string into the normalization form named by form as specified in Unicode Standard Annex #15, Unicode Normaliz`
+- `repeat: (count: number) => string — Returns a String value that is made from count copies appended together. If count is 0, the empty string is returned.`
+- `startsWith: (searchString: string, position?: number) => boolean — Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object (converted to a String) `
+- `anchor: (name: string) => string — Returns an `<a>` HTML anchor element and sets the name attribute to the text value`
+- `big: () => string — Returns a `<big>` HTML element`
+- `blink: () => string — Returns a `<blink>` HTML element`
+- `bold: () => string — Returns a `<b>` HTML element`
+- `fixed: () => string — Returns a `<tt>` HTML element`
+- `fontcolor: (color: string) => string — Returns a `<font>` HTML element and sets the color attribute value`
+- `fontsize: { (size: number): string; (size: string): string; } — Returns a `<font>` HTML element and sets the size attribute value`
+- `italics: () => string — Returns an `<i>` HTML element`
+- `link: (url: string) => string — Returns an `<a>` HTML element and sets the href attribute value`
+- `small: () => string — Returns a `<small>` HTML element`
+- `strike: () => string — Returns a `<strike>` HTML element`
+- `sub: () => string — Returns a `<sub>` HTML element`
+- `sup: () => string — Returns a `<sup>` HTML element`
+- `padStart: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the start (left`
+- `padEnd: (maxLength: number, fillString?: string) => string — Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length. The padding is applied from the end (right)`
+- `trimEnd: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `trimStart: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimLeft: () => string — Removes the leading white space and line terminator characters from a string.`
+- `trimRight: () => string — Removes the trailing white space and line terminator characters from a string.`
+- `matchAll: (regexp: RegExp) => RegExpStringIterator<RegExpExecArray> — Matches a string with a regular expression, and returns an iterable of matches containing the results of that search.`
+- `replaceAll: { (searchValue: string`
+- `RegExp, replaceValue: string): string; (searchValue: st — Replace all instances of a substring in a string, using a regular expression or search string.`
+- `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
+- `__@iterator@896: () => StringIterator<string> — Iterator`
+
+### sortOptionsBy  <sub>packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx:209</sub>
+
+```ts
+<T extends { value: string; label?: unknown; }>(opts: T[], sortBy?: "label"): T[]
+```
+
+props/params:
+
+- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
+- `toString: () => string — Returns a string representation of an array.`
+- `toLocaleString: { (): string; (locales: string`
+- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
+- `pop: () => T — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `push: (...items: T[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
+- `concat: { (...items: ConcatArray<T>[]): T[]; (...items: (T`
+- `ConcatArray<T>)[]): T[]; } — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
+- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
+- `reverse: () => T[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
+- `shift: () => T — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `slice: (start?: number, end?: number) => T[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
+- `sort: (compareFn?: (a: T, b: T) => number) => T[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
+- `splice: { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: numbe — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
+- `unshift: (...items: T[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
+- `indexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
+- `lastIndexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
+- `every: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Determines whether all the members of an array satisfy the specified test.`
+- `some: (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any) =>  — Determines whether the specified callback function returns true for any element of an array.`
+- `forEach: (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => vo — Performs the specified action for each element in an array.`
+- `map: <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[ — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
+- `filter: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Returns the elements of an array that meet the condition specified in a callback function.`
+- `reduce: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
+- `reduceRight: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
+- `find: { <S extends T>(predicate: (value: T, index: number, obj: T[]) => value is S, th — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
+- `findIndex: (predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any) => nu — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
+- `fill: (value: T, start?: number, end?: number) => T[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
+- `copyWithin: (target: number, start: number, end?: number) => T[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
+- `entries: () => ArrayIterator<[number, T]> — Returns an iterable of key, value pairs for every entry in the array`
+- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
+- `values: () => ArrayIterator<T> — Returns an iterable of values in the array`
+- `includes: (searchElement: T, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
+- `flatMap: <U, This = undefined>(callback: (this: This, value: T, index: number, array: T[] — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
+- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
+- `at: (index: number) => T — Returns the item located at the specified index.`
+- `__@iterator@896: () => ArrayIterator<T> — Iterator`
+- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
+
+### spliceMultilinePaste  <sub>packages/shared/src/lib/paste.ts:35</sub>
+
+```ts
+(current: string, pasted: string, selStart: number, selEnd: number): string
 ```
 
 props/params:

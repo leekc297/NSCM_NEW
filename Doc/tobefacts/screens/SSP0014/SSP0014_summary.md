@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | component | 244 |
+| features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | component | 251 |
 | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | component | 234 |
 | features/shipping/src/pages/shipment-model-pic/hooks/useShipmentModelPicValidation.ts | hook | 68 |
 | features/shipping/src/pages/shipment-model-pic/index.ts | index | 2 |
@@ -24,8 +24,8 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | ShipmentModelPicForm.tsx:64 |
-| (useTabLookupQueries) | hook | 2 | Y | ShipmentModelPicForm.tsx:68 ShipmentModelPicGrid.tsx:76 |
+| (useTabComboQueries) | hook | 1 | Y | ShipmentModelPicForm.tsx:65 |
+| (useTabLookupQueries) | hook | 2 | Y | ShipmentModelPicForm.tsx:69 ShipmentModelPicGrid.tsx:76 |
 | /SSP0014/main/USER_CHECK/call-proc | http | 1 | Y | useShipmentModelPicValidation.ts:47 |
 | (useTabComboQueryResults) | hook | 1 | Y | ShipmentModelPic.tsx:87 |
 | SSP0014/main//call-proc | hook | 1 | Y | ShipmentModelPic.tsx:163 |
@@ -42,14 +42,14 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 90 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,clearFilters | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 109 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 141 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 163 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 187 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 217 |
-| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 213 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 234 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 91 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,clearFilters | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 110 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 142 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 164 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 188 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 224 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 214 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 241 |
 | g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 107 |
 | g | cellEditEnded | deriveName | addHandler | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 161 |
 | g | pastedCell | deriveName | addHandler | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 162 |
@@ -102,8 +102,8 @@
 | MSG01052 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0014(10), COM0010(3), SCM0002(2), SCP0005(2), SCP0013(1), DMF0020(1)
-- SP/PKG: PKG_SSP0014(7), P_SSP0014_SAVE_MODEL_PIC(3), P_SSP0014_GET_USER_ID_CHECK(2), P_USER_ID(2), P_SSP0014_GET_MODEL_PIC(2), P_ITEM_ID(2), P_CREATE_ID(1), P_DIVISION_ID(1), P_OPERATION_GROUP(1), P_FROM_SITE(1), P_VALID_YN(1), P_LANGUAGE(1)
+- 화면ID: SSP0014(12), SCM0002(3), SCP0013(3), COM0010(3), COM0013(2), SCP0005(2), DMF0004(1), DMF0020(1)
+- SP/PKG: PKG_SSP0014(7), P_ITEM_ID(4), P_SSP0014_SAVE_MODEL_PIC(3), P_SSP0014_GET_USER_ID_CHECK(2), P_USER_ID(2), P_SSP0014_GET_MODEL_PIC(2), P_CREATE_ID(1), P_DIVISION_ID(1), P_OPERATION_GROUP(1), P_FROM_SITE(1), P_VALID_YN(1), P_LANGUAGE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

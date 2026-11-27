@@ -1,0 +1,5 @@
+﻿side,target,lookup_type,result,why,ref
+신규행,CELL_PROD_SITE,DM_CELL_PROD_SITE,PASS,SEGMENT1 기준 · 후보 5건 = 활성 코드 전부 · 비활성 0,DMF0042_BizPlan.cs:1277 ← DMF0042_BizPlan.cs:1277
+기존행,CELL_PROD_SITE,DM_CELL_PROD_SITE,FAIL,"SEGMENT1 기준 · 비활성 코드 후보 노출 2건: ['A05', 'Z01']",DMF0042_BizPlan.cs:1277 ← DMF0042_BizPlan.cs:1277
+신규행,CURRENCY,CURRENCY_LIST,PASS,SEGMENT1 기준 · 후보 10건 = 활성 코드 전부 · 비활성 0,DMF0042_BizPlan.cs:1245 ← DMF0042_BizPlan.cs:331
+기존행,CURRENCY,CURRENCY_LIST,PASS,SEGMENT1 기준 · 후보 10건 = 활성 코드 전부 · 비활성 0,DMF0042_BizPlan.cs:1245 ← DMF0042_BizPlan.cs:331

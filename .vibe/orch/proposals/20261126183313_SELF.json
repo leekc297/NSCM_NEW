@@ -1,0 +1,174 @@
+{
+  "id": "20261126183313_SELF",
+  "at": "2026-11-26T18:33:13+09:00",
+  "ms": 1795685593672,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|edits|t_orch_usercheck.js|test companion double count",
+  "title": "반복 수정 집계에서 시험 파일은 원본과 같은 절에 있으면 세지 않음(시험 파일만 고친 절만 셈)",
+  "evidence": "orch-history.js:313, orch-ladder.js:55-58, ladder.json:76, :1138, :1175, stats.json repeatFiles t_orch_usercheck.js defect 20 / orch-usercheck.js defect 22, CHANGELOG.md:423, :1607, :1644-1650 · 진단 사다리 묶음 L3|edits|t_orch_usercheck.js",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_histauto.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_s6_group.js"
+  ],
+  "before_after": "변경 전: orch-history.js:313 이 절의 파일 basename 마다 kindDays 를 +1 해서, orch-usercheck.js 와 test/t_orch_usercheck.js 를 함께 고친 절 하나가 두 파일에 각각 결함 1건으로 들어감. 변경 후: 절의 파일 목록에 test/ 밖 VM 파일이 1개 이상 있으면 test/ 아래 파일은 그 절에서 kindDays 와 changes 를 올리지 않고 v.withSrc 에만 +1(표시용). 시험 파일만 고친 절은 종전대로 셈. repeatFiles 항목에 withSrc 를 추가해 S9 상세에 '원본과 함께 바뀐 절 N건(제외)'로 표시.",
+  "verify": "1) node tools/VibeManager/test/t_orch_history_kind.js: 새 표본 2건 추가. (가) 파일 orch-usercheck.js + test/t_orch_usercheck.js 인 defect 절 1건이면 byFile['t_orch_usercheck.js'].kindDays.defect 합 0, withSrc 1. (나) 파일 test/t_orch_usercheck.js 만 있는 defect 절 1건이면 defect 1. 반영 전 이 시험 0건 → 반영 뒤 2건 PASS. 2) 이력 집계 재생성 뒤 .vibe/orch/history/stats.json repeatFiles 의 t_orch_usercheck.js defect: 반영 전 20(이번에 stats.json 에서 읽은 값) → 반영 뒤 시험 파일만 고친 결함 절 수만 남음(반영 전 미측정. CHANGELOG.md:1607, :1644 2건은 확인). orch-usercheck.js defect 22 는 이 안으로 바뀌지 않음.",
+  "rollback": "orch-history.js, test/t_orch_history_kind.js 를 .bak_<태그> 로 되돌리고 이력 집계를 다시 실행",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "t_orch_usercheck.js 7일 결함 절 20건 ≥ l3FileEditsMin 4. 같은 변경이 원본 묶음(L3|edits|orch-usercheck.js 22건)과 시험 묶음으로 두 번 올라옴. test/ 아래 파일 묶음 2개(t_orch_usercheck.js, run_all.js)가 열려 있음.",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:35:14+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:35:14+09:00",
+      "by": "3acd3c",
+      "what": "경고: 대상 파일 겹침 tools/VibeManager/test/t_orch_usercheck.js (S-Y 20261126183041_SELF), tools/VibeManager/test/t_fs_retry.js (S-Y 20261126183041_SELF), tools/VibeManager/test/t_orch_ladder_recur_time.js (S-Y 20261126183041_SELF), tools/VibeManager/test/t_orch_selfcheck.js (S-Y 20261126183041_SELF), tools/VibeManager/test/t_orch_userrule.js (S-Y 20261126183041_SELF)"
+    },
+    {
+      "at": "2026-11-26T18:35:14+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T18:40:45+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 46개 파일 통과, 시험 100/110개 파일 통과(PASS 1740, FAIL 5), 정의 정합 통과, 문장 규칙 위반 0 · 반영 전부터 어긋난 항목 5건 · 백업 태그 20261126_self1835"
+    },
+    {
+      "at": "2026-11-26T18:40:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T18:43:08+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-history.js buildStats: 같은 절에 test/ 밖 파일이 있으면 test/ 파일은 집계에서 빼고 withSrc 만 올림, repeatFiles 에 withSrc. 시험 파일만 고친 절은 종전. t_orch_history_kind 추가 3건. 실제 stats.json 재집계 효과는 미측정(다음 이력 수집). run_all 111개 중 110 통과 PASS 1888(18:46), 실패 t_orch_selfapply.js 는 같은 시각 다른 세션 편집, 단독 ALL PASS. 설치 폴더 복사"
+    },
+    {
+      "at": "2026-11-26T18:53:13+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 46개 파일 통과, 시험 111/111개 파일 통과(PASS 1893, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-26T18:53:13+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 2건. 2026-11-26 18:41~18:47. v1 ALL PASS(22건, 새 1절 표본 2건 포함). v2 t_orch_usercheck.js defect 20 → 0. S1 node --check orch-history.js, t_orch_history_kind.js 통과. S2 run_all 'ALL OK 파일 111/111 PASS 1893 FAIL 0' 289.2초. 문장 규칙 'orch-history.js | 문장 43 | 위반 0'(반영 전 0 → 반영 뒤 0) · 변경 30개 파일 · 대상 목록 밖 변경 28개: Doc/verify/DMF0042/e2e_results.json, tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/WORKLOG.md, 20261126_184243_R12_ALL.json, 20261126_184310_R12_ALL.json",
+      "log": ".vibe\\logs\\2026-11-26T18-40-53_claude_orch.log",
+      "sec": 411,
+      "costUsd": 1.0505982000000003,
+      "files": [
+        "Doc/verify/DMF0042/e2e_results.json",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/CHANGELOG.md",
+        "tools/VibeManager/WORKLOG.md",
+        "tools/VibeManager/test/t_orch_usercheck.js",
+        "20261126_184243_R12_ALL.json",
+        "20261126_184310_R12_ALL.json",
+        "Doc/e2e/_run.acct.10236.json",
+        "Doc/verify/DMF0042/_test_timing.jsonl",
+        "Doc/verify/DMF0042/calls/_trace_A6_조회_결과_행_순서_AS-IS_ORDER_BY_0.json",
+        "Doc/verify/DMF0042/calls/_trace_C1_C4_상위_조회조건_변경_하위_후보_재조회_선택_초기화_그리드_상태_0.json",
+        "Doc/verify/DMF0042/calls/_trace_PCOL_팝업_내부_그리드_컬럼_H5_A5_D5_H2_0.json",
+        "Doc/verify/DMF0042/calls/_trace_W4_D3_행_조건부_잠금_AS-IS_lock_rules_0.json",
+        "Doc/verify/DMF0042/calls/_trace_W4_E4_업무_검증_메시지_AS-IS_저장_차단__0.json",
+        "Doc/verify/DMF0042/calls/_trace_W4_M4_팝업_선택값_반영_AS-IS_0.json",
+        "Doc/verify/DMF0042/calls/_trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행__0.json",
+        "Doc/verify/DMF0042/combo_cascade.json",
+        "Doc/verify/DMF0042/dyn_facts.json",
+        "Doc/verify/DMF0042/e2e/shots/index_trace.json",
+        "Doc/verify/DMF0042/e2e/shots/trace_C1_C4_상위_조회조건_변경_하위_후보_재조회_선택_초기화_그리드_상태.png",
+        "Doc/verify/DMF0042/e2e/shots/trace_W4_E4_업무_검증_메시지_AS_IS_저장_차단.png",
+        "Doc/verify/DMF0042/e2e/shots/trace_W4_M4_팝업_선택값_반영_AS_IS.png",
+        "Doc/verify/DMF0042/e2e/shots/trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행.png",
+        "Doc/verify/DMF0042/e2e_test_kind.jsonl",
+        "Doc/verify/DMF0042/form_scen_results.json",
+        "tools/VibeManager/20261126_184305_R12_ALL.json",
+        "tools/VibeManager/20261126_184317_R12_ALL.json",
+        "tools/VibeManager/20261126_184319_R12_ALL.json",
+        "tools/VibeManager/20261126_184321_R12_ALL.json",
+        "tools/VibeManager/test/t_orch_history_kind.js"
+      ]
+    }
+  ],
+  "plain": {
+    "what": "VM 기능 파일과 그 시험 파일을 같이 고친 기록 1건이 '같은 파일을 자주 고침' 경고 2건으로 올라오던 것을 1건으로 셉니다. 시험 파일만 고친 기록은 종전대로 셉니다.",
+    "risk": "시험 파일 자체 결함이 원본 수정과 같은 기록에 섞여 있으면 시험 파일 쪽 경고가 덜 올라옵니다. 그 기록은 원본 파일 경고에 들어갑니다.",
+    "undo": "백업 파일 2개로 되돌리고 이력 집계를 다시 실행하면 종전 건수로 돌아갑니다."
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "kind": "fix",
+  "testsAdded": [
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_histauto.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_s6_group.js"
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795685711528,
+  "autoFp": "e66fcfad7a",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "applyStartMs": 1795686053312,
+  "appliedMs": 1795686793791,
+  "verifyJudge": {
+    "at": "2026-11-26T18:47:51+09:00",
+    "verified": true,
+    "text": "실행 통과 2건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 46개 파일 통과, 시험 111/111개 파일 통과(PASS 1893, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self1835",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_history_kind.js tools/VibeManager: 반영 전 1절 기준 시험 0건 → 반영 뒤 'PASS (가) 절 1건: t_orch_usercheck.js kindDays.defect 합 0, withSrc 1', 'PASS (나) 절 1건: 시험 파일만이면 defect 1', ALL PASS 22건"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "orch-history collect() 재생성(18:41:54, 7.6초): stats.json t_orch_usercheck.js defect 20 → 0(repeatFiles 에서 빠짐, byFile kinds defect 0 request 2, withSrc 22). 시험 파일만 고친 절 0건. orch-usercheck.js defect 22 → 17 은 다른 개선안 20261126183040_SELF 의 분류 변경(request 10 → 17) 결과이고 이번 조건은 원본 파일을 빼지 않음(orch-history.js:325)"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/test/t_orch_history_kind.js"
+    ],
+    "verify_result": "2026-11-26 18:41~18:47. v1 ALL PASS(22건, 새 1절 표본 2건 포함). v2 t_orch_usercheck.js defect 20 → 0. S1 node --check orch-history.js, t_orch_history_kind.js 통과. S2 run_all 'ALL OK 파일 111/111 PASS 1893 FAIL 0' 289.2초. 문장 규칙 'orch-history.js | 문장 43 | 위반 0'(반영 전 0 → 반영 뒤 0)",
+    "note": "orch-history.js 의 집계 변경(:322-326, repeatFiles withSrc :333)은 편집 전에 이미 들어가 있었음. 이번에는 시험 파일에 개선안 v1 문구대로 1절 기준 표본 2건만 추가함. S9 상세의 '원본과 함께 바뀐 절 N건(제외)' 표시는 orch-selfcheck.js:295 라 targets 밖이어서 미반영. 추가 확인 후보: CHANGELOG 절 '묶음 S-Y'는 t_orch_usercheck.js 를 test/ 경로 없이 적어 시험 파일로 인식되지 않음(요청 1건으로 셈)."
+  },
+  "snap": "prop_20261126183313_SELF"
+}

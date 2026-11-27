@@ -1,0 +1,204 @@
+{
+  "id": "20261127005352_SELF",
+  "at": "2026-11-27T00:53:52+09:00",
+  "ms": 1795708432503,
+  "source": "self",
+  "status": "applied",
+  "sig": "changelog self pending on write fail",
+  "title": "반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 기록 때 다시 씀",
+  "evidence": "오류 서명 orch-improve.changelogSelf UNKNOWN 9건(11-23 18:54 ~ 11-26 16:15). tools/VibeManager/orch-improve.js:561 쓰기가 실패하면 562 catch 에서 오류만 남기고 false 를 돌려줌. 523~524 는 개선안 이력에 'CHANGELOG 기록 실패'만 적고 절 내용은 버림. .vibe/orch/proposals 중 이력에 'CHANGELOG 기록 실패'가 있는 안 8개(20261123184517_SELF_5, 20261124021155_SELF_3, 20261124064958_SELF_2, 20261124093730_SELF, 20261125031023_SELF, 20261125034940_SELF_2, 20261125125004_SELF, 20261126103110_SELF)는 CHANGELOG.md 에 '개선안 <id> 승인' 줄 0건(다른 자가 보완 절 203건은 있음). 미확인 추적(S6)과 반복 수정 집계(S9)가 CHANGELOG 절을 원천으로 쓰므로 8건은 두 집계에서 빠짐. 파일을 잡은 프로세스는 미확인",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_improve.js",
+    "tools/VibeManager/test/t_claim_overlap.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_impact_rule.js",
+    "tools/VibeManager/test/t_incident_handler.js",
+    "tools/VibeManager/test/t_orch_afterwork.js",
+    "tools/VibeManager/test/t_orch_apply_recover.js",
+    "tools/VibeManager/test/t_orch_applyfail.js",
+    "tools/VibeManager/test/t_orch_consult.js",
+    "tools/VibeManager/test/t_orch_coreauto.js",
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfapply.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_undo.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_verify.js",
+    "tools/VibeManager/test/t_orch_vision.js",
+    "tools/VibeManager/test/t_orch_watch_gone.js",
+    "tools/VibeManager/test/t_orch_worklist.js",
+    "tools/VibeManager/test/t_run_end.js"
+  ],
+  "before_after": "changelogSelf 쓰기 실패 = 오류 기록 후 절 버림 → 쓰기 실패 = 만든 절 텍스트를 .vibe/orch/changelog_pending.jsonl 에 한 줄로 남기고, 다음 changelogSelf 호출 때 대기 절을 시각 순으로 새 절과 함께 맨 위에 쓴 뒤 대기 파일을 비움. 개선안 이력 문구 'CHANGELOG 기록 실패' → 'CHANGELOG 기록 대기(다음 기록 때 씀)'",
+  "verify": "node tools/VibeManager/test/t_orch_improve.js: 반영 전 미측정 → 반영 뒤 CHANGELOG 쓰기 실패 주입 시험 1건 추가(실패 때 대기 파일 1줄, 다음 호출 뒤 대기 파일 0줄, CHANGELOG 에 두 절 모두 있음) PASS",
+  "rollback": "tools/VibeManager/orch-improve.js.bak_<태그>, tools/VibeManager/test/t_orch_improve.js.bak_<태그> 로 되돌림. .vibe/orch/changelog_pending.jsonl 은 지워도 됨",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 원인(CHANGELOG.md 열기 UNKNOWN) 반영 기록 실패 8건(개선안 이력 'CHANGELOG 기록 실패' 8개 파일). 11-26 쓰기 재시도(fs-retry)를 넣은 뒤에도 같은 서명의 쓰기 실패가 3건 다시 남(vm_errors.jsonl 128, 130, 131행. 스택에 writeFileSyncRetry 있음). 재시도만으로 막히지 않아 실패한 기록을 잃지 않는 구조로 바꿈",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-27T00:53:54+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-27T00:58:45+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1957, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261127_self0054"
+    },
+    {
+      "at": "2026-11-27T00:58:51+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-27T01:05:03+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-improve.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-27T01:05:03+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 1건. 2026-11-27 00:59:14 반영 전: node tools/VibeManager/test/t_orch_improve.js → ALL PASS, PASS 55건, 쓰기 실패 주입 시험 없음(미측정). 2026-11-27 00:59:59 반영 뒤: node --check orch-improve.js, t_orch_improve.js 오류 0. node tools/VibeManager/test/t_orch_improve.js → 'PASS CHANGELOG 쓰기 실패 → 대기 파일 1줄 → 다음 호출 뒤 0줄 · 두 절 모두 있음 · 변경 36개 파일 · 대상 목록 밖 변경 34개: Doc/asisfacts/screens/DMF0003/color_rules.csv, Doc/asisfacts/screens/DMF0003/edit_expect.csv, Doc/asisfacts/screens/DMF0003/lock_rules.csv, Doc/asisfacts/screens/DMF0005/edit_expect.csv, Doc/asisfacts/screens/DMF0005/lock_rules.csv, Doc/asisfacts/screens/DMF0042/edit_expect.csv",
+      "log": ".vibe\\logs\\2026-11-27T00-58-52_claude_orch.log",
+      "sec": 86,
+      "costUsd": 0.7460154999999999,
+      "files": [
+        "Doc/asisfacts/screens/DMF0003/color_rules.csv",
+        "Doc/asisfacts/screens/DMF0003/edit_expect.csv",
+        "Doc/asisfacts/screens/DMF0003/lock_rules.csv",
+        "Doc/asisfacts/screens/DMF0005/edit_expect.csv",
+        "Doc/asisfacts/screens/DMF0005/lock_rules.csv",
+        "Doc/asisfacts/screens/DMF0042/edit_expect.csv",
+        "Doc/asisfacts/screens/DMF0042/lock_rules.csv",
+        "Doc/asisfacts/screens/DMF0044/edit_expect.csv",
+        "Doc/asisfacts/screens/DMF0044/lock_rules.csv",
+        "Doc/asisfacts/screens/DMF0082/color_rules.csv",
+        "Doc/asisfacts/screens/DMF0082/edit_expect.csv",
+        "Doc/asisfacts/screens/DMF0082/lock_rules.csv",
+        "Doc/asisfacts/screens/SCP0007/edit_expect.csv",
+        "Doc/asisfacts/screens/SCP0007/lock_rules.csv",
+        "Doc/asisfacts/screens/SCP0016/lock_rules.csv",
+        "Doc/asisfacts/screens/SCP0041/lock_rules.csv",
+        "Doc/asisfacts/screens/SCP0104/edit_expect.csv",
+        "Doc/asisfacts/screens/SCP0104/edit_expect_sheets.csv",
+        "Doc/asisfacts/screens/SCP0104/lock_rules.csv",
+        "Doc/asisfacts/screens/SSP0003/lock_rules.csv",
+        "Doc/asisfacts/screens/SSP0015/edit_expect.csv",
+        "Doc/asisfacts/screens/SSP0015/edit_expect_sheets.csv",
+        "Doc/asisfacts/screens/SSP0015/lock_rules.csv",
+        "Doc/asisfacts/screens/SSP0020/lock_rules.csv",
+        "Doc/asisfacts/screens/SSP0021/edit_expect.csv",
+        "Doc/asisfacts/screens/SSP0021/edit_expect_sheets.csv",
+        "Doc/asisfacts/screens/SSP0021/lock_rules.csv",
+        "Doc/asisfacts/screens/SSP0060/edit_expect.csv",
+        "Doc/asisfacts/screens/SSP0060/edit_expect_sheets.csv",
+        "Doc/asisfacts/screens/SSP0060/lock_rules.csv",
+        "Doc/asisfacts/screens/SSP0200/edit_expect.csv",
+        "Doc/asisfacts/screens/SSP0200/lock_rules.csv",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/Harness/verify/facts_lockrules.py",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/test/t_orch_improve.js"
+      ]
+    },
+    {
+      "at": "2026-11-27T09:50:26+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-27T09:49:37+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "errors",
+  "selfKey": "orch-improve.changelogSelf | UNKNOWN: unknown error, open '<path>'",
+  "kind": "fix",
+  "testsAdded": [
+    "tools/VibeManager/test/t_claim_overlap.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_impact_rule.js",
+    "tools/VibeManager/test/t_incident_handler.js",
+    "tools/VibeManager/test/t_orch_afterwork.js",
+    "tools/VibeManager/test/t_orch_apply_recover.js",
+    "tools/VibeManager/test/t_orch_applyfail.js",
+    "tools/VibeManager/test/t_orch_consult.js",
+    "tools/VibeManager/test/t_orch_coreauto.js",
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfapply.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_undo.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_verify.js",
+    "tools/VibeManager/test/t_orch_vision.js",
+    "tools/VibeManager/test/t_orch_watch_gone.js",
+    "tools/VibeManager/test/t_orch_worklist.js",
+    "tools/VibeManager/test/t_run_end.js"
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795708433687,
+  "autoFp": "bdb47573e6",
+  "applyStartMs": 1795708731709,
+  "verifyJudge": {
+    "at": "2026-11-27T01:00:23+09:00",
+    "verified": true,
+    "text": "실행 통과 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261127_self0054",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-improve.js"
+  ],
+  "appliedMs": 1795709103663,
+  "synced": [
+    "orch-improve.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_improve.js 실행. 'PASS CHANGELOG 쓰기 실패 → 대기 파일 1줄 → 다음 호출 뒤 0줄 · 두 절 모두 있음 ok1=false n1=1 ok2=true n2=0', 'ALL PASS'. PASS 55건 → 56건"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_improve.js"
+    ],
+    "verify_result": "2026-11-27 00:59:14 반영 전: node tools/VibeManager/test/t_orch_improve.js → ALL PASS, PASS 55건, 쓰기 실패 주입 시험 없음(미측정). 2026-11-27 00:59:59 반영 뒤: node --check orch-improve.js, t_orch_improve.js 오류 0. node tools/VibeManager/test/t_orch_improve.js → 'PASS CHANGELOG 쓰기 실패 → 대기 파일 1줄 → 다음 호출 뒤 0줄 · 두 절 모두 있음 ok1=false n1=1 ok2=true n2=0', 'ALL PASS', PASS 56건. python tools/Docs/doc_style.py tools/VibeManager/orch-improve.js --quiet → 'orch-improve.js | 문장 145 | 위반 0' (반영 전 0 → 반영 뒤 0)",
+    "note": "changelogSelf 쓰기 실패 때 절 텍스트를 .vibe/orch/changelog_pending.jsonl 에 {at,id,reverted,text} 한 줄로 남기고, 다음 호출 때 새 절과 대기 절(시각 역순)을 맨 위에 쓴 뒤 대기 파일을 비움. 이력 문구 'CHANGELOG 기록 실패' → 'CHANGELOG 기록 대기(다음 기록 때 씀)'. 대기 파일 비우기 실패 때는 오류 기록(changelogPendingClear)만 남고 다음 호출 때 같은 절이 다시 들어감. 지난 8건(20261123184517_SELF_5 등)의 절 텍스트는 버려진 상태라 이번 반영으로 되살아나지 않음. 수정 전 코드로 새 시험이 실패하는지 확인하는 단계는 실행하지 않음. S2 전체 시험, S4 정의 정합은 VMO 게이트에 맡김."
+  },
+  "snap": "prop_20261127005352_SELF",
+  "effectiveMs": 1795740577891,
+  "effectiveAt": "2026-11-27T09:49:37+09:00"
+}

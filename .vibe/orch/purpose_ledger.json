@@ -1,0 +1,51 @@
+{
+ "note": "목적 원장(개선안 20261126165130_SELF, L4 단계 원장 20261126001222_VISION 단계 1, 문서 .vibe/orch/vision/concept_20261126_L4_useraxis_checklistTime.md). 목적 키마다 지금 유효한 개념 1건. 효력 시각 = sources 중 가장 늦은 시각(reload true 면 그 뒤 첫 창 로드). 남은 구현 항목 = items 중 status open + tools/Harness/plan_state.json 의 purpose 가 같은 남은 항목. 읽기 = orch-ladder.js purposeLedger()",
+ "purposes": {
+  "checklistTime": {
+   "title": "CheckList 화면 1개 10분, 길어야 30분(정합성 같음)",
+   "concept": "행 단위 해소 + D0~D5 중복 제거(측정 1회, 해소 원장 고정, row_run 으로 그 행만 다시 잼, 같은 확인 묶음)",
+   "sources": [
+    {
+     "kind": "plan",
+     "ref": "~/.claude/plans/linked-leaping-melody-of-1a09d305-77b0-4b44-9014-2c212ef299f2.md",
+     "at": "2026-11-25T19:00:27+09:00",
+     "why": "사용자 승인 플랜(행 단위 해소, D0~D5). 시각 = 파일 수정 시각(2026-11-26 17:3x ls 실측)"
+    },
+    {
+     "kind": "changelog",
+     "ref": "tools/VibeManager/CHANGELOG.md '## (판 번호 없음, VM 저장소 + 설치 폴더 + 검사 하네스) CheckList 체인 소요 개선 2~7 (2026-11-26 10:06)'",
+     "at": "2026-11-26T10:06:00+09:00",
+     "reload": true,
+     "why": "workbench.js runTaskStreaming 변경 포함(창 다시 로드 뒤 효력)"
+    }
+   ],
+   "items": [
+    {
+     "id": "D2",
+     "text": "화면 한 번 열고 읽기 시험 여러 개(읽기 시험 세션 공유)",
+     "status": "open",
+     "why": "memory project_checklist_row_level_resolution_20261125 '11-25 20:28 미착수'. CHANGELOG 에 완료 기록 0건(2026-11-26 17:3x 조회)"
+    },
+    {
+     "id": "D3",
+     "text": "같은 조회는 한 번만(조회 응답 재사용)",
+     "status": "open",
+     "why": "같음"
+    },
+    {
+     "id": "D4",
+     "text": "같은 저장 왕복, 같은 팝업은 한 번만(저장·팝업 관측 공유)",
+     "status": "open",
+     "why": "같음"
+    }
+   ],
+   "by": "Claude Code 세션 S-Z",
+   "at": "2026-11-26T17:33:48+09:00",
+   "aliases": [
+    "CheckList 화면 1개 10분, 길어야 30분 안에 끝남",
+    "CheckList 화면 1개 10분, 길어야 30분. 속도 개선은 판정 결과가 같은 대체 방법만"
+   ],
+   "aliasesWhy": "Overall Review 목적 문구(.vibe/orch/vision/*.json purposes) 중 이 목적 키와 같은 것. 개선안 20261126175507_SELF(단계 4) 목적 키 대응표"
+  }
+ }
+}

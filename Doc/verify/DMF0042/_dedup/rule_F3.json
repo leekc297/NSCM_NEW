@@ -1,0 +1,238 @@
+{
+ "rule_id": "F3",
+ "hash": "c5b8f1d268e4fdfa",
+ "groups": [
+  {
+   "rows": [
+    "T-13d40a42"
+   ],
+   "why": "대조표 2행 추적이라 성질이 다르고, 특정 컬럼 측정과 같다고 볼 근거가 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-71d9bb1a"
+   ],
+   "why": "병합 셀 붙여넣기는 다른 행이 다루지 않는 요소이고 기대도 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b8f8ac84"
+   ],
+   "why": "콤보 컬럼이 정해지지 않은 일반 규칙이라 어느 컬럼의 P09 행과 같은지 확정할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-725e9dff"
+   ],
+   "why": "SCM_SITE_ID40 신규 행에 후보 값을 붙여넣는 검사(P08)로, 같은 컬럼·방법의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "V-60c47fdf"
+   ],
+   "why": "SCM_SITE_ID40에 후보 밖 값을 붙여넣어 거부되는지 보는 검사(P09)로, 기대가 다른 행들과 다르다."
+  },
+  {
+   "rows": [
+    "V-0893ce86"
+   ],
+   "why": "SCM_SITE_ID40에 붙여넣기가 아니라 직접 입력하는 검사(P10)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-1517919d"
+   ],
+   "why": "SCM_SITE_ID40 기존 행에서 후보 안 값을 Copy해 붙여넣는 경로(P31)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-986fd30d"
+   ],
+   "why": "SCM_SITE_ID40 기존 행에서 후보 밖 값을 Copy해 붙여넣는 경로(P32)라 원본 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-08ebae1c"
+   ],
+   "why": "DEPT_ID40 신규 행에 후보 값을 붙여넣는 검사(P08)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-78dce8d4"
+   ],
+   "why": "DEPT_ID40에 후보 밖 값을 붙여넣어 거부되는지 보는 검사(P09)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-a033d198"
+   ],
+   "why": "DEPT_ID40에 직접 입력하는 검사(P10)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-100cf309"
+   ],
+   "why": "DEPT_ID40 후보 안 값을 Copy&Paste하는 경로(P31)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-2dc58ed4"
+   ],
+   "why": "DEPT_ID40 후보 밖 원본을 Copy&Paste하는 경로(P32)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-8cc1bd67"
+   ],
+   "why": "FCST_TYPE 신규 행에 후보 값을 붙여넣는 검사(P08)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-2eefa72f"
+   ],
+   "why": "FCST_TYPE에 후보 밖 값을 붙여넣어 거부되는지 보는 검사(P09)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-558327d2"
+   ],
+   "why": "FCST_TYPE에 직접 입력하는 검사(P10)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-5f3df2aa"
+   ],
+   "why": "FCST_TYPE 후보 안 값을 Copy&Paste하는 경로(P31)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-f6de1e1a"
+   ],
+   "why": "FCST_TYPE 후보 밖 원본을 Copy&Paste하는 경로(P32)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-6e2d65d4"
+   ],
+   "why": "CELL_PROD_SITE 신규 행에 후보 값을 붙여넣는 검사(P08)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-b6cc930e"
+   ],
+   "why": "CELL_PROD_SITE에 후보 밖 값을 붙여넣어 거부되는지 보는 검사(P09)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-bc8b6ea2"
+   ],
+   "why": "CELL_PROD_SITE에 직접 입력하는 검사(P10)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-3e914230"
+   ],
+   "why": "CELL_PROD_SITE 후보 안 값을 Copy&Paste하는 경로(P31)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-82cd74ba"
+   ],
+   "why": "CELL_PROD_SITE 후보 밖 원본을 Copy&Paste하는 경로(P32)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-486ba2ec"
+   ],
+   "why": "CURRENCY 신규 행에 후보 값을 붙여넣는 검사(P08)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-6338ed8e"
+   ],
+   "why": "CURRENCY에 후보 밖 값을 붙여넣어 거부되는지 보는 검사(P09)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-afbf4f00"
+   ],
+   "why": "CURRENCY에 직접 입력하는 검사(P10)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-b7861ca1"
+   ],
+   "why": "CURRENCY 후보 안 값을 Copy&Paste하는 경로(P31)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-b0c413e5"
+   ],
+   "why": "CURRENCY 후보 밖 원본을 Copy&Paste하는 경로(P32)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-df1ed6c9"
+   ],
+   "why": "END_CUSTOMER40 신규 행에 후보 값을 붙여넣는 검사(P08)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-9dbba56e"
+   ],
+   "why": "END_CUSTOMER40에 후보 밖 값을 붙여넣어 거부되는지 보는 검사(P09)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-dc8d1dcc"
+   ],
+   "why": "END_CUSTOMER40에 직접 입력하는 검사(P10)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-a16cdae2"
+   ],
+   "why": "END_CUSTOMER40 후보 안 값을 Copy&Paste하는 경로(P31)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-aea62901"
+   ],
+   "why": "END_CUSTOMER40 후보 밖 원본을 Copy&Paste하는 경로(P32)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-cb273ece"
+   ],
+   "why": "INCOTERMS 신규 행에 후보 값을 붙여넣는 검사(P08)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-e3a06d89"
+   ],
+   "why": "INCOTERMS에 후보 밖 값을 붙여넣어 거부되는지 보는 검사(P09)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-e3926718"
+   ],
+   "why": "INCOTERMS에 직접 입력하는 검사(P10)라 방법이 다르다."
+  },
+  {
+   "rows": [
+    "V-c415c410"
+   ],
+   "why": "INCOTERMS 후보 안 값을 Copy&Paste하는 경로(P31)로 단독이다."
+  },
+  {
+   "rows": [
+    "V-b7c8119a"
+   ],
+   "why": "INCOTERMS 후보 밖 원본을 Copy&Paste하는 경로(P32)로 단독이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:41:17",
+ "cost": 0.1564332
+}

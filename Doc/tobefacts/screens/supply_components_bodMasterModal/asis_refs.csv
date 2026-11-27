@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"supply/components/bodMasterModal","","features/supply/src/components/bodMasterModal/BodMasterModal.tsx","17","SCP0009 SCP0010","","","","AS-IS SCM0002_GetBODPopup(BOD Master) 을 옮긴 공용 모달. SCP0009(FG, type 0) / SCP0010(SEMI, type 1) 이 같이 쓴다."
+"supply/components/bodMasterModal","","features/supply/src/components/bodMasterModal/BodMasterModal.tsx","18","","PKG_SCM0002 P_SCM0002_GET_BOD_FG_POPUP P_SCM0002_GET_BOD_SEMI_POPUP","","","조회 SP: PKG_SCM0002.P_SCM0002_GET_BOD_FG_POPUP / P_SCM0002_GET_BOD_SEMI_POPUP(화면별 bodMaster/SEARCH 버튼매핑이 고른다)."
+"supply/components/bodMasterModal","","features/supply/src/components/bodMasterModal/BodMasterModal.tsx","19","SCP0009","","","","메타 등록: .atlas/gscm-design/SCP0009/design/09_register_bod_master_popup.sql"
+"supply/components/bodMasterModal","","features/supply/src/components/bodMasterModal/BodMasterModal.tsx","21","","","331","","(SCM0002_GetBODPopup.cs:331-337, 373-374). 이 모달도 잠금 행을 체크 고정(해제 불가)으로 보여 주고 OK 에서 제외한다."

@@ -13,7 +13,7 @@
 | features/master/src/components/searchFields/index.ts | index | 5 |
 | features/master/src/components/searchFields/SearchFields.debug.ts | other | 205 |
 | features/master/src/components/searchFields/SearchFields.module.scss | style | 89 |
-| features/master/src/components/searchFields/SearchFields.tsx | page | 1403 |
+| features/master/src/components/searchFields/SearchFields.tsx | page | 1453 |
 | features/master/src/components/searchFields/SearchFields.utils.ts | other | 113 |
 | features/master/src/components/searchFields/useCascadeFields.tsx | hook | 175 |
 | features/master/src/components/searchFields/yearField.util.ts | other | 40 |
@@ -21,7 +21,7 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 10 | Y | SearchFields.tsx:288 SearchFields.tsx:342 SearchFields.tsx:412 SearchFields.tsx:511 SearchFields.tsx:617 SearchFields.tsx:742 |
+| (useTabComboQueries) | hook | 10 | Y | SearchFields.tsx:306 SearchFields.tsx:360 SearchFields.tsx:430 SearchFields.tsx:529 SearchFields.tsx:635 SearchFields.tsx:760 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -29,31 +29,31 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| InputField | onFocus | <arrow> onFocus | jsx | features/master/src/components/searchFields/SearchFields.tsx | 250 |
-| InputField | onBlur | <arrow> setText | jsx | features/master/src/components/searchFields/SearchFields.tsx | 254 |
-| InputField | onChange | <arrow> setText,onValueChange | jsx | features/master/src/components/searchFields/SearchFields.tsx | 258 |
-| Button | onClick | <arrow> onOpenPopup | jsx | features/master/src/components/searchFields/SearchFields.tsx | 269 |
-| CustomDropdown | onChange | <arrow> onChange,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 311 |
-| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 359 |
-| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 447 |
-| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 568 |
-| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 674 |
-| CustomDropdown | onChange | <arrow> onChange,String(opts??'').split(',').filter,String(opts??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 797 |
-| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 846 |
-| PopupSearchInput | onValueChange | <arrow> onChange,v.split(',').map(s=>s.trim()).filter,v.split(',').map,v.split,s.trim | jsx | features/master/src/components/searchFields/SearchFields.tsx | 897 |
-| PopupSearchInput | onOpenPopup | <arrow> setOpen | jsx | features/master/src/components/searchFields/SearchFields.tsx | 905 |
-| PopupSearchInput | onValueChange | <arrow> onChange,v.split(',').map(s=>s.trim()).filter,v.split(',').map,v.split,s.trim | jsx | features/master/src/components/searchFields/SearchFields.tsx | 974 |
-| PopupSearchInput | onOpenPopup | <arrow> setOpen | jsx | features/master/src/components/searchFields/SearchFields.tsx | 982 |
-| PopupSearchInput | onValueChange | <arrow> onChange,v.split(',').map(s=>s.trim()).filter,v.split(',').map,v.split,s.trim | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1049 |
-| PopupSearchInput | onOpenPopup | <arrow> setOpen | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1057 |
-| DatePickerCalendar | onChange | <arrow> onChange,date?.format | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1167 |
-| DatePickerCalendar | onChange | <arrow> onChange,date?.format | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1184 |
-| DatePickerCalendar | onChange | <arrow> yearValueOf,onChange | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1252 |
-| CustomDropdown | onChange | <arrow> onChange,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1300 |
-| PopupSearchInput | onValueChange | onValueChange ?? (() => { /* 미전달 = popup 선택 전용, 직접 입력 안 함 */ }) | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1360 |
-| PopupSearchInput | onFocus | unlabelOnFocus | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1366 |
-| PopupSearchInput | onOpenPopup | onOpenPopup | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1367 |
-| input | onChange | <arrow> onChange | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1395 |
+| InputField | onFocus | <arrow> onFocus | jsx | features/master/src/components/searchFields/SearchFields.tsx | 255 |
+| InputField | onBlur | <arrow> setText | jsx | features/master/src/components/searchFields/SearchFields.tsx | 259 |
+| InputField | onChange | <arrow> setText,onValueChange | jsx | features/master/src/components/searchFields/SearchFields.tsx | 276 |
+| Button | onClick | <arrow> onOpenPopup | jsx | features/master/src/components/searchFields/SearchFields.tsx | 287 |
+| CustomDropdown | onChange | <arrow> onChange,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 329 |
+| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 377 |
+| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 465 |
+| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 586 |
+| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 692 |
+| CustomDropdown | onChange | <arrow> onChange,String(opts??'').split(',').filter,String(opts??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 815 |
+| CustomDropdown | onChange | <arrow> onChange,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 864 |
+| PopupSearchInput | onValueChange | <arrow> onChange,v.split(',').map(s=>s.trim()).filter,v.split(',').map,v.split,s.trim | jsx | features/master/src/components/searchFields/SearchFields.tsx | 919 |
+| PopupSearchInput | onOpenPopup | <arrow> setOpen | jsx | features/master/src/components/searchFields/SearchFields.tsx | 927 |
+| PopupSearchInput | onValueChange | <arrow> onChange,v.split(',').map(s=>s.trim()).filter,v.split(',').map,v.split,s.trim | jsx | features/master/src/components/searchFields/SearchFields.tsx | 996 |
+| PopupSearchInput | onOpenPopup | <arrow> setOpen | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1004 |
+| PopupSearchInput | onValueChange | <arrow> onChange,v.split(',').map(s=>s.trim()).filter,v.split(',').map,v.split,s.trim | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1071 |
+| PopupSearchInput | onOpenPopup | <arrow> setOpen | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1079 |
+| DatePickerCalendar | onChange | <arrow> onChange,date.isValid,date.format | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1213 |
+| DatePickerCalendar | onChange | <arrow> onChange,date.isValid,date.format | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1233 |
+| DatePickerCalendar | onChange | <arrow> yearValueOf,onChange | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1302 |
+| CustomDropdown | onChange | <arrow> onChange,String | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1350 |
+| PopupSearchInput | onValueChange | onValueChange ?? (() => { /* 미전달 = popup 선택 전용, 직접 입력 안 함 */ }) | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1410 |
+| PopupSearchInput | onFocus | unlabelOnFocus | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1416 |
+| PopupSearchInput | onOpenPopup | onOpenPopup | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1417 |
+| input | onChange | <arrow> onChange | jsx | features/master/src/components/searchFields/SearchFields.tsx | 1445 |
 | CustomDropdown | onChange | <arrow> handleChange,String | jsx | features/master/src/components/searchFields/useCascadeFields.tsx | 159 |
 
 ## 5. 컴포넌트 사용 집계
@@ -95,7 +95,7 @@
 | LBL00512 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0003(4), DMF0048(3), DMF0020(2), DMF0043(1), DMF0045(1), DMF0074(1), SCP0006(1), SSP0015(1), SSP0023(1), DMF0044(1)
+- 화면ID: DMF0003(4), DMF0045(3), DMF0048(3), DMF0020(2), SSP0060(2), DMF0043(1), DMF0074(1), SCP0006(1), SSP0015(1), SSP0023(1), DMF0044(1)
 - SP/PKG: P_COM0006(1), P_COM0008(1), P_OWNER_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

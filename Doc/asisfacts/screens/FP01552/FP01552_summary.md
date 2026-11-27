@@ -137,9 +137,9 @@
 | event:this.Load | Form_Load > FindData | 213 | FP\Common\AmendCommon#find_DateMap | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_AmendCommon_find_DateMap.sql |
 | event:this.Load | Form_Load > FindData | 214 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_MonthCnt] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > FindData | 214 | FP\Common\AmendCommon#find_MonthCnt | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_AmendCommon_find_MonthCnt.sql |
-| event:this.Load | Form_Load > InitControls > GetDivision | 215 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > FindData | 215 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_bukInfo] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > FindData | 215 | FP\Common\AmendCommon#find_BukInfo | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_AmendCommon_find_BukInfo.sql |
+| event:this.Load | Form_Load > InitControls > GetDivision | 215 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls > GetSite | 222 | biz:FPCommonDataBLL.FPCommonDataList [code=SITE] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls > GetPlant | 232 | biz:FPCommonDataBLL.FPCommonDataList [code=PLANT] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls > cbo_plan_group_changed > GetCurrDate | 3394 | biz:FPCommonDataBLL.FPCommonDataList [code=CURR_UTDATE] | BIZ_MATCH |  |
@@ -234,7 +234,7 @@
 | GetPlant | Filter | INSTANCE_ID, DIVISION_ID, SITE_ID |
 | GetSite | Filter | INSTANCE_ID, DIVISION_ID |
 | GoEditMode | row | DATA_TYPE, PSI, CATEGORY_ID, EDIT_YN, E_YN, PLANT_ID, ITEM_ID, STORAGE_ID |
-| InitControls | Filter | USER_ID, DIVISION_ID, SITE_ID, PLANT_ID, PLAN_DATE, MASTER_ID, INSTANCE_ID, DATE, CELL_ITEM_ID, COMPANY_ID, TRANSPORT, MARKET |
+| InitControls | Filter | PLAN_DATE, MASTER_ID, INSTANCE_ID, USER_ID, DIVISION_ID, SITE_ID, PLANT_ID, DATE, CELL_ITEM_ID, COMPANY_ID, TRANSPORT, MARKET |
 | InitControls | InitRow | ITEM_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID |
 | InitSpread | Filter | PROGRAM_ID, SHEET_NAME |
 | planday_changed | Filter | PLAN_DATE |
@@ -269,35 +269,21 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetMeasure | Measure:128, InitControl:150, CheckAndGetMeasure:378, Measure:156, InitControl:215 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
-| GetCheckedListValue | InitControls:177, InitControls:182, InitControls:188, ClbPlant_SelectedIndexChanged:197, clbSite_SelectedIndexChanged:202, ClbDivision_SelectedIndexChanged:208, FindData:366, FindData:367 | CString.GetCheckedListValue | CODE |
-| FP_UpdateBatch2 | Save_Data_Execute:560, Save_Data:352 | DataService.FP_UpdateBatch2 | COUNT, EXCEPTION, RESULT |
 | SetFilter | InitControls:208, InitControls:210, InitControls:211, InitControls:212, InitControls:213, InitControls:225, InitControls:226, InitControls:231 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
+| GetCheckedListValue | InitControls:224, SetChangeControl:254, SetChangeControl:266, SetChangeControl:274, SetChangeControl:282, ApplySearchCondition:1988, InitControls:177, InitControls:182 | CString.GetCheckedListValue | CODE |
 | GetInnerTable | SetChangeControl:250, SetChangeControl:259, SetChangeControl:267, SetChangeControl:275, GetPlanGroup:3328, GetDivision:3358, GetSite:3365, GetPlant:3371 | DataService.GetInnerTable | ACTIVE_FLAG, ALL_LINE, AMEND_FLAG, AMEND_INSTANCE, AMEND_MAIN_FLAG, AMEND_UI_NAME, CODE, CONFIRM_AREA, DIVISION_ID, DIVISION_NAME, FACTORY_ID, FACTORY_NAME, INSTANCE_ID, INSTANCE_NAME, IN_ACT, IS_SAME_PLAN_ID, LINE_AUTH, LINE_ID, LINE_NAME, NAME, OPERATION_ID, OPERATION_NAME, PLANT_ID, PLANT_NAME, SHOP_GROUP_ID, SITE_ID, SITE_NAME, SORT_ORDER, USE_FLAG, USE_WOW_STATUS, VERSION_YN |
+| GetMeasure | CheckAndGetMeasure:378, Measure:128, InitControl:150, Measure:156, InitControl:215 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | EditQuery | RefreshHeader:419, RefreshHeader:430 | FPExtensions.EditQuery | ROW_ID |
 | GetChanges | Save_Data:1126 | FPExtensions.GetChanges | ROW_ID |
 | FP_UpdateBatch | Save_Data:1268 | DataService.FP_UpdateBatch | COUNT, RESULT |
 | SetRowVisibleOnMeasureDatatypeCategoryName | CreateFilterDataSet:1566 | MeasureService.SetRowVisibleOnMeasureDatatypeCategoryName | _MM_ |
 | SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:1567 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
 | FP_Log2 | cbo_plan_group_changed:2500, cbo_plan_group_changed:2507 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
+| FP_UpdateBatch2 | Save_Data_Execute:560, Save_Data:352 | DataService.FP_UpdateBatch2 | COUNT, EXCEPTION, RESULT |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
-| this.btnFind | Click | btnFind_Click | InitializeComponent:422 |
-| this.btnSave | Click | btnSave_Click | InitializeComponent:473 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:524 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:683 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:684 |
-| this | Load | Form_Load | .ctor:137 |
-| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:190 |
-| clbSite | SelectedIndexChanged | clbSite_SelectedIndexChanged | InitControls:191 |
-| clbPlant | SelectedIndexChanged | ClbPlant_SelectedIndexChanged | InitControls:192 |
-| this | Load | Form_Load | .ctor:66 |
 | this | Load | Form_Load | .ctor:141 |
 | cboInstance | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:296 |
 | drpPlanDate | DateTimeChanged | planday_changed | InitEvent:297 |
@@ -344,18 +330,32 @@
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:2098 |
 | this.btnCategory | Click | btnCatagory_Click | InitializeComponent:2136 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:2174 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
 | this | Load | Form_Load | .ctor:100 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:83 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:84 |
+| this.btnFind | Click | btnFind_Click | InitializeComponent:422 |
+| this.btnSave | Click | btnSave_Click | InitializeComponent:473 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:524 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:683 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:684 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:235 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:303 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:304 |
 | this | Load | Form_Load | .ctor:96 |
+| this | Load | Form_Load | .ctor:137 |
+| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:190 |
+| clbSite | SelectedIndexChanged | clbSite_SelectedIndexChanged | InitControls:191 |
+| clbPlant | SelectedIndexChanged | ClbPlant_SelectedIndexChanged | InitControls:192 |
 | this | Load | Form_Load | .ctor:104 |
 | cboTransport | SelectedIndexChanged | cboTransport_changed | InitEvent:217 |
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | InitEvent:219 |
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | dpPlanDate_ValueChanged:434 |
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | dpPlanDate_ValueChanged:457 |
+| this | Load | Form_Load | .ctor:66 |
 | this.btnSloc | Click | btnSloc_Click | InitializeComponent:366 |
 | this.btnCellItem | Click | btnCellItem_Click | InitializeComponent:421 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:709 |
@@ -371,30 +371,30 @@
 ## 6. 컨트롤 (199개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 41 | lblSite, lblNickName, layoutControlItem3, layoutControlItem5, layoutControlItem4, layoutControlItem1, layoutControlItem6, layoutControlItem7, layoutControlItem2, lblSql, lblData, lblInstance, lblPlanDate, lblPlanID, lblDivision … |
+| LayoutControlItem | 41 | lblSql, lblData, lblInstance, lblPlanDate, lblPlanID, lblDivision, lblSite, lblPlant, lblItem, lblPlanPeriod, layoutControlItem2, lblPjtGroup, layoutControlItem13, lblSite, lblNickName … |
 | UsrLabel | 27 | lblConId, usrLabel14, lblConDate, usrLabel12, lblConfirmPlanId, usrLabel10, lblFixDate, lblDescription, usrLabel17, usrLabel8, lblInsertTime, usrLabel6, lblInsertId, usrLabel4, lblRequestId … |
-| UsrButton | 22 | usrButton1, usrButton2, btnFind, btnSave, btnClose, btnToggleSave, btnSql, usrButton2, btnConfirm, btnCalculation, btnVersion, btnConfirmHis, btnMenu, btnBucket, btnCategory … |
+| UsrButton | 22 | btnToggleSave, btnSql, usrButton2, btnConfirm, btnCalculation, btnVersion, btnConfirmHis, btnMenu, btnBucket, btnCategory, btnColumn, usrButton1, usrButton2, btnFind, btnSave … |
 | CheckBox | 16 | chk_month, chk_week, chk_day, chk_delivery, chk_req, chk_prev_req, chk_cma, chk_form, chk_total_2, chk_ship_result, chk_shortage, chk_result, chk_eohAvail, chk_eoh, chk_eohHold … |
-| UsrLayoutControl | 10 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1 |
-| LayoutControlGroup | 10 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1 |
-| UsrTextBox | 9 | txtCellCode, txtNickName, txtNickName, txtCellCode, txtNickName, txtItem, txtItem, txtQty, txtSloc |
-| Panel | 8 | panel1, infoPanel, menuPanel, panel2, panel4, panel1, panel1, panel3 |
-| FpSpread | 8 | spdMain, spdMain, spdMain, spdEdit, spdInfo, spdMain, spdMain, spdMain |
-| SheetView | 8 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
-| EmptySpaceItem | 7 | emptySpaceItem2, emptySpaceItem4, emptySpaceItem5, emptySpaceItem2, emptySpaceItem1, emptySpaceItem3, emptySpaceItem1 |
+| UsrLayoutControl | 10 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1 |
+| LayoutControlGroup | 10 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1 |
+| UsrTextBox | 9 | txtNickName, txtCellCode, txtCellCode, txtNickName, txtNickName, txtItem, txtItem, txtQty, txtSloc |
+| FpSpread | 8 | spdMain, spdEdit, spdInfo, spdMain, spdMain, spdMain, spdMain, spdMain |
+| SheetView | 8 | spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
+| Panel | 8 | infoPanel, menuPanel, panel2, panel4, panel1, panel1, panel1, panel3 |
+| EmptySpaceItem | 7 | emptySpaceItem4, emptySpaceItem5, emptySpaceItem2, emptySpaceItem1, emptySpaceItem3, emptySpaceItem2, emptySpaceItem1 |
 | UsrConditionPanel | 6 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
-| UsrCheckedList2 | 5 | clbDivision, clbPlant, clbDivision, clbPlant, cboSite |
-| ImageList | 5 | imageList1, imageList2, imageList3, imageList1, imageList1 |
+| UsrCheckedList2 | 5 | clbDivision, clbPlant, cboSite, clbDivision, clbPlant |
+| ImageList | 5 | imageList1, imageList1, imageList2, imageList3, imageList1 |
 | UsrCombo | 3 | cboInstance, cboPlanId, cboTransport |
 | Label | 3 | label1, label1, label2 |
-| UsrDatePicker2 | 2 | drpFixDate, dpPlanDate |
 | UsrCheckBox | 2 | chk_lineAssign, chk_Info |
-| UsrCheckedList | 1 | clbSite |
+| UsrDatePicker2 | 2 | drpFixDate, dpPlanDate |
 | UsrDateRangePickerWtWeek | 1 | drpPeriod |
 | UsrDatePickerWtWeek | 1 | drpPlanDate |
 | SplitContainer | 1 | splitter |
 | TextBox | 1 | tbLog |
 | DataGridView | 1 | dgEdit |
+| UsrCheckedList | 1 | clbSite |
 | UsrButtonList | 1 | btnButtonList |
 
 ## 7. 확인 필요 (7건)
@@ -434,8 +434,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: MAIN, Confirm History, Amend, CMA, ItemPopup, StoragePopup
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:303, SetSheetHeaderColumn_FP@InitSpread:352, SetSheetHeaderColumn_FP@RefreshHeaderOnly:542, SetSheetHeaderColumn_FP@SetSpreadInit:163, SetSheetHeaderColumn_FP@SetSpreadInit:161, SetSheetHeaderColumn_FP@SetSpreadInit:158
+- 코드에서 생성하는 시트: Amend, CMA, ItemPopup, MAIN, Confirm History, StoragePopup
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@InitSpread:352, SetSheetHeaderColumn_FP@RefreshHeaderOnly:542, SetSheetHeaderColumn_FP@SetSpreadInit:163, SetSheetHeaderColumn_FP@SetSpreadInit:161, SetSheetHeaderColumn_FP@SetSpreadInit:303, SetSheetHeaderColumn_FP@SetSpreadInit:158
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

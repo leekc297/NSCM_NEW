@@ -1,0 +1,46 @@
+{
+  "id": "20261126164550_SELF",
+  "at": "2026-11-26T16:45:50+09:00",
+  "ms": 1795679150069,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|edits|quick.json|fixkind sn as defect",
+  "title": "변경 기록 분류에서 'S13 사용자 지시 규칙 반영' 절을 결함과 분리해 셈",
+  "evidence": "orch-history.js:86, 94 승인 문구 = 결함 · orch-history.js:314-315 결함 7일 5건 이상 → repeatFiles · orch-ladder.js:56-58 L3 edits 묶음 생성 · CHANGELOG.md:189-190(R74 라벨), 433-434(R120 제목), 210-211(R210 기능 추가), 492-493(R112 메뉴 이름) 절은 원인 줄 없이 승인 문구만 있음 · 진단 사다리 묶음 L3|edits|quick.json",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/test/t_orch_history.js"
+  ],
+  "before_after": "전: fixKindOf 가 본문에 '개선안 …_SELF 승인' 만 있어도 defect. 후: 본문에 'S13|' 근거 키가 있고 제목에 결함, 오판, 사고, 오류가 없으며 '- 원인' 줄이 없으면 request 로 셈(S11| 을 style 로 세는 방식과 같은 틀). INC 승인과 '- 원인' 줄이 있는 절은 종전처럼 defect.",
+  "verify": "t_orch_history.js 에 CHANGELOG.md:188-193(R74) 절 원문을 넣는 재현 시험 추가: fixKindOf 결과 반영 전 'defect'(orch-history.js:94 기준, 실행값 미측정) → 반영 뒤 'request' · CHANGELOG.md:298-304(체인 args 누락, '- 원인' 줄 있음) 절은 반영 전후 'defect' 유지 · 시험 수 반영 전 미측정 → 반영 뒤 2개 늘어남 · 반영 뒤 orch-history 재집계에서 quick.json 7일 결함 건수가 S13 근거 절 수만큼 줄어듦(반영 전 25, 감소 폭 미측정)",
+  "rollback": "orch-history.js, t_orch_history.js 를 .bak_<태그> 로 되돌리고 orch-history 재집계",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "L3 묶음 판정 근거인 결함 건수가 S13 절 15개(CHANGELOG.md S13|…|quick.json)로 부풀려짐. 이 규칙은 다른 파일 묶음 판정에도 같이 쓰임(orch-ladder.js:56)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:07+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:56:18+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · 20261126164321_SELF 와 같은 변경으로 반영(S13 절 request, 원인 줄 있으면 defect 유지). run_all 93/93 PASS 1577 FAIL 0(16:56:04), 설치 폴더 복사"
+    }
+  ],
+  "plain": {
+    "what": "사용자가 지시한 메뉴 이름 변경이나 기능 추가를 '결함 수정'으로 세지 않게 해서, 되풀이 결함 경보가 실제 결함만 보고 울리게 함",
+    "risk": "S13 근거로 고친 실제 동작 결함(예 R218 지시문 구조 불일치)이 요청으로 빠져 경보가 늦게 울림. '- 원인' 줄이 있으면 결함으로 남겨 막음",
+    "undo": "orch-history.js 를 백업으로 되돌리고 재집계"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795679778921
+}

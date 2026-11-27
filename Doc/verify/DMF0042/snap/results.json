@@ -1,0 +1,98 @@
+[
+ {
+  "key": "조회조건_Div_40",
+  "kind": "조회조건",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\DMF0042\\snap\\received\\조회조건_Div_40.aria.yml",
+  "diff": "",
+  "lines": 48,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\DMF0042\\snap\\received\\조회조건_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 조회영역 aria(49줄 · formItem 공통 조상) · 시각 순서 13칸",
+  "at": "2026-11-26T09:31:33.252Z"
+ },
+ {
+  "key": "버튼_Div_40",
+  "kind": "버튼",
+  "scope": "Div 40",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\DMF0042\\snap\\received\\버튼_Div_40.aria.yml",
+  "diff": "",
+  "lines": 17,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\DMF0042\\snap\\received\\버튼_Div_40.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 버튼 바 aria(18줄) · 보이는 버튼 KOR,이 이민용,Home,Business Plan,Scroll tabs left,Scroll tabs right,Close others,Close All,Full screen,Open,Search(F5),Set Price,Exchange Rate,Ver. Cutoff,Replace,Column Setting,Insert(F8),Delete(F9),Save(F7),Sort(F3),Filter(F4),Condition(F6),Reset Condition(F10),Excel",
+  "at": "2026-11-26T09:31:33.372Z"
+ },
+ {
+  "key": "헤더_Biz_Plan",
+  "kind": "헤더",
+  "scope": "Biz Plan",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\DMF0042\\snap\\received\\헤더_Biz_Plan.txt",
+  "diff": "",
+  "lines": 3,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\DMF0042\\snap\\received\\헤더_Biz_Plan.txt 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 헤더 3행 · 칸 21",
+  "at": "2026-11-26T09:31:51.907Z"
+ },
+ {
+  "key": "팝업_PJT",
+  "kind": "팝업",
+  "scope": "PJT",
+  "status": "ERROR",
+  "golden": "",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "팝업 열기/aria 실패 TimeoutError: locator.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator('[data-e2e-cond=\"snap1\"]').f",
+  "at": ""
+ },
+ {
+  "key": "팝업_Model_Nickname",
+  "kind": "팝업",
+  "scope": "Model/Nickname",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\DMF0042\\snap\\received\\팝업_Model_Nickname.aria.yml",
+  "diff": "",
+  "lines": 42,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\DMF0042\\snap\\received\\팝업_Model_Nickname.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 팝업 aria(43줄)",
+  "at": "2026-11-26T09:32:20.271Z"
+ },
+ {
+  "key": "팝업_Owner",
+  "kind": "팝업",
+  "scope": "Owner",
+  "status": "NEW",
+  "golden": "",
+  "received": "Doc\\verify\\DMF0042\\snap\\received\\팝업_Owner.aria.yml",
+  "diff": "",
+  "lines": 65,
+  "detail": "골든 없음 — 수신본 Doc\\verify\\DMF0042\\snap\\received\\팝업_Owner.aria.yml 를 snap_validate.py 로 AS-IS 기대와 대조한 뒤 snap_approve.py 로 승인 · 팝업 aria(66줄)",
+  "at": "2026-11-26T09:32:21.916Z"
+ },
+ {
+  "key": "화면샷_1920",
+  "kind": "화면샷",
+  "scope": "1920",
+  "status": "NEW",
+  "golden": "Doc\\verify\\DMF0042\\snap\\golden\\화면샷_1920.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요)",
+  "at": ""
+ },
+ {
+  "key": "화면샷_1366",
+  "kind": "화면샷",
+  "scope": "1366",
+  "status": "NEW",
+  "golden": "Doc\\verify\\DMF0042\\snap\\golden\\화면샷_1366.png",
+  "received": "",
+  "diff": "",
+  "lines": 0,
+  "detail": "골든 없음 — 첫 캡처가 골든 후보로 저장됨(승인 전에는 판정필요)",
+  "at": ""
+ }
+]

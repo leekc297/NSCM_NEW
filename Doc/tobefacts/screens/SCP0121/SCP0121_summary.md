@@ -1,7 +1,7 @@
 # SCP0121 — To-Be Fact Pack 요약
 
 - page_key: `supply/plan-group-master` · feature: supply · As-is Fact Pack 있음
-- 파일 18 · 엔드포인트 호출 12 (미해결 2, 주석 속 1) · 이벤트 24 · 컴포넌트 사용 51 · 하드코딩 컬럼 0 · 메시지 23
+- 파일 18 · 엔드포인트 호출 12 (미해결 2, 주석 속 1) · 이벤트 32 · 컴포넌트 사용 51 · 하드코딩 컬럼 0 · 메시지 23
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -14,7 +14,7 @@
 | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.module.scss | component | 52 |
 | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | component | 280 |
 | features/supply/src/pages/plan-group-master/components/modals/planGroupInfoModalStore.ts | store | 41 |
-| features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | component | 280 |
+| features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | component | 305 |
 | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | component | 139 |
 | features/supply/src/pages/plan-group-master/hooks/usePlanGroupMasterValidation.ts | hook | 129 |
 | features/supply/src/pages/plan-group-master/index.ts | index | 2 |
@@ -61,13 +61,21 @@
 | Button | onClick | handleSave | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 257 |
 | Button | onClick | modalClose | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 264 |
 | OwnerSelectModal | onConfirm | handleOwnerConfirm | jsx | features/supply/src/pages/plan-group-master/components/modals/PlanGroupInfoModal.tsx | 275 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 153 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,setDivisionKey | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 168 |
-| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 194 |
-| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 213 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 170 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,setDivisionKey | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 185 |
+| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 211 |
+| CustomDropdown | onOpen | handleConditionOpen('operation') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 212 |
+| CustomDropdown | onClose | handleConditionClose('operation') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 213 |
 | CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 232 |
-| CustomDropdown | onChange | <arrow> changeCondition | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 251 |
-| CustomDropdown | onChange | <arrow> changeAndClearGrid | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 270 |
+| CustomDropdown | onOpen | handleConditionOpen('plant') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 233 |
+| CustomDropdown | onClose | handleConditionClose('plant') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 234 |
+| CustomDropdown | onChange | <arrow> changeLineParent | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 253 |
+| CustomDropdown | onOpen | handleConditionOpen('building') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 254 |
+| CustomDropdown | onClose | handleConditionClose('building') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 255 |
+| CustomDropdown | onChange | <arrow> changeCondition | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 274 |
+| CustomDropdown | onChange | <arrow> changeCondition | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 293 |
+| CustomDropdown | onOpen | handleConditionOpen('planGroup') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 294 |
+| CustomDropdown | onClose | handleConditionClose('planGroup') | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 295 |
 | grid | pastingCell | <arrow> sender.getColumn,dataMap.getDisplayValues,names.map,String,dataMap.getKeyValue,resolvePlanGroupCode | addHandler | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 85 |
 | DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 122 |
 | ModelByDivisionPopup | onClose | <arrow> setOpenItemModal | jsx | features/supply/src/pages/plan-group-master/components/PlanGroupMasterGrid.tsx | 132 |
@@ -128,11 +136,12 @@
 | LBL00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0121(6), COM0004(2), SCM0002(1), SCP0002(1), DMF0020(1)
+- 화면ID: SCP0121(6), COM0004(2), SCM0002(2), SCP0002(1), DMF0020(1)
 - SP/PKG: PKG_SCP0121(2), P_SCP0121_GET_OWNER_DATA_POPUP(1), P_SCP0121_GET_PLAN_GROUP_POPUP(1), P_SCP0121_SAVE_PLAN_GR_POPUP(1), PKG_COM0000(1), P_SCP0121_GET_SEARCH_INFO(1), SCP0121_SAVE_PLAN_GROUP_LINE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
+| code | 1회 발화한다(cs:1455 `origin_chk == cbo.Text → return`, 1489-1498). 체크 즉시 비우거나 같은 값으로 | features/supply/src/pages/plan-group-master/components/PlanGroupMasterForm.tsx | 128 |
 | endpoint | 컬럼 메타 admin fetch (SCM_MST_SHEET_COLUMNS, sheet 'Plan Group Master' 11행). division 무관(고정 11컬럼). | features/supply/src/pages/plan-group-master/usePlanGroupMasterStore.ts | 149 |
 
 ## 10. __asis-mapping__.md 상태

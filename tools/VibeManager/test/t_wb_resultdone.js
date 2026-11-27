@@ -33,5 +33,34 @@ chk('② 답이 없던 AI 대화 = 재개 대기로 남김', exists('C_none_ai')
 chk('실행 중 목록 비움', wbm._liveChains.size === 0, String(wbm._liveChains.size));
 const rs = wbm.resumable(p, { screen: 'DMF0082' }).map(r => r.runId).sort().join(',');
 chk('화면 DMF0082 재개 목록 = 남긴 2건', rs === 'B_wait_ai,C_none_ai', rs);
-try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
-console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+
+// 개선안 20261126192236_SELF(R256): VMO 단추 공용 응답 orchAck = 접수, 대기 순번과 사유, 실패를 에이전트 탭 줄로
+(async () => {
+  const ack = wbm._orchAck; const tick = () => new Promise(r => setTimeout(r, 20));
+  const mkAg = st => { const notes = []; return { notes, say: (k, o) => notes.push(o.text), status: () => Object.assign({}, st) }; };
+  const posts = []; const wb = { post: m => posts.push(m) };
+  { const ag = mkAg({ busy: false, current: '', queued: 0 }); await ack(wb, '사건 X 에이전트 조치', () => ({ ok: true }), { queue: true, ag }); await tick();
+    chk('한가함: 접수 줄만, 대기 줄 없음', ag.notes.length === 1 && /^접수: 사건 X/.test(ag.notes[0]), JSON.stringify(ag.notes));
+    chk('접수 때 agentStatus 보냄', posts.some(m => m.type === 'agentStatus')); }
+  { const st = { busy: true, current: 'INC_A', queued: 1 }; const ag = mkAg(st); await ack(wb, '사건 Y 에이전트 조치', () => { st.queued = 2; return { ok: true }; }, { queue: true, ag }); await tick();
+    chk('바쁨: 대기열 2번째, 대기 사유 = 현재 조치 INC_A', ag.notes.some(t => /^대기: 사건 Y .*대기열 2번째, 대기 사유 = 현재 조치 INC_A/.test(t)), JSON.stringify(ag.notes)); }
+  { const ag = mkAg({ busy: true, current: 'INC_A', queued: 1 }); await ack(wb, '사건 Z 에이전트 조치', () => ({ ok: false, why: '이미 대기열에 있거나 조치 중: Z' }), { queue: true, ag }); await tick();
+    chk('enqueue 거절 = 실패 줄에 사유, 대기 줄 없음', ag.notes.some(t => t === '실패: 사건 Z 에이전트 조치 · 이미 대기열에 있거나 조치 중: Z') && !ag.notes.some(t => /^대기/.test(t)), JSON.stringify(ag.notes)); }
+  { const ag = mkAg({ busy: false }); let caught = false; await ack(wb, '컨설팅', () => Promise.reject(new Error('boom')), { ag }).catch(() => { caught = true; }); await tick();
+    chk('Promise 예외 = 실패 줄 + 부른 쪽에도 그대로 전달', caught && ag.notes.includes('실패: 컨설팅 · boom'), JSON.stringify(ag.notes)); }
+  { const ag = mkAg({ busy: false }); let caught = false; await ack(wb, '진단 사다리', () => { throw new Error('sync'); }, { ag }).catch(() => { caught = true; }); await tick();
+    chk('동기 예외 = 실패 줄', caught && ag.notes.includes('실패: 진단 사다리 · sync'), JSON.stringify(ag.notes)); }
+  { const ag = mkAg({ busy: true, current: 'INC_B' }); await ack(wb, '자가진단 진단', () => Promise.resolve({ busy: true }), { ag }); await tick();
+    chk('busy 결과 = 진행 안 함 줄', ag.notes.some(t => /^대기: 자가진단 진단 · 대기 사유 = 현재 조치 INC_B/.test(t)) && ag.notes.some(t => /이번에는 진행하지 않음/.test(t)), JSON.stringify(ag.notes)); }
+  { const ag = mkAg({ busy: true, current: 'INC_B' }); await ack(wb, '컨설팅', { skipped: '이미 검토 중' }, { ag, noWait: true }); await tick();
+    chk('skipped = 건너뜀 줄, noWait 이면 대기 줄 없음', ag.notes.includes('건너뜀: 컨설팅 · 이미 검토 중') && !ag.notes.some(t => /^대기/.test(t)), JSON.stringify(ag.notes)); }
+  { const ag = mkAg({ busy: false }); await ack(wb, '자가진단 진단', () => Promise.resolve({ skipped: true, why: '어긋난 항목 0건' }), { ag }); await tick();
+    chk('skipped true = why 를 사유로', ag.notes.includes('건너뜀: 자가진단 진단 · 어긋난 항목 0건'), JSON.stringify(ag.notes)); }
+  const src = fs.readFileSync(path.join(dir, 'workbench.js'), 'utf8');
+  for (const c of ['orch:incAgent', 'orch:ladder', 'orch:vision', 'orch:consult', 'orch:selfRun', 'orch:selfDiag', 'orch:histCollect', 'orch:histSummarize']) {
+    const i = src.indexOf(`case '${c}':`); const j = src.indexOf('break;', i); const body = i >= 0 ? src.slice(i, src.indexOf("        case '", i + 10) > 0 ? src.indexOf("        case '", i + 10) : j) : '';
+    chk(`${c} 분기가 orchAck 를 씀`, body.includes('orchAck('));
+  }
+  try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+  console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
+})().catch(e => { console.log('ERROR', e && e.stack || e); process.exit(1); });

@@ -1,0 +1,43 @@
+{
+  "id": "20261126214604_REVIEW_2",
+  "at": "2026-11-26T21:46:04+09:00",
+  "ms": 1795697164919,
+  "source": "review",
+  "status": "applied",
+  "sig": "selfcheck midrun fp stale",
+  "title": "자가진단 무거운 점검 도중 VM 파일이 바뀌면 그 회차의 구문, 시험, 정의 정합 실패는 사건으로 올리지 않고 조용해진 뒤 다시 잼",
+  "evidence": "selfcheck/history.jsonl 1332행 2026-11-26 17:14:51 '개선안 반영 게이트' S1 ok:0, S2 fail:11. 같은 회차 사건 20261126_171453_R12_ALL_5.json detail 'LOAD_FAIL workbench.js Missing catch or finally after try'. S1 구문 통과 뒤 S2 실행 중 workbench.js 가 바뀜. 1333행 17:19:42 S1 fail:1. 1344행 18:40:42 S2 fail:10(사건 184042, 184043 6건). 1008행 2026-11-25 07:34:56 '정기' S2 fail:2(사건 073456, 073457 31건, 그중 _2 'LOAD_FAIL extension.js Cannot find module'). 위 사건 모두 detail 'PASS 0 · FAIL 0' 또는 LOAD_FAIL이고 actions '다시 점검한 결과 S2 항목에서 사라짐'으로 5~46분 안에 닫힘. orch-selfcheck.js:457 은 시작 때 fingerprint 를 1번 재고 :479 syncIncidents 전에 다시 재지 않음. 집계 incidents.byRule R12 294",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_orch_selfcheck_stale.js"
+  ],
+  "before_after": "변경 전: 점검이 끝나면 결과를 바로 사건으로 올림(S2 1회 226~365초 동안 파일이 바뀌어도 그대로). 변경 후: :479 앞에서 fingerprint() 를 다시 재서 시작 값과 다르면 res.stale=true. 그 회차 S1, S2, S3, S4 실패 항목은 사건으로 올리지 않고 history.jsonl 에 stale 을 남김. fpChecked 를 비워 selfSettleSec 뒤 무거운 점검을 다시 돌림. 개선안 반영 게이트는 stale 이면 게이트 결과를 '재측정 필요'로 돌려 반영 실패로 세지 않음",
+  "verify": "새 시험 t_orch_selfcheck_stale.js: run 중간에 대상 파일 mtime 을 바꾸면 R12 사건 0건, res.stale true. 반영 전 시험 없음 → 반영 뒤 2건(지문 변경 회차 사건 없음, 지문 같은 회차 사건 종전대로) PASS",
+  "rollback": "VMO 백업으로 orch-selfcheck.js 를 되돌리고 새 시험 파일을 지움",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "소스 1곳 결함(run 시작 때 지문만 보고 끝에서 다시 보지 않음). 7일 안 3회차에서 사건 49건이 같은 원인으로 생겼고 모두 다음 점검에서 닫힘",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T22:01:27+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T22:08:53+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-selfcheck.js run 점검 뒤 지문 재측정 → res.stale, S1~S4 사건 보류, 자동 동기화 안 함, history stale, fpChecked 비움. gate stale 회차 최대 2번 재실행, 결과 stale. t_orch_selfcheck_stale.js 6건 PASS. run_all 115/115 PASS 1943(22:08). 설치 폴더 복사"
+    }
+  ],
+  "plain": {
+    "what": "VM 파일을 고치는 도중 돈 자가 점검의 오류를 사건으로 올리지 않고, 수정이 끝난 뒤 다시 잼",
+    "risk": "잘못되면 실제로 깨진 파일의 오류가 다음 점검까지 2분 넘게 늦게 올라옴",
+    "undo": "바꾼 파일을 백업본으로 되돌림"
+  },
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795698533708
+}

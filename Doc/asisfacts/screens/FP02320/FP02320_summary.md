@@ -129,9 +129,9 @@
 ## 7. 확인 필요 (5건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 1085 | FP02320_ValidateDataDelegate | FP\{?default:part_service}\FP02320_PANCAKE_MASTER#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 820 | Save_Data | FP\{?default:part_service}\FP02320_PANCAKE_MASTER#find_insertValid | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1093 | FP02320_ValidateDataDelegate | FP\{?default:part_service}\FP02320_PANCAKE_MASTER#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1085 | FP02320_ValidateDataDelegate | FP\{?default:part_service}\FP02320_PANCAKE_MASTER#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1089 | FP02320_ValidateDataDelegate | FP\{?default:part_service}\FP02320_PANCAKE_MASTER#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1071 | FP02320_SaveDataDelegate | FP\{?default:part_service}\FP02320_PANCAKE_MASTER#merge_FP02320 | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 

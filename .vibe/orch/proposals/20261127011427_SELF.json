@@ -1,0 +1,131 @@
+{
+  "id": "20261127011427_SELF",
+  "at": "2026-11-27T01:14:27+09:00",
+  "ms": 1795709667609,
+  "source": "self",
+  "status": "applied",
+  "sig": "설계 결정 해당없음이 코드 메타 문자열 부분 일치로 무관 행까지 덮음",
+  "title": "설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음",
+  "evidence": "입력 S16|K3. tools/Harness/verify/judge.py:2995 대조 범위 = target + condition[:600] + expected[:200], :3005 'any(t.upper() in hay …)' 부분 일치. DMF0042 원장 GAP-264(DD-120 토큰 Sales Site;SCM_SITE_ID;Model;ITEM_ID;Team;End Customer;Insert) 해당없음 127행 중 97행은 조건 칸 'FARPOINT.WIN.SPREAD.MODEL.SHEETDATAMODELEVENTTYPE' 의 MODEL 에 걸림(966행 V-dea3ce34 siMain.SetValue, 대상 EDI_QTY·COUNTRY·CITY·MKT_FCST 등). DD-118 'Edit' 10행은 'EDITBUTTON:651', 'EDIT_FLAG' 에 걸림(501행 V-45660f7b INCOTERMS). DMF0005 DD-027 'Division' 27행은 '\"DIVISIONID\"' 에 걸림(3023행 AD-d80cffd7). DD-032 'Active' 는 'ACTIVESHEET' 에 걸림(1411행 V-f9279037). 덮인 행의 원 실측은 '해석 불가'·'수동 검수' 라 미검증이 해당없음으로 숨음.",
+  "targets": [
+    "tools/Harness/verify/judge.py"
+  ],
+  "before_after": "변경 전 judge.py:3005 모든 토큰을 대상+조건+기대 칸에 부분 일치. 변경 후 토큰 종류별로 대조함. ① 대상 칸 = 종전 부분 일치. ② 화면 라벨 토큰(^[A-Z][a-z], 예 Model, Team, Edit, Insert, Active, Division) = 대상 칸 + 기대 칸 단어 경계만, 조건 칸은 보지 않음. ③ 식별자 토큰(SCM_SITE_ID, purchase_81 등) = 세 칸에서 단어 경계 (?<![A-Z0-9_])T(?![A-Z0-9_]). ④ 한글 문구 토큰(DD-216 '계정 언어 CN 로 화면 표시') = 종전 부분 일치. 전 원장 읽기 시험(11-27 01:1x): 설계 결정 해당없음 296행 → 유지 160행, 해제 136행. 해제는 DMF0042 144→36, DMF0005 103→74 이고 다른 24화면은 변화 없음(DD-216 2행씩 유지). 해제 행은 종전 원판정(미검증·판정필요·FAIL)으로 돌아감.",
+  "verify": "python tools/Harness/verify/engine_selfcheck.py PASS. judge.py 에는 --selftest 없음. 조건 'FARPOINT.WIN.SPREAD.MODEL.' + 토큰 Model → 불일치, 대상 'ITEM_ID40 / Model' → 일치, 대상 'btnCutOff' + 토큰 Cutoff → 일치, 조건 안 '계정 언어 CN 로 화면 표시' → 일치, 이 4건을 짧은 시험으로 확인. 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042, DMF0005 재지 못한 해당없음(설계 결정) 행 수 감소 확인, Doc/verify/<ID>/design_decisions_applied.csv 적용 행 수 비교. 판정 결함 유형은 Doc/verify/_checker_defects.md 규칙대로 기록.",
+  "rollback": "judge.py 2995~3006 대조 블록을 수정 전 .bak 로 되돌림.",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-27T01:28:43+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-27T01:33:26+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과 · 백업 태그 20261127_self0128"
+    },
+    {
+      "at": "2026-11-27T01:33:33+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-27T01:42:19+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과 · 설치 폴더 복사 0개 · CHANGELOG 절 추가"
+    },
+    {
+      "at": "2026-11-27T01:42:19+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v4 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042, DMF0005 재지 못한 해당없음(설계 결정) 행 수 감소 확인, Doc/verify/<ID>/design_decision (다음 실행이 있어야 확인)"
+    },
+    {
+      "at": "2026-11-27T01:42:19+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 4건, 반영 뒤 확인 1건. engine_selfcheck: 반영 전 PASS → 반영 뒤 PASS(2026-11-27 01:36:57). 토큰 대조 시험: 종전 9건 전부 일치 → 반영 뒤 기대대로 불일치 5건, 일치 4건(01:35:38). py_compile OK. · 변경 3개 파일 · 대상 목록 밖 변경 2개: Doc/verify/_checker_defects.md, Doc/verify/_engine_selfcheck.json",
+      "log": ".vibe\\logs\\2026-11-27T01-33-33_claude_orch.log",
+      "sec": 241,
+      "costUsd": 0.9056398999999999,
+      "files": [
+        "Doc/verify/_checker_defects.md",
+        "Doc/verify/_engine_selfcheck.json",
+        "tools/Harness/verify/judge.py"
+      ]
+    }
+  ],
+  "self": true,
+  "check": "S16",
+  "selfKey": "S16|K3",
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795710522621,
+  "autoFp": "fb4a6dba42",
+  "applyStartMs": 1795710813347,
+  "postChecks": [
+    {
+      "n": 4,
+      "text": "다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042, DMF0005 재지 못한 해당없음(설계 결정) 행 수 감소 확인, Doc/verify/<ID>/design_decisions_applied.csv 적용 행 수 비교.",
+      "why": "다음 실행이 있어야 확인",
+      "status": "open",
+      "at": "2026-11-27T01:37:41+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-27T01:37:41+09:00",
+    "verified": true,
+    "text": "실행 통과 4건, 반영 뒤 확인 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과"
+  },
+  "selfTag": "20261127_self0128",
+  "needsReload": false,
+  "hotLoaded": [],
+  "reloadFiles": [],
+  "appliedMs": 1795711339938,
+  "synced": [],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "python tools/Harness/verify/engine_selfcheck.py 반영 전 '[selfcheck] PASS' (76.1초), 반영 뒤 01:36 '[selfcheck] PASS' (76.0초) · PY_COMPILE 0, SELFTEST_PY 0(신규 0), PY 76개 실행"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "Grep 'selftest' tools/Harness/verify/judge.py → 0건. --selftest 없음 확인, 대신 python -m py_compile judge.py → compile_ok"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "python -c 로 judge._dd_token_hit 시험 9건 OK(01:35). 조건 'FARPOINT.WIN.SPREAD.MODEL.SHEETDATAMODELEVENTTYPE'+Model old True → new False · 'ITEM_ID40 / Model' True → True · 'btnCutOff'+Cutoff True → True · 조건 '계정 언어 CN 로 화면 표시' True → True · 추가 EDITBUTTON/EDIT_FLAG+Edit, \"DIVISIONID\"+Division, ACTIVESHEET+Active True → False, SCM_SITE_ID 일치 유지, SCM_SITE_ID2 불일치"
+      },
+      {
+        "n": 5,
+        "result": "pass",
+        "note": "Doc/verify/_checker_defects.md 끝 표에 T687 행 추가(유형 T7 설계 결정과 결함 혼동 + T6 매칭 한계, 고친 곳, 검증, v4 미측정 표기)"
+      }
+    ],
+    "changed_files": [
+      "tools/Harness/verify/judge.py",
+      "Doc/verify/_checker_defects.md"
+    ],
+    "verify_result": "engine_selfcheck: 반영 전 PASS → 반영 뒤 PASS(2026-11-27 01:36:57). 토큰 대조 시험: 종전 9건 전부 일치 → 반영 뒤 기대대로 불일치 5건, 일치 4건(01:35:38). py_compile OK.",
+    "note": "judge.py 에 _dd_token_hit() 를 main() 앞에 추가하고 설계 결정 블록의 hay 부분 일치를 이 함수 호출로 바꿈. 대상 칸 = 부분 일치 · 라벨 토큰(^[A-Z][a-z]) = 기대 칸 단어 경계만 · 식별자 = 조건·기대 칸 단어 경계 · 비ASCII 문구 = 부분 일치. v4(다음 CheckList 뒤 DMF0042, DMF0005 해당없음 행 감소 확인)는 반영 뒤 확인 항목이라 실행 안 함. _checker_defects.md 는 v5 기록 때문에 수정함. 걸린 시간 약 5분, 오래 걸린 단계 = engine_selfcheck 2회(각 76초)."
+  },
+  "snap": "prop_20261127011427_SELF"
+}

@@ -1,7 +1,7 @@
 # SSP0201 — To-Be Fact Pack 요약
 
 - page_key: `shipping/shipment-change-request` · feature: shipping · As-is Fact Pack 있음
-- 파일 33 · 엔드포인트 호출 22 (미해결 4, 주석 속 2) · 이벤트 39 · 컴포넌트 사용 71 · 하드코딩 컬럼 0 · 메시지 44
+- 파일 33 · 엔드포인트 호출 22 (미해결 4, 주석 속 2) · 이벤트 38 · 컴포넌트 사용 71 · 하드코딩 컬럼 0 · 메시지 44
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -10,18 +10,18 @@
 | features/shipping/src/pages/shipment-change-request/components/RequestActionBar.module.scss | component | 6 |
 | features/shipping/src/pages/shipment-change-request/components/RequestActionBar.tsx | component | 45 |
 | features/shipping/src/pages/shipment-change-request/components/RequestInfoPanel.tsx | component | 300 |
-| features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | component | 233 |
-| features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | component | 495 |
+| features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | component | 237 |
+| features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | component | 496 |
 | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestSubGrid.tsx | component | 136 |
 | features/shipping/src/pages/shipment-change-request/hooks/useShipmentChangeRequestBusyTask.ts | hook | 38 |
 | features/shipping/src/pages/shipment-change-request/hooks/useShipmentChangeRequestCellCombos.ts | hook | 136 |
 | features/shipping/src/pages/shipment-change-request/hooks/useShipmentChangeRequestValidation.test.ts | test | 49 |
 | features/shipping/src/pages/shipment-change-request/hooks/useShipmentChangeRequestValidation.ts | hook | 255 |
 | features/shipping/src/pages/shipment-change-request/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-change-request/shipment-change-request.constants.ts | constants | 395 |
+| features/shipping/src/pages/shipment-change-request/shipment-change-request.constants.ts | constants | 398 |
 | features/shipping/src/pages/shipment-change-request/shipment-change-request.types.ts | types | 41 |
 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.module.scss | style | 67 |
-| features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | page | 1003 |
+| features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | page | 1004 |
 | features/shipping/src/pages/shipment-change-request/useShipmentChangeRequestStore.ts | store | 379 |
 | features/shipping/src/pages/shipment-change-request/utils/shipmentChangeRequestCancel.ts | util | 134 |
 | features/shipping/src/pages/shipment-change-request/utils/shipmentChangeRequestColumns.ts | util | 86 |
@@ -44,13 +44,13 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | RequestInfoPanel.tsx:41 ShipmentChangeRequestForm.tsx:54 |
-| (useTabLookupQueries) | hook | 2 | Y | ShipmentChangeRequestForm.tsx:57 useShipmentChangeRequestValidation.ts:90 |
+| (useTabComboQueries) | hook | 2 | Y | RequestInfoPanel.tsx:41 ShipmentChangeRequestForm.tsx:55 |
+| (useTabLookupQueries) | hook | 2 | Y | ShipmentChangeRequestForm.tsx:58 useShipmentChangeRequestValidation.ts:90 |
 | (useTabComboQueryResults) | hook | 1 | Y | useShipmentChangeRequestCellCombos.ts:68 |
 | {?{comboId:COMBO.CELL_END_CUSTOMER,divisionId:div,scmSiteId,itemId,param5:'P',}} | http | 1 | N | useShipmentChangeRequestCellCombos.ts:92 |
 | {?{comboId:'SSPBlockCheckIF_SCP',segment1:MENU_ID}} | http | 1 | N | useShipmentChangeRequestValidation.ts:136 |
-| SSP0201/main//call-proc | hook | 1 | Y | ShipmentChangeRequest.tsx:233 |
-| SSP0201/sub//call-proc | hook | 1 | Y | ShipmentChangeRequest.tsx:240 |
+| SSP0201/main//call-proc | hook | 1 | Y | ShipmentChangeRequest.tsx:234 |
+| SSP0201/sub//call-proc | hook | 1 | Y | ShipmentChangeRequest.tsx:241 |
 | /SSP0201/main/GET_SCP_DAY_PERIOD/call-proc | http | 1 | Y | useShipmentChangeRequestStore.ts:204 |
 | {?{comboId:COMBO.REQUESTOR_DEPT}} | http | 1 | N | useShipmentChangeRequestStore.ts:295 |
 | {?{comboId:COMBO.DEPT_NAME,deptId,param1:String(useSessionStore.getState().session} | http | 1 | N | useShipmentChangeRequestStore.ts:302 |
@@ -76,39 +76,38 @@
 | InputField | onChange | <arrow> onChange | jsx | features/shipping/src/pages/shipment-change-request/components/RequestInfoPanel.tsx | 224 |
 | CustomDropdown | onChange | <arrow> onChange,String | jsx | features/shipping/src/pages/shipment-change-request/components/RequestInfoPanel.tsx | 243 |
 | InputField | onChange | <arrow> onChange | jsx | features/shipping/src/pages/shipment-change-request/components/RequestInfoPanel.tsx | 284 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 70 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 101 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 128 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 156 |
-| PeriodField | onChange | <arrow> setPeriod | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 169 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 196 |
-| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 192 |
-| InputField | onKeyDown | <arrow> e.preventDefault | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 220 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 223 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 71 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 102 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 129 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 157 |
+| PeriodField | onChange | <arrow> setPeriod | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 170 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 203 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 193 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestForm.tsx | 227 |
 | g | updatedLayout | attach | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 160 |
 | g | beginningEdit | editGate | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 220 |
 | g | pastingCell | editGate | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 221 |
-| g | cellEditEnded | applyCellChange | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 369 |
-| g | pastedCell | applyCellChange | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 370 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 392 |
-| g | selectionChanged | refreshEndCustomerOnFocus | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 407 |
-| DataGrid | gotFocus | onGridFocus | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 491 |
+| g | cellEditEnded | applyCellChange | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 370 |
+| g | pastedCell | applyCellChange | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 371 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 393 |
+| g | selectionChanged | refreshEndCustomerOnFocus | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 408 |
+| DataGrid | gotFocus | onGridFocus | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 492 |
 | grid | loadedRows | <arrow> autoFitColumns | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestSubGrid.tsx | 87 |
 | grid | formatItem | <arrow>  | addHandler | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestSubGrid.tsx | 90 |
 | DataGrid | initialized | handleInitialized | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestSubGrid.tsx | 131 |
 | DataGrid | gotFocus | onGridFocus | jsx | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestSubGrid.tsx | 132 |
-| ShipmentChangeRequestForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 828 |
-| ShipmentChangeRequestForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 829 |
-| ShipmentChangeRequestMainGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 886 |
-| ShipmentChangeRequestMainGrid | onEndCustomerSourceChanged | applyEndCustomer | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 887 |
-| ShipmentChangeRequestMainGrid | onEndCustomerCellFocus | focusEndCustomer | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 888 |
-| ShipmentChangeRequestMainGrid | onBlockedEdit | onBlockedEdit | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 889 |
-| ShipmentChangeRequestMainGrid | onGridFocus | <arrow> setFocusedSheet | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 890 |
-| RequestInfoPanel | onChange | setRequestInfo | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 911 |
-| RequestInfoPanel | onApprovalSearch | <arrow> setOpenApproval | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 912 |
-| RequestActionBar | onRequestComplete | handleChangeRequest | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 920 |
-| RequestActionBar | onCancel | handleCancel | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 921 |
-| ShipmentChangeRequestSubGrid | onGridFocus | <arrow> setFocusedSheet | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 941 |
+| ShipmentChangeRequestForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 829 |
+| ShipmentChangeRequestForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 830 |
+| ShipmentChangeRequestMainGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 887 |
+| ShipmentChangeRequestMainGrid | onEndCustomerSourceChanged | applyEndCustomer | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 888 |
+| ShipmentChangeRequestMainGrid | onEndCustomerCellFocus | focusEndCustomer | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 889 |
+| ShipmentChangeRequestMainGrid | onBlockedEdit | onBlockedEdit | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 890 |
+| ShipmentChangeRequestMainGrid | onGridFocus | <arrow> setFocusedSheet | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 891 |
+| RequestInfoPanel | onChange | setRequestInfo | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 912 |
+| RequestInfoPanel | onApprovalSearch | <arrow> setOpenApproval | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 913 |
+| RequestActionBar | onRequestComplete | handleChangeRequest | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 921 |
+| RequestActionBar | onCancel | handleCancel | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 922 |
+| ShipmentChangeRequestSubGrid | onGridFocus | <arrow> setFocusedSheet | jsx | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 942 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -144,7 +143,7 @@
 | code | count |
 |---|---|
 | MSG00097 | 1 |
-| MSG00133 | 1 |
+| MSG00004 | 1 |
 | MSG00001 | 1 |
 | MSG00672 | 1 |
 | MSG00003 | 1 |
@@ -156,7 +155,7 @@
 | MSG01206 | 1 |
 | MSG01353 | 1 |
 | MSG01081 | 1 |
-| MSG00287 | 1 |
+| MSG01291 | 1 |
 | MSG01126 | 1 |
 | MSG01296 | 1 |
 | MSG00614 | 1 |
@@ -164,7 +163,7 @@
 | MSG01269 | 1 |
 | MSG00328 | 1 |
 | MSG01188 | 1 |
-| MSG01317 | 1 |
+| MSG01500 | 1 |
 | MSG01347 | 1 |
 | LBL00001 | 1 |
 | LBL00022 | 1 |
@@ -187,17 +186,17 @@
 | LBL01104 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0200(86), SSP0201(31), SSP0003(3), SSP0026(2), SSP0202(2), COM0013(1), SSP0015(1), SSP0014(1), DMF0008(1)
-- SP/PKG: PKG_SSP0201(11), SCM0001_GET_SCP_DAY_PERIOD(7), P_FROM_SITE(3), FN_MULTY_TIME(3), P_CONFIRM_ID(3), P_SSP0201_GET_SHIPMENT_STATUS(2), P_SSP0201_GET_SHIPMENT_CHANGE_REQUEST(2), P_TO_SITE(2), PKG_COM0000(2), P_SCM0001_GET_SCP_DAY_PERIOD(2), P_ACTIVE_FLAG(2), SSP0201_GET_CHANGE_REQ_NO(2), P_DEBUG_MODE(2), FN_GET_SCM_SITE_DESCRIPTION(1), P_USER_DEPT_ID(1), P_REQUEST_DEPT_ID(1), FN_GET_IN_STR(1), P_TIMEZONE(1), SSP0201_GET_SHIPMENT_CHANGE_REQUEST(1), P_SSP0201_DELETE_SHIPMENT_REQUEST_DRAFTING(1), P_CHANGE_REQUEST_NO(1), P_SPL_ARR(1), SSP0201_SAVE_SHIPMENT_REQUEST_COMPLETE(1), P_SSP0201_COMPLETE(1), P_AUTH(1), P_SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING(1), SSP0201_SAVE_SHIPMENT_CONFIRM_NEW(1), P_SSP0201_GET_CHANGE_REQ_NO(1), P_SSP0201_SAVE_SHIPMENT_CONFIRM_NEW(1), P_SSP0201_SAVE(1), P_SSP0201_GET_SHIPMENT_CHANGE_REQUEST_N(1), P_DIVISION_ID(1), P_ERP_SO_NO(1), P_ITEM_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1), P_STATUS(1), P_CHANGE_TYPE(1), P_LANGUAGE(1), P_USER_ID(1)
+- 화면ID: SSP0200(95), SSP0201(31), COM0013(3), SSP0003(3), SSP0026(2), SSP0202(2), SSP0015(1), SSP0014(1), DMF0008(1)
+- SP/PKG: PKG_SSP0201(11), SCM0001_GET_SCP_DAY_PERIOD(7), P_FROM_SITE(3), FN_MULTY_TIME(3), P_CONFIRM_ID(3), P_SSP0201_GET_SHIPMENT_STATUS(2), P_SSP0201_GET_SHIPMENT_CHANGE_REQUEST(2), P_TO_SITE(2), PKG_COM0000(2), P_SCM0001_GET_SCP_DAY_PERIOD(2), P_ACTIVE_FLAG(2), SSP0201_GET_CHANGE_REQ_NO(2), P_DEBUG_MODE(2), FN_GET_SCM_SITE_DESCRIPTION(1), P_USER_DEPT_ID(1), P_REQUEST_DEPT_ID(1), PKG_SCM0002(1), P_SCM0002_GET_MATERIAL_BY_DIVISION(1), SSP0026_GET_ITEM_BY_DIVISION_POPUP(1), FN_GET_IN_STR(1), P_TIMEZONE(1), SSP0201_GET_SHIPMENT_CHANGE_REQUEST(1), P_SSP0201_DELETE_SHIPMENT_REQUEST_DRAFTING(1), P_CHANGE_REQUEST_NO(1), P_SPL_ARR(1), SSP0201_SAVE_SHIPMENT_REQUEST_COMPLETE(1), P_SSP0201_COMPLETE(1), P_AUTH(1), P_SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING(1), SSP0201_SAVE_SHIPMENT_CONFIRM_NEW(1), P_SSP0201_GET_CHANGE_REQ_NO(1), P_SSP0201_SAVE_SHIPMENT_CONFIRM_NEW(1), P_SSP0201_SAVE(1), P_SSP0201_GET_SHIPMENT_CHANGE_REQUEST_N(1), P_DIVISION_ID(1), P_ERP_SO_NO(1), P_ITEM_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1), P_STATUS(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | jsx | 우측 1/3 은 빈 칸(`<Grid size={4} />`)으로 비워 2열을 유지한다 — 비우지 않으면 | features/shipping/src/pages/shipment-change-request/components/RequestInfoPanel.tsx | 65 |
-| code | NEW_LT_DAY 공백이면 파생 없음 → AS-IS 처럼 그 자리에서 끝낸다(마킹·전파 없음, cs:5528 return). | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 296 |
-| code | Save / Request Complete / Cancel 공통 실행 래퍼 — **연타 가드 + 전역 스피너**를 한자리에 모은다. `savingRef` : 재진입 차단(같은 핸들러 연타 + 서로 다른 핸들러 교차 호출). 조회·Insert·New· Delete 도 이 플래그를 읽어 "저장 중"에는 비켜선다. `runBusy` : react-query mutation 으로 감싸 `useIsBusy([tabId])` 가 전역 스 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 198 |
-| code | 재조회는 **await 가능**해야 한다 — 저장 가드(savingRef)가 재조회 완료까지 잡혀 있어야 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 274 |
-| code | DeleteButton — **저장 전 신규행(CRUD_TYPE='I')만** 그리드에서 걷어낸다(사용자 지시 2026-10-07). AS-IS `DeleteButton()`(cs:688~691)은 본문이 빈 NO-OP 라 종전 TO-BE 도 `() => undefined` 였는데, 넣은 신규행을 되돌릴 방법이 없어 자매 SSP0200 과 동일한 실동작을 부여했다. 수정행·기존행은 제거도 `CRUD_TYPE='D'` 마킹도 하 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 381 |
-| code | 저장 실행 — 수정행·신규행을 **한 흐름**으로 처리한다(utils/shipmentChangeRequestSaveChain.ts). 번호 1회 채번 -> 수정행 DRAFTING -> 신규행(SAVE_NEW/SEARCH_NEW/DRAFTING). 실패하면 그 자리에서 멈춘다. 종전엔 두 체인이 따로 있고 `handleSave` 가 "신규가 있으면 신규만 하고 return" 했다 — 같이 수정한 기존행이 저장되지 않았고, 번호도 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 470 |
+| code | NEW_LT_DAY 공백이면 파생 없음 → AS-IS 처럼 그 자리에서 끝낸다(마킹·전파 없음, cs:5528 return). | features/shipping/src/pages/shipment-change-request/components/ShipmentChangeRequestMainGrid.tsx | 297 |
+| code | Save / Request Complete / Cancel 공통 실행 래퍼 — **연타 가드 + 전역 스피너**를 한자리에 모은다. `savingRef` : 재진입 차단(같은 핸들러 연타 + 서로 다른 핸들러 교차 호출). 조회·Insert·New· Delete 도 이 플래그를 읽어 "저장 중"에는 비켜선다. `runBusy` : react-query mutation 으로 감싸 `useIsBusy([tabId])` 가 전역 스 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 199 |
+| code | 재조회는 **await 가능**해야 한다 — 저장 가드(savingRef)가 재조회 완료까지 잡혀 있어야 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 275 |
+| code | DeleteButton — **저장 전 신규행(CRUD_TYPE='I')만** 그리드에서 걷어낸다(사용자 지시 2026-10-07). AS-IS `DeleteButton()`(cs:688~691)은 본문이 빈 NO-OP 라 종전 TO-BE 도 `() => undefined` 였는데, 넣은 신규행을 되돌릴 방법이 없어 자매 SSP0200 과 동일한 실동작을 부여했다. 수정행·기존행은 제거도 `CRUD_TYPE='D'` 마킹도 하 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 382 |
+| code | 저장 실행 — 수정행·신규행을 **한 흐름**으로 처리한다(utils/shipmentChangeRequestSaveChain.ts). 번호 1회 채번 -> 수정행 DRAFTING -> 신규행(SAVE_NEW/SEARCH_NEW/DRAFTING). 실패하면 그 자리에서 멈춘다. 종전엔 두 체인이 따로 있고 `handleSave` 가 "신규가 있으면 신규만 하고 return" 했다 — 같이 수정한 기존행이 저장되지 않았고, 번호도 | features/shipping/src/pages/shipment-change-request/ShipmentChangeRequest.tsx | 471 |
 | endpoint | ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(메인/서브 2회). | features/shipping/src/pages/shipment-change-request/useShipmentChangeRequestStore.ts | 43 |
 | code | await 사이에 restore 가 periodRestored 를 세웠을 수 있다 — 쓰기 직전 재확인(느린 SP 대비). | features/shipping/src/pages/shipment-change-request/useShipmentChangeRequestStore.ts | 217 |
 | endpoint | 메인/서브 2 시트 컬럼메타 각각 fetch (design 03 §4.1). 미등록/실패 시 빈 배열 유지. | features/shipping/src/pages/shipment-change-request/useShipmentChangeRequestStore.ts | 321 |

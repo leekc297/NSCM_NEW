@@ -1,21 +1,22 @@
 {
  "ok": true,
- "mode": "dry-run",
- "stamp": "20261126_011250",
+ "mode": "apply",
+ "stamp": "20261126_180312",
  "areas_sel": "fe",
  "be_login": [],
- "tip": "753467f768cdd34cdb0873c9e1e0a5e383e69b9c",
- "tip_info": "753467f76 2026-11-25 17:34 eunjoo_hwang docs(SSP0046): convert-flow 산출 — react-gap 감사·등록 SQL",
- "base": "2e27252dba3f3f64e74dff86c485f39285b7439d",
+ "tip": "b9a122af90960a1066a6ee653d444118ddb53148",
+ "tip_info": "b9a122af9 2026-11-26 17:35 BeomJu fix: dm고도화 메뉴id변경 관련 수정사항",
+ "base": "6f99270c01ed7c3b2f42b1379d9922ea42f75342",
  "ancestor": true,
- "commits": 27,
- "changed": 0,
+ "commits": 11,
+ "changed": 1,
  "counts": {
-  "동일": 18
+  "동일": 17,
+  "공통 변경분 — 공통 원문 적용(로컬 보호 안 함)": 1
  },
  "actions": {
-  "none": 18,
-  "write": 0,
+  "none": 17,
+  "write": 1,
   "merge": 0,
   "delete": 0,
   "keep": 0
@@ -23,10 +24,11 @@
  "pending": 0,
  "areas": {
   "fe": {
-   "base": "2e27252dba3f3f64e74dff86c485f39285b7439d",
-   "changed": 0,
+   "base": "6f99270c01ed7c3b2f42b1379d9922ea42f75342",
+   "changed": 1,
    "actions": {
-    "none": 18
+    "none": 17,
+    "write": 1
    },
    "pending": 0,
    "local_only": 0,
@@ -35,5 +37,13 @@
  },
  "overwrite_local": true,
  "local_only": 0,
- "report": "C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261126_011250.md"
+ "report": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126_180312\\README.md",
+ "backup": "C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126_180312",
+ "verify": [
+  "공통 원문 적용 1건 — 개행 정규화 후 공통 원문과 불일치 0건",
+  "적용 파일 충돌 마커 잔존 0건",
+  "삭제 0건 — 잔존 0",
+  "procedures.d.ts `declare global` 1건(기대 1)"
+ ],
+ "paths": "features/shipping/src/pages/distribution-route"
 }

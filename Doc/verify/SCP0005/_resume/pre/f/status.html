@@ -1,0 +1,45 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>SCP0005 건수 현황</title><style>
+:root{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+@media (prefers-color-scheme:dark){:root{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}}
+:root[data-theme=light]{--fg:#1f2328;--mut:#6e7781;--line:#e1e4e8;--bg:#fff;--soft:#f6f8fa;
+--pass:#1a7f37;--fail:#cf222e;--rev:#b08800;--unv:#bc4c00;--na:#afb8c1}
+:root[data-theme=dark]{--fg:#e6edf3;--mut:#8d96a0;--line:#30363d;--bg:#0d1117;--soft:#161b22;
+--pass:#3fb950;--fail:#f85149;--rev:#d29922;--unv:#db6d28;--na:#484f58}
+*{box-sizing:border-box}
+body{margin:0;padding:14px 16px;background:var(--bg);color:var(--fg);font:13px/1.5 'Malgun Gothic',system-ui,sans-serif;max-width:760px}
+.hd{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}.hd b{font-size:15px}.hd span{color:var(--mut);font-size:12px}
+.kpi{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.kpi div{flex:1;padding:6px 10px;border-left:1px solid var(--line)}.kpi div:first-child{border-left:0}
+.kpi i{display:block;font-style:normal;color:var(--mut);font-size:11px}.kpi em{font-style:normal;font-size:18px;font-weight:600}
+.kpi .FAIL em{color:var(--fail)}.kpi .판정필요 em{color:var(--rev)}.kpi .미검증 em{color:var(--unv)}.kpi .PASS em{color:var(--pass)}
+table{border-collapse:collapse;width:100%;margin-top:12px}
+th,td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th{color:var(--mut);font-weight:400;font-size:12px}th:first-child,td:first-child{text-align:left}
+td.bar{width:34%;padding-left:12px}
+.bar div{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--soft)}
+.bar span{height:100%}
+.c-PASS{background:var(--pass)}.c-FAIL{background:var(--fail)}.c-판정필요{background:var(--rev)}.c-미검증{background:var(--unv)}.c-해당없음{background:var(--na)}
+td.FAIL{color:var(--fail);font-weight:600}td.판정필요{color:var(--rev)}td.미검증{color:var(--unv)}
+tr.sum td{font-weight:600;border-bottom:0}
+h3{font-size:13px;margin:16px 0 4px}
+ul{margin:0;padding-left:18px}li{margin:1px 0}li code{color:var(--mut);font-size:12px}
+.line{margin-top:12px;color:var(--fg)}.line b{font-weight:600}.warn{color:var(--unv)}
+.src{margin-top:14px;color:var(--mut);font-size:11px}
+</style></head><body>
+<div class="hd"><b>SCP0005 DistributionRoute</b><span>CheckList v13 · 생성 2026-11-26 08:14</span></div>
+<div class="kpi"><div><i>전체</i><em>2,138</em></div><div class="PASS"><i>PASS</i><em>1,214</em></div><div class="FAIL"><i>FAIL</i><em>47</em></div><div class="판정필요"><i>판정필요</i><em>25</em></div><div class="미검증"><i>미검증</i><em>3</em></div><div class="해당없음"><i>해당없음</i><em>849</em></div></div>
+<table><tr><th>축</th><th>전체</th><th>PASS</th><th>FAIL</th><th>판정필요</th><th>미검증</th><th>해당없음</th><th></th></tr>
+<tr><td>1.디자인·다국어</td><td>325</td><td class="">207</td><td class="FAIL">21</td><td class="판정필요">1</td><td class="">0</td><td class="">96</td><td class="bar"><div><span class="c-PASS" style="width:63.7%" title="PASS 207"></span><span class="c-FAIL" style="width:6.5%" title="FAIL 21"></span><span class="c-판정필요" style="width:0.3%" title="판정필요 1"></span><span class="c-해당없음" style="width:29.5%" title="해당없음 96"></span></div></td></tr>
+<tr><td>2.AS-IS 로직</td><td>262</td><td class="">151</td><td class="FAIL">1</td><td class="">0</td><td class="">0</td><td class="">110</td><td class="bar"><div><span class="c-PASS" style="width:57.6%" title="PASS 151"></span><span class="c-FAIL" style="width:0.4%" title="FAIL 1"></span><span class="c-해당없음" style="width:42.0%" title="해당없음 110"></span></div></td></tr>
+<tr><td>3.SMOKE</td><td>550</td><td class="">247</td><td class="FAIL">17</td><td class="판정필요">3</td><td class="미검증">2</td><td class="">281</td><td class="bar"><div><span class="c-PASS" style="width:44.9%" title="PASS 247"></span><span class="c-FAIL" style="width:3.1%" title="FAIL 17"></span><span class="c-판정필요" style="width:0.5%" title="판정필요 3"></span><span class="c-미검증" style="width:0.4%" title="미검증 2"></span><span class="c-해당없음" style="width:51.1%" title="해당없음 281"></span></div></td></tr>
+<tr><td>4.CRUD</td><td>596</td><td class="">308</td><td class="FAIL">5</td><td class="판정필요">18</td><td class="미검증">1</td><td class="">264</td><td class="bar"><div><span class="c-PASS" style="width:51.7%" title="PASS 308"></span><span class="c-FAIL" style="width:0.8%" title="FAIL 5"></span><span class="c-판정필요" style="width:3.0%" title="판정필요 18"></span><span class="c-미검증" style="width:0.2%" title="미검증 1"></span><span class="c-해당없음" style="width:44.3%" title="해당없음 264"></span></div></td></tr>
+<tr><td>5.권한별 CRUD</td><td>27</td><td class="">5</td><td class="">0</td><td class="">0</td><td class="">0</td><td class="">22</td><td class="bar"><div><span class="c-PASS" style="width:18.5%" title="PASS 5"></span><span class="c-해당없음" style="width:81.5%" title="해당없음 22"></span></div></td></tr>
+<tr><td>분류 없음</td><td>378</td><td class="">296</td><td class="FAIL">3</td><td class="판정필요">3</td><td class="">0</td><td class="">76</td><td class="bar"><div><span class="c-PASS" style="width:78.3%" title="PASS 296"></span><span class="c-FAIL" style="width:0.8%" title="FAIL 3"></span><span class="c-판정필요" style="width:0.8%" title="판정필요 3"></span><span class="c-해당없음" style="width:20.1%" title="해당없음 76"></span></div></td></tr>
+<tr class="sum"><td>합계</td><td>2,138</td><td>1,214</td><td>47</td><td>25</td><td>3</td><td>849</td><td></td></tr></table>
+<div class="line">FE 대조표 <b>7</b>행 (구현 4, 미구현 <b class="">0</b>), AS-IS 액션 대조표 <b>266</b>행 (상태 빈칸 <b class="warn">242</b>)</div>
+<h3>조치 필요 13건</h3><ul><li>SCP·SSP 컬럼·조회조건 라벨 Valid→Active <code>H5 V-660a833e</code></li><li>SCP0005 센티널 표시 <code>N1 V-2ca073e5</code></li><li>FROM_CITY <code>H2 V-0810a59e</code></li><li>SCP0005 컬럼별 저장 왕복 <code>F1 V-4e4af2a4</code></li><li>SCP0005_DistributionRoutePopup <code>M3 T-6d14c72c</code></li><li>SCP0005 팝업 SCP0005_DistributionRoutePopup CELL:ROUTE_ID OPEN <code>M3 EG-a1c25099</code></li><li>popCity.ShowDialog() <code>H6 V-7cdbda05</code></li><li>SCP0005 팝업 SCM0002_CitybyCountry BTN:btnToSrch BTN_ORDER <code>H6 EG-09469e15</code></li><li>popCity.Form_Load(true, sCountry, sCity) <code>H6 V-616b4d31</code></li><li>SCP0005 Excel 필수 칸 빈 업로드 <code>E3 V-087d756b</code></li><li>MSG00265 <code>E4 T-2c4e7c8a</code></li><li>siMain.SetBGColor <code>H2 V-b4651880</code></li><li>MSG00043 <code>E4 T-ece1c98b</code></li></ul>
+<div class="src">출처: SCP0005_DistributionRoute_CheckList_v13.xlsx 11-26 02:41, __asis-mapping__.md 10-01 09:14, __asis-actions__.md 10-23 11:29, checklist_counts.json 11-26 02:41, work_ledger_summary.json 11-26 02:39</div>
+</body></html>

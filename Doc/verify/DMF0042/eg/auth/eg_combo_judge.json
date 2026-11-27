@@ -1,0 +1,592 @@
+[
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/40/DM Admin · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/40/DM Admin · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 16개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/40/DM Admin · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2020개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/40/DM Admin · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1327개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/40/DM Admin · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/40/DM Admin · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/40/DM Admin · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/40/DM Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/40/DM Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 16개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/40/DM Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2020개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/40/DM Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1327개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/40/DM Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/40/DM Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/40/DM Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/40/DM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/40/DM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 16개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/40/DM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2020개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/40/DM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1327개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/40/DM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/40/DM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/40/DM Viewer · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 120개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2020개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1761개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/40/SCP Planner · Div 40",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 113개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 244개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 495개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Plant Site",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 41개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/81/DM Admin · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 157개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 601개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1262개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Plant Site",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 68개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/81/DM Planner · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/81/DM Planner (W/S) · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/81/DM Planner (W/S) · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 167개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/81/DM Planner (W/S) · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2020개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/81/DM Planner (W/S) · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 2555개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/81/DM Planner (W/S) · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/81/DM Planner (W/S) · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/81/DM Planner (W/S) · Div ",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Div",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 6개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Team",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 157개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "End Customer",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 601개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Sales Site",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 1262개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Plant Site",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 68개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Biz. Type",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 76개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Bucket",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 3개"
+},
+{
+"eg": "EG367",
+"screen": "DMF0042",
+"target": "Item Type",
+"ctx": "DM/81/DM Viewer · Div 81",
+"asis": "DM_BIGFILTER(@GROUP_ID·@USER_ID) 실행",
+"result": "판정필요",
+"expected": "AS-IS 원천 실행 경로",
+"actual": "BigFilter 대응 칸 아님 · TO-BE 후보 4개"
+}
+]

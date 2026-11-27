@@ -1,0 +1,274 @@
+{
+ "rule_id": "G4",
+ "hash": "6f39b9dbce4780fa",
+ "groups": [
+  {
+   "rows": [
+    "EG-06652e2b"
+   ],
+   "why": "같은 팝업(DM0002_ItembyDivisionPopupEx)을 여는 EG-92eb4b1c와 기대 라벨은 같지만, 여기서는 조회조건 Model/Nickname에서 열고 그쪽은 셀 ITEM_ID40에서 열어 넘어가는 값이 다를 수 있으므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-92eb4b1c"
+   ],
+   "why": "셀 ITEM_ID40에서 연 팝업의 조건 목록이라 조회조건에서 연 EG-06652e2b와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-7727bfa6"
+   ],
+   "why": "Owner 팝업(DM0020)의 조건 라벨이다. 같은 팝업을 다루는 다른 행이 없고 TRACE btnOwner는 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-aac7e7ea"
+   ],
+   "why": "btnColumn이 여는 TitleSetForm 팝업의 조건 목록이다. 버튼 자체를 추적하는 TRACE T-43432b71과 대상과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-176e2674"
+   ],
+   "why": "Year·Version 초기값을 확인하는 행이다. 대상이 같은 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-0bf53460"
+   ],
+   "why": "lblProject 활성 여부를 Div 81 조건에서 본다. Div 값마다 상태가 다르므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-2e3e6a87"
+   ],
+   "why": "lblProject 활성 여부를 Div 81_UC 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-677a520d"
+   ],
+   "why": "lblProject 활성 여부를 Div 81_ST 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-6ab04fb9"
+   ],
+   "why": "lblProject 활성 여부를 Div 81_HM 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-759294a9"
+   ],
+   "why": "lblProject 활성 여부를 Div 81_HG 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-8a37bf3a"
+   ],
+   "why": "lblProject 활성 여부를 Div 40 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-a7bf4344"
+   ],
+   "why": "lblProject 활성 여부를 Div 81_HD 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-e1156761"
+   ],
+   "why": "lblProject 활성 여부를 Div 82 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-0d0a9e7c"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 82 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-2307e4a4"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 81_HM 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-3c12284e"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 81_UC 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-6999bb74"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 40 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-6cff526e"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 81 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-9b30db9b"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 81_HG 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-a7dc69c5"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 81_HD 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-fccb6697"
+   ],
+   "why": "lblPlantSite 활성 여부를 Div 81_ST 조건에서 보며, 다른 Div와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "ES-ff7ead86"
+   ],
+   "why": "조건을 펼친 뒤 모든 라벨이 화면에 보이는지 E2E로 확인하는 행이다. 요소 하나씩 대조표 위치를 추적하는 TRACE와 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-92148204"
+   ],
+   "why": "돋보기 버튼이 입력칸 안쪽에 있는지 보는 배치 확인으로, 같은 기대를 가진 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-09dd660e"
+   ],
+   "why": "clbDivision이 대조표 51행에 실제로 구현되어 있는지 추적하는 행이며, 다른 요소와 묶을 근거가 없다."
+  },
+  {
+   "rows": [
+    "T-12f3fcac"
+   ],
+   "why": "btnMeasure의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-1f95d9a6"
+   ],
+   "why": "cboClosed의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-2d47229c"
+   ],
+   "why": "cboBucketType의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-36a3f202"
+   ],
+   "why": "drpPeriod의 구현 위치를 추적하는 행이다. usrMonthFrom/To와 라벨 Period가 겹치지만 다른 컨트롤이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-43432b71"
+   ],
+   "why": "btnColumn 버튼 자체의 구현을 추적하는 행이라 팝업 조건 목록을 보는 EG-aac7e7ea와 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-4c20e2a5"
+   ],
+   "why": "usrMonthFrom(팝업형)의 구현 위치를 추적하는 행이며, usrMonthTo와는 다른 요소다."
+  },
+  {
+   "rows": [
+    "T-81f7c918"
+   ],
+   "why": "btnProject 버튼의 구현 위치를 추적하는 행으로, txtProject와 lblProject와는 다른 요소다."
+  },
+  {
+   "rows": [
+    "T-89bdfdeb"
+   ],
+   "why": "clbPlantSite의 구현 위치를 추적하는 행이라 Div별 lblPlantSite 활성 평가와 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-8de846ce"
+   ],
+   "why": "btnItemId의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-8f9e13bc"
+   ],
+   "why": "cboQty의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-9c1640b1"
+   ],
+   "why": "btnCutOff의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-9d580f4a"
+   ],
+   "why": "clbTeam의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-c03a4035"
+   ],
+   "why": "chkSum의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-c20b9a73"
+   ],
+   "why": "btnOwner 버튼의 구현을 추적하는 행이라 Owner 팝업 조건 라벨을 보는 EG-7727bfa6과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-df466434"
+   ],
+   "why": "clbSalesSite의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-e33d557a"
+   ],
+   "why": "clbBizType의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-ec086613"
+   ],
+   "why": "clbItemType의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-ec83d766"
+   ],
+   "why": "txtProject의 구현 위치를 추적하는 행이라 btnProject와 lblProject 활성 평가와는 대상과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-f055079a"
+   ],
+   "why": "clbCustomer의 구현 위치를 추적하는 행으로, 대상이 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "T-f955a57f"
+   ],
+   "why": "usrMonthTo(팝업형)의 구현 위치를 추적하는 행이며, usrMonthFrom과는 다른 요소다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:42:53",
+ "cost": 0.1468612
+}

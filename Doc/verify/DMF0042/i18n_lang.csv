@@ -1,0 +1,7 @@
+﻿lang,result,why
+KO,PASS,KO 문구 19건 일치 · 사전에 없는 문구 10건
+EN,PASS,EN 문구 19건 일치 · 사전에 없는 문구 10건
+EN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 END_CUSTOMER40 72행, CELL_PROD_SITE 200행 — 명칭 칸이면 언어 미반영"
+CN,FAIL,"CN 화면에 다른 언어 문구 2건: 'Condition'→'条件'(버튼), 'Division'→'部门'(그리드 헤더 = 메타 Biz Plan.DIVISION_ID 컬럼 라벨) · 사전에 없는 문구 10건"
+CN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 END_CUSTOMER40 72행, CELL_PROD_SITE 200행 — 명칭 칸이면 언어 미반영"
+조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)

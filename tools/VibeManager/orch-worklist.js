@@ -36,7 +36,7 @@ let getPaths = null; let opts = {};
 const P = () => getPaths();
 const file = () => path.join(P().vibeDir, 'orch', 'worklist.json');
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
-const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f + '.t', JSON.stringify(v, null, 1), 'utf8'); try { fs.renameSync(f + '.t', f); } catch { fs.copyFileSync(f + '.t', f); try { fs.unlinkSync(f + '.t'); } catch { } } return true; } catch (e) { errlog.note('orch-worklist', 'writeJson', e); return false; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); require('./fs-retry').writeFileSyncRetry(f + '.t', JSON.stringify(v, null, 1), 'utf8'); try { require('./fs-retry').renameSyncRetry(f + '.t', f); } catch { fs.copyFileSync(f + '.t', f); try { fs.unlinkSync(f + '.t'); } catch { } } return true; } catch (e) { errlog.note('orch-worklist', 'writeJson', e); return false; } }; // 2026-11-26 개선안 20261126164445_VISION: 쓰기와 바꾸기 일시 실패 재시도(fs-retry.js)
 const nowLocal = ms => (orchEv ? orchEv.nowLocal(ms) : new Date(ms || Date.now()).toISOString());
 const mod = n => { if (opts.mods && n in opts.mods) return opts.mods[n]; try { return require(`./${n}`); } catch (e) { errlog.note('orch-worklist', `require ${n}`, e); return null; } };
 function cfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); return Object.assign({}, DEF, (h && h.orch) || {}); }
@@ -194,4 +194,5 @@ function summary() {
 function ready() { return !!getPaths; }
 /** o = { paths: () => ({ root, vibeDir }), mods?: { 'orch-watch', 'orch-improve', 'orch-agent', 'orch-ledger' } } */
 function init(o) { getPaths = o.paths; opts = o || {}; }
-module.exports = { init, ready, build, tick, noteDiag, summary, ownerOfIncident, needUserContract, planItems, planTick, OWNER_KO, DEF, TAG, CONTRACT_NOTE };
+// 개선안 20261126162524_SELF: _initOpts = 반영 즉시 다시 읽은 뒤 같은 인자로 init(orch-selfcheck.js hotReload HOT_REINIT)
+module.exports = { _initOpts: () => (getPaths ? opts : null), init, ready, build, tick, noteDiag, summary, ownerOfIncident, needUserContract, planItems, planTick, OWNER_KO, DEF, TAG, CONTRACT_NOTE };

@@ -525,12 +525,12 @@
 | 5654 | Delete_Data_Excel_Buffer | FP_Planning.PR_UI_FP02842_AMEND_LINE_EXCEL_SAVE | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 6320 | Query | FP\{?default:part_service}\AmendMemo#list_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 6321 | Query | FP\{?default:part_service}\AmendMemo#list_setup_color_code | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5453 | Insert_Data_Excel_Buffer | FP\{?default:part_service}\FP02842_EXCELIMPORT#insert_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 2796 | btnRelease_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2834 | btnRelease_Click | FP\{?default:part_service}\XpCommonAmend#find_instanceInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2835 | btnRelease_Click | FP\{?default:part_service}\XpCommonAmend#find_planInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 6355 | Query | FP\{?default:part_service}\PICAlarm#find_Category | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 6356 | Query | FP\{?default:part_service}\PICAlarm#find_Category_Color | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5453 | Insert_Data_Excel_Buffer | FP\{?default:part_service}\FP02842_EXCELIMPORT#insert_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

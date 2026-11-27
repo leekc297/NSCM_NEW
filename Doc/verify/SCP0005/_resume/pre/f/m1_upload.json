@@ -1,0 +1,263 @@
+{
+ "at": "2026-11-25T16:45:07.346Z",
+ "cs": "GSCM\\01.Framework\\GSCM.Windows.Forms\\UI\\ExcelUploadForm2.cs",
+ "kinds": [
+  {
+   "status": "Error-Required",
+   "kind": "required",
+   "vars": [
+    "strLTtype",
+    "strFromCountry",
+    "strFromCity",
+    "strTransMode",
+    "strPriority",
+    "strDPortName",
+    "strDCountry",
+    "strDPortCode",
+    "strAPortName",
+    "strACountry",
+    "strAPortCode",
+    "strShippingCompany",
+    "strToCountry",
+    "strToCity",
+    "strValid"
+   ],
+   "line": 964
+  },
+  {
+   "status": "Error-Departure days",
+   "kind": "allEmpty",
+   "vars": [
+    "strMon",
+    "strTue",
+    "strWed",
+    "strThu",
+    "strFri",
+    "strSat",
+    "strSun"
+   ],
+   "line": 972
+  },
+  {
+   "status": "Error-L/T Type",
+   "kind": "lookup",
+   "vars": [
+    "strLTtype"
+   ],
+   "line": 984
+  },
+  {
+   "status": "Error-TransMode",
+   "kind": "lookup",
+   "vars": [
+    "strTransMode"
+   ],
+   "line": 992
+  },
+  {
+   "status": "Error-From Site",
+   "kind": "lookup",
+   "vars": [
+    "strFromCountry",
+    "strFromCity"
+   ],
+   "line": 1000
+  },
+  {
+   "status": "Error-To Site",
+   "kind": "lookup",
+   "vars": [
+    "strToCountry",
+    "strToCity"
+   ],
+   "line": 1008
+  },
+  {
+   "status": "Error-Unique Duplicate",
+   "kind": "dbdup",
+   "vars": [],
+   "line": 1028
+  },
+  {
+   "status": "Error-Duplicate",
+   "kind": "filedup",
+   "vars": [
+    "strRouteId",
+    "strLTtype",
+    "strFromCountry",
+    "strFromCity",
+    "strTransMode",
+    "strDPortName",
+    "strDCountry",
+    "strDPortCode",
+    "strAPortName",
+    "strACountry",
+    "strAPortCode",
+    "strShippingCompany",
+    "strToCountry",
+    "strToCity"
+   ],
+   "line": 1078
+  }
+ ],
+ "skipped": [
+  "Priority Error"
+ ],
+ "map": {
+  "agree": 34,
+  "of": 35,
+  "diff": [
+   "34:'Valid*'↔'Active'"
+  ]
+ },
+ "base": {
+  "row": 0,
+  "values": [
+   "9917",
+   "AVERAGE",
+   "WINDSOR, CANADA",
+   "CA",
+   "CAWND",
+   "TRK",
+   "1",
+   "Y",
+   "Y",
+   "Y",
+   "Y",
+   "Y",
+   "Y",
+   "Y",
+   "-",
+   "-",
+   "-",
+   "-",
+   "-",
+   "-",
+   "-",
+   "WINDSOR, CANADA",
+   "CA",
+   "CAWND",
+   "",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0",
+   "",
+   "",
+   "",
+   "Y"
+  ]
+ },
+ "notBuilt": [],
+ "step": "OK",
+ "upload": {
+  "total": 10,
+  "ok": 1,
+  "err": 9,
+  "errRows": [
+   {
+    "status": "Error-Required",
+    "row": 1
+   },
+   {
+    "status": "Error-Departure days",
+    "row": 2
+   },
+   {
+    "status": "Error-L/T Type",
+    "row": 3
+   },
+   {
+    "status": "Error-TransMode",
+    "row": 4
+   },
+   {
+    "status": "Error-From Site",
+    "row": 5
+   },
+   {
+    "status": "Error-To Site",
+    "row": 6
+   },
+   {
+    "status": "Error-Unique Duplicate",
+    "row": 7
+   },
+   {
+    "status": "Error-Duplicate",
+    "row": 8
+   },
+   {
+    "status": "Error-Duplicate",
+    "row": 9
+   }
+  ],
+  "why": ""
+ },
+ "rows": [
+  {
+   "status": "Success",
+   "kind": "control",
+   "how": "기준 행 그대로",
+   "got": "Success"
+  },
+  {
+   "status": "Error-Required",
+   "kind": "required",
+   "how": "strLTtype 비움 · strShippingCompany 꼬리 'M1'(파일 안 중복 피함 · T637)",
+   "got": "Error-Required"
+  },
+  {
+   "status": "Error-Departure days",
+   "kind": "allEmpty",
+   "how": "strMon,strTue,strWed,strThu,strFri,strSat,strSun 비움 · strShippingCompany 꼬리 'M2'(파일 안 중복 피함 · T637)",
+   "got": "Error-Departure days"
+  },
+  {
+   "status": "Error-L/T Type",
+   "kind": "lookup",
+   "how": "strLTtype = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M3'(파일 안 중복 피함 · T637)",
+   "got": "Error-L/T Type"
+  },
+  {
+   "status": "Error-TransMode",
+   "kind": "lookup",
+   "how": "strTransMode = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M4'(파일 안 중복 피함 · T637)",
+   "got": "Error-TransMode"
+  },
+  {
+   "status": "Error-From Site",
+   "kind": "lookup",
+   "how": "strFromCountry = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M5'(파일 안 중복 피함 · T637)",
+   "got": "Error-From Site"
+  },
+  {
+   "status": "Error-To Site",
+   "kind": "lookup",
+   "how": "strToCountry = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M6'(파일 안 중복 피함 · T637)",
+   "got": "Error-To Site"
+  },
+  {
+   "status": "Error-Unique Duplicate",
+   "kind": "dbdup",
+   "how": "strRouteId 비움(신규 행) · 나머지 = 기존 행과 같은 값",
+   "got": "Error-Unique Duplicate"
+  },
+  {
+   "status": "Error-Duplicate",
+   "kind": "filedup",
+   "how": "strShippingCompany = 'E2EDUP' 같은 행 2개(1/2)",
+   "got": "Error-Duplicate"
+  },
+  {
+   "status": "Error-Duplicate",
+   "kind": "filedup",
+   "how": "strShippingCompany = 'E2EDUP' 같은 행 2개(2/2)",
+   "got": "Error-Duplicate"
+  }
+ ],
+ "result": "PASS",
+ "why": "대조군 Success · Error-Required(strLTtype 비움 · strShippingCompany 꼬리 'M1'(파일 안 중복 피함 · T637)) → 'Error-Required' · Error-Departure days(strMon,strTue,strWed,strThu,strFri,strSat,strSun 비움 · strShippingCompany 꼬리 'M2'(파일 안 중복 피함 · T637)) → 'Error-Departure days' · Error-L/T Type(strLTtype = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M3'(파일 안 중복 피함 · T637)) → 'Error-L/T Type' · Error-TransMode(strTransMode = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M4'(파일 안 중복 피함 · T637)) → 'Error-TransMode' · Error-From Site(strFromCountry = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M5'(파일 안 중복 피함 · T637)) → 'Error-From Site' · Error-To Site(strToCountry = 'ZZ'(기준 정보에 없는 값) · strShippingCompany 꼬리 'M6'(파일 안 중복 피함 · T637)) → 'Error-To Site' · Error-Unique Duplicate(strRouteId 비움(신규 행) · 나머지 = 기존 행과 같은 값) → 'Error-Unique Duplicate' · Error-Duplicate(strShippingCompany = 'E2EDUP' 같은 행 2개(1/2)) → 'Error-Duplicate' · Error-Duplicate(strShippingCompany = 'E2EDUP' 같은 행 2개(2/2)) → 'Error-Duplicate' · AS-IS 주석 처리 상태(실행 안 됨 · 대상 아님) Priority Error · 기준 행 r0 · 누른 단추 OK(T633) · 적재·저장 요청 가로챔 0건(서버 미전송)"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "20261126_220721_R12_ALL",
+  "at": "2026-11-26T22:07:21+09:00",
+  "ms": 1795698441001,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_gate_fe_page.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_gate_fe_page.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 1 · FAIL 1 · FAIL 예외 ReferenceError: bad is not defined",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_gate_fe_page.js",
+    "file": "t_gate_fe_page.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T22:12:00+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

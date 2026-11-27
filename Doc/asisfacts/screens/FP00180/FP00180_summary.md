@@ -31,31 +31,21 @@
 | event:clbDivision.SelectedIndexChanged | mcbo_division_SelectedIndexChanged > SetChangeControl | 1064 | FP\COMMON\BigFilter_FP#list_material_class2 | MATCH | [sql] foxquery_sql\FP_Common_BigFilter_FP_list_material_class2.sql |
 | event:clbDivision.SelectedIndexChanged | mcbo_division_SelectedIndexChanged > SetChangeControl | 1079 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_material_class2] | BIZ_MATCH |  |
 | event:clbDivision.SelectedIndexChanged | mcbo_division_SelectedIndexChanged > SetChangeControl | 1079 | FP\COMMON\BigFilter_FP#list_material_class2 | MATCH | [sql] foxquery_sql\FP_Common_BigFilter_FP_list_material_class2.sql |
-| button:FindButton | FindButton > Find_Data | 376 | {?string.Empty} | UNRESOLVED |  |
 | button:FindButton | FindButton > Find_Data | 376 | {?pServiceCallName} | UNRESOLVED |  |
 | event:mcbo_site.SelectedIndexChanged | mcbo_site_SelectedIndexChanged > SetChangeControl | 1064 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_material_class2] | BIZ_MATCH |  |
 | event:mcbo_site.SelectedIndexChanged | mcbo_site_SelectedIndexChanged > SetChangeControl | 1064 | FP\COMMON\BigFilter_FP#list_material_class2 | MATCH | [sql] foxquery_sql\FP_Common_BigFilter_FP_list_material_class2.sql |
 | event:mcbo_site.SelectedIndexChanged | mcbo_site_SelectedIndexChanged > SetChangeControl | 1079 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_material_class2] | BIZ_MATCH |  |
 | event:mcbo_site.SelectedIndexChanged | mcbo_site_SelectedIndexChanged > SetChangeControl | 1079 | FP\COMMON\BigFilter_FP#list_material_class2 | MATCH | [sql] foxquery_sql\FP_Common_BigFilter_FP_list_material_class2.sql |
-| button:SaveButton | SaveButton > Save_Data > Find_Data | 376 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Find_Data | 376 | {?pServiceCallName} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Line | 461 | biz:FPCommonDataBLL.GeneralUpdateBatch [batchId=saveAll_FP00180] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Line | 461 | FP\MASTER\FP00180_Material#saveAll_FP00180 | MATCH | [update-batch]  |
-| button:SaveButton | SaveButton > Save_Data | 607 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data | 607 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnFind.Click | btnFind_Click > Find_Data | 376 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnFind.Click | btnFind_Click > Find_Data | 376 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer > Find_Data_Validation | 457 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer > Find_Data_Validation | 457 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 752 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 752 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 831 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 831 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data | 376 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data | 376 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data | 607 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 607 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.Load | Form_Load > Find_Data | 376 | {?string.Empty} | UNRESOLVED |  |
 | event:this.Load | Form_Load > Find_Data | 376 | {?pServiceCallName} | UNRESOLVED |  |
 | event:this.Load | Form_Load > InitControls > GetItemType | 660 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_material_class2] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls > GetItemType | 660 | FP\COMMON\BigFilter_FP#list_material_class2 | MATCH | [sql] foxquery_sql\FP_Common_BigFilter_FP_list_material_class2.sql |
@@ -80,7 +70,6 @@
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | {?pServiceCallName} | UNRESOLVED | 5 |  |  |  |
-| {?string.Empty} | UNRESOLVED | 5 |  |  |  |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=SITE] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.GeneralExecuteNonQuery [batchId=delete_Excel_buffer] | BIZ_MATCH | 1 |  |  |  |
@@ -173,21 +162,16 @@
 | UsrLabel | 1 | lblSheetName |
 | ImageList | 1 | imageList1 |
 
-## 7. 확인 필요 (14건)
+## 7. 확인 필요 (9건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 376 | Find_Data | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 376 | Find_Data | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 457 | Find_Data_Validation | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 457 | Find_Data_Validation | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 607 | Save_Data | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 607 | Save_Data | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 752 | Save_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 752 | Save_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 831 | Delete_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 831 | Delete_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 844 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00180_Material#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 836 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00180_Material#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 844 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00180_Material#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 819 | FP00180_SaveDataDelegate | FP\{?default:part_service}\FP00180_Material#FP00180_MATERIAL_EXCEL_UPDATE_BATCH | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 840 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00180_Material#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 

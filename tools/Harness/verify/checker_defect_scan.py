@@ -27,7 +27,8 @@ OUT_DEF = os.path.join(ROOT, '.vibe', 'orch', 'selfcheck', 'checker_scan.json')
 
 RX_K1 = re.compile(r'^[^.()]+\.([A-Z][A-Z0-9]?)\s*\(|\b(?:COL|CELL|COLUMN):([A-Z][A-Z0-9]?)\b')
 RX_K2 = re.compile(r'(\[[^\]]{2,30}\][^|]{20,120})')
-RX_K3 = re.compile(r'검사기 한계|측정 실패|측정하지 못|미측정|재측정 대상|해석 불가|해석 실패|수동 검수|검증 미완|읽지 못함|찾지 못함|못 잼|못 재')
+RX_K3 = re.compile(r'검사기 한계(?! 아님)|측정 실패|측정하지 못|미측정|재측정 대상|해석 불가|해석 실패|수동 검수|검증 미완|읽지 못함|찾지 못함|못 잼|못 재')
+RX_CITE = re.compile(r'^\[(?:V|T|EG|AD)-[0-9a-f]{8}\]')  # 다른 원장 행 인용 조각 머리(2026-11-27 개선안 20261127011428_SELF)
 RX_K4_BAD = re.compile(r'^\s*\[(?:미검증|측정 실패|측정 경로[^\]]*|측정 전제 미충족)\]')
 RX_K4_FAIL = re.compile(r'측정 전제 미충족|검사기 한계|측정 실패|측정 경로 없음')
 RX_K5 = re.compile(r'COL\(([A-Z][A-Z0-9_]+)\) 없음')
@@ -58,14 +59,28 @@ def classify(r, ign):
             return [], why
     res = r.get('result') or ''
     ks = []
-    if RX_K1.search(r.get('target') or ''):
-        ks.append('K1')
-    seen = collections.Counter(m.group(1).strip() for m in RX_K2.finditer(ev))
-    if any(v >= 2 for v in seen.values()):
+    # 2026-11-26 개선안 20261126190221_SELF: K1 오탐 2종 제외. ① 'A / 화면 문구' 의 문구 쪽 '.'(SSP0024 'Post Oper.LT(Day' 7행) = ' / ' 앞만 검사
+    #   ② 잡힌 이름이 asis_ref 의 TO-BE 메타 'SHEET_COLUMNS <시트>.<이름>' 에 있는 실제 칸(DMF0020 M0~M9 40행, DMF0068 M1~M9 45행, SCP0108 DV 2행)
+    m1 = RX_K1.search((r.get('target') or '').split(' / ')[0])
+    if m1:
+        nm = m1.group(1) or m1.group(2) or ''
+        ar = r.get('asis_ref') or ''; sh = ((r.get('target') or '').split(' / ')[0].split('.')[0]).strip()
+        meta = nm and (re.search(r'SHEET_COLUMNS [^|]*?\.' + re.escape(nm) + r'(?![A-Za-z0-9_])', ar)
+                       or (m1.group(1) and sh and re.search(r'SHEET_COLUMNS\([^)/]*/' + re.escape(sh) + r'\)', ar)))  # 'META SCM_MST_SHEET_COLUMNS(DMF0020/Sales Price Template)' = 그 시트 메타에서 온 칸(DMF0020 M0~M9 20행)
+        if not meta:
+            ks.append('K1')
+    # 2026-11-27 개선안 20261127011428_SELF: 다른 원장 행을 인용한 묶음 조각('[V-…]', '[T-…]', '[EG-…]', '[AD-…]' 로 시작)은 조각 안에서만 반복을 셈
+    #   (DMF0042 V-3b323e85 '[EG-480e08d7] … | [EG-6f9ef8cb] …' 처럼 서로 다른 행 인용이 같은 머리말을 가져도 누적 아님 · 전 원장 10행)
+    parts = ev.split(' | ')
+    cited = [p for p in parts if RX_CITE.match(p.strip())]
+    rest = ' | '.join(p for p in parts if not RX_CITE.match(p.strip()))
+    rep = lambda t: any(v >= 2 for v in collections.Counter(m.group(1).strip() for m in RX_K2.finditer(t)).values())
+    if rep(rest) or any(rep(p) for p in cited):
         ks.append('K2')
     if res == 'NA' and RX_K3.search(ev) and not ev.startswith('[사용자판정]'):
         ks.append('K3')
-    if (res in ('PASS', 'NA') and RX_K4_BAD.search(ev)) or (res == 'FAIL' and RX_K4_FAIL.search(ev[:200])):
+    # 2026-11-26 개선안 20261126190221_SELF: '[선행 결함 종속 V-…]' FAIL(judge.py 2026-11-19 사용자 지시 종속 FAIL, SCP0096 V-d8f314e2 2행)은 뒤에 붙은 종전 증거로 K4 에 걸지 않음
+    if (res in ('PASS', 'NA') and RX_K4_BAD.search(ev)) or (res == 'FAIL' and not ev.lstrip().startswith('[선행 결함 종속') and RX_K4_FAIL.search(ev[:200])):
         ks.append('K4')
     if res in ('ERROR', '판정필요') and RX_K5.search(ev):
         ks.append('K5')
@@ -143,6 +158,18 @@ def selftest():
     chk('K3 근거 있는 NA 아님', classify({'target': 'x', 'evidence': 'AS-IS InsertButton 없음(신규행 시나리오 없음)', 'result': 'NA'}, ign)[0] == [])
     chk('K4 NA 인데 [미검증]', 'K4' in classify({'target': 'x', 'evidence': '[미검증] 칸 해석 불가', 'result': 'NA'}, ign)[0])
     chk('K4 FAIL 인데 측정 전제 미충족', 'K4' in classify({'target': 'x', 'evidence': '[측정 전제 미충족] 조회 0행', 'result': 'FAIL'}, ign)[0])
+    # 2026-11-26 개선안 20261126190221_SELF 오탐 표본
+    chk('K1 메타에 있는 두 글자 칸(M0) = 탐지 없음', classify({'target': 'Sales Price Template.M0 (M0)', 'asis_ref': 'TO-BE SHEET_COLUMNS Sales Price Template.M0 VISIBLE=Y', 'evidence': '', 'result': 'NOT_RUN'}, ign)[0] == [])
+    chk('K1 시트 메타 근거(SHEET_COLUMNS(ID/시트)) 칸 = 탐지 없음 · 다른 시트 메타면 유지', classify({'target': 'Sales Price Template.M0 (M0)', 'asis_ref': 'META SCM_MST_SHEET_COLUMNS(DMF0020/Sales Price Template)', 'evidence': '', 'result': 'NOT_RUN'}, ign)[0] == [] and classify({'target': 'Distribution Route.O (Pick)', 'asis_ref': 'META SCM_MST_SHEET_COLUMNS(X/Other)', 'evidence': '', 'result': 'NA'}, ign)[0] == ['K1'])
+    chk('K1 화면 문구 쪽 점(Post Oper.LT) = 탐지 없음', classify({'target': 'POST_OPER_LT / Post Oper.LT(Day', 'evidence': '', 'result': 'PASS'}, ign)[0] == [])
+    chk('K1 메타에 없는 한 글자 칸(Distribution Route.O) = K1 유지', classify({'target': 'Distribution Route.O (Pick)', 'asis_ref': 'TO-BE SHEET_COLUMNS Distribution Route.OPERATION_ID VISIBLE=Y', 'evidence': '', 'result': 'NA'}, ign)[0] == ['K1'])
+    chk('K4 선행 결함 종속 FAIL = 탐지 없음', classify({'target': 'x', 'evidence': '[선행 결함 종속 V-eb856b69] 앞 결함 때문에 FAIL | [측정 경로 없음] 탭 전환 실패', 'result': 'FAIL'}, ign)[0] == [])
+    # 2026-11-27 개선안 20261127011428_SELF 오탐 표본
+    evc = '[EG-480e08d7] [측정] 조회 버튼 눌러 그리드 12행 확인 완료 | [EG-6f9ef8cb] [측정] 조회 버튼 눌러 그리드 12행 확인 완료'
+    chk('K2 서로 다른 행 인용 묶음 = 탐지 없음', 'K2' not in classify({'target': 'x', 'evidence': evc, 'result': 'PASS'}, ign)[0])
+    evc2 = '[V-4c9f9912] [미검증] 검사기(auth)가 실행하지 못함 — 엔진 확장 | [미검증] 검사기(auth)가 실행하지 못함 — 엔진 확장 | [미검증] 검사기(auth)가 실행하지 못함 — 엔진 확장'
+    chk('K2 인용 밖 조각 반복 = K2 유지', 'K2' in classify({'target': 'x', 'evidence': evc2, 'result': 'ERROR'}, ign)[0])
+    chk("K3 '검사기 한계 아님' 부정 문구 = 탐지 없음", 'K3' not in classify({'target': 'x', 'evidence': 'ENERGE_WH: 음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음(데이터 조건 · 검사기 한계 아님)', 'result': 'NA'}, ign)[0])
     chk('K5 칸 값 없음', 'K5' in classify({'target': 'x', 'evidence': '조건 평가 불가: COL(ERP_STATUS) 없음', 'result': 'ERROR'}, ign)[0])
     chk('예외 = 사용자 결정 문구', classify({'target': 'x', 'evidence': '규칙 F1 ... 직접 일치하는 요소 없음 — 규칙 전반 상속', 'result': 'NA'}, ign) == ([], '사용자 결정'))
     chk('묶음 서명 정규화', sig("ITEM_ID 12행 'abc' 없음") == sig("SITE_CODE 3행 'x' 없음"))

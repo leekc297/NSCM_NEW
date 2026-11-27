@@ -214,16 +214,16 @@
 ## 7. 확인 필요 (10건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 1730 | call_Excel_Row_Validation | FP\{?default:part_service}\MemoExcel#delete_validation_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1720 | call_Excel_Row_Validation | FP\{?default:part_service}\MemoExcel#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 216 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP00601_PlanAmend#find_WeekCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 217 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP00601_PlanAmend#find_DateMap | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 218 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP00601_PlanAmend#find_MonthCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 219 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP00601_PlanAmend#find_bukInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1730 | call_Excel_Row_Validation | FP\{?default:part_service}\MemoExcel#delete_validation_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1204 | GetCateTable | FP\{?default:part_service}\PICAlarm#find_Category | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1624 | Save_Data_Momo_Excel | FP\{?default:part_service}\PICAlarm#find_Category | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1645 | Save_Data_Momo_Excel | FP\{?default:part_service}\AmendMemo#fetch_amend_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1719 | call_Excel_Row_Validation | FP\{?default:part_service}\MemoExcel#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 1204 | GetCateTable | FP\{?default:part_service}\PICAlarm#find_Category | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 1624 | Save_Data_Momo_Excel | FP\{?default:part_service}\PICAlarm#find_Category | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

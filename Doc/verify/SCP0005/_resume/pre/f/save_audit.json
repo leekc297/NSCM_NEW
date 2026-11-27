@@ -1,0 +1,33 @@
+{
+ "menu_id": "SCP0005",
+ "generated": "2026-11-26 02:34:42",
+ "F8": {
+  "verdict": "PASS",
+  "note": "감사 컬럼 = 저장 계정·저장 시각 (CREATED_BY=minyonglee1 · CREATION_DATE=2026-11-26 01:15:56 · LAST_UPDATED_BY=minyonglee1 · LAST_UPDATE_DATE=2026-11-26 01:15:59) · SCP_MST_DISTRIBUTION_ROUTE 1행 · 저장 계정 출처 키별 계정 줄 1건 · 정리 SQL 머리글"
+ },
+ "F7": {
+  "verdict": "PASS",
+  "asis_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+  "asis_insert_tables": [
+   "SCP_MST_DISTRIBUTION_ROUTE"
+  ],
+  "asis_update_only": [],
+  "tobe_written": [
+   "SCP_MST_DISTRIBUTION_ROUTE",
+   "SCP_MST_DISTRIBUTION_ROUTE_H"
+  ],
+  "tobe_extra": [
+   "SCP_MST_DISTRIBUTION_ROUTE_H"
+  ],
+  "note": "AS-IS 신규행 경로 테이블 SCP_MST_DISTRIBUTION_ROUTE 모두 기록 · TO-BE 에만 기록(참고 — AS-IS 트리거·다른 경로 여부 확인): SCP_MST_DISTRIBUTION_ROUTE_H"
+ },
+ "run": {
+  "cleanup_sql": "Doc\\verify\\SCP0005\\cleanup\\cleanup_20261126_023441.sql",
+  "account": "minyonglee1",
+  "saved_at": "2026-11-26 01:13:52",
+  "tables": {
+   "SCP_MST_DISTRIBUTION_ROUTE": 1,
+   "SCP_MST_DISTRIBUTION_ROUTE_H": 2
+  }
+ }
+}

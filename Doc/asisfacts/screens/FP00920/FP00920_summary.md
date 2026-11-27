@@ -118,8 +118,8 @@
 ## 7. 확인 필요 (4건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 768 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00920_Shipping_Result#find_Excel_buffer_validation | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 760 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00920_Shipping_Result#delete_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
+| 768 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00920_Shipping_Result#find_Excel_buffer_validation | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 749 | FP00180_SaveDataDelegate | FP\{?default:part_service}\FP00920_Shipping_Result#FP00920_Shipping_Result_EXCEL_UPDATE_BATCH | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 764 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP00920_Shipping_Result#insert_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 

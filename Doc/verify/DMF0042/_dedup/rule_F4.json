@@ -1,0 +1,348 @@
+{
+ "rule_id": "F4",
+ "hash": "f18dfb06c2e30362",
+ "groups": [
+  {
+   "rows": [
+    "EG-150732a5",
+    "EG-f3540a8a"
+   ],
+   "why": "두 행은 같은 Biz Plan 전 컬럼 선택 조회를, 같은 임시 칸 설정 PROC 직접 실행 조건으로 확인하고 기대 결과(SQL 오류 0)도 같다."
+  },
+  {
+   "rows": [
+    "EG-26a143de",
+    "EG-76970384"
+   ],
+   "why": "두 행은 같은 PKG_DMF0042 콤보 SQL을 같은 소스·메타 정적 점검으로 확인하고 기대 결과(TB_FX_* 참조 0, ATTRIBUTE9 실존)도 같다."
+  },
+  {
+   "rows": [
+    "EG-43a1f5bc"
+   ],
+   "why": "Division 전환 중 세션 오류(401/403)를 확인하므로 기대 결과가 ORA 오류를 보는 V-df270a17과 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-00e4ca64"
+   ],
+   "why": "DMF0042_1_BizPlan.GetSpdTitle 진입점에만 해당하는 추적 행이다."
+  },
+  {
+   "rows": [
+    "T-033f3e69"
+   ],
+   "why": "DMF0020 환율 팝업 스프레드 타이틀 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-0612c3f6"
+   ],
+   "why": "DMF0042_2_BizPlan.SaveData 진입점에만 해당하며, 버튼 진입점이나 대조표 행과는 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-0823c327"
+   ],
+   "why": "대조표 3#1 Form_Load 행만 추적한다."
+  },
+  {
+   "rows": [
+    "T-0d2d9864"
+   ],
+   "why": "대조표 24 SaveButton→SaveData 행은 어느 화면 변형(1/2/3)인지 확정할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-0de73f9e"
+   ],
+   "why": "BP_FCST 저장 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-150819d4"
+   ],
+   "why": "RTF.GetSLOC 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-156beb32"
+   ],
+   "why": "DMF0003 DPINIT 조회 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-2a36cd68"
+   ],
+   "why": "2_BizPlan.GetCellProdSite 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-32410ee8"
+   ],
+   "why": "사업계획 데이터 조회 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-35fe4c02"
+   ],
+   "why": "3_BizPlan.GetSpdTitle 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-41ae873a"
+   ],
+   "why": "1_BizPlan.GetDayRange 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-441b2fbe"
+   ],
+   "why": "RTF.GetSPlant 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-448e6bfc"
+   ],
+   "why": "DMF0009_GET_CODE SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-477fc542"
+   ],
+   "why": "2_BizPlan.GetDayRange 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-4793d1ae"
+   ],
+   "why": "2_BizPlan.SaveButton 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-47a9f660"
+   ],
+   "why": "RTF.SaveData 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-53cddaa1"
+   ],
+   "why": "drpPeriod(p_month=7) 대조표 행만 추적한다."
+  },
+  {
+   "rows": [
+    "T-5846effc"
+   ],
+   "why": "Division 분기 33개 전수 대조표 행으로, 조회 오류를 보는 V-df270a17과 확인 대상 범위가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-6332685a"
+   ],
+   "why": "3_BizPlan.FindData 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-697412fa"
+   ],
+   "why": "미래가격 팝업 SP를 추적하며, 이름이 비슷한 _DATA SP와는 다른 프로시저다."
+  },
+  {
+   "rows": [
+    "T-6d0484f5"
+   ],
+   "why": "환율 단가 조회 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-6fba1fe0"
+   ],
+   "why": "2_BizPlan 셀 더블클릭 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-731d224a"
+   ],
+   "why": "3_BizPlan.GetCellProdSite 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-75338735"
+   ],
+   "why": "환율 저장 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-78c21760"
+   ],
+   "why": "RTF.SaveButton 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-8240cd98"
+   ],
+   "why": "3_BizPlan.FindButton 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-8327455f"
+   ],
+   "why": "SCM0001 LOOKUP_VALUES SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-8cffdd38"
+   ],
+   "why": "RTF.FindData 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-8d612695"
+   ],
+   "why": "2_BizPlan.FindData 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-9ac52d7e"
+   ],
+   "why": "SCM0001 BIZ_TYPE_BY_DIVISION SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-ae4b8937"
+   ],
+   "why": "2_BizPlan.GetSpdTitle 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-b33d0510"
+   ],
+   "why": "대조표 25 btnSetPrice_Click 행은 어느 화면 변형인지 확정할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-c59bbae3"
+   ],
+   "why": "BizPlan_old.GetDayRange 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-d25ad0ee"
+   ],
+   "why": "2_BizPlan.FindButton 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-d7d4e026"
+   ],
+   "why": "BizPlan.GetDayRange 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-dc31a336"
+   ],
+   "why": "대조표 20 FindButton→FindData 행은 어느 화면 변형인지 확정할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-dc9f51c8"
+   ],
+   "why": "3_BizPlan.GetDayRange 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-dcdf38c7"
+   ],
+   "why": "미래가격 팝업 데이터 SP를 추적하며, 팝업 SP와는 다른 프로시저다."
+  },
+  {
+   "rows": [
+    "T-dd0458bf"
+   ],
+   "why": "DMF0003 DPRESULT 조회 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-df075610"
+   ],
+   "why": "BP_FCST 가격 변환 저장 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-e2c31343"
+   ],
+   "why": "BizPlan.GetCellProdSite 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-e9ecc1f0"
+   ],
+   "why": "RTF.FindDataMain 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-eb16b9e1"
+   ],
+   "why": "G8 필수값 변경 대조표 행만 추적한다."
+  },
+  {
+   "rows": [
+    "T-efac1b2e"
+   ],
+   "why": "환율 팝업 InitSpread_X 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-f15d64ea"
+   ],
+   "why": "DMF0042 스프레드 타이틀 SP라는 고유 대상을 추적한다."
+  },
+  {
+   "rows": [
+    "T-f520d2ca"
+   ],
+   "why": "1_BizPlan.GetCellProdSite 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-f5a0401b"
+   ],
+   "why": "2_BizPlan.btnSetPrice_Click 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "T-f8ea98d4"
+   ],
+   "why": "2_BizPlan 콤보 선택 변경 진입점에만 해당한다."
+  },
+  {
+   "rows": [
+    "V-7117081c"
+   ],
+   "why": "경계값 저장→재조회→원복 절차이고 재조회 값 일치까지 기대하므로 다른 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-8cf9f0b6"
+   ],
+   "why": "Division 40에서 Bucket 반복 전환 조회라는 특정 시나리오라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-9b14a92a"
+   ],
+   "why": "조회·저장·버킷 전환·Max 저장을 한데 묶은 화면 전체 규칙이라 다른 행과 범위가 일치하지 않는다."
+  },
+  {
+   "rows": [
+    "V-df270a17"
+   ],
+   "why": "Division 값마다 조회하며 HTTP·ORA 오류를 보므로, 세션 오류를 보는 EG-43a1f5bc와 기대 결과가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:41:23",
+ "cost": 0.1851052
+}

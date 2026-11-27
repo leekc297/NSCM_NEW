@@ -237,7 +237,8 @@ function extractComments(ctx) {
   const visit = n => {
     add(ts.getLeadingCommentRanges(text, n.getFullStart()));
     add(ts.getTrailingCommentRanges(text, n.end));
-    if (ts.isJsxExpression(n) && !n.expression) add(ts.getLeadingCommentRanges(text, n.getStart(sf) + 1));
+    // 2026-11-26 T669: '{/* … */}' 는 '{' 와 같은 줄이라 leading 범위(줄바꿈 뒤만)에 안 잡힌다 → trailing 범위도 본다(IntegrationPsi.tsx:555 교차검증 불일치 · 11-13 뒤 Pack 정지 원인)
+    if (ts.isJsxExpression(n) && !n.expression) { add(ts.getLeadingCommentRanges(text, n.getStart(sf) + 1)); add(ts.getTrailingCommentRanges(text, n.getStart(sf) + 1)); }
     ts.forEachChild(n, visit);
   };
   visit(sf); add(ts.getLeadingCommentRanges(text, 0));

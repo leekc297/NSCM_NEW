@@ -1,10 +1,10 @@
 {
- "lastMs": 1795356435898,
- "lastAt": "2026-11-22T23:07:15+09:00",
+ "lastMs": 1795716938440,
+ "lastAt": "2026-11-27T03:15:38+09:00",
  "manual": false,
- "log": ".vibe\\logs\\2026-11-22T23-03-45_claude_orch.log",
- "sec": 210,
- "costUsd": 2.1022198000000003,
- "lastResult": "개선안 3건 등록, 중복 1건 제외",
- "summary": "S13 U3 실패는 R12 사건에 조치 기록이 붙지 않는 점(orch-agent.js:298, harness.json:42 agentRules 에 R12 없음)과 U3 판정의 자기 참조(orch-usercheck.js:68)가 맞물려 생긴 결함이라 L2 로 1건 올림. 오류 기록 9종 가운데 Invalid time value 2종은 orch-state.js:104~112 lockAt(CHANGELOG :553 개선안 20261120143326_SELF)에서, lockStopClean 3종과 restore 4종은 반영된 안 '정상 처리 기록 오류 집계 제외'(CHANGELOG :72)에서 이미 고쳐져 올리지 않음. S11 위반은 workbench.js 1개 파일 142건이고 이번에 50건(L3222~L3474)을 올림. 못 올린 것은 workbench.js 92건(L144 1, L761~L1047 5, L1610 HTML 문자열 32 중 정규식과 svg 키 같은 코드 식별자 포함, L2776~L2778 2, L3488~L3676 52). repeatFiles 는 CHANGELOG 331절 가운데 11-20 05:31~11-22 15:04 사이 120절 제목만 "
+ "log": ".vibe\\logs\\2026-11-27T03-12-49_claude_orch.log",
+ "sec": 169,
+ "costUsd": 2.1236163,
+ "lastResult": "개선안 0건 등록",
+ "summary": "입력의 실패 항목(S13 U11·U21, 열린 사건 20261127_002648_R12_ALL)은 저장소와 설치 폴더에 이미 수정이 있음(orch-usercheck.js:224, :497). VM 마지막 기동이 11-26 18:20 이라 실행 중 코드가 수정 전이고 창 다시 로드 뒤 확인 대상임. 오류 기록 서명 중 job-runner.listener(jobs.js:83), orch-state Invalid time value 는 고친 뒤 재발 0건이고, 파일 쓰기 UNKNOWN 은 재시도 도입 뒤 3건(마지막 11-26 20:35)이며 재시도 정보 기록이 로드 전이라 원인 미측정이어서 올리지 않음. 반복 수정 파일은 CHANGELOG 절을 from 일자부터 대조함(workbench.js 170절, orch-usercheck.js 51절, orch-improve.js 46절, orch-watch.js 34절, job-runner.js 33절, orch-history.js 12절). 대부분 서로 다른 사용자 요청과 감지기 추가이고, 같은 원인 묶음(고정 문구 문장 규칙, 창 다시 로드 뒤 중지 기록)은 개념 재정립과 반영 지시문 수정(orch-improve.j"
 }

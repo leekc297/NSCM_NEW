@@ -1,0 +1,383 @@
+{
+ "at": "2026-11-27 01:13:31",
+ "scanAt": "2026-11-27 01:12:40",
+ "items": [
+  {
+   "key": "S16|K2",
+   "what": "K2 같은 문구 반복(판정마다 누적) 1069행/25화면",
+   "id": "K2",
+   "name": "같은 문구 반복(판정마다 누적)",
+   "rows": 1069,
+   "screens": [
+    "DMF0005",
+    "DMF0042",
+    "SCP0005",
+    "SCP0007",
+    "SCP0016",
+    "SCP0020",
+    "SCP0033",
+    "SCP0037",
+    "SCP0041",
+    "SCP0084",
+    "SCP0104",
+    "SCP0108",
+    "SCP0111",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0020",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-b9ba5caf",
+     "rule_id": "SC1",
+     "result": "ERROR",
+     "target": "DMF0005 화면",
+     "evidence": " | [미검증] 검사기(check.js SC1·smoke 기준표 순서)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(check.js SC1·smoke 기준표 순서)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-02d642c4",
+     "rule_id": "J2",
+     "result": "FAIL",
+     "target": "DMF0042 화면",
+     "evidence": "E2E auth authorized=true notFound=false menuAccess=Y tobeGroups=ADMIN|DM ADMIN|DM Planner|DM Planner (W/S)|FP · 오류: Error: [40] 그리드 DIVISION 값 범위 | E2E auth KOR | 김 김현기 | Home | Business Plan | Scroll tabs left | Scroll tabs right | Close others | Close All · 오류: Error: [40] 그리드 DIVISION 값 범위 | E2E "
+    },
+    {
+     "menu_id": "SCP0005",
+     "row_id": "V-a0689c02",
+     "rule_id": "H7",
+     "result": "PASS",
+     "target": "SCP0005 화면",
+     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'DistributionRoute_20261126_011442.xlsx' 7313B | E2E smoke 공통 'Excel 다운로드' [OK] 'DistributionRoute_20261126_011442.xlsx' 7313B"
+    },
+    {
+     "menu_id": "SCP0007",
+     "row_id": "V-4ef6a2ea",
+     "rule_id": "H7",
+     "result": "PASS",
+     "target": "SCP0007 화면",
+     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'BOD_20261114_073632.xlsx' 7253B | E2E smoke 공통 'Excel 다운로드' [OK] 'BOD_20261114_073632.xlsx' 7253B"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "V-2e2a7392",
+     "rule_id": "J2",
+     "result": "ERROR",
+     "target": "SCP0016 화면",
+     "evidence": " | [미검증] 검사기(auth·authcrud spec)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(auth·authcrud spec)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-d0db9c44",
+     "rule_id": "H7",
+     "result": "PASS",
+     "target": "SCP0020 화면",
+     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'TactTime_20261114_095944.xlsx' 6593B | E2E smoke 공통 'Excel 다운로드' [OK] 'TactTime_20261114_095944.xlsx' 6593B"
+    }
+   ]
+  },
+  {
+   "key": "S16|K3",
+   "what": "K3 재지 못한 행의 해당없음(미검증 원칙 위반 후보) 1052행/25화면",
+   "id": "K3",
+   "name": "재지 못한 행의 해당없음(미검증 원칙 위반 후보)",
+   "rows": 1052,
+   "screens": [
+    "DMF0005",
+    "DMF0042",
+    "SCP0005",
+    "SCP0007",
+    "SCP0016",
+    "SCP0020",
+    "SCP0033",
+    "SCP0037",
+    "SCP0041",
+    "SCP0084",
+    "SCP0096",
+    "SCP0104",
+    "SCP0111",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0020",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-e0e9e53f",
+     "rule_id": "H13",
+     "result": "NA",
+     "target": "production.ENERGE_WH (Energy(Wh))",
+     "evidence": "ENERGE_WH: 음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음(데이터 조건 · 검사기 한계 아님)"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-dea3ce34",
+     "rule_id": "C3",
+     "result": "NA",
+     "target": "siMain.SetValue",
+     "evidence": "설계 결정(GAP GAP-264 · DD-120 · 확인(원천 제외) · claude(batch gap_DMF0021_DMF0042_DMF0044)): AS-IS 'End Customer → Sales Site → Model 순 선택, Team·End Customer 직접 선택' → TO-BE 'Sales Site → Model 팝업 선택 시 Team · End Customer 자동 채움, 두 칸 직접 입력 불가' — 근거 : 2026-09-02 고객 회신 · 처리 내역 : 2026-09-03 자동매핑 추가 작업 주석 확인(제외) "
+    },
+    {
+     "menu_id": "SCP0005",
+     "row_id": "V-6221c680",
+     "rule_id": "E4",
+     "result": "NA",
+     "target": "MSG00107",
+     "evidence": "[대표 측정] 같은 확인 대표 T-a696588b 측정 결과(Doc/verify/SCP0005/dup_groups.csv): MSG00107: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (intPRIORITY < 1)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)"
+    },
+    {
+     "menu_id": "SCP0007",
+     "row_id": "V-eae7455b",
+     "rule_id": "MS1",
+     "result": "NA",
+     "target": "MSG00106",
+     "evidence": "AS-IS MSG00106 '기간은 연속적으로 입력하여야 합니다.' → 같은 문구의 TO-BE ID MSG01133 '기간은 연속적으로 입력하여야 합니다.' — TO-BE 코드(FE bod 폴더 · PKG)에 MSG00106/MSG01133 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "V-6a3d49b3",
+     "rule_id": "H13",
+     "result": "NA",
+     "target": "Waterfall Shipment Plan.BOH (BOH (To Site))",
+     "evidence": "BOH: 음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음(데이터 조건 · 검사기 한계 아님)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-7155a3c9",
+     "rule_id": "MS1",
+     "result": "NA",
+     "target": "MSG00199",
+     "evidence": "AS-IS MSG00199 '작업중인 데이터가 있습니다. 작업 완료후 사용하세요.' → 같은 문구의 TO-BE ID MSG01210 '작업중인 데이터가 있습니다. 작업 완료후 사용하세요.' — TO-BE 코드(FE tact-time 폴더 · PKG)에 MSG00199/MSG01210 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
+    }
+   ]
+  },
+  {
+   "key": "S16|C|X-LOC|이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입",
+   "what": "미검증 묶음 X-LOC ERROR 293행/12화면",
+   "rule_id": "X-LOC",
+   "result": "ERROR",
+   "sig": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 293,
+   "screens": [
+    "DMF0042",
+    "SCP0016",
+    "SCP0020",
+    "SCP0037",
+    "SCP0041",
+    "SCP0108",
+    "SCP0131",
+    "SSP0003",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0042",
+     "row_id": "T-f574b22b",
+     "target": "— · 파리티 확인(무변경): 분모0 가드 기구현 / Cutoff 재조회 없음=파리티·Replace 재조회=기적용 / 6년 자동보정 ",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "T-3ba7861f",
+     "target": "3 · BtnProject_Click(1304)",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "T-0b8653ba",
+     "target": "1 Layout · usrLayoutControl1 / layoutControlGroup1 (orphan dead)",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "key": "S16|C|C6|원천 컬럼 분기 해석 불가 — 조건 <S> → 기계 판정 불가 — 수동 ",
+   "what": "미검증 묶음 C6 ERROR 192행/7화면",
+   "rule_id": "C6",
+   "result": "ERROR",
+   "sig": "원천 컬럼 분기 해석 불가 — 조건 <S> → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 192,
+   "screens": [
+    "DMF0042",
+    "SCP0020",
+    "SCP0041",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-47393edc",
+     "target": "siMain.SetValue",
+     "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siMain.GetValue(e.Row, e.Column).ToString() == \"\")' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-8fb7b586",
+     "target": "TACT_TIME",
+     "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siExcept.ActiveSheet.SheetName == SpdSheet.shtExcept) ▸ if (e.Type == FarPoint.Win.Spread.Model.' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0041",
+     "row_id": "V-b38f6029",
+     "target": "siMain.SetValue",
+     "evidence": "원천 컬럼 분기 해석 불가 — 조건 'try ▸ if (e.Column == siMain.GetColumnIndex(DefPack.DATE_FORECAST_START) || e.Column == siMain.GetCo' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "key": "S16|C|C2|원천/대상 해석 불가 — 조건 <S> → 기계 판정 불가 — 수동 검수 ",
+   "what": "미검증 묶음 C2 ERROR 118행/10화면",
+   "rule_id": "C2",
+   "result": "ERROR",
+   "sig": "원천/대상 해석 불가 — 조건 <S> → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 118,
+   "screens": [
+    "DMF0005",
+    "DMF0042",
+    "SCP0020",
+    "SCP0037",
+    "SSP0015",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-dc313343",
+     "target": "DIVISION_ID",
+     "evidence": "원천/대상 해석 불가 — 조건 'if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.s' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-edbdad1a",
+     "target": "CURRENCY",
+     "evidence": "원천/대상 해석 불가 — 조건 'if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.s' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-284d1a95",
+     "target": "LINE_ID",
+     "evidence": "원천/대상 해석 불가 — 조건 'if (fps != null) ▸ else of (fps.Name == \"spdMain\" && spdMain.ActiveSheetIndex == 0) ▸ if (fps.Name =' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "key": "S16|C|X-ROW|진입점 집계 #검사 — <C>:#",
+   "what": "미검증 묶음 X-ROW ERROR 105행/20화면",
+   "rule_id": "X-ROW",
+   "result": "ERROR",
+   "sig": "진입점 집계 #검사 — <C>:#",
+   "rows": 105,
+   "screens": [
+    "DMF0005",
+    "DMF0042",
+    "SCP0007",
+    "SCP0020",
+    "SCP0028",
+    "SCP0033",
+    "SCP0041",
+    "SCP0084",
+    "SCP0108",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "T-1b67519f",
+     "target": "DMF0005_SaleSite_PjtModelMapping.shtSubDataModel_Changed",
+     "evidence": "진입점 집계 7검사 — ERROR:7"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "T-f4cc02b3",
+     "target": "DMF0042_1_RTF.CreateSpread",
+     "evidence": "진입점 집계 1검사 — ERROR:1"
+    },
+    {
+     "menu_id": "SCP0007",
+     "row_id": "T-8f578a07",
+     "target": "SCP0007_BOD.SpdMain_TopChange",
+     "evidence": "진입점 집계 1검사 — ERROR:1"
+    }
+   ]
+  },
+  {
+   "key": "S16|C|A6|AS-IS <C> BY [<C>] ↔ TO-BE  [] — TO-BE 프",
+   "what": "미검증 묶음 A6 ERROR 103행/10화면",
+   "rule_id": "A6",
+   "result": "ERROR",
+   "sig": "AS-IS <C> BY [<C>] ↔ TO-BE  [] — TO-BE 프로시저 배선(<C>) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(",
+   "rows": 103,
+   "screens": [
+    "DMF0005",
+    "DMF0042",
+    "SCP0016",
+    "SCP0041",
+    "SSP0003",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-ff13b645",
+     "target": "SCM0001_GET_LOOKUP_VALUES",
+     "evidence": "AS-IS ORDER BY [DISPLAY_SEQ] ↔ TO-BE  [] — TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-5fbec7ed",
+     "target": "UP_FX_GetCommonDataList_DM",
+     "evidence": "AS-IS ORDER BY [DISPLAY_SEQ] ↔ TO-BE  [] — TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "V-f293b53b",
+     "target": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+     "evidence": "AS-IS ORDER BY [SORT_ORDER_NO] ↔ TO-BE  [] — TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  }
+ ]
+}

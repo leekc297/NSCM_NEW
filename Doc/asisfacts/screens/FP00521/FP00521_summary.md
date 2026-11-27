@@ -140,14 +140,30 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:477, CreateFilterDataSet:656 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
-| SetRowsUnVisible | CreateFilterDataSet:480, CreateFilterDataSet:659 | MeasureService.SetRowsUnVisible | _MM_ |
-| HasMemoAuthority | InitControls:156, InitControls:102 | UserService.HasMemoAuthority | NowGroupID |
 | GetCheckedListValue | Find_Data:460, Find_Data:514, Find_Data_WaterFall:699, Find_Data_WaterFall:700, Find_Data_WaterFall:701, Find_Data_WaterFall:702, Find_Data_WaterFall:703, Find_Data_WaterFall:704 | CString.GetCheckedListValue | CODE |
+| SetRowVisibleOnDatatypeCategory | CreateFilterDataSet:656, CreateFilterDataSet:477 | MeasureService.SetRowVisibleOnDatatypeCategory | CATEGORY_ID, DATA_TYPE, _MM_ |
+| SetRowsUnVisible | CreateFilterDataSet:659, CreateFilterDataSet:480 | MeasureService.SetRowsUnVisible | _MM_ |
+| HasMemoAuthority | InitControls:156, InitControls:102 | UserService.HasMemoAuthority | NowGroupID |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this.dtpPlanDate | CloseUp | dtpPlanDate_CloseUp | InitializeComponent:197 |
+| this.dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitializeComponent:198 |
+| this.btnMemoDown | Click | btnMemoDowm_Click | InitializeComponent:211 |
+| this.rdoGroup1 | SelectedIndexChanged | rdoGroup1_SelectedIndexChanged | InitializeComponent:297 |
+| this.btnMemo | Click | btnMemo_Click | InitializeComponent:511 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:810 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1177 |
+| this | Load | Form_Load | .ctor:142 |
+| cboSite | SelectedIndexChanged | CboSite_SelectedIndexChanged | InitEvent:272 |
+| cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:273 |
+| cboPlanID | SelectedIndexChanged | CboPlanID_SelectedIndexChanged | InitEvent:274 |
+| cboPlant | SelectedIndexChanged | CboPlant_SelectedIndexChanged | InitEvent:275 |
+| clbFactory | SelectedIndexChanged | ClbFactory_SelectedIndexChanged | InitEvent:276 |
+| clbOperation | SelectedIndexChanged | ClbOperation_SelectedIndexChanged | InitEvent:277 |
+| drpPeriod | Click | drpPeriod_Click | InitEvent:278 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:1354 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:156 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:220 |
 | this.btnExport | Click | btnExport_Click | InitializeComponent:259 |
@@ -165,45 +181,29 @@
 | this.btnSql | Click | btnSql_Click | InitializeComponent:386 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:425 |
 | this.btnSave | Click | btnSave_Click | InitializeComponent:464 |
-| this.dtpPlanDate | CloseUp | dtpPlanDate_CloseUp | InitializeComponent:197 |
-| this.dtpPlanDate | ValueChanged | dtpPlanDate_ValueChanged | InitializeComponent:198 |
-| this.btnMemoDown | Click | btnMemoDowm_Click | InitializeComponent:211 |
-| this.rdoGroup1 | SelectedIndexChanged | rdoGroup1_SelectedIndexChanged | InitializeComponent:297 |
-| this.btnMemo | Click | btnMemo_Click | InitializeComponent:511 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:810 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1177 |
-| this | Load | Form_Load | .ctor:142 |
-| cboSite | SelectedIndexChanged | CboSite_SelectedIndexChanged | InitEvent:272 |
-| cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:273 |
-| cboPlanID | SelectedIndexChanged | CboPlanID_SelectedIndexChanged | InitEvent:274 |
-| cboPlant | SelectedIndexChanged | CboPlant_SelectedIndexChanged | InitEvent:275 |
-| clbFactory | SelectedIndexChanged | ClbFactory_SelectedIndexChanged | InitEvent:276 |
-| clbOperation | SelectedIndexChanged | ClbOperation_SelectedIndexChanged | InitEvent:277 |
-| drpPeriod | Click | drpPeriod_Click | InitEvent:278 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:1354 |
 
 ## 6. 컨트롤 (100개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 35 | lblSql, layoutControlItem2, layoutControlItem1, lblSql, layoutControlItem2, layoutControlItem1, layoutControlItem3, lblSql, layoutControlItem13, layoutControlItem16, layoutControlItem5, layoutControlItem3, lblCreator, lblCreation, layoutControlItem2 … |
-| UsrButton | 12 | btnClose, btnSql, btnExport, btnClose, btnSql, btnSave, btnFind, btnDelete, btnSql, btnClose, btnSave, btnSql |
+| LayoutControlItem | 35 | layoutControlItem12, layoutControlItem7, lblPlan, layoutControlItem2, layoutControlItem6, layoutControlItem3, layoutControlItem13, layoutControlItem11, layoutControlItem14, layoutControlItem4, layoutControlItem8, layoutControlItem15, layoutControlItem16, layoutControlItem9, layoutControlItem5 … |
+| UsrButton | 12 | btnSql, btnClose, btnSql, btnExport, btnClose, btnSql, btnSave, btnFind, btnDelete, btnSql, btnClose, btnSave |
 | UsrLayoutControl | 8 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 8 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
 | UsrConditionPanel | 4 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
-| ImageList | 4 | imageList1, imageList1, imageList1, imageList1 |
 | UsrCheckedList2 | 4 | clbProdType, clbOperation, clbLine, clbFactory |
 | UsrCombo | 4 | cboPlant, cboPlanID, cboPlanGroup, cboSite |
+| ImageList | 4 | imageList1, imageList1, imageList1, imageList1 |
+| UsrLabel | 3 | lblPlanID, usrLabel2, usrLabel1 |
+| UsrMultiLineEditor | 3 | txtModel, txtNickName, txtItemID |
 | FpSpread | 3 | spdMain, spdMain, spdMain |
 | SheetView | 3 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
-| UsrLabel | 3 | usrLabel2, usrLabel1, lblPlanID |
-| UsrMultiLineEditor | 3 | txtModel, txtNickName, txtItemID |
-| UsrTextBox | 2 | txtCreationDate, txtCreator |
 | SimpleButton | 2 | btnMemoDown, btnMemo |
-| TextBox | 1 | txtMemo |
+| UsrTextBox | 2 | txtCreationDate, txtCreator |
 | DateTimePicker | 1 | dtpPlanDate |
 | UsrDateRangePicker2 | 1 | drpPeriod |
 | RadioGroup | 1 | rdoGroup1 |
 | UsrCheckBox | 1 | chkTotInclude |
+| TextBox | 1 | txtMemo |
 
 ## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
@@ -234,8 +234,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: WaterFallMemoDownPopup, WaterFallMemoPopup, WaterFall
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:239, SetSheetHeaderColumn_FP@SetSpreadInit:220, SetSheetHeaderColumn_FP@SetSpreadInit:327
+- 코드에서 생성하는 시트: WaterFall, WaterFallMemoDownPopup, WaterFallMemoPopup
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:327, SetSheetHeaderColumn_FP@SetSpreadInit:239, SetSheetHeaderColumn_FP@SetSpreadInit:220
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
 |---|---|---:|---|---|---|---|---|

@@ -1,0 +1,64 @@
+{
+  "id": "20261126180937_SELF",
+  "at": "2026-11-26T18:09:37+09:00",
+  "ms": 1795684177821,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|consultcadence",
+  "title": "사용자 지적 감지기 추가 U32 consultCadence: 창 다시 로드 뒤 VMO 컨설팅 기능이 바로 기동하지 않음",
+  "evidence": "사용자 지적(2026-11-26T16:33:41+09:00) \"리로드 했습니다. VMO 의 컨설팅 기능 기동되도록 해주세요.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfcheck_eligible.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_vision.js"
+  ],
+  "before_after": "DETECTORS 에 consultCadence 없음 → 추가. 판정: VMO 가동 중 orch-consult 마지막 실행 시각이 창 다시 로드 시각보다 앞이고 설정 주기를 넘었는데 새 실행 기록이 없으면 공백으로 판정함. 기능 신설, 설정 변경 직후 첫 실행 대기(현재 창 연 뒤 25분 고정)도 공백으로 셈 · 읽을 기록: .vibe/orch/consult/meta.json(lastRun, lastResult), tools/Harness/harness.json orch 설정 주기, .vibe/orch/events.jsonl 의 VMO 기동 기록. user_checks.json U32 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:10:42+09:00",
+      "by": "S-Y",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:23:22+09:00",
+      "by": "S-Y",
+      "what": "반영 완료(세션 직접 보완) · orch-usercheck.js consultCadence(U32 · activations.jsonl, consult/meta.json, consultEveryDays) · user_checks.json U32 active, graceMin 10 · test/t_orch_usercheck.js U32 표본 10건 포함 ALL PASS(2026-11-26 18:23:14)"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U32",
+  "kind": "detector",
+  "testsAdded": [
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfcheck_eligible.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_vision.js"
+  ],
+  "claimedBy": "S-Y",
+  "waitNote": "",
+  "appliedMs": 1795685002956
+}

@@ -10,7 +10,7 @@
 | features/supply/src/pages/plan-control/components/EngineRunGrid.tsx | component | 47 |
 | features/supply/src/pages/plan-control/components/PlanControlForm.tsx | component | 198 |
 | features/supply/src/pages/plan-control/components/PlanControlGrid.module.scss | component | 44 |
-| features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | component | 256 |
+| features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | component | 269 |
 | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.module.scss | component | 160 |
 | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | component | 892 |
 | features/supply/src/pages/plan-control/hooks/usePlanControlCellActions.ts | hook | 514 |
@@ -19,8 +19,8 @@
 | features/supply/src/pages/plan-control/plan-control.constants.ts | constants | 212 |
 | features/supply/src/pages/plan-control/plan-control.types.ts | types | 52 |
 | features/supply/src/pages/plan-control/PlanControl.module.scss | style | 49 |
-| features/supply/src/pages/plan-control/PlanControl.tsx | page | 276 |
-| features/supply/src/pages/plan-control/usePlanControlStore.ts | store | 195 |
+| features/supply/src/pages/plan-control/PlanControl.tsx | page | 284 |
+| features/supply/src/pages/plan-control/usePlanControlStore.ts | store | 196 |
 | features/supply/src/pages/plan-control/utils/planControl.activity.test.ts | test | 121 |
 | features/supply/src/pages/plan-control/utils/planControl.activity.ts | util | 74 |
 | features/supply/src/pages/plan-control/__asis-mapping__.md | mapping | 298 |
@@ -36,7 +36,7 @@
 | /SCP0123/planIdCreate/SAVE/call-proc | http | 1 | Y | PlanIdCreatePopup.tsx:501 |
 | SCP0123/planControl/SEARCH/call-proc | callProc | 2 | Y | usePlanControlCellActions.ts:134 usePlanControlCellActions.ts:478 |
 | /SCP0123/planControl/SAVE/call-proc | http | 1 | Y | usePlanControlCellActions.ts:178 |
-| SCP0123/planControl//call-proc | hook | 2 | Y | usePlanControlPolling.ts:81 PlanControl.tsx:136 |
+| SCP0123/planControl//call-proc | hook | 2 | Y | usePlanControlPolling.ts:81 PlanControl.tsx:144 |
 | SCP0123/engineRun//call-proc | hook | 1 | Y | usePlanControlPolling.ts:90 |
 | (useTabComboQueries) | hook | 1 | Y | PlanControl.tsx:93 |
 | SCP0123/searchInfo//call-proc | hook | 1 | Y | PlanControl.tsx:102 |
@@ -62,14 +62,14 @@
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/plan-control/components/PlanControlForm.tsx | 155 |
 | DatePickerCalendar | onChange | <arrow> setSearchParams,date?.format | jsx | features/supply/src/pages/plan-control/components/PlanControlForm.tsx | 175 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/plan-control/components/PlanControlForm.tsx | 187 |
-| grid | beginningEdit | handleBeginningEdit | addHandler | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 179 |
-| grid | formatItem | handleFormatItem | addHandler | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 180 |
-| grid.hostElement | keydown | blockComboCellKey | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 206 |
-| document | click | finishPlanIdEdit | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 227 |
-| document | keydown | finishPlanIdEdit | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 228 |
-| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 250 |
-| DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 251 |
-| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 252 |
+| grid | beginningEdit | handleBeginningEdit | addHandler | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 192 |
+| grid | formatItem | handleFormatItem | addHandler | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 193 |
+| grid.hostElement | keydown | blockComboCellKey | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 219 |
+| document | click | finishPlanIdEdit | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 240 |
+| document | keydown | finishPlanIdEdit | addEventListener | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 241 |
+| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 263 |
+| DataGrid | gotFocus | gotFocus | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 264 |
+| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 265 |
 | DatePickerCalendar | onChange | <arrow> onChange | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 557 |
 | Checkbox | onChange | onToggleNoFrozen | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 584 |
 | CustomDropdown | onChange | <arrow> handleLevelCdChange(setLevels,key),handleLevelCdChange,String | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 613 |
@@ -84,12 +84,12 @@
 | InputField | onChange | <arrow> setDesc | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 861 |
 | Button | onClick | <arrow> saveData | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 876 |
 | Button | onClick | closeAndReset | jsx | features/supply/src/pages/plan-control/components/PlanIdCreatePopup.tsx | 884 |
-| PlanControlForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 209 |
-| PlanControlGrid | cellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 241 |
-| PlanControlGrid | gotFocus | <arrow> setFocusSub | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 242 |
-| EngineRunGrid | gotFocus | <arrow> setFocusSub | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 256 |
-| PlanIdCreatePopup | onClose | <arrow> setPlanIdCreateContext | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 265 |
-| PlanIdCreatePopup | onSaved | <arrow> queryClient.invalidateQueries,invalidateCombos | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 266 |
+| PlanControlForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 217 |
+| PlanControlGrid | cellEditEnded | handleCellEditEnded | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 249 |
+| PlanControlGrid | gotFocus | <arrow> setFocusSub | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 250 |
+| EngineRunGrid | gotFocus | <arrow> setFocusSub | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 264 |
+| PlanIdCreatePopup | onClose | <arrow> setPlanIdCreateContext | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 273 |
+| PlanIdCreatePopup | onSaved | <arrow> queryClient.invalidateQueries,invalidateCombos | jsx | features/supply/src/pages/plan-control/PlanControl.tsx | 274 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -151,7 +151,7 @@
 | MSG01467 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0039(5), SCP0122(2), SCP0123(2), SCP0025(1), SCP0108(1), SCP0020(1), SCM0005(1), SYS0013(1), SCP0100(1), SSP0021(1)
+- 화면ID: SCP0039(5), SCP0122(2), SCP0123(2), SCP0025(1), SCP0108(1), SCP0020(1), SCM0005(1), SYS0013(1), SCP0100(1)
 - SP/PKG: PKG_SCP0123(5), P_SCP0123_GET_PLAN_ID_INFO(3), P_USER_ID(2), P_SCP0123_SAVE_PLAN_ID_CREATE_82(1), P_SCP0123_GET_PLAN_CONTROL(1), P_SCP0123_SAVE_PLAN_ACTV_RUN(1), P_SCP0123_PLAN_ID_INFO_GET(1), P_SCP0123_PLAN_ID_SAVE(1), P_SCP0123_SAVE_PLAN_ID_CREATE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
@@ -160,7 +160,7 @@
 | jsx | <DataGrid beginningEdit={...}> prop 으로 넘기지 않는다 — DataGrid 의 setEditableColumns | features/supply/src/pages/plan-control/components/PlanControlGrid.tsx | 135 |
 | code | confirm 은 Promise<boolean> — "No" 면 그 자리에서 중단한다(AS-IS DialogResult.No return). | features/supply/src/pages/plan-control/hooks/usePlanControlCellActions.ts | 85 |
 | endpoint | 일단위 판정 집합의 조회 경로. useTabLookupQueries(admin/lookup)를 쓰면 응답 컬럼명이 | features/supply/src/pages/plan-control/plan-control.constants.ts | 63 |
-| code | removeRow 가 살아나 AS-IS 에 없던 행 추가·삭제가 실제로 동작한다. () => undefined 로 버튼만 렌더하고 | features/supply/src/pages/plan-control/PlanControl.tsx | 183 |
+| code | removeRow 가 살아나 AS-IS 에 없던 행 추가·삭제가 실제로 동작한다. () => undefined 로 버튼만 렌더하고 | features/supply/src/pages/plan-control/PlanControl.tsx | 191 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

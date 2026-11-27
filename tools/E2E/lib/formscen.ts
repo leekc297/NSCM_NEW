@@ -8,12 +8,13 @@
 import type { Page } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { accountId } from './authprobe';
 import { branchBody, persistRespSamples, respSample } from './btnpopup';
 import type { Nscm } from './nscm';
 import { probe } from './probe';
 
-export type FStep = { op: 'text' | 'period' | 'multi' | 'click' | 'dialog' | 'search' | 'checkall' | 'checkrows' | 'wait' | 'tab' | 'expectButton' | 'selectAllToggle' | 'fieldButton' | 'expectDialogInput' | 'dialogPickFirst' | 'expectField' | 'file' | 'date' | 'pick' | 'require' | 'requireCells'; file?: string; size?: number; nth?: number; index?: number; sep?: string; idx?: number; eq?: string; notIn?: string[]; fake?: boolean; join?: 'any' | 'all'; cells?: { r: number; c: number; op: 'eq' | 'ne'; v: string }[]; note?: string; fuzzy?: boolean; visible?: boolean; not?: string; where?: Record<string, string>; label?: string; value?: string; from?: string; to?: string; mode?: 'none' | 'keep' | 'first' | 'all'; name?: string; how?: 'ok' | 'cancel'; ms?: number };
-export type FScen = { id: string; msg: string; meth: string; asis_line: string; asis_text: string; asis_text_alt?: string[]; kind: 'dynamic' | 'unreachable' | 'error_branch'; basis?: string; phase?: 'setup' | 'teardown'; rowsAfterMin?: number; rowsAfterMax?: number; matchAfter?: { where: Record<string, string>; min?: number; max?: number }; delayMs?: number; checks?: { msgCountEqualsMatch?: boolean; audit?: Record<string, string>; maxMs?: number; loading?: boolean; noConfirm?: boolean }; covers?: { rule: string; target: string; aspect: string }[]; allowSave?: boolean; expectSave?: number; steps?: FStep[]; expectRowsMin?: number; note?: string; needs?: string[]; fakeSave?: { literal?: string } };
+export type FStep = { op: 'text' | 'period' | 'multi' | 'click' | 'dialog' | 'search' | 'checkall' | 'checkrows' | 'wait' | 'tab' | 'expectButton' | 'selectAllToggle' | 'fieldButton' | 'expectDialogInput' | 'dialogPickFirst' | 'expectField' | 'file' | 'date' | 'pick' | 'require' | 'requireCells' | 'asAccount' | 'authGate'; key?: string; file?: string; size?: number; nth?: number; index?: number; sep?: string; idx?: number; eq?: string; notIn?: string[]; fake?: boolean; join?: 'any' | 'all'; cells?: { r: number; c: number; op: 'eq' | 'ne'; v: string }[]; note?: string; fuzzy?: boolean; visible?: boolean; not?: string; where?: Record<string, string>; label?: string; value?: string; from?: string; to?: string; mode?: 'none' | 'keep' | 'first' | 'all'; name?: string; how?: 'ok' | 'cancel'; ms?: number };
+export type FScen = { id: string; msg: string; meth: string; asis_line: string; asis_file?: string; asis_text: string; asis_text_alt?: string[]; kind: 'dynamic' | 'unreachable' | 'error_branch'; basis?: string; phase?: 'setup' | 'teardown'; rowsAfterMin?: number; rowsAfterMax?: number; matchAfter?: { where: Record<string, string>; min?: number; max?: number }; delayMs?: number; checks?: { msgCountEqualsMatch?: boolean; audit?: Record<string, string>; maxMs?: number; loading?: boolean; noConfirm?: boolean }; covers?: { rule: string; target: string; aspect: string }[]; allowSave?: boolean; expectSave?: number; steps?: FStep[]; expectRowsMin?: number; note?: string; needs?: string[]; fakeSave?: { literal?: string } };
 export type Aspect = { ok: boolean | null; note: string };
 export type FRes = { id: string; msg: string; meth: string; result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; why: string; shown: string; saves: number; ms?: number; aspects?: Record<string, Aspect> };
 
@@ -55,6 +56,12 @@ async function fakeOn(p: Page) {
   const id = (process.env.VERIFY_ID || '').toUpperCase(); const root = path.resolve(__dirname, '..', '..', '..');
   FAKE.samples = id ? persistRespSamples([], path.join(root, 'Doc', 'verify', id, 'resp_samples.json')) : [];
   FAKE.on = true; FAKE_PAGE = p; await p.route('**/*', fakeHandler);
+}
+const ACCT: { orig: string } = { orig: '' };
+/** asAccount 로 바꾼 계정을 원래 계정으로 되돌리고 화면을 다시 연다(2026-11-26 5차) */
+async function acctRestore(nscm: Nscm) {
+  if (!ACCT.orig) return; const o = ACCT.orig; ACCT.orig = '';
+  await nscm.loginAs(o).catch(() => undefined); await nscm.openScreen((process.env.VERIFY_ID || '').toUpperCase()).catch(() => undefined);
 }
 async function fakeOff() { if (FAKE.on && FAKE_PAGE) await FAKE_PAGE.unroute('**/*', fakeHandler).catch(() => undefined); FAKE.on = false; FAKE_PAGE = null; }
 /** 시나리오 파일 vars + 실행 계정(@ME) */
@@ -104,6 +111,21 @@ export async function runStep(nscm: Nscm, st: FStep): Promise<string> {
   const p = nscm.page;
   if (st.op === 'wait') { await p.waitForTimeout(st.ms ?? 500); return ''; }
   if (st.op === 'search') { await nscm.search().catch(() => undefined); await p.waitForTimeout(1_500); return ''; }
+  if (st.op === 'asAccount') {
+    // 2026-11-26 R241 5차: 명부 계정(users.json key)으로 로그인해 같은 화면을 다시 연다. 시나리오가 끝나면 runFormScen 이 원래 계정으로 되돌린다
+    const uid = accountId(st.key || ''); if (!uid) return `명부 계정 '${st.key}' 없음(tools/E2E/users.json)`;
+    const mid = (process.env.VERIFY_ID || '').toUpperCase(); if (!mid) return '화면 ID(VERIFY_ID) 없음';
+    if (!ACCT.orig) ACCT.orig = (nscm as unknown as { curUser: string }).curUser || '';
+    await nscm.loginAs(uid); const o = await nscm.openScreen(mid).catch(() => ({ authorized: false, notFound: false }));
+    return o.authorized ? '' : `명부 계정 '${st.key}' 로 화면 ${mid} 권한 없음(메뉴 조회 권한 그룹인데 열리지 않음)`;
+  }
+  if (st.op === 'authGate') {
+    // 2026-11-26 R241 5차: 권한 없는 계정의 단추 — 숨김·비활성 = TO-BE 룰 CR-070(버튼 코드 권한이 있을 때만 노출) 통과(문구 대조 안 함), 보이면 눌러 AS-IS 권한 문구 대조
+    const b = nscm.subButton(st.name || '');
+    if (!(await b.isVisible({ timeout: 3_000 }).catch(() => false))) return `SKIPTEXT:단추 '${st.name}' 숨김 — CR-070 권한 없는 계정 미노출`;
+    if (await b.isDisabled().catch(() => false)) return `SKIPTEXT:단추 '${st.name}' 비활성 — CR-070 권한 없는 계정 사용 불가`;
+    return runStep(nscm, { op: 'click', name: st.name });
+  }
   if (st.op === 'dialog') { const ok = await nscm.closeAlert(st.how ?? 'ok'); await p.waitForTimeout(400); return ok ? '' : '닫을 대화상자 없음'; }
   if (st.op === 'click') {
     const b = nscm.subButton(st.name || ''); if (!(await b.isVisible({ timeout: 3_000 }).catch(() => false))) return `버튼 '${st.name}' 없음`;
@@ -255,12 +277,18 @@ export async function runStep(nscm: Nscm, st: FStep): Promise<string> {
     await it.hover().catch(() => undefined);
     if (await clr.count()) await clr.click({ timeout: 3_000, force: true }).catch(() => undefined);
     await p.waitForTimeout(400);
+    if (st.mode === 'none') {  // 2026-11-27: 단일 선택 필수 칸(DMF0042 'Div')은 비울 수 없다 = AS-IS '선택 없음' 분기에 화면으로 도달 불가(실측 값 기록)
+      const v = (await it.locator('[role="combobox"]').first().inputValue().catch(() => '')).trim();
+      if (v && !(await it.locator('.MuiChip-root').count().catch(() => 0))) return `NA:'${st.label}' 칸이 비워지지 않음(단일 선택 · 지운 뒤 값 '${v.slice(0, 40)}') — AS-IS '선택 없음' 분기에 TO-BE 화면으로 도달 불가`;
+    }
     if (st.mode === 'first' || st.mode === 'all') {
       const combo = it.locator('[role="combobox"]').first(); await combo.click({ timeout: 3_000 }).catch(() => undefined);
       const opts = p.locator('.MuiAutocomplete-popper [role="option"], [role="listbox"] [role="option"]'); await opts.first().waitFor({ state: 'visible', timeout: 4_000 }).catch(() => undefined);
       const texts = (await opts.allInnerTexts().catch(() => [] as string[])).map(s => s.replace(/\s+/g, ' ').trim());
       const isAll = (t: string) => /^\(?(all|전체|select all)\)?$/i.test(t);
-      const i = st.mode === 'all' ? texts.findIndex(t => isAll(t)) : texts.findIndex(t => t && !isAll(t)); if (i < 0) { await p.keyboard.press('Escape').catch(() => undefined); return `'${st.label}' 후보 없음`; }
+      let i = st.mode === 'all' ? texts.findIndex(t => isAll(t)) : texts.findIndex(t => t && !isAll(t));
+      if (i < 0 && st.mode === 'all') { const sel = await opts.evaluateAll(es => es.findIndex(e => e.getAttribute('aria-selected') === 'true')).catch(() => -1); i = sel >= 0 ? sel : texts.findIndex(t => !!t); }  // 2026-11-27: ALL 후보 없는 단일 선택 칸 = 선택된 값(없으면 첫 후보)으로 '선택 있음' 조건을 맞춘다
+      if (i < 0) { await p.keyboard.press('Escape').catch(() => undefined); return `'${st.label}' 후보 없음`; }
       await opts.nth(i).click({ timeout: 3_000 }).catch(() => undefined); await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(300);
     }
     return '';
@@ -269,7 +297,15 @@ export async function runStep(nscm: Nscm, st: FStep): Promise<string> {
 }
 
 /** 시나리오 1건 실행 — saves() 는 호출부가 세는 저장 요청 수 */
+/** 같은 실행 안에서 단계가 같은 생성분 시나리오 결과(2026-11-27). AS-IS 원본 파일만 다른 같은 검사(DMF0042 FindData 5개 파일 cs:595·660·697·723·758)를 TO-BE 한 화면에서 5번 재지 않는다 */
+const SAME: Map<string, FRes> = new Map();
+const sameKey = (sc: FScen) => (sc.kind !== 'dynamic' || sc.phase || sc.allowSave || sc.fakeSave || (sc.needs || []).length || (sc.expectSave || 0) > 0) ? '' : JSON.stringify([sc.msg, sc.meth, sc.asis_text, sc.steps || [], sc.checks || {}, sc.rowsAfterMin ?? null, sc.rowsAfterMax ?? null, sc.matchAfter || null, sc.expectRowsMin || 0]);
 export async function runFormScen(nscm: Nscm, sc: FScen, saves: () => number, rowCount?: () => Promise<number>): Promise<FRes> {
+  const k = sameKey(sc); const prev = k ? SAME.get(k) : undefined;
+  if (prev && prev.result !== 'ERROR') return { ...prev, id: sc.id, msg: sc.msg, meth: sc.meth, why: `${sc.id}: ${prev.id} 와 단계·기대 문구 같음(AS-IS ${sc.asis_line} 같은 검사) · ${prev.id} 실측 결과 사용 — ${prev.why}` };
+  const r = await runFormScen0(nscm, sc, saves, rowCount); if (k && r.result !== 'ERROR') SAME.set(k, { ...r }); return r;
+}
+async function runFormScen0(nscm: Nscm, sc: FScen, saves: () => number, rowCount?: () => Promise<number>): Promise<FRes> {
   const base = { id: sc.id, msg: sc.msg, meth: sc.meth };
   if (sc.kind === 'unreachable') return { ...base, result: 'NA', why: `${sc.msg}: 도달 불가(AS-IS 원문 근거) — ${sc.basis || ''} · ${sc.asis_line}`, shown: '', saves: 0 };
   if (sc.kind === 'error_branch') return { ...base, result: 'NA', why: `${sc.msg}: 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · ${sc.basis || ''} · ${sc.asis_line}`, shown: '', saves: 0 };
@@ -279,15 +315,19 @@ export async function runFormScen(nscm: Nscm, sc: FScen, saves: () => number, ro
   const p = nscm.page; await nscm.clearDialogs(); const s0 = saves(); let shown = ''; let clickMs = -1; let loadingSeen: boolean | null = null; const expFail: string[] = []; SAMPLE_LOADING = !!(sc.checks && sc.checks.loading);
   for (let k = 0; k < 32 && (await shownText(p, 250)); k++) { await nscm.clearDialogs(); await p.waitForTimeout(250); }  // 앞 시나리오의 토스트가 남아 이번 문구로 읽히지 않게
   await fakeOff(); FAKE.literal = sc.fakeSave?.literal || ''; FAKE.hits = []; FAKE.noSample = '';
+  let skipText = '';  // authGate: 권한 없는 계정 단추 숨김·비활성 = CR-070 통과(문구 대조 안 함)
   for (const st of sc.steps || []) {
     const before = st.op === 'click' ? '' : '';
     const err = await runStep(nscm, st);
     if (err && err.startsWith('FAIL:')) { expFail.push(err.slice(5)); continue; }
-    if (err) { await fakeOff(); return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: ${err}`, shown, saves: saves() - s0 }; }
-    if (st.op === 'click' || st.op === 'file') { const t = await shownText(p, 5_000); if (t) shown = shown ? `${shown} | ${t}` : t; }  // file = 파일 선택 뒤 검사 문구(2026-11-26)
+    if (err && err.startsWith('SKIPTEXT:')) { skipText = err.slice(9); continue; }
+    if (err && err.startsWith('NA:')) { await fakeOff(); await acctRestore(nscm); await nscm.clearDialogs(); return { ...base, result: 'NA', why: `${sc.id} ${sc.msg}: ${err.slice(3)} · ${sc.asis_line}`, shown, saves: saves() - s0 }; }
+    if (err) { await fakeOff(); await acctRestore(nscm); return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: ${err}`, shown, saves: saves() - s0 }; }
+    if (st.op === 'click' || st.op === 'file' || st.op === 'search' || st.op === 'authGate') { const t = await shownText(p, 5_000); if (t) shown = shown ? `${shown} | ${t}` : t; }  // file·search·authGate 뒤 검사 문구(2026-11-26)
     if (st.op === 'click' && clickMs < 0) clickMs = LAST_CLICK.ms; if (st.op === 'click' && LAST_CLICK.loading !== null) loadingSeen = LAST_CLICK.loading;
     void before;
   }
+  await acctRestore(nscm);
   const fk = { hits: [...FAKE.hits], noSample: FAKE.noSample }; await fakeOff();
   if (sc.fakeSave && !fk.hits.length && fk.noSample) { await nscm.clearDialogs(); return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: 실저장 대신 쓸 ${fk.noSample}(Doc/verify/<ID>/resp_samples.json) — 요청은 막음(서버 미전송) · 화면 문구 '${shown.slice(0, 80)}'`, shown, saves: 0 }; }
   if (sc.fakeSave) shown = shown ? `${shown} [표본 응답 ${fk.hits.join(', ') || '없음'}]` : shown;
@@ -301,7 +341,7 @@ export async function runFormScen(nscm: Nscm, sc: FScen, saves: () => number, ro
   const uiLang = ((await p.locator('header').getByText(/^(KOR|ENG|CHN)$/).first().innerText({ timeout: 2_000 }).catch(() => '')) || '').trim();
   if (!matched && uiLang && uiLang !== 'KOR') for (const alt of sc.asis_text_alt || []) { const k2 = frag(alt).slice(0, 12); if (k2 && nrm(shown).includes(k2)) { matched = true; langNote = ` · 화면 언어 ${uiLang} — 같은 메시지의 다른 언어 문구 '${clean(alt).slice(0, 40)}' 와 일치`; break; } }
   const wantSave = sc.expectSave ?? 0; const bad: string[] = [];
-  if (exp && !matched) bad.push(`기대 문구 '${exp.slice(0, 40)}' 없음 — 화면 문구 '${shown.slice(0, 140) || '(없음)'}'`);  // 문구 없는 동작 시나리오(asis_text 빈값)는 단계 기대로만 판정
+  if (exp && !matched && !skipText) bad.push(`기대 문구 '${exp.slice(0, 40)}' 없음 — 화면 문구 '${shown.slice(0, 140) || '(없음)'}'`);  // 문구 없는 동작 시나리오(asis_text 빈값)는 단계 기대로만 판정
   for (const e of expFail) bad.push(e);
   if (wantSave === 0 && attempted > 0) bad.push(`검증 없이 저장 요청 ${attempted}건`);
   if (wantSave > 0 && attempted < wantSave) bad.push(`저장 요청 ${attempted}건(기대 ${wantSave}건 이상)`);
@@ -329,8 +369,8 @@ export async function runFormScen(nscm: Nscm, sc: FScen, saves: () => number, ro
       if (sc.checks?.audit) { const na = await countRows(p, { ...sc.matchAfter.where, ...sc.checks.audit }); aspects.audit = { ok: n > 0 && na === n, note: `대상 행 ${n}건 중 감사 칸 조건(${JSON.stringify(sc.checks.audit)}) 일치 ${na}건` }; } }
   }
   const why = `${sc.id} ${sc.msg}(${sc.asis_line}) ${sc.note || ''} → 화면 문구 '${shown.slice(0, 140) || '(없음)'}' · 저장 요청 ${attempted}건${rowNote}${langNote}`;
-  aspects.pass = { ok: !bad.length, note: bad.length ? bad.join(' · ') : (exp ? `화면 문구 '${shown.slice(0, 60)}' = AS-IS 문구` : '단계 기대 전부 충족') };
-  return { ...base, result: bad.length ? 'FAIL' : 'PASS', why: bad.length ? `${why} — ${bad.join(' · ')}` : (exp ? `${why} — AS-IS 문구 '${exp.slice(0, 40)}' 와 같음` : `${why} — 단계 기대 전부 충족`), shown, saves: attempted, ms: clickMs, aspects };
+  aspects.pass = { ok: !bad.length, note: bad.length ? bad.join(' · ') : skipText ? `${skipText}(AS-IS 문구 대조 대신 TO-BE 룰 CR-070)` : (exp ? `화면 문구 '${shown.slice(0, 60)}' = AS-IS 문구` : '단계 기대 전부 충족') };
+  return { ...base, result: bad.length ? 'FAIL' : 'PASS', why: bad.length ? `${why} — ${bad.join(' · ')}` : skipText ? `${why} — ${skipText}(TO-BE 룰 CR-070 · tools/Harness/rules/tobe_rule_registry.csv)` : (exp ? `${why} — AS-IS 문구 '${exp.slice(0, 40)}' 와 같음` : `${why} — 단계 기대 전부 충족`), shown, saves: attempted, ms: clickMs, aspects };
 }
 
 // ── 원장 행 연결·결과 누적(2026-11-16) ─────────────────────────────────────────
@@ -352,7 +392,8 @@ export function scenariosOfRow(row: LedgerRow, scs: FScen[]): FScen[] {
   if (row.rule_id !== 'E4') return [];
   if (row.source === 'ASIS') {
     const ref = row.asis_ref || ''; const msg = (row.target || '').trim();
-    return scs.filter(s => s.msg === msg && (new RegExp(`:${s.asis_line.replace(/^cs:/, '')}(?![0-9])`).test(ref)));
+    // 2026-11-27: 원본 파일이 여럿인 화면(DMF0042 5개 파일)은 줄 번호만으로 다른 파일 행에 붙지 않게 파일 이름까지 맞춘다(asis_file 없는 사람 파일은 줄 번호만)
+    return scs.filter(s => s.msg === msg && (new RegExp(`${s.asis_file ? escRe(s.asis_file) : ''}:${s.asis_line.replace(/^cs:/, '')}(?![0-9])`, 'i').test(ref)));
   }
   if (row.source === 'TRACE') {
     let c: { name?: string; e4?: { meth: string; line: string; msg: string }[] } = {}; try { c = JSON.parse(row.condition || '{}'); } catch { /* 조건 없음 */ }

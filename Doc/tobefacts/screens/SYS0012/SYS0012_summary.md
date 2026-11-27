@@ -98,7 +98,7 @@
 | LBL00627 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SYS0012(3), DMF0043(1), SCM0009(1)
+- 화면ID: SYS0012(3), DMF0043(2), SCM0009(1)
 - SP/PKG: P_SYS0012_GET_APPROVAL_LIST(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

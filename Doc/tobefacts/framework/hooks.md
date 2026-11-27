@@ -96,12 +96,12 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **useTabComboQueries** | `@shared/hooks` | 237 |  |  |
-| **useTabProcQuery** | `@shared/hooks` | 216 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
-| **useTabBtnPermissions** | `@shared/hooks` | 121 |  |  |
-| **useTabid** | `@shared/stores` | 75 |  |  |
+| **useTabComboQueries** | `@shared/hooks` | 249 |  |  |
+| **useTabProcQuery** | `@shared/hooks` | 229 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
+| **useTabBtnPermissions** | `@shared/hooks` | 122 |  |  |
+| **useTabid** | `@shared/stores` | 76 |  |  |
 | **useSaveWithValidation** | `@shared/hooks` | 71 |  |  |
-| **useTabLookupQueries** | `@shared/hooks` | 58 |  |  |
+| **useTabLookupQueries** | `@shared/hooks` | 57 |  |  |
 | **useProcMutation** | `@shared/hooks` | 34 |  |  |
 | **useTabComboQueryResults** | `@shared/hooks` | 10 |  | `useTabComboQueries` 와 같은 쿼리를 구독하되 `data` 뿐 아니라 `isPending`/`isError` 도 함께 돌려준다. 콤보 데이터가 아직 안 온 것(로딩 중)과 조회했지만 실패한 것을 구분해야 하는 호출부용 (예: DataG |
 | **useTitleAreaLanguage** | `@shared/hooks` | 6 |  | 디자인 시스템 TitleArea(SubTitleArea) 의 `language` 값 — 건수 표기 「총 N건」 / 「Total N rows」 를 고른다. 디자인 시스템은 `language` 기본값이 'ko' 이고 'ko' 가 아니면 모두 영어(Tota |
@@ -120,7 +120,7 @@ props/params:
 | **useStreamProcQuery** | `@shared/hooks` | 0 |  |  |
 | **useTabComboQuery** | `@shared/hooks` | 0 |  | @deprecated useTabComboQueries를 사용하세요 |
 
-### useTabComboQueries  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:314</sub>
+### useTabComboQueries  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:393</sub>
 
 ```ts
 (args: UseTabComboQueriesArgs): any
@@ -138,7 +138,7 @@ props/params:
 ### useTabProcQuery  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:89</sub>
 
 ```ts
-<M extends MenuId, S extends SheetName<M> = SheetName<M>>({ menuId, sheetName, procedureAction, tabId, filters, enabled, queryOptions, }: { menuId: M; sheetName: S; procedureAction?: BUTTON_TYPE; tabId: string; filters?: ProcRequest<M, S>; enabled?: boolean; queryOptions?: Omit<UseQueryOptions<ProcResponse<M, S>>, "queryKey" | "queryFn">; }): any
+<M extends MenuId, S extends SheetName<M> = SheetName<M>>({ menuId, sheetName, procedureAction, tabId, filters, enabled, stream, queryOptions, }: { menuId: M; sheetName: S; procedureAction?: BUTTON_TYPE; tabId: string; filters?: ProcRequest<M, S>; enabled?: boolean; stream?: boolean; queryOptions?: Omit<UseQueryOptions<ProcResponse<M, S>>, "queryKey" | "queryFn">; }): any
 ```
 
 props/params:
@@ -149,6 +149,7 @@ props/params:
 - `tabId: string`
 - `filters?: ProcRequest<M, S>`
 - `enabled?: boolean`
+- `stream?: boolean — true 면 `/call-proc-stream`(서버 스트리밍 + fetchSize 1000) 으로 조회한다. 응답 형태는 동일하다. 대용량 결과(수십만 행) 시트에만 켠다 — 일반 조회는 기본 `/call-proc` 가 맞다. 주의: 스트림 엔드포인트는 BUTTON 로그를 남기지 않는`
 - `queryOptions?: Omit<UseQueryOptions<ProcResponse<M, S>>, "queryKey"`
 - `"queryFn">`
 
@@ -175,7 +176,7 @@ props/params:
 (): { saveWithValidation: <T>(saveData: T[], staticColumns: RawFlexGridColumnConfig[], mutate: (data: T[]) => void, validationRows?: WijmoRowItem[]) => void; }
 ```
 
-### useTabLookupQueries  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:349</sub>
+### useTabLookupQueries  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:428</sub>
 
 ```ts
 ({ filters, enabled, queryOptions, }: { filters: any[]; enabled?: boolean; queryOptions?: Omit<UseQueryOptions<LookupResponse[]>, "queryKey" | "queryFn">; }): any
@@ -188,10 +189,10 @@ props/params:
 - `queryOptions?: Omit<UseQueryOptions<LookupResponse[]>, "queryKey"`
 - `"queryFn">`
 
-### useProcMutation  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:166</sub>
+### useProcMutation  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:222</sub>
 
 ```ts
-<M extends MenuId, S extends SheetName<M> = SheetName<M>, RS extends ResponseKeys<M, S> = ResponseKeys<M, S>>({ menuId, sheetName, procedureAction, tabId, onSuccess, onError, }: { menuId: M; sheetName: S; procedureAction?: BUTTON_TYPE; tabId: string; onSuccess?: () => void; onError?: (error?: Error) => void; }): any
+<M extends MenuId, S extends SheetName<M> = SheetName<M>, RS extends ResponseKeys<M, S> = ResponseKeys<M, S>>({ menuId, sheetName, procedureAction, tabId, onSuccess, onError, checkResultCode, }: { menuId: M; sheetName: S; procedureAction?: BUTTON_TYPE; tabId: string; onSuccess?: () => void; onError?: (error?: Error) => void; checkResultCode?: boolean; }): any
 ```
 
 props/params:
@@ -202,8 +203,9 @@ props/params:
 - `tabId: string`
 - `onSuccess?: () => void`
 - `onError?: (error?: Error) => void`
+- `checkResultCode?: boolean — 결과 커서(o_rc1/o_result_cursor)의 RESULT_CODE 로 비즈니스 실패를 재판정할지(기본 false). SAVE SP 가 실패를 envelope/O_RESULT_CURSOR.CODE 가 아니라 결과 커서 RESULT_CODE 에만 담는 화면만 true 로 켠다(fa`
 
-### useTabComboQueryResults  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:322</sub>
+### useTabComboQueryResults  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:401</sub>
 
 ```ts
 ({ filters, enabled, queryOptions, src, sheetName }: UseTabComboQueriesArgs): any
@@ -224,13 +226,13 @@ props/params:
 (): "ko" | "en"
 ```
 
-### useInvalidateCombos  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:233</sub>
+### useInvalidateCombos  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:312</sub>
 
 ```ts
 (): any
 ```
 
-### useTabLookupQuery  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:328</sub>
+### useTabLookupQuery  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:407</sub>
 
 ```ts
 ({ filters, enabled, queryOptions, }: { filters: LookupParam; enabled?: boolean; queryOptions?: Omit<UseQueryOptions<LookupResponse[]>, "queryKey" | "queryFn">; }): any
@@ -249,10 +251,10 @@ props/params:
 (): { clearAllData: () => Promise<void>; }
 ```
 
-### useDataGridUtils  <sub>packages/shared/src/components/organisms/data-grid/dataGridUtils.ts:36</sub>
+### useDataGridUtils  <sub>packages/shared/src/components/organisms/data-grid/dataGridUtils.ts:37</sub>
 
 ```ts
-<T extends WijmoRowItem = WijmoRowItem>(): { setSummaryTooltip: (grid: FlexGrid<T>) => void; setCellTooltip: (grid: FlexGrid<T>) => void; setAggregationRow: (grid: FlexGrid<T>, placement: "above" | "below") => void; setCheckbox: (grid: FlexGrid<T>) => any; formatPopupIcon: (grid: FlexGrid<T>, formatItemEventArgs: FormatItemEventArgs) => void; formatEditableColumns: (grid: FlexGrid<T>, formatItemEventArgs: FormatItemEventArgs, hasCheckboxColumn?: boolean) => void; formatSortableColumns: (grid: Fl
+<T extends WijmoRowItem = WijmoRowItem>(): { setSummaryTooltip: (grid: FlexGrid<T>) => void; getSelectionSummaryHTML: (grid: FlexGrid<T>) => string; setCellTooltip: (grid: FlexGrid<T>) => void; setAggregationRow: (grid: FlexGrid<T>, placement: "above" | "below") => void; setCheckbox: (grid: FlexGrid<T>) => any; formatPopupIcon: (grid: FlexGrid<T>, formatItemEventArgs: FormatItemEventArgs) => void; formatEditableColumns: (grid: FlexGrid<T>, formatItemEventArgs: FormatItemEventArgs, hasCheckboxCol
 ```
 
 ### useDirtyCheck  <sub>packages/shared/src/stores/useDirtyRegistry.ts:164</sub>
@@ -330,7 +332,7 @@ props/params:
 - `onDone?: (result: any) => void`
 - `onError?: (error: Error) => void`
 
-### useTabComboQuery  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:254</sub>
+### useTabComboQuery  <sub>packages/shared/src/hooks/useCustomQueryClient.ts:333</sub>
 
 ```ts
 ({ filters, enabled, queryOptions, }: { filters: ComboParam; enabled?: boolean; queryOptions?: Omit<UseQueryOptions<ComboResponse[]>, "queryKey" | "queryFn">; }): any

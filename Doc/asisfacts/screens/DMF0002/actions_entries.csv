@@ -2,7 +2,7 @@
 "DMF0002","BucketConversion","event","this.clbDivision.SelectedIndexChanged","clbDivision_SelectedIndexChanged","clbDivision_SelectedIndexChanged","0","clbDivision_SelectedIndexChanged","",""
 "DMF0002","BucketConversion","event","this.clbDivision.SelectedIndexChanged","clbDivision_SelectedIndexChanged","GetSalesSitebyDivision","1","clbDivision_SelectedIndexChanged > GetSalesSitebyDivision","620",""
 "DMF0002","BucketConversion","event","this.spdMain.ComboSelChange","spdMain_ComboSelChange","spdMain_ComboSelChange","0","spdMain_ComboSelChange","",""
-"DMF0002","BucketConversion","event","this.spdMain.ComboSelChange","spdMain_ComboSelChange","GetSalesSitebyDivision","1","spdMain_ComboSelChange > GetSalesSitebyDivision","642","if (e.Column == siMain.GetColumnIndex(DefColumns.DIVISION_ID))"
+"DMF0002","BucketConversion","event","this.spdMain.ComboSelChange","spdMain_ComboSelChange","GetSalesSitebyDivision","1","spdMain_ComboSelChange > GetSalesSitebyDivision","642","if (e.Column == siMain.GetColumnIndex(DefColumns.Division))"
 "DMF0002","BucketConversion","event","this.Load","Form_Load","Form_Load","0","Form_Load","",""
 "DMF0002","BucketConversion","event","this.Load","Form_Load","InitControls","1","Form_Load > InitControls","121",""
 "DMF0002","BucketConversion","event","this.Load","Form_Load","CreateSpread","1","Form_Load > CreateSpread","123",""

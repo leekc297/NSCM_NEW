@@ -57,7 +57,7 @@ function note(mod, fn, err, extra) {
     const prev = last.get(sig);
     if (prev && ms - prev.ms < DEDUPE_MS) { prev.skipped++; return null; }
     const stack = String((err && err.stack) || '').split(/\r?\n/).slice(1, 6).map(s => s.trim().slice(0, 240));
-    const rec = Object.assign({ at: nowLocal(ms), ms, mod: String(mod), fn: String(fn), msg, code: (err && err.code) || '', stack, sig, skipped: prev ? prev.skipped : 0 }, extra || {});
+    const rec = Object.assign({ at: nowLocal(ms), ms, mod: String(mod), fn: String(fn), msg, code: (err && err.code) || '', stack, sig, skipped: prev ? prev.skipped : 0 }, (err && err.retry && typeof err.retry === 'object') ? { retry: { tries: Number(err.retry.tries) || 0, ms: Number(err.retry.ms) || 0 } } : {}, extra || {}); // 2026-11-26 개선안 20261126190705_SELF: fs-retry 재시도 끝 실패 정보
     last.set(sig, { ms, skipped: 0 });
     if (last.size > 500) { for (const [k, v] of last) if (ms - v.ms > 3600000) last.delete(k); }
     const f = file();

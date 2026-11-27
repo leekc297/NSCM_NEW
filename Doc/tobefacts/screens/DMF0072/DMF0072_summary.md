@@ -1,7 +1,7 @@
 # DMF0072 — To-Be Fact Pack 요약
 
 - page_key: `master/nn-master-mapping` · feature: master · As-is Fact Pack 있음
-- 파일 12 · 엔드포인트 호출 10 (미해결 0, 주석 속 2) · 이벤트 15 · 컴포넌트 사용 30 · 하드코딩 컬럼 0 · 메시지 20
+- 파일 12 · 엔드포인트 호출 10 (미해결 0, 주석 속 2) · 이벤트 15 · 컴포넌트 사용 30 · 하드코딩 컬럼 0 · 메시지 21
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -14,7 +14,7 @@
 | features/master/src/pages/nn-master-mapping/nn-master-mapping.constants.ts | constants | 48 |
 | features/master/src/pages/nn-master-mapping/nn-master-mapping.types.ts | types | 11 |
 | features/master/src/pages/nn-master-mapping/NnMasterMapping.module.scss | style | 181 |
-| features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | page | 406 |
+| features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | page | 407 |
 | features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts | store | 127 |
 | features/master/src/pages/nn-master-mapping/utils/nn-master-mapping.merge.ts | util | 40 |
 | features/master/src/pages/nn-master-mapping/utils/searchCombos.ts | util | 100 |
@@ -28,7 +28,7 @@
 | (useTabComboQueries) | hook | 4 | Y | NnMasterMappingForm.tsx:87 NnMasterMappingForm.tsx:93 NnMasterMappingForm.tsx:96 NnMasterMapping.tsx:75 |
 | (useTabLookupQueries) | hook | 1 | Y | NnMasterMappingGrid.tsx:81 |
 | DMF0072/main//call-proc | hook | 1 | Y | NnMasterMapping.tsx:94 |
-| /DMF0072/main/SAVE/call-proc | http | 1 | Y | NnMasterMapping.tsx:322 |
+| /DMF0072/main/SAVE/call-proc | http | 1 | Y | NnMasterMapping.tsx:323 |
 | /admin/menu/DMF0072/column | http | 1 | Y | useNnMasterMappingStore.ts:94 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -51,7 +51,7 @@
 | g | beginningEdit | handleBeginningEdit | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 172 |
 | g | formatItem | handleFormatItem | addHandler | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 203 |
 | DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx | 349 |
-| NnMasterMappingForm | onSearch | handleSearch | jsx | features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | 386 |
+| NnMasterMappingForm | onSearch | handleSearch | jsx | features/master/src/pages/nn-master-mapping/NnMasterMapping.tsx | 387 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -87,6 +87,7 @@
 | LBL00618 | 1 |
 | LBL00011 | 1 |
 | MSG00608 | 1 |
+| MSG00004 | 1 |
 | MSG00610 | 1 |
 | MSG00611 | 1 |
 | MSG00108 | 1 |
@@ -100,7 +101,7 @@
 | MSG00618 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0004(4), DMF0043_01(1), SCP0048(1), DMF0021(1), DMF0005(1)
+- 화면ID: DMF0004(4), DMF0043_01(1), COM0005(1), COM0008(1), SCP0048(1), DMF0021(1), DMF0005(1)
 - SP/PKG: PR_GET_SHEET_COLUMN_LIST(2), DMF0072_GET_NNMASTER_MAPPING(1), DMF0008_GET_MY_DIVISION_LIST(1), SCM0001_GET_LOOKUP_VALUES(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

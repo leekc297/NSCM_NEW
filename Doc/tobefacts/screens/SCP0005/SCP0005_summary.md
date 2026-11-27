@@ -15,7 +15,7 @@
 | features/shipping/src/pages/distribution-route/distribution-route.excelForm.ts | other | 70 |
 | features/shipping/src/pages/distribution-route/distribution-route.types.ts | types | 25 |
 | features/shipping/src/pages/distribution-route/DistributionRoute.module.scss | style | 12 |
-| features/shipping/src/pages/distribution-route/DistributionRoute.tsx | page | 363 |
+| features/shipping/src/pages/distribution-route/DistributionRoute.tsx | page | 373 |
 | features/shipping/src/pages/distribution-route/hooks/useDistributionRouteValidation.ts | hook | 53 |
 | features/shipping/src/pages/distribution-route/index.ts | index | 2 |
 | features/shipping/src/pages/distribution-route/useDistributionRouteStore.ts | store | 163 |
@@ -32,7 +32,7 @@
 | (useTabComboQueries) | hook | 1 | Y | DistributionRouteForm.tsx:44 |
 | /SCP0005/{ADMIN_SHEET_NAME[SHEETS.ROUTE]}/UPLOAD/excel-upload | http | 1 | N | ExcelUploadModal.tsx:133 |
 | SCP0005/route//call-proc | hook | 1 | Y | DistributionRoute.tsx:74 |
-| /SCP0005/{ADMIN_SHEET_NAME[SHEETS.ROUTE]}/UPLOAD_SAVE/call-proc | http | 1 | N | DistributionRoute.tsx:334 |
+| /SCP0005/{ADMIN_SHEET_NAME[SHEETS.ROUTE]}/UPLOAD_SAVE/call-proc | http | 1 | N | DistributionRoute.tsx:344 |
 | /admin/menu/SCP0005/column | http | 1 | Y | useDistributionRouteStore.ts:115 |
 | /admin/menu/SCP0005/search-conditions | http | 1 | Y | useDistributionRouteStore.ts:136 |
 | /SCP0005/route/SEARCH_CITY/call-proc | http | 1 | Y | distributionRoute.cityLookup.ts:37 |
@@ -65,14 +65,14 @@
 | FileUploader | onFileChange | <arrow> setAlert,t,setFiles,value.slice,resetResult | jsx | features/shipping/src/pages/distribution-route/components/modals/ExcelUploadModal.tsx | 226 |
 | Button | onClick | <arrow> handleUpload | jsx | features/shipping/src/pages/distribution-route/components/modals/ExcelUploadModal.tsx | 251 |
 | Button | onClick | handleClose | jsx | features/shipping/src/pages/distribution-route/components/modals/ExcelUploadModal.tsx | 255 |
-| DistributionRouteForm | onSearch | handleSearch | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 284 |
-| DistributionRouteForm | onFromSearch | <arrow> setRegionMode | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 285 |
-| DistributionRouteForm | onToSearch | <arrow> setRegionMode | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 286 |
-| DistributionRouteGrid | onFromCellDblClick | <arrow> openCellRegion | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 309 |
-| DistributionRouteGrid | onToCellDblClick | <arrow> openCellRegion | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 310 |
-| DistributionRouteGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 311 |
-| ExcelUploadModal | onUploaded | <arrow> refetch | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 328 |
-| ExcelUploadModal | onSave | <arrow> apiClient.post,Number | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 329 |
+| DistributionRouteForm | onSearch | handleSearch | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 294 |
+| DistributionRouteForm | onFromSearch | <arrow> setRegionMode | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 295 |
+| DistributionRouteForm | onToSearch | <arrow> setRegionMode | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 296 |
+| DistributionRouteGrid | onFromCellDblClick | <arrow> openCellRegion | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 319 |
+| DistributionRouteGrid | onToCellDblClick | <arrow> openCellRegion | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 320 |
+| DistributionRouteGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 321 |
+| ExcelUploadModal | onUploaded | <arrow> refetch | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 338 |
+| ExcelUploadModal | onSave | <arrow> apiClient.post,Number | jsx | features/shipping/src/pages/distribution-route/DistributionRoute.tsx | 339 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -139,7 +139,7 @@
 | MSG01220 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0005(19), SCM0002(2), DMF0004(2), SCP0006(2), SCP0020(2), DMF0014(2), DMF0074(1), SCM0008(1), DMF0082(1), SSP0014(1)
+- 화면ID: SCP0005(19), DMF0004(3), SCM0002(2), SCP0006(2), SCP0020(2), DMF0014(2), DMF0074(1), SCM0008(1), DMF0082(1), SSP0014(1)
 - SP/PKG: PKG_SCP0005(6), P_SCP0005_EXCEL_UPLOAD(3), SCP0005_GET_DISTRIBUTION_ROUTE(2), P_SCP0005_SAVE_ROUTE(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_SCP0005_GET_DISTRIBUTION_ROUTE(1), SCP0005_SAVE_DISTRIBUTION_ROUTE(1), P_PROGRAM_ID(1), P_SHEET_NAME(1), P_CREATED_BY(1), SCP0005_GET_COUNTRY_CITY(1), P_SCP0005_GET_COUNTRY_CITY(1), P_SPLIT(1), P_USER_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

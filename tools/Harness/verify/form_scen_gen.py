@@ -21,6 +21,16 @@
        뒤 검사 통과 = 그 조각이 아닌 항목 · 콤보 값 != dt.Rows[0] 이고 콤보를 같은 함수 결과로 채움 = 둘째 항목 · 첨부 건수(RowCount + add > max) = 전제 행
        (expectRowsMin) + 작은 정상 파일 · 그리드 칸 검사 = 통과 조건을 실행 때 확인(requireCells) · 화면 상태 조건(this.필드) 아래 바뀌는 값 = 조건 거짓 갈래로 풀고
        그 조건이 숨기는 칸 표시로 확인(require) · 끝 칸 라벨이 글자 없으면 시작 칸 라벨 둘째 입력
+     2026-11-26 4차(TO-BE 존재): TO-BE 메뉴(사내 TO-BE DB SCM_MGR.SCM_ADM_MNU_M 읽기 · 실패하면 Doc/tobefacts/db/menu.csv, TO-BE ID = map_screen.csv)가
+       미등록·미사용(USE_YN ≠ Y)이면 그 화면 시나리오 전부, 처리 메서드가 TO-BE 화면 폴더 __asis-mapping__.md 에서 ⏳·미구현·후속이면 그 단추 시나리오를
+       _tobe_missing(TO-BE 미구현)으로 둠 — 잴 TO-BE 화면·단추가 없어 응답 표본도 생길 수 없음. 활성 파일에 넣지 않음
+     2026-11-26 5차(맡김 해소): 저장 뒤 다시 조회 메서드 안 검사 = 'FindButton > 메서드' 경로(actions_entries)가 있으면 조회 단추(search) 시나리오로 다시 만듦 ·
+       권한 검사(SecurityContext.CanUpdate) = 메뉴 SEARCH 권한은 있고 SAVE 권한은 없는 그룹(btn_auth.csv)의 명부 계정(users.json)으로 로그인(asAccount) →
+       단추 숨김·비활성이면 TO-BE 룰 CR-070 통과, 보이면 AS-IS 권한 문구 대조(authGate) · TO-BE 미구현 화면의 맡김도 _tobe_missing
+     2026-11-26 6차: TO-BE 메뉴가 없는 화면이라도 메시지 문장이 90% 이상 같은 AS-IS 원문을 가진 TO-BE 메뉴(USE_YN=Y) 화면이 있으면, 그 화면 원문에 같은
+       메서드·문장이 있는 항목은 _covered(그 화면 CheckList 에서 잼 · 대응 줄 기록). 모듈 전체가 TO-BE 메뉴에 없으면 사유에 적음(FP 모듈 0개)
+     2026-11-26 7차: tools/Harness/rules/form_scen_scope.csv(asis_id, scope=out, why, decided)에 사용자가 범위 밖으로 확정한 화면은 TO-BE 미구현 항목을
+       _out_of_scope 로 둠(2026-11-26 17:22 확정 16화면 = FP 모듈 13 · SCP0099 · SCP0083 · SSP0007)
        (맡김)        _delegated: 권한 검사(SecurityContext.CanUpdate 등 → authprobe), 그리드 셀 값 검사(→ 그리드 셀 경로),
                      저장 호출 뒤 다시 조회 메서드 안 검사(→ 조회 단추 경로)
      2026-11-26 2차 패턴: 확인창(GMessageBox(..) == DialogResult.No 면 중단 → 취소 눌러 저장 요청 없음 확인, 뒤 검사는 확인 단계 추가),
@@ -236,6 +246,104 @@ class Screen:
                 meths.append((r['method'], tuple(key), r))
             res[re.sub(r'^this\.', '', ev['target'])] = {'handler': ev['handler'], 'meths': meths}
         return res
+
+
+_TOBE_MENU = None
+
+
+def tobe_of(asis):
+    """AS-IS 화면 ID → TO-BE 메뉴 ID — tools/Harness/rules/map_screen.csv(run_verify asis_of 와 같은 원장), 없으면 같은 ID"""
+    for r in rd(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')):
+        if (r.get('asis_id') or '').upper() == asis.upper() and r.get('tobe_id'):
+            return r['tobe_id'].upper()
+    return asis.upper()
+
+
+def tobe_menus():
+    """TO-BE 메뉴 {MNU_ID: {use, route, src}} — 사내 TO-BE DB SCM_MGR.SCM_ADM_MNU_M(읽기 전용) 우선, 실패하면 Doc/tobefacts/db/menu.csv"""
+    global _TOBE_MENU
+    if _TOBE_MENU is not None:
+        return _TOBE_MENU
+    out = {}
+    try:
+        sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+        from dbconn import connect
+        with connect('tobe') as cx:
+            cur = cx.cursor()
+            cur.execute('SELECT MNU_ID, USE_YN, ROUTE_PATH FROM SCM_MGR.SCM_ADM_MNU_M')
+            for mid_, use, route in cur.fetchall():
+                out[str(mid_).upper()] = {'use': str(use or ''), 'route': str(route or ''), 'src': 'DB SCM_ADM_MNU_M ' + time.strftime('%Y-%m-%d %H:%M')}
+    except Exception as e:
+        for r in rd(os.path.join(ROOT, 'Doc', 'tobefacts', 'db', 'menu.csv')):
+            out[(r.get('mnu_id') or '').upper()] = {'use': r.get('use_yn', ''), 'route': r.get('route_path', ''), 'src': f'Doc/tobefacts/db/menu.csv(DB 실패 {type(e).__name__})'}
+    _TOBE_MENU = out
+    return out
+
+
+_MSGSETS = None
+
+
+def msg_sets():
+    """AS-IS 화면별 메시지 문장 집합 {(메서드, 메시지 문장)} — 같은 원문을 가진 화면 찾기용(2026-11-26 6차)"""
+    global _MSGSETS
+    if _MSGSETS is None:
+        _MSGSETS = {}
+        for sid in sorted(os.listdir(FACTS)):
+            p = os.path.join(FACTS, sid, 'actions.csv')
+            if os.path.exists(p):
+                _MSGSETS[sid.upper()] = {(r['method'], r['value'].strip()) for r in rd(p) if r['kind'] == 'MESSAGE'}
+    return _MSGSETS
+
+
+def covered_by(asis):
+    """TO-BE 메뉴가 없는 AS-IS 화면의 메시지 문장이 TO-BE 메뉴가 있는(USE_YN=Y) 다른 AS-IS 화면 원문에 90% 이상 있으면 → (그 화면 ID, 같음 수, 전체 수) | None"""
+    ms = msg_sets(); mine = ms.get(asis.upper(), set())
+    if not mine:
+        return None
+    best = None
+    for sid, s in ms.items():
+        if sid == asis.upper() or (tobe_menus().get(tobe_of(sid)) or {}).get('use') != 'Y':
+            continue
+        n = len(mine & s)
+        if n * 10 >= len(mine) * 9 and (not best or n > best[1]):
+            best = (sid, n, len(mine))
+    return best
+
+
+def auth_role_key(tobe_mid, asis):
+    """메뉴 조회(SEARCH) 권한은 있고 SAVE 권한은 없는 사용자 그룹(Doc/tobefacts/db/btn_auth.csv) 중 시험 계정 명부(tools/E2E/users.json areas)에
+    역할로 있는 것 → ('<영역>/<Div>/<역할>', 그룹, 버튼 권한 목록) | None. 영역 = 화면 ID 앞(SCP·SSP·DM)"""
+    grp = {}
+    for r in rd(os.path.join(ROOT, 'Doc', 'tobefacts', 'db', 'btn_auth.csv')):
+        if (r.get('mnu_id') or '').upper() == tobe_mid.upper() and r.get('use_yn') == 'Y':
+            grp.setdefault(r['user_gr_id'], set()).add(r['mnu_btn_cd'])
+    cand = sorted(g for g, b in grp.items() if 'SEARCH' in b and 'SAVE' not in b and g not in ('-', ''))
+    try:
+        uj = json.load(open(os.path.join(ROOT, 'tools', 'E2E', 'users.json'), encoding='utf-8-sig'))
+    except Exception:
+        return None
+    area = 'DM' if asis.upper().startswith('DM') else asis.upper()[:3]
+    divs = ((uj.get('areas') or {}).get(area) or {}).get('divisions') or {}
+    for g in cand:
+        for dv in sorted(divs):
+            if (divs[dv] or {}).get(g):
+                return (f'{area}/{dv}/{g}', g, sorted(grp[g]))
+    return None
+
+
+def tobe_handler_status(route, handler):
+    """TO-BE 화면 폴더 __asis-mapping__.md 에서 AS-IS 처리 메서드 행의 상태 — '⏳'·'미구현'·'후속' 이면 미구현 사유, 아니면 ''"""
+    seg = (route or '').rstrip('/').split('/')[-1]
+    if not seg or not handler:
+        return ''
+    for f in sorted(__import__('glob').glob(os.path.join(ROOT, 'nscm-fe', 'features', '*', 'src', 'pages', seg, '__asis-mapping__.md'))):
+        try:
+            for ln in open(f, encoding='utf-8', errors='replace'):
+                if f'`{handler}`' in ln and re.search(r'⏳|미구현|\(후속', ln):
+                    return f"{os.path.relpath(f, ROOT)}: {ln.strip()[:160]}"
+        except OSError:
+            pass
+    return ''
 
 
 def msg_master():
@@ -625,7 +733,7 @@ def grid_reads(sc, meth):
     return any(RX_GRID.search(' '.join((r['target'], r['value'], r['guard'], r['raw']))) for r in sc.by_meth.get(meth, []))
 
 
-def build(asis, vars_=None):
+def build(asis, vars_=None, mid=None):
     sc = Screen(asis)
     if not sc.acts:
         return {'ok': False, 'why': f'AS-IS 사실 없음 Doc/asisfacts/screens/{asis}'}
@@ -641,19 +749,23 @@ def build(asis, vars_=None):
     def blab(b):
         return next((p['value'].strip().strip('"') for p in sc.props if re.sub(r'^this\.', '', p['target']) == b and p['prop'] == 'Text'), '') or PREFIX.sub('', b)
 
-    for btn, ch in sorted(chains.items()):
+    def do_chain(btn, ch, search_meth=None):
+        """단추 사슬 1개 처리. search_meth = 조회 단추(FindButton) 경로로 그 메서드 검사만 다시 만듦(2026-11-26 5차)"""
         handler = ch['handler']; chain = ch['meths']
         names = {m for m, _k, _r in chain}
-        sv = [m for m in names if m in savem]
-        if not sv:
-            continue
-        tables = sorted(set().union(*[savem[m] for m in sv]))
-        grid = [m for m in sv if grid_reads(sc, m)]
-        if grid:
-            buttons.append({'button': btn, 'form': False, 'why': f'저장 메서드 {",".join(sorted(grid))} 가 그리드를 읽음', 'save': sorted(sv), 'tables': tables})
-            continue
-        blabel = blab(btn)
-        buttons.append({'button': btn, 'form': True, 'label': blabel, 'save': sorted(sv), 'tables': tables})
+        sv = [m for m in names if m in savem] if search_meth is None else []
+        if search_meth is None:
+            if not sv:
+                return
+            tables = sorted(set().union(*[savem[m] for m in sv]))
+            grid = [m for m in sv if grid_reads(sc, m)]
+            if grid:
+                buttons.append({'button': btn, 'form': False, 'why': f'저장 메서드 {",".join(sorted(grid))} 가 그리드를 읽음', 'save': sorted(sv), 'tables': tables})
+                return
+            blabel = blab(btn)
+            buttons.append({'button': btn, 'form': True, 'label': blabel, 'save': sorted(sv), 'tables': tables})
+        else:
+            blabel = ''
         keyof = {m: k for m, k, _r in chain}
         msgs = []
         for m in names:
@@ -669,8 +781,11 @@ def build(asis, vars_=None):
                 k_ = keyof.get(s_, ())
                 pos = k_[0] if k_ else min((L for L in ep_lines_all.get(s_, []) if L), default=10 ** 9)
                 save_pos[f_] = min(save_pos.get(f_, 10 ** 9), pos)
-        msgs = [t for t in msgs if (t[1], t[2]['line']) not in seen_msg]
-        seen_msg.update((t[1], t[2]['line']) for t in msgs)
+        if search_meth is None:
+            msgs = [t for t in msgs if (t[1], t[2]['line']) not in seen_msg]
+            seen_msg.update((t[1], t[2]['line']) for t in msgs)
+        else:
+            msgs = [t for t in msgs if t[1] == search_meth]
         passed = []    # 앞선 검사: {ctl, op, pass, line, meth, msg, needs, guard, kind: input|none|unknown}
         lookups = {}   # 조회 메서드 → lookup_info
         cnt_prev = []  # (meth, guard, cond, 조건 조각, line, msg) — 건수 조건 포함 관계(도달 불가) 판정
@@ -692,11 +807,11 @@ def build(asis, vars_=None):
                 if p['kind'] != 'input' or p['ctl'] == skip_ctl:
                     continue
                 lb = sc.label(p['ctl']); lab[p['ctl']] = lb
-                st = {'op': p['op'], 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **p['pass']}
+                st = {'op': p['op'], 'label': lb['label'], 'fuzzy': True, **p['pass']}
                 if p['op'] == 'date2':
                     lb2 = sc.label(p['ctl2'])
-                    st = {'op': 'text', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'value': p['pass']['from']}
-                    steps.append(st); st = {'op': 'text', 'label': lb2['label'], **({'fuzzy': True} if lb2['fuzzy'] else {}), 'value': p['pass']['to']}
+                    st = {'op': 'text', 'label': lb['label'], 'fuzzy': True, 'value': p['pass']['from']}
+                    steps.append(st); st = {'op': 'text', 'label': lb2['label'], 'fuzzy': True, 'value': p['pass']['to']}
                 steps.append(st); needs += p['needs']
             return steps, sorted(set(needs)), lab, None, post
 
@@ -745,7 +860,7 @@ def build(asis, vars_=None):
             (pending if p['kind'] == 'unknown' else blocked).append(row)
 
         def with_click(steps, post, own=None, click=None):
-            return steps + [click or {'op': 'click', 'name': blabel}] + post + (own or [])
+            return steps + [click or ({'op': 'search'} if search_meth else {'op': 'click', 'name': blabel})] + post + (own or [])
 
         def src_line(a):
             ls = sc.src_lines(a['file'])
@@ -774,7 +889,7 @@ def build(asis, vars_=None):
             mcode = re.search(r'"(MSG\d+)"', a['value'])
             code = mcode.group(1) if mcode else ''
             mr = master.get(code, {})
-            base = {'msg': code or '(동적 메시지)', 'meth': m, 'asis_line': f"cs:{a['line']}", 'asis_text': mr.get('Ko', ''),
+            base = {'msg': code or '(동적 메시지)', 'meth': m, 'asis_line': f"cs:{a['line']}", 'asis_file': re.split(r'[\\/]', a['file'])[-1], 'asis_text': mr.get('Ko', ''),
                     'asis_text_alt': [t for t in (mr.get('En', ''), mr.get('Ch', '')) if t], 'button': btn}
             if m not in savem and _key and _key[0] > save_pos.get(a['file'], 10 ** 9) and m != handler:
                 # 저장 호출 뒤에 부르는 메서드(다시 조회) 안 검사 — 이 단추로 재려면 실저장이 먼저 일어남
@@ -800,7 +915,15 @@ def build(asis, vars_=None):
                 add_pass(None, '', {}, a, m, code, [], ga, 'confirm'); continue
             # ── 권한 검사 → 계정 그룹별 권한 측정(authprobe)에 맡김 · 시험 계정은 권한 있음 ──
             if RX_AUTH.search(cond):
-                delegated.append({**base, 'to': 'authprobe', 'why': f'권한 검사({cond[:80]}) — 권한 없는 계정이 필요해 계정 그룹별 권한 측정에 맡김'})
+                # 2026-11-26 5차: 메뉴 조회 권한은 있고 SAVE 권한은 없는 그룹(btn_auth.csv)의 시험 계정(users.json 명부)으로 로그인해 단추를 누름.
+                #   TO-BE 룰 CR-070(확정: 버튼 코드 권한이 있을 때만 노출) → 단추가 숨거나 비활성이면 그 룰로 통과, 보이면 AS-IS 권한 문구를 기대
+                rk_ = auth_role_key(mid or tobe_of(asis), asis)
+                steps, needs, lab, blk, post = prior_steps(ga)
+                if rk_ and not blk and not search_meth:
+                    emit({**base, 'kind': 'dynamic', 'steps': [{'op': 'asAccount', 'key': rk_[0]}] + steps + [{'op': 'authGate', 'name': blabel}] + post + confirm,
+                          'note': f"권한 검사({cond[:60]}) · 계정 {rk_[0]}(그룹 {rk_[1]} = {(mid or tobe_of(asis))} 버튼 권한 {'·'.join(rk_[2])}, SAVE 없음 · btn_auth.csv) · 단추 숨김·비활성이면 CR-070 통과, 보이면 AS-IS 문구"}, needs)
+                else:
+                    delegated.append({**base, 'to': 'authprobe', 'why': f'권한 검사({cond[:80]}) — ' + ('앞선 검사 통과 입력을 정할 수 없음' if blk else 'SAVE 권한 없는 그룹의 시험 계정(btn_auth.csv × users.json)이 없어') + ' 계정 그룹별 권한 측정에 맡김'})
                 add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
             # ── 그리드 값 검사 → 그리드 셀 경로(W3)에 맡김 ──
             if RX_GRID.search(cond):
@@ -896,7 +1019,7 @@ def build(asis, vars_=None):
                             if blk:
                                 blocked_by(base, blk)
                             else:
-                                emit({**base, 'kind': 'dynamic', 'steps': with_click(steps + [{'op': 'pick', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'index': idx_t}], post, confirm),
+                                emit({**base, 'kind': 'dynamic', 'steps': with_click(steps + [{'op': 'pick', 'label': lb['label'], 'fuzzy': True, 'index': idx_t}], post, confirm),
                                       'note': f'{x} 를 {fdt.group(1)} 결과로 채움(첫 항목 = {dtv}.Rows[0]) · {idx_t + 1}번째 항목 선택 · 라벨 근거 {x}={lb["src"]}'}, needs)
                             add_pass(x, 'pick', {'index': idx_p}, a, m, code, [], ga); continue
                     if any(v in sc.ctls for v in re.findall(r'\b([A-Za-z_]\w*)\b', cond)):
@@ -930,7 +1053,7 @@ def build(asis, vars_=None):
                         blocked_by(base, blk)
                     else:
                         lb = sc.label(x)
-                        st = steps + [{'op': 'text', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **trig}]
+                        st = steps + [{'op': 'text', 'label': lb['label'], 'fuzzy': True, **trig}]
                         emit({**base, 'kind': 'dynamic', 'note': f"{x} {why} · 라벨 근거 {x}={lb['src']}", 'steps': with_click(st, post, confirm)}, needs)
                 add_pass(x, 'text', {'value': f'@{ctl_name(x)}'}, a, m, code, [ctl_name(x)], ga)
                 continue
@@ -1009,7 +1132,7 @@ def build(asis, vars_=None):
                 if blk:
                     blocked_by(base, blk)
                 else:
-                    emit({**base, 'kind': 'dynamic', 'steps': with_click(steps + [{'op': 'pick', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'sep': sep_, 'idx': k_, 'eq': lit}], post, confirm),
+                    emit({**base, 'kind': 'dynamic', 'steps': with_click(steps + [{'op': 'pick', 'label': lb['label'], 'fuzzy': True, 'sep': sep_, 'idx': k_, 'eq': lit}], post, confirm),
                           'note': f"{v0} = {mv.group(2)}() = {x} 선택 이름 '{sep_}' 로 나눈 {k_}번째 조각 · 그 조각이 '{lit}' 인 항목 선택(없으면 측정 경로 없음) · 라벨 근거 {x}={lb['src']}"}, needs)
                 pp = next((p for p in passed if p['ctl'] == x and p['op'] == 'pick' and p['kind'] == 'input'), None)
                 if pp:
@@ -1042,15 +1165,15 @@ def build(asis, vars_=None):
                 lb = sc.label(x); lab[x] = lb
                 if pt['op'] == 'date2':
                     lb2 = sc.label(pt['ctl2']); lab[pt['ctl2']] = lb2
-                    steps.append({'op': 'text', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'value': pt['trigger']['from']})
-                    steps.append({'op': 'text', 'label': lb2['label'], **({'fuzzy': True} if lb2['fuzzy'] else {}), 'value': pt['trigger']['to']})
+                    steps.append({'op': 'text', 'label': lb['label'], 'fuzzy': True, 'value': pt['trigger']['from']})
+                    steps.append({'op': 'text', 'label': lb2['label'], 'fuzzy': True, 'value': pt['trigger']['to']})
                 else:
                     if pt['op'] == 'date' and pt.get('ctl_from') and not re.search(r'[A-Za-z가-힣]', lb['label']):
                         # 끝 칸 배치 항목 라벨이 글자 없음(' ~ ') → 시작 칸 라벨 항목의 둘째 입력
                         lb = sc.label(pt['ctl_from']); lab[x] = {**lb, 'src': lb['src'] + ' 둘째 입력'}
-                        steps.append({'op': 'date', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'nth': 1, **pt['trigger']})
+                        steps.append({'op': 'date', 'label': lb['label'], 'fuzzy': True, 'nth': 1, **pt['trigger']})
                     else:
-                        steps.append({'op': pt['op'], 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **pt['trigger']})
+                        steps.append({'op': pt['op'], 'label': lb['label'], 'fuzzy': True, **pt['trigger']})
                 note = f"{x} {'빈값' if pt['trigger'].get('value') == '' else json.dumps(pt['trigger'], ensure_ascii=False)}" + (f" · {pt['note']}" if pt.get('note') else '') + \
                        ' · 라벨 근거 ' + ', '.join(f"{k}={v['src']}" for k, v in lab.items())
                 emit({**base, 'kind': 'dynamic', 'note': note, 'steps': with_click(steps, post, confirm)}, sorted(set(needs + pt.get('needs', []))))
@@ -1064,6 +1187,70 @@ def build(asis, vars_=None):
             st[ci] = {'op': 'click', 'name': blabel}
             emit({**base, 'kind': 'dynamic', 'expectRowsMin': 1, 'steps': st,
                   'note': f'준비({setup["meth"]} {setup["asis_line"]})와 같은 입력으로 다시 저장 · 조회 표 {dt} 의 건수 조건(cs:{ln})'}, list(setup.get('needs', [])))
+
+    for btn, ch in sorted(chains.items()):
+        do_chain(btn, ch)
+    # 2026-11-26 5차: 저장 뒤 다시 조회 메서드 안 검사(맡김 search) → 그 메서드를 조회 단추(프레임워크 FindButton) 경로로 다시 만든다.
+    #   AS-IS actions_entries 에 'FindButton > 메서드' 경로가 있을 때만(조회 단추가 저장 없이 바로 부름). 만든 메시지는 맡김에서 뺀다
+    srch = sorted({d['meth'] for d in delegated if d.get('to') == 'search'})
+    for m_ in srch:
+        if not any(r['entry'] == 'FindButton' and r['path'] == f'FindButton > {m_}' for r in sc.entries):
+            continue
+        n0 = len(gen) + len(pending) + len(blocked)
+        do_chain('FindButton', {'handler': 'FindButton', 'meths': [(m_, (), None)]}, search_meth=m_)
+        made = {(s['meth'], s['asis_line']) for s in (gen + pending + blocked)[n0:]}
+        for s in (gen + pending + blocked)[n0:]:
+            s['button'] = 'FindButton'
+            s['note'] = ('조회 단추(FindButton → ' + m_ + ') 경로 · ' + s.get('note', '')).rstrip(' · ')
+        delegated[:] = [d for d in delegated if not (d.get('to') == 'search' and (d['meth'], d['asis_line']) in made)]
+    # 2026-11-26 4차: TO-BE 화면·단추가 없으면 잴 수 없다 — 메뉴 미등록·미사용(use_yn ≠ Y) 화면은 전부, 처리 메서드가 TO-BE 매핑에서 ⏳·미구현·후속인 단추는 그 단추 시나리오만 _tobe_missing
+    tobe_missing, covered = [], []
+    tm = tobe_menus().get((mid or tobe_of(asis)).upper())   # TO-BE 메뉴 ID(map_screen.csv AS-IS → TO-BE, 없으면 같은 ID)
+    if gen or pending or blocked or delegated:
+        if not tm or tm['use'] != 'Y':
+            why = f"TO-BE 메뉴 {'미등록' if not tm else '미사용(USE_YN=' + tm['use'] + ')'} — {(tm or {}).get('src') or next((v['src'] for v in tobe_menus().values()), 'TO-BE 메뉴 원장 없음')}"
+            # 6차: 같은 AS-IS 원문(메시지 문장 90% 이상 같음)을 가진 TO-BE 화면이 있으면 그 화면 원문에 같은 메서드·문장이 있는 항목은 그 화면에서 잼(covered)
+            cb = covered_by(asis)
+            mod = re.sub(r'\d.*', '', asis.upper())
+            if not any(re.sub(r'\d.*', '', k) == mod and v.get('use') == 'Y' for k, v in tobe_menus().items()):
+                why += f' · TO-BE 메뉴에 {mod} 모듈 화면 0개'
+            cb_rows = {}
+            if cb:
+                for r in rd(os.path.join(FACTS, cb[0], 'actions.csv')):
+                    if r['kind'] == 'MESSAGE':
+                        cb_rows.setdefault((r['method'], r['value'].strip()), r['line'])
+            for s in gen + pending + blocked + delegated:   # 5차: 맡김도 TO-BE 화면이 없으면 맡을 측정이 없음
+                src_ = next((r for r in sc.by_meth.get(s.get('meth', ''), []) if r['kind'] == 'MESSAGE' and f"cs:{r['line']}" == s.get('asis_line')), None)
+                hit = cb_rows.get((s.get('meth', ''), src_['value'].strip())) if (cb and src_) else None
+                if hit:
+                    covered.append({**s, 'covered_by': {'screen': cb[0], 'meth': s.get('meth'), 'asis_line': f'cs:{hit}'},
+                                    'why_tobe': f"{why} · 같은 AS-IS 원문 화면 {cb[0]}(메시지 문장 {cb[1]}/{cb[2]} 같음, TO-BE 메뉴 있음)의 {s.get('meth')} cs:{hit} 같은 문장으로 그 화면 CheckList 에서 잼"})
+                else:
+                    tobe_missing.append({**s, 'why_tobe': why + (f' · 같은 원문 화면 {cb[0]} 에 이 문장 없음' if cb else ' · 같은 AS-IS 원문을 가진 TO-BE 화면 없음(메시지 문장 90% 이상 같은 화면 0개)')})
+            gen, pending, blocked = [], [], []
+            delegated[:] = []
+        else:
+            keep = []
+            for s in gen:
+                h = chains.get(s.get('button', ''), {}).get('handler', '')
+                st = tobe_handler_status(tm['route'], h)
+                if st:
+                    tobe_missing.append({**s, 'why_tobe': f'TO-BE 단추 미구현({h}) — {st}'})
+                else:
+                    keep.append(s)
+            gen = keep
+    # 2026-11-26 7차: 사용자가 범위 밖으로 확정한 화면(tools/Harness/rules/form_scen_scope.csv scope=out)의 TO-BE 미구현 항목 → _out_of_scope
+    out_of_scope = []
+    sr = next((r for r in rd(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'form_scen_scope.csv')) if (r.get('asis_id') or '').upper() == asis.upper() and r.get('scope') == 'out'), None)
+    if sr and tobe_missing:
+        out_of_scope = [{**s, 'why_scope': f"{sr.get('decided', '')} · {sr.get('why', '')} · tools/Harness/rules/form_scen_scope.csv"} for s in tobe_missing]
+        tobe_missing = []
+    for i, s in enumerate(out_of_scope, 1):
+        s['id'] = f'GO{i:02d}'
+    for i, s in enumerate(tobe_missing, 1):
+        s['id'] = f'GT{i:02d}'
+    for i, s in enumerate(covered, 1):
+        s['id'] = f'GC{i:02d}'
     for i, s in enumerate(gen, 1):
         s['id'] = f'G{i:02d}'
     for i, s in enumerate(pending, 1):
@@ -1072,7 +1259,8 @@ def build(asis, vars_=None):
         s['id'] = f'GB{i:02d}'
     for i, s in enumerate(delegated, 1):
         s['id'] = f'GD{i:02d}'
-    return {'ok': True, 'asis': asis, 'buttons': buttons, 'scenarios': gen, 'pending': pending, 'blocked': blocked, 'delegated': delegated}
+    return {'ok': True, 'asis': asis, 'buttons': buttons, 'scenarios': gen, 'pending': pending, 'blocked': blocked, 'delegated': delegated,
+            'tobe_missing': tobe_missing, 'covered': covered, 'out_of_scope': out_of_scope, 'tobe': tm or {}}
 
 
 def compare(gen, manual):
@@ -1123,18 +1311,18 @@ def run(mid, asis=None, dry=False):
                 vars_ = {**(cur.get('vars') or {}), **vars_}
         except Exception:
             manual = {}
-    g = build(asis, vars_)
+    g = build(asis, vars_, mid)
     if not g['ok']:
         print(f"[SKIP] {mid}: {g['why']}"); return 0
     forms = [b for b in g['buttons'] if b['form']]
     dyn = [s for s in g['scenarios'] if s['kind'] == 'dynamic']
     stamp = time.strftime('%Y-%m-%d %H:%M:%S')
     rep = {'_gen': f'form_scen_gen.py {stamp}', 'menu_id': mid, 'asis': asis, 'buttons': g['buttons'],
-           'counts': {'active': len(g['scenarios']), 'dynamic': len(dyn), 'pending': len(g['pending']), 'blocked': len(g['blocked']), 'delegated': len(g['delegated'])},
-           'scenarios': g['scenarios'], '_pending': g['pending'], '_blocked': g['blocked'], '_delegated': g['delegated']}
+           'counts': {'active': len(g['scenarios']), 'dynamic': len(dyn), 'pending': len(g['pending']), 'blocked': len(g['blocked']), 'delegated': len(g['delegated']), 'tobe_missing': len(g['tobe_missing']), 'covered': len(g['covered']), 'out_of_scope': len(g['out_of_scope'])}, 'tobe': g['tobe'],
+           'scenarios': g['scenarios'], '_pending': g['pending'], '_blocked': g['blocked'], '_delegated': g['delegated'], '_tobe_missing': g['tobe_missing'], '_covered': g['covered'], '_out_of_scope': g['out_of_scope']}
     if manual is not None:
         rep['compare_manual'] = compare(g, manual)
-    msg = f"[form_scen_gen] {mid}(AS-IS {asis}) 폼 저장 단추 {len(forms)}개 · 활성 {len(g['scenarios'])}건(dynamic {len(dyn)}) · 보류 {len(g['pending'])}건 · 측정 보류 {len(g['blocked'])}건 · 다른 측정에 맡김 {len(g['delegated'])}건"
+    msg = f"[form_scen_gen] {mid}(AS-IS {asis}) 폼 저장 단추 {len(forms)}개 · 활성 {len(g['scenarios'])}건(dynamic {len(dyn)}) · 보류 {len(g['pending'])}건 · 측정 보류 {len(g['blocked'])}건 · 다른 측정에 맡김 {len(g['delegated'])}건 · TO-BE 미구현 {len(g['tobe_missing'])}건 · 같은 원문 TO-BE 화면에서 잼 {len(g['covered'])}건 · 범위 밖(사용자 확정) {len(g['out_of_scope'])}건"
     if not forms:
         if manual is None and os.path.exists(target) and not dry:
             os.remove(target)  # 지난 생성분(_gen)만 정리
@@ -1220,37 +1408,57 @@ def selftest():
     if g['pending']:
         bad.append(f"보류 {len(g['pending'])}건: " + ' | '.join(p['why'] for p in g['pending']))
     # 2026-11-26 보류 해소 2차 — 화면별 기대(원문 근거) + 전 화면 불변 조건
+    allsc = lambda r: r['scenarios'] + r.get('tobe_missing', []) + r.get('out_of_scope', [])   # 4차: TO-BE 미등록 화면도 생성 규칙은 같게 확인
     sx = {sid: build(sid, {}) for sid in ('SCP0078', 'DMF0042', 'SCP0123', 'SCP0011')}
-    f78 = {s['asis_line']: s for s in sx['SCP0078']['scenarios'] if s['kind'] == 'dynamic'}
+    f78 = {s['asis_line']: s for s in allsc(sx['SCP0078']) if s['kind'] == 'dynamic'}
     if [t.get('size') for t in f78.get('cs:528', {}).get('steps', []) if t['op'] == 'file'] != [10485761]:
         bad.append('SCP0078 cs:528 파일 크기 검사 단계(10MB + 1 바이트) 아님')
     if [t.get('file') for t in f78.get('cs:535', {}).get('steps', []) if t['op'] == 'file'] != ['zq_formscen.exe']:
         bad.append('SCP0078 cs:535 확장자 검사 단계(.exe) 아님')
     d42 = sx['DMF0042']
-    if any(s['meth'] == 'FindData' for s in d42['scenarios'] if s['kind'] == 'dynamic'):
-        bad.append('DMF0042 Set Price 저장 뒤 FindData 검사를 이 단추 시나리오로 만듦(실저장 먼저 일어남)')
-    if any(sum(1 for t in s.get('steps', []) if t['op'] == 'dialog') != 1 for s in d42['scenarios'] if s['msg'] == 'MSG00282'):
+    if any(s['meth'] == 'FindData' and any(t['op'] == 'click' for t in s.get('steps', [])) for s in allsc(d42) if s['kind'] == 'dynamic'):
+        bad.append('DMF0042 Set Price 저장 뒤 FindData 검사를 Set Price 단추 시나리오로 만듦(실저장 먼저 일어남)')
+    if sum(1 for s in allsc(d42) if s['meth'] == 'FindData' and s['kind'] == 'dynamic' and any(t['op'] == 'search' for t in s.get('steps', []))) != 15:
+        bad.append('DMF0042 FindData 검사 15건을 조회 단추(FindButton) 시나리오로 만들지 않음(5차)')
+    if any(sum(1 for t in s.get('steps', []) if t['op'] == 'dialog') != 1 for s in allsc(d42) if s['msg'] == 'MSG00282'):
         bad.append('DMF0042 MSG00282 확인창 시나리오에 다른 변형 파일 확인창 단계가 섞임')
-    s123 = next((s for s in sx['SCP0123']['scenarios'] if s['asis_line'] == 'cs:498'), None)
+    s123 = next((s for s in allsc(sx['SCP0123']) if s['asis_line'] == 'cs:498'), None)
     if not s123 or not any(t['op'] == 'require' and t.get('visible') is True and 'tgt_divis_cd' in t.get('note', '') for t in s123.get('steps', [])):
         bad.append('SCP0123 cs:498 끝 일자가 화면 상태(tgt_divis_cd)로 바뀌는 것을 표시 확인 단계로 두지 않음')
     if s123 and not any(t['op'] == 'date' and t.get('nth') == 1 and re.search(r'[A-Za-z]', t['label']) for t in s123.get('steps', [])):
         bad.append("SCP0123 cs:498 끝 칸 라벨(' ~ ')을 시작 칸 라벨 둘째 입력으로 바꾸지 않음")
     # 3차(측정 보류 해소): 실저장 성공 = 표본 응답(fake 단추) · 버전 종류 = 콤보 조각 · 최신 Plan Date = 둘째 항목 · 첨부 건수 = 전제 행
     sy = {sid: build(sid, {}) for sid in ('DMF0020', 'SCP0083', 'SSP0027')}
-    if not all(s.get('fakeSave') is not None and any(t.get('fake') for t in s['steps']) for s in sy['DMF0020']['scenarios'] if s['msg'] == 'MSG00143'):
+    if not all(s.get('fakeSave') is not None and any(t.get('fake') for t in s['steps']) for s in allsc(sy['DMF0020']) if s['msg'] == 'MSG00143'):
         bad.append('DMF0020 MSG00143 저장 성공을 표본 응답 단계로 만들지 않음')
-    v83 = {s['asis_line']: s for s in sy['SCP0083']['scenarios']}
+    v83 = {s['asis_line']: s for s in allsc(sy['SCP0083'])}
     if not any(t['op'] == 'pick' and t.get('eq') == 'C' for t in v83.get('cs:2904', {}).get('steps', [])):
         bad.append("SCP0083 cs:2904 버전 종류 'C' 항목 선택 단계 아님")
     if not any(t['op'] == 'pick' and t.get('notIn') == ['C', 'P'] for t in v83.get('cs:2918', {}).get('steps', [])):
         bad.append("SCP0083 cs:2918 앞선 버전 종류 검사 통과(C·P 아닌 항목) 단계 아님")
-    if not any(t['op'] == 'pick' and t.get('index') == 1 for s in sy['SSP0027']['scenarios'] if s['asis_line'] == 'cs:5432' for t in s['steps']):
+    if not any(t['op'] == 'pick' and t.get('index') == 1 for s in allsc(sy['SSP0027']) if s['asis_line'] == 'cs:5432' for t in s['steps']):
         bad.append('SSP0027 cs:5432 Plan Date 둘째 항목 선택 단계 아님')
+    # 4차: TO-BE 미등록·미사용 화면은 활성 시나리오 0건 · 처리 메서드 매핑 ⏳ 는 미구현 사유
+    for sid_, r_ in list(sx.items()) + list(sy.items()):
+        if r_.get('tobe', {}).get('use') != 'Y' and r_['scenarios']:
+            bad.append(f'{sid_} TO-BE 메뉴 미등록·미사용인데 활성 시나리오 {len(r_["scenarios"])}건')
+    # 7차: 범위 밖 확정 원장(form_scen_scope.csv)의 화면은 TO-BE 미구현 0건 · 범위 밖으로만
+    for sid_ in ('FP00599', 'SCP0099', 'SCP0083', 'SSP0007'):
+        r_ = build(sid_, {})
+        if r_['tobe_missing'] or not r_['out_of_scope']:
+            bad.append(f"{sid_} 범위 밖 확정 화면인데 TO-BE 미구현 {len(r_['tobe_missing'])}건 · 범위 밖 {len(r_['out_of_scope'])}건")
+    # 6차: 같은 AS-IS 원문(메시지 문장 90% 이상)을 가진 TO-BE 화면 — DMF0067 → DMF0042(20/20), SCP0060 → SCP0011(13/14)
+    for a_, b_ in (('DMF0067', 'DMF0042'), ('SCP0060', 'SCP0011')):
+        cb_ = covered_by(a_)
+        if not cb_ or cb_[0] != b_:
+            bad.append(f'{a_} 같은 원문 TO-BE 화면 {b_} 을 찾지 못함({cb_})')
+    if not tobe_handler_status('demand/demand-master/sales-future-price', 'btnBatch_Click'):
+        bad.append('DMF0020 btnBatch_Click 의 TO-BE 매핑 ⏳(후속)을 미구현으로 보지 않음')
     if f78.get('cs:542', {}).get('expectRowsMin') != 5:
         bad.append('SCP0078 cs:542 첨부 건수 전제 행 5 아님')
-    if not any(s.get('to') == 'authprobe' for s in sx['SCP0011']['delegated']):
-        bad.append('SCP0011 권한 검사(CanUpdate)를 권한 측정에 맡기지 않음')
+    a11 = next((s for s in allsc(sx['SCP0011']) if s['msg'] == 'MSG00096'), None)
+    if not a11 or [t['op'] for t in a11.get('steps', [])][:1] != ['asAccount'] or not any(t['op'] == 'authGate' for t in a11['steps']):
+        bad.append('SCP0011 권한 검사(CanUpdate)를 SAVE 권한 없는 계정 시나리오(asAccount · authGate)로 만들지 않음(5차)')
     np_, ns_ = 0, 0
     for sid in sorted(os.listdir(FACTS)):
         r = build(sid, {}) if os.path.isdir(os.path.join(FACTS, sid)) else {}
@@ -1287,9 +1495,9 @@ def main(argv):
     if not args:
         print(__doc__); return 2
     asis = None
-    if '--asis' in argv:
+    if '--asis' in argv:  # 2026-11-27: '--asis' 값만 뺀다(화면ID 와 같은 값이면 화면ID 까지 빠져 IndexError 나던 것)
         i = argv.index('--asis'); asis = argv[i + 1] if i + 1 < len(argv) else None
-        args = [a for a in args if a != asis]
+        args = [a for j, a in enumerate(argv) if not a.startswith('--') and j != i + 1]
     try:
         return run(args[0].upper(), asis, dry)
     except Exception as e:

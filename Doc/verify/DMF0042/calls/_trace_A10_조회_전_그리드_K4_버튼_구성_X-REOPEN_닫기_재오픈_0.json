@@ -1,0 +1,54 @@
+[
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 373,
+  "at": "2026-11-26T09:33:56.702Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 13,
+  "dur": 202,
+  "at": "2026-11-26T09:34:02.482Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"ADMIN\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 97,
+  "dur": 8259,
+  "at": "2026-11-26T09:34:10.440Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 343,
+  "at": "2026-11-26T09:34:14.224Z",
+  "user": "minyonglee1",
+  "test": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈"
+ }
+]

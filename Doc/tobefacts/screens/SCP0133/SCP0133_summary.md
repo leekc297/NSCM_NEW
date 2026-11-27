@@ -10,21 +10,21 @@
 | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | component | 347 |
 | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | component | 232 |
 | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.module.scss | component | 20 |
-| features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | component | 293 |
+| features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | component | 296 |
 | features/supply/src/pages/warehouse-capacity/index.ts | index | 2 |
 | features/supply/src/pages/warehouse-capacity/useWarehouseCapacityStore.ts | store | 223 |
 | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacity.saveRequest.ts | util | 128 |
-| features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | util | 188 |
+| features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | util | 184 |
 | features/supply/src/pages/warehouse-capacity/warehouse-capacity.constants.ts | constants | 140 |
 | features/supply/src/pages/warehouse-capacity/warehouse-capacity.types.ts | types | 23 |
 | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.module.scss | style | 12 |
-| features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | page | 367 |
+| features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | page | 369 |
 | features/supply/src/pages/warehouse-capacity/__asis-mapping__.md | mapping | 53 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 5 | Y | WarehouseCapacityForm.tsx:65 WarehouseCapacityForm.tsx:73 WarehouseCapacityGrid.tsx:70 WarehouseItemMappingGrid.tsx:74 WarehouseCapacity.tsx:118 |
+| (useTabComboQueries) | hook | 5 | Y | WarehouseCapacityForm.tsx:65 WarehouseCapacityForm.tsx:73 WarehouseCapacityGrid.tsx:70 WarehouseItemMappingGrid.tsx:75 WarehouseCapacity.tsx:118 |
 | (useTabLookupQuery) | hook | 1 | Y | WarehouseCapacityForm.tsx:71 |
 | /admin/menu/SCP0133/search-conditions | http | 1 | Y | useWarehouseCapacityStore.ts:183 |
 | /admin/menu/SCP0133/column | http | 2 | Y | useWarehouseCapacityStore.ts:200 useWarehouseCapacityStore.ts:203 |
@@ -60,20 +60,20 @@
 | g | prepareCellForEdit | planGroupPrepareEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 181 |
 | g | cellEditEnding | planGroupEditEndingHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 195 |
 | DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 228 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 111 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 112 |
-| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 152 |
-| g | prepareCellForEdit | planGroupPrepareEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 165 |
-| g | cellEditEnding | planGroupEditEndingHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 178 |
-| g | cellEditEnded | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 199 |
-| g | pastedCell | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 200 |
-| g | cellEditEnded | whDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 220 |
-| g | pastedCell | whDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 221 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 268 |
-| editor | beforeinput | <arrow> value.slice,isWithinDigitLimit,inputEvent.preventDefault | addEventListener | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 63 |
-| g | prepareCellForEdit | prepareHandler | addHandler | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 82 |
-| g | cellEditEnding | editEndingHandler | addHandler | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 83 |
-| g | pastingCell | pastingHandler | addHandler | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 84 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 112 |
+| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 113 |
+| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 153 |
+| g | prepareCellForEdit | planGroupPrepareEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 166 |
+| g | cellEditEnding | planGroupEditEndingHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 179 |
+| g | cellEditEnded | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 200 |
+| g | pastedCell | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 201 |
+| g | cellEditEnded | whDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 221 |
+| g | pastedCell | whDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 222 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 271 |
+| editor | beforeinput | <arrow> value.slice,isWithinDigitLimit,inputEvent.preventDefault | addEventListener | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 59 |
+| g | prepareCellForEdit | prepareHandler | addHandler | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 78 |
+| g | cellEditEnding | editEndingHandler | addHandler | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 79 |
+| g | pastingCell | pastingHandler | addHandler | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | 80 |
 | WarehouseCapacityForm | onSearch | handleSearch | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 309 |
 | WarehouseCapacityForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 310 |
 | WarehouseCapacityGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 339 |
@@ -125,7 +125,7 @@
 | MSG00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0133(9), SCP0127(2), SCP0129(1), SCP0025(1), SCP0006(1), SCP0126(1), SCP0020(1)
+- 화면ID: SCP0133(10), SCP0127(2), SCP0129(1), SCP0025(1), SCP0006(1), SCP0126(1), SCP0020(1), COM0013(1)
 - SP/PKG: PKG_SCP0133(10), P_SCP0133_GET_WAREHOUSE_ITEM_MAPPING(2), P_SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING(2), P_SCP0133_GET(2), FN_ASIS_SORT_KEY(1), P_USER_ID(1), P_SCP0133_SAVE_(1), P_SCP0133_GET_WAREHOUSE_CAPACITY(1), P_SCP0133_SAVE_WAREHOUSE_CAPACITY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

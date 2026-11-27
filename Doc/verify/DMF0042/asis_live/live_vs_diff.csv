@@ -1,1 +1,14 @@
 ﻿asis_sp,tobe_proc,kind,diff_calls,diff_verdicts,diff_skip_why,live_calls,live_phase,live_rows,live_params,gap,note
+DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,SAVE,76,SKIP:76,kind=SAVE — GET 만 실행(쓰기 SP 실행 금지) ·  · kind 근거: DML 대상 ['A'],4,find,"0,0,0,7564","{""p_division_id"": ""40"", ""p_dept_id"": ""ALL"", ""p_end_customer"": ""ALL"", ""p_scm_site_id"": ""ALL"", ""p_project_code"": """", ""p_item_id"": """", ""p_item_type"": ""ALL"", ""p_from_yyyymmdd"": ""20261101"", ""p_now_yyyymmdd"": ""20261123"", ""p_to_yyyymmdd"": ""20270531"", ""p_created_by"": ""jaeuk.shin"", ""p_plant_site_id"": ""ALL"", ""p_biztype"": ""ALL"", ""p_userinfo"": ""ADMIN"", ""p_owner"": """", ""p_qty_yn"": ""N""}",LIVE_CAN_FILL,차등 검증은 전부 건너뜀 · AS-IS 실측에 결과(건수·인자) 있음 → 같은 조건 실측(조건 시나리오)으로 대조 가능
+DMF0042_SAVE_DM_PLN_BP_FCST,PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+PR_GET_DAY_RANGE,PR_GET_DAY_RANGE,GET,1,ERR:1,,2,find/load,"1,1","{""p_created_by"": ""jaeuk.shin"", ""p_month"": ""7""}",BOTH,차등 검증·실측 모두 있음
+DMF0042_1_GET_SPREAD_TITLE,,미확인,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+SCM0001_GET_LOOKUP_VALUES,,GET,0,,,5,find/load,"2,3,4,3,4","{""p_lookup_type"": ""ITEM_TYPE_CODE""}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
+SCM0001_GET_BIZ_TYPE_BY_DIVISION,,GET,0,,,1,load,12,"{""p_division_id"": ""81""}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
+DMF0042_GET_EXCHANGE_PRICE,PKG_DMF0042.P_DMF0042_GET_EXCHANGE_PRICE,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV,PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+UP_FX_GETCOMMONDATALIST_DM,,GET,0,,,2,find,"7,7","{""CODE"": ""DM_CELL_PROD_SITE"", ""PARAM1"": ""ALL"", ""PARAM2"": """", ""PARAM3"": """", ""PARAM4"": """", ""PARAM5"": """"}",LIVE_ONLY,차등 검증 호출 없음(E2E 가 이 PROC 을 부르지 않음) · AS-IS 실측에는 있음
+DMF0042_3_Get_BizPlan,,SAVE,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+DMF0009_GET_CODE,,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+DMF0042_3_GET_SPREAD_TITLE,,GET,0,,,0,,,{},NONE,차등 검증·실측 모두 없음(미검증)
+DMF0042_GET_SPREAD_TITLE,PKG_DMF0042.P_DMF0042_GET_SPREAD_TITLE,GET,43,DIFF:9 ROWS_ONLY:34,,6,find/load,"18,18,18,18,25","{""p_start_yyyymmdd"": ""20261101"", ""p_end_yyyymmdd"": ""20270531"", ""p_created_by"": ""jaeuk.shin"", ""p_division_id"": ""40""}",BOTH,차등 검증·실측 모두 있음

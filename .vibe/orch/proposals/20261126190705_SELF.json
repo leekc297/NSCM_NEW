@@ -1,0 +1,53 @@
+{
+  "id": "20261126190705_SELF",
+  "at": "2026-11-26T19:07:05+09:00",
+  "ms": 1795687625623,
+  "source": "self",
+  "status": "applied",
+  "sig": "fsretry diag fields",
+  "title": "파일 쓰기 재시도(fs-retry)가 끝내 실패할 때 시도 수와 걸린 시간을 오류 기록에 남김",
+  "evidence": "vm_errors.jsonl:128, :130 stack 에 fs-retry.js:9:21 이 있음(재시도 6회, 250ms 간격을 거친 뒤 실패). fs-retry.js:7-11 마지막 시도 실패 때 시도 수와 경과 시간 없이 throw. orch-errlog.js:60 기록 필드에 재시도 정보 없음",
+  "targets": [
+    "tools/VibeManager/fs-retry.js",
+    "tools/VibeManager/orch-errlog.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js"
+  ],
+  "before_after": "재시도 끝 실패가 일반 실패와 같은 줄로 남음 → fs-retry 가 던지는 오류에 e.retry = { tries, ms } 를 붙이고 errlog 기록에 retry 필드로 남김(msg, sig 는 그대로라 서명별 건수는 이어짐)",
+  "verify": "t_fs_retry.js 에 항상 UNKNOWN 을 내는 쓰기 대역으로 e.retry.tries 6, ms 1000 이상 확인 1건 추가. 반영 전 PASS 미측정 → 반영 전 + 1",
+  "rollback": "fs-retry.js, orch-errlog.js, test/t_fs_retry.js 를 반영 전 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "재시도를 넣은 뒤에도 실패 2건(17:21:46 plans.json, 18:18:55 ladder.json). 잡고 있는 프로세스는 미확인이라 재시도 시간을 늘리기 전에 근거부터 남김",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:07:23+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:14:25+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · fs-retry.js mark(): 재시도 끝 실패 오류에 e.retry={tries, ms}, orch-errlog.js note 가 retry 필드로 남김(서명 그대로). t_fs_retry.js 2건 추가. run_all 111개 중 110 통과 PASS 1895(19:15), 실패 t_orch_hotreload.js 는 mtime 시각 경합으로 흔들림 → 시험 고침 뒤 단독 3회 ALL PASS. 설치 폴더 복사"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "errors",
+  "selfKey": "orch-ladder.writeJson | UNKNOWN: unknown error, open '<path>'",
+  "kind": "fix",
+  "testsAdded": [
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js"
+  ],
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795688065300
+}

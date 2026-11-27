@@ -1,0 +1,58 @@
+{
+ "rule_id": "DB-SYN",
+ "hash": "cb6e0564c0107914",
+ "groups": [
+  {
+   "rows": [
+    "EG-41cab32e"
+   ],
+   "why": "PKG_SCP0005 소스에 TB_FX_* 참조가 없고 ATTRIBUTE9가 실존 SQL_ID인지 보는 정적 점검이다. V-dbf10e0d의 객체 존재·VALID·메타 확인과 기대 결과가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-42c71c59"
+   ],
+   "why": "FE store의 setFilter/orEmpty에서 FindDataMain 파라미터 'ALL'→'' 변환을 추적하는 행이다. 다른 행처럼 BE SP를 대상으로 하지 않아 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-4f9139c7"
+   ],
+   "why": "대상이 P_SCP0005_GET_COUNTRY_CITY 하나뿐이고, 같은 SP를 보는 다른 행이 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-74b664fb"
+   ],
+   "why": "대상이 팝업용 SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID로 다른 SP라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-80e558e7"
+   ],
+   "why": "대상이 P_SCP0005_GET_DISTRIBUTION_ROUTE로 다른 SP라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-9374e9e4"
+   ],
+   "why": "대상이 SCP0005_GET_DISTRIBUTION_ROUTEID로 다른 SP라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-e3d3d7ca"
+   ],
+   "why": "대상이 저장용 SCP0005_SAVE_DISTRIBUTION_ROUTE로 다른 SP라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-dbf10e0d"
+   ],
+   "why": "BE 계정 객체·권한·메타가 있고 VALID한지 화면 전체로 보는 차단 판정이다. 개별 SP 추적 행이나 정적 참조 점검과는 기대 결과가 달라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 02:32:55",
+ "cost": 0.051089100000000005
+}

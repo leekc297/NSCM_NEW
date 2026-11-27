@@ -1,0 +1,4286 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "_verify",
+      "_trace",
+      "_snap",
+      "--grep",
+      "@verify|@trace|@snap",
+      "--workers",
+      "1",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/DMF0042/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_snap.spec.ts",
+      "file": "_snap.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "@snap 스냅샷 형상 검사",
+          "file": "_snap.spec.ts",
+          "line": 66,
+          "column": 6,
+          "specs": [
+            {
+              "title": "@snap 조회조건 패널·버튼 바 aria ×Div",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7712,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:31:22.859Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-조회조건-패널·버튼-바-aria-×Div-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-74c995e979b472a2d796",
+              "file": "_snap.spec.ts",
+              "line": 72,
+              "column": 7
+            },
+            {
+              "title": "@snap 그리드 헤더 텍스트(모델) ×시트",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 25451,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e_results.json — UNKNOWN\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:31:33.808Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-그리드-헤더-텍스트-모델-×시트-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-399ba7d6116eaaa3a887",
+              "file": "_snap.spec.ts",
+              "line": 108,
+              "column": 7
+            },
+            {
+              "title": "@snap 조회조건 팝업 정적 aria",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 22517,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:32:03.230Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-조회조건-팝업-정적-aria-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-95b89906c95d0086fb4b",
+              "file": "_snap.spec.ts",
+              "line": 128,
+              "column": 7
+            },
+            {
+              "title": "@snap 화면샷 패널+헤더 띠 1920/1366",
+              "ok": true,
+              "tags": [
+                "snap",
+                "snap"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 21614,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:32:29.785Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_snap--snap-스냅샷-형상-검사-snap-화면샷-패널-헤더-띠-1920-1366-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6de4c50016f8c51fc199-0bf4274e8a15b8e9e175",
+              "file": "_snap.spec.ts",
+              "line": 151,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 DMF0042 @trace",
+          "file": "_trace.spec.ts",
+          "line": 638,
+          "column": 6,
+          "specs": [
+            {
+              "title": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 28096,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:33:51.849Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace--cb83f--K4-버튼-구성-·-X-REOPEN-닫기·재오픈-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-5758cc77ad56b88129b0",
+              "file": "_trace.spec.ts",
+              "line": 664,
+              "column": 7
+            },
+            {
+              "title": "G6 조회조건 초기값 = AS-IS 로드 문장",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8882,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:34:22.868Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-G6-조회조건-초기값-AS-IS-로드-문장-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-608304950b15d1c02088",
+              "file": "_trace.spec.ts",
+              "line": 738,
+              "column": 7
+            },
+            {
+              "title": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 6건 (500 admin/combo | 500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 1건: [DB] ORA-01400 \"SCM_MGR\".\"SCM_COM_SYS_LOG\""
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 452530,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:34:34.534Z",
+                      "annotations": [
+                        {
+                          "type": "dberr",
+                          "description": "BE 5xx 6건 (500 admin/combo | 500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 1건: [DB] ORA-01400 \"SCM_MGR\".\"SCM_COM_SYS_LOG\""
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace--95d32-경-→-하위-후보-재조회·선택-초기화-그리드-상태-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-3e00267d38c87ffcba2b",
+              "file": "_trace.spec.ts",
+              "line": 774,
+              "column": 7
+            },
+            {
+              "title": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 28468,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:42:10.712Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace--773b0-·E1·D4·C3·C2·C6·F4-TRACE-행--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-05653fdba5fdb9b8d3f5",
+              "file": "_trace.spec.ts",
+              "line": 861,
+              "column": 7
+            },
+            {
+              "title": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17919,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:42:41.904Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-PCOL-팝업-내부-그리드-컬럼-—-H5·A5·D5·H2-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-d5215c8f4ac463d793da",
+              "file": "_trace.spec.ts",
+              "line": 1213,
+              "column": 7
+            },
+            {
+              "title": "W4 D3 행 조건부 잠금 = AS-IS lock_rules",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18555,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:43:02.720Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-W4-D3-행-조건부-잠금-AS-IS-lock-rules-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-03b72b636acd7b318046",
+              "file": "_trace.spec.ts",
+              "line": 1288,
+              "column": 7
+            },
+            {
+              "title": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 40305,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[formscen] G01 PASS G01 MSG00282(cs:3117) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음\n"
+                        },
+                        {
+                          "text": "[formscen] G02 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3133\n"
+                        },
+                        {
+                          "text": "[formscen] G03 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:790) · cs:790\n"
+                        },
+                        {
+                          "text": "[formscen] G04 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:816) · cs:816\n"
+                        },
+                        {
+                          "text": "[formscen] G05 PASS G05 MSG00282(cs:3231) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음\n"
+                        },
+                        {
+                          "text": "[formscen] G06 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3247\n"
+                        },
+                        {
+                          "text": "[formscen] G07 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:851) · cs:851\n"
+                        },
+                        {
+                          "text": "[formscen] G08 PASS G08 MSG00282(cs:3180) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음\n"
+                        },
+                        {
+                          "text": "[formscen] G09 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3196\n"
+                        },
+                        {
+                          "text": "[formscen] G10 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:768) · cs:768\n"
+                        },
+                        {
+                          "text": "[formscen] G11 PASS G11 MSG00282(cs:3341) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음\n"
+                        },
+                        {
+                          "text": "[formscen] G12 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3357\n"
+                        },
+                        {
+                          "text": "[formscen] G13 PASS G13 MSG00282(cs:2383) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음\n"
+                        },
+                        {
+                          "text": "[formscen] G14 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:2399\n"
+                        },
+                        {
+                          "text": "[formscen] G15 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:676) · cs:676\n"
+                        },
+                        {
+                          "text": "[formscen] G16 ERROR [측정 경로 없음] G16 MSG00097: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G17 ERROR [측정 경로 없음] G17 MSG00108: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G18 ERROR [측정 경로 없음] G18 MSG00276: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G19 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:790) · cs:790\n"
+                        },
+                        {
+                          "text": "[formscen] G20 ERROR [측정 경로 없음] G20 MSG00097: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G21 ERROR [측정 경로 없음] G21 MSG00108: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G22 ERROR [측정 경로 없음] G22 MSG00276: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G23 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:816) · cs:816\n"
+                        },
+                        {
+                          "text": "[formscen] G24 ERROR [측정 경로 없음] G24 MSG00097: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G25 ERROR [측정 경로 없음] G25 MSG00108: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G26 ERROR [측정 경로 없음] G26 MSG00276: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G27 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:851) · cs:851\n"
+                        },
+                        {
+                          "text": "[formscen] G28 ERROR [측정 경로 없음] G28 MSG00097: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G29 ERROR [측정 경로 없음] G29 MSG00108: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G30 ERROR [측정 경로 없음] G30 MSG00276: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G31 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:768) · cs:768\n"
+                        },
+                        {
+                          "text": "[formscen] G32 ERROR [측정 경로 없음] G32 MSG00097: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G33 ERROR [측정 경로 없음] G33 MSG00108: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G34 ERROR [측정 경로 없음] G34 MSG00276: 조회영역 칸 'Division' 없음\n"
+                        },
+                        {
+                          "text": "[formscen] G35 NA (동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:676) · cs:676\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:43:24.109Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-W4-E4-업무-검증-메시지-AS-IS-저장-차단--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-52696640afc2c5c1befe",
+              "file": "_trace.spec.ts",
+              "line": 1350,
+              "column": 7
+            },
+            {
+              "title": "W4 M4 팝업 선택값 반영 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 41427,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:44:07.590Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-W4-M4-팝업-선택값-반영-AS-IS-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-be10fa9e4ec0f60732f1",
+              "file": "_trace.spec.ts",
+              "line": 1615,
+              "column": 7
+            },
+            {
+              "title": "A6 조회 결과 행 순서 = AS-IS ORDER BY",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 59043,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:46:44.435Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-A6-조회-결과-행-순서-AS-IS-ORDER-BY-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-50f0281b8d7662add63b",
+              "file": "_trace.spec.ts",
+              "line": 1687,
+              "column": 7
+            },
+            {
+              "title": "W4b H3·F5·F3·M3·J1·H4",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 267495,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 1건이 120s 안에 끝나지 않음: DMF0042/Biz%20Plan/SEARCH/call-proc\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 2번째 → 8행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조회조건 'End Customer' 2번째 후보 대안 조회(End Customer '1X Technologies'(후보 13개 중 1번째):0행 · End Customer 'ABS'(후보 13개 중 2번째):8행)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:47:46.115Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-W4b-H3·F5·F3·M3·J1·H4-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-6ee1ebcac67c2d1810b2",
+              "file": "_trace.spec.ts",
+              "line": 1757,
+              "column": 7
+            },
+            {
+              "title": "D6 Insert 위치·상태 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 21879,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:52:16.406Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-D6-Insert-위치·상태-AS-IS-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-b1deeed29a00dda17dad",
+              "file": "_trace.spec.ts",
+              "line": 2021,
+              "column": 7
+            },
+            {
+              "title": "W4c 정밀 판정 — 판정필요 해소",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1452489,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[ensureRows] 시도 → 96행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] Division '40' 대안 조회(Div 40:96행)\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 1건이 120s 안에 끝나지 않음: DMF0042/Biz%20Plan/SEARCH/call-proc\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 1건이 120s 안에 끝나지 않음: DMF0042/Biz%20Plan/SEARCH/call-proc\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:52:40.810Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-W4c-정밀-판정-—-판정필요-해소-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-e3472f3447a446c55838",
+              "file": "_trace.spec.ts",
+              "line": 2050,
+              "column": 7
+            },
+            {
+              "title": "W4d 잔여 판정필요 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 97996,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:17:06.452Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-W4d-잔여-판정필요-실측-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-12ffe83ef3efc93c9d72",
+              "file": "_trace.spec.ts",
+              "line": 2561,
+              "column": 7
+            },
+            {
+              "title": "W9 대조표 미구현 행 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 361,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:18:46.825Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-W9-대조표-미구현-행-실측-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-3b3e9c9c820784455eed",
+              "file": "_trace.spec.ts",
+              "line": 3037,
+              "column": 7
+            },
+            {
+              "title": "H2 조건부 배경색 = AS-IS 행 조건(color_rules)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 416,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:18:50.217Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-H2-조건부-배경색-AS-IS-행-조건-color-rules--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-75d984f0c0b3570ef758",
+              "file": "_trace.spec.ts",
+              "line": 3227,
+              "column": 7
+            },
+            {
+              "title": "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7543,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:18:53.005Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace--8ac0e-튼-BTN-AS-IS-버튼-→-TO-BE-칸-버튼-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-0dc40083c11d379c1ac8",
+              "file": "_trace.spec.ts",
+              "line": 3336,
+              "column": 7
+            },
+            {
+              "title": "D3 조건부 잠금 = AS-IS(조건 만족 계정·Division)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10408,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:19:02.815Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace-D3-조건부-잠금-AS-IS-조건-만족-계정·Division--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-5c30eec7b507f4483734",
+              "file": "_trace.spec.ts",
+              "line": 3375,
+              "column": 7
+            },
+            {
+              "title": "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 542,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:19:15.590Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_trace-검증엔진-DMF0042-trace--2d6a8-AS-IS-버튼-→-팝업-→-OK-→-후속-메서드-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-11ca7908cf75a2de9fe9",
+              "file": "_trace.spec.ts",
+              "line": 3453,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 DMF0042 @verify",
+          "file": "_verify.spec.ts",
+          "line": 306,
+          "column": 6,
+          "specs": [
+            {
+              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7202,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:19:21.047Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-조회-전-버튼-전제조건-D4-·-화면-진입-다국어-I2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-201be3972636c729293f",
+              "file": "_verify.spec.ts",
+              "line": 341,
+              "column": 7
+            },
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 96582,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[lap] 기존행 편집(D1) 11s\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 15s\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 54s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 54s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 57s\n"
+                        },
+                        {
+                          "text": "[lap] E1 80s\n"
+                        },
+                        {
+                          "text": "[lap] H13 81s\n"
+                        },
+                        {
+                          "text": "[lap] E2 81s\n"
+                        },
+                        {
+                          "text": "[lap] C3 81s\n"
+                        },
+                        {
+                          "text": "[lap] D5 81s\n"
+                        },
+                        {
+                          "text": "[lap] K5 81s\n"
+                        },
+                        {
+                          "text": "[lap] H2 81s\n"
+                        },
+                        {
+                          "text": "[lap] A2 83s\n"
+                        },
+                        {
+                          "text": "[lap] C2 83s\n"
+                        },
+                        {
+                          "text": "[lap] C6 85s\n"
+                        },
+                        {
+                          "text": "[lap] E5 85s\n"
+                        },
+                        {
+                          "text": "[lap] E7 92s\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:19:30.685Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-117ae-1·B2-·숫자-E1-·날짜-E2-·다국어-I2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-73723fc9fc7f92e72a50",
+              "file": "_verify.spec.ts",
+              "line": 375,
+              "column": 65
+            },
+            {
+              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 612961,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 600000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 600000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 600000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts",
+                            "column": 7,
+                            "line": 153
+                          },
+                          "message": "Error: page.evaluate: Target page, context or browser has been closed\n\n   at ..\\..\\..\\tools\\E2E\\lib\\probe.ts:153\n\n  151 |   cellCenter: (p: Page, row: number, binding: string) =>\n  152 |     // 스크롤 직후에는 셀이 아직 다시 그려지지 않아 null 이 나온다(2026-10-23 실측) → 최대 10회(약 2초) 재시도\n> 153 |     p.evaluate(`(async () => { const c = ${CTL}; const col = c && c.columns.getColumn(${J(binding)}); if (!col) return null; c.scrollIntoView(${row}, col.index);\n      |       ^\n  154 |       for (let k = 0; k < 10; k++) { let el = c.cells.getCellElement(${row}, col.index);\n  155 |       if (!el) { try { c.scrollIntoView(${row}, col.index); c.refresh(false); await new Promise(r => requestAnimationFrame(r)); await new Promise(r => setTimeout(r, 120));\n  156 |         el = c.cells.getCellElement(${row}, col.index);\n    at Object.cellCenter (C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts:153:7)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1042:28"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:21:09.654Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-137f6--셀-값이-TO-BE-팝업-조회-요청에-들어가는지-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-137f6--셀-값이-TO-BE-팝업-조회-요청에-들어가는지-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-137f6--셀-값이-TO-BE-팝업-조회-요청에-들어가는지-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-137f6--셀-값이-TO-BE-팝업-조회-요청에-들어가는지-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-137f6--셀-값이-TO-BE-팝업-조회-요청에-들어가는지-chromium\\trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a0271497a4736332066b",
+              "file": "_verify.spec.ts",
+              "line": 1021,
+              "column": 7
+            },
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=N inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · 수정 저장 경로 강제(edit-save) · 필수 칸(DIVISION_ID,INCOTERMS,CURRENCY,END_CUSTOMER40,SCM_SITE_ID40,ITEM_ID40,FCST_TYPE,CELL_PROD_SITE) 채워진 행 없음 — 종전 후보 · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '14.54' 입력 → 표시 '14.540'(글자 누락) · 재입력(키보드) → '14.540' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '13956' 입력 → 표시 '13,956.000'(글자 누락) · 재입력(키보드) → '13,956.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '7659999' 입력 → 표시 '7,659,999.000'(글자 누락) · 재입력(키보드) → '7,659,999.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '840.69' 입력 → 표시 '840.690'(글자 누락) · 재입력(키보드) → '840.690' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '12.64' 입력 → 표시 '12.640'(글자 누락) · 재입력(키보드) → '12.640' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '3.5' 입력 → 표시 '3.500'(글자 누락) · 재입력(키보드) → '3.500' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '39335' 입력 → 표시 '39,335.000'(글자 누락) · 재입력(키보드) → '39,335.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '30.58' 입력 → 표시 '30.580'(글자 누락) · 재입력(키보드) → '30.580' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '192116003' 입력 → 표시 '192,116,003.000'(글자 누락) · 재입력(키보드) → '192,116,003.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '15.87' 입력 → 표시 '15.870'(글자 누락) · 재입력(키보드) → '15.870' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '801601' 입력 → 표시 '801,601.000'(글자 누락) · 재입력(키보드) → '801,601.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '2.64' 입력 → 표시 '2.640'(글자 누락) · 재입력(키보드) → '2.640' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '234999' 입력 → 표시 '234,999.000'(글자 누락) · 재입력(키보드) → '234,999.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '14251' 입력 → 표시 '14,251.000'(글자 누락) · 재입력(키보드) → '14,251.000' — 입력 버리고 다음 후보(T432) · 편집 가능 셀 18개 시도 — 값이 바뀌는 셀 없음"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 328421,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[save-sheet] AS-IS Save 대상 'Biz Plan'(SaveButton→SaveData · shtMain=\"Biz Plan\" (DMF0042_1_BizPlan.cs)) 그리드 확정 실패 — 시트 'Biz Plan' 그리드를 화면에서 확정 못 함 — 보이는 그리드: 미확정\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        },
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:32:13.343Z",
+                      "annotations": [
+                        {
+                          "type": "crud",
+                          "description": "mode=edit-save save=Y insert=N delete=Y editable=N inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · 수정 저장 경로 강제(edit-save) · 필수 칸(DIVISION_ID,INCOTERMS,CURRENCY,END_CUSTOMER40,SCM_SITE_ID40,ITEM_ID40,FCST_TYPE,CELL_PROD_SITE) 채워진 행 없음 — 종전 후보 · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '14.54' 입력 → 표시 '14.540'(글자 누락) · 재입력(키보드) → '14.540' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '13956' 입력 → 표시 '13,956.000'(글자 누락) · 재입력(키보드) → '13,956.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '7659999' 입력 → 표시 '7,659,999.000'(글자 누락) · 재입력(키보드) → '7,659,999.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '840.69' 입력 → 표시 '840.690'(글자 누락) · 재입력(키보드) → '840.690' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '12.64' 입력 → 표시 '12.640'(글자 누락) · 재입력(키보드) → '12.640' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '1' 입력 → 표시 '1.000'(글자 누락) · 재입력(키보드) → '1.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '3.5' 입력 → 표시 '3.500'(글자 누락) · 재입력(키보드) → '3.500' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '39335' 입력 → 표시 '39,335.000'(글자 누락) · 재입력(키보드) → '39,335.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '30.58' 입력 → 표시 '30.580'(글자 누락) · 재입력(키보드) → '30.580' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '192116003' 입력 → 표시 '192,116,003.000'(글자 누락) · 재입력(키보드) → '192,116,003.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '15.87' 입력 → 표시 '15.870'(글자 누락) · 재입력(키보드) → '15.870' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '801601' 입력 → 표시 '801,601.000'(글자 누락) · 재입력(키보드) → '801,601.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '2.64' 입력 → 표시 '2.640'(글자 누락) · 재입력(키보드) → '2.640' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '234999' 입력 → 표시 '234,999.000'(글자 누락) · 재입력(키보드) → '234,999.000' — 입력 버리고 다음 후보(T432) · [입력 경로 실패] M_202701 '14251' 입력 → 표시 '14,251.000'(글자 누락) · 재입력(키보드) → '14,251.000' — 입력 버리고 다음 후보(T432) · 편집 가능 셀 18개 시도 — 값이 바뀌는 셀 없음"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-a5cb9-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-735ac675459fed630536",
+              "file": "_verify.spec.ts",
+              "line": 1100,
+              "column": 7
+            },
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 69141,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[save-sheet] AS-IS Save 대상 'Biz Plan'(SaveButton→SaveData · shtMain=\"Biz Plan\" (DMF0042_1_BizPlan.cs)) 그리드 확정 실패 — 시트 'Biz Plan' 그리드를 화면에서 확정 못 함 — 보이는 그리드: 미확정\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:37:45.159Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-저장-세부-F1·F6-—-컬럼별-왕복·0-값-저장-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-23727b85d8565478933e",
+              "file": "_verify.spec.ts",
+              "line": 1786,
+              "column": 7
+            },
+            {
+              "title": "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 110569,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:38:56.515Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-2c2a6-1-실패·H10-취소·H11-로딩·F2-붙여넣기--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e76fb2440c9149b8c80d",
+              "file": "_verify.spec.ts",
+              "line": 1945,
+              "column": 7
+            },
+            {
+              "title": "신규행 검증(E3 컬럼별 필수·E4 키 중복)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 43319,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:40:50.215Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-신규행-검증-E3-컬럼별-필수·E4-키-중복--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-68f68e87a8047ab7f679",
+              "file": "_verify.spec.ts",
+              "line": 2065,
+              "column": 7
+            },
+            {
+              "title": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1500000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 156848,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[ensureRows] 시도 → 96행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:41:35.746Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-입력-검증-저장-E1-음수·소수·E2-날짜·E5-콤보--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f9617b6b644a2c81e6d7",
+              "file": "_verify.spec.ts",
+              "line": 2233,
+              "column": 7
+            },
+            {
+              "title": "기간 동적 컬럼(A8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10822,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:44:14.859Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-기간-동적-컬럼-A8--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-81f968ff2798ca5c6344",
+              "file": "_verify.spec.ts",
+              "line": 2277,
+              "column": 7
+            },
+            {
+              "title": "실전송 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10272,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:44:28.180Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-실전송-건수-A1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7fd93e4994045ef7e3fe",
+              "file": "_verify.spec.ts",
+              "line": 2289,
+              "column": 7
+            },
+            {
+              "title": "합계 값(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11287,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:44:40.719Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-합계-값-A3--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-007c211828d6985f714e",
+              "file": "_verify.spec.ts",
+              "line": 2306,
+              "column": 7
+            },
+            {
+              "title": "Division 컬럼(A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 748229,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[ensureRows] 조건 Team 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Sales Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Plant Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Biz. Type 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Team 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Sales Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Plant Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Biz. Type 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Item Type 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Item Type 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:44:54.280Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Division-컬럼-A5--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-9207d2c0f4e2c985c90d",
+              "file": "_verify.spec.ts",
+              "line": 2333,
+              "column": 7
+            },
+            {
+              "title": "조회조건 겹침(H4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8475,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:57:24.788Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-조회조건-겹침-H4--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-44999f8adc790c190026",
+              "file": "_verify.spec.ts",
+              "line": 2371,
+              "column": 7
+            },
+            {
+              "title": "Excel 2단계 차단(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4562,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:57:35.952Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Excel-2단계-차단-M1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6f8b0f0b153c250eda8c",
+              "file": "_verify.spec.ts",
+              "line": 2384,
+              "column": 7
+            },
+            {
+              "title": "Excel 양식·업로드(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5314,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:57:42.854Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Excel-양식·업로드-M1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ed90ddc854d83a44b4e8",
+              "file": "_verify.spec.ts",
+              "line": 2398,
+              "column": 7
+            },
+            {
+              "title": "셀 연쇄 초기화(C2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 301,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:57:50.537Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-셀-연쇄-초기화-C2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4276ac194a1e5d9268fc",
+              "file": "_verify.spec.ts",
+              "line": 2501,
+              "column": 7
+            },
+            {
+              "title": "컬럼 설정 필수 컬럼(K2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 30410,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:57:53.159Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-컬럼-설정-필수-컬럼-K2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-273f13cf201d8c43e15c",
+              "file": "_verify.spec.ts",
+              "line": 2568,
+              "column": 7
+            },
+            {
+              "title": "언어 전환 문구 덤프(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 41784,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[langacct] DMF0042 I2: 언어 시험 계정 bindy122678 로 로그인(다른 화면 대기 없음)\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:58:25.895Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-언어-전환-문구-덤프-I2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-44bb2ce4a376e15082f1",
+              "file": "_verify.spec.ts",
+              "line": 2623,
+              "column": 7
+            },
+            {
+              "title": "병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 470555,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 57550,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T10:59:09.972Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-da770-력·Delete·원값-복원-H3·F5·D1·F3--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b22c2498be9b13e8f5af",
+              "file": "_verify.spec.ts",
+              "line": 2659,
+              "column": 7
+            },
+            {
+              "title": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13430,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:00:09.780Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-텍스트-부분-삭제·Insert-행-Div-변경-E6·D1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e0aa4da275b59ad2259c",
+              "file": "_verify.spec.ts",
+              "line": 2701,
+              "column": 7
+            },
+            {
+              "title": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15661,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:00:25.497Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-720b9-계·기간-이상값·정렬-Copy-A10·N1·K1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-77cd860b58eafed3d08c",
+              "file": "_verify.spec.ts",
+              "line": 2715,
+              "column": 7
+            },
+            {
+              "title": "레이아웃·조회 묶음(H4·N1·G1·L2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 126777,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:00:43.365Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-레이아웃·조회-묶음-H4·N1·G1·L2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7c5efdc56d3e2fec95c1",
+              "file": "_verify.spec.ts",
+              "line": 2732,
+              "column": 7
+            },
+            {
+              "title": "필터 항목·연속 조회 본문(K1·G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 125495,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:02:52.367Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-필터-항목·연속-조회-본문-K1·G6--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-76de014532e216af966c",
+              "file": "_verify.spec.ts",
+              "line": 2756,
+              "column": 7
+            },
+            {
+              "title": "조회조건 초기값·Division 변경 뒤 Version(G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6682,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:05:00.192Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-62984-값·Division-변경-뒤-Version-G6--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b599677d3e9bcbbddc2f",
+              "file": "_verify.spec.ts",
+              "line": 2768,
+              "column": 7
+            },
+            {
+              "title": "Team 값 덤프(B8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11488,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:05:09.193Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Team-값-덤프-B8--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-581d7ad0cabc216ac5db",
+              "file": "_verify.spec.ts",
+              "line": 2778,
+              "column": 7
+            },
+            {
+              "title": "Insert 행 Division(D4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16009,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:05:22.953Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Insert-행-Division-D4--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6c6ab20b4c9ac5bd305f",
+              "file": "_verify.spec.ts",
+              "line": 2783,
+              "column": 7
+            },
+            {
+              "title": "동적 칸 정렬·방향키 응답(K1·L1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 20914,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:05:41.227Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-동적-칸-정렬·방향키-응답-K1·L1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1cf9b661ba6c22249ba0",
+              "file": "_verify.spec.ts",
+              "line": 2792,
+              "column": 7
+            },
+            {
+              "title": "기간 조건 글자·역전(E2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13788,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:06:04.400Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-기간-조건-글자·역전-E2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0d2f97e9cfb8f4453c71",
+              "file": "_verify.spec.ts",
+              "line": 2803,
+              "column": 7
+            },
+            {
+              "title": "Division별 조회 오류·콤보 이름(F4·A2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 556484,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:06:20.442Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Division별-조회-오류·콤보-이름-F4·A2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-353867642d2891127a82",
+              "file": "_verify.spec.ts",
+              "line": 2817,
+              "column": 7
+            },
+            {
+              "title": "버튼 경로 메시지·모달 조건(E4·B3·B4·G4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15100,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:15:39.148Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-버튼-경로-메시지·모달-조건-E4·B3·B4·G4--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7a3164829c424cd21882",
+              "file": "_verify.spec.ts",
+              "line": 2830,
+              "column": 7
+            },
+            {
+              "title": "전용 버튼 확인창(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 114749,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:15:56.481Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-전용-버튼-확인창-M2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5cf4e4f2a7bb34ed9f86",
+              "file": "_verify.spec.ts",
+              "line": 2878,
+              "column": 7
+            },
+            {
+              "title": "편집 모드 구분(D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13664,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:17:53.521Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-편집-모드-구분-D1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-075e92f54b542f1a69e2",
+              "file": "_verify.spec.ts",
+              "line": 2886,
+              "column": 7
+            },
+            {
+              "title": "실적 구간 색(H2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 312,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:18:09.408Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-실적-구간-색-H2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ab93e181600e462c391c",
+              "file": "_verify.spec.ts",
+              "line": 2902,
+              "column": 7
+            },
+            {
+              "title": "이름·ID 조건 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 309,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:18:11.978Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-이름·ID-조건-건수-A1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d7b70cc8cc2c9168d67e",
+              "file": "_verify.spec.ts",
+              "line": 2914,
+              "column": 7
+            },
+            {
+              "title": "Sum 체크박스(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 309,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:18:14.555Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Sum-체크박스-A3--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a3abd49b0c44370bf8d3",
+              "file": "_verify.spec.ts",
+              "line": 2926,
+              "column": 7
+            },
+            {
+              "title": "숫자 표시 형식(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 301,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:18:17.086Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-숫자-표시-형식-H8--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-58478af20e54be64252a",
+              "file": "_verify.spec.ts",
+              "line": 2937,
+              "column": 7
+            },
+            {
+              "title": "문서 표시 문구(H5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 288,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:18:19.621Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-문서-표시-문구-H5--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1af4018fc83a64fe6486",
+              "file": "_verify.spec.ts",
+              "line": 2946,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오 1/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 8850000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 548696,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] DMF0042 '신규 행 있을 때 Bucket 변경 차단' 시작 20:18:24\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 'Replace 자료 없는 버전 → 사전 중단 안내(원장 변경 없음)' 시작 20:18:59\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 기존 행 Delete → D 저장 요청' 시작 20:20:15\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] DEPT_ID40 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 20:20:43\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] END_CUSTOMER40 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 20:21:19\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] END_CUSTOMER40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 20:21:54\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] SCM_SITE_ID40 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 20:22:44\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] INCOTERMS 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 20:23:15\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] INCOTERMS 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 20:23:46\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] FCST_TYPE 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 20:24:17\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CELL_PROD_SITE 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 20:24:51\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CELL_PROD_SITE 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 20:25:24\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CURRENCY 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 20:25:58\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0' 시작 20:26:28\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 값 있는 편집 구간 수량 셀 편집' 시작 20:27:01\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:18:22.101Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-문서-시나리오-1-4-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f13cdac23fde0ae7a73e",
+              "file": "_verify.spec.ts",
+              "line": 2962,
+              "column": 47
+            },
+            {
+              "title": "문서 시나리오 2/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 8850000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 455777,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] DMF0042 '신규 행 있을 때 다른 기능 MSG00680' 시작 20:27:35\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림' 시작 20:28:00\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] DEPT_ID40 셀 콤보 후보 = 서버 콤보 TeambyDivisionAuth' 시작 20:28:35\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] DEPT_ID40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 20:29:04\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] END_CUSTOMER40 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 20:29:35\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] SCM_SITE_ID40 셀 콤보 후보 = 서버 콤보 SiteByEndCustomer' 시작 20:30:03\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] SCM_SITE_ID40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 20:30:31\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] INCOTERMS 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 20:31:01\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] FCST_TYPE 셀 콤보 후보 = 서버 콤보 DM_LOOKUP_DIV' 시작 20:31:29\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] FCST_TYPE 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 20:31:58\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CELL_PROD_SITE 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 20:32:26\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CURRENCY 셀 콤보 후보 = 서버 콤보 CURRENCY_LIST' 시작 20:32:53\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CURRENCY 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 20:33:23\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 편집 중 Replace 실행 → MSG00680(DM-52 일반 규칙)' 시작 20:33:51\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] Bucket 반복 전환 조회 SQL 오류 0' 시작 20:34:19\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:27:33.130Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-문서-시나리오-2-4-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ea3ce1a08f7b9e270e5e",
+              "file": "_verify.spec.ts",
+              "line": 2962,
+              "column": 47
+            },
+            {
+              "title": "문서 시나리오 3/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 8850000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 460681,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] DMF0042 '선택 행 위로 Insert' 시작 20:35:13\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CN 언어 조회 건수 총/건 표기' 시작 20:35:37\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] DEPT_ID40 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 20:36:46\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] DEPT_ID40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 20:37:17\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] END_CUSTOMER40 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 20:37:46\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] SCM_SITE_ID40 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 20:38:20\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] SCM_SITE_ID40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 20:38:48\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] INCOTERMS 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 20:39:19\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] FCST_TYPE 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 20:39:46\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] FCST_TYPE 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 20:40:15\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CELL_PROD_SITE 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣기 대조)' 시작 20:40:43\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CURRENCY 신규 행 콤보 붙여넣기 — 후보 값 반영' 시작 20:41:11\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CURRENCY 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 밖 값(비활성 등) 행에서 복사' 시작 20:41:39\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 편집 중 Exchange Rate 실행 → MSG00680(DM-52 일반 규칙)' 시작 20:42:10\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 조회조건 콤보 9종 = 콤보' 시작 20:42:41\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:35:11.190Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-문서-시나리오-3-4-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-04b1980f6d64a7c94c5f",
+              "file": "_verify.spec.ts",
+              "line": 2962,
+              "column": 47
+            },
+            {
+              "title": "문서 시나리오 4/4",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 8850000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 461046,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[시나리오] DMF0042 '신규 행 Sales Site·Model 입력 → Team·End Customer·Energy 자동' 시작 20:42:57\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 조회 중 Loading 토스트 없음' 시작 20:43:30\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] DEPT_ID40 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 20:43:55\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] END_CUSTOMER40 셀 콤보 후보 = 서버 콤보 EndCustomerByDivision40' 시작 20:44:22\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] END_CUSTOMER40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 20:44:49\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] SCM_SITE_ID40 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 20:45:18\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] INCOTERMS 셀 콤보 후보 = 서버 콤보 incotermsEdit' 시작 20:45:46\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] INCOTERMS 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 20:46:19\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] FCST_TYPE 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 20:46:58\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CELL_PROD_SITE 셀 콤보 후보 = 서버 콤보 DM_CELL_PROD_SITE' 시작 20:47:34\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CELL_PROD_SITE 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영' 시작 20:48:10\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] CURRENCY 신규 행 콤보 붙여넣기 — 후보 밖 값 거부' 시작 20:48:47\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 기존 행 동적 기간 칸 수정 저장 → 입력된 필수 칸 오탐 없음' 시작 20:49:22\n"
+                        },
+                        {
+                          "text": "[시나리오] DMF0042 '[자동] 편집 중 Ver. Cutoff 실행 → MSG00680(DM-52 일반 규칙)' 시작 20:49:59\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:42:54.227Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-문서-시나리오-4-4-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-08b9f9cf215a9e059e14",
+              "file": "_verify.spec.ts",
+              "line": 2962,
+              "column": 47
+            },
+            {
+              "title": "0 표시 규칙(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 563,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:50:37.858Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-0-표시-규칙-H8--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-57315d011fa49672aa1b",
+              "file": "_verify.spec.ts",
+              "line": 3217,
+              "column": 7
+            },
+            {
+              "title": "문서 조건별 버튼·컬럼 노출(K4·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 484,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:50:41.347Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-문서-조건별-버튼·컬럼-노출-K4·A5--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-23facde045584d601b92",
+              "file": "_verify.spec.ts",
+              "line": 3224,
+              "column": 7
+            },
+            {
+              "title": "셀 편집 표시·값 유지(A2·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 27648,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:50:44.725Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-셀-편집-표시·값-유지-A2·F6--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-9e052fd9f7ac8753a21c",
+              "file": "_verify.spec.ts",
+              "line": 3231,
+              "column": 7
+            },
+            {
+              "title": "재조회 하위 시트 초기화(A4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 604,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:51:15.192Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-재조회-하위-시트-초기화-A4--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4fc0e122ea7fc56d7000",
+              "file": "_verify.spec.ts",
+              "line": 3269,
+              "column": 7
+            },
+            {
+              "title": "월 Bucket 합계(F1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 27298,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[파일 쓰기 재시도] writeFileSync C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e_results.json — UNKNOWN\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:51:19.057Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-월-Bucket-합계-F1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1f0348720107ddeae655",
+              "file": "_verify.spec.ts",
+              "line": 3281,
+              "column": 7
+            },
+            {
+              "title": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 59374,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:51:49.341Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-0d0c8-상태-Insert-D6-·붙여넣기-후보-외-F3--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-81611cbcddd075bd8eac",
+              "file": "_verify.spec.ts",
+              "line": 3307,
+              "column": 7
+            },
+            {
+              "title": "그리드 표시 묶음(N1·H8·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14000,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:52:51.640Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-그리드-표시-묶음-N1·H8·A5--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-20208abe750b42d58978",
+              "file": "_verify.spec.ts",
+              "line": 3347,
+              "column": 7
+            },
+            {
+              "title": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6887,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:53:08.400Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-화면-틀-J4-메뉴-오픈·탭-이름-·-G4-돋보기--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d9e4accab8b327193114",
+              "file": "_verify.spec.ts",
+              "line": 3358,
+              "column": 7
+            },
+            {
+              "title": "선택 조회 복수·단일·전체 왕복(G2·B6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 233816,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:53:18.053Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-선택-조회-복수·단일·전체-왕복-G2·B6--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-018973d5835a6bbb67e1",
+              "file": "_verify.spec.ts",
+              "line": 3372,
+              "column": 7
+            },
+            {
+              "title": "Excel 다운로드 내용(H7)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18916,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:57:14.662Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-Excel-다운로드-내용-H7--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-040a8aa464b347b429ab",
+              "file": "_verify.spec.ts",
+              "line": 3414,
+              "column": 7
+            },
+            {
+              "title": "필터 유지 재조회(K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 30799,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:57:36.759Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-필터-유지-재조회-K1--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-42abd465e52a7a7732b1",
+              "file": "_verify.spec.ts",
+              "line": 3431,
+              "column": 7
+            },
+            {
+              "title": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 51877,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:58:10.413Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-97077-11-·팝업-Enter-G10-·특수-버튼-M2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2f47e936f5ae2d3e1e1f",
+              "file": "_verify.spec.ts",
+              "line": 3463,
+              "column": 7
+            },
+            {
+              "title": "주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6271,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:59:05.108Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-04b05-기본-요일-1일-전량-·-주-합계-입력값-·-원복-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-fda2b07adfded2908d5e",
+              "file": "_verify.spec.ts",
+              "line": 3597,
+              "column": 7
+            },
+            {
+              "title": "권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 524,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:59:14.206Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-a8c48-AS-IS-잠금-규칙을-다른-권한-계정으로-재평가-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d9d8e6366677dc09f655",
+              "file": "_verify.spec.ts",
+              "line": 3666,
+              "column": 7
+            },
+            {
+              "title": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12999,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:59:17.589Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-dce6c-로-하단-조회-시-상단-재조회·재렌더-깜빡임-없음-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-234d0a323b803638e7b0",
+              "file": "_verify.spec.ts",
+              "line": 3697,
+              "column": 7
+            },
+            {
+              "title": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 155437,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[F4 진단-목록] k3pop2 checked=1/5 · 첫 체크 칸 item checked=false ind=true\n"
+                        },
+                        {
+                          "text": "[F4 진단] k3pop2 값 목록 6 · 적용 직전 체크 0 · 전체 칸 false · 적용 뒤 행 122 · filter=function items=122 src=14733\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T11:59:33.427Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-ca126-rl-C·우클릭-·Hide-Column·F5-조회-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d0c3a4b4808b21574288",
+              "file": "_verify.spec.ts",
+              "line": 3740,
+              "column": 7
+            },
+            {
+              "title": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 29362,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T12:02:11.731Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-셀-키-입력-E6-—-한글-IME-첫-글자·콤보-자동완성-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0159354a98d0d9434aef",
+              "file": "_verify.spec.ts",
+              "line": 3952,
+              "column": 7
+            },
+            {
+              "title": "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19963,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T12:02:43.806Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-6c6ff-천-대조-a-·재진입-재조회-시-콤보-재조회-b--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-586bd3774ad3e2f7b002",
+              "file": "_verify.spec.ts",
+              "line": 4113,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 112620,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T12:03:06.460Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verify-조회조건-콤보-후보-품질-B1·B2--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-018773758684e2f83429",
+              "file": "_verify.spec.ts",
+              "line": 4165,
+              "column": 7
+            },
+            {
+              "title": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18098,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T12:05:01.818Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-fb632-스트-—-대소문자-무시-G8-·콤마-다중값-G9--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c2909121056a846fc426",
+              "file": "_verify.spec.ts",
+              "line": 4304,
+              "column": 7
+            },
+            {
+              "title": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 26833,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T12:05:22.739Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\e2e\\artifacts\\_verify-정합검증-DMF0042-verif-2ac50-1-—-정렬-3단-토글·필터-UI·적용-해제-행수-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a50f99948f5f2f0c7ab2",
+              "file": "_verify.spec.ts",
+              "line": 4409,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-26T09:31:19.276Z",
+    "duration": 9302002.152,
+    "expected": 83,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

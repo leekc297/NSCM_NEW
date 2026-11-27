@@ -38,28 +38,20 @@
 | event:clbSite.SelectedIndexChanged | ClbSite_SelectedIndexChanged > SetChangeControl | 359 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_release_building] | BIZ_MATCH |  |
 | event:clbSite.SelectedIndexChanged | ClbSite_SelectedIndexChanged > SetChangeControl | 359 | FP\COMMON\BigFilter_FP#list_release_building | MATCH | [sql] foxquery_sql\FP_Common_BigFilter_FP_list_release_building.sql |
 | event:clbSite.SelectedIndexChanged | ClbSite_SelectedIndexChanged | 2013 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
-| button:FindButton | FindButton > Find_Data > Find_Data_Import | 377 | {?string.Empty} | UNRESOLVED |  |
 | button:FindButton | FindButton > Find_Data > Find_Data_Import | 377 | {?pServiceCallName} | UNRESOLVED |  |
 | button:FindButton | FindButton > Find_Data > Find_Data_Line | 1125 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | button:FindButton | FindButton > FindData_Sub_2 > Find_Data_Line_ALL | 1307 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Import | 377 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Import | 377 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 411 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 411 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Import | 654 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Import | 654 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 774 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 774 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 834 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 834 | {?pServiceCallName} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Line | 1125 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Line | 1735 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | event:popSql2.OnSql | RunSql2Source > Find_Data_Line_Sub | 1185 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | event:popSql2.OnSql | RunSql2Source > Find_Data_Line_ALL | 1307 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | event:popSql2.OnSql | RunSql2Source > Save_Data_Line_Sub | 1868 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
-| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 377 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 377 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 654 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 654 | {?pServiceCallName} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Line | 1125 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | button:SaveButton | SaveButton > Save_Data > FindData_Sub > Find_Data_Line_Sub | 1185 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
@@ -69,19 +61,13 @@
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Line | 1735 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Line_Sub | 1868 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | event:spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Sub > Find_Data_Line_Sub | 1185 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
-| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 377 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 377 | {?pServiceCallName} | UNRESOLVED |  |
 | event:this.btnFind.Click | btnFind_Click > FindData_Sub_ALL > FindData_Sub > Find_Data_Line_Sub | 1185 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
 | event:this.btnFind.Click | btnFind_Click > FindData_Sub_ALL > FindData_Sub_2 > Find_Data_Line_ALL | 1307 | FP_Master.PR_UI_FP00100_LINE | MATCH | SP PR_UI_FP00100_LINE |
-| event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 411 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 411 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 774 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 774 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 834 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 834 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 377 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 377 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 654 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 654 | {?pServiceCallName} | UNRESOLVED |  |
 | event:this.Load | Form_Load > InitControls > SetCountry | 166 | biz:FPCommonDataBLL.FPCommonDataList [code=COUNTRY_ID] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 209 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
@@ -99,7 +85,6 @@
 | event:this.Load | Form_Load > InitControls > ClbLine_SelectedIndexChanged > SetChangeControl | 337 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.Load | Form_Load > InitControls > ClbLine_SelectedIndexChanged > SetChangeControl | 359 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_release_building] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls > ClbLine_SelectedIndexChanged > SetChangeControl | 359 | FP\COMMON\BigFilter_FP#list_release_building | MATCH | [sql] foxquery_sql\FP_Common_BigFilter_FP_list_release_building.sql |
-| event:this.Load | Form_Load > Find_Data > Find_Data_Import | 377 | {?string.Empty} | UNRESOLVED |  |
 | event:this.Load | Form_Load > Find_Data > Find_Data_Import | 377 | {?pServiceCallName} | UNRESOLVED |  |
 | event:this.Load | Form_Load > InitControls > ClbSite_SelectedIndexChanged | 2013 | FP_Planning.PR_UI_FP_PLAN_FORM_CODE | MATCH | SP PR_UI_FP_PLAN_FORM_CODE |
 | event:this.Load | Form_Load > InitControls > ClbPlant_SelectedIndexChanged | 2022 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_release_building] | BIZ_MATCH |  |
@@ -117,7 +102,6 @@
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
 | {?pServiceCallName} | UNRESOLVED | 5 |  |  |  |
-| {?string.Empty} | UNRESOLVED | 5 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=COUNTRY_ID] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=ELECTRODE_TYPE] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_instance_from_tree] | BIZ_MATCH | 1 |  |  |  |
@@ -213,18 +197,13 @@
 | Panel | 1 | panel1 |
 | UsrLabel | 1 | lblSheetName |
 
-## 7. 확인 필요 (10건)
+## 7. 확인 필요 (5건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 377 | Find_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 377 | Find_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 411 | Find_Data_Validation | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 411 | Find_Data_Validation | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 654 | Save_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 654 | Save_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 774 | Save_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 774 | Save_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 834 | Delete_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 834 | Delete_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)

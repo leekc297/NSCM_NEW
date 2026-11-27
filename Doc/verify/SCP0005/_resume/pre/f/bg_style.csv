@@ -1,0 +1,3 @@
+﻿method,api,color,guard,tobe_hits,result,why
+CheckValid,SetBGColor,,for (i< siMain.ActiveSheet.RowCount),5,PASS,TO-BE 셀 색 변경 코드 5곳 존재(예 nscm-fe\features\shipping\src\pages\distribution-route\components\DistributionRouteGrid.tsx:2) — 조건·색 일치는 E2E H2 실측 · AS-IS CheckValid SetBGColor  [for (i< siMain.ActiveSheet.RowCount)]
+SaveData,SetBGColor,,"if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(SpdSheet.shtMain) == false) ▸ if (iCount > 0) ▸ try ▸ else of (response.DataSet.Tables[0].Rows[",5,PASS,"TO-BE 셀 색 변경 코드 5곳 존재(예 nscm-fe\features\shipping\src\pages\distribution-route\components\DistributionRouteGrid.tsx:2) — 조건·색 일치는 E2E H2 실측 · AS-IS SaveData SetBGColor  [if (fps.Name == ""spdMain"") ▸ if (siMain != null && siMain.IsLock(SpdSheet.shtMai]"

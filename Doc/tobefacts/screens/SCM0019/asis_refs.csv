@@ -1,4 +1,5 @@
 ﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"admin/scp-if-blocking","SCM0019","features/admin/src/pages/scp-if-blocking/components/ScpIfBlockingForm.tsx","74","DMF0003","","","","Period* (필수 — AS-IS layoutControlItem6.Text=""Period*""). From~To YYYYMMDD. 공백 시 조회 차단(R6). 공용 PeriodField(features/master SearchFields) — 표준 레이아웃·높이정합(36px) 내장. DMF0003 등 선례. PeriodField 가 자체 <Grid> 를 포함하므로 바깥 Grid 로 감싸지 않는다."
 "admin/scp-if-blocking","SCM0019","features/admin/src/pages/scp-if-blocking/components/ScpIfBlockingGrid.tsx","19","","","","DM_RTF_YN","FP/MRP/DM_RTF_YN = FPComboBox + YesOrNo 셀콤보(메타 CELL_COMBO_DATA_TYPE, 공용 DataGrid 자동 배선)."
 "admin/scp-if-blocking","SCM0019","features/admin/src/pages/scp-if-blocking/scp-if-blocking.constants.ts","4","SCM0019","","","SCM_MST_SHEET_COLUMNS","단일 시트 ""Main"" (design 03 §1 — SCM_MST_SHEET_COLUMNS PROGRAM_ID='SCM0019' 5컬럼, sheetNm='Main')."
 "admin/scp-if-blocking","SCM0019","features/admin/src/pages/scp-if-blocking/scp-if-blocking.constants.ts","15","","","","SCM_MST_SHEET_COLUMNS","admin SCM_MST_SHEET_COLUMNS SHEET_NAME — 컬럼 메타 조회 스코프 키 (DB 실측 'Main')."

@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/ownerByDivisionModal/owner-by-division-modal.constants.ts | constants | 8 |
-| features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.module.scss | style | 20 |
+| features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.module.scss | style | 21 |
 | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | page | 358 |
 | features/master/src/components/ownerByDivisionModal/ownerByDivisionModalStore.ts | store | 43 |
 
@@ -28,8 +28,8 @@
 | SearchArea | onSearch | handleSearch | jsx | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | 198 |
 | InputField | onChange | <arrow> setOwnerKeyword | jsx | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | 295 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | 296 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | 343 |
-| Button | onClick | modalClose | jsx | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | 350 |
+| Button | onClick | modalClose | jsx | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | 341 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx | 350 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

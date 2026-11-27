@@ -1,0 +1,35 @@
+{
+ "rule_id": "E7",
+ "hash": "891797fd5c686f91",
+ "groups": [
+  {
+   "rows": [
+    "EG-6fbf9fcb",
+    "V-c3d65ea6"
+   ],
+   "why": "Both rows target the ITEM_ID40 (Model*) popup cell (DM0002_ItembyDivisionPopupEx) and check the same E7 rule: when an invalid value is typed directly into the cell, it should be reverted or blocked by a validation message."
+  },
+  {
+   "rows": [
+    "EG-abd87762"
+   ],
+   "why": "This row targets the MEASURE cell of popup DMF0051_1_RTF, which no other row covers, so it stays on its own."
+  },
+  {
+   "rows": [
+    "V-4bf7bf6a"
+   ],
+   "why": "This is the only row for the PROJECT_CODE82 (Project Code) column, so it stays on its own."
+  },
+  {
+   "rows": [
+    "V-9816c421"
+   ],
+   "why": "ITEM_ID (Model) shares an AS-IS source location with ITEM_ID40 but is a different column, so it stays on its own."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:40:32",
+ "cost": 0.0460372
+}

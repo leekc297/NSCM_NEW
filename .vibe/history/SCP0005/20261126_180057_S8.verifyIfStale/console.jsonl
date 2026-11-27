@@ -1,0 +1,129 @@
+{"t":1795683657419,"m":{"type":"out","stream":"task","text":"▶ CheckList — 최신이 아닐 때만 실행 (FE 소스·PKG DDL·화면 메타가 직전 CheckList 이후 바뀌었거나 결과 없음 → run_verify · 최신이면 건너뜀) — 보완 메뉴 첫 단계 \n  $ python C:\\Projects\\NSCM\\tools\\Harness/verify/verify_if_stale.py SCP0005\n","cls":"cmd"}}
+{"t":1795683658405,"m":{"type":"out","stream":"task","text":"[STALE] SCP0005 CheckList 최신 아님: AS-IS 파싱 결과 변경 11-26 17:58:25 > CheckList 11-26 02:41:12 (Doc\\asisfacts\\screens\\SCP0005)\n","cls":""}}
+{"t":1795683658405,"m":{"type":"out","stream":"task","text":"→ CheckList 실행: run_verify.py SCP0005\n","cls":""}}
+{"t":1795683787929,"m":{"type":"out","stream":"task","text":"[selfcheck] full · 129.1초 · PY_COMPILE 0(신규 0) · PY_UNDEF 0(신규 0) · CTRL_CHARS 0(신규 0) · JS_SYNTAX 0(신규 0) · SPEC_SIZE 0(신규 0) · TSC 0(신규 0) · SELFTEST_JS 0(신규 0) · SELFTEST_PY 0(신규 0) · RULE_REGISTRY 0(신규 0) · GEN_SMOKE 0(신규 0) · selftest JS 40개·PY 75개 실행(DB 필요 3개 미실행)\n","cls":""}}
+{"t":1795683787929,"m":{"type":"out","stream":"task","text":"[selfcheck] PASS → Doc/verify/_engine_selfcheck.json\n","cls":""}}
+{"t":1795683787929,"m":{"type":"out","stream":"task","text":"[VM_INNER] run_verify run_id=20261126180307\n","cls":""}}
+{"t":1795683789551,"m":{"type":"out","stream":"task","text":"== 화면 소스 Download & Merge SCP0005 · DB MODE · 대상 nscm-fe/features/shipping/src/pages/distribution-route · 2026-11-26 18:03:09 ==\n","cls":""}}
+{"t":1795683789551,"m":{"type":"out","stream":"task","text":"[세부 1/2] 공통 최신 받기 + 파일별 판정(미리보기 · 파일 변경 없음)\n","cls":""}}
+{"t":1795683789693,"m":{"type":"out","stream":"task","text":"⬇️ git fetch common …\n","cls":""}}
+{"t":1795683792530,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683792531,"m":{"type":"out","stream":"task","text":"기준선 6f99270c0 → 최신 b9a122af9 2026-11-26 17:35 BeomJu fix: dm고도화 메뉴id변경 관련 수정사항 · 신규 커밋 11\n","cls":""}}
+{"t":1795683792531,"m":{"type":"out","stream":"task","text":"[FE] 대상 1건 분류 중 …\n","cls":""}}
+{"t":1795683792531,"m":{"type":"out","stream":"task","text":"⚠ DB MODE — 로컬 소스 보호 안 함: 내 편집본도 공통 원문으로 덮어씁니다\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"분류 결과\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"     17  동일\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"      1  공통 변경분 — 공통 원문 적용(로컬 보호 안 함)\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"  → 적용: 공통 채택/신규 1 · 병합 0 · 삭제 0 · 로컬 유지 0 · 변경 없음 17 · 결정 대기 0\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"  [FE] 공통 채택/신규 1 · 병합 0 · 삭제 0 · 로컬 유지 0 · 결정 대기 0\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683792805,"m":{"type":"out","stream":"task","text":"미리보기 → C:\\Projects\\NSCM\\.vibe\\common_sync\\PLAN_20261126_180309.md\n","cls":""}}
+{"t":1795683792820,"m":{"type":"out","stream":"task","text":"[세부 2/2] 적용 — 공통 b9a122af9 · 공통 원문 1 · 병합 0 · 삭제 0\n","cls":""}}
+{"t":1795683793772,"m":{"type":"out","stream":"task","text":"기준선 6f99270c0 → 최신 b9a122af9 2026-11-26 17:35 BeomJu fix: dm고도화 메뉴id변경 관련 수정사항 · 신규 커밋 11\n","cls":""}}
+{"t":1795683793772,"m":{"type":"out","stream":"task","text":"[FE] 대상 1건 분류 중 …\n","cls":""}}
+{"t":1795683793772,"m":{"type":"out","stream":"task","text":"⚠ DB MODE — 로컬 소스 보호 안 함: 내 편집본도 공통 원문으로 덮어씁니다\n","cls":""}}
+{"t":1795683795590,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683795590,"m":{"type":"out","stream":"task","text":"분류 결과\n","cls":""}}
+{"t":1795683795590,"m":{"type":"out","stream":"task","text":"     17  동일\n","cls":""}}
+{"t":1795683795591,"m":{"type":"out","stream":"task","text":"      1  공통 변경분 — 공통 원문 적용(로컬 보호 안 함)\n","cls":""}}
+{"t":1795683795591,"m":{"type":"out","stream":"task","text":"  → 적용: 공통 채택/신규 1 · 병합 0 · 삭제 0 · 로컬 유지 0 · 변경 없음 17 · 결정 대기 0\n","cls":""}}
+{"t":1795683795591,"m":{"type":"out","stream":"task","text":"  [FE] 공통 채택/신규 1 · 병합 0 · 삭제 0 · 로컬 유지 0 · 결정 대기 0\n","cls":""}}
+{"t":1795683795591,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683795591,"m":{"type":"out","stream":"task","text":"✅ 일부 경로 적용 완료(기준선 미갱신 · 대상 features/shipping/src/pages/distribution-route) — 보고 C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126_180312\\README.md\n","cls":""}}
+{"t":1795683795604,"m":{"type":"out","stream":"task","text":"@@LINK 📄 화면 소스 받기 보고|C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126_180312\\README.md\n","cls":""}}
+{"t":1795683795604,"m":{"type":"out","stream":"task","text":"[OK] SCP0005 화면 소스 받음 — 공통 원문 1 · 병합 0 · 삭제 0 · 백업 C:\\Projects\\NSCM\\_artifacts\\_backup\\NSCMFE_PRE_COMMON_20261126_180312\n","cls":""}}
+{"t":1795683816456,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683816456,"m":{"type":"out","stream":"task","text":"Running 1 test using 1 worker\n","cls":""}}
+{"t":1795683816457,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683818426,"m":{"type":"out","stream":"task","text":"[진입 확인] SCP0005 열림 · http://127.0.0.1:5173/view/SCP0005\n","cls":""}}
+{"t":1795683819035,"m":{"type":"out","stream":"task","text":"  ok 1 [chromium] › ..\\..\\Doc\\e2e\\specs\\_open.spec.ts:15:7 › 진입 확인 SCP0005 @open › 화면 열기 1회 (6.0s)\n","cls":""}}
+{"t":1795683819997,"m":{"type":"out","stream":"task","text":"[TO-BE 녹화] 녹화 파일 1개(동영상 webm · 실패 시험 실행 기록 zip) → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\open\\video\\20261126_180339_36752 · 오래된 보관 1회 지움(최근 5회 유지)\n","cls":""}}
+{"t":1795683819997,"m":{"type":"out","stream":"task","text":"@@LINK 🎬 TO-BE 녹화|C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\e2e\\open\\video\\20261126_180339_36752\n","cls":""}}
+{"t":1795683820001,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683820001,"m":{"type":"out","stream":"task","text":"  1 passed (12.1s)\n","cls":""}}
+{"t":1795683820042,"m":{"type":"out","stream":"task","text":"== UI CheckList SCP0005 (AS-IS SCP0005) ==\n","cls":""}}
+{"t":1795683820042,"m":{"type":"out","stream":"task","text":"[시간] 진입 확인 · 24.2s · 열림\n","cls":""}}
+{"t":1795683821540,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795683821540,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683821541,"m":{"type":"out","stream":"task","text":"[단계 1/8] 사전 작업(DB·Fact Pack·메타·스펙·smoke)\n","cls":""}}
+{"t":1795683824884,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683824884,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\prereq.py SCP0005 --asis SCP0005\n","cls":""}}
+{"t":1795683825024,"m":{"type":"out","stream":"task","text":"== UI CheckList 사전 작업 점검 SCP0005 (AS-IS SCP0005)\n","cls":""}}
+{"t":1795683825024,"m":{"type":"out","stream":"task","text":"  $ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\DbConn\\probe.py\n","cls":""}}
+{"t":1795683826217,"m":{"type":"out","stream":"task","text":"    [OK] asis: As-is MSSQL (LGCE_SCMDEV) [mssql] scp_mgr_dev@222.110.191.243:2433/LGCE_SCMDEV — DB=LGCE_SCMDEV server=zio now=2026-11-26 18:03:45 · SP 2456 (0.2s)\n","cls":""}}
+{"t":1795683826218,"m":{"type":"out","stream":"task","text":"    [OK] tobe: To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR) [oracle] system@59.19.252.148:2521/ZIOUI1 — DB=ZIOUI1 host=localhost schema=SCM_MGR now=2026-11-26 18:03:45 · PKG/PROC 1083 · 사용 메뉴 185 (0.8s)\n","cls":""}}
+{"t":1795683826218,"m":{"type":"out","stream":"task","text":"    리포트: C:\\Projects\\NSCM\\Doc\\db\\probe_20261126_180346.md\n","cls":""}}
+{"t":1795683826218,"m":{"type":"out","stream":"task","text":"[세부 1/10] DB 접속(AS-IS MSSQL · TO-BE Oracle) — OK\n","cls":""}}
+{"t":1795683826218,"m":{"type":"out","stream":"task","text":"[OK] DB 접속(AS-IS MSSQL · TO-BE Oracle) — 전부 접속\n","cls":""}}
+{"t":1795683826218,"m":{"type":"out","stream":"task","text":"[세부 2/10] AS-IS Fact Pack(SCP0005) — OK\n","cls":""}}
+{"t":1795683826219,"m":{"type":"out","stream":"task","text":"[OK] AS-IS Fact Pack(SCP0005) — controls.csv, actions.csv, files.csv, endpoints.csv 있음\n","cls":""}}
+{"t":1795683826219,"m":{"type":"out","stream":"task","text":"[세부 3/10] TO-BE DB 메타(Doc/tobefacts/db) — OK\n","cls":""}}
+{"t":1795683826219,"m":{"type":"out","stream":"task","text":"[OK] TO-BE DB 메타(Doc/tobefacts/db) — 0.4시간 전 export(기준 12시간)\n","cls":""}}
+{"t":1795683826231,"m":{"type":"out","stream":"task","text":"  $ powershell -NoProfile -ExecutionPolicy Bypass -File C:\\Projects\\NSCM\\tools\\TobeFacts\\run.ps1\n","cls":""}}
+{"t":1795683855857,"m":{"type":"out","stream":"task","text":"    3/3 화면별 Pack\n","cls":""}}
+{"t":1795683855857,"m":{"type":"out","stream":"task","text":"    Pack: 화면 207 → C:\\Projects\\NSCM\\Doc\\tobefacts\\screens\n","cls":""}}
+{"t":1795683855857,"m":{"type":"out","stream":"task","text":"    완료 6.2s → C:\\Projects\\NSCM\\Doc\\tobefacts\n","cls":""}}
+{"t":1795683855857,"m":{"type":"out","stream":"task","text":"    4/4 프레임워크·공통 카탈로그\n","cls":""}}
+{"t":1795683855857,"m":{"type":"out","stream":"task","text":"    framework: export 525 (component 71, constant 85, function 173, hook 27, store 27, type 108, class 3, enum 13, namespace-object 6, value 12) → C:\\Projects\\NSCM\\Doc\\tobefacts\\framework  · 카탈로그 C:\\Projects\\NSCM\\tools\\Harness\\rules/tobe_catalog.csv\n","cls":""}}
+{"t":1795683855858,"m":{"type":"out","stream":"task","text":"    완료: C:\\Projects\\NSCM\\Doc\\tobefacts  (화면별: C:\\Projects\\NSCM\\Doc\\tobefacts\\screens\\<MENU_ID>\\<MENU_ID>_summary.md)\n","cls":""}}
+{"t":1795683855858,"m":{"type":"out","stream":"task","text":"[세부 4/10] TO-BE 화면 인덱스(Doc/tobefacts/screens) — DONE\n","cls":""}}
+{"t":1795683855858,"m":{"type":"out","stream":"task","text":"[DONE] TO-BE 화면 인덱스(Doc/tobefacts/screens) — FE 소스가 인덱스보다 최신 → 재추출 · rc=0 · 30s · ojects\\NSCM\\Doc\\tobefacts 4/4 프레임워크·공통 카탈로그 framework: export 525 (component 71, constant 85, function 173, hook 27, store 27, type 108, class 3, enum 13, namespac\n","cls":""}}
+{"t":1795683855858,"m":{"type":"out","stream":"task","text":"[세부 5/10] FE 대조표(__asis-mapping__.md) — OK\n","cls":""}}
+{"t":1795683855858,"m":{"type":"out","stream":"task","text":"[OK] FE 대조표(__asis-mapping__.md) — nscm-fe\\features\\shipping\\src\\pages\\distribution-route\\__asis-mapping__.md\n","cls":""}}
+{"t":1795683855868,"m":{"type":"out","stream":"task","text":"[세부 6/10] 조회조건 기준표(search_cond.csv) — MANUAL\n","cls":""}}
+{"t":1795683855869,"m":{"type":"out","stream":"task","text":"[MANUAL] 조회조건 기준표(search_cond.csv) — 기준표 xlsx 에 이 화면 행 없음 — 조회조건 순서·라벨(CR-071)은 AS-IS 기준으로만 판정. 기준표 xlsx 보강 후 build_search_cond.py\n","cls":""}}
+{"t":1795683855879,"m":{"type":"out","stream":"task","text":"[세부 7/10] 골든 케이스(golden_cases.csv) — OK\n","cls":""}}
+{"t":1795683855879,"m":{"type":"out","stream":"task","text":"[OK] 골든 케이스(golden_cases.csv) — 5건 있음\n","cls":""}}
+{"t":1795683855879,"m":{"type":"out","stream":"task","text":"[세부 8/10] E2E plan(Doc/gen/<ID>/e2e_plan.json) — OK\n","cls":""}}
+{"t":1795683855880,"m":{"type":"out","stream":"task","text":"[OK] E2E plan(Doc/gen/<ID>/e2e_plan.json) — 있음\n","cls":""}}
+{"t":1795683855882,"m":{"type":"out","stream":"task","text":"  $ node C:\\Projects\\NSCM\\tools\\E2E\\gen-e2e.js SCP0005\n","cls":""}}
+{"t":1795683856365,"m":{"type":"out","stream":"task","text":"    SCP0005: AS-IS 팝업 클래스 안 시트 메인 제외 — POPUP\n","cls":""}}
+{"t":1795683856365,"m":{"type":"out","stream":"task","text":"      SCP0005 테스트 모드 admin (users.json screens) → 계정 2: jooyong026, dana.robot\n","cls":""}}
+{"t":1795683856365,"m":{"type":"out","stream":"task","text":"      SCP0005 → SCP0005  smoke/crud(save)/auth(2계정)/authcrud(기대 있음 2계정)  메타컬럼 Y\n","cls":""}}
+{"t":1795683856365,"m":{"type":"out","stream":"task","text":"    스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs  (계정×DIV 매트릭스 2행 · 색인 전체 29화면/35행)\n","cls":""}}
+{"t":1795683856367,"m":{"type":"out","stream":"task","text":"[세부 9/10] E2E 스펙(Doc/e2e/specs/<ID>.*) — DONE\n","cls":""}}
+{"t":1795683856367,"m":{"type":"out","stream":"task","text":"[DONE] E2E 스펙(Doc/e2e/specs/<ID>.*) — rc=0 · 0s · SCP0005: AS-IS 팝업 클래스 안 시트 메인 제외 — POPUP SCP0005 테스트 모드 admin (users.json screens) → 계정 2: jooyong026, dana.robot SCP0005 → SCP0005 smoke/crud(save)/auth(2계정)/authcrud(기대 있음 2계정) 메타컬럼 Y 스펙\n","cls":""}}
+{"t":1795683856479,"m":{"type":"out","stream":"task","text":"  $ cmd /c C:\\Projects\\NSCM\\tools\\E2E\\run-e2e.cmd smoke SCP0005\n","cls":""}}
+{"t":1795683971184,"m":{"type":"out","stream":"task","text":"    Playwright smoke SCP0005  running - output goes to the log file\n","cls":""}}
+{"t":1795683971184,"m":{"type":"out","stream":"task","text":"    # E2E 결과 — 2026-11-26 18:05\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"    \n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"    테스트 8 · PASS 8 · FAIL 0 · FLAKY 0 · SKIP 0\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"    → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"    log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_180416_smoke.log\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"[세부 10/10] smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용) — DONE\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"[DONE] smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용) — smoke 3건 실행 · rc=0 · 100s · cts\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_180416_smoke.log FE 5173 / BE 8080 responding Playwright smoke SCP0005 running - output goes to the log file # E2E 결과 — 2026-11-2\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"== 사전 작업 {'OK': 6, 'DONE': 3, 'MANUAL': 1} → C:\\Projects\\NSCM\\Doc\\verify\\SCP0005\\prereq.json\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"[시간] prereq.py · 시작 18:03:44 · 131.7s · rc=0\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795683971185,"m":{"type":"out","stream":"task","text":"$ C:\\Python3.11.5\\python.exe C:\\Projects\\NSCM\\tools\\Harness\\verify\\opinion_intake.py SCP0005\n","cls":""}}
+{"t":1795684013568,"m":{"type":"out","stream":"task","text":"[의견 처리] 사용자의견 10건(원장에 있는 행 0) · 처리 기록 0건(이번에 닫힘 0) · 새로 처리할 의견 0건\n","cls":""}}
+{"t":1795684013568,"m":{"type":"out","stream":"task","text":"[의견 처리] 기록 0건 · 엔진 보완·룰 등록 대상(열림) 0건 · 구분  · 비용 $0.0000\n","cls":""}}
+{"t":1795684013568,"m":{"type":"out","stream":"task","text":"[시간] opinion_intake.py · 시작 18:05:56 · 18.6s · rc=0\n","cls":""}}
+{"t":1795684013569,"m":{"type":"out","stream":"task","text":"[AI 호출] opinion_intake.py · opinion 호출 0건(기억 0) · 효과 기록 0행 · Doc/verify/SCP0005/llm_effect.csv\n","cls":""}}
+{"t":1795684013569,"m":{"type":"out","stream":"task","text":"[WARN] AI opinion 호출 0건 — opinion_intake.py 가 AI 를 켠 채 실행됐지만 호출 없이 끝남(효과 기록 없음) · Doc/verify/SCP0005/llm_effect.csv\n","cls":""}}
+{"t":1795684013569,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795684013569,"m":{"type":"out","stream":"task","text":"$ run-e2e.cmd crud SCP0005 --mode admin\n","cls":""}}
+{"t":1795684013569,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795684013570,"m":{"type":"out","stream":"task","text":"RUNID 20261126_180615 - log C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_180615_crud.log\n","cls":""}}
+{"t":1795684013570,"m":{"type":"out","stream":"task","text":"FE 5173 / BE 8080 responding\n","cls":""}}
+{"t":1795684013570,"m":{"type":"out","stream":"task","text":"[FAIL] spec generation failed (gen-e2e.js) - log tail:\n","cls":""}}
+{"t":1795684013570,"m":{"type":"out","stream":"task","text":"    at Module.load (node:internal/modules/cjs/loader:1651:32)\n","cls":""}}
+{"t":1795684013570,"m":{"type":"out","stream":"task","text":"    at Module._load (node:internal/modules/cjs/loader:1443:12)\n","cls":""}}
+{"t":1795684013570,"m":{"type":"out","stream":"task","text":"    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\n","cls":""}}
+{"t":1795684013571,"m":{"type":"out","stream":"task","text":"    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n","cls":""}}
+{"t":1795684013571,"m":{"type":"out","stream":"task","text":"    at node:internal/main/run_main_module:33:47 {\n","cls":""}}
+{"t":1795684013571,"m":{"type":"out","stream":"task","text":"  errno: -4094,\n","cls":""}}
+{"t":1795684013571,"m":{"type":"out","stream":"task","text":"  code: 'UNKNOWN',\n","cls":""}}
+{"t":1795684013571,"m":{"type":"out","stream":"task","text":"  syscall: 'open',\n","cls":""}}
+{"t":1795684013571,"m":{"type":"out","stream":"task","text":"  path: 'C:\\\\Projects\\\\NSCM\\\\Doc\\\\e2e\\\\specs\\\\SCP0005.plan.json'\n","cls":""}}
+{"t":1795684013572,"m":{"type":"out","stream":"task","text":"}\n","cls":""}}
+{"t":1795684013572,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795684013572,"m":{"type":"out","stream":"task","text":"Node.js v24.22.2\n","cls":""}}
+{"t":1795684013572,"m":{"type":"out","stream":"task","text":"[ERROR] crud: 실행 실패 rc=6 · 1건 · 14.5s\n","cls":""}}
+{"t":1795684013572,"m":{"type":"out","stream":"task","text":"\n","cls":""}}
+{"t":1795684013572,"m":{"type":"out","stream":"task","text":"$ run-e2e.cmd auth SCP0005 --mode admin\n","cls":""}}
+{"t":1795684013573,"m":{"type":"out","stream":"task","text":"[DB 감시] 실행 중(pid 33860)\n","cls":""}}
+{"t":1795684013573,"m":{"type":"out","stream":"task","text":"RUNID 20261126_180629 - log C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_180629_auth.log\n","cls":""}}
+{"t":1795684013573,"m":{"type":"out","stream":"task","text":"FE 5173 / BE 8080 responding\n","cls":""}}
+{"t":1795684013573,"m":{"type":"out","stream":"task","text":"Playwright auth SCP0005  running - output goes to the log file\n","cls":""}}

@@ -1,0 +1,45 @@
+{
+  "id": "20261126192239_SELF",
+  "at": "2026-11-26T19:22:39+09:00",
+  "ms": 1795688559306,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|.claude/agents/vm orchestra.md|에이전트지시문의컨설팅설명에주제별전문가역할dbuiuxcnetreactspr",
+  "title": "사용자 지시 R258 같은 문제: .claude/agents/vm-orchestra.md:16 에이전트 지시문의 컨설팅 설명에 주제별 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 역할 스킬 사용이 없음. 수석 엔지니어 한 사람",
+  "evidence": "규칙 R258 \"VMO 컨설팅은 주제마다 해당 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 그 역할 스킬을 붙여 수행함\" (원래 지시 2026-11-26 18:23 \"C#.NET, REACT 등에 대해서도 전문자 SKILL 이 필요합니다.\") · .claude/agents/vm-orchestra.md:16 - 컨설팅 검토(orch-consult.js · 하루 1회): VMO 는 IT 컨설턴트이자 DB·UI 를 모두 다루는 수석 엔지니어 입장에서 VM 전체를 진단하고(강점·약점·위험) ...",
+  "targets": [
+    ".claude/agents/vm-orchestra.md"
+  ],
+  "before_after": "16행 뒤에 '주제 낱말로 역할(DB, UI/UX, C#.NET, React, Spring Boot)을 고르고 harness.json orch.consultSkills 의 역할 스킬을 Skill 도구로 먼저 불러 근거 칸에 쓴 스킬을 적음' 1줄 추가. .claude 아래 파일이라 Claude Code 세션에서 반영",
+  "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": ".claude/agents/vm-orchestra.md.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:26:20+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:27:51+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · .claude/agents/vm-orchestra.md 17행에 컨설팅 주제 전문가 역할 1줄 추가(역할 5종, harness.json orch.consultSkills 또는 orch-consult.js 기본 스킬 6종을 Skill 도구로 먼저 부르고 근거 칸에 적음, 못 부르면 '스킬 없음: 이름'). 백업 .bak_20261126_sz(2026-11-26 19:27)"
+    }
+  ],
+  "plain": {
+    "what": "VMO 컨설팅은 주제마다 해당 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 그 역할 스킬을 붙여 수행함 규칙을 .claude/agents/vm-orchestra.md 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R258|.claude/agents/vm-orchestra.md",
+  "kind": "fix",
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795688871033
+}

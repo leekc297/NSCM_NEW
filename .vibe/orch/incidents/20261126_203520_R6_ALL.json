@@ -1,0 +1,26 @@
+{
+  "id": "20261126_203520_R6_ALL",
+  "at": "2026-11-26T20:35:20+09:00",
+  "ms": 1795692920575,
+  "rule": "R6",
+  "ruleName": "서버 이상",
+  "title": "서버 응답 없음. BE 포트 8080 열림 · HTTP 응답 없음 64초",
+  "screen": "",
+  "sig": "R6|listen|8080",
+  "count": 1,
+  "repeat": null,
+  "detail": "VM 이 띄운 서버",
+  "evidence": {
+    "port": 8080,
+    "owner": "vm"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T20:53:43+09:00",
+      "by": "VMO",
+      "what": "포트 8080 응답 회복 확인. 조치 없음"
+    }
+  ]
+}

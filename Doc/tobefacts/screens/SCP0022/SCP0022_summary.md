@@ -1,17 +1,17 @@
 # SCP0022 — To-Be Fact Pack 요약
 
 - page_key: `supply/formation` · feature: supply · As-is Fact Pack 있음
-- 파일 10 · 엔드포인트 호출 9 (미해결 0, 주석 속 1) · 이벤트 22 · 컴포넌트 사용 29 · 하드코딩 컬럼 0 · 메시지 21
+- 파일 10 · 엔드포인트 호출 9 (미해결 0, 주석 속 1) · 이벤트 22 · 컴포넌트 사용 29 · 하드코딩 컬럼 0 · 메시지 20
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/formation/components/FormationExceptGrid.tsx | component | 130 |
-| features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | component | 121 |
+| features/supply/src/pages/formation/components/FormationExceptGrid.tsx | component | 132 |
+| features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | component | 130 |
 | features/supply/src/pages/formation/components/FormationForm.tsx | component | 167 |
-| features/supply/src/pages/formation/components/FormationGrid.tsx | component | 146 |
-| features/supply/src/pages/formation/formation.constants.ts | constants | 132 |
+| features/supply/src/pages/formation/components/FormationGrid.tsx | component | 148 |
+| features/supply/src/pages/formation/formation.constants.ts | constants | 156 |
 | features/supply/src/pages/formation/Formation.module.scss | style | 48 |
 | features/supply/src/pages/formation/Formation.tsx | page | 476 |
 | features/supply/src/pages/formation/index.ts | index | 2 |
@@ -38,28 +38,28 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| DataGrid | gotFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 122 |
-| DataGrid | initialized | attachNumberInputBlock | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 123 |
-| DataGrid | beginningEdit | handleBeginEdit | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 124 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 125 |
-| DataGrid | pastedCell | handlePasted | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 126 |
-| DataGrid | gotFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 114 |
-| DataGrid | initialized | attachNumberInputBlock | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 115 |
-| DataGrid | beginningEdit | handleBeginEdit | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 116 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 117 |
+| DataGrid | gotFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 124 |
+| DataGrid | initialized | attachNumberInputBlock | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 125 |
+| DataGrid | beginningEdit | handleBeginEdit | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 126 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 127 |
+| DataGrid | pastedCell | handlePasted | jsx | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | 128 |
+| DataGrid | gotFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 123 |
+| DataGrid | initialized | <arrow> attachNumberInputBlock | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 124 |
+| DataGrid | beginningEdit | handleBeginEdit | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 125 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | 126 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 83 |
 | CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 96 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 119 |
 | InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 144 |
 | Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 140 |
-| DataGrid | gotFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 138 |
-| DataGrid | initialized | attachNumberInputBlock | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 139 |
-| DataGrid | beginningEdit | handleBeginEdit | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 140 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 141 |
-| DataGrid | pastedCell | handlePasted | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 142 |
-| grid.hostElement | keydown | <arrow> hasBlockedChar,currentBinding,event.preventDefault | addEventListener | features/supply/src/pages/formation/formation.constants.ts | 108 |
-| grid.hostElement | paste | <arrow> event.clipboardData?.getData,hasBlockedChar,currentBinding,event.preventDefault | addEventListener | features/supply/src/pages/formation/formation.constants.ts | 117 |
-| grid | pastingCell | <arrow> hasBlockedChar,String | addHandler | features/supply/src/pages/formation/formation.constants.ts | 127 |
+| DataGrid | gotFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 140 |
+| DataGrid | initialized | attachNumberInputBlock | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 141 |
+| DataGrid | beginningEdit | handleBeginEdit | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 142 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 143 |
+| DataGrid | pastedCell | handlePasted | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 144 |
+| grid.hostElement | keydown | <arrow> hasBlockedChar,currentBinding,event.preventDefault | addEventListener | features/supply/src/pages/formation/formation.constants.ts | 132 |
+| grid.hostElement | paste | <arrow> event.clipboardData?.getData,hasBlockedChar,currentBinding,event.preventDefault | addEventListener | features/supply/src/pages/formation/formation.constants.ts | 141 |
+| grid | pastingCell | <arrow> hasBlockedChar,String | addHandler | features/supply/src/pages/formation/formation.constants.ts | 151 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -92,9 +92,9 @@
 | code | count |
 |---|---|
 | MSG01037 | 2 |
-| MSG00699 | 2 |
 | MSG00085 | 2 |
 | MSG00667 | 2 |
+| MSG00699 | 1 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
 | LBL00005 | 1 |
@@ -115,6 +115,7 @@
 | kind | snippet | file | line |
 |---|---|---|---|
 | endpoint | 컬럼 메타 fetch(/admin/menu/SCP0022/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 가 문자열 그대로 매칭). SCP0022 는 공백 포함 표시명으로 배포돼 있어 코드 키(SHEETS)와 분리한다. | features/supply/src/pages/formation/formation.constants.ts | 40 |
+| code | NEGATIVE_BLOCKED_COLUMNS 의 음수 부호('-'), DECIMAL_BLOCKED_COLUMNS 의 소수점('.') 입력 자체를 차단한다(입력 후 검증이 아니라 입력 시점 차단, 알림 없음 — AS-IS NumberCellType 동작 재현). - keydown: 편집 중 키 입력. wijmo 기본 처리보다 먼저 끊기 위해 캡처 단계로 등록. - pastingCell: 셀 선택 상태에서 Ctrl+V. 해당 셀만 | features/supply/src/pages/formation/formation.constants.ts | 113 |
 | code | import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores'; | features/supply/src/pages/formation/useFormationStore.ts | 3 |
 
 ## 10. __asis-mapping__.md 상태

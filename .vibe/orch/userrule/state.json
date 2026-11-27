@@ -1,8 +1,8 @@
 {
- "lastMs": 1795677853411,
- "lastAt": "2026-11-26T16:24:13+09:00",
- "log": ".vibe\\logs\\2026-11-26T16-22-54_claude_orch.log",
- "sec": 79,
+ "lastMs": 1795688556201,
+ "lastAt": "2026-11-26T19:22:36+09:00",
+ "log": ".vibe\\logs\\2026-11-26T19-18-41_claude_orch.log",
+ "sec": 235,
  "rules": [
   "R1",
   "R2",
@@ -254,28 +254,41 @@
   "R248",
   "R249",
   "R250",
-  "R251"
+  "R251",
+  "R252",
+  "R253",
+  "R254",
+  "R255",
+  "R256",
+  "R257",
+  "R258"
  ],
  "found": [
   {
-   "rule": "R244",
-   "file": "tools/VibeManager/orch-selfcheck.js",
-   "line": 600,
-   "what": "claim_proposal.js 는 apply-failed 안도 맡게 하지만(claim 조건 /^(pending|apply-failed)$/) 실패 원인 진단 고르기(600)와 자동 반영 고르기 pend0 의 apply-failed 분기(660 '|| (p.status === 'apply-failed' && !c.selfRepairEnabled && ..."
+   "rule": "R256",
+   "file": "tools/VibeManager/workbench.js",
+   "line": 3397,
+   "what": "VMO 단추 분기가 접수, 대기, 실패를 웹뷰로 돌려보내지 않음. incAgent 는 대기열에 넣어도 대기 표시가 없음(drain 이 busy 면 조용히 return). propApprove(3407)는 why 'busy' 만 안내하고 '개선안 없음', '상태 …', 보호 파일, '원장 쓰기 실패'와 예외는 표시 없음. propReview(3423 'req"
   },
   {
-   "rule": "R248",
-   "file": "tools/VibeManager/orch-selfcheck.js",
-   "line": 538,
-   "what": "승인 대상 5종(hook, settings.json, DB, 시험 계정, 작업 모드) 밖인 orch-selfcheck.js·orch-improve.js 의 자동 반영·승인 기준 변경 안을 coreAutoApply 가 켜져 있어도 사용자 승인으로 분류함"
+   "rule": "R257",
+   "file": "tools/VibeManager/quick.json",
+   "line": 2657,
+   "what": "VM 환경설정 그룹에 orch.autoImproveOnStop(작업 종료 뒤 대기 개선안 이어 진행)과 orch.autoImproveScope 를 켜고 끄는 항목이 없음(quick.json autoImprove 0건). 값은 harness.json 98행을 직접 고쳐야만 바뀜"
   },
   {
-   "rule": "R251",
-   "file": "tools/VibeManager/orch-vision.js",
-   "line": 84,
-   "what": "UI/UX 추천 대상 지정이 '*view*.js' 라 menu-view.js, tabview.js 만 걸리고 workbench.js, orchestra.js, jobs.js, flow-panel.js, prompt-panel.js, history.js 웹뷰 HTML·CSS 가 추천 범위에서 빠짐"
+   "rule": "R258",
+   "file": "tools/VibeManager/orch-consult.js",
+   "line": 59,
+   "what": "DB 역할 기본 스킬 'db' 는 ~/.claude/skills, .claude/skills 어디에도 SKILL.md 가 없음(두 폴더에 있는 것은 frontend-design, csharp-expert, winforms-expert, vercel-react-best-practices, java-springboot). skillInstalled('db') "
+  },
+  {
+   "rule": "R258",
+   "file": ".claude/agents/vm-orchestra.md",
+   "line": 16,
+   "what": "에이전트 지시문의 컨설팅 설명에 주제별 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 역할 스킬 사용이 없음. 수석 엔지니어 한 사람 기준만 적혀 있음"
   }
  ],
- "lastResult": "규칙 10개 점검: 남은 곳 3, 개선안 3, 이미 올라간 안 0",
+ "lastResult": "규칙 3개 점검: 남은 곳 4, 개선안 4, 이미 올라간 안 0",
  "skipped": []
 }

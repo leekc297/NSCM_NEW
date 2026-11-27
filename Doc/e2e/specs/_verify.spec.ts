@@ -400,6 +400,8 @@ test.describe(`정합검증 ${ID} @verify`, () => {
     // 이 테스트가 재는 행: COLUMN 은 지금 탭의 시트만 · 그 밖의 행은 첫 시트 실행에서만
     const pick = (pred: (r: Record<string, string>) => boolean) => rows.filter(z => pred(z) && !(sheetMiss && z.source === 'COLUMN' && nrmSheet(z.target.split('.')[0]) === nrmSheet(SHEET_NAME)) && (SHEET_LIST.length < 2 || (z.source === 'COLUMN' ? nrmSheet(z.target.split('.')[0]) === nrmSheet(SHEET_NAME) || !SHEET_LIST.some(n => nrmSheet(n) === nrmSheet(z.target.split('.')[0])) && SHEET_I === 0 : SHEET_I === 0)));
     const div = searchedDiv([...nscm.calls].reverse().find(c => /SEARCH/i.test(c.btn) && /divisionId/.test(c.body || ''))?.body ?? calls[0]?.body);
+    // 2026-11-26 T673: 조회 요청 본문(최상위 + data 아래 키) — AS-IS 조회조건 컨트롤 비교 SRCH(cboBucketType)=="DAILY" 를 평가(condeval.ts)
+    const srchBody: Record<string, unknown> = (() => { try { const j = JSON.parse([...nscm.calls].reverse().find(c => /SEARCH/i.test(c.btn) && /divisionId/.test(c.body || ''))?.body ?? calls[0]?.body ?? '{}') as Record<string, unknown>; const d = (j && typeof j.data === 'object' && j.data) ? j.data as Record<string, unknown> : {}; return { ...j, ...d }; } catch { return {}; } })();
     const vis = (await probe.visibleBindings(p)) || [];
     for (const x of pick(x => x.source === 'COLUMN' && x.rule_id === 'A5')) {
       const b = binding(x.target); const wantHidden = /VISIBLE_FLAG 'N'/.test(x.expected);
@@ -431,9 +433,12 @@ test.describe(`정합검증 ${ID} @verify`, () => {
     const judgeCond = async (x: Record<string, string>, b: string, rules: NonNullable<ReturnType<typeof parseRules>>, where: string, candRows: number[], selfCol: string): Promise<boolean | null> => {
       const want = new Map<number, { editable: boolean; by: string }>(); const errs: string[] = [];
       if (ACCT_CTX.unknown && JSON.stringify(rules).includes('GROUP')) { put(x.row_id, 'ERROR', `[계정 그룹 미확인] ${where} ${b}: 로그인 계정 '${ACCOUNT}' 의 그룹을 plan.accounts·accounts.json·user_group_user.csv 어디서도 찾지 못해 AS-IS GROUP 조건을 평가할 수 없음 — 측정 보류(PASS/FAIL 오판 금지 · 검사기 입력 결함)`); return null; }
+      /* 2026-11-26 T668(checker_defect_scan K5 SCP0020 '신규행 LANE_QTY: COL(OPERATION_GROUP_ID) 없음'): 신규행은 비운 칸의 키가 행 데이터에 없다.
+         그 칸이 그리드 칸(숨김 포함)이거나 다른 행 데이터에 있는 필드면 AS-IS GetText 처럼 빈 문자열로 평가한다. 어디에도 없는 필드만 평가 불가로 남긴다 */
+      const knownCols = new Set<string>([...((await probe.allBindings(p)) || []), ...((await probe.dataKeys(p)) || [])]);
       for (const r of candRows) {
         const item = await probe.rowItem(p, r); if (!item) continue;
-        const ctx: CondCtx = { ...ACCT_CTX, div, self: selfCol, col: (n: string) => (n in item ? item[n] : null), auth: authEdit, sheet: (/^(.+?)\.[A-Z0-9_<]/.exec(x.target || '') || [])[1] /* T264: 원장 대상 '시트.컬럼' 의 시트 · 없으면 SHEET 원자는 평가 불가 */ };
+        const ctx: CondCtx = { ...ACCT_CTX, div, self: selfCol, col: (n: string) => (n in item ? item[n] : knownCols.has(n) ? '' : null), search: srchBody, auth: authEdit, sheet: (/^(.+?)\.[A-Z0-9_<]/.exec(x.target || '') || [])[1] /* T264: 원장 대상 '시트.컬럼' 의 시트 · 없으면 SHEET 원자는 평가 불가 */ };
         const ev = evalRules(rules, ctx);
         if ('error' in ev) { errs.push(`r${r}: ${ev.error}`); continue; }
         want.set(r, ev);
@@ -687,7 +692,8 @@ test.describe(`정합검증 ${ID} @verify`, () => {
       let mData: H13M = { s: 'ERROR', note: '측정 안 됨' };
       { let found: { b: string; row: number } | null = null;
         for (const c0 of cands) { const rs = await probe.findRowsByValue(p, `d => { const v = Number(String(d[${JSON.stringify(c0)}] ?? '').replace(/,/g, '')); return !isNaN(v) && v < 0; }`, 1); if (rs.length) { found = { b: c0, row: rs[0] }; break; } }
-        if (!found) mData = { s: 'NA', note: '음수 데이터 행 없음(데이터 조건)' };
+        /* 2026-11-26 개선안 20261126190220_SELF: 음수 데이터 행이 없으면 글자색을 재지 못한 것 = 미검증(2026-11-11 결정). 칸이 그리드에 없을 때만 해당없음(표시 여부는 A5) */
+        if (!found) mData = inRowMissing.has(b) ? { s: 'NA', note: '음수 데이터 행 없음 · 현재 그리드에 없음(표시 여부는 A5)' } : { s: 'ERROR', note: '[미검증] 음수 데이터 행 없음(데이터 조건 · 측정 재료 없음)' };
         else {
           let st = await probe.cellStyle(p, found.row, found.b);
           if (!st || st.err) {  // 데이터로 찍은 행이 렌더되지 않으면(가로 가상화) 렌더된 음수 셀을 대상 컬럼 집합에서 직접 고른다(2026-10-30 v16 진단: viewRange c-1~-1 · x=0)
@@ -715,6 +721,8 @@ test.describe(`정합검증 ${ID} @verify`, () => {
           else if (!st || st.err) mKey = { s: 'ERROR', note: `${ir.where} r${ir.row} 셀 스타일 읽기 실패(${st?.err || '그리드 없음'})` };
           else { mKey = judge(`${ir.where} r${ir.row} ${how}`, st, " — '-1' 입력이 거부·보정됨(E1 규칙)"); mKey.note += ' · 복원'; }
         } }
+      /* 20261126190220_SELF: inRowMissing 은 (나)의 inRow 에서 채워지므로 (가) 미검증을 여기서 다시 본다 — 칸이 그리드에 없으면 해당없음 */
+      if (mData.s === 'ERROR' && /^\[미검증\] 음수 데이터 행 없음/.test(mData.note) && inRowMissing.has(b)) mData = { s: 'NA', note: '음수 데이터 행 없음 · 현재 그리드에 없음(표시 여부는 A5)' };
       const ms = [mData, mKey]; const head = `${b}${dp ? ' (' + dynTag(x, dp) + ')' : ''}`;
       const verdict = ms.some(m => m.s === 'FAIL') ? 'FAIL' : ms.some(m => m.s === 'PASS') ? 'PASS' : ms.some(m => m.s === 'ERROR') ? 'ERROR' : 'NA';
       put(x.row_id, verdict, `${head}: (가) 음수 데이터 행 ${mData.s} ${mData.note} · (나) 키 입력 '-1' 직후 ${mKey.s} ${mKey.note} · 기대색 근거 ${expC.src}${verdict === 'FAIL' ? ' — AS-IS 는 음수를 빨강으로 표시(TO-BE 그리드 formatter 음수 글자색 처리 확인)' : ''}`);

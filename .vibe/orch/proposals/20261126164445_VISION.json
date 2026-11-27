@@ -1,0 +1,43 @@
+{
+  "id": "20261126164445_VISION",
+  "at": "2026-11-26T16:44:45+09:00",
+  "ms": 1795679085626,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 vm 파일 쓰기 재시도 fs retry 를 남은 orch 모듈 쓰기 함수에 적용",
+  "title": "컨설팅: VM 파일 쓰기 재시도(fs-retry)를 남은 orch 모듈 쓰기 함수에 적용",
+  "evidence": "vm_errors.jsonl 127줄 2026-11-26T16:31:54 orch-ladder.writeJson UNKNOWN open .vibe/orch/ladder.json. fs-retry.js 는 16:26 에 orch-improve, orch-history, orch-watch 3모듈에만 적용됨(CHANGELOG.md:22). orch-ladder.js:22 는 fs.writeFileSync 직접 사용. 같은 형태 쓰기: orch-usercheck.js:22, orch-userrule.js:19, orch-checkerscan.js:14, orch-consult.js:17, orch-worklist.js:39(writeFileSync 뒤 rename). S5 7일 쓰기 실패 서명 5종 29건",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/orch-userrule.js",
+    "tools/VibeManager/orch-checkerscan.js",
+    "tools/VibeManager/orch-consult.js",
+    "tools/VibeManager/orch-worklist.js",
+    "tools/VibeManager/test/t_fs_retry.js"
+  ],
+  "before_after": "변경 전: 6모듈이 fs.writeFileSync 를 바로 불러 UNKNOWN, EBUSY 1회로 기록이 빠짐. 변경 후: 6모듈 writeJson, writeText 가 require('./fs-retry').writeFileSyncRetry 로 씀(임시 파일 쓰기 포함, rename 실패 시 복사는 지금 동작 유지). t_fs_retry.js 에 모듈별 writeJson 이 첫 시도 UNKNOWN 뒤 성공하는 시험 6건 추가",
+  "verify": "반영 때: node tools/VibeManager/test/run_all.js, node tools/VibeManager/test/t_fs_retry.js. 반영 뒤: 창 다시 로드 후 24시간 vm_errors.jsonl 에서 orch-ladder, orch-usercheck, orch-userrule, orch-checkerscan, orch-consult, orch-worklist 의 'UNKNOWN: unknown error, open' 서명 0건 확인",
+  "rollback": "대상 파일 .bak_<tag> 사본 복원, 또는 VMO 창 개선안 탭 되돌리기",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:07+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:56:19+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · fs-retry.js renameSyncRetry 추가, orch-ladder, orch-usercheck, orch-userrule, orch-checkerscan, orch-consult, orch-worklist 의 writeJson/writeText 쓰기와 바꾸기에 재시도. t_fs_retry.js 9개 모듈 확인과 rename 시험 추가. run_all 93/93 PASS 1577 FAIL 0(16:56:04), 설치 폴더 복사"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795679779910
+}

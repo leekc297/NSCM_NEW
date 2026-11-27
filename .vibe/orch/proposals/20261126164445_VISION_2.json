@@ -1,0 +1,39 @@
+{
+  "id": "20261126164445_VISION_2",
+  "at": "2026-11-26T16:44:45+09:00",
+  "ms": 1795679085721,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 vm 이 띄운 서버 nscm_be nscm_fe 출력 로그를 정한 크기마다 새 파일로 바꾸고 오래된 파일을 지움",
+  "title": "컨설팅: VM 이 띄운 서버(NSCM_BE, NSCM_FE) 출력 로그를 정한 크기마다 새 파일로 바꾸고 오래된 파일을 지움",
+  "evidence": "S10(16:40) .vibe/logs/2026-11-23T11-24-48_NSCM_BE.log 32GB, logsGB 34.2. 같은 원인의 로그 삭제 개선안 4회: 20261119215147_SELF_2(58,885,136,326바이트), 20261120143327_SELF_2(54.8GB), 20261120225006_SELF_5(30.6GB), 20261122230716_SELF_2(25.5GB). workbench.js:789 spawnStream 이 fs.createWriteStream(logF) 로 서버 출력을 크기 제한 없이 씀",
+  "targets": [
+    "tools/VibeManager/workbench.js",
+    "tools/Harness/harness.json",
+    "tools/VibeManager/test/t_spawn_logcap.js"
+  ],
+  "before_after": "변경 전: 서버 기동 1회의 출력 전체가 로그 1개에 쌓임(11-23 11:24 ~ 11-25 23:08 32GB). 변경 후: spawnStream 이 label 이 서버 기동일 때 쓴 바이트를 세어 harness.json orch.serverLogMaxMB(새 키)를 넘으면 _partN 새 파일로 바꾸고, 같은 실행의 파일은 orch.serverLogKeep(새 키)개만 남김. 실패 줄 수집(failLines), Task History 로그 연결(history.addLog)은 새 파일도 등록. 키 기본값은 사용자 결정 목록에 적고 그 값으로 시작. 새 시험 t_spawn_logcap.js 는 작은 상한으로 교체, 남김 개수, 실패 줄 수집 유지를 확인",
+  "verify": "반영 때: node tools/VibeManager/test/run_all.js, node tools/VibeManager/test/t_spawn_logcap.js. 반영 뒤: 서버 재기동 1회 뒤 S10 logsGB, bigFiles 값과 .vibe/logs *_NSCM_BE*.log 파일별 크기가 상한 이하인지 확인. 7일 동안 '로그 삭제' 개선안 0건 확인",
+  "rollback": "workbench.js.bak_<tag>, harness.json.bak_<tag> 복원",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:07+09:00",
+      "by": "S-W",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:12:05+09:00",
+      "by": "S-W",
+      "what": "반영 완료(세션 직접 보완) · 대상 정정: 서버 로그를 쓰는 곳 = server-service.js start()(workbench.js:789 spawnStream 아님). 신규 logpipe.js 중계기가 서버 출력을 받아 쓰고 orch.serverLogMaxMB 마다 <로그>_partN.log 로 이름 바꾼 뒤 새로 씀, orch.serverLogKeep 개만 남김. server-service.js serverSpawnArgs, start() 중계기 기동, tailFile 교체 때 part 뒷부분 읽기. harness.json orch.serverLogMaxMB 200, serverLogKeep 5(기본값 사용자 확인 대상). 처음 만든 복사 뒤 비우기 방식은 6회 중 2회 1~3줄 누락으로 버림. 시험 t_spawn_logcap PASS 13(4회 연속), t_server_service PASS 14, t_server_belog PASS 11 (2026-11-26 17:11:55). 기존 50GB 로그 삭제 안 함. VS Code 안 Code.exe + ELECTRON_RUN_AS_NODE 실행은 창 다시 로드 뒤 서버 재기동 때 확인 필요(미확인)"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-W",
+  "waitNote": "",
+  "appliedMs": 1795680725793
+}

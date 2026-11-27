@@ -25,8 +25,8 @@
 | CustomDropdown | onChange | <arrow> setCompanyId | jsx | features/supply/src/components/ElecMaterialPopup.tsx | 205 |
 | InputField | onChange | <arrow> setItemId | jsx | features/supply/src/components/ElecMaterialPopup.tsx | 218 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/components/ElecMaterialPopup.tsx | 219 |
-| Button | onClick | handleSubmit | jsx | features/supply/src/components/ElecMaterialPopup.tsx | 251 |
-| Button | onClick | onClose | jsx | features/supply/src/components/ElecMaterialPopup.tsx | 258 |
+| Button | onClick | onClose | jsx | features/supply/src/components/ElecMaterialPopup.tsx | 251 |
+| Button | onClick | handleSubmit | jsx | features/supply/src/components/ElecMaterialPopup.tsx | 258 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

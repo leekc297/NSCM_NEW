@@ -1,0 +1,37 @@
+{
+  "id": "20261126180322_VISION",
+  "at": "2026-11-26T18:03:22+09:00",
+  "ms": 1795683802194,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 작업 모드 전환 도구 set_scope.py 가 전환 기록을 events.jsonl 에 남기고 ui/db mode 전환 전 점검 결과를 출력",
+  "title": "컨설팅: 작업 모드 전환 도구(set_scope.py)가 전환 기록을 events.jsonl 에 남기고 UI/DB MODE 전환 전 점검 결과를 출력",
+  "evidence": "tools/Harness/verify/set_scope.py:30~35 는 값을 쓰고 한 줄만 출력함. events.jsonl 에 scope 기록 0건(18:0x 확인). 지난 컨설팅 로드맵 '전환일부터 7일 nscm-fe/nscm-be 대상 안 applied, reverted 건수'를 잴 기준 시각이 없음. 전환 때 확인할 자료: gate_baseline.tsv 첫 줄(11-26 17:57:59 scope=DB_ONLY n=2171), Doc/verify/_engine_selfcheck.json GEN_SMOKE 결과",
+  "targets": [
+    "tools/Harness/verify/set_scope.py"
+  ],
+  "before_after": "전: 값 변경과 한 줄 출력만 함. 후: 값이 바뀌면 .vibe/orch/events.jsonl 에 {at, type 'scope.change', before, after, by 'set_scope.py'} 1줄 추가. 바꾸는 값이 DB_FE 이면 전환 전 점검 3줄 출력(종료 전 게이트 기준선 시각과 화면 파일 수, 생성기 자체 시험 마지막 결과와 시각, 자가진단 S2 마지막 결과). 점검 결과로 전환을 막지 않음. --selftest(임시 harness.json, 임시 events.jsonl 로 기록 1줄, 같은 값 재지정 때 기록 0줄 확인)와 --path 인자 추가. 작업 모드 값 자체는 이 안으로 바꾸지 않음",
+  "verify": "반영 때: python tools/Harness/verify/set_scope.py --selftest. python tools/Harness/verify/engine_selfcheck.py. 반영 뒤: 사용자가 차주 UI/DB MODE 로 바꿀 때 events.jsonl scope.change 1줄과 점검 출력 확인",
+  "rollback": "set_scope.py 반영 전 사본으로 되돌림. 추가된 events.jsonl 줄은 기록이라 남겨 둠",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:10:42+09:00",
+      "by": "S-Y",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:21:06+09:00",
+      "by": "S-Y",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/set_scope.py append_event(scope.change), precheck 3줄(DB_FE 전환 때), --selftest, --path, --events · --selftest 7건 PASS(임시 harness, 실제 repairScope DB_ONLY 유지, 2026-11-26 18:20:57)"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-Y",
+  "waitNote": "",
+  "appliedMs": 1795684866123
+}

@@ -1,7 +1,7 @@
 # SSP0024 — To-Be Fact Pack 요약
 
 - page_key: `shipping/shipment-master-electrode` · feature: shipping · As-is Fact Pack 있음
-- 파일 14 · 엔드포인트 호출 10 (미해결 1, 주석 속 0) · 이벤트 24 · 컴포넌트 사용 43 · 하드코딩 컬럼 11 · 메시지 21
+- 파일 14 · 엔드포인트 호출 10 (미해결 1, 주석 속 0) · 이벤트 24 · 컴포넌트 사용 42 · 하드코딩 컬럼 11 · 메시지 21
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 11건
 
 ## 1. 파일
@@ -9,14 +9,14 @@
 |---|---|---|
 | features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.module.scss | component | 26 |
 | features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.tsx | component | 291 |
-| features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | component | 237 |
+| features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | component | 250 |
 | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | component | 346 |
 | features/shipping/src/pages/shipment-master-electrode/hooks/useShipmentMasterElectrodeValidation.ts | hook | 67 |
 | features/shipping/src/pages/shipment-master-electrode/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-master-electrode/shipment-master-electrode.constants.ts | constants | 247 |
 | features/shipping/src/pages/shipment-master-electrode/shipment-master-electrode.types.ts | types | 33 |
 | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.module.scss | style | 6 |
-| features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | page | 483 |
+| features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | page | 478 |
 | features/shipping/src/pages/shipment-master-electrode/useShipmentMasterElectrodeStore.ts | store | 184 |
 | features/shipping/src/pages/shipment-master-electrode/utils/shipmentMasterElectrodeColumns.ts | util | 42 |
 | features/shipping/src/pages/shipment-master-electrode/utils/shipmentMasterElectrodeEditLock.ts | util | 42 |
@@ -25,13 +25,13 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | ElectrodeItemByDivisionModal.tsx:85 ShipmentMasterElectrodeForm.tsx:51 |
+| (useTabComboQueries) | hook | 2 | Y | ElectrodeItemByDivisionModal.tsx:85 ShipmentMasterElectrodeForm.tsx:52 |
 | SSP0024/popup//call-proc | hook | 1 | Y | ElectrodeItemByDivisionModal.tsx:117 |
 | (useTabLookupQueries) | hook | 1 | Y | ShipmentMasterElectrodeGrid.tsx:96 |
 | {?{comboId:COMBO.CELL_PLANT_SITE,divisionId}} | http | 1 | N | ShipmentMasterElectrodeGrid.tsx:235 |
 | /SSP0024/main/USER_CHECK/call-proc | http | 1 | Y | useShipmentMasterElectrodeValidation.ts:28 |
-| SSP0024/main//call-proc | hook | 1 | Y | ShipmentMasterElectrode.tsx:106 |
-| /SSP0024/main/SAVE/call-proc | http | 1 | Y | ShipmentMasterElectrode.tsx:314 |
+| SSP0024/main//call-proc | hook | 1 | Y | ShipmentMasterElectrode.tsx:105 |
+| /SSP0024/main/SAVE/call-proc | http | 1 | Y | ShipmentMasterElectrode.tsx:313 |
 | /admin/menu/SSP0024/column | http | 1 | Y | useShipmentMasterElectrodeStore.ts:129 |
 | /admin/menu/SSP0024/search-conditions | http | 1 | Y | useShipmentMasterElectrodeStore.ts:159 |
 
@@ -46,13 +46,13 @@
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.tsx | 240 |
 | Button | onClick | handleSubmit | jsx | features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.tsx | 276 |
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-master-electrode/components/modals/ElectrodeItemByDivisionModal.tsx | 283 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 103 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 125 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 152 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 191 |
-| Button | onClick | onMaterialSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 187 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 227 |
-| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 222 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 104 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 126 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 153 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 198 |
+| Button | onClick | onMaterialSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 188 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 240 |
+| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeForm.tsx | 229 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 139 |
 | g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 157 |
 | g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 177 |
@@ -60,11 +60,11 @@
 | g | pastedCell | pastedCellHandler | addHandler | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 266 |
 | g.hostElement? | keydown | keyDownHandler | addEventListener | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 283 |
 | DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-master-electrode/components/ShipmentMasterElectrodeGrid.tsx | 342 |
-| ShipmentMasterElectrodeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 387 |
-| ShipmentMasterElectrodeForm | onMaterialSearch | <arrow> setOpenMaterial | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 388 |
-| ShipmentMasterElectrodeForm | onModelSearch | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 389 |
-| ShipmentMasterElectrodeGrid | onMaterialCellDblClick | handleMaterialCellDblClick | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 428 |
-| ShipmentMasterElectrodeGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 429 |
+| ShipmentMasterElectrodeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 386 |
+| ShipmentMasterElectrodeForm | onMaterialSearch | <arrow> setOpenMaterial | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 387 |
+| ShipmentMasterElectrodeForm | onModelSearch | <arrow> setOpenModel | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 388 |
+| ShipmentMasterElectrodeGrid | onMaterialCellDblClick | handleMaterialCellDblClick | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 423 |
+| ShipmentMasterElectrodeGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 424 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -75,11 +75,11 @@
 | Button | 4 |
 | InputField | 3 |
 | SearchArea | 2 |
-| ProgressIndicator | 2 |
 | DataGrid | 2 |
 | FunctionSearchIcon | 2 |
 | MaterialByDivisionModal | 2 |
 | CustomDialog | 1 |
+| ProgressIndicator | 1 |
 | ResultArea | 1 |
 | ControlConfirmIcon | 1 |
 | MainTitle | 1 |
@@ -129,12 +129,12 @@
 | MSG00667 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0024(10), SSP0002(3), SSP0014(2), SSP0017(2), COM0008(1), SSP0200(1), SSP0025(1), SCP0020(1), SSP0015(1), DMF0020(1), SCP0124(1), SCP0025(1), SCP0053(1)
+- 화면ID: SSP0024(11), COM0013(3), SSP0002(3), SSP0014(2), SSP0017(2), COM0008(1), SSP0200(1), SSP0025(1), SCP0020(1), SSP0015(1), DMF0020(1), SCP0124(1), SSP0003(1), SCP0025(1), SCP0053(1)
 - SP/PKG: PKG_SSP0024(6), PKG_SSP0002(4), P_SSP0024_GET_ITEM_BY_DIVISION_POPUP(3), P_SSP0024_GET_SHIP_MASTER(2), P_SSP0024_SAVE_SHIP_MASTER(2), PR_GET_LOOKUP_INFO_LIST(1), SSP0002_GET_USER_INFO_LIST(1), P_SSP0002_GET_USER_INFO_LIST(1), P_MATERIAL_ID(1), P_MODEL_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | 제거하고 기존행은 조용히 no-op 한다(AS-IS DeleteButton cs:272 guard return·표준 동일 — 메시지 없음). | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 207 |
+| code | 제거하고 기존행은 조용히 no-op 한다(AS-IS DeleteButton cs:272 guard return·표준 동일 — 메시지 없음). | features/shipping/src/pages/shipment-master-electrode/ShipmentMasterElectrode.tsx | 206 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 78

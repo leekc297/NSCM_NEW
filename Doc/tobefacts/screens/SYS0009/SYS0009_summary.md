@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/admin/src/pages/menu-button-management/components/MenuButtonManagementForm.tsx | component | 106 |
-| features/admin/src/pages/menu-button-management/components/MenuButtonManagementTable.tsx | component | 53 |
+| features/admin/src/pages/menu-button-management/components/MenuButtonManagementTable.tsx | component | 55 |
 | features/admin/src/pages/menu-button-management/index.ts | index | 2 |
 | features/admin/src/pages/menu-button-management/menu-button-management.constants.ts | constants | 7 |
 | features/admin/src/pages/menu-button-management/MenuButtonManagement.tsx | page | 106 |
@@ -36,8 +36,8 @@
 | InputField | onChange | <arrow> setSearchParams | jsx | features/admin/src/pages/menu-button-management/components/MenuButtonManagementForm.tsx | 59 |
 | InputField | onChange | <arrow> setSearchParams | jsx | features/admin/src/pages/menu-button-management/components/MenuButtonManagementForm.tsx | 73 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/admin/src/pages/menu-button-management/components/MenuButtonManagementForm.tsx | 94 |
-| DataGrid | cellEditEnded | handleMenuChange | jsx | features/admin/src/pages/menu-button-management/components/MenuButtonManagementTable.tsx | 48 |
-| DataGrid | pastedCell | handleMenuChange | jsx | features/admin/src/pages/menu-button-management/components/MenuButtonManagementTable.tsx | 49 |
+| DataGrid | cellEditEnded | handleMenuChange | jsx | features/admin/src/pages/menu-button-management/components/MenuButtonManagementTable.tsx | 50 |
+| DataGrid | pastedCell | handleMenuChange | jsx | features/admin/src/pages/menu-button-management/components/MenuButtonManagementTable.tsx | 51 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

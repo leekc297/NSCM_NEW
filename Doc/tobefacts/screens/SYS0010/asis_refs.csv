@@ -7,4 +7,6 @@
 "admin/lookup","SYS0010","features/admin/src/pages/lookup/Lookup.tsx","124","","","","SCM_ADM_PROC_M","3. 파라미터 이름 — BE makeProcedure 는 SCM_ADM_PROC_M.COL_NM 을 키로 body 에서 값을"
 "admin/lookup","SYS0010","features/admin/src/pages/lookup/Lookup.tsx","127","SCM0103 SYS0010","","","","4. p_program_id 는 AS-IS 가 'SCM0103' 고정 — 아래 코드의 MENU_ID('SYS0010') 와 다르다."
 "admin/lookup","SYS0010","features/admin/src/pages/lookup/Lookup.tsx","155","SYS0004","","","","⭐ master hook §2.4 — Search 시 admin SYS0004 메타 refetch (admin 변경 즉시 반영)"
+"admin/lookup","SYS0010","features/admin/src/pages/lookup/Lookup.tsx","185","SCM0003","","261","","AS-IS SCM0003 DeleteButton(L261~268) 과 같다. 2026-09-14 신규행 전용으로 막았던 것을"
+"admin/lookup","SYS0010","features/admin/src/pages/lookup/Lookup.tsx","187","","P_SYS0010_SAVE_LOOKUP_MASTER","","","주의: 상단(Lookup Type) 삭제는 P_SYS0010_SAVE_LOOKUP_MASTER 가 그 타입의 하단 값까지 함께 지운다."
 "admin/lookup","SYS0010","features/admin/src/pages/lookup/lookup.utils.ts","110","","P_SYS0010_GET_LOOKUP_MASTER_DETAIL P_SYS0010_SAVE_LOOKUP_MASTER_DETAIL","","","저장 payload 한 행 — 정규화 + UPDATE 대상 식별용 원본 세그먼트 값(SEGMENT1_KEY~5) 부착. Lookup Values 의 행 식별자는 LOOKUP_TYPE + SEGMENT1~5 다. 그래서 세그먼트를 수정한 뒤 바뀐 값만 보내면 UPDATE 가 찾는 행이 없어 0건으로 끝나고, 오류도 없이 조용히 사라진다. AS-IS(SCM0003_Lookup.cs ""UPDATE용 KEY"" 숨김 컬럼)는 바뀐 값과"

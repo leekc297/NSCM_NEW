@@ -1,0 +1,65 @@
+- dialog:
+  - heading "Owner Popup" [level=2]
+  - img
+  - text: Div
+  - combobox [disabled]: 40 Mobility & IT Battery
+  - button "Open" [disabled]
+  - img
+  - text: Team
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: End Customer
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: Sales Site
+  - combobox "ALL" [disabled]
+  - button "Open" [disabled]
+  - text: Owner
+  - textbox
+  - button "Search"
+  - paragraph
+  - text: {TOTAL}
+  - grid:
+    - rowgroup:
+      - row "No Div. Team ID Team Owner User Name User Name (EN) Deselect All Rows":
+        - columnheader "No"
+        - columnheader "Div."
+        - columnheader "Team ID"
+        - columnheader "Team"
+        - columnheader "Owner"
+        - columnheader "User Name"
+        - columnheader "User Name (EN)"
+        - gridcell "Deselect All Rows":
+          - checkbox "Deselect All Rows"
+    - rowgroup:
+      - row {데이터 행}
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect Row"
+    - row "Deselect All Rows"
+  - status
+  - text: "0"
+  - button "Close"
+  - button "OK"

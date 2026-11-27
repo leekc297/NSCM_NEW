@@ -1,0 +1,5 @@
+﻿row_id,source,rule_id,target,class,actor,remedy,evidence,prev_fail
+V-ef37f9e9,GENERAL,H6,[SCP0007 결함 유형] Route 검색 팝업 제목,집계,집계,하위 행 판정을 따라감 · 하위 미검증이 풀리면 같이 풀림,규칙 H6 판정 1행 중 FAIL 0 · 판정필요 0 · 미검증 1 — [V-0e9099ba] new GSCM.SCM.PopUp.UIL.SCP0005_DistributionRoutePopup(): 팝업이 열리지 않아 표준 확인 불가(G5 행 참고) → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7),
+T-d920ea16,TRACE,X-ROW,SCP0005_DistributionRoute.FindButton,집계,집계,하위 행 판정을 따라감 · 하위 미검증이 풀리면 같이 풀림,진입점 집계 9검사 — PASS:8 · ERROR:1,
+T-e71343b5,TRACE,X-ROW,SCP0005_DistributionRoute.FindDataReceive,집계,집계,하위 행 판정을 따라감 · 하위 미검증이 풀리면 같이 풀림,진입점 집계 8검사 — PASS:4 · NA:2 · ERROR:1 · WARN:1,
+T-9343bbce,TRACE,M4,SCP0005_DistributionRoute.spdMain_CellDoubleClick,집계,집계,하위 행 판정을 따라감 · 하위 미검증이 풀리면 같이 풀림,진입점 집계 — 대조표 SCP0005_DistributionRoute.spdMain_CellDoubleClick 의 M4 8요소: PASS:7 · NOT_RUN:1 (미실행 요소가 남아 판정필요),

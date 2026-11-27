@@ -1,7 +1,7 @@
 # DMF0005 — To-Be Fact Pack 요약
 
 - page_key: `master/sales-site-project-model` · feature: master · As-is Fact Pack 있음
-- 파일 17 · 엔드포인트 호출 10 (미해결 3, 주석 속 0) · 이벤트 40 · 컴포넌트 사용 68 · 하드코딩 컬럼 3 · 메시지 26
+- 파일 17 · 엔드포인트 호출 10 (미해결 3, 주석 속 0) · 이벤트 40 · 컴포넌트 사용 67 · 하드코딩 컬럼 3 · 메시지 26
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
@@ -10,7 +10,7 @@
 | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.module.scss | style | 37 |
 | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | page | 223 |
 | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.module.scss | style | 41 |
-| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | page | 461 |
+| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | page | 459 |
 | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | page | 664 |
 | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx | page | 131 |
 | features/master/src/pages/sales-site-project-model/index.ts | index | 2 |
@@ -63,10 +63,10 @@
 | Button | onClick | <arrow> setOpenItemByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 335 |
 | InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 364 |
 | Button | onClick | <arrow> setOpenOwnerByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 360 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 388 |
-| Checkbox | onChange | <arrow> setActiveTab,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 401 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 420 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 427 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 389 |
+| Checkbox | onChange | <arrow> setActiveTab,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 405 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 418 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 425 |
 | grid | copying | handleCopying | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 172 |
 | grid | pastedCell | handlePastedTeam | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 173 |
 | grid.hostElement | keydown | handleClearTeam | addEventListener | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 174 |
@@ -92,8 +92,8 @@
 | component | count |
 |---|---|
 | Grid | 9 |
-| FormItem | 9 |
 | Button | 8 |
+| FormItem | 8 |
 | CustomDropdown | 5 |
 | DataGrid | 3 |
 | InputField | 3 |

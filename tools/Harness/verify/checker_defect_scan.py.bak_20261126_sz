@@ -1,0 +1,171 @@
+# -*- coding: utf-8 -*-
+"""checker_defect_scan.py — 검사기 판정 결함 탐색(2026-11-26 사용자 지시 'VMO 가 지금 하고 있는 보완 작업을 자가진단해서 보완 · 자동 승인')
+
+전 화면 원장(Doc/verify/<ID>/verify_ledger.csv)의 판정 근거를 모아 검사기 결함 후보를 낸다. 파일을 고치지 않는다(읽기만).
+VMO 자가진단 S16(tools/VibeManager/orch-checkerscan.js)이 부르고, 결과로 검사기 전용 Claude 진단 → 개선안(자동 반영 대상)을 만든다.
+오늘 세션이 손으로 찾은 결함 유형(T649·T655·T656 칸 이름 잘림 · T657 문구 누적 · T659·T660 재지 못한 행 해당없음 · T661 다른 그리드 측정)을 탐지기로 옮겼다.
+
+탐지기(행 단위 · 근거 있는 것만)
+  K1 한 글자 칸 이름   대상 '<시트>.<1~2글자 대문자> (' · 'COL:<1~2글자>' — 정규식이 대소문자 섞인 이름을 자른 흔적
+  K2 같은 문구 반복    증거 안에 같은 '[머리말] 문장'(20자 이상)이 두 번 이상 — 판정마다 덧붙이며 쌓인 흔적
+  K3 재지 못한 해당없음 결과 NA 인데 증거가 측정 실패·검사기 한계·해석 불가·수동 검수 등 '재지 못함'을 말함(11-11 결정 위반 후보)
+  K4 결과·증거 어긋남  결과 PASS·NA 인데 증거 머리말이 [미검증]·[측정 실패]·[측정 경로 …] · 결과 FAIL 인데 증거가 측정 전제 미충족·검사기 한계
+  K5 칸 값 없음 계산 불가 증거 'COL(X) 없음' — 그 칸이 측정 그리드 행 데이터에 없음(다른 시트·그리드에서 잰 흔적)
+묶음(미검증 상위 유형)
+  C  결과 ERROR·판정필요 행을 증거 모양(대문자 이름·숫자·따옴표 값 정규화)으로 묶어 행 수·화면 수 상위 — 검사기 공백·결함 후보(진단이 판단)
+예외 = tools/Harness/rules/checker_scan_ignore.csv(사용자 결정 · 문서 대상) 의 문구가 증거에 있으면 빼고 수만 센다
+
+  python tools/Harness/verify/checker_defect_scan.py [--out <json>] [--top 15] [--min-rows 30] [--if-changed]
+  python tools/Harness/verify/checker_defect_scan.py --selftest
+"""
+import csv, collections, glob, hashlib, json, os, re, sys, datetime
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+csv.field_size_limit(10 ** 9)
+OUT_DEF = os.path.join(ROOT, '.vibe', 'orch', 'selfcheck', 'checker_scan.json')
+
+RX_K1 = re.compile(r'^[^.()]+\.([A-Z][A-Z0-9]?)\s*\(|\b(?:COL|CELL|COLUMN):([A-Z][A-Z0-9]?)\b')
+RX_K2 = re.compile(r'(\[[^\]]{2,30}\][^|]{20,120})')
+RX_K3 = re.compile(r'검사기 한계|측정 실패|측정하지 못|미측정|재측정 대상|해석 불가|해석 실패|수동 검수|검증 미완|읽지 못함|찾지 못함|못 잼|못 재')
+RX_K4_BAD = re.compile(r'^\s*\[(?:미검증|측정 실패|측정 경로[^\]]*|측정 전제 미충족)\]')
+RX_K4_FAIL = re.compile(r'측정 전제 미충족|검사기 한계|측정 실패|측정 경로 없음')
+RX_K5 = re.compile(r'COL\(([A-Z][A-Z0-9_]+)\) 없음')
+
+
+def ignores():
+    out = []
+    p = os.path.join(ROOT, 'tools', 'Harness', 'rules', 'checker_scan_ignore.csv')
+    if os.path.exists(p):
+        for r in csv.DictReader(open(p, encoding='utf-8-sig')):
+            if (r.get('pattern') or '').strip():
+                out.append((r['pattern'].strip(), r.get('reason') or ''))
+    return out
+
+
+def sig(ev):
+    k = re.sub(r'[A-Z][A-Z0-9_]{2,}', '<C>', ev or '')
+    k = re.sub(r'\d+', '#', k)
+    k = re.sub(r"'[^']*'", '<S>', k)
+    return k[:90]
+
+
+def classify(r, ign):
+    """행 하나 → (탐지기 id 목록, 예외 사유 or '')"""
+    ev = r.get('evidence') or ''
+    for pat, why in ign:
+        if pat in ev:
+            return [], why
+    res = r.get('result') or ''
+    ks = []
+    if RX_K1.search(r.get('target') or ''):
+        ks.append('K1')
+    seen = collections.Counter(m.group(1).strip() for m in RX_K2.finditer(ev))
+    if any(v >= 2 for v in seen.values()):
+        ks.append('K2')
+    if res == 'NA' and RX_K3.search(ev) and not ev.startswith('[사용자판정]'):
+        ks.append('K3')
+    if (res in ('PASS', 'NA') and RX_K4_BAD.search(ev)) or (res == 'FAIL' and RX_K4_FAIL.search(ev[:200])):
+        ks.append('K4')
+    if res in ('ERROR', '판정필요') and RX_K5.search(ev):
+        ks.append('K5')
+    return ks, ''
+
+
+NAMES = {'K1': '한 글자 칸 이름(정규식 잘림 흔적)', 'K2': '같은 문구 반복(판정마다 누적)', 'K3': '재지 못한 행의 해당없음(미검증 원칙 위반 후보)',
+         'K4': '결과와 증거 어긋남', 'K5': "칸 값 없음 'COL(X) 없음'(다른 그리드 측정 흔적)"}
+
+
+def fingerprint(files):
+    h = hashlib.sha1()
+    for f in files:
+        try:
+            st = os.stat(f); h.update(f'{f}|{st.st_mtime_ns}|{st.st_size}'.encode())
+        except OSError:
+            pass
+    ip = os.path.join(ROOT, 'tools', 'Harness', 'rules', 'checker_scan_ignore.csv')
+    if os.path.exists(ip):
+        h.update(open(ip, 'rb').read())
+    return h.hexdigest()[:16]
+
+
+def scan(top=15, min_rows=30):
+    files = sorted(glob.glob(os.path.join(ROOT, 'Doc', 'verify', '*', 'verify_ledger.csv')))
+    ign = ignores()
+    det = {k: {'id': k, 'name': NAMES[k], 'rows': 0, 'screens': set(), 'samples': []} for k in NAMES}
+    clus = {}
+    ignored = collections.Counter(); total = 0
+    for f in files:
+        mid = os.path.basename(os.path.dirname(f))
+        try:
+            rows = list(csv.DictReader(open(f, encoding='utf-8-sig')))
+        except (OSError, UnicodeDecodeError):
+            continue
+        for r in rows:
+            total += 1
+            ks, why = classify(r, ign)
+            if why:
+                ignored[why[:60]] += 1; continue
+            for k in ks:
+                d = det[k]; d['rows'] += 1; d['screens'].add(mid)
+                if len(d['samples']) < 6 and mid not in {s['menu_id'] for s in d['samples']}:
+                    d['samples'].append({'menu_id': mid, 'row_id': r.get('row_id'), 'rule_id': r.get('rule_id'), 'result': r.get('result'), 'target': (r.get('target') or '')[:80], 'evidence': (r.get('evidence') or '')[:300]})
+            if (r.get('result') or '') in ('ERROR', '판정필요'):
+                key = (r.get('rule_id') or '', r.get('result') or '', sig(r.get('evidence')))
+                c = clus.setdefault(key, {'rule_id': key[0], 'result': key[1], 'sig': key[2], 'rows': 0, 'screens': set(), 'samples': []})
+                c['rows'] += 1; c['screens'].add(mid)
+                if len(c['samples']) < 3 and mid not in {s['menu_id'] for s in c['samples']}:
+                    c['samples'].append({'menu_id': mid, 'row_id': r.get('row_id'), 'target': (r.get('target') or '')[:80], 'evidence': (r.get('evidence') or '')[:300]})
+    cl = sorted((c for c in clus.values() if c['rows'] >= min_rows and len(c['screens']) >= 2), key=lambda c: -c['rows'])[:top]
+    for c in cl:
+        c['screens'] = sorted(c['screens'])
+    dl = []
+    for d in det.values():
+        d['screens'] = sorted(d['screens'])
+        dl.append(d)
+    return {'at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'ledgers': len(files), 'rows': total, 'fingerprint': fingerprint(files),
+            'detectors': dl, 'clusters': cl, 'ignored': dict(ignored), 'ignore_file': 'tools/Harness/rules/checker_scan_ignore.csv'}
+
+
+def selftest():
+    ok = True
+
+    def chk(n, c):
+        nonlocal ok
+        print('PASS' if c else 'FAIL', n); ok = ok and bool(c)
+    ign = [('직접 일치하는 요소 없음 — 규칙 전반', '사용자 결정')]
+    chk('K1 한 글자 칸', classify({'target': 'Distribution Route.O (Pick)', 'evidence': '', 'result': 'NA'}, ign)[0] == ['K1'])
+    chk('K1 COL:I', 'K1' in classify({'target': 'E3|COL:I', 'evidence': '', 'result': 'ERROR'}, ign)[0])
+    chk('K1 정상 이름 아님', classify({'target': 'Main.ITEM_ID (Item)', 'evidence': '', 'result': 'PASS'}, ign)[0] == [])
+    ev2 = ' | [미검증] 검사기(auth)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상 | [미검증] 검사기(auth)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상'
+    chk('K2 문구 반복', 'K2' in classify({'target': 'x', 'evidence': ev2, 'result': 'ERROR'}, ign)[0])
+    chk('K3 재지 못한 NA', 'K3' in classify({'target': 'x', 'evidence': 'MSG00002: 위반 입력 자동 생성 불가(검사기 한계)', 'result': 'NA'}, ign)[0])
+    chk('K3 근거 있는 NA 아님', classify({'target': 'x', 'evidence': 'AS-IS InsertButton 없음(신규행 시나리오 없음)', 'result': 'NA'}, ign)[0] == [])
+    chk('K4 NA 인데 [미검증]', 'K4' in classify({'target': 'x', 'evidence': '[미검증] 칸 해석 불가', 'result': 'NA'}, ign)[0])
+    chk('K4 FAIL 인데 측정 전제 미충족', 'K4' in classify({'target': 'x', 'evidence': '[측정 전제 미충족] 조회 0행', 'result': 'FAIL'}, ign)[0])
+    chk('K5 칸 값 없음', 'K5' in classify({'target': 'x', 'evidence': '조건 평가 불가: COL(ERP_STATUS) 없음', 'result': 'ERROR'}, ign)[0])
+    chk('예외 = 사용자 결정 문구', classify({'target': 'x', 'evidence': '규칙 F1 ... 직접 일치하는 요소 없음 — 규칙 전반 상속', 'result': 'NA'}, ign) == ([], '사용자 결정'))
+    chk('묶음 서명 정규화', sig("ITEM_ID 12행 'abc' 없음") == sig("SITE_CODE 3행 'x' 없음"))
+    print('ALL PASS' if ok else 'SOME FAIL'); return 0 if ok else 1
+
+
+if __name__ == '__main__':
+    if '--selftest' in sys.argv:
+        sys.exit(selftest())
+    a = sys.argv
+    out = a[a.index('--out') + 1] if '--out' in a else OUT_DEF
+    top = int(a[a.index('--top') + 1]) if '--top' in a else 15
+    mr = int(a[a.index('--min-rows') + 1]) if '--min-rows' in a else 30
+    if '--if-changed' in a and os.path.exists(out):
+        try:
+            prev = json.load(open(out, encoding='utf-8'))
+            if prev.get('fingerprint') == fingerprint(sorted(glob.glob(os.path.join(ROOT, 'Doc', 'verify', '*', 'verify_ledger.csv')))):
+                print(f"[checker_scan] 원장 변화 없음 — 지난 결과 유지({prev.get('at')})"); sys.exit(0)
+        except (OSError, ValueError):
+            pass
+    r = scan(top, mr)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    t = out + '.tmp'
+    json.dump(r, open(t, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    os.replace(t, out)
+    print(f"[checker_scan] 원장 {r['ledgers']}개 · {r['rows']}행 · 탐지 " + ' · '.join(f"{d['id']} {d['rows']}행/{len(d['screens'])}화면" for d in r['detectors']) + f" · 미검증 묶음 {len(r['clusters'])}개 · 예외 {sum(r['ignored'].values())}행 → {os.path.relpath(out, ROOT)}")

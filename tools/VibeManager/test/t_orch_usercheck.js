@@ -76,6 +76,27 @@ const run = () => uc.check().items; const has = (items, uid, re) => items.some(i
   chk('U3 자기 sig R12 사건 3시간 = S13|U3|idleInc 항목 0건', run().filter(i => i.key === 'S13|U3|idleInc' || (i.uid === 'U3' && /열린 사건/.test(i.what))).length === 0);
   INC = [{ id: 'I4', rule: 'R12', sig: 'R12|S13|U1|x', status: 'open', ms: now - 180 * M, title: '다른 R12 사건', actions: [] }];
   chk('U3 다른 sig R12 사건 3시간 = 항목 1건', run().filter(i => i.uid === 'U3' && /열린 사건 1건/.test(i.what)).length === 1);
+  // 2026-11-26 S-Z: R12 사건 뒤 그 지적 번호(U<n>)나 사건 id 를 가리키는 개선안 = 진행(자가진단이 개선안으로 조치). 실례 20261126_130515_R12_ALL(U21) ↔ 163554_SELF 근거 '진단 사다리 묶음 L3|usercheck|U21'
+  INC = [{ id: '20261126_130515_R12_ALL', rule: 'R12', sig: 'R12|S13|U21|count|20261125005937_SELF|1795665875000', status: 'open', ms: now - 277 * M, title: 'U21 VMO 반영 실패 24시간 6건', actions: [{ at: locT(now - 270 * M), by: 'VMO', what: '에이전트 담당 아님: 규칙 R12 은 agentRules 밖' }] }];
+  PROP = [{ id: '20261126163554_SELF', status: 'applied', ms: now - 200 * M, title: '반영 지시문', evidence: 'orch-improve.js:366 고정 문구 · 진단 사다리 묶음 L3|usercheck|U21', targets: ['tools/VibeManager/orch-improve.js'] }];
+  chk('U3 R12 사건 뒤 같은 지적 번호(U21) 근거 개선안 = 진행(idleInc 없음)', !run().some(i => i.key === 'S13|U3|idleInc'));
+  PROP = [{ id: 'X1', status: 'applied', ms: now - 200 * M, title: '다른 지적', evidence: '진단 사다리 묶음 L3|usercheck|U210', targets: ['tools/VibeManager/a.js'] }, { id: 'X0', status: 'applied', ms: now - 300 * M, title: '사건 전 안', evidence: 'L3|usercheck|U21', targets: ['tools/VibeManager/a.js'] }];
+  chk('U3 다른 번호(U210)·사건 전 개선안 = 진행 아님(idleInc 1건)', run().some(i => i.key === 'S13|U3|idleInc' && /열린 사건 1건/.test(i.what)));
+  PROP = [{ id: 'X2', status: 'pending', ms: now - 100 * M, title: '사건 연결', incident: '20261126_130515_R12_ALL', evidence: 'x', targets: ['tools/VibeManager/a.js'] }];
+  chk('U3 사건 id 를 incident 로 가진 개선안 = 진행', !run().some(i => i.key === 'S13|U3|idleInc'));
+  // 개선안 20261126183041_SELF: 처리 담당(handler)과 progressAt 만 읽음. 개선안 근거 낱말이 없어도 handler.ref 있으면 진행, ref 없고 progressAt 이 gap(120분) 넘으면 공백
+  PROP = [];
+  INC = [{ id: '20261126_130515_R12_ALL', rule: 'R12', sig: 'R12|S13|U21|count|20261125005937_SELF|1795665875000', status: 'open', ms: now - 277 * M, title: 'U21', actions: [], handler: { by: 'selfdiag', ref: '20261126163554_SELF', at: locT(now - 200 * M) }, progressAt: locT(now - 200 * M) }];
+  chk('U3 handler.ref 있음(개선안으로 처리 중) = idleInc 0건', !run().some(i => i.key === 'S13|U3|idleInc'));
+  INC[0].handler = { by: 'selfdiag', ref: '', at: locT(now - 200 * M) }; INC[0].progressAt = locT(now - 200 * M);
+  chk('U3 handler ref 없음 + progressAt 200분 전(gap 넘음) = idleInc 1건', run().some(i => i.key === 'S13|U3|idleInc' && /20261126_130515_R12_ALL/.test(i.detail)));
+  INC[0].progressAt = locT(now - 30 * M);
+  chk('U3 handler ref 없음 + progressAt 30분 전 = idleInc 0건', !run().some(i => i.key === 'S13|U3|idleInc'));
+  INC[0].progressAt = locT(now - 200 * M); INC[0].actions = [{ at: locT(now - 10 * M), by: 'VMO', what: '조치 기록' }];
+  chk('U3 handler 있으면 actions 문구 대신 progressAt 으로 판정 = idleInc 1건', run().some(i => i.key === 'S13|U3|idleInc'));
+  INC = [{ id: '20261120_132034_R12_ALL', rule: 'R12', sig: 'R12|S13|U3|idleInc', status: 'open', ms: now - 300 * M, title: 'U3 사건', actions: [], handler: { by: 'selfdiag', ref: '', at: locT(now - 300 * M) }, progressAt: locT(now - 300 * M) }];
+  chk('U3 자기 사건(20261120_132034_R12_ALL) = handler 있어도 제외', !run().some(i => i.key === 'S13|U3|idleInc'));
+  PROP = [];
   // 개선안 20261126110058_VISION: 반영 줄 진행 판정 · 세션이 맡은 안(claimedBy) 제외
   INC = []; review = { enabled: true, lastMs: now };
   PROP = Array.from({ length: 40 }, (_, i) => ({ id: `Q${i}`, status: 'pending', ms: now - (150 + i) * M, title: `대기 ${i}`, targets: ['tools/VibeManager/a.js'] }));
@@ -99,6 +120,7 @@ const run = () => uc.check().items; const has = (items, uid, re) => items.some(i
     { id: '20261120_201206_R5_SCP0028', rule: 'R5', status: 'need-user', ms: now - 300 * M, title: 'R5', actions: [{ at: locT(now - 290 * M), by: 'VMO', what: 'Claude 조치 중단 · 원인 engine: diff_verify.py' }], agent: { cause_class: 'engine', cause: 'tools/Harness/verify/diff_verify.py 상한 없음', next_for_user: 'CheckList 를 다시 실행할지 결정' } }];
   r = run(); { const it = r.find(i => i.key === 'S13|U3|needUserVmo');
     chk('U3 need-user 계약: 원인 VM 코드 사건 = needUserVmo 실패 1건 · 사용자 행동 기록 있는 사건은 빠짐', !!it && /1건/.test(it.what) && /094237_R3/.test(it.detail) && !/201206_R5/.test(it.detail), JSON.stringify(r.filter(i => i.uid === 'U3').map(i => i.what))); }
+  INC[0].shownAt = locT(now - 60 * M); chk('U3 need-user 계약: 사람 확인 줄에 보인 사건(shownAt) = 알렸음, 실패 없음(개선안 20261126164446_VISION)', !run().some(i => i.key === 'S13|U3|needUserVmo')); delete INC[0].shownAt;
   INC[0].actions.push({ at: locT(now - 5 * M), by: 'VMO', what: '열린 일 장부: 다시 넘김' });
   chk('U3 need-user 계약: 마지막 기록 5분 전 = 시한 안, 실패 없음', !run().some(i => i.key === 'S13|U3|needUserVmo'));
   INC = []; PROP = []; EV = []; review = { enabled: true, lastMs: now };
@@ -186,6 +208,9 @@ const run = () => uc.check().items; const has = (items, uid, re) => items.some(i
     chk('U11 진단 줄과 repair.at 같은 시각 = U11 아님', !has(run(), 'U11'));
     PROP = ['R3', 'R4'].map(id => ({ id, status: 'apply-failed', ms: now - 10 * 3600000, title: `stop 안 ${id}`, history: [{ at: tF, what: '반영 실패. 검증 실패' }, { at: tD, what: '반영 실패 진단: 자동으로 풀 수 없음' }], repair: { at: tD, decision: 'stop' } }));
     r = run(); chk('U11 stop 안 2건 = fail 0 · 사람 판단 대기 warn 1줄(2건)', r.filter(i => i.uid === 'U11' && i.level === 'fail').length === 0 && r.filter(i => i.uid === 'U11' && i.level === 'warn' && /사람 판단 대기 2건/.test(i.what)).length === 1, JSON.stringify(r.filter(i => i.uid === 'U11').map(i => i.what)));
+    // 2026-11-27: 사용자 판단 대기(userHold, claim_proposal hold)로 돌린 안 = fail 아님 · 사람 판단 대기 warn 에 사유
+    PROP = [{ id: 'R5', status: 'apply-failed', userHold: true, reason: '사람 판단 필요: 페이지 조건 평가 먼저', ms: now - 10 * 3600000, title: '보류 안', history: [{ at: tF, what: '반영 실패. Claude exit 1' }] }];
+    r = run(); chk('U11 userHold 안 = fail 0 · 사람 판단 대기 warn(사유 포함)', r.filter(i => i.uid === 'U11' && i.level === 'fail').length === 0 && r.some(i => i.uid === 'U11' && i.level === 'warn' && /사람 판단 대기 1건/.test(i.what) && /사용자 판단 대기 사람 판단 필요/.test(i.detail)), JSON.stringify(r.filter(i => i.uid === 'U11')));
     PROP = []; }
   // U14 VMW 화면 목록 명칭 빠짐: 메뉴 이름 있는데 목록 이름 빔 · ID 와 같음 · 웹뷰 보고 · 메뉴 없음
   const mnu = W('Doc/tobefacts/db/menu.csv', '﻿mnu_id,uppr_mnu_id,mnu_desc\nSCP0028,SCP,"Supply Plan, Detail"\nSSP0014,SSP,Order Plan\nSCP0005,SCP,Plan View\n');
@@ -295,6 +320,24 @@ const run = () => uc.check().items; const has = (items, uid, re) => items.some(i
   PROP = [{ id: 'C21', title: '원인 다', history: [{ at: at(3 * 24 * 60), what: '반영 실패 exit 1' }, { at: at(30), what: '반영 실패. 반영 도중 VMO 가 다시 시작됨' }] }];
   r = run(); chk('U21 같은 원인 7일 안 2회 + 마지막 24시간 안 = 실패, 24시간 건수 1 = 건수 실패 아님', has(r, 'U21', /같은 원인 반영 실패 2회 원인 다/) && !has(r, 'U21', /24시간/), JSON.stringify(r.filter(i => i.uid === 'U21')));
   PROP[0].history[1].at = at(26 * 60); chk('U21 같은 원인 마지막 실패 24시간 지남 = 아님', !has(run(), 'U21'));
+  // 개선안 20261126183411_SELF(단계 7): 준비 확인 줄('반영 실패(준비 확인)')과 지금 준비 확인에서 막힐 안(retarget)의 실패는 세지 않음 · detail 에 원인 부류
+  { const sc0 = mods['orch-selfcheck']; mods['orch-selfcheck'] = Object.assign({}, sc0, { preflight: p => (p.id === 'G21' ? { ok: false, kind: 'retarget', why: '대상 파일 없음' } : { ok: true }) });
+    PROP = [{ id: 'F21', title: '문장', history: [{ at: at(50), what: '반영 실패. 게이트에서 새로 어긋난 항목 1건: S11 a.js 문장 규칙 위반 늘어남' }] }, { id: 'H21', title: '끊김', history: [{ at: at(40), what: '반영 실패. Claude exit 1 · 대상 파일 1개 복원' }] },
+      { id: 'G21', title: '대상 없음', history: [{ at: at(30), what: '반영 실패. 반영 안 됨: 대상 파일 tools/VibeManager/CLAUDE.md 가 저장소에 없어 반영 불가' }] }, { id: 'K21', title: '준비', history: [{ at: at(20), what: '반영 실패(준비 확인): 대상 파일 없음: x. Claude 호출 없음' }] }];
+    r = run(); const it = r.find(i => i.uid === 'U21' && /24시간/.test(i.what));
+    chk('U21 준비 확인 줄 · 준비 확인에서 막힐 안 = 세지 않음(2건) · 원인 부류(문장 규칙 1, 실행 끊김 1) · 제외 건수', !!it && /24시간 2건/.test(it.what) && /원인 부류 (문장 규칙 1, 실행 끊김 1|실행 끊김 1, 문장 규칙 1)/.test(it.detail) && /준비 확인에서 막힐 안의 실패 1건 제외/.test(it.detail), JSON.stringify(it));
+    mods['orch-selfcheck'] = sc0; }
+  // 개선안 20261126223020_SELF: 고친 안(supersededBy 끝)이 반영 완료된 실패는 빼고 셈 · 대체 안이 pending 이면 그대로 셈
+  PROP = [{ id: 'S1a', status: 'superseded', supersededBy: 'S1b', title: '대체 1', history: [{ at: at(50), what: '반영 실패. 검증 실패' }] }, { id: 'S2a', status: 'superseded', supersededBy: 'S2b', title: '대체 2', history: [{ at: at(45), what: '반영 실패. Claude exit 1' }] },
+    { id: 'S1b', status: 'applied', title: '고친 안 1', history: [] }, { id: 'S2b', status: 'superseded', supersededBy: 'S2c', title: '고친 안 2', history: [] }, { id: 'S2c', status: 'applied', title: '고친 안 2 다시', history: [] },
+    { id: 'AF1', status: 'apply-failed', title: '실패 안', history: [{ at: at(40), what: '반영 실패. 검증 실패' }] }];
+  chk('U21 대체 안 반영 완료 2건 제외 → 24시간 1건 = 건수 실패 아님', !has(run(), 'U21', /24시간/), JSON.stringify(run().filter(i => i.uid === 'U21')));
+  PROP[2].status = 'pending'; PROP[4].status = 'pending';
+  r = run(); const it3 = r.find(i => i.uid === 'U21' && /24시간/.test(i.what));
+  chk('U21 대체 안 미반영 = 그대로 셈(24시간 3건)', !!it3 && /24시간 3건/.test(it3.what), JSON.stringify(it3));
+  PROP[2].status = 'applied'; PROP.push({ id: 'AF2', status: 'apply-failed', title: '실패 안 2', history: [{ at: at(30), what: '반영 실패. 검증 실패' }] });
+  r = run(); const it4 = r.find(i => i.uid === 'U21' && /24시간/.test(i.what));
+  chk('U21 detail 에 고친 안 반영 완료 제외 건수', !!it4 && /24시간 3건/.test(it4.what) && /고친 안 반영 완료 1건 제외/.test(it4.detail), JSON.stringify(it4));
   PROP = [{ id: 'D21', title: '원인 라', selfKey: 'S2|t_x.js', history: [{ at: at(50), what: '반영 실패 exit 1' }] }, { id: 'E21', title: '원인 마', incident: 'I_E', history: [{ at: at(50), what: '반영 실패 exit 1' }] }];
   EV = [{ type: 'incident', id: 'I_E', rule: 'R1', screen: 'SCP0028', sig: 'R1|SCP0028|x', ms: now - 70 * M },
     { type: 'incident', id: 'I_D2', rule: 'R12', sig: 'R12|S2|t_x.js', title: 'S2 시험 실패', ms: now - 20 * M },
@@ -320,6 +363,14 @@ const run = () => uc.check().items; const has = (items, uid, re) => items.some(i
     { type: 'user', entrypoint: 'sdk-cli', timestamp: new Date(now - 26 * 60 * M).toISOString(), message: { content: '[object Object]' } }]);
   r = run(); const u22 = r.filter(i => i.uid === 'U22');
   chk('U22 문자열 · text 블록 첫머리 = 실패 2건, 26시간 전 = 아님', u22.length === 2 && u22.every(i => i.level === 'fail' && /object Object/.test(i.what)) && u22.some(i => /claude-vscode/.test(i.detail)), JSON.stringify(u22));
+  // 2026-11-26 S-Z: 파일별 읽은 위치 기억 = 뒤에 붙은 줄만 읽어도 결과 같음 · 덮어쓰기는 처음부터 · 줄 중간까지 쓴 마지막 줄은 다음에 다시 읽음
+  { const L = o => JSON.stringify(o); const base = [{ type: 'user', entrypoint: 'claude-vscode', timestamp: new Date(now - 10 * M).toISOString(), message: { content: '[object Object],[object Object]' } }];
+    fs.writeFileSync(f22, base.map(L).join('\n') + '\n'); const a1 = run().filter(i => i.uid === 'U22').length;
+    const add = L({ type: 'user', entrypoint: 'sdk-cli', timestamp: new Date(now - 4 * M).toISOString(), message: { content: '[object Object]' } });
+    fs.appendFileSync(f22, add.slice(0, 40)); const a2 = run().filter(i => i.uid === 'U22').length; // 줄 중간까지
+    fs.appendFileSync(f22, add.slice(40) + '\n'); const a3 = run().filter(i => i.uid === 'U22').length; // 줄 끝
+    fs.writeFileSync(f22, L({ type: 'user', timestamp: new Date(now - 3 * M).toISOString(), message: { content: '평문' } }) + '\n'); const a4 = run().filter(i => i.uid === 'U22').length; // 덮어쓰기(작아짐)
+    chk('U22 읽은 위치 기억: 1건 → 줄 중간 1건 → 줄 끝 2건 → 덮어쓰기 0건', a1 === 1 && a2 === 1 && a3 === 2 && a4 === 0, JSON.stringify([a1, a2, a3, a4])); }
   fs.rmSync(f22);
   // U23 VMW 재개 뒤 WORKBENCH 진행 표시(개선안 20261120193704_SELF): 진행 기록 5분 멈춤 + 작업 로그 늘어남 = 실패 · WORKBENCH 보고 없음, 보고에 runId 없음 = 실패
   const rid23 = 'SCP0028_1795169872066'; const t23 = now - 10 * M; const cp23 = '.vibe/orch/chain_progress/SCP0028_1795169872066.json'; const lg23 = '.vibe/jobs/J23/SCP0028.log';
@@ -553,6 +604,31 @@ const run = () => uc.check().items; const has = (items, uid, re) => items.some(i
     chk('U31 계획 등록 전에 시작한 체인의 뒤 단계 = 대상 아님', !has(run(), 'U31'));
     W(pf, { plan: '', items: [], cleared: locT(now - 5 * M) }); EV = [ce(now - 30 * M, 'SCP0005_4')]; chk('U31 계획 기록 비움(clear) = 판정 안 함', !has(run(), 'U31'));
     EV = []; fs.unlinkSync(path.join(root, pf)); }
+  // U32 창 다시 로드 뒤 컨설팅 미기동(개선안 20261126180937_SELF)
+  { const af = '.vibe/orch/activations.jsonl'; const mf = '.vibe/orch/consult/meta.json'; let running = false;
+    mods['orch-consult'] = { ready: () => true, meta: () => ({ running }) };
+    const act = ms => W(af, JSON.stringify({ at: locT(ms), ms }) + '\n');
+    chk('U32 창 로드 기록 없음 = 판정 안 함', !has(run(), 'U32'));
+    act(now - 40 * M); W(mf, { lastMs: now - 30 * 3600000, lastResult: '개선안 6건 등록' });
+    r = run(); { const u = r.filter(i => i.uid === 'U32'); chk('U32 창 로드 40분, 마지막 컨설팅 30시간 전(주기 1일 넘음) = fail 1건', u.length === 1 && u[0].level === 'fail' && /컨설팅 미기동 40분/.test(u[0].what) && /창 로드 때 이미 주기 넘음/.test(u[0].detail), JSON.stringify(u)); }
+    W(mf, {}); chk('U32 컨설팅 실행 기록 없음(기능 신설) + 창 로드 40분 = fail', has(run(), 'U32'));
+    act(now - 5 * M); chk('U32 창 로드 5분(graceMin 10 안) = 통과', !has(run(), 'U32'));
+    act(now - 40 * M); running = true; chk('U32 컨설팅 실행 중 = 통과', !has(run(), 'U32')); running = false;
+    W(mf, { lastMs: now - 20 * M }); chk('U32 창 로드 뒤 실행 기록 있음 = 통과', !has(run(), 'U32'));
+    W(mf, { lastMs: now - 50 * M }); chk('U32 창 로드 전 실행, 주기 안 = 통과', !has(run(), 'U32'));
+    W(mf, { lastMs: now - (24 * 60 + 30) * M }); act(now - 10 * 60 * M); chk('U32 창 로드 뒤 주기가 30분 전에 참(1시간 타이머 몫 안) = 통과', !has(run(), 'U32'));
+    W(mf, { lastMs: now - (24 * 60 + 90) * M }); chk('U32 창 로드 뒤 주기가 90분 전에 참(60분 + 10분 넘음) = fail', has(run(), 'U32', /컨설팅 미기동/));
+    W('tools/Harness/harness.json', { orch: { checklistTargetMin: 30, selfDiagGapMin: 60, selfLightMin: 10, userLearnGapMin: 60, consultEnabled: false } }); chk('U32 consultEnabled false = 판정 안 함', !has(run(), 'U32'));
+    W('tools/Harness/harness.json', { orch: { checklistTargetMin: 30, selfDiagGapMin: 60, selfLightMin: 10, userLearnGapMin: 60 } });
+    delete mods['orch-consult']; fs.unlinkSync(path.join(root, af)); fs.unlinkSync(path.join(root, mf)); }
+  // 개선안 20261126180324_SELF(L4 원장 20261126001222_VISION 단계 5): 사용자 세션 개념 변경 = 목적 원장 갱신안. 표본 = 11-25 행 단위 해소 세션(quick.json 체인, row_run.py 고침, 목적 키 checklistTime)
+  { const led = { purposes: { checklistTime: { aliases: ['CheckList 화면 1개 10분, 길어야 30분 안에 끝남'], sources: [] } } };
+    const p = { at: '2026-11-25T19:05:00+09:00', ms: 0, session: '1a09d305', text: '미검증 해소를 행 단위로 바꾸고 화면 전체 재측정은 하지 않게 체인을 고쳐줘', edits: ['tools/VibeManager/quick.json', 'tools/Harness/verify/row_run.py'] };
+    const a = uc.ledgerUpdateFor(p, { kind: 'fix-request', purpose: 'checklistTime' }, led);
+    chk('원장 단계 5 행 단위 해소 세션 표본 = 원장 갱신안 1건(대상 purpose_ledger.json, 출처 session, 체인 파일이라 reload)', !!a && a.targets.join() === '.vibe/orch/purpose_ledger.json' && /"kind":"session"/.test(a.before_after) && /"reload":true/.test(a.before_after) && /1a09d305/.test(a.before_after) && /checklistTime/.test(a.title) && a.sig === 'ln|purposeledger|checklistTime|2026-11-25T19:05', a && a.title);
+    chk('원장 단계 5 목적 키가 원장 aliases 문구 = 같은 원장 키로', (uc.ledgerUpdateFor(p, { purpose: 'CheckList 화면 1개 10분, 길어야 30분 안에 끝남' }, led) || {}).sig === 'ln|purposeledger|checklistTime|2026-11-25T19:05');
+    chk('원장 단계 5 체인·플랜 파일 안 고침 · 원장에 없는 목적 키 · 목적 키 없음 · 원장 없음 = 갱신안 없음', uc.ledgerUpdateFor(Object.assign({}, p, { edits: ['tools/VibeManager/workbench.js'] }), { purpose: 'checklistTime' }, led) === null && uc.ledgerUpdateFor(p, { purpose: 'reloadResume' }, led) === null && uc.ledgerUpdateFor(p, { purpose: '' }, led) === null && uc.ledgerUpdateFor(p, { purpose: 'checklistTime' }, null) === null);
+    chk('원장 단계 5 플랜 파일(plans/*.md), plan_state 도 개념 변경 파일', uc.CONCEPT_FILE_RE.test('plans/linked-leaping-melody.md') && uc.CONCEPT_FILE_RE.test('tools/Harness/plan_state.py') && uc.CONCEPT_FILE_RE.test('tools\\VibeManager\\steps.json'.split(String.fromCharCode(92)).join('/'))); }
   try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

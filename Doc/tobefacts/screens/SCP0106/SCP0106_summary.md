@@ -13,10 +13,10 @@
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanColumnModal.tsx | component | 111 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | component | 451 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.module.scss | component | 26 |
-| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | component | 450 |
+| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | component | 451 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanItemPopup.tsx | component | 56 |
 | features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanCellEdit.ts | hook | 162 |
-| features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanCombos.ts | hook | 315 |
+| features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanCombos.ts | hook | 327 |
 | features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanQuery.ts | hook | 169 |
 | features/supply/src/pages/capa-loss-plan/hooks/useCapaLossPlanSave.ts | hook | 215 |
 | features/supply/src/pages/capa-loss-plan/index.ts | index | 2 |
@@ -116,7 +116,7 @@
 | MSG00096 | 1 |
 | MSG00002 | 1 |
 | MSG00006 | 1 |
-| MSG00133 | 1 |
+| MSG00004 | 1 |
 | LBL00605 | 3 |
 | LBL00764 | 1 |
 | LBL00765 | 1 |
@@ -140,7 +140,7 @@
 | LBL00056 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0105(26), SCP0106(16), SCP0104(2), SCP0006(1), SCP0107(1), SCP0020(1)
+- 화면ID: SCP0105(29), SCP0106(16), SCP0104(2), SCP0006(1), SCP0107(1), SCP0100(1), SCP0020(1)
 - SP/PKG: PKG_SCP0106(9), PKG_SCP0104(3), P_SCP0104_GET_SPREAD_TITLE(3), P_SCP0106_GET_CAPA_LOSS_PLAN_(1), P_SCP0106_SAVE_CAPA_LOSS_PLAN_(1), PKG_NSCM_UI_COM_MENU(1), PR_GET_SHEET_COLUMN_LIST(1), SCP0104_GET_SPREAD_TITLE(1), SCP0106_SAVE_CAPA_LOSS_PLAN_(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

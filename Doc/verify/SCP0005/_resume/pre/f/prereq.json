@@ -1,0 +1,78 @@
+{
+ "menu_id": "SCP0005",
+ "asis_id": "SCP0005",
+ "generated": "2026-11-26 01:14:47",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SCP0005)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "OK",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "5.9시간 전 export(기준 12시간)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\distribution-route · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "OK",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\distribution-route\\__asis-mapping__.md"
+  },
+  {
+   "key": "search_cond",
+   "what": "조회조건 기준표(search_cond.csv)",
+   "status": "MANUAL",
+   "producer": "tools/Harness/refs/build_search_cond.py(원천 = 사용자 xlsx)",
+   "evidence": "기준표 xlsx 에 이 화면 행 없음 — 조회조건 순서·라벨(CR-071)은 AS-IS 기준으로만 판정. 기준표 xlsx 보강 후 build_search_cond.py"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "5건 있음"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "OK",
+   "producer": "tools/E2E/gen-e2e.js",
+   "evidence": "최신"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 · rc=0 · 98s · cts\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_011309_smoke.log FE 5173 / BE 8080 responding Playwright smoke SCP0005 running - output goes to the log file # E2E 결과 — 2026-11-26 01:14 테스트 8 · PASS 8 · FAIL 0 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_011309_smoke.log"
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+﻿elem_key,kind,item,asis_static,asis_live,tobe,verdict,status,src
+SP:DMF0042_GET_SPREAD_TITLE,실측-파싱 대조,DMF0042_GET_SPREAD_TITLE,DMF0042_BizPlan.cs:2953 GetSpdTitle,2회 · 구간 find/load,,MATCH,확정,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:PR_GET_DAY_RANGE,실측-파싱 대조,PR_GET_DAY_RANGE,DMF0042_1_BizPlan.cs:2874 GetDayRange,1회 · 구간 load,,MATCH,확정,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:SCM0001_GET_BIZ_TYPE_BY_DIVISION,실측-파싱 대조,SCM0001_GET_BIZ_TYPE_BY_DIVISION,DMF0042_1_BizPlan.cs:2920 GetBizTypebyDivision,1회 · 구간 load,,MATCH,확정,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:SCM0001_GET_LOOKUP_VALUES,실측-파싱 대조,SCM0001_GET_LOOKUP_VALUES,DMF0042_1_BizPlan.cs:2907 GetLookupData,3회 · 구간 load,,MATCH,확정,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:SQL: SELECT *,실측-파싱 대조,SQL: SELECT *,,1회,,INLINE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0009_GET_CODE,실측-파싱 대조,DMF0009_GET_CODE,DMF0042_3_BizPlan.cs:2951 GetComboData,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0042_1_GET_SPREAD_TITLE,실측-파싱 대조,DMF0042_1_GET_SPREAD_TITLE,DMF0042_1_BizPlan.cs:2890 GetSpdTitle,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0042_3_GET_BIZPLAN,실측-파싱 대조,DMF0042_3_GET_BIZPLAN,DMF0042_3_BizPlan.cs:765 FindData,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0042_3_GET_SPREAD_TITLE,실측-파싱 대조,DMF0042_3_GET_SPREAD_TITLE,DMF0042_3_BizPlan.cs:3004 GetSpdTitle,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,실측-파싱 대조,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,DMF0042_1_BizPlan.cs:739 FindData,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0042_GET_EXCHANGE_PRICE,실측-파싱 대조,DMF0042_GET_EXCHANGE_PRICE,DMF0042_1_BizPlan.cs:3015 GetFuturePriceInfo,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0042_SAVE_DM_PLN_BP_FCST,실측-파싱 대조,DMF0042_SAVE_DM_PLN_BP_FCST,DMF0042_1_BizPlan.cs:1101 SaveData,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV,실측-파싱 대조,DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV,DMF0042_1_BizPlan.cs:3124 btnSetPrice_Click,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+SP:UP_FX_GETCOMMONDATALIST_DM,실측-파싱 대조,UP_FX_GETCOMMONDATALIST_DM,DMF0042_1_BizPlan.cs:3369 GetCellProdSite,0회,,NOT_CALLED,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,(선언 ↔ 실측),58개,45개,,INFO,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,BaseRibbonCtl,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,Change,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,cbo,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,chkAll,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clb,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,dp1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,dp2,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,dtp,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,lbl,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,panel1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,pictureBox1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlMain,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,statusStripBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,textBox1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,textBox2,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,txt,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtTextKeyin,,있음,,LIVE_ONLY,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbTeam,Y,Team,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbCustomer,Y,End Customer,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbBizType,Y,Biz.Type,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbSalesSite,Y,Sales Site,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtProject,Y,Project,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnProject,Y,layoutControlItem3,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnColumn,Y,item0,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnMeasure,Y,layoutControlItem4,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbPlantSite,Y,Plant Site,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,chkSum,Y,layoutControlItem5,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnItemId,Y,layoutControlItem2,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbDivision,Y,Div,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtItemId,Y,Model / Nickname,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtOwner,Y,Owner,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnOwner,Y,layoutControlItem6,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbItemType,Y,Item Type,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,drpPeriod,Y,Period,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnSetPrice,Y,Set Price,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnExchangeRate,Y,Exchange Rate,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnCutOff,Y,Ver. Cutoff,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboBucketType,Y,Bucket,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboClosed,Y,Closed,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboQty,Y,.,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnReplace,Y,Replace,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv
+,실측-파싱 대조,spdMain/Biz Plan,정적 컬럼 사실 70행(시트 미지정 포함),컬럼 19(보임 18) · 헤더 3단 · 행 0 · 고정 7,,LIVE,판단 대기,Doc/verify/DMF0042/asis_live/live_vs_static.csv

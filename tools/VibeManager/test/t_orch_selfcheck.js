@@ -4,7 +4,11 @@ const path = require('path'); const fs = require('fs'); const os = require('os')
 const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'self-')); const vibeDir = path.join(root, '.vibe'); const vmd = path.join(root, 'tools', 'VibeManager'); const inst = path.join(root, 'installed');
 const mk = (f, s) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s, 'utf8'); }; const NL = String.fromCharCode(10);
-mk(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: { agentEnabled: false, selfErrRepeat: 3, ghostKey: 1, tickSec: 30 } }));
+mk(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: { agentEnabled: false, selfErrRepeat: 3, ghostKey: 1, tickSec: 30, hookOnlyKey: true, hookPsKey: 1, bakOnlyKey: 1 } }));
+// 개선안 20261126190702_SELF: hook 스크립트에서만 읽는 orch 키 = 읽는 코드 있음(.bak_ 사본은 세지 않음)
+mk(path.join(root, '.claude', 'hooks', 'auto-improve-on-stop.js'), 'const on = (h.orch || {}).hookOnlyKey !== false;' + NL);
+mk(path.join(root, 'tools', 'Harness', 'hooks', 'gate.ps1'), '$k = $h.orch.hookPsKey' + NL);
+mk(path.join(root, '.claude', 'hooks', 'old.js.bak_20261126_x'), 'bakOnlyKey');
 mk(path.join(vmd, 'good.js'), "'use strict';\nconst x = require('./other');\nconst tickSec = 1; const agentEnabled = 1; const selfErrRepeat = 1;\nmodule.exports = { x, tickSec, agentEnabled, selfErrRepeat };\n");
 mk(path.join(vmd, 'other.js'), 'module.exports = 1;\n');
 mk(path.join(vmd, 'bad.js'), 'function broken( {\n');
@@ -56,7 +60,7 @@ const keys = (r, id) => r.checks[id].items.map(i => i.key);
   // S7 · S12
   watch.tick(); r = await sc.run(['S7', 'S12'], '시험');
   chk('S7 감시기 tick 시각 · 규칙별 건수', r.checks.S7.info.started === true && !!r.checks.S7.info.lastTickAt && r.checks.S7.info.byRule.R12 === 7 /* S1 1 · S3 1 · S4 4 · S5 1 */, JSON.stringify(r.checks.S7.info));
-  const k12 = keys(r, 'S12'); chk('S12 읽는 코드 없는 설정 2건', k12.includes('S12|orch|ghostKey') && k12.includes('S12|cfg|vibeManager.deadSetting') && k12.length === 2, JSON.stringify(k12));
+  const k12 = keys(r, 'S12'); chk('S12 읽는 코드 없는 설정 3건(hook 에서 읽는 hookOnlyKey, hookPsKey 제외 · .bak_ 사본에만 있는 bakOnlyKey 포함)', k12.includes('S12|orch|ghostKey') && k12.includes('S12|orch|bakOnlyKey') && k12.includes('S12|cfg|vibeManager.deadSetting') && !k12.includes('S12|orch|hookOnlyKey') && !k12.includes('S12|orch|hookPsKey') && k12.length === 3, JSON.stringify(k12));
   const g = await sc.gate(); chk('게이트: 시험 실행기 없음 = 통과 아님 · S4 실패 표시', g.ok === false && g.bad.includes('S4'), g.text);
   const h = fs.readFileSync(path.join(vibeDir, 'orch', 'selfcheck', 'history.jsonl'), 'utf8').trim().split(NL);
   chk('회차 기록', h.length >= 9 && JSON.parse(h[0]).status.S1 === 'fail:1');
@@ -133,6 +137,22 @@ const keys = (r, id) => r.checks[id].items.map(i => i.key);
     const b = im.add({ title: 'a.js 문구 변경(위반 없음)', evidence: 'S11|a.js', targets: ['tools/VibeManager/a.js'], before_after: '문구 변경', verify: '', rollback: '', sig: 'style-good', check: 'S11', selfKey: 'S11|a.js' }, 'self');
     mode('good'); rr = await im.approve(b.id, '시험'); const pb = im.get(b.id);
     chk('위반 없는 개선안 = 게이트 통과 · 게이트 기록에 문장 규칙 위반 0 → 0', rr.ok === true && pb.status === 'applied' && /문장 규칙 위반 0 → 0/.test(pb.gate.text), JSON.stringify([pb.status, pb.gate]));
+    // 개선안 20261126132614_SELF: 게이트 밖에서 늘어난 문장 위반 = S11 점검이 L1 정리 개선안 1건으로 올림
+    const l1s = () => im.list().filter(x => x.selfKey === 'S11|L1');
+    const DASH = String.fromCharCode(0x2014); // 위반 표본 문자. 시험 소스에 직접 쓰면 이 파일도 문장 규칙 위반으로 셈
+    W3('tools/VibeManager/a.js', 'module.exports = { msg: `작업 결과를 저장함 ' + DASH + ' 다음 단계로 넘어감` };\n');
+    let rs = await sc.run(['S11'], '시험 L1 정리'); let L = l1s();
+    chk('S11 위반 1건(기준선 0) = L1 정리 개선안 1건(fix, L1, 대상 a.js, verify 1 → 0)', rs.checks.S11.count === 1 && !!rs.styleL1 && !!rs.styleL1.added && L.length === 1 && L[0].impact === 'fix' && L[0].level === 'L1' && L[0].targets.includes('tools/VibeManager/a.js') && /문장 위반 1 → 0/.test(L[0].verify) && /a\.js: L\d+ /.test(L[0].evidence), JSON.stringify([rs.checks.S11, rs.styleL1, L.map(x => [x.sig, x.impact, x.level, x.targets, x.verify, x.evidence])]));
+    chk('L1 정리 안 = 자동 반영 대상(code)', sc.autoEligible(L[0]).ok === true, JSON.stringify(sc.autoEligible(L[0])));
+    rs = await sc.run(['S11'], '시험 L1 정리 2회'); chk('처리 중인 안 있음 = 새로 올리지 않음', l1s().length === 1 && rs.styleL1.open === L[0].id, JSON.stringify(rs.styleL1));
+    const rj = im.get(L[0].id); rj.status = 'rejected'; im.save(rj);
+    rs = await sc.run(['S11'], '시험 L1 반려 뒤'); chk('반려 = 그 건수를 기준선으로 받아들이고 새 안 없음', l1s().length === 1 && rs.styleL1.up.length === 0, JSON.stringify(rs.styleL1));
+    W3('tools/VibeManager/a.js', 'module.exports = { msg: `작업 결과를 저장함 ' + DASH + ' 다음 단계로 넘어감`, m2: `저장을 끝냄 ' + DASH + ' 화면을 닫음` };\n');
+    rs = await sc.run(['S11'], '시험 L1 다시 늘어남'); L = l1s();
+    chk('기준선 1 → 2 늘어남 = 새 L1 안 1건(a.js:2)', L.length === 2 && rs.styleL1.up.join() === 'a.js 1 → 2' && L.some(x => /위반 정리 2건\(a\.js\)/.test(x.title)) && new Set(L.map(x => x.sig)).size === 2, JSON.stringify([rs.styleL1, L.map(x => [x.sig, x.title])]));
+    W3('tools/VibeManager/a.js', A3); rs = await sc.run(['S11'], '시험 L1 정리 뒤');
+    const bse = JSON.parse(fs.readFileSync(path.join(v3, 'orch', 'selfcheck', 'style_base.json'), 'utf8'));
+    chk('위반 0 = 기준선 0 으로 내리고 새 안 없음', rs.checks.S11.status === 'ok' && (bse.per['a.js'] || 0) === 0 && l1s().length === 2, JSON.stringify([rs.checks.S11.status, bse]));
     agent.dispose && agent.dispose(); im.dispose && im.dispose(); }
   sc.dispose(); watch.dispose(); st.dispose(); await new Promise(x => setTimeout(x, 100)); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

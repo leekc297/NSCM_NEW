@@ -1,6 +1,7 @@
 # DMF0042 · DMF0042_SAVE_DM_PLN_BP_FCST ↔ PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST
 
-- 실행: 2026-11-19 18:39:16
+- 실행: 2026-11-26 18:28:33
 - 파라미터: `{"p_active_flag": "", "p_DIVISION_ID": "40", "p_PROJECT_CODE": "Inventus Power", "p_PROJECT_NAME": "", "p_SCM_SITE_ID": "Fabricators_CN_QIN", "p_PLANT_SITE_ID": "", "p_ITEM_ID": "MCCM134010A1", "p_FCST_TYPE": "", "p_INCOTERMS": "", "p_ITEM_USE": "", "p_UNIT_ENERGY": "", "p_MEASURE": "", "p_YYYYMM": "", "p_QTY": "", "p_CURRENCY": "", "p_DEPT_ID": "", "p_END_CUSTOMER": "", "p_BIZ_TYPE": "", "p_CELL_PROD_SITE": "", "p_CREATED_BY": "bpark416", "p_LAST_UPDATED_BY": ""}`
 - 종류: SAVE
+- 입력 인자 원천 없음: p_active_flag=pAction.Remove(0, 1) · p_PROJECT_NAME=pProjectName.Remove(0, 1) · p_PLANT_SITE_ID=pPlant_Site_Id.Remove(0, 1) · p_FCST_TYPE=pFcst_Type.Remove(0, 1) · p_INCOTERMS=pIncoterms.Remove(0, 1) · p_ITEM_USE=p_ITEM_USE.Remove(0, 1) · p_UNIT_ENERGY=p_UNIT_ENERGY.Remove(0, 1) · p_MEASURE=pMeasure.Remove(0, 1) · p_YYYYMM=pYyyyMM.Remove(0, 1) · p_QTY=pInput.Remove(0, 1) · p_DEPT_ID=p_DEPT_ID.Remove(0, 1) · p_END_CUSTOMER=p_END_CUSTOMER.Remove(0, 1) · p_BIZ_TYPE=p_BIZ_TYPE.Remove(0, 1) · p_CELL_PROD_SITE=pCell_Prod_Site.Remove(0, 1) · p_LAST_UPDATED_BY=pUserID.Remove(0, 1) · 실행 기록 없음(TO-BE sqllog_calls.json PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST 호출 0 · 차등 검증 diff_summary DMF0042_SAVE_DM_PLN_BP_FCST 0 · AS-IS 실측 Doc/asislive/DMF0042 DMF0042_SAVE_DM_PLN_BP_FCST 0)
 - SAVE 류 — `--write` 없이 건너뜀

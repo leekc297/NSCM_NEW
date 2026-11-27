@@ -1,7 +1,7 @@
 # SCP0041 — To-Be Fact Pack 요약
 
 - page_key: `supply/stock-osp` · feature: supply · As-is Fact Pack 있음
-- 파일 15 · 엔드포인트 호출 9 (미해결 2, 주석 속 1) · 이벤트 23 · 컴포넌트 사용 50 · 하드코딩 컬럼 2 · 메시지 33
+- 파일 15 · 엔드포인트 호출 9 (미해결 2, 주석 속 1) · 이벤트 25 · 컴포넌트 사용 51 · 하드코딩 컬럼 2 · 메시지 33
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -10,15 +10,15 @@
 | features/supply/src/pages/stock-osp/components/modals/ExcelUploadModal.module.scss | component | 47 |
 | features/supply/src/pages/stock-osp/components/modals/ExcelUploadModal.tsx | component | 370 |
 | features/supply/src/pages/stock-osp/components/OspStockGrid.tsx | component | 43 |
-| features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | component | 173 |
-| features/supply/src/pages/stock-osp/components/StockOspForm.tsx | component | 323 |
+| features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | component | 206 |
+| features/supply/src/pages/stock-osp/components/StockOspForm.tsx | component | 327 |
 | features/supply/src/pages/stock-osp/hooks/useStockOspValidation.ts | hook | 46 |
 | features/supply/src/pages/stock-osp/index.ts | index | 2 |
 | features/supply/src/pages/stock-osp/stock-osp.constants.ts | constants | 124 |
 | features/supply/src/pages/stock-osp/stock-osp.types.ts | types | 23 |
 | features/supply/src/pages/stock-osp/StockOspPage.module.scss | style | 27 |
 | features/supply/src/pages/stock-osp/StockOspPage.tsx | page | 365 |
-| features/supply/src/pages/stock-osp/useStockOspStore.ts | store | 202 |
+| features/supply/src/pages/stock-osp/useStockOspStore.ts | store | 204 |
 | features/supply/src/pages/stock-osp/utils/stock-osp.editLock.ts | util | 19 |
 | features/supply/src/pages/stock-osp/utils/stock-osp.save.ts | util | 90 |
 | features/supply/src/pages/stock-osp/__asis-mapping__.md | mapping | 165 |
@@ -27,13 +27,13 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | /SCP0041/{ADMIN_SHEET_NAME[SHEETS.OSP]}/UPLOAD/excel-upload | http | 1 | N | ExcelUploadModal.tsx:167 |
-| (useTabComboQueries) | hook | 1 | Y | StockOspForm.tsx:73 |
-| (useTabLookupQueries) | hook | 1 | Y | StockOspForm.tsx:82 |
+| (useTabComboQueries) | hook | 1 | Y | StockOspForm.tsx:72 |
+| (useTabLookupQueries) | hook | 1 | Y | StockOspForm.tsx:81 |
 | SCP0041/Osp Stock//call-proc | hook | 1 | Y | StockOspPage.tsx:88 |
 | SCP0041/Pack Hold Stock//call-proc | hook | 1 | Y | StockOspPage.tsx:95 |
 | /SCP0041/{ADMIN_SHEET_NAME[SHEETS.OSP]}/UPLOAD_SAVE/call-proc | http | 1 | N | StockOspPage.tsx:339 |
-| /admin/menu/SCP0041/column | http | 1 | Y | useStockOspStore.ts:149 |
-| /admin/menu/SCP0041/search-conditions | http | 1 | Y | useStockOspStore.ts:180 |
+| /admin/menu/SCP0041/column | http | 1 | Y | useStockOspStore.ts:151 |
+| /admin/menu/SCP0041/search-conditions | http | 1 | Y | useStockOspStore.ts:182 |
 | /SCP0041/Pack Hold Stock/SAVE/call-proc | http | 1 | Y | stock-osp.save.ts:66 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -45,19 +45,21 @@
 | FileUploader | onFileChange | <arrow> setAlert,t,setFiles,value.slice,resetResult | jsx | features/supply/src/pages/stock-osp/components/modals/ExcelUploadModal.tsx | 298 |
 | Button | onClick | <arrow> handleSave | jsx | features/supply/src/pages/stock-osp/components/modals/ExcelUploadModal.tsx | 325 |
 | Button | onClick | <arrow> handleClose | jsx | features/supply/src/pages/stock-osp/components/modals/ExcelUploadModal.tsx | 329 |
-| g | beginningEdit | handler | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 94 |
-| g | cellEditEnding | onEnding | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 130 |
-| g | cellEditEnded | onEnded | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 131 |
-| g | formatItem | handler | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 157 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 201 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 197 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 218 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 231 |
-| CustomDropdown | onChange | <arrow> set,pickMulti(picked).join,pickMulti | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 248 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 260 |
-| CustomDropdown | onChange | <arrow> onDivisionChange,str | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 275 |
-| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 296 |
-| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 313 |
+| g | beginningEdit | handler | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 95 |
+| g | cellEditEnding | onEnding | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 131 |
+| g | cellEditEnded | onEnded | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 132 |
+| editor | beforeinput | guard | addEventListener | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 162 |
+| g | prepareCellForEdit | onPrepare | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 164 |
+| g | formatItem | handler | addHandler | features/supply/src/pages/stock-osp/components/PackHoldStockGrid.tsx | 190 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 200 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 196 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 222 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 235 |
+| CustomDropdown | onChange | <arrow> set,pickMulti(picked).join,pickMulti | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 252 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 264 |
+| CustomDropdown | onChange | <arrow> onDivisionChange,str | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 279 |
+| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 300 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/stock-osp/components/StockOspForm.tsx | 317 |
 | StockOspForm | onSearch | handleSearch | jsx | features/supply/src/pages/stock-osp/StockOspPage.tsx | 264 |
 | StockOspForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/stock-osp/StockOspPage.tsx | 265 |
 | StockOspForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/stock-osp/StockOspPage.tsx | 266 |
@@ -70,12 +72,13 @@
 | component | count |
 |---|---|
 | FormItem | 9 |
-| Grid | 6 |
+| Grid | 7 |
 | Button | 3 |
 | TextField | 3 |
 | DataGrid | 3 |
 | CustomDropdown | 3 |
 | InputField | 2 |
+| PeriodRangePicker | 2 |
 | TabItem | 2 |
 | CustomDialog | 1 |
 | ProgressIndicator | 1 |
@@ -83,9 +86,7 @@
 | ControlConfirmIcon | 1 |
 | Label | 1 |
 | FunctionSearchIcon | 1 |
-| PeriodField | 1 |
 | SearchArea | 1 |
-| PeriodRangePicker | 1 |
 | FileExceldownloadIcon | 1 |
 | FileExceluploadIcon | 1 |
 | MainTitle | 1 |
@@ -139,7 +140,7 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0041(11), DMF0074(2), SCP0005(2), SSP0023(1), SCP0053(1), DMF0082(1), SCP0025(1)
+- 화면ID: SCP0041(11), DMF0074(2), SCP0005(2), SSP0023(1), SCP0053(1), DMF0082(1), COM0013(1), COM0008(1), SCP0025(1)
 - SP/PKG: PKG_SCP0041(6), P_SCP0041_STOCK_OSP_EXCEL_UPLOAD(3), P_SCP0041_GET_STOCK_OSP(3), P_SCP0041_GET_PACK_HOLD_STOCK(3), P_SCP0041_SAVE_PACKER_HOLD_STOCK(3), P_SCP0041_UPLOAD(3), P_MODE(1), P_CREATED_BY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

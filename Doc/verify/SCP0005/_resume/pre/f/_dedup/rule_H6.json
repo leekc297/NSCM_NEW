@@ -1,0 +1,200 @@
+{
+ "rule_id": "H6",
+ "hash": "6324d9d35cc3bdb5",
+ "groups": [
+  {
+   "rows": [
+    "EG-b395018a",
+    "EG-09469e15"
+   ],
+   "why": "Both rows check OK → CLOSE button order on the same SCM0002_CitybyCountry popup opened in search-condition mode (btnFromSrch/btnToSrch), with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-10f493b6",
+    "EG-de087bbe"
+   ],
+   "why": "Both rows check No. column width (41px) on the same popup opened in search-condition mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-414fcb29",
+    "EG-76606ae5"
+   ],
+   "why": "Both rows check section title placement outside the border on the same popup opened in search-condition mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-429dd8e9",
+    "EG-a8056b9c"
+   ],
+   "why": "Both rows check for no horizontal line under the header on the same popup opened in search-condition mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-8b6b7d38",
+    "EG-b3f3ae62"
+   ],
+   "why": "Both rows check the result count display on the same popup opened in search-condition mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-5cd10d14",
+    "EG-841a5b3e"
+   ],
+   "why": "Both rows check for exactly one left No. column on the same popup opened in search-condition mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-813457a4",
+    "EG-e97f075b",
+    "EG-24dc66b9",
+    "EG-7b7aa573"
+   ],
+   "why": "All rows check OK → CLOSE button order on the same SCM0002_CitybyCountry popup opened in grid-cell mode (FROM/TO COUNTRY·CITY double-click), with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-c3fb30f5",
+    "EG-743d1740",
+    "EG-31ea04ce",
+    "EG-728c8d4c"
+   ],
+   "why": "All rows check No. column width (41px) on the same popup opened in grid-cell mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-433d1ea1",
+    "EG-c8aacfc6",
+    "EG-1ab99e61",
+    "EG-88e50b58"
+   ],
+   "why": "All rows check section title placement outside the border on the same popup opened in grid-cell mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-38dc9509",
+    "EG-d0897c6a",
+    "EG-322f9a1e",
+    "EG-399b702c"
+   ],
+   "why": "All rows check for no horizontal line under the header on the same popup opened in grid-cell mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-4492e347",
+    "EG-7a21f483",
+    "EG-92ef68a0",
+    "EG-4bb5580c"
+   ],
+   "why": "All rows check the result count display on the same popup opened in grid-cell mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-545b85e8",
+    "EG-d6e1b619",
+    "EG-99a05a52",
+    "EG-5f3353a4"
+   ],
+   "why": "All rows check for exactly one left No. column on the same popup opened in grid-cell mode, with the same expected result."
+  },
+  {
+   "rows": [
+    "EG-06fc42a7"
+   ],
+   "why": "This is the only button order check on the ExcelUploadForm2 popup, a different popup."
+  },
+  {
+   "rows": [
+    "EG-3afa56ab"
+   ],
+   "why": "This is the only section title check on the ExcelUploadForm2 popup."
+  },
+  {
+   "rows": [
+    "EG-e045fbfd"
+   ],
+   "why": "This is the ExcelUploadForm2 No. column check, and its expected result (No. column plus count display) differs from the other No. column rows."
+  },
+  {
+   "rows": [
+    "EG-eb0d61a8"
+   ],
+   "why": "This is the only header horizontal line check on the ExcelUploadForm2 popup."
+  },
+  {
+   "rows": [
+    "T-50c6a15b"
+   ],
+   "why": "This trace row covers the txtToCity condition, a different element from the other rows, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-fd52bd41"
+   ],
+   "why": "This trace row covers the txtFromCity condition, which differs from txtToCity, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-7eacee67"
+   ],
+   "why": "This trace row covers the FROM_CITY_NAME column alone."
+  },
+  {
+   "rows": [
+    "T-e425f595"
+   ],
+   "why": "This trace row covers the TO_CITY_NAME column alone."
+  },
+  {
+   "rows": [
+    "T-e999c1bd"
+   ],
+   "why": "This trace row checks ProgressForm being replaced by isFetching, which is a different property."
+  },
+  {
+   "rows": [
+    "T-ffd8cc98"
+   ],
+   "why": "This trace row checks that the cell double-click → RegionModal implementation exists in the source, which is a different property."
+  },
+  {
+   "rows": [
+    "V-0e9099ba",
+    "V-4cfc72f5"
+   ],
+   "why": "Both rows are the creation and display of the same DistributionRoutePopup on the same ROUTE_ID cell condition, with the same expected popup standard."
+  },
+  {
+   "rows": [
+    "V-616b4d31",
+    "V-718e1a16"
+   ],
+   "why": "Both rows load the city popup in the same mode with Form_Load(true), with the same expected popup standard."
+  },
+  {
+   "rows": [
+    "V-7cdbda05",
+    "V-ac0769f6"
+   ],
+   "why": "Both rows are the same unconditioned popCity.ShowDialog call, with the same expected popup standard."
+  },
+  {
+   "rows": [
+    "V-c9dc5aa7",
+    "V-cca901cb"
+   ],
+   "why": "Both rows load and display the city popup on the same FROM/TO cell condition (Form_Load false), with the same expected popup standard."
+  },
+  {
+   "rows": [
+    "V-e14533b1"
+   ],
+   "why": "The frm.ShowDialog target cannot be identified, so this row stays alone."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 07:41:16",
+ "cost": 0.1657297
+}

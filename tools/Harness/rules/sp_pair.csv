@@ -235,3 +235,16 @@ SCP0005,SCP0005_GET_DISTRIBUTION_ROUTEID,PKG_SCP0005.P_SCP0005_GET_ROUTEID,GET,o
 SCP0005,SCP0005_SAVE_DISTRIBUTION_ROUTE,PKG_SCP0005.P_SCP0005_SAVE_ROUTE,SAVE,ordinal,pkgsrc," · 짝 근거: 본문 943~957행 PROCEDURE P_SCP0005_SAVE_ROUTE 바로 앞 머리말 Program ID ""SCP0005_SAVE_DISTRIBUTION_ROUTE"" · 입력 인자 36개 이름 일치(T560) · kind 근거: DML 대상 ['SCM_SYS_LOG_BATCH', 'SCP_MST_DISTRIBUTION_ROUTE']"
 SCP0005,SCP0005_GET_COUNTRY_CITY,PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY,GET,ordinal,exact, · kind 근거: DML 없음(SELECT/임시 테이블만)
 SCP0005,SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID,PKG_SCP0005.P_SCP0005_GET_ROUTE_HIST,GET,ordinal,pkgsrc," · 짝 근거: 본문 733~743행 PROCEDURE P_SCP0005_GET_ROUTE_HIST 바로 앞 머리말 Program ID ""SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID"" · 입력 인자 1개 이름 일치(T560) · kind 근거: DML 없음(SELECT/임시 테이블만)"
+DMF0042,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,SAVE,ordinal,exact, · kind 근거: DML 대상 ['A']
+DMF0042,DMF0042_SAVE_DM_PLN_BP_FCST,PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST,SAVE,ordinal,exact," · kind 근거: DML 대상 ['A', 'DM_PLN_BP_FCST', 'DM_PLN_BP_FCST_H']"
+DMF0042,PR_GET_DAY_RANGE,PR_GET_DAY_RANGE,GET,ordinal,exact, · kind 근거: DML 없음(SELECT/임시 테이블만)
+DMF0042,DMF0042_1_GET_SPREAD_TITLE,,미확인,,none,TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual) · kind 근거: 본문 없음(modules/dbo.DMF0042_1_GET_SPREAD_TITLE.sql)
+DMF0042,SCM0001_GET_LOOKUP_VALUES,,GET,,none,TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual) · kind 근거: DML 없음(SELECT/임시 테이블만)
+DMF0042,SCM0001_GET_BIZ_TYPE_BY_DIVISION,,GET,,none,TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual) · kind 근거: DML 없음(SELECT/임시 테이블만)
+DMF0042,DMF0042_GET_EXCHANGE_PRICE,PKG_DMF0042.P_DMF0042_GET_EXCHANGE_PRICE,GET,ordinal,exact, · kind 근거: DML 없음(SELECT/임시 테이블만)
+DMF0042,DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV,PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV,SAVE,ordinal,exact, · kind 근거: DML 대상 ['DM_PLN_BP_FCST']
+DMF0042,UP_FX_GETCOMMONDATALIST_DM,,GET,,none,TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual) · kind 근거: DML 없음(SELECT/임시 테이블만)
+DMF0042,DMF0042_3_Get_BizPlan,,SAVE,,none,TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual) · kind 근거: DML 대상 ['A']
+DMF0042,DMF0009_GET_CODE,,GET,,none,TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual) · kind 근거: DML 없음(SELECT/임시 테이블만)
+DMF0042,DMF0042_3_GET_SPREAD_TITLE,,GET,,none,TO-BE proc 미매칭 — tobe_proc 수동 지정(source=manual) · kind 근거: DML 없음(SELECT/임시 테이블만)
+DMF0042,DMF0042_GET_SPREAD_TITLE,PKG_DMF0042.P_DMF0042_GET_SPREAD_TITLE,GET,ordinal,exact, · kind 근거: DML 없음(SELECT/임시 테이블만)

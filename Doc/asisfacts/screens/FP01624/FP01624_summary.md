@@ -638,13 +638,13 @@
 ## 7. 확인 필요 (9건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 165 | InitControls | FP\{?default:part_service}\AmendMemo#find_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 3013 | SaveAll_Past | FP\Planning\FP01624_MPPWPP#excel2_merge_FP01624 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 | 3035 | SaveAll_Past | FP\Planning\FP01624_MPPWPP#excel2_merge_FP01624 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 | 507 | SaveToDB | FP\{?default:part_service}\PlanAmendMemo#saveAll_planAmendMemoP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 560 | SaveToDB | FP\{?default:part_service}\PlanAmendMemo#saveAll_planAmendMemoP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 212 | btnSave_Click | FP\{?default:part_service}\AmendMemo#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 235 | btnClose_Click | FP\{?default:part_service}\AmendMemo#delete_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 165 | InitControls | FP\{?default:part_service}\AmendMemo#find_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2107 | Run_setSaveProcess | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#find_bukInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 3179 | Run_getListValidation_Apply | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#find_bukInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 

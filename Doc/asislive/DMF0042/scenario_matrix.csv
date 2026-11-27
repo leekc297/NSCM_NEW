@@ -1,0 +1,40 @@
+﻿control,group,division,mode,ok,popups,dialogs,calls,asis_timeout,grid_cells,varies,run
+(조회),ADMIN,40,,실행,,,DMF0042_GET_SPREAD_TITLE=25 ; DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA=7564,,,같음,run_20261126_231528_acts_div40
+(조회),ADMIN,81,,실행,,,DMF0042_GET_SPREAD_TITLE=18 ; DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA=0,,,같음,run_20261126_232326_acts_div81
+(조회),ADMIN,82,,실행,,,DMF0042_GET_SPREAD_TITLE=16 ; DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA=0,,,같음,run_20261126_232705_acts_div82
+btnColumn,ADMIN,(기본),,실행,DM0002_TitleSetForm_Popup(행 26),,DMF0002_GET_TITLESET_POPUP=37,,,같음,run_20261126_225739_acts
+btnColumn,ADMIN,40,,실행,DM0002_TitleSetForm_Popup(행 26),,DMF0002_GET_TITLESET_POPUP=37,,,같음,run_20261126_231528_acts_div40
+btnColumn,ADMIN,81,,실행,DM0002_TitleSetForm_Popup(행 11),,DMF0002_GET_TITLESET_POPUP=15,,,같음,run_20261126_232326_acts_div81
+btnColumn,ADMIN,82,,실행,DM0002_TitleSetForm_Popup(행 3),,DMF0002_GET_TITLESET_POPUP=5,,,같음,run_20261126_232705_acts_div82
+btnCutOff,ADMIN,(기본),,실행,VersionCutOffPopUp(행 0),,DMF0042_GET_DM_MDF_VERSION=0,,,같음,run_20261126_225739_acts
+btnCutOff,ADMIN,40,,실행,VersionCutOffPopUp(행 0),,DMF0042_GET_DM_MDF_VERSION=0,,,같음,run_20261126_231528_acts_div40
+btnCutOff,ADMIN,81,,실행,VersionCutOffPopUp(행 0),,DMF0042_GET_DM_MDF_VERSION=0,,,같음,run_20261126_232326_acts_div81
+btnCutOff,ADMIN,82,,실행,VersionCutOffPopUp(행 0),,DMF0042_GET_DM_MDF_VERSION=0,,,같음,run_20261126_232705_acts_div82
+btnItemId,ADMIN,(기본),,실행,DM0002_ItembyDivisionPopupEx(행 0),,SCM0001_GET_SITE_BY_DIVISION=1327 ; DMF0000_GET_COMMON_SPREAD_TITLE=12 ; DMF0002_GET_ITEM_BY_DIVISION_POPUPEx=15524,,,조건에 따라 다름,run_20261126_225739_acts
+btnItemId,ADMIN,40,,실행,DM0002_ItembyDivisionPopupEx(행 0),,SCM0001_GET_SITE_BY_DIVISION=1327 ; DMF0000_GET_COMMON_SPREAD_TITLE=12 ; DMF0002_GET_ITEM_BY_DIVISION_POPUPEx=15524,,,조건에 따라 다름,run_20261126_231528_acts_div40
+btnItemId,ADMIN,81,,실행,DM0002_ItembyDivisionPopupEx(행 0),,SCM0001_GET_SITE_BY_DIVISION=453 ; DMF0000_GET_COMMON_SPREAD_TITLE=14 ; DMF0002_GET_ITEM_BY_DIVISION_POPUPEx=49696,,,조건에 따라 다름,run_20261126_232326_acts_div81
+btnItemId,ADMIN,82,,실행,DM0002_ItembyDivisionPopupEx(행 500),ESS 혹은 ESS를 포함할 때 프로젝트 코드나 모델 코드는 3자리 이상이어야 합니다.,,,,조건에 따라 다름,run_20261126_232705_acts_div82
+btnMeasure,ADMIN,(기본),,실행,,,,,,같음,run_20261126_225739_acts
+btnMeasure,ADMIN,40,,실행,,,,,,같음,run_20261126_231528_acts_div40
+btnMeasure,ADMIN,81,,실행,,,,,,같음,run_20261126_232326_acts_div81
+btnMeasure,ADMIN,82,,실행,,,,,,같음,run_20261126_232705_acts_div82
+btnOwner,ADMIN,(기본),,실행,DM0020_OwnerbyDivisionPopup(행 0),,SCM0001_GET_SITE_BY_DIVISION=1327 ; DMF0000_GET_COMMON_SPREAD_TITLE=6 ; DMF0020_GET_OWNER_DATA=102,,,같음,run_20261126_225739_acts
+btnOwner,ADMIN,40,,실행,DM0020_OwnerbyDivisionPopup(행 102),,SCM0001_GET_SITE_BY_DIVISION=1327 ; DMF0000_GET_COMMON_SPREAD_TITLE=6 ; DMF0020_GET_OWNER_DATA=102,,,같음,run_20261126_231528_acts_div40
+btnOwner,ADMIN,81,,실행,DM0020_OwnerbyDivisionPopup(행 146),,SCM0001_GET_SITE_BY_DIVISION=453 ; DMF0000_GET_COMMON_SPREAD_TITLE=8 ; DMF0020_GET_OWNER_DATA=146,,,같음,run_20261126_232326_acts_div81
+btnOwner,ADMIN,82,,실행,DM0020_OwnerbyDivisionPopup(행 113),,SCM0001_GET_SITE_BY_DIVISION=776 ; DMF0000_GET_COMMON_SPREAD_TITLE=8 ; DMF0020_GET_OWNER_DATA=113,,,같음,run_20261126_232705_acts_div82
+btnProject,ADMIN,(기본),,실행,,,,,,조건에 따라 다름,run_20261126_225739_acts
+btnProject,ADMIN,40,,실행,,,,,,조건에 따라 다름,run_20261126_231528_acts_div40
+btnProject,ADMIN,81,,실행,SCM0002_ProjectbyDivisionPopupEx(행 0),,DM0000_GET_COMMON_SPREAD_TITLE=13 ; DM0000_GET_COMMON_SPREAD_TITLE=13 ; SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX=900,,,조건에 따라 다름,run_20261126_232326_acts_div81
+btnProject,ADMIN,82,,실행,SCM0002_ProjectbyDivisionPopupEx(행 1740),,DM0000_GET_COMMON_SPREAD_TITLE=13 ; DM0000_GET_COMMON_SPREAD_TITLE=13 ; SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX=1740,,,조건에 따라 다름,run_20261126_232705_acts_div82
+btnReplace,ADMIN,(기본),,실행,ReplaceByCutOffPopUp(행 0) ; ExceptionDialog(행 -1),,DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION=0 ; DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION=0,DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION,,조건에 따라 다름,run_20261126_225739_acts
+btnReplace,ADMIN,40,,실행,ReplaceByCutOffPopUp(행 0) ; ExceptionDialog(행 -1),,DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION=0 ; DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION=0,DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION,,조건에 따라 다름,run_20261126_231528_acts_div40
+btnReplace,ADMIN,81,,실행,,데이터 조회 후 다시 시도해 주시기 바랍니다.,,,,조건에 따라 다름,run_20261126_232326_acts_div81
+btnReplace,ADMIN,82,,실행,,데이터 조회 후 다시 시도해 주시기 바랍니다.,,,,조건에 따라 다름,run_20261126_232705_acts_div82
+cboBucketType,ADMIN,(기본),,실행,,,,,,같음,run_20261126_225739_acts
+cboBucketType,ADMIN,40,,실행,,,,,,같음,run_20261126_231528_acts_div40
+cboBucketType,ADMIN,81,,실행,,,,,,같음,run_20261126_232326_acts_div81
+cboBucketType,ADMIN,82,,실행,,,,,,같음,run_20261126_232705_acts_div82
+layoutControlItem3,ADMIN,(기본),,실패: InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationExce,,,,,,같음,run_20261126_225739_acts
+layoutControlItem3,ADMIN,40,,실패: InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationExce,,,,,,같음,run_20261126_231528_acts_div40
+layoutControlItem3,ADMIN,81,,실패: InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationExce,,,,,,같음,run_20261126_232326_acts_div81
+layoutControlItem3,ADMIN,82,,실패: InvalidOperationException: click:layoutControlItem3 failed: InvalidOperationExce,,,,,,같음,run_20261126_232705_acts_div82

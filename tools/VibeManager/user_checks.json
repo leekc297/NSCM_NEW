@@ -1,6 +1,6 @@
 {
  "about": "사용자 지적 원장(2026-11-20 사용자 지시: 상황을 보고 입력한 지적은 VMO 감시가 자가진단하고 보완). 항목 = 지적 원문 + 감지기. orch-usercheck.js 가 자가진단 S13 으로 실행. 새 지적은 학습기가 더함. purpose = 목적 키(진단 사다리 L4 가 같은 목적 키 지적을 묶음, 없으면 감지기 이름이 목적 키)",
- "coveredUntil": "2026-11-26T16:10:37+09:00",
+ "coveredUntil": "2026-11-27T00:57:39+09:00",
  "items": [
   {
    "id": "U1",
@@ -379,6 +379,30 @@
    },
    "status": "active",
    "why": "AI 작업 순서를 지적한 글임. 기존 감지기는 진행 표시, 소요, 중지 누수만 보고 계획 잔여와 시험 시작 순서는 보지 않음. 같은 내용이 사용자 지시 규칙 R230 에 있어 그 문장을 씀. 목적 키 checklistTime, reloadResume 과 바란 결과가 다름"
+  },
+  {
+   "id": "U32",
+   "at": "2026-11-26 16:33",
+   "quote": "리로드 했습니다.\nVMO 의 컨설팅 기능 기동되도록 해주세요.",
+   "symptom": "창 다시 로드 뒤 VMO 컨설팅 기능이 바로 기동하지 않음",
+   "detector": "consultCadence",
+   "params": {
+    "graceMin": 10
+   },
+   "status": "active",
+   "why": "orch-consult.js 113~114행이 창 연 뒤 25분, 이후 1시간 주기로만 due() 를 봄. 다시 로드 직후 사용자가 기동을 따로 요청함. 기존 감지기 vmoCadence 는 사건, 개선안 반영 공백만 보고 컨설팅 실행 공백은 보지 않음. R155 와 같은 방향임"
+  },
+  {
+   "id": "U33",
+   "at": "2026-11-26 18:14",
+   "quote": "로드 후 컨설팅을 누르고 주제를 입력했는데 반응이 없습니다.",
+   "symptom": "창 다시 로드 뒤 VMO 컨설팅을 누르고 주제를 입력했는데 화면 반응 없음",
+   "detector": "consultNoResponse",
+   "params": {
+    "waitMin": 3
+   },
+   "status": "active",
+   "why": "고친 파일(orch-consult.js, orchestra.js, workbench.js)이 있음. 컨설팅 요청, 응답 기록이 events.jsonl 에 0건이어서 지금 감지기로는 판정할 수 없음"
   }
  ]
 }

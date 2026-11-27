@@ -267,6 +267,28 @@ def timing_add(name, t0, rc=''):
     print(f"[시간] {name} · 시작 {time.strftime('%H:%M:%S', time.localtime(t0))} · {sec:.1f}s · rc={rc}", flush=True)
 
 
+def timing_gaps(rec):
+    """run_timing.json 1회 기록의 귀속 빈틈(2026-11-26 개선안 20261126173842_SELF). E2E 시험이 돌았는데(e2e_tests 1건 이상) stage_min 에 e2e 단계가 없으면 1건.
+    11-25 SCP0028 기록(e2e_tests 97, stage_min 에 e2e 없음, 단계 밖 37.9분)이 이 경우임"""
+    out = []
+    if (rec.get('e2e_tests') or 0) > 0 and 'e2e' not in (rec.get('stage_min') or {}):
+        out.append(f"E2E 시험 {rec.get('e2e_tests')}건이 돌았는데 e2e 단계 행 없음(단계 밖 {rec.get('unattributed_min')}분)")
+    return out
+
+
+def selftest():
+    ok = True
+    def chk(n, c):
+        nonlocal ok
+        print('PASS' if c else 'FAIL', n); ok &= bool(c)
+    chk('11-25 SCP0028 표본(e2e_tests 97, e2e 키 없음) = 빈틈 1건', len(timing_gaps({'e2e_tests': 97, 'stage_min': {'pre': 10.2, 'post': 8.1}, 'unattributed_min': 37.9})) == 1)
+    chk('e2e 키 있음 = 빈틈 0건', timing_gaps({'e2e_tests': 97, 'stage_min': {'e2e': 41.2}}) == [])
+    chk('E2E 시험 0건 = 빈틈 0건', timing_gaps({'e2e_tests': 0, 'stage_min': {}}) == [])
+    src = open(os.path.abspath(__file__), encoding='utf-8').read()
+    chk('E2E 차례 실행도 timing_add 로 기록', "timing_add('playwright (E2E 차례 실행)'" in src and "timing_add('e2e_shard (E2E 나눠 실행)'" in src)
+    print('selftest', 'OK' if ok else 'FAIL'); return 0 if ok else 1
+
+
 def timing_write():
     """실행 끝(정상·오류 모두)에 1회 — 화면 폴더 _timing.csv 에 이번 실행 행을 덧붙이고 단계 합계를 찍는다."""
     if not _TM['mid'] or not _TM['rows']:
@@ -308,6 +330,10 @@ def timing_write():
             _hist.append({'run_at': _TM['run_at'], 'wall_min': _wall, 'stage_sum_min': _sum, 'unattributed_min': _un, 'e2e_tests': _nt, 'e2e_retries': _nr,
                           'stage_min': {k or '-': round(v / 60, 1) for k, v in tot.items()},
                           'top': [{'stage': r[0], 'tool': r[1], 'start': r[2], 'min': round(r[3] / 60, 1)} for r in sorted(_TM['rows'], key=lambda x: -x[3])[:10]]})
+            _gp = timing_gaps(_hist[-1])   # 2026-11-26 개선안 20261126173842_SELF: 귀속 빈틈을 기록하고 알림
+            if _gp:
+                _hist[-1]['gaps'] = _gp
+                print('[WARN] 시간 기록 빈틈: ' + ' · '.join(_gp), flush=True)
             json.dump(_hist[-20:], open(_rp, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
         except Exception as _e:
             print(f'[WARN] run_timing.json 기록 실패({_e})', flush=True)
@@ -1377,8 +1403,10 @@ def main_e2e_on(py, mid, asis, a, only, blocked):
                 if rc is not None:
                     timing_add('e2e_shard (E2E 나눠 실행)', _t_sh, rc)
                 if rc is None:
+                    _t_pw = time.time()   # 2026-11-26 개선안 20261126173842_SELF(단계 6 · 흡수 20261126000934_VISION 단계 2): 나눠 실행이 없을 때 차례 실행도 e2e 단계 행으로 기록(종전 = _timing.csv 에 없음)
                     rc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', *spec_files, *tier_args, '--workers', '1',
                               '--reporter=list,json'], env=env, cwd=E2E)
+                    timing_add('playwright (E2E 차례 실행)', _t_pw, rc)
                 if not os.path.exists(res_json):
                     print(f'[FAIL] E2E 결과 파일 없음({res_json}), Playwright 가 판정 없이 끝남(rc={rc}). 로그 확인')
                     return 3
@@ -1976,6 +2004,8 @@ def made_docs_text(mid):
     return ' · '.join(os.path.relpath(_latest_doc(mid, k), ROOT).replace('\\', '/') for k in ('CheckList', 'ActionItemList') if _latest_doc(mid, k))
 
 if __name__ == '__main__':
+    if '--selftest' in sys.argv[1:2]:   # 2026-11-26 시간 기록 빈틈 판정 자체 시험(engine_selfcheck SELFTEST_PY 가 부름)
+        sys.exit(selftest())
     import datetime
     STARTED = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     os.environ['LLM_RUN_START'] = STARTED  # 2026-11-19 AI 검토 비용 상한(harness.json llmReviewBudgetUsd)은 이 실행이 쓴 합으로 센다(llm_call.spent)

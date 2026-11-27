@@ -1,0 +1,51 @@
+{
+  "id": "20261126164322_SELF",
+  "at": "2026-11-26T16:43:22+09:00",
+  "ms": 1795679002155,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|edits|orchestra.js|webview dup kit",
+  "title": "웹뷰 공용 모듈 신설(마크다운 렌더, Ctrl+A 범위, 경계 막대, 글래스 CSS)과 규칙 점검이 공용 모듈을 먼저 고치도록 변경",
+  "evidence": "causes[1]의 grep 줄 번호, orch-userrule.js:26, :57, :95~101, CHANGELOG.md:229, 248, 255, 262, 269, 452, 459, 1323, 1330, 1337, 270, 453, 761, 1331, 256 · 진단 사다리 묶음 L3|edits|orchestra.js",
+  "targets": [
+    "tools/VibeManager/webview-kit.js",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/jobs.js",
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/history.js",
+    "tools/VibeManager/orch-userrule.js",
+    "tools/VibeManager/test/t_webview_kit.js"
+  ],
+  "before_after": "변경 전에는 mdHtml(jobs.js:496, orchestra.js:1006, workbench.js:2458), Ctrl+A 범위 처리(jobs.js:555, orchestra.js:1202, workbench.js:2841), 경계 막대 드래그, .glass 변수가 파일마다 복사돼 있습니다. 규칙 점검은 파일마다 개선안을 냅니다. 변경 후에는 webview-kit.js가 css()와 script()를 내보내 웹뷰 HTML 템플릿에 끼워 넣습니다. script()에는 mdHtml, 영역 한정 selectAll, 경계 막대 연결 함수가 들어갑니다. 4개 웹뷰의 복사본은 지우고 kit 호출로 바꿉니다. workbench.js는 필요한 줄만 Edit로 고칩니다(vm-orchestra.md:115). orch-userrule.js는 SCOPE_FILES에 webview-kit.js를 넣고, 프롬프트(:57)에 '여러 파일에 같은 원인이 있으면 webview-kit.js 1건으로 묶음'을 더합니다. 화면 동작은 바꾸지 않습니다.",
+  "verify": "grep -c 'function mdHtml' tools/VibeManager/{jobs,orchestra,workbench}.js: 반영 전 합계 3 → 반영 뒤 기대 0이고 webview-kit.js 1. grep -c \"execCommand('selectAll\" 같은 3개 파일: 반영 전 3 → 반영 뒤 기대 0이고 webview-kit.js 1. node tools/VibeManager/test/t_webview_syntax.js tools/VibeManager: 반영 전 PASS 19(CHANGELOG.md:271 기록) → 반영 뒤 기대 PASS 19 이상. 새 시험 t_webview_kit.js(마크다운 표, 목록 렌더와 selectAll 범위 표본): 반영 전 없음 → 반영 뒤 통과. orch-userrule.buildPrompt 출력에 webview-kit.js 포함: 반영 전 0 → 반영 뒤 1.",
+  "rollback": "대상 7개 파일을 각 .bak_<날짜>_self<시각>으로 복원하고 webview-kit.js, t_webview_kit.js 삭제(설치 폴더는 같은 태그)",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 사용자 지시 규칙이 파일마다 따로 승인된 사례가 4개 규칙에 걸쳐 10건입니다(R4 3, R114 2, R179 2, R181 3). 웹뷰 6개 파일에 같은 동작이 복사돼 있습니다(mdHtml 3, selectAll 3, .glass 5개 파일, 경계 막대 4개 파일).",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:07+09:00",
+      "by": "S-W",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:56:51+09:00",
+      "by": "S-W",
+      "what": "반영 완료(세션 직접 보완) · webview-kit.js 신설(mdEsc, mdInline, mdHtml, kitSelScope, kitSelAll, kitDrag, glassCss). jobs.js, orchestra.js, workbench.js, history.js 복사본 삭제 후 kit 호출(mdHtml 3벌, selectAll 3벌, 경계 막대 3곳, .glass 2곳). orch-userrule.js SCOPE_FILES 맨 앞 webview-kit.js, 지시문 묶음 줄 추가. 렌더 비교: 마크다운 코드 3108자 일치, 차이는 kit 호출부만. 시험 t_webview_kit PASS 30, t_webview_syntax PASS 19, 관련 8파일 PASS 131 FAIL 0 (2026-11-26 16:56:45)"
+    }
+  ],
+  "plain": {
+    "what": "VM, VMO, VMW 화면이 각자 갖고 있던 같은 기능(답변 정리 표시, 전체 선택 범위, 칸 크기 조절, 반투명 상자)을 한 파일로 모아, 한 번 고치면 모든 화면에 같이 적용되게 합니다.",
+    "risk": "옮기다 빠진 부분이 있으면 해당 화면의 답변 표시나 칸 크기 조절이 동작하지 않습니다.",
+    "undo": "VMO Fixes 탭의 되돌리기 단추를 누르거나 파일별 백업을 복원합니다."
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "kind": "fix",
+  "claimedBy": "S-W",
+  "waitNote": "",
+  "appliedMs": 1795679811168
+}

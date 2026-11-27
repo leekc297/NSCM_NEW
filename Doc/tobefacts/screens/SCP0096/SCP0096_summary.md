@@ -8,14 +8,14 @@
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | component | 210 |
-| features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | component | 442 |
+| features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | component | 444 |
 | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.module.scss | component | 13 |
 | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.tsx | component | 147 |
 | features/supply/src/pages/shipment-working-day-osp/index.ts | index | 2 |
 | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.constants.ts | constants | 193 |
-| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | other | 60 |
-| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.types.ts | types | 104 |
-| features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | page | 425 |
+| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | other | 70 |
+| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.types.ts | types | 113 |
+| features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | page | 431 |
 | features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts | store | 187 |
 | features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md | mapping | 116 |
 
@@ -27,7 +27,7 @@
 | (useTabLookupQueries) | hook | 1 | Y | ShipmentWorkingDayOspInputModal.tsx:49 |
 | SCP0096/Shipment Working Day OSP//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:86 |
 | SCP0096/calendar//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:96 |
-| /SCP0096/Shipment Working Day OSP/SAVE/call-proc | http | 1 | Y | ShipmentWorkingDayOsp.tsx:237 |
+| /SCP0096/Shipment Working Day OSP/SAVE/call-proc | http | 1 | Y | ShipmentWorkingDayOsp.tsx:243 |
 | /admin/menu/SCP0096/column | http | 1 | Y | useShipmentWorkingDayOspStore.ts:140 |
 | /admin/menu/SCP0096/search-conditions | http | 1 | Y | useShipmentWorkingDayOspStore.ts:165 |
 
@@ -41,21 +41,21 @@
 | SearchArea | onSearch | onSubmit | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 155 |
 | CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,onDivisionChange | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 169 |
 | PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 194 |
-| g | formatItem | formatHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 264 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 274 |
-| g | cellEditEnding | rangeGuardHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 289 |
-| el | beforeinput | guardDefaultMaxOnInput | addEventListener | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 321 |
-| g | prepareCellForEdit | prepareEditHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 323 |
-| g | updatedLayout | onLayout | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 388 |
-| f | filterApplied | onFilterApplied | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 418 |
+| g | formatItem | formatHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 266 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 276 |
+| g | cellEditEnding | rangeGuardHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 291 |
+| el | beforeinput | guardDefaultMaxOnInput | addEventListener | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 323 |
+| g | prepareCellForEdit | prepareEditHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 325 |
+| g | updatedLayout | onLayout | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 390 |
+| f | filterApplied | onFilterApplied | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 420 |
 | CustomDropdown | onChange | <arrow> setDayWeekCode,String | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.tsx | 102 |
 | CustomDropdown | onChange | <arrow> setInputValue,String | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.tsx | 120 |
 | Button | onClick | handleOk | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.tsx | 132 |
 | Button | onClick | onClose | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspInputModal.tsx | 139 |
-| ShipmentWorkingDayOspForm | onSubmit | handleSearch | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 391 |
-| ShipmentWorkingDayOspForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 391 |
-| ShipmentWorkingDayOspInputModal | onClose | <arrow> setInputModalOpen | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 419 |
-| ShipmentWorkingDayOspInputModal | onConfirm | handleInputConfirm | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 420 |
+| ShipmentWorkingDayOspForm | onSubmit | handleSearch | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 397 |
+| ShipmentWorkingDayOspForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 397 |
+| ShipmentWorkingDayOspInputModal | onClose | <arrow> setInputModalOpen | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 425 |
+| ShipmentWorkingDayOspInputModal | onConfirm | handleInputConfirm | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 426 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -80,9 +80,9 @@
 | mergedColumns | col.colNm | col.colLblNm \|\| col.colNm | col.colWth ?? 100 | col.visible !== false |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 95 |
 | mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 120 |
 | leaf | dc.binding | dc.dayLabel \|\| dc.binding.slice(2) | 56 | true |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 158 |
-| sumGroups | s.binding | s.header | 80 | showSum |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 199 |
-| buildDynSumColumns | name | name.replace(/^W_/, '') |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | 52 |
-| buildDynSumColumns | name | `${ym.slice(0, 4)}-${ym.slice(4, 6)}` |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | 55 |
+| sumGroups | s.binding | s.header | 80 | showSum |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 201 |
+| buildDynSumColumns | name | name.replace(/^W_/, '') |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | 62 |
+| buildDynSumColumns | name | `${ym.slice(0, 4)}-${ym.slice(4, 6)}` |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | 65 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -108,12 +108,12 @@
 | LBL00627 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0096(11), SCP0019(10), SCP0010(3), DMF0014(3), DMF0048(1), DMF0021(1), SCP0120(1), SSP0025(1), SCP0025(1)
+- 화면ID: SCP0096(12), SCP0019(10), SCP0010(3), DMF0014(3), DMF0048(1), DMF0021(1), SCP0120(1), SSP0025(1), SCP0025(1)
 - SP/PKG: PKG_COM0000(8), PKG_SCP0096(8), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(6), P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP(5), P_USER_ID(5), P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP(3), P_SCM0001_GET_SCP_MONTH_PERIOD(2), FN_MULTY_TIME(2), P_MEASURE(2), P_ACTION(1), P_DIVISION_ID(1), P_PLANT_SITE_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | 공백): 버튼은 노출하되 클릭 무동작. 무동작 함수 () => undefined 로 배선한다 — false 면 버튼이 숨겨지고 | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 278 |
+| code | 공백): 버튼은 노출하되 클릭 무동작. 무동작 함수 () => undefined 로 배선한다 — false 면 버튼이 숨겨지고 | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 284 |
 | endpoint | ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 6행, admin 즉시 반영). | features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts | 137 |
 
 ## 10. __asis-mapping__.md 상태

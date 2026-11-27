@@ -11,13 +11,13 @@
 | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | component | 257 |
 | features/master/src/pages/contribute-view/components/ContributeViewGrid.module.scss | component | 13 |
 | features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx | component | 187 |
-| features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.module.scss | component | 174 |
+| features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.module.scss | component | 173 |
 | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | component | 375 |
 | features/master/src/pages/contribute-view/components/modals/contributeVersionModalStore.ts | store | 35 |
 | features/master/src/pages/contribute-view/contribute-view.constants.ts | constants | 59 |
 | features/master/src/pages/contribute-view/ContributeView.module.scss | style | 17 |
 | features/master/src/pages/contribute-view/ContributeView.tsx | page | 293 |
-| features/master/src/pages/contribute-view/hooks/useContributeViewExpression.ts | hook | 109 |
+| features/master/src/pages/contribute-view/hooks/useContributeViewExpression.ts | hook | 118 |
 | features/master/src/pages/contribute-view/hooks/useContributeViewValidation.ts | hook | 47 |
 | features/master/src/pages/contribute-view/index.ts | index | 2 |
 | features/master/src/pages/contribute-view/types.ts | types | 58 |
@@ -100,7 +100,7 @@
 | VERSION_COLUMNS | VERSION_TYPE | Type | 117 |  |  |  | meta-shape | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 91 |
 | VERSION_COLUMNS | MAX(CREATED_BY) | Create By | 120 |  |  |  | meta-shape | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 92 |
 | VERSION_COLUMNS | MAX(CREATION_DATE) | Create Date | 150 |  |  |  | meta-shape | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 93 |
-| buildColumnMeta | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  | 120\|80 |  |  |  | object | features/master/src/pages/contribute-view/hooks/useContributeViewExpression.ts | 55 |
+| buildColumnMeta | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  | isBase ? BASE_COL_WIDTH : (spColumnWidth(r.COLUMN_WIDTH) ??  |  |  |  | object | features/master/src/pages/contribute-view/hooks/useContributeViewExpression.ts | 64 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -129,7 +129,7 @@
 | MSG00618 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0043_01(3), DMF0082(1), DMF0043(1)
+- 화면ID: DMF0043_01(4), DMF0043(2), DMF0082(1)
 - SP/PKG: DMF0043_GET_SALES_LIST_SPREAD_TITLE(3), DMF0043_GET_CONTRIBUTION_SALES_LIST(2), DMF0043_GET_CONT_VIEW_VERSIONPOPUP(1), PKG_DMF0043(1), P_DMF0043_GET_CONT_VIEW_VERSIONPOPUP(1), P_DIVISION_ID(1), P_START(1), P_VERSION_TYPE(1), P_DESCRIPTION(1), P_DMF0043_SALES_LIST_GET(1), DMF0002_GET_TITLESET_POPUP(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
@@ -142,7 +142,7 @@
 | endpoint | `useTabComboQueries(['MyDivision'])` 로 사용자 권한 기반 전체 Division 동적 lookup | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 77 |
 | code | const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용) | features/master/src/pages/contribute-view/contribute-view.constants.ts | 34 |
 | endpoint | 화면 mount 시 admin SHEET_COLUMNS 동적 fetch (admin 변경 즉시 반영). | features/master/src/pages/contribute-view/ContributeView.tsx | 113 |
-| code | const isHidden = !isBase && binding.indexOf('B_') > 0; | features/master/src/pages/contribute-view/hooks/useContributeViewExpression.ts | 49 |
+| code | const isHidden = !isBase && binding.indexOf('B_') > 0; | features/master/src/pages/contribute-view/hooks/useContributeViewExpression.ts | 58 |
 | code | 저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용. 반환값 = 복원된 개인화(없으면 null). | features/master/src/pages/contribute-view/useContributeViewStore.ts | 71 |
 
 ## 10. __asis-mapping__.md 상태

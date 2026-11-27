@@ -1,0 +1,318 @@
+# -*- coding: utf-8 -*-
+"""엔진 변경 게이트(EN-00 · 2026-11-11) — 검증·생성 도구를 고친 뒤 실행에 투입하기 전에 '돌려 보면 드러나는' 결함을 실제로 돌려서 잡는다.
+
+  python tools/Harness/verify/engine_selfcheck.py            전체 검사(tsc·selftest 포함)
+  python tools/Harness/verify/engine_selfcheck.py --quick    빠른 검사만(컴파일·미정의 이름·제어 문자·JS 문법·스펙 크기)
+  python tools/Harness/verify/engine_selfcheck.py --if-changed   감시 파일이 마지막 전체 통과 뒤 바뀌었을 때만 전체 검사, 아니면 빠른 검사
+  python tools/Harness/verify/engine_selfcheck.py --update-baseline   지금 실패 목록을 기준선으로 기록(사용자 확인 뒤에만)
+  python tools/Harness/verify/engine_selfcheck.py --selftest  이 게이트 자체의 변이 입증
+
+왜(2026-11-10 실제 사고 — Doc/verify/_checker_defects.md T217·T218·T220):
+  ① run_verify 에 정의 안 된 변수 → --only 실행 3건이 E2E 직전 NameError 로 중단   → PY_UNDEF
+  ② 치환 스크립트가 _verify.spec.ts 의 다른 위치를 절단(652KB → 148KB)             → SPEC_SIZE
+  ③ 정규식의 단어 경계 자리에 백스페이스(0x08) 혼입 — judge.py 경로가 한 번도 일치 안 함 → CTRL_CHARS
+검사: PY_COMPILE · PY_UNDEF(모듈 전역 미정의 이름 — symtable) · CTRL_CHARS · JS_SYNTAX(node --check) · SPEC_SIZE · TSC · SELFTEST_JS · SELFTEST_PY
+      · GEN_SMOKE(2026-11-26, 전체 검사만: tools/Harness/test/t_gen_check_smoke.js = 기준 화면 gen.js 생성 + check.js 검사를 임시 폴더에서)
+기준선: tools/Harness/verify/_selfcheck_baseline.json — 이미 알려진 실패(예: tsc 'reach')는 통과로 치되 출력에 남긴다. 새 실패 1건이라도 있으면 exit 1.
+결과: Doc/verify/_engine_selfcheck.json (검사별 실행 여부·건수·시각 · 감시 파일 지문)
+한계(추측으로 메우지 않음): 인자별 실행 경로를 실제로 타 보는 드라이런은 없다 — 미정의 이름은 정적으로 잡지만, 값이 틀린 경로(잘못된 파일 경로 등)는 못 잡는다.
+"""
+import builtins
+import glob
+import hashlib
+import json
+import os
+import re
+import subprocess
+import symtable
+import sys
+import time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+BASELINE = os.path.join(HERE, '_selfcheck_baseline.json')
+OUT = os.path.join(ROOT, 'Doc', 'verify', '_engine_selfcheck.json')
+E2E = os.path.join(ROOT, 'tools', 'E2E')
+
+PY_GLOBS = ['tools/Harness/verify/*.py', 'tools/DbConn/*.py', 'tools/Harness/*.py',
+            'tools/AsisLive/*.py', 'tools/Docs/*.py',
+            'tools/CommonSync/*.py']  # 2026-11-19 VMO 자가진단 개선안 20261119215147_SELF(사용자 승인): run_verify.py 가 tools/CommonSync/screen_sync.py 를 직접 실행하는데 감시 밖이었다(inventory_check GATE_SCOPE · 추가 시점 컴파일 0 · 미정의 이름 0)
+            # 2026-11-13 전수 점검: CheckList 체인이 직접 부르는 asis_live_screen.py(diff 단계)·문서 단계가 import 하는 tools/Docs 가 감시 밖이었다(추가 시점 컴파일 0 · 미정의 이름 0)
+JS_GLOBS = ['tools/Harness/*.js', 'tools/Harness/lib/*.js', 'tools/E2E/*.js', 'tools/E2E/lib/*.js',
+            'tools/VibeManager/*.js', 'tools/VibeManager/test/*.js']  # 2026-11-19 VMO 자가진단 Q4: VM(VS Code 확장) JS 가 구문 게이트 밖이었다(추가 시점 구문 오류 0)
+TS_GLOBS = ['tools/E2E/lib/*.ts', 'tools/E2E/fixtures/*.ts', 'Doc/e2e/specs/_*.spec.ts', 'Doc/e2e/specs/eg_*.spec.ts']
+DATA_GLOBS = ['tools/Harness/rules/*.csv', 'tools/VibeManager/*.json', 'tools/E2E/e2e.config.json']
+SPEC_WATCH = ['Doc/e2e/specs/_verify.spec.ts', 'Doc/e2e/specs/_trace.spec.ts', 'Doc/e2e/specs/_snap.spec.ts', 'Doc/e2e/specs/eg_popup.spec.ts',
+              'tools/Harness/verify/judge.py', 'tools/Harness/verify/run_verify.py', 'tools/Harness/verify/mapping_trace.py', 'tools/E2E/lib/nscm.ts', 'tools/E2E/lib/probe.ts']
+CTRL = re.compile('[\x00-\x08\x0b\x0c\x0e-\x1f]')
+MODULE_DUNDERS = {'__file__', '__name__', '__doc__', '__builtins__', '__spec__', '__package__', '__loader__', '__path__', '__debug__', '__class__', '__annotations__', '__dict__'}
+
+
+def files(globs):
+    out = []
+    for g in globs:
+        out += [p for p in glob.glob(os.path.join(ROOT, g)) if os.path.isfile(p) and '.bak' not in os.path.basename(p)]
+    return sorted(set(out))
+
+
+def rel(p):
+    return os.path.relpath(p, ROOT).replace(os.sep, '/')
+
+
+def read(p):
+    with open(p, encoding='utf-8-sig', errors='replace') as f:
+        return f.read()
+
+
+# ── PY_UNDEF: 모듈 전역에서 찾을 수 없는 이름(함수·컴프리헨션 안 참조 포함) ──────────────────────────
+def undefined_names(src, filename='<src>'):
+    """[(name, 첫 줄)] — 어디에도 정의되지 않은 전역 참조. from x import * 가 있으면 판정 불가로 빈 목록."""
+    if re.search(r'^\s*from\s+\S+\s+import\s+\*', src, re.M):
+        return []
+    top = symtable.symtable(src, filename, 'exec')
+    defined = set(dir(builtins)) | MODULE_DUNDERS
+    for s in top.get_symbols():
+        if s.is_assigned() or s.is_imported() or s.is_namespace():
+            defined.add(s.get_name())
+    used = set()
+
+    def walk(t, is_top):
+        for s in t.get_symbols():
+            n = s.get_name()
+            if not is_top and s.is_declared_global() and s.is_assigned():
+                defined.add(n)  # 함수 안 global x; x = … 는 모듈 전역을 만든다
+            if is_top:
+                if s.is_referenced() and not (s.is_assigned() or s.is_imported() or s.is_namespace()):
+                    used.add(n)
+            elif s.is_global() and s.is_referenced() and not s.is_assigned():
+                used.add(n)
+        for c in t.get_children():
+            walk(c, False)
+    walk(top, True)
+    miss = sorted(n for n in used if n not in defined)
+    out = []
+    lines = src.split('\n')
+    for n in miss:
+        rx = re.compile(r'(?<![\w.])' + re.escape(n) + r'(?!\w)')
+        ln = next((i + 1 for i, l in enumerate(lines) if rx.search(l.split('#')[0])), 0)
+        out.append((n, ln))
+    return out
+
+
+def chk_py():
+    comp, undef = [], []
+    for p in files(PY_GLOBS):
+        src = read(p)
+        try:
+            compile(src, p, 'exec')
+        except SyntaxError as e:
+            comp.append(f"{rel(p)}:{e.lineno} {e.msg}"); continue
+        try:
+            for n, ln in undefined_names(src, p):
+                undef.append(f"{rel(p)}:{ln} 미정의 이름 '{n}'")
+        except Exception as e:  # noqa: BLE001 — 분석 실패는 숨기지 않고 실패로 올린다
+            undef.append(f"{rel(p)}:0 미정의 이름 분석 실패 {str(e)[:80]}")
+    return comp, undef
+
+
+def chk_ctrl():
+    out = []
+    for p in files(PY_GLOBS + JS_GLOBS + TS_GLOBS + DATA_GLOBS):
+        for i, l in enumerate(read(p).split('\n'), 1):
+            m = CTRL.search(l)
+            if m:
+                out.append(f"{rel(p)}:{i} 제어 문자 0x{ord(m.group(0)):02x}"); break
+    return out
+
+
+def chk_js():
+    out = []
+    for p in files(JS_GLOBS):
+        r = subprocess.run(['node', '--check', p], capture_output=True, text=True, encoding='utf-8', errors='replace')
+        if r.returncode:
+            msg = next((l for l in (r.stderr or '').split('\n') if 'Error' in l), (r.stderr or '').strip().split('\n')[-1] if r.stderr else '')
+            out.append(f"{rel(p)} {msg[:120]}")
+    return out
+
+
+def chk_spec_size(prev):
+    """감시 파일이 직전 기록보다 10% 넘게 줄면 실패(치환 사고 감지). 반환 (실패 목록, 현재 크기표)"""
+    cur, out = {}, []
+    for r in SPEC_WATCH:
+        p = os.path.join(ROOT, r)
+        if not os.path.isfile(p):
+            out.append(f"{r} 파일 없음"); continue
+        n = os.path.getsize(p); cur[r] = n
+        was = (prev or {}).get(r)
+        if was and n < was * 0.9:
+            out.append(f"{r} 크기 {was:,} → {n:,}바이트({round((1 - n / was) * 100)}% 감소)")
+    return out, cur
+
+
+def chk_tsc():
+    r = subprocess.run('npx tsc --noEmit -p .', cwd=E2E, shell=True, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=900)
+    errs = []
+    for l in ((r.stdout or '') + (r.stderr or '')).split('\n'):
+        m = re.match(r'^(.*?)\((\d+),\d+\): error (TS\d+): (.*)$', l.strip())
+        if m:
+            errs.append(f"{os.path.basename(m.group(1))} {m.group(3)} {m.group(4)[:100]}")  # 줄 번호는 기준선 비교에서 뺀다(코드 추가로 밀림)
+    return errs
+
+
+def chk_selftest_js():
+    out, n = [], 0
+    for p in sorted(glob.glob(os.path.join(E2E, 'lib', '*.selftest.js'))):
+        n += 1
+        try:
+            r = subprocess.run(['node', p], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=300, cwd=E2E)
+            if r.returncode:
+                tail = [l for l in ((r.stdout or '') + (r.stderr or '')).strip().split('\n') if l.strip()][-1:] or ['']
+                out.append(f"{os.path.basename(p)} exit {r.returncode} · {tail[0][:100]}")
+        except subprocess.TimeoutExpired:
+            out.append(f"{os.path.basename(p)} 300초 초과")
+    return out, n
+
+
+GEN_SMOKE = os.path.join(ROOT, 'tools', 'Harness', 'test', 't_gen_check_smoke.js')
+
+
+def chk_gen_smoke():
+    """2026-11-26 개선안 20261126164445_VISION_4: 생성기 gen.js, 게이트 check.js 를 기준 화면으로 임시 폴더에서 돌린다(nscm-fe, 저장소 Doc/gen 에 쓰지 않음)."""
+    if not os.path.exists(GEN_SMOKE):
+        return ['t_gen_check_smoke.js 없음'], {'at': time.strftime('%Y-%m-%d %H:%M:%S'), 'result': 'FAIL', 'seconds': 0}
+    t0 = time.time()
+    try:
+        r = subprocess.run(['node', GEN_SMOKE], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=600, cwd=ROOT)
+        lines = [l for l in ((r.stdout or '') + (r.stderr or '')).split('\n') if l.strip()]
+        out = [l.strip()[5:160] for l in lines if l.startswith('FAIL ')]
+        if r.returncode and not out:
+            out = [f"exit {r.returncode} · {(lines[-1] if lines else '')[:120]}"]
+    except subprocess.TimeoutExpired:
+        out = ['600초 초과']
+    meta = {'at': time.strftime('%Y-%m-%d %H:%M:%S'), 'result': 'FAIL' if out else 'PASS', 'seconds': round(time.time() - t0, 1)}
+    return out, meta
+
+
+def chk_selftest_py():
+    """--selftest 를 __main__ 에서 받는 순수 판정 selftest 만(DB 접속 없이 끝나는 것). DB 가 필요한 것은 실행하지 않고 목록에 '미실행'으로 남긴다."""
+    out, ran, skipped = [], 0, []
+    for p in files(['tools/Harness/verify/*.py']):
+        src = read(p)
+        if not re.search(r"sys\.argv\[1\]\s*==\s*'--selftest'|'--selftest'\s+in\s+sys\.argv|'--selftest'\s+in\s+a", src) or os.path.abspath(p) == os.path.abspath(__file__):
+            continue
+        m = re.search(r'def selftest\(\)[\s\S]*?(?=\ndef |\nif __name__)', src)
+        if not m or re.search(r'\bconnect\(', m.group(0)):
+            skipped.append(os.path.basename(p)); continue
+        ran += 1
+        try:
+            r = subprocess.run([sys.executable, p, '--selftest'], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=300, cwd=ROOT)
+            if r.returncode:
+                tail = [l for l in ((r.stdout or '') + (r.stderr or '')).strip().split('\n') if l.strip()][-1:] or ['']
+                out.append(f"{os.path.basename(p)} exit {r.returncode} · {tail[0][:100]}")
+        except subprocess.TimeoutExpired:
+            out.append(f"{os.path.basename(p)} 300초 초과")
+    return out, ran, skipped
+
+
+def chk_rule_registry():
+    """2026-11-13 전수 점검: TO-BE 룰 원장 무결성(tobe_rule_registry.py --check · 읽기 전용) — 코드에 룰 번호(CR·DD…)가 있는데 원장에 없으면 실패.
+    종전엔 손으로만 돌려 새 룰 번호가 원장에 안 올라가도 드러나지 않았다. 실행 자체가 안 되면 숨기지 않고 실패로 올린다."""
+    p = os.path.join(HERE, 'tobe_rule_registry.py')
+    try:
+        r = subprocess.run([sys.executable, p, '--check'], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=300, cwd=ROOT)
+    except subprocess.TimeoutExpired:
+        return ['tobe_rule_registry.py --check 300초 초과']
+    if r.returncode:
+        tail = [l for l in ((r.stdout or '') + (r.stderr or '')).strip().split('\n') if l.strip()][-1:] or ['']
+        return [f"tobe_rule_registry.py --check exit {r.returncode} · {tail[0][:200]}"]
+    return []
+
+
+def fingerprint():
+    h = hashlib.sha1()
+    for p in files(PY_GLOBS + JS_GLOBS + TS_GLOBS):
+        st = os.stat(p); h.update(f"{rel(p)}|{st.st_size}|{int(st.st_mtime)}\n".encode())
+    return h.hexdigest()
+
+
+def load(p, d):
+    try:
+        return json.load(open(p, encoding='utf-8'))
+    except (OSError, ValueError):
+        return d
+
+
+def selftest():
+    cases = [
+        ('정의 안 된 전역(함수 안)', "import os\ndef f():\n    return os.path.join(DOC, 'x')\n", ['DOC']),
+        ('정의된 전역', "import os\nDOC = 1\ndef f():\n    return DOC\n", []),
+        ('함수 안 global 대입', "def a():\n    global G\n    G = 1\ndef b():\n    return G\n", []),
+        ('컴프리헨션 안 미정의', "def f(xs):\n    return [y for x in xs if x in ONLY]\n", ['ONLY', 'y']),
+        ('지역·매개변수·내장', "def f(a):\n    b = len(a)\n    return sorted([b])\n", []),
+        ('모듈 수준 미정의', "print(UNDEFINED_X)\n", ['UNDEFINED_X']),
+        ('try 안 import', "try:\n    import json as J\nexcept ImportError:\n    J = None\ndef f():\n    return J\n", []),
+    ]
+    bad = 0
+    for name, src, want in cases:
+        got = [n for n, _ in undefined_names(src)]
+        ok = got == want
+        bad += 0 if ok else 1
+        print(f"{'OK ' if ok else 'NG '} {name} → {got}{'' if ok else ' (기대 ' + str(want) + ')'}")
+    c1 = bool(CTRL.search('a' + chr(8) + 'b')) and not CTRL.search('탭\t줄\r\n한글')
+    print(f"{'OK ' if c1 else 'NG '} 제어 문자: 0x08 검출 · 탭/CR/LF/한글 통과"); bad += 0 if c1 else 1
+    f, _ = chk_spec_size({SPEC_WATCH[0]: 10 ** 9})
+    c2 = any(SPEC_WATCH[0] in x for x in f)
+    print(f"{'OK ' if c2 else 'NG '} 크기 급감 검출"); bad += 0 if c2 else 1
+    print(f"{len(cases) + 2 - bad}/{len(cases) + 2}")
+    return 1 if bad else 0
+
+
+def main():
+    a = set(sys.argv[1:])
+    if '--selftest' in a:
+        return selftest()
+    prev = load(OUT, {})
+    base = load(BASELINE, {})
+    fp = fingerprint()
+    full = '--quick' not in a
+    if '--if-changed' in a:
+        full = not (prev.get('full_pass_fingerprint') == fp)
+    t0 = time.time()
+    res = {}
+    comp, undef = chk_py()
+    res['PY_COMPILE'] = comp; res['PY_UNDEF'] = undef
+    res['CTRL_CHARS'] = chk_ctrl()
+    res['JS_SYNTAX'] = chk_js()
+    size_fail, sizes = chk_spec_size(prev.get('sizes'))
+    res['SPEC_SIZE'] = size_fail
+    meta = {}
+    if full:
+        res['TSC'] = chk_tsc()
+        res['SELFTEST_JS'], meta['selftest_js_ran'] = chk_selftest_js()
+        res['SELFTEST_PY'], meta['selftest_py_ran'], meta['selftest_py_skipped_db'] = chk_selftest_py()
+        res['RULE_REGISTRY'] = chk_rule_registry()
+        res['GEN_SMOKE'], meta['gen_smoke'] = chk_gen_smoke()
+    if '--update-baseline' in a:
+        json.dump({k: sorted(v) for k, v in res.items() if k != 'SPEC_SIZE'}, open(BASELINE, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+        print(f"[selfcheck] 기준선 기록 → {rel(BASELINE)} · " + ' · '.join(f"{k} {len(v)}" for k, v in res.items() if k != 'SPEC_SIZE'))
+        base = load(BASELINE, {})
+    new = {k: [x for x in v if x not in set(base.get(k, []))] for k, v in res.items()}
+    n_new = sum(len(v) for v in new.values())
+    out = {'at': time.strftime('%Y-%m-%d %H:%M:%S'), 'mode': 'full' if full else 'quick', 'seconds': round(time.time() - t0, 1), 'fingerprint': fp,
+           'result': 'FAIL' if n_new else 'PASS', 'counts': {k: {'found': len(v), 'new': len(new[k])} for k, v in res.items()}, 'new': new, 'meta': meta,
+           # 크기표는 통과했을 때만 갱신 — 실패(급감)한 크기를 새 기준으로 삼지 않는다
+           'sizes': sizes if not size_fail else (prev.get('sizes') or sizes),
+           'full_pass_fingerprint': fp if (full and not n_new) else prev.get('full_pass_fingerprint', '')}
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    json.dump(out, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    print(f"[selfcheck] {out['mode']} · {out['seconds']}초 · " + ' · '.join(f"{k} {c['found']}(신규 {c['new']})" for k, c in out['counts'].items())
+          + (f" · selftest JS {meta.get('selftest_js_ran')}개·PY {meta.get('selftest_py_ran')}개 실행(DB 필요 {len(meta.get('selftest_py_skipped_db', []))}개 미실행)" if full else ''))
+    for k, v in new.items():
+        for x in v[:20]:
+            print(f"  [신규 실패] {k}: {x}")
+    print(f"[selfcheck] {'FAIL — 실행 투입 금지(위 항목 수정 뒤 다시)' if n_new else 'PASS'} → {rel(OUT)}")
+    return 1 if n_new else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -16,24 +16,37 @@
      "doc": "",
      "summary": "workbench.js 7일 반복 수정 76건의 결함 재발 묶음은 실행 중지 기록 9건이고, 중지 길 7곳이 각자 일부만 기록하며 읽는 쪽이 시각 차이로 중지를 추정하는 설계가 공통 원인임. 나머지 절은 사용자 요청 화면 기능 72절과 고정 문구 정리 6절이고 결함 재발이 아님. 중지 기록을 실행 번호 기준 함수 하나로 모으는 안(fix)과 S9 집계를 결함 수정 절만 세는 안(core)을 냄.",
      "log": ".vibe\\logs\\2026-11-22T00-04-21_claude_orch.log"
+    },
+    {
+     "at": "2026-11-26T16:40:34+09:00",
+     "ms": 1795678834413,
+     "level": "L3",
+     "proposal": "20261126164030_SELF",
+     "proposals": [
+      "20261126164030_SELF",
+      "20261126164033_SELF"
+     ],
+     "doc": "",
+     "summary": "workbench.js 결함 55건 중 29건은 사용자 지시를 같은 방식으로 반영한 절(S13 규칙 적용)이고 그중 16건은 다른 파일을 고친 절임. 공통 원인은 '개선안 _SELF 승인' 문구를 결함 표지로 쓰는 분류 규칙(orch-history.js:94)과, 변경 설명에 나온 파일 이름까지 고친 파일로 세는 집계(orch-history.js:126~127)임. 분류에 S13 규칙 적용 종류를 두는 안(core)과 고친 파일을 '파일 <목록>.' 표시로만 세는 안(fix)을 냄.",
+     "log": ".vibe\\logs\\2026-11-26T16-35-55_claude_orch.log"
     }
    ],
    "level": "L3",
    "kind": "edits",
-   "title": "workbench.js 7일 결함 수정 55건 · 요청 48건, 문구 7건(표시만)",
-   "why": "결함 수정 55건 ≥ 4(상위 3개) · 요청 48건, 문구 7건(표시만)",
+   "title": "workbench.js 7일 결함 수정 31건 · 요청 54건, 문구 6건(표시만)",
+   "why": "결함 수정 31건 ≥ 4(상위 3개) · 요청 54건, 문구 6건(표시만) · 구조 개선안 20261126164030_SELF 효력(2026-11-26 16:56) 뒤 재발 없음(효력 뒤 근거 0건 < 4), L4 올림 보류",
    "evidence": [
     {
      "src": "S9",
-     "what": "workbench.js 7일 안 변경 기록 55건",
-     "detail": "2026-11-20 부터, 전체 141건, 세션 수정 432건",
-     "defect": 55,
-     "request": 48,
-     "style": 7
+     "what": "workbench.js 7일 안 변경 기록 31건",
+     "detail": "2026-11-17 부터, 전체 132건, 세션 수정 465건",
+     "defect": 31,
+     "request": 54,
+     "style": 6
     }
    ],
-   "lastSeenAt": "2026-11-26T16:33:13+09:00",
-   "lastSeenMs": 1795678393507,
+   "lastSeenAt": "2026-11-27T09:50:34+09:00",
+   "lastSeenMs": 1795740634156,
    "status": "open",
    "resolvedAt": "2026-11-25T00:09:36+09:00"
   },
@@ -254,11 +267,25 @@
   "L3|usercheck|U21": {
    "key": "L3|usercheck|U21",
    "firstAt": "2026-11-20T18:35:19+09:00",
-   "runs": [],
+   "runs": [
+    {
+     "at": "2026-11-26T16:35:55+09:00",
+     "ms": 1795678555569,
+     "level": "L3",
+     "proposal": "20261126163554_SELF",
+     "proposals": [
+      "20261126163554_SELF",
+      "20261126163555_SELF"
+     ],
+     "doc": "",
+     "summary": "U21 묶음의 반영 실패 5건(20261124064956_SELF_3, 20261124064957_SELF_3, 20261124064958_SELF_3, 20261124232611_SELF, 20261125005937_SELF)은 반영 지시문이 반영 뒤 검사 목록과 고칠 수 있는 파일 범위를 AI에 다르게 알려서 생김. 문장 규칙 검사는 2026-11-23 반영 뒤 검사에 들어갔으나 지시문(orch-improve.js:366)은 구문, run_all, 정의 정합만 적어 4건이 문장 규칙 위반으로 되돌려졌고, 사용자 지시 규칙 안과 L4 단계 안은 고칠 파일에 시험 파일을 넣지 않아 2건이 시험을 고치지 못함. 고친 안 5건은 기호 제거와 시험 파일 추가로 모두 반영 완료됐으므로, 지시문에 검사 목록을 검사 ",
+     "log": ".vibe\\logs\\2026-11-26T16-33-13_claude_orch.log"
+    }
+   ],
    "level": "L3",
    "kind": "usercheck",
    "title": "사용자 지적 U21 이 고친 뒤 다시 걸림",
-   "why": "반영 완료 1건 효력(2026-11-21 01:59) 뒤 2026-11-26 13:04 재발 · 감지기 개선안 1건 제외",
+   "why": "반영 완료 1건 효력(2026-11-21 01:59) 뒤 2026-11-26 13:04 재발 · 감지기 개선안 1건 제외 · 구조 개선안 20261126163554_SELF 효력(2026-11-26 16:54) 뒤 재발 없음(효력 뒤 근거 0건 < 1), L4 올림 보류",
    "evidence": [
     {
      "src": "S13",
@@ -273,10 +300,10 @@
      "proposal": "20261120225006_SELF"
     }
    ],
-   "lastSeenAt": "2026-11-26T16:33:13+09:00",
-   "lastSeenMs": 1795678393507,
-   "status": "open",
-   "resolvedAt": "2026-11-21T18:26:28+09:00"
+   "lastSeenAt": "2026-11-26T18:21:37+09:00",
+   "lastSeenMs": 1795684897873,
+   "status": "resolved",
+   "resolvedAt": "2026-11-26T18:23:11+09:00"
   },
   "L4|useraxis|vmoCadence": {
    "key": "L4|useraxis|vmoCadence",
@@ -529,25 +556,39 @@
   "L3|edits|orchestra.js": {
    "key": "L3|edits|orchestra.js",
    "firstAt": "2026-11-20T21:06:08+09:00",
-   "runs": [],
+   "runs": [
+    {
+     "at": "2026-11-26T16:43:22+09:00",
+     "ms": 1795679002958,
+     "level": "L3",
+     "proposal": "20261126164321_SELF",
+     "proposals": [
+      "20261126164321_SELF",
+      "20261126164322_SELF"
+     ],
+     "doc": "",
+     "summary": "orchestra.js 결함 수정 27건 중 14건은 결함이 아니라 S13 사용자 지시 규칙(R4~R179)을 퍼뜨린 절입니다. orch-history.js:94가 '개선안 <id>_SELF 승인' 문구만 보고 이 절들을 defect로 셉니다. 같은 규칙이 웹뷰 파일마다 따로 고쳐지는 이유는 웹뷰 6개가 마크다운 렌더, Ctrl+A 범위, 경계 막대, 글래스 CSS를 각자 복사해 갖고 있고 orch-userrule.js가 파일마다 개선안을 내기 때문입니다.",
+     "log": ".vibe\\logs\\2026-11-26T16-40-34_claude_orch.log"
+    }
+   ],
    "level": "L3",
    "kind": "edits",
-   "title": "orchestra.js 7일 결함 수정 27건 · 요청 30건, 문구 2건(표시만)",
-   "why": "결함 수정 27건 ≥ 4(상위 3개) · 요청 30건, 문구 2건(표시만)",
+   "title": "orchestra.js 7일 결함 수정 11건 · 요청 38건, 문구 2건(표시만)",
+   "why": "결함 수정 11건 ≥ 4(상위 3개) · 요청 38건, 문구 2건(표시만) · 구조 개선안 20261126164321_SELF 효력(2026-11-26 16:56) 뒤 재발 없음(효력 뒤 근거 0건 < 4), L4 올림 보류",
    "evidence": [
     {
      "src": "S9",
-     "what": "orchestra.js 7일 안 변경 기록 27건",
-     "detail": "2026-11-20 부터, 전체 63건, 세션 수정 114건",
-     "defect": 27,
-     "request": 30,
+     "what": "orchestra.js 7일 안 변경 기록 11건",
+     "detail": "2026-11-20 부터, 전체 63건, 세션 수정 123건",
+     "defect": 11,
+     "request": 38,
      "style": 2
     }
    ],
-   "lastSeenAt": "2026-11-26T16:33:13+09:00",
-   "lastSeenMs": 1795678393507,
-   "status": "open",
-   "resolvedAt": "2026-11-26T00:15:32+09:00"
+   "lastSeenAt": "2026-11-26T19:21:17+09:00",
+   "lastSeenMs": 1795688477167,
+   "status": "resolved",
+   "resolvedAt": "2026-11-26T20:54:21+09:00"
   },
   "L4|struct|applyfail|doc_style.py": {
    "key": "L4|struct|applyfail|doc_style.py",
@@ -965,9 +1006,21 @@
    ],
    "level": "L4",
    "kind": "useraxis",
-   "title": "같은 축 효력 뒤 근거 지적 1건 · 1판 초과 5건(checklistTime)",
-   "why": "같은 목적 개선안 20261123000419_VISION 효력(2026-11-23 15:58) 뒤 지적 1건(기준 3) · 효력 뒤 실행 6건 중 1판 초과 5건(기준 1) · 효력 전 지적 3건 제외",
+   "title": "같은 축 사용자 지적 3건(checklistTime) · 구현 대기",
+   "why": "목적 원장 checklistTime 남은 구현 항목 3건 · 남은 구현 중 측정은 개념 판정 근거로 쓰지 않음, L4 진단 안 함",
    "evidence": [
+    {
+     "src": "user",
+     "what": "U24 2026-11-20 23:44 unverifiedResolveIncomplete",
+     "detail": "현재 작업중인 checklist에 1차 30개 미검증 을 한번에 처리하지 못한 사유 찾아서 보완해주세요",
+     "ms": 1795185840000
+    },
+    {
+     "src": "user",
+     "what": "U25 2026-11-20 23:48 partialRemeasureSlow",
+     "detail": "부분 재측정이 1차보다 시간이 더 많이 소요된 사유도 보완해주세요",
+     "ms": 1795186080000
+    },
     {
      "src": "user",
      "what": "U30 2026-11-25 02:53 remeasureWithoutResolve",
@@ -975,49 +1028,15 @@
      "ms": 1795542780000
     },
     {
-     "src": "run",
-     "what": "CheckList SCP0005 1판 114분(목표 30분) 2026-11-25 03:19",
-     "detail": "runId SCP0005_1795535760277 · 체인 전체 143분",
-     "ms": 1795544351398
-    },
-    {
-     "src": "run",
-     "what": "CheckList SSP0005 1판 없음 · 체인 전체 143분(목표 30분) 2026-11-25 03:19",
-     "detail": "runId SSP0005_1795535760347 · 체인 전체 143분",
-     "ms": 1795544359387
-    },
-    {
-     "src": "run",
-     "what": "CheckList SSP0014 1판 84분(목표 30분) 2026-11-25 03:19",
-     "detail": "runId SSP0014_1795535760369 · 체인 전체 143분",
-     "ms": 1795544364069
-    },
-    {
-     "src": "run",
-     "what": "CheckList SCP0028 1판 80분(목표 30분) 2026-11-25 03:19",
-     "detail": "runId SCP0028_1795535760315 · 체인 전체 143분",
-     "ms": 1795544367932
-    },
-    {
-     "src": "run",
-     "what": "CheckList SCP0005 1판 94분(목표 30분) 2026-11-26 02:41",
-     "detail": "runId SCP0005_1795608394751 · 체인 전체 335분",
-     "ms": 1795628481618
-    },
-    {
-     "src": "applied",
-     "what": "20261123000419_VISION 개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판)과 보완 회차 분리 효력 2026-11-23 15:58",
-     "proposal": "20261123000419_VISION"
-    },
-    {
-     "src": "applied",
-     "what": "20261121120359_VISION 개념 재정립: CheckList 재측정 단위(미해결 행의 규칙 전체 → 바뀐 검사기가 판정하는 행과 그 행을 효력 2026-11-23 15:48",
-     "proposal": "20261121120359_VISION"
+     "src": "ledger",
+     "what": "목적 원장 checklistTime: 행 단위 해소 + D0~D5 중복 제거(측정 1회, 해소 원장 고정, row_run 으로 그 행만 다시 잼, 효력 2026-11-26 16:29 · 남은 구현 3건(D2, D3, D4)"
     }
    ],
-   "lastSeenAt": "2026-11-26T16:33:13+09:00",
-   "lastSeenMs": 1795678393507,
-   "status": "open"
+   "lastSeenAt": "2026-11-27T09:50:34+09:00",
+   "lastSeenMs": 1795740634156,
+   "status": "wait",
+   "statusLabel": "구현 대기: 남은 구현 3건(D2, D3, D4)",
+   "waitAt": "2026-11-27T09:50:34+09:00"
   },
   "L4|useraxis|reloadResume": {
    "key": "L4|useraxis|reloadResume",
@@ -1113,48 +1132,75 @@
   "L3|edits|orch-usercheck.js": {
    "key": "L3|edits|orch-usercheck.js",
    "firstAt": "2026-11-23T18:04:38+09:00",
-   "runs": [],
+   "runs": [
+    {
+     "at": "2026-11-26T18:30:42+09:00",
+     "ms": 1795685442113,
+     "level": "L3",
+     "proposal": "20261126183040_SELF",
+     "proposals": [
+      "20261126183040_SELF",
+      "20261126183041_SELF"
+     ],
+     "doc": "",
+     "summary": "orch-usercheck.js 7일 결함 수정 22건 가운데 13건은 감지기를 새로 추가한 절(U13~U29)임. orch-history.js:96 이 '개선안 _SELF 승인' 문구만 보고 결함으로 세고, 진단 사다리 orch-ladder.js:36 proposalKind 는 같은 개선안을 '감지기 개선안'으로 빼서 두 집계 기준이 다름. 남은 결함 9건 가운데 확인한 3건은 사건에 처리 담당 기록이 없어서 U3 판정(orch-usercheck.js:103~127)이 처리 경로가 새로 생길 때마다 예외 조건을 덧붙인 수정이고, 나머지 6건의 원인은 미확인임.",
+     "log": ".vibe\\logs\\2026-11-26T18-27-21_claude_orch.log"
+    }
+   ],
    "level": "L3",
    "kind": "edits",
-   "title": "orch-usercheck.js 7일 결함 수정 24건 · 요청 6건, 문구 2건(표시만)",
-   "why": "결함 수정 24건 ≥ 4(상위 3개) · 요청 6건, 문구 2건(표시만)",
+   "title": "orch-usercheck.js 7일 결함 수정 22건 · 요청 18건, 문구 2건(표시만)",
+   "why": "결함 수정 22건 ≥ 4(상위 3개) · 요청 18건, 문구 2건(표시만) · 구조 개선안 20261126183040_SELF 효력(2026-11-26 18:43) 뒤 재발 없음(효력 뒤 근거 0건 < 4), L4 올림 보류",
    "evidence": [
     {
      "src": "S9",
-     "what": "orch-usercheck.js 7일 안 변경 기록 24건",
-     "detail": "2026-11-20 부터, 전체 32건, 세션 수정 92건",
-     "defect": 24,
-     "request": 6,
+     "what": "orch-usercheck.js 7일 안 변경 기록 22건",
+     "detail": "2026-11-20 부터, 전체 43건, 세션 수정 108건",
+     "defect": 22,
+     "request": 18,
      "style": 2
     }
    ],
-   "lastSeenAt": "2026-11-26T15:04:20+09:00",
-   "lastSeenMs": 1795673060272,
-   "status": "resolved",
+   "lastSeenAt": "2026-11-27T09:50:34+09:00",
+   "lastSeenMs": 1795740634156,
+   "status": "open",
    "resolvedAt": "2026-11-26T15:23:23+09:00"
   },
   "L3|edits|t_orch_usercheck.js": {
    "key": "L3|edits|t_orch_usercheck.js",
    "firstAt": "2026-11-23T18:04:38+09:00",
-   "runs": [],
+   "runs": [
+    {
+     "at": "2026-11-26T18:33:14+09:00",
+     "ms": 1795685594564,
+     "level": "L3",
+     "proposal": "20261126183313_SELF",
+     "proposals": [
+      "20261126183313_SELF"
+     ],
+     "doc": "",
+     "summary": "t_orch_usercheck.js 결함 20건은 orch-usercheck.js 결함 22건과 같은 변경 절을 시험 파일 이름으로 한 번 더 센 값이다. 집계가 시험 파일을 독립 파일로 세어 같은 변경이 묶음 2개로 올라오고(orch-history.js:313), 감지기 추가 절을 결함으로 셈(orch-history.js:96)이 이 숫자를 키운다. 후자는 형제 묶음 개선안 20261126183040_SELF 가 다루므로, 시험 파일 중복 집계만 구조 개선안으로 낸다.",
+     "log": ".vibe\\logs\\2026-11-26T18-30-42_claude_orch.log"
+    }
+   ],
    "level": "L3",
    "kind": "edits",
-   "title": "t_orch_usercheck.js 7일 결함 수정 18건 · 요청 1건, 문구 0건(표시만)",
-   "why": "결함 수정 18건 ≥ 4(상위 3개) · 요청 1건, 문구 0건(표시만)",
+   "title": "t_orch_usercheck.js 7일 결함 수정 23건 · 요청 5건, 문구 0건(표시만)",
+   "why": "결함 수정 23건 ≥ 4(상위 3개) · 요청 5건, 문구 0건(표시만) · 구조 개선안 20261126183313_SELF 효력(2026-11-26 18:53) 뒤 재발 없음(효력 뒤 근거 1건 < 4), L4 올림 보류",
    "evidence": [
     {
      "src": "S9",
-     "what": "t_orch_usercheck.js 7일 안 변경 기록 18건",
-     "detail": "2026-11-20 부터, 전체 19건, 세션 수정 48건",
-     "defect": 18,
-     "request": 1,
+     "what": "t_orch_usercheck.js 7일 안 변경 기록 23건",
+     "detail": "2026-11-20 부터, 전체 29건, 세션 수정 64건",
+     "defect": 23,
+     "request": 5,
      "style": 0
     }
    ],
-   "lastSeenAt": "2026-11-25T09:17:18+09:00",
-   "lastSeenMs": 1795565838125,
-   "status": "resolved",
-   "resolvedAt": "2026-11-25T09:28:50+09:00"
+   "lastSeenAt": "2026-11-27T09:50:34+09:00",
+   "lastSeenMs": 1795740634156,
+   "status": "open",
+   "resolvedAt": "2026-11-26T18:55:11+09:00"
   },
   "L2|usercheck-first|U14": {
    "key": "L2|usercheck-first|U14",
@@ -1190,25 +1236,13 @@
    "level": "L2",
    "kind": "usercheck-first",
    "title": "사용자 지적 U3 첫 감지(동작 수정 없음)",
-   "why": "감지기 개선안 1건 효력(2026-11-23 10:55) 뒤 2026-11-26 16:22 첫 감지 · 동작 수정 개선안 반영 없음",
+   "why": "감지기 개선안 1건 효력(2026-11-23 10:55) 뒤 2026-11-26 18:08 첫 감지 · 동작 수정 개선안 반영 없음",
    "evidence": [
     {
      "src": "S13",
-     "what": "U3 조치 기록 없는 열린 사건 1건",
-     "detail": "20261123_115110_R12_ALL R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 12건 (4592분)",
-     "ms": 1795677768781,
-     "key": "S13|U3|idleInc"
-    },
-    {
-     "src": "detector",
-     "what": "20261122230715_SELF U3 조치 없는 열린 사건 판정에서 U3 자신이 올린 R12 사건 제외 효력 2026-11-23 10:55",
-     "proposal": "20261122230715_SELF"
-    },
-    {
-     "src": "S13",
      "what": "U3 자동 반영 대상인데 반영 안 된 개선안 1건",
-     "detail": "20261126110059_VISION 개념 재정립: VMO 자가 보완의 효력 시점(창 다시 로드 기다림 → VMO 점검 모듈은 반영 즉시 다시 읽 (322분)",
-     "ms": 1795677768781,
+     "detail": "36분(최근 간격 x 2) 안에 반영 시도 기록 없음 · 최근 시도 2026-11-26 17:21 · 최근 간격 중앙값 18분(간격 72개 실측) · 줄 맨 앞 20261126153056_SELF_2 0분째 · 1. 20261126153056_SELF_2 사용자 지시 R241 같은 문제: tools/Harness/verify/mapping_tr (158분)",
+     "ms": 1795684111059,
      "key": "S13|U3|stuckProp"
     },
     {
@@ -1217,9 +1251,10 @@
      "proposal": "20261122230715_SELF"
     }
    ],
-   "lastSeenAt": "2026-11-26T16:33:13+09:00",
-   "lastSeenMs": 1795678393507,
-   "status": "open"
+   "lastSeenAt": "2026-11-26T18:21:37+09:00",
+   "lastSeenMs": 1795684897873,
+   "status": "resolved",
+   "resolvedAt": "2026-11-26T18:23:11+09:00"
   },
   "L2|usercheck-first|U24": {
    "key": "L2|usercheck-first|U24",
@@ -1278,25 +1313,39 @@
   "L3|edits|quick.json": {
    "key": "L3|edits|quick.json",
    "firstAt": "2026-11-25T22:29:02+09:00",
-   "runs": [],
+   "runs": [
+    {
+     "at": "2026-11-26T16:45:52+09:00",
+     "ms": 1795679152307,
+     "level": "L3",
+     "proposal": "20261126164547_SELF",
+     "proposals": [
+      "20261126164547_SELF",
+      "20261126164550_SELF"
+     ],
+     "doc": "",
+     "summary": "quick.json 결함 수정 25건은 두 가지가 겹친 결과다. 하나는 같은 체인 단계 정의(S8.unverified 수선 블록 등)를 체인마다 복사해 둔 구조라서 규칙 하나가 바뀔 때마다 9곳, 12곳을 고치고 일부를 빠뜨린 것이다. 다른 하나는 변경 기록 분류 규칙이 '개선안 …_SELF 승인' 문구만 있으면 이름 바꾸기, 기능 추가 같은 사용자 지시 반영 절(S13 15절)까지 결함으로 센 것이다.",
+     "log": ".vibe\\logs\\2026-11-26T16-43-23_claude_orch.log"
+    }
+   ],
    "level": "L3",
    "kind": "edits",
-   "title": "quick.json 7일 결함 수정 25건 · 요청 29건, 문구 0건(표시만)",
-   "why": "결함 수정 25건 ≥ 4(상위 3개) · 요청 29건, 문구 0건(표시만)",
+   "title": "quick.json 7일 결함 수정 26건 · 요청 29건, 문구 0건(표시만)",
+   "why": "결함 수정 26건 ≥ 4(상위 3개) · 요청 29건, 문구 0건(표시만) · 구조 개선안 20261126164547_SELF 효력(2026-11-26 17:48) 뒤 재발 없음(효력 뒤 근거 0건 < 4), L4 올림 보류",
    "evidence": [
     {
      "src": "S9",
-     "what": "quick.json 7일 안 변경 기록 25건",
-     "detail": "2026-11-20 부터, 전체 90건, 세션 수정 72건",
-     "defect": 25,
+     "what": "quick.json 7일 안 변경 기록 26건",
+     "detail": "2026-11-20 부터, 전체 91건, 세션 수정 72건",
+     "defect": 26,
      "request": 29,
      "style": 0
     }
    ],
-   "lastSeenAt": "2026-11-26T16:33:13+09:00",
-   "lastSeenMs": 1795678393507,
-   "status": "open",
-   "resolvedAt": "2026-11-26T01:14:37+09:00"
+   "lastSeenAt": "2026-11-26T18:21:37+09:00",
+   "lastSeenMs": 1795684897873,
+   "status": "resolved",
+   "resolvedAt": "2026-11-26T18:23:11+09:00"
   },
   "L3|applyfail|history.js": {
    "key": "L3|applyfail|history.js",
@@ -1326,8 +1375,125 @@
    "lastSeenMs": 1795650051028,
    "status": "resolved",
    "resolvedAt": "2026-11-26T08:49:53+09:00"
+  },
+  "L2|usercheck-first|U29": {
+   "key": "L2|usercheck-first|U29",
+   "firstAt": "2026-11-26T16:59:36+09:00",
+   "runs": [],
+   "level": "L2",
+   "kind": "usercheck-first",
+   "title": "사용자 지적 U29 첫 감지(동작 수정 없음)",
+   "why": "감지기 개선안 1건 효력(2026-11-26 16:29) 뒤 2026-11-26 17:01 첫 감지 · 동작 수정 개선안 반영 없음",
+   "evidence": [
+    {
+     "src": "S13",
+     "what": "U29 AS-IS 실측 로그인 계정 오류 SSP0020",
+     "detail": "Doc/asislive/SSP0020/run_20261126_165837/run.json 2026-11-26 17:01:01.283 상태 FAIL · 메뉴 0개(기준 50개 이상) · 사유 메뉴 목록이 비어 있음(메뉴 조회 실패·권한 없음) — 화면을 열 수 없음",
+     "ms": 1795680061283,
+     "key": "S13|U29|SSP0020|run_20261126_165837"
+    },
+    {
+     "src": "detector",
+     "what": "20261124230634_SELF_2 사용자 지적 감지기 추가 U29 asisLiveLogin: AS-IS 실측 중 오류 발생(로그인 계정이 남은 효력 2026-11-26 16:29",
+     "proposal": "20261124230634_SELF_2"
+    }
+   ],
+   "lastSeenAt": "2026-11-26T17:20:39+09:00",
+   "lastSeenMs": 1795681239559,
+   "status": "resolved",
+   "resolvedAt": "2026-11-26T17:21:42+09:00"
+  },
+  "L4|struct|usercheck|U21": {
+   "key": "L4|struct|usercheck|U21",
+   "firstAt": "2026-11-26T18:23:11+09:00",
+   "runs": [
+    {
+     "at": "2026-11-26T18:27:21+09:00",
+     "ms": 1795685241132,
+     "level": "L4",
+     "proposal": "20261126182719_VISION",
+     "proposals": [
+      "20261126182719_VISION"
+     ],
+     "doc": ".vibe/orch/vision/concept_20261126_L4_struct_usercheck_U21.md",
+     "summary": "U21 은 2026-11-26 16:54 에 구조 개선 20261126163554_SELF 가 반영됐습니다. 이 개선은 문장 규칙 게이트 때문에 되돌린 4건만 막았고, 18:17 재발(20261126153056_SELF)은 원인이 다른 실패입니다. 사람 판단 필요로 묶인 안을 autoApplyAll 이 자동 반영 대상으로 다시 넣었고, 대상 파일이 근거와 어긋난 채로 반영을 시작했습니다. 권장안은 반영 전에 대상과 근거가 맞는지 먼저 확인하는 단계를 두는 것입니다. 이 확인에서 막힌 안은 반영 실패로 세지 않고 VMO 가 대상을 다시 진단합니다.",
+     "log": ".vibe\\logs\\2026-11-26T18-25-11_claude_orch.log"
+    }
+   ],
+   "level": "L4",
+   "kind": "usercheck",
+   "title": "사용자 지적 U21 이 고친 뒤 다시 걸림",
+   "why": "구조 개선안 20261126163554_SELF 효력(2026-11-26 16:54) 뒤 3일 안에 같은 묶음 다시 참 · 효력 뒤 근거 1건 ≥ 1 · 반영 완료 1건 효력(2026-11-21 01:59) 뒤 2026-11-26 18:17 재발 · 감지기 개선안 1건 제외",
+   "evidence": [
+    {
+     "src": "S13",
+     "what": "U21 VMO 반영 실패 24시간 3건",
+     "detail": "원인 부류 검증 1, 문장 규칙 1, 실행 끊김 1 · 개선안 3개 · 마지막 2026-11-26 18:17 20261126153056_SELF '반영 실패. Claude exit 1 · 대상 파일 1개 복원 · 대상 밖 변경 Doc/verify/_llm_usage.csv, tools/Ha' · 20261124232611_SELF 2026-11-26 11:54, 20261125005937_SELF 2026-11-26 13:04, 20261126153056_SELF 2026-11-26 18:17",
+     "ms": 1795684661000,
+     "key": "S13|U21|count|20261126153056_SELF|1795684661000"
+    },
+    {
+     "src": "struct",
+     "what": "20261126163554_SELF 반영 지시문의 반영 뒤 검사 목록을 검사 정의에서 받아 쓰고, 대상 VM .js 의 반영 전 문장 규칙 위반 효력 2026-11-26 16:54",
+     "proposal": "20261126163554_SELF"
+    }
+   ],
+   "lastSeenAt": "2026-11-27T09:50:34+09:00",
+   "lastSeenMs": 1795740634156,
+   "status": "open",
+   "resolvedAt": "2026-11-27T01:05:30+09:00"
+  },
+  "L3|edits|user_checks.json": {
+   "key": "L3|edits|user_checks.json",
+   "firstAt": "2026-11-26T20:54:21+09:00",
+   "runs": [],
+   "level": "L3",
+   "kind": "edits",
+   "title": "user_checks.json 7일 결함 수정 13건 · 요청 6건, 문구 0건(표시만)",
+   "why": "결함 수정 13건 ≥ 4(상위 3개) · 요청 6건, 문구 0건(표시만)",
+   "evidence": [
+    {
+     "src": "S9",
+     "what": "user_checks.json 7일 안 변경 기록 8건",
+     "detail": "2026-11-20 부터, 전체 19건, 세션 수정 26건",
+     "defect": 13,
+     "request": 6,
+     "style": 0
+    }
+   ],
+   "lastSeenAt": "2026-11-26T20:54:21+09:00",
+   "lastSeenMs": 1795694061177,
+   "status": "resolved",
+   "resolvedAt": "2026-11-26T20:55:21+09:00"
+  },
+  "L2|usercheck-first|U27": {
+   "key": "L2|usercheck-first|U27",
+   "firstAt": "2026-11-26T21:43:13+09:00",
+   "runs": [],
+   "level": "L2",
+   "kind": "usercheck-first",
+   "title": "사용자 지적 U27 첫 감지(동작 수정 없음)",
+   "why": "감지기 개선안 1건 효력(2026-11-26 16:29) 뒤 2026-11-27 04:44 첫 감지 · 동작 수정 개선안 반영 없음",
+   "evidence": [
+    {
+     "src": "S13",
+     "what": "U27 AI 주간 한도 값 오래됨 28분",
+     "detail": "lastTry 2026-11-27 05:04 · lastOk 2026-11-27 04:44 · nextMs 2026-11-27 05:14 · 갱신 주기 10분 · 기준 20분(주기 2배, 최대 20분) 넘음 · 마지막 오류 로그인 토큰 만료(Claude Code 를 쓰면 갱신)",
+     "ms": 1795722292187,
+     "key": "S13|U27|aiUsage|stale"
+    },
+    {
+     "src": "detector",
+     "what": "20261124230634_SELF 사용자 지적 감지기 추가 U27 aiUsageStale: AI 주간 한도가 VM 기록 발생 때만 갱신되어 V 효력 2026-11-26 16:29",
+     "proposal": "20261124230634_SELF"
+    }
+   ],
+   "lastSeenAt": "2026-11-27T05:22:40+09:00",
+   "lastSeenMs": 1795724560422,
+   "status": "resolved",
+   "resolvedAt": "2026-11-27T05:23:40+09:00"
   }
  },
  "day": "2026-11-26",
- "dayRuns": 3
+ "dayRuns": 10
 }

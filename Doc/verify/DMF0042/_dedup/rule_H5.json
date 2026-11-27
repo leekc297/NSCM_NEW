@@ -1,0 +1,238 @@
+{
+ "rule_id": "H5",
+ "hash": "dc225cfcc64a3627",
+ "groups": [
+  {
+   "rows": [
+    "EG-38850f83"
+   ],
+   "why": "FORECAST_INFO_SPEC 라벨을 소스와 메타에서 정적으로 점검하는 행으로, 화면 표시를 확인하는 다른 행과 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "EG-3f97c464"
+   ],
+   "why": "Owner 조회조건에서 여는 DM0020 팝업의 제목을 확인하는 행이다. 조회조건 Owner의 라벨(V-b2b5c444)과는 대상이 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "EG-606e3e5b"
+   ],
+   "why": "ITEM_ID40 셀에서 여는 DM0002_ItembyDivisionPopupEx 팝업의 제목을 확인하며, 이 진입점은 다른 행에 없다."
+  },
+  {
+   "rows": [
+    "EG-9a0c5f46"
+   ],
+   "why": "btnColumn 버튼에서 여는 TitleSetForm 팝업의 제목을 확인하며, 이 팝업은 다른 행에 없다."
+  },
+  {
+   "rows": [
+    "EG-aadf387b"
+   ],
+   "why": "Model / Nickname 조건에서 여는 팝업의 제목을 확인한다. 조회조건 라벨 문구를 보는 V-c28bd117과는 대상과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "T-24291368"
+   ],
+   "why": "CURRENCY 그리드 컬럼 라벨을 추적하는 대조표 행이며, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-248e0623"
+   ],
+   "why": "SetSpreadColumn 진입점을 추적하는 행으로, 화면 요소가 아니라 구현 위치를 확인하는 성질이다."
+  },
+  {
+   "rows": [
+    "T-2b97de31"
+   ],
+   "why": "EXT_INT 컬럼을 추적하는 행이며, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-36be5d33"
+   ],
+   "why": "SMALL_CLASS_LABEL_NAME 헤더 스팬 컬럼을 추적하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-465f21a5"
+   ],
+   "why": "CreateSpread 진입점을 추적하는 행으로, 구현 위치를 확인하는 성질이다."
+  },
+  {
+   "rows": [
+    "T-47a7aeda"
+   ],
+   "why": "CELL_PROD_SITE 컬럼 라벨을 추적하는 행이며, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-7d156d93"
+   ],
+   "why": "DIVISION_ID 그리드 컬럼을 추적한다. 조회조건 Division(V-b4da3f22)과는 요소 종류가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-8b2fd543"
+   ],
+   "why": "COLUMN_LABEL_NAME 메타 컬럼을 추적하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-a918226a"
+   ],
+   "why": "SetSpreadHeaderSpan 진입점을 추적하는 행으로, 구현 위치를 확인하는 성질이다."
+  },
+  {
+   "rows": [
+    "T-ab7216ed"
+   ],
+   "why": "Sales Price 팝업 안의 UNIT_CURRENCY 컬럼을 추적하며, 메인 그리드의 CURRENCY 컬럼과는 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-b66cf000"
+   ],
+   "why": "usrMonthFrom 조건을 추적한다. drpPeriod(V-e923a2ac)와 같은 컨트롤인지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-b9ef46dd"
+   ],
+   "why": "MEASURE 컬럼 라벨을 추적하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-bee74527"
+   ],
+   "why": "Exchange Rate 모달을 어떻게 다시 구성했는지 추적하는 대조표 행으로, 라벨 표시를 확인하는 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-d4512ef1"
+   ],
+   "why": "LARGE_CLASS_LABEL_NAME 헤더 스팬 컬럼을 추적하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-d6dbef5f"
+   ],
+   "why": "PROJECT_CODE 그리드 컬럼을 추적한다. 조회조건 Project(V-359ec6f9)와는 요소 종류가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-f48d3681"
+   ],
+   "why": "Sales Price 팝업 안의 CURRENCY_UNITCURRENCY 컬럼을 추적하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-f8a6807b"
+   ],
+   "why": "ITEM_ID(Model) 그리드 컬럼을 추적한다. 조회조건 Model / Nickname과는 요소 종류가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-f95fa19f"
+   ],
+   "why": "COLUMN_NAME 메타 컬럼을 추적하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-051a5abd"
+   ],
+   "why": "조회조건 Bucket의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-14bcffa0"
+   ],
+   "why": "조회조건 Biz.Type의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-359ec6f9"
+   ],
+   "why": "조회조건 Project의 라벨을 확인하며, PROJECT_CODE 그리드 컬럼과는 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-529fffc5"
+   ],
+   "why": "조회조건 End Customer의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-94997598"
+   ],
+   "why": "조회조건 Closed의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-96012b16"
+   ],
+   "why": "조회조건 chkSum의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-b2b5c444"
+   ],
+   "why": "조회조건 Owner의 라벨을 확인하며, Owner 팝업 제목과는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-b48b8d8e"
+   ],
+   "why": "조회조건 Plant Site의 라벨을 확인하며, CELL_PROD_SITE 컬럼과 같은 요소라는 근거가 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-b4da3f22"
+   ],
+   "why": "조회조건 Division의 라벨을 확인하며, DIVISION_ID 그리드 컬럼과는 요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-bddc7642"
+   ],
+   "why": "조회조건 '.'의 라벨을 확인하는 행이다. 어떤 요소인지 확실하지 않아 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-c28bd117"
+   ],
+   "why": "조회조건 Model / Nickname의 라벨을 확인하며, 팝업 제목이나 ITEM_ID 컬럼과는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-c735f4f5"
+   ],
+   "why": "조회조건 Item Type의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-c84046d1"
+   ],
+   "why": "조회조건 Team의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-c9118a69"
+   ],
+   "why": "조회조건 Sales Site의 라벨을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "V-e923a2ac"
+   ],
+   "why": "조회조건 drpPeriod의 라벨을 확인한다. usrMonthFrom과 같은 컨트롤인지 확신할 수 없어 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:43:42",
+ "cost": 0.1273732
+}

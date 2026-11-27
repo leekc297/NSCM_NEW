@@ -7,10 +7,10 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.module.scss | component | 44 |
+| features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.module.scss | component | 43 |
 | features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.tsx | component | 388 |
-| features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | component | 259 |
-| features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | component | 157 |
+| features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | component | 266 |
+| features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | component | 149 |
 | features/shipping/src/pages/shipment-lot-size/hooks/useShipmentLotSizeValidation.ts | hook | 77 |
 | features/shipping/src/pages/shipment-lot-size/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-lot-size/shipment-lot-size.constants.ts | constants | 187 |
@@ -27,7 +27,7 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | ShipmentLotSizeBatchModal.tsx:79 ShipmentLotSizeForm.tsx:53 |
+| (useTabComboQueries) | hook | 2 | Y | ShipmentLotSizeBatchModal.tsx:79 ShipmentLotSizeForm.tsx:54 |
 | SCP0028/popup//call-proc | hook | 1 | Y | ShipmentLotSizeBatchModal.tsx:96 |
 | SCP0028/main//call-proc | hook | 1 | Y | ShipmentLotSize.tsx:85 |
 | /SCP0028/main/INSERT/call-proc | http | 1 | Y | ShipmentLotSize.tsx:215 |
@@ -54,21 +54,21 @@
 | CustomDropdown | onChange | <arrow> setOpGroup,String | jsx | features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.tsx | 341 |
 | Button | onClick | handleConfirm | jsx | features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.tsx | 373 |
 | Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.tsx | 380 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 94 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 121 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 143 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 162 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 181 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 212 |
-| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 208 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 230 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 249 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 80 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 96 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 97 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 115 |
-| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 128 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 153 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 95 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 122 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 144 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 163 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 182 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 219 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 209 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 237 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 256 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 73 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 89 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 90 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 104 |
+| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 117 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 145 |
 | ShipmentLotSizeForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx | 321 |
 | ShipmentLotSizeForm | onItemSearch | <arrow> setItemModalOpen | jsx | features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx | 322 |
 | ShipmentLotSizeGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx | 358 |
@@ -141,8 +141,8 @@
 | MSG00719 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0028(10), SCP0005(4), SCP0006(2), SCP0025(2), SCM0002(2), SSP0025(2), SCM0008(1), SSP0003(1), COM0013(1), SCP0001(1)
-- SP/PKG: PKG_SCP0028(11), P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP(3), P_SCP0028_GET_SHIPMENT_LOT_SIZE(2), P_SCP0028_SAVE_SHIPMENT_LOT_SIZE(2), P_USER_ID(2), P_DEBUG_MODE(2), FN_GET_LOOKUP_CODE_DESC(1), FN_GET_SCM_SITE_DESCRIPTION(1), P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT(1), PKG_NSCM_UI_COM_AUTH(1), PR_GET_MNU_BTN_AUTH(1), P_ACTIVE_FLAG(1), P_VALID_YN(1)
+- 화면ID: SCP0028(10), SCP0005(4), SCM0002(3), SCP0006(2), SCP0025(2), SSP0025(2), COM0013(2), SCM0008(1), SSP0003(1), COM0008(1), SCP0001(1)
+- SP/PKG: PKG_SCP0028(11), P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP(3), P_SCP0028_GET_SHIPMENT_LOT_SIZE(2), P_SCP0028_SAVE_SHIPMENT_LOT_SIZE(2), P_USER_ID(2), P_DEBUG_MODE(2), FN_GET_LOOKUP_CODE_DESC(1), FN_GET_SCM_SITE_DESCRIPTION(1), P_ITEM_ID(1), P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT(1), PKG_NSCM_UI_COM_AUTH(1), PR_GET_MNU_BTN_AUTH(1), PKG_SCM0002(1), P_SCM0002_GET_ITEM_BY_DIVISION_POPUP(1), P_SCM0002_GET_MATERIAL_BY_DIVISION(1), P_ACTIVE_FLAG(1), P_VALID_YN(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

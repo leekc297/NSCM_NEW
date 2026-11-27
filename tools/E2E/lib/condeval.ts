@@ -6,7 +6,7 @@ import * as path from 'node:path';
 //   규칙 목록은 AS-IS 원문 순서대로 적용한 마지막 상태가 정답(기본 = 편집 가능). 한 규칙이라도 RAW 를 평가해야 결론이 갈리면 '평가 불가'.
 //   화면 리터럴 없음 — GROUP 은 계정 속성(plan.json accounts: admin·groups·tobeGroups), DIV 는 조회 요청의 divisionId, COL 은 그 행의 dataItem.
 export type Rule = { g: string; lock: 'Y' | 'N'; ref: string };
-export type CondCtx = { group: string[]; admin: boolean; div: string; col: (name: string) => string | null; self: string; /** 2026-11-12 T264: 이 계정이 이 화면의 편집 권한자인가(모르면 생략 → AUTH 는 평가 불가) */ auth?: boolean; /** 지금 재는 그리드의 시트 이름(모르면 생략 → SHEET 는 평가 불가) */ sheet?: string; /** 2026-11-18 SCP0111 H2: 조회 결과 전체 행(EXISTS 원자 — AS-IS DBUtils.Filter(조회 결과 전체, …) 존재 검사) · 모르면 생략 → 평가 불가 */ rows?: Record<string, unknown>[]; /** 2026-11-18: 공통 코드 값(lookups.json types — INLOOKUP 원자) · 모르면 생략 → 평가 불가 */ lookups?: Record<string, Record<string, string[]>> };
+export type CondCtx = { group: string[]; admin: boolean; div: string; col: (name: string) => string | null; self: string; /** 2026-11-12 T264: 이 계정이 이 화면의 편집 권한자인가(모르면 생략 → AUTH 는 평가 불가) */ auth?: boolean; /** 지금 재는 그리드의 시트 이름(모르면 생략 → SHEET 는 평가 불가) */ sheet?: string; /** 2026-11-18 SCP0111 H2: 조회 결과 전체 행(EXISTS 원자 — AS-IS DBUtils.Filter(조회 결과 전체, …) 존재 검사) · 모르면 생략 → 평가 불가 */ rows?: Record<string, unknown>[]; /** 2026-11-18: 공통 코드 값(lookups.json types — INLOOKUP 원자) · 모르면 생략 → 평가 불가 */ lookups?: Record<string, Record<string, string[]>>; /** 2026-11-26 T673: 조회 요청 본문(평평한 키 → 값) · 모르면 생략 → SRCH 는 평가 불가 */ search?: Record<string, unknown>; /** SRCH 상수 집합(evalRules 가 규칙 목록에서 채움) */ srchLits?: Map<string, Set<string>> };
 export type EvalResult = { editable: boolean; by: string } | { error: string };
 
 const nrm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -47,12 +47,34 @@ function evalAtom(a: string, ctx: CondCtx): boolean {
   }
   // 2026-11-12 T264: AUTH = AS-IS 편집 권한 플래그(bEdit_Auth) — 문맥에 권한 여부가 있을 때만 평가
   if (a === 'AUTH') { if (ctx.auth === undefined) throw new Unknown('AUTH(계정 편집 권한 문맥 없음)'); return ctx.auth; }
+  // 2026-11-26 T673: SRCH(조회조건 컨트롤)=="값" = AS-IS 조회조건 컨트롤 값 비교(cboBucketType.ControlValues == BucketType.Daily → "DAILY").
+  //   TO-BE 조회 요청 본문(ctx.search)에서 컨트롤 이름의 접두(cbo·clb·rdo·cmb·usr)를 뗀 키를 대소문자·기호 무시로 찾는다.
+  //   같은 칸 규칙에 나온 AS-IS 상수 집합(ctx.srchLits)에 TO-BE 값이 없으면 코드값 체계가 다를 수 있어 평가 불가로 남긴다(오판 방지)
+  const mq = /^SRCH\((\w+)\)\s*(==|!=)\s*"([^"]*)"$/.exec(a);
+  if (mq) {
+    if (!ctx.search) throw new Unknown(`SRCH(${mq[1]}) — 조회 요청 문맥 없음`);
+    const want = nrm(mq[1].replace(/^(cbo|clb|rdo|cmb|usr)/i, ''));
+    const key = Object.keys(ctx.search).find(k => nrm(k) === want);
+    if (key === undefined) throw new Unknown(`SRCH(${mq[1]}) — 조회 요청에 '${want}' 키 없음`);
+    const v = String(ctx.search[key] ?? '');
+    const lits = ctx.srchLits?.get(mq[1]);
+    if (lits && lits.size && ![...lits].some(l => nrm(l) === nrm(v))) throw new Unknown(`SRCH(${mq[1]}) — TO-BE 값 '${v}' 가 AS-IS 상수(${[...lits].join(',')})에 없음`);
+    const same = nrm(v) === nrm(mq[3]);
+    return mq[2] === '==' ? same : !same;
+  }
   // SHEET=="이름" = AS-IS 다중 시트 컨트롤의 활성 시트 조건 — 지금 재는 시트를 알 때만 평가(공백·기호 무시 비교)
   const msh = /^SHEET\s*(==|!=)\s*"([^"]*)"$/.exec(a);
   if (msh) { if (ctx.sheet === undefined || ctx.sheet === '') throw new Unknown(`SHEET(${msh[2]}) — 재는 시트 문맥 없음`); const same = nrm(ctx.sheet) === nrm(msh[2]); return msh[1] === '==' ? same : !same; }
   // SELF~"regex" — 지금 평가 중인 동적 binding(ctx.self) 이 정규식에 맞는가(AS-IS GetColumnTag(iCol).IndexOf("M_")==0 · 2026-10-31)
   const ms = /^SELF~"([^"]+)"$/.exec(a);
   if (ms) { try { return new RegExp(ms[1]).test(ctx.self || ''); } catch { throw new Unknown(a); } }
+  // 2026-11-26 T679 COL(X)~"regex" — 그 행 X 칸 값이 정규식에 맞는가(AS-IS GetValue(iRow, …X).ToString().IndexOf("RTF") >= 0 · DMF0044 EditButton:358)
+  const mcx = /^COL\((\w+)\)~"([^"]+)"$/.exec(a);
+  if (mcx) {
+    const name = mcx[1] === 'SELF' ? ctx.self : mcx[1];
+    const v = ctx.col(name); if (v == null) throw new Unknown(`COL(${name}) 없음`);
+    try { return new RegExp(mcx[2]).test(v); } catch { throw new Unknown(a); }
+  }
   const m = /^(GROUP|DIV|COL\((\w+)\))(?:\[(\d+):(\d+)\])?\s*(==|!=)\s*("([^"]*)"|-?\d+)$/.exec(a);
   if (!m) throw new Unknown(a);
   const lit = m[7] !== undefined ? m[7] : m[6];
@@ -129,6 +151,7 @@ export function evalRules(rules: Rule[], ctx: CondCtx, defaultEditable = true): 
 }
 
 function evalRulesOne(rules: Rule[], ctx: CondCtx, defaultEditable = true): EvalResult {
+  if (!ctx.srchLits) { const lm = new Map<string, Set<string>>(); for (const r of rules) for (const m of (r.g || '').matchAll(/SRCH\((\w+)\)\s*(?:==|!=)\s*"([^"]*)"/g)) { if (!lm.has(m[1])) lm.set(m[1], new Set()); lm.get(m[1])!.add(m[2]); } if (lm.size) ctx = { ...ctx, srchLits: lm }; }  // T673
   let editable = defaultEditable; let by = defaultEditable ? '기본(편집 모드 전체 해제)' : '기본(잠금)';
   for (const r of rules) {
     let hit: boolean;

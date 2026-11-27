@@ -70,9 +70,8 @@ td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .notice div{white-space:pre-wrap}
 @media (max-width:520px){.cards{grid-template-columns:1fr}}
 /* ── 2026-11-19 디자인: 반투명(유리) 대시보드 · 기능 전체 영역 ── */
-:root{--fg:var(--vscode-editor-foreground,#ccc);--g1:color-mix(in srgb,var(--fg) 5%,transparent);--g2:color-mix(in srgb,var(--fg) 9%,transparent);--gb:color-mix(in srgb,var(--fg) 14%,transparent);--acc:var(--vscode-charts-blue,#3794ff);--acc2:var(--vscode-charts-purple,#a371f7)}
-body{background:radial-gradient(1100px 460px at 8% -12%,color-mix(in srgb,var(--acc) 15%,transparent),transparent 62%),radial-gradient(900px 440px at 104% -6%,color-mix(in srgb,var(--acc2) 12%,transparent),transparent 58%),var(--vscode-editor-background);background-attachment:fixed}
-.glass{background:var(--g1);border:1px solid var(--gb);border-radius:12px;-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 22px rgba(0,0,0,.16)}
+/* 2026-11-26 개선안 20261126164322_SELF: :root 변수, body 배경, .glass = webview-kit.js glassCss */
+${require('./webview-kit').glassCss(false)}
 .top{gap:4px;padding:8px 12px;border-bottom:1px solid var(--gb);background:var(--g1);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .top h1{font-size:13px;letter-spacing:.3px;margin-right:10px}
 .tab{border-radius:8px;padding:5px 11px;opacity:.72;transition:background .15s,opacity .15s}
@@ -315,6 +314,8 @@ button.sec{padding:2px 8px;font-size:10.5px;border-radius:5px}
 /* ── 2026-11-20 상황판 A 관제실 ── */
 .adash{gap:12px}
 .a-top{display:grid;grid-template-columns:minmax(0,3fr) minmax(260px,1.35fr);gap:10px}
+.needtop{border:1px solid var(--warn);border-left-width:4px;border-radius:10px;padding:6px 10px;margin-bottom:8px;font-size:12px;display:flex;flex-direction:column;gap:4px}
+.needtop .nh{font-weight:700;color:var(--warn)}.needtop .nr{cursor:pointer;display:flex;flex-direction:column}.needtop .nr:hover{background:var(--g2)}.needtop .nn{color:var(--mut)}
 .a-srvs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 .a-srv{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--g1);border:1px solid var(--gb)}
 .a-srv .a-ic{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;background:color-mix(in srgb,var(--mut) 18%,transparent);color:var(--mut)}
@@ -503,6 +504,7 @@ button.sec:hover{background:color-mix(in srgb,var(--fg) 12%,transparent)}
 </div>
 
 <div class="pane" id="board"><div class="dash adash">
+  <div class="needtop" id="bNeed" hidden></div>
   <div class="a-top"><div class="a-srvs" id="bSrv"></div><div id="bKpi"></div></div>
   <div class="a-grid">
     <div class="a-col">
@@ -619,7 +621,7 @@ function clearSubDots(){ document.querySelectorAll('.lh .nb').forEach(x=>x.remov
 let lgOn={be:false,fe:false};
 function paintLg(){ ['be','fe'].forEach(function(k){ const b=$(k==='be'?'lgBe':'lgFe'); const on=!!lgOn[k]; b.classList.toggle('on',on); b.textContent=(k==='be'?'BE':'FE')+' '+(on?'On':'Off'); const tb=document.querySelector('.lh[data-ls="'+k+'"]'); if(tb) tb.classList.toggle('lgoff',!on); /* 2026-11-20 사용자 지시: 꺼짐이면 탭의 상태 점·응답 문구 숨김 */ b.title=(k==='be'?'BE':'FE')+' Log '+(on?(KO?'켜짐. 누르면 끔':'on. Click to turn off'):(KO?'꺼짐. 누르면 켜고 최근 부분부터 다시 읽음':'off. Click to turn on')); const box=$(boxOf(k)); if(!on){ box.textContent=''; const d=document.createElement('span'); d.className='mut'; d.textContent=(KO?'⏸ '+(k==='be'?'BE':'FE')+' Log 꺼짐. 위 '+(k==='be'?'BE':'FE')+' Off 단추를 누르면 켜지고 최근 부분부터 보입니다':'⏸ log off')+String.fromCharCode(10); box.appendChild(d); } }); }
 document.querySelectorAll('[data-lg]').forEach(function(b){ b.onclick=function(){ const k=b.dataset.lg; lgOn[k]=!lgOn[k]; paintLg(); vscode.postMessage({type:'orch:logOn',stream:k,on:lgOn[k]}); }; });
-function show(t){ if(t==='task'||t==='belog'||t==='felog') t='log'; if(!$(t)) t='board'; cur=t; document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.t===t;b.classList.toggle('on',on);if(on){const n=b.querySelector('.nb');if(n)n.remove();}}); document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('on',x.id===t)); if(t==='log'){ clearSubDots(); LBOX.forEach(scrollEnd); } else if(t==='agent') scrollEnd('agB'); try{vscode.setState(Object.assign({},st00(),{tab:t}));}catch(e){} }
+function show(t){ if(t==='task'||t==='belog'||t==='felog') t='log'; if(!$(t)) t='board'; cur=t; if(t==='board') setTimeout(function(){ if(needTop.length) paintNeed(); },0); document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.t===t;b.classList.toggle('on',on);if(on){const n=b.querySelector('.nb');if(n)n.remove();}}); document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('on',x.id===t)); if(t==='log'){ clearSubDots(); LBOX.forEach(scrollEnd); } else if(t==='agent') scrollEnd('agB'); try{vscode.setState(Object.assign({},st00(),{tab:t}));}catch(e){} }
 function scroller(id){ return $(id); }
 function scrollEnd(id){ const s=scroller(id); s.scrollTop=s.scrollHeight; }
 function mark(t){ if(cur===t) return; const b=document.querySelector('.tab[data-t="'+t+'"]'); if(b&&!b.querySelector('.nb')){const n=document.createElement('span');n.className='nb';n.textContent='●';b.appendChild(n);} }
@@ -665,6 +667,14 @@ function paintBoard(d){
   lastBoard=d; paintKpi();
 }
 let lastBoard=null;
+// 2026-11-26 개선안 20261126164446_VISION: 요약 맨 위 '사람 확인 필요' 줄 = need-user 사건 1줄(push 실패면 원인, HTTP 응답, 미push 커밋 수) + 다음 행동 1줄.
+//   줄이 보이면(요약 탭, 창 보임) 사건에 보인 시각을 남김(orch:needShown, 처음 1번만) = 자가진단 U3 가 알림 여부를 나눔
+let needTop=[];
+function paintNeed(){ const b=$('bNeed'); if(!b) return; if(!needTop.length){ b.hidden=true; b.innerHTML=''; return; } b.hidden=false;
+  b.innerHTML='<div class="nh">'+(KO?'사람 확인 필요 ':'Needs you ')+needTop.length+(KO?'건':'')+'</div>'+needTop.map(function(x){ return '<div class="nr" data-inc="'+esc(x.id)+'" title="'+esc(x.id)+'"><span>'+esc(x.line)+'</span><span class="nn">'+(KO?'다음 행동: ':'Next: ')+esc(x.next)+'</span></div>'; }).join('');
+  b.querySelectorAll('[data-inc]').forEach(function(r){ r.onclick=function(){ show('inc'); }; });
+  const ids=needTop.filter(function(x){ return !x.shownAt; }).map(function(x){ return x.id; });
+  if(ids.length&&cur==='board'&&document.visibilityState!=='hidden'){ vscode.postMessage({type:'orch:needShown',ids:ids}); needTop.forEach(function(x){ if(!x.shownAt) x.shownAt='sent'; }); } }
 function paintKpi(){ const d=lastBoard||{}; const run=(d.jobs||[]).length+(d.chains||[]).length+(d.claudes||[]).filter(c=>!(d.chains||[]).some(x=>x.wb===c.wb&&x.screen===c.screen)).length+(d.procs||[]).filter(p=>!(d.chains||[]).some(x=>x.wb===p.wb&&x.screen===p.screen)).length;
   const cl=(d.claudes||[]).length, wt=(d.waits||[]).length; const wmax=(d.waits||[]).reduce((a,w)=>Math.max(a,w.sec||0),0);
   const io=incs.filter(x=>x.status==='open'||x.status==='acting').length, iu=incs.filter(x=>x.status==='need-user').length, pp=props.filter(x=>x.status==='pending').length;
@@ -770,7 +780,7 @@ function paintProp(){
   const qi=bar.querySelector('.tlq'); if(qi.value!==prQ) qi.value=prQ; qi.oninput=()=>{ prQ=qi.value.trim(); paintProp(); };
   const active=x=>/^(pending|approved|applying|apply-failed)$/.test(x.status);
   const inMode=x=>prMode==='need'?(!isAutoP(x)&&(all||active(x))):prMode==='auto'?isAutoP(x):prMode==='vision'?(x.source==='vision'&&(all||active(x))):(all||active(x)||isAutoP(x));
-  const ql=prQ.toLowerCase(); const hit=x=>!ql||(String(x.title||'')+' '+(x.targets||[]).join(' ')+' '+String(x.evidence||'')).toLowerCase().indexOf(ql)>=0;
+  const ql=prQ.toLowerCase(); const qIds=/^id:/.test(ql)?ql.slice(3).split(',').map(s=>s.trim()).filter(Boolean):null; /* 2026-11-26 R255: 'id:a,b' = 그 개선안만(Overall Review 지난 결과에서 이동) */ const hit=x=>!ql||(qIds?qIds.indexOf(String(x.id||'').toLowerCase())>=0:false)||!qIds&&(String(x.title||'')+' '+(x.targets||[]).join(' ')+' '+String(x.evidence||'')).toLowerCase().indexOf(ql)>=0;
   const base=props.filter(x=>inMode(x)&&hit(x)); const srcs={}; for(const x of base){ const k=prSrcKey(x); srcs[k]=(srcs[k]||0)+1; } if(prSrcF&&!srcs[prSrcF]) prSrcF='';
   const rows=base.filter(x=>!prSrcF||prSrcKey(x)===prSrcF).sort((a,b)=>prLast(b)-prLast(a));
   const stCls=s=>s==='pending'?'s-need':s==='approved'||s==='applying'?'s-act':s==='applied'?'s-res':s==='apply-failed'?'s-open':'s-close';
@@ -803,17 +813,42 @@ function paintProp(){
 }
 // 2026-11-20 Overall Review(큰 그림 점검) Overview 패널: 적용 여부 · 주기 · 마지막 점검 · 목적 판단 건수 · 다음 점검 · 지금 점검 단추
 let vsMeta=null;
+/* 개선안 20261126173142_SELF(L4 원장 20261125000242_VISION 단계 4): 대기 묶음(status wait, 실측 대기·효력 대기)을 사다리 카드에 사유와 함께 표시. 종전 = 열린 묶음만 그려 '실측 대기'가 화면에 없었음 */
+function ladWaitRows(lad){ return ((lad&&lad.bundles)||[]).filter(function(x){return x&&x.status==='wait';}).slice(0,4).map(function(x){ return '<div class="vs-kv"><span title="'+esc(KO?'진단하지 않고 기다리는 묶음':'Waiting bundle')+'">'+esc(x.level)+(KO?' 대기':' wait')+'</span><span title="'+esc(x.why||'')+'">'+esc(x.title)+' · '+esc(x.statusLabel||(KO?'대기':'waiting'))+'</span></div>'; }).join(''); }
+/* 2026-11-26 사용자 지적('VMO 에서 컨설팅의 결과를 어떻게 봐야 할지'): Overall Review 카드에 컨설팅 줄 — 진행 중(시작 시각 · 주제) 또는 마지막(시각 · 주제 · 결과 · 요약) · 보고서 열기 · 올린 개선안 */
+function csBlock(c){ const run=$('csRun'); if(run){ run.disabled=!!(c&&c.running); run.textContent=c&&c.running?(KO?'컨설팅 중':'Consulting'):(KO?'컨설팅':'Consult'); }
+  if(!c) return '';
+  if(c.running) return '<div class="vs-kv"><span>'+(KO?'컨설팅':'Consult')+'</span><span><b>'+(c.runWait?(KO?'대기 중':'waiting'):(KO?'진행 중':'running'))+'</b>'+(c.runWait?' ('+esc(c.runWait)+(KO?', 자리 나면 자동 시작':', starts when free')+')':'')+' · '+esc(dtm(c.runSince))+(KO?' 시작':' start')+(c.runTopic?' · '+(KO?'주제 ':'topic ')+esc(c.runTopic):'')+'</span></div>';
+  if(!c.lastAt) return '<div class="vs-kv"><span>'+(KO?'컨설팅':'Consult')+'</span><span>'+(KO?'이력 없음':'never')+'</span></div>';
+  return '<div class="vs-kv"><span>'+(KO?'컨설팅':'Consult')+'</span><span>'+esc(dtm(c.lastAt))+(c.topic?' · '+(KO?'주제 ':'topic ')+esc(c.topic):'')+' · '+esc(c.lastResult||'')+'</span></div>'
+    +(c.summary?'<div class="vs-sum" title="'+esc(c.summary)+'">'+esc(c.summary)+'</div>':'')
+    +'<div class="vs-l1">'+(c.file?'<button class="sec" id="csOpen" title="'+esc(c.file)+'">'+(KO?'컨설팅 보고서 열기':'Open report')+'</button> ':'')+'<button class="sec" id="csFix" title="'+esc(KO?'컨설팅이 올린 개선안(제목 컨설팅:)':'Proposals from consulting')+'">'+(KO?'컨설팅 개선안':'Consult proposals')+'</button></div>'
+    +((c.reports||[]).length>1?'<details class="vs-p"><summary>'+(KO?'지난 컨설팅 보고서 ':'Past reports ')+c.reports.length+'</summary>'+c.reports.map(r=>'<div class="vs-pi"><a href="#" data-csf="'+esc(r.file)+'">'+esc(dtm(r.at))+'</a>'+(r.topic?' · '+esc(r.topic):(KO?' · 전체 진단':' · full review'))+'</div>').join('')+'</details>':''); }
+function csBind(){ document.querySelectorAll('[data-csf]').forEach(a=>a.onclick=e=>{ e.preventDefault(); vscode.postMessage({type:'orch:consultOpen',file:a.dataset.csf}); }); const o=$('csOpen'); if(o) o.onclick=()=>vscode.postMessage({type:'orch:consultOpen'}); const f=$('csFix'); if(f) f.onclick=()=>{ prMode='all'; prQ='컨설팅:'; paintProp(); show('prop'); }; }
+/* 개선안 20261126173842_SELF 후속: 효력 뒤 CheckList 1판 원장(orch-vision checklistEffect) 최근 3건. 1판, 목표, 단계 밖 비율(10% 넘으면 귀속 부족), 동시 실행 */
+function clEffRows(ce){ if(!ce||!ce.proposal) return ''; var rs=(ce.runsAfter||[]).slice(-3).reverse(); var head='<div class="vs-kv"><span title="'+esc((KO?'CheckList 시간 목적 판정 자료: 기준 개선안 ':'CheckList time purpose: base proposal ')+ce.proposal+(KO?' 효력 ':' effective ')+(ce.effAt||'-'))+'">'+(KO?'CheckList 1판':'CheckList 1st doc')+'</span><span>'+(rs.length?(KO?'효력 뒤 ':'after effect ')+(ce.runsAfter||[]).length+(KO?'건':' runs'):esc(ce.note||(KO?'실측 대기':'waiting')))+'</span></div>';
+  return head+rs.map(function(r){ var fd=r.firstDocMin; var over=fd!=null&&fd>ce.targetMin; var pct=r.outsidePct; return '<div class="vs-kv"><span>'+esc(r.screen)+'</span><span title="'+esc('runId '+r.runId+(r.stageMin?', '+Object.keys(r.stageMin).map(function(k){return k+' '+r.stageMin[k];}).join(', '):''))+'">'+(fd!=null?(KO?'1판 ':'1st ')+fd+(KO?'분':'m'):(KO?'1판 없음, 체인 ':'no 1st doc, chain ')+r.chainMin+(KO?'분':'m'))+(KO?' (목표 ':' (target ')+ce.targetMin+(KO?'분)':'m)')+(over?(KO?' 초과':' over'):'')+(pct!=null?(KO?', 단계 밖 ':', outside ')+pct+'%'+(pct>10?(KO?'(귀속 부족)':'(unattributed)'):''):'')+(r.concurrent?(KO?', 동시 ':', concurrent ')+(r.concurrent+1)+(KO?'화면':''):'')+', '+esc(String(r.at||'').slice(5,16).replace('T',' '))+'</span></div>'; }).join(''); }
 function paintVision(m){ if(!m) return; vsMeta=m; const p=m.purposes||[]; const cnt=k=>p.filter(x=>x&&x.verdict===k).length;
   const b=$('vsBody'); const run=$('vsRun'); run.disabled=!!m.running; run.textContent=m.running?(KO?'점검 중':'Running'):(KO?'지금 점검':'Run now');
   b.innerHTML='<div class="vs-l1"><span class="chip" title="'+esc(KO?'환경설정 vibeManager.orch.visionEnabled · 미적용이면 주기 점검 안 함(단추는 됨)':'Setting vibeManager.orch.visionEnabled')+'">'+(m.enabled?(KO?'적용':'On'):(KO?'미적용':'Off'))+'</span><span class="chip" title="vibeManager.orch.visionEveryDays">'+(KO?m.everyDays+'일마다':'every '+m.everyDays+'d')+'</span><span class="chip" title="harness.json orch.visionAutoApply">'+(m.autoApply?(KO?'자동 반영':'auto apply'):(KO?'승인 뒤 반영':'apply after approval'))+'</span></div>'
     +'<div class="vs-kv"><span>'+(KO?'마지막':'Last')+'</span><span>'+(m.lastAt?esc(dtm(m.lastAt))+' · '+esc(m.lastResult||''):(KO?'점검 이력 없음':'never'))+'</span></div>'
     +(p.length?'<div class="vs-kv"><span>'+(KO?'목적 판단':'Purposes')+'</span><span><b class="ok">'+(KO?'맞음 ':'met ')+cnt('맞음')+'</b> · <b class="bad">'+(KO?'어긋남 ':'off ')+cnt('어긋남')+'</b> · '+(KO?'미확인 ':'unknown ')+cnt('미확인')+'</span></div>':'')
-    +(m.ladder?'<div class="vs-kv"><span title="'+esc(KO?'진단 사다리: L1 사소 · L2 결함은 자가진단과 사건이 맡고, 되풀이되면 L3 구조, 구조를 고쳐도 목적이 어긋나면 L4 개념 재정립으로 올림':'Diagnosis ladder')+'">'+(KO?'진단 사다리':'Ladder')+'</span><span>L3 '+((m.ladder.open||{}).L3||0)+' · L4 '+((m.ladder.open||{}).L4||0)+(KO?' · 오늘 진단 ':' · today ')+(m.ladder.dayRuns||0)+(m.ladder.reload&&m.ladder.reload.n?'<span title="'+esc(KO?'반영 완료했지만 창 다시 로드 전이라 실행 중 코드에 없는 개선안. 재발 감시와 올림은 창 로드 뒤(효력 시각)부터 셈':'Applied, waiting for window reload')+'">'+(KO?' · 로드 대기 ':' · reload wait ')+m.ladder.reload.n+(KO?'건':'')+(m.ladder.reload.oldestAt?' ('+esc(String(m.ladder.reload.oldestAt).slice(5,16).replace('T',' '))+(KO?' 부터':' since')+')':'')+'</span>':'')+(m.ladder.hold&&m.ladder.hold.files&&m.ladder.hold.files.length?'<span title="'+esc((m.ladder.hold.files||[]).join(', '))+'">'+(KO?' · 판정 코드 로드 대기로 진단 보류':' · diagnosis held (reload)')+'</span>':'')+' <button class="sec" id="vsLad" title="'+esc(KO?'올림 조건을 지금 점검하고 필요한 묶음을 진단(읽기 전용 AI Agent 호출)':'Check now')+'">'+(KO?'지금 올림 점검':'Check now')+'</button></span></div>'+((m.ladder.bundles||[]).filter(function(x){return x.status==='open';}).slice(0,4).map(function(x){ return '<div class="vs-kv"><span>'+esc(x.level)+'</span><span title="'+esc(x.why||'')+'">'+esc(x.title)+(x.lastRun&&x.lastRun.proposal?' · '+esc(x.lastRun.proposal):(KO?' · 진단 대기':' · waiting'))+'</span></div>'; }).join('')+((m.ladder.plans||[]).filter(function(p){return p.status==='open';}).slice(0,3).map(function(p){ return '<div class="vs-kv"><span title="'+esc(KO?'L4 단계 원장: 승인된 L4 안을 단계마다 하위 안으로 반영. 남은 단계는 열린 일(담당 VMO, 시한)':'L4 plan ledger')+'">'+(KO?'L4 원장':'L4 plan')+'</span><span title="'+esc((p.absorbed||[]).length?(KO?'흡수한 안 ':'absorbed ')+p.absorbed.join(', '):'')+'">'+esc(String(p.title||'').slice(0,60))+(KO?' · 단계 ':' · step ')+p.done+'/'+p.steps+(p.cur?(KO?' · 지금 단계 ':' · now ')+p.cur+' '+esc(p.curStatus||''):'')+'</span></div>'; }).join(''))):'')
+    +(m.ladder?'<div class="vs-kv"><span title="'+esc(KO?'진단 사다리: L1 사소 · L2 결함은 자가진단과 사건이 맡고, 되풀이되면 L3 구조, 구조를 고쳐도 목적이 어긋나면 L4 개념 재정립으로 올림':'Diagnosis ladder')+'">'+(KO?'진단 사다리':'Ladder')+'</span><span>L3 '+((m.ladder.open||{}).L3||0)+' · L4 '+((m.ladder.open||{}).L4||0)+(KO?' · 오늘 진단 ':' · today ')+(m.ladder.dayRuns||0)+(m.ladder.reload&&m.ladder.reload.n?'<span title="'+esc(KO?'반영 완료했지만 창 다시 로드 전이라 실행 중 코드에 없는 개선안. 재발 감시와 올림은 창 로드 뒤(효력 시각)부터 셈':'Applied, waiting for window reload')+'">'+(KO?' · 로드 대기 ':' · reload wait ')+m.ladder.reload.n+(KO?'건':'')+(m.ladder.reload.oldestAt?' ('+esc(String(m.ladder.reload.oldestAt).slice(5,16).replace('T',' '))+(KO?' 부터':' since')+')':'')+'</span>':'')+(m.ladder.hold&&m.ladder.hold.files&&m.ladder.hold.files.length?'<span title="'+esc((m.ladder.hold.files||[]).join(', '))+'">'+(KO?' · 판정 코드 로드 대기로 진단 보류':' · diagnosis held (reload)')+'</span>':'')+' <button class="sec" id="vsLad" title="'+esc(KO?'올림 조건을 지금 점검하고 필요한 묶음을 진단(읽기 전용 AI Agent 호출)':'Check now')+'">'+(KO?'지금 올림 점검':'Check now')+'</button></span></div>'+((m.ladder.bundles||[]).filter(function(x){return x.status==='open';}).slice(0,4).map(function(x){ return '<div class="vs-kv"><span>'+esc(x.level)+'</span><span title="'+esc(x.why||'')+'">'+esc(x.title)+(x.lastRun&&x.lastRun.proposal?' · '+esc(x.lastRun.proposal):(KO?' · 진단 대기':' · waiting'))+'</span></div>'; }).join('')+ladWaitRows(m.ladder)+clEffRows(m.checklistEffect)+((m.ladder.plans||[]).filter(function(p){return p.status==='open';}).slice(0,3).map(function(p){ return '<div class="vs-kv"><span title="'+esc(KO?'L4 단계 원장: 승인된 L4 안을 단계마다 하위 안으로 반영. 남은 단계는 열린 일(담당 VMO, 시한)':'L4 plan ledger')+'">'+(KO?'L4 원장':'L4 plan')+'</span><span title="'+esc((p.absorbed||[]).length?(KO?'흡수한 안 ':'absorbed ')+p.absorbed.join(', '):'')+'">'+esc(String(p.title||'').slice(0,60))+(KO?' · 단계 ':' · step ')+p.done+'/'+p.steps+(p.cur?(KO?' · 지금 단계 ':' · now ')+p.cur+' '+esc(p.curStatus||''):'')+'</span></div>'; }).join(''))):'')
     +(m.summary?'<div class="vs-sum" title="'+esc(m.summary)+'">'+esc(m.summary)+'</div>':'')
     +'<div class="vs-kv"><span>'+(KO?'다음':'Next')+'</span><span>'+(m.enabled?(m.nextAt?esc(dtm(m.nextAt)):'-'):(KO?'주기 점검 안 함(미적용)':'not scheduled (off)'))+'</span></div>'
+    +csBlock(m.consult)
+    +vsHist(m.history)
     +(p.length?'<details class="vs-p"><summary>'+(KO?'목적별 판단 ':'Purposes ')+p.length+'</summary>'+p.map(x=>'<div class="vs-pi"><span class="'+(x.verdict==='맞음'?'ok':x.verdict==='어긋남'?'bad':'mutx')+'">'+esc(x.verdict||'')+'</span> '+esc(x.purpose||'')+'<div class="mutx">'+esc(x.evidence||'')+'</div></div>').join('')+'</details>':'');
+  csBind(); vsHistBind();
 }
-$('csRun').onclick=()=>{ vscode.postMessage({type:'orch:consult'}); $('csRun').disabled=true; $('csRun').textContent=KO?'검토 중':'Running'; setTimeout(()=>{ $('csRun').disabled=false; $('csRun').textContent=KO?'컨설팅':'Consult'; }, 60000); };
+// 2026-11-26 개선안 20261126182424_SELF(R255): 지난 큰 그림 점검 결과(날짜, 요약, 어긋남 수, 그 결과 개선안으로 이동)와 개념 재정립 문서 목록. 열기 = orch:visionOpen
+function vsHist(h){ if(!h) return ''; const rs=h.results||[], cs=h.concepts||[]; let s='';
+  if(rs.length) s+='<details class="vs-p"><summary>'+(KO?'지난 큰 그림 점검 ':'Past reviews ')+rs.length+'</summary>'+rs.map(r=>'<div class="vs-pi"><a href="#" data-vsf="'+esc(r.file)+'">'+esc(dtm(r.at))+'</a> · '+(KO?'목적 ':'purposes ')+r.purposes+(r.miss?' · <span class="bad">'+(KO?'어긋남 ':'off ')+r.miss+'</span>':'')+((r.proposals||[]).length?' <button class="sec" data-vsids="'+esc(r.proposals.join(','))+'">'+(KO?'개선안 ':'proposals ')+r.proposals.length+'</button>':'')+(r.summary?'<div class="mutx">'+esc(r.summary)+'</div>':'')+'</div>').join('')+'</details>';
+  if(cs.length) s+='<details class="vs-p"><summary>'+(KO?'개념 재정립 문서 ':'Concept docs ')+cs.length+'</summary>'+cs.map(c=>'<div class="vs-pi"><a href="#" data-vsf="'+esc(c.file)+'">'+esc(c.name)+'</a></div>').join('')+'</details>';
+  return s; }
+function vsHistBind(){ document.querySelectorAll('[data-vsf]').forEach(a=>a.onclick=e=>{ e.preventDefault(); vscode.postMessage({type:'orch:visionOpen',file:a.dataset.vsf}); });
+  document.querySelectorAll('[data-vsids]').forEach(b=>b.onclick=()=>{ prMode='all'; prQ='id:'+b.dataset.vsids; prSrcF=''; paintProp(); show('prop'); }); }
+$('csRun').onclick=()=>{ vscode.postMessage({type:'orch:consult'}); }; // 2026-11-26: 주제 입력창은 확장이 띄움 · 진행 표시는 Overall Review 카드 컨설팅 줄(종전 60초 뒤 단추만 되돌려 진행 여부를 알 수 없었음)
 $('vsRun').onclick=()=>{ vscode.postMessage({type:'orch:vision'}); $('vsRun').disabled=true; $('vsRun').textContent=KO?'점검 중':'Running'; };
 $('vsFix').onclick=()=>{ prMode='vision'; paintProp(); show('prop');   { const lb=$('vsLad'); if(lb) lb.onclick=function(){ lb.disabled=true; vscode.postMessage({type:'orch:ladder'}); }; }
 };
@@ -851,9 +886,9 @@ const SIDE_R={inc:1,pr:1};
 // 2026-11-26 R179 영역과 본문 사이 경계 막대 · 끌어서 너비 조절(workbench.js .lsplit 방식) · 상태 = vscode.setState sideW
 const SIDE_P=':scope>.tls,:scope>.dc-nav,:scope>.hc-nav', SIDE_MIN=140;
 function sideSplit(w){ const k=w.dataset.side, p=w.querySelector(SIDE_P); if(!p) return; let sp=w.querySelector(':scope>.sideS'); if(!sp){ sp=document.createElement('div'); sp.className='sideS'; sp.dataset.k=k; sp.setAttribute('role','separator'); sp.setAttribute('aria-orientation','vertical'); if(SIDE_R[k]) w.insertBefore(sp,p); else p.after(sp); } sp.title=KO?'끌어서 너비 조절':'Drag to resize'; try{ sp.style.order=getComputedStyle(p).order; }catch(e){} const px=+((st00().sideW||{})[k]||0); p.style.width=px>=SIDE_MIN?px+'px':''; }
-document.addEventListener('pointerdown',e=>{ const sp=e.target&&e.target.closest&&e.target.closest('.sideS[data-k]'); if(!sp||e.button!==0) return; const w=sp.parentElement, p=w&&w.querySelector(SIDE_P); if(!p) return; const k=sp.dataset.k, r=!!SIDE_R[k], x0=e.clientX, w0=p.getBoundingClientRect().width, MAX=Math.max(SIDE_MIN,Math.round(w.getBoundingClientRect().width*0.6)); let nw=w0; e.preventDefault(); try{sp.setPointerCapture(e.pointerId);}catch(x){} sp.classList.add('drag');
-  sp.onpointermove=function(ev){ const d=ev.clientX-x0; nw=Math.round(Math.max(SIDE_MIN,Math.min(MAX,r?w0-d:w0+d))); p.style.width=nw+'px'; };
-  sp.onpointerup=sp.onpointercancel=function(){ sp.onpointermove=null; sp.onpointerup=sp.onpointercancel=null; sp.classList.remove('drag'); const s=st00(), sw=Object.assign({},s.sideW||{}); sw[k]=nw; try{ vscode.setState(Object.assign({},s,{sideW:sw})); }catch(er){} };
+document.addEventListener('pointerdown',e=>{ const sp=e.target&&e.target.closest&&e.target.closest('.sideS[data-k]'); if(!sp||e.button!==0) return; const w=sp.parentElement, p=w&&w.querySelector(SIDE_P); if(!p) return; const k=sp.dataset.k, r=!!SIDE_R[k], x0=e.clientX, w0=p.getBoundingClientRect().width, MAX=Math.max(SIDE_MIN,Math.round(w.getBoundingClientRect().width*0.6)); let nw=w0;
+  kitDrag(sp,e,function(ev){ const d=ev.clientX-x0; nw=Math.round(Math.max(SIDE_MIN,Math.min(MAX,r?w0-d:w0+d))); p.style.width=nw+'px'; },
+  function(){ const s=st00(), sw=Object.assign({},s.sideW||{}); sw[k]=nw; try{ vscode.setState(Object.assign({},s,{sideW:sw})); }catch(er){} });
 });
 document.addEventListener('dblclick',e=>{ const sp=e.target&&e.target.closest&&e.target.closest('.sideS[data-k]'); if(!sp) return; const s=st00(), sw=Object.assign({},s.sideW||{}); delete sw[sp.dataset.k]; try{ vscode.setState(Object.assign({},s,{sideW:sw})); }catch(er){} sideApply(); });
 function sideApply(){ const sc=st00().side||{}; document.querySelectorAll('[data-side]').forEach(w=>{ const k=w.dataset.side, off=!!sc[k], r=!!SIDE_R[k]; w.classList.toggle('sc-off',off); sideSplit(w); const b=w.querySelector(':scope>.sideT'); if(!b) return; const lb=off?(KO?'영역 펴기':'Expand panel'):(KO?'영역 접기':'Collapse panel'); b.textContent=(off!==r)?'▶':'◀'; b.title=lb; b.setAttribute('aria-label',lb); b.setAttribute('aria-expanded',off?'false':'true'); }); }
@@ -988,51 +1023,9 @@ function paintWeeks(){ $('hsWeeks').innerHTML = hsWeeks.length ? '<table><tr><th
   $('hsWeeks').querySelectorAll('[data-wv]').forEach(function(b){ b.onclick=function(){ vscode.postMessage({type:'orch:histSummary',week:b.dataset.wv}); }; });
   $('hsWeeks').querySelectorAll('[data-ws]').forEach(function(b){ b.onclick=function(){ b.disabled=true; b.textContent=KO?'정리 중 …':'working …'; vscode.postMessage({type:'orch:histSummarize',week:b.dataset.ws}); }; });
 }
-// 개선안 20261124040953_SELF (R114): 주간 정리 주제 summary 는 workbench.js mdHtml 과 같은 마크다운 변환으로 그림(글 안의 HTML 은 글자로 바꿈)
-//   mdEsc · mdInline · mdHtml = jobs.js 466~508 줄과 같은 코드
-const MD_BT=String.fromCharCode(96);
-function mdEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function mdInline(s){
-  const parts=String(s).split(MD_BT);let out='';
-  for(let i=0;i<parts.length;i++){
-    if(i%2===1&&i<parts.length-1){out+='<code class="mdc">'+mdEsc(parts[i])+'</code>';continue;}
-    let t=mdEsc(i%2===1?MD_BT+parts[i]:parts[i]);
-    t=t.replace(/[*][*]([^*]+)[*][*]/g,'<b>$1</b>');
-    t=t.replace(/\\[([^\\]]+)\\]\\(([^)\\s]+)\\)/g,(m0,a,h)=>'<a class="mdl" href="#" data-href="'+h+'">'+a+'</a>');
-    out+=t;
-  }
-  return out;
-}
-function mdHtml(src){
-  const L=String(src||'').replace(/\\r/g,'').split('\\n');const fence=MD_BT+MD_BT+MD_BT;const stack=[];let h='';let i=0;
-  const close=lvl=>{while(stack.length>lvl)h+='</li></'+stack.pop()+'>';};
-  const isList=s=>/^( *)([-*+]|[0-9]+[.)]) +/.test(s);
-  while(i<L.length){
-    const ln=L[i];const tr=ln.trim();
-    if(tr.startsWith(fence)){close(0);const buf=[];i++;while(i<L.length&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}i++;h+='<pre class="mdpre"><code>'+mdEsc(buf.join('\\n'))+'</code></pre>';continue;}
-    if(!tr){if(!(stack.length&&i+1<L.length&&isList(L[i+1])))close(0);i++;continue;}
-    let m=/^(#{1,6}) +(.*)$/.exec(ln);
-    if(m){close(0);h+='<div class="mdh mdh'+Math.min(m[1].length,4)+'">'+mdInline(m[2])+'</div>';i++;continue;}
-    if(/^ *([-*_])( *[-*_]){2,} *$/.test(ln)&&!/[^-*_ ]/.test(ln)){close(0);h+='<hr class="mdhr">';i++;continue;}
-    if(tr.startsWith('|')&&i+1<L.length&&/^ *[|]?[ :|-]+[|]? *$/.test(L[i+1])&&L[i+1].includes('-')){
-      close(0);const row=s=>s.trim().replace(/^[|]/,'').replace(/[|]$/,'').split('|').map(c=>c.trim());
-      let t='<div class="mdtw"><table class="mdt"><thead><tr>'+row(ln).map(c=>'<th>'+mdInline(c)+'</th>').join('')+'</tr></thead><tbody>';i+=2;
-      while(i<L.length&&L[i].trim().startsWith('|')){t+='<tr>'+row(L[i]).map(c=>'<td>'+mdInline(c)+'</td>').join('')+'</tr>';i++;}
-      h+=t+'</tbody></table></div>';continue;}
-    m=/^( *)([-*+]|[0-9]+[.)]) +(.*)$/.exec(ln);
-    if(m){
-      const lvl=Math.floor(m[1].length/2)+1;const ty=/[0-9]/.test(m[2])?'ol':'ul';const stt=ty==='ol'?' start="'+parseInt(m[2],10)+'"':'';
-      if(stack.length<lvl){while(stack.length<lvl){h+='<'+ty+(stack.length===lvl-1?stt:'')+' class="mdlist">';stack.push(ty);}}
-      else{close(lvl);if(stack[lvl-1]!==ty){h+='</li></'+stack.pop()+'><'+ty+stt+' class="mdlist">';stack.push(ty);}else h+='</li>';}
-      h+='<li>'+mdInline(m[3]);i++;continue;}
-    if(/^> ?/.test(ln)){close(0);const buf=[];while(i<L.length&&/^> ?/.test(L[i])){buf.push(L[i].replace(/^> ?/,''));i++;}h+='<blockquote class="mdq">'+buf.map(mdInline).join('<br>')+'</blockquote>';continue;}
-    if(stack.length&&/^ {2,}/.test(ln)){h+='<br>'+mdInline(tr);i++;continue;}
-    close(0);const buf=[ln];i++;
-    while(i<L.length&&L[i].trim()&&!/^(#{1,6} |> ?)/.test(L[i])&&!isList(L[i])&&!L[i].trim().startsWith('|')&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}
-    h+='<p class="mdp">'+buf.map(mdInline).join('<br>')+'</p>';
-  }
-  close(0);return h;
-}
+// 개선안 20261124040953_SELF (R114): 주간 정리 주제 summary 는 마크다운으로 그림(글 안의 HTML 은 글자로 바꿈)
+//   2026-11-26 개선안 20261126164322_SELF: 변환 함수(mdEsc, mdInline, mdHtml), Ctrl+A 범위, 경계 막대 끌기 함수 = webview-kit.js 공용 모듈
+${require('./webview-kit').script()}
 function paintSummary(m){ const s=m.summary; if(!s){ $('hsSum').innerHTML=m.text?'<div class="empty">'+esc(m.text)+'</div>':''; return; }
   $('hsSum').innerHTML='<div class="grp" style="margin-top:8px"><div style="margin-bottom:6px"><b>'+esc(s.week)+' ~ '+esc(s.to||'')+'</b> <span class="s" style="color:var(--mut)">'+(KO?'항목 ':'items ')+s.items+' · '+dtm(s.at)+(s.costUsd!=null?' · '+Number(s.costUsd).toFixed(3)+' USD':'')+(s.sec?' · '+s.sec+'s':'')+'</span></div>'
     +(s.topics||[]).map(function(t){ return '<div style="margin:6px 0"><b>'+esc(t.title)+'</b> <span class="s" style="color:var(--mut)">'+(t.ids||[]).length+(KO?'건':'')+'</span><div class="md">'+mdHtml(t.summary)+'</div>'+((t.files||[]).length?'<div class="s" style="color:var(--mut)">'+esc(t.files.slice(0,12).join(', '))+'</div>':'')+'</div>'; }).join('')
@@ -1160,7 +1153,7 @@ window.addEventListener('message', e=>{ const m=e.data||{};
   if(m.type==='histList'){ paintHistList(m); return; }
   if(m.type==='histItem'){ paintHistItem(m); return; }
   if(m.type==='histSummary'){ paintSummary(m); return; }
-  if(m.type==='incidents'){ incs=m.items||[]; paintInc(); paintKpi(); if(m.fresh) mark('inc'); return; }
+  if(m.type==='incidents'){ incs=m.items||[]; needTop=m.needTop||[]; paintInc(); paintKpi(); paintNeed(); if(m.fresh) mark('inc'); return; }
   if(m.type==='vision'){ paintVision(m.meta); return; }
   if(m.type==='dict'){ dcGroups=m.groups||[]; paintDict(); return; }
   if(m.type==='proposals'){ props=m.items||[]; paintProp(); paintKpi(); propMeta(m.meta); if(m.fresh) mark('prop'); return; }
@@ -1190,27 +1183,17 @@ document.addEventListener('keydown',e=>{ if(!$('vmiMenu').classList.contains('on
 document.querySelectorAll('[data-srv][data-act]').forEach(b=>b.onclick=()=>{const c=srvCmds[b.dataset.srv]||{}; const l=b.dataset.act==='start'?c.start:c.stop; if(l) vscode.postMessage({type:'orch:quick',label:l});});
 // 2026-11-25 R94: 분할 막대 끌기 = 위아래 두 칸 높이 조절(최소 48px), 두 번 누르기 = 세 칸 같은 크기
 document.querySelectorAll('.lsplit').forEach(function(sp){
-  sp.onpointerdown=function(e){ const i=+sp.dataset.sp; const hs=LSEC.map(id=>$(id).getBoundingClientRect().height); const y0=e.clientY, a=hs[i], b=hs[i+1], MIN=48; if(a+b<MIN*2) return; e.preventDefault(); try{sp.setPointerCapture(e.pointerId);}catch(x){} sp.classList.add('drag');
-    sp.onpointermove=function(ev){ const d=Math.max(MIN-a,Math.min(b-MIN,ev.clientY-y0)); lsz=hs.slice(); lsz[i]=a+d; lsz[i+1]=b-d; paintLsz(); };
-    sp.onpointerup=sp.onpointercancel=function(){ sp.onpointermove=null; sp.onpointerup=sp.onpointercancel=null; sp.classList.remove('drag'); if(lsz){ try{localStorage.setItem('vmoLsz',JSON.stringify(lsz.map(n=>Math.round(n))));}catch(x){} } }; };
+  sp.onpointerdown=function(e){ const i=+sp.dataset.sp; const hs=LSEC.map(id=>$(id).getBoundingClientRect().height); const y0=e.clientY, a=hs[i], b=hs[i+1], MIN=48; if(a+b<MIN*2) return;
+    kitDrag(sp,e,function(ev){ const d=Math.max(MIN-a,Math.min(b-MIN,ev.clientY-y0)); lsz=hs.slice(); lsz[i]=a+d; lsz[i+1]=b-d; paintLsz(); },
+    function(){ if(lsz){ try{localStorage.setItem('vmoLsz',JSON.stringify(lsz.map(n=>Math.round(n))));}catch(x){} } }); };
   sp.ondblclick=function(){ lsz=null; paintLsz(); try{localStorage.removeItem('vmoLsz');}catch(x){} };
 });
 paintLsz();
 document.querySelectorAll('[data-latest]').forEach(b=>b.onclick=()=>scrollEnd(b.dataset.latest));
 document.querySelectorAll('[data-clear]').forEach(b=>b.onclick=()=>{$(b.dataset.clear).innerHTML=''; if(b.dataset.clear==='taskB'){ tlHidden=false; tlShow(false); }});
-// 2026-11-23 R4(workbench.js 2633~2654 방식): 로그 창(.log = belogB, felogB, taskB, agB)에서 Ctrl+A = 마지막으로 누른 그 창 글만 선택. 입력칸(agIn 등)은 브라우저 기본 동작
-//   VS Code 본체가 보내는 document.execCommand('selectAll') 도 같은 대상. 본체가 포커스를 입력칸으로 되돌린 뒤 부르므로 대상은 포커스가 아니라 SEL_L 로 판단
-let SEL_L=null;
-function selLogVisible(L){return !!(L&&L.isConnected&&L.getClientRects().length>0);}
-document.addEventListener('pointerdown',e=>{const t=e.target; SEL_L=(t&&t.closest)?t.closest('.log'):null;},true);
-function selLog(){ if(!selLogVisible(SEL_L)) return false; const a=document.activeElement; if(a&&a!==document.body&&a.blur) a.blur();
-  const r=document.createRange(); r.selectNodeContents(SEL_L); const s=window.getSelection(); s.removeAllRanges(); s.addRange(r); return true; }
-document.addEventListener('keydown',e=>{
-  if(!(e.ctrlKey||e.metaKey)||e.shiftKey||e.altKey||String(e.key).toLowerCase()!=='a') return;
-  const a=document.activeElement; if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable)) return;
-  if(selLog()) e.preventDefault();
-},true);
-(function(){ if(typeof document.execCommand!=='function') return; const ex=document.execCommand.bind(document); document.execCommand=function(cmd,ui,val){ if(String(cmd).toLowerCase()==='selectall'&&selLog()) return true; return ex(cmd,ui,val); }; })();
+// 2026-11-23 R4: 로그 창(.log = belogB, felogB, taskB, agB)에서 Ctrl+A = 마지막으로 누른 그 창 글만 선택. 입력칸(agIn 등)은 브라우저 기본 동작
+//   VS Code 본체가 보내는 전체 선택 명령도 같은 대상. 2026-11-26 개선안 20261126164322_SELF: webview-kit.js kitSelScope, kitSelAll
+kitSelAll(kitSelScope('.log'));
 $('tlClose').onclick=()=>{ tlHidden=true; tlShow(false); }; $('tlOpen').onclick=()=>{ tlHidden=false; tlShow(true); };
 $('stop').onclick=()=>vscode.postMessage({type:'stop'});
 let st0=null; try{st0=vscode.getState();}catch(e){}

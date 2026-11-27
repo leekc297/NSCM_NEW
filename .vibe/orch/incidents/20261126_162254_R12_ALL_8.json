@@ -16,13 +16,19 @@
     "file": "fs-retry.js",
     "result": ".vibe/orch/selfcheck/result.json"
   },
-  "status": "open",
+  "status": "resolved",
   "notice": false,
   "actions": [
     {
       "at": "2026-11-26T16:24:14+09:00",
       "by": "VMO",
       "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    },
+    {
+      "at": "2026-11-26T16:40:04+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S3 항목에서 사라짐",
+      "grade": "A"
     }
   ]
 }

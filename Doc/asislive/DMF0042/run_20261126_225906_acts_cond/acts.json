@@ -1,0 +1,812 @@
+{
+ "id": "DMF0042",
+ "group": "ADMIN",
+ "cond": true,
+ "acts": [
+  {
+   "control": "cboBucketType",
+   "kind": "cond",
+   "change": "다음 항목(0 → 1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:Quarterly",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [],
+   "scenarios": [
+    "DMF0042-Sf2bf00",
+    "DMF0042-Sf2bf00",
+    "DMF0042-S977b45",
+    "DMF0042-S977b45",
+    "DMF0042-Saca138",
+    "DMF0042-Saca138",
+    "DMF0042-S35e26e",
+    "DMF0042-S35e26e",
+    "DMF0042-S359c36",
+    "DMF0042-S359c36",
+    "DMF0042-S18a7a3",
+    "DMF0042-S18a7a3",
+    "DMF0042-S01ac02",
+    "DMF0042-S01ac02",
+    "DMF0042-Sb4aa7b",
+    "DMF0042-Sb4aa7b",
+    "DMF0042-S199aee",
+    "DMF0042-S199aee",
+    "DMF0042-S4bb21a",
+    "DMF0042-S4bb21a",
+    "DMF0042-Sa4e217",
+    "DMF0042-Sa4e217",
+    "DMF0042-S6dc2d6",
+    "DMF0042-S6dc2d6",
+    "DMF0042-S04532f",
+    "DMF0042-S04532f",
+    "DMF0042-S37258a",
+    "DMF0042-S37258a",
+    "DMF0042-S277c65",
+    "DMF0042-S277c65",
+    "DMF0042-S01a39d",
+    "DMF0042-S01a39d",
+    "DMF0042-S6b2f49",
+    "DMF0042-S6b2f49",
+    "DMF0042-Sdc54e6",
+    "DMF0042-Sdc54e6",
+    "DMF0042-S994059",
+    "DMF0042-S994059",
+    "DMF0042-Sdb25e7",
+    "DMF0042-Sdb25e7",
+    "DMF0042-S07b82e",
+    "DMF0042-S07b82e",
+    "DMF0042-S1f30cd",
+    "DMF0042-S1f30cd",
+    "DMF0042-Sb1234a",
+    "DMF0042-Sb1234a",
+    "DMF0042-Sf2cd12",
+    "DMF0042-Sf2cd12",
+    "DMF0042-Sb55f1e",
+    "DMF0042-Sb55f1e",
+    "DMF0042-Sf70c7a",
+    "DMF0042-Sf70c7a"
+   ]
+  },
+  {
+   "control": "cboBucketType",
+   "kind": "cond",
+   "change": "원래 항목으로(0)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:0:Monthly",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [],
+   "scenarios": [
+    "DMF0042-Sf2bf00",
+    "DMF0042-Sf2bf00",
+    "DMF0042-S977b45",
+    "DMF0042-S977b45",
+    "DMF0042-Saca138",
+    "DMF0042-Saca138",
+    "DMF0042-S35e26e",
+    "DMF0042-S35e26e",
+    "DMF0042-S359c36",
+    "DMF0042-S359c36",
+    "DMF0042-S18a7a3",
+    "DMF0042-S18a7a3",
+    "DMF0042-S01ac02",
+    "DMF0042-S01ac02",
+    "DMF0042-Sb4aa7b",
+    "DMF0042-Sb4aa7b",
+    "DMF0042-S199aee",
+    "DMF0042-S199aee",
+    "DMF0042-S4bb21a",
+    "DMF0042-S4bb21a",
+    "DMF0042-Sa4e217",
+    "DMF0042-Sa4e217",
+    "DMF0042-S6dc2d6",
+    "DMF0042-S6dc2d6",
+    "DMF0042-S04532f",
+    "DMF0042-S04532f",
+    "DMF0042-S37258a",
+    "DMF0042-S37258a",
+    "DMF0042-S277c65",
+    "DMF0042-S277c65",
+    "DMF0042-S01a39d",
+    "DMF0042-S01a39d",
+    "DMF0042-S6b2f49",
+    "DMF0042-S6b2f49",
+    "DMF0042-Sdc54e6",
+    "DMF0042-Sdc54e6",
+    "DMF0042-S994059",
+    "DMF0042-S994059",
+    "DMF0042-Sdb25e7",
+    "DMF0042-Sdb25e7",
+    "DMF0042-S07b82e",
+    "DMF0042-S07b82e",
+    "DMF0042-S1f30cd",
+    "DMF0042-S1f30cd",
+    "DMF0042-Sb1234a",
+    "DMF0042-Sb1234a",
+    "DMF0042-Sf2cd12",
+    "DMF0042-Sf2cd12",
+    "DMF0042-Sb55f1e",
+    "DMF0042-Sb55f1e",
+    "DMF0042-Sf70c7a",
+    "DMF0042-Sf70c7a"
+   ]
+  },
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "다음 항목(1 → 2)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:2:82 ESS Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0042_GET_SPREAD_TITLE",
+    "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "PR_GET_DAY_RANGE",
+    "SCM0001_GET_LOOKUP_VALUES"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "btnProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbBizType(clb)",
+     "before": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      9,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbCustomer(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      348,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "ALL"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbPlantSite(cbo)",
+     "before": [
+      "ALL",
+      1,
+      0,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(pnlMain)",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      30,
+      null,
+      0,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      27,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbTeam(clb)",
+     "before": [
+      "",
+      16,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      27,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "txtProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "textBox1",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0042-S70a88d",
+    "DMF0042-S95028d",
+    "DMF0042-S59ccaf",
+    "DMF0042-S0263a1",
+    "DMF0042-S2155fc",
+    "DMF0042-S040495",
+    "DMF0042-S7f396b",
+    "DMF0042-S094a78",
+    "DMF0042-S555d71",
+    "DMF0042-Sfa0728"
+   ]
+  },
+  {
+   "control": "clbDivision",
+   "kind": "cond",
+   "change": "원래 항목으로(1)",
+   "ok": true,
+   "error": null,
+   "applied": "combo:1:40 Mobility & IT Battery",
+   "popups": [],
+   "dialogs": [],
+   "calls": [
+    "DMF0042_GET_SPREAD_TITLE",
+    "SCM0001_GET_LOOKUP_VALUES",
+    "PR_GET_DAY_RANGE",
+    "SCM0001_GET_LOOKUP_VALUES"
+   ],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "btnProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbBizType(clb)",
+     "before": [
+      "",
+      9,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      3,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbCustomer(clb)",
+     "before": [
+      "",
+      348,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbPlantSite(cbo)",
+     "before": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(pnlMain)",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbPlantSite(clb)",
+     "before": [
+      "",
+      27,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      30,
+      null,
+      0,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbTeam(clb)",
+     "before": [
+      "",
+      27,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      16,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "txtProject",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "textBox1",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      false,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0042-S70a88d",
+    "DMF0042-S95028d",
+    "DMF0042-S59ccaf",
+    "DMF0042-S0263a1",
+    "DMF0042-S2155fc",
+    "DMF0042-S040495",
+    "DMF0042-S7f396b",
+    "DMF0042-S094a78",
+    "DMF0042-S555d71",
+    "DMF0042-Sfa0728"
+   ]
+  },
+  {
+   "control": "clbCustomer",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 500개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:-",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbSalesSite(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0042-S43d591",
+    "DMF0042-S43d591",
+    "DMF0042-S1ba1d0",
+    "DMF0042-S1ba1d0",
+    "DMF0042-S348aeb",
+    "DMF0042-S348aeb",
+    "DMF0042-S400a5e",
+    "DMF0042-S400a5e",
+    "DMF0042-S6e306e",
+    "DMF0042-S6e306e"
+   ]
+  },
+  {
+   "control": "clbTeam",
+   "kind": "cond",
+   "change": "첫 항목만 체크(목록 16개)",
+   "ok": true,
+   "error": null,
+   "applied": "check:0:ESS.SCM.SCM2팀",
+   "popups": [],
+   "dialogs": [],
+   "calls": [],
+   "asis_timeout": [],
+   "changed_controls": [
+    {
+     "control": "clbCustomer",
+     "before": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "-"
+     ],
+     "after": [
+      "",
+      null,
+      null,
+      null,
+      true,
+      true,
+      "ALL"
+     ]
+    },
+    {
+     "control": "clbCustomer(cbo)",
+     "before": [
+      "-",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "ALL",
+      1,
+      0,
+      null,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbCustomer(clb)",
+     "before": [
+      "",
+      500,
+      null,
+      1,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    },
+    {
+     "control": "clbSalesSite(clb)",
+     "before": [
+      "",
+      2,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ],
+     "after": [
+      "",
+      1,
+      null,
+      0,
+      true,
+      true,
+      ""
+     ]
+    }
+   ],
+   "scenarios": [
+    "DMF0042-Se56b9a",
+    "DMF0042-Se56b9a",
+    "DMF0042-Sd3e0a3",
+    "DMF0042-Sd3e0a3",
+    "DMF0042-S462ebd",
+    "DMF0042-S462ebd",
+    "DMF0042-Saa37cf",
+    "DMF0042-Saa37cf",
+    "DMF0042-S578140",
+    "DMF0042-S578140"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "control": "cboDivision",
+   "why": "화면에 보이는 컨트롤이 아님(다른 탭·팝업 안·숨김)",
+   "scenarios": 10
+  },
+  {
+   "control": "spdMain",
+   "why": "값을 고르는 규칙이 없는 컨트롤 형식(FpSpread)",
+   "scenarios": 28
+  }
+ ],
+ "at": "2026-11-26 22:57:58",
+ "data_find_reuse": {
+  "cond": "Division 40",
+  "ok": true,
+  "done": [
+   {
+    "op": {
+     "division": "40"
+    },
+    "ok": true,
+    "note": null
+   }
+  ],
+  "src": "Doc/asislive/DMF0042/data_find.json"
+ },
+ "division_set": {
+  "ok": true,
+  "applied": "40"
+ }
+}

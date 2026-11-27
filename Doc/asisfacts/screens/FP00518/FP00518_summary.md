@@ -83,11 +83,22 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
-| GetCheckedListValue | InitControls:219, InitControls:229, Find_Data_Item:376, Find_Data_Item:377, Find_Data_Item:378, clbDivision_SelectedIndexChanged:455, clbDivision_SelectedIndexChanged:463, cboSite_SelectedIndexChanged:483 | CString.GetCheckedListValue | CODE |
+| GetCheckedListValue | InitControls:164, InitControls:173, InitControls:185, SetChangedControl:260, SetChangedControl:266, SetChangedControl:273, btnCreateWPP_Click:522, btnImport_Click:583 | CString.GetCheckedListValue | CODE |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
 |---|---|---|---|
+| this.btnCreateWPP | Click | btnCreateWPP_Click | InitializeComponent:174 |
+| this.chkWPP | CheckedChanged | chkWPP_CheckedChanged | InitializeComponent:284 |
+| this.btnImport | Click | btnImport_Click | InitializeComponent:632 |
+| this.btnSql | Click | btnSql_Click | InitializeComponent:696 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:956 |
+| this | Load | Form_Load | .ctor:113 |
+| cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:295 |
+| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:296 |
+| cboSite | SelectedIndexChanged | CboSite_SelectedIndexChanged | InitEvent:297 |
+| cboWppWeek | SelectedIndexChanged | CboWppWeek_SelectedIndexChanged | InitEvent:298 |
+| popSql | OnSql | RunSqlSource | btnSql_Click:572 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:157 |
 | this.cboSite | SelectedIndexChanged | cboSite_SelectedIndexChanged | InitializeComponent:259 |
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:303 |
@@ -101,11 +112,6 @@
 | clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitEvent:263 |
 | cboSite | SelectedIndexChanged | cboSite_SelectedIndexChanged | InitEvent:264 |
 | popSql | OnSql | RunSqlSource | btnSql_Click:319 |
-| this.btnCreateWPP | Click | btnCreateWPP_Click | InitializeComponent:174 |
-| this.chkWPP | CheckedChanged | chkWPP_CheckedChanged | InitializeComponent:284 |
-| this.btnImport | Click | btnImport_Click | InitializeComponent:632 |
-| this.btnSql | Click | btnSql_Click | InitializeComponent:696 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:956 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:180 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:237 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:292 |
@@ -113,32 +119,26 @@
 | this | Load | Form_Load | .ctor:124 |
 | this | Load | Form_Load | .ctor:133 |
 | popSql | OnSql | RunSqlSource | btnSql_Click:218 |
-| this | Load | Form_Load | .ctor:113 |
-| cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:295 |
-| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:296 |
-| cboSite | SelectedIndexChanged | CboSite_SelectedIndexChanged | InitEvent:297 |
-| cboWppWeek | SelectedIndexChanged | CboWppWeek_SelectedIndexChanged | InitEvent:298 |
-| popSql | OnSql | RunSqlSource | btnSql_Click:572 |
 
 ## 6. 컨트롤 (68개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 23 | layoutControlItem1, lblDivision, layoutControlItem2, layoutControlItem3, layoutControlItem4, layoutControlItem5, layoutControlItem3, layoutControlItem6, layoutControlItem7, layoutControlItem8, layoutControlItem4, layoutControlItem5, layoutControlItem9, lblWppWeek, lblWppSeq … |
-| UsrCombo | 7 | cboPlant, cboSite, cboWppSeq, cboWppWeek, cboPlanGroup, cboCellType, cboSite |
+| LayoutControlItem | 23 | layoutControlItem3, layoutControlItem6, layoutControlItem7, layoutControlItem8, layoutControlItem4, layoutControlItem5, layoutControlItem9, lblWppWeek, lblWppSeq, layoutControlItem2, layoutControlItem1, lblExcelImport, lblSql, layoutControlItem12, layoutControlItem1 … |
+| UsrCombo | 7 | cboWppSeq, cboWppWeek, cboPlanGroup, cboCellType, cboSite, cboPlant, cboSite |
 | UsrLayoutControl | 6 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 6 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
-| UsrButton | 4 | btnSql, btnImport, btnSql, btnSql |
+| UsrButton | 4 | btnImport, btnSql, btnSql, btnSql |
 | UsrConditionPanel | 3 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
-| UsrCheckedList2 | 3 | clbDivision, clbPlant, clbDivision |
+| UsrCheckedList2 | 3 | clbPlant, clbDivision, clbDivision |
 | FpSpread | 3 | spdMain, spdMain, spdMain |
 | SheetView | 3 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
-| UsrButtonList | 2 | btnButtonList, btnButtonList |
 | UsrMultiLineEditor | 2 | txtItemName, txtItemID |
-| UsrTextBox | 1 | txtItem |
+| UsrButtonList | 2 | btnButtonList, btnButtonList |
 | SimpleButton | 1 | btnCreateWPP |
 | UsrCheckBox | 1 | chkWPP |
 | UsrDateRangePicker2 | 1 | drpPeriod |
 | ImageList | 1 | imageList1 |
+| UsrTextBox | 1 | txtItem |
 | UsrLabel | 1 | usrLabel1 |
 
 ## 7. 확인 필요 (0건)
@@ -171,8 +171,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: ItemPopup, TransportModePopup, ShippingPlan
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:292, SetSheetHeaderColumn_FP@SetSpreadInit:188, SetSheetHeaderColumn_FP@SetSpreadInit:358
+- 코드에서 생성하는 시트: ShippingPlan, ItemPopup, TransportModePopup
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:358, SetSheetHeaderColumn_FP@SetSpreadInit:292, SetSheetHeaderColumn_FP@SetSpreadInit:188
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
 |---|---|---:|---|---|---|---|---|

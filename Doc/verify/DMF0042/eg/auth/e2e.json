@@ -1,0 +1,3186 @@
+[
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 40",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1557",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 40",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1558",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "btnCutOff.enabled",
+  "ctx": "전체 Div",
+  "result": "ERROR",
+  "expected": "AS-IS Div 분기 있음(2문장)",
+  "actual": "컨트롤 라벨 미식별 — TO-BE 칸과 대응 못함(plan.fields·디자이너 Text 없음)",
+  "asis": "DMF0042_2_BizPlan.cs:335",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "btnCutOff.visible",
+  "ctx": "전체 Div",
+  "result": "ERROR",
+  "expected": "AS-IS Div 분기 있음(2문장)",
+  "actual": "컨트롤 라벨 미식별 — TO-BE 칸과 대응 못함(plan.fields·디자이너 Text 없음)",
+  "asis": "DMF0042_2_BizPlan.cs:336",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "btnProject.enabled",
+  "ctx": "전체 Div",
+  "result": "ERROR",
+  "expected": "AS-IS Div 분기 있음(6문장)",
+  "actual": "컨트롤 라벨 미식별 — TO-BE 칸과 대응 못함(plan.fields·디자이너 Text 없음)",
+  "asis": "DMF0042_2_BizPlan.cs:1559",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 81",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1569",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 81",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1570",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 82",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1582",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 82",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1583",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 81_HD",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1569",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 81_HD",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1570",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 81_HG",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1569",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 81_HG",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1570",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 81_HM",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1569",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 81_HM",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1570",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 81_ST",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1569",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 81_ST",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1570",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblProject.enabled",
+  "ctx": "Div 81_UC",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1569",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG271",
+  "screen": "DMF0042",
+  "target": "lblPlantSite.enabled",
+  "ctx": "Div 81_UC",
+  "result": "ERROR",
+  "expected": "AS-IS 조건 평가",
+  "actual": "평가 불가 RAW(sDivision != null & sDivision != \"\")",
+  "asis": "DMF0042_2_BizPlan.cs:1570",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 40 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 40 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 40 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 81 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 81 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 81 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 82 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 82 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 82 · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 81_HD · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 81_HD · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 81_HD · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 81_HG · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 81_HG · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 81_HG · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 81_HM · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 81_HM · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 81_HM · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 81_ST · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 81_ST · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 81_ST · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 CR-070",
+  "ctx": "Div 81_UC · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 CR-070",
+  "ctx": "Div 81_UC · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG369",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 CR-070",
+  "ctx": "Div 81_UC · 조회 전",
+  "result": "PASS",
+  "expected": "Div 권한 있음 → 기능 있으면 노출",
+  "actual": "노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG212",
+  "screen": "DMF0042",
+  "target": "Division 전환",
+  "ctx": "후보 8개 순회",
+  "result": "PASS",
+  "expected": "Division 전환 중 세션 오류(401/403) 0 — DM-163",
+  "actual": "0건(5xx 0건 별도)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG257",
+  "screen": "DMF0042",
+  "target": "조회 본문 Division",
+  "ctx": "Div 40",
+  "result": "PASS",
+  "expected": "본문 Division=40 — DM-85",
+  "actual": "40",
+  "asis": "AS-IS: 조회 인자 = 선택 Division",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG257",
+  "screen": "DMF0042",
+  "target": "조회 본문 Division",
+  "ctx": "Div 81",
+  "result": "PASS",
+  "expected": "본문 Division=81 — DM-85",
+  "actual": "81",
+  "asis": "AS-IS: 조회 인자 = 선택 Division",
+  "note": "",
+  "mctx": {
+   "calls": 5,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG257",
+  "screen": "DMF0042",
+  "target": "조회 본문 Division",
+  "ctx": "Div 40",
+  "result": "PASS",
+  "expected": "본문 Division=40 — DM-85",
+  "actual": "40",
+  "asis": "AS-IS: 조회 인자 = 선택 Division",
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG024",
+  "screen": "DMF0042",
+  "target": "복귀 헤더",
+  "ctx": "40→81→40",
+  "result": "PASS",
+  "expected": "원래 Div 복귀 시 처음 헤더와 동일 — DM-P60",
+  "actual": "동일(정적 14컬럼)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG024",
+  "screen": "DMF0042",
+  "target": "Div 전용 컬럼",
+  "ctx": "40→81",
+  "result": "FAIL",
+  "expected": "메타(Biz Plan) 40 전용 7·81 전용 6 재구성",
+  "actual": "이전 Div 전용 잔존 - · 이 Div 전용 누락 PLANT_SITE_ID",
+  "asis": "SCM_MST_SHEET_COLUMNS DIVISION_ID",
+  "note": "개인화(TITLESET_USER) 보유 계정이면 DEFAULT 와 다를 수 있음 — 같은 계정의 Div 간 차이만 비교",
+  "mctx": {
+   "calls": 7,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG024",
+  "screen": "DMF0042",
+  "target": "Div 전용 컬럼",
+  "ctx": "40 기준",
+  "result": "판정필요",
+  "expected": "40 전용 컬럼 표시",
+  "actual": "없음 DEPT_ID40,ENERGE_WH,ITEM_NAME",
+  "asis": "",
+  "note": "개인화로 뺐을 수 있어 FAIL 로 세우지 않음",
+  "mctx": {
+   "calls": 7,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG257",
+  "screen": "DMF0042",
+  "target": "헤더 재구성 시점",
+  "ctx": "40→81 조회 전",
+  "result": "FAIL",
+  "expected": "AS-IS Div 변경 이벤트 가 헤더 재구성(InitSpread 류)",
+  "actual": "조회 전 미재구성(잔존 -)",
+  "asis": "InitSpread,SetSpreadColumn,SetSpreadHeaderSpan",
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG294",
+  "screen": "DMF0042",
+  "target": "DMF0042",
+  "ctx": "전체",
+  "result": "NA",
+  "expected": "Year·Version 초기값 문장",
+  "actual": "AS-IS 로드·변경 경로에 해당 문장 없음",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 7,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "그룹 3개 중 메뉴 권한 2개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
+  "actual": "후보 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "단일 권한 → 40",
+  "actual": "40",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 40",
+  "actual": "7576행 Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0042",
+  "target": "권한 범위 조회",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(40)",
+  "actual": "7576행 · Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "그룹 3개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
+  "actual": "후보 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "단일 권한 → 40",
+  "actual": "40",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 40",
+  "actual": "7576행 Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0042",
+  "target": "권한 범위 조회",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(40)",
+  "actual": "7576행 · Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "그룹 3개 중 메뉴 권한 2개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
+  "actual": "후보 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "단일 권한 → 40",
+  "actual": "40",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 40",
+  "actual": "7576행 Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0042",
+  "target": "권한 범위 조회",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(40)",
+  "actual": "7576행 · Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/DM Viewer",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "그룹 6개 중 메뉴 권한 2개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40",
+  "actual": "후보 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "단일 권한 → 40",
+  "actual": "40",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 40",
+  "actual": "7576행 Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0042",
+  "target": "권한 범위 조회",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(40)",
+  "actual": "7576행 · Division 40",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/SCP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/40/SCP Planner",
+  "result": "판정필요",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "조회 전후 모두 비노출 — 화면 기능 없음(hotkeyConfig)·Div 단위 권한 구분은 공용 K4/J2 대조표 필요",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 없음 → 비노출(CR-070)",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/40/SCP Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 없음 → 비노출(CR-070)",
+  "actual": "툴바 단추 조회 전 비노출 · 조회 후 비노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "그룹 2개 중 메뉴 권한 1개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 4,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "actual": "후보 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "후보 안의 값(81,81_HD,81_HG,81_HM,81_ST,81_UC)",
+  "actual": "81",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "이전 세션 잔존",
+  "ctx": "DM/40/SCP Planner→DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "이전 계정 Div 잔존 0",
+  "actual": "이전 40 · 이번 81",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/81/DM Admin",
+  "result": "NA",
+  "expected": "권한 Div 행",
+  "actual": "기본 조회 0행 · Division '81' + 기간 5년 확대 대안 조회(Div 81:0행 · Div 81_HD:0행 · Div 81_HG:0행 · Div 81_ → 669행",
+  "asis": "",
+  "note": "0행은 행 범위 판정 대상 아님",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "actual": "669행 Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0042",
+  "target": "권한 범위 조회",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(81,81_HD,81_HG,81_HM,81_ST,81_UC)",
+  "actual": "669행 · Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/81/DM Admin",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "그룹 4개 중 메뉴 권한 2개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 44,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "actual": "후보 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "후보 안의 값(81,81_HD,81_HG,81_HM,81_ST,81_UC)",
+  "actual": "81",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/81/DM Planner",
+  "result": "NA",
+  "expected": "권한 Div 행",
+  "actual": "기본 조회 0행 · Division '81' + 기간 5년 확대 대안 조회(Div 81:0행 · Div 81_HD:0행 · Div 81_HG:0행 · Div 81_ → 669행",
+  "asis": "",
+  "note": "0행은 행 범위 판정 대상 아님",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG368",
+  "screen": "DMF0042",
+  "target": "조회 행 범위",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "행 Division ⊆ 권한 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "actual": "669행 Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG007",
+  "screen": "DMF0042",
+  "target": "권한 범위 조회",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "조회 결과 = 권한 Div 범위(81,81_HD,81_HG,81_HM,81_ST,81_UC)",
+  "actual": "669행 · Division 81",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "note": "건수 = 원장 대조는 facts_auth_db 후처리",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 43,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "그룹 6개 중 메뉴 권한 2개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 44,
+   "rows": 670,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "판정필요",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC,EE",
+  "actual": "후보 81,81_HD,81_HG,81_HM,81_ST,81_UC · 권한 있는데 없음 EE",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "판정필요",
+  "expected": "후보 다수 — 기본 선택",
+  "actual": "빈값",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "SAVE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "INSERT 버튼 조회 전",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG374",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG411",
+  "screen": "DMF0042",
+  "target": "DELETE 버튼 조회 전",
+  "ctx": "DM/81/DM Planner (W/S)",
+  "result": "PASS",
+  "expected": "계정 그룹 버튼 권한 합집합(Division ALL·복수·미지정 — useTabBtnPermissions) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070)",
+  "actual": "툴바 단추 조회 전 노출 · 조회 후 노출",
+  "asis": "PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG382",
+  "screen": "DMF0042",
+  "target": "메뉴 트리",
+  "ctx": "DM/81/DM Viewer",
+  "result": "PASS",
+  "expected": "그룹 5개 중 메뉴 권한 3개 → 노출",
+  "actual": "트리에 있음",
+  "asis": "SCM_ADM_USER_GR_MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 2,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG366",
+  "screen": "DMF0042",
+  "target": "Division 후보",
+  "ctx": "DM/81/DM Viewer",
+  "result": "PASS",
+  "expected": "후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "actual": "후보 81,81_HD,81_HG,81_HM,81_ST,81_UC",
+  "asis": "SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG365",
+  "screen": "DMF0042",
+  "target": "자동 선택",
+  "ctx": "DM/81/DM Viewer",
+  "result": "PASS",
+  "expected": "후보 안의 값(81,81_HD,81_HG,81_HM,81_ST,81_UC)",
+  "actual": "81",
+  "asis": "DM-65",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 40",
+  "result": "판정필요",
+  "expected": "메타 필수 10개",
+  "actual": "Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 40",
+  "result": "FAIL",
+  "expected": "메타 필수 10개",
+  "actual": "표시 8개 · 메타 밖 - · 표시 누락 Biz.Type*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 81",
+  "result": "판정필요",
+  "expected": "메타 필수 8개",
+  "actual": "Biz.Type*, Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 81",
+  "result": "PASS",
+  "expected": "메타 필수 8개",
+  "actual": "일치 6개",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 81_HD",
+  "result": "판정필요",
+  "expected": "메타 필수 8개",
+  "actual": "Biz.Type*, Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 81_HD",
+  "result": "PASS",
+  "expected": "메타 필수 8개",
+  "actual": "일치 6개",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 81_HG",
+  "result": "판정필요",
+  "expected": "메타 필수 8개",
+  "actual": "Biz.Type*, Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 81_HG",
+  "result": "PASS",
+  "expected": "메타 필수 8개",
+  "actual": "일치 6개",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 81_HM",
+  "result": "판정필요",
+  "expected": "메타 필수 8개",
+  "actual": "Biz.Type*, Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 81_HM",
+  "result": "PASS",
+  "expected": "메타 필수 8개",
+  "actual": "일치 6개",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 81_ST",
+  "result": "판정필요",
+  "expected": "메타 필수 8개",
+  "actual": "Biz.Type*, Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 81_ST",
+  "result": "PASS",
+  "expected": "메타 필수 8개",
+  "actual": "일치 6개",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 81_UC",
+  "result": "판정필요",
+  "expected": "메타 필수 8개",
+  "actual": "Biz.Type*, Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 81_UC",
+  "result": "PASS",
+  "expected": "메타 필수 8개",
+  "actual": "일치 6개",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "메타 필수인데 설정 창 목록에 없음(Biz Plan)",
+  "ctx": "Div 82",
+  "result": "판정필요",
+  "expected": "메타 필수 5개",
+  "actual": "Biz.Type*, Project*",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "고정 컬럼·Measure 축일 수 있어 FAIL 아님",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG160",
+  "screen": "DMF0042",
+  "target": "필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan)",
+  "ctx": "Div 82",
+  "result": "PASS",
+  "expected": "메타 필수 5개",
+  "actual": "일치 3개",
+  "asis": "SCM_MST_SHEET_COLUMNS",
+  "note": "공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG022",
+  "screen": "DMF0042",
+  "target": "Measure 버튼",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "Measure 버튼",
+  "actual": "버튼·설정 창 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG402",
+  "screen": "DMF0042",
+  "target": "Measure 버튼",
+  "ctx": "전체 Div",
+  "result": "NA",
+  "expected": "Measure 버튼",
+  "actual": "버튼·설정 창 없음",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 1,
+   "rows": 3,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG109",
+  "screen": "DMF0042",
+  "target": "Insert 그룹 차단",
+  "ctx": "DMF0042",
+  "result": "NA",
+  "expected": "AS-IS Insert GROUP 분기",
+  "actual": "InsertButton·InsertRow 경로에 GROUP guard MESSAGE 없음",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG373",
+  "screen": "DMF0042",
+  "target": "Insert 차단 메시지",
+  "ctx": "DMF0042",
+  "result": "NA",
+  "expected": "AS-IS Insert GROUP 분기",
+  "actual": "GROUP guard MESSAGE 없음",
+  "asis": "facts_auth",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG140",
+  "screen": "DMF0042",
+  "target": "병합 그룹 위 삽입",
+  "ctx": "병합 DIVISION_ID r0~30 · 선택 r1",
+  "result": "PASS",
+  "expected": "신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15",
+  "actual": "신규행 r0 · 메시지 -",
+  "asis": "DMF0042_2_BizPlan.cs:518",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG319",
+  "screen": "DMF0042",
+  "target": "병합 그룹 위 삽입",
+  "ctx": "병합 DIVISION_ID r0~30 · 선택 r1",
+  "result": "PASS",
+  "expected": "신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15",
+  "actual": "신규행 r0 · 메시지 -",
+  "asis": "DMF0042_2_BizPlan.cs:518",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG126",
+  "screen": "DMF0042",
+  "target": "Sort 유지 Insert",
+  "ctx": "정렬 INCOTERMS asc · 선택 r2",
+  "result": "PASS",
+  "expected": "Insert 후 정렬 유지 — DM-32",
+  "actual": "정렬 전 INCOTERMS asc → 후 INCOTERMS asc · 신규행 r0",
+  "asis": "DMF0042_2_BizPlan.cs:518",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG126",
+  "screen": "DMF0042",
+  "target": "선택 행 위 Insert",
+  "ctx": "선택 r2",
+  "result": "PASS",
+  "expected": "AS-IS 선택 행 기준 삽입 → 신규행 ≤ r2(맨 위 r0 은 CR-074)",
+  "actual": "신규행 r0",
+  "asis": "DMF0042_2_BizPlan.cs:518,DMF0042_2_BizPlan.cs:1306",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG113",
+  "screen": "DMF0042",
+  "target": "DMF0042",
+  "ctx": "전체",
+  "result": "NA",
+  "expected": "GET_ADMIN_GROUP_MEASURE 행",
+  "actual": "이 메뉴 룩업 0행(SEGMENT2=DMF0042)",
+  "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "DMF0042",
+  "target": "DMF0042",
+  "ctx": "전체",
+  "result": "NA",
+  "expected": "GET_ADMIN_GROUP_MEASURE 행",
+  "actual": "이 메뉴 룩업 0행(SEGMENT2=DMF0042)",
+  "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG067",
+  "screen": "DMF0042",
+  "target": "DMF0042",
+  "ctx": "전체",
+  "result": "NA",
+  "expected": "GET_ADMIN_GROUP_MEASURE 행",
+  "actual": "이 메뉴 룩업 0행(SEGMENT2=DMF0042)",
+  "asis": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "note": "",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Admin · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Admin · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Admin · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Admin · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Viewer · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Viewer · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Viewer · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/DM Viewer · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/40/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "DMF0042",
+  "target": "DM/81/DM Admin",
+  "ctx": "Div 81",
+  "result": "ERROR",
+  "expected": "조회 행",
+  "actual": "0행 — 측정 불가(사전 데이터 금지)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 13,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "DMF0042",
+  "target": "DM/81/DM Planner",
+  "ctx": "Div 81",
+  "result": "ERROR",
+  "expected": "조회 행",
+  "actual": "0행 — 측정 불가(사전 데이터 금지)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 13,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/DM Planner (W/S) · Div ",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/DM Planner (W/S) · Div ",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/DM Planner (W/S) · Div ",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/DM Planner (W/S) · Div ",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "DMF0042",
+  "target": "DM/81/DM Viewer",
+  "ctx": "Div 81",
+  "result": "ERROR",
+  "expected": "조회 행",
+  "actual": "0행 — 측정 불가(사전 데이터 금지)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 13,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/81/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "DMF0042",
+  "target": "DM/82/DM Admin",
+  "ctx": "Div 82",
+  "result": "ERROR",
+  "expected": "조회 행",
+  "actual": "0행 — 측정 불가(사전 데이터 금지)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 14,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "DMF0042",
+  "target": "DM/82/DM Planner",
+  "ctx": "Div 81",
+  "result": "ERROR",
+  "expected": "조회 행",
+  "actual": "0행 — 측정 불가(사전 데이터 금지)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 13,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG376",
+  "screen": "DMF0042",
+  "target": "DM/82/DM Viewer",
+  "ctx": "Div 82",
+  "result": "ERROR",
+  "expected": "조회 행",
+  "actual": "0행 — 측정 불가(사전 데이터 금지)",
+  "asis": "",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 13,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG377",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/82/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG124",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/82/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG378",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/82/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG123",
+  "screen": "DMF0042",
+  "target": "행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값)",
+  "ctx": "DM/82/SCP Planner · Div 40",
+  "result": "PASS",
+  "expected": "규칙 3컬럼 · 평가 불가 0",
+  "actual": "대조 6셀 · 불일치 0",
+  "asis": "edit_expect.csv",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG315",
+  "screen": "DMF0042",
+  "target": "헤더 병합",
+  "ctx": "AS-IS 문장 1건",
+  "result": "PASS",
+  "expected": "AS-IS 헤더 병합 (siMain.ColumnHeaderSpan(0, iCellCnt, 3, 1, 5, sColumnLabel, )",
+  "actual": "TO-BE 헤더 3행 병합 16개 Division|Rep. Incoterms|Currency|End Customer|Sales Site",
+  "asis": "DMF0042_2_BizPlan.cs:399",
+  "note": "",
+  "mctx": {
+   "calls": 3,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG032",
+  "screen": "DMF0042",
+  "target": "정렬 키 SORT_ORDER_NO",
+  "ctx": "보유 DM/40/DM Admin · Div 40",
+  "result": "FAIL",
+  "expected": "AS-IS ORDER BY SORT_ORDER_NO(DMF0002_GET_TITLESET_POPUP:152)",
+  "actual": "30행 단조 아님 · 처음 10,40,50,70",
+  "asis": "DMF0002_GET_TITLESET_POPUP:152",
+  "note": "혼합 정렬(입력일+SORT_ORDER_NO) 동적 규칙은 원문 동적 SQL 해석 전 — 키 단조 여부만",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG032",
+  "screen": "DMF0042",
+  "target": "정렬 키 SORT_ORDER_NO",
+  "ctx": "미보유 DM/40/DM Viewer · Div 40",
+  "result": "FAIL",
+  "expected": "AS-IS ORDER BY SORT_ORDER_NO(DMF0002_GET_TITLESET_POPUP:152)",
+  "actual": "30행 단조 아님 · 처음 10,40,50,70",
+  "asis": "DMF0002_GET_TITLESET_POPUP:152",
+  "note": "혼합 정렬(입력일+SORT_ORDER_NO) 동적 규칙은 원문 동적 SQL 해석 전 — 키 단조 여부만",
+  "mctx": {
+   "calls": 3,
+   "rows": 7577,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG395",
+  "screen": "DMF0042",
+  "target": "설정 저장 직후 그리드",
+  "ctx": "조회 96행",
+  "result": "PASS",
+  "expected": "저장 직후 그리드 비움 → 재조회로 구성 적용 — GAP-356",
+  "actual": "저장 요청 6건(서버 미전송: admin/menu/DMF0042/titleset,admin/combo?src=grid) · 직후 행 -1",
+  "asis": "GAP-356(문서 확정 2026-08-05)",
+  "note": "실제 저장 구성대로 표시·복원은 실저장 필요 — integration.md",
+  "mctx": {
+   "calls": 3,
+   "rows": 97,
+   "req": 0
+  }
+ },
+ {
+  "eg": "EG380",
+  "screen": "DMF0042",
+  "target": "무권한 첫 화면",
+  "ctx": "DM/82/DM Planner (W/S)",
+  "result": "FAIL",
+  "expected": "Auth Request(권한 신청) 화면 메인 — DM-247",
+  "actual": "URL /view/home · 안내창 'You are not authorized to NSCM. Apply for permission.' · 안내창 확인 뒤 URL /view/home · 본문 SCM 공급망관리시스템 Supply Chain Management system Demand Authority KOR 이 이미영 Home Close others C",
+  "asis": "DM-247·GAP-475",
+  "note": "명부 GUEST 전용 계정 2",
+  "mctx": {
+   "calls": 0,
+   "rows": -1,
+   "req": 0
+  }
+ }
+]

@@ -1,0 +1,38 @@
+{
+  "id": "20261126180319_VISION",
+  "at": "2026-11-26T18:03:19+09:00",
+  "ms": 1795683799842,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 vm 시험 전체 실행 중 소스가 바뀐 실패 파일만 단독 n회 다시 실행하고 결과를 따로 표시",
+  "title": "컨설팅: VM 시험 전체 실행 중 소스가 바뀐 실패 파일만 단독 1회 다시 실행하고 결과를 따로 표시",
+  "evidence": "S2 11-26 17:37 t_run_end.js FAIL(orch-agent.js:354), 같은 분 저장소 orch-agent.js 수정(S3 상세). CHANGELOG.md:7 17:45 t_om_job.js, t_lk_job.js 는 run_all 안에서만 실패하고 단독 ALL PASS. S6 '전체 실행 때만 1건 실패, 그 시각 다른 세션이 orch-watch.js 수정 16:58'. run_all.js:12~21 은 실행 중 소스 변경을 기록하지 않음",
+  "targets": [
+    "tools/VibeManager/test/run_all.js",
+    "tools/VibeManager/test/t_run_all_changed.js"
+  ],
+  "before_after": "전: 실패 파일을 바로 FAIL 로 셈. 후: 시험 파일마다 시작 시각을 남기고, 끝난 뒤 VM 폴더 *.js, *.json, test/*.js 중 그 시작 시각 뒤에 수정된 파일을 changedDuring 으로 RESULT 에 넣음. 실패 파일 중 그 시험이 도는 동안 소스가 바뀐 것만 단독 1회 다시 실행. 다시 실행해 통과하면 ok 로 두고 rerun 목록에 '실행 중 소스 변경 뒤 단독 재실행 통과(바뀐 파일 목록)'를 남김. 다시 실행해도 실패하거나 바뀐 파일이 없으면 종전대로 FAIL. 출력 마지막 줄에 '재실행 N' 추가",
+  "verify": "반영 때: node tools/VibeManager/test/t_run_all_changed.js tools/VibeManager(임시 폴더에 시험 2개를 두고 한쪽이 실행 중 다른 .js 를 고쳐 1회 실패, 다른 쪽은 변경 없이 실패하는 경우를 만들어 rerun 1건, FAIL 1건 확인). node tools/VibeManager/test/run_all.js tools/VibeManager. 반영 뒤: 24시간 동안 selfcheck history.jsonl S2 의 rerun 건수와 반영 실패 history 중 시험 사유 건수를 봄",
+  "rollback": "run_all.js 반영 전 사본(.bak_<시각>)으로 되돌리고 t_run_all_changed.js 삭제",
+  "impact": "core",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:10:42+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:43:07+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · test/run_all.js: 실패 시험 중 그 시험 시작 뒤 VM *.js, *.json, test/*.js 가 바뀐 것만 단독 1회 재실행, 통과면 rerun 기록, 마지막 줄 '재실행 N'. test/t_run_all_changed.js 4건. run_all 111개 중 110 통과 PASS 1888(18:46), 실패 t_orch_selfapply.js 는 같은 시각 다른 세션 편집, 단독 ALL PASS. 설치 폴더 복사"
+    }
+  ],
+  "kind": "detector",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795686187804
+}

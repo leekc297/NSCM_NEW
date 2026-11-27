@@ -14,7 +14,7 @@
 | features/admin/src/pages/lookup/index.ts | index | 2 |
 | features/admin/src/pages/lookup/lookup.constants.ts | constants | 14 |
 | features/admin/src/pages/lookup/Lookup.module.scss | style | 90 |
-| features/admin/src/pages/lookup/Lookup.tsx | page | 333 |
+| features/admin/src/pages/lookup/Lookup.tsx | page | 334 |
 | features/admin/src/pages/lookup/lookup.utils.test.ts | test | 75 |
 | features/admin/src/pages/lookup/lookup.utils.ts | other | 175 |
 | features/admin/src/pages/lookup/useLookupStore.ts | store | 195 |
@@ -45,7 +45,7 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/admin/src/pages/lookup/components/LookupForm.tsx | 95 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/admin/src/pages/lookup/components/LookupForm.tsx | 118 |
 | DataGrid | gotFocus | handleGotFocus | jsx | features/admin/src/pages/lookup/components/LookupMasterGrid.tsx | 59 |
-| LookupForm | onSubmit | handleSubmit | jsx | features/admin/src/pages/lookup/Lookup.tsx | 284 |
+| LookupForm | onSubmit | handleSubmit | jsx | features/admin/src/pages/lookup/Lookup.tsx | 285 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -82,8 +82,8 @@
 | LBL00637 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SYS0010(3), SCP0120(1), SCM0103(1), SYS0004(1)
-- SP/PKG: P_SYS0010_GET_LOOKUP_MASTER_DETAIL(1), P_SYS0010_SAVE_LOOKUP_MASTER_DETAIL(1)
+- 화면ID: SYS0010(3), SCP0120(1), SCM0103(1), SYS0004(1), SCM0003(1)
+- SP/PKG: P_SYS0010_SAVE_LOOKUP_MASTER(1), P_SYS0010_GET_LOOKUP_MASTER_DETAIL(1), P_SYS0010_SAVE_LOOKUP_MASTER_DETAIL(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

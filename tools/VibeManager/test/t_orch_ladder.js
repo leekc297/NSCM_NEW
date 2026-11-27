@@ -171,6 +171,64 @@ W('tools/VibeManager/user_checks.json', { items: [1, 2, 3].map(k => ({ id: `U${3
     const g5 = get(L.scan());
     chk('L4-2 ⑤ 같은 목적 L4 개선안 없음 = 종전 기준(7일 지적 3건)으로 나옴', !!g5 && !g5.wait && g5.evidence.length === 3 && /같은 목적 반영 개선안 없음/.test(g5.why), JSON.stringify(g5 && g5.why));
     props.splice(props.findIndex(x => x.id === '20261123000419_VISION'), 1); fs.rmSync(evf, { force: true }); fs.writeFileSync(ucf, keep); }
+  // 개선안 20261126173844_SELF(L4 원장 20261126001222_VISION 단계 2): 목적 원장 효력(원장 출처)과 VMO 개선안 효력 중 늦은 시각 · 남은 구현 1건 이상 = 구현 대기
+  //   표본 = 이번 근거(U30 11-25 02:53 remeasureWithoutResolve, events 4401~4424 = 4화면 동시 체인 03:19 끝, 1판 없음 143분)와 원장 효력 11-25 21:00, 효력 뒤 1판 94분(SCP0005 21:06 시작 · 22:40 문서 1판). 시각은 지금 기준 상대값
+  { const H = 3600000; const at = ms => loc(ms).slice(0, 16).replace('T', ' '); const ucf = path.join(root, 'tools/VibeManager/user_checks.json'); const keep = fs.readFileSync(ucf, 'utf8'); const evf = fx('events.jsonl'); const plf = path.join(od, 'purpose_ledger.json');
+    const U = (id, detector, ms) => ({ id, at: at(ms), quote: `지적 ${id}`, detector, purpose: 'checklistTime', status: 'active' });
+    const EFF = now - 100 * H; const LEFF = now - 40 * H; // VMO 안 효력(11-23 15:58 자리) · 원장 효력(11-25 21:00 자리)
+    props.push({ id: '20261123000419_VISION', status: 'applied', level: 'L4', impact: 'core', sig: 'ln|purpose|checklisttime|clock split first doc', appliedMs: EFF, title: '개념 재정립: CheckList 30분 목표 구간', targets: ['tools/VibeManager/quick.json'], history: [] });
+    W('tools/VibeManager/user_checks.json', { items: [U('U2', 'chainTarget', now - 150 * H), U('U24', 'unverifiedResolveIncomplete', now - 130 * H), U('U25', 'partialRemeasureSlow', now - 129 * H), U('U30', 'remeasureWithoutResolve', now - 58 * H)] });
+    const chainEnd = (endMs, scr, runId, msRun) => ({ ms: endMs, type: 'chain.end', ok: false, ms_run: msRun, screen: scr, chain: 'checklist', runId, stopped: true });
+    const old4 = ['SCP0005', 'SCP0028', 'SSP0005', 'SSP0014'].map((s, i) => chainEnd(now - 56 * H + i * 5000, s, `${s}_old`, 143 * 60000)); // 효력 사이(VMO 효력 뒤, 원장 효력 전) 4건 · 1판 없음 143분
+    const evW = arr => fs.writeFileSync(evf, arr.map(x => JSON.stringify(x)).join('\n') + '\n');
+    const led = (items, extra) => W('.vibe/orch/purpose_ledger.json', { purposes: { checklistTime: Object.assign({ title: 'CheckList 30분', concept: '행 단위 해소 + D0~D5', sources: [{ kind: 'plan', ref: 'plan.md', at: loc(LEFF) }], items }, extra || {}) } });
+    const K = 'L4|useraxis|checklistTime'; const get = cs => cs.find(x => x.key === K);
+    // ① 남은 구현 D2, D3, D4 = 구현 대기(진단 안 함)
+    led([{ id: 'D2', status: 'open' }, { id: 'D3', status: 'open' }, { id: 'D4', status: 'open' }]); evW(old4);
+    const a1 = L.scan(); const g1 = get(a1); const u1 = L.update(a1); const b1 = u1.ladder.bundles[K];
+    chk('원장 단계 2 ① 남은 구현 3건 = 구현 대기 · 진단 목록에 없음 · 근거에 원장 줄', !!g1 && g1.wait === true && /^구현 대기: 남은 구현 3건\(D2, D3, D4\)/.test(g1.waitLabel) && g1.evidence.some(e => e.src === 'ledger') && b1 && b1.status === 'wait' && !u1.fresh.some(x => x.key === K), JSON.stringify(g1 && { label: g1.waitLabel, why: g1.why }));
+    // ② 구현 끝 · 원장 효력 뒤 실행 0건 = 원장 효력 기준 실측 대기(VMO 효력 뒤였던 4화면 143분 체인은 원장 효력 전이라 제외)
+    led([{ id: 'D2', status: 'done' }, { id: 'D3', status: 'done' }, { id: 'D4', status: 'done' }]);
+    const g2 = get(L.scan());
+    chk('원장 단계 2 ② 원장 효력(VMO 효력보다 늦음) 뒤 실행 0건 = 실측 대기 · 4401~4424 표본 4건과 U30 은 원장 효력 전이라 근거 아님', !!g2 && g2.wait === true && /실측 대기/.test(g2.waitLabel) && /목적 원장 checklistTime 효력/.test(g2.why) && /효력 뒤 실행 0건/.test(g2.why) && /효력 전 지적 4건 제외/.test(g2.why), JSON.stringify(g2 && { label: g2.waitLabel, why: g2.why }));
+    // ③ 원장 효력 뒤 1판 94분 = 나옴
+    const R = now - 10 * H; evW(old4.concat([{ ms: R - 335 * 60000 + 94 * 60000, type: 'step.end', runId: 'SCP0005_new', status: 'OK', stepKey: 'checklist:2:--docs' }, chainEnd(R, 'SCP0005', 'SCP0005_new', 335 * 60000)]));
+    const g3 = get(L.scan()); const r3 = g3 ? g3.evidence.filter(e => e.src === 'run') : [];
+    chk('원장 단계 2 ③ 원장 효력 뒤 1판 94분 1건 = L4|useraxis|checklistTime 나옴(효력 전 4건 제외)', !!g3 && !g3.wait && r3.length === 1 && /SCP0005 1판 94분\(목표 30분\)/.test(r3[0].what), JSON.stringify(g3 && { run: r3.map(e => e.what), why: g3.why }));
+    // ④ 원장 출처가 창 로드 기다림(reload)이고 그 뒤 창 로드 없음 = 효력 대기
+    led([], { sources: [{ kind: 'changelog', ref: 'x', at: loc(now - 1 * H), reload: true }] }); const actF = path.join(od, 'activations.jsonl'); const act0 = fs.existsSync(actF) ? fs.readFileSync(actF, 'utf8') : null; fs.writeFileSync(actF, JSON.stringify({ ms: now - 2 * H, pid: 1 }) + '\n');
+    const g4 = get(L.scan());
+    chk('원장 단계 2 ④ 원장 효력 전(reload 출처 뒤 창 로드 없음) = 효력 대기', !!g4 && g4.wait === true && /^효력 대기: 목적 원장/.test(g4.waitLabel), JSON.stringify(g4 && g4.waitLabel));
+    if (act0 == null) fs.rmSync(actF, { force: true }); else fs.writeFileSync(actF, act0);
+    // ⑤ 원장 없음 = 종전 경로(VMO 안 효력 기준, 4건 143분 1판 초과로 나옴)
+    fs.rmSync(plf, { force: true }); const g5 = get(L.scan());
+    chk('원장 단계 2 ⑤ 원장 없음 = 종전 경로(VMO 안 효력 기준 · 1판 94분 1건 = 초과 근거)', !!g5 && !g5.wait && g5.evidence.filter(e => e.src === 'run').length === 1 && /같은 목적 개선안 20261123000419_VISION/.test(g5.why), JSON.stringify(g5 && g5.why));
+    // 개선안 20261126174143_SELF(단계 3): 사용자 중지(stopped)이면서 1판 없는 실행 = 1판 전 중지(초과 근거 아님, 표시는 남김) · 동시 실행 화면 수. 표본 = SSP0005_1795535760347 등 4화면 동시(11-25 00:56 시작, 03:19 중지, 143분)
+    const st = g5 ? g5.evidence.filter(e => e.src === 'stop') : [];
+    chk('원장 단계 3 1판 전 중지 4건(SSP0005 포함) = 초과 근거에서 빠지고 근거 표시에 남음 · 동시 실행 4화면 · 사유에 제외 건수', st.length === 4 && st.some(e => /SSP0005 1판 전 중지 · 체인 143분/.test(e.what) && /동시 실행 4화면/.test(e.what) && /초과 근거 아님/.test(e.what)) && /1판 전 중지 4건 제외/.test(g5.why), JSON.stringify(st.map(e => e.what)));
+    evW(old4.map(x => Object.assign({}, x, { stopped: false })));
+    const g6 = get(L.scan());
+    chk('원장 단계 3 중지 아닌 1판 없는 143분 실행 = 종전대로 1판 초과 근거(4건)', !!g6 && g6.evidence.filter(e => e.src === 'run').length === 4 && !g6.evidence.some(e => e.src === 'stop'), JSON.stringify(g6 && g6.why));
+    props.splice(props.findIndex(x => x.id === '20261123000419_VISION'), 1); fs.rmSync(evf, { force: true }); fs.writeFileSync(ucf, keep);
+    { const lad = L.readLadder(); delete lad.bundles[K]; fs.writeFileSync(path.join(od, 'ladder.json'), JSON.stringify(lad)); } }
+  // 개선안 20261126175507_SELF(L4 원장 20261126001222_VISION 단계 4): L4-1 도 원장 효력 거름 · 목적 문구 묶음과 같은 축 묶음을 원장 목적 키(aliases)로 1묶음
+  //   표본 = 전역 Overall Review 3회(11-18~11-20, 'CheckList 화면 1개 10분, 길어야 30분 안에 끝남' 어긋남) + 같은 목적 키 지적 3건
+  { const H = 3600000; const at = ms => loc(ms).slice(0, 16).replace('T', ' '); const ucf = path.join(root, 'tools/VibeManager/user_checks.json'); const keep = fs.readFileSync(ucf, 'utf8'); const plf = path.join(od, 'purpose_ledger.json');
+    const PKEY = 'L4|purpose|CheckList화면1개10분길어야30분안에'; const K = 'L4|useraxis|checklistTime';
+    const led = (items, effAt) => W('.vibe/orch/purpose_ledger.json', { purposes: { checklistTime: { title: 'CheckList 30분', concept: '행 단위 해소', aliases: ['CheckList 화면 1개 10분, 길어야 30분 안에 끝남'], sources: [{ kind: 'plan', ref: 'p', at: effAt }], items } } });
+    const U = (id, ms) => ({ id, at: at(ms), quote: `지적 ${id}`, detector: 'chainTarget', purpose: 'checklistTime', status: 'active' });
+    W('tools/VibeManager/user_checks.json', { items: [] });
+    const g0 = L.scan(); chk('원장 단계 4 원장 없음 = 종전 목적 문구 묶음(L4|purpose|CheckList…)', g0.some(x => x.key === PKEY) && !g0.some(x => x.key === K), JSON.stringify(g0.filter(x => /^L4/.test(x.key)).map(x => x.key)));
+    led([{ id: 'D2', status: 'open' }], '2026-11-17T09:00:00+09:00');
+    const g1 = L.scan(); const b1 = g1.find(x => x.key === K);
+    chk('원장 단계 4 ① 남은 구현 = 목적 문구 묶음이 원장 키 1묶음(구현 대기)으로 · L4|purpose 없음', !g1.some(x => x.key === PKEY) && b1 && b1.wait && /^구현 대기/.test(b1.waitLabel) && b1.evidence.some(e => e.src === 'vision') && b1.evidence.some(e => e.src === 'ledger'), JSON.stringify(b1 && { w: b1.waitLabel, ev: b1.evidence.map(e => e.src) }));
+    led([{ id: 'D2', status: 'done' }], '2026-11-17T09:00:00+09:00'); W('tools/VibeManager/user_checks.json', { items: [U('U70', now - 30 * H), U('U71', now - 20 * H), U('U72', now - 10 * H)] });
+    const g2 = L.scan(); const b2 = g2.filter(x => x.key === K);
+    chk('원장 단계 4 ② 원장 효력(11-17) 뒤 목적 어긋남 3회 + 같은 축 지적 3건 = 2묶음이 1묶음 · 근거 vision 과 user 둘 다 · 사유 이어 붙임', b2.length === 1 && !g2.some(x => x.key === PKEY) && !b2[0].wait && b2[0].evidence.some(e => e.src === 'vision') && b2[0].evidence.some(e => e.src === 'user') && / \/ /.test(b2[0].why), JSON.stringify(b2[0] && { t: b2[0].title, why: b2[0].why }));
+    led([], '2026-11-21T09:00:00+09:00'); W('tools/VibeManager/user_checks.json', { items: [] });
+    const g3 = L.scan();
+    chk('원장 단계 4 ③ 원장 효력(11-21)이 판정 3회 뒤 = 목적 묶음 없음(효력 전 판정 제외)', !g3.some(x => x.key === K || x.key === PKEY), JSON.stringify(g3.filter(x => /^L4/.test(x.key)).map(x => x.key)));
+    fs.rmSync(plf, { force: true }); fs.writeFileSync(ucf, keep); }
   // 개선안 20261126131312_SELF(L4 원장 20261125000616_VISION 단계 1): 목적 연속 계산에서 같은 목적 반영 L4 안 효력 전 판정은 빼고 셈
   //   같은 목적 L4 안 연결 = plans.json 같은 목적 원장의 related(PV1). 시각은 지금 기준 상대값
   { const H = 3600000; const EFF = now - 40 * H; const PK = 'L4|purpose|VM고정문구가문장규칙을지킴'; const vd = path.join(od, 'vision'); const plf = path.join(vd, 'plans.json'); const plKeep = fs.existsSync(plf) ? fs.readFileSync(plf, 'utf8') : null; const made = [];
@@ -216,6 +274,23 @@ W('tools/VibeManager/user_checks.json', { items: [1, 2, 3].map(k => ({ id: `U${3
   const sc =require(path.join(dir, 'orch-selfcheck')); sc.init({ paths: () => p, vmDir: dir, timer: false, incidents: false, autoSync: false, inventory: false, docStyle: false });
   const r = await sc.run(['S15'], '시험'); const k = r.checks.S15;
   chk('S15: 개념 재정립 승인 대기 = 주의 · 집계', k && k.items.some(i => /^S15\|l4\|/.test(i.key) && i.level === 'warn') && k.info.total >= 1, JSON.stringify(k && { st: k.status, keys: k.items.map(i => i.key), info: k.info }));
+  // 개선안 20261126165130_SELF(L4 원장 20261126001222_VISION 단계 1): 목적 원장 읽기 = 효력 시각(출처 중 가장 늦은 것, 창 로드 기다림) · 남은 구현 항목 수(원장 + plan_state 목적 키)
+  { const T = s => Date.parse(s); const actF = path.join(od, 'activations.jsonl'); const act0 = fs.existsSync(actF) ? fs.readFileSync(actF, 'utf8') : null;
+    W('.vibe/orch/purpose_ledger.json', { purposes: { checklistTime: { title: 'CheckList 30분', concept: '행 단위 해소 + D0~D5', sources: [{ kind: 'plan', ref: 'plan.md', at: '2026-11-25T19:00:27+09:00' }, { kind: 'changelog', ref: '체인 소요 개선 2~7', at: '2026-11-26T10:06:00+09:00', reload: true }], items: [{ id: 'D2', status: 'open' }, { id: 'D3', status: 'open' }, { id: 'D4', status: 'done' }] } } });
+    fs.writeFileSync(actF, JSON.stringify({ ms: T('2026-11-25T20:55:34+09:00'), pid: 1 }) + '\n');
+    let pl = L.purposeLedger(); let c = pl.checklistTime;
+    chk('목적 원장: 창 로드 기록이 reload 출처보다 앞 = 효력 전(effMs null) · 남은 항목 D2, D3(done 제외)', c && c.effMs === null && c.effAt === '' && c.remainingN === 2 && c.remaining.join() === 'D2,D3', JSON.stringify(c));
+    fs.appendFileSync(actF, JSON.stringify({ ms: T('2026-11-26T16:29:09+09:00'), pid: 2 }) + '\n' + JSON.stringify({ kind: 'reload-mark', ms: T('2026-11-26T11:00:00+09:00') }) + '\n');
+    c = L.purposeLedger().checklistTime;
+    chk('목적 원장: reload 출처 뒤 첫 창 로드(16:29:09) = 효력 시각 · kind 있는 줄 제외', c.effMs === T('2026-11-26T16:29:09+09:00') && /^2026-11-26T16:29:09/.test(c.effAt) && c.sources[1].effMs === c.effMs && c.sources[0].effMs === T('2026-11-25T19:00:27+09:00'), JSON.stringify(c.sources));
+    W('tools/Harness/plan_state.json', { plan: '시간 단축', purpose: 'checklistTime', items: [{ name: 'D2a', status: 'todo' }, { name: 'D2b', status: 'done' }] });
+    c = L.purposeLedger().checklistTime;
+    chk('목적 원장: plan_state 목적 키 같은 남은 항목 더함(3건)', c.remainingN === 3 && c.remaining.includes('plan_state:D2a') && !c.remaining.includes('plan_state:D2b'), JSON.stringify(c.remaining));
+    W('tools/Harness/plan_state.json', { plan: '다른 계획', purpose: 'reloadResume', items: [{ name: 'X', status: 'todo' }] });
+    chk('목적 원장: 다른 목적 키 계획은 세지 않음', L.purposeLedger().checklistTime.remainingN === 2);
+    W('tools/Harness/harness.json', { orch: { ladderMaxPerDay: 10, purposeLedger: false } }); chk('목적 원장: orch.purposeLedger false = 빈 원장', Object.keys(L.purposeLedger()).length === 0);
+    W('tools/Harness/harness.json', { orch: { ladderMaxPerDay: 10 } }); fs.rmSync(path.join(od, 'purpose_ledger.json')); chk('목적 원장 파일 없음 = 빈 원장', Object.keys(L.purposeLedger()).length === 0);
+    if (act0 == null) fs.rmSync(actF, { force: true }); else fs.writeFileSync(actF, act0); fs.rmSync(path.join(root, 'tools', 'Harness', 'plan_state.json'), { force: true }); }
   try { sc.dispose(); } catch { } try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

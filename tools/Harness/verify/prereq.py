@@ -214,15 +214,20 @@ def main():
     pdir = page_dir(mid)
     ip = D('Doc', 'tobefacts', 'screens', '_index.csv')
     inx = [r for r in read_csv(ip) if (r.get('menu_id') or '').upper() == mid]
+    # 2026-11-26 T670: 신선도는 화면별 Pack(Doc/tobefacts/screens/<ID>/<ID>_summary.md) 시각까지 본다. 종전 = _index.csv 시각만 →
+    #   추출(scan)은 _index.csv 를 새로 쓰고 Pack 은 교차검증 불일치로 안 돈 상태(11-13 ~ 11-26)를 '최신'으로 봄
+    _sm = D('Doc', 'tobefacts', 'screens', mid, f'{mid}_summary.md')
+    _packed = lambda: min(mtime(ip), mtime(_sm)) if os.path.exists(_sm) else 0
     if not pdir and a.docs:  # 문서는 TO-BE 화면이 없어도 AS-IS 기준으로 만든다
         put('tobe_index', 'TO-BE 화면 소스·인덱스', 'SKIP', '-', f'nscm-fe 에 {mid} 화면 없음 — AS-IS 기준 문서만(TO-BE 열은 "원천 없음")')
     elif not pdir:
         put('tobe_index', 'TO-BE 화면 소스·인덱스', 'FAIL', '-', f'nscm-fe 에서 {mid} 를 쓰는 화면 폴더를 찾지 못함 — TO-BE 화면 미개발이면 CheckList 대상 아님')
         return finish(mid, asis, items, 6)
-    elif not inx or newest(pdir) > mtime(ip):
+    elif not inx or newest(pdir) > _packed() or not (read_csv(ip)[:1] and 'dts_sheets' in read_csv(ip)[0]):
         _r = producer_lock('tobe_index', lambda: run(ps(D('tools', 'TobeFacts', 'run.ps1')), timeout=1800))
         rc, ev = (0, _r[1]) if _r[0] == 'WAITED' else _r
-        ok = any((r.get('menu_id') or '').upper() == mid for r in read_csv(ip)) and mtime(ip) >= newest(pdir)
+        # T670: 종료 코드도 본다(run.ps1 은 교차검증 불일치·Pack 실패를 rc 1 로 알림). 종전 = 인덱스 시각만 보고 DONE
+        ok = rc == 0 and any((r.get('menu_id') or '').upper() == mid for r in read_csv(ip)) and _packed() >= newest(pdir)
         put('tobe_index', 'TO-BE 화면 인덱스(Doc/tobefacts/screens)', 'DONE' if ok else 'ERROR', 'tools/TobeFacts/run.ps1',
             f"{'인덱스에 화면 없음' if not inx else 'FE 소스가 인덱스보다 최신'} → 재추출 · {ev}")
     else:

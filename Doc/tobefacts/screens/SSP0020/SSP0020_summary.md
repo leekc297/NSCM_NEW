@@ -12,9 +12,9 @@
 | features/shipping/src/pages/delegate/components/DelegateGrid.tsx | component | 50 |
 | features/shipping/src/pages/delegate/delegate.constants.ts | constants | 147 |
 | features/shipping/src/pages/delegate/Delegate.module.scss | style | 8 |
-| features/shipping/src/pages/delegate/Delegate.tsx | page | 493 |
+| features/shipping/src/pages/delegate/Delegate.tsx | page | 497 |
 | features/shipping/src/pages/delegate/delegate.types.ts | types | 18 |
-| features/shipping/src/pages/delegate/hooks/useDelegateValidation.ts | hook | 156 |
+| features/shipping/src/pages/delegate/hooks/useDelegateValidation.ts | hook | 162 |
 | features/shipping/src/pages/delegate/index.ts | index | 2 |
 | features/shipping/src/pages/delegate/useDelegateStore.ts | store | 157 |
 | features/shipping/src/pages/delegate/utils/delegateColumns.ts | util | 42 |
@@ -25,9 +25,9 @@
 |---|---|---|---|---|
 | (useTabComboQueryResults) | hook | 1 | Y | Delegate.tsx:92 |
 | SSP0020/Delegate//call-proc | hook | 1 | Y | Delegate.tsx:116 |
-| /SSP0020/Delegate/SAVE/call-proc | http | 1 | Y | Delegate.tsx:251 |
-| /SSP0020/Delegate/UNSET/call-proc | http | 1 | Y | Delegate.tsx:346 |
-| /SSP0020/Delegate/USER_CHECK/call-proc | http | 1 | Y | useDelegateValidation.ts:137 |
+| /SSP0020/Delegate/SAVE/call-proc | http | 1 | Y | Delegate.tsx:255 |
+| /SSP0020/Delegate/UNSET/call-proc | http | 1 | Y | Delegate.tsx:350 |
+| /SSP0020/Delegate/USER_CHECK/call-proc | http | 1 | Y | useDelegateValidation.ts:139 |
 | /admin/menu/SSP0020/column | http | 1 | Y | useDelegateStore.ts:100 |
 | /admin/menu/SSP0020/search-conditions | http | 1 | Y | useDelegateStore.ts:126 |
 
@@ -43,8 +43,8 @@
 | CustomDropdown | onChange | <arrow> String(picked??'').split(',').filter,String(picked??'').split,String,tokens.includes,setInput,tokens.filter | jsx | features/shipping/src/pages/delegate/components/DelegateForm.tsx | 106 |
 | DatePickerCalendar | onChange | <arrow> setInput,date?.format | jsx | features/shipping/src/pages/delegate/components/DelegateForm.tsx | 143 |
 | DatePickerCalendar | onChange | <arrow> setInput,date?.format | jsx | features/shipping/src/pages/delegate/components/DelegateForm.tsx | 158 |
-| DelegateForm | onSearch | handleSearch | jsx | features/shipping/src/pages/delegate/Delegate.tsx | 435 |
-| DelegateForm | onDelegateeSearch | <arrow> setOpenUser | jsx | features/shipping/src/pages/delegate/Delegate.tsx | 436 |
+| DelegateForm | onSearch | handleSearch | jsx | features/shipping/src/pages/delegate/Delegate.tsx | 439 |
+| DelegateForm | onDelegateeSearch | <arrow> setOpenUser | jsx | features/shipping/src/pages/delegate/Delegate.tsx | 440 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -84,7 +84,7 @@
 | MSG01301 | 1 |
 | MSG01308 | 1 |
 | MSG01153 | 1 |
-| MSG00219 | 1 |
+| MSG01230 | 1 |
 | MSG01299 | 1 |
 | MSG01300 | 1 |
 | MSG01303 | 1 |

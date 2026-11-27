@@ -3,7 +3,7 @@
   "at": "2026-11-26T15:30:56+09:00",
   "ms": 1795674656384,
   "source": "self",
-  "status": "pending",
+  "status": "applied",
   "sig": "userrule|rn|tools/harness/verify/mapping_trace.py|dncn사이트표본sitetypesjson을만드는스크립트가tools에없고s",
   "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/mapping_trace.py:2331 D3·C2 사이트 표본 site_types.json 을 만드는 스크립트가 tools 에 없고 SCP0007 1화면에만 있음, strTO_SITE_TYPE 분기가 ",
   "evidence": "규칙 R241 \"검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함\" (원래 지시 2026-11-26 14:38 \"sheet_nav 생성기도 만들어서 상세 시트 진입 보완해줘\") · tools/Harness/verify/mapping_trace.py:2331 stp = os.path.join(DOC, 'verify', MENU, 'site_types.json')  # TO site 의 SITE_TYPE 분기(strTO_SITE_TYPE) — TO-BE SCM_MST_SITE 표본",
@@ -48,6 +48,46 @@
       "at": "2026-11-26T16:13:59+09:00",
       "by": "사용자(세션 4ec206 대리 기록)",
       "what": "보류 해제 — 사용자 지시 2026-11-26 16:1x(승인 가이드 완화 · 기능적인 부분은 VMO 가 스스로 보완): 자동 반영 대상으로 되돌림"
+    },
+    {
+      "at": "2026-11-26T16:51:10+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T16:51:10+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-26T17:21:47+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-26T17:27:25+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 45개 파일 통과, 시험 97/97개 파일 통과(PASS 1658, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self1721"
+    },
+    {
+      "at": "2026-11-26T17:27:30+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T17:48:21+09:00",
+      "by": "VMO",
+      "what": "반영 도중 VMO 가 다시 시작됨(창 다시 로드). AI 편집만 되돌림 · 대상 파일 1개(mapping_trace.py AI 편집 3건만 되돌림(반영 전과 같음)) · 다시 대기(실패로 세지 않음)"
+    },
+    {
+      "at": "2026-11-26T18:21:20+09:00",
+      "by": "S-D2",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:36:00+09:00",
+      "by": "S-D2",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/mapping_trace.py ensure_site_types 신규(AS-IS 원문에 drs[\"SITE_TYPE\"] 분기가 있는 화면만 TO-BE SCM_MST_SITE 로 Doc/verify/<화면>/site_types.json 생성, gen.at 24시간 안이면 그대로, DB 실패 = 기존 파일 유지) · D3, C2 표본이 이 함수를 부름(run_verify 가 부르는 mapping_trace 안에서 생성, run_verify.py 는 대상 밖이라 안 고침) · GSCM UIL 원문 분기 화면 = SCP0007 1개 · SCP0007 파일 재생성 SCM_MST_SITE 3099행, 사이트 3020개(18:28:57, 수작업 원본 site_types.json.bak_20261126_sd2) · 시험 5건 ALL PASS 18:29:01 · selftest 108/108 · run_all 109/109 PASS 1855 FAIL 0(18:29:23~18:35:51)"
     }
   ],
   "plain": {
@@ -62,5 +102,10 @@
   "waitNote": "",
   "impactWas": "fix",
   "needsApproval": "",
-  "reason": "사람 판단 필요: site_types.json 생성기 신설(TO-BE SCM_MST_SITE 조회 설계)이 필요한 별도 작업(4ec206 보고)"
+  "reason": "사람 판단 필요: site_types.json 생성기 신설(TO-BE SCM_MST_SITE 조회 설계)이 필요한 별도 작업(4ec206 보고)",
+  "applyStartMs": 1795681650892,
+  "autoTried": false,
+  "interrupted": true,
+  "claimedBy": "S-D2",
+  "appliedMs": 1795685760194
 }

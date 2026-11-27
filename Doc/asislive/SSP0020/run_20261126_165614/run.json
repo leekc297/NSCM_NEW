@@ -1,0 +1,21 @@
+{
+ "id": "SSP0020",
+ "started": "2026-11-26 16:56:14.511",
+ "tool": "asis_live_run.py",
+ "steps": [],
+ "status": "FAIL",
+ "gate": {},
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "user_id": "jaeuk.shin",
+ "prev_user_id": "jaeuk.shin",
+ "main": {
+  "title": "GSCM",
+  "user": "Login : 관리자(admin)",
+  "menu_count": 0
+ },
+ "why": "메뉴 목록이 비어 있음(메뉴 조회 실패·권한 없음) — 화면을 열 수 없음",
+ "ended": "2026-11-26 16:58:24.715",
+ "exit": 2
+}

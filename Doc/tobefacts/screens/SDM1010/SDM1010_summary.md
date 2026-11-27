@@ -196,15 +196,17 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SDM1010(13), SDM5010(3), SDM1020(2), DMF0042(1)
-- SP/PKG: P_SES_USER_ID(4), SCM0001_GET_LOOKUP_VALUES(3), P_SES_(2), P_SDM1010_GET(2), P_SDM1010_BTN_REQ_PJT_REG_MAIN(2), P_ACTIVE_FLAG(2), P_SES_DIVISION_ID(1), P_SDM1010_GET_POP_USER_ORG(1), P_SDM1010_GET_TAB2_PJT_LIST(1), P_SDM1010_SAVE_TAB1_PJT_REG(1), PKG_SDM1010(1)
+- SP/PKG: SCM0001_GET_LOOKUP_VALUES(5), P_SES_USER_ID(4), P_SES_(2), P_SDM1010_GET(2), P_SDM1010_BTN_REQ_PJT_REG_MAIN(2), P_ACTIVE_FLAG(2), P_SES_DIVISION_ID(1), P_SDM1010_GET_POP_USER_ORG(1), P_SDM1010_GET_TAB2_PJT_LIST(1), P_SDM1010_SAVE_TAB1_PJT_REG(1), PKG_SDM1010(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | jsx | 요청 그리드 PROCESS 셀 버튼 — 하단 Close/OK 버튼과 같은 <Button> 컴포넌트를 그대로 써서 | features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx | 442 |
 | jsx | formatItem 이 만드는 순수 DOM이라 <Button> 을 직접 못 앉히므로, formatItem 이 셀 안에 빈 | features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx | 445 |
 | jsx | 컨테이너 div만 만들어 두고 그 div로 실제 <Button> 들을 createPortal 한다(JSX는 아래 requestPanel | features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx | 446 |
+| jsx | PROCESS 셀 버튼 — formatRequestProcess 가 만들어 둔 컨테이너 div로 실제 <Button> 을 portal. 입력/조회는 OK와, 반려는 Close와 완전히 같은 <Button> appearance/priority. | features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx | 712 |
 | code | import { ProjectProcessFlow } from './components/ProjectProcessFlow'; | features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx | 34 |
 | endpoint | 요청 본문은 useProcMutation(callMutationProc)과 동일한 { data: [...] } 형태를 유지한다. | features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx | 116 |
+| jsx | <ProjectProcessFlow /> | features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx | 404 |
 | code | 저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용. | features/spms-demand/src/pages/project-registration/useProjectRegistrationStore.ts | 111 |
 
 ## 10. __asis-mapping__.md 상태

@@ -6,3 +6,4 @@
 "authority/auth-approval","SYS0012","features/authority/src/pages/auth-approval/AuthApproval.tsx","130","","","197","","AS-IS BtnReject_Click L197 — popup 통과 후 2중 검증 (popup.reason.Length > 0)"
 "authority/auth-approval","SYS0012","features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx","16","SYS0012 SCM0009","","","","SYS0012 조회조건 5종 (AS-IS SCM0009 이미지 기준 + NSCM 표준 4/행, 사용자 요구 2026-06-28):"
 "authority/auth-approval","SYS0012","features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx","24","","","","SCM_ADM_CMBO_SQL_M","Div 드롭다운 — 공용 콤보 MyDivision 재사용 (SCM_ADM_CMBO_SQL_M)"
+"authority/auth-approval","SYS0012","features/authority/src/pages/auth-approval/components/AuthRejectPopup.tsx","64","DMF0043","","","","룰 v2 _tobe/10_popup_modal.md §6.4 — raw button 대신 표준 Button 컴포넌트만 사용. 기존에는 무관한 팝업(DMF0043)의 SCSS를 복사한 raw button + 하드코딩 색상이었음."

@@ -1,0 +1,58 @@
+{
+  "id": "20261126164857_INC",
+  "at": "2026-11-26T16:48:57+09:00",
+  "ms": 1795679337060,
+  "source": "incident",
+  "status": "applied",
+  "sig": "source backup 미push 커밋에서 이미 들어간 영상과 스냅샷을 빼고 다시 묶기 push 전 대용량 검사 추가",
+  "title": "Source Backup 미push 커밋에서 이미 들어간 영상과 스냅샷을 빼고 다시 묶기, push 전 대용량 검사 추가",
+  "evidence": "origin/main 269902c65(11-20 15:20) 이후 push 성공 0건(.git/logs/refs/remotes/origin/main 18행). 미push 커밋 4건 중 8b7cff4d3 에 e2e/video 242파일 1007M, .vibe/orch/snap 포함(11-23 측정). .gitignore 229~230행은 새로 올라가는 파일만 막음. 반영 뒤 push 2회는 사용자 중지 1회, 종료 기록 없음 1회(events.jsonl 4102, 4129행)",
+  "targets": [
+    "git 로컬 이력(미push 커밋 4건, 원격 변경 없음)",
+    "tools/VibeManager/workbench.js"
+  ],
+  "before_after": "전: 미push 커밋 4건에 영상, 스냅샷이 남아 push 마다 1GB 넘게 보냄. 후 1(사용자 승인): git reset --soft origin/main 뒤 git rm -r --cached .vibe/orch/snap 과 Doc/verify/*/e2e/video 에 걸리는 파일을 빼고 BACKUP 커밋 1건으로 다시 만든 뒤 push 함. 원격 이력은 바꾸지 않으며 force-push 없음. 후 2(VM 코드): workbench.js 3/3 push 전에 origin/main..HEAD 에 .gitignore 제외 경로 파일이나 50MB 넘는 파일이 있으면 push 하지 않고 경로와 크기를 출력하고 멈춤",
+  "verify": "1번 뒤: git rev-list --count origin/main..HEAD 가 0, git ls-tree -r HEAD 에 .vibe/orch/snap 과 e2e/video 경로 0건. 2번 뒤: node tools/VibeManager/test/run_all.js 통과, 대용량 파일이 든 미push 커밋 표본으로 push 를 멈추는 시험을 t_*.js 에 추가",
+  "rollback": "1번: 다시 묶기 전 HEAD(0db6dbba6)를 태그 BACKUP_PRE_REPACK 으로 남기고 되돌릴 때 git reset --soft BACKUP_PRE_REPACK. 2번: workbench.js push 전 검사 블록 삭제",
+  "impact": "",
+  "level": "L2",
+  "levelWhy": "같은 서명 사건 1건(repeat.same 1). 반영한 L2 개선안 1건이 이미 커밋된 대용량 파일을 덮지 못한 결함이라 같은 사례 안의 보완. 재발 2건 이상 조건 미충족이라 L3 아님",
+  "incident": "20261123_112448_R1_ALL",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:50:47+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T16:50:47+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-26T17:01:46+09:00",
+      "by": "S-W",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:29:15+09:00",
+      "by": "S-W",
+      "what": "반영 완료(세션 직접 보완) · 후 2: workbench.js prePushCheck, 3/3 push 전 origin/main..HEAD 의 .gitignore 제외 경로 또는 100MB 초과 파일 = 멈춤(경로, 크기 출력), 50MB 초과 = 경고. 후 1 = 조정 세션 17:09 처리(1a0acf93d), 이 세션은 git 이력 변경 안 함. 실측 17:26:03: 미push 파일 16,287, 100MB 초과 0, 50MB 초과 0, 제외 경로 1개 .vibe/runs.log(170,450바이트) = 지금 백업은 push 전에 멈춤. 시험 t_backup_push PASS 11 (2026-11-26 17:28:48)"
+    },
+    {
+      "at": "2026-11-26T17:45:20+09:00",
+      "by": "S-W",
+      "what": "보충: 후 1 = 조정 세션 17:09 처리, push 17:26(1a0acf93d, origin/main reflog 17:26:14). .gitignore 에 걸린 추적 파일 6개는 조정 세션이 17:3x git rm --cached. .vibe/runs.log 는 사용자 지시로 로컬 커밋 2142e47e9(17:38:52, 미push)에 먼저 담김, 나머지 5개는 다음 Source Backup 커밋에 들어감. push 전 검사 17:38:57 통과(멈춤 0, 경고 0). run_all 17:39:27~17:45:12 파일 100/100 PASS 1705 FAIL 0"
+    }
+  ],
+  "kind": "fix",
+  "needsApproval": "자동 범위 밖 git 로컬 이력(미push 커밋 4건, 원격 변경 없음)",
+  "approvedWait": {
+    "by": "사용자",
+    "ms": 1795679447355
+  },
+  "claimedBy": "S-W",
+  "waitNote": "",
+  "appliedMs": 1795681755012
+}

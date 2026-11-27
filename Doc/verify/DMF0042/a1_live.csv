@@ -1,0 +1,3 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+DMF0042,Biz Plan|같은 사용자,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,ERROR,0,96,[측정 경로 없음] AS-IS 0행 · 양쪽 Measure 칸 설정이 있는 사용자 없음,
+DMF0042,Biz Plan,DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA,REVIEW,7564,96,"AS-IS 7564행 · TO-BE 96행 · 키 ['INCOTERMS', 'CURRENCY', 'MEASURE'] AS-IS 전용 0 · TO-BE 전용 0 · 값 대조 176칸(숫자 컬럼 13) · 불일치 컬럼 0","미대응 인자 ['p_created_by', 'p_userinfo']"

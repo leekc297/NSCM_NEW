@@ -11,12 +11,12 @@
 | features/shipping/src/pages/shipment-request-pack/components/ExcelUploadModal.tsx | component | 306 |
 | features/shipping/src/pages/shipment-request-pack/components/modals/BodItemRouteModal.module.scss | component | 23 |
 | features/shipping/src/pages/shipment-request-pack/components/modals/BodItemRouteModal.tsx | component | 225 |
-| features/shipping/src/pages/shipment-request-pack/components/PopupInput.tsx | component | 33 |
+| features/shipping/src/pages/shipment-request-pack/components/PopupInput.tsx | component | 37 |
 | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailGrid.tsx | component | 217 |
 | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailSearch.module.scss | component | 46 |
 | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailSearch.tsx | component | 144 |
 | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackForm.tsx | component | 308 |
-| features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | component | 669 |
+| features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | component | 671 |
 | features/shipping/src/pages/shipment-request-pack/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-request-pack/shipment-request-pack.constants.ts | constants | 182 |
 | features/shipping/src/pages/shipment-request-pack/shipment-request-pack.types.ts | types | 56 |
@@ -72,8 +72,8 @@
 | Button | onClick | handleClose | jsx | features/shipping/src/pages/shipment-request-pack/components/ExcelUploadModal.tsx | 265 |
 | Button | onClick | handleSubmit | jsx | features/shipping/src/pages/shipment-request-pack/components/modals/BodItemRouteModal.tsx | 210 |
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-request-pack/components/modals/BodItemRouteModal.tsx | 217 |
-| InputField | onChange | <arrow> onChange | jsx | features/shipping/src/pages/shipment-request-pack/components/PopupInput.tsx | 30 |
-| Button | onClick | onOpen | jsx | features/shipping/src/pages/shipment-request-pack/components/PopupInput.tsx | 26 |
+| InputField | onChange | <arrow> onChange | jsx | features/shipping/src/pages/shipment-request-pack/components/PopupInput.tsx | 34 |
+| Button | onClick | onOpen | jsx | features/shipping/src/pages/shipment-request-pack/components/PopupInput.tsx | 27 |
 | g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailGrid.tsx | 105 |
 | g | updatedLayout | applyDashFormat | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailGrid.tsx | 129 |
 | g.hostElement | dblclick | handler | addEventListener | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackDetailGrid.tsx | 161 |
@@ -107,7 +107,7 @@
 | g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 499 |
 | g | updatedLayout | applyDynVisibility | addHandler | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 553 |
 | g.hostElement | dblclick | dblclickHandler | addEventListener | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 642 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 664 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-request-pack/components/ShipmentRequestPackMainGrid.tsx | 666 |
 | ShipmentRequestPackForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 856 |
 | TabWrapper | onTabClick | <arrow> setActiveMainSheet | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 878 |
 | ShipmentRequestPackMainGrid | onDrillDetail | handleDrillDetail | jsx | features/shipping/src/pages/shipment-request-pack/ShipmentRequestPack.tsx | 893 |
@@ -241,7 +241,7 @@
 | MSG00002 | 1 |
 | MSG01296 | 1 |
 | MSG01320 | 1 |
-| MSG00042 | 1 |
+| MSG01075 | 1 |
 | MSG00429 | 2 |
 | MSG00043 | 2 |
 | MSG00699 | 1 |
@@ -250,7 +250,7 @@
 | MSG00001 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0045(32), SSP0026(14), SCP0030(11), SSP0015(5), SSP0023(3), SYS0001(1), SSP0201(1), DMF0008(1), SSP0202(1), SSP0003(1)
+- 화면ID: DMF0045(33), SSP0026(14), SCP0030(12), SSP0015(6), SSP0023(4), SSP0003(3), COM0013(2), SSP0024(1), SYS0001(1), SSP0201(1), DMF0008(1), SSP0202(1)
 - SP/PKG: PKG_SSP0026(8), P_SCP0030_GET_BOD_POPUP(2), DM0003_GET_BUCKET_TYPE_CODE(2), P_SSP0026_GET_SHIPMENT_REQUEST_PACK(2), P_SSP0026_SAVE_SHIP_REQ_PACK(2), PR_GET_EXCEL_UPLOAD_RESULT(1), P_SSP0026_GET_REQUEST_DETAIL_PACK(1), P_SSP0026_GET_BOD_ITEM(1), PKG_NSCM_UI_COMM(1), PR_GET_PROC_INFO_LIST(1), P_SCM_SITE_ID(1), P_SSP0026_SAVE_SHIP_REQ_(1), P_SSP0026_SAVE_SHIP_REQ_CELL(1), P_SSP0026_SAVE_SHIP_REQ_DETAIL_PACK(1), P_SSP0026_GET_SPREAD_TITLE(1), SSP0026_GET_SPREAD_TITLE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)

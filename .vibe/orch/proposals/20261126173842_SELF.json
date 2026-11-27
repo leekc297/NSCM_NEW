@@ -1,0 +1,48 @@
+{
+  "id": "20261126173842_SELF",
+  "at": "2026-11-26T17:38:42+09:00",
+  "ms": 1795682322837,
+  "source": "self",
+  "status": "applied",
+  "sig": "lnplan cacgbbcfaaacec_vision step g",
+  "title": "CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 6",
+  "evidence": "L4 단계 원장 20261125000242_VISION 단계 6/6 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md · 흡수한 안 20261126000934_VISION",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-vision.js",
+    "tools/Harness/verify/run_verify.py",
+    "tools/Harness/harness.json",
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_vision.js"
+  ],
+  "before_after": "지금: 30분 시계 범위(측정 1회와 문서 1판)를 정하고 run_timing.json 마지막 1줄과 효력 전 판정의 연속 횟수로 목적을 판정함 → 새: 효력 뒤 체인 runId 단위 1판을 단계별 소요 원장으로 판정하고, 30분을 단계 예산으로 나눠 예산을 넘은 단계만 판정 결과가 같은 대체안(ledger_diff.py 차이 0건) 대상으로 올림. 단계 밖 시간이 10%를 넘으면 미확인으로 둠 · 흡수한 안 20261126000934_VISION 변경: 지금: 30분 시계 범위(측정 1회와 문서 1판)를 정하고 run_timing.json 마지막 1줄과 효력 전 판정의 연속 횟수로 목적을 판정함 → 새: 효력 뒤 체인 runId 단위 1판을 단계별 소요 원장으로 판정하고, 30분을 단계 예산으로 나눠 예산을 넘은 단계만 판정 결과가 같은 대체안(ledger_diff.py 차이 0건) 대상으로 올림. 단계 밖 시간이 10%를 넘으면 미확인으로 둠 · 상세 = .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md 전환 절 단계 6",
+  "verify": "1) t_orch_ladder.js: 11-20~11-23 판정 4건 + 효력 2026-11-23 15:58:21 표본 → L4|purpose|CheckList화면1개10분길어야30분안에 없음, 효력 뒤 어긋남 3건 표본 → 있음(반영 전 코드 FAIL → 반영 뒤 PASS). 2) run_verify.py 자기 시험: e2e_tests ≥ 1 실행의 stage_min 에 e2e 키 존재(반영 전 11-25 표본 FAIL). 3) t_orch_vision.js: events.jsonl:4301,4309 표본에서 SCP0028_1795535760315 1판 79.8분, 단계 밖 37.9분 출력, 문서 단계 줄 3.0분을 1판으로 읽지 않음. 지시문에 규칙 1-2 줄 존재. 4) test/run_all.js 전체 통과. 5) 반영 뒤 확인(다음 실행 필요): 다음 CheckList 1회 뒤 vision 판정 JSON evidence 에 단계별 분과 단계 밖 비율 표시",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 단계 원장 끔. 단계마다 반영 백업과 .bak_<날짜>_concept 사본으로 orch-ladder.js, orch-vision.js, orchestra.js, 시험 파일 복원. VMO 개선안 탭 되돌리기. plans.json 원장 삭제는 개선안 원본에 영향 없음",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261125000242_VISION 단계 6",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T17:39:34+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:44:24+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · 반영: (1) L4-1 효력 거름은 20261126131312_SELF 로 이미 있음(t_orch_ladder '반영 L4 효력 전 판정 4건 → 묶음 안 올림' PASS, 실데이터 scan 에 L4|purpose|CheckList 묶음 없음). (2) run_verify.py E2E 차례 실행도 timing_add, timing_gaps(E2E 시험 있는데 e2e 단계 행 없음) 기록과 [WARN], --selftest 4건 OK(11-25 SCP0028 표본 = 빈틈 1건). (3) orch-vision.js checklistEffect 에 1판 단계별 분(stageMin), 단계 밖 분과 비율, 문서 기록 분, 동시 실행 수, 예산 초과 단계(overBudget) 추가, 지시문 1-2 에 단계 밖 비율 10 초과 = 미확인, 대체안 조건. 실데이터 SCP0028_1795535760315 1판 79.7분, 단계 밖 37.9분(47.5%), 문서 3.0분, 동시 3. t_orch_vision.js PASS 27 → 31. 미반영: harness.json orch.checklistStageBudget 값(개념 문서 단계 4 = 첫 실측 뒤 사용자 판정 대상, 코드는 값이 있으면 읽음), orchestra.js 단계 표(Overview 에 checklistEffect 를 넘기는 meta 경로 없음, 다음 안)(2026-11-26 17:44)"
+    }
+  ],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261125000242_VISION|6",
+  "kind": "fix",
+  "plan": "20261125000242_VISION",
+  "planStep": 6,
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795682664459
+}

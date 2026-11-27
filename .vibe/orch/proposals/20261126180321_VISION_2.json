@@ -1,0 +1,39 @@
+{
+  "id": "20261126180321_VISION_2",
+  "at": "2026-11-26T18:03:21+09:00",
+  "ms": 1795683801602,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 반영 지시문 impact_rule 의 사용자 승인 목록을 실제 자동 반영 기준에서 만들어 씀",
+  "title": "컨설팅: 반영 지시문(IMPACT_RULE)의 사용자 승인 목록을 실제 자동 반영 기준에서 만들어 씀",
+  "evidence": "orch-improve.js:44 IMPACT_RULE '사용자 승인은 FE, BE 소스, DB 객체, 룰 문서, hook, 시험 계정 설정, 작업 모드, 코드 파일 삭제만'. 실제 기준 harness.json:50 autoApplyAll true 일 때 orch-selfcheck.js:609~615 예외 = 저장소 밖 경로, .claude/settings, 실행 hook 스크립트, 작업 모드 변경, AS-IS 소스(GSCM/), DB MODE 의 FE·BE. 메모리 feedback_vmo_approval_core_only_20261120.md(11-26 갱신)와 같은 쪽은 코드임",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_impact_rule.js"
+  ],
+  "before_after": "전: IMPACT_RULE 마지막 문장이 고정 문구라 autoApplyAll, 작업 모드에 따라 달라지는 실제 기준과 다름. 후: orch-selfcheck.js 에 approvalNote() 를 두어 cfg().autoApplyAll 과 workScope() 로 승인 대상 문장을 만듦(autoApplyAll true + DB_ONLY = '사용자 승인은 저장소 밖 경로, .claude/settings, 실행 hook 스크립트, 작업 모드 변경, AS-IS 소스, FE·BE 소스만'). orch-improve.js 는 IMPACT_RULE 의 마지막 문장을 이 함수 결과로 바꿔 씀. autoEligible 동작은 바꾸지 않음",
+  "verify": "반영 때: node --check 두 파일. node tools/VibeManager/test/t_impact_rule.js tools/VibeManager(autoApplyAll true/false, DB_ONLY/DB_FE 4조합에서 문장에 든 대상과 autoEligible 판정이 맞는지 표본 8건으로 확인). node tools/VibeManager/test/run_all.js tools/VibeManager. python tools/Docs/doc_style.py tools/VibeManager/orch-selfcheck.js tools/VibeManager/orch-improve.js --quiet 위반 수가 늘지 않음. 반영 뒤: 다음 컨설팅, 자가진단 지시문의 승인 문장 확인",
+  "rollback": "두 파일 반영 전 사본으로 되돌리고 시험 파일 삭제",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:10:42+09:00",
+      "by": "S-Y",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:15:40+09:00",
+      "by": "S-Y",
+      "what": "반영 완료(세션 직접 보완) · orch-selfcheck.js:639 approvalNote(autoEligible 기준) · orch-improve.js:46 impactRule, :576 IMPACT_RULE 읽을 때 생성 · test/t_impact_rule.js 42건 PASS, t_orch_vision ALL PASS, doc_style 위반 0→0(2026-11-26 18:15:19). 지금 harness(autoApplyAll true, DB_ONLY) 기준 DB 객체·시험 계정은 자동이라 승인 목록에 없음"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-Y",
+  "waitNote": "",
+  "appliedMs": 1795684540326
+}

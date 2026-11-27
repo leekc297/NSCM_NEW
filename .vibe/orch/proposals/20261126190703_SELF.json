@@ -1,0 +1,64 @@
+{
+  "id": "20261126190703_SELF",
+  "at": "2026-11-26T19:07:03+09:00",
+  "ms": 1795687623566,
+  "source": "self",
+  "status": "applied",
+  "sig": "repeat exclude run outputs",
+  "title": "반복 수정 집계에서 측정 산출물 경로(Doc/verify/, Doc/e2e/results/)는 빼고 셈",
+  "evidence": "orch-history.js:139-141 '- 변경: … 파일 <목록>.' 의 목록을 고친 파일로 씀, :325-326 basename 으로 셈. CHANGELOG.md 에서 세 파일 경로 151건 중 145건이 Doc/verify/<화면>/, Doc/verify/_llm_usage.csv, Doc/e2e/results/<화면>/ 이고 6건은 경로 없는 이름. diag_in repeatFiles 세 파일 edits 0",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_histauto.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_s6_group.js"
+  ],
+  "before_after": "VMO 자가 보완 절의 파일 목록에 같이 적힌 측정 산출물(CheckList, E2E 실행이 만든 파일)도 고친 파일로 셈 → buildStats 에서 경로가 Doc/verify/ 또는 Doc/e2e/results/ 로 시작하는 파일은 byFile 에 넣지 않음. 경로 없는 이름은 종전",
+  "verify": "t_orch_history_kind.js 에 Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/_llm_usage.csv 가 든 절 표본 추가 후 repeatFiles 에 두 이름 없음. 실데이터 repeatFiles 반영 전 15개(_test_timing.jsonl, e2e_results.json, _llm_usage.csv 포함) → 반영 뒤 다음 이력 수집에서 세 이름 빠짐",
+  "rollback": "orch-history.js, test/t_orch_history_kind.js 를 반영 전 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "집계 오판 3개 파일. _test_timing.jsonl 결함 10, e2e_results.json 9, _llm_usage.csv 6 이 L3 기준(7일 4번 초과)을 넘겼지만 세션 수정 0건이고 CHANGELOG 언급 경로가 측정 산출물임",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:07:23+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:14:25+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-history.js buildStats: Doc/verify/, Doc/e2e/results/ 경로(역슬래시 포함)는 반복 수정 집계에서 뺌, 경로 없는 이름은 종전. t_orch_history_kind.js 2건 추가(24건). run_all 111개 중 110 통과 PASS 1895(19:15), 실패 t_orch_hotreload.js 는 mtime 시각 경합으로 흔들림 → 시험 고침 뒤 단독 3회 ALL PASS. 설치 폴더 복사"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S9",
+  "selfKey": "S9|file|_test_timing.jsonl, S9|file|e2e_results.json, S9|file|_llm_usage.csv",
+  "kind": "fix",
+  "testsAdded": [
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_histauto.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_s6_group.js"
+  ],
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795688065396
+}

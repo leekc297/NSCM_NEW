@@ -3,7 +3,7 @@
   "at": "2026-11-26T15:30:56+09:00",
   "ms": 1795674656146,
   "source": "self",
-  "status": "pending",
+  "status": "apply-failed",
   "sig": "userrule|rn|tools/harness/verify/ledger.py|편집기대보정이사람이적은editexpectmanualcsvscpn화",
   "title": "사용자 지시 R241 같은 문제: tools/Harness/verify/ledger.py:472 편집 기대 보정이 사람이 적은 edit_expect_manual.csv(SCP0104 1화면)에 기대고, 다른 화면의 '해석 못 한 잠금' 칸은 채울 수단이 없음",
   "evidence": "규칙 R241 \"검사 실행에 필요한 화면별 사실 파일은 수작업 1화면에 기대지 않고 AS-IS 원문에서 생성기로 전 화면 만들고, 상세 시트 칸은 원문 진입 경로(그리드 더블클릭 ChangeSheet)로 들어간 뒤 측정함\" (원래 지시 2026-11-26 14:38 \"sheet_nav 생성기도 만들어서 상세 시트 진입 보완해줘\") · tools/Harness/verify/ledger.py:472 ee_manual = {(re.sub(r'[^a-z0-9]', '', (r.get('sheet') or '').lower()), (r.get('column') or '').upper()): dict(r, asis_visible='', ambiguous='', control='') for r in read_csv(P('Doc', 'verify', mid, '",
@@ -13,9 +13,9 @@
   "before_after": "SCP0104 수작업 행이 쓴 원문 잠금 패턴을 edit_expect 자동 해석기에 넣어 전 화면 edit_expect.csv 에서 채움. 수작업 파일은 생성 결과와 대조하는 시험 입력으로만 남김",
   "verify": "node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
   "rollback": "tools/Harness/verify/ledger.py.bak_<날짜>_self<시각>",
-  "impact": "fix",
+  "impact": "core",
   "level": "",
-  "levelWhy": "SCP0104 수작업 edit_expect_manual 139행 중 자동 해석과 같은 것은 신규행 41행뿐. 페이지 조건(isPageSOP) 평가 구현이 먼저 필요(4ec206 보고)",
+  "levelWhy": "S-Z 실측(2026-11-26 17:26): 고칠 곳이 targets(ledger.py) 밖인 facts_lockrules.py(AS-IS 잠금 해석기)임. SCP0104 수작업 139행 중 자동 해석 일치 0행(edit_expect_sheets 불일치 64, edit_expect 불일치 23, 기대 없음 52). 불일치 원인 = SetLockColumnsAllAssign:3985 LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, isInsertMode) 의 잠금 인자 지역 불리언(isInsertMode = editType != \"I\")과 클래스 필드 칸 끝(_fixed_column_idx), 4004 dateStartColIdx~dateEndColIdx(GetColumnIndex(_fixed_column_name)+1 ~ GetMaxColumnIndex) 를 해석 못 함. ledger.py 만 고쳐 수작업 파일을 시험 입력으로 돌리면 SCP0104 편집 기대 139칸이 UNKNOWN 으로 되돌아감. facts_lockrules.py 는 오늘 15:43 다른 세션이 T658, T664, T665 로 고치는 중이고 ledger.py 도 17:12 다른 세션 수정. 대상을 facts_lockrules.py + ledger.py 로 고쳐 그 파일을 맡은 세션이 처리하도록 사람 판단 필요",
   "incident": "",
   "screen": "",
   "history": [
@@ -58,6 +58,59 @@
       "at": "2026-11-26T16:29:12+09:00",
       "by": "VMO",
       "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    },
+    {
+      "at": "2026-11-26T17:23:16+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:26:42+09:00",
+      "by": "S-Z",
+      "what": "사용자 판단 대기로 보류(자동 반영 안 함) · S-Z 실측(2026-11-26 17:26): 고칠 곳이 targets(ledger.py) 밖인 facts_lockrules.py(AS-IS 잠금 해석기)임. SCP0104 수작업 139행 중 자동 해석 일치 0행(edit_expect_sheets 불일치 64, edit_expect 불일치 23, 기대 없음 52). 불일치 원인 = SetLockColumnsAllAssign:3985 LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, isInsertMode) 의 잠금 인자 지역 불리언(isInsertMode = editType != \"I\")과 클래스 필드 칸 끝(_fixed_column_idx), 4004 dateStartColIdx~dateEndColIdx(GetColumnIndex(_fixed_column_name)+1 ~ GetMaxColumnIndex) 를 해석 못 함. ledger.py 만 고쳐 수작업 파일을 시험 입력으로 돌리면 SCP0104 편집 기대 139칸이 UNKNOWN 으로 되돌아감. facts_lockrules.py 는 오늘 15:43 다른 세션이 T658, T664, T665 로 고치는 중이고 ledger.py 도 17:12 다른 세션 수정. 대상을 facts_lockrules.py + ledger.py 로 고쳐 그 파일을 맡은 세션이 처리하도록 사람 판단 필요"
+    },
+    {
+      "at": "2026-11-26T18:03:27+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T18:07:45+09:00",
+      "by": "VMO",
+      "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    },
+    {
+      "at": "2026-11-26T18:09:47+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T18:16:19+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 45개 파일 통과, 시험 100/100개 파일 통과(PASS 1731, FAIL 0), 정의 정합 통과 · 백업 태그 20261126_self1809"
+    },
+    {
+      "at": "2026-11-26T18:16:26+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T18:17:41+09:00",
+      "by": "VMO",
+      "what": "반영 실패. Claude exit 1 · 대상 파일 1개 복원 · 대상 밖 변경 Doc/verify/_llm_usage.csv, tools/Harness/gate_baseline.tsv, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-selfcheck.js, Doc/verify/DMF0042/llm_cache.json, Doc/verify/DMF0042/llm_usage.csv 는 AI 가 고치지 않아 그대로 남음",
+      "log": ".vibe\\logs\\2026-11-26T18-16-27_claude_orch.log",
+      "sec": 69,
+      "costUsd": null,
+      "files": [
+        "Doc/verify/_llm_usage.csv",
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-selfcheck.js",
+        "Doc/verify/DMF0042/llm_cache.json",
+        "Doc/verify/DMF0042/llm_usage.csv",
+        "tools/VibeManager/20261126_181714_R12_ALL.json",
+        "tools/VibeManager/test/t_gate_fe_page.js"
+      ]
     }
   ],
   "plain": {
@@ -69,14 +122,18 @@
   "check": "S13",
   "selfKey": "S13|R241|tools/Harness/verify/ledger.py",
   "kind": "fix",
-  "waitNote": "",
+  "waitNote": "사람 판단 대기(자동 반영 안 함)",
   "impactWas": "fix",
-  "needsApproval": "",
+  "needsApproval": "사람 판단 필요: S-Z 실측(2026-11-26 17:26): 고칠 곳이 targets(ledger.py) 밖인 facts_lockrules.py(AS-IS 잠금 해석기)임. SCP0104 수작업 139행 중 자동 해석 일치 0행(edit_expect_sheets 불일치 64, edit_expect 불일치 23, 기대 없음 52). 불일치 원인 = SetLockColumnsAllAssign:3985 LockRange2(rowIdx, 0, rowIdx, _fixed_column_idx, isInsertMode) 의 잠금 인자 지역 불리언(isInsertMode = editType != \"I\")과 클래스 필드 칸 끝(_fixed_column_idx), 4004 dateStartColIdx~dateEndColIdx(GetColumnIndex(_fixed_column_name)+1 ~ GetMaxColumnIndex) 를 해석 못 함. ledger.py 만 고쳐 수작업 파일을 시험 입력으로 돌리면 SCP0104 편집 기대 139칸이 UNKNOWN 으로 되돌아감. facts_lockrules.py 는 오늘 15:43 다른 세션이 T658, T664, T665 로 고치는 중이고 ledger.py 도 17:12 다른 세션 수정. 대상을 facts_lockrules.py + ledger.py 로 고쳐 그 파일을 맡은 세션이 처리하도록 사람 판단 필요",
   "reason": "사람 판단 필요: SCP0104 수작업 edit_expect_manual 139행 중 자동 해석과 같은 것은 신규행 41행뿐. 페이지 조건(isPageSOP) 평가 구현이 먼저 필요(4ec206 보고)",
   "auto": true,
   "gated": true,
-  "autoTried": false,
-  "autoTries": 1,
-  "autoMs": 1795677925909,
-  "autoFp": "fefa93c567"
+  "autoTried": true,
+  "autoTries": 3,
+  "autoMs": 1795684186823,
+  "autoFp": "04e4973ac1",
+  "autoWaitMs": 2111041602871,
+  "userHold": true,
+  "applyStartMs": 1795684586045,
+  "result": null
 }

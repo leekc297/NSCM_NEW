@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/teamModal/team-modal.constants.ts | constants | 8 |
-| features/master/src/components/teamModal/TeamModal.module.scss | style | 20 |
+| features/master/src/components/teamModal/TeamModal.module.scss | style | 21 |
 | features/master/src/components/teamModal/TeamModal.tsx | page | 209 |
 | features/master/src/components/teamModal/teamModalStore.ts | store | 41 |
 
@@ -27,8 +27,8 @@
 | SearchArea | onSearch | handleSearch | jsx | features/master/src/components/teamModal/TeamModal.tsx | 145 |
 | InputField | onChange | <arrow> setTeamInput | jsx | features/master/src/components/teamModal/TeamModal.tsx | 155 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/teamModal/TeamModal.tsx | 156 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/teamModal/TeamModal.tsx | 194 |
-| Button | onClick | modalClose | jsx | features/master/src/components/teamModal/TeamModal.tsx | 201 |
+| Button | onClick | modalClose | jsx | features/master/src/components/teamModal/TeamModal.tsx | 192 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/teamModal/TeamModal.tsx | 201 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

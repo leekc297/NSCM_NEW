@@ -6,7 +6,9 @@ const path = require('path');
 class CsvOut {
   constructor(file, header) {
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    this.fd = fs.openSync(file, 'w');
+    // 2026-11-26 T669: 임시 파일에 쓰고 close() 때 바꿔 넣는다. 종전 = 실행이 중간에 죽으면(파일 열기 UNKNOWN 17:14) 잘린 파일이 남음(files.csv 75바이트)
+    this.file = file; this.tmp = `${file}.${process.pid}.tmp`;
+    this.fd = fs.openSync(this.tmp, 'w');
     this.header = header; this.rows = 0;
     fs.writeSync(this.fd, '﻿' + header.map(q).join(',') + '\n');
   }
@@ -14,7 +16,7 @@ class CsvOut {
     const vals = this.header.map(h => obj[h] == null ? '' : String(obj[h]));
     fs.writeSync(this.fd, vals.map(q).join(',') + '\n'); this.rows++;
   }
-  close() { fs.closeSync(this.fd); }
+  close() { fs.closeSync(this.fd); try { fs.renameSync(this.tmp, this.file); } catch (e) { fs.copyFileSync(this.tmp, this.file); fs.unlinkSync(this.tmp); } }
 }
 function q(s) { return '"' + String(s).replace(/"/g, '""').replace(/\r?\n/g, '\\n') + '"'; }
 

@@ -1,0 +1,38 @@
+{
+  "id": "20261126164445_VISION_4",
+  "at": "2026-11-26T16:44:45+09:00",
+  "ms": 1795679085891,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 ui mode 전환 전 생성기 시험 기준 화면으로 gen.js 생성 check.js 검사를 임시 폴더에서 돌리는 자체 시험 추가와 engine_selfcheck 등록",
+  "title": "컨설팅: UI MODE 전환 전 생성기 시험: 기준 화면으로 gen.js 생성, check.js 검사를 임시 폴더에서 돌리는 자체 시험 추가와 engine_selfcheck 등록",
+  "evidence": "tools/Harness/gen.js 수정 2026-11-02 10:39, check.js 2026-11-09 10:54, new-screen.ps1 2026-10-23 09:49. --selftest 는 repair-loop.js 에만 6건. tools/VibeManager/test 와 engine_selfcheck.py 에 gen.js, check.js 호출 0건(t_resume_inner.js:109 주석만). steps.json 은 new-screen 3곳, check.js 7곳에서 이 도구를 부름(1461~1572줄). 차주 UI MODE 전환에서 이 경로가 1번째로 쓰임",
+  "targets": [
+    "tools/Harness/test/t_gen_check_smoke.js",
+    "tools/Harness/verify/engine_selfcheck.py"
+  ],
+  "before_after": "변경 전: 생성기와 게이트가 2주 넘게 시험 없이 남아 있어 UI MODE 첫 화면에서 생성기 결함과 화면 결함을 나누지 못함. 변경 후: t_gen_check_smoke.js 가 reference 화면(DMF0004~0006 중 Doc/gen 산출이 있는 화면 1개) 입력으로 gen.js 를 scratch 출력 폴더에 돌리고, 생성 파일 목록과 TODO(이식) 표지 존재, check.js 가 같은 결과에서 종료 코드 0 또는 정해진 미구현 건수를 내는지 확인. 저장소 Doc/gen, nscm-fe 는 쓰지 않음. engine_selfcheck.py 에 GEN_SMOKE 항목으로 등록",
+  "verify": "반영 때: node tools/Harness/test/t_gen_check_smoke.js, python tools/Harness/verify/engine_selfcheck.py. 반영 뒤: Doc/verify/_engine_selfcheck.json 에 GEN_SMOKE 실행 시각과 PASS 기록 확인, git status 로 Doc/gen, nscm-fe 변경 0건 확인",
+  "rollback": "새 시험 파일 삭제(승인 대상), engine_selfcheck.py.bak_<tag> 복원",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:08+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:00:45+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/test/t_gen_check_smoke.js 신규(DMF0005, 임시 폴더 gen.js 생성, 결정론, check.js --json BLOCK MS1 1건 기대값, Doc/gen 변경 0건) 10건 PASS. engine_selfcheck.py chk_gen_smoke, GEN_SMOKE 전체 검사 등록. engine_selfcheck full PASS 17:00:32, GEN_SMOKE 0건 1.5초. git status Doc/gen, nscm-fe 0건. inventory --write-registry 실행(2026-11-26 17:00)"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795680045201
+}

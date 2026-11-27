@@ -961,12 +961,8 @@
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 703 | FP\Common\FP00602_LineAdd#save_all | MATCH_PATTERN | [update-batch]  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 712 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul_2] | BIZ_MATCH |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 712 | FP\Common\FP00600_PlanAmend#execute_psiCalcul_2 | MATCH_PATTERN | SP PR_SCM_OF_PSI_AMEND_UI_CALCULATION_PARALLEL_A |
-| event:this.btnSave.Click | btnSave_Click > Save_Data | 712 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul_2] | BIZ_MATCH |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data | 712 | FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 722 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul] | BIZ_MATCH |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 722 | FP\Common\FP00600_PlanAmend#execute_psiCalcul | MATCH_PATTERN | SP PR_SCM_OF_PSI_AMEND_UI_CALCULATION_PARALLEL_B |
-| event:this.btnSave.Click | btnSave_Click > Save_Data | 722 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data | 722 | FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY |  |
 | event:this.btnSSP.Click | btnSSP_Click | 5210 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_save_chk] | BIZ_MATCH |  |
 | event:this.btnSSP.Click | btnSSP_Click | 5210 | FP\Common\XpCommonAmend#find_save_chk | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_XpCommonAmend_find_save_chk.sql |
 | event:this.btnSSP.Click | btnSSP_Click | 5234 | biz:FPCommonDataBLL.GeneralExecuteNonQuery [batchId=saveAll_SSP_Transit] | BIZ_MATCH |  |
@@ -1189,8 +1185,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul_2] | BIZ_MATCH | 1 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 4 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=AMEND_INSTANCE] | BIZ_MATCH | 4 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=DEMAND_MARKET_TYPE] | BIZ_MATCH | 1 |  |  |  |
@@ -1282,8 +1276,6 @@
 | FP\Common\XpCommonCond#find_AMend_Save_Check | MATCH_PATTERN | 13 | [sql] foxquery_sql\FP_Common_XpCommonCond_find_AMend_Save_Check.sql | SELECT:FP_PLAN_STATUS_H, SELECT:SCM_FP_PLAN_DETAIL_H, SELECT:SCM_FP_PLAN_GROUP_DETAIL_H, SELECT:FP_RELEASE_CALCULATION_STATUS_H |  |
 | FP\Planning\FP00595#find_isPDS | MATCH | 2 | [sql] foxquery_sql\FP_Planning_FP00595_find_isPDS.sql | SELECT:SCM_SYS_LOOKUP_VALUE |  |
 | FP\Planning\PlanControl#check_plan_date_limit | MATCH | 2 | [sql] foxquery_sql\FP_Planning_planControl_check_plan_date_limit.sql | SELECT:SCM_SYS_LOOKUP_VALUE |  |
-| FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
-| FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -1452,11 +1444,11 @@
 | SaveToDB | main.Tables[0].Rows[i] | USER_ID, JOB_ORDER |
 | SaveToDB | eachRow | _VALID |
 | SaveToDB | dr | NEW_SEQ, INSTANCE_ID, FP_PLAN_ID |
-| SaveToDB | validation.Tables[0].Rows[0] | NEW_SEQ |
-| SaveToDB | Filter | INSTANCE_ID, PLAN_ID, NEW_SEQ |
+| SaveToDB | Filter | NEW_SEQ, INSTANCE_ID, PLAN_ID |
 | SaveToDB | result.Tables[0].Rows[0] | RESULT, COUNT, EXCEPTION |
 | SaveToDB | valrow | _VALID, _MSG |
 | SaveToDB | xlsrow | MESSAGE |
+| SaveToDB | validation.Tables[0].Rows[0] | NEW_SEQ |
 | SetBohQty | row | DATA_TYPE, OPERATION_ID, BOH_QTY, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
 | SetBohQty | each_row | _TYPE, OPERATION_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
 | SetBohQty | result.First() | QTY |
@@ -1490,7 +1482,7 @@
 | GetCheckedListValue | InitControls:230, SetChangeControl:277, SetChangeControl:289, SetChangeControl:297, SetChangeControl:305, SetChangeControl:314, SetChangeControl:322, SetChangeControl:330 | CString.GetCheckedListValue | CODE |
 | SetFilter | GetBasisTime:257, SetChangePlanDate:262, SetChangeControl:278, SetChangeControl:279, SetChangeControl:280, SetChangeControl:281, UIFindData:760, Save_Data:1594 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
 | GetInnerTable | SetChangeControl:273, SetChangeControl:282, SetChangeControl:290, SetChangeControl:298, SetChangeControl:306, SetChangeControl:315, SetChangeControl:323, GetPlanGroup:2303 | DataService.GetInnerTable | ACTIVE_FLAG, ALL_LINE, AMEND_FLAG, AMEND_INSTANCE, AMEND_MAIN_FLAG, AMEND_UI_NAME, CODE, CONFIRM_AREA, DIVISION_ID, DIVISION_NAME, FACTORY_ID, FACTORY_NAME, INSTANCE_ID, INSTANCE_NAME, IN_ACT, IS_SAME_PLAN_ID, LINE_AUTH, LINE_ID, LINE_NAME, NAME, OPERATION_ID, OPERATION_NAME, PLANT_ID, PLANT_NAME, SHOP_GROUP_ID, SITE_ID, SITE_NAME, SORT_ORDER, USE_FLAG, USE_WOW_STATUS, VERSION_YN |
-| GetMeasure | CheckAndGetMeasure:434, CheckAndGetMeasure:528, CheckAndGetMeasure:431, CheckAndGetMeasure:427, Measure:184, InitControl:262, InitControl:263 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
+| GetMeasure | CheckAndGetMeasure:434, CheckAndGetMeasure:528, CheckAndGetMeasure:431, CheckAndGetMeasure:427, Measure:184, InitControl:263, InitControl:262 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | EditQuery | RefreshHeader:472, Query:660, RefreshHeader:566, Query:779, RefreshHeader:469, RefreshHeader:478, RefreshHeader:628 | FPExtensions.EditQuery | ROW_ID |
 | ShowMemoLine | RefreshHeader:586, RefreshHeader:707 | MemoService.ShowMemoLine | ATTR1, ATTR2, ATTRIBUTE10, ATTRIBUTE2, COLOR_A, COLOR_B, DATA_TYPE, Default, ELECTRODE_TYPE, EQUIPMENT_ID, INSTANCE_ID, ITEM_ID, PRODUCTION_TYPE, SEGMENT1, UI_COLOR, UI_DESC, UI_PARAM, chk_day |
 | ApplyMemoTextLine | Query:659, Query:778 | MemoService.ApplyMemoTextLine | ATTR2, CATEGORY_ID, COMPANY_ID, DATA_TYPE, DIVISION_ID, ELECTRODE_TYPE, EQUIPMENT_ID, FACTORY_ID, ITEM_ID, LINE_ID, MARKET, MEMO, OPERATION_ID, PLANT_ID, PLAN_DATE, PRODUCTION_TYPE, TOP_ITEM_ID |
@@ -1505,7 +1497,7 @@
 | FP_Log2 | cbo_plan_group_changed:5386, cbo_plan_group_changed:5392 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
 | SetManualCondition | btnSql_Click:1671, btnSql_Click:1672, btnSql_Click:1673, btnSql_Click:1674, btnSql_Click:1675, btnSql_Click:1676, btnSql_Click:1677, btnSql_Click:1678 | BaseForm.SetManualCondition | ControlName, ControlValue |
 | LoadAmendColumn | RefreshHeader:598 | MeasureService.LoadAmendColumn | DAYTAG, MONTHTAG, WEEKTAG |
-| CommonDefaultLineCheck | DefaultLineCheck:730, DefaultLineCheck:819 | ExcelService.CommonDefaultLineCheck | BUCKET_FROM, BUCKET_TO, MESSAGE, QTY |
+| CommonDefaultLineCheck | DefaultLineCheck:819, DefaultLineCheck:730 | ExcelService.CommonDefaultLineCheck | BUCKET_FROM, BUCKET_TO, MESSAGE, QTY |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
@@ -1783,30 +1775,18 @@
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:465 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:491 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:492 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:210 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:265 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:266 |
-| this | Load | Form_Load | .ctor:95 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:439 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:477 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:503 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:504 |
-| this | Load | Form_Load | .ctor:143 |
-| dateRange | ValueChanged | dateRange_ValueChanged | Form_Load:158 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:210 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:265 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:266 |
 | this | Load | Form_Load | .ctor:156 |
 | dateRange | ValueChanged | dateRange_ValueChanged | Form_Load:171 |
-| this.radioMPP | CheckedChanged | radioMPP_CheckedChanged | InitializeComponent:266 |
-| this.radioWPP | CheckedChanged | radioWPP_CheckedChanged | InitializeComponent:304 |
-| this.btnSave | Click | btnSave_Click | InitializeComponent:378 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:428 |
-| this.btnFind | Click | btnFind_Click | InitializeComponent:467 |
-| this.btnDownload | Click | btnDownload_Click | InitializeComponent:506 |
-| this.btnUpload | Click | btnUpload_Click | InitializeComponent:545 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:758 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:759 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:175 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:222 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:223 |
+| this | Load | Form_Load | .ctor:95 |
+| this | Load | Form_Load | .ctor:143 |
+| dateRange | ValueChanged | dateRange_ValueChanged | Form_Load:158 |
 | this.radioMPP | CheckedChanged | radioMPP_CheckedChanged | InitializeComponent:267 |
 | this.radioWPP | CheckedChanged | radioWPP_CheckedChanged | InitializeComponent:305 |
 | this.btnSave | Click | btnSave_Click | InitializeComponent:379 |
@@ -1816,17 +1796,29 @@
 | this.btnUpload | Click | btnUpload_Click | InitializeComponent:546 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:757 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:758 |
-| this | Load | Form_Load | .ctor:97 |
-| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitControls:132 |
-| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitControls:133 |
 | this | Load | Form_Load | .ctor:158 |
 | this.btnClose | Click | btnClose_Click | InitializeComponent:152 |
 | this.btnDownload | Click | btnDownload_Click | InitializeComponent:192 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:245 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:246 |
+| this.radioMPP | CheckedChanged | radioMPP_CheckedChanged | InitializeComponent:266 |
+| this.radioWPP | CheckedChanged | radioWPP_CheckedChanged | InitializeComponent:304 |
+| this.btnSave | Click | btnSave_Click | InitializeComponent:378 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:428 |
+| this.btnFind | Click | btnFind_Click | InitializeComponent:467 |
+| this.btnDownload | Click | btnDownload_Click | InitializeComponent:506 |
+| this.btnUpload | Click | btnUpload_Click | InitializeComponent:545 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:758 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:759 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:274 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:354 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:355 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:175 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:222 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:223 |
+| this | Load | Form_Load | .ctor:97 |
+| mcbo_operation | SelectedIndexChanged | mcbo_operation_changed | InitControls:132 |
+| mcbo_line | SelectedIndexChanged | mcbo_line_changed | InitControls:133 |
 | this | Load | Form_Load | .ctor:95 |
 
 ## 6. 컨트롤 (575개, 상세는 controls.csv)
@@ -1863,7 +1855,7 @@
 | UsrDatePicker2 | 2 | dpPlanDate, sCalendar_planday |
 | RadioGroup | 1 | rdo_uom |
 
-## 7. 확인 필요 (153건)
+## 7. 확인 필요 (151건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 5458 | btnCreatePlan_Click | FP_Master.PR_UI_FP00602_FIND_FP0060 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
@@ -1878,6 +1870,18 @@
 | 5342 | btnCreatePlan_Click | FP_Master.PR_UI_FP00602_FIND_FP0060 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 5747 | btnStatus_Click | FP_Master.PR_UI_FP00602_FIND_FP0060 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 5756 | btnStatus_Click | FP_Master.PR_UI_FP00602_FIND_FP0060 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 3210 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3552 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5397 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5432 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5816 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5865 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5234 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5283 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3237 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3587 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5281 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5316 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1507 | Save_Data | FP\{?default:part_service}\XpCommonCond#find_AMend_Save_Check | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2076 | SetReleaseProcess | FP\{?default:part_service}\XpCommonAmend#find_isCurrWeek | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2639 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#find_WeekCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -1950,20 +1954,25 @@
 | 276 | FindData | FP\{?default:part_service}\FP00602_LineAdd#find_pdsItemLineList | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 712 | Save_Data | FP\{?default:part_service}\FP00600_PlanAmend#execute_psiCalcul_2 | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 722 | Save_Data | FP\{?default:part_service}\FP00600_PlanAmend#execute_psiCalcul | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3210 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3552 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5397 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5432 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5816 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5865 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5234 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5283 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3237 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3587 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5281 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5316 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 712 | Save_Data | FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 722 | Save_Data | FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
+| 1528 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3012 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3558 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 1618 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3028 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 1730 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3182 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 1552 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3039 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3593 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 703 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#save_all | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3215 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3504 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3470 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3629 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3242 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3539 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 696 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 697 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#saveAll_MPPWPP_log | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 5373 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 5408 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 5551 | btnRelease_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -2000,25 +2009,6 @@
 | 578 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#find_LineAdd_dup | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 582 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#find_dup | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 611 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#find_addPdsValidation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1528 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3012 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3558 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1618 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3028 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1730 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3182 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 1552 | Save_Data | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3039 | SaveExcelRows | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3593 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 703 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#save_all | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3215 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3504 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3470 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3629 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3242 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3539 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_MPPWPP#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 696 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#saveAll_MPPWPP | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 697 | Save_Data | FP\{?default:part_service}\FP00602_LineAdd#saveAll_MPPWPP_log | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |
@@ -2051,8 +2041,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: UserFindPopup, Amend, Main, LinePopup, MaterialPopup, AutoExcelPopup, AddPdsPopup, InvalidExcel
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:231, SetSheetHeaderColumn_FP@RefreshHeaderOnly:670, SetSheetHeaderColumn_FP@RefreshHeaderOnly:789, SetSheetHeaderColumn_FP@RefreshHeaderOnly:784, SetSheetHeaderColumn_FP@DrawNoDateHeader:832, SetSheetHeaderColumn_FP@SetSpreadInit:163, SetSheetHeaderColumn_FP@SetSpreadInit:155, SetSheetHeaderColumn_FP@SetSpreadInit:168, SetSheetHeaderColumn_FP@SetSpreadInit:225
+- 코드에서 생성하는 시트: UserFindPopup, Amend, Main, LinePopup, AutoExcelPopup, MaterialPopup, InvalidExcel, AddPdsPopup
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:231, SetSheetHeaderColumn_FP@RefreshHeaderOnly:670, SetSheetHeaderColumn_FP@RefreshHeaderOnly:789, SetSheetHeaderColumn_FP@RefreshHeaderOnly:784, SetSheetHeaderColumn_FP@DrawNoDateHeader:832, SetSheetHeaderColumn_FP@SetSpreadInit:163, SetSheetHeaderColumn_FP@SetSpreadInit:155, SetSheetHeaderColumn_FP@SetSpreadInit:225, SetSheetHeaderColumn_FP@SetSpreadInit:168
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

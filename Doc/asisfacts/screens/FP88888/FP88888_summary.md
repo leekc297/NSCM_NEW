@@ -12,8 +12,6 @@
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
-| button:FindButton | FindButton > UIFindData | 1876 | biz:FPCommonDataBLL.RunProcedureCustomTable [procedure=test_of_custom_table] | BIZ_MATCH |  |
-| button:FindButton | FindButton > UIFindData | 1876 | LogVue#test_of_custom_table | NOT_IN_FOXQUERY |  |
 | button:FindButton | FindButton > UIFindData | 1876 | biz:FPCommonDataBLL.GeneralRunProcedureCustomTable [procedure=test_of_custom_table] | BIZ_MATCH |  |
 | button:FindButton | FindButton > UIFindData | 1876 | FP\Common\LogVue#test_of_custom_table | MATCH_PATTERN | SP FP00TEST_FIND_TEST |
 | button:FindButton | FindButton > UIFindData > FindMainData | 2072 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_menu_log] | BIZ_MATCH |  |
@@ -47,7 +45,6 @@
 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_log] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=list_menu_log] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.GeneralRunProcedureCustomTable [procedure=test_of_custom_table] | BIZ_MATCH | 1 |  |  |  |
-| biz:FPCommonDataBLL.RunProcedureCustomTable [procedure=test_of_custom_table] | BIZ_MATCH | 1 |  |  |  |
 | FP\Common\AmendCommon#find_BukInfo | MATCH_PATTERN | 1 | [sql] foxquery_sql\FP_Common_AmendCommon_find_BukInfo.sql | SELECT:TH_UIS_CAL |  |
 | FP\Common\AmendCommon#find_DateMap | MATCH_PATTERN | 1 | [sql] foxquery_sql\FP_Common_AmendCommon_find_DateMap.sql | SELECT:TH_UIS_CAL |  |
 | FP\Common\AmendCommon#find_MonthCnt | MATCH_PATTERN | 1 | [sql] foxquery_sql\FP_Common_AmendCommon_find_MonthCnt.sql | SELECT:TH_UIS_CAL |  |
@@ -55,7 +52,6 @@
 | FP\Common\LogVue#list_log | MATCH | 1 | [sql] foxquery_sql\FP_Common_LogVue_list_log.sql | SELECT:TH_UIS_SQL_LOG |  |
 | FP\Common\LogVue#list_menu_log | MATCH | 1 | [sql] foxquery_sql\FP_Common_LogVue_list_menu_log.sql | SELECT:TB_FX_MENUCONNECT, SELECT:TB_FX_MENUITEMINFO, SELECT:TB_FX_PROGRAMINFO, SELECT:MENU |  |
 | FP\Common\LogVue#test_of_custom_table | MATCH_PATTERN | 1 | SP FP00TEST_FIND_TEST | EXEC:FP00TEST_FIND_TEST | ⚠ DB에 SP 없음 |
-| LogVue#test_of_custom_table | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 | MenuContainer.UP_FX_GetMenuExecutionLog | MATCH | 1 | [statement] foxquery_sql\MenuContainer.UP_FX_GetMenuExecutionLog.sql | SELECT:SCM_SYS_LOG_BATCH |  |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
@@ -140,10 +136,9 @@
 | Label | 1 | label1 |
 | ImageList | 1 | imageList1 |
 
-## 7. 확인 필요 (6건)
+## 7. 확인 필요 (5건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 1876 | UIFindData | LogVue#test_of_custom_table | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 | 2447 | ApplyAmendCalendarCondition | FP\{?default:part_service}\AmendCommon#find_WeekCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2448 | ApplyAmendCalendarCondition | FP\{?default:part_service}\AmendCommon#find_DateMap | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2449 | ApplyAmendCalendarCondition | FP\{?default:part_service}\AmendCommon#find_MonthCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |

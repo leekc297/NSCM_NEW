@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/measureSelectModal/MeasureSelectModal.module.scss | style | 30 |
-| features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | page | 441 |
+| features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | page | 459 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 (없음)
@@ -19,18 +19,18 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| ColumnSelectDualList | onToggleLeft | toggleLeft | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 399 |
-| ColumnSelectDualList | onToggleRight | toggleRight | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 400 |
-| ColumnSelectDualList | onToggleAllLeft | toggleAllLeft | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 401 |
-| ColumnSelectDualList | onToggleAllRight | toggleAllRight | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 402 |
-| ColumnSelectDualList | onMoveRight | moveToUser | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 403 |
-| ColumnSelectDualList | onMoveLeft | moveToBase | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 404 |
-| ColumnSelectDualList | onReorderRight | reorderRight | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 405 |
-| ColumnSelectDualList | onRowDoubleClickLeft | moveOneToUser | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 406 |
-| ColumnSelectDualList | onRowDoubleClickRight | moveOneToBase | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 407 |
-| Button | onClick | handleDefault | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 417 |
-| Button | onClick | handleOk | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 426 |
-| Button | onClick | modalClose | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 433 |
+| ColumnSelectDualList | onToggleLeft | toggleLeft | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 417 |
+| ColumnSelectDualList | onToggleRight | toggleRight | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 418 |
+| ColumnSelectDualList | onToggleAllLeft | toggleAllLeft | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 419 |
+| ColumnSelectDualList | onToggleAllRight | toggleAllRight | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 420 |
+| ColumnSelectDualList | onMoveRight | moveToUser | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 421 |
+| ColumnSelectDualList | onMoveLeft | moveToBase | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 422 |
+| ColumnSelectDualList | onReorderRight | reorderRight | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 423 |
+| ColumnSelectDualList | onRowDoubleClickLeft | moveOneToUser | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 424 |
+| ColumnSelectDualList | onRowDoubleClickRight | moveOneToBase | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 425 |
+| Button | onClick | handleDefault | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 435 |
+| Button | onClick | modalClose | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 442 |
+| Button | onClick | handleOk | jsx | features/master/src/components/measureSelectModal/MeasureSelectModal.tsx | 451 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

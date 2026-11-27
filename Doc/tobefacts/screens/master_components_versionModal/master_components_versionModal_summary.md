@@ -9,7 +9,7 @@
 |---|---|---|
 | features/master/src/components/versionModal/version-modal.constants.ts | constants | 32 |
 | features/master/src/components/versionModal/versionModal.api.ts | api | 71 |
-| features/master/src/components/versionModal/VersionModal.module.scss | style | 137 |
+| features/master/src/components/versionModal/VersionModal.module.scss | style | 134 |
 | features/master/src/components/versionModal/VersionModal.tsx | page | 678 |
 | features/master/src/components/versionModal/versionModalStore.ts | store | 33 |
 
@@ -50,8 +50,8 @@
 | Button | onClick | <arrow> runAction | jsx | features/master/src/components/versionModal/VersionModal.tsx | 607 |
 | Button | onClick | <arrow> runAction | jsx | features/master/src/components/versionModal/VersionModal.tsx | 619 |
 | Button | onClick | <arrow> runAction | jsx | features/master/src/components/versionModal/VersionModal.tsx | 627 |
-| Button | onClick | <arrow> adopt,getGridSelectedRow | jsx | features/master/src/components/versionModal/VersionModal.tsx | 662 |
-| Button | onClick | modalClose | jsx | features/master/src/components/versionModal/VersionModal.tsx | 670 |
+| Button | onClick | modalClose | jsx | features/master/src/components/versionModal/VersionModal.tsx | 661 |
+| Button | onClick | <arrow> adopt,getGridSelectedRow | jsx | features/master/src/components/versionModal/VersionModal.tsx | 669 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

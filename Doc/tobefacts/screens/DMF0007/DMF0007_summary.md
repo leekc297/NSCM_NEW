@@ -1,17 +1,17 @@
 # DMF0007 — To-Be Fact Pack 요약
 
 - page_key: `master/customer-forecast-master` · feature: master · As-is Fact Pack 있음
-- 파일 8 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 9 · 컴포넌트 사용 21 · 하드코딩 컬럼 4 · 메시지 8
+- 파일 8 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 9 · 컴포넌트 사용 21 · 하드코딩 컬럼 4 · 메시지 10
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 4건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterFcstGrid.tsx | page | 141 |
+| features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterFcstGrid.tsx | page | 151 |
 | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx | page | 223 |
 | features/master/src/pages/customer-forecast-master/customer-fcst-master.constants.ts | constants | 12 |
-| features/master/src/pages/customer-forecast-master/customer-fcst-master.uniqueCheck.ts | other | 99 |
-| features/master/src/pages/customer-forecast-master/CustomerFcstMaster.tsx | page | 243 |
+| features/master/src/pages/customer-forecast-master/customer-fcst-master.uniqueCheck.ts | other | 107 |
+| features/master/src/pages/customer-forecast-master/CustomerFcstMaster.tsx | page | 248 |
 | features/master/src/pages/customer-forecast-master/index.ts | index | 2 |
 | features/master/src/pages/customer-forecast-master/useCustomerFcstMasterStore.ts | store | 121 |
 | features/master/src/pages/customer-forecast-master/utils/CustomerFcstMasterDateColumns.ts | util | 106 |
@@ -34,15 +34,15 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| DataGrid | cellEditEnded | handleCellChange | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterFcstGrid.tsx | 135 |
-| DataGrid | pastedCell | handleCellChange | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterFcstGrid.tsx | 137 |
+| DataGrid | cellEditEnded | handleCellChange | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterFcstGrid.tsx | 145 |
+| DataGrid | pastedCell | handleCellChange | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterFcstGrid.tsx | 147 |
 | SearchArea | onSearch | onSubmit | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx | 100 |
 | CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx | 113 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx | 139 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx | 162 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx | 186 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-forecast-master/componenets/CustomerFcstMasterForm.tsx | 209 |
-| CustomerFcstMasterForm | onSubmit | handleSearch | jsx | features/master/src/pages/customer-forecast-master/CustomerFcstMaster.tsx | 223 |
+| CustomerFcstMasterForm | onSubmit | handleSearch | jsx | features/master/src/pages/customer-forecast-master/CustomerFcstMaster.tsx | 228 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -69,6 +69,7 @@
 | code | count |
 |---|---|
 | MSG00136 | 2 |
+| MSG01427 | 2 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
 | LBL00710 | 1 |

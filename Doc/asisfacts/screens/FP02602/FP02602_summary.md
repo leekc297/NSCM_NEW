@@ -129,8 +129,8 @@
 ## 7. 확인 필요 (4건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 653 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP02602_Production_Result#find_Excel_buffer_validation | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 645 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP02602_Production_Result#delete_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
+| 653 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP02602_Production_Result#find_Excel_buffer_validation | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 634 | FP00180_SaveDataDelegate | FP\{?default:part_service}\FP02602_Production_Result#FP02602_Production_Result_EXCEL_UPDATE_BATCH | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 649 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP02602_Production_Result#insert_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 

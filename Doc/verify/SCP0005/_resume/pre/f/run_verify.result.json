@@ -1,0 +1,749 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-26T02:41:17+09:00",
+ "producer": "run_verify",
+ "id": "SCP0005",
+ "skip_e2e": false,
+ "started": "2026-11-26 01:11:56",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-2ca073e5",
+   "class": "N1",
+   "msg": "SCP0005 센티널 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 표시 @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-087d756b",
+   "class": "E3",
+   "msg": "SCP0005 Excel 필수 칸 빈 업로드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Excel @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4e4af2a4",
+   "class": "F1",
+   "msg": "SCP0005 컬럼별 저장 왕복",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 저장 세부 @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0810a59e",
+   "class": "H2",
+   "msg": "FROM_CITY",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c099fa4f",
+   "class": "H2",
+   "msg": "TO_CITY",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b4651880",
+   "class": "H2",
+   "msg": "siMain.SetBGColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-17e451a7",
+   "class": "H2",
+   "msg": "FROM_CITY",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e63ff383",
+   "class": "H2",
+   "msg": "TO_CITY",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3134fc3e",
+   "class": "E4",
+   "msg": "MSG00043",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-ece1c98b)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4a0b6271",
+   "class": "E4",
+   "msg": "MSG00265",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-2c4e7c8a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-718e1a16",
+   "class": "H6",
+   "msg": "popCity.Form_Load(true, sCountry, sCity)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-616b4d31)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7cdbda05",
+   "class": "H6",
+   "msg": "popCity.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-616b4d31",
+   "class": "H6",
+   "msg": "popCity.Form_Load(true, sCountry, sCity)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ac0769f6",
+   "class": "H6",
+   "msg": "popCity.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-7cdbda05)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cca901cb",
+   "class": "H6",
+   "msg": "popCity.Form_Load(false, sCountry, sCity)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-c9dc5aa7)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c9dc5aa7",
+   "class": "H6",
+   "msg": "popCity.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-433764ba",
+   "class": "E3",
+   "msg": "[DMF0014 결함 유형] Excel Upload OK·Customs Handbook/Project/Model 검증",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ac167c8b",
+   "class": "H2",
+   "msg": "[SCP0006 결함 유형] Main Grid 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-660a833e",
+   "class": "H5",
+   "msg": "SCP·SSP 컬럼·조회조건 라벨 Valid→Active",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "META+E2E CR-092 라벨 잔존"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-117a91ca",
+   "class": "H2",
+   "msg": "DB메타 구동(gridColumns=[]) · `staticColumns` admin fetch(`ADMIN_SHEET_NAME`='Distribution Route') +",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6d3ab193",
+   "class": "H2",
+   "msg": "R9 TRK/AIR→DAYS 7 'Y' · `daysAllYes()` cellEditEnded",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5ab1639a",
+   "class": "H2",
+   "msg": "R10 TRK→港/Forwarder 7 '-' · `portsDash()` cellEditEnded",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c21ed709",
+   "class": "H2",
+   "msg": "R11/R12 FROM/TO 셀 더블클릭→도시팝업 · `onFromCellDblClick`/`onToCellDblClick`→`RegionModal`(cell-from/to)→`s",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ffd8cc98",
+   "class": "H6",
+   "msg": "R11/R12 FROM/TO 셀 더블클릭→도시팝업 · `onFromCellDblClick`/`onToCellDblClick`→`RegionModal`(cell-from/to)→`s",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1254494a",
+   "class": "H2",
+   "msg": "R7 조회 databind · `useTabProcQuery` o_rc1",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1b394e4f",
+   "class": "H2",
+   "msg": "R16/R17 클라 검증 색칠 · `validateRows`(전 편집행 누적, iter-2 G4) → `invalidCells` state → grid `for",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a2e01ea6",
+   "class": "H2",
+   "msg": "R18 Insert/Delete · `GridAction.addRow` / `removeRow(grid, true)`(신규만)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e999c1bd",
+   "class": "H6",
+   "msg": "ProgressForm · react-query isFetching(별도 팝업 불요)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c0a47fd2",
+   "class": "H2",
+   "msg": "COMMON:UC-07 · 필터 걸린 상태 재조회해도 조회되고 필터도 유지(rebindFilterColumns)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-30dac365",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.CheckValid",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-643aee5e",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6f3e294f",
+   "class": "H2",
+   "msg": "SCP0005_DistributionRoute.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0aa76ea9",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a12fee3f",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ece1c98b",
+   "class": "E4",
+   "msg": "MSG00043",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1169e814",
+   "class": "H2",
+   "msg": "SCP0005_DistributionRoute.SetImageCell",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-daa63418",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.SetImageCell",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3bee5a7f",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.btnEaxel_Upload_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2c4e7c8a",
+   "class": "E4",
+   "msg": "MSG00265",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-895bac8f",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.btnFromSrch_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9e212130",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.btnToSrch_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d6110a41",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoute.spdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6d14c72c",
+   "class": "M3",
+   "msg": "SCP0005_DistributionRoutePopup",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f440761d",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup..ctor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-004bd1d4",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9bf7f55b",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup.DefineProperty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6cba9e4a",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup.Dispose",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-70884df3",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-09365c5b",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ec7da311",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup.Form_Load",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b28fc636",
+   "class": "X-ROW",
+   "msg": "SCP0005_DistributionRoutePopup.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-b395018a",
+   "class": "H6",
+   "msg": "SCP0005 팝업 SCM0002_CitybyCountry BTN:btnFromSrch BTN_ORDER",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(EG-09469e15)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-09469e15",
+   "class": "H6",
+   "msg": "SCP0005 팝업 SCM0002_CitybyCountry BTN:btnToSrch BTN_ORDER",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-813457a4",
+   "class": "H6",
+   "msg": "SCP0005 팝업 SCM0002_CitybyCountry CELL:FROM_COUNTRY BTN_ORDER",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(EG-24dc66b9)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-a1c25099",
+   "class": "M3",
+   "msg": "SCP0005 팝업 SCP0005_DistributionRoutePopup CELL:ROUTE_ID OPEN",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-e97f075b",
+   "class": "H6",
+   "msg": "SCP0005 팝업 SCM0002_CitybyCountry CELL:FROM_CITY BTN_ORDER",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(EG-24dc66b9)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-7b7aa573",
+   "class": "H6",
+   "msg": "SCP0005 팝업 SCM0002_CitybyCountry CELL:TO_CITY BTN_ORDER",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(EG-24dc66b9)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-24dc66b9",
+   "class": "H6",
+   "msg": "SCP0005 팝업 SCM0002_CitybyCountry CELL:TO_COUNTRY BTN_ORDER",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-popup @11-26 02:39"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [],
+ "summary": {
+  "rows": 2275,
+  "PASS": 1312,
+  "FAIL": 58,
+  "판정필요": 30,
+  "미검증": 4,
+  "해당없음": 871,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1816,
+   "사람": 2,
+   "없음(판정 대기)": 30,
+   "기계(상속·집계)": 410,
+   "없음(미검증)": 4,
+   "출처 미기록": 13
+  },
+  "fail_listed": 58,
+  "coverage": {
+   "rules": 91,
+   "measured": 1071,
+   "not_run_error": 24,
+   "na": 319,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_CheckList_v13.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/SCP0005_DistributionRoute_ActionItemList_v13.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0005/e2e_results.json"
+  }
+ ],
+ "note": "문서 단계 재개(--resume-docs 2026-11-26 02:40:04) — E2E·판정은 원 실행 2026-11-26 01:11:56 결과"
+}

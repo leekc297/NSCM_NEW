@@ -1,0 +1,430 @@
+{
+ "rule_id": "M3",
+ "hash": "dac67a61c56b008f",
+ "groups": [
+  {
+   "rows": [
+    "EG-052ce80f"
+   ],
+   "why": "This checks that double-clicking the PROJECT_CODE82 cell opens the popup; no other row checks that same element for opening."
+  },
+  {
+   "rows": [
+    "EG-13a3a7b9"
+   ],
+   "why": "This checks the data in the ITEM_ID40 cell popup, and its expected result ('no error, data present') differs from the ASIS rows' 'same list as AS-IS'."
+  },
+  {
+   "rows": [
+    "EG-3c664aec"
+   ],
+   "why": "This checks that the Project search-condition button opens its popup; it differs from the cell double-click rows."
+  },
+  {
+   "rows": [
+    "EG-3da089ff"
+   ],
+   "why": "This checks that btnMeasure opens its popup; no other row checks the same element."
+  },
+  {
+   "rows": [
+    "EG-4636aa8b"
+   ],
+   "why": "This checks the data in the Model / Nickname search-condition popup; the expected result differs from the ASIS rows."
+  },
+  {
+   "rows": [
+    "EG-842c92ee"
+   ],
+   "why": "This checks that double-clicking the PROJECT_CODE cell opens the popup; it is a different column from PROJECT_CODE82."
+  },
+  {
+   "rows": [
+    "EG-88f8e26b"
+   ],
+   "why": "This checks that btnIncotermsChg opens its popup; no other row checks the same element."
+  },
+  {
+   "rows": [
+    "EG-bdc030cb"
+   ],
+   "why": "This checks the data in the btnColumn popup; the expected result differs from the ASIS rows."
+  },
+  {
+   "rows": [
+    "EG-dc4ace27"
+   ],
+   "why": "This checks that double-clicking the MEASURE cell opens the popup; no other row checks the same element."
+  },
+  {
+   "rows": [
+    "EG-ddc06bd1"
+   ],
+   "why": "This checks the data in the Owner search-condition popup; the expected result differs from the ASIS rows."
+  },
+  {
+   "rows": [
+    "T-0caea789"
+   ],
+   "why": "This trace row covers the DMF0042_1_BizPlan popup (comparison table, 54 rows); every trace row has a different element."
+  },
+  {
+   "rows": [
+    "T-2dcbf28c"
+   ],
+   "why": "This trace row covers btnItemId and checks a different property from the measurement rows."
+  },
+  {
+   "rows": [
+    "T-5a0bf34a"
+   ],
+   "why": "This trace row covers btnColumn and checks a different property from the measurement rows."
+  },
+  {
+   "rows": [
+    "T-60f858b4"
+   ],
+   "why": "This trace row covers btnSetPrice; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-67555f4b"
+   ],
+   "why": "This trace row covers btnIncotermsChg and checks a different property from the measurement rows."
+  },
+  {
+   "rows": [
+    "T-6ef184b8"
+   ],
+   "why": "This trace row covers the DMF0042_3_BizPlan popup."
+  },
+  {
+   "rows": [
+    "T-7b198add"
+   ],
+   "why": "This trace row covers the DMF0042_ExchangeRatePopup popup."
+  },
+  {
+   "rows": [
+    "T-abd6bca5"
+   ],
+   "why": "This trace row covers btnProject and checks a different property from the measurement rows."
+  },
+  {
+   "rows": [
+    "T-ba8f2205"
+   ],
+   "why": "This trace row covers btnOwner and checks a different property from the measurement rows."
+  },
+  {
+   "rows": [
+    "T-bbc1c435"
+   ],
+   "why": "This trace row covers the DMF0042_BizPlan popup."
+  },
+  {
+   "rows": [
+    "T-cda03135"
+   ],
+   "why": "This trace row covers btnCutOff; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-d5a5689b"
+   ],
+   "why": "This trace row covers btnReplace; no other row checks it."
+  },
+  {
+   "rows": [
+    "T-d71abf6d"
+   ],
+   "why": "This trace row covers btnMeasure and checks a different property from the measurement rows."
+  },
+  {
+   "rows": [
+    "T-e9b7b699"
+   ],
+   "why": "This trace row covers the DMF0042_1_RTF popup."
+  },
+  {
+   "rows": [
+    "T-eebcc6e8"
+   ],
+   "why": "This trace row covers btnExchangeRate."
+  },
+  {
+   "rows": [
+    "T-fb2a3471"
+   ],
+   "why": "This trace row covers the DMF0042_BizPlan_old popup."
+  },
+  {
+   "rows": [
+    "V-0092a45a"
+   ],
+   "why": "Other rows have the same PROJECT_CODE82 condition text, but they may come from different forms (main, BizPlan, _1, _3, _old), so I can't confirm it is the same element."
+  },
+  {
+   "rows": [
+    "V-9bea4449"
+   ],
+   "why": "This is the same text as the other PROJECT_CODE82 rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-ac72aa62"
+   ],
+   "why": "This is the same text as the other PROJECT_CODE82 rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-d1823927"
+   ],
+   "why": "This is the same text as the other PROJECT_CODE82 rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-1d043b2b"
+   ],
+   "why": "Other rows have the same PROJECT_CODE condition text, but they may come from different forms, so I can't confirm it is the same element."
+  },
+  {
+   "rows": [
+    "V-55e298ba"
+   ],
+   "why": "This is the same text as the other PROJECT_CODE rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-8bcd645c"
+   ],
+   "why": "This is the same text as the other PROJECT_CODE rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-a1e299fa"
+   ],
+   "why": "This is the same text as the other PROJECT_CODE rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-1eb70f98"
+   ],
+   "why": "The condition (PROJECT_CODE or another column, truncated) differs from the single-column rows."
+  },
+  {
+   "rows": [
+    "V-02175830"
+   ],
+   "why": "The condition is empty, so I can't tell which button or form calls this; I can't confirm it is the same element as another call site."
+  },
+  {
+   "rows": [
+    "V-0679fe5e"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-41d17e31"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-e2d3e239"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-f32309f8"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-1804cd2e"
+   ],
+   "why": "Other rows have the same ITEM_ID/ITEM_ID40 condition text, but they may come from different forms, so I can't confirm it is the same element."
+  },
+  {
+   "rows": [
+    "V-a08c02de"
+   ],
+   "why": "This is the same text as the other ITEM_ID/ITEM_ID40 rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-b6d2f17d"
+   ],
+   "why": "This is the same text as the other ITEM_ID/ITEM_ID40 rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-ec1c0834"
+   ],
+   "why": "This is the same text as the other ITEM_ID/ITEM_ID40 rows, but they may come from different forms, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-64bd6e80"
+   ],
+   "why": "The condition is the single ITEM_ID column, which differs from the ITEM_ID/ITEM_ID40 rows."
+  },
+  {
+   "rows": [
+    "V-07843a25"
+   ],
+   "why": "The condition is empty, so I can't tell which call site of the item popup this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-2534f49c"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-41d0eafc"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-56c78e2b"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-d0296cf9"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-1c96c6d6"
+   ],
+   "why": "The condition is empty, so I can't tell which call site of the Owner popup this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-2a3cca60"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-39fc6309"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-4c454807"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-8b49f48e"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-47ddfba8"
+   ],
+   "why": "The condition is empty, so I can't tell which call site of the ExchangeRate popup this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-61b1b3e0"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-d5b20abe"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-d9311d6a"
+   ],
+   "why": "The condition is empty, so I can't tell which call site this is; kept separate."
+  },
+  {
+   "rows": [
+    "V-7e9fa75c"
+   ],
+   "why": "This is the only row for the DM0002_MatsterChgPopup call."
+  },
+  {
+   "rows": [
+    "V-084a9f65"
+   ],
+   "why": "TitleSetForm(\"DMF0042\", true) may be called from different buttons such as btnColumn and btnMeasure, so I can't confirm it is the same element."
+  },
+  {
+   "rows": [
+    "V-9e2dfac9"
+   ],
+   "why": "TitleSetForm(\"DMF0042\", true) may be called from different buttons, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-fa946da2"
+   ],
+   "why": "TitleSetForm(\"DMF0042\", true) may be called from different buttons, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-675768c9"
+   ],
+   "why": "TitleSetForm(\"DMF0042\", false) may be called from different buttons, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-7189d831"
+   ],
+   "why": "TitleSetForm(\"DMF0042\", false) may be called from different buttons, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-7b310ef6"
+   ],
+   "why": "TitleSetForm(\"DMF0042\", false) may be called from different buttons, so I kept it separate."
+  },
+  {
+   "rows": [
+    "V-a61baf50"
+   ],
+   "why": "TitleSetForm(\"DMF0042_1\", false) is a different form and argument from the other rows."
+  },
+  {
+   "rows": [
+    "V-cb73350f"
+   ],
+   "why": "TitleSetForm(\"DMF0042_1\", true) is a different form and argument from the other rows."
+  },
+  {
+   "rows": [
+    "V-1b4aec2a"
+   ],
+   "why": "TitleSetForm(\"DMF0042_3\", false) is a different form and argument from the other rows."
+  },
+  {
+   "rows": [
+    "V-31ccdc9f"
+   ],
+   "why": "TitleSetForm(\"DMF0042_3\", true) is a different form and argument from the other rows."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:45:20",
+ "cost": 0.23000919999999997
+}

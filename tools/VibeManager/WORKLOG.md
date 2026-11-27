@@ -1,37 +1,37 @@
 # Vibe_Manager 작업 이력
 
-생성 2026-11-26T16:16:23+09:00 (orch-history.js 가 만든 파일. 직접 고치지 않음)
+생성 2026-11-27T09:19:49+09:00 (orch-history.js 가 만든 파일. 직접 고치지 않음)
 
 ## 건수
 
 | 구분 | 건수 |
 |---|---|
-| 변경 | 544 |
-| 세션 | 716 |
-| VM 실행 | 579 |
-| Claude 호출 | 762 |
-| 사건 | 352 |
-| 개선안 | 350 |
+| 변경 | 603 |
+| 세션 | 763 |
+| VM 실행 | 581 |
+| Claude 호출 | 806 |
+| 사건 | 411 |
+| 개선안 | 420 |
 | 검사기 결함 | 38 |
 | 룰 변경 | 85 |
-| 세션 중 VM 관련 | 564 |
-| 세션의 VM 파일 수정(Edit, Write) | 2012 |
-| 변경 기록의 미확인 항목 | 544 |
-| 백업 파일(저장소 / 설치 폴더) | 1176 / 826 |
-| 기간 | 2026-07-03 ~ 2026-11-26 |
+| 세션 중 VM 관련 | 605 |
+| 세션의 VM 파일 수정(Edit, Write) | 2354 |
+| 변경 기록의 미확인 항목 | 628 |
+| 백업 파일(저장소 / 설치 폴더) | 1460 / 953 |
+| 기간 | 2026-07-03 ~ 2026-11-27 |
 
 ## 영역별(변경, VM 세션)
 
 | 영역 | 건수 |
 |---|---|
-| VMO | 597 |
-| VM 기타 | 137 |
-| CheckList 엔진 | 112 |
-| Workbench | 109 |
-| 체인·메뉴 | 78 |
+| VMO | 661 |
+| VM 기타 | 148 |
+| CheckList 엔진 | 122 |
+| Workbench | 112 |
+| 체인·메뉴 | 81 |
 | 업무 작업창 | 23 |
-| 룰·hook | 18 |
-| Git | 16 |
+| 룰·hook | 22 |
+| Git | 21 |
 | 서버 | 10 |
 | 문서 생성 | 8 |
 
@@ -39,26 +39,26 @@
 
 | 파일 | 7일 안 결함 | 7일 안 요청 | 7일 안 문구 | 시작일 | 전체 횟수 | 세션 수정 수 |
 |---|---|---|---|---|---|---|
-| workbench.js | 55 | 48 | 7 | 2026-11-20 | 141 | 432 |
-| orchestra.js | 27 | 30 | 2 | 2026-11-20 | 63 | 114 |
-| quick.json | 25 | 29 | 0 | 2026-11-20 | 90 | 72 |
-| orch-usercheck.js | 24 | 7 | 2 | 2026-11-20 | 33 | 99 |
-| t_orch_usercheck.js | 20 | 3 | 0 | 2026-11-20 | 23 | 56 |
-| job-runner.js | 16 | 11 | 1 | 2026-11-20 | 32 | 37 |
-| orch-watch.js | 16 | 13 | 2 | 2026-11-19 | 34 | 95 |
-| user_checks.json | 15 | 4 | 0 | 2026-11-20 | 20 | 25 |
-| jobs.js | 14 | 15 | 0 | 2026-11-20 | 33 | 40 |
-| orch-improve.js | 11 | 19 | 3 | 2026-11-19 | 38 | 138 |
-| orch-ladder.js | 9 | 5 | 2 | 2026-11-20 | 17 | 77 |
-| steps.json | 9 | 12 | 0 | 2026-11-20 | 42 | 6 |
-| orch-selfcheck.js | 9 | 21 | 2 | 2026-11-19 | 36 | 81 |
-| 10_RULES_KEEP.md | 9 | 7 | 0 | 2026-11-22 | 23 | 28 |
+| workbench.js | 31 | 54 | 6 | 2026-11-17 | 132 | 465 |
+| t_orch_usercheck.js | 23 | 5 | 0 | 2026-11-20 | 29 | 64 |
+| orch-usercheck.js | 22 | 18 | 2 | 2026-11-20 | 43 | 108 |
+| user_checks.json | 13 | 6 | 0 | 2026-11-20 | 20 | 26 |
+| orch-improve.js | 12 | 24 | 3 | 2026-11-20 | 48 | 165 |
+| orch-watch.js | 12 | 13 | 2 | 2026-11-20 | 35 | 100 |
+| orchestra.js | 11 | 38 | 2 | 2026-11-20 | 63 | 123 |
+| job-runner.js | 10 | 16 | 1 | 2026-11-20 | 31 | 37 |
+| _test_timing.jsonl | 10 | 3 | 6 | 2026-11-20 | 19 | 0 |
+| orch-ladder.js | 9 | 10 | 3 | 2026-11-20 | 23 | 78 |
 | e2e_results.json | 9 | 2 | 3 | 2026-11-20 | 14 | 0 |
-| history.js | 8 | 5 | 2 | 2026-11-25 | 19 | 33 |
-| extension.js | 8 | 11 | 2 | 2026-11-20 | 28 | 96 |
-| harness.json | 8 | 22 | 3 | 2026-11-20 | 42 | 0 |
-| run-rule.js | 8 | 2 | 0 | 2026-11-24 | 10 | 7 |
-| run_verify.py | 7 | 11 | 0 | 2026-11-19 | 28 | 0 |
+| orch-history.js | 8 | 2 | 0 | 2026-11-20 | 12 | 37 |
+| orch-selfcheck.js | 8 | 29 | 3 | 2026-11-20 | 49 | 112 |
+| t_orch_ladder.js | 7 | 6 | 2 | 2026-11-22 | 15 | 21 |
+| quick.json | 7 | 37 | 0 | 2026-11-19 | 93 | 73 |
+| t_orch_ladder_recur_time.js | 6 | 1 | 0 | 2026-11-20 | 8 | 9 |
+| t_orch_history.js | 6 | 1 | 0 | 2026-11-20 | 8 | 10 |
+| _llm_usage.csv | 6 | 3 | 0 | 2026-11-20 | 9 | 0 |
+| t_fs_retry.js | 5 | 2 | 0 | 2026-11-26 | 7 | 1 |
+| steps.json | 5 | 14 | 0 | 2026-11-20 | 45 | 7 |
 
 ## 변경 기록 2건 이상에 나온 같은 지시
 
@@ -66,10 +66,13 @@
 |---|---|
 | "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음" | 13 |
 | "VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\Projects\NSCM\Doc\CheckList 폴더에서 C:\Projects\NSCM\Doc\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고" | 13 |
+| "계속 개선항목 찾아서 진행해주세요" | 10 |
+| "계속 개선항목 찾아서 진행해줘" | 6 |
 | "사용자에게 주는 산출물(시험 Excel, CheckList)의 시트명, 열 이름은 일반 사용자가 아는 업무 용어(GAP 등)로 쓰고 내부 용어(대조표)를 쓰지 않음" | 5 |
 | "그리고 테스트 SHEET 생성 시 대조표 라는 단어가 일반 사용자들에게는 익숙하지 않아서, GAP분석 대조표의 의미가 AS-IS 와 TO-BE 에 대한 대조라는 의미이면 GAP SHEET 로 대체하고, UI 에 대한 전체 목록이라는 의미이면 일반 사용자들에게 익숙한 다른 용어로 변경했으" | 5 |
 | "검사기는 그리드 편집 컬럼의 입력 제한(정수, 음수 허용, 음수 글자색)과 조회조건 팝업의 LIKE 검색을 AS-IS 실측과 대조해 차이를 조치필요로 판정함" | 5 |
 | "SSP0024 CHECKLIST 에서 아래 2개 항목의 오류로 확인되는데 조치 필요 항목에 나오지 않습니다. 검사엔진 보완 요청 합니다. 1) GRID COLUMN - Pancake Roll Length, Steelcrate/Cut - 정수만 입력(-입력 가능, -입력 시 FontCol" | 5 |
+| "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요" | 4 |
 | "VMW 도 같은 글래스모피즘으로 적용해주세요" | 4 |
 | "CheckList 오류 행 설명은 간결한 오류명, 대상 위치(조회조건 항목 또는 탭, 그리드, 컬럼), AS-IS 표기·동작, TO-BE 표기·동작, GAP 순서로 씀" | 4 |
 | "SCP0104 에 대해서 사용자의견 추가하였습니다. DB 객체에 대해서는 보완 해주세요. 중복제거도 해주세요. 그리고 설명 부분을 조금 더 쉽게 정리해주면 좋을 것 같아요. 먼저, 오류명에 대해서 1차 정의 (현재보다 조금 더 간결하게) 그리고 오류가 정확하게 어떤 항목인지, 조회조건이" | 4 |
@@ -81,19 +84,326 @@
 | "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함" | 3 |
 | "현재는 DB MODE로만 작업을 해서 현재의 소스가 최신 소스이고 변경대상이 아닌것으로 STATUS 변경하고 싶어요. 게이트 대상에서도 제외하고 싶어요. 차후 UI/DB MODE 일때는 게이트 대상이 되면 될 것 같아요." | 3 |
 | "VM 이 띄우는 AI 호출(CheckList AI 검토, VMO 진단 등)은 모델을 따로 고정하지 않고 WORKBENCH 에서 고른 모델을 씀" | 3 |
-| "WORKBENCH 가 사용하고 있는 MODEL 그대로 사용하도록 해주세요." | 3 |
-| "체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함" | 3 |
-| "VM CHECKLIST작업 시 최초부터 3단계 보완까지를 전체 STEP 으로 표기되는데, CHECKLIST 작업만 진행하고, 필요시 추가 STEP 이 추가되도록 해주세요." | 3 |
+
+## 2026-11-27
+
+변경 6, 세션 8, Claude 호출 8, 사건 3, 개선안 4
+
+- 01:42 [VMO] VMO 자가 보완: 설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음
+  - 지시: "개선안 20261127011427_SELF 승인(VM 자가진단 S16 S16/K3). 근거 = 입력 S16/K3. tools/Harness/verify/judge.py:2995 대조 범위 = target + condition[:600] + expected[:200], :3005 'any(t.upper() in hay …)' 부분 일치. DMF0042 원장 "
+  - 파일 2개: tools/Harness/verify/judge.py, Doc/verify/_checker_defects.md
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042, DMF0005 재지 못한 해당없음(설계 결정) 행 수 감소 확인, Doc/verify/<ID>/design_decisions_applied.csv 적용 행 수 비교..
+  - 되돌리기 태그: 20261127_self0128
+- 01:27 [VMO] VMO 자가 보완: 조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임
+  - 지시: "개선안 20261127011426_SELF 승인(VM 자가진단 S16 S16/K2). 근거 = 입력 S16/K2. Doc/verify/DMF0042/verify_ledger.csv 273행 V-96012b16, 277행 V-359ec6f9 에 같은 머리말 '[측정 경로 없음] AS-IS 라벨 … 기준표 행 0 · ' 이 6번 있음. 원장 시각 11-27 0"
+  - 파일 1개: tools/Harness/verify/judge.py
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042 H5 같은 문구 반복 8행 → 0행 확인..
+  - 되돌리기 태그: 20261127_self0114
+- 01:20 [CheckList 엔진] 검사기 결함 탐지기 오탐 2종: 다른 행 인용 묶음, '검사기 한계 아님'
+  - 파일 2개: tools/Harness/verify/checker_defect_scan.py, .vibe/orch/selfcheck/checker_scan.json
+- 01:05 [VMO] VMO 자가 보완: 반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 기록 때 다시 씀
+  - 지시: "개선안 20261127005352_SELF 승인(VM 자가진단 errors orch-improve.changelogSelf / UNKNOWN: unknown error, open '<path>'). 근거 = 오류 서명 orch-improve.changelogSelf UNKNOWN 9건(11-23 18:54 ~ 11-26 16:15). tools/VibeMa"
+  - 파일 27개: tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js, tools/VibeManager/test/t_claim_overlap.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_impact_rule.js, tools/VibeManager/test/t_incident_handler.js, tools/VibeManager/test/t_orch_afterwork.js, tools/VibeManager/test/t_orch_apply_recover.js 외
+  - 미확인 2건: 개선안 확인: 2026-11-27 00:59:14 반영 전: node tools/VibeManager/test/t_orch_improve.js → ALL PASS, PASS 55건, 쓰기 실패 주입 시험 없음(미측정). / VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261127_self0054
+  - 세션: e2b32fca
+- 00:47 [CheckList 엔진] U11 반영 실패 방치 판정에서 사용자 판단 대기 안 제외
+  - 파일 1개: orch-usercheck.js
+  - 미확인 1건: 실행 중 VMO 판정(창 다시 로드 뒤 S13 에서 U11 fail 사라지는지 확인)
+- 00:44 [CheckList 엔진] S-C 8차: DMF0042 CheckList 결과로 폼 저장형 생성기·실행기 보완
+  - 파일 2개: form_scen_gen.py, formscen.ts
+  - 미확인 2건: 변경 2~4 의 화면 동작(G16 NA, G17·G18 MSG00108·MSG00276 문구). / 다음 DMF0042 CheckList 실행 때 확인.
+  - 되돌리기 태그: 20261127_sc5
+- 세션 7c03c9f7 "Vibe_Manager 자가진단" 00:50~00:53, 지시 1건
+- 세션 e2b32fca "CHANGELOG 자가 보완 절 대기 기록 개선" 00:58~01:00, 지시 1건, VM 파일 수정 4건(orch-improve.js 3, t_orch_improve.js 1)
+- 세션 96ab0a1a "VMO 보완 대상 자동 탐색" 01:05~01:05, 지시 1건, 화면 SCP0028, SCP0005
+- 세션 7618f1a6 "VMO 자가진단 S16 검사기 판정 결함 진단" 01:06~01:14, 지시 1건
+- 세션 8a6a8eff "judge.py 머리말 중복 제거" 01:19~01:22, 지시 1건, 화면 DMF0042
+- 세션 38fabe78 "설계 결정 해당없음 부분 일치 판정 수정" 01:33~01:37, 지시 1건, 화면 DMF0042, DMF0005
+- 세션 27924622 "Vibe_Manager 자가진단" 02:02~02:06, 지시 1건
+- 세션 d8f2b395 "Vibe_Manager 자가진단" 03:12~03:15, 지시 1건
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U27 AI 주간 한도 값 오래됨 28분 (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U27 AI 주간 한도 마지막 조회 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U11 반영 실패 개선안 6시간 방치 (open)
+- 개선안: 개선안 조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임 (applied)
+- 개선안: 개선안 설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음 (applied)
+- 개선안: 개선안 결함 탐지기 오탐 2종(서로 다른 행 인용 묶음, '검사기 한계 아님' 부정 문구) (applied)
+- 개선안: 개선안 반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 기록 때 다시 씀 (applied)
 
 ## 2026-11-26
 
-변경 51, 세션 84, VM 실행 6, Claude 호출 79, 사건 11, 개선안 42
+변경 104, 세션 123, VM 실행 8, Claude 호출 115, 사건 67, 개선안 108
 
+- 23:53 [VMO] VMO 자가 보완: 반복 지시 집계에서 VMO 승인, 되돌리기 기록 줄의 인용은 사용자 지시로 세지 않음
+  - 지시: "개선안 20261126234153_SELF 승인(VM 자가진단 S9 S9/ask/e476ad881e). 근거 = diag_in S9 '같은 지시 13건' S9/ask/e476ad881e, S9/ask/733486eb1f, 5건 S9/ask/bc5a5b1d5a, S9/ask/78ecb614b3, S9/ask/b2ae65dc75, S9/ask/7012e7ef7"
+  - 파일 10개: tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_orch_histauto.js, tools/VibeManager/test/t_orch_history.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_orch_usercheck.js 외
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261126_self2342
+  - 세션: 0af975be, d1e7f3cd, 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, f5aba63b, bff6a922
+- 22:56 [VMO] S-Z 10차: 설치 폴더에 직접 복사한 분석 모듈을 정기 점검 때 다시 읽음
+  - 파일 7개: orch-ladder.js, orch-usercheck.js, plans.json, ladder.json, orch-selfcheck.js, result.json, t_orch_hotreload.js
+  - 미확인 2건: orch-selfcheck.js 는 HOT 모듈이 아니라 창 다시 로드 뒤 적용. / 그 전까지 호스트의 orch-ladder.js 도 19:09 전 코드라 001528_VISION 재계획은 창 다시 로드 뒤.
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 6f0713e7, 80a5e3ae, 80d64ee2, ca7d2fc9, 7ab9afb3, abce7d5c, a149f211, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 22:47 [VMO] VMO 자가 보완: 삭제 안을 반영할 때 지울 로그, 백업 파일을 반영 전 사본(.bak_, 스냅샷)으로 복사하지 않음
+  - 지시: "개선안 20261126223019_SELF 승인(VM 자가진단 S10 S10/belog/nscm.20261114.log.bak_20261123_self1121). 근거 = orch-improve.js:437 backupTargets(pr) 가 대상을 .vibe/orch/snap/prop_<id>/files 로 복사함(:305~311). orch-improv"
+  - 파일 40개: tools/VibeManager/orch-improve.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_orch_selfapply.js, tools/VibeManager/test/t_checkerscan.js, tools/VibeManager/test/t_claim_overlap.js, tools/VibeManager/test/t_claim_proposal.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_gate_fe_page.js 외
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261123_self1121, 20261126_self2230
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 6f0713e7, afeb3564, 80a5e3ae, 80d64ee2, ca7d2fc9, 7ab9afb3, a149f211, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, f5aba63b, 014aecc1, f0346e8f, bff6a922
+- 22:38 [VMO] U21 반영 실패 집계에서 고친 안이 반영 완료된 실패 제외
+  - 파일 2개: orch-usercheck.js, orch-ladder.js
+  - 미확인 1건: VMO 실행 중 U21 판정(창 다시 로드 뒤 자가진단 S13 에서 확인)
+  - 세션: 0af975be, d1e7f3cd, 6f0713e7, 80a5e3ae, ca7d2fc9, 7ab9afb3, abce7d5c, a149f211, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e
+- 22:12 [VMO] VMO 자가 보완: 창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 살리지 않음
+  - 지시: "개선안 20261126214604_REVIEW 승인(VM 자가진단 ). 근거 = 집계 incidents.topRepeats R5 '창 다시 로드로 끊긴 실행 16건(알림)' n 8. 사건 파일 20261120_142504, 145830, 180433, 183604, 184728, 185754, 20261123_184718, 20261126_154128_R5"
+  - 파일 40개: tools/VibeManager/orch-watch.js, tools/VibeManager/orch-state.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_reloadcut.js, tools/VibeManager/test/t_chain_abort.js, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_claim_overlap.js, tools/VibeManager/test/t_claude_usage.js 외
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 반영 뒤 확인 1건: 사건 파일 중 sig R5/reloadcut/36504 반영 전 8건 → 반영 뒤 창 다시 로드 1회 뒤에도 8건 유지..
+  - 되돌리기 태그: 20261126_self2150
+  - 세션: 0af975be, d1e7f3cd, 69237325, 6b837b34, afeb3564, 7ab9afb3, a149f211, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, f5aba63b, 014aecc1, f0346e8f, bff6a922
+- 22:08 [VMO] 중지 원인 '기타' 경로 기록, 점검 도중 VM 파일 변경 회차 사건 보류
+  - 파일 5개: orch-improve.js, t_orch_improve.js, workbench.js, orch-selfcheck.js, t_orch_selfcheck_stale.js
+  - 미확인 1건: 실데이터 digest(7) 의 stoppedOther 내용(창 다시 로드 뒤 VMO 집계에서 확인), 실제 점검 도중 파일 변경 때 사건 보류 동작
+  - 세션: d1e7f3cd, fb1fbaaf, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, 6f0713e7, b6231c06, 80d64ee2, f5b97751, 7ab9afb3, b40393b7, b4e3982c, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 5cb39f0d, 014aecc1, f0346e8f
+- 21:30 [VMO] 자가진단 S10 로그 증가 속도와 가벼운 주기 편입
+  - 파일 1개: orch-selfcheck.js
+  - 미확인 1건: BE 로그 수준 조정과 로그 파일 정리는 사용자 판단(BE 설정 logback-spring.xml, 파일 삭제)
+  - 세션: d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 20:56 [VMO] 자가진단 S2 오래 걸린 시험 기록
+  - 파일 1개: orch-selfcheck.js
+  - 미확인 3건: S2 결과에 파일별 시간이 남지 않아 오래 걸린 시험 미확인 / 20:34 게이트 4021초 원인. / 다음 게이트부터 info.slow 로 확인
+  - 세션: d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 20:53 [VMO] VMO 자가 보완: 사용자 지시 R256 같은 문제: tools/VibeManager/workbench.js:3397 VMO 단추 분기가 접수, 대기, 실패를 웹뷰로 돌려보내지 않음. incAgent 는 대기열에 넣어도 대기 표시가 없
+  - 지시: "웹뷰에서 실행한 VMO 기능은 누르는 즉시 접수 표시를 보이고 시작, 대기 사유, 실패를 같은 화면에 보임" / "로드 후 컨설팅을 누르고 주제를 입력했는데 반응이 없습니다."
+  - 파일 34개: tools/VibeManager/workbench.js, tools/VibeManager/test/t_backup_push.js, tools/VibeManager/test/t_chain_abort.js, tools/VibeManager/test/t_chain_loop.js, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_cloud_reveal.js, tools/VibeManager/test/t_hist_console.js, tools/VibeManager/test/t_job_autodel.js 외
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261126_self1927
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, 80a5e3ae, ca7d2fc9, f5b97751, 7ab9afb3, a149f211, c0401204, b40393b7, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e, f5aba63b, 5cb39f0d, bff6a922
+- 20:50 [VMO] 묶음 S-Z 9차: 사용자 지적 점검의 세션 기록 다시 읽기 줄임
+  - 지시: "계속 개선항목 찾아서 진행해줘"
+  - 파일 1개: orch-usercheck.js
+  - 미확인 2건: 19:27~20:34 확장 프로세스 CPU 원인(이번 변경으로 줄어드는지 미측정). / VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261126_sz5, 20261126_sz6
+  - 세션: 0af975be, d1e7f3cd, 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e
+- 19:31 [VMO] 사용자 지적 감지기 U33 consultNoResponse 와 컨설팅 사건 기록
+  - 지시: "로드 후 컨설팅을 누르고 주제를 입력했는데 반응이 없습니다."
+  - 파일 3개: orch-consult.js, orch-usercheck.js, user_checks.json
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 실제 컨설팅 요청 때 사건이 남는지는 다시 로드 뒤 VMO 컨설팅 단추로 확인
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e
+- 19:3x [VMO] 묶음 S-Z 7차: 컨설팅 역할 스킬 찾는 곳 확장
+  - 지시: "계속 개선항목 찾아서 진행해줘" / "C#.NET, REACT 등에 대해서도 전문자 SKILL 이 필요합니다."
+  - 파일 5개: orch-consult.js, .claude/agents/vm-orchestra.md, workbench.js, quick.json, steps.json
+  - 되돌리기 태그: 20261126_sz
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, c55c3662, b6231c06, f5b97751, 7ab9afb3, f6d5268c, 540898d2, bdfa6c11, b40393b7, d53e521f, 8a8d6c8b, dd2cfcda, 5cb39f0d
+- 19:29 [VMO] 묶음 S-Z 8차: 환경설정 작업 종료 뒤 개선안 이어 진행 항목
+  - 지시: "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요"
+  - 파일 5개: quick.json, steps.json, tools/Harness/verify/set_harness_flag.py, harness.json, set_harness_flag.py
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261126_sz
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
+- 19:18 [VMO] 자동 개선 반복: 재시도 실패 기록, 측정 산출물 집계 제외, 실행 중 삭제 시험, 흔들리던 시험
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 9개: fs-retry.js, orch-errlog.js, t_fs_retry.js, orch-history.js, t_orch_history_kind.js, test/run_all.js, t_session_continue.js, t_run_all_changed.js 외
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요)
+  - 세션: 0af975be, d1e7f3cd, dd2cfcda, 4f30164e, f5aba63b, bff6a922
+- 19:11 [CheckList 엔진] 묶음 S-Z 6차: 검사기 결함 탐지 오탐, 설정 정합 hook 키, 계획 원장 쓰기 실패
+  - 지시: "작업 종료 시 개선항목 찾아서 진행"
+  - 파일 5개: tools/Harness/verify/checker_defect_scan.py, orch-selfcheck.js, orch-ladder.js, plans.json, orch-improve.js
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 20261126001528_VISION 원장 생성은 창 다시 로드 뒤 ladder tick 에서 확인.
+  - 되돌리기 태그: 20261126_sz, 20261126_sz3, 20261126_sz4, 20261126_sz2
+  - 세션: d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, abce7d5c, a149f211, b4e3982c, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 014aecc1, f0346e8f
+- 19:11 [VM 기타] Claude Code 세션 묶음 S-B 추가: AsisFacts 운영 출력 재생성
+  - 지시: "'Doc/asisfacts 운영 출력도 다시 만들어줘'. Doc/asisfacts_cmp/apply_and_zip.py 실행 18:19:31~18:59:53, run.ps1 -SkipBuild rc=0, 교차검증 mismatches 0, screens 445."
+  - 파일 1개: endpoint_usage.csv
+- 19:07 [VMO] 시험이 VM 폴더에 사건 파일을 남기던 결함
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 4개: 184321_R12_ALL.json, orch-watch.js, test/t_gate_fe_page.js, user_rules.json
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요)
+  - 세션: d1e7f3cd, 69237325, 6b837b34, 7ab9afb3, 8a8d6c8b, 4f30164e, f0346e8f
+- 18:53 [VMO] VMO 자가 보완: 반복 수정 집계에서 시험 파일은 원본과 같은 절에 있으면 세지 않음(시험 파일만 고친 절만 셈)
+  - 지시: "개선안 20261126183313_SELF 승인(VM 자가진단 ). 근거 = orch-history.js:313, orch-ladder.js:55-58, ladder.json:76, :1138, :1175, stats.json repeatFiles t_orch_usercheck.js defect 20 / orch-usercheck.js defect 22, "
+  - 파일 10개: tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_orch_histauto.js, tools/VibeManager/test/t_orch_history.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_orch_usercheck.js 외
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261126_self1835
+  - 세션: 0af975be, d1e7f3cd, 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, f5aba63b, bff6a922
+- 18:47 [VMO] 자동 개선 반복 1차: 맡음 겹침 경고, 시험 재실행, 흔들리던 시험, 첫 점검, 반복 수정 집계
+  - 지시: "계속 개선항목 찾아서 진행해주세요" / "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요"
+  - 파일 13개: claim_proposal.js, test/t_claim_overlap.js, test/run_all.js, test/t_run_all_changed.js, test/t_resume_inner.js, orch-vision.js, meta.json, test/t_vision_first.js 외
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 반복 수정 집계 변화는 다음 이력 수집(stats.json) 뒤 S9, S15 로 확인
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, 80a5e3ae, ca7d2fc9, f5b97751, 7ab9afb3, c0401204, b40393b7, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e, f5aba63b, 5cb39f0d, bff6a922
+- 18:42 [VMO] 묶음 S-Z 5차: 반영 전 준비 확인, U21 원인 부류
+  - 지시: "계속 개선항목 찾아서 진행해줘"
+  - 파일 6개: orch-selfcheck.js, harness.json, ledger.py, facts_lockrules.py, tools/VibeManager/CLAUDE.md, orch-usercheck.js
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261126_sz2, 20261126_sz4
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 6f0713e7, 80a5e3ae, 80d64ee2, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 18:37 [룰·hook] 묶음 S-W 3차: AI 한도 기본 100, 첫 실행 지연, 상시 분석 첫 확인, Overall Review 지난 결과 + 턴 종료 자동 이어가기 hook
+  - 지시: "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요" / "자동반영 해주세요"
+  - 파일 10개: .claude/settings.local.json, .claude/hooks/auto-improve-on-stop.js, harness.json, orch-agent.js, orch-consult.js, meta.json, orch-improve.js, orchestra.js 외
+  - 미확인 1건: VMO 창 Overall Review 목록 표시, 다시 로드 뒤 컨설팅 60초 첫 실행, 상시 분석 120초 첫 확인(창 다시 로드 뒤 확인).
+  - 되돌리기 태그: 20261126_sw3
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, c41e90d1, 0cc2625f, 12ebe4b3, b6231c06, f2cc646c, 82e77a32, 7ea62927, 1356c17b, f5b97751, 7ab9afb3, b40393b7, b4e3982c, 8a8d6c8b, dd2cfcda, 4f30164e, 5cb39f0d, 014aecc1, f0346e8f
+- 18:36 [VMO] 묶음 S-D2 이어가기: 개선안 20261126153056_SELF_2 site_types.json 생성기
+  - 지시: "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록"
+  - 파일 5개: tools/Harness/verify/mapping_trace.py, /site_types.json, site_types.json, orch-selfcheck.js, harness.json
+  - 미확인 2건: run_verify 실행에서 생성 경로는 이번에 돌리지 않음(CheckList 실행 금지). / run_verify.py 는 대상 밖이라 안 고침
+  - 되돌리기 태그: 20261126_sd2
+  - 세션: d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 18:32 [VMO] 묶음 S-Y: S6 묶음 요약, 반영 지시문 승인 문장, 화면 게이트, 작업 모드 전환 기록, U32 컨설팅 미기동, 개선 세션 자동 이어 진행
+  - 지시: "1x '작업 종료 시 개선항목 찾아서 진행을 자동으로', 범위 = 개선 세션만): tools/Harness/hooks/vmo-continue-stop.js 신규(세션 기록에 claim_proposal.js claim/done 실행이 있는 세션만 대상, 연속 orch.sessionContinueMax 10번 상한, 끄기 orch.sessionContinue "
+  - 파일 15개: orch-selfcheck.js, t_s6_group.js, orch-improve.js, .claude/settings.json, t_impact_rule.js, check.js, t_gate_fe_page.js, tools/Harness/verify/set_scope.py 외
+  - 미확인 2건: 못 끝낸 3파일(t_checkerscan.js, t_claim_proposal.js, t_gate_fe_page.js)은 예외로 끝났고 원인 미확인(로그에 스택 없음). / VS Code 실화면(창 다시 로드 필요), Stop hook 실동작(다음 개선 세션 종료 때 확인).
+  - 되돌리기 태그: 20261126_sy, 20261126_sy2
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 12ebe4b3, 6f0713e7, 80a5e3ae, 80d64ee2, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 014aecc1, f0346e8f
+- 18:31 [VMO] 작업 종료 뒤 개선 항목 자동 찾기·진행 orch-afterwork.js
+  - 지시: "1x): '작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요'"
+  - 파일 3개: orch-afterwork.js, .vibe/orch/afterwork/last.json, orch-vision.js
+  - 미확인 1건: 창 다시 로드 뒤 실가동(실제 작업 종료 때 동작)은 미확인.
+  - 세션: 0af975be, d1e7f3cd, dd2cfcda
+- 18:22 [VMO] 묶음 S-Z 4차: 목적 원장 단계 5, 사용자 세션 개념 변경 등록
+  - 지시: "계속 개선항목 찾아서 진행해줘" / "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요"
+  - 파일 4개: orch-usercheck.js, quick.json, steps.json, .vibe/orch/purpose_ledger.json
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 실제 학습 회차에서 갱신안이 나오는지는 다음 학습 뒤 개선안 목록으로 확인.
+  - 되돌리기 태그: 20261126_sz3, 20261126_sz2
+  - 세션: 0af975be, d1e7f3cd, c55c3662, 80a5e3ae, ca7d2fc9, 7ab9afb3, f6d5268c, 540898d2, bdfa6c11, c0401204, d53e521f, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e
+- 18:04 [CheckList 엔진] 묶음 S-Z 3차: 목적 원장 단계 2~4, CheckList 1판 단계 원장과 화면 표시, 사다리 대기 표시, 조치 없는 사건 판정
+  - 지시: "계속 개선항목 찾아서 진행해줘"
+  - 파일 9개: orch-ladder.js, purpose_ledger.json, orchestra.js, test/t_orch_ladder_card.js, run_verify.py, orch-vision.js, harness.json, orch-usercheck.js 외
+  - 미확인 3건: 지시문 1-2 에 단계 밖 비율 10 초과 = 미확인. / VS Code 실화면(창 다시 로드 필요). / 실행 중인 VMO 는 창 다시 로드 전이라 S13 U3 가 옛 판정으로 남음(18:02 자가진단 결과).
+  - 되돌리기 태그: 20261126_sz, 20261126_sz2
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 8535c5e9, 19c8ee89, 6f0713e7, f2cc646c, 82e77a32, 7ea62927, 1356c17b, 80a5e3ae, ca7d2fc9, 7ab9afb3, abce7d5c, a149f211, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e
+- 17:48 [VMO] 제어 문자 검사 추가와 추적 제외 파일 정리
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 5개: tools/Harness/verify/form_scen_gen.py, facts_lockrules.py, orch-selfcheck.js, test/t_s1_ctrl.js, feedback_bash_heredoc_backslash_ctrlchar_20261126.md
+  - 미확인 2건: 같은 시각 다른 세션 편집과 겹쳤을 수 있으나 원인 미확인 / VS Code 실화면(창 다시 로드 필요)
+  - 세션: d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 17:34 [CheckList 엔진] 묶음 S-Z 2차: CheckList 시간 목적 판정 자료, 점검 모듈 반영 즉시 다시 읽기, 목적 원장
+  - 지시: "계속 개선항목 찾아서 진행해줘"
+  - 파일 10개: orch-vision.js, orch-selfcheck.js, orch-usercheck.js, orch-worklist.js, orch-improve.js, .vibe/orch/purpose_ledger.json, orch-ladder.js, tools/Harness/plan_state.py 외
+  - 미확인 3건: 큰 그림 점검 입력에 기준 안 20261123000419_VISION 의 효력 시각(effAt)과 효력 뒤 끝난 CheckList 체인(runsAfter: runId, firstDocMin, chainMin)을 넣고 지시문 1-2 규칙(효력 뒤 0건 = 미확인 실측 대기, 1판 > 목표 = 어긋남)을 더함. / VS Code 실화면(창 다시 로드 필요). / 전체 run_all 결과는 아래 확인 줄.
+  - 되돌리기 태그: 20261126_sz, 20261126_sz2
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 6f0713e7, 80a5e3ae, 80d64ee2, ca7d2fc9, 7ab9afb3, abce7d5c, a149f211, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 014aecc1, f0346e8f
+- 17:34 [VMO] VMO 고정 문구 문장 규칙 위반 정리 3파일
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 5개: orch-consult.js, orch-checkerscan.js, orch-vision.js, doc_style.py, prompt-panel.js
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요)
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 33533f79, 0199649d, 8a8d6c8b, dd2cfcda
+- 17:31 [룰·hook] Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 범위 밖 확정 15화면 추가
+  - 지시: "28): '15화면도 확정'. tools/Harness/rules/form_scen_scope.csv 에 DM0036, DMF0000, DMF0020, DMF0051, FP00631, FP01624, FP02845, FPC0096, FPC0103, FPC0110, FPC0114, FPC0115, SCP0078, SCP0113, SSP0027 추가(사유 = "
+- 17:29 [Git] 묶음 S-W 추가: Source Backup commit 자동 정리 끔, push 전 대용량, 제외 경로 검사
+  - 파일 1개: workbench.js
+  - 되돌리기 태그: 20261126_sw2
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
+- 17:27 [룰·hook] Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 범위 밖 확정 16화면
+  - 지시: "22): 남은 TO-BE 미구현 25건(FP 모듈 13화면 19건, SCP0099 3건, SCP0083 2건, SSP0007 1건) '범위 밖으로 확정'."
+  - 파일 2개: tools/Harness/rules/form_scen_scope.csv, tools/Harness/verify/form_scen_gen.py
+- 17:22 [체인·메뉴] 묶음 S-W: 웹뷰 공용 모듈, push 실패 원인 줄, 서버 로그 크기 상한, 체인 단계 틀
+  - 지시: "계속 개선항목 찾아서 진행" / "병렬로 펼쳐서 진행"
+  - 파일 19개: webview-kit.js, jobs.js, orchestra.js, workbench.js, history.js, orch-userrule.js, menu-view.js, prompt-panel.js 외
+  - 미확인 4건: 🚒 자동보완 체인 실실행 1회(조정 세션 결정으로 시험으로 대신함, 실실행은 사용자 몫). / 18:00:57 실행은 단독 작업 S8.verifyIfStale(chain.start 없음)이라 체인 확인에 쓰지 않음. / VMO 창 사람 확인 줄 표시, VS Code 안 중계기 기동(서버 재기동 필요), 경계 막대와 Ctrl+A 실제 동작.
+  - 되돌리기 태그: 20261126_tpl, 20261126_sw
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, 33533f79, c41e90d1, 0cc2625f, c55c3662, 986fe8e6, b6231c06, 69237325, 6b837b34, 7c451e24, f2cc646c, 82e77a32, 7ea62927, b2437c72, d1c67d55, 1356c17b, 30597a11, ef2ccee9, 0199649d, 85647d80, b48a922d, fb14a808, 80a5e3ae, ca7d2fc9, f5b97751, 1e4d5506, 7ab9afb3, f6d5268c, 540898d2, bdfa6c11, c0401204, b40393b7, d53e521f, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e, 5cb39f0d, f0346e8f
+- 17:20 [CheckList 엔진] Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 6차, TO-BE 미구현 29건 중 4건 같은 원문 TO-BE 화면으로 연결
+  - 지시: "'TO-BE 미구현 29건도 해소되게 보완해줘'. 29건 = FP 13화면 19건, SCP0099 3건, SSP0007 1건, SCP0060 1건, DMF0067 3건(조회 단추), SCP0083 2건(조회 단추). 이 화면들의 TO-BE 대응 화면을 찾음."
+  - 파일 1개: tools/Harness/verify/form_scen_gen.py
+  - 되돌리기 태그: 20261126_sc4
+- 17:19 [VMO] VMO 자가 보완: VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 2
+  - 지시: "개선안 20261126132614_SELF 승인(VM 자가진단 L4plan L4plan/20261125000616_VISION/2). 근거 = L4 단계 원장 20261125000616_VISION 단계 2/4 · 문서 .<긴 문자열>.md"
+  - 파일 5개: tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/orch-vision.js, tools/VibeManager/test/t_orch_ladder.js, tools/VibeManager/test/t_orch_selfcheck.js
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
+  - 되돌리기 태그: 20261126_self1652
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, abce7d5c, a149f211, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 17:15 [VMO] t_orch_agent.js 전체 실행 때만 1건 실패하던 시간 차 보완
+  - 지시: "t_orch_agent 전체 실행 때만 실패하는 원인 확인해줘" / "예, 고쳐줘"
+  - 파일 2개: orch-watch.js, test/t_orch_agent.js
+  - 되돌리기 태그: 20261126_sz
+  - 세션: d1e7f3cd, 69237325, 6b837b34, 7ab9afb3, 8a8d6c8b, dd2cfcda, f0346e8f
+- 17:10 [체인·메뉴] Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 5차, 다른 측정에 맡긴 45건 → 0건
+  - 지시: "'다른 측정에 맡긴 45건도 해소되게 보완해줘'. 45건(권한 22, 저장 뒤 조회 20, 그리드 3)을 TO-BE 존재 기준으로 나눔: TO-BE 메뉴 있는 화면 16건(DMF0042 조회 15, SCP0011 권한 1), TO-BE 미등록·미사용 화면 29건."
+  - 파일 4개: tools/Harness/verify/form_scen_gen.py, Doc/tobefacts/db/btn_auth.csv, tools/E2E/users.json, tools/E2E/lib/formscen.ts
+  - 미확인 2건: Playwright 실측 미실행. / SCM Viewer 계정 로그인과 Calculate 단추 표시 상태는 실행 때 확인.
+  - 되돌리기 태그: 20261126_sc4
+- 17:10 [Git] Source Backup 미push 커밋 다시 묶기
+  - 지시: "다시 묶기 승인"
+  - 파일 1개: quick.json
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
+- 17:08 [VMO] 묶음 S-Z: 반영 지시문 게이트 목록, 시험 파일 자동 포함, VMO 알림 한곳, 생성기 자체 시험
+  - 지시: "계속 개선항목 찾아서 진행" / "병렬로 펼쳐서 진행"
+  - 파일 17개: orch-selfcheck.js, orch-improve.js, doc_style.py, harness.json, job-runner.js, orch-watch.js, orch-notify.js, extension.js 외
+  - 미확인 3건: VS Code 실화면(창 다시 로드 필요). / 알림 묶음 효과는 다시 로드 뒤 24시간 events.jsonl notify.shown 건수와 notify.merged 합계로 확인. / t_orch_agent.js 전체 실행 때만 1건 실패한 원인 미확인(그 시각 다른 세션이 orch-watch.js 수정 16:58).
+  - 되돌리기 태그: 20261126_sz
+  - 세션: d1e7f3cd, fb1fbaaf, 46a0ad61, 258733fe, 6f0713e7, 69237325, 6b837b34, 3663801f, 80d64ee2, 959f6adb, 9b44b899, 7ab9afb3, b4e3982c, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 014aecc1, f0346e8f
+- 17:05 [Git] Source Backup 에 영상이 계속 들어가던 제외 규칙 보완
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 1개: workbench.js
+  - 미확인 1건: 미실행(사용자 승인 대기): 이미 추적 중인 영상, 스냅샷의 추적 해제(git rm -r --cached)와 미push 커밋 4건 다시 묶기(git reset --soft origin/main 뒤 1건 커밋, force-push 없음)
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
+- 16:57 [VMO] 반복 수정 집계 오판 보완과 쓰기 재시도 확대
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 7개: orch-history.js, workbench.js, orchestra.js, quick.json, t_orch_history.js, fs-retry.js, ladder.json
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 집계 변화가 L3 진단 대기 묶음 수에 주는 효과는 다음 자가진단 S15 결과로 확인
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, c41e90d1, 0cc2625f, c55c3662, b6231c06, f2cc646c, 82e77a32, 7ea62927, 1356c17b, f5b97751, 7ab9afb3, f6d5268c, 540898d2, bdfa6c11, b40393b7, d53e521f, 8a8d6c8b, dd2cfcda, 5cb39f0d, bff6a922
+- 16:56 [CheckList 엔진] Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 4차, 표본 없는 7화면 = TO-BE 미구현 판정
+  - 지시: "'표본 없는 7화면도 해소되게 보완해줘'. 7화면(DM0036, DMF0000, DMF0020, FP01624, FPC0103, SCP0099, SSP0027)의 TO-BE 원장을 확인함."
+  - 파일 3개: tools/Harness/verify/form_scen_gen.py, Doc/tobefacts/db/menu.csv, map_screen.csv
+  - 미확인 2건: Playwright 실측 미실행. / TO-BE 저장 PKG 원문으로 응답 표본을 만드는 방식은 이번 대상이 없어 넣지 않음.
+  - 되돌리기 태그: 20261126_sc3
+- 16:54 [VMO] Claude Code 세션 묶음 S-B 추가: AsisFacts 의미 분석 모듈별 로그
+  - 지시: "'Semantic.cs 모듈별 로그도 고쳐줘'. 개선안 20261125173941_SELF 의 남은 항목(_run.log 에 모듈별 의미 분석 시도, 개선 건수)."
+  - 미확인 2건: 순번 열이 실행마다 달라지는 원인. / Doc/asisfacts 운영 출력은 다시 만들지 않음.
+  - 되돌리기 태그: 20261126_sb
+- 16:49 [CheckList 엔진] harness-gen-context 발동 조건 축소 · 폴더 판정 3단계
+  - 파일 3개: GEN_NOTES.md, tools/Harness/hooks/harness-gen-context.ps1, new-screen.ps1
+  - 되돌리기 태그: 20261126_vision5
+- 16:45 [VMO] VMO 개선안 R244, R248, R251 3건
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 4개: orch-selfcheck.js, test/t_claim_proposal.js, t_orch_coreauto.js, orch-vision.js
+  - 미확인 2건: 여러 세션 시험이 겹친 부하에서 시간 의존 단계가 밀린 것으로 보며 원인은 미확인 / VS Code 실화면(창 다시 로드 필요)
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 16:41 [CheckList 엔진] Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 3차, 측정 보류 20건 → 0건
+  - 지시: "'측정 보류 20건도 해소되게 보완해줘'. 2차(16:25 절)의 측정 보류 20건을 원문 줄로 확인하고 규칙을 넣음."
+  - 파일 3개: tools/Harness/verify/form_scen_gen.py, /resp_samples.json, tools/E2E/lib/formscen.ts
+  - 미확인 3건: Playwright 실측 미실행. / 표본 응답 9건의 7화면은 resp_samples.json 이 아직 없어(16:41 확인) 실행하면 '실제 응답 표본 없음' 미검증(ERROR)이 됨. / 콤보 항목·전제 행·Cell 칸 표시가 실제 데이터에 없으면 그 시나리오도 미검증.
+  - 되돌리기 태그: 20261126_sc3
+- 16:4x [VMO] VMO 컨설팅 검토 기동 · Overall Review 패널 '컨설팅' 버튼
+  - 지시: "'리로드 했습니다. VMO 의 컨설팅 기능 기동되도록 해주세요.'"
+  - 파일 7개: orch-consult.js, orch-vision.js, workbench.js, orchestra.js, orch-consult/vision/selfcheck/dict.js, user_checks/rules.json, .vibe/orch/consult/last.md
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, c41e90d1, 0cc2625f, b6231c06, f2cc646c, 82e77a32, 7ea62927, 1356c17b, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, dd2cfcda, 5cb39f0d
+- 16:27 [VM 기타] sqllog_calls.py 큰 PARAMS 를 DB 안에서 줄여 받음
+  - 지시: "'sqllog_calls DB 쪽 소요 비중도 측정해줘', '고쳐줘'"
+  - 파일 1개: tools/Harness/verify/sqllog_calls.py
+  - 되돌리기 태그: 20261126_sa
+- 16:26 [VMO] VMW 작업 끝 알림 결함과 파일 쓰기 일시 실패 보완
+  - 지시: "계속 개선항목 찾아서 진행해주세요"
+  - 파일 10개: jobs.js, CHANGELOG.md, WORKLOG.md, digest.json, step_stats.json, fs-retry.js, orch-improve.js, orch-history.js 외
+  - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 재시도 효과는 다시 로드 뒤 vm_errors.jsonl 같은 서명 건수로 확인
+  - 세션: 0af975be, d1e7f3cd, 69237325, 6b837b34, b2437c72, d1c67d55, 7ab9afb3, 28b90713, 43df20fa, 8a8d6c8b, dd2cfcda, 4f30164e, 014aecc1, f0346e8f, bff6a922
+- 16:25 [VM 기타] Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 2차 패턴, 38화면 보류 0건
+  - 지시: "'남은 37화면 보류도 패턴 보완해줘'. 1차 생성기(16:05 절)의 보류 95건(31화면)을 원문 줄로 확인하고 처리 규칙을 넣음."
+  - 파일 2개: tools/Harness/verify/form_scen_gen.py, tools/E2E/lib/formscen.ts
+  - 미확인 2건: Playwright 실측 미실행. / 맡김 45건은 해당 측정이 그 메시지를 재는지 이번에 확인하지 않음.
+  - 되돌리기 태그: 20261126_sc2
+- 16:25 [VMO] VMO 컨설팅 검토 신설 · AI 주간 한도 멈춤 기준 100%
+  - 지시: "VMO 는 IT 컨설턴트이며, DB, UI 모두을 섭렵한 최고의 엔지니어 입니다. 자신의 입장에서 현재의 VM 을 바라보면서 기능추가/보완에 대한 의견을 스스로 내고 개발을 진행" / "AI 한도는 걱정하지 마세요. 주간한도가 모자라면 계정을 추가해서라도 하고싶은 모든 일을 하도록"
+  - 파일 7개: orch-consult.js, last.md, meta.json, orch-vision.js, tools/Harness/harness.json, .claude/agents/vm-orchestra.md, test/t_orch_consult.js
+  - 미확인 2건: 실가동 컨설팅 보고와 개선안(창 다시 로드 뒤 25분 / 하루 1회)
+  - 되돌리기 태그: 20261126_ailimit
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 8a8d6c8b, dd2cfcda
+- 16:20 [VMO] VMO 목적 확대: 검사기 판정 결함 자가진단(S16) · 기능 추가·UI MODE 준비·UI/UX 추천 · 승인 기준 완화
+  - 지시: "VMO 에서 지금 하고 있는 보완 작업을 자가검진해서 보완진행 · 사용자 승인이 아닌 자동승인 대상" / "VMO 의 목적은 VM, VMO, VMW 가 제대로 일할 수 있도록 필요한 모든 작업을 모니터링하고 보완·기능 추가" / "특정한 일은 하면 안된다던지 하는 것은 없습니다"
+  - 파일 12개: orch-checkerscan.js, tools/Harness/verify/checker_defect_scan.py, tools/Harness/rules/checker_scan_ignore.csv, orch-vision.js, gen.js, check.js, orch-selfcheck.js, .claude/settings.json 외
+  - 미확인 3건: 실가동 S16 진단이 올린 개선안과 자동 반영 결과(다음 정기 점검 뒤 / AI 주간 한도 90% 이상이면 멈춤) / 큰 그림 점검 새 관점 결과(다음 일일 점검 뒤)
+  - 되돌리기 태그: 20261126_s16, 20261126_vmopurpose
+  - 세션: 0af975be, d1e7f3cd, fb1fbaaf, 6f0713e7, afeb3564, cf90d3c0, 80d64ee2, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
+- 16:18 [VMO] VMO 오판 1건 보완과 오래 열린 사건 정리
+  - 지시: "계속 개선항목 찾아서 진행해주세요" / "20261120_094237_R3_SSP0005(orch-watch.js:176), 20261120_094734_R5_SCP0028(orch-state.js:67), 20261120_201206_R5_SCP0028(diff_verify.py:298-300, :430), 20261125_032605_R1_SCP0005(unverified_resolve.py:"
+  - 파일 6개: set_vmo_rerun.py, tools/Harness/verify/form_scen_gen.py, checker_defect_scan.py, orch-selfcheck.js, scripts/rules/inventory_check.py, tools/Harness/README.md
+  - 미확인 1건: VS Code 실화면(창 다시 로드 필요)
+  - 세션: d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
 - 16:14 [VMO] Claude Code 세션 묶음 S-B: VMO 미반영 개선안 10건 처리
   - 파일 12개: tools/Analysis/perf_check/perf_check.py, perf_check.py, quick.json, marisoft.vibe-manager-2.0.1/quick.json, tools/Analysis/ssp_it_precheck/scn_rows.py, lookup_merge_gen.py, _MSSQL_20261125.sql, tools/AsisFacts/asisfacts.json 외
   - 미확인 3건: 사내 ZIOUI1, MSSQL 실행(DB 접속 시험 안 함). / Doc/asisfacts 운영 출력 재생성 안 함. / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_sb
-  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
 - 16:14 [VMO] VMO 미반영 개선안 병렬 보완: 묶음 S-A 검사 하네스 12건
   - 파일 21개: claim_proposal.js, decisions.py, engine_gate.py, sqllog_calls.py, make_verify_docs.py, dedup_pre.py, _user_verdicts.csv, _user_verdicts_direct.csv 외
   - 미확인 1건: DB 실행 미실행
@@ -113,12 +423,12 @@
   - 파일 10개: claim_proposal.js, orch-usercheck.js, tools/Harness/plan_state.json, user_checks.json, run_timing.json, orch-improve.js, orch-ladder.js, test/t_orch_usercheck.js 외
   - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / plan_state.py clear 로 지운 계획은 항목 기록이 없어 U31 이 판정하지 못함
   - 되돌리기 태그: 20261126_sd2
-  - 세션: d1e7f3cd, 6f0713e7, 80a5e3ae, ca7d2fc9, 7ab9afb3, abce7d5c, a149f211, c0401204, b4e3982c, e0c530f6
+  - 세션: 0af975be, d1e7f3cd, 6f0713e7, 80a5e3ae, ca7d2fc9, 7ab9afb3, abce7d5c, a149f211, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e, 014aecc1, f0346e8f
 - 15:51 [VMO] VMO 미반영 개선안 병렬 보완: 조정과 묶음 D1 9건
   - 지시: "VM 기능개선 세션에서 개선중인 항목을 여기에서도 개선항목을 찾아서 개선할 수 있도록 병렬로 진행" / "병렬로 펼쳐서 진행할 수 있는 작업이면 하위에 세션 멀티로 추가해서 진행"
   - 파일 19개: claim_proposal.js, judge.py, ledger.py, mapping_trace.py, run_verify.py, history.js, workbench.js, job-runner.js 외
   - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 하위 세션 S-A, S-B, S-C, S-D2 와 4ec206 결과는 각 세션 보고 뒤 확인
-  - 세션: d1e7f3cd, 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, 46a0ad61, c41e90d1, 0cc2625f, c55c3662, 258733fe, 6f0713e7, b6231c06, 7c451e24, f2cc646c, 82e77a32, 3663801f, 7ea62927, b2437c72, d1c67d55, 1356c17b, 30597a11, ef2ccee9, b48a922d, fb14a808, 80d64ee2, f5b97751, 1e4d5506, 959f6adb, 9b44b899, 7ab9afb3, b40393b7, b4e3982c
+  - 세션: d1e7f3cd, fb1fbaaf, 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, 46a0ad61, c41e90d1, 0cc2625f, c55c3662, 258733fe, 6f0713e7, b6231c06, 7c451e24, f2cc646c, 82e77a32, 3663801f, 7ea62927, b2437c72, d1c67d55, 1356c17b, 30597a11, ef2ccee9, b48a922d, fb14a808, 80d64ee2, f5b97751, 1e4d5506, 959f6adb, 9b44b899, 7ab9afb3, b40393b7, b4e3982c, 8a8d6c8b, b3b09931, dd2cfcda, 4f30164e, 5cb39f0d, 014aecc1, f0346e8f
 - 15:40 [VMO] Claude Code 세션 묶음 S-C: VMO 미반영 개선안 3건 처리
   - 파일 4개: tools/E2E/lib/popupprobe.ts, probe.ts, tools/E2E/lib/crud.ts, form_scen_gen.py
   - 미확인 1건: Playwright 실측은 미실행.
@@ -128,40 +438,40 @@
   - 파일 1개: tools/VibeManager/quick.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1444
-  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
 - 14:20 [VMO] VMO 자가 보완: 사용자 지시 R218 같은 문제: tools/VibeManager/quick.json:495 📋 TestResultList(495), 🚀 ID 하나로 전체(1068, 1133), 🧩 from AS-IS(1334
   - 지시: "CheckList 미검증 = 1단계 측정 안 자동 재측정(--no-rerun 금지) / 2단계 반복 = 🧪 보완 → 게이트 → 처리 대상 행 규칙만 해소 확인 재측정 / 재검증은 미검증 전체 해소 뒤에만(해소 게이트: 처리 대상 0 또는 전체 재측정으로만 잴 행만 남음). 해소 못 하고 반복이 끝나면 재검증 없이 남은 행·사유 보고" / "미검증 건수에 대해서 해소를 하지 않고 재검증이 진행되는 현상이 반복되고 있습니다. … 미검증에 대한 해소 이전에 checklist 단계에서도 미검증을 자체적으로 보완할 수 있게 하는 것이 1단계이고, 2단계로 미검증해소단계에서는 도출된 미검증에 대해서는 전체 미검증에 대한 해소를 한후"
   - 파일 1개: tools/VibeManager/quick.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1400
-  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
 - 13:57 [VMO] VMO 자가 보완: 사용자 지시 R74 같은 문제: tools/VibeManager/quick.json:1647 워크벤치 메뉴 이름에 AI 제품명이 있고, 영문 label_en 도 "💻 New Claude Terminal" 임
   - 지시: "VM 웹뷰 탭, 메뉴 이름은 AI 제품명 대신 기능을 나타내는 이름을 씀" / "Console 이 가장 적당해 보이네요.. 이걸로 변경해주세요." / "label"
   - 파일 1개: tools/VibeManager/quick.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1339
-  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
 - 13:25 [VMO] VMO 자가 보완: VM 고정 문구 문장 규칙 2차 단계 1 다시 올림(목적 묶음 연속 계산에서 같은 목적 반영 L4 안 효력 전 판정 제외, 새 문구 가운뎃점 나열 없이)
   - 지시: "개선안 20261126131312_SELF 승인(VM 자가진단 L4plan L4plan/20261125000616_VISION/1). 근거 = 실패 안 20261125005937_SELF(L4 원장 20261125000616_VISION 단계 1/4, 문서 .<긴 문자열>.md) · 게이트 보고 .vibe/orch/selfcheck/doc_style_gat"
-  - 파일 6개: orch-ladder.js, plans.json, harness.json, test/t_orch_ladder.js, tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_ladder.js
+  - 파일 2개: tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_ladder.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1313
-  - 세션: 6f0713e7, abce7d5c, a149f211
+  - 세션: 6f0713e7, abce7d5c, a149f211, dd2cfcda
 - 12:50 [VMO] VMO 자가 보완: 개념 재정립: 창 다시 로드 뒤 작업 재개를 재개 원장 1곳으로
   - 지시: "개선안 20261125000907_VISION 승인(VM 자가진단 ). 근거 = user_checks U13, U16, U17, U18, U23 원문. ladder.json L3,usercheck,U13/U16/U18/U23 resolved, L4,struct,usercheck,U13 resolved 11-21 15:05. CHANGELOG.md:417-4"
-  - 파일 11개: job.json, tools/VibeManager/workbench.js, tools/VibeManager/job-runner.js, tools/VibeManager/jobs.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/orch-watch.js, tools/Harness/verify/run_verify.py, tools/VibeManager/test/t_chain_resume.js 외
+  - 파일 10개: tools/VibeManager/workbench.js, tools/VibeManager/job-runner.js, tools/VibeManager/jobs.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/orch-watch.js, tools/Harness/verify/run_verify.py, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_job_resume.js 외
   - 미확인 3건: VS Code 실화면(창 다시 로드 필요). / 반영 뒤 확인 2건: 6) 창 다시 로드 1회 뒤 원장 cut 1건이 ui.json job, wb 보고에 같은 runId 로 있음. / / 7) 11-27 까지 실사용 재개 1회 이상에서 U13, U16, U17, U23 감지기 실패 0..
   - 되돌리기 태그: 20261126_self1231
-  - 세션: 48fd34e3, dd044e6f, 46a0ad61, c41e90d1, 0cc2625f, b6231c06, 69237325, 6b837b34, 3663801f, b2437c72, d1c67d55, 80a5e3ae, ca7d2fc9, f5b97751, 959f6adb, 9b44b899, 7ab9afb3, c0401204, b40393b7, b4e3982c, e0c530f6
+  - 세션: 0af975be, d1e7f3cd, 48fd34e3, dd044e6f, 46a0ad61, c41e90d1, 0cc2625f, b6231c06, 69237325, 6b837b34, 3663801f, b2437c72, d1c67d55, 80a5e3ae, ca7d2fc9, f5b97751, 959f6adb, 9b44b899, 7ab9afb3, c0401204, b40393b7, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e, 5cb39f0d, f0346e8f
 - 12:29 [VMO] VMO 자가 보완: 사용자 지시 R210 같은 문제: tools/VibeManager/quick.json:527 사용자 매뉴얼(527줄), 운영자 매뉴얼(634줄) 업무에 출력 형식 선택 항목(formats)이 없음. VM 소개 자료(
   - 지시: "VMW 문서 생성 업무는 출력 형식(PPTX, Google Slides, PDF, HTML)과 대상을 선택 항목으로 둠" / "VMW 에 기능 추가해주세요. PPT의 양식은 자유롭고 세련된 비지니스 제안서 느낌으로 할게요. GOOGLE PT 로도 만들 수 있도록 PPT, PT 등 OUTPUT 양식은 다양하게 선택할 수 있도록 해주세요. 대상도 선택할 수 있도록 해주세요." / "jobInputs"
-  - 파일 6개: user_manual.py, ops_manual.py, _inputs.json, tools/VibeManager/quick.json, tools/Docs/ops_manual.py, tools/Docs/user_manual.py
+  - 파일 3개: tools/VibeManager/quick.json, tools/Docs/ops_manual.py, tools/Docs/user_manual.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1212
-  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
 - 12:11 [VMO] VMO 자가 보완: 사용자 매뉴얼, 운영자 매뉴얼 업무에서 모듈을 여러 개 고르면 모듈마다 문서를 따로 만듦(job-runner 와 시험 2개 같이 수정)
   - 지시: "개선안 20261126120156_SELF 승인(VM 자가진단 S13 S13/R200/tools/VibeManager/job-runner.js). 근거 = 원래 지시 2026-11-24 12:59 'dm, system 2개를 동시 선택해서 하나의 사용자 메뉴얼로 작성했습니다. 2개의 메뉴얼로 분리해주세요.' · tools/VibeManager/job-run"
-  - 파일 7개: job-runner.js, t_um_job.js, _inputs.json, t_om_job.js, tools/VibeManager/job-runner.js, tools/VibeManager/test/t_um_job.js, tools/VibeManager/test/t_om_job.js
+  - 파일 3개: tools/VibeManager/job-runner.js, tools/VibeManager/test/t_um_job.js, tools/VibeManager/test/t_om_job.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1202
   - 세션: 46a0ad61, 3663801f, 959f6adb, 9b44b899, 7ab9afb3
@@ -173,28 +483,28 @@
   - 세션: 7c451e24, 30597a11, ef2ccee9, b48a922d, fb14a808, 1e4d5506
 - 10:55 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U29 asisLiveLogin: AS-IS 실측 중 오류 발생(로그인 계정이 남은 ID 로 Guest 접속)
   - 지시: "as-is 실측 중 오류 확인해서 보완해줘"
-  - 파일 6개: harness.json, tools/Harness/harness.json, user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 3개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 2건: 로그 경로 미확인. / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1043
-  - 세션: 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6
+  - 세션: 0af975be, d1e7f3cd, 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e
 - 10:42 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U27 aiUsageStale: AI 주간 한도가 VM 기록 발생 때만 갱신되어 VMO 감시 중 오래된 값이 보임
   - 지시: "VM 기록은 수시로 발생 되지만 VMO 의 모니터링은 지속적으로 발생 시킵니다. AI 주간한도 가져오는 기준을 변경하는 것도 하나의 방법 입니다."
-  - 파일 5개: .vibe/orch/ai_usage_state.json, user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 3개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1032
-  - 세션: 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6
+  - 세션: 0af975be, d1e7f3cd, 80a5e3ae, ca7d2fc9, 7ab9afb3, c0401204, b4e3982c, e0c530f6, 8a8d6c8b, dd2cfcda, 4f30164e
 - 10:18 [VMO] VMO 자가 보완: 사용자 지시 R181 같은 문제: tools/VibeManager/prompt-panel.js:141 프롬프트 웹뷰에 글래스모피즘 양식이 없음(backdrop-filter 0건)
   - 지시: "VM 웹뷰(VMO, VMW, WORKBENCH, FLOW 등)는 사용자가 고른 한 가지 디자인 양식(글래스모피즘)을 같게 씀" / "VMW 도 같은 글래스모피즘으로 적용해주세요"
   - 파일 1개: tools/VibeManager/prompt-panel.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1000
-  - 세션: 33533f79, 0199649d
+  - 세션: 33533f79, 0199649d, 8a8d6c8b
 - 10:06 [CheckList 엔진] CheckList 체인 소요 개선 2~7
   - 지시: "SCP0005 체인 J20261125_210634(20,087초) 분석의 나머지 개선 요소 순서대로 수정 지시."
   - 파일 9개: workbench.js, Doc/e2e/specs/_verify.spec.ts, row_run.py, asis_fp.py, sqllog_calls.py, /sqllog_cache.json, run_verify.py, e2e_suite.py 외
   - 미확인 4건: 감시 타이머 미실행 ERROR 표시는 자기 분할 행만. / sqllog 캐시 실제 DB 읽기(미실행), 다음 체인 단계별 소요(미측정). / 지문 계산이 바뀌어 다음 1회는 AS-IS 실측을 새로 함.
   - 되돌리기 태그: 20261126_chainargs
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
 - 09:59 [VMO] VMO 자가 보완: 사용자 지시 R181 같은 문제: tools/VibeManager/menu-view.js:240 메뉴 웹뷰에 글래스모피즘 양식이 없음(backdrop-filter 0건)
   - 지시: "VM 웹뷰(VMO, VMW, WORKBENCH, FLOW 등)는 사용자가 고른 한 가지 디자인 양식(글래스모피즘)을 같게 씀" / "VMW 도 같은 글래스모피즘으로 적용해주세요"
   - 파일 1개: tools/VibeManager/menu-view.js
@@ -203,10 +513,10 @@
   - 세션: 85647d80
 - 09:41 [VMO] VMO 자가 보완: 사용자 지시 R181 같은 문제: tools/VibeManager/history.js:125 Revision 웹뷰에 글래스모피즘 양식(--g1, --gb, backdrop-filter)이 없음(backdrop-fil
   - 지시: "VM 웹뷰(VMO, VMW, WORKBENCH, FLOW 등)는 사용자가 고른 한 가지 디자인 양식(글래스모피즘)을 같게 씀" / "VMW 도 같은 글래스모피즘으로 적용해주세요"
-  - 파일 2개: orchestra.js, tools/VibeManager/history.js
+  - 파일 1개: tools/VibeManager/history.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0925
-  - 세션: 8535c5e9, 19c8ee89, 7c451e24, f2cc646c, 82e77a32, 7ea62927, 1356c17b, 30597a11, ef2ccee9, b48a922d, fb14a808, 1e4d5506
+  - 세션: 7c451e24, 30597a11, ef2ccee9, b48a922d, fb14a808, 1e4d5506
 - 09:23 [VMO] VMO 자가 보완: 사용자 지시 R179 같은 문제: tools/VibeManager/history.js:126 #l 과 #r 좌우 분할에 경계 막대 크기 조절이 없음(history.js 에 pointermove, col-resize
   - 지시: "웹뷰에서 좌우 또는 상하로 나뉜 영역은 경계 막대를 끌어 크기를 조절할 수 있게 함" / "VMW 에 SPLIT BAR 을 두어서 왼쪽/오른쪽의 사이즈를 조정할 수 있도록 해주세요"
   - 파일 1개: tools/VibeManager/history.js
@@ -215,10 +525,10 @@
   - 세션: 7c451e24, 30597a11, ef2ccee9, b48a922d, fb14a808, 1e4d5506
 - 09:06 [VMO] VMO 자가 보완: 사용자 지시 R179 같은 문제: tools/VibeManager/orchestra.js:355 .tls, .dc-nav(365줄), .hc-nav(368줄)와 본문 사이에 경계 막대 크기 조절이 없음(orchest
   - 지시: "웹뷰에서 좌우 또는 상하로 나뉜 영역은 경계 막대를 끌어 크기를 조절할 수 있게 함" / "VMW 에 SPLIT BAR 을 두어서 왼쪽/오른쪽의 사이즈를 조정할 수 있도록 해주세요"
-  - 파일 3개: jobs.js, workbench.js, tools/VibeManager/orchestra.js
+  - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0850
-  - 세션: 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, c41e90d1, 0cc2625f, b6231c06, f2cc646c, 82e77a32, 7ea62927, b2437c72, d1c67d55, 1356c17b, f5b97751, 7ab9afb3, b40393b7
+  - 세션: fb1fbaaf, 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b, 8a8d6c8b
 - 08:49 [VMO] VMO 자가 보완: 사용자 지시 R178 같은 문제: tools/VibeManager/history.js Revision 창 왼쪽 목록(#l)에 접기와 펴기 단추가 없음(단추 문구 기호 없이)
   - 지시: "웹뷰에서 목록, 보조 패널처럼 본문 옆에 붙은 영역은 접기와 펴기 단추를 둠" / "><div class="
   - 파일 1개: tools/VibeManager/history.js
@@ -230,7 +540,7 @@
   - 파일 5개: quick.json, workbench.js, steps.json, checklist_run.py, test/t_chain_args.js
   - 미확인 1건: 다음 체인 실행에서 6·7단계 실제 소요(미측정), VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_wlargs
-  - 세션: 0af975be, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, c55c3662, b6231c06, f5b97751, 7ab9afb3, f6d5268c, 540898d2, bdfa6c11, b40393b7, d53e521f
+  - 세션: 0af975be, d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, c55c3662, b6231c06, f5b97751, 7ab9afb3, f6d5268c, 540898d2, bdfa6c11, b40393b7, d53e521f, 8a8d6c8b, dd2cfcda, 5cb39f0d
 - 08:01 [VMO] VMO 자가 보완: 사용자 지시 R159 같은 문제: tools/VibeManager/jobs.js:383 VMW 웹뷰 초기 동시 상한 기본값이 5임(init 전 표시, 입력칸 기본값)
   - 지시: "동시 실행 상한 기본값은 3으로 두고 PC 부하 입장 조건과 함께 적용함" / "동시의 최대를 Default 를 5에서 3으로 변경해주세요."
   - 파일 1개: tools/VibeManager/jobs.js
@@ -239,19 +549,19 @@
   - 세션: b2437c72, d1c67d55, 7ab9afb3
 - 07:44 [VMO] VMO 자가 보완: 사용자 지시 R159 같은 문제: tools/VibeManager/job-runner.js:169 동시 실행 상한 기본값이 5임. tools/Harness/harness.json:58 "jobMaxPar": 5 가
   - 지시: "동시 실행 상한 기본값은 3으로 두고 PC 부하 입장 조건과 함께 적용함" / "동시의 최대를 Default 를 5에서 3으로 변경해주세요."
-  - 파일 2개: harness.json, tools/VibeManager/job-runner.js
+  - 파일 1개: tools/VibeManager/job-runner.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0727
   - 세션: 46a0ad61, 3663801f, 959f6adb, 9b44b899, 7ab9afb3
 - 07:27 [VMO] VMO 자가 보완: 사용자 지시 R158 같은 문제: tools/VibeManager/jobs.js:454 최근 선택으로 불러온 화면 중 현재 목록에 없는 화면은 명칭이 빈 값으로 들어감(flow.targets 의 menu.csv 채움
   - 지시: "화면 목록은 화면 ID 와 명칭을 같이 보이고 명칭이 없으면 현재 메뉴 정보에서 채움" / "VMW 의 좌하단 UI 목록에 명칭이 누락된 부분이 확인됩니다. UI 명칭 누락분현재 메뉴에서 찾아서 명칭 채워주세요."
-  - 파일 2개: Doc/tobefacts/db/menu.csv, tools/VibeManager/jobs.js
+  - 파일 1개: tools/VibeManager/jobs.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0706
   - 세션: b2437c72, d1c67d55, 7ab9afb3
 - 07:06 [VMO] VMO 자가 보완: Dictionary 탭에 사용자 지시 규칙(user_rules.json) 묶음 추가, 출처와 제목 나열은 쉼표로
   - 지시: "개선안 20261126065740_SELF 승인(VM 자가진단 S13 S13/R154/tools/VibeManager/orch-dict.js). 근거 = 규칙 R154(새 코드를 추가할 때 Dictionary 탭도 갱신) · tools/VibeManager/orch-dict.js:87~88 원천에 user_checks.json 만 있고 user_rules."
-  - 파일 7개: orch-dict.js, user_rules.json, tools/VibeManager/user_rules.json, orch-userrule.js, t_orch_dict.js, tools/VibeManager/orch-dict.js, tools/VibeManager/test/t_orch_dict.js
+  - 파일 2개: tools/VibeManager/orch-dict.js, tools/VibeManager/test/t_orch_dict.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0657
   - 세션: afeb3564, cf90d3c0
@@ -260,70 +570,70 @@
   - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0621
-  - 세션: 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b
+  - 세션: fb1fbaaf, 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b, 8a8d6c8b
 - 06:21 [VMO] VMO 자가 보완: 사용자 지시 R151 같은 문제: tools/VibeManager/orchestra.js:910 VMO History 탭 행이 e.screens 화면 ID 를 표시하지만 WORKBENCH 연결 아이콘이 없음
   - 지시: "화면별 작업을 보이는 목록(VMO 상황판, VMW 목록, 이력)은 항목 오른쪽에 그 화면 WORKBENCH 를 여는 연결 아이콘을 둠" / "VMO 상황판의 지금 실행 중 항목의 오른쪽에 UI 별 작업의 경우 WORKBENCH 연결 아이콘을 추가해주세요." / "hrow"
   - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0604
-  - 세션: 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b
+  - 세션: fb1fbaaf, 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b, 8a8d6c8b
 - 06:04 [VMO] VMO 자가 보완: 사용자 지시 R151 같은 문제: tools/VibeManager/history.js:116 화면 ID 를 가진 이력 행(116줄, 158줄 hit 행)에 그 화면 WORKBENCH 를 여는 연결 아이콘이 없음
   - 지시: "화면별 작업을 보이는 목록(VMO 상황판, VMW 목록, 이력)은 항목 오른쪽에 그 화면 WORKBENCH 를 여는 연결 아이콘을 둠" / "VMO 상황판의 지금 실행 중 항목의 오른쪽에 UI 별 작업의 경우 WORKBENCH 연결 아이콘을 추가해주세요." / "it${it.dir === sel ? ' sel' : ''}"
-  - 파일 2개: jobs.js, tools/VibeManager/history.js
+  - 파일 1개: tools/VibeManager/history.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0547
-  - 세션: 7c451e24, b2437c72, d1c67d55, 30597a11, ef2ccee9, b48a922d, fb14a808, 1e4d5506, 7ab9afb3
+  - 세션: 7c451e24, 30597a11, ef2ccee9, b48a922d, fb14a808, 1e4d5506
 - 05:47 [VMO] VMO 자가 보완: 사용자 지시 R143 같은 문제: tools/VibeManager/orch-watch.js:93 창 다시 로드로 끊긴 실행(cutRun)을 실패 사건 대신 알림으로 올림(제목 문구는 쉼표로 씀)
   - 지시: "개선안 20261126053333_SELF 승인(VM 자가진단 S13 S13/R143/tools/VibeManager/orch-watch.js). 근거 = 규칙 R143 '창 다시 로드로 끊긴 실행은 실패 사건으로 올리지 않고 알림으로 표시함'(원래 지시 2026-11-20 01:02) · tools/VibeManager/orch-watch.js:93 if"
-  - 파일 2개: orch-watch.js, tools/VibeManager/orch-watch.js
+  - 파일 1개: tools/VibeManager/orch-watch.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0538
-  - 세션: 69237325, 6b837b34, 7ab9afb3
+  - 세션: d1e7f3cd, 69237325, 6b837b34, 7ab9afb3, 8a8d6c8b, f0346e8f
 - 05:14 [VMO] VMO 자가 보완: 사용자 지시 R142 같은 문제: tools/VibeManager/server-service.js:240 같은 함수 238줄 post({ type: 'server', name, ok, sec }) 를 orchestr
   - 지시: "같은 사건의 알림은 VS Code 알림과 웹뷰 알림 중 한 경로에서 한 번만 보임" / "알림에 동일 FE 기동완료, BE 기동 완료 가 2번씩 나오는 것도 사유 확인해서 보완해주세요."
-  - 파일 2개: orchestra.js, tools/VibeManager/server-service.js
+  - 파일 1개: tools/VibeManager/server-service.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0458
-  - 세션: 8535c5e9, 19c8ee89, 986fe8e6, f2cc646c, 82e77a32, 7ea62927, 1356c17b
+  - 세션: 986fe8e6, 8a8d6c8b
 - 04:57 [VMO] VMO 자가 보완: 사용자 지시 R140 같은 문제: tools/VibeManager/orch-ladder.js:13 자가진단 사다리 하루 진단 수 상한 기본 3건이 남아 있고, harness.json 에 키가 없어 그대로 적용되며,
   - 지시: "VMO 자동 반영과 자가 보완은 하루 건수 상한을 두지 않고 대상이 생기면 반영함" / "하루 상한 6건은 어디서 설정했나요? 하루 상한 지금은 해제해주세요."
-  - 파일 3개: orch-selfcheck.js, tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-selfcheck.js
+  - 파일 2개: tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-selfcheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0441
-  - 세션: 6f0713e7, 80d64ee2, abce7d5c, a149f211, b4e3982c
+  - 세션: d1e7f3cd, fb1fbaaf, 6f0713e7, 80d64ee2, abce7d5c, a149f211, b4e3982c, b3b09931, dd2cfcda, 4f30164e, 014aecc1
 - 04:40 [VMO] VMO 자가 보완: 사용자 지시 R138 같은 문제: tools/VibeManager/workbench.js:2029 Workbench 탭 순서가 Console, Status, Log, History 와 동적 탭 순이라 Log 탭이 마
   - 지시: "웹뷰 탭 순서는 주 기능 탭을 앞에 두고 LOG 탭을 마지막에 둠" / "VMO TAB 순서에 LOG 을 제일 뒤로 보내주세요." / "rtb"
   - 파일 1개: tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0424
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
 - 04:24 [VMO] VMO 자가 보완: 사용자 지시 R135 같은 문제: tools/VibeManager/extension.js:460 사이드바 화면 트리 FE 게이트 항목과 457줄 '화면·PKG·메타 게이트' 묶음이 DB MODE 에서도 FE 판정으로
   - 지시: "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함" / "현재는 DB MODE로만 작업을 해서 현재의 소스가 최신 소스이고 변경대상이 아닌것으로 STATUS 변경하고 싶어요. 게이트 대상에서도 제외하고 싶어요. 차후 UI/DB MODE 일때는 게이트 대상이 되면 될 것 같아요."
   - 파일 1개: tools/VibeManager/extension.js
   - 미확인 2건: 개선안 확인: 반영 전 04:15:51 node --check CHECK_OK, run_all.js 는 권한 확인으로 실행 못 함(반영 전 값 미측정) → 반영 뒤 04:16:20 node --check CHECK_OK, run_all.js ALL OK 87/87 PASS 1422 FAIL 0 228s (RESULT at 2026-11-25T19:16:21Z) / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0411
-  - 세션: 258733fe
+  - 세션: 258733fe, dd2cfcda
 - 04:10 [VMO] VMO 자가 보완: 사용자 지시 R135 같은 문제: tools/VibeManager/workbench.js:449 Status 탭 FE 게이트 타일이 작업 모드 분기 없이 BLOCK 수로 bad 를 표시하고, 440줄 진행률도 같은
   - 지시: "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함" / "현재는 DB MODE로만 작업을 해서 현재의 소스가 최신 소스이고 변경대상이 아닌것으로 STATUS 변경하고 싶어요. 게이트 대상에서도 제외하고 싶어요. 차후 UI/DB MODE 일때는 게이트 대상이 되면 될 것 같아요."
   - 파일 1개: tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0354
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
 - 03:54 [VMO] VMO 자가 보완: 사용자 지시 R131 같은 문제: tools/Harness/harness.json:16 켜고 끄는 키 snapAutoApprove, llmReviewLean, dedupGeneral, dedupScreen, orch
   - 지시: "harness.json 에서 켜고 끄는 기능 설정은 VM 환경설정 화면에 항목을 둠" / "VM 환경설정에 AI 검토 켜고 끄는 항목 추가해주세요" / "snapAutoApprove"
-  - 파일 5개: quick.json, tools/Harness/harness.json, tools/VibeManager/quick.json, tools/VibeManager/steps.json, tools/Harness/verify/set_harness_flag.py
+  - 파일 4개: tools/Harness/harness.json, tools/VibeManager/quick.json, tools/VibeManager/steps.json, tools/Harness/verify/set_harness_flag.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0336
-  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
 - 03:36 [VMO] VMO 자가 보완: 사용자 지시 R130 같은 문제: tools/VibeManager/orch-agent.js:193 VMO 에이전트 호출이 Workbench 선택 모델 대신 VS Code 설정값을 씀
   - 지시: "VM 이 띄우는 AI 호출(CheckList AI 검토, VMO 진단 등)은 모델을 따로 고정하지 않고 WORKBENCH 에서 고른 모델을 씀" / "WORKBENCH 가 사용하고 있는 MODEL 그대로 사용하도록 해주세요."
-  - 파일 2개: workbench.js, tools/VibeManager/orch-agent.js
+  - 파일 1개: tools/VibeManager/orch-agent.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0319
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, 12ebe4b3, b6231c06, f5b97751, 7ab9afb3, b40393b7, b4e3982c
+  - 세션: fb1fbaaf, 12ebe4b3, b4e3982c, 4f30164e
 - 03:15 [VMO] VMO 자가 보완: 사용자 지시 R125 같은 문제: tools/Harness/verify/run_verify.py:110 AI 단계를 켠 채 실행해도 호출 수를 확인하지 않음. 호출 0건으로 끝나도 경고가 없음. llm_call.lo
   - 지시: "AI 단계를 켠 체인은 단계마다 AI 호출 여부와 건수를 기록하고 호출 없이 끝나면 경고로 표시함" / "VM 의 기능을 UI 별 기능과 공통기능으로 분리하고자 합니다. 공통기능이라고 하면 서버구동, SOURCE DOWN, SOURCE BACKUP 등 UI 와 직접 연계되지 않는 공통의 기능을 처리하고 특시 BE LOG, FE LOG 창을 이쪽으로 이동하고, BE, FE 기동상태도 항상 표"
-  - 파일 2개: /llm_effect.csv, tools/Harness/verify/run_verify.py
+  - 파일 1개: tools/Harness/verify/run_verify.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0258
 - 02:57 [VMO] VMO 자가 보완: 사용자 지시 R130 같은 문제: tools/VibeManager/job-runner.js:136 VMW 실행기에 model 을 넘기지 않아 CheckList AI 검토와 AI 단계가 설정값(p.claudeModel
@@ -337,49 +647,49 @@
   - 파일 1개: tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0218
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
 - 02:18 [VMO] VMO 자가 보완: 사용자 지시 R120 같은 문제: tools/VibeManager/quick.json:139 단계 title 에 괄호 설명이 남아 진행 표시(N/M)가 잘림. 159~323, 356~371, 408~502, 636~
   - 지시: "단계, 하위 단계 이름은 괄호 설명을 빼고 짧게 써서 진행 표시(N/M)가 잘리지 않게 함" / "진행상황을 보면 4/8 하위의 1/80 과 같이 하위 step 이 보여야 하는데 잘려서 보이지 않습니다. checkList 수행 (E2E 4종 포함 · AS-IS vs TO-BE → CheckList·ActionItem...) 에서 ( ) 안의 문장을 삭제하고, 하위의 작업에서도 ( )" / "title"
   - 파일 1개: tools/VibeManager/quick.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0151
-  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f
+  - 세션: c55c3662, f6d5268c, 540898d2, bdfa6c11, d53e521f, dd2cfcda
 - 01:50 [VMO] VMO 자가 보완: 사용자 지시 R118 같은 문제: tools/VibeManager/prompt-panel.js:142 사이드바 프롬프트 입력창이 불투명 테두리이고 :focus 규칙이 없어 workbench.js:1862 .pbox
   - 지시: "프롬프트 입력창 테두리는 포커스 없을 때 반투명, 포커스 때 얇은 테두리와 그림자로 표시하고 프롬프트를 받는 모든 입력창에 같게 씀" / "프롬프트 창의 Boarder 에 대해서 cursor가 없을때와 있을 때 의 두께와 색감에 대해서 보완하고자 합니다 . Cursor 가 없을 때는 투명도를 높여 은은하게 보이도록 하고 Cursor가 갔을 때도 지금보다는 조금 두께는 줄이고 그림자가 보이는 것 같은 느낌이 보이면 좋겠습니다"
-  - 파일 2개: workbench.js, tools/VibeManager/prompt-panel.js
+  - 파일 1개: tools/VibeManager/prompt-panel.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0133
-  - 세션: 48fd34e3, dd044e6f, 33533f79, c41e90d1, 0cc2625f, b6231c06, 0199649d, f5b97751, 7ab9afb3, b40393b7
+  - 세션: 33533f79, 0199649d, 8a8d6c8b
 - 01:33 [VMO] VMO 자가 보완: 사용자 지시 R117 같은 문제: tools/VibeManager/orchestra.js:378 VMO 사건 조치 결과 줄의 강조 막대(.kacts div, .kacts div.ag)가 불투명색임
   - 지시: "결과, 보고 블록 앞 강조 세로 막대는 같은 색을 반투명으로 표시함" / "최종 보고나 결과 보여 줄 때 앞에 보이는 color bar 의 색감을 조정하고자 합니다. 동일 색감으로 가지고 가지만 반투명 상태로 은은하게 보이도록 조정해주세요. 글자 앞의 초록색 세로 bar 의 투명도 조정 요청입니다."
   - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0114
-  - 세션: 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b
+  - 세션: fb1fbaaf, 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b, 8a8d6c8b
 - 01:13 [VMO] VMO 자가 보완: 사용자 지시 R117 같은 문제: tools/VibeManager/workbench.js:1708 결과 메시지 막대가 불투명색임. 현황 KPI(.kpi.ok/.mid/.bad, 1837행과 2004행)도 불투명 #3
   - 지시: "결과, 보고 블록 앞 강조 세로 막대는 같은 색을 반투명으로 표시함" / "최종 보고나 결과 보여 줄 때 앞에 보이는 color bar 의 색감을 조정하고자 합니다. 동일 색감으로 가지고 가지만 반투명 상태로 은은하게 보이도록 조정해주세요. 글자 앞의 초록색 세로 bar 의 투명도 조정 요청입니다."
   - 파일 1개: tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0056
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
 - 00:56 [VMO] VMO 자가 보완: 사용자 지시 R115 같은 문제: tools/VibeManager/workbench.js:3664 Source Download & Merge 를 실행할 때마다 Console 에 작업 모드 이름을 출력함
   - 지시: "작업 모드처럼 상시 상태값은 본문 출력 창에 반복 표기하지 않고 프롬프트 창 하단 보조 컨트롤 줄에 표시함" / "VM 의 작업모드 표기가 항상 위의 Console 창에 표기되고 있습니다. 이것을 보이지 않게 해주세요. 그리고 작업모드를 프롬프트창의 엔진 옆에 표기해주세요.(DB Mode, UI&DB Mode) 2개 모드, 현재는 DB Mode 입니다."
   - 파일 1개: tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0034
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7
+  - 세션: d1e7f3cd, 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, f5b97751, 7ab9afb3, b40393b7, 8a8d6c8b, 5cb39f0d
 - 00:33 [VMO] VMO 자가 보완: 사용자 지시 R114 같은 문제: tools/VibeManager/orchestra.js:933 VMO 주간 정리(AI 호출 결과, costUsd 기록)의 summary 를 pre-wrap 평문으로 보임
   - 지시: "VM, VMW, VMO 웹뷰가 보이는 AI 답변과 결과 보고는 마크다운(제목, 번호 목록, 표, 코드)을 렌더링해 보임" / "질문에 대한 답변이나 작업 후 결과에 대해서 나열할 때 클로드 코드와 같이 정리된 형태로 보여줄 수 있도록 해주세요. 지금은 나열된 text 내에서 결과나 답변을 찾아야 하는 형태 입니다. 아래는 클로드코드에서 일반적이 ㄴ답변의 형태 입니다. <pasted_content id=" / ") · tools/VibeManager/orchestra.js:933 '<div style="
-  - 파일 2개: workbench.js, tools/VibeManager/orchestra.js
+  - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self0015
-  - 세션: 48fd34e3, 8535c5e9, dd044e6f, 19c8ee89, c41e90d1, 0cc2625f, b6231c06, f2cc646c, 82e77a32, 7ea62927, 1356c17b, f5b97751, 7ab9afb3, b40393b7
+  - 세션: fb1fbaaf, 8535c5e9, 19c8ee89, f2cc646c, 82e77a32, 7ea62927, 1356c17b, 8a8d6c8b
 - 00:05 [VMO] VMO 자가 보완: 사용자 지시 R114 같은 문제: tools/VibeManager/jobs.js:450 VMW 로그 창에 chain-runner 가 넘긴 AI 답변(chain-runner.js:43 role assistant)이 평
   - 지시: "VM, VMW, VMO 웹뷰가 보이는 AI 답변과 결과 보고는 마크다운(제목, 번호 목록, 표, 코드)을 렌더링해 보임" / "질문에 대한 답변이나 작업 후 결과에 대해서 나열할 때 클로드 코드와 같이 정리된 형태로 보여줄 수 있도록 해주세요. 지금은 나열된 text 내에서 결과나 답변을 찾아야 하는 형태 입니다. 아래는 클로드코드에서 일반적이 ㄴ답변의 형태 입니다. <pasted_content id="
-  - 파일 2개: workbench.js, tools/VibeManager/jobs.js
+  - 파일 1개: tools/VibeManager/jobs.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self2344
-  - 세션: 48fd34e3, dd044e6f, c41e90d1, 0cc2625f, b6231c06, b2437c72, d1c67d55, f5b97751, 7ab9afb3, b40393b7
+  - 세션: b2437c72, d1c67d55, 7ab9afb3
 - 시각 없음 [Workbench] Workbench FLOW 탭 스크롤
 - 세션 4d2ca76b "VMO CheckList 목적 어긋남 개념 재정립" 00:06~00:09, 지시 1건, 화면 SCP0028, SCP0005, SSP0005, SSP0014, SCP0111
 - 세션 035b2a47 "VMO checklistTime 개념 재정립" 00:09~00:12, 지시 1건, 화면 SCP0005, SSP0005, SSP0014, SCP0028, SCP0111
@@ -425,7 +735,7 @@
 - 세션 71cbd334 "VM 규칙 학습 지적 분석" 09:24~09:24, 지시 1건, 화면 SCP0028
 - 세션 fb14a808 "Revision 웹뷰 글래스모피즘 양식 적용" 09:29~09:37, 지시 1건, VM 파일 수정 5건(history.js 5)
 - 세션 85647d80 "menu-view.js 글래스모피즘 양식 적용" 09:46~09:55, 지시 1건, VM 파일 수정 5건(menu-view.js 5)
-- 세션 acd09f74 "SSP BATCH 속도개선" 10:02~16:11, 지시 17건
+- 세션 acd09f74 "SSP BATCH 속도개선" 10:02~16:19, 지시 18건
 - 세션 0199649d "프롬프트 패널 글래스모피즘 양식 적용" 10:04~10:14, 지시 1건, VM 파일 수정 3건(prompt-panel.js 3)
 - 세션 9f1ccceb "SSP 일마감 FP 목표송신 순서" 10:06~10:13, 지시 1건
 - 세션 80d64ee2 "orch-worklist.js 연결 L4 개선안 단계 3" 10:23~10:26, 지시 1건, VM 파일 수정 10건(orch-selfcheck.js 7, t_orch_worklist.js 2, orch-worklist.js 1)
@@ -459,36 +769,197 @@
 - 세션 464536ea "ssp_it_precheck dbeaver.py 시험일 기본값 고정 문제" 15:09~15:18, 지시 1건
 - 세션 a42818e0 "VM 사용자 지시 규칙 점검" 15:27~15:30, 지시 1건
 - 세션 34f6d57c "dbeaver_test.py 시험일 인자 추가" 15:35~15:52, 지시 1건
-- 세션 43df20fa "VMO 개선안 보완 S-A 검사 하네스 12건" 15:37~16:16, 지시 3건, VM 파일 수정 1건(CHANGELOG.md 1)
-- 세션 28b90713 "VMO 개선안 보완 S-C E2E 라이브러리 3건" 15:38~16:15, 지시 4건, VM 파일 수정 3건(CHANGELOG.md 3)
-- 세션 8b406c0a "VMO 개선안 보완 S-B 분석·문서 도구 10건" 15:38~16:14, 지시 3건
-- 세션 e0c530f6 "VMO 개선안 보완 S-D2 점검 모듈 7건" 15:38~15:59, 지시 1건, VM 파일 수정 7건(orch-usercheck.js 5, user_checks.json 1, t_orch_usercheck.js 1)
+- 세션 43df20fa "VMO 개선안 보완 S-A 검사 하네스 12건" 15:37~17:42, 지시 12건, VM 파일 수정 4건(CHANGELOG.md 4), 화면 SCP0005
+- 세션 28b90713 "VMO 개선안 보완 S-C E2E 라이브러리 3건" 15:38~2026-11-27 00:45, 지시 14건, VM 파일 수정 14건(CHANGELOG.md 14), 화면 DMF0042
+- 세션 8b406c0a "VMO 개선안 보완 S-B 분석·문서 도구 10건" 15:38~19:11, 지시 7건
+- 세션 e0c530f6 "VMO 개선안 보완 S-D2 점검 모듈 7건" 15:38~18:36, 지시 2건, VM 파일 수정 7건(orch-usercheck.js 5, user_checks.json 1, t_orch_usercheck.js 1)
 - 세션 b4e3982c "VMO 진단·조치 주기 L4 단계 4" 16:03~16:10, 지시 1건, VM 파일 수정 27건(orch-worklist.js 13, t_orch_worklist.js 7, orch-agent.js 3, orch-usercheck.js 2, t_orch_usercheck.js 1)
-- 세션 9535831a "VMO 자가 보완 학습 지적 정리" 16:15~16:16, 지시 1건, 화면 SCP0028
-- VM 실행 6건: DMF0082 claude 2, 공통 menu_git-common-sync 1, SCP0005 S8.rowRegress 1, SCP0005 S8.checklistRun 1, SCP0005 S8.unverifiedGate 1
+- 세션 9535831a "VMO 자가 보완 학습 지적 정리" 16:15~16:17, 지시 1건, 화면 SCP0028
+- 세션 6d470e61 "VMO 사용자 지시 규칙 점검" 16:22~16:24, 지시 1건
+- 세션 cc57d25c "답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, tools/VibeManager/rule" 16:30~16:31, 지시 1건
+- 세션 ee194829 "workbench.js 7일 결함 수정 묶음" 16:31~16:35, 지시 1건
+- 세션 46d95c1e "U21 VMO 반영 실패 재발 진단" 16:33~16:35, 지시 1건
+- 세션 af985ee2 "workbench.js 7일 결함 수정 묶음 진단" 16:35~16:40, 지시 1건
+- 세션 6ce71142 "답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, tools/VibeManager/rule" 16:40~16:44, 지시 1건, 화면 SSP0020, SCP0007, SCP0104, SCP0005
+- 세션 71884ab2 "orchestra.js 7일 결함 수정 묶음" 16:40~16:43, 지시 1건
+- 세션 be793ec5 "quick.json 7일 결함 수정 묶음" 16:43~16:45, 지시 1건
+- 세션 09b01cc4 "Source Backup push 실패 HTTP 500" 16:46~16:48, 지시 1건, 화면 SCP0028
+- 세션 8a8d6c8b "VMO 개선안 보완 S-W 웹뷰·서버 로그·체인 4건" 16:47~18:37, 지시 10건, VM 파일 수정 92건(server-service.js 25, workbench.js 14, orchestra.js 8, t_quick_tpl.js 7, CHANGELOG.md 6), 화면 SCP0005
+- 세션 dd2cfcda "VMO 개선안 보완 S-Z 반영 지시문·알림·생성기 시험 4건" 16:47~2026-11-27 01:39, 지시 20건, VM 파일 수정 67건(orch-selfcheck.js 12, orch-improve.js 11, CHANGELOG.md 7, orch-vision.js 4, t_orch_usercheck.js 4)
+- 세션 2a30a87a "Source Backup 3/3 push 실패" 16:50~16:52, 지시 1건, 화면 SCP0028
+- 세션 b3b09931 "VM 고정 문구 문장 규칙 2차 개선" 16:58~17:09, 지시 1건, VM 파일 수정 13건(t_orch_selfcheck.js 7, orch-selfcheck.js 6)
+- 세션 ea481af5 "VM 진행 없음 R5 Source Backup commit 정체" 17:19~17:21, 지시 1건
+- 세션 ddd97eba "mapping_trace.py site_types.json 생성기" 17:27~17:46, 지시 1건, 화면 SCP0007
+- 세션 e03a913f "답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, tools/VibeManager/rule" 17:38~17:38, 지시 1건
+- 세션 8e4a6375 "VMO 컨설팅 검토" 17:57~18:03, 지시 1건, 화면 SSP0020, SCP0007, SCP0104, SCP0005
+- 세션 32b06c07 "답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, tools/VibeManager/rule" 18:08~18:09, 지시 1건, 화면 SCP0028, SCP0005
+- 세션 4f30164e "VMO 개선안 보완 S-Y 자가진단·작업 모드·감지기 5건" 18:11~19:59, 지시 2건, VM 파일 수정 37건(orch-selfcheck.js 9, orch-improve.js 6, CHANGELOG.md 5, t_session_continue.js 4, t_orch_usercheck.js 3)
+- 세션 376019a1 "답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, tools/VibeManager/rule" 18:16~18:17, 지시 1건, 화면 SCP0104
+- 세션 c0404546 "답변, 진행 보고, 알림 문장은 한국어로 씀. [실행 룰 A-13, tools/VibeManager/rule" 18:22~18:24, 지시 1건
+- 세션 69d3f28f "U21 VMO 반영 실패 재발 묶음" 18:25~18:27, 지시 1건, 화면 SCP0028, SSP0014, SCP0111, SCP0005
+- 세션 da115077 "orch-usercheck.js 반복 결함 묶음" 18:27~18:30, 지시 1건
+- 세션 0b8cfaa3 "t_orch_usercheck.js 7일 결함 수정 묶음" 18:30~18:33, 지시 1건
+- 세션 7a0dfc82 "Source Backup commit 진행 없음 사건" 18:33~18:34, 지시 1건, 화면 DMF0042
+- 세션 f5aba63b "반복 수정 집계 시험 파일 제외 개선" 18:40~18:47, 지시 1건, VM 파일 수정 1건(t_orch_history_kind.js 1)
+- 세션 32704999 "VMO 검사기 판정 결함 진단 S16" 18:54~19:02, 지시 1건
+- 세션 ec183f9b "Vibe_Manager 자가진단" 19:02~19:06, 지시 1건
+- 세션 186483b5 "VMO 사용자 지적 학습 6건 판정" 19:11~19:12, 지시 1건, 화면 SCP0028, SCP0005
+- 세션 5a5c0276 "VMO 사용자 지시 규칙 점검" 19:18~19:22, 지시 1건
+- 세션 5cb39f0d "VMO 단추 접수 표시 반영" 20:35~20:48, 지시 1건, VM 파일 수정 19건(workbench.js 18, t_wb_resultdone.js 1)
+- 세션 89e0f17c "facts_lockrules.py 보완 대상 학습" 20:54~20:54, 지시 1건, 화면 SCP0028, SCP0005
+- 세션 66a77216 "Vibe_Manager 최근 7일 실행 집계 상시 분석" 21:42~21:46, 지시 1건, 화면 SSP0005, SCP0005, SCP0028, SSP0014, DMF0082, DMF0042
+- 세션 f0346e8f "orch-watch 끊긴 실행 알림 중복 제거" 21:54~22:02, 지시 1건, VM 파일 수정 9건(orch-state.js 3, orch-improve.js 3, t_orch_reloadcut.js 2, orch-watch.js 1), 화면 SCP0005, SCP0028, SSP0014, SSP0005
+- 세션 39f23bf3 "facts_lockrules.py 보완 대상" 22:12~22:12, 지시 1건, 화면 SCP0028, SCP0005
+- 세션 ee636f21 "VM 자가진단 개선안 점검" 22:22~22:26, 지시 1건
+- 세션 014aecc1 "VM 삭제 안 사본 생략 개선" 22:35~22:42, 지시 1건, VM 파일 수정 6건(orch-improve.js 3, orch-selfcheck.js 2, t_orch_selfapply.js 1)
+- 세션 852a46b2 "Vibe_Manager 자가진단" 23:37~23:41, 지시 1건
+- 세션 bff6a922 "반복 지시 집계 VMO 승인 줄 제외" 23:47~23:48, 지시 1건, VM 파일 수정 3건(orch-history.js 2, t_orch_history_kind.js 1)
+- VM 실행 8건: DMF0082 claude 2, SCP0005 S8.verifyIfStale 1, 공통 menu_git-upload 1, 공통 menu_git-common-sync 1, SCP0005 S8.rowRegress 1, SCP0005 S8.checklistRun 1, SCP0005 S8.unverifiedGate 1
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_gate_fe_page.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U27 AI 주간 한도 값 오래됨 37분 (resolved)
+- 사건: 사건 R6 서버 응답 없음. BE 포트 8080 열림 · HTTP 응답 없음 64초 (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U33 감지기 없는 지적 U33 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_session_continue.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-watch.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_ailimit.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_apply_recover.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_applyfail.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_coreauto.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_dict.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_hotreload.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_improve.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_ladder.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_ledger.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_selfapply.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 6건 (open)
+- 사건: 사건 R9 죽은 잠금. _run.e2e.SCP0005.lock (PID 39304 없음) (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 1건 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_run_end.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-agent.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orchestra.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: quick.json 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: steps.json 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: quick_tpl_apply.js 설치본에 없음 (resolved)
+- 사건: 사건 R12 VM 자가진단 S1 구문: prompt-panel.js 구문 오류 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_chain_abort.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_chain_loop.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_chain_resume.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_chain_runner.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_chain_userstop.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_um_job.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_verify_fresh.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_vi_job.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_wb_jobstop.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_wb_late.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_wb_load.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_wb_logname.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_wb_openscreen.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_wb_resultdone.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_wb_stopmark.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_webview_syntax.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U29 AS-IS 실측 로그인 계정 오류 SSP0020 (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U29 AS-IS 실측 로그인 계정 오류 SSP0020 (resolved)
+- 사건: 사건 R5 진행 없음. ⬆️ Source Backup 2/3 commit 로그 10분 무출력 (need-user)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_coreauto.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S5 실행 오류: orch-ladder.writeJson 오류 1회(새 서명) (resolved)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U3 사용자 행동 기록 없이 사용자 확인으로 멈춘 사건 1건(담당 VMO) (resolved)
+- 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_agent.js 실패 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: jobs.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-dict.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-history.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-improve.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-vision.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-watch.js 내용 다름 (resolved)
+- 사건: 사건 R12 VM 자가진단 S3 설치본 차이: fs-retry.js 설치본에 없음 (resolved)
 - 사건: 사건 R12 VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성) (resolved)
 - 사건: 사건 R5 창 다시 로드로 끊긴 실행 16건(알림) (resolved)
 - 사건: 사건 R5 창 다시 로드로 끊긴 실행 3건(알림) (resolved)
 - 사건: 사건 R12 VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성) (resolved)
-- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 6건 (open)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 6건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 5건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 4건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 5건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 4건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S8 개선안 효과: 자가 보완 뒤에도 남음: Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성) (resolved)
 - 사건: 사건 R5 진행 없음. 미검증 해소 게이트 — 해소 확인 결과(unverified_settle.json) 처리 대상 전체 해소 전이면 남은 행·사유를 적고 오류(재검증 안 함) 로그 10분 무출력 (resolved)
-- 개선안: 개선안 CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 2 (pending)
+- 개선안: 개선안 반복 지시 집계에서 VMO 승인, 되돌리기 기록 줄의 인용은 사용자 지시로 세지 않음 (applied)
+- 개선안: 개선안 삭제 안을 반영할 때 지울 로그, 백업 파일을 반영 전 사본(.bak_, 스냅샷)으로 복사하지 않음 (applied)
+- 개선안: 개선안 U21 반영 실패 집계에서 고친 안이 반영 완료된 실패는 빼고 셈 (applied)
+- 개선안: 개선안 BE 로그 백업 사본 4개 삭제(nscm-be/logs *.log.bak_20261123_self*, 54.9GB)와 스냅샷 사본 폴더 삭제 (pending)
+- 개선안: 개선안 창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 살리지 않음 (applied)
+- 개선안: 개선안 자가진단 무거운 점검 도중 VM 파일이 바뀌면 그 회차의 구문, 시험, 정의 정합 실패는 사건으로 올리지 않고 조용해진 뒤 다시 잼 (applied)
+- 개선안: 개선안 측정 추가: 실행 집계의 중지 원인 '기타'마다 어떤 중지 기록으로 분류했는지 남김 (applied)
+- 개선안: 개선안 사용자 지시 R256 같은 문제: tools/VibeManager/workbench.js:3397 VMO 단추 분기가 접수, 대기, 실패를 웹뷰로 돌려보내지 않음. incAgent 는 대기열에 넣어도 대기 표시가 없음(drain 이 busy 면 조용히 retu (applied)
+- 개선안: 개선안 사용자 지시 R257 같은 문제: tools/VibeManager/quick.json:2657 VM 환경설정 그룹에 orch.autoImproveOnStop(작업 종료 뒤 대기 개선안 이어 진행)과 orch.autoImproveScope 를 켜고 끄는 항목 (applied)
+- 개선안: 개선안 사용자 지시 R258 같은 문제: tools/VibeManager/orch-consult.js:59 DB 역할 기본 스킬 'db' 는 ~/.claude/skills, .claude/skills 어디에도 SKILL.md 가 없음(두 폴더에 있는 것은 fronten (applied)
+- 개선안: 개선안 사용자 지시 R258 같은 문제: .claude/agents/vm-orchestra.md:16 에이전트 지시문의 컨설팅 설명에 주제별 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 역할 스킬 사용이 없음. 수석 엔지니어 한 사람 (applied)
+- 개선안: 개선안 사용자 지적 감지기 추가 U33 consultNoResponse: 창 다시 로드 뒤 VMO 컨설팅을 누르고 주제를 입력했는데 화면 반응 없음 (applied)
+- 개선안: 개선안 계획 원장(plans.json) 쓰기 실패 때 개선안을 '단계 원장 진행'으로 바꾸지 않고, 원장 없는 진행 안을 다시 만듦 (applied)
+- 개선안: 개선안 시험 전체 실행기: 실행 도중 지워진 시험 파일은 실패로 세지 않고 '실행 중 삭제'로 따로 적음 (applied)
+- 개선안: 개선안 설정 정합 점검(S12)이 hook 스크립트(.claude/hooks/*.js, tools/Harness/hooks/*)에서 읽는 harness.json orch 키도 '읽는 코드 있음'으로 셈 (applied)
+- 개선안: 개선안 반복 수정 집계에서 측정 산출물 경로(Doc/verify/, Doc/e2e/results/)는 빼고 셈 (applied)
+- 개선안: 개선안 파일 쓰기 재시도(fs-retry)가 끝내 실패할 때 시도 수와 걸린 시간을 오류 기록에 남김 (applied)
+- 개선안: 개선안 음수 글자색(H13) 검사: 음수 데이터 행과 편집 가능 행이 둘 다 없으면 해당없음 대신 미검증으로 판정 (applied)
+- 개선안: 개선안 검사기 결함 탐지기 오탐 수정: 실제 두 글자 칸(M0, DV)과 화면 문구의 '.', 사용자 결정으로 만든 종속 FAIL (applied)
+- 개선안: 개선안 VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 7 (applied)
+- 개선안: 개선안 반복 수정 집계에서 시험 파일은 원본과 같은 절에 있으면 세지 않음(시험 파일만 고친 절만 셈) (applied)
+- 개선안: 개선안 변경 기록 종류 분류를 개선안 종류 판정 하나로 맞춤(감지기 추가 = 요청) (applied)
+- 개선안: 개선안 사건에 처리 담당(handler)과 마지막 진행 시각을 기록하고 U3 는 그 필드만 읽음 (applied)
+- 개선안: 개선안 개념 재정립: VMO 개선안 반영은 반영 전 준비 확인을 통과한 안만 시작하고, 막힌 안은 반영 실패가 아니라 대상 재진단으로 보냄 (superseded)
+- 개선안: 개선안 사용자 지시 R253 같은 문제: tools/VibeManager/orch-agent.js:46 harness.json 에 orch.aiWeeklyStopPct 키가 없거나 읽기에 실패하면 주간 한도 90% 에서 자가진단, 자동 보완, 컨설팅을 멈춤 (applied)
+- 개선안: 개선안 사용자 지시 R254 같은 문제: tools/VibeManager/orch-consult.js:123 meta.json 에 lastMs 가 없어도 창을 다시 로드한 뒤 첫 컨설팅을 25분 미룸 (applied)
+- 개선안: 개선안 사용자 지시 R254 같은 문제: tools/VibeManager/orch-vision.js:182 vision/meta.json 에 lastMs 가 없어도 첫 큰 그림 점검을 10분 미룸 (applied)
+- 개선안: 개선안 사용자 지시 R254 같은 문제: tools/VibeManager/orch-improve.js:570 상시 분석은 init 때 첫 실행이 없음. 기록이 없어도 1시간 주기나 체인 종료를 기다림 (applied)
+- 개선안: 개선안 사용자 지시 R255 같은 문제: tools/VibeManager/orchestra.js:831 Overall Review 카드가 vision/meta.json 마지막 1건만 그림. orch-vision.js:163 의 vision/<시각>.json 지난 결 (applied)
+- 개선안: 개선안 사용자 지적 감지기 추가 U32 consultCadence: 창 다시 로드 뒤 VMO 컨설팅 기능이 바로 기동하지 않음 (applied)
+- 개선안: 개선안 컨설팅: VM 시험 전체 실행 중 소스가 바뀐 실패 파일만 단독 1회 다시 실행하고 결과를 따로 표시 (applied)
+- 개선안: 개선안 컨설팅: 개선안을 맡을 때 다른 세션이 맡은 안과 대상 파일이 겹치면 경고하고 개선안 이력에 남김 (applied)
+- 개선안: 개선안 컨설팅: 자가진단 미확인 추적(S6)을 종류와 경과일로 묶어 요약을 먼저 보여 줌 (applied)
+- 개선안: 개선안 컨설팅: 반영 지시문(IMPACT_RULE)의 사용자 승인 목록을 실제 자동 반영 기준에서 만들어 씀 (applied)
+- 개선안: 개선안 컨설팅: 작업 모드 전환 도구(set_scope.py)가 전환 기록을 events.jsonl 에 남기고 UI/DB MODE 전환 전 점검 결과를 출력 (applied)
+- 개선안: 개선안 컨설팅: UI/DB MODE 에서 FE 화면 폴더를 고치는 개선안의 반영 게이트에 화면 게이트(check.js, 타입 검사와 린트 제외) 추가 (applied)
+- 개선안: 개선안 CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) · 단계 5 (applied)
+- 개선안: 개선안 VM 고정 문구 문장 규칙 위반 정리 2건(orch-consult.js, workbench.js) (applied)
+- 개선안: 개선안 CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) · 단계 4 (applied)
+- 개선안: 개선안 CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) · 단계 3 (applied)
+- 개선안: 개선안 CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 6 (applied)
+- 개선안: 개선안 CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) · 단계 2 (applied)
+- 개선안: 개선안 CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 4 (applied)
+- 개선안: 개선안 CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 3 (applied)
+- 개선안: 개선안 VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 3 (pending)
+- 개선안: 개선안 Source Backup commit 단계에서 git 자동 정리를 끄고 백업 뒤 정리를 따로 실행 (applied)
+- 개선안: 개선안 CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) · 단계 1 (applied)
+- 개선안: 개선안 Source Backup 미push 커밋에서 이미 들어간 영상과 스냅샷을 빼고 다시 묶기, push 전 대용량 검사 추가 (applied)
+- 개선안: 개선안 체인 공통 단계를 quick.json 한 곳(단계 틀)에 두고 체인은 이름으로 불러 쓰게 바꿈. 체인 args 는 작업 정의 args 에 덧붙이게 바꿈 (applied)
+- 개선안: 개선안 변경 기록 분류에서 'S13 사용자 지시 규칙 반영' 절을 결함과 분리해 셈 (applied)
+- 개선안: 개선안 컨설팅: VM 파일 쓰기 재시도(fs-retry)를 남은 orch 모듈 쓰기 함수에 적용 (applied)
+- 개선안: 개선안 컨설팅: VM 이 띄운 서버(NSCM_BE, NSCM_FE) 출력 로그를 정한 크기마다 새 파일로 바꾸고 오래된 파일을 지움 (applied)
+- 개선안: 개선안 컨설팅: VMO 알림을 한곳에서 내보내고 반영 완료 알림을 묶음, 알림 기록을 events.jsonl 에 남김 (applied)
+- 개선안: 개선안 컨설팅: UI MODE 전환 전 생성기 시험: 기준 화면으로 gen.js 생성, check.js 검사를 임시 폴더에서 돌리는 자체 시험 추가와 engine_selfcheck 등록 (applied)
+- 개선안: 개선안 컨설팅: harness-gen-context hook(UserPromptSubmit)이 VMO, 컨설팅 프롬프트에 신규 화면 절차를 붙이지 않게 하고 '없음' 판정을 폴더 기준으로 고침 (applied)
+- 개선안: 개선안 컨설팅: Source Backup push 실패 사건(77시간 need-user)에 원인 분류와 다음 행동을 붙여 VMO 창 요약 맨 위에 보임 (applied)
+- 개선안: 개선안 결함 수정 집계에서 S13 사용자 지시 규칙 적용 절을 request로 분류 (applied)
+- 개선안: 개선안 웹뷰 공용 모듈 신설(마크다운 렌더, Ctrl+A 범위, 경계 막대, 글래스 CSS)과 규칙 점검이 공용 모듈을 먼저 고치도록 변경 (applied)
+- 개선안: 개선안 반복 수정 집계에서 사용자 지시 반영 절(S13 규칙 적용)을 결함과 따로 셈 (applied)
+- 개선안: 개선안 변경 기록 파일 집계를 '- 변경:' 줄의 '파일 <목록>.' 표시 기준으로 셈 (applied)
+- 개선안: 개선안 반영 지시문의 반영 뒤 검사 목록을 검사 정의에서 받아 쓰고, 대상 VM .js 의 반영 전 문장 규칙 위반 수와 확인 명령을 함께 넣음 (applied)
+- 개선안: 개선안 자동 반영 개선안을 등록할 때 원본 VM .js 를 부르는 test/t_*.js 를 고칠 파일에 자동으로 넣음 (applied)
+- 개선안: 개선안 VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 6 (applied)
+- 개선안: 개선안 사용자 지시 R244 같은 문제: tools/VibeManager/orch-selfcheck.js:600 claim_proposal.js 는 apply-failed 안도 맡게 하지만(claim 조건 /^(pending/apply-failed)$/) 실패 원인 진단 고 (applied)
+- 개선안: 개선안 사용자 지시 R248 같은 문제: tools/VibeManager/orch-selfcheck.js:538 승인 대상 5종(hook, settings.json, DB, 시험 계정, 작업 모드) 밖인 orch-selfcheck.js·orch-improve.js 의 자동  (applied)
+- 개선안: 개선안 사용자 지시 R251 같은 문제: tools/VibeManager/orch-vision.js:84 UI/UX 추천 대상 지정이 '*view*.js' 라 menu-view.js, tabview.js 만 걸리고 workbench.js, orchestra.js, j (applied)
+- 개선안: 개선안 CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 2 (applied)
 - 개선안: 개선안 사용자 지시 R239 같은 문제: tools/Harness/verify/judge.py:3592 결함 유형 행에 직접 맞는 측정 행이 없는데 같은 규칙 다른 대상 행이 FAIL 이거나 PASS 뿐이면 해당없음(NA)으로 둠, 이 분기 자체 시험 없음 (rejected)
 - 개선안: 개선안 사용자 지시 R240 같은 문제: tools/E2E/lib/popupprobe.ts:238 cellPoint 와 270줄 sortByF3 가 스크롤 뒤 200ms 를 한 번 기다리고 셀이 없으면 바로 null, 다시 그리기와 다시 읽기 없음 (applied)
 - 개선안: 개선안 사용자 지시 R240 같은 문제: tools/E2E/lib/crud.ts:311 310줄 scrollIntoView 뒤 400ms 를 한 번 기다리고 읽음, 셀이 아직 안 그려졌으면 -1 이 되어 '신규 행 위치를 찾지 못함'으로 실저장 시험 (applied)
 - 개선안: 개선안 사용자 지시 R241 같은 문제: tools/Harness/verify/run_verify.py:1012 시트별 데이터 조건 생성기 sheet_data_cond.py 를 run_verify 가 부르지 않아 sheet_data_cond.json 이 SCP0104 1화면 (applied)
-- 개선안: 개선안 사용자 지시 R241 같은 문제: tools/Harness/verify/ledger.py:472 편집 기대 보정이 사람이 적은 edit_expect_manual.csv(SCP0104 1화면)에 기대고, 다른 화면의 '해석 못 한 잠금' 칸은 채울 수단이 없음 (pending)
-- 개선안: 개선안 사용자 지시 R241 같은 문제: tools/Harness/verify/mapping_trace.py:2331 D3·C2 사이트 표본 site_types.json 을 만드는 스크립트가 tools 에 없고 SCP0007 1화면에만 있음, strTO_SITE_TYPE 분기가  (pending)
+- 개선안: 개선안 사용자 지시 R241 같은 문제: tools/Harness/verify/ledger.py:472 편집 기대 보정이 사람이 적은 edit_expect_manual.csv(SCP0104 1화면)에 기대고, 다른 화면의 '해석 못 한 잠금' 칸은 채울 수단이 없음 (apply-failed)
+- 개선안: 개선안 사용자 지시 R241 같은 문제: tools/Harness/verify/mapping_trace.py:2331 D3·C2 사이트 표본 site_types.json 을 만드는 스크립트가 tools 에 없고 SCP0007 1화면에만 있음, strTO_SITE_TYPE 분기가  (applied)
 - 개선안: 개선안 사용자 지시 R241 같은 문제: tools/E2E/lib/formscen.ts:21 폼 저장형 시나리오 form_scenarios.json 을 만드는 스크립트가 없고 SSP0020 1화면 수작업 파일만 있음, 다른 폼 저장형 화면은 @formse (applied)
 - 개선안: 개선안 사용자 지시 R238 같은 문제: tools/Harness/verify/judge.py:2851 읽기 전용 그리드 판단이 메인 시트 edit_expect.csv 만 보고 edit_expect_sheets.csv 를 보지 않아, 다른 시트에 편집 가능한 칸이  (applied)
 - 개선안: 개선안 사용자 지시 R238 같은 문제: tools/Harness/verify/judge.py:3681 일반 텍스트 셀 집합을 시트 구분 없이 컬럼 이름으로만 만들어, 다른 시트에서 텍스트 셀인 같은 이름 컬럼 때문에 D1 FAIL 이 PASS 로 바뀜 (applied)
 - 개선안: 개선안 사용자 지시 R238 같은 문제: tools/Harness/verify/gen_expect.py:353 소수 자릿수를 컬럼 이름으로만 모아 첫 행(메인 시트) 값만 남기고, 다른 시트의 같은 이름 편집 칸에도 그 자릿수로 기대값을 만듦 (applied)
-- 개선안: 개선안 VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 2 (pending)
+- 개선안: 개선안 VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 2 (applied)
 - 개선안: 개선안 VM 고정 문구 문장 규칙 2차 단계 1 다시 올림(목적 묶음 연속 계산에서 같은 목적 반영 L4 안 효력 전 판정 제외, 새 문구 가운뎃점 나열 없이) (applied)
 - 개선안: 개선안 사용자 지시 R237 같은 문제: Doc/e2e/specs/_trace.spec.ts:2749 2595줄 searchWait() 가 nscm.search() 와 rowCount 만 쓰고 ensureRows 를 부르지 않음. 기존행 INCOTERMS 편집 시 (applied)
 - 개선안: 개선안 사용자 지시 R237 같은 문제: Doc/e2e/specs/_trace.spec.ts:3038 대조표 미구현 재현(GA~GG, 기준 기존행 ROUTE_CNT>0) 시험이 기본 조회 1회의 n0 만 쓰고 0행이면 '기준 기존행 없음(조회 0행)' 으로 진행함 (applied)
@@ -504,7 +975,7 @@
 - 개선안: 개선안 사용자 지시 R236 같은 문제: tools/Harness/verify/i18n_lang_check.py:133 언어별 버튼 문구를 하나도 읽지 못한 경우(by_lang 이 비었거나 목록이 모두 빈 경우)에도 해당없음으로 둠. 같은 화면의 조회 실측이 있어도 해당없음이 남음 (applied)
 - 개선안: 개선안 자동 반영 대기 판정(U3 stuckProp)을 대기 시간 대신 반영 줄 진행으로 판정 (applied)
 - 개선안: 개선안 반영 실패 방치 판정(U11)이 '반영 실패 진단' 기록을 실패로 세는 결함 수정, 진단 stop 안은 사람 판단 대기로 분리 (applied)
-- 개선안: 개선안 개념 재정립: VMO 자가 보완의 효력 시점(창 다시 로드 기다림 → VMO 점검 모듈은 반영 즉시 다시 읽고 다시 init, 창 로드는 화면·체인 파일만) (pending)
+- 개선안: 개선안 개념 재정립: VMO 자가 보완의 효력 시점(창 다시 로드 기다림 → VMO 점검 모듈은 반영 즉시 다시 읽고 다시 init, 창 로드는 화면·체인 파일만) (superseded)
 - 개선안: 개선안 VMO 진단·조치 주기 3차(승인된 L4 안을 한 번 반영 → 단계 원장으로 끝까지 옮김, 같은 축 L4 재진단 중지) · 단계 4 (applied)
 - 개선안: 개선안 사용자 지시 R178 같은 문제: tools/VibeManager/history.js Revision 창 왼쪽 목록(#l)에 접기와 펴기 단추가 없음(단추 문구 기호 없이) (applied)
 - 개선안: 개선안 사용자 지시 R234 같은 문제: tools/VibeManager/job-runner.js:147 하위 단계(측정, 미검증 분류, 수선 회차, 다시 실행)는 시작 시각 at 만 저장되고 끝 시각과 소요(sec)가 없음. 8개를 넘으면 앞의 기록이 잘림 (applied)
@@ -516,8 +987,8 @@
 - 개선안: 개선안 Dictionary 탭에 사용자 지시 규칙(user_rules.json) 묶음 추가, 출처와 제목 나열은 쉼표로 (applied)
 - 개선안: 개선안 사용자 지시 R143 같은 문제: tools/VibeManager/orch-watch.js:93 창 다시 로드로 끊긴 실행(cutRun)을 실패 사건 대신 알림으로 올림(제목 문구는 쉼표로 씀) (applied)
 - 개선안: 개선안 sqllog_calls.py 소요 증가 원인 측정 뒤 PARAMS 읽기 방식 보완 (applied)
-- 개선안: 개선안 개념 재정립: 진단 사다리 반복 수정 묶음을 파일 단위에서 원인 서명 단위로 (pending)
-- 개선안: 개선안 개념 재정립: CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) (pending)
+- 개선안: 개선안 개념 재정립: 진단 사다리 반복 수정 묶음을 파일 단위에서 원인 서명 단위로 (planned)
+- 개선안: 개선안 개념 재정립: CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) (planned)
 - 개선안: 개선안 개념 재정립: CheckList 시간 목적(30분 시계 범위 정하기 → 1판 단계별 소요 원장과 단계 예산) (superseded)
 
 ## 2026-11-25
@@ -538,22 +1009,22 @@
   - 세션: 0074db74, fa3b8dca, 3bbb661c, 1d0e019d, 43e0b66f, d108229b, f97163fd
 - 23:08 [VMO] VMO 자가 보완: 사용자 지시 R110 같은 문제: tools/VibeManager/jobs.js:417 실행 전 VMW 상세는 stepNames(조건부 단계 포함 전체)를 대기 단계로 모두 보임
   - 지시: "체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함" / "VM CHECKLIST작업 시 최초부터 3단계 보완까지를 전체 STEP 으로 표기되는데, CHECKLIST 작업만 진행하고, 필요시 추가 STEP 이 추가되도록 해주세요."
-  - 파일 3개: job-runner.js, tools/VibeManager/jobs.js, tools/VibeManager/job-runner.js
+  - 파일 2개: tools/VibeManager/jobs.js, tools/VibeManager/job-runner.js
   - 미확인 2건: 개선안 확인: 반영 전 미측정(편집 전 실행 명령이 셸 구문 거부로 실행 안 됨) → 반영 뒤 node --check 2파일 SYNTAX_OK, run_all 87/87 PASS 1422 FAIL 0, t_webview_syntax ALL PASS / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self2254
   - 세션: 41c737be, 193b0e93, 4fc943ee
 - 22:53 [VMO] VMO 자가 보완: 사용자 지시 R110 같은 문제: tools/VibeManager/orchestra.js:964 단계 막대와 978행 st.no+'/'+(c.total) 표시가 조건부 단계를 포함한 총수로 그려짐
   - 지시: "체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함" / "VM CHECKLIST작업 시 최초부터 3단계 보완까지를 전체 STEP 으로 표기되는데, CHECKLIST 작업만 진행하고, 필요시 추가 STEP 이 추가되도록 해주세요."
-  - 파일 2개: orch-state.js, tools/VibeManager/orchestra.js
+  - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self2236
-  - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, c8c99bd6, 871f495a, 25e07839
+  - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, c8c99bd6, 25e07839
 - 22:27 [VMO] VMO 자가 보완: 사용자 지시 R110 같은 문제: tools/VibeManager/orch-state.js:39 VMO 상황판의 단계 총수(M)가 조건부 단계까지 넣은 정의 전체(ev.steps)임
   - 지시: "체인 단계 목록은 실행이 정해진 단계만 보이고 조건부 단계(미검증 보완, 재수행)는 실행이 정해질 때 추가함" / "VM CHECKLIST작업 시 최초부터 3단계 보완까지를 전체 STEP 으로 표기되는데, CHECKLIST 작업만 진행하고, 필요시 추가 STEP 이 추가되도록 해주세요."
-  - 파일 2개: workbench.js, tools/VibeManager/orch-state.js
+  - 파일 1개: tools/VibeManager/orch-state.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self2156
-  - 세션: 635fc2c2, ef9fb99c, 9b30e682, bc658967, 1d0e019d, 1c7f3144, 871f495a
+  - 세션: 871f495a
 - 21:56 [VMO] VMO 자가 보완: 사용자 지시 R109 같은 문제: tools/VibeManager/quick.json:429 TestResultList, 새 화면 2종, 🚒 자동보완 체인의 미검증 해소 단계는 보완 뒤 CheckList 전체(S8
   - 지시: "CheckList 체인은 1단계 CheckList 수행, 2단계 미검증 보완, 3단계 CheckList 재수행(미검증 항목만, 불가하면 전체)으로 단계를 보이고 미검증이 없으면 1단계에서 끝냄" / "VM CHECKLIST 수행 시, 미검증 있으면 미검증에 대한 보완을 진행하고, 다시 CHECKLIST 수행하도록 해주세요. 미검증 항목에 대해서만 별도 CHECK 가능하면 가장 좋고, 그게 아니면 처음부터 수행하는 것으로 해주세요. 전체 STEP 을 보면 1 단계 - CHECKLIST" / "rerunTask"
   - 파일 1개: tools/VibeManager/quick.json
@@ -582,12 +1053,12 @@
   - 되돌리기 태그: 20261125_self1956
 - 19:50 [VMO] VMO 자가 보완: 사용자 지시 R100 같은 문제: tools/Docs/make_docs.py:607 화면분석서 Excel '1.화면 대조' 시트 제목과 669행 파일 이름 '{ID}_{nm}_대조표' 에 내부 용어 '대조표' 가 나
   - 지시: "사용자에게 주는 산출물(시험 Excel, CheckList)의 시트명, 열 이름은 일반 사용자가 아는 업무 용어(GAP 등)로 쓰고 내부 용어(대조표)를 쓰지 않음" / "그리고 테스트 SHEET 생성 시 대조표 라는 단어가 일반 사용자들에게는 익숙하지 않아서, GAP분석 대조표의 의미가 AS-IS 와 TO-BE 에 대한 대조라는 의미이면 GAP SHEET 로 대체하고, UI 에 대한 전체 목록이라는 의미이면 일반 사용자들에게 익숙한 다른 용어로 변경했으"
-  - 파일 2개: make_ui_test_sheet.py, tools/Docs/make_docs.py
+  - 파일 1개: tools/Docs/make_docs.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self1931
 - 19:30 [VMO] VMO 자가 보완: 사용자 지시 R103 같은 문제: tools/VibeManager/history.js:177 History 의 Revision, Task 하위 탭마다 일자별, 화면별, 새로고침 단추를 따로 그림. 두 탭에 같은 id
   - 지시: "같은 종류 내용을 하위 탭으로 묶은 탭은 공통 동작 단추(최신, 지우기)를 하위 탭마다 따로 두지 않고 상단에 한 벌 두어 선택한 하위 탭에 적용함" / "WORKBENCH 의 LOG TABPAGE 내 TASK LOG, FE LOG, BE LOG 3개을 TABPAGE 로 LAYOUT 변경하도록 할게요. 최신과 지우기 기능은 공통 적용 되도록 해주세요." / "hist-top"
-  - 파일 3개: workbench.js, tools/VibeManager/history.js, tools/VibeManager/workbench.js
+  - 파일 2개: tools/VibeManager/history.js, tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self1910
   - 세션: 229897ce, 635fc2c2, ef9fb99c, f3b5da05, 9b30e682, bc658967, 1d0e019d, 1c7f3144
@@ -599,17 +1070,17 @@
   - 세션: 0074db74, fa3b8dca, 3bbb661c, 1d0e019d, 43e0b66f, d108229b, f97163fd
 - 18:39 [VMO] VMO 자가 보완: 사용자 지시 R99 같은 문제: tools/Harness/verify/run_docs_batch.py:38 cleanup_spec.json 에 정의가 없는 메뉴는 실저장을 끄고 저장 시험을 미검증으로 남김. run_
   - 지시: "CheckList 저장 시험은 실저장을 막지 않고 저장 직전 행을 기록한 뒤 실저장 왕복을 실측하고 체인 끝에 복원함" / "실제 저장도 동작해주세요."
-  - 파일 4개: run_verify.py, gen_cleanup_spec.py, save_residue.py, tools/Harness/verify/run_docs_batch.py
+  - 파일 1개: tools/Harness/verify/run_docs_batch.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self1818
 - 17:17 [VMO] VMO 자가 보완: 사용자 지시 R225 같은 문제: Doc/통합테스트_SSP/SSP_LOOKUP_이관_3_확인_ORACLE_20261125.sql:3 MERGE 결과 실행 방법만 있고 이 파일의 조회 [O1]~[O3] 실행 방법(Ct
   - 지시: "사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음" / "Cannot execute more than one query in one tab. Try to use multiple tabs for simultaneous query execution."
-  - 파일 1개: _ORACLE_20261125.sql
+  - 파일 1개: Doc/통합테스트_SSP/SSP_LOOKUP_이관_3_확인_ORACLE_20261125.sql
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self1659
 - 16:21 [VMO] VMO 자가 보완: 사용자 지시 R225 같은 문제: Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql:4 머리 주석에 DBeaver 실행 방법(Ctrl+Enter 또는 Alt+X)이 없음
   - 지시: "사용자가 DBeaver 에서 실행할 SQL 파일은 실행 단위마다 문장 끝 구분자(Oracle ';' 또는 '/', MSSQL ';' 또는 GO)와 빈 줄을 두고, 파일 머리 주석에 실행 방법(문장 단위 Ctrl+Enter 또는 스크립트 실행 Alt+X)을 적음" / "Cannot execute more than one query in one tab. Try to use multiple tabs for simultaneous query execution."
-  - 파일 1개: _ORACLE_20261125.sql
+  - 파일 1개: Doc/통합테스트_SSP/SSP_LOOKUP_이관_4_복원_ORACLE_20261125.sql
   - 미확인 4건: 개선안 확인: run_all.js 반영 전 → 반영 뒤 = 미실행(권한 차단) → 미실행(권한 차단). / VS Code 실화면(창 다시 로드 필요). / 반영 뒤 확인 1건: node tools/VibeManager/test/run_all.js
   - 되돌리기 태그: 20261125_self1612
 - 15:58 [VMO] VMO 자가 보완: 사용자 지시 R90 같은 문제: tools/Harness/verify/judge.py:2431 CheckList 근거 문장에 '하위 연쇄 없음'이 들어감. :3068 '셀 입력 방식·연쇄 후보는 편집 칸에만 해당'도
@@ -701,7 +1172,7 @@
   - 되돌리기 태그: 20261125_self1122
 - 11:20 [VMO] VMO 자가 보완: 사용자 지시 R83 같은 문제: tools/Harness/verify/make_verify_docs.py:38 CheckList 출력 폴더와 옛 폴더(39줄 OLD_CHECKLIST_DIR = P('Doc', 'Ch
   - 지시: "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음" / "VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\Projects\NSCM\Doc\CheckList 폴더에서 C:\Projects\NSCM\Doc\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고"
-  - 파일 3개: harness.json, tools/Docs/doc_paths.py, tools/Harness/verify/make_verify_docs.py
+  - 파일 1개: tools/Harness/verify/make_verify_docs.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self1104
 - 11:03 [VMO] VMO 자가 보완: 사용자 지시 R82 같은 문제: tools/Harness/verify/make_ui_test_sheet.py:246 CheckList는 있는데 시험 Excel이 없는 SCP, SSP 화면 13개(SCP0007 SCP
@@ -711,12 +1182,12 @@
   - 되돌리기 태그: 20261125_self1047
 - 10:46 [VMO] VMO 자가 보완: 사용자 지시 R81 같은 문제: tools/Harness/verify/decisions.py:119 결정 목록 질문이 규칙 번호(rule_id)로 시작하고 선택지가 P, F, N 판정 코드와 evidence_ref,
   - 지시: "사용자에게 묻는 질문과 보고는 내부 도구, 검사기 용어 대신 사용자가 아는 화면, 업무 단어로 쓰고 선택지마다 결과를 적음" / "방금의 경우에도 CHK 행 선택기 라고 하는 것에 대해서 제가 어떤 의미인지를 모르는데 답을 원하는 상황이라 권장안으로 그냥 실행 할 수 밖에 없었습니다." / "{r['rule_id']} {r['target'][:50]} — 실측대로가 AS-IS 와 같은가?"
-  - 파일 2개: detect_rules.csv, tools/Harness/verify/decisions.py
+  - 파일 1개: tools/Harness/verify/decisions.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self1030
 - 10:27 [VMO] VMO 자가 보완: 사용자 지시 R79 같은 문제: tools/Harness/verify/run_verify.py:1369 CheckList 차등 단계가 대상 화면이면 항목 구분 없이 AS-IS 런처 기본 실측과 실측 묶음(asis_l
   - 지시: "검사기는 정적 분석으로 판정할 수 있는 항목을 정적으로 판정하고 런처 실구동은 동적 확인이 필요한 항목에만 쓰며 TO-BE 룰로 바뀐 항목은 룰 준수 여부만 판정함" / "질문에 대한 답을 잠깐 멈추고 다시 처음으로 돌아가서 질문을 하나 할게요. as-is 을 to-be로 전환하고 기능을 100% 동작하도록 오류없이 만드는 것이 목적입니다. 모든 항목을 런처를 통하거나 할 필요는 없다고 생각합니다. 정적으로 가능한 부분은 정적으로 해결하고, 동적으로 필요"
-  - 파일 2개: asis_live_proof_join.py, tools/Harness/verify/run_verify.py
+  - 파일 1개: tools/Harness/verify/run_verify.py
   - 미확인 2건: 동적 행이 있는데 실측을 못 하면 종전대로 미측정 처리. / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self1010
 - 10:08 [VMO] VMO 자가 보완: 사용자 지시 R72 같은 문제: tools/Harness/verify/asis_live_rows.py:44 한쪽 데이터 없음을 TO-BE 0건만 조치필요로 판정함. AS-IS 0건, TO-BE 1건 이상이고 차이가
@@ -726,15 +1197,15 @@
   - 되돌리기 태그: 20261125_self0952
 - 09:51 [VMO] VMO 자가 보완: 사용자 지시 R65 같은 문제: tools/Harness/verify/run_verify.py:878 CheckList 시작 때 DB 감시를 켜지만 끝날 때 끄는 호출이 없음. ensure_watch 는 부모가 끝나
   - 지시: "DB 세션 감시는 CheckList 와 E2E 시험을 시작할 때 자동으로 켜지고 끝나면 꺼짐" / "로컬 be 재기동은 be 소스 변경에 따라서 진행한것 확인, db 감시의 경우에는 checklist 수행이나 e2e 테스트 시에 자동 동작하도록 요청, 카카오톡 알림은 무시해주세요."
-  - 파일 4개: db_orphan_sessions.py, run_verify.py, tools/Harness/verify/run_verify.py, tools/Harness/verify/db_orphan_sessions.py
+  - 파일 2개: tools/Harness/verify/run_verify.py, tools/Harness/verify/db_orphan_sessions.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0933
 - 09:16 [VMO] VMO 자가 보완: 사용자 지시 R94 같은 문제: tools/VibeManager/orchestra.js:499 VMO Logs 탭이 BE Log, FE Log, Task를 하위 탭으로 하나씩만 보임. :500 belogB, felo
   - 지시: "같은 종류 로그를 보이는 탭은 한 탭 안에 세로로 나누고 경계를 끌어 크기를 조절할 수 있게 함" / "workbench의 Log, Task Log 2개 Tabpage 를 하나로 합쳐주세요. Log Tabpage 아래에 Task Log, FE Log, BE Log 3개가 세로배치 되도록 해주세요. 그리고 3개의 Log 는 Split Bar 을 두어서 사이즈를 조절할 수 있도록 해주세요." / "lsub"
-  - 파일 2개: workbench.js, tools/VibeManager/orchestra.js
+  - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0857
-  - 세션: 7bbe81ad, dad9be21, 635fc2c2, ef9fb99c, 58008a29, 9b30e682, bc658967, 1d0e019d, 3066637e, 9a9d1a79, c8c99bd6, 1c7f3144, 25e07839
+  - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, c8c99bd6, 25e07839
 - 08:55 [VMO] VMO 자가 보완: 사용자 지시 R93 같은 문제: tools/VibeManager/orchestra.js:32 VMO 상단(:461 h1 VMO + 탭 8개 + VM 기능 아이콘 + chip)이 좁은 창에서 두 줄로 줄바꿈됨. :76
   - 지시: "웹뷰 상단 제목과 기능 아이콘은 한 줄에 두고 줄바꿈되지 않음" / "VM 아이콘을 기능 icon 과 같은 line 으로 맨 왼쪽에 위치시키고 싶은데, 2개의 라인으로 나오고 있습니다. 보완해주세요."
   - 파일 1개: tools/VibeManager/orchestra.js
@@ -749,13 +1220,13 @@
   - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, c8c99bd6, 25e07839
 - 08:20 [VMO] VMO 자가 보완: 사용자 지시 규칙 점검이 저장소에 없는 파일로 개선안을 만들지 않게 함
   - 지시: "개선안 20261125080629_SELF 승인(VM 자가진단 S13 S13/R83/tools/VibeManager/CLAUDE.md). 근거 = tools/VibeManager/orch-userrule.js:88 은 저장소 폴더 접두어가 없는 경로에 존재 확인 없이 tools/VibeManager/ 를 붙임. 2026-11-24 01:20:49 개선안 2"
-  - 파일 8개: orch-userrule.js, state.json, t_orch_userrule.js, vm/orchestra.js, tools/DbConn/x.py, CLAUDE.md, tools/VibeManager/orch-userrule.js, tools/VibeManager/test/t_orch_userrule.js
+  - 파일 2개: tools/VibeManager/orch-userrule.js, tools/VibeManager/test/t_orch_userrule.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0811
-  - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, ad428aac, c8c99bd6, 25e07839
+  - 세션: ad428aac
 - 07:52 [VMO] VMO 자가 보완: 사용자 지시 R83 같은 문제: tools/VibeManager/quick.json:1378 1378, 1390줄 AI 지시문에 폴더 이름을 직접 적음
   - 지시: "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음" / "VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\Projects\NSCM\Doc\CheckList 폴더에서 C:\Projects\NSCM\Doc\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고"
-  - 파일 3개: harness.json, tools/VibeManager/quick.json, tools/VibeManager/workbench.js
+  - 파일 2개: tools/VibeManager/quick.json, tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0735
   - 세션: 635fc2c2, ef9fb99c, 0074db74, 9b30e682, fa3b8dca, 3bbb661c, bc658967, 1d0e019d, 1c7f3144, 43e0b66f, d108229b, f97163fd
@@ -767,34 +1238,34 @@
   - 세션: 600ab9bb, cd589b56, cd85af7c, 6f5d2fdd
 - 06:50 [VMO] VMO 자가 보완: 사용자 지시 R83 같은 문제: tools/VibeManager/workbench.js:467 Workbench 산출물 목록이 CheckList 폴더를 직접 적음
   - 지시: "산출물 폴더 경로는 설정 1곳에 두고 VM, 생성기, 실행 중인 AI 세션이 그 값을 읽어 쓰며 소스에 경로를 따로 적지 않음" / "VM 과 현재 작업 중인 세션에서 사용중이 CHECKLIST 폴더를 C:\Projects\NSCM\Doc\CheckList 폴더에서 C:\Projects\NSCM\Doc\UI_CHECKLIST 폴더로 변경해주세요. 그리고 현재 UI_CHECKLIST 폴더는 존재하지 않는데 폴더 생성하고"
-  - 파일 3개: harness.json, extension.js, tools/VibeManager/workbench.js
+  - 파일 1개: tools/VibeManager/workbench.js
   - 미확인 3건: run_all.js 반영 전 미측정 → 반영 뒤 ALL OK 파일 84/84 PASS 1367 FAIL 0 232.7s / t_webview_syntax.js 반영 전 미측정 → 반영 뒤 ALL PASS / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0636
-  - 세션: 600ab9bb, 635fc2c2, ef9fb99c, 9b30e682, cd589b56, bc658967, cd85af7c, 1d0e019d, 6f5d2fdd, 1c7f3144
+  - 세션: 635fc2c2, ef9fb99c, 9b30e682, bc658967, 1d0e019d, 1c7f3144
 - 06:36 [VMO] VMO 자가 보완: 사용자 지시 R81 같은 문제: tools/VibeManager/quick.json:366 미검증 해소 프롬프트의 결정 목록 양식에 업무 단어 지시와 선택지별 결과 열이 없음. 'CHK 행 선택기' 같은 검사기 이름
   - 지시: "사용자에게 묻는 질문과 보고는 내부 도구, 검사기 용어 대신 사용자가 아는 화면, 업무 단어로 쓰고 선택지마다 결과를 적음" / "방금의 경우에도 CHK 행 선택기 라고 하는 것에 대해서 제가 어떤 의미인지를 모르는데 답을 원하는 상황이라 권장안으로 그냥 실행 할 수 밖에 없었습니다."
-  - 파일 2개: quick.json, tools/VibeManager/quick.json
+  - 파일 1개: tools/VibeManager/quick.json
   - 미확인 4건: 개선안 확인: run_all.js: 반영 전 미실행(권한 차단) → 반영 뒤 미실행(권한 차단). / VS Code 실화면(창 다시 로드 필요). / 반영 뒤 확인 1건: node tools/VibeManager/test/run_all.js
   - 되돌리기 태그: 20261125_self0627
   - 세션: 0074db74, fa3b8dca, 3bbb661c, 1d0e019d, 43e0b66f, d108229b, f97163fd
 - 06:27 [VMO] VMO 자가 보완: 사용자 지시 R81 같은 문제: tools/VibeManager/run-rule.js:5 VM, VMW, VMO 의 모든 AI 호출 앞에 붙는 문구에 '사용자에게 묻는 질문과 보고는 업무 단어로, 선택지마다 결과'
   - 지시: "사용자에게 묻는 질문과 보고는 내부 도구, 검사기 용어 대신 사용자가 아는 화면, 업무 단어로 쓰고 선택지마다 결과를 적음" / "방금의 경우에도 CHK 행 선택기 라고 하는 것에 대해서 제가 어떤 의미인지를 모르는데 답을 원하는 상황이라 권장안으로 그냥 실행 할 수 밖에 없었습니다."
-  - 파일 3개: 10_RULES_KEEP.md, tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
+  - 파일 2개: tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0610
   - 세션: 0534c5ee, 651b7728
 - 06:10 [VMO] VMO 자가 보완: 사용자 지시 R78 같은 문제: tools/VibeManager/steps.json:2383 골든 테스트는 S4.goldgen(golden_cases.csv 생성) 다음에 S4.golden(golden.py:568
   - 지시: "차례로 실행해야 하는 여러 단계 메뉴는 메뉴 1개로 묶고, 그 메뉴를 실행하면 전체 과정을 끝까지 수행함" / "VM AS-IS 실측 부터 AS-IS 실측 묶음 까지를 하나의 AS-IS 실측 하나의 메뉴로 생성하고 AS-IS 실측 메뉴 실행하면 전체 과정을 수행할 수 있도록 해주세요. 사용자는 상세 프로세스를 각각 수행할 수 없습니다." / "id"
-  - 파일 4개: quick.json, golden_cases.csv, tools/VibeManager/steps.json, tools/VibeManager/quick.json
+  - 파일 2개: tools/VibeManager/steps.json, tools/VibeManager/quick.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0552
   - 세션: 0074db74, 26e5ad4a, fa3b8dca, 3bbb661c, 1d0e019d, 6f5d2fdd, 43e0b66f, d108229b, f97163fd, fd571b57
 - 05:52 [VMO] VMO 자가 보완: 사용자 지시 R78 같은 문제: tools/VibeManager/steps.json:141 S1L 분류에 S1.liveCheck, S1.live, S1.liveScreen 등 27개가 단독 작업으로만 정의됨. 묶음
   - 지시: "차례로 실행해야 하는 여러 단계 메뉴는 메뉴 1개로 묶고, 그 메뉴를 실행하면 전체 과정을 끝까지 수행함" / "VM AS-IS 실측 부터 AS-IS 실측 묶음 까지를 하나의 AS-IS 실측 하나의 메뉴로 생성하고 AS-IS 실측 메뉴 실행하면 전체 과정을 수행할 수 있도록 해주세요. 사용자는 상세 프로세스를 각각 수행할 수 없습니다." / "id"
-  - 파일 2개: quick.json, tools/VibeManager/steps.json
+  - 파일 1개: tools/VibeManager/steps.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0529
-  - 세션: 0074db74, 26e5ad4a, fa3b8dca, 3bbb661c, 1d0e019d, 6f5d2fdd, 43e0b66f, d108229b, f97163fd, fd571b57
+  - 세션: 26e5ad4a, 6f5d2fdd, fd571b57
 - 05:29 [VMO] VMO 자가 보완: 사용자 지시 R78 같은 문제: tools/VibeManager/extension.js:349 NSCM 전환 단계 트리(메뉴 Steps 레일)에 분류별 묶음 실행 항목이 없음. '2. AS-IS 실측 (런처 구동)'
   - 지시: "차례로 실행해야 하는 여러 단계 메뉴는 메뉴 1개로 묶고, 그 메뉴를 실행하면 전체 과정을 끝까지 수행함" / "VM AS-IS 실측 부터 AS-IS 실측 묶음 까지를 하나의 AS-IS 실측 하나의 메뉴로 생성하고 AS-IS 실측 메뉴 실행하면 전체 과정을 수행할 수 있도록 해주세요. 사용자는 상세 프로세스를 각각 수행할 수 없습니다."
   - 파일 1개: tools/VibeManager/extension.js
@@ -803,19 +1274,19 @@
   - 세션: 600ab9bb, cd589b56, cd85af7c, 6f5d2fdd
 - 05:12 [VMO] VMO 자가 보완: CheckList 시간 목적 L4 판정을 효력 뒤 근거와 1판 실측으로 바꿈(검증 기대값 재설정)
   - 지시: "개선안 20261125050137_SELF 승인(VM 자가진단 ). 근거 = orch-ladder.js:104 L4-2 는 u.at 7일 안 지적만 셈, 같은 파일 77, 87-94행 L3 는 effMsOf 로 효력 뒤 근거만 셈. 지난 반영(2026-11-25 04:48~04:54)에서 t_orch_ladder.js 새 표본 6건 반영 전 FAIL, 반영"
-  - 파일 3개: t_orch_ladder.js, tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_ladder.js
+  - 파일 2개: tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_ladder.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0502
   - 세션: 3976dab7
 - 04:44 [VMO] VMO 자가 보완: 사용자 지시 R76 같은 문제: tools/VibeManager/quick.json:366 quick.json prompt 8건 중 50_DOC_STYLE.md 를 참조하는 것은 546, 577 2건. 366, 13
   - 지시: "VM, VMW, VMO 가 띄운 AI 의 답변, 보고와 생성기가 만드는 문서 문장은 문장 규칙 18개(~/.claude/CLAUDE.md, rules/50_DOC_STYLE.md)를 따름" / "네.. .적용해주세요.. .클로드코드와 VM 전체에 적용되도록 해주세요." / "prompt"
-  - 파일 3개: run-rule.js, tools/VibeManager/rules/50_DOC_STYLE.md, tools/VibeManager/quick.json
+  - 파일 1개: tools/VibeManager/quick.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0427
-  - 세션: 0074db74, 0534c5ee, fa3b8dca, 3bbb661c, 651b7728, 1d0e019d, 43e0b66f, d108229b, f97163fd
+  - 세션: 0074db74, fa3b8dca, 3bbb661c, 1d0e019d, 43e0b66f, d108229b, f97163fd
 - 04:27 [VMO] VMO 자가 보완: 사용자 지시 R76 같은 문제: tools/VibeManager/run-rule.js:5 VM, VMW, VMO 모든 AI 호출 앞에 붙는 공통 지시문에 문장 규칙(50_DOC_STYLE.md) 참조 없음. 메뉴,
   - 지시: "VM, VMW, VMO 가 띄운 AI 의 답변, 보고와 생성기가 만드는 문서 문장은 문장 규칙 18개(~/.claude/CLAUDE.md, rules/50_DOC_STYLE.md)를 따름" / "네.. .적용해주세요.. .클로드코드와 VM 전체에 적용되도록 해주세요."
-  - 파일 4개: tools/VibeManager/rules/50_DOC_STYLE.md, 10_RULES_KEEP.md, tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
+  - 파일 2개: tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0411
   - 세션: 0534c5ee, 651b7728
@@ -839,16 +1310,16 @@
   - 세션: 635fc2c2, ef9fb99c, 9b30e682, bc658967, 1d0e019d, 1c7f3144
 - 02:44 [VMO] VMO 자가 보완: 사용자 지시 R67 같은 문제: tools/VibeManager/history.js:177 workbench History 탭 상단 단추에 컬러 이모지가 있음(📅 🎯 📋 💬 🔗 ⚙️)
   - 지시: "VM 웹뷰의 메뉴, 패널 상단 아이콘은 컬러 이모지 대신 VM 아이콘 색 한 가지로 단색 표시함" / "VM 메뉴의 이모지 단색과, 메뉴 상단의 아이콘, WORKBENCH 상단 아이콘을 VM 의 아이콘이 사용하는 COLOR 로 단색을 맞추면 훨씬 보기 좋을 것 같습니다. 보완 적용 요청 합니다." / "hist-top"
-  - 파일 2개: workbench.js, tools/VibeManager/history.js
+  - 파일 1개: tools/VibeManager/history.js
   - 미확인 2건: t_webview_syntax.js: 반영 뒤 (반영 전 미실행) / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0226
-  - 세션: 229897ce, 635fc2c2, ef9fb99c, f3b5da05, 9b30e682, bc658967, 1d0e019d, 1c7f3144
+  - 세션: 229897ce, f3b5da05, 1c7f3144
 - 02:26 [VMO] VMO 자가 보완: 사용자 지시 R67 같은 문제: tools/VibeManager/jobs.js:319 VMW 상단 단추에 컬러 이모지가 있음(319행 📄 🗑, 320행 🕘)
   - 지시: "VM 웹뷰의 메뉴, 패널 상단 아이콘은 컬러 이모지 대신 VM 아이콘 색 한 가지로 단색 표시함" / "VM 메뉴의 이모지 단색과, 메뉴 상단의 아이콘, WORKBENCH 상단 아이콘을 VM 의 아이콘이 사용하는 COLOR 로 단색을 맞추면 훨씬 보기 좋을 것 같습니다. 보완 적용 요청 합니다." / "ico"
-  - 파일 2개: workbench.js, tools/VibeManager/jobs.js
+  - 파일 1개: tools/VibeManager/jobs.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0205
-  - 세션: 635fc2c2, 41c737be, ef9fb99c, 9b30e682, bc658967, 1d0e019d, 1c7f3144, 193b0e93, 4fc943ee
+  - 세션: 41c737be, 193b0e93, 4fc943ee
 - 02:04 [VMO] VMO 자가 보완: 사용자 지시 R57 같은 문제: tools/VibeManager/workbench.js:3683 git-merge 메뉴가 index 를 쓰는 merge 를 index.lock, git 프로세스 확인 없이 실행함. S
   - 지시: "VM 의 Git 작업은 실행 전 다른 git 프로세스가 없는데 남은 index.lock 이 있으면 지우고 실행하며 다른 git 프로세스가 있으면 끝날 때까지 기다림" / "Source Backup 시 아래 메세지 발생 합니다. 확인 요청 합니다. <pasted_content id=" / "> ■ 종료 exit 128 — 로그 .vibe\logs\2026-11-11T21-07-26____Source_Backup.log ✖ 실패 원인(표식 줄 없음 — 마지"
   - 파일 1개: tools/VibeManager/workbench.js
@@ -857,19 +1328,19 @@
   - 세션: 635fc2c2, ef9fb99c, 9b30e682, bc658967, 1d0e019d, 1c7f3144
 - 01:45 [VMO] VMO 자가 보완: 사용자 지시 R56 같은 문제: tools/VibeManager/history.js:98 Revision 패널 제목에 버전이 없음
   - 지시: "웹뷰 제목줄은 도구 이름과 버전을 보이고 내용 없는 덧붙임 문구를 넣지 않음" / "Vibe Manger 뒤에 버전을 보여주세요.. " / " 는 삭제"
-  - 파일 2개: package.json, tools/VibeManager/history.js
+  - 파일 1개: tools/VibeManager/history.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0118
   - 세션: 229897ce, f3b5da05, 1c7f3144
 - 01:18 [VMO] VMO 자가 보완: 사용자 지시 R56 같은 문제: tools/VibeManager/flow-panel.js:269 FLOW 패널 제목에 도구 이름만 있고 버전이 없음
   - 지시: "웹뷰 제목줄은 도구 이름과 버전을 보이고 내용 없는 덧붙임 문구를 넣지 않음" / "Vibe Manger 뒤에 버전을 보여주세요.. " / " 는 삭제"
-  - 파일 2개: package.json, tools/VibeManager/flow-panel.js
+  - 파일 1개: tools/VibeManager/flow-panel.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0059
   - 세션: 6bfcace1
 - 00:58 [VMO] VMO 자가 보완: 사용자 지시 R56 같은 문제: tools/VibeManager/extension.js:642 대시보드 제목줄 버전이 v1.0 고정이고 package.json version 2.0.1 과 다름
   - 지시: "웹뷰 제목줄은 도구 이름과 버전을 보이고 내용 없는 덧붙임 문구를 넣지 않음" / "Vibe Manger 뒤에 버전을 보여주세요.. " / " 는 삭제"
-  - 파일 2개: package.json, tools/VibeManager/extension.js
+  - 파일 1개: tools/VibeManager/extension.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0042
   - 세션: 600ab9bb, cd589b56, cd85af7c, 6f5d2fdd
@@ -881,16 +1352,16 @@
   - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, c8c99bd6, 25e07839
 - 00:25 [VMO] VMO 자가 보완: 사용자 지시 R64 같은 문제: tools/VibeManager/orchestra.js:547 VMO 입력창 안내 문구가 길고 한글 문구가 따로 있음. VM 입력창은 짧은 영문 한 줄(workbench.js:407
   - 지시: "프롬프트를 받는 모든 입력창의 입력 전 안내 문구(placeholder)는 짧은 한 줄로 씀" / "VM 프롬프트 창 에 입력전에 나오는 가이드 메세지를 SIMPLE 하게 변경해 주세요. (영문으로)" / "agIn"
-  - 파일 2개: workbench.js, tools/VibeManager/orchestra.js
+  - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261125_self0009
-  - 세션: 7bbe81ad, dad9be21, 635fc2c2, ef9fb99c, 58008a29, 9b30e682, bc658967, 1d0e019d, 3066637e, 9a9d1a79, c8c99bd6, 1c7f3144, 25e07839
+  - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, c8c99bd6, 25e07839
 - 00:00 [VMO] VMO 자가 보완: 사용자 지시 R54 같은 문제: tools/VibeManager/orchestra.js:197 VMO 에이전트 입력창 하단 보조 표시(#agInfo) 글자가 11px. VM 입력창 하단은 9.2px(workbench
   - 지시: "프롬프트 창 하단 보조 컨트롤(모델, 모드)은 짧은 이름과 본문보다 작은 글자로 표시함" / "프롬프트 창 아래의 model 사이즈를 현재의 반으로, 자동승인(전부허용), 자동승인, 수동, 플랜 의 모드를 영문으로 변경하고 단어를 간단하게, 그리고 프롬프트 하단의 글자 사이즈를 현재 기준 80% 정도로 줄여주세요."
-  - 파일 2개: workbench.js, tools/VibeManager/orchestra.js
+  - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self2344
-  - 세션: 7bbe81ad, dad9be21, 635fc2c2, ef9fb99c, 58008a29, 9b30e682, bc658967, 1d0e019d, 3066637e, 9a9d1a79, c8c99bd6, 1c7f3144, 25e07839
+  - 세션: 7bbe81ad, dad9be21, 58008a29, 3066637e, 9a9d1a79, c8c99bd6, 25e07839
 - 시각 없음 [Workbench] VMW 작업을 연결한 Workbench 에서도 중지
   - 지시: "VMW 에서 CHECKLIST 실행 후, WORKBENCH 로 연결한 경우 중지 버턴이 보이지 않습니다. VMW 에서 연결한 경우에도 중지할 수 있도록 해주세요"
   - 파일 2개: job-runner.js, workbench.js
@@ -1149,13 +1620,13 @@
 
 - 23:44 [VMO] VMO 자가 보완: 사용자 지시 R47 같은 문제: tools/VibeManager/run-rule.js:5 AI 지시문에 '결정이 필요하면 멈추지 않고 권장안으로 진행하고 회신 양식에 질문을 적음' 문장과 회신 양식 경로가 없음. r
   - 지시: "결정이 필요한 질문은 작업을 멈추지 않고 진행하면서 회신 양식으로 받음" / "계속 진행중이죠? 계속 진행해주시고, 혹시 회신이나 결정이 필요하면 작업은 진행하면서 회신 받는 폼으로 질문해주세요. 그냥 위의 상태창에 보여주는 것은 계속 잘 진행되는 것으로 인지하겠습니다."
-  - 파일 3개: 10_RULES_KEEP.md, tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
+  - 파일 2개: tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self2328
   - 세션: 40488493, 103e8c88, 012b3b64, 35d09ca1, c316c612, 525ebb8e, ad8f2ab9
 - 23:22 [VMO] VMO 자가 보완: 사용자 지시 R43 같은 문제: tools/VibeManager/run-rule.js:6 모든 AI 호출 앞 문구에 '남은 항목이 있으면 완료로 보고하지 않음' 완료 조건이 없음
   - 지시: "AI 작업은 해야 할 항목을 목록으로 두고 남은 항목이 있으면 완료로 보고하지 않음" / "누락하지 말고 100% 기능 구현을 하기 위하여 순차적으로 하나씩 하나씩 모든 기능을 구현해주세요. 순서를 바꾸는 것은 괜찮습니다. 하지만 해야할일을 누락하고, 완료되었다고 보고하지 말아주세요."
-  - 파일 3개: rules/10_RULES_KEEP.md, tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
+  - 파일 2개: tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self2306
   - 세션: 40488493, 103e8c88, 012b3b64, 35d09ca1, c316c612, 525ebb8e, ad8f2ab9
@@ -1232,7 +1703,7 @@
   - 세션: 0a4b2462
 - 10:49 [VMO] VMO 자가 보완: 사용자 지시 R135 같은 문제: tools/VibeManager/flow-panel.js:71 화면 상태 Gate 칸(71~73줄)이 repairScope 분기 없이 CHECK.md·fe_gate.json 으로 b
   - 지시: "DB MODE 에서는 FE 소스를 변경 대상으로 보지 않아 화면 상태와 종료 전 게이트에서 빼고, UI/DB MODE 에서는 기준선 이후 바뀐 화면만 게이트 대상으로 함" / "현재는 DB MODE로만 작업을 해서 현재의 소스가 최신 소스이고 변경대상이 아닌것으로 STATUS 변경하고 싶어요. 게이트 대상에서도 제외하고 싶어요. 차후 UI/DB MODE 일때는 게이트 대상이 되면 될 것 같아요."
-  - 파일 3개: CHECK.md, fe_gate.json, tools/VibeManager/flow-panel.js
+  - 파일 1개: tools/VibeManager/flow-panel.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self1033
   - 세션: 2ecf3770
@@ -1244,7 +1715,7 @@
   - 세션: 4d2f5b63
 - 10:21 [VMO] VMO 자가 보완: 사용자 지시 R108 같은 문제: tools/Harness/verify/run_verify.py:846 수정분 재점검(checklist_run.py --delta → run_verify --only)은 screen_
   - 지시: "CheckList 시작 때 DB MODE 이면 그 화면 FE 폴더를 Git 원격과 비교해 최신 변경분을 Download & Merge 한 뒤 측정함" / "작업 계속 진행해주세요. 그리고 다음 기능도 추가해주세요. CHECKLIST 수행 시 UI 해당 소스에 대해서 GIT 확인 후 최신소스 변경 분 있으면 다운로드 하는 기능 추가해주세요."
-  - 파일 3개: checklist_run.py, screen_sync.py, tools/Harness/verify/run_verify.py
+  - 파일 1개: tools/Harness/verify/run_verify.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self1005
 - 10:15 [룰·hook] VMW 새 업무 🛠 운영자 매뉴얼(양식 구조 + 분석 자료 흐름과 운영 절차)
@@ -1260,16 +1731,17 @@
   - 되돌리기 태그: 20261124_self0950
 - 09:50 [VMO] VMO 자가 보완: 사용자 지시 R79 같은 문제: tools/AsisLive/asis_live_screen.py:204 버튼, 조건 값, 셀 클릭, 입력, 이벤트, 값 분기 실행(204~211줄)이 소스 분기 전부를 런처로 실행함.
   - 지시: "검사기는 정적 분석으로 판정할 수 있는 항목을 정적으로 판정하고 런처 실구동은 동적 확인이 필요한 항목에만 쓰며 TO-BE 룰로 바뀐 항목은 룰 준수 여부만 판정함" / "질문에 대한 답을 잠깐 멈추고 다시 처음으로 돌아가서 질문을 하나 할게요. as-is 을 to-be로 전환하고 기능을 100% 동작하도록 오류없이 만드는 것이 목적입니다. 모든 항목을 런처를 통하거나 할 필요는 없다고 생각합니다. 정적으로 가능한 부분은 정적으로 해결하고, 동적으로 필요" / "버튼 분기 실행(팝업·메시지·Excel 기록 후 닫기)"
-  - 파일 2개: asis_live_scen_src.py, tools/AsisLive/asis_live_screen.py
+  - 파일 1개: tools/AsisLive/asis_live_screen.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0934
 - 09:19 [VMO] VMO 자가 보완: 사용자 지시 R71 같은 문제: tools/AsisLive/host/AsisLiveHost.cs:829 PopupPick 이 행을 고르다 예외(SetItem 없음, 열 없음, SetItem 호출 실패)가 나면 pp.
   - 지시: "AS-IS 런처가 띄운 팝업, 경고창, 외부 프로그램(Excel) 창은 값을 확인하고 기록한 뒤 닫음" / "현재 런처로 실행된 POPUP 창이 너무 많은데 닫기처리 한번 해도 될까요? 아니면 그대로 놔둬야 하나요? 런처로 실행 시 POPUP 차이나 경고창을 띄운 후 확인하고나면 POPUP 창이나 경고창을 닫으면 안되나요? POPUP 이 너무 많이 띄워져 있습니다."
+  - 파일 1개: tools/AsisLive/host/AsisLiveHost.cs
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0903
 - 09:03 [VMO] VMO 자가 보완: 사용자 지시 R71 같은 문제: tools/AsisLive/asis_live_run.py:364 기본 실측 measure() 가 조회, 필수 조건 채움(popup_pick), 데이터 찾기(asis_live_dataf
   - 지시: "AS-IS 런처가 띄운 팝업, 경고창, 외부 프로그램(Excel) 창은 값을 확인하고 기록한 뒤 닫음" / "현재 런처로 실행된 POPUP 창이 너무 많은데 닫기처리 한번 해도 될까요? 아니면 그대로 놔둬야 하나요? 런처로 실행 시 POPUP 차이나 경고창을 띄운 후 확인하고나면 POPUP 창이나 경고창을 닫으면 안되나요? POPUP 이 너무 많이 띄워져 있습니다." / "dialogs"
-  - 파일 2개: asis_live_batch.py, tools/AsisLive/asis_live_run.py
+  - 파일 1개: tools/AsisLive/asis_live_run.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0847
 - 09:01 [VMO] VMO 승인 기준 = VM 로직 큰 변화만 · Claude Code 작업 이력을 사용자 수정사항으로 학습
@@ -1279,16 +1751,16 @@
   - 세션: a34ef595, 40488493, 103e8c88, 012b3b64, 0a4b2462, c316c612, 525ebb8e, ad8f2ab9
 - 08:32 [VMO] VMO 자가 보완: 사용자 지시 R39 같은 문제: tools/VibeManager/extension.js:245 kind claude 터미널 실행(S5.claude TODO 이식)은 run-rule NOTE 를 붙이지 않아 진행 보고
   - 지시: "긴 자동 진행 작업은 5분마다 진행 상태 한 줄을 보고하고 전체가 끝날 때까지 멈추지 않고 진행함" / "중간 중간에 진행상태 알려주고, 전체 다 끝날때까지는 자동 진행해주세요."
-  - 파일 2개: workbench.js, tools/VibeManager/extension.js
+  - 파일 1개: tools/VibeManager/extension.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0817
-  - 세션: 25c6d477, ac64d039, edbff8b4, c316c612
+  - 세션: ac64d039, edbff8b4
 - 08:11 [VMO] VMO 자가 보완: 사용자 지시 R39 같은 문제: tools/VibeManager/rules/10_RULES_KEEP.md:46 정본 A-13 9항도 5분 초과 때 1회 보고로 적혀 있고 끝까지 자동 진행 문구가 없음
   - 지시: "긴 자동 진행 작업은 5분마다 진행 상태 한 줄을 보고하고 전체가 끝날 때까지 멈추지 않고 진행함" / "중간 중간에 진행상태 알려주고, 전체 다 끝날때까지는 자동 진행해주세요."
-  - 파일 2개: run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
+  - 파일 1개: tools/VibeManager/rules/10_RULES_KEEP.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0756
-  - 세션: 40488493, 103e8c88, 012b3b64, 35d09ca1, c316c612, 525ebb8e, ad8f2ab9
+  - 세션: 40488493, 103e8c88, 012b3b64, c316c612, 525ebb8e, ad8f2ab9
 - 07:55 [VMO] VMO 자가 보완: 사용자 지시 R39 같은 문제: tools/VibeManager/run-rule.js:10 모든 AI 호출 앞 문구가 5분 초과 때 한 번만 보고하게 하고, 5분마다 보고와 끝날 때까지 멈추지 않고 진행 지시가 없음
   - 지시: "긴 자동 진행 작업은 5분마다 진행 상태 한 줄을 보고하고 전체가 끝날 때까지 멈추지 않고 진행함" / "중간 중간에 진행상태 알려주고, 전체 다 끝날때까지는 자동 진행해주세요."
   - 파일 1개: tools/VibeManager/run-rule.js
@@ -1302,22 +1774,22 @@
   - 되돌리기 태그: 20261124_self0724
 - 07:23 [VMO] VMO 자가 보완: 사용자 지시 R38 같은 문제: tools/VibeManager/rules/40_SEARCH_COND.md:23 CR-092 와 22행 CR 이 정본 밖에서 본문까지 정의됨
   - 지시: "TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함" / "1. 'AS-IS 와 달라도 오류 아님'인지 'TO-BE 개발 규칙' 의 경우 별도의 MD 파일로 일괄 관리할 수 있도록 보완 요청 (현재의 MD 파일에 분산되어 있으면 취합해서 관리 요청) 2. M1 진행해주세요. 3. 2개 항목은 차후 결정 예정."
-  - 파일 2개: TOBE_RULES_DIFF.md, tools/VibeManager/rules/40_SEARCH_COND.md
+  - 파일 1개: tools/VibeManager/rules/40_SEARCH_COND.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0708
   - 세션: ac1eaf95
 - 07:07 [VMO] VMO 자가 보완: 사용자 지시 R38 같은 문제: tools/VibeManager/rules/10_RULES_KEEP.md:152 CR-073, CR-075, CR-077 등 8행이 룰 본문을 직접 정의하고 정본 TOBE_RULES_
   - 지시: "TO-BE 룰과 TO-BE 개발 규칙은 MD 파일 1개에 모아 두고 검사기, 생성기, 다른 룰 문서는 그 파일을 참조함" / "1. 'AS-IS 와 달라도 오류 아님'인지 'TO-BE 개발 규칙' 의 경우 별도의 MD 파일로 일괄 관리할 수 있도록 보완 요청 (현재의 MD 파일에 분산되어 있으면 취합해서 관리 요청) 2. M1 진행해주세요. 3. 2개 항목은 차후 결정 예정."
-  - 파일 4개: Doc/_rules_consolidation/TOBE_RULES_DIFF.md, confirmed_requirements.csv, tobe_rule_registry.py, tools/VibeManager/rules/10_RULES_KEEP.md
+  - 파일 1개: tools/VibeManager/rules/10_RULES_KEEP.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0650
   - 세션: 40488493, 103e8c88, 012b3b64, c316c612, 525ebb8e, ad8f2ab9
 - 06:39 [VMO] VMO 자가 보완: 사용자 지시 R37 같은 문제: tools/VibeManager/quick.json:1386 AI 메뉴 3개(🧪 미검증 해소 327행, 📘 사용자 매뉴얼 내용 보완 569행, 🧯 자동 보완 1386행)에 pro
   - 지시: "AI 가 추측으로 결론을 내는 단계는 실제 실행(파싱, 실측, 시험) 결과와 대조하는 엔진을 두고 대조 전 결과는 미검증으로 표시함" / "지금 VM 프로세스에 대해서 근본적인 질문을 하나 할게요 1. AS-IS C#.NET 을 TO-BE REACT 로 변환 2. AS-IS MSSQL 을 TO-BE ORACLE 로 변환 3. 정적, 동적으로 AS-IS 대비 TO-BE 기능 구현 확인 - TO-BE에서의 신규 RULE 적용분" / "label"
-  - 파일 2개: workbench.js, tools/VibeManager/quick.json
+  - 파일 1개: tools/VibeManager/quick.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0623
-  - 세션: 25c6d477, dbaaa89a, ebda2f76, 332c721a, c316c612
+  - 세션: dbaaa89a, ebda2f76, 332c721a
 - 06:19 [VMO] VMO 자가 보완: 사용자 지시 R36 같은 문제: tools/CloudPkg/cloud_pkg.py:1226 수정본 단추에서 변경이 없을 때 print_nothing(1246~1252행)이 latest_pkg 로 MOD, FULL 중
   - 지시: "수정본 이관 산출물은 전체 이관본과 따로 최근 수정분만 추출한 파일을 만들고 수정본 단추는 그 파일 경로를 보여 줌" / "클라우드 이관 패키지(수정본) 클릭 시 전체 패키지 이관본을 적용하는게 아니라 최근 수정본만 추출해서 그부분만 적용하도록 보완해주세요. 지금은 수정본을 클릭해서 전체 패키지 이관본의 주소만 보입니다." / "^{ID}_CLOUD_{'DBUI' if mode == 'all' else 'DB'}_(MOD/FULL)_(\d{{8}}_\d{{4}}(?:\d{{2}})?)$"
   - 파일 1개: tools/CloudPkg/cloud_pkg.py
@@ -1340,7 +1812,7 @@
   - 되돌리기 태그: 20261124_self0511
 - 05:09 [VMO] VMO 자가 보완: 사용자 지시 R33 같은 문제: tools/E2E/lib/rowstate.ts:23 메인 조회조건 부분 일치 판정(judgeLike, ledger.py:608 G1 '부분일치(Like)' 고정 기대)이 AS-IS S
   - 지시: "검사기는 그리드 편집 컬럼의 입력 제한(정수, 음수 허용, 음수 글자색)과 조회조건 팝업의 LIKE 검색을 AS-IS 실측과 대조해 차이를 조치필요로 판정함" / "SSP0024 CHECKLIST 에서 아래 2개 항목의 오류로 확인되는데 조치 필요 항목에 나오지 않습니다. 검사엔진 보완 요청 합니다. 1) GRID COLUMN - Pancake Roll Length, Steelcrate/Cut - 정수만 입력(-입력 가능, -입력 시 FontCol"
-  - 파일 2개: ledger.py, tools/E2E/lib/rowstate.ts
+  - 파일 1개: tools/E2E/lib/rowstate.ts
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0453
 - 04:50 [VMO] VMO 자가 보완: 사용자 지시 R33 같은 문제: Doc/e2e/specs/eg_popup.spec.ts:392 AS-IS 팝업 SP가 LIKE를 쓰지 않을 때(like=false) TO-BE가 부분 일치로 조회되면 PASS, 안 되
@@ -1356,25 +1828,24 @@
   - 세션: dbaaa89a, ebda2f76, 332c721a
 - 03:55 [VMO] VMO 자가 보완: 사용자 지시 R31 같은 문제: tools/VibeManager/run-rule.js:5 VM, VMW(workbench.js 967줄), VMO(orch-agent.js 228줄) 모든 AI 호출 앞 문구에 한국어
   - 지시: "VM, VMW, VMO 가 띄운 AI 의 답변, 진행 보고, 알림 문장은 한국어로 씀" / "회신은 한국어로 처리해주세요.."
-  - 파일 3개: 10_RULES_KEEP.md, tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
+  - 파일 2개: tools/VibeManager/run-rule.js, tools/VibeManager/rules/10_RULES_KEEP.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0340
   - 세션: 40488493, 103e8c88, 012b3b64, 35d09ca1, c316c612, 525ebb8e, ad8f2ab9
 - 03:38 [VMO] VMO 자가 보완: 검사기 게이트 결과를 화면별 JSON(Doc/verify/<ID>/engine_gate.json)으로 남겨 quick.json 6, 7단계 조건(ifJsonGt)의 입력을 만듦(R28 보완 1조각)
   - 지시: "개선안 20261124032939_SELF 승인(VM 자가진단 S13 S13/R28/tools/VibeManager/quick.json). 근거 = tools/VibeManager/workbench.js:1180-1186 ifJsonGt = 이번 체인에서 갱신된 JSON 파일의 숫자 키만 읽음 · tools/Harness/verify/engine_gate."
-  - 파일 3개: /engine_gate.json, quick.json, tools/Harness/verify/engine_gate.py
+  - 파일 1개: tools/Harness/verify/engine_gate.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0330
-  - 세션: dbaaa89a, ebda2f76, 332c721a
 - 03:05 [VMO] VMO 자가 보완: 사용자 지시 R27 같은 문제: tools/VibeManager/orch-improve.js:376 CHANGELOG 에 쓰는 문구 일자를 slice 로 자름. 371줄과 375줄은 `${now.slice(0, 10
   - 지시: "VM 화면, 알림, 결과 요약, 생성 문서에 보이는 일자는 Windows 짧은 날짜 형식(date-fmt.js fmtDate, fmtDT, 웹뷰 fmtD)으로 보임. 저장 값은 바꾸지 않음" / "VM의 모든 일자는 윈도우의 일자 FORMAT 에 맞도록 해주세요. 현재 윈도우는 YYYY-MM-DD 로 표기하고 있습니다."
-  - 파일 2개: date-fmt.js, tools/VibeManager/orch-improve.js
+  - 파일 1개: tools/VibeManager/orch-improve.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0250
   - 세션: a34ef595, 0a4b2462
 - 02:48 [VMO] VMO 자가 보완: 사용자 지시 R27 같은 문제: tools/VibeManager/recheck.js:17 화면에 보이는 note 문구 일자를 8줄 stamp 의 YYYY-MM-DD HH:mm 고정 형식으로 만듦
   - 지시: "VM 화면, 알림, 결과 요약, 생성 문서에 보이는 일자는 Windows 짧은 날짜 형식(date-fmt.js fmtDate, fmtDT, 웹뷰 fmtD)으로 보임. 저장 값은 바꾸지 않음" / "VM의 모든 일자는 윈도우의 일자 FORMAT 에 맞도록 해주세요. 현재 윈도우는 YYYY-MM-DD 로 표기하고 있습니다."
-  - 파일 2개: date-fmt.js, tools/VibeManager/recheck.js
+  - 파일 1개: tools/VibeManager/recheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0229
   - 세션: 918003f0
@@ -1398,16 +1869,16 @@
   - 세션: 0d3bfb98, 3c6397e6, 5353240c
 - 01:12 [VMO] VMO 자가 보완: 사용자 지시 R10 같은 문제: tools/VibeManager/workbench.js:3434 Source Upload(UI)가 PC 로컬 원격 설정에서 URL 을 읽고 fetch(3442)와 push(3487)를
   - 지시: "VM 의 Git 작업은 작업 종류마다 지정한 계정과 원격 주소를 명시해 실행하고 PC 전역 git 설정에 기대지 않음" / "하나만더 할게요.. VM 에서 backup 시에는 Github leekc297 계정을 사용합니다. Source Download & Merge, Source Upload 시에는 gyucheollee297 계정으로 https://github.com/eunjoo-hwang/nscm-fe.gi"
-  - 파일 2개: quick.json, tools/VibeManager/workbench.js
+  - 파일 1개: tools/VibeManager/workbench.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0057
-  - 세션: 25c6d477, dbaaa89a, ebda2f76, 332c721a, c316c612
+  - 세션: 25c6d477, c316c612
 - 00:49 [VMO] VMO 자가 보완: 사용자 지시 R6 같은 문제: tools/VibeManager/jobs.js:289 VMW 상단 줄(.head)에 작업 조작 아이콘 단추 6개가 나란히 있음
   - 지시: "상단 줄에 같은 종류 기능 단추가 4개 넘게 늘어서면 아이콘 1개와 아래로 펼치는 목록으로 묶음(목록 = 아이콘 + 기능명, 바깥 클릭과 Esc 로 닫힘)" / "아이콘을 옆으로 나열하면 보기는 좋은데, 공간을 많이 차지하니, 하나의 아이콘만 표기하고 클릭하면 밑으로 펼쳐지도록 해서 선택할 수 있도록 해주세요." / "ico"
-  - 파일 2개: orchestra.js, tools/VibeManager/jobs.js
+  - 파일 1개: tools/VibeManager/jobs.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261124_self0033
-  - 세션: 0d3bfb98, 3c6397e6, 5353240c, 0a4b2462, 2bed7fc2
+  - 세션: 0d3bfb98, 3c6397e6, 5353240c
 - 00:23 [VMO] VMO 자가 보완: 사용자 지시 R4 같은 문제: tools/VibeManager/jobs.js:294 VMW 실행 로그에 Ctrl+A 범위 제한과 execCommand 감싸기가 없음
   - 지시: "웹뷰에서 글을 보여 주는 영역(파일 보기, 로그, 결과 표)에서 Ctrl+A 는 그 영역만 선택. VS Code 본체가 보내는 execCommand('selectAll') 경로도 같음. 입력칸과 편집 칸은 기본 동작" / "해당 파일에서 편집모드로 들어가지 않더라도 CTRL+A 시 자신의 파일만 전체 선택되도록 하고 싶습니다." / "log"
   - 파일 1개: tools/VibeManager/jobs.js
@@ -1621,10 +2092,10 @@
 
 - 23:59 [VMO] VMO 자가 보완: 사용자 지시 R4 같은 문제: tools/VibeManager/orchestra.js:500 VMO 로그 탭(belogB, felogB, taskB)과 에이전트 창(agB, 543줄)에 Ctrl+A 범위 제한과 ex
   - 지시: "웹뷰에서 글을 보여 주는 영역(파일 보기, 로그, 결과 표)에서 Ctrl+A 는 그 영역만 선택. VS Code 본체가 보내는 execCommand('selectAll') 경로도 같음. 입력칸과 편집 칸은 기본 동작" / "해당 파일에서 편집모드로 들어가지 않더라도 CTRL+A 시 자신의 파일만 전체 선택되도록 하고 싶습니다." / "log lbody"
-  - 파일 2개: workbench.js, tools/VibeManager/orchestra.js
+  - 파일 1개: tools/VibeManager/orchestra.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261123_self2344
-  - 세션: 92f33c0f, a0380cfb, 1a09d305, 1f055d3d, 5292d453, 6c107fe7, 62d34e0f, c45f475c, c959f83f, cfdd97ff, e666c8cd
+  - 세션: a0380cfb, 1a09d305, 1f055d3d, 6c107fe7, e666c8cd
 - 23:34 [VMO] VMO 자가 보완: 사용자 지시 R4 같은 문제: tools/VibeManager/workbench.js:2633 Ctrl+A 대상이 파일 탭(.dtab)뿐이라 Log 탭의 #log, #felog, #belog(2034~2036, .l
   - 지시: "웹뷰에서 글을 보여 주는 영역(파일 보기, 로그, 결과 표)에서 Ctrl+A 는 그 영역만 선택. VS Code 본체가 보내는 execCommand('selectAll') 경로도 같음. 입력칸과 편집 칸은 기본 동작" / "해당 파일에서 편집모드로 들어가지 않더라도 CTRL+A 시 자신의 파일만 전체 선택되도록 하고 싶습니다."
   - 파일 1개: tools/VibeManager/workbench.js
@@ -1662,7 +2133,7 @@
   - 세션: 92f33c0f, a0380cfb, 1a09d305, 1f055d3d, 5292d453, 6c107fe7, 62d34e0f, c45f475c, c959f83f, cfdd97ff, e666c8cd
 - 21:36 [VMO] VMO 자가 보완: 재개 거부를 사건으로 남기고 소스 지문을 단계별로 나눔(1조각: run_verify.py 만)
   - 지시: "개선안 20261123162019_SELF 승인(VM 자가진단 ). 근거 = repair_20261121000933_SELF_2.json verify_items 1~5 통과(임시 하네스 ZZRSTEST 16:13~16:14) · 게이트 실패 = result.json 16:15:11 S4 'run_verify.py:451 x.py', S2 PASS 138→1"
-  - 파일 3개: /_resume/refuse.json, run_verify.py, tools/Harness/verify/run_verify.py
+  - 파일 1개: tools/Harness/verify/run_verify.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261123_self2123
 - 21:18 [VMO] VMO 자가 보완: 개념 재정립: 자동 반영 차례(가장 오래된 안 1건을 매번 처음부터 시도 → 반영 차례 장부로 자리부터 잡고, 막힌 안은 뒤로 돌림)
@@ -1673,25 +2144,25 @@
   - 세션: 25875bb6, a0380cfb, b9ca5741, 1a09d305, 1f055d3d, 87fd28d1, 74f0a61c, 9eb8ba66, 4fcd7994, 5292d453, df6c6426, 6c107fe7, 086b4c57, fa6cf98b, 52b96598, 78fa46bf, 25585b6f
 - 20:55 [VMO] VMO 자가 보완: 감지기 추가 개선안은 '고친 것'으로 세지 않고 감시 시작점으로 기록, 결함 수정 개선안이 나올 때부터 재발 판정(기존 사다리 시험 고정값 포함)
   - 지시: "개선안 20261123122722_SELF 승인(VM 자가진단 ). 근거 = repair_20261120184003_SELF_2.json gate.newBad: t_orch_ladder.js:49 FAIL · t_orch_ladder.js:17 P4 targets ['tools/VibeManager/orch-usercheck.js'] · orch-ladde"
-  - 파일 11개: orch-ladder.js, orch-usercheck.js, user_checks.json, orch-improve.js, t_orch_ladder.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/orch-watch.js, tools/VibeManager/orch-ladder.js 외
+  - 파일 4개: tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_ladder.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261123_self2045
-  - 세션: 3da7b5b2, a0380cfb, cd86057d, d5d3011a, 20de4a59, 60a2755a, b9ca5741, 126c22bb, 1f055d3d, 5683b8d5, ccb3a539, 095d666d, 87fd28d1, 94499fe3, e8e5e8c6, fcf02270, 4c65e37a, 71145c68, c205d947, 112aa3e3, 74f0a61c, 9eb8ba66, 4fcd7994, 5292d453, df6c6426, 6c107fe7, b3b84846, fa6cf98b, 52b96598, 78fa46bf, 25585b6f
+  - 세션: 3da7b5b2, d5d3011a, 20de4a59, 60a2755a, b9ca5741, 1f055d3d, 87fd28d1, 94499fe3, 71145c68, c205d947, 112aa3e3, 74f0a61c, 9eb8ba66, 4fcd7994, 5292d453, df6c6426, 6c107fe7, b3b84846, fa6cf98b, 52b96598, 78fa46bf, 25585b6f
 - 20:37 [VMO] VMO 자가 보완: VMO 열린 일 순환 1조각: 에이전트 담당 밖 사건 기록 남기기, 되돌린 뒤 남은 시험 정리
   - 지시: "개선안 20261123121302_SELF 승인(VM 자가진단 ). 근거 = orch-agent.js:298 agentRules 밖 규칙(R12 등) 사건을 기록 없이 continue · orch-agent.js:18 DEF agentRules 에 R12 없음 · result.json:900-901(2026-11-20 18:27) R12 열린 사건 10건 "
-  - 파일 8개: t_orch_worklist.js, t_orch_usercheck.js, orch-worklist.js, orch-selfcheck.js, orch-usercheck.js, tools/VibeManager/orch-agent.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_worklist.js
+  - 파일 3개: tools/VibeManager/orch-agent.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_worklist.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261123_self2028
-  - 세션: 25875bb6, 3da7b5b2, a0380cfb, cd86057d, d5d3011a, 20de4a59, 126c22bb, 1a09d305, 5683b8d5, ccb3a539, 095d666d, 94499fe3, e8e5e8c6, fcf02270, 4c65e37a, 74f0a61c, 9eb8ba66, 5292d453, df6c6426, 6c107fe7, b3b84846, 086b4c57, 52b96598, 78fa46bf
+  - 세션: a0380cfb, cd86057d, 20de4a59, 126c22bb, 1a09d305, 095d666d, fcf02270, 4c65e37a, 086b4c57, 78fa46bf
 - 20:22 [VMO] VMO 자가 보완: Source Backup 대상에서 대용량 생성물(.vibe/orch/snap, e2e video) 제외와 push 실패 1회 재시도
   - 지시: "개선안 20261123113703_INC 승인(VM 자가진단 ). 근거 = push 로그 HTTP 500. 미push 커밋 4,521파일·3,288,898줄에 Doc/verify/SCP0028/e2e/video 242파일(1007M), .vibe/orch/snap(디스크 27G) 경로 포함. .gitignore 에 제외 규칙 없음. workbench.js:"
-  - 파일 2개: workbench.js, tools/VibeManager/workbench.js
+  - 파일 2개: .gitignore, tools/VibeManager/workbench.js
   - 미확인 2건: VS Code 실화면(창 다시 로드 필요). / 반영 뒤 확인 1건: Source Backup 실행 뒤 git status -sb 가 ahead 0 인지 확인..
   - 되돌리기 태그: 20261123_self2013
   - 세션: 92f33c0f, 1a09d305, 1f055d3d, 5292d453, 62d34e0f, c45f475c, c959f83f, cfdd97ff
 - 20:06 [VMO] VMO 자가 보완: 사용자 지적 재발 판정에서 감지기 추가 개선안을 수정본에서 빼고, 근거 로그가 지워져 사라진 항목은 resolved 대신 근거 삭제로 표시(기존 사다리 시험 P4 표본 대상 파일 정정 포함)
   - 지시: "개선안 20261123112024_SELF 승인(VM 자가진단 ). 근거 = orch-ladder.js:61-63 · proposals/20261120151817_SELF_2.json:7, :10-14 · incidents/20261120_185744_R12_ALL.json:19, :25 · 진단 사다리 묶음 L3/usercheck/U18 · 직전 반영 실"
-  - 파일 7개: orch-usercheck.js, user_checks.json, t_orch_ladder.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_ladder.js
+  - 파일 4개: tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_ladder.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261123_self1955
   - 세션: 3da7b5b2, a0380cfb, cd86057d, d5d3011a, 20de4a59, 60a2755a, b9ca5741, 126c22bb, 5683b8d5, ccb3a539, 095d666d, 94499fe3, e8e5e8c6, fcf02270, 4c65e37a, 71145c68, c205d947, 112aa3e3, 6c107fe7, b3b84846, fa6cf98b
@@ -1774,7 +2245,7 @@
   - 세션: 92f33c0f, 1a09d305, 1f055d3d, 5292d453, 62d34e0f, c45f475c, c959f83f, cfdd97ff
 - 15:45 [VMO] VMO 자가 보완: 진단 사다리 L4 사용자 지적 축을 감지기 이름 대신 목적 키로 묶음
   - 지시: "개선안 20261121120359_VISION_3 승인(VM 자가진단 ). 근거 = plans/vm-ui-snug-mountain.md 2.2 원문 '사용자 지적 중 같은 목적 축(입력 문구의 목적 키) 7일 3건 이상'. orch-ladder.js:69-71 은 u.detector 로 묶음. user_checks.json U2 chainTarget, U2"
-  - 파일 5개: user_checks.json, tools/VibeManager/orch-ladder.js, tools/VibeManager/user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_ladder.js
+  - 파일 4개: tools/VibeManager/orch-ladder.js, tools/VibeManager/user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_ladder.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261123_self1529
   - 세션: 3da7b5b2, a0380cfb, cd86057d, d5d3011a, 20de4a59, 60a2755a, b9ca5741, 126c22bb, 5683b8d5, ccb3a539, 095d666d, 94499fe3, e8e5e8c6, fcf02270, 4c65e37a, 71145c68, c205d947, 112aa3e3, 6c107fe7, b3b84846, fa6cf98b
@@ -1846,7 +2317,7 @@
   - 세션: 92f33c0f, 1a09d305, 1f055d3d, 5292d453, f02547f9, 62d34e0f, c45f475c, c959f83f, cfdd97ff
 - 시각 없음 [VMO] VMO 자가 보완: 사용자 지시 R221 같은 문제: tools/Analysis/ssp_it_precheck/dbeaver.py:14 검증쿼리 시트에 넣는 쿼리의 시험일·계획 시작일 기본값이 2026-11-23으로 고정돼 사용자가 정한
   - 지시: "여러 쿼리, 실행 명령을 사용자에게 주는 생성기는 종류별(Oracle, MSSQL, 실행 명령) 1파일로 모으고 실행 단위마다 위에 내용 주석을 달며 Oracle, MSSQL 판을 같은 형태로 만들고 기준일 같은 인자는 사용자 지정값으로 채운 뒤 사내 DB 실행 또는 문법 검사를 거쳐 제공함" / "재컴파일 완료했습니다. SSP 통합테스트 시나리오에 추가한 사전점검 단계의 ORACLE QUERY 을 하나의 파일로 생성하고, 각각의 실행 파일위에 주석으로 해당 파일의 내용 표기해주세요. MSSQL QUERY 도 동일한 형태로 하나의 파일로 생성해주세요. 파일 생성 시 PLAN_DAT"
-  - 파일 3개: gen_sql_files.py, tools/Analysis/ssp_it_precheck/dbeaver.py, tools/Analysis/ssp_it_precheck/gen_sql_files.py
+  - 파일 2개: tools/Analysis/ssp_it_precheck/dbeaver.py, tools/Analysis/ssp_it_precheck/gen_sql_files.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261126_self1504
 - 세션 e21da3e3 "CheckList 화면 1개 10분 목적 어긋남 3회 연속" 00:00~00:04, 지시 1건, 화면 SCP0005, SCP0028, SSP0005, SSP0014, SCP0111
@@ -1988,7 +2459,7 @@
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 같은 원인 반영 실패 5회 개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판 (resolved)
 - 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-usercheck.js 내용 다름 (resolved)
 - 사건: 사건 R12 VM 자가진단 S3 설치본 차이: quick.json 내용 다름 (resolved)
-- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U3 조치 기록 없는 열린 사건 1건 (open)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U3 조치 기록 없는 열린 사건 1건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 8건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 같은 원인 반영 실패 4회 개념 재정립: CheckList 30분 목표 구간(측정 1회와 문서 1판 (resolved)
 - 사건: 사건 R12 VM 자가진단 S3 설치본 차이: orch-improve.js 내용 다름 (resolved)
@@ -2010,10 +2481,10 @@
 - 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_usercheck.js 실패 (resolved)
 - 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_worklist.js 실패 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 4건 (resolved)
-- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 12건 (open)
+- 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 12건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S2 시험: t_orch_usercheck.js 실패 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 3건 (resolved)
-- 사건: 사건 R1 ⬆️ Source Backup 3/3 push 실패 (exit 1) (need-user)
+- 사건: 사건 R1 ⬆️ Source Backup 3/3 push 실패 (exit 1) (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U21 VMO 반영 실패 24시간 2건 (resolved)
 - 사건: 사건 R12 VM 자가진단 S13 사용자 지적: U3 자동 반영 대상인데 반영 안 된 개선안 1건 (resolved)
 - 개선안: 개선안 사용자 지시 R76 같은 문제: tools/VibeManager/run-rule.js:5 VM, VMW, VMO 모든 AI 호출 앞에 붙는 공통 지시문에 문장 규칙(50_DOC_STYLE.md) 참조 없음. 메뉴, 체인 경로(workbench.js a (applied)
@@ -2093,7 +2564,7 @@
   - 세션: b8c5490f, c32cdcbf, 92f33c0f, cb773d56
 - 23:15 [VMO] VMO 자가 보완: U3 조치 없는 열린 사건 판정에서 U3 자신이 올린 R12 사건 제외
   - 지시: "개선안 20261122230715_SELF 승인(VM 자가진단 S13 S13/U3/idleInc). 근거 = diag_in.json S13 항목 detail 의 근거 사건 = 20261120_132034_R12_ALL 자신(3463분). .vibe/orch/incidents/20261120_132034_R12_ALL.json sig 'R12/S13/U3/i"
-  - 파일 3개: orch-usercheck.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 2개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261122_self2307
   - 세션: b8c5490f, 27c68c51
@@ -2111,37 +2582,37 @@
   - 세션: 5210792c, 618cee93, 65eb2014
 - 13:50 [VMO] VMO 자가 보완: 집계의 끝나지 않은 대기에서 wait.gone 으로 사라짐이 확인된 대기 빼기(1조각: 대기만, 체인 chain.gone 은 다음 조각)
   - 지시: "개선안 20261122133806_SELF 승인(VM 자가진단 ). 근거 = orch-improve.js:115 wait.start 를 wOpen 에 넣고 :119 wait.gone 은 gone 만 셈. wOpen 에서 지우지 않아 :132 open 에 남음. 실제 7일 기록 집계(13:31:49) dbwin started 5, unfinished 4 [D"
-  - 파일 6개: orch-improve.js, t_orch_improve.js, t_orch_watch_gone.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js, tools/VibeManager/test/t_orch_watch_gone.js
+  - 파일 3개: tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js, tools/VibeManager/test/t_orch_watch_gone.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261122_self1338
   - 세션: 618cee93, b8c5490f, 0c5d445b, 89bedfb6, 8fb42733, c32cdcbf
 - 13:26 [VMO] VMO 자가 보완: 단계 소요 통계 키에 실행 인자 구분 추가: 6단계 문서 생성(--docs)을 1단계 CheckList 측정과 분리
   - 지시: "개선안 20261122130655_REVIEW_3 승인(VM 자가진단 ). 근거 = quick.json:181~186 '6. 문서 생성' 단계 task S8.checklistRun, args --docs. events.jsonl 2026-11-21T01:55:50 step.end no 18 task S8.checklistRun ms_run 200915(문서"
-  - 파일 5개: workbench.js, tools/VibeManager/workbench.js, tools/VibeManager/orch-watch.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_step_screen.js
+  - 파일 4개: tools/VibeManager/workbench.js, tools/VibeManager/orch-watch.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_step_screen.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261122_self1317
   - 세션: 618cee93, b8c5490f, 0c5d445b, 89bedfb6, 8fb42733, c32cdcbf, 92f33c0f, cb773d56
 - 13:17 [VMO] VMO 자가 보완: 상시 분석 집계에 실행 중 코드 판 기록(측정 추가): 로드 시각, 설치본보다 오래된 파일, 창 로드 대기 반영 건수
   - 지시: "개선안 20261122130655_REVIEW 승인(VM 자가진단 ). 근거 = activations.jsonl 마지막 창 로드 2026-11-21T01:59:17 pid 30404. 그 뒤 events.jsonl selfcheck.autoapply ok 14건(11-21 02:11 ~ 11-22 00:48), 그중 VM .js 설치본 복사(selfchec"
-  - 파일 3개: orch-selfcheck.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js
+  - 파일 2개: tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261122_self1307
   - 세션: 618cee93, b8c5490f, 0c5d445b, 89bedfb6, 8fb42733, c32cdcbf
 - 00:48 [VMO] VMO 자가 보완: 실행 끝 기록 단일화: 중지 길 7곳이 endRun(runId, by, why) 하나를 부르고, 읽는 쪽은 runId 로 맞춤
   - 지시: "개선안 20261122000646_SELF 승인(VM 자가진단 ). 근거 = workbench.js:134~143, :676, :2836, :3065, :3662, job-runner.js:236, :247, :286, :334, chain-runner.js:75, orch-improve.js:78~84, orch-usercheck.js:124, :160,"
-  - 파일 8개: workbench.js, tools/VibeManager/workbench.js, tools/VibeManager/job-runner.js, tools/VibeManager/chain-runner.js, tools/VibeManager/orch-watch.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_run_end.js
+  - 파일 7개: tools/VibeManager/workbench.js, tools/VibeManager/job-runner.js, tools/VibeManager/chain-runner.js, tools/VibeManager/orch-watch.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_run_end.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261122_self0029
   - 세션: 618cee93, b8c5490f, 0c5d445b, 89bedfb6, 8fb42733, c32cdcbf, 92f33c0f, 27c68c51, cb773d56
 - 00:29 [VMO] VMO 자가 보완: L3 반영 실패 집계에서 고친 안이 반영 완료된 대체 안 제외
   - 지시: "개선안 20261122000421_SELF_2 승인(VM 자가진단 ). 근거 = orch-ladder.js:47 applied 만 제외. 232523_SELF superseded → 001936_SELF_2 applied. 묶음 firstAt 2026-11-20T18:35:19, lastSeenAt 2026-11-22T00:00:31, status open"
-  - 파일 3개: orch-ladder.js, tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_ladder.js
+  - 파일 2개: tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_ladder.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261122_self0021
   - 세션: 5210792c, 618cee93, 65eb2014
 - 00:21 [VMO] VMO 자가 보완: 개선안 verify 작성 규칙 공용화: 반영 전 측정값 대비 변화, targets 로만 달라지는 값만 기대값으로
   - 지시: "개선안 20261122000421_SELF 승인(VM 자가진단 ). 근거 = orch-selfcheck.js:355, :464, orch-improve.js:156, orch-vision.js:77 verify 규칙에 반영 전 측정, 대상 한정 조건 없음. orch-improve.js:268-271 verified false 면 되돌림. 사례 232523_"
-  - 파일 9개: orch-selfcheck.js, orch-improve.js, orch-vision.js, orch-ladder.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/orch-vision.js, tools/VibeManager/orch-ladder.js 외
+  - 파일 5개: tools/VibeManager/orch-improve.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/orch-vision.js, tools/VibeManager/orch-ladder.js, tools/VibeManager/test/t_orch_improve.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261122_self0007
   - 세션: 5210792c, 618cee93, b8c5490f, 0c5d445b, 89bedfb6, 8fb42733, c32cdcbf, 65eb2014
@@ -2190,7 +2661,7 @@
 
 - 23:25 [VMO] VMO 자가 보완: S6 미확인 원장: 변경 줄 안의 따옴표 인용에 든 '미확인', '미측정' 낱말을 미확인 항목으로 세지 않음
   - 지시: "개선안 20261121225944_SELF_3 승인(VM 자가진단 S6 S6/CL:2026-11-20:6mq4rl#8ee6b1eb4e, S6/CL:2026-11-20:6mq4rl#1121647e1a, S6/CL:2026-11-20:6mq4rl#3fa52bfaef, unverifiedOpen CL:2026-11-20:1w34aty(변경 줄 항목)). 근거 ="
-  - 파일 5개: orch-history.js, t_orch_history.js, CHANGELOG.md, tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history.js
+  - 파일 2개: tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history.js
   - 미확인 6건: 3 = 미측정 있음. / 조각 3개가 미확인 3건(6mq4rl)이 됨. / CHANGELOG.md:129 줄의 인용 - 미확인 도 미확인 1건(1w34aty)이 됨.
   - 되돌리기 태그: 20261121_self2317
   - 세션: abb087a6
@@ -2202,13 +2673,13 @@
   - 세션: b903b33e, fefbe095, 3f0334e9, b0c532f9
 - 23:08 [VMO] VMO 자가 보완: 수정 전에 남은 정상 처리 기록(중지 뒤 잠금 정리, AI 편집만 되돌림)을 오류 집계에서 제외
   - 지시: "info"
-  - 파일 4개: orch-errlog.js, t_orch_errlog.js, tools/VibeManager/orch-errlog.js, tools/VibeManager/test/t_orch_errlog.js
+  - 파일 2개: tools/VibeManager/orch-errlog.js, tools/VibeManager/test/t_orch_errlog.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self2300
   - 세션: 96871e7b
 - 12:25 [VMO] VMO 자가 보완: 부분 재측정 범위 판정 이력과 단계 밖 소요 시간을 기록
   - 지시: "개선안 20261121120359_VISION_4 승인(VM 자가진단 ). 근거 = delta_scope.py:396-398 finish 가 delta_scope.json 을 덮어씀. 지금 파일은 11-21 01:01 3회차 판정만 있음. run_verify.py:245-255 run_timing.json 이 단계별 도구 시간 합만 적음. 11-21 01:"
-  - 파일 4개: run_timing.json, tools/Harness/verify/delta_scope.py, tools/Harness/verify/run_verify.py, tools/Harness/verify/timing_report.py
+  - 파일 3개: tools/Harness/verify/delta_scope.py, tools/Harness/verify/run_verify.py, tools/Harness/verify/timing_report.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self1216
 - 12:16 [VMO] VMO 자가 보완: 자동 반영 판정에서 삭제 안 구분을 제목 낱말 대신 대상 경로와 안 종류로 함
@@ -2225,7 +2696,7 @@
   - 세션: b903b33e, fefbe095, 3f0334e9, ea8dd26c, b0c532f9
 - 10:40 [VMO] VMO 자가 보완: 자가진단 S3 설치본 차이에서 기록 문서(CHANGELOG.md, README.md, CONCEPT.md)는 사건 없이 바로 동기화
   - 지시: "개선안 20261121100244_REVIEW_3 승인(VM 자가진단 ). 근거 = 집계 R12 127건 중 R12/S3/CHANGELOG.md 12회, 12건 모두 '다시 점검한 결과 S3 항목에서 사라짐'으로 resolved. 사건 12건 detail 에서 저장소와 설치본의 수정 시각 차이 1~32분, 크기 305693 → 708077바이트(11-19 "
-  - 파일 4개: CHANGELOG.md, README.md, CONCEPT.md, tools/VibeManager/orch-selfcheck.js
+  - 파일 1개: tools/VibeManager/orch-selfcheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self1028
   - 세션: ea32052a, e21c6e04
@@ -2243,30 +2714,29 @@
   - 세션: 3f0334e9, ea8dd26c
 - 02:20 [VMO] VMO 자가 보완: doc_style.py JS 소스 검사에 확인된 오탐 제외 목록과 줄 머리 ✖ 실패 표시 제외 추가
   - 지시: "개선안 20261120225006_SELF_2 승인(VM 자가진단 S11 S11/workbench.js, S11/history.js, S11/extension.js, S11/jobs.js, S11/orch-ledger.js, S11/orch-undo.js, S11/orch-usercheck.js, S11/orch-vision.js, S11/orchestra"
-  - 파일 2개: workbench.js, tools/Docs/doc_style.py
+  - 파일 1개: tools/Docs/doc_style.py
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self0211
-  - 세션: b903b33e, fefbe095, 3f0334e9, b0c532f9
 - 02:11 [VMO] VMO 자가 보완: Harness 도구 등록부에 set_vmo_rerun.py 등록(등록부 다시 생성)
   - 지시: "개선안 20261120181921_SELF_5 승인(VM 자가진단 S4 S4/inv/REGISTRY). 근거 = S4 inventory_check REGISTRY: 도구 261, 등록부에 없는 도구 1 '(미등록) tools/Harness/verify/set_vmo_rerun.py'. scripts/rules/inventory_check.py:6, :318"
-  - 파일 4개: README.md, scripts/rules/inventory_check.py, set_vmo_rerun.py, tools/Harness/README.md
+  - 파일 1개: tools/Harness/README.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self0203
 - 01:00 [VMO] VMO 자가 보완: 감지기 판정 자료의 보내는 쪽 연결과 게이트 생산자 검사 추가(U14, U16, U23 공통), 검증에서 창 다시 로드 확인 분리
   - 지시: "개선안 20261121001943_SELF 승인(VM 자가진단 ). 근거 = orch-usercheck.js:210,253,266,445,465,520~524 · orchestra.js:641,681,733 · jobs.js:316~345 · workbench.js:3142 · t_orch_usercheck.js:165~169,272~274 · 직전 반영 "
-  - 파일 7개: jobs.js, workbench.js, orch-usercheck.js, tools/VibeManager/jobs.js, tools/VibeManager/workbench.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 4개: tools/VibeManager/jobs.js, tools/VibeManager/workbench.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 2건: 직전 반영 실패 20261121000456_SELF: ①~③ 통과, ④ 창 다시 로드 미실행으로 verified=false(orch-improve.js:217,250) (반영 실패한 20261121000456_SELF 를 고친 안 / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self0049
   - 세션: 260c8284, b903b33e, e7459bfd, fefbe095, 3f0334e9, b0c532f9
 - 00:48 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U25 partialRemeasureSlow: 부분 재측정 소요가 1차 전체 측정 소요보다 김
   - 지시: "부분 재측정이 1차보다 시간이 더 많이 소요된 사유도 보완해주세요"
-  - 파일 7개: _S8.checklistRun/meta.json, meta.json, /run_verify.result.json, user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 3개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 2건: 파일명과 필드명 미확인), Doc/verify/<ID>/run_verify.result.json (started, ts). / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self0039
   - 세션: 260c8284, b903b33e, e7459bfd, fefbe095
 - 00:38 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U24 unverifiedResolveIncomplete: 진행 중인 CheckList 의 1차 미검증 30건을 미검증 해소 단계가 한 번에 처리하지 못하고 남김
   - 지시: "현재 작업중인 checklist에 1차 30개 미검증 을 한번에 처리하지 못한 사유 찾아서 보완해주세요"
-  - 파일 9개: run_verify.result.json, unverified_triage.json, /run_verify.result.json, /unverified_triage.json, _chain_checklist/meta.json, user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json 외
+  - 파일 3개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261121_self0023
   - 세션: 260c8284, b903b33e, e7459bfd, fefbe095
@@ -2357,13 +2827,13 @@
   - 세션: 1d4cb42c, e0fd92f7, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 23:08 [VMO] VMO 자가 보완: 작은 모듈 3개 고정 문구 정리(orch-agent 1, orch-improve 1, orch-ladder 2)
   - 지시: "파일:줄 · 사건 · 장부 줄"
-  - 파일 6개: orch-agent.js, orch-improve.js, orch-ladder.js, tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-ladder.js
+  - 파일 3개: tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-ladder.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self2300
   - 세션: d1e7f3cd, 1d4cb42c, 1357fefa, 16c64de0, 26627784, cd3755ba, f58b4dfb, 9d6d3631, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, 8a0d20a6, 0075d08f
 - 22:58 [VMO] VMO 자가 보완: 재발 판정 정정: U21 재발은 뒤에 반영 완료된 안 제외, S8 재발은 원인 분류가 다른 사건 제외
   - 지시: "개선안 20261120225006_SELF 승인(VM 자가진단 S13 S13/U21/recur/20261120_201206_R5_SCP0028, S13/U21/recur/20261120_002620_R12_ALL_3, S13/U21/recur/20261120_114124_R12_ALL_2, S8/20261119205920_INC). 근거 = orch-use"
-  - 파일 8개: orch-usercheck.js, orch-selfcheck.js, t_orch_usercheck.js, t_orch_selfcheck.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_selfcheck.js
+  - 파일 4개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_selfcheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self2250
   - 세션: d1e7f3cd, 407fa98a, e0fd92f7, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, 9fa496be, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
@@ -2380,37 +2850,37 @@
   - 되돌리기 태그: 20261120_glass
 - 20:40 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U23 workbenchResumeProgress: VMW 에서 작업 재개 뒤 WORKBENCH 에 진행 상태가 보이지 않음
   - 지시: "VMW 에서 작업재개 했는데 WORKBENCH 에서 진행상태가 보이지 않습니다. 확인 요청 합니다."
-  - 파일 6개: ui.json, .vibe/orch/usercheck/ui.json, user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 3개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self2030
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
 - 20:30 [VMO] VMO 자가 보완: 재개 기록(chain_progress) 쓰기·지우기에 사유 사건 남김: progress.write(interrupted) · progress.drop(resume, userDrop, ttl, jobRemove, no
   - 지시: "개선안 20261120184524_SELF_2 승인(VM 자가진단 ). 근거 = workbench.js:33(progDel 무기록), :95, :1051, :1279, :2789, :2806 · job-runner.js:341 · snap/prop_20261120131344_SELF_2/before.json:392 와 snap/prop_20261120135"
-  - 파일 5개: job-runner.js, tools/VibeManager/workbench.js, tools/VibeManager/job-runner.js, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_job_autodel.js
+  - 파일 4개: tools/VibeManager/workbench.js, tools/VibeManager/job-runner.js, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_job_autodel.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self2021
   - 세션: d1e7f3cd, 1d4cb42c, 1365d34c, 36c7d0f1, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 20:19 [VMO] VMO 자가 보완: U13 판정을 원래 중단 사건 기준으로 다시 세움: 중단 = chain.end aborted, user.stop vscode.dispose 의 runId·ms · 재개 가능 = VMW 단추 조건과 같게 · 재실행 =
   - 지시: "개선안 20261120184524_SELF 승인(VM 자가진단 ). 근거 = orch-usercheck.js:148-166 · jobs.js:247 · job-runner.js:72, :315 · events.jsonl:970-976, :981-983, :1030, :1058-1059, :1087-1090, :1142-1145, :1309-1310, :13"
-  - 파일 4개: job.json, jobs.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 2개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self2004
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
 - 20:03 [VMO] VMO 자가 보완: 진단 사다리 사용자 지적 재발 판정에 '반영 효력 뒤 생긴 항목만' 조건 추가, 감지기 항목에 생긴 시각 ms 추가
   - 지시: "개선안 20261120184003_SELF 승인(VM 자가진단 ). 근거 = orch-ladder.js:51 · orch-usercheck.js:99,443 · ui.json miss 마지막 13:40:15 < activations.jsonl:20 13:55:28 · result.json:1046,1054 U21 근거 사건 00:26, 11:41 < 반영 "
-  - 파일 5개: orch-ladder.js, orch-usercheck.js, tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_ladder_recur_time.js
+  - 파일 3개: tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_ladder_recur_time.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1953
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259, 0075d08f
 - 19:52 [VMO] VMO 자가 보완: 변경 기록 파일 집계에서 확인, 사용자, 되돌리기, 미확인, 시험, node 명령 줄과 줄 가운데 '확인:' 뒤 부분 제외
   - 지시: "개선안 20261120182700_SELF 승인(VM 자가진단 S9 S9/file/run_all.js). 근거 = repeatFiles run_all.js 36건(세션 수정 1건). orch-history.js:109 finishSection 이 절 본문 전체에서 파일 이름을 뽑음. 1차 반영(2026-11-20 18:22~18:23, 20261120181"
-  - 파일 1개: orch-history.js
+  - 파일 2개: tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1937
   - 세션: ffecd628, 00b1a8cf
 - 19:27 [VMO] VMO 자가 보완: 작은 모듈 3개 고정 문구 정리(orch-vision 1, orch-dict 1, orch-usercheck 1)
   - 지시: "개선안 20261120181921_SELF_4 승인(VM 자가진단 S11 S11/orch-vision.js, S11/orch-dict.js, S11/orch-usercheck.js). 근거 = .vibe/orch/selfcheck/doc_style 보고. orch-vision.js:68 '정합성이 같은 대체 방법만'(추상어), orch-dict.js:46 "
-  - 파일 6개: orch-vision.js, orch-dict.js, orch-usercheck.js, tools/VibeManager/orch-vision.js, tools/VibeManager/orch-dict.js, tools/VibeManager/orch-usercheck.js
+  - 파일 3개: tools/VibeManager/orch-vision.js, tools/VibeManager/orch-dict.js, tools/VibeManager/orch-usercheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1918
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, 529fa4df, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
@@ -2427,25 +2897,25 @@
   - 세션: 1d4cb42c, e0fd92f7, 1365d34c, 36c7d0f1, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 19:13 [VMO] VMO 자가 보완: AI 편집만 되돌린 정상 처리 기록을 오류 집계에서 제외
   - 지시: "개선안 20261120181921_SELF_3 승인(VM 자가진단 S5 orch-improve.restore). 근거 = errors 서명 'orch-improve.restore / N_VISION_N probe.ts AI 편집 N건만 되돌림(반영 전과 같음)…' 1건, 'orch-improve.restore / N_SELF orch-usercheck.js"
-  - 파일 4개: orch-improve.js, t_orch_errlog.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_errlog.js
+  - 파일 6개: tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_errlog.js, Doc/verify/SCP0028/e2e/serial/scn_1.png, Doc/verify/SCP0028/e2e/serial/scn_2.png, Doc/verify/SCP0028/e2e/serial/scn_4.png, Doc/verify/SCP0028/e2e/serial/scn_end.png
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1905
   - 세션: d1e7f3cd, 1357fefa, 16c64de0, 26627784, cd3755ba, 0aea5bb1, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, 0075d08f
 - 19:05 [VMO] VMO 자가 보완: 자가 보완 CHANGELOG 파일 목록과 되돌리기 줄에서 반영 중 다른 작업이 바꾼 파일 제외
   - 지시: "개선안 20261120181921_SELF_2 승인(VM 자가진단 S9 S9/file/e2e_results.json). 근거 = repeatFiles e2e_results.json 21건(세션 수정 0건). orch-improve.js:171 changedSince 가 git 변경 전후 차이를 모두 반환하고(.vibe/ 와 .bak_ 만 제외), :271 "
-  - 파일 5개: orch-improve.js, t_orch_improve.js, Doc/verify/SCP0028/touched_rows.json, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js
+  - 파일 3개: Doc/verify/SCP0028/touched_rows.json, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1548, 20261120_self1857
   - 세션: d1e7f3cd, 1357fefa, 16c64de0, 26627784, cd3755ba, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, 0075d08f
 - 17:43 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U22 promptSerialize: VM 이 프롬프트를 '[object Object],[object Object]' 로 보냄
   - 지시: "[object Object],[object Object]"
-  - 파일 15개: user_checks.json, /SSP_FLOW/README.md, /SSP_FLOW/SSP_DATA_FLOW.md, /SSP_FLOW/SSP_DATA_FLOW_DETAIL.md, /SSP_FLOW/SSP_OVERVIEW.md, /SSP_FLOW/SSP_PROCESS_FLOW.md, /SSP_FLOW/SSP_REF_PROCESS.md, /SSP_FLOW/SSP_SHIPPLAN_FLOW.md 외
+  - 파일 15개: Doc/화면분석서/SSP_FLOW/README.md, Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW.md, Doc/화면분석서/SSP_FLOW/SSP_DATA_FLOW_DETAIL.md, Doc/화면분석서/SSP_FLOW/SSP_FLOW.html, Doc/화면분석서/SSP_FLOW/SSP_OVERVIEW.md, Doc/화면분석서/SSP_FLOW/SSP_PROCESS_FLOW.md, Doc/화면분석서/SSP_FLOW/SSP_REF_PROCESS.md, Doc/화면분석서/SSP_FLOW/SSP_SHIPPLAN_FLOW.md 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1735
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
 - 17:34 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U21 applyFailRepeat: VMO 자가 보완 반영 실패, 개선안 반영 실패 메시지가 반복 발생함. 중지 뒤 계속 실행 미해결을 같은 판단으로 다시 올림
   - 지시: "추가적으로 VMO 작업에 대해서 자가 보완 반영 실패, 개선안 반영 실패 등 반영 실패 메세지가 발생하는데 이것도 원인을 찾아서 보완해주세요. VMO 가 자기 오판을 스스로 알아내는 판단은 아직 약합니다. 이번에도 '중지 뒤 계속 실행 미해결'만 다시 올렸습니다. 이번 수정은 같은 오판이 다시 나지 않게 막는 수준입니다. 라고 의견을 주었는데. VMO 가 "
-  - 파일 5개: user_checks.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/user_checks.json, _F4_A2__0.json
+  - 파일 4개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/user_checks.json, Doc/verify/SCP0028/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1726
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
@@ -2456,7 +2926,7 @@
   - 세션: 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 16:48 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U19 chainAfterFail: SCP0028 체인이 단계 오류로 끝난 뒤 VMW 목록에서 사라졌는데 체인이 다음 단계를 계속 띄우고, VMO 가 그 오류를 감지·자가 보완하지
   - 지시: "수행중이던 SCP0028 이 오류발생하면서 종료 했는데, 오류 발생후에 VMW 에도 프로세스가 보이지 않는데, 체인에 의해서 다음 스텝이 계속 돌고 있는 것 같습니다. 오류 시 다음 스텝이 수행되지 않도록 보완이 되어야 하는 것이 첫번째이고, 두번째로 검사엔진보완 작업에서 오류가 발생하면 VMO 가 모니터링 해서 자체 보완을 해야할 것 같은데, 어떻게 수행"
-  - 파일 4개: job.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/user_checks.json
+  - 파일 4개: tools/Harness/gate_baseline.tsv, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/user_checks.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1640
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
@@ -2466,7 +2936,7 @@
   - 되돌리기 태그: 20261120_recvis
 - 16:31 [VMO] VMO 자가 보완: 행 대기(waitRows) 대기 사유를 시험 소요 기록(_test_timing.jsonl)에 남김, 기록 줄 파일 포함
   - 지시: "개선안 20261120162234_SELF 승인(VM 자가진단 ). 근거 = 20261120115806_VISION_2 반영 실패 16:21:36. test.ts:72-76 에서 row 를 만들고 parts: n.tparts, reqs: n.reqs 만 기록함(75행). SSP0005 _test_timing.jsonl run 2026-11-19T21:12:"
-  - 파일 40개: probe.ts, pagereg.ts, test.ts, Doc/asislive/SCP0028/latest.json, tools/E2E/fixtures/test.ts, tools/E2E/lib/pagereg.selftest.js, tools/E2E/lib/pagereg.ts, tools/E2E/lib/probe.ts 외
+  - 파일 40개: Doc/asislive/SCP0028/latest.json, tools/E2E/fixtures/test.ts, tools/E2E/lib/pagereg.selftest.js, tools/E2E/lib/pagereg.ts, tools/E2E/lib/probe.ts, tools/VibeManager/CHANGELOG.md, tools/VibeManager/quick.json, tools/VibeManager/steps.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1623
 - 16:31 [VM 기타] 실측 녹화 = 동영상(Playwright 전용 ffmpeg) — AS-IS · TO-BE
@@ -2479,70 +2949,70 @@
   - 되돌리기 태그: 20261120_view
 - 16:07 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U18 resumeRestartFromStart: UI 생성·UI 보완 체인도 재개하면 끊긴 단계를 처음부터 다시 돎. 끊긴 시점이나 바로 앞 시점부터 이어 돌아야 함
   - 지시: "CHECKLIST 가 아닌 UI 생성, UI 보완 작업일 때의 작업재개도 중단된 시점이나 그 바로 이전 시점부터 재개되도록 되어야 합니다. 이것도 같이 고민해주세요."
-  - 파일 24개: user_checks.json, Doc/verify/SCP0028/_dedup/rule_A1.json, Doc/verify/SCP0028/_dedup/rule_A5.json, Doc/verify/SCP0028/_dedup/rule_A6.json, Doc/verify/SCP0028/_dedup/rule_A7.json, Doc/verify/SCP0028/_dedup/rule_H10.json, Doc/verify/SCP0028/_dedup/rule_H4.json, Doc/verify/SCP0028/_dedup/rule_MS1.json 외
+  - 파일 24개: Doc/verify/SCP0028/_dedup/rule_A1.json, Doc/verify/SCP0028/_dedup/rule_A5.json, Doc/verify/SCP0028/_dedup/rule_A6.json, Doc/verify/SCP0028/_dedup/rule_A7.json, Doc/verify/SCP0028/_dedup/rule_H10.json, Doc/verify/SCP0028/_dedup/rule_H4.json, Doc/verify/SCP0028/_dedup/rule_MS1.json, Doc/verify/SCP0028/dedup_screen.csv 외
   - 미확인 2건: 읽을 기록: .vibe/orch/chain_progress/*.json(runId, job, screen, interruptedAt, 단계 번호·세부 진행 필드는 미확인), .vibe/orch/events.jsonl(chain.start, 단계 시작 사건 type 미확인), 단계 로그 줄 수. / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1548
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
 - 15:47 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U16 resumedJobShown: 창 다시 로드 뒤 WORKBENCH 에서는 작업이 재개되는데 VMW 목록에는 재개된 작업이 보이지 않음
   - 지시: "다시 로드 후 작업 재개 시 WORKBENCH 에서는 재개 되는데 VMW 에 재개된 작업이 보이지 않습니다."
-  - 파일 12개: job.json, /job.json, .vibe/orch/usercheck/ui.json, ui.json, user_checks.json, Doc/verify/SCP0028/e2e_results.json, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js 외
+  - 파일 9개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/user_checks.json, Doc/verify/SCP0028/calls/_verify_그리드_표시_묶음_N1_H8_A5__0.json, Doc/verify/SCP0028/calls/_verify_셀_편집_표시_값_유지_A2_F6__0.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1539
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
 - 15:38 [VMO] VMO 자가 보완: orch-vision.js, orch-dict.js 추상어 '정합성' 2건을 대상과 값으로 고침
   - 지시: "['B3', '화면 열기 고정 2초 → 조건 대기(하지 않음: 정합성)']"
-  - 파일 7개: orch-vision.js, orch-dict.js, Doc/verify/SCP0028/combo_runtime.json, Doc/verify/SCP0028/e2e_results.json, tools/VibeManager/orch-dict.js, tools/VibeManager/orch-vision.js, Doc/_doc_style/orch-vision.js.style.csv
+  - 파일 7개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/combo_runtime.json, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/orch-dict.js, tools/VibeManager/orch-vision.js, Doc/_doc_style/orch-vision.js.style.csv
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1531
   - 세션: d1e7f3cd, f58b4dfb, 9d6d3631, 529fa4df, 9f82f80f
 - 15:31 [VMO] VMO 자가 보완: 설치본 차이(S3)는 자동 동기화를 먼저 하고 남은 차이만 사건으로 올림
   - 지시: "개선안 20261120115806_VISION_3 승인(VM 자가진단 ). 근거 = digest7d 사건 126건 중 R12 51건, R12:resolved 50. topRepeats R12/S3/CHANGELOG.md 8건, R12/S3/orchestra.js 3건, R12/S3/orch-selfcheck.js 3건. orch-selfcheck.js:27"
-  - 파일 18개: Doc/verify/SCP0028/a1_live.json, Doc/verify/SCP0028/e2e/shots/index_verify.json, Doc/verify/SCP0028/e2e_results.json, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_job_resume.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_resume_inner.js, Doc/verify/SCP0028/calls/_grid_main.json 외
+  - 파일 21개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/a1_live.json, Doc/verify/SCP0028/e2e/shots/index_verify.json, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_job_resume.js, tools/VibeManager/test/t_orch_selfcheck.js 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1519
   - 세션: d1e7f3cd, 407fa98a, e0fd92f7, 9fa496be, b555d259
 - 15:16 [VMO] VMO 자가 보완: 중지되거나 끊긴 체인의 끝 기록에 실제 실행 단계 수를 남김
   - 지시: "개선안 20261120115806_VISION 승인(VM 자가진단 ). 근거 = events.jsonl 640~739줄 Claude 단계 6건이 실행됐으나 digest7d chains.checklist claudeRan 0, runsWithoutClaude 11. workbench.js:55 claudeRan 0, scriptRan 0 고정. 같은 체인들의"
-  - 파일 34개: Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE.md, Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT.md, Doc/golden/SCP0028/SCP0028_SAVE_SHIPMENT_LOT_SIZE.md, Doc/golden/SCP0028/_summary.md, Doc/golden/_summary.csv, Doc/golden/_summary.md, Doc/verify/SCP0028/b7_check.json, _0.json 외
+  - 파일 40개: Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE.md, Doc/golden/SCP0028/SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT.md, Doc/golden/SCP0028/SCP0028_SAVE_SHIPMENT_LOT_SIZE.md, Doc/golden/SCP0028/_summary.md, Doc/golden/_summary.csv, Doc/golden/_summary.md, Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/b7_check.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1501
-  - 세션: d1e7f3cd, 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 1357fefa, 16c64de0, 26627784, cd3755ba, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, c4ca292f, 0075d08f, 85553ad0
+  - 세션: d1e7f3cd, 1357fefa, 16c64de0, 26627784, cd3755ba, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, 0075d08f
 - 14:55 [VMO] VMO 자가 보완: workbench.js 592~1397줄 알림 문구 정리 2차 34건(줄표 12, 문장 잇는 화살표 2, 틀 1, 장식 기호 19)
   - 지시: "개선안 20261120143326_SELF_3 승인(VM 자가진단 S11 S11/workbench.js). 근거 = .vibe/orch/selfcheck/doc_style/workbench.js.style.csv 의 L592~L1397 57건 중 34건. 줄표: L592, L1180, L1267, L1273, L1304, L1305, L1306, L1307"
-  - 파일 9개: Doc/verify/SCP0028/e2e_results.json, tools/VibeManager/orchestra.js, tools/VibeManager/workbench.js, Doc/_doc_style/workbench.js.style.csv, _H4_N1_G1_L2__0.json, _H3_F5_D1_F3__0.json, _Copy_A10_N1_K1__0.json, _E6_D1__0.json 외
+  - 파일 11개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/orchestra.js, tools/VibeManager/workbench.js, Doc/_doc_style/workbench.js.style.csv, Doc/verify/SCP0028/calls/_verify_레이아웃_조회_묶음_H4_N1_G1_L2__0.json, Doc/verify/SCP0028/calls/_verify_병합_셀_입력_Delete_원값_복원_H3_F5_D1_F3__0.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1448
   - 세션: d1e7f3cd, 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, f58b4dfb, 97ff7a04, 9d6d3631, 437c8fe3, c4ca292f, 85553ad0
 - 14:47 [VMO] VMO 자가 보완: 중지 뒤 잠금 정리 기록을 오류 집계(S5, 자가진단 errors)에서 제외
   - 지시: "개선안 20261120143326_SELF_2 승인(VM 자가진단 S5 orch-watch.lockStopClean / 중지 뒤 잠금 정리: Doc/eNe/_run.admit.lock (PID N 없음 · 화면 <ID> · VMW 작업 JN_N interrupted N:N:N)). 근거 = orch-watch.js:140 이 정상 처리인 잠금 정리를 err"
-  - 파일 8개: orch-watch.js, orch-errlog.js, t_orch_lock_repeat.js, t_orch_errlog.js, tools/VibeManager/orch-errlog.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_errlog.js, Doc/verify/SCP0028/touched_rows.json
+  - 파일 4개: tools/VibeManager/orch-errlog.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_errlog.js, Doc/verify/SCP0028/touched_rows.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1441
   - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, f58b4dfb, 0aea5bb1, 9d6d3631, 13d7b298
 - 14:40 [VMO] VMO 자가 보완: 잠금 파일 시각(at) 형식별 변환으로 Invalid time value 오류 제거
   - 지시: "개선안 20261120143326_SELF 승인(VM 자가진단 S5 orch-watch.tick / Invalid time value). 근거 = 오류 서명 'orch-watch.tick / Invalid time value'(13:56:08 1건), 'orch-selfcheck.chainBusy / Invalid time value'(13:56:17 1건"
-  - 파일 13개: orch-state.js, t_orch_state_locks.js, Doc/verify/SCP0028/dyn_facts.json, Doc/verify/SCP0028/e2e_results.json, tools/VibeManager/job-runner.js, tools/VibeManager/orch-state.js, tools/VibeManager/package.json, tools/VibeManager/workbench.js 외
+  - 파일 14개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/dyn_facts.json, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl, tools/VibeManager/job-runner.js, tools/VibeManager/orch-state.js, tools/VibeManager/package.json, tools/VibeManager/workbench.js 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1434
   - 세션: d1e7f3cd, 1d4cb42c, 1365d34c, 36c7d0f1, 42600766, a435c93b, 133cbff8, 473c9c4b, 78af9e01, e610492d, 26627784, 28bb3fe6, cd3755ba, 0328e564, 2249ba7f, 61707622, 0ac1c535, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 14:12 [VMO] VMO 자가 보완: 작은 모듈 8개 고정 문구 정리(orchestra, history, orch-agent, orch-watch, orch-usercheck, orch-dict, prompt-panel, orch-vision 17건,
   - 지시: "개선안 20261120135025_SELF 승인(VM 자가진단 S11 S11/orchestra.js). 근거 = 이전 안 20261120131344_SELF_2 반영 결과(13:48:13): doc_style.py 위반 25 → 9건. 남은 9건 중 제외 목록 8건(orchestra.js L13 정규식, history.js L167·L172 버튼 아이콘, "
-  - 파일 15개: orch-agent.js, orch-usercheck.js, _AS-IS_lock_rules_0.json, __0.json, Doc/verify/SCP0028/dyn_facts.json, Doc/verify/SCP0028/e2e/shots/index_trace.json, Doc/verify/SCP0028/e2e_results.json, tools/VibeManager/history.js 외
+  - 파일 16개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/calls/_trace_W4_D3_행_조건부_잠금_AS-IS_lock_rules_0.json, Doc/verify/SCP0028/calls/_trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행__0.json, Doc/verify/SCP0028/dyn_facts.json, Doc/verify/SCP0028/e2e/shots/index_trace.json, Doc/verify/SCP0028/e2e/shots/trace_W5_컬럼_대상_검사_H5_A5_H2_D1_D5_E1_D4_C3_C2_C6_F4_TRACE_행.png, Doc/verify/SCP0028/e2e_results.json, Doc/verify/SCP0028/e2e_test_kind.jsonl 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1405
   - 세션: d1e7f3cd, 1d4cb42c, e0fd92f7, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 61707622, 883c82e9, a8ee60c9, f58b4dfb, 0aea5bb1, 9d6d3631, 529fa4df, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259, 0075d08f
 - 14:05 [VMO] VMO 자가 보완: extension.js, server-service.js 고정 문구 정리(38건, 줄표, 화살표 잇기, 상태 기호)
   - 지시: "개선안 20261120131344_SELF_3 승인(VM 자가진단 S11 S11/extension.js). 근거 = diag_in S11 항목 S11/extension.js 21(수식어 1 기호 19 추상어 1), S11/server-service.js 17(기호 17). 보고 extension.js.style.csv: L326, L327, L333 '… "
-  - 파일 18개: extension.js, server-service.js, Doc/e2e/results/SCP0028/artifacts/.last-run.json, Doc/e2e/specs/SCP0028.plan.json, Doc/tobefacts/db/_export_log.md, Doc/tobefacts/db/menu.csv, Doc/tobefacts/db/msg_master.csv, Doc/tobefacts/db/procs_catalog.csv 외
+  - 파일 23개: Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SCP0028/artifacts/.last-run.json, Doc/e2e/results/SCP0028/shots/SCP0028_open.png, Doc/e2e/results/SCP0028/shots/SCP0028_searched.png, Doc/e2e/specs/SCP0028.plan.json, Doc/tobefacts/db/_export_log.md, Doc/tobefacts/db/menu.csv, Doc/tobefacts/db/msg_master.csv 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1357
   - 세션: d1e7f3cd, 696c2058, 133cbff8, 356d1ad5, 48ccbfcf, 892faacd
 - 13:44 [VMO] VMO 자가 보완: 체인 끝 기록(step.end, chain.end)에 중지 표시(stopped) 기록, 감시기와 U10 감지기가 시간 창 추정 전에 그 값을 봄
   - 지시: "개선안 20261120131344_SELF 승인(VM 자가진단 S9 S9/file/orch-watch.js). 근거 = repeatFiles orch-watch.js 35, t_orch_watch.js 14, run_all.js 30, job-runner.js 19. CHANGELOG.md 2026-11-19~20 절에서 orch-watch.js 가 나온 "
-  - 파일 14개: workbench.js, chain-runner.js, orch-watch.js, orch-usercheck.js, Doc/e2e/specs/_trace.spec.ts, Doc/verify/_engine_selfcheck.json, tools/Harness/README.md, tools/VibeManager/orch-usercheck.js 외
+  - 파일 10개: Doc/e2e/specs/_trace.spec.ts, Doc/verify/_engine_selfcheck.json, tools/Harness/README.md, tools/VibeManager/orch-usercheck.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_watch.js, tools/VibeManager/workbench.js 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1337
-  - 세션: d1e7f3cd, 1d4cb42c, e0fd92f7, 03f495b6, 1365d34c, 36c7d0f1, 42600766, 7c2c3699, 82373bdc, a435c93b, d1571c18, 133cbff8, 473c9c4b, 6ff41015, 78af9e01, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 61707622, 883c82e9, a8ee60c9, f58b4dfb, 0aea5bb1, 97ff7a04, 9d6d3631, 437c8fe3, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, c4ca292f, b555d259, 85553ad0
+  - 세션: d1e7f3cd, 1d4cb42c, 03f495b6, 1365d34c, 36c7d0f1, 42600766, 7c2c3699, 82373bdc, a435c93b, d1571c18, 133cbff8, 473c9c4b, 6ff41015, 78af9e01, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 61707622, 883c82e9, a8ee60c9, f58b4dfb, 0aea5bb1, 97ff7a04, 9d6d3631, 437c8fe3, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, c4ca292f, b555d259, 85553ad0
 - 13:27 [CheckList 엔진] CheckList 한 번 실행으로 미검증 해소: 반복 묶음 · 부분 재측정 · 권장안 적용 · 검사기 보완 보호 · 문서 1회
   - 지시: "CHECKLIST 단계에서 미검증이 없어질때까지 한번에 동작하도록" / "사용자판정의 경우에도 우선 권장안으로 해서 진행은 하고 차후 판정필요 항목으로 사용자가 필요시에만 다시 코멘트"
   - 파일 14개: run_timing.json, workbench.js, quick.json, unverified_triage.json, steps.json, tools/Harness/verify/decide_apply.py, ai_recommend.csv, ai_recommend_base.json 외
@@ -2551,22 +3021,22 @@
   - 세션: 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 13:27 [VMO] VMO 자가 보완: VMO Events 탭에 사건 발생 시각(ms, lastMs) 전달, 조치 없는 새 사건이 7일 보기에서 빠지던 결함 정정
   - 지시: "개선안 20261120131343_SELF_2 승인(VM 자가진단 S13 S13/U8/inc). 근거 = workbench.js:2600 postIncidents 가 웹뷰로 보내는 항목은 id, at, lastAt, rule, title, status, actions 등이고 ms, lastMs 가 없음. orchestra.js:569 incLast = x."
-  - 파일 10개: workbench.js, orchestra.js, test/t_orch_inc_time.js, tools/Harness/verify/gen_expect.py, tools/VibeManager/orchestra.js, tools/VibeManager/quick.json, tools/VibeManager/steps.json, tools/VibeManager/workbench.js 외
+  - 파일 7개: tools/Harness/verify/gen_expect.py, tools/VibeManager/orchestra.js, tools/VibeManager/quick.json, tools/VibeManager/steps.json, tools/VibeManager/workbench.js, tools/VibeManager/test/t_chain_loop.js, tools/VibeManager/test/t_orch_inc_time.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1320
   - 세션: 0af975be, d1e7f3cd, 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, f58b4dfb, 97ff7a04, 9d6d3631, 437c8fe3, c4ca292f, 85553ad0
 - 13:20 [VMO] VMO 자가 보완: S13 감지기 없음 판정: 파일에는 있고 실행 중 모듈에만 없으면 실패 대신 '창 다시 로드 뒤 적용' 경고로 올림
   - 지시: "개선안 20261120131343_SELF 승인(VM 자가진단 S13 S13/U15/nodet). 근거 = diag_in S13 항목 S13/U13/nodet, S13/U14/nodet, S13/U15/nodet. raised.json 사건 20261120_115556_R12_ALL(11:55:56), 20261120_121026_R12_ALL(12:10:"
-  - 파일 4개: orch-usercheck.js, t_orch_usercheck.js, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
+  - 파일 2개: tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1314
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
 - 13:05 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U15 logTabShown: VMO 의 FE LOG 탭에 FE 서버 로그가 계속 표시되지 않음
   - 지시: "BE LOG, FE LOG 는 켜고/꺼는 버턴을 추가할게요... BE LOG 의 경우 양이 많아서 상시 볼 필요는 없는 것 같구. 필요할때만 켜서 보도록 할게요. 그리고 FE LOG 는 계속 안보이는데 연결여부 확인해주세요."
-  - 파일 13개: server-service.js, user_checks.json, Doc/verify/SCP0028/_dedup/rule_H6.json, Doc/verify/SCP0028/_dedup/rule_M4.json, Doc/verify/SCP0028/_dedup/rule_MS1.json, Doc/verify/SCP0028/dedup_screen.csv, Doc/verify/SCP0028/llm_usage.csv, Doc/verify/SCP0028/verify_ledger.csv 외
+  - 파일 11개: Doc/verify/SCP0028/_dedup/rule_H6.json, Doc/verify/SCP0028/_dedup/rule_M4.json, Doc/verify/SCP0028/_dedup/rule_MS1.json, Doc/verify/SCP0028/dedup_screen.csv, Doc/verify/SCP0028/llm_usage.csv, Doc/verify/SCP0028/verify_ledger.csv, Doc/verify/_llm_usage.csv, tools/VibeManager/orch-usercheck.js 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1258
-  - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 48ccbfcf, 883c82e9, a8ee60c9, f58b4dfb, 892faacd, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
+  - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
 - 13:04 [VMO] VMO · VMW 에서 화면을 누르면 같은 화면 Workbench 창 Console 로
   - 지시: "VMO, VMW 에서 작업 단위를 클릭해서 WORKBENCH을 오픈할 때, 동일 UI 가 열려 있으면 새창을 열지않고 열려있는 UI 의 WORKBENCH CONSOLE 을 띄워주세요."
   - 파일 1개: workbench.js
@@ -2575,7 +3045,7 @@
   - 세션: 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 12:09 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U14 screenNameMissing: VMW 좌하단 화면 목록에 화면 명칭이 빠진 항목이 있음
   - 지시: "VMW 의 좌하단 UI 목록에 명칭이 누락된 부분이 확인됩니다. UI 명칭 누락분현재 메뉴에서 찾아서 명칭 채워주세요."
-  - 파일 10개: /job.json, job.json, .vibe/orch/usercheck/ui.json, user_checks.json, Doc/verify/SCP0028/llm_cache.json, Doc/verify/SCP0028/llm_usage.csv, Doc/verify/_llm_usage.csv, tools/VibeManager/orch-usercheck.js 외
+  - 파일 6개: Doc/verify/SCP0028/llm_cache.json, Doc/verify/SCP0028/llm_usage.csv, Doc/verify/_llm_usage.csv, tools/VibeManager/orch-usercheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/user_checks.json
   - 미확인 2건: 읽을 기록: .vibe/jobs/<job>/job.json screens[].id 와 화면 이름 필드(현재 job.json 에 이름 필드 없음 확인), VM 메뉴 목록 원본(경로 미확인), 웹뷰 보고 .vibe/orch/usercheck/ui.json 에 목록 표시 이름 기록 추가 필요. / VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1200
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
@@ -2587,7 +3057,7 @@
   - 세션: d1e7f3cd, 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 48ccbfcf, 61707622, f58b4dfb, 892faacd, 97ff7a04, 9d6d3631, 437c8fe3, c4ca292f, 85553ad0
 - 11:55 [VMO] VMO 자가 보완: 사용자 지적 감지기 추가 U13 reloadResumeMissing: VS Code 창 다시 로드 뒤 VMW 작업 전체가 중단되고 재개할 수 없음
   - 지시: "VM 에서 작업을 진행하다가 reload 작업을 하면 작업하던 모든 task 가 중지됩니다. reload 후 작업을 재개할 수 없나요? 작업을 재개할 수 있으면 VM 업무 작업에 표기하고 작업재개 버턴 활성화 되도록 해주세요, workbench에서도 보이고 작업재개 버턴 활성화 되도록 해주세요. 그리고 VM 업무 작업 의 명칭을 VMW 로 명명하도록 변경할"
-  - 파일 18개: job.json, /job.json, user_checks.json, Doc/e2e/results/SCP0028/artifacts/.last-run.json, Doc/e2e/specs/SCP0028.plan.json, Doc/tobefacts/db/_export_log.md, Doc/verify/SCP0028/open_check.json, Doc/verify/SCP0028/run_mode.json 외
+  - 파일 21개: Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SCP0028/artifacts/.last-run.json, Doc/e2e/results/SCP0028/shots/SCP0028_searched.png, Doc/e2e/specs/SCP0028.plan.json, Doc/tobefacts/db/_export_log.md, Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/e2e_test_kind.jsonl, Doc/verify/SCP0028/open_check.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1148
   - 세션: d1e7f3cd, 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 48ccbfcf, 61707622, 883c82e9, a8ee60c9, f58b4dfb, 892faacd, 97ff7a04, 9d6d3631, 437c8fe3, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, c4ca292f, b555d259, 85553ad0
@@ -2605,10 +3075,9 @@
   - 세션: d1e7f3cd, 48ccbfcf, 892faacd
 - 11:33 [VMO] VMO 자가 보완: 측정 추가: 사라진 대기의 대기 시간을 발견 시각이 아닌 마지막 생존 확인 시각까지로 잰다(옛 기대 시험 1건 포함)
   - 지시: "개선안 20261120103659_SELF 승인(VM 자가진단 ). 근거 = 집계 waits dbwin gone 3, goneSec 70097. events.jsonl wait.gone 3건이 2026-11-20 00:48:35 VM 재시작 뒤 첫 sweep 에 기록됨. 시작 시각 2026-11-19 17:48:56, 18:20:33, 18:47:25. o"
-  - 파일 40개: t_orch_state_old.js, nscm-fe/apps/web/src/layout/header/components/PersonalSettingModal.tsx, nscm-fe/features/demand/src/components/versionModal/VersionModal.tsx, nscm-fe/features/demand/src/pages/business-plan/components/modals/MeasureSelectModal.tsx, nscm-fe/features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx, nscm-fe/features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx, nscm-fe/features/demand/src/pages/forecast-price/useForecastPriceStore.ts, nscm-fe/features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx 외
+  - 파일 40개: nscm-fe/apps/web/src/layout/header/components/PersonalSettingModal.tsx, nscm-fe/features/admin/src/pages/group-user/components/modals/DivisionModal.module.scss, nscm-fe/features/demand/src/components/versionModal/VersionModal.tsx, nscm-fe/features/demand/src/pages/business-plan/BusinessPlan.module.scss, nscm-fe/features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.module.scss, nscm-fe/features/demand/src/pages/business-plan/components/modals/MeasureSelectModal.tsx, nscm-fe/features/demand/src/pages/demand-manager/DemandManager.module.scss, nscm-fe/features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1123
-  - 세션: cd3755ba
 - 11:31 [업무 작업창] 창 다시 로드 뒤 작업 재개(VMW · Workbench) · VMW 작업 삭제 · 업무 작업 → VMW
   - 지시: "reload 작업을 하면 작업하던 모든 task 가 중지됩니다. reload 후 작업을 재개할 수 없나요? ... VM 업무 작업에 표기하고 작업재개 버턴 활성화 ... workbench에서도 보이고 작업재개 버턴 활성화" / "VM 업무 작업 의 명칭을 VMW 로 ... VMW 는 VM Work" / "중단, 재개 가 들어가면 ... 삭제하는 기능 ... 재개도 할 수 없도록"
   - 파일 8개: workbench.js, quick.json, jobs.js, job.json, orch-state.js, orch-improve.js, t_orch_proc_grace.js, t_orch_step_screen.js
@@ -2623,10 +3092,10 @@
   - 세션: e0fd92f7
 - 11:23 [VMO] VMO 자가 보완: 하위 프로세스 소멸 뒤 10초 유예하고 그동안 proc.end 가 없을 때만 R5(사라진 실행)로 올린다
   - 지시: "개선안 20261120095113_INC 승인(VM 자가진단 ). 근거 = events.jsonl:681 R5 사건 09:47:34.645, events.jsonl:682 proc.end exit 0 09:47:34.689(44ms 뒤), 683 step.end OK. orch-state.js:58 은 하위 PID 가 없으면 유예 없이 procs 에서 지워"
-  - 파일 6개: orch-state.js, tools/VibeManager/flow-panel.js, tools/VibeManager/job-runner.js, tools/VibeManager/jobs.js, tools/VibeManager/workbench.js, tools/VibeManager/test/t_job_resume.js
+  - 파일 5개: tools/VibeManager/flow-panel.js, tools/VibeManager/job-runner.js, tools/VibeManager/jobs.js, tools/VibeManager/workbench.js, tools/VibeManager/test/t_job_resume.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1116
-  - 세션: d1e7f3cd, 1d4cb42c, e0fd92f7, 1365d34c, 36c7d0f1, 42600766, a435c93b, 133cbff8, 473c9c4b, 78af9e01, e610492d, 26627784, 28bb3fe6, cd3755ba, 0328e564, 2249ba7f, 61707622, 0ac1c535, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
+  - 세션: d1e7f3cd, 1d4cb42c, e0fd92f7, 1365d34c, 36c7d0f1, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 11:11 [Workbench] History 왼쪽 거르기 입력칸 테마 색
   - 지시: "History의 선택분(영역, 기간, 찾기) Backcolor 처리해주세요 Back theme 인데 White Backcolor 라 보기 좋지 않습니다. theme 에 맞춰 주세요."
   - 파일 1개: orchestra.js
@@ -2641,7 +3110,7 @@
   - 세션: d1e7f3cd, 61707622, f58b4dfb, 9d6d3631, 529fa4df, 9f82f80f
 - 11:02 [VMO] VMO 자가 보완: R3 단계 지연 기준을 화면별 통계로 분리
   - 지시: "개선안 20261120094734_INC 승인(VM 자가진단 ). 근거 = orch-watch.js:108 key = ev.task // ev.name. step_stats.json S8.checklistRun = [5767240, 6058498, 8206788, 12908259]이고 앞 3개는 06:07:32 시작한 SCP0028, SSP0014, SCP"
-  - 파일 5개: step_stats.json, tools/VibeManager/orch-watch.js, tools/VibeManager/orchestra.js, tools/VibeManager/test/t_orch_step_screen.js, tools/VibeManager/test/t_webview_syntax.js
+  - 파일 5개: tools/VibeManager/orch-watch.js, tools/VibeManager/orchestra.js, tools/VibeManager/design/history_concepts.html, tools/VibeManager/test/t_orch_step_screen.js, tools/VibeManager/test/t_webview_syntax.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1055
   - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, 61707622, f58b4dfb, 0aea5bb1, 9d6d3631
@@ -2653,7 +3122,7 @@
   - 세션: d1e7f3cd, 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, f58b4dfb, 97ff7a04, 9d6d3631, 437c8fe3, c4ca292f, 85553ad0
 - 10:55 [VMO] VMO 자가 보완: 중지 직후 남은 잠금은 사건 없이 지우고 처리 기록만 남긴다
   - 지시: "개선안 20261120094531_REVIEW 승인(VM 자가진단 ). 근거 = incidents byRule R9 28. 2026-11-20 06:06:42~06:06:44 R9 사건 9건(_ALL 1, SCP0005 2, SCP0028 2, SSP0005 2, SSP0014 2)은 06:06:04~05 user.stop 4건(by 'VS Code 종료'"
-  - 파일 5개: tools/VibeManager/CHANGELOG.md, tools/VibeManager/orch-watch.js, tools/VibeManager/orchestra.js, tools/VibeManager/test/t_orch_lock_repeat.js, tools/VibeManager/test/t_job_tidy.js
+  - 파일 7개: tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md, tools/VibeManager/orch-watch.js, tools/VibeManager/orchestra.js, tools/VibeManager/test/t_orch_lock_repeat.js, tools/VibeManager/design/health_concepts.html, tools/VibeManager/test/t_job_tidy.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1046
   - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, 61707622, f58b4dfb, 0aea5bb1, 9d6d3631
@@ -2675,13 +3144,13 @@
   - 되돌리기 태그: 20261120_aipts
 - 10:30 [VMO] VMO 자가 보완: 측정 추가: 에이전트 Claude 호출 끝 기록에 결과 줄 수신 여부, 마지막 진행 종류, 중지 주체를 남긴다
   - 지시: "개선안 20261120094530_REVIEW_3 승인(VM 자가진단 ). 근거 = 집계 claude calls 73, fail 7. incidents R7 '응답 중 종료' 10건(DMF0042), '미분류' 9건. 실패 로그 4개가 결과 줄 없이 '--- exit 1 ---' 로 끝나고 stderrTail 빈 값: .vibe/logs/2026-11-19"
-  - 파일 11개: orch-watch.js, Doc/verify/_llm_usage.csv, tools/Harness/harness.json, tools/VibeManager/extension.js, tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_agent.js 외
+  - 파일 10개: Doc/verify/_llm_usage.csv, tools/Harness/harness.json, tools/VibeManager/extension.js, tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_agent.js, tools/VibeManager/workbench.js 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1021
   - 세션: d1e7f3cd, 1d4cb42c, 696c2058, 03f495b6, 1365d34c, 36c7d0f1, 42600766, 7c2c3699, 82373bdc, a435c93b, d1571c18, 133cbff8, 356d1ad5, 473c9c4b, 6ff41015, 78af9e01, e610492d, 1357fefa, 16c64de0, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, 48ccbfcf, 61707622, f58b4dfb, 0aea5bb1, 892faacd, 97ff7a04, 9d6d3631, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, c4ca292f, 0075d08f, 85553ad0
 - 10:21 [VMO] VMO 자가 보완: 실패 서명에서 'log tail:' 머리 줄과 '$ 명령' 줄을 건너뛰고 다음 원인 줄로 서명을 만든다
   - 지시: "개선안 20261120094530_REVIEW_2 승인(VM 자가진단 ). 근거 = incidents topRepeats R2 n=11, sig 'S8.checklistRun / [FAIL] Playwright exit code N - log tail:' 아래 화면 3개(SSP0005, SCP0005, SCP0028). events.jsonl step.en"
-  - 파일 5개: Doc/verify/_llm_usage.csv, Doc/verify/SCP0028/llm_cache.json, Doc/verify/SCP0028/llm_usage.csv, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json
+  - 파일 6개: Doc/verify/_llm_usage.csv, tools/Harness/gate_baseline.tsv, Doc/verify/SCP0028/llm_cache.json, Doc/verify/SCP0028/llm_usage.csv, tools/VibeManager/orch-usercheck.js, tools/VibeManager/user_checks.json
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self1014
   - 세션: d1e7f3cd, 0a9ed594, ff18308e, 0328e564, 2249ba7f, 883c82e9, a8ee60c9, f58b4dfb, 9d6d3631, a008bafe, a291cc6c, 02c00ac7, b545f018, a9b5f6ab, c7d6aa3e, 8a0d20a6, 9f82f80f, 6ba6570f, 7471db6b, b555d259
@@ -2693,10 +3162,10 @@
   - 세션: 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 10:00 [VMO] VMO 자가 보완: 측정 추가: 7일 집계에서 중지된 실행을 실패와 따로 센다(단계, 체인, 프로세스)
   - 지시: "개선안 20261120094530_REVIEW 승인(VM 자가진단 ). 근거 = 집계 steps S8.checklistRun n=14 fail=11, chains checklist n=11 ok=0, procFails exits 1:10. events.jsonl job.item.end 를 대조하면 FAIL 11건 중 status cancel 8건(00:33"
-  - 파일 40개: Doc/e2e/results/SSP0005/artifacts/.last-run.json, Doc/e2e/specs/SCP0028.auth.spec.ts, Doc/e2e/specs/SCP0028.authcrud.spec.ts, Doc/e2e/specs/SCP0028.crud.spec.ts, Doc/e2e/specs/SCP0028.smoke.spec.ts, Doc/e2e/specs/SSP0005.auth.spec.ts, Doc/e2e/specs/SSP0005.authcrud.spec.ts, Doc/e2e/specs/SSP0005.crud.spec.ts 외
+  - 파일 40개: Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SCP0028/shots/SCP0028_open.png, Doc/e2e/results/SCP0028/shots/SCP0028_searched.png, Doc/e2e/results/SSP0005/_test_timing.jsonl, Doc/e2e/results/SSP0005/artifacts/.last-run.json, Doc/e2e/results/SSP0005/shots/SSP0005_open.png, Doc/e2e/results/SSP0005/shots/SSP0005_searched.png, Doc/e2e/specs/SCP0028.auth.spec.ts 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0952
-  - 세션: d1e7f3cd, 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 1357fefa, 16c64de0, 26627784, cd3755ba, 0328e564, 2249ba7f, 61707622, f58b4dfb, 97ff7a04, 9d6d3631, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, c4ca292f, 0075d08f, 85553ad0
+  - 세션: d1e7f3cd, 1357fefa, 16c64de0, 26627784, cd3755ba, 437c8fe3, 978db66a, beec828c, f2d03ff3, 13d7b298, 0075d08f
 - 10:00 [VMO] VMO 탭 이름 영어로 변경
   - 지시: "VMO 의 상황판 / 사건 / 개선안 / 자가진단 / 이력 / 에이전트 / LOG 을 영어로 TABPAGE 명칭을 변경하면 어떤걸 추천하나요?" / "추천안으로 변경"
   - 파일 1개: orchestra.js
@@ -2729,48 +3198,46 @@
   - 세션: d1e7f3cd, e0fd92f7, 9fa496be, b555d259
 - 07:47 [VMO] VMO 자가 보완: VM 창이 끝날 때 job 없이 띄운 체인에도 끝 기록(chain.end ok=false, aborted, why 'VM 창 종료로 중단') 남기기(검증 기대값, 대상 경로 정정)
   - 지시: "개선안 20261120065425_SELF 승인(VM 자가진단 ). 근거 = extension.js deactivate가 job-runner 작업만 정리함. events.jsonl:38 체인 job 값 빈 문자열. 21:53 체인 4건이 끝 기록 없이 사라져 R5 사건 4건 생김. orch-state.js:42 chain.end를 받으면 체인 삭제. 앞선 "
-  - 파일 40개: workbench.js, extension.js, orch-watch.js, Doc/gen/SSP0014/FULLRUN.md, _F4_A2__0.json, Doc/verify/SSP0005/e2e_results.json, Doc/verify/SSP0014/_checker_regress.md, Doc/verify/SSP0014/_regress_report.md 외
+  - 파일 40개: Doc/gen/SSP0014/FULLRUN.md, Doc/verify/SSP0005/_test_timing.jsonl, Doc/verify/SSP0005/calls/_verify_Division별_조회_오류_콤보_이름_F4_A2__0.json, Doc/verify/SSP0005/e2e_results.json, Doc/verify/SSP0014/_checker_regress.md, Doc/verify/SSP0014/_regress_report.md, Doc/verify/SSP0014/_timing.csv, Doc/verify/SSP0014/action_items.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0740
-  - 세션: d1e7f3cd, 1d4cb42c, 696c2058, 03f495b6, 1365d34c, 36c7d0f1, 42600766, 7c2c3699, 82373bdc, a435c93b, d1571c18, 133cbff8, 356d1ad5, 473c9c4b, 6ff41015, 78af9e01, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, 48ccbfcf, 61707622, f58b4dfb, 0aea5bb1, 892faacd, 97ff7a04, 9d6d3631, 437c8fe3, c4ca292f, 85553ad0
+  - 세션: 696c2058, 133cbff8, 356d1ad5, 48ccbfcf, 892faacd
 - 07:40 [VMO] VMO 자가 보완: VM 작업 로그 이름에 화면 ID와 실행 번호를 넣어 같은 초에 시작한 실행끼리 로그를 공유하지 않게 함(검증 = 시험만)
   - 지시: "개선안 20261120064043_SELF 승인(VM 자가진단 ). 근거 = events.jsonl:263~265 SCP0005, SCP0014, SCP0028 proc.start 3건의 log 값이 같음(.vibe/logs/2026-11-20T00-33-54_CheckList...log). 지금 workbench.js:499 logF = 초 단위 시각 +"
-  - 파일 19개: workbench.js, test/t_wb_logname.js, Doc/verify/_llm_usage.csv, tools/VibeManager/workbench.js, Doc/verify/SCP0005/_dedup/rule_A1.json, Doc/verify/SCP0005/_dedup/rule_A10.json, Doc/verify/SCP0005/_dedup/rule_A2.json, Doc/verify/SCP0005/_dedup/rule_A3.json 외
+  - 파일 17개: Doc/verify/_llm_usage.csv, tools/VibeManager/workbench.js, Doc/verify/SCP0005/_dedup/rule_A1.json, Doc/verify/SCP0005/_dedup/rule_A10.json, Doc/verify/SCP0005/_dedup/rule_A2.json, Doc/verify/SCP0005/_dedup/rule_A3.json, Doc/verify/SCP0005/_dedup/rule_A4.json, Doc/verify/SCP0005/_dedup/rule_A5.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0734
   - 세션: 1d4cb42c, 42600766, 133cbff8, 473c9c4b, 78af9e01, e610492d, 0328e564, 2249ba7f, 61707622, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 07:34 [VMO] VMO 자가 보완: CheckList 체인 R11 판정 때 이번 체인이 만든 결과 파일만 사용
   - 지시: "개선안 20261120042738_INC 승인(VM 자가진단 ). 근거 = orch-watch.js:108 run_verify.result.json을 시각 확인 없이 읽음. 120행 claudeRan 0이면 그 값으로 R11을 올림. 이번 사건의 결과 파일 ts는 2026-11-19T16:17:57, 체인 시작은 2026-11-20 01:10:46(even"
-  - 파일 40개: _Division_D4__0.json, Doc/verify/SSP0005/e2e_results.json, Doc/verify/_llm_usage.csv, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_watch.js, Doc/asislive/SCP0005/run_20261120_072913_acts/acts.json, Doc/asislive/SCP0005/run_20261120_072913_acts/calls.json, Doc/asislive/SCP0005/run_20261120_072913_acts/run.json 외
+  - 파일 40개: Doc/verify/SSP0005/_test_timing.jsonl, Doc/verify/SSP0005/calls/_verify_Insert_행_Division_D4__0.json, Doc/verify/SSP0005/e2e_results.json, Doc/verify/_llm_usage.csv, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_watch.js, Doc/asislive/SCP0005/run_20261120_072913_acts/acts.json, Doc/asislive/SCP0005/run_20261120_072913_acts/calls.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0726
   - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, f58b4dfb, 0aea5bb1, 9d6d3631
 - 07:26 [VMO] VMO 자가 보완: 강제 종료된 실행은 '중지'로 표시하고 동시 실행 로그 파일 이름 겹침 제거
   - 지시: "개선안 20261120042556_INC 승인(VM 자가진단 ). 근거 = workbench.js:463,466 은 종료코드가 0 이 아니면 로그의 마지막 [FAIL]/✖ 줄 5개를 원인으로 씀. 이번 사건 서명이 판정 결과 줄(SsoUserModal ssoUserYn)로 잡힘. workbench.js:437 로그 파일 이름 = 초 단위 시각 + 단계 이름"
-  - 파일 40개: Doc/asislive/SCP0028/save_compare.csv, Doc/asislive/SCP0028/scenario_compare.csv, Doc/asislive/SCP0028/scenario_compare_summary.json, Doc/asislive/SCP0028/scenario_matrix.csv, Doc/asislive/SCP0028/scenarios_cov.csv, Doc/asislive/SCP0028/scenarios_spec.csv, Doc/asislive/SCP0028/screen_bundle.json, _0.json 외
+  - 파일 40개: Doc/asislive/SCP0028/save_compare.csv, Doc/asislive/SCP0028/scenario_compare.csv, Doc/asislive/SCP0028/scenario_compare_summary.json, Doc/asislive/SCP0028/scenario_matrix.csv, Doc/asislive/SCP0028/scenarios_cov.csv, Doc/asislive/SCP0028/scenarios_spec.csv, Doc/asislive/SCP0028/screen_bundle.json, Doc/verify/SCP0005/_test_timing.jsonl 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0710
 - 07:08 [VMO] VMO 자가 보완: R11·R10 사건이 지난 실행 결과 건수를 쓰지 않게 함, 동시 실행 로그 파일 분리
   - 지시: "개선안 20261120042237_INC 승인(VM 자가진단 ). 근거 = orch-watch.js:108-121 checklistSnap 이 run_verify.result.json(ts 2026-11-19T16:35:20)을 그대로 읽어 11-20 04:15 사건 제목에 FAIL 29·미검증 278 표시. workbench.js:437 로그 이름이 초 "
-  - 파일 40개: orch-watch.js, result.ts, workbench.js, Doc/asislive/SSP0014/latest.json, Doc/asislive/SSP0014/scenarios_cov.csv, Doc/golden/SSP0014/_summary.csv, Doc/golden/SSP0014/_summary.md, Doc/golden/_summary.csv 외
+  - 파일 40개: Doc/asislive/SSP0014/latest.json, Doc/asislive/SSP0014/scenarios_cov.csv, Doc/golden/SSP0014/_summary.csv, Doc/golden/SSP0014/_summary.md, Doc/golden/_summary.csv, Doc/golden/_summary.md, Doc/verify/SCP0005/e2e/scn_1.png, Doc/verify/SCP0005/e2e/scn_2.png 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0656
-  - 세션: d1e7f3cd, 1d4cb42c, 03f495b6, 1365d34c, 36c7d0f1, 42600766, 7c2c3699, 82373bdc, a435c93b, d1571c18, 133cbff8, 473c9c4b, 6ff41015, 78af9e01, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, 61707622, f58b4dfb, 0aea5bb1, 97ff7a04, 9d6d3631, 437c8fe3, c4ca292f, 85553ad0
 - 06:32 [VMO] VMO 자가 보완: VM 다시 시작 때 지난 실행을 '사라진 실행(R5)'으로 늦게 올리지 않기, 실행 시작 기록에 화면 ID 채우기
   - 지시: "개선안 20261120005532_INC 승인(VM 자가진단 ). 근거 = events.jsonl:49 proc.start screen "" (명령에 SSP0005 있음). 실행 주인 PID 3764 마지막 사건 21:47:45(events.jsonl:67). 사건 20261120_004835_R5_ALL 은 3시간 뒤 00:48:35 에 올라왔고, 그 사"
-  - 파일 17개: orch-state.js, checklist_run.py, orch-watch.js, Doc/verify/SCP0028/a1_live.json, Doc/verify/SCP0028/calls/_grid_main.json, _A5__0.json, __0.json, _A1__0.json 외
+  - 파일 27개: Doc/verify/SCP0028/_test_timing.jsonl, Doc/verify/SCP0028/a1_live.json, Doc/verify/SCP0028/calls/_grid_main.json, Doc/verify/SCP0028/calls/_verify_Division_컬럼_A5__0.json, Doc/verify/SCP0028/calls/_verify_신규행_검증_E3_컬럼별_필수_E4_키_중복__0.json, Doc/verify/SCP0028/calls/_verify_실전송_건수_A1__0.json, Doc/verify/SCP0028/calls/_verify_입력_검증_저장_E1_음수_소수_E2_날짜_E5_콤보__0.json, Doc/verify/SCP0028/calls/_verify_저장_경로_F1_실패_H10_취소_H11_로딩_F2_붙여넣기__0.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0625
   - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, 28bb3fe6, b74490cd, cd3755ba, 0328e564, 2249ba7f, f58b4dfb, 0ac1c535, 0aea5bb1, 9d6d3631
 - 06:24 [VMO] VMO 자가 보완: VS Code 종료(dispose)로 멈춘 실행도 감시기에 중지로 알려 R1, R2, R11 사건을 만들지 않는다
   - 지시: "개선안 20261120005403_INC 승인(VM 자가진단 ). 근거 = job.json J20261120_003352 note 'VS Code 종료로 중단됨' · job-runner.js:219 dispose() 에 user.stop 없음 · orch-watch.js:125 userStopped, :132, :139, :143 · events.jsonl"
-  - 파일 31개: job-runner.js, orch-watch.js, t_orch_watch.js, _aria_0.json, _1920_1366_0.json, _0.json, _AS-IS_lock_rules_0.json, __0.json 외
+  - 파일 40개: Doc/verify/SCP0005/_test_timing.jsonl, Doc/verify/SCP0005/calls/_snap__snap_조회조건_팝업_정적_aria_0.json, Doc/verify/SCP0005/calls/_snap__snap_화면샷_패널_헤더_띠_1920_1366_0.json, Doc/verify/SCP0005/calls/_trace_A10_조회_전_그리드_K4_버튼_구성_X-REOPEN_닫기_재오픈_0.json, Doc/verify/SCP0005/calls/_trace_C1_C4_상위_조회조건_변경_하위_후보_재조회_선택_초기화_그리드_상태_0.json, Doc/verify/SCP0005/calls/_trace_G6_조회조건_초기값_AS-IS_로드_문장_0.json, Doc/verify/SCP0005/calls/_trace_W4_D3_행_조건부_잠금_AS-IS_lock_rules_0.json, Doc/verify/SCP0005/calls/_trace_W4_E4_업무_검증_메시지_AS-IS_저장_차단__0.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0617
-  - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, f58b4dfb, 0aea5bb1, 9d6d3631, c4ca292f
 - 06:16 [VMO] VMO 자가 보완: TO-BE 화면이 없는 화면의 CheckList 실패를 반복 오류(R1·R2) 사건에서 제외
   - 지시: "개선안 20261120005146_INC 승인(VM 자가진단 ). 근거 = prereq.py:219-221 FAIL 문구 'TO-BE 화면 미개발이면 CheckList 대상 아님'(rc 6). orch-watch.js:73-77 failure()가 서명 횟수만 세서 같은 원인으로 R1(00:34) 다음 R2(00:48) 생성. Claude 조치가 2회 호출"
-  - 파일 40개: Doc/asisfacts/screens/SCP0028/combo_values.json, Doc/asisfacts/screens/SSP0005/combo_values.json, Doc/asisfacts/screens/SSP0014/combo_values.json, Doc/e2e/results/SCP0005/_summary.csv, Doc/e2e/results/SCP0005/_summary.md, Doc/e2e/results/SCP0005/results.json, Doc/e2e/results/SCP0028/_summary.csv, Doc/e2e/results/SCP0028/_summary.md 외
+  - 파일 40개: Doc/asisfacts/screens/SCP0028/combo_values.json, Doc/asisfacts/screens/SSP0005/combo_values.json, Doc/asisfacts/screens/SSP0014/combo_values.json, Doc/e2e/results/SCP0005/_summary.csv, Doc/e2e/results/SCP0005/_summary.md, Doc/e2e/results/SCP0005/_test_timing.jsonl, Doc/e2e/results/SCP0005/html/index.html, Doc/e2e/results/SCP0005/results.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0609
 - 06:00 [CheckList 엔진] CheckList 전체기능 재점검 / 수정분 재점검 분리
@@ -2781,17 +3248,16 @@
   - 세션: 1365d34c, 36c7d0f1, c4ca292f
 - 05:45 [VMO] VMO 자가 보완: 작업 목록 중지를 감시기에 알리고 R11 판정에서 사용자 중지와 이전 실행 결과를 뺀다
   - 지시: "개선안 20261120003909_INC 승인(VM 자가진단 ). 근거 = job.json J20261120_003243 note '사용자 중지' · events.jsonl 241~251행 user.stop 없음 · workbench.js:2643 user.stop 생성처 1곳 · orch-watch.js:120 R11 조건 · orch-watch.js:1"
-  - 파일 4개: job-runner.js, orch-watch.js, t_orch_watch.js, tools/VibeManager/CHANGELOG.md
+  - 파일 2개: tools/Harness/gate_baseline.tsv, tools/VibeManager/CHANGELOG.md
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0539
-  - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, f58b4dfb, 0aea5bb1, 9d6d3631, c4ca292f
 - 05:41 [CheckList 엔진] CheckList 속도 개선 남은 항목: AI 검토 행 단위 기억 · 구간별 소요표
   - 지시: "이어서 구현"
   - 파일 6개: tools/Harness/verify/llm_review.py, /llm_rowcache.json, run_verify.py, /run_timing.json, run-e2e.cmd, /results.json
   - 되돌리기 태그: 20261120_rowcache, 20261120_open
 - 05:31 [VMO] VMO 자가 보완: 작업 목록 중지를 감시기에 user.stop 으로 알리고 CheckList 체인 R11 판정에서 사용자 중지를 뺀다
   - 지시: "개선안 20261120003742_INC 승인(VM 자가진단 ). 근거 = job.json J20261120_003243 note '사용자 중지' · events.jsonl 241~251행에 user.stop 없음 · user.stop 생성처는 workbench.js:2643 1곳 · orch-watch.js:139 R1 확인, orch-watch.js:1"
-  - 파일 7개: job-runner.js, orch-watch.js, t_orch_watch.js, tools/VibeManager/CHANGELOG.md, tools/VibeManager/job-runner.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_watch.js
+  - 파일 4개: tools/VibeManager/CHANGELOG.md, tools/VibeManager/job-runner.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_watch.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0524
   - 세션: d1e7f3cd, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, f58b4dfb, 0aea5bb1, 9d6d3631, c4ca292f
@@ -2802,7 +3268,7 @@
   - 되돌리기 태그: 20261120
 - 05:24 [VMO] VMO 자가 보완: 작은 모듈 고정 문구 줄표, 가운뎃점, 틀 정리(시험 파일 포함 재제출)
   - 지시: "개선안 20261120001936_SELF_3 승인(VM 자가진단 S11 S11/prompt-panel.js). 근거 = failed 20261119232524_SELF_3 사유 = orch-selfcheck.js:362 '반영 완료 — 생성물 삭제' 를 test/t_orch_selfapply.js:90 정규식 /반영 완료 — 생성물 삭제/ 가 맞춰 보는데"
-  - 파일 20개: orch-selfcheck.js, t_orch_selfapply.js, history.js, tabview.js, server-service.js, Doc/tobefacts/db/_export_log.md, Doc/verify/SCP0028/run_mode.json, Doc/verify/SCP0028/screen_sync.json 외
+  - 파일 20개: Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SCP0028/shots/SCP0028_cond.png, Doc/e2e/results/SCP0028/shots/SCP0028_open.png, Doc/e2e/results/SCP0028/shots/SCP0028_searched.png, Doc/tobefacts/db/_export_log.md, Doc/verify/SCP0028/run_mode.json, Doc/verify/SCP0028/screen_sync.json, Doc/verify/_engine_selfcheck.json 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0518
   - 세션: d1e7f3cd, e0fd92f7, 48ccbfcf, f58b4dfb, 892faacd, 9d6d3631, 9fa496be, b555d259
@@ -2843,12 +3309,12 @@
   - 세션: d1e7f3cd, e0fd92f7, 03f495b6, 1365d34c, 36c7d0f1, 7c2c3699, 82373bdc, a435c93b, d1571c18, 6ff41015, e610492d, 1357fefa, 26627784, 3f29dae7, 1cba13ab, b74490cd, cd3755ba, 0328e564, 2249ba7f, f58b4dfb, 0aea5bb1, 9d6d3631, 9fa496be, b555d259
 - 01:15 [VMO] VMO 자가 보완: doc_style.py JS 소스 검사에서 주석과 정규식 리터럴 제외(확인 기준 정정 재제출)
   - 지시: "개선안 20261120001936_SELF_2 승인(VM 자가진단 S11 S11/extension.js). 근거 = failed 20261119232523_SELF 2회 실패 사유 = 확인 기준 'tabview.js 위반 0' 불충족. 결과 기록(result.verify_result)은 extension.js 51 → 40, tabview.js 2 → 1,"
-  - 파일 3개: -chromium/error-context.md, Doc/tobefacts/db/_export_log.md, tools/Docs/doc_style.py
+  - 파일 12개: Doc/e2e/results/SCP0005/_test_timing.jsonl, Doc/e2e/results/SCP0028/_test_timing.jsonl, Doc/e2e/results/SSP0005/_test_timing.jsonl, Doc/e2e/results/SSP0014/_test_timing.jsonl, Doc/e2e/results/SSP0014/artifacts/SSP0014.smoke-SSP0014-Ship-ddd6d--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/error-context.md, Doc/e2e/results/SSP0014/artifacts/SSP0014.smoke-SSP0014-Ship-ddd6d--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium/test-failed-1.png, Doc/tobefacts/db/_export_log.md, tools/Docs/doc_style.py 외
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0109
 - 01:04 [VMO] VMO 자가 보완: S8 개선안 효과 판정에서 S9 반복 수정 key 제외
   - 지시: "개선안 20261120001936_SELF 승인(VM 자가진단 S8 S8/20261119232524_SELF). 근거 = orch-selfcheck.js:190 은 selfKey 가 지금 점검 결과에 있으면 fail 로 올림. 개선안 20261119232524_SELF 의 selfKey 는 S9/file/workbench.js 이고 orch-selfchec"
-  - 파일 3개: a.js, result.json, tools/VibeManager/test/t_orch_selfcheck.js
+  - 파일 1개: tools/VibeManager/test/t_orch_selfcheck.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0059
   - 세션: 407fa98a, 9fa496be, b555d259
@@ -2878,7 +3344,7 @@
   - 세션: 1d4cb42c, 42600766, a435c93b, 133cbff8, 473c9c4b, 78af9e01, e610492d, 26627784, 28bb3fe6, cd3755ba, 0328e564, 2249ba7f, 61707622, 0ac1c535, 97ff7a04, 437c8fe3, c4ca292f, 85553ad0
 - 00:04 [VMO] VMO 자가 보완: extension.js 알림과 트리 문구에서 줄표 제거(18건), '모두' 1건 삭제
   - 지시: "개선안 20261119232524_SELF_2 승인(VM 자가진단 S11 S11/extension.js). 근거 = .vibe/orch/selfcheck/doc_style/extension.js.style.csv 51행 중 사용자에게 보이는 문자열의 줄표 = L50, L51, L227, L229, L230, L261, L272, L305, L321, L32"
-  - 파일 1개: tools/VibeManager/extension.js
+  - 파일 2개: tools/Harness/gate_baseline.tsv, tools/VibeManager/extension.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261120_self0000
   - 세션: 696c2058, 133cbff8, 356d1ad5, 48ccbfcf, 892faacd
@@ -3286,7 +3752,7 @@
 
 - 23:59 [VMO] VMO 자가 보완: workbench.js 웹뷰 스크립트를 t_webview_syntax.js 구문 시험 대상에 추가
   - 지시: "개선안 20261119232524_SELF 승인(VM 자가진단 S9 S9/file/workbench.js). 근거 = tools/VibeManager/workbench.js:1261 function html(wb, p, state) 가 :3239 module.exports 에 없음. tools/VibeManager/test/t_webview_syntax.j"
-  - 파일 7개: workbench.js, test/run_all.js, t_webview_syntax.js, tools/VibeManager/server-service.js, tools/VibeManager/test/t_server_service.js, tools/VibeManager/workbench.js, tools/VibeManager/test/t_webview_syntax.js
+  - 파일 4개: tools/VibeManager/server-service.js, tools/VibeManager/test/t_server_service.js, tools/VibeManager/workbench.js, tools/VibeManager/test/t_webview_syntax.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261119_self2355
   - 세션: 26317e78, d171d1d6, d1e7f3cd, 11ce998e, adda3df7
@@ -3309,7 +3775,7 @@
   - 세션: 26317e78, d171d1d6, d1e7f3cd, 915764f4, 933b1562, be754539, ed77e474, 11ce998e
 - 23:25 [VMO] VMO 자가 보완: job-runner.js, server-service.js 고정 문구에서 줄표 제거(29건)
   - 지시: "개선안 20261119220749_SELF_3 승인(VM 자가진단 S11 S11/job-runner.js). 근거 = 입력 key S11/job-runner.js(기호 12), S11/server-service.js(기호 34). .vibe/orch/selfcheck/doc_style/job-runner.js.style.csv 12행이 줄표(L47, L60"
-  - 파일 4개: t_job_par.js, tools/VibeManager/job-runner.js, tools/VibeManager/server-service.js, tools/VibeManager/test/t_job_par.js
+  - 파일 3개: tools/VibeManager/job-runner.js, tools/VibeManager/server-service.js, tools/VibeManager/test/t_job_par.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261119_self2320
   - 세션: d1e7f3cd, adda3df7
@@ -3333,7 +3799,7 @@
   - 세션: d1e7f3cd, 915764f4, 933b1562, be754539, ed77e474
 - 22:40 [VMO] VMO 자가 보완: S6 미확인 원장: 기능 설명 줄 제외, '미확인:' 줄 문장 단위 분리, 'VS Code 화면' 항목을 창 로드 기록과 연결
   - 지시: "개선안 20261119220749_SELF_2 승인(VM 자가진단 S6 S6/CL:2026-11-19:1dt58td#5db5f5186f). 근거 = 입력 key S6/CL:2026-11-19:1dt58td#173850d3ab, #5db5f5186f, #83dd6e11b0 = tools/VibeManager/CHANGELOG.md 12, 13, 15줄(Q3,"
-  - 파일 7개: orch-history.js, orch-selfcheck.js, unverified.json, tools/VibeManager/orch-history.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_orch_history.js, tools/VibeManager/test/t_orch_selfcheck.js
+  - 파일 4개: tools/VibeManager/orch-history.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_orch_history.js, tools/VibeManager/test/t_orch_selfcheck.js
   - 미확인 4건: tools/VibeManager/orch-history.js:92-94 가 낱말 포함만으로 미확인 항목에 넣음. / 변경: orch-history.js:94 변경 전: 문장에 미확인, 미실행, 미측정 낱말이 있으면 등록 → 변경 후: 낱말 바로 뒤가 , , 가운뎃점, 쉼표이거나 바로 앞이 가운뎃점인 문장은 제외. / 추가 4건 PASS: CHANGELOG.md Q3, Q4, Q5 줄과 줄 4개 문장 = unverified 0건, 21:1x~21:5x 절 줄 = 5건, = 1건, 제외 자리와 미확인이 함께 있는 문장 = 미확인.
   - 되돌리기 태그: 20261119_self2235
   - 세션: d1e7f3cd, 915764f4, 933b1562, be754539, ed77e474
@@ -3345,10 +3811,10 @@
   - 세션: d1e7f3cd, 915764f4, 933b1562, be754539, ed77e474
 - 22:30 [VMO] VMO 자가 보완: VMO 켜고 끄기의 harness.json 교체에 EPERM 재시도 적용, 쓰기 실패를 오류 기록에 남김
   - 지시: "개선안 20261119215147_SELF_3 승인(VM 자가진단 S5 ). 근거 = 오류 기록 서명 'orch-history.writeJson / EPERM: operation not permitted, rename <path> -> <path>'(.vibe/orch/vm_errors_dev_20261119_2147.jsonl 1행, 2026-11-19 "
-  - 파일 6개: orch-agent.js, orch-selfcheck.js, tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_agent_q.js
+  - 파일 4개: tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-watch.js, tools/VibeManager/test/t_orch_agent_q.js
   - 미확인 1건: VS Code 실화면(창 다시 로드 필요).
   - 되돌리기 태그: 20261119_self2226
-  - 세션: d1e7f3cd, b96a7c6b, 915764f4, 933b1562, b994a142, be754539, bf6d91d6, dec1beda, ed77e474, 5e4c4b2a
+  - 세션: d1e7f3cd, b96a7c6b, b994a142, bf6d91d6, dec1beda, 5e4c4b2a
 - 22:15 [VMO] VMO 자가 보완: VMO 3개 모듈 고정 문구에서 줄표와 가운뎃점 나열 제거(62건)
   - 지시: "개선안 20261119215147_SELF_4 승인(VM 자가진단 S11 S11/orch-agent.js). 근거 = 입력 key S11/orch-agent.js(기호 23), S11/orch-improve.js(기호 23), S11/orch-watch.js(기호 16). .vibe/orch/selfcheck/doc_style/orch-agent.js.st"
   - 파일 3개: tools/VibeManager/orch-agent.js, tools/VibeManager/orch-improve.js, tools/VibeManager/orch-watch.js
@@ -3547,7 +4013,7 @@
 - 세션 f98cd180 "SCP0111 CheckList 미검증 해소" 12:24~13:44, 지시 2건, 화면 SCP0111
 - 세션 9cee8c43 "tools/Harness/verify/llm_call.py 의 1번째 줄을 Read 로 읽고 JSON 하나만" 16:12~16:13, 지시 1건
 - 세션 c639852d "SSP0014 CheckList 미검증 해소" 16:18~17:25, 지시 2건, 화면 SSP0014
-- 세션 d1e7f3cd "VM 기능개선2" 16:30~2026-11-26 16:13, 지시 108건, VM 파일 수정 225건(workbench.js 54, orchestra.js 29, extension.js 12, jobs.js 9, server-service.js 7), 화면 SCP0028
+- 세션 d1e7f3cd "VM 기능개선2" 16:30~2026-11-27 09:18, 지시 121건, VM 파일 수정 282건(workbench.js 55, orchestra.js 29, extension.js 12, orch-history.js 10, jobs.js 9), 화면 SCP0028
 - 세션 81932e1b "SCP0028 CheckList 미검증 해소" 16:35~17:25, 지시 2건, 화면 SCP0028
 - 세션 5e94a827 "SCP0005 CheckList 미검증 해소" 17:08~17:29, 지시 3건, 화면 SCP0005
 - 세션 5a94924a ".claude/agents/vm-orchestra.md 의 조치 등급과 지킬 것을 따른다. 사건 없이 온 사" 17:26~17:28, 지시 1건
@@ -3830,7 +4296,7 @@
 - 세션 a3162921 "SCP0104 AS-IS 액션 대조표" 15:53~16:12, 지시 3건, VM 파일 수정 1건(workbench.js 1), 화면 SCP0104
 - 세션 daafccf3 "P_SCP0111_SAVE_PSI_ADMIN V_ACTIVE_FLAG 분기" 17:16~18:33, 지시 12건, VM 파일 수정 3건(50_DOC_STYLE.md 2, workbench.js 1), 화면 SCP0111
 - 세션 501c8447 "SCP0111 화면 DB 모드 CheckList" 20:10~20:14, 지시 1건, 화면 SCP0111
-- 세션 fb1fbaaf "시험 저장으로 새로 생긴 행 정리 결함 보완" 21:38~2026-11-18 05:01, 지시 7건, 화면 SSP0020
+- 세션 fb1fbaaf "VM 기능개선 - 지정" 21:38~2026-11-26 18:30, 지시 22건, VM 파일 수정 11건(orch-consult.js 5, orch-agent.js 3, orch-selfcheck.js 1, orchestra.js 1, t_orch_consult_roles.js 1), 화면 SSP0020
 - VM 실행 33건: SCP0111 claude 13, SCP0104 claude 5, SCP0104 menu_git-upload 2, SCP0111 S1.liveScenCov 1, SCP0111 S1.liveCond 1, SCP0111 S1.liveScenCmp 1, SCP0111 S1.liveScenMatrix 1, SCP0111 S1.liveScenSpec 1, SCP0111 S8.verify 1, SCP0111 S1.liveScen 1
 
 ## 2026-11-16
@@ -3896,7 +4362,7 @@
   - 되돌리기 태그: 20261113_livescreen
 - 세션 d7117b4a "TO-BE SCP, SSP 조회조건 대소문자·LIKE 적용 현황" 09:00~13:02, 지시 7건
 - 세션 eb690416 "SSP0020 소스 다운로드 및 머지" 09:20~09:26, 지시 1건, 화면 SSP0020
-- 세션 ec66cd53 "MD·Hook·Rule·하네스 현행 기준 전체 정리" 14:46~2026-11-14 11:27, 지시 24건, VM 파일 수정 2건(10_RULES_KEEP.md 2)
+- 세션 ec66cd53 "MD·Hook·Rule·하네스 현행 기준 전체 정리" 14:46~2026-11-26 21:25, 지시 25건, VM 파일 수정 2건(10_RULES_KEEP.md 2)
 - 세션 21c90110 "VM 생성엔진·검사엔진 전체 오류 점검·보완" 14:52~17:26, 지시 9건, 화면 SCP0016
 - 세션 8ec86c90 "사내 PKG 빈 문자열 비교 구문 영향 점검" 18:04~21:50, 지시 8건
 - VM 실행 32건: 공통 claude 27, SCP0104 S8.verify 2, SSP0020 S8.verify 2, SSP0020 claude 1
@@ -4051,7 +4517,7 @@
 - 세션 74c4ef70 "SSP0022 Shipment Request(Electrode) 전환 산출물" 14:24~14:30, 지시 1건, 화면 SSP0022
 - 세션 cb21d82d "SCP0028 Shipment Lot Size 분석서 작성" 14:26~14:29, 지시 1건, 화면 SCP0028
 - 세션 aec965ee "Oracle MAX_STRING_SIZE 확장 시 인덱스" 14:45~14:57, 지시 3건
-- 세션 0af975be "VM 기능개선" 17:07~2026-11-26 16:14, 지시 340건, VM 파일 수정 37건(menu-view.js 19, workbench.js 8, extension.js 3, CHANGELOG.md 1, t_wb_late.js 1), 화면 SCP0104, SSP0020, SCP0096, SCP0028, SCP0005, SSP0021
+- 세션 0af975be "VM 기능개선" 17:07~2026-11-27 01:04, 지시 354건, VM 파일 수정 46건(menu-view.js 19, workbench.js 8, extension.js 3, orch-vision.js 2, orch-history.js 2), 화면 SCP0104, SSP0020, SCP0096, SCP0028, SCP0005, SSP0021
 - 세션 06ebb860 "SSP0005 Shipment Working Day 화면" 17:27~17:30, 지시 1건, 화면 SSP0005
 - 세션 22c45376 "SSP0005 Shipment Working Day 분석 문서" 17:30~17:33, 지시 1건, 화면 SSP0005, SCP0009
 - 세션 0d514785 "SCP0096 Shipment Working Day OSP 화면" 17:50~17:52, 지시 1건, 화면 SCP0096

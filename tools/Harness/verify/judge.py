@@ -780,6 +780,25 @@ def f4_calllog(mid, ev):
     return ('FAIL' if bad else 'PASS', f"다른 시나리오 호출 기록 {len(hits)}건(HTTP {', '.join(sorted({str(h[0]) for h in hits}))}) · 기록 {len(files)}개: {', '.join(files)[:300]}")
 
 
+def _dd_token_hit(tok, target, condition, expected):
+    """설계 결정 target_tokens 1개가 판정 행에 걸리는지(2026-11-27 VMO 20261127011427_SELF).
+    종전 = 대상+조건[:600]+기대[:200] 부분 일치 → 조건 칸 'FARPOINT.WIN.SPREAD.MODEL.' 의 MODEL, 'EDITBUTTON' 의 EDIT 등에 걸려 무관 행까지 NA.
+    ① 대상 칸 = 부분 일치(btnCutOff ↔ Cutoff) ② 화면 라벨 토큰(^[A-Z][a-z]) = 기대 칸 단어 경계만, 조건 칸 안 봄
+    ③ 식별자 토큰 = 조건·기대 칸 단어 경계 ④ 한글 문구 토큰 = 조건·기대 칸 부분 일치."""
+    t = (tok or '').strip().upper()
+    if not t:
+        return False
+    if t in (target or '').upper():
+        return True
+    cond = (condition or '')[:600].upper(); exp = (expected or '')[:200].upper()
+    if any(ord(c) > 127 for c in t):
+        return t in cond or t in exp
+    bound = re.compile(r'(?<![A-Z0-9_])' + re.escape(t) + r'(?![A-Z0-9_])')
+    if re.match(r'^[A-Z][a-z]', tok.strip()):
+        return bool(bound.search(exp))
+    return bool(bound.search(cond) or bound.search(exp))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('menu_id')
@@ -1354,7 +1373,7 @@ def main():
                 r['result'] = 'PASS'; r['evidence'] = f"AS-IS 라벨 '{want}' = TO-BE '{hit[0]}'({hit[1]}){' · div↔division 같은 이름(위 STATIC 규칙)' if norm(hit[0]) != w else ''} · 기준표 행 0 → AS-IS 라벨 대조"
                 r['tobe_ref'] = 'STATIC Form 라벨·E2E 덤프 ↔ AS-IS 라벨(기준표 없음)'; stat['H5_NO_STD'] += 1
             elif _seen and _rt:
-                r['evidence'] = (f"[측정 경로 없음] AS-IS 라벨 '{want}' 을 TO-BE 라벨 목록에서 못 찾음, 정적 Form 라벨 {len(shown)}개({', '.join(s[1] for s in shown)[:160]}) · E2E 덤프 {len(_rt)}개({', '.join(((v or {}).get('label') or k) for k, v in _rt.items())[:160]}) · 텍스트·팝업 칸은 E2E 덤프 대상 아님 · 기준표 행 0 · " + (r.get('evidence') or ''))[:1500]
+                r['evidence'] = (f"[측정 경로 없음] AS-IS 라벨 '{want}' 을 TO-BE 라벨 목록에서 못 찾음, 정적 Form 라벨 {len(shown)}개({', '.join(s[1] for s in shown)[:160]}) · E2E 덤프 {len(_rt)}개({', '.join(((v or {}).get('label') or k) for k, v in _rt.items())[:160]}) · 텍스트·팝업 칸은 E2E 덤프 대상 아님 · 기준표 행 0 · " + re.sub(r"\[측정 경로 없음\] AS-IS 라벨 '[^']*' 을 TO-BE 라벨 목록에서 못 찾음, .*?기준표 행 0 · ", '', r.get('evidence') or ''))[:1500]
 
     # 2026-11-20 T489(SCP0028 V-5d06fca9 B6 'Valid 사양 기준 없음 — 화면 다중=false · ALL=true'): 기준표 행 0 화면은 E2E 가 AS-IS 컨트롤 형식을 'UsrCombo'·'UsrCheckedList'
     #   두 이름으로만 읽어 UsrComboBox 등은 기대가 비었다. 기준표가 없으면 기대 = AS-IS 사실: 다중 = controls.csv 형식(UsrCheckedList 계열 다중 · UsrCombo 계열 단일),
@@ -2080,7 +2099,8 @@ def main():
                     # 2026-11-07 T150(SCP0084 H7): '조회된 데이터가 없습니다' 알림으로 끝난 공통 기능(Excel 다운로드 등)은 기능 결함이 아니라 측정 전제(조회 행) 미충족 → ERROR 로 반입
                     if v == 'FAIL' and re.search(r'조회된 데이터가 없|데이터가 없습니다|No data', note or ''): v = 'ERROR'; note = '[측정 전제 미충족: 조회 0행 알림] ' + (note or '')
                     res = V.get(v, '판정필요'); worse = prev and ({'FAIL': 0, 'ERROR': 1, '판정필요': 2, 'PASS': 3, 'NA': 4}.get(prev[0], 2) < {'FAIL': 0, 'ERROR': 1, '판정필요': 2, 'PASS': 3, 'NA': 4}.get(res, 2))
-                    ev_screen[rule] = prev if worse else (res, f"E2E smoke 공통 '{name}' [{v}] {note[:100]}" + (f" | {prev[1][:80]}" if prev else ''))
+                    _new = f"E2E smoke 공통 '{name}' [{v}] {note[:100]}"  # 2026-11-26 T667: 같은 요약 줄이 2번 들어오면(재실행·프로젝트 2개) 같은 문구를 다시 붙이지 않음
+                    ev_screen[rule] = prev if worse else (res, _new + (f" | {prev[1][:80]}" if prev and not prev[1].startswith(_new) else ''))
             elif t == 'cond' and m:
                 v, name, k2, note = m.groups()
                 if k2 in ('combo', 'checkbox', 'radio', 'text', 'period', 'search'): ev_cond[('G1', norm(name))] = (V.get(v, '판정필요'), f"E2E smoke 조회조건 '{name}' [{v}] {note[:100]}")
@@ -2498,7 +2518,8 @@ def main():
                 elif e4s: res, why = 'NA', f"TO-BE 코드에 {m_}/{mapped or '-'} 참조 없음 — 이 상황의 메시지 유무·문구는 E4 행에서 판정(E4 실측 {e4s[0]['result']}: {e4s[0]['evidence'][:100]}) · MS1 은 'ID 를 다른 뜻으로 쓰는지' 만 본다"
                 elif mapped and _cat(atext) in ('저장 성공', '저장 실패'): res, why = 'PASS', f"TO-BE 화면 코드에 {m_}/{mapped} 참조 없음 — 저장 결과 메시지는 공용 useProcMutation 기본 처리(성공 MSG00002 토스트 · 실패 서버 메시지→없으면 MSG00003 Alert, useCustomQueryClient.ts:203-211)가 담당 · 같은 뜻(AS-IS '{(atext or '')[:30]}')"
                 elif not mapped: res, why = 'NA', f"TO-BE 메시지 사전에 같은 문구 없고 TO-BE 코드에 {m_} 참조도 없음 — TO-BE 가 이 메시지를 쓰지 않음(해당 상황의 처리 여부는 E4·D1 등 동작 행에서 판정 · 필요하면 MSG01001+ 신규 등록)"
-                else: res, why = 'NA', f"TO-BE 코드(FE {os.path.basename(fe_dir) or '-'} 폴더 · PKG)에 {m_}/{mapped} 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
+                # 2026-11-26 T667(checker_defect_scan K3): TO-BE 에 같은 문구 ID 가 있는데 코드 참조도 E4 실측도 없음 = 재지 못함 → 미검증(11-11 결정 · 해당없음 아님)
+                else: res, why = 'ERROR', f"[미검증] TO-BE 코드(FE {os.path.basename(fe_dir) or '-'} 폴더 · PKG)에 {m_}/{mapped} 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
             r['result'] = res; r['evidence'] = f"{head} — {why}"[:1500]; r['tobe_ref'] = 'STATIC msgmap(문구 일치) + 코드 사용 ID'; stat['MS1'] += 1
 
     # T8 측정 경로 편중(2026-10-29 SCP0096 Working Time Default 0~7·정수 미검출): 검사기가 'Insert 없음/신규행 없음' 을 이유로 못 돈 행은
@@ -2990,7 +3011,6 @@ def main():
                 continue
             if uv and not uv_fail:
                 continue
-            hay = (r['target'] + ' ' + (r.get('condition') or '')[:600] + ' ' + (r.get('expected') or '')[:200]).upper()
             for d in dd_rows:
                 if r['rule_id'] not in [x.strip() for x in d['rule_ids'].split(';')]:
                     continue
@@ -3000,7 +3020,7 @@ def main():
                 if toks == ['*']:
                     if r['source'] != 'RULE_SCREEN' and r.get('area') not in ('화면', '조회조건'):
                         continue
-                elif not toks or not any(t.upper() in hay for t in toks):
+                elif not toks or not any(_dd_token_hit(t, r['target'], r.get('condition'), r.get('expected')) for t in toks):
                     continue
                 tag = f"GAP {d.get('gap_item') or d.get('src') + '-' + d.get('no')} · {d['dd_id']}"
                 if not (d.get('human_check') or '').startswith('확인'):
@@ -3818,6 +3838,20 @@ def main():
         if _gn: stat['GRID_ABSENT_CONTRADICT'] = _gn
     except Exception as _e:
         print(f'  [WARN] 그리드에 없음 모순 확인 실패: {type(_e).__name__} {_e}')
+    # 2026-11-26 T667(checker_defect_scan K2 '같은 문구 반복' 1,058행 · 24화면): 증거를 ' | ' 로 이어 붙이는 곳(T657 W7 접미 · smoke 공통 · AS-IS 여러 문장 합치기)이
+    #   같은 조각을 두 번 넣는다. 쓰기 직전에 같은 조각(앞뒤 공백 제거 뒤 완전 일치)만 걷어낸다 · 순서 유지 · 내용이 다른 조각은 그대로
+    _dupn = 0
+    for r in rows:
+        _ev = r.get('evidence') or ''
+        if ' | ' not in _ev: continue
+        _seen = set(); _keep = []
+        for _p in _ev.split(' | '):
+            _k = _p.strip()
+            if not _k or _k in _seen: continue
+            _seen.add(_k); _keep.append(_k)
+        _ev2 = ' | '.join(_keep)
+        if _ev2 != _ev.strip(): r['evidence'] = _ev2; _dupn += 1
+    if _dupn: stat['EVIDENCE_DUP_TRIM'] = _dupn
     with open(led_p, 'w', encoding='utf-8-sig', newline='') as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()

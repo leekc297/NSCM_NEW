@@ -1,7 +1,7 @@
 # DMF0074 — To-Be Fact Pack 요약
 
 - page_key: `demand/metal-link-price` · feature: demand · As-is Fact Pack 있음
-- 파일 16 · 엔드포인트 호출 10 (미해결 0, 주석 속 3) · 이벤트 29 · 컴포넌트 사용 60 · 하드코딩 컬럼 10 · 메시지 29
+- 파일 16 · 엔드포인트 호출 10 (미해결 0, 주석 속 3) · 이벤트 29 · 컴포넌트 사용 59 · 하드코딩 컬럼 10 · 메시지 29
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 10건
 
 ## 1. 파일
@@ -19,7 +19,7 @@
 | features/demand/src/pages/metal-link-price/index.ts | index | 2 |
 | features/demand/src/pages/metal-link-price/metal-link-price.constants.ts | constants | 313 |
 | features/demand/src/pages/metal-link-price/metal-link-price.types.ts | types | 42 |
-| features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | page | 406 |
+| features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | page | 407 |
 | features/demand/src/pages/metal-link-price/useMetalLinkPriceStore.ts | store | 176 |
 | features/demand/src/pages/metal-link-price/utils/metal-link-price.searchCombos.ts | util | 43 |
 | features/demand/src/pages/metal-link-price/__asis-mapping__.md | mapping | 318 |
@@ -68,8 +68,8 @@
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | 226 |
 | PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | 235 |
 | InputField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | 246 |
-| Button | onClick | handleApply | jsx | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | 286 |
-| Button | onClick | modalClose | jsx | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | 293 |
+| Button | onClick | modalClose | jsx | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | 283 |
+| Button | onClick | handleApply | jsx | features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx | 293 |
 | MetalLinkPriceForm | onSubmit | handleSearch | jsx | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 277 |
 | MetalLinkVersionModal | onApply | <arrow> setSearchParams | jsx | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 345 |
 | FcstUploadModal | onSave | <arrow> useSessionStore.getState,apiClient.post,Number | jsx | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 363 |
@@ -101,7 +101,6 @@
 | ItemByDivisionModal | 1 |
 | MetalLinkVersionModal | 1 |
 | FcstUploadModal | 1 |
-| Alert | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
@@ -147,7 +146,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: DMF0020(6), DMF0074_40(5), DMF0014(3), DMF0021(2), DMF0082(2), DMF0074(2), DMF0045(1), DMF0053(1)
-- SP/PKG: PKG_DMF0074(9), P_DMF0074_GET_METAL_LINK_TEMPLATE(4), P_DMF0074_GET_METAL_LINK_PRICE(4), DMF0073_GET_VERSION_SALESPRICE(3), P_DMF0074_EXCEL_UPLOAD(2), P_FROM(2), DMF0000_GET_COMMON_SPREAD_TITLE(1), P_MODE(1), P_PROGRAM_ID(1), P_CREATED_BY(1), PKG_NSCM_UI_COM_MENU(1)
+- SP/PKG: PKG_DMF0074(9), P_DMF0074_GET_METAL_LINK_TEMPLATE(4), P_DMF0074_GET_METAL_LINK_PRICE(4), DMF0073_GET_VERSION_SALESPRICE(3), P_DMF0074_EXCEL_UPLOAD(2), P_MODE(2), P_FROM(2), DMF0000_GET_COMMON_SPREAD_TITLE(1), P_PROGRAM_ID(1), P_CREATED_BY(1), PKG_NSCM_UI_COM_MENU(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -158,6 +157,8 @@
 | code | void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 }); | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 165 |
 | code | setOpenTemplateModal(true); | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 256 |
 | jsx | iconComponent: <FileExceldownloadIcon />, | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 259 |
+| jsx | <MetalLinkTemplateModal open={openTemplateModal} modalClose={() => setOpenTemplateModal(false)} divisionId={searchParams.divisionId} /> | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 349 |
+| jsx | 알림창은 MDIContainer 의 전역 <Alert /> 하나가 그린다. 이 화면에 두던 복제본은 같은 전역 저장소를 봐서 알림이 두 겹으로 열렸고, 탭을 떠날 때 전역 확인창까지 취소로 닫았다(2026-11-22 제거). | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx | 402 |
 | endpoint | ⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 58행, admin 즉시 반영) | features/demand/src/pages/metal-link-price/useMetalLinkPriceStore.ts | 128 |
 
 ## 10. __asis-mapping__.md 상태

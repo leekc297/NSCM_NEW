@@ -63,8 +63,6 @@
 | event:this.btnOK.Click | btnOK_Click_1 > SaveData | 449 | FP\Common\XpCommonAmend#insert_DWSubmit | MATCH_PATTERN | [update-batch]  |
 | event:this.btnOK.Click | btnOK_Click_1 > SaveData | 458 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=executeSubmit] | BIZ_MATCH |  |
 | event:this.btnOK.Click | btnOK_Click_1 > SaveData | 458 | FP\Common\XpCommonAmend#executeSubmit | MATCH_PATTERN | SP PR_SCM_MPP_WPP_CONVERT |
-| event:this.btnOK.Click | btnOK_Click_1 > SaveData | 458 | biz:AppService.GeneralRunProcedureCustomTable [procedure=executeSubmit] | BIZ_MATCH |  |
-| event:this.btnOK.Click | btnOK_Click_1 > SaveData | 458 | XpCommonAmend#executeSubmit | NOT_IN_FOXQUERY |  |
 | event:this.btnOK.Click | btnOK_Click_1 > SaveData | 467 | biz:FPCommonDataBLL.GeneralExecuteNonQuery [batchId=update_Submit_Flag] | BIZ_MATCH |  |
 | event:this.btnOK.Click | btnOK_Click_1 > SaveData | 467 | FP\Common\XpCommonAmend#update_Submit_Flag | MATCH_PATTERN | [update-batch]  |
 | event:this.Load | Form_Load > InitControls | 178 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_isCurrWeek] | BIZ_MATCH |  |
@@ -84,7 +82,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=executeSubmit] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.GeneralExecuteNonQuery [batchId=update_Submit_Flag] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_bukInfo] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_DateMap] | BIZ_MATCH | 1 |  |  |  |
@@ -106,7 +103,6 @@
 | FP\Common\XpCommonAmend#findPeriod_DWSubmit | MATCH_PATTERN | 3 | [sql] foxquery_sql\FP_Common_XpCommonAmend_findPeriod_DWSubmit.sql | SELECT:TH_UIS_CALENDAR, SELECT:TH_UIS_CAL, REF:FN_SITE_TIME, SELECT:FP_INSTANCE_INFO_V, SELECT:SCM_SYS_LOOKUP_VALUE |  |
 | FP\Common\XpCommonAmend#insert_DWSubmit | MATCH_PATTERN | 1 | [update-batch]  |  |  |
 | FP\Common\XpCommonAmend#update_Submit_Flag | MATCH_PATTERN | 1 | [update-batch]  | UPDATE:A, SELECT:SCM_FP_PLAN_H, REF:FN_SITE_TIME |  |
-| XpCommonAmend#executeSubmit | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -165,9 +161,11 @@
 | UsrButton | 1 | btnOK |
 | UsrDateRangePicker2 | 1 | drPeriod |
 
-## 7. 확인 필요 (14건)
+## 7. 확인 필요 (13건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 449 | SaveData | FP\{?default:part_service}\XpCommonAmend#insert_DWSubmit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 467 | SaveData | FP\{?default:part_service}\XpCommonAmend#update_Submit_Flag | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 178 | InitControls | FP\{?default:part_service}\XpCommonAmend#find_isCurrWeek | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 331 | FindData | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#find_WeekCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 332 | FindData | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#find_DateMap | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -175,9 +173,6 @@
 | 334 | FindData | FP\{?default:part_service}\FP00602_PlanAmendLineAssy#find_bukInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 401 | SaveData | FP\{?default:part_service}\XpCommonAmend#find_isCurrWeek | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 458 | SaveData | FP\{?default:part_service}\XpCommonAmend#executeSubmit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 449 | SaveData | FP\{?default:part_service}\XpCommonAmend#insert_DWSubmit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 467 | SaveData | FP\{?default:part_service}\XpCommonAmend#update_Submit_Flag | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 458 | SaveData | XpCommonAmend#executeSubmit | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 | 207 | InitControls | FP\{?default:part_service}\XPCommonAmend#findPeriod_DWSubmit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 418 | SaveData | FP\{?default:part_service}\XpCommonAmend#find_saveAuth | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 578 | Wpp_CheckedChanged | FP\{?default:part_service}\XPCommonAmend#findPeriod_DWSubmit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |

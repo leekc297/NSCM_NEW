@@ -1,0 +1,502 @@
+{
+ "rule_id": "H2",
+ "hash": "54248e17356c9022",
+ "groups": [
+  {
+   "rows": [
+    "EG-00411f5e"
+   ],
+   "why": "Checks the conditional cell colour in CheckValid; this is a different code path from SaveData, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-f75de113"
+   ],
+   "why": "Checks the conditional cell colour on the server-error path inside SaveData; this is a different path from CheckValid, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-1169e814"
+   ],
+   "why": "Trace row checking that the SetImageCell entry point is mapped; it checks a different property from the colour rules, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-117a91ca"
+   ],
+   "why": "Trace row checking that DB-metadata startup and staticColumns are implemented; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-1254494a"
+   ],
+   "why": "Trace row checking that the R7 query databind is implemented; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-1644d0ea"
+   ],
+   "why": "Trace row checking the VALID_YN mapping; it expects a mapping in the trace table rather than the yellow/white colour rule, so it is not grouped with the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-1985dad6"
+   ],
+   "why": "Trace row checking the LT_ARRIVAL_INLAND mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-1b394e4f"
+   ],
+   "why": "Trace row checking that R16/R17 client-side validation colouring (invalidCells) is implemented; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-1ed30566"
+   ],
+   "why": "Trace row checking the LT_SUM mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-327df977"
+   ],
+   "why": "Trace row checking the LT_DEPARTURE_INLAND mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-4280b68c"
+   ],
+   "why": "Trace row checking the FROM_COUNTRY mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-44723d88"
+   ],
+   "why": "Trace row checking the FROM_CITY mapping; it confirms a mapping rather than a colour, so it is not grouped with the ASIS or COLUMN rows."
+  },
+  {
+   "rows": [
+    "T-4903d096"
+   ],
+   "why": "Trace row checking the ROUTE_ID mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-5ab1639a"
+   ],
+   "why": "Trace row checking that R10 portsDash is implemented; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-6d3ab193"
+   ],
+   "why": "Trace row checking that R9 daysAllYes is implemented; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-6f3e294f"
+   ],
+   "why": "Trace row checking that the CreateSpread entry point is mapped; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-72999610"
+   ],
+   "why": "Trace row checking the TO_CITY mapping; it confirms a mapping rather than a colour, so it is not grouped."
+  },
+  {
+   "rows": [
+    "T-87ff0355"
+   ],
+   "why": "Trace row checking the TRANSPORT_MODE mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-8edcf6b2"
+   ],
+   "why": "Trace row checking the FROM_CITY_NAME mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-910b4f21"
+   ],
+   "why": "Trace row checking the TO_CITY_NAME mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-a027eb31"
+   ],
+   "why": "Trace row checking the SHIP_DOC_PREPARATION_DATE mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-a2e01ea6"
+   ],
+   "why": "Trace row checking that R18 Insert/Delete is implemented; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-a86cad2c"
+   ],
+   "why": "Trace row checking the PRIORITY mapping; it confirms a mapping rather than a colour, so it is not grouped."
+  },
+  {
+   "rows": [
+    "T-ae5f500b"
+   ],
+   "why": "Trace row checking the LT_VOYAGE mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-b2c6bde7"
+   ],
+   "why": "Trace row checking the LT_LAY_OFF_CLEARANCE mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-c0a47fd2"
+   ],
+   "why": "Trace row checking that UC-07 keeps the filter after re-query; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-c21ed709"
+   ],
+   "why": "Trace row checking that the R11/R12 city popup is implemented; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-c2cdd93e"
+   ],
+   "why": "Trace row checking the TO_COUNTRY mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-ec437b38"
+   ],
+   "why": "Trace row checking that the SetSpreadColumn entry point is mapped; no other row checks the same thing."
+  },
+  {
+   "rows": [
+    "T-ef596679"
+   ],
+   "why": "Trace row checking the D_PORT_NAME mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-f5ade244"
+   ],
+   "why": "Trace row checking the LT_TYPE mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "T-ffa8d020"
+   ],
+   "why": "Trace row checking the LT_WAIT_SHIPPING mapping; its expected result differs from the COLUMN row."
+  },
+  {
+   "rows": [
+    "V-06e7dec2"
+   ],
+   "why": "Server-error path in SaveData colours FROM_CITY_NAME–FROM_CITY as Invalid; this trigger differs from the empty-value check in client validation, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-17e451a7"
+   ],
+   "why": "Client validation colours FROM_CITY as Invalid when it is empty; this condition differs from the server-error path."
+  },
+  {
+   "rows": [
+    "V-0810a59e"
+   ],
+   "why": "Restores FROM_CITY to UnLockColor; this expected result differs from the Invalid colouring."
+  },
+  {
+   "rows": [
+    "V-e63ff383"
+   ],
+   "why": "Client validation colours TO_CITY as Invalid when it is empty; this condition differs from the server-error path."
+  },
+  {
+   "rows": [
+    "V-dc54eed4"
+   ],
+   "why": "Server-error path colours the TO_CITY_NAME–TO_CITY range as Invalid; its condition differs from the empty-value check."
+  },
+  {
+   "rows": [
+    "V-bc631885"
+   ],
+   "why": "Server-error path colours the D_PORT_NAME–TO_CITY range as Invalid; this range differs from every other row."
+  },
+  {
+   "rows": [
+    "V-c099fa4f"
+   ],
+   "why": "Restores TO_CITY to UnLockColor; this expected result differs from the Invalid colouring."
+  },
+  {
+   "rows": [
+    "V-b4651880"
+   ],
+   "why": "Client validation colours PRIORITY as Invalid when it is below 1; this condition differs from the server-error path."
+  },
+  {
+   "rows": [
+    "V-fa71e89c"
+   ],
+   "why": "Server-error path colours PRIORITY as Invalid; its condition differs from the client-side check for values below 1."
+  },
+  {
+   "rows": [
+    "V-c56bdc72"
+   ],
+   "why": "Restores PRIORITY to UnLockColor; this expected result differs from the Invalid colouring."
+  },
+  {
+   "rows": [
+    "V-b6f27092"
+   ],
+   "why": "Server-error path colours the LT_TYPE–TRANSPORT_MODE range as Invalid; this range differs from every other row."
+  },
+  {
+   "rows": [
+    "V-0b6a6f50"
+   ],
+   "why": "Standard 3-colour rule for the VALID_YN column; no other COLUMN row covers this column."
+  },
+  {
+   "rows": [
+    "V-0bef758e"
+   ],
+   "why": "Standard 3-colour rule for the D_PORT_NAME column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-174e190f"
+   ],
+   "why": "Standard 3-colour rule for the D_COUNTRY column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-29d5091a"
+   ],
+   "why": "Standard 3-colour rule for the DAYS_SUN column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-2c0c4c1d"
+   ],
+   "why": "Standard 3-colour rule for the TO_CITY column; its expected result differs from the ASIS Invalid/UnLock rows."
+  },
+  {
+   "rows": [
+    "V-2d563d06"
+   ],
+   "why": "Standard 3-colour rule for the LT_LAY_OFF_CLEARANCE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-2df53e8e"
+   ],
+   "why": "Standard 3-colour rule for the LT_SUM column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-37207093"
+   ],
+   "why": "Standard 3-colour rule for the A_PORT_CODE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-3a1eb461"
+   ],
+   "why": "Standard 3-colour rule for the LAST_UPDATE_DATE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-3effbc72"
+   ],
+   "why": "Standard 3-colour rule for the One_SEGMENT_COST column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-461b5c0a"
+   ],
+   "why": "Standard 3-colour rule for the ROUTE_ID column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-49171110"
+   ],
+   "why": "Standard 3-colour rule for the DAYS_TUE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-4d504fb5"
+   ],
+   "why": "Standard 3-colour rule for the DAYS_SAT column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-540bff9b"
+   ],
+   "why": "Standard 3-colour rule for the TO_COUNTRY column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-706ad28d"
+   ],
+   "why": "Standard 3-colour rule for the TO_CITY_NAME column; its expected result differs from the ASIS Invalid row."
+  },
+  {
+   "rows": [
+    "V-775323e3"
+   ],
+   "why": "Standard 3-colour rule for the LT_WAIT_SHIPPING column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-8213c3ad"
+   ],
+   "why": "Standard 3-colour rule for the DAYS_FRI column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-83f1ed9b"
+   ],
+   "why": "Standard 3-colour rule for the SHIP_DOC_PREPARATION_DATE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-870e5b04"
+   ],
+   "why": "Standard 3-colour rule for the D_PORT_CODE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-8aa02ef9"
+   ],
+   "why": "Standard 3-colour rule for the A_PORT_NAME column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-8ccd91b6"
+   ],
+   "why": "Standard 3-colour rule for the TRANSPORT_MODE column; its expected result differs from the ASIS Invalid row."
+  },
+  {
+   "rows": [
+    "V-91b2e167"
+   ],
+   "why": "Standard 3-colour rule for the LT_DEPARTURE_INLAND column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-94614405"
+   ],
+   "why": "Standard 3-colour rule for the CREATED_BY column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-9593291d"
+   ],
+   "why": "Standard 3-colour rule for the Two_SEGMENT_COST column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-9623e1bc"
+   ],
+   "why": "Standard 3-colour rule for the SHIPPING_COMPANY column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-9a886d51"
+   ],
+   "why": "Standard 3-colour rule for the DAYS_WED column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-9c622c63"
+   ],
+   "why": "Standard 3-colour rule for the Three_SEGMENT_COST column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-a15f8422"
+   ],
+   "why": "Standard 3-colour rule for the FROM_CITY column; its expected result differs from the ASIS Invalid/UnLock rows."
+  },
+  {
+   "rows": [
+    "V-a4b02e55"
+   ],
+   "why": "Standard 3-colour rule for the PRIORITY column; its expected result differs from the ASIS Invalid/UnLock rows."
+  },
+  {
+   "rows": [
+    "V-a7cabeb0"
+   ],
+   "why": "Standard 3-colour rule for the A_COUNTRY column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-ba113c85"
+   ],
+   "why": "Standard 3-colour rule for the LT_VOYAGE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-cf9f292a"
+   ],
+   "why": "Standard 3-colour rule for the LT_TYPE column; its expected result differs from the ASIS Invalid row."
+  },
+  {
+   "rows": [
+    "V-db9114d5"
+   ],
+   "why": "Standard 3-colour rule for the FROM_CITY_NAME column; its expected result differs from the ASIS Invalid row."
+  },
+  {
+   "rows": [
+    "V-e13a9f84"
+   ],
+   "why": "Standard 3-colour rule for the DAYS_THU column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-e535827e"
+   ],
+   "why": "Standard 3-colour rule for the DAYS_MON column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-f21dd6e5"
+   ],
+   "why": "Standard 3-colour rule for the FROM_COUNTRY column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-f258cdaa"
+   ],
+   "why": "Standard 3-colour rule for the CREATION_DATE column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-f70239ca"
+   ],
+   "why": "Standard 3-colour rule for the LAST_UPDATED_BY column; this column is not covered by any other row."
+  },
+  {
+   "rows": [
+    "V-ff2c5603"
+   ],
+   "why": "Standard 3-colour rule for the LT_ARRIVAL_INLAND column; this column is not covered by any other row."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 05:19:09",
+ "cost": 0.25180610000000003
+}

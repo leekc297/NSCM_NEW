@@ -1,5 +1,7 @@
 ﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
 "demand/demand-manager","DMF0068","features/demand/src/pages/demand-manager/components/DemandManagerForm.tsx","20","DMF0068","","","","AS-IS DMF0068 조회조건 전수 — Version(팝업 주입) / Period(월 구간). 사업부는 40 고정이라 조회조건에 없다."
+"demand/demand-manager","DMF0068","features/demand/src/pages/demand-manager/components/DemandManagerForm.tsx","40","DMF0082 DMF0020","","","","Version — 직접 입력 + 우측 팝업 버튼. 기본 선택값이 없어 미선택 시 빈 칸이고, 조회는 MSG00283 으로 막는다. 공용 VersionField 를 쓰지 않는 이유: 빈 값에 'Current' 를 대신 표시해 (DMF0082/DMF0020 은 그 값이 유효한 버전 토큰) 선택된 것처럼 보이기 때문. 표시값 = 조회키 = VERSION_NO 하나다. 팝업이 설명을 덧붙여 보여주다가 포커스 순간 코드로 되돌리면 값이"
+"demand/demand-manager","DMF0068","features/demand/src/pages/demand-manager/components/DemandManagerForm.tsx","47","DMF0020","","","","size=3 — DMF0020 sales-future-price 의 VersionField(gridSize=3)와 동일 폭"
 "demand/demand-manager","DMF0068","features/demand/src/pages/demand-manager/components/DemandManagerGrid.tsx","25","DMF0068","","","","⭐ DMF0068 Grid — 왼쪽 고정 영역(컬럼 메타) + 오른쪽 월 영역(조회 기간에서 산출)."
 "demand/demand-manager","DMF0068","features/demand/src/pages/demand-manager/components/DemandManagerGrid.tsx","113","","PKG_DMF0068 P_DMF0068_GET_LOOKUPPROJECT","","","Project 셀 콤보 — PKG_DMF0068.P_DMF0068_GET_LOOKUPPROJECT (CODE/NAME)"
 "demand/demand-manager","DMF0068","features/demand/src/pages/demand-manager/components/DemandManagerGrid.tsx","376","DMF0082","","","","내부 인덱스가 어긋난다. 다음 프레임으로 미룬다(DMF0082 선례)."

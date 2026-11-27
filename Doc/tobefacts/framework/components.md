@@ -28,7 +28,7 @@ props/params:
 
 - `mirrorRouteOnMount?: boolean — 404 로 진입한 경우 false — RouterSync 가 마운트 시 URL 을 덮어쓰지 않게 한다`
 
-### MDITabs  <sub>apps/web/src/mdi/MDITabs.tsx:16</sub>
+### MDITabs  <sub>apps/web/src/mdi/MDITabs.tsx:18</sub>
 
 ```ts
 (): any
@@ -55,28 +55,28 @@ props/params:
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
 | **MaterialByDivisionModal** | `features/master/src/components` | 73 |  |  |
-| **PeriodField** | `features/master/src/components` | 67 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
-| **ProjectByDivisionModal** | `features/master/src/components` | 36 | button:^btnProject$ |  |
-| **MeasureSelectModal** | `features/master/src/components` | 29 | button:^btnMeasure$ |  |
-| **ItemByDivisionModal** | `features/master/src/components` | 27 | button:^btn(Item\|Model\|Material)(Id)?$ |  |
-| **ProjectField** | `features/master/src/components` | 15 | field:^(txt\|usr)Project(Code)?$ |  |
-| **ItemField** | `features/master/src/components` | 12 | field:^(txt\|usr)(Item\|ItemId\|Model\|ModelId\|Nickname\|Material\|MaterialId)$ / field:^(txt\|usr)NickName$ |  |
-| **OwnerField** | `features/master/src/components` | 11 | field:^(txt\|cbo\|usr)Owner$ |  |
+| **PeriodField** | `features/master/src/components` | 70 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
+| **ProjectByDivisionModal** | `features/master/src/components` | 37 | button:^btnProject$ |  |
+| **MeasureSelectModal** | `features/master/src/components` | 31 | button:^btnMeasure$ |  |
+| **ItemByDivisionModal** | `features/master/src/components` | 28 | button:^btn(Item\|Model\|Material)(Id)?$ |  |
+| **ProjectField** | `features/master/src/components` | 17 | field:^(txt\|usr)Project(Code)?$ |  |
+| **ItemField** | `features/master/src/components` | 14 | field:^(txt\|usr)(Item\|ItemId\|Model\|ModelId\|Nickname\|Material\|MaterialId)$ / field:^(txt\|usr)NickName$ |  |
+| **OwnerField** | `features/master/src/components` | 13 | field:^(txt\|cbo\|usr)Owner$ |  |
 | **ModelByDivisionPopup** | `features/master/src/components` | 8 |  |  |
-| **SalesSiteField** | `features/master/src/components` | 7 | field:^clbSalesSite$\|^cboSalesSite$ | // 4. SalesSiteField (size=4, combo=SalesSite) // |
-| **DivisionField** | `features/master/src/components` | 6 | field:^cboDivision$\|^cboDiv$ |  |
+| **SalesSiteField** | `features/master/src/components` | 8 | field:^clbSalesSite$\|^cboSalesSite$ | // 4. SalesSiteField (size=4, combo=SalesSite) // |
+| **DivisionField** | `features/master/src/components` | 7 | field:^cboDivision$\|^cboDiv$ |  |
 | **CustomerModal** | `features/master/src/components` | 5 | button:^btnCustomer$ |  |
+| **TeamModal** | `features/master/src/components` | 5 |  |  |
 | **VersionField** | `features/master/src/components` | 5 | field:^cboVersion$\|^cboVer(sion)?No$ |  |
 | **ContributeVersionModal** | `features/master/src/components` | 4 |  |  |
+| **EndCustomerField** | `features/master/src/components` | 4 | field:^clb(End)?Customer$\|^cboEndCustomer$ | // 3. EndCustomerField (size=4, combo=EndCustomer) // |
 | **OwnerByDivisionModal** | `features/master/src/components` | 4 | button:^btnOwner$ |  |
 | **OwnerModal** | `features/master/src/components` | 4 |  |  |
-| **TeamModal** | `features/master/src/components` | 4 |  |  |
+| **PlantSiteField** | `features/master/src/components` | 4 | field:^clbPlantSite$\|^cboPlantSite$\|^clbPlant$ | // 6. PlantSiteField (size=4, combo=PlantSitebyEndCustomer) // // Plant Site — combo `PlantSitebyEndCustomer`. // 2026-08-22 콤보 SQL 개정: 파라미터 |
+| **TeamField** | `features/master/src/components` | 4 | field:^clbTeam$\|^cboTeam$ | // 2. TeamField (size=4, combo=TeambyDivision) // |
+| **BizTypeField** | `features/master/src/components` | 3 | field:^cboBizType$\|^cboBiz / field:^clbBizType$ | // 7. BizTypeField (size=4, combo=BizType — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BIZ_TYPE') // |
 | **BucketField** | `features/master/src/components` | 3 | field:^cboBucket(Type)?$ |  |
-| **EndCustomerField** | `features/master/src/components` | 3 | field:^clb(End)?Customer$\|^cboEndCustomer$ | // 3. EndCustomerField (size=4, combo=EndCustomer) // |
-| **PlantSiteField** | `features/master/src/components` | 3 | field:^clbPlantSite$\|^cboPlantSite$\|^clbPlant$ | // 6. PlantSiteField (size=4, combo=PlantSitebyEndCustomer) // // Plant Site — combo `PlantSitebyEndCustomer`. // 2026-08-22 콤보 SQL 개정: 파라미터 |
 | **RegionModal** | `features/master/src/components` | 3 |  |  |
-| **TeamField** | `features/master/src/components` | 3 | field:^clbTeam$\|^cboTeam$ | // 2. TeamField (size=4, combo=TeambyDivision) // |
-| **BizTypeField** | `features/master/src/components` | 2 | field:^cboBizType$\|^cboBiz / field:^clbBizType$ | // 7. BizTypeField (size=4, combo=BizType — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='BIZ_TYPE') // |
 | **ProjectModal** | `features/master/src/components` | 2 |  |  |
 | **SearchOverRangeField** | `features/master/src/components` | 2 | field:^chk(Over\|SearchOver)Range$ |  |
 | **VersionModal** | `features/master/src/components` | 2 |  |  |
@@ -90,7 +90,7 @@ props/params:
 | **ProjectByDivisionPopup** | `features/master/src/components` | 0 |  |  |
 | **SoldToCustomerField** | `features/master/src/components` | 0 | field:^clbSoldTo\|^cboSoldTo | // 5. SoldToCustomerField (size=4, combo=SoldCustomer) // |
 
-### MaterialByDivisionModal  <sub>features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx:88</sub>
+### MaterialByDivisionModal  <sub>features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx:91</sub>
 
 ```ts
 ({ open, modalClose, setSelectedValue, preSearchParams, headerTitle, multiCheckbox, multiDivision, dialogSize, operationGroupLabel, }: MaterialByDivisionModalProps): any
@@ -106,12 +106,12 @@ props/params:
 - `multiCheckbox?: boolean — 멀티 선택 모드(옵션, default false). true 시 체크박스 컬럼으로 선택.`
 - `multiDivision?: boolean — Division 검색조건 멀티 표시 모드(옵션, default false). false 면 호출 화면의 단일 divisionId 를 disabled 로 고정 표시(AS-IS SCM0002 계약, 27개+ 화면 공용 기본값). true 면 호출 화면이 넘긴 콤마 결합 divisionId(`
 - `dialogSize?: number — 팝업 가로 폭(px, 옵션).`
-- `operationGroupLabel?: string — Operation Group 표시 라벨(옵션). 없으면 코드값 표시. SP 에는 코드가 넘어간다.`
+- `operationGroupLabel?: string — Operation Group 표시 라벨 강제(옵션 override). 미지정이면 팝업이 operationGroup 코드를 OPERATION_GROUP 룩업으로 공통 해석해 이름을 표시한다(코드가 룩업에 없으면 코드 원문). SP 에는 항상 코드가 넘어간다.`
 
-### PeriodField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1127</sub>
+### PeriodField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1159</sub>
 
 ```ts
-({ start, end, onChange, gridSize, label, mode, disabledStart, disabled, }: PeriodFieldProps): any
+({ start, end, onChange, gridSize, label, mode, disabledStart, disabled, startMax, endMin, }: PeriodFieldProps): any
 ```
 
 props/params:
@@ -125,6 +125,8 @@ props/params:
 - `"month" — 'month' = 년월(YYYYMM) 구간 — AS-IS drpPeriodMonth 계열 화면(DMF0074 등, usecase='month' 정본 = DemandManagerForm). 기본 'date'(YYYYMMDD) — 기존 사용처 회귀 0. ⚠ 값 형식이 모드에 따라 다르다(Y`
 - `disabledStart?: boolean — 시작(From) 피커를 비활성화한다 — AS-IS 일부 화면(SCP0006 등)이 `MonthMin1=MonthMax1`로 From 월 자체를 고정하는 동작 재현용(design/02_search-combo.md §2 #6). 기본 false — 미지정 시 기존 사용처와 동일하게 동작(회`
 - `disabled?: boolean — From/To 두 피커 모두 비활성화 (예: SSP0015 Packer 시트 — Period 편집 불가). 기본 false(회귀 0).`
+- `startMax?: string — 시작(From) 피커의 최대 선택일, 종료(To) 피커의 최소 선택일(값 형식은 start/end 와 동일 — date=YYYYMMDD / month=YYYYMM). 범위 밖 날짜를 picker 에서 아예 비활성화한다. SSP0060 상세 Shipment Date 를 상단 Period `
+- `endMin?: string`
 
 ### ProjectByDivisionModal  <sub>features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx:56</sub>
 
@@ -179,7 +181,7 @@ props/params:
 - `dialogSize?: number — ⭐ 팝업 가로 폭(px, 옵션). 미지정이면 1000 = 기존 동작 그대로(회귀 0). 검색조건/컬럼을 줄여 연 화면에서 폭까지 좁히라고 둔 opt-in.`
 - `smallDivision?: { menuId: string; itemType?: string; } — 좁은 조회(itemBySmallDivision) 사용 opt-in. 미지정이면 기존 itemByDivision 그대로(회귀 0). 넓은 쪽은 team/end customer/site 축까지 펼친 목록이라, visibleColumns 로 컬럼을 좁혀 연 화면에서는 같은 Model 이 여러`
 
-### ProjectField  <sub>features/master/src/components/searchFields/SearchFields.tsx:871</sub>
+### ProjectField  <sub>features/master/src/components/searchFields/SearchFields.tsx:891</sub>
 
 ```ts
 (props: ProjectFieldProps): any
@@ -190,6 +192,7 @@ props/params:
 - `multiCheckbox?: boolean`
 - `disabled?: boolean`
 - `labelCode?: string`
+- `pasteMultiline?: boolean`
 - `value: string[]`
 - `onChange: (v: string[]) => void`
 - `division: string`
@@ -199,7 +202,7 @@ props/params:
 - `projectCodes?: string[]`
 - `gridSize?: number`
 
-### ItemField  <sub>features/master/src/components/searchFields/SearchFields.tsx:950</sub>
+### ItemField  <sub>features/master/src/components/searchFields/SearchFields.tsx:972</sub>
 
 ```ts
 (props: ItemFieldProps): any
@@ -218,7 +221,7 @@ props/params:
 - `projectCodes?: string[]`
 - `gridSize?: number`
 
-### OwnerField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1025</sub>
+### OwnerField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1047</sub>
 
 ```ts
 (props: OwnerFieldProps): any
@@ -251,7 +254,7 @@ props/params:
 - `params?: ModelByDivisionPopupParams`
 - `multiSelect?: boolean — 다중선택 opt-in (기본 false = 기존 단일선택). AS-IS `Form_Load` 첫 인자 bMultiSelect 자리다. true 면 체크박스 열이 생기고, OK 가 체크된 행들을 AS-IS 와 같은 규약으로 돌려준다 — `SetItem()`(SCM0002_ItembyDiv`
 
-### SalesSiteField  <sub>features/master/src/components/searchFields/SearchFields.tsx:464</sub>
+### SalesSiteField  <sub>features/master/src/components/searchFields/SearchFields.tsx:482</sub>
 
 ```ts
 ({ value, onChange, division, gridSize, comboId, endCustomer, deptId, asYn, cascade, sortBy, debugLabel, }: MultiFieldProps & { comboId?: string; endCustomer?: string; deptId?: string; asYn?: boolean; cascade?: CascadeFilter; sortBy?: DropdownSortKey; debugLabel?: string; }): any
@@ -271,7 +274,7 @@ props/params:
 - `sortBy?: DropdownSortKey — 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다. 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조). 표시 계층 전용이라 cascade 가 좁히는 원본 행`
 - `debugLabel?: string — 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조.`
 
-### DivisionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:286</sub>
+### DivisionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:304</sub>
 
 ```ts
 ({ value, onChange, gridSize, disabled }: DivisionFieldProps): any
@@ -299,7 +302,22 @@ props/params:
 - `soldTo?: string`
 - `shipTo?: string`
 
-### VersionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1332</sub>
+### TeamModal  <sub>features/master/src/components/teamModal/TeamModal.tsx:26</sub>
+
+```ts
+({ open, modalClose, setSelectedValue, teamId, teamName, divisionId, }: TeamModalProps): any
+```
+
+props/params:
+
+- `open: boolean`
+- `modalClose: () => void`
+- `setSelectedValue: (teamId: string, teamName?: string) => void`
+- `teamId?: string`
+- `teamName?: string`
+- `divisionId?: string`
+
+### VersionField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1382</sub>
 
 ```ts
 ({ value, onOpenPopup, gridSize, label, emptyText, onValueChange, versionNo, }: VersionFieldProps): any
@@ -325,6 +343,24 @@ props/params:
 
 - `open: boolean`
 - `modalClose: () => void`
+
+### EndCustomerField  <sub>features/master/src/components/searchFields/SearchFields.tsx:394</sub>
+
+```ts
+({ value, onChange, division, gridSize, comboId, cascade, disabled, sortBy, debugLabel, }: MultiFieldProps & { comboId?: string; cascade?: CascadeFilter; disabled?: boolean; sortBy?: DropdownSortKey; debugLabel?: string; }): any
+```
+
+props/params:
+
+- `value: string[]`
+- `onChange: (v: string[]) => void`
+- `division?: string`
+- `gridSize?: number`
+- `comboId?: string — ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체. 기본 'EndCustomer'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본 'EndCustomerByDivision'(40=SITE_ITEM owner-d`
+- `cascade?: CascadeFilter — 클라이언트 cascade 필터. CascadeFilter 주석 참조. 예: { DEPT_ID: sc.deptIds }`
+- `disabled?: boolean — 2026-08-22 opt-in — division 기준 잠금 (AS-IS DMF0043 Enabled=false 계열). 미지정 = 기존 동작(무영향). 판정은 호출 측 책임 (예: divisionId === '40').`
+- `sortBy?: DropdownSortKey — 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다. 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조). 표시 계층 전용이라 cascade 가 좁히는 원본 행`
+- `debugLabel?: string — 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조.`
 
 ### OwnerByDivisionModal  <sub>features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx:36</sub>
 
@@ -357,54 +393,7 @@ props/params:
 - `singleSelect?: boolean — true 면 담당자를 한 명만 확정할 수 있다 — 2명 이상 선택 후 OK 시 경고하고 닫지 않는다.`
 - `maxSelect?: number — 확정할 수 있는 최대 인원. 넘게 선택한 채 OK 를 누르면 경고하고 닫지 않는다(singleSelect 와 같은 방식). 미지정이면 상한 없음(종전 동작). singleSelect 가 켜져 있으면 그 판정이 먼저다. 첫 사용처 DMF0005 Owner 10명 제한 (2026-10-13`
 
-### TeamModal  <sub>features/master/src/components/teamModal/TeamModal.tsx:26</sub>
-
-```ts
-({ open, modalClose, setSelectedValue, teamId, teamName, divisionId, }: TeamModalProps): any
-```
-
-props/params:
-
-- `open: boolean`
-- `modalClose: () => void`
-- `setSelectedValue: (teamId: string, teamName?: string) => void`
-- `teamId?: string`
-- `teamName?: string`
-- `divisionId?: string`
-
-### BucketField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1276</sub>
-
-```ts
-({ value, onChange, gridSize }: BucketFieldProps): any
-```
-
-props/params:
-
-- `value: "W"`
-- `"M"`
-- `onChange: (v: "W"`
-- `"M") => void`
-- `gridSize?: number`
-
-### EndCustomerField  <sub>features/master/src/components/searchFields/SearchFields.tsx:376</sub>
-
-```ts
-({ value, onChange, division, gridSize, comboId, cascade, disabled, sortBy, debugLabel, }: MultiFieldProps & { comboId?: string; cascade?: CascadeFilter; disabled?: boolean; sortBy?: DropdownSortKey; debugLabel?: string; }): any
-```
-
-props/params:
-
-- `value: string[]`
-- `onChange: (v: string[]) => void`
-- `division?: string`
-- `gridSize?: number`
-- `comboId?: string — ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체. 기본 'EndCustomer'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본 'EndCustomerByDivision'(40=SITE_ITEM owner-d`
-- `cascade?: CascadeFilter — 클라이언트 cascade 필터. CascadeFilter 주석 참조. 예: { DEPT_ID: sc.deptIds }`
-- `disabled?: boolean — 2026-08-22 opt-in — division 기준 잠금 (AS-IS DMF0043 Enabled=false 계열). 미지정 = 기존 동작(무영향). 판정은 호출 측 책임 (예: divisionId === '40').`
-- `sortBy?: DropdownSortKey — 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다. 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조). 표시 계층 전용이라 cascade 가 좁히는 원본 행`
-- `debugLabel?: string — 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조.`
-
-### PlantSiteField  <sub>features/master/src/components/searchFields/SearchFields.tsx:697</sub>
+### PlantSiteField  <sub>features/master/src/components/searchFields/SearchFields.tsx:715</sub>
 
 ```ts
 ({ value, onChange, division, endCustomer, gridSize, comboId, cascade, disabled: disabledOverride, sortBy, debugLabel, }: MultiFieldProps & { endCustomer?: string; comboId?: string; cascade?: CascadeFilter; disabled?: boolean; sortBy?: DropdownSortKey; debugLabel?: string; }): any
@@ -423,21 +412,7 @@ props/params:
 - `sortBy?: DropdownSortKey — 목록 정렬. 미지정 = 위 TEMP_LIST_SORT_BY(임시 일괄 'label'). 화면이 명시하면 그 값이 이긴다. 'label' 은 표시명 기준 숫자-영어-한글 순 (CustomDropdown sortOptionsBy 참조). 표시 계층 전용이라 cascade 가 좁히는 원본 행`
 - `debugLabel?: string — 임시 로컬 디버그 — 넘기면 cascade 단계별 결과가 콘솔에 찍힌다. SearchFields.debug 참조.`
 
-### RegionModal  <sub>features/master/src/components/regionModal/RegionModal.tsx:31</sub>
-
-```ts
-({ open, modalClose, setSelectedValue, country, city, }: RegionModalProps): any
-```
-
-props/params:
-
-- `open: boolean`
-- `modalClose: () => void`
-- `setSelectedValue: (countryCode: string, countryName: string, cityCode: string, cityName: string) =`
-- `country?: string`
-- `city?: string`
-
-### TeamField  <sub>features/master/src/components/searchFields/SearchFields.tsx:322</sub>
+### TeamField  <sub>features/master/src/components/searchFields/SearchFields.tsx:340</sub>
 
 ```ts
 ({ value, onChange, division, gridSize, comboId, }: MultiFieldProps & { comboId?: string; }): any
@@ -451,7 +426,7 @@ props/params:
 - `gridSize?: number`
 - `comboId?: string — ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in 콤보 대체. 기본 'TeambyDivision'(기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 등록본 'UserTeamByDivision'(SITE_ITEM.OWNER 1번 토`
 
-### BizTypeField  <sub>features/master/src/components/searchFields/SearchFields.tsx:814</sub>
+### BizTypeField  <sub>features/master/src/components/searchFields/SearchFields.tsx:832</sub>
 
 ```ts
 ({ value, onChange, gridSize, comboId, division, }: Omit<MultiFieldProps, "division"> & { comboId?: string; division?: string; }): any
@@ -464,6 +439,34 @@ props/params:
 - `gridSize?: number`
 - `comboId?: string — ⭐ 2026-07-23 (DMF0003 조회조건 AS-IS 정합) — opt-in. comboId 기본 'BizType'(전역 lookup — 기존 화면 무영향). DMF0003 은 AS-IS BigFilter 1:1 'BizTypebyDivision'(DM_BIZ_TYPE(40) UN`
 - `division?: string`
+
+### BucketField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1326</sub>
+
+```ts
+({ value, onChange, gridSize }: BucketFieldProps): any
+```
+
+props/params:
+
+- `value: "W"`
+- `"M"`
+- `onChange: (v: "W"`
+- `"M") => void`
+- `gridSize?: number`
+
+### RegionModal  <sub>features/master/src/components/regionModal/RegionModal.tsx:31</sub>
+
+```ts
+({ open, modalClose, setSelectedValue, country, city, }: RegionModalProps): any
+```
+
+props/params:
+
+- `open: boolean`
+- `modalClose: () => void`
+- `setSelectedValue: (countryCode: string, countryName: string, cityCode: string, cityName: string) =`
+- `country?: string`
+- `city?: string`
 
 ### ProjectModal  <sub>features/master/src/components/projectModal/ProjectModal.tsx:24</sub>
 
@@ -479,7 +482,7 @@ props/params:
 - `preSearchParams: ProcRequest<"COM0012", "project">`
 - `preProject: string`
 
-### SearchOverRangeField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1383</sub>
+### SearchOverRangeField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1433</sub>
 
 ```ts
 ({ value, onChange, gridSize }: CheckFieldProps): any
@@ -505,7 +508,7 @@ props/params:
 - `projectType: string`
 - `onSelect: (versionNo: string, label: string) => void`
 
-### YearField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1219</sub>
+### YearField  <sub>features/master/src/components/searchFields/SearchFields.tsx:1269</sub>
 
 ```ts
 ({ value, onChange, gridSize, label, required, minYear, maxYear, }: YearFieldProps): any
@@ -633,7 +636,7 @@ props/params:
 - `onSelect?: (selected: ProjectByDivisionSelection) => void`
 - `params?: ProjectByDivisionPopupParams`
 
-### SoldToCustomerField  <sub>features/master/src/components/searchFields/SearchFields.tsx:585</sub>
+### SoldToCustomerField  <sub>features/master/src/components/searchFields/SearchFields.tsx:603</sub>
 
 ```ts
 ({ value, onChange, division, gridSize, comboId, endCustomer, deptId, cascade, debugLabel, }: MultiFieldProps & { comboId?: string; endCustomer?: string; deptId?: string; cascade?: CascadeFilter; debugLabel?: string; }): any
@@ -655,24 +658,24 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **DataGrid** | `@shared/components` | 287 | FpSpread |  |
-| **CustomDropdown** | `@shared/components` | 181 | UsrCombo / UsrComboBox / ComboBox / UsrCheckedList / UsrCheckedList2 / CheckedListBoxControl |  |
-| **SearchArea** | `@shared/components` | 176 | UsrConditionPanel / button:^btn(Search\|Find\|Inquiry\|Retrieve)$ / button:^(FindButton\|btnQuery)$ |  |
-| **MainTitle** | `@shared/components` | 141 |  |  |
-| **SubTitle** | `@shared/components` | 141 | button:^btnExcel(Down\|Download\|Export)?$ |  |
-| **CustomDialog** | `@shared/components` | 105 |  |  |
-| **ResultArea** | `@shared/components` | 61 |  |  |
-| **ColumnLayoutModal** | `@shared/components` | 31 | button:^btnColumn$ |  |
+| **DataGrid** | `@shared/components` | 291 | FpSpread |  |
+| **CustomDropdown** | `@shared/components` | 186 | UsrCombo / UsrComboBox / ComboBox / UsrCheckedList / UsrCheckedList2 / CheckedListBoxControl |  |
+| **SearchArea** | `@shared/components` | 180 | UsrConditionPanel / button:^btn(Search\|Find\|Inquiry\|Retrieve)$ / button:^(FindButton\|btnQuery)$ |  |
+| **MainTitle** | `@shared/components` | 143 |  |  |
+| **SubTitle** | `@shared/components` | 143 | button:^btnExcel(Down\|Download\|Export)?$ |  |
+| **CustomDialog** | `@shared/components` | 107 |  |  |
+| **ResultArea** | `@shared/components` | 65 |  |  |
+| **ColumnLayoutModal** | `@shared/components` | 33 | button:^btnColumn$ |  |
 | **TabItem** | `@shared/components` | 31 | TabPage |  |
 | **TabWrapper** | `@shared/components` | 31 | TabControl |  |
-| **PeriodRangePicker** | `@shared/components` | 23 |  |  |
+| **PeriodRangePicker** | `@shared/components` | 22 |  |  |
 | **SsoUserModal** | `@shared/components` | 16 |  |  |
 | **DETAIL_CONDITIONS_SX** | `@shared/components` | 2 |  | 하단 DetailBar 전용. 상단(CSS Grid)과 달리 레거시 flex-wrap Grid 를 그대로 둔다 — 하단바는 // 리사이즈 Panel(width 1460 + overflow:hidden) 안이라 넘쳐도 가로 스크롤이 닿지 않아, 넘치면  |
 | **MessageModal** | `@shared/components` | 2 |  |  |
-| **Alert** | `@shared/components` | 1 |  |  |
 | **CascadeDropdown** | `@shared/components` | 1 |  | 종속 콤보(공유 캐스케이더) — 1~N단계 필드를 항상 나란히 보여주되, 어느 필드를 누르든 같은 액션(하나의 컬럼 팝업)이 열린다. 팝업에서 경로를 골라 내려가면 각 단계 필드가 함께 채워지고, 상위를 다시 고르면 하위는 초기화된다. 값은 name  |
 | **ColumnSelectDualList** | `@shared/components` | 1 |  |  |
 | **SsoDeptModal** | `@shared/components` | 1 |  |  |
+| **Alert** | `@shared/components` | 0 |  |  |
 | **ColorPickerButton** | `@shared/components` | 0 |  |  |
 | **ColumnButton** | `@shared/components` | 0 |  |  |
 | **ColumnGrids** | `@shared/components` | 0 |  |  |
@@ -687,10 +690,10 @@ props/params:
 | **SEARCH_AREA_MIN_WIDTH** | `@shared/components` | 0 |  | 조회조건 필드(4개/행, 각 25%)가 이 폭 아래에서 더 줄지 않도록 유지하는 페이지 최소너비. // ViewContainer(apps/web/src/mdi)가 페이지 전체(MainTitle+SearchArea+SubTitle+Result)를 //  |
 | **ToastMessage** | `@shared/components` | 0 |  |  |
 
-### DataGrid  <sub>packages/shared/src/components/organisms/data-grid/DataGrid.tsx:2015</sub>
+### DataGrid  <sub>packages/shared/src/components/organisms/data-grid/DataGrid.tsx:2394</sub>
 
 ```ts
-<T extends WijmoRowItem = WijmoRowItem>({ gridFilterRef, gridRef, editTrackerRef, itemsSource, staticColumns, dynamicColumns, useSummaryTooltip, useCellTooptip, useCheckbox, useResultColumns, useAggregationRow, aggregationRowPlacement, emptyCellAsZero, negativeCellAsZero, numberRules, excludeFromDirtyCheck, hideStatusColumn, saveAuth, isReadOnly, useContextMenu, contextMenuItems, excelFileName, layoutKey, comboParams, sheetName, allowMerging, selectionMode, initialized, headerRowHeight, dblClick
+<T extends WijmoRowItem = WijmoRowItem>({ gridFilterRef, gridRef, editTrackerRef, enableUndo, reapplyEditOnUndo, itemsSource, staticColumns, dynamicColumns, useSummaryTooltip, useCellTooptip, useCheckbox, useResultColumns, useAggregationRow, aggregationRowPlacement, emptyCellAsZero, negativeCellAsZero, numberRules, excludeFromDirtyCheck, hideStatusColumn, saveAuth, isReadOnly, useContextMenu, contextMenuItems, excelFileName, layoutKey, comboParams, sheetName, allowMerging, selectionMode, initial
 ```
 
 props/params:
@@ -698,6 +701,8 @@ props/params:
 - `gridFilterRef?: MutableRefObject<any>`
 - `gridRef?: MutableRefObject<any>`
 - `editTrackerRef?: MutableRefObject<any>`
+- `enableUndo?: boolean — 셀 편집 Undo/Redo(Ctrl+Z / Ctrl+Y) — AS-IS Spread UndoManager 대응(입력상태 되돌리기). **기본 활성(전역)**. wijmo UndoStack 이 FlexGrid 셀 편집을 기록하고 Ctrl+Z/Y 를 처리한다. 정렬/리사이즈/행추가·삭제는 `
+- `reapplyEditOnUndo?: boolean — undo/redo 시 되돌린 셀의 cellEditEnded 를 재발화할지(기본 false — opt-in). 한 편집이 다른 셀을 함께 set 하는 **cascade(연동 편집) 그리드**에서, wijmo undo 가 직접 친 셀만 되돌리는 한계를 화면 자신의 연동 로직을 재실행시켜 연`
 - `itemsSource?: T[]`
 - `staticColumns?: RawFlexGridColumnConfig[]`
 - `dynamicColumns?: FlexGridColumnConfig[]`
@@ -728,10 +733,10 @@ props/params:
 - `click?: (mouseEvent: MouseEvent) => void`
 - `gotFocus?: (sender: Control, args: EventArgs) => void`
 
-### CustomDropdown  <sub>packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx:251</sub>
+### CustomDropdown  <sub>packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx:257</sub>
 
 ```ts
-({ options: rawOptions, value, onChange, limitTags, allOption, sortBy, className, ...props }: SingleProps<DropdownOption> | MultipleProps<DropdownOption>): any
+({ options: rawOptions, value, onChange, limitTags, allOption, sortBy, keepSentinelValues, className, ...props }: SingleProps<DropdownOption> | MultipleProps<DropdownOption>): any
 ```
 
 props/params:
@@ -739,6 +744,7 @@ props/params:
 - `multiple?: boolean`
 - `allOption?: boolean`
 - `sortBy?: "label"`
+- `keepSentinelValues?: boolean`
 - `value?: string`
 - `onChange?: ((event: React.SyntheticEvent, value: string) => void)`
 - `((event: React.Syntheti`
@@ -830,10 +836,10 @@ props/params:
 - `setActiveTabIndex?: (index: number) => void`
 - `rightSlot?: ReactNode — 탭 줄에서 탭 버튼들 오른쪽에 표시할 보조 영역(표시 전용). 주의: 이 값은 persist key(= 탭 label)와 무관하다 — 여기 넣은 텍스트가 바뀌어도 그리드가 remount 되지 않는다.`
 
-### PeriodRangePicker  <sub>packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx:252</sub>
+### PeriodRangePicker  <sub>packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx:275</sub>
 
 ```ts
-({ start, end, onChange, label, required, className, quickWeeksFromToday, allowTextInput, monthOnly, }: PeriodRangePickerProps): any
+({ start, end, onChange, label, required, className, quickWeeks, lastWeeks, quickWeeksFromToday, allowTextInput, monthOnly, }: PeriodRangePickerProps): any
 ```
 
 props/params:
@@ -883,12 +889,6 @@ props/params:
 - `initialType?: string`
 - `initialMessage?: string`
 - `messageTypeFilters?: string[]`
-
-### Alert  <sub>packages/shared/src/components/organisms/alert/Alert.tsx:4</sub>
-
-```ts
-(): any
-```
 
 ### CascadeDropdown  <sub>packages/shared/src/components/molecules/cascadeDropdown/CascadeDropdown.tsx:103</sub>
 
@@ -957,6 +957,12 @@ props/params:
 - `modalClose: () => void`
 - `setSelectedValue: (deptId: string, deptNm: string) => void`
 - `initialDept?: string`
+
+### Alert  <sub>packages/shared/src/components/organisms/alert/Alert.tsx:4</sub>
+
+```ts
+(): any
+```
 
 ### ColorPickerButton  <sub>packages/shared/src/components/molecules/colorPickerButton/ColorPickerButton.tsx:22</sub>
 

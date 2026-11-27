@@ -1,0 +1,43 @@
+{
+  "id": "20261126173844_SELF",
+  "at": "2026-11-26T17:38:44+09:00",
+  "ms": 1795682324087,
+  "source": "self",
+  "status": "applied",
+  "sig": "lnplan cacgbbcgaabccc_vision step c",
+  "title": "CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함) · 단계 2",
+  "evidence": "L4 단계 원장 20261126001222_VISION 단계 2/6 · 문서 .vibe/orch/vision/concept_20261126_L4_useraxis_checklistTime.md",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/test/t_orch_ladder.js"
+  ],
+  "before_after": "L4-2 가 원장 효력과 VMO 개선안 효력 중 늦은 시각을 씀. 남은 항목 1건 이상이면 wait '구현 대기' · 상세 = .vibe/orch/vision/concept_20261126_L4_useraxis_checklistTime.md 전환 절 단계 2",
+  "verify": "t_orch_ladder.js 에 이번 근거(U30 11-25 02:53, events 4401~4424 표본)와 원장 효력 11-25 21:00 표본을 넣어 L4|useraxis|checklistTime 진단 대상이 나오지 않음. 효력 뒤 1판 94분 표본은 나옴",
+  "rollback": "harness.json orch.purposeLedger false 로 원장 판정 끔(종전 axisProps 판정). 반영 백업 사본으로 orch-ladder.js, orch-usercheck.js, plan_state.py, orchestra.js, t_orch_ladder.js 복원. .vibe/orch/purpose_ledger.json 삭제. VMO 개선안 탭 되돌리기",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261126001222_VISION 단계 2",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T17:39:34+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:40:58+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · orch-ladder.js L4-2: 목적 원장(purposeLedger) 있는 목적 키 = 남은 구현 1건 이상이면 wait '구현 대기', 원장 효력 전이면 '효력 대기', 그 밖은 원장 효력과 VMO 안 효력 중 늦은 시각 기준. t_orch_ladder.js 원장 단계 2 ①~⑤ 추가(U30, 4401~4424 4화면 143분 표본, 원장 효력, 1판 94분), PASS 55 → 60, ALL PASS. 실데이터 scan: L4|useraxis|checklistTime = 구현 대기 3건(D2, D3, D4)(2026-11-26 17:40)"
+    }
+  ],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261126001222_VISION|2",
+  "kind": "fix",
+  "plan": "20261126001222_VISION",
+  "planStep": 2,
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795682458039
+}

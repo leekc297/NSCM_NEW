@@ -39,12 +39,12 @@ const P = () => getPaths();
 const orchDir = () => path.join(P().vibeDir, 'orch');
 const LG = () => { try { const l = require('./orch-ledger'); if (!l.ready()) l.init({ paths: () => P() }); return l; } catch (e) { return { note() { return ''; }, observing() { return false; }, tick() { return {}; }, stats() { return { byRule: {}, falses: [], observe: {}, total: 0, overdue: 0 }; } }; } }; // 2026-11-20 개입 장부(orch-ledger.js)
 function loadCfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); cfg = Object.assign({}, DEF, (h && h.orch) || {}); return cfg; }
-// 2026-11-24 사용자 지시: AI 주간 한도가 harness.json orch.aiWeeklyStopPct(기본 90)% 이상이면 VMO 자가진단과 보완(자동 AI 호출)을 멈춤.
+// 2026-11-24 사용자 지시: AI 주간 한도가 harness.json orch.aiWeeklyStopPct(기본 100, 2026-11-26 R253 = 다 쓴 때만)% 이상이면 VMO 자가진단과 보완(자동 AI 호출)을 멈춤.
 //   작업 모니터링(감시, 사건 기록, 알림, 상황판)은 계속. 사용자가 직접 시킨 일(VMO 직접 지시, 사람 승인, 사건 탭 에이전트 단추)은 진행.
 //   한도 값 = claude-usage.js(최근 AI 실행 기록의 rate_limit_event seven_day). 재설정 시각이 지나면 멈춤 풀림
 function aiLimit() {
-  let lim = 90;
-  try { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); const v = h.orch && h.orch.aiWeeklyStopPct; if (v != null && v !== '' && !isNaN(Number(v))) lim = Number(v); } catch { /* 기본 90 */ }
+  let lim = 100; // 2026-11-26 개선안 20261126182418_SELF(R253): 키가 없거나 읽기 실패 = 100%(다 쓴 때만 멈춤)
+  try { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); const v = h.orch && h.orch.aiWeeklyStopPct; if (v != null && v !== '' && !isNaN(Number(v))) lim = Number(v); } catch { /* 기본 100 */ }
   if (!(lim > 0)) return { stop: false, lim, pct: null, why: '' };
   let u = null; try { u = require('./claude-usage').read(P().vibeDir); } catch { u = null; }
   const w = u && u.weekly; const pct = w && typeof w.pct === 'number' ? w.pct : null; const reset = (w && w.resetsAt) || 0;
@@ -333,7 +333,10 @@ async function drain() {
         if (!job.manual && (cfg.enabled === false || !cfg.agentEnabled)) continue;
         // 2026-11-23 개선안 20261123121302_SELF: agentRules 밖 규칙(R12 등) = 사건마다 '에이전트 담당 아님' 기록 1건. 종전 기록 없이 넘겨 열린 이유가 안 보임. 사건 상태는 그대로(열림)
         if (!job.manual && !(cfg.agentRules || []).includes(inc.rule)) {
-          if (!(inc.actions || []).some(a => /^에이전트 담당 아님/.test(String(a.what || '')))) act(inc.id, null, `에이전트 담당 아님: 규칙 ${inc.rule} 은 agentRules(${(cfg.agentRules || []).join(', ')}) 밖. 사건은 열린 채 둠`);
+          // 개선안 20261126183041_SELF: 처리 담당(handler)과 마지막 진행 시각(progressAt)을 사건에 적음. 담당 밖 규칙 = 자가진단(selfdiag)이 개선안으로 처리. U3 는 이 필드를 읽음
+          const hd = inc.handler ? null : { handler: { by: 'selfdiag', ref: '', at: nowLocal() }, progressAt: nowLocal() };
+          if (!(inc.actions || []).some(a => /^에이전트 담당 아님/.test(String(a.what || '')))) act(inc.id, hd, `에이전트 담당 아님: 규칙 ${inc.rule} 은 agentRules(${(cfg.agentRules || []).join(', ')}) 밖. 사건은 열린 채 둠`);
+          else if (hd) watch.update(inc.id, hd, null);
           continue;
         }
         await claudeAction(inc, job.extra, job.manual);
@@ -347,12 +350,26 @@ async function drain() {
 function saveQueue() { try { writeJson(path.join(orchDir(), 'agent_queue.json'), queue.map(q => ({ id: q.id, manual: q.manual, extra: q.extra })).concat(current && current.id ? [{ id: current.id, manual: false, extra: '', running: true }] : [])); } catch (ex) { errlog.note('orch-agent', 'saveQueue', ex); } }
 function restoreQueue() { const a = readJson(path.join(orchDir(), 'agent_queue.json'), []); let n = 0; for (const q of Array.isArray(a) ? a : []) { const inc = watch.get(q.id); if (!inc || /^(resolved|closed|ignored)$/.test(inc.status)) continue; if (inc.status === 'acting') watch.update(q.id, { status: 'open' }, { by: 'VMO', what: '창 다시 로드 뒤 에이전트 대기열 되살림(조치 중이던 사건 다시 진단)' }); if (enqueue(q.id, !!q.manual, q.extra || '')) n++; } return n; }
 function enqueue(id, manual, extra) { if (queue.some(q => q.id === id) || (current && current.id === id)) return false; queue.push({ id, manual: !!manual, extra: extra || '' }); saveQueue(); setTimeout(drain, 50); return true; }
+/** 2026-11-26 에이전트 탭 대화의 질문과 답을 파일로 남긴다(.vibe/orch/answers/<시각>.md · index.jsonl). 반환 = 저장소 기준 경로 또는 '' */
+function saveAnswer(q, r) {
+  try {
+    const d = path.join(orchDir(), 'answers'); fs.mkdirSync(d, { recursive: true });
+    const f = path.join(d, `${stampFile()}.md`); const rel = path.relative(P().root, f).split(path.sep).join('/');
+    const md = [`# VMO 답변 ${nowLocal()}`, '', `- 결과: ${r && r.ok ? '완료' : `실패 exit ${r && r.code}`} · ${r && r.ms ? Math.round(r.ms / 1000) : 0}초`, `- 실행 기록: ${(r && r.log) || '-'}`, '', '## 질문', '', String(q || ''), '', '## 답', '', String((r && r.text) || '(답 없음)'), ''].join(String.fromCharCode(10));
+    fs.writeFileSync(f, md, 'utf8');
+    fs.appendFileSync(path.join(d, 'index.jsonl'), JSON.stringify({ at: nowLocal(), file: rel, ok: !!(r && r.ok), q: String(q || '').slice(0, 200), log: (r && r.log) || '' }) + String.fromCharCode(10), 'utf8');
+    return rel;
+  } catch (e) { errlog.note('orch-agent', 'saveAnswer', e); return ''; }
+}
 /** 에이전트 탭 대화 — 사건 없이 질문·지시. 같은 세션을 이어 쓴다 */
 async function ask(text) {
   if (busy) { // 2026-11-23 사용자: 기본 대기열. 현재 작업과 같은 안건(prompt-relate.judge)이면 응답 중이라도 바로 반영
     const jd = require('./prompt-relate').judge(text, relateCtx()); const t2 = /^[+>]/.test(String(text || '').trim()) && jd.text ? jd.text : text;
     if (!jd.related) return enqueueAsk(t2, `다른 안건으로 판단: ${jd.why}. 바로 넣으려면 대기열의 지금 보내기`);
-    if (current && current.inject && current.inject(t2)) { if (current.ctx) current.ctx.texts.push(String(t2)); say('note', { text: `같은 안건으로 판단(${jd.why}). 진행 중인 응답에 바로 반영` }); return null; }
+    // 2026-11-26 사용자 지적('UI DESIGN 3개 제안을 요청 · 진행됐는지, 산출물이 있는지 확인할 방법 없음'): 사건 조치·개선안 반영 중인 응답에 넣으면 답이 그 실행의 결과 JSON 뒤에 묻혀 남지 않는다
+    //   → 바로 넣기는 에이전트 탭 대화(current.id '대화') 응답일 때만. 그 밖에는 대기열에 넣고 끝나면 대화로 따로 보낸다(답은 answers 파일로 남음)
+    if (current && current.id === '대화' && current.inject && current.inject(t2)) { if (current.ctx) current.ctx.texts.push(String(t2)); say('note', { text: `같은 안건으로 판단(${jd.why}). 진행 중인 응답에 바로 반영` }); return null; }
+    if (current && current.id !== '대화') return enqueueAsk(t2, `지금은 ${current.id} 조치 중. 끝나면 대화로 따로 보냄(답은 .vibe/orch/answers 에 남음)`, true);
     return enqueueAsk(t2, `같은 안건(${jd.why}), 지금은 응답 입력이 닫혀 있음`, true);
   }
   text = String(text || '').replace(/^\s*[+>]\s*/, '');
@@ -365,7 +382,8 @@ async function ask(text) {
     const r = await runClaude(`.claude/agents/vm-orchestra.md 의 조치 등급과 지킬 것을 따른다. 사건 없이 온 사용자 지시이므로 결과 JSON 은 생략하고 답만 쓴다. 실행 중인 화면을 멈추거나 다시 실행할 때는 프로세스를 직접 끊지 말고 .vibe/orch/stop_requests/ 에 요청 파일을 쓴다(vm-orchestra.md '실행 중지와 다시 실행').\n\n${text}`, { resume: chatSession || undefined, label: '에이전트 대화' });
     if (stopScr.length) { try { watch.markUserStop(stopScr, Date.now() + 30000, '에이전트 대화'); } catch (e) { errlog.note('orch-agent', 'markUserStop', e); } }
     if (r.session) chatSession = r.session; if (!r.ok && /No conversation found|session.*not found/i.test(r.stderr || '')) chatSession = '';
-    say('end', { ok: r.ok, text: r.ok ? `답변 완료 · ${Math.round(r.ms / 1000)}s` : `실패 exit ${r.code} ${r.stderr || ''}` });
+    const ans = saveAnswer(text, r);
+    say('end', { ok: r.ok, text: (r.ok ? `답변 완료 · ${Math.round(r.ms / 1000)}s` : `실패 exit ${r.code} ${r.stderr || ''}`) + (ans ? ` · 답변 파일 ${ans}` : '') });
     return r;
   } finally { current = null; busy = false; setTimeout(drain, 50); setTimeout(pumpAsk, 120); }
 }
@@ -433,4 +451,4 @@ function init(opts) {
 }
 function dispose() { started = false; stop('VS Code 종료'); }
 
-module.exports = { aiLimit, SKILL_NOTE, restoreQueue, saveQueue, queueList, removeQueued, sendQueuedNow, setEnabled, init, dispose, on, feedList, status, enqueue, ask, stop, revert, lastJsonBlock, buildPrompt, snapshot, diffAfter, codeAction, DEF, runClaude, withLock, reserve, release, say, gitDirty, loadCfg, ALLOWED_TOOLS, paths: () => P() };
+module.exports = { saveAnswer, aiLimit, SKILL_NOTE, restoreQueue, saveQueue, queueList, removeQueued, sendQueuedNow, setEnabled, init, dispose, on, feedList, status, enqueue, ask, stop, revert, lastJsonBlock, buildPrompt, snapshot, diffAfter, codeAction, DEF, runClaude, withLock, reserve, release, say, gitDirty, loadCfg, ALLOWED_TOOLS, paths: () => P() };

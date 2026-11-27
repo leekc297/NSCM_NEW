@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/projectByDivisionModal/project-by-division-modal.constants.ts | constants | 8 |
-| features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.module.scss | style | 42 |
+| features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.module.scss | style | 43 |
 | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | page | 413 |
 | features/master/src/components/projectByDivisionModal/projectByDivisionModalStore.ts | store | 43 |
 
@@ -28,8 +28,8 @@
 | SearchArea | onSearch | handleSearch | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 253 |
 | InputField | onChange | <arrow> setProjectCode | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 352 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 353 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 398 |
-| Button | onClick | modalClose | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 405 |
+| Button | onClick | modalClose | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 396 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 405 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -62,7 +62,7 @@
 | LBL00012 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: COM0005(5), DMF0045(2), DMF0020(1), DMF0021(1), DMF0003(1), DMF0082(1)
+- 화면ID: COM0005(5), DMF0020(2), DMF0045(2), DMF0021(1), DMF0003(1), DMF0082(1)
 - SP/PKG: P_COM0005_GET_PROJECT_BY_DIVISION_POPUP(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)

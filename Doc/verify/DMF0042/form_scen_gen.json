@@ -1,0 +1,811 @@
+{
+ "_gen": "form_scen_gen.py 2026-11-27 00:43:10",
+ "menu_id": "DMF0042",
+ "asis": "DMF0042",
+ "buttons": [
+  {
+   "button": "btnSetPrice",
+   "form": true,
+   "label": "Set Price",
+   "save": [
+    "btnSetPrice_Click"
+   ],
+   "tables": [
+    "DM_PLN_BP_FCST"
+   ]
+  }
+ ],
+ "counts": {
+  "active": 35,
+  "dynamic": 20,
+  "pending": 0,
+  "blocked": 0,
+  "delegated": 0,
+  "tobe_missing": 0,
+  "covered": 0,
+  "out_of_scope": 0
+ },
+ "tobe": {
+  "use": "Y",
+  "route": "demand/business-plan",
+  "src": "DB SCM_ADM_MNU_M 2026-11-27 00:43"
+ },
+ "scenarios": [
+  {
+   "msg": "MSG00282",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3117",
+   "asis_file": "DMF0042_1_BizPlan.cs",
+   "asis_text": "변경된 환율을 적용하시겠습니까?",
+   "asis_text_alt": [
+    "Do you want to apply the changed exchange rate?",
+    "Do you want to apply the changed exchange rate?"
+   ],
+   "button": "btnSetPrice",
+   "kind": "dynamic",
+   "steps": [
+    {
+     "op": "click",
+     "name": "Set Price"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "note": "확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인",
+   "id": "G01"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3133",
+   "asis_file": "DMF0042_1_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click)",
+   "id": "G02"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:790",
+   "asis_file": "DMF0042_1_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:790)",
+   "id": "G03"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:816",
+   "asis_file": "DMF0042_3_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:816)",
+   "id": "G04"
+  },
+  {
+   "msg": "MSG00282",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3231",
+   "asis_file": "DMF0042_3_BizPlan.cs",
+   "asis_text": "변경된 환율을 적용하시겠습니까?",
+   "asis_text_alt": [
+    "Do you want to apply the changed exchange rate?",
+    "Do you want to apply the changed exchange rate?"
+   ],
+   "button": "btnSetPrice",
+   "kind": "dynamic",
+   "steps": [
+    {
+     "op": "click",
+     "name": "Set Price"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "note": "확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인",
+   "id": "G05"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3247",
+   "asis_file": "DMF0042_3_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click)",
+   "id": "G06"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:851",
+   "asis_file": "DMF0042_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:851)",
+   "id": "G07"
+  },
+  {
+   "msg": "MSG00282",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3180",
+   "asis_file": "DMF0042_BizPlan.cs",
+   "asis_text": "변경된 환율을 적용하시겠습니까?",
+   "asis_text_alt": [
+    "Do you want to apply the changed exchange rate?",
+    "Do you want to apply the changed exchange rate?"
+   ],
+   "button": "btnSetPrice",
+   "kind": "dynamic",
+   "steps": [
+    {
+     "op": "click",
+     "name": "Set Price"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "note": "확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인",
+   "id": "G08"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3196",
+   "asis_file": "DMF0042_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click)",
+   "id": "G09"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:768",
+   "asis_file": "DMF0042_2_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:768)",
+   "id": "G10"
+  },
+  {
+   "msg": "MSG00282",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3341",
+   "asis_file": "DMF0042_2_BizPlan.cs",
+   "asis_text": "변경된 환율을 적용하시겠습니까?",
+   "asis_text_alt": [
+    "Do you want to apply the changed exchange rate?",
+    "Do you want to apply the changed exchange rate?"
+   ],
+   "button": "btnSetPrice",
+   "kind": "dynamic",
+   "steps": [
+    {
+     "op": "click",
+     "name": "Set Price"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "note": "확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인",
+   "id": "G11"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:3357",
+   "asis_file": "DMF0042_2_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click)",
+   "id": "G12"
+  },
+  {
+   "msg": "MSG00282",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:2383",
+   "asis_file": "DMF0042_BizPlan_old.cs",
+   "asis_text": "변경된 환율을 적용하시겠습니까?",
+   "asis_text_alt": [
+    "Do you want to apply the changed exchange rate?",
+    "Do you want to apply the changed exchange rate?"
+   ],
+   "button": "btnSetPrice",
+   "kind": "dynamic",
+   "steps": [
+    {
+     "op": "click",
+     "name": "Set Price"
+    },
+    {
+     "op": "dialog",
+     "how": "cancel"
+    }
+   ],
+   "note": "확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인",
+   "id": "G13"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "btnSetPrice_Click",
+   "asis_line": "cs:2399",
+   "asis_file": "DMF0042_BizPlan_old.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click)",
+   "id": "G14"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:676",
+   "asis_file": "DMF0042_BizPlan_old.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "btnSetPrice",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:676)",
+   "id": "G15"
+  },
+  {
+   "msg": "MSG00097",
+   "meth": "FindData",
+   "asis_line": "cs:697",
+   "asis_file": "DMF0042_1_BizPlan.cs",
+   "asis_text": "권한을 가진 Division이 없습니다.",
+   "asis_text_alt": [
+    "No authority assigned.",
+    "No authority assigned."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · clbDivision {\"mode\": \"none\"} · 라벨 근거 clbDivision=lblDivion.Text",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "none"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G16"
+  },
+  {
+   "msg": "MSG00108",
+   "meth": "FindData",
+   "asis_line": "cs:705",
+   "asis_file": "DMF0042_1_BizPlan.cs",
+   "asis_text": "시작일자가 종료일자보다 늦을 수 없습니다.",
+   "asis_text_alt": [
+    "The start date can not be later than the end date.",
+    "The start date can not be later than the end date."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY+1\", \"to\": \"@TODAY\"} · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY+1",
+     "to": "@TODAY"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G17"
+  },
+  {
+   "msg": "MSG00276",
+   "meth": "FindData",
+   "asis_line": "cs:711",
+   "asis_file": "DMF0042_1_BizPlan.cs",
+   "asis_text": "조회 기간은 6년 이상 설정 할 수 없습니다.",
+   "asis_text_alt": [
+    "Searching period can't be set more than 6 years.",
+    "Searching period can't be set more than 6 years."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY\", \"to\": \"@TODAY+2197\"} · 기간 상한 AddYears(6) 보다 긴 2197일 · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY",
+     "to": "@TODAY+2197"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G18"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:790",
+   "asis_file": "DMF0042_1_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "FindButton",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:790)",
+   "note": "조회 단추(FindButton → FindData) 경로",
+   "id": "G19"
+  },
+  {
+   "msg": "MSG00097",
+   "meth": "FindData",
+   "asis_line": "cs:723",
+   "asis_file": "DMF0042_3_BizPlan.cs",
+   "asis_text": "권한을 가진 Division이 없습니다.",
+   "asis_text_alt": [
+    "No authority assigned.",
+    "No authority assigned."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · clbDivision {\"mode\": \"none\"} · 라벨 근거 clbDivision=lblDivion.Text",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "none"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G20"
+  },
+  {
+   "msg": "MSG00108",
+   "meth": "FindData",
+   "asis_line": "cs:731",
+   "asis_file": "DMF0042_3_BizPlan.cs",
+   "asis_text": "시작일자가 종료일자보다 늦을 수 없습니다.",
+   "asis_text_alt": [
+    "The start date can not be later than the end date.",
+    "The start date can not be later than the end date."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY+1\", \"to\": \"@TODAY\"} · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY+1",
+     "to": "@TODAY"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G21"
+  },
+  {
+   "msg": "MSG00276",
+   "meth": "FindData",
+   "asis_line": "cs:737",
+   "asis_file": "DMF0042_3_BizPlan.cs",
+   "asis_text": "조회 기간은 6년 이상 설정 할 수 없습니다.",
+   "asis_text_alt": [
+    "Searching period can't be set more than 6 years.",
+    "Searching period can't be set more than 6 years."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY\", \"to\": \"@TODAY+2197\"} · 기간 상한 AddYears(6) 보다 긴 2197일 · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY",
+     "to": "@TODAY+2197"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G22"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:816",
+   "asis_file": "DMF0042_3_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "FindButton",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:816)",
+   "note": "조회 단추(FindButton → FindData) 경로",
+   "id": "G23"
+  },
+  {
+   "msg": "MSG00097",
+   "meth": "FindData",
+   "asis_line": "cs:758",
+   "asis_file": "DMF0042_BizPlan.cs",
+   "asis_text": "권한을 가진 Division이 없습니다.",
+   "asis_text_alt": [
+    "No authority assigned.",
+    "No authority assigned."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · clbDivision {\"mode\": \"none\"} · 라벨 근거 clbDivision=lblDivion.Text",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "none"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G24"
+  },
+  {
+   "msg": "MSG00108",
+   "meth": "FindData",
+   "asis_line": "cs:766",
+   "asis_file": "DMF0042_BizPlan.cs",
+   "asis_text": "시작일자가 종료일자보다 늦을 수 없습니다.",
+   "asis_text_alt": [
+    "The start date can not be later than the end date.",
+    "The start date can not be later than the end date."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY+1\", \"to\": \"@TODAY\"} · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY+1",
+     "to": "@TODAY"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G25"
+  },
+  {
+   "msg": "MSG00276",
+   "meth": "FindData",
+   "asis_line": "cs:772",
+   "asis_file": "DMF0042_BizPlan.cs",
+   "asis_text": "조회 기간은 6년 이상 설정 할 수 없습니다.",
+   "asis_text_alt": [
+    "Searching period can't be set more than 6 years.",
+    "Searching period can't be set more than 6 years."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY\", \"to\": \"@TODAY+2197\"} · 기간 상한 AddYears(6) 보다 긴 2197일 · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY",
+     "to": "@TODAY+2197"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G26"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:851",
+   "asis_file": "DMF0042_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "FindButton",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:851)",
+   "note": "조회 단추(FindButton → FindData) 경로",
+   "id": "G27"
+  },
+  {
+   "msg": "MSG00097",
+   "meth": "FindData",
+   "asis_line": "cs:660",
+   "asis_file": "DMF0042_2_BizPlan.cs",
+   "asis_text": "권한을 가진 Division이 없습니다.",
+   "asis_text_alt": [
+    "No authority assigned.",
+    "No authority assigned."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · clbDivision {\"mode\": \"none\"} · 라벨 근거 clbDivision=lblDivion.Text",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "none"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G28"
+  },
+  {
+   "msg": "MSG00108",
+   "meth": "FindData",
+   "asis_line": "cs:668",
+   "asis_file": "DMF0042_2_BizPlan.cs",
+   "asis_text": "시작일자가 종료일자보다 늦을 수 없습니다.",
+   "asis_text_alt": [
+    "The start date can not be later than the end date.",
+    "The start date can not be later than the end date."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY+1\", \"to\": \"@TODAY\"} · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY+1",
+     "to": "@TODAY"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G29"
+  },
+  {
+   "msg": "MSG00276",
+   "meth": "FindData",
+   "asis_line": "cs:674",
+   "asis_file": "DMF0042_2_BizPlan.cs",
+   "asis_text": "조회 기간은 6년 이상 설정 할 수 없습니다.",
+   "asis_text_alt": [
+    "Searching period can't be set more than 6 years.",
+    "Searching period can't be set more than 6 years."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY\", \"to\": \"@TODAY+2197\"} · 기간 상한 AddYears(6) 보다 긴 2197일 · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY",
+     "to": "@TODAY+2197"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G30"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:768",
+   "asis_file": "DMF0042_2_BizPlan.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "FindButton",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:768)",
+   "note": "조회 단추(FindButton → FindData) 경로",
+   "id": "G31"
+  },
+  {
+   "msg": "MSG00097",
+   "meth": "FindData",
+   "asis_line": "cs:595",
+   "asis_file": "DMF0042_BizPlan_old.cs",
+   "asis_text": "권한을 가진 Division이 없습니다.",
+   "asis_text_alt": [
+    "No authority assigned.",
+    "No authority assigned."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · clbDivision {\"mode\": \"none\"} · 라벨 근거 clbDivision=lblDivion.Text",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "none"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G32"
+  },
+  {
+   "msg": "MSG00108",
+   "meth": "FindData",
+   "asis_line": "cs:603",
+   "asis_file": "DMF0042_BizPlan_old.cs",
+   "asis_text": "시작일자가 종료일자보다 늦을 수 없습니다.",
+   "asis_text_alt": [
+    "The start date can not be later than the end date.",
+    "The start date can not be later than the end date."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY+1\", \"to\": \"@TODAY\"} · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY+1",
+     "to": "@TODAY"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G33"
+  },
+  {
+   "msg": "MSG00276",
+   "meth": "FindData",
+   "asis_line": "cs:609",
+   "asis_file": "DMF0042_BizPlan_old.cs",
+   "asis_text": "조회 기간은 6년 이상 설정 할 수 없습니다.",
+   "asis_text_alt": [
+    "Searching period can't be set more than 6 years.",
+    "Searching period can't be set more than 6 years."
+   ],
+   "button": "FindButton",
+   "kind": "dynamic",
+   "note": "조회 단추(FindButton → FindData) 경로 · drpPeriod {\"from\": \"@TODAY\", \"to\": \"@TODAY+2197\"} · 기간 상한 AddYears(6) 보다 긴 2197일 · 라벨 근거 clbDivision=lblDivion.Text, drpPeriod=컨트롤 이름 drpPeriod",
+   "steps": [
+    {
+     "op": "multi",
+     "label": "Division",
+     "fuzzy": true,
+     "mode": "all"
+    },
+    {
+     "op": "period",
+     "label": "Period",
+     "fuzzy": true,
+     "from": "@TODAY",
+     "to": "@TODAY+2197"
+    },
+    {
+     "op": "search"
+    }
+   ],
+   "id": "G34"
+  },
+  {
+   "msg": "(동적 메시지)",
+   "meth": "FindData",
+   "asis_line": "cs:676",
+   "asis_file": "DMF0042_BizPlan_old.cs",
+   "asis_text": "",
+   "asis_text_alt": [],
+   "button": "FindButton",
+   "kind": "error_branch",
+   "basis": "예외 catch 블록(FindData cs:676)",
+   "note": "조회 단추(FindButton → FindData) 경로",
+   "id": "G35"
+  }
+ ],
+ "_pending": [],
+ "_blocked": [],
+ "_delegated": [],
+ "_tobe_missing": [],
+ "_covered": [],
+ "_out_of_scope": []
+}

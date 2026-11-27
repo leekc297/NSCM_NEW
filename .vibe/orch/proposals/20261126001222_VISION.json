@@ -3,7 +3,7 @@
   "at": "2026-11-26T00:12:22+09:00",
   "ms": 1795619542108,
   "source": "vision",
-  "status": "pending",
+  "status": "planned",
   "sig": "ln|useraxis|checklisttime|purposeledger|effclock",
   "title": "개념 재정립: CheckList 시간 목적의 효력 시계(VMO 개선안만 → 목적 원장의 유효 개념, 출처 무관, 남은 구현 중 진단 안 함)",
   "evidence": "events.jsonl:4241~4250(11-25 00:56 4화면 동시 시작), 4401·4408·4417·4424(03:19 chain.end, stopped true, ms_run 8591121~8607617). user_checks.json:357-366 U30 11-25 02:53. quick.json:128 '2026-11-25 행 단위 해소 … 화면 전체 재측정은 하지 않음'. events.jsonl:5390·5453·5460·5498 SCP0005_1795608394751 21:06 시작, 22:36 측정 끝, 22:40 1판, 23:37 미검증 보완, chain.end 없음. orch-ladder.js:112 axisProps = VMO L4 applied 안만. orch-ladder.js:116-117 clRunsOf 중지 구분 없음. plan_state.py status 남은 항목 0, memory 20:28 D2~D4 미착수. 같은 목적 20261126000934_VISION pending · 진단 사다리 묶음 L4|useraxis|checklistTime · 문서 .vibe/orch/vision/concept_20261126_L4_useraxis_checklistTime.md",
@@ -24,12 +24,25 @@
   "levelWhy": "L4-2 같은 축 조건 참: 효력(20261123000419_VISION 2026-11-23 15:58) 뒤 지적 1건(기준 3), 효력 뒤 실행 5건 중 1판 초과 4건(기준 1). 같은 목적 L4 묶음이 11-24 00:04 진단(20261124000457_VISION, 20261125050137_SELF 로 대체 반영) 뒤 11-26 에 다시 참. 근거가 11-25 사용자 승인 개념 변경 전 실행이라 개념 판정 규칙 자체를 다시 세움",
   "incident": "",
   "screen": "",
-  "history": [],
+  "history": [
+    {
+      "at": "2026-11-26T16:50:31+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "L4 단계 원장으로 진행(단계 6개, 단계마다 하위 안 반영). 원장 .vibe/orch/vision/plans.json"
+    }
+  ],
   "plain": {
     "what": "사용자가 CheckList 진행 방식을 바꾼 뒤(11-25 행 단위 해소)에도 VMO 는 바꾸기 전 실행 기록으로 'CheckList 30분 목표가 어긋났다'고 매일 다시 진단했습니다. 바꾼 뒤에는 방식이 바뀐 시각을 기록해 두고 그 뒤 실행만 봅니다. 계획한 구현(D2~D4)이 남았으면 측정 판정을 미루고, 같은 목적 진단은 하루 1번으로 합칩니다.",
     "risk": "방식 변경 등록이 늦거나 남은 구현이 오래 남으면 실제로 30분을 넘는 상황을 VMO 가 늦게 알립니다. 사다리 카드에 구현 대기 경과 일수를 표시해 사람이 볼 수 있게 합니다.",
     "undo": "VM 환경설정 harness.json 의 orch.purposeLedger 를 false 로 바꾸면 지금 판정 방식으로 돌아갑니다. 바꾼 파일은 반영 백업 사본으로 복원합니다."
   },
   "kind": "fix",
-  "needsApproval": "자동 범위 밖 .vibe/orch/purpose_ledger.json"
+  "needsApproval": "자동 범위 밖 .vibe/orch/purpose_ledger.json",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795679430508,
+  "autoFp": "c80edcf72c",
+  "plan": "20261126001222_VISION"
 }

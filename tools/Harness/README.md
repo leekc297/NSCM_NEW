@@ -147,7 +147,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 ### 도구 등록부
 
 <!-- TOOL-REGISTRY:BEGIN -->
-> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-26 16:11 · 도구 283개 · 손 실행 42개). 직접 고치지 말고 다시 생성한다.
+> 자동 생성 — `python scripts/rules/inventory_check.py --write-registry` (2026-11-26 19:01 · 도구 283개 · 손 실행 41개). 직접 고치지 말고 다시 생성한다.
 > 진입 열: `체인 <단계>` = `run_verify.py`(CheckList) 가 그 단계에서 실행 · `VM <작업 id>` = `tools/VibeManager/steps.json` 작업 · `다른 도구가 사용` = import·호출만 · `손 실행` = 어떤 진입점에도 연결 없음(명령줄에서 직접).
 
 
@@ -216,7 +216,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
 | `bucket_day.py` | 다른 도구가 사용: _verify.spec.ts | 사업부 기본 Bucket 요일 — AS-IS UP_FX_GetCommonDataList 'DefaultBucketDay'(SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='DEFAULT_BUCKET_DAY' SEGMENT1=Division SE |
-| `dbconn.py` | 다른 도구가 사용: a1_live.py, all_cols_check.py, asis_batch_facts.py 외 71 | dbconn — NSCM DB 접속정보 레지스트리 (비밀번호는 절대 출력/저장하지 않는다) |
+| `dbconn.py` | 다른 도구가 사용: a1_live.py, all_cols_check.py, asis_batch_facts.py 외 73 | dbconn — NSCM DB 접속정보 레지스트리 (비밀번호는 절대 출력/저장하지 않는다) |
 | `export_tobe_meta.py` | 체인 pre(prereq 안) / VM S2.export | export_tobe_meta — To-Be Oracle 메타를 CSV 로 내려 Doc        obefacts\db\ 에 둔다 (gap.js / gen.js / E2E 생성기가 읽는다). |
 | `gen_golden_cases.py` | 체인 pre(prereq 안) / VM S4.goldgen | gen_golden_cases — 화면별 골든 케이스 초안 생성 (As-is SP ↔ To-Be PKG.PROC 짝 + 파라미터) |
 | `golden.py` | 체인 static / VM S4.golden | golden — As-is SP(MSSQL) 와 To-Be PKG.PROC(Oracle) 를 같은 파라미터로 실행해 결과셋을 대조한다. |
@@ -230,7 +230,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | 도구 | 진입 | 머리말 첫 줄 |
 |---|---|---|
 | `doc_archive.py` | 다른 도구가 사용: make_docs.py, make_test_report.py, make_testcases.py 외 1 | 버전 문서 공용 — 다음 버전 번호 · 이전 버전 old/ 이동 (2026-10-28 사용자 요청) |
-| `doc_style.py` | 다른 도구가 사용: llm_desc.py, make_docs.py, make_test_report.py 외 10 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
+| `doc_style.py` | 다른 도구가 사용: llm_desc.py, make_docs.py, make_test_report.py 외 11 | 문서 문장 규칙 검사 — 사용자 상시 지시 2026-11-13 |
 | `make_docs.py` | VM S3.xlsx | make_docs — 화면 ID 하나로 사람이 보는 Excel 문서 4종을 팀 양식(hook #105 · TestCases4)으로 생성한다. |
 | `make_testcases.py` | 다른 도구가 사용: doc_archive.py, make_docs.py | make_testcases — 단위테스트(TestCases4) 를 '실제 사용자 흐름' 으로 재구성해 생성한다 (2026-10-27 사용자 지시). |
 | `md2xlsx.py` | 다른 도구가 사용: agent.ps1 | md2xlsx — 화면 문서(MD) + Fact Pack CSV + GAP CSV 를 사용자가 보는 Excel 1권으로 묶는다. |
@@ -306,7 +306,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `b7_check.py` | 체인 static | B7 기준 데이터 변경 후 후보 갱신 — (a) 이 화면 저장이 콤보 원천을 바꾸는가 정적 대조 (2026-10-28) |
 | `backlog_types.py` | 손 실행(진입점 연결 없음) | 전수 목록의 '아직 증명 안 됨' 을 보완 유형으로 묶는다 (2026-11-12 주기 방식 — 일괄 보완의 작업 단위) |
 | `bg_style_check.py` | 체인 post | AS-IS 조건부 셀 스타일(SetBGColor/SetFontColor/SetForeColor) ↔ TO-BE 화면 스타일 코드 존재(H2 정적 · EG312 · SCPSSP-14) — Doc/verify/<ID>/bg_style.csv (2026-11-03) |
-| `checker_defect_scan.py` | 다른 도구가 사용: orch-checkerscan.js, orch-selfcheck.js | checker_defect_scan.py — 검사기 판정 결함 탐색(2026-11-26 사용자 지시 'VMO 가 지금 하고 있는 보완 작업을 자가진단해서 보완 · 자동 승인') |
+| `checker_defect_scan.py` | 다른 도구가 사용: orch-afterwork.js, orch-checkerscan.js, orch-dict.js 외 1 | checker_defect_scan.py — 검사기 판정 결함 탐색(2026-11-26 사용자 지시 'VMO 가 지금 하고 있는 보완 작업을 자가진단해서 보완 · 자동 승인') |
 | `checker_regress.py` | 체인 docs | 검사기 자체 회귀(P3 · 2026-11-06 근본 보완 · W8 플랜 1-6 확장) — 골든 화면의 원장 판정 스냅숏을 기준으로, 검사기·공용 컴포넌트를 고친 뒤 판정이 어떻게 바뀌었는지 대조한다. |
 | `checklist_run.py` | VM S8.checklistRecheck·S8.checklistRun·S8.wlRound·S8.unverifiedGate 외 2 | VM 🔎 CheckList 체인의 1단계·3단계 실행기 (2026-11-18 사용자 지시) |
 | `checklist_selftest.py` | 다른 도구가 사용: mutate.ts | CheckList 자기검증(변이 시험) — 검사기가 오류를 실제로 잡는지 화면마다 기계적으로 증명 (2026-10-28) |
@@ -347,7 +347,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `engine_gap_cluster.py` | 손 실행(진입점 연결 없음) | 엔진 갭 항목을 신설 묶음(engine)으로 분류해 _engine_gap.csv 에 고정하고 진행 현황을 출력한다(2026-10-31) — 진행율의 분모는 이 파일 |
 | `engine_gap_merge.py` | 손 실행(진입점 연결 없음) | 엔진 갭 대조표 병합·온전성 점검(2026-10-31) — gap_*.csv → Doc/verify/_engine_gap.csv(항목 ID 부여·상태 열 유지) |
 | `engine_gate.py` | VM S8.engineGate | 검사기 보완 구간 보호 (2026-11-20 CheckList 한 번 실행 구조 2.4) |
-| `engine_selfcheck.py` | 다른 도구가 사용: check-plan-before-test.ps1, engine_gate.py, inventory_check.py 외 2 | 엔진 변경 게이트(EN-00 · 2026-11-11) — 검증·생성 도구를 고친 뒤 실행에 투입하기 전에 '돌려 보면 드러나는' 결함을 실제로 돌려서 잡는다. |
+| `engine_selfcheck.py` | 다른 도구가 사용: check-plan-before-test.ps1, engine_gate.py, inventory_check.py 외 3 | 엔진 변경 게이트(EN-00 · 2026-11-11) — 검증·생성 도구를 고친 뒤 실행에 투입하기 전에 '돌려 보면 드러나는' 결함을 실제로 돌려서 잡는다. |
 | `envelope.py` | 다른 도구가 사용: decisions.py, evidence_check.py, run_verify.py 외 1 | 결과 봉투 vibe-result/1 — 판정 산출물 옆 <이름>.result.json (2026-10-26) |
 | `evidence_check.py` | 다른 도구가 사용: decisions.py, e2e-judge.js, llm_call.py 외 1 | 근거 확인기 — 결과 봉투(vibe-result/1)의 인용 근거가 실제로 있는지 기계로 확인해 근거 등급(hard/soft)을 매긴다 (2026-10-26) |
 | `excel_stage_clean.py` | 다른 도구가 사용: _verify.spec.ts | Excel 업로드 시험이 남긴 스테이징 행 정리(2026-11-02) |
@@ -391,7 +391,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `judge_popup_selftest.py` | 손 실행(진입점 연결 없음) | judge.py 의 팝업 문장 → 팝업 클래스 해석(T269) 변이 입증 |
 | `keyset_guard.py` | 손 실행(진입점 연결 없음) | 키 범위 스냅샷·복원 — 자동 복원기(restore_touched)가 못 되살리는 '지우고 다시 넣기·삭제' 저장 시험용 (2026-11-04 · GAP-175) |
 | `ledger.py` | 체인 facts | 화면 검증 항목 원장 생성 — Doc/verify/<ID>/verify_ledger.csv |
-| `ledger_diff.py` | 손 실행(진입점 연결 없음) | 원장 전후 대조 (2026-11-20 CheckList 속도 개선 플랜 R0) |
+| `ledger_diff.py` | 다른 도구가 사용: orch-vision.js | 원장 전후 대조 (2026-11-20 CheckList 속도 개선 플랜 R0) |
 | `ledger_guard.py` | 다른 도구가 사용: _verify.spec.ts, cleanup_marker.py, crud.ts | 정합검증 CRUD 실제 저장 안전장치 — 저장 직전 빈 키 확인 · 공유 마스터 스냅샷 기록(2026-10-24) |
 | `llm_call.py` | 다른 도구가 사용: criteria_build.py, dedup_general.py, dedup_screen.py 외 8 | AI 검토 공용 호출기 — 검증 체인(Python)에서 Claude Code 를 읽기 전용으로 불러 JSON 답을 받는다 (2026-11-19 사용자 지시) |
 | `llm_desc.py` | 다른 도구가 사용: make_verify_docs.py, run_verify.py | CheckList 설명 문장 작성 — '조치 필요'·'판정 필요' 시트의 설명 칸 정리 문장을 Claude 가 쓴다 (2026-11-19 사용자 지시 · 적용 단계 '설명 문장 작성') |

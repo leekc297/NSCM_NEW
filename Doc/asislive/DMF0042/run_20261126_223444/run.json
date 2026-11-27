@@ -1,0 +1,263 @@
+{
+ "id": "DMF0042",
+ "started": "2026-11-26 22:34:44.270",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-26 22:34:44.494",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.DM.Plan.UIL.DMF0042_BizPlan",
+   "form_text": "Business Plan",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0042_BizPlan.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:35:34.214"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-26 22:35:37.500",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0042\\run_20261126_223444\\dump_load.json",
+   "control_count": 91,
+   "grid_count": 1,
+   "total": "Sum : 0",
+   "time_status": "DB : s, UI : s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:35:37.561"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-26 22:35:37.729",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0042\\run_20261126_223444\\shots\\DMF0042_01_load.png",
+   "width": 987,
+   "height": 843,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:35:37.902"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-26 22:35:38.558",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:35:39.653"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-26 22:37:55.562",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0042\\run_20261126_223444\\dump_find.json",
+   "control_count": 91,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:37:55.575"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-26 22:51:00.776",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0042\\run_20261126_223444\\dump_find.json",
+   "control_count": 91,
+   "grid_count": 1,
+   "total": "",
+   "time_status": "",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:51:00.857"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-26 22:51:01.015",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\DMF0042\\run_20261126_223444\\shots\\DMF0042_02_find.png",
+   "width": 891,
+   "height": 939,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:51:01.233"
+  },
+  {
+   "step": "sweep",
+   "ok": true,
+   "left": 0,
+   "dialogs_open": 0,
+   "closed": 0,
+   "error": null
+  },
+  {
+   "step": "close_screen",
+   "cmd": "close_screen",
+   "at": "2026-11-26 22:51:02.742",
+   "close_timed_out": false,
+   "open_screens": 0,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 22:51:03.961"
+  },
+  {
+   "step": "sweep_after_close",
+   "ok": true,
+   "left": 0,
+   "dialogs_open": 0,
+   "closed": 0,
+   "error": null
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 63,
+  "calls_with_params": 63
+ },
+ "menu_warm_sec": 151.34,
+ "menu_warm_rows": 273,
+ "user_id": "jaeuk.shin",
+ "prev_user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "batch": true,
+ "db_wait_before": {
+  "sec": 0,
+  "left": 0
+ },
+ "screen": {
+  "form_type": "GSCM.DM.Plan.UIL.DMF0042_BizPlan",
+  "form_text": "Business Plan",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\DM\\Plan\\DMF0042_BizPlan.dll"
+ },
+ "fills": [],
+ "fill_left": [],
+ "scenario": {
+  "rule": "recent",
+  "set": []
+ },
+ "find": {
+  "signaled": false,
+  "time_status": "",
+  "total": null,
+  "how": "no_signal",
+  "inflight_check": "ok",
+  "inflight_max": 1,
+  "inflight_sec": 124
+ },
+ "data_find": {
+  "at": "2026-11-26 22:37:55",
+  "rows0": 0,
+  "tries": [
+   {
+    "cond": "Division 81",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "division": "81"
+      },
+      "ok": true,
+      "note": null
+     }
+    ],
+    "at": "2026-11-26 22:46:07"
+   },
+   {
+    "cond": "Division 81(딸린 인자 빈 값)",
+    "rows": 0,
+    "done": [
+     {
+      "op": {
+       "division": "81"
+      },
+      "ok": true,
+      "note": null
+     }
+    ],
+    "at": "2026-11-26 22:47:57"
+   },
+   {
+    "cond": "Division 40",
+    "rows": 1,
+    "done": [
+     {
+      "op": {
+       "division": "40"
+      },
+      "ok": true,
+      "note": null
+     }
+    ],
+    "at": "2026-11-26 22:51:00"
+   }
+  ],
+  "find_sp": [
+   "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  ],
+  "sheets": [
+   "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  ],
+  "search": {
+   "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA": {
+    "sp": "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+    "axes": [
+     "division",
+     "period"
+    ],
+    "conds": [
+     "Division 81",
+     "Division 81(딸린 인자 빈 값)",
+     "Division 40"
+    ],
+    "tried": 3,
+    "note": null
+   }
+  },
+  "found": {
+   "cond": "Division 40",
+   "rows": 1,
+   "ops": [
+    {
+     "division": "40"
+    }
+   ]
+  }
+ },
+ "t_open": "2026-11-26 22:34:44.487",
+ "t_find": "2026-11-26 22:35:38.240",
+ "dialogs": [],
+ "popups_closed": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 91,
+  "layout_items": 27,
+  "grids": 1,
+  "sheets": 1,
+  "header_cols": 26,
+  "data_rows": 50,
+  "grid_rows": 7564,
+  "calls_total": 63,
+  "calls_screen": 63,
+  "calls_find": 43,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-26 22:51:05.363",
+ "exit": 0
+}

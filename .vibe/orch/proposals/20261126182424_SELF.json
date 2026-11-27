@@ -1,0 +1,80 @@
+{
+  "id": "20261126182424_SELF",
+  "at": "2026-11-26T18:24:24+09:00",
+  "ms": 1795685064927,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orchestra.js|overallreview카드가visionmetajson마지막n건만그림or",
+  "title": "사용자 지시 R255 같은 문제: tools/VibeManager/orchestra.js:831 Overall Review 카드가 vision/meta.json 마지막 1건만 그림. orch-vision.js:163 의 vision/<시각>.json 지난 결",
+  "evidence": "규칙 R255 \"VMO 가 만드는 결과(컨설팅, 진단, Overall Review, 개념 재정립 문서)는 VMO 화면 탭에서 목록과 상세로 보이고 그 결과에서 나온 개선안으로 이동할 수 있게 함\" (원래 지시 2026-11-26 17:41 \"VMO 에 필요하면 컨설팅 결과를 볼 수 있는 기능이 추가되어야 할 것 같아요\") · tools/VibeManager/orchestra.js:831 function paintVision(m){ if(!m) return; vsMeta=m; const p=m.purposes||[];",
+  "targets": [
+    "tools/VibeManager/orchestra.js",
+    "tools/VibeManager/test/t_claude_usage.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_inc_time.js",
+    "tools/VibeManager/test/t_orch_ladder_card.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_unv.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_webview_kit.js",
+    "tools/VibeManager/test/t_webview_syntax.js"
+  ],
+  "before_after": "orch-vision.js meta() 가 consult reports() 처럼 지난 결과, 개념 문서, 작업 종료 점검 목록을 넘기게 함. paintVision 에 csBlock 과 같은 '지난 결과' details 목록, 열기 단추, 그 결과 개선안 id 로 가는 이동(prQ 필터)을 넣음. workbench.js 열기 처리는 orch:consultOpen 처럼 경로 정규식으로 범위를 제한함",
+  "verify": "node --check tools/VibeManager/orchestra.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orchestra.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:24:45+09:00",
+      "by": "S-W",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:24:45+09:00",
+      "by": "S-W",
+      "what": "경고: 대상 파일 겹침 tools/VibeManager/test/t_orch_ccwork.js (3acd3c 20261126180221_SELF), tools/VibeManager/test/t_orch_history.js (3acd3c 20261126180221_SELF), tools/VibeManager/test/t_orch_history_kind.js (3acd3c 20261126180221_SELF), tools/VibeManager/test/t_orch_inc_time.js (3acd3c 20261126180221_SELF), tools/VibeManager/test/t_orch_unv.js (3acd3c 20261126180221_SELF), tools/VibeManager/test/t_orch_usercheck.js (3acd3c 20261126180221_SELF) 외 2"
+    },
+    {
+      "at": "2026-11-26T18:30:34+09:00",
+      "by": "S-W",
+      "what": "반영 완료(세션 직접 보완) · orchestra.js paintVision 에 vsHist(지난 큰 그림 점검 결과: 날짜 열기, 목적 수, 어긋남 수, 그 결과 개선안 버튼 → 개선안 탭 'id:' 필터 / 개념 재정립 문서 목록) + vsHistBind, paintProp hit 에 'id:a,b' 필터. workbench.js visionHistory(vision/<시각>.json 20건, concept_*.md 20건) 를 postVision meta.history 로 보냄, orch:visionOpen 은 VISION_FILE_RE 경로만 엶. orch-vision.js 는 3acd3c 작업 중이라 손대지 않음. 실데이터 결과 5건, 개념 문서 19건. 시험 t_vision_history(신규) PASS 6, t_webview_syntax ALL PASS (2026-11-26 18:30:34)"
+    }
+  ],
+  "plain": {
+    "what": "VMO 가 만드는 결과(컨설팅, 진단, Overall Review, 개념 재정립 문서)는 VMO 화면 탭에서 목록과 상세로 보이고 그 결과에서 나온 개선안으로 이동할 수 있게 함 규칙을 tools/VibeManager/orchestra.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R255|tools/VibeManager/orchestra.js",
+  "kind": "fix",
+  "testsAdded": [
+    "tools/VibeManager/test/t_claude_usage.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_inc_time.js",
+    "tools/VibeManager/test/t_orch_ladder_card.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_unv.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_webview_kit.js",
+    "tools/VibeManager/test/t_webview_syntax.js"
+  ],
+  "claimedBy": "S-W",
+  "waitNote": "",
+  "appliedMs": 1795685434256
+}

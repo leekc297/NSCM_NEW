@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/projectModal/project-modal-constants.ts | constants | 8 |
-| features/master/src/components/projectModal/ProjectModal.module.scss | style | 19 |
+| features/master/src/components/projectModal/ProjectModal.module.scss | style | 20 |
 | features/master/src/components/projectModal/ProjectModal.tsx | page | 217 |
 | features/master/src/components/projectModal/projectModalStore.ts | store | 41 |
 
@@ -28,8 +28,8 @@
 | SearchArea | onSearch | handleSearch | jsx | features/master/src/components/projectModal/ProjectModal.tsx | 141 |
 | InputField | onChange | <arrow> handleProjectChange | jsx | features/master/src/components/projectModal/ProjectModal.tsx | 168 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/projectModal/ProjectModal.tsx | 169 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/projectModal/ProjectModal.tsx | 202 |
-| Button | onClick | modalClose | jsx | features/master/src/components/projectModal/ProjectModal.tsx | 209 |
+| Button | onClick | modalClose | jsx | features/master/src/components/projectModal/ProjectModal.tsx | 200 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/projectModal/ProjectModal.tsx | 209 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

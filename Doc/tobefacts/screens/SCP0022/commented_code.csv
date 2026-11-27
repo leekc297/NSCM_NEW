@@ -1,3 +1,4 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
 "supply/formation","SCP0022","features/supply/src/pages/formation/formation.constants.ts","40","endpoint","컬럼 메타 fetch(/admin/menu/SCP0022/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 가 문자열 그대로 매칭). SCP0022 는 공백 포함 표시명으로 배포돼 있어 코드 키(SHEETS)와 분리한다."
+"supply/formation","SCP0022","features/supply/src/pages/formation/formation.constants.ts","113","code","NEGATIVE_BLOCKED_COLUMNS 의 음수 부호('-'), DECIMAL_BLOCKED_COLUMNS 의 소수점('.') 입력 자체를 차단한다(입력 후 검증이 아니라 입력 시점 차단, 알림 없음 — AS-IS NumberCellType 동작 재현). - keydown: 편집 중 키 입력. wijmo 기본 처리보다 먼저 끊기 위해 캡처 단계로 등록. - pastingCell: 셀 선택 상태에서 Ctrl+V. 해당 셀만"
 "supply/formation","SCP0022","features/supply/src/pages/formation/useFormationStore.ts","3","code","import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';"

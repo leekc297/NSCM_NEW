@@ -19,7 +19,7 @@ const vmDir = () => opts.vmDir || path.join(P().root, 'tools', 'VibeManager');
 const ucDir = () => path.join(P().vibeDir, 'orch', 'usercheck');
 const ledgerFile = () => path.join(vmDir(), 'user_checks.json');
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
-const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f + '.t', JSON.stringify(v, null, 1), 'utf8'); fs.renameSync(f + '.t', f); return true; } catch (e) { errlog.note('orch-usercheck', 'writeJson', e); return false; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); require('./fs-retry').writeFileSyncRetry(f + '.t', JSON.stringify(v, null, 1), 'utf8'); require('./fs-retry').renameSyncRetry(f + '.t', f); return true; } catch (e) { errlog.note('orch-usercheck', 'writeJson', e); return false; } }; // 2026-11-26 개선안 20261126164445_VISION: 쓰기와 바꾸기 일시 실패 재시도(fs-retry.js)
 const lsDir = d => { try { return fs.readdirSync(d, { withFileTypes: true }); } catch { return []; } };
 const nowLocal = ms => (orchEv ? orchEv.nowLocal(ms) : new Date(ms || Date.now()).toISOString());
 const hm = ms => dfmt.fmtDT(ms);
@@ -44,6 +44,19 @@ function ledgerCuts(now) {
 }
 
 // ── 감지기(코드) ── 각 함수는 (항목 u, 문맥 x) → [{ level, what, detail, key }]
+// 2026-11-26 S-Z: U22 promptSerialize 파일별 읽은 위치·찾은 줄 기억(f → { size, mtime, head, off, hits: Map(key → { f, item }) })
+const PS_CACHE = new Map();
+/** 새로 읽은 글(txt)에서 '[object Object]' 직렬화 실패 user 줄을 찾아 hits 에 넣음(키 = 세션 앞 8자|시각). item.ms = 줄 시각 */
+function psScan(u, x, d, e, f, txt, pat, hits) {
+  for (const ln of txt.split('\n')) {
+    if (ln.indexOf('[object Object]') < 0 || ln.indexOf('"user"') < 0) continue; let r; try { r = JSON.parse(ln); } catch { continue; }
+    if (r.type !== 'user' || r.isMeta || r.isCompactSummary) continue; const c = (r.message || {}).content;
+    const t = typeof c === 'string' ? c : Array.isArray(c) ? c.filter(b => b && b.type === 'text').map(b => String(b.text || '')).join('\n') : '';
+    if (!pat.test(t)) continue; const ms = Date.parse(r.timestamp || ''); if (!Number.isFinite(ms)) continue;
+    const key = `S13|${u.id}|${e.name.slice(0, 8)}|${ms}`; if (hits.has(key)) continue;
+    hits.set(key, { f, item: { level: 'fail', what: `VM 프롬프트 직렬화 실패 '[object Object]' ${hm(ms)}`, detail: `${path.relative(d, f)} ${nowLocal(ms)} type user, 입력 경로 ${r.entrypoint || '-'}, 내용 앞 '${t.replace(/\s+/g, ' ').trim().slice(0, 120)}', 객체 배열(첨부 이미지, 붙여넣기)을 문자열로 바꾸지 못함`, key, ms } });
+  }
+}
 const DETECTORS = {
   // U1 업무 작업 카드 표시가 진행을 따라가지 않음: 스크립트 단계 화면의 로그는 늘었는데 단계, 세부 진행 글이 staleMin 넘게 그대로
   progressShown(u, x) {
@@ -103,13 +116,22 @@ const DETECTORS = {
     // 개선안 20261122230715_SELF: U3 자신이 올린 R12 사건은 제외(항목과 사건이 서로를 유지하던 순환 끊기)
     // 개선안 20261126103110_SELF(L4 단계 원장 20261124000718_VISION 단계 4): 진행 = 상태 전이 기록. '에이전트 담당 아님' 기록은 진행으로 세지 않음(종전 기록 1건이면 빠짐)
     const prog = i => (i.actions || []).filter(a => !/^에이전트 담당 아님/.test(String(a.what || '')));
-    const idle = x.incidents.filter(i => i.status === 'open' && !i.notice && !prog(i).length && x.now - (i.ms || 0) > gap && i.sig !== 'R12|S13|U3|idleInc');
+    // 2026-11-26 S-Z(사건 20261126_130515_R12_ALL U21 277분 '조치 없음'): R12 사건은 에이전트가 맡지 않고 자가진단이 개선안으로 조치함. 사건 뒤 등록된 개선안이 그 사건 id(incident) 또는
+    //   같은 사용자 지적 번호(sig R12|S13|U<n>| 의 U<n>, 근거·서명·selfKey 안의 낱말)를 가리키면 진행으로 셈(실례 163554_SELF, 163555_SELF 근거 '진단 사다리 묶음 L3|usercheck|U21')
+    const propLinked = i => { const m = /^R12\|S13\|(U\d+)\|/.exec(String(i.sig || '')); const re = m ? new RegExp('(^|[| ,(])' + m[1] + '(?![0-9])') : null;
+      return (x.proposals || []).some(p => (Number(p.ms) || 0) > (i.ms || 0) && (p.incident === i.id || (re && re.test(`${p.evidence || ''} ${p.sig || ''} ${p.selfKey || ''}`)))); };
+    // 개선안 20261126183041_SELF: 처리 담당(handler)이 있는 사건은 그 필드만 읽음. handler.ref(개선안 id) 있음 = 개선안으로 처리 중(진행), ref 없음 = progressAt 이 gap 을 넘으면 공백.
+    //   handler 없는 옛 사건만 종전 조건(actions 문구, 개선안 근거 낱말)으로 판정
+    const pAt = i => Date.parse(String(i.progressAt || (i.handler && i.handler.at) || '')) || (i.ms || 0);
+    const stalled = i => (i.handler ? !i.handler.ref && x.now - pAt(i) > gap : !prog(i).length && !propLinked(i));
+    const idle = x.incidents.filter(i => i.status === 'open' && !i.notice && stalled(i) && x.now - (i.ms || 0) > gap && i.sig !== 'R12|S13|U3|idleInc');
     if (idle.length) out.push({ level: 'fail', what: `조치 기록 없는 열린 사건 ${idle.length}건`, detail: idle.slice(0, 8).map(i => `${i.id} ${i.rule} ${String(i.title).slice(0, 60)} (${Math.round((x.now - i.ms) / 60000)}분)`).join(' / '), key: 'S13|U3|idleInc' });
     //   need-user 계약: 사용자 행동 기록이 없거나 원인이 VM, VMO 코드인 need-user 사건(담당 VMO)이 마지막 기록 뒤 gap 넘게 그대로면 fail
     const wl = mod('orch-worklist');
     if (wl && typeof wl.needUserContract === 'function' && x.cfg.needUserContract !== false) {
       const lastMs = i => Math.max(i.ms || 0, ...(i.actions || []).map(a => Date.parse(String(a.at || '')) || 0));
-      const nu = x.incidents.filter(i => i.status === 'need-user' && !i.notice && i.sig !== 'R12|S13|U3|needUserVmo' && x.now - lastMs(i) > gap).map(i => ({ i, k: wl.needUserContract(i, id => { const im = mod('orch-improve'); return im && im.get ? im.get(id) : null; }) })).filter(r => r.k.owner === 'vmo' && !r.k.wait);
+      // 2026-11-26 개선안 20261126164446_VISION: VMO 창 요약 맨 위 사람 확인 줄에 보인 사건(shownAt) = 사용자에게 알렸음, 실패에서 뺌
+      const nu = x.incidents.filter(i => i.status === 'need-user' && !i.notice && !i.shownAt && i.sig !== 'R12|S13|U3|needUserVmo' && x.now - lastMs(i) > gap).map(i => ({ i, k: wl.needUserContract(i, id => { const im = mod('orch-improve'); return im && im.get ? im.get(id) : null; }) })).filter(r => r.k.owner === 'vmo' && !r.k.wait);
       if (nu.length) out.push({ level: 'fail', what: `사용자 행동 기록 없이 사용자 확인으로 멈춘 사건 ${nu.length}건(담당 VMO)`, detail: nu.slice(0, 8).map(r => `${r.i.id} ${r.i.rule} ${r.k.why} · 다음 행동 ${r.k.next} (마지막 기록 뒤 ${Math.round((x.now - lastMs(r.i)) / 60000)}분)`).join(' / '), key: 'S13|U3|needUserVmo' });
     }
     const sc = mod('orch-selfcheck'); const elig = p => { try { return sc && sc.autoEligible ? sc.autoEligible(p) : { ok: false }; } catch { return { ok: false }; } };
@@ -199,11 +221,12 @@ const DETECTORS = {
     //   repair.at 이 마지막 실패와 같은 시각이어도 재진단 있음으로 봄. repair.decision stop(사람 판단 필요) 안은 fail 대신 '사람 판단 대기' warn 1줄로 묶음
     for (const p of x.proposals) {
       if (p.status !== 'apply-failed') continue; const fails = (p.history || []).filter(h => /^반영 실패(?!\s*진단)/.test(String(h.what || ''))); const last = fails.length ? Date.parse(String(fails[fails.length - 1].at).replace(' ', 'T')) : (p.ms || 0);
-      if (!Number.isFinite(last) || x.now - last < lim) continue; const ra = p.repair && p.repair.at ? Date.parse(String(p.repair.at).replace(' ', 'T')) : 0;
+      if (!Number.isFinite(last) || x.now - last < lim) continue; if (p.userHold) { human.push(p); continue; } // 2026-11-27 00:36 사용자 판단 대기(claim_proposal hold · userHold)로 돌린 안도 방치 fail 로 셈(20261126153056_SELF)
+      const ra = p.repair && p.repair.at ? Date.parse(String(p.repair.at).replace(' ', 'T')) : 0;
       if (ra && ra >= last) { if (p.repair.decision === 'stop') human.push(p); continue; }
       out.push({ level: 'fail', what: `반영 실패 개선안 ${Math.round((x.now - last) / 3600000)}시간 방치`, detail: `${p.id} ${String(p.title).slice(0, 80)} · 재진단 ${p.repair ? `${p.repair.decision || ''} ${p.repair.at || ''}` : '없음'}`, key: `S13|U11|${p.id}` });
     }
-    if (human.length) out.push({ level: 'warn', what: `반영 실패 사람 판단 대기 ${human.length}건`, detail: human.slice(0, 8).map(p => `${p.id} ${String(p.title).slice(0, 60)} · 재진단 stop ${p.repair.at}`).join(' / '), key: 'S13|U11|human' });
+    if (human.length) out.push({ level: 'warn', what: `반영 실패 사람 판단 대기 ${human.length}건`, detail: human.slice(0, 8).map(p => `${p.id} ${String(p.title).slice(0, 60)} · ${p.userHold ? `사용자 판단 대기${p.reason ? ` ${String(p.reason).slice(0, 60)}` : ''}` : `재진단 stop ${p.repair.at}`}`).join(' / '), key: 'S13|U11|human' });
     return out;
   },
   // U13 창 다시 로드 뒤 VMW 작업 재개 누락(개선안 20261120184524_SELF: 원래 중단 사건 기준으로 다시 세움)
@@ -465,15 +488,22 @@ const DETECTORS = {
   //   repairRetry(U11)는 apply-failed 로 방치된 개선안만 봄. 이 감지기는 실패 발생 자체의 반복을 봄
   applyFailRepeat(u, x) {
     const out = []; const minN = u.params.countMin || 2; const winMs = (u.params.titleDays || 7) * DAY;
-    const isFail = w => /^반영 실패/.test(String(w || '').trim()) && !/^반영 실패 진단/.test(String(w || '').trim());
-    const fails = [];
-    for (const p of x.proposals || []) for (const h of p.history || []) { const ms = Date.parse(h.at || ''); if (isFail(h.what) && ms && x.now - ms < winMs) fails.push({ p, ms, what: String(h.what).slice(0, 80) }); }
+    // 개선안 20261126183411_SELF(L4 원장 20261124000718_VISION 단계 7): 준비 확인(orch-selfcheck preflight)을 통과한 뒤의 실패만 셈. '반영 실패(준비 확인)' 줄과 지금 준비 확인에서 막힐 안(대상 재진단)의 실패는 빼고, 원인 부류를 detail 에 적음
+    const isFail = w => /^반영 실패/.test(String(w || '').trim()) && !/^반영 실패 진단/.test(String(w || '').trim()) && !/^반영 실패\(준비 확인\)/.test(String(w || '').trim());
+    const sc = mod('orch-selfcheck'); const pfMemo = new Map(); const blocked = p => { if (!sc || typeof sc.preflight !== 'function') return false; if (!pfMemo.has(p.id)) { let r = null; try { r = sc.preflight(p, { busyFiles: [] }); } catch { r = null; } pfMemo.set(p.id, !!(r && !r.ok && r.kind === 'retarget')); } return pfMemo.get(p.id); };
+    const causeOf = w => { const t = String(w || ''); return /S11 /.test(t) ? '문장 규칙' : /게이트에서 새로 어긋난 항목/.test(t) ? '게이트 시험' : /Claude exit|시간 초과|결과 JSON 없음/.test(t) ? '실행 끊김' : /검증 실패/.test(t) ? '검증' : /반영 안 됨/.test(t) ? '반영 안 됨' : '기타'; };
+    // 개선안 20261126223020_SELF: 고친 안으로 대체(superseded)된 안은 supersededBy 를 따라간 마지막 안이 반영 완료면 그 실패를 빼고 셈(orch-ladder.js lastOf 와 같은 조건)
+    const byId = new Map((x.proposals || []).map(p => [p.id, p]));
+    const doneByChain = p => { if (!p || p.status !== 'superseded') return false; let q = p; const seen = new Set(); while (q && q.status === 'superseded' && q.supersededBy && !seen.has(q.id)) { seen.add(q.id); q = byId.get(q.supersededBy); } return !!q && q !== p && q.status === 'applied'; };
+    const fails = []; let skippedPf = 0; let skippedDone = 0;
+    for (const p of x.proposals || []) for (const h of p.history || []) { const ms = Date.parse(h.at || ''); if (isFail(h.what) && ms && x.now - ms < winMs) { if (blocked(p)) { skippedPf++; continue; } if (doneByChain(p)) { skippedDone++; continue; } fails.push({ p, ms, what: String(h.what).slice(0, 80), cause: causeOf(h.what) }); } }
     if (!fails.length) return out;
     fails.sort((a, b) => a.ms - b.ms);
     const day = fails.filter(f => x.now - f.ms < DAY);
     if (day.length >= minN) {
       const last = day[day.length - 1];
-      out.push({ level: 'fail', what: `VMO 반영 실패 24시간 ${day.length}건`, detail: `개선안 ${new Set(day.map(f => f.p.id)).size}개 · 마지막 ${hm(last.ms)} ${last.p.id} '${last.what}' · ${day.slice(-5).map(f => `${f.p.id} ${hm(f.ms)}`).join(', ')}`.slice(0, 600), key: `S13|${u.id}|count|${last.p.id}|${last.ms}`, ms: last.ms });
+      const byCause = {}; for (const f of day) byCause[f.cause] = (byCause[f.cause] || 0) + 1;
+      out.push({ level: 'fail', what: `VMO 반영 실패 24시간 ${day.length}건`, detail: `원인 부류 ${Object.entries(byCause).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(', ')}${skippedPf ? ` · 준비 확인에서 막힐 안의 실패 ${skippedPf}건 제외` : ''}${skippedDone ? ` · 고친 안 반영 완료 ${skippedDone}건 제외` : ''} · 개선안 ${new Set(day.map(f => f.p.id)).size}개 · 마지막 ${hm(last.ms)} ${last.p.id} '${last.what}' · ${day.slice(-5).map(f => `${f.p.id} ${hm(f.ms)}`).join(', ')}`.slice(0, 600), key: `S13|${u.id}|count|${last.p.id}|${last.ms}`, ms: last.ms });
     }
     const byTitle = {};
     for (const f of fails) { const t = String(f.p.title || '').trim(); if (t) (byTitle[t] = byTitle[t] || []).push(f); }
@@ -501,20 +531,25 @@ const DETECTORS = {
   //   따옴표 안 인용(개선안 제목, 근거, 학습 프롬프트 '1. (시각) …' 줄)은 줄 첫머리가 아니라 판정하지 않음
   promptSerialize(u, x) {
     const out = []; const pat = /(^|\n)[ \t]*\[object Object\]/; const sid = new Set();
+    // 2026-11-26 S-Z(실측 usercheck.check 3.9초 중 이 감지기 1.6초): 세션 기록은 뒤에만 붙으므로 파일별로 읽은 위치(off)와 찾은 줄을 기억하고 새로 붙은 부분만 읽음.
+    //   앞 256바이트가 바뀌었거나 크기가 줄면(덮어쓰기) 처음부터 다시 읽음. 마지막 줄이 끝나지 않았으면 그 줄은 다음에 다시 읽음
+    const cache = PS_CACHE;
     for (const d of sessionDirs()) for (const e of lsDir(d)) {
-      if (!e.isFile() || !e.name.endsWith('.jsonl')) continue; const f = path.join(d, e.name); let m = 0; try { m = fs.statSync(f).mtimeMs; } catch { continue; }
-      if (x.now - m > DAY) continue; let txt = ''; try { txt = fs.readFileSync(f, 'utf8'); } catch { continue; }
-      if (txt.indexOf('[object Object]') < 0) continue;
-      for (const ln of txt.split('\n')) {
-        if (ln.indexOf('[object Object]') < 0 || ln.indexOf('"user"') < 0) continue; let r; try { r = JSON.parse(ln); } catch { continue; }
-        if (r.type !== 'user' || r.isMeta || r.isCompactSummary) continue; const c = (r.message || {}).content;
-        const t = typeof c === 'string' ? c : Array.isArray(c) ? c.filter(b => b && b.type === 'text').map(b => String(b.text || '')).join('\n') : '';
-        if (!pat.test(t)) continue; const ms = Date.parse(r.timestamp || ''); if (!Number.isFinite(ms) || x.now - ms > DAY) continue;
-        const k = `${e.name.slice(0, 8)}|${ms}`; if (sid.has(k)) continue; sid.add(k);
-        out.push({ level: 'fail', what: `VM 프롬프트 직렬화 실패 '[object Object]' ${hm(ms)}`, detail: `${path.relative(d, f)} ${nowLocal(ms)} type user, 입력 경로 ${r.entrypoint || '-'}, 내용 앞 '${t.replace(/\s+/g, ' ').trim().slice(0, 120)}', 객체 배열(첨부 이미지, 붙여넣기)을 문자열로 바꾸지 못함`, key: `S13|${u.id}|${e.name.slice(0, 8)}|${ms}` });
-      }
+      if (!e.isFile() || !e.name.endsWith('.jsonl')) continue; const f = path.join(d, e.name); let st = null; try { st = fs.statSync(f); } catch { continue; }
+      if (x.now - st.mtimeMs > DAY) { cache.delete(f); continue; }
+      let c = cache.get(f); let head = ''; let fd = null;
+      try { fd = fs.openSync(f, 'r'); const hb = Buffer.alloc(Math.min(256, st.size)); fs.readSync(fd, hb, 0, hb.length, 0); head = hb.toString('latin1');
+        if (c && (st.size < c.size || head !== c.head)) c = null;
+        if (c && st.size === c.size && st.mtimeMs === c.mtime) { for (const h of c.hits.values()) h.f === f && out.push(h.item); continue; }
+        const start = c ? c.off : 0; const n = st.size - start; const buf = Buffer.alloc(Math.max(0, n)); if (n > 0) fs.readSync(fd, buf, 0, n, start);
+        const nl = buf.lastIndexOf(10); const off = nl >= 0 ? start + nl + 1 : start;
+        if (!c) c = { hits: new Map() }; Object.assign(c, { size: st.size, mtime: st.mtimeMs, head, off }); cache.set(f, c);
+        const txt = buf.toString('utf8');
+        if (txt.indexOf('[object Object]') >= 0) psScan(u, x, d, e, f, txt, pat, c.hits);
+        for (const h of c.hits.values()) out.push(h.item);
+      } catch { /* 읽기 실패 = 이번 회차 건너뜀 */ } finally { if (fd != null) { try { fs.closeSync(fd); } catch { /* 닫기 실패 */ } } }
     }
-    return out.slice(-10);
+    const seen = new Set(); return out.filter(it => { const ms = it.ms; if (!Number.isFinite(ms) || x.now - ms > DAY || seen.has(it.key)) return false; seen.add(it.key); return true; }).sort((a, b) => a.ms - b.ms).slice(-10);
   },
   // U23 VMW 작업 재개 뒤 WORKBENCH 에 진행 상태가 안 보임(개선안 20261120193704_SELF)
   //   대상 = .vibe/orch/chain_progress/*.json 중 resumedFrom 이 있고 interruptedAt 이 없는(실행 중) 재개 기록. 시작 = events.jsonl 같은 runId chain.start ms(없으면 기록 t0)
@@ -755,6 +790,35 @@ const DETECTORS = {
     }
     return out;
   },
+  // U32 창 다시 로드 뒤 VMO 컨설팅이 바로 기동하지 않음(개선안 20261126180937_SELF)
+  //   읽는 기록: .vibe/orch/activations.jsonl(창 로드 = VM 기동) 마지막 줄, .vibe/orch/consult/meta.json lastMs, harness.json orch.consultEveryDays · consultEnabled
+  //   공백 = 마지막 컨설팅이 창 로드보다 앞이고 주기를 넘었는데(실행 기록 없음 포함) 새 실행 기록이 없음. 창 로드 때 이미 주기를 넘었으면 창 로드 뒤 graceMin(10)분부터 셈
+  //   (orch-consult.js init 의 창 연 뒤 25분 고정 대기도 공백으로 셈). 창 로드 뒤에 주기가 찼으면 1시간 타이머 몫으로 60분 + graceMin 뒤부터 셈. 실행 중이면 판정 안 함
+  // 2026-11-26 개선안 20261126191217_SELF(U33): 컨설팅 요청(consult.request) 뒤 waitMin(기본 3)분 안에 대기, 시작, 끝(consult.wait, consult.start, consult.end) 기록이 없으면 미응답. 24시간 안 요청만 봄
+  consultNoResponse(u, x) {
+    const waitMs = (Number((u.params || {}).waitMin) || 3) * 60000; const out = [];
+    const reqs = x.events.filter(e => e.type === 'consult.request' && x.now - (e.ms || 0) < DAY && x.now - (e.ms || 0) >= waitMs);
+    for (const r of reqs) {
+      const resp = x.events.find(e => /^consult\.(wait|start|end)$/.test(e.type) && (e.ms || 0) >= (r.ms || 0) && (e.ms || 0) - (r.ms || 0) <= waitMs);
+      if (!resp) out.push({ level: 'fail', what: `컨설팅 요청 뒤 ${Math.round(waitMs / 60000)}분 응답 없음`, detail: `요청 ${hm(r.ms)}${r.manual ? '(사용자 단추)' : '(주기)'}${r.topic ? ` · 주제 ${String(r.topic).slice(0, 60)}` : ''} · 대기, 시작, 끝 기록 없음(events.jsonl consult.*)`, key: `U33|${r.ms}` });
+    }
+    return out.slice(-3);
+  },
+  consultCadence(u, x) {
+    const c = x.cfg; if (c.enabled === false || c.consultEnabled === false) return [];
+    const lines = (() => { try { return fs.readFileSync(path.join(P().vibeDir, 'orch', 'activations.jsonl'), 'utf8').split('\n'); } catch { return []; } })();
+    let A = 0; for (const ln of lines) { if (!ln.trim()) continue; try { const m = Number(JSON.parse(ln).ms) || 0; if (m <= x.now && m > A) A = m; } catch { /* 깨진 줄 */ } }
+    if (!A) return [];
+    const meta = readJson(path.join(P().vibeDir, 'orch', 'consult', 'meta.json'), {}); const L = Number(meta.lastMs) || 0;
+    if (L >= A) return [];
+    const cm = opts.mods && opts.mods['orch-consult'] ? opts.mods['orch-consult'] : null; // 실행 중 여부는 시험이나 init 된 모듈에서만 앎(파일 기록 없음)
+    try { const live = cm || require('./orch-consult'); if (live && (!live.ready || live.ready()) && live.meta && live.meta().running) return []; } catch { /* 모듈 없음 */ }
+    const per = Math.max(0.01, Number(c.consultEveryDays) || 1) * DAY; const grace = (Number((u.params || {}).graceMin) || 10) * 60000;
+    const dueAt = L ? L + per : 0; const dueAtLoad = !L || dueAt <= A; const from = dueAtLoad ? A + grace : dueAt + 60 * 60000 + grace;
+    if (x.now < from) return [];
+    const mm = ms => Math.round(ms / 60000);
+    return [{ level: 'fail', what: `창 로드 뒤 컨설팅 미기동 ${mm(x.now - A)}분`, detail: `창 로드 ${hm(A)}(activations.jsonl) · 마지막 컨설팅 ${L ? `${hm(L)}(${String(meta.lastResult || '').slice(0, 60)})` : '기록 없음'} · 주기 ${Number(c.consultEveryDays) || 1}일 · ${dueAtLoad ? '창 로드 때 이미 주기 넘음' : `주기 찬 시각 ${hm(dueAt)}`} · 창 연 뒤 첫 실행 25분 고정(orch-consult.js init) · 지금까지 새 실행 기록 없음(.vibe/orch/consult/meta.json)`, key: `S13|U32|${A}`, ms: A }];
+  },
 };
 /** CSV 텍스트 → 행 배열(따옴표, 줄바꿈 포함 칸 처리) */
 function csvRows(t) {
@@ -861,26 +925,40 @@ function editedFiles(c) {
   else if (/^(Bash|PowerShell)$/.test(c.name) && inp.command) { let sw = null; try { sw = require('./orch-undo').SHELL_WRITE; } catch { sw = null; } if (sw && sw.test(String(inp.command))) for (const f of writeTargets(inp.command)) out.add(f); }
   VM_FILE_RE.lastIndex = 0; return [...out].filter(f => !/\.bak_|^test\/|\/test\//.test(f)).slice(0, 20);
 }
+// 2026-11-26 S-Z(실측 프로파일 check() 2회 중 pendingPrompts 자체 1.5초 + 파일 읽기 2.4초): 세션 기록은 뒤에만 붙으므로 파일별로 읽은 위치(off), 찾은 프롬프트, 마지막 프롬프트(편집 파일을 붙일 대상)를 기억하고 새로 붙은 줄만 읽음.
+//   앞 256바이트가 바뀌었거나 크기가 줄면(덮어쓰기) 처음부터 다시 읽음. 마지막 줄이 끝나지 않았으면(쓰는 중) 그 줄은 다음에 읽음. from(이미 학습한 시각) 거름은 꺼낼 때 함
+const PP_CACHE = new Map();
 function pendingPrompts(sinceMs) {
   const L = ledger(); const lj = readJson(path.join(ucDir(), 'learn.json'), {}); const from = sinceMs != null ? sinceMs : Math.max(Date.parse(L.coveredUntil || '') || 0, lj.untilMs || 0);
   const out = []; const hist = mod('orch-history'); const red = s => (hist && hist.redact ? hist.redact(s) : s);
   for (const d of sessionDirs()) for (const e of lsDir(d)) {
     if (!e.isFile() || !e.name.endsWith('.jsonl')) continue; const f = path.join(d, e.name); let st; try { st = fs.statSync(f); } catch { continue; }
-    if (st.mtimeMs <= from) continue; let txt = ''; try { txt = fs.readFileSync(f, 'utf8'); } catch { continue; }
-    // 2026-11-24 사용자 지시('VM 관련 Claude Code 작업 이력도 VMO 사용자 수정사항으로 관리'): 프롬프트 뒤 다음 프롬프트까지 Claude Code 가 고친 VM 파일(편집 도구, 쓰기 명령)을 그 프롬프트의 edits 로 붙임
-    let lastP = null;
-    for (const ln of txt.split('\n')) {
-      if (lastP && ln && ln.indexOf('"tool_use"') >= 0) { let a; try { a = JSON.parse(ln); } catch { a = null; } for (const c of (a && a.type === 'assistant' && a.message && Array.isArray(a.message.content) ? a.message.content : [])) if (c && c.type === 'tool_use') for (const f of editedFiles(c)) if (!lastP.edits.includes(f) && lastP.edits.length < 20) lastP.edits.push(f); }
-      if (!ln || (ln.indexOf('"user"') < 0 && ln.indexOf('queued_command') < 0)) continue; let r; try { r = JSON.parse(ln); } catch { continue; }
-      let t = '', ts = '';
-      // 2026-11-23: 그림을 붙인 프롬프트는 content 가 배열(text + image) → 글 부분만 이어 읽음(종전 문자열만 읽어 캡처 붙인 지시가 빠짐)
-      const ct = (r.message || {}).content; const ctext = typeof ct === 'string' ? ct : Array.isArray(ct) && !ct.some(c => c && c.type === 'tool_result') ? ct.filter(c => c && c.type === 'text').map(c => c.text).join(String.fromCharCode(10)) : '';
-      if (r.type === 'user' && r.entrypoint && r.entrypoint !== 'sdk-cli' && !r.isMeta && !r.isCompactSummary && ctext) { t = ctext; ts = r.timestamp; }
-      else if (r.type === 'attachment' && r.attachment && r.attachment.type === 'queued_command' && (r.attachment.origin || {}).kind === 'human') { const qp = r.attachment.prompt; t = typeof qp === 'string' ? qp : Array.isArray(qp) ? qp.filter(c => c && c.type === 'text').map(c => c.text).join(String.fromCharCode(10)) : (qp && qp.text) || ''; ts = r.attachment.timestamp || r.timestamp; } /* 2026-11-24 작업 중 보낸 프롬프트가 배열이면 '[object Object]' 로 읽히던 것 */
-      else continue;
-      t = String(t || '').trim(); const ms = Date.parse(ts || ''); if (!t || !Number.isFinite(ms) || ms <= from || SKIP.test(t) || t.length < 6) continue;
-      lastP = { at: nowLocal(ms), ms, text: red(t).slice(0, 1200), session: e.name.slice(0, 8), edits: [] }; out.push(lastP);
-    }
+    if (st.mtimeMs <= from) { PP_CACHE.delete(f); continue; }
+    let c = PP_CACHE.get(f); let fd = null;
+    try {
+      fd = fs.openSync(f, 'r'); const hb = Buffer.alloc(Math.min(256, st.size)); fs.readSync(fd, hb, 0, hb.length, 0); const head = hb.toString('latin1');
+      if (c && (st.size < c.size || head !== c.head)) c = null;
+      if (!c || st.size !== c.size || st.mtimeMs !== c.mtime) {
+        const start = c ? c.off : 0; const n = Math.max(0, st.size - start); const buf = Buffer.alloc(n); if (n > 0) fs.readSync(fd, buf, 0, n, start);
+        const nl = buf.lastIndexOf(10); const done = nl >= 0 ? buf.subarray(0, nl + 1) : Buffer.alloc(0);
+        if (!c) c = { prompts: [], lastP: null }; Object.assign(c, { size: st.size, mtime: st.mtimeMs, head, off: start + done.length }); PP_CACHE.set(f, c);
+        // 2026-11-24 사용자 지시('VM 관련 Claude Code 작업 이력도 VMO 사용자 수정사항으로 관리'): 프롬프트 뒤 다음 프롬프트까지 Claude Code 가 고친 VM 파일(편집 도구, 쓰기 명령)을 그 프롬프트의 edits 로 붙임
+        for (const ln of done.toString('utf8').split('\n')) {
+          const lastP = c.lastP;
+          if (lastP && ln && ln.indexOf('"tool_use"') >= 0) { let a; try { a = JSON.parse(ln); } catch { a = null; } for (const cc of (a && a.type === 'assistant' && a.message && Array.isArray(a.message.content) ? a.message.content : [])) if (cc && cc.type === 'tool_use') for (const ef of editedFiles(cc)) if (!lastP.edits.includes(ef) && lastP.edits.length < 20) lastP.edits.push(ef); }
+          if (!ln || (ln.indexOf('"user"') < 0 && ln.indexOf('queued_command') < 0)) continue; let r; try { r = JSON.parse(ln); } catch { continue; }
+          let t = '', ts = '';
+          // 2026-11-23: 그림을 붙인 프롬프트는 content 가 배열(text + image) → 글 부분만 이어 읽음(종전 문자열만 읽어 캡처 붙인 지시가 빠짐)
+          const ct = (r.message || {}).content; const ctext = typeof ct === 'string' ? ct : Array.isArray(ct) && !ct.some(x => x && x.type === 'tool_result') ? ct.filter(x => x && x.type === 'text').map(x => x.text).join(String.fromCharCode(10)) : '';
+          if (r.type === 'user' && r.entrypoint && r.entrypoint !== 'sdk-cli' && !r.isMeta && !r.isCompactSummary && ctext) { t = ctext; ts = r.timestamp; }
+          else if (r.type === 'attachment' && r.attachment && r.attachment.type === 'queued_command' && (r.attachment.origin || {}).kind === 'human') { const qp = r.attachment.prompt; t = typeof qp === 'string' ? qp : Array.isArray(qp) ? qp.filter(x => x && x.type === 'text').map(x => x.text).join(String.fromCharCode(10)) : (qp && qp.text) || ''; ts = r.attachment.timestamp || r.timestamp; } /* 2026-11-24 작업 중 보낸 프롬프트가 배열이면 '[object Object]' 로 읽히던 것 */
+          else continue;
+          t = String(t || '').trim(); const ms = Date.parse(ts || ''); if (!t || !Number.isFinite(ms) || SKIP.test(t) || t.length < 6) continue;
+          c.lastP = { at: nowLocal(ms), ms, text: red(t).slice(0, 1200), session: e.name.slice(0, 8), edits: [] }; c.prompts.push(c.lastP);
+        }
+      }
+    } catch { /* 읽기 실패 = 이번 회차 건너뜀 */ } finally { if (fd != null) { try { fs.closeSync(fd); } catch { /* 닫기 실패 */ } } }
+    for (const p of (c && c.prompts) || []) if (p.ms > from) out.push(Object.assign({}, p, { edits: p.edits.slice() }));
   }
   return out.sort((a, b) => a.ms - b.ms);
 }
@@ -892,6 +970,23 @@ const purposeOf = u => String((u && (u.purpose || u.detector)) || '').trim();
 function purposeGroups(L) { const g = {}; for (const u of (L && L.items) || []) { const k = String(u.purpose || '').trim(); if (k) (g[k] || (g[k] = [])).push(u); } return g; }
 /** 새 원장 항목에 넣을 목적 키: 학습 결과의 purpose 가 원장에 있는 키면 그 키 → 같은 감지기 항목의 purpose → 없음(빈 값 = 필드 생략) */
 function purposeFor(L, it, detector) { const g = purposeGroups(L); const want = String((it && it.purpose) || '').trim(); if (want && g[want]) return want; const same = detector ? ((L && L.items) || []).find(u => u.detector === detector && String(u.purpose || '').trim()) : null; return same ? String(same.purpose).trim() : ''; }
+// 개선안 20261126180324_SELF(L4 원장 20261126001222_VISION 단계 5): 사용자 세션 개념 변경 등록. 그 지시로 고친 파일에 체인 정의(quick.json, steps.json) 또는 플랜 파일이 있고
+//   학습 결과의 목적 키가 목적 원장(.vibe/orch/purpose_ledger.json)의 키나 aliases 에 있으면 원장 갱신안(출처 추가)을 낸다. 반영은 개선안 절차(원장 파일은 자동 반영 범위 밖이면 승인)
+const CONCEPT_FILE_RE = /(^|\/)(quick|steps)\.json$|(^|\/)plans?\/[^/]+\.md$|plan_state\.(py|json)$/;
+/** p = 프롬프트({ at, ms, text, session, edits }), it = 학습 결과 항목, led = purpose_ledger.json 내용. 반환 = 개선안 입력 또는 null */
+function ledgerUpdateFor(p, it, led) {
+  const edits = ((p && p.edits) || []).map(String); const hit = edits.filter(f => CONCEPT_FILE_RE.test(f.split(String.fromCharCode(92)).join('/'))); if (!hit.length) return null;
+  const want = String((it && it.purpose) || '').trim(); const ps = (led && led.purposes) || {}; if (!want) return null;
+  const np = s => String(s || '').replace(/\s+/g, '').toLowerCase();
+  const key = ps[want] ? want : Object.keys(ps).find(k => (ps[k].aliases || []).some(a => np(a) === np(want))) || ''; if (!key) return null;
+  const at = String(p.at || ''); const reload = edits.some(f => /\.js$/.test(f) || /(^|\/)(quick|steps)\.json$/.test(f));
+  const src = { kind: 'session', ref: `Claude Code 세션 ${p.session || ''} ${at.slice(0, 16)} '${String(p.text || '').replace(/\s+/g, ' ').slice(0, 80)}'`, at, reload, files: edits.slice(0, 10) };
+  return { title: `목적 원장 갱신: ${key} 개념 변경 출처 추가(${at.slice(0, 16).replace('T', ' ')} 사용자 세션)`, impact: 'fix', level: 'L2', sig: `ln|purposeledger|${key}|${at.slice(0, 16)}`,
+    evidence: `사용자 지시(${at}) "${String(p.text || '').replace(/\s+/g, ' ').slice(0, 200)}" · 고친 파일 ${edits.slice(0, 8).join(', ')} · 목적 키 ${key}(학습 결과 ${want})`,
+    targets: ['.vibe/orch/purpose_ledger.json'], before_after: `purposes.${key}.sources 에 ${JSON.stringify(src)} 추가. 그 지시로 남은 구현 항목이 생겼으면 items 에 status open 으로 추가(지시문과 고친 파일로 확인)`,
+    verify: `node -e 로 orch-ladder.js purposeLedger() 의 ${key} sources 수가 반영 전보다 1 늘고 효력 시각이 ${at.slice(0, 16)} 이후(reload ${reload ? '참 = 그 뒤 첫 창 로드' : '거짓'})`,
+    rollback: '.vibe/orch/purpose_ledger.json 에서 추가한 출처 줄 삭제', plain: { what: `CheckList 시간 같은 목적의 판정 기준 시각을 사용자가 바꾼 개념(${at.slice(0, 16)}) 뒤로 옮김`, risk: '다른 목적의 지시를 잘못 붙이면 그 목적의 판정이 늦어짐', undo: '원장 파일에서 그 출처 줄을 지움' } };
+}
 /** 새 프롬프트 분류(Claude, 읽기 전용) → 원장 인용 추가 · 새 감지기 개선안 · 제외 기록. 반환 { ok, mapped, added, excluded } | { skipped } */
 // 2026-11-23 사용자 지시: 프롬프트 패턴에서 보완 지시(fix-request)를 뽑아 규칙(user_rules.json)으로 모으고 자가진단이 같은 문제를 찾게 함(orch-userrule.js)
 //   o.sinceMs = 그 시각 뒤 프롬프트(소급) · o.rulesOnly = 규칙만 뽑음(지적 원장 U, coveredUntil, 제외 기록을 건드리지 않음)
@@ -932,11 +1027,13 @@ async function learn(manual, o) {
     const out = agent.lastJsonBlock(r.text);
     const meta = Object.assign(lj, { lastMs: Date.now(), lastAt: nowLocal(), log: r.log, sec: Math.round((r.ms || 0) / 1000) });
     if (!r.ok || !out || !Array.isArray(out.items)) { meta.lastResult = !r.ok ? `학습 실패 exit ${r.code}` : '결과 JSON 없음'; writeJson(lf, meta); agent.say('end', { id: 'usercheck', ok: false, text: meta.lastResult }); return { ok: false, why: meta.lastResult }; }
-    const L2 = ledger(); let mapped = 0, added = 0, excluded = 0, rules = 0, ruleDup = 0; meta.excluded = meta.excluded || [];
+    const L2 = ledger(); let mapped = 0, added = 0, excluded = 0, rules = 0, ruleDup = 0, ledgerProps = 0; meta.excluded = meta.excluded || [];
     for (const it of out.items) {
       const p = batch[(Number(it.n) || 0) - 1]; if (!p) continue;
       if ((it.kind === 'fix-request' || it.kind === 'issue') && it.rule && ur) { const a = ur.addRule({ at: p.at, quote: p.text, rule: it.rule, category: it.category, scope: it.scope, check: it.check, fixedIn: (p.edits || []).length ? `Claude Code ${p.at.slice(0, 16)} ${p.edits.slice(0, 10).join(', ')}` : '' }); if (a.dup) ruleDup++; else rules++; }
       if (o.rulesOnly) continue;
+      { let lu = null; try { lu = ledgerUpdateFor(p, it, readJson(path.join(P().vibeDir, 'orch', 'purpose_ledger.json'), null)); } catch (e) { errlog.note('orch-usercheck', 'ledgerUpdateFor', e); } // 개선안 20261126180324_SELF
+        if (lu) { const imp = mod('orch-improve'); if (imp) { const a = imp.add(lu, 'self'); if (a && a.id) ledgerProps++; } } }
       if (it.kind === 'fix-request') continue;
       if (it.kind !== 'issue') { excluded++; meta.excluded.push({ at: p.at, text: p.text.slice(0, 200), why: String(it.why || '').slice(0, 200) }); continue; }
       if (it.detector && DETECTORS[it.detector]) {
@@ -956,7 +1053,7 @@ async function learn(manual, o) {
     }
     if (o.rulesOnly) { meta.lastRuleResult = `소급 ${batch.length}건: 새 규칙 ${rules} · 같은 규칙 ${ruleDup}`; writeJson(lf, meta); agent.say('end', { id: 'usercheck', ok: true, text: `사용자 지시 규칙 소급. ${meta.lastRuleResult}` }); return { ok: true, rules, ruleDup, lastMs: batch[batch.length - 1].ms, n: batch.length }; }
     L2.coveredUntil = nowLocal(batch[batch.length - 1].ms); writeJson(ledgerFile(), L2);
-    meta.untilMs = batch[batch.length - 1].ms; meta.excluded = meta.excluded.slice(-200); meta.lastResult = `새 프롬프트 ${batch.length}건: 기존 감지기 ${mapped} · 새 감지기 개선안 ${added} · 사용자 지시 규칙 ${rules}(같은 규칙 ${ruleDup}) · 지적 아님 ${excluded}`; writeJson(lf, meta);
+    meta.untilMs = batch[batch.length - 1].ms; meta.excluded = meta.excluded.slice(-200); meta.lastResult = `새 프롬프트 ${batch.length}건: 기존 감지기 ${mapped} · 새 감지기 개선안 ${added} · 사용자 지시 규칙 ${rules}(같은 규칙 ${ruleDup}) · 지적 아님 ${excluded}${ledgerProps ? ` · 목적 원장 갱신안 ${ledgerProps}` : ''}`; writeJson(lf, meta);
     agent.say('end', { id: 'usercheck', ok: true, text: `사용자 지적 학습 완료. ${meta.lastResult}` });
     return { ok: true, mapped, added, excluded, rules, ruleDup };
   })();
@@ -985,7 +1082,9 @@ const ready = () => !!getPaths;
 // 개선안 20261123112024_SELF: 진단 사다리(orch-ladder L3 사용자 지적 재발)가 쓰는 판별 2종
 //   ① 감지기 개선안 = sig 가 sn|newdet 이거나 targets 가 감지기 파일(orch-usercheck.js, user_checks.json, test/)뿐. 동작을 고치지 않았으므로 '고친 뒤 재발' 근거가 아님
 const DETECTOR_FILE = t => { const s = String(t || '').replace(/\\/g, '/'); return /(^|\/)orch-usercheck\.js$/.test(s) || /(^|\/)user_checks\.json$/.test(s) || /(^|\/)test\//.test(s); };
-function isDetectorProposal(p) { if (!p) return false; if (/^sn\|newdet(\||$)/.test(String(p.sig || ''))) return true; const t = (p.targets || []).filter(Boolean); return t.length > 0 && t.every(DETECTOR_FILE); }
+function isDetectorProposal(p) { // 2026-11-26 개선안 20261126183040_SELF: 판정은 orch-ladder.proposalKind 하나(감지기 파일 판정이 두 곳에 따로 있던 것). 불러오지 못하면 종전 판정
+  try { const lad = require('./orch-ladder'); if (lad && typeof lad.proposalKind === 'function') return lad.proposalKind(p) === 'detector'; } catch { /* 아래 종전 판정 */ }
+  if (!p) return false; if (/^sn\|newdet(\||$)/.test(String(p.sig || ''))) return true; const t = (p.targets || []).filter(Boolean); return t.length > 0 && t.every(DETECTOR_FILE); }
 //   ② S13 항목 key 의 근거 파일. 업무 작업 로그 key(S13|<uid>|...|J<날짜>_<시각>|<화면>|...) = .vibe/jobs/<job>/<화면>.log · 그 밖 = null(판정 안 함)
 function evidenceFile(key, vibeDir) {
   const parts = String(key || '').split('|'); const i = parts.findIndex(s => /^J\d{8}_\d{6}\w*$/.test(s)); if (i < 0) return null;
@@ -995,4 +1094,5 @@ function evidenceFile(key, vibeDir) {
 /** 근거 파일이 지워졌는지. 근거 파일을 정할 수 없는 key = false */
 function evidenceGone(key, vibeDir) { const f = evidenceFile(key, vibeDir); return !!f && !fs.existsSync(f); }
 
-module.exports = { ready, init, check, noteUi, learn, backfill, maybeLearn, pendingPrompts, ledger, DETECTORS, UI_SOURCES, purposeOf, purposeFor, purposeGroups, isDetectorProposal, evidenceFile, evidenceGone };
+// 개선안 20261126162524_SELF(L4 단계 원장 20261124000718_VISION 단계 6): 반영 즉시 다시 읽기(orch-selfcheck.js hotReload HOT_REINIT). _initOpts = 다시 읽은 뒤 같은 인자로 init, busy = 학습 중이면 다시 읽지 않음
+module.exports = { ledgerUpdateFor, CONCEPT_FILE_RE, _initOpts: () => (getPaths ? opts : null), busy: () => !!learning, ready, init, check, noteUi, learn, backfill, maybeLearn, pendingPrompts, ledger, DETECTORS, UI_SOURCES, purposeOf, purposeFor, purposeGroups, isDetectorProposal, evidenceFile, evidenceGone };

@@ -1,5 +1,64 @@
 {
   "$comment": "Vibe_Manager 워크벤치·사이드바 전체 메뉴 항목. kind: terminal(명령 실행) | task(steps.json 작업 id) | claude(프롬프트를 Claude 세션에 전송) | open(파일). ${id} = 패널의 화면ID 입력값, ${root} = 프로젝트 루트",
+  "stepTemplates": {
+    "unverifiedLoop": {
+      "desc": "미검증 해소 묶음: 미검증 해소(분류, 자동 재측정, 검사엔진 보완, 최대 2회) → 해소 게이트(열린 행 0 확인) → CheckList 재검증 1회(게이트 통과 때만). 체인이 { \"use\": \"unverifiedLoop\" } 로 부름(2026-11-26 개선안 20261126164547_SELF)",
+      "steps": [
+        {
+          "task": "S8.unverified",
+          "title": "미검증 해소",
+          "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
+          "optional": true,
+          "verify": {
+            "type": "unverifiedOpen"
+          },
+          "repair": {
+            "claudeOf": "🧪 CheckList Unverified Fix",
+            "rounds": 2,
+            "on": "verify",
+            "rerunTask": "S8.checklistSettle",
+            "rerunOkCodes": [
+              10
+            ]
+          },
+          "args": [
+            "${input:ids}"
+          ]
+        },
+        {
+          "task": "S8.unverifiedGate",
+          "args": [
+            "${input:ids}",
+            "--gate"
+          ],
+          "title": "미검증 해소 게이트",
+          "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
+          "optional": true,
+          "ifJsonGt": {
+            "file": "${root}/Doc/verify/${id}/unverified_settle.json",
+            "key": "actionable",
+            "gt": -1,
+            "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
+          }
+        },
+        {
+          "task": "S8.verify",
+          "title": "CheckList 재검증 1회",
+          "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
+          "optional": true,
+          "okCodes": [
+            10
+          ],
+          "ifJsonGt": {
+            "file": "${root}/Doc/verify/${id}/unverified_settle.json",
+            "key": "ready",
+            "gt": 0,
+            "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
+          }
+        }
+      ]
+    }
+  },
   "groups": [
     {
       "title": "UI 분석·생성·보완 (ID 필요)",
@@ -508,56 +567,7 @@
               "desc": "최신이면 건너뜀 · 없거나 오래됐으면 E2E 포함 전체 실행"
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S8.report",
@@ -1333,56 +1343,7 @@
               }
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S1.liveScen",
@@ -1434,56 +1395,7 @@
               ]
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S8.report",
@@ -1682,56 +1594,7 @@
               }
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S1.liveScen",
@@ -1783,56 +1646,7 @@
               ]
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S8.report",
@@ -2011,56 +1825,7 @@
               }
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "claudeOf": "🧯 자동 보완",
@@ -2084,56 +1849,7 @@
               ]
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S8.report",
@@ -2397,56 +2113,7 @@
               }
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S8.diagnose",
@@ -2485,56 +2152,7 @@
               ]
             },
             {
-              "task": "S8.unverified",
-              "title": "미검증 해소",
-              "desc": "분류 · 자동 재측정 → 🧪 검사엔진 보완 → 해소 확인 재측정(처리 대상 행 규칙만) → 재분류, 최대 2회 · 남아도 체인 계속",
-              "optional": true,
-              "verify": {
-                "type": "unverifiedOpen"
-              },
-              "repair": {
-                "claudeOf": "🧪 CheckList Unverified Fix",
-                "rounds": 2,
-                "on": "verify",
-                "rerunTask": "S8.checklistSettle",
-                "rerunOkCodes": [
-                  10
-                ]
-              },
-              "args": [
-                "${input:ids}"
-              ]
-            },
-            {
-              "task": "S8.unverifiedGate",
-              "args": [
-                "${input:ids}",
-                "--gate"
-              ],
-              "title": "미검증 해소 게이트",
-              "desc": "해소 원장 열린 행 0 · 남으면 행별 시도 횟수와 사유 보고, 재검증 안 함",
-              "optional": true,
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "actionable",
-                "gt": -1,
-                "skipNote": "미검증 보완 반복 없음(해소 확인 재측정 안 함)"
-              }
-            },
-            {
-              "task": "S8.verify",
-              "title": "CheckList 재검증 1회",
-              "desc": "미검증 해소 반복이 끝나고 해소 게이트를 넘었을 때만 · 전체 측정 1회",
-              "optional": true,
-              "okCodes": [
-                10
-              ],
-              "ifJsonGt": {
-                "file": "${root}/Doc/verify/${id}/unverified_settle.json",
-                "key": "ready",
-                "gt": 0,
-                "skipNote": "미검증 해소 전 또는 보완 반복 없음, 재검증 안 함"
-              }
+              "use": "unverifiedLoop"
             },
             {
               "task": "S8.repairCompare",
@@ -3036,17 +2654,24 @@
           "hint": "사용자가 중지한 작업이 계속 단계나 프로세스를 띄우면 사건으로 올릴지 정한다. 값은 tools/Harness/harness.json orch.r14Enabled · 기본 켬"
         },
         {
+          "label": "♻ 작업 종료 뒤 개선안 이어 진행 (켜기 / 끄기)",
+          "kind": "task",
+          "task": "S8.flagAutoImproveOnStop",
+          "label_en": "♻ Continue VMO proposals after a turn ends (On / Off)",
+          "hint": "Claude Code 작업 턴이 끝날 때 맡은 세션이 없는 VMO 대기 개선안이 있으면 이어서 진행할지 정한다(.claude/hooks/auto-improve-on-stop.js). 값은 tools/Harness/harness.json orch.autoImproveOnStop · 기본 켬 · 세션마다 이어가기 상한 orch.autoImproveMaxPerSession(기본 20)"
+        },
+        {
           "label": "🔁 VMO 보완 뒤 재수행 (재수행 / 수행 없음)",
           "label_en": "🔁 VMO rerun after fix (rerun / none)",
           "kind": "task",
           "task": "S8.vmoRerun"
         },
         {
-          "label": "🖥️ AS-IS 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",
+          "label": "🖥️ AS-IS 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화 / 캡처)",
           "kind": "task",
           "task": "S8.asisView",
-          "label_en": "🖥️ AS-IS Live View (Hidden / Window / Record)",
-          "hint": "AS-IS 실측(런처 실행기)을 창 없이 실행할지, 창을 띄울지, 녹화할지 정한다. 창 없이 실행 = 실행기 창을 화면 밖으로 옮김(조작·화면 사진은 같음 · 창이 처음 뜰 때 잠깐 보임). 녹화 = 창 없이(투명 창) 1초마다 화면을 찍어 동영상 저장(<실행 폴더>/record.webm · Playwright 전용 ffmpeg). 값은 tools/Harness/harness.json asisLiveView · 기본 창 띄우기"
+          "label_en": "🖥️ AS-IS Live View (Hidden / Window / Record / Capture)",
+          "hint": "AS-IS 실측(런처 실행기)을 창 없이 실행할지, 창을 띄울지, 녹화할지 정한다. 창 없이 실행 = 실행기 창을 화면 밖으로 옮김(조작·화면 사진은 같음 · 창이 처음 뜰 때 잠깐 보임). 녹화 = 창 없이(투명 창) 1초마다 화면을 찍어 동영상 저장(<실행 폴더>/record.webm · Playwright 전용 ffmpeg). 캡처 = 창 없이(투명 창) 실행하고 새 창이 뜰 때와 끝날 때만 사진 저장(<실행 폴더>/captures/*.jpg). 값은 tools/Harness/harness.json asisLiveView"
         },
         {
           "label": "🌐 TO-BE 실측 화면 (창 없이 실행 / 창 띄우기 / 녹화)",

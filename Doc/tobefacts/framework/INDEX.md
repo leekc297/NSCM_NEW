@@ -1,6 +1,6 @@
-# To-Be 프레임워크·공통 카탈로그 (TobeFacts framework.js 2026-11-13)
+# To-Be 프레임워크·공통 카탈로그 (TobeFacts framework.js 2026-11-26)
 
-원천: packages/foundation/src · packages/shared/src · features/master/src/components · apps/web/src/mdi — export 516건. 사용 수 = features/*/src/pages 의 import 등장 횟수. As-is 대응 = tools/Harness/rules 사전.
+원천: packages/foundation/src · packages/shared/src · features/master/src/components · apps/web/src/mdi — export 525건. 사용 수 = features/*/src/pages 의 import 등장 횟수. As-is 대응 = tools/Harness/rules 사전.
 
 | 파일 | 종류 | 건수 | 많이 쓰는 것 |
 |---|---|---|---|
@@ -8,7 +8,7 @@
 | [hooks.md](hooks.md) | hook | 27 | useTabActivation, useViewReload, useIsBusy, useCascadeFields, useTabComboQueries, useTabProcQuery, useTabBtnPermissions, useTabid |
 | [stores.md](stores.md) | store | 27 | useMDIStore, useContributeVersionModalStore, useCustomerModalStore, useContributeRateModalStore, useItemByDivisionModalStore, useItemByPlantSiteModalStore, useMaterialByDivisionModalStore, useModelByDivisionPopupStore |
 | [apis.md](apis.md) | namespace-object, class | 9 | EditTracker, CustomMergeManager, ColumnInsertMergeManager, GridUtils, GridAction, DynamicColumnManager, idbPersister, REQUEST_CHK_COLUMN |
-| [utils.md](utils.md) | function, constant, value, enum | 274 | MAX_MOUNTED_TABS, MDI_TAB_MODE, resetView, resolveView, CRUD_TYPE, CRUD_MSG, API_CONFIG, CACHE_MAX_AGE |
+| [utils.md](utils.md) | function, constant, value, enum | 283 | MAX_MOUNTED_TABS, MDI_TAB_MODE, resetView, resolveView, CRUD_TYPE, CRUD_MSG, API_CONFIG, CACHE_MAX_AGE |
 | [types.md](types.md) | type | 108 | AnyPage, AnyTab, MdiTabMode, RawFlexGridColumnConfig, PageProps, HotkeyConfig, ComboResponse, FlexGridColumnConfig |
 
 ## 화면 개발 표준 (카탈로그 적용 규칙)

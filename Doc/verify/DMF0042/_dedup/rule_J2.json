@@ -1,0 +1,310 @@
+{
+ "rule_id": "J2",
+ "hash": "f583ef1538e37cba",
+ "groups": [
+  {
+   "rows": [
+    "EG-1037a809"
+   ],
+   "why": "EG374 INSERT 버튼, 조회 전, 81/DM Admin이다. 계정 그룹이 다르면 권한 조건도 달라서 이 행과 같은 행이 없다."
+  },
+  {
+   "rows": [
+    "EG-126ef8d6"
+   ],
+   "why": "EG369 DELETE 버튼, Div 81_HD, 조회 전이다. Div마다 권한 조건이 달라서 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-1420fc4d"
+   ],
+   "why": "EG369 INSERT 버튼, Div 81_HD, 조회 전이다. 같은 버튼·같은 Div인 행이 없다."
+  },
+  {
+   "rows": [
+    "EG-162e2a3d"
+   ],
+   "why": "EG374 SAVE 버튼, 40/DM Admin이다. 같은 계정 그룹으로 SAVE를 확인하는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "EG-1ced90ea"
+   ],
+   "why": "EG369 DELETE 버튼, Div 40이다. Div가 다르면 측정 조건이 다르다."
+  },
+  {
+   "rows": [
+    "EG-1dfea559"
+   ],
+   "why": "EG374 DELETE 버튼, 81/DM Planner이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-26a818b6"
+   ],
+   "why": "EG369 INSERT 버튼, Div 81_HM이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-26fc680a"
+   ],
+   "why": "EG374 INSERT 버튼, 40/DM Planner이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-2c469278"
+   ],
+   "why": "EG373 Insert 차단 메시지 분기를 확인하는 행이다. 버튼 노출 여부를 보는 다른 행과 대상과 기대 결과가 모두 다르다."
+  },
+  {
+   "rows": [
+    "EG-32d53d7b"
+   ],
+   "why": "EG374 DELETE 버튼, 40/SCP Planner이다. 기대 결과가 비노출이라 노출을 기대하는 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-33f827e2"
+   ],
+   "why": "EG374 SAVE 버튼, 40/DM Planner이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-3b6b7c08"
+   ],
+   "why": "EG374 SAVE 버튼, 81/DM Admin이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-3bbac515"
+   ],
+   "why": "EG369 SAVE 버튼, Div 81_HM이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-3c6cb7e5"
+   ],
+   "why": "EG369 DELETE 버튼, Div 81_HM이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-3f8a73af"
+   ],
+   "why": "EG374 SAVE 버튼, 81/DM Planner이다. W/S 계정 그룹과는 다른 그룹이라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "EG-424e04a5"
+   ],
+   "why": "EG369 DELETE 버튼, Div 81_HG이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-4868f106"
+   ],
+   "why": "EG374 DELETE 버튼, 40/DM Admin이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-4ab3b201"
+   ],
+   "why": "EG374 DELETE 버튼, 40/DM Planner이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-5bdc6749"
+   ],
+   "why": "EG369 SAVE 버튼, Div 40이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-61f79799"
+   ],
+   "why": "EG369 INSERT 버튼, Div 81_HG이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-63ddd69d"
+   ],
+   "why": "EG374 DELETE 버튼, 81/DM Admin이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-6830adbf"
+   ],
+   "why": "EG369 INSERT 버튼, Div 81_UC이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-6950c9c3"
+   ],
+   "why": "EG374 INSERT 버튼, 81/DM Planner (W/S)이다. W/S가 없는 DM Planner와는 다른 계정 그룹이다."
+  },
+  {
+   "rows": [
+    "EG-6b6b70d8"
+   ],
+   "why": "EG369 DELETE 버튼, Div 81_ST이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-76709a65"
+   ],
+   "why": "EG369 DELETE 버튼, Div 81_UC이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-768f2064"
+   ],
+   "why": "EG374 SAVE 버튼, 81/DM Planner (W/S)이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-8811a4fa"
+   ],
+   "why": "EG369 INSERT 버튼, Div 82이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-8d3ed3f7"
+   ],
+   "why": "EG369 DELETE 버튼, Div 82이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-90babdca"
+   ],
+   "why": "EG369 SAVE 버튼, Div 81_ST이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-954ff4e2"
+   ],
+   "why": "EG374 SAVE 버튼, 40/DM Viewer이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-9767295f"
+   ],
+   "why": "EG374 INSERT 버튼, 40/DM Viewer이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-a6f91f13"
+   ],
+   "why": "btnCutOff의 visible 속성을 확인한다. enabled 속성과는 다른 성질이라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "EG-a7b3433f"
+   ],
+   "why": "EG374 INSERT 버튼, 81/DM Planner이다. W/S 계정 그룹과는 다른 그룹이다."
+  },
+  {
+   "rows": [
+    "EG-a97c4928"
+   ],
+   "why": "EG369 INSERT 버튼, Div 40이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-abfe7eba"
+   ],
+   "why": "EG374 DELETE 버튼, 81/DM Planner (W/S)이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-b12e2324"
+   ],
+   "why": "EG369 DELETE 버튼, Div 81이다. 81_xx 하위 Div와는 다른 Div이다."
+  },
+  {
+   "rows": [
+    "EG-b405a971"
+   ],
+   "why": "EG369 SAVE 버튼, Div 81_HD이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-b5d22b43"
+   ],
+   "why": "EG374 DELETE 버튼, 40/DM Viewer이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-bd7b4da2"
+   ],
+   "why": "EG374 INSERT 버튼, 40/DM Admin이다. 같은 계정 그룹과 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-c6b2a7a0"
+   ],
+   "why": "EG369 INSERT 버튼, Div 81이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-caf9b3a0"
+   ],
+   "why": "btnCutOff의 enabled 속성을 확인한다. visible 속성과는 다른 성질이다."
+  },
+  {
+   "rows": [
+    "EG-cb5a584e"
+   ],
+   "why": "EG369 SAVE 버튼, Div 81이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-cc33b2ef"
+   ],
+   "why": "btnProject의 enabled 속성을 확인한다. 이 버튼을 다루는 행은 이것뿐이다."
+  },
+  {
+   "rows": [
+    "EG-cded8dc1"
+   ],
+   "why": "EG374 SAVE 버튼, 40/SCP Planner이다. 기대 결과가 노출이라 같은 그룹의 INSERT·DELETE 비노출 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-d392d7e6"
+   ],
+   "why": "EG369 SAVE 버튼, Div 82이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-d51ee278"
+   ],
+   "why": "EG374 INSERT 버튼, 40/SCP Planner이다. 기대 결과가 비노출이라 다른 INSERT 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-e4fb8a3e"
+   ],
+   "why": "EG369 SAVE 버튼, Div 81_HG이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-f0edc6fc"
+   ],
+   "why": "EG369 INSERT 버튼, Div 81_ST이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "EG-f9cb4a99"
+   ],
+   "why": "EG369 SAVE 버튼, Div 81_UC이다. 같은 Div와 버튼 조합이 이 행뿐이다."
+  },
+  {
+   "rows": [
+    "V-02d642c4"
+   ],
+   "why": "화면 전체를 포괄하는 일반 기대 결과다. 특정 버튼·Div·계정 그룹으로 측정하는 행과 대상과 조건이 같지 않아 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:44:21",
+ "cost": 0.1613452
+}

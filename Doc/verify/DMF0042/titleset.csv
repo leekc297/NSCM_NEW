@@ -1,3 +1,4 @@
 ﻿kind,target,result,why
-TITLESET_MIG,DMF0042,ERROR,"[확인 대상] 이관 대상 1948행 중 TO-BE 없음 1861행(예 [('aslim97', 'C', 'CELL_PROD_SITE'), ('aslim97', 'C', 'CURRENCY'), ('aslim97', 'C', 'DEPT_ID40')]) · AS-IS 전체 2221행 — AS-IS 접속이 개발 DB 라 이관 원천 일치 미확인"
-TITLESET_REQ,DMF0042.Biz Plan,PASS,"칸 설정 보유 28명 모두 필수 컬럼 2개 보유 · Division 별 필수 미보유 사용자 수(사용자 Division 미확인 — 참고) {'40': 2, '81': 6, '81_HD': 6, '81_HG': 6, '81_HM': 6, '81_ST': 6, '81_UC': 6, '82': 4}"
+TITLESET_MIG,DMF0042,ERROR,"[확인 대상] 이관 대상 1995행 중 TO-BE 없음 1898행(예 [('aslim97', 'C', 'CELL_PROD_SITE'), ('aslim97', 'C', 'CURRENCY'), ('aslim97', 'C', 'DEPT_ID40')]) · AS-IS 전체 2221행 — AS-IS 접속이 개발 DB 라 이관 원천 일치 미확인"
+TITLESET_REQ,DMF0042.Biz Plan,PASS,"칸 설정 보유 35명 모두 필수 컬럼 2개 보유 · Division 별 필수 미보유 사용자 수(사용자 Division 미확인 — 참고) {'40': 2, '81': 6, '81_HD': 6, '81_HG': 6, '81_HM': 6, '81_ST': 6, '81_UC': 6, '82': 4}"
+MEASURE_ORDER,DMF0042.Biz Plan,NA,이 사용자 Measure 셋팅 없음 · 사용자 

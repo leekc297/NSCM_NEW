@@ -1,0 +1,93 @@
+[
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 291,
+  "at": "2026-11-26T10:40:53.759Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 13,
+  "dur": 150,
+  "at": "2026-11-26T10:40:56.738Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"ADMIN\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 97,
+  "dur": 5647,
+  "at": "2026-11-26T10:41:02.252Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 13,
+  "dur": 258,
+  "at": "2026-11-26T10:41:22.235Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"ADMIN\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 97,
+  "dur": 6299,
+  "at": "2026-11-26T10:41:28.386Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 13,
+  "dur": 113,
+  "at": "2026-11-26T10:41:28.964Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"ADMIN\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 97,
+  "dur": 5790,
+  "at": "2026-11-26T10:41:34.598Z",
+  "user": "minyonglee1",
+  "test": "신규행 검증(E3 컬럼별 필수·E4 키 중복)"
+ }
+]

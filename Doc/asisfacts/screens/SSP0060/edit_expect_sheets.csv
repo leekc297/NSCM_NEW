@@ -8,10 +8,6 @@ QMS_MES_HOLD,Y,Y,Y,,,,,,MES Stock
 OQC_COMPLETE,Y,Y,Y,,,,,,MES Stock
 TOTAL,Y,Y,Y,,,,,,MES Stock
 AVAILABLE_STOCK,Y,Y,Y,,,,,,MES Stock
-DIVISION_ID,,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,MES Stock
-FCST_TYPE,,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,MES Stock
-MKT_OWNER,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,MES Stock
-ORIGIN_TO_DIVISION_ID,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,MES Stock
 BOXID,Y,Y,Y,,,,,,MES Stock Detail
 PRODID,Y,Y,Y,,,,,,MES Stock Detail
 PRJT_NAME,Y,Y,Y,,,,,,MES Stock Detail
@@ -25,10 +21,6 @@ MES_HOLD_YN,Y,Y,Y,,,,,,MES Stock Detail
 QMS_HOLD_YN,Y,Y,Y,,,,,,MES Stock Detail
 MES_UNHOLD_SCHD_DATE,Y,Y,Y,,,,,,MES Stock Detail
 QMS_UNHOLD_SCHD_DATE,Y,Y,Y,,,,,,MES Stock Detail
-DIVISION_ID,,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,MES Stock Detail
-FCST_TYPE,,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,MES Stock Detail
-MKT_OWNER,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,MES Stock Detail
-ORIGIN_TO_DIVISION_ID,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,MES Stock Detail
 DIVISION_ID,Y,NONE,N,,잠금 (EditButton:2763),,기존행 SSP0060_ShipmentPlan:2763 LockColumn,,Shipment Plan
 FROM_SITE,N,NONE,N,,잠금 (EditButton:2763),,기존행 SSP0060_ShipmentPlan:2763 LockColumn,,Shipment Plan
 FROM_SITE_DESCRIPTION,Y,NONE,N,,잠금 (EditButton:2763),,기존행 SSP0060_ShipmentPlan:2763 LockColumn,,Shipment Plan
@@ -48,7 +40,7 @@ TRANSPORT_MODE,Y,NONE,N,,잠금 (EditButton:2763),,기존행 SSP0060_ShipmentPla
 INCOTERMS,Y,NONE,N,,잠금 (EditButton:2763),,기존행 SSP0060_ShipmentPlan:2763 LockColumn,,Shipment Plan
 FCST_TYPE,Y,NONE,N,,잠금 (EditButton:2763),,기존행 SSP0060_ShipmentPlan:2763 LockColumn,,Shipment Plan
 <DYNAMIC:LOOP>,,NONE,COND,,"RULES:[{""g"": ""COL(MEASURE)==\""SHIP_PLAN_DETAIL\"" && COL(TO_SITE)!=\""\"" && RAW(siMain.ActiveSheet.ColumnHeader.Cells[2, j].Value.ToString() != \""SUM\"") && RAW(sColName.IndexOf(\""D_\"") == 0) && RAW(CString.GetDateFromYYYYMMDD(sYYYYMMDD) >= CString.GetDateFromYYYYMMDD(curPlanDate)) && RAW(CString.GetDateFromYYYYMMDD(sYYYYMMDD) <= CString.GetDateFromYYYYMMDD(sConfirmDay)) && RAW(CString.IsNumber(sEditYN))"", ""lock"": ""N"", ""ref"": ""EditButton:2785""}, {""g"": ""COL(MEASURE)==\""SHIP_PLAN_DETAIL\"" && COL(TO_SITE)!=\""\"" && RAW(siMain.ActiveSheet.ColumnHeader.Cells[2, j].Value.ToString() != \""SUM\"") && RAW(sColName.IndexOf(\""D_\"") == 0) && RAW(CString.GetDateFromYYYYMMDD(sYYYYMMDD) >= CString.GetDateFromYYYYMMDD(curPlanDate)) && RAW(CString.GetDateFromYYYYMMDD(sYYYYMMDD) <= CString.GetDateFromYYYYMMDD(sConfirmDay)) && !(RAW(CString.IsNumber(sEditYN)))"", ""lock"": ""N"", ""ref"": ""EditButton:2789""}]",,기존행 SSP0060_ShipmentPlan:2785 LockRange | 기존행 SSP0060_ShipmentPlan:2789 LockRange,,Shipment Plan
-DIVISION_ID,Y,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,Shipment Result
+DIVISION_ID,Y,Y,Y,,,,,,Shipment Result
 TYPE,Y,Y,Y,,,,,,Shipment Result
 ERP_SO_NO,Y,Y,Y,,,,,,Shipment Result
 CONFIRM_ID,Y,Y,Y,,,,,,Shipment Result
@@ -64,10 +56,7 @@ INCOTERMS,Y,Y,Y,,,,,,Shipment Result
 ETD_DATE,Y,Y,Y,,,,,,Shipment Result
 ETA_DATE,Y,Y,Y,,,,,,Shipment Result
 SHIP_TYPE,Y,Y,Y,,,,,,Shipment Result
-FCST_TYPE,,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,Shipment Result
-MKT_OWNER,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,Shipment Result
-ORIGIN_TO_DIVISION_ID,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,Shipment Result
-DIVISION_ID,Y,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,Stock Location Detail
+DIVISION_ID,Y,Y,Y,,,,,,Stock Location Detail
 COMPANY_ID,Y,Y,Y,,,,,,Stock Location Detail
 CUTOFF_DATE,Y,Y,Y,,,,,,Stock Location Detail
 FROM_SITE,Y,Y,Y,,,,,,Stock Location Detail
@@ -87,10 +76,7 @@ HOLDING_DATE,Y,Y,Y,,,,,,Stock Location Detail
 AVAILABLE_DATE,Y,Y,Y,,,,,,Stock Location Detail
 OUTSOURCING_FLAG,Y,Y,Y,,,,,,Stock Location Detail
 OUTSOURCING_FACTORY,Y,Y,Y,,,,,,Stock Location Detail
-FCST_TYPE,,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,Stock Location Detail
-MKT_OWNER,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,Stock Location Detail
-ORIGIN_TO_DIVISION_ID,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,Stock Location Detail
-DIVISION_ID,Y,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,oWMS Detail
+DIVISION_ID,Y,Y,Y,,,,,,oWMS Detail
 PLANT_ID,Y,Y,Y,,,,,,oWMS Detail
 STORAGE_ID,Y,Y,Y,,,,,,oWMS Detail
 ITEM_ID,Y,Y,Y,,,,,,oWMS Detail
@@ -115,6 +101,3 @@ PACKING_STATUS,Y,Y,Y,,,,,,oWMS Detail
 CUSTOMER_CODE,Y,Y,Y,,,,,,oWMS Detail
 CUSTOMER_NAME,Y,Y,Y,,,,,,oWMS Detail
 LOT_ISSUE_DATE,Y,Y,Y,,,,,,oWMS Detail
-FCST_TYPE,,N,Y,잠금 (InsertRow:2696),,,신규행 SSP0060_ShipmentPlan:2696 LockRange,,oWMS Detail
-MKT_OWNER,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,oWMS Detail
-ORIGIN_TO_DIVISION_ID,,N,Y,잠금 (InsertRow:2697),,,신규행 SSP0060_ShipmentPlan:2697 LockRange,,oWMS Detail

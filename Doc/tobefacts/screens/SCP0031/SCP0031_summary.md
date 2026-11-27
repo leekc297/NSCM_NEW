@@ -1,18 +1,18 @@
 # SCP0031 — To-Be Fact Pack 요약
 
 - page_key: `supply/global-psi` · feature: supply · As-is Fact Pack 있음
-- 파일 13 · 엔드포인트 호출 8 (미해결 1, 주석 속 3) · 이벤트 20 · 컴포넌트 사용 34 · 하드코딩 컬럼 1 · 메시지 23
+- 파일 13 · 엔드포인트 호출 9 (미해결 1, 주석 속 3) · 이벤트 20 · 컴포넌트 사용 32 · 하드코딩 컬럼 1 · 메시지 23
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | component | 472 |
+| features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | component | 450 |
 | features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx | component | 340 |
 | features/supply/src/pages/global-psi/components/GlobalPsiModals.tsx | component | 67 |
 | features/supply/src/pages/global-psi/global-psi.constants.ts | constants | 166 |
 | features/supply/src/pages/global-psi/global-psi.types.ts | types | 27 |
-| features/supply/src/pages/global-psi/GlobalPsi.tsx | page | 285 |
+| features/supply/src/pages/global-psi/GlobalPsi.tsx | page | 311 |
 | features/supply/src/pages/global-psi/index.ts | index | 2 |
 | features/supply/src/pages/global-psi/useGlobalPsiStore.ts | store | 244 |
 | features/supply/src/pages/global-psi/utils/globalPsiColumns.test.ts | test | 65 |
@@ -24,10 +24,10 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | GlobalPsiForm.tsx:87 GlobalPsiForm.tsx:91 |
-| SCP0031/main//call-proc | hook | 1 | Y | GlobalPsi.tsx:61 |
-| SCP0031/calendar//call-proc | hook | 1 | Y | GlobalPsi.tsx:82 |
-| {?{comboId:PLAN_PERIOD_COMBO_ID,planName:sc.planStartYyyymmdd,divisionId:sc.divisi} | http | 1 | N | GlobalPsi.tsx:146 |
+| (useTabComboQueries) | hook | 3 | Y | GlobalPsiForm.tsx:87 GlobalPsiForm.tsx:91 GlobalPsi.tsx:58 |
+| SCP0031/main//call-proc | hook | 1 | Y | GlobalPsi.tsx:77 |
+| SCP0031/calendar//call-proc | hook | 1 | Y | GlobalPsi.tsx:98 |
+| {?{comboId:PLAN_PERIOD_COMBO_ID,planName:sc.planStartYyyymmdd,divisionId:sc.divisi} | http | 1 | N | GlobalPsi.tsx:162 |
 | /admin/menu/SCP0031/column | http | 1 | Y | useGlobalPsiStore.ts:171 |
 | /admin/menu/SCP0031/measure | http | 1 | Y | useGlobalPsiStore.ts:199 |
 | /admin/menu/SCP0031/search-conditions | http | 1 | Y | useGlobalPsiStore.ts:220 |
@@ -40,36 +40,35 @@
 |---|---|---|---|---|---|
 | CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 262 |
 | CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 291 |
-| Checkbox | onChange | onToggle | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 311 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 323 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 363 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 359 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 390 |
-| Button | onClick | onNickNameSearch | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 386 |
-| CascadeDropdown | onChange | <arrow> selectPlanDate,set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 445 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 460 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 302 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 342 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 338 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 369 |
+| Button | onClick | onNickNameSearch | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 365 |
+| CascadeDropdown | onChange | <arrow> selectPlanDate,set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 424 |
+| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 439 |
 | g | formatItem | formatHandler | addHandler | features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx | 160 |
 | g | updatedLayout | syncFixedBindings | addHandler | features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx | 183 |
 | g | updatedLayout | applyPivotVisibility | addHandler | features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx | 222 |
 | g.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx | 262 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx | 311 |
 | MeasureSelectModal | onApply | <arrow> staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed,fetchStaticMeasures | jsx | features/supply/src/pages/global-psi/components/GlobalPsiModals.tsx | 46 |
-| GlobalPsiForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 218 |
-| GlobalPsiForm | onItemSearch | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 219 |
-| GlobalPsiForm | onNickNameSearch | <arrow> setOpenNickNamePopup | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 220 |
-| GlobalPsiModals | onClose | <arrow> setOpenMeasurePopup | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 281 |
+| GlobalPsiForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 234 |
+| GlobalPsiForm | onItemSearch | <arrow> setOpenItemPopup | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 235 |
+| GlobalPsiForm | onNickNameSearch | <arrow> setOpenNickNamePopup | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 236 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 256 |
+| GlobalPsiModals | onClose | <arrow> setOpenMeasurePopup | jsx | features/supply/src/pages/global-psi/GlobalPsi.tsx | 307 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| Grid | 7 |
-| FormItem | 5 |
+| Grid | 6 |
+| FormItem | 4 |
 | CustomDropdown | 2 |
 | InputField | 2 |
 | Button | 2 |
 | FunctionSearchIcon | 2 |
 | MaterialByDivisionModal | 2 |
-| Checkbox | 1 |
 | SearchArea | 1 |
 | CascadeDropdown | 1 |
 | PeriodField | 1 |
@@ -79,6 +78,7 @@
 | MainTitle | 1 |
 | GlobalPsiForm | 1 |
 | SubTitle | 1 |
+| Checkbox | 1 |
 | GlobalPsiGrid | 1 |
 | GlobalPsiModals | 1 |
 
@@ -93,12 +93,12 @@
 | MSG00618 | 1 |
 | MSG00013 | 1 |
 | MSG00097 | 1 |
-| MSG01393 | 1 |
+| MSG00402 | 1 |
 | MSG00108 | 1 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
 | LBL00021 | 1 |
-| LBL00618 | 1 |
+| LBL00767 | 1 |
 | LBL00022 | 1 |
 | LBL00023 | 1 |
 | LBL00039 | 1 |
@@ -115,16 +115,17 @@
 | LBL00684 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0025(14), SCP0031(10), SCP0100(7), SCP0013(4), DMF0003(2), SCP0095(2), SCP0010(1), SCM0002(1), DMF0021(1)
+- 화면ID: SCP0025(14), SCP0031(10), SCP0013(7), SCP0100(7), SCP0095(2), SCM0002(2), SCP0010(1), SCP0009(1), DMF0003(1), DMF0021(1)
 - SP/PKG: PKG_SCP0031(2), P_SCP0031_GET_GLOBAL_PSI(1), PKG_COM0000(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), SCM0001_GET_SCP_MONTH_PERIOD(1), PR_GET_SHEET_MEASURE_LIST(1), P_DIVISION_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
+| code | {checkbox(t(LBL.ALL, '_All'), sc.chkAll, v => set({ chkAll: v }))} | features/supply/src/pages/global-psi/components/GlobalPsiForm.tsx | 443 |
 | code | return) 행별 명시값 48 이 안 지워져 헤더가 그대로 높게 남는다. 각 row.height 를 실제 tier 수로 | features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx | 283 |
 | code | HORIZON_END_DATE 를 넘으면 종료일을 horizon 으로 되돌리고 이번 조회를 중단한다(AS-IS return). | features/supply/src/pages/global-psi/global-psi.constants.ts | 114 |
-| endpoint | mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회). | features/supply/src/pages/global-psi/GlobalPsi.tsx | 101 |
-| code | 중단한다(return). 조회 자체가 무해하도록 AS-IS 도 try/catch 로 감싸므로, 콤보 실패·0행이면 clamp 없이 진행. | features/supply/src/pages/global-psi/GlobalPsi.tsx | 142 |
-| code | horizon 초과 = 종료일 되돌리고 조회 중단(AS-IS return) | features/supply/src/pages/global-psi/GlobalPsi.tsx | 177 |
+| endpoint | mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회). | features/supply/src/pages/global-psi/GlobalPsi.tsx | 117 |
+| code | 중단한다(return). 조회 자체가 무해하도록 AS-IS 도 try/catch 로 감싸므로, 콤보 실패·0행이면 clamp 없이 진행. | features/supply/src/pages/global-psi/GlobalPsi.tsx | 158 |
+| code | horizon 초과 = 종료일 되돌리고 조회 중단(AS-IS return) | features/supply/src/pages/global-psi/GlobalPsi.tsx | 193 |
 | endpoint | admin SCM_MST_SHEET_COLUMNS 동적 fetch(convert-core §2.4 하드코딩 금지). 미등록/실패 시 빈 배열. | features/supply/src/pages/global-psi/useGlobalPsiStore.ts | 39 |
 | endpoint | SCM_MST_SHEET_MEASURE 동적 fetch(design 03 §1-C 'Global PSI' 16행). PIVOT measure 세로축. | features/supply/src/pages/global-psi/useGlobalPsiStore.ts | 42 |
 

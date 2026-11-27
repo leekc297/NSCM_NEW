@@ -1,22 +1,23 @@
 # master_components_materialByDivisionModal — To-Be Fact Pack 요약
 
 - page_key: `master/components/materialByDivisionModal` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 4 · 엔드포인트 호출 3 (미해결 0, 주석 속 0) · 이벤트 5 · 컴포넌트 사용 18 · 하드코딩 컬럼 0 · 메시지 4
+- 파일 4 · 엔드포인트 호출 4 (미해결 0, 주석 속 0) · 이벤트 5 · 컴포넌트 사용 18 · 하드코딩 컬럼 0 · 메시지 4
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/materialByDivisionModal/material-by-division-modal.constants.ts | constants | 19 |
-| features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.module.scss | style | 20 |
-| features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | page | 377 |
+| features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.module.scss | style | 21 |
+| features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | page | 394 |
 | features/master/src/components/materialByDivisionModal/materialByDivisionModalStore.ts | store | 42 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | MaterialByDivisionModal.tsx:116 |
-| COM0013/materialByDivision//call-proc | hook | 1 | Y | MaterialByDivisionModal.tsx:133 |
+| (useTabComboQueries) | hook | 1 | Y | MaterialByDivisionModal.tsx:119 |
+| (useTabLookupQueries) | hook | 1 | Y | MaterialByDivisionModal.tsx:137 |
+| COM0013/materialByDivision//call-proc | hook | 1 | Y | MaterialByDivisionModal.tsx:151 |
 | /admin/menu/COM0013/column | http | 1 | Y | materialByDivisionModalStore.ts:30 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -25,11 +26,11 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 266 |
-| InputField | onChange | <arrow> setItemId | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 323 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 324 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 362 |
-| Button | onClick | modalClose | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 369 |
+| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 284 |
+| InputField | onChange | <arrow> setItemId | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 340 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 341 |
+| Button | onClick | modalClose | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 377 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 386 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -63,7 +64,7 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| jsx | <InputField fullWidth disabled value={searchParam.operationGroup ?? ''} /> | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 306 |
+| jsx | <InputField fullWidth disabled value={searchParam.operationGroup ?? ''} /> | features/master/src/components/materialByDivisionModal/MaterialByDivisionModal.tsx | 323 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

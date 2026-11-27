@@ -10,9 +10,9 @@
 | features/supply/src/pages/capa-teep-report/capa-teep-report.constants.ts | constants | 348 |
 | features/supply/src/pages/capa-teep-report/capa-teep-report.types.ts | types | 133 |
 | features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx | page | 348 |
-| features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | component | 384 |
+| features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | component | 380 |
 | features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.module.scss | component | 28 |
-| features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.tsx | component | 166 |
+| features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.tsx | component | 178 |
 | features/supply/src/pages/capa-teep-report/components/modals/CapaTeepReportColumnModal.tsx | component | 120 |
 | features/supply/src/pages/capa-teep-report/hooks/useCapaTeepReportCombos.ts | hook | 304 |
 | features/supply/src/pages/capa-teep-report/hooks/useCapaTeepReportConditionEffects.ts | hook | 70 |
@@ -55,9 +55,9 @@
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 266 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 291 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 314 |
-| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 346 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 371 |
-| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.tsx | 120 |
+| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 342 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 367 |
+| grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.tsx | 132 |
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,Number,String,clearFilters,settings.filter | jsx | features/supply/src/pages/capa-teep-report/components/modals/CapaTeepReportColumnModal.tsx | 73 |
 
 ## 5. 컴포넌트 사용 집계
@@ -110,7 +110,7 @@
 | LBL00765 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0107(21), SCP0106(17), SCP0108(11), SCP0105(10), SCP0104(3), SCP0006(1), SCM0008(1)
+- 화면ID: SCP0107(21), SCP0106(17), SCP0105(11), SCP0108(11), SCP0104(3), SCP0006(1), SCM0008(1), SCP0018(1)
 - SP/PKG: PKG_SCP0107(9), P_SCP0107_GET_SPREAD_TITLE(4), PKG_SCP0104(3), P_SCP0107_GET_CAPA_TEEP_ASSEMBLY(1), PKG_SCP0100(1), P_SCP0100_GET_GLOBAL_PSI_REPORT(1), P_VERSION(1), P_VERSION_SEQ(1), P_DIVISION_ID(1), P_SITE_ID(1), P_PLANT_ID(1), P_FACTORY_ID(1), P_LINE_ID(1), P_OPERATION_ID(1), P_ELECTRODE_TYPE(1), P_PROGRAM_ID(1), P_SHEET_NAME(1), P_USER_ID(1), PR_GET_SHEET_COLUMN_LIST(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

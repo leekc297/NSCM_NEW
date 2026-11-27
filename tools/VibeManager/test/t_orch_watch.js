@@ -167,6 +167,21 @@ const sleep = t => new Promise(r => setTimeout(r, t));
   // 저장·조회·상태 변경
   const all = w.list(); chk('사건 파일 저장', all.length === got.length, `${all.length}/${got.length}`);
   const u = w.update(got[0].id, { status: 'resolved' }, { by: 'test', what: '확인' }); chk('사건 상태 변경·조치 기록', u && u.status === 'resolved' && u.actions.length === 1);
+  // 2026-11-26 개선안 20261126164446_VISION: Source Backup push 실패 = 원인 분류(HTTP 코드, 거부 사유) + 다음 행동, 사람 확인 줄, 보인 시각 기록
+  { const lf = path.join(root, '.vibe', 'push.log'); fs.writeFileSync(lf, 'error: RPC failed; HTTP 500 curl 22 The requested URL returned error: 500\nsend-pack: unexpected disconnect while reading sideband packet\nfatal: the remote end hung up unexpectedly\nEverything up-to-date\n');
+    const inc = w.raise('R1', { title: '⬆️ Source Backup 3/3 push 실패 (exit 1)', sig: '⬆️ Source Backup 3/3 push | send-pack', detail: 'send-pack: unexpected disconnect', evidence: { log: lf, exit: 1 } });
+    const pi = w.get(inc.id).pushInfo || {};
+    chk('push 실패 사건: 원인 분류 server, HTTP 500, 거부 사유 1줄, 다음 행동', pi.kind === 'server' && pi.http === 500 && /HTTP 500/.test(pi.reason) && /Source Backup 다시 실행/.test(pi.next), JSON.stringify(pi));
+    chk('push 거부 분류(non-fast-forward)', w.pushCause(' ! [rejected] main -> main (fetch first)\nerror: failed to push some refs').kind === 'rejected');
+    chk('원인 못 찾음 = unknown(추정 안 함)', w.pushCause('exit 1').kind === 'unknown');
+    w.update(inc.id, { status: 'need-user' }, { by: 'VMO', what: '사용자 확인 필요' });
+    const top = w.needUserTop(); const row = top.find(x => x.id === inc.id) || {};
+    chk('사람 확인 줄: 사건 1줄에 원인과 HTTP 응답, 다음 행동 1줄', /원격 서버 오류 응답 HTTP 500/.test(row.line) && /Source Backup 다시 실행/.test(row.next) && !row.shownAt, JSON.stringify(row));
+    const m1 = w.markShown([inc.id]); const s1 = w.get(inc.id).shownAt; const m2 = w.markShown([inc.id]);
+    chk('보인 시각 기록 = 처음 1번만', m1.length === 1 && !!s1 && m2.length === 0 && w.get(inc.id).shownAt === s1 && w.needUserTop().find(x => x.id === inc.id).shownAt === s1);
+    const other = w.raise('R1', { title: 'S8.verify 실패', sig: 'other|x', screen: 'TST0009' });
+    chk('push 사건이 아니면 원인 분류 없음', !w.get(other.id).pushInfo && w.pushInfoOf(w.get(other.id)) === null);
+    got.length = 0; }
   console.log('사건 목록:'); for (const x of w.list().reverse()) console.log('  ', x.rule, x.screen || '-', '|', x.title);
   w.dispose(); st.dispose(); await sleep(50);
   try { fs.rmSync(root, { recursive: true, force: true }); } catch { }

@@ -1,0 +1,41 @@
+# SCP0005 미검증 해소 행별 조치표(라운드 5 · 2026-11-25 07:4x · 체인 회차 3)
+
+- 입력: 원장 verify_ledger.csv(07:45:31), 분류 unverified_triage.csv(07:45:31). 재측정 실행 run 20261125061230(06:12:30 시작, 규칙 24개 부분 재측정)
+- 처리 대상 20행 + 결정 1행(V-a6bb7234, 담당 결정) = 목록 21행. 집계 12행 제외. 빠진 행 0
+- 라운드 4 조치표 사본: _unverified_plan.md.bak_20261125_r4. 행 ID 뒤 ※ = 라운드 4 에서 고쳤는데 풀리지 않은 행(같은 고침 되풀이 안 함, 재측정 로그로 다른 원인 확인)
+
+## 묶음 요약(행 수 많은 순)
+
+| 묶음 | 행 | 고칠 파일 |
+|---|---|---|
+| W1 | 6 | Doc/e2e/specs/_trace.spec.ts |
+| W2 | 6 | tools/E2E/lib/saveprobe.ts, crud.ts (저장 세부) |
+| W3 | 4 | Doc/e2e/specs/_verify.spec.ts, m1upload.ts (업로드·붙여넣기·F5) |
+| W4 | 4 | judge.py·mapping_trace.py(A6 팝업 SP), facts_combosrc.py |
+| D | 1 | 결정 목록(R4-D9 적용 행) |
+
+## 행별 조치
+
+| No | 묶음 | row_id | 규칙 | 유형 | 대상 | 재측정 증거 요약 | 결과 | 사유·고친 곳 |
+|---|---|---|---|---|---|---|---|---|
+| 1 | W1 | T-6a512ae5※ | E4 | AI검토:검사기오판 | MSG00209 | [FAIL] AS-IS 는 L/T 5칸 합계가 999 를 넘을 때만 MSG00209 를 띄우고 바꾼 칸을 0 으로 되돌린다. 검사기는 합계 999 를 위반 입력으로 넣어 알림이 없는 정상 동작을 FAIL 로 기록했다. TO-BE 도 합계 999 초과 때 바꾼 칸을 0  | 고침 | T590·T594 닫힌 토스트 글자 제외(_trace.spec.ts:281~296). 라운드 4 T550 입력 계획은 정상(T-dba493fd PASS) |
+| 2 | W1 | T-eea49685※ | E4 | AI검토:검사기오판 | LT_ARRIVAL_INLAND / Arrival Inland | [FAIL] [대표 T-6a512ae5 와 같은 증거] AS-IS 는 L/T 5칸 합계가 999 를 넘을 때만 MSG00209 를 띄우고 바꾼 칸을 0 으로 되돌린다. 검사기는 합계 999 를 위반 입력으로 넣어 알림이 없는 정상 동작을 FAIL 로 기록했다. TO-B | 고침 | T590·T594 닫힌 토스트 글자 제외(_trace.spec.ts:281~296). 라운드 4 T550 입력 계획은 정상(T-dba493fd PASS) |
+| 3 | W1 | V-17e451a7 | H2 | 검사기공백 | FROM_CITY | [측정 경로 없음] 계정 donghoon.lee(그룹 ADMIN/DM ADMIN/GUEST/SCM PI Admin) · Div 40 조회 8076행 중 조건 만족 0행 · 평가 불가 1행 — 조건 !(COL(CRUD_TYPE)!="I" && COL(CRUD_TYPE)! | 고침 | T591 부정 숫자·빈 칸 원자 전제 편집(saveerr.ts, _trace.spec.ts:554) |
+| 4 | W1 | V-28e296d5※ | A4 | 미분류 | SCP0005 화면 | [측정 실패] 재조회 응답·그리드 행 수 못 읽음 · Division 조회조건 없음(T455) → 'Trans Mode' '​'→'AIR ​' 재조회 · 앞 조회 8076행 · 이번 응답 -행(부가 배열 포함) · 그리드 0행 | 고침 | T592·T593 본 조회 시트 학습·U+200B·응답 대기 |
+| 5 | W1 | V-3e95d2be※ | E4 | AI검토:검사기오판 | MSG00209 | [FAIL] AS-IS 는 L/T 5칸 합계가 999 를 넘을 때만 MSG00209 를 띄우고 바꾼 칸을 0 으로 되돌린다. 검사기는 합계 999 를 넣어 위반이 아닌 입력으로 시험했고, 남아 있던 알림 문구까지 섞어 FAIL 로 기록했다. TO-BE 는 같은 조건에서 | 고침 | T590·T594 닫힌 토스트 글자 제외(_trace.spec.ts:281~296). 라운드 4 T550 입력 계획은 정상(T-dba493fd PASS) |
+| 6 | W1 | V-e63ff383 | H2 | 검사기공백 | TO_CITY | [측정 경로 없음] 계정 donghoon.lee(그룹 ADMIN/DM ADMIN/GUEST/SCM PI Admin) · Div 40 조회 8076행 중 조건 만족 0행 · 평가 불가 14행 — 조건 !(COL(CRUD_TYPE)!="I" && COL(CRUD_TYPE) | 고침 | T591 부정 숫자·빈 칸 원자 전제 편집(saveerr.ts, _trace.spec.ts:554) |
+| 7 | W2 | ES-836708a8※ | F1 | 데이터전제 | SCP0005 E2E authcrud 저장 왕복(insert) jooyong026 | [측정 전제 미충족: 시험 행 저장 요청 없음(saveCalls=0)] 화면 검증·필수 칸에 막혔을 수 있음 · mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=Y updated=N cl | 고침 | T599 머리글 묶음 1개 이상 필수 채움 |
+| 8 | W2 | ES-88905017※ | F1 | AI검토:검사기오판 | SCP0005 E2E crud 저장 왕복(insert) | [FAIL] AS-IS 도 요일(DAYS_MON~DAYS_SUN)이 하나도 없으면 MSG00223 으로 저장을 막는다. 검사기는 TRANSPORT_MODE=FERRY 마커 행에 요일을 채우지 않아 TO-BE 의 '[Working Days] 값은 필수 입력 항목입니다.' | 고침 | T599 머리글 묶음 1개 이상 필수 채움 |
+| 9 | W2 | V-26d2974c※ | F1 | 검사기공백 | SCP0005 2행 동시 저장 | [측정 경로 없음] 두 행의 식별 값이 같음 | 고침 | T598 ID 칸으로 두 행 찾기 |
+| 10 | W2 | V-7116d2aa※ | F6 | AI검토:검사기오판 | SCP0005 0 값 저장 | [판정필요] AS-IS 는 Save 때 CheckValid 에서 Priority 가 1 미만인 행이 있으면 'Priority는 양의 정수입니다.' 메시지를 띄우고 저장을 막는다. TO-BE 도 Priority 를 4에서 0으로 바꿔 저장하자 같은 메시지를 띄우고 서버로 | 고침 | T596 지역 변수 경유 AS-IS 검증 추적(rowlink.ts guardReaches) |
+| 11 | W2 | V-72fbb5b2※ | F6 | 검사기공백 | SCP0005 빈값 저장 | PRIORITY r360 '4'→빈값 · [입력 경로 실패] 빈값 거부 여부 미확인 · 저장 요청 없음 · 칸 표시 '0' | 고침 | T595 빈값 → 0 저장 차단 메시지 대조 |
+| 12 | W2 | V-be38da4d | F4 | 검사기공백 | SCP0005 경계값 저장 | PRIORITY r361 원값 '5' · [업무 검증 차단] 경계값 '99' 저장 요청 없음 · 화면 메시지 'Priority는 양의 정수입니다.' · 원복 OK | 고침 | T597 단계마다 남은 수정 행 버림 |
+| 13 | W3 | V-087d756b※ | E3 | AI검토:검사기오판 | SCP0005 Excel 필수 칸 빈 업로드 | [FAIL] AS-IS는 필수 15칸 중 하나라도 비면 업로드 결과 그리드의 행 상태를 Error-Required로 표시하고, 별도 팝업은 띄우지 않습니다. TO-BE도 같은 15칸을 검사해 Error-Required로 표시하고, 오류가 1건 이상이면 적재하지 않습니다 | 고침 | T601 응답 MESSAGE_TEXT 값 해석 · AS-IS 덮어쓰기 순서 |
+| 14 | W3 | V-219edc76※ | M1 | 검사기공백 | Excel Upload Validation 메시지(Sales Site/Project/Mod | [측정 코드 없음] Excel Upload 버튼 있음 [KOR / 김 김철희 / Home / Distribution Route / Scroll tabs left / Scroll tabs right / Close others / Close All / Full screen | 고침 | T602 응답 해석·결과 기록 경로 |
+| 15 | W3 | V-8fd091cc※ | K3 | AI검토:검사기오판 | [DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀) | [FAIL] 신규행 FROM_COUNTRY에 'E2EPASTE1'을 붙여넣자 빈 칸이 'E2'로 바뀌었다. 붙여넣기는 동작했고 국가 코드 칸 길이 2자에서 잘린 것이다. LT_TYPE 콤보는 후보 'MIN'만 받고 후보 밖 값은 거부했으며, 병합은 AS-IS에서도 이력 | 고침 | T604 AS-IS 칸 길이·메인 화면 병합만. 06:12 회차에 E6 시험 미실행(_test_timing.jsonl) |
+| 16 | W3 | V-96a5218a※ | K3 | AI검토:검사기오판 | [결함 유형 묶음 K3-G02 · 2건] 조회 단축키(F5) 실행 | [FAIL] AS-IS 는 F5 를 Find(FindButton) 조회로 처리하고, TO-BE 는 SearchArea 의 F5 처리기가 이 화면의 onSearch 로 조회를 실행한다. 같은 실행에서 To City Region Popup 값을 고른 직후 메인 F5 로 조 | 고침 | T603 확인창 처리 · T600 단추 찾기(popk3run.ts) |
+| 17 | W4 | FACT-708ae4ce |  | AI검토:추출오류 | combo_src.csv cboValidYN | 원문은 UsrCombo(ComboBox 상속)인 cboValidYN에 setListBox(dtValidYN, cboValidYN, true, "CODE", "NAME")를 호출하고, 이 오버로드는 blnAllFlag가 true이면 모든 컬럼을 CConstVariable | 고침 | T607 facts_combosrc.py setListBox ALL 행 |
+| 18 | W4 | T-2f7778bd | A6 | 검사기공백 | SCP0005_GET_DISTRIBUTION_ROUTEID | SCP0005_GET_DISTRIBUTION_ROUTEID: 화면 진입·조회 경로에서 이 SP 가 결과를 반환하지 않음(팝업·셀 이벤트 SP) — 해당 시나리오에서 실측 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7) | 고침 | T605·T606·T608 정적 정렬·골든 순서 상속 |
+| 19 | W4 | T-336fa068 | A6 | 검사기공백 | SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID | SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID: 화면 진입·조회 경로에서 이 SP 가 결과를 반환하지 않음(팝업·셀 이벤트 SP) — 해당 시나리오에서 실측 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7) | 고침 | T605·T606·T608 정적 정렬·골든 순서 상속 |
+| 20 | W4 | T-f0f809e9 | A6 | 검사기공백 | PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY | PKG_SCP0005.P_SCP0005_GET_COUNTRY_CITY: 화면 진입·조회 경로에서 이 SP 가 결과를 반환하지 않음(팝업·셀 이벤트 SP) — 해당 시나리오에서 실측 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7) | 고침 | T605·T606·T608 정적 정렬·골든 순서 상속 |
+| 21 | D | V-a6bb7234 | G5 | AI검토:검사기오판 | frm.ShowDialog() | [판정필요] AS-IS Excel Upload 팝업은 인자로 프로그램 ID 'SCP0005' 와 시트 이름 'Distribution Route' 를 받는다. TO-BE ExcelUploadModal 은 이 두 값을 props 로 받지 않고 모달 안에서 MENU_ID ' | 결정 | R4-D9 권장안 적용(AI 검토 PASS) · 사람 확인 대기 |

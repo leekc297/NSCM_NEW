@@ -11,12 +11,12 @@
 | features/supply/src/pages/capa/Capa.module.scss | style | 34 |
 | features/supply/src/pages/capa/Capa.tsx | page | 563 |
 | features/supply/src/pages/capa/capa.types.ts | types | 72 |
-| features/supply/src/pages/capa/components/CapaForm.tsx | component | 386 |
-| features/supply/src/pages/capa/components/CapaGrid.tsx | component | 362 |
+| features/supply/src/pages/capa/components/CapaForm.tsx | component | 385 |
+| features/supply/src/pages/capa/components/CapaGrid.tsx | component | 364 |
 | features/supply/src/pages/capa/components/modals/CapaExcelUploadModal.module.scss | component | 41 |
 | features/supply/src/pages/capa/components/modals/CapaExcelUploadModal.tsx | component | 192 |
 | features/supply/src/pages/capa/components/modals/NewVersionConfirmModal.tsx | component | 180 |
-| features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | component | 204 |
+| features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | component | 207 |
 | features/supply/src/pages/capa/index.ts | index | 2 |
 | features/supply/src/pages/capa/useCapaStore.ts | store | 261 |
 | features/supply/src/pages/capa/utils/capa.combos.ts | util | 48 |
@@ -59,21 +59,21 @@
 | CapaForm | onSearch | <arrow> handleSearch | jsx | features/supply/src/pages/capa/Capa.tsx | 450 |
 | VersionInfoModal | onClose | <arrow> setVersionInfoOpen | jsx | features/supply/src/pages/capa/Capa.tsx | 501 |
 | ColumnLayoutModal | onSave | <arrow> settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,index)=>({name:s.COLUMN_NAME,sortOrderNo:index+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map,setAlert,t | jsx | features/supply/src/pages/capa/Capa.tsx | 532 |
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 135 |
-| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 175 |
-| Button | onClick | onOpenPopup | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 171 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 187 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,changeDivision | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 203 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 222 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 271 |
-| CustomDropdown | onChange | <arrow> String(picked??'').split,String,setSearchParams,codes.includes | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 289 |
-| CustomDropdown | onChange | <arrow> changeVersion,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 310 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 326 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 331 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 336 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 341 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 346 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 351 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 134 |
+| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 174 |
+| Button | onClick | onOpenPopup | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 170 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 186 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,changeDivision | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 202 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 221 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 270 |
+| CustomDropdown | onChange | <arrow> String(picked??'').split,String,setSearchParams,codes.includes | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 288 |
+| CustomDropdown | onChange | <arrow> changeVersion,String | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 309 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 325 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 330 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 335 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 340 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 345 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa/components/CapaForm.tsx | 350 |
 | g | beginningEdit | beginningEdit | addHandler | features/supply/src/pages/capa/components/CapaGrid.tsx | 314 |
 | g | pastingCell | pastingCell | addHandler | features/supply/src/pages/capa/components/CapaGrid.tsx | 315 |
 | g | cellEditEnded | cellEditEnded | addHandler | features/supply/src/pages/capa/components/CapaGrid.tsx | 316 |
@@ -88,13 +88,13 @@
 | Checkbox | onChange | <arrow> setChkScp | jsx | features/supply/src/pages/capa/components/modals/NewVersionConfirmModal.tsx | 143 |
 | CustomDropdown | onChange | <arrow> setVersionDivision,String | jsx | features/supply/src/pages/capa/components/modals/NewVersionConfirmModal.tsx | 156 |
 | InputField | onChange | <arrow> setVersionName | jsx | features/supply/src/pages/capa/components/modals/NewVersionConfirmModal.tsx | 170 |
-| SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 138 |
-| PeriodField | onChange | <arrow> setFromDate,setToDate | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 145 |
-| InputField | onChange | <arrow> setVersionName | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 159 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 160 |
-| Checkbox | onChange | <arrow> setChkBp | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 173 |
-| Checkbox | onChange | <arrow> setChkRp | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 178 |
-| Checkbox | onChange | <arrow> setChkScp | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 183 |
+| SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 141 |
+| PeriodField | onChange | <arrow> setFromDate,setToDate | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 148 |
+| InputField | onChange | <arrow> setVersionName | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 162 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 163 |
+| Checkbox | onChange | <arrow> setChkBp | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 176 |
+| Checkbox | onChange | <arrow> setChkRp | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 181 |
+| Checkbox | onChange | <arrow> setChkScp | jsx | features/supply/src/pages/capa/components/modals/VersionInfoModal.tsx | 186 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

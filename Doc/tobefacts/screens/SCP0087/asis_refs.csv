@@ -14,7 +14,7 @@
 "supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx","25","SCP0087","","","","설계: .atlas/gscm-design/SCP0087/design/00~03 + 07. 상세 매핑: __asis-mapping__.md."
 "supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx","33","SCP0087","","","","필수 컬럼(메타 INPUT_TP_CD=M/IM) 저장검증 — 전 화면 공통. SCP0087 편집 3컬럼은 'O'(필수 아님)라 통과."
 "supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx","35","SCP0023","","","SCM_ADM_USER_GR_MNU_BTN_MPG_M","admin 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M) 동적 반영 — 하드코딩 금지(CLAUDE.md 체크3, 자매 SCP0023 표준)."
-"supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx","99","SCP0023","","","","Insert 비활성(R13) / Delete no-op(R14) — 툴바 미노출. Search/Save 만 hasButton 게이트(자매 SCP0023 표준)."
+"supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx","102","SCP0023","","","","Insert 비활성(R13) / Delete no-op(R14) — 툴바 미노출. Search/Save 만 hasButton 게이트(자매 SCP0023 표준)."
 "supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/useMdmClassMasterStore.ts","29","SCP0087","","","SCM_MST_SHEET_COLUMNS","ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(SCP0087 23행 등록확인, design 03 §1)."
 "supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/useMdmClassMasterStore.ts","80","","","205","","p_use_flag (IN3) — ALL 선택 시 '' 전달(전 사용여부, AS-IS cs:205), Y/N 은 완전일치"
 "supply/mdm-class-master","SCP0087","features/supply/src/pages/mdm-class-master/useMdmClassMasterStore.ts","95","","","","SCM_MST_SHEET_COLUMNS","admin SCM_MST_SHEET_COLUMNS 동적 fetch — 미등록/실패 시 빈 배열 유지(그리드 constants fallback)."

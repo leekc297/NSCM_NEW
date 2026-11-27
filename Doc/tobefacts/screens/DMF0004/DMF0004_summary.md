@@ -1,7 +1,7 @@
 # DMF0004 — To-Be Fact Pack 요약
 
 - page_key: `master/sales-site` · feature: master · As-is Fact Pack 있음
-- 파일 14 · 엔드포인트 호출 11 (미해결 0, 주석 속 0) · 이벤트 14 · 컴포넌트 사용 42 · 하드코딩 컬럼 0 · 메시지 13
+- 파일 14 · 엔드포인트 호출 11 (미해결 0, 주석 속 0) · 이벤트 14 · 컴포넌트 사용 41 · 하드코딩 컬럼 0 · 메시지 13
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -11,7 +11,7 @@
 | features/master/src/pages/sales-site/components/SalesSiteCustomerGrid.tsx | component | 203 |
 | features/master/src/pages/sales-site/components/SalesSiteForm.module.scss | component | 30 |
 | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | component | 286 |
-| features/master/src/pages/sales-site/components/SalesSiteGrid.tsx | component | 170 |
+| features/master/src/pages/sales-site/components/SalesSiteGrid.tsx | component | 172 |
 | features/master/src/pages/sales-site/components/SalesSiteLocationGrid.tsx | component | 107 |
 | features/master/src/pages/sales-site/index.ts | index | 2 |
 | features/master/src/pages/sales-site/sales-site.constants.ts | constants | 41 |
@@ -53,17 +53,17 @@
 | CustomDropdown | onChange | <arrow> setSearchParams,setOpenDetailGrid | jsx | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | 172 |
 | CustomDropdown | onChange | <arrow> setSearchParams,setOpenDetailGrid | jsx | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | 205 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | 230 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | 256 |
-| Checkbox | onChange | <arrow> setOpenDetailGrid,setActiveTab | jsx | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | 271 |
-| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site/components/SalesSiteGrid.tsx | 156 |
-| DataGrid | cellEditEnded | handleAutoSalesSite | jsx | features/master/src/pages/sales-site/components/SalesSiteGrid.tsx | 157 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | 258 |
+| Checkbox | onChange | <arrow> setOpenDetailGrid,setActiveTab | jsx | features/master/src/pages/sales-site/components/SalesSiteForm.tsx | 273 |
+| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site/components/SalesSiteGrid.tsx | 158 |
+| DataGrid | cellEditEnded | handleAutoSalesSite | jsx | features/master/src/pages/sales-site/components/SalesSiteGrid.tsx | 159 |
 | DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site/components/SalesSiteLocationGrid.tsx | 94 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
 | Grid | 6 |
-| FormItem | 6 |
+| FormItem | 5 |
 | CustomDropdown | 5 |
 | DataGrid | 4 |
 | TabItem | 3 |

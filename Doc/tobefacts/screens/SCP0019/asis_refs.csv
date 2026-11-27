@@ -1,4 +1,5 @@
 ﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"supply/working-time","SCP0019","features/supply/src/pages/working-time/components/WorkingTimeForm.tsx","176","SCP0096","","","","Day of the week · Input Value · Input 버튼은 조회조건에서 분리 — 버튼영역 '입력' 버튼이 여는 WorkingTimeInputModal 로 이동했다(2026-10-15 사용자 지시, 자매 SCP0096 shipment-working-day-osp 선례)."
 "supply/working-time","SCP0019","features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx","35","DMF0044 SCM0008","","","","DMF0044/SCM0008 안티패턴 — 운영자가 admin 에서 정한 INPUT_TP_CD 가 화면에 무효화된다"
 "supply/working-time","SCP0019","features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx","37","SCP0019","","","","SCP0019 WORKING_TIME_DEFAULT 는 deploy SQL(05_register_apply.sql)로 INPUT_TP_CD 'S'→'O' 정합."
 "supply/working-time","SCP0019","features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx","77","","","","SCM_MST_SHEET_COLUMNS","컬럼 메타 정본 = admin `/column` 응답(SCM_MST_SHEET_COLUMNS 14행) 단일 원천."

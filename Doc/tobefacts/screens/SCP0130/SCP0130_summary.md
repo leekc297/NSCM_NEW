@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | component | 368 |
+| features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | component | 376 |
 | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | component | 129 |
 | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx | component | 205 |
 | features/supply/src/pages/scheduled-receipt-information/index.ts | index | 2 |
@@ -41,15 +41,15 @@
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 164 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,setDivisionRevertKey | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 184 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 207 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 221 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 250 |
-| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 246 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,clearGrid | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 277 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 304 |
-| div | onBlur | <arrow> setFromDateRevertKey | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 320 |
-| DatePickerCalendar | onChange | <arrow> date?.isValid,setSearchParams,date.format | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 333 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,setDivisionRevertKey | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 191 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,clearGrid | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 217 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 240 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 269 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 265 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 296 |
+| div | onBlur | <arrow> setFromDateRevertKey | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 313 |
+| DatePickerCalendar | onChange | <arrow> date?.isValid,setSearchParams,date.format | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 326 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 353 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | 60 |
 | g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | 61 |
 | g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationMainGrid.tsx | 75 |
@@ -105,17 +105,18 @@
 | LBL00005 | 1 |
 | LBL00007 | 1 |
 | LBL00062 | 1 |
-| LBL00618 | 1 |
+| LBL00033 | 1 |
 | LBL00021 | 1 |
 | MSG00002 | 1 |
 | MSG00003 | 3 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0130(27), SCP0129(3), SCP0128(2), SCP0053(2), SCP0025(1), SCP0122(1), SCP0127(1)
+- 화면ID: SCP0130(28), SCP0129(3), SCP0128(2), SCP0053(2), SCP0025(1), SCP0122(1), SCP0127(1)
 - SP/PKG: PKG_SCP0130(4), P_USER_ID(4), SCP0130_GET_VIRTUAL_BOM(1), SCP0130_GET_SCHEDULED_RECIEPT_INFORMATION(1), FN_GET_DIVISION(1), SCP0130_GET_SEARCH_INFO(1), P_SCP0130_SVAE_VIRTUAL_BOM(1), P_SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
+| code | ③ Parent Model(Item ID) — 제품·대상 그룹 첫 필드(BOM 부모, Material 앞). Virtual Bom 시트에서만 노출(SCP0130-08, AS-IS btnItemId.Visible .cs:1473/1488); Scheduled Receipt 시트에서는 조회조건 자체를 숨긴다(itemId 파라미터도 store 에서 ''). | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationForm.tsx | 245 |
 | endpoint | Virtual Bom 시트 그리드 — design/03_grid-columns.md §1.2/§3 white-list 재현. ITEM_ID 셀 더블클릭 → 품목 팝업(`MaterialByDivisionModal`, design/02_search-combo.md §4.6 확정 재사용, gridSignals#21 SetText 재현) — buttonGuards#4/#5(헤더 더블클릭 제외 / 잠금 또는 비편집모드&&비신규행 시 팝 | features/supply/src/pages/scheduled-receipt-information/components/ScheduledReceiptInformationVirtualBomGrid.tsx | 37 |
 | endpoint | 컬럼 메타 fetch(/admin/menu/SCP0130/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 가 문자열 그대로 매칭). DB 실측(design/03_grid-columns.md §1) 값을 그대로 쓴다 — 코드 키(SHEETS)와 분리(formation.constants.ts 선례와 동일 패턴). | features/supply/src/pages/scheduled-receipt-information/scheduled-receipt-information.constants.ts | 27 |
 | code | buttonGuards#1 — fps==null(선택 행 없음) 시 무동작 return(design/01_layout.md §2 #3, | features/supply/src/pages/scheduled-receipt-information/ScheduledReceiptInformation.tsx | 231 |

@@ -1,0 +1,29 @@
+{
+  "id": "20261126_171456_R12_ALL_2",
+  "at": "2026-11-26T17:14:56+09:00",
+  "ms": 1795680896148,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_webview_syntax.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_webview_syntax.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 1 · PASS 15 · FAIL 2 · FAIL workbench(ko) HTML 생성 Missing catch or finally after try / FAIL workbench(en) HTML 생성 Missing catch or finally after try / SOME FAIL",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_webview_syntax.js",
+    "file": "t_webview_syntax.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T17:19:43+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -9,8 +9,8 @@
 |---|---|---|
 | features/supply/src/pages/workbench/components/WorkbenchForm.tsx | component | 328 |
 | features/supply/src/pages/workbench/components/WorkbenchGrid.tsx | component | 336 |
-| features/supply/src/pages/workbench/hooks/useWorkbenchData.ts | hook | 223 |
-| features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | hook | 287 |
+| features/supply/src/pages/workbench/hooks/useWorkbenchData.ts | hook | 228 |
+| features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | hook | 294 |
 | features/supply/src/pages/workbench/index.ts | index | 4 |
 | features/supply/src/pages/workbench/useWorkbenchStore.ts | store | 178 |
 | features/supply/src/pages/workbench/utils/workbench.cascade.ts | util | 62 |
@@ -22,7 +22,7 @@
 | features/supply/src/pages/workbench/utils/workbench.gridCombos.ts | util | 209 |
 | features/supply/src/pages/workbench/utils/workbench.insert.ts | util | 71 |
 | features/supply/src/pages/workbench/utils/workbench.save.ts | util | 219 |
-| features/supply/src/pages/workbench/workbench.constants.ts | constants | 596 |
+| features/supply/src/pages/workbench/workbench.constants.ts | constants | 602 |
 | features/supply/src/pages/workbench/Workbench.tsx | page | 460 |
 | features/supply/src/pages/workbench/workbench.types.ts | types | 66 |
 | features/supply/src/pages/workbench/__asis-mapping__.md | mapping | 358 |
@@ -32,12 +32,12 @@
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | WorkbenchForm.tsx:89 |
 | (useTabLookupQueries) | hook | 1 | Y | useWorkbenchData.ts:77 |
-| SCP0125/init//call-proc | hook | 1 | Y | useWorkbenchData.ts:97 |
-| SCP0125/mktFcst//call-proc | hook | 1 | Y | useWorkbenchData.ts:111 |
-| SCP0125/{?stockSheet}//call-proc | hook | 1 | N | useWorkbenchData.ts:118 |
-| SCP0125/{?stockElecSheet}//call-proc | hook | 1 | N | useWorkbenchData.ts:125 |
-| SCP0125/elecDemand//call-proc | hook | 1 | Y | useWorkbenchData.ts:132 |
-| SCP0125/stock2ndOcv//call-proc | hook | 1 | Y | useWorkbenchData.ts:139 |
+| SCP0125/init//call-proc | hook | 1 | Y | useWorkbenchData.ts:101 |
+| SCP0125/mktFcst//call-proc | hook | 1 | Y | useWorkbenchData.ts:116 |
+| SCP0125/{?stockSheet}//call-proc | hook | 1 | N | useWorkbenchData.ts:123 |
+| SCP0125/{?stockElecSheet}//call-proc | hook | 1 | N | useWorkbenchData.ts:130 |
+| SCP0125/elecDemand//call-proc | hook | 1 | Y | useWorkbenchData.ts:137 |
+| SCP0125/stock2ndOcv//call-proc | hook | 1 | Y | useWorkbenchData.ts:144 |
 | /admin/menu/SCP0125/column | http | 1 | Y | useWorkbenchStore.ts:135 |
 | /admin/menu/SCP0125/search-conditions | http | 1 | Y | useWorkbenchStore.ts:153 |
 | /SCP0125/{sheet}/SAVE/call-proc | http | 1 | N | Workbench.tsx:271 |
@@ -126,13 +126,13 @@
 | MSG00003 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0125(19), SCP0123(2)
-- SP/PKG: P_USER_ID(4), PKG_SCP0125(2), FN_GET_DIVISION(1), PKG_NSCM_UI_COM_LOOKUP(1), PR_GET_LOOKUP_INFO_LIST(1), FN_CHAR_TO_DATE(1)
+- 화면ID: SCP0125(19), SCP0123(2), COM0013(1), SCM0002(1), COM0008(1), DM0002(1)
+- SP/PKG: P_USER_ID(4), PKG_SCP0125(2), FN_GET_DIVISION(1), PKG_SCM0002(1), P_SCM0002_GET_ITEM_BY_DIVISION_POPUP(1), PKG_NSCM_UI_COM_LOOKUP(1), PR_GET_LOOKUP_INFO_LIST(1), FN_CHAR_TO_DATE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | code | if (!underEdit) e.cell.textContent = toDisplayDate(row?.[COL.DUE_DATE]); | features/supply/src/pages/workbench/components/WorkbenchGrid.tsx | 169 |
-| code | 저장 대상 행을 검증하고 실제로 보낼 행만 돌려준다. 실패 시 alert 후 `undefined` (AS-IS 는 첫 위반에서 `return` 하며 그 행 이후는 검사하지 않는다 — 같은 동작). | features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | 125 |
+| code | 저장 대상 행을 검증하고 실제로 보낼 행만 돌려준다. 실패 시 alert 후 `undefined` (AS-IS 는 첫 위반에서 `return` 하며 그 행 이후는 검사하지 않는다 — 같은 동작). | features/supply/src/pages/workbench/hooks/useWorkbenchValidation.ts | 132 |
 | code | R15 저장 — 3중 가드(EDIT 권한 / 빈 그리드는 Toast) 후 검증 39건 → `^` 결합 payload. `CRUD_TYPE` 마킹 행만 대상이며 자체 행상태 필드는 쓰지 않는다. AS-IS D13("Edit 모드 아니면 return")은 모드가 아니라 `canEdit` 로 재표현한다(규범 §2.4). | features/supply/src/pages/workbench/Workbench.tsx | 319 |
 
 ## 10. __asis-mapping__.md 상태

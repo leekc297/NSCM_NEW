@@ -1,0 +1,166 @@
+{
+ "rule_id": "B2",
+ "hash": "34d2339b29cf8f92",
+ "groups": [
+  {
+   "rows": [
+    "T-0fac110a"
+   ],
+   "why": "DEPT_NAME_KO 컬럼과 같은 대상을 확인하는 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-14f3b840"
+   ],
+   "why": "SCM_SITE_ID 컬럼(InsertRow)은 SCM_SITE_ID40/81/82와 컬럼명이 달라 같은 요소인지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-32bc7ec4"
+   ],
+   "why": "그리드 컬럼 BIZ_TYPE_NAME81과 조회조건 Biz.Type은 라벨만 같고 요소가 달라(컬럼 vs 조회조건) 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-bc0f4f6a"
+   ],
+   "why": "그리드 컬럼 DIVISION_ID와 조회조건 Division은 라벨만 같고 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-dea84365"
+   ],
+   "why": "SCM_SITE_ID82는 라벨 Sales Site가 같아도 SCM_SITE_ID81·SCM_SITE_ID40과 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-02808a47"
+   ],
+   "why": "조회조건 Bucket만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-04582ef0"
+   ],
+   "why": "신규행 CURRENCY 컬럼만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-1f8bd955"
+   ],
+   "why": "신규행 INCOTERMS 컬럼만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-225603fa"
+   ],
+   "why": "조회조건 Team은 그리드 컬럼 DEPT_ID/DEPT_ID40과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-22af6879"
+   ],
+   "why": "조회조건 Plant Site는 그리드 컬럼 PLANT_SITE_ID와 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-2f93baa7"
+   ],
+   "why": "DEPT_ID40은 DEPT_ID와 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-31227310"
+   ],
+   "why": "신규행 MEASURE 컬럼만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-37ae74e3"
+   ],
+   "why": "END_CUSTOMER40은 END_CUSTOMER와 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-48b14ca3"
+   ],
+   "why": "조회조건 Closed만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-5fd779d3"
+   ],
+   "why": "SCM_SITE_ID81은 SCM_SITE_ID40/82와 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-630f12f5"
+   ],
+   "why": "END_CUSTOMER는 END_CUSTOMER40과 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-6f885210"
+   ],
+   "why": "조회조건 Biz.Type은 그리드 컬럼 BIZ_TYPE_NAME81과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-708539ce"
+   ],
+   "why": "조회조건 Division은 그리드 컬럼 DIVISION_ID와 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-7d191923"
+   ],
+   "why": "신규행 FCST_TYPE 컬럼만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-954883e7"
+   ],
+   "why": "조회조건 Sales Site는 그리드의 SCM_SITE_ID 계열 컬럼들과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-9efef69e"
+   ],
+   "why": "조회조건 Item Type만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-b3befc22"
+   ],
+   "why": "SCM_SITE_ID40은 SCM_SITE_ID81/82와 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-ced51121"
+   ],
+   "why": "조회조건 End Customer는 그리드 컬럼 END_CUSTOMER/END_CUSTOMER40과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-df1ece50"
+   ],
+   "why": "신규행 CELL_PROD_SITE 컬럼만 확인하는 유일한 행이다."
+  },
+  {
+   "rows": [
+    "V-e484d215"
+   ],
+   "why": "DEPT_ID는 DEPT_ID40과 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-eef03dd4"
+   ],
+   "why": "신규행 PLANT_SITE_ID 컬럼은 조회조건 Plant Site와 요소가 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:37:16",
+ "cost": 0.09148519999999999
+}

@@ -1,13 +1,13 @@
 # DMF0044 — To-Be Fact Pack 요약
 
 - page_key: `demand/sales-reports` · feature: demand · As-is Fact Pack 있음
-- 파일 31 · 엔드포인트 호출 35 (미해결 1, 주석 속 2) · 이벤트 47 · 컴포넌트 사용 45 · 하드코딩 컬럼 5 · 메시지 34
-- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 5건
+- 파일 31 · 엔드포인트 호출 35 (미해결 1, 주석 속 2) · 이벤트 47 · 컴포넌트 사용 45 · 하드코딩 컬럼 6 · 메시지 34
+- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 6건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.module.scss | component | 39 |
+| features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.module.scss | component | 40 |
 | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | component | 936 |
 | features/demand/src/pages/sales-reports/components/modals/exchangeRateModalStore.ts | store | 32 |
 | features/demand/src/pages/sales-reports/components/modals/index.ts | index | 3 |
@@ -15,7 +15,7 @@
 | features/demand/src/pages/sales-reports/components/modals/textboxModalStore.ts | store | 23 |
 | features/demand/src/pages/sales-reports/components/SalesReportsForm.module.scss | component | 193 |
 | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | component | 165 |
-| features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | component | 836 |
+| features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | component | 854 |
 | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | component | 245 |
 | features/demand/src/pages/sales-reports/index.ts | index | 2 |
 | features/demand/src/pages/sales-reports/sales-reports.constants.ts | constants | 106 |
@@ -47,7 +47,7 @@
 | DMF0044/exchangeRate/TITLE/call-proc | hook | 1 | Y | ExchangeRateModal.tsx:234 |
 | /admin/menu/DMF0044/column | http | 2 | Y | ExchangeRateModal.tsx:334 useSalesReportsStore.ts:291 |
 | DMF0044/textbox//call-proc | hook | 1 | Y | TextboxModal.tsx:52 |
-| (useTabComboQueries) | hook | 4 | Y | SalesReportsForm.tsx:50 SalesReportsGrid.tsx:152 SalesReportsGrid.tsx:202 SalesReports.tsx:73 |
+| (useTabComboQueries) | hook | 4 | Y | SalesReportsForm.tsx:50 SalesReportsGrid.tsx:161 SalesReportsGrid.tsx:211 SalesReports.tsx:73 |
 | DMF0044/MDF Reports//call-proc | hook | 1 | Y | SalesReports.tsx:97 |
 | DMF0044/spreadTitle//call-proc | hook | 1 | Y | SalesReports.tsx:106 |
 | DMF0044/measure//call-proc | hook | 1 | Y | SalesReports.tsx:121 |
@@ -100,19 +100,19 @@
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 129 |
 | VersionField | onOpenPopup | onOpenVersionModal | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 144 |
 | VersionField | onValueChange | <arrow> set | jsx | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | 149 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 524 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 554 |
-| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 555 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 607 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 608 |
-| g | pastingCell | capturePasteRange | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 666 |
-| g | pastedCell | propagatePaste | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 667 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 685 |
-| g.hostElement | mousedown | mouseDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 700 |
-| g.hostElement | keydown | keyDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 711 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 719 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 776 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 798 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 542 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 572 |
+| g | pastingCell | beginningEditHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 573 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 625 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 626 |
+| g | pastingCell | capturePasteRange | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 684 |
+| g | pastedCell | propagatePaste | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 685 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 703 |
+| g.hostElement | mousedown | mouseDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 718 |
+| g.hostElement | keydown | keyDownCapture | addEventListener | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 729 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 737 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 794 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 816 |
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet,visible.map,onClose | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 164 |
 | MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map,fetchStaticMeasures | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 198 |
 | VersionModal | onSelect | onVersionSelect | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 223 |
@@ -162,8 +162,9 @@
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
 | dynamicColumns | c.binding | c.mm | 120 | true |  |  | object | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | 351 |
-| mainDynamicColumns | m.binding | m.label | 225 | true |  |  | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 328 |
-| evalDyn | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  |  |  |  | lockCtxRef.current.dataType | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 357 |
+| dynColMetas | String(r.COLUMN_NAME) |  | spColumnWidth(r.COLUMN_WIDTH) |  |  |  | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 277 |
+| mainDynamicColumns | m.binding | m.label | m.width ?? DYN_COL_DEFAULT_WIDTH | true |  |  | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 345 |
+| evalDyn | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  |  |  |  | lockCtxRef.current.dataType | object | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 375 |
 | readGridGroupInput | column?.binding ?? '' |  |  | column?.visible !== false |  |  | object | features/demand/src/pages/sales-reports/SalesReports.tsx | 233 |
 | cell | params.binding ?? 'M_202607' |  |  |  |  | params.dataType ?? DATA_TYPE.CUTOFF | object | features/demand/src/pages/sales-reports/utils/sales-reports.editLock.test.ts | 17 |
 
@@ -201,13 +202,13 @@
 | LBL00310 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0044(29), DMF0003(10), DMF0042(9), DMF0049(8), DMF0020(2), DMF0072(1), DMF0074(1), DM0002(1), DMF0021(1), DMF0005(1), DMF0040(1), DMF0053(1)
+- 화면ID: DMF0044(29), DMF0003(11), DMF0042(10), DMF0049(9), DMF0020(3), DMF0072(1), DMF0074(1), DM0002(1), DMF0021(1), DMF0005(1), DMF0040(1), DMF0053(1)
 - SP/PKG: DMF0044_GET_SPREAD_TITLE(6), P_DMF0044_GET_MEASURE(4), P_DMF0044_GET_SALES_REPORTS_DATA(4), P_YYYYMMDD(2), DMF0044_GET_SALES_REPORTS_DATA(2), P_CREATED_BY(2), PKG_DMF0044(2), DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP(1), DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE(1), P_VERSION_NO(1), P_YYYYMM(1), P_DESCRIPTION1(1), P_ACTION_TYPE(1), P_MDF_TYPE(1), P_USER_GROUP(1), SCM0002_SET_TITLESET_POPUP(1), P_DMF0044_SAVE_DM_EXCHANGE_RATE_REPORT(1), P_DMF0044_SAVE_TEXTBOX(1), P_CUTOFF_YYYYMMDD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | code | [문제] 종전에는 `if (!gridRef.current) return;` 으로 끝냈다. 그런데 이 모달은 다이얼로그 | features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx | 523 |
-| code | 편집 중인 셀(editRange 가드로 조기 return)과 정적/동적 어디에도 안 걸리는 컬럼 | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 457 |
+| code | 편집 중인 셀(editRange 가드로 조기 return)과 정적/동적 어디에도 안 걸리는 컬럼 | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 475 |
 | code | F8 Insert — Data Type=2(ETC) 전용 (AS-IS InsertRow L973 분기 return). | features/demand/src/pages/sales-reports/SalesReports.tsx | 300 |
 | code | silent (AS-IS 분기 return 파리티) | features/demand/src/pages/sales-reports/SalesReports.tsx | 304 |
 | code | *주석 처리돼 있다**(`//if (GetText(ActiveRowIndex, Action) != "I") return;`) — 즉 AS-IS 는 | features/demand/src/pages/sales-reports/SalesReports.tsx | 365 |

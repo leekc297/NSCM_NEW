@@ -44,8 +44,8 @@
 | Checkbox | onChange | handleIncludeMv | jsx | features/demand/src/components/versionModal/VersionModal.tsx | 539 |
 | DatePickerCalendar | onChange | <arrow> setMvMonth,date?.format | jsx | features/demand/src/components/versionModal/VersionModal.tsx | 549 |
 | Checkbox | onChange | setUpdateLatest | jsx | features/demand/src/components/versionModal/VersionModal.tsx | 565 |
-| Button | onClick | <arrow> adopt,getSelectedRow | jsx | features/demand/src/components/versionModal/VersionModal.tsx | 643 |
-| Button | onClick | modalClose | jsx | features/demand/src/components/versionModal/VersionModal.tsx | 652 |
+| Button | onClick | modalClose | jsx | features/demand/src/components/versionModal/VersionModal.tsx | 643 |
+| Button | onClick | <arrow> adopt,getSelectedRow | jsx | features/demand/src/components/versionModal/VersionModal.tsx | 651 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -102,6 +102,7 @@
 | kind | snippet | file | line |
 |---|---|---|---|
 | code | onSelect(versionNo, `${versionNo} ${cellStr(row.VERSION_DESCRIPTION)}`.trim()); | features/demand/src/components/versionModal/VersionModal.tsx | 275 |
+| code | V-1 Division = 표준 카탈로그 DivisionField. AS-IS L119~120 `SelectedValue=_sDiv; Enabled=false` 1:1 — 부모 확정값이라 비활성(값은 부모가 소유). disabled 필수: onChange 를 no-op 으로 둔 것만으로는 목록이 열려 고를 수 있어 바꿀 수 있는 것처럼 보였다(고르면 값이 되돌아온다). 실제로 잠근다. | features/demand/src/components/versionModal/VersionModal.tsx | 453 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

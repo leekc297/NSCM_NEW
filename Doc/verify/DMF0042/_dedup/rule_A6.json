@@ -1,0 +1,1012 @@
+{
+ "rule_id": "A6",
+ "hash": "795d75809c138f59",
+ "groups": [
+  {
+   "rows": [
+    "V-0419e1ca",
+    "V-55aa65b0"
+   ],
+   "why": "같은 SP DMF0009_GET_CODE에 같은 정렬 키 DISPLAY_SEQ로 ORDER BY 동일 여부와 실측 결과 순서를 확인하는 같은 행이다."
+  },
+  {
+   "rows": [
+    "V-3dd9664a",
+    "V-869712ee"
+   ],
+   "why": "같은 SP DMF0009_GET_CODE에 같은 정렬 키 SORT_ORDER_NO로 같은 확인을 하는 행이다."
+  },
+  {
+   "rows": [
+    "V-cc7bb123",
+    "V-fc823692"
+   ],
+   "why": "같은 SP DMF0009_GET_CODE에 같은 정렬 키 SEQ로 같은 확인을 하는 행이다."
+  },
+  {
+   "rows": [
+    "V-0a5700cf",
+    "V-ff953806"
+   ],
+   "why": "같은 SP DMF0042_3_GET_SPREAD_TITLE에 같은 정렬 키 SORT_ORDER_NO, 같은 기대 결과를 가진 행이다."
+  },
+  {
+   "rows": [
+    "V-14582ec9",
+    "V-4721889b",
+    "V-c953c81f",
+    "V-d97b77fb"
+   ],
+   "why": "같은 SP DMF0002_GET_TITLESET_POPUP에 같은 정렬 키 SORT_ORDER_NO, 같은 기대 결과를 가진 행이다."
+  },
+  {
+   "rows": [
+    "V-45a58e03",
+    "V-804b9d59"
+   ],
+   "why": "같은 SP UP_FX_GetCommonDataList_DM에 같은 정렬 키 SORT_ORDER,CODE, 같은 기대 결과를 가진 행이다."
+  },
+  {
+   "rows": [
+    "V-4b1c5f55",
+    "V-53438713",
+    "V-5fbec7ed",
+    "V-609667b4",
+    "V-90f42e1c",
+    "V-96a8fca2",
+    "V-96c5a722",
+    "V-be1565bd",
+    "V-bf4ead34",
+    "V-f9c7b841"
+   ],
+   "why": "같은 SP UP_FX_GetCommonDataList_DM에 같은 정렬 키 DISPLAY_SEQ로 대상·조건·기대 문구가 모두 같은 행이다."
+  },
+  {
+   "rows": [
+    "V-b9270a52",
+    "V-dc0c7eff"
+   ],
+   "why": "같은 SP DMF0042_GET_SPREAD_TITLE에 같은 정렬 키 SORT_ORDER_NO, 같은 기대 결과를 가진 행이다."
+  },
+  {
+   "rows": [
+    "V-9d782ebf"
+   ],
+   "why": "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA의 USER_ID 정렬 행이다. 같은 SP를 같은 방법으로 보는 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-df100913"
+   ],
+   "why": "DMF0042_3_Get_BizPlan은 다른 SP라서 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-a1498d10"
+   ],
+   "why": "DMF0003_GET_DM_ANL_MKT_PSI_DPINIT의 SEQ 정렬 행이다. 같은 SP 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-d2c80d0b"
+   ],
+   "why": "DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT는 다른 SP라서 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-afa88b17"
+   ],
+   "why": "SCM0001_GET_LOOKUP_VALUES의 DISPLAY_SEQ 정렬 행이다. 같은 SP 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-725111a2"
+   ],
+   "why": "DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE의 BASIS_START_DATE 정렬 행이다. 같은 SP 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-12d38f2f"
+   ],
+   "why": "ORDER BY가 없는 SP DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-bfa5da80"
+   ],
+   "why": "ORDER BY가 없는 SP DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-225e13db"
+   ],
+   "why": "ORDER BY가 없는 SP DMF0042_1_GET_BIZPLAN_RTF에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-2eca4004"
+   ],
+   "why": "ORDER BY가 없는 SP DMF0042_GET_EXCHANGE_PRICE에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-2fb87eb2"
+   ],
+   "why": "ORDER BY가 없는 SP PR_GET_DAY_RANGE에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-47d5e874"
+   ],
+   "why": "ORDER BY가 없는 SP SCM0001_GET_BIZ_TYPE_BY_DIVISION에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-570123cf"
+   ],
+   "why": "ORDER BY가 없는 SP DMF0042_1_GET_DM_PLN_BUSINESS_PLAN_DATA에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-c0ba5e97"
+   ],
+   "why": "ORDER BY가 없는 SP DMF0042_1_GET_BIZPLAN_INFO에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "V-fba50e35"
+   ],
+   "why": "ORDER BY가 없는 SP DMF0042_1_GET_SPREAD_TITLE에 대한 고유 행이다."
+  },
+  {
+   "rows": [
+    "EG-90ed2f8e"
+   ],
+   "why": "정렬 키 SORT_ORDER_NO가 없는 Viewer 권한 상태라서 보유 상태(Admin) 행과 따로 둔다."
+  },
+  {
+   "rows": [
+    "EG-e67fc52a"
+   ],
+   "why": "정렬 키 SORT_ORDER_NO를 가진 Admin 권한 상태라서 미보유 상태 행과 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-13f4ea13"
+   ],
+   "why": "대조표 추적 행으로, DMF0042_1_RTF.FindDataMain 구현 위치를 확인하는 다른 성질의 행이다."
+  },
+  {
+   "rows": [
+    "T-1d10eafd"
+   ],
+   "why": "대조표 추적 행으로, Division 분기 전수를 확인한다."
+  },
+  {
+   "rows": [
+    "T-2373470d"
+   ],
+   "why": "대조표 추적 행으로, DMF0042_3_BizPlan.FindData를 확인한다."
+  },
+  {
+   "rows": [
+    "T-2c6c36a0"
+   ],
+   "why": "대조표 추적 행으로, DMF0042_3_BizPlan.FindButton을 확인한다."
+  },
+  {
+   "rows": [
+    "T-339934d7"
+   ],
+   "why": "대조표 추적 행으로, btnSetPrice_Click을 확인한다."
+  },
+  {
+   "rows": [
+    "T-39d9548c"
+   ],
+   "why": "대조표 추적 행으로, DMF0042_2_BizPlan.FindButton을 확인한다."
+  },
+  {
+   "rows": [
+    "T-5a4fc37b"
+   ],
+   "why": "대조표 추적 행으로, P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP 구현을 확인한다."
+  },
+  {
+   "rows": [
+    "T-5f382ce3"
+   ],
+   "why": "대조표 추적 행으로, drpPeriod(PR_GET_DAY_RANGE)를 확인한다."
+  },
+  {
+   "rows": [
+    "T-5f784c33"
+   ],
+   "why": "대조표 추적 행으로, P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA 구현을 확인한다."
+  },
+  {
+   "rows": [
+    "T-75393800"
+   ],
+   "why": "대조표 추적 행으로, DMF0042_2_BizPlan.FindData를 확인한다."
+  },
+  {
+   "rows": [
+    "T-7a8533f3"
+   ],
+   "why": "대조표 추적 행으로, FindButton→FindData(L684~799)를 확인한다."
+  },
+  {
+   "rows": [
+    "T-9a853a19"
+   ],
+   "why": "대조표 추적 행으로, DMF0042_1_RTF.FindData를 확인한다."
+  },
+  {
+   "rows": [
+    "T-b685b638"
+   ],
+   "why": "대조표 추적 행으로, P_DMF0042_GET_SPREAD_TITLE의 소스 실존과 정렬 정의를 확인하는 성질이라 V 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-f2135ad6"
+   ],
+   "why": "대조표 추적 행으로, P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA의 소스 실존을 확인하는 성질이라 V 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-fac1aec3"
+   ],
+   "why": "대조표 추적 행으로, DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE의 소스 실존을 확인하는 성질이라 V 행과 묶지 않는다."
+  },
+  {
+   "rows": [
+    "AD-031e9f7e"
+   ],
+   "why": "호출 #81 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-08ec8ff1"
+   ],
+   "why": "호출 #61 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-0a100d3b"
+   ],
+   "why": "호출 #37 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-0a11b033"
+   ],
+   "why": "호출 #72 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-0bdd60ea"
+   ],
+   "why": "호출 #3 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-0c38099b"
+   ],
+   "why": "호출 #93 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-0d547c76"
+   ],
+   "why": "호출 #82 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-10513044"
+   ],
+   "why": "호출 #80 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-128bf586"
+   ],
+   "why": "호출 #50 mdfVersion의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-1410cf7c"
+   ],
+   "why": "호출 #23 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-141345f5"
+   ],
+   "why": "호출 #25 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-170fad6d"
+   ],
+   "why": "호출 #62 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-17d187cd"
+   ],
+   "why": "호출 #69 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-185b7506"
+   ],
+   "why": "호출 #89 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-1c86ba8d"
+   ],
+   "why": "호출 #64 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-2009b75b"
+   ],
+   "why": "호출 #106 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-21ee123b"
+   ],
+   "why": "호출 #84 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-22112280"
+   ],
+   "why": "호출 #67 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-22f099f4"
+   ],
+   "why": "호출 #47 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-23213431"
+   ],
+   "why": "호출 #58 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-23bcd7d3"
+   ],
+   "why": "호출 #21 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-266e7ea7"
+   ],
+   "why": "호출 #16 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-283b6dd9"
+   ],
+   "why": "호출 #11 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-29938618"
+   ],
+   "why": "호출 #27 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-29ddead0"
+   ],
+   "why": "호출 #54 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-2a57c9fa"
+   ],
+   "why": "호출 #41 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-2d66c26d"
+   ],
+   "why": "호출 #83 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-33713ae0"
+   ],
+   "why": "호출 #39 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-35ef41d3"
+   ],
+   "why": "호출 #120 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-3d91ce4e"
+   ],
+   "why": "호출 #145 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-3ed9bdcf"
+   ],
+   "why": "호출 #97 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-43b54439"
+   ],
+   "why": "호출 #24 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-469c1bf5"
+   ],
+   "why": "호출 #94 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-46ed6ad2"
+   ],
+   "why": "호출 #88 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-472ef3f3"
+   ],
+   "why": "호출 #45 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-4aa0a7b4"
+   ],
+   "why": "호출 #28 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-4ae977b4"
+   ],
+   "why": "호출 #108 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-4bec212d"
+   ],
+   "why": "호출 #90 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-4d18fe3f"
+   ],
+   "why": "호출 #77 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-52501d67"
+   ],
+   "why": "호출 #68 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-594e35f7"
+   ],
+   "why": "호출 #19 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-5b6175b1"
+   ],
+   "why": "호출 #59 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-5e9a994a"
+   ],
+   "why": "호출 #98 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-5f1d8252"
+   ],
+   "why": "호출 #55 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-688a4d21"
+   ],
+   "why": "호출 #114 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-68ed06fa"
+   ],
+   "why": "호출 #49 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-6a0c19a4"
+   ],
+   "why": "호출 #36 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-6cc3c7fc"
+   ],
+   "why": "호출 #9 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-6eb2d30e"
+   ],
+   "why": "호출 #85 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-6f2e9048"
+   ],
+   "why": "호출 #53 mdfVersion의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-6f42bab3"
+   ],
+   "why": "호출 #63 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-6f7e8841"
+   ],
+   "why": "호출 #78 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-738a3e42"
+   ],
+   "why": "호출 #20 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-74b9d02d"
+   ],
+   "why": "호출 #52 mdfVersion의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-75a8f040"
+   ],
+   "why": "호출 #124 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-7684057e"
+   ],
+   "why": "호출 #8 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-76887637"
+   ],
+   "why": "호출 #2 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-7af9ca34"
+   ],
+   "why": "호출 #13 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-7c2efe19"
+   ],
+   "why": "호출 #123 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-7cb34c0b"
+   ],
+   "why": "호출 #105 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-7d47f4c2"
+   ],
+   "why": "호출 #66 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-7d645be5"
+   ],
+   "why": "호출 #17 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-801baf2e"
+   ],
+   "why": "호출 #91 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-82324dd2"
+   ],
+   "why": "호출 #71 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-83779cfd"
+   ],
+   "why": "호출 #44 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-8591b653"
+   ],
+   "why": "호출 #112 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-86236469"
+   ],
+   "why": "호출 #95 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-8707c188"
+   ],
+   "why": "호출 #119 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-8db5aa0e"
+   ],
+   "why": "호출 #60 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-8ed961e8"
+   ],
+   "why": "호출 #34 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-8ff0c098"
+   ],
+   "why": "호출 #111 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-91da5083"
+   ],
+   "why": "호출 #7 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-92786892"
+   ],
+   "why": "호출 #117 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-9341076e"
+   ],
+   "why": "호출 #43 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-9466c35b"
+   ],
+   "why": "호출 #65 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-99dee000"
+   ],
+   "why": "호출 #33 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-9d5f3d5d"
+   ],
+   "why": "호출 #56 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a1904f3c"
+   ],
+   "why": "호출 #115 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a29d863c"
+   ],
+   "why": "호출 #29 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a3990b37"
+   ],
+   "why": "호출 #40 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a3bb348e"
+   ],
+   "why": "호출 #103 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a514f91f"
+   ],
+   "why": "호출 #32 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a79257e0"
+   ],
+   "why": "호출 #30 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a7abff9e"
+   ],
+   "why": "호출 #26 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a96c2623"
+   ],
+   "why": "호출 #76 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-a9b38f17"
+   ],
+   "why": "호출 #1 dayRange의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-aa043d97"
+   ],
+   "why": "호출 #125 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-ac1b23f3"
+   ],
+   "why": "호출 #48 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-aca8f534"
+   ],
+   "why": "호출 #18 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-b0e85c41"
+   ],
+   "why": "호출 #79 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-b2341bf7"
+   ],
+   "why": "호출 #12 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-b415fca5"
+   ],
+   "why": "호출 #57 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-b6bcc3fd"
+   ],
+   "why": "호출 #102 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-b94989e6"
+   ],
+   "why": "호출 #99 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-bb6f0cff"
+   ],
+   "why": "호출 #100 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-c3103c63"
+   ],
+   "why": "호출 #14 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-c6decb3e"
+   ],
+   "why": "호출 #87 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-c743464c"
+   ],
+   "why": "호출 #38 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-c821b492"
+   ],
+   "why": "호출 #70 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-c99998c1"
+   ],
+   "why": "호출 #116 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-cc0792f7"
+   ],
+   "why": "호출 #42 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-cc2ed997"
+   ],
+   "why": "호출 #92 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d19ed597"
+   ],
+   "why": "호출 #73 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d228962b"
+   ],
+   "why": "호출 #75 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d6245301"
+   ],
+   "why": "호출 #51 mdfVersion의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d6f85665"
+   ],
+   "why": "호출 #109 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d72ec934"
+   ],
+   "why": "호출 #121 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d7a554f4"
+   ],
+   "why": "호출 #10 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d83f1b34"
+   ],
+   "why": "호출 #31 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-d9a5dd70"
+   ],
+   "why": "호출 #22 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-dcf126d7"
+   ],
+   "why": "호출 #107 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-def2ea58"
+   ],
+   "why": "호출 #122 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-df217ab3"
+   ],
+   "why": "호출 #118 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-e02d4785"
+   ],
+   "why": "호출 #35 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-e0cde5aa"
+   ],
+   "why": "호출 #104 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-e1aec371"
+   ],
+   "why": "호출 #15 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-e28d5c91"
+   ],
+   "why": "호출 #96 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-e35f9c34"
+   ],
+   "why": "호출 #130 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-e5eaed20"
+   ],
+   "why": "호출 #101 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-e7962d26"
+   ],
+   "why": "호출 #113 spreadTitle의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-ea251864"
+   ],
+   "why": "호출 #86 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-ebc61011"
+   ],
+   "why": "호출 #144 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-fd7a2186"
+   ],
+   "why": "호출 #74 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  },
+  {
+   "rows": [
+    "AD-ff3cf247"
+   ],
+   "why": "호출 #110 Biz Plan의 고유 인자 결과를 비교하는 행이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:36:46",
+ "cost": 0.7038766000000001
+}

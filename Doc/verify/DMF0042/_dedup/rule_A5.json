@@ -1,0 +1,1013 @@
+{
+ "rule_id": "A5",
+ "hash": "4bf47b2fdeee1d30",
+ "groups": [
+  {
+   "rows": [
+    "EG-ad44e0fd",
+    "EG-fa2b86a4"
+   ],
+   "why": "Both rows check the same Measure button for every Division and expect the same result; only the rule code (EG022 vs EG402) differs."
+  },
+  {
+   "rows": [
+    "AD-00026e02"
+   ],
+   "why": "Biz Plan call #18 has its own arguments, and the truncated text can't show it matches another call, so it stays alone."
+  },
+  {
+   "rows": [
+    "AD-00a4da56"
+   ],
+   "why": "Biz Plan call #94 has its own arguments, and the truncated text can't show it matches another call, so it stays alone."
+  },
+  {
+   "rows": [
+    "AD-036885fc"
+   ],
+   "why": "mdfVersion call #52 uses a different date range from the other mdfVersion calls."
+  },
+  {
+   "rows": [
+    "AD-0630ecbe"
+   ],
+   "why": "mdfVersion call #50 uses a different date range from the other mdfVersion calls."
+  },
+  {
+   "rows": [
+    "AD-08e8ad26"
+   ],
+   "why": "spreadTitle call #124 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-0a3f2d29"
+   ],
+   "why": "spreadTitle call #117 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-0c3cd8bd"
+   ],
+   "why": "Biz Plan call #30 has its own query conditions (deptId)."
+  },
+  {
+   "rows": [
+    "AD-0dd367d9"
+   ],
+   "why": "Biz Plan call #57 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-13a7af36"
+   ],
+   "why": "spreadTitle call #85 uses a unique start date, Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-13dd5929"
+   ],
+   "why": "Biz Plan call #100 has its own query conditions."
+  },
+  {
+   "rows": [
+    "AD-1583bc04"
+   ],
+   "why": "spreadTitle call #63 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-188a46c9"
+   ],
+   "why": "Biz Plan call #64 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-19b512ba"
+   ],
+   "why": "Biz Plan call #72 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-1a969455"
+   ],
+   "why": "Biz Plan call #3 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-1d8a3320"
+   ],
+   "why": "Biz Plan call #68 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-202df7c6"
+   ],
+   "why": "Biz Plan call #39 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-21577cf9"
+   ],
+   "why": "spreadTitle call #119 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-2267758f"
+   ],
+   "why": "Biz Plan call #110 has its own query conditions."
+  },
+  {
+   "rows": [
+    "AD-2ba25b2c"
+   ],
+   "why": "spreadTitle call #125 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-340b33ed"
+   ],
+   "why": "spreadTitle call #40 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-36b02c46"
+   ],
+   "why": "Biz Plan call #145 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-39e6eead"
+   ],
+   "why": "Biz Plan call #8 has its own endCustomer condition."
+  },
+  {
+   "rows": [
+    "AD-3ed60b5f"
+   ],
+   "why": "spreadTitle call #56 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-418db9b8"
+   ],
+   "why": "spreadTitle call #44 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-44a82704"
+   ],
+   "why": "spreadTitle call #38 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-4aab327f"
+   ],
+   "why": "spreadTitle call #121 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-4b6b3ee1"
+   ],
+   "why": "Biz Plan call #29 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-4bbde53d"
+   ],
+   "why": "Biz Plan call #80 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-4c397b4d"
+   ],
+   "why": "spreadTitle call #114 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-4ff725ea"
+   ],
+   "why": "spreadTitle call #54 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-50d7fe21"
+   ],
+   "why": "spreadTitle call #83 uses a unique start date and user combination."
+  },
+  {
+   "rows": [
+    "AD-51cf1be3"
+   ],
+   "why": "spreadTitle call #109 uses a unique start date and user combination."
+  },
+  {
+   "rows": [
+    "AD-55352560"
+   ],
+   "why": "Biz Plan call #144 has its own itemId condition."
+  },
+  {
+   "rows": [
+    "AD-558ad50e"
+   ],
+   "why": "Biz Plan call #14 has its own multi-deptId condition."
+  },
+  {
+   "rows": [
+    "AD-56095af7"
+   ],
+   "why": "spreadTitle call #115 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-5642889c"
+   ],
+   "why": "spreadTitle call #28 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-56b9ac82"
+   ],
+   "why": "Biz Plan call #96 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-57eea771"
+   ],
+   "why": "Biz Plan call #10 has its own scmSiteId condition."
+  },
+  {
+   "rows": [
+    "AD-58c00f61"
+   ],
+   "why": "Biz Plan call #27 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-5af50fd3"
+   ],
+   "why": "Biz Plan call #122 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-5b687b00"
+   ],
+   "why": "Biz Plan call #104 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-5c4229cc"
+   ],
+   "why": "Biz Plan call #70 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-61222d8f"
+   ],
+   "why": "Biz Plan call #106 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-61d00037"
+   ],
+   "why": "Biz Plan call #23 has its own endCustomer condition."
+  },
+  {
+   "rows": [
+    "AD-65ce1dee"
+   ],
+   "why": "spreadTitle call #48 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-673a7d1b"
+   ],
+   "why": "This is the only dayRange call."
+  },
+  {
+   "rows": [
+    "AD-68305920"
+   ],
+   "why": "spreadTitle call #71 uses a unique start date, Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-68b91a7a"
+   ],
+   "why": "spreadTitle call #69 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-6dd9f696"
+   ],
+   "why": "Biz Plan call #88 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-6ed785f8"
+   ],
+   "why": "spreadTitle call #2 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-7202c779"
+   ],
+   "why": "Biz Plan call #79 has its own itemType condition."
+  },
+  {
+   "rows": [
+    "AD-758b3ddb"
+   ],
+   "why": "Biz Plan call #98 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-77ca65f7"
+   ],
+   "why": "Biz Plan call #12 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-7901966d"
+   ],
+   "why": "spreadTitle call #113 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-7b7bdbc2"
+   ],
+   "why": "spreadTitle call #93 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-7c3e8a14"
+   ],
+   "why": "Biz Plan call #21 has its own deptId condition."
+  },
+  {
+   "rows": [
+    "AD-7f8c24a3"
+   ],
+   "why": "Biz Plan call #35 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-7fd3ba74"
+   ],
+   "why": "Biz Plan call #34 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-810a6956"
+   ],
+   "why": "Biz Plan call #47 has its own itemId condition."
+  },
+  {
+   "rows": [
+    "AD-831a7317"
+   ],
+   "why": "Biz Plan call #99 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-854e1575"
+   ],
+   "why": "spreadTitle call #67 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-86d76a5b"
+   ],
+   "why": "Biz Plan call #84 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-8a20da98"
+   ],
+   "why": "spreadTitle call #89 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-8be6a03d"
+   ],
+   "why": "spreadTitle call #97 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-8be89820"
+   ],
+   "why": "Biz Plan call #41 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-8c3af1d0"
+   ],
+   "why": "Biz Plan call #9 has its own scmSiteId condition."
+  },
+  {
+   "rows": [
+    "AD-8e431cd4"
+   ],
+   "why": "spreadTitle call #81 uses a unique start date."
+  },
+  {
+   "rows": [
+    "AD-8f6880e3"
+   ],
+   "why": "Biz Plan call #130 has its own projectCode and itemId conditions."
+  },
+  {
+   "rows": [
+    "AD-91012bf7"
+   ],
+   "why": "Biz Plan call #55 has its own itemId condition."
+  },
+  {
+   "rows": [
+    "AD-92f624d9"
+   ],
+   "why": "spreadTitle call #95 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-9687b699"
+   ],
+   "why": "spreadTitle call #61 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-989d28d8"
+   ],
+   "why": "Biz Plan call #66 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-99979b32"
+   ],
+   "why": "Biz Plan call #24 has its own endCustomer condition."
+  },
+  {
+   "rows": [
+    "AD-9b4946ab"
+   ],
+   "why": "spreadTitle call #87 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-9c0ab705"
+   ],
+   "why": "Biz Plan call #90 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-9c488d23"
+   ],
+   "why": "spreadTitle call #59 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-9c68c7f1"
+   ],
+   "why": "Biz Plan call #22 has its own endCustomer condition."
+  },
+  {
+   "rows": [
+    "AD-9c9ba648"
+   ],
+   "why": "spreadTitle call #58 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-9e63fcd9"
+   ],
+   "why": "spreadTitle call #118 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-9f303f52"
+   ],
+   "why": "Biz Plan call #36 has its own itemType condition."
+  },
+  {
+   "rows": [
+    "AD-a0cc0abb"
+   ],
+   "why": "Biz Plan call #7 has its own endCustomer condition."
+  },
+  {
+   "rows": [
+    "AD-a0d1e3a2"
+   ],
+   "why": "Biz Plan call #25 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-a23fcbe0"
+   ],
+   "why": "Biz Plan call #45 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-a25d8726"
+   ],
+   "why": "Biz Plan call #26 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-a47050d2"
+   ],
+   "why": "Biz Plan call #37 has its own itemType condition."
+  },
+  {
+   "rows": [
+    "AD-abc31985"
+   ],
+   "why": "Biz Plan call #92 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-ae3a58ac"
+   ],
+   "why": "Biz Plan call #33 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-aedca4d9"
+   ],
+   "why": "Biz Plan call #101 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-b43d451c"
+   ],
+   "why": "Biz Plan call #77 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-b77aebb6"
+   ],
+   "why": "spreadTitle call #65 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-b783eceb"
+   ],
+   "why": "mdfVersion call #51 uses a different date range from the other mdfVersion calls."
+  },
+  {
+   "rows": [
+    "AD-bf63af82"
+   ],
+   "why": "spreadTitle call #42 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-c0491b9d"
+   ],
+   "why": "Biz Plan call #60 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-c05480a6"
+   ],
+   "why": "Biz Plan call #103 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-c2bc7245"
+   ],
+   "why": "Biz Plan call #76 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-c50d249b"
+   ],
+   "why": "Biz Plan call #108 has its own start date condition."
+  },
+  {
+   "rows": [
+    "AD-c5b3b8c5"
+   ],
+   "why": "Biz Plan call #86 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-c660aebf"
+   ],
+   "why": "Biz Plan call #16 has its own itemType condition."
+  },
+  {
+   "rows": [
+    "AD-c8985d48"
+   ],
+   "why": "Biz Plan call #112 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-cc106854"
+   ],
+   "why": "spreadTitle call #120 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-cdb15acc"
+   ],
+   "why": "Biz Plan call #74 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-ce3945ad"
+   ],
+   "why": "Biz Plan call #32 has its own endCustomer condition."
+  },
+  {
+   "rows": [
+    "AD-d16961f9"
+   ],
+   "why": "Biz Plan call #13 has its own deptId condition."
+  },
+  {
+   "rows": [
+    "AD-d2bb0927"
+   ],
+   "why": "Biz Plan call #49 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-d36f7c32"
+   ],
+   "why": "Biz Plan call #43 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-d3fc9de8"
+   ],
+   "why": "Biz Plan call #31 has its own endCustomer condition."
+  },
+  {
+   "rows": [
+    "AD-d4d57f6b"
+   ],
+   "why": "Biz Plan call #11 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-d507cada"
+   ],
+   "why": "spreadTitle call #19 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-d583ad20"
+   ],
+   "why": "spreadTitle call #123 uses a unique user."
+  },
+  {
+   "rows": [
+    "AD-d72b24ab"
+   ],
+   "why": "Biz Plan call #15 has its own itemType condition."
+  },
+  {
+   "rows": [
+    "AD-dbc1233f"
+   ],
+   "why": "Biz Plan call #102 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-dbf0cc9d"
+   ],
+   "why": "Biz Plan call #62 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-dd45feaa"
+   ],
+   "why": "Biz Plan call #105 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-deb8ed9c"
+   ],
+   "why": "Biz Plan call #82 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-e0365fd4"
+   ],
+   "why": "spreadTitle call #91 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-e3a5ebfe"
+   ],
+   "why": "Biz Plan call #73 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-e5486bfd"
+   ],
+   "why": "Biz Plan call #78 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-e6739cf8"
+   ],
+   "why": "Biz Plan call #75 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-ec0e41af"
+   ],
+   "why": "spreadTitle call #111 uses a unique start date and user combination."
+  },
+  {
+   "rows": [
+    "AD-ec296b87"
+   ],
+   "why": "spreadTitle call #107 uses a unique start date and user combination."
+  },
+  {
+   "rows": [
+    "AD-f16777f1"
+   ],
+   "why": "spreadTitle call #116 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "AD-f4c3d4cd"
+   ],
+   "why": "mdfVersion call #53 uses a different date range from the other mdfVersion calls."
+  },
+  {
+   "rows": [
+    "AD-fa36712b"
+   ],
+   "why": "Biz Plan call #20 is truncated, so it can't be shown to match another call."
+  },
+  {
+   "rows": [
+    "AD-fd92ff76"
+   ],
+   "why": "spreadTitle call #17 uses a unique Division and user combination."
+  },
+  {
+   "rows": [
+    "EG-0f49e9aa"
+   ],
+   "why": "This row checks when the header is rebuilt after a Division change, before searching; no other row checks that."
+  },
+  {
+   "rows": [
+    "EG-11eb9776"
+   ],
+   "why": "This row checks that the header is identical after going 40→81→40, which no other row expects."
+  },
+  {
+   "rows": [
+    "EG-3b9ad832"
+   ],
+   "why": "This row checks that the popup metadata query uses Division 40 right after the screen opens."
+  },
+  {
+   "rows": [
+    "EG-3bba291e"
+   ],
+   "why": "This row checks the popup query argument after changing Division 40→82, which is a different state."
+  },
+  {
+   "rows": [
+    "EG-592a003d"
+   ],
+   "why": "This row is a static check of required columns for users with saved column settings."
+  },
+  {
+   "rows": [
+    "EG-6dbfdb23"
+   ],
+   "why": "This row only records whether the running account has personalization."
+  },
+  {
+   "rows": [
+    "EG-73a23d7d"
+   ],
+   "why": "This row checks that the search request body has Division 40."
+  },
+  {
+   "rows": [
+    "EG-94643a36"
+   ],
+   "why": "This row checks the count of Division-only columns rebuilt for 40→81."
+  },
+  {
+   "rows": [
+    "EG-b5e6085d"
+   ],
+   "why": "This row checks the popup's 41 metadata candidates."
+  },
+  {
+   "rows": [
+    "EG-ce0b147a"
+   ],
+   "why": "This row checks that the search request body has Division 81, a different condition from the Division 40 row."
+  },
+  {
+   "rows": [
+    "EG-fe8f30ae"
+   ],
+   "why": "This row checks that Division 40-only columns are shown; its expected result differs in detail from the V row."
+  },
+  {
+   "rows": [
+    "T-00b208f9"
+   ],
+   "why": "This trace row tracks the PROJECT_CODE82 column."
+  },
+  {
+   "rows": [
+    "T-032e09e2"
+   ],
+   "why": "This trace row tracks the ITEM_ID40 column."
+  },
+  {
+   "rows": [
+    "T-068246b1"
+   ],
+   "why": "This trace row tracks the SMALL_CLASS_LABEL_NAME source location."
+  },
+  {
+   "rows": [
+    "T-26792624"
+   ],
+   "why": "This trace row tracks cboQty in row 1#14."
+  },
+  {
+   "rows": [
+    "T-31b778c5"
+   ],
+   "why": "This trace row tracks the CURRENCY_UNITCURRENCY popup column."
+  },
+  {
+   "rows": [
+    "T-3f644506"
+   ],
+   "why": "This trace row tracks the DIVISION_ID column."
+  },
+  {
+   "rows": [
+    "T-4a32efe6"
+   ],
+   "why": "This trace row tracks drpPeriod."
+  },
+  {
+   "rows": [
+    "T-52897c79"
+   ],
+   "why": "This trace row tracks cboQty in row 6#5."
+  },
+  {
+   "rows": [
+    "T-5557d1d2"
+   ],
+   "why": "This trace row tracks VARIATION_FACTOR."
+  },
+  {
+   "rows": [
+    "T-6b0dc1ce"
+   ],
+   "why": "This trace row tracks the PROJECT_CODE column."
+  },
+  {
+   "rows": [
+    "T-6ccda6a5"
+   ],
+   "why": "This trace row tracks the SetSpreadColumn entry point."
+  },
+  {
+   "rows": [
+    "T-77c71bad"
+   ],
+   "why": "This trace row tracks IMPUTATION_YN."
+  },
+  {
+   "rows": [
+    "T-834d9e09"
+   ],
+   "why": "This trace row tracks the Exchange Rate modal."
+  },
+  {
+   "rows": [
+    "T-83d137db"
+   ],
+   "why": "This trace row tracks CELL_PROD_SITE."
+  },
+  {
+   "rows": [
+    "T-86b7cd86"
+   ],
+   "why": "This trace row tracks UNIT_CURRENCY."
+  },
+  {
+   "rows": [
+    "T-92c54a7b"
+   ],
+   "why": "This trace row tracks COLUMN_LABEL_NAME."
+  },
+  {
+   "rows": [
+    "T-9f72ea71"
+   ],
+   "why": "This trace row tracks the SetSpreadHeaderSpan entry point."
+  },
+  {
+   "rows": [
+    "T-9fb52591"
+   ],
+   "why": "This trace row tracks COLUMN_NAME."
+  },
+  {
+   "rows": [
+    "T-a123c4f8"
+   ],
+   "why": "This trace row tracks the ITEM_ID column."
+  },
+  {
+   "rows": [
+    "T-a8802210"
+   ],
+   "why": "This trace row tracks LARGE_CLASS_LABEL_NAME."
+  },
+  {
+   "rows": [
+    "T-b38ac018"
+   ],
+   "why": "This trace row tracks the CreateSpread entry point."
+  },
+  {
+   "rows": [
+    "T-c49e8271"
+   ],
+   "why": "This trace row tracks EXT_INT."
+  },
+  {
+   "rows": [
+    "T-c7916301"
+   ],
+   "why": "This trace row tracks DEMAND_OPERATION."
+  },
+  {
+   "rows": [
+    "T-dd4ddb70"
+   ],
+   "why": "This trace row tracks the MEASURE column and checks something different from the COLUMN metadata row."
+  },
+  {
+   "rows": [
+    "T-fdeba765"
+   ],
+   "why": "This trace row tracks the CURRENCY column."
+  },
+  {
+   "rows": [
+    "V-172013a1"
+   ],
+   "why": "This row checks the column order after searching."
+  },
+  {
+   "rows": [
+    "V-63dcc6c8"
+   ],
+   "why": "This row checks the column layout for Division 40."
+  },
+  {
+   "rows": [
+    "V-64521c1a"
+   ],
+   "why": "This row is a screen-wide rule that covers several conditions together."
+  },
+  {
+   "rows": [
+    "V-7a25c7ad"
+   ],
+   "why": "This row checks the column layout for Division 81."
+  },
+  {
+   "rows": [
+    "V-8bd1e823"
+   ],
+   "why": "This row compares the MEASURE column's visibility metadata."
+  },
+  {
+   "rows": [
+    "V-d453f65c"
+   ],
+   "why": "This row checks the column layout for Division 82."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:36:24",
+ "cost": 0.6653966
+}

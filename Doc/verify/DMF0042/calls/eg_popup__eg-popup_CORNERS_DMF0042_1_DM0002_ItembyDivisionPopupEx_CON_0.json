@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 274,
+  "at": "2026-11-26T12:11:26.516Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CORNERS DMF0042 #1 DM0002_ItembyDivisionPopupEx COND:btnItemId"
+ },
+ {
+  "menu": "COM0008",
+  "sheet": "itemByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0008/itemByDivision/SEARCH/call-proc",
+  "postData": "{}",
+  "status": 200,
+  "rows": 1,
+  "dur": 120,
+  "at": "2026-11-26T12:11:32.901Z",
+  "user": "minyonglee1",
+  "test": "@eg-popup CORNERS DMF0042 #1 DM0002_ItembyDivisionPopupEx COND:btnItemId"
+ }
+]

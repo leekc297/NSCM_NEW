@@ -65,15 +65,10 @@
 | unreached:(진입점 미연결) | <field:dtYesOrNo> | 221 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | mSave | 477 | DM.PR_DM_ADM_DQ_CREATE | MATCH | SP PR_DM_ADM_DQ_CREATE |
 | unreached:(진입점 미연결) | SaveDataBiz | 575 | biz:GSCM_DM_Mst_BLL.mSet_DM0006_CustomerModelMapping_INT | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | SaveDataBiz | 579 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | unreached:(진입점 미연결) | SaveData_BizService | 602 | biz:GSCM_DM_Mst_BLL.mSetTestList | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | SaveData_BizService | 604 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | unreached:(진입점 미연결) | SaveData_BizServiceCollection | 625 | biz:GSCM_DM_Mst_BLL.mSetTestListCollection | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | SaveData_BizServiceCollection | 627 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | unreached:(진입점 미연결) | SaveData_BizServiceCollection2 | 650 | biz:GSCM_DM_Mst_BLL.mSetTestListCollection2 | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | SaveData_BizServiceCollection2 | 652 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | unreached:(진입점 미연결) | SaveData_BizServiceCollection3 | 694 | biz:GSCM_DM_Mst_BLL.mSetTestListCollection3 | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | SaveData_BizServiceCollection3 | 701 | {?request.QueryId}#{?serviceUri} | UNRESOLVED |  |
 | unreached:(진입점 미연결) | SaveData | 766 | xxxx.InsertQueryId | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | SaveData | 767 | xxxx.DeleteQueryId | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | SaveData | 768 | xxxx.UpdateQueryId | NOT_IN_FOXQUERY |  |
@@ -87,7 +82,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?request.QueryId}#{?serviceUri} | UNRESOLVED | 5 |  |  |  |
 | biz:CommonData.CommonDataList [code=MyDivision] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, UP_FX_GetCommonDataList:SELECT:TB_FX_USERGROUPAUTHEXTENTION |
 | biz:CommonData.CommonDataList [code=UpperDeptId] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_SITE, UP_FX_GetCommonDataList:SELECT:SCM_MST_SSO_DEPT_INFO |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 3 |  |  |  |
@@ -139,8 +133,8 @@
 | GetCheckedListValue | InitControls:147, FindData:379, btnModelType_Click:778, btnProject_Click:797, clbDivision_SelectedIndexChanged:836, clbDivision_SelectedIndexChanged:841, clbDivision_SelectedIndexChanged:846, clbTeam_SelectedIndexChanged:1423 | CString.GetCheckedListValue | CODE |
 | GetSpdTitle | InitSpread:215 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
 | CreateSheetHeaderColumn | InitSpread:216 | SpreadInfo.CreateSheetHeaderColumn | CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
-| GetChanges | SaveData:770, SaveData:237 | FPExtensions.GetChanges | ROW_ID |
 | SaveData | SaveButton:136 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+| GetChanges | SaveData:237, SaveData:770 | FPExtensions.GetChanges | ROW_ID |
 
 ## 5. 이벤트 배선
 | 대상 | 이벤트 | 핸들러 | 위치 |
@@ -168,22 +162,22 @@
 | dsdm | Changed | Dsdm_Changed | CreateSpread:209 |
 | dsdm | Changed | Dsdm_Changed | Dsdm_Changed:1472 |
 | dsdm | Changed | Dsdm_Changed | Dsdm_Changed:1499 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:209 |
+| this | Load | Form_Load | .ctor:63 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:108 |
 | this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:109 |
 | this.spdMain | KeyUp | spdMain_KeyUp | InitializeComponent:110 |
 | this.clbDivisions | SelectedIndexChanged | clbDivision_SelectedIndexChanged | InitializeComponent:394 |
 | this.btnProject | Click | btnProject_Click | InitializeComponent:431 |
 | this.btnModelType | Click | btnModelType_Click | InitializeComponent:468 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:209 |
 | this | Load | Form_Load | .ctor:95 |
-| this | Load | Form_Load | .ctor:63 |
 
 ## 6. 컨트롤 (103개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 | LayoutControlItem | 28 | layoutControlItem1, layoutControlItem2, layoutControlItem3, layoutControlItem5, layoutControlItem1, layoutControlItem4, layoutControlItem3, layoutControlItem9, layoutControlItem21, layoutControlItem6, layoutControlItem10, layoutControlItem5, layoutControlItem22, lblActive, layoutControlItem25 … |
-| EmptySpaceItem | 12 | emptySpaceItem2, emptySpaceItem3, emptySpaceItem4, emptySpaceItem1, emptySpaceItem5, emptySpaceItem1, emptySpaceItem2, emptySpaceItem4, emptySpaceItem5, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1 |
-| UsrMultiLineEditor | 10 | umltCustomerPJT, umltCustomerModel, umltModel, umltProject, umltCustomerPJT, umltCustomerModel, umltModel, umltProject, txtCity, txtCountry |
+| EmptySpaceItem | 12 | emptySpaceItem2, emptySpaceItem3, emptySpaceItem4, emptySpaceItem1, emptySpaceItem5, emptySpaceItem1, emptySpaceItem2, emptySpaceItem4, emptySpaceItem5, emptySpaceItem1, emptySpaceItem1, emptySpaceItem2 |
+| UsrMultiLineEditor | 10 | umltCustomerPJT, umltCustomerModel, umltModel, umltProject, txtCity, txtCountry, umltCustomerPJT, umltCustomerModel, umltModel, umltProject |
 | UsrLayoutControl | 8 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 8 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
 | UsrCheckedList | 7 | clbRole, clbSalesSite, clbDivisions, clbTeam, clbEndCustomer, clbSalesSite, clbDivisions |
@@ -200,7 +194,7 @@
 | ImageList | 1 | imageList1 |
 | Panel | 1 | panel1 |
 
-## 7. 확인 필요 (12건)
+## 7. 확인 필요 (7건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 154 | FindData | xxxx.xxxx | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
@@ -210,11 +204,6 @@
 | 766 | SaveData | xxxx.InsertQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 767 | SaveData | xxxx.DeleteQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 768 | SaveData | xxxx.UpdateQueryId | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
-| 579 | SaveDataBiz | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 604 | SaveData_BizService | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 627 | SaveData_BizServiceCollection | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 652 | SaveData_BizServiceCollection2 | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 701 | SaveData_BizServiceCollection3 | {?request.QueryId}#{?serviceUri} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

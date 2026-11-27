@@ -1,0 +1,2 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"master/components/capaNewModelPopup","","features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx","428","jsx","<Grid size={2}> <FormItem label={t('LBL00767', '_Nick Name')} labelAlign='right' render={() => ( <InputField fullWidth value={nickName} onChange={e => setNickName(e.target.value)} onKeyDown={e => e.key === 'Enter' && void fetchList()} /> )}"

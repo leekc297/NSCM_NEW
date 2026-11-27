@@ -27,7 +27,7 @@ const setMode = m => (fs.mkdirSync(path.join(root, '.vibe'), { recursive: true }
 const calls = () => { try { return fs.readFileSync(path.join(root, '.vibe', 'calls.txt'), 'utf8').trim().split('\n').filter(Boolean).length; } catch { return 0; } };
 const p = { root, vibeDir, claude: fakeCmd, claudeModel: '' };
 const st = require(path.join(dir, 'orch-state')); const watch = require(path.join(dir, 'orch-watch')); const agent = require(path.join(dir, 'orch-agent'));
-watch.init(p, {}); const notes = []; agent.init({ paths: () => p, serverSvc: null, loadQuick: () => [], notify: (inc, what) => notes.push(what) });
+watch.init(p, { noReloadSweep: true }); /* 2026-11-26: init 5초 뒤 reloadSweep 이 손으로 올린 사건(원인 기록 없음)을 '다시 읽어 올린 중복'으로 해결해 5단계가 5초에 걸리면 실패했음. 이 시험은 reloadSweep 을 확인하지 않음 */ const notes = []; agent.init({ paths: () => p, serverSvc: null, loadQuick: () => [], notify: (inc, what) => notes.push(what) });
 let ok = true; const chk = (name, cond, extra) => { console.log(cond ? 'PASS' : 'FAIL', name, extra || ''); if (!cond) ok = false; };
 const sleep = t => new Promise(r => setTimeout(r, t));
 const waitFor = async (fn, ms = 20000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (fn()) return true; await sleep(150); } return false; };

@@ -152,6 +152,11 @@
 ## 7. 확인 필요 (14건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 809 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_alarm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 789 | usrButton3_Click | FP\{?default:part_service}\AmendMemo#save_alarm | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
+| 813 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 821 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 791 | usrButton3_Click | FP\{?default:part_service}\AmendMemo#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 245 | InitControls | FP\{?default:part_service}\PICAlarm#find_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 279 | InitControls | FP\{?default:part_service}\PICAlarm#find_alarm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 766 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#max_pic_ref | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -159,11 +164,6 @@
 | 229 | InitControls | FP\{?default:part_service}\AmendMemo#find_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 245 | InitControls | FP\{?default:part_service}\AmendMemo#find_alarm | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 757 | usrButton3_Click | FP\{?default:part_service}\AmendMemo#max_pic_ref | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
-| 809 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_alarm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 789 | usrButton3_Click | FP\{?default:part_service}\AmendMemo#save_alarm | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
-| 813 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 821 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 791 | usrButton3_Click | FP\{?default:part_service}\AmendMemo#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 708 | SpdMain_Changed | FP\{?default:part_service}\PICAlarm#get_userinfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 604 | SpdMain_Changed | FP\{?default:part_service}\AmendMemo#get_userinfo | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 

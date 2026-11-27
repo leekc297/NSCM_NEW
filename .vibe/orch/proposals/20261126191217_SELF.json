@@ -1,0 +1,66 @@
+{
+  "id": "20261126191217_SELF",
+  "at": "2026-11-26T19:12:17+09:00",
+  "ms": 1795687937716,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn|newdet|consultnoresponse",
+  "title": "사용자 지적 감지기 추가 U33 consultNoResponse: 창 다시 로드 뒤 VMO 컨설팅을 누르고 주제를 입력했는데 화면 반응 없음",
+  "evidence": "사용자 지적(2026-11-26T18:14:23+09:00) \"로드 후 컨설팅을 누르고 주제를 입력했는데 반응이 없습니다.\"",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/user_checks.json",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfcheck_eligible.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_vision.js"
+  ],
+  "before_after": "DETECTORS 에 consultNoResponse 없음 → 추가. 판정: 컨설팅 요청 기록 뒤 3분 안에 시작, 대기, 실패 기록이 없으면 미응답으로 판정함 · 읽을 기록: .vibe/orch/events.jsonl 에 컨설팅 요청, 시작, 대기, 완료, 실패 type 을 새로 남기고 요청 시각과 첫 응답 시각을 비교함(11-26 현재 consult 계열 type 0건). user_checks.json U33 status pending-detector → active",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)",
+  "rollback": "두 파일을 반영 전 스냅샷으로 되돌림",
+  "impact": "",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:14:55+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:21:43+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-consult.js run 에 사건 consult.request, consult.wait, consult.start, consult.end(ok, why, sec), orch-usercheck.js DETECTORS.consultNoResponse(요청 뒤 waitMin 3분 안 wait/start/end 없으면 fail, 24시간 안 요청), user_checks.json U33 status active, params waitMin 3. test/t_u33_consult.js 9건. run_all 112/112 PASS 1905 FAIL 0(19:25~19:30), 설치 폴더 복사"
+    }
+  ],
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U33",
+  "kind": "detector",
+  "testsAdded": [
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfcheck_eligible.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_vision.js"
+  ],
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795688503179
+}

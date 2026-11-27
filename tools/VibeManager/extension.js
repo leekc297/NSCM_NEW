@@ -775,17 +775,21 @@ function activate(context) {
         Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager 사건 ${inc.rule} ${inc.ruleName}${inc.screen ? ` · ${inc.screen}` : ''} — ${String(inc.title).slice(0, 160)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { });
       });
       // P4 에이전트: 새 사건을 받아 조치(코드 조치 → Claude 조치). 파일을 고쳤거나 사용자 확인이 필요하면 알림
+      // 개선안 20261126164445_VISION_3: VMO 알림 한곳(orch-notify.js). 반영 완료는 10분 묶음, 실패와 사건은 바로, 같은 문구는 10분에 1번, 기록 events.jsonl notify.shown·notify.merged
+      const vmoNt = require('./orch-notify');
+      vmoNt.init({ merge: () => { try { const h = JSON.parse(fs.readFileSync(path.join(paths().root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')); return !(h && h.orch && h.orch.notifyMerge === false); } catch { return true; } },
+        show: (text, o) => { Promise.resolve(vscode.window.showInformationMessage(text, ...(o.button ? [o.button] : []))).then(a => { if (a && o.open) vscode.commands.executeCommand('vibeManager.openOrchestra', o.open); }, () => { }); } });
       require('./orch-agent').init({
         paths, serverSvc: require('./server-service'),
         loadQuick: () => promptPanel.loadQuick(paths().extDir, paths().root).groups.flatMap(g => g.items || []),
-        notify: (inc, what) => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO — ${inc.rule}${inc.screen ? ` ${inc.screen}` : ''}: ${String(what).slice(0, 200)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { }); },
+        notify: (inc, what) => { vmoNt.send('incident', `Vibe_Manager VMO — ${inc.rule}${inc.screen ? ` ${inc.screen}` : ''}: ${String(what).slice(0, 200)}`, { button: '사건 보기', open: 'inc' }); },
       });
       // P8·P9 업무 작업 실행기. 서버 이상(R6)·TCP 연결 수(R8) 사건이 생기면 실행 중 작업을 일시 중지하고 사건이 해결되면 다시 진행한다
       try { const jr = require('./job-runner'); jr.init(wbApi()); jr.attachWatch(watch); } catch (e) { log(`VMW 실행기 시작 실패: ${e.message}`); }
       // 2026-11-20 자가 복구: 화면 진입 실패(R13) → 원인 확인 → 해결 → 확인 → 그 화면 다시 실행. 풀지 못하면 에이전트로 넘김
-      try { require('./orch-heal').init({ paths, notify: (inc, what) => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO 자가 복구 ${inc.screen}: ${String(what).slice(0, 200)}`, '사건 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'inc'); }, () => { }); } }); } catch (e) { log(`자가 복구 시작 실패: ${e.message}`); }
+      try { require('./orch-heal').init({ paths, notify: (inc, what) => { vmoNt.send('incident', `Vibe_Manager VMO 자가 복구 ${inc.screen}: ${String(what).slice(0, 200)}`, { button: '사건 보기', open: 'inc' }); } }); } catch (e) { log(`자가 복구 시작 실패: ${e.message}`); }
       // P5 상시 개선안: 체인이 끝났을 때와 1시간마다 확인해 마지막 분석에서 reviewEveryHours 지났으면 분석 1회. 반영은 사용자 승인 뒤에만
-      require('./orch-improve').init({ notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO — ${String(text).slice(0, 200)}`, '개선안 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'prop'); }, () => { }); } });
+      require('./orch-improve').init({ notify: (text, kind, key) => { vmoNt.send(kind || vmoNt.kindOf(text), `Vibe_Manager VMO — ${String(text).slice(0, 200)}`, { key, button: '개선안 보기', open: 'prop' }); } });
       // 2026-11-19 자가진단 Q2~Q6: 작업 이력 취합과 VM 자가진단. 수집 · 점검은 코드만 쓰고 Claude 는 진단과 주제별 정리에서만 부른다
       try {
         require('./orch-history').init({ paths });
@@ -795,9 +799,9 @@ function activate(context) {
         setTimeout(() => { try { const rs = workbench.resumable(paths()); if (!rs.length) return; const jobsN = new Set(rs.filter(r => r.job).map(r => r.job)).size; const wbN = rs.filter(r => !r.job).length;
           Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager: 창 다시 로드로 끊긴 작업 재개 가능 ${rs.length}건(VMW 작업 ${jobsN} · Workbench 체인 ${wbN}). 끊긴 단계부터 다시 실행할 수 있습니다`, ...(jobsN ? ['VMW 열기'] : []), ...(wbN ? ['Workbench 열기'] : []))).then(a => { if (a === 'VMW 열기') vscode.commands.executeCommand('vibeManager.openJobs'); else if (a === 'Workbench 열기') vscode.commands.executeCommand('vibeManager.openWorkbench'); });
         } catch (e) { log(`재개 알림 실패: ${e.message}`); } }, 8000);
-        require('./orch-vision').init({ paths, settings: () => ({ visionEnabled: cfg().get('orch.visionEnabled') !== false, visionEveryDays: Number(cfg().get('orch.visionEveryDays')) || 1 }), notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO. ${String(text).slice(0, 200)}`, '개선안 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'prop'); }); } });
+        require('./orch-vision').init({ paths, settings: () => ({ visionEnabled: cfg().get('orch.visionEnabled') !== false, visionEveryDays: Number(cfg().get('orch.visionEveryDays')) || 1 }), notify: text => { vmoNt.send('approval', `Vibe_Manager VMO. ${String(text).slice(0, 200)}`, { button: '개선안 보기', open: 'prop' }); } });
         // 개선안 20261122130655_REVIEW_2: busy = 실행 중 체인(workbench liveChains) 있음 · subscribeChainEnd = events chain.end 구독 · notifyReload = 실행 중 체인 0개일 때 창 다시 로드 알림 1회
-        require('./orch-selfcheck').init({ paths, notify: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO 자가진단. ${String(text).slice(0, 200)}`, '자가진단 보기')).then(a => { if (a) vscode.commands.executeCommand('vibeManager.openOrchestra', 'self'); }, () => { }); },
+        require('./orch-selfcheck').init({ paths, notify: (text, kind, key) => { const k = kind || vmoNt.kindOf(text); vmoNt.send(k === 'other' ? 'selfcheck' : k, `Vibe_Manager VMO 자가진단. ${String(text).slice(0, 200)}`, { key, button: k === 'applied' || k === 'apply-failed' ? '개선안 보기' : '자가진단 보기', open: k === 'applied' || k === 'apply-failed' ? 'prop' : 'self' }); },
           busy: () => { const m = workbench._liveChains; return !!(m && m.size > 0); },
           subscribeChainEnd: fn => { const off = require('./orch-events').on(ev => { if (ev && ev.type === 'chain.end') setTimeout(fn, 1000); }); const iv = setInterval(fn, 60000); if (iv.unref) iv.unref(); return () => { try { off(); } catch { } clearInterval(iv); }; }, // 단일 질문 실행(workbench.js:846)은 chain.end 가 없어 60초 확인을 같이 둠
           notifyReload: text => { Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager VMO. ${String(text).slice(0, 240)}`, 'Reload Window')).then(a => { if (a) vscode.commands.executeCommand('workbench.action.reloadWindow'); }, () => { }); } });
@@ -814,6 +818,7 @@ function deactivate() {
   try { require('./orch-selfcheck').dispose(); } catch { }
   try { require('./orch-vision').dispose(); } catch { }
   try { require('./orch-improve').dispose(); } catch { }
+  try { require('./orch-notify').dispose(); } catch { } // 개선안 20261126164445_VISION_3
   try { require('./orch-agent').dispose(); } catch { }
   try { require('./orch-watch').dispose(); } catch { }
   try { require('./orch-state').dispose(); } catch { }

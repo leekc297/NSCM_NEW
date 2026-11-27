@@ -12,7 +12,7 @@ const servers = {};              // name → terminal
 
 function loadQuick(extDir, root) {
   const cands = [path.join(root, '.vibe', 'quick.json'), path.join(root, 'tools', 'VibeManager', 'quick.json'), path.join(extDir, 'quick.json')];
-  for (const f of cands) if (fs.existsSync(f)) { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch (e) { vscode.window.showWarningMessage(`quick.json 파싱 실패: ${f}. ${e.message}`); } }
+  for (const f of cands) if (fs.existsSync(f)) { try { return require('./quick-tpl').expand(JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, ''))); } /* 2026-11-26 개선안 20261126164547_SELF: 체인 { use } 단계 틀 펼침 */ catch (e) { vscode.window.showWarningMessage(`quick.json 파싱 실패: ${f}. ${e.message}`); } }
   return { groups: [] };
 }
 const subst = (s, vars) => String(s == null ? '' : s).replace(/\$\{(\w+)\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m));

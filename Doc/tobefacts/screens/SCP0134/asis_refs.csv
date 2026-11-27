@@ -1,4 +1,5 @@
 ﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"supply/plan-management","SCP0134","features/supply/src/pages/plan-management/components/PlanManagementForm.tsx","123","","","","SCM_ADM_MSG_M","캡션·LBL = SCM_ADM_MSG_M 실측(design 02 §4.5). PlanWeek 캡션은 AS-IS 그대로 ""Plan Date*""(필수 표시)이나 실제 필수검증에서는 제외(ConditionNotUseList — design 02 §4 순서1)"
 "supply/plan-management","SCP0134","features/supply/src/pages/plan-management/plan-management.constants.ts","4","SCP0134","","","SCM_ADM_MNU_BTN_MPG_M","BE 프로시저 라우팅 키 — DB SCM_ADM_MNU_BTN_MPG_M.SHT_NM 실측값(SCP0134 신규등록 05_register.sql)."
 "supply/plan-management","SCP0134","features/supply/src/pages/plan-management/plan-management.constants.ts","5","SCP0015","","","","SCP0015 의 planConfirm 채널은 폐지(확인정보가 mainGrid O_RC 본문에 동봉됨)."
 "supply/plan-management","SCP0134","features/supply/src/pages/plan-management/plan-management.constants.ts","14","","","","SCM_MST_SHEET_COLUMNS","admin SCM_MST_SHEET_COLUMNS.SHEET_NAME (사용자 선등록분, SHT_NM 과 다른 값 공간)"

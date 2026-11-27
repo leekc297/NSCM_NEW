@@ -185,11 +185,11 @@
 |---|---|---|---|
 | GetDMInnerTable | SetChangeControl:160 | DataService.GetDMInnerTable | CODE, DEPT_ID, DIVISION_ID, END_CUSTOMER, NAME |
 | FP_Log2 | InitControls:172, InitControls:184 | DataService.FP_Log2 | LOGTYPE, NOTE, USER_ID |
-| GetCheckedListValue | InitControls:180, clbDivision_SelectedIndexChanged:1463, SaveData:245, FindData:250, SaveData:305, GetSpdTitle:280, FindData:418, FindData:198 | CString.GetCheckedListValue | CODE |
+| GetCheckedListValue | InitControls:180, clbDivision_SelectedIndexChanged:1463, FindData:250, SaveData:305, SaveData:245, FindData:418, GetSpdTitle:280, FindData:198 | CString.GetCheckedListValue | CODE |
 | GetMeasure | InitControls:191 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | SetSheetHeaderColumn | InitSpread:235 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
 | CreateSheetHeaderColumnDtDiv | InitSpread:236 | SpreadInfo.CreateSheetHeaderColumnDtDiv | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
-| SaveData | SaveButton:376, SaveButton:238, btnButtonList_UsrButtonList_Click_Detected:423, SaveButton:213, SaveButton:406, btnButtonList_UsrButtonList_Click_Detected:694, SaveButton:226, btnButtonList_UsrButtonList_Click_Detected:400 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+| SaveData | SaveButton:376, SaveButton:238, btnButtonList_UsrButtonList_Click_Detected:423, SaveButton:406, btnButtonList_UsrButtonList_Click_Detected:694, SaveButton:226, btnButtonList_UsrButtonList_Click_Detected:400, SaveButton:213 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
 | LoadData | btnExchangeRate_Click:1442, btnTextbox_Click:1477, btnCopy_Click:365 | UsrCheckedListBox.LoadData | APPLFACTORY, APPLSITE, CODE, FACTORY, NAME, OPERGROUP, PANELFACTORY, PANELSITE, RESOURCE, SCHGROUP, SHIFTTYPE, SITE, ShiftType |
 | CreateSheetHeaderColumn | InitSpread:178, InitSpread:175, InitSpread:172 | SpreadInfo.CreateSheetHeaderColumn | CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, LARGE_CLASS_LABEL_NAME, PROGRAM_ID, SHEET_NAME, SMALL_CLASS_LABEL_NAME, UPPERCASE_APPLY_FLAG, VALID_YN |
 | GetSpdTitle | InitSpread:174 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
@@ -209,15 +209,20 @@
 | clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:198 |
 | dsdm | Changed | spdMain_Changed | DefineProperty:207 |
 | this.clbDivision | SelectedIndexChanged | clbDivision_SelectedIndexChanged | DefineProperty:208 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:177 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:382 |
+| this | Load | Form_Load | .ctor:96 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:171 |
 | this.btnCopy | Click | btnCopy_Click | InitializeComponent:283 |
 | this.btnTransfer | Click | btnTransfer_Click | InitializeComponent:320 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:430 |
 | this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:431 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:187 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:278 |
 | this | Load | Form_Load | .ctor:85 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:177 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:382 |
-| this | Load | Form_Load | .ctor:96 |
+| this | Load | Form_Load | .ctor:78 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:169 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:213 |
 | this.btnVerCopy | Click | btnVerCopy_Click | InitializeComponent:272 |
 | this.btnVerDel | Click | btnVerDel_Click | InitializeComponent:309 |
 | this.btnTranCancel | Click | btnTranCancel_Click | InitializeComponent:346 |
@@ -231,35 +236,30 @@
 | this.chkMV | CheckedChanged | chkMV_CheckedChanged | InitializeComponent:788 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1066 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1067 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:187 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:278 |
-| this | Load | Form_Load | .ctor:89 |
-| clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:129 |
-| clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:138 |
-| this | Load | Form_Load | .ctor:78 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:169 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:213 |
 | this | Load | Form_Load | .ctor:80 |
 | this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:175 |
 | this.btnTransfer | Click | btnTransfer_Click | InitializeComponent:302 |
 | this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:417 |
+| this | Load | Form_Load | .ctor:89 |
+| clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:129 |
+| clbType | SelectedIndexChanged | clbType_SelectedIndexChanged | InitControls:138 |
 | this | Load | Form_Load | .ctor:84 |
 
 ## 6. 컨트롤 (152개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 46 | lblSPVersion, layoutControlItem1, lblType, lblYear, lblDataType, layoutControlItem4, layoutControlItem2, lblDivision, lci_btnTextBox, layoutControlItem2, Period, clbDivisions, layoutControlItem6, layoutControlItem1, layoutControlItem2 … |
+| LayoutControlItem | 46 | lblSPVersion, layoutControlItem1, lblType, lblYear, lblDataType, layoutControlItem4, layoutControlItem2, lblDivision, lci_btnTextBox, layoutControlItem2, lblDivision, layoutControlItem4, Period, layoutControlItem1, layoutControlItem2 … |
 | UsrButton | 15 | btnTextbox, btnExchangeRate, btnSPVer, btnMeasure, btnCopy, btnTransfer, btnVerCopy, btnVerDel, btnTranCancel, btnTransfer, btnVerCre, btnOK, btnClose, usrButton1, btnTransfer |
 | UsrLayoutControl | 14 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2 |
 | LayoutControlGroup | 14 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2 |
-| EmptySpaceItem | 11 | emptySpaceItem1, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem3, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1 |
-| UsrCombo | 10 | clbType, usrYear, usrDataType, clbDivision, clbDivision, clbDivision, clbType, clbDivision, usrYear, clbDivision |
+| EmptySpaceItem | 11 | emptySpaceItem1, emptySpaceItem1, emptySpaceItem3, emptySpaceItem2, emptySpaceItem2, emptySpaceItem1, emptySpaceItem1, emptySpaceItem1, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1 |
+| UsrCombo | 10 | clbType, usrYear, usrDataType, clbDivision, clbDivision, clbDivision, usrYear, clbDivision, clbType, clbDivision |
 | UsrConditionPanel | 7 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
 | SheetView | 7 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
 | FpSpread | 7 | spdMain, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain |
 | UsrButtonList | 5 | btnButtonList, btnButtonList, btnButtonList, btnButtonList, btnButtonList |
-| UsrDateRangePicker | 4 | drpPeriod, drpPeriod, drpPeriod, drpPeriod |
 | TextBox | 4 | txtDes, txtType, txtDes, txtType |
+| UsrDateRangePicker | 4 | drpPeriod, drpPeriod, drpPeriod, drpPeriod |
 | UsrCheckBox | 3 | chkUpdate, chkResult, chkMV |
 | UsrMultiLineEditor | 2 | txtSPVersion, txtDesc |
 | UsrCheckedList | 1 | clbDivisions |
@@ -305,7 +305,7 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: MDF Reports, MDFVerpopup2, Cut-Off PopUp, MDFVerpopup, Sales Price PopUp, Textbox Popup
+- 코드에서 생성하는 시트: MDF Reports, Cut-Off PopUp, MDFVerpopup2, Sales Price PopUp, Textbox Popup, MDFVerpopup
 - 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:235, CreateSheetHeaderColumnDtDiv@InitSpread:236, CreateSheetHeaderColumn@InitSpread:178, CreateSheetHeaderColumn@InitSpread:175, CreateSheetHeaderColumn@InitSpread:172
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

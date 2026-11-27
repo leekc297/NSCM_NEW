@@ -14,20 +14,20 @@
 | features/supply/src/pages/opt-capa/components/modals/NoWorkWeekModal.tsx | component | 73 |
 | features/supply/src/pages/opt-capa/components/OptCapaForm.tsx | component | 229 |
 | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | component | 595 |
-| features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | hook | 626 |
+| features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | hook | 628 |
 | features/supply/src/pages/opt-capa/hooks/useOptCapaSave.ts | hook | 69 |
 | features/supply/src/pages/opt-capa/hooks/useOptCapaSheets.ts | hook | 193 |
-| features/supply/src/pages/opt-capa/hooks/useOptCapaValidation.ts | hook | 378 |
+| features/supply/src/pages/opt-capa/hooks/useOptCapaValidation.ts | hook | 424 |
 | features/supply/src/pages/opt-capa/index.ts | index | 5 |
-| features/supply/src/pages/opt-capa/opt-capa.constants.ts | constants | 657 |
+| features/supply/src/pages/opt-capa/opt-capa.constants.ts | constants | 684 |
 | features/supply/src/pages/opt-capa/opt-capa.types.ts | types | 89 |
 | features/supply/src/pages/opt-capa/OptCapa.module.scss | style | 9 |
-| features/supply/src/pages/opt-capa/OptCapa.tsx | page | 412 |
+| features/supply/src/pages/opt-capa/OptCapa.tsx | page | 426 |
 | features/supply/src/pages/opt-capa/useOptCapaStore.ts | store | 275 |
 | features/supply/src/pages/opt-capa/utils/optCapa.candidates.ts | util | 315 |
 | features/supply/src/pages/opt-capa/utils/optCapa.editLock.ts | util | 115 |
 | features/supply/src/pages/opt-capa/utils/optCapa.excelForm.ts | util | 21 |
-| features/supply/src/pages/opt-capa/utils/optCapa.save.ts | util | 395 |
+| features/supply/src/pages/opt-capa/utils/optCapa.save.ts | util | 474 |
 | features/supply/src/pages/opt-capa/utils/optCapa.sheetVisibility.ts | util | 125 |
 | features/supply/src/pages/opt-capa/utils/optCapa.week.ts | util | 30 |
 | features/supply/src/pages/opt-capa/__asis-mapping__.md | mapping | 438 |
@@ -41,10 +41,10 @@
 | /SCP0126/{sheet}/SAVE/call-proc | http | 1 | N | useOptCapaSave.ts:54 |
 | (useTabComboQueries) | hook | 2 | Y | useOptCapaSheets.ts:57 useOptCapaSheets.ts:61 |
 | SCP0126/init//call-proc | hook | 1 | Y | useOptCapaSheets.ts:98 |
-| SCP0126/{?querySheet}//call-proc | hook | 1 | N | OptCapa.tsx:135 |
-| /SCP0126/{ADMIN_SHEET_NAME[SHEETS.NO_WORK]}/UPLOAD_SAVE/call-proc | http | 1 | N | OptCapa.tsx:362 |
+| SCP0126/{?querySheet}//call-proc | hook | 1 | N | OptCapa.tsx:149 |
+| /SCP0126/{ADMIN_SHEET_NAME[SHEETS.NO_WORK]}/UPLOAD_SAVE/call-proc | http | 1 | N | OptCapa.tsx:376 |
 | /admin/menu/SCP0126/search-conditions | http | 1 | Y | useOptCapaStore.ts:251 |
-| /SCP0126/noWorkWeek\|noWork\|dailyCapa\|sopEop\|rampUp\|rampUpItvl\|prepRt\|utilRt\|yldElec/SAVE/call-proc | propagated | 1 | Y | useOptCapaActions.tsx:397 |
+| /SCP0126/noWorkWeek\|noWork\|dailyCapa\|sopEop\|rampUp\|rampUpItvl\|prepRt\|utilRt\|yldElec/SAVE/call-proc | propagated | 1 | Y | useOptCapaActions.tsx:398 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -94,18 +94,18 @@
 | grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 508 |
 | grid | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 534 |
 | grid.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/opt-capa/components/OptCapaGrid.tsx | 563 |
-| OptCapaForm | onSearch | actions.handleSearch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 266 |
-| OptCapaForm | onModelSearch | <arrow> setOpenModelPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 267 |
-| OptCapaGrid | onItemCellDblClick | actions.openItemPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 310 |
-| OptCapaGrid | onWeekCellDblClick | actions.showWeekPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 311 |
-| NoWorkBatchModal | onClose | actions.closeBatch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 326 |
-| NoWorkBatchModal | onSaved | actions.refreshAfterExternalSave | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 327 |
-| NoWorkWeekModal | onClose | actions.closeWeekPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 349 |
-| NoWorkWeekModal | onSelect | actions.handleWeekSelect | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 350 |
-| NoWorkExcelUploadModal | onUploaded | actions.refreshAfterExternalSave | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 357 |
-| NoWorkExcelUploadModal | onSave | <arrow> apiClient.post,Number | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 358 |
-| ModelByDivisionPopup | onClose | actions.closeItemPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 397 |
-| ModelByDivisionPopup | onSelect | <arrow> actions.handleItemSelect,str | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 399 |
+| OptCapaForm | onSearch | actions.handleSearch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 280 |
+| OptCapaForm | onModelSearch | <arrow> setOpenModelPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 281 |
+| OptCapaGrid | onItemCellDblClick | actions.openItemPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 324 |
+| OptCapaGrid | onWeekCellDblClick | actions.showWeekPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 325 |
+| NoWorkBatchModal | onClose | actions.closeBatch | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 340 |
+| NoWorkBatchModal | onSaved | actions.refreshAfterExternalSave | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 341 |
+| NoWorkWeekModal | onClose | actions.closeWeekPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 363 |
+| NoWorkWeekModal | onSelect | actions.handleWeekSelect | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 364 |
+| NoWorkExcelUploadModal | onUploaded | actions.refreshAfterExternalSave | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 371 |
+| NoWorkExcelUploadModal | onSave | <arrow> apiClient.post,Number | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 372 |
+| ModelByDivisionPopup | onClose | actions.closeItemPopup | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 411 |
+| ModelByDivisionPopup | onSelect | <arrow> actions.handleItemSelect,str | jsx | features/supply/src/pages/opt-capa/OptCapa.tsx | 413 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -200,14 +200,17 @@
 | LBL00757 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0126(10), SCP0006(4), SCP0005(3), SCM0008(2), SCP0114(2), DMF0009(1), SCP0120(1), SSP0025(1), SCP0025(1)
-- SP/PKG: PKG_SCP0126(10), P_SPLIT(4), P_SCP0126_SAVE_NO_WORK_BATCH(2), P_RESULT_ERR(1), P_RESULT_OK(1), P_SCP0126_GET(1), P_LINE_ID(1), P_VALUE(1), P_PLANT_ID(1), P_DIVISION_ID(1), P_SCP0126_SAVE_NO_WORK_WEEK(1)
+- 화면ID: SCP0126(10), SCP0006(4), SCP0005(3), SCM0008(2), SCP0114(2), DMF0009(1), SCP0120(1), SSP0025(1), SCP0031(1), SCM0002(1), COM0008(1), SCP0025(1)
+- SP/PKG: PKG_SCP0126(11), P_SPLIT(4), P_SCP0126_SAVE_NO_WORK_BATCH(2), P_RESULT_ERR(1), P_RESULT_OK(1), P_SCP0126_GET(1), P_LINE_ID(1), P_VALUE(1), PKG_SCM0002(1), P_PLANT_ID(1), P_DIVISION_ID(1), P_PRE_TYPE(1), P_SCP0126_SAVE_NO_WORK_WEEK(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| jsx | **버튼 가시성은 권한별이다** — 각 키에 `authorized && hasButton('<BTN_CD>')` 게이트를 곱한다. 권한(`SCM_ADM_USER_GR_MNU_BTN_MPG_M` → `/admin/menu/SCP0126/auth` → `hasButton`)이 있으면 실제 핸들러를, 없으면 `false` 를 둔다. 공용 `SubTitle` 은 값이 `false` 인 버튼을 렌더하지 않으므로 (`SubTitle.ts | features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | 509 |
+| jsx | **버튼 가시성은 권한별이다** — 각 키에 `authorized && hasButton('<BTN_CD>')` 게이트를 곱한다. 권한(`SCM_ADM_USER_GR_MNU_BTN_MPG_M` → `/admin/menu/SCP0126/auth` → `hasButton`)이 있으면 실제 핸들러를, 없으면 `false` 를 둔다. 공용 `SubTitle` 은 값이 `false` 인 버튼을 렌더하지 않으므로 (`SubTitle.ts | features/supply/src/pages/opt-capa/hooks/useOptCapaActions.tsx | 511 |
+| code | No Work **Week** — 라인·주 단위 Off Time 합계 7 초과 차단 (AS-IS `Save_NoWork_Week` cs:1719~1753). Week 모드에서만 돈다(`isWeekNoWork`). 그룹키는 AS-IS 와 동일하게 전극(`EE*`)이면 `LINE_TYPE` 포함, 아니면 제외(cs:1723·1728). 합계 대상은 삭제행을 뺀 저장행의 `OFF_TIME`(일 단위 — GET 이 초/86400 로  | features/supply/src/pages/opt-capa/hooks/useOptCapaValidation.ts | 366 |
 | endpoint | admin `SCM_MST_SHEET_COLUMNS` 동적 fetch(8시트) — 미등록/실패 시 빈 배열 유지(hook #113 §1-3). | features/supply/src/pages/opt-capa/useOptCapaStore.ts | 36 |
-| endpoint | 저장 payload 조립 — SAVE SP 8종의 `all_arguments`/`SCM_ADM_PROC_M` 실측 계약 이식(design 03 §4.3). 전 SP 가 `activeFlag` 로 시작하는 **컬럼별 `'^'`-결합 CLOB** + 마지막 `sesUserId`(VARCHAR) 규약이다. 키명은 `SCM_ADM_PROC_M.COL_NM` **camelCase** 그대로다 (메모리 `scp-proc-m-colnm-i | features/supply/src/pages/opt-capa/utils/optCapa.save.ts | 20 |
+| endpoint | 저장 payload 조립 — SAVE SP 8종의 `all_arguments`/`SCM_ADM_PROC_M` 실측 계약 이식(design 03 §4.3). 전 SP 가 `activeFlag` 로 시작하는 **컬럼별 `'^'`-결합 CLOB** + 마지막 `sesUserId`(VARCHAR) 규약이다. 키명은 `SCM_ADM_PROC_M.COL_NM` **camelCase** 그대로다 (메모리 `scp-proc-m-colnm-i | features/supply/src/pages/opt-capa/utils/optCapa.save.ts | 21 |
+| code | #5 전송 정렬키 — AS-IS `saveData.OrderByDescending(x => x.Key)`(cs:1897) 의 복합키. `division^plant^line^operation^line_type^week_name(ISO)^type('-')` 로 **내림차순** 정렬해 보낸다. 복수 Type 이 같은 주/라인의 일별 용량(86400s)을 나눠 채우는 순서를 결정하므로(SP DML BODY:4621-4643) AS-I | features/supply/src/pages/opt-capa/utils/optCapa.save.ts | 425 |
+| code | #5 AS-IS OrderByDescending(x => x.Key) 등가 — 복합키 내림차순(문자열 비교). | features/supply/src/pages/opt-capa/utils/optCapa.save.ts | 461 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 95

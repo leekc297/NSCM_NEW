@@ -116,13 +116,13 @@
 ## 7. 확인 필요 (8건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 788 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_alarm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 792 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 800 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 224 | InitControls | FP\{?default:part_service}\PICAlarm#find_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 258 | InitControls | FP\{?default:part_service}\PICAlarm#find_alarm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 745 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#max_pic_ref | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 864 | usrButton2_Click | FP\{?default:part_service}\PICAlarm#find_alarm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 788 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_alarm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 792 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 800 | usrButton3_Click | FP\{?default:part_service}\PICAlarm#save_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 687 | SpdMain_Changed | FP\{?default:part_service}\PICAlarm#get_userinfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)

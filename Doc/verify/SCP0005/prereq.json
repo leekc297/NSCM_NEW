@@ -1,7 +1,7 @@
 {
  "menu_id": "SCP0005",
  "asis_id": "SCP0005",
- "generated": "2026-11-26 01:14:47",
+ "generated": "2026-11-26 18:05:56",
  "rc": 0,
  "items": [
   {
@@ -23,14 +23,14 @@
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
    "status": "OK",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "5.9시간 전 export(기준 12시간)"
+   "evidence": "0.4시간 전 export(기준 12시간)"
   },
   {
    "key": "tobe_index",
    "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
-   "status": "OK",
+   "status": "DONE",
    "producer": "tools/TobeFacts/run.ps1",
-   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\distribution-route · 인덱스 최신"
+   "evidence": "FE 소스가 인덱스보다 최신 → 재추출 · rc=0 · 30s · ojects\\NSCM\\Doc\\tobefacts 4/4 프레임워크·공통 카탈로그 framework: export 525 (component 71, constant 85, function 173, hook 27, store 27, type 108, class 3, enum 13, namespace-object 6, value 12) → C:\\Projects\\NSCM\\Doc\\tobefacts\\framework · 카탈로그 C:\\Projects\\NSCM\\tools\\Harness\\rules/tobe_catalog.csv 완료: C:\\Projects\\NSCM\\Doc\\tobefacts (화면별: C:\\Projects\\NSCM\\Doc\\tobefacts\\screens\\<MENU_ID>\\<MENU_ID>_summary.md)"
   },
   {
    "key": "mapping_md",
@@ -63,16 +63,16 @@
   {
    "key": "e2e_spec",
    "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
-   "status": "OK",
-   "producer": "tools/E2E/gen-e2e.js",
-   "evidence": "최신"
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 0s · SCP0005: AS-IS 팝업 클래스 안 시트 메인 제외 — POPUP SCP0005 테스트 모드 admin (users.json screens) → 계정 2: jooyong026, dana.robot SCP0005 → SCP0005 smoke/crud(save)/auth(2계정)/authcrud(기대 있음 2계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 2행 · 색인 전체 29화면/35행)"
   },
   {
    "key": "smoke",
    "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
    "status": "DONE",
    "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
-   "evidence": "smoke 3건 실행 · rc=0 · 98s · cts\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_011309_smoke.log FE 5173 / BE 8080 responding Playwright smoke SCP0005 running - output goes to the log file # E2E 결과 — 2026-11-26 01:14 테스트 8 · PASS 8 · FAIL 0 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_011309_smoke.log"
+   "evidence": "smoke 3건 실행 · rc=0 · 100s · cts\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_180416_smoke.log FE 5173 / BE 8080 responding Playwright smoke SCP0005 running - output goes to the log file # E2E 결과 — 2026-11-26 18:05 테스트 8 · PASS 8 · FAIL 0 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\SCP0005\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\SCP0005\\run_20261126_180416_smoke.log"
   }
  ]
 }

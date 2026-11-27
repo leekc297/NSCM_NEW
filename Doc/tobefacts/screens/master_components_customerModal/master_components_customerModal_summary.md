@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/customerModal/customer-modal.constants.ts | constants | 8 |
-| features/master/src/components/customerModal/CustomerModal.module.scss | style | 21 |
+| features/master/src/components/customerModal/CustomerModal.module.scss | style | 22 |
 | features/master/src/components/customerModal/CustomerModal.tsx | page | 268 |
 | features/master/src/components/customerModal/customerModalStore.ts | store | 41 |
 
@@ -30,8 +30,8 @@
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/customerModal/CustomerModal.tsx | 199 |
 | InputField | onChange | <arrow> setShipToInput | jsx | features/master/src/components/customerModal/CustomerModal.tsx | 213 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/customerModal/CustomerModal.tsx | 214 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/customerModal/CustomerModal.tsx | 253 |
-| Button | onClick | modalClose | jsx | features/master/src/components/customerModal/CustomerModal.tsx | 260 |
+| Button | onClick | modalClose | jsx | features/master/src/components/customerModal/CustomerModal.tsx | 251 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/customerModal/CustomerModal.tsx | 260 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

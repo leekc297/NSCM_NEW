@@ -1,0 +1,329 @@
+{
+ "rule_id": "C2",
+ "hash": "30519494f5578d24",
+ "groups": [
+  {
+   "rows": [
+    "T-0d98064a"
+   ],
+   "why": "TRACE 진입점 clbTeam_SelectedIndexChanged는 대조표 행이 소스에 실존하는지 확인하는 행이라 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-0f7cfd8a"
+   ],
+   "why": "TRACE 진입점 cboBucketType_SelectedIndexChanged는 성질이 다른 추적 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-16b1d582"
+   ],
+   "why": "TRACE spdMain_Changed 구간(L1800~2723)을 추적하는 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-25edb47b"
+   ],
+   "why": "TRACE SOLDTO_NAME 컬럼을 추적하는 행이고 같은 컬럼을 다루는 ASIS 행이 없다."
+  },
+  {
+   "rows": [
+    "T-4c75d8e5"
+   ],
+   "why": "TRACE SCM_SITE_ID 컬럼을 추적하는 행으로, ASIS 셀 콤보 후보와는 확인하는 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-4c8b822f"
+   ],
+   "why": "TRACE DEMAND_OPERATION 팝업 컬럼을 추적하는 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-5ad163c9"
+   ],
+   "why": "TRACE END_CUSTOMER40 메타 콤보 출처를 추적하는 행으로, ASIS 후보 확인과 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-5b7235e3"
+   ],
+   "why": "TRACE 진입점 clbCustomer_SelectedIndexChanged는 추적 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-5f45dbc7"
+   ],
+   "why": "TRACE 진입점 cboDivision_SelectedIndexChanged는 추적 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-63c43d30"
+   ],
+   "why": "TRACE COUNTRY 컬럼을 추적하는 행이고 같은 컬럼의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-67b1f424"
+   ],
+   "why": "TRACE END_CUSTOMER 메타 콤보 출처를 추적하는 행으로, ASIS 행과 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-6fdd2ed4"
+   ],
+   "why": "TRACE Division 분기 전수를 집계하는 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-8bc867f5"
+   ],
+   "why": "TRACE DIVISION_ID 원장 추적 행으로, ASIS 콤보 후보와 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-8bed291c"
+   ],
+   "why": "TRACE CITY 컬럼을 추적하는 행이고 같은 컬럼의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-8d72bc64"
+   ],
+   "why": "TRACE SCM_SITE_ID40 메타 콤보 SiteByEndCustomer를 추적하는 행으로, ASIS 행과 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-9a818428"
+   ],
+   "why": "TRACE UNIT_ENERGY 컬럼을 추적하는 행이고 같은 컬럼의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-b724a1f3"
+   ],
+   "why": "TRACE DEPT_ID40 메타 콤보 출처를 추적하는 행으로, ASIS 행과 성질이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-c6d2c91d"
+   ],
+   "why": "TRACE SHIPTO_NAME 컬럼을 추적하는 행이고 같은 컬럼의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-d124c29f"
+   ],
+   "why": "TRACE SHIPTO_CODE 컬럼을 추적하는 행이고 같은 컬럼의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-d1ea5166"
+   ],
+   "why": "TRACE IMPUTATION_YN 팝업 컬럼을 추적하는 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-d5cb79f4"
+   ],
+   "why": "TRACE spdMain_EditChange 구간을 추적하는 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-d64e4edd"
+   ],
+   "why": "TRACE 진입점 chkSum_CheckedChanged는 추적 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-dae8a99c"
+   ],
+   "why": "TRACE SOLDTO_CODE 컬럼을 추적하는 행이고 같은 컬럼의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-ec15d598"
+   ],
+   "why": "TRACE MEASURE 메타 콤보를 추적하는 행이고 같은 컬럼의 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-ecc11b18"
+   ],
+   "why": "TRACE VARIATION_FACTOR 팝업 컬럼을 추적하는 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-eeb7fef3"
+   ],
+   "why": "TRACE 진입점 spdMain_Changed(393행)는 추적 행이라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-00a512a7",
+    "V-618f33e6",
+    "V-b9f3c79d"
+   ],
+   "why": "세 행 모두 사업부 40의 활성행 DEPT_ID40 셀 콤보가 dtTeamAuth인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-0a94fc5c",
+    "V-20184eda",
+    "V-8c171624",
+    "V-cc060c9c"
+   ],
+   "why": "네 행 모두 활성행 SCM_SITE_ID81 셀 콤보가 dtSalesSiteAuth인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-0db507c9",
+    "V-883d5fc3",
+    "V-dfec9ce3",
+    "V-ed8628c3"
+   ],
+   "why": "네 행 모두 활성행 END_CUSTOMER40 셀 콤보가 dtCustomer인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-0f4cf892"
+   ],
+   "why": "DEPT_NAME_KO 컬럼을 보는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-12b2a8fa",
+    "V-23b2ae22",
+    "V-4c266218",
+    "V-7cd3a1cf",
+    "V-edbdad1a"
+   ],
+   "why": "다섯 행 모두 행 추가로 생긴 신규행(insCell.Row.Index)의 CURRENCY 셀 콤보가 dtCurrencyList인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-1d558d3a",
+    "V-74649ca6",
+    "V-88e25df3",
+    "V-9eb33426",
+    "V-9f2c0cc5"
+   ],
+   "why": "다섯 행 모두 활성행(ActiveRowIndex)의 CURRENCY 셀 콤보가 dtCurrencyList인지 보며, 신규행 행들과는 상태가 달라 따로 묶었다."
+  },
+  {
+   "rows": [
+    "V-16f24a4c",
+    "V-57706630",
+    "V-bc528860"
+   ],
+   "why": "세 행 모두 활성행 BIZ_TYPE_NAME81 셀 콤보가 dtBizType81인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-22c6c547",
+    "V-a023207f",
+    "V-ca1484f6",
+    "V-ca95afc3"
+   ],
+   "why": "네 행 모두 활성행 SCM_SITE_ID40 셀 콤보가 dtSalesSiteAuth인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-2b5ecc16",
+    "V-482c21d4",
+    "V-67527be1",
+    "V-837516a9",
+    "V-f7d398ae"
+   ],
+   "why": "다섯 행 모두 활성행 END_CUSTOMER 셀 콤보가 dtCustomer인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-2e0bc043",
+    "V-8171f79d",
+    "V-b01e8ad8"
+   ],
+   "why": "세 행 모두 사업부 40에서 DEPT_ID40을 바꾼 뒤 SCM_SITE_ID40 콤보가 dtSalesSite로 다시 채워지는지 보며, 보이는 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-30492e9e",
+    "V-96ed3c12",
+    "V-bcf69618"
+   ],
+   "why": "세 행 모두 사업부 40이 아닐 때 활성행 DEPT_ID 셀 콤보가 dtTeamAuth인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-352cec4e",
+    "V-7ce487e9",
+    "V-eaed62c2"
+   ],
+   "why": "세 행 모두 사업부 40에서 DEPT_ID40을 바꾼 뒤 END_CUSTOMER40 콤보가 dtCustomer로 다시 채워지는지 보며, 보이는 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-5a9af464"
+   ],
+   "why": "사업부 81에서 END_CUSTOMER를 바꾼 뒤의 SCM_SITE_ID cascade를 보는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-5fd584a1",
+    "V-996ba14d",
+    "V-c9358c4d",
+    "V-d7bd3496"
+   ],
+   "why": "네 행 모두 활성행 SCM_SITE_ID82 셀 콤보가 dtSalesSiteAuth인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-68f00b95"
+   ],
+   "why": "DIVISION_ID 셀 콤보가 dtDivision인지 보는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-6a338f10",
+    "V-eafb5927"
+   ],
+   "why": "두 행 모두 사업부 40의 CELL_PROD_SITE 콤보가 인자 없는 GetCellProdSite()인지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-b4a06a5e"
+   ],
+   "why": "CELL_PROD_SITE 콤보를 GetCellProdSite에 인자(\"DM_CELL_PROD_SITE\", \"Y\")를 넣어 채우므로 기대가 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-6b239e3a",
+    "V-b05a3528",
+    "V-b0a7c3a7"
+   ],
+   "why": "세 행 모두 사업부 40에서 END_CUSTOMER40을 바꾼 뒤 SCM_SITE_ID40 콤보가 dtSalesSite로 다시 채워지는지 보며, 조건과 기대가 똑같다."
+  },
+  {
+   "rows": [
+    "V-71889896"
+   ],
+   "why": "DEPT_ID 콤보를 dtTeam으로 채우는 행으로, 사업부 조건이 없고 기대도 dtTeamAuth 쪽과 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-cb714874"
+   ],
+   "why": "활성행 SCM_SITE_ID 셀 콤보가 dtSalesSiteAuth인지 보는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-e316719e"
+   ],
+   "why": "사업부 81에서 SCM_SITE_ID 자체를 바꾼 경우의 분기라 END_CUSTOMER를 바꾼 경우와 상태가 달라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:38:12",
+ "cost": 0.2751012
+}

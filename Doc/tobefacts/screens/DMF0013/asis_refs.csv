@@ -48,6 +48,7 @@
 "demand/cust-psi-upload","DMF0013","features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx","280","","","339","","F9 Delete — AS-IS DeleteButton (원장 §E13 L339~344). 신규행('I')만 삭제. DB행 삭제 불가."
 "demand/cust-psi-upload","DMF0013","features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx","358","","","514","","activeFlag 는 AS-IS SaveData 전건 'M' 직렬화(원장 §E14 L514/534) 1:1."
 "demand/cust-psi-upload","DMF0013","features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx","390","DMF0013","","","","insert/delete 활성 (DMF0013 은 F8 삽입 존치 — portspec §8-1). manual/upload = 명시 false."
+"demand/cust-psi-upload","DMF0013","features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx","504","DMF0013","","","","AS-IS btnExcelUpload_Click (원장 §E09) — 공통 ExcelUploadForm(""DMF0013"", 'PSI Upload') 1:1. 2-Step: [Upload]=검증·분류 / [OK]=저장(onSave — mode=1 call-proc)."
 "demand/cust-psi-upload","DMF0013","features/demand/src/pages/cust-psi-upload/CustPsiUpload.tsx","536","DMF0014","","","","업로드 후 재조회 (portspec §8-8: AS-IS 는 재조회 부재였으나 DMF0014 개선 승계)"
 "demand/cust-psi-upload","DMF0013","features/demand/src/pages/cust-psi-upload/useCustPsiUploadStore.ts","10","","DMF0013_GET_CUST_PSI_UPLOAD_DATA DMF0014_GET_SPREAD_TITLE","","","MAIN = DM.DMF0013_GET_CUST_PSI_UPLOAD_DATA / SPREAD_TITLE = 공유 DM.DMF0014_GET_SPREAD_TITLE"
 "demand/cust-psi-upload","DMF0013","features/demand/src/pages/cust-psi-upload/useCustPsiUploadStore.ts","11","","PR_GET_DAY_RANGE","","","DAY_RANGE = PR_GET_DAY_RANGE (기본 조회구간 — AS-IS GetDayRange p_month=6)"

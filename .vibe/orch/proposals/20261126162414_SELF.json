@@ -3,7 +3,7 @@
   "at": "2026-11-26T16:24:14+09:00",
   "ms": 1795677854251,
   "source": "self",
-  "status": "pending",
+  "status": "applied",
   "sig": "userrule|rn|tools/vibemanager/orch vision.js|uiux추천대상지정이viewjs라menuviewjstabviewjs만걸리",
   "title": "사용자 지시 R251 같은 문제: tools/VibeManager/orch-vision.js:84 UI/UX 추천 대상 지정이 '*view*.js' 라 menu-view.js, tabview.js 만 걸리고 workbench.js, orchestra.js, j",
   "evidence": "규칙 R251 \"VMO 는 VM 웹뷰 UI/UX 를 현재 널리 쓰는 패턴과 비교한 개선안을 스스로 올리고 큰 디자인 변경은 컨셉 시안 HTML 을 먼저 보임\" (원래 지시 2026-11-26 16:10 \"VMO 의 기능 에 한계는 없다라고 전달했습니다. 이는 VMO 의 UI/UX 도 마찬가지 입니다. 더 나은 UI/UX 을 추천하고 싶으면 추천해주세요. 그것도 VMO 가 스스로 해주면 좋을 것 같아요. 제가 UI/UX 에 대해서 요청 하는 부분은 제가 인지하고 있는 한시적인 부분을 가지\") · tools/VibeManager/orch-vision.js:84 '10. UI/UX 추천: VM·VMO·VMW 웹뷰(tools/VibeManager 의 *view*.js·media·webview 관련 파일)를 읽고, ...'",
@@ -23,6 +23,11 @@
       "at": "2026-11-26T16:26:23+09:00",
       "by": "3acd3c",
       "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T16:44:48+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-vision.js 10번 UI/UX 추천 대상을 파일 이름으로: workbench.js, orchestra.js, jobs.js, flow-panel.js, menu-view.js, prompt-panel.js, history.js, tabview.js, media 폴더. run_all 92/92 PASS 1553 FAIL 0(16:44:22), 설치 폴더 동일 확인"
     }
   ],
   "plain": {
@@ -35,6 +40,6 @@
   "selfKey": "S13|R251|tools/VibeManager/orch-vision.js",
   "kind": "fix",
   "claimedBy": "3acd3c",
-  "autoWaitMs": 1795706783223,
-  "waitNote": "Claude Code 세션 3acd3c 가 직접 보완 중"
+  "waitNote": "",
+  "appliedMs": 1795679088646
 }

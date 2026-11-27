@@ -13,9 +13,9 @@
 | features/supply/src/pages/scp-bom/index.ts | index | 2 |
 | features/supply/src/pages/scp-bom/scp-bom.constants.ts | constants | 85 |
 | features/supply/src/pages/scp-bom/scp-bom.types.ts | types | 17 |
-| features/supply/src/pages/scp-bom/ScpBom.tsx | page | 213 |
-| features/supply/src/pages/scp-bom/useScpBomStore.ts | store | 175 |
-| features/supply/src/pages/scp-bom/utils/scp-bom.editLock.ts | util | 20 |
+| features/supply/src/pages/scp-bom/ScpBom.tsx | page | 215 |
+| features/supply/src/pages/scp-bom/useScpBomStore.ts | store | 176 |
+| features/supply/src/pages/scp-bom/utils/scp-bom.editLock.ts | util | 34 |
 | features/supply/src/pages/scp-bom/utils/scp-bom.save.ts | util | 92 |
 | features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | util | 37 |
 | features/supply/src/pages/scp-bom/__asis-mapping__.md | mapping | 138 |
@@ -26,7 +26,7 @@
 | (useTabComboQueries) | hook | 1 | Y | ScpBomForm.tsx:53 |
 | SCP0053/SCP BOM//call-proc | hook | 1 | Y | ScpBom.tsx:63 |
 | /admin/menu/SCP0053/column | http | 1 | Y | useScpBomStore.ts:119 |
-| /admin/menu/SCP0053/search-conditions | http | 1 | Y | useScpBomStore.ts:152 |
+| /admin/menu/SCP0053/search-conditions | http | 1 | Y | useScpBomStore.ts:153 |
 | /SCP0053/SCP BOM/SAVE/call-proc | http | 1 | Y | scp-bom.save.ts:67 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -48,9 +48,9 @@
 | g | beginningEdit | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 107 |
 | g | pastingCell | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 125 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 141 |
-| ScpBomForm | onSearch | handleSearch | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 175 |
-| ScpBomForm | onModelSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 176 |
-| ScpBomForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 177 |
+| ScpBomForm | onSearch | handleSearch | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 177 |
+| ScpBomForm | onModelSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 178 |
+| ScpBomForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 179 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -93,7 +93,7 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0053(7), SCP0037(1), SCP0025(1)
+- 화면ID: SCP0053(7), COM0013(2), SCP0037(1), SCP0025(1)
 - SP/PKG: PKG_SCP0053(4), P_SCP0053_GET_SCP_BOM(2), P_SCP0053_SAVE_SCP_BOM(2)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
@@ -112,9 +112,9 @@
 | code | import { useScpBomValidation } from './hooks/useScpBomValidation'; | features/supply/src/pages/scp-bom/ScpBom.tsx | 21 |
 | code | import { findInvalidScpYnParents } from './utils/scp-bom.scpYn'; | features/supply/src/pages/scp-bom/ScpBom.tsx | 27 |
 | code | const { validateSearch } = useScpBomValidation(); // V1 가드 임시 비활성 (2026-10-07) | features/supply/src/pages/scp-bom/ScpBom.tsx | 37 |
-| code | if (!validateSearch(sc)) return; | features/supply/src/pages/scp-bom/ScpBom.tsx | 90 |
-| code | const invalidParents = findInvalidScpYnParents(src); | features/supply/src/pages/scp-bom/ScpBom.tsx | 136 |
-| code | }); | features/supply/src/pages/scp-bom/ScpBom.tsx | 144 |
+| code | if (!validateSearch(sc)) return; | features/supply/src/pages/scp-bom/ScpBom.tsx | 91 |
+| code | const invalidParents = findInvalidScpYnParents(src); | features/supply/src/pages/scp-bom/ScpBom.tsx | 138 |
+| code | }); | features/supply/src/pages/scp-bom/ScpBom.tsx | 146 |
 | endpoint | ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(실측 27행, design 03 §1). | features/supply/src/pages/scp-bom/useScpBomStore.ts | 20 |
 | code | const parentKey = (r: Row) => `${s(r.DIVISION_ID)}\|${s(r.PARENT_ITEM_ID)}`; | features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | 9 |
 | code | if (yCount !== 1) hits.push(pk.split('\|')[1] ?? ''); | features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | 31 |

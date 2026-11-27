@@ -1,0 +1,24 @@
+// 2026-11-26 VMO 컨설팅 주제별 전문가 역할(DB · UI/UX · C#.NET · React · Spring Boot)과 역할별 스킬 선택 시험
+'use strict';
+const path = require('path'); const fs = require('fs'); const os = require('os');
+const cs = require(path.join(__dirname, '..', 'orch-consult.js'));
+let fail = 0; const chk = (n, c, v) => { console.log(`${c ? 'PASS' : 'FAIL'} ${n}${v !== undefined ? ' ' + JSON.stringify(v) : ''}`); if (!c) fail++; };
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'csr'));
+fs.mkdirSync(path.join(root, '.claude', 'skills', 'frontend-design'), { recursive: true }); fs.writeFileSync(path.join(root, '.claude', 'skills', 'frontend-design', 'SKILL.md'), '---\nname: frontend-design\n---\n');
+cs.init({ paths: () => ({ root, vibeDir: path.join(root, '.vibe') }), noTimer: true });
+const R = t => cs.rolesOf(t).join(',');
+chk('UI 주제 = ui', R('VMO 화면 UI 디자인 안 3개') === 'ui', R('VMO 화면 UI 디자인 안 3개'));
+chk('DB 주제 = db', R('DMF0082 PKG 실행 계획 튜닝') === 'db', R('DMF0082 PKG 실행 계획 튜닝'));
+chk('C#.NET 주제 = csharp', R('AS-IS WinForms Spread 이벤트 순서') === 'csharp' && R('C#.NET 소스') === 'csharp');
+chk('React 주제 = react', R('nscm-fe React 재렌더') === 'react');
+chk('Spring 주제 = spring', R('nscm-be MyBatis 트랜잭션') === 'spring');
+chk('여러 역할', R('SP 와 React 화면') === 'db,ui,react', R('SP 와 React 화면'));
+chk('영문 낱말 일부는 안 걸림(HTMLX, SPA)', R('HTMLX 와 SPA') === '', R('HTMLX 와 SPA'));
+chk('주제 없음 = 역할 없음', R('') === '' && cs.rolePrompt({}, '').lines.length === 0);
+const rp = cs.rolePrompt({}, 'VMO 화면 UI 디자인');
+chk('설치된 스킬만 사용(frontend-design 프로젝트 스킬)', rp.sk.use.includes('frontend-design'), rp.sk);
+chk('프롬프트에 역할·스킬 지시', rp.lines.join('\n').includes('UI/UX 전문가') && rp.lines.join('\n').includes('Skill 도구로 frontend-design'));
+const rp2 = cs.rolePrompt({ consultSkills: { db: ['없는스킬'] } }, 'SQL 튜닝');
+chk('설정 스킬이 없으면 미설치로 기록', rp2.sk.use.length === 0 && rp2.sk.missing.includes('없는스킬'), rp2.sk);
+chk('buildPrompt 에 역할 줄', cs.buildPrompt({ consultMaxPerRun: 3 }, [], 'Oracle 인덱스').includes('DB 전문가'));
+console.log(fail ? 'SOME FAIL' : 'ALL PASS'); process.exit(fail ? 1 : 0);

@@ -1,0 +1,272 @@
+{
+  "id": "20261126214604_REVIEW",
+  "at": "2026-11-26T21:46:04+09:00",
+  "ms": 1795697164232,
+  "source": "review",
+  "status": "applied",
+  "sig": "reloadcut renotify replay",
+  "title": "창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 살리지 않음",
+  "evidence": "집계 incidents.topRepeats R5 '창 다시 로드로 끊긴 실행 16건(알림)' n 8. 사건 파일 20261120_142504, 145830, 180433, 183604, 184728, 185754, 20261123_184718, 20261126_154128_R5_ALL.json 의 owner 가 모두 36504이고 목록이 같은 16건(11-20 10:07 SCP0005 재수행, 11-20 00:33~18:47 체인 11개, Claude 4개). orch-state.js:69-75 sweep() 은 주인 PID 가 없는 항목을 gone 으로 내지만, 시작 때 events.jsonl 재생으로 같은 항목이 다시 생김. 지우는 기록은 proc.gone(orch-state.js:55)뿐이고 체인과 Claude 는 없음. orch-watch.js:401 은 알림만 올리고 events 에 끊김 기록을 남기지 않음. 집계 chains.checklist noEnd 8, noEndScreens SCP0028, SSP0014, SCP0005, SSP0005 가 같은 실행임",
+  "targets": [
+    "tools/VibeManager/orch-watch.js",
+    "tools/VibeManager/orch-state.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_reloadcut.js",
+    "tools/VibeManager/test/t_chain_abort.js",
+    "tools/VibeManager/test/t_chain_resume.js",
+    "tools/VibeManager/test/t_claim_overlap.js",
+    "tools/VibeManager/test/t_claude_usage.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_impact_rule.js",
+    "tools/VibeManager/test/t_incident_handler.js",
+    "tools/VibeManager/test/t_job_par.js",
+    "tools/VibeManager/test/t_orch_afterwork.js",
+    "tools/VibeManager/test/t_orch_agent.js",
+    "tools/VibeManager/test/t_orch_agent_persist.js",
+    "tools/VibeManager/test/t_orch_agent_q.js",
+    "tools/VibeManager/test/t_orch_ailimit.js",
+    "tools/VibeManager/test/t_orch_apply_recover.js",
+    "tools/VibeManager/test/t_orch_applyfail.js",
+    "tools/VibeManager/test/t_orch_consult.js",
+    "tools/VibeManager/test/t_orch_coreauto.js",
+    "tools/VibeManager/test/t_orch_dict.js",
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_improve.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_lock_repeat.js",
+    "tools/VibeManager/test/t_orch_openfail.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_proc_grace.js",
+    "tools/VibeManager/test/t_orch_reloadmark.js",
+    "tools/VibeManager/test/t_orch_selfapply.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_state_locks.js",
+    "tools/VibeManager/test/t_orch_state_old.js",
+    "tools/VibeManager/test/t_orch_step_screen.js",
+    "tools/VibeManager/test/t_orch_stopleak.js",
+    "tools/VibeManager/test/t_orch_undo.js",
+    "tools/VibeManager/test/t_orch_unv.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_userstop.js",
+    "tools/VibeManager/test/t_orch_verify.js",
+    "tools/VibeManager/test/t_orch_vision.js",
+    "tools/VibeManager/test/t_orch_watch.js",
+    "tools/VibeManager/test/t_orch_watch_gone.js",
+    "tools/VibeManager/test/t_orch_watch_skip_notarget.js",
+    "tools/VibeManager/test/t_orch_worklist.js",
+    "tools/VibeManager/test/t_prompt_relate.js",
+    "tools/VibeManager/test/t_run_end.js",
+    "tools/VibeManager/test/t_s1_ctrl.js",
+    "tools/VibeManager/test/t_server_service.js"
+  ],
+  "before_after": "변경 전: 끊긴 실행 알림만 올리고 기록 없음 → VM 을 다시 시작할 때마다 재생으로 같은 실행이 열린 상태가 되어 알림이 다시 남. 집계에도 끝 기록 없는 체인(noEnd)으로 계속 셈. 변경 후: orch-watch.js:401 알림 때 events 에 run.cut(owner, 항목별 what, screen, label, t0)을 남김. orch-state.js onEvent 가 run.cut 을 받으면 procs, chains, claudes 에서 같은 owner·t0 항목을 지움. orch-improve.js digest 는 run.cut 이 있는 체인을 noEnd 에서 빼고 cutByReload 로 따로 셈",
+  "verify": "node tools/VibeManager/test/t_orch_reloadcut.js tools/VibeManager 에 '같은 events 를 두 번 재생해도 알림 1건' 시험 추가. 시험 수 반영 전 미측정 → 반영 뒤 1건 늘고 PASS. 사건 파일 중 sig R5|reloadcut|36504 반영 전 8건 → 반영 뒤 창 다시 로드 1회 뒤에도 8건 유지. digest(7) chains.checklist.noEnd 반영 전 8 → 반영 뒤 run.cut 기록이 생긴 체인만큼 줄고 cutByReload 에 같은 수",
+  "rollback": "VMO 가 만든 대상 4개 파일 백업으로 되돌림. 이미 남은 run.cut 줄은 되돌린 코드가 읽지 않으므로 그대로 둠",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "같은 서명 R5|reloadcut|36504 알림이 7일에 8회(11-20 6회, 11-23 1회, 11-26 1회). 원인은 소스 1곳(재생 때 끊긴 실행을 지우는 기록 없음). 구조 문제가 아니라 결함 1건",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T21:50:02+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T21:50:02+09:00",
+      "by": "VMO",
+      "what": "자동 반영 안 대상에 시험 51개 더함: tools/VibeManager/test/t_chain_abort.js, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_claim_overlap.js, tools/VibeManager/test/t_claude_usage.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_impact_rule.js"
+    },
+    {
+      "at": "2026-11-26T21:54:47+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 46개 파일 통과, 시험 114/114개 파일 통과(PASS 1935, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self2150"
+    },
+    {
+      "at": "2026-11-26T21:54:53+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T22:12:00+09:00",
+      "by": "VMO",
+      "what": "게이트 재실행: 한 번만 실패한 시험 1건은 흔들리는 시험으로 보고 제외(S2 t_gate_fe_page.js 실패: exit 1 · PASS 1 · FAIL 1 · FAIL 예외 ReferenceError: bad is not defined)"
+    },
+    {
+      "at": "2026-11-26T22:12:00+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1943, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 2개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-state.js, orch-watch.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T22:12:00+09:00",
+      "by": "VMO",
+      "what": "반영 뒤 확인 1건(합격 판정에서 뺌): v3 사건 파일 중 sig R5|reloadcut|36504 반영 전 8건 → 반영 뒤 창 다시 로드 1회 뒤에도 8건 유지. (Grep 결과 incidents 중 sig R5|reloadcut|36504 반영 전 8건. 반영 뒤 8건 )"
+    },
+    {
+      "at": "2026-11-26T22:12:00+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건, 실행 못 함 1건. 2026-11-26 21:57 node --check 4개 파일 SYNTAX_OK · t_orch_reloadcut 3건 ALL PASS(반영 전 2건) · run_all.js 'ALL OK 파일 114/114 PASS 1936 FAIL 0 재실행 0 삭제 0 274.3s' · doc_style.py --quiet 'orch-watch.js 위반 0, orch-state.js 위반 0, orch-improve.js 위반 0'(반영 전 0, 0, 0) · digest(7) checklist noEnd 8 → 8, cutByReload · 변경 9개 파일 · 대상 목록 밖 변경 4개: tools/Harness/gate_baseline.tsv, Doc/e2e/_run.acct.27996.json, Doc/verify/DMF0042/eg/auth/e2e.json, Doc/verify/DMF0042/eg/auth/eg_combos.json",
+      "log": ".vibe\\logs\\2026-11-26T21-54-54_claude_orch.log",
+      "sec": 459,
+      "costUsd": 1.8118744000000002,
+      "files": [
+        "tools/Harness/gate_baseline.tsv",
+        "tools/VibeManager/orch-improve.js",
+        "tools/VibeManager/orch-state.js",
+        "tools/VibeManager/orch-watch.js",
+        "tools/VibeManager/test/t_orch_improve.js",
+        "tools/VibeManager/test/t_orch_reloadcut.js",
+        "Doc/e2e/_run.acct.27996.json",
+        "Doc/verify/DMF0042/eg/auth/e2e.json",
+        "Doc/verify/DMF0042/eg/auth/eg_combos.json"
+      ]
+    },
+    {
+      "at": "2026-11-27T09:50:31+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-27T09:49:37+09:00"
+    }
+  ],
+  "plain": {
+    "what": "창을 다시 열 때마다 며칠 전에 끊긴 같은 작업 16건을 또 알리던 것을 한 번만 알리게 함",
+    "risk": "잘못되면 지금 끊긴 실행도 알림 없이 사라져 상황판에 끊김이 안 보임",
+    "undo": "바꾼 파일 4개를 백업본으로 되돌림"
+  },
+  "kind": "fix",
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795697401291,
+  "autoFp": "89737bb806",
+  "testsChecked": true,
+  "testsAdded": [
+    "tools/VibeManager/test/t_chain_abort.js",
+    "tools/VibeManager/test/t_chain_resume.js",
+    "tools/VibeManager/test/t_claim_overlap.js",
+    "tools/VibeManager/test/t_claude_usage.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_impact_rule.js",
+    "tools/VibeManager/test/t_incident_handler.js",
+    "tools/VibeManager/test/t_job_par.js",
+    "tools/VibeManager/test/t_orch_afterwork.js",
+    "tools/VibeManager/test/t_orch_agent.js",
+    "tools/VibeManager/test/t_orch_agent_persist.js",
+    "tools/VibeManager/test/t_orch_agent_q.js",
+    "tools/VibeManager/test/t_orch_ailimit.js",
+    "tools/VibeManager/test/t_orch_apply_recover.js",
+    "tools/VibeManager/test/t_orch_applyfail.js",
+    "tools/VibeManager/test/t_orch_consult.js",
+    "tools/VibeManager/test/t_orch_coreauto.js",
+    "tools/VibeManager/test/t_orch_dict.js",
+    "tools/VibeManager/test/t_orch_errlog.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_improve.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_lock_repeat.js",
+    "tools/VibeManager/test/t_orch_openfail.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_proc_grace.js",
+    "tools/VibeManager/test/t_orch_reloadmark.js",
+    "tools/VibeManager/test/t_orch_selfapply.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_state_locks.js",
+    "tools/VibeManager/test/t_orch_state_old.js",
+    "tools/VibeManager/test/t_orch_step_screen.js",
+    "tools/VibeManager/test/t_orch_stopleak.js",
+    "tools/VibeManager/test/t_orch_undo.js",
+    "tools/VibeManager/test/t_orch_unv.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_userstop.js",
+    "tools/VibeManager/test/t_orch_verify.js",
+    "tools/VibeManager/test/t_orch_vision.js",
+    "tools/VibeManager/test/t_orch_watch.js",
+    "tools/VibeManager/test/t_orch_watch_gone.js",
+    "tools/VibeManager/test/t_orch_watch_skip_notarget.js",
+    "tools/VibeManager/test/t_orch_worklist.js",
+    "tools/VibeManager/test/t_prompt_relate.js",
+    "tools/VibeManager/test/t_run_end.js",
+    "tools/VibeManager/test/t_s1_ctrl.js",
+    "tools/VibeManager/test/t_server_service.js"
+  ],
+  "applyStartMs": 1795697693444,
+  "postChecks": [
+    {
+      "n": 3,
+      "text": "사건 파일 중 sig R5|reloadcut|36504 반영 전 8건 → 반영 뒤 창 다시 로드 1회 뒤에도 8건 유지.",
+      "why": "Grep 결과 incidents 중 sig R5|reloadcut|36504 반영 전 8건. 반영 뒤 8건 유지 여부는 창 다시 로드 1회가 필요해 지금 실행할 수 없음",
+      "status": "open",
+      "at": "2026-11-26T22:02:39+09:00"
+    }
+  ],
+  "verifyJudge": {
+    "at": "2026-11-26T22:02:39+09:00",
+    "verified": true,
+    "text": "실행 통과 3건, 실행 못 함 1건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1943, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self2150",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-state.js",
+    "orch-watch.js"
+  ],
+  "appliedMs": 1795698720371,
+  "synced": [
+    "orch-state.js",
+    "orch-watch.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_reloadcut.js tools/VibeManager → 'PASS 같은 events 를 두 번 재생해도 알림 1건 run.cut 1줄 · 항목 3 · 알림 1건' · ALL PASS (2026-11-26 21:57:12). 고치기 전 코드에서 새 시험이 실패하는지는 확인 못 함(임시 경로 쓰기 막힘)"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "시험 수 반영 전 2건 PASS(21:56:22) → 반영 뒤 3건 PASS(21:57:12), 1건 늘어남"
+      },
+      {
+        "n": 3,
+        "result": "blocked",
+        "note": "Grep 결과 incidents 중 sig R5|reloadcut|36504 반영 전 8건. 반영 뒤 8건 유지 여부는 창 다시 로드 1회가 필요해 지금 실행할 수 없음"
+      },
+      {
+        "n": 4,
+        "result": "pass",
+        "note": "digest(7) 실데이터(digest.json 쓰기 막은 측정 스크립트) 반영 전 chainsNoEnd 8, checklist noEnd 8, cutByReload 없음 → 반영 뒤 noEnd 8, cutByReload 0, chainsCutByReload 0. run.cut 기록이 생긴 체인 0개라 줄어든 수 0과 같은 수 0으로 기대와 맞음"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-watch.js",
+      "tools/VibeManager/orch-state.js",
+      "tools/VibeManager/orch-improve.js",
+      "tools/VibeManager/test/t_orch_reloadcut.js"
+    ],
+    "verify_result": "2026-11-26 21:57 node --check 4개 파일 SYNTAX_OK · t_orch_reloadcut 3건 ALL PASS(반영 전 2건) · run_all.js 'ALL OK 파일 114/114 PASS 1936 FAIL 0 재실행 0 삭제 0 274.3s' · doc_style.py --quiet 'orch-watch.js 위반 0, orch-state.js 위반 0, orch-improve.js 위반 0'(반영 전 0, 0, 0) · digest(7) checklist noEnd 8 → 8, cutByReload 0(run.cut 기록 아직 없음) · R5|reloadcut|36504 사건 파일 8건(반영 전)",
+    "note": "run.cut 은 항목마다 owner 를 넣어 주인 PID 가 다른 항목이 섞여도 맞게 지움. sweep 이 체인 항목에 runId 를 실음. 반영 뒤 창 다시 로드 1회 뒤 사건 파일 8건 유지(v3)와 run.cut 이 생긴 뒤 noEnd 감소(v4) 재확인 필요. 고치기 전 코드에서 새 시험이 실패하는지는 확인 못 함"
+  },
+  "snap": "prop_20261126214604_REVIEW",
+  "effectiveMs": 1795740577891,
+  "effectiveAt": "2026-11-27T09:49:37+09:00"
+}

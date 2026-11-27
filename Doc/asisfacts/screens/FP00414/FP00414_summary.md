@@ -152,8 +152,8 @@
 ## 7. 확인 필요 (4건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 959 | Excel_CheckValidation | FP\MASTER\FP00414_FormationTrayModel#find_Excel_buffer_validation | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 | 950 | Excel_CheckValidation | FP\MASTER\FP00414_FormationTrayModel#delete_Excel_buffer | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
+| 959 | Excel_CheckValidation | FP\MASTER\FP00414_FormationTrayModel#find_Excel_buffer_validation | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 | 920 | Excel_Save | FP\MASTER\FP00414_FormationTrayModel#merge_FP00411_import | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 | 954 | Excel_CheckValidation | FP\MASTER\FP00414_FormationTrayModel#insert_Excel_buffer | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 

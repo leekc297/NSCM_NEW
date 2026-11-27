@@ -1,0 +1,59 @@
+{
+  "id": "20261126192238_SELF",
+  "at": "2026-11-26T19:22:38+09:00",
+  "ms": 1795688558375,
+  "source": "self",
+  "status": "applied",
+  "sig": "userrule|rn|tools/vibemanager/orch consult.js|db역할기본스킬db는claudeskillsclaudeskills어디에도s",
+  "title": "사용자 지시 R258 같은 문제: tools/VibeManager/orch-consult.js:59 DB 역할 기본 스킬 'db' 는 ~/.claude/skills, .claude/skills 어디에도 SKILL.md 가 없음(두 폴더에 있는 것은 fronten",
+  "evidence": "규칙 R258 \"VMO 컨설팅은 주제마다 해당 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 그 역할 스킬을 붙여 수행함\" (원래 지시 2026-11-26 18:23 \"C#.NET, REACT 등에 대해서도 전문자 SKILL 이 필요합니다.\") · tools/VibeManager/orch-consult.js:59 const dirs = [path.join(require('os').homedir(), '.claude', 'skills', name), path.join((P() && P().root) || '', '.claude', 'skills', name)];",
+  "targets": [
+    "tools/VibeManager/orch-consult.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_afterwork.js",
+    "tools/VibeManager/test/t_orch_consult.js",
+    "tools/VibeManager/test/t_orch_consult_roles.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_u33_consult.js"
+  ],
+  "before_after": "skillInstalled 가 플러그인 스킬 위치(~/.claude/plugins 아래 skills/<name>/SKILL.md, 플러그인 접두 'plugin:name')도 찾게 하거나, 찾지 못하는 스킬은 Skill 도구 호출 줄에 그대로 넣고 실패를 보고서에 남김. DB 역할 스킬이 0개면 컨설팅 시작 때 VMO 화면 note 로 알림",
+  "verify": "node --check tools/VibeManager/orch-consult.js · node tools/VibeManager/test/run_all.js · 웹뷰 파일이면 node tools/VibeManager/test/t_webview_syntax.js",
+  "rollback": "tools/VibeManager/orch-consult.js.bak_<날짜>_self<시각>",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:26:20+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:27:50+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · orch-consult.js skillInstalled: 찾는 곳에 ~/.agents/skills, ~/.claude/plugins 아래 skills/<이름>(깊이 6, 10분 캐시) 추가, 'plugin:name' 은 name 으로. rolePrompt: 못 찾은 역할 스킬도 Skill 도구로 불러 보고 없으면 보고서 근거 칸에 '스킬 없음: 이름'. 컨설팅 시작 때 못 찾은 스킬이 있으면 VMO note. 실측(19:3x) db, frontend-design, csharp-expert, java-springboot 모두 찾음(db 는 ~/.claude/skills/db → ~/.agents/skills/db 연결). t_orch_consult.js 2건 추가 PASS 14, ALL PASS(2026-11-26 19:27)"
+    }
+  ],
+  "plain": {
+    "what": "VMO 컨설팅은 주제마다 해당 전문가 역할(DB, UI/UX, C#.NET, React, Spring)과 그 역할 스킬을 붙여 수행함 규칙을 tools/VibeManager/orch-consult.js 에도 적용",
+    "risk": "화면 표시나 동작이 바뀜. 시험과 구문 검사 통과 때만 반영",
+    "undo": "VMO Fixes 탭 되돌리기"
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|R258|tools/VibeManager/orch-consult.js",
+  "kind": "fix",
+  "testsAdded": [
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_afterwork.js",
+    "tools/VibeManager/test/t_orch_consult.js",
+    "tools/VibeManager/test/t_orch_consult_roles.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_u33_consult.js"
+  ],
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795688870935
+}

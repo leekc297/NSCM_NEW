@@ -1,0 +1,46 @@
+{
+ "rule_id": "G8",
+ "hash": "72be4cd8912ff9c8",
+ "groups": [
+  {
+   "rows": [
+    "EG-838abf08"
+   ],
+   "why": "이 행은 DM0020_OwnerbyDivisionPopup 팝업 안의 Owner 조회조건을 확인한다. 메인 화면의 Owner 조회조건(V-eb60bad6)과는 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-a04321ac"
+   ],
+   "why": "이 행은 DM0002 팝업의 ITEM_ID40 그리드 컬럼(CELL)을 확인한다. 같은 팝업의 Model / Nickname 조회조건(COND)과는 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-bff8255b"
+   ],
+   "why": "이 행은 DM0002_ItembyDivisionPopupEx 팝업 안의 Model / Nickname 조회조건을 확인한다. 메인 화면의 Model / Nickname 조회조건(V-be1d74a1)과 같은 요소인지 확신할 수 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b5d5fc5e"
+   ],
+   "why": "메인 화면의 Project 조회조건은 다른 행과 대상 요소가 겹치지 않아 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-be1d74a1"
+   ],
+   "why": "이 행은 메인 화면의 Model / Nickname 조회조건을 확인한다. 팝업 안의 같은 이름 조건과는 다른 화면 요소라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-eb60bad6"
+   ],
+   "why": "이 행은 메인 화면의 Owner 조회조건을 확인한다. Owner 팝업 안의 조회조건과는 다른 화면 요소라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:42:54",
+ "cost": 0.044681200000000004
+}

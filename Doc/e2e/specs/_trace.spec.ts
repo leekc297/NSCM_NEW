@@ -1857,7 +1857,7 @@ test.describe(`검증엔진 ${ID} @trace`, () => {
             else if (asisNewOnly) ev.push(`기존행 Delete → 변화 없음(CRUD_TYPE='${crudD}' · 앞선 편집 상태 유지) — AS-IS DeleteButton 은 신규행(FlagI)만 삭제(기존행 무동작 · actions.csv) · TO-BE 동일`);
             else { ev.push(`기존행 Delete → CRUD_TYPE='${crudD}' (D 아님 · Active 토글 없음)`); ok = false; }
           }
-        } catch (e) { ev.push(`Delete 시험 불가(도구): ${String(e).replace(/\s+/g, ' ').slice(0, 80)}`); }
+        } catch (e) { ev.push(`Delete 시험 불가(도구): ${String(e).replace(/\x1b\[[0-9;]*[A-Za-z]/g, '').replace(/\s+/g, ' ').slice(0, 80)}`); }  /* 2026-11-26: 색 코드(ESC) 제거 */
       } else ev.push('Delete 버튼 비노출(권한 또는 기능 없음)');
       for (const t of [...f5.map(t => t.x), ...ruleF5]) put(t.row_id, ok ? 'PASS' : 'FAIL', ev.join(' · ') + ' (AS-IS CRUD Status I/U/D 표시)');
     }

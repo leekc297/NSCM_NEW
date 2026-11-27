@@ -1,0 +1,136 @@
+{
+ "rule_id": "G6",
+ "hash": "d316d82f33348d88",
+ "groups": [
+  {
+   "rows": [
+    "T-00fd9576"
+   ],
+   "why": "clbBizType(Biz Type) 조회조건의 초기값만 확인하는 행이고, 같은 요소를 보는 다른 행이 없다."
+  },
+  {
+   "rows": [
+    "T-07e36228"
+   ],
+   "why": "usrMonthTo(종료 월) 초기값을 확인한다. usrMonthFrom과 대조표 행 번호는 같지만 컨트롤이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-0b9e5f7a"
+   ],
+   "why": "usrMonthFrom(시작 월) 초기값을 확인한다. usrMonthTo와 컨트롤이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-12408cde"
+   ],
+   "why": "clbCustomer 조회조건 초기값을 확인한다. 대조표 16행을 함께 쓰는 clbTeam·cboBucketType과는 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-31fb23f4"
+   ],
+   "why": "drpPeriod(날짜 범위) 컨트롤 초기값을 확인한다. 월 선택 컨트롤(usrMonthFrom/To)과는 다른 요소다."
+  },
+  {
+   "rows": [
+    "T-40e7ed0b"
+   ],
+   "why": "cboBucketType 콤보 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-4e6d48d4"
+   ],
+   "why": "cboQty 체크박스 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-4eef1c8e"
+   ],
+   "why": "txtItemId(Model/Nickname) 입력칸 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-4fa22924"
+   ],
+   "why": "txtProject 입력칸 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-78a4a30d"
+   ],
+   "why": "clbPlantSite 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-7d30a46a"
+   ],
+   "why": "clbDivision 초기값이 AS-IS Form_Load와 같은지 확인한다. V-7de24f35는 Division이 빈 칸이 아닌지와 Year까지 보므로 기대 결과가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-82c8cf5e"
+   ],
+   "why": "txtOwner 입력칸 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-864267dd"
+   ],
+   "why": "clbTeam 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-90c89393"
+   ],
+   "why": "cboClosed 콤보 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-a3716484"
+   ],
+   "why": "clbItemType 초기값을 확인한다. 대조표 6행을 함께 쓰는 drpPeriod와는 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-edf168a8"
+   ],
+   "why": "chkSum 체크박스 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "T-f5e4ff3d"
+   ],
+   "why": "clbSalesSite 초기값만 확인하는 행이다."
+  },
+  {
+   "rows": [
+    "V-2198cc52"
+   ],
+   "why": "검사기가 필수 조건을 자동으로 채운 횟수를 보는 기록 점검이라 다른 행과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-3d56a628"
+   ],
+   "why": "조건을 바꾼 뒤 다시 조회할 때 바꾸지 않은 인자가 그대로인지 보는 행이라 초기값 확인과 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-7de24f35"
+   ],
+   "why": "진입 직후 Division이 빈 칸이 아니고 Year가 현재 연도인지 함께 보는 복합 기대라, clbDivision 추적 행과 기대 결과가 같지 않다."
+  },
+  {
+   "rows": [
+    "V-8cf7c43c"
+   ],
+   "why": "Division을 바꾼 직후 Version이 다시 구성되는지 보는 행이라 상태와 대상이 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:42:37",
+ "cost": 0.0872492
+}

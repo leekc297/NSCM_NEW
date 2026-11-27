@@ -1,0 +1,46 @@
+{
+  "id": "20261126190701_SELF",
+  "at": "2026-11-26T19:07:01+09:00",
+  "ms": 1795687621681,
+  "source": "self",
+  "status": "applied",
+  "sig": "runall deleted test",
+  "title": "시험 전체 실행기: 실행 도중 지워진 시험 파일은 실패로 세지 않고 '실행 중 삭제'로 따로 적음",
+  "evidence": "test/run_all.js:9 시험 목록을 시작 때 한 번만 읽음, :22 changedSince 는 바뀐 파일(mtime)만 보고 지워진 파일을 못 봄 → :25-31 재실행 분기를 타지 않음. CHANGELOG.md:62 '19:00 … vmo-continue-stop.js, t_session_continue.js 는 지움'. diag_in S2 info sec 346.1(18:56~19:01 실행)",
+  "targets": [
+    "tools/VibeManager/test/run_all.js",
+    "tools/VibeManager/test/t_run_all_changed.js"
+  ],
+  "before_after": "실행 도중 지워진 시험이 exit 1 로 실패 처리되어 S2 가 fail 이 됨 → 실패 뒤 그 시험 파일이 없으면 rec.ok = true, rec.removed = '실행 중 삭제' 로 두고 out.removed 목록과 마지막 줄 '삭제 N' 에 적음. 파일이 있으면 종전 판정",
+  "verify": "node tools/VibeManager/test/t_run_all_changed.js tools/VibeManager: 임시 폴더에서 앞 시험이 뒤 시험 파일을 지우는 표본 1건 추가(removed 에 들어가고 ok, 전체 fail 0). 반영 전 PASS 미측정(CHANGELOG 18:47 기록 4건) → 반영 뒤 기대 반영 전 + 1",
+  "rollback": "test/run_all.js, test/t_run_all_changed.js 를 반영 전 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "1건. S2 19:01:58 t_session_continue.js 실패(PASS 0, FAIL 0, 마지막 줄 Node.js 버전)는 19:00 에 시험 파일과 대상 hook 을 지운 뒤 실행된 결과. 시험 파일은 지금 없음(Glob 0건)",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:07:24+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:14:25+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · test/run_all.js: 실패 뒤 그 시험 파일이 없으면 ok, removed '실행 중 삭제', out.removed, 마지막 줄 '삭제 N'. t_run_all_changed.js 2건 추가. run_all 111개 중 110 통과 PASS 1895(19:15), 실패 t_orch_hotreload.js 는 mtime 시각 경합으로 흔들림 → 시험 고침 뒤 단독 3회 ALL PASS. 설치 폴더 복사"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S2",
+  "selfKey": "S2|t_session_continue.js",
+  "kind": "detector",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795688065499
+}

@@ -1,0 +1,82 @@
+[
+ {
+  "run_at": "2026-11-26 17:39:50",
+  "wall_min": 418.2,
+  "stage_sum_min": 414.9,
+  "unattributed_min": 3.3,
+  "e2e_tests": 127,
+  "e2e_retries": 0,
+  "stage_min": {
+   "pre": 19.9,
+   "facts": 25.1,
+   "static": 3.2,
+   "e2e": 155.2,
+   "eg": 79.2,
+   "diff": 61.7,
+   "post": 60.7,
+   "docs": 9.8
+  },
+  "top": [
+   {
+    "stage": "e2e",
+    "tool": "playwright _verify _trace _snap",
+    "start": "18:31:18",
+    "min": 155.0
+   },
+   {
+    "stage": "eg",
+    "tool": "eg_chain.py",
+    "start": "21:06:23",
+    "min": 79.1
+   },
+   {
+    "stage": "diff",
+    "tool": "asis_live_screen.py",
+    "start": "22:31:50",
+    "min": 55.5
+   },
+   {
+    "stage": "post",
+    "tool": "llm_review.py",
+    "start": "23:48:11",
+    "min": 37.6
+   },
+   {
+    "stage": "facts",
+    "tool": "criteria_build.py",
+    "start": "18:09:14",
+    "min": 18.3
+   },
+   {
+    "stage": "post",
+    "tool": "dedup_screen.py",
+    "start": "23:35:04",
+    "min": 13.1
+   },
+   {
+    "stage": "pre",
+    "tool": "prereq.py",
+    "start": "17:42:23",
+    "min": 10.5
+   },
+   {
+    "stage": "docs",
+    "tool": "llm_desc.py",
+    "start": "00:28:18",
+    "min": 9.3
+   },
+   {
+    "stage": "pre",
+    "tool": "e2e_suite.py",
+    "start": "17:52:58",
+    "min": 9.3
+   },
+   {
+    "stage": "diff",
+    "tool": "diff_verify.py",
+    "start": "22:25:48",
+    "min": 5.6
+   }
+  ]
+ }
+]

@@ -1,0 +1,52 @@
+{
+ "rule_id": "F1",
+ "hash": "427b1827ed0bd234",
+ "groups": [
+  {
+   "rows": [
+    "ES-2199bdfa"
+   ],
+   "why": "Runs the save round-trip in no-save mode with the dana.robot auth account, so its state differs from the insert-mode rows and it stays on its own."
+  },
+  {
+   "rows": [
+    "ES-836708a8"
+   ],
+   "why": "Runs the insert round-trip with the jooyong026 auth account, so its auth context differs from the generic crud row and grouping it could drop a check."
+  },
+  {
+   "rows": [
+    "ES-88905017"
+   ],
+   "why": "Runs the insert round-trip as a generic crud run with no auth account, so its context differs from the authcrud rows."
+  },
+  {
+   "rows": [
+    "V-26d2974c"
+   ],
+   "why": "Checks that editing two rows and saving once updates both, which is a different target and expected result from single-row checks."
+  },
+  {
+   "rows": [
+    "V-4e4af2a4"
+   ],
+   "why": "Checks the save round-trip for each editable column, so its scope differs from the single marker-row round-trip."
+  },
+  {
+   "rows": [
+    "V-c9c3b04a"
+   ],
+   "why": "Checks that the marker row exists in the DB ledger after the success message, but its target and condition are unclear, so it stays on its own."
+  },
+  {
+   "rows": [
+    "V-ed1875e6"
+   ],
+   "why": "Checks what happens when the server is forced to fail, and the expected result (failure message shown, no success message) differs from the other rows."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 02:33:15",
+ "cost": 0.041099699999999996
+}

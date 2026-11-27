@@ -12,6 +12,7 @@
   ② 치환 스크립트가 _verify.spec.ts 의 다른 위치를 절단(652KB → 148KB)             → SPEC_SIZE
   ③ 정규식의 단어 경계 자리에 백스페이스(0x08) 혼입 — judge.py 경로가 한 번도 일치 안 함 → CTRL_CHARS
 검사: PY_COMPILE · PY_UNDEF(모듈 전역 미정의 이름 — symtable) · CTRL_CHARS · JS_SYNTAX(node --check) · SPEC_SIZE · TSC · SELFTEST_JS · SELFTEST_PY
+      · GEN_SMOKE(2026-11-26, 전체 검사만: tools/Harness/test/t_gen_check_smoke.js = 기준 화면 gen.js 생성 + check.js 검사를 임시 폴더에서)
 기준선: tools/Harness/verify/_selfcheck_baseline.json — 이미 알려진 실패(예: tsc 'reach')는 통과로 치되 출력에 남긴다. 새 실패 1건이라도 있으면 exit 1.
 결과: Doc/verify/_engine_selfcheck.json (검사별 실행 여부·건수·시각 · 감시 파일 지문)
 한계(추측으로 메우지 않음): 인자별 실행 경로를 실제로 타 보는 드라이런은 없다 — 미정의 이름은 정적으로 잡지만, 값이 틀린 경로(잘못된 파일 경로 등)는 못 잡는다.
@@ -172,6 +173,26 @@ def chk_selftest_js():
     return out, n
 
 
+GEN_SMOKE = os.path.join(ROOT, 'tools', 'Harness', 'test', 't_gen_check_smoke.js')
+
+
+def chk_gen_smoke():
+    """2026-11-26 개선안 20261126164445_VISION_4: 생성기 gen.js, 게이트 check.js 를 기준 화면으로 임시 폴더에서 돌린다(nscm-fe, 저장소 Doc/gen 에 쓰지 않음)."""
+    if not os.path.exists(GEN_SMOKE):
+        return ['t_gen_check_smoke.js 없음'], {'at': time.strftime('%Y-%m-%d %H:%M:%S'), 'result': 'FAIL', 'seconds': 0}
+    t0 = time.time()
+    try:
+        r = subprocess.run(['node', GEN_SMOKE], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=600, cwd=ROOT)
+        lines = [l for l in ((r.stdout or '') + (r.stderr or '')).split('\n') if l.strip()]
+        out = [l.strip()[5:160] for l in lines if l.startswith('FAIL ')]
+        if r.returncode and not out:
+            out = [f"exit {r.returncode} · {(lines[-1] if lines else '')[:120]}"]
+    except subprocess.TimeoutExpired:
+        out = ['600초 초과']
+    meta = {'at': time.strftime('%Y-%m-%d %H:%M:%S'), 'result': 'FAIL' if out else 'PASS', 'seconds': round(time.time() - t0, 1)}
+    return out, meta
+
+
 def chk_selftest_py():
     """--selftest 를 __main__ 에서 받는 순수 판정 selftest 만(DB 접속 없이 끝나는 것). DB 가 필요한 것은 실행하지 않고 목록에 '미실행'으로 남긴다."""
     out, ran, skipped = [], 0, []
@@ -270,6 +291,7 @@ def main():
         res['SELFTEST_JS'], meta['selftest_js_ran'] = chk_selftest_js()
         res['SELFTEST_PY'], meta['selftest_py_ran'], meta['selftest_py_skipped_db'] = chk_selftest_py()
         res['RULE_REGISTRY'] = chk_rule_registry()
+        res['GEN_SMOKE'], meta['gen_smoke'] = chk_gen_smoke()
     if '--update-baseline' in a:
         json.dump({k: sorted(v) for k, v in res.items() if k != 'SPEC_SIZE'}, open(BASELINE, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
         print(f"[selfcheck] 기준선 기록 → {rel(BASELINE)} · " + ' · '.join(f"{k} {len(v)}" for k, v in res.items() if k != 'SPEC_SIZE'))

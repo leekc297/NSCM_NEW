@@ -6,4 +6,6 @@
 "demand/metal-link-price","DMF0074","features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx","165","code","void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });"
 "demand/metal-link-price","DMF0074","features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx","256","code","setOpenTemplateModal(true);"
 "demand/metal-link-price","DMF0074","features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx","259","jsx","iconComponent: <FileExceldownloadIcon />,"
+"demand/metal-link-price","DMF0074","features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx","349","jsx","<MetalLinkTemplateModal open={openTemplateModal} modalClose={() => setOpenTemplateModal(false)} divisionId={searchParams.divisionId} />"
+"demand/metal-link-price","DMF0074","features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx","402","jsx","알림창은 MDIContainer 의 전역 <Alert /> 하나가 그린다. 이 화면에 두던 복제본은 같은 전역 저장소를 봐서 알림이 두 겹으로 열렸고, 탭을 떠날 때 전역 확인창까지 취소로 닫았다(2026-11-22 제거)."
 "demand/metal-link-price","DMF0074","features/demand/src/pages/metal-link-price/useMetalLinkPriceStore.ts","128","endpoint","⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 58행, admin 즉시 반영)"

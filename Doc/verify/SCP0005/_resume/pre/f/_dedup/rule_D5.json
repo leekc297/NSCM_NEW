@@ -1,0 +1,352 @@
+{
+ "rule_id": "D5",
+ "hash": "ade00fcaa8559211",
+ "groups": [
+  {
+   "rows": [
+    "EG-002ce789"
+   ],
+   "why": "Checks the popup identity of the TO_COUNTRY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-073b7c41"
+   ],
+   "why": "Checks the popup icon on the TO_CITY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-0f890cb0"
+   ],
+   "why": "Checks the popup identity of the FROM_CITY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-22785298"
+   ],
+   "why": "Checks that the FROM_CITY cell accepts typed input. This is a different aspect from the cell type or icon checks on the same column."
+  },
+  {
+   "rows": [
+    "EG-379146ee"
+   ],
+   "why": "Checks the popup identity of the btnToSrch button. The button is a different element from the cells."
+  },
+  {
+   "rows": [
+    "EG-3cc6c061"
+   ],
+   "why": "Checks the editor type of the FROM_COUNTRY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-4041a815"
+   ],
+   "why": "Checks that the ROUTE_ID cell has no icon. Both the column and the expected result differ from the other icon checks."
+  },
+  {
+   "rows": [
+    "EG-4486fdaa"
+   ],
+   "why": "Checks that the TO_COUNTRY cell accepts typed input. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-4a7a07b6"
+   ],
+   "why": "Checks the popup icon on the FROM_COUNTRY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-7622b502"
+   ],
+   "why": "Checks the popup identity of the btnFromSrch button. The button is a different element from btnToSrch and from the cells."
+  },
+  {
+   "rows": [
+    "EG-7f465a85"
+   ],
+   "why": "Checks the popup icon on the FROM_CITY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-8e2f8c30"
+   ],
+   "why": "Checks the ExcelUpload popup from the Upload button. Both the element and the popup differ from every other row."
+  },
+  {
+   "rows": [
+    "EG-954a091e"
+   ],
+   "why": "Checks the popup icon on the TO_COUNTRY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-9c573043"
+   ],
+   "why": "Checks the popup editor type of the ROUTE_ID cell. This is a different column from the City by Country checks."
+  },
+  {
+   "rows": [
+    "EG-b33a4891"
+   ],
+   "why": "Checks that the FROM_COUNTRY cell accepts typed input. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-b6fc0877"
+   ],
+   "why": "Checks the editor type of the FROM_CITY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-b7b794bd"
+   ],
+   "why": "Checks the popup identity of the FROM_COUNTRY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-bc580d74"
+   ],
+   "why": "Checks that the TO_CITY cell accepts typed input. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-e57dea5a"
+   ],
+   "why": "Checks the editor type of the TO_CITY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-ec002ba4"
+   ],
+   "why": "Checks the editor type of the TO_COUNTRY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "EG-facf6bbd"
+   ],
+   "why": "Checks the popup identity of the TO_CITY cell. No other row checks the same element in the same way."
+  },
+  {
+   "rows": [
+    "T-11e33e2b"
+   ],
+   "why": "This trace row checks that LT_ARRIVAL_INLAND is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-12c712b9"
+   ],
+   "why": "This trace row checks that LT_DEPARTURE_INLAND is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-12ee95f6"
+   ],
+   "why": "This trace row checks that SHIP_DOC_PREPARATION_DATE is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-1304cbda"
+   ],
+   "why": "This trace row checks that ROUTE_ID is implemented in the source, which is a different property from the popup rule check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-18397f43"
+   ],
+   "why": "This trace row covers the common UC-05 rule (Excel download shows names instead of codes for combo columns). No other row covers it."
+  },
+  {
+   "rows": [
+    "T-1b8b97d2"
+   ],
+   "why": "This trace row checks that FROM_COUNTRY is implemented in the source, which is a different property from the rule checks, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-31b65ccf"
+   ],
+   "why": "This trace row checks that LT_LAY_OFF_CLEARANCE is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-3f944e06"
+   ],
+   "why": "This trace row checks that LT_VOYAGE is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-6b3ff049"
+   ],
+   "why": "This trace row checks that FROM_CITY_NAME is implemented in the source. No other row covers that column."
+  },
+  {
+   "rows": [
+    "T-89ecb063"
+   ],
+   "why": "This trace row checks that TO_COUNTRY is implemented in the source, which is a different property from the rule checks, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-91dc93c9"
+   ],
+   "why": "This trace row checks that TO_CITY is implemented in the source, which is a different property from the rule checks, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-caac23c7"
+   ],
+   "why": "This trace row checks that LT_WAIT_SHIPPING is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-d9a6a9d2"
+   ],
+   "why": "This trace row checks that PRIORITY is implemented in the source, which is a different property from the COLUMN editor check, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-e527ded3"
+   ],
+   "why": "This trace row checks that the SetImageCell method exists in the source. No other row checks it."
+  },
+  {
+   "rows": [
+    "T-ed37789b"
+   ],
+   "why": "This trace row checks that the CreateSpread method exists in the source. No other row checks it."
+  },
+  {
+   "rows": [
+    "T-f3926879"
+   ],
+   "why": "This trace row checks that FROM_CITY is implemented in the source, which is a different property from the rule checks, so it stays separate."
+  },
+  {
+   "rows": [
+    "T-f67ec136"
+   ],
+   "why": "This trace row checks that the SetSpreadColumn method exists in the source. No other row checks it."
+  },
+  {
+   "rows": [
+    "V-09c27e18"
+   ],
+   "why": "Checks the DATETIME editor on LAST_UPDATE_DATE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-297f3c25"
+   ],
+   "why": "Checks the NUMBER editor on LT_WAIT_SHIPPING. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-2dedda7a"
+   ],
+   "why": "Checks the COMBO editor on DAYS_FRI. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-347067d8"
+   ],
+   "why": "Checks the COMBO editor on DAYS_SAT. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-3477a440"
+   ],
+   "why": "Checks the NUMBER editor on LT_VOYAGE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-47637f19"
+   ],
+   "why": "Checks the COMBO editor on DAYS_SUN. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-4e2d9ae2"
+   ],
+   "why": "Checks the COMBO editor on VALID_YN. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-7051c2da"
+   ],
+   "why": "Checks the NUMBER editor on SHIP_DOC_PREPARATION_DATE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-776eeeaf"
+   ],
+   "why": "Checks the COMBO editor on DAYS_THU. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-945baf3b"
+   ],
+   "why": "Checks the COMBO editor on LT_TYPE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-b5ead96f"
+   ],
+   "why": "Checks the COMBO editor on DAYS_MON. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-c1a8331e"
+   ],
+   "why": "Checks the COMBO editor on DAYS_TUE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-c475aa8d"
+   ],
+   "why": "Checks the COMBO editor on TRANSPORT_MODE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-c5a4ea26"
+   ],
+   "why": "Checks the NUMBER editor on LT_LAY_OFF_CLEARANCE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-d26cbc63"
+   ],
+   "why": "Checks the COMBO editor on DAYS_WED. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-d3bc69e7"
+   ],
+   "why": "Checks the NUMBER editor on LT_DEPARTURE_INLAND. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-e612a8b3"
+   ],
+   "why": "Checks the NUMBER editor on LT_ARRIVAL_INLAND. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-eca92661"
+   ],
+   "why": "Checks the DATETIME editor on CREATION_DATE. This column differs from every other row's column."
+  },
+  {
+   "rows": [
+    "V-f09fbbc3"
+   ],
+   "why": "Checks the NUMBER editor on PRIORITY. This column differs from every other row's column."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 22:31:04",
+ "cost": 0.16972629999999997
+}

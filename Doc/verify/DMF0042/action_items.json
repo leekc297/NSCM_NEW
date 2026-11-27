@@ -1,0 +1,726 @@
+[
+ {
+  "row_id": "V-bdb9455e",
+  "rule_id": "C4",
+  "target": "DMF0042 시나리오 신규 행 있을 때 Bucket 변경 차단",
+  "same": []
+ },
+ {
+  "row_id": "EG-5e2d5c94",
+  "rule_id": "B4",
+  "target": "DMF0042 Active 정책 Sales Site SEARCH",
+  "same": []
+ },
+ {
+  "row_id": "V-6c0249cf",
+  "rule_id": "K3",
+  "target": "[결함 유형 묶음 K3-G02 · 2건] 조회 단축키(F5) 실행",
+  "same": []
+ },
+ {
+  "row_id": "T-1f95d9a6",
+  "rule_id": "G4",
+  "target": "cboClosed / Closed",
+  "same": []
+ },
+ {
+  "row_id": "EG-3c664aec",
+  "rule_id": "M3",
+  "target": "DMF0042 팝업 SCM0002_ProjectbyDivisionPopupEx COND:Project OPEN",
+  "same": []
+ },
+ {
+  "row_id": "EG-0f49e9aa",
+  "rule_id": "A5",
+  "target": "DMF0042 EG257 헤더 재구성 시점 40→81 조회 전",
+  "same": []
+ },
+ {
+  "row_id": "V-7e9fa75c",
+  "rule_id": "M3",
+  "target": "new DM0002_MatsterChgPopup()",
+  "same": [
+   "EG-88f8e26b"
+  ]
+ },
+ {
+  "row_id": "V-749baf1a",
+  "rule_id": "F5",
+  "target": "DMF0042 화면",
+  "same": [
+   "T-79823b13"
+  ]
+ },
+ {
+  "row_id": "V-02d642c4",
+  "rule_id": "J2",
+  "target": "DMF0042 화면",
+  "same": [
+   "V-49ea4cea",
+   "V-253ab5a4"
+  ]
+ },
+ {
+  "row_id": "V-eb3408a8",
+  "rule_id": "F1",
+  "target": "DMF0042 시나리오 [자동] 기존 행 Delete → D 저장 요청",
+  "same": []
+ },
+ {
+  "row_id": "V-64521c1a",
+  "rule_id": "A5",
+  "target": "DMF0042 화면",
+  "same": [
+   "V-7af0ebe9",
+   "V-230d60d2",
+   "AD-6ed785f8",
+   "AD-fd92ff76",
+   "AD-d507cada",
+   "AD-5642889c",
+   "AD-44a82704",
+   "AD-340b33ed",
+   "AD-bf63af82",
+   "AD-418db9b8",
+   "AD-65ce1dee",
+   "AD-4ff725ea",
+   "AD-3ed60b5f",
+   "AD-9c9ba648",
+   "AD-9c488d23",
+   "AD-9687b699",
+   "AD-1583bc04",
+   "AD-b77aebb6",
+   "AD-854e1575",
+   "AD-68b91a7a",
+   "AD-68305920",
+   "AD-8e431cd4",
+   "AD-50d7fe21",
+   "AD-13a7af36",
+   "AD-9b4946ab",
+   "AD-8a20da98",
+   "AD-e0365fd4",
+   "AD-7b7bdbc2",
+   "AD-92f624d9",
+   "AD-8be6a03d",
+   "AD-ec296b87",
+   "AD-51cf1be3",
+   "AD-ec0e41af",
+   "AD-7901966d",
+   "AD-4c397b4d",
+   "AD-56095af7",
+   "AD-f16777f1",
+   "AD-0a3f2d29",
+   "AD-9e63fcd9",
+   "AD-21577cf9",
+   "AD-cc106854",
+   "AD-4aab327f",
+   "AD-d583ad20",
+   "AD-08e8ad26",
+   "AD-2ba25b2c"
+  ]
+ },
+ {
+  "row_id": "V-a053e054",
+  "rule_id": "H3",
+  "target": "DMF0042 입력 중 병합 해제",
+  "same": []
+ },
+ {
+  "row_id": "V-100cf309",
+  "rule_id": "F3",
+  "target": "DMF0042 시나리오 [자동] DEPT_ID40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영",
+  "same": []
+ },
+ {
+  "row_id": "V-736e5e45",
+  "rule_id": "B4",
+  "target": "Biz Plan.CELL_PROD_SITE (Cell Prod Site*)",
+  "same": []
+ },
+ {
+  "row_id": "T-2deb2d76",
+  "rule_id": "D5",
+  "target": "CELL_PROD_SITE / Cell Prod Site",
+  "same": []
+ },
+ {
+  "row_id": "EG-fe492487",
+  "rule_id": "D5",
+  "target": "DMF0042 팝업 DM0002_ItembyDivisionPopupEx CELL:ITEM_ID40 CELL_ICON",
+  "same": []
+ },
+ {
+  "row_id": "EG-94643a36",
+  "rule_id": "A5",
+  "target": "DMF0042 EG024 Div 전용 컬럼 40→81",
+  "same": []
+ },
+ {
+  "row_id": "EG-64a74e96",
+  "rule_id": "B5",
+  "target": "DMF0042 Lookup 후보 CELL_PROD_SITE 기존행",
+  "same": []
+ },
+ {
+  "row_id": "EG-5b7ed08d",
+  "rule_id": "B4",
+  "target": "DMF0042 Active 정책 End Customer GRID_EX",
+  "same": []
+ },
+ {
+  "row_id": "EG-dc4ace27",
+  "rule_id": "M3",
+  "target": "DMF0042 팝업 DMF0051_1_RTF CELL:MEASURE OPEN",
+  "same": []
+ },
+ {
+  "row_id": "V-2114039a",
+  "rule_id": "H8",
+  "target": "Biz Plan.<DYNAMIC:LOOP> (동적 LOOP 컬럼)",
+  "same": []
+ },
+ {
+  "row_id": "V-11ab8740",
+  "rule_id": "E4",
+  "target": "MSG00002",
+  "same": []
+ },
+ {
+  "row_id": "V-0e2a72bd",
+  "rule_id": "H6",
+  "target": "new DM0002_ItembyDivisionPopupEx()",
+  "same": [
+   "V-07e182b0",
+   "EG-480e08d7",
+   "EG-6891cb81",
+   "EG-6f9ef8cb"
+  ]
+ },
+ {
+  "row_id": "V-1d196413",
+  "rule_id": "H6",
+  "target": "new DM0020_OwnerbyDivisionPopup()",
+  "same": [
+   "V-12fa1b10"
+  ]
+ },
+ {
+  "row_id": "V-02175830",
+  "rule_id": "M3",
+  "target": "new SCM0002_ProjectbyDivisionPopupEx()",
+  "same": []
+ },
+ {
+  "row_id": "EG-a5542dfc",
+  "rule_id": "G5",
+  "target": "DMF0042 팝업 SCM0002_ProjectbyDivisionPopupEx COND:Project CORNERS",
+  "same": []
+ },
+ {
+  "row_id": "V-1210bb26",
+  "rule_id": "H6",
+  "target": "popItem.ShowDialog()",
+  "same": [
+   "V-70c4b471",
+   "V-10d1a11a"
+  ]
+ },
+ {
+  "row_id": "V-d3787247",
+  "rule_id": "I4",
+  "target": "DMF0042 화면",
+  "same": []
+ },
+ {
+  "row_id": "EG-c935c87c",
+  "rule_id": "H4",
+  "target": "DMF0042 팝업 DM0002_TitleSetForm_Popup BTN:btnColumn LAYOUT_SCROLL",
+  "same": []
+ },
+ {
+  "row_id": "EG-3da089ff",
+  "rule_id": "M3",
+  "target": "DMF0042 팝업 DM0002_TitleSetForm_Popup BTN:btnMeasure OPEN",
+  "same": []
+ },
+ {
+  "row_id": "EG-3d161d68",
+  "rule_id": "G5",
+  "target": "DMF0042 팝업 DM0002_MatsterChgPopup BTN:btnIncotermsChg CORNERS",
+  "same": []
+ },
+ {
+  "row_id": "V-3e41b595",
+  "rule_id": "E4",
+  "target": "MSG00310",
+  "same": [
+   "V-119e9de9",
+   "V-a097e1c2",
+   "V-e3630fbf",
+   "V-87e8f4da",
+   "V-05ed2d14",
+   "V-a8a9ff28",
+   "V-f0299336",
+   "T-1115bd5d",
+   "T-ab18b973",
+   "T-7286563e",
+   "T-5c0369a9",
+   "T-e96fe73c",
+   "T-db01f180",
+   "T-544eb0df",
+   "T-eb828187",
+   "T-523d21c7",
+   "T-a0aeacff",
+   "T-d535e96c"
+  ]
+ },
+ {
+  "row_id": "ES-74b8b569",
+  "rule_id": "F1",
+  "target": "DMF0042 E2E authcrud 저장 왕복(editonly) k0101",
+  "same": []
+ },
+ {
+  "row_id": "EG-88f8e26b",
+  "rule_id": "M3",
+  "target": "",
+  "folded_into": "V-7e9fa75c"
+ },
+ {
+  "row_id": "T-79823b13",
+  "rule_id": "F5",
+  "target": "",
+  "folded_into": "V-749baf1a"
+ },
+ {
+  "row_id": "V-49ea4cea",
+  "rule_id": "J2",
+  "target": "",
+  "folded_into": "V-02d642c4"
+ },
+ {
+  "row_id": "V-253ab5a4",
+  "rule_id": "J2",
+  "target": "",
+  "folded_into": "V-02d642c4"
+ },
+ {
+  "row_id": "V-7af0ebe9",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "V-230d60d2",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-6ed785f8",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-fd92ff76",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-d507cada",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-5642889c",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-44a82704",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-340b33ed",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-bf63af82",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-418db9b8",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-65ce1dee",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-4ff725ea",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-3ed60b5f",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-9c9ba648",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-9c488d23",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-9687b699",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-1583bc04",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-b77aebb6",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-854e1575",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-68b91a7a",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-68305920",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-8e431cd4",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-50d7fe21",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-13a7af36",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-9b4946ab",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-8a20da98",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-e0365fd4",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-7b7bdbc2",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-92f624d9",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-8be6a03d",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-ec296b87",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-51cf1be3",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-ec0e41af",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-7901966d",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-4c397b4d",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-56095af7",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-f16777f1",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-0a3f2d29",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-9e63fcd9",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-21577cf9",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-cc106854",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-4aab327f",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-d583ad20",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-08e8ad26",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "AD-2ba25b2c",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-64521c1a"
+ },
+ {
+  "row_id": "V-07e182b0",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-0e2a72bd"
+ },
+ {
+  "row_id": "EG-480e08d7",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-0e2a72bd"
+ },
+ {
+  "row_id": "EG-6891cb81",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-0e2a72bd"
+ },
+ {
+  "row_id": "EG-6f9ef8cb",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-0e2a72bd"
+ },
+ {
+  "row_id": "V-12fa1b10",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-1d196413"
+ },
+ {
+  "row_id": "V-70c4b471",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-1210bb26"
+ },
+ {
+  "row_id": "V-10d1a11a",
+  "rule_id": "H6",
+  "target": "",
+  "folded_into": "V-1210bb26"
+ },
+ {
+  "row_id": "V-119e9de9",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "V-a097e1c2",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "V-e3630fbf",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "V-87e8f4da",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "V-05ed2d14",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "V-a8a9ff28",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "V-f0299336",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-1115bd5d",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-ab18b973",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-7286563e",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-5c0369a9",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-e96fe73c",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-db01f180",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-544eb0df",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-eb828187",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-523d21c7",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-a0aeacff",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ },
+ {
+  "row_id": "T-d535e96c",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-3e41b595"
+ }
+]

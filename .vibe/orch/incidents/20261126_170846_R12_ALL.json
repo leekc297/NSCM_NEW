@@ -1,0 +1,29 @@
+{
+  "id": "20261126_170846_R12_ALL",
+  "at": "2026-11-26T17:08:46+09:00",
+  "ms": 1795680526548,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S13 사용자 지적: U29 AS-IS 실측 로그인 계정 오류 SSP0020",
+  "screen": "",
+  "sig": "R12|S13|U29|SSP0020|run_20261126_165837",
+  "count": 1,
+  "repeat": null,
+  "detail": "Doc/asislive/SSP0020/run_20261126_165837/run.json 2026-11-26 17:01:01.283 상태 FAIL · 메뉴 0개(기준 50개 이상) · 사유 메뉴 목록이 비어 있음(메뉴 조회 실패·권한 없음) — 화면을 열 수 없음",
+  "evidence": {
+    "check": "S13",
+    "key": "S13|U29|SSP0020|run_20261126_165837",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T17:20:57+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S13 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -11,14 +11,10 @@
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
 | unreached:(진입점 미연결) | FN_NMM0266 | 61 | dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R | NOT_IN_FOXQUERY |  |
-| unreached:(진입점 미연결) | FN_NMM0266 | 61 | biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R] | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | FN_NMM0266 | 61 | {?definition_path}#dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R | UNRESOLVED |  |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?definition_path}#dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R | UNRESOLVED | 1 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R] | BIZ_MATCH | 1 |  |  |  |
 | dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R | NOT_IN_FOXQUERY | 1 |  |  | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:XIF_MRP_NO_USE_3M_OUT_IF_R_SN, INSERT:SCM_SYS_LOG_BATCH |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
@@ -37,11 +33,10 @@
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 
-## 7. 확인 필요 (2건)
+## 7. 확인 필요 (1건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 61 | FN_NMM0266 | dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R | NOT_IN_FOXQUERY | DB 객체 존재(P) → FoxQuery 없이 직접 호출: EXEC:PR_SCM_SYS_LOG_BATCH, INSERT:XIF_MRP_NO_USE_3M_OUT_IF_R_SN, INSERT:SCM_SYS_LOG_BATCH · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
-| 61 | FN_NMM0266 | {?definition_path}#dbo.PR_GSCM_XIF_MRP_NO_USE_3M_OUT_IF_R | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

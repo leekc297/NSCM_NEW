@@ -9,7 +9,7 @@
 |---|---|---|
 | features/demand/src/pages/demand-manager/components/DemandManagerForm.module.scss | component | 71 |
 | features/demand/src/pages/demand-manager/components/DemandManagerForm.tsx | component | 117 |
-| features/demand/src/pages/demand-manager/components/DemandManagerGrid.tsx | component | 422 |
+| features/demand/src/pages/demand-manager/components/DemandManagerGrid.tsx | component | 424 |
 | features/demand/src/pages/demand-manager/components/modals/index.ts | index | 2 |
 | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | component | 350 |
 | features/demand/src/pages/demand-manager/components/modals/versionPopupModalStore.ts | store | 46 |
@@ -63,8 +63,8 @@
 | CustomDropdown | onChange | <arrow> setVersionType,String | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 281 |
 | InputField | onChange | <arrow> setDescription | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 294 |
 | div | onDoubleClick | handleGridDoubleClick | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 304 |
-| Button | onClick | adoptCurrentSelection | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 335 |
-| Button | onClick | modalClose | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 342 |
+| Button | onClick | modalClose | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 335 |
+| Button | onClick | adoptCurrentSelection | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 342 |
 | DemandManagerForm | onSearch | handleSearch | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 347 |
 | DemandManagerForm | onOpenVersionModal | <arrow> setOpenVersionModal | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 348 |
 | DemandManagerForm | onChangeVersion | <arrow> setSearchCondition | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 349 |
@@ -124,7 +124,7 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0068(4), DMF0082(2), DMF0003(1)
+- 화면ID: DMF0068(4), DMF0082(3), DMF0020(2), DMF0003(1)
 - SP/PKG: PKG_DMF0068(9), P_DMF0068_GET_LOOKUPPROJECT(3), P_DMF0068_GET_ORDERLIST(3), P_DMF0068_SAVE_ORDERLIST_JSON(2), P_DMF0068_DEL_ORDERLIST_JSON(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

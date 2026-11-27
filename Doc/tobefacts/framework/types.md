@@ -14,11 +14,11 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **RawFlexGridColumnConfig** | `@foundation/models` | 411 |  |  |
-| **PageProps** | `@foundation/models` | 151 |  |  |
-| **HotkeyConfig** | `@foundation/models` | 139 |  |  |
-| **ComboResponse** | `@foundation/models` | 112 |  |  |
-| **FlexGridColumnConfig** | `@foundation/models` | 79 |  |  |
+| **RawFlexGridColumnConfig** | `@foundation/models` | 420 |  |  |
+| **PageProps** | `@foundation/models` | 153 |  |  |
+| **HotkeyConfig** | `@foundation/models` | 141 |  |  |
+| **ComboResponse** | `@foundation/models` | 115 |  |  |
+| **FlexGridColumnConfig** | `@foundation/models` | 83 |  |  |
 | **ComboParam** | `@foundation/models` | 32 |  |  |
 | **LookupResponse** | `@foundation/models` | 7 |  |  |
 | **Menu** | `@foundation/models` | 1 |  |  |
@@ -49,7 +49,7 @@
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
 | **ComboOption** | `features/master/src/components` | 32 |  | Filter 콤보 옵션 만들기 — AS-IS DataService.GetDMInnerTable 재현. 그 함수는 세션당 한 번 받아 둔 데이터셋(list_line_dm)을 메모리에서 거른다. TO-BE 는 등록 SQL(Filter*)이 같은 결과셋을  |
-| **MeasureMeta** | `features/master/src/components` | 23 |  | 공용 Measure 선택 popup (2026-07-30 통합 — 화면별 5벌 중복 제거): // AS-IS DM0002_TitleSetForm_Popup.cs 의 measure 모드 동등 동작. ColumnSettingModal(컬럼 모드) 의 형제 |
+| **MeasureMeta** | `features/master/src/components` | 24 |  | 공용 Measure 선택 popup (2026-07-30 통합 — 화면별 5벌 중복 제거): // AS-IS DM0002_TitleSetForm_Popup.cs 의 measure 모드 동등 동작. ColumnSettingModal(컬럼 모드) 의 형제 |
 | **Row** | `features/master/src/components` | 3 |  | // helpers // |
 | **ItemModalColumn** | `features/master/src/components` | 2 |  |  |
 | **ItemModalCondition** | `features/master/src/components` | 2 |  |  |
@@ -83,7 +83,7 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **ColumnLayoutRow** | `@shared/components` | 13 |  |  |
+| **ColumnLayoutRow** | `@shared/components` | 16 |  |  |
 | **CascadeNode** | `@shared/components` | 1 |  | 계층 선택지 트리 노드 — value/label 과 선택 시 펼쳐질 하위(children). // children 이 없으면 잎(최종 선택)이다. |
 | **ColumnMetaRow** | `@shared/components` | 1 |  | admin 컬럼 메타 1행 중 컬럼 설정 팝업이 쓰는 부분 (`/admin/menu/{mnuId}/column` = GridColumn DTO). |
 | **DualListColumn** | `@shared/components` | 1 |  | 공용 Column Setting dual list (2026-06-20 신설 / 2026-07-01 디자인 개편 + 우측 D&D 순서이동): // AS-IS DM0002_TitleSetForm_Popup.cs 의 Base/User dual list 동 |

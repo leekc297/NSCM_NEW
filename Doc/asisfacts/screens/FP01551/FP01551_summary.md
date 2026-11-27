@@ -111,14 +111,10 @@
 | event:popSql.OnSql | RunSqlSource > FindMainData > ApplyAmendCalendarCondition | 1789 | FP\Common\FP01551_PlanAmend#find_BukInfo | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP01551_PlanAmend_find_BukInfo.sql |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 541 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 541 | FP\Common\FP01551_PlanAmend#execute_psiCalcul | MATCH_PATTERN | SP PR_SCM_OF_PACK_REQUIRE_CEL |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 541 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 541 | FP01551_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 553 | biz:FPCommonDataBLL.GeneralUpdateBatch [batchId=save_CalculationList] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 553 | FP\Common\FP01551_PlanAmend#save_CalculationList | MATCH_PATTERN | [update-batch]  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 563 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 563 | FP\Common\FP01551_PlanAmend#execute_psiCalcul | MATCH_PATTERN | SP PR_SCM_OF_PACK_REQUIRE_CEL |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 563 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Execute | 563 | FP01551_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY |  |
 | button:SaveButton | SaveButton > UISaveData > Save_Data | 1129 | biz:FPCommonDataBLL.GeneralUpdateBatch [batchId=merge_data] | BIZ_MATCH |  |
 | button:SaveButton | SaveButton > UISaveData > Save_Data | 1129 | FP\Common\FP01551_PlanAmend#merge_data | MATCH_PATTERN | [update-batch]  |
 | button:SaveButton | SaveButton > UISaveData > UIFindData > FindMainData | 1763 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_CellAssyYN] | BIZ_MATCH |  |
@@ -145,14 +141,10 @@
 | event:this.btnBucket.Click | btnBucket_Click > UIFindData > FindTotalValue > GetPlanGroup | 3039 | biz:FPCommonDataBLL.FPCommonDataList [code=AMEND_INSTANCE] | BIZ_MATCH |  |
 | event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 541 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul] | BIZ_MATCH |  |
 | event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 541 | FP\Common\FP01551_PlanAmend#execute_psiCalcul | MATCH_PATTERN | SP PR_SCM_OF_PACK_REQUIRE_CEL |
-| event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 541 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH |  |
-| event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 541 | FP01551_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY |  |
 | event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 553 | biz:FPCommonDataBLL.GeneralUpdateBatch [batchId=save_CalculationList] | BIZ_MATCH |  |
 | event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 553 | FP\Common\FP01551_PlanAmend#save_CalculationList | MATCH_PATTERN | [update-batch]  |
 | event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 563 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul] | BIZ_MATCH |  |
 | event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 563 | FP\Common\FP01551_PlanAmend#execute_psiCalcul | MATCH_PATTERN | SP PR_SCM_OF_PACK_REQUIRE_CEL |
-| event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 563 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH |  |
-| event:this.btnButtonList.UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected > Save_Data > Save_Data_Execute | 563 | FP01551_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY |  |
 | event:this.btnCalculation2.Click | btnCalculation_Click > UIFindData > FindMainData | 1763 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_CellAssyYN] | BIZ_MATCH |  |
 | event:this.btnCalculation2.Click | btnCalculation_Click > UIFindData > FindMainData | 1763 | FP\Common\FP01551_PlanAmend#find_CellAssyYN | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP01551_PlanAmend_find_CellAssyYN.sql |
 | event:this.btnCalculation2.Click | btnCalculation_Click > UIFindData > FindMainData > ApplyAmendCalendarCondition | 1786 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_WeekCnt] | BIZ_MATCH |  |
@@ -177,19 +169,13 @@
 | event:this.btnCategory.Click | btnCatagory_Click > UIFindData > FindTotalValue > GetPlanGroup | 3039 | biz:FPCommonDataBLL.FPCommonDataList [code=AMEND_INSTANCE] | BIZ_MATCH |  |
 | event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1195 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_confirm] | BIZ_MATCH |  |
 | event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1195 | FP\Common\FP01551_PlanAmend#execute_confirm | MATCH_PATTERN | SP PR_SCM_OF_PACK_REQUIRE_FIX |
-| event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1195 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_confirm] | BIZ_MATCH |  |
-| event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1195 | FP01551_PlanAmend#execute_confirm | NOT_IN_FOXQUERY |  |
 | event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1202 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_planSend] | BIZ_MATCH |  |
 | event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1202 | FP\Common\FP01551_PlanAmend#execute_planSend | MATCH_PATTERN | SP PR_SCM_INHOUSE_REQUEST_PLAN_SEND |
-| event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1202 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_planSend] | BIZ_MATCH |  |
-| event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm | 1202 | FP01551_PlanAmend#execute_planSend | NOT_IN_FOXQUERY |  |
 | event:this.btnConfirm2.Click | btnConfirm_Click > UISaveConfirm > Save_Confirm > GetPlanGroup | 3039 | biz:FPCommonDataBLL.FPCommonDataList [code=AMEND_INSTANCE] | BIZ_MATCH |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 350 | biz:FPCommonDataBLL.GeneralUpdateBatch [batchId=add_cell_code] | BIZ_MATCH |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data | 350 | FP\Common\FP01551_PlanAmend#add_cell_code | MATCH_PATTERN | [update-batch]  |
 | event:this.btnVerSave.Click | btnVerSave_Click > Save_Data > Save_Data_Execute | 257 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_version] | BIZ_MATCH |  |
 | event:this.btnVerSave.Click | btnVerSave_Click > Save_Data > Save_Data_Execute | 257 | FP\Common\FP01551_PlanAmend#execute_version | MATCH_PATTERN | SP PR_SCM_OF_PACK_REQUIRE_CEL |
-| event:this.btnVerSave.Click | btnVerSave_Click > Save_Data > Save_Data_Execute | 257 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_version] | BIZ_MATCH |  |
-| event:this.btnVerSave.Click | btnVerSave_Click > Save_Data > Save_Data_Execute | 257 | FP01551_PlanAmend#execute_version | NOT_IN_FOXQUERY |  |
 | event:this.btnVersion2.Click | btnVersion_Click > UIFindData > FindMainData | 1763 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_CellAssyYN] | BIZ_MATCH |  |
 | event:this.btnVersion2.Click | btnVersion_Click > UIFindData > FindMainData | 1763 | FP\Common\FP01551_PlanAmend#find_CellAssyYN | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_FP01551_PlanAmend_find_CellAssyYN.sql |
 | event:this.btnVersion2.Click | btnVersion_Click > UIFindData > FindMainData > ApplyAmendCalendarCondition | 1786 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_WeekCnt] | BIZ_MATCH |  |
@@ -231,10 +217,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_confirm] | BIZ_MATCH | 1 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_planSend] | BIZ_MATCH | 1 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH | 2 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_version] | BIZ_MATCH | 1 |  |  |  |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=AMEND_INSTANCE] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=CURR_UTDATE] | BIZ_MATCH | 1 |  |  |  |
@@ -273,10 +255,6 @@
 | FP\Common\FP01551_PlanAmend#find_WeekCnt | MATCH_PATTERN | 1 | [sql] foxquery_sql\FP_Common_FP01551_PlanAmend_find_WeekCnt.sql | SELECT:TH_UIS_CAL |  |
 | FP\Common\FP01551_PlanAmend#merge_data | MATCH_PATTERN | 1 | [update-batch]  |  |  |
 | FP\Common\FP01551_PlanAmend#save_CalculationList | MATCH_PATTERN | 1 | [update-batch]  |  |  |
-| FP01551_PlanAmend#execute_confirm | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
-| FP01551_PlanAmend#execute_planSend | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
-| FP01551_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
-| FP01551_PlanAmend#execute_version | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -340,10 +318,10 @@
 | Save_Data | newrow | INSTANCE_ID, PLAN_ID, DIVISION_ID, COMPANY_ID, CATEGORY_ID, SITE_ID, PLANT_ID, STORAGE_ID, SOC_ID, MARKET, REQUIRE_DATE, CELL_ITEM_ID, REQUIRE_QTY, ORIG_REQUIRE_QTY, M |
 | Save_Data | dr | USER_ID |
 | Save_Data | resultDT.Rows[0] | RESULT |
-| Save_Data_Execute | Filter | BASIS_PLAN_ID, PLAN_ID, CREATE_PLAN_ID, CAL_OPTION, FIX_DATE, COPY_FLAG, USER_ID, TARGET_DATE, INSTANCE_ID |
-| Save_Data_Execute | dtCurrDate.Rows[0] | CUR_DATE |
 | Save_Data_Execute | newrow | INSTANCE_ID, PLAN_ID, DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, CELL_ITEM_ID, USER_ID |
+| Save_Data_Execute | Filter | INSTANCE_ID, PLAN_ID, BASIS_PLAN_ID, CREATE_PLAN_ID, FIX_DATE, COPY_FLAG, TARGET_DATE, CAL_OPTION, USER_ID |
 | Save_Data_Execute | resultDT.Rows[0] | RESULT |
+| Save_Data_Execute | dtCurrDate.Rows[0] | CUR_DATE |
 | SetBohQty | row | DATA_TYPE, OPERATION_ID, BOH_QTY, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
 | SetBohQty | each_row | _TYPE, OPERATION_ID, COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, TOP_ITEM_ID |
 | SetBohQty | result.First() | QTY |
@@ -360,9 +338,9 @@
 ### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
 | 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
 |---|---|---|---|
+| GetMeasure | Measure:128, InitControl:150, Measure:143, InitControl:192, CheckAndGetMeasure:377 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | GetCheckedListValue | InitControls:201, cboTransport_changed:226, InitControls:177, InitControls:182, InitControls:188, ClbPlant_SelectedIndexChanged:197, clbSite_SelectedIndexChanged:202, ClbDivision_SelectedIndexChanged:208 | CString.GetCheckedListValue | CODE |
 | FP_UpdateBatch2 | Save_Data:350, Save_Data_Execute:553 | DataService.FP_UpdateBatch2 | COUNT, EXCEPTION, RESULT |
-| GetMeasure | Measure:128, InitControl:150, Measure:143, InitControl:192, CheckAndGetMeasure:377 | MeasureService.GetMeasure | FLAG, MEA_ID, MEA_NAME, MEA_VALUE, MENU_ID, TYPE, USER_ID |
 | SetFilter | InitControls:205, InitControls:206, InitControls:207, InitControls:208, InitControls:221, InitControls:222, SetChangeControl:247, SetChangeControl:248 | BaseForm.SetFilter | AllYn, Col, SheetName, Value |
 | GetInnerTable | SetChangeControl:242, SetChangeControl:251, SetChangeControl:259, SetChangeControl:267, SetChangeControl:275 | DataService.GetInnerTable | ACTIVE_FLAG, ALL_LINE, AMEND_FLAG, AMEND_INSTANCE, AMEND_MAIN_FLAG, AMEND_UI_NAME, CODE, CONFIRM_AREA, DIVISION_ID, DIVISION_NAME, FACTORY_ID, FACTORY_NAME, INSTANCE_ID, INSTANCE_NAME, IN_ACT, IS_SAME_PLAN_ID, LINE_AUTH, LINE_ID, LINE_NAME, NAME, OPERATION_ID, OPERATION_NAME, PLANT_ID, PLANT_NAME, SHOP_GROUP_ID, SITE_ID, SITE_NAME, SORT_ORDER, USE_FLAG, USE_WOW_STATUS, VERSION_YN |
 | EditQuery | RefreshHeader:418, RefreshHeader:428 | FPExtensions.EditQuery | ROW_ID |
@@ -381,23 +359,28 @@
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | InitEvent:217 |
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | dpPlanDate_ValueChanged:432 |
 | dpPlanDate | ValueChanged | dpPlanDate_ValueChanged | dpPlanDate_ValueChanged:455 |
-| this.btnSloc | Click | btnSloc_Click | InitializeComponent:348 |
-| this.btnCellItem | Click | btnCellItem_Click | InitializeComponent:403 |
-| this.btnClose | Click | btnClose_Click | InitializeComponent:691 |
-| this.btnSave | Click | btnSave_Click | InitializeComponent:730 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:170 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
+| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:336 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:543 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:544 |
+| this.btnSloc | Click | btnSloc_Click | InitializeComponent:348 |
+| this.btnCellItem | Click | btnCellItem_Click | InitializeComponent:403 |
+| this.btnClose | Click | btnClose_Click | InitializeComponent:691 |
+| this.btnSave | Click | btnSave_Click | InitializeComponent:730 |
+| this | Load | Form_Load | .ctor:136 |
+| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:190 |
+| clbSite | SelectedIndexChanged | clbSite_SelectedIndexChanged | InitControls:191 |
+| clbPlant | SelectedIndexChanged | ClbPlant_SelectedIndexChanged | InitControls:192 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:187 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:224 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:239 |
 | this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:240 |
+| this | Load | Form_Load | .ctor:66 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:83 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:84 |
-| this.btnButtonList | UsrButtonList_Click_Detected | btnButtonList_UsrButtonList_Click_Detected | InitializeComponent:336 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:543 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:544 |
 | this | Load | Form_Load | .ctor:93 |
 | this.btnVerClose | Click | btnVerClose_Click | InitializeComponent:121 |
 | this.btnVerSave | Click | btnVerSave_Click | InitializeComponent:158 |
@@ -406,11 +389,6 @@
 | rdoRequest | CheckedChanged | rdoRequest_Click | MeasureSetForm_Load:91 |
 | rdoMoving | CheckedChanged | rdoMoving_Click | MeasureSetForm_Load:92 |
 | rdoPack | CheckedChanged | rdoPack_Click | MeasureSetForm_Load:93 |
-| this | Load | Form_Load | .ctor:136 |
-| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitControls:190 |
-| clbSite | SelectedIndexChanged | clbSite_SelectedIndexChanged | InitControls:191 |
-| clbPlant | SelectedIndexChanged | ClbPlant_SelectedIndexChanged | InitControls:192 |
-| this | Load | Form_Load | .ctor:66 |
 | this | Load | Form_Load | .ctor:138 |
 | cboInstance | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:296 |
 | drpPlanDate | DateTimeChanged | planday_changed | InitEvent:297 |
@@ -466,25 +444,25 @@
 ## 6. 컨트롤 (192개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
-| LayoutControlItem | 40 | layoutControlItem20, layoutControlItem10, layoutControlItem7, layoutControlItem6, layoutControlItem19, layoutControlItem31, layoutControlItem28, layoutControlItem33, layoutControlItem34, layoutControlItem32, layoutControlItem18, layoutControlItem2, layoutControlItem5, layoutControlItem12, layoutControlItem14 … |
+| LayoutControlItem | 40 | layoutControlItem1, lblSite, lblNickName, layoutControlItem2, layoutControlItem3, layoutControlItem5, layoutControlItem4, layoutControlItem20, layoutControlItem10, layoutControlItem7, layoutControlItem6, layoutControlItem19, layoutControlItem31, layoutControlItem28, layoutControlItem33 … |
 | UsrLabel | 25 | usrLabel2, usrLabel16, usrLabel13, usrLabel7, usrLabel1, usrLabel3, usrLabel5, lblConId, usrLabel14, lblConDate, usrLabel12, lblConfirmPlanId, usrLabel10, lblFixDate, lblDescription … |
-| UsrButton | 20 | btnSloc, btnCellItem, btnClose, btnSave, usrButton1, usrButton2, usrButton1, usrButton2, btnVerClose, btnVerSave, btnToggleSave, btnSql, usrButton2, btnBucket, btnCategory … |
-| UsrLayoutControl | 10 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2 |
-| LayoutControlGroup | 10 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2 |
-| UsrTextBox | 9 | txtItem, txtQty, txtSloc, txtCellCode, txtNickName, txtNickName, txtCellCode, txtNickName, txtItem |
+| UsrButton | 20 | usrButton1, usrButton2, btnSloc, btnCellItem, btnClose, btnSave, usrButton1, usrButton2, btnVerClose, btnVerSave, btnToggleSave, btnSql, usrButton2, btnBucket, btnCategory … |
+| UsrLayoutControl | 10 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 10 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup1, layoutControlGroup2 |
 | Panel | 9 | panel1, panel1, panel3, panel1, infoPanel, panel2, panel4, panel1, panel3 |
 | CheckBox | 9 | chk_month, chk_week, chk_day, chk_avail, chk_i, chk_ship_result, chk_p, chk_s, chk_total_2 |
+| UsrTextBox | 9 | txtCellCode, txtNickName, txtItem, txtQty, txtSloc, txtNickName, txtCellCode, txtNickName, txtItem |
+| EmptySpaceItem | 8 | emptySpaceItem2, emptySpaceItem1, emptySpaceItem4, emptySpaceItem5, emptySpaceItem2, emptySpaceItem3, emptySpaceItem1, emptySpaceItem1 |
 | FpSpread | 8 | spdMain, spdMain, spdMain, spdMain, spdEdit, spdInfo, spdMain, spdMain |
 | SheetView | 8 | spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdEdit_Sheet1, spdInfo_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
-| EmptySpaceItem | 8 | emptySpaceItem2, emptySpaceItem1, emptySpaceItem4, emptySpaceItem5, emptySpaceItem2, emptySpaceItem3, emptySpaceItem1, emptySpaceItem1 |
 | UsrConditionPanel | 6 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
 | UsrCheckedList2 | 6 | clbDivision, clbPlant, clbDivision, clbFactory, clbPlant, cboSite |
 | Label | 4 | label1, label2, label2, label1 |
 | UsrCombo | 3 | cboTransport, cboInstance, cboPlanId |
 | RadioButton | 3 | rdoPack, rdoMoving, rdoRequest |
+| UsrButtonList | 2 | btnButtonList, btnButtonList |
 | UsrDatePicker2 | 2 | dpPlanDate, drpPlanDate |
 | ImageList | 2 | imageList1, imageList1 |
-| UsrButtonList | 2 | btnButtonList, btnButtonList |
 | UsrCheckBox | 2 | chk_lineAssign, chk_Info |
 | UsrDatePicker | 1 | drpFixDate |
 | UsrCheckedList | 1 | clbSite |
@@ -493,9 +471,11 @@
 | TextBox | 1 | tbLog |
 | DataGridView | 1 | dgEdit |
 
-## 7. 확인 필요 (22건)
+## 7. 확인 필요 (17건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
+| 553 | Save_Data_Execute | FP\{?default:part_service}\FP01551_PlanAmend#save_CalculationList | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 350 | Save_Data | FP\{?default:part_service}\FP01551_PlanAmend#add_cell_code | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1786 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP01551_PlanAmend#find_WeekCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1787 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP01551_PlanAmend#find_DateMap | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1788 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP01551_PlanAmend#find_MonthCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -509,15 +489,8 @@
 | 1195 | Save_Confirm | FP\{?default:part_service}\FP01551_PlanAmend#execute_confirm | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1202 | Save_Confirm | FP\{?default:part_service}\FP01551_PlanAmend#execute_planSend | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 257 | Save_Data_Execute | FP\{?default:part_service}\FP01551_PlanAmend#execute_version | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 553 | Save_Data_Execute | FP\{?default:part_service}\FP01551_PlanAmend#save_CalculationList | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 350 | Save_Data | FP\{?default:part_service}\FP01551_PlanAmend#add_cell_code | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 541 | Save_Data_Execute | FP01551_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 563 | Save_Data_Execute | FP01551_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 1195 | Save_Confirm | FP01551_PlanAmend#execute_confirm | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 1202 | Save_Confirm | FP01551_PlanAmend#execute_planSend | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 257 | Save_Data_Execute | FP01551_PlanAmend#execute_version | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 1763 | FindMainData | FP\{?default:part_service}\FP01551_PlanAmend#find_CellAssyYN | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1129 | Save_Data | FP\{?default:part_service}\FP01551_PlanAmend#merge_data | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 1763 | FindMainData | FP\{?default:part_service}\FP01551_PlanAmend#find_CellAssyYN | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |
@@ -547,8 +520,8 @@
 
 ## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + HARDCODED (+코드 표시/라벨 변경)** (상세 grid_code.csv)
 메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
-- 코드에서 생성하는 시트: ItemPopup, StoragePopup, MAIN, Confirm History, Amend, CMA
-- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:160, SetSheetHeaderColumn_FP@SetSpreadInit:158, SetSheetHeaderColumn_FP@SetSpreadInit:302, SetSheetHeaderColumn_FP@InitSpread:351, SetSheetHeaderColumn_FP@RefreshHeaderOnly:541, SetSheetHeaderColumn_FP@SetSpreadInit:164
+- 코드에서 생성하는 시트: ItemPopup, MAIN, Confirm History, StoragePopup, Amend, CMA
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn_FP@SetSpreadInit:160, SetSheetHeaderColumn_FP@SetSpreadInit:302, SetSheetHeaderColumn_FP@SetSpreadInit:158, SetSheetHeaderColumn_FP@InitSpread:351, SetSheetHeaderColumn_FP@RefreshHeaderOnly:541, SetSheetHeaderColumn_FP@SetSpreadInit:164
 - 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSheet
 
 | 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |

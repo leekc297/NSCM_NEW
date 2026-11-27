@@ -1,0 +1,38 @@
+{
+  "id": "20261126180321_VISION",
+  "at": "2026-11-26T18:03:21+09:00",
+  "ms": 1795683801052,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 자가진단 미확인 추적 sn 을 종류와 경과일로 묶어 요약을 먼저 보여 줌",
+  "title": "컨설팅: 자가진단 미확인 추적(S6)을 종류와 경과일로 묶어 요약을 먼저 보여 줌",
+  "evidence": "result.json S6 11-26 17:42 total 572, open 572, confirmed 0, dropped 0, reloadOpen 391, reloadLoaded 374. orch-selfcheck.js:236 은 open 앞 60건만 항목으로 나열하고 묶음 요약이 없음. 일괄 확인 단추(workbench.js:3434 orch:selfMarkLoaded)를 쓴 기록 0건(confirmed 0)",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_s6_group.js"
+  ],
+  "before_after": "전: S6 항목 = 열린 행 앞 60건. 후: info.groups 에 종류별 건수(창 로드 뒤 화면 확인만 남음, 창 로드 대기, 실측 미실행, 사용자 승인 대기, 그 밖)와 7일 넘은 건수를 넣고, items 맨 앞에 묶음 요약 1줄('창 로드 뒤 확인만 남음 374건, 일괄 확인 단추로 처리')을 둠. 종류 판정은 text 의 낱말(창 다시 로드, 실화면 / 미실행, 실측 / 승인 대기, 사용자 확인 대기)로 함. 상태는 바꾸지 않음(자동 확인 없음)",
+  "verify": "반영 때: node --check tools/VibeManager/orch-selfcheck.js. node tools/VibeManager/test/t_s6_group.js tools/VibeManager(임시 이력 원장 5종 문장으로 groups 건수와 요약 줄 확인, status 변경 0건). node tools/VibeManager/test/run_all.js tools/VibeManager. 반영 뒤: 자가진단 탭 S6 첫 줄 요약 표시와 confirmed+dropped 일별 증가 건수",
+  "rollback": "orch-selfcheck.js 반영 전 사본으로 되돌리고 시험 파일 삭제",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:10:42+09:00",
+      "by": "S-Y",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:13:52+09:00",
+      "by": "S-Y",
+      "what": "반영 완료(세션 직접 보완) · orch-selfcheck.js:234~252 s6Group, info.groups, items 첫 줄 묶음 요약(상태 변경 없음) · test/t_s6_group.js 7건 PASS(2026-11-26 18:13:45)"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-Y",
+  "waitNote": "",
+  "appliedMs": 1795684432123
+}

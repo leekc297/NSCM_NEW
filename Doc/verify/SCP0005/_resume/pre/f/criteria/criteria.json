@@ -1,0 +1,34 @@
+{
+ "menu_id": "SCP0005",
+ "at": "2026-11-26 01:18:17",
+ "ledger": "Doc/verify/SCP0005/verify_ledger.csv",
+ "ledger_rows": 1357,
+ "elements": 103,
+ "items": 1253,
+ "status": {
+  "확정": 857,
+  "대상 아님": 371,
+  "판단 대기": 25
+ },
+ "family_rows": 711,
+ "family": {
+  "same": 104,
+  "element": 68,
+  "screen": 140,
+  "absent_confirmed": 364,
+  "absent_wait": 24
+ },
+ "rules_applied": 347,
+ "rules_quote_fail": 1,
+ "user_fixed": 0,
+ "live_links": 70,
+ "live_wait": 29,
+ "ai": {
+  "calls": 0,
+  "cached": 38,
+  "failed": 0,
+  "cost": 0.0,
+  "nochange": 0
+ },
+ "batches": 38
+}

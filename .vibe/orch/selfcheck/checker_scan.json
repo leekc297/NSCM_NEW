@@ -1,60 +1,23 @@
 {
- "at": "2026-11-26 16:04:36",
+ "at": "2026-11-27 01:20:01",
  "ledgers": 58,
- "rows": 117085,
- "fingerprint": "1c0994780e6d46ec",
+ "rows": 119493,
+ "fingerprint": "30f9eaa2f5633a98",
  "detectors": [
   {
    "id": "K1",
    "name": "한 글자 칸 이름(정규식 잘림 흔적)",
-   "rows": 94,
-   "screens": [
-    "DMF0020",
-    "DMF0068",
-    "SCP0108",
-    "SSP0024"
-   ],
-   "samples": [
-    {
-     "menu_id": "DMF0020",
-     "row_id": "V-cbfae26c",
-     "rule_id": "D1",
-     "result": "NOT_RUN",
-     "target": "Sales Price Template.M0 (M0)",
-     "evidence": ""
-    },
-    {
-     "menu_id": "DMF0068",
-     "row_id": "V-aeec1a24",
-     "rule_id": "D1",
-     "result": "NOT_RUN",
-     "target": "ContributeSalesList.M1 (M1)",
-     "evidence": ""
-    },
-    {
-     "menu_id": "SCP0108",
-     "row_id": "V-3937c66e",
-     "rule_id": "A5",
-     "result": "ERROR",
-     "target": "CUTOFF.DV (DV)",
-     "evidence": "[측정 경로 누락] 탭 'CUTOFF' 전환 실패(Division 순회 포함) — 이 시트 컬럼 미측정"
-    },
-    {
-     "menu_id": "SSP0024",
-     "row_id": "T-4589d2bb",
-     "rule_id": "D1",
-     "result": "PASS",
-     "target": "POST_OPER_LT / Post Oper.LT(Day",
-     "evidence": "기존행 r0 POST_OPER_LT 편집=false (AS-IS 잠금) | 신규행 r0 POST_OPER_LT 편집=false (AS-IS 잠금)"
-    }
-   ]
+   "rows": 0,
+   "screens": [],
+   "samples": []
   },
   {
    "id": "K2",
    "name": "같은 문구 반복(판정마다 누적)",
-   "rows": 1058,
+   "rows": 1052,
    "screens": [
     "DMF0005",
+    "DMF0042",
     "SCP0005",
     "SCP0007",
     "SCP0016",
@@ -89,6 +52,14 @@
      "evidence": " | [미검증] 검사기(check.js SC1·smoke 기준표 순서)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(check.js SC1·smoke 기준표 순서)가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
     },
     {
+     "menu_id": "DMF0042",
+     "row_id": "V-02d642c4",
+     "rule_id": "J2",
+     "result": "FAIL",
+     "target": "DMF0042 화면",
+     "evidence": "E2E auth authorized=true notFound=false menuAccess=Y tobeGroups=ADMIN|DM ADMIN|DM Planner|DM Planner (W/S)|FP · 오류: Error: [40] 그리드 DIVISION 값 범위 | E2E auth KOR | 김 김현기 | Home | Business Plan | Scroll tabs left | Scroll tabs right | Close others | Close All · 오류: Error: [40] 그리드 DIVISION 값 범위 | E2E "
+    },
+    {
      "menu_id": "SCP0005",
      "row_id": "V-a0689c02",
      "rule_id": "H7",
@@ -119,23 +90,16 @@
      "result": "PASS",
      "target": "SCP0020 화면",
      "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'TactTime_20261114_095944.xlsx' 6593B | E2E smoke 공통 'Excel 다운로드' [OK] 'TactTime_20261114_095944.xlsx' 6593B"
-    },
-    {
-     "menu_id": "SCP0033",
-     "row_id": "V-2934470e",
-     "rule_id": "H7",
-     "result": "PASS",
-     "target": "SCP0033 화면",
-     "evidence": "E2E smoke 공통 'Excel 다운로드' [OK] 'ShipmentSemiDeptDay_20261114_111033.xlsx' 6496B | E2E smoke 공통 'Excel 다운로드' [OK] 'ShipmentSemiDeptDay_20261114_111033.xlsx' 6496B"
     }
    ]
   },
   {
    "id": "K3",
    "name": "재지 못한 행의 해당없음(미검증 원칙 위반 후보)",
-   "rows": 921,
+   "rows": 1020,
    "screens": [
     "DMF0005",
+    "DMF0042",
     "SCP0005",
     "SCP0007",
     "SCP0016",
@@ -163,11 +127,19 @@
    "samples": [
     {
      "menu_id": "DMF0005",
-     "row_id": "V-e0e9e53f",
-     "rule_id": "H13",
+     "row_id": "V-6f80ba2a",
+     "rule_id": "MS1",
      "result": "NA",
-     "target": "production.ENERGE_WH (Energy(Wh))",
-     "evidence": "ENERGE_WH: 음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음(데이터 조건 · 검사기 한계 아님)"
+     "target": "MSG00096",
+     "evidence": "AS-IS MSG00096 '사용 권한이 없습니다.' → 같은 문구의 TO-BE ID MSG01125 '사용 권한이 없습니다.' — TO-BE 코드(FE sales-site-project-model 폴더 · PKG)에 MSG00096/MSG01125 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-dea3ce34",
+     "rule_id": "C3",
+     "result": "NA",
+     "target": "siMain.SetValue",
+     "evidence": "설계 결정(GAP GAP-264 · DD-120 · 확인(원천 제외) · claude(batch gap_DMF0021_DMF0042_DMF0044)): AS-IS 'End Customer → Sales Site → Model 순 선택, Team·End Customer 직접 선택' → TO-BE 'Sales Site → Model 팝업 선택 시 Team · End Customer 자동 채움, 두 칸 직접 입력 불가' — 근거 : 2026-09-02 고객 회신 · 처리 내역 : 2026-09-03 자동매핑 추가 작업 주석 확인(제외) "
     },
     {
      "menu_id": "SCP0005",
@@ -187,11 +159,11 @@
     },
     {
      "menu_id": "SCP0016",
-     "row_id": "V-6a3d49b3",
-     "rule_id": "H13",
+     "row_id": "T-10be0aa1",
+     "rule_id": "M3",
      "result": "NA",
-     "target": "Waterfall Shipment Plan.BOH (BOH (To Site))",
-     "evidence": "BOH: 음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음(데이터 조건 · 검사기 한계 아님)"
+     "target": "btnColumn",
+     "evidence": "팝업을 여는 트리거 셀을 화면 메타에서 찾지 못함 — 팝업 내부 기능 검사 대상 미확정(수동 검수 W7)"
     },
     {
      "menu_id": "SCP0020",
@@ -200,34 +172,15 @@
      "result": "NA",
      "target": "MSG00199",
      "evidence": "AS-IS MSG00199 '작업중인 데이터가 있습니다. 작업 완료후 사용하세요.' → 같은 문구의 TO-BE ID MSG01210 '작업중인 데이터가 있습니다. 작업 완료후 사용하세요.' — TO-BE 코드(FE tact-time 폴더 · PKG)에 MSG00199/MSG01210 참조 없음 · E4 실측 없음 — 공통 컴포넌트 메시지이거나 미구현(E4 행에서 판정) — 수동 검수"
-    },
-    {
-     "menu_id": "SCP0033",
-     "row_id": "V-b66ffc3a",
-     "rule_id": "E4",
-     "result": "NA",
-     "target": "MSG00059",
-     "evidence": "MSG00059: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (siMain.ActiveSheet.RowCount <= 0)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)"
     }
    ]
   },
   {
    "id": "K4",
    "name": "결과와 증거 어긋남",
-   "rows": 2,
-   "screens": [
-    "SCP0096"
-   ],
-   "samples": [
-    {
-     "menu_id": "SCP0096",
-     "row_id": "V-d8f314e2",
-     "rule_id": "H2",
-     "result": "FAIL",
-     "target": "SCP0096 시나리오 [자동] 당주 구분선(rail) = 이번 주(Weekly)",
-     "evidence": "[선행 결함 종속 V-eb856b69] AS-IS W_ 칸은 chkSum.Checked 일 때 표시(SCP0096_Shipment_Working_Day_OSP.cs:355) · TO-BE 'SCP0096 체크박스 Sum' FAIL 로 이 칸이 화면에 없어 AS-IS 동작 없음 · 조치 = V-eb856b69 보완(같은 원인) · [측정 경로 없음] [자동] 당주 구분선(rail) = 이번 주(Weekly): W_ 동적 칸 없음 · 저장 요청 0 · 편집기 null · search:0행·신규0·호출1·요청6 → rail:2행·신규0·"
-    }
-   ]
+   "rows": 0,
+   "screens": [],
+   "samples": []
   },
   {
    "id": "K5",
@@ -318,6 +271,46 @@
    ]
   },
   {
+   "rule_id": "X-LOC",
+   "result": "ERROR",
+   "sig": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 293,
+   "screens": [
+    "DMF0042",
+    "SCP0016",
+    "SCP0020",
+    "SCP0037",
+    "SCP0041",
+    "SCP0108",
+    "SCP0131",
+    "SSP0003",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0042",
+     "row_id": "T-f574b22b",
+     "target": "— · 파리티 확인(무변경): 분모0 가드 기구현 / Cutoff 재조회 없음=파리티·Replace 재조회=기적용 / 6년 자동보정 ",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0016",
+     "row_id": "T-3ba7861f",
+     "target": "3 · BtnProject_Click(1304)",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "T-0b8653ba",
+     "target": "1 Layout · usrLayoutControl1 / layoutControlGroup1 (orphan dead)",
+     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
    "rule_id": "X-ROW",
    "result": "ERROR",
    "sig": "진입점 집계 #검사 — <C>:# (미실행 검사가 남아 판정필요)",
@@ -374,45 +367,6 @@
    ]
   },
   {
-   "rule_id": "X-LOC",
-   "result": "ERROR",
-   "sig": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
-   "rows": 290,
-   "screens": [
-    "SCP0016",
-    "SCP0020",
-    "SCP0037",
-    "SCP0041",
-    "SCP0108",
-    "SCP0131",
-    "SSP0003",
-    "SSP0021",
-    "SSP0023",
-    "SSP0060",
-    "SSP0200"
-   ],
-   "samples": [
-    {
-     "menu_id": "SCP0016",
-     "row_id": "T-3ba7861f",
-     "target": "3 · BtnProject_Click(1304)",
-     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
-    },
-    {
-     "menu_id": "SCP0020",
-     "row_id": "T-0b8653ba",
-     "target": "1 Layout · usrLayoutControl1 / layoutControlGroup1 (orphan dead)",
-     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
-    },
-    {
-     "menu_id": "SCP0037",
-     "row_id": "T-85e253f9",
-     "target": "2 · cboDivision.SelectedIndexChanged",
-     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
-    }
-   ]
-  },
-  {
    "rule_id": "D1",
    "result": "ERROR",
    "sig": "기존행 r# <C> 편집=false — 기대: AS-IS 편집 기대 없음(AS-IS 컬럼 아님 또는 facts_lockrules 미실행) — TO-BE 신설 컬럼",
@@ -447,6 +401,41 @@
      "row_id": "V-a5963ae0",
      "target": "Osp Stock.DIVISION_ID (Div*)",
      "evidence": "기존행 r0 DIVISION_ID 편집=false — 기대: AS-IS 편집 기대 없음(AS-IS 컬럼 아님 또는 facts_lockrules 미실행) — TO-BE 신설 컬럼이면 확정 규칙으로 판정 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
+   "rule_id": "C6",
+   "result": "ERROR",
+   "sig": "원천 컬럼 분기 해석 불가 — 조건 <S> → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 192,
+   "screens": [
+    "DMF0042",
+    "SCP0020",
+    "SCP0041",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0060"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-47393edc",
+     "target": "siMain.SetValue",
+     "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siMain.GetValue(e.Row, e.Column).ToString() == \"\")' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-8fb7b586",
+     "target": "TACT_TIME",
+     "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (siExcept.ActiveSheet.SheetName == SpdSheet.shtExcept) ▸ if (e.Type == FarPoint.Win.Spread.Model.' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0041",
+     "row_id": "V-b38f6029",
+     "target": "siMain.SetValue",
+     "evidence": "원천 컬럼 분기 해석 불가 — 조건 'try ▸ if (e.Column == siMain.GetColumnIndex(DefPack.DATE_FORECAST_START) || e.Column == siMain.GetCo' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
     }
    ]
   },
@@ -547,6 +536,44 @@
    ]
   },
   {
+   "rule_id": "C2",
+   "result": "ERROR",
+   "sig": "원천/대상 해석 불가 — 조건 <S> → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
+   "rows": 118,
+   "screens": [
+    "DMF0005",
+    "DMF0042",
+    "SCP0020",
+    "SCP0037",
+    "SSP0015",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "V-dc313343",
+     "target": "DIVISION_ID",
+     "evidence": "원천/대상 해석 불가 — 조건 'if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.s' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-edbdad1a",
+     "target": "CURRENCY",
+     "evidence": "원천/대상 해석 불가 — 조건 'if (siMain != null && siMain.IsLock(siMain.SheetName) == false) ▸ if (siMain.SheetName == SpdSheet.s' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "SCP0020",
+     "row_id": "V-284d1a95",
+     "target": "LINE_ID",
+     "evidence": "원천/대상 해석 불가 — 조건 'if (fps != null) ▸ else of (fps.Name == \"spdMain\" && spdMain.ActiveSheetIndex == 0) ▸ if (fps.Name =' → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    }
+   ]
+  },
+  {
    "rule_id": "X-REASON",
    "result": "ERROR",
    "sig": "제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W#)",
@@ -618,6 +645,109 @@
    ]
   },
   {
+   "rule_id": "X-ROW",
+   "result": "ERROR",
+   "sig": "진입점 집계 #검사 — <C>:# · <C>:#",
+   "rows": 111,
+   "screens": [
+    "DMF0005",
+    "DMF0006",
+    "DMF0042",
+    "DMF0045",
+    "DMF0048",
+    "DMF0072",
+    "SCP0005",
+    "SCP0007",
+    "SCP0020",
+    "SCP0028",
+    "SCP0033",
+    "SCP0037",
+    "SCP0100",
+    "SCP0108",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0005",
+    "SSP0014",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "T-25df7678",
+     "target": "DMF0005_SaleSite_PjtModelMapping.InitControls",
+     "evidence": "진입점 집계 17검사 — PASS:11 · ERROR:6"
+    },
+    {
+     "menu_id": "DMF0006",
+     "row_id": "T-ac9f5b96",
+     "target": "DMF0006_CustomerModelMapping.clbDivision_SelectedIndexChanged",
+     "evidence": "진입점 집계 13검사 — NOT_RUN:10 · ERROR:3"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "T-7caa02ca",
+     "target": "DMF0042_1_RTF.Dispose",
+     "evidence": "진입점 집계 2검사 — PASS:1 · ERROR:1"
+    }
+   ]
+  },
+  {
+   "rule_id": "X-ROW",
+   "result": "ERROR",
+   "sig": "진입점 집계 #검사 — <C>:#",
+   "rows": 105,
+   "screens": [
+    "DMF0005",
+    "DMF0042",
+    "SCP0007",
+    "SCP0020",
+    "SCP0028",
+    "SCP0033",
+    "SCP0041",
+    "SCP0084",
+    "SCP0108",
+    "SCP0122",
+    "SCP0127",
+    "SCP0131",
+    "SSP0003",
+    "SSP0015",
+    "SSP0021",
+    "SSP0023",
+    "SSP0024",
+    "SSP0025",
+    "SSP0060",
+    "SSP0200"
+   ],
+   "samples": [
+    {
+     "menu_id": "DMF0005",
+     "row_id": "T-1b67519f",
+     "target": "DMF0005_SaleSite_PjtModelMapping.shtSubDataModel_Changed",
+     "evidence": "진입점 집계 7검사 — ERROR:7"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "T-f4cc02b3",
+     "target": "DMF0042_1_RTF.CreateSpread",
+     "evidence": "진입점 집계 1검사 — ERROR:1"
+    },
+    {
+     "menu_id": "SCP0007",
+     "row_id": "T-8f578a07",
+     "target": "SCP0007_BOD.SpdMain_TopChange",
+     "evidence": "진입점 집계 1검사 — ERROR:1"
+    }
+   ]
+  },
+  {
    "rule_id": "A7",
    "result": "ERROR",
    "sig": " | [미검증] 검사기(tools/DbConn/golden.py <sp>.cols.csv(공란 컬럼·같은 키 불일치) → judge)가 이 대상을 실행하지 못함 ",
@@ -665,226 +795,48 @@
    ]
   },
   {
-   "rule_id": "X-LOC",
-   "result": "판정필요",
-   "sig": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요",
-   "rows": 100,
-   "screens": [
-    "DMF0035",
-    "DMF0040",
-    "DMF0048",
-    "DMF0053",
-    "DMF0072",
-    "DMF0074",
-    "SCP0100",
-    "SSP0005",
-    "SYS0010",
-    "SYS0014"
-   ],
-   "samples": [
-    {
-     "menu_id": "DMF0035",
-     "row_id": "T-a5d844b6",
-     "target": "mktFcstWaterfall · PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL",
-     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요"
-    },
-    {
-     "menu_id": "DMF0040",
-     "row_id": "T-46fa7d3d",
-     "target": "FilterTeambyDivision (#1) · Division",
-     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요"
-    },
-    {
-     "menu_id": "DMF0048",
-     "row_id": "T-564a9f44",
-     "target": "DB SP · `_artifacts/_deploy_packages/DMF0048_SALES_MONITORING_20260704/01_SP/`",
-     "evidence": "이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요"
-    }
-   ]
-  },
-  {
-   "rule_id": "X-ROW",
+   "rule_id": "A6",
    "result": "ERROR",
-   "sig": "진입점 집계 #검사 — <C>:# · <C>:#",
-   "rows": 96,
+   "sig": "AS-IS <C> BY [<C>] ↔ TO-BE  [] — TO-BE 프로시저 배선(<C>) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(",
+   "rows": 103,
    "screens": [
     "DMF0005",
-    "DMF0006",
-    "DMF0045",
-    "DMF0048",
-    "DMF0072",
-    "SCP0005",
-    "SCP0007",
-    "SCP0020",
-    "SCP0028",
-    "SCP0033",
-    "SCP0037",
-    "SCP0100",
-    "SCP0108",
-    "SCP0122",
-    "SCP0127",
-    "SCP0131",
-    "SSP0003",
-    "SSP0005",
-    "SSP0014",
-    "SSP0015",
-    "SSP0021",
-    "SSP0023",
-    "SSP0024",
-    "SSP0025",
-    "SSP0060",
-    "SSP0200"
-   ],
-   "samples": [
-    {
-     "menu_id": "DMF0005",
-     "row_id": "T-25df7678",
-     "target": "DMF0005_SaleSite_PjtModelMapping.InitControls",
-     "evidence": "진입점 집계 17검사 — PASS:11 · ERROR:6"
-    },
-    {
-     "menu_id": "DMF0006",
-     "row_id": "T-ac9f5b96",
-     "target": "DMF0006_CustomerModelMapping.clbDivision_SelectedIndexChanged",
-     "evidence": "진입점 집계 13검사 — NOT_RUN:10 · ERROR:3"
-    },
-    {
-     "menu_id": "DMF0045",
-     "row_id": "T-603a1299",
-     "target": "DMF0045_ShipmentRequest.EditButton",
-     "evidence": "진입점 집계 17검사 — NOT_RUN:15 · ERROR:2"
-    }
-   ]
-  },
-  {
-   "rule_id": "X-ROW",
-   "result": "ERROR",
-   "sig": "진입점 집계 #검사 — <C>:#",
-   "rows": 93,
-   "screens": [
-    "DMF0005",
-    "SCP0007",
-    "SCP0020",
-    "SCP0028",
-    "SCP0033",
-    "SCP0041",
-    "SCP0084",
-    "SCP0108",
-    "SCP0122",
-    "SCP0127",
-    "SCP0131",
-    "SSP0003",
-    "SSP0015",
-    "SSP0021",
-    "SSP0023",
-    "SSP0024",
-    "SSP0025",
-    "SSP0060",
-    "SSP0200"
-   ],
-   "samples": [
-    {
-     "menu_id": "DMF0005",
-     "row_id": "T-1b67519f",
-     "target": "DMF0005_SaleSite_PjtModelMapping.shtSubDataModel_Changed",
-     "evidence": "진입점 집계 7검사 — ERROR:7"
-    },
-    {
-     "menu_id": "SCP0007",
-     "row_id": "T-8f578a07",
-     "target": "SCP0007_BOD.SpdMain_TopChange",
-     "evidence": "진입점 집계 1검사 — ERROR:1"
-    },
-    {
-     "menu_id": "SCP0020",
-     "row_id": "T-8032b4bc",
-     "target": "SCP0020_TactTime.CheckDigitValueEntered",
-     "evidence": "진입점 집계 6검사 — ERROR:6"
-    }
-   ]
-  },
-  {
-   "rule_id": "G2",
-   "result": "ERROR",
-   "sig": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W#) | [미검증] 검사기(_ve",
-   "rows": 90,
-   "screens": [
-    "DMF0005",
+    "DMF0042",
     "SCP0016",
-    "SCP0020",
-    "SCP0033",
-    "SCP0037",
     "SCP0041",
-    "SCP0108",
-    "SCP0127",
-    "SCP0131",
     "SSP0003",
     "SSP0015",
     "SSP0021",
     "SSP0023",
-    "SSP0024",
-    "SSP0025",
     "SSP0060",
     "SSP0200"
    ],
    "samples": [
     {
      "menu_id": "DMF0005",
-     "row_id": "V-1e9995cb",
-     "target": "조회조건 chkProjectInfo",
-     "evidence": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+     "row_id": "V-ff13b645",
+     "target": "SCM0001_GET_LOOKUP_VALUES",
+     "evidence": "AS-IS ORDER BY [DISPLAY_SEQ] ↔ TO-BE  [] — TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
+    },
+    {
+     "menu_id": "DMF0042",
+     "row_id": "V-5fbec7ed",
+     "target": "UP_FX_GetCommonDataList_DM",
+     "evidence": "AS-IS ORDER BY [DISPLAY_SEQ] ↔ TO-BE  [] — TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
     },
     {
      "menu_id": "SCP0016",
-     "row_id": "V-2ffa024a",
-     "target": "조회조건 PJT",
-     "evidence": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
-    },
-    {
-     "menu_id": "SCP0020",
-     "row_id": "V-d3a11873",
-     "target": "조회조건 Model/Nickname",
-     "evidence": " | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
-    }
-   ]
-  },
-  {
-   "rule_id": "C3",
-   "result": "ERROR",
-   "sig": "원천 <C> 기존행 편집 불가(신규행·기존행·앞 #행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아",
-   "rows": 86,
-   "screens": [
-    "SSP0015",
-    "SSP0021",
-    "SSP0023",
-    "SSP0060"
-   ],
-   "samples": [
-    {
-     "menu_id": "SSP0015",
-     "row_id": "V-88e855fb",
-     "target": "EDIT_MAIN",
-     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
-    },
-    {
-     "menu_id": "SSP0021",
-     "row_id": "V-23e634c8",
-     "target": "EDIT_MAIN",
-     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
-    },
-    {
-     "menu_id": "SSP0023",
-     "row_id": "V-0f42c0f3",
-     "target": "EDIT_MAIN",
-     "evidence": "원천 TRANSPORT_MODE 기존행 편집 불가(신규행·기존행·앞 40행 모두) — 연쇄 프로브 불가 — 검사기가 원천 셀을 열 수 없어 측정하지 못함(검사기 한계 · 화면 오류 아님) → 수동 검수 대상(작업 원장 W7) | [미검증] 검사기(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천))가 이 대상을 실행하지 못함 — 검증 엔진 확장 대상(작업 원장 W7)"
+     "row_id": "V-f293b53b",
+     "target": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+     "evidence": "AS-IS ORDER BY [SORT_ORDER_NO] ↔ TO-BE  [] — TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 → 기계 판정 불가 — 수동 검수 대상(작업 원장 W7)"
     }
    ]
   }
  ],
  "ignored": {
-  "결함 유형 행 직접 일치 실측 없음 = 해당없음 유지(2026-10-29 허위 FAIL 방지 · VMO 20": 7294,
-  "같은 결정(다른 대상 PASS 를 물려받지 않음 = 해당없음 유지)": 3041,
-  "대조표(__asis-mapping__.md) 서술 보강 항목 — 검사기 판정 결함 아님(문서 작성 대상)": 783
+  "결함 유형 행 직접 일치 실측 없음 = 해당없음 유지(2026-10-29 허위 FAIL 방지 · VMO 20": 7573,
+  "같은 결정(다른 대상 PASS 를 물려받지 않음 = 해당없음 유지)": 3074,
+  "대조표(__asis-mapping__.md) 서술 보강 항목 — 검사기 판정 결함 아님(문서 작성 대상)": 791
  },
  "ignore_file": "tools/Harness/rules/checker_scan_ignore.csv"
 }

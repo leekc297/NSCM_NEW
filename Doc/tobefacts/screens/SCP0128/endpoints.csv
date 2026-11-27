@@ -10,5 +10,5 @@
 "supply/safety-stock","SCP0128","features/supply/src/pages/safety-stock/SafetyStock.tsx","126","","commented","useProcMutation","","","","","","공용 useProcMutation({data:[rows]}) 로는 전부 null 바인딩돼 조용히 no-op 된다 — 전용 조립 util 로","1"
 "supply/safety-stock","SCP0128","features/supply/src/pages/safety-stock/useSafetyStockStore.ts","132","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SCP0128/column","Y","{ sheetNm: SHEETS.MAIN }","0"
 "supply/safety-stock","SCP0128","features/supply/src/pages/safety-stock/useSafetyStockStore.ts","153","restoreSearchConditions","http","apiClient.get","","","","/admin/menu/SCP0128/search-conditions","Y","","0"
-"supply/safety-stock","SCP0128","features/supply/src/pages/safety-stock/utils/safetyStockSaveRequest.ts","105","submitSafetyStockSave","http","apiClient.post","SCP0128","main","SAVE","/SCP0128/main/SAVE/call-proc","Y","payload","0"
+"supply/safety-stock","SCP0128","features/supply/src/pages/safety-stock/utils/safetyStockSaveRequest.ts","138","submitSafetyStockSave","http","apiClient.post","SCP0128","main","SAVE","/SCP0128/main/SAVE/call-proc","Y","payload","0"
 "supply/safety-stock","SCP0128","features/supply/src/pages/safety-stock/utils/safetyStockSaveRequest.ts","5","","commented","useProcMutation","","","","","","→ 공용 useProcMutation({data:[rows]}) 로는 top-level 에 activeFlag/divisionId... 키가 없어 전부","1"

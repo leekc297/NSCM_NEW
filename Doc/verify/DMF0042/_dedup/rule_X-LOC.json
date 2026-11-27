@@ -1,0 +1,508 @@
+{
+ "rule_id": "X-LOC",
+ "hash": "c95de2ae71554390",
+ "groups": [
+  {
+   "rows": [
+    "T-078fd25f"
+   ],
+   "why": "Checks that the implementation location in this one trace-table row exists in the source; another row's location can't stand in for it, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-0e48f21a"
+   ],
+   "why": "Checks that the implementation location of the trace row for the save validations (MSG messages) exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-10112381"
+   ],
+   "why": "Checks that the location of correction G1 (direct-entry lock on Q_/Y_) exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-14b699dc"
+   ],
+   "why": "Checks that the location of correction G4 (Q_ roll-up) exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-19a43741"
+   ],
+   "why": "Checks that the location of the chkSum control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-1c6ec7eb"
+   ],
+   "why": "Checks that the location of the Exchange Rate modal rebuild row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-1fab233d"
+   ],
+   "why": "Checks that the location of the clbPlantSite control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-2120e264"
+   ],
+   "why": "Checks that the location of the btnColumn button-table row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-25043746"
+   ],
+   "why": "Checks the location of the AS-IS event row btnSetPrice_Click. This row comes from the event table and T-7ba08dc8 comes from the button table, so their implementation locations may differ and they stay separate."
+  },
+  {
+   "rows": [
+    "T-27d002b4"
+   ],
+   "why": "Checks that the location of the search-validation trace row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-2860629b"
+   ],
+   "why": "Checks that the location of the spdMain_EditChange event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-2cb1a8b2"
+   ],
+   "why": "Checks that the location of the Filter/Sort SubTitle row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-2fa5585e"
+   ],
+   "why": "Checks the location of the btnReplace button-table row. It is a different trace row from the event row T-bb862621, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-2fe18195"
+   ],
+   "why": "Checks that the location of the btnColumn_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-316b0e36"
+   ],
+   "why": "Checks that the location of the cboQty control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-3e165fee"
+   ],
+   "why": "Checks that the location of the EditButton event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-40d23756"
+   ],
+   "why": "Checks that the location of correction G8 (required values) exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-40ee37fb"
+   ],
+   "why": "Checks that the location of the clbSalesSite control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-42798da4"
+   ],
+   "why": "Checks that the location of the catalog field popup row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-47504d94"
+   ],
+   "why": "Checks that the location of the bucket display rule row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-4f2fb9b2"
+   ],
+   "why": "Checks the location of the btnExchangeRate button-table row. It is a different trace row from the event row T-c0ab36c9, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-50d061c4"
+   ],
+   "why": "Checks that the location of the spdMain_Changed event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-5114842f"
+   ],
+   "why": "Checks that the location of the spdMain_KeyUp event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-55997ea6"
+   ],
+   "why": "Checks that the location of correction G2 (removal of old R6) exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-5abfffaa"
+   ],
+   "why": "Checks that the location of the clbDivision control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-5b00a419"
+   ],
+   "why": "Checks that the location of the Division-branch trace row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-643b0043"
+   ],
+   "why": "Checks that the location of the InsertButton event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-6bd239cb"
+   ],
+   "why": "Checks that the location of the btnProject_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-6f028bc1"
+   ],
+   "why": "Checks that the location of the InsertRow metadata lock row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-794d6e85"
+   ],
+   "why": "Checks the location of the Edit-toggle removal row (6#1). It is a different trace row from T-d9ffd052, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-7ba08dc8"
+   ],
+   "why": "Checks that the location of the btnSetPrice button-table row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-834b596d"
+   ],
+   "why": "Checks that the location of the DeleteButton event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-8937dac8"
+   ],
+   "why": "Checks that the location of the clbCustomer_SelectedIndexChanged event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-8a177106"
+   ],
+   "why": "Checks that the location of the SaveButton event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-8af613d8"
+   ],
+   "why": "Checks that the location of the drpPeriod control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-8cc89349"
+   ],
+   "why": "Checks that the location of correction G5 (Set Price pending block) exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-90752792"
+   ],
+   "why": "Checks that the location of the cboBucketType_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-92424505"
+   ],
+   "why": "Checks that the location of the Find (F5) hotkey row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-94b010e4"
+   ],
+   "why": "Checks that the location of the InsertRow Measure/quantity lock row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-9aae2f78"
+   ],
+   "why": "Checks that the location of the clbBizType control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-9bc0649d"
+   ],
+   "why": "Checks that the location of the required-column-exists trace row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-9e0ec6f8"
+   ],
+   "why": "Checks that the location of the SUM header row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-a2862286"
+   ],
+   "why": "Checks that the location of the cboBucketType control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-a42b36be"
+   ],
+   "why": "Checks that the location of the btnMeasure button-table row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-a5eae1d2"
+   ],
+   "why": "Checks the location of the 'cboQty hidden + fixed N' row (6#5). It is a different trace row from 1#14, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-a7146c6d"
+   ],
+   "why": "Checks that the location of the Insert (F8) hotkey row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-ab3ddad1"
+   ],
+   "why": "Checks that the location of the btnOwner_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-adf1ebc1"
+   ],
+   "why": "Checks that the location of the Grid input validation row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-afdcc063"
+   ],
+   "why": "Checks that the location of the cboClosed control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-b297b625"
+   ],
+   "why": "Checks that the location of the OnShown event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-b4e027c7"
+   ],
+   "why": "Checks that the location of the button-guard trace row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-b8eb32f4"
+   ],
+   "why": "Checks that the location of the clbItemType control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-ba4c9ef9"
+   ],
+   "why": "Checks that the location of the clbTeam control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-bb862621"
+   ],
+   "why": "Checks that the location of the btnReplace_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c0ab36c9"
+   ],
+   "why": "Checks that the location of the btnExchangeRate_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c1d90141"
+   ],
+   "why": "Checks that the location of the EditButton lock row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c3af6f2d"
+   ],
+   "why": "Checks that the location of correction G9 (CELL_PROD_SITE combo) exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c49c0999"
+   ],
+   "why": "Checks the location of the btnCutOff button-table row. It is a different trace row from the event row T-c78f6e7b, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c78f6e7b"
+   ],
+   "why": "Checks that the location of the btnCutOff_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c79e96f5"
+   ],
+   "why": "Checks that the location of the FindButton event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-c7a5c75c"
+   ],
+   "why": "Checks that the location of the SAVE parameter difference row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-cbcb2dcb"
+   ],
+   "why": "Checks that the location of the MEASURE VISIBLE_FLAG row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-d01f0179"
+   ],
+   "why": "Checks that the location of the Form_Load event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-d1bb3cbd"
+   ],
+   "why": "Checks that the location of the MSG remapping row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-d35c3a98"
+   ],
+   "why": "Checks that the location of the txtOwner+btnOwner control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-d96d9a1b"
+   ],
+   "why": "Checks that the location of the spdMain_ComboSelChange event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-d9ffd052"
+   ],
+   "why": "Checks that the location of the Edit (F2) hotkey row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-db912f77"
+   ],
+   "why": "Checks that the location of the clbTeam_SelectedIndexChanged event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-de61a7e9"
+   ],
+   "why": "Checks that the location of the Excel (F12) row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-e2180bf8"
+   ],
+   "why": "Checks that the location of the btnMeasure_Click event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-e4978dc5"
+   ],
+   "why": "Checks that the location of the Ver.Cutoff/Replace modal rebuild row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-ec1df318"
+   ],
+   "why": "Checks that the location of the Delete (F9) hotkey row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-ede52156"
+   ],
+   "why": "Checks that the location of the txtProject+btnProject control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-ee7d977d"
+   ],
+   "why": "Checks that the location of the Save (F7) hotkey row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-ef4ebd09"
+   ],
+   "why": "Checks that the location of the chkSum_CheckedChanged event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-f02365e7"
+   ],
+   "why": "Checks that the location of the clbCustomer control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-f03fc5a2"
+   ],
+   "why": "Checks that the location of the spdMain_CellDoubleClick event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-f142e383"
+   ],
+   "why": "Checks that the location of the spdMain_TopChange event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-f4cb99d8"
+   ],
+   "why": "Checks that the location of the btnIncotermsChg not-migrated row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-f574b22b"
+   ],
+   "why": "Checks that the location of the parity-check trace row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-fbdef255"
+   ],
+   "why": "Checks that the location of the cboBucketType_SelectedIndexChanged event row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-fd50661f"
+   ],
+   "why": "Checks that the location of the txtItemId+btnItemId control row exists in the source, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-fd9da556"
+   ],
+   "why": "Checks that the location of the btnItemId_Click event row exists in the source, so it stays alone."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:45:53",
+ "cost": 0.2694892
+}

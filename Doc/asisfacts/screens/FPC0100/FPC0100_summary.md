@@ -17,102 +17,57 @@
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
 |---|---|---:|---|---|---|
-| button:FindButton | FindButton > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
 | button:FindButton | FindButton > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| button:FindButton | FindButton > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| button:FindButton | FindButton > Find_Data > Find_Data_Import | 392 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | button:FindButton | FindButton > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| button:FindButton | FindButton > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
-| button:FindButton | FindButton > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Find_Data_Import | 392 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 427 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 427 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 427 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 427 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 432 | {?string.Empty} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 427 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Validation | 432 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Import | 641 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Import | 641 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Import | 653 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Import | 653 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Import | 658 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Import | 658 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 712 | {?string.Empty} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Save_Data_Import | 658 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 712 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 739 | {?string.Empty} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 739 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 739 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 739 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Buffer | 739 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 752 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 752 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 779 | {?string.Empty} | UNRESOLVED |  |
 | event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 779 | {?pServiceCallName} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 789 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 789 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Delete_Data_Buffer | 789 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 392 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 641 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 641 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 653 | {?string.Empty} | UNRESOLVED |  |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 653 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 658 | {?string.Empty} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 658 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| button:SaveButton | SaveButton > Save_Data > Save_Data_Import | 658 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 392 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 427 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 427 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 427 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 427 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 432 | {?string.Empty} | UNRESOLVED |  |
+| event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 427 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.btnImport.Click | btnImport_Click > Find_Save_Validation > Find_Data_Validation | 432 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 712 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 712 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 739 | {?string.Empty} | UNRESOLVED |  |
+| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 739 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 739 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 739 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Save_Data_Buffer | 739 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 752 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 752 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 779 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 779 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 789 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 789 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| event:this.btnImport.Click | btnImport_Click > Delete_Data_Buffer | 789 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 392 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 641 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 641 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 653 | {?string.Empty} | UNRESOLVED |  |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 653 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 658 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 658 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.Load | Form_Load > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Import | 658 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.Load | Form_Load > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.Load | Form_Load > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
-| event:this.Load | Form_Load > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.Load | Form_Load > Find_Data > Find_Data_Import | 392 | {?string.Empty} | UNRESOLVED |  |
+| event:this.Load | Form_Load > Find_Data > Find_Data_Import | 392 | FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | SP PR_UI_FP00100_LINE_EXCEL |
 | event:this.Load | Form_Load > Find_Data > Find_Data_Import | 392 | {?pServiceCallName} | UNRESOLVED |  |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?pServiceCallName} | UNRESOLVED | 15 |  |  |  |
-| {?string.Empty} | UNRESOLVED | 15 |  |  |  |
+| {?pServiceCallName} | UNRESOLVED | 10 |  |  |  |
+| FP_Master.PR_UI_FP00100_LINE_EXCEL | MATCH | 5 | SP PR_UI_FP00100_LINE_EXCEL | EXEC:PR_UI_FP00100_LINE_EXCEL | ⚠ DB에 SP 없음 |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -181,39 +136,19 @@
 | SheetView | 4 | spdComExcel_Sheet1, spdComExcel_Sheet1, spdMain_Sheet1, spdComExcel_Sheet1 |
 | EmptySpaceItem | 1 | emptySpaceItem1 |
 
-## 7. 확인 필요 (30건)
+## 7. 확인 필요 (10건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 392 | Find_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 392 | Find_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 427 | Find_Data_Validation | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 427 | Find_Data_Validation | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 641 | Save_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 641 | Save_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 712 | Save_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 712 | Save_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 752 | Delete_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 752 | Delete_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 392 | Find_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 392 | Find_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 432 | Find_Data_Validation | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 432 | Find_Data_Validation | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 653 | Save_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 653 | Save_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 739 | Save_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 739 | Save_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 779 | Delete_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
 | 779 | Delete_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 392 | Find_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 392 | Find_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 427 | Find_Data_Validation | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 427 | Find_Data_Validation | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 658 | Save_Data_Import | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 658 | Save_Data_Import | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 739 | Save_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 739 | Save_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 789 | Delete_Data_Buffer | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 789 | Delete_Data_Buffer | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

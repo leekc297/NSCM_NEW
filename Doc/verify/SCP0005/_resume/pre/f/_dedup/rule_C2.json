@@ -1,0 +1,172 @@
+{
+ "rule_id": "C2",
+ "hash": "3b3119fefc05a2e8",
+ "groups": [
+  {
+   "rows": [
+    "T-04d775ba"
+   ],
+   "why": "FROM_CITY 컬럼만 대상으로 하는 추적 행이며, 같은 요소를 다루는 행이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-23ec1123"
+   ],
+   "why": "LT_VOYAGE 숫자 컬럼만 대상으로 하므로 다른 LT_* 컬럼과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-31aa93b0"
+   ],
+   "why": "LT_ARRIVAL_INLAND 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-32b3d098"
+   ],
+   "why": "TRANSPORT_MODE 콤보 컬럼은 cascade를 일으키는 원천 컬럼으로 다른 행과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-46b9927d"
+   ],
+   "why": "LT_WAIT_SHIPPING 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-58285076"
+   ],
+   "why": "DAYS_WED 컬럼은 다른 요일 컬럼과 요소가 다르므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-6a6f8160"
+   ],
+   "why": "A_PORT_CODE 컬럼만 대상으로 하며 D_PORT_CODE와 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-6e161066"
+   ],
+   "why": "A_COUNTRY 컬럼만 대상으로 하며 D_COUNTRY와 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-6e75e40a"
+   ],
+   "why": "PRIORITY 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-6feb4248"
+   ],
+   "why": "LT_LAY_OFF_CLEARANCE 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-745157a9"
+   ],
+   "why": "SHIPPING_COMPANY(Forwarder) 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-765c437b"
+   ],
+   "why": "LT_SUM 합계 컬럼은 개별 L/T 컬럼과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-83feba7d"
+   ],
+   "why": "A_PORT_NAME 컬럼만 대상으로 하며 D_PORT_NAME과 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-840a1fc6"
+   ],
+   "why": "DAYS_SAT 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-87cfd2b2"
+   ],
+   "why": "D_PORT_CODE 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-967c7ac6"
+   ],
+   "why": "TO_CITY 컬럼은 FROM_CITY와 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-992594b7"
+   ],
+   "why": "R9 규칙(TRK/AIR이면 요일 7칸을 'Y'로 채우는 daysAllYes)의 구현을 추적하는 ROW 행으로, 개별 컬럼 행과 성질이 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-9bd59181"
+   ],
+   "why": "R10 규칙(TRK이면 항구/Forwarder 7칸을 '-'로 채우는 portsDash)의 구현을 추적하는 ROW 행으로, R9와 기대 결과가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-9e2ec614"
+   ],
+   "why": "DAYS_TUE 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-b03141a1"
+   ],
+   "why": "DAYS_SUN 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-b24c88f4"
+   ],
+   "why": "spdMainDataModel_Changed 진입점(ENTRY)의 실존을 추적하는 행으로, 컬럼 행과 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-bd0af4bd"
+   ],
+   "why": "DAYS_FRI 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-d11b8eec"
+   ],
+   "why": "D_COUNTRY 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-de53b6fd"
+   ],
+   "why": "LT_DEPARTURE_INLAND 컬럼은 LT_ARRIVAL_INLAND와 컬럼이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-e44d0b2b"
+   ],
+   "why": "D_PORT_NAME 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-ea99683c"
+   ],
+   "why": "DAYS_THU 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-f2ca4bd1"
+   ],
+   "why": "DAYS_MON 컬럼만 대상으로 하는 행이라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 02:32:24",
+ "cost": 0.112735
+}

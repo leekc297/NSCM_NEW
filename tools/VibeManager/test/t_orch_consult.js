@@ -16,6 +16,7 @@ const OUT = { summary: '요약', assessment: [{ area: 'UI 개발', verdict: '약
 const agent = { runClaude: async () => ({ ok: true, text: 'x', log: 'l' }), withLock: async (id, fn) => fn(), lastJsonBlock: () => OUT, say: () => { } };
 const cs = require(path.join(dir, 'orch-consult'));
 cs.init({ paths: () => ({ root, vibeDir }), noTimer: true, mods: { 'orch-agent': agent, 'orch-improve': imp } });
+chk('⑤ 실행 기록 없음 = 첫 실행 60초 뒤(R254, 개선안 20261126182420_SELF)', cs.firstDelayMs() === 60000, String(cs.firstDelayMs()));
 const pr = cs.buildPrompt({ consultMaxPerRun: 6 }, [{ title: '기존 안', status: 'pending' }]);
 chk('① 컨설턴트 역할 · DB·UI 수석 엔지니어', /IT 컨설턴트/.test(pr) && /Oracle DB/.test(pr) && /React/.test(pr));
 chk('① 진단 · 로드맵 · 개선안 · 읽기 전용', /현황 진단/.test(pr) && /개선 로드맵/.test(pr) && /바로 개발할 개선안 최대 6건/.test(pr) && /파일을 고치지 않는다/.test(pr));
@@ -29,6 +30,16 @@ chk('④ 처음 = 주기 도래', cs.due() === true);
   chk('③ 머리말 컨설팅: · 출처 vision · origin consult', added[0] && added[0].o.title === '컨설팅: 드릴 진입 시각화' && added[0].src === 'vision' && added[0].o.origin === 'consult');
   chk('③ 보고 last.md · meta', fs.existsSync(path.join(vibeDir, 'orch', 'consult', 'last.md')) && /개선안 1건 등록/.test(cs.meta().lastResult || ''));
   chk('④ 방금 돌았으면 주기 전', cs.due() === false);
+  chk('⑤ 실행 기록 있음 = 첫 실행 종전대로 25분 뒤', cs.firstDelayMs() === 25 * 60000, String(cs.firstDelayMs()));
   setCfg({ consultEnabled: false }); chk('④ 끄기 = 자동 실행 안 함', (await cs.run(false)).skipped === '꺼짐' && cs.due(Date.now() + 9 * 86400000) === false);
+  // 개선안 20261126192238_SELF: 스킬 찾는 곳 = ~/.claude/skills, .claude/skills, ~/.agents/skills, ~/.claude/plugins 아래 skills/<이름> · 못 찾은 스킬은 지시문에 '불러 보고 없으면 보고서에 적음'
+  { const home = fs.mkdtempSync(path.join(os.tmpdir(), 'consult-home-')); const keepH = process.env.USERPROFILE; const keepH2 = process.env.HOME;
+    const mkS = rel => { fs.mkdirSync(path.join(home, rel), { recursive: true }); fs.writeFileSync(path.join(home, rel, 'SKILL.md'), '---\nname: x\n---\n'); };
+    mkS('.agents/skills/db'); mkS('.claude/plugins/store/mkt/plug/skills/java-springboot'); mkS('.claude/skills/frontend-design');
+    process.env.USERPROFILE = home; process.env.HOME = home;
+    chk('스킬 위치: ~/.agents/skills(db), 플러그인 skills(java-springboot, plugin:java-springboot), ~/.claude/skills(frontend-design) = 있음 · 없는 이름 = 없음', cs.skillInstalled('db') && cs.skillInstalled('java-springboot') && cs.skillInstalled('plugin:java-springboot') && cs.skillInstalled('frontend-design') && !cs.skillInstalled('nope-skill'));
+    const rp = cs.rolePrompt({ consultSkills: { db: ['db', 'nope-skill'] } }, 'DB 프로시저 성능');
+    chk('못 찾은 역할 스킬 = 지시문에 불러 보고 없으면 보고서에 적는 줄', rp.sk.use.join() === 'db' && rp.sk.missing.join() === 'nope-skill' && rp.lines.some(l => /찾지 못한 역할 스킬 nope-skill/.test(l) && /스킬 없음: 이름/.test(l)), JSON.stringify(rp.sk));
+    process.env.USERPROFILE = keepH; if (keepH2 == null) delete process.env.HOME; else process.env.HOME = keepH2; try { fs.rmSync(home, { recursive: true, force: true }); } catch { } }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })();

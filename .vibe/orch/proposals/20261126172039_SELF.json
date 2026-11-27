@@ -1,0 +1,67 @@
+{
+  "id": "20261126172039_SELF",
+  "at": "2026-11-26T17:20:39+09:00",
+  "ms": 1795681239802,
+  "source": "self",
+  "status": "pending",
+  "sig": "lnplan cacgbbcfaaagbg_vision step d",
+  "title": "VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 3",
+  "evidence": "L4 단계 원장 20261125000616_VISION 단계 3/4 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_VM_.md",
+  "targets": [
+    "tools/VibeManager/orch-ladder.js",
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/orch-vision.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    ".claude/hooks/check-vm-doc-style(신규 실행 hook, 승인)",
+    ".claude/settings.json(hook 등록, 승인)"
+  ],
+  "before_after": "Write, Edit 뒤 tools/VibeManager/*.js 이면 그 파일 doc_style.py 전후 비교 결과를 출력함. 차단하지 않음 · 상세 = .vibe/orch/vision/concept_20261125_L4_purpose_VM_.md 전환 절 단계 3",
+  "verify": "'—' 를 넣은 Edit 1건에서 경고 출력, 위반 없는 Edit 에서는 출력 없음.",
+  "rollback": "단계마다 .bak_<날짜>_concept 백업과 VMO 개선안 탭 되돌리기를 씀. hook 은 .claude/settings.json 등록 줄을 삭제함. 효력 필터와 L1 정리는 harness.json orch 설정 키를 false 로 둠. plans.json 항목 삭제는 개선안 원본에 영향 없음.",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "S-Z 확인(2026-11-26 17:3x): 변경 본체가 새 실행 hook(.claude/hooks/check-vm-doc-style)과 .claude/settings.json hook 등록임. 둘 다 사용자 승인 대상(CLAUDE.md, VMO 승인 규칙). 나머지 대상(orch-ladder.js, orch-selfcheck.js, orch-vision.js)은 before_after 에 바꿀 내용 없음. 사용자가 hook 추가를 승인하면 진행",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T17:25:07+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T17:25:07+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-26T17:38:41+09:00",
+      "by": "Claude Code 세션",
+      "what": "사용자 판단 대기로 보류(자동 반영 안 함) · S-Z 확인(2026-11-26 17:3x): 변경 본체가 새 실행 hook(.claude/hooks/check-vm-doc-style)과 .claude/settings.json hook 등록임. 둘 다 사용자 승인 대상(CLAUDE.md, VMO 승인 규칙). 나머지 대상(orch-ladder.js, orch-selfcheck.js, orch-vision.js)은 before_after 에 바꿀 내용 없음. 사용자가 hook 추가를 승인하면 진행"
+    },
+    {
+      "at": "2026-11-26T17:50:45+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-26T17:54:17+09:00",
+      "by": "VMO",
+      "what": "반영 시작 전에 VMO 가 다시 시작됨(창 다시 로드). 다시 대기"
+    }
+  ],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261125000616_VISION|3",
+  "kind": "fix",
+  "plan": "20261125000616_VISION",
+  "planStep": 3,
+  "needsApproval": "실행 hook 스크립트 .claude/hooks/check-vm-doc-style(신규 실행 hook, 승인)(Claude Code 안전 장치 · 자동 반영 제외)",
+  "impactWas": "fix",
+  "userHold": true,
+  "reason": "사람 판단 필요: S-Z 확인(2026-11-26 17:3x): 변경 본체가 새 실행 hook(.claude/hooks/check-vm-doc-style)과 .claude/settings.json hook 등록임. 둘 다 사용자 승인 대상(CLAUDE.md, VMO 승인 규칙). 나머지 대상(orch-ladder.js, orch-selfcheck.js, orch-vision.js)은 before_after 에 바꿀 내용 없음. 사용자가 hook 추가를 승인하면 진행",
+  "autoWaitMs": 2111042321255,
+  "waitNote": "사람 판단 대기(자동 반영 안 함)",
+  "autoTried": false
+}

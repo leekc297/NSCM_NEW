@@ -35,6 +35,11 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
   let ran3 = false; await agent.withLock('review', async () => { ran3 = true; }); chk('② withLock 실행', ran3);
   setUse(0.97, Date.now() - 60000); await wait(1100);
   chk('② 재설정 시각 지남 = 진행', agent.aiLimit().stop === false);
+  // 2026-11-26 개선안 20261126182418_SELF(R253): 키가 없으면 기준 100 = 다 쓴 때만 멈춤
+  setH({}); setUse(0.99, Date.now() + 86400000); await wait(1100);
+  { const A = agent.aiLimit(); chk('⑤ 키 없음 + 99% = 진행(기준 100)', A.stop === false && A.lim === 100, JSON.stringify(A)); }
+  setUse(1, Date.now() + 86400000); await wait(1100);
+  { const A = agent.aiLimit(); chk('⑤ 키 없음 + 100% = 멈춤', A.stop === true && A.lim === 100, JSON.stringify(A)); }
   setUse(0.99, Date.now() + 86400000); setH({ aiWeeklyStopPct: 0 }); await wait(1100);
   chk('③ 기준 0 = 끔', agent.aiLimit().stop === false);
   const watchSrc = fs.readFileSync(path.join(dir, 'orch-watch.js'), 'utf8');

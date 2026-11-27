@@ -1,0 +1,534 @@
+{
+ "rule_id": "H2",
+ "hash": "5eaa83c654cefa71",
+ "groups": [
+  {
+   "rows": [
+    "V-065768b7",
+    "V-48e07650",
+    "V-4dcf777c",
+    "V-9bc5f9e9",
+    "V-bd1900e1"
+   ],
+   "why": "These rows are word-for-word identical: same SetActiveCell(iArray[0], 2) target, same IsLock/shtMain condition and same expected color rule, so nothing tells them apart and one measurement covers all of them."
+  },
+  {
+   "rows": [
+    "V-13a04bd9",
+    "V-1646da51",
+    "V-354f5a34",
+    "V-6124c5b9",
+    "V-bf6cee0c"
+   ],
+   "why": "These rows are word-for-word identical: same SetActiveCell(iResult[i], 2) target, same for(i >= 0) condition and same expected color rule, so nothing tells them apart and one measurement covers all of them."
+  },
+  {
+   "rows": [
+    "V-01895b79"
+   ],
+   "why": "This SetActiveCell(i, 2) row has a different condition (the per-row required-value check loop) and a different argument, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-025fc7c5"
+   ],
+   "why": "Trace row that checks the EditButton lock cases (#6~13) against the mapping table, which is a different kind of check, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-050d7813"
+   ],
+   "why": "Trace row for the DIVISION_ID mapping table entry, a different check from the color result, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-271985b5"
+   ],
+   "why": "Trace row for the popup column CURRENCY_UNITCURRENCY, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-28eab5b9"
+   ],
+   "why": "Trace row for EXT_INT, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-3092e290"
+   ],
+   "why": "Trace row for the CreateSpread entry point, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-3abd98ea"
+   ],
+   "why": "Trace row for the popup column UNIT_CURRENCY, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-43a9d4ea"
+   ],
+   "why": "Trace row for the GetCellColor entry point, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-46f7143c"
+   ],
+   "why": "Trace row for the SetCellColor entry point, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-648db4d9"
+   ],
+   "why": "Trace row for rebuilding the Exchange Rate modal (#6), so it stays alone."
+  },
+  {
+   "rows": [
+    "T-6593b550"
+   ],
+   "why": "Trace row for the SUM header span (#1~5), so it stays alone."
+  },
+  {
+   "rows": [
+    "T-6c6888b3"
+   ],
+   "why": "Trace row for SMALL_CLASS_LABEL_NAME, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-84d4fa71"
+   ],
+   "why": "Trace row for the PROJECT_CODE mapping table entry, a different check from the COLUMN row, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-87223742"
+   ],
+   "why": "Trace row for the SetSpreadHeaderSpan entry point, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-87d76c30"
+   ],
+   "why": "Trace row for the CELL_PER_CAR mapping table entry, a different check from the COLUMN color row, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-88690220"
+   ],
+   "why": "Trace row for the CELL_PROD_SITE mapping table entry, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-88dc6824"
+   ],
+   "why": "Trace row for the hidden EDIT_FLAG column, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-8f0f2cac"
+   ],
+   "why": "Trace row for spdMain_TopChange (#18), so it stays alone."
+  },
+  {
+   "rows": [
+    "T-914b4a11"
+   ],
+   "why": "Trace row for COLUMN_NAME, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-9db3c4f4"
+   ],
+   "why": "Trace row for the SetSpreadColumn entry point, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-a76a5d41"
+   ],
+   "why": "Trace row for the drpPeriod condition (#9), so it stays alone."
+  },
+  {
+   "rows": [
+    "T-afea2fe9"
+   ],
+   "why": "Trace row for the CURRENCY mapping table entry, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-b83d6caa"
+   ],
+   "why": "Trace row for LARGE_CLASS_LABEL_NAME, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-d741cdad"
+   ],
+   "why": "Trace row for the MEASURE mapping table entry, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-dd2c2120"
+   ],
+   "why": "Trace row for the ITEM_ID mapping table entry, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-e2c38176"
+   ],
+   "why": "Trace row for COLUMN_LABEL_NAME, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-e42b8e89"
+   ],
+   "why": "Trace row for the MODULE_PER_CAR mapping table entry, so it stays alone."
+  },
+  {
+   "rows": [
+    "T-fb3023e7"
+   ],
+   "why": "Trace row for the popup column REPORT_GROUP8, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-005f0227"
+   ],
+   "why": "Color check for the single column FORECAST_INFO_CELL_MODEL."
+  },
+  {
+   "rows": [
+    "V-01adba15"
+   ],
+   "why": "Color check for the single column NICK_NAME."
+  },
+  {
+   "rows": [
+    "V-04f791c0"
+   ],
+   "why": "Color check for the single column FCST_TYPE."
+  },
+  {
+   "rows": [
+    "V-0b63b0d5"
+   ],
+   "why": "Color check for the single column MIN_CAPACITY."
+  },
+  {
+   "rows": [
+    "V-0bcac123"
+   ],
+   "why": "Color check for ITEM_ID40, which is a different column from ITEM_ID."
+  },
+  {
+   "rows": [
+    "V-1960466e"
+   ],
+   "why": "Color check for the single column ITEM_USE."
+  },
+  {
+   "rows": [
+    "V-1c443b1d"
+   ],
+   "why": "Color check for the single column DMS_SALES."
+  },
+  {
+   "rows": [
+    "V-1d970660"
+   ],
+   "why": "Color check for the single column PROJECT_NAME."
+  },
+  {
+   "rows": [
+    "V-1e083ee1"
+   ],
+   "why": "Color check for PROJECT_CODE, which is a different column from PROJECT_CODE82."
+  },
+  {
+   "rows": [
+    "V-1f94dbe3"
+   ],
+   "why": "Color check for the single column ITEM_NAME."
+  },
+  {
+   "rows": [
+    "V-2e2590ab"
+   ],
+   "why": "Color check for the single column MDM_PROJECT_NAME."
+  },
+  {
+   "rows": [
+    "V-2ea05ec2"
+   ],
+   "why": "Color check for the single column CURRENCY."
+  },
+  {
+   "rows": [
+    "V-30d92a2b"
+   ],
+   "why": "Color check for the single column CUST_GROUP."
+  },
+  {
+   "rows": [
+    "V-35f7636b"
+   ],
+   "why": "Color check for BIZ_TYPE_NAME81, which is a different column from BIZ_TYPE_NAME40."
+  },
+  {
+   "rows": [
+    "V-35f98fe7"
+   ],
+   "why": "Color check for the single column ITEM_CLASS_NAME."
+  },
+  {
+   "rows": [
+    "V-38e2e7c9"
+   ],
+   "why": "Color check for the single column OWNER."
+  },
+  {
+   "rows": [
+    "V-46f7d268"
+   ],
+   "why": "Color check for the single column PRIORITY."
+  },
+  {
+   "rows": [
+    "V-47244069"
+   ],
+   "why": "Color check for PROJECT_CODE82, which is a different column from PROJECT_CODE."
+  },
+  {
+   "rows": [
+    "V-4d624560"
+   ],
+   "why": "Color check for the single column INTERNAL_YN."
+  },
+  {
+   "rows": [
+    "V-53ddc326"
+   ],
+   "why": "Color check for the dynamic LOOP columns."
+  },
+  {
+   "rows": [
+    "V-562ffeb9"
+   ],
+   "why": "Color check for DEPT_ID, which is a different column from DEPT_ID40."
+  },
+  {
+   "rows": [
+    "V-62f6d9e7"
+   ],
+   "why": "Color check for the single column ITEM_TYPE."
+  },
+  {
+   "rows": [
+    "V-6d8cec32"
+   ],
+   "why": "Color check for the single column DMS_CUSTOMER."
+  },
+  {
+   "rows": [
+    "V-6d96e840"
+   ],
+   "why": "Color check for the single column COUNTRY_NAME."
+  },
+  {
+   "rows": [
+    "V-72ab4ca9"
+   ],
+   "why": "Color check for END_CUSTOMER40, which is a different column from END_CUSTOMER."
+  },
+  {
+   "rows": [
+    "V-74a05269"
+   ],
+   "why": "Color check for SCM_SITE_ID82, which is a different column from 81 and 40."
+  },
+  {
+   "rows": [
+    "V-75209543"
+   ],
+   "why": "Color check for the single column CELL_PER_MODULE."
+  },
+  {
+   "rows": [
+    "V-7632edf5"
+   ],
+   "why": "Color check for the single column FORECAST_INFO_CELL_PACK_COUNT."
+  },
+  {
+   "rows": [
+    "V-78e61221"
+   ],
+   "why": "Color check for the single column UNIT_ENERGY."
+  },
+  {
+   "rows": [
+    "V-7944f1ea"
+   ],
+   "why": "Color check for the single column ENERGE_WH."
+  },
+  {
+   "rows": [
+    "V-7afe8892"
+   ],
+   "why": "Color check for the single column MODULE_PER_PACK."
+  },
+  {
+   "rows": [
+    "V-7eb5dba9"
+   ],
+   "why": "Color check for the single column MODULE_PER_CAR; the trace row checks something different, so they are not grouped."
+  },
+  {
+   "rows": [
+    "V-7f9bb943"
+   ],
+   "why": "Color check for the single column FORECAST_INFO_SPEC."
+  },
+  {
+   "rows": [
+    "V-86f0c339"
+   ],
+   "why": "Color check for the single column FORECAST_INFO_PRODUCT_GROUP."
+  },
+  {
+   "rows": [
+    "V-8e7f5515"
+   ],
+   "why": "Color check for the single column REPORT_GROUP6."
+  },
+  {
+   "rows": [
+    "V-9b7efa16"
+   ],
+   "why": "Color check for DEPT_ID40, which is a different column from DEPT_ID."
+  },
+  {
+   "rows": [
+    "V-9eecc668"
+   ],
+   "why": "Color check for the single column REPORT_GROUP1."
+  },
+  {
+   "rows": [
+    "V-9f4b9eb4"
+   ],
+   "why": "Color check for the single column PLANT_SITE_ID."
+  },
+  {
+   "rows": [
+    "V-a38fa898"
+   ],
+   "why": "Color check for the single column CELL_PROD_SITE; the trace row checks something different, so they are not grouped."
+  },
+  {
+   "rows": [
+    "V-a9402bf5"
+   ],
+   "why": "Color check for the single column MEASURE; the trace row checks something different, so they are not grouped."
+  },
+  {
+   "rows": [
+    "V-a9e54fd5"
+   ],
+   "why": "Color check for the single column DIVISION_ID; the trace row checks something different, so they are not grouped."
+  },
+  {
+   "rows": [
+    "V-aaa8bc97"
+   ],
+   "why": "Color check for BIZ_TYPE_NAME40, which is a different column from BIZ_TYPE_NAME81."
+  },
+  {
+   "rows": [
+    "V-ad2d333e"
+   ],
+   "why": "Color check for SCM_SITE_ID81, which is a different column from 82 and 40."
+  },
+  {
+   "rows": [
+    "V-b589a613"
+   ],
+   "why": "Color check for the single column SHIPTO_DESCRIPTION."
+  },
+  {
+   "rows": [
+    "V-c1130da5"
+   ],
+   "why": "Color check for the single column PRODUCT_GROUP_NAME."
+  },
+  {
+   "rows": [
+    "V-c9d214cf"
+   ],
+   "why": "Color check for ITEM_ID, which is a different column from ITEM_ID40."
+  },
+  {
+   "rows": [
+    "V-d3c4d754"
+   ],
+   "why": "Color check for the single column CELL_PER_PACK."
+  },
+  {
+   "rows": [
+    "V-da47310a"
+   ],
+   "why": "Color check for SCM_SITE_ID40, which is a different column from 81 and 82."
+  },
+  {
+   "rows": [
+    "V-dca3be64"
+   ],
+   "why": "Color check for the single column CELL_PER_CAR; the trace row checks something different, so they are not grouped."
+  },
+  {
+   "rows": [
+    "V-df42f51a"
+   ],
+   "why": "Color check for the single column CELL_TYPE."
+  },
+  {
+   "rows": [
+    "V-e10db9e3"
+   ],
+   "why": "Color check for the single column INCOTERMS."
+  },
+  {
+   "rows": [
+    "V-e150faaa"
+   ],
+   "why": "Color check for the single column VERSION_NO."
+  },
+  {
+   "rows": [
+    "V-e57443cc"
+   ],
+   "why": "Color check for the single column VMI_YN."
+  },
+  {
+   "rows": [
+    "V-e6c797a4"
+   ],
+   "why": "Color check for the single column CITY_NAME."
+  },
+  {
+   "rows": [
+    "V-ec3f587a"
+   ],
+   "why": "Color check for END_CUSTOMER, which is a different column from END_CUSTOMER40."
+  },
+  {
+   "rows": [
+    "V-f17ee94a"
+   ],
+   "why": "Color check for the single column APPLICATION."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:43:42",
+ "cost": 0.22725320000000002
+}

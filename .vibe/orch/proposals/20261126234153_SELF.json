@@ -1,0 +1,152 @@
+{
+  "id": "20261126234153_SELF",
+  "at": "2026-11-26T23:41:53+09:00",
+  "ms": 1795704113972,
+  "source": "self",
+  "status": "applied",
+  "sig": "sn ask approval quote",
+  "title": "반복 지시 집계에서 VMO 승인, 되돌리기 기록 줄의 인용은 사용자 지시로 세지 않음",
+  "evidence": "diag_in S9 '같은 지시 13건' S9|ask|e476ad881e, S9|ask|733486eb1f, 5건 S9|ask|bc5a5b1d5a, S9|ask|78ecb614b3, S9|ask|b2ae65dc75, S9|ask|7012e7ef7d. tools/VibeManager/orch-improve.js:556 이 자동 반영 기록을 '- 사용자(일자): 개선안 <id> 승인(VM 자가진단 …). 근거 = <evidence>' 로 씀. evidence 안에 규칙 문구와 '원래 지시' 따옴표 인용이 있음. tools/VibeManager/orch-history.js:125 가 '사용자'로 시작하는 줄의 따옴표 인용을 전부 ask 로 넣음. 실례 CHANGELOG.md:1029, 1045, 1059, 1101, 1176, 1190(R83 적용 절 13개가 11-16 14:59 지시 1건을 인용). 파이썬 재현(23:3x, 같은 추출 규칙): repeatAsks 77건, 상위 13, 13, 10, 6, 5, 5, 5, 5 가 입력과 일치. 승인 기록 줄 247개를 빼면 6건",
+  "targets": [
+    "tools/VibeManager/orch-history.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_histauto.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_s6_group.js"
+  ],
+  "before_after": "변경 전: finishSection 이 '사용자(…): 개선안 <id> 승인' 줄과 '개선안 <id> 되돌리기 실행' 줄의 인용도 ask 로 넣음 → 규칙 적용 절 수만큼 '같은 지시'로 셈. 변경 후: /^사용자[^:]*:\\s*개선안 \\S+ (승인|되돌리기 실행)/ 에 맞는 줄은 ask 에 넣지 않음. 표시용으로 ruleAsk 필드에 따로 둠. 사람이 입력한 '사용자(…): \"…\"' 줄은 종전대로 셈. 시험 t_orch_history_kind.js 에 승인 기록 줄 2절 → repeatAsks 0건, 실제 사용자 인용 2절 → 1건(count 2) 표본 추가",
+  "verify": "node -e 로 orch-history.parseChangelog(CHANGELOG.md) → _buildStats(절,[],[],{}).repeatAsks 를 잼(t_orch_history_kind.js 와 같은 vscode 대체, 임시 root). 반영 전 미측정(node 실행 승인 안 됨, 같은 추출 규칙의 파이썬 재현값 77건) → 반영 뒤 기대: '산출물 폴더 경로는 설정 1곳에' 항목과 'CHECKLIST 폴더를 … UI_CHECKLIST 폴더로 변경' 항목이 빠짐, '계속 개선항목 찾아서 진행해주세요' 항목 count 10 남음. node tools/VibeManager/test/t_orch_history_kind.js 시험 수 반영 전 대비 2건 늘어남",
+  "rollback": "tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history_kind.js 를 반영 전 .bak_ 사본으로 되돌림",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "결함 1건. orch-history.js:125 한 곳의 추출 조건 문제임. 재현(CHANGELOG.md 재파싱)에서 입력 repeatAsks 상위 12건 순서와 건수가 일치함. 같은 결함을 고친 이력 없음, 재발 조건(L3) 해당 없음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T23:41:56+09:00",
+      "by": "VMO 자동(게이트 통과 조건)",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T23:47:15+09:00",
+      "by": "VMO",
+      "what": "반영 전 게이트: 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1954, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 · 백업 태그 20261126_self2342"
+    },
+    {
+      "at": "2026-11-26T23:47:21+09:00",
+      "by": "VMO",
+      "what": "반영 시작"
+    },
+    {
+      "at": "2026-11-26T23:53:50+09:00",
+      "by": "VMO",
+      "what": "게이트 통과: 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1956, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0 · 설치 폴더 복사 1개 · CHANGELOG 절 추가 · 창 다시 로드 뒤 적용 orch-history.js(실행 중 체인 0개일 때 알림)"
+    },
+    {
+      "at": "2026-11-26T23:53:50+09:00",
+      "by": "VMO",
+      "what": "반영 완료 · 검증 통과. 검증 항목 실행 통과 3건. 2026-11-26 23:4x 실행. repeatAsks 40건(상위 40 잘림, 상위 13,13,10) → 6건(10,6,4,2,2,2). 두 인용 항목 빠짐, '계속 개선항목 찾아서 진행해주세요' count 10 → 10. t_orch_history_kind.js PASS 24 → 26, ALL PASS. node --check orch-history.js, t_orch_history_kind.js → SYNTAX_OK. python tools/Docs/doc_style.py tools/VibeManager/orch-histor · 변경 8개 파일 · 대상 목록 밖 변경 6개: Doc/verify/_llm_usage.csv, Doc/verify/DMF0042/_dedup/rule_X-ROW.json, Doc/verify/DMF0042/dedup_screen.csv, Doc/verify/DMF0042/dup_groups.csv, Doc/verify/DMF0042/dup_held.csv, Doc/verify/DMF0042/llm_usage.csv",
+      "log": ".vibe\\logs\\2026-11-26T23-47-22_claude_orch.log",
+      "sec": 85,
+      "costUsd": 0.8886823,
+      "files": [
+        "Doc/verify/_llm_usage.csv",
+        "tools/VibeManager/orch-history.js",
+        "Doc/verify/DMF0042/_dedup/rule_X-ROW.json",
+        "Doc/verify/DMF0042/dedup_screen.csv",
+        "Doc/verify/DMF0042/dup_groups.csv",
+        "Doc/verify/DMF0042/dup_held.csv",
+        "Doc/verify/DMF0042/llm_usage.csv",
+        "tools/VibeManager/test/t_orch_history_kind.js"
+      ]
+    },
+    {
+      "at": "2026-11-27T09:50:29+09:00",
+      "by": "VMO",
+      "what": "효력 시작: 반영 뒤 첫 창 로드 2026-11-27T09:49:37+09:00"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S9",
+  "selfKey": "S9|ask|e476ad881e",
+  "kind": "fix",
+  "testsAdded": [
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_histauto.js",
+    "tools/VibeManager/test/t_orch_history.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_selfcheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_s6_group.js"
+  ],
+  "auto": true,
+  "gated": true,
+  "autoTried": true,
+  "autoTries": 1,
+  "autoMs": 1795704114979,
+  "autoFp": "3b3c0427e0",
+  "applyStartMs": 1795704441649,
+  "verifyJudge": {
+    "at": "2026-11-26T23:48:52+09:00",
+    "verified": true,
+    "text": "실행 통과 3건",
+    "why": ""
+  },
+  "gate": {
+    "ok": true,
+    "text": "구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1956, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"
+  },
+  "selfTag": "20261126_self2342",
+  "needsReload": true,
+  "hotLoaded": [],
+  "reloadFiles": [
+    "orch-history.js"
+  ],
+  "appliedMs": 1795704830555,
+  "synced": [
+    "orch-history.js"
+  ],
+  "result": {
+    "applied": true,
+    "already_applied": false,
+    "verified": true,
+    "verify_items": [
+      {
+        "n": 1,
+        "result": "pass",
+        "note": "node 임시 스크립트(t_orch_history_kind.js 와 같은 vscode 대체, 임시 root)로 parseChangelog(CHANGELOG.md 596절) → _buildStats(절,[],[],{}).repeatAsks. 반영 전 40건(상위 40 잘림, 상위 13,13,10,6,5,5,5,5) → 반영 뒤 6건(10,6,4,2,2,2)"
+      },
+      {
+        "n": 2,
+        "result": "pass",
+        "note": "같은 실행 출력: 반영 뒤 'has 산출물 폴더 경로는 설정 1곳에: false', 'has UI_CHECKLIST 폴더로 변경: false', '계속 개선항목 count: 10'"
+      },
+      {
+        "n": 3,
+        "result": "pass",
+        "note": "node tools/VibeManager/test/t_orch_history_kind.js: 반영 전 PASS 24건 ALL PASS → 반영 뒤 PASS 26건 ALL PASS(추가 2건: '승인, 되돌리기 기록 줄 2절 = 같은 지시 0건(ruleAsk 에 따로 둠)', '사람이 입력한 인용 2절 = 같은 지시 1건(count 2)')"
+      }
+    ],
+    "changed_files": [
+      "tools/VibeManager/orch-history.js",
+      "tools/VibeManager/test/t_orch_history_kind.js"
+    ],
+    "verify_result": "2026-11-26 23:4x 실행. repeatAsks 40건(상위 40 잘림, 상위 13,13,10) → 6건(10,6,4,2,2,2). 두 인용 항목 빠짐, '계속 개선항목 찾아서 진행해주세요' count 10 → 10. t_orch_history_kind.js PASS 24 → 26, ALL PASS. node --check orch-history.js, t_orch_history_kind.js → SYNTAX_OK. python tools/Docs/doc_style.py tools/VibeManager/orch-history.js --quiet → 'orch-history.js | 문장 43 | 위반 0' (반영 전 0 → 반영 뒤 0, 23:48:29)",
+    "note": "승인, 되돌리기 기록 줄 판별식 /^사용자[^:]*:\\s*개선안 \\S+ (?:승인|되돌리기 실행)/ 는 orch-improve.js:552, 556 의 기록 형식과 맞춤. 나머지 target 시험 파일 8개는 변경 불필요해 고치지 않음. S2 전체 시험, S4 정의 정합은 VMO 반영 뒤 게이트라 실행하지 않음"
+  },
+  "snap": "prop_20261126234153_SELF",
+  "effectiveMs": 1795740577891,
+  "effectiveAt": "2026-11-27T09:49:37+09:00"
+}

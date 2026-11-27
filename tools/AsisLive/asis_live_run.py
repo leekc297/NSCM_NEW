@@ -111,13 +111,14 @@ class Host:
         return {"ok": False, "error": "no response within %ss (cmd=%s)" % (timeout, cmd)}
     def stop(self):
         if self.proc and self.proc.poll() is None:
+            if self.view and hasattr(self.view, 'final_shot'): self.view.final_shot()   # 2026-11-26 캡처 방식: 실행기를 닫기 직전 1장
             self.send("quit", timeout=10)
             try: self.proc.wait(10)
             except subprocess.TimeoutExpired: self.proc.kill()
         if self.view:
             try:
                 r = self.view.stop(); self.view = None
-                print('[AS-IS 실측 화면] 방식 %s · 투명 처리한 창 %s%s' % (r.get('mode'), r.get('moved'), (' · 녹화 ' + os.path.relpath(r['gif'], ROOT)) if r.get('gif') else ''), flush=True)
+                print('[AS-IS 실측 화면] 방식 %s · 투명 처리한 창 %s%s' % (r.get('mode'), r.get('moved'), (' · 녹화 ' + os.path.relpath(r['gif'], ROOT)) if r.get('gif') else '') + ((' · 캡처 %s장 %s' % (r['captures'], os.path.relpath(r['cap_dir'], ROOT))) if r.get('captures') else ''), flush=True)
                 if r.get('why'): print('[WARN] 실측 화면 방식: %s' % r['why'], flush=True)
             except Exception as e:
                 print('[WARN] 실측 화면 방식 마무리 실패: %s' % e, flush=True)
@@ -249,9 +250,37 @@ def live_user():
     except Exception:
         return "jaeuk.shin"
 
+def warm_menu(user):
+    """2026-11-26 AS-IS 메뉴 SP 데우기. 런처 메뉴 조회 UP_FX_GetGSCMAuthenticationMenuList 는 메뉴 아이콘(Icon) 68,681,092바이트를 읽는다.
+       AS-IS 개발 DB 캐시가 식은 뒤 첫 호출은 256초(11-26 17:03 직접 실행)로, 런처 제한 30초를 넘겨 메뉴 0건 FAIL 이 난다(11-24 18:53 · 11-25 01:49·05:09 · 11-26 16:53~16:59 DbProfile).
+       런처를 띄우기 전에 같은 SP 를 서버 안 임시 테이블로 한 번 실행해(결과를 받지 않음 · 캐시가 데워져 있으면 0.8초) 캐시를 데운다. 실패해도 실측은 계속한다.
+       반환 (초, 행 수) 또는 (None, 사유)"""
+    try:
+        sys.path.insert(0, os.path.join(ROOT, "tools", "DbConn")); import dbconn
+        c = dbconn.connect("asis")
+        try: c.timeout = 600
+        except Exception: pass
+        cur = c.cursor()
+        cur.execute("SELECT ISNULL(DefaultGroupID, '') FROM dbo.TB_FX_User WITH (NOLOCK) WHERE UserID = ?", (user,)); g = (cur.fetchone() or [""])[0] or "ADMIN"
+        t0 = time.time()
+        cur.execute("""SET NOCOUNT ON;
+CREATE TABLE #m (MenuID nvarchar(20), ProgramID nvarchar(20), PrntMenuID nvarchar(20), NavigatePath nvarchar(1000), Title nvarchar(250), Description nvarchar(250), Parameter nvarchar(250),
+ ProgramPath nvarchar(500), ClassName nvarchar(500), SortOrder int, MenuLevel int, MenuAction int, CollapsedIconClass nvarchar(50), ExpandedIconClass nvarchar(50), Icon varbinary(max), Expanded bit, MenuVisible bit);
+INSERT INTO #m EXEC dbo.UP_FX_GetGSCMAuthenticationMenuList @UserID = ?, @GroupID = ?, @ProgramId = '';
+SELECT COUNT(*) FROM #m; DROP TABLE #m;""", (user, g))
+        while cur.description is None and cur.nextset(): pass
+        n = cur.fetchone()[0]; sec = round(time.time() - t0, 2); c.close()
+        return sec, n
+    except Exception as e:
+        return None, "%s: %s" % (type(e).__name__, str(e)[:200])
+
+
 def start_session(cmddir):
     """호스트 기동 → 로그인 → 메인 대기 → 최대화. 반환 (host|None, info, why)"""
-    host = Host(cmddir); info = {}
+    sec, n = warm_menu(live_user())
+    if sec is None: print("[WARN] AS-IS 메뉴 SP 데우기 실패(실측은 계속): %s" % n, flush=True)
+    else: print("[AS-IS 메뉴 데우기] UP_FX_GetGSCMAuthenticationMenuList %s초 · %s행%s" % (sec, n, " · 캐시가 식어 있었음(런처 제한 30초 초과 구간)" if sec > 30 else ""), flush=True)
+    host = Host(cmddir); info = {"menu_warm_sec": sec, "menu_warm_rows": n}
     if not host.start(): return None, info, "호스트 기동 실패"
     want = live_user()
     r = host.send("login", timeout=90, user=want)

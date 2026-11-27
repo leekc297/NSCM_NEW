@@ -54,6 +54,6 @@
 "supply/project-route","SCP0006","features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx","148","code","};"
 "supply/project-route","SCP0006","features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx","149","code","}, [gridRef]);"
 "supply/project-route","SCP0006","features/supply/src/pages/project-route/project-route.constants.ts","30","endpoint","컬럼 메타 fetch(/admin/menu/SCP0006/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 문자열 매칭). AS-IS SpreadInfo 시트명(Main/BOM Explosion/Plant Assign)이 DB SHEET_NAME 으로 배포된 것으로 본다(design/03 §0). 라이브 확인필요(design/03 §6-2)."
-"supply/project-route","SCP0006","features/supply/src/pages/project-route/ProjectRoute.tsx","206","code","const plantReadOnly = (bomKey?.cellType ?? '').toUpperCase() === 'CA1';"
-"supply/project-route","SCP0006","features/supply/src/pages/project-route/ProjectRoute.tsx","209","endpoint","---- mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline) ----"
+"supply/project-route","SCP0006","features/supply/src/pages/project-route/ProjectRoute.tsx","207","code","const plantReadOnly = (bomKey?.cellType ?? '').toUpperCase() === 'CA1';"
+"supply/project-route","SCP0006","features/supply/src/pages/project-route/ProjectRoute.tsx","210","endpoint","---- mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline) ----"
 "supply/project-route","SCP0006","features/supply/src/pages/project-route/useProjectRouteStore.ts","203","endpoint","컬럼 메타는 admin(SCM_MST_SHEET_COLUMNS)에서 동적 fetch(ui-category hook, 하드코딩 금지)."

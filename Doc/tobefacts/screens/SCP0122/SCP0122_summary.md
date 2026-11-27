@@ -1,18 +1,18 @@
 # SCP0122 — To-Be Fact Pack 요약
 
 - page_key: `supply/plan-activity-mgmt` · feature: supply · As-is Fact Pack 있음
-- 파일 9 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 6 · 컴포넌트 사용 15 · 하드코딩 컬럼 0 · 메시지 9
+- 파일 9 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 6 · 컴포넌트 사용 15 · 하드코딩 컬럼 0 · 메시지 10
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | component | 203 |
+| features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | component | 202 |
 | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtGrid.tsx | component | 80 |
 | features/supply/src/pages/plan-activity-mgmt/index.ts | index | 2 |
 | features/supply/src/pages/plan-activity-mgmt/plan-activity-mgmt.constants.ts | constants | 76 |
 | features/supply/src/pages/plan-activity-mgmt/plan-activity-mgmt.types.ts | types | 14 |
-| features/supply/src/pages/plan-activity-mgmt/PlanActivityMgmt.tsx | page | 206 |
+| features/supply/src/pages/plan-activity-mgmt/PlanActivityMgmt.tsx | page | 227 |
 | features/supply/src/pages/plan-activity-mgmt/usePlanActivityMgmtStore.ts | store | 144 |
 | features/supply/src/pages/plan-activity-mgmt/utils/plan-activity-mgmt.util.ts | util | 96 |
 | features/supply/src/pages/plan-activity-mgmt/__asis-mapping__.md | mapping | 70 |
@@ -36,10 +36,10 @@
 |---|---|---|---|---|---|
 | SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | 119 |
 | CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | 133 |
-| CustomDropdown | onChange | <arrow> planGroupOptions.find,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,String | jsx | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | 159 |
-| CustomDropdown | onChange | <arrow> processOptions.find,setSearchParams,String | jsx | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | 187 |
+| CustomDropdown | onChange | <arrow> planGroupOptions.find,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams,String | jsx | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | 158 |
+| CustomDropdown | onChange | <arrow> processOptions.find,setSearchParams,String | jsx | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtForm.tsx | 186 |
 | grid | cellEditEnded | handleCellEditEnded | addHandler | features/supply/src/pages/plan-activity-mgmt/components/PlanActivityMgmtGrid.tsx | 58 |
-| PlanActivityMgmtForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-activity-mgmt/PlanActivityMgmt.tsx | 186 |
+| PlanActivityMgmtForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-activity-mgmt/PlanActivityMgmt.tsx | 207 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -68,11 +68,11 @@
 | MSG00004 | 1 |
 | MSG00002 | 1 |
 | MSG00428 | 1 |
-| MSG00043 | 1 |
+| MSG00043 | 2 |
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SCP0006(3), SCP0122(2), SCP0129(1), SCP0025(1), SCP0123(1), SCP0005(1)
-- SP/PKG: SCP0122_GET_PLAN_ACTIVITY_MGMT(2), SCP0122_SAVE_PLAN_ACTIVITY_MGMT(1)
+- SP/PKG: SCP0122_GET_PLAN_ACTIVITY_MGMT(2), FN_ASIS_SORT_KEY(1), SCP0122_SAVE_PLAN_ACTIVITY_MGMT(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

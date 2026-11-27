@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | component | 202 |
+| features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | component | 209 |
 | features/shipping/src/pages/inventory-raw/components/InventoryRawGrid.tsx | component | 118 |
 | features/shipping/src/pages/inventory-raw/index.ts | index | 2 |
 | features/shipping/src/pages/inventory-raw/inventory-raw.constants.ts | constants | 83 |
@@ -19,8 +19,8 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | InventoryRawForm.tsx:56 |
-| (useTabLookupQueries) | hook | 1 | Y | InventoryRawForm.tsx:61 |
+| (useTabComboQueries) | hook | 1 | Y | InventoryRawForm.tsx:57 |
+| (useTabLookupQueries) | hook | 1 | Y | InventoryRawForm.tsx:62 |
 | SSP0017/main//call-proc | hook | 1 | Y | InventoryRaw.tsx:47 |
 | /admin/menu/SSP0017/column | http | 1 | Y | useInventoryRawStore.ts:86 |
 | /admin/menu/SSP0017/search-conditions | http | 1 | Y | useInventoryRawStore.ts:115 |
@@ -33,12 +33,12 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 94 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 123 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 157 |
-| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 153 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 174 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 192 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 95 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 124 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 164 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 154 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 181 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx | 199 |
 | grid | updatedLayout | applyAggregates | addHandler | features/shipping/src/pages/inventory-raw/components/InventoryRawGrid.tsx | 90 |
 | grid | formatItem | formatFooter | addHandler | features/shipping/src/pages/inventory-raw/components/InventoryRawGrid.tsx | 91 |
 | InventoryRawForm | onSearch | handleSearch | jsx | features/shipping/src/pages/inventory-raw/InventoryRaw.tsx | 142 |
@@ -77,8 +77,8 @@
 | MSG00614 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0001(4), SSP0021(2), SSP0017(2), SCP0053(2), SSP0015(1), DMF0045(1), SSP0019(1), SSP0202(1), DMF0004(1)
-- SP/PKG: SSP0017_GET_INVENTORY_RAW(3)
+- 화면ID: SSP0001(4), DMF0045(2), SSP0021(2), SSP0019(2), SSP0017(2), SCP0053(2), SSP0015(1), SSP0202(1), COM0013(1), SSP0003(1), SSP0026(1), DMF0004(1)
+- SP/PKG: SSP0017_GET_INVENTORY_RAW(3), PKG_SCM0002(1), P_SCM0002_GET_MATERIAL_BY_DIVISION(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

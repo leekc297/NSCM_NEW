@@ -9,6 +9,10 @@
     record  창 없이 녹화(2026-11-20 사용자 지시 '투명 창 + 녹화'). hidden 과 같이 창을 투명하게 두고, 1초마다 실행기 창(메인 + 그 위의 팝업·메시지 창)을 PrintWindow 로 찍어 끝날 때 동영상 1개(record.webm)로 묶는다.
             동영상 = Playwright 전용 ffmpeg(%LOCALAPPDATA%/ms-playwright/ffmpeg-*/ffmpeg-win64.exe · VP9). ffmpeg 가 없으면 GIF(record.gif)
             저장: 명령 폴더가 <실행 폴더>/_cmd 이면 <실행 폴더>/record.webm · 아니면 Doc/asislive/_rec/<명령 폴더 이름>.webm (가로 1280 이하로 줄임)
+    capture 창 없이 실행 + 필요한 때만 캡처(2026-11-26 사용자 지시 '녹화 대신 캡처 · 백그라운드 실행'). hidden 과 같이 창을 투명하게 두고,
+            새 창(로그인 · 메인 · 팝업 · 메시지 창)이 뜰 때마다 0.6초 뒤 1장, 실행기를 닫기 직전 1장을 JPEG 로 남긴다(1초마다 찍지 않음 · 동영상 묶기 없음 · 실행당 최대 300장).
+            저장: 명령 폴더가 <실행 폴더>/_cmd 이면 <실행 폴더>/captures/ · 아니면 Doc/asislive/_rec/<명령 폴더 이름>_captures/ (가로 1280 이하로 줄임)
+            판정 근거 캡처(shots/*.png · 실행기 shot 명령)는 화면 방식과 무관하게 그대로 찍힌다.
   사용: Host.start() 뒤 view = asis_view.start(pid, cmddir) · Host.stop() 에서 view.stop() · 'maximize' 뒤 view.after_maximize()
   python tools/AsisLive/asis_view.py --selftest   (창 없이 값 해석·경로 시험)
 """
@@ -21,8 +25,9 @@ import time
 from ctypes import wintypes
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-MODES = ('hidden', 'window', 'record')
-NAMES = {'hidden': '창 없이 실행', 'window': '창 띄우기', 'record': '녹화'}
+MODES = ('hidden', 'window', 'record', 'capture')
+NAMES = {'hidden': '창 없이 실행', 'window': '창 띄우기', 'record': '녹화', 'capture': '창 없이 실행 + 캡처'}
+CAP_MAX = 300
 
 
 def mode():
@@ -125,6 +130,31 @@ def rescue_frames(skip=''):
     return n
 
 
+def cap_dir(cmddir):
+    """capture 방식 저장 폴더 — <실행 폴더>/captures · 아니면 Doc/asislive/_rec/<명령 폴더 이름>_captures"""
+    cmddir = os.path.abspath(cmddir)
+    if os.path.basename(cmddir) == '_cmd':
+        return os.path.join(os.path.dirname(cmddir), 'captures')
+    return os.path.join(ROOT, 'Doc', 'asislive', '_rec', os.path.basename(cmddir) + '_captures')
+
+
+def prune_cap_dirs(saved_dir):
+    """_rec 아래 캡처 폴더를 최근 recordKeepRuns 개만 남긴다(실행 폴더 안 captures 는 실행 폴더와 같이 두므로 건드리지 않음). 반환 = 지운 수"""
+    import glob, shutil
+    if os.path.basename(os.path.dirname(saved_dir)) != '_rec':
+        return 0
+    ds = sorted(glob.glob(os.path.join(os.path.dirname(saved_dir), '*_captures')), key=os.path.getmtime)
+    n = 0
+    for d in ds[:max(0, len(ds) - keep_runs())]:
+        shutil.rmtree(d, ignore_errors=True); n += 1
+    return n
+
+
+def safe_name(s):
+    s = ''.join(ch if ch.isalnum() or ch in '-_' else '_' for ch in (s or '').strip())[:40].strip('_')
+    return s or 'win'
+
+
 def gif_path(cmddir):
     cmddir = os.path.abspath(cmddir)
     if os.path.basename(cmddir) == '_cmd':
@@ -147,6 +177,8 @@ if sys.platform == 'win32':
     U.GetWindowLongW.argtypes = [wintypes.HWND, ctypes.c_int]
     U.SetWindowLongW.argtypes = [wintypes.HWND, ctypes.c_int, ctypes.c_long]
     U.SetLayeredWindowAttributes.argtypes = [wintypes.HWND, wintypes.COLORREF, ctypes.c_ubyte, wintypes.DWORD]
+    U.GetWindowTextLengthW.argtypes = [wintypes.HWND]
+    U.GetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
     U.GetWindowDC.argtypes = [wintypes.HWND]
     U.GetWindowDC.restype = wintypes.HDC
     U.ReleaseDC.argtypes = [wintypes.HWND, wintypes.HDC]
@@ -175,6 +207,13 @@ def windows_of(pid):
         return True
     U.EnumWindows(EnumProc(cb), 0)
     return out
+
+
+def window_title(h):
+    n = U.GetWindowTextLengthW(h)
+    b = ctypes.create_unicode_buffer(max(1, n) + 1)
+    U.GetWindowTextW(h, b, len(b))
+    return b.value
 
 
 def offscreen_x():
@@ -209,6 +248,7 @@ class View:
         self.pid, self.cmddir, self.mode = pid, cmddir, (m or mode())
         self.frames, self.moved, self.stop_ev = [], 0, threading.Event(); self.done = set(); self.nframe = 0
         self.t = None; self.gif = ''; self.why = ''
+        self.seen, self.pending, self.ncap = set(), [], 0   # capture 방식: 본 창 · 찍을 예정 · 찍은 수
 
     def begin(self):
         if self.mode == 'window' or sys.platform != 'win32':
@@ -234,18 +274,18 @@ class View:
                 self.done.add(h); self.moved += 1
 
     def after_maximize(self):
-        if self.mode in ('hidden', 'record'):
+        if self.mode in ('hidden', 'record', 'capture'):
             time.sleep(0.3); self.hide()
 
-    def snap(self):
-        from PIL import Image
+    def compose(self):
+        """메인 창 + 그 위의 팝업·메시지 창을 한 장으로(PrintWindow · 투명 창도 찍힘). 반환 (PIL.Image, 창 목록) 또는 (None, [])"""
         ws = windows_of(self.pid)
         if not ws:
-            return
+            return None, []
         main = max(ws, key=lambda x: (x[1][2] - x[1][0]) * (x[1][3] - x[1][1]))
         base = capture(*main)
         if base is None:
-            return
+            return None, ws
         for h, rc in ws:
             if h == main[0]:
                 continue
@@ -254,17 +294,55 @@ class View:
                 base.paste(im, (rc[0] - main[1][0], rc[1] - main[1][1]))
         if base.width > 1280:
             base = base.resize((1280, int(base.height * 1280 / base.width)))
+        return base, ws
+
+    def snap(self):
+        base, _ = self.compose()
+        if base is None:
+            return
         # 2026-11-20 사용자 지시 '중단된 실행도 녹화를 보관': 장면을 찍는 대로 파일로(<녹화 이름>.frames/00001.jpg). 실측 스크립트가 강제 종료돼도 다음 실측 시작 때 동영상으로 묶는다
         fd = frames_dir(self.cmddir); os.makedirs(fd, exist_ok=True)
         self.nframe += 1; base.convert('RGB').save(os.path.join(fd, '%05d.jpg' % self.nframe), 'JPEG', quality=85)
         self.frames.append(1)
 
+    def shot(self, why):
+        """capture 방식 1장 — <캡처 폴더>/<번호>_<사유>.jpg. 반환 = 저장 경로 또는 ''"""
+        if self.mode != 'capture' or self.ncap >= CAP_MAX:
+            return ''
+        base, _ = self.compose()
+        if base is None:
+            return ''
+        d = cap_dir(self.cmddir); os.makedirs(d, exist_ok=True)
+        self.ncap += 1; p = os.path.join(d, '%03d_%s.jpg' % (self.ncap, safe_name(why)))
+        base.convert('RGB').save(p, 'JPEG', quality=85)
+        return p
+
+    def final_shot(self):
+        """실행기를 닫기 직전 1장(Host.stop 이 quit 보내기 전에 부른다)"""
+        try:
+            self.shot('end')
+        except Exception as e:
+            self.why = f'마지막 캡처 실패: {type(e).__name__}: {str(e)[:120]}'
+
+    def watch_new(self):
+        """capture 방식: 새 창이 뜨면 0.6초 뒤 1장(창이 다 그려진 뒤). 사유 = 새 창 제목"""
+        now = time.time()
+        for h, _ in windows_of(self.pid):
+            if h not in self.seen:
+                self.seen.add(h); self.pending.append((now + 0.6, window_title(h)))
+        due = [x for x in self.pending if x[0] <= now]
+        if due:
+            self.pending = [x for x in self.pending if x[0] > now]
+            self.shot('open_' + due[-1][1])
+
     def loop(self):
         last = 0.0
         while not self.stop_ev.is_set():
             try:
-                if self.mode in ('hidden', 'record'):   # 2026-11-20 사용자 지시: 녹화도 투명 창(창 없이 녹화)
+                if self.mode in ('hidden', 'record', 'capture'):   # 2026-11-20 사용자 지시: 녹화도 투명 창(창 없이 녹화) · 11-26 캡처도 투명 창
                     self.hide()
+                if self.mode == 'capture':
+                    self.watch_new()
                 if self.mode == 'record' and time.time() - last >= 1.0:
                     last = time.time(); self.snap()
             except Exception as e:   # 화면 방식 실패는 실측을 멈추지 않는다(사유만 남김)
@@ -294,7 +372,12 @@ class View:
         if self.t:
             self.t.join(timeout=30)
         self.finish()
-        return {'mode': self.mode, 'moved': self.moved, 'gif': self.gif, 'why': self.why}
+        cap = ''
+        if self.mode == 'capture' and self.ncap:
+            cap = cap_dir(self.cmddir); d = prune_cap_dirs(cap)
+            print(f'[AS-IS 캡처] {self.ncap}장 → {os.path.relpath(cap, ROOT)}' + (f' · 오래된 캡처 폴더 {d}개 지움(최근 {keep_runs()}회 유지)' if d else ''), flush=True)
+            print('@@LINK 📷 AS-IS 캡처|' + os.path.relpath(cap, ROOT).replace(os.sep, '/'), flush=True)
+        return {'mode': self.mode, 'moved': self.moved, 'gif': self.gif, 'why': self.why, 'captures': self.ncap, 'cap_dir': cap}
 
 
 def windows_of_alive(pid):
@@ -325,6 +408,10 @@ def selftest():
     os.environ['ASIS_LIVE_VIEW'] = 'xx'; chk('값 — 모르는 값 = 설정 파일 값', mode() in MODES)
     os.environ.pop('ASIS_LIVE_VIEW', None)
     chk('녹화 경로 — 실행 폴더', gif_path(os.path.join(ROOT, 'Doc', 'asislive', 'X', 'run_1', '_cmd')).endswith(os.path.join('run_1', 'record.gif')))
+    os.environ['ASIS_LIVE_VIEW'] = 'capture'; chk('값 — capture', mode() == 'capture'); os.environ.pop('ASIS_LIVE_VIEW', None)
+    chk('캡처 경로 — 실행 폴더', cap_dir(os.path.join(ROOT, 'Doc', 'asislive', 'X', 'run_1', '_cmd')).endswith(os.path.join('run_1', 'captures')))
+    chk('캡처 경로 — 그 밖', cap_dir('C:/x/_cmd_save_101010').endswith(os.path.join('_rec', '_cmd_save_101010_captures')))
+    chk('파일 이름 — 제목 정리', safe_name('메시지: 저장?') == '메시지__저장' and safe_name('') == 'win')
     chk('녹화 경로 — 그 밖', gif_path('C:/x/_cmd_save_101010').endswith(os.path.join('_rec', '_cmd_save_101010.gif')))
     if sys.platform == 'win32':
         chk('창 목록 — 이 프로세스 창 없음', windows_of(os.getpid()) == [])

@@ -1,0 +1,37 @@
+{
+  "id": "20261126_180823_R9_SCP0005",
+  "at": "2026-11-26T18:08:23+09:00",
+  "ms": 1795684103810,
+  "rule": "R9",
+  "ruleName": "죽은 잠금",
+  "title": "죽은 잠금. _run.e2e.SCP0005.lock (PID 39304 없음)",
+  "screen": "SCP0005",
+  "sig": "R9|_run.e2e.SCP0005.lock",
+  "count": 1,
+  "repeat": null,
+  "detail": "시작 2026-11-26T09:06:29.966Z · 인자 auth SCP0005 --mode admin",
+  "evidence": {
+    "file": "Doc/e2e/_run.e2e.SCP0005.lock",
+    "pid": 39304
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T18:08:24+09:00",
+      "by": "VMO",
+      "what": "죽은 잠금 삭제: Doc/e2e/_run.e2e.SCP0005.lock (PID 39304 없음 재확인)",
+      "grade": "A"
+    },
+    {
+      "at": "2026-11-26T18:18:49+09:00",
+      "by": "VMO 사후 검증",
+      "what": "잠금 삭제 판정: 맞음. 잠금 주인 PID 39304 없음 확인"
+    }
+  ],
+  "vmoCheck": {
+    "entry": "I20261126_180824_1",
+    "verdict": "ok",
+    "at": "2026-11-26T18:18:49+09:00"
+  }
+}

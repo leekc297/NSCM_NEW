@@ -1,0 +1,15 @@
+# SCP0005 미검증 조치표 (라운드 6, 2026-11-25 18:2x)
+
+입력: 해소 원장 unverified_worklist.csv(기준 17:00:47, 갱신 18:19:15) 33행. 열림 16행(검사기 9, 데이터전제 1, 집계 6), 닫힘 11행, 결정 6행. 직전 측정 = row_run RR20261125170349(17:03~17:28).
+원장 미검증 처리 대상 10행 = 조치표 10행(빠진 행 0). 집계 6행(V-ef37f9e9, T-27795148, T-e499d5e0, T-d920ea16, T-e71343b5, T-9343bbce)은 하위 행을 따라감.
+
+| 묶음 | 행 ID | 규칙 | 대상 | 측정 실패 지점(17:03 실측) | 고칠 곳 | 담당 |
+|---|---|---|---|---|---|---|
+| K1 그리드 조작 | V-27f100cb, V-f426f87d, V-7ccb8dd4, V-612b1d63 | K3 | 메인 그리드 Ctrl+클릭, Shift+클릭 | '셀 좌표 확인 실패(2행 · LT_TYPE): wj-listbox-item' | Doc/e2e/specs/_verify.spec.ts K3 셀 좌표 확인 | 주 세션 |
+| K2 2행 동시 저장 | V-26d2974c | F1 | 2행 동시 저장 | 'r360 행 식별 0건 · 저장 오류 저장에 실패'(run 20261125081611, 17:03 row_run 결과 없음) | _verify.spec.ts 저장 세부, tools/E2E/lib/saveprobe.ts | 주 세션 |
+| K3 신규 행 저장(계정) | ES-836708a8 | F1 | authcrud insert jooyong026 | 'SAVE: [Working Days] 값은 필수 입력 항목입니다.' saveCalls=0 | tools/E2E/lib/crud.ts 필수 칸 채움 | 주 세션 |
+| K4 Excel 업로드 | V-219edc76, V-a32c8abf | M1 | 업로드 검증 메시지, Excel Form 버튼 | '업로드 응답 없음(90초)'(run 081611), '[측정 코드 없음]'(_trace.spec W4d 고정 문구) | _verify.spec.ts M1, _trace.spec.ts:2583, tools/E2E/lib/m1upload.ts | 주 세션 |
+| K5 조회조건 콤보 | V-052d2add | B4 | 조회조건 Valid | 'ALL: 설명 불가(원천 마스터 테이블 해석 실패)' | tools/Harness/verify/combo_oracle.py:518 | 하위 에이전트 A |
+| K6 업로드 팝업 인자 | V-a6bb7234 | G5 | frm.ShowDialog() | '#2 this.spdMain.ActiveSheet.SheetName 미전달' 판정필요가 ERROR 로 바뀜 | tools/Harness/verify/popup_args_check.py, judge.py:1643 | 하위 에이전트 B |
+
+결정 6행(V-087d756b, V-7116d2aa, V-3e95d2be, V-8fd091cc, T-eea49685, T-6a512ae5)은 라운드 5 결정(R5-D1, D3, D4, D5) 적용 상태로 처리하지 않음.

@@ -123,6 +123,9 @@ def gaps(lo, hi, covered):
 #   따옴표가 문자열 안에서는 \\" 로만 나오므로 '{'·',' 뒤 '"@' 와 '}],"' 는 문자열 안에서 생기지 않음. '}]}' 는 문자열 안에 있을 수 있어 잘못 자를 수 있음.
 #   자른 결과는 작은 JSON 을 JSON_OBJECT_T 로 다시 해석해 남은 '@' 키·목록·객체를 지우고(=종전 기준), 해석이 실패하면(잘못 자른 경우 포함) 원문 전체를 종전 방식(nscm_strip_dom)으로 처리함.
 #   확인(16:39~16:43): 같은 387건 경과 6.2초(DB CPU 6.1초) · pick() 결과 387건 일치 · 큰 행 291건 모두 빠른 경로 · 경계 입력 6종(중첩 배열, 문서 끝 배열 문자열 '}]}', 잘린 JSON, 빈 배열 등) split_params 결과 일치
+# 2026-11-26 사용자 'LOB 디스크 읽기도 줄여줘': LOB 직접 물리 읽기 1,490,223(원문 1회 읽기 521,238 의 2.9배)의 원인 = 큰 배열을 훑는 INSTR 앞뒤의 DBMS_LOB.SUBSTR·READ(1자)와
+#   문서 앞부분 COPY(16:50~17:01 diag_cut_variants.py · diag_lobreads_20261126.py 31건 측정). nscm_cut 을 INSTR 만으로 판단하고 문서 첫 글자는 직접 씀.
+#   확인(17:02~17:07): 같은 387건 경과 3.9초 · LOB 직접 물리 읽기 607,956 · direct path read 0.8초 · pick() 결과 387건 일치 · 큰 행 291건 모두 빠른 경로 · 경계 입력 15종 일치
 PARAMS_KEEP = 32000
 
 
@@ -144,32 +147,59 @@ EXCEPTION WHEN OTHERS THEN
 END;
 FUNCTION nscm_cut(p CLOB) RETURN CLOB IS
   o CLOB; n PLS_INTEGER := DBMS_LOB.GETLENGTH(p); pos PLS_INTEGER := 1; cp PLS_INTEGER := 1;
-  k PLS_INTEGER; q PLS_INTEGER; e PLS_INTEGER; e1 PLS_INTEGER; e2 PLS_INTEGER; rs PLS_INTEGER; re PLS_INTEGER; prev VARCHAR2(4);
+  k PLS_INTEGER; q PLS_INTEGER; e PLS_INTEGER; x PLS_INTEGER; rs PLS_INTEGER; re PLS_INTEGER;
+  pv VARCHAR2(1); st VARCHAR2(1) := '{{'; nx VARCHAR2(1); started BOOLEAN := FALSE;
+  -- 글자 확인도 INSTR 로만 한다. 큰 배열을 훑는 INSTR 앞에서 DBMS_LOB.SUBSTR·READ 로 앞부분을 읽으면 그 INSTR 의 LOB 물리 읽기가 1.5배가 됨(16:55 diag_cut_variants.py u1·u3 93,868 / u2 62,403)
+  -- pv = 지울 키 앞 글자(',' 또는 '{{'), st = 앞 구간이 비었을 때 이어받는 앞 글자, nx = 배열 뒤 글자(',' 또는 '}}')
 BEGIN
   DBMS_LOB.CREATETEMPORARY(o, TRUE);
   LOOP
-    k := DBMS_LOB.INSTR(p, '"@', pos);
-    EXIT WHEN k = 0;
-    prev := DBMS_LOB.SUBSTR(p, 1, k - 1);
+    k := 0;
+    IF NOT started THEN
+      started := TRUE;
+      IF DBMS_LOB.INSTR(p, '"@', 1) = 2 THEN k := 2; pv := '{{'; END IF;   -- 첫 키(앞 글자 '{{' 가정, 틀리면 아래 해석 검증에서 종전 방식으로)
+    END IF;
+    IF k = 0 THEN
+      k := DBMS_LOB.INSTR(p, ',"@', GREATEST(pos - 1, 1));
+      EXIT WHEN k = 0;
+      k := k + 1;
+      pv := CASE WHEN k - 1 >= cp THEN ',' ELSE st END;   -- 앞 쉼표를 이미 지웠으면 앞 상태를 이어받음
+    END IF;
     q := DBMS_LOB.INSTR(p, '":', k + 2);
-    IF prev NOT IN ('{{', ',') OR q = 0 OR DBMS_LOB.SUBSTR(p, 1, q + 2) <> '[' THEN
-      pos := k + 2;
+    IF q = 0 OR DBMS_LOB.INSTR(p, '":[', k + 2) <> q THEN
+      pos := k + 1;   -- 값이 배열이 아님(남겨 두고 아래 해석에서 지움)
     ELSE
-      IF DBMS_LOB.SUBSTR(p, 1, q + 3) = ']' THEN
-        e := q + 3;
+      x := DBMS_LOB.INSTR(p, '],', q + 3);
+      IF x = q + 3 THEN
+        e := q + 3; nx := ',';                                       -- 빈 배열 + 쉼표
       ELSE
-        e1 := DBMS_LOB.INSTR(p, '}}],"', q + 3); e2 := 0;
-        IF e1 = 0 THEN e2 := DBMS_LOB.INSTR(p, '}}]}}', q + 3); END IF;   -- '}}]}}' = 문서 끝 배열. 뒤에 '}}],"' 가 있으면 그 배열은 끝이 아님(LOB 를 한 번만 훑음)
-        IF e1 = 0 AND e2 = 0 THEN RAISE_APPLICATION_ERROR(-20001, 'array end'); END IF;
-        e := CASE WHEN e1 = 0 THEN e2 ELSE e1 END + 1;
+        IF x > 0 THEN
+          x := DBMS_LOB.INSTR(p, '}}],"', x - 1);                     -- 첫 '],' 가 배열 끝이면 바로 맞음, 아니면(문자열 안 '],') 그 뒤로 이어서 찾음
+          IF x > 0 THEN e := x + 1; nx := ','; END IF;
+        END IF;
+        IF x = 0 THEN                                                -- 문서 끝 배열
+          x := DBMS_LOB.INSTR(p, '}}]}}', q + 3);
+          IF x > 0 THEN
+            e := x + 1;
+          ELSIF DBMS_LOB.INSTR(p, '[]}}', q + 2) = q + 2 THEN
+            e := q + 3;                                              -- 빈 배열 + 문서 끝
+          ELSE
+            RAISE_APPLICATION_ERROR(-20001, 'array end');
+          END IF;
+          nx := '}}';
+        END IF;
       END IF;
-      IF prev = ',' THEN
+      IF pv = ',' THEN
         rs := k - 1; re := e;
       ELSE
-        rs := k; re := e + CASE WHEN DBMS_LOB.SUBSTR(p, 1, e + 1) = ',' THEN 1 ELSE 0 END;
+        rs := k; re := e + CASE WHEN nx = ',' THEN 1 ELSE 0 END;
       END IF;
-      IF rs > cp THEN DBMS_LOB.COPY(o, p, rs - cp, DBMS_LOB.GETLENGTH(o) + 1, cp); END IF;
-      cp := re + 1; pos := re + 1;
+      IF rs = 2 AND cp = 1 THEN
+        DBMS_LOB.WRITEAPPEND(o, 1, '{{');   -- 문서 첫 글자는 LOB 에서 복사하지 않고 직접 씀(앞부분 COPY 가 겹치면 물리 읽기 1.5배, 17:01 측정)
+      ELSIF rs > cp THEN
+        DBMS_LOB.COPY(o, p, rs - cp, DBMS_LOB.GETLENGTH(o) + 1, cp);
+      END IF;
+      cp := re + 1; pos := re + 1; st := pv;
     END IF;
   END LOOP;
   IF n >= cp THEN DBMS_LOB.COPY(o, p, n - cp + 1, DBMS_LOB.GETLENGTH(o) + 1, cp); END IF;

@@ -1,0 +1,41 @@
+PASS S1 구문 오류 1건(bad.js) [{"level":"fail","what":"bad.js 구문 오류","detail":"Unexpected token ';' (bad.js:3)","key":"S1|bad.js","file":"bad.js"}]
+PASS S3 설치본 차이 1건(other.js) {"id":"S3","name":"설치본 차이","status":"fail","count":1,"items":[{"level":"fail","what":"other.js 내용 다름","detail":"저장소 20바이트 2026-11-26T17:02 / 설치본 31바이트 2026-11-26T17:02","key":"S3|other.js","file":"other.js"}],"info":{"compared":8,"diff":1,"missing":0},"note":"","at":"2026-11-26T17:02:56+09:00","ms":33,"fp":"3511e9e0ed"}
+PASS S4 없는 작업 · 없는 메뉴 · 등록 안 된 명령 · 없는 모듈 ["S4|task|S9.nope","S4|label|🧪 없는 메뉴","S4|cmd|vibeManager.two","S4|req|extension.js|./missing-mod"]
+PASS 사건 R12 6건(S1 1 · S3 1 · S4 4) · 제목에 항목 이름 VM 자가진단 S4 정의 정합: 없는 모듈 require: ./missing-mod | VM 자가진단 S4 정의 정합: package.json 명령이 등록되지 않음: vibeManager.two | VM 자가진단 S4 정의 정합: 없는 메뉴 참조: 🧪 없는 메뉴 | VM 자가진단 S4 정의 정합: 없는 작업 id 참조: S9.nope | VM 자가진단 S3 설치본 차이: other.js 내용 다름 | VM 자가진단 S1 구문: bad.js 구문 오류
+PASS 같은 실패 다시 점검 = 새 사건 없음 
+PASS 동기화: 다른 파일 2개 복사 · 설치본 백업 {"ok":true,"at":"2026-11-26T17:02:56+09:00","by":"시험","tag":"20261126_selftest","copied":["bad.js","other.js"],"fail":[]}
+PASS 고친 뒤 S1 · S3 통과 · 그 사건 2건 해결 · S4 사건 4건 그대로 S4:open,S4:open,S4:open,S4:open,S3:resolved,S1:resolved
+PASS S5 새 오류 서명 = 실패 1건 [{"level":"fail","what":"orch-watch.tick 오류 1회(새 서명)","detail":"boom 12 · at C:\\Projects\\NSCM\\tools\\VibeManager\\test\\t_orch_selfcheck.js:44:37 · 마지막 2026-11-26T17:02:56+09:00","key":"S5|orch-watch.tick | boom N","sig":"orch-watch.tick | boom N"}]
+PASS S5 본 서명 1회 = 통과(3회 미만) 
+PASS S6 이력 수집 전 = 건너뜀 
+PASS S6 미확인 3건 · 다시 로드 필요 2건 ["VS Code 실화면 미확인(창 다시 로드 필요).","실제 Claude 응답","VS Code 화면 미확인."]
+PASS 'VS Code 화면 미확인.' 항목 = reload true(2026-11-19 SELF_2) {"key":"CL:2026-11-19:a1k2gg#650baf36a0","id":"CL:2026-11-19:a1k2gg","date":"2026-11-19","time":"10:00","title":"시험 절","text":"VS Code 화면 미확인.","status":"open","by":"","at":"","note":"","reload":true,"loaded":""}
+PASS 창 로드 기록이 절 시각 뒤 = 로드 표시 
+PASS 확인 처리 뒤 열림 2건 
+PASS S7 감시기 tick 시각 · 규칙별 건수 {"lastTickAt":"2026-11-26T17:02:56+09:00","started":true,"incidents7d":7,"byRule":{"R15":0,"R1":0,"R2":0,"R3":0,"R4":0,"R5":0,"R6":0,"R7":0,"R8":0,"R13":0,"R9":0,"R10":0,"R11":0,"R12":7,"R14":0},"zeroRules":["R15","R1","R2","R3","R4","R5","R6","R7","R8","R13","R9","R10","R11","R14"],"acted":3,"resolved":3,"needUser":0,"needUserOwner":{"user":0,"vmo":0},"stale":0,"agent":null,"eventsBytes":4244}
+PASS S12 읽는 코드 없는 설정 2건 ["S12|orch|ghostKey","S12|cfg|vibeManager.deadSetting"]
+PASS 게이트: 시험 실행기 없음 = 통과 아님 · S4 실패 표시 구문 검사 4개 파일 통과, 시험 test/run_all.js 없음, 정의 정합 실패 4
+PASS 회차 기록 
+PASS tick 첫 회 = 무거운 점검 · S3 통과 [["S1","S2","S4","S11","S12","S3","S5","S6","S7","S8","S9","S13","S14","S15","S16"],["S10","S6","S9"]]
+PASS 파일 변경 직후 tick = S3 뺀 가벼운 점검 · R12 사건 수 그대로 · S3 시각 그대로 ["S5","S6","S7","S8","S9","S13","S14","S15","S16"] R12 8→8 S3 2026-11-26T17:02:56+09:00→2026-11-26T17:02:56+09:00
+PASS selfSettleSec 지난 뒤 tick = 무거운 점검에서 S3 판정 · R12 1건 추가 ["S1","S2","S4","S11","S12","S3","S5","S6","S7","S8","S9","S13","S14","S15","S16"] R12 8→9 ["S3|good.js"]
+PASS 무거운 점검 뒤 tick = 가벼운 점검에 S3 포함 · 새 사건 없음 ["S3","S5","S6","S7","S8","S9","S13","S14","S15","S16"]
+PASS S8: 건수형 S11 은 판정 안 함 · S1 은 남으면 판정 ["S8|P_S1"]
+PASS S8: S9 누적 건수 key(S9|file|a.js)는 같은 key 가 다시 나와도 판정 안 함 ["S8|P_S1"]
+PASS S8: cause_class env → engine = 0건 ["S8|P_S1","S8|P_CC_SAME","S8|P_CC_NONE"]
+PASS S8: cause_class 같음 = 1건 ["S8|P_S1","S8|P_CC_SAME","S8|P_CC_NONE"]
+PASS S8: cause_class 없음 = 1건(종전대로) ["S8|P_S1","S8|P_CC_SAME","S8|P_CC_NONE"]
+PASS 동기화 조건 충족 → 동기화 먼저 · S3 통과 · R12 S3 사건 0건 S1 ok S2 ok S3 ok S4 ok sync {"ok":true,"at":"2026-11-26T17:02:58+09:00","by":"VMO 자동","tag":"20261126_sync1702","copied":["a.js"],"fail":[],"hot":[],"reload":["a.js"]} R12 S3 0
+PASS 동기화 조건 미충족(S2 실패) → 동기화 안 함 · R12 S3 사건 1건 S2 fail S3 fail R12 S3 1
+PASS styleTargets: VM .js 만 · 검사기 변경 안은 비교 안 함 
+(node:44504) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS 위반 1건 넣은 가짜 개선안 = 게이트 S11 새로 어긋남 · 반영 실패 · a.js 되돌림 ["apply-failed",{"ok":false,"text":"구문 검사 1개 파일 통과, 시험 1/1개 파일 통과(PASS 1, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1","newBad":["S11 a.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/a.js.style.csv)"]},["반영 시작","반영 실패. 게이트에서 새로 어긋난 항목 1건: S11 a.js 문장 규칙 위반 늘어남: 0 → 1(보고 .vibe/orch/selfcheck/doc_style_gate/a.js.style.csv) · 구문 검사 1개 파일 통과, 시험 1/1개 파일 통과(PASS 1, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 1 · 대상 파일 2개 복원(a.js 사본으로 복원(새 문자열이 비어 위치를 정할 수 없음). 덮기 전 파일 tools/VibeManager/a.js.bak_prerestore_20261126_170300)"]]
+PASS 위반 없는 개선안 = 게이트 통과 · 게이트 기록에 문장 규칙 위반 0 → 0 ["applied",{"ok":true,"text":"구문 검사 1개 파일 통과, 시험 1/1개 파일 통과(PASS 1, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0"}]
+PASS S11 위반 1건(기준선 0) = L1 정리 개선안 1건(fix, L1, 대상 a.js, verify 1 → 0) [{"id":"S11","name":"고정 문구","status":"warn","count":1,"items":[{"level":"warn","what":"a.js 문장 규칙 위반 1건","detail":"기호 1","key":"S11|a.js","file":"a.js","n":1}],"info":{"files":1,"violations":1,"report":".vibe/orch/selfcheck/doc_style"},"note":"","at":"2026-11-26T17:03:02+09:00","ms":123,"fp":"3088d61897"},{"at":"2026-11-26T17:03:02+09:00","up":["a.js 0 → 1"],"added":"20261126170302_SELF"},[["sn ln|gjdeeibknj","fix","L1",["tools/VibeManager/a.js","tools/VibeManager/test/t_a.js"],"python tools/Docs/doc_style.py tools/VibeManager/a.js --quiet 문장 위반 1 → 0, exit 0","S11 점검 2026-11-26T17:03:02+09:00 · 기준선 .vibe/orch/selfcheck/style_base.json · 보고 .vibe/orch/selfcheck/doc_style/<파일>.style.csv · a.js: L1 기호"]]]
+PASS L1 정리 안 = 자동 반영 대상(code) {"ok":true,"kind":"code","why":""}
+PASS 처리 중인 안 있음 = 새로 올리지 않음 {"at":"2026-11-26T17:03:02+09:00","up":["a.js 0 → 1"],"open":"20261126170302_SELF"}
+PASS 반려 = 그 건수를 기준선으로 받아들이고 새 안 없음 {"at":"2026-11-26T17:03:02+09:00","up":[]}
+PASS 기준선 1 → 2 늘어남 = 새 L1 안 1건(a.js:2) [{"at":"2026-11-26T17:03:02+09:00","up":["a.js 1 → 2"],"added":"20261126170302_SELF_2"},[["sn ln|olonkffidj","VM 고정 문구 문장 규칙 위반 정리 2건(a.js)"],["sn ln|gjdeeibknj","VM 고정 문구 문장 규칙 위반 정리 1건(a.js)"]]]
+PASS 위반 0 = 기준선 0 으로 내리고 새 안 없음 ["ok",{"at":"2026-11-26T17:03:03+09:00","per":{"a.js":0},"raised":[{"id":"20261126170302_SELF","at":"2026-11-26T17:03:02+09:00","per":{"a.js":1},"accepted":"2026-11-26T17:03:02+09:00"},{"id":"20261126170302_SELF_2","at":"2026-11-26T17:03:02+09:00","per":{"a.js":2}}]}]
+ALL PASS

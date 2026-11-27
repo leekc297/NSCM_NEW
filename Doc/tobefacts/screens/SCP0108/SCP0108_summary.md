@@ -12,10 +12,10 @@
 | features/supply/src/pages/capa-lob-report/CapaLobReport.tsx | page | 322 |
 | features/supply/src/pages/capa-lob-report/components/CapaLobReportForm.tsx | component | 460 |
 | features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.module.scss | component | 24 |
-| features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | component | 189 |
+| features/supply/src/pages/capa-lob-report/components/CapaLobReportGrid.tsx | component | 190 |
 | features/supply/src/pages/capa-lob-report/components/modals/CapaLobReportColumnModal.tsx | component | 110 |
 | features/supply/src/pages/capa-lob-report/components/modals/CapaLobReportItemPopup.tsx | component | 50 |
-| features/supply/src/pages/capa-lob-report/hooks/useCapaLobReportCombos.ts | hook | 310 |
+| features/supply/src/pages/capa-lob-report/hooks/useCapaLobReportCombos.ts | hook | 351 |
 | features/supply/src/pages/capa-lob-report/hooks/useCapaLobReportConditionEffects.ts | hook | 67 |
 | features/supply/src/pages/capa-lob-report/index.ts | index | 2 |
 | features/supply/src/pages/capa-lob-report/useCapaLobReportStore.ts | store | 488 |
@@ -30,7 +30,7 @@
 | SCP0108/CURRENT//call-proc | hook | 1 | Y | CapaLobReport.tsx:85 |
 | SCP0108/CUTOFF//call-proc | hook | 1 | Y | CapaLobReport.tsx:92 |
 | SCP0108/spreadTitle//call-proc | hook | 1 | Y | CapaLobReport.tsx:103 |
-| (useTabComboQueryResults) | hook | 1 | Y | useCapaLobReportCombos.ts:82 |
+| (useTabComboQueryResults) | hook | 1 | Y | useCapaLobReportCombos.ts:93 |
 | /admin/menu/SCP0108/search-conditions | http | 1 | Y | useCapaLobReportStore.ts:297 |
 | /admin/menu/SCP0108/column | http | 1 | Y | useCapaLobReportStore.ts:432 |
 
@@ -126,8 +126,8 @@
 | LBL00765 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0108(18), SCP0105(16), SCP0104(5), SCP0106(4), SCP0025(2)
-- SP/PKG: PKG_SCP0104(6), PKG_SCP0108(5), P_SCP0104_GET_SPREAD_TITLE(3), SCP0108_GET_CAPA_LOB_CURRENT(1), SCP0108_GET_CAPA_LOB(1), PKG_SCP0100(1), P_SCP0100_GET_GLOBAL_PSI_REPORT(1)
+- 화면ID: SCP0108(18), SCP0105(16), SCP0104(5), SCP0106(4), SCP0025(2), SCP0100(1)
+- SP/PKG: PKG_SCP0104(6), PKG_SCP0108(6), P_SCP0104_GET_SPREAD_TITLE(3), SCP0108_GET_CAPA_LOB_CURRENT(1), SCP0108_GET_CAPA_LOB(1), PKG_SCP0100(1), P_SCP0100_GET_GLOBAL_PSI_REPORT(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

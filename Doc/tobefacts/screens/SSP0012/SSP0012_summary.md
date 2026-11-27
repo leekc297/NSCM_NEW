@@ -1,22 +1,22 @@
 # SSP0012 — To-Be Fact Pack 요약
 
 - page_key: `shipping/shipment-plan-confirm-detail` · feature: shipping · As-is Fact Pack 있음
-- 파일 12 · 엔드포인트 호출 6 (미해결 0, 주석 속 2) · 이벤트 17 · 컴포넌트 사용 62 · 하드코딩 컬럼 50 · 메시지 12
+- 파일 12 · 엔드포인트 호출 6 (미해결 0, 주석 속 2) · 이벤트 19 · 컴포넌트 사용 62 · 하드코딩 컬럼 50 · 메시지 14
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 50건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/BodDetailModal.tsx | component | 138 |
-| features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | component | 194 |
-| features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | component | 266 |
+| features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | component | 213 |
+| features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | component | 273 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.module.scss | component | 21 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | component | 168 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-plan-confirm-detail/shipment-plan-confirm-detail.constants.ts | constants | 110 |
+| features/shipping/src/pages/shipment-plan-confirm-detail/shipment-plan-confirm-detail.constants.ts | constants | 113 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/shipment-plan-confirm-detail.types.ts | types | 28 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.module.scss | style | 6 |
-| features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | page | 301 |
+| features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | page | 325 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/useShipmentPlanConfirmDetailStore.ts | store | 422 |
 | features/shipping/src/pages/shipment-plan-confirm-detail/__asis-mapping__.md | mapping | 77 |
 
@@ -24,9 +24,9 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | /SSP0012/main/GET_BOD_DETAIL/call-proc | http | 1 | Y | BodDetailModal.tsx:89 |
-| /SSP0012/main/GET_REQ_DRAFTING/call-proc | http | 1 | Y | ShipmentRequestDetailModal.tsx:141 |
-| (useTabComboQueries) | hook | 1 | Y | ShipmentPlanConfirmDetailForm.tsx:82 |
-| SSP0012/main//call-proc | hook | 1 | Y | ShipmentPlanConfirmDetail.tsx:95 |
+| /SSP0012/main/GET_REQ_DRAFTING/call-proc | http | 1 | Y | ShipmentRequestDetailModal.tsx:144 |
+| (useTabComboQueries) | hook | 1 | Y | ShipmentPlanConfirmDetailForm.tsx:83 |
+| SSP0012/main//call-proc | hook | 1 | Y | ShipmentPlanConfirmDetail.tsx:96 |
 | /admin/menu/SSP0012/search-conditions | http | 1 | Y | useShipmentPlanConfirmDetailStore.ts:256 |
 | /admin/menu/SSP0012/column | http | 1 | Y | useShipmentPlanConfirmDetailStore.ts:327 |
 
@@ -37,22 +37,24 @@
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/BodDetailModal.tsx | 130 |
-| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 186 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 130 |
-| CustomDropdown | onChange | <arrow> setDivisions,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 149 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 177 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 212 |
-| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 208 |
-| PeriodField | onChange | <arrow> setPeriod | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 225 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 239 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 256 |
+| DataGrid | initialized | <arrow> Math.round,applyLeafHeaderHeight,grid.updatedLayout.addHandler | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 186 |
+| grid | updatedLayout | applyLeafHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 195 |
+| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 205 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 131 |
+| CustomDropdown | onChange | <arrow> setDivisions,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 150 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 178 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 219 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 209 |
+| PeriodField | onChange | <arrow> setPeriod | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 232 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 246 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailForm.tsx | 263 |
 | g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 95 |
 | g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 123 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan-confirm-detail/components/ShipmentPlanConfirmDetailGrid.tsx | 136 |
-| ShipmentPlanConfirmDetailForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 169 |
-| ShipmentPlanConfirmDetailForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 170 |
-| ShipmentPlanConfirmDetailGrid | onDrilldown | setDrilldown | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 194 |
-| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN],columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 244 |
+| ShipmentPlanConfirmDetailForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 193 |
+| ShipmentPlanConfirmDetailForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 194 |
+| ShipmentPlanConfirmDetailGrid | onDrilldown | setDrilldown | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 218 |
+| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN],columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map | jsx | features/shipping/src/pages/shipment-plan-confirm-detail/ShipmentPlanConfirmDetail.tsx | 268 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -114,26 +116,26 @@
 | BOD_COLUMNS | LT_LAY_OFF_CLEARANCE | Lay Off/Customs Clearance | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/BodDetailModal.tsx | 75 |
 | BOD_COLUMNS | LT_ARRIVAL_INLAND | Arrival Inland | 80 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/BodDetailModal.tsx | 76 |
 | BOD_COLUMNS | LT_SUM | Total L/T | 70 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/BodDetailModal.tsx | 77 |
-| DRAFTING_COLUMNS | ERP_SO_NO | SO No | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 41 |
-| DRAFTING_COLUMNS | PROJECT_NAME | Project Name | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 42 |
-| DRAFTING_COLUMNS | FCST_TYPE | FCST Type | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 43 |
-| DRAFTING_COLUMNS | ITEM_ID | Model | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 44 |
-| DRAFTING_COLUMNS | FROM_SITE | From Site | 80 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 45 |
-| DRAFTING_COLUMNS | TO_SITE | To Site | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 46 |
-| DRAFTING_COLUMNS | INCOTERMS | Incoterms | 75 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 47 |
-| DRAFTING_COLUMNS | LT_DAY | L/T(Day) | 70 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 49 |
-| DRAFTING_COLUMNS | ETD | ETD | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 50 |
-| DRAFTING_COLUMNS | ETA | ETA | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 51 |
-| DRAFTING_COLUMNS | TRANSPORT_MODE | Trans Mode | 75 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 52 |
-| DRAFTING_COLUMNS | SHIPMENT_DATE | Shipment Date | 100 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 53 |
-| DRAFTING_COLUMNS | SHIPMENT_CONFIRM_QTY | Qty | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 54 |
-| DRAFTING_COLUMNS | NEW_LT_DAY | L/T(Day) | 70 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 56 |
-| DRAFTING_COLUMNS | NEW_ETD | ETD | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 57 |
-| DRAFTING_COLUMNS | NEW_ETA | ETA | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 58 |
-| DRAFTING_COLUMNS | NEW_TRANSPORT_MODE | Trans Mode | 75 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 59 |
-| DRAFTING_COLUMNS | NEW_SHIPMENT_DATE | Shipment Date | 100 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 60 |
-| DRAFTING_COLUMNS | NEW_SHIPMENT_CONFIRM_QTY | Qty | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 61 |
-| DRAFTING_COLUMNS | CONFIRM_ID | Confirm ID | 130 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 63 |
+| DRAFTING_COLUMNS | ERP_SO_NO | SO No | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 44 |
+| DRAFTING_COLUMNS | PROJECT_NAME | Project Name | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 45 |
+| DRAFTING_COLUMNS | FCST_TYPE | FCST Type | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 46 |
+| DRAFTING_COLUMNS | ITEM_ID | Model | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 47 |
+| DRAFTING_COLUMNS | FROM_SITE | From Site | 80 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 48 |
+| DRAFTING_COLUMNS | TO_SITE | To Site | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 49 |
+| DRAFTING_COLUMNS | INCOTERMS | Incoterms | 75 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 50 |
+| DRAFTING_COLUMNS | LT_DAY | L/T(Day) | 70 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 52 |
+| DRAFTING_COLUMNS | ETD | ETD | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 53 |
+| DRAFTING_COLUMNS | ETA | ETA | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 54 |
+| DRAFTING_COLUMNS | TRANSPORT_MODE | Trans Mode | 75 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 55 |
+| DRAFTING_COLUMNS | SHIPMENT_DATE | Shipment Date | 100 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 56 |
+| DRAFTING_COLUMNS | SHIPMENT_CONFIRM_QTY | Qty | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 57 |
+| DRAFTING_COLUMNS | NEW_LT_DAY | L/T(Day) | 70 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 59 |
+| DRAFTING_COLUMNS | NEW_ETD | ETD | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 60 |
+| DRAFTING_COLUMNS | NEW_ETA | ETA | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 61 |
+| DRAFTING_COLUMNS | NEW_TRANSPORT_MODE | Trans Mode | 75 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 62 |
+| DRAFTING_COLUMNS | NEW_SHIPMENT_DATE | Shipment Date | 100 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 63 |
+| DRAFTING_COLUMNS | NEW_SHIPMENT_CONFIRM_QTY | Qty | 90 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 64 |
+| DRAFTING_COLUMNS | CONFIRM_ID | Confirm ID | 130 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-confirm-detail/components/modals/ShipmentRequestDetailModal.tsx | 66 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -148,12 +150,14 @@
 | LBL00605 | 1 |
 | MSG00667 | 1 |
 | MSG00013 | 1 |
+| MSG01135 | 1 |
+| MSG01187 | 1 |
 | LBL00764 | 1 |
 | LBL00765 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0012(11), SCM0002(4), SSP0001(2), SSP0003(2), SSP0005(2), DMF0020(1), DMF0003(1), SSP0201(1), SSP0014(1), DMF0045(1)
-- SP/PKG: SCM0001_GET_SCP_DAY_PERIOD(8), PKG_SSP0012(4), P_SSP0003_GET_REQ_DRAFTING(3), PKG_SCM0002(2), P_SCM0002_GET_SHIPMENT_PLAN_CONFIRM_BOD_POPUP(2), PKG_SSP0003(2), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0003_GET_DRAFTING(2), P_SSP0012_GET_SHIPMENT_PLAN_CONFIRM_DETAIL(2), P_DIVISION_ID(1), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), P_SCM0002_SHIPMENT_PLAN_CONFIRM_BOD_POPUP(1), P_SSP0012_BOD_POPUP_GET(1), FN_GET_IN_STR(1)
+- 화면ID: SSP0012(11), SCM0002(5), SSP0003(3), SSP0001(2), COM0013(2), SSP0005(2), DMF0020(1), DMF0003(1), SSP0201(1), SSP0014(1), SSP0026(1), DMF0045(1)
+- SP/PKG: SCM0001_GET_SCP_DAY_PERIOD(9), PKG_SSP0012(4), P_SSP0003_GET_REQ_DRAFTING(3), PKG_SCM0002(2), P_SCM0002_GET_SHIPMENT_PLAN_CONFIRM_BOD_POPUP(2), PKG_SSP0003(2), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0003_GET_DRAFTING(2), P_SSP0012_GET_SHIPMENT_PLAN_CONFIRM_DETAIL(2), P_DIVISION_ID(1), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), P_SCM0002_SHIPMENT_PLAN_CONFIRM_BOD_POPUP(1), P_SSP0012_BOD_POPUP_GET(1), FN_GET_IN_STR(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

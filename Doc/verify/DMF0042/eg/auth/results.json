@@ -1,0 +1,897 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "eg_auth",
+      "--workers",
+      "1",
+      "--retries",
+      "0",
+      "--reporter=list,json"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/DMF0042/eg/auth/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "eg_auth.spec.ts",
+      "file": "eg_auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "E03 Division·권한 DMF0042 @eg-auth",
+          "file": "eg_auth.spec.ts",
+          "line": 96,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Div 순회 — 조건 활성·노출 · 버튼 · 헤더 재구성 · 조회 파라미터 · 401 · 기본값",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 62744,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG271 ERROR\":16,\"EG369 ERROR\":3,\"EG369 PASS\":24,\"EG212 PASS\":1,\"EG257 PASS\":3,\"EG024 PASS\":1,\"EG024 FAIL\":1,\"EG024 판정필요\":1,\"EG257 FAIL\":1,\"EG294 NA\":1}\n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 40] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1557 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 40] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1558 \n"
+                        },
+                        {
+                          "text": "  EG369 ERROR btnCutOff.enabled [전체 Div] 기대 AS-IS Div 분기 있음(2문장) · 실측 컨트롤 라벨 미식별 — TO-BE 칸과 대응 못함(plan.fields·디자이너 Text 없음) · DMF0042_2_BizPlan.cs:335 \n"
+                        },
+                        {
+                          "text": "  EG369 ERROR btnCutOff.visible [전체 Div] 기대 AS-IS Div 분기 있음(2문장) · 실측 컨트롤 라벨 미식별 — TO-BE 칸과 대응 못함(plan.fields·디자이너 Text 없음) · DMF0042_2_BizPlan.cs:336 \n"
+                        },
+                        {
+                          "text": "  EG369 ERROR btnProject.enabled [전체 Div] 기대 AS-IS Div 분기 있음(6문장) · 실측 컨트롤 라벨 미식별 — TO-BE 칸과 대응 못함(plan.fields·디자이너 Text 없음) · DMF0042_2_BizPlan.cs:1559 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 81] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1569 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 81] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1570 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 82] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1582 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 82] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1583 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 81_HD] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1569 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 81_HD] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1570 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 81_HG] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1569 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 81_HG] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1570 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 81_HM] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1569 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 81_HM] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1570 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 81_ST] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1569 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 81_ST] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1570 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblProject.enabled [Div 81_UC] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1569 \n"
+                        },
+                        {
+                          "text": "  EG271 ERROR lblPlantSite.enabled [Div 81_UC] 기대 AS-IS 조건 평가 · 실측 평가 불가 RAW(sDivision != null & sDivision != \"\") · DMF0042_2_BizPlan.cs:1570 \n"
+                        },
+                        {
+                          "text": "  EG024 FAIL Div 전용 컬럼 [40→81] 기대 메타(Biz Plan) 40 전용 7·81 전용 6 재구성 · 실측 이전 Div 전용 잔존 - · 이 Div 전용 누락 PLANT_SITE_ID · SCM_MST_SHEET_COLUMNS DIVISION_ID 개인화(TITLESET_USER) 보유 계정이면 DEFAULT 와 다를 수 있음 — 같은 계정의 Div 간 차이만 비교\n"
+                        },
+                        {
+                          "text": "  EG257 FAIL 헤더 재구성 시점 [40→81 조회 전] 기대 AS-IS Div 변경 이벤트 가 헤더 재구성(InitSpread 류) · 실측 조회 전 미재구성(잔존 -) · InitSpread,SetSpreadColumn,SetSpreadHeaderSpan \n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T12:47:30.785Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-bc6f9-더-재구성-·-조회-파라미터-·-401-·-기본값-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-cc7936d1044474d9cbf4",
+              "file": "eg_auth.spec.ts",
+              "line": 103,
+              "column": 7
+            },
+            {
+              "title": "계정 순회 — 메뉴 트리 · 직접 접근 · Div 후보·자동 선택 · 조회 전 버튼 · 행 범위",
+              "ok": false,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 1500000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 1513281,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 1500000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 1500000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 1500000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts",
+                            "column": 28,
+                            "line": 60
+                          },
+                          "message": "Error: page.evaluate: Target page, context or browser has been closed\n\n   at ..\\..\\..\\tools\\E2E\\lib\\probe.ts:60\n\n  58 |   dataKeys: (p: Page) =>\n  59 |     p.evaluate(`(() => { const c = ${CTL}; if (!c || !c.collectionView) return null; const ks = new Set(); for (const d of c.collectionView.items.slice(0, 50)) if (d && typeof d === 'object') for (const k of Object.keys(d)) if (!k.startsWith('_') && !k.startsWith('$')) ks.add(k); return [...ks]; })()`) as Promise<string[] | null>,\n> 60 |   rowCount: (p: Page) => p.evaluate(`(() => { const c = ${CTL}; return c ? c.rows.length : -1; })()`) as Promise<number>,\n     |                            ^\n  61 |   /** 그리드에 행이 찰 때까지 **시간 상한**으로 대기(기본 120s) → 마지막 행 수. 2026-10-29: 횟수 상한(240회×500ms)은 부하 시 evaluate 1회가 수 초라 15분 테스트 타임아웃을 넘겼다(SCP0111 B1·B2 G1 루프) */\n  62 |   //   2026-11-20 CheckList 속도 개선 B1: 서버가 조회 응답을 0행으로 끝냈으면 상한까지 기다리지 않는다(SSP0005 한 실행에 이 대기 3,732초 · 조회 응답 0.8초). 조건은 lib/pagereg.ts emptyAnswered. 모르면 종전대로 상한까지\n  63 |   //   2026-11-20 20261120162234_SELF: 한 번이라도 기다렸으면 마지막 사유(pagereg.waitReason · 0행 확정 뒤 행이 찬 경우 emptyThenRows)·대기 초·행 수·상한을 page 기록 waitWhy 에 쌓는다(fixtures/test.ts 가 _test_timing.jsonl 에 씀). 대기 동작은 그대로\n    at Object.rowCount (C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts:60:28)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\eg_auth.spec.ts:376:34"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DM/40/DM Admin 17s\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DM/40/DM Planner 18s\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DM/40/DM Viewer 19s\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DM/40/SCP Planner 18s\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 판정필요\":1,\"EG411 판정필요\":1,\"EG374 PASS\":2,\"EG411 PASS\":2}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HD\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HG\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HM\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_ST\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Team 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Sales Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Plant Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Plant Site 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Biz. Type 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Item Type 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Item Type 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 669행 · 본문 {\"startYyyymmdd\":\"20211101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"jiwon.park\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DM/81/DM Admin 617s\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":2,\"EG368 NA\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HD\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HG\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HM\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_ST\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Team 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 End Customer 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Sales Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Plant Site 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Plant Site 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Biz. Type 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Bucket 3번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Item Type 1번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 조건 Item Type 2번째 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20241101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20211101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_UC\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 669행 · 본문 {\"startYyyymmdd\":\"20211101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"bpark416\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DM/81/DM Planner 614s\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1,\"EG368 NA\":1,\"EG368 PASS\":1,\"EG007 PASS\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DM/81/DM Planner (W/S) 11s\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 판정필요\":1,\"EG365 판정필요\":1,\"EG374 PASS\":3,\"EG411 PASS\":3}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81\",\"userId\":\"park6151\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HD\",\"userId\":\"park6151\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HG\",\"userId\":\"park6151\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_HM\",\"userId\":\"park6151\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 0행 · 본문 {\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"81_ST\",\"userId\":\"park6151\",\"mnuId\":\"DMF0042\"}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG382 PASS\":1,\"EG366 PASS\":1,\"EG365 PASS\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T12:48:36.487Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-e94aa-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-e94aa-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-e94aa-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-e94aa-v-후보·자동-선택-·-조회-전-버튼-·-행-범위-chromium\\trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-78e9d6ea1bb39feee7c5",
+              "file": "eg_auth.spec.ts",
+              "line": 261,
+              "column": 7
+            },
+            {
+              "title": "개인화 후보 Div 순회 — Measure 후보·컬럼 필수 표시 = UI Category(Div 별)",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19403,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG160 판정필요\":8,\"EG160 FAIL\":1,\"EG160 PASS\":7,\"EG022 NA\":1,\"EG402 NA\":1}\n"
+                        },
+                        {
+                          "text": "  EG160 FAIL 필수 표시 = USER_SELECTABLE_FLAG N(Biz Plan) [Div 40] 기대 메타 필수 10개 · 실측 표시 8개 · 메타 밖 - · 표시 누락 Biz.Type* · SCM_MST_SHEET_COLUMNS 공란 저장 검증 집합 3자 대조는 실저장 경로 — integration.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T13:14:14.327Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-9119c-컬럼-필수-표시-UI-Category-Div-별--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-6c88fd8c0d7838d3cd59",
+              "file": "eg_auth.spec.ts",
+              "line": 394,
+              "column": 7
+            },
+            {
+              "title": "Insert — 그룹 차단 · Sort 유지 · 선택 행 위 · 병합 그룹 위",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 31268,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[EG126] F3 정렬 스위치 켠 뒤 INCOTERMS asc 정렬\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG109 NA\":1,\"EG373 NA\":1,\"EG140 PASS\":1,\"EG319 PASS\":1,\"EG126 PASS\":2}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T13:14:37.239Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-94641--Sort-유지-·-선택-행-위-·-병합-그룹-위-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-795974100251180c3678",
+              "file": "eg_auth.spec.ts",
+              "line": 445,
+              "column": 7
+            },
+            {
+              "title": "편집 — AS-IS 규칙(GROUP·행 값)·룩업 시간창 × 계정",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 541881,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG113 NA\":1,\"EG376 NA\":1,\"EG067 NA\":1,\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG376 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG376 ERROR DM/81/DM Admin [Div 81] 기대 조회 행 · 실측 0행 — 측정 불가(사전 데이터 금지) ·  \n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG376 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG376 ERROR DM/81/DM Planner [Div 81] 기대 조회 행 · 실측 0행 — 측정 불가(사전 데이터 금지) ·  \n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG376 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG376 ERROR DM/81/DM Viewer [Div 81] 기대 조회 행 · 실측 0행 — 측정 불가(사전 데이터 금지) ·  \n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG376 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG376 ERROR DM/82/DM Admin [Div 82] 기대 조회 행 · 실측 0행 — 측정 불가(사전 데이터 금지) ·  \n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG376 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG376 ERROR DM/82/DM Planner [Div 81] 기대 조회 행 · 실측 0행 — 측정 불가(사전 데이터 금지) ·  \n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG376 ERROR\":1}\n"
+                        },
+                        {
+                          "text": "  EG376 ERROR DM/82/DM Viewer [Div 82] 기대 조회 행 · 실측 0행 — 측정 불가(사전 데이터 금지) ·  \n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG377 PASS\":1,\"EG124 PASS\":1,\"EG378 PASS\":1,\"EG123 PASS\":1}\n"
+                        },
+                        {
+                          "text": "[eg_auth] DMF0042 {}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T13:15:11.183Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-b3851-S-규칙-GROUP·행-값-·룩업-시간창-×-계정-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-752485ef20e5de43a901",
+              "file": "eg_auth.spec.ts",
+              "line": 527,
+              "column": 7
+            },
+            {
+              "title": "헤더 병합 — AS-IS ColumnHeaderSpan ↔ TO-BE 병합 헤더",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11783,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG315 PASS\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T13:24:15.709Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-e5657-umnHeaderSpan-↔-TO-BE-병합-헤더-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-18d0a1ade58dbd296be2",
+              "file": "eg_auth.spec.ts",
+              "line": 597,
+              "column": 7
+            },
+            {
+              "title": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 29981,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG032 FAIL\":2}\n"
+                        },
+                        {
+                          "text": "  EG032 FAIL 정렬 키 SORT_ORDER_NO [보유 DM/40/DM Admin · Div 40] 기대 AS-IS ORDER BY SORT_ORDER_NO(DMF0002_GET_TITLESET_POPUP:152) · 실측 30행 단조 아님 · 처음 10,40,50,70 · DMF0002_GET_TITLESET_POPUP:152 혼합 정렬(입력일+SORT_ORDER_NO) 동적 규칙은 원문 동적 SQL 해석 전 — 키 단조 여부만\n"
+                        },
+                        {
+                          "text": "  EG032 FAIL 정렬 키 SORT_ORDER_NO [미보유 DM/40/DM Viewer · Div 40] 기대 AS-IS ORDER BY SORT_ORDER_NO(DMF0002_GET_TITLESET_POPUP:152) · 실측 30행 단조 아님 · 처음 10,40,50,70 · DMF0002_GET_TITLESET_POPUP:152 혼합 정렬(입력일+SORT_ORDER_NO) 동적 규칙은 원문 동적 SQL 해석 전 — 키 단조 여부만\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T13:24:30.383Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-6e104--—-칸-설정-보유-미보유-계정-정렬-EG032--chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-037ef34ff1689ab06143",
+              "file": "eg_auth.spec.ts",
+              "line": 613,
+              "column": 7
+            },
+            {
+              "title": "개인화 저장 후 동작(EG395) — 저장 요청을 서버로 보내지 않고 화면 반응만",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15222,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG395 PASS\":1}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T13:25:03.046Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-6c253--—-저장-요청을-서버로-보내지-않고-화면-반응만-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-40732e6eceea9a49508b",
+              "file": "eg_auth.spec.ts",
+              "line": 656,
+              "column": 7
+            },
+            {
+              "title": "무권한 기본 화면(EG380) — 세션 메뉴 없음 상태의 FE 첫 화면",
+              "ok": true,
+              "tags": [
+                "eg-auth"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7646,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[eg_auth] DMF0042 {\"EG380 FAIL\":1}\n"
+                        },
+                        {
+                          "text": "  EG380 FAIL 무권한 첫 화면 [DM/82/DM Planner (W/S)] 기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실측 URL /view/home · 안내창 'You are not authorized to NSCM. Apply for permission.' · 안내창 확인 뒤 UR · DM-247·GAP-475 명부 GUEST 전용 계정 2\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T13:25:20.878Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0042\\eg\\auth\\artifacts\\eg_auth-E03-Division·권한-DM-4882f-G380-—-세션-메뉴-없음-상태의-FE-첫-화면-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fce9d8edbd378244cae8-b1f86b44fd1e4aa44554",
+              "file": "eg_auth.spec.ts",
+              "line": 681,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-26T12:47:29.971Z",
+    "duration": 2282167.7909999997,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -109,18 +109,32 @@ export const DistributionRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 저장 조립기 호출 래퍼 — 컬럼별 '^'-fold payload 로 SAVE_ROUTE 호출(SCP0006 submitPlantSave 동형).
   //   성공 시 편집마킹·위반색 해제 + 재조회, 실패 시 사유 Toast + (중복오류면) 위반행 셀 색칠(R14/R15).
-  const submitRouteSave = async (changed: DistributionRouteRow[]) => {
+  const submitRouteSaveLocked = async (changed: DistributionRouteRow[]) => {
     const result = await submitRouteSaveRequest(changed, sessionUserId ?? '');
     if (!result.ok) {
       setInvalidCells(buildSaveErrorCells(result.errCode, result.errorRow));
       // 저장 실패는 사용자가 읽고 넘어가야 하는 메시지라 toast 가 아니라 alert 로 노출한다.
-      void setAlert({ type: 'alert', content: result.message ?? t(MSG.SAVE_DUP, '_저장에 실패하였습니다.') });
+      void setAlert({
+        type: 'alert',
+        content: result.message ?? t(MSG.SAVE_DUP, '_저장에 실패하였습니다.'),
+      });
       return;
     }
     setInvalidCells([]);
     setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '_저장되었습니다.') });
     editTrackerRef.current?.clearChanges();
     void refetch();
+  };
+  // 저장 진행 중 재진입 차단 — 응답 전에 Save 를 다시 누르면 같은 행이 두 번 전송됐다(2026-11-26).
+  const savingRef = useRef(false);
+  const submitRouteSave = async (changed: DistributionRouteRow[]) => {
+    if (savingRef.current) return;
+    savingRef.current = true;
+    try {
+      await submitRouteSaveLocked(changed);
+    } finally {
+      savingRef.current = false;
+    }
   };
 
   useEffect(() => {
@@ -219,11 +233,7 @@ export const DistributionRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const regionCountry =
-    regionMode === 'search-from'
-      ? sc.fromCountry
-      : regionMode === 'search-to'
-        ? sc.toCountry
-        : '';
+    regionMode === 'search-from' ? sc.fromCountry : regionMode === 'search-to' ? sc.toCountry : '';
   const regionCity =
     regionMode === 'search-from' ? sc.fromCity : regionMode === 'search-to' ? sc.toCity : '';
 

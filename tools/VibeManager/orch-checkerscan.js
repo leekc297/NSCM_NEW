@@ -11,7 +11,7 @@ const P = () => getPaths();
 const two = n => String(n).padStart(2, '0');
 const nowLocal = (ms) => { const d = ms ? new Date(ms) : new Date(); return `${d.getFullYear()}-${two(d.getMonth() + 1)}-${two(d.getDate())} ${two(d.getHours())}:${two(d.getMinutes())}:${two(d.getSeconds())}`; };
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
-const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f + '.t', JSON.stringify(v, null, 1), 'utf8'); fs.renameSync(f + '.t', f); } catch (e) { errlog.note('orch-checkerscan', 'writeJson', e); } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); require('./fs-retry').writeFileSyncRetry(f + '.t', JSON.stringify(v, null, 1), 'utf8'); require('./fs-retry').renameSyncRetry(f + '.t', f); } catch (e) { errlog.note('orch-checkerscan', 'writeJson', e); } }; // 2026-11-26 개선안 20261126164445_VISION: 쓰기와 바꾸기 일시 실패 재시도(fs-retry.js)
 const selfDir = () => path.join(P().vibeDir, 'orch', 'selfcheck');
 const outFile = () => path.join(selfDir(), 'checker_scan.json');
 const metaFile = () => path.join(selfDir(), 'checker_diag.json');
@@ -63,19 +63,19 @@ function diagPrompt(rel) {
   return [
     '.claude/agents/vm-orchestra.md 의 지킬 것을 따른다. 이번 일은 VMO 자가진단 S16 검사기 판정 결함 진단이다. 파일을 고치지 않는다(읽기만).',
     'VMO 목적(2026-11-26 사용자 지시): VM 의 파싱 → 분석 → 개발 → 보완 → 시험 → CheckList 가 제대로 돌도록 필요한 것을 스스로 찾아 보완하고, 없는 기능은 추가한다.',
-    `입력 파일 ${rel} 을 읽는다. items = 전 화면 원장(Doc/verify/<ID>/verify_ledger.csv) 판정 근거에서 tools/Harness/verify/checker_defect_scan.py 가 찾은 검사기 결함 후보(K1 한 글자 칸 이름 · K2 같은 문구 반복 · K3 재지 못한 행의 해당없음 · K4 결과와 증거 어긋남 · K5 칸 값 없음) 와 미검증 상위 묶음이다.`,
-    '할 일: 항목마다 예시 원장 행을 열고, 그 증거 문장을 만든 소스(Doc/e2e/specs/*.spec.ts · tools/E2E/lib/*.ts · tools/Harness/verify/*.py 의 put/result 대입)를 Grep 으로 찾아 원인을 확인한다. 검사기 결함이면 고치는 개선안을 올린다(최대 3건). 원장이 지난 측정분이라 이미 고쳐진 결함이면(소스에 수정이 있음) 올리지 않고 summary 에 적는다.',
+    `입력 파일 ${rel} 을 읽는다. items = 전 화면 원장(Doc/verify/<ID>/verify_ledger.csv) 판정 근거에서 tools/Harness/verify/checker_defect_scan.py 가 찾은 검사기 결함 후보(K1 한 글자 칸 이름, K2 같은 문구 반복, K3 재지 못한 행의 해당없음, K4 결과와 증거 어긋남, K5 칸 값 없음) 와 미검증 상위 묶음이다.`,
+    '할 일: 항목마다 예시 원장 행을 열고, 그 증거 문장을 만든 소스(Doc/e2e/specs/*.spec.ts, tools/E2E/lib/*.ts, tools/Harness/verify/*.py 의 put/result 대입)를 Grep 으로 찾아 원인을 확인한다. 검사기 결함이면 고치는 개선안을 올린다(최대 3건). 원장이 지난 측정분이라 이미 고쳐진 결함이면(소스에 수정이 있음) 올리지 않고 summary 에 적는다.',
     '규칙',
     '- 재지 못한 행은 미검증(ERROR)이다(2026-11-11 결정). 해당없음(NA)은 원문·메타 근거가 있을 때만. 예외: tools/Harness/rules/checker_scan_ignore.csv 의 사용자 결정(결함 유형 행 직접 일치 없음 = 해당없음 유지)은 바꾸지 않는다.',
     '- 원장 파일(verify_ledger.csv)·CheckList 결과물을 직접 고치는 안은 올리지 않는다. 검사기(판정 코드)를 고친다. 다음 CheckList 실행부터 반영된다.',
     '- 개선안마다 근거(입력 항목 key, 원장 화면·행 번호, 소스 파일:줄)를 적는다. 소스에서 확인하지 못한 것은 올리지 않는다.',
-    '- targets 는 저장소 기준 경로(tools/Harness/verify/…, Doc/e2e/specs/…, tools/E2E/lib/…). impact = fix(검사기 결함 수정) 또는 core(판정 기준 자체를 바꾸는 경우).',
-    "- verify 에 반드시 'python tools/Harness/verify/engine_selfcheck.py PASS' 와 고친 파이썬 파일의 '--selftest ALL PASS'(있으면), spec 을 고쳤으면 'npx playwright test <spec> --list 로드 정상'(tools/E2E 에서 VERIFY_ID=<화면>)을 넣는다. 원장 변화 확인은 '다음 CheckList 실행 뒤 checker_defect_scan.py 로 해당 탐지 행 수 감소 확인' 으로 적는다.",
+    '- targets 는 저장소 기준 경로(tools/Harness/verify/…, Doc/e2e/specs/…, tools/E2E/lib/…). impact = fix(검사기 결함 수정) 또는 core(판정 기준 자체를 바꿈).',
+    "- verify 에 'python tools/Harness/verify/engine_selfcheck.py PASS' 와 고친 파이썬 파일의 '--selftest ALL PASS'(있으면), spec 을 고쳤으면 'npx playwright test <spec> --list 로드 정상'(tools/E2E 에서 VERIFY_ID=<화면>)을 넣는다. 원장 변화 확인은 '다음 CheckList 실행 뒤 checker_defect_scan.py 로 해당 탐지 행 수 감소 확인' 으로 적는다.",
     '- 결과는 마지막에 JSON 블록 하나: {"summary": "…", "proposals": [{"key": "S16|…", "title": "…", "evidence": "…", "targets": ["…"], "before_after": "…", "verify": "…", "rollback": "…", "impact": "fix"}]}',
   ].join('\n');
 }
 
-/** o = { agent, imp, cfg, notify } · 반환 { skipped|busy|ok, added } */
+/** o = { agent, imp, cfg, notify }, 반환 { skipped|busy|ok, added } */
 async function maybeDiagnose(o) {
   o = o || {}; const c = o.cfg || {};
   if (!getPaths || c.checkerScanEnabled === false) return { skipped: true, why: '꺼짐' };

@@ -1,0 +1,43 @@
+{
+  "id": "20261126214605_REVIEW",
+  "at": "2026-11-26T21:46:05+09:00",
+  "ms": 1795697165623,
+  "source": "review",
+  "status": "applied",
+  "sig": "digest stop other detail",
+  "title": "측정 추가: 실행 집계의 중지 원인 '기타'마다 어떤 중지 기록으로 분류했는지 남김",
+  "evidence": "집계 steps S8.checklistRun stoppedBy other 5, chains checklist stoppedBy other 5. orch-improve.js:204 는 근처 60초에 중지 기록(user.stop)이 없고 job.item.end cancel 이나 proc.end stopped 표시만 있을 때도 'other' 를 냄. :195 는 by 가 목록 밖일 때(예 events.jsonl:5317 by '에이전트 대화')도 'other'. events.jsonl user.stop 70줄 중 by 없는 줄 6줄(695~698, 1264, 2495), 이 줄들은 :203 에서 button 으로 셈. 5건이 어느 경로인지는 node 실행 승인 거절로 미확인",
+  "targets": [
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_improve.js"
+  ],
+  "before_after": "변경 전: stoppedBy 에 숫자만 남음. 변경 후: stopCause 가 'other' 를 낼 때 경로(표시만 있음, 목록 밖 by 값)와 by, why, screen, at 을 stoppedOther 배열(단계, 체인별 최대 10건)로 digest 에 남김. by 없는 user.stop 을 button 으로 세는 경로도 경로 이름 'by 없음'으로 같이 남김",
+  "verify": "node tools/VibeManager/test/t_orch_improve.js tools/VibeManager 에 '표시만 있는 중지 = stoppedOther 경로 표시만 있음' 표본 추가. 시험 수 반영 전 미측정 → 반영 뒤 1건 늘고 PASS. digest(7) steps S8.checklistRun.stoppedOther 반영 전 필드 없음 → 반영 뒤 길이 = stoppedBy.other 값",
+  "rollback": "VMO 백업으로 두 파일을 되돌림. digest.json 은 다음 집계 때 다시 써짐",
+  "impact": "fix",
+  "level": "L1",
+  "levelWhy": "기록 보완. S8.checklistRun 중지 15건 중 5건, CheckList 체인 중지 22건 중 5건이 '기타'인데 집계에 내역이 없어 원인을 셀 수 없음",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T22:01:27+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T22:08:53+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-improve.js stopInfo, countStop: stoppedOther(경로, by, why, screen, at · 최대 10건), stoppedNoBy. t_orch_improve.js 55건 PASS. run_all 115/115 PASS 1943(22:08). 설치 폴더 복사"
+    }
+  ],
+  "plain": {
+    "what": "작업이 멈춘 이유가 '기타'로만 나오던 것을 어떤 기록 때문인지 같이 보여 줌",
+    "risk": "잘못되면 실행 집계 화면에 중지 원인 내역이 비거나 숫자와 건수가 어긋나 보임",
+    "undo": "바꾼 파일 2개를 백업본으로 되돌림"
+  },
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795698533638
+}

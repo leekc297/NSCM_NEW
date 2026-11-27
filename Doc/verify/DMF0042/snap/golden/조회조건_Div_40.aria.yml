@@ -1,0 +1,48 @@
+- img
+- text: Div
+- combobox: 40 Mobility & IT Battery
+- button "Open"
+- text: Team
+- combobox "ALL"
+- button "Open"
+- text: End Customer
+- combobox "ALL"
+- button "Open"
+- text: Sales Site
+- combobox "ALL"
+- button "Open"
+- text: Plant Site
+- combobox "ALL" [disabled]
+- button "Open" [disabled]
+- text: Biz. Type
+- combobox "ALL"
+- button "Open"
+- img
+- text: Period
+- textbox "YYYY.MM.DD": 2026.11.01
+- text: ~
+- textbox "YYYY.MM.DD": 2027.05.31
+- text: Bucket
+- combobox: Monthly
+- button "Open"
+- button "Search(F5)"
+- button
+- separator
+- text: Project
+- textbox [disabled]
+- button [disabled]
+- text: Model/Nickname
+- textbox
+- button
+- text: Owner
+- textbox
+- button
+- text: Item Type
+- combobox "ALL"
+- button "Open"
+- checkbox "Sum" [checked]
+- img
+- text: Sum
+- checkbox "Qty≠0"
+- text: Qty≠0
+# visual-order: Div > Team > End Customer > Sales Site > Plant Site > Biz. Type > Period > Bucket > Project > Model/Nickname > Owner > Item Type > Sum

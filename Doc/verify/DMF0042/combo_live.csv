@@ -1,0 +1,46 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+SiteByEndCustomerAuth,"{""comboId"":""SiteByEndCustomerAuth"",""divisionId"":""'40'"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",1327,1327,,,PASS,응답 1327건 = DB 1327건
+EndCustomerByDivisionDeptAuth,"{""comboId"":""EndCustomerByDivisionDeptAuth"",""divisionId"":""'40'"",""deptId"":""''"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",1,1,,,PASS,응답 1건 = DB 1건
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""divisionId"":""'40'"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",1163,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 []"
+EndCustomerByDivision40,"{""comboId"":""EndCustomerByDivision40"",""divisionId"":""'40'"",""deptId"":""''"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",2020,1100,,,PASS,응답 1100건 = DB 1100건
+MyDivision,"{""comboId"":""MyDivision"",""mnuId"":""DMF0042""}",8,8,,,PASS,응답 8건 = DB 8건
+BizType,"{""comboId"":""BizType"",""mnuId"":""DMF0042""}",76,15,,,PASS,응답 15건 = DB 15건
+ItemType,"{""comboId"":""ItemType"",""mnuId"":""DMF0042""}",4,4,,,PASS,응답 4건 = DB 4건
+FilterMyDivision,"{""comboId"":""FilterMyDivision"",""mnuId"":""DMF0042""}",8,8,,,PASS,응답 8건 = DB 8건
+EndCustomer,"{""comboId"":""EndCustomer"",""mnuId"":""DMF0042""}",1921,1622,,,PASS,응답 1622건 = DB 1622건
+BucketType2,"{""comboId"":""BucketType2"",""mnuId"":""DMF0042""}",3,3,,,PASS,응답 3건 = DB 3건
+FromSiteByDivision,"{""comboId"":""FromSiteByDivision"",""divisionId"":""'40'"",""mnuId"":""DMF0042""}",30,30,,,PASS,응답 30건 = DB 30건
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""divisionId"":""'40'"",""endCustomer"":""'ALL'"",""mnuId"":""DMF0042""}",1211,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 ['validYn', 'validYn']"
+EndCustomerByDivision40,"{""comboId"":""EndCustomerByDivision40"",""divisionId"":""'40'"",""deptId"":""''"",""mnuId"":""DMF0042""}",2061,1102,,,PASS,응답 1102건 = DB 1102건
+DMF0042CellProdSiteValid,"{""comboId"":""DMF0042CellProdSiteValid"",""mnuId"":""DMF0042""}",5,5,,,PASS,응답 5건 = DB 5건
+TeambyDivision,"{""comboId"":""TeambyDivision"",""divisionId"":""'40'"",""mnuId"":""DMF0042""}",16,16,,,PASS,응답 16건 = DB 16건
+DMF0042_BP_Measure,"{""comboId"":""DMF0042_BP_Measure"",""divisionId"":""'40'"",""mnuId"":""DMF0042""}",4,4,,,PASS,응답 4건 = DB 4건
+BizPlanUserAuthGroup,"{""comboId"":""BizPlanUserAuthGroup"",""mnuId"":""DMF0042""}",5,5,,,PASS,응답 5건 = DB 5건
+SalesSite,"{""comboId"":""SalesSite"",""mnuId"":""DMF0042""}",4414,2560,,,PASS,응답 2560건 = DB 2560건
+TeambyDivision,"{""comboId"":""TeambyDivision"",""divisionId"":""''"",""mnuId"":""DMF0042""}",168,168,,,PASS,응답 168건 = DB 168건
+FilterTeambyDivision,"{""comboId"":""FilterTeambyDivision"",""mnuId"":""DMF0042""}",209,168,,,PASS,응답 168건 = DB 168건
+IncotermsEdit,"{""comboId"":""IncotermsEdit"",""lookupType"":""'BP_INCOTERMS'"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",10,10,,,PASS,응답 10건 = DB 10건
+CURRENCY_LIST,"{""comboId"":""CURRENCY_LIST"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",10,10,,,PASS,응답 10건 = DB 10건
+EndCustomerByDivision40,"{""comboId"":""EndCustomerByDivision40"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",2020,1100,,,PASS,응답 1100건 = DB 1100건
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",2555,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 ['divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId', 'divisionId']"
+SiteByEndCustomerAuth,"{""comboId"":""SiteByEndCustomerAuth"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",2555,2555,,,PASS,응답 2555건 = DB 2555건
+DM_LOOKUP_DIV,"{""comboId"":""DM_LOOKUP_DIV"",""lookupType"":""'BP_FCST_TYPE'"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",0,0,,,PASS,응답 0건 = DB 0건
+DMF0042CellProdSite,"{""comboId"":""DMF0042CellProdSite"",""lookupType"":""'DM_CELL_PROD_SITE'"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",7,7,,,PASS,응답 7건 = DB 7건
+DMF0042_BP_Measure,"{""comboId"":""DMF0042_BP_Measure"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",9,9,,,PASS,응답 9건 = DB 9건
+IncotermsEdit,"{""comboId"":""IncotermsEdit"",""mnuId"":""DMF0042""}",10,10,,,PASS,응답 10건 = DB 10건
+SiteByEndCustomer,"{""comboId"":""SiteByEndCustomer"",""divisionId"":""''"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",2555,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 []"
+EndCustomerByDivision40,"{""comboId"":""EndCustomerByDivision40"",""divisionId"":""''"",""deptId"":""''"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",2020,1100,,,PASS,응답 1100건 = DB 1100건
+SiteByEndCustomerAuth,"{""comboId"":""SiteByEndCustomerAuth"",""divisionId"":""''"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",2555,2555,,,PASS,응답 2555건 = DB 2555건
+CURRENCY_LIST,"{""comboId"":""CURRENCY_LIST"",""mnuId"":""DMF0042""}",10,10,,,PASS,응답 10건 = DB 10건
+DM_LOOKUP_DIV,"{""comboId"":""DM_LOOKUP_DIV"",""param1"":""'40'"",""param2"":""'BP_FCST_TYPE'"",""mnuId"":""DMF0042""}",3,3,,,PASS,응답 3건 = DB 3건
+DMF0042CellProdSite,"{""comboId"":""DMF0042CellProdSite"",""mnuId"":""DMF0042""}",7,7,,,PASS,응답 7건 = DB 7건
+DMF0042_BP_Measure,"{""comboId"":""DMF0042_BP_Measure"",""mnuId"":""DMF0042""}",9,9,,,PASS,응답 9건 = DB 9건
+EndCustomerByDivisionDeptAuth,"{""comboId"":""EndCustomerByDivisionDeptAuth"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",510,510,,,PASS,응답 510건 = DB 510건
+EndCustomerByDivisionDeptAuth,"{""comboId"":""EndCustomerByDivisionDeptAuth"",""divisionId"":""''"",""deptId"":""''"",""mnuId"":""DMF0042"",""validYn"":""'Y'""}",510,510,,,PASS,응답 510건 = DB 510건
+EndCustomerByDivision40,"{""comboId"":""EndCustomerByDivision40"",""divisionId"":""'40'"",""deptId"":""'71059518,58124984,58260040,70090867,58099468,58666055,70618872,71060790,58520274,70021343,70000478,70267799,70318556,70090866,70174158,71067310'"",""mnuId"":""DMF0042""}",988,919,,,PASS,응답 919건 = DB 919건
+SiteByEndCustomer40,"{""comboId"":""SiteByEndCustomer40"",""divisionId"":""'40'"",""deptId"":""'71059518,58124984,58260040,70090867,58099468,58666055,70618872,71060790,58520274,70021343,70000478,70267799,70318556,70090866,70174158,71067310'"",""endCustomer"":""'ALL'"",""mnuId"":""DMF0042""}",1163,,,,ERROR,"[확인 대상] 치환 SQL 실행 오류 ORA-00911: : invalid character after
+Help: https://docs.oracle.com/error-help/db/ora-00911/ · 미치환 키 []"

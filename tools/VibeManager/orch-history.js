@@ -91,6 +91,17 @@ const FIX_KINDS = ['defect', 'request', 'style'];
 function fixKindOf(title, bodyLines) {
   const body = (bodyLines || []).join('\n'); const t = String(title || '');
   if (/S11\|/.test(body) || /고정 문구|알림 문구 정리|문구에서 줄표/.test(t)) return 'style';
+  // 2026-11-26 개선안 20261126164321_SELF, 20261126164550_SELF, 20261126164030_SELF: S13 사용자 지시 규칙을 다른 파일에 적용한 절('S13|R<번호>|' 근거 키)은 결함 수정이 아니라 요청 반영. 제목에 결함, 오판, 사고, 오류가 있거나 '- 원인' 줄이 있으면 종전대로 defect
+  if (/S13\|R\d+\|/.test(body) && !/결함|오판|사고|오류/.test(t) && !/^\s*- 원인\s*[:：(]/m.test(body)) return 'request';
+  // 2026-11-26 개선안 20261126183040_SELF: 사용자 지적 감지기 추가 절 = 요청(감시 시작점). 감지기 '추가' 표시(제목 '사용자 지적 감지기 추가' 또는 '- 변경: DETECTORS 에 <이름> 없음 → 추가')가 있고
+  //   '- 변경: … 파일 <목록>.' 이 없거나 감지기 파일(orch-usercheck.js, user_checks.json, test/)뿐이면 승인 문구보다 먼저 request. 제목은 사용자 지적 문구('… 오류 발생')를 담으므로 결함 낱말은 보지 않고 '- 원인' 줄만 봄.
+  //   파일 목록만으로는 판정하지 않음(감지기 판정 로직을 고친 결함 절 'U3 조치 없는 열린 사건 판정에서 …' 까지 요청이 됨)
+  if ((/사용자 지적 감지기 추가/.test(t) || /DETECTORS 에 \S+ 없음 → 추가/.test(body)) && !/^\s*- 원인\s*[:：(]/m.test(body)) {
+    const mk = (bodyLines || []).map(l => /^\s*- 변경\s*:/.test(l) ? /\.\s파일 (.+?)\.(?:\s대상 밖 변경|\s*$)/.exec(l) : null).filter(Boolean).pop();
+    const fl = mk && mk[1].trim() !== '없음' ? mk[1].split(/,\s*/).map(x => x.trim().replace(/\\/g, '/')).filter(Boolean) : [];
+    const detFile = f => /(^|\/)orch-usercheck\.js$/.test(f) || /(^|\/)user_checks\.json$/.test(f) || /(^|\/)test\//.test(f);
+    if (!fl.length || fl.every(detFile)) return 'request';
+  }
   if (/결함|오판|사고|오류/.test(t) || /^\s*- 원인\s*[:：(]/m.test(body) || /개선안 \d{14}_(?:INC|SELF)(?:_\d+)? 승인/.test(body)) return 'defect';
   return 'request';
 }
@@ -111,7 +122,10 @@ function finishSection(c) {
   title = title.replace(/\s*\((?:\d{4}-\d{2}-\d{2})[^)]*\)\s*$/, '').replace(/^\d+\.\d+\.\d+\s*(?:—|-)?\s*/, '').replace(/^\(\d{4}-\d{2}-\d{2}\)\s*/, '').trim() || (ver ? `판 ${ver}` : head);
   const bullets = c.body.filter(l => /^\s*- /.test(l)).map(l => l.replace(/^\s*- /, ''));
   if (/^판 \d/.test(title) && bullets.length) title = bullets[0].replace(/\s+/g, ' ').slice(0, 90); // 판 번호만 있는 절 = 첫 항목을 제목으로
-  const asks = []; for (const b of bullets) if (/^사용자/.test(b)) { const q = b.match(/"([^"]{2,})"/g) || b.match(/“([^”]{2,})”/g); if (q) for (const x of q) asks.push(x.slice(1, -1)); else asks.push(b.replace(/^사용자[^:]*:\s*/, '').slice(0, 300)); }
+  // 2026-11-26 개선안 20261126234153_SELF: VMO 승인, 되돌리기 기록 줄('사용자(…): 개선안 <id> 승인(…). 근거 = …')의 인용은 규칙 문구라 사용자 지시로 세지 않고 ruleAsk 에 따로 둠
+  const RULE_LOG = /^사용자[^:]*:\s*개선안 \S+ (?:승인|되돌리기 실행)/; const ruleAsk = [];
+  for (const b of bullets) if (RULE_LOG.test(b)) { const q = b.match(/"([^"]{2,})"/g) || b.match(/“([^”]{2,})”/g); if (q) for (const x of q) ruleAsk.push(x.slice(1, -1)); }
+  const asks = []; for (const b of bullets) if (/^사용자/.test(b) && !RULE_LOG.test(b)) { const q = b.match(/"([^"]{2,})"/g) || b.match(/“([^”]{2,})”/g); if (q) for (const x of q) asks.push(x.slice(1, -1)); else asks.push(b.replace(/^사용자[^:]*:\s*/, '').slice(0, 300)); }
   const confirmed = bullets.filter(b => /^확인/.test(b)).map(b => b.slice(0, 400));
   const unverified = [];
   for (const b of bullets) {
@@ -124,10 +138,13 @@ function finishSection(c) {
   const baks = [...new Set((body.match(/\.bak_\d{8}(?:_[A-Za-z0-9]+)?/g) || []).map(x => x.slice(5)))];
   // 2026-11-20 20261120182700_SELF: 확인·사용자·되돌리기·미확인·시험·node 명령 줄과 줄 가운데 '· 확인:' 뒤 부분은 변경 파일 집계에서 뺌
   const fileBody = c.body.filter(l => !/^\s*- (?:확인|사용자|되돌리기|미확인|시험|node )/.test(l)).map(l => l.replace(/\s*·\s*확인\s*:.*$/, '')).join('\n');
-  const files = [...new Set((fileBody.replace(/\S*\.bak_\S*/g, ' ').match(/[A-Za-z0-9_./\\-]+\.(?:js|json|py|ps1|md|svg|cmd|ts|tsx|csv|sql)\b/g) || []).map(x => x.replace(/\\/g, '/').replace(/^\.\//, '')))].slice(0, 40);
+  // 2026-11-26 개선안 20261126164033_SELF: VMO 자가 보완 절은 '- 변경: … 파일 <목록>.' 표시가 있음. 있으면 그 목록만 고친 파일(설명 문장 속 파일 이름, '대상 밖 변경 N개' 는 뺌). 표시가 없는 옛 절은 종전 방식
+  const mark = c.body.map(l => /^\s*- 변경\s*:/.test(l) ? /\.\s파일 (.+?)\.(?:\s대상 밖 변경|\s*$)/.exec(l) : null).filter(Boolean).pop();
+  const markFiles = mark ? (mark[1].trim() === '없음' ? [] : mark[1].split(/,\s*/).map(x => x.trim().replace(/\\/g, '/').replace(/^\.\//, '')).filter(x => /\.[A-Za-z0-9]+$/.test(x))) : null;
+  const files = markFiles ? [...new Set(markFiles)].slice(0, 40) : [...new Set((fileBody.replace(/\S*\.bak_\S*/g, ' ').match(/[A-Za-z0-9_./\\-]+\.(?:js|json|py|ps1|md|svg|cmd|ts|tsx|csv|sql)\b/g) || []).map(x => x.replace(/\\/g, '/').replace(/^\.\//, '')))].slice(0, 40);
   const proposal = (/(\d{14}_(?:REVIEW|INC|SELF)(?:_\d+)?)/.exec(body) || [])[1] || '';
   const needsReload = /창 다시 로드|재시작 필요|Reload/i.test(head + body);
-  return { id: `CL:${dm[1] || 'nodate'}:${hash(head)}`, kind: 'change', fix: fixKindOf(title, c.body), date: dm[1] || '', time: (dm[2] || '').replace(/x/g, '0'), timeRaw: dm[2] || '', area: areaOf(title, scope + ' ' + body.slice(0, 1500)), title, ver, scope, ask: asks.map(redact), files, screens: screensOf(head + ' ' + body), confirmed, unverified, baks, proposal, needsReload, sources: [{ src: 'CHANGELOG.md', line: c.line }] };
+  return { id: `CL:${dm[1] || 'nodate'}:${hash(head)}`, kind: 'change', fix: fixKindOf(title, c.body), date: dm[1] || '', time: (dm[2] || '').replace(/x/g, '0'), timeRaw: dm[2] || '', area: areaOf(title, scope + ' ' + body.slice(0, 1500)), title, ver, scope, ask: asks.map(redact), ruleAsk: ruleAsk.map(redact), files, screens: screensOf(head + ' ' + body), confirmed, unverified, baks, proposal, needsReload, sources: [{ src: 'CHANGELOG.md', line: c.line }] };
 }
 
 // ── H2: Claude Code 세션 기록(늘어난 부분만) ──
@@ -304,15 +321,21 @@ function buildStats(entries, baks, mems, st) {
   const changes = entries.filter(e => e.kind === 'change'); const sessions = entries.filter(e => e.kind === 'session');
   const byDate = {}; for (const e of entries) { if (!e.date) continue; const d = byDate[e.date] = byDate[e.date] || {}; d[e.kind] = (d[e.kind] || 0) + 1; }
   // 개선안 20261122000646_SELF_2: 절마다 종류(defect, request, style)를 따로 셈. 한 절에 같은 파일 이름이 경로만 달리 여러 번 나와도 1건
-  const newFile = () => ({ changes: 0, edits: 0, days: {}, kinds: { defect: 0, request: 0, style: 0 }, kindDays: { defect: {}, request: {}, style: {} } });
-  const byFile = {}; for (const c of changes) { const k = FIX_KINDS.includes(c.fix) ? c.fix : 'request'; for (const n of new Set(c.files.map(f => path.basename(f)))) { const v = byFile[n] = byFile[n] || newFile(); v.changes++; v.days[c.date] = (v.days[c.date] || 0) + 1; v.kinds[k]++; v.kindDays[k][c.date] = (v.kindDays[k][c.date] || 0) + 1; } }
+  const newFile = () => ({ changes: 0, edits: 0, withSrc: 0, days: {}, kinds: { defect: 0, request: 0, style: 0 }, kindDays: { defect: {}, request: {}, style: {} } });
+  // 2026-11-26 개선안 20261126183313_SELF: 시험 파일(test/ 아래)은 같은 절에 원본(test/ 밖 파일)이 있으면 세지 않고 withSrc 만 올림(표시용). 시험 파일만 고친 절은 종전대로 셈
+  //   (orch-usercheck.js 와 test/t_orch_usercheck.js 를 함께 고친 절 하나가 두 파일에 결함 1건씩 들어가 L3|edits|t_orch_usercheck.js 묶음이 올라옴)
+  const isTestPath = f => /(^|\/)test\//.test(String(f || '').replace(/\\/g, '/'));
+  // 2026-11-26 개선안 20261126190703_SELF: 측정 산출물 경로(Doc/verify/, Doc/e2e/results/)는 고친 파일이 아니라 CheckList, E2E 실행 결과라 반복 수정 집계에서 뺌(경로 없는 이름은 종전)
+  const isMeasureOut = f => /^(?:\.\/)?Doc\/(?:verify|e2e\/results)\//i.test(String(f || '').replace(/\\/g, '/'));
+  const byFile = {}; for (const c0 of changes) { const c = Object.assign({}, c0, { files: (c0.files || []).filter(f => !isMeasureOut(f)) }); const k = FIX_KINDS.includes(c.fix) ? c.fix : 'request'; const hasSrc = c.files.some(f => !isTestPath(f)); const testOnly = {}; for (const f of c.files) { const n = path.basename(f); testOnly[n] = (testOnly[n] === undefined ? true : testOnly[n]) && isTestPath(f); }
+    for (const n of new Set(c.files.map(f => path.basename(f)))) { const v = byFile[n] = byFile[n] || newFile(); if (hasSrc && testOnly[n]) { v.withSrc++; continue; } v.changes++; v.days[c.date] = (v.days[c.date] || 0) + 1; v.kinds[k]++; v.kindDays[k][c.date] = (v.kindDays[k][c.date] || 0) + 1; } }
   for (const s of sessions) for (const [f, n] of Object.entries(s.fileEdits || {})) { (byFile[f] = byFile[f] || newFile()); byFile[f].edits += n; }
   // S9 재료: 같은 파일이 7일 안 결함 수정 절에 5회 이상 나온 지점 · 같은 지시가 2회 이상 나온 지점
   //   count, from = 결함(defect) 절 7일 최대 · request, style = 같은 방식의 건수(표시만) · all = 종류 무관 7일 최대(종전 count)
   const win = dm => { const days = Object.keys(dm).sort(); let best = 0, from = ''; for (const d0 of days) { const t0 = Date.parse(d0); let n = 0; for (const d1 of days) { const t1 = Date.parse(d1); if (t1 >= t0 && t1 - t0 < 7 * 86400000) n += dm[d1]; } if (n > best) { best = n; from = d0; } } return { best, from }; };
   const repeatFiles = [];
   for (const [f, v] of Object.entries(byFile)) { const d = win(v.kindDays.defect);
-    if (d.best >= 5) repeatFiles.push({ file: f, count: d.best, from: d.from, defect: d.best, request: win(v.kindDays.request).best, style: win(v.kindDays.style).best, all: win(v.days).best, total: v.changes, kinds: v.kinds, edits: v.edits }); }
+    if (d.best >= 5) repeatFiles.push({ file: f, count: d.best, from: d.from, defect: d.best, request: win(v.kindDays.request).best, style: win(v.kindDays.style).best, all: win(v.days).best, total: v.changes, kinds: v.kinds, edits: v.edits, withSrc: v.withSrc }); }
   repeatFiles.sort((a, b) => b.count - a.count);
   const askMap = {}; for (const c of changes) for (const a of c.ask) { const k = a.replace(/[\s.,·…"'~!?]/g, '').slice(0, 40); if (k.length < 8) continue; (askMap[k] = askMap[k] || { text: a.slice(0, 160), ids: [] }).ids.push(c.id); }
   const repeatAsks = Object.values(askMap).filter(x => new Set(x.ids).size >= 2).map(x => ({ text: x.text, count: new Set(x.ids).size, ids: [...new Set(x.ids)].slice(0, 10) })).sort((a, b) => b.count - a.count);
@@ -461,4 +484,4 @@ function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 /** o = { paths: () => p, sessionDirs?: [폴더], writeMd?: false } */
 function init(o) { getPaths = o.paths; opts = o || {}; cacheEntries = null; if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } if (opts.timer !== false) { autoTimer = setInterval(autoTick, 60000); if (autoTimer.unref) autoTimer.unref(); } return true; }
 
-module.exports = { autoCfg, setAuto, autoTick, init, collect, list, get, stats, status, weeks, summary, summarize, on, parseChangelog, isUnverifiedSentence, fixKindOf, FIX_KINDS, redact, areaOf, weekOf, renderMd, KIND_KO };
+module.exports = { _buildStats: buildStats, autoCfg, setAuto, autoTick, init, collect, list, get, stats, status, weeks, summary, summarize, on, parseChangelog, isUnverifiedSentence, fixKindOf, FIX_KINDS, redact, areaOf, weekOf, renderMd, KIND_KO };

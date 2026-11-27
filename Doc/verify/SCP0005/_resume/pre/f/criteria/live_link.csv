@@ -1,0 +1,71 @@
+﻿elem_key,kind,item,asis_static,asis_live,tobe,verdict,status,src
+SP:SCP0005_GET_COUNTRY_CITY,실측-파싱 대조,SCP0005_GET_COUNTRY_CITY,SCP0005_DistributionRoute.cs:916 GetData_Country,1회 · 구간 find,,MATCH,확정,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+SP:SCP0005_GET_DISTRIBUTION_ROUTE,실측-파싱 대조,SCP0005_GET_DISTRIBUTION_ROUTE,SCP0005_DistributionRoute.cs:424 FindDataMain,1회 · 구간 find,,MATCH,확정,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+SP:SQL: SELECT *,실측-파싱 대조,SQL: SELECT *,,1회,,INLINE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+SP:SCP0005_GET_DISTRIBUTION_ROUTEID,실측-파싱 대조,SCP0005_GET_DISTRIBUTION_ROUTEID,SCP0005_DistributionRoute.cs:499 FindDataReceive,0회,,NOT_CALLED,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+SP:SCP0005_SAVE_DISTRIBUTION_ROUTE,실측-파싱 대조,SCP0005_SAVE_DISTRIBUTION_ROUTE,SCP0005_DistributionRoute.cs:752 SaveData,0회,,NOT_CALLED,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,(선언 ↔ 실측),30개,23개,,INFO,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,BaseRibbonCtl,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,Change,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,cbo,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,chkAll,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,clb,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,panel1,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,pnlMain,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,statusStripBaseForm,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtTextKeyin,,있음,,LIVE_ONLY,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnToSrch,Y,layoutControlItem6,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnFromSrch,Y,layoutControlItem7,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,cboValidYN,Y,Valid,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,clbTransMode,Y,Trans Mode,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtFromCountry,Y,From Country,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtFromCity,Y,From City,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtToCountry,Y,To Country,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,txtToCity,Y,To City,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnEaxel_Upload,Y,layoutControlItem9,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,btnExcel_Form,Y,layoutControlItem10,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+,실측-파싱 대조,spdMain/Distribution Route,정적 컬럼 사실 39행(시트 미지정 포함),컬럼 40(보임 39) · 헤더 2단 · 행 8076 · 고정 2,,LIVE,판단 대기,Doc/verify/SCP0005/asis_live/live_vs_static.csv
+COL:FROM_CITY,조회 인자,SCP0005_GET_DISTRIBUTION_ROUTE.from_city,,,,SAME,확정,Doc/asislive/SCP0005/cond_compare.csv
+COL:FROM_COUNTRY,조회 인자,SCP0005_GET_DISTRIBUTION_ROUTE.from_country,,,,SAME,확정,Doc/asislive/SCP0005/cond_compare.csv
+COL:TO_CITY,조회 인자,SCP0005_GET_DISTRIBUTION_ROUTE.to_city,,,,SAME,확정,Doc/asislive/SCP0005/cond_compare.csv
+COL:TO_COUNTRY,조회 인자,SCP0005_GET_DISTRIBUTION_ROUTE.to_country,,,,SAME,확정,Doc/asislive/SCP0005/cond_compare.csv
+COL:TRANSPORT_MODE,조회 인자,SCP0005_GET_DISTRIBUTION_ROUTE.transport_mode,,,,SAME,확정,Doc/asislive/SCP0005/cond_compare.csv
+COL:VALID_YN,조회 인자,SCP0005_GET_DISTRIBUTION_ROUTE.valid_yn,,,,SAME,확정,Doc/asislive/SCP0005/cond_compare.csv
+COL:A_COUNTRY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.a_country,,-,-,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:A_PORT_CODE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.a_port_code,,-,-,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:A_PORT_NAME,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.a_port_name,,-,-,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.active_flag,,M,M,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:D_COUNTRY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.d_country,,-,-,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:D_PORT_CODE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.d_port_code,,-,-,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:D_PORT_NAME,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.d_port_name,,-,-,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:DAYS_FRI,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.days_fri,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:DAYS_MON,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.days_mon,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:DAYS_SAT,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.days_sat,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:DAYS_SUN,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.days_sun,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:DAYS_THU,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.days_thu,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:DAYS_TUE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.days_tue,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:DAYS_WED,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.days_wed,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.debug_mode,,F,,ASIS_ONLY,판단 대기,Doc/asislive/SCP0005/save_compare.csv
+COL:FROM_CITY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.from_city,,CAWND,CAWND,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:FROM_CITY_NAME,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.from_city_name,,"WINDSOR, CANADA",,DIFF,판단 대기,Doc/asislive/SCP0005/save_compare.csv
+COL:FROM_COUNTRY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.from_country,,CA,CA,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:LT_ARRIVAL_INLAND,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.lt_arrival_inland,,0,0,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:LT_DEPARTURE_INLAND,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.lt_departure_inland,,0,0,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:LT_LAY_OFF_CLEARANCE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.lt_lay_off_clearance,,0,0,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:LT_TYPE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.lt_type,,AVERAGE,AVERAGE,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:LT_VOYAGE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.lt_voyage,,0,0,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:LT_WAIT_SHIPPING,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.lt_wait_shipping,,0,0,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:ONE_SEGMENT_COST,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.one_segment_cost,,,,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:PRIORITY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.priority,,2,1,DIFF,판단 대기,Doc/asislive/SCP0005/save_compare.csv
+COL:ROUTE_ID,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.route_id,,9917,9917,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:SHIP_DOC_PREPARATION_DATE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.ship_doc_preparation_date,,,,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:SHIPPING_COMPANY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.shipping_company,,-,-,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:THREE_SEGMENT_COST,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.three_segment_cost,,,,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:TO_CITY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.to_city,,CAWND,CAWND,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:TO_CITY_NAME,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.to_city_name,,"WINDSOR, CANADA","WINDSOR, CANADA",SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:TO_COUNTRY,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.to_country,,CA,CA,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:TRANSPORT_MODE,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.transport_mode,,TRK,TRK,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+COL:TWO_SEGMENT_COST,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.two_segment_cost,,,,SAME,확정,Doc/asislive/SCP0005/save_compare.csv
+,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.user_id,,jaeuk.shin,minyonglee1,USER(비교 제외),판단 대기,Doc/asislive/SCP0005/save_compare.csv
+COL:VALID_YN,저장 인자,SCP0005_SAVE_DISTRIBUTION_ROUTE.valid_yn,,Y,Y,SAME,확정,Doc/asislive/SCP0005/save_compare.csv

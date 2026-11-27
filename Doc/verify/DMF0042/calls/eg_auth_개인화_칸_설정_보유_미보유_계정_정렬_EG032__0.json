@@ -1,0 +1,93 @@
+[
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 248,
+  "at": "2026-11-26T13:24:36.888Z",
+  "user": "yooah.chung",
+  "test": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"hongjae.kim\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 156,
+  "at": "2026-11-26T13:24:41.341Z",
+  "user": "yooah.chung",
+  "test": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"DM ADMIN\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 7577,
+  "dur": 5478,
+  "at": "2026-11-26T13:24:46.601Z",
+  "user": "yooah.chung",
+  "test": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 227,
+  "at": "2026-11-26T13:24:50.145Z",
+  "user": "yooah.chung",
+  "test": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 227,
+  "at": "2026-11-26T13:24:52.513Z",
+  "user": "yooah.chung",
+  "test": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"yooah.chung\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 20,
+  "dur": 136,
+  "at": "2026-11-26T13:24:56.435Z",
+  "user": "yooah.chung",
+  "test": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"DM Planner\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 7577,
+  "dur": 5719,
+  "at": "2026-11-26T13:25:01.925Z",
+  "user": "yooah.chung",
+  "test": "개인화 — 칸 설정 보유/미보유 계정 정렬(EG032)"
+ }
+]

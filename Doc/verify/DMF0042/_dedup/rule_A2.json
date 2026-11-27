@@ -1,0 +1,100 @@
+{
+ "rule_id": "A2",
+ "hash": "d43ec7efd4d2183e",
+ "groups": [
+  {
+   "rows": [
+    "V-06fe3474"
+   ],
+   "why": "SCM_SITE_ID40(Sales Site*) 컬럼의 신규행 표시값만 확인하는 행이고, 다른 행과 컬럼이 겹치지 않는다."
+  },
+  {
+   "rows": [
+    "V-1cd34be9"
+   ],
+   "why": "조회 후 상태의 콤보 칸 그리드 표시를 확인하는 행이다. 상태(조회 결과)와 범위(Excel 미포함)가 다른 행과 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "V-2d747c60"
+   ],
+   "why": "DEPT_ID(Team*) 컬럼의 신규행 표시값만 확인하는 행이고, DEPT_ID40과는 다른 컬럼이다."
+  },
+  {
+   "rows": [
+    "V-3af68191"
+   ],
+   "why": "셀 표시값이 아니라 콤보 셀 편집기를 연 상태의 표시를 확인하므로 확인 요소와 상태가 다르다."
+  },
+  {
+   "rows": [
+    "V-3ee5d90b"
+   ],
+   "why": "END_CUSTOMER(End Customer*) 컬럼의 신규행 표시값만 확인하는 행이고, END_CUSTOMER40과는 다른 컬럼이다."
+  },
+  {
+   "rows": [
+    "V-4d43b6e0"
+   ],
+   "why": "DEPT_ID40(Team) 컬럼의 신규행 표시값만 확인하는 행이고, DEPT_ID와는 다른 컬럼이다."
+  },
+  {
+   "rows": [
+    "V-506d7750"
+   ],
+   "why": "CURRENCY(Currency*) 컬럼의 신규행 표시값만 확인하는 행이고, 다른 행과 컬럼이 겹치지 않는다."
+  },
+  {
+   "rows": [
+    "V-54f3dc06"
+   ],
+   "why": "MEASURE(Measure) 컬럼의 신규행 표시값만 확인하는 행이고, 다른 행과 컬럼이 겹치지 않는다."
+  },
+  {
+   "rows": [
+    "V-55bf3f60"
+   ],
+   "why": "INCOTERMS(Rep. Incoterms*) 컬럼의 신규행 표시값만 확인하는 행이고, 다른 행과 컬럼이 겹치지 않는다."
+  },
+  {
+   "rows": [
+    "V-642dc7a6"
+   ],
+   "why": "END_CUSTOMER40(End Customer*) 컬럼의 신규행 표시값만 확인하는 행이고, END_CUSTOMER와는 다른 컬럼이다."
+  },
+  {
+   "rows": [
+    "V-92ec43de"
+   ],
+   "why": "CELL_PROD_SITE(Cell Prod Site*) 컬럼의 신규행 표시값만 확인하는 행이고, 다른 행과 컬럼이 겹치지 않는다."
+  },
+  {
+   "rows": [
+    "V-9f8e9ae9"
+   ],
+   "why": "조건 없이 화면 전체의 dataMap 컬럼을 그리드와 Excel 모두에서 확인하는 포괄 행이라 범위와 상태가 다르다. 확신이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-a7beeb4a"
+   ],
+   "why": "FCST_TYPE(FCST Type*) 컬럼의 신규행 표시값만 확인하는 행이고, 다른 행과 컬럼이 겹치지 않는다."
+  },
+  {
+   "rows": [
+    "V-c5040959"
+   ],
+   "why": "SCM_SITE_ID81(Sales Site) 컬럼의 신규행 표시값만 확인하는 행이고, SCM_SITE_ID40과는 다른 컬럼이다."
+  },
+  {
+   "rows": [
+    "V-e1bfe420"
+   ],
+   "why": "PLANT_SITE_ID(Plant Site) 컬럼의 신규행 표시값만 확인하는 행이고, 다른 행과 컬럼이 겹치지 않는다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:35:29",
+ "cost": 0.0753486
+}

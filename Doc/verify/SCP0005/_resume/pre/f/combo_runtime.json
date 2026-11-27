@@ -1,0 +1,621 @@
+{
+ "at": "2026-11-25T16:31:36.372Z",
+ "search": {
+  "Valid": {
+   "label": "Valid",
+   "opts": [
+    "ALL",
+    "Y",
+    "N"
+   ],
+   "multi": false,
+   "sel": [
+    "ALL"
+   ]
+  },
+  "Trans Mode": {
+   "label": "Trans Mode",
+   "opts": [
+    "SELECT ALL",
+    "AIR",
+    "FERRY",
+    "TRUCK",
+    "SEA",
+    "RAIL"
+   ],
+   "multi": true,
+   "sel": []
+  }
+ },
+ "grid": {
+  "LT_TYPE": {
+   "header": "L/T Type",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "AVERAGE",
+      "v": "AVERAGE"
+     },
+     {
+      "c": "MIN",
+      "v": "MIN"
+     },
+     {
+      "c": "MAX",
+      "v": "MAX"
+     }
+    ],
+    "disp": [
+     "AVERAGE",
+     "MIN",
+     "MAX"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "AVERAGE",
+      "v": "AVERAGE"
+     },
+     {
+      "c": "MIN",
+      "v": "MIN"
+     },
+     {
+      "c": "MAX",
+      "v": "MAX"
+     }
+    ],
+    "disp": [
+     "AVERAGE",
+     "MIN",
+     "MAX"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "TRANSPORT_MODE": {
+   "header": "Trans Mode",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "AIR",
+      "v": "AIR"
+     },
+     {
+      "c": "FRY",
+      "v": "FERRY"
+     },
+     {
+      "c": "TRK",
+      "v": "TRUCK"
+     },
+     {
+      "c": "SEA",
+      "v": "SEA"
+     },
+     {
+      "c": "RAI",
+      "v": "RAIL"
+     }
+    ],
+    "disp": [
+     "AIR",
+     "FERRY",
+     "TRUCK",
+     "SEA",
+     "RAIL"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "AIR",
+      "v": "AIR"
+     },
+     {
+      "c": "FRY",
+      "v": "FERRY"
+     },
+     {
+      "c": "TRK",
+      "v": "TRUCK"
+     },
+     {
+      "c": "SEA",
+      "v": "SEA"
+     },
+     {
+      "c": "RAI",
+      "v": "RAIL"
+     }
+    ],
+    "disp": [
+     "AIR",
+     "FERRY",
+     "TRUCK",
+     "SEA",
+     "RAIL"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "DAYS_MON": {
+   "header": "Mon",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "DAYS_TUE": {
+   "header": "Tue",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "DAYS_WED": {
+   "header": "Wed",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "DAYS_THU": {
+   "header": "Thu",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "DAYS_FRI": {
+   "header": "Fri",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "DAYS_SAT": {
+   "header": "Sat",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "DAYS_SUN": {
+   "header": "Sun",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  },
+  "VALID_YN": {
+   "header": "Active",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "newCtx": {},
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "Y",
+      "v": "Y"
+     },
+     {
+      "c": "N",
+      "v": "N"
+     }
+    ],
+    "disp": [
+     "Y",
+     "N"
+    ],
+    "editing": true
+   },
+   "exCtx": {}
+  }
+ },
+ "rr": {
+  "grid": "20261126011249",
+  "combos": "20261126011249",
+  "search": "20261126011249"
+ },
+ "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"YesOrNo\",\"mnuId\":\"SCP0005\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 2,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "Y",
+     "v": "Y"
+    },
+    {
+     "c": "N",
+     "v": "N"
+    }
+   ],
+   "user": "brightboy"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"LtType\",\"mnuId\":\"SCP0005\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 3,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AVERAGE",
+     "v": "AVERAGE"
+    },
+    {
+     "c": "MIN",
+     "v": "MIN"
+    },
+    {
+     "c": "MAX",
+     "v": "MAX"
+    }
+   ],
+   "user": "brightboy"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"TransportModeCode\",\"mnuId\":\"SCP0005\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 5,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AIR",
+     "v": "AIR"
+    },
+    {
+     "c": "FRY",
+     "v": "FERRY"
+    },
+    {
+     "c": "TRK",
+     "v": "TRUCK"
+    },
+    {
+     "c": "SEA",
+     "v": "SEA"
+    },
+    {
+     "c": "RAI",
+     "v": "RAIL"
+    }
+   ],
+   "user": "brightboy"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"TransportModeCode\",\"mnuId\":\"SCP0005\"}",
+   "status": 200,
+   "n": 5,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AIR",
+     "v": "AIR"
+    },
+    {
+     "c": "FRY",
+     "v": "FERRY"
+    },
+    {
+     "c": "TRK",
+     "v": "TRUCK"
+    },
+    {
+     "c": "SEA",
+     "v": "SEA"
+    },
+    {
+     "c": "RAI",
+     "v": "RAIL"
+    }
+   ],
+   "user": "brightboy"
+  }
+ ]
+}

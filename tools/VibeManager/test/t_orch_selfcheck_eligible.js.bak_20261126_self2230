@@ -1,0 +1,34 @@
+// orch-selfcheck.js autoEligible: 삭제 안 판정 = 제목 낱말 대신 대상 경로와 안 종류(2026-11-21 개선안 20261121000933_SELF 사고 · 20261121120359_VISION_2)
+//   사용: node test/t_orch_selfcheck_eligible.js <VibeManager 폴더>
+const path = require('path'); const fs = require('fs'); const os = require('os');
+const dir = path.resolve(process.argv[2] || path.join(__dirname, '..'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'selfel-')); const vibeDir = path.join(root, '.vibe');
+fs.mkdirSync(path.join(root, 'tools', 'Harness'), { recursive: true }); fs.writeFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), JSON.stringify({ orch: { agentEnabled: false } }));
+const p = { root, vibeDir, extDir: path.join(root, 'installed') };
+const sc = require(path.join(dir, 'orch-selfcheck')); sc.init({ paths: () => p, timer: false, autoSync: false, inventory: false, docStyle: false });
+let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x || ''); if (!c) ok = false; };
+// 실사건 표본 ① 20261121000933_SELF: 제목에 '근거 삭제로 표시'·'근거 로그' 낱말, 대상은 전부 VM 코드
+const real1 = { id: '20261121000933_SELF', source: 'self', impact: 'fix', self: true,
+  title: '사용자 지적 재발 판정에서 감지기 추가 개선안을 수정본에서 빼고, 근거 로그가 지워져 사라진 항목은 resolved 대신 근거 삭제로 표시',
+  targets: ['tools/VibeManager/orch-ladder.js', 'tools/VibeManager/orch-usercheck.js', 'tools/VibeManager/test/t_orch_ladder_recur_time.js'] };
+const e1 = sc.autoEligible(real1);
+chk('20261121000933_SELF = 자동 반영(code)', e1.ok === true && e1.kind === 'code', JSON.stringify(e1));
+// 실사건 표본 ② 20261119215147_SELF_2: .vibe/logs 로그 2개 삭제 = delete 유지
+const real2 = { id: '20261119215147_SELF_2', source: 'self', self: true, title: '서버 로그 2개 삭제(.vibe/logs be_bootrun, 58,885,136,326바이트)',
+  targets: ['.vibe/logs/be_bootrun_20261112_1031.log', '.vibe/logs/be_bootrun_20261114_0148.log'] };
+const e2 = sc.autoEligible(real2);
+chk('20261119215147_SELF_2 = 생성물 삭제(delete)', e2.ok === true && e2.kind === 'delete', JSON.stringify(e2));
+// 코드 파일 삭제 = 승인 유지(제목이 대상 파일 이름을 들어 지운다고 함 · 삭제 목록 필드)
+const e3 = sc.autoEligible({ self: true, title: 'a.js 파일 삭제', targets: ['tools/VibeManager/a.js'] });
+chk('대상 파일 이름을 든 도구 파일 삭제 = 자동(2026-11-24 사용자 지시, 반영 전 사본 있음)', e3.ok === true, JSON.stringify(e3));
+const e4 = sc.autoEligible({ self: true, title: '옛 모듈 정리', targets: ['tools/VibeManager/old.js'], deletes: ['tools/VibeManager/old.js'] });
+chk('삭제 목록 필드(도구 파일) = 자동(2026-11-24 사용자 지시)', e4.ok === true, JSON.stringify(e4));
+{ const e5 = sc.autoEligible({ self: true, title: '옛 화면 정리', targets: ['nscm-fe/src/old.tsx'], deletes: ['nscm-fe/src/old.tsx'] }); chk('삭제 목록 필드(FE 파일) = 승인', e5.ok === false, JSON.stringify(e5)); }
+const e5 = sc.autoEligible({ self: true, title: '스냅샷 정리', targets: ['.vibe/orch/snap/prop_1/'], deletes: ['.vibe/orch/snap/prop_1/'] });
+chk('생성물 대상 + 삭제 목록 필드 = delete', e5.ok === true && e5.kind === 'delete', JSON.stringify(e5));
+const e6 = sc.autoEligible({ self: true, title: '로그 쓰기 수정', targets: ['.vibe/logs/x.log'] });
+chk('생성물 대상인데 삭제 안 아님 = 승인', e6.ok === false && /삭제 안이 아님/.test(e6.why), JSON.stringify(e6));
+const e7 = sc.autoEligible({ self: true, title: '로그 삭제 판정 수정', targets: ['nscm-fe/a.ts'] });
+chk('범위 밖 대상 = 승인(자동 범위 밖)', e7.ok === false && /자동 범위 밖/.test(e7.why), JSON.stringify(e7));
+try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
+console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);

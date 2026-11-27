@@ -1,18 +1,18 @@
 # DMF0082 — To-Be Fact Pack 요약
 
 - page_key: `demand/forecast-price` · feature: demand · As-is Fact Pack 있음
-- 파일 44 · 엔드포인트 호출 37 (미해결 6, 주석 속 1) · 이벤트 77 · 컴포넌트 사용 115 · 하드코딩 컬럼 36 · 메시지 84
-- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 36건
+- 파일 44 · 엔드포인트 호출 37 (미해결 6, 주석 속 1) · 이벤트 78 · 컴포넌트 사용 115 · 하드코딩 컬럼 37 · 메시지 84
+- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 37건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/demand/src/pages/forecast-price/components/ForecastPriceForm.module.scss | component | 17 |
 | features/demand/src/pages/forecast-price/components/ForecastPriceForm.tsx | component | 441 |
-| features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | component | 2085 |
+| features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | component | 2175 |
 | features/demand/src/pages/forecast-price/components/ForecastPriceGridUtils.test.ts | test | 216 |
-| features/demand/src/pages/forecast-price/components/ForecastPriceGridUtils.ts | component | 603 |
-| features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.module.scss | component | 41 |
+| features/demand/src/pages/forecast-price/components/ForecastPriceGridUtils.ts | component | 683 |
+| features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.module.scss | component | 42 |
 | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | component | 901 |
 | features/demand/src/pages/forecast-price/components/modals/exchangeRateModalStore.ts | store | 32 |
 | features/demand/src/pages/forecast-price/components/modals/ForecastTemplateModal.module.scss | component | 38 |
@@ -24,12 +24,12 @@
 | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.module.scss | component | 45 |
 | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | component | 360 |
 | features/demand/src/pages/forecast-price/components/modals/versionSelectModalStore.ts | store | 43 |
-| features/demand/src/pages/forecast-price/forecast-price.constants.ts | constants | 323 |
+| features/demand/src/pages/forecast-price/forecast-price.constants.ts | constants | 325 |
 | features/demand/src/pages/forecast-price/forecast-price.types.ts | types | 99 |
-| features/demand/src/pages/forecast-price/ForecastPrice.tsx | page | 1210 |
+| features/demand/src/pages/forecast-price/ForecastPrice.tsx | page | 1220 |
 | features/demand/src/pages/forecast-price/index.ts | index | 2 |
 | features/demand/src/pages/forecast-price/useForecastPriceStore.test.tsx | test | 171 |
-| features/demand/src/pages/forecast-price/useForecastPriceStore.ts | store | 660 |
+| features/demand/src/pages/forecast-price/useForecastPriceStore.ts | store | 667 |
 | features/demand/src/pages/forecast-price/utils/forecast-price.api.ts | api | 161 |
 | features/demand/src/pages/forecast-price/utils/forecast-price.asFromSite.test.ts | test | 85 |
 | features/demand/src/pages/forecast-price/utils/forecast-price.asFromSite.ts | util | 45 |
@@ -55,27 +55,27 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 11 | Y | ForecastPriceForm.tsx:76 ForecastPriceForm.tsx:121 ForecastPriceGrid.tsx:295 ForecastPriceGrid.tsx:325 ForecastPriceGrid.tsx:354 ExchangeRateModal.tsx:150 |
-| {?{comboId:'CELL_PROD_SITE_ID',divisionId:q(divisionId),itemId:q(itemId),}} | http | 1 | N | ForecastPriceGrid.tsx:441 |
-| {?{comboId:'SalesBucket',divisionId:q(div),scmSiteId:q(site),incoterms:q(inco),}} | http | 1 | N | ForecastPriceGrid.tsx:582 |
-| {?{comboId:'FcstPriceEditMeasure',divisionId:q(div),scmSiteId:`'${site.trim()!==''} | http | 1 | N | ForecastPriceGrid.tsx:614 |
-| {?{comboId:'SiteByEndCustomer',divisionId:q(div),endCustomer:q(cust)}} | http | 1 | N | ForecastPriceGrid.tsx:652 |
-| {?{comboId:'CELL_PROD_SITE_ID',divisionId:q(div),itemId:q(item)}} | http | 1 | N | ForecastPriceGrid.tsx:786 |
+| (useTabComboQueries) | hook | 11 | Y | ForecastPriceForm.tsx:76 ForecastPriceForm.tsx:121 ForecastPriceGrid.tsx:310 ForecastPriceGrid.tsx:340 ForecastPriceGrid.tsx:369 ExchangeRateModal.tsx:150 |
+| {?{comboId:'CELL_PROD_SITE_ID',divisionId:q(divisionId),itemId:q(itemId),}} | http | 1 | N | ForecastPriceGrid.tsx:456 |
+| {?{comboId:'SalesBucket',divisionId:q(div),scmSiteId:q(site),incoterms:q(inco),}} | http | 1 | N | ForecastPriceGrid.tsx:597 |
+| {?{comboId:'FcstPriceEditMeasure',divisionId:q(div),scmSiteId:`'${site.trim()!==''} | http | 1 | N | ForecastPriceGrid.tsx:629 |
+| {?{comboId:'SiteByEndCustomer',divisionId:q(div),endCustomer:q(cust)}} | http | 1 | N | ForecastPriceGrid.tsx:667 |
+| {?{comboId:'CELL_PROD_SITE_ID',divisionId:q(div),itemId:q(item)}} | http | 1 | N | ForecastPriceGrid.tsx:801 |
 | DMF0082/futurePriceInfo//call-proc | hook | 1 | Y | ExchangeRateModal.tsx:187 |
 | /DMF0082/futurePriceInfo/IF/call-proc | http | 1 | Y | ExchangeRateModal.tsx:208 |
 | /DMF0082/futurePriceInfo/SAVE/call-proc | http | 1 | Y | ExchangeRateModal.tsx:722 |
 | DMF0082/savePriceData//call-proc | hook | 1 | Y | SavePricePeriodModal.tsx:392 |
 | DMF0082/savePriceTitle//call-proc | hook | 1 | Y | SavePricePeriodModal.tsx:416 |
-| /DMF0082/FcstNPrice/SAVE/call-proc | http | 2 | Y | SavePricePeriodModal.tsx:655 ForecastPrice.tsx:752 |
+| /DMF0082/FcstNPrice/SAVE/call-proc | http | 2 | Y | SavePricePeriodModal.tsx:655 ForecastPrice.tsx:762 |
 | DMF0082/version//call-proc | hook | 1 | Y | VersionSelectModal.tsx:162 |
 | {?{comboId:'SiteEndCustomerMapDMF0082',divisionId:q(div)}} | http | 1 | N | ForecastPrice.tsx:180 |
 | DMF0082/FcstNPrice//call-proc | hook | 1 | Y | ForecastPrice.tsx:210 |
 | DMF0082/spreadTitle//call-proc | hook | 1 | Y | ForecastPrice.tsx:218 |
 | DMF0082/buttonAuth//call-proc | hook | 1 | Y | ForecastPrice.tsx:258 |
-| /admin/menu/DMF0082/search-conditions | http | 1 | Y | useForecastPriceStore.ts:308 |
-| /admin/menu/DMF0082/column | http | 3 | Y | useForecastPriceStore.ts:418 useForecastPriceStore.ts:553 useForecastPriceStore.ts:573 |
-| DMF0082/titleSet/SEARCH/call-proc | http | 1 | Y | useForecastPriceStore.ts:460 |
-| /admin/menu/DMF0082/measure | http | 1 | Y | useForecastPriceStore.ts:535 |
+| /admin/menu/DMF0082/search-conditions | http | 1 | Y | useForecastPriceStore.ts:310 |
+| /admin/menu/DMF0082/column | http | 3 | Y | useForecastPriceStore.ts:420 useForecastPriceStore.ts:557 useForecastPriceStore.ts:580 |
+| DMF0082/titleSet/SEARCH/call-proc | http | 1 | Y | useForecastPriceStore.ts:462 |
+| /admin/menu/DMF0082/measure | http | 1 | Y | useForecastPriceStore.ts:537 |
 | /DMF0082/titleSet/SAVE/call-proc | http | 1 | Y | forecast-price.api.ts:38 |
 | /DMF0082/FcstNPrice/FORM_DATA/call-proc | http | 1 | Y | forecast-price.api.ts:80 |
 | /DMF0082/FcstNPrice/UPLOAD_SAVE/call-proc | http | 1 | Y | forecast-price.api.ts:132 |
@@ -107,18 +107,19 @@
 | VersionField | onOpenPopup | onOpenVersionLookup | jsx | features/demand/src/pages/forecast-price/components/ForecastPriceForm.tsx | 418 |
 | Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/forecast-price/components/ForecastPriceForm.tsx | 426 |
 | Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/forecast-price/components/ForecastPriceForm.tsx | 431 |
-| gridFilter | filterApplied | rememberFilter | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1142 |
-| g | beginningEdit | beginCellEditHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1927 |
-| g | pastingCell | cellEditableHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1928 |
-| g | cellEditEnded | cellEditHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1929 |
-| g | pastedCell | cellEditHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1930 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1931 |
-| g | updatedView | reapplyCellProdSiteMap | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1932 |
-| g.hostElement | keydown | enforceDecimalKey | addEventListener | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1933 |
-| g.hostElement | keydown | keydownHandler | addEventListener | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1934 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1935 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1973 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 2038 |
+| gridFilter | filterApplied | rememberFilter | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1158 |
+| g | beginningEdit | beginCellEditHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1968 |
+| g | pastingCell | cellEditableHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1969 |
+| g | cellEditEnded | cellEditHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1970 |
+| g | pastedCell | cellEditHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1971 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1972 |
+| g | updatedView | reapplyCellProdSiteMap | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1973 |
+| g.hostElement | keydown | enforceDecimalKey | addEventListener | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1974 |
+| g.hostElement | keydown | keydownHandler | addEventListener | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1975 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1976 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 2014 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 2079 |
+| g | updatedLayout | applyFooter | addHandler | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 2129 |
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 430 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 459 |
 | g | pastedCell | cellEditEndedHandler | addHandler | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 464 |
@@ -159,18 +160,18 @@
 | Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 282 |
 | Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 287 |
 | InputField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 300 |
-| Button | onClick | handleApply | jsx | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 345 |
-| Button | onClick | modalClose | jsx | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 352 |
-| ForecastPriceForm | onSubmit | <arrow> handleSubmit | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 942 |
-| ForecastPriceForm | onOpenVersionLookup | <arrow> setVersionModalOpen | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 945 |
-| ForecastPriceForm | onBucketChange | handleBucketChange | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 946 |
-| ForecastPriceGrid | onPopupCellDblClick | <arrow> setPopupRow,setOpenItem,setOpenProject | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 964 |
-| VersionSelectModal | onApply | <arrow> setSearchParams | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1080 |
-| MeasureSelectModal | onApply | <arrow> staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map,fetchStaticMeasures,invalidateAfterSave | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1093 |
-| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet('C',visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,}))).then,saveTitleSet,visible.map | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1123 |
-| SavePricePeriodModal | onSaveResult | <arrow> invalidateAfterSave | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1181 |
-| FcstUploadModal | onSave | saveExcelUpload | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1204 |
-| FcstUploadModal | onUploaded | <arrow> invalidateAfterSave | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1205 |
+| Button | onClick | modalClose | jsx | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 342 |
+| Button | onClick | handleApply | jsx | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 352 |
+| ForecastPriceForm | onSubmit | <arrow> handleSubmit | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 952 |
+| ForecastPriceForm | onOpenVersionLookup | <arrow> setVersionModalOpen | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 955 |
+| ForecastPriceForm | onBucketChange | handleBucketChange | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 956 |
+| ForecastPriceGrid | onPopupCellDblClick | <arrow> setPopupRow,setOpenItem,setOpenProject | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 974 |
+| VersionSelectModal | onApply | <arrow> setSearchParams | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1090 |
+| MeasureSelectModal | onApply | <arrow> staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map,fetchStaticMeasures,invalidateAfterSave | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1103 |
+| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet('C',visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,}))).then,saveTitleSet,visible.map | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1133 |
+| SavePricePeriodModal | onSaveResult | <arrow> invalidateAfterSave | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1191 |
+| FcstUploadModal | onSave | saveExcelUpload | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1214 |
+| FcstUploadModal | onUploaded | <arrow> invalidateAfterSave | jsx | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1215 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -217,7 +218,8 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| dynamicColumns | m.binding | hasDaily ? (m.kind === 'D' ? m.leaf \|\| 'SUM' : 'SUM') : subK | 90 | true |  |  | object | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 943 |
+| dynColMetas | String(r.COLUMN_NAME) |  | spColumnWidth(r.COLUMN_WIDTH) |  |  |  | object | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 861 |
+| dynamicColumns | m.binding | hasDaily ? (m.kind === 'D' ? m.leaf \|\| 'SUM' : 'SUM') : subK | m.width ?? DYN_COL_DEFAULT_WIDTH | true |  |  | object | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 959 |
 | gridStaticColumns | c.key | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 320 |
 | gridDynamicColumns | `M_${ym}` | ym.slice(4, 6) | 90 | true |  |  | object | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 357 |
 | trailing | c.key | c.header | c.width | true |  |  | object | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 380 |
@@ -243,7 +245,7 @@
 | VERSION_COLUMNS | VERSION_TYPE | Type | 90 |  |  |  | meta-shape | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 67 |
 | VERSION_COLUMNS | CREATED_BY | Create By | 110 |  |  |  | meta-shape | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 68 |
 | VERSION_COLUMNS | CREATION_DATE | Create Date | 150 |  |  |  | meta-shape | features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx | 69 |
-| buildGroupKeyOf | column?.binding ?? '' |  |  | column?.visible !== false |  |  | object | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 483 |
+| buildGroupKeyOf | column?.binding ?? '' |  |  | column?.visible !== false |  |  | object | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 488 |
 | FALLBACK_TEMPLATE_COLUMNS | DIVISION_ID | Div | 50 |  |  |  | meta-shape | features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.ts | 46 |
 | FALLBACK_TEMPLATE_COLUMNS | DEPT_NAME | Team | 180 |  |  |  | meta-shape | features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.ts | 47 |
 | FALLBACK_TEMPLATE_COLUMNS | END_CUSTOMER | End Customer | 150 |  |  |  | meta-shape | features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.ts | 48 |
@@ -293,7 +295,7 @@
 | MSG00001 | 1 |
 | MSG00043 | 1 |
 | MSG00113 | 1 |
-| MSG00164 | 1 |
+| MSG01505 | 1 |
 | MSG00227 | 1 |
 | MSG00260 | 1 |
 | MSG00283 | 1 |
@@ -319,25 +321,26 @@
 | LBL00765 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0082(40), DMF0003(27), DMF0020(12), DMF0021(4), DMF0074(3), DMF0042(2), DMF0073(1), SYS0004(1), COM0005(1), COM0006(1), DMF0005(1), DMF0043(1)
+- 화면ID: DMF0082(40), DMF0003(34), DMF0020(12), DMF0021(4), DMF0074(3), DMF0042(2), DMF0073(2), SYS0004(1), COM0005(1), COM0006(1), DMF0005(1), DMF0048(1), DMF0043(1)
 - SP/PKG: PKG_DMF0082(12), DMF0082_SAVE_MAIN_DATA(8), P_DMF0082_GET_BUTTON_AUTH(7), PR_GET_SHEET_COLUMN_LIST(4), P_DMF0082_GET_EXCEL_FORM_DATA(3), DMF0073_GET_VERSION_SALESPRICE(3), P_DMF0082_GET_EXCEL_UPLOAD_DATA(3), DMF0082_GET_SPREAD_TITLE(2), PKG_DMF0000(2), P_DMF0000_SAVE_EXCHANGE_POPUP_DATA(2), PR_SCM_MST_EXCHANGE_RATE_UI(2), PKG_SCM0002(2), P_DMF0082_SAVE_MAIN_DATA(2), P_USERINFO(2), DMF0003_GET_BUCKET_TYPE_CODE(1), PKG_DMF0020(1), PR_SCM_MST_EXCHANGE_RATE(1), DMF0082_GET_EXCEL_FORM(1), SCM0002_GET_VERSIONBYWATERFALLPOPUP(1), P_VERSION_TYPE(1), P_SCM0002_GET_VERSIONBYWATERFALLPOPUP(1), P_DMF0082_GET_MAIN_DATA(1), PKG_COM0000(1), P_COM0008_GET_ITEM_BY_DIVISION_POPUP(1), P_DEPT_ID(1), P_DMF0002_GET_ITEM_BY_DIVISION_POPUPEX(1), PR_GET_DAY_RANGE(1), DMF0002_GET_TITLESET_POPUP(1), SCM0002_SET_TITLESET_POPUP(1), P_MODE(1), PR_GET_LOOKUP_INFO_LIST(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | endpoint | Bucket 옵션 = CMBO 'BucketType' 동적 fetch (DMF0003_GET_BUCKET_TYPE_CODE 1:1 — CMBO 등록명). | features/demand/src/pages/forecast-price/components/ForecastPriceForm.tsx | 66 |
-| code | const applyEditMeasures = (dataItem: WijmoRowItem, clearStale = false) => { | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 603 |
-| code | applyEditMeasures(item); | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 748 |
-| code | applyCellProdSites(item); | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 749 |
-| jsx | `<DataGrid>` 가 `handleInitialized`(DataGrid.tsx:542)에서 이미 만들며, 그쪽이 React | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1161 |
-| jsx | → 대상 목록은 `<DataGrid filterColumns={...}>` 로 넘긴다(아래 JSX). 생성 주체는 DataGrid 단일. | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1165 |
+| code | const applyEditMeasures = (dataItem: WijmoRowItem, clearStale = false) => { | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 618 |
+| code | applyEditMeasures(item); | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 763 |
+| code | applyCellProdSites(item); | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 764 |
+| jsx | `<DataGrid>` 가 `handleInitialized`(DataGrid.tsx:542)에서 이미 만들며, 그쪽이 React | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1177 |
+| jsx | → 대상 목록은 `<DataGrid filterColumns={...}>` 로 넘긴다(아래 JSX). 생성 주체는 DataGrid 단일. | features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx | 1181 |
 | jsx | CODE='9' / RESULT_MSG='fail' / EVENT=<SQLERRM> 를 돌려주는데, RESULT_MSG 만 읽으면 | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 222 |
 | code | 그 전에 실행되고 끝난다. 예전처럼 `if (!g) return` 으로 포기하면 deps 가 다시 바뀌지 않는 한 | features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx | 397 |
 | code | dtEndCustomer = DataService.GetDMInnerTable("EndCustomerByDivision", Filter); | features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx | 298 |
 | code | import { ForecastTemplateModal } from './components/modals'; | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 30 |
 | code | const [templateModalOpen, setTemplateModalOpen] = useState(false); | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 75 |
 | code | 컬럼/메저를 복원된 division 기준으로 다시 받는다(별도 순서 await 불필요). | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 135 |
-| code | error.response 를 그대로 resolve 한다(axios-interceptors.ts L53~55) → await 가 throw 안 함. | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 759 |
-| code | action: () => setTemplateModalOpen(true), | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 846 |
+| code | error.response 를 그대로 resolve 한다(axios-interceptors.ts L53~55) → await 가 throw 안 함. | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 769 |
+| code | action: () => setTemplateModalOpen(true), | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 856 |
+| jsx | Excel Form 팝업은 쓰지 않는다 — customButtons 액션이 직접 다운로드한다(handleExcelFormDownload). <ForecastTemplateModal open={templateModalOpen} modalClose={() => setTemplateModalOpen(false)} divisionId={searchParams.divisionId} filters={filters as Record<str | features/demand/src/pages/forecast-price/ForecastPrice.tsx | 1194 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

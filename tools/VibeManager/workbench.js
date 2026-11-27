@@ -199,6 +199,34 @@ let instSeq = 0;
 const panels = new Set();  // WB 인스턴스 집합
 let lastWB = null;
 let orchWB = null;         // 2026-11-19 VMO 창(1개) — panels 에 넣지 않는다
+// 2026-11-26 개선안 20261126164857_INC(후 2): Source Backup 3/3 push 전 검사. upstream..HEAD 에서 더하거나 바꾼 파일 중
+//   .gitignore 제외 규칙에 걸리는 파일, stopBytes(100MB, GitHub 파일 한도) 넘는 파일 = push 멈춤 · warnBytes(50MB) 넘는 파일 = 경고 줄만.
+//   크기 = 커밋에 든 blob 크기(git diff --raw + cat-file --batch-check, 디스크 파일과 무관). 읽기 명령만 씀. upstream 이 없으면 검사 안 함(ok, why)
+function prePushCheck(cwd, upstream, lim) {
+  const L = Object.assign({ stopBytes: 100 * 1048576, warnBytes: 50 * 1048576 }, lim || {});
+  const g = (args, input) => cp.spawnSync('git', ['-c', 'core.quotepath=false', ...args], { cwd, encoding: 'utf8', windowsHide: true, maxBuffer: 1 << 28, input });
+  if (g(['rev-parse', '--verify', '-q', upstream]).status !== 0) return { ok: true, skipped: `원격 기준 ${upstream} 없음`, stop: [], warn: [], ignored: [] };
+  const raw = g(['diff', '--raw', '--no-abbrev', '--no-renames', '--diff-filter=AM', `${upstream}..HEAD`]);
+  if (raw.status !== 0) return { ok: true, skipped: `git diff 실패 exit ${raw.status}`, stop: [], warn: [], ignored: [] };
+  const rows = String(raw.stdout || '').split(/\r?\n/).map(l => /^:\d+ \d+ [0-9a-f]+ ([0-9a-f]+) [AM]\t(.+)$/.exec(l)).filter(Boolean).map(m => ({ sha: m[1], f: m[2] }));
+  const sizes = new Map(); if (rows.length) { const cf = g(['cat-file', '--batch-check'], rows.map(r => r.sha).join('\n') + '\n'); for (const ln of String(cf.stdout || '').split(/\r?\n/)) { const m = /^([0-9a-f]+) blob (\d+)$/.exec(ln); if (m) sizes.set(m[1], Number(m[2])); } }
+  const ign = rows.length ? new Set(String(g(['check-ignore', '--no-index', '--stdin'], rows.map(r => r.f).join('\n') + '\n').stdout || '').split(/\r?\n/).filter(Boolean)) : new Set();
+  const list = rows.map(r => ({ f: r.f, size: sizes.get(r.sha) || 0 }));
+  const ignored = list.filter(x => ign.has(x.f)); const stop = list.filter(x => x.size > L.stopBytes); const warn = list.filter(x => x.size > L.warnBytes && x.size <= L.stopBytes);
+  return { ok: !ignored.length && !stop.length, files: list.length, stop, warn, ignored };
+}
+// 2026-11-26 개선안 20261126182424_SELF(R255): VMO Overall Review 카드에 지난 큰 그림 점검 결과(vision/<시각>.json)와 개념 재정립 문서(concept_*.md) 목록.
+//   orch-vision.js meta() 는 마지막 1건만 줌. 결과마다 날짜, 요약, 목적 판단 수(어긋남), 그 결과로 등록한 개선안 id. 열기는 orch:visionOpen(VISION_FILE_RE 경로만)
+const VISION_FILE_RE = /^\.vibe\/orch\/vision\/(\d{8}_\d{6}\.json|concept_[^/\\]+\.md|plan_[^/\\]+\.md)$/;
+function visionHistory(p, limit) {
+  const dir = path.join(p.vibeDir || path.join(p.root, '.vibe'), 'orch', 'vision'); let names = []; try { names = fs.readdirSync(dir); } catch { return { results: [], concepts: [] }; }
+  const rel = n => `.vibe/orch/vision/${n}`; const n = limit || 20;
+  const results = names.filter(x => /^\d{8}_\d{6}\.json$/.test(x)).sort().reverse().slice(0, n).map(x => { let j = {}; try { j = JSON.parse(fs.readFileSync(path.join(dir, x), 'utf8')); } catch { j = {}; } const pu = Array.isArray(j.purposes) ? j.purposes : []; return { file: rel(x), at: j.at || '', summary: String(j.summary || '').slice(0, 160), purposes: pu.length, miss: pu.filter(q => q && q.verdict === '어긋남').length, proposals: Array.isArray(j.proposals) ? j.proposals.slice(0, 20) : [] }; });
+  const concepts = names.filter(x => /^concept_.+\.md$/.test(x)).map(x => { let ms = 0; try { ms = fs.statSync(path.join(dir, x)).mtimeMs; } catch { ms = 0; } return { file: rel(x), name: x.replace(/^concept_/, '').replace(/\.md$/, ''), ms }; }).sort((a, b) => b.ms - a.ms).slice(0, n);
+  return { results, concepts };
+}
+// 2026-11-26 개선안 20261126165225_INC: Source Backup 2/3 commit 은 git 자동 정리(maintenance.auto, gc.auto)를 끄고 실행. 끝나며 정리가 돌아 3/3 push 시작이 늦어지던 것 막음
+const backupCommitArgs = msg => `-c core.safecrlf=false -c maintenance.auto=false -c gc.auto=0 commit -q -m "${String(msg).replace(/"/g, "'")}"`;
 // 2026-11-25 규칙 R57(사용자 지시 2026-11-11 21:07 Source Backup exit 128): VM 의 Git 작업(git-upload · git-merge)은 실행 전 이 함수를 부른다.
 //   인덱스를 쓰는 다른 git.exe 가 있으면 끝날 때까지 기다리고(3초 간격 · 30초마다 진행 출력 · 30분 넘으면 중단),
 //   없는데 남은 index.lock 이 있으면 강제 종료 잔재로 보고 index.lock.stale_<생성시각> 로 이름을 바꿔 보존한 뒤 진행한다.
@@ -419,6 +447,35 @@ const summ = inp => { try { const s = JSON.stringify(inp); return s.length > 160
 // 1.8.4: 도구 호출 한 줄 요약(사람이 읽는 형태) — Step 카드의 접힌 요약·도구 행 제목에 사용
 // 1.8.7: 로컬 파일·폴더를 OS 기본 프로그램으로 열기 — vscode.env.openExternal(Uri.file) 은 Windows 에서 한글 경로(Doc\화면설계서 등)를
 //   file: URI 로 넘기며 깨져 "지정된 파일을 찾을 수 없습니다 (0x2)" 가 난다 → Windows 는 cmd start 로, 그 외는 openExternal
+/** 2026-11-26 개선안 20261126192236_SELF(R256): VMO 단추 공용 응답. 누른 즉시 '접수', 에이전트가 다른 조치 중이면 '대기'와 대기 사유, 결과 ok:false·skipped·busy 와 예외를 같은 에이전트 탭 줄로 보낸다
+ *  work = 함수 또는 Promise · o.queue = 사건 대기열 순번 표시 · o.noWait = 대기 줄 안 씀(바로 끝나는 안내) · o.ag = 시험용 에이전트 모듈. 반환 = work 의 Promise 그대로(부른 쪽 then 은 종전대로) */
+function orchAck(wb, label, work, o) {
+  o = o || {}; let ag = o.ag || null; if (!ag) { try { ag = require('./orch-agent'); } catch { ag = null; } }
+  const st = () => { try { return ag && ag.status ? ag.status() : null; } catch { return null; } };
+  const note = text => {
+    try { if (ag && ag.say) ag.say('note', { text }); else wb.post({ type: 'agent', kind: 'note', at: '', text }); } catch (ex) { try { require('./orch-errlog').note('workbench', 'orchAck:note', ex); } catch { } }
+    try { const s = st(); if (s) wb.post({ type: 'agentStatus', status: s }); } catch { }
+  };
+  const fail = (why, ex) => { if (ex) { try { require('./orch-errlog').note('workbench', `orchAck:${label}`, ex); } catch { } } note(`실패: ${label} · ${why || '사유 없음'}`); };
+  const before = st(); note(`접수: ${label}`);
+  let pr; try { pr = Promise.resolve(typeof work === 'function' ? work() : work); } catch (ex) { pr = Promise.reject(ex); }
+  if (!o.noWait && before && (before.busy || before.current)) {
+    const after = st(); const why = `대기 사유 = 현재 조치 ${before.current || '다른 조치'}`;
+    if (o.queue) pr.then(v => { if (!(v && v.ok === false)) note(`대기: ${label} · 대기열 ${(after && after.queued) || 1}번째, ${why}`); }, () => { });
+    else note(`대기: ${label} · ${why}. 자리가 나면 이어서 진행`);
+  }
+  pr.then(v => {
+    if (v && v.ok === false) fail(v.why || v.error || v.skipped);
+    else if (v && v.busy) note(`대기: ${label} · 에이전트가 다른 조치 중이라 이번에는 진행하지 않음`);
+    else if (v && v.skipped) note(`건너뜀: ${label} · ${typeof v.skipped === 'string' ? v.skipped : (v.why || '사유 없음')}`);
+  }, ex => fail(ex && ex.message ? ex.message : String(ex), ex));
+  return pr;
+}
+/** 2026-11-26 컨설팅 보고서 열기 — markdown.showPreview 를 웹뷰 단추에서 바로 부르면 화면에 아무것도 뜨지 않았음(18:13 실화면). 편집기로 열고 그 문서를 미리보기로 바꾼다. 실패하면 편집기 그대로 둔다 */
+function openConsultReport(f) {
+  vscode.workspace.openTextDocument(vscode.Uri.file(f)).then(doc => vscode.window.showTextDocument(doc, { preview: true }).then(() => vscode.commands.executeCommand('markdown.showPreview').then(undefined, () => undefined)),
+    e => vscode.window.showErrorMessage(`Vibe_Manager VMO 컨설팅 보고서 열기 실패 ${f}: ${e && e.message ? e.message : e}`));
+}
 function openWithOS(p, wb, file) {
   try {
     const f = path.normalize(String(file || ''));
@@ -2442,49 +2499,8 @@ function newStep(title,idx,isTodo){
 function curStep(){const r=RUN;if(!r)return null;if(r.cur>=0&&r.steps[r.cur])return r.steps[r.cur];const st=newStep('',null,false);updateHead();return st;}
 // 2026-11-19 사용자: 답변·작업 결과 = Claude Code 처럼 정리된 형태로(제목·굵게·목록·표·코드). Markdown 을 화면 요소로 그린다.
 //   글 안의 HTML 은 모두 글자로 바꿔 그림(스크립트 실행 없음). 링크는 클릭하면 파일(줄 번호 #L)·URL 을 연다(mdlink)
-const MD_BT=String.fromCharCode(96);
-function mdEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function mdInline(s){
-  const parts=String(s).split(MD_BT);let out='';
-  for(let i=0;i<parts.length;i++){
-    if(i%2===1&&i<parts.length-1){out+='<code class="mdc">'+mdEsc(parts[i])+'</code>';continue;}
-    let t=mdEsc(i%2===1?MD_BT+parts[i]:parts[i]);
-    t=t.replace(/[*][*]([^*]+)[*][*]/g,'<b>$1</b>');
-    t=t.replace(/\\[([^\\]]+)\\]\\(([^)\\s]+)\\)/g,(m0,a,h)=>'<a class="mdl" href="#" data-href="'+h+'">'+a+'</a>');
-    out+=t;
-  }
-  return out;
-}
-function mdHtml(src){
-  const L=String(src||'').replace(/\\r/g,'').split('\\n');const fence=MD_BT+MD_BT+MD_BT;const stack=[];let h='';let i=0;
-  const close=lvl=>{while(stack.length>lvl)h+='</li></'+stack.pop()+'>';};
-  const isList=s=>/^( *)([-*+]|[0-9]+[.)]) +/.test(s);
-  while(i<L.length){
-    const ln=L[i];const tr=ln.trim();
-    if(tr.startsWith(fence)){close(0);const buf=[];i++;while(i<L.length&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}i++;h+='<pre class="mdpre"><code>'+mdEsc(buf.join('\\n'))+'</code></pre>';continue;}
-    if(!tr){if(!(stack.length&&i+1<L.length&&isList(L[i+1])))close(0);i++;continue;}
-    let m=/^(#{1,6}) +(.*)$/.exec(ln);
-    if(m){close(0);h+='<div class="mdh mdh'+Math.min(m[1].length,4)+'">'+mdInline(m[2])+'</div>';i++;continue;}
-    if(/^ *([-*_])( *[-*_]){2,} *$/.test(ln)&&!/[^-*_ ]/.test(ln)){close(0);h+='<hr class="mdhr">';i++;continue;}
-    if(tr.startsWith('|')&&i+1<L.length&&/^ *[|]?[ :|-]+[|]? *$/.test(L[i+1])&&L[i+1].includes('-')){
-      close(0);const row=s=>s.trim().replace(/^[|]/,'').replace(/[|]$/,'').split('|').map(c=>c.trim());
-      let t='<div class="mdtw"><table class="mdt"><thead><tr>'+row(ln).map(c=>'<th>'+mdInline(c)+'</th>').join('')+'</tr></thead><tbody>';i+=2;
-      while(i<L.length&&L[i].trim().startsWith('|')){t+='<tr>'+row(L[i]).map(c=>'<td>'+mdInline(c)+'</td>').join('')+'</tr>';i++;}
-      h+=t+'</tbody></table></div>';continue;}
-    m=/^( *)([-*+]|[0-9]+[.)]) +(.*)$/.exec(ln);
-    if(m){
-      const lvl=Math.floor(m[1].length/2)+1;const ty=/[0-9]/.test(m[2])?'ol':'ul';const stt=ty==='ol'?' start="'+parseInt(m[2],10)+'"':'';
-      if(stack.length<lvl){while(stack.length<lvl){h+='<'+ty+(stack.length===lvl-1?stt:'')+' class="mdlist">';stack.push(ty);}}
-      else{close(lvl);if(stack[lvl-1]!==ty){h+='</li></'+stack.pop()+'><'+ty+stt+' class="mdlist">';stack.push(ty);}else h+='</li>';}
-      h+='<li>'+mdInline(m[3]);i++;continue;}
-    if(/^> ?/.test(ln)){close(0);const buf=[];while(i<L.length&&/^> ?/.test(L[i])){buf.push(L[i].replace(/^> ?/,''));i++;}h+='<blockquote class="mdq">'+buf.map(mdInline).join('<br>')+'</blockquote>';continue;}
-    if(stack.length&&/^ {2,}/.test(ln)){h+='<br>'+mdInline(tr);i++;continue;}
-    close(0);const buf=[ln];i++;
-    while(i<L.length&&L[i].trim()&&!/^(#{1,6} |> ?)/.test(L[i])&&!isList(L[i])&&!L[i].trim().startsWith('|')&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}
-    h+='<p class="mdp">'+buf.map(mdInline).join('<br>')+'</p>';
-  }
-  close(0);return h;
-}
+//   2026-11-26 개선안 20261126164322_SELF: 변환 함수(mdEsc, mdInline, mdHtml), Ctrl+A 범위 함수 = webview-kit.js 공용 모듈
+${require('./webview-kit').script(['md','sel'])}
 function mdEl(cls,txt){const d=el('div',cls+' md');d.innerHTML=mdHtml(txt);return d;}
 document.addEventListener('click',e=>{const a=e.target&&e.target.closest?e.target.closest('a.mdl'):null;if(!a)return;e.preventDefault();vscode.postMessage({type:'mdlink',href:a.getAttribute('data-href')||''});});
 function addText(txt){
@@ -2825,23 +2841,15 @@ function openTabUI(m){
 //   2026-11-23 R4: Log 탭의 로그 창(#log, #felog, #belog = .logbody)도 같은 대상. SEL_L = 마지막으로 누른 로그 창, 그 창 글만 선택
 let SEL_T=null,SEL_L=null;
 function selVisible(T){return !!(T&&T.pane&&T.pane.style.display!=='none'&&T.pane.isConnected&&!T.editing);}
-function selLogVisible(L){return !!(L&&L.isConnected&&L.getClientRects().length>0);}
 document.addEventListener('pointerdown',e=>{const t=e.target;const p=t.closest&&t.closest('.dtab');SEL_T=p?Object.values(TABS).find(x=>x.pane===p)||null:null;
   SEL_L=(!p&&t.closest)?t.closest('.logbody'):null;},true);
-function selRange(c){const a=document.activeElement;if(a&&a!==document.body&&a.blur)a.blur();
-  const r=document.createRange();r.selectNodeContents(c);const s=window.getSelection();s.removeAllRanges();s.addRange(r);return s;}
-function selFile(){if(selLogVisible(SEL_L)){selRange(SEL_L);return true;}
+function selFile(){if(kitSelVisible(SEL_L)){kitSelRange(SEL_L);return true;}
   const T=SEL_T;if(!selVisible(T))return false;const c=T.pane.querySelector('.dtc');if(!c)return false;
-  const s=selRange(c);T.allLen=s.toString().length;return true;}
-document.addEventListener('keydown',e=>{
-  if(!(e.ctrlKey||e.metaKey)||e.shiftKey||e.altKey||String(e.key).toLowerCase()!=='a')return;
-  const a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
-  if(selFile())e.preventDefault();
-},true);
-// 2026-11-23 VS Code 웹뷰: Ctrl+A 는 페이지가 막아도 본체로 넘어가 본체가 document.execCommand('selectAll') 을 부른다
-//   (VS Code pre/index.html handleInnerKeydown → forwardKeyEvent, onMessage('execCommand')). 이때 본체가 마지막 입력칸으로 포커스를 되돌린 뒤 부르므로
-//   대상 판단은 포커스가 아니라 SEL_L(마지막으로 누른 로그 창), SEL_T(마지막으로 누른 곳이 파일 탭이거나 링크로 연 탭)로 한다. 그 밖의 명령(copy, paste 등)은 그대로 넘김
-(function(){if(typeof document.execCommand!=='function')return;const ex=document.execCommand.bind(document);document.execCommand=function(cmd,ui,val){if(String(cmd).toLowerCase()==='selectall'&&selFile())return true;return ex(cmd,ui,val);};})();
+  const s=kitSelRange(c);T.allLen=s.toString().length;return true;}
+// 2026-11-23 VS Code 웹뷰: Ctrl+A 는 페이지가 막아도 본체로 넘어가 본체가 전체 선택 명령을 부른다(VS Code pre/index.html handleInnerKeydown, forwardKeyEvent).
+//   본체가 마지막 입력칸으로 포커스를 되돌린 뒤 부르므로 대상 판단은 SEL_L(마지막으로 누른 로그 창), SEL_T(마지막으로 누른 파일 탭, 링크로 연 탭)로 함
+//   2026-11-26 개선안 20261126164322_SELF: 키 처리와 명령 가로채기 = webview-kit.js kitSelAll
+kitSelAll(selFile);
 document.addEventListener('copy',e=>{
   const T=Object.values(TABS).find(x=>selVisible(x));if(!T||!T.text)return; // 원문 복사 = 지금 선택이 본문 전체(Ctrl+A 때 길이)와 같을 때만
   const s=window.getSelection();const c=T.pane.querySelector('.dtc');if(!s||!s.rangeCount||!c||!T.allLen||s.toString().length!==T.allLen)return;
@@ -3119,7 +3127,7 @@ function open(api, opts) {
     setTimeout(() => { try { wb.post({ type: 'board', data: boardData() }); } catch { } }, 1000);
     // 사건 탭: 감시기(orch-watch.js)가 사건을 만들거나 바꿀 때마다 목록을 다시 보낸다
     const orchWatch = require('./orch-watch');
-    wb.postIncidents = fresh => { try { wb.post({ type: 'incidents', fresh: !!fresh, items: orchWatch.list(150).map(x => ({ notice: !!x.notice, id: x.id, at: x.at, lastAt: x.lastAt || '', ms: x.ms || 0, lastMs: x.lastMs || 0, rule: x.rule, ruleName: x.ruleName, title: x.title, screen: x.screen, count: x.count, status: x.status, detail: x.detail, snap: x.snap || '', reverted: !!x.reverted, actions: (x.actions || []).slice(-4) })) }); } catch { } };
+    wb.postIncidents = fresh => { try { wb.post({ type: 'incidents', fresh: !!fresh, items: orchWatch.list(150).map(x => ({ notice: !!x.notice, id: x.id, at: x.at, lastAt: x.lastAt || '', ms: x.ms || 0, lastMs: x.lastMs || 0, rule: x.rule, ruleName: x.ruleName, title: x.title, screen: x.screen, count: x.count, status: x.status, detail: x.detail, snap: x.snap || '', reverted: !!x.reverted, actions: (x.actions || []).slice(-4) })), needTop: (() => { try { return orchWatch.needUserTop ? orchWatch.needUserTop(5) : []; } catch { return []; } })() /* 2026-11-26 개선안 20261126164446_VISION: 요약 맨 위 사람 확인 줄 */ }); } catch { } };
     const unW = orchWatch.on((inc, isNew) => { wb.postIncidents(isNew && !inc.notice); if (isNew && inc.notice) wb.post({ type: 'chat', role: 'meta', text: `${inc.title}: ${String(inc.detail || '').split(String.fromCharCode(10)).slice(0, 4).join(', ')}` }); }); // 알림 사건 = 상황판 알림 칸에 1줄
     panel.onDidDispose(() => { try { unW(); } catch { } });
     // 에이전트 탭(P4): 조치 진행 출력과 상태
@@ -3132,7 +3140,8 @@ function open(api, opts) {
     wb.postProposals = () => { try { const scq = require('./orch-selfcheck'); const items = orchImprove.list().slice(0, 100).map(x => { let e = { ok: false }; try { e = scq.autoEligible(x); } catch { } const sk = (() => { try { return scq.status().autoSkip; } catch { return null; } })(); return Object.assign({}, x, { autoTarget: !!e.ok && /^(pending|apply-failed|approved|applying|superseded)$/.test(x.status) && !x.reason && !x.needsUser, needsApproval: e.ok ? '' : (x.needsApproval || e.why || ''), waitNote: x.waitNote || (e.ok && e.kind === 'code' && x.status === 'pending' && sk ? `자동 반영 대기: ${sk.skipped}${sk.nextAt ? `, 다시 가능 ${dfmt.fmtDT(sk.nextAt)}` : ''}` : '') }); }); const pend = items.filter(x => x.status === 'pending' && !x.autoTarget && !x.auto).length; wb.post({ type: 'proposals', items, meta: orchImprove.meta(), fresh: propSeen >= 0 && pend > propSeen }); propSeen = pend; } catch { } };
     const unP = orchImprove.on(() => wb.postProposals());
     // 2026-11-20 큰 그림 점검(Overall Review · orch-vision.js): Overview 패널에 마지막 점검, 다음 점검, 적용 여부
-    wb.postVision = () => { try { wb.post({ type: 'vision', meta: require('./orch-vision').meta() }); } catch (ex) { require('./orch-errlog').note('workbench', 'postVision', ex); } };
+    wb.postVision = () => { try { wb.post({ type: 'vision', meta: Object.assign({}, require('./orch-vision').meta(), { history: visionHistory(p) }) }); } catch (ex) { require('./orch-errlog').note('workbench', 'postVision', ex); } };
+    try { require('./orch-consult').setOnDone(() => wb.postVision()); } catch (ex) { require('./orch-errlog').note('workbench', 'consultOnDone', ex); } // 2026-11-26 자동(주기) 컨설팅이 끝나도 카드 갱신
     const unV = require('./orch-vision').on(() => wb.postVision());
     panel.onDidDispose(() => { try { unV(); } catch { } });
     panel.onDidDispose(() => { try { unP(); } catch { } });
@@ -3409,7 +3418,7 @@ function open(api, opts) {
           if (wb.postSelf) wb.postSelf(); if (wb.postHist) wb.postHist(); // 2026-11-19 자가진단 · 이력 탭 첫 자료
           break;
         }
-        case 'orch:incAgent': { const ok = require('./orch-agent').enqueue(m.id, true); if (!ok) wb.post({ type: 'agent', kind: 'note', at: '', text: `이미 대기열에 있거나 조치 중: ${m.id}` }); break; }
+        case 'orch:incAgent': { orchAck(wb, `사건 ${m.id} 에이전트 조치`, () => (require('./orch-agent').enqueue(m.id, true) ? { ok: true } : { ok: false, why: `이미 대기열에 있거나 조치 중: ${m.id}` }), { queue: true }); break; } // 개선안 20261126192236_SELF(R256): 접수, 대기 순번과 사유, 실패를 에이전트 탭에
         case 'orch:incRevert': {
           const a = await vscode.window.showWarningMessage(`사건 ${m.id} 에서 에이전트가 고친 파일을 조치 전으로 되돌립니다.`, { modal: true }, '되돌리기');
           if (a === '되돌리기') { const r = require('./orch-agent').revert(m.id); vscode.window.showInformationMessage(r.ok ? `Vibe_Manager 되돌리기 완료: ${r.done.length}개 파일` : `Vibe_Manager 되돌리기 ${r.why || `일부 실패 ${r.fail.length}개`}`); }
@@ -3436,9 +3445,20 @@ function open(api, opts) {
         }
         case 'orch:propOpen': api.openPath(path.join(p.vibeDir, 'orch', 'proposals', `${m.id}.json`)); break;
         case 'orch:propReview': require('./orch-improve').review(true); break;
-        case 'orch:ladder': { const l = require('./orch-ladder'); if (!l.ready()) l.init({ paths: () => api.paths() }); l.tick({ manual: true }).then(r => { vscode.window.showInformationMessage(`Vibe_Manager VMO 진단 사다리: 후보 ${r.cands}건 · 진단 ${r.ran.length}건${r.ran.length ? ` (${r.ran.map(x => `${x.level} ${x.ok ? '완료' : '실패'}`).join(', ')})` : ''}`); if (wb.postVision) wb.postVision(); if (wb.postProposals) wb.postProposals(); }, ex => require('./orch-errlog').note('workbench', 'ladder', ex)); break; } // 2026-11-20
-        case 'orch:vision': require('./orch-vision').run(true).then(r => { if (r && r.skipped) vscode.window.showInformationMessage(`Vibe_Manager Overall Review(큰 그림 점검): ${r.skipped}`); if (wb.postVision) wb.postVision(); }, ex => require('./orch-errlog').note('workbench', 'orch:vision', ex)); if (wb.postVision) setTimeout(wb.postVision, 300); break;
-        case 'orch:consult': require('./orch-consult').run(true).then(r => { vscode.window.showInformationMessage(`Vibe_Manager VMO 컨설팅 검토: ${r && r.skipped ? r.skipped : r && r.ok ? `개선안 ${r.added || 0}건 등록 · 중복 ${r.dups || 0}건 · 보고 .vibe/orch/consult/last.md` : (r && r.why) || '실패'}`); }, ex => require('./orch-errlog').note('workbench', 'orch:consult', ex)); break; // 2026-11-26 사용자 지시('VMO 컨설팅 기능 기동'): 지금 컨설팅 검토 1회
+        case 'orch:ladder': { const l = require('./orch-ladder'); if (!l.ready()) l.init({ paths: () => api.paths() }); orchAck(wb, '진단 사다리', () => l.tick({ manual: true })).then(r => { vscode.window.showInformationMessage(`Vibe_Manager VMO 진단 사다리: 후보 ${r.cands}건 · 진단 ${r.ran.length}건${r.ran.length ? ` (${r.ran.map(x => `${x.level} ${x.ok ? '완료' : '실패'}`).join(', ')})` : ''}`); if (wb.postVision) wb.postVision(); if (wb.postProposals) wb.postProposals(); }, () => { }); break; } // 2026-11-20
+        case 'orch:vision': orchAck(wb, 'Overall Review(큰 그림 점검)', () => require('./orch-vision').run(true)).then(r => { if (r && r.skipped) vscode.window.showInformationMessage(`Vibe_Manager Overall Review(큰 그림 점검): ${r.skipped}`); if (wb.postVision) wb.postVision(); }, () => { if (wb.postVision) wb.postVision(); }); if (wb.postVision) setTimeout(wb.postVision, 300); break;
+        case 'orch:consult': { // 2026-11-26 사용자 지적('VMO 에서 컨설팅의 결과를 어떻게 봐야 할지'): 주제 입력(비우면 VM 전체 진단) · 시작과 끝에 Overall Review 카드 갱신 · 끝나면 보고서 열기 단추가 있는 알림
+          const cs = require('./orch-consult'); if (cs.meta().running) { orchAck(wb, '컨설팅', { skipped: '이미 검토 중. Overall Review 카드에서 진행 확인' }, { noWait: true }); vscode.window.showInformationMessage('Vibe_Manager VMO 컨설팅: 이미 검토 중입니다. Overall Review 카드에서 진행을 볼 수 있습니다'); if (wb.postVision) wb.postVision(); break; }
+          vscode.window.showInputBox({ title: 'VMO 컨설팅 주제', prompt: '컨설팅할 주제를 적습니다. 비우면 VM 전체를 진단합니다(예: VMO 화면 UI 디자인 안 3개)', ignoreFocusOut: true }).then(topic => {
+            if (topic === undefined) return; // 취소
+            const pr = orchAck(wb, `컨설팅${topic ? ` · 주제 ${topic}` : ' · VM 전체 진단'}`, () => cs.run(true, topic)); setTimeout(() => { if (wb.postVision) wb.postVision(); }, 300); vscode.window.showInformationMessage(`Vibe_Manager VMO 컨설팅 시작${topic ? ` · 주제 ${topic}` : ' · VM 전체 진단'}. 에이전트가 다른 일 중이면 자리가 날 때까지 기다립니다. 진행은 상황판 Overall Review 카드 컨설팅 줄에서 봅니다`);
+            pr.then(r => { if (wb.postVision) wb.postVision(); const msg = `Vibe_Manager VMO 컨설팅 검토: ${r && r.skipped ? r.skipped : r && r.ok ? `개선안 ${r.added || 0}건 등록, 중복 ${r.dups || 0}건, 보고 ${r.file}` : (r && r.why) || '실패'}`;
+              if (r && r.ok && r.file) vscode.window.showInformationMessage(msg, '보고서 열기').then(b => { if (b) openConsultReport(path.join(p.root, r.file)); }); else vscode.window.showInformationMessage(msg); },
+              () => { if (wb.postVision) wb.postVision(); }); // 예외는 orchAck 가 errlog 와 에이전트 탭 줄로 남김
+          });
+          break; }
+        case 'orch:visionOpen': { const f = String(m.file || ''); if (VISION_FILE_RE.test(f) && fs.existsSync(path.join(p.root, f))) api.openPath(path.join(p.root, f)); else vscode.window.showInformationMessage('Vibe_Manager VMO 큰 그림 점검: 파일이 없습니다'); break; } // 2026-11-26 개선안 20261126182424_SELF(R255): 지난 결과, 개념 문서 열기(경로 범위 제한)
+        case 'orch:consultOpen': { const f = (m.file && /^\.vibe\/orch\/consult\/\d{8}_\d{6}\.md$/.test(String(m.file))) ? String(m.file) : (require('./orch-consult').meta() || {}).file; /* m.file = 지난 보고서(목록에서 고름) */ if (f && fs.existsSync(path.join(p.root, f))) openConsultReport(path.join(p.root, f)); else vscode.window.showInformationMessage('Vibe_Manager VMO 컨설팅: 보고서가 아직 없습니다'); break; }
         case 'orch:dict': try { wb.post({ type: 'dict', groups: require('./orch-dict').build(api.paths) }); } catch (ex) { require('./orch-errlog').note('workbench', 'orch:dict', ex); } break; // 2026-11-20 Dictionary 탭
         case 'orch:logOn': { const k = m.stream === 'fe' ? 'fe' : 'be'; wb.logOn = Object.assign({}, wb.logOn, { [k]: !!m.on }); try { if (api.ctx.globalState) api.ctx.globalState.update('vibeManager.orch.logOn', wb.logOn); } catch { } try { serverSvc.setLogOn(k, !!m.on); } catch (ex) { require('./orch-errlog').note('workbench', 'orch:logOn', ex); }
           wb.post({ type: 'logOn', on: wb.logOn });
@@ -3447,20 +3467,20 @@ function open(api, opts) {
         case 'orch:uiStat': require('./orch-usercheck').noteUi(m); break; // 2026-11-20 사용자 지적 U8: VMO 화면이 받은 목록의 최신 활동 시각 보고 → 원본과 어긋나면 S13 실패
         // 2026-11-19 자가진단 · 이력 탭
         case 'orch:timeline': wb.tlMin = Math.max(10, Math.min(1440, Number(m.min) || 60)); try { const d = orchState.snapshot(); wb.post({ type: 'board', data: Object.assign(d, { timeline: orchState.timeline(wb.tlMin) }) }); } catch (ex) { require('./orch-errlog').note('workbench', 'orch:timeline', ex); } break;
-        case 'orch:selfRun': require('./orch-selfcheck').run('all', '지금 점검 버튼').then(() => wb.postSelf && wb.postSelf(), ex => require('./orch-errlog').note('workbench', 'selfRun', ex)); if (wb.postSelf) wb.postSelf(); break;
-        case 'orch:selfDiag': require('./orch-selfcheck').diagnose(true).then(r => { if (wb.postSelf) wb.postSelf(); if (wb.postProposals) wb.postProposals(); vscode.window.showInformationMessage(`Vibe_Manager 자가진단: ${r && r.ok ? `개선안 ${r.added}건 등록` : r && r.busy ? '에이전트가 다른 일 처리 중' : r && r.skipped ? '어긋난 항목 0건이라 진단 생략' : '진단 실패(에이전트 탭 확인)'}`); }, ex => require('./orch-errlog').note('workbench', 'selfDiag', ex)); break;
+        case 'orch:selfRun': orchAck(wb, '자가진단 지금 점검', () => require('./orch-selfcheck').run('all', '지금 점검 버튼'), { noWait: true }).then(() => wb.postSelf && wb.postSelf(), () => { }); if (wb.postSelf) wb.postSelf(); break;
+        case 'orch:selfDiag': orchAck(wb, '자가진단 진단', () => require('./orch-selfcheck').diagnose(true)).then(r => { if (wb.postSelf) wb.postSelf(); if (wb.postProposals) wb.postProposals(); vscode.window.showInformationMessage(`Vibe_Manager 자가진단: ${r && r.ok ? `개선안 ${r.added}건 등록` : r && r.busy ? '에이전트가 다른 일 처리 중' : r && r.skipped ? '어긋난 항목 0건이라 진단 생략' : '진단 실패(에이전트 탭 확인)'}`); }, () => { if (wb.postSelf) wb.postSelf(); }); break;
         case 'orch:selfSync': { const r = require('./orch-selfcheck').syncInstalled('사용자', null); vscode.window.showInformationMessage(r.ok === false && r.why ? `Vibe_Manager 설치 폴더 동기화 안 함: ${r.why}` : `Vibe_Manager 설치 폴더 동기화: ${r.copied.length}개 복사${r.fail.length ? `, 실패 ${r.fail.length}개` : ''}. 적용은 VS Code 창 다시 로드 뒤`); require('./orch-selfcheck').run(['S3'], '설치 폴더 동기화 뒤').then(() => wb.postSelf && wb.postSelf(), () => { }); break; }
         case 'orch:selfMark': require('./orch-selfcheck').markUnverified(String(m.key || ''), /^(confirmed|dropped|open)$/.test(m.status) ? m.status : 'open', '사용자', ''); require('./orch-selfcheck').run(['S6'], '미확인 처리').then(() => wb.postSelf && wb.postSelf(), () => { }); break;
         case 'orch:selfMarkLoaded': { const n = require('./orch-selfcheck').markLoadedAll('사용자'); vscode.window.showInformationMessage(`Vibe_Manager 미확인 항목 ${n}건을 확인함으로 바꿈(창 로드 기록 있는 항목)`); require('./orch-selfcheck').run(['S6'], '미확인 일괄 확인').then(() => wb.postSelf && wb.postSelf(), () => { }); break; }
         case 'orch:ruleRelease': { const lg = require('./orch-ledger'); if (!lg.ready()) lg.init({ paths: () => api.paths() }); const okR = lg.release(String(m.rule || ''), '사용자'); vscode.window.showInformationMessage(okR ? `Vibe_Manager VMO: ${m.rule} 관찰 모드 해제. 다시 개입합니다` : `Vibe_Manager VMO: ${m.rule} 은 관찰 모드가 아닙니다`); require('./orch-selfcheck').run(['S14'], '관찰 모드 해제').then(() => wb.postSelf && wb.postSelf(), ex => require('./orch-errlog').note('workbench', 'ruleRelease', ex)); break; } // 2026-11-20
         case 'orch:selfOpen': api.openPath(path.join(p.vibeDir, 'orch', 'selfcheck', 'result.json')); break;
-        case 'orch:histCollect': require('./orch-history').collect().then(() => { if (wb.postHist) wb.postHist({ done: true }); }, ex => require('./orch-errlog').note('workbench', 'histCollect', ex)); if (wb.postHist) wb.postHist(); break;
+        case 'orch:histCollect': orchAck(wb, '작업 이력 수집', () => require('./orch-history').collect(), { noWait: true }).then(() => { if (wb.postHist) wb.postHist({ done: true }); }, () => { if (wb.postHist) wb.postHist({ done: true }); }); if (wb.postHist) wb.postHist(); break;
         case 'orch:histAuto': { const r = require('./orch-history').setAuto(!!m.on); if (!r.ok) vscode.window.showWarningMessage(`Vibe_Manager 이력 자동 수집 설정 실패: ${r.why}`); if (wb.postHist) wb.postHist(); break; } // 2026-11-20 이력 탭 자동 수집 체크
         case 'orch:histList': { const r = require('./orch-history').list(m.filter || {}); wb.post({ type: 'histList', total: r.total, items: r.items.map(e => ({ id: e.id, date: e.date, time: e.timeRaw || e.time || '', kind: e.kind, area: e.area, title: e.title, screens: e.screens || [], files: (e.files || []).length, unverified: (e.unverified || []).length })) }); break; }
         case 'orch:histGet': wb.post({ type: 'histItem', item: require('./orch-history').get(String(m.id || '')) }); break;
         case 'orch:histOpenMd': api.openPath(path.join(p.root, 'tools', 'VibeManager', 'WORKLOG.md')); break;
         case 'orch:histSummary': wb.post({ type: 'histSummary', summary: require('./orch-history').summary(String(m.week || '')) }); break;
-        case 'orch:histSummarize': require('./orch-history').summarize(String(m.week || ''), true).then(r => { wb.post({ type: 'histSummary', summary: r.summary || null, text: r.busy ? '에이전트가 다른 일 처리 중이라 정리하지 못함' : r.empty ? '그 주 항목 0건' : r.error ? `정리 실패: ${r.error}` : '' }); if (wb.postHist) wb.postHist(); }, ex => { require('./orch-errlog').note('workbench', 'histSummarize', ex); wb.post({ type: 'histSummary', summary: null, text: `정리 실패: ${ex.message}` }); }); break;
+        case 'orch:histSummarize': orchAck(wb, `작업 이력 주간 정리 ${String(m.week || '')}`.trim(), () => require('./orch-history').summarize(String(m.week || ''), true)).then(r => { wb.post({ type: 'histSummary', summary: r.summary || null, text: r.busy ? '에이전트가 다른 일 처리 중이라 정리하지 못함' : r.empty ? '그 주 항목 0건' : r.error ? `정리 실패: ${r.error}` : '' }); if (wb.postHist) wb.postHist(); }, ex => { wb.post({ type: 'histSummary', summary: null, text: `정리 실패: ${ex && ex.message}` }); }); break; // errlog 는 orchAck 가 남김
         case 'orch:agentAsk': require('./orch-agent').ask(String(m.text || '')); break;
         case 'orch:agentStop': require('./orch-agent').stop(); break;
         // 2026-11-19 에이전트 프롬프트 대기열(Workbench 프롬프트 창과 같은 동작) · VMO 켜고 끄기
@@ -3481,6 +3501,7 @@ function open(api, opts) {
           const jr = require('./job-runner'); if (m.screen) { const r = jr.stopScreen(String(m.screen).toUpperCase(), '사용자', 'VMO 창에서 중지'); if (!r || !r.job) vscode.window.showWarningMessage(`Vibe_Manager: ${m.screen} 를 돌리는 VMW 작업이 없습니다`); } else if (m.job && /^J\d{8}_\d{6}/.test(String(m.job))) jr.stop(String(m.job)); break; }
         case 'orch:openWb': { openForScreen(api, m.screen, Number(m.wb)); break; } // 2026-11-20 상황판 ↗ = 같은 화면 창이면 그 창 Console, 없으면 새 창
         case 'orch:incOpen': { const x = require('./orch-watch').get(m.id); if (x) api.openPath(path.join(p.vibeDir, 'orch', 'incidents', `${m.id}.json`)); break; }
+        case 'orch:needShown': { try { require('./orch-watch').markShown(Array.isArray(m.ids) ? m.ids : []); } catch (e) { require('./orch-errlog').note('workbench', 'orch:needShown', e); } break; } // 2026-11-26 개선안 20261126164446_VISION: 사람 확인 줄이 보인 시각
         case 'orch:incCloseMany': { const ow = require('./orch-watch'); for (const id of (Array.isArray(m.ids) ? m.ids : []).slice(0, 500)) { const x = ow.get(String(id)); if (x && (x.status === 'open' || x.status === 'need-user')) ow.update(x.id, { status: 'closed' }, { by: '사용자', what: '닫음(일괄)' }); } break; } // 2026-11-20 사건 일괄 닫기(조치 중, 해결, 닫은 사건은 건드리지 않음)
         case 'orch:incStatus': { require('./orch-watch').update(m.id, { status: m.status }, { by: '사용자', what: m.status === 'closed' ? '닫음' : m.status }); break; }
         case 'orch:quick': { // VMO 창 기능 버튼 — 라벨로 quick.json 항목을 찾아 실행
@@ -3822,12 +3843,22 @@ function open(api, opts) {
             wb.out('task', `✅ 1/3 add 완료: 묶음 ${groups.length - skippedGroups.length}/${groups.length}개 (${sec()}s)\n`, 'ok');
             const staged = cp.spawnSync('git', ['diff', '--cached', '--quiet'], { cwd, windowsHide: true }).status; // 0 = 바뀐 것 없음 · 1 = 있음
             if (staged === 1) {
-              const c2 = await run('2/3 commit', `-c core.safecrlf=false commit -q -m "${msg.replace(/"/g, "'")}"`);
+              const c2 = await run('2/3 commit', backupCommitArgs(msg)); // 2026-11-26 20261126165225_INC: 자동 정리 끔
               if (c2 !== 0) { wb.out('task', `✖ ${item.label} 실패 — 2/3 commit exit ${c2} (${sec()}s)\n`, 'bad'); api.record('quick', `${item.label} commit exit ${c2}`); break; }
             } else wb.out('task', `ℹ 2/3 commit 생략. 바뀐 파일 없음\n`, '');
             // 2026-11-23(20261123113703_INC): push 가 HTTP 500·sideband 끊김으로 실패하면 30초 뒤 1회 재시도 · 다시 실패하면 미push 커밋 파일 수와 대용량 경로 출력
             let pushErr = false; const PUSH_RETRY_RE = /HTTP 500|\b500\b.*(Internal|error)|sideband|unexpected disconnect|remote end hung up|early EOF|RPC failed/i;
             const pushOnce = sub => wb.spawnStream(p, 'cmd', ['/c', `git ${cred}push ${item.remote} ${item.branch}`], { spawn: { cwd }, env, onLine: ln => { if (PUSH_RETRY_RE.test(ln)) pushErr = true; } }, 'task', `${item.label} ${sub}`);
+            { // 2026-11-26 개선안 20261126164857_INC(후 2): push 전 .gitignore 제외 경로, 100MB 넘는 파일 = 멈춤 · 50MB 넘는 파일 = 경고
+              const pc = prePushCheck(cwd, `${item.remote}/${item.branch}`); const mb = n => `${(n / 1048576).toFixed(1)}MB`;
+              if (pc.skipped) wb.out('task', `ℹ push 전 검사 건너뜀: ${pc.skipped}\n`, '');
+              if (pc.warn.length) wb.out('task', `⚠ push 전 검사: 50MB 넘는 파일 ${pc.warn.length}개(GitHub 경고 대상, push 는 진행)\n${pc.warn.slice(0, 20).map(x => `   - ${x.f} ${mb(x.size)}`).join('\n')}\n`, 'warn');
+              if (!pc.ok) {
+                const lines = [...pc.ignored.map(x => `   - [.gitignore 제외 경로] ${x.f} ${mb(x.size)}`), ...pc.stop.map(x => `   - [100MB 초과] ${x.f} ${mb(x.size)}`)];
+                wb.out('task', `✖ ${item.label} push 멈춤: 미push 커밋(${item.remote}/${item.branch}..HEAD)에 .gitignore 제외 경로 ${pc.ignored.length}개, 100MB 넘는 파일 ${pc.stop.length}개\n${lines.slice(0, 40).join('\n')}${lines.length > 40 ? `\n   … 외 ${lines.length - 40}개` : ''}\n   커밋에서 빼려면 git rm --cached 와 커밋 정리가 필요함(사용자 확인 뒤)\n`, 'bad');
+                api.record('quick', `${item.label} push blocked ignored ${pc.ignored.length} big ${pc.stop.length}`); break;
+              }
+            }
             let c3 = await pushOnce('3/3 push');
             if (c3 !== 0 && pushErr) {
               wb.out('task', `⚠ 3/3 push exit ${c3}: HTTP 500·sideband 끊김. 30초 뒤 1회 다시 시도\n`, 'warn'); api.record('quick', `${item.label} push retry`);
@@ -3844,6 +3875,7 @@ function open(api, opts) {
             if (c3 !== 0) { wb.out('task', `✖ ${item.label} 실패: 3/3 push exit ${c3} (${sec()}s). 커밋은 로컬에 남아 있습니다(다시 실행하면 push 부터)\n`, 'bad'); api.record('quick', `${item.label} push exit ${c3}`); break; }
             const head = cp.spawnSync('git', ['log', '-1', '--format=%h %s'], { cwd, encoding: 'utf8', windowsHide: true }).stdout.trim();
             wb.out('task', `✅ ${item.label} 완료 — ${head} → ${item.remote}/${item.branch} (${sec()}s)\n`, 'ok');
+            wb.out('task', `ℹ git 저장소 정리(git maintenance run)는 백업 밖에서 실행. 백업 commit 은 자동 정리를 끄고 함\n`, ''); // 2026-11-26 20261126165225_INC
             vscode.window.showInformationMessage(`Vibe_Manager ✅ ${item.label} 완료 — ${head}`);
           }
           else if (item.kind === 'git-common-sync' || item.kind === 'git-common-sync-be') {
@@ -3993,4 +4025,6 @@ module.exports.abortCounts = abortCounts;
 module.exports._reapOrphans = reapOrphans; module.exports.planPending = planPending; module.exports.resumable = resumable; module.exports.resumePlan = resumePlan; module.exports._resumePrompt = resumePrompt; module.exports.chainSig = chainSig; module.exports._progDel = progDel; module.exports.ledgerView = ledgerView; module.exports._progWrite = progWrite; // 2026-11-20 작업 재개 · 개선안 20261125000907_VISION 재개 원장 조회·쓰기 // 개선안 20261120005942_INC: extension.deactivate 가 부른다
 module.exports._liveChains = liveChains; // 시험용(test/t_chain_abort.js)
 module.exports._stopMarkOf = stopMarkOf; // 시험용(test/t_wb_stopmark.js · 개선안 20261120042556_INC)
+module.exports._visionHistory = visionHistory; module.exports._VISION_FILE_RE = VISION_FILE_RE; module.exports._prePushCheck = prePushCheck; module.exports._backupCommitArgs = backupCommitArgs; // 시험용(test/t_backup_push.js)
+module.exports._orchAck = orchAck; // 시험용(test/t_wb_resultdone.js · 개선안 20261126192236_SELF)
 module.exports._html = html; // 시험용(test/t_webview_syntax.js 웹뷰 스크립트 구문 검사) · 동작 변경 없음

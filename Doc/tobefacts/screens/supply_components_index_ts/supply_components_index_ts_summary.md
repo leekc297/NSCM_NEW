@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/components/index.ts | other | 10 |
+| features/supply/src/components/index.ts | other | 11 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 (없음)

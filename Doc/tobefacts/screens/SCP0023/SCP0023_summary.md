@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | component | 168 |
-| features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | component | 109 |
+| features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | component | 124 |
 | features/supply/src/pages/outsourcing-capacity/hooks/useOutsourcingCapacityValidation.ts | hook | 70 |
 | features/supply/src/pages/outsourcing-capacity/index.ts | index | 2 |
 | features/supply/src/pages/outsourcing-capacity/outsourcing-capacity.constants.ts | constants | 71 |
@@ -41,10 +41,10 @@
 | CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 121 |
 | InputField | onChange | <arrow> set | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 158 |
 | Button | onClick | onItemSearch | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx | 153 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 56 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 83 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 84 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 105 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 61 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 98 |
+| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 99 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx | 120 |
 | OutsourcingCapacityForm | onSearch | handleSearch | jsx | features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx | 128 |
 | OutsourcingCapacityForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx | 128 |
 | OutsourcingCapacityGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx | 148 |
@@ -88,7 +88,7 @@
 | MSG01268 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0023(10), SCP0025(2), SCP0020(1)
+- 화면ID: SCP0023(10), SCP0025(2), SCP0020(1), SCM0002(1)
 - SP/PKG: SCP0023_GET_OUTSOURCING_CAPA(2), PKG_SCP0023(2), SCP0023_SAVE_OUTSOURCING_CAPA(1), SCM0001_GET_PLANT_SITE_BY_DIVISION_OSP(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

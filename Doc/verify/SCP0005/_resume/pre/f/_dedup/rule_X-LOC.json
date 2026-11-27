@@ -1,0 +1,220 @@
+{
+ "rule_id": "X-LOC",
+ "hash": "f79b03046abff2c2",
+ "groups": [
+  {
+   "rows": [
+    "T-16121ad6"
+   ],
+   "why": "R13 LT 합산·999 차단 대조표 행의 구현 위치(sumLeadTime)를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-1dfe9b4c"
+   ],
+   "why": "InsertButton 대조표 행의 구현 위치(hotkeyConfig.insert)를 확인하는 단독 행이다. R18 행과는 대조표 행과 구현 위치가 달라 묶지 않았다."
+  },
+  {
+   "rows": [
+    "T-247afe28"
+   ],
+   "why": "From Country→City cascade 폐기 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-2fd77d1c"
+   ],
+   "why": "COMMON:UC-04 Toast 알림 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-37263395"
+   ],
+   "why": "SaveButton 대조표 행의 구현 위치(handleSave)를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-3a40f436"
+   ],
+   "why": "COMMON:UC-01 필터 유지 Insert 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-5a638fa4"
+   ],
+   "why": "From 조회조건과 RegionModal(search-from) 대조표 행을 확인하는 단독 행이다. To 조건과는 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-5c6d1f8f"
+   ],
+   "why": "R6 신규행 VALID_YN 기본값 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-5d40b232"
+   ],
+   "why": "메타 필수 검증(useSaveWithValidation) 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-605227b1"
+   ],
+   "why": "cboValidYN 조회조건 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-62dffb38"
+   ],
+   "why": "DAYS 최소 1 검증 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-64e1d168"
+   ],
+   "why": "FROM/TO City Name 비공백 검증 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-7060577e"
+   ],
+   "why": "Excel Upload 버튼 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-75c91a01"
+   ],
+   "why": "To 조회조건과 RegionModal(search-to) 대조표 행을 확인하는 단독 행이다. From 조건과는 대상 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-7abbb23d"
+   ],
+   "why": "clbTransMode 다중선택 조회조건 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-92ee52b2"
+   ],
+   "why": "R16/R17 클라이언트 검증 색칠 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-955fdd70"
+   ],
+   "why": "R14/R15 저장응답 색칠 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-99c45334"
+   ],
+   "why": "DB 메타 컬럼 구동 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-9bdb4d6a"
+   ],
+   "why": "ProgressForm 대체(isFetching) 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-9d26fe5f"
+   ],
+   "why": "R8 ROUTE_ID 일반 잠금 셀 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-b9ce63e0"
+   ],
+   "why": "R1 숫자셀 범위 clamp 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-bdf66ae4"
+   ],
+   "why": "PRIORITY>=1 검증 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-bfdf39a8"
+   ],
+   "why": "COMMON:UC-07 재조회 시 필터 유지 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-c23eee55"
+   ],
+   "why": "EditButton 상시편집 대체 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-c3684ebc"
+   ],
+   "why": "R9 TRK/AIR→DAYS 'Y' 대조표 행의 구현 위치(daysAllYes)를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-c6d5696c"
+   ],
+   "why": "DeleteButton 대조표 행의 구현 위치(handleDelete)를 확인하는 단독 행이다. R18 행과는 대조표 행이 달라 묶지 않았다."
+  },
+  {
+   "rows": [
+    "T-cdd05171"
+   ],
+   "why": "R10 TRK→항/Forwarder '-' 대조표 행의 구현 위치(portsDash)를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-ce562687"
+   ],
+   "why": "R7 조회 databind 대조표 행의 구현 위치(useTabProcQuery)를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-d01b1a60"
+   ],
+   "why": "조회 파라미터 'ALL'→'' 변환 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-db7cf59a"
+   ],
+   "why": "R18 Insert/Delete 대조표 행의 구현 위치(GridAction)를 확인하는 단독 행이다. 버튼 행들과는 대조표 행과 위치가 다르다."
+  },
+  {
+   "rows": [
+    "T-db8c53fa"
+   ],
+   "why": "COMMON:UC-05 Excel Download Name 출력 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-de2920f5"
+   ],
+   "why": "R11/R12 셀 더블클릭 도시팝업 대조표 행의 구현 위치를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-dffb828e"
+   ],
+   "why": "btnExcel_Form 미노출 대조표 행을 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-ee190bcb"
+   ],
+   "why": "R3/R4/R5 편집잠금 대조표 행의 구현 위치(ALWAYS_LOCKED)를 확인하는 단독 행이다."
+  },
+  {
+   "rows": [
+    "T-f5f11041"
+   ],
+   "why": "FindButton 대조표 행의 구현 위치(handleSearch)를 확인하는 단독 행이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-20 07:45:52",
+ "cost": 0.14644
+}

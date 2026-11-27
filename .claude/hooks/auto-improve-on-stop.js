@@ -1,0 +1,44 @@
+// 2026-11-26 사용자 지시 "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요" (Stop hook, .claude/settings.local.json)
+//   Claude Code 데스크톱 세션의 턴이 끝날 때 VMO 개선안 중 맡은 세션이 없는 대기 안이 있으면 끝내지 않고 이어서 진행하게 함(decision block).
+//   대상: CLAUDE_CODE_ENTRYPOINT = claude-desktop 이고 VM 이 띄운 실행(VIBE_HARNESS, VIBE_ORCH)이 아닌 세션만. VMO 에이전트, 체인 안 Claude 는 대상 아님.
+//   끄기: tools/Harness/harness.json orch.autoImproveOnStop = false. 세션마다 이어가기 상한 orch.autoImproveMaxPerSession(기본 20).
+//   같은 후보 목록으로 연속 2번 이어가기를 시켰는데 바뀐 것이 없으면(세션이 맡지 않기로 함) 멈춤을 허용함(무한 반복 방지).
+//   후보 = .vibe/orch/proposals/<id>.json 중 status pending, 사람 판단 보류(userHold) 아님, 맡음(claimedBy + autoWaitMs 지금 뒤) 아님.
+//   2026-11-26 18:4x 사용자 결정 '개선 세션만으로 좁힘': 세션 기록(transcript_path)에 tools/VibeManager/claim_proposal.js claim, done, hold, release 실행 또는 지시가 있는 세션만 대상.
+//   일반 작업 세션은 그대로 종료. 예전처럼 데스크톱 세션 전부 = harness.json orch.autoImproveScope 'all'. 기록은 끝 32MB 만 읽음
+'use strict';
+const fs = require('fs'); const path = require('path');
+const root = process.env.AUTO_IMPROVE_ROOT ? path.resolve(process.env.AUTO_IMPROVE_ROOT) : path.resolve(__dirname, '..', '..'); // AUTO_IMPROVE_ROOT = 시험용 임시 저장소
+const out = o => { process.stdout.write(JSON.stringify(o)); process.exit(0); };
+let input = {}; try { input = JSON.parse(fs.readFileSync(0, 'utf8') || '{}'); } catch { input = {}; }
+const env = process.env;
+if (env.CLAUDE_CODE_ENTRYPOINT !== 'claude-desktop' || env.VIBE_HARNESS === '1' || env.VIBE_ORCH === '1' || env.AUTO_IMPROVE_ON_STOP === '0') process.exit(0);
+let orch = {}; try { orch = (JSON.parse(fs.readFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')).orch) || {}; } catch { orch = {}; }
+if (orch.autoImproveOnStop === false) process.exit(0);
+const improveSession = tp => { let txt = ''; try { const s = fs.statSync(tp); const len = Math.min(s.size, 32 * 1024 * 1024); const fd = fs.openSync(tp, 'r'); const b = Buffer.alloc(len); fs.readSync(fd, b, 0, len, s.size - len); fs.closeSync(fd); txt = b.toString('utf8'); } catch { return false; } return /claim_proposal\.js["']?\s+(?:--root\s+\S+\s+)?(?:claim|done|hold|release)\b/.test(txt); };
+if (orch.autoImproveScope !== 'all' && !improveSession(String(input.transcript_path || ''))) process.exit(0);
+const maxN = Number(orch.autoImproveMaxPerSession) > 0 ? Number(orch.autoImproveMaxPerSession) : 20;
+const pdir = path.join(root, '.vibe', 'orch', 'proposals'); const now = Date.now();
+let cand = [];
+try {
+  for (const f of fs.readdirSync(pdir)) {
+    if (!/^\d{14}_[A-Z]+(_\d+)?\.json$/.test(f)) continue;
+    let p; try { p = JSON.parse(fs.readFileSync(path.join(pdir, f), 'utf8')); } catch { continue; }
+    if (!p || p.status !== 'pending' || p.userHold || p.approvedWait) continue; // approvedWait = 사람 승인 뒤 VMO 가 반영 대기(orch-improve.js pumpApprovals)
+    if (p.claimedBy && Number(p.autoWaitMs || 0) > now) continue;
+    cand.push(p);
+  }
+} catch { process.exit(0); }
+if (!cand.length) process.exit(0);
+cand.sort((a, b) => (b.ms || 0) - (a.ms || 0));
+const sid = String(input.session_id || env.CLAUDE_CODE_SESSION_ID || 'nosession').replace(/[^\w-]/g, '_');
+const sdir = path.join(root, '.vibe', 'orch', 'autoimprove'); const sf = path.join(sdir, `${sid}.json`);
+let st = {}; try { st = JSON.parse(fs.readFileSync(sf, 'utf8')); } catch { st = {}; }
+const ids = cand.map(p => p.id).join(',');
+const same = st.lastIds === ids; const repeat = same ? (st.repeat || 0) + 1 : 0;
+const save = o => { try { fs.mkdirSync(sdir, { recursive: true }); fs.writeFileSync(sf, JSON.stringify(Object.assign(st, o), null, 1), 'utf8'); } catch { /* 기록 실패 무시 */ } };
+if ((st.n || 0) >= maxN) out({ systemMessage: `자동 개선 이어가기 상한 ${maxN}회에 닿아 멈춤(대기 개선안 ${cand.length}건 남음, harness.json orch.autoImproveMaxPerSession)` });
+if (repeat >= 2) { save({ repeat }); out({ systemMessage: `자동 개선 이어가기: 같은 대기 개선안 ${cand.length}건에 진전이 없어 멈춤(${cand.map(p => p.id).join(', ').slice(0, 200)})` }); }
+save({ n: (st.n || 0) + 1, lastIds: ids, repeat, lastAt: new Date().toISOString() });
+const list = cand.slice(0, 8).map(p => `- ${p.id} [${p.impact || '-'}] ${String(p.title || '').replace(/\s+/g, ' ').slice(0, 110)} · 대상 ${(p.targets || []).slice(0, 3).join(', ').slice(0, 120)}`).join('\n');
+out({ decision: 'block', reason: `[자동 개선 이어가기 ${(st.n || 0)}/${maxN}] 사용자 상시 지시 "작업 종료 시 개선항목 찾아서 진행". 맡은 세션이 없는 VMO 대기 개선안 ${cand.length}건:\n${list}\n진행 방법: 안을 골라 node tools/VibeManager/claim_proposal.js claim <세션 이름> <id> 로 맡고, 개선안 파일(.vibe/orch/proposals/<id>.json)의 title, evidence, targets, before_after, verify 대로 백업 → 수정 → 시험 → claim_proposal.js done. 사람 판단이 필요하면 hold <id> <사유>, 범위 밖이면 release. 다른 세션이 고치는 파일은 피함. 진행할 안이 없다고 판단하면 그 이유를 한 줄로 쓰고 끝내도 됨(같은 목록이 2번 이어지면 멈춤 허용).` });

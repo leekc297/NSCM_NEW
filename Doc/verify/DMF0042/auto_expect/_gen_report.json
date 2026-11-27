@@ -1,9 +1,9 @@
 {
  "id": "DMF0042",
  "asis": "DMF0042",
- "at": "2026-11-19 18:48:04",
+ "at": "2026-11-26 18:09:03",
  "has_asis": true,
- "tobe_cols": 52,
+ "tobe_cols": 55,
  "buttons": [
   "COLUMN_SETUP",
   "CUTOFF",
@@ -60,8 +60,10 @@
    "why_not": []
   },
   "p_dirty": {
-   "rows": 5,
-   "why_not": []
+   "rows": 4,
+   "why_not": [
+    "DM-52 제외: AS-IS 버튼 btnSetPrice(Set Price) Click 핸들러에 편집 중 차단 메시지 없음(CR-022 = 차단 메시지 코드 규칙)"
+   ]
   },
   "p_clear": {
    "rows": 0,
@@ -143,8 +145,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 58,
-   "used": 55
+   "rows": 57,
+   "used": 54
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -155,7 +157,7 @@
    "used": 0
   }
  },
- "rows": 58,
- "rows_used": 55,
+ "rows": 57,
+ "rows_used": 54,
  "dup_of_hand": 3
 }

@@ -1,0 +1,27 @@
+# SCP0005 결정 목록 · 2026-11-25 미검증 해소 라운드 4
+
+- 종전 목록(2026-11-20 D1~D8) 사본: _unverified_decisions.md.bak_20261120
+- 권장안은 원문 근거가 있는 쪽. 근거가 없으면 '근거 없음'
+
+| 결정 | 정할 내용 | 행 수 | 행 ID | 권장안 | 근거 경로:줄 |
+|---|---|---|---|---|---|
+| R4-D1 | Route Id 더블클릭 이력 팝업이 TO-BE 에 없어 이력 팝업 표준, 팝업 조회, 선택값 반영, 이력 조회 SP 호출을 잴 수 없음. FE 보완 전까지 미검증 유지 | 5 | V-0e9099ba, V-4cfc72f5, V-a46588cb, T-fce350f2, T-ea530cd5 | FE 가이드 G1 반영 뒤 측정(DB MODE 라 화면 수정 안 함) | SCP0005_DistributionRoute.cs:1093~1103, FE_GUIDE_20261120_0854.md G1, DistributionRouteGrid.tsx 2026-11-25 05:35 확인 ROUTE_ID 분기 없음 |
+| R4-D2 | SCP0005_GET_DISTRIBUTION_ROUTEID 는 다른 화면이 ROUTE_ID 를 넘겨 열 때만 호출됨. 진입 시나리오를 검사기에 넣을지 | 1 | T-719d403c | 진입 시나리오 추가(SCP0102 에서 ROUTE_ID 더블클릭으로 진입). SP 결과 대조는 이번 라운드 골든 ⑥ 단계(T547)로 따로 잼 | SCP0005_DistributionRoute.cs:208, 499. _ENGINE_MASTER.md:1159(11-16 AS-IS 실측 SCP0102 → ROUTEID 1행) |
+| R4-D3 | 스냅샷 '버튼 Div 40' 승인. snap_validate 05:35 MISMATCH 누락 UPLOAD_SAVE, UPLOAD, SEARCH_ROUTEID, SEARCH_CITY | 1 | V-5daefe3f | 누락 4건은 서버 연결 이름이고 화면 버튼 바에는 Excel Upload 가 있음. 확인 뒤 snap_approve 승인 | snap/snap_validate.csv 3행, snap/received/버튼_Div_40.aria.yml |
+| R4-D4 | 콤보 칸에 후보 밖 값을 붙여넣을 때 AS-IS 기대값. 데이터에 후보 밖 값 행이 0건이라 검사기가 합성 값으로 TO-BE 결과만 남기고 ERROR 로 둠 | 9 | V-6f2db8d3, V-ba8f9817, V-5804ccc8, V-5a4e9648, V-7ac42873, V-753a87af, V-cb7ed54f, V-3d0ea655, V-d8ff8497 | AS-IS 런처에서 TRANSPORT_MODE 에 'ZZ' 붙여넣기 실측 뒤 기대값 확정. DAYS_*, VALID_YN 은 AS-IS 도 Y/N 2건이라 후보 밖 도메인 없음 | SpreadInfo.cs:521 ClipboardPasteAsStringSkipHidden, SCP0005_DistributionRoute.cs 붙여넣기 처리 0건 |
+| R4-D5 | 키 중복 신규행 서버 차단은 실저장으로만 잴 수 있음. 실저장 허용 여부 | 1 | V-b3450ff5 | ERROR 유지. AS-IS, TO-BE 저장 SP 모두 입력 뒤 중복 확인·되돌림 구조라 실저장 시 이력 표 기록이 남음 | SCP0005_SAVE_DISTRIBUTION_ROUTE.sql:580~641, PKG_SCP0005.TOBE.sql:1343~1390(11-13 사본, 사내 최신 미확인) |
+| R4-D6 | MSG00043 문구. TO-BE 는 서버 문구 '[99010] DUP DATA.' 를 그대로 띄우고 AS-IS 는 '저장시 중복 오류가 발생하였습니다. ( Route Id : n )' | 3 | T-ece1c98b, T-f048d4a9, V-3134fc3e | FE 가이드로 MSG00043 + Route Id 표시. TO-BE 룰 인정 여부는 사용자 판단 | SCP0005_DistributionRoute.cs:813, saveRequest.ts:108, DistributionRoute.tsx:117 |
+| R4-D7 | MSG00265. AS-IS 는 업로드 창을 닫으면 항상 '다시 조회하시겠습니까?' 를 묻고, TO-BE 는 업로드 성공 때만 다른 문구 토스트 뒤 묻지 않고 재조회 | 3 | V-4a0b6271, T-2c4e7c8a, T-e19b6757 | TO-BE 룰 등록(업로드 완료 때만 자동 재조회) 여부 결정. 결정 전 검사기 판정은 FAIL 경로 | SCP0005_DistributionRoute.cs:379~384, ExcelUploadModal.tsx:180~186 |
+| R4-D8 | TO-BE 는 City Name 칸 더블클릭에도 도시 팝업을 엶. AS-IS 는 Country, City 칸만 | 0(이번 처리로 NA 4행) | T-7eacee67, T-e425f595, T-3beee65f, T-a391f109 관련 | 오류 아님(편의 기능 추가) | SCP0005_DistributionRoute.cs:1112~1116, distribution-route.constants.ts:187~188 |
+| R4-D9 | ExcelUploadModal 이 AS-IS 인자 2번(시트명)을 받지 않음 | 1 | V-a6bb7234(07:44 AI 검토 PASS 반영, 사람 확인 대기) | 시트명은 TO-BE 업로드 메타로 대체된 것으로 보고 PASS. 업로드 대상 확인은 M1 행이 맡음 | popup_args.csv 3행, SCP0005_DistributionRoute.cs:376 |
+| R4-D10 | 정렬 키 4칸(FROM/TO_COUNTRY, FROM/TO_CITY)이 NULL 허용이라 NULL 위치 차이는 데이터 실측(NULL 0행)으로만 PASS | 3 | EG-9afd4a78, EG-89828767, EG-e6b3240d | 보완 단계에서 PKG_SCP0005 조회 3개 ORDER BY 에 NULLS FIRST 추가(DB 객체 보완) | sort_check.csv 2·3·6행, AsIs_LGCE_SCMDEV_Table_DDL.sql:48168~48187 |
+| R4-D11 | 원복 실패 칸을 DB 복원(restore_touched)에 맡기고 다음 칸을 계속 잴 때 F1 판정 | 1 | V-4e4af2a4 | 값 왕복 판정 유지, 증거 앞에 '원복 NG · [원복 DB 위임]' 표시(이번에 반영) | saveprobe.ts:227~242, _verify.spec.ts:1806~1815 |
+| R4-D12 | ledger.py 셀 규칙 시트 구분(T579-a)으로 원장 행 ID 30개가 바뀜. 옛 ID 의 판정·AI 검토 이력은 넘어가지 않음 | 30 | DAYS_* D5 7행, LAST_UPDATE_DATE 3행, LT 5칸 × D5·H8·E1·H13 20행 | 바뀐 ID 허용(근거 줄이 팝업 폼 cs:141~145 → 본 화면 cs:251~255 로 맞게 바뀜) | ledger.py:501~506, 619, 631 |
+| R4-D13 | 기준 원장 판단 대기 25항목. 다른 화면 결함 유형 일반화 행이 이 화면에 대상이 없다는 판단 24건 + 기준 정리 답 없음 1건 | 25 | criteria.md 10~34행 C-d4a59387d1 ~ C-6ccd08f95a | 24건 대상 아님(행마다 사유와 검색 결과 기재). C-6ccd08f95a(G4 스냅샷 조회조건 기간 칸)는 근거 없음, 사람 확인 | criteria/criteria.md:10~34 |
+| R4-D14 | 기준 원장 실측 대조 판단 대기(SP 미호출 2, 저장 인자 차이 2, LIVE_ONLY 컨트롤 10 등) | 29 | criteria.md 35~63행 | 근거 없음, 사람 확인. 저장 인자 차이 2건(from_city_name, priority)이 같은 시험 행 비교인지 미확인 | criteria/criteria.md:35~63 |
+| R5-D1 | 0 값·빈값 저장 단계의 PASS 조건에 '화면 문구 = AS-IS 문구' 를 더함. 다른 화면의 종전 PASS 가 '[화면 메시지 불일치]' 미검증으로 바뀔 수 있음 | 2 | V-72fbb5b2, V-7116d2aa | 그대로 둠(AS-IS 문구가 메시지 표에 없으면 종전 판정) | TB_FX_MessageInfo.csv, SCP0005_DistributionRoute.cs:1293~1297 |
+| R5-D2 | TO-BE 가 빈값을 0 으로 바꿔 저장에 성공할 때 판정. AS-IS 는 빈값을 0 으로 읽어 저장을 막음 | 0(SCP0005 는 TO-BE 도 차단) | - | 근거 없음. 다른 화면에서 나오면 FAIL 로 볼지 결정 | SCP0005_DistributionRoute.cs:1268, 1288~1290 |
+| R5-D3 | Excel 필수 칸 빈 업로드 기대 상태에 AS-IS 덮어쓰기 문구(Error-Departure days, Error-Number)를 포함 | 1 | V-087d756b | 포함(AS-IS 가 같은 파일을 같은 순서로 덮어씀) | ExcelUploadForm2.cs:964, 1112, 1124, 1140 · PKG_SCP0005 1875 → 2001 → 2012 |
+| R5-D4 | 붙여넣기 값이 칸 길이로 잘려 들어가면 '반영' 으로 봄. 길이 차이 판정은 칸 길이 행이 맡음 | 1 | V-8fd091cc | 반영으로 봄 | grid_columns_asis.csv FROM_COUNTRY 길이 2 |
+| R5-D5 | 화면 알림 수집을 '화면 안에 보이는 알림만' 으로 바꾼 공용 변경. 다른 화면의 메시지 판정이 바뀔 수 있음(미측정) | 3 | V-3e95d2be, T-eea49685, T-6a512ae5 | 그대로 둠(닫힌 토스트 글자는 화면에 보이지 않음) | ToastMessage.tsx 닫힘 뒤 DOM 잔존 |
+| R5-D6 | 팝업·셀 이벤트 조회의 정렬 판정에 골든 순서가 없으면 정적 정렬 PASS 만으로 PASS 로 올리지 않음 | 0 | - | ERROR 유지 | judge.py:383 a6_offpath_verdict |

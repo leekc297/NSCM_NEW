@@ -1,0 +1,22 @@
+{
+  "id": "20261126_182352_R12_ALL",
+  "at": "2026-11-26T18:23:52+09:00",
+  "ms": 1795685032907,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S4 정의 정합: quick.json 또는 steps.json 을 읽지 못함",
+  "screen": "",
+  "sig": "R12|S4|load",
+  "count": 1,
+  "repeat": null,
+  "detail": "C:\\Users\\LG\\AppData\\Local\\Temp\\gatefe-VHKpAC\\tools\\VibeManager",
+  "evidence": {
+    "check": "S4",
+    "key": "S4|load",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "open",
+  "notice": false,
+  "actions": []
+}

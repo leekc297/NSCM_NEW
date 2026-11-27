@@ -146,12 +146,15 @@
 | kind | snippet | file | line |
 |---|---|---|---|
 | code | const subModuleOptions = (subModules as ComboOption[] \| undefined) ?.filter(item => !selectedModules \|\| selectedModules.includes(item.PARENT_CODE ?? '')).map(item => ({ label: item.NAME, value: item.CODE })); | features/admin/src/pages/mail-setup/components/MailSetupForm.tsx | 35 |
+| jsx | 26.09.11 요구사항 203 -Sub Module Main 화면 및 그리드 화면에서 제외 <Grid size={3}> <FormItem className={commonStyles.formItem} label={t('LBL00378', '_Sub Module')} labelAlign='right' render={() => ( <CustomDropdown allOption isInput={false} value={searchP | features/admin/src/pages/mail-setup/components/MailSetupForm.tsx | 66 |
 | code | PopSQL 8분할 텍스트 결합 (AS-IS TEXT1~TEXT8) -> CLOB — SP가 VARCHAR2 4000자 제한으로 sql_text 커럼 하나로 반환하도록 변경 export const joinSqlText = (row?: Record<string, string>) => { if (!row) return ''; return [1, 2, 3, 4, 5, 6, 7, 8].map(index => row[`TEXT${ind | features/admin/src/pages/mail-setup/mail-setup.util.ts | 73 |
 | code | }); | features/admin/src/pages/mail-setup/MailSetup.tsx | 150 |
 | code | const handleDeleteCategory = () => { | features/admin/src/pages/mail-setup/MailSetup.tsx | 331 |
 | code | if (!categoryGridRef.current) return; | features/admin/src/pages/mail-setup/MailSetup.tsx | 332 |
 | code | GridAction.removeRow(categoryGridRef.current, true); | features/admin/src/pages/mail-setup/MailSetup.tsx | 333 |
 | code | }; | features/admin/src/pages/mail-setup/MailSetup.tsx | 334 |
+| code | 삭제 대신 주석 보존 (2026-09-15) — focused 분기 추가 전 구버전. onClick={() => setActiveTab('message')} | features/admin/src/pages/mail-setup/MailSetup.tsx | 523 |
+| code | 삭제 대신 주석 보존 (2026-09-15) — focused 분기 추가 전 구버전. onClick={() => setActiveTab('receiver')} | features/admin/src/pages/mail-setup/MailSetup.tsx | 536 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

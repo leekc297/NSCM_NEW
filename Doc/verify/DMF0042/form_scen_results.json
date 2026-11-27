@@ -1,0 +1,387 @@
+{
+ "G01": {
+  "id": "G01",
+  "msg": "MSG00282",
+  "meth": "btnSetPrice_Click",
+  "result": "PASS",
+  "why": "G01 MSG00282(cs:3117) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음",
+  "shown": "변경된 환율을 적용하시겠습니까? Cancel Confirm",
+  "saves": 0,
+  "ms": 210,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-26T09:43:48.563Z"
+ },
+ "G02": {
+  "id": "G02",
+  "msg": "(동적 메시지)",
+  "meth": "btnSetPrice_Click",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3133",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:48.567Z"
+ },
+ "G03": {
+  "id": "G03",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:790) · cs:790",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:48.569Z"
+ },
+ "G04": {
+  "id": "G04",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:816) · cs:816",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:48.572Z"
+ },
+ "G05": {
+  "id": "G05",
+  "msg": "MSG00282",
+  "meth": "btnSetPrice_Click",
+  "result": "PASS",
+  "why": "G05 MSG00282(cs:3231) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음",
+  "shown": "변경된 환율을 적용하시겠습니까? Cancel Confirm",
+  "saves": 0,
+  "ms": 171,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-26T09:43:50.827Z"
+ },
+ "G06": {
+  "id": "G06",
+  "msg": "(동적 메시지)",
+  "meth": "btnSetPrice_Click",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3247",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:50.831Z"
+ },
+ "G07": {
+  "id": "G07",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:851) · cs:851",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:50.835Z"
+ },
+ "G08": {
+  "id": "G08",
+  "msg": "MSG00282",
+  "meth": "btnSetPrice_Click",
+  "result": "PASS",
+  "why": "G08 MSG00282(cs:3180) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음",
+  "shown": "변경된 환율을 적용하시겠습니까? Cancel Confirm",
+  "saves": 0,
+  "ms": 172,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-26T09:43:53.108Z"
+ },
+ "G09": {
+  "id": "G09",
+  "msg": "(동적 메시지)",
+  "meth": "btnSetPrice_Click",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3196",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:53.112Z"
+ },
+ "G10": {
+  "id": "G10",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:768) · cs:768",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:53.117Z"
+ },
+ "G11": {
+  "id": "G11",
+  "msg": "MSG00282",
+  "meth": "btnSetPrice_Click",
+  "result": "PASS",
+  "why": "G11 MSG00282(cs:3341) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음",
+  "shown": "변경된 환율을 적용하시겠습니까? Cancel Confirm",
+  "saves": 0,
+  "ms": 161,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-26T09:43:55.411Z"
+ },
+ "G12": {
+  "id": "G12",
+  "msg": "(동적 메시지)",
+  "meth": "btnSetPrice_Click",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:3357",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:55.416Z"
+ },
+ "G13": {
+  "id": "G13",
+  "msg": "MSG00282",
+  "meth": "btnSetPrice_Click",
+  "result": "PASS",
+  "why": "G13 MSG00282(cs:2383) 확인창(== DialogResult.No 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인 → 화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' · 저장 요청 0건 — AS-IS 문구 '변경된 환율을 적용하시겠습니까?' 와 같음",
+  "shown": "변경된 환율을 적용하시겠습니까? Cancel Confirm",
+  "saves": 0,
+  "ms": 173,
+  "aspects": {
+   "pass": {
+    "ok": true,
+    "note": "화면 문구 '변경된 환율을 적용하시겠습니까? Cancel Confirm' = AS-IS 문구"
+   }
+  },
+  "at": "2026-11-26T09:43:57.682Z"
+ },
+ "G14": {
+  "id": "G14",
+  "msg": "(동적 메시지)",
+  "meth": "btnSetPrice_Click",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 오류 문구·코드를 그대로 띄우는 분기(btnSetPrice_Click) · cs:2399",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:57.686Z"
+ },
+ "G15": {
+  "id": "G15",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:676) · cs:676",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:57.691Z"
+ },
+ "G16": {
+  "id": "G16",
+  "msg": "MSG00097",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G16 MSG00097: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:58.884Z"
+ },
+ "G17": {
+  "id": "G17",
+  "msg": "MSG00108",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G17 MSG00108: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:59.232Z"
+ },
+ "G18": {
+  "id": "G18",
+  "msg": "MSG00276",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G18 MSG00276: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:59.588Z"
+ },
+ "G19": {
+  "id": "G19",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:790) · cs:790",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:59.591Z"
+ },
+ "G20": {
+  "id": "G20",
+  "msg": "MSG00097",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G20 MSG00097: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:43:59.953Z"
+ },
+ "G21": {
+  "id": "G21",
+  "msg": "MSG00108",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G21 MSG00108: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:00.302Z"
+ },
+ "G22": {
+  "id": "G22",
+  "msg": "MSG00276",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G22 MSG00276: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:00.655Z"
+ },
+ "G23": {
+  "id": "G23",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:816) · cs:816",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:00.659Z"
+ },
+ "G24": {
+  "id": "G24",
+  "msg": "MSG00097",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G24 MSG00097: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:01.017Z"
+ },
+ "G25": {
+  "id": "G25",
+  "msg": "MSG00108",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G25 MSG00108: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:01.366Z"
+ },
+ "G26": {
+  "id": "G26",
+  "msg": "MSG00276",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G26 MSG00276: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:01.716Z"
+ },
+ "G27": {
+  "id": "G27",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:851) · cs:851",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:01.719Z"
+ },
+ "G28": {
+  "id": "G28",
+  "msg": "MSG00097",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G28 MSG00097: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:02.070Z"
+ },
+ "G29": {
+  "id": "G29",
+  "msg": "MSG00108",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G29 MSG00108: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:02.421Z"
+ },
+ "G30": {
+  "id": "G30",
+  "msg": "MSG00276",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G30 MSG00276: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:02.756Z"
+ },
+ "G31": {
+  "id": "G31",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:768) · cs:768",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:02.761Z"
+ },
+ "G32": {
+  "id": "G32",
+  "msg": "MSG00097",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G32 MSG00097: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:03.113Z"
+ },
+ "G33": {
+  "id": "G33",
+  "msg": "MSG00108",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G33 MSG00108: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:03.461Z"
+ },
+ "G34": {
+  "id": "G34",
+  "msg": "MSG00276",
+  "meth": "FindData",
+  "result": "ERROR",
+  "why": "[측정 경로 없음] G34 MSG00276: 조회영역 칸 'Division' 없음",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:03.797Z"
+ },
+ "G35": {
+  "id": "G35",
+  "msg": "(동적 메시지)",
+  "meth": "FindData",
+  "result": "NA",
+  "why": "(동적 메시지): 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · 예외 catch 블록(FindData cs:676) · cs:676",
+  "shown": "",
+  "saves": 0,
+  "at": "2026-11-26T09:44:03.801Z"
+ }
+}

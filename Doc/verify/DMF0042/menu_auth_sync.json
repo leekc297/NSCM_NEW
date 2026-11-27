@@ -1,0 +1,159 @@
+{
+ "menu_id": "DMF0042",
+ "asis_id": "DMF0042",
+ "at": "2026-11-26 23:28:11",
+ "result": "FAIL",
+ "fails": [
+  "AS-IS 만 메뉴 권한 그룹 ['FP Viewer', 'SCP Tester']",
+  "DM Viewer C·U·D→SAVE: AS-IS 불가 ↔ TO-BE 허용"
+ ],
+ "gaps": [],
+ "notes": [
+  "ADMIN U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
+  "DM ADMIN U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
+  "DM Planner U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
+  "DM Planner (W/S) U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
+  "SCM PI Admin U→EDIT: TO-BE 편집 버튼 없음(CR-093) · U 허용 = SAVE 허용 일치",
+  "TO-BE 전용 버튼 ['COLUMN_SETUP', 'CUTOFF', 'EXCEL', 'EXCHANGE_RATE', 'MEASURE_SELECT', 'REPLACE', 'SET_PRICE'](AS-IS ACL 대응 없음 · 비교 제외)"
+ ],
+ "asis_groups": {
+  "ADMIN": "CRUD",
+  "DM ADMIN": "CRUD",
+  "DM Planner": "CRUD",
+  "DM Planner (W/S)": "CRUD",
+  "DM Viewer": "R",
+  "FP Viewer": "",
+  "SCM PI Admin": "CRUD",
+  "SCP Planner": "R",
+  "SCP Tester": ""
+ },
+ "tobe_groups": [
+  "ADMIN",
+  "DM ADMIN",
+  "DM Planner",
+  "DM Planner (W/S)",
+  "DM Viewer",
+  "SCM PI Admin",
+  "SCP Planner"
+ ],
+ "tobe_buttons": {
+  "ADMIN": [
+   "COLUMN_SETUP",
+   "CUTOFF",
+   "DELETE",
+   "EXCEL",
+   "EXCHANGE_RATE",
+   "INSERT",
+   "MEASURE_SELECT",
+   "REPLACE",
+   "SAVE",
+   "SEARCH",
+   "SET_PRICE"
+  ],
+  "DM ADMIN": [
+   "COLUMN_SETUP",
+   "CUTOFF",
+   "DELETE",
+   "EXCEL",
+   "EXCHANGE_RATE",
+   "INSERT",
+   "MEASURE_SELECT",
+   "REPLACE",
+   "SAVE",
+   "SEARCH",
+   "SET_PRICE"
+  ],
+  "DM Planner": [
+   "COLUMN_SETUP",
+   "CUTOFF",
+   "DELETE",
+   "EXCEL",
+   "EXCHANGE_RATE",
+   "INSERT",
+   "MEASURE_SELECT",
+   "REPLACE",
+   "SAVE",
+   "SEARCH",
+   "SET_PRICE"
+  ],
+  "DM Planner (W/S)": [
+   "COLUMN_SETUP",
+   "CUTOFF",
+   "DELETE",
+   "EXCEL",
+   "EXCHANGE_RATE",
+   "INSERT",
+   "MEASURE_SELECT",
+   "REPLACE",
+   "SAVE",
+   "SEARCH",
+   "SET_PRICE"
+  ],
+  "DM Viewer": [
+   "COLUMN_SETUP",
+   "CUTOFF(N)",
+   "DELETE(N)",
+   "EXCEL",
+   "EXCHANGE_RATE",
+   "INSERT(N)",
+   "MEASURE_SELECT",
+   "REPLACE(N)",
+   "SAVE",
+   "SEARCH",
+   "SET_PRICE(N)"
+  ],
+  "FP Viewer": [
+   "COLUMN_SETUP(N)",
+   "CUTOFF(N)",
+   "DELETE(N)",
+   "EXCEL(N)",
+   "EXCHANGE_RATE(N)",
+   "INSERT(N)",
+   "MEASURE_SELECT(N)",
+   "REPLACE(N)",
+   "SAVE(N)",
+   "SEARCH(N)",
+   "SET_PRICE(N)"
+  ],
+  "SCM PI Admin": [
+   "COLUMN_SETUP",
+   "CUTOFF",
+   "DELETE",
+   "EXCEL",
+   "EXCHANGE_RATE",
+   "INSERT",
+   "MEASURE_SELECT",
+   "REPLACE",
+   "SAVE",
+   "SEARCH",
+   "SET_PRICE"
+  ],
+  "SCP Planner": [
+   "COLUMN_SETUP",
+   "CUTOFF(N)",
+   "DELETE(N)",
+   "EXCEL",
+   "EXCHANGE_RATE",
+   "INSERT(N)",
+   "MEASURE_SELECT",
+   "REPLACE(N)",
+   "SAVE(N)",
+   "SEARCH",
+   "SET_PRICE(N)"
+  ],
+  "SCP Tester": [
+   "COLUMN_SETUP(N)",
+   "CUTOFF(N)",
+   "DELETE(N)",
+   "EXCEL(N)",
+   "EXCHANGE_RATE(N)",
+   "INSERT(N)",
+   "MEASURE_SELECT(N)",
+   "REPLACE(N)",
+   "SAVE(N)",
+   "SEARCH(N)",
+   "SET_PRICE(N)"
+  ]
+ },
+ "why": "그룹 9↔7 · AS-IS 만 메뉴 권한 그룹 ['FP Viewer', 'SCP Tester']; DM Viewer C·U·D→SAVE: AS-IS 불가 ↔ TO-BE 허용"
+}

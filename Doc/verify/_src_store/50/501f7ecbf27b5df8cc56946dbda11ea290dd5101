@@ -1,0 +1,413 @@
+// 폼 저장형 화면 시나리오 실행기(2026-11-16 · SSP0020 미검증 0 작업)
+//   대상: 그리드 셀 편집이 아니라 조회영역 입력 + 버튼으로 저장·해제하는 화면. 그리드 셀 위반 입력(W3)이 측정 경로를 못 만드는 E4·F 계열 행을 잰다.
+//   입력: Doc/verify/<ID>/form_scenarios.json (화면 사실 — 근거는 AS-IS 원문 행. 실행기는 화면을 가리지 않는다)
+//     2026-11-26 R241(VMO 20261126153056_SELF_3): 생성기 tools/Harness/verify/form_scen_gen.py 가 AS-IS 원문(메시지 가드·입력칸·저장 SP)에서 만든다(run_verify facts 단계).
+//     사람이 쓴 파일(_gen 키 없음, SSP0020)은 생성기가 덮지 않고 대조만 한다. 생성분 단계의 fuzzy = AS-IS 컨트롤 이름에서 얻은 라벨(TO-BE 칸 라벨과 앞부분 일치 1건일 때만 씀)
+//   단계: text(라벨 칸 입력) · period(기간 두 칸) · multi(다중 선택 none|keep|first) · click(버튼) · dialog(ok|cancel) · search · checkall(행 머리 전체 선택) · wait
+//   판정: 기대 문구(AS-IS 메시지 문구) 포함 여부 + 저장 요청 수. 저장 요청은 allowSave 시나리오만 서버에 보낸다(그 밖은 호출부가 route 로 차단)
+import type { Page } from '@playwright/test';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { accountId } from './authprobe';
+import { branchBody, persistRespSamples, respSample } from './btnpopup';
+import type { Nscm } from './nscm';
+import { probe } from './probe';
+
+export type FStep = { op: 'text' | 'period' | 'multi' | 'click' | 'dialog' | 'search' | 'checkall' | 'checkrows' | 'wait' | 'tab' | 'expectButton' | 'selectAllToggle' | 'fieldButton' | 'expectDialogInput' | 'dialogPickFirst' | 'expectField' | 'file' | 'date' | 'pick' | 'require' | 'requireCells' | 'asAccount' | 'authGate'; key?: string; file?: string; size?: number; nth?: number; index?: number; sep?: string; idx?: number; eq?: string; notIn?: string[]; fake?: boolean; join?: 'any' | 'all'; cells?: { r: number; c: number; op: 'eq' | 'ne'; v: string }[]; note?: string; fuzzy?: boolean; visible?: boolean; not?: string; where?: Record<string, string>; label?: string; value?: string; from?: string; to?: string; mode?: 'none' | 'keep' | 'first' | 'all'; name?: string; how?: 'ok' | 'cancel'; ms?: number };
+export type FScen = { id: string; msg: string; meth: string; asis_line: string; asis_text: string; asis_text_alt?: string[]; kind: 'dynamic' | 'unreachable' | 'error_branch'; basis?: string; phase?: 'setup' | 'teardown'; rowsAfterMin?: number; rowsAfterMax?: number; matchAfter?: { where: Record<string, string>; min?: number; max?: number }; delayMs?: number; checks?: { msgCountEqualsMatch?: boolean; audit?: Record<string, string>; maxMs?: number; loading?: boolean; noConfirm?: boolean }; covers?: { rule: string; target: string; aspect: string }[]; allowSave?: boolean; expectSave?: number; steps?: FStep[]; expectRowsMin?: number; note?: string; needs?: string[]; fakeSave?: { literal?: string } };
+export type Aspect = { ok: boolean | null; note: string };
+export type FRes = { id: string; msg: string; meth: string; result: 'PASS' | 'FAIL' | 'ERROR' | 'NA'; why: string; shown: string; saves: number; ms?: number; aspects?: Record<string, Aspect> };
+
+const nrm = (s: string) => String(s || '').toLowerCase().replace(/\\[nr]/g, '').replace(/[^a-z0-9가-힣一-鿿]/g, '');  // 한자(CN 화면 문구)도 남긴다
+const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+export function loadFormScen(root: string, id: string): { scenarios: FScen[]; vars?: Record<string, string>; saveRx?: string } | null {
+  const f = path.join(root, 'Doc', 'verify', id, 'form_scenarios.json');
+  if (!fs.existsSync(f)) return null;
+  try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return null; }
+}
+
+// 2026-11-18 SSP0020 23:58 실행: 준비(F09)·검증(F05)·정리(F13) 사이에 자정이 지나 @TODAY 가 바뀌어 F05 FAIL · F13 조건 행 없음 →
+//   run_verify.py 가 준비 직전 기준 시각(FORM_BASE_MS)을 정해 세 단계에 같은 값을 넘긴다. 없으면 현재 시각
+const baseMs = () => { const b = Number(process.env.FORM_BASE_MS || ''); return Number.isFinite(b) && b > 0 ? b : Date.now(); };
+const today = (off = 0) => { const d = new Date(baseMs() + off * 86400000); const z = (n: number) => String(n).padStart(2, '0'); return `${d.getFullYear()}.${z(d.getMonth() + 1)}.${z(d.getDate())}`; };
+/** 값 토큰: @TODAY · @TODAY+n · @TODAY-n → YYYY.MM.DD */
+let VARS: Record<string, string> = {};
+const LAST_CLICK: { ms: number; loading: boolean | null } = { ms: -1, loading: null };
+let SAMPLE_LOADING = false;
+
+// ── 실저장 대신 실제 성공 응답 표본(2026-11-26 R241 3차 · form_scen_gen fakeSave) ─────────────────────────────
+//   단추(click fake)를 누른 뒤 브라우저의 xhr·fetch 요청은 서버로 보내지 않는다: '<sheet>/<btn>/call-proc' 중 Doc/verify/<ID>/resp_samples.json 에
+//   같은 시트·버튼 실제 성공 응답이 있으면 그 표본으로 답하고(AS-IS 성공 값 literal 이 있으면 그 값을 가진 표본만), 나머지는 막는다(_trace T502·T503 과 같은 원천)
+type FakeState = { on: boolean; literal: string; hits: string[]; noSample: string; samples: string[] };
+const FAKE: FakeState = { on: false, literal: '', hits: [], noSample: '', samples: [] };
+let FAKE_PAGE: Page | null = null;
+const fakeHandler = async (rt: import('@playwright/test').Route) => {
+  const rq = rt.request(); const ty = rq.resourceType();
+  if (ty !== 'xhr' && ty !== 'fetch') { await rt.continue().catch(() => undefined); return; }
+  const mm = /\/([^/]+)\/([^/]+)\/([^/]+)\/call-proc/.exec(rq.url()); const sheet = mm ? decodeURIComponent(mm[2]) : ''; const btn = mm ? decodeURIComponent(mm[3]) : '';
+  const smp = mm ? respSample(FAKE.samples, sheet, btn) : null; const bb = smp ? (FAKE.literal ? branchBody(smp, FAKE.literal, false)?.body : smp) : null;
+  if (bb) { FAKE.hits.push(`${sheet}/${btn}`); await rt.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(bb) }).catch(() => undefined); return; }
+  if (mm && !FAKE.noSample) FAKE.noSample = `${sheet}/${btn} 실제 응답 표본${smp ? `에 성공 값 '${FAKE.literal}' 칸 없음` : ' 없음'}`;
+  await rt.abort('blockedbyclient').catch(() => undefined);
+};
+async function fakeOn(p: Page) {
+  if (FAKE.on) return;
+  const id = (process.env.VERIFY_ID || '').toUpperCase(); const root = path.resolve(__dirname, '..', '..', '..');
+  FAKE.samples = id ? persistRespSamples([], path.join(root, 'Doc', 'verify', id, 'resp_samples.json')) : [];
+  FAKE.on = true; FAKE_PAGE = p; await p.route('**/*', fakeHandler);
+}
+const ACCT: { orig: string } = { orig: '' };
+/** asAccount 로 바꾼 계정을 원래 계정으로 되돌리고 화면을 다시 연다(2026-11-26 5차) */
+async function acctRestore(nscm: Nscm) {
+  if (!ACCT.orig) return; const o = ACCT.orig; ACCT.orig = '';
+  await nscm.loginAs(o).catch(() => undefined); await nscm.openScreen((process.env.VERIFY_ID || '').toUpperCase()).catch(() => undefined);
+}
+async function fakeOff() { if (FAKE.on && FAKE_PAGE) await FAKE_PAGE.unroute('**/*', fakeHandler).catch(() => undefined); FAKE.on = false; FAKE_PAGE = null; }
+/** 시나리오 파일 vars + 실행 계정(@ME) */
+export function setVars(v: Record<string, string>) { VARS = v || {}; }
+const tok = (v: string | undefined) => { const m = /^@TODAY([+-]\d+)?$/.exec(v || ''); if (m) return today(Number(m[1] || 0)); const k = /^@(\w+)$/.exec(v || ''); return k && VARS[k[1]] !== undefined ? VARS[k[1]] : (v ?? ''); };
+
+function item(p: Page, label: string) {
+  return p.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: p.locator(':scope > :first-child', { hasText: new RegExp(`^\\s*\\*?\\s*${escRe(label)}\\.?\\s*\\*?\\s*$`, 'i') }) }).first();
+}
+
+/** 생성분 단계(fuzzy) 라벨 — 같은 라벨 칸이 없으면 조회영역 칸 라벨 중 앞부분이 서로 일치하는 칸이 1개일 때 그 칸(AS-IS 'Division' ↔ TO-BE 'Div'). 0개·2개 이상이면 원래 라벨(칸 없음 → 측정 경로 없음) */
+async function itemFor(p: Page, st: FStep) {
+  const lab = st.label || ''; const it0 = item(p, lab);
+  if (!st.fuzzy || (await it0.count().catch(() => 0))) return { it: it0, label: lab };
+  const cn = (t: string) => t.replace(/\*/g, '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+  const want = cn(lab); if (want.length < 3) return { it: it0, label: lab };
+  const labs = (await p.locator('[class*="_formItem_"] > :first-child, [class*="formItem"] > :first-child').allInnerTexts().catch(() => [] as string[])).map(t => t.replace(/\s+/g, ' ').replace(/\*/g, '').trim()).filter(Boolean);
+  const hit = [...new Set(labs)].filter(t => { const c = cn(t); return c.length >= 3 && (c.startsWith(want) || want.startsWith(c)); });
+  return hit.length === 1 ? { it: item(p, hit[0]), label: hit[0] } : { it: it0, label: lab };
+}
+
+const normV = (v: unknown) => String(v ?? '').toLowerCase().replace(/[^a-z0-9가-힣_]/g, '');
+const whereOf = (w: Record<string, string>) => Object.fromEntries(Object.entries(w).map(([k, v]) => [k, (String(v).startsWith('~') ? '~' : '') + normV(tok(String(v).replace(/^~/, '')))]));  // '~값' = 포함 비교
+/** 조건(binding = 값, 날짜는 숫자만 비교)에 맞는 그리드 행 수 — 첫 번째 보이는 그리드 */
+export async function countRows(p: Page, where: Record<string, string>): Promise<number> {
+  const w = JSON.stringify(whereOf(where));
+  return p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return -1; const w = ${w}; const nz = v => String(v ?? '').toLowerCase().replace(/[^a-z0-9가-힣_]/g, ''); let n = 0; for (const r of c.rows) { const d = r.dataItem; if (d && Object.keys(w).every(k => w[k][0] === '~' ? nz(d[k]).includes(w[k].slice(1)) : nz(d[k]) === w[k])) n++; } return n; })()`).catch(() => -1) as Promise<number>;
+}
+/** 조건에 맞는 행만 선택 상태로(행 머리 선택기와 같은 isSelected) — 선택한 행 수 */
+export async function selectRows(p: Page, where: Record<string, string>): Promise<number> {
+  const w = JSON.stringify(whereOf(where));
+  return p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return -1; const w = ${w}; const nz = v => String(v ?? '').toLowerCase().replace(/[^a-z0-9가-힣_]/g, ''); let n = 0; for (const r of c.rows) { const d = r.dataItem; const hit = !!d && Object.keys(w).every(k => w[k][0] === '~' ? nz(d[k]).includes(w[k].slice(1)) : nz(d[k]) === w[k]); r.isSelected = hit; if (hit) n++; } c.invalidate(); return n; })()`).catch(() => -1) as Promise<number>;
+}
+/** 화면에 보이는 알림·확인창·토스트 문구(없으면 '') */
+export async function shownText(p: Page, ms = 4_000): Promise<string> {
+  const end = Date.now() + ms; const loc = p.locator('[role="dialog"], [role="alertdialog"], [role="alert"], .MuiSnackbar-root');
+  while (Date.now() < end) {
+    const n = Math.min(await loc.count().catch(() => 0), 30); const out: string[] = [];
+    for (let i = 0; i < n; i++) { const e = loc.nth(i); if (!(await e.isVisible().catch(() => false))) continue; const t = (await e.innerText().catch(() => '')).replace(/\s+/g, ' ').trim(); if (t && !out.includes(t)) out.push(t); }
+    if (out.length) return out.join(' | ');
+    await p.waitForTimeout(250);
+  }
+  return '';
+}
+
+export async function runStep(nscm: Nscm, st: FStep): Promise<string> {
+  const p = nscm.page;
+  if (st.op === 'wait') { await p.waitForTimeout(st.ms ?? 500); return ''; }
+  if (st.op === 'search') { await nscm.search().catch(() => undefined); await p.waitForTimeout(1_500); return ''; }
+  if (st.op === 'asAccount') {
+    // 2026-11-26 R241 5차: 명부 계정(users.json key)으로 로그인해 같은 화면을 다시 연다. 시나리오가 끝나면 runFormScen 이 원래 계정으로 되돌린다
+    const uid = accountId(st.key || ''); if (!uid) return `명부 계정 '${st.key}' 없음(tools/E2E/users.json)`;
+    const mid = (process.env.VERIFY_ID || '').toUpperCase(); if (!mid) return '화면 ID(VERIFY_ID) 없음';
+    if (!ACCT.orig) ACCT.orig = (nscm as unknown as { curUser: string }).curUser || '';
+    await nscm.loginAs(uid); const o = await nscm.openScreen(mid).catch(() => ({ authorized: false, notFound: false }));
+    return o.authorized ? '' : `명부 계정 '${st.key}' 로 화면 ${mid} 권한 없음(메뉴 조회 권한 그룹인데 열리지 않음)`;
+  }
+  if (st.op === 'authGate') {
+    // 2026-11-26 R241 5차: 권한 없는 계정의 단추 — 숨김·비활성 = TO-BE 룰 CR-070(버튼 코드 권한이 있을 때만 노출) 통과(문구 대조 안 함), 보이면 눌러 AS-IS 권한 문구 대조
+    const b = nscm.subButton(st.name || '');
+    if (!(await b.isVisible({ timeout: 3_000 }).catch(() => false))) return `SKIPTEXT:단추 '${st.name}' 숨김 — CR-070 권한 없는 계정 미노출`;
+    if (await b.isDisabled().catch(() => false)) return `SKIPTEXT:단추 '${st.name}' 비활성 — CR-070 권한 없는 계정 사용 불가`;
+    return runStep(nscm, { op: 'click', name: st.name });
+  }
+  if (st.op === 'dialog') { const ok = await nscm.closeAlert(st.how ?? 'ok'); await p.waitForTimeout(400); return ok ? '' : '닫을 대화상자 없음'; }
+  if (st.op === 'click') {
+    const b = nscm.subButton(st.name || ''); if (!(await b.isVisible({ timeout: 3_000 }).catch(() => false))) return `버튼 '${st.name}' 없음`;
+    if (await b.isDisabled().catch(() => false)) return `버튼 '${st.name}' 비활성`;
+    const LSEL = '[role="progressbar"], .MuiCircularProgress-root, .MuiLinearProgress-root, [class*="spinner" i], [class*="loading" i]:not([class*="loaded"])';
+    const base0 = SAMPLE_LOADING ? await p.locator(LSEL).count().catch(() => 0) : 0;
+    if (st.fake) await fakeOn(p);   // 2026-11-26 R241 3차: 이 단추 뒤 서버 호출 = 표본 응답 또는 막음(실저장 없음)
+    const t0 = Date.now(); await b.click({ timeout: 10_000 }).catch(() => undefined);
+    let seen: boolean | null = SAMPLE_LOADING ? false : null; let got = -1;
+    const lim = st.ms ?? 1_200; const msgLoc = p.locator('[role="dialog"], [role="alertdialog"], [role="alert"], .MuiSnackbar-root');
+    while (Date.now() - t0 < Math.max(lim, 400)) {
+      if (SAMPLE_LOADING && !seen && (await p.locator(LSEL).count().catch(() => 0)) > base0) seen = true;
+      if (got < 0) { const n = Math.min(await msgLoc.count().catch(() => 0), 20); for (let i = 0; i < n; i++) { const e = msgLoc.nth(i); if ((await e.isVisible().catch(() => false)) && ((await e.innerText().catch(() => '')).trim())) { got = Date.now() - t0; break; } } }
+      if (got >= 0 && Date.now() - t0 >= Math.min(lim, 1_200)) break;
+      await p.waitForTimeout(60);
+    }
+    LAST_CLICK.ms = got; LAST_CLICK.loading = seen; return '';
+  }
+  if (st.op === 'fieldButton') {
+    // 조회영역 칸 안의 찾기 버튼(팝업 열기)
+    await nscm.expandSearchArea().catch(() => undefined);
+    const it0 = item(p, st.label || ''); const b0 = it0.locator('button').first();
+    if (!(await b0.isVisible({ timeout: 3_000 }).catch(() => false))) return `'${st.label}' 칸의 찾기 버튼 없음`;
+    await b0.click({ timeout: 5_000 }).catch(() => undefined);
+    const dlg0 = p.locator('[role="dialog"]:visible').last(); await dlg0.waitFor({ state: 'visible', timeout: 8_000 }).catch(() => undefined);
+    for (let k = 0; k < 20 && !(await dlg0.locator('.wj-cells .wj-row').count().catch(() => 0)); k++) await p.waitForTimeout(400);
+    return (await dlg0.isVisible().catch(() => false)) ? '' : `'${st.label}' 찾기 버튼을 눌러도 팝업이 열리지 않음`;
+  }
+  if (st.op === 'expectDialogInput') {
+    const dlg1 = p.locator('[role="dialog"]:visible').last(); const v1 = await dlg1.locator('input[type="text"], input:not([type])').first().inputValue({ timeout: 3_000 }).catch(() => '(읽지 못함)');
+    return v1 === tok(st.value) ? '' : `FAIL:팝업 조건 칸 값 '${v1}'(기대 '${tok(st.value)}' — 화면 칸 값이 팝업으로 전달)`;
+  }
+  if (st.op === 'dialogPickFirst') {
+    const dlg2 = p.locator('[role="dialog"]:visible').last(); const c2 = dlg2.locator('.wj-cells .wj-row').first().locator('.wj-cell').first();
+    if (!(await c2.isVisible({ timeout: 3_000 }).catch(() => false))) return '팝업 그리드에 행 없음';
+    await c2.dblclick({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(1_200);
+    if (await p.locator('[role="dialog"]:visible').count().catch(() => 0)) { const ok2 = p.locator('[role="dialog"]:visible').last().getByRole('button', { name: /^(OK|확인|Confirm)$/i }).first(); if (await ok2.isVisible().catch(() => false)) { await ok2.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(800); } }
+    return (await p.locator('[role="dialog"]:visible').count().catch(() => 0)) ? 'FAIL:행을 골라도 팝업이 닫히지 않음' : '';
+  }
+  if (st.op === 'expectField') {
+    const it3 = item(p, st.label || ''); const v3 = await it3.locator('input:not([type="hidden"]):not([role="combobox"])').first().inputValue({ timeout: 3_000 }).catch(() => '');
+    if (!v3.trim()) return `FAIL:'${st.label}' 칸이 비어 있음(팝업에서 고른 값이 반영되지 않음)`;
+    return st.not !== undefined && v3 === tok(st.not) ? `FAIL:'${st.label}' 칸 값이 '${v3}' 그대로(팝업에서 고른 사용자 이름으로 바뀌지 않음)` : '';
+  }
+  if (st.op === 'tab') {
+    // 그리드 영역의 시트 탭(화면 제목 탭과 이름이 같을 수 있어 마지막에 보이는 것을 누른다)
+    const rx = new RegExp(`^\\s*${escRe(st.name || '')}\\s*$`, 'i');
+    for (const loc of [p.getByRole('tab', { name: rx }), p.getByRole('button', { name: rx })]) {
+      const n = await loc.count().catch(() => 0);
+      for (let i = n - 1; i >= 0; i--) { const e = loc.nth(i); if (await e.isVisible().catch(() => false)) { await e.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(800); return ''; } }
+    }
+    return `탭 '${st.name}' 없음`;
+  }
+  if (st.op === 'expectButton') {
+    const vis = await nscm.subButton(st.name || '').isVisible({ timeout: 1_500 }).catch(() => false);
+    return vis === (st.visible !== false) ? '' : `FAIL:버튼 '${st.name}' ${vis ? '보임' : '안 보임'}(기대 ${st.visible !== false ? '보임' : '안 보임'})`;
+  }
+  if (st.op === 'selectAllToggle') {
+    // 행 머리 전체 선택 체크를 눌러 전 행 선택 → 다시 눌러 전 행 해제(AS-IS 머리글 체크로 전 행 CHK 를 뒤집는 동작 대응)
+    const h = p.locator('.wj-flexgrid .wj-topleft input.wj-column-selector').first();
+    if (!(await h.isVisible({ timeout: 3_000 }).catch(() => false))) return '행 머리 전체 선택 체크 없음';
+    const cnt = () => p.evaluate(`(() => { const c = ${probe.CTL_SRC}; if (!c) return [-1, -1]; let n = 0; for (const r of c.rows) if (r.isSelected) n++; return [n, c.rows.length]; })()`).catch(() => [-1, -1]) as Promise<number[]>;
+    await h.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(500); const a = await cnt();
+    await h.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(500); const b = await cnt();
+    return a[1] > 0 && a[0] === a[1] && b[0] === 0 ? '' : `FAIL:전체 선택 체크 1회 뒤 선택 ${a[0]}/${a[1]}행 · 2회 뒤 선택 ${b[0]}행(기대 전 행 선택 → 0행)`;
+  }
+  if (st.op === 'checkrows') {
+    // 조건에 맞는 행만 선택한다(검증용으로 만든 행만 — 계정의 다른 행은 건드리지 않는다)
+    const n = await selectRows(p, st.where || {}); await p.waitForTimeout(400);
+    return n > 0 ? '' : `조건 ${JSON.stringify(st.where)} 에 맞는 행 없음`;
+  }
+  if (st.op === 'checkall') {
+    const h = p.locator('.wj-flexgrid .wj-topleft input.wj-column-selector').first();
+    if (!(await h.isVisible({ timeout: 3_000 }).catch(() => false))) return '행 머리 전체 선택 체크 없음';
+    await h.check({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(400); return '';
+  }
+  if (st.op === 'require') {
+    // 2026-11-26 R241 3차: 화면 상태 조건(AS-IS 필드 값 등)을 그 조건이 숨기는 칸의 표시 여부로 확인 — 다르면 이 화면 상태에서는 잴 수 없음(측정 경로 없음)
+    await nscm.expandSearchArea().catch(() => undefined);
+    const { it: rq } = await itemFor(p, st); const vis = await rq.isVisible({ timeout: 2_000 }).catch(() => false);
+    return vis === (st.visible !== false) ? '' : `[전제 다름] '${st.label}' 칸 ${vis ? '보임' : '안 보임'}(이 시나리오 전제 ${st.visible !== false ? '보임' : '안 보임'} · ${st.note || ''})`;
+  }
+  if (st.op === 'requireCells') {
+    // 2026-11-26 R241 3차: 앞선 그리드 칸 검사를 통과하는 값인지 실행 때 확인(열린 대화상자 안 그리드 우선, 없으면 화면 그리드) — 아니면 측정 경로 없음
+    const conds = JSON.stringify(st.cells || []); const join = st.join === 'any' ? 'any' : 'all';
+    const r = await p.evaluate(`(() => { const dl = [...document.querySelectorAll('[role="dialog"]')].filter(d => d.offsetParent !== null).pop();
+      const host = (dl && dl.querySelector('.wj-flexgrid')) || null; const ctlOf = el => { if (!el) return null; let c = el['$WJ-CTRL']; if (!c || !c.columns) for (const k of Object.getOwnPropertyNames(el)) { const v = el[k]; if (v && typeof v === 'object' && v.columns) { c = v; break; } } return c || null; };
+      const c = ctlOf(host) || ${probe.CTL_SRC}; if (!c) return null; const cs = ${conds};
+      const vals = cs.map(q => { try { const v = c.getCellData(q.r, q.c, true); return v == null ? '' : String(v); } catch (e) { return null; } });
+      return { vals, ok: cs.map((q, i) => vals[i] !== null && (q.op === 'eq' ? vals[i] === q.v : vals[i] !== q.v)) }; })()`).catch(() => null) as { vals: (string | null)[]; ok: boolean[] } | null;
+    if (!r) return '[전제 다름] 그리드 없음(앞선 그리드 칸 검사 통과 여부를 잴 수 없음)';
+    const pass = join === 'any' ? r.ok.some(Boolean) : r.ok.every(Boolean);
+    return pass ? '' : `[전제 다름] 그리드 칸 값 ${JSON.stringify(r.vals)} 이 앞선 검사 통과 조건 아님(${st.note || ''})`;
+  }
+  if (st.op === 'pick') {
+    // 2026-11-26 R241 3차: 콤보 항목 고르기 — index(전체 항목 제외 순번) · sep/idx/eq(항목 이름을 sep 로 나눈 idx 번째 조각이 eq) · notIn(그 조각이 목록에 없는 첫 항목)
+    await nscm.expandSearchArea().catch(() => undefined);
+    const { it: pk } = await itemFor(p, st); if (!(await pk.isVisible({ timeout: 3_000 }).catch(() => false))) return `조회영역 칸 '${st.label}' 없음`;
+    const clr = pk.locator('button[aria-label="Clear"]').first(); await pk.hover().catch(() => undefined);
+    if (await clr.count()) { await clr.click({ timeout: 3_000, force: true }).catch(() => undefined); await p.waitForTimeout(300); }
+    const combo = pk.locator('[role="combobox"]').first(); await combo.click({ timeout: 3_000 }).catch(() => undefined);
+    const opts = p.locator('.MuiAutocomplete-popper [role="option"], [role="listbox"] [role="option"]'); await opts.first().waitFor({ state: 'visible', timeout: 4_000 }).catch(() => undefined);
+    const texts = (await opts.allInnerTexts().catch(() => [] as string[])).map(s => s.replace(/\s+/g, ' ').trim());
+    const isAll = (t: string) => /^\(?(all|전체|select all)\)?$/i.test(t);
+    const part = (t: string) => (st.sep ? (t.split(st.sep)[st.idx ?? 0] || '') : t).trim();
+    const cand = texts.map((t, i) => ({ t, i })).filter(q => q.t && !isAll(q.t));
+    const hit = st.index !== undefined ? cand[st.index] : st.eq !== undefined ? cand.find(q => part(q.t) === st.eq) : st.notIn ? cand.find(q => !st.notIn!.includes(part(q.t))) : cand[0];
+    if (!hit) { await p.keyboard.press('Escape').catch(() => undefined); return `'${st.label}' 에 조건 맞는 항목 없음(항목 ${cand.length}개 · 조건 ${JSON.stringify({ index: st.index, eq: st.eq, notIn: st.notIn })})`; }
+    await opts.nth(hit.i).click({ timeout: 3_000 }).catch(() => undefined); await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(500);
+    return '';
+  }
+  if (st.op === 'file') {
+    // 2026-11-26 R241 생성분(form_scen_gen 파일 크기·확장자 검사): 단추를 눌러 열린 파일 선택 창에 시험 파일(이름·바이트 수)을 넣는다. 선택 창이 안 열리면 측정 경로 없음
+    const b = nscm.subButton(st.name || ''); if (!(await b.isVisible({ timeout: 3_000 }).catch(() => false))) return `버튼 '${st.name}' 없음`;
+    const [fc] = await Promise.all([p.waitForEvent('filechooser', { timeout: 8_000 }).catch(() => null), b.click({ timeout: 5_000 }).catch(() => undefined)]);
+    if (!fc) return `버튼 '${st.name}' 을 눌러도 파일 선택 창이 열리지 않음`;
+    await fc.setFiles({ name: st.file || 'zq_formscen.txt', mimeType: 'application/octet-stream', buffer: Buffer.alloc(Math.max(1, st.size ?? 16), 0x41) }).catch(() => undefined);
+    await p.waitForTimeout(st.ms ?? 1_500); return '';
+  }
+  await nscm.expandSearchArea().catch(() => undefined);
+  const { it } = await itemFor(p, st); if (!(await it.isVisible({ timeout: 3_000 }).catch(() => false))) return `조회영역 칸 '${st.label}' 없음${st.fuzzy ? '(생성분 라벨 — TO-BE 칸 라벨과 앞부분 일치 1건 아님)' : ''}`;
+  if (st.op === 'text') {
+    const inp = it.locator('input:not([type="hidden"]):not([role="combobox"]), textarea').first(); if (!(await inp.count())) return `'${st.label}' 입력칸 없음`;
+    await inp.fill(tok(st.value), { timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(200); return '';
+  }
+  if (st.op === 'date') {
+    // 2026-11-26 R241 생성분: 날짜 칸 1개(시작·끝 칸이 따로인 화면의 끝 칸) — 기간 칸과 같은 입력 방식
+    const e = it.locator('input:not([type="hidden"])').nth(st.nth ?? 0); if (!(await e.count())) return `'${st.label}' 날짜 칸(${(st.nth ?? 0) + 1}번째 입력) 없음`;
+    const v = tok(st.value); await e.click({ timeout: 5_000 }).catch(() => undefined); await p.keyboard.press('Control+a').catch(() => undefined);
+    if (v) await p.keyboard.type(v.replace(/\D/g, ''), { delay: 30 }); else await p.keyboard.press('Delete').catch(() => undefined);
+    await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(250);
+    const got = await e.inputValue().catch(() => '');
+    return got.replace(/\D/g, '') === v.replace(/\D/g, '') ? '' : `'${st.label}' 날짜 입력 불일치: 기대 ${v} 실제 ${got}`;
+  }
+  if (st.op === 'period') {
+    const ins = it.locator('input:not([type="hidden"])'); if ((await ins.count()) < 2) return `'${st.label}' 기간 칸 2개 아님(${await ins.count()})`;
+    for (const [i, v] of [[0, tok(st.from)], [1, tok(st.to)]] as [number, string][]) {
+      const e = ins.nth(i); await e.click({ timeout: 5_000 }).catch(() => undefined); await p.keyboard.press('Control+a').catch(() => undefined);
+      if (v) await p.keyboard.type(v.replace(/\D/g, ''), { delay: 30 }); else await p.keyboard.press('Delete').catch(() => undefined);
+      await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(250);
+    }
+    const got = [(await ins.nth(0).inputValue().catch(() => '')), (await ins.nth(1).inputValue().catch(() => ''))];
+    const want = [tok(st.from), tok(st.to)];
+    return got.every((g, i) => g.replace(/\D/g, '') === want[i].replace(/\D/g, '')) ? '' : `'${st.label}' 기간 입력 불일치: 기대 ${want.join('~')} 실제 ${got.join('~')}`;
+  }
+  if (st.op === 'multi') {
+    if (st.mode === 'keep') return '';
+    const clr = it.locator('button[aria-label="Clear"]').first();
+    await it.hover().catch(() => undefined);
+    if (await clr.count()) await clr.click({ timeout: 3_000, force: true }).catch(() => undefined);
+    await p.waitForTimeout(400);
+    if (st.mode === 'first' || st.mode === 'all') {
+      const combo = it.locator('[role="combobox"]').first(); await combo.click({ timeout: 3_000 }).catch(() => undefined);
+      const opts = p.locator('.MuiAutocomplete-popper [role="option"], [role="listbox"] [role="option"]'); await opts.first().waitFor({ state: 'visible', timeout: 4_000 }).catch(() => undefined);
+      const texts = (await opts.allInnerTexts().catch(() => [] as string[])).map(s => s.replace(/\s+/g, ' ').trim());
+      const isAll = (t: string) => /^\(?(all|전체|select all)\)?$/i.test(t);
+      const i = st.mode === 'all' ? texts.findIndex(t => isAll(t)) : texts.findIndex(t => t && !isAll(t)); if (i < 0) { await p.keyboard.press('Escape').catch(() => undefined); return `'${st.label}' 후보 없음`; }
+      await opts.nth(i).click({ timeout: 3_000 }).catch(() => undefined); await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(300);
+    }
+    return '';
+  }
+  return `알 수 없는 단계 ${st.op}`;
+}
+
+/** 시나리오 1건 실행 — saves() 는 호출부가 세는 저장 요청 수 */
+export async function runFormScen(nscm: Nscm, sc: FScen, saves: () => number, rowCount?: () => Promise<number>): Promise<FRes> {
+  const base = { id: sc.id, msg: sc.msg, meth: sc.meth };
+  if (sc.kind === 'unreachable') return { ...base, result: 'NA', why: `${sc.msg}: 도달 불가(AS-IS 원문 근거) — ${sc.basis || ''} · ${sc.asis_line}`, shown: '', saves: 0 };
+  if (sc.kind === 'error_branch') return { ...base, result: 'NA', why: `${sc.msg}: 서버 오류 분기 — 정상 데이터로 재현 불가(오류 주입 금지) · ${sc.basis || ''} · ${sc.asis_line}`, shown: '', saves: 0 };
+  const missV = (sc.needs || []).filter(k => VARS[k] === undefined || VARS[k] === '');  // 2026-11-26 R241: 생성분이 앞선 검사 통과값으로 쓰는 vars 가 없으면 '@이름' 글자를 넣지 않고 미검증
+  if (missV.length) return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: 앞선 검사 통과값 vars 미지정 ${missV.join(', ')} — Doc/verify/<ID>/form_vars.json`, shown: '', saves: 0 };
+  if (rowCount && (sc.expectRowsMin || 0) > 0) { const n0 = await rowCount(); if (n0 < (sc.expectRowsMin || 0)) return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: 전제 행 ${n0}행(필요 ${sc.expectRowsMin}행 이상) — 준비 시나리오(setup) 실행 여부 확인`, shown: '', saves: 0 }; }
+  const p = nscm.page; await nscm.clearDialogs(); const s0 = saves(); let shown = ''; let clickMs = -1; let loadingSeen: boolean | null = null; const expFail: string[] = []; SAMPLE_LOADING = !!(sc.checks && sc.checks.loading);
+  for (let k = 0; k < 32 && (await shownText(p, 250)); k++) { await nscm.clearDialogs(); await p.waitForTimeout(250); }  // 앞 시나리오의 토스트가 남아 이번 문구로 읽히지 않게
+  await fakeOff(); FAKE.literal = sc.fakeSave?.literal || ''; FAKE.hits = []; FAKE.noSample = '';
+  let skipText = '';  // authGate: 권한 없는 계정 단추 숨김·비활성 = CR-070 통과(문구 대조 안 함)
+  for (const st of sc.steps || []) {
+    const before = st.op === 'click' ? '' : '';
+    const err = await runStep(nscm, st);
+    if (err && err.startsWith('FAIL:')) { expFail.push(err.slice(5)); continue; }
+    if (err && err.startsWith('SKIPTEXT:')) { skipText = err.slice(9); continue; }
+    if (err) { await fakeOff(); await acctRestore(nscm); return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: ${err}`, shown, saves: saves() - s0 }; }
+    if (st.op === 'click' || st.op === 'file' || st.op === 'search' || st.op === 'authGate') { const t = await shownText(p, 5_000); if (t) shown = shown ? `${shown} | ${t}` : t; }  // file·search·authGate 뒤 검사 문구(2026-11-26)
+    if (st.op === 'click' && clickMs < 0) clickMs = LAST_CLICK.ms; if (st.op === 'click' && LAST_CLICK.loading !== null) loadingSeen = LAST_CLICK.loading;
+    void before;
+  }
+  await acctRestore(nscm);
+  const fk = { hits: [...FAKE.hits], noSample: FAKE.noSample }; await fakeOff();
+  if (sc.fakeSave && !fk.hits.length && fk.noSample) { await nscm.clearDialogs(); return { ...base, result: 'ERROR', why: `[측정 경로 없음] ${sc.id} ${sc.msg}: 실저장 대신 쓸 ${fk.noSample}(Doc/verify/<ID>/resp_samples.json) — 요청은 막음(서버 미전송) · 화면 문구 '${shown.slice(0, 80)}'`, shown, saves: 0 }; }
+  if (sc.fakeSave) shown = shown ? `${shown} [표본 응답 ${fk.hits.join(', ') || '없음'}]` : shown;
+  const attempted = saves() - s0; await nscm.clearDialogs();
+  const exp = (sc.asis_text || '').replace(/\{\d+\}/g, '').replace(/\\n\\r|\\r\\n|\\n/g, ' ').trim();
+  const clean = (t: string) => (t || '').replace(/\{\d+\}/g, '').replace(/\\n\\r|\\r\\n|\\n/g, ' ').trim();
+  // 화면 언어가 KO 가 아닐 수 있다(언어 전환 검사 뒤) — AS-IS 메시지의 En·Ch 문구(asis_text_alt)와도 대조한다. {0} 자리는 빼고 가장 긴 조각으로 본다
+  const frag = (t: string) => { const parts = clean(t).split(/\s{2,}|(?<=\S)\s(?=\d)|\d+/).map(x => nrm(x)).filter(x => x.length >= 4); return parts.sort((a, b) => b.length - a.length)[0] || nrm(clean(t)); };
+  const key = nrm(exp).slice(0, 12); let matched = !!key && nrm(shown).includes(key); let langNote = '';
+  // 화면 언어 = 머리글의 KOR·ENG·CHN 표시. KOR 화면에서 KO 문구가 아니면 메시지 미등록(영문 기본 문구 노출)이므로 다른 언어 문구로 맞추지 않는다
+  const uiLang = ((await p.locator('header').getByText(/^(KOR|ENG|CHN)$/).first().innerText({ timeout: 2_000 }).catch(() => '')) || '').trim();
+  if (!matched && uiLang && uiLang !== 'KOR') for (const alt of sc.asis_text_alt || []) { const k2 = frag(alt).slice(0, 12); if (k2 && nrm(shown).includes(k2)) { matched = true; langNote = ` · 화면 언어 ${uiLang} — 같은 메시지의 다른 언어 문구 '${clean(alt).slice(0, 40)}' 와 일치`; break; } }
+  const wantSave = sc.expectSave ?? 0; const bad: string[] = [];
+  if (exp && !matched && !skipText) bad.push(`기대 문구 '${exp.slice(0, 40)}' 없음 — 화면 문구 '${shown.slice(0, 140) || '(없음)'}'`);  // 문구 없는 동작 시나리오(asis_text 빈값)는 단계 기대로만 판정
+  for (const e of expFail) bad.push(e);
+  if (wantSave === 0 && attempted > 0) bad.push(`검증 없이 저장 요청 ${attempted}건`);
+  if (wantSave > 0 && attempted < wantSave) bad.push(`저장 요청 ${attempted}건(기대 ${wantSave}건 이상)`);
+  let rowNote = '';
+  if (rowCount && (sc.rowsAfterMin !== undefined || sc.rowsAfterMax !== undefined)) {
+    await p.waitForTimeout(1_500); const n = await rowCount(); rowNote = ` · 실행 뒤 그리드 ${n}행`;
+    if (sc.rowsAfterMin !== undefined && n < sc.rowsAfterMin) bad.push(`실행 뒤 ${n}행(기대 ${sc.rowsAfterMin}행 이상)`);
+    if (sc.rowsAfterMax !== undefined && n > sc.rowsAfterMax) bad.push(`실행 뒤 ${n}행(기대 ${sc.rowsAfterMax}행 이하)`);
+  }
+  if (sc.matchAfter) {
+    await p.waitForTimeout(1_500); const n = await countRows(p, sc.matchAfter.where); rowNote += ` · 실행 뒤 조건 행 ${n}건`;
+    if (sc.matchAfter.min !== undefined && n < sc.matchAfter.min) bad.push(`실행 뒤 조건 행 ${n}건(기대 ${sc.matchAfter.min}건 이상)`);
+    if (sc.matchAfter.max !== undefined && n > sc.matchAfter.max) bad.push(`실행 뒤 조건 행 ${n}건(기대 ${sc.matchAfter.max}건 이하)`);
+  }
+  // 저장 측면(2026-11-16) — 화면 규칙 행(covers)이 이 값으로 판정된다. null = 이번 실행에서 재지 못함
+  const aspects: Record<string, Aspect> = {};
+  if (sc.allowSave) {
+    aspects.single = { ok: attempted === 1, note: `저장 요청 ${attempted}건(버튼 1회)` };
+    aspects.noerror = { ok: !/ORA-[0-9]{5}|SQLCODE|서버에 연결할 수 없습니다|Error occurred|실행중 에러/.test(shown), note: `화면 문구 '${shown.slice(0, 80)}'` };
+    if (sc.checks?.noConfirm) aspects.noconfirm = { ok: !/(Cancel|취소)/.test(shown), note: `저장 전 확인창 ${/(Cancel|취소)/.test(shown) ? '있음' : '없음'} · 저장 요청 ${attempted}건` };
+    if (sc.checks?.maxMs !== undefined) aspects.time = { ok: clickMs < 0 ? null : clickMs <= sc.checks.maxMs, note: clickMs < 0 ? '응답 문구 시각 미포착' : `버튼 → 결과 문구 ${clickMs}ms(기준 ${sc.checks.maxMs}ms${sc.delayMs ? ` · 시험 지연 ${sc.delayMs}ms 포함` : ''})` };
+    if (sc.checks?.loading) aspects.loading = { ok: loadingSeen, note: loadingSeen === null ? '로딩 표시 미측정' : `응답 지연 ${sc.delayMs || 0}ms 동안 로딩 표시 ${loadingSeen ? '보임' : '안 보임'}` };
+    if (sc.matchAfter) { const n = await countRows(p, sc.matchAfter.where); aspects.reflect = { ok: (sc.matchAfter.min === undefined || n >= sc.matchAfter.min) && (sc.matchAfter.max === undefined || n <= sc.matchAfter.max), note: `재조회 그리드의 대상 행 ${n}건` };
+      if (sc.checks?.msgCountEqualsMatch) { const m = /([0-9]+) *개의/.exec(shown) || /([0-9]+) *data saved/i.exec(shown) || /已保存 *([0-9]+)/.exec(shown) || /([0-9]+)/.exec(shown); aspects.count = { ok: m ? Number(m[1]) === n : null, note: m ? `결과 문구 건수 ${m[1]} ↔ 생긴 행 ${n}건(중복·누락 없음 여부)` : '결과 문구에서 건수를 못 읽음' }; }
+      if (sc.checks?.audit) { const na = await countRows(p, { ...sc.matchAfter.where, ...sc.checks.audit }); aspects.audit = { ok: n > 0 && na === n, note: `대상 행 ${n}건 중 감사 칸 조건(${JSON.stringify(sc.checks.audit)}) 일치 ${na}건` }; } }
+  }
+  const why = `${sc.id} ${sc.msg}(${sc.asis_line}) ${sc.note || ''} → 화면 문구 '${shown.slice(0, 140) || '(없음)'}' · 저장 요청 ${attempted}건${rowNote}${langNote}`;
+  aspects.pass = { ok: !bad.length, note: bad.length ? bad.join(' · ') : skipText ? `${skipText}(AS-IS 문구 대조 대신 TO-BE 룰 CR-070)` : (exp ? `화면 문구 '${shown.slice(0, 60)}' = AS-IS 문구` : '단계 기대 전부 충족') };
+  return { ...base, result: bad.length ? 'FAIL' : 'PASS', why: bad.length ? `${why} — ${bad.join(' · ')}` : skipText ? `${why} — ${skipText}(TO-BE 룰 CR-070 · tools/Harness/rules/tobe_rule_registry.csv)` : (exp ? `${why} — AS-IS 문구 '${exp.slice(0, 40)}' 와 같음` : `${why} — 단계 기대 전부 충족`), shown, saves: attempted, ms: clickMs, aspects };
+}
+
+// ── 원장 행 연결·결과 누적(2026-11-16) ─────────────────────────────────────────
+//   시나리오 결과는 Doc/verify/<ID>/form_scen_results.json 에 id 단위로 쌓는다(setup → @trace W3 → teardown 이 서로 다른 프로세스).
+//   원장 행 하나가 시나리오 여러 개에 걸리면(MSG00004 = 저장·해제) 전부 끝난 뒤의 합산 결과가 최종이다.
+export type LedgerRow = Record<string, string>;
+const RANK: Record<string, number> = { FAIL: 4, ERROR: 3, PASS: 2, NA: 1 };
+
+export function resultsPath(root: string, id: string) { return process.env.FORM_SCEN_RESULTS || path.join(root, 'Doc', 'verify', id, 'form_scen_results.json'); }  // FORM_SCEN_RESULTS = 단독 시험이 공식 결과를 덮지 않게
+export function loadResults(root: string, id: string): Record<string, FRes & { at: string }> {
+  try { return JSON.parse(fs.readFileSync(resultsPath(root, id), 'utf8')); } catch { return {}; }
+}
+export function saveResult(root: string, id: string, r: FRes, reset = false) {
+  const all = reset ? {} : loadResults(root, id); all[r.id] = { ...r, at: new Date().toISOString() };
+  fs.writeFileSync(resultsPath(root, id), JSON.stringify(all, null, 1), 'utf8');
+}
+/** 이 원장 행(E4 · source TRACE|ASIS)에 걸리는 시나리오 — TRACE 는 condition.e4[].meth, ASIS 는 asis_ref 의 행 번호·메서드 */
+export function scenariosOfRow(row: LedgerRow, scs: FScen[]): FScen[] {
+  if (row.rule_id !== 'E4') return [];
+  if (row.source === 'ASIS') {
+    const ref = row.asis_ref || ''; const msg = (row.target || '').trim();
+    return scs.filter(s => s.msg === msg && (new RegExp(`:${s.asis_line.replace(/^cs:/, '')}(?![0-9])`).test(ref)));
+  }
+  if (row.source === 'TRACE') {
+    let c: { name?: string; e4?: { meth: string; line: string; msg: string }[] } = {}; try { c = JSON.parse(row.condition || '{}'); } catch { /* 조건 없음 */ }
+    const msg = c.name || (row.target || '').trim(); const e4 = c.e4 || [];
+    // 대상이 메시지가 아니라 컨트롤·SP 인 행(txtDelegatee 등)은 e4[] 의 메시지로 잇는다 — e4 가 없을 때만 대상 이름으로 잇는다
+    if (e4.length) return scs.filter(s => e4.some(e => (e.msg || msg) === s.msg && e.meth === s.meth && (!e.line || String(e.line) === s.asis_line.replace(/^cs:/, ''))));
+    return scs.filter(s => s.msg === msg);
+  }
+  return [];
+}
+/** 행에 걸린 시나리오가 전부 실행됐을 때만 합산 결과를 준다(하나라도 안 끝났으면 null) */
+export function combine(scs: FScen[], done: Record<string, FRes>): { result: FRes['result']; why: string } | null {
+  if (!scs.length) return null; const rs = scs.map(s => done[s.id]); if (rs.some(r => !r)) return null;
+  const top = rs.reduce((a, b) => (RANK[b.result] > RANK[a.result] ? b : a));
+  return { result: top.result, why: `[폼 저장형 시나리오 ${rs.length}건] ` + rs.map(r => `${r.result}: ${r.why}`).join(' ‖ ') };
+}
+
+/** 화면 규칙 행(RULE_SCREEN) ↔ 시나리오 측면(covers) — [{row_id, result, why}] */
+export function coverRows(ledger: LedgerRow[], scs: FScen[], done: Record<string, FRes>): { row_id: string; result: FRes['result']; why: string }[] {
+  const out: { row_id: string; result: FRes['result']; why: string }[] = [];
+  for (const x of ledger.filter(q => q.source === 'RULE_SCREEN' || q.source === 'TRACE' || q.source === 'ASIS')) {
+    const hits: { sc: FScen; asp: string }[] = [];
+    for (const sc of scs) for (const c of sc.covers || []) if (c.rule === x.rule_id && new RegExp(c.target).test(x.target || '')) hits.push({ sc, asp: c.aspect });
+    if (!hits.length) continue;
+    const parts: { r: FRes['result']; t: string }[] = [];
+    for (const h of hits) { const fr = done[h.sc.id]; const a = fr && fr.aspects ? fr.aspects[h.asp] : undefined;
+      if (!fr) parts.push({ r: 'ERROR', t: `${h.sc.id} 미실행` }); else if (!a) parts.push({ r: 'ERROR', t: `${h.sc.id} 측면 ${h.asp} 미측정` });
+      else parts.push({ r: a.ok === null ? 'ERROR' : a.ok ? 'PASS' : 'FAIL', t: `${h.sc.id}(${h.sc.asis_line} ${h.sc.note || ''}) ${h.asp}: ${a.note}` }); }
+    const top = parts.reduce((a, b) => (RANK[b.r] > RANK[a.r] ? b : a));
+    out.push({ row_id: x.row_id, result: top.r, why: '[폼 저장형 시나리오 — 이 화면의 저장·해제는 조회영역 입력과 버튼으로 한다(그리드 셀 편집 없음)] ' + parts.map(q => `${q.r}: ${q.t}`).join(' ‖ ') });
+  }
+  return out;
+}

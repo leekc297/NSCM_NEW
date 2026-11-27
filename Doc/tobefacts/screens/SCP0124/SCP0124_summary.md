@@ -13,8 +13,8 @@
 | features/supply/src/pages/plan-group-dashboard/plan-group-dashboard.constants.ts | constants | 69 |
 | features/supply/src/pages/plan-group-dashboard/plan-group-dashboard.types.ts | types | 14 |
 | features/supply/src/pages/plan-group-dashboard/plan-group-dashboard.util.ts | other | 64 |
-| features/supply/src/pages/plan-group-dashboard/PlanGroupDashboard.tsx | page | 122 |
-| features/supply/src/pages/plan-group-dashboard/usePlanGroupDashboardStore.ts | store | 174 |
+| features/supply/src/pages/plan-group-dashboard/PlanGroupDashboard.tsx | page | 129 |
+| features/supply/src/pages/plan-group-dashboard/usePlanGroupDashboardStore.ts | store | 180 |
 | features/supply/src/pages/plan-group-dashboard/__asis-mapping__.md | mapping | 51 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -24,7 +24,7 @@
 | SCP0124/searchInfo//call-proc | hook | 1 | Y | PlanGroupDashboardForm.tsx:63 |
 | SCP0124/main//call-proc | hook | 1 | Y | PlanGroupDashboard.tsx:68 |
 | /admin/menu/SCP0124/column | http | 1 | Y | usePlanGroupDashboardStore.ts:126 |
-| /admin/menu/SCP0124/search-conditions | http | 1 | Y | usePlanGroupDashboardStore.ts:153 |
+| /admin/menu/SCP0124/search-conditions | http | 1 | Y | usePlanGroupDashboardStore.ts:156 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -41,7 +41,7 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/plan-group-dashboard/components/PlanGroupDashboardForm.tsx | 151 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/plan-group-dashboard/components/PlanGroupDashboardForm.tsx | 166 |
 | PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/plan-group-dashboard/components/PlanGroupDashboardForm.tsx | 181 |
-| PlanGroupDashboardForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-group-dashboard/PlanGroupDashboard.tsx | 100 |
+| PlanGroupDashboardForm | onSearch | handleSearch | jsx | features/supply/src/pages/plan-group-dashboard/PlanGroupDashboard.tsx | 107 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -74,7 +74,7 @@
 | MSG01187 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0123(5), SCP0124(3), SCP0025(3), DMF0045(1), SCP0039(1), SCP0120(1), SCP0126(1)
+- 화면ID: SCP0123(4), SCP0124(3), SCP0025(3), DMF0045(1), SCP0039(1), SCP0120(1), SCP0126(1)
 - SP/PKG: P_SCP0121_GET_SEARCH_INFO(4), PKG_COM0000(1), PKG_SCP0124(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

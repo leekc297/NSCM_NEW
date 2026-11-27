@@ -5,7 +5,7 @@
   python tools/Harness/verify/set_harness_flag.py <키> ON|OFF     켬 / 끔
   python tools/Harness/verify/set_harness_flag.py --selftest
 
-  키: snapAutoApprove, llmReviewLean, dedupGeneral, dedupScreen, orch.agentEnabled, orch.r14Enabled
+  키: snapAutoApprove, llmReviewLean, dedupGeneral, dedupScreen, orch.agentEnabled, orch.r14Enabled, orch.autoImproveOnStop
   VM 메뉴: 환경설정 → 키별 항목. steps.json S8.flag* 가 이 도구를 부른다(set_llm_review.py 와 같은 틀).
   harness.json 의 다른 줄은 건드리지 않는다(그 키 값만 바꾼다). orch.* 키는 "orch" 절 안의 값만 바꾼다.
   종료코드 0, 2 = 키·값 오류, 3 = harness.json 에 키 없음 또는 쓰기 실패
@@ -27,6 +27,7 @@ FLAGS = {
     'dedupScreen': ('화면 안 중복 정리(같은 원인 행을 대표 행으로 묶음)', True),
     'orch.agentEnabled': ('VMO 에이전트 자동 진단', True),
     'orch.r14Enabled': ('VMO 중지 뒤 계속 실행 감시', True),
+    'orch.autoImproveOnStop': ('작업 종료 뒤 대기 개선안 이어 진행(Claude Code Stop hook .claude/hooks/auto-improve-on-stop.js)', True),  # 2026-11-26 개선안 20261126192237_SELF, 사용자 지시 R257
 }
 
 

@@ -1,0 +1,22 @@
+{
+  "id": "20261127_095610_R12_ALL",
+  "at": "2026-11-27T09:56:10+09:00",
+  "ms": 1795740970690,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S5 실행 오류: workbench.postVision 오류 1회(새 서명)",
+  "screen": "",
+  "sig": "R12|S5|workbench.postVision | p is not defined",
+  "count": 1,
+  "repeat": null,
+  "detail": "p is not defined · at wb.postVision (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\workbench.js:3143:143) < at Qm.onMsg [as value] (c:\\Users\\LG\\.vscode\\extensions\\marisoft.vibe-manager-2.0.1\\workbench.js:3417:75) · 마지막 2026-11-27T09:50:03+09:00",
+  "evidence": {
+    "check": "S5",
+    "key": "S5|workbench.postVision | p is not defined",
+    "file": "",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "open",
+  "notice": false,
+  "actions": []
+}

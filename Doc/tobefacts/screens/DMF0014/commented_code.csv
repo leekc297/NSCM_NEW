@@ -7,4 +7,5 @@
 "demand/customer-fcst-upload","DMF0014","features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx","469","code","const handleDelete = () => undefined;"
 "demand/customer-fcst-upload","DMF0014","features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx","492","code","if (!filters[SHEETS.MAIN]) setFilters();"
 "demand/customer-fcst-upload","DMF0014","features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx","493","code","setOpenTemplateModal(true);"
+"demand/customer-fcst-upload","DMF0014","features/demand/src/pages/customer-fcst-upload/CustomerFcstUpload.tsx","581","jsx","<CustomerFcstTemplateModal open={openTemplateModal} modalClose={() => setOpenTemplateModal(false)} divisionId={searchParams.divisionId} filters={filters[SHEETS.MAIN] as Record<string, unknown> | undefined} staticColumns={staticColumn} />"
 "demand/customer-fcst-upload","DMF0014","features/demand/src/pages/customer-fcst-upload/useCustomerFcstUploadStore.ts","220","endpoint","⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 15행, admin 즉시 반영)"

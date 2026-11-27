@@ -1,0 +1,442 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Projects\\NSCM\\tools\\E2E\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "DMF0042",
+      "--grep",
+      "@authcrud"
+    ],
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": "C:\\Projects\\NSCM\\tools\\E2E\\video_keep.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/e2e/results/DMF0042/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "snapshotDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:5173",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": {
+            "mode": "on",
+            "size": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "headless": true,
+          "launchOptions": {},
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          },
+          "locale": "ko-KR",
+          "actionTimeout": 20000,
+          "navigationTimeout": 60000,
+          "browserName": "chromium",
+          "channel": "chrome"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "DMF0042.authcrud.spec.ts",
+      "file": "DMF0042.authcrud.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "DMF0042 권한별 CRUD @authcrud [k0101 ADMIN/DM ADMIN/DM Planner/DM Planner (W/S)/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCP Planner/SSP Viewer]",
+          "file": "DMF0042.authcrud.spec.ts",
+          "line": 14,
+          "column": 8,
+          "specs": [
+            {
+              "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
+              "ok": false,
+              "tags": [
+                "authcrud"
+              ],
+              "tests": [
+                {
+                  "timeout": 540000,
+                  "annotations": [
+                    {
+                      "type": "authcrud",
+                      "description": "tobeGroups=ADMIN|DM ADMIN|DM Planner|DM Planner (W/S)|FP Viewer|GUEST|JV Planner|SCM PI Admin|SCP Planner|SSP Viewer menuAccess=Y expected=MEASURE_SELECT|SET_PRICE|CUTOFF|REPLACE|EXCHANGE_RATE|COLUMN_SETUP|EXCEL|SAVE|DELETE|INSERT|SEARCH dataset=DM ADMIN|SYSTEM ADMIN matrix=-"
+                    },
+                    {
+                      "type": "cascade",
+                      "description": "k0101 div=40 선택=true 후보=[40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82] 권한=[81_ST,81_HM,81_HG,81_HD,81,40,EE_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,81_UC] 권한밖=0 대표포함=true 연동=-"
+                    },
+                    {
+                      "type": "crud",
+                      "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Insert 행 추가 확인(그리드 행 7576 → 7580 · 화면에 그려진 행 수는 같음(가상화)) · [측정 보류: 신규 행 저장 정리 경로 없음] cleanup_spec DMF0042 mode=editonly — 마커 행 저장 시험 안 함"
+                    },
+                    {
+                      "type": "authcrud",
+                      "description": "k0101 div=40 mode=insert save=true insert=true delete=true editable=null saved=false found=false cleaned=true restored=true"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 48151,
+                      "error": {
+                        "message": "Error: [k0101 40] 조회 결과 DIVISION 값 = 선택 Division\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: [k0101 40] 조회 결과 DIVISION 값 = 선택 Division\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:37:139",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                          "column": 139,
+                          "line": 37
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mconst\u001b[39m alert \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39malertText()\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (alert) \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mcloseAlert()\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m         \u001b[36mconst\u001b[39m divVals \u001b[33m=\u001b[39m (\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgridColumnValues(\u001b[32m'DIVISION'\u001b[39m))\u001b[33m.\u001b[39mconcat(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgridColumnValues(\u001b[32m'DIVISION_ID'\u001b[39m))\u001b[33m.\u001b[39mconcat(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgridColumnValues(\u001b[32m'Division'\u001b[39m))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 37 |\u001b[39m         \u001b[36mif\u001b[39m (divVals\u001b[33m.\u001b[39mlength) expect\u001b[33m.\u001b[39msoft(divVals\u001b[33m.\u001b[39mevery(v \u001b[33m=>\u001b[39m \u001b[33m!\u001b[39mv \u001b[33m||\u001b[39m v\u001b[33m.\u001b[39mstartsWith(div))\u001b[33m,\u001b[39m \u001b[32m`[${acc.id} ${div}] 조회 결과 DIVISION 값 = 선택 Division`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 38 |\u001b[39m         \u001b[36mconst\u001b[39m o \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m crudCycle(nscm\u001b[33m,\u001b[39m test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m,\u001b[39m \u001b[33mMARK\u001b[39m \u001b[33m+\u001b[39m (divs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m \u001b[35m1\u001b[39m \u001b[33m?\u001b[39m div\u001b[33m.\u001b[39mreplace(\u001b[35m/[^A-Za-z0-9]/g\u001b[39m\u001b[33m,\u001b[39m \u001b[32m''\u001b[39m) \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m         test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'authcrud'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`${acc.id} div=${div} mode=${o.mode} save=${o.saveVisible} insert=${o.insertVisible} delete=${o.deleteVisible} editable=${o.editable} saved=${o.saved} found=${o.found} cleaned=${o.cleaned} restored=${o.restored}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 40 |\u001b[39m         out \u001b[33m=\u001b[39m out \u001b[33m?\u001b[39m \u001b[33mObject\u001b[39m\u001b[33m.\u001b[39massign({}\u001b[33m,\u001b[39m out\u001b[33m,\u001b[39m { saved\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39msaved \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39msaved\u001b[33m,\u001b[39m found\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39mfound \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39mfound\u001b[33m,\u001b[39m cleaned\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39mcleaned \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39mcleaned\u001b[33m,\u001b[39m restored\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39mrestored \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39mrestored\u001b[33m,\u001b[39m saveCalls\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39msaveCalls \u001b[33m+\u001b[39m o\u001b[33m.\u001b[39msaveCalls\u001b[33m,\u001b[39m saveErrors\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39msaveErrors\u001b[33m.\u001b[39mconcat(o\u001b[33m.\u001b[39msaveErrors) }) \u001b[33m:\u001b[39m o\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                            "column": 139,
+                            "line": 37
+                          },
+                          "message": "Error: [k0101 40] 조회 결과 DIVISION 값 = 선택 Division\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  35 |         const alert = await nscm.alertText(); if (alert) await nscm.closeAlert();\n  36 |         const divVals = (await nscm.gridColumnValues('DIVISION')).concat(await nscm.gridColumnValues('DIVISION_ID')).concat(await nscm.gridColumnValues('Division'));\n> 37 |         if (divVals.length) expect.soft(divVals.every(v => !v || v.startsWith(div)), `[${acc.id} ${div}] 조회 결과 DIVISION 값 = 선택 Division`).toBeTruthy();\n     |                                                                                                                                           ^\n  38 |         const o = await crudCycle(nscm, test.info(), PLAN, MARK + (divs.length > 1 ? div.replace(/[^A-Za-z0-9]/g, '') : ''));\n  39 |         test.info().annotations.push({ type: 'authcrud', description: `${acc.id} div=${div} mode=${o.mode} save=${o.saveVisible} insert=${o.insertVisible} delete=${o.deleteVisible} editable=${o.editable} saved=${o.saved} found=${o.found} cleaned=${o.cleaned} restored=${o.restored}` });\n  40 |         out = out ? Object.assign({}, out, { saved: out.saved && o.saved, found: out.found && o.found, cleaned: out.cleaned && o.cleaned, restored: out.restored && o.restored, saveCalls: out.saveCalls + o.saveCalls, saveErrors: out.saveErrors.concat(o.saveErrors) }) : o;\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:37:139"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                            "column": 120,
+                            "line": 50
+                          },
+                          "message": "Error: [k0101] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                        ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:50:120"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                            "column": 186,
+                            "line": 50
+                          },
+                          "message": "Error: [k0101] 재조회 후 신규 행 존재\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                                                                                          ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:50:186"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T08:59:05.221Z",
+                      "annotations": [
+                        {
+                          "type": "authcrud",
+                          "description": "tobeGroups=ADMIN|DM ADMIN|DM Planner|DM Planner (W/S)|FP Viewer|GUEST|JV Planner|SCM PI Admin|SCP Planner|SSP Viewer menuAccess=Y expected=MEASURE_SELECT|SET_PRICE|CUTOFF|REPLACE|EXCHANGE_RATE|COLUMN_SETUP|EXCEL|SAVE|DELETE|INSERT|SEARCH dataset=DM ADMIN|SYSTEM ADMIN matrix=-"
+                        },
+                        {
+                          "type": "cascade",
+                          "description": "k0101 div=40 선택=true 후보=[40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82] 권한=[81_ST,81_HM,81_HG,81_HD,81,40,EE_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,81_UC] 권한밖=0 대표포함=true 연동=-"
+                        },
+                        {
+                          "type": "crud",
+                          "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Insert 행 추가 확인(그리드 행 7576 → 7580 · 화면에 그려진 행 수는 같음(가상화)) · [측정 보류: 신규 행 저장 정리 경로 없음] cleanup_spec DMF0042 mode=editonly — 마커 행 저장 시험 안 함"
+                        },
+                        {
+                          "type": "authcrud",
+                          "description": "k0101 div=40 mode=insert save=true insert=true delete=true editable=null saved=false found=false cleaned=true restored=true"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                        "column": 139,
+                        "line": 37
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 51241,
+                      "error": {
+                        "message": "Error: [k0101 40] 조회 결과 DIVISION 값 = 선택 Division\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: [k0101 40] 조회 결과 DIVISION 값 = 선택 Division\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:37:139",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                          "column": 139,
+                          "line": 37
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mconst\u001b[39m alert \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39malertText()\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (alert) \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mcloseAlert()\u001b[33m;\u001b[39m\n \u001b[90m 36 |\u001b[39m         \u001b[36mconst\u001b[39m divVals \u001b[33m=\u001b[39m (\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgridColumnValues(\u001b[32m'DIVISION'\u001b[39m))\u001b[33m.\u001b[39mconcat(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgridColumnValues(\u001b[32m'DIVISION_ID'\u001b[39m))\u001b[33m.\u001b[39mconcat(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgridColumnValues(\u001b[32m'Division'\u001b[39m))\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 37 |\u001b[39m         \u001b[36mif\u001b[39m (divVals\u001b[33m.\u001b[39mlength) expect\u001b[33m.\u001b[39msoft(divVals\u001b[33m.\u001b[39mevery(v \u001b[33m=>\u001b[39m \u001b[33m!\u001b[39mv \u001b[33m||\u001b[39m v\u001b[33m.\u001b[39mstartsWith(div))\u001b[33m,\u001b[39m \u001b[32m`[${acc.id} ${div}] 조회 결과 DIVISION 값 = 선택 Division`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 38 |\u001b[39m         \u001b[36mconst\u001b[39m o \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m crudCycle(nscm\u001b[33m,\u001b[39m test\u001b[33m.\u001b[39minfo()\u001b[33m,\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m,\u001b[39m \u001b[33mMARK\u001b[39m \u001b[33m+\u001b[39m (divs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m \u001b[35m1\u001b[39m \u001b[33m?\u001b[39m div\u001b[33m.\u001b[39mreplace(\u001b[35m/[^A-Za-z0-9]/g\u001b[39m\u001b[33m,\u001b[39m \u001b[32m''\u001b[39m) \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 39 |\u001b[39m         test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'authcrud'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`${acc.id} div=${div} mode=${o.mode} save=${o.saveVisible} insert=${o.insertVisible} delete=${o.deleteVisible} editable=${o.editable} saved=${o.saved} found=${o.found} cleaned=${o.cleaned} restored=${o.restored}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 40 |\u001b[39m         out \u001b[33m=\u001b[39m out \u001b[33m?\u001b[39m \u001b[33mObject\u001b[39m\u001b[33m.\u001b[39massign({}\u001b[33m,\u001b[39m out\u001b[33m,\u001b[39m { saved\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39msaved \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39msaved\u001b[33m,\u001b[39m found\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39mfound \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39mfound\u001b[33m,\u001b[39m cleaned\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39mcleaned \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39mcleaned\u001b[33m,\u001b[39m restored\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39mrestored \u001b[33m&&\u001b[39m o\u001b[33m.\u001b[39mrestored\u001b[33m,\u001b[39m saveCalls\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39msaveCalls \u001b[33m+\u001b[39m o\u001b[33m.\u001b[39msaveCalls\u001b[33m,\u001b[39m saveErrors\u001b[33m:\u001b[39m out\u001b[33m.\u001b[39msaveErrors\u001b[33m.\u001b[39mconcat(o\u001b[33m.\u001b[39msaveErrors) }) \u001b[33m:\u001b[39m o\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                            "column": 139,
+                            "line": 37
+                          },
+                          "message": "Error: [k0101 40] 조회 결과 DIVISION 값 = 선택 Division\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  35 |         const alert = await nscm.alertText(); if (alert) await nscm.closeAlert();\n  36 |         const divVals = (await nscm.gridColumnValues('DIVISION')).concat(await nscm.gridColumnValues('DIVISION_ID')).concat(await nscm.gridColumnValues('Division'));\n> 37 |         if (divVals.length) expect.soft(divVals.every(v => !v || v.startsWith(div)), `[${acc.id} ${div}] 조회 결과 DIVISION 값 = 선택 Division`).toBeTruthy();\n     |                                                                                                                                           ^\n  38 |         const o = await crudCycle(nscm, test.info(), PLAN, MARK + (divs.length > 1 ? div.replace(/[^A-Za-z0-9]/g, '') : ''));\n  39 |         test.info().annotations.push({ type: 'authcrud', description: `${acc.id} div=${div} mode=${o.mode} save=${o.saveVisible} insert=${o.insertVisible} delete=${o.deleteVisible} editable=${o.editable} saved=${o.saved} found=${o.found} cleaned=${o.cleaned} restored=${o.restored}` });\n  40 |         out = out ? Object.assign({}, out, { saved: out.saved && o.saved, found: out.found && o.found, cleaned: out.cleaned && o.cleaned, restored: out.restored && o.restored, saveCalls: out.saveCalls + o.saveCalls, saveErrors: out.saveErrors.concat(o.saveErrors) }) : o;\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:37:139"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                            "column": 120,
+                            "line": 50
+                          },
+                          "message": "Error: [k0101] 허용 계정 마커 행 저장 \n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                        ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:50:120"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                            "column": 186,
+                            "line": 50
+                          },
+                          "message": "Error: [k0101] 재조회 후 신규 행 존재\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  48 |       if (expEdit != null && out.editable != null) expect.soft(out.editable, `[${acc.id}] btn_auth EDIT=${expEdit ? 'Y' : 'N'} → 셀 편집기 ${expEdit ? '열림' : '안 열림'}`).toBe(expEdit);\n  49 |       if (expSave === true) {\n> 50 |         if (out.mode === 'insert') { expect.soft(out.saved, `[${acc.id}] 허용 계정 마커 행 저장 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy(); expect(out.cleaned, `[${acc.id}] 마커 행 정리 완료`).toBeTruthy(); }\n     |                                                                                                                                                                                          ^\n  51 |         else if (out.mode === 'edit-save') { expect.soft(out.editable, `[${acc.id}] 허용 계정 편집 가능 셀 존재`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, `[${acc.id}] 수정 저장 성공 ${out.saveErrors.join(' / ')}`).toBeTruthy(); expect.soft(out.found, `[${acc.id}] 재조회 후 수정값 반영`).toBeTruthy(); expect(out.restored, `[${acc.id}] 원래 값 복원 저장·확인`).toBeTruthy(); } }\n  52 |       } else if (expSave === false) {\n  53 |         if (out.editable != null) expect.soft(out.editable, `[${acc.id}] 비허용 계정 셀 편집 불가`).toBeFalsy();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts:50:186"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "[search] 조회 요청 없음 — 알림 '수정 중인 데이터가 있습니다. 조회 하시겠습니까? Cancel Confirm' 뒤 5초 동안 조회 요청이 나가지 않아 응답 대기(120초) 생략\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-26T09:00:03.869Z",
+                      "annotations": [
+                        {
+                          "type": "authcrud",
+                          "description": "tobeGroups=ADMIN|DM ADMIN|DM Planner|DM Planner (W/S)|FP Viewer|GUEST|JV Planner|SCM PI Admin|SCP Planner|SSP Viewer menuAccess=Y expected=MEASURE_SELECT|SET_PRICE|CUTOFF|REPLACE|EXCHANGE_RATE|COLUMN_SETUP|EXCEL|SAVE|DELETE|INSERT|SEARCH dataset=DM ADMIN|SYSTEM ADMIN matrix=-"
+                        },
+                        {
+                          "type": "cascade",
+                          "description": "k0101 div=40 선택=true 후보=[40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82] 권한=[81_ST,81_HM,81_HG,81_HD,81,40,EE_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,81_UC] 권한밖=0 대표포함=true 연동=-"
+                        },
+                        {
+                          "type": "crud",
+                          "description": "mode=insert save=Y insert=Y delete=Y editable=- inserted=Y saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Insert 행 추가 확인(그리드 행 7576 → 7580 · 화면에 그려진 행 수는 같음(가상화)) · [측정 보류: 신규 행 저장 정리 경로 없음] cleanup_spec DMF0042 mode=editonly — 마커 행 저장 시험 안 함"
+                        },
+                        {
+                          "type": "authcrud",
+                          "description": "k0101 div=40 mode=insert save=true insert=true delete=true editable=null saved=false found=false cleaned=true restored=true"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-867e9-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0042.authcrud.spec.ts",
+                        "column": 139,
+                        "line": 37
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a38df0d163ad1ae85e8e-48816df1153261326238",
+              "file": "DMF0042.authcrud.spec.ts",
+              "line": 17,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "DMF0042 권한별 CRUD @authcrud [miyeong.lee GUEST]",
+          "file": "DMF0042.authcrud.spec.ts",
+          "line": 14,
+          "column": 8,
+          "specs": [
+            {
+              "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
+              "ok": true,
+              "tags": [
+                "authcrud"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "authcrud",
+                      "description": "tobeGroups=GUEST menuAccess=N expected= dataset=DM Planner (W/S) matrix=-"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 61353,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[openScreen] DMF0042: 주소 진입 뒤 Home 에 남음(http://127.0.0.1:5173/view/home) — 화면 진입 실패로 처리\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-26T09:01:08.166Z",
+                      "annotations": [
+                        {
+                          "type": "authcrud",
+                          "description": "tobeGroups=GUEST menuAccess=N expected= dataset=DM Planner (W/S) matrix=-"
+                        }
+                      ],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\artifacts\\DMF0042.authcrud-DMF0042-권-1983c-용이면-마커-행-CRUD-·-비허용이면-편집-불가-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a38df0d163ad1ae85e8e-2ba4d028f6171b5ce9e6",
+              "file": "DMF0042.authcrud.spec.ts",
+              "line": 17,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-26T08:59:04.005Z",
+    "duration": 189714.671,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

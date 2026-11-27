@@ -1,0 +1,297 @@
+{
+ "rule_id": "MS1",
+ "hash": "749b649c4abcd3df",
+ "groups": [
+  {
+   "rows": [
+    "EG-07d04d5c"
+   ],
+   "why": "Hard-coded Korean text '중복된 데이터가 있습니다'. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-15178a36"
+   ],
+   "why": "Hard-coded text '${done} (${res.count...'. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-1ac6e593"
+   ],
+   "why": "Hard-coded text '삭제할 행을 선택해 주세요.'. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-771f1a11"
+   ],
+   "why": "Korean text inside the PROC about exceeding the save limit. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-7fe24589"
+   ],
+   "why": "Hard-coded text inside the MSG.REQUIRED_FIELD template. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-a58497bd"
+   ],
+   "why": "Hard-coded text '데이터 조회 후 다시 시도해 주시기 바랍니다.'. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-b0993fb1"
+   ],
+   "why": "Korean text inside the PROC about no data to restore for the selected version. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-b85baf0f"
+   ],
+   "why": "Hard-coded text '[DMF0042] Ver. Cutoff 실패:'. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "EG-f3660adc"
+   ],
+   "why": "Korean text inside the PROC saying the Division value does not exist. No other row checks this literal, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-069d0776",
+    "V-48677429",
+    "V-50b6f29a",
+    "V-70b9753c",
+    "V-ff7f42af"
+   ],
+   "why": "All check the meaning mapping of MSG00275 on the same SaveData path (non-BRANCH), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-46b6f2af",
+    "V-75905d02",
+    "V-7df35d81",
+    "V-dd4f532f",
+    "V-f8896f10"
+   ],
+   "why": "All check MSG00275 on the same SaveData(BRANCH) path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-089b7f1b",
+    "V-1c362617",
+    "V-36d16967",
+    "V-61aa9979",
+    "V-88bc93e5"
+   ],
+   "why": "All check MSG00002 on the same ValidationCheck path (non-BRANCH), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-160763bf",
+    "V-4cb78a16",
+    "V-d22e7686",
+    "V-d6dc0b90",
+    "V-df15cdc4"
+   ],
+   "why": "All check MSG00002 on the same ValidationCheck(BRANCH) path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-8f18880b",
+    "V-ab18df93"
+   ],
+   "why": "Both check MSG00002 on the same SaveData path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-0a78aebd",
+    "V-5387c67c",
+    "V-90f88fdd",
+    "V-ddeb7f1e"
+   ],
+   "why": "All check MSG00113 on the same EditButton path (non-BRANCH), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-0c8394a6",
+    "V-26700be7",
+    "V-32a39b67",
+    "V-3c291a3b",
+    "V-4a902fe1"
+   ],
+   "why": "All check MSG00113 on the same EditButton(BRANCH) path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-2d99a1fa",
+    "V-69f01190",
+    "V-d412ce2e",
+    "V-ecde13be",
+    "V-ee50be6c"
+   ],
+   "why": "All check MSG00113 on the same SaveData(BRANCH) path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-6c7a0d65",
+    "V-81fc840b",
+    "V-8bb5a053",
+    "V-c1c350f0",
+    "V-fa757871"
+   ],
+   "why": "All check MSG00113 on the same SaveData path (non-BRANCH), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-1f99f900",
+    "V-312c6cc5",
+    "V-4859fcd4",
+    "V-631531ef",
+    "V-a6eb152c",
+    "V-beb2e07c"
+   ],
+   "why": "All check MSG00004 on the same SaveData path (non-BRANCH), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-127d7c82",
+    "V-3f2dc9f5",
+    "V-3f3013e3",
+    "V-585bddda",
+    "V-7bcc681e"
+   ],
+   "why": "All check MSG00004 on the same SaveData(BRANCH) path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-18643349",
+    "V-421cc7ac",
+    "V-4fd358d9",
+    "V-51139da4",
+    "V-520db377",
+    "V-a723a9f6",
+    "V-beeff291",
+    "V-c057a8e2",
+    "V-c9799e13",
+    "V-d1a5a167",
+    "V-f1f0a0d7"
+   ],
+   "why": "All check MSG00310 on the same SaveData path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-25e07320",
+    "V-adb4d499",
+    "V-c279514b",
+    "V-fca41336"
+   ],
+   "why": "All check MSG00289 on the same spdMain_Changed path (non-BRANCH), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-84049a72",
+    "V-ad429673",
+    "V-b79e8f76",
+    "V-f7be849f"
+   ],
+   "why": "All check MSG00289 on the same spdMain_Changed(BRANCH) path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-28029f2a"
+   ],
+   "why": "The only row for MSG00096 on the SaveButton path (non-BRANCH), so it stays alone."
+  },
+  {
+   "rows": [
+    "V-ba00385d"
+   ],
+   "why": "The only row for MSG00096 on the SaveButton(BRANCH) path; its branch differs from the non-BRANCH row, so it stays alone."
+  },
+  {
+   "rows": [
+    "V-36001273",
+    "V-579eea13",
+    "V-b45001d7",
+    "V-c7ef8901",
+    "V-f4fbb36f"
+   ],
+   "why": "All check MSG00227 on the same cboBucketType_Click path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-3a4ad76a",
+    "V-425a3c4e",
+    "V-48ab3efb",
+    "V-a790176b",
+    "V-e7fb2380"
+   ],
+   "why": "All check MSG00043 on the same SaveData path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-447100a7",
+    "V-53dcc69e",
+    "V-74483be0",
+    "V-9bd6562d",
+    "V-f2370f83"
+   ],
+   "why": "All check MSG00108 on the same FindData path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-448a8715",
+    "V-475fa61f",
+    "V-6999779c",
+    "V-89344170",
+    "V-dd070f51"
+   ],
+   "why": "All check MSG00097 on the same FindData(BRANCH) path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-4b885965",
+    "V-4d42b37a",
+    "V-9681f16b",
+    "V-baf372b3",
+    "V-f5dab291"
+   ],
+   "why": "All check MSG00097 on the same FindData path (non-BRANCH), with the same expected result."
+  },
+  {
+   "rows": [
+    "V-4bc83eb6",
+    "V-4d27f84e",
+    "V-ddf2c1c3",
+    "V-ed2ee3f3",
+    "V-fd83fda3"
+   ],
+   "why": "All check MSG00142 on the same btnExchangeRate_Click path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-4f60dc2e",
+    "V-6ca9c4a5",
+    "V-733a3b73",
+    "V-7450dd00",
+    "V-7b52565a"
+   ],
+   "why": "All check MSG00282 on the same btnSetPrice_Click path, with the same expected result."
+  },
+  {
+   "rows": [
+    "V-54534967",
+    "V-55de066a",
+    "V-7eedde56",
+    "V-ca84b068",
+    "V-fe2d9ed9"
+   ],
+   "why": "All check MSG00276 on the same FindData path, with the same expected result."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:45:21",
+ "cost": 0.2481452
+}

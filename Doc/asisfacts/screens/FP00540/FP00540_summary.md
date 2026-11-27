@@ -104,8 +104,8 @@
 ## 7. 확인 필요 (4건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 599 | FP00540_ValidateDataDelegate | FP\{?default:part_service}\FP00540_SSP_Shipping_Plan#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 595 | FP00540_ValidateDataDelegate | FP\{?default:part_service}\FP00540_SSP_Shipping_Plan#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 599 | FP00540_ValidateDataDelegate | FP\{?default:part_service}\FP00540_SSP_Shipping_Plan#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 582 | FP00540_SaveDataDelegate | FP\{?default:part_service}\FP00540_SSP_Shipping_Plan#merge_FP00540 | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 597 | FP00540_ValidateDataDelegate | FP\{?default:part_service}\FP00540_SSP_Shipping_Plan#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 

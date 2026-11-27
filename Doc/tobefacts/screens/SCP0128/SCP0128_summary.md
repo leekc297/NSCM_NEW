@@ -1,24 +1,24 @@
 # SCP0128 — To-Be Fact Pack 요약
 
 - page_key: `supply/safety-stock` · feature: supply · As-is Fact Pack 있음
-- 파일 13 · 엔드포인트 호출 9 (미해결 0, 주석 속 4) · 이벤트 16 · 컴포넌트 사용 33 · 하드코딩 컬럼 0 · 메시지 20
+- 파일 13 · 엔드포인트 호출 9 (미해결 0, 주석 속 4) · 이벤트 18 · 컴포넌트 사용 33 · 하드코딩 컬럼 0 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | component | 284 |
-| features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | component | 221 |
+| features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | component | 245 |
 | features/supply/src/pages/safety-stock/index.ts | index | 2 |
-| features/supply/src/pages/safety-stock/safety-stock.constants.ts | constants | 92 |
+| features/supply/src/pages/safety-stock/safety-stock.constants.ts | constants | 97 |
 | features/supply/src/pages/safety-stock/safety-stock.types.ts | types | 26 |
 | features/supply/src/pages/safety-stock/SafetyStock.tsx | page | 219 |
 | features/supply/src/pages/safety-stock/useSafetyStockStore.ts | store | 174 |
 | features/supply/src/pages/safety-stock/utils/safety-stock.util.ts | util | 73 |
 | features/supply/src/pages/safety-stock/utils/safetyStockDivisionMap.ts | util | 22 |
 | features/supply/src/pages/safety-stock/utils/safetyStockEditLock.ts | util | 56 |
-| features/supply/src/pages/safety-stock/utils/safetyStockSaveRequest.ts | util | 119 |
-| features/supply/src/pages/safety-stock/utils/safetyStockSaveValidation.ts | util | 128 |
+| features/supply/src/pages/safety-stock/utils/safetyStockSaveRequest.ts | util | 156 |
+| features/supply/src/pages/safety-stock/utils/safetyStockSaveValidation.ts | util | 136 |
 | features/supply/src/pages/safety-stock/__asis-mapping__.md | mapping | 177 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -29,7 +29,7 @@
 | SCP0128/main//call-proc | hook | 1 | Y | SafetyStock.tsx:66 |
 | /admin/menu/SCP0128/column | http | 1 | Y | useSafetyStockStore.ts:132 |
 | /admin/menu/SCP0128/search-conditions | http | 1 | Y | useSafetyStockStore.ts:153 |
-| /SCP0128/main/SAVE/call-proc | http | 1 | Y | safetyStockSaveRequest.ts:105 |
+| /SCP0128/main/SAVE/call-proc | http | 1 | Y | safetyStockSaveRequest.ts:138 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -54,7 +54,9 @@
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 140 |
 | g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 141 |
 | g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 157 |
-| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 161 |
+| sender.activeEditor? | input | sanitizeQtyInput | addEventListener | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 178 |
+| g | prepareCellForEdit | prepareEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 180 |
+| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 184 |
 | SafetyStockGrid | onItemModalOpenChange | setItemModalOpen | jsx | features/supply/src/pages/safety-stock/SafetyStock.tsx | 214 |
 
 ## 5. 컴포넌트 사용 집계
@@ -94,14 +96,16 @@
 | MSG00001 | 1 |
 | MSG00428 | 1 |
 | MSG00611 | 1 |
-| MSG00219 | 1 |
+| MSG01230 | 1 |
 | MSG00085 | 1 |
+| MSG00460 | 1 |
 | MSG00458 | 1 |
+| MSG00004 | 1 |
 | MSG00003 | 1 |
 | MSG00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0127(13), SCP0128(6), SCP0001(2), SDM5010(2), SCP0122(2), SCP0006(2), SCP0011(2), SCP0125(1), SCP0126(1), SCP0002(1)
+- 화면ID: SCP0127(13), SCP0128(6), SCP0001(2), SDM5010(2), SCP0131(2), SCP0122(2), SCP0006(2), SCP0011(2), SCP0132(2), SCP0125(1), SCP0126(1), SCP0002(1)
 - SP/PKG: PKG_SCP0128(10), P_SCP0128_GET_SEARCH_INFO(5), P_SCP0128_SAVE_SAFETY_STOCK(2), P_SCP0128_GET_SAFETY_STOCK(1), SCP0128_GET_SEARCH_INFO(1), P_USER_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

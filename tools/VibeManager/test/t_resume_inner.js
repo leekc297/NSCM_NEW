@@ -62,7 +62,10 @@ let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x 
 const cnt = k => { try { return fs.readFileSync(path.join(root, 'out', `${k}.txt`), 'utf8').length; } catch { return 0; } };
 const calls = () => { try { return fs.readFileSync(path.join(vibeDir, 'calls.txt'), 'utf8').trim().split('\n').filter(Boolean).map(l => JSON.parse(l)); } catch { return []; } };
 const mk = (id, job) => new ChainRunner(api, { id, jobId: job || '', autoAnswer: false, onLog: () => { }, onStep: () => { }, onNote: () => { } });
-const cut = async (r, pr, ms) => { await new Promise(res => setTimeout(res, ms)); r.stop(); wbm.abortRunningChains('시험: 창 다시 로드'); await pr; };
+// 2026-11-26: 고정 시각에 끊으면 전체 시험 부하(다른 세션과 겹침)에서 목표 지점 전에 끊겨 흔들림(16:34, 18:25 전체 실행에서 ④ 실패, 단독 통과).
+//   until 이 있으면 ms 뒤부터 until() 이 참이 될 때까지(최대 40초) 기다렸다 끊는다
+const liveProg = id => { try { const d = path.join(vibeDir, 'orch', 'chain_progress'); for (const n of fs.readdirSync(d)) { if (!n.toUpperCase().startsWith(String(id).toUpperCase() + '_')) continue; const j = JSON.parse(fs.readFileSync(path.join(d, n), 'utf8')); if (!j.interruptedAt) return j; } } catch { } return null; };
+const cut = async (r, pr, ms, until) => { await new Promise(res => setTimeout(res, ms)); if (until) { const t0 = Date.now(); while (!until() && Date.now() - t0 < 40000) await new Promise(res => setTimeout(res, 100)); } r.stop(); wbm.abortRunningChains('시험: 창 다시 로드'); await pr; };
 (async () => {
   // ① 단계 안 재개 지원 스크립트
   const chA = { kind: 'chain', label: '측정 체인', chainId: 'tA', steps: [{ task: 'T.c1', title: '1. 첫 단계' }, { task: 'T.prog', title: '2. 측정' }, { task: 'T.c3', title: '3. 끝 단계' }] };
@@ -95,7 +98,7 @@ const cut = async (r, pr, ms) => { await new Promise(res => setTimeout(res, ms))
   chk('AI 단계 재개 완료 OK', bC.status === 'OK', bC.status);
   // ④ 수선 2회차에서 끊김 → 2회차부터
   const chD = { kind: 'chain', label: '수선 체인', chainId: 'tD', steps: [{ task: 'T.bad', title: '1. 판정', repair: { claudeOf: 'RQ', rounds: 3 } }] };
-  const d1 = mk('rin0004'); await cut(d1, d1.run(chD), 6000);
+  const d1 = mk('rin0004'); await cut(d1, d1.run(chD), 1500, () => { const j = liveProg('rin0004'); return !!(j && j.sub && j.sub.round === 2 && j.sub.stage === 'ai'); });
   const recD = wbm.resumable(p, { screen: 'rin0004' })[0];
   chk('끊기기 전: 첫 실행 + 1회차 뒤 재실행 = 2회 실행', cnt('bad_cnt') === 2, cnt('bad_cnt'));
   chk('수선 회차 기록(2회차 · AI 단계 · 첫 실행 종료코드)', recD && recD.sub && recD.sub.round === 2 && recD.sub.stage === 'ai' && recD.sub.code === 6, JSON.stringify(recD && recD.sub));

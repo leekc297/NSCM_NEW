@@ -1,0 +1,140 @@
+{
+ "id": "SSP0020",
+ "started": "2026-11-26 17:13:27.394",
+ "tool": "asis_live_run.py",
+ "steps": [
+  {
+   "step": "open",
+   "cmd": "open",
+   "at": "2026-11-26 17:13:53.916",
+   "in_menu": true,
+   "open_timed_out": false,
+   "form_type": "GSCM.SSP.Plan.UIL.SSP0020_Delegate",
+   "form_text": "Delegate",
+   "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0020_Delegate.UIL.dll",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 17:14:06.719"
+  },
+  {
+   "step": "dump_load",
+   "cmd": "dump",
+   "at": "2026-11-26 17:14:12.227",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0020\\run_20261126_171327\\dump_load.json",
+   "control_count": 35,
+   "grid_count": 1,
+   "total": "Total : 1",
+   "time_status": "DB : 5.718s, UI : 0.02s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 17:14:12.287"
+  },
+  {
+   "step": "shot_load",
+   "cmd": "shot",
+   "at": "2026-11-26 17:14:12.454",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0020\\run_20261126_171327\\shots\\SSP0020_01_load.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 17:14:12.689"
+  },
+  {
+   "step": "find",
+   "cmd": "find",
+   "at": "2026-11-26 17:14:13.023",
+   "call_timed_out": false,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 17:14:14.205"
+  },
+  {
+   "step": "dump_find",
+   "cmd": "dump",
+   "at": "2026-11-26 17:14:20.259",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0020\\run_20261126_171327\\dump_find.json",
+   "control_count": 35,
+   "grid_count": 1,
+   "total": "Total : 1",
+   "time_status": "DB : 0.027s, UI : 0.082s",
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 17:14:20.284"
+  },
+  {
+   "step": "shot_find",
+   "cmd": "shot",
+   "at": "2026-11-26 17:14:20.613",
+   "method": "PrintWindow",
+   "path": "C:\\Projects\\NSCM\\Doc\\asislive\\SSP0020\\run_20261126_171327\\shots\\SSP0020_02_find.png",
+   "width": 1936,
+   "height": 1168,
+   "dialog_count": 0,
+   "ok": true,
+   "done": "2026-11-26 17:14:20.814"
+  },
+  {
+   "step": "sweep",
+   "ok": true,
+   "left": 0,
+   "dialogs_open": 0,
+   "closed": 0,
+   "error": null
+  }
+ ],
+ "status": "OK",
+ "gate": {
+  "opened": true,
+  "grid_headers": true,
+  "grid_rows": true,
+  "shots": 2,
+  "calls": 13,
+  "calls_with_params": 13
+ },
+ "client_base_url": "http://localhost:8086/",
+ "other_launchers": [],
+ "scenario": null,
+ "menu_warm_sec": 1.56,
+ "menu_warm_rows": 273,
+ "user_id": "jaeuk.shin",
+ "prev_user_id": "jaeuk.shin",
+ "main": {
+  "title": "SCM DEV ",
+  "user": "DEV ENV : Login : 신재욱 [업무혁신.SCM PI.공급/생산SCM PI팀]",
+  "menu_count": 273
+ },
+ "screen": {
+  "form_type": "GSCM.SSP.Plan.UIL.SSP0020_Delegate",
+  "form_text": "Delegate",
+  "assembly": "C:\\Projects\\NSCM\\GSCM\\02.Launcher\\GSCM.Launcher\\bin\\Debug\\SSP\\Plan\\SSP0020_Delegate.UIL.dll"
+ },
+ "find": {
+  "signaled": true,
+  "time_status": "DB : 0.027s, UI : 0.082s",
+  "total": "Total : 1",
+  "how": "status"
+ },
+ "t_open": "2026-11-26 17:13:53.802",
+ "t_find": "2026-11-26 17:14:12.744",
+ "dialogs": [],
+ "popups_closed": [],
+ "dump_used": "dump_find.json",
+ "counts": {
+  "controls": 35,
+  "layout_items": 14,
+  "grids": 1,
+  "sheets": 2,
+  "header_cols": 18,
+  "data_rows": 2,
+  "grid_rows": 2,
+  "calls_total": 22,
+  "calls_screen": 13,
+  "calls_find": 3,
+  "dialogs": 0
+ },
+ "why": "",
+ "ended": "2026-11-26 17:14:23.225",
+ "exit": 0
+}

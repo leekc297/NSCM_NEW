@@ -1,18 +1,18 @@
 # SCP0095 — To-Be Fact Pack 요약
 
 - page_key: `supply/global-psi-elec` · feature: supply · As-is Fact Pack 있음
-- 파일 11 · 엔드포인트 호출 8 (미해결 0, 주석 속 3) · 이벤트 13 · 컴포넌트 사용 30 · 하드코딩 컬럼 1 · 메시지 16
+- 파일 11 · 엔드포인트 호출 8 (미해결 0, 주석 속 3) · 이벤트 13 · 컴포넌트 사용 31 · 하드코딩 컬럼 1 · 메시지 18
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecDrilldownModal.tsx | component | 130 |
-| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | component | 309 |
-| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | component | 222 |
-| features/supply/src/pages/global-psi-elec/global-psi-elec.constants.ts | constants | 140 |
+| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | component | 312 |
+| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | component | 225 |
+| features/supply/src/pages/global-psi-elec/global-psi-elec.constants.ts | constants | 144 |
 | features/supply/src/pages/global-psi-elec/global-psi-elec.types.ts | types | 21 |
-| features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | page | 292 |
+| features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | page | 318 |
 | features/supply/src/pages/global-psi-elec/index.ts | index | 2 |
 | features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | store | 215 |
 | features/supply/src/pages/global-psi-elec/utils/globalPsiElecColumns.ts | util | 144 |
@@ -22,9 +22,9 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 3 | Y | GlobalPsiElecForm.tsx:74 GlobalPsiElecForm.tsx:76 GlobalPsiElecForm.tsx:78 |
-| SCP0095/globalPsiElec//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:72 |
-| SCP0095/calendar//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:92 |
+| (useTabComboQueries) | hook | 3 | Y | GlobalPsiElecForm.tsx:73 GlobalPsiElecForm.tsx:75 GlobalPsiElecForm.tsx:77 |
+| SCP0095/globalPsiElec//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:73 |
+| SCP0095/calendar//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:98 |
 | /admin/menu/SCP0095/column | http | 1 | Y | useGlobalPsiElecStore.ts:146 |
 | /admin/menu/SCP0095/measure | http | 1 | Y | useGlobalPsiElecStore.ts:169 |
 | /admin/menu/SCP0095/search-conditions | http | 1 | Y | useGlobalPsiElecStore.ts:192 |
@@ -35,24 +35,24 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 162 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 191 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 202 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 249 |
-| Button | onClick | onMaterialSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 245 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 280 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 161 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 190 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 201 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 248 |
+| Button | onClick | onMaterialSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 244 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 283 |
 | g | formatItem | formatHandler | addHandler | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 157 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 195 |
-| GlobalPsiElecForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 231 |
-| GlobalPsiElecForm | onMaterialSearch | <arrow> setOpenMaterialPopup | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 231 |
-| GlobalPsiElecGrid | onCellDblClick | handleCellDblClick | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 253 |
-| MeasureSelectModal | onApply | handleMeasureApply | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 278 |
-| GlobalPsiElecDrilldownModal | onClose | <arrow> setDrilldownParams | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 285 |
+| GlobalPsiElecForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 257 |
+| GlobalPsiElecForm | onMaterialSearch | <arrow> setOpenMaterialPopup | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 257 |
+| GlobalPsiElecGrid | onCellDblClick | handleCellDblClick | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 279 |
+| MeasureSelectModal | onApply | handleMeasureApply | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 304 |
+| GlobalPsiElecDrilldownModal | onClose | <arrow> setDrilldownParams | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 311 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| Grid | 4 |
+| Grid | 5 |
 | FormItem | 3 |
 | CustomDropdown | 2 |
 | CustomDialog | 1 |
@@ -65,7 +65,7 @@
 | InputField | 1 |
 | Button | 1 |
 | FunctionSearchIcon | 1 |
-| PeriodField | 1 |
+| PeriodRangePicker | 1 |
 | Typography | 1 |
 | DataGrid | 1 |
 | IcMeasureSelect | 1 |
@@ -87,6 +87,8 @@
 |---|---|
 | MSG00013 | 1 |
 | MSG00097 | 1 |
+| MSG01135 | 1 |
+| MSG01187 | 1 |
 | MSG01399 | 1 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
@@ -103,8 +105,8 @@
 | MSG00618 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0013(15), SCP0100(13), SCP0095(10), SCP0025(2), DMF0021(1), SCP0111(1), COM0013(1), SCP0031(1), SCP0053(1)
-- SP/PKG: PKG_SCP0095(4), PKG_COM0000(2), SCP0095_GET_GLOBAL_PSI_ELEC(1), P_DIVISION_ID(1), P_SCP0095_GET_GLOBAL_PSI_ELEC(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SCM0001_GET_SCP_DAY_PERIOD(1)
+- 화면ID: SCP0013(16), SCP0100(15), SCP0095(10), COM0013(2), SCP0025(2), DMF0021(1), SCP0111(1), SCP0031(1), SCP0053(1)
+- SP/PKG: PKG_SCP0095(4), PKG_COM0000(2), SCP0095_GET_GLOBAL_PSI_ELEC(1), P_DIVISION_ID(1), P_PLAN_TYPE(1), P_SCP0095_GET_GLOBAL_PSI_ELEC(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SCM0001_GET_SCP_DAY_PERIOD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -113,7 +115,7 @@
 | code | const psi = s(row.PSI); | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 128 |
 | code | const measure = s(row.MEASURE_NAME); | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 129 |
 | code | if (psi === 'P' && measure === 'SUM') ev.cell.style.backgroundColor = CONDITIONAL_BG.P_SUM; | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 130 |
-| endpoint | mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회). | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 104 |
+| endpoint | mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회). | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 110 |
 | endpoint | admin SCM_MST_SHEET_COLUMNS 동적 fetch(convert-core §2.4 하드코딩 금지). 미등록/실패 시 빈 배열. | features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | 37 |
 | endpoint | SCM_MST_SHEET_MEASURE 동적 fetch(SHEET_NAME='Global PSI Elec' 10행, DB 실측). measure 개인화 팝업 원천. | features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | 40 |
 

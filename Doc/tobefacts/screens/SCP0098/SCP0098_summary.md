@@ -1,7 +1,7 @@
 # SCP0098 — To-Be Fact Pack 요약
 
 - page_key: `supply/capa-mobility-it` · feature: supply · As-is Fact Pack 있음
-- 파일 23 · 엔드포인트 호출 11 (미해결 0, 주석 속 0) · 이벤트 41 · 컴포넌트 사용 42 · 하드코딩 컬럼 2 · 메시지 22
+- 파일 23 · 엔드포인트 호출 11 (미해결 0, 주석 속 0) · 이벤트 41 · 컴포넌트 사용 41 · 하드코딩 컬럼 2 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
@@ -11,8 +11,8 @@
 | features/supply/src/pages/capa-mobility-it/capa-mobility-it.types.ts | types | 18 |
 | features/supply/src/pages/capa-mobility-it/CapaMobilityIt.module.scss | style | 6 |
 | features/supply/src/pages/capa-mobility-it/CapaMobilityIt.tsx | page | 419 |
-| features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | component | 228 |
-| features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | component | 348 |
+| features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | component | 235 |
+| features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | component | 350 |
 | features/supply/src/pages/capa-mobility-it/components/modals/BulkUpdateModal.module.scss | component | 13 |
 | features/supply/src/pages/capa-mobility-it/components/modals/BulkUpdateModal.tsx | component | 118 |
 | features/supply/src/pages/capa-mobility-it/components/modals/CopySelectModal.module.scss | component | 47 |
@@ -39,7 +39,7 @@
 | SCP0098/capaMonth//call-proc | hook | 1 | Y | CapaMobilityIt.tsx:141 |
 | SCP0098/capaWork//call-proc | hook | 1 | Y | CapaMobilityIt.tsx:148 |
 | /SCP0098/copy/SAVE/call-proc | http | 1 | Y | CapaMobilityIt.tsx:225 |
-| (useTabComboQueries) | hook | 2 | Y | CapaMobilityItForm.tsx:60 CapaMobilityItForm.tsx:70 |
+| (useTabComboQueries) | hook | 2 | Y | CapaMobilityItForm.tsx:63 CapaMobilityItForm.tsx:73 |
 | /admin/menu/SCP0098/column | http | 1 | Y | useCapaMobilityItStore.ts:135 |
 | /admin/menu/SCP0098/measure | http | 1 | Y | useCapaMobilityItStore.ts:153 |
 | /admin/menu/SCP0098/search-conditions | http | 1 | Y | useCapaMobilityItStore.ts:175 |
@@ -66,13 +66,13 @@
 | ExcelOptionModal | onClose | <arrow> setExcelOpen | jsx | features/supply/src/pages/capa-mobility-it/CapaMobilityIt.tsx | 390 |
 | ExcelOptionModal | onConfirm | <arrow> handleExcel | jsx | features/supply/src/pages/capa-mobility-it/CapaMobilityIt.tsx | 391 |
 | MeasureSelectModal | onApply | <arrow> staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map,setAlert,t | jsx | features/supply/src/pages/capa-mobility-it/CapaMobilityIt.tsx | 400 |
-| CustomDropdown | onChange | <arrow> onPick,str(picked).split(',').filter,str(picked).split,str,v.toUpperCase | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 120 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 138 |
-| CustomDropdown | onChange | <arrow>  | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 153 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 189 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 190 |
-| Button | onClick | <arrow> setOpenItem | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 185 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 202 |
+| CustomDropdown | onChange | <arrow> onPick,str(picked).split(',').filter,str(picked).split,str,v.toUpperCase | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 123 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 141 |
+| CustomDropdown | onChange | <arrow>  | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 156 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 192 |
+| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 193 |
+| Button | onClick | <arrow> setOpenItem | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 188 |
+| PeriodField | onChange | <arrow> setSearchParams,monthEnd | jsx | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItForm.tsx | 209 |
 | editor | beforeinput | <arrow> /[^0-9.-]/.test,ev.preventDefault | addEventListener | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | 251 |
 | editor | input | <arrow> keepNumeric | addEventListener | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | 254 |
 | editor | compositionend | keepNumeric | addEventListener | features/supply/src/pages/capa-mobility-it/components/CapaMobilityItGrid.tsx | 257 |
@@ -103,8 +103,8 @@
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| Grid | 7 |
 | Button | 7 |
+| Grid | 6 |
 | FormItem | 5 |
 | CustomDropdown | 3 |
 | CustomDialog | 3 |
@@ -121,7 +121,7 @@
 | MeasureSelectModal | 1 |
 | SearchArea | 1 |
 | FunctionSearchIcon | 1 |
-| PeriodRangePicker | 1 |
+| PeriodField | 1 |
 | MaterialByDivisionModal | 1 |
 | DataGrid | 1 |
 
@@ -157,8 +157,8 @@
 | MSG01153 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0098(12), DMF0082(1), SSP0060(1), SCP0009(1)
-- SP/PKG: P_COPY_MONTH_WEEK(4), PKG_SCP0098(3), P_SAVE_SCP_CAPA_WORK(3), P_GET_CAPA_MOBILITYIT(1), P_SAVE_SCP_CAPA_PRODUCT_RATE(1), P_SAVE_SCP_CAPA(1), P_DAY_TYPE(1), SCM0001_GET_SCP_DAY_PERIOD(1), SCM0002_SET_TITLESET_POPUP(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_ACTIVE_FLAG(1)
+- 화면ID: SCP0098(12), COM0008(2), COM0013(2), DMF0082(1), SSP0060(1), SCP0009(1)
+- SP/PKG: PKG_SCP0098(4), P_GET_CAPA_MOBILITYIT(4), P_COPY_MONTH_WEEK(4), P_SAVE_SCP_CAPA_WORK(3), P_SAVE_SCP_CAPA_PRODUCT_RATE(1), P_SAVE_SCP_CAPA(1), P_ITEM_ID(1), P_DAY_TYPE(1), SCM0001_GET_SCP_DAY_PERIOD(1), SCM0002_SET_TITLESET_POPUP(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_ACTIVE_FLAG(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

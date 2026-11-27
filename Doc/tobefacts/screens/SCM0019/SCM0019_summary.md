@@ -66,10 +66,12 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCM0019(3), SCP0121(1), SSP0020(1), SCP0125(1), DMF0014(1), SCP0101(1), SCP0084(1)
+- 화면ID: SCM0019(3), DMF0003(1), SCP0121(1), SSP0020(1), SCP0125(1), DMF0014(1), SCP0101(1), SCP0084(1)
 - SP/PKG: PKG_SCM0019(4), P_USER_ID(1), P_SCM0019_SAVE(1), P_DIVISION_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
-(없음)
+| kind | snippet | file | line |
+|---|---|---|---|
+| jsx | Period* (필수 — AS-IS layoutControlItem6.Text="Period*"). From~To YYYYMMDD. 공백 시 조회 차단(R6). 공용 PeriodField(features/master SearchFields) — 표준 레이아웃·높이정합(36px) 내장. DMF0003 등 선례. PeriodField 가 자체 <Grid> 를 포함하므로 바깥 Grid 로 감싸지 않는다. | features/admin/src/pages/scp-if-blocking/components/ScpIfBlockingForm.tsx | 74 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 10

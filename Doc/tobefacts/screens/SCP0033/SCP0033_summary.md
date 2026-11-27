@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | component | 190 |
-| features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | component | 162 |
+| features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | component | 160 |
 | features/shipping/src/pages/shipment-semi-dept-day/hooks/useShipmentSemiDeptDayValidation.ts | hook | 64 |
 | features/shipping/src/pages/shipment-semi-dept-day/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-semi-dept-day/shipment-semi-dept-day.constants.ts | constants | 182 |
@@ -40,10 +40,10 @@
 | InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 162 |
 | Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 158 |
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 180 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 91 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 110 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 128 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 158 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 87 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 106 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 124 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 156 |
 | ShipmentSemiDeptDayForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 338 |
 | ShipmentSemiDeptDayForm | onModelSearch | <arrow> setModelPopupOpen | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 339 |
 | ShipmentSemiDeptDayGrid | onItemCellDblClick | handleItemCellDblClick | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 368 |
@@ -96,8 +96,8 @@
 | MSG01091 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0033(9), SCM0002(8), SSP0025(5), SSP0024(4), SCP0020(2), DMF0003(1), DMF0020(1)
-- SP/PKG: PKG_SCP0033(4), P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY(2), P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY(1), P_SCP0033_SAVE(1)
+- 화면ID: SCM0002(10), SCP0033(9), SSP0025(5), SSP0024(4), COM0013(2), SCP0013(2), SCP0020(2), DMF0003(1), DMF0020(1), SSP0003(1)
+- SP/PKG: PKG_SCP0033(4), P_SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY(2), P_SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY(1), P_SCP0033_SAVE(1), P_DIVISION_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

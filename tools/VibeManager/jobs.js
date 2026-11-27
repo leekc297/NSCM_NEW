@@ -478,51 +478,9 @@ function paintDetail(){ const R=document.querySelector('.right'), D=$('detail');
   $('dClose').onclick=function(e){ e.stopPropagation(); detailOpen=false; paintDetail(); };
   D.onclick=function(e){ const a=e.target.closest('a.lk'); if(a&&a.dataset.out) vscode.postMessage({type:'openOut',path:a.dataset.out,reveal:!!a.dataset.rv}); }; }
 setInterval(function(){ document.querySelectorAll('#detail .el').forEach(function(e){ e.textContent=elTxt(e.dataset.t0); }); },1000);
-// 개선안 20261124040952_SELF_5 (R114): AI 답변(stream 'claude' · 도구 줄 제외)은 workbench.js mdEl 과 같은 마크다운 변환으로 블록을 그림. 스크립트 로그는 글자 그대로
-//   mdInline · mdHtml = workbench.js 2365~2407 줄과 같은 코드(글 안의 HTML 은 글자로 바꿔 그림)
-const MD_BT=String.fromCharCode(96);
-function mdEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function mdInline(s){
-  const parts=String(s).split(MD_BT);let out='';
-  for(let i=0;i<parts.length;i++){
-    if(i%2===1&&i<parts.length-1){out+='<code class="mdc">'+mdEsc(parts[i])+'</code>';continue;}
-    let t=mdEsc(i%2===1?MD_BT+parts[i]:parts[i]);
-    t=t.replace(/[*][*]([^*]+)[*][*]/g,'<b>$1</b>');
-    t=t.replace(/\\[([^\\]]+)\\]\\(([^)\\s]+)\\)/g,(m0,a,h)=>'<a class="mdl" href="#" data-href="'+h+'">'+a+'</a>');
-    out+=t;
-  }
-  return out;
-}
-function mdHtml(src){
-  const L=String(src||'').replace(/\\r/g,'').split('\\n');const fence=MD_BT+MD_BT+MD_BT;const stack=[];let h='';let i=0;
-  const close=lvl=>{while(stack.length>lvl)h+='</li></'+stack.pop()+'>';};
-  const isList=s=>/^( *)([-*+]|[0-9]+[.)]) +/.test(s);
-  while(i<L.length){
-    const ln=L[i];const tr=ln.trim();
-    if(tr.startsWith(fence)){close(0);const buf=[];i++;while(i<L.length&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}i++;h+='<pre class="mdpre"><code>'+mdEsc(buf.join('\\n'))+'</code></pre>';continue;}
-    if(!tr){if(!(stack.length&&i+1<L.length&&isList(L[i+1])))close(0);i++;continue;}
-    let m=/^(#{1,6}) +(.*)$/.exec(ln);
-    if(m){close(0);h+='<div class="mdh mdh'+Math.min(m[1].length,4)+'">'+mdInline(m[2])+'</div>';i++;continue;}
-    if(/^ *([-*_])( *[-*_]){2,} *$/.test(ln)&&!/[^-*_ ]/.test(ln)){close(0);h+='<hr class="mdhr">';i++;continue;}
-    if(tr.startsWith('|')&&i+1<L.length&&/^ *[|]?[ :|-]+[|]? *$/.test(L[i+1])&&L[i+1].includes('-')){
-      close(0);const row=s=>s.trim().replace(/^[|]/,'').replace(/[|]$/,'').split('|').map(c=>c.trim());
-      let t='<div class="mdtw"><table class="mdt"><thead><tr>'+row(ln).map(c=>'<th>'+mdInline(c)+'</th>').join('')+'</tr></thead><tbody>';i+=2;
-      while(i<L.length&&L[i].trim().startsWith('|')){t+='<tr>'+row(L[i]).map(c=>'<td>'+mdInline(c)+'</td>').join('')+'</tr>';i++;}
-      h+=t+'</tbody></table></div>';continue;}
-    m=/^( *)([-*+]|[0-9]+[.)]) +(.*)$/.exec(ln);
-    if(m){
-      const lvl=Math.floor(m[1].length/2)+1;const ty=/[0-9]/.test(m[2])?'ol':'ul';const stt=ty==='ol'?' start="'+parseInt(m[2],10)+'"':'';
-      if(stack.length<lvl){while(stack.length<lvl){h+='<'+ty+(stack.length===lvl-1?stt:'')+' class="mdlist">';stack.push(ty);}}
-      else{close(lvl);if(stack[lvl-1]!==ty){h+='</li></'+stack.pop()+'><'+ty+stt+' class="mdlist">';stack.push(ty);}else h+='</li>';}
-      h+='<li>'+mdInline(m[3]);i++;continue;}
-    if(/^> ?/.test(ln)){close(0);const buf=[];while(i<L.length&&/^> ?/.test(L[i])){buf.push(L[i].replace(/^> ?/,''));i++;}h+='<blockquote class="mdq">'+buf.map(mdInline).join('<br>')+'</blockquote>';continue;}
-    if(stack.length&&/^ {2,}/.test(ln)){h+='<br>'+mdInline(tr);i++;continue;}
-    close(0);const buf=[ln];i++;
-    while(i<L.length&&L[i].trim()&&!/^(#{1,6} |> ?)/.test(L[i])&&!isList(L[i])&&!L[i].trim().startsWith('|')&&!L[i].trim().startsWith(fence)){buf.push(L[i]);i++;}
-    h+='<p class="mdp">'+buf.map(mdInline).join('<br>')+'</p>';
-  }
-  close(0);return h;
-}
+// 개선안 20261124040952_SELF_5 (R114): AI 답변(stream 'claude', 도구 줄 제외)은 마크다운으로 그림. 스크립트 로그는 글자 그대로
+//   2026-11-26 개선안 20261126164322_SELF: 변환 함수(mdEsc, mdInline, mdHtml)와 Ctrl+A 범위 함수 = webview-kit.js 공용 모듈
+${require('./webview-kit').script(['md','sel'])}
 function mdEl(cls,txt){const d=document.createElement('div');d.className=(cls?cls+' ':'')+'md';d.innerHTML=mdHtml(txt);return d;}
 document.addEventListener('click',e=>{const a=e.target&&e.target.closest?e.target.closest('a.mdl'):null;if(!a)return;e.preventDefault();const h=a.getAttribute('data-href')||'';if(h&&!/^[a-z]+:/i.test(h))vscode.postMessage({type:'openFile',path:h.replace(/#L?[0-9].*$/,'')});});
 function isMdChunk(text, stream){ const t=String(text||''); return stream==='claude'&&!/^  · /.test(t)&&t.trim().length>0; }
@@ -551,19 +509,9 @@ ${require('./id-input').webviewSnippet()}
 ${require('./date-fmt').webviewSnippet()}
 idInput($('paste')); // 2026-11-23 한글 입력 상태에서도 영문 대문자 ID
 $('add').onclick=addPaste; $('paste').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addPaste(); } });
-// 2026-11-23 R4(orchestra.js 1083~1095 방식, 개선안 20261123172600_SELF_5): 실행 로그(#log)를 마지막으로 눌렀으면 Ctrl+A = 로그 글만 선택. 검색칸(q), 붙여넣기 칸(paste) 등 입력칸은 기본 동작
-//   VS Code 본체가 보내는 document.execCommand('selectAll') 도 같은 대상. 본체가 포커스를 입력칸으로 되돌린 뒤 부르므로 대상은 포커스가 아니라 SEL_L 로 판단
-let SEL_L=null;
-function selLogVisible(L){ return !!(L&&L.isConnected&&L.getClientRects().length>0); }
-document.addEventListener('pointerdown',e=>{ const t=e.target; SEL_L=(t&&t.closest)?t.closest('#log'):null; },true);
-function selLog(){ if(!selLogVisible(SEL_L)) return false; const a=document.activeElement; if(a&&a!==document.body&&a.blur) a.blur();
-  const r=document.createRange(); r.selectNodeContents(SEL_L); const s=window.getSelection(); s.removeAllRanges(); s.addRange(r); return true; }
-document.addEventListener('keydown',e=>{
-  if(!(e.ctrlKey||e.metaKey)||e.shiftKey||e.altKey||String(e.key).toLowerCase()!=='a') return;
-  const a=document.activeElement; if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable)) return;
-  if(selLog()) e.preventDefault();
-},true);
-(function(){ if(typeof document.execCommand!=='function') return; const ex=document.execCommand.bind(document); document.execCommand=function(cmd,ui,val){ if(String(cmd).toLowerCase()==='selectall'&&selLog()) return true; return ex(cmd,ui,val); }; })();
+// 2026-11-23 R4: 실행 로그(#log)를 마지막으로 눌렀으면 Ctrl+A = 로그 글만 선택. 검색칸(q), 붙여넣기 칸(paste) 등 입력칸은 기본 동작
+//   VS Code 본체가 보내는 전체 선택 명령도 같은 대상. 2026-11-26 개선안 20261126164322_SELF: webview-kit.js kitSelScope, kitSelAll
+kitSelAll(kitSelScope('#log'));
 $('go').onclick=()=>{ const mm=isMod(); const order=mm?(curItem().modules||[]).filter(m=>modSel.has(m)):screens.filter(s=>sel.has(s.id)).map(s=>s.id); logScreen=''; $('log').textContent=''; vscode.postMessage({type:'create',itemLabel:$('item').value,screens:order,inputs:mm?jinOut():{},onFail:document.querySelector('input[name=of]:checked').value,mode:document.querySelector('input[name=md]:checked').value,maxPar:Math.max(1,Math.min(CFG.maxPar,parseInt($('mp').value,10)||CFG.maxPar)),autoAnswer:$('ask').checked&&$('askRow').style.display!=='none'}); };
 $('bResume').onclick=()=>job&&vscode.postMessage({type:'start',id:job.id}); $('bRetry').onclick=()=>job&&vscode.postMessage({type:'retry',id:job.id}); $('bPause').onclick=()=>job&&vscode.postMessage({type:'pause',id:job.id}); $('bStop').onclick=()=>job&&vscode.postMessage({type:'stop',id:job.id});
 function jamSet(on){ $('jamMenu').classList.toggle('on',on); $('jamBtn').setAttribute('aria-expanded',on?'true':'false'); if(on){ const f=$('jamMenu').querySelector('.jait:not(:disabled)'); if(f) f.focus(); } }

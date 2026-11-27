@@ -234,6 +234,56 @@ def sp_tokens(text):
 
 
 _ASIS_SRC_TXT = None
+_SITE_TYPES_DONE = False
+_RX_SITE_TYPE = re.compile(r'\[\s*"SITE_TYPE"\s*\]')
+SITE_TYPES_MAX_AGE_H = 24
+
+
+def ensure_site_types():
+    """2026-11-26 개선안 20261126153056_SELF_2(규칙 R241): D3, C2 사이트 표본 site_types.json 생성기.
+    AS-IS 화면 원문(현행 파일 + 여는 팝업)에 SITE_TYPE 분기(drs["SITE_TYPE"])가 있는 화면만 TO-BE SCM_MST_SITE 를 읽어
+    Doc/verify/<화면>/site_types.json 을 씀. 형식 = 종전 SCP0007 수작업 파일과 같음(sites: SCM_SITE_ID → type, osp, valid, div) + gen(시각, 원천, 행 수).
+    파일의 gen.at 이 SITE_TYPES_MAX_AGE_H 시간 안이면 그대로 씀. gen 없는 수작업 파일은 다시 만듦. DB 조회 실패 = 기존 파일 유지, 원인 출력(판정은 종전과 같음).
+    한 실행에 1번만 봄. 반환 = 파일 경로(없으면 '')"""
+    global _SITE_TYPES_DONE
+    stp = os.path.join(DOC, 'verify', MENU, 'site_types.json')
+    if _SITE_TYPES_DONE:
+        return stp if os.path.exists(stp) else ''
+    _SITE_TYPES_DONE = True
+    _asis_calls_sp('')  # AS-IS 원문 읽기(_ASIS_SRC_TXT 채움)
+    if not _ASIS_SRC_TXT or not _RX_SITE_TYPE.search(_ASIS_SRC_TXT):
+        return stp if os.path.exists(stp) else ''
+    old = {}
+    try:
+        old = json.load(open(stp, encoding='utf-8'))
+    except Exception:
+        old = {}
+    at = ((old.get('gen') or {}).get('at') or '') if isinstance(old, dict) else ''
+    try:
+        if at and (datetime.datetime.now() - datetime.datetime.strptime(at, '%Y-%m-%d %H:%M:%S')).total_seconds() < SITE_TYPES_MAX_AGE_H * 3600:
+            return stp
+    except ValueError:
+        pass
+    try:
+        sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+        from dbconn import connect
+        with connect('tobe') as cx:
+            cur = cx.cursor()
+            cur.execute("SELECT SCM_SITE_ID, SITE_TYPE, NVL(OSP_YN, 'N'), NVL(VALID_YN, 'N'), DIVISION_ID FROM SCM_MST_SITE WHERE SCM_SITE_ID IS NOT NULL ORDER BY DIVISION_ID, SCM_SITE_ID")
+            rows = cur.fetchall()
+    except Exception as e:
+        print(f'[site_types] TO-BE SCM_MST_SITE 조회 실패, 기존 파일 유지({"있음" if old else "없음"}): {str(e)[:200]}')
+        return stp if os.path.exists(stp) else ''
+    sites = {}
+    for sid, typ, osp, valid, div in rows:
+        sites[str(sid)] = {'type': typ or '', 'osp': osp or 'N', 'valid': valid or 'N', 'div': '' if div is None else str(div)}
+    os.makedirs(os.path.dirname(stp), exist_ok=True)
+    tmp = stp + '.tmp'
+    json.dump({'sites': sites, 'gen': {'at': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'src': 'TO-BE SCM_MST_SITE', 'rows': len(rows), 'sites': len(sites), 'by': 'mapping_trace.ensure_site_types'}},
+              open(tmp, 'w', encoding='utf-8'), ensure_ascii=False)
+    os.replace(tmp, stp)
+    print(f'[site_types] {MENU} site_types.json 생성: SCM_MST_SITE {len(rows)}행, 사이트 {len(sites)}개')
+    return stp
 
 
 def _asis_calls_sp(name):
@@ -2328,8 +2378,8 @@ def engine_condition(d, rmap):
     if c == 'J1':
         j['divisions'] = sorted({r.get('division_id', '') for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'division.csv')) if r.get('division_id')})[:30]
     if c in ('D3', 'C2') and d['et'] in ('COL', 'LEDGER'):
-        stp = os.path.join(DOC, 'verify', MENU, 'site_types.json')  # TO site 의 SITE_TYPE 분기(strTO_SITE_TYPE) — TO-BE SCM_MST_SITE 표본
-        if os.path.exists(stp):
+        stp = ensure_site_types()  # TO site 의 SITE_TYPE 분기(strTO_SITE_TYPE) — TO-BE SCM_MST_SITE 표본(개선안 20261126153056_SELF_2: 원문에 분기가 있는 화면마다 생성)
+        if stp and os.path.exists(stp):
             by = collections.defaultdict(list)
             for k, v in json.load(open(stp, encoding='utf-8')).get('sites', {}).items():
                 if v.get('valid') == 'Y': by[v.get('type', '')].append(k)

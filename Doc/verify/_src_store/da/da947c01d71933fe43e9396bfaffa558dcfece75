@@ -1,0 +1,1509 @@
+# -*- coding: utf-8 -*-
+"""form_scen_gen.py — 폼 저장형 시나리오(Doc/verify/<ID>/form_scenarios.json) 생성 (2026-11-26 · VMO 20261126153056_SELF_3 · 규칙 R241)
+
+  배경: 폼 저장형 시나리오(tools/E2E/lib/formscen.ts)가 SSP0020 1화면 수작업 파일에만 있어, 다른 폼 저장형 화면은 E4 메시지 행을 재지 못했다.
+  근거 = AS-IS 원문만(Doc/asisfacts/screens/<AS-IS ID>/actions.csv·actions_entries.csv·events.csv·endpoints.csv·props.csv·controls.csv,
+         GSCM/<파일> 원문 줄, Doc/asisfacts/db/meta/dbo.TB_FX_MessageInfo.csv 메시지 문구).
+
+  1) 폼 저장 단추 = 단추 Click 처리 사슬(actions_entries)에 저장 SP(endpoints objects 에 INSERT·UPDATE·DELETE·MERGE, 로그 표 SCM_SYS_LOG* 제외)가 있고
+     그 SP 를 부르는 메서드 본문이 그리드(spread)를 읽지 않는 단추. 없으면 폼 저장형 화면 아님(파일 안 만듦).
+  2) 사슬 안 메시지(actions kind=MESSAGE) 1건마다 시나리오 1건. 순서 = 처리 메서드 호출 줄 → 메서드 안 줄.
+     kind
+       error_branch  catch 블록 · GMessageBoxForException · 문구 없는 동적 메시지 · 저장 SP 응답이 실패인 갈래(else of)
+       dynamic       아래 입력 패턴으로 단계를 만든 메시지
+       unreachable   발생 입력이 앞선 검사의 통과 조건과 같은 칸에서 부딪힘 · 건수 조건이 앞선 같은 건수 조건에 조각을 더한 것(포함 관계)
+       setup/teardown 저장 성공 갈래 = 앞선 검사 통과값으로 저장(phase setup, allowSave) + 같은 표를 해제·삭제하는 그리드 단추로 그 행만 정리(phase teardown).
+                     정리 단추가 없거나 저장 SP 인자에서 그리드 칸 조건(p_x → X)을 못 만들면 보류
+       (보류)        해석 못 한 조건 → 활성 파일에 넣지 않고 _pending 에 사유와 함께 둠
+       (측정 보류)   사유가 정해진 것 → _blocked: 작업 중 표시(타이밍), 메서드 인자 검사, 아래 3차 규칙으로도 못 푸는 데이터 상태 검사
+     2026-11-26 3차(측정 보류 해소): 정리 경로 없는 실저장 성공 = 단추(click fake) 뒤 서버 호출을 막고 같은 시트·버튼 실제 성공 응답 표본
+       (Doc/verify/<ID>/resp_samples.json)으로 답함 · 콤보 선택 이름 조각(GetComboSelectName(..).Split('-')[k] == "C") = 그 조각 항목 고르기(pick)·
+       뒤 검사 통과 = 그 조각이 아닌 항목 · 콤보 값 != dt.Rows[0] 이고 콤보를 같은 함수 결과로 채움 = 둘째 항목 · 첨부 건수(RowCount + add > max) = 전제 행
+       (expectRowsMin) + 작은 정상 파일 · 그리드 칸 검사 = 통과 조건을 실행 때 확인(requireCells) · 화면 상태 조건(this.필드) 아래 바뀌는 값 = 조건 거짓 갈래로 풀고
+       그 조건이 숨기는 칸 표시로 확인(require) · 끝 칸 라벨이 글자 없으면 시작 칸 라벨 둘째 입력
+     2026-11-26 4차(TO-BE 존재): TO-BE 메뉴(사내 TO-BE DB SCM_MGR.SCM_ADM_MNU_M 읽기 · 실패하면 Doc/tobefacts/db/menu.csv, TO-BE ID = map_screen.csv)가
+       미등록·미사용(USE_YN ≠ Y)이면 그 화면 시나리오 전부, 처리 메서드가 TO-BE 화면 폴더 __asis-mapping__.md 에서 ⏳·미구현·후속이면 그 단추 시나리오를
+       _tobe_missing(TO-BE 미구현)으로 둠 — 잴 TO-BE 화면·단추가 없어 응답 표본도 생길 수 없음. 활성 파일에 넣지 않음
+     2026-11-26 5차(맡김 해소): 저장 뒤 다시 조회 메서드 안 검사 = 'FindButton > 메서드' 경로(actions_entries)가 있으면 조회 단추(search) 시나리오로 다시 만듦 ·
+       권한 검사(SecurityContext.CanUpdate) = 메뉴 SEARCH 권한은 있고 SAVE 권한은 없는 그룹(btn_auth.csv)의 명부 계정(users.json)으로 로그인(asAccount) →
+       단추 숨김·비활성이면 TO-BE 룰 CR-070 통과, 보이면 AS-IS 권한 문구 대조(authGate) · TO-BE 미구현 화면의 맡김도 _tobe_missing
+     2026-11-26 6차: TO-BE 메뉴가 없는 화면이라도 메시지 문장이 90% 이상 같은 AS-IS 원문을 가진 TO-BE 메뉴(USE_YN=Y) 화면이 있으면, 그 화면 원문에 같은
+       메서드·문장이 있는 항목은 _covered(그 화면 CheckList 에서 잼 · 대응 줄 기록). 모듈 전체가 TO-BE 메뉴에 없으면 사유에 적음(FP 모듈 0개)
+     2026-11-26 7차: tools/Harness/rules/form_scen_scope.csv(asis_id, scope=out, why, decided)에 사용자가 범위 밖으로 확정한 화면은 TO-BE 미구현 항목을
+       _out_of_scope 로 둠(2026-11-26 17:22 확정 16화면 = FP 모듈 13 · SCP0099 · SCP0083 · SSP0007)
+       (맡김)        _delegated: 권한 검사(SecurityContext.CanUpdate 등 → authprobe), 그리드 셀 값 검사(→ 그리드 셀 경로),
+                     저장 호출 뒤 다시 조회 메서드 안 검사(→ 조회 단추 경로)
+     2026-11-26 2차 패턴: 확인창(GMessageBox(..) == DialogResult.No 면 중단 → 취소 눌러 저장 요청 없음 확인, 뒤 검사는 확인 단계 추가),
+       응답 변수 추적(대입 문장 3단계·메서드 인자 → 호출부·화면 메서드 본문의 서버·HTTP 호출), 응답 성공·실패 방향(!=·!·== null·Count == 0 ·else),
+       저장 호출 뒤 조건 없는 안내·건수(iCount++) > 0 = 저장 성공, 다중 선택 콤보(GetCheckedListValue(.., X.ControlValues) == ""),
+       기간 칸 분해(X.ControlValues.Split(':')[0·1]), 기간 상한(X.Value1.AddYears(n) < X.Value2 → 상한 + 1일), 시작·끝 칸이 따로인 기간 역전(끝 칸 3650일 전),
+       숫자 범위(V < N 등 → 경계 밖 값), 파일 크기·확장자 검사(파일 열기 창 OK 뒤 helper(..) == false → 크기 상한 + 1 바이트 · 막는 확장자), 화면 변형 파일별 상태
+     입력 패턴(가드 마지막 조건)
+       빈값      string.IsNullOr(WhiteSpace|Empty)(X.Text) · X.Text == "" · 원문 변수 = X.Text…         → text X ""
+       기간 빈값  IsNullOrEmpty(a) || IsNullOrEmpty(b), a·b = 같은 기간 칸 Text1·Text2(Value1·Value2)   → period "" ""
+       기간 역전  Convert.ToInt32(a) > Convert.ToInt32(b) 같은 기간 칸                                  → period @TODAY+1 ~ @TODAY
+       선택 없음  else of (F == true), F = true 가 X.Items[i].CheckState == Checked 아래에서만 · X.CheckedItems.Count == 0 → multi X none
+       본인 지정  V == UserInfoContext.Current.UserId · base.UserInfo.UserId, V = 칸 X 조회 결과         → text X @ME
+       조회 건수  조회 메서드(호출 인자 = 칸 X) 응답 Rows.Count 갈래: 여러 건 = 조회 SP 가 LIKE '%'+@P+'%' 일 때 "" · 0건 = 일치 없는 검색어(SP 인자 길이 안)
+       기존 행 중복 v > 0, v = 조회 표(… = ds.Tables[n]).AsEnumerable().Count(…) → 준비(setup)와 같은 입력으로 다시 저장(expectRowsMin 1)
+     앞선 검사 통과값: 빈값·조회 결과 검사 칸 = vars 토큰 @<칸 이름>(값은 Doc/verify/<ID>/form_vars.json · 사람이 정함), 기간 = @TODAY~@TODAY, 선택 = all.
+     필요한 vars 가 없으면 그 시나리오는 보류(_pending).
+  3) 출력
+     Doc/verify/<ID>/form_scen_gen.json   생성 결과 전부(활성 + 보류 + 대조) — 항상 씀
+     Doc/verify/<ID>/form_scenarios.json  활성 시나리오(dynamic 1건 이상일 때만). 사람이 쓴 파일(_gen 표시 없음)은 덮지 않고 대조만 함
+     저장 요청을 서버에 보내는 시나리오(allowSave)는 정리 단추가 있는 준비·정리 쌍으로만 만듦
+  사용:
+    python tools/Harness/verify/form_scen_gen.py <ID> [--asis <AS-IS ID>] [--dry]
+    python tools/Harness/verify/form_scen_gen.py --all [--dry]          (asisfacts 화면 전부)
+    python tools/Harness/verify/form_scen_gen.py --selftest              (SSP0020 수작업본 대조)
+"""
+import csv, json, os, re, sys, time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
+FACTS = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens')
+MSGCSV = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'meta', 'dbo.TB_FX_MessageInfo.csv')
+SRC = os.path.join(ROOT, 'GSCM')
+csv.field_size_limit(10 ** 9)
+
+RX_GRID = re.compile(r'\b(si\w*|spd\w*|sprd\w*|fpSpread\w*)\.(Get(Text|Value|Cell)\w*|ActiveSheet|Sheets)\b|\.Sheets\[\d+\]\.Cells\[|GetChanged|GetSave\w*Data|GetModified|ActiveSheet\.', re.I)
+CUR = {'file': '', 'line': 0}   # build 가 메시지마다 채움 — 같은 메서드 이름이 여러 파일(화면 변형)에 있을 때 그 메시지 파일의 원문을 읽게
+RX_DML = re.compile(r'\b(INSERT|UPDATE|DELETE|MERGE):([A-Z0-9_\.]+)', re.I)
+RX_RESP = re.compile(r'\bresponse\b|\.DataSet\b|Tables\s*\[|Rows\s*\[\s*0\s*\]\s*\[|ExecuteDataSet')
+RX_NOSAVE_T = re.compile(r'^(dbo\.)?(SCM_SYS_LOG|SCM_MST_TITLESET|SCM_ADM_DB_SCRIPT|TB_FX_)', re.I)
+RX_NOSAVE_M = re.compile(r'^(Find|Get|Search|Select|Init|Load|Set\w*Title|\w*TitleSet)', re.I)
+RX_NOSAVE_SP = re.compile(r'_(GET|SEARCH|FIND|SELECT|SEL|LIST)(_|\b)', re.I)
+RX_ME = re.compile(r'UserInfoContext\.Current\.UserId|base\.UserInfo\.UserId|UserInfo\.UserId')
+PREFIX = re.compile(r'^(txt|clb|drp|dtp|cbo|cmb|chk|rdo|num|mcb|lkp|usr|edt|lbl)(?=[A-Z])')
+# 2026-11-26 보류 해소 2차: 응답을 받는 문장(변수 대입 원문) · 조건 안 응답 판정 · 실패 방향 · 권한 검사
+RX_RESP_STMT = re.compile(r'FoxDataClient|ExecuteDataSet|ExecuteNonQuery|SaveDataTable|ExcuteProcedure|DataService\.|\bclient\.\w+\(|\.Tables\[|Task\.Factory|\bawait\b|PostAsync|ReadAsStringAsync|GetStringAsync|GetAsync|SendAsync|HttpClient|WebClient|DownloadString|\.DataSet\b|\bresponse\b')
+RX_RESP_COND = re.compile(r'\bt\.Success\b|\.Good\(\)|\btran\w*\.Success\b|result_code|err_code')
+RX_FAIL = re.compile(r'!=|!\s*[\w(]|==\s*false|Count\s*==\s*0|IsNullOr|==\s*null|CheckDataEmpty|Contains\("error"\)', re.I)
+RX_AUTH = re.compile(r'SecurityContext\.Can(Update|Save|Insert|Delete|Read)|\bCan(Update|Save|Insert|Delete)\b')
+RX_CONFIRM = re.compile(r'GMessageBox\(\s*"(MSG\d+)"[^;]*?\)\s*(==|!=)\s*DialogResult\.(\w+)')
+RX_WRAP = re.compile(r'^(?:int\.Parse|long\.Parse|decimal\.Parse|Convert\.To\w+|DateTime\.Parse|DateTime\.ParseExact|ScpUtils\.ConvertInt)\((.*)\)$', re.S)
+
+
+def rd(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def atoms(guard):
+    return [s.strip() for s in (guard or '').split('▸') if s.strip()]
+
+
+def inner(atom):
+    """'if (X)' · 'else of (X)' → ('if'|'else', X)"""
+    m = re.match(r'^(if|else of|else if)\s*\((.*)\)\s*$', atom.strip(), re.S)
+    if not m:
+        return ('', atom.strip())
+    return ('else' if m.group(1) == 'else of' else 'if', m.group(2).strip())
+
+
+def strip_par(t):
+    t = t.strip()
+    while t.startswith('(') and t.endswith(')'):
+        d = 0; ok = True
+        for k, ch in enumerate(t):
+            d += ch == '('; d -= ch == ')'
+            if d == 0 and k < len(t) - 1:
+                ok = False; break
+        if not ok:
+            break
+        t = t[1:-1].strip()
+    return t
+
+
+def exclusive(prior, cur):
+    """앞선 메시지 가드와 이번 가드가 같은 조건의 if / else 갈래로 갈리면 True(앞선 검사는 이번 경로에서 실행되지 않음)"""
+    for a, b in zip(prior, cur):
+        if a == b:
+            continue
+        ka, ca = inner(a); kb, cb = inner(b)
+        return ca == cb and {ka, kb} == {'if', 'else'}
+    return False
+
+
+def ctl_name(name):
+    base = PREFIX.sub('', name)
+    return re.sub(r'[^A-Za-z0-9]', '', base).upper() or name.upper()
+
+
+class Screen:
+    def __init__(self, asis):
+        d = os.path.join(FACTS, asis)
+        self.asis = asis
+        self.acts = rd(os.path.join(d, 'actions.csv'))
+        self.entries = rd(os.path.join(d, 'actions_entries.csv'))
+        self.events = rd(os.path.join(d, 'events.csv'))
+        self.eps = rd(os.path.join(d, 'endpoints.csv'))
+        self.props = rd(os.path.join(d, 'props.csv'))
+        self.ctls = {c['name']: c for c in rd(os.path.join(d, 'controls.csv'))}
+        self.by_meth = {}
+        for a in self.acts:
+            self.by_meth.setdefault(a['method'], []).append(a)
+        self._src = {}
+        self.labels = self._labels()
+
+    # ── 원문 ──
+    def src_lines(self, rel):
+        if rel not in self._src:
+            p = os.path.join(SRC, rel.replace('\\', os.sep))
+            try:
+                with open(p, encoding='utf-8-sig', errors='replace') as f:
+                    self._src[rel] = f.read().splitlines()
+            except OSError:
+                self._src[rel] = []
+        return self._src[rel]
+
+    def assigns(self, meth):
+        """메서드 원문 범위의 '변수 = 식;' → {변수: 식}"""
+        rows = self.by_meth.get(meth, [])
+        if not rows:
+            return {}
+        rel = rows[0]['file']; lines = self.src_lines(rel)
+        lo = min(int(r['line']) for r in rows) - 8; hi = max(int(r['line']) for r in rows)
+        txt = '\n'.join(lines[max(lo - 1, 0):hi])
+        out = {}
+        for m in re.finditer(r'(?:\b(?:string|var|int|bool|DateTime|decimal|double|long)\s+)?\b([A-Za-z_]\w*)\s*=\s*(?!=)([^;]+);', txt):
+            out.setdefault(m.group(1), m.group(2).strip())
+        return out
+
+    # ── 라벨 ──
+    def _labels(self):
+        item_text, item_ctl = {}, {}
+        for p in self.props:
+            if p['prop'] == 'Text':
+                v = p['value'].strip()
+                if v.startswith('"') and v.endswith('"'):
+                    item_text[p['target']] = v[1:-1]
+            if p['prop'] == 'Control':
+                m = re.match(r'this\.(\w+)$', p['value'].strip())
+                if m:
+                    item_ctl[p['target']] = m.group(1)
+        out = {}
+        for it, c in item_ctl.items():
+            if it in item_text and item_text[it] and not item_text[it].startswith(it):
+                out[c] = {'label': item_text[it].replace('*', '').strip(), 'src': f'{it}.Text', 'fuzzy': False}
+        return out
+
+    def label(self, ctl):
+        if ctl in self.labels:
+            return self.labels[ctl]
+        base = PREFIX.sub('', ctl)
+        return {'label': re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', base), 'src': f'컨트롤 이름 {ctl}', 'fuzzy': True}
+
+    def ctl_kind(self, ctl):
+        t = (self.ctls.get(ctl, {}).get('type') or '')
+        if re.search(r'CheckedListBox|CheckedComboBox|MultiCheck', t):
+            return 'multi'
+        if re.search(r'DateRange|Period|DateEditRange', t) or ctl.startswith('drp'):
+            return 'period'
+        if re.search(r'Combo|LookUp', t):
+            # 2026-11-26: UsrCombo 를 CString.GetCheckedListValue(dt, X.ControlValues) 로 읽으면 다중 선택 콤보(DMF0042 clbDivision)
+            if any(re.search(r'GetCheckedListValue\(\s*\w+\s*,\s*%s\.ControlValues' % re.escape(ctl), ln) for rel in {a['file'] for a in self.acts} for ln in self.src_lines(rel)):
+                return 'multi'
+            return 'combo'
+        if re.search(r'DateEdit|DateTimePicker|UsrDate(?!Range)|Calendar', t) or re.match(r'^(dtp|dp)[A-Z]', ctl):
+            return 'date'
+        if re.search(r'Text|Editor|Edit\b|MemoEdit', t):
+            return 'text'
+        return ''
+
+    # ── 단추 사슬 ──
+    def save_members(self):
+        out = {}
+        for e in self.eps:
+            # 로그·화면 개인 설정(타이틀셋·프레임워크 TB_FX_) 표와 조회 메서드·조회 SP 는 저장으로 보지 않음(2026-11-26 DMF0044 FindData 타이틀셋 저장 오탐)
+            if RX_NOSAVE_M.search(e['member']) or RX_NOSAVE_SP.search(e.get('sp_or_sql') or ''):
+                continue
+            tabs = [t for k, t in RX_DML.findall(e.get('objects') or '') if not RX_NOSAVE_T.search(t)]
+            if tabs:
+                out.setdefault(e['member'], set()).update(tabs)
+        return out
+
+    def chains(self):
+        """단추 Click 처리 → [(method, order_key, call_args)]"""
+        res = {}
+        btns = [ev for ev in self.events if ev['event'] == 'Click' and ev['op'] == '+=']
+        for ev in btns:
+            ent = f"{ev['target']}.Click"
+            rows = [r for r in self.entries if r['entry'] == ent]
+            if not rows:
+                continue
+            meths = []
+            for r in rows:
+                path = r['path'].split(' > ')
+                # 호출 줄 사슬: 경로 각 단계의 call_line 을 찾아 키로 쓴다
+                key = []
+                for k in range(1, len(path)):
+                    sub = ' > '.join(path[:k + 1])
+                    hit = next((q for q in rows if q['path'] == sub), None)
+                    key.append(int(hit['call_line']) if hit and hit['call_line'].isdigit() else 0)
+                meths.append((r['method'], tuple(key), r))
+            res[re.sub(r'^this\.', '', ev['target'])] = {'handler': ev['handler'], 'meths': meths}
+        return res
+
+
+_TOBE_MENU = None
+
+
+def tobe_of(asis):
+    """AS-IS 화면 ID → TO-BE 메뉴 ID — tools/Harness/rules/map_screen.csv(run_verify asis_of 와 같은 원장), 없으면 같은 ID"""
+    for r in rd(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')):
+        if (r.get('asis_id') or '').upper() == asis.upper() and r.get('tobe_id'):
+            return r['tobe_id'].upper()
+    return asis.upper()
+
+
+def tobe_menus():
+    """TO-BE 메뉴 {MNU_ID: {use, route, src}} — 사내 TO-BE DB SCM_MGR.SCM_ADM_MNU_M(읽기 전용) 우선, 실패하면 Doc/tobefacts/db/menu.csv"""
+    global _TOBE_MENU
+    if _TOBE_MENU is not None:
+        return _TOBE_MENU
+    out = {}
+    try:
+        sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
+        from dbconn import connect
+        with connect('tobe') as cx:
+            cur = cx.cursor()
+            cur.execute('SELECT MNU_ID, USE_YN, ROUTE_PATH FROM SCM_MGR.SCM_ADM_MNU_M')
+            for mid_, use, route in cur.fetchall():
+                out[str(mid_).upper()] = {'use': str(use or ''), 'route': str(route or ''), 'src': 'DB SCM_ADM_MNU_M ' + time.strftime('%Y-%m-%d %H:%M')}
+    except Exception as e:
+        for r in rd(os.path.join(ROOT, 'Doc', 'tobefacts', 'db', 'menu.csv')):
+            out[(r.get('mnu_id') or '').upper()] = {'use': r.get('use_yn', ''), 'route': r.get('route_path', ''), 'src': f'Doc/tobefacts/db/menu.csv(DB 실패 {type(e).__name__})'}
+    _TOBE_MENU = out
+    return out
+
+
+_MSGSETS = None
+
+
+def msg_sets():
+    """AS-IS 화면별 메시지 문장 집합 {(메서드, 메시지 문장)} — 같은 원문을 가진 화면 찾기용(2026-11-26 6차)"""
+    global _MSGSETS
+    if _MSGSETS is None:
+        _MSGSETS = {}
+        for sid in sorted(os.listdir(FACTS)):
+            p = os.path.join(FACTS, sid, 'actions.csv')
+            if os.path.exists(p):
+                _MSGSETS[sid.upper()] = {(r['method'], r['value'].strip()) for r in rd(p) if r['kind'] == 'MESSAGE'}
+    return _MSGSETS
+
+
+def covered_by(asis):
+    """TO-BE 메뉴가 없는 AS-IS 화면의 메시지 문장이 TO-BE 메뉴가 있는(USE_YN=Y) 다른 AS-IS 화면 원문에 90% 이상 있으면 → (그 화면 ID, 같음 수, 전체 수) | None"""
+    ms = msg_sets(); mine = ms.get(asis.upper(), set())
+    if not mine:
+        return None
+    best = None
+    for sid, s in ms.items():
+        if sid == asis.upper() or (tobe_menus().get(tobe_of(sid)) or {}).get('use') != 'Y':
+            continue
+        n = len(mine & s)
+        if n * 10 >= len(mine) * 9 and (not best or n > best[1]):
+            best = (sid, n, len(mine))
+    return best
+
+
+def auth_role_key(tobe_mid, asis):
+    """메뉴 조회(SEARCH) 권한은 있고 SAVE 권한은 없는 사용자 그룹(Doc/tobefacts/db/btn_auth.csv) 중 시험 계정 명부(tools/E2E/users.json areas)에
+    역할로 있는 것 → ('<영역>/<Div>/<역할>', 그룹, 버튼 권한 목록) | None. 영역 = 화면 ID 앞(SCP·SSP·DM)"""
+    grp = {}
+    for r in rd(os.path.join(ROOT, 'Doc', 'tobefacts', 'db', 'btn_auth.csv')):
+        if (r.get('mnu_id') or '').upper() == tobe_mid.upper() and r.get('use_yn') == 'Y':
+            grp.setdefault(r['user_gr_id'], set()).add(r['mnu_btn_cd'])
+    cand = sorted(g for g, b in grp.items() if 'SEARCH' in b and 'SAVE' not in b and g not in ('-', ''))
+    try:
+        uj = json.load(open(os.path.join(ROOT, 'tools', 'E2E', 'users.json'), encoding='utf-8-sig'))
+    except Exception:
+        return None
+    area = 'DM' if asis.upper().startswith('DM') else asis.upper()[:3]
+    divs = ((uj.get('areas') or {}).get(area) or {}).get('divisions') or {}
+    for g in cand:
+        for dv in sorted(divs):
+            if (divs[dv] or {}).get(g):
+                return (f'{area}/{dv}/{g}', g, sorted(grp[g]))
+    return None
+
+
+def tobe_handler_status(route, handler):
+    """TO-BE 화면 폴더 __asis-mapping__.md 에서 AS-IS 처리 메서드 행의 상태 — '⏳'·'미구현'·'후속' 이면 미구현 사유, 아니면 ''"""
+    seg = (route or '').rstrip('/').split('/')[-1]
+    if not seg or not handler:
+        return ''
+    for f in sorted(__import__('glob').glob(os.path.join(ROOT, 'nscm-fe', 'features', '*', 'src', 'pages', seg, '__asis-mapping__.md'))):
+        try:
+            for ln in open(f, encoding='utf-8', errors='replace'):
+                if f'`{handler}`' in ln and re.search(r'⏳|미구현|\(후속', ln):
+                    return f"{os.path.relpath(f, ROOT)}: {ln.strip()[:160]}"
+        except OSError:
+            pass
+    return ''
+
+
+def msg_master():
+    out = {}
+    for r in rd(MSGCSV):
+        out[r['MessageID']] = r
+    return out
+
+
+def meth_params(sc, meth):
+    """메서드 선언 원문의 인자 이름 목록"""
+    rows = sc.by_meth.get(meth, [])
+    if not rows:
+        return []
+    sig = next((ln for ln in sc.src_lines(rows[0]['file']) if re.search(r'\b%s\s*\(' % re.escape(meth), ln) and re.search(r'\b(private|public|protected|internal)\b', ln)), '')
+    return re.findall(r'\b[\w<>\[\]]+\s+(\w+)\s*(?=,|\))', sig.split('(', 1)[1]) if '(' in sig else []
+
+
+def method_body(sc, name, n=40):
+    """화면 원문에서 메서드 선언부터 n 줄(접근 한정자 있는 선언만)"""
+    for rel in sorted({a['file'] for a in sc.acts}):
+        ls = sc.src_lines(rel)
+        for i, ln in enumerate(ls):
+            if re.search(r'\b(private|public|protected|internal)\b[^=;(]*\b%s\s*\(' % re.escape(name), ln):
+                return '\n'.join(ls[i:i + n])
+    return ''
+
+
+def traced_resp(sc, meth, ident, line, depth=0, chain_meths=()):
+    """변수 값이 서버 응답에서 오는가 — 메시지 앞 대입 문장을 3단계까지 따라가고, 메서드 인자면 호출부 인자 식을 따라감"""
+    if depth > 3:
+        return False
+    ln, stmt = stmt_before(sc, meth, ident, line)
+    if stmt:
+        rhs = stmt.split('=', 1)[1] if '=' in stmt else stmt
+        if RX_RESP_STMT.search(rhs):
+            return True
+        # 2026-11-26: 화면 메서드 호출 결과(obj = CallFileList(...))면 그 메서드 본문이 서버·외부 호출을 하는가
+        for fn in re.findall(r'\b([A-Za-z_]\w*)\s*\(', rhs):
+            if fn not in ('ToString', 'Parse', 'Replace', 'Trim', 'Substring') and RX_RESP_STMT.search(method_body(sc, fn)):
+                return True
+        for v in set(re.findall(r'\b([A-Za-z_]\w*)\b', rhs)) - {ident}:
+            if v in sc.ctls or v in ('string', 'int', 'var', 'bool', 'new', 'this', 'base', 'null', 'true', 'false'):
+                continue
+            if traced_resp(sc, meth, v, ln, depth + 1, chain_meths):
+                return True
+        return False
+    ps = meth_params(sc, meth)
+    if ident in ps:
+        ix = ps.index(ident)
+        for cm in chain_meths:
+            for a in sc.by_meth.get(cm, []):
+                if a['kind'] == 'CALL_LOCAL' and re.sub(r'^this\.', '', a['target']) == meth:
+                    v = a['value'].strip()
+                    args = [x.strip() for x in v[1:-1].split(',')] if v.startswith('(') else []
+                    if ix < len(args) and (RX_RESP_STMT.search(args[ix]) or any(traced_resp(sc, cm, w, int(a['line']), depth + 1, chain_meths) for w in re.findall(r'\b([A-Za-z_]\w*)\b', args[ix]) if w not in sc.ctls)):
+                        return True
+    return False
+
+
+def resp_kind(sc, meth, cond, savem, chain_meths, line=0):
+    """조건이 서버 응답을 읽는가 → 'save' | 'lookup' | ''"""
+    names = set(re.findall(r'\b([A-Za-z_]\w*)\b', cond))
+    hit = bool(RX_RESP.search(cond)) or bool(RX_RESP_COND.search(cond))
+    if not hit:
+        # 조건 변수가 응답 갈래 안에서 대입되는가(bolSuessceChk 등)
+        for a in sc.by_meth.get(meth, []):
+            if a['kind'] in ('LOCAL', 'FLAG') and a['target'] in names and a['value'] and RX_RESP.search(a['guard'] or ''):
+                hit = True; break
+    if not hit and line:
+        # 2026-11-26: 조건 변수 값을 원문 대입 문장으로 따라가 응답이면(sResultMsg, iCount, specialty ← JObject.Parse(obj) ← 업로드 응답)
+        hit = any(traced_resp(sc, meth, v, line, 0, tuple(chain_meths)) for v in names if v not in sc.ctls and not re.match(r'^(string|int|null|true|false|Count|Rows|Tables|ToString|Equals|Contains)$', v))
+    if not hit:
+        return ''
+    return 'save' if meth in savem else 'lookup'
+
+
+def resp_success(ats):
+    """응답을 읽는 가드 원자들이 모두 성공 쪽이면 True(실패 표현 != · ! · == false · Count == 0 · IsNullOr · == null 을 else 와 합쳐 판정)"""
+    ok = True
+    for br, c in ats:
+        if not c or c.startswith('for ('):
+            continue
+        s = not RX_FAIL.search(c)
+        ok = ok and (s if br == 'if' else not s)
+    return ok
+
+
+def unwrap(expr):
+    e = strip_par(expr.strip())
+    for _ in range(4):
+        e = re.sub(r'\.(?:ToString|Trim|Replace|Substring)\([^()]*\)$', '', e)
+        m = RX_WRAP.match(e)
+        if not m:
+            break
+        e = split_top(m.group(1), ',')[0] if ',' in m.group(1) else m.group(1).strip()
+    return e
+
+
+def lookup_ctl(sc, handler, meth):
+    """조회 메서드 호출 인자의 칸 → [ctl]"""
+    for a in sc.by_meth.get(handler, []):
+        if a['kind'] == 'CALL_LOCAL' and re.sub(r'^this\.', '', a['target']) == meth:
+            return re.findall(r'\b([A-Za-z_]\w*)\.(?:Text|EditValue|Value)\b', a['value'])
+    return []
+
+
+def resolve(sc, meth, operand):
+    """피연산자 → (ctl, part) part = Text|Text1|Text2|Value1|Value2|''"""
+    return _resolve(sc, meth, operand, 0)
+
+
+def _resolve(sc, meth, operand, depth):
+    # 2026-11-26: 감싼 식(int.Parse·Convert.To·DateTime.ParseExact) 풀기 · ControlValues(다중 선택 값, 기간 'a:b') · Split 배열 첨자 · 대입 3단계
+    operand = unwrap(operand)
+    m = re.match(r'^([A-Za-z_]\w*)\.(Text1|Text2|Value1|Value2|Text|EditValue|ControlValues|SelectedValue)\b', operand)
+    if m and m.group(1) in sc.ctls:
+        return m.group(1), m.group(2)
+    def rhs_of(var, before=0):
+        """메시지 줄(또는 before 줄) 앞 가장 가까운 대입(같은 파일) → (식, 그 줄 가드, 줄) · 없으면 메서드 첫 대입"""
+        if CUR['line']:
+            ln, st = stmt_before(sc, meth, var, before or CUR['line'])
+            if st and '=' in st:
+                g = next((r['guard'] for r in sc.by_meth.get(meth, []) if r['file'] == CUR['file'] and r['line'] == str(ln)), '')
+                g = ' ▸ '.join(x for x in atoms(g) if x not in ('try', 'finally') and not x.startswith('for (') and x not in CUR.get('guard', ()))  # 메시지 자기 가드 안 대입은 상태 조건 아님
+                return st.split('=', 1)[1].strip().rstrip(';').strip(), g, ln
+        return sc.assigns(meth).get(var, ''), '', 0
+    m = re.match(r'^([A-Za-z_]\w*)\[(\d)\]$', operand)
+    if m:
+        ex, _g, _ln = rhs_of(m.group(1))
+        s = re.search(r'\b([A-Za-z_]\w*)\.(?:ControlValues|Text)\.Split\(', ex)
+        if s and s.group(1) in sc.ctls:
+            return s.group(1), ('Text1', 'Text2')[int(m.group(2))] if int(m.group(2)) < 2 else ''
+        return '', ''
+    if re.match(r'^[A-Za-z_]\w*$', operand) and depth < 3:
+        ex, g, gln = rhs_of(operand)
+        if not ex:
+            return '', ''
+        if g and not re.search(r'\b([A-Za-z_]\w*)\.(Text1|Text2|Value1|Value2|Text|EditValue|ControlValues|SelectedValue)\b', ex):
+            # 2026-11-26 3차: 화면 상태 조건 g 아래에서 값이 바뀜 → g 가 거짓인 갈래(그 앞 대입)로 풀고, 실행 때 g 거짓을 화면 표시로 확인(CUR req)
+            ex2, g2, _l2 = rhs_of(operand, gln) if gln else ('', '', 0)
+            if ex2 and not g2:
+                r2 = _resolve(sc, meth, ex2, depth + 1)
+                if r2[0]:
+                    CUR.setdefault('req', []).append((g, False))
+                    return r2
+            return '', f'DATA:{operand} 값이 화면 상태 조건({g[:80]}) 아래에서 바뀜'
+        m = re.search(r'\b([A-Za-z_]\w*)\.(Text1|Text2|Value1|Value2|Text|EditValue|ControlValues|SelectedValue)\b', ex)
+        if m and m.group(1) in sc.ctls:
+            return m.group(1), m.group(2)
+        u = unwrap(ex)
+        if u != ex or re.match(r'^[A-Za-z_]\w*(\[\d\])?$', u):
+            return _resolve(sc, meth, u, depth + 1)
+    return '', ''
+
+
+def pattern(sc, meth, br, cond, chain, handler):
+    """→ {'trigger': step, 'pass': step, 'ctl': ctl} | {'why': 사유}"""
+    c = strip_par(cond)
+    parts = [strip_par(x) for x in re.split(r'\|\|', c)]
+    # 기간 빈값
+    if br == 'if' and len(parts) == 2 and all(re.match(r'^string\.IsNullOr(?:WhiteSpace|Empty)\((.+)\)$', p) for p in parts):
+        rs = [resolve(sc, meth, re.match(r'^string\.IsNullOr(?:WhiteSpace|Empty)\((.+)\)$', p).group(1)) for p in parts]
+        if rs[0][0] and rs[0][0] == rs[1][0] and sc.ctl_kind(rs[0][0]) == 'period':
+            x = rs[0][0]
+            return {'ctl': x, 'op': 'period', 'trigger': {'from': '', 'to': ''}, 'pass': {'from': '@TODAY', 'to': '@TODAY'}}
+    # 빈값
+    m = re.match(r'^string\.IsNullOr(?:WhiteSpace|Empty)\((.+)\)$', c) or re.match(r'^(.+?)(?:\.Trim\(\))?\s*==\s*""$', c) or re.match(r'^(.+?)\.(?:Trim\(\)\.)?Length\s*==\s*0$', c)
+    if br == 'if' and m and '||' not in m.group(1) and '&&' not in m.group(1):
+        x, part = resolve(sc, meth, m.group(1))
+        if x and sc.ctl_kind(x) == 'text':
+            return {'ctl': x, 'op': 'text', 'trigger': {'value': ''}, 'pass': {'value': f'@{ctl_name(x)}'}, 'needs': [ctl_name(x)]}
+        if x and sc.ctl_kind(x) == 'multi':  # 2026-11-26: CString.GetCheckedListValue(dt, clbX.ControlValues) == "" → 선택 없음
+            return {'ctl': x, 'op': 'multi', 'trigger': {'mode': 'none'}, 'pass': {'mode': 'all'}}
+        return {'why': f'빈값 검사 대상 {m.group(1)} 의 입력칸을 원문에서 찾지 못함'}
+    # 기간 역전 — A > B · DateTime.Compare(A, B) > 0 · A.CompareTo(B) > 0 (A·B = 같은 기간 칸 앞·뒤, 감싼 식·Split 첨자·대입 3단계까지 풀어 봄)
+    m = re.match(r'^DateTime\.Compare\((.+)\)\s*>\s*0$', c)
+    ab = split_top(m.group(1), ',') if m else None
+    if not ab:
+        m = re.match(r'^(.+?)\.CompareTo\((.+)\)\s*>\s*0$', c)
+        ab = [m.group(1), m.group(2)] if m else None
+    if not ab:
+        ab = split_top(c, '>') if '>' in c and '>=' not in c and '=>' not in c else None
+    if br == 'if' and ab and len(ab) == 2:
+        a, b = resolve(sc, meth, ab[0]), resolve(sc, meth, ab[1])
+        dat = next((p[1][5:] for p in (a, b) if p[1].startswith('DATA:')), '')
+        if dat:
+            return {'block': f'기간 비교 값 {dat} — 입력으로 정할 수 없음'}
+        if a[0] and a[0] == b[0] and sc.ctl_kind(a[0]) == 'period' and a[1] in ('Text1', 'Value1') and b[1] in ('Text2', 'Value2'):
+            return {'ctl': a[0], 'op': 'period', 'trigger': {'from': '@TODAY+1', 'to': '@TODAY'}, 'pass': {'from': '@TODAY', 'to': '@TODAY'}}
+        if a[0] and b[0] and a[0] != b[0] and sc.ctl_kind(b[0]) == 'date':
+            # 시작 칸(a)과 끝 칸(b)이 따로인 화면(SCP0123 txtProdStart · dpProdEnd): 끝 칸을 시작보다 앞(@TODAY-3650)으로 → 시작 > 끝. 통과값은 화면 기본값 그대로(단계 없음)
+            return {'ctl': b[0], 'ctl_from': a[0], 'op': 'date', 'trigger': {'value': '@TODAY-3650'}, 'pass': None,
+                    'note': f'시작 {a[0]}.{a[1]} > 끝 {b[0]}.{b[1]} — 끝 칸을 3650일 전으로'}
+    # 기간 길이 상한 — X.Value1.AddYears(n) < X.Value2 · X.Value2 > X.Value1.AddYears(n) (AddMonths·AddDays 포함) → 상한 + 1일 넘는 기간
+    m = re.match(r'^(\w+)\.(?:Value1|Text1)\.Add(Years|Months|Days)\((\d+)\)\s*<\s*(\w+)\.(?:Value2|Text2)$', c) or \
+        re.match(r'^(\w+)\.(?:Value2|Text2)\s*>\s*(\w+)\.(?:Value1|Text1)\.Add(Years|Months|Days)\((\d+)\)$', c)
+    if br == 'if' and m:
+        g = m.groups()
+        x, unit, n = (g[0], g[1], int(g[2])) if len(g) == 4 and g[1] in ('Years', 'Months', 'Days') else (g[1], g[2], int(g[3]))
+        if x in sc.ctls and sc.ctl_kind(x) == 'period':
+            days = {'Years': 366, 'Months': 31, 'Days': 1}[unit] * n + 1
+            return {'ctl': x, 'op': 'period', 'trigger': {'from': '@TODAY', 'to': f'@TODAY+{days}'}, 'pass': {'from': '@TODAY', 'to': '@TODAY'},
+                    'note': f'기간 상한 Add{unit}({n}) 보다 긴 {days}일'}
+    # 숫자 범위 — V < N · V > N · V <= N · V >= N, V = 입력칸 값(Convert.ToInt32(txtX.Text) 등) → 경계 밖 값
+    m = re.match(r'^(\w+)\s*(<=|>=|<|>)\s*(\d+)$', c)
+    if br == 'if' and m:
+        x, part = resolve(sc, meth, m.group(1))
+        if part.startswith('DATA:'):
+            return {'block': part[5:]}
+        if x and sc.ctl_kind(x) == 'text':
+            n = int(m.group(3)); v = {'<': n - 1, '>': n + 1, '<=': n, '>=': n}[m.group(2)]
+            ok = {'<': n, '>': n, '<=': n + 1, '>=': n - 1}[m.group(2)]   # 통과값 = 경계 안 값(이 검사를 통과하는 가장 가까운 정수)
+            return {'ctl': x, 'op': 'text', 'trigger': {'value': str(v)}, 'pass': {'value': str(ok)},
+                    'note': f'{m.group(1)} {m.group(2)} {n} 이 되는 값 {v}'}
+    # 선택 없음
+    m = re.match(r'^(\w+)\s*==\s*true$', c)
+    if br == 'else' and m:
+        f = m.group(1); boxes = set()
+        for a in sc.by_meth.get(meth, []):
+            if a['kind'] in ('LOCAL', 'FLAG') and a['target'] == f and a['value'].strip() == 'true':
+                boxes.update(re.findall(r'\b(\w+)\.Items\[\w+\]\.CheckState\s*==\s*CheckState\.Checked', a['guard'] or ''))
+        if len(boxes) == 1 and sc.ctl_kind(next(iter(boxes))) == 'multi':
+            x = next(iter(boxes))
+            return {'ctl': x, 'op': 'multi', 'trigger': {'mode': 'none'}, 'pass': {'mode': 'all'}}
+    m = re.match(r'^(\w+)\.CheckedItems\.Count\s*==\s*0$', c)
+    if br == 'if' and m and sc.ctl_kind(m.group(1)) == 'multi':
+        return {'ctl': m.group(1), 'op': 'multi', 'trigger': {'mode': 'none'}, 'pass': {'mode': 'all'}}
+    # 본인 지정
+    m = re.match(r'^(\w+)\s*==\s*(.+)$', c)
+    if br == 'if' and m and RX_ME.search(m.group(2)):
+        v = m.group(1)
+        for cm, _k, _r in chain:
+            if any(a['kind'] in ('LOCAL', 'FLAG') and a['target'] == v for a in sc.by_meth.get(cm, [])):
+                xs = [x for x in lookup_ctl(sc, handler, cm) if sc.ctl_kind(x) == 'text']
+                if len(xs) == 1:
+                    return {'ctl': xs[0], 'op': 'text', 'trigger': {'value': '@ME'}, 'pass': {'value': f'@{ctl_name(xs[0])}'}, 'needs': [ctl_name(xs[0])],
+                            'note': f'{v} = {cm} 조회 결과({xs[0]} 값) · 로그인 계정과 같으면 발생'}
+    return {'why': f'조건 해석 패턴 없음: {br} ({c[:120]})'}
+
+
+NOMATCH = 'ZQ9NOMATCH'   # 조회 0건 갈래 입력값(실행 때 기대 문구로 결과 확인)
+MODDIR = os.path.join(ROOT, 'Doc', 'asisfacts', 'db', 'modules')
+
+
+def split_top(s, op):
+    out, d, cur, i, q = [], 0, '', 0, False
+    while i < len(s):
+        ch = s[i]
+        if ch == '"' and (i == 0 or s[i - 1] != '\\'):
+            q = not q
+        if not q:
+            d += ch == '('; d -= ch == ')'
+            if d == 0 and s.startswith(op, i):
+                out.append(cur); cur = ''; i += len(op); continue
+        cur += ch; i += 1
+    out.append(cur)
+    return [re.sub(r'\s+', '', x) for x in out if x.strip()]
+
+
+def stmt_before(sc, meth, var, line):
+    """메시지 줄 앞에서 var 에 값을 넣는 문장(여러 줄) → (줄, 문장) | (0, '')"""
+    rows = sc.by_meth.get(meth, [])
+    if CUR['file'] and any(r['file'] == CUR['file'] for r in rows):
+        rows = [r for r in rows if r['file'] == CUR['file']]   # 화면 변형 파일마다 같은 이름 메서드가 있을 때 메시지 파일 원문만
+    if not rows:
+        return 0, ''
+    near = [int(r['line']) for r in rows if int(r['line']) <= line]
+    lines = sc.src_lines(rows[0]['file']); lo = (max(int(r['line']) for r in rows if int(r['line']) <= line and r['stmt_no'] == '1') if any(r['stmt_no'] == '1' and int(r['line']) <= line for r in rows) else min(near or [line])) - 8
+    for k in range(line - 1, max(lo, 1) - 1, -1):
+        if k - 1 < len(lines) and re.search(r'\b%s\s*=(?!=)' % re.escape(var), lines[k - 1]):
+            buf = []
+            for j in range(k, min(k + 40, len(lines)) + 1):
+                buf.append(lines[j - 1])
+                if ';' in lines[j - 1]:
+                    break
+            return k, ' '.join(x.strip() for x in buf)
+    return 0, ''
+
+
+def count_lambda(stmt):
+    """'v = dt.AsEnumerable().Count(row => P);' → (dt, {조건 조각}) | None"""
+    m = re.search(r'(\w+)\.AsEnumerable\(\)\s*\.Count\(\s*\w+\s*=>\s*(.*)\)\s*;\s*$', stmt, re.S)
+    if not m:
+        return None
+    return m.group(1), frozenset(split_top(m.group(2), '&&'))
+
+
+def is_query_table(sc, meth, dt):
+    """dt 가 조회 응답 표(… = ds.Tables[n]…)로 채워지는가 — 화면 원문 전체에서"""
+    rows = sc.by_meth.get(meth, [])
+    if not rows:
+        return False
+    return any(re.search(r'\b%s\s*=\s*\w+\.Tables\[' % re.escape(dt), ln) for ln in sc.src_lines(rows[0]['file']))
+
+
+def lookup_info(sc, handler, meth):
+    """조회 메서드(호출 인자 = 입력칸) → {ctl, sp, param, like, size}"""
+    call = next((a for a in sc.by_meth.get(handler, []) if a['kind'] == 'CALL_LOCAL' and re.sub(r'^this\.', '', a['target']) == meth), None)
+    if not call:
+        return None
+    v = call['value'].strip()
+    args = [x.strip() for x in v[1:-1].split(',')] if v.startswith('(') and v.endswith(')') else []
+    ci = next((i for i, x in enumerate(args) if re.match(r'^\w+\.(Text|EditValue)$', x) and sc.ctl_kind(x.split('.')[0]) == 'text'), -1)
+    if ci < 0:
+        return None
+    ctl = args[ci].split('.')[0]
+    rows = sc.by_meth.get(meth, [])
+    sig = ''
+    if rows:
+        sig = next((ln for ln in sc.src_lines(rows[0]['file']) if re.search(r'\b%s\s*\(' % re.escape(meth), ln) and re.search(r'\b(private|public|protected|internal)\b', ln)), '')
+    ps = re.findall(r'\b\w+\s+(\w+)\s*(?=,|\))', sig.split('(', 1)[1]) if '(' in sig else []
+    pname = ps[ci] if ci < len(ps) else ''
+    key = ''
+    for a in rows:
+        mk = re.search(r'\["(\w+)"\]', a['target'])
+        if a['kind'] == 'DATA_OP' and mk and pname and a['value'].strip() == pname:
+            key = mk.group(1); break
+    ep = next((e for e in sc.eps if e['member'] == meth), None)
+    sp = re.sub(r'^SP\s+', '', (ep or {}).get('sp_or_sql', '')).strip()
+    like, size = False, 0
+    if sp and key and os.path.isdir(MODDIR):
+        want = {f'dbo.{sp}.sql'.lower(), f'{sp}.sql'.lower()}
+        f = next((os.path.join(MODDIR, n) for n in os.listdir(MODDIR) if n.lower() in want), '')
+        if f:
+            sql = open(f, encoding='utf-8-sig', errors='replace').read()
+            like = bool(re.search(r"LIKE\s*'%'\s*\+\s*@" + re.escape(key) + r"\s*\+\s*'%'", sql, re.I))
+            m = re.search(r'@' + re.escape(key) + r'\s+N?VARCHAR\s*\((\d+)\)', sql, re.I)
+            size = int(m.group(1)) if m else 0
+    return {'ctl': ctl, 'sp': sp, 'param': key, 'like': like, 'size': size}
+
+
+def lookup_count(ats):
+    """가드 원자의 Rows.Count 조건을 모두 만족하는 건수 → 0 | 1 | 2 | None"""
+    cons = []
+    for br, c in ats:
+        m = re.search(r'Rows\.Count\s*(==|>=|>|<|!=)\s*(\d+)', c)
+        if m:
+            cons.append((br, m.group(1), int(m.group(2))))
+    if not cons:
+        return None
+    ops = {'==': lambda a, b: a == b, '>': lambda a, b: a > b, '>=': lambda a, b: a >= b, '<': lambda a, b: a < b, '!=': lambda a, b: a != b}
+    for n in (0, 1, 2):
+        if all(ops[o](n, v) == (br == 'if') for br, o, v in cons):
+            return n
+    return None
+
+
+def known_cols(sc):
+    cols = {r['column'].upper() for r in rd(os.path.join(FACTS, sc.asis, 'grid_columns_asis.csv')) if r.get('column')}
+    for rel in {a['file'] for a in sc.acts}:
+        cols.update(c.upper() for c in re.findall(r'\.Field<\w+>\("(\w+)"\)', '\n'.join(sc.src_lines(rel))))
+    return cols
+
+
+def save_where(sc, smeth, passed, lookups, cols):
+    """저장 SP 인자 → 그리드 칸 조건(p_x → X) · 값 = 앞선 검사 통과값"""
+    where, src = {}, []
+    asg = sc.assigns(smeth)
+    for a in sc.by_meth.get(smeth, []):
+        m = re.search(r'Parameters\["(\w+)"\]', a['target'])
+        if a['kind'] != 'DATA_OP' or not m:
+            continue
+        col = re.sub(r'^p_', '', m.group(1), flags=re.I).upper()
+        if col not in cols:
+            continue
+        v = a['value'].strip(); ex = asg.get(v, v)
+        x, part = resolve(sc, smeth, v)
+        if x:
+            pp = next((p for p in passed if p['ctl'] == x and p['kind'] == 'input'), None)
+            if pp and pp['op'] == 'period' and part in ('Text1', 'Value1'):
+                where[col] = pp['pass']['from']; src.append(f'{m.group(1)}={x}.{part}')
+            elif pp and pp['op'] == 'period' and part in ('Text2', 'Value2'):
+                where[col] = pp['pass']['to']; src.append(f'{m.group(1)}={x}.{part}')
+            elif pp and pp['op'] == 'text':
+                where[col] = pp['pass']['value']; src.append(f'{m.group(1)}={x}.{part}')
+            continue
+        fv = re.match(r'^(\w+)$', ex)
+        if fv:
+            for lm, lk in lookups.items():
+                if any(r['kind'] in ('LOCAL', 'FLAG') and r['target'] == fv.group(1) for r in sc.by_meth.get(lm, [])):
+                    where[col] = f"@{ctl_name(lk['ctl'])}"; src.append(f"{m.group(1)}={fv.group(1)}({lm} 조회 결과, {lk['ctl']})")
+    return where, src
+
+
+def grid_reads(sc, meth):
+    return any(RX_GRID.search(' '.join((r['target'], r['value'], r['guard'], r['raw']))) for r in sc.by_meth.get(meth, []))
+
+
+def build(asis, vars_=None, mid=None):
+    sc = Screen(asis)
+    if not sc.acts:
+        return {'ok': False, 'why': f'AS-IS 사실 없음 Doc/asisfacts/screens/{asis}'}
+    master = msg_master(); savem = sc.save_members(); vars_ = vars_ or {}
+    buttons, gen, pending = [], [], []
+    blocked, delegated = [], []   # 측정 보류(사유 확정) · 다른 측정에 맡김
+    seen_msg = set(); chains = sc.chains(); cols = known_cols(sc)
+    ep_lines_all = {}
+    for e in sc.eps:
+        if e['line'].isdigit():
+            ep_lines_all.setdefault(e['member'], []).append(int(e['line']))
+
+    def blab(b):
+        return next((p['value'].strip().strip('"') for p in sc.props if re.sub(r'^this\.', '', p['target']) == b and p['prop'] == 'Text'), '') or PREFIX.sub('', b)
+
+    def do_chain(btn, ch, search_meth=None):
+        """단추 사슬 1개 처리. search_meth = 조회 단추(FindButton) 경로로 그 메서드 검사만 다시 만듦(2026-11-26 5차)"""
+        handler = ch['handler']; chain = ch['meths']
+        names = {m for m, _k, _r in chain}
+        sv = [m for m in names if m in savem] if search_meth is None else []
+        if search_meth is None:
+            if not sv:
+                return
+            tables = sorted(set().union(*[savem[m] for m in sv]))
+            grid = [m for m in sv if grid_reads(sc, m)]
+            if grid:
+                buttons.append({'button': btn, 'form': False, 'why': f'저장 메서드 {",".join(sorted(grid))} 가 그리드를 읽음', 'save': sorted(sv), 'tables': tables})
+                return
+            blabel = blab(btn)
+            buttons.append({'button': btn, 'form': True, 'label': blabel, 'save': sorted(sv), 'tables': tables})
+        else:
+            blabel = ''
+        keyof = {m: k for m, k, _r in chain}
+        msgs = []
+        for m in names:
+            for a in sc.by_meth.get(m, []):
+                if a['kind'] == 'MESSAGE':
+                    msgs.append((keyof.get(m, ()) + (int(a['line']),), m, a))
+        # 2026-11-26 DMF0042: 화면 변형 파일(DMF0042_BizPlan · DMF0042_1_BizPlan)은 따로 — 앞선 검사 상태가 섞이지 않게 파일별로 묶어 차례로
+        msgs.sort(key=lambda t: (t[2]['file'], t[0]))
+        # 저장 호출 위치(처리 메서드 기준 호출 줄) — 그 뒤에 부르는 메서드(다시 조회 FindData 등)의 검사는 실저장이 먼저 일어나므로 이 단추로 재지 않음
+        save_pos = {}
+        for s_ in sv:
+            for f_ in {r['file'] for r in sc.by_meth.get(s_, [])}:
+                k_ = keyof.get(s_, ())
+                pos = k_[0] if k_ else min((L for L in ep_lines_all.get(s_, []) if L), default=10 ** 9)
+                save_pos[f_] = min(save_pos.get(f_, 10 ** 9), pos)
+        if search_meth is None:
+            msgs = [t for t in msgs if (t[1], t[2]['line']) not in seen_msg]
+            seen_msg.update((t[1], t[2]['line']) for t in msgs)
+        else:
+            msgs = [t for t in msgs if t[1] == search_meth]
+        passed = []    # 앞선 검사: {ctl, op, pass, line, meth, msg, needs, guard, kind: input|none|unknown}
+        lookups = {}   # 조회 메서드 → lookup_info
+        cnt_prev = []  # (meth, guard, cond, 조건 조각, line, msg) — 건수 조건 포함 관계(도달 불가) 판정
+        deferred = []  # 기존 행 중복 검사(준비 행이 있어야 발생) → 저장 성공 갈래를 본 뒤 만든다
+        setup = None
+
+        def prior_steps(ga, skip_ctl=None):
+            """앞선 검사 통과 단계 → (steps, needs, labels, 막는 앞선 검사, 확인창 통과 단계)"""
+            steps, needs, lab, post = [], [], {}, []
+            for p in passed:
+                if exclusive(p['guard'], ga):
+                    continue
+                if p['kind'] in ('unknown', 'data', 'grid', 'param'):
+                    return None, None, None, p, None
+                if p['kind'] == 'confirm':
+                    post.append({'op': 'dialog', 'how': 'ok'}); continue
+                if p['kind'] == 'cells':   # 그리드 값 검사 통과 = 실행 때 그리드 칸 값이 통과 조건인지 확인(아니면 측정 경로 없음)
+                    steps.append({'op': 'requireCells', **p['pass']}); continue
+                if p['kind'] != 'input' or p['ctl'] == skip_ctl:
+                    continue
+                lb = sc.label(p['ctl']); lab[p['ctl']] = lb
+                st = {'op': p['op'], 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **p['pass']}
+                if p['op'] == 'date2':
+                    lb2 = sc.label(p['ctl2'])
+                    st = {'op': 'text', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'value': p['pass']['from']}
+                    steps.append(st); st = {'op': 'text', 'label': lb2['label'], **({'fuzzy': True} if lb2['fuzzy'] else {}), 'value': p['pass']['to']}
+                steps.append(st); needs += p['needs']
+            return steps, sorted(set(needs)), lab, None, post
+
+        def add_pass(ctl, op, pv, a, m, code, needs, ga, kind='input', ctl2=None):
+            if kind != 'input' or not any(p['ctl'] == ctl and p['kind'] == 'input' for p in passed):
+                passed.append({'ctl': ctl, 'ctl2': ctl2, 'op': op, 'pass': pv, 'line': a['line'], 'meth': m, 'msg': code, 'needs': needs, 'guard': ga, 'kind': kind})
+
+        def proxy_steps(reqs):
+            """화면 상태 조건 g 의 참·거짓을 화면 표시로 확인하는 단계 — 원문에서 g 아래 'X.Visibility = Never'·'X.Visible = false' 를 찾아 X 라벨 칸 표시 여부로"""
+            out = []
+            for g, truth in reqs:
+                hit, lt = None, ''
+                for r in sc.acts:
+                    if r['kind'] == 'UI_PROP' and g in atoms(r['guard']) and re.search(r'\.(Visibility|Visible)$', r['target']) and re.search(r'Never|false', r['value']):
+                        h = re.sub(r'^this\.', '', r['target'].rsplit('.', 1)[0])
+                        t = next((p['value'].strip().strip('"') for p in sc.props if p['target'] == h and p['prop'] == 'Text'), '')
+                        if not re.search(r'[A-Za-z가-힣]', t):   # 라벨 글자 없는 배치 항목(' ~ ')이면 안에 든 칸의 라벨
+                            ic = next((re.sub(r'^this\.', '', p['value'].strip()) for p in sc.props if p['target'] == h and p['prop'] == 'Control'), '')
+                            lbx = sc.label(ic) if ic else None
+                            t = lbx['label'] if lbx and not lbx['fuzzy'] else ''
+                        if t:
+                            hit, lt = h, t; break
+                if not hit:
+                    return None
+                out.append({'op': 'require', 'label': lt.replace('*', '').strip(), 'visible': not truth, 'note': f'{g} 이 {"참" if truth else "거짓"}인 화면({hit} {"숨김" if truth else "표시"})'})
+            return out
+
+        def emit(sc_, needs):
+            if CUR.get('req') and sc_.get('steps') is not None and not sc_.get('phase'):
+                ps_ = proxy_steps(CUR['req'])
+                if ps_ is None:
+                    blocked.append({**sc_, 'why': f"화면 상태 조건({'; '.join(g for g, _t in CUR['req'])[:100]})의 참·거짓을 화면 표시로 확인할 원문(Visibility·Visible)이 없음"}); return
+                sc_['steps'] = ps_ + sc_['steps']
+            miss = [n for n in needs if n not in vars_]
+            if needs:
+                sc_['needs'] = needs
+            if miss:
+                pending.append({**sc_, 'why': f"앞선 검사 통과값 vars 미지정: {', '.join(miss)} (Doc/verify/<ID>/form_vars.json)"})
+            else:
+                gen.append(sc_)
+
+        def blocked_by(base, p, what=''):
+            why = {'unknown': '의 통과 입력을 해석하지 못함', 'data': '(조회 데이터 상태 검사)의 통과 여부를 입력으로 정할 수 없음',
+                   'grid': '(그리드 값 검사)의 통과 여부를 조회영역 입력으로 정할 수 없음', 'param': '(메서드 인자 검사)의 통과 여부를 입력으로 정할 수 없음'}[p['kind']]
+            row = {**base, 'why': f"{what}앞선 검사 {p['msg']}({p['meth']} cs:{p['line']}){why}"}
+            (pending if p['kind'] == 'unknown' else blocked).append(row)
+
+        def with_click(steps, post, own=None, click=None):
+            return steps + [click or ({'op': 'search'} if search_meth else {'op': 'click', 'name': blabel})] + post + (own or [])
+
+        def src_line(a):
+            ls = sc.src_lines(a['file'])
+            n = int(a['line'])
+            return ls[n - 1] if 0 < n <= len(ls) else ''
+
+        def helper_body(name):
+            return method_body(sc, name, 30)
+
+        ep_lines = {}
+        for e in sc.eps:
+            if e['line'].isdigit():
+                ep_lines.setdefault(e['member'], []).append(int(e['line']))
+        save_ops = {}
+        for e in sc.eps:
+            for op_, t in RX_DML.findall(e.get('objects') or ''):
+                if not RX_NOSAVE_T.search(t):
+                    save_ops.setdefault(e['member'], set()).add(op_.upper())
+
+        cur_file = None
+        for _key, m, a in msgs:
+            if a['file'] != cur_file:   # 화면 변형 파일이 바뀌면 앞선 검사 상태를 새로 시작
+                cur_file = a['file']; passed.clear(); lookups.clear(); cnt_prev.clear()
+            ga = atoms(a['guard'])
+            CUR.update(file=a['file'], line=int(a['line']), guard=tuple(ga), req=[])
+            mcode = re.search(r'"(MSG\d+)"', a['value'])
+            code = mcode.group(1) if mcode else ''
+            mr = master.get(code, {})
+            base = {'msg': code or '(동적 메시지)', 'meth': m, 'asis_line': f"cs:{a['line']}", 'asis_text': mr.get('Ko', ''),
+                    'asis_text_alt': [t for t in (mr.get('En', ''), mr.get('Ch', '')) if t], 'button': btn}
+            if m not in savem and _key and _key[0] > save_pos.get(a['file'], 10 ** 9) and m != handler:
+                # 저장 호출 뒤에 부르는 메서드(다시 조회) 안 검사 — 이 단추로 재려면 실저장이 먼저 일어남
+                if not re.search(r'catch|ForException', (a['guard'] or '') + a['value']) and code:
+                    to = 'search' if RX_NOSAVE_M.search(m) else ''
+                    (delegated if to else blocked).append({**base, **({'to': to} if to else {}), 'why': f'저장 호출(처리 메서드 cs:{save_pos.get(a["file"])}) 뒤에 부르는 {m} 안 검사 — 이 단추로는 실저장이 먼저 일어나 재지 않음' + (' · 조회 단추 경로에서 잴 대상' if to else '')})
+                    continue
+            ats = [inner(x) for x in ga if not x.startswith('for (') and x not in ('try', 'finally')]
+            br, cond = ats[-1] if ats else ('', '')
+            confirm = [{'op': 'dialog', 'how': 'cancel'}] if mr.get('Button') and mr.get('Button') != '0202001' else []
+            if 'catch' in (a['guard'] or '') or 'ForException' in a['target'] + a['value']:
+                gen.append({**base, 'kind': 'error_branch', 'basis': f"예외 catch 블록({m} cs:{a['line']})"}); continue
+            if not code:
+                gen.append({**base, 'kind': 'error_branch', 'basis': f"오류 문구·코드를 그대로 띄우는 분기({a['guard'] or m})"}); continue
+            # ── 확인창(메시지 자체가 조건: if (GMessageBox("MSGx") == DialogResult.No) return) ──
+            cf = RX_CONFIRM.search(src_line(a))
+            if cf and cf.group(1) == code and not cond:   # 조건 갈래 안 확인창(조회 결과 갈래 등)은 그 갈래 규칙으로 만듦
+                steps, needs, lab, blk, post = prior_steps(ga)
+                if blk:
+                    blocked_by(base, blk); add_pass(None, '', {}, a, m, code, [], ga, 'confirm'); continue
+                emit({**base, 'kind': 'dynamic', 'steps': with_click(steps, post, [{'op': 'dialog', 'how': 'cancel'}]),
+                      'note': f"확인창({cf.group(2)} DialogResult.{cf.group(3)} 이면 중단) — 취소를 눌러 저장 요청 없이 끝나는지 확인"}, needs)
+                add_pass(None, '', {}, a, m, code, [], ga, 'confirm'); continue
+            # ── 권한 검사 → 계정 그룹별 권한 측정(authprobe)에 맡김 · 시험 계정은 권한 있음 ──
+            if RX_AUTH.search(cond):
+                # 2026-11-26 5차: 메뉴 조회 권한은 있고 SAVE 권한은 없는 그룹(btn_auth.csv)의 시험 계정(users.json 명부)으로 로그인해 단추를 누름.
+                #   TO-BE 룰 CR-070(확정: 버튼 코드 권한이 있을 때만 노출) → 단추가 숨거나 비활성이면 그 룰로 통과, 보이면 AS-IS 권한 문구를 기대
+                rk_ = auth_role_key(mid or tobe_of(asis), asis)
+                steps, needs, lab, blk, post = prior_steps(ga)
+                if rk_ and not blk and not search_meth:
+                    emit({**base, 'kind': 'dynamic', 'steps': [{'op': 'asAccount', 'key': rk_[0]}] + steps + [{'op': 'authGate', 'name': blabel}] + post + confirm,
+                          'note': f"권한 검사({cond[:60]}) · 계정 {rk_[0]}(그룹 {rk_[1]} = {(mid or tobe_of(asis))} 버튼 권한 {'·'.join(rk_[2])}, SAVE 없음 · btn_auth.csv) · 단추 숨김·비활성이면 CR-070 통과, 보이면 AS-IS 문구"}, needs)
+                else:
+                    delegated.append({**base, 'to': 'authprobe', 'why': f'권한 검사({cond[:80]}) — ' + ('앞선 검사 통과 입력을 정할 수 없음' if blk else 'SAVE 권한 없는 그룹의 시험 계정(btn_auth.csv × users.json)이 없어') + ' 계정 그룹별 권한 측정에 맡김'})
+                add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
+            # ── 그리드 값 검사 → 그리드 셀 경로(W3)에 맡김 ──
+            if RX_GRID.search(cond):
+                delegated.append({**base, 'to': 'grid', 'why': f'그리드 값 검사({cond[:80]}) — 조회영역 입력이 아니라 그리드 셀 경로에 맡김'})
+                # 2026-11-26 3차: 'X.Sheets[0].Cells[r, c].Text (==|!=) "v"' 로만 된 조건이면 통과 조건(조건의 부정)을 실행 때 그리드 칸 값으로 확인하는 전제 단계로 둠
+                cells = re.findall(r'\.Cells\[\s*(\d+)\s*,\s*(\d+)\s*\]\.Text\s*(==|!=)\s*"([^"]*)"', cond)
+                rest = re.sub(r'\w+\.Sheets\[\d+\]\.Cells\[\s*\d+\s*,\s*\d+\s*\]\.Text\s*(==|!=)\s*"[^"]*"', '', strip_par(cond))
+                if br == 'if' and cells and re.fullmatch(r'[\s&|()]*', rest) and not ('&&' in cond and '||' in cond):
+                    req = {'join': 'any' if '&&' in cond else 'all',   # 부정: not(A && B) = 하나라도 아님 · not(A || B) = 모두 아님
+                           'cells': [{'r': int(r_), 'c': int(c_), 'op': 'ne' if o_ == '==' else 'eq', 'v': v_} for r_, c_, o_, v_ in cells],
+                           'note': f'AS-IS 그리드 칸 조건 부정 — {strip_par(cond)[:100]}'}
+                    add_pass(None, 'requireCells', req, a, m, code, [], ga, 'cells')
+                else:
+                    add_pass(None, '', {}, a, m, code, [], ga, 'grid')
+                continue
+            rk = resp_kind(sc, m, cond, savem, names, int(a['line']))
+            if m in savem and any(L < int(a['line']) for L in ep_lines.get(m, [])):
+                mc0 = re.match(r'^(\w+)\s*>\s*0$', strip_par(cond))
+                if not cond:
+                    rk = 'save'   # 조건 없이 저장 호출 뒤에 띄우는 메시지 = 저장 성공 안내
+                elif mc0 and re.search(r'\b%s\s*(\+\+|\+=\s*1)' % re.escape(mc0.group(1)), method_body(sc, m, 200)):
+                    rk = 'save'   # 저장할 때마다 1씩 세는 건수(iCount++) > 0 = 저장 성공 안내(FP01624 Save_Data)
+            # ── 저장 응답 ──
+            if rk == 'save':
+                if not resp_success(ats):
+                    gen.append({**base, 'kind': 'error_branch', 'basis': f"저장 응답 실패 갈래({(cond or '조건 없음')[:100]} · {m} cs:{a['line']})"}); continue
+                steps, needs, lab, blk, post = prior_steps(ga)
+                if blk:
+                    blocked_by(base, blk, '저장 성공 갈래 — '); continue
+                ops_ = save_ops.get(m, set())
+                where, wsrc = save_where(sc, m, passed, lookups, cols)
+                mt = set(savem.get(m, ()))
+                tear = []
+                for b2, c2 in sorted(chains.items()):
+                    if b2 == btn:
+                        continue
+                    sv2 = [q for q in {q for q, _k, _r in c2['meths']} if q in savem and set(savem[q]) & mt]
+                    if sv2 and any(grid_reads(sc, q) for q in sv2):
+                        tear.append((b2, c2, sv2))
+                why_fake = ('저장 SP 가 새 행을 만들지 않음(' + (', '.join(sorted(ops_)) or '변경 종류 미확인') + ')' if not ops_ & {'INSERT', 'MERGE'} else
+                            '저장 SP 인자에서 그리드 칸 조건(matchAfter)을 만들지 못함' if not where else
+                            f"같은 표({', '.join(sorted(mt))})의 행을 해제·삭제하는 그리드 단추가 없음" if not tear else '')
+                if why_fake:
+                    # 2026-11-26 3차: 정리 경로 없는 실저장 → 데이터 변경 요청은 서버로 보내지 않고 같은 시트·버튼의 이전 실제 성공 응답 표본
+                    #   (Doc/verify/<ID>/resp_samples.json · _trace T502·T503 과 같은 방식)으로 답해 성공 문구를 확인. 표본이 없으면 실행기가 미검증(ERROR)
+                    lit = next((mm.group(1) for _b, c_ in reversed(ats) for mm in [re.search(r'==\s*"([^"]+)"', c_)] if mm), '')
+                    emit({**base, 'kind': 'dynamic', 'fakeSave': {'literal': lit},
+                          'steps': with_click(steps, post, None, {'op': 'click', 'name': blabel, 'ms': 4500, 'fake': True}),
+                          'note': f'저장 성공 갈래 — {why_fake} · 실저장 대신 실제 성공 응답 표본으로 답함(단추를 누른 뒤 서버 호출은 표본 있는 호출만 표본으로 답하고 나머지는 막음)' + (f"(성공 값 '{lit}')" if lit else '')}, needs)
+                    continue
+                tb, tch, _sv2 = tear[0]
+                tmeths = {q for q, _k, _r in tch['meths']}
+                tmsg = None
+                for q in sorted(tmeths):
+                    for r in sc.by_meth.get(q, []):
+                        if r['kind'] == 'MESSAGE' and re.search(r'"(MSG\d+)"', r['value']) and 'catch' not in (r['guard'] or ''):
+                            ta = [inner(x) for x in atoms(r['guard']) if not x.startswith('for (') and x not in ('try', 'finally')]
+                            if ta and resp_success(ta) and resp_kind(sc, q, ta[-1][1], savem, tmeths, int(r['line'])) == 'save':
+                                tmsg = (q, r); break
+                    if tmsg:
+                        break
+                setup = {**base, 'kind': 'dynamic', 'phase': 'setup', 'allowSave': True, 'expectSave': 1,
+                         'steps': with_click(steps, post, None, {'op': 'click', 'name': blabel, 'ms': 4500}),
+                         'matchAfter': {'where': where, 'min': 1},
+                         'note': f"정상 저장(검증용 행 생성) · 조건 칸 근거 {', '.join(wsrc)} · 정리 단추 {tb}"}
+                emit(setup, needs)
+                tcode = re.search(r'"(MSG\d+)"', tmsg[1]['value']).group(1) if tmsg else ''
+                tmr = master.get(tcode, {})
+                tdown = {'msg': tcode or '(동작)', 'meth': tmsg[0] if tmsg else tch['handler'], 'asis_line': f"cs:{tmsg[1]['line']}" if tmsg else '',
+                         'asis_text': tmr.get('Ko', ''), 'asis_text_alt': [t for t in (tmr.get('En', ''), tmr.get('Ch', '')) if t], 'button': tb,
+                         'kind': 'dynamic', 'phase': 'teardown', 'allowSave': True, 'expectSave': 1, 'expectRowsMin': 1,
+                         'steps': [{'op': 'checkrows', 'where': where}, {'op': 'click', 'name': blab(tb), 'ms': 3000}],
+                         'matchAfter': {'where': where, 'max': 0}, 'note': f'검증용으로 만든 행만 골라 {blab(tb)}(정리)'}
+                emit(tdown, sorted({v[1:] for v in where.values() if v.startswith('@') and not v.startswith('@TODAY') and v != '@ME'}))
+                continue
+            # ── 조회 결과 갈래 ──
+            if rk == 'lookup':
+                lk = lookups.get(m) or lookup_info(sc, handler, m)
+                n = lookup_count(ats)
+                if not lk:
+                    # 2026-11-26 3차: 콤보 X 선택값 != dt.Rows[0][..] 이고 X 를 같은 함수 결과로 채우면(setListBox(dtY, X) · dtY = F(...) · dt = F(...)) 첫 항목이 Rows[0] → 둘째 항목 고르면 발생
+                    mx = re.match(r'^(\w+)\.(?:SelectedValue|Text|EditValue)\S*\s*(!=|==)\s*(\w+)\.Rows\[0\]', strip_par(cond))
+                    if mx and mx.group(1) in sc.ctls and br == 'if':
+                        x, dtv = mx.group(1), mx.group(3)
+                        allsrc = '\n'.join(ln for rel in sorted({r['file'] for r in sc.acts}) for ln in sc.src_lines(rel))
+                        fdt = re.search(r'\b%s\s*=\s*([\w\.]+)\(' % re.escape(dtv), allsrc)
+                        binds = re.findall(r'setListBox\(\s*(\w+)\s*,\s*%s\s*[,)]|%s\.DataSource\s*=\s*(\w+)' % (re.escape(x), re.escape(x)), allsrc)
+                        same = fdt and any(re.search(r'\b%s\s*=\s*%s\(' % (re.escape(b1 or b2), re.escape(fdt.group(1))), allsrc) for b1, b2 in binds)
+                        if same:
+                            lb = sc.label(x)
+                            idx_t, idx_p = (1, 0) if mx.group(2) == '!=' else (0, 1)
+                            steps, needs, lab, blk, post = prior_steps(ga, skip_ctl=x)
+                            if blk:
+                                blocked_by(base, blk)
+                            else:
+                                emit({**base, 'kind': 'dynamic', 'steps': with_click(steps + [{'op': 'pick', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'index': idx_t}], post, confirm),
+                                      'note': f'{x} 를 {fdt.group(1)} 결과로 채움(첫 항목 = {dtv}.Rows[0]) · {idx_t + 1}번째 항목 선택 · 라벨 근거 {x}={lb["src"]}'}, needs)
+                            add_pass(x, 'pick', {'index': idx_p}, a, m, code, [], ga); continue
+                    if any(v in sc.ctls for v in re.findall(r'\b([A-Za-z_]\w*)\b', cond)):
+                        blocked.append({**base, 'why': f'조회 데이터와 입력칸 값 비교({cond[:80]}) — 조회 데이터 상태에 따라 갈림 · 입력으로 정할 수 없음'})
+                        add_pass(None, '', {}, a, m, code, [], ga, 'data'); continue
+                    if not resp_success(ats):
+                        gen.append({**base, 'kind': 'error_branch', 'basis': f"조회·외부 응답 실패·빈 응답 갈래({cond[:100]} · {m} cs:{a['line']})"})
+                        add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
+                    blocked.append({**base, 'why': f'조회 응답 성공 갈래({cond[:80]}) — 조회 데이터 상태에 따라 갈림'})
+                    add_pass(None, '', {}, a, m, code, [], ga, 'data'); continue
+                lookups[m] = lk; x = lk['ctl']
+                trig, why = None, ''
+                if n is not None and n >= 2:
+                    if lk['like']:
+                        trig = {'value': ''}; why = f"빈 검색어 = {lk['sp']} @{lk['param']} LIKE '%'+@{lk['param']}+'%' 전부 일치(여러 건)"
+                    else:
+                        why = f"여러 건 갈래 — {lk['sp']} @{lk['param']} 이 LIKE 검색이 아니어서 여러 건 입력을 정하지 못함"
+                elif n == 0:
+                    if lk['param']:
+                        v = NOMATCH[:lk['size']] if lk['size'] else NOMATCH
+                        trig = {'value': v}; why = f"일치 없는 검색어 '{v}'({lk['sp']} @{lk['param']}{' 길이 ' + str(lk['size']) if lk['size'] else ''})"
+                    else:
+                        why = '0건 갈래 — 조회 SP 인자를 찾지 못함'
+                else:
+                    why = f'조회 결과 갈래({cond[:80]}) — 건수 조건을 풀지 못함'
+                if trig is None:
+                    pending.append({**base, 'why': why})
+                else:
+                    steps, needs, lab, blk, post = prior_steps(ga, skip_ctl=x)
+                    if blk:
+                        blocked_by(base, blk)
+                    else:
+                        lb = sc.label(x)
+                        st = steps + [{'op': 'text', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **trig}]
+                        emit({**base, 'kind': 'dynamic', 'note': f"{x} {why} · 라벨 근거 {x}={lb['src']}", 'steps': with_click(st, post, confirm)}, needs)
+                add_pass(x, 'text', {'value': f'@{ctl_name(x)}'}, a, m, code, [ctl_name(x)], ga)
+                continue
+            # ── 건수 조건(포함 관계 · 기존 행 중복) ──
+            mc = re.match(r'^(\w+)\s*>\s*0$', strip_par(cond))
+            if br == 'if' and mc:
+                ln, stmt = stmt_before(sc, m, mc.group(1), int(a['line']))
+                cl = count_lambda(stmt) if stmt else None
+                if cl:
+                    dt, conj = cl
+                    sup = next((q for q in cnt_prev if q[0] == m and q[1] == ga and q[2] == strip_par(cond) and q[3] < conj), None)
+                    cnt_prev.append((m, ga, strip_par(cond), conj, a['line'], code))
+                    if sup:
+                        gen.append({**base, 'kind': 'unreachable', 'basis': f"cs:{ln} 건수 조건은 앞선 {sup[5]}(cs:{sup[4]}) 조건에 {' && '.join(sorted(conj - sup[3]))[:120]} 를 더한 것이라, 이 조건이 참이면 앞선 조건이 먼저 참이 되어 cs:{sup[4]} 에서 끝남"})
+                        add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
+                    if is_query_table(sc, m, dt):
+                        deferred.append((base, a, dt, ln))
+                        add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
+            # ── 파일 선택 검사(파일 열기 창 OK 뒤 helper(...) == false) ──
+            mf = re.match(r'^(\w+)\((.*)\)\s*==\s*false$', strip_par(cond))
+            if br == 'if' and mf and any('DialogResult.OK' in c2 for _b, c2 in ats):
+                body = helper_body(mf.group(1)); trig = None
+                ml = re.search(r'(\w+)\s*=\s*([\d\s\*\+]+);', body)
+                if ml and re.search(r'>\s*%s\b' % re.escape(ml.group(1)), body) and re.fullmatch(r'[\d\s\*\+]+', ml.group(2)):
+                    size = int(eval(ml.group(2), {'__builtins__': {}})) + 1   # 숫자·*·+ 만 있는 원문 식
+                    trig = {'file': 'zq_formscen.txt', 'size': size}; why = f'파일 크기 상한 {ml.group(2).strip()} 바이트 + 1({mf.group(1)})'
+                me_ = re.search(r'(\w+)\.Contains\(\s*\w+\s*\)', body)
+                if not trig and me_:
+                    lit = re.search(r'%s\s*=\s*"([^"]+)"' % re.escape(me_.group(1)), '\n'.join(ln for rel in sorted({r['file'] for r in sc.acts}) for ln in sc.src_lines(rel)))
+                    ext = re.search(r'\*\.(\w+)', lit.group(1)) if lit else None
+                    if ext:
+                        trig = {'file': f'zq_formscen.{ext.group(1)}', 'size': 16}; why = f'막는 확장자 목록 {me_.group(1)} 의 첫 확장자 .{ext.group(1)}({mf.group(1)})'
+                if trig:
+                    steps, needs, lab, blk, post = prior_steps(ga)
+                    if blk:
+                        blocked_by(base, blk)
+                    else:
+                        emit({**base, 'kind': 'dynamic', 'note': why, 'steps': steps + [{'op': 'file', 'name': blabel, **trig}] + post + confirm}, needs)
+                    add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
+                # 2026-11-26 3차: 첨부 건수 검사 — helper 본문 'X.RowCount + add > max'(인자 = 호출 숫자) → 그리드 행이 (max - add + 1)행 이상일 때 작은 정상 파일을 고르면 발생
+                mr_ = re.search(r'\.RowCount\s*\+\s*(\w+)', body); mx_ = re.search(r'>\s*(\w+)', body[mr_.end():] if mr_ else '')
+                hp = re.findall(r'\bint\s+(\w+)', body.split(')', 1)[0]) if body else []
+                av = [x.strip() for x in mf.group(2).split(',')]
+                if mr_ and mx_ and len(hp) == len(av) and all(x.isdigit() for x in av) and mr_.group(1) in hp and mx_.group(1) in hp:
+                    add_n = int(av[hp.index(mr_.group(1))]); max_n = int(av[hp.index(mx_.group(1))]); need = max_n - add_n + 1
+                    steps, needs, lab, blk, post = prior_steps(ga)
+                    if blk:
+                        blocked_by(base, blk)
+                    else:
+                        emit({**base, 'kind': 'dynamic', 'expectRowsMin': need, 'steps': steps + [{'op': 'file', 'name': blabel, 'file': 'zq_formscen.txt', 'size': 16}] + post + confirm,
+                              'note': f'첨부 목록 행 {need}행 이상(RowCount + {add_n} > {max_n}) 전제 · 작은 정상 파일 선택({mf.group(1)}) · 전제 행이 모자라면 실행기가 측정 경로 없음'}, needs)
+                    add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
+                blocked.append({**base, 'why': f'파일 검사 {mf.group(1)} — 원문 조건이 크기·확장자·첨부 건수가 아님'})
+                add_pass(None, '', {}, a, m, code, [], ga, 'data'); continue
+            # ── 작업 중 표시(필드 bool) · 메서드 반환값 · 메서드 인자 ──
+            idents = [v for v in re.findall(r'\b([A-Za-z_]\w*)\b', cond) if v not in ('true', 'false', 'null', 'Equals', 'ToString', 'Length', 'Count', 'Trim')]
+            def field_bool(v):
+                """화면 원문 전체에서 v 에 넣는 값이 true·false 뿐인가(작업 중 표시 필드)"""
+                vals = {x for rel in {r['file'] for r in sc.acts} for ln in sc.src_lines(rel) for x in re.findall(r'\b%s\s*=\s*(\w+)\s*;' % re.escape(v), ln)}
+                return bool(vals) and vals <= {'true', 'false'}
+            if br == 'if' and re.fullmatch(r'!?\s*\w+(\s*==\s*true)?', strip_par(cond)) and idents and idents[0] not in sc.ctls and field_bool(idents[0]):
+                blocked.append({**base, 'why': f'작업 중 표시({idents[0]}) — 앞 작업이 끝나기 전에 다시 누르는 타이밍 시험이라 입력 시나리오로 재지 않음'})
+                add_pass(None, '', {}, a, m, code, [], ga, 'none'); continue
+            v0 = next((v for v in idents if v not in sc.ctls), '')
+            ex0 = sc.assigns(m).get(v0, '') if v0 else ''
+            # 2026-11-26 3차: V = F() 이고 F 가 콤보 선택 이름을 나눈 조각을 돌려주면(GetComboSelectName(dt, X.ControlValues).Split('-')[k]) → 그 조각이 값인 항목 선택
+            mv = re.match(r'^(this\.)?([A-Z]\w*)\(\s*\)$', ex0.strip()) if v0 else None
+            fb = method_body(sc, mv.group(2), 30) if mv else ''
+            ms_ = re.search(r"GetComboSelectName\(\s*\w+\s*,\s*(\w+)\.ControlValues\s*\)\.Split\(\s*'(.)'\s*\)", fb)
+            mk_ = re.search(r'\w+\[(\d)\]', fb[ms_.end():]) if ms_ else None
+            me2 = re.match(r'^%s\s*\.Equals\(\s*"([^"]*)"\s*\)$|^%s\s*==\s*"([^"]*)"$' % (re.escape(v0), re.escape(v0)), strip_par(cond)) if v0 else None
+            if ms_ and mk_ and me2 and br == 'if' and ms_.group(1) in sc.ctls:
+                x = ms_.group(1); lit = me2.group(1) if me2.group(1) is not None else me2.group(2)
+                sep_, k_ = ms_.group(2), int(mk_.group(1)); lb = sc.label(x)
+                steps, needs, lab, blk, post = prior_steps(ga, skip_ctl=x)
+                if blk:
+                    blocked_by(base, blk)
+                else:
+                    emit({**base, 'kind': 'dynamic', 'steps': with_click(steps + [{'op': 'pick', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'sep': sep_, 'idx': k_, 'eq': lit}], post, confirm),
+                          'note': f"{v0} = {mv.group(2)}() = {x} 선택 이름 '{sep_}' 로 나눈 {k_}번째 조각 · 그 조각이 '{lit}' 인 항목 선택(없으면 측정 경로 없음) · 라벨 근거 {x}={lb['src']}"}, needs)
+                pp = next((p for p in passed if p['ctl'] == x and p['op'] == 'pick' and p['kind'] == 'input'), None)
+                if pp:
+                    pp['pass'].setdefault('notIn', []).append(lit)
+                else:
+                    add_pass(x, 'pick', {'sep': sep_, 'idx': k_, 'notIn': [lit]}, a, m, code, [], ga)
+                continue
+            if v0 and re.match(r'^(this\.)?[A-Z]\w*\(', ex0.strip()) and not resolve(sc, m, v0)[0]:
+                blocked.append({**base, 'why': f'조회 데이터 상태 검사({v0} = {ex0.strip()[:60]}) — 값이 화면 데이터 상태에서 정해져 입력으로 정할 수 없음'})
+                add_pass(None, '', {}, a, m, code, [], ga, 'data'); continue
+            if v0 and v0 in meth_params(sc, m) and not resolve(sc, m, v0)[0]:
+                blocked.append({**base, 'why': f'메서드 인자 검사({v0}) — 호출부가 넘기는 값이라 조회영역 입력으로 정할 수 없음'})
+                add_pass(None, '', {}, a, m, code, [], ga, 'param'); continue
+            pt = pattern(sc, m, br, cond, chain, handler)
+            if 'block' in pt:
+                blocked.append({**base, 'why': pt['block']})
+                add_pass(None, '', {}, a, m, code, [], ga, 'data'); continue
+            if 'why' in pt:
+                pending.append({**base, 'why': pt['why']})
+                add_pass(None, '', {}, a, m, code, [], ga, 'unknown'); continue
+            x = pt['ctl']
+            clash = next((p for p in passed if p['kind'] == 'input' and not exclusive(p['guard'], ga) and p['ctl'] == x and pt['op'] == 'text' and pt['trigger'].get('value') == ''), None)
+            if clash:
+                gen.append({**base, 'kind': 'unreachable', 'basis': f"앞선 검사 {clash['msg']}({clash['meth']} cs:{clash['line']})가 같은 칸 {x} 를 먼저 검사함 — 빈값이면 그 검사에서 끝남"})
+                add_pass(x, pt['op'], pt['pass'], a, m, code, pt.get('needs', []), ga); continue
+            steps, needs, lab, blk, post = prior_steps(ga, skip_ctl=x)
+            if blk:
+                blocked_by(base, blk)
+            else:
+                lb = sc.label(x); lab[x] = lb
+                if pt['op'] == 'date2':
+                    lb2 = sc.label(pt['ctl2']); lab[pt['ctl2']] = lb2
+                    steps.append({'op': 'text', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'value': pt['trigger']['from']})
+                    steps.append({'op': 'text', 'label': lb2['label'], **({'fuzzy': True} if lb2['fuzzy'] else {}), 'value': pt['trigger']['to']})
+                else:
+                    if pt['op'] == 'date' and pt.get('ctl_from') and not re.search(r'[A-Za-z가-힣]', lb['label']):
+                        # 끝 칸 배치 항목 라벨이 글자 없음(' ~ ') → 시작 칸 라벨 항목의 둘째 입력
+                        lb = sc.label(pt['ctl_from']); lab[x] = {**lb, 'src': lb['src'] + ' 둘째 입력'}
+                        steps.append({'op': 'date', 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), 'nth': 1, **pt['trigger']})
+                    else:
+                        steps.append({'op': pt['op'], 'label': lb['label'], **({'fuzzy': True} if lb['fuzzy'] else {}), **pt['trigger']})
+                note = f"{x} {'빈값' if pt['trigger'].get('value') == '' else json.dumps(pt['trigger'], ensure_ascii=False)}" + (f" · {pt['note']}" if pt.get('note') else '') + \
+                       ' · 라벨 근거 ' + ', '.join(f"{k}={v['src']}" for k, v in lab.items())
+                emit({**base, 'kind': 'dynamic', 'note': note, 'steps': with_click(steps, post, confirm)}, sorted(set(needs + pt.get('needs', []))))
+            add_pass(x, pt['op'], pt['pass'], a, m, code, pt.get('needs', []), ga, 'input' if pt['pass'] is not None else 'none', pt.get('ctl2'))
+        # 기존 행 중복 검사 = 준비(setup)와 같은 입력으로 다시 저장(준비 행이 있어야 발생)
+        for base, a, dt, ln in deferred:
+            if not setup:
+                blocked.append({**base, 'why': f'기존 행 중복 검사({dt} 건수 cs:{ln}) — 준비 행을 만들 저장 성공·정리 경로가 없어 중복 행을 만들 수 없음'}); continue
+            st = [dict(s) for s in setup['steps']]
+            ci = max(i for i, s in enumerate(st) if s['op'] == 'click')
+            st[ci] = {'op': 'click', 'name': blabel}
+            emit({**base, 'kind': 'dynamic', 'expectRowsMin': 1, 'steps': st,
+                  'note': f'준비({setup["meth"]} {setup["asis_line"]})와 같은 입력으로 다시 저장 · 조회 표 {dt} 의 건수 조건(cs:{ln})'}, list(setup.get('needs', [])))
+
+    for btn, ch in sorted(chains.items()):
+        do_chain(btn, ch)
+    # 2026-11-26 5차: 저장 뒤 다시 조회 메서드 안 검사(맡김 search) → 그 메서드를 조회 단추(프레임워크 FindButton) 경로로 다시 만든다.
+    #   AS-IS actions_entries 에 'FindButton > 메서드' 경로가 있을 때만(조회 단추가 저장 없이 바로 부름). 만든 메시지는 맡김에서 뺀다
+    srch = sorted({d['meth'] for d in delegated if d.get('to') == 'search'})
+    for m_ in srch:
+        if not any(r['entry'] == 'FindButton' and r['path'] == f'FindButton > {m_}' for r in sc.entries):
+            continue
+        n0 = len(gen) + len(pending) + len(blocked)
+        do_chain('FindButton', {'handler': 'FindButton', 'meths': [(m_, (), None)]}, search_meth=m_)
+        made = {(s['meth'], s['asis_line']) for s in (gen + pending + blocked)[n0:]}
+        for s in (gen + pending + blocked)[n0:]:
+            s['button'] = 'FindButton'
+            s['note'] = ('조회 단추(FindButton → ' + m_ + ') 경로 · ' + s.get('note', '')).rstrip(' · ')
+        delegated[:] = [d for d in delegated if not (d.get('to') == 'search' and (d['meth'], d['asis_line']) in made)]
+    # 2026-11-26 4차: TO-BE 화면·단추가 없으면 잴 수 없다 — 메뉴 미등록·미사용(use_yn ≠ Y) 화면은 전부, 처리 메서드가 TO-BE 매핑에서 ⏳·미구현·후속인 단추는 그 단추 시나리오만 _tobe_missing
+    tobe_missing, covered = [], []
+    tm = tobe_menus().get((mid or tobe_of(asis)).upper())   # TO-BE 메뉴 ID(map_screen.csv AS-IS → TO-BE, 없으면 같은 ID)
+    if gen or pending or blocked or delegated:
+        if not tm or tm['use'] != 'Y':
+            why = f"TO-BE 메뉴 {'미등록' if not tm else '미사용(USE_YN=' + tm['use'] + ')'} — {(tm or {}).get('src') or next((v['src'] for v in tobe_menus().values()), 'TO-BE 메뉴 원장 없음')}"
+            # 6차: 같은 AS-IS 원문(메시지 문장 90% 이상 같음)을 가진 TO-BE 화면이 있으면 그 화면 원문에 같은 메서드·문장이 있는 항목은 그 화면에서 잼(covered)
+            cb = covered_by(asis)
+            mod = re.sub(r'\d.*', '', asis.upper())
+            if not any(re.sub(r'\d.*', '', k) == mod and v.get('use') == 'Y' for k, v in tobe_menus().items()):
+                why += f' · TO-BE 메뉴에 {mod} 모듈 화면 0개'
+            cb_rows = {}
+            if cb:
+                for r in rd(os.path.join(FACTS, cb[0], 'actions.csv')):
+                    if r['kind'] == 'MESSAGE':
+                        cb_rows.setdefault((r['method'], r['value'].strip()), r['line'])
+            for s in gen + pending + blocked + delegated:   # 5차: 맡김도 TO-BE 화면이 없으면 맡을 측정이 없음
+                src_ = next((r for r in sc.by_meth.get(s.get('meth', ''), []) if r['kind'] == 'MESSAGE' and f"cs:{r['line']}" == s.get('asis_line')), None)
+                hit = cb_rows.get((s.get('meth', ''), src_['value'].strip())) if (cb and src_) else None
+                if hit:
+                    covered.append({**s, 'covered_by': {'screen': cb[0], 'meth': s.get('meth'), 'asis_line': f'cs:{hit}'},
+                                    'why_tobe': f"{why} · 같은 AS-IS 원문 화면 {cb[0]}(메시지 문장 {cb[1]}/{cb[2]} 같음, TO-BE 메뉴 있음)의 {s.get('meth')} cs:{hit} 같은 문장으로 그 화면 CheckList 에서 잼"})
+                else:
+                    tobe_missing.append({**s, 'why_tobe': why + (f' · 같은 원문 화면 {cb[0]} 에 이 문장 없음' if cb else ' · 같은 AS-IS 원문을 가진 TO-BE 화면 없음(메시지 문장 90% 이상 같은 화면 0개)')})
+            gen, pending, blocked = [], [], []
+            delegated[:] = []
+        else:
+            keep = []
+            for s in gen:
+                h = chains.get(s.get('button', ''), {}).get('handler', '')
+                st = tobe_handler_status(tm['route'], h)
+                if st:
+                    tobe_missing.append({**s, 'why_tobe': f'TO-BE 단추 미구현({h}) — {st}'})
+                else:
+                    keep.append(s)
+            gen = keep
+    # 2026-11-26 7차: 사용자가 범위 밖으로 확정한 화면(tools/Harness/rules/form_scen_scope.csv scope=out)의 TO-BE 미구현 항목 → _out_of_scope
+    out_of_scope = []
+    sr = next((r for r in rd(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'form_scen_scope.csv')) if (r.get('asis_id') or '').upper() == asis.upper() and r.get('scope') == 'out'), None)
+    if sr and tobe_missing:
+        out_of_scope = [{**s, 'why_scope': f"{sr.get('decided', '')} · {sr.get('why', '')} · tools/Harness/rules/form_scen_scope.csv"} for s in tobe_missing]
+        tobe_missing = []
+    for i, s in enumerate(out_of_scope, 1):
+        s['id'] = f'GO{i:02d}'
+    for i, s in enumerate(tobe_missing, 1):
+        s['id'] = f'GT{i:02d}'
+    for i, s in enumerate(covered, 1):
+        s['id'] = f'GC{i:02d}'
+    for i, s in enumerate(gen, 1):
+        s['id'] = f'G{i:02d}'
+    for i, s in enumerate(pending, 1):
+        s['id'] = f'GP{i:02d}'
+    for i, s in enumerate(blocked, 1):
+        s['id'] = f'GB{i:02d}'
+    for i, s in enumerate(delegated, 1):
+        s['id'] = f'GD{i:02d}'
+    return {'ok': True, 'asis': asis, 'buttons': buttons, 'scenarios': gen, 'pending': pending, 'blocked': blocked, 'delegated': delegated,
+            'tobe_missing': tobe_missing, 'covered': covered, 'out_of_scope': out_of_scope, 'tobe': tm or {}}
+
+
+def compare(gen, manual):
+    """수작업본 ↔ 생성분: (meth, asis_line, msg) 기준"""
+    key = lambda s: (s.get('meth'), s.get('asis_line'), s.get('msg'))
+    g = {key(s): s for s in gen['scenarios']}; gp = {key(s): s for s in gen['pending']}
+    rows = []
+    for s in manual.get('scenarios', []):
+        k = key(s)
+        if k in g:
+            kg = g[k]['kind']
+            rows.append({'manual': s['id'], 'gen': g[k]['id'], 'kind_manual': s['kind'], 'kind_gen': kg, 'same_kind': kg == s['kind'],
+                         'same_text': (g[k].get('asis_text') or '') == (s.get('asis_text') or '')})
+        elif k in gp:
+            rows.append({'manual': s['id'], 'gen': gp[k]['id'], 'kind_manual': s['kind'], 'kind_gen': '보류', 'why': gp[k]['why']})
+        else:
+            rows.append({'manual': s['id'], 'gen': '', 'kind_manual': s['kind'], 'kind_gen': '없음', 'meth': s.get('meth'), 'asis_line': s.get('asis_line')})
+    return rows
+
+
+def asis_of(mid):
+    p = os.path.join(ROOT, 'Doc', 'verify', mid, 'run_mode.json')
+    try:
+        a = json.load(open(p, encoding='utf-8')).get('asis')
+        if a:
+            return a
+    except Exception:
+        pass
+    return mid
+
+
+def run(mid, asis=None, dry=False):
+    asis = asis or asis_of(mid)
+    vdir = os.path.join(ROOT, 'Doc', 'verify', mid)
+    vf = os.path.join(vdir, 'form_vars.json'); vars_ = {}
+    if os.path.exists(vf):
+        try:
+            vars_ = json.load(open(vf, encoding='utf-8-sig'))
+        except Exception as e:
+            print(f'[WARN] {vf} 읽기 실패({type(e).__name__}) — vars 없이 생성')
+    target = os.path.join(vdir, 'form_scenarios.json')
+    manual = None
+    if os.path.exists(target):
+        try:
+            cur = json.load(open(target, encoding='utf-8-sig'))
+            if not cur.get('_gen'):
+                manual = cur
+                vars_ = {**(cur.get('vars') or {}), **vars_}
+        except Exception:
+            manual = {}
+    g = build(asis, vars_, mid)
+    if not g['ok']:
+        print(f"[SKIP] {mid}: {g['why']}"); return 0
+    forms = [b for b in g['buttons'] if b['form']]
+    dyn = [s for s in g['scenarios'] if s['kind'] == 'dynamic']
+    stamp = time.strftime('%Y-%m-%d %H:%M:%S')
+    rep = {'_gen': f'form_scen_gen.py {stamp}', 'menu_id': mid, 'asis': asis, 'buttons': g['buttons'],
+           'counts': {'active': len(g['scenarios']), 'dynamic': len(dyn), 'pending': len(g['pending']), 'blocked': len(g['blocked']), 'delegated': len(g['delegated']), 'tobe_missing': len(g['tobe_missing']), 'covered': len(g['covered']), 'out_of_scope': len(g['out_of_scope'])}, 'tobe': g['tobe'],
+           'scenarios': g['scenarios'], '_pending': g['pending'], '_blocked': g['blocked'], '_delegated': g['delegated'], '_tobe_missing': g['tobe_missing'], '_covered': g['covered'], '_out_of_scope': g['out_of_scope']}
+    if manual is not None:
+        rep['compare_manual'] = compare(g, manual)
+    msg = f"[form_scen_gen] {mid}(AS-IS {asis}) 폼 저장 단추 {len(forms)}개 · 활성 {len(g['scenarios'])}건(dynamic {len(dyn)}) · 보류 {len(g['pending'])}건 · 측정 보류 {len(g['blocked'])}건 · 다른 측정에 맡김 {len(g['delegated'])}건 · TO-BE 미구현 {len(g['tobe_missing'])}건 · 같은 원문 TO-BE 화면에서 잼 {len(g['covered'])}건 · 범위 밖(사용자 확정) {len(g['out_of_scope'])}건"
+    if not forms:
+        if manual is None and os.path.exists(target) and not dry:
+            os.remove(target)  # 지난 생성분(_gen)만 정리
+        print(msg + ' — 폼 저장형 화면 아님(파일 안 만듦)'); return 0
+    if dry:
+        print(msg + ' (--dry)'); return 0
+    os.makedirs(vdir, exist_ok=True)
+    with open(os.path.join(vdir, 'form_scen_gen.json'), 'w', encoding='utf-8') as f:
+        json.dump(rep, f, ensure_ascii=False, indent=1)
+    if manual is not None:
+        print(msg + ' — 사람이 쓴 form_scenarios.json 있음: 덮지 않고 대조만(form_scen_gen.json compare_manual)')
+    elif not dyn:
+        print(msg + ' — dynamic 0건: form_scenarios.json 안 만듦(form_scen_gen.json 에 보류 사유)')
+        if os.path.exists(target):
+            os.remove(target)  # 지난 생성분(_gen) 정리
+    else:
+        out = {'_gen': rep['_gen'], '_doc': 'form_scen_gen.py 생성분 — 사람이 고치려면 _gen 키를 지운다(그 뒤로 생성기가 덮지 않음)',
+               'vars': {k: v for k, v in vars_.items()}, 'scenarios': g['scenarios']}
+        with open(target, 'w', encoding='utf-8') as f:
+            json.dump(out, f, ensure_ascii=False, indent=1)
+        print(msg + ' — form_scenarios.json 씀')
+    return 0
+
+
+def selftest():
+    mf = os.path.join(ROOT, 'Doc', 'verify', 'SSP0020', 'form_scenarios.json')
+    manual = json.load(open(mf, encoding='utf-8-sig'))
+    g = build('SSP0020', manual.get('vars') or {})
+    rows = compare(g, manual)
+    bad = []
+    want = {  # 수작업본과 같아야 할 판정(생성기가 다루는 Save 사슬 메시지 + 정리 단추 UnSet 성공 문구)
+        ('UserName_Search', 'cs:802', 'MSG00302'): 'dynamic',
+        ('UserName_Search', 'cs:811', 'MSG00301'): 'dynamic',
+        ('Validation_Check', 'cs:372', 'MSG00298'): 'unreachable',
+        ('Validation_Check', 'cs:379', 'MSG00305'): 'dynamic',
+        ('Validation_Check', 'cs:385', 'MSG00134'): 'dynamic',
+        ('Validation_Check', 'cs:393', 'MSG00219'): 'dynamic',
+        ('Validation_Check', 'cs:426', 'MSG00105'): 'dynamic',
+        ('Validation_Check', 'cs:440', 'MSG00296'): 'unreachable',
+        ('Validation_Check', 'cs:454', 'MSG00297'): 'unreachable',
+        ('Validation_Check', 'cs:462', 'MSG00299'): 'dynamic',
+        ('SaveData', 'cs:523', 'MSG00004'): 'dynamic',
+        ('UnSet', 'cs:749', 'MSG00004'): 'dynamic',
+        ('SaveData', 'cs:528', 'MSG00284'): 'error_branch',
+        ('SaveData', 'cs:535', '(동적 메시지)'): 'error_branch',
+        ('BtnSave_Click', 'cs:359', '(동적 메시지)'): 'error_branch',
+    }
+    idx = {(s['meth'], s['asis_line'], s['msg']): s for s in g['scenarios']}
+    for k, kind in want.items():
+        s = idx.get(k)
+        if not s:
+            bad.append(f'{k} 생성 안 됨(보류 {[p["why"] for p in g["pending"] if (p["meth"], p["asis_line"], p["msg"]) == k]})')
+        elif s['kind'] != kind:
+            bad.append(f'{k} kind {s["kind"]} ≠ {kind}')
+    man = {}
+    for s in manual['scenarios']:
+        man.setdefault((s['meth'], s['asis_line'], s['msg']), s)   # 같은 메시지 2회차(F09b·F13b)는 1회차로 대조
+    nv = lambda v: '<NOMATCH>' if isinstance(v, str) and (v.startswith('@NO') or v == NOMATCH) else v
+    tx = lambda t: re.sub(r'\{\d+\}', '', t or '')
+    for k in want:
+        s, m = idx.get(k), man.get(k)
+        if not (s and m):
+            continue
+        for f in ('phase', 'allowSave', 'expectRowsMin'):
+            if s.get(f) != m.get(f):
+                bad.append(f'{k} {f} 생성 {s.get(f)} ≠ 수작업 {m.get(f)}')
+        if s['kind'] == 'dynamic':
+            ops_g = [(t['op'], nv(t.get('value')), t.get('from'), t.get('to'), t.get('mode'), json.dumps(t.get('where'), sort_keys=True)) for t in s.get('steps', []) if t['op'] != 'click']
+            ops_m = [(t['op'], nv(t.get('value')), t.get('from'), t.get('to'), t.get('mode'), json.dumps(t.get('where'), sort_keys=True)) for t in m.get('steps', []) if t['op'] != 'click']
+            if ops_g != ops_m:
+                bad.append(f'{k} 단계 차이 생성 {ops_g} ↔ 수작업 {ops_m}')
+            if (s.get('matchAfter') or None) != (m.get('matchAfter') or None):
+                bad.append(f"{k} matchAfter 차이 {s.get('matchAfter')} ↔ {m.get('matchAfter')}")
+            if not tx(s.get('asis_text')).startswith(tx(m.get('asis_text')) or 'NO-TEXT'):
+                bad.append(f"{k} 문구 차이 '{s.get('asis_text')}' ↔ '{m.get('asis_text')}'")
+    # 그리드 저장 단추(UnSet)는 폼 저장 단추가 아님 · 저장 시나리오는 준비·정리 단계에만
+    if any(b['button'] == 'btnUnSet' and b['form'] for b in g['buttons']):
+        bad.append('btnUnSet 을 폼 저장 단추로 봄')
+    if any(s.get('allowSave') and s.get('phase') not in ('setup', 'teardown') for s in g['scenarios']):
+        bad.append('준비·정리 밖 allowSave 시나리오 생성')
+    if sum(1 for s in g['scenarios'] if s.get('phase') == 'setup') != sum(1 for s in g['scenarios'] if s.get('phase') == 'teardown'):
+        bad.append('준비(setup)와 정리(teardown) 건수 다름')
+    if g['pending']:
+        bad.append(f"보류 {len(g['pending'])}건: " + ' | '.join(p['why'] for p in g['pending']))
+    # 2026-11-26 보류 해소 2차 — 화면별 기대(원문 근거) + 전 화면 불변 조건
+    allsc = lambda r: r['scenarios'] + r.get('tobe_missing', []) + r.get('out_of_scope', [])   # 4차: TO-BE 미등록 화면도 생성 규칙은 같게 확인
+    sx = {sid: build(sid, {}) for sid in ('SCP0078', 'DMF0042', 'SCP0123', 'SCP0011')}
+    f78 = {s['asis_line']: s for s in allsc(sx['SCP0078']) if s['kind'] == 'dynamic'}
+    if [t.get('size') for t in f78.get('cs:528', {}).get('steps', []) if t['op'] == 'file'] != [10485761]:
+        bad.append('SCP0078 cs:528 파일 크기 검사 단계(10MB + 1 바이트) 아님')
+    if [t.get('file') for t in f78.get('cs:535', {}).get('steps', []) if t['op'] == 'file'] != ['zq_formscen.exe']:
+        bad.append('SCP0078 cs:535 확장자 검사 단계(.exe) 아님')
+    d42 = sx['DMF0042']
+    if any(s['meth'] == 'FindData' and any(t['op'] == 'click' for t in s.get('steps', [])) for s in allsc(d42) if s['kind'] == 'dynamic'):
+        bad.append('DMF0042 Set Price 저장 뒤 FindData 검사를 Set Price 단추 시나리오로 만듦(실저장 먼저 일어남)')
+    if sum(1 for s in allsc(d42) if s['meth'] == 'FindData' and s['kind'] == 'dynamic' and any(t['op'] == 'search' for t in s.get('steps', []))) != 15:
+        bad.append('DMF0042 FindData 검사 15건을 조회 단추(FindButton) 시나리오로 만들지 않음(5차)')
+    if any(sum(1 for t in s.get('steps', []) if t['op'] == 'dialog') != 1 for s in allsc(d42) if s['msg'] == 'MSG00282'):
+        bad.append('DMF0042 MSG00282 확인창 시나리오에 다른 변형 파일 확인창 단계가 섞임')
+    s123 = next((s for s in allsc(sx['SCP0123']) if s['asis_line'] == 'cs:498'), None)
+    if not s123 or not any(t['op'] == 'require' and t.get('visible') is True and 'tgt_divis_cd' in t.get('note', '') for t in s123.get('steps', [])):
+        bad.append('SCP0123 cs:498 끝 일자가 화면 상태(tgt_divis_cd)로 바뀌는 것을 표시 확인 단계로 두지 않음')
+    if s123 and not any(t['op'] == 'date' and t.get('nth') == 1 and re.search(r'[A-Za-z]', t['label']) for t in s123.get('steps', [])):
+        bad.append("SCP0123 cs:498 끝 칸 라벨(' ~ ')을 시작 칸 라벨 둘째 입력으로 바꾸지 않음")
+    # 3차(측정 보류 해소): 실저장 성공 = 표본 응답(fake 단추) · 버전 종류 = 콤보 조각 · 최신 Plan Date = 둘째 항목 · 첨부 건수 = 전제 행
+    sy = {sid: build(sid, {}) for sid in ('DMF0020', 'SCP0083', 'SSP0027')}
+    if not all(s.get('fakeSave') is not None and any(t.get('fake') for t in s['steps']) for s in allsc(sy['DMF0020']) if s['msg'] == 'MSG00143'):
+        bad.append('DMF0020 MSG00143 저장 성공을 표본 응답 단계로 만들지 않음')
+    v83 = {s['asis_line']: s for s in allsc(sy['SCP0083'])}
+    if not any(t['op'] == 'pick' and t.get('eq') == 'C' for t in v83.get('cs:2904', {}).get('steps', [])):
+        bad.append("SCP0083 cs:2904 버전 종류 'C' 항목 선택 단계 아님")
+    if not any(t['op'] == 'pick' and t.get('notIn') == ['C', 'P'] for t in v83.get('cs:2918', {}).get('steps', [])):
+        bad.append("SCP0083 cs:2918 앞선 버전 종류 검사 통과(C·P 아닌 항목) 단계 아님")
+    if not any(t['op'] == 'pick' and t.get('index') == 1 for s in allsc(sy['SSP0027']) if s['asis_line'] == 'cs:5432' for t in s['steps']):
+        bad.append('SSP0027 cs:5432 Plan Date 둘째 항목 선택 단계 아님')
+    # 4차: TO-BE 미등록·미사용 화면은 활성 시나리오 0건 · 처리 메서드 매핑 ⏳ 는 미구현 사유
+    for sid_, r_ in list(sx.items()) + list(sy.items()):
+        if r_.get('tobe', {}).get('use') != 'Y' and r_['scenarios']:
+            bad.append(f'{sid_} TO-BE 메뉴 미등록·미사용인데 활성 시나리오 {len(r_["scenarios"])}건')
+    # 7차: 범위 밖 확정 원장(form_scen_scope.csv)의 화면은 TO-BE 미구현 0건 · 범위 밖으로만
+    for sid_ in ('FP00599', 'SCP0099', 'SCP0083', 'SSP0007'):
+        r_ = build(sid_, {})
+        if r_['tobe_missing'] or not r_['out_of_scope']:
+            bad.append(f"{sid_} 범위 밖 확정 화면인데 TO-BE 미구현 {len(r_['tobe_missing'])}건 · 범위 밖 {len(r_['out_of_scope'])}건")
+    # 6차: 같은 AS-IS 원문(메시지 문장 90% 이상)을 가진 TO-BE 화면 — DMF0067 → DMF0042(20/20), SCP0060 → SCP0011(13/14)
+    for a_, b_ in (('DMF0067', 'DMF0042'), ('SCP0060', 'SCP0011')):
+        cb_ = covered_by(a_)
+        if not cb_ or cb_[0] != b_:
+            bad.append(f'{a_} 같은 원문 TO-BE 화면 {b_} 을 찾지 못함({cb_})')
+    if not tobe_handler_status('demand/demand-master/sales-future-price', 'btnBatch_Click'):
+        bad.append('DMF0020 btnBatch_Click 의 TO-BE 매핑 ⏳(후속)을 미구현으로 보지 않음')
+    if f78.get('cs:542', {}).get('expectRowsMin') != 5:
+        bad.append('SCP0078 cs:542 첨부 건수 전제 행 5 아님')
+    a11 = next((s for s in allsc(sx['SCP0011']) if s['msg'] == 'MSG00096'), None)
+    if not a11 or [t['op'] for t in a11.get('steps', [])][:1] != ['asAccount'] or not any(t['op'] == 'authGate' for t in a11['steps']):
+        bad.append('SCP0011 권한 검사(CanUpdate)를 SAVE 권한 없는 계정 시나리오(asAccount · authGate)로 만들지 않음(5차)')
+    np_, ns_ = 0, 0
+    for sid in sorted(os.listdir(FACTS)):
+        r = build(sid, {}) if os.path.isdir(os.path.join(FACTS, sid)) else {}
+        if not r.get('ok') or not any(b['form'] for b in r['buttons']):
+            continue
+        np_ += len([p for p in r['pending'] if 'vars 미지정' not in p['why']])
+        ns_ += sum(1 for s in r['scenarios'] if s.get('allowSave') and s.get('phase') not in ('setup', 'teardown'))
+    if np_:
+        bad.append(f'전 화면 보류(vars 미지정 제외) {np_}건')
+    if ns_:
+        bad.append(f'전 화면 준비·정리 밖 allowSave {ns_}건')
+    print(f"[selftest] SSP0020 생성 활성 {len(g['scenarios'])}건 · 보류 {len(g['pending'])}건 · 수작업 {len(manual['scenarios'])}건 대조")
+    for r in rows:
+        print('  ', json.dumps(r, ensure_ascii=False))
+    for b in bad:
+        print('  [FAIL]', b)
+    print('[selftest]', 'PASS' if not bad else f'FAIL {len(bad)}건')
+    return 0 if not bad else 1
+
+
+def main(argv):
+    if '--selftest' in argv:
+        return selftest()
+    dry = '--dry' in argv
+    if '--all' in argv:
+        for sid in sorted(os.listdir(FACTS)):
+            if os.path.isdir(os.path.join(FACTS, sid)):
+                try:
+                    run(sid, sid, dry)
+                except Exception as e:
+                    print(f'[ERROR] {sid}: {type(e).__name__} {e}')
+        return 0
+    args = [a for a in argv if not a.startswith('--')]
+    if not args:
+        print(__doc__); return 2
+    asis = None
+    if '--asis' in argv:
+        i = argv.index('--asis'); asis = argv[i + 1] if i + 1 < len(argv) else None
+        args = [a for a in args if a != asis]
+    try:
+        return run(args[0].upper(), asis, dry)
+    except Exception as e:
+        print(f'[ERROR] form_scen_gen {args[0]}: {type(e).__name__} {e}')
+        return 0  # 체인 중단 안 함
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

@@ -106,8 +106,8 @@
 ## 7. 확인 필요 (4건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 764 | FP02560_ValidateDataDelegate | FP\{?default:part_service}\FP02560_Site_Bod#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=2 |
 | 756 | FP02560_ValidateDataDelegate | FP\{?default:part_service}\FP02560_Site_Bod#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=2 |
+| 764 | FP02560_ValidateDataDelegate | FP\{?default:part_service}\FP02560_Site_Bod#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=2 |
 | 760 | FP02560_ValidateDataDelegate | FP\{?default:part_service}\FP02560_Site_Bod#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=2 |
 | 743 | FP02560_SaveDataDelegate | FP\{?default:part_service}\FP02560_Site_Bod#merge_FP02560 | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=2 |
 

@@ -1,0 +1,304 @@
+{
+ "rule_id": "DB-SYN",
+ "hash": "cd55db4216d2e681",
+ "groups": [
+  {
+   "rows": [
+    "EG-162c829e"
+   ],
+   "why": "콤보 SQL EndCustomerByDivisionDeptAuth 하나만 실존하는지 보는 행이라 다른 콤보 SQL 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-18f24466"
+   ],
+   "why": "콤보 SQL TeambyDivisionAuth 하나만 실존하는지 보는 행이라 다른 콤보 SQL 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-580d7aaa"
+   ],
+   "why": "콤보 SQL SiteByEndCustomerAuth 하나만 실존하는지 보는 행이라 다른 콤보 SQL 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "EG-c5ffe6c9"
+   ],
+   "why": "PKG_DMF0042가 AS-IS 테이블을 참조하는지 보는 행이라 콤보 SQL 실존 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-04bcce60"
+   ],
+   "why": "대조표 25행(btnSetPrice_Click L3115~3136)을 추적하는 행이다. ENTRY 행 T-f1c9e0ac와 같은 코드라고 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-0e70e01d"
+   ],
+   "why": "2_BizPlan.spdMain_CellDoubleClick 진입점 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-15c6c13e"
+   ],
+   "why": "Division 분기 33건 전체를 추적하는 행이라 다른 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-16a9d578"
+   ],
+   "why": "2_BizPlan.SaveData 진입점을 추적하는 행이다. 대조표 24행(T-b943143c)과 같은 폼인지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-191283a4"
+   ],
+   "why": "SP P_DMF0042_SAVE_DM_PLN_BP_FCST 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-26d47acd"
+   ],
+   "why": "3_BizPlan.FindData 진입점을 추적하는 행이다. 다른 폼의 FindData와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-2c12611d"
+   ],
+   "why": "SP P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-3272da5a"
+   ],
+   "why": "2_BizPlan.GetSpdTitle 진입점을 추적하는 행이다. 다른 폼의 GetSpdTitle과는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-3a6984be"
+   ],
+   "why": "SP P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP 하나만 추적하는 행이다. 이름에 _DATA가 붙은 SP와는 다른 SP다."
+  },
+  {
+   "rows": [
+    "T-3dc1fdab"
+   ],
+   "why": "SP P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-411870e1"
+   ],
+   "why": "1_RTF.GetSPlant 진입점 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-42f92b99"
+   ],
+   "why": "SP DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-5571e6d7"
+   ],
+   "why": "3_BizPlan.GetDayRange 진입점을 추적하는 행이다. 다른 폼의 GetDayRange와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-5cfa0a1c"
+   ],
+   "why": "SP P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-5d4e1a66"
+   ],
+   "why": "SP SCM0001_GET_BIZ_TYPE_BY_DIVISION 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-5d8d5771"
+   ],
+   "why": "SP P_DMF0042_SAVE_DM_BP_EXCHANGE_RATE 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-648de487"
+   ],
+   "why": "3_BizPlan.GetSpdTitle 진입점을 추적하는 행이다. 다른 폼의 GetSpdTitle과는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-64acb2ec"
+   ],
+   "why": "SP P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-65a6c20d"
+   ],
+   "why": "대조표 1#9행(drpPeriod, PR_GET_DAY_RANGE)을 추적하는 행이다. GetDayRange ENTRY 행들과 같은 코드라고 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-6a617756"
+   ],
+   "why": "ExchangeRatePopup.InitSpread_X 진입점 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-6c5e1801"
+   ],
+   "why": "SP SCM0001_GET_LOOKUP_VALUES 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-76d5025d"
+   ],
+   "why": "2_BizPlan.GetDayRange 진입점을 추적하는 행이다. 다른 폼의 GetDayRange와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-8336f4e1"
+   ],
+   "why": "SP P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA 하나만 추적하는 행이다. _DATA가 없는 SP와는 다른 SP다."
+  },
+  {
+   "rows": [
+    "T-87937ef1"
+   ],
+   "why": "SP P_DMF0042_GET_EXCHANGE_PRICE 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-89b44141"
+   ],
+   "why": "1_BizPlan.GetSpdTitle 진입점을 추적하는 행이다. 다른 폼의 GetSpdTitle과는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-917f39b9"
+   ],
+   "why": "BizPlan_old.GetDayRange 진입점을 추적하는 행이다. 다른 폼의 GetDayRange와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-9ae65fa3"
+   ],
+   "why": "SP DMF0009_GET_CODE 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-a8f565e2"
+   ],
+   "why": "2_BizPlan.spdMain_ComboSelChange 진입점 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-ae443c36"
+   ],
+   "why": "BizPlan.GetDayRange 진입점을 추적하는 행이다. 다른 폼의 GetDayRange와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-b8fb4352"
+   ],
+   "why": "1_BizPlan.GetDayRange 진입점을 추적하는 행이다. 다른 폼의 GetDayRange와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-b943143c"
+   ],
+   "why": "대조표 24행(SaveButton→SaveData L801~1148)을 추적하는 행이다. 어느 폼의 SaveData인지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-cb4dec24"
+   ],
+   "why": "BizPlan.GetCellProdSite 진입점을 추적하는 행이다. 다른 폼의 GetCellProdSite와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-cc4bc97d"
+   ],
+   "why": "대조표 3#1행(Form_Load L209~217) 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-dbf6c47c"
+   ],
+   "why": "2_BizPlan.GetCellProdSite 진입점을 추적하는 행이다. 다른 폼의 GetCellProdSite와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-dd829879"
+   ],
+   "why": "1_BizPlan.GetCellProdSite 진입점을 추적하는 행이다. 다른 폼의 GetCellProdSite와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-e6222043"
+   ],
+   "why": "1_RTF.SaveData 진입점을 추적하는 행이다. 다른 폼의 SaveData와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-e8c24f30"
+   ],
+   "why": "대조표 20행(FindButton→FindData L684~799)을 추적하는 행이다. 어느 폼의 FindData인지 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-e8f48ab1"
+   ],
+   "why": "1_RTF.GetSLOC 진입점 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-e9291d61"
+   ],
+   "why": "SP P_DMF0042_GET_SPREAD_TITLE 하나만 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-ecbb9403"
+   ],
+   "why": "3_BizPlan.GetCellProdSite 진입점을 추적하는 행이다. 다른 폼의 GetCellProdSite와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-f1c9e0ac"
+   ],
+   "why": "2_BizPlan.btnSetPrice_Click 진입점을 추적하는 행이다. 대조표 25행(T-04bcce60)과 같은 코드라고 확신할 수 없어 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-f2082546"
+   ],
+   "why": "1_RTF.FindData 진입점을 추적하는 행이다. 다른 폼의 FindData와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-f4a7b362"
+   ],
+   "why": "2_BizPlan.FindData 진입점을 추적하는 행이다. 다른 폼의 FindData와는 대상이 다르다."
+  },
+  {
+   "rows": [
+    "T-fbb62a99"
+   ],
+   "why": "대조표 G8행(필수값 변경)을 추적하는 행이다. 다른 행과 대상이 다르다."
+  },
+  {
+   "rows": [
+    "V-eec0b5e3"
+   ],
+   "why": "화면 전체에서 BE 계정 객체가 VALID한지와 메타가 있는지를 함께 보는 포괄 규칙이다. 개별 객체 행과 기대 결과가 달라 따로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:40:16",
+ "cost": 0.1855572
+}

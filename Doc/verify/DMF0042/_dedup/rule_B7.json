@@ -1,0 +1,304 @@
+{
+ "rule_id": "B7",
+ "hash": "cea974b96bf52365",
+ "groups": [
+  {
+   "rows": [
+    "EG-06f4cc81"
+   ],
+   "why": "SalesSite 콤보를 이 파라미터 조합으로 DB 재실행하는 행은 이것 하나라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-0de30374"
+   ],
+   "why": "SiteByEndCustomerAuth를 divisionId=''로 부르는 요청은 다른 행과 파라미터가 달라 후보 집합도 다르다."
+  },
+  {
+   "rows": [
+    "EG-0f366b59"
+   ],
+   "why": "FilterTeambyDivision 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-159122c3"
+   ],
+   "why": "EndCustomerByDivisionDeptAuth를 divisionId='40'으로 부르는 요청이라 divisionId=''인 행이나 divisionId가 없는 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-1ecd95f9"
+   ],
+   "why": "TeambyDivision을 divisionId=''로 부르는 요청이라 divisionId='40'인 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-1fe4561b"
+   ],
+   "why": "DMF0042CellProdSite를 lookupType·validYn과 함께 부르는 요청이라 파라미터가 없는 요청과 다르다."
+  },
+  {
+   "rows": [
+    "EG-2a4878c6"
+   ],
+   "why": "DMF0042_BP_Measure를 divisionId='40'으로 부르는 요청이라 다른 BP_Measure 행과 파라미터가 다르다."
+  },
+  {
+   "rows": [
+    "EG-36091a06"
+   ],
+   "why": "EndCustomerByDivision40을 divisionId=''·deptId=''로 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-3cec0271"
+   ],
+   "why": "EndCustomerByDivision40을 validYn만 넣어 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-3fff5df3"
+   ],
+   "why": "FromSiteByDivision 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-4042c59b"
+   ],
+   "why": "MyDivision 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-49e9f75d"
+   ],
+   "why": "EndCustomerByDivision40을 division '40'·deptId=''로, validYn 없이 부르는 요청이라 EG-5b51a247과 다르다."
+  },
+  {
+   "rows": [
+    "EG-4fa41d38"
+   ],
+   "why": "DMF0042CellProdSite를 파라미터 없이 부르는 요청이라 lookupType이 있는 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-5639ddaa"
+   ],
+   "why": "DMF0042_BP_Measure를 파라미터 없이 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-598d1556"
+   ],
+   "why": "DM_LOOKUP_DIV를 lookupType·validYn으로 부르는 요청이라 param1·param2를 쓰는 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-5b51a247"
+   ],
+   "why": "EndCustomerByDivision40을 division '40'·deptId=''·validYn으로 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-5e8d3ac4"
+   ],
+   "why": "EndCustomerByDivision40에 특정 deptId 목록을 넣어 부르는 요청이라 다른 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-5ed4963a"
+   ],
+   "why": "FilterMyDivision 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-65f8ba1b"
+   ],
+   "why": "IncotermsEdit를 lookupType·validYn과 함께 부르는 요청이라 파라미터가 없는 요청과 다르다."
+  },
+  {
+   "rows": [
+    "EG-769bc6cb"
+   ],
+   "why": "SiteByEndCustomer를 divisionId=''·validYn으로 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-86445dc3"
+   ],
+   "why": "EndCustomerByDivisionDeptAuth를 validYn만 넣어 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-8dcc9288"
+   ],
+   "why": "SiteByEndCustomer를 validYn만 넣어 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-8e8feab9"
+   ],
+   "why": "IncotermsEdit를 파라미터 없이 부르는 요청이라 lookupType이 있는 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-933ab91e"
+   ],
+   "why": "TeambyDivision을 divisionId='40'으로 부르는 요청이라 divisionId=''인 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-96372674"
+   ],
+   "why": "SiteByEndCustomer40 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-99bd7b76"
+   ],
+   "why": "BizPlanUserAuthGroup 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-a326f25f"
+   ],
+   "why": "BucketType2 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-a6431ea6"
+   ],
+   "why": "SiteByEndCustomer를 endCustomer='ALL'로 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-a9384250"
+   ],
+   "why": "EndCustomerByDivisionDeptAuth를 divisionId=''·deptId=''로 부르는 요청이라 divisionId='40'인 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-ae81392a"
+   ],
+   "why": "DM_LOOKUP_DIV를 param1·param2로 부르는 요청이라 lookupType을 쓰는 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-b99ddfe3"
+   ],
+   "why": "BizType 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-cc9c69be"
+   ],
+   "why": "CURRENCY_LIST를 validYn 없이 부르는 요청이라 validYn이 있는 행과 후보 집합이 다를 수 있다."
+  },
+  {
+   "rows": [
+    "EG-d2c15879"
+   ],
+   "why": "DMF0042CellProdSiteValid는 CellProdSite와 다른 콤보다."
+  },
+  {
+   "rows": [
+    "EG-d4003e10"
+   ],
+   "why": "ItemType 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-dbb4d0b8"
+   ],
+   "why": "SiteByEndCustomer를 divisionId='40'·validYn으로 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-dfdc3b35"
+   ],
+   "why": "EndCustomer 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "EG-e212b9a1"
+   ],
+   "why": "SiteByEndCustomerAuth를 divisionId='40'·validYn으로 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-f4c15847"
+   ],
+   "why": "CURRENCY_LIST를 validYn='Y'로 부르는 요청이라 validYn이 없는 행과 다르다."
+  },
+  {
+   "rows": [
+    "EG-f61483cd"
+   ],
+   "why": "DMF0042_BP_Measure를 validYn으로 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "EG-f9c6d62f"
+   ],
+   "why": "SiteByEndCustomerAuth를 validYn만 넣어 부르는 요청은 이 조합이 유일하다."
+  },
+  {
+   "rows": [
+    "V-2a0a05f2"
+   ],
+   "why": "화면 조회조건 Sales Site의 즉시 반영과 선택값 유지를 보는 행이라 API 응답과 DB 결과를 비교하는 EG 행과 방법·기대가 다르다."
+  },
+  {
+   "rows": [
+    "V-5df0464a"
+   ],
+   "why": "조회조건 End Customer는 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  },
+  {
+   "rows": [
+    "V-6b890d0d"
+   ],
+   "why": "조회조건 Item Type은 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  },
+  {
+   "rows": [
+    "V-87fd0ceb"
+   ],
+   "why": "조회조건 Team은 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  },
+  {
+   "rows": [
+    "V-93afc672"
+   ],
+   "why": "조회조건 Closed는 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  },
+  {
+   "rows": [
+    "V-a8d22510"
+   ],
+   "why": "조회조건 Bucket은 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  },
+  {
+   "rows": [
+    "V-a9c13f68"
+   ],
+   "why": "조회조건 Biz.Type은 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  },
+  {
+   "rows": [
+    "V-c84e5035"
+   ],
+   "why": "조회조건 Plant Site는 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  },
+  {
+   "rows": [
+    "V-d8a4f427"
+   ],
+   "why": "조회조건 Division은 다른 조회조건과 요소가 다르고, API를 보는 EG 행과 방법도 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:37:55",
+ "cost": 0.1708972
+}

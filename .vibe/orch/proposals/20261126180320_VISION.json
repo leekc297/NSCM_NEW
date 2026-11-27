@@ -1,0 +1,38 @@
+{
+  "id": "20261126180320_VISION",
+  "at": "2026-11-26T18:03:20+09:00",
+  "ms": 1795683800482,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 개선안을 맡을 때 다른 세션이 맡은 안과 대상 파일이 겹치면 경고하고 개선안 이력에 남김",
+  "title": "컨설팅: 개선안을 맡을 때 다른 세션이 맡은 안과 대상 파일이 겹치면 경고하고 개선안 이력에 남김",
+  "evidence": "CHANGELOG.md:7, 16, 26, 32 에 11-26 하루 '다른 세션이 같은 파일 수정 중' 기록 4건. S9 workbench.js 7일 세션 수정 435건. claim_proposal.js:18~25 는 상태와 claimedBy 만 보고 targets 겹침을 보지 않음. list(37~38행)도 대상 파일을 보여 주지 않음",
+  "targets": [
+    "tools/VibeManager/claim_proposal.js",
+    "tools/VibeManager/test/t_claim_overlap.js"
+  ],
+  "before_after": "전: 맡을 때 대상 파일 겹침을 보지 않음. 후: claim 때 지금 유효한 다른 세션 맡음(claimedBy 다름, autoWaitMs 지금 뒤)의 targets 와 겹치는 파일을 찾아 'WARN 대상 파일 겹침 <파일> (<세션> <개선안>)'을 출력하고 history 에 같은 문장을 남김. 맡기는 막지 않음. list 에 targets 앞 3개를 함께 출력. 시험용으로 --root <폴더> 인자를 받음",
+  "verify": "반영 때: node tools/VibeManager/test/t_claim_overlap.js tools/VibeManager(임시 폴더 proposals 에 겹치는 안 2개, 안 겹치는 안 1개로 WARN 1건, history 1줄, list 출력 확인). node tools/VibeManager/test/run_all.js tools/VibeManager. 반영 뒤: 다음 세션 병렬 작업 때 proposals history '대상 파일 겹침' 건수와 CHANGELOG '다른 세션' 언급 건수를 비교",
+  "rollback": "claim_proposal.js 반영 전 사본으로 되돌리고 시험 파일 삭제",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:10:42+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:43:07+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · claim_proposal.js: claim 때 다른 세션이 맡은 안과 targets 겹침이면 WARN 출력과 이력 '경고: 대상 파일 겹침', list 에 대상 파일 3개, --root 인자. test/t_claim_overlap.js 5건. run_all 111개 중 110 통과 PASS 1888(18:46), 실패 t_orch_selfapply.js 는 같은 시각 다른 세션 편집, 단독 ALL PASS. 설치 폴더 복사"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795686187703
+}

@@ -1,18 +1,18 @@
 # SCP0007 — To-Be Fact Pack 요약
 
 - page_key: `supply/bod` · feature: supply · As-is Fact Pack 있음
-- 파일 13 · 엔드포인트 호출 11 (미해결 0, 주석 속 1) · 이벤트 25 · 컴포넌트 사용 59 · 하드코딩 컬럼 0 · 메시지 27
+- 파일 13 · 엔드포인트 호출 11 (미해결 0, 주석 속 1) · 이벤트 26 · 컴포넌트 사용 59 · 하드코딩 컬럼 0 · 메시지 27
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/bod/bod.constants.ts | constants | 161 |
-| features/supply/src/pages/bod/Bod.tsx | page | 331 |
+| features/supply/src/pages/bod/bod.constants.ts | constants | 165 |
+| features/supply/src/pages/bod/Bod.tsx | page | 348 |
 | features/supply/src/pages/bod/bod.types.ts | types | 30 |
 | features/supply/src/pages/bod/bod.util.ts | other | 173 |
 | features/supply/src/pages/bod/components/BodForm.tsx | component | 206 |
-| features/supply/src/pages/bod/components/BodGrid.tsx | component | 665 |
+| features/supply/src/pages/bod/components/BodGrid.tsx | component | 681 |
 | features/supply/src/pages/bod/components/modals/bod-distribution-route-popup.constants.ts | constants | 19 |
 | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.module.scss | component | 35 |
 | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | component | 320 |
@@ -25,10 +25,10 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | SCP0007/bod//call-proc | hook | 1 | Y | Bod.tsx:56 |
-| SCP0007/countryCity//call-proc | hook | 1 | Y | Bod.tsx:80 |
-| /SCP0007/bod/SAVE/call-proc | http | 1 | Y | Bod.tsx:111 |
-| (useTabComboQueries) | hook | 3 | Y | BodForm.tsx:37 BodGrid.tsx:173 BodDistributionRoutePopup.tsx:62 |
-| SCP0007/routeCnt/SEARCH/call-proc | callProc | 1 | Y | BodGrid.tsx:383 |
+| SCP0007/countryCity//call-proc | hook | 1 | Y | Bod.tsx:88 |
+| /SCP0007/bod/SAVE/call-proc | http | 1 | Y | Bod.tsx:119 |
+| (useTabComboQueries) | hook | 3 | Y | BodForm.tsx:37 BodGrid.tsx:183 BodDistributionRoutePopup.tsx:62 |
+| SCP0007/routeCnt/SEARCH/call-proc | callProc | 1 | Y | BodGrid.tsx:393 |
 | SCP0005/route//call-proc | hook | 1 | Y | BodDistributionRoutePopup.tsx:116 |
 | /admin/menu/SCP0005/column | http | 1 | Y | bodDistributionRoutePopupStore.ts:50 |
 | /admin/menu/SCP0007/column | http | 1 | Y | useBodStore.ts:99 |
@@ -44,8 +44,8 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| BodGrid | onRouteCellDblClick | handleRouteCellDblClick | jsx | features/supply/src/pages/bod/Bod.tsx | 312 |
-| BodDistributionRoutePopup | onSelect | handleRouteSelect | jsx | features/supply/src/pages/bod/Bod.tsx | 326 |
+| BodGrid | onRouteCellDblClick | handleRouteCellDblClick | jsx | features/supply/src/pages/bod/Bod.tsx | 329 |
+| BodDistributionRoutePopup | onSelect | handleRouteSelect | jsx | features/supply/src/pages/bod/Bod.tsx | 343 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 71 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 86 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 102 |
@@ -55,20 +55,21 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 166 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 180 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/BodForm.tsx | 196 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 262 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 282 |
-| grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 493 |
-| grid | formatItem | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 616 |
-| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 658 |
-| DataGrid | pastedCell | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 659 |
-| DataGrid | initialized | <arrow> setGridReady | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 661 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 272 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 292 |
+| grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 505 |
+| grid | pastingCell | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 506 |
+| grid | formatItem | handler | addHandler | features/supply/src/pages/bod/components/BodGrid.tsx | 632 |
+| DataGrid | cellEditEnded | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 674 |
+| DataGrid | pastedCell | handleCellEdit | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 675 |
+| DataGrid | initialized | <arrow> setGridReady | jsx | features/supply/src/pages/bod/components/BodGrid.tsx | 677 |
 | g.hostElement? | dblclick | onDbl | addEventListener | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 148 |
 | SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 174 |
 | Button | onClick | <arrow> setRegionMode | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 209 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 228 |
 | Button | onClick | <arrow> setRegionMode | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 257 |
-| Button | onClick | handleApply | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 296 |
-| Button | onClick | modalClose | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 303 |
+| Button | onClick | modalClose | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 293 |
+| Button | onClick | handleApply | jsx | features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx | 303 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -124,13 +125,13 @@
 | LBL00627 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0007(6), SCP0005(2), DMF0020(1), COM0001(1)
-- SP/PKG: SCP0007_GET_COUNTRY_CITY(2), SCP0005_GET_DISTRIBUTION_ROUTE(2), SCP0007_GET_BOD(1), PKG_SCP0007(1), P_SCP0007_GET_COUNTRY_CITY(1), P_SCP0007_SAVE_BOD(1), SCP0007_GET_ROUTE_CNT(1), P_TRANSPORT_MODE(1), PKG_SCP0005(1)
+- 화면ID: SCP0007(7), SCP0005(4), DMF0020(1), COM0001(1), SCP0001(1)
+- SP/PKG: SCP0007_GET_COUNTRY_CITY(2), P_SCP0007_SAVE_BOD(2), SCP0005_GET_DISTRIBUTION_ROUTE(2), SCP0007_GET_BOD(1), P_SCP0007_GET_BOD(1), PKG_SCP0007(1), P_SCP0007_GET_COUNTRY_CITY(1), SCP0007_GET_ROUTE_CNT(1), P_TRANSPORT_MODE(1), PKG_SCP0005(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | 보낸다. 공용 useProcMutation(callMutationProc)은 body 로 `{ data }` 배열 1개만 전송하는 | features/supply/src/pages/bod/Bod.tsx | 99 |
-| code | AS-IS DeleteButton(SCP0007_BOD.cs L361-365) — action(CRUD_TYPE) != 'I' 이면 silent return. | features/supply/src/pages/bod/Bod.tsx | 196 |
+| endpoint | 보낸다. 공용 useProcMutation(callMutationProc)은 body 로 `{ data }` 배열 1개만 전송하는 | features/supply/src/pages/bod/Bod.tsx | 107 |
+| code | AS-IS DeleteButton(SCP0007_BOD.cs L361-365) — action(CRUD_TYPE) != 'I' 이면 silent return. | features/supply/src/pages/bod/Bod.tsx | 213 |
 | code | 저장 전 행 단위 업무 검증 — AS-IS SaveData_Main(SCP0007_BOD.cs L677-782) 중 필수값(공통 checkRequiredOfSpread 로 이미 커버되는 항목 제외) 이외의 BOD 고유 규칙만 이식한다. 첫 위반 1건만 반환(AS-IS 도 위반 즉시 return). Monday/Sunday 위반 시 AS-IS 처럼 해당 셀 값을 자동 보정(가까운 월/일요일)하고 실패를 반환 — 사용자가 보정된  | features/supply/src/pages/bod/bod.util.ts | 103 |
 
 ## 10. __asis-mapping__.md 상태

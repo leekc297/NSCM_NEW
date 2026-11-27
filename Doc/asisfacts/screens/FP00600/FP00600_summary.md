@@ -191,30 +191,20 @@
 | unreached:(진입점 미연결) | call_Excel_Col_Save | 2552 | FP\Common\FP00601_Excel_Import#merge_ExcelImport | MATCH_PATTERN | [update-batch]  |
 | unreached:(진입점 미연결) | call_Excel_Col_Save | 2572 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul_2] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | call_Excel_Col_Save | 2572 | FP\Common\FP00600_PlanAmend#execute_psiCalcul_2 | MATCH_PATTERN | SP PR_SCM_OF_PSI_AMEND_UI_CALCULATION_PARALLEL_A |
-| unreached:(진입점 미연결) | call_Excel_Col_Save | 2572 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul_2] | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | call_Excel_Col_Save | 2572 | FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | call_Excel_Col_Save | 2582 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | call_Excel_Col_Save | 2582 | FP\Common\FP00600_PlanAmend#execute_psiCalcul | MATCH_PATTERN | SP PR_SCM_OF_PSI_AMEND_UI_CALCULATION_PARALLEL_B |
-| unreached:(진입점 미연결) | call_Excel_Col_Save | 2582 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | call_Excel_Col_Save | 2582 | FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2723 | biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_AMend_Save_Check] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2723 | FP\Common\XpCommonCond#find_AMend_Save_Check | MATCH_PATTERN | [sql] foxquery_sql\FP_Common_XpCommonCond_find_AMend_Save_Check.sql |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2744 | biz:FPCommonDataBLL.GeneralUpdateBatch [batchId=merge_ExcelImport] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2744 | FP\Common\FP00601_Excel_Import#merge_ExcelImport | MATCH_PATTERN | [update-batch]  |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2763 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul_2] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2763 | FP\Common\FP00600_PlanAmend#execute_psiCalcul_2 | MATCH_PATTERN | SP PR_SCM_OF_PSI_AMEND_UI_CALCULATION_PARALLEL_A |
-| unreached:(진입점 미연결) | call_Excel_Row_Save | 2763 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul_2] | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | call_Excel_Row_Save | 2763 | FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY |  |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2773 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_psiCalcul] | BIZ_MATCH |  |
 | unreached:(진입점 미연결) | call_Excel_Row_Save | 2773 | FP\Common\FP00600_PlanAmend#execute_psiCalcul | MATCH_PATTERN | SP PR_SCM_OF_PSI_AMEND_UI_CALCULATION_PARALLEL_B |
-| unreached:(진입점 미연결) | call_Excel_Row_Save | 2773 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH |  |
-| unreached:(진입점 미연결) | call_Excel_Row_Save | 2773 | FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY |  |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul_2] | BIZ_MATCH | 2 |  |  |  |
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_psiCalcul] | BIZ_MATCH | 2 |  |  |  |
 | biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=AMEND_INSTANCE] | BIZ_MATCH | 2 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, UP_FX_GetCommonDataList_SCP:REF:FN_GET_DIVISION |
@@ -255,8 +245,6 @@
 | FP\Common\XpCommonAmend#find_save_chk | MATCH_PATTERN | 2 | [sql] foxquery_sql\FP_Common_XpCommonAmend_find_save_chk.sql | SELECT:FP_USER_ROLE_INFO_V |  |
 | FP\Common\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 1 | [sql] foxquery_sql\FP_Common_XpCommonAmend_saveAll_MRP_Transit.sql | UPDATE:SCM_FP_PLAN_H |  |
 | FP\Common\XpCommonCond#find_AMend_Save_Check | MATCH_PATTERN | 2 | [sql] foxquery_sql\FP_Common_XpCommonCond_find_AMend_Save_Check.sql | SELECT:FP_PLAN_STATUS_H, SELECT:SCM_FP_PLAN_DETAIL_H, SELECT:SCM_FP_PLAN_GROUP_DETAIL_H, SELECT:FP_RELEASE_CALCULATION_STATUS_H |  |
-| FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
-| FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY | 2 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -412,14 +400,6 @@
 | bucke_menu | Click | onZeroBucketMenu | spdMain_CellClick:4177 |
 | memo_menu | Click | onMemoMenu | spdMain_CellClick:4189 |
 | bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:4203 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:345 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:382 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:407 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:408 |
 | this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:354 |
 | this.cboPlanId | DropDown | cboPlanId_DropDown | InitializeComponent:832 |
 | this.btnSql | Click | btnSql_Click | InitializeComponent:1118 |
@@ -455,16 +435,24 @@
 | this.btnBucket | Click | btnBucket_Click | InitializeComponent:2087 |
 | this.btnCategory | Click | btnCatagory_Click | InitializeComponent:2125 |
 | this.btnColumn | Click | btnColumn_Click | InitializeComponent:2163 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:345 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:382 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:407 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:408 |
 
 ## 6. 컨트롤 (126개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
 |---|---:|---|
 | CheckBox | 23 | chk_month, chk_week, chk_day, chk_sspSimul_inventory, chk_sspSimul, chk_activated, chk_BOH_2nd, chk_ssp_inventory, chk_do, chk_inventory, chk_wpp_outqty, chk_wpp_inqty, chk_mpp_outqty, chk_mpp_inqty, chk_result … |
 | LayoutControlItem | 22 | lblPlanner, lblPlanID, lblSql, lblInstance, lblData, lblDivision, lblOperation, lblItem, lblNickName, lblModel, layoutControlItem13, lblFactory, lblLine, lblSite, layoutControlItem12 … |
-| UsrButton | 15 | usrButton1, usrButton2, usrButton1, usrButton2, btnToggleSave, btnSql, btnExcelImport, usrButton2, btnMemo, btnMrp, btnRelease, btnCreatePlan, btnBucket, btnCategory, btnColumn |
-| Label | 14 | label1, label2, label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1 |
-| Panel | 8 | panel1, panel1, panel3, infoPanel, panel2, panel3, panel4, panel1 |
+| UsrButton | 15 | btnToggleSave, btnSql, btnExcelImport, usrButton2, btnMemo, btnMrp, btnRelease, btnCreatePlan, btnBucket, btnCategory, btnColumn, usrButton1, usrButton2, usrButton1, usrButton2 |
+| Label | 14 | label3, txtBuilding, txtBasic, txtDesc, txtCreation, txtCreator, label7, label6, label5, label4, label2, label1, label1, label2 |
 | UsrCheckedList2 | 8 | clbLine, clbDivision, clbProdType, clbOperation, clbFactory, clbPlant, clbPlanner, cboSite |
+| Panel | 8 | infoPanel, panel2, panel3, panel4, panel1, panel1, panel1, panel3 |
 | EmptySpaceItem | 6 | emptySpaceItem4, emptySpaceItem2, emptySpaceItem1, emptySpaceItem6, emptySpaceItem5, emptySpaceItem3 |
 | UsrCombo | 3 | cboShipment, cboInstance, cboPlanId |
 | UsrTextBox | 3 | txtPjtGroup, txtItem, txtModel |
@@ -485,10 +473,11 @@
 | GroupBox | 1 | groupBox1 |
 | TextBox | 1 | tbLog |
 
-## 7. 확인 필요 (26건)
+## 7. 확인 필요 (22건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 4956 | btnCreatePlan_Click | FP_Master.PR_UI_FP00600_ETC | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 4933 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 630 | Query | FP\{?default:part_service}\AmendMemo#list_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 631 | Query | FP\{?default:part_service}\AmendMemo#list_setup_color_code | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2279 | ApplyAmendCalendarCondition | FP\{?default:part_service}\FP00600_PlanAmend#find_WeekCnt | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -501,19 +490,14 @@
 | 2582 | call_Excel_Col_Save | FP\{?default:part_service}\FP00600_PlanAmend#execute_psiCalcul | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2763 | call_Excel_Row_Save | FP\{?default:part_service}\FP00600_PlanAmend#execute_psiCalcul_2 | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2773 | call_Excel_Row_Save | FP\{?default:part_service}\FP00600_PlanAmend#execute_psiCalcul | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 4933 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2572 | call_Excel_Col_Save | FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 2582 | call_Excel_Col_Save | FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 2763 | call_Excel_Row_Save | FP00600_PlanAmend#execute_psiCalcul_2 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
-| 2773 | call_Excel_Row_Save | FP00600_PlanAmend#execute_psiCalcul | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
+| 2552 | call_Excel_Col_Save | FP\{?default:part_service}\FP00601_EXCEL_IMPORT#merge_ExcelImport | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2744 | call_Excel_Row_Save | FP\{?default:part_service}\FP00601_EXCEL_IMPORT#merge_ExcelImport | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 665 | Query | FP\{?default:part_service}\PICAlarm#find_Category | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 666 | Query | FP\{?default:part_service}\PICAlarm#find_Category_Color | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 4908 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 5045 | btnRelease_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 5083 | btnRelease_Click | FP\{?default:part_service}\XpCommonAmend#find_instanceInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 5084 | btnRelease_Click | FP\{?default:part_service}\XpCommonAmend#find_planInfo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2552 | call_Excel_Col_Save | FP\{?default:part_service}\FP00601_EXCEL_IMPORT#merge_ExcelImport | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2744 | call_Excel_Row_Save | FP\{?default:part_service}\FP00601_EXCEL_IMPORT#merge_ExcelImport | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

@@ -1,0 +1,75 @@
+{
+  "id": "20261126164547_SELF",
+  "at": "2026-11-26T16:45:47+09:00",
+  "ms": 1795679147721,
+  "source": "self",
+  "status": "applied",
+  "sig": "ln|edits|quick.json|chain step duplication",
+  "title": "체인 공통 단계를 quick.json 한 곳(단계 틀)에 두고 체인은 이름으로 불러 쓰게 바꿈. 체인 args 는 작업 정의 args 에 덧붙이게 바꿈",
+  "evidence": "quick.json:518-526 = quick.json:1692-1700 같은 블록, rerunTask 9곳(522…2499) · workbench.js:1362 args: st.args || null · CHANGELOG.md:300-302, 183-184, 176-177, 521, 493 · 진단 사다리 묶음 L3|edits|quick.json",
+  "targets": [
+    "tools/VibeManager/quick.json",
+    "tools/VibeManager/workbench.js",
+    "tools/VibeManager/test/t_chain_args.js"
+  ],
+  "before_after": "전: S8.unverified 수선 블록, 미검증 해소 게이트, 해소 원장 점검 단계를 체인마다 복사(rerunTask 9곳, 관련 단계 25곳). 체인 args 가 작업 정의 args 를 대신해 '--' 옵션이 빠짐. 후: quick.json 최상위에 단계 틀(예 stepTemplates.unverifiedLoop)을 두고 체인 단계는 {\"use\": \"unverifiedLoop\"} 로 부름. 체인을 읽을 때 틀을 펼침. 체인 args 는 작업 정의 '--' 옵션 뒤에 덧붙이고 대체는 명시 옵션(argsReplace)일 때만 함. 지시문에서 체인 구조를 설명하는 문장은 틀의 desc 를 끼워 넣어 한 곳에서만 고치게 함.",
+  "verify": "Grep quick.json '\"rerunTask\": \"S8.checklistSettle\"': 반영 전 9건(이번 측정) → 반영 뒤 1건(틀 1곳). node tools/VibeManager/test/run_all.js --only t_chain_args: 펼친 뒤 체인 단계 args 49곳 비교 시험이 늘어남(반영 전 시험 수 미측정) · 펼친 결과가 반영 전 quick.json 체인 정의와 단계별 task, args, repair 값이 같음을 비교하는 시험 1개 추가(반영 전 0개 → 반영 뒤 1개) · CHANGELOG.md:300 사례 재현: 틀 단계에 args [\"${input:ids}\"] 만 준 체인에서 --wl-round, --gate 가 남음(반영 전 빠짐 → 반영 뒤 남음)",
+  "rollback": "quick.json, workbench.js 를 .bak_<태그> 로 되돌림(설치 폴더 같은 태그) · 새 시험 파일 삭제",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "코드 반영 끝, quick.json 변환은 창 다시 로드 뒤. 반영: quick-tpl.js(expand), prompt-panel.js loadQuick 이 stepTemplates { use } 펼침, 변환기 quick_tpl_apply.js(9곳 → stepTemplates.unverifiedLoop 1곳), 시험 t_quick_tpl.js PASS 8(변환 전후 체인 16개 단계 158개 같음). 지금 quick.json 을 바꾸지 않은 이유: 실행 중 VM 설치본 prompt-panel.js 는 { use } 를 몰라 그 단계를 '프롬프트 없음' exit 2 로 실패시킴(workbench.js runOnce). 사용자 할 일: VS Code 창 다시 로드 → node tools/VibeManager/quick_tpl_apply.js → node tools/VibeManager/test/t_quick_tpl.js tools/VibeManager. 체인 args 덧붙임 규칙은 workbench.js runTaskStreaming 의 11-26 보정(체인 args 에 -- 옵션이 없으면 작업 정의 옵션을 붙임)이 이미 처리해 argsReplace 는 넣지 않음. orch-selfcheck.js S4 는 quick.json 원문을 읽어 틀 안 단계를 점검하지 않음(다른 세션 파일, 후속). 2026-11-26 17:17",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:07+09:00",
+      "by": "S-W",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:16:45+09:00",
+      "by": "S-W",
+      "what": "사용자 판단 대기로 보류(자동 반영 안 함) · 코드 반영 끝, quick.json 변환은 창 다시 로드 뒤. 반영: quick-tpl.js(expand), prompt-panel.js loadQuick 이 stepTemplates { use } 펼침, 변환기 quick_tpl_apply.js(9곳 → stepTemplates.unverifiedLoop 1곳), 시험 t_quick_tpl.js PASS 8(변환 전후 체인 16개 단계 158개 같음). 지금 quick.json 을 바꾸지 않은 이유: 실행 중 VM 설치본 prompt-panel.js 는 { use } 를 몰라 그 단계를 '프롬프트 없음' exit 2 로 실패시킴(workbench.js runOnce). 사용자 할 일: VS Code 창 다시 로드 → node tools/VibeManager/quick_tpl_apply.js → node tools/VibeManager/test/t_quick_tpl.js tools/VibeManager. 체인 args 덧붙임 규칙은 workbench.js runTaskStreaming 의 11-26 보정(체인 args 에 -- 옵션이 없으면 작업 정의 옵션을 붙임)이 이미 처리해 argsReplace 는 넣지 않음. orch-selfcheck.js S4 는 quick.json 원문을 읽어 틀 안 단계를 점검하지 않음(다른 세션 파일, 후속). 2026-11-26 17:17"
+    },
+    {
+      "at": "2026-11-26T17:25:18+09:00",
+      "by": "사용자",
+      "what": "승인"
+    },
+    {
+      "at": "2026-11-26T17:25:18+09:00",
+      "by": "VMO",
+      "what": "승인 접수. 에이전트가 다른 조치 중이라 끝나면 자동 반영(다시 승인 필요 없음)"
+    },
+    {
+      "at": "2026-11-26T17:48:38+09:00",
+      "by": "사용자",
+      "what": "대기한 승인으로 반영 시작"
+    },
+    {
+      "at": "2026-11-26T17:48:53+09:00",
+      "by": "Claude Code 세션",
+      "what": "반영 완료(세션 직접 보완) · 사용자가 창 다시 로드 뒤 quick_tpl_apply.js 실행(quick.json 17:47:12 변환, 백업 quick.json.bak_20261126_tpl). 확인 17:47~17:48: stepTemplates.unverifiedLoop 1곳, use 9, rerunTask S8.checklistSettle 원문 9 → 1, 펼친 결과 = 변환 전 백업과 같음, t_quick_tpl PASS 8, t_chain_args 42곳 PASS, 체인 시험 8파일 PASS 98 FAIL 0(17:48:46). 설치본 prompt-panel.js 에 quick-tpl 펼침 있음"
+    },
+    {
+      "at": "2026-11-26T18:15:34+09:00",
+      "by": "S-W",
+      "what": "보충: 변환 전 사본 test/fixtures/quick_chains_before_tpl_20261126.json 대조 시험 추가(t_quick_tpl ⑥). 틀 자리 9곳 = 변환 전과 같음, 🚒 자동보완 15단계, 3~5, 10~12단계 같음. t_quick_tpl PASS 11, run_all 18:15:13 파일 100/100 PASS 1731 FAIL 0. 체인 실실행 확인은 미확인(사용자 몫)"
+    }
+  ],
+  "plain": {
+    "what": "CheckList 체인 9종에 똑같이 복사해 둔 '미검증 해소' 단계 설정을 한 곳에 모아, 규칙이 바뀌면 한 곳만 고치게 함",
+    "risk": "펼치는 과정에서 체인 단계 순서나 인자가 달라지면 체인 동작이 바뀜. 펼친 결과를 반영 전 정의와 비교하는 시험으로 막음",
+    "undo": "백업 파일로 quick.json, workbench.js 를 되돌림"
+  },
+  "self": true,
+  "check": "",
+  "selfKey": "",
+  "kind": "fix",
+  "waitNote": "",
+  "impactWas": "core",
+  "needsApproval": "사람 판단 필요: 코드 반영 끝, quick.json 변환은 창 다시 로드 뒤. 반영: quick-tpl.js(expand), prompt-panel.js loadQuick 이 stepTemplates { use } 펼침, 변환기 quick_tpl_apply.js(9곳 → stepTemplates.unverifiedLoop 1곳), 시험 t_quick_tpl.js PASS 8(변환 전후 체인 16개 단계 158개 같음). 지금 quick.json 을 바꾸지 않은 이유: 실행 중 VM 설치본 prompt-panel.js 는 { use } 를 몰라 그 단계를 '프롬프트 없음' exit 2 로 실패시킴(workbench.js runOnce). 사용자 할 일: VS Code 창 다시 로드 → node tools/VibeManager/quick_tpl_apply.js → node tools/VibeManager/test/t_quick_tpl.js tools/VibeManager. 체인 args 덧붙임 규칙은 workbench.js runTaskStreaming 의 11-26 보정(체인 args 에 -- 옵션이 없으면 작업 정의 옵션을 붙임)이 이미 처리해 argsReplace 는 넣지 않음. orch-selfcheck.js S4 는 quick.json 원문을 읽어 틀 안 단계를 점검하지 않음(다른 세션 파일, 후속). 2026-11-26 17:17",
+  "userHold": true,
+  "reason": "사람 판단 필요: 코드 반영 끝, quick.json 변환은 창 다시 로드 뒤. 반영: quick-tpl.js(expand), prompt-panel.js loadQuick 이 stepTemplates { use } 펼침, 변환기 quick_tpl_apply.js(9곳 → stepTemplates.unverifiedLoop 1곳), 시험 t_quick_tpl.js PASS 8(변환 전후 체인 16개 단계 158개 같음). 지금 quick.json 을 바꾸지 않은 이유: 실행 중 VM 설치본 prompt-panel.js 는 { use } 를 몰라 그 단계를 '프롬프트 없음' exit 2 로 실패시킴(workbench.js runOnce). 사용자 할 일: VS Code 창 다시 로드 → node tools/VibeManager/quick_tpl_apply.js → node tools/VibeManager/test/t_quick_tpl.js tools/VibeManager. 체인 args 덧붙임 규칙은 workbench.js runTaskStreaming 의 11-26 보정(체인 args 에 -- 옵션이 없으면 작업 정의 옵션을 붙임)이 이미 처리해 argsReplace 는 넣지 않음. orch-selfcheck.js S4 는 quick.json 원문을 읽어 틀 안 단계를 점검하지 않음(다른 세션 파일, 후속). 2026-11-26 17:17",
+  "appliedMs": 1795682933639
+}

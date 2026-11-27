@@ -1,0 +1,34 @@
+{
+  "id": "20261126_171942_R12_ALL",
+  "at": "2026-11-26T17:19:42+09:00",
+  "ms": 1795681182364,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S1 구문: prompt-panel.js 구문 오류",
+  "screen": "",
+  "sig": "R12|S1|prompt-panel.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "Missing catch or finally after try (prompt-panel.js:15)",
+  "evidence": {
+    "check": "S1",
+    "key": "S1|prompt-panel.js",
+    "file": "prompt-panel.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T17:21:41+09:00",
+      "by": "VMO",
+      "what": "에이전트 담당 아님: 규칙 R12 은 agentRules(R1, R2, R3, R4, R5, R10, R11, R13, R14) 밖. 사건은 열린 채 둠"
+    },
+    {
+      "at": "2026-11-26T17:27:25+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S1 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+ "rule_id": "A1",
+ "hash": "352b1bd566627ef8",
+ "groups": [
+  {
+   "rows": [
+    "EG-a2cf8306",
+    "EG-c0692cbc",
+    "EG-e118048c"
+   ],
+   "why": "세 행 모두 같은 route 조회 결과를 화면 실전송 인자로 AS-IS SP를 돌려 확인하고, 기대 결과도 '건수·키 집합 = AS-IS'로 같아 대상 이름에 붙은 꼬리표만 다르다."
+  },
+  {
+   "rows": [
+    "AD-03d05d6f"
+   ],
+   "why": "SEARCH_CITY 호출 #18(city=PLWRO)만의 고유 인자라 다른 조건 행과 묶을 수 없다."
+  },
+  {
+   "rows": [
+    "AD-07ed178a"
+   ],
+   "why": "SEARCH 호출 #13(from ZW, to ZW/ZWBAT)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-1d350bdf"
+   ],
+   "why": "SEARCH 호출 #19(fromCountry=E2E)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-1ea5f923"
+   ],
+   "why": "SEARCH 호출 #7(transportMode 다중값)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-24176521"
+   ],
+   "why": "SEARCH 호출 #9(AD→AD, AIR)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-27475158"
+   ],
+   "why": "SEARCH_CITY 호출 #3(city=CAWND)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "AD-4f1197cf"
+   ],
+   "why": "SEARCH_CITY 호출 #27(city=ADCAN)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "AD-6284734b"
+   ],
+   "why": "SEARCH 호출 #2(무조건 전체 조회)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-849be348"
+   ],
+   "why": "SEARCH_CITY 호출 #11(city=KRCOJ)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "AD-9383422c"
+   ],
+   "why": "SEARCH_CITY 호출 #16(city=CNNKG)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "AD-a23da796"
+   ],
+   "why": "SEARCH_CITY 호출 #10(city=CNCKG)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "AD-a718e2e8"
+   ],
+   "why": "SEARCH_CITY 호출 #15(city=ADALV)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "AD-b25ce69c"
+   ],
+   "why": "SEARCH 호출 #4(validYn=Y)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-bd7b1d86"
+   ],
+   "why": "SEARCH 호출 #6(transportMode=RAI)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-f3865ed3"
+   ],
+   "why": "SEARCH 호출 #5(validYn=N)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-f5e6055c"
+   ],
+   "why": "SEARCH_CITY 호출 #17(city=CLANF)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "AD-f7aa3c95"
+   ],
+   "why": "SEARCH 호출 #12(from ZW/ZWBAT)만의 고유 조회조건이다."
+  },
+  {
+   "rows": [
+    "AD-f905b01e"
+   ],
+   "why": "SEARCH_CITY 호출 #14(city=ZZ_E2)만의 고유 인자다."
+  },
+  {
+   "rows": [
+    "EG-343d8ad3"
+   ],
+   "why": "콤보 SQL 실존 여부를 소스·메타에서 정적으로 점검하는 행이라 조회 결과 비교와 성질이 다르다."
+  },
+  {
+   "rows": [
+    "V-fd895574"
+   ],
+   "why": "화면 전체 비교에 차이 행 목록 증거까지 요구해 EG 실전송 route 행과 범위·기대가 같다고 확신할 수 없다."
+  },
+  {
+   "rows": [
+    "T-15c61cf0"
+   ],
+   "why": "cboValidYN 콤보 요소에 대한 대조표 추적이라 다른 요소와 묶을 수 없다."
+  },
+  {
+   "rows": [
+    "T-400e0530"
+   ],
+   "why": "FindDataMain 파라미터 'ALL'→'' 변환에 대한 대조표 추적으로 요소가 다르다."
+  },
+  {
+   "rows": [
+    "T-425e728c"
+   ],
+   "why": "P_SCP0005_GET_COUNTRY_CITY SP 대조표 추적으로, 개별 호출 AD 행들과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-5539373c"
+   ],
+   "why": "clbTransMode 다중 체크 요소에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-5bac20a1"
+   ],
+   "why": "From 국가·도시 입력과 검색 팝업 요소에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-5e80b2ee"
+   ],
+   "why": "필터를 건 상태에서 재조회하는 공통 UC-07 상태에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-690a63d4"
+   ],
+   "why": "Excel Upload 버튼과 팝업 후 재조회에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-85a00387"
+   ],
+   "why": "R7 조회 databind(o_rc1) 구현에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-94b3ad3d"
+   ],
+   "why": "GET_DISTRIBUTION_ROUTEID SP에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-ba2f69a6"
+   ],
+   "why": "Search 버튼·단축키 요소에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-c65db01b"
+   ],
+   "why": "이력 팝업 SP(HISTORY_ROUTEID)에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-cc8abc78"
+   ],
+   "why": "P_SCP0005_GET_DISTRIBUTION_ROUTE SP 대조표 추적으로, 개별 호출 AD 행들과 성질이 다르다."
+  },
+  {
+   "rows": [
+    "T-d2177f06"
+   ],
+   "why": "To 국가·도시 입력과 검색 팝업 요소에 대한 대조표 추적이다."
+  },
+  {
+   "rows": [
+    "T-f69d99a2"
+   ],
+   "why": "From 국가→도시 cascade가 폐기된 점에 대한 대조표 추적이다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 02:36:48",
+ "cost": 0.1791697
+}

@@ -1,0 +1,232 @@
+{
+ "rule_id": "B3",
+ "hash": "5a6ed5d810f72d17",
+ "groups": [
+  {
+   "rows": [
+    "EG-4477d3e8"
+   ],
+   "why": "DM0020_OwnerbyDivisionPopup 팝업(Owner 조건) 하나만 이 기대 정렬을 가지므로 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-522d6019"
+   ],
+   "why": "EG-ebb3cd99와 같은 팝업이지만 조회조건 Model/Nickname에서 연 경우라 셀에서 연 경우와 넘기는 값이 다를 수 있어 묶지 않는다."
+  },
+  {
+   "rows": [
+    "EG-ebb3cd99"
+   ],
+   "why": "ITEM_ID40 셀에서 연 팝업이라 조회조건에서 연 EG-522d6019와 시작 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-d3dfd82a"
+   ],
+   "why": "DM0002_TitleSetForm_Popup의 btnColumn 버튼 팝업을 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "T-230567b0"
+   ],
+   "why": "대조표 추적 행이며 GetDayRange 구현 위치가 소스에 있는지를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-317b95e1"
+   ],
+   "why": "대조표 추적 행이며 GetFuturePriceInfo 구현 위치를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-48a08924"
+   ],
+   "why": "대조표 추적 행이며 GetCellIndexBySpanRowCells 구현 위치를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-4e5e5640"
+   ],
+   "why": "대조표 추적 행이며 GetCellColor 구현 위치를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-548e4f75"
+   ],
+   "why": "SCM_SITE_ID 컬럼의 추적 행이라 성질이 다르고, 컬럼명도 SCM_SITE_ID40·SCM_SITE_ID81과 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-6526ed9e"
+   ],
+   "why": "대조표 추적 행이며 GetLookupData 구현 위치를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-84c3e455"
+   ],
+   "why": "drpPeriod 조건의 추적 행으로 추적 성질이 다르고, Bucket 조건과 같은 요소라는 확신이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-9174a04a"
+   ],
+   "why": "GetCellProdSite 구현 위치를 확인하는 추적 행이라 CELL_PROD_SITE 컬럼의 후보 정렬 검사와 성질이 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "T-b287ad45"
+   ],
+   "why": "대조표 추적 행이며 GetThisWeekMonday 구현 위치를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-c30202b7"
+   ],
+   "why": "대조표 추적 행이며 GetSpdTitle 구현 위치를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-c9534ac8"
+   ],
+   "why": "대조표 추적 행이며 GetCellNumbersByRow 구현 위치를 확인하는 성질이 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-f5be429d"
+   ],
+   "why": "GetBizTypebyDivision 구현 위치를 확인하는 추적 행이라 Biz.Type 조건의 정렬 검사와 성질이 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-1af0bde3"
+   ],
+   "why": "조회조건 Item Type 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-48303ef9"
+   ],
+   "why": "END_CUSTOMER40 컬럼은 END_CUSTOMER 컬럼과 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-4cff7ca0"
+   ],
+   "why": "조회조건 Closed 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-55d28796"
+   ],
+   "why": "조회조건 Plant Site는 신규행의 PLANT_SITE_ID 컬럼과 요소와 상태가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-57e19fe7"
+   ],
+   "why": "신규행 INCOTERMS 컬럼을 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-62f16372"
+   ],
+   "why": "신규행 CURRENCY 컬럼을 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-698f4d09"
+   ],
+   "why": "신규행 FCST_TYPE 컬럼을 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-87dcfd74"
+   ],
+   "why": "조회조건 Biz.Type 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-8ac0a4dc"
+   ],
+   "why": "SCM_SITE_ID40 컬럼은 SCM_SITE_ID81·SCM_SITE_ID 및 Sales Site 조건과 다른 요소라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-ada13013"
+   ],
+   "why": "DEPT_ID 컬럼은 DEPT_ID40 컬럼 및 Team 조건과 다른 요소라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b1993e7e"
+   ],
+   "why": "조회조건 Team은 신규행의 DEPT_ID·DEPT_ID40 컬럼과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-b750d715"
+   ],
+   "why": "조회조건 Division 콤보를 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-bcf03eb8"
+   ],
+   "why": "SCM_SITE_ID81 컬럼은 SCM_SITE_ID40 컬럼과 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-c230410d"
+   ],
+   "why": "조회조건 End Customer는 신규행의 END_CUSTOMER 컬럼들과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-cddda49c"
+   ],
+   "why": "신규행 MEASURE 컬럼을 확인하는 행은 이것 하나뿐이다."
+  },
+  {
+   "rows": [
+    "V-ce3c73a6"
+   ],
+   "why": "조회조건 Bucket이 drpPeriod와 같은 요소라는 확신이 없어 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-d9725e22"
+   ],
+   "why": "신규행 PLANT_SITE_ID 컬럼은 Plant Site 조회조건과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-e541dbde"
+   ],
+   "why": "END_CUSTOMER 컬럼은 END_CUSTOMER40 컬럼과 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-e7eb4528"
+   ],
+   "why": "조회조건 Sales Site는 신규행의 SCM_SITE_ID 계열 컬럼과 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-f876020c"
+   ],
+   "why": "DEPT_ID40 컬럼은 DEPT_ID 컬럼과 다른 컬럼이라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "V-fb20d7b1"
+   ],
+   "why": "신규행 CELL_PROD_SITE 컬럼의 후보 정렬 검사는 GetCellProdSite 추적 행과 성질이 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:37:23",
+ "cost": 0.1220572
+}

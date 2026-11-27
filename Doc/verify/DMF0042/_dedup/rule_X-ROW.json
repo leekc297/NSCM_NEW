@@ -1,0 +1,1942 @@
+{
+ "rule_id": "X-ROW",
+ "hash": "89b0a4302e04918f",
+ "groups": [
+  {
+   "rows": [
+    "T-0062872c"
+   ],
+   "why": "대조표 15행(DMF0042_BizPlan.ValidationCheck) 추적 행이며 대상 메서드와 대조표 행이 같은 다른 행이 없어 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-029f3db4"
+   ],
+   "why": "대조표 18행(DMF0042_BizPlan.DefineProperty)만 추적하는 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0505ff77"
+   ],
+   "why": "DMF0042_3_BizPlan의 ValidationCheck는 다른 폼 클래스라서 대조표 행 번호가 같아도 같은 요소로 볼 근거가 없어 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-054add7e"
+   ],
+   "why": "DMF0042_BizPlan_old.MinColumnChk는 구버전 폼의 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-064aa6ac"
+   ],
+   "why": "DMF0042_1_BizPlan.btnSetPrice_Click은 1번 폼의 버튼이라 다른 폼의 같은 이름 버튼과 묶지 않음."
+  },
+  {
+   "rows": [
+    "T-065f582b"
+   ],
+   "why": "DMF0042_3_BizPlan.OnShown은 고유 폼의 진입점이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-06ce1375"
+   ],
+   "why": "DMF0042_1_RTF.spdMain_LeaveCell은 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-06dbab4e"
+   ],
+   "why": "DMF0042_1_RTF.Select_DpInit_Data(대조표 147행)는 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-06f76081"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.InitSpread는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-07365a34"
+   ],
+   "why": "DMF0042_3_BizPlan.GetBizTypebyDivision은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-07460da5"
+   ],
+   "why": "DMF0042_1_BizPlan.spdMain_ComboSelChange는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-088c74bf"
+   ],
+   "why": "DMF0042_2_BizPlan.btnProject_Click(popup=false, 9행)은 다른 폼과 상태·행이 달라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-08ef36e8"
+   ],
+   "why": "DMF0042_BizPlan_old.InitSaveDataTable은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-09a21c14"
+   ],
+   "why": "DMF0042_BizPlan_old.btnProject_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-09b0d350"
+   ],
+   "why": "DMF0042_BizPlan.btnCutOff_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-09cd1658"
+   ],
+   "why": "DMF0042_BizPlan.btnItemId_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0b1f52f7"
+   ],
+   "why": "DMF0042_BizPlan_old.GetDayRange는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0b7f9526"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.CreateSpread는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0ba1ee89"
+   ],
+   "why": "이름이 '19'라는 불명확한 대상이라 다른 행과 같은 요소인지 확인할 수 없어 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0bb596b2"
+   ],
+   "why": "DMF0042_2_BizPlan.clbTeam_SelectedIndexChanged는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0bfb307c"
+   ],
+   "why": "DMF0042_3_BizPlan.btnColumn_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0d3d8d8c"
+   ],
+   "why": "DMF0042_3_BizPlan.InsertRow(394행)는 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0d9a83dd"
+   ],
+   "why": "DMF0042_1_BizPlan.SetSpreadColumn은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0e23d719"
+   ],
+   "why": "DMF0042_2_BizPlan.spdMain_ComboSelChange는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0ed3517d"
+   ],
+   "why": "DMF0042_BizPlan.InsertRow는 다른 폼의 InsertRow와 클래스가 달라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-0f9c4fce"
+   ],
+   "why": "DMF0042_BizPlan_old.spdMain_Changed는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-10800f7e"
+   ],
+   "why": "DMF0042_1_RTF.InitControls는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1134d6f6"
+   ],
+   "why": "DMF0042_3_BizPlan.fnValidation은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-12722e6d"
+   ],
+   "why": "DMF0042_1_BizPlan.FindData는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-129d56fe"
+   ],
+   "why": "DMF0042_3_BizPlan.MinColumnChk는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-12bd5f94"
+   ],
+   "why": "DMF0042_BizPlan_old.DeleteButton은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-130c9b06"
+   ],
+   "why": "DMF0042_3_BizPlan.btnExchangeRate_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-13a85b1e"
+   ],
+   "why": "DMF0042_BizPlan.chkSum_CheckedChanged는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-13cbddf1"
+   ],
+   "why": "DMF0042_1_BizPlan.GetCellProdSite는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1418371f"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.spdMain_TopChange는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1517a9f4"
+   ],
+   "why": "DMF0042_3_BizPlan.GetLookupData는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1547284b"
+   ],
+   "why": "DMF0042_1_RTF.spdMain_ComboCloseUp은 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-169a4729"
+   ],
+   "why": "DMF0042_3_BizPlan.btnCutOff_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1793cdfa"
+   ],
+   "why": "DMF0042_2_BizPlan.InitControls는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-18ace293"
+   ],
+   "why": "DMF0042_1_BizPlan.SaveButton은 1번 폼 저장 버튼이라 다른 폼의 저장과 묶지 않음."
+  },
+  {
+   "rows": [
+    "T-19c45568"
+   ],
+   "why": "DMF0042_BizPlan_old.spdMain_TopChange는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1a8a5152"
+   ],
+   "why": "DMF0042_2_BizPlan.ParameterString은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1ac0552a"
+   ],
+   "why": "btnColumn 'Column Show' 라벨 행은 어느 폼의 메서드에 해당하는지 확정되지 않아 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1bd2d6bf"
+   ],
+   "why": "DMF0042_2_BizPlan.GetCellColor는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1c5a9493"
+   ],
+   "why": "DMF0042_BizPlan_old.CreateSpread는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1c5d9e7b"
+   ],
+   "why": "DMF0042_BizPlan_old.InitSpread는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1d46e528"
+   ],
+   "why": "DMF0042_BizPlan.btnReplace_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1d746646"
+   ],
+   "why": "DMF0042_BizPlan.spdMain_TopChange는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-1e8de6c3"
+   ],
+   "why": "DMF0042_BizPlan_old.InitControls는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2056df74"
+   ],
+   "why": "DMF0042_3_BizPlan.InitControls는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2072f194"
+   ],
+   "why": "DMF0042_3_BizPlan.chkSum_CheckedChanged는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-20ce8859"
+   ],
+   "why": "DMF0042_2_BizPlan.clbCustomer_SelectedIndexChanged는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-214151e6"
+   ],
+   "why": "DMF0042_BizPlan.btnColumn_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-21799763"
+   ],
+   "why": "DMF0042_BizPlan_old.SaveData는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-22aca8bd"
+   ],
+   "why": "DMF0042_BizPlan_old.DefineProperty는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-22ae8065"
+   ],
+   "why": "DMF0042_BizPlan.GetFuturePriceInfo는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-232cd38d"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.InitControls는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2398bde2"
+   ],
+   "why": "DMF0042_1_BizPlan.btnColumn_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-25d627ba"
+   ],
+   "why": "DMF0042_3_BizPlan.spdMain_TopChange는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-267044bb"
+   ],
+   "why": "DMF0042_BizPlan.DeleteButton은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2732a63c"
+   ],
+   "why": "DMF0042_3_BizPlan.SaveButton은 3번 폼 저장 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-27717979"
+   ],
+   "why": "DMF0042_2_BizPlan.FindButton은 2번 폼 조회 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2848a3a0"
+   ],
+   "why": "DMF0042_3_BizPlan.clbTeam_SelectedIndexChanged는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-291eac58"
+   ],
+   "why": "DMF0042_3_BizPlan.GetComboData는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-29f3656b"
+   ],
+   "why": "DMF0042_1_BizPlan.spdMain_CellDoubleClick은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2a6ca60c"
+   ],
+   "why": "DMF0042_BizPlan_old.spdMain_EditChange는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2a949e61"
+   ],
+   "why": "DMF0042_1_BizPlan.cboDivision_SelectedIndexChanged는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2c9c4678"
+   ],
+   "why": "DMF0042_BizPlan.spdMain_CellDoubleClick은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2caecc88"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.InsertRow는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2cbcca49"
+   ],
+   "why": "DMF0042_1_BizPlan.InsertRow는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2dc229d4"
+   ],
+   "why": "DMF0042_1_BizPlan.btnMeasure_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2e2ac93b"
+   ],
+   "why": "DMF0042_1_BizPlan.EditButton은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-2f9ac831"
+   ],
+   "why": "DMF0042_2_BizPlan.spdMain_TopChange는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-308a7a54"
+   ],
+   "why": "DMF0042_1_RTF.SaveData는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-30d8ea1e"
+   ],
+   "why": "DMF0042_3_BizPlan.GetCellProdSite는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-31aa9cf7"
+   ],
+   "why": "DMF0042_1_BizPlan.ValidationCheck는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3219ed91"
+   ],
+   "why": "DMF0042_BizPlan_old.spdMain_CellDoubleClick은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-340f6f5d"
+   ],
+   "why": "DMF0042_3_BizPlan.btnOwner_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-35a70eb0"
+   ],
+   "why": "DMF0042_BizPlan_old.btnExchangeRate_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3610911d"
+   ],
+   "why": "DMF0042_3_BizPlan.InitSaveDataTable은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-38800fb8"
+   ],
+   "why": "DMF0042_2_BizPlan.btnMeasure_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-38f0d5c6"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.SaveButton은 팝업 저장 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3a814a02"
+   ],
+   "why": "DMF0042_1_RTF.FindDataMain은 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3b47af77"
+   ],
+   "why": "DMF0042_1_BizPlan.SaveData는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3bd4def9"
+   ],
+   "why": "DMF0042_1_BizPlan.spdMain_EditChange는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3bf95965"
+   ],
+   "why": "DMF0042_2_BizPlan.btnColumn_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3c021586"
+   ],
+   "why": "DMF0042_BizPlan.ExcelButton은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3c700b01"
+   ],
+   "why": "DMF0042_2_BizPlan.btnOwner_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3cac1ef4"
+   ],
+   "why": "ExchangeRatePopup의 ButtonList 클릭 감지는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3d853dd9"
+   ],
+   "why": "DMF0042_1_RTF.Select_DpResult_Data는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3e47897c"
+   ],
+   "why": "DMF0042_1_RTF.spdMain_CellClick은 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3ea947bc"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.InitSpread_X는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3ee71852"
+   ],
+   "why": "DMF0042_BizPlan_old.btnSetPrice_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3f21d714"
+   ],
+   "why": "'Excel (F12)' 라벨 행은 어느 폼의 ExcelButton인지 확정되지 않아 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3fc22e36"
+   ],
+   "why": "btnIncotermsChg (MasterChg) 라벨 행은 어느 폼의 메서드에 해당하는지 확정되지 않아 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3fc5cd75"
+   ],
+   "why": "DMF0042_BizPlan.GetThisWeekMonday는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-3fe0b471"
+   ],
+   "why": "DMF0042_3_BizPlan.Dispose는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-418143b6"
+   ],
+   "why": "DMF0042_3_BizPlan.GetFuturePriceInfo는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-41cedb65"
+   ],
+   "why": "DMF0042_BizPlan_old.EditButton은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4206dd21"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.Form_Load는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-42323498"
+   ],
+   "why": "DMF0042_BizPlan.spdMain_Changed는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-42ed66b3"
+   ],
+   "why": "DMF0042_2_BizPlan.btnCutOff_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-430d62a0"
+   ],
+   "why": "DMF0042_1_BizPlan.Form_Load는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4410427c"
+   ],
+   "why": "DMF0042_2_BizPlan.GetDayRange는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-452fed72"
+   ],
+   "why": "DMF0042_BizPlan.MinColumnChk는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-45c7ca09"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.mOK는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-45d1212f"
+   ],
+   "why": "DMF0042_1_BizPlan.GetCellNumbersByRow는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-463194f4"
+   ],
+   "why": "DMF0042_2_BizPlan.FindData는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-469c8663"
+   ],
+   "why": "DMF0042_BizPlan_old.spdMain_ComboSelChange는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-474a8b4b"
+   ],
+   "why": "DMF0042_BizPlan_old.InsertRow는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-486943f6"
+   ],
+   "why": "DMF0042_1_BizPlan.btnReplace_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-49d2566b"
+   ],
+   "why": "DMF0042_BizPlan.SaveData는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4a43fcb7"
+   ],
+   "why": "DMF0042_3_BizPlan.DefineProperty는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4a4be483"
+   ],
+   "why": "DMF0042_2_BizPlan.cboBucketType_SelectedIndexChanged는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4a50b030"
+   ],
+   "why": "DMF0042_BizPlan.GetDayRange는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4bfc57d4"
+   ],
+   "why": "DMF0042_1_RTF 생성자는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4c1ce0ea"
+   ],
+   "why": "DMF0042_3_BizPlan.SetSpreadColumn은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4c8fcd54"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.FindData는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4ea2782c"
+   ],
+   "why": "DMF0042_3_BizPlan.clbCustomer_SelectedIndexChanged는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4eb04f19"
+   ],
+   "why": "DMF0042_2_BizPlan.MinColumnChk는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4f524406"
+   ],
+   "why": "DMF0042_BizPlan.btnExchangeRate_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-4fcf7b19"
+   ],
+   "why": "DMF0042_BizPlan_old.GetThisWeekMonday는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-504fd6a2"
+   ],
+   "why": "DMF0042_BizPlan.SaveButton은 고유 폼 저장 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-505e35d5"
+   ],
+   "why": "DMF0042_BizPlan_old.GetSpdTitle은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-50b48a70"
+   ],
+   "why": "DMF0042_3_BizPlan.cboDivision_SelectedIndexChanged는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-521cf169"
+   ],
+   "why": "DMF0042_2_BizPlan.SaveData는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-52ae0f43"
+   ],
+   "why": "DMF0042_BizPlan_old.GetCellNumbersByRow는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-53f16337"
+   ],
+   "why": "DMF0042_BizPlan.SetSpreadHeaderSpan은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-551c1e93"
+   ],
+   "why": "DMF0042_BizPlan_old.cboBucketType_Click은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-56a6bf81"
+   ],
+   "why": "DMF0042_3_BizPlan.btnMeasure_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-56d9fd77"
+   ],
+   "why": "DMF0042_BizPlan.cboDivision_SelectedIndexChanged는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-582f8a0d"
+   ],
+   "why": "DMF0042_BizPlan_old.GetLookupData는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-58a974f6"
+   ],
+   "why": "DMF0042_3_BizPlan.spdMain_EditChange는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-58e09e28"
+   ],
+   "why": "DMF0042_BizPlan.cboBucketType_Click은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5993070b"
+   ],
+   "why": "DMF0042_3_BizPlan.GetCellNumbersByRow는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5b1cfb97"
+   ],
+   "why": "DMF0042_1_BizPlan.btnOwner_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5b25005c"
+   ],
+   "why": "DMF0042_3_BizPlan.btnProject_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5b5ca573"
+   ],
+   "why": "DMF0042_1_BizPlan.SetSpreadHeaderSpan은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5b7fd13b"
+   ],
+   "why": "DMF0042_3_BizPlan.spdMain_ComboSelChange는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5c9a76d4"
+   ],
+   "why": "DMF0042_1_BizPlan.spdMain_TopChange는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5e4c8f2f"
+   ],
+   "why": "DMF0042_3_BizPlan.SetSpreadHeaderSpan은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5e5e063d"
+   ],
+   "why": "DMF0042_3_BizPlan.btnItemId_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5ec27bfd"
+   ],
+   "why": "DMF0042_3_BizPlan.GetCellIndexBySpanRowCells는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-5f9d03fa"
+   ],
+   "why": "DMF0042_BizPlan_old.GetCellColor는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-60d807e6"
+   ],
+   "why": "DMF0042_BizPlan.GetCellProdSite는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-60e95aa0"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.GetCellColor는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-62d88703"
+   ],
+   "why": "DMF0042_3_BizPlan.spdMain_CellDoubleClick은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-6312cc3f"
+   ],
+   "why": "DMF0042_BizPlan.btnMeasure_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-66167f97"
+   ],
+   "why": "DMF0042_3_BizPlan.SaveData는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-67358aa8"
+   ],
+   "why": "'6#8' 식별자 행은 무엇을 가리키는지 확정되지 않아 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-67b7fe0b"
+   ],
+   "why": "DMF0042_3_BizPlan.cboBucketType_SelectedIndexChanged는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-67f6a91e"
+   ],
+   "why": "DMF0042_1_BizPlan.cboBucketType_Click은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-681b7af0"
+   ],
+   "why": "DMF0042_BizPlan.clbTeam_SelectedIndexChanged는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-699ce9c3"
+   ],
+   "why": "DMF0042_2_BizPlan.OnShown은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-6ae411f6"
+   ],
+   "why": "DMF0042_2_BizPlan.fnValidation은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-6af9775b"
+   ],
+   "why": "DMF0042_BizPlan.GetCellIndexBySpanRowCells는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-6d5417ad"
+   ],
+   "why": "DMF0042_BizPlan.FindData는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-6e5919af"
+   ],
+   "why": "DMF0042_BizPlan.btnOwner_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-6fa13b3e"
+   ],
+   "why": "DMF0042_3_BizPlan.SetComboCol은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-6fffab92"
+   ],
+   "why": "DMF0042_3_BizPlan.DeleteButton은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7066b7eb"
+   ],
+   "why": "DMF0042_BizPlan.GetCellColor는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7230a88a"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.Dispose는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-735303b8"
+   ],
+   "why": "DMF0042_1_RTF.GetSPlant는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-739ce30c"
+   ],
+   "why": "DMF0042_1_BizPlan.FindButton은 1번 폼 조회 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-73c48698"
+   ],
+   "why": "DMF0042_2_BizPlan.SetSpreadColumn은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-73c7cfab"
+   ],
+   "why": "DMF0042_1_BizPlan.GetBizTypebyDivision은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7576d722"
+   ],
+   "why": "DMF0042_1_BizPlan.clbCustomer_SelectedIndexChanged는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-75f958aa"
+   ],
+   "why": "DMF0042_1_RTF.Select_In_De_Demand는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-77ade745"
+   ],
+   "why": "DMF0042_2_BizPlan.chkSum_CheckedChanged는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-77da487f"
+   ],
+   "why": "'6#3' 식별자 행은 무엇을 가리키는지 확정되지 않아 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-78ccfffb"
+   ],
+   "why": "DMF0042_2_BizPlan.InsertRow는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-78e4c3e7"
+   ],
+   "why": "DMF0042_3_BizPlan.btnSetPrice_Click은 3번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-791edaff"
+   ],
+   "why": "DMF0042_BizPlan_old.ValidationCheck는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7bdc60d4"
+   ],
+   "why": "DMF0042_2_BizPlan.GetCellIndexBySpanRowCells는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7c13bbad"
+   ],
+   "why": "DMF0042_2_BizPlan.InitSaveDataTable은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7c7cbbfa"
+   ],
+   "why": "DMF0042_1_BizPlan.InitControls는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7caa02ca"
+   ],
+   "why": "DMF0042_1_RTF.Dispose는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7cb12780"
+   ],
+   "why": "DMF0042_1_BizPlan.OnShown은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7cc6a23b"
+   ],
+   "why": "DMF0042_1_RTF의 FormClosing 핸들러는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7dca3ea7"
+   ],
+   "why": "DMF0042_BizPlan.btnSetPrice_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7ea04ca8"
+   ],
+   "why": "DMF0042_BizPlan.Dispose는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-7f887110"
+   ],
+   "why": "DMF0042_BizPlan.OnShown은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-80ab9523"
+   ],
+   "why": "DMF0042_3_BizPlan.Form_Load는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-815c01cb"
+   ],
+   "why": "DMF0042_BizPlan.FindButton은 고유 폼 조회 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8192f4c6"
+   ],
+   "why": "DMF0042_2_BizPlan.cboDivision_SelectedIndexChanged는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-81c9ec3d"
+   ],
+   "why": "DMF0042_3_BizPlan.SetComboColumn은 SetComboCol과 다른 메서드라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-83a237d8"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.LoadData는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-83f88f89"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.SaveData는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8454be85"
+   ],
+   "why": "DMF0042_3_BizPlan.GetSpdTitle은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-845a0fe6"
+   ],
+   "why": "DMF0042_1_RTF.EditButton은 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-84730c8d"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.InsertButton은 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-84a66e14"
+   ],
+   "why": "DMF0042_2_BizPlan.btnReplace_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-85410454"
+   ],
+   "why": "DMF0042_3_BizPlan.EditButton은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8580cf26"
+   ],
+   "why": "DMF0042_BizPlan_old.Dispose는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-85e0a1fe"
+   ],
+   "why": "DMF0042_3_BizPlan.InsertButton은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-869648ce"
+   ],
+   "why": "DMF0042_BizPlan.GetCellNumbersByRow는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-86d6fdff"
+   ],
+   "why": "DMF0042_ExchangeRatePopup 생성자는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-884db370"
+   ],
+   "why": "DMF0042_BizPlan.GetSpdTitle은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8ac93363"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.EditButton은 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8af8c277"
+   ],
+   "why": "DMF0042_BizPlan.clbCustomer_SelectedIndexChanged는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8bbb46eb"
+   ],
+   "why": "'6#4' 식별자 행은 무엇을 가리키는지 확정되지 않아 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8be94e69"
+   ],
+   "why": "DMF0042_1_BizPlan.btnItemId_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8db4b5ae"
+   ],
+   "why": "DMF0042_BizPlan_old.chkSum_CheckedChanged는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8dbbcc2b"
+   ],
+   "why": "DMF0042_3_BizPlan.GetDayRange는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-8fe03ee4"
+   ],
+   "why": "DMF0042_3_BizPlan.FindData는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-90991c83"
+   ],
+   "why": "DMF0042_BizPlan.btnProject_Click은 고유 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-92ff4066"
+   ],
+   "why": "DMF0042_2_BizPlan.spdMain_CellDoubleClick은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-936d89f2"
+   ],
+   "why": "DMF0042_BizPlan_old.SaveButton은 구버전 폼 저장 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-939ddd09"
+   ],
+   "why": "DMF0042_1_BizPlan.spdMain_Changed는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-94b50456"
+   ],
+   "why": "DMF0042_BizPlan_old.btnMeasure_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-961adf37"
+   ],
+   "why": "DMF0042_2_BizPlan.spdMain_Changed는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-96d95295"
+   ],
+   "why": "DMF0042_1_BizPlan.ParameterString은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-977947a8"
+   ],
+   "why": "DMF0042_BizPlan.fnValidation은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-98383449"
+   ],
+   "why": "DMF0042_3_BizPlan.GetCellColor는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9a44a31d"
+   ],
+   "why": "DMF0042_1_BizPlan.cboBucketType_SelectedIndexChanged는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9ab38ee2"
+   ],
+   "why": "DMF0042_1_BizPlan.GetDayRange는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9be370d3"
+   ],
+   "why": "DMF0042_BizPlan_old.cboBucketType_SelectedIndexChanged는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9ccdd75b"
+   ],
+   "why": "DMF0042_BizPlan.ParameterString은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9d55dd5d"
+   ],
+   "why": "DMF0042_1_RTF.GetSplit는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9daa9f2f"
+   ],
+   "why": "DMF0042_BizPlan_old.fnValidation은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9ede7bcb"
+   ],
+   "why": "DMF0042_1_BizPlan.btnExchangeRate_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-9ff2b159"
+   ],
+   "why": "DMF0042_1_BizPlan.GetCellColor는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a125e05b"
+   ],
+   "why": "DMF0042_BizPlan_old.OnShown은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a128611f"
+   ],
+   "why": "DMF0042_1_BizPlan.GetFuturePriceInfo는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a2b9559f"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.FindButton은 팝업 조회 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a32887da"
+   ],
+   "why": "DMF0042_BizPlan 생성자는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a34faf7f"
+   ],
+   "why": "DMF0042_1_BizPlan.GetSpdTitle은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a3bb14d3"
+   ],
+   "why": "DMF0042_2_BizPlan.DeleteButton은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a464c139"
+   ],
+   "why": "DMF0042_2_BizPlan.GetThisWeekMonday는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a50b302e"
+   ],
+   "why": "DMF0042_BizPlan_old.clbCustomer_SelectedIndexChanged는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a61a185f"
+   ],
+   "why": "DMF0042_1_RTF.InitSpread는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a6cbe159"
+   ],
+   "why": "DMF0042_3_BizPlan.spdMain_Changed는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a7aa1c83"
+   ],
+   "why": "DMF0042_BizPlan.spdMain_EditChange는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a8d97468"
+   ],
+   "why": "DMF0042_3_BizPlan.GetThisWeekMonday는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-a9dfba7f"
+   ],
+   "why": "DMF0042_BizPlan_old.GetFuturePriceInfo는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-aa29002f"
+   ],
+   "why": "DMF0042_BizPlan.cboBucketType_SelectedIndexChanged는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-aaa58216"
+   ],
+   "why": "DMF0042_1_BizPlan.InitSaveDataTable은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ac65d2c2"
+   ],
+   "why": "DMF0042_1_BizPlan.CreateSpread는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-adcaa8fe"
+   ],
+   "why": "DMF0042_2_BizPlan.btnExchangeRate_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ae817bea"
+   ],
+   "why": "DMF0042_1_BizPlan.DefineProperty는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-aee4f3da"
+   ],
+   "why": "DMF0042_BizPlan.CreateSpread는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-af274188"
+   ],
+   "why": "DMF0042_1_BizPlan.InitSpread는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-b120b8ec"
+   ],
+   "why": "DMF0042_1_RTF.DefineProperty는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-b15b5720"
+   ],
+   "why": "DMF0042_BizPlan_old.SetSpreadColumn은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-b6aadab3"
+   ],
+   "why": "DMF0042_3_BizPlan.FindButton은 3번 폼 조회 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-b7160d94"
+   ],
+   "why": "DMF0042_1_RTF.FindData는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-b7819e41"
+   ],
+   "why": "DMF0042_1_BizPlan.GetCellIndexBySpanRowCells는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-b80acad6"
+   ],
+   "why": "DMF0042_BizPlan.SetComboCol은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-b80d78b6"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.DeleteButton은 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ba391b15"
+   ],
+   "why": "DMF0042_BizPlan_old.btnIncotermsChg_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ba46ab62"
+   ],
+   "why": "DMF0042_2_BizPlan.GetCellProdSite는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-bc8d6272"
+   ],
+   "why": "'3#2' 식별자 행은 무엇을 가리키는지 확정되지 않아 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-bcb4957f"
+   ],
+   "why": "DMF0042_BizPlan_old.FindData는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-bdd05f33"
+   ],
+   "why": "DMF0042_2_BizPlan.InitSpread는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-bde93180"
+   ],
+   "why": "DMF0042_BizPlan_old.GetBizTypebyDivision은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-be213482"
+   ],
+   "why": "DMF0042_1_BizPlan.DeleteButton은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-be84750e"
+   ],
+   "why": "DMF0042_BizPlan.InsertButton은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-bf40a19b"
+   ],
+   "why": "DMF0042_1_BizPlan.chkSum_CheckedChanged는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-bf5c6cec"
+   ],
+   "why": "DMF0042_1_BizPlan.GetLookupData는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-bfd34f8f"
+   ],
+   "why": "DMF0042_3_BizPlan.SetCellColor는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-c27db0cf"
+   ],
+   "why": "DMF0042_BizPlan.spdMain_ComboSelChange는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-c284b114"
+   ],
+   "why": "DMF0042_BizPlan_old.btnColumn_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-c2c86f50"
+   ],
+   "why": "DMF0042_BizPlan_old.InsertButton은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-c441b25f"
+   ],
+   "why": "DMF0042_BizPlan.GetBizTypebyDivision은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-c574db70"
+   ],
+   "why": "DMF0042_2_BizPlan.GetLookupData는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-c70eea41"
+   ],
+   "why": "DMF0042_BizPlan.GetLookupData는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-c8047470"
+   ],
+   "why": "DMF0042_2_BizPlan.GetBizTypebyDivision은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-cad765de"
+   ],
+   "why": "DMF0042_BizPlan_old.cboDivision_SelectedIndexChanged는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-cb0c8208"
+   ],
+   "why": "DMF0042_BizPlan_old.FindButton은 구버전 폼 조회 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-cca242ac"
+   ],
+   "why": "DMF0042_BizPlan_old.btnOwner_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ccfb23da"
+   ],
+   "why": "DMF0042_1_BizPlan.Dispose는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-cfc09fe9"
+   ],
+   "why": "DMF0042_BizPlan.InitControls는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d15a472e"
+   ],
+   "why": "DMF0042_BizPlan_old.Form_Load는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d20b3346"
+   ],
+   "why": "DMF0042_1_BizPlan.btnCutOff_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d268c01e"
+   ],
+   "why": "DMF0042_2_BizPlan.ValidationCheck는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d33e1775"
+   ],
+   "why": "DMF0042_1_BizPlan.SetCellColor는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d37f1ad4"
+   ],
+   "why": "DMF0042_BizPlan.EditButton은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d5fd5418"
+   ],
+   "why": "DMF0042_BizPlan.SetCellColor는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d68d3b1d"
+   ],
+   "why": "DMF0042_3_BizPlan.InitSpread는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d82e4186"
+   ],
+   "why": "DMF0042_BizPlan.InitSpread는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d937601d"
+   ],
+   "why": "DMF0042_1_BizPlan 생성자는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-d9b455a2"
+   ],
+   "why": "DMF0042_3_BizPlan.ParameterString은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-da349bea"
+   ],
+   "why": "DMF0042_1_BizPlan.InsertButton은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-de0ba96d"
+   ],
+   "why": "DMF0042_BizPlan_old.btnItemId_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-df944add"
+   ],
+   "why": "DMF0042_BizPlan_old.ParameterString은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e17f6a73"
+   ],
+   "why": "DMF0042_1_RTF.sheetSetting은 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e1f558eb"
+   ],
+   "why": "btnCutOff (ADMIN/DM ADMIN) 라벨 행은 권한 조건이 붙은 별도 서술이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e21baff2"
+   ],
+   "why": "DMF0042_BizPlan.SetSpreadColumn은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e28a830a"
+   ],
+   "why": "DMF0042_2_BizPlan.spdMain_EditChange는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e2988320"
+   ],
+   "why": "DMF0042_BizPlan_old.GetCellIndexBySpanRowCells는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e3720062"
+   ],
+   "why": "DMF0042_2_BizPlan.Form_Load는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e5209fdc"
+   ],
+   "why": "DMF0042_BizPlan.Form_Load는 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e5ca0722"
+   ],
+   "why": "DMF0042_2_BizPlan.InsertButton은 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e739c0aa"
+   ],
+   "why": "DMF0042_BizPlan.InitSaveDataTable은 고유 폼 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-e82cd81f"
+   ],
+   "why": "DMF0042_1_BizPlan.MinColumnChk는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-eb4e765e"
+   ],
+   "why": "DMF0042_2_BizPlan.SetCellColor는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-eb5cf9bf"
+   ],
+   "why": "DMF0042_2_BizPlan.btnItemId_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ebec3986"
+   ],
+   "why": "DMF0042_2_BizPlan.DefineProperty는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ee990a3d"
+   ],
+   "why": "DMF0042_1_RTF.spdMain_KeyUp은 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ef07a211"
+   ],
+   "why": "DMF0042_3_BizPlan 생성자는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f296a778"
+   ],
+   "why": "DMF0042_1_BizPlan.clbTeam_SelectedIndexChanged는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f41ea6f2"
+   ],
+   "why": "DMF0042_ExchangeRatePopup.DefineProperty는 팝업 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f4cc02b3"
+   ],
+   "why": "DMF0042_1_RTF.CreateSpread는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f541a107"
+   ],
+   "why": "DMF0042_BizPlan_old.SetCellColor는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f626fd73"
+   ],
+   "why": "DMF0042_2_BizPlan.CreateSpread는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f7665703"
+   ],
+   "why": "DMF0042_1_BizPlan.GetThisWeekMonday는 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f7987240"
+   ],
+   "why": "DMF0042_BizPlan_old.btnCutOff_Click은 구버전 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f83a9fae"
+   ],
+   "why": "DMF0042_3_BizPlan.CreateSpread는 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-f94a2f93"
+   ],
+   "why": "DMF0042_1_RTF.SaveButton은 RTF 폼 저장 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fa77b1e1"
+   ],
+   "why": "DMF0042_1_RTF의 ButtonList 클릭 감지는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fab197d9"
+   ],
+   "why": "DMF0042_BizPlan_old.clbTeam_SelectedIndexChanged는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fc3187fc"
+   ],
+   "why": "Filter/Sort/Condition/Reset 라벨 행은 여러 기능을 묶은 별도 서술이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fc528a1e"
+   ],
+   "why": "DMF0042_3_BizPlan.cboBucketType_Click은 3번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fcb64cd8"
+   ],
+   "why": "DMF0042_1_RTF.GetSLOC는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fcc9ab16"
+   ],
+   "why": "DMF0042_1_RTF.Form_Load는 RTF 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fccafcd0"
+   ],
+   "why": "DMF0042_2_BizPlan.btnSetPrice_Click은 2번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fccdd277"
+   ],
+   "why": "DMF0042_1_BizPlan.fnValidation은 1번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fd89a75e"
+   ],
+   "why": "DMF0042_2_BizPlan.GetCellNumbersByRow는 2번 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fe04d7ad"
+   ],
+   "why": "DMF0042_BizPlan_old.SetSpreadHeaderSpan은 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-fe41ae68"
+   ],
+   "why": "DMF0042_BizPlan_old 생성자는 구버전 폼 고유 대상이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ff6e738f"
+   ],
+   "why": "DMF0042_1_BizPlan.btnProject_Click은 1번 폼 버튼이라 단독으로 둠."
+  },
+  {
+   "rows": [
+    "T-ff78cf57"
+   ],
+   "why": "DMF0042_3_BizPlan.btnReplace_Click은 3번 폼 버튼이라 단독으로 둠."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:48:11",
+ "cost": 0.9924612
+}

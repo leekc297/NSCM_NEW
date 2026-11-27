@@ -532,8 +532,11 @@ def main():
     # TO-BE 화면이 실제로 조회하는 시트만(대소문자 그대로) — 메타에는 'Production'/'production'/'production_40' 같은 잔존 변형 시트가 있다(2026-10-23 DMF0005 2,099행)
     used = set()
     for r in read_csv(P('Doc', 'tobefacts', 'screens', '_index.csv')):
-        if r['menu_id'].upper() == mid and '/components/' not in r['page_key']:
+        if r['menu_id'].upper() == mid and '/components/' not in r['page_key'] and False:  # 2026-11-26 T669: 끔(아래 설명)
             used |= set((r.get('dts_sheets') or '').split())
+    # 2026-11-26 T669: TobeFacts Pack 이 11-13 뒤 교차검증 불일치로 멈춰 _index.csv 에 dts_sheets 가 없었다 → 이 거르기는 그동안 꺼진 채 원장이 만들어졌고
+    #   T451(메타 조회 시트 · AS-IS 시트 이름 기준)이 대신 정했다. run.ps1 수정으로 dts_sheets 가 되살아나면 SCP0005 'Distribution Route' 284행이 'route' 로 바뀌어
+    #   T451 결정('route' = API 매핑 이름 중복 메타)과 어긋나고 행 ID·사용자 판정이 끊긴다. 지난 판과 같은 동작(dts_sheets 안 씀)으로 고정한다
     if used and any(c['sheet_name'] in used for c in cols):
         cols = [c for c in cols if c['sheet_name'] in used]
     # T451(2026-11-20 SCP0005 D1 80행): 화면 사실(dts_sheets)이 없으면 E2E 가 기록한 컬럼 메타 조회 시트(Doc/verify/<ID>/meta_sheets.json · nscm.ts recordMetaSheets)를 쓴다.
@@ -548,6 +551,13 @@ def main():
         #   팝업 자체 유무는 M3 팝업 행(대조표 T-·eg-popup EG-)이 판정한다. TO-BE 가 그 시트를 조회하면(_ms 포함) 그대로 남는다
         _pop_sh = {_nzs(s) for s in popup_owned_sheets(sdir)}
         _asis_sh = {_nzs(r.get('sheet')) for r in read_csv(os.path.join(sdir, 'grid_columns_asis.csv'))} - _pop_sh
+        # 2026-11-26 T669: grid_columns_asis 는 AS-IS 메타(SCM_MST_SHEET_COLUMNS) 시트를 코드 사용과 무관하게 다 담는다(SCP0020 'Tact Time' = 메타에만 있고
+        #   AS-IS AddSheet 는 Plant·Packer·Tact Time Except, TO-BE 화면도 안 씀 → 원장 154행이 화면에 없는 시트로 측정됨). AS-IS 코드 AddSheet 시트 이름이
+        #   전부 해석되면 그 집합을 AS-IS 시트로 쓴다. 해석 안 된 AddSheet 가 하나라도 있으면 종전 집합
+        _add = [r for r in read_csv(os.path.join(sdir, 'grid_code.csv')) if r.get('kind') == 'SHEET' and r.get('api') == 'AddSheet']
+        _hints = {_nzs(r.get('sheet_hint')) for r in _add if r.get('sheet_hint') and '{' not in r['sheet_hint']}
+        if _hints and not any((not r.get('sheet_hint')) or '{' in r['sheet_hint'] for r in _add):
+            _asis_sh = _hints - _pop_sh
         if _ms and any(c['sheet_name'] in _ms for c in cols):
             _drop = {c['sheet_name'] for c in cols if c['sheet_name'] not in _ms and _nzs(c['sheet_name']) not in _asis_sh}
             if _drop:

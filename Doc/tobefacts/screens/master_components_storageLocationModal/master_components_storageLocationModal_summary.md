@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/storageLocationModal/storage-location-modal.constants.ts | constants | 8 |
-| features/master/src/components/storageLocationModal/StorageLocationModal.module.scss | style | 20 |
+| features/master/src/components/storageLocationModal/StorageLocationModal.module.scss | style | 21 |
 | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | page | 223 |
 | features/master/src/components/storageLocationModal/storageLocationModalStore.ts | store | 41 |
 
@@ -28,8 +28,8 @@
 | SearchArea | onSearch | handleSearch | jsx | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | 144 |
 | InputField | onChange | <arrow> setStorageIdInput | jsx | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | 168 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | 169 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | 208 |
-| Button | onClick | modalClose | jsx | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | 215 |
+| Button | onClick | modalClose | jsx | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | 206 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/storageLocationModal/StorageLocationModal.tsx | 215 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

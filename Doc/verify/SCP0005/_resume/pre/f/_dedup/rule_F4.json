@@ -1,0 +1,77 @@
+{
+ "rule_id": "F4",
+ "hash": "eecec5aea1059c3d",
+ "groups": [
+  {
+   "rows": [
+    "EG-2b5a2da5",
+    "EG-998f18d0"
+   ],
+   "why": "두 행은 대상(PKG_SCP0005 콤보 SQL 실존), 방법(소스·메타 정적 점검), 기대(TB_FX_* 참조 0 · ATTRIBUTE9 = 실존 콤보 SQL_ID)가 모두 같은 중복 행이다."
+  },
+  {
+   "rows": [
+    "EG-eae5294c"
+   ],
+   "why": "Div 칸이 Division 조회조건인지 확인하는 행이라 SQL 오류 측정 행과 기대가 다르다."
+  },
+  {
+   "rows": [
+    "T-6735b1ef"
+   ],
+   "why": "P_SCP0005_GET_DISTRIBUTION_ROUTE 프로시저 하나를 추적하는 행이고, 다른 TRACE 행은 모두 다른 SP를 대상으로 한다."
+  },
+  {
+   "rows": [
+    "T-719d403c"
+   ],
+   "why": "SCP0005_GET_DISTRIBUTION_ROUTEID 조회 SP 추적 행이며, 다른 SP나 조회 결과 요소와 같다는 근거가 없다."
+  },
+  {
+   "rows": [
+    "T-78600da2"
+   ],
+   "why": "FindDataMain 파라미터 'ALL'→'' 변환(store setFilter/orEmpty)이라는 다른 구현 요소를 추적하는 행이다."
+  },
+  {
+   "rows": [
+    "T-829cf301"
+   ],
+   "why": "P_SCP0005_GET_COUNTRY_CITY라는 별도 조회 프로시저를 대상으로 하는 행이다."
+  },
+  {
+   "rows": [
+    "T-9b93a539"
+   ],
+   "why": "저장 SP(SCP0005_SAVE_DISTRIBUTION_ROUTE) 추적 행이라 조회 SP 행과 대상이 다르고, 경계값 저장 행과는 조건(최대값 저장·재조회 일치)이 달라 따로 둔다."
+  },
+  {
+   "rows": [
+    "T-ea530cd5"
+   ],
+   "why": "이력 팝업 조회 SP(popup=true)라 메인 화면 조회 SP와 상태·요소가 다르다."
+  },
+  {
+   "rows": [
+    "V-10f8b165"
+   ],
+   "why": "Division 값마다 조회하는 조건이 붙은 오류 점검이라 다른 행과 조건이 다르다."
+  },
+  {
+   "rows": [
+    "V-9c62f0b4"
+   ],
+   "why": "조회/저장/버킷 전환 반복과 자릿수 Max 저장을 합친 복합 점검이라 다른 단일 요소 행과 묶기에 확신이 없다."
+  },
+  {
+   "rows": [
+    "V-be38da4d"
+   ],
+   "why": "AS-IS 최대값 저장→재조회→원복 순서이고 기대에 재조회 값 일치가 들어가, SQL 오류 0만 보는 행과 기대가 다르다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 07:40:52",
+ "cost": 0.0678471
+}

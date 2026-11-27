@@ -1,0 +1,1335 @@
+{
+ "rule_id": "D1",
+ "hash": "0cb8fc43531de3e9",
+ "groups": [
+  {
+   "rows": [
+    "V-0021dd61",
+    "V-57aa1596"
+   ],
+   "why": "Both check the same AS-IS lock of all columns (LockColumn(0, Max, true)) with no condition, so target, condition and expected result are identical."
+  },
+  {
+   "rows": [
+    "V-02e51b5d",
+    "V-194eceea",
+    "V-44e7445c",
+    "V-94af8d42",
+    "V-fcd12e31"
+   ],
+   "why": "All five check the same lock of all columns (LockColumn(0, Max, true)) under the same 'try' condition, so target, condition and expected result are identical."
+  },
+  {
+   "rows": [
+    "EG-026cb40e"
+   ],
+   "why": "Stands alone because it checks the EG113 GET_ADMIN_GROUP_MEASURE row, which no other row checks."
+  },
+  {
+   "rows": [
+    "EG-1e9dcfbe"
+   ],
+   "why": "Stands alone because EG124 rules are checked separately for each role (DM/81/SCP Planner)."
+  },
+  {
+   "rows": [
+    "EG-248fe107"
+   ],
+   "why": "Stands alone because it checks pasting into the MEASURE cell of the DMF0051_1_RTF popup, a different element and action from the other rows."
+  },
+  {
+   "rows": [
+    "EG-3d0638d0"
+   ],
+   "why": "Stands alone because EG124 rules are checked separately for each role (DM/40/DM Viewer)."
+  },
+  {
+   "rows": [
+    "EG-431e3824"
+   ],
+   "why": "Stands alone because it checks pasting into the ITEM_ID40 cell of the DM0002 popup."
+  },
+  {
+   "rows": [
+    "EG-541ee887"
+   ],
+   "why": "Stands alone because it checks the EG109 Insert group block, which no other row checks."
+  },
+  {
+   "rows": [
+    "EG-615e744c"
+   ],
+   "why": "Stands alone because EG124 rules are checked separately for each role (DM/82/SCP Planner)."
+  },
+  {
+   "rows": [
+    "EG-75c4cf98"
+   ],
+   "why": "Stands alone because it checks the Delete key on the MEASURE cell of the DMF0051_1_RTF popup, a different popup from EG-9dbbc2db."
+  },
+  {
+   "rows": [
+    "EG-9dbbc2db"
+   ],
+   "why": "Stands alone because it checks the Delete key on the ITEM_ID40 cell of the DM0002 popup."
+  },
+  {
+   "rows": [
+    "EG-b9b6118c"
+   ],
+   "why": "Stands alone because it checks EG123 for the DM/40/DM Viewer role, a different rule from EG124."
+  },
+  {
+   "rows": [
+    "EG-bb369954"
+   ],
+   "why": "Stands alone because it checks EG124 for the DM/81/DM Planner (W/S) role."
+  },
+  {
+   "rows": [
+    "EG-c2209aa7"
+   ],
+   "why": "Stands alone because it checks EG123 for the DM/82/SCP Planner role."
+  },
+  {
+   "rows": [
+    "EG-c2734644"
+   ],
+   "why": "Stands alone because it checks EG123 for the DM/40/DM Admin role."
+  },
+  {
+   "rows": [
+    "EG-c46177c6"
+   ],
+   "why": "Stands alone because it checks EG123 for the DM/40/DM Planner role."
+  },
+  {
+   "rows": [
+    "EG-d657ebc7"
+   ],
+   "why": "Stands alone because it checks EG124 for the DM/40/SCP Planner role."
+  },
+  {
+   "rows": [
+    "EG-d6722607"
+   ],
+   "why": "Stands alone because it checks EG124 for the DM/40/DM Admin role."
+  },
+  {
+   "rows": [
+    "EG-e9ad3709"
+   ],
+   "why": "Stands alone because it checks EG123 for the DM/40/SCP Planner role."
+  },
+  {
+   "rows": [
+    "EG-f0ed2640"
+   ],
+   "why": "Stands alone because it checks EG123 for the DM/81/DM Planner (W/S) role."
+  },
+  {
+   "rows": [
+    "EG-f16de14c"
+   ],
+   "why": "Stands alone because it checks EG123 for the DM/81/SCP Planner role."
+  },
+  {
+   "rows": [
+    "EG-fa035f73"
+   ],
+   "why": "Stands alone because it checks EG124 for the DM/40/DM Planner role."
+  },
+  {
+   "rows": [
+    "T-10a7e5d5"
+   ],
+   "why": "Stands alone because it checks the trace-table entry for the 33 Division branches, which differs in nature from a column measurement."
+  },
+  {
+   "rows": [
+    "T-12834546"
+   ],
+   "why": "Stands alone because it checks BIZ_TYPE_NAME82 against 4 trace-table rows covering both new and existing rows, so it does not match a single-state column row."
+  },
+  {
+   "rows": [
+    "T-196eb582"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP1 against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-2227ddf8"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP5 against the trace table."
+  },
+  {
+   "rows": [
+    "T-229e2cb1"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP7 against the trace table."
+  },
+  {
+   "rows": [
+    "T-25ba3a6c"
+   ],
+   "why": "Stands alone because it checks SHIPTO_DESCRIPTION against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-26d346b6"
+   ],
+   "why": "Stands alone because it checks EDI_QTY against the trace table, which differs in nature from the AS-IS lock rows."
+  },
+  {
+   "rows": [
+    "T-29ad8b10"
+   ],
+   "why": "Stands alone because it checks CITY_NAME against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-29ccfbc0"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP4 against the trace table."
+  },
+  {
+   "rows": [
+    "T-2cf49ce5"
+   ],
+   "why": "Stands alone because it traces the SUM header span implementation."
+  },
+  {
+   "rows": [
+    "T-34a4f81c"
+   ],
+   "why": "Stands alone because it checks VMI_YN against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-39a749b5"
+   ],
+   "why": "Stands alone because it checks NICK_NAME against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-3d0b4c9f"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP8 against the trace table."
+  },
+  {
+   "rows": [
+    "T-3d307eef"
+   ],
+   "why": "Stands alone because it traces btnExchangeRate_Click."
+  },
+  {
+   "rows": [
+    "T-45b61465"
+   ],
+   "why": "Stands alone because it checks CELL_PER_CAR against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-4611880f"
+   ],
+   "why": "Stands alone because it checks DMS_SALES against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-4a951ab9"
+   ],
+   "why": "Stands alone because it traces spdMain_EditChange."
+  },
+  {
+   "rows": [
+    "T-4be692d5"
+   ],
+   "why": "Stands alone because it checks MODULE_PER_CAR against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-4d082daa"
+   ],
+   "why": "Stands alone because it checks CELL_CODE against the trace table, and no column row covers that column."
+  },
+  {
+   "rows": [
+    "T-50c8c406"
+   ],
+   "why": "Stands alone because it traces btnReplace_Click."
+  },
+  {
+   "rows": [
+    "T-52f9692b"
+   ],
+   "why": "Stands alone because it checks DIVISION_ID against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-581953b2"
+   ],
+   "why": "Stands alone because it checks VERSION_NO against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-58f36be4"
+   ],
+   "why": "Stands alone because it traces the EditButton entry point."
+  },
+  {
+   "rows": [
+    "T-5a8289d1"
+   ],
+   "why": "Stands alone because it checks EDIT_FLAG against the trace table."
+  },
+  {
+   "rows": [
+    "T-5f0ca8d9"
+   ],
+   "why": "Stands alone because it checks CUST_GROUP against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-6298b331"
+   ],
+   "why": "Stands alone because it checks COUNTRY_NAME against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-62a2249d"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP6 against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-6b223b3f"
+   ],
+   "why": "Stands alone because it traces the 8 EditButton lock entries."
+  },
+  {
+   "rows": [
+    "T-6d8c9f29"
+   ],
+   "why": "Stands alone because it checks DMS_CUSTOMER against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-6e4aac1e"
+   ],
+   "why": "Stands alone because it checks OWNER against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-6e7fff67"
+   ],
+   "why": "Stands alone because it checks PRODUCT_GROUP_NAME against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-6ef93bb2"
+   ],
+   "why": "Stands alone because it checks KWH against the trace table."
+  },
+  {
+   "rows": [
+    "T-7340698b"
+   ],
+   "why": "Stands alone because it checks ITEM_CLASS_NAME against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-74017939"
+   ],
+   "why": "Stands alone because it traces InsertButton → InsertRow."
+  },
+  {
+   "rows": [
+    "T-758550b6"
+   ],
+   "why": "Stands alone because it checks FORECAST_INFO_CELL_MODEL against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-79a0a33b"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP2 against the trace table."
+  },
+  {
+   "rows": [
+    "T-7ed20e73"
+   ],
+   "why": "Stands alone because it checks CELL_NAME against the trace table."
+  },
+  {
+   "rows": [
+    "T-802fa72b"
+   ],
+   "why": "Stands alone because it checks REPORT_GROUP3 against the trace table."
+  },
+  {
+   "rows": [
+    "T-81b3c963"
+   ],
+   "why": "Stands alone because it checks CELL_TYPE against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-874ee6a7"
+   ],
+   "why": "Stands alone because it checks PROJECT_CODE against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-888c75e2"
+   ],
+   "why": "Stands alone because it checks APPLICATION against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-98d3562e"
+   ],
+   "why": "Stands alone because it checks FORECAST_INFO_CELL_PACK_COUNT against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-9ffca0c9"
+   ],
+   "why": "Stands alone because it traces correction G1 (Q_/Y_ direct-input lock)."
+  },
+  {
+   "rows": [
+    "T-9ffd8df9"
+   ],
+   "why": "Stands alone because it traces correction G4 (Q_ rollup)."
+  },
+  {
+   "rows": [
+    "T-a067abba"
+   ],
+   "why": "Stands alone because it checks CURRENCY against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-a1d7f20a"
+   ],
+   "why": "Stands alone because it checks SCM_SITE_ID40 against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-a272f99b"
+   ],
+   "why": "Stands alone because it checks ITEM_TYPE against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-a38299a5"
+   ],
+   "why": "Stands alone because it checks MDM_PROJECT_NAME against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-a73927c3"
+   ],
+   "why": "Stands alone because it checks ALT_SIM_YN against the trace table."
+  },
+  {
+   "rows": [
+    "T-a8bef016"
+   ],
+   "why": "Stands alone because it checks CELL_PER_PACK against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-a9c4939e"
+   ],
+   "why": "Stands alone because it checks MIN_CAPACITY against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-aac53102"
+   ],
+   "why": "Stands alone because it traces the 6 button guards."
+  },
+  {
+   "rows": [
+    "T-accb4fb8"
+   ],
+   "why": "Stands alone because it checks CUST_GROUP_DTL against the trace table."
+  },
+  {
+   "rows": [
+    "T-b2e5d24e"
+   ],
+   "why": "Stands alone because it traces btnCutOff_Click."
+  },
+  {
+   "rows": [
+    "T-b463f4ba"
+   ],
+   "why": "Stands alone because it checks ITEM_NAME against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-b5b519df"
+   ],
+   "why": "Stands alone because it checks FORECAST_INFO_PRODUCT_GROUP against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-c55ef7d4"
+   ],
+   "why": "Stands alone because it traces the Exchange Rate modal rebuild."
+  },
+  {
+   "rows": [
+    "T-c590424e"
+   ],
+   "why": "Stands alone because it traces correction G2 (removal of the existing-row INCO/FCST unlock)."
+  },
+  {
+   "rows": [
+    "T-c7f1b290"
+   ],
+   "why": "Stands alone because it traces the decision to leave Edit (F2) unregistered."
+  },
+  {
+   "rows": [
+    "T-c81a45fd"
+   ],
+   "why": "Stands alone because it checks DEPT_ID40 against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-ccad4d9a"
+   ],
+   "why": "Stands alone because it checks MKT_FCST against the trace table."
+  },
+  {
+   "rows": [
+    "T-d3a5412e"
+   ],
+   "why": "Stands alone because it checks CURRENCY_UNITCURRENCY against the trace table."
+  },
+  {
+   "rows": [
+    "T-d6c18da0"
+   ],
+   "why": "Stands alone because it traces removal of the Edit (F2) toggle."
+  },
+  {
+   "rows": [
+    "T-da5bd773"
+   ],
+   "why": "Stands alone because it checks BIZ_TYPE_NAME40 against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-dbf3df94"
+   ],
+   "why": "Stands alone because it checks CELL_PER_MODULE against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-df0473f3"
+   ],
+   "why": "Stands alone because it checks RESULT against the trace table."
+  },
+  {
+   "rows": [
+    "T-df90a11d"
+   ],
+   "why": "Stands alone because it checks PRIORITY against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-e9b25b72"
+   ],
+   "why": "Stands alone because it checks GAP against the trace table."
+  },
+  {
+   "rows": [
+    "T-ed3d417e"
+   ],
+   "why": "Stands alone because it checks INTERNAL_YN against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-fa650869"
+   ],
+   "why": "Stands alone because it checks MODULE_PER_PACK against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-fbea0182"
+   ],
+   "why": "Stands alone because it traces cboBucketType_SelectedIndexChanged."
+  },
+  {
+   "rows": [
+    "T-fc34fb23"
+   ],
+   "why": "Stands alone because it checks FORECAST_INFO_SPEC against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "T-fcce2b91"
+   ],
+   "why": "Stands alone because it checks ROUTE against the trace table."
+  },
+  {
+   "rows": [
+    "T-ff024964"
+   ],
+   "why": "Stands alone because it checks PLANT_SITE_ID against the trace table for both new and existing rows."
+  },
+  {
+   "rows": [
+    "V-02596eb7"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_TYPE existing-row lock."
+  },
+  {
+   "rows": [
+    "V-035e2d18"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_CELL_PACK_COUNT existing-row lock."
+  },
+  {
+   "rows": [
+    "V-04b5f170"
+   ],
+   "why": "Stands alone because it is the only row checking that FCST_TYPE is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-04ec8a2e"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_NAME new-row lock."
+  },
+  {
+   "rows": [
+    "V-06a2cee6"
+   ],
+   "why": "Stands alone because it is the only row checking the BIZ_TYPE_NAME81 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-089ba3c1"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_PER_PACK new-row conditional lock."
+  },
+  {
+   "rows": [
+    "V-09367ce3"
+   ],
+   "why": "Stands alone because it is the only row checking the END_CUSTOMER existing-row lock."
+  },
+  {
+   "rows": [
+    "V-09924884"
+   ],
+   "why": "Stands alone because it is the only row checking the CITY_NAME new-row lock."
+  },
+  {
+   "rows": [
+    "V-0a6d6bd1"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_PER_MODULE existing-row lock."
+  },
+  {
+   "rows": [
+    "V-0a76703f"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_CELL_MODEL existing-row lock."
+  },
+  {
+   "rows": [
+    "V-0bef52c6"
+   ],
+   "why": "Stands alone because it is the only row checking the BIZ_TYPE_NAME40 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-0dbb8dd1"
+   ],
+   "why": "Stands alone because it checks the MKT_FCST lock under the AddMonths(-1) condition, which differs from V-9b172993."
+  },
+  {
+   "rows": [
+    "V-136f3400"
+   ],
+   "why": "Stands alone because it is the only row checking popup-assisted input on ITEM_ID for a new row."
+  },
+  {
+   "rows": [
+    "V-13f9a604"
+   ],
+   "why": "Stands alone because it is the only row checking the PLANT_SITE_ID existing-row lock."
+  },
+  {
+   "rows": [
+    "V-18136f1d"
+   ],
+   "why": "Stands alone because it is the only row checking that BIZ_TYPE_NAME81 is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-19e43954"
+   ],
+   "why": "Stands alone because it is the only row checking the VMI_YN new-row lock."
+  },
+  {
+   "rows": [
+    "V-1a7a3aa3"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_PER_CAR new-row lock."
+  },
+  {
+   "rows": [
+    "V-1c2cc8de"
+   ],
+   "why": "Stands alone because it checks the RESULT lock under the AddMonths(-1) condition."
+  },
+  {
+   "rows": [
+    "V-1c712790"
+   ],
+   "why": "Stands alone because it is the only row checking input into a merged cell."
+  },
+  {
+   "rows": [
+    "V-1c8893ee"
+   ],
+   "why": "Stands alone because it is the only row checking the APPLICATION new-row lock."
+  },
+  {
+   "rows": [
+    "V-1fa2ec2b"
+   ],
+   "why": "Stands alone because it is the only row checking the VERSION_NO existing-row lock."
+  },
+  {
+   "rows": [
+    "V-23b4a9e0"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_USE existing-row lock."
+  },
+  {
+   "rows": [
+    "V-25dd6c19"
+   ],
+   "why": "Stands alone because it is the only row checking the ENERGE_WH existing-row lock."
+  },
+  {
+   "rows": [
+    "V-26616524"
+   ],
+   "why": "Stands alone because it is the only row checking the MODULE_PER_PACK existing-row lock."
+  },
+  {
+   "rows": [
+    "V-285cc0ca"
+   ],
+   "why": "Stands alone because it is the only row checking the NICK_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-2a66542e"
+   ],
+   "why": "Stands alone because it is the only row checking the BIZ_TYPE_NAME40 new-row lock."
+  },
+  {
+   "rows": [
+    "V-2ecc2b90"
+   ],
+   "why": "Stands alone because it is the only row checking the OWNER new-row lock."
+  },
+  {
+   "rows": [
+    "V-30bd4a60"
+   ],
+   "why": "Stands alone because it is the only row checking that DEPT_ID40 is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-31b4478a"
+   ],
+   "why": "Stands alone because it is the only row checking the SCM_SITE_ID40 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-35b80f55"
+   ],
+   "why": "Stands alone because it is the only row checking that INCOTERMS is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-37066f4c"
+   ],
+   "why": "Stands alone because it is the only row checking the SHIPTO_DESCRIPTION existing-row lock."
+  },
+  {
+   "rows": [
+    "V-3793416e"
+   ],
+   "why": "Stands alone because it is the only row checking the PRIORITY existing-row lock."
+  },
+  {
+   "rows": [
+    "V-3b49f0e7"
+   ],
+   "why": "Stands alone because it is the only row checking the CUST_GROUP new-row lock."
+  },
+  {
+   "rows": [
+    "V-3e38247e"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_ID existing-row lock."
+  },
+  {
+   "rows": [
+    "V-3ff1f1b2"
+   ],
+   "why": "Stands alone because it is the only row checking the MDM_PROJECT_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-44780ada"
+   ],
+   "why": "Stands alone because it is the only row checking the MEASURE existing-row conditional lock."
+  },
+  {
+   "rows": [
+    "V-45660f7b"
+   ],
+   "why": "Stands alone because it is the only row checking the INCOTERMS existing-row conditional unlock."
+  },
+  {
+   "rows": [
+    "V-462bee18"
+   ],
+   "why": "Stands alone because it is the only row checking the MIN_CAPACITY existing-row lock."
+  },
+  {
+   "rows": [
+    "V-477da731"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_TYPE new-row lock."
+  },
+  {
+   "rows": [
+    "V-4a326289"
+   ],
+   "why": "Stands alone because it is the only row checking that SCM_SITE_ID40 is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-557150af"
+   ],
+   "why": "Stands alone because it is the only row checking the DEPT_ID40 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-5657be66"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_PER_CAR existing-row lock."
+  },
+  {
+   "rows": [
+    "V-56ae7fe7"
+   ],
+   "why": "Stands alone because it is the only row checking the SCM_SITE_ID82 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-56d49da3"
+   ],
+   "why": "Stands alone because it is the only row checking the APPLICATION existing-row lock."
+  },
+  {
+   "rows": [
+    "V-57669b75"
+   ],
+   "why": "Stands alone because it is the only row checking that END_CUSTOMER is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-5f2382b1"
+   ],
+   "why": "Stands alone because it is the only row checking the INTERNAL_YN existing-row lock."
+  },
+  {
+   "rows": [
+    "V-5fc98347"
+   ],
+   "why": "Stands alone because it is the only row checking the CITY_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-60edd059"
+   ],
+   "why": "Stands alone because it is the only row checking that ENERGE_WH is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-6237f82e"
+   ],
+   "why": "Stands alone because it is the only row checking the INTERNAL_YN new-row lock."
+  },
+  {
+   "rows": [
+    "V-62794657"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_SPEC new-row lock."
+  },
+  {
+   "rows": [
+    "V-67aa4d62"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_CLASS_NAME new-row lock."
+  },
+  {
+   "rows": [
+    "V-67c15224"
+   ],
+   "why": "Stands alone because it is the only row checking the SHIPTO_DESCRIPTION new-row lock."
+  },
+  {
+   "rows": [
+    "V-694b9903"
+   ],
+   "why": "Stands alone because it is the only row checking popup-assisted input on ITEM_ID40 for a new row."
+  },
+  {
+   "rows": [
+    "V-6a1583a0"
+   ],
+   "why": "Stands alone because it is the only row checking that PROJECT_NAME is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-6bb0eec0"
+   ],
+   "why": "Stands alone because it is the only row checking that DEPT_ID is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-6e062377"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_CLASS_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-6f0e8025"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_CELL_PACK_COUNT new-row lock."
+  },
+  {
+   "rows": [
+    "V-78d541a3"
+   ],
+   "why": "Stands alone because it is the only row checking that CELL_PROD_SITE is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-79d392e0"
+   ],
+   "why": "Stands alone because it is the only row checking the DIVISION_ID existing-row lock."
+  },
+  {
+   "rows": [
+    "V-7a8d8d86"
+   ],
+   "why": "Stands alone because it is the only row checking the PRODUCT_GROUP_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-7d4cf04a"
+   ],
+   "why": "Stands alone because it is the only row checking the MDM_PROJECT_NAME new-row lock."
+  },
+  {
+   "rows": [
+    "V-7e7413e0"
+   ],
+   "why": "Stands alone because it is the only row checking popup-assisted input on PROJECT_CODE82 for a new row."
+  },
+  {
+   "rows": [
+    "V-7f0b263c"
+   ],
+   "why": "Stands alone because it is the only row checking the CUST_GROUP existing-row lock."
+  },
+  {
+   "rows": [
+    "V-867ab49c"
+   ],
+   "why": "Stands alone because it checks the RESULT lock under the current-month condition."
+  },
+  {
+   "rows": [
+    "V-86c1a7b9"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_TYPE new-row lock."
+  },
+  {
+   "rows": [
+    "V-88061de1"
+   ],
+   "why": "Stands alone because it is the only row checking the DIVISION_ID new-row lock."
+  },
+  {
+   "rows": [
+    "V-8b06361f"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_PRODUCT_GROUP existing-row lock."
+  },
+  {
+   "rows": [
+    "V-8cb911d7"
+   ],
+   "why": "Stands alone because it is the only row checking the PROJECT_CODE new-row conditional lock."
+  },
+  {
+   "rows": [
+    "V-92805dff"
+   ],
+   "why": "Stands alone because it checks the EDI_QTY lock under the current-month condition."
+  },
+  {
+   "rows": [
+    "V-94650395"
+   ],
+   "why": "Stands alone because it is the only row checking the PROJECT_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-97097aec"
+   ],
+   "why": "Stands alone because it is the only row checking the new-row conditional lock on the dynamic LOOP columns."
+  },
+  {
+   "rows": [
+    "V-98e0c4c9"
+   ],
+   "why": "Stands alone because it is the only row checking the edit-mode distinction on the first existing row right after a search."
+  },
+  {
+   "rows": [
+    "V-99e89ced"
+   ],
+   "why": "Stands alone because it is the only row checking the OWNER existing-row lock."
+  },
+  {
+   "rows": [
+    "V-9b172993"
+   ],
+   "why": "Stands alone because it checks the MKT_FCST lock under the current-month condition."
+  },
+  {
+   "rows": [
+    "V-9b20dd6f"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_ID40 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-a1af96f8"
+   ],
+   "why": "Stands alone because it is the only row checking the MEASURE new-row conditional lock."
+  },
+  {
+   "rows": [
+    "V-a2ad0636"
+   ],
+   "why": "Stands alone because it is the only row checking the SCM_SITE_ID81 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-a47c48fc"
+   ],
+   "why": "Stands alone because it is the only row checking the DMS_CUSTOMER existing-row lock."
+  },
+  {
+   "rows": [
+    "V-a59a06c5"
+   ],
+   "why": "Stands alone because it is the only row checking the PROJECT_CODE existing-row lock."
+  },
+  {
+   "rows": [
+    "V-a6be5b4a"
+   ],
+   "why": "Stands alone because it is the only row checking that UNIT_ENERGY is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-a8aab189"
+   ],
+   "why": "Stands alone because it is the only row checking the END_CUSTOMER40 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-ab1a19a2"
+   ],
+   "why": "Stands alone because it is the only row checking the REPORT_GROUP6 new-row lock."
+  },
+  {
+   "rows": [
+    "V-abb68e8f"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-b250f45c"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_PER_PACK existing-row lock."
+  },
+  {
+   "rows": [
+    "V-b766d44c"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_PRODUCT_GROUP new-row lock."
+  },
+  {
+   "rows": [
+    "V-b7798bea"
+   ],
+   "why": "Stands alone because it checks the EDI_QTY lock under the AddMonths(-1) condition."
+  },
+  {
+   "rows": [
+    "V-b77cef5b"
+   ],
+   "why": "Stands alone because it is the only row checking the COUNTRY_NAME new-row lock."
+  },
+  {
+   "rows": [
+    "V-ba75922c"
+   ],
+   "why": "Stands alone because it is the only row checking that SCM_SITE_ID82 is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-baf6fbe3"
+   ],
+   "why": "Stands alone because it is the only row checking the PRODUCT_GROUP_NAME new-row lock."
+  },
+  {
+   "rows": [
+    "V-bc2f27e6"
+   ],
+   "why": "Stands alone because it is the only row checking the DMS_SALES existing-row lock."
+  },
+  {
+   "rows": [
+    "V-bd73fd1e"
+   ],
+   "why": "Stands alone because it is the only row checking the new-row auto-fill scenario."
+  },
+  {
+   "rows": [
+    "V-bd992c16"
+   ],
+   "why": "Stands alone because it is the only row checking the PRIORITY new-row lock."
+  },
+  {
+   "rows": [
+    "V-c18d50ca"
+   ],
+   "why": "Stands alone because it is the only row checking the REPORT_GROUP1 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-c6242527"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_PROD_SITE existing-row lock."
+  },
+  {
+   "rows": [
+    "V-c62a7850"
+   ],
+   "why": "Stands alone because it checks the GAP lock under the current-month condition."
+  },
+  {
+   "rows": [
+    "V-c65447eb"
+   ],
+   "why": "Stands alone because it is the only row checking the REPORT_GROUP6 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-c899db1d"
+   ],
+   "why": "Stands alone because it is the only row checking the PROJECT_CODE82 existing-row lock."
+  },
+  {
+   "rows": [
+    "V-c9853c05"
+   ],
+   "why": "Stands alone because it is the only row checking the VMI_YN existing-row lock."
+  },
+  {
+   "rows": [
+    "V-cdf17933"
+   ],
+   "why": "Stands alone because it is the only row checking the FCST_TYPE existing-row conditional unlock."
+  },
+  {
+   "rows": [
+    "V-cea32666"
+   ],
+   "why": "Stands alone because it is the only row checking the DEPT_ID existing-row lock."
+  },
+  {
+   "rows": [
+    "V-d0a4051e"
+   ],
+   "why": "Stands alone because it is the only row checking the REPORT_GROUP1 new-row lock."
+  },
+  {
+   "rows": [
+    "V-d40fef44"
+   ],
+   "why": "Stands alone because it is the only row checking the UNIT_ENERGY existing-row lock."
+  },
+  {
+   "rows": [
+    "V-d83c4a10"
+   ],
+   "why": "Stands alone because it checks the GAP lock under the AddMonths(-1) condition."
+  },
+  {
+   "rows": [
+    "V-d9b23f95"
+   ],
+   "why": "Stands alone because it is the only row checking the COUNTRY_NAME existing-row lock."
+  },
+  {
+   "rows": [
+    "V-da7128f6"
+   ],
+   "why": "Stands alone because it is the only row checking the existing-row conditional lock on the dynamic LOOP columns."
+  },
+  {
+   "rows": [
+    "V-dbdbda5e"
+   ],
+   "why": "Stands alone because it is the only row checking the ITEM_TYPE existing-row lock."
+  },
+  {
+   "rows": [
+    "V-dc676c34"
+   ],
+   "why": "Stands alone because it is the only row checking the NICK_NAME new-row lock."
+  },
+  {
+   "rows": [
+    "V-e1f65817"
+   ],
+   "why": "Stands alone because it is the only row checking the MODULE_PER_PACK new-row conditional lock."
+  },
+  {
+   "rows": [
+    "V-e31548e0"
+   ],
+   "why": "Stands alone because it is the only row checking a Division change on an inserted row."
+  },
+  {
+   "rows": [
+    "V-e38882e1"
+   ],
+   "why": "Stands alone because it is the only row checking that CURRENCY is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-e3be5006"
+   ],
+   "why": "Stands alone because it is the only row checking the DMS_CUSTOMER new-row lock."
+  },
+  {
+   "rows": [
+    "V-e575bded"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_CELL_MODEL new-row lock."
+  },
+  {
+   "rows": [
+    "V-e806419d"
+   ],
+   "why": "Stands alone because it is the only row checking the FORECAST_INFO_SPEC existing-row lock."
+  },
+  {
+   "rows": [
+    "V-ea1c0fef"
+   ],
+   "why": "Stands alone because it is the only row checking that END_CUSTOMER40 is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-ed5495ea"
+   ],
+   "why": "Stands alone because it is the only row checking the VERSION_NO new-row lock."
+  },
+  {
+   "rows": [
+    "V-f18a990c"
+   ],
+   "why": "Stands alone because it is the only row checking the CELL_PER_MODULE new-row conditional lock."
+  },
+  {
+   "rows": [
+    "V-f224fca8"
+   ],
+   "why": "Stands alone because it is the only row checking the MODULE_PER_CAR existing-row lock."
+  },
+  {
+   "rows": [
+    "V-f304938b"
+   ],
+   "why": "Stands alone because it is the only row checking the PLANT_SITE_ID new-row conditional lock."
+  },
+  {
+   "rows": [
+    "V-f4aa37b8"
+   ],
+   "why": "Stands alone because it is the only row checking that SCM_SITE_ID81 is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-f67dab48"
+   ],
+   "why": "Stands alone because it is the only row checking the CURRENCY existing-row lock."
+  },
+  {
+   "rows": [
+    "V-f903b582"
+   ],
+   "why": "Stands alone because it is the only row checking the DMS_SALES new-row lock."
+  },
+  {
+   "rows": [
+    "V-f9218755"
+   ],
+   "why": "Stands alone because it is the only row checking that ITEM_USE is editable on a new row."
+  },
+  {
+   "rows": [
+    "V-f96d7ad9"
+   ],
+   "why": "Stands alone because it is the only row checking the MIN_CAPACITY new-row lock."
+  },
+  {
+   "rows": [
+    "V-ff14d448"
+   ],
+   "why": "Stands alone because it is the only row checking the MODULE_PER_CAR new-row lock."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:39:38",
+ "cost": 0.5675612
+}

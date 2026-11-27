@@ -1,6 +1,7 @@
 ﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
 "supply/scp-bom-elec","SCP0097","features/supply/src/pages/scp-bom-elec/components/ScpBomElecForm.tsx","50","SCP0031","","","","(memory f10-reset-default-reselect-needs-has-value-flag-in-deps, 선례 SCP0031 2026-10-08)."
 "supply/scp-bom-elec","SCP0097","features/supply/src/pages/scp-bom-elec/components/ScpBomElecForm.tsx","56","SCP0053","","","","자매 SCP0053 과 동일하게 첫 항목 기본선택으로 통일."
+"supply/scp-bom-elec","SCP0097","features/supply/src/pages/scp-bom-elec/components/ScpBomElecForm.tsx","80","SCP0053","","","","Division — 선택 가능(자매 SCP0053 과 달리 disabled 아님) + 필수. 변경 = 검색조건(Div 제외) + Grid 초기화(store changeDivision, TO-BE 공통 요건). 편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴)."
 "supply/scp-bom-elec","SCP0097","features/supply/src/pages/scp-bom-elec/components/ScpBomElecGrid.tsx","77","SCP0053","","","","(SCP0053 독립 감사 교차 발견 — memory sheet-columns-input-tp-all-search-only-grid-readonly)."
 "supply/scp-bom-elec","SCP0097","features/supply/src/pages/scp-bom-elec/hooks/useScpBomElecValidation.ts","6","SCP0097","","","","SCP0097 조회 사전검증 (design 02 §4/§6 · 01 §2.6 R1):"
 "supply/scp-bom-elec","SCP0097","features/supply/src/pages/scp-bom-elec/scp-bom-elec.constants.ts","2","SCP0097","","","","설계 근거: .atlas/gscm-design/SCP0097/design/00_checklist.md ~ 03_grid-columns.md · convert-flow/{goal,plan}.md"

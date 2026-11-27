@@ -424,27 +424,6 @@
 | dsdm | Changed | spdMain_Changed | spdMain_Changed:4006 |
 | dsdm | Changed | spdMain_Changed | spdMain_Changed:4031 |
 | dsdm | Changed | spdMain_Changed | spdMain_Changed:4033 |
-| this.chkColor | CheckedChanged | chkColor_CheckedChanged | InitializeComponent:238 |
-| this.cboAS | CheckedChanged | cboAS_CheckedChanged | InitializeComponent:275 |
-| this.btnOwner | Click | btnOwner_Click | InitializeComponent:358 |
-| this.btnIncotermsChg | Click | btnIncotermsChg_Click | InitializeComponent:395 |
-| this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitializeComponent:471 |
-| this.btnMeasure | Click | btnMeasure_Click | InitializeComponent:547 |
-| this.btnColumn | Click | btnColumn_Click | InitializeComponent:584 |
-| this.btnProject | Click | btnProject_Click | InitializeComponent:620 |
-| this.btnItemId | Click | btnItemId_Click | InitializeComponent:690 |
-| this.cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitializeComponent:727 |
-| this.cboBucketType | Click | cboBucketType_Click | InitializeComponent:728 |
-| this.clbCustomer | SelectedIndexChanged | clbCustomer_SelectedIndexChanged | InitializeComponent:922 |
-| this.clbTeam | SelectedIndexChanged | clbTeam_SelectedIndexChanged | InitializeComponent:962 |
-| this.spdMain | ClipboardPasted | spdMain_ClipboardPasted | InitializeComponent:1453 |
-| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1454 |
-| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1455 |
-| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1456 |
-| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1457 |
-| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:1458 |
-| this.spdMain | KeyUp | spdMain_KeyUp | InitializeComponent:1459 |
-| this.contextMenuStrip1 | ItemClicked | contextMenuStrip1_ItemClicked | InitializeComponent:1471 |
 | this.chkColor | CheckedChanged | chkColor_CheckedChanged | InitializeComponent:321 |
 | this.cboAS | CheckedChanged | cboAS_CheckedChanged | InitializeComponent:358 |
 | this.btnOwner | Click | btnOwner_Click | InitializeComponent:441 |
@@ -486,6 +465,27 @@
 | dsdm | Changed | spdMain_Changed | spdMain_Changed:4446 |
 | dsdm | Changed | spdMain_Changed | spdMain_Changed:4471 |
 | dsdm | Changed | spdMain_Changed | spdMain_Changed:4473 |
+| this.chkColor | CheckedChanged | chkColor_CheckedChanged | InitializeComponent:238 |
+| this.cboAS | CheckedChanged | cboAS_CheckedChanged | InitializeComponent:275 |
+| this.btnOwner | Click | btnOwner_Click | InitializeComponent:358 |
+| this.btnIncotermsChg | Click | btnIncotermsChg_Click | InitializeComponent:395 |
+| this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitializeComponent:471 |
+| this.btnMeasure | Click | btnMeasure_Click | InitializeComponent:547 |
+| this.btnColumn | Click | btnColumn_Click | InitializeComponent:584 |
+| this.btnProject | Click | btnProject_Click | InitializeComponent:620 |
+| this.btnItemId | Click | btnItemId_Click | InitializeComponent:690 |
+| this.cboBucketType | SelectedIndexChanged | cboBucketType_SelectedIndexChanged | InitializeComponent:727 |
+| this.cboBucketType | Click | cboBucketType_Click | InitializeComponent:728 |
+| this.clbCustomer | SelectedIndexChanged | clbCustomer_SelectedIndexChanged | InitializeComponent:922 |
+| this.clbTeam | SelectedIndexChanged | clbTeam_SelectedIndexChanged | InitializeComponent:962 |
+| this.spdMain | ClipboardPasted | spdMain_ClipboardPasted | InitializeComponent:1453 |
+| this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:1454 |
+| this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:1455 |
+| this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:1456 |
+| this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:1457 |
+| this.spdMain | TopChange | spdMain_TopChange | InitializeComponent:1458 |
+| this.spdMain | KeyUp | spdMain_KeyUp | InitializeComponent:1459 |
+| this.contextMenuStrip1 | ItemClicked | contextMenuStrip1_ItemClicked | InitializeComponent:1471 |
 | this | Load | Form_Load | .ctor:298 |
 | dsdm | Changed | spdMain_Changed | DefineProperty:603 |
 | clbDivision | SelectedIndexChanged | cboDivision_SelectedIndexChanged | DefineProperty:605 |
@@ -521,19 +521,19 @@
 |---|---:|---|
 | LayoutControlItem | 113 | lblTeam, lblCustomer, lblBizType, Period, lblSalesSite, lblModel, lblProject, layoutControlItem3, layoutControlItem1, lblBucket, layoutControlItem2, layoutControlItem4, lblPlantSite, layoutControlItem5, lblItemType … |
 | UsrCheckedList | 25 | clbItemType, clbPlantSite, clbSalesSite, clbBizType, clbCustomer, clbTeam, clbEDISender, clbItemType, clbPlantSite, clbSalesSite, clbBizType, clbCustomer, clbTeam, clbEDISender, clbItemType … |
-| UsrLayoutControl | 20 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl4, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1 … |
-| LayoutControlGroup | 20 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup4, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1 … |
-| UsrButton | 19 | btnOwner, btnIncotermsChg, btnMeasure, btnColumn, btnProject, btnItemId, btnOwner, btnIncotermsChg, btnMeasure, btnColumn, btnProject, btnItemId, btnOwner, btnIncotermsChg, btnMeasure … |
+| UsrLayoutControl | 20 | usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl4, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1, usrLayoutControl3, usrLayoutControl1, usrLayoutControl2, usrLayoutControl1 … |
+| LayoutControlGroup | 20 | layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup4, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1, layoutControlGroup3, layoutControlGroup1, layoutControlGroup2, layoutControlGroup1 … |
+| UsrButton | 19 | btnOwner, btnIncotermsChg, btnMeasure, btnColumn, btnProject, btnItemId, btnOwner, btnIncotermsChg, btnMeasure, btnColumn, btnProject, btnItemId, btnExcelUpload, btnOwner, btnIncotermsChg … |
 | UsrCheckBox | 15 | chkColor, cboAS, cboQty, chkSum, cboCellQty, chkColor, cboAS, cboQty, chkSum, cboCellQty, chkColor, cboAS, cboQty, chkSum, cboCellQty |
 | TextBox | 13 | txtProject, txtPRHeader, txtProjectCode, txtYYYYMMDD, txtItemId, txtItemName, txtRequestedBy, txtRequestNo, txtDivisionName, txtPuchMgr, txtPuchGroup, txtPrHeader, txtRequestDate |
-| EmptySpaceItem | 12 | emptySpaceItem4, emptySpaceItem4, emptySpaceItem4, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1, emptySpaceItem3, emptySpaceItem4, emptySpaceItem2, emptySpaceItem1 |
+| EmptySpaceItem | 12 | emptySpaceItem4, emptySpaceItem4, emptySpaceItem1, emptySpaceItem2, emptySpaceItem4, emptySpaceItem1, emptySpaceItem2, emptySpaceItem1, emptySpaceItem3, emptySpaceItem4, emptySpaceItem2, emptySpaceItem1 |
 | ToolStripMenuItem | 12 | Request_PR, View_PR, Add_History, View_History, Request_PR, View_PR, Add_History, View_History, Request_PR, View_PR, Add_History, View_History |
-| FpSpread | 11 | spdMain, spdMain, spdSub1, spdSub2, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain |
-| SheetView | 11 | spdMain_Sheet1, spdMain_Sheet1, spdSub1_Sheet1, spdSub2_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
+| FpSpread | 11 | spdMain, spdSub1, spdSub2, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain, spdMain |
+| SheetView | 11 | spdMain_Sheet1, spdSub1_Sheet1, spdSub2_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1, spdMain_Sheet1 |
 | UsrMultiLineEditor | 9 | txtProject, txtItemId, txtOwner, txtProject, txtItemId, txtOwner, txtProject, txtItemId, txtOwner |
-| UsrCombo | 9 | cboBucketType, clbDivision, cboBucketType, clbDivision, cboBucketType, clbDivision, cmbCarMaker, cmbCarModel, cmbBizType |
+| UsrCombo | 9 | cboBucketType, clbDivision, cboBucketType, clbDivision, cmbCarMaker, cmbCarModel, cmbBizType, cboBucketType, clbDivision |
 | UsrConditionPanel | 6 | usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1, usrConditionPanel1 |
-| UsrDateRangePicker | 6 | drpPeriod, drpPeriod, drpPeriod, drpPeriodPSI, drpPeriodSimulation, drpPeriod1 |
+| UsrDateRangePicker | 6 | drpPeriod, drpPeriod, drpPeriodPSI, drpPeriodSimulation, drpPeriod1, drpPeriod |
 | UsrLabel | 5 | lblExcelInfoLabel, lblExcelInfo, usrLabel2, usrLabel2, usrLabel2 |
 | TableLayoutPanel | 4 | tableLayoutPanel3, tableLayoutPanel2, tableLayoutPanel4, tableLayoutPanel1 |
 | SimpleButton | 4 | btnFindPSI, btnReport, btnCalculation, btnUpDown |

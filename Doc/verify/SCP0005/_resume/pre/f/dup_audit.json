@@ -1,0 +1,267 @@
+{
+ "menu_id": "SCP0005",
+ "at": "2026-11-25 19:17:56",
+ "window_utc": [
+  "2026-11-24T16:24:33.070Z",
+  "2026-11-24T17:06:44.600ZZ"
+ ],
+ "rows": {
+  "rows": 2276,
+  "by_source": {
+   "RULE_SCREEN": 622,
+   "GENERAL": 551,
+   "TRACE": 448,
+   "COLUMN": 284,
+   "CONFIRMED": 110,
+   "ASIS": 98,
+   "ASIS_DIFF": 72,
+   "DEFECT": 50,
+   "SEARCH": 20,
+   "MSG": 11,
+   "SP": 10
+  },
+  "groups": 44,
+  "group_rows": 95,
+  "members": 51,
+  "same_verdict_groups": 31,
+  "mixed_verdict_groups": 13,
+  "source_mix": {
+   "CONFIRMED + DEFECT": 24,
+   "ASIS + TRACE": 20
+  },
+  "general_rows": 551,
+  "examples": [
+   [
+    [
+     "V-6221c680",
+     "ASIS",
+     "NA"
+    ],
+    [
+     "T-d5588785",
+     "TRACE",
+     "NA"
+    ],
+    [
+     "T-a696588b",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-0ac54e30",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-9cd41abc",
+     "TRACE",
+     "NA"
+    ],
+    [
+     "T-3be03b11",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-d3fca115",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-b0d11ff7",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-9b7a0ed3",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-74322736",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-6f578dc6",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-e20a41ea",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-0710f52d",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-5b9d8476",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-90dcaf82",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-a31072df",
+     "TRACE",
+     "NA"
+    ]
+   ],
+   [
+    [
+     "V-1a0fa33c",
+     "ASIS",
+     "PASS"
+    ],
+    [
+     "T-9e0c91e1",
+     "TRACE",
+     "NA"
+    ]
+   ]
+  ]
+ },
+ "tests": {
+  "tests": 82,
+  "total_min": 84.1,
+  "login_wait_over5s_min": 0.8,
+  "fixed_min": 31.5,
+  "body_min": 51.7,
+  "wait_min": 55.2,
+  "read_tests": 112,
+  "write_tests": 6,
+  "by_file": {
+   "_verify.spec.ts": 60,
+   "_trace.spec.ts": 18,
+   "_snap.spec.ts": 4
+  }
+ },
+ "calls": {
+  "calls": 585,
+  "distinct": 24,
+  "repeats": 561,
+  "repeat_server_sec": 548.6,
+  "top": [
+   {
+    "what": "route/SEARCH",
+    "n": 266,
+    "tests": 69,
+    "avg_ms": 646
+   },
+   {
+    "what": "region/SEARCH",
+    "n": 219,
+    "tests": 88,
+    "avg_ms": 1626
+   },
+   {
+    "what": "route/SEARCH_CITY",
+    "n": 32,
+    "tests": 14,
+    "avg_ms": 104
+   },
+   {
+    "what": "region/SEARCH",
+    "n": 6,
+    "tests": 6,
+    "avg_ms": 144
+   },
+   {
+    "what": "region/SEARCH",
+    "n": 6,
+    "tests": 6,
+    "avg_ms": 148
+   },
+   {
+    "what": "region/SEARCH",
+    "n": 6,
+    "tests": 6,
+    "avg_ms": 154
+   }
+  ]
+ },
+ "features": {
+  "팝업": {
+   "tests": 7,
+   "min": 2.0,
+   "titles": [
+    [
+     "_snap.spec.ts",
+     "@snap 조회조건 팝업 정적 aria"
+    ],
+    [
+     "_trace.spec.ts",
+     "BTN 팝업 경로(F4·E4·G1) = AS-IS 버튼 → 팝업 → OK → 후속 메서드"
+    ],
+    [
+     "_trace.spec.ts",
+     "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼"
+    ],
+    [
+     "_trace.spec.ts",
+     "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2"
+    ],
+    [
+     "_trace.spec.ts",
+     "W4 M4 팝업 선택값 반영 = AS-IS"
+    ],
+    [
+     "_verify.spec.ts",
+     "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)"
+    ],
+    [
+     "_verify.spec.ts",
+     "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지"
+    ]
+   ]
+  },
+  "저장": {
+   "tests": 6,
+   "min": 9.3,
+   "titles": [
+    [
+     "_trace.spec.ts",
+     "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)"
+    ],
+    [
+     "_verify.spec.ts",
+     "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)"
+    ],
+    [
+     "_verify.spec.ts",
+     "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)"
+    ],
+    [
+     "_verify.spec.ts",
+     "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)"
+    ],
+    [
+     "_verify.spec.ts",
+     "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장"
+    ],
+    [
+     "_verify.spec.ts",
+     "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)"
+    ]
+   ]
+  }
+ }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "20261126190221_SELF",
+  "at": "2026-11-26T19:02:21+09:00",
+  "ms": 1795687341604,
+  "source": "self",
+  "status": "applied",
+  "sig": "검사기 결함 탐지기 오탐 수정 실제 두 글자 칸 mn dv 과 화면 문구의 . 사용자 결정으로 만든 종속 fail",
+  "title": "검사기 결함 탐지기 오탐 수정: 실제 두 글자 칸(M0, DV)과 화면 문구의 '.', 사용자 결정으로 만든 종속 FAIL",
+  "evidence": "입력 S16|K1 94행/4화면은 전부 오탐임. DMF0020 V-cbfae26c 'Sales Price Template.M0 (M0)' asis_ref 'TO-BE SHEET_COLUMNS Sales Price Template.M0 VISIBLE=Y', DMF0068 M1~M9 동일, SCP0108 V-3937c66e 'CUTOFF.DV' asis_ref 'TO-BE SHEET_COLUMNS CUTOFF.DV VISIBLE=N'으로 메타에 있는 실제 칸임. SSP0024 T-4589d2bb 'POST_OPER_LT / Post Oper.LT(Day' 는 화면 문구 'Post Oper.LT(Day)' 의 '.' 뒤 'LT' 를 tools/Harness/verify/checker_defect_scan.py:28 RX_K1 이 칸 이름으로 잡음(:61 은 target 전체를 검사). 집계: DMF0020 M0~M9 40행, DMF0068 M1~M9 45행, SCP0108 DV 2행, SSP0024 LT 7행. 입력 S16|K4 SCP0096 V-d8f314e2 2행은 judge.py:2688-2691 이 2026-11-19 사용자 지시로 만든 '[선행 결함 종속 V-eb856b69]' FAIL 인데, 뒤에 붙은 종전 증거 '[측정 경로 없음]'이 :68 RX_K4_FAIL(ev[:200]) 에 걸림.",
+  "targets": [
+    "tools/Harness/verify/checker_defect_scan.py"
+  ],
+  "before_after": "K1 변경 전: RX_K1.search(target). 변경 후: target 을 ' / ' 앞 부분만 검사하고, 잡힌 이름이 asis_ref 의 'SHEET_COLUMNS <시트>.<이름> ' 에 있으면 제외함. K4 변경 전: FAIL 이면 ev[:200] 에서 측정 경로 없음 등 검색. 변경 후: ev 가 '[선행 결함 종속' 으로 시작하면 제외함. selftest 에 'Sales Price Template.M0 (M0)'+asis_ref 메타 = 탐지 없음, 'POST_OPER_LT / Post Oper.LT(Day' = 탐지 없음, '[선행 결함 종속 V-x] … [측정 경로 없음]' FAIL = K4 없음, 기존 'Distribution Route.O (Pick)' = K1 유지 사례를 넣음.",
+  "verify": "python tools/Harness/verify/engine_selfcheck.py PASS. python tools/Harness/verify/checker_defect_scan.py --selftest ALL PASS. 원장 변화 없이 바로 checker_defect_scan.py 재실행으로 K1 94→0행, K4 2→0행 확인.",
+  "rollback": "tools/Harness/verify/checker_defect_scan.py 를 수정 전 백업으로 되돌림.",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:06:22+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:08:01+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · tools/Harness/verify/checker_defect_scan.py classify: K1 = target 의 ' / ' 앞만 검사, 잡힌 이름이 asis_ref 'SHEET_COLUMNS <시트>.<이름>' 또는 'SHEET_COLUMNS(<ID>/<같은 시트>)' 이면 제외. K4 = '[선행 결함 종속' 으로 시작하는 FAIL 제외. selftest 오탐 표본 5건 추가 ALL PASS(기존 K1 'Distribution Route.O' 유지). 실측 checker_defect_scan.py 재실행 K1 94 → 0행, K4 2 → 0행, K2 1058, K3 921, K5 199 그대로. .vibe/orch/selfcheck/checker_scan.json 갱신(2026-11-26 19:08)"
+    }
+  ],
+  "self": true,
+  "check": "S16",
+  "selfKey": "S16|K1|K4",
+  "kind": "fix",
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795687681775
+}

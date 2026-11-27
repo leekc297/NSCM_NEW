@@ -1,3 +1,419 @@
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 설계 결정 해당없음이 코드·메타 문자열 부분 일치로 무관 행까지 덮음 (2026-11-27 01:42)
+- 사용자(2026-11-27): 개선안 20261127011427_SELF 승인(VM 자가진단 S16 S16|K3). 근거 = 입력 S16|K3. tools/Harness/verify/judge.py:2995 대조 범위 = target + condition[:600] + expected[:200], :3005 'any(t.upper() in hay …)' 부분 일치. DMF0042 원장 GAP-264(DD-120 토큰 Sales Site;SCM_SITE_ID;Model;ITEM_ID;Team;End Customer;Insert) 해당없음 127행 중 97행은 조건 칸 'FARPOINT.WIN.SPREAD.MODEL.SHEETDATAMODELEVENTTYPE' 의 MODEL 에 걸림(966행 V-dea3ce34 siMain.SetValue, 대상 EDI_QTY·COUNTRY·CITY·MKT_FCST 등). DD-118 'Edit' 1
+- 변경: 변경 전 judge.py:3005 모든 토큰을 대상+조건+기대 칸에 부분 일치. 변경 후 토큰 종류별로 대조함. ① 대상 칸 = 종전 부분 일치. ② 화면 라벨 토큰(^[A-Z][a-z], 예 Model, Team, Edit, Insert, Active, Division) = 대상 칸 + 기대 칸 단어 경계만, 조건 칸은 보지 않음. ③ 식별자 토큰(SCM_SITE_ID, purchase_81 등) = 세 칸에서 단어 경계 (?<![A-Z0-9_])T(?![A-Z0-9_]). ④ 한글 문구 토큰(DD-216 '계정 언어 CN 로 화면 표시') = 종전 부분 일치. 전 원장 읽기 시험(11-27 01:1x): 설계 결정 해당없음 296행 → 유지 160행, 해제 136행. 해제는 DMF0042 144→36, DMF0005 103→74 이고 다른 24화면은 변화 없음(DD-216 2행씩 유지). 해제 행은 종전 원판정(미검증·판정필요·FAIL)으로 돌아감.. 파일 tools/Harness/verify/judge.py, Doc/verify/_checker_defects.md. 대상 밖 변경 1개(다른 작업).
+- 확인(01:42 실행): 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과. 개선안 확인: engine_selfcheck: 반영 전 PASS → 반영 뒤 PASS(2026-11-27 01:36:57). 토큰 대조 시험: 종전 9건 전부 일치 → 반영 뒤 기대대로 불일치 5건, 일치 4건(01:35:38). py_compile OK.
+- 미확인: VS Code 실화면(창 다시 로드 필요). 반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042, DMF0005 재지 못한 해당없음(설계 결정) 행 수 감소 확인, Doc/verify/<ID>/design_decisions_applied.csv 적용 행 수 비교..
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/Harness/verify/judge.py.bak_20261127_self0128(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 조회조건 라벨 못 찾음(H5) 머리말이 판정마다 앞에 쌓임 (2026-11-27 01:27)
+- 사용자(2026-11-27): 개선안 20261127011426_SELF 승인(VM 자가진단 S16 S16|K2). 근거 = 입력 S16|K2. Doc/verify/DMF0042/verify_ledger.csv 273행 V-96012b16, 277행 V-359ec6f9 에 같은 머리말 '[측정 경로 없음] AS-IS 라벨 … 기준표 행 0 · ' 이 6번 있음. 원장 시각 11-27 00:27 은 judge.py 수정 11-26 16:59 뒤. 전 원장 같은 유형 8행. tools/Harness/verify/judge.py:1357 이 머리말 + (r.get('evidence') or '') 로 앞에 붙이고 결과는 ERROR 로 남겨, 다음 judge 실행 때 1330행 조건에 다시 걸림. judge.py:3823~3836(T667)은 ' | ' 조각만 걷어서 ' · ' 로 이어진 반복은 남음.
+- 변경: 변경 전 judge.py:1357 '… 기준표 행 0 · " + (r.get('evidence') or '')'. 변경 후 '… 기준표 행 0 · " + re.sub(r"\[측정 경로 없음\] AS-IS 라벨 '[^']*' 을 TO-BE 라벨 목록에서 못 찾음, .*?기준표 행 0 · ", '', r.get('evidence') or '')'. 앞서 붙은 같은 머리말을 지우고 1번만 붙임. 머리말 뒤 W7 접미 등 다른 내용은 그대로 둠.. 파일 tools/Harness/verify/judge.py. 대상 밖 변경 3개(다른 작업).
+- 확인(01:27 실행): 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과. 개선안 확인: 2026-11-27 01:22 기준. engine_selfcheck.py 반영 전 PASS(77.3초, 신규 0) → 반영 뒤 PASS(76.8초, 신규 0). 머리말 반복 시험: 반영 전 원장 V-96012b16 머리말 6개 → 반영 식 2회 적용 뒤 1개, 빈 증거 2회 적용 1개, 접미 유지 True, PASS
+- 미확인: VS Code 실화면(창 다시 로드 필요). 반영 뒤 확인 1건: 다음 CheckList 실행 뒤 checker_defect_scan.py 로 DMF0042 H5 같은 문구 반복 8행 → 0행 확인..
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/Harness/verify/judge.py.bak_20261127_self0114(설치 폴더는 같은 태그).
+
+## (판 번호 없음, 검사 도구) 검사기 결함 탐지기 오탐 2종: 다른 행 인용 묶음, '검사기 한계 아님' (2026-11-27 01:20)
+- 개선안 20261127011428_SELF(S16 K2, K3 입력)
+- 변경: tools/Harness/verify/checker_defect_scan.py. K2 는 증거를 ' | ' 조각으로 나눠 '[V-|T-|EG-|AD-<8자리>]' 로 시작하는 인용 조각끼리의 반복은 세지 않음(RX_CITE). K3 '검사기 한계(?! 아님)'
+- 시험: --selftest 표본 3건 추가 ALL PASS, engine_selfcheck.py PASS(01:1x, 60.4초)
+- 전 원장 비교(원장 58개 119,493행, scratch 출력): K2 1069 → 1052행(개선안 예상 10행, 실제 17행 감소), K3 1052 → 1020행(32행 감소, 예상과 같음). K1, K4, K5 변화 없음
+- 사고: 사용법 확인용 --help 인자가 실제 탐지를 돌려 .vibe/orch/selfcheck/checker_scan.json 을 새 코드 결과(K2 1052, K3 1020)로 덮어씀(01:1x). 다음 VMO 정기 탐지도 같은 파일 결과를 쓰므로 값 차이 없음
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 반영 뒤 CHANGELOG.md 쓰기가 실패한 자가 보완 절을 대기 파일에 남기고 다음 기록 때 다시 씀 (2026-11-27 01:05)
+- 사용자(2026-11-27): 개선안 20261127005352_SELF 승인(VM 자가진단 errors orch-improve.changelogSelf | UNKNOWN: unknown error, open '<path>'). 근거 = 오류 서명 orch-improve.changelogSelf UNKNOWN 9건(11-23 18:54 ~ 11-26 16:15). tools/VibeManager/orch-improve.js:561 쓰기가 실패하면 562 catch 에서 오류만 남기고 false 를 돌려줌. 523~524 는 개선안 이력에 'CHANGELOG 기록 실패'만 적고 절 내용은 버림. .vibe/orch/proposals 중 이력에 'CHANGELOG 기록 실패'가 있는 안 8개(20261123184517_SELF_5, 20261124021155_SELF_3, 20261124064958_SELF_2, 20261124093730_SELF, 20261125031023_SELF, 20261125034940_SELF_2, 202611251
+- 변경: changelogSelf 쓰기 실패 = 오류 기록 후 절 버림 → 쓰기 실패 = 만든 절 텍스트를 .vibe/orch/changelog_pending.jsonl 에 한 줄로 남기고, 다음 changelogSelf 호출 때 대기 절을 시각 순으로 새 절과 함께 맨 위에 쓴 뒤 대기 파일을 비움. 개선안 이력 문구 'CHANGELOG 기록 실패' → 'CHANGELOG 기록 대기(다음 기록 때 씀)'. 파일 tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_improve.js, tools/VibeManager/test/t_claim_overlap.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_impact_rule.js, tools/VibeManager/test/t_incident_handler.js, tools/VibeManager/test/t_orch_afterwork.js, tools/VibeManager/test/t_orch_apply_recover.js, tools/VibeManager/test/t_orch_applyfail.js, tools/VibeManager/test/t_orch_consult.js, tools/VibeManager/test/t_orch_coreauto.js, tools/VibeManager/test/t_orch_errlog.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_orch_hotreload.js, tools/VibeManager/test/t_orch_ladder.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_plans.js, tools/VibeManager/test/t_orch_selfapply.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_orch_undo.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_userrule.js, tools/VibeManager/test/t_orch_verify.js, tools/VibeManager/test/t_orch_vision.js, tools/VibeManager/test/t_orch_watch_gone.js, tools/VibeManager/test/t_orch_worklist.js, tools/VibeManager/test/t_run_end.js. 대상 밖 변경 34개(다른 작업).
+- 확인(01:05 실행): 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1958, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0. 개선안 확인: 2026-11-27 00:59:14 반영 전: node tools/VibeManager/test/t_orch_improve.js → ALL PASS, PASS 55건, 쓰기 실패 주입 시험 없음(미측정). 2026-11-27 00:59:59 반영 뒤: node --check orch-improve.js, t_orch_improve.js 오류 0. node tools/VibeManager/test/t_orch_improve.js → 'PASS CHANGELOG 쓰기 실패 → 대기 파일 1줄 → 다음 호출 뒤 0줄 · 두 절 모두 있음
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/VibeManager/orch-improve.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_improve.js.bak_20261127_self0054, tools/VibeManager/test/t_claim_overlap.js.bak_20261127_self0054, tools/VibeManager/test/t_fs_retry.js.bak_20261127_self0054, tools/VibeManager/test/t_impact_rule.js.bak_20261127_self0054, tools/VibeManager/test/t_incident_handler.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_afterwork.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_apply_recover.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_applyfail.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_consult.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_coreauto.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_errlog.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_history_kind.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_hotreload.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_ladder.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_ladder_recur_time.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_plans.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_selfapply.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_selfcheck.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_undo.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_usercheck.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_userrule.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_verify.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_vision.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_watch_gone.js.bak_20261127_self0054, tools/VibeManager/test/t_orch_worklist.js.bak_20261127_self0054, tools/VibeManager/test/t_run_end.js.bak_20261127_self0054(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) U11 반영 실패 방치 판정에서 사용자 판단 대기 안 제외 (2026-11-27 00:47)
+- 근거: 00:36:52 자가진단 S13 U11 fail '반영 실패 개선안 6시간 방치' 20261126153056_SELF(재진단 없음). 이 안은 userHold true, reason '사람 판단 필요: SCP0104 수작업 edit_expect_manual 139행 중 자동 해석과 같은 것은 신규행 41행뿐. 페이지 조건(isPageSOP) 평가 구현이 먼저 필요'
+- 변경: orch-usercheck.js repairRetry 가 userHold 안을 fail 대신 '반영 실패 사람 판단 대기' warn 에 넣고 detail 에 사유 앞 60자를 적음
+- 시험: t_orch_usercheck.js 표본 1건 추가 PASS. run_all 115/115 파일, PASS 1957, FAIL 0(00:47, 284.3초)
+- 미확인: 실행 중 VMO 판정(창 다시 로드 뒤 S13 에서 U11 fail 사라지는지 확인)
+
+## (판 번호 없음, 검증엔진) S-C 8차: DMF0042 CheckList 결과로 폼 저장형 생성기·실행기 보완 (2026-11-27 00:44)
+- 근거(DMF0042 CheckList, run_id 20261126174140, 2026-11-26 17:41:40 시작, 2026-11-27 00:38:15 끝, 로그 Doc/verify/DMF0042/_run_20261126_1739_formscen.log): 생성 시나리오 35건 결과 PASS 5, NA 15(서버 오류 분기), ERROR 15. ERROR 15건 원인 = 조회영역 칸 'Division' 없음. TO-BE 칸 라벨 'Div'(snap/received/조회조건_Div_40.aria.yml), 생성 단계에 fuzzy 없음. 같은 실행의 form_scen_gen.py DMF0042 --asis DMF0042 가 IndexError rc=1(18:04:46). restore_touched 기록 없음.
+- 변경 1: form_scen_gen.py main. '--asis' 값과 화면ID 가 같으면 화면ID 까지 빠지던 것을 '--asis' 다음 인자만 빼게 고침.
+- 변경 2: form_scen_gen.py 생성 단계 라벨 10곳 전부 fuzzy true. 라벨이 같은 칸이 있으면 그 칸, 없을 때만 앞부분 일치 1칸(Division → Div).
+- 변경 3: formscen.ts multi. mode none 에서 지운 뒤에도 값이 남는 단일 선택 칸은 NA(지운 뒤 값 기록). mode all 에서 ALL 후보가 없으면 선택된 후보, 없으면 첫 후보. runFormScen 이 'NA:' 단계 결과를 NA 로 기록.
+- 변경 4: formscen.ts runFormScen. 같은 실행에서 단계, 기대 문구, 기대 행이 같은 생성분(dynamic, 저장 없음)은 앞 시나리오 실측 결과를 쓰고 근거에 앞 시나리오 ID 를 적음. DMF0042 FindData 5개 파일 15건 → 실측 3건.
+- 변경 5: 생성 시나리오에 asis_file 추가. scenariosOfRow ASIS 행은 파일 이름과 줄 번호로 연결. MSG00282 원장 행 5건이 시나리오 1건씩(G01, G11, G05, G08, G13)으로 연결됨을 확인.
+- 확인(00:43:16~00:44:42 실행): form_scen_gen.py --selftest PASS, tools/E2E npx tsc --noEmit exit 0, engine_selfcheck PASS(63.4초). DMF0042 재생성 rc=0, 활성 35건(dynamic 20).
+- 미확인: 변경 2~4 의 화면 동작(G16 NA, G17·G18 MSG00108·MSG00276 문구). 다음 DMF0042 CheckList 실행 때 확인.
+- 되돌리기: tools/Harness/verify/form_scen_gen.py.bak_20261127_sc5, tools/E2E/lib/formscen.ts.bak_20261127_sc5
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 반복 지시 집계에서 VMO 승인, 되돌리기 기록 줄의 인용은 사용자 지시로 세지 않음 (2026-11-26 23:53)
+- 사용자(2026-11-26): 개선안 20261126234153_SELF 승인(VM 자가진단 S9 S9|ask|e476ad881e). 근거 = diag_in S9 '같은 지시 13건' S9|ask|e476ad881e, S9|ask|733486eb1f, 5건 S9|ask|bc5a5b1d5a, S9|ask|78ecb614b3, S9|ask|b2ae65dc75, S9|ask|7012e7ef7d. tools/VibeManager/orch-improve.js:556 이 자동 반영 기록을 '- 사용자(일자): 개선안 <id> 승인(VM 자가진단 …). 근거 = <evidence>' 로 씀. evidence 안에 규칙 문구와 '원래 지시' 따옴표 인용이 있음. tools/VibeManager/orch-history.js:125 가 '사용자'로 시작하는 줄의 따옴표 인용을 전부 ask 로 넣음. 실례 CHANGELOG.md:1029, 1045, 1059, 110
+- 변경: 변경 전: finishSection 이 '사용자(…): 개선안 <id> 승인' 줄과 '개선안 <id> 되돌리기 실행' 줄의 인용도 ask 로 넣음 → 규칙 적용 절 수만큼 '같은 지시'로 셈. 변경 후: /^사용자[^:]*:\s*개선안 \S+ (승인|되돌리기 실행)/ 에 맞는 줄은 ask 에 넣지 않음. 표시용으로 ruleAsk 필드에 따로 둠. 사람이 입력한 '사용자(…): "…"' 줄은 종전대로 셈. 시험 t_orch_history_kind.js 에 승인 기록 줄 2절 → repeatAsks 0건, 실제 사용자 인용 2절 → 1건(count 2) 표본 추가. 파일 tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_orch_histauto.js, tools/VibeManager/test/t_orch_history.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_userrule.js, tools/VibeManager/test/t_s6_group.js. 대상 밖 변경 6개(다른 작업).
+- 확인(23:53 실행): 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1956, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0. 개선안 확인: 2026-11-26 23:4x 실행. repeatAsks 40건(상위 40 잘림, 상위 13,13,10) → 6건(10,6,4,2,2,2). 두 인용 항목 빠짐, '계속 개선항목 찾아서 진행해주세요' count 10 → 10. t_orch_history_kind.js PASS 24 → 26, ALL PASS. node --check orch-history.js, t_orch_history_kind.js → SYNTAX_OK. python tools/Docs/doc_style.py tools/VibeManager/orch-histor
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/VibeManager/orch-history.js.bak_20261126_self2342, tools/VibeManager/test/t_orch_history_kind.js.bak_20261126_self2342, tools/VibeManager/test/t_fs_retry.js.bak_20261126_self2342, tools/VibeManager/test/t_orch_histauto.js.bak_20261126_self2342, tools/VibeManager/test/t_orch_history.js.bak_20261126_self2342, tools/VibeManager/test/t_orch_ladder_recur_time.js.bak_20261126_self2342, tools/VibeManager/test/t_orch_selfcheck.js.bak_20261126_self2342, tools/VibeManager/test/t_orch_usercheck.js.bak_20261126_self2342, tools/VibeManager/test/t_orch_userrule.js.bak_20261126_self2342, tools/VibeManager/test/t_s6_group.js.bak_20261126_self2342(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) S-Z 10차: 설치 폴더에 직접 복사한 분석 모듈을 정기 점검 때 다시 읽음 (2026-11-26 22:56)
+- 근거(22:48 실측): VMO 호스트 pid 37960 창 로드 18:20(activations.jsonl). orch-ladder.js 저장소, 설치본 수정 19:09, 두 파일 내용 같음. 마지막 selfcheck.hotreload 19:18 hot = orch-usercheck.js 만. 개선안 20261126001528_VISION 은 status planned, history '단계 원장으로 진행'인데 plans.json 에 항목 없음. orch-ladder.js:271 재계획 코드가 호스트에 안 들어가 22:48 ladder.json 갱신 뒤에도 재계획 안 됨. hotReload 는 syncInstalled 로 VMO 가 복사한 파일만 부름.
+- 변경: orch-selfcheck.js staleHot() 추가. run() 시작 때 HOT_MODULES, HOT_REINIT 중 이미 불러 둔 모듈의 파일 수정 시각이 모듈 로드 시각, 마지막 다시 읽은 시각보다 뒤면 hotReload. 결과 result.json hotStale. 끄기 orch.hotReloadStale false. 시험 t_orch_hotreload.js 5건 추가.
+- 확인(22:50~22:56 실행): t_orch_hotreload.js ALL PASS 34, t_orch_selfcheck.js ALL PASS, t_orch_selfapply.js ALL PASS. run_all.js 'ALL OK 파일 115/115 PASS 1954 FAIL 0'. doc_style.py orch-selfcheck.js 위반 0 → 0. 제어 문자 0x08 0건.
+- 미확인: orch-selfcheck.js 는 HOT 모듈이 아니라 창 다시 로드 뒤 적용. 그 전까지 호스트의 orch-ladder.js 도 19:09 전 코드라 001528_VISION 재계획은 창 다시 로드 뒤.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 삭제 안을 반영할 때 지울 로그, 백업 파일을 반영 전 사본(.bak_, 스냅샷)으로 복사하지 않음 (2026-11-26 22:47)
+- 사용자(2026-11-26): 개선안 20261126223019_SELF 승인(VM 자가진단 S10 S10|belog|nscm.20261114.log.bak_20261123_self1121). 근거 = orch-improve.js:437 backupTargets(pr) 가 대상을 .vibe/orch/snap/prop_<id>/files 로 복사함(:305~311). orch-improve.js:445 는 대상마다 <파일>.bak_<태그> 를 복사함. 삭제 안인지 보지 않음. 실측 2026-11-26: nscm-be/logs/nscm.20261114.log.bak_20261123_self1121, _self1129 각 25,588,795,959바이트, nscm.20261115.log.bak_20261123_self1121, _self1129 각 1,864,717,015바이트, .vibe/orch/snap/prop_20261122230716_SELF_2/files/nscm-be/logs/ 2개 27.4GB. 
+- 변경: 삭제 안이어도 반영 전에 대상 로그를 스냅샷과 .bak_ 로 복사함 → 삭제 안(orch-selfcheck isDeleteProposal)이고 대상이 생성물(.vibe/logs, nscm-be/logs 의 *.log 와 *.log.bak_*, .vibe/orch/snap, *.bak_<일자>)이면 backupTargets 와 .bak_ 복사를 건너뛰고, history 에 '삭제 안: 사본 안 만듦(되돌릴 수 없음)'을 남김. 코드, 문서 파일 삭제 안은 지금처럼 사본을 만듦(orch-selfcheck.js:703 이 이 사본에 기댐). 파일 tools/VibeManager/orch-improve.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/test/t_orch_selfapply.js, tools/VibeManager/test/t_checkerscan.js, tools/VibeManager/test/t_claim_overlap.js, tools/VibeManager/test/t_claim_proposal.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_gate_fe_page.js, tools/VibeManager/test/t_impact_rule.js, tools/VibeManager/test/t_incident_handler.js, tools/VibeManager/test/t_orch_afterwork.js, tools/VibeManager/test/t_orch_ailimit.js, tools/VibeManager/test/t_orch_apply_recover.js, tools/VibeManager/test/t_orch_applyfail.js, tools/VibeManager/test/t_orch_consult.js, tools/VibeManager/test/t_orch_coreauto.js, tools/VibeManager/test/t_orch_dict.js, tools/VibeManager/test/t_orch_errlog.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_orch_hotreload.js, tools/VibeManager/test/t_orch_improve.js, tools/VibeManager/test/t_orch_ladder.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_ledger.js, tools/VibeManager/test/t_orch_plans.js, tools/VibeManager/test/t_orch_s10_belog.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_orch_selfcheck_eligible.js, tools/VibeManager/test/t_orch_selfcheck_stale.js, tools/VibeManager/test/t_orch_undo.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_userrule.js, tools/VibeManager/test/t_orch_verify.js, tools/VibeManager/test/t_orch_vision.js, tools/VibeManager/test/t_orch_watch_gone.js, tools/VibeManager/test/t_orch_worklist.js, tools/VibeManager/test/t_run_end.js, tools/VibeManager/test/t_s10_grow.js, tools/VibeManager/test/t_s1_ctrl.js, tools/VibeManager/test/t_s2_slow.js, tools/VibeManager/test/t_s6_group.js. 대상 밖 변경 48개(다른 작업).
+- 확인(22:47 실행): 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1949, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0. 개선안 확인: 2026-11-26 22:35~22:42 실행. t_orch_selfapply.js 반영 전 PASS 59 ALL PASS → 반영 뒤 PASS 62 ALL PASS. node --check 3개 파일 통과. run_all.js: 'ALL OK 파일 115/115 PASS 1949 FAIL 0 재실행 0 삭제 0 275.1s'. doc_style.py --quiet: 'orch-improve.js | 문장 145 | 위반 0', 'orch-selfcheck.js | 문장 277 | 위반 0'(반영 전 0, 0)
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/VibeManager/orch-improve.js.bak_20261126_self2230, tools/VibeManager/orch-selfcheck.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_selfapply.js.bak_20261126_self2230, tools/VibeManager/test/t_checkerscan.js.bak_20261126_self2230, tools/VibeManager/test/t_claim_overlap.js.bak_20261126_self2230, tools/VibeManager/test/t_claim_proposal.js.bak_20261126_self2230, tools/VibeManager/test/t_fs_retry.js.bak_20261126_self2230, tools/VibeManager/test/t_gate_fe_page.js.bak_20261126_self2230, tools/VibeManager/test/t_impact_rule.js.bak_20261126_self2230, tools/VibeManager/test/t_incident_handler.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_afterwork.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_ailimit.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_apply_recover.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_applyfail.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_consult.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_coreauto.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_dict.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_errlog.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_history_kind.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_hotreload.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_improve.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_ladder.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_ladder_recur_time.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_ledger.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_plans.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_s10_belog.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_selfcheck.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_selfcheck_eligible.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_selfcheck_stale.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_undo.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_usercheck.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_userrule.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_verify.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_vision.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_watch_gone.js.bak_20261126_self2230, tools/VibeManager/test/t_orch_worklist.js.bak_20261126_self2230, tools/VibeManager/test/t_run_end.js.bak_20261126_self2230, tools/VibeManager/test/t_s10_grow.js.bak_20261126_self2230, tools/VibeManager/test/t_s1_ctrl.js.bak_20261126_self2230, tools/VibeManager/test/t_s2_slow.js.bak_20261126_self2230, tools/VibeManager/test/t_s6_group.js.bak_20261126_self2230(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) U21 반영 실패 집계에서 고친 안이 반영 완료된 실패 제외 (2026-11-26 22:38)
+- 개선안 20261126223020_SELF: U21 applyFailRepeat 가 superseded 안의 실패도 셈. 열린 사건 20261126_182210_R12_ALL 이 이 판정으로 남음
+- 변경: orch-usercheck.js applyFailRepeat 가 supersededBy 를 따라간 마지막 안이 applied 인 실패를 빼고 셈(orch-ladder.js lastOf 와 같은 조건). detail 에 '고친 안 반영 완료 N건 제외'
+- 실데이터 읽기 확인(22:33, 개선안 파일만 읽음): 변경 전 코드 '24시간 6건' fail 1건 → 변경 뒤 0건. 6건 중 5건이 대체 안 반영 완료(20261124064956_SELF_3, 064957_SELF_3, 064958_SELF_3, 20261124232611_SELF, 20261125005937_SELF). 남은 20261126153056_SELF(apply-failed) 1건은 countMin 2 미만. 개선안 예상 4건 제외와 1건 차이(064956_SELF_3)
+- 시험: t_orch_usercheck.js 표본 3건 추가 PASS. run_all 115/115 파일, PASS 1946, FAIL 0(22:38, 275.2초)
+- 미확인: VMO 실행 중 U21 판정(창 다시 로드 뒤 자가진단 S13 에서 확인)
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 창 다시 로드로 끊긴 실행 알림을 한 번만 내고, 다음 VM 시작 때 같은 실행을 다시 살리지 않음 (2026-11-26 22:12)
+- 사용자(2026-11-26): 개선안 20261126214604_REVIEW 승인(VM 자가진단  ). 근거 = 집계 incidents.topRepeats R5 '창 다시 로드로 끊긴 실행 16건(알림)' n 8. 사건 파일 20261120_142504, 145830, 180433, 183604, 184728, 185754, 20261123_184718, 20261126_154128_R5_ALL.json 의 owner 가 모두 36504이고 목록이 같은 16건(11-20 10:07 SCP0005 재수행, 11-20 00:33~18:47 체인 11개, Claude 4개). orch-state.js:69-75 sweep() 은 주인 PID 가 없는 항목을 gone 으로 내지만, 시작 때 events.jsonl 재생으로 같은 항목이 다시 생김. 지우는 기록은 proc.gone(orch-state.js:55)뿐이고 체인과 C
+- 변경: 변경 전: 끊긴 실행 알림만 올리고 기록 없음 → VM 을 다시 시작할 때마다 재생으로 같은 실행이 열린 상태가 되어 알림이 다시 남. 집계에도 끝 기록 없는 체인(noEnd)으로 계속 셈. 변경 후: orch-watch.js:401 알림 때 events 에 run.cut(owner, 항목별 what, screen, label, t0)을 남김. orch-state.js onEvent 가 run.cut 을 받으면 procs, chains, claudes 에서 같은 owner·t0 항목을 지움. orch-improve.js digest 는 run.cut 이 있는 체인을 noEnd 에서 빼고 cutByReload 로 따로 셈. 파일 tools/VibeManager/orch-watch.js, tools/VibeManager/orch-state.js, tools/VibeManager/orch-improve.js, tools/VibeManager/test/t_orch_reloadcut.js, tools/VibeManager/test/t_chain_abort.js, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_claim_overlap.js, tools/VibeManager/test/t_claude_usage.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_impact_rule.js, tools/VibeManager/test/t_incident_handler.js, tools/VibeManager/test/t_job_par.js, tools/VibeManager/test/t_orch_afterwork.js, tools/VibeManager/test/t_orch_agent.js, tools/VibeManager/test/t_orch_agent_persist.js, tools/VibeManager/test/t_orch_agent_q.js, tools/VibeManager/test/t_orch_ailimit.js, tools/VibeManager/test/t_orch_apply_recover.js, tools/VibeManager/test/t_orch_applyfail.js, tools/VibeManager/test/t_orch_consult.js, tools/VibeManager/test/t_orch_coreauto.js, tools/VibeManager/test/t_orch_dict.js, tools/VibeManager/test/t_orch_errlog.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_orch_hotreload.js, tools/VibeManager/test/t_orch_improve.js, tools/VibeManager/test/t_orch_ladder.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_ledger.js, tools/VibeManager/test/t_orch_lock_repeat.js, tools/VibeManager/test/t_orch_openfail.js, tools/VibeManager/test/t_orch_plans.js, tools/VibeManager/test/t_orch_proc_grace.js, tools/VibeManager/test/t_orch_reloadmark.js, tools/VibeManager/test/t_orch_selfapply.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_orch_state_locks.js, tools/VibeManager/test/t_orch_state_old.js, tools/VibeManager/test/t_orch_step_screen.js, tools/VibeManager/test/t_orch_stopleak.js, tools/VibeManager/test/t_orch_undo.js, tools/VibeManager/test/t_orch_unv.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_userrule.js, tools/VibeManager/test/t_orch_userstop.js, tools/VibeManager/test/t_orch_verify.js, tools/VibeManager/test/t_orch_vision.js, tools/VibeManager/test/t_orch_watch.js, tools/VibeManager/test/t_orch_watch_gone.js, tools/VibeManager/test/t_orch_watch_skip_notarget.js, tools/VibeManager/test/t_orch_worklist.js, tools/VibeManager/test/t_prompt_relate.js, tools/VibeManager/test/t_run_end.js, tools/VibeManager/test/t_s1_ctrl.js, tools/VibeManager/test/t_server_service.js. 대상 밖 변경 4개(다른 작업).
+- 확인(22:12 실행): 구문 검사 46개 파일 통과, 시험 115/115개 파일 통과(PASS 1943, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0. 개선안 확인: 2026-11-26 21:57 node --check 4개 파일 SYNTAX_OK · t_orch_reloadcut 3건 ALL PASS(반영 전 2건) · run_all.js 'ALL OK 파일 114/114 PASS 1936 FAIL 0 재실행 0 삭제 0 274.3s' · doc_style.py --quiet 'orch-watch.js 위반 0, orch-state.js 위반 0, orch-improve.js 위반 0'(반영 전 0, 0, 0) · digest(7) checklist noEnd 8 → 8, cutByReload
+- 미확인: VS Code 실화면(창 다시 로드 필요). 반영 뒤 확인 1건: 사건 파일 중 sig R5|reloadcut|36504 반영 전 8건 → 반영 뒤 창 다시 로드 1회 뒤에도 8건 유지..
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/VibeManager/orch-watch.js.bak_20261126_self2150, tools/VibeManager/orch-state.js.bak_20261126_self2150, tools/VibeManager/orch-improve.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_reloadcut.js.bak_20261126_self2150, tools/VibeManager/test/t_chain_abort.js.bak_20261126_self2150, tools/VibeManager/test/t_chain_resume.js.bak_20261126_self2150, tools/VibeManager/test/t_claim_overlap.js.bak_20261126_self2150, tools/VibeManager/test/t_claude_usage.js.bak_20261126_self2150, tools/VibeManager/test/t_fs_retry.js.bak_20261126_self2150, tools/VibeManager/test/t_impact_rule.js.bak_20261126_self2150, tools/VibeManager/test/t_incident_handler.js.bak_20261126_self2150, tools/VibeManager/test/t_job_par.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_afterwork.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_agent.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_agent_persist.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_agent_q.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_ailimit.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_apply_recover.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_applyfail.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_consult.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_coreauto.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_dict.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_errlog.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_history_kind.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_hotreload.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_improve.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_ladder.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_ladder_recur_time.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_ledger.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_lock_repeat.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_openfail.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_plans.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_proc_grace.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_reloadmark.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_selfapply.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_selfcheck.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_state_locks.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_state_old.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_step_screen.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_stopleak.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_undo.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_unv.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_usercheck.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_userrule.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_userstop.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_verify.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_vision.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_watch.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_watch_gone.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_watch_skip_notarget.js.bak_20261126_self2150, tools/VibeManager/test/t_orch_worklist.js.bak_20261126_self2150, tools/VibeManager/test/t_prompt_relate.js.bak_20261126_self2150, tools/VibeManager/test/t_run_end.js.bak_20261126_self2150, tools/VibeManager/test/t_s1_ctrl.js.bak_20261126_self2150, tools/VibeManager/test/t_server_service.js.bak_20261126_self2150(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 중지 원인 '기타' 경로 기록, 점검 도중 VM 파일 변경 회차 사건 보류 (2026-11-26 22:08)
+- 개선안 20261126214605_REVIEW: 집계 S8.checklistRun, checklist 체인 stoppedBy other 5건이 어느 경로인지 기록 없음. orch-improve.js stopCause 를 stopInfo 로 나눠 'other' 마다 경로(표시만 있음, 근처 중지 기록 by 목록 밖, 같은 실행 중지 기록 by 목록 밖, 끝 기록 중지 주체 목록 밖)와 by, why, screen, at 을 stoppedOther(단계, 체인별 최대 10건)에 남김. by 없는 user.stop 을 button 으로 센 줄은 stoppedNoBy 에 따로 남김. 시험 t_orch_improve.js 54 → 55건
+- 개선안 20261126214604_REVIEW_2: 11-26 17:14:51 반영 게이트 S2 LOAD_FAIL workbench.js 등 R12 사건이 점검 도중 바뀐 파일 때문에 생기고 5~46분 안에 닫힘. orch-selfcheck.js run 이 점검 뒤 지문을 다시 재서 다르면 res.stale. 그 회차 S1~S4 는 사건을 올리거나 닫지 않고, 설치 폴더 자동 동기화도 하지 않음. history.jsonl 에 stale 기록, fpChecked 를 비워 조용해진 뒤 무거운 점검을 다시 돌림. gate 는 stale 회차를 최대 2번 다시 잼. 시험 t_orch_selfcheck_stale.js 6건
+- 시험: run_all 115/115 파일, PASS 1943, FAIL 0(22:08, 278.7초)
+- 미확인: 실데이터 digest(7) 의 stoppedOther 내용(창 다시 로드 뒤 VMO 집계에서 확인), 실제 점검 도중 파일 변경 때 사건 보류 동작
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 자가진단 S10 로그 증가 속도와 가벼운 주기 편입 (2026-11-26 21:30)
+- 근거: S10 이 하루 1회라 21:01 자가진단 결과의 .vibe/logs/2026-11-23T11-24-48_NSCM_BE.log 가 32GB(마지막 수정 11-25 23:08 기준). 21:27 실제 크기 50.9GB, 계속 늘어남. 끝부분 내용은 DMF0042 조회 결과 행과 SCM_COM_SQL_LOG INSERT 문
+- 변경: orch-selfcheck.js S10 을 LIGHT(10분 주기)에 넣음. 하루 1회 실행은 그대로. .vibe/logs, nscm-be/logs 파일마다 앞 점검 대비 시간당 증가량을 재고 selfLogGrowGBh(기본 2) 이상이면 주의 항목 S10|grow|<파일>. 5분 안 재측정은 판정 안 함
+- 시험: test/t_s10_grow.js 6건, t_orch_s10_belog.js 5건, t_orch_selfcheck.js 38건 PASS
+- 미확인: BE 로그 수준 조정과 로그 파일 정리는 사용자 판단(BE 설정 logback-spring.xml, 파일 삭제)
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 자가진단 S2 오래 걸린 시험 기록 (2026-11-26 20:56)
+- 근거: 20:34:16 개선안 반영 게이트(S1, S2, S4) 4021초. 20:53:40 같은 게이트 281초(S2 279.9초). 19:27~20:53 VMO 사건 기록 멈춤. S2 결과에 파일별 시간이 남지 않아 오래 걸린 시험 미확인
+- 변경: orch-selfcheck.js s2 가 info.slow(시간 큰 순 시험 5개, 초)를 남기고, 120초 넘은 시험은 주의 항목 S2|slow|<파일>로 올림
+- 시험: test/t_s2_slow.js 4건, t_orch_selfcheck.js 38건 PASS
+- 미확인: 20:34 게이트 4021초 원인. 다음 게이트부터 info.slow 로 확인
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 사용자 지시 R256 같은 문제: tools/VibeManager/workbench.js:3397 VMO 단추 분기가 접수, 대기, 실패를 웹뷰로 돌려보내지 않음. incAgent 는 대기열에 넣어도 대기 표시가 없 (2026-11-26 20:53)
+- 사용자(2026-11-26): 개선안 20261126192236_SELF 승인(VM 자가진단 S13 S13|R256|tools/VibeManager/workbench.js). 근거 = 규칙 R256 "웹뷰에서 실행한 VMO 기능은 누르는 즉시 접수 표시를 보이고 시작, 대기 사유, 실패를 같은 화면에 보임" (원래 지시 2026-11-26 18:14 "로드 후 컨설팅을 누르고 주제를 입력했는데 반응이 없습니다.") · tools/VibeManager/workbench.js:3397 case 'orch:incAgent': { const ok = require('./orch-agent').enqueue(m.id, true); if (!ok) wb.post({ type: 'agent', kind: 'note', at: '', text: `이미 대기열에 있거나 조치 중: ${m.id}` }); break; }
+- 변경: 분기마다 누른 즉시 wb.post({type:'agent',kind:'note',text:'접수: …'}) 와 agentStatus 를 보내고, enqueue 성공이 busy 상태에서 일어나면 '대기열 N번째, 대기 사유 = 현재 조치 id' 를 보냄. Promise 결과의 ok:false why 와 catch 예외를 errlog 와 함께 같은 note 로 웹뷰에 보냄. 공용 helper(예 wb.orchAck(label, promise))로 묶어 분기마다 같은 문구 틀을 지킴. 파일 tools/VibeManager/workbench.js, tools/VibeManager/test/t_backup_push.js, tools/VibeManager/test/t_chain_abort.js, tools/VibeManager/test/t_chain_loop.js, tools/VibeManager/test/t_chain_resume.js, tools/VibeManager/test/t_cloud_reveal.js, tools/VibeManager/test/t_hist_console.js, tools/VibeManager/test/t_job_autodel.js, tools/VibeManager/test/t_job_mirror.js, tools/VibeManager/test/t_job_resume.js, tools/VibeManager/test/t_job_unv.js, tools/VibeManager/test/t_orch_ccwork.js, tools/VibeManager/test/t_orch_history.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_orch_hotreload.js, tools/VibeManager/test/t_orch_improve.js, tools/VibeManager/test/t_orch_inc_time.js, tools/VibeManager/test/t_orch_ladder.js, tools/VibeManager/test/t_orch_unv.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_reap_orphans.js, tools/VibeManager/test/t_resume_inner.js, tools/VibeManager/test/t_run_end.js, tools/VibeManager/test/t_verify_fresh.js, tools/VibeManager/test/t_vision_history.js, tools/VibeManager/test/t_wb_jobstop.js, tools/VibeManager/test/t_wb_late.js, tools/VibeManager/test/t_wb_load.js, tools/VibeManager/test/t_wb_logname.js, tools/VibeManager/test/t_wb_openscreen.js, tools/VibeManager/test/t_wb_resultdone.js, tools/VibeManager/test/t_wb_stopmark.js, tools/VibeManager/test/t_webview_kit.js, tools/VibeManager/test/t_webview_syntax.js. 대상 밖 변경 38개(다른 작업).
+- 확인(20:53 실행): 구문 검사 46개 파일 통과, 시험 112/112개 파일 통과(PASS 1925, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0. 개선안 확인: 2026-11-26 20:36:08~20:40:57 반영 전: node --check 통과, run_all 'ALL OK 파일 112/112 PASS 1907 FAIL 0', t_webview_syntax 'ALL PASS', doc_style 'workbench.js | 문장 609 | 위반 0'. 2026-11-26 20:43:34~20:48:29 반영 뒤: node --check 통과, t_wb_resultdone 'OK t_wb_resultdone.js PASS 22', run_all 'ALL OK 파일 112/112 PAS
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/VibeManager/workbench.js.bak_20261126_self1927, tools/VibeManager/test/t_backup_push.js.bak_20261126_self1927, tools/VibeManager/test/t_chain_abort.js.bak_20261126_self1927, tools/VibeManager/test/t_chain_loop.js.bak_20261126_self1927, tools/VibeManager/test/t_chain_resume.js.bak_20261126_self1927, tools/VibeManager/test/t_cloud_reveal.js.bak_20261126_self1927, tools/VibeManager/test/t_hist_console.js.bak_20261126_self1927, tools/VibeManager/test/t_job_autodel.js.bak_20261126_self1927, tools/VibeManager/test/t_job_mirror.js.bak_20261126_self1927, tools/VibeManager/test/t_job_resume.js.bak_20261126_self1927, tools/VibeManager/test/t_job_unv.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_ccwork.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_history.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_history_kind.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_hotreload.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_improve.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_inc_time.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_ladder.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_unv.js.bak_20261126_self1927, tools/VibeManager/test/t_orch_usercheck.js.bak_20261126_self1927, tools/VibeManager/test/t_reap_orphans.js.bak_20261126_self1927, tools/VibeManager/test/t_resume_inner.js.bak_20261126_self1927, tools/VibeManager/test/t_run_end.js.bak_20261126_self1927, tools/VibeManager/test/t_verify_fresh.js.bak_20261126_self1927, tools/VibeManager/test/t_vision_history.js.bak_20261126_self1927, tools/VibeManager/test/t_wb_jobstop.js.bak_20261126_self1927, tools/VibeManager/test/t_wb_late.js.bak_20261126_self1927, tools/VibeManager/test/t_wb_load.js.bak_20261126_self1927, tools/VibeManager/test/t_wb_logname.js.bak_20261126_self1927, tools/VibeManager/test/t_wb_openscreen.js.bak_20261126_self1927, tools/VibeManager/test/t_wb_resultdone.js.bak_20261126_self1927, tools/VibeManager/test/t_wb_stopmark.js.bak_20261126_self1927, tools/VibeManager/test/t_webview_kit.js.bak_20261126_self1927, tools/VibeManager/test/t_webview_syntax.js.bak_20261126_self1927(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 묶음 S-Z 9차: 사용자 지적 점검의 세션 기록 다시 읽기 줄임 (2026-11-26 20:50)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해줘". 근거: VMO 확장 프로세스(pid 37960)가 19:27~20:34 다른 기록 없이 개선안 반영 게이트 1회(4021초, S4 3341초)만 남김. 확장 프로세스 안 동기 작업을 실측함.
+- 실측(20:4x, 실데이터 읽기만): orch-usercheck.js check() 1회 3.3~6.7초. 프로파일 2회 중 pendingPrompts 자체 1.5초와 파일 읽기 2.4초, promptSerialize(U22) 1.2초. 둘 다 세션 기록 파일(.jsonl)을 부를 때마다 통째로 다시 읽음.
+- 변경: pendingPrompts, promptSerialize(U22)가 파일별 읽은 위치·찾은 줄을 기억하고 새로 붙은 줄만 읽음. 앞 256바이트가 바뀌거나 크기가 줄면(덮어쓰기) 처음부터, 쓰는 중인 마지막 줄은 다음에 읽음.
+- 확인: 최근 3일 실데이터 대조 이전 코드 = 새 코드(프롬프트 219건, 편집 파일 250건). pendingPrompts 7.1초 → 첫 회 4.8초, 두 번째 0.12초. promptSerialize 1228ms → 74~127ms. t_orch_usercheck.js U22 읽은 위치 표본 1건 추가, PASS 215, 관련 6파일 PASS 364 FAIL 0. doc_style 위반 0.
+- 미확인: 19:27~20:34 확장 프로세스 CPU 원인(이번 변경으로 줄어드는지 미측정). VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: orch-usercheck.js.bak_20261126_sz5(U22 전), .bak_20261126_sz6(pendingPrompts 전).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 묶음 S-Z 8차: 환경설정 작업 종료 뒤 개선안 이어 진행 항목 (2026-11-26 19:29)
+- 사용자(11-26): "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요"(R257, 환경설정에서 켜고 끔).
+- 20261126192237_SELF: quick.json VM 환경설정 그룹에 '♻ 작업 종료 뒤 개선안 이어 진행 (켜기 / 끄기)' 항목, steps.json S8.flagAutoImproveOnStop, tools/Harness/verify/set_harness_flag.py 키 orch.autoImproveOnStop 추가. 값 = harness.json orch.autoImproveOnStop(기본 켬).
+- 미반영: 범위 항목(orch.autoImproveScope 'all' / 개선 세션만)은 set_harness_flag.py 가 켜고 끄는 값만 다뤄 넣지 않음.
+- 확인(19:29): JSON 구문 정상, set_harness_flag.py --selftest OK, STATUS = 켬, S4 정의 정합 0건, 관련 5파일 PASS 69 FAIL 0.
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: quick.json, steps.json, set_harness_flag.py 의 .bak_20261126_sz.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + .claude) 묶음 S-Z 7차: 컨설팅 역할 스킬 찾는 곳 확장 (2026-11-26 19:3x)
+- 사용자(11-26): 자동 회차 "계속 개선항목 찾아서 진행해줘". 근거 사용자 지시 R258 "C#.NET, REACT 등에 대해서도 전문자 SKILL 이 필요합니다."
+- 20261126192238_SELF: orch-consult.js 스킬 찾는 곳에 ~/.agents/skills, ~/.claude/plugins 아래 skills/<이름> 추가('plugin:name' 은 name). 못 찾은 역할 스킬은 지시문에 '불러 보고 없으면 보고서에 스킬 없음: 이름' 줄, 컨설팅 시작 때 VMO note. 실측 db, frontend-design, csharp-expert, java-springboot 모두 찾음.
+- 20261126192239_SELF: .claude/agents/vm-orchestra.md 에 컨설팅 주제 전문가 역할과 역할 스킬을 먼저 부르는 규칙 1줄.
+- 확인: t_orch_consult.js PASS 14(2건 추가), t_fs_retry, t_orch_afterwork 포함 3파일 PASS 40, FAIL 0. doc_style 위반 0.
+- 남김: 20261126192236_SELF(workbench.js), 20261126192237_SELF(quick.json, steps.json)는 다른 세션이 자주 고치는 파일이라 VMO 자동 반영 차례에 둠.
+- 되돌리기: orch-consult.js.bak_20261126_sz, .claude/agents/vm-orchestra.md.bak_20261126_sz.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 사용자 지적 감지기 U33 consultNoResponse 와 컨설팅 사건 기록 (2026-11-26 19:31)
+- 사용자 지적(2026-11-26 18:14): "로드 후 컨설팅을 누르고 주제를 입력했는데 반응이 없습니다." 개선안 20261126191217_SELF(종료 hook 이 넘김)
+- 근거: events.jsonl 에 컨설팅 계열 사건 0건이라 '요청 뒤 응답 없음'을 판정할 기록이 없었음
+- 변경: orch-consult.js run 이 consult.request(요청), consult.wait(에이전트 사용 중 대기), consult.start(실행 시작), consult.end(ok, why, sec) 사건을 남김. orch-usercheck.js 감지기 consultNoResponse: 요청 뒤 3분(params.waitMin) 안에 wait, start, end 기록이 없으면 fail(24시간 안 요청). user_checks.json U33 pending-detector → active
+- 시험: test/t_u33_consult.js 9건, t_orch_usercheck.js, t_orch_consult.js ALL PASS. run_all 112/112 파일, PASS 1905, FAIL 0(19:30)
+- 미확인: VS Code 실화면(창 다시 로드 필요). 실제 컨설팅 요청 때 사건이 남는지는 다시 로드 뒤 VMO 컨설팅 단추로 확인
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 자동 개선 반복: 재시도 실패 기록, 측정 산출물 집계 제외, 실행 중 삭제 시험, 흔들리던 시험 (2026-11-26 19:18)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요"(종료 hook 이 넘긴 대기 개선안 6건 중 이 세션 3건, S-Z 2건, VM 기능개선 1건)
+- 20261126190705_SELF fs-retry.js, orch-errlog.js: 재시도 끝 실패 오류에 retry {tries, ms}, 오류 기록에 retry 필드(서명 그대로). t_fs_retry.js 2건 추가
+- 20261126190703_SELF orch-history.js buildStats: 측정 산출물 경로(Doc/verify/, Doc/e2e/results/) 는 반복 수정 집계에서 뺌(CHANGELOG 세 파일 경로 151건 중 145건이 측정 산출물). t_orch_history_kind.js 2건 추가
+- 20261126190701_SELF test/run_all.js: 실행 도중 지워진 시험 파일은 실패로 세지 않고 removed '실행 중 삭제', 마지막 줄 '삭제 N'(19:00 t_session_continue.js 실측). t_run_all_changed.js 2건 추가
+- test/t_orch_hotreload.js: codeInfo staleFiles 시험이 파일 수정 시각과 다시 읽은 시각의 경합으로 전체 실행에서 1회 실패(19:15) → 쓴 파일 mtime 을 1초 앞으로 고정. 단독 3회 ALL PASS
+- 시험: run_all 111개 중 110 통과, PASS 1895(19:15). 실패 1개 = 위 t_orch_hotreload.js(고침)
+- 미확인: VS Code 실화면(창 다시 로드 필요)
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 묶음 S-Z 6차: 검사기 결함 탐지 오탐, 설정 정합 hook 키, 계획 원장 쓰기 실패 (2026-11-26 19:11)
+- 사용자(11-26): 상시 지시 "작업 종료 시 개선항목 찾아서 진행"(자동 회차, Stop hook 안내).
+- 20261126190221_SELF: tools/Harness/verify/checker_defect_scan.py K1 = target 의 ' / ' 앞만 검사, asis_ref 의 TO-BE 메타 칸(SHEET_COLUMNS <시트>.<이름>, SHEET_COLUMNS(<ID>/<같은 시트>))은 제외. K4 = '[선행 결함 종속' FAIL 제외. 실측 K1 94 → 0행, K4 2 → 0행. selftest 오탐 표본 5건 추가.
+- 20261126190702_SELF: orch-selfcheck.js S12 설정 정합이 .claude/hooks, tools/Harness/hooks 스크립트(.bak_ 제외)에서 읽는 orch 키도 읽는 코드로 셈. 실데이터 S12 경고 2건(autoImproveOnStop, autoImproveMaxPerSession) → 0건.
+- 20261126190700_SELF: orch-ladder.js planFromProposal 이 plans.json 쓰기 실패면 개선안을 planned 로 바꾸지 않고 { writeFailed } 반환, orch-improve.js approve 는 승인 상태 유지. ladder tick 이 원장 없는 planned 안(실례 20261126001528_VISION, 11-26 17:21 plans.json UNKNOWN)의 원장을 다시 만듦.
+- 확인(19:10): checker_defect_scan.py --selftest ALL PASS, t_orch_selfcheck.js PASS 38, t_orch_plans.js PASS 33, 관련 7파일 PASS 284, FAIL 0. doc_style 위반 0.
+- 미확인: VS Code 실화면(창 다시 로드 필요). 20261126001528_VISION 원장 생성은 창 다시 로드 뒤 ladder tick 에서 확인.
+- 되돌리기: checker_defect_scan.py.bak_20261126_sz, orch-selfcheck.js.bak_20261126_sz3, orch-ladder.js.bak_20261126_sz4, orch-improve.js.bak_20261126_sz2.
+
+## (판 번호 없음, Doc/asisfacts) Claude Code 세션 묶음 S-B 추가: AsisFacts 운영 출력 재생성 (2026-11-26 19:11)
+- 사용자(2026-11-26): 'Doc/asisfacts 운영 출력도 다시 만들어줘'. Doc/asisfacts_cmp/apply_and_zip.py 실행 18:19:31~18:59:53, run.ps1 -SkipBuild rc=0, 교차검증 mismatches 0, screens 445.
+- 백업: Doc/asisfacts_backup_20261126_1819_before_semantic.zip(13588개, 89MB). 새 결과: Doc/AS-IS_파서결과_공통_화면별_20261126_1819.zip(13588개, 89MB).
+- _run.log: semantic projects 200 → 316, sink improved 14 → 89, call args improved 9186 → 18067, 1982.6s. 모듈별 줄 15개. derived sites 11192 → 9065, sites after propagation 59729 → 57602.
+- endpoint_usage.csv 행 31357 → 26410. BIZ_MATCH 10983 → 7788, WRAPS_FOX_REQUEST 2385 → 733, UNRESOLVED 343 → 179, EMPTY +61, MATCH +41, NOT_IN_FOXQUERY -38.
+- 호출 지점(파일, 줄, 멤버) 22256 → 21641. 사라진 615곳 = 전부 derived 행(via FoxDataClient.ExecuteDataSet 2892행, Execute 68행), 키 = 빈 값 1226, CommonData.PseudoDataClient 1130, FPCommonDataBLL.PseudoDataClient 604. 615곳 모두 앞쪽 요청 생성 줄(new FoxDataRequest, new FoxBizRequest)의 직접 행이 새 결과에 있음. 새로 생긴 호출 지점 0.
+- 되돌리기: 백업 ZIP 의 asisfacts/ 를 Doc/asisfacts 에 풀어 덮음.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 시험이 VM 폴더에 사건 파일을 남기던 결함 (2026-11-26 19:07)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요"
+- 근거(18:59 저장소와 설치 폴더 대조): tools/VibeManager 에 R12 사건 파일 7개(20261126_181714 ~ 184321_R12_ALL.json, 각 583바이트, detail = 시험 임시 폴더 gatefe-…). orch-watch.js:23 incDir 초기값 '' 이라 init 전 raise 가 현재 폴더에 씀. test/t_gate_fe_page.js 가 자가진단을 사건 기록 켠 채 돌림
+- 변경: orch-watch.js raise 첫 줄에서 incDir 가 비면 쓰지 않고 null. test/t_gate_fe_page.js sc.init 에 incidents: false. 잘못 생긴 7개는 scratchpad 로 옮김(삭제 안 함). user_rules.json 설치본 동기화(16:39 판 → 18:09 판)
+- 확인: t_gate_fe_page, t_orch_watch, t_orch_selfcheck, t_s1_ctrl ALL PASS. run_all 112개 중 111 통과, PASS 1888(19:06), 실패 1개 = 실행 중 다른 세션이 지운 test/t_session_continue.js(지금 저장소에 없음). run_all 전후 tools/VibeManager 추적 안 된 파일 비교 = 새 파일 0개. VM .js 전체 doc_style 위반 0
+- 미확인: VS Code 실화면(창 다시 로드 필요)
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: 반복 수정 집계에서 시험 파일은 원본과 같은 절에 있으면 세지 않음(시험 파일만 고친 절만 셈) (2026-11-26 18:53)
+- 사용자(2026-11-26): 개선안 20261126183313_SELF 승인(VM 자가진단  ). 근거 = orch-history.js:313, orch-ladder.js:55-58, ladder.json:76, :1138, :1175, stats.json repeatFiles t_orch_usercheck.js defect 20 / orch-usercheck.js defect 22, CHANGELOG.md:423, :1607, :1644-1650 · 진단 사다리 묶음 L3|edits|t_orch_usercheck.js
+- 변경: 변경 전: orch-history.js:313 이 절의 파일 basename 마다 kindDays 를 +1 해서, orch-usercheck.js 와 test/t_orch_usercheck.js 를 함께 고친 절 하나가 두 파일에 각각 결함 1건으로 들어감. 변경 후: 절의 파일 목록에 test/ 밖 VM 파일이 1개 이상 있으면 test/ 아래 파일은 그 절에서 kindDays 와 changes 를 올리지 않고 v.withSrc 에만 +1(표시용). 시험 파일만 고친 절은 종전대로 셈. repeatFiles 항목에 withSrc 를 추가해 S9 상세에 '원본과 함께 바뀐 절 N건(제외)'로 표시.. 파일 tools/VibeManager/orch-history.js, tools/VibeManager/test/t_orch_history_kind.js, tools/VibeManager/test/t_fs_retry.js, tools/VibeManager/test/t_orch_histauto.js, tools/VibeManager/test/t_orch_history.js, tools/VibeManager/test/t_orch_ladder_recur_time.js, tools/VibeManager/test/t_orch_selfcheck.js, tools/VibeManager/test/t_orch_usercheck.js, tools/VibeManager/test/t_orch_userrule.js, tools/VibeManager/test/t_s6_group.js. 대상 밖 변경 28개(다른 작업).
+- 확인(18:53 실행): 구문 검사 46개 파일 통과, 시험 111/111개 파일 통과(PASS 1893, FAIL 0), 정의 정합 통과, 문장 규칙 위반 0 → 0. 개선안 확인: 2026-11-26 18:41~18:47. v1 ALL PASS(22건, 새 1절 표본 2건 포함). v2 t_orch_usercheck.js defect 20 → 0. S1 node --check orch-history.js, t_orch_history_kind.js 통과. S2 run_all 'ALL OK 파일 111/111 PASS 1893 FAIL 0' 289.2초. 문장 규칙 'orch-history.js | 문장 43 | 위반 0'(반영 전 0 → 반영 뒤 0)
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/VibeManager/orch-history.js.bak_20261126_self1835, tools/VibeManager/test/t_orch_history_kind.js.bak_20261126_self1835, tools/VibeManager/test/t_fs_retry.js.bak_20261126_self1835, tools/VibeManager/test/t_orch_histauto.js.bak_20261126_self1835, tools/VibeManager/test/t_orch_history.js.bak_20261126_self1835, tools/VibeManager/test/t_orch_ladder_recur_time.js.bak_20261126_self1835, tools/VibeManager/test/t_orch_selfcheck.js.bak_20261126_self1835, tools/VibeManager/test/t_orch_usercheck.js.bak_20261126_self1835, tools/VibeManager/test/t_orch_userrule.js.bak_20261126_self1835, tools/VibeManager/test/t_s6_group.js.bak_20261126_self1835(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 자동 개선 반복 1차: 맡음 겹침 경고, 시험 재실행, 흔들리던 시험, 첫 점검, 반복 수정 집계 (2026-11-26 18:47)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요", "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요"(이 세션 /loop 자기 속도 반복 설정 18:24)
+- 20261126180320_VISION claim_proposal.js: claim 때 다른 세션이 맡은 안과 대상 파일이 겹치면 WARN 과 이력 '경고: 대상 파일 겹침', list 에 대상 파일, --root(시험용). test/t_claim_overlap.js 5건
+- 20261126180319_VISION test/run_all.js: 실패한 시험 중 그 시험이 도는 동안 VM *.js, *.json, test/*.js 가 바뀐 것만 단독 1번 다시 실행, 통과면 rerun 목록에 바뀐 파일, 마지막 줄 '재실행 N'. test/t_run_all_changed.js 4건(앞 시험이 바꾼 파일은 넣지 않음 확인)
+- test/t_resume_inner.js: ④ 수선 2회차 끊기를 고정 6초 대신 재개 기록(chain_progress sub.round 2, stage ai) 도달 뒤로 바꿈. 근거 16:34, 18:25 전체 실행에서만 실패, 단독 통과. 3개 동시 실행 ALL PASS(18:28)
+- 20261126182422_SELF orch-vision.js firstDelayMs: 실행 기록(meta.json lastMs) 없으면 60초 뒤 첫 큰 그림 점검, 있으면 10분(R254). test/t_vision_first.js 3건
+- 20261126180221_SELF orch-consult.js, workbench.js 고정 문구 2건(번역투, 가운뎃점) 위반 0
+- 20261126183040_SELF orch-history.js fixKindOf: 사용자 지적 감지기 추가 절(추가 표시 + 파일이 감지기 파일뿐) = request, '- 원인' 줄이면 defect. orch-usercheck.js isDetectorProposal 은 orch-ladder.proposalKind 하나로. VM 기능개선 세션과 맡음이 겹쳐 서로 물러났다가 이 세션이 다시 맡음(18:36)
+- 20261126183313_SELF orch-history.js buildStats: 같은 절에 원본(test/ 밖)이 있으면 test/ 파일은 반복 수정 집계에서 빼고 withSrc 만, 시험 파일만 고친 절은 종전. t_orch_history_kind.js 20건
+- 시험: run_all 111개 중 110 통과, PASS 1888(18:46). t_orch_selfapply.js 1개는 같은 시각(18:39~18:40) 다른 세션이 이 시험과 orch-selfcheck.js 를 고치던 중이라 실패, 단독 ALL PASS
+- 미확인: VS Code 실화면(창 다시 로드 필요). 반복 수정 집계 변화는 다음 이력 수집(stats.json) 뒤 S9, S15 로 확인
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 묶음 S-Z 5차: 반영 전 준비 확인, U21 원인 부류 (2026-11-26 18:42)
+- 사용자(11-26): 자동 회차 "계속 개선항목 찾아서 진행해줘".
+- 20261126183411_SELF(L4 원장 20261124000718_VISION 단계 7, 흡수 20261126182719_VISION): orch-selfcheck.js preflight. VMO 자동 반영이 안을 고르기 전에 ① 대상 파일 있음(신규 표시 제외) ② 보류 사유가 대상 밖 파일을 가리키지 않음 ③ 다른 세션이 맡은 안과 대상 파일이 겹치지 않음(시험 파일 제외)을 확인함. ①② 실패 = Claude 호출 없이 '반영 실패(준비 확인)'으로 두고 반영 실패 진단이 대상을 다시 진단, ③ = 이번 차례 건너뜀(시도로 세지 않음). 끄기 harness.json orch.applyPreflight false.
+- 근거: 20261126153056_SELF(보류 사유 '고칠 곳이 targets(ledger.py) 밖인 facts_lockrules.py') 를 autoApplyAll 이 18:16 반영 시도, 18:17 Claude exit 1. 20261124012049_SELF_5 대상 tools/VibeManager/CLAUDE.md 없음.
+- orch-usercheck.js U21: '반영 실패(준비 확인)' 줄과 지금 준비 확인에서 막힐 안의 실패는 세지 않고 detail 에 원인 부류(문장 규칙, 게이트 시험, 실행 끊김, 검증, 반영 안 됨, 기타)를 적음. 실데이터(18:3x): 24시간 5건(문장 규칙 4, 검증 1), 막힐 안의 실패 7건 제외.
+- 확인: verify 재현 153056_SELF, 012049_SELF_5 = 대상 재진단, 014508_SELF_3 동시 편집 입력 = 다음 차례, 005937_SELF 통과. t_orch_selfapply.js PASS 53 → 59, t_orch_usercheck.js U21 표본 추가 ALL PASS. doc_style 위반 0. 전체 run_all 111/111 파일, PASS 1893, FAIL 0(18:46:57).
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: orch-selfcheck.js.bak_20261126_sz2, orch-usercheck.js.bak_20261126_sz4.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 묶음 S-W 3차: AI 한도 기본 100, 첫 실행 지연, 상시 분석 첫 확인, Overall Review 지난 결과 + 턴 종료 자동 이어가기 hook (2026-11-26 18:37)
+- 사용자(11-26 18:2x): "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요", "자동반영 해주세요".
+- Stop hook: .claude/settings.local.json hooks.Stop → .claude/hooks/auto-improve-on-stop.js. Claude Code 데스크톱 세션(CLAUDE_CODE_ENTRYPOINT claude-desktop, VIBE_HARNESS·VIBE_ORCH 아님)의 턴이 끝날 때 맡은 세션 없는 대기 개선안(pending, userHold·approvedWait 아님, 맡음 기한 지남)이 있으면 decision block 으로 이어감. harness.json orch.autoImproveOnStop(true), autoImproveMaxPerSession(20). 같은 후보 목록에 진전 없이 2번이면 멈춤 허용. 18:24:23 다른 세션(d1e7f3cd)에서 발동 기록 확인.
+- 20261126182418_SELF(done): orch-agent.js aiLimit 기본 90 → 100(R253). t_orch_ailimit ⑤ 키 없음 99% 진행, 100% 멈춤.
+- 20261126182420_SELF(done): orch-consult.js firstDelayMs() = meta.json lastMs 없으면 60초, 있으면 25분(R254). t_orch_consult ⑤ 2건.
+- 20261126182423_SELF(done): orch-improve.js init 에 첫 상시 분석 확인(120초 뒤 1회, reviewDue 이고 체인 없을 때만, dispose 해제). t_orch_improve 1건.
+- 20261126182424_SELF(done): orchestra.js Overall Review 카드에 '지난 큰 그림 점검'(날짜 열기, 목적 수, 어긋남 수, 개선안 버튼 → 개선안 탭 'id:' 필터)과 '개념 재정립 문서' 목록. workbench.js visionHistory(vision/<시각>.json, concept_*.md 각 20건), orch:visionOpen 은 .vibe/orch/vision 결과, 개념, 플랜 문서만 엶. 실데이터 결과 5건, 개념 문서 19건. 새 시험 t_vision_history PASS 6.
+- 20261126182422_SELF(orch-vision.js 첫 실행 지연)는 같은 초에 3acd3c 가 맡아 반영, 이 묶음은 손대지 않음.
+- 시험: run_all 18:30:34~18:36:43 파일 109/110, PASS 1869, FAIL 1(t_orch_history_kind, 같은 시각 다른 세션이 orch-history.js 18:35:53, 시험 파일 18:36:20 수정 중. 단독 재실행 FAIL 0). 설치 폴더 5파일 PASS 104 FAIL 0(18:37:16).
+- 미확인: VMO 창 Overall Review 목록 표시, 다시 로드 뒤 컨설팅 60초 첫 실행, 상시 분석 120초 첫 확인(창 다시 로드 뒤 확인).
+- 되돌리기: 각 파일 .bak_20261126_sw3(설치 폴더 같은 태그), test/t_vision_history.js 삭제, settings.local.json hooks 삭제 또는 orch.autoImproveOnStop false.
+
+## (판 번호 없음, VM 저장소) 묶음 S-D2 이어가기: 개선안 20261126153056_SELF_2 site_types.json 생성기 (2026-11-26 18:36)
+- 사용자(11-26 18:2x): "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록". 같은 지시로 다른 세션이 18:19:42 에 Stop hook .claude/hooks/auto-improve-on-stop.js 를 만들어 .claude/settings.local.json 에 등록함. 이 세션은 hook 을 겹쳐 만들지 않고 맡은 세션 없는 대기 안을 맡아 진행함
+- 변경: tools/Harness/verify/mapping_trace.py:242 ensure_site_types 신규. AS-IS 원문에 SITE_TYPE 분기가 있는 화면만 TO-BE SCM_MST_SITE 로 Doc/verify/<화면>/site_types.json 생성(gen.at 24시간 안 = 그대로, DB 실패 = 기존 파일 유지). D3, C2 사이트 표본(2381줄)이 이 함수를 부름. GSCM UIL 원문 분기 화면 = SCP0007 1개
+- SCP0007 site_types.json 재생성 SCM_MST_SITE 3099행, 사이트 3020개(18:28:57). 11-09 수작업 파일의 E00L00300_40-P 는 지금 DB 에 없음. 수작업 원본 = site_types.json.bak_20261126_sd2
+- 시험: 표본 5건 ALL PASS(18:29:01), mapping_trace --selftest 108/108(반영 전 108/108), 문장 검사 위반 122 → 122, run_all 109/109 PASS 1855 FAIL 0(18:29:23~18:35:51)
+- 맡지 않음: 20261126183411_SELF(L4 단계 7, orch-selfcheck.js, harness.json 등 41개 파일). S-D2 금지 파일 포함, 같은 계열은 S-Z 가 처리
+- 미확인: run_verify 실행에서 생성 경로는 이번에 돌리지 않음(CheckList 실행 금지). run_verify.py 는 대상 밖이라 안 고침
+
+## (판 번호 없음, VM 저장소) 작업 종료 뒤 개선 항목 자동 찾기·진행 orch-afterwork.js (2026-11-26 18:31)
+- 사용자(11-26 18:1x): '작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요'
+- 종전: 체인·작업 목록이 끝나면 orch-improve 가 20초 뒤 사건 정리(digest)와 하루 1회 검토만 함. 검사기 결함 진단(S16, 6시간 간격)과 컨설팅(하루 1회)은 작업 종료와 연결 없음.
+- 변경: 새 모듈 orch-afterwork.js. orch-state 의 chain.end(정상 끝)·job.end(완료) 를 받아, 마지막 종료 뒤 afterWorkDelaySec(90초) 동안 새 종료와 실행 중 체인이 없으면 한 번 실행한다. 순서는 검사기 결함 스캔, 새 항목 진단(간격 afterWorkDiagGapMin 30분), 끝난 작업을 주제로 컨설팅(간격 afterWorkConsultGapMin 60분), 자동 반영 차례 1회(autoApplyNext). 사용자 중지(stopped·aborted)와 job 중지는 건너뜀. 끄기 orch.afterWorkEnabled false. 기록 .vibe/orch/afterwork/last.json · history.jsonl. orch-vision.js init·dispose 에서 기동.
+- 승인 경계는 그대로: 자동 반영 대상만 진행(autoEligible), 실행 hook·settings·DB 객체·시험 계정·작업 모드는 승인 대기.
+- 확인(18:22~18:30): test/t_orch_afterwork.js 11건 ALL PASS · run_all 106/106 PASS 1826 FAIL 0 · doc_style 위반 0. 설치 폴더 반영 18:30(orch-afterwork.js, orch-vision.js). 창 다시 로드 뒤 실가동(실제 작업 종료 때 동작)은 미확인.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 묶음 S-Y: S6 묶음 요약, 반영 지시문 승인 문장, 화면 게이트, 작업 모드 전환 기록, U32 컨설팅 미기동, 개선 세션 자동 이어 진행 (2026-11-26 18:32)
+- 20261126180321_VISION: orch-selfcheck.js s6Group. S6 info.groups 에 종류별 건수(창 로드 뒤 화면 확인만 남음, 창 로드 대기, 실측 미실행, 사용자 승인 대기, 그 밖)와 7일 넘은 건수, items 첫 줄 묶음 요약. 상태는 바꾸지 않음. 시험 t_s6_group.js PASS 7.
+- 20261126180321_VISION_2: orch-selfcheck.js approvalNote(autoEligible 과 같은 기준), orch-improve.js impactRule. IMPACT_RULE 은 읽을 때마다 승인 문장을 만들어 orch-consult, orch-ladder, orch-vision, 자가진단 지시문이 같은 문장을 받음. 지금 기준(autoApplyAll true, DB_ONLY) 승인 대상 = 저장소 밖 경로, .claude/settings.json, 실행 hook 스크립트, 작업 모드 변경, AS-IS 소스, FE·BE 소스. 시험 t_impact_rule.js PASS 42(4조합 x 표본 8건).
+- 20261126180323_VISION: orch-selfcheck.js fePages, feGate, gate() G-FE, gateSpec G-FE. UI/DB MODE 에서 nscm-fe 페이지 폴더를 고치는 안은 check.js --page --json(--tsc, --lint, --final 없음) BLOCK 수가 반영 전보다 늘면 되돌림. orch-improve.js gOpt 에 feBase. 시험 t_gate_fe_page.js PASS 9(임시 저장소 대역 check.js).
+- 20261126180322_VISION: tools/Harness/verify/set_scope.py. 값이 바뀌면 .vibe/orch/events.jsonl 에 scope.change 1줄, DB_FE 로 바꿀 때 전환 전 점검 3줄(게이트 기준선, GEN_SMOKE, 자가진단 S2) 출력, --selftest, --path, --events. --selftest PASS 7. 실제 작업 모드는 DB_ONLY 그대로.
+- 20261126180937_SELF: orch-usercheck.js consultCadence, user_checks.json U32 active(graceMin 10). 창 로드(activations.jsonl) 뒤 컨설팅 기록(consult/meta.json)이 없고 주기를 넘었으면 fail. t_orch_usercheck.js PASS 208(U32 표본 10건).
+- 사용자 지시(18:1x '작업 종료 시 개선항목 찾아서 진행을 자동으로', 범위 = 개선 세션만): tools/Harness/hooks/vmo-continue-stop.js 신규(세션 기록에 claim_proposal.js claim/done 실행이 있는 세션만 대상, 연속 orch.sessionContinueMax 10번 상한, 끄기 orch.sessionContinue false). 시험 t_session_continue.js PASS 11. 18:28 .claude/settings.json Stop 에 등록했다가 18:33 해제함. 다른 세션이 18:20~18:22 에 같은 일을 하는 .claude/hooks/auto-improve-on-stop.js 를 .claude/settings.local.json 에 먼저 등록해 두 hook 이 같은 목록으로 겹쳐 막았음(이 세션 18:33 종료 때 실측). 19:00 사용자 결정 '개선 세션만으로 좁힘': .claude/hooks/auto-improve-on-stop.js 에 세션 기록 판정을 넣음(claim_proposal.js claim, done, hold, release 가 있는 세션만, 예전 동작 = orch.autoImproveScope 'all'). vmo-continue-stop.js, t_session_continue.js 는 지움. 시험 t_auto_improve_stop.js PASS 6(19:01). 되돌리기 auto-improve-on-stop.js.bak_20261126_sy.
+- 20261126183041_SELF(Stop hook 이 넘긴 안, S-Y 가 맡음): orch-agent.js 담당 밖 R12 에 handler { by selfdiag } 와 progressAt, orch-improve.js add() 뒤 linkIncidents(incident 필드 또는 근거의 U<n> → 열린 사건 handler.ref = 개선안 id), orch-usercheck.js U3 idleInc 는 handler 있는 사건을 그 필드로만 판정(ref 있음 = 진행, ref 없음 = progressAt 이 gap 넘으면 공백), handler 없는 옛 사건은 종전 조건. 시험 t_orch_usercheck.js PASS 208 → 213, t_incident_handler.js PASS 5(신규), t_orch_worklist.js handler 확인 1건 추가. doc_style orch-usercheck.js 위반 1 → 0.
+- 확인: run_all.js 1차 파일 106/106, PASS 1829, FAIL 0(18:23 시작, 469.7초). 2차(183041_SELF 뒤, 18:37~18:42) 파일 108/111, PASS 1868, FAIL 0. 못 끝낸 3파일(t_checkerscan.js, t_claim_proposal.js, t_gate_fe_page.js)은 예외로 끝났고 원인 미확인(로그에 스택 없음). 18:43 단독 실행 3번씩 9건 ALL PASS. engine_selfcheck 1차 FAIL(orch-consult.js:42 0x08, 다른 세션 편집 중 · 18:26 에 없어짐), 2차 PASS(174.6초). 문장 규칙 orch-selfcheck.js, orch-improve.js 위반 0 → 0.
+- 미확인: VS Code 실화면(창 다시 로드 필요), Stop hook 실동작(다음 개선 세션 종료 때 확인).
+- 되돌리기: 각 파일 .bak_20261126_sy(저장소, 설치 폴더, .claude/settings.json), 183041_SELF 분은 .bak_20261126_sy2(orch-agent.js, orch-improve.js, orch-usercheck.js, t_orch_usercheck.js, t_orch_worklist.js), 새 파일(t_s6_group.js, t_impact_rule.js, t_gate_fe_page.js, t_session_continue.js, t_incident_handler.js, vmo-continue-stop.js)은 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 묶음 S-Z 4차: 목적 원장 단계 5, 사용자 세션 개념 변경 등록 (2026-11-26 18:22)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해줘", "작업 종료 시 개선항목 찾아서 진행을 자동으로 진행되도록 해주세요". 이 세션에 10분 주기 자동 회차를 걸었음(세션 한정, 30일 뒤 자동 만료).
+- 20261126180324_SELF(L4 원장 20261126001222_VISION 단계 5): orch-usercheck.js ledgerUpdateFor, CONCEPT_FILE_RE. 학습 때 그 지시로 고친 파일에 quick.json, steps.json, plans/*.md, plan_state 가 있고 학습 결과 목적 키가 목적 원장 키나 aliases 에 있으면 원장 갱신안 1건(대상 .vibe/orch/purpose_ledger.json, sources 에 session 출처, 체인 파일이면 reload)을 등록함.
+- 확인(18:22): t_orch_usercheck.js PASS 194 → 198(11-25 행 단위 해소 세션 표본 = 등록안 1건), 관련 5파일 PASS 314, FAIL 0. doc_style orch-usercheck.js 위반 0.
+- 미확인: VS Code 실화면(창 다시 로드 필요). 실제 학습 회차에서 갱신안이 나오는지는 다음 학습 뒤 개선안 목록으로 확인.
+- 되돌리기: orch-usercheck.js.bak_20261126_sz3, test/t_orch_usercheck.js.bak_20261126_sz2.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 묶음 S-Z 3차: 목적 원장 단계 2~4, CheckList 1판 단계 원장과 화면 표시, 사다리 대기 표시, 조치 없는 사건 판정 (2026-11-26 18:04)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해줘".
+- 20261126173844_SELF(목적 원장 단계 2): orch-ladder.js L4-2 가 원장 효력과 VMO 안 효력 중 늦은 시각을 씀. 남은 구현 1건 이상 = '구현 대기', 원장 효력 전 = '효력 대기'. 실데이터: L4|useraxis|checklistTime = 구현 대기 3건(D2, D3, D4).
+- 20261126174143_SELF(단계 3): clRunsOf 가 사용자 중지이면서 1판 없는 실행을 '1판 전 중지'로 두고 초과 근거에서 뺌(근거 표시는 남김), 동시 실행 화면 수 추가. 표본 SSP0005_1795535760347 등 11-25 4화면 동시 중지.
+- 20261126175507_SELF(단계 4): L4-1 도 원장 효력 거름. purpose_ledger.json aliases(Overall Review 목적 문구 2건)로 목적 문구 묶음을 L4|useraxis|checklistTime 1묶음으로 합침. 같은 key 합치기는 대기 아닌 쪽 기준, 사유 이어 붙임.
+- 20261126173142_SELF(L4 원장 20261125000242_VISION 단계 4): orchestra.js ladWaitRows, 사다리 카드에 대기 묶음(status wait)과 사유 표시. 렌더 시험 test/t_orch_ladder_card.js 신규.
+- 20261126173842_SELF(단계 6): run_verify.py E2E 차례 실행도 시간 기록, timing_gaps(E2E 시험 있는데 e2e 단계 행 없음) 기록과 [WARN], --selftest. orch-vision.js checklistEffect 에 1판 단계별 분, 단계 밖 분과 비율, 문서 기록 분, 동시 실행, 예산 초과 단계. 지시문 1-2 에 단계 밖 비율 10 초과 = 미확인. 실데이터 SCP0028_1795535760315 1판 79.7분, 단계 밖 37.9분(47.5%), 동시 3. 미반영: harness.json checklistStageBudget 값(첫 실측 뒤 사용자 판정 대상).
+- 후속(S-Z): Overview 사다리 카드에 효력 뒤 CheckList 1판 최근 3건(1판, 목표 초과, 단계 밖 비율, 동시 실행) 표시. orch-vision.js meta 에 checklistEffect(60초 캐시, 계산 44ms 실측).
+- 후속(S-Z): orch-usercheck.js U3 조치 없는 열린 사건 판정이 R12 사건 뒤 그 사건 id 또는 같은 지적 번호(U<n>)를 가리키는 개선안을 진행으로 셈. 사건 20261126_130515_R12_ALL(U21, 297분 '조치 없음')은 163554_SELF 등 개선안으로 조치된 상태였음. 새 코드 실측: S13 U3 idleInc 0건.
+- 20261126172039_SELF: hold(변경 본체가 새 실행 hook 과 .claude/settings.json 등록, 사용자 승인 대상).
+- 확인: t_orch_ladder.js PASS 55 → 66, t_orch_usercheck.js 191 → 194, t_orch_vision.js 27 → 31, t_orch_ladder_card.js 신규 22, run_verify.py --selftest OK. run_all 100/100 파일, PASS 1724, FAIL 0(18:02:53). doc_style 바꾼 파일 위반 0.
+- 미확인: VS Code 실화면(창 다시 로드 필요). 실행 중인 VMO 는 창 다시 로드 전이라 S13 U3 가 옛 판정으로 남음(18:02 자가진단 결과).
+- 되돌리기: 각 파일 .bak_20261126_sz, _sz2, _sz3, _sz4(설치 폴더 .bak_20261126_sz2). 새 파일 test/t_orch_ladder_card.js 는 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + git 추적) 제어 문자 검사 추가와 추적 제외 파일 정리 (2026-11-26 17:48)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요"
+- 제어 문자: 11-26 하루에 쓰기 스크립트가 넣은 0x08 이 3번 남(tools/Harness/verify/form_scen_gen.py:47, facts_lockrules.py:328, orch-selfcheck.js s8 정규식). 원인 = 이 환경 Bash heredoc 이 '\\' 를 '\' 하나로 줄임(test/t_s1_ctrl.js 작성 때 재현). JS 는 구문 오류가 아니라 정규식만 틀어져 S1 구문 점검이 못 잡음
+  - orch-selfcheck.js s1: VM .js 와 test/*.js 에서 0x00~0x1F(탭, 줄바꿈 제외) 검사, 항목 key S1|ctrl|<파일>, 몇째 줄 몇 번 문자인지 표시
+  - test/t_s1_ctrl.js 신규 4건. 메모리 feedback_bash_heredoc_backslash_ctrlchar_20261126.md
+- git 추적: .gitignore 에 걸리면서 추적 중인 파일 6개 git rm --cached(.vibe/runs.log, Doc/e2e/_run.log, __pycache__ pyc 3개, tools/VibeManager/dist/vibe-manager-1.2.1.vsix). 디스크 파일 남음. 하위 세션 S-W 가 넣은 push 전 검사(제외 경로 = 멈춤)가 다음 Source Backup 을 막지 않게 함. git ls-files -ci --exclude-standard = 0
+- 시험: run_all 100개 중 98 통과, PASS 1694(17:45:26). t_om_job.js, t_lk_job.js 2개는 run_all 안에서 실패, 단독 실행 ALL PASS(17:45). 같은 시각 다른 세션 편집과 겹쳤을 수 있으나 원인 미확인
+- 미확인: VS Code 실화면(창 다시 로드 필요)
+
+## (판 번호 없음, VM 저장소 + 설치 폴더 + 하네스) 묶음 S-Z 2차: CheckList 시간 목적 판정 자료, 점검 모듈 반영 즉시 다시 읽기, 목적 원장 (2026-11-26 17:34)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해줘". VMO 개선안 6건을 Claude Code 세션 S-Z 가 맡음(claim_proposal.js).
+- 20261126155824_SELF(L4 원장 20261125000242_VISION 단계 2): orch-vision.js checklistEffect 추가. 큰 그림 점검 입력에 기준 안 20261123000419_VISION 의 효력 시각(effAt)과 효력 뒤 끝난 CheckList 체인(runsAfter: runId, firstDocMin, chainMin)을 넣고 지시문 1-2 규칙(효력 뒤 0건 = 미확인 실측 대기, 1판 > 목표 = 어긋남)을 더함. 실데이터: 효력 2026-11-23 15:58:21, 효력 뒤 체인 6건, 1판 114, 84, 80, 94분, 1판 없음 2건.
+- 20261126162524_SELF(L4 원장 20261124000718_VISION 단계 6): orch-selfcheck.js HOT_REINIT(orch-usercheck.js, orch-worklist.js). 반영 뒤 다시 읽고 옛 모듈 _initOpts(없으면 ready 일 때 paths)로 다시 init, 학습 중(busy)이면 창 로드 대상. orch-improve.js codeInfo staleFiles 에서 설치본 수정 뒤 다시 읽은 모듈을 뺌(수정 시각 ms 정수 비교).
+- 20261126165130_SELF(L4 원장 20261126001222_VISION 단계 1): .vibe/orch/purpose_ledger.json 신규(checklistTime, 출처 = 행 단위 해소 플랜 11-25 19:00:27, CHANGELOG 체인 소요 개선 2~7 11-26 10:06, 남은 항목 D2, D3, D4). orch-ladder.js purposeLedger() 읽기 함수(끄기 orch.purposeLedger false). tools/Harness/plan_state.py set --purpose <목적 키>. 실원장 읽기: 효력 2026-11-26T16:29:09(10:06 뒤 첫 창 로드), 남은 항목 3. 사다리 판정 연결과 카드 표시는 단계 2·4 몫.
+- 20261126172743_SELF(단계 3): 20261125050137_SELF(11-25 05:12 반영)로 이미 들어가 있어 고친 파일 없음. t_orch_ladder.js L4-2 표본 ①~⑤ PASS 로 확인.
+- 20261126153056_SELF: hold. 고칠 곳이 대상 밖 facts_lockrules.py(SCP0104 수작업 139행 중 자동 해석 일치 0행, SetLockColumnsAllAssign:3985 지역 불리언 isInsertMode, 필드 칸 끝 _fixed_column_idx 미해석). 그 파일은 오늘 15:43 다른 세션이 T658, T664, T665 로 고침.
+- 시험: t_orch_vision.js PASS 21 → 27, t_orch_hotreload.js 20 → 29(6회 연속 ALL PASS), t_orch_ladder.js 49 → 55, plan_state.py --selftest OK. 관련 10파일 묶음 PASS 488(17:30, hotreload 수정 전 1건 실패 뒤 고침).
+- 미확인: VS Code 실화면(창 다시 로드 필요). 전체 run_all 결과는 아래 확인 줄.
+- 되돌리기: 각 파일 .bak_20261126_sz(설치 폴더 .bak_20261126_sz2). 새 파일 purpose_ledger.json 은 삭제.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 고정 문구 문장 규칙 위반 정리 3파일 (2026-11-26 17:34)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요"
+- 근거: VMO 자가진단 S11(16:50) orch-consult.js 21건, orch-checkerscan.js 5건, orch-vision.js 3건(doc_style.py 17:28 재측정 orch-vision.js 4건)
+- 변경: AI 지시문, 표시 문구의 가운뎃점 나열 → 쉼표, 줄표 → 쉼표, 수식어(모두, 반드시) 삭제, 번역투('~경우') 정리, 추측 표현('판단하면') → 근거 조건, 이모지(🧯·🛠️) → '보완 메뉴'. orch-consult.js meta lastResult 구분자 쉼표
+- 확인: doc_style.py 3파일 위반 0(17:30). run_all 98/98 파일, PASS 1678, FAIL 0(17:33:46)
+- 참고: 17:14 자가진단 S1 의 prompt-panel.js 구문 오류는 17:27 node --check 통과(설치본과 같음). 하위 세션 편집 도중 상태로 봄
+- 미확인: VS Code 실화면(창 다시 로드 필요)
+
+## (판 번호 없음, VM 저장소) Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 범위 밖 확정 15화면 추가 (2026-11-26 17:31)
+- 사용자(2026-11-26 17:28): '15화면도 확정'. tools/Harness/rules/form_scen_scope.csv 에 DM0036, DMF0000, DMF0020, DMF0051, FP00631, FP01624, FP02845, FPC0096, FPC0103, FPC0110, FPC0114, FPC0115, SCP0078, SCP0113, SSP0027 추가(사유 = 화면별 TO-BE 메뉴 미등록·미사용, 모듈 TO-BE 메뉴 0개 여부, 같은 원문 TO-BE 화면 없음). 원장 31화면.
+- 결과(17:29:08 전 화면 미리보기): 폼 저장 38화면 · 활성 69건 · 보류 0 · 측정 보류 0 · 맡김 0 · TO-BE 미구현 0 · 같은 원문 TO-BE 화면에서 잼 13 · 범위 밖 304건(31화면).
+- 확인: --selftest PASS(17:29). engine_selfcheck FAIL(17:29:40~17:31:38) — 신규 실패 1건 CTRL_CHARS tools/Harness/verify/facts_lockrules.py:328 제어 문자 0x08. 이 세션이 고친 파일 아님(그 파일 17:31:43 다른 작업이 수정 중). 이 세션 파일(form_scen_gen.py, formscen.ts, form_scen_scope.csv) 제어 문자 0건, 그 밖 항목 0건.
+
+## (판 번호 없음, VM 저장소) Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 범위 밖 확정 16화면 (2026-11-26 17:27)
+- 사용자(2026-11-26 17:22): 남은 TO-BE 미구현 25건(FP 모듈 13화면 19건, SCP0099 3건, SCP0083 2건, SSP0007 1건) '범위 밖으로 확정'.
+- tools/Harness/rules/form_scen_scope.csv 신규(asis_id, scope=out, why, decided): FP00594·FP00595·FP00596·FP00597·FP00598·FP00599·FP00600·FP00601·FP00602·FP00607·FP00621·FP00622·FP00643·SCP0099·SCP0083·SSP0007 16화면.
+- tools/Harness/verify/form_scen_gen.py 7차: 이 원장의 scope=out 화면은 TO-BE 미구현 항목을 _out_of_scope(사유 = 확정 시각·근거)로 둠. 화면 단위 결정이라 25건을 포함한 16화면 항목 188건이 범위 밖으로 감.
+- 결과(17:24:38 전 화면 미리보기): 폼 저장 38화면 · 활성 69건 · 보류 0 · 측정 보류 0 · 맡김 0 · 같은 원문 TO-BE 화면에서 잼 13 · 범위 밖 188 · TO-BE 미구현 116건(15화면: DM0036, DMF0000, DMF0020, DMF0051, FP00631, FP01624, FP02845, FPC0096, FPC0103, FPC0110, FPC0114, FPC0115, SCP0078, SCP0113, SSP0027 · 이번 확정 대상 아님).
+- 확인: --selftest PASS(범위 밖 확인 추가), engine_selfcheck PASS(17:25:37~17:27:19), pyflakes 0건, 제어 문자 0건.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 묶음 S-W 추가: Source Backup commit 자동 정리 끔, push 전 대용량, 제외 경로 검사 (2026-11-26 17:29)
+- 조정 세션 요청(11-26 17:2x). workbench.js 만 고침.
+- 20261126165225_INC(done): 2/3 commit = backupCommitArgs(msg) = `-c core.safecrlf=false -c maintenance.auto=false -c gc.auto=0 commit -q -m ...`. 3/3 push 성공 뒤 안내 1줄 'git 저장소 정리(git maintenance run)는 백업 밖에서 실행'.
+- 20261126164857_INC(done, 후 2만): prePushCheck(cwd, origin/main). origin/main..HEAD 에서 더하거나 바꾼 파일(git diff --raw, cat-file --batch-check blob 크기, check-ignore --no-index)을 봄. .gitignore 제외 경로 또는 100MB 초과 = push 멈춤, 경로와 크기 출력. 50MB 초과 = 경고 줄만(조정 세션 지시: 추적 중 50~100MB 파일 10개). 원격 기준 없음 = 검사 건너뜀. 후 1(미push 커밋 다시 묶기) = 조정 세션 17:09 처리, 이 묶음은 하지 않음.
+- 실측(17:26:03, 읽기만): 미push 커밋 파일 16,287, 100MB 초과 0, 50MB 초과 0, .gitignore 제외 경로 1개 = .vibe/runs.log 170,450바이트. 지금 상태로 Source Backup 을 돌리면 push 전에 멈춤(.vibe/runs.log 를 커밋에서 빼는 일은 사용자 확인 대상).
+- 시험: t_backup_push(신규, 임시 git 저장소) PASS 11. workbench 관련 35파일 PASS 728 FAIL 0(17:28:48). 설치 폴더 복사 17:28:59, 설치 폴더 t_backup_push ALL PASS.
+- 되돌리기: workbench.js.bak_20261126_sw2(설치 폴더 같은 태그), test/t_backup_push.js 삭제.
+- 보충(17:45): 후 1 은 조정 세션이 17:09 묶고 17:26 push(1a0acf93d, origin/main reflog 17:26:14). .gitignore 에 걸린 추적 파일 6개는 조정 세션이 17:3x git rm --cached. 그중 .vibe/runs.log 는 사용자 지시로 로컬 커밋 2142e47e9(17:38:52, 미push, 임시 index 로 그 파일만)에 담김, 나머지 5개(Doc/e2e/_run.log, pyc 3개, dist/vibe-manager-1.2.1.vsix)는 스테이징된 채 다음 Source Backup 커밋에 들어감. push 전 검사 17:38:57 = 멈춤 0, 경고 0. run_all 17:39:27~17:45:12 파일 100/100, PASS 1705, FAIL 0.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 묶음 S-W: 웹뷰 공용 모듈, push 실패 원인 줄, 서버 로그 크기 상한, 체인 단계 틀 (2026-11-26 17:22)
+- 사용자(11-26): "계속 개선항목 찾아서 진행", "병렬로 펼쳐서 진행". VMO 개선안 4건을 Claude Code 세션 S-W 가 반영함(claim_proposal.js 맡음 → done 3건, hold 1건).
+- 20261126164322_SELF(done): webview-kit.js 신규. mdEsc, mdInline, mdHtml(종전 3벌과 글자 3,108자 일치), kitSelScope, kitSelAll(Ctrl+A, 본체 selectAll 명령), kitDrag(경계 막대), glassCss. jobs.js, orchestra.js, workbench.js, history.js 가 ${require('./webview-kit')...} 로 끼워 씀. 복사본 mdHtml 3 → 0, selectAll 가로채기 3 → 0, setPointerCapture 3 → 0, .glass 기본 규칙 2 → 0. orch-userrule.js SCOPE_FILES 맨 앞 webview-kit.js, 지시문에 '공용 모듈 1건으로 묶음' 줄. 반영 전후 웹뷰 HTML 비교 = kit 호출부만 다름. menu-view.js, prompt-panel.js 의 .glass 복사본은 대상 밖이라 그대로.
+- 20261126164446_VISION(done): orch-watch.js pushCause(rejected, auth, size, network, server, unknown), pushInfoOf(HTTP 코드, 거부 사유 1줄, 미push 커밋 수 git rev-list @{u}..HEAD), needUserTop, markShown. R1 Source Backup push 사건에 pushInfo 붙임. orchestra.js 요약 맨 위 '사람 확인 필요' 줄(#bNeed, 사건 1줄 + 다음 행동 1줄), 요약 탭에서 보이면 orch:needShown 으로 사건 shownAt 기록(처음 1번). workbench.js postIncidents needTop, orch:needShown 처리. orch-usercheck.js U3 needUserVmo 에서 shownAt 사건 제외. 실측 17:00:12: 20261123_112448_R1_ALL 로그 = server, HTTP 500, 미push 4건.
+- 20261126164445_VISION_2(done, 대상 정정): 서버 로그를 쓰는 곳은 server-service.js start()(workbench.js:789 spawnStream 아님). logpipe.js 중계기 신규: 서버 출력을 받아 로그에 쓰고 harness.json orch.serverLogMaxMB(새 키, 200) 를 넘으면 <로그>_partN.log 로 이름 바꾼 뒤 새로 씀, orch.serverLogKeep(새 키, 5)개만 남김. server-service.js serverSpawnArgs, start() 가 중계기로 기동(VS Code 안 = Code.exe + ELECTRON_RUN_AS_NODE), tailFile 이 교체 때 part 뒷부분을 마저 읽음. serverLogMaxMB 0 = 종전 방식. 처음 만든 '복사 뒤 비우기' 방식은 6회 중 2회 1~3줄 누락으로 버림. 기존 .vibe/logs/2026-11-23T11-24-48_NSCM_BE.log(50,192,232,252바이트) 는 지우지 않음. 기본값 200 MB, 5개는 사용자 확인 대상.
+- 20261126164547_SELF(17:48 done 으로 바뀜): 사용자가 창 다시 로드 뒤 quick_tpl_apply.js 실행, quick.json 17:47:12 변환(백업 quick.json.bak_20261126_tpl). rerunTask S8.checklistSettle 원문 9곳 → 1곳, 펼친 결과 = 변환 전 백업과 같음, t_quick_tpl PASS 8, 체인 시험 8파일 PASS 98 FAIL 0(17:48:46).
+- 20261126164547_SELF 대조 시험(18:07~18:15): test/fixtures/quick_chains_before_tpl_20261126.json = 변환 직전 체인 16개 사본(quick.json.bak_20261126_tpl). t_quick_tpl ⑥ = 틀 자리 9곳 펼친 단계가 변환 전 같은 자리와 같음(task, args, title, optional, ifJsonGt, ifMissing, okCodes, verify, repair, 단계 전체), 🚒 자동보완 단계 수 15, task 순서, 3~5단계와 10~12단계 같음. 틀에서 --gate 를 뺀 사본으로 ⑥ 2건 FAIL 확인. t_quick_tpl PASS 11, run_all 18:08:29~18:15:13 파일 100/100, PASS 1731, FAIL 0. 설치 폴더 test/t_quick_tpl.js, test/fixtures 복사(18:15:19), 설치 폴더 ALL PASS.
+- 미확인: 🚒 자동보완 체인 실실행 1회(조정 세션 결정으로 시험으로 대신함, 실실행은 사용자 몫). 18:00:57 실행은 단독 작업 S8.verifyIfStale(chain.start 없음)이라 체인 확인에 쓰지 않음.
+- 20261126164547_SELF(종전 hold 기록): quick-tpl.js expand, prompt-panel.js loadQuick 이 quick.json stepTemplates { use } 를 펼침. 변환기 quick_tpl_apply.js(미검증 해소 3단계 9곳 → stepTemplates.unverifiedLoop 1곳). quick.json 은 아직 그대로: 실행 중 설치본이 { use } 단계를 '프롬프트 없음' exit 2 로 실패시킴. 창 다시 로드 뒤 node tools/VibeManager/quick_tpl_apply.js 실행. 체인 args 덧붙임은 workbench.js:1555 기존 보정이 처리해 argsReplace 는 넣지 않음.
+- 시험: t_webview_kit(신규) PASS 30, t_webview_syntax PASS 19, t_orch_watch PASS 35, t_orch_usercheck PASS 191, t_spawn_logcap(신규) PASS 13(4회 연속), t_server_service PASS 14, t_server_belog PASS 11, t_quick_tpl(신규) PASS 8, t_chain_args PASS(58곳, 변환 뒤 42곳). run_all (17:16:51~17:22:18) 파일 97/97, PASS 1652, FAIL 0. 설치 폴더 t_webview_kit PASS 30, t_webview_syntax PASS 19, t_quick_tpl PASS 5(변환기 없는 폴더라 ①~③ 건너뜀).
+- 미확인: VMO 창 사람 확인 줄 표시, VS Code 안 중계기 기동(서버 재기동 필요), 경계 막대와 Ctrl+A 실제 동작. 창 다시 로드 뒤 확인.
+- 설치 폴더 복사(17:22:34): webview-kit.js, jobs.js, orchestra.js, workbench.js, history.js, orch-userrule.js, orch-watch.js, orch-usercheck.js, server-service.js, logpipe.js, quick-tpl.js, prompt-panel.js, test 5개. quick_tpl_apply.js 는 저장소에만 둠(설치본 quick.json 을 바꾸지 않게).
+- 되돌리기: 각 파일 .bak_20261126_sw(설치 폴더 같은 태그), 새 파일 webview-kit.js, logpipe.js, quick-tpl.js, quick_tpl_apply.js, test/t_webview_kit.js, test/t_spawn_logcap.js, test/t_quick_tpl.js 삭제, harness.json orch.serverLogMaxMB, serverLogKeep 삭제.
+
+## (판 번호 없음, VM 저장소) Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 6차, TO-BE 미구현 29건 중 4건 같은 원문 TO-BE 화면으로 연결 (2026-11-26 17:20)
+- 사용자(2026-11-26): 'TO-BE 미구현 29건도 해소되게 보완해줘'. 29건 = FP 13화면 19건, SCP0099 3건, SSP0007 1건, SCP0060 1건, DMF0067 3건(조회 단추), SCP0083 2건(조회 단추). 이 화면들의 TO-BE 대응 화면을 찾음.
+- 확인: TO-BE FE __asis-mapping__.md 머리에 이 화면 AS-IS ID 0건. 사내 TO-BE DB SCM_ADM_MNU_M 메뉴 219개 중 FP 모듈 0개. AS-IS 메시지 문장 비교: DMF0067 20/20 = DMF0042, SCP0060 13/14 = SCP0011, SSP0007 10/14 = SCP0011(90% 미만).
+- tools/Harness/verify/form_scen_gen.py 6차: TO-BE 메뉴가 없는 화면이라도 메시지 문장이 90% 이상 같은 AS-IS 원문을 가진 TO-BE 메뉴(USE_YN=Y) 화면이 있으면 같은 메서드·문장 항목을 _covered(그 화면 CheckList 에서 잼, 대응 줄 기록)로 둠. 모듈 전체가 TO-BE 메뉴에 없으면 사유에 적음.
+- 결과: 29건 중 4건 _covered(DMF0067 FindData 3건 → DMF0042 cs:697·705·711, SCP0060 btnCal_Click → SCP0011 cs:3337). 25건은 TO-BE 메뉴 없음·같은 원문 TO-BE 화면 없음(FP 모듈 19건, SCP0099 3건, SSP0007 1건, SCP0083 2건)으로 남음. TO-BE 화면을 만들거나 대응 화면을 정해야 잴 수 있음.
+- 확인: --selftest PASS(6차 확인 2가지 추가), engine_selfcheck PASS(17:18:39~17:20:48), pyflakes 0건, 제어 문자 0건.
+- 되돌리기: tools/Harness/verify/form_scen_gen.py.bak_20261126_sc4(4차 이전 상태는 sc3).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 자가 보완: VM 고정 문구 문장 규칙 2차(VMO 반영만 검사 → 쓰기 경로 전체 검사, 새어 든 위반 L1 정리, 목적 어긋남은 효력 뒤 판정만 셈) · 단계 2 (2026-11-26 17:19)
+- 사용자(2026-11-26): 개선안 20261126132614_SELF 승인(VM 자가진단 L4plan L4plan|20261125000616_VISION|2). 근거 = L4 단계 원장 20261125000616_VISION 단계 2/4 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_VM_.md
+- 변경: S11 점검이 이전 결과보다 늘어난 문장 위반을 fix 개선안으로 올림 · 상세 = .vibe/orch/vision/concept_20261125_L4_purpose_VM_.md 전환 절 단계 2. 파일 tools/VibeManager/orch-ladder.js, tools/VibeManager/orch-selfcheck.js, tools/VibeManager/orch-vision.js, tools/VibeManager/test/t_orch_ladder.js, tools/VibeManager/test/t_orch_selfcheck.js. 대상 밖 변경 372개(다른 작업).
+- 확인(17:19 실행): 구문 검사 44개 파일 실패 1, 시험 92/97개 파일 통과(PASS 1586, FAIL 1), 정의 정합 통과, 문장 규칙 위반 3 → 3. 개선안 확인: 반영 전 → 반영 뒤. doc_style.py tools/VibeManager/*.js: 16:58 5개 파일 31건(orch-selfcheck.js 0) → 17:02 사본 5개 파일 33건(다른 작업이 workbench.js 1→3), orch-selfcheck.js 0 → 0. S11 정리 개선안: 없음 → 1건(33건, 대상 5개 파일, fix, L1, 자동 반영 대상), 2회째 추가 0건. node test/t_orch_selfcheck.js: ALL PASS(L1 표본 6건 포함, 17:08). node test/run_
+- 미확인: VS Code 실화면(창 다시 로드 필요).
+- 되돌리기: VMO 창 개선안 탭의 되돌리기 버튼, 또는 tools/VibeManager/orch-ladder.js.bak_20261126_self1652, tools/VibeManager/orch-selfcheck.js.bak_20261126_self1652, tools/VibeManager/orch-vision.js.bak_20261126_self1652, tools/VibeManager/test/t_orch_ladder.js.bak_20261126_self1652, tools/VibeManager/test/t_orch_selfcheck.js.bak_20261126_self1652(설치 폴더는 같은 태그).
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) t_orch_agent.js 전체 실행 때만 1건 실패하던 시간 차 보완 (2026-11-26 17:15)
+- 사용자(11-26): "t_orch_agent 전체 실행 때만 실패하는 원인 확인해줘", "예, 고쳐줘". 17:05 run_all 에서 '같은 서명 2회 조치 뒤 3번째' 1건 실패(이 시험 28.2초, 단독 5.2초).
+- 원인: orch-watch.js:532 가 watch.init 5초, 60초 뒤 reloadSweep 을 돎. 시험 5단계가 손으로 올린 사건 i5 는 원인 기록(step.end)이 없어 '지난 기록을 다시 읽어 올린 중복'으로 해결 처리됨. 5단계가 5초 시점에 걸릴 때만 실패. 재현: i5 를 4.9초에 올린 사본 FAIL(같은 문구), noReloadSweep 사본 ALL PASS(17:11).
+- 변경: test/t_orch_agent.js:30 watch.init(p, {}) → watch.init(p, { noReloadSweep: true }). 이 시험에 reloadSweep 확인 항목 0건.
+- 확인(17:15 실행): 단독 PASS 15, i5 를 4.9초에 올린 사본 ALL PASS, run_all --only t_orch_agent PASS 15.
+- 되돌리기: test/t_orch_agent.js.bak_20261126_sz(설치 폴더 같은 태그).
+
+## (판 번호 없음, VM 저장소) Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 5차, 다른 측정에 맡긴 45건 → 0건 (2026-11-26 17:10)
+- 사용자(2026-11-26): '다른 측정에 맡긴 45건도 해소되게 보완해줘'. 45건(권한 22, 저장 뒤 조회 20, 그리드 3)을 TO-BE 존재 기준으로 나눔: TO-BE 메뉴 있는 화면 16건(DMF0042 조회 15, SCP0011 권한 1), TO-BE 미등록·미사용 화면 29건.
+- tools/Harness/verify/form_scen_gen.py 5차:
+  - 단추별 처리 본문을 do_chain 으로 묶고, 저장 뒤 다시 조회 메서드 안 검사는 actions_entries 에 'FindButton > 메서드' 경로가 있으면 조회 단추(search) 시나리오로 다시 만듦. DMF0042 FindData 15건(변형 파일 2개).
+  - 권한 검사(SecurityContext.CanUpdate): 메뉴 SEARCH 권한은 있고 SAVE 권한은 없는 그룹(Doc/tobefacts/db/btn_auth.csv)의 명부 계정(tools/E2E/users.json)으로 로그인. SCP0011 = SCP/40/SCM Viewer. 단추 숨김·비활성이면 TO-BE 룰 CR-070(확정 · 버튼 코드 권한이 있을 때만 노출) 통과, 보이면 AS-IS 권한 문구 MSG00096 대조.
+  - TO-BE 미등록·미사용 화면의 맡김 29건은 _tobe_missing 으로.
+- tools/E2E/lib/formscen.ts: 단계 asAccount(명부 계정 로그인 · 시나리오 끝에 원래 계정으로 되돌림) · authGate 추가, search·authGate 뒤 화면 문구 읽기.
+- 확인: --selftest PASS(5차 확인 2가지 추가). 전 화면 미리보기 38화면 보류 0건 · 측정 보류 0건 · 맡김 0건, 활성 시나리오 화면 DMF0042(dynamic 20), SCP0011(2), SCP0123(3), SSP0020(수작업본 유지). tools/E2E tsc exit 0(17:07:34~17:08:04). engine_selfcheck PASS(17:09:13~17:10:54). 제어 문자 0건.
+- 미확인: Playwright 실측 미실행. SCM Viewer 계정 로그인과 Calculate 단추 표시 상태는 실행 때 확인.
+- 되돌리기: tools/Harness/verify/form_scen_gen.py.bak_20261126_sc4, tools/E2E/lib/formscen.ts.bak_20261126_sc4.
+
+## (판 번호 없음, 저장소 git) Source Backup 미push 커밋 다시 묶기 (2026-11-26 17:10)
+- 사용자(11-26 17:0x): "다시 묶기 승인"
+- 전: origin/main 269902c65(11-20) 뒤 미push 4건(8b7cff4d3, e5c975349, ed0f80758, 0db6dbba6). 원격 대비 19,183파일, 영상 경로 242, 스냅샷 1,258, 추적 .webm 1,534
+- 한 일: 로컬 브랜치 backup/pre-rebundle-20261126 = 0db6dbba6 보관 → git reset --soft origin/main → git rm --cached(Doc/verify/**/video, Doc/verify/**/*.webm, .vibe/orch/snap 9,821개, 100MB 초과 Doc/asisfacts_cmp/{base,sem,sem2}/{calls,props}.csv 6개) → .gitignore 규칙 추가 → 커밋 1a0acf93d BACKUP_20261126_170900(maintenance.auto=false, gc.auto=0)
+- 확인: 보관 브랜치 대비 차이 = 삭제 9,827, .gitignore 수정 1(그 밖 0). 100MB 초과 추적 파일 0, 50~100MB 10개. 디스크 파일 남음(read1 영상, .vibe/orch/snap 315폴더 확인)
+- push(사용자 "push 진행"): 첫 시도 17:11 은 credential username 을 지정하지 않아 Git Credential Manager 가 다른 계정 인증을 기다리며 멈춤(출력 0바이트) → 17:25 종료(rc=1, 원격 변경 없음). leekc297 지정(quick.json Source Backup credUser 와 같은 값)으로 다시 push → 성공 269902c65..1a0acf93d main -> main(17:26:14, 객체 8,679개 301.67MiB). 사건 20261123_112448_R1_ALL resolved
+- 참고: .git/objects/pack 에 .idx 없는 옛 pack 15개(06-07 ~ 11-05 생성, git 이 읽지 않음) 있음. 정리는 하지 않음
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 묶음 S-Z: 반영 지시문 게이트 목록, 시험 파일 자동 포함, VMO 알림 한곳, 생성기 자체 시험 (2026-11-26 17:08)
+- 사용자(11-26): "계속 개선항목 찾아서 진행", "병렬로 펼쳐서 진행". VMO 개선안 4건을 Claude Code 세션 S-Z 가 반영함(claim_proposal.js 맡음 → done).
+- 20261126163554_SELF: orch-selfcheck.js gateSpec(targets) 추가(S1, S2, S4 + 대상 VM .js 있고 styleGate 켬이면 S11). orch-improve.js approveHeld 의 반영 전 게이트를 지시문 앞으로 옮기고 gatePromptLines 로 [반영 뒤 게이트 검사] 목록, doc_style.py 명령, 파일별 반영 전 문장 규칙 위반 수를 지시문에 넣음.
+- 20261126163555_SELF: orch-improve.js testTargetsFor, addTestTargets. self 안 등록 때와 자동 반영으로 넘어온 gated 안 반영 시작 때 원본 VM .js 이름을 따옴표나 / 뒤로 부르는 test/t_*.js 를 targets 끝에 더하고 testsAdded 에 남김. 끄기 harness.json orch.autoTestTargets false. 이번 저장소 실측 job-runner.js 를 부르는 시험 17개, orch-watch.js 33개.
+- 20261126164445_VISION_3: orch-notify.js 신규. 반영 완료는 10분 묶음('개선안 반영 N건, 실패 M건'), 반영 실패와 사건은 바로, 같은 문구 10분에 1번, 같은 개선안 실패 알림 2개는 1건. events.jsonl 에 notify.shown, notify.merged 기록. extension.js 의 orch-agent, orch-heal, orch-improve, orch-vision, orch-selfcheck 알림을 연결. orch-improve.js 상시 분석 알림은 coreAutoApply true 이면 '개선안 N건 등록(자동 반영 순서 대기)'. 끄기 orch.notifyMerge false.
+- 20261126164445_VISION_4: tools/Harness/test/t_gen_check_smoke.js 신규(DMF0005 로 gen.js 를 임시 폴더에 생성, 두 번 실행 결과 같음, check.js --json BLOCK MS1 1건 기대, 저장소 Doc/gen 변경 0건). engine_selfcheck.py 전체 검사에 GEN_SMOKE 등록. inventory_check.py --write-registry 실행.
+- 파일: orch-selfcheck.js, orch-improve.js, extension.js, orch-notify.js, test/t_orch_selfapply.js, test/t_orch_notify.js, tools/Harness/test/t_gen_check_smoke.js, tools/Harness/verify/engine_selfcheck.py, tools/Harness/README.md(등록부).
+- 확인: t_orch_selfapply.js PASS 44 → 53. t_orch_notify.js 11건 PASS. t_gen_check_smoke.js 10건 PASS. engine_selfcheck.py full PASS(17:00:32, GEN_SMOKE 0건 1.5초). run_all 94/95 파일, PASS 1630, FAIL 1(17:05:08, t_orch_agent.js '같은 서명 2회 조치 뒤 3번째'). t_orch_agent.js 단독 PASS 15, 5파일 묶음 재실행 2회 PASS 170(17:07:48). git status Doc/gen, nscm-fe 변경 0건.
+- 미확인: VS Code 실화면(창 다시 로드 필요). 알림 묶음 효과는 다시 로드 뒤 24시간 events.jsonl notify.shown 건수와 notify.merged 합계로 확인. t_orch_agent.js 전체 실행 때만 1건 실패한 원인 미확인(그 시각 다른 세션이 orch-watch.js 수정 16:58).
+- 되돌리기: 각 파일 .bak_20261126_sz(설치 폴더 같은 태그). 새 파일 orch-notify.js, test/t_orch_notify.js, tools/Harness/test/t_gen_check_smoke.js 는 삭제.
+
+## (판 번호 없음, 저장소 .gitignore) Source Backup 에 영상이 계속 들어가던 제외 규칙 보완 (2026-11-26 17:05)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요"
+- 근거(17:03 실측): origin/main..HEAD 미push 커밋 4건(8b7cff4d3 11-23 ~ 0db6dbba6 11-26 16:44), 19,183파일 변경, e2e/video 242파일, .vibe/orch/snap 1,258파일. 추적 중 .webm 1,534개. .gitignore:230 'Doc/verify/*/e2e/video/' 는 e2e/read<번호>/video, eg/popup/video 를 막지 못함(HEAD 에 SCP0005 read1 영상 212,255,809바이트 등)
+- 변경: .gitignore 에 'Doc/verify/**/video/', 'Doc/verify/**/*.webm' 추가. git check-ignore 로 read1, eg/popup 경로 제외 확인, checklist.xlsx 는 제외 안 됨 확인
+- 개선안 20261126164857_INC(push 전 대용량 검사), 20261126165225_INC(commit 자동 정리 끄기)는 workbench.js 담당 하위 세션 S-W 에 맡김
+- 미실행(사용자 승인 대기): 이미 추적 중인 영상, 스냅샷의 추적 해제(git rm -r --cached)와 미push 커밋 4건 다시 묶기(git reset --soft origin/main 뒤 1건 커밋, force-push 없음)
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) 반복 수정 집계 오판 보완과 쓰기 재시도 확대 (2026-11-26 16:57)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요". 16:35~16:45 VMO 가 올린 개선안 15건을 3묶음으로 나눔: 이 세션 5건, 하위 세션 S-W 4건(workbench.js, orchestra.js, jobs.js), S-Z 4건(orch-improve.js, orch-selfcheck.js, extension.js). hook 스크립트 수정 1건(20261126164445_VISION_5)은 승인 대상이라 hold
+- 20261126164321_SELF, 20261126164550_SELF, 20261126164030_SELF(같은 문제 3건): orch-history.js fixKindOf 가 S13 사용자 지시 규칙 적용 절도 결함 수정(defect)으로 세어 진단 사다리 L3 반복 수정 묶음이 올라옴. 본문에 'S13|R<번호>|' 가 있고 결함 제목, '- 원인' 줄이 없으면 request. 실 CHANGELOG 11-20 이후 defect: workbench.js 63 → 25, orchestra.js 29 → 10, quick.json 28 → 6
+- 20261126164033_SELF: 변경 파일 집계는 '- 변경: … 파일 <목록>.' 표시가 있으면 그 목록만(설명 문장 속 파일 이름 제외). t_orch_history.js 표본 기준 96 → 90(실측 91)
+- 20261126164445_VISION: fs-retry.js 에 renameSyncRetry 추가. orch-ladder, orch-usercheck, orch-userrule, orch-checkerscan, orch-consult, orch-worklist 쓰기와 임시 파일 바꾸기에 재시도(근거 vm_errors.jsonl 16:31:54 orch-ladder.writeJson UNKNOWN ladder.json)
+- 시험: test/t_orch_history_kind.js 신규 8건, t_fs_retry.js 확장. run_all 93/93 파일, PASS 1577, FAIL 0(16:56:04)
+- 미확인: VS Code 실화면(창 다시 로드 필요). 집계 변화가 L3 진단 대기 묶음 수에 주는 효과는 다음 자가진단 S15 결과로 확인
+
+## (판 번호 없음, VM 저장소) Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 4차, 표본 없는 7화면 = TO-BE 미구현 판정 (2026-11-26 16:56)
+- 사용자(2026-11-26): '표본 없는 7화면도 해소되게 보완해줘'. 7화면(DM0036, DMF0000, DMF0020, FP01624, FPC0103, SCP0099, SSP0027)의 TO-BE 원장을 확인함.
+- 확인 결과: 사내 TO-BE DB SCM_MGR.SCM_ADM_MNU_M(16:50:48 읽기 전용 조회)에 DMF0000, FP01624, FPC0103, SCP0099, SSP0027 행 없음, DM0036·DMF0020 USE_YN = N. DMF0020 은 TO-BE 화면 폴더 __asis-mapping__.md 14행 btnBatch_Click(Batch Job)이 ⏳(후속). Doc/verify 아래 7화면 실행 기록에 ':200 응답=' 표본 0건. 잴 TO-BE 화면·단추가 없어 응답 표본이 생길 수 없음.
+- tools/Harness/verify/form_scen_gen.py 4차: TO-BE 메뉴(실DB 우선, 실패하면 Doc/tobefacts/db/menu.csv · TO-BE ID = map_screen.csv)가 미등록·미사용이면 그 화면 시나리오 전부, 처리 메서드 매핑이 ⏳·미구현·후속이면 그 단추 시나리오를 _tobe_missing(TO-BE 미구현)으로 두고 활성 파일에 넣지 않음. 자체 시험에 판정 확인 2가지 추가.
+- 결과(16:54:56 전 화면 미리보기): 폼 저장 38화면 중 TO-BE 미등록·미사용 33화면, 표본 응답 시나리오 9건 전부 TO-BE 미구현으로 분류, 활성 시나리오 파일이 생기는 화면 = DMF0042, SCP0011, SCP0123(SSP0020 수작업본 유지). 보류 0건 · 측정 보류 0건.
+- 확인: --selftest PASS, engine_selfcheck PASS(16:55:14~16:56:38, CTRL_CHARS 0 · TSC 0), pyflakes 0건. 실행기(formscen.ts) 변경 없음.
+- 미확인: Playwright 실측 미실행. TO-BE 저장 PKG 원문으로 응답 표본을 만드는 방식은 이번 대상이 없어 넣지 않음.
+- 되돌리기: tools/Harness/verify/form_scen_gen.py.bak_20261126_sc3(3차 상태).
+
+## (판 번호 없음, VM 저장소) Claude Code 세션 묶음 S-B 추가: AsisFacts 의미 분석 모듈별 로그 (2026-11-26 16:54)
+- 사용자(2026-11-26): 'Semantic.cs 모듈별 로그도 고쳐줘'. 개선안 20261125173941_SELF 의 남은 항목(_run.log 에 모듈별 의미 분석 시도, 개선 건수).
+- 변경: tools/AsisFacts/src/Semantic.cs ModuleOf(화면ID 접두 → DM, SCP, SSP, FP, SCM, 화면ID 없음 = Common, 01.Framework = Framework, 그 밖 = 기타(접두)) 추가. sink, 호출 인자의 시도·개선 위치에서 모듈별로 세고 합계 줄 뒤에 'semantic module <모듈>: sink tried, improved, call args tried, improved' 줄을 _run.log 와 화면에 씀. tools/AsisFacts/_bin 다시 빌드(obj 의 AsisFacts.dll 잠김으로 중간 파일은 임시 폴더).
+- 확인: 빌드 경고 0, 오류 0. 함정 회귀테스트 RESULT PASS(임시 판, _bin 판). 전체 scan 을 임시 폴더로 16:19:01~16:53:22 rc=0. 모듈별 합 = 합계(sink 116/89, 호출 인자 174185/18067). 15:47 scan 결과와 semantic_report, endpoint_usage, calls, sites 내용 같음(순번 열 seq, origin_seq 만 다름).
+- 미확인: 순번 열이 실행마다 달라지는 원인. Doc/asisfacts 운영 출력은 다시 만들지 않음.
+- 되돌리기: tools/AsisFacts/src/Semantic.cs.bak_20261126_sb 로 되돌린 뒤 run.ps1(빌드 포함).
+
+## (판 번호 없음, 하네스 hook) harness-gen-context 발동 조건 축소 · 폴더 판정 3단계 (2026-11-26 16:49)
+- 개선안 20261126164445_VISION_5(VMO 컨설팅 첫 실행이 올림, 사용자 승인 '반영해줘').
+- 원인: 프롬프트 전체에서 화면ID 1개와 의도 단어 1개만 있으면 발동. 11-26 16:40 VMO 컨설팅 프롬프트에 SSP0020 신규 개발 절차와 '(Doc\gen\SSP0020 없음 — 1) 부터 실행)' 이 붙음. 폴더는 11-13 부터 있고 GEN_NOTES.md 만 없음.
+- 변경: tools/Harness/hooks/harness-gen-context.ps1. VIBE_ORCH=1(VMO 가 띄운 Claude)이면 발동 안 함, 화면ID 와 의도 단어가 같은 문장(줄바꿈, 마침표 기준)일 때만 발동, 폴더 있고 GEN_NOTES.md 없으면 'new-screen.ps1 다시 실행 금지, 2) 부터 진행' 안내. 백업 .bak_20261126_vision5.
+- 확인(16:48~16:49): tools/Harness/test/t_harness_gen_context.ps1 6건 ALL PASS. 실제 Doc/gen 기준 'SSP0020 신규 개발 해줘' = '있음, 생성 메모 없음' 안내, VIBE_ORCH=1 = 출력 0바이트.
+
+## (판 번호 없음, VM 저장소 + 설치 폴더) VMO 개선안 R244, R248, R251 3건 (2026-11-26 16:45)
+- 사용자(11-26): "계속 개선항목 찾아서 진행해주세요". 16:24 새로 올라온 개선안 3건을 세션이 맡아 반영
+- 20261126162413_SELF(R244): orch-selfcheck.js claimedNow. 세션이 맡은 반영 실패 안은 VMO 반영 실패 진단, 재시도에서도 뺌. test/t_claim_proposal.js 신규 7건
+- 20261126162413_SELF_2(R248, 사용자 16:03 "특정한 일은 하면 안된다던지 하는 것은 없습니다"): autoEligible 의 승인 기준 변경 판정은 coreAutoApply 가 꺼졌을 때만. t_orch_coreauto.js 기대값 변경, 종전 기준 시험 1건 추가
+- 20261126162414_SELF(R251): orch-vision.js UI/UX 추천 대상 파일 이름 명시
+- 시험: run_all 92/92 파일, PASS 1553, FAIL 0(16:44:22). 16:34 실행에서 t_resume_inner.js 1회 실패(PASS 17, FAIL 3) 뒤 단독 2회 실행 모두 FAIL 0(16:38). 여러 세션 시험이 겹친 부하에서 시간 의존 단계가 밀린 것으로 보며 원인은 미확인
+- 미확인: VS Code 실화면(창 다시 로드 필요)
+
 ## (판 번호 없음, VM 저장소) Claude Code 세션 묶음 S-C: 폼 저장형 시나리오 생성기 3차, 측정 보류 20건 → 0건 (2026-11-26 16:41)
 - 사용자(2026-11-26): '측정 보류 20건도 해소되게 보완해줘'. 2차(16:25 절)의 측정 보류 20건을 원문 줄로 확인하고 규칙을 넣음.
 - tools/Harness/verify/form_scen_gen.py 3차 규칙:
@@ -17,6 +433,7 @@
 - 원인(16:33 확인): 설치 폴더 marisoft.vibe-manager-2.0.1 에 orch-consult.js 없음, orch-vision.js 는 컨설팅 init 없는 구판. 자가진단 S2 fail:1(16:22)로 자동 반영(selfAutoSync)이 멈춰 저장소 변경이 설치 폴더에 안 들어감.
 - 변경: workbench.js case 'orch:consult'(orch-consult.run(true) 1회, 결과 알림), orchestra.js Overall Review 패널 '컨설팅' 버튼 csRun. 설치 폴더에 orch-consult/vision/selfcheck/dict.js, user_checks/rules.json, workbench.js, orchestra.js 복사.
 - 확인(16:39): t_orch_consult, t_checkerscan, t_orch_dict, t_webview_syntax, t_orch_coreauto ALL PASS. 창 다시 로드 뒤 버튼으로 바로 실행, 자동 실행은 창 연 뒤 25분 첫 점검 + 1시간마다 주기(consultEveryDays 1) 확인.
+- 첫 실행(16:40:00~16:44:45, 286초, VS Code 밖 node 1회, 대기열 복원 끔): 진단 10건, 로드맵 8건, 개선안 6건 등록(20261126164445_VISION~_5, 20261126164446_VISION). 자동 반영 대상 5건, VISION_5 는 실행 hook 스크립트 대상이라 승인 대기. 보고 .vibe/orch/consult/last.md.
 
 ## (판 번호 없음, VM 저장소) sqllog_calls.py 큰 PARAMS 를 DB 안에서 줄여 받음 (2026-11-26 16:27)
 - 사용자(11-26): 'sqllog_calls DB 쪽 소요 비중도 측정해줘', '고쳐줘'
@@ -25,6 +442,8 @@
 - 확인(16:25~16:27 같은 구간): 새 쿼리 34.4초(DB CPU 33.1초, 보낸 바이트 405,537) / 종전 95.9초(보낸 바이트 2,102,514,996). pick() 결과 387건 seq, proc, fe, ses, rows, 파싱 성공 여부 일치(다른 건 0). LOB 물리 읽기 521,238 은 그대로. selftest 11 → 12건, engine_selfcheck --quick PASS
 - 추가(16:42, 사용자 'JSON 해석 CPU 33초도 줄여줘'): 큰 행 31건 비교(16:33) INSTR 0.6초, JSON_VALUE 1.8초, JSON_MERGEPATCH 3.3초, JSON_OBJECT_T 3.5초. nscm_cut 이 맨 위 '"@키":[' 배열 구간을 글자 위치로 잘라내고 남은 작은 JSON 만 해석함. 해석 실패면 원문 전체를 종전 방식으로 처리
 - 확인(16:39~16:43 같은 구간): 새 쿼리 6.2초(DB CPU 6.1초, LOB 물리 읽기 1,490,223, direct path read 2.2초) / 종전 102.6초. pick() 결과 387건 일치. 큰 행 291건 모두 빠른 경로. 경계 입력 6종(앞·중간 배열 2개, 배열 안 중첩 배열, 문서 끝 배열 문자열 '}]}', 잘린 JSON, @ 키 null·일반 키 목록, 빈 배열) split_params 결과 일치. selftest 12/12, engine_selfcheck --quick PASS
+- 추가(17:07, 사용자 'LOB 디스크 읽기도 줄여줘'): LOB 직접 물리 읽기 1,490,223 은 원문 1회 읽기 521,238 의 2.9배. 원인은 큰 배열을 훑는 INSTR 앞의 DBMS_LOB.SUBSTR, READ 1자 호출(31건 62,403 → 93,868)과 문서 앞부분 COPY. nscm_cut 을 INSTR 만으로 판단하게 바꾸고 문서 첫 글자는 WRITEAPPEND 로 직접 씀
+- 확인(17:02~17:07 같은 구간): 새 쿼리 3.9초, LOB 직접 물리 읽기 607,956(1회 읽기의 1.17배), direct path read 0.8초 / 종전 98.0초. pick() 결과 387건 일치, 큰 행 291건 모두 빠른 경로, 경계 입력 15종(첫 키 @ 연속, 빈 배열 문서 끝, 문자열 안 '],' 등) split_params 결과 일치. 17:02 측정 1회는 디스크 대기가 길어(종전 쿼리 direct path read 23.3초) 새 쿼리 23.9초로 나옴
 - 되돌리기: tools/Harness/verify/sqllog_calls.py.bak_20261126_sa(개선안 반영 전 원본)
 
 ## (판 번호 없음, VM 저장소 + 설치 폴더) VMW 작업 끝 알림 결함과 파일 쓰기 일시 실패 보완 (2026-11-26 16:26)

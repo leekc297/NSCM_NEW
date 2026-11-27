@@ -1,7 +1,7 @@
 # SCP0020 — To-Be Fact Pack 요약
 
 - page_key: `supply/tact-time` · feature: supply · As-is Fact Pack 있음
-- 파일 17 · 엔드포인트 호출 11 (미해결 0, 주석 속 1) · 이벤트 27 · 컴포넌트 사용 27 · 하드코딩 컬럼 1 · 메시지 24
+- 파일 17 · 엔드포인트 호출 10 (미해결 0, 주석 속 1) · 이벤트 27 · 컴포넌트 사용 27 · 하드코딩 컬럼 1 · 메시지 24
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
@@ -9,30 +9,30 @@
 |---|---|---|
 | features/supply/src/pages/tact-time/components/TactTimeExceptGrid.tsx | component | 149 |
 | features/supply/src/pages/tact-time/components/TactTimeForm.tsx | component | 239 |
-| features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | component | 251 |
+| features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | component | 261 |
 | features/supply/src/pages/tact-time/hooks/useTactTimeValidation.test.tsx | test | 251 |
 | features/supply/src/pages/tact-time/hooks/useTactTimeValidation.ts | hook | 137 |
 | features/supply/src/pages/tact-time/index.ts | index | 2 |
 | features/supply/src/pages/tact-time/tact-time.constants.ts | constants | 247 |
 | features/supply/src/pages/tact-time/tact-time.types.ts | types | 23 |
-| features/supply/src/pages/tact-time/TactTime.module.scss | style | 53 |
-| features/supply/src/pages/tact-time/TactTime.tsx | page | 348 |
+| features/supply/src/pages/tact-time/TactTime.module.scss | style | 56 |
+| features/supply/src/pages/tact-time/TactTime.tsx | page | 334 |
 | features/supply/src/pages/tact-time/useTactTimeStore.ts | store | 228 |
 | features/supply/src/pages/tact-time/utils/tactTimeColumns.ts | util | 34 |
 | features/supply/src/pages/tact-time/utils/tactTimeDerive.test.ts | test | 58 |
 | features/supply/src/pages/tact-time/utils/tactTimeDerive.ts | util | 57 |
-| features/supply/src/pages/tact-time/utils/tactTimeEditLock.test.ts | test | 118 |
-| features/supply/src/pages/tact-time/utils/tactTimeEditLock.ts | util | 189 |
+| features/supply/src/pages/tact-time/utils/tactTimeEditLock.test.ts | test | 120 |
+| features/supply/src/pages/tact-time/utils/tactTimeEditLock.ts | util | 191 |
 | features/supply/src/pages/tact-time/__asis-mapping__.md | mapping | 83 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | TactTimeForm.tsx:64 |
-| (useTabLookupQueries) | hook | 2 | Y | TactTimeForm.tsx:71 TactTime.tsx:58 |
-| SCP0020/plant//call-proc | hook | 2 | Y | TactTime.tsx:82 TactTime.tsx:104 |
-| SCP0020/packer//call-proc | hook | 2 | Y | TactTime.tsx:89 TactTime.tsx:109 |
-| SCP0020/except//call-proc | hook | 2 | Y | TactTime.tsx:96 TactTime.tsx:114 |
+| (useTabLookupQueries) | hook | 1 | Y | TactTimeForm.tsx:71 |
+| SCP0020/plant//call-proc | hook | 2 | Y | TactTime.tsx:69 TactTime.tsx:91 |
+| SCP0020/packer//call-proc | hook | 2 | Y | TactTime.tsx:76 TactTime.tsx:96 |
+| SCP0020/except//call-proc | hook | 2 | Y | TactTime.tsx:83 TactTime.tsx:101 |
 | /admin/menu/SCP0020/column | http | 1 | Y | useTactTimeStore.ts:177 |
 | /admin/menu/SCP0020/search-conditions | http | 1 | Y | useTactTimeStore.ts:207 |
 
@@ -62,13 +62,13 @@
 | g | cellEditEnding | cellEditEndingHandler | addHandler | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 191 |
 | g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 192 |
 | g.hostElement | dblclick | dblclickHandler | addEventListener | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 201 |
-| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 211 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 247 |
-| TactTimeForm | onSearch | handleSearch | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 259 |
-| TactTimeForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 259 |
-| TactTimeMainGrid | onRowDblClick | <arrow> exceptSrc.some,setAlert,t,setExceptFilter | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 283 |
-| TactTimeMainGrid | onFocus | <arrow> setFocused | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 308 |
-| TactTimeExceptGrid | onFocus | <arrow> setFocused | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 322 |
+| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 221 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 257 |
+| TactTimeForm | onSearch | handleSearch | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 246 |
+| TactTimeForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 246 |
+| TactTimeMainGrid | onRowDblClick | <arrow> exceptSrc.some,setAlert,t,setExceptFilter | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 270 |
+| TactTimeMainGrid | onFocus | <arrow> setFocused | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 295 |
+| TactTimeExceptGrid | onFocus | <arrow> setFocused | jsx | features/supply/src/pages/tact-time/TactTime.tsx | 309 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -124,7 +124,7 @@
 | MSG00004 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0020(10), SCM0002(1)
+- 화면ID: SCP0020(10), COM0013(2), SCM0002(1), COM0008(1)
 - SP/PKG: SCP0020_GET_TACT_TIME(1), SCP0020_SAVE_TACT_TIME(1), FN_GET_DIVISION(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
@@ -133,7 +133,7 @@
 | jsx | <FunctionSearchIcon appearance='lined' onClick={onItemSearch} /> | features/supply/src/pages/tact-time/components/TactTimeForm.tsx | 216 |
 | code | setCell('TACT_TIME', deriveTactTimeFromDaily(row.DAILY_CAPACITY)); | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 127 |
 | code | if (row) onRowDblClick(row); | features/supply/src/pages/tact-time/components/TactTimeMainGrid.tsx | 198 |
-| code | AS-IS: 조회된 행이 없으면 신규행 추가 불가 (cs:760/817 ActiveRowIndex<0 return). | features/supply/src/pages/tact-time/TactTime.tsx | 174 |
+| code | AS-IS: 조회된 행이 없으면 신규행 추가 불가 (cs:760/817 ActiveRowIndex<0 return). | features/supply/src/pages/tact-time/TactTime.tsx | 161 |
 | endpoint | ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch (미등록 시 빈 배열 → | features/supply/src/pages/tact-time/useTactTimeStore.ts | 27 |
 | code | if (d === null \|\| d === 0) return 0; | features/supply/src/pages/tact-time/utils/tactTimeDerive.ts | 30 |
 

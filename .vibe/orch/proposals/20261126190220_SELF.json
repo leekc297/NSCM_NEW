@@ -1,0 +1,40 @@
+{
+  "id": "20261126190220_SELF",
+  "at": "2026-11-26T19:02:20+09:00",
+  "ms": 1795687340695,
+  "source": "self",
+  "status": "applied",
+  "sig": "음수 글자색 hn 검사 음수 데이터 행과 편집 가능 행이 둘 다 없으면 해당없음 대신 미검증으로 판정",
+  "title": "음수 글자색(H13) 검사: 음수 데이터 행과 편집 가능 행이 둘 다 없으면 해당없음 대신 미검증으로 판정",
+  "evidence": "입력 S16|K3 표본 DMF0005 V-e0e9e53f(H13 NA '음수 값 표본 없음 · 편집 가능 행 없음 — 측정 재료 없음'), SCP0016 V-6a3d49b3 동일. 전 원장 H13 NA 가운데 같은 옛 문구 32행. 화면별 H13 NA는 SSP0015 49행, SSP0021 28행, SSP0060 28행 등 16화면. 현재 소스 Doc/e2e/specs/_verify.spec.ts:695 는 음수 데이터 행이 없으면 (가) NA '음수 데이터 행 없음(데이터 조건)', :709 는 편집 가능 행이 없으면 (나) NA, :724 는 둘 다 NA 면 최종 NA 로 판정함. 글자색을 한 번도 재지 않은 행이 해당없음이 되어 2026-11-11 결정(재지 못한 행 = 미검증)에 어긋남. 같은 성격인 tools/E2E/lib/popk3.ts:39 는 '0행은 결함 없음이 아님(측정 재료 없음)'으로 ERROR 처리함. 새 문구에는 checker_defect_scan.py RX_K3 단어가 없어 다음 실행부터 탐지에도 걸리지 않음.",
+  "targets": [
+    "Doc/e2e/specs/_verify.spec.ts"
+  ],
+  "before_after": "변경 전 :695 if (!found) mData = { s: 'NA', note: '음수 데이터 행 없음(데이터 조건)' }. 변경 후 inRowMissing.has(b) 이면 종전 NA 유지(칸 표시 여부는 A5 판정), 그 밖에는 mData = { s: 'ERROR', note: '[미검증] 음수 데이터 행 없음(데이터 조건 · 측정 재료 없음)' }. 결과: (나)도 NA 면 :724 판정이 ERROR 가 됨. (나)가 PASS, FAIL 이면 종전과 같음. :677 의 E1 최소 0 이상(음수 불가 칸) NA 는 원문 근거가 있어 바꾸지 않음.",
+  "verify": "python tools/Harness/verify/engine_selfcheck.py PASS. tools/E2E 에서 VERIFY_ID=DMF0005 npx playwright test ../../Doc/e2e/specs/_verify.spec.ts --list 로드 정상. 다음 CheckList 실행 뒤 checker_defect_scan.py 로 K3 탐지 행 수 감소 확인, H13 NA 가운데 '음수 데이터 행 없음' 행 0 확인.",
+  "rollback": "Doc/e2e/specs/_verify.spec.ts 를 수정 전 백업(.bak_<날짜>_h13)으로 되돌림.",
+  "impact": "fix",
+  "level": "",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T19:07:55+09:00",
+      "by": "VM 기능개선",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T19:11:33+09:00",
+      "by": "VM 기능개선",
+      "what": "반영 완료(세션 직접 보완) · Doc/e2e/specs/_verify.spec.ts:695~696 (가) 음수 데이터 행 없음 = ERROR '[미검증] 음수 데이터 행 없음(데이터 조건 · 측정 재료 없음)' · 칸이 그리드에 없으면(inRowMissing) NA 유지 · :724~725 (나) 뒤 inRowMissing 재확인 보정. 반려안 20261126153055_SELF(judge.py 결함 유형 상속 NA)와 별개 분기 확인. engine_selfcheck PASS(TSC 포함) 19:11. 원장 반영은 다음 CheckList 실행"
+    }
+  ],
+  "self": true,
+  "check": "S16",
+  "selfKey": "S16|K3|H13",
+  "kind": "fix",
+  "claimedBy": "VM 기능개선",
+  "waitNote": "",
+  "appliedMs": 1795687893254
+}

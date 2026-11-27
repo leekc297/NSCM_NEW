@@ -1,0 +1,42 @@
+{
+  "id": "20261126173142_SELF",
+  "at": "2026-11-26T17:31:42+09:00",
+  "ms": 1795681902745,
+  "source": "self",
+  "status": "applied",
+  "sig": "lnplan cacgbbcfaaacec_vision step e",
+  "title": "CheckList 시간 목적 판정(효력 전 자료로 어긋남 연속 → 효력 뒤 1판 실측으로만 판정, 없으면 실측 대기) · 단계 4",
+  "evidence": "L4 단계 원장 20261125000242_VISION 단계 4/6 · 문서 .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md",
+  "targets": [
+    "tools/VibeManager/orchestra.js"
+  ],
+  "before_after": "Overview 사다리 카드에 '실측 대기: 다음 CheckList 1회 필요' 표시 · 상세 = .vibe/orch/vision/concept_20261125_L4_purpose_CheckList_1_10_30_.md 전환 절 단계 4",
+  "verify": "orchestra.js 렌더 시험",
+  "rollback": "harness.json orch.l4PlanEnabled false 로 단계 원장 끔. 단계마다 반영 백업과 .bak_<날짜>_concept 사본으로 orch-ladder.js, orch-vision.js, orchestra.js, 시험 파일 복원. VMO 개선안 탭 되돌리기. plans.json 원장 삭제는 개선안 원본에 영향 없음",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "L4 단계 원장 20261125000242_VISION 단계 4",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T17:36:51+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:38:33+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · orchestra.js ladWaitRows 추가, paintVision 사다리 카드에 대기 묶음(status wait) 최대 4줄을 statusLabel(실측 대기: 다음 CheckList 1회 필요 등)과 근거 title 로 표시. 렌더 시험 test/t_orch_ladder_card.js 신규 12건 PASS(ko, en), t_webview_syntax ALL PASS, doc_style orchestra.js 위반 0 → 0. 지금 실원장 ladder.json 에 wait 묶음 0건(2026-11-26 17:38)"
+    }
+  ],
+  "self": true,
+  "check": "L4plan",
+  "selfKey": "L4plan|20261125000242_VISION|4",
+  "kind": "fix",
+  "plan": "20261125000242_VISION",
+  "planStep": 4,
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795682313174
+}

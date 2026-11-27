@@ -28,7 +28,13 @@ function cfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'har
 const say = (kind, o) => { const m = Object.assign({ type: 'vision', kind }, o || {}); for (const fn of listeners) { try { fn(m); } catch (e) { errlog.note('orch-vision', 'listener', e); } } };
 function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 function ladderSummary() { try { const l = require('./orch-ladder'); if (!l.ready()) l.init({ paths: () => P() }); return l.summary(); } catch (e) { errlog.note('orch-vision', 'ladder', e); return null; } } // 2026-11-20 진단 사다리 요약(Overview)
-function meta() { const c = cfg(); const m = readJson(path.join(vDir(), 'meta.json'), {}); const nextMs = c.visionEnabled && c.enabled !== false ? (m.lastMs || 0) + c.visionEveryDays * 86400000 : 0; return Object.assign({ ladder: ladderSummary(), enabled: !!c.visionEnabled, everyDays: c.visionEveryDays, autoApply: !!c.visionAutoApply, running: !!running, nextAt: nextMs ? nowLocal(Math.max(nextMs, Date.now())) : '' }, m); }
+// 개선안 20261126173842_SELF 후속: Overview 에 효력 뒤 CheckList 1판 원장 표시(60초 캐시, events.jsonl 끝 8MB 를 화면 갱신마다 읽지 않게)
+let ceCache = { ms: 0, v: null };
+function checklistEffectCached(c) { if (Date.now() - ceCache.ms < 60000 && ceCache.v) return ceCache.v; let v = null; try { v = checklistEffect(c); } catch (e) { errlog.note('orch-vision', 'checklistEffectCached', e); } ceCache = { ms: Date.now(), v }; return v; }
+function meta() { const c = cfg(); const m = readJson(path.join(vDir(), 'meta.json'), {}); const nextMs = c.visionEnabled && c.enabled !== false ? (m.lastMs || 0) + c.visionEveryDays * 86400000 : 0; let consult = null; try { consult = require('./orch-consult').ready() ? require('./orch-consult').meta() : null; } catch (e) { errlog.note('orch-vision', 'consult meta', e); } // 2026-11-26 Overall Review 카드에 컨설팅 상태·결과
+  return Object.assign({ consult, checklistEffect: checklistEffectCached(c), ladder: ladderSummary(), enabled: !!c.visionEnabled, everyDays: c.visionEveryDays, autoApply: !!c.visionAutoApply, running: !!running, nextAt: nextMs ? nowLocal(Math.max(nextMs, Date.now())) : '' }, m); }
+/** 첫 점검까지 지연(ms). 실행 기록(meta.json lastMs)이 없으면 60초, 있으면 10분(2026-11-26 R254) */
+function firstDelayMs() { try { return readJson(path.join(vDir(), 'meta.json'), {}).lastMs ? 10 * 60000 : 60000; } catch { return 10 * 60000; } }
 function due() { const c = cfg(); if (c.enabled === false || !c.visionEnabled) return false; const m = readJson(path.join(vDir(), 'meta.json'), {}); return !m.lastMs || Date.now() - m.lastMs >= c.visionEveryDays * 86400000; }
 
 /** 목적 자료: 사용자 지시 메모리(VM, VMO, CheckList 속도), 플랜 파일 앞부분, 사용자 지적 원장 */
@@ -40,6 +46,47 @@ function purposeDocs() {
   const plan = opts.planFile || path.join(os.homedir(), '.claude', 'plans', 'vm-ui-snug-mountain.md'); const pt = readText(plan, 3000); if (pt) out.push({ src: 'plans/vm-ui-snug-mountain.md(앞 3000자)', text: pt });
   const L = readJson(path.join(opts.vmDir || path.join(P().root, 'tools', 'VibeManager'), 'user_checks.json'), { items: [] });
   out.push({ src: 'tools/VibeManager/user_checks.json(사용자 지적 원장)', text: (L.items || []).map(u => `${u.id} ${u.at} [${u.status}] ${u.symptom} · 원문 "${String(u.quote || '').slice(0, 160)}"`).join('\n') });
+  return out;
+}
+// 개선안 20261126155824_SELF(L4 단계 원장 20261125000242_VISION 단계 2): CheckList 시간 목적 판정 자료 = 같은 목적 L4 안(20261123000419_VISION, 30분 시계 = 측정 1회와 문서 1판)의
+//   효력 시각 뒤에 끝난 CheckList 체인의 1판 소요. 효력 전 자료(checklistTiming, digest7d)로 어긋남을 연속으로 내던 것(Overall Review 11-22, 11-23)을 막는다.
+//   1판 계산 = orch-usercheck.js chainTarget 과 같음(같은 runId 의 첫 성공 step.end 중 stepKey ':--docs', 옛 기록은 S8.checklistRun 이면서 이름에 '문서')
+//   기준 안 바꾸기 = harness.json orch.checklistEffectProposal
+const isCLChain = e => /^checklist/i.test(e.chain || '') || /CheckList/i.test(e.chainLabel || e.label || '');
+const isDocStep = s => (s.stepKey ? /:--docs(:|$)/.test(s.stepKey) : (s.task === 'S8.checklistRun' && /문서/.test(s.name || '')));
+/** 반환 { proposal, effAt, targetMin, runsAfter: [{ runId, screen, at, firstDocMin, chainMin }], note } */
+function checklistEffect(c) {
+  const id = String((c && c.checklistEffectProposal) || '20261123000419_VISION'); const targetMin = Number(c && c.checklistTargetMin) || 30;
+  const out = { proposal: id, effAt: '', targetMin, runsAfter: [], note: '' };
+  const imp = mod('orch-improve'); let p = null; try { p = imp && imp.get ? imp.get(id) : null; } catch { p = null; }
+  if (!p) { out.note = '기준 개선안 없음'; return out; }
+  let eff = null; try { eff = imp.effectiveMsOf ? imp.effectiveMsOf(p) : (Number(p.appliedMs) || null); } catch { eff = null; }
+  if (!eff) { out.note = p.status === 'applied' ? '반영 완료, 효력 전(창 다시 로드 대기)' : `기준 개선안 상태 ${p.status}`; return out; }
+  out.effAt = nowLocal(eff);
+  const evs = opts.events ? opts.events() : (orchEv && orchEv.tail ? orchEv.tail(8 * 1024 * 1024) : []);
+  for (const e of evs) {
+    if (e.type !== 'chain.end' || !isCLChain(e) || !((e.ms || 0) >= eff)) continue;
+    const t0 = (e.ms || 0) - (e.ms_run || 0); let best = null;
+    if (e.runId) for (const s of evs) if (s.type === 'step.end' && s.runId === e.runId && /^(OK|WARN)$/.test(s.status || '') && isDocStep(s) && (best == null || s.ms < best)) best = s.ms;
+    const row = { runId: e.runId || '', screen: e.screen || '', at: e.at || nowLocal(e.ms), firstDocMin: best == null ? null : Math.round((best - t0) / 6000) / 10, chainMin: Math.round((e.ms_run || 0) / 60000) };
+    // 개선안 20261126173842_SELF(단계 6, 흡수 20261126000934_VISION 단계 3): 1판 단계별 분과 단계 밖 분. run_timing.json 중 run_at 이 1판 구간(체인 시작 ~ 첫 문서 단계 끝, 1판 없으면 체인 끝) 안인 기록
+    //   측정 기록(docs 외 단계)의 unattributed_min 합 = 단계 밖 분, docs 만 있는 기록 = 문서 1판 분(1판 길이로 읽지 않음). 동시 실행 = 구간이 겹친 다른 CheckList 체인 수
+    try {
+      const end = best != null ? best : (e.ms || 0); const tm = readJson(path.join(P().root, 'Doc', 'verify', String(e.screen || ''), 'run_timing.json'), []);
+      const stage = {}; let outMin = 0, docsMin = 0, nRec = 0;
+      for (const r of Array.isArray(tm) ? tm : []) { const at = Date.parse(String((r && r.run_at) || '').replace(' ', 'T')); if (!Number.isFinite(at) || at < t0 - 60000 || at > end) continue; nRec++;
+        const sm = (r && r.stage_min) || {}; const keys = Object.keys(sm); for (const k of keys) stage[k] = Math.round(((stage[k] || 0) + Number(sm[k] || 0)) * 10) / 10;
+        if (keys.length && keys.every(k => k === 'docs')) docsMin += Number(r.wall_min || 0); else outMin += Number(r.unattributed_min || 0); }
+      row.stageMin = stage; row.timingRecords = nRec; row.outsideMin = Math.round(outMin * 10) / 10; row.docsMin = Math.round(docsMin * 10) / 10;
+      const span = (end - t0) / 60000; row.outsidePct = nRec && span > 0 ? Math.round(outMin / span * 1000) / 10 : null;
+      row.concurrent = evs.filter(o => o !== e && o.type === 'chain.end' && isCLChain(o) && ((o.ms || 0) - (o.ms_run || 0)) < (e.ms || 0) && (o.ms || 0) > t0).length;
+      const bud = (c && c.checklistStageBudget && typeof c.checklistStageBudget === 'object') ? c.checklistStageBudget : null;
+      row.overBudget = bud ? Object.keys(stage).filter(k => Number(bud[k]) > 0 && stage[k] > Number(bud[k])).sort((x, y) => (stage[y] - bud[y]) - (stage[x] - bud[x])).slice(0, 3) : [];
+    } catch (ex) { errlog.note('orch-vision', 'checklistStages', ex); }
+    out.runsAfter.push(row);
+  }
+  out.budget = (c && c.checklistStageBudget && typeof c.checklistStageBudget === 'object') ? c.checklistStageBudget : null; // 단계 예산(분). 값은 첫 실측 뒤 사용자 판정 대상이라 기본값 없음
+  out.runsAfter = out.runsAfter.slice(-20); if (!out.runsAfter.length) out.note = '실측 대기: 효력 뒤 CheckList 0건';
   return out;
 }
 /** 실행 상태 자료(코드 집계) */
@@ -60,6 +107,7 @@ function stateDocs() {
     const ps = mod('orch-improve') ? mod('orch-improve').list() : []; const blocked = ps.filter(p => p.gate && (p.gate.newBad || []).some(x => /^S11 /.test(x)) && (p.autoMs || p.applyStartMs || 0) >= cut).length;
     o.styleRule = { remain: s11 && s11.status !== 'skip' ? (s11.status === 'ok' ? 0 : s11.count) : null, remainAt: s11 ? s11.at || '' : '', newSum7d: rises.reduce((a, x) => a + x.to - x.from, 0), rises7d: rises.slice(-10), gateBlocked7d: blocked, measured7d: rows.filter(x => x.ms >= cut).length };
   } catch (e) { errlog.note('orch-vision', 'styleRule', e); }
+  try { o.checklistEffect = checklistEffect(cfg()); } catch (e) { errlog.note('orch-vision', 'checklistEffect', e); }
   try { const uc = mod('orch-usercheck'); const lj = readJson(path.join(P().vibeDir, 'orch', 'usercheck', 'learn.json'), {}); o.userLearn = { lastAt: lj.lastAt || '', lastResult: lj.lastResult || '', excluded: (lj.excluded || []).slice(-10) }; if (uc && uc.pendingPrompts) o.userPromptsPending = uc.pendingPrompts().length; } catch (e) { errlog.note('orch-vision', 'usercheck', e); }
   return o;
 }
@@ -74,13 +122,14 @@ function buildPrompt(c) {
     '할 일',
     '1. [목적] 에서 사용자가 요구한 목적을 항목으로 뽑고, 항목마다 지금 상태가 맞음/어긋남/미확인 인지 [실행 상태] 수치와 소스를 근거로 판단한다.',
     '1-1. 목적 "VM 고정 문구가 문장 규칙을 지킴"(S11)은 [실행 상태] styleRule 의 두 수치로 판정한다. 새로 생긴 위반 = newSum7d(7일 안 점검 사이 증가 합), 대상 문장 잔량 = remain. 둘 다 0 이면 맞음, 하나라도 0 보다 크면 어긋남, remain 이 null 이거나 measured7d 가 0 이면 미확인. evidence 에 두 수치와 remainAt 시각을 적는다. 줄 머리 상태 표지와 메뉴 이름 인용은 doc_style.py 가 문장에서 빼므로 위반으로 세지 않는다.',
+    '1-2. 목적 "CheckList 화면 1개 10분, 길어야 30분"은 [실행 상태] checklistEffect 로만 판정한다. effAt(같은 목적 L4 안 proposal 의 효력 시각)이 비었거나 runsAfter(효력 뒤 끝난 CheckList 체인)가 0건이면 미확인(사유 "실측 대기: 효력 뒤 CheckList 0건" 또는 note). runsAfter 중 firstDocMin(측정 1회와 문서 1판 소요)이 targetMin 보다 큰 건이 1건 이상이면 어긋남, 0건이면 맞음. firstDocMin 이 null(1판 없음)인 건은 chainMin 으로 판정하고, 1판이 있으면 chainMin 은 표시만 한다. 효력 전 자료(checklistTiming, digest7d)로 이 목적을 어긋남으로 판정하지 않는다. 판정에 쓴 실행의 outsidePct(1판 구간 중 단계 밖 시간 비율)가 10 보다 크면 그 실행은 미확인(귀속 부족)으로 두고 단계 밖 분을 적는다. 어긋남이면 stageMin 상위 3단계(budget 이 있으면 overBudget 단계)와 concurrent(동시 실행 체인 수)를 근거로 적고, 속도 개선안은 그 단계에만 판정 결과가 같은 대체안(ledger_diff.py 차이 0건 조건)으로 낸다. evidence 에 effAt, runsAfter 건수, 판정에 쓴 runId 와 firstDocMin 을 적는다.',
     '2. 어긋난 항목은 원인(어느 파일, 어느 함수, 어느 설정)을 소스에서 확인한다. tools/VibeManager, tools/Harness, tools/E2E 를 읽는다.',
     '3. 구조 문제(감시 빈틈, 목적과 다른 동작, 반복되는 사용자 지적, CheckList 판정 결과가 AS-IS 와 달라지는 위험)를 개선 방향으로 올린다.',
     `4. 개선안은 최대 ${c.visionMaxPerRun}건. 근거 수치와 출처가 없으면 올리지 않는다. 이미 올라온 안(아래 목록), 반려된 안과 같은 내용은 올리지 않는다.`,
     '5. CheckList 속도 개선은 CheckList 판정 결과가 같은 대체 방법만 올린다(할 일을 빼는 안 금지).',
-    '6. 반영은 자동 반영 기준(orch-selfcheck.js autoEligible)을 따른다. fix·core 모두 자동(coreAutoApply), 승인 유지 = 실행 hook 스크립트·.claude/settings.json·DB 객체·시험 계정 설정·작업 모드 변경, FE·BE 소스는 작업 모드를 따름(UI/DB MODE 자동 · DB MODE 금지). plain 에 업무 말로 무엇이 바뀌는지, 위험, 되돌리는 법을 적는다.',
+    '6. 반영은 자동 반영 기준(orch-selfcheck.js autoEligible)을 따른다. fix, core 자동(coreAutoApply), 승인 유지 = 실행 hook 스크립트·.claude/settings.json·DB 객체·시험 계정 설정·작업 모드 변경, FE·BE 소스는 작업 모드를 따름(UI/DB MODE 자동 · DB MODE 금지). plain 에 업무 말로 무엇이 바뀌는지, 위험, 되돌리는 법을 적는다.',
     '8. 기능 개선과 기능 추가(2026-11-26 사용자 지시 "VMO 기능에 한계 없음"): VM 전 과정(파싱 → 분석 → 개발 → 보완 → 시험 → CheckList)과 VMW 업무 작업을 단계마다 따라가며 사람이 손으로 하고 있는 일, 빠진 도구, 끊긴 연결(생성기 없이 수작업 1화면에만 있는 사실 파일 등)을 찾아 기능 추가 안을 낸다. 요청받지 않은 기능도 목적에 필요하면 올린다.',
-    '9. UI MODE 전환 준비(차주부터 UI/DB MODE 로 AS-IS → TO-BE 화면 전환 개발): UI 개발 경로(tools/Harness gen.js·check.js 게이트, 화면별 대조표 __asis-mapping__.md, 참조 화면 DMF0004~0006 패턴, 신규 화면 필수 3종 ui-dynamic-property-management·menu-button-dynamic-fetch·ui-category-setup-column-meta, 화면 완료 게이트 screen-completion-gate G1~G11, 작업 모드 전환 set_scope.py, 보완 체인 🧯·🛠️)을 점검해 UI 개발이 누락 없이 끝까지 돌도록 부족한 생성기·게이트·VMO 감시·체인 단계를 안으로 올린다. 개발 중 CheckList 가 같은 기준으로 바로 잴 수 있는지도 본다.',
+    '9. UI MODE 전환 준비(차주부터 UI/DB MODE 로 AS-IS → TO-BE 화면 전환 개발): UI 개발 경로(tools/Harness gen.js·check.js 게이트, 화면별 대조표 __asis-mapping__.md, 참조 화면 DMF0004~0006 패턴, 신규 화면 필수 3종 ui-dynamic-property-management·menu-button-dynamic-fetch·ui-category-setup-column-meta, 화면 완료 게이트 screen-completion-gate G1~G11, 작업 모드 전환 set_scope.py, 보완 체인 보완 메뉴)을 점검해 UI 개발이 누락 없이 끝까지 돌도록 부족한 생성기·게이트·VMO 감시·체인 단계를 안으로 올린다. 개발 중 CheckList 가 같은 기준으로 바로 잴 수 있는지도 본다.',
     '10. UI/UX 추천: VM·VMO·VMW 웹뷰(tools/VibeManager 의 workbench.js, orchestra.js, jobs.js, flow-panel.js, menu-view.js, prompt-panel.js, history.js, tabview.js 와 media 폴더)를 읽고, 사용자가 요청한 부분에 한정하지 않고 지금 널리 쓰이는 UI/UX 관행(정보 위계와 요약 먼저, 진행 상태와 남은 시간 표시, 빈 상태·오류 안내와 다음 행동, 키보드 접근성, 일관된 컴포넌트와 간격, 다크 모드, 좁은 폭 대응, 알림 과다 줄이기)에 비춰 개선안을 낸다. 근거는 화면 파일:줄과 어긋난 관행.',
     '7. 감·예측 금지. 확인하지 못한 것은 "미확인" 으로 적는다. 문장은 한국어 업무 문서 문체(수식어, 번역투, 줄표 금지).',
     '',
@@ -127,11 +176,13 @@ async function run(manual) {
 
 function init(o) {
   getPaths = o.paths; opts = o || {}; notifier = o.notify || null;
-  try { require('./orch-consult').init({ paths: o.paths, notify: o.notify, noTimer: o.noTimer }); } catch (e) { errlog.note('orch-vision', 'consult init', e); } // 2026-11-26 VMO 컨설팅 검토(orch-consult.js) — 큰 그림 점검과 같은 paths·알림, 자기 타이머
+  try { require('./orch-consult').init({ paths: o.paths, notify: o.notify, noTimer: o.noTimer }); } catch (e) { errlog.note('orch-vision', 'consult init', e); }
+  try { require('./orch-afterwork').init({ paths: o.paths, notify: o.notify, noListen: o.noTimer }); } catch (e) { errlog.note('orch-vision', 'afterwork init', e); } // 2026-11-26 사용자 지시 '작업 종료 시 개선항목 찾아서 자동 진행'(orch-afterwork.js) // 2026-11-26 VMO 컨설팅 검토(orch-consult.js) — 큰 그림 점검과 같은 paths·알림, 자기 타이머
   if (timer) return;
   if (o.noTimer) return;
   timer = setInterval(() => { try { if (due()) run(false); } catch (e) { errlog.note('orch-vision', 'timer', e); } }, 3600000);
-  const first = setTimeout(() => { try { if (due()) run(false); } catch (e) { errlog.note('orch-vision', 'first', e); } }, 10 * 60000); if (first.unref) first.unref(); // 창을 연 뒤 10분: 다시 로드 때마다 바로 돌지 않게
+  // 2026-11-26 개선안 20261126182422_SELF(R254): 실행 기록(meta.json lastMs)이 없으면(신설, 기록 삭제) 60초 뒤 바로 기동. 기록이 있으면 종전대로 창을 연 뒤 10분(다시 로드 때마다 바로 도는 일은 due() 의 일수 조건이 막음)
+  const first = setTimeout(() => { try { if (due()) run(false); } catch (e) { errlog.note('orch-vision', 'first', e); } }, firstDelayMs()); if (first.unref) first.unref();
 }
-function dispose() { try { require('./orch-consult').dispose(); } catch { /* 없음 */ } if (timer) { clearInterval(timer); timer = null; } }
-module.exports = { init, dispose, on, run, due, meta, buildPrompt, purposeDocs, stateDocs, DEF };
+function dispose() { try { require('./orch-consult').dispose(); } catch { /* 없음 */ } try { require('./orch-afterwork').dispose(); } catch { /* 없음 */ } if (timer) { clearInterval(timer); timer = null; } }
+module.exports = { firstDelayMs, init, dispose, on, run, due, meta, buildPrompt, purposeDocs, stateDocs, checklistEffect, DEF };

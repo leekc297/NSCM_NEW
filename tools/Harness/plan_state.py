@@ -2,6 +2,7 @@
 """계획 진행 기록(2026-11-25 사용자 지시 '필요한 작업이 있으면 먼저 전체를 진행하고 테스트를 진행')
 
   python tools/Harness/plan_state.py set "<계획 이름>" <항목> [<항목> ...]   승인된 계획의 구현 항목 등록(모두 남음)
+  python tools/Harness/plan_state.py set --purpose <목적 키> "<계획 이름>" <항목> ...   목적 키(예 checklistTime)를 붙여 등록. VMO 목적 원장(orch-ladder.js purposeLedger)이 남은 구현 항목으로 셈(2026-11-26 개선안 20261126165130_SELF)
   python tools/Harness/plan_state.py done <항목> [<항목> ...]              구현 끝난 항목 표시
   python tools/Harness/plan_state.py drop <항목> "<사유>"                   사용자가 빼라고 한 항목(사유 필수)
   python tools/Harness/plan_state.py status                                  남은 항목 출력(종료코드 0 = 남은 항목 없음, 2 = 남음)
@@ -43,9 +44,16 @@ def main(argv, p=None):
     cmd, rest = argv[0], argv[1:]
     s = load(p)
     if cmd == 'set':
+        purpose = ''
+        if rest[:1] == ['--purpose']:
+            purpose, rest = (rest[1] if len(rest) > 1 else ''), rest[2:]
+            if not purpose:
+                print('[ERROR] set --purpose <목적 키> "<계획 이름>" <항목>...'); return 3
         if len(rest) < 2:
             print('[ERROR] set "<계획 이름>" <항목>...'); return 3
         s = {'plan': rest[0], 'at': now(), 'items': [{'name': x, 'status': 'todo', 'at': now()} for x in rest[1:]]}
+        if purpose:
+            s['purpose'] = purpose
         save(s, p); print(f"[계획] {s['plan']} · 구현 항목 {len(s['items'])}개 등록 — 모두 끝나기 전에는 화면 측정·통합 시험을 하지 않음"); return 0
     if cmd in ('done', 'drop'):
         names = rest[:1] if cmd == 'drop' else rest
@@ -78,6 +86,9 @@ def selftest():
     chk('사유 없는 drop 거부', main(['drop', 'A'], p) == 3)
     main(['done', 'A'], p); main(['drop', 'B', '사용자가 뺌'], p)
     chk('done + drop → 남은 항목 0 → status 0', main(['status'], p) == 0 and load(p)['items'][1]['why'] == '사용자가 뺌')
+    chk('--purpose 로 목적 키 기록 · 항목 2', main(['set', '--purpose', 'checklistTime', '계획2', 'D2', 'D3'], p) == 0 and load(p).get('purpose') == 'checklistTime' and len(load(p)['items']) == 2)
+    chk('--purpose 값 없음 거부', main(['set', '--purpose'], p) == 3)
+    chk('--purpose 없이 set = purpose 없음', main(['set', '계획3', 'A'], p) == 0 and 'purpose' not in load(p))
     print('selftest', 'OK' if ok else 'FAIL'); return 0 if ok else 1
 
 

@@ -10,7 +10,7 @@
 | features/admin/src/pages/group-user/components/GroupUserInfoGrid.tsx | component | 117 |
 | features/admin/src/pages/group-user/components/GroupUserMainGrid.tsx | component | 76 |
 | features/admin/src/pages/group-user/components/GroupUserUnitGrid.tsx | component | 37 |
-| features/admin/src/pages/group-user/components/modals/DivisionModal.module.scss | component | 164 |
+| features/admin/src/pages/group-user/components/modals/DivisionModal.module.scss | component | 163 |
 | features/admin/src/pages/group-user/components/modals/DivisionModal.tsx | component | 194 |
 | features/admin/src/pages/group-user/components/modals/divisionModalStore.ts | store | 27 |
 | features/admin/src/pages/group-user/group-user.constants.ts | constants | 23 |

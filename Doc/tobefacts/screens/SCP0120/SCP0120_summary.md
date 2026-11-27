@@ -1,18 +1,18 @@
 # SCP0120 — To-Be Fact Pack 요약
 
 - page_key: `supply/constraint-mgmt` · feature: supply · As-is Fact Pack 있음
-- 파일 15 · 엔드포인트 호출 9 (미해결 0, 주석 속 0) · 이벤트 17 · 컴포넌트 사용 31 · 하드코딩 컬럼 0 · 메시지 18
+- 파일 15 · 엔드포인트 호출 9 (미해결 0, 주석 속 0) · 이벤트 17 · 컴포넌트 사용 31 · 하드코딩 컬럼 0 · 메시지 20
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.module.scss | component | 20 |
-| features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | component | 131 |
+| features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | component | 138 |
 | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtDetailGrid.tsx | component | 83 |
-| features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | component | 119 |
+| features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | component | 126 |
 | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtMasterGrid.tsx | component | 112 |
-| features/supply/src/pages/constraint-mgmt/constraint-mgmt.constants.ts | constants | 151 |
+| features/supply/src/pages/constraint-mgmt/constraint-mgmt.constants.ts | constants | 158 |
 | features/supply/src/pages/constraint-mgmt/constraint-mgmt.types.ts | types | 26 |
 | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.module.scss | style | 59 |
 | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | page | 571 |
@@ -41,15 +41,15 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| InputField | onChange | <arrow> setCount,e.target.value.replace | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 97 |
-| InputField | onKeyDown | <arrow> e.preventDefault,handleSubmit | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 98 |
-| Button | onClick | handleSubmit | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 116 |
-| Button | onClick | modalClose | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 123 |
+| InputField | onChange | <arrow> setCount,e.target.value.replace | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 104 |
+| InputField | onKeyDown | <arrow> e.preventDefault,handleSubmit | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 105 |
+| Button | onClick | handleSubmit | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 123 |
+| Button | onClick | modalClose | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 130 |
 | DataGrid | gotFocus | handleGotFocus | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtDetailGrid.tsx | 78 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 34 |
 | InputField | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 51 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String(picked??'').split(',').filter,String(picked??'').split,String,value.toUpperCase | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 81 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 109 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String(picked??'').split(',').filter,String(picked??'').split,String,value.toUpperCase | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 80 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 114 |
 | DataGrid | gotFocus | handleGotFocus | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtMasterGrid.tsx | 107 |
 | ConstraintMgmtForm | onSearch | handleSearch | jsx | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 512 |
 | ConstraintMgmtMasterGrid | onRefresh | handleRefreshMaster | jsx | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 537 |
@@ -95,6 +95,7 @@
 | LBL00112 | 1 |
 | LBL00359 | 1 |
 | LBL00107 | 1 |
+| LBL01276 | 1 |
 | MSG00672 | 1 |
 | MSG00004 | 1 |
 | MSG00429 | 1 |
@@ -106,6 +107,7 @@
 | MSG00460 | 1 |
 | MSG01059 | 1 |
 | MSG01082 | 1 |
+| MSG01504 | 1 |
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SYS0010(4), SCP0120(2), SCP0122(1)

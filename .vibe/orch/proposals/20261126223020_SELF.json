@@ -1,0 +1,72 @@
+{
+  "id": "20261126223020_SELF",
+  "at": "2026-11-26T22:30:20+09:00",
+  "ms": 1795699820126,
+  "source": "self",
+  "status": "applied",
+  "sig": "un skip superseded applied",
+  "title": "U21 반영 실패 집계에서 고친 안이 반영 완료된 실패는 빼고 셈",
+  "evidence": "orch-usercheck.js:495 는 history 에 '반영 실패'가 있는 개선안을 상태 구분 없이 셈(:491 isFail, :492 준비 확인 제외만 있음). orch-ladder.js:64 주석 '고친 안으로 대체(superseded)된 안은 supersededBy 를 따라간 마지막 안이 반영 완료면 건너뜀'. 개선안 파일 상태: 20261124064958_SELF_3, 20261124232611_SELF, 20261125005937_SELF = superseded, 대체 안 20261126065740_SELF, 084048_SELF, 120156_SELF, 131312_SELF = applied. 열린 사건 20261126_182210_R12_ALL 이 이 판정으로 60분 시한을 넘김",
+  "targets": [
+    "tools/VibeManager/orch-usercheck.js",
+    "tools/VibeManager/test/t_orch_usercheck.js",
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfcheck_eligible.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_vision.js",
+    "tools/VibeManager/test/t_u33_consult.js"
+  ],
+  "before_after": "applyFailRepeat ①, ② 가 superseded 안의 실패도 셈 → supersededBy 를 따라간 마지막 안이 applied 면 그 실패를 빼고, 뺀 건수를 detail 에 '고친 안 반영 완료 N건 제외'로 적음(orch-ladder.js:65 lastOf 와 같은 조건)",
+  "verify": "node tools/VibeManager/test/t_orch_usercheck.js: 실패 기록이 있는 superseded 안 2개(대체 안 applied)와 apply-failed 안 1개를 넣으면 U21 24시간 건수 1(countMin 2 미만이라 fail 없음). 대체 안이 pending 이면 3건으로 fail. 반영 전 이 사례 없음(미측정), diag_in U21 24시간 6건 → 반영 뒤 기대: 대체 안이 반영 완료된 4건 빠짐",
+  "rollback": "tools/VibeManager/orch-usercheck.js.bak_<태그>, test/t_orch_usercheck.js.bak_<태그> 로 되돌림",
+  "impact": "fix",
+  "level": "L3",
+  "levelWhy": "같은 감지기의 오판이 4건임. 064957_SELF_3 → 065740_SELF, 064958_SELF_3 → 084048_SELF, 232611_SELF → 120156_SELF, 005937_SELF → 131312_SELF 모두 고친 안이 applied 인데 U21 이 24시간 6건으로 셈. 진단 사다리는 같은 제외 조건이 orch-ladder.js:64~65, :354 두 곳에 따로 있고 U21 에만 없음. 제외 조건이 모듈마다 따로 있는 것이 공통 원인",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T22:32:20+09:00",
+      "by": "3acd3c",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T22:38:15+09:00",
+      "by": "3acd3c",
+      "what": "반영 완료(세션 직접 보완) · orch-usercheck.js applyFailRepeat doneByChain: 대체 안 반영 완료 실패 제외, detail 제외 건수. 실데이터 변경 전 6건 fail → 변경 뒤 0건(5건 제외, 153056_SELF 1건 남음). t_orch_usercheck.js 표본 3건 PASS. run_all 115/115 PASS 1946(22:38). 설치 폴더 복사"
+    }
+  ],
+  "plain": {
+    "what": "",
+    "risk": "",
+    "undo": ""
+  },
+  "self": true,
+  "check": "S13",
+  "selfKey": "S13|U21|count|20261126153056_SELF|1795684661000",
+  "kind": "detector",
+  "testsAdded": [
+    "tools/VibeManager/test/t_fs_retry.js",
+    "tools/VibeManager/test/t_orch_ccwork.js",
+    "tools/VibeManager/test/t_orch_history_kind.js",
+    "tools/VibeManager/test/t_orch_hotreload.js",
+    "tools/VibeManager/test/t_orch_ladder.js",
+    "tools/VibeManager/test/t_orch_ladder_recur_time.js",
+    "tools/VibeManager/test/t_orch_ledger.js",
+    "tools/VibeManager/test/t_orch_plans.js",
+    "tools/VibeManager/test/t_orch_selfcheck_eligible.js",
+    "tools/VibeManager/test/t_orch_userrule.js",
+    "tools/VibeManager/test/t_orch_vision.js",
+    "tools/VibeManager/test/t_u33_consult.js"
+  ],
+  "claimedBy": "3acd3c",
+  "waitNote": "",
+  "appliedMs": 1795700295121
+}

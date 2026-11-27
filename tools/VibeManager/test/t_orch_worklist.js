@@ -92,6 +92,7 @@ if (process.argv[3] === '--drain') { // 실제 orch-watch + orch-agent(R12 는 C
     await new Promise(r => setTimeout(r, 400)); agent.enqueue(inc.id, false); await new Promise(r => setTimeout(r, 400));
     const acts = (watch.get(inc.id) || {}).actions || [];
     chk('drain: agentRules 밖 R12 = 담당 아님 기록 1건(종전 0건)', acts.filter(a => /^에이전트 담당 아님/.test(a.what)).length === 1, JSON.stringify(acts));
+    { const h = (watch.get(inc.id) || {}); chk('drain: 담당 밖 R12 = handler by selfdiag, ref 빈 값, progressAt 기록(개선안 20261126183041_SELF)', h.handler && h.handler.by === 'selfdiag' && h.handler.ref === '' && !!h.progressAt, JSON.stringify(h.handler)); }
     agent.enqueue(inc.id, false); await new Promise(r => setTimeout(r, 400));
     chk('drain: 다시 넣어도 담당 아님 기록은 1건 유지', ((watch.get(inc.id) || {}).actions || []).filter(a => /^에이전트 담당 아님/.test(a.what)).length === 1);
     chk('drain: 사건은 열림 유지', (watch.get(inc.id) || {}).status === 'open');

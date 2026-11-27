@@ -19,7 +19,7 @@ cp.execSync('git init -q && git add -A && git -c user.email=t@t -c user.name=t c
 const fake = path.join(vibeDir, 'fake_claude.js'); fs.mkdirSync(vibeDir, { recursive: true });
 fs.writeFileSync(fake, `
 const fs=require('fs'),path=require('path');let inp='';let done=false;process.stdin.on('data',d=>{inp+=d;if(inp.includes('\\n'))go();});
-function go(){if(done)return;done=true;const mode=fs.readFileSync(path.join('.vibe','mode.txt'),'utf8').trim();const out=o=>console.log(JSON.stringify(o));
+function go(){if(done)return;done=true;fs.writeFileSync(path.join('.vibe','last_prompt.txt'),inp);const mode=fs.readFileSync(path.join('.vibe','mode.txt'),'utf8').trim();const out=o=>console.log(JSON.stringify(o));
  if(inp.includes('반영 실패한 개선안의 실패 원인 진단')){ const dec=fs.readFileSync(path.join('.vibe','repair.txt'),'utf8').trim(); fs.appendFileSync(path.join('.vibe','calls.txt'),'repair|'+dec+'\\n'); const j={decision:dec,cause:'tools/VibeManager/test/t_a.js:1 value 양수 기대',reason:dec==='stop'?'사람 판단 필요':'',proposal:dec==='revise'?{title:'a.js 값 7 로(고친 안)',evidence:'t_a.js 기대 양수',targets:['tools/VibeManager/a.js'],before_after:'value -5 -> 7',verify:'',rollback:'',sig:'a-neg-fix'}:{}}; out({type:'system',subtype:'init',session_id:'s'}); out({type:'assistant',message:{content:[{type:'text',text:'\`\`\`json\\n'+JSON.stringify(j)+'\\n\`\`\`'}]}}); out({type:'result',is_error:false,num_turns:1,duration_ms:5,total_cost_usd:0.01,session_id:'s'}); setTimeout(()=>process.exit(0),50); return; }
  fs.appendFileSync(path.join('.vibe','calls.txt'),mode+'|'+(/백업\\(\\.bak\\)은 VMO 가 이미/.test(inp)?'selfprompt':'plain')+'\\n');
  fs.writeFileSync(path.join('tools','VibeManager','a.js'), mode==='good7' ? 'module.exports = { value: 7 };\\n' : mode==='good' ? 'module.exports = { value: 2 };\\n' : 'module.exports = { value: -5 };\\n');
@@ -163,6 +163,62 @@ const baks = (d, re) => fs.readdirSync(d).filter(f => re.test(f));
     const ord = sc.applyOrder([im.get(sf.id), im.get(rf.id)]).map(x => x.id); setMode('good7'); const a3 = await sc.autoApplyNext(false);
     chk('repairOf 안이 원래 안과 같은 원인으로 실패한 안보다 먼저 나옴(등록은 늦어도)', ord[0] === rf.id && ord[1] === sf.id && a3.id === rf.id && a3.ok === true, JSON.stringify([ord, a3]));
     sc.gate = g0; { const x = im.get(sf.id); x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); } }
+  // ⑪-2 개선안 20261126183411_SELF(단계 7): 반영 전 준비 확인. 대상 없음, 보류 사유가 대상 밖 = Claude 없이 반영 실패(준비 확인) · 동시 편집 = 다음 차례 · 신규 표시 = 통과
+  { for (const x of im.list()) if (x.status === 'pending' || x.status === 'apply-failed') { x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); }
+    chk('준비 확인: 대상 파일 없음(20261124012049_SELF_5 형) = retarget', sc.preflight({ targets: ['tools/VibeManager/CLAUDE.md'] }).kind === 'retarget');
+    chk('준비 확인: 보류 사유가 대상 밖 파일(20261126153056_SELF 형) = retarget', sc.preflight({ targets: ['tools/VibeManager/a.js'], needsApproval: '사람 판단 필요: 고칠 곳이 targets(a.js) 밖인 facts_lockrules.py 임' }).kind === 'retarget');
+    chk('준비 확인: 동시 편집 파일 입력(20261124014508_SELF_3 형) = next · 시험 파일만 겹치면 통과', sc.preflight({ targets: ['tools/VibeManager/a.js'] }, { busyFiles: ['tools/VibeManager/a.js'] }).kind === 'next' && sc.preflight({ targets: ['tools/VibeManager/a.js', 'tools/VibeManager/test/t_a.js'] }, { busyFiles: ['tools/VibeManager/test/t_a.js'] }).ok);
+    chk('준비 확인: 신규 표시 대상·있는 파일 = 통과(게이트 되돌림 안 20261125005937_SELF 형)', sc.preflight({ targets: ['tools/VibeManager/a.js', 'tools/VibeManager/new_mod.js(신규)'] }).ok && sc.preflight({ targets: ['tools/VibeManager/b.js'], before_after: 'b.js 신규 모듈' }).ok);
+    const m1 = im.add({ title: '없는 파일 고치기 시험', evidence: 'S5', targets: ['tools/VibeManager/CLAUDE.md'], sig: 'pf-missing' }, 'self'); setMode('good'); const n1 = callsN(); const r1 = await sc.autoApplyNext(false); const x1 = im.get(m1.id);
+    chk('준비 확인 retarget = Claude 호출 0회 · 반영 실패(준비 확인) 기록 · preflight 필드', callsN() === n1 && x1.status === 'apply-failed' && x1.preflight && x1.preflight.kind === 'retarget' && /^반영 실패\(준비 확인\): 대상 파일 없음/.test(x1.history.slice(-1)[0].what), JSON.stringify([r1, x1.status, x1.history.slice(-1)[0].what]));
+    x1.reason = '시험 정리'; x1.status = 'rejected'; im.save(x1);
+    const m2 = im.add({ title: '다른 세션 맡은 파일 시험', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'pf-busy' }, 'self'); const o2 = im.add({ title: '세션이 맡은 안', evidence: 'S5', targets: ['tools/VibeManager/a.js'], sig: 'pf-claimed' }, 'self'); { const q = im.get(o2.id); q.claimedBy = 'S-X'; q.autoWaitMs = Date.now() + 3600000; im.save(q); }
+    const n2 = callsN(); await sc.autoApplyNext(false); const x2 = im.get(m2.id);
+    chk('준비 확인 next(다른 세션이 맡은 안과 같은 파일) = 반영 안 함 · 시도로 세지 않음 · 대기 사유', callsN() === n2 && x2.status === 'pending' && !x2.autoTried && /^준비 확인: 다른 세션이 같은 파일을 고치는 중/.test(x2.waitNote || ''), JSON.stringify([x2.status, x2.waitNote]));
+    for (const id of [m2.id, o2.id]) { const q = im.get(id); q.reason = '시험 정리'; q.status = 'rejected'; im.save(q); } }
+  // ⑫ 개선안 20261126163554_SELF: 반영 지시문의 반영 뒤 검사 목록 = gateSpec · 대상 VM .js 면 문장 규칙(S11) 명령과 반영 전 위반 수
+  { const realT = ['tools/VibeManager/orch-watch.js', 'tools/VibeManager/orch-dict.js', 'tools/VibeManager/history.js', 'tools/VibeManager/orch-ladder.js']; // 실패 안 20261124064956_SELF_3, 064957_SELF_3, 064958_SELF_3, 20261125005937_SELF 의 대상
+    const specs = realT.map(t => sc.gateSpec([t])); const s11 = specs.filter(L => L.some(x => x.id === 'S11' && /doc_style\.py/.test(x.cmd)));
+    chk('gateSpec: 실패 안 4건 대상 모두 S11 포함 · S1, S2, S4 늘 포함', s11.length === 4 && specs.every(L => ['S1', 'S2', 'S4'].every(i => L.some(x => x.id === i))), JSON.stringify(specs.map(L => L.map(x => x.id))));
+    const sd = sc.gateSpec(['tools/Docs/doc_style.py', 'tools/VibeManager/a.js']);
+    chk('gateSpec: 검사기(doc_style.py) 대상이면 S11 빠짐', !sd.some(x => x.id === 'S11') && sd.length === 3, JSON.stringify(sd.map(x => x.id)));
+    const lines = im.gatePromptLines(['tools/VibeManager/a.js', 'tools/VibeManager/b.js'], { style: { ok: true, per: { 'a.js': 3, 'b.js': 0 }, total: 3 } }).join(NL);
+    chk('지시문 줄: 게이트 목록 · doc_style.py 명령 · 파일별 반영 전 위반 수', /\[반영 뒤 게이트 검사\]/.test(lines) && /- S11 /.test(lines) && /python tools\/Docs\/doc_style\.py tools\/VibeManager\/a\.js tools\/VibeManager\/b\.js --quiet/.test(lines) && /반영 전 문장 규칙 위반 수: a\.js 3, b\.js 0/.test(lines), lines);
+    const lp = fs.readFileSync(path.join(vibeDir, 'last_prompt.txt'), 'utf8');
+    chk('반영 지시문(실제 approve 경로)에 게이트 목록과 doc_style.py 포함 · 기준 미측정 표시', /\[반영 뒤 게이트 검사\]/.test(lp) && (lp.match(/doc_style\.py/g) || []).length >= 1 && /반영 전 문장 규칙 위반 수: 미측정/.test(lp), lp.slice(0, 200)); }
+  // ⑬ 개선안 20261126163555_SELF: 자동 반영 안 등록 때 원본 VM .js 를 부르는 test/t_*.js 를 대상에 더함
+  { const tdir = path.join(root, 'tools', 'VibeManager', 'test'); const made = ['t_um_job.js', 't_om_job.js', 't_orch_ladder.js', 't_other.js'];
+    fs.writeFileSync(path.join(tdir, 't_um_job.js'), "// const jr = require(path.join(dir, 'job-runner'));\nconsole.log('ALL PASS');\n");
+    fs.writeFileSync(path.join(tdir, 't_om_job.js'), "// require('../job-runner.js')\nconsole.log('ALL PASS');\n");
+    fs.writeFileSync(path.join(tdir, 't_orch_ladder.js'), "// require(path.join(dir, 'orch-ladder'))\nconsole.log('ALL PASS');\n");
+    fs.writeFileSync(path.join(tdir, 't_other.js'), "// job-runner-x orch-ladderx\nconsole.log('ALL PASS');\n");
+    const j1 = im.add({ title: 'job-runner 시험 포함 시험', evidence: 'S5', targets: ['tools/VibeManager/job-runner.js'], sig: 'tt-job' }, 'self'); const p1 = im.get(j1.id);
+    chk('job-runner.js 안 = t_um_job.js, t_om_job.js 더함(대상 3개) · testsAdded 기록 · 이름만 비슷한 시험 제외', p1.targets.length === 3 && p1.targets.includes('tools/VibeManager/test/t_um_job.js') && p1.targets.includes('tools/VibeManager/test/t_om_job.js') && p1.testsAdded.length === 2 && !p1.targets.some(t => /t_other/.test(t)), JSON.stringify(p1.targets));
+    const j2 = im.add({ title: 'orch-ladder 시험 포함 시험', evidence: 'S5', targets: ['tools/VibeManager/orch-ladder.js'], sig: 'tt-ladder' }, 'self'); const p2 = im.get(j2.id);
+    chk('orch-ladder.js 안 = t_orch_ladder.js 더함(대상 2개)', p2.targets.length === 2 && p2.targets[1] === 'tools/VibeManager/test/t_orch_ladder.js', JSON.stringify(p2.targets));
+    const j3 = im.add({ title: 'doc_style 시험 포함 시험', evidence: 'S5', targets: ['tools/Docs/doc_style.py'], sig: 'tt-doc' }, 'self'); const p3 = im.get(j3.id);
+    chk('대상이 tools/Docs/doc_style.py 뿐 = 더하지 않음', p3.targets.length === 1 && !p3.testsAdded, JSON.stringify(p3.targets));
+    const j4 = im.add({ title: '이미 있는 시험 다시 넣지 않음', evidence: 'S5', targets: ['tools/VibeManager/job-runner.js', 'tools/VibeManager/test/t_um_job.js'], sig: 'tt-dup' }, 'self'); const p4 = im.get(j4.id);
+    chk('이미 대상에 있는 시험은 다시 넣지 않음', p4.targets.length === 3 && p4.targets.filter(t => /t_um_job/.test(t)).length === 1, JSON.stringify(p4.targets));
+    const j5 = im.add({ title: '사건 안은 등록 때 더하지 않음', evidence: 'R1', targets: ['tools/VibeManager/job-runner.js'], sig: 'tt-inc' }, 'incident');
+    chk('self, gated 아닌 안 = 등록 때 더하지 않음', im.get(j5.id).targets.length === 1);
+    for (const id of [j1.id, j2.id, j3.id, j4.id, j5.id]) { const x = im.get(id); x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); }
+    for (const f of made) fs.rmSync(path.join(tdir, f), { force: true }); }
+  // ⑭ 개선안 20261126223019_SELF: 삭제 안의 생성물 대상 = 반영 전 사본(스냅샷, .bak_) 없음 · 코드 파일 삭제 안 = 사본 1개
+  { for (const x of im.list()) if (x.status === 'pending' || x.status === 'apply-failed') { x.reason = '시험 정리'; x.status = 'rejected'; im.save(x); }
+    const walk = d => { try { return fs.readdirSync(d, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]); } catch { return []; } };
+    const snapFiles = id => walk(path.join(vibeDir, 'orch', 'snap', `prop_${id}`, 'files'));
+    const logRel = 'nscm-be/logs/a.log.bak_20261123_self1121'; W(logRel, 'L'.repeat(100));
+    chk('deleteNoCopy: 로그 백업 삭제 안 = 그 경로 · 코드 파일 삭제 안, 고치는 안 = 없음', sc.deleteNoCopy({ title: 'a.log.bak_20261123_self1121 파일 삭제', targets: [logRel] }).join() === logRel && sc.deleteNoCopy({ title: 'x.js 파일 삭제', targets: ['tools/VibeManager/x.js'] }).length === 0 && sc.deleteNoCopy({ title: '로그 문구 고침', targets: [logRel] }).length === 0);
+    const d1 = im.add({ title: 'a.log.bak_20261123_self1121 파일 삭제', evidence: 'S10', targets: [logRel], sig: 'del-nocopy' }, 'self');
+    setMode('good'); await im.approve(d1.id, '사용자'); const x1 = im.get(d1.id);
+    const bakN = baks(path.join(root, 'nscm-be', 'logs'), /^a\.log\.bak_20261123_self1121\.bak_/).length;
+    chk('로그 백업 삭제 안: snap/prop_<id>/files 사본 0개 · .bak_<태그> 0개 · 기록 남김', snapFiles(d1.id).length === 0 && bakN === 0 && x1.history.some(h => /삭제 안: 사본 안 만듦\(되돌릴 수 없음\)/.test(h.what)), JSON.stringify([snapFiles(d1.id).length, bakN, x1.status]));
+    W('tools/VibeManager/x.js', 'module.exports = 0;\n');
+    const d2 = im.add({ title: 'x.js 파일 삭제', evidence: 'S5', targets: ['tools/VibeManager/x.js'], sig: 'del-code' }, 'self');
+    setMode('good'); await im.approve(d2.id, '사용자'); const x2 = im.get(d2.id); const sf2 = snapFiles(d2.id);
+    chk('코드 파일 삭제 안: 사본 1개 남김 · 사본 안 만듦 기록 없음', sf2.length === 1 && /x\.js$/.test(sf2[0]) && !x2.history.some(h => /사본 안 만듦/.test(h.what)), JSON.stringify([sf2.length, x2.status]));
+    for (const id of [d1.id, d2.id]) { const q = im.get(id); if (q.status !== 'applied') { q.reason = '시험 정리'; q.status = 'rejected'; im.save(q); } } }
   sc.dispose(); im.dispose(); agent.dispose(); watch.dispose(); st.dispose(); await new Promise(x => setTimeout(x, 150)); try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error('ERROR', e); process.exit(2); });

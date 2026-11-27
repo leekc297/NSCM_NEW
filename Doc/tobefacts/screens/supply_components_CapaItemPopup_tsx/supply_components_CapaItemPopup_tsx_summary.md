@@ -24,8 +24,8 @@
 | SearchArea | onSearch | handleSearch | jsx | features/supply/src/components/CapaItemPopup.tsx | 212 |
 | InputField | onChange | <arrow> setItemId | jsx | features/supply/src/components/CapaItemPopup.tsx | 236 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/components/CapaItemPopup.tsx | 237 |
-| Button | onClick | handleSubmit | jsx | features/supply/src/components/CapaItemPopup.tsx | 278 |
-| Button | onClick | onClose | jsx | features/supply/src/components/CapaItemPopup.tsx | 285 |
+| Button | onClick | onClose | jsx | features/supply/src/components/CapaItemPopup.tsx | 276 |
+| Button | onClick | handleSubmit | jsx | features/supply/src/components/CapaItemPopup.tsx | 285 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

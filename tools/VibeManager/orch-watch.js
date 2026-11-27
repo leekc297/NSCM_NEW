@@ -57,12 +57,14 @@ function update(id, patch, action) {
 }
 
 function raise(rule, o) {
+  if (!incDir) return null; // 2026-11-26: init 전(시험 등)에는 쓰지 않음. 종전 = incDir '' 이라 현재 폴더(tools/VibeManager)에 사건 파일 7개가 생김(18:17~18:43, test/t_gate_fe_page.js)
   const now = Date.now(); const screen = String(o.screen || '').toUpperCase(); const sig = o.sig || `${rule}|${o.key || o.title || ''}`;
   // 같은 사건이 열려 있으면 횟수만 올린다
   const open = list(60).find(x => x.rule === rule && x.sig === sig && (x.screen || '') === screen && x.status !== 'closed' && x.status !== 'resolved' && now - (x.ms || 0) < cfg.dedupeMin * 60000);
   if (open) { if (o.evidence) open.evidence = o.evidence; if (o.title && /반복 \d+회/.test(o.title)) open.title = o.title; open.count = (open.count || 1) + 1; open.lastAt = orchEv ? orchEv.nowLocal(now) : ''; open.lastMs = now; if (o.detail) open.detail = o.detail; save(open); for (const fn of listeners) { try { fn(open, false); } catch (ex) { errlog.note('orch-watch', 'listener', ex); } } return open; }
   const inc = { id: `${stamp(now)}_${rule}_${screen || 'ALL'}`, at: orchEv ? orchEv.nowLocal(now) : new Date(now).toISOString(), ms: now, rule, ruleName: TITLE[rule] || rule, title: o.title || TITLE[rule] || rule, screen, sig, count: 1, repeat: o.repeat || null, detail: o.detail || '', evidence: o.evidence || {}, status: o.notice ? 'resolved' : 'open', notice: !!o.notice, ...(o.reload ? { reload: o.reload } : {}), actions: o.notice ? [{ at: orchEv ? orchEv.nowLocal(now) : '', by: 'VMO', what: '알림(사건 아님). Claude 조치 없음' }] : [] };
   let n = 1; while (fs.existsSync(path.join(incDir, `${inc.id}.json`))) inc.id = `${stamp(now)}_${rule}_${screen || 'ALL'}_${++n}`;
+  if (isPushInc(inc)) { try { pushInfoOf(inc, { force: true }); } catch (ex) { errlog.note('orch-watch', 'pushInfo', ex); } } // 2026-11-26 개선안 20261126164446_VISION: push 실패 원인 분류
   save(inc);
   if (orchEv) orchEv.emit('incident', { id: inc.id, rule, screen, title: inc.title, sig });
   for (const fn of listeners) { try { fn(inc, true); } catch (ex) { errlog.note('orch-watch', 'listener', ex); } }
@@ -396,7 +398,9 @@ ${fe.msg}` : 'FE 변환 오류 없음. 메뉴 권한, BE 상태, 계정 순으�
       if (g.owner && g.owner !== process.pid && !state.pidAlive(g.owner)) { cut.push(g); continue; }
       raise('R5', { screen: g.screen, sig: `R5|gone|${g.what}|${g.label || ''}`, title: `종료 기록 없이 사라진 실행. ${g.what === 'chain' ? '체인' : g.what === 'claude' ? 'Claude' : '프로세스'} ${g.label || ''}`, detail: `시작 ${orchEv ? orchEv.nowLocal(g.t0) : g.t0} · 주인 PID ${g.owner} · 끝 사건 없음(중지, 창 다시 로드, 강제 종료)`, evidence: { log: g.log || '', pid: g.pid || null } });
     }
-    if (cut.length) { const kind = g => (g.what === 'chain' ? '체인' : g.what === 'claude' ? 'Claude' : '프로세스'); raise('R5', { notice: true, screen: '', sig: `R5|reloadcut|${cut[0].owner}`, title: `창 다시 로드로 끊긴 실행 ${cut.length}건(알림)`, detail: cut.map(g => `${kind(g)} ${g.screen ? g.screen + ' ' : ''}${g.label || ''} · 시작 ${orchEv ? orchEv.nowLocal(g.t0).slice(11, 16) : ''}`).join(String.fromCharCode(10)), evidence: { owner: cut[0].owner, runs: cut.map(g => ({ what: g.what, screen: g.screen || '', label: g.label || '', log: g.log || '' })) } }); }
+    // 개선안 20261126214604_REVIEW: 알림과 함께 events 에 run.cut(owner, 항목별 what, screen, label, t0)을 남긴다. 다음 VM 이 기록을 다시 읽어도 orch-state 가 같은 항목을 지워 알림이 다시 나지 않음
+    if (cut.length && orchEv) { try { orchEv.emit('run.cut', { owner: cut[0].owner, runs: cut.map(g => ({ what: g.what, owner: g.owner, screen: g.screen || '', label: g.label || '', t0: g.t0 || null, runId: g.runId || '', chain: g.chain || '' })) }); } catch (ex) { errlog.note('orch-watch', 'run.cut', ex); } }
+    if (cut.length) { const kind = g =>(g.what === 'chain' ? '체인' : g.what === 'claude' ? 'Claude' : '프로세스'); raise('R5', { notice: true, screen: '', sig: `R5|reloadcut|${cut[0].owner}`, title: `창 다시 로드로 끊긴 실행 ${cut.length}건(알림)`, detail: cut.map(g => `${kind(g)} ${g.screen ? g.screen + ' ' : ''}${g.label || ''} · 시작 ${orchEv ? orchEv.nowLocal(g.t0).slice(11, 16) : ''}`).join(String.fromCharCode(10)), evidence: { owner: cut[0].owner, runs: cut.map(g => ({ what: g.what, screen: g.screen || '', label: g.label || '', log: g.log || '' })) } }); }
     if (serverSvc) for (const s of serverSvc.stateList()) {
       const k = `R6|listen|${s.port}`;
       if (s.state === 'listen' && Date.now() - s.since > cfg.serverListenSec * 1000) { if (!seenOnce.has(k)) { seenOnce.add(k); raise('R6', { screen: '', sig: k, title: `서버 응답 없음. ${s.label} 포트 ${s.port} 열림 · HTTP 응답 없음 ${Math.round((Date.now() - s.since) / 1000)}초`, detail: s.owner === 'vm' ? 'VM 이 띄운 서버' : 'VM 밖에서 띄운 서버', evidence: { port: s.port, owner: s.owner } }); } } else seenOnce.delete(k);
@@ -469,6 +473,57 @@ function reloadSweep() {
 /** 사건 구독 fn(incident, isNew). 반환 = 해제 함수 */
 function on(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 
+// ── 2026-11-26 개선안 20261126164446_VISION: Source Backup push 실패 원인 분류와 다음 행동 ──
+//   근거: 사건 20261123_112448_R1_ALL 이 원인 분류 없이 'push 실패 (exit 1)'만 보인 채 77시간 need-user 로 남음.
+//   pushCause(text) = push 로그 글에서 원격 응답(HTTP 코드, 거부 사유 1줄)을 뽑아 종류와 다음 행동을 정함(로그에 있는 글만 씀)
+const PUSH_KINDS = [
+  { kind: 'rejected', re: /\[rejected\]|non-fast-forward|fetch first|Updates were rejected/i, ko: '원격에 로컬에 없는 커밋 있음(push 거부)', next: '원격 변경 받기(pull) 뒤 ⬆️ Source Backup 다시 실행' },
+  { kind: 'auth', re: /Authentication failed|HTTP 40[13]\b|Permission denied|could not read Username|invalid credentials/i, ko: '인증 실패', next: 'Git 계정 인증(토큰) 확인 뒤 ⬆️ Source Backup 다시 실행' },
+  { kind: 'size', re: /GH001|exceeds GitHub's file size limit|large files detected|HTTP 413\b|pack exceeds maximum allowed size/i, ko: '파일 크기 제한 초과', next: '큰 파일을 .gitignore 로 빼고 커밋 정리 뒤 ⬆️ Source Backup 다시 실행' },
+  { kind: 'network', re: /Could not resolve host|Failed to connect|Connection timed out|Connection reset|SSL|unable to access/i, ko: '원격 연결 실패', next: '네트워크(VPN, 프록시) 확인 뒤 ⬆️ Source Backup 다시 실행' },
+  { kind: 'server', re: /HTTP 5\d\d\b|returned error: 5\d\d|remote end hung up|unexpected disconnect/i, ko: '원격 서버 오류 응답', next: '원격 상태 확인 뒤 ⬆️ Source Backup 다시 실행' },
+];
+function pushCause(text) {
+  const t = String(text || ''); const lines = t.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  const hm = /HTTP (\d{3})\b/.exec(t) || /returned error: (\d{3})\b/.exec(t);
+  const k = PUSH_KINDS.find(x => x.re.test(t)) || { kind: 'unknown', ko: '원인 미분류', next: 'push 로그 확인 뒤 ⬆️ Source Backup 다시 실행' };
+  const reasonLine = lines.find(l => /^(error|fatal|remote|!)\b|\[rejected\]|HTTP \d{3}/i.test(l)) || lines[0] || '';
+  return { kind: k.kind, cause: k.ko, http: hm ? Number(hm[1]) : null, reason: reasonLine.slice(0, 200), next: k.next };
+}
+const isPushInc = inc => !!inc && inc.rule === 'R1' && /Source Backup/i.test(String(inc.title || '')) && /push/i.test(String(inc.title || '') + String(inc.sig || ''));
+/** 미push 커밋 수(git rev-list --count @{u}..HEAD). 측정 못 하면 null */
+function unpushedCount(dir) {
+  try { const r = require('child_process').spawnSync('git', ['rev-list', '--count', '@{u}..HEAD'], { cwd: dir || root, encoding: 'utf8', timeout: 8000, windowsHide: true });
+    const n = parseInt(String(r.stdout || '').trim(), 10); return r.status === 0 && Number.isFinite(n) ? n : null; } catch { return null; }
+}
+/** push 실패 사건에 원인 분류를 붙여 저장(10분 안에 붙였으면 그대로). push 사건이 아니면 null */
+function pushInfoOf(inc, o) {
+  if (!isPushInc(inc)) return null;
+  const now = Date.now(); const pi = inc.pushInfo;
+  if (pi && !(o && o.force) && now - (pi.ms || 0) < 10 * 60000) return pi;
+  let text = String(inc.detail || ''); const lf = inc.evidence && inc.evidence.log;
+  if (lf) { try { const f = path.isAbsolute(lf) ? lf : path.join(root, lf); const s = fs.statSync(f); const fd = fs.openSync(f, 'r'); try { const n = Math.min(s.size, 64 * 1024); const b = Buffer.alloc(n); fs.readSync(fd, b, 0, n, s.size - n); text = `${b.toString('utf8')}\n${text}`; } finally { fs.closeSync(fd); } } catch { /* 로그 없음 = detail 만 */ } }
+  const c = pushCause(text); const unp = (o && 'unpushed' in o) ? o.unpushed : unpushedCount();
+  inc.pushInfo = Object.assign(c, { unpushed: unp, ms: now, at: orchEv ? orchEv.nowLocal(now) : new Date(now).toISOString() });
+  if (inc.id && incDir) save(inc);
+  return inc.pushInfo;
+}
+/** VMO 창 요약 맨 위 '사람 확인 필요' 줄 = need-user 사건마다 1줄 + 다음 행동 1줄(push 사건은 원인 분류 포함) */
+function needUserTop(limit) {
+  return list(200).filter(x => x.status === 'need-user' && !x.notice && !x.reload).slice(0, limit || 5).map(x => {
+    const pi = pushInfoOf(x);
+    const line = pi ? `${x.title} · ${pi.cause}${pi.http ? ` HTTP ${pi.http}` : ''}${pi.reason ? ` · ${pi.reason}` : ''}${pi.unpushed != null ? ` · 미push 커밋 ${pi.unpushed}건` : ''}` : String(x.title || '');
+    const lastAct = (x.actions || []).slice().reverse().find(a => /다음 행동|사용자 확인 필요/.test(String(a.what || '')));
+    const nx = pi ? pi.next : (/다음 행동 '([^']+)'/.exec(String(lastAct && lastAct.what || '')) || [])[1] || '사건 탭에서 원인 확인 뒤 닫기 또는 다시 실행';
+    return { id: x.id, rule: x.rule, at: x.at, line: line.slice(0, 300), next: nx, shownAt: x.shownAt || '' };
+  });
+}
+/** 사람 확인 줄이 VMO 창에 보인 시각을 사건에 기록(처음 1번만, 리스너 안 부름 = 화면 다시 그리기 반복 없음). U3 가 '알림' 여부를 나눔 */
+function markShown(ids) {
+  const out = []; for (const id of (Array.isArray(ids) ? ids : []).slice(0, 50)) { const inc = get(String(id)); if (!inc || inc.status !== 'need-user' || inc.shownAt) continue; inc.shownAt = orchEv ? orchEv.nowLocal() : new Date().toISOString(); inc.shownMs = Date.now(); save(inc); out.push(inc.id); }
+  return out;
+}
+
 function init(p, opts) {
   if (started || !p || !p.root) return;
   started = true; initMs = Date.now(); root = p.root; orchDir = path.join(p.vibeDir || path.join(p.root, '.vibe'), 'orch'); incDir = path.join(orchDir, 'incidents');
@@ -483,4 +538,4 @@ function dispose() { if (timer) { clearInterval(timer); timer = null; } started 
 
 function health() { return { started, lastTickMs, initMs, tickSec: Math.max(5, cfg.tickSec) }; }
 
-module.exports = { _stopWatch: stopWatch, _stoppedRuns: stoppedRuns, runStopped,reloadCause, reloadSweep, RELOAD_KO, STALE_EVENT_MS, markUserStop, userStopped, feCompileError, openFailCount, init, dispose, on, list, get, update, raise, tick, onEvent, health, TITLE, DEF };
+module.exports = { _stopWatch: stopWatch, _stoppedRuns: stoppedRuns, runStopped,reloadCause, reloadSweep, RELOAD_KO, STALE_EVENT_MS, markUserStop, userStopped, feCompileError, openFailCount, pushCause, pushInfoOf, needUserTop, markShown, init, dispose, on, list, get, update, raise, tick, onEvent, health, TITLE, DEF };

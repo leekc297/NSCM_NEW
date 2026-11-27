@@ -147,8 +147,8 @@
 ## 7. 확인 필요 (4건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 1019 | FP00130_ValidateDataDelegate | FP\{?default:part_service}\FP00130_Equipment#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1009 | FP00130_ValidateDataDelegate | FP\{?default:part_service}\FP00130_Equipment#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 1019 | FP00130_ValidateDataDelegate | FP\{?default:part_service}\FP00130_Equipment#find_Excel_buffer_validation | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 989 | FP00130_SaveDataDelegate | FP\{?default:part_service}\FP00130_Equipment#merge_FP00130 | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1013 | FP00130_ValidateDataDelegate | FP\{?default:part_service}\FP00130_Equipment#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 

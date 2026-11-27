@@ -99,7 +99,8 @@ let ok = true; const chk = (n, c, x) => { console.log(c ? 'PASS' : 'FAIL', n, x 
   console.log(`  workbench.js 절 ${realCl.length}개 · 직접 분류 표본 ${cmp.labeled}개(표본 밖 ${cmp.unlabeled}) · 직접 ${JSON.stringify(cmp.man)} · 분류 ${JSON.stringify(cmp.auto)} · 어긋남 ${cmp.miss.length}절`);
   for (const m of cmp.miss) console.log(`    어긋난 절: ${m}`);
   // 2026-11-23 17:1x 실측 어긋남 7절(직접 결함 → 분류 요청 3, 직접 요청 → 분류 결함 4). 문구 6절은 일치해야 함
-  chk('실 CHANGELOG workbench.js 표본 96절: 문구 일치 · 어긋남 7절 이하 · 결함 수 차이 3 이하', cmp.labeled >= 96 && cmp.man.style === cmp.auto.style && !cmp.miss.some(m => /style/.test(m)) && cmp.miss.length <= 7 && Math.abs(cmp.man.defect - cmp.auto.defect) <= 3, JSON.stringify({ labeled: cmp.labeled, man: cmp.man, auto: cmp.auto, miss: cmp.miss.length }));
+  /* 2026-11-26 개선안 20261126164033_SELF: '- 변경: … 파일 <목록>.' 표시 절은 그 목록만 세어 설명 속 workbench.js 언급 절 5개가 빠짐(96 → 91) */
+  chk('실 CHANGELOG workbench.js 표본 90절 이상: 문구 일치 · 어긋남 7절 이하 · 결함 수 차이 3 이하', cmp.labeled >= 90 && cmp.man.style === cmp.auto.style && !cmp.miss.some(m => /style/.test(m)) && cmp.miss.length <= 7 && Math.abs(cmp.man.defect - cmp.auto.defect) <= 3, JSON.stringify({ labeled: cmp.labeled, man: cmp.man, auto: cmp.auto, miss: cmp.miss.length }));
   // 집계: 결함 절만 7일 5회 기준 · 요청, 문구 건수는 따로 · 한 절에 같은 파일 이름 경로만 달리 2번 = 1건
   { const r2 = fs.mkdtempSync(path.join(os.tmpdir(), 'hist2-')); const vm2 = path.join(r2, 'tools', 'VibeManager'); const sec = (i, t, b) => [`## (판 번호 없음, VM 저장소) ${t} (2026-11-2${i % 3} 10:0${i})`].concat(b).join(NL);
     const secs = []; for (let i = 0; i < 5; i++) secs.push(sec(i, `결함 ${i} 정정`, ['- 원인: x', '- 변경: w.js, tools/VibeManager/w.js']));

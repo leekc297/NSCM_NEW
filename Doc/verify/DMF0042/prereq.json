@@ -1,7 +1,7 @@
 {
  "menu_id": "DMF0042",
  "asis_id": "DMF0042",
- "generated": "2026-11-19 18:49:30",
+ "generated": "2026-11-26 17:52:55",
  "rc": 0,
  "items": [
   {
@@ -21,9 +21,9 @@
   {
    "key": "tobe_meta",
    "what": "TO-BE DB 메타(Doc/tobefacts/db)",
-   "status": "OK",
+   "status": "DONE",
    "producer": "tools/DbConn/export_tobe_meta.py",
-   "evidence": "9.9시간 전 export(기준 12시간)"
+   "evidence": "22시간 지난 메타 → 다시 export · rc=0 · 22s · _meta.csv 1560행 proc_params.csv 8811행 sheet_columns.csv 17288행 sheet_measures.csv 1763행 combo_sql.csv 747행 menu.csv 219행 msg_master.csv 5252행 btn_auth.csv 15153행 user_group.csv 23행 user_group_user.csv 13090행 user_group_menu.csv 2228행 users.csv 8613행 division.csv 14행 unit_auth.csv 25062행 tables.csv 6069행 columns.csv 18774행 procs_catalog.csv 2104행 완료: C:\\Projects\\NSCM\\Doc\\tobefacts\\db (성공 17 / 실패 0)"
   },
   {
    "key": "tobe_index",
@@ -47,11 +47,25 @@
    "evidence": "13건 있음 · TO-BE PROC 미매칭 7건(DMF0042:DMF0042_1_GET_SPREAD_TITLE, DMF0042:SCM0001_GET_LOOKUP_VALUES, DMF0042:SCM0001_GET_BIZ_TYPE_BY_DIVISION, DMF0042:UP_FX_GETCOMMONDATALIST_DM, DMF0042:DMF0042_3_Get_BizPlan) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
   },
   {
-   "key": "e2e",
-   "what": "E2E 사전(plan·스펙·smoke)",
-   "status": "SKIP",
-   "producer": "-",
-   "evidence": "--skip-e2e"
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "DONE",
+   "producer": "tools/Harness/gen.js <ID> --plan-only",
+   "evidence": "plan-only 생성 · rc=0 · 0s · To-Be 메뉴 메타: DMF0042 → feature=demand pageDir=business-plan 상위=Demand_Plan USE_YN=Y (Business Plan) 액션 대조표: 3192행 · 의미 확인 필요 110 DMF0042 --plan-only → C:\\Projects\\NSCM\\Doc\\gen\\DMF0042 (e2e_plan.json, register.json) fields=15 buttons=9 sheets=1+1popup procs=26"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 1s · DMF0042: AS-IS 팝업 클래스 안 시트 메인 제외 — Sales Price PopUp DMF0042 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: k0101 DMF0042 → DMF0042 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행 · 색인 전체 29화면/34행)"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/<ID>/_summary.csv · 없으면 공용)",
+   "status": "DONE",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "smoke 3건 실행 (FAIL 포함 — 결과는 판정 근거로 반입) · rc=1 · 608s ·  › ..\\..\\Doc\\e2e\\specs\\DMF0042.smoke.spec.ts:106:7 › DMF0042 BizPlan 스모크 @smoke › 조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인 1 passed (9.8m) # E2E 결과 — 2026-11-26 17:52 테스트 3 · PASS 1 · FAIL 2 · FLAKY 0 · SKIP 0 → C:\\Projects\\NSCM\\Doc\\e2e\\results\\DMF0042\\_summary.md · 색인 C:\\Projects\\NSCM\\Doc\\e2e\\results\\_summary.md log: C:\\Projects\\NSCM\\Doc\\e2e\\logs\\DMF0042\\run_20261126_174247_smoke.log"
   }
  ]
 }

@@ -1,0 +1,29 @@
+{
+  "id": "20261126_184043_R12_ALL_6",
+  "at": "2026-11-26T18:40:43+09:00",
+  "ms": 1795686043907,
+  "rule": "R12",
+  "ruleName": "VM 자가진단",
+  "title": "VM 자가진단 S2 시험: t_orch_improve.js 실패",
+  "screen": "",
+  "sig": "R12|S2|t_orch_improve.js",
+  "count": 1,
+  "repeat": null,
+  "detail": "exit 2 · PASS 18 · FAIL 0 · ERROR C:\\Projects\\NSCM\\tools\\VibeManager\\orch-selfcheck.js:649",
+  "evidence": {
+    "check": "S2",
+    "key": "S2|t_orch_improve.js",
+    "file": "t_orch_improve.js",
+    "result": ".vibe/orch/selfcheck/result.json"
+  },
+  "status": "resolved",
+  "notice": false,
+  "actions": [
+    {
+      "at": "2026-11-26T18:53:10+09:00",
+      "by": "VMO",
+      "what": "다시 점검한 결과 S2 항목에서 사라짐",
+      "grade": "A"
+    }
+  ]
+}

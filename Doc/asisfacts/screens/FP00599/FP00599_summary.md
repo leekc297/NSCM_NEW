@@ -1425,14 +1425,6 @@
 | bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5715 |
 | bucke_menu | Click | onZeroMaterialMenu | spdMain_CellClick:5727 |
 | nlfamend_menu | Click | onNLFAmendMenu | spdMain_CellClick:5734 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
 | this.btnToggleSave | Click | btnToggleSave_Click | InitializeComponent:314 |
 | this.chk_Info | CheckedChanged | chk_Info_CheckedChanged_1 | InitializeComponent:489 |
 | this.cbo_fpplanid | DropDown | cbo_fpplanid_DropDown | InitializeComponent:793 |
@@ -1473,14 +1465,6 @@
 | this.btn_category | Click | btnCatagory_Click | InitializeComponent:2208 |
 | this.btn_column | Click | btnColumn_Click | InitializeComponent:2246 |
 | this | Load | FP00599_PlanAmend_Model_Assy_Load | InitializeComponent:2470 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:462 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:499 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:525 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:526 |
-| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:390 |
-| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:427 |
-| this | Load | MeasureSetForm_Load | InitializeComponent:453 |
-| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:454 |
 | this | Load | Form_Load | .ctor:146 |
 | cbo_plan_group | SelectedIndexChanged | cbo_plan_group_changed | InitEvent:354 |
 | mcbo_planner | SelectedIndexChanged | mcbo_planner_changed | InitEvent:355 |
@@ -1511,6 +1495,22 @@
 | sCalendar_planday | DateTimeChanged | planday_changed | btnCreatePlan_Click:5628 |
 | cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:6087 |
 | cbo_fpplanid | SelectedIndexChanged | cbo_fpplanid_changed | cbo_fpplanid_DropDown:6090 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:119 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:156 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:170 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:171 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:462 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:499 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:525 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:526 |
+| this.usrButton1 | Click | usrButton1_Click | InitializeComponent:390 |
+| this.usrButton2 | Click | usrButton2_Click | InitializeComponent:427 |
+| this | Load | MeasureSetForm_Load | InitializeComponent:453 |
+| this | SizeChanged | MeasureSetForm_SizeChanged | InitializeComponent:454 |
 
 ## 6. 컨트롤 (441개, 상세는 controls.csv)
 | 유형 | 개수 | 컨트롤 |
@@ -1554,6 +1554,21 @@
 | 421 | Save_Data_Line | FP_Master.PR_UI_FP00599_SAVEALL_FP00599 | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 1681 | FindAttribute | FP_Master.PR_UI_FP00599_FINDATTRIBUTE | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
 | 1701 | FindFormAttribute | FP_Master.PR_UI_FP00599_FINDFORMATTRIBUTE | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) · SP 직접호출 또는 미등록 — DB 단계에서 확인 |
+| 2793 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3057 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5502 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5540 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2762 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3025 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5448 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 5486 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 4859 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 4897 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2378 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2564 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2579 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 4294 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 4329 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 611 | Query | FP\{?default:part_service}\AmendMemo#list_memo | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 612 | Query | FP\{?default:part_service}\AmendMemo#list_setup_color_code | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 1401 | Save_Data | FP\{?default:part_service}\XpCommonCond#find_AMend_Save_Check | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -1593,21 +1608,13 @@
 | 2270 | SaveExcelRows | FP\{?default:part_service}\AmendValidation#find_save_seq | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2433 | call_Excel_Row_Save | FP\{?default:part_service}\XpCommonCond#find_AMend_Save_Check | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 2447 | call_Excel_Row_Save | FP\{?default:part_service}\AmendValidation#find_save_seq | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2793 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3057 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5502 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5540 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2762 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3025 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5448 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 5486 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 4859 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 4897 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2378 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2564 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2579 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#delete_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 4294 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_SSP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 4329 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#saveAll_MRP_Transit | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3063 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 3031 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2383 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2569 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2584 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2798 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
+| 2767 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 646 | Query | FP\{?default:part_service}\PICAlarm#find_Category | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 647 | Query | FP\{?default:part_service}\PICAlarm#find_Category_Color | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 5478 | btnSSP_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
@@ -1633,13 +1640,6 @@
 | 4305 | btnMRP_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 4580 | btnDppWppCopy_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 | 4627 | btnDwSubmit_Click | FP\{?default:part_service}\XpCommonAmend#find_save_chk | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3063 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 3031 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2383 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2569 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2584 | call_Excel_Row_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORT#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2798 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 2767 | call_Excel_Col_Validation | FP\{?default:part_service}\FP00602_EXCELIMPORTROW#insert_Excel_buffer | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

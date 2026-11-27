@@ -1,19 +1,19 @@
 # SCP0084 — To-Be Fact Pack 요약
 
 - page_key: `supply/long-term-stock` · feature: supply · As-is Fact Pack 있음
-- 파일 9 · 엔드포인트 호출 5 (미해결 0, 주석 속 0) · 이벤트 10 · 컴포넌트 사용 18 · 하드코딩 컬럼 0 · 메시지 13
+- 파일 9 · 엔드포인트 호출 5 (미해결 0, 주석 속 0) · 이벤트 11 · 컴포넌트 사용 18 · 하드코딩 컬럼 0 · 메시지 13
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx | component | 279 |
-| features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | component | 151 |
+| features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | component | 196 |
 | features/supply/src/pages/long-term-stock/hooks/useLongTermStockValidation.ts | hook | 28 |
 | features/supply/src/pages/long-term-stock/index.ts | index | 2 |
-| features/supply/src/pages/long-term-stock/long-term-stock.constants.ts | constants | 123 |
+| features/supply/src/pages/long-term-stock/long-term-stock.constants.ts | constants | 126 |
 | features/supply/src/pages/long-term-stock/long-term-stock.types.ts | types | 15 |
-| features/supply/src/pages/long-term-stock/LongTermStock.tsx | page | 188 |
+| features/supply/src/pages/long-term-stock/LongTermStock.tsx | page | 211 |
 | features/supply/src/pages/long-term-stock/useLongTermStockStore.ts | store | 155 |
 | features/supply/src/pages/long-term-stock/__asis-mapping__.md | mapping | 58 |
 
@@ -39,11 +39,12 @@
 | CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx | 231 |
 | CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx | 250 |
 | CustomDropdown | onChange | <arrow> set | jsx | features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx | 269 |
-| g | updatedLayout | apply | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 92 |
-| g | beginningEdit | handler | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 111 |
-| g | formatItem | handler | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 127 |
-| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 141 |
-| LongTermStockForm | onSearch | handleSearch | jsx | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 164 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 109 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 137 |
+| g | beginningEdit | handler | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 156 |
+| g | formatItem | handler | addHandler | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 172 |
+| DataGrid | initialized | handleInitialized | jsx | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 186 |
+| LongTermStockForm | onSearch | handleSearch | jsx | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 187 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -79,8 +80,8 @@
 | MSG00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0084(3), SCP0006(1), SCP0001(1), SSP0005(1)
-- SP/PKG: PKG_SCP0084(2), SCP0084_GET_MONTH_RANGE(2), SCP0084_GET_LONG_TERM_STOCK(1), SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET(1), P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET(1)
+- 화면ID: SCP0084(6), SCP0006(1), SCP0001(1), SSP0005(1)
+- SP/PKG: SCP0084_GET_MONTH_RANGE(3), PKG_SCP0084(2), SCP0084_GET_LONG_TERM_STOCK(1), SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET(1), P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
@@ -93,16 +94,16 @@
 | code | }); | features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx | 143 |
 | code | return toOptions(filtered); | features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx | 144 |
 | code | }, [plantsAllRaw, sc.divisionId]); | features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx | 145 |
-| code | import { COL, MEMO_EDITABLE_BG, MERGE_COLUMNS } from '../long-term-stock.constants'; | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 17 |
-| code | const apply = () => { | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 77 |
-| code | for (const col of g.columns) { | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 78 |
-| code | if (!col.binding) continue; | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 79 |
-| code | col.allowMerging = MERGE_COLUMNS.has(col.binding); | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 80 |
-| code | }; | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 82 |
+| code | import { COL, MEMO_EDITABLE_BG, MERGE_COLUMNS } from '../long-term-stock.constants'; | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 18 |
+| code | const apply = () => { | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 94 |
+| code | for (const col of g.columns) { | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 95 |
+| code | if (!col.binding) continue; | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 96 |
+| code | col.allowMerging = MERGE_COLUMNS.has(col.binding); | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 97 |
+| code | }; | features/supply/src/pages/long-term-stock/components/LongTermStockGrid.tsx | 99 |
 | code | export const MERGE_COLUMNS: ReadonlySet<string> = new Set([ | features/supply/src/pages/long-term-stock/long-term-stock.constants.ts | 102 |
 | code | ]); | features/supply/src/pages/long-term-stock/long-term-stock.constants.ts | 107 |
-| code | insert: () => undefined, | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 148 |
-| code | delete: () => undefined, | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 149 |
+| code | insert: () => undefined, | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 171 |
+| code | delete: () => undefined, | features/supply/src/pages/long-term-stock/LongTermStock.tsx | 172 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

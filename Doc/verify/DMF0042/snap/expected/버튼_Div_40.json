@@ -1,0 +1,37 @@
+{
+ "kind": "버튼",
+ "scope": "Div 40",
+ "codes": [
+  "MEASURE_SELECT",
+  "SET_PRICE",
+  "CUTOFF",
+  "REPLACE",
+  "EXCHANGE_RATE",
+  "COLUMN_SETUP",
+  "EXCEL",
+  "SAVE",
+  "DELETE",
+  "INSERT",
+  "SEARCH"
+ ],
+ "asis_buttons": [
+  {
+   "key": "measure",
+   "label": "Measure",
+   "lbl": "LBL00310",
+   "kind": "subtitle-custom",
+   "tobe": "MEASURE_SELECT",
+   "asis": "btnMeasure"
+  },
+  {
+   "key": "column",
+   "label": "Period",
+   "lbl": "LBL00013",
+   "kind": "subtitle-custom",
+   "tobe": "COLUMN_SETUP",
+   "asis": "btnColumn"
+  }
+ ],
+ "src": "plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)",
+ "note": "코드 ↔ 표시명은 접두 일치(SEARCH~Search(F5)) · MEASURE_SELECT~Measure"
+}

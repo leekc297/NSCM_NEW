@@ -1,0 +1,40 @@
+{
+  "id": "20261126164445_VISION_3",
+  "at": "2026-11-26T16:44:45+09:00",
+  "ms": 1795679085805,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 vmo 알림을 한곳에서 내보내고 반영 완료 알림을 묶음 알림 기록을 events.jsonl 에 남김",
+  "title": "컨설팅: VMO 알림을 한곳에서 내보내고 반영 완료 알림을 묶음, 알림 기록을 events.jsonl 에 남김",
+  "evidence": "extension.js:781, 786, 788, 798, 800 에서 VMO 모듈 5개가 각자 vscode.window.showInformationMessage 를 부름. 묶음, 간격 제한 코드 0건. orch-improve.js:447 반영 1건마다 '개선안 반영 완료' 알림, 414·429 반영 실패마다 알림. 11-25 00:00~11-26 10:55 반영 89건, 실패 8건(vision meta). orch-improve.js:240 은 coreAutoApply true 인데 '개선안 N건 승인 대기' 문구. 알림 표시가 events.jsonl 에 기록되지 않아 표시 건수 미측정",
+  "targets": [
+    "tools/VibeManager/orch-notify.js",
+    "tools/VibeManager/extension.js",
+    "tools/VibeManager/orch-improve.js",
+    "tools/VibeManager/test/t_orch_notify.js"
+  ],
+  "before_after": "변경 전: 반영 완료, 실패, 사건, 자가진단 알림이 건마다 따로 뜸. 변경 후: orch-notify.js 가 종류(반영 완료, 반영 실패, 사건, 자가진단, 승인 대기)별로 받음. 반영 완료는 10분 동안 모아 '개선안 반영 N건, 실패 M건' 1건으로 보내고, 반영 실패와 need-user 사건은 바로 보냄. 같은 문구는 10분 안에 1번만 보냄. 보낸 알림과 묶은 건수를 events.jsonl 에 type notify.shown, notify.merged 로 기록. orch-improve.js:240 문구는 자동 반영 켜짐이면 '개선안 N건 등록(자동 반영 순서 대기)'로 씀. 시험 t_orch_notify.js 는 묶음, 바로 보냄, 중복 제거, 기록을 확인",
+  "verify": "반영 때: node tools/VibeManager/test/run_all.js, node tools/VibeManager/test/t_orch_notify.js. 반영 뒤: 창 다시 로드 뒤 24시간 events.jsonl 의 notify.shown 건수와 notify.merged 합계를 비교. 반영 실패 알림이 묶이지 않고 바로 뜬 기록 확인",
+  "rollback": "orch-notify.js 삭제(승인 대상), extension.js, orch-improve.js .bak_<tag> 복원",
+  "impact": "fix",
+  "level": "L2",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T16:47:08+09:00",
+      "by": "S-Z",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T17:07:53+09:00",
+      "by": "S-Z",
+      "what": "반영 완료(세션 직접 보완) · orch-notify.js 신규(반영 완료 10분 묶음, 실패·사건 바로, 같은 문구 10분 1번, events.jsonl notify.shown·notify.merged, 끄기 orch.notifyMerge false), extension.js 알림 5곳 연결과 dispose, orch-improve.js notifier 종류·id 전달과 자동 반영 켜짐 등록 문구, orch-selfcheck.js 자동 반영 알림 종류·id. test/t_orch_notify.js 11건 PASS. run_all 94/95(t_orch_agent 1건 전체 실행 때만 실패, 단독 재실행 PASS 15). 설치 폴더 복사 17:07"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-Z",
+  "waitNote": "",
+  "appliedMs": 1795680473629
+}

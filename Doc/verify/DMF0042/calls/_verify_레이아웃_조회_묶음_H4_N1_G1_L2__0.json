@@ -1,0 +1,67 @@
+[
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 292,
+  "at": "2026-11-26T11:00:46.943Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"40\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 13,
+  "dur": 191,
+  "at": "2026-11-26T11:00:59.911Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"40\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"ADMIN\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 97,
+  "dur": 5905,
+  "at": "2026-11-26T11:01:05.681Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "spreadTitle",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/spreadTitle/SEARCH/call-proc",
+  "postData": "{\"startYyyymmdd\":\"20261101\",\"endYyyymmdd\":\"20270531\",\"divisionId\":\"82\",\"userId\":\"minyonglee1\",\"mnuId\":\"DMF0042\"}",
+  "status": 200,
+  "rows": 13,
+  "dur": 154,
+  "at": "2026-11-26T11:01:12.790Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ },
+ {
+  "menu": "DMF0042",
+  "sheet": "Biz Plan",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/Biz%20Plan/SEARCH/call-proc",
+  "postData": "{\"divisionId\":\"82\",\"deptId\":\"ALL\",\"endCustomer\":\"ALL\",\"scmSiteId\":\"ALL\",\"projectCode\":\"\",\"itemId\":\"\",\"itemType\":\"ALL\",\"fromYyyymmdd\":\"20261101\",\"nowYyyymmdd\":\"20261123\",\"toYyyymmdd\":\"20270531\",\"plantSiteId\":\"ALL\",\"bizType\":\"ALL\",\"userGroup\":\"ADMIN\",\"owner\":\"\",\"qtyYn\":\"N\"}",
+  "status": 200,
+  "rows": 1,
+  "dur": 4462,
+  "at": "2026-11-26T11:01:17.135Z",
+  "user": "minyonglee1",
+  "test": "레이아웃·조회 묶음(H4·N1·G1·L2)"
+ }
+]

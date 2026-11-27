@@ -1,47 +1,46 @@
 # SCP0009 — To-Be Fact Pack 요약
 
 - page_key: `supply/shipment-plan-fg` · feature: supply · As-is Fact Pack 있음
-- 파일 20 · 엔드포인트 호출 19 (미해결 1, 주석 속 0) · 이벤트 33 · 컴포넌트 사용 45 · 하드코딩 컬럼 11 · 메시지 50
+- 파일 22 · 엔드포인트 호출 16 (미해결 1, 주석 속 0) · 이벤트 36 · 컴포넌트 사용 44 · 하드코딩 컬럼 11 · 메시지 52
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 11건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/shipment-plan-fg/components/modals/FixReasonModal.tsx | component | 79 |
-| features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | component | 517 |
-| features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | component | 495 |
+| features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | component | 510 |
+| features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | component | 542 |
 | features/supply/src/pages/shipment-plan-fg/index.ts | index | 2 |
 | features/supply/src/pages/shipment-plan-fg/shipment-plan-fg.columns.ts | other | 77 |
-| features/supply/src/pages/shipment-plan-fg/shipment-plan-fg.constants.ts | constants | 176 |
-| features/supply/src/pages/shipment-plan-fg/shipment-plan-fg.types.ts | types | 62 |
-| features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | page | 604 |
-| features/supply/src/pages/shipment-plan-fg/useShipmentPlanFgStore.ts | store | 259 |
+| features/supply/src/pages/shipment-plan-fg/shipment-plan-fg.constants.ts | constants | 178 |
+| features/supply/src/pages/shipment-plan-fg/shipment-plan-fg.types.ts | types | 63 |
+| features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | page | 704 |
+| features/supply/src/pages/shipment-plan-fg/useShipmentPlanFgStore.ts | store | 262 |
 | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.buildColumns.ts | util | 42 |
 | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.drilldown.test.ts | test | 56 |
 | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.drilldown.ts | util | 34 |
-| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.editLock.test.ts | test | 193 |
-| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.editLock.ts | util | 187 |
+| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.editLock.test.ts | test | 216 |
+| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.editLock.ts | util | 188 |
 | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.fix.test.ts | test | 158 |
 | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.fix.ts | util | 153 |
 | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.headerMerge.ts | util | 57 |
+| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.insert.test.ts | test | 124 |
+| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.insert.ts | util | 243 |
 | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.save.test.ts | test | 60 |
-| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.save.ts | util | 150 |
-| features/supply/src/pages/shipment-plan-fg/__asis-mapping__.md | mapping | 474 |
+| features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.save.ts | util | 152 |
+| features/supply/src/pages/shipment-plan-fg/__asis-mapping__.md | mapping | 495 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 9 | Y | ShipmentPlanFgForm.tsx:61 ShipmentPlanFgForm.tsx:71 ShipmentPlanFgForm.tsx:80 ShipmentPlanFgForm.tsx:88 ShipmentPlanFgForm.tsx:102 ShipmentPlanFgForm.tsx:106 |
-| SCP0009/main//call-proc | hook | 1 | Y | ShipmentPlanFg.tsx:88 |
-| SCP0009/calendar//call-proc | hook | 1 | Y | ShipmentPlanFg.tsx:95 |
-| /SCP0009/saveYn/SEARCH/call-proc | http | 1 | Y | ShipmentPlanFg.tsx:180 |
-| /SCP0009/main/{action}/call-proc | http | 1 | N | ShipmentPlanFg.tsx:230 |
-| /SCP0009/main/SAVE/call-proc | http | 1 | Y | ShipmentPlanFg.tsx:405 |
-| /admin/menu/SCP0009/column | http | 1 | Y | useShipmentPlanFgStore.ts:183 |
-| /admin/menu/SCP0009/measure | http | 1 | Y | useShipmentPlanFgStore.ts:205 |
-| /admin/menu/SCP0009/search-conditions | http | 1 | Y | useShipmentPlanFgStore.ts:236 |
-| /SCP0009/main/FIX/call-proc | propagated | 1 | Y | ShipmentPlanFg.tsx:304 |
-| /SCP0009/main/UNFIX/call-proc | propagated | 1 | Y | ShipmentPlanFg.tsx:337 |
+| SCP0009/main//call-proc | hook | 1 | Y | ShipmentPlanFg.tsx:97 |
+| SCP0009/calendar//call-proc | hook | 1 | Y | ShipmentPlanFg.tsx:104 |
+| {?args.path} | http | 1 | N | ShipmentPlanFg.tsx:206 |
+| /SCP0009/saveYn/SEARCH/call-proc | http | 1 | Y | ShipmentPlanFg.tsx:216 |
+| /admin/menu/SCP0009/column | http | 1 | Y | useShipmentPlanFgStore.ts:186 |
+| /admin/menu/SCP0009/measure | http | 1 | Y | useShipmentPlanFgStore.ts:208 |
+| /admin/menu/SCP0009/search-conditions | http | 1 | Y | useShipmentPlanFgStore.ts:239 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -50,44 +49,47 @@
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
 | InputField | onChange | <arrow> setReason,e.target.value.replace(/\^/g,'').slice,e.target.value.replace | jsx | features/supply/src/pages/shipment-plan-fg/components/modals/FixReasonModal.tsx | 55 |
-| Button | onClick | <arrow> onConfirm | jsx | features/supply/src/pages/shipment-plan-fg/components/modals/FixReasonModal.tsx | 64 |
-| Button | onClick | onClose | jsx | features/supply/src/pages/shipment-plan-fg/components/modals/FixReasonModal.tsx | 71 |
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 290 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 319 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 330 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,String,clearFilters | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 348 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 408 |
-| Button | onClick | onProjectSearch | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 404 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 435 |
-| Button | onClick | onItemSearch | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 431 |
-| PlanVersionCascade | onChange | <arrow> set,getDayRange,dayjs | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 464 |
-| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 488 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 507 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 282 |
-| g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 292 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 313 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 314 |
-| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 353 |
-| g | updatedLayout | applyDrill | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 402 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 418 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 472 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 491 |
-| ShipmentPlanFgForm | onSearch | handleSearch | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 474 |
-| ShipmentPlanFgForm | onChangeBucketType | handleChangeBucketType | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 475 |
-| ShipmentPlanFgForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 476 |
-| ShipmentPlanFgForm | onProjectSearch | <arrow> setOpenProject | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 477 |
-| ShipmentPlanFgGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 528 |
-| FixReasonModal | onClose | <arrow> setOpenFixReason | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 549 |
-| FixReasonModal | onConfirm | handleFixReasonConfirm | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 549 |
-| NewPlanModal | onSaved | handleNewPlanSaved | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 555 |
-| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 567 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME,columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,setToast | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 582 |
+| Button | onClick | onClose | jsx | features/supply/src/pages/shipment-plan-fg/components/modals/FixReasonModal.tsx | 63 |
+| Button | onClick | <arrow> onConfirm | jsx | features/supply/src/pages/shipment-plan-fg/components/modals/FixReasonModal.tsx | 71 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 293 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 322 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 333 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,String,clearFilters | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 351 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 414 |
+| Button | onClick | onProjectSearch | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 410 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 441 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 437 |
+| PlanVersionCascade | onChange | <arrow> set,getDayRange,dayjs | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 470 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgForm.tsx | 495 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 302 |
+| g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 312 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 333 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 334 |
+| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 382 |
+| g | updatedLayout | applyDrill | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 433 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 449 |
+| g.hostElement | click | clickHandler | addEventListener | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 463 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 518 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 538 |
+| ShipmentPlanFgForm | onSearch | handleSearch | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 546 |
+| ShipmentPlanFgForm | onChangeBucketType | handleChangeBucketType | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 547 |
+| ShipmentPlanFgForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 548 |
+| ShipmentPlanFgForm | onProjectSearch | <arrow> setOpenProject | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 549 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 585 |
+| ShipmentPlanFgGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 608 |
+| ShipmentPlanFgGrid | onBodCellClick | handleBodCellClick | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 609 |
+| BodMasterModal | onSelect | handleBodSelect | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 628 |
+| FixReasonModal | onClose | <arrow> setOpenFixReason | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 649 |
+| FixReasonModal | onConfirm | handleFixReasonConfirm | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 649 |
+| NewPlanModal | onSaved | handleNewPlanSaved | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 655 |
+| ColumnLayoutModal | onSave | handleSaveColumnLayout | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 667 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME,columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,setToast | jsx | features/supply/src/pages/shipment-plan-fg/ShipmentPlanFg.tsx | 682 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| Grid | 8 |
-| FormItem | 6 |
+| Grid | 7 |
+| FormItem | 5 |
 | Button | 4 |
 | InputField | 3 |
 | CustomDropdown | 3 |
@@ -97,14 +99,15 @@
 | SearchArea | 1 |
 | PlanVersionCascade | 1 |
 | PeriodRangePicker | 1 |
-| Checkbox | 1 |
 | DataGrid | 1 |
 | MainTitle | 1 |
 | ShipmentPlanFgForm | 1 |
 | SubTitle | 1 |
 | IcGridColumnSetup | 1 |
 | IcMeasureSelect | 1 |
+| Checkbox | 1 |
 | ShipmentPlanFgGrid | 1 |
+| BodMasterModal | 1 |
 | MaterialByDivisionModal | 1 |
 | ProjectByDivisionModal | 1 |
 | FixReasonModal | 1 |
@@ -115,9 +118,9 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| toLeafConfig | l.binding | l.header | 90 | l.visible |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 172 |
-| leaf | m.binding | m.kind === 'D' ? m.leaf : 'SUM' |  | isDynVisible(m.kind) |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 196 |
-| dynCols | c.binding ?? '' |  |  | c.visible |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 414 |
+| toLeafConfig | l.binding | l.header | 90 | l.visible |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 178 |
+| leaf | m.binding | m.kind === 'D' ? m.leaf : 'SUM' |  | isDynVisible(m.kind) |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 202 |
+| dynCols | c.binding ?? '' |  |  | c.visible |  |  | object | features/supply/src/pages/shipment-plan-fg/components/ShipmentPlanFgGrid.tsx | 445 |
 | buildColumns | c.key | c.header | c.width ?? 100 | c.visible !== false |  |  | meta-map | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.buildColumns.ts | 29 |
 | col | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER |  |  | visible |  |  | object | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.drilldown.test.ts | 5 |
 | columns | MEASURE |  |  | true |  |  | object | features/supply/src/pages/shipment-plan-fg/utils/shipment-plan-fg.fix.test.ts | 38 |
@@ -145,7 +148,9 @@
 | MSG00165 | 1 |
 | MSG01488 | 1 |
 | MSG01187 | 1 |
+| MSG01135 | 1 |
 | MSG00004 | 1 |
+| MSG01243 | 1 |
 | MSG01075 | 1 |
 | MSG01104 | 1 |
 | MSG01126 | 1 |
@@ -182,8 +187,8 @@
 | LBL00111 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0009(9), SCP0031(1), SCP0010(1), SCP0025(1), SCM0002(1)
-- SP/PKG: PKG_SCP0009(6), P_SCP0009_SAVE_ANL_SHIP_PLAN_FG_WEEKLY(5), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(4), P_SCP0009_GET_SHIPMENT_PLAN_FG(3), PKG_COM0000(3), P_BUCKET(3), PKG_SCP0013(2), P_SCP0013_GET_PLAN_SAVE_YN(2), P_SCP0009_SAVE_ANL_SHIP_FG_FIX_DATASET(2), P_ACTIVE_FLAG(2), P_FIX_REASON(1), P_SCP0009_GET_SHIP_PLAN_FG_TITLE_PARAL(1), P_SCP0013_SAVE_YN_GET(1), SCM0001_GET_SCP_DAILY_PLAN_PERIOD(1), P_CHK_ALL(1), P_SCP0009(1), P_SCP0009_FIX_SAVE(1), SCM0001_GET_SCP_DAY_PERIOD(1), P_ITEM_ID(1), FN_GET_ITEM_LIKE_CONDITION(1), P_SHEET_NAME(1), P_SCP0009_SAVE_ANL_SHIP_PLAN_FG_WEEKLY_JSON(1), P_SCP0009_SAVE_ANL_SHIP_FG_FIX_DATASET_JSON(1), P_ELECTRODE_TYPE(1), P_YYYYMMDD(1)
+- 화면ID: SCP0009(10), SCP0013(3), SCP0031(1), SCP0010(1), SCP0025(1), SCM0002(1), SCP0134(1)
+- SP/PKG: PKG_SCP0009(8), P_SCP0009_SAVE_ANL_SHIP_PLAN_FG_WEEKLY(5), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(4), P_SCP0009_GET_SHIPMENT_PLAN_FG(3), PKG_COM0000(3), P_BUCKET(3), P_CHK_ALL(2), PKG_SCP0013(2), P_SCP0013_GET_PLAN_SAVE_YN(2), P_SCP0009_SAVE_ANL_SHIP_FG_FIX_DATASET(2), P_ACTIVE_FLAG(2), P_FIX_REASON(1), P_SCP0009_GET_SHIP_PLAN_FG_TITLE_PARAL(1), P_SCP0013_SAVE_YN_GET(1), SCM0001_GET_SCP_DAILY_PLAN_PERIOD(1), P_SCP0009(1), P_SCP0009_FIX_SAVE(1), SCM0001_GET_SCP_DAY_PERIOD(1), P_ITEM_ID(1), FN_GET_ITEM_LIKE_CONDITION(1), P_TO_PERIOD(1), P_SHEET_NAME(1), P_SCP0009_SAVE_ANL_SHIP_PLAN_FG_WEEKLY_JSON(1), P_SCP0009_SAVE_ANL_SHIP_FG_FIX_DATASET_JSON(1), P_ELECTRODE_TYPE(1), P_YYYYMMDD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

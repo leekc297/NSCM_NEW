@@ -269,8 +269,8 @@
 | 940 | gfn_Service | FP_Master.PR_UI_{?param["DESCRIPTOR"].Value}_{?param["SERVICE"].Value} | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=77 |
 | 947 | gfn_Service | FP_Master.PR_UI_{?param["DESCRIPTOR"].Value}_{?param["SERVICE"].Value} | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=77 |
 | 951 | gfn_Service | FP_Master.PR_UI_{?param["DESCRIPTOR"].Value}_{?param["SERVICE"].Value} | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=77 |
-| 1390 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP90000_Data_Handling#find_Excel_buffer_validation | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 1382 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP90000_Data_Handling#delete_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
+| 1390 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP90000_Data_Handling#find_Excel_buffer_validation | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 1371 | FP00180_SaveDataDelegate | FP\{?default:part_service}\FP90000_Data_Handling#FP90000_Data_Handling_EXCEL_UPDATE_BATCH | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 | 1386 | FP00180_ValidateDataDelegate | FP\{?default:part_service}\FP90000_Data_Handling#insert_Excel_buffer | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 · pattern no match |
 

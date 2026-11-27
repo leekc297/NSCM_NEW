@@ -1,0 +1,28 @@
+[
+ {
+  "menu": "DMF0042",
+  "sheet": "dayRange",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/DMF0042/dayRange/SEARCH/call-proc",
+  "postData": "{\"createdBy\":\"\",\"month\":\"7\"}",
+  "status": 200,
+  "rows": 3,
+  "dur": 367,
+  "at": "2026-11-26T10:18:56.684Z",
+  "user": "minyonglee1",
+  "test": "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼"
+ },
+ {
+  "menu": "COM0006",
+  "sheet": "ownerByDivision",
+  "btn": "SEARCH",
+  "url": "http://127.0.0.1:5173/api/COM0006/ownerByDivision/SEARCH/call-proc",
+  "postData": "{}",
+  "status": 200,
+  "rows": 1,
+  "dur": 560,
+  "at": "2026-11-26T10:19:02.334Z",
+  "user": "minyonglee1",
+  "test": "G4 조회조건 팝업 버튼(BTN) = AS-IS 버튼 → TO-BE 칸 버튼"
+ }
+]

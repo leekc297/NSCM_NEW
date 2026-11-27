@@ -30,6 +30,8 @@ const SRC: Record<SnapKind, string> = {
 };
 let CUR: { calls: number; rows: number } = { calls: 0, rows: -1 };
 const put = (kind: SnapKind, scope: string, s: SnapResult, extra: Record<string, unknown> = {}) => {
+  // 2026-11-26: Playwright 오류 문장의 터미널 색 코드(ESC[2m 등)를 지운다 — 원장 CSV·이력·판정 문장 비교에 ESC(0x1b) 가 남던 것(SCP0005 V-e1b5b2c6·V-f8f04705 · :180 detail)
+  if (typeof s.detail === 'string') s = { ...s, detail: s.detail.replace(/\x1b\[[0-9;]*[A-Za-z]/g, '') };
   snaps.push(s);
   const r = rowFor(kind, scope); if (!r) return;
   // 2026-11-19 T348 TO-BE 룰 CR-114(사용자의견 SCP0111 v64 V-55556e17·V-e8ca7b9a '컬럼 폭 비율은 오류에서 제외'): 화면샷 픽셀 차이 = 오류 아님(PASS + 차이 경로 근거)

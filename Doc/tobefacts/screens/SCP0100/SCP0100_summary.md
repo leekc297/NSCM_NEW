@@ -7,9 +7,9 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.module.scss | component | 8 |
-| features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | component | 607 |
-| features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | component | 334 |
+| features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.module.scss | component | 13 |
+| features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | component | 610 |
+| features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | component | 345 |
 | features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | component | 138 |
 | features/supply/src/pages/global-psi-report/global-psi-report.constants.ts | constants | 278 |
 | features/supply/src/pages/global-psi-report/global-psi-report.types.ts | types | 30 |
@@ -23,11 +23,11 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | GlobalPsiReportForm.tsx:116 |
-| (useTabLookupQueries) | hook | 1 | Y | GlobalPsiReportForm.tsx:123 |
-| SCP0100/site//call-proc | hook | 2 | Y | GlobalPsiReportForm.tsx:135 GlobalPsiReportForm.tsx:146 |
-| SCP0100/planDate//call-proc | hook | 1 | Y | GlobalPsiReportForm.tsx:163 |
-| {?{comboId:PLAN_END_DATE_COMBO_ID,divisionId:PLAN_END_DATE_DIVISION,planName:planS} | http | 1 | N | GlobalPsiReportForm.tsx:270 |
+| (useTabComboQueries) | hook | 1 | Y | GlobalPsiReportForm.tsx:118 |
+| (useTabLookupQueries) | hook | 1 | Y | GlobalPsiReportForm.tsx:125 |
+| SCP0100/site//call-proc | hook | 2 | Y | GlobalPsiReportForm.tsx:137 GlobalPsiReportForm.tsx:148 |
+| SCP0100/planDate//call-proc | hook | 1 | Y | GlobalPsiReportForm.tsx:165 |
+| {?{comboId:PLAN_END_DATE_COMBO_ID,divisionId:PLAN_END_DATE_DIVISION,planName:planS} | http | 1 | N | GlobalPsiReportForm.tsx:273 |
 | SCP0100/report//call-proc | hook | 1 | Y | GlobalPsiReport.tsx:71 |
 | SCP0100/searchLevel//call-proc | hook | 1 | Y | GlobalPsiReport.tsx:78 |
 | SCP0100/searchLevelDetail//call-proc | hook | 1 | Y | GlobalPsiReport.tsx:85 |
@@ -42,19 +42,19 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 310 |
-| RadioGroup | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 337 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 370 |
-| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 404 |
-| Button | onClick | onPopup | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 400 |
-| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 425 |
-| SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 436 |
-| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 513 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 588 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 593 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 313 |
+| RadioGroup | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 340 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 373 |
+| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 407 |
+| Button | onClick | onPopup | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 403 |
+| InputField | onChange | <arrow> onChange | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 428 |
+| SearchArea | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 439 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 528 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 591 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 596 |
 | g | formatItem | formatHandler | addHandler | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 257 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 308 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 330 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 314 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 341 |
 | ColumnLayoutModal | onSave | <arrow> settings.filter,saveTitleSet({menuId:MENU_ID,sheetName,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map,alertSaveFailed,queryClient.invalidateQueries | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | 81 |
 | MeasureSelectModal | onApply | <arrow> staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed,fetchStaticMeasures | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | 117 |
 | GlobalPsiReportForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-report/GlobalPsiReport.tsx | 242 |
@@ -121,8 +121,8 @@
 | LBL00310 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0100(20), SCP0031(11), SCM0002(3), DMF0021(2), SCP0098(1), SCP0111(1), SCP0025(1), SCP0053(1), SCP0095(1)
-- SP/PKG: P_SCP0100_GET_SITE(5), P_SCP0100_GET_PLAN_DATE(5), PKG_SCP0100(5), P_DIVISION_ID(5), P_BUCKET(4), P_CHK_AS(2), P_CHK_CELL_QTY(2), P_CELL_GROUP(2), P_ITEM_ID(2), P_PROJECT(2), P_NICK_NAME(2), P_SITE_TPYE(2), P_PROGRAM_ID(2), P_START_YYYYMMDD(2), P_FROM_SITE(2), P_TO_SITE(2), PR_GET_SHEET_COLUMN_LIST(2), P_SCP0100_GET_GLOBAL_PSI_REPORT(1), P_END_YYYYMMDD(1), DM0003_GET_BUCKET_TYPE_CODE(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1), P_PLAN_START_YYYYMMDD(1), P_P_START_YYYYMMDD(1), PR_GET_SHEET_MEASURE_LIST(1), PKG_COM0000(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1)
+- 화면ID: SCP0100(24), SCP0031(11), SCM0002(3), DMF0021(2), SCP0098(1), SCP0111(1), COM0013(1), COM0005(1), SCP0025(1), SCP0053(1), SCP0095(1)
+- SP/PKG: P_DIVISION_ID(7), P_SCP0100_GET_SITE(5), P_SCP0100_GET_PLAN_DATE(5), PKG_SCP0100(5), P_BUCKET(4), P_ITEM_ID(3), P_PROJECT(3), FN_SPLITSTRING(3), P_CHK_AS(2), P_CHK_CELL_QTY(2), P_CELL_GROUP(2), P_NICK_NAME(2), P_SITE_TPYE(2), P_PROGRAM_ID(2), P_START_YYYYMMDD(2), P_FROM_SITE(2), P_TO_SITE(2), PR_GET_SHEET_COLUMN_LIST(2), P_SCP0100_GET_GLOBAL_PSI_REPORT(1), P_END_YYYYMMDD(1), DM0003_GET_BUCKET_TYPE_CODE(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1), P_PLAN_START_YYYYMMDD(1), P_P_START_YYYYMMDD(1), PR_GET_SHEET_MEASURE_LIST(1), PKG_COM0000(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

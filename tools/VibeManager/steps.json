@@ -2606,6 +2606,26 @@
           ]
         },
         {
+          "id": "S8.flagAutoImproveOnStop",
+          "title": "작업 종료 뒤 개선안 이어 진행 켜고 끄기 (harness.json orch.autoImproveOnStop)",
+          "title_en": "Continue VMO proposals after a turn ends on/off",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_harness_flag.py",
+          "splitArgs": true,
+          "args": ["orch.autoImproveOnStop", "${input:flag}"],
+          "inputs": [
+            {
+              "name": "flag",
+              "prompt": "작업 종료 뒤 개선안 이어 진행 — Claude Code 작업 턴이 끝날 때 맡은 세션이 없는 VMO 대기 개선안을 이어서 진행할지",
+              "options": [
+                { "value": "ON", "description": "켜기(기본) — 대기 개선안이 있으면 이어 진행(세션마다 상한 orch.autoImproveMaxPerSession)" },
+                { "value": "OFF", "description": "끄기 — 작업 턴이 끝나면 그대로 멈춤" },
+                { "value": "STATUS", "description": "현재 값만 표시" }
+              ]
+            }
+          ]
+        },
+        {
           "id": "S8.vmoRerun",
           "title": "VMO 보완 뒤 재수행 (수행 없음 / 재수행 · harness.json orch.rerunAfterFix)",
           "title_en": "VMO rerun after fix",
@@ -2638,7 +2658,7 @@
         },
         {
           "id": "S8.asisView",
-          "title": "AS-IS 실측 화면 방식 (창 없이 실행 · 창 띄우기 · 녹화 · harness.json asisLiveView)",
+          "title": "AS-IS 실측 화면 방식 (창 없이 실행 · 창 띄우기 · 녹화 · 캡처 · harness.json asisLiveView)",
           "kind": "python",
           "script": "${harnessDir}/verify/set_live_view.py",
           "splitArgs": true,
@@ -2649,7 +2669,7 @@
           "inputs": [
             {
               "name": "view",
-              "prompt": "AS-IS 실측 — 런처 실행기 창을 어떻게 할지(녹화 = 동영상)",
+              "prompt": "AS-IS 실측 — 런처 실행기 창을 어떻게 할지(녹화 = 동영상 · 캡처 = 새 창·끝날 때 사진)",
               "options": [
                 {
                   "value": "hidden",
@@ -2664,13 +2684,17 @@
                   "description": "녹화"
                 },
                 {
+                  "value": "capture",
+                  "description": "창 없이 실행 + 캡처(새 창·끝날 때)"
+                },
+                {
                   "value": "STATUS",
                   "description": "현재 값만 표시"
                 }
               ]
             }
           ],
-          "title_en": "AS-IS live view (hidden / window / record)"
+          "title_en": "AS-IS live view (hidden / window / record / capture)"
         },
         {
           "id": "S8.tobeView",

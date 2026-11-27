@@ -1,0 +1,70 @@
+{
+ "rule_id": "M3",
+ "hash": "f2f274c44d468e9f",
+ "groups": [
+  {
+   "rows": [
+    "EG-5946e9b2"
+   ],
+   "why": "btnToSrch 버튼으로 연 CitybyCountry 팝업의 조회 결과를 확인하는 행이다. 다른 행과 화면 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-6dfc1107"
+   ],
+   "why": "TO_CITY 셀로 연 CitybyCountry 팝업의 조회 결과를 확인하는 행이다. 다른 셀·버튼과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-7e3f2ada"
+   ],
+   "why": "FROM_COUNTRY 셀로 연 CitybyCountry 팝업의 조회 결과를 확인하는 행이다. 다른 셀·버튼과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-8cc549b2"
+   ],
+   "why": "btnFromSrch 버튼으로 연 CitybyCountry 팝업의 조회 결과를 확인하는 행이다. 다른 행과 화면 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-8eae0725"
+   ],
+   "why": "FROM_CITY 셀로 연 CitybyCountry 팝업의 조회 결과를 확인하는 행이다. 다른 셀·버튼과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-996219a8"
+   ],
+   "why": "ExcelUploadForm2 팝업의 Upload 버튼을 확인하는 행이다. 다른 행과 팝업 자체가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "EG-a1c25099"
+   ],
+   "why": "ROUTE_ID 셀을 더블클릭하면 DistributionRoutePopup이 열리는지만 본다. 목록 행수를 보는 V-a46588cb와 기대 결과가 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "EG-ae8f908e"
+   ],
+   "why": "TO_COUNTRY 셀로 연 CitybyCountry 팝업의 조회 결과를 확인하는 행이다. 다른 셀·버튼과 대상 요소가 달라 단독으로 둔다."
+  },
+  {
+   "rows": [
+    "T-6d14c72c"
+   ],
+   "why": "대조표 8행이 구현에 반영됐는지를 추적하는 행이다. 실제 동작을 측정하는 행과 확인하는 성질이 달라 묶지 않는다."
+  },
+  {
+   "rows": [
+    "V-a46588cb"
+   ],
+   "why": "DistributionRoutePopup 목록이 AS-IS와 같은지, 행수와 조회조건을 바꾼 뒤까지 비교한다. 팝업이 열리는지만 보는 EG-a1c25099와 기대 결과가 달라 단독으로 둔다."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-25 05:18:47",
+ "cost": 0.0565381
+}

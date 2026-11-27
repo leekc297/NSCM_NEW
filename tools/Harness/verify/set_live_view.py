@@ -10,6 +10,7 @@
     hidden  실행기 창을 화면 밖으로 옮겨 실행(조작·화면 사진은 같음 · 창이 처음 뜰 때 잠깐 보였다가 옮겨짐)
     window  창 띄우기(종전 · 기본)
     record  창 없이(투명 창) 1초마다 화면을 찍어 동영상 1개로 저장(<실행 폴더>/record.webm · 그 밖 Doc/asislive/_rec/ · ffmpeg 없으면 GIF)
+    capture 창 없이(투명 창) 실행하고 새 창이 뜰 때와 끝날 때만 캡처(<실행 폴더>/captures/*.jpg · 2026-11-26 기본)
   TO-BE 실측(Playwright · tools/E2E/playwright.config.ts)
     hidden  창 없이 실행(종전 · 기본)
     window  Chrome 창을 띄우고 동작 사이 e2eSlowMoMs(기본 300ms) 지연 · 작업자 1개
@@ -26,8 +27,9 @@ import sys
 
 PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'harness.json'))
 KEYS = {'ASIS': ('asisLiveView', 'window', 'AS-IS 실측'), 'TOBE': ('e2eView', 'hidden', 'TO-BE 실측')}
-NAMES = {'hidden': '창 없이 실행', 'window': '창 띄우기', 'record': '녹화'}
-WORDS = {'hidden': 'hidden', '창없이': 'hidden', '창 없이 실행': 'hidden', 'window': 'window', '창띄우기': 'window', '창 띄우기': 'window', 'record': 'record', '녹화': 'record'}
+NAMES = {'hidden': '창 없이 실행', 'window': '창 띄우기', 'record': '녹화', 'capture': '창 없이 실행 + 캡처'}
+WORDS = {'hidden': 'hidden', '창없이': 'hidden', '창 없이 실행': 'hidden', 'window': 'window', '창띄우기': 'window', '창 띄우기': 'window', 'record': 'record', '녹화': 'record', 'capture': 'capture', '캡처': 'capture', '캡쳐': 'capture'}
+SIDE_MODES = {'ASIS': ('hidden', 'window', 'record', 'capture'), 'TOBE': ('hidden', 'window', 'record')}   # 2026-11-26 capture = AS-IS 만(TO-BE 는 FAIL 행 캡처가 이미 있음)
 
 
 def parse(word):
@@ -68,6 +70,7 @@ def selftest():
         nonlocal ok
         print(('  [OK] ' if c else '  [FAIL] ') + n); ok = ok and bool(c)
     chk('값 해석 — 한글·영문·선택 문구', parse('녹화') == 'record' and parse('hidden') == 'hidden' and parse('window — 창 띄우기') == 'window' and parse('창 없이 실행') == 'hidden')
+    chk('값 해석 — 캡처', parse('캡처') == 'capture' and parse('capture') == 'capture' and 'capture' not in SIDE_MODES['TOBE'])
     chk('값 해석 — 모르는 값', parse('xx') is None and parse('') is None)
     src = '{\n  "repairScope": "DB_ONLY",\n  "llmReview": true,\n  "x": 1\n}\n'
     out = apply_text(src, 'e2eView', 'window')
@@ -93,8 +96,8 @@ def main():
     if not rest or rest.upper() in ('STATUS', '현재'):
         print(describe(cfg, side) + f'  ({PATH})'); return 0
     v = parse(rest)
-    if v is None:
-        print(f'[FAIL] 값은 hidden(창 없이 실행) · window(창 띄우기) · record(녹화) (입력: {rest})'); return 2
+    if v is None or v not in SIDE_MODES[side]:
+        print(f"[FAIL] {side} 값은 " + ' · '.join(f'{m}({NAMES[m]})' for m in SIDE_MODES[side]) + f' (입력: {rest})'); return 2
     if str(cfg.get(key) or KEYS[side][1]) == v and key in cfg:
         print('변경 없음 — ' + describe(cfg, side)); return 0
     out = apply_text(raw, key, v)

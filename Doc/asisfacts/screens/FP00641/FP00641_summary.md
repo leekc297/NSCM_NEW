@@ -516,13 +516,13 @@
 | this.button1 | Click | button1_Click | InitializeComponent:2202 |
 | this.btnCategory | Click | btnCategory_Click | InitializeComponent:2397 |
 | this.btn_column | Click | btnColumn_Click | InitializeComponent:2509 |
-| this | Load | Form_Load | .ctor:109 |
 | this.spdMain | CellClick | spdMain_CellClick | InitializeComponent:122 |
 | this.spdMain | CellDoubleClick | spdMain_CellDoubleClick | InitializeComponent:123 |
 | this.spdMain | ComboSelChange | spdMain_ComboSelChange | InitializeComponent:124 |
 | this.spdMain | EditChange | spdMain_EditChange | InitializeComponent:125 |
 | this.spdMain | EnabledChanged | spdMain_EnabledChanged | InitializeComponent:126 |
 | this.spdMain | TextChanged | spdMain_TextChanged | InitializeComponent:127 |
+| this | Load | Form_Load | .ctor:109 |
 | this.usrButton1 | Click | usrButton1_Click | InitializeComponent:512 |
 | this.usrButton2 | Click | usrButton2_Click | InitializeComponent:549 |
 | this | Load | MeasureSetForm_Load | InitializeComponent:681 |

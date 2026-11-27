@@ -16,14 +16,15 @@ const vmDir = () => opts.vmDir || path.join(P().root, 'tools', 'VibeManager');
 const ledgerFile = () => path.join(vmDir(), 'user_rules.json');
 const stDir = () => path.join(P().vibeDir, 'orch', 'userrule');
 const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
-const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f + '.t', JSON.stringify(v, null, 1), 'utf8'); fs.renameSync(f + '.t', f); return true; } catch (e) { errlog.note('orch-userrule', 'writeJson', e); return false; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); require('./fs-retry').writeFileSyncRetry(f + '.t', JSON.stringify(v, null, 1), 'utf8'); require('./fs-retry').renameSyncRetry(f + '.t', f); return true; } catch (e) { errlog.note('orch-userrule', 'writeJson', e); return false; } }; // 2026-11-26 개선안 20261126164445_VISION: 쓰기와 바꾸기 일시 실패 재시도(fs-retry.js)
 const nowLocal = ms => (orchEv ? orchEv.nowLocal(ms) : new Date(ms || Date.now()).toISOString());
 const mod = n => { if (opts.mods && opts.mods[n]) return opts.mods[n]; try { return require(`./${n}`); } catch (e) { errlog.note('orch-userrule', `require ${n}`, e); return null; } };
 function cfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); return Object.assign({ userRuleEnabled: true, userRuleEveryHours: 24 }, (h && h.orch) || {}); }
 const ledger = () => readJson(ledgerFile(), { about: '', items: [] });
 const norm = s => String(s || '').toLowerCase().replace(/[^0-9a-z가-힣]/g, '');
 // 점검 대상 = VM 화면(웹뷰 HTML 생성 코드)과 VS Code 입력창을 쓰는 확장 코드. 규칙 scope 가 더 좁으면 그 파일만
-const SCOPE_FILES = ['workbench.js', 'orchestra.js', 'jobs.js', 'flow-panel.js', 'menu-view.js', 'prompt-panel.js', 'tabview.js', 'history.js', 'extension.js'];
+// 2026-11-26 개선안 20261126164322_SELF: 웹뷰 공용 모듈 webview-kit.js(마크다운 렌더, Ctrl+A 범위, 경계 막대, 글래스 CSS)를 맨 앞에 둠
+const SCOPE_FILES = ['webview-kit.js', 'workbench.js', 'orchestra.js', 'jobs.js', 'flow-panel.js', 'menu-view.js', 'prompt-panel.js', 'tabview.js', 'history.js', 'extension.js'];
 const SWEEP_TOOLS = 'Read,Glob,Grep';
 
 /** 규칙 추가(learn 의 fix-request, 손 입력). 같은 규칙(글자만 비교)이 있으면 인용만 더함. 반환 { id, dup } */
@@ -55,6 +56,7 @@ function buildPrompt(rules) {
     `대상 파일 = 규칙 scope 와 유형 점검 범위에 적힌 파일, 없으면 tools/VibeManager/ 의 ${SCOPE_FILES.join(', ')}. 웹뷰 화면은 이 파일들이 만드는 HTML, CSS, 스크립트다.`,
     '찾는 기준: 같은 원인으로 같은 증상이 날 곳만. 근거 = 파일, 줄, 그 줄의 코드 인용. 이미 고친 곳(fixedIn)과 규칙을 지키는 곳은 적지 않는다. 추측으로 적지 않는다.',
     '곳마다 고치는 방법을 1~3줄로 적는다(바꿀 코드, 지킬 것). 같은 파일 같은 원인은 1건으로 묶는다.',
+    '여러 웹뷰 파일에 같은 원인이 있고 그 동작이 webview-kit.js(마크다운 렌더 mdHtml, Ctrl+A 범위 kitSelAll, 경계 막대 kitDrag, 글래스 CSS glassCss)에 있거나 옮길 수 있으면 file 을 webview-kit.js 로 한 1건으로 묶는다.',
     '마지막 출력은 JSON 코드 블록 1개다. 남은 곳이 없으면 items 를 빈 배열로 둔다.',
     '```json',
     '{ "items": [ { "rule": "R1", "file": "jobs.js", "line": 120, "quote": "그 줄 코드", "what": "남은 문제 한 줄", "fix": "고치는 방법" } ] }',

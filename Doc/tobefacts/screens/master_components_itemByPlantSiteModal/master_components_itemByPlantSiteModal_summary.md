@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/itemByPlantSiteModal/item-by-plant-site-modal.constants.ts | constants | 38 |
-| features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.module.scss | style | 20 |
+| features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.module.scss | style | 21 |
 | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | page | 291 |
 | features/master/src/components/itemByPlantSiteModal/itemByPlantSiteModalStore.ts | store | 59 |
 
@@ -28,8 +28,8 @@
 | SearchArea | onSearch | handleSearch | jsx | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | 201 |
 | InputField | onChange | <arrow> setItemId | jsx | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | 240 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | 241 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | 276 |
-| Button | onClick | modalClose | jsx | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | 283 |
+| Button | onClick | modalClose | jsx | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | 274 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/itemByPlantSiteModal/ItemByPlantSiteModal.tsx | 283 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

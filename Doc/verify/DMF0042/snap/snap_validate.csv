@@ -1,0 +1,9 @@
+﻿key,kind,scope,status,missing,order,type_warn,extra,basis
+조회조건_Div_40,조회조건,Div 40,OK,,,,,
+버튼_Div_40,버튼,Div 40,MISMATCH,MEASURE_SELECT;CUTOFF,,EXCEL: 공용 SubTitle Excel 은 툴팁만 있는 아이콘 버튼(접근성 이름 없음 · SubTitle.tsx Tooltip title=Excel) — 이름 없는 버튼 1개로 확인;SEARCH: Search(F5) 는 조회영역(SearchArea) 안의 버튼 — SubTitle 버튼 바 스냅샷 대상 아님(조회조건 스냅샷에서 확인),,plan.json accounts[0].expectedBtns / menuBtnCodes(btn_auth) · buttons(AS-IS 메서드)
+헤더_Biz_Plan,헤더,Biz Plan,OK,,,,2026;2027;cellprodsite;date;endcustomer;fcsttype;model;q1;q2;q4;salessite;sum,PR_GET_SHEET_COLUMN_LIST(user=minyonglee1 · div=40 · 개인화 9행 · SHEET_PRSL_YN=Y) — TO-BE BE 와 같은 SP 출력(DISPLAY_FLAG=Y 순)
+팝업_PJT,팝업,PJT,NA,,,,,수신본 없음(ERROR)
+팝업_Model_Nickname,팝업,Model/Nickname,NA,,,,,AS-IS 유래 기대 없음(팝업·화면샷) — 사람 확인
+팝업_Owner,팝업,Owner,NA,,,,,AS-IS 유래 기대 없음(팝업·화면샷) — 사람 확인
+화면샷_1920,화면샷,1920,NA,,,,,화면샷 — 사람 확인(NEW)
+화면샷_1366,화면샷,1366,NA,,,,,화면샷 — 사람 확인(NEW)

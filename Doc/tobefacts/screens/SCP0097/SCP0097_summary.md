@@ -75,7 +75,7 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0053(7), SCP0097(6), SCP0031(1)
+- 화면ID: SCP0053(8), SCP0097(6), SCP0031(1)
 - SP/PKG: PKG_SCP0097(4), P_SCP0097_GET_SCP_BOM_ELEC(2), P_SCP0097_SAVE_SCP_BOM_ELEC(2), P_DIVISION_ID(1), P_PARENT_ID(1), P_CHILD_ID(1), P_DEBUG_MODE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

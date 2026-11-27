@@ -89,7 +89,13 @@ function tailFile(file, onLine, fromBytes, opt) {
     if (stopped || busy) return; busy = true;
     fs.stat(file, (e, st) => {
       if (e || stopped) { busy = false; return; }
-      if (st.size < pos) { pos = 0; buf = ''; }               // 파일이 새로 만들어짐
+      if (st.size < pos) {                                     // 파일이 새로 만들어짐
+        // 2026-11-26 개선안 20261126164445_VISION_2: logpipe.js 가 상한에서 <로그>_partN.log 로 옮긴 경우 = 그 part 의 안 읽은 뒷부분을 마저 읽고 새 파일 처음부터
+        let drained = false;
+        try { const ps = require('./logpipe').partsOf(file); const last = ps[ps.length - 1]; if (last) { const fd = fs.openSync(last.f, 'r'); try { const sz = fs.fstatSync(fd).size; if (sz >= pos) { const b2 = Buffer.alloc(Math.min(sz - pos, 8 * 1048576)); const n2 = b2.length ? fs.readSync(fd, b2, 0, b2.length, pos) : 0; buf += b2.slice(0, n2).toString('utf8'); drained = true; } } finally { fs.closeSync(fd); } } } catch { /* part 없음 = 처음부터 */ }
+        if (drained) { const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { try { onLine(ln); } catch (ex) { errlog.note('server-service', 'tailLine', ex); } } } else buf = '';
+        pos = 0;
+      }
       if (st.size === pos) { busy = false; return; }
       if (maxLag && st.size - pos > maxLag) { const skip = st.size - pos - Math.floor(maxLag / 4); try { onLine(`… 로그가 빠르게 쌓여 ${(skip / 1048576).toFixed(1)} MB 건너뜀(원문 ${path.basename(file)})`); } catch { /* 표시 실패 무시 */ } pos += skip; buf = ''; } // 2026-11-20: BE 파일 로그가 시간당 1GB 넘게 쌓일 때 화면이 밀리지 않게
       const len = Math.min(st.size - pos, 512 * 1024); const b = Buffer.alloc(len);
@@ -209,6 +215,26 @@ function watchGuardLogs(recent) {
   }
 }
 
+// ── 2026-11-26 개선안 20261126164445_VISION_2: VM 이 띄운 서버(NSCM_BE, NSCM_FE) 출력 로그 크기 상한 ──
+//   근거: .vibe/logs/2026-11-23T11-24-48_NSCM_BE.log 50,192,232,252바이트(11-26 17:0x 측정, 기동 1회 출력 전체가 1개 파일), 같은 원인 로그 삭제 개선안 4회.
+//   종전: 서버가 로그 파일 핸들(append)을 직접 받아 씀. 변경: 중계기 logpipe.js 가 서버를 띄우고 출력을 받아 로그 파일에 씀.
+//   쓴 바이트가 harness.json orch.serverLogMaxMB 를 넘으면 중계기가 파일을 닫고 <로그>_partN.log 로 이름을 바꾼 뒤 같은 이름으로 새로 엶(중계기만 파일을 쥐어 줄 빠짐 없음).
+//   _part 파일은 orch.serverLogKeep 개만 남기고 오래된 것부터 지움. 중계기는 VM 과 따로 도는 프로세스라 창을 다시 로드해도 서버와 함께 남음(종전 cmd 자식과 같음).
+//   serverLogMaxMB 0 이거나 logpipe.js 가 없으면 종전 방식. 새로 띄우는 서버부터 적용, 이미 있는 로그 파일은 건드리지 않음
+//   (2026-11-26 처음 만든 '복사 뒤 비우기' 방식은 시험 t_spawn_logcap 6회 중 2회 1~3줄 누락으로 버림)
+const LOGPIPE = path.join(__dirname, 'logpipe.js');
+function logCapCfg() {
+  let o = {}; try { o = (JSON.parse(fs.readFileSync(path.join(root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^﻿/, '')).orch) || {}; } catch { o = {}; }
+  const mb = Number(o.serverLogMaxMB); const keep = Number(o.serverLogKeep);
+  return { maxBytes: (Number.isFinite(mb) && mb > 0 ? mb : 200) * 1048576, keep: Number.isFinite(keep) && keep >= 1 ? Math.floor(keep) : 5, off: mb === 0 };
+}
+/** 서버 기동 명령. 상한을 쓰면 { cmd: 실행 파일, args: [logpipe.js, 로그, 상한, 개수, '--', 'cmd /c <명령>'], env, pipe: true } */
+function serverSpawnArgs(itCmd, logF, cfgOver) {
+  const c = cfgOver || logCapCfg();
+  if (c.off || !fs.existsSync(LOGPIPE)) return { cmd: 'cmd', args: ['/c', itCmd], pipe: false };
+  return { cmd: process.execPath, args: [LOGPIPE, logF, String(c.maxBytes), String(c.keep), '--', `cmd /c ${itCmd}`], env: { ELECTRON_RUN_AS_NODE: '1' }, pipe: true }; // VS Code 안에서 process.execPath = Code.exe → node 로 실행
+}
+
 // ── 기동 ──
 /** it = quick.json 서버 항목(cmd · ready · port · readyTimeoutSec · hint) · say(text, cls) = 요청한 창의 Task Log 출력(없어도 됨)
  *  반환 Promise<{ok, sec, msg, timeout?}> — 기동 완료·실패·시간 초과 때 한 번 */
@@ -224,7 +250,9 @@ function start(p, it, cwd, name, say) {
   let fd = null; try { fd = fs.openSync(logF, 'a'); } catch (e) { say(`${name} 로그 파일을 열 수 없음: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: '로그 파일 열기 실패' }); }
   out(stream, `▶ ${name}\n  $ cmd /c ${it.cmd}\n`, 'cmd');
   let child;
-  try { child = cp.spawn('cmd', ['/c', it.cmd], { cwd, shell: process.platform === 'win32', env: Object.assign({}, process.env), stdio: ['ignore', fd, fd], windowsHide: true }); }
+  const sa = serverSpawnArgs(it.cmd, logF); // 2026-11-26 개선안 20261126164445_VISION_2: 로그 크기 상한 = 중계기 logpipe.js(출력은 중계기가 로그에 씀, 중계기 자신의 출력은 같은 로그 파일)
+  try { child = sa.pipe ? cp.spawn(sa.cmd, sa.args, { cwd, shell: false, env: Object.assign({}, process.env, sa.env), stdio: ['ignore', 'ignore', fd], windowsHide: true })
+    : cp.spawn('cmd', ['/c', it.cmd], { cwd, shell: process.platform === 'win32', env: Object.assign({}, process.env), stdio: ['ignore', fd, fd], windowsHide: true }); }
   catch (e) { try { fs.closeSync(fd); } catch { } out(stream, `${name} 실행 실패: ${e.message}\n`, 'bad'); return Promise.resolve({ ok: false, sec: 0, msg: e.message }); }
   try { fs.closeSync(fd); } catch { }
   const s = { name, port: it.port || null, stream, child, pid: child.pid, logF, t0, ready: false, attached: false };
@@ -357,4 +385,4 @@ function dispose(killServers) {
   started = false;
 }
 
-module.exports = { setLogOn, logOnState: () => Object.assign({}, logOn), init, dispose, start, stop, ensure, subscribe, snapshot, stateList, isRunning, pollOnce, portOwnerInfo, portOwner, killTree, PROTECTED_PROC, streamOf };
+module.exports = { logCapCfg, serverSpawnArgs, _tailFile: tailFile, setLogOn, logOnState: () => Object.assign({}, logOn), init, dispose, start, stop, ensure, subscribe, snapshot, stateList, isRunning, pollOnce, portOwnerInfo, portOwner, killTree, PROTECTED_PROC, streamOf };

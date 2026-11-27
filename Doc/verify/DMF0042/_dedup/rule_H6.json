@@ -1,0 +1,668 @@
+{
+ "rule_id": "H6",
+ "hash": "a0ce64d72c101f68",
+ "groups": [
+  {
+   "rows": [
+    "V-25aabeee",
+    "V-27143bcc",
+    "V-3da3fdc9",
+    "V-d9ba3d99",
+    "V-10d1a11a",
+    "V-1b89c571",
+    "V-273c7005",
+    "V-6d74450e",
+    "V-1841845a",
+    "V-3fa3b8d3",
+    "V-75dbe2b3",
+    "V-9b10cb34"
+   ],
+   "why": "All are the same ItembyDivisionPopupEx opening (create, Form_Load(false) and ShowDialog) under the same ITEM_ID/ITEM_ID40 cell condition, with the same popup-standard expectation."
+  },
+  {
+   "rows": [
+    "V-5448b137",
+    "V-26c433fa",
+    "V-7880f905"
+   ],
+   "why": "All are the same ItembyDivisionPopupEx opening (create, Form_Load and ShowDialog) under the ITEM_ID-only condition, with the same expectation."
+  },
+  {
+   "rows": [
+    "V-5c44599d",
+    "V-93cdbd29",
+    "V-add7124d",
+    "V-ae045e5c",
+    "V-01698a4b",
+    "V-24a743ce",
+    "V-37a0d36c",
+    "V-a24593e0",
+    "V-03456d5d",
+    "V-24ba7a9a",
+    "V-88f0ade7",
+    "V-9806662b"
+   ],
+   "why": "All are the same ProjectbyDivisionPopupEx opening (create, Form_Load and ShowDialog) under the PROJECT_CODE82 column condition, with the same expectation."
+  },
+  {
+   "rows": [
+    "V-0fe103d1",
+    "V-831155be",
+    "V-94591724",
+    "V-f0013a5a",
+    "V-3bf44110",
+    "V-9cfaf9f4",
+    "V-a0df5abc",
+    "V-addb38a8",
+    "V-14b9b3fb",
+    "V-983f0408",
+    "V-c9035f1f",
+    "V-da6826d9"
+   ],
+   "why": "All are the same ProjectbyDivisionPopupEx opening (create, Form_Load and ShowDialog) under the PROJECT_CODE column condition, with the same expectation."
+  },
+  {
+   "rows": [
+    "V-27791849",
+    "V-8435df85",
+    "V-26d4c6d6"
+   ],
+   "why": "All are the same ProjectbyDivisionPopupEx opening under the PROJECT_CODE||PROJECT_CO… compound condition, with the same expectation."
+  },
+  {
+   "rows": [
+    "V-6bbd9c1f",
+    "V-6cecd4cf"
+   ],
+   "why": "Both are the same popup's Form_Load and ShowDialog under the MEASURE=RTF condition, with the same expectation."
+  },
+  {
+   "rows": [
+    "V-07e182b0",
+    "V-164c2875",
+    "V-81cfdc94",
+    "V-b38b55d4",
+    "V-e9fba552"
+   ],
+   "why": "All are the identical popItem.Form_Load(true,…,sOwner) call, so the popup and opening arguments are the same and so is the expectation."
+  },
+  {
+   "rows": [
+    "V-70c4b471",
+    "V-8b285a32",
+    "V-bb1b832d",
+    "V-d9e8d469",
+    "V-e239fb10"
+   ],
+   "why": "All are the identical popItem.Form_Load(true, sdivision,…,sItemId) call, so the popup and arguments are the same and so is the expectation."
+  },
+  {
+   "rows": [
+    "V-127be395",
+    "V-99d60d99",
+    "V-ac6948f9",
+    "V-c1eeb83b",
+    "V-f42f338b"
+   ],
+   "why": "All are the identical popProject.Form_Load(true,…,sScmSiteID,sProject) call, so the popup and arguments are the same and so is the expectation."
+  },
+  {
+   "rows": [
+    "V-1dc2dcf5",
+    "V-bce797b1"
+   ],
+   "why": "Both are the Form_Load and ShowDialog of the single popAdjst popup, with the same expectation."
+  },
+  {
+   "rows": [
+    "V-1417ed28",
+    "V-903e172f",
+    "V-e8df2085"
+   ],
+   "why": "All create TitleSetForm_Popup with identical arguments (\"DMF0042\", true), with the same expectation."
+  },
+  {
+   "rows": [
+    "V-4b1c80ee",
+    "V-5d5860b8",
+    "V-e55b2383"
+   ],
+   "why": "All create TitleSetForm_Popup with identical arguments (\"DMF0042\", false), with the same expectation."
+  },
+  {
+   "rows": [
+    "V-41d355a1",
+    "V-7ef290e8",
+    "V-b56c42ad",
+    "V-d7dd8ff5"
+   ],
+   "why": "All create the screen-specific ExchangeRatePopup with no arguments, so the popup and expectation are the same."
+  },
+  {
+   "rows": [
+    "EG-01354af3"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (Model/Nickname trigger) TOPLINE check."
+  },
+  {
+   "rows": [
+    "EG-0248a55c"
+   ],
+   "why": "Single: TitleSetForm NO_COL check."
+  },
+  {
+   "rows": [
+    "EG-07ed4e0d"
+   ],
+   "why": "Single: OwnerbyDivisionPopup TOPLINE check."
+  },
+  {
+   "rows": [
+    "EG-0ae6a932"
+   ],
+   "why": "Single: OwnerbyDivisionPopup SECTION_TITLE check."
+  },
+  {
+   "rows": [
+    "EG-10f747c5"
+   ],
+   "why": "Single: TitleSetForm SECTION_TITLE check."
+  },
+  {
+   "rows": [
+    "EG-159ad0ce"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (Model/Nickname trigger) COUNT check."
+  },
+  {
+   "rows": [
+    "EG-3f48b85b"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (ITEM_ID40 trigger) TOPLINE check; the trigger differs, so it is not merged."
+  },
+  {
+   "rows": [
+    "EG-480e08d7"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (Model/Nickname trigger) BTN_ORDER check."
+  },
+  {
+   "rows": [
+    "EG-614e7470"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (ITEM_ID40 trigger) COUNT check."
+  },
+  {
+   "rows": [
+    "EG-6891cb81"
+   ],
+   "why": "Single: OwnerbyDivisionPopup BTN_ORDER check."
+  },
+  {
+   "rows": [
+    "EG-6f9ef8cb"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (ITEM_ID40 trigger) BTN_ORDER check."
+  },
+  {
+   "rows": [
+    "EG-74798713"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (ITEM_ID40 trigger) NO_COL check."
+  },
+  {
+   "rows": [
+    "EG-89e16bf7"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (ITEM_ID40 trigger) NO_WIDTH check."
+  },
+  {
+   "rows": [
+    "EG-8c598495"
+   ],
+   "why": "Single: OwnerbyDivisionPopup COUNT check."
+  },
+  {
+   "rows": [
+    "EG-96bd8ca6"
+   ],
+   "why": "Single: OwnerbyDivisionPopup NO_WIDTH check."
+  },
+  {
+   "rows": [
+    "EG-a4515a49"
+   ],
+   "why": "Single: OwnerbyDivisionPopup NO_COL check."
+  },
+  {
+   "rows": [
+    "EG-ac00d482"
+   ],
+   "why": "Single: TitleSetForm BTN_ORDER check."
+  },
+  {
+   "rows": [
+    "EG-c6861cda"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (Model/Nickname trigger) SECTION_TITLE check."
+  },
+  {
+   "rows": [
+    "EG-d518dc20"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (Model/Nickname trigger) NO_WIDTH check."
+  },
+  {
+   "rows": [
+    "EG-d63a4300"
+   ],
+   "why": "Single: TitleSetForm TOPLINE check."
+  },
+  {
+   "rows": [
+    "EG-ec144d48"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (Model/Nickname trigger) NO_COL check."
+  },
+  {
+   "rows": [
+    "EG-f7a49dc4"
+   ],
+   "why": "Single: ItembyDivisionPopupEx (ITEM_ID40 trigger) SECTION_TITLE check."
+  },
+  {
+   "rows": [
+    "T-3363600c"
+   ],
+   "why": "Single: a trace row that checks a different property (the InsertRow implementation location)."
+  },
+  {
+   "rows": [
+    "T-35c98b39"
+   ],
+   "why": "Single: a trace row for the clbItemType condition."
+  },
+  {
+   "rows": [
+    "T-5214bc7c"
+   ],
+   "why": "Single: a trace row for the txtProject condition."
+  },
+  {
+   "rows": [
+    "T-d176c953"
+   ],
+   "why": "Single: a trace row checking the Exchange Rate modal rebuild."
+  },
+  {
+   "rows": [
+    "T-f2794730"
+   ],
+   "why": "Single: a trace row for the BIZ_TYPE_NAME82 popup column."
+  },
+  {
+   "rows": [
+    "V-d40d8a1f"
+   ],
+   "why": "Single: a snapshot comparison against the approved golden for the PJT condition popup, which is a different check."
+  },
+  {
+   "rows": [
+    "V-03ff3146"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-1dd724bf"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-32aec8b9"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-38555156"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-538d180a"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-8c9c8509"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-9f2394e9"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-9f2b5927"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-b603d031"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-be24c7f2"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-c02d48d9"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-e1c57710"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-f2abcf20"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-f2c4be03"
+   ],
+   "why": "Single: generic popup.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-4b02cfbd"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-699254bf"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-6b20b2e7"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-744d90a3"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-926f8038"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-acc6e1f9"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-b06510fe"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-b86820b8"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-dd4b851f"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-fc4fe308"
+   ],
+   "why": "Single: generic frm.ShowDialog(); the target popup cannot be identified."
+  },
+  {
+   "rows": [
+    "V-1210bb26"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger (Form_Load arguments) cannot be identified."
+  },
+  {
+   "rows": [
+    "V-12fa1b10"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-5163b15e"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-5179558f"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-78ed1abd"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-816e6798"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-868f5891"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-883a7df0"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-ad991fd0"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-de1d5f8b"
+   ],
+   "why": "Single: popItem.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-260c75c6"
+   ],
+   "why": "Single: popProject.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-404870f2"
+   ],
+   "why": "Single: popProject.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-68a856f1"
+   ],
+   "why": "Single: popProject.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-6da216e3"
+   ],
+   "why": "Single: popProject.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-99c4b743"
+   ],
+   "why": "Single: popProject.ShowDialog() with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-1af3bc3d"
+   ],
+   "why": "Single: ProjectbyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-926405f0"
+   ],
+   "why": "Single: ProjectbyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-ad3cf845"
+   ],
+   "why": "Single: ProjectbyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-fc39508c"
+   ],
+   "why": "Single: ProjectbyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-fecea1f5"
+   ],
+   "why": "Single: ProjectbyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-0e2a72bd"
+   ],
+   "why": "Single: ItembyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-39cdf70a"
+   ],
+   "why": "Single: ItembyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-8f152d01"
+   ],
+   "why": "Single: ItembyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-c7c1bd4d"
+   ],
+   "why": "Single: ItembyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-f6b8b38e"
+   ],
+   "why": "Single: ItembyDivisionPopupEx created with no condition; the trigger cannot be identified."
+  },
+  {
+   "rows": [
+    "V-1d196413"
+   ],
+   "why": "Single: OwnerbyDivisionPopup created with no condition; it is unclear whether the trigger is a search condition or a grid column."
+  },
+  {
+   "rows": [
+    "V-8fd84844"
+   ],
+   "why": "Single: OwnerbyDivisionPopup created with no condition; the trigger is unclear."
+  },
+  {
+   "rows": [
+    "V-95e84325"
+   ],
+   "why": "Single: OwnerbyDivisionPopup created with no condition; the trigger is unclear."
+  },
+  {
+   "rows": [
+    "V-d830ece8"
+   ],
+   "why": "Single: OwnerbyDivisionPopup created with no condition; the trigger is unclear."
+  },
+  {
+   "rows": [
+    "V-e3661a2a"
+   ],
+   "why": "Single: OwnerbyDivisionPopup created with no condition; the trigger is unclear."
+  },
+  {
+   "rows": [
+    "V-45279408"
+   ],
+   "why": "Single: the only TitleSetForm_Popup created with (\"DMF0042_1\", true)."
+  },
+  {
+   "rows": [
+    "V-4da2cca0"
+   ],
+   "why": "Single: the only TitleSetForm_Popup created with (\"DMF0042_1\", false)."
+  },
+  {
+   "rows": [
+    "V-b0a534ca"
+   ],
+   "why": "Single: the only TitleSetForm_Popup created with (\"DMF0042_3\", true)."
+  },
+  {
+   "rows": [
+    "V-e0049a61"
+   ],
+   "why": "Single: the only TitleSetForm_Popup created with (\"DMF0042_3\", false)."
+  },
+  {
+   "rows": [
+    "V-cf027b3b"
+   ],
+   "why": "Single: the only MatsterChgPopup creation."
+  }
+ ],
+ "why": "",
+ "by": "AI",
+ "at": "2026-11-26 23:44:29",
+ "cost": 0.40067719999999996
+}

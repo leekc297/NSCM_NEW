@@ -1,0 +1,91 @@
+{
+ "sheets": {
+  "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA": {
+   "sp": "DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA",
+   "conds": [
+    {
+     "label": "Division 40",
+     "rows": 7564,
+     "ops": [
+      {
+       "division": "40"
+      }
+     ],
+     "params": {
+      "p_division_id": "40"
+     },
+     "launcher_rows": 1,
+     "launcher_at": "2026-11-26 22:51:00"
+    },
+    {
+     "label": "Division 81",
+     "rows": 1,
+     "ops": [
+      {
+       "division": "81"
+      }
+     ],
+     "params": {
+      "p_division_id": "81"
+     }
+    },
+    {
+     "label": "Division 81(딸린 인자 빈 값)",
+     "rows": 1,
+     "ops": [
+      {
+       "division": "81"
+      }
+     ],
+     "params": {
+      "p_division_id": "81",
+      "p_item_id": "",
+      "p_item_type": "",
+      "p_plant_site_id": ""
+     }
+    }
+   ],
+   "divs": [
+    "40",
+    "81"
+   ],
+   "tried": [
+    {
+     "cond": "Division 81",
+     "rows": 1,
+     "err": "",
+     "at": "2026-11-26 22:39:07"
+    },
+    {
+     "cond": "Division 81(딸린 인자 빈 값)",
+     "rows": 1,
+     "err": "",
+     "at": "2026-11-26 22:40:14"
+    },
+    {
+     "cond": "Division 40",
+     "rows": 7564,
+     "err": "",
+     "at": "2026-11-26 22:44:16"
+    }
+   ],
+   "axes": [
+    "division",
+    "period"
+   ],
+   "at": "2026-11-26 22:44:17"
+  }
+ },
+ "at": "2026-11-26 22:44:17",
+ "source": "AS-IS 조회 SP 재실행(팝업 행·Division·콤보·기간 후보 · .env.asis)",
+ "default_cond": {
+  "label": "Division 40",
+  "ops": [
+   {
+    "division": "40"
+   }
+  ],
+  "rows": 1,
+  "at": "2026-11-26 22:51:00"
+ }
+}

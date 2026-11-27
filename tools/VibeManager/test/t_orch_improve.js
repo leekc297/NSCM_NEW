@@ -91,6 +91,7 @@ const sleep = t => new Promise(r => setTimeout(r, t));
     chk('집계: 화면 없는 기존 실패는 그대로 fail', s8 && s8.fail === 1 && s8.stopped === 0, JSON.stringify(s8));
     const sc4 = d3.steps.find(x => x.key === 'S8.cancelTest');
     chk('집계: CANCEL stopped true = stopped 1, stoppedBy 1, fail 0', sc4 && sc4.n === 3 && sc4.stopped === 1 && Object.values(sc4.stoppedBy).reduce((a, b) => a + b, 0) === 1 && sc4.fail === 0, JSON.stringify(sc4));
+    chk('집계: 중지 원인 other 경로 기록(개선안 20261126214605_REVIEW) = stoppedOther 길이 = stoppedBy.other, 경로 표시만 있음', sc4 && Array.isArray(sc4.stoppedOther) && sc4.stoppedOther.length === sc4.stoppedBy.other && sc4.stoppedOther.length === 1 && sc4.stoppedOther[0].path === '표시만 있음' && sc4.stoppedOther[0].screen === 'TSTC002' && Array.isArray(sc4.stoppedNoBy), JSON.stringify(sc4 && { o: sc4.stoppedOther, b: sc4.stoppedBy }));
     chk('집계: CANCEL stopped false = cancel 1, 취소 소요는 중앙값과 p90 에서 빠짐(1초), cancelSec 14000', sc4 && sc4.cancel === 1 && sc4.medianSec === 1 && sc4.p90Sec === 1 && sc4.cancelSec === 14000, JSON.stringify(sc4)); }
   chk('분석 예정 판단(이력 없음 = 예정)', im.reviewDue() === true);
   // 개선안 20261122000421_SELF: verify 작성 규칙 공용 상수(VERIFY_RULE)가 지시문 5종에 들어가고, 반영 지시에 '편집 전에' 반영 전 값 재기가 들어감
@@ -140,6 +141,7 @@ const sleep = t => new Promise(r => setTimeout(r, t));
   { const rp = prompts.find(x => x.label === '상시 분석'); const first = rp ? rp.pr.split('\n')[0] : '';
     chk('상시 분석 지시문 첫 줄 = 집계 코드가 설치본보다 오래됨: 파일 1개, 창 로드 대기 반영 0건', first.startsWith('집계 코드가 설치본보다 오래됨: 파일 1개, 창 로드 대기 반영 0건') && first.includes('new.js'), first.slice(0, 120)); }
   chk('분석 뒤 다음 분석은 예정 아님 · 알림 1회', im.reviewDue() === false && notes.length === 1, notes.join('|'));
+  chk('창 연 뒤 첫 상시 분석 확인(R254): 주기 전이면 돌지 않음 · init 이 firstReview 예약', im._firstReview() === false && /firstTimer = setTimeout\(firstReview/.test(fs.readFileSync(path.join(dir, 'orch-improve.js'), 'utf8')));
   const rv2 = await im.review(true); chk('같은 안 다시 올리지 않음', rv2.added === 0 && rv2.dups === 1 && im.list().length === 1);
   const id = ps[0].id;
   chk('승인 전에는 대상 파일 그대로', R('tools/E2E/e2e.config.json').includes('120'));
@@ -188,6 +190,15 @@ const sleep = t => new Promise(r => setTimeout(r, t));
     const sec = R('tools/VibeManager/CHANGELOG.md').split('# CHANGELOG')[0]; const chg = (sec.match(/^- 변경:.*$/m) || [''])[0]; const back = (sec.match(/^- 되돌리기:.*$/m) || [''])[0];
     chk('CHANGELOG: 대상 밖 Doc/verify 파일 → 파일 목록·되돌리기 줄에 없음 · 개수 2개만', okCl && !/Doc\/verify/.test(sec) && /orch-x\.js, tools\/VibeManager\/orch-y\.js, tools\/VibeManager\/test\/t_x\.js\./.test(chg) && /대상 밖 변경 2개\(다른 작업\)/.test(chg), chg);
     chk('CHANGELOG: 되돌리기 줄 = .bak_ 사본 있는 대상만', back.includes('orch-x.js.bak_20261120_self1548') && !back.includes('orch-y.js.bak_') && !back.includes('t_x.js.bak_'), back); }
+  // 개선안 20261127005352_SELF: CHANGELOG 쓰기 실패 주입 → 대기 파일 1줄 → 다음 호출 때 두 절 모두 쓰고 대기 파일 0줄
+  { const fr = require('../fs-retry'); const orig = fr.writeFileSyncRetry; const pf = path.join(vibeDir, 'orch', 'changelog_pending.jsonl');
+    const cnt = () => { try { return fs.readFileSync(pf, 'utf8').split(/\r?\n/).filter(Boolean).length; } catch { return 0; } };
+    W('tools/VibeManager/CHANGELOG.md', '# CHANGELOG\n');
+    fr.writeFileSyncRetry = () => { const e = new Error('EBUSY 주입'); e.code = 'EBUSY'; throw e; };
+    let ok1; try { ok1 = im.changelogSelf({ id: 'T_FAIL1', title: '실패 절', evidence: 'e', before_after: 'b' }, null, ['tools/VibeManager/orch-x.js'], { text: 'OK' }, { copied: [] }, 't1', false); } finally { fr.writeFileSyncRetry = orig; }
+    const n1 = cnt(); const ok2 = im.changelogSelf({ id: 'T_OK2', title: '성공 절', evidence: 'e', before_after: 'b' }, null, ['tools/VibeManager/orch-x.js'], { text: 'OK' }, { copied: [] }, 't2', false);
+    const n2 = cnt(); const cl = R('tools/VibeManager/CHANGELOG.md');
+    chk('CHANGELOG 쓰기 실패 → 대기 파일 1줄 → 다음 호출 뒤 0줄 · 두 절 모두 있음', ok1 === false && n1 === 1 && ok2 === true && n2 === 0 && cl.includes('개선안 T_FAIL1 승인') && cl.includes('개선안 T_OK2 승인') && cl.indexOf('# CHANGELOG') > cl.indexOf('T_FAIL1'), `ok1=${ok1} n1=${n1} ok2=${ok2} n2=${n2}`); }
   const m = im.meta(); chk('상태 조회', m.enabled === true && m.pending === 0 && !!m.lastAt, JSON.stringify(m).slice(0, 160));
   im.dispose(); agent.dispose(); watch.dispose(); st.dispose(); await sleep(100);
   try { fs.rmSync(root, { recursive: true, force: true }); } catch { }

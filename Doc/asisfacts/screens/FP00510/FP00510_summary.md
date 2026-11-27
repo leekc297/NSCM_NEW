@@ -25,41 +25,28 @@
 |---|---|---:|---|---|---|
 | event:cboDivision.SelectedIndexChanged | CboDivision_SelectedIndexChanged > GetOrderType | 266 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION_DEMAND_TYPE] | BIZ_MATCH |  |
 | event:clbPlant.SelectedIndexChanged | clbPlant_SelectedIndexChanged > GetScpPlantID | 311 | biz:FPCommonDataBLL.FPCommonDataList [code=SCP_PLAN] | BIZ_MATCH |  |
-| button:FindButton | FindButton > Find_Data > Find_Data_ProdType | 512 | {?string.Empty} | UNRESOLVED |  |
-| button:FindButton | FindButton > Find_Data > Find_Data_ProdType | 512 | {?pServiceCallName} | UNRESOLVED |  |
+| button:FindButton | FindButton > Find_Data > Find_Data_ProdType | 512 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | button:FindButton | FindButton > FindData_Main > Find_Data_Main | 602 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Target | 343 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_Target | 343 | {?pServiceCallName} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Save_Data_Target | 343 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Target | 407 | FP_Master.PR_UI_FP00510_SCP_TARGET_SAVE | MATCH | SP PR_UI_FP00510_SCP_TARGET_SAVE |
-| event:popSql.OnSql | RunSqlSource > Find_Data_ProdType | 512 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Find_Data_ProdType | 512 | {?pServiceCallName} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Find_Data_ProdType | 512 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Main | 602 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
-| event:popSql.OnSql | RunSqlSource > Save_Data_ProdType | 670 | {?string.Empty} | UNRESOLVED |  |
-| event:popSql.OnSql | RunSqlSource > Save_Data_ProdType | 670 | {?pServiceCallName} | UNRESOLVED |  |
+| event:popSql.OnSql | RunSqlSource > Save_Data_ProdType | 670 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:popSql.OnSql | RunSqlSource > Find_Data_Sub | 710 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:popSql.OnSql | RunSqlSource > Save_Data_Main | 887 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Target | 343 | {?string.Empty} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_Target | 343 | {?pServiceCallName} | UNRESOLVED |  |
+| button:SaveButton | SaveButton > Save_Data > Save_Data_Target | 343 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Target | 407 | FP_Master.PR_UI_FP00510_SCP_TARGET_SAVE | MATCH | SP PR_UI_FP00510_SCP_TARGET_SAVE |
-| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_ProdType | 512 | {?string.Empty} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_ProdType | 512 | {?pServiceCallName} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data | 561 | {?string.Empty} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data | 561 | {?pServiceCallName} | UNRESOLVED |  |
+| button:SaveButton | SaveButton > Save_Data > Find_Data > Find_Data_ProdType | 512 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
+| button:SaveButton | SaveButton > Save_Data | 561 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | button:SaveButton | SaveButton > Save_Data > FindData_Main > Find_Data_Main | 602 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_ProdType | 670 | {?string.Empty} | UNRESOLVED |  |
-| button:SaveButton | SaveButton > Save_Data > Save_Data_ProdType | 670 | {?pServiceCallName} | UNRESOLVED |  |
+| button:SaveButton | SaveButton > Save_Data > Save_Data_ProdType | 670 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | button:SaveButton | SaveButton > Save_Data > Save_Data_Main | 887 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
-| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_ProdType | 512 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_ProdType | 512 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Target | 343 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Target | 343 | {?pServiceCallName} | UNRESOLVED |  |
+| event:this.btnFind.Click | btnFind_Click > Find_Data > Find_Data_ProdType | 512 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
+| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Target | 343 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_Target | 407 | FP_Master.PR_UI_FP00510_SCP_TARGET_SAVE | MATCH | SP PR_UI_FP00510_SCP_TARGET_SAVE |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_ProdType | 512 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_ProdType | 512 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data | 561 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data | 561 | {?pServiceCallName} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_ProdType | 670 | {?string.Empty} | UNRESOLVED |  |
-| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_ProdType | 670 | {?pServiceCallName} | UNRESOLVED |  |
+| event:this.btnSave.Click | btnSave_Click > Save_Data > Find_Data > Find_Data_ProdType | 512 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
+| event:this.btnSave.Click | btnSave_Click > Save_Data | 561 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
+| event:this.btnSave.Click | btnSave_Click > Save_Data > Save_Data_ProdType | 670 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:this.btnSplit.Click | btnSplit_Click > FindData_Main > Find_Data_Main | 602 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:this.Load | Form_Load > InitControls | 191 | biz:FPCommonDataBLL.FPCommonDataList [code=LOOKUP_CODE_TARGET] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 193 | biz:FPCommonDataBLL.FPCommonDataList [code=LOOKUP_CODE_TARGET] | BIZ_MATCH |  |
@@ -67,21 +54,18 @@
 | event:this.Load | Form_Load > InitControls | 196 | biz:FPCommonDataBLL.YesNo | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls > GetOrderType | 266 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION_DEMAND_TYPE] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls > GetScpPlantID | 311 | biz:FPCommonDataBLL.FPCommonDataList [code=SCP_PLAN] | BIZ_MATCH |  |
-| event:this.Load | Form_Load > Find_Data > Find_Data_ProdType | 512 | {?string.Empty} | UNRESOLVED |  |
-| event:this.Load | Form_Load > Find_Data > Find_Data_ProdType | 512 | {?pServiceCallName} | UNRESOLVED |  |
+| event:this.Load | Form_Load > Find_Data > Find_Data_ProdType | 512 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 | event:this.spdMain.CellDoubleClick | SpdMain_CellDoubleClick > FindData_Sub > Find_Data_Sub | 710 | FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | SP PR_UI_FP00510_SCP_TARGET |
 
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| {?pServiceCallName} | UNRESOLVED | 4 |  |  |  |
-| {?string.Empty} | UNRESOLVED | 4 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=DEMAND_MARKET_TYPE] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION_DEMAND_TYPE] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=LOOKUP_CODE_TARGET] | BIZ_MATCH | 2 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=SCP_PLAN] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.YesNo | BIZ_MATCH | 1 |  |  |  |
-| FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | 3 | SP PR_UI_FP00510_SCP_TARGET | EXEC:PR_UI_FP00510_SCP_TARGET | ⚠ DB에 SP 없음 |
+| FP_Master.PR_UI_FP00510_SCP_TARGET | MATCH | 7 | SP PR_UI_FP00510_SCP_TARGET | EXEC:PR_UI_FP00510_SCP_TARGET | ⚠ DB에 SP 없음 |
 | FP_Master.PR_UI_FP00510_SCP_TARGET_SAVE | MATCH | 1 | SP PR_UI_FP00510_SCP_TARGET_SAVE | EXEC:PR_UI_FP00510_SCP_TARGET_SAVE | ⚠ DB에 SP 없음 |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
@@ -157,17 +141,9 @@
 | Panel | 1 | StockPanel |
 | Splitter | 1 | splitter1 |
 
-## 7. 확인 필요 (8건)
+## 7. 확인 필요 (0건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
-| 512 | Find_Data_ProdType | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 512 | Find_Data_ProdType | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 561 | Save_Data | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 561 | Save_Data | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 670 | Save_Data_ProdType | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 670 | Save_Data_ProdType | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
-| 343 | Save_Data_Target | {?string.Empty} | UNRESOLVED | 빈 값(미사용 코드 경로) |
-| 343 | Save_Data_Target | {?pServiceCallName} | UNRESOLVED | 정적 결정 불가 — 식 확인 필요 |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

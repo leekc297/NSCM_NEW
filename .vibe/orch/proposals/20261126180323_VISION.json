@@ -1,0 +1,38 @@
+{
+  "id": "20261126180323_VISION",
+  "at": "2026-11-26T18:03:23+09:00",
+  "ms": 1795683803442,
+  "source": "vision",
+  "status": "applied",
+  "sig": "컨설팅 ui/db mode 에서 fe 화면 폴더를 고치는 개선안의 반영 게이트에 화면 게이트 check.js 타입 검사와 린트 제외 추가",
+  "title": "컨설팅: UI/DB MODE 에서 FE 화면 폴더를 고치는 개선안의 반영 게이트에 화면 게이트(check.js, 타입 검사와 린트 제외) 추가",
+  "evidence": "orch-selfcheck.js:613, 621 UI/DB MODE(DB_FE)면 nscm-fe 대상 안을 자동 반영. orch-selfcheck.js:483~510 gate 는 S1, S2, S4, S11 만 봄. tools/Harness/check.js:4, 614 는 --tsc, --lint, --final 을 줄 때만 타입 검사와 린트를 돌림. 메모리 feedback_no_auto_typecheck_lint.md(2026-09-02 타입 검사, 린트 자동 실행 금지) 유지",
+  "targets": [
+    "tools/VibeManager/orch-selfcheck.js",
+    "tools/VibeManager/test/t_gate_fe_page.js"
+  ],
+  "before_after": "전: FE 안의 반영 게이트 = VM 구문, VM 시험, 정의 정합, 문장 규칙. 후: workScope() 가 DB_FE 이고 targets 에 nscm-fe/features/<f>/src/pages/<폴더>/ 아래 파일이 있으면 그 페이지 폴더마다 node tools/Harness/check.js --page <폴더> --json 을 돌림(--tsc, --lint, --final 안 줌). 반영 전 게이트의 BLOCK 수를 기준으로 두고 늘어난 경우만 bad 에 'G-FE' 를 넣음. gate text 에 '화면 게이트 BLOCK n → m, 타입 검사와 린트 미실행(사용자 지시 2026-09-02)'을 붙임. gateSpec 에도 같은 항목 추가. DB_ONLY 이거나 페이지 폴더가 없으면 건너뜀",
+  "verify": "반영 때: node --check tools/VibeManager/orch-selfcheck.js. node tools/VibeManager/test/t_gate_fe_page.js tools/VibeManager(임시 저장소에 check.js 대역 스크립트를 두고 BLOCK 1 → 2 실패, 1 → 1 통과, DB_ONLY 건너뜀, 페이지 폴더 없음 건너뜀 4건 확인). node tools/VibeManager/test/run_all.js tools/VibeManager. 반영 뒤: UI/DB MODE 전환 뒤 첫 FE 대상 개선안 반영 기록의 게이트 문장과 세션 종료 게이트 결과 비교",
+  "rollback": "orch-selfcheck.js 반영 전 사본으로 되돌리고 시험 파일 삭제",
+  "impact": "core",
+  "level": "L3",
+  "levelWhy": "",
+  "incident": "",
+  "screen": "",
+  "history": [
+    {
+      "at": "2026-11-26T18:10:42+09:00",
+      "by": "S-Y",
+      "what": "세션이 맡음(VMO 자동 반영 8시간 보류)"
+    },
+    {
+      "at": "2026-11-26T18:17:23+09:00",
+      "by": "S-Y",
+      "what": "반영 완료(세션 직접 보완) · orch-selfcheck.js gate() G-FE 비교, fePages/feGate(check.js --page --json, --tsc·--lint·--final 없음), gateSpec G-FE · orch-improve.js gOpt feBase 1줄 · test/t_gate_fe_page.js 9건 PASS(임시 저장소 대역 check.js, nscm-fe 미기록, 2026-11-26 18:17:15)"
+    }
+  ],
+  "kind": "fix",
+  "claimedBy": "S-Y",
+  "waitNote": "",
+  "appliedMs": 1795684643047
+}

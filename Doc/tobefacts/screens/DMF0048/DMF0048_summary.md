@@ -1,15 +1,15 @@
 # DMF0048 — To-Be Fact Pack 요약
 
 - page_key: `demand/sales-monitoring` · feature: demand · As-is Fact Pack 있음
-- 파일 13 · 엔드포인트 호출 10 (미해결 0, 주석 속 3) · 이벤트 21 · 컴포넌트 사용 32 · 하드코딩 컬럼 4 · 메시지 26
-- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 4건
+- 파일 13 · 엔드포인트 호출 10 (미해결 0, 주석 속 3) · 이벤트 21 · 컴포넌트 사용 32 · 하드코딩 컬럼 5 · 메시지 26
+- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 5건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.module.scss | component | 71 |
 | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | component | 414 |
-| features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | component | 695 |
+| features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | component | 731 |
 | features/demand/src/pages/sales-monitoring/index.ts | index | 2 |
 | features/demand/src/pages/sales-monitoring/sales-monitoring.constants.ts | constants | 352 |
 | features/demand/src/pages/sales-monitoring/sales-monitoring.types.ts | types | 61 |
@@ -54,13 +54,13 @@
 | ItemField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 356 |
 | OwnerField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 378 |
 | Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 404 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 453 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 460 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 464 |
-| g | updatedLayout | onLayout | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 530 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 583 |
-| g | updatedLayout | applyFooter | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 634 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 661 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 464 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 471 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 475 |
+| g | updatedLayout | onLayout | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 566 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 619 |
+| g | updatedLayout | applyFooter | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 670 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 697 |
 | SalesMonitoringForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx | 315 |
 | ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx | 361 |
 | MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).//필수:저장키는팝업조회와같은상수를써야한다(다르면재진입시개인화유실).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx | 410 |
@@ -90,10 +90,11 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| mergedColumns | c.key | c.header | c.width ?? 100 | c.visible !== false |  |  | object | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 125 |
-| mergedColumns | col.colNm | col.colLblNm \|\| fb?.header \|\| col.colNm | col.colWth ?? fb?.width ?? 100 | col.visible !== false |  |  | object | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 141 |
-| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 242 |
-| mainDynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| m.small \|\| 'SUM' : 'SUM' | 90 | true |  |  | object | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 289 |
+| mergedColumns | c.key | c.header | c.width ?? 100 | c.visible !== false |  |  | object | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 133 |
+| mergedColumns | col.colNm | col.colLblNm \|\| fb?.header \|\| col.colNm | col.colWth ?? fb?.width ?? 100 | col.visible !== false |  |  | object | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 149 |
+| dynColMetas | r.COLUMN_NAME |  | spColumnWidth(r.COLUMN_WIDTH) |  |  |  | object | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 203 |
+| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 253 |
+| mainDynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| m.small \|\| 'SUM' : 'SUM' | m.width ?? DYN_COL_DEFAULT_WIDTH | true |  |  | object | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 300 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -129,7 +130,7 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | ⭐ 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 대상 (동적 기간 컬럼은 위에서 return). | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 438 |
+| code | ⭐ 개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 대상 (동적 기간 컬럼은 위에서 return). | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 449 |
 | endpoint | VISIBLE_FLAG='Y' 이면서 division 대표 컬럼). 정본은 admin 동적 fetch (fetchStaticColumns) — 본 | features/demand/src/pages/sales-monitoring/sales-monitoring.constants.ts | 97 |
 | code | 저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용. | features/demand/src/pages/sales-monitoring/useSalesMonitoringStore.ts | 94 |
 | endpoint | ⭐ ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 54행, admin 즉시 반영) | features/demand/src/pages/sales-monitoring/useSalesMonitoringStore.ts | 351 |

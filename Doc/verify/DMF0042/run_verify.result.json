@@ -1,18 +1,3657 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-11-17T15:12:52+09:00",
+ "ts": "2026-11-27T00:38:16+09:00",
  "producer": "run_verify",
  "id": "DMF0042",
  "skip_e2e": false,
- "started": "2026-11-17 15:03:59",
- "state": "error",
- "verdict": null,
- "why": "exit 2 — 멈춘 단계: 인자",
+ "started": "2026-11-26 17:39:50",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-64521c1a",
+   "class": "A5",
+   "msg": "DMF0042 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-749baf1a",
+   "class": "F5",
+   "msg": "DMF0042 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d3787247",
+   "class": "I4",
+   "msg": "DMF0042 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "META SCM_ADM_MSG_M 중복 문구 · nscm-fe\\features\\demand\\src\\pages\\business-plan"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-02d642c4",
+   "class": "J2",
+   "msg": "DMF0042 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E smoke/auth 요약"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a053e054",
+   "class": "H3",
+   "msg": "DMF0042 입력 중 병합 해제",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 병합 셀 @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-bdb9455e",
+   "class": "C4",
+   "msg": "DMF0042 시나리오 신규 행 있을 때 Bucket 변경 차단",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-eb3408a8",
+   "class": "F1",
+   "msg": "DMF0042 시나리오 [자동] 기존 행 Delete → D 저장 요청",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-100cf309",
+   "class": "F3",
+   "msg": "DMF0042 시나리오 [자동] DEPT_ID40 기존 행 셀 Copy → 신규 행 붙여넣기 — 후보 안 값 반영",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-736e5e45",
+   "class": "B4",
+   "msg": "Biz Plan.CELL_PROD_SITE (Cell Prod Site*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS DMF0042 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2114039a",
+   "class": "H8",
+   "msg": "Biz Plan.<DYNAMIC:LOOP> (동적 LOOP 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3e41b595",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-1115bd5d)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-119e9de9",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-ab18b973)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a097e1c2",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-7286563e)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8f152d01",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d9e8d469",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sdivision, sTeam, sEndCustomer, sScmSite, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-70c4b471)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1210bb26",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d830ece8",
+   "class": "H6",
+   "msg": "new DM0020_OwnerbyDivisionPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-164c2875",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId, sOwner)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-07e182b0)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ad991fd0",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f32309f8",
+   "class": "M3",
+   "msg": "new SCM0002_ProjectbyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d9ba3d99",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1b89c571",
+   "class": "H6",
+   "msg": "popItem.Form_Load(false, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1841845a",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e3630fbf",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-5c0369a9)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-87e8f4da",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-e96fe73c)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0e2a72bd",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-70c4b471",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sdivision, sTeam, sEndCustomer, sScmSite, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-868f5891",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1d196413",
+   "class": "H6",
+   "msg": "new DM0020_OwnerbyDivisionPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b38b55d4",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId, sOwner)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-07e182b0)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-12fa1b10",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e2d3e239",
+   "class": "M3",
+   "msg": "new SCM0002_ProjectbyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5448b137",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-26c433fa)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-26c433fa",
+   "class": "H6",
+   "msg": "popItem.Form_Load(false, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7880f905",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-26c433fa)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7c1bd4d",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8b285a32",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sdivision, sTeam, sEndCustomer, sScmSite, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-70c4b471)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5179558f",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e3661a2a",
+   "class": "H6",
+   "msg": "new DM0020_OwnerbyDivisionPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e9fba552",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId, sOwner)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-07e182b0)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-883a7df0",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-02175830",
+   "class": "M3",
+   "msg": "new SCM0002_ProjectbyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-25aabeee",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6d74450e",
+   "class": "H6",
+   "msg": "popItem.Form_Load(false, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-75dbe2b3",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-05ed2d14",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-523d21c7)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a8a9ff28",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-a0aeacff)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f0299336",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(T-d535e96c)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-39cdf70a",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-bb1b832d",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sdivision, sTeam, sEndCustomer, sScmSite, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-70c4b471)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-de1d5f8b",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8fd84844",
+   "class": "H6",
+   "msg": "new DM0020_OwnerbyDivisionPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-07e182b0",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId, sOwner)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5163b15e",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0679fe5e",
+   "class": "M3",
+   "msg": "new SCM0002_ProjectbyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3da3fdc9",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-10d1a11a",
+   "class": "H6",
+   "msg": "popItem.Form_Load(false, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9b10cb34",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7e9fa75c",
+   "class": "M3",
+   "msg": "new DM0002_MatsterChgPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f6b8b38e",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e239fb10",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sdivision, sTeam, sEndCustomer, sScmSite, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-70c4b471)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-816e6798",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-95e84325",
+   "class": "H6",
+   "msg": "new DM0020_OwnerbyDivisionPopup()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-81cfdc94",
+   "class": "H6",
+   "msg": "popItem.Form_Load(true, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId, sOwner)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-07e182b0)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-78ed1abd",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-41d17e31",
+   "class": "M3",
+   "msg": "new SCM0002_ProjectbyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "상속(팝업 실측)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-27143bcc",
+   "class": "H6",
+   "msg": "new DM0002_ItembyDivisionPopupEx()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-273c7005",
+   "class": "H6",
+   "msg": "popItem.Form_Load(false, sDivision, sTeam, sEndCustomer, sScmSiteId, sProject, sItemId)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3fa3b8d3",
+   "class": "H6",
+   "msg": "popItem.ShowDialog()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-10d1a11a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-11ab8740",
+   "class": "E4",
+   "msg": "MSG00002",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-18658557",
+   "class": "A5",
+   "msg": "컬럼/Measure 셋팅(개인화 Default)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기준 정리(대표 V-64521c1a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0fb679eb",
+   "class": "B4",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-3bbec90d)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-23380184",
+   "class": "B4",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ab0669c0",
+   "class": "B4",
+   "msg": "Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "대표 측정(V-4f88b67f)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5e38c9e3",
+   "class": "D5",
+   "msg": "Project Code(PROJECT_CODE)·Model(ITEM_ID) 입력 셀/조건 FPTextModal 에디터",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3b323e85",
+   "class": "H6",
+   "msg": "그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c405f453",
+   "class": "B4",
+   "msg": "조회조건 End Customer → Sales Site 콤보 cascade(SCM_ADM_CMBO_SQL_M SiteByEndCustomer40 · @endCustomer · VALID_YN)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9bd31255",
+   "class": "C4",
+   "msg": "Bucket 변경 시 미저장 변경 차단 검사(신규 행·수정 셀) · MSG00227 「Insert 된 행이 있어 Bucket 을 변경할 수 없습니다.」",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d0f92b81",
+   "class": "B4",
+   "msg": "[DMF0007 결함 유형] 저장(성공 메시지) · Sales Site 셀 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-82726bdb",
+   "class": "B5",
+   "msg": "[DMF0007 결함 유형] Measure Combo(LOOKUP CUST_FCST_MEASURE)·DM_MST_CUSTOMER_FCST(_C/_H).MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ddf703af",
+   "class": "B4",
+   "msg": "[DMF0006 결함 유형] 조회조건 Team · 그리드 Team/End Customer/Sales Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0a076bb3",
+   "class": "M3",
+   "msg": "[DMF0020 결함 유형] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a5d1e4a8",
+   "class": "B4",
+   "msg": "[DMF0004 결함 유형] Sales Site 그리드 End Customer·Sold to Customer 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ad7d4fc8",
+   "class": "B4",
+   "msg": "[DMF0006 결함 유형] Team·End Customer·Sales Site 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a9ca17c4",
+   "class": "B5",
+   "msg": "[DMF0003 결함 유형] FCST Type 콤보 · Measure 입력 가능",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-49ea4cea",
+   "class": "J2",
+   "msg": "[DMF0082 결함 유형] Insert·Save 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기준 정리(대표 V-02d642c4)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1fdfbf66",
+   "class": "B4",
+   "msg": "[DMF0004 결함 유형] Sales Site 조회조건 표시값",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-91143a59",
+   "class": "B4",
+   "msg": "[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-802a7f44",
+   "class": "B4",
+   "msg": "[DMF0053 결함 유형] Biz Type·Plant Site 조건 후보 vs 결과 컬럼값",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-176cf4a7",
+   "class": "B5",
+   "msg": "[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI_In_Req)·AS From Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3754649e",
+   "class": "B4",
+   "msg": "[DMF0082 결함 유형] Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI_In_Req)·AS From Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3c4615d4",
+   "class": "B5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7af105fa",
+   "class": "M3",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-812d17d4",
+   "class": "G5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2fe31875",
+   "class": "D5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-df75f153",
+   "class": "B4",
+   "msg": "[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9c08f11b",
+   "class": "B5",
+   "msg": "[DMF0082 결함 유형] AS From Site 활성·콤보, Measure 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-935e8595",
+   "class": "B4",
+   "msg": "[DMF0082 결함 유형] End Customer 셀 콤보 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c6513438",
+   "class": "B5",
+   "msg": "[DMF0082 결함 유형] End Customer 셀 콤보 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0356df7a",
+   "class": "H6",
+   "msg": "[DMF0035 결함 유형] Project/Model/Owner 조회조건 팝업",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-bc2afa25",
+   "class": "H6",
+   "msg": "[DMF0005 결함 유형] Team 팝업 조건(Team ID/Team Name)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ded5ba0c",
+   "class": "B4",
+   "msg": "[DMF0005 결함 유형] Sales Plant 셀 콤보(3050 Plant)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-dac72ce8",
+   "class": "H6",
+   "msg": "[DMF0005 결함 일반화] 팝업 No. 컬럼(Model/Owner/Project/Version 팝업)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8f580f7b",
+   "class": "B4",
+   "msg": "[SYS0016 결함 유형] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라벨 / Active / Notice Content / 팝업 타이틀",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-428e7009",
+   "class": "B4",
+   "msg": "[DMF0005 결함 유형] 하단 그리드 Sales Company/Sales Plant 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-893d4585",
+   "class": "H6",
+   "msg": "[DMF0005 결함 유형] Project 팝업(그리드)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8d437008",
+   "class": "M3",
+   "msg": "[DMF0005 결함 유형] Project 팝업(그리드)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2cd3cd96",
+   "class": "F1",
+   "msg": "[SYS0004 결함 유형] Insert 저장 / Delete CRUD Status",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fdc881c0",
+   "class": "B4",
+   "msg": "[SCP0007 결함 유형] To Site 조회조건 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-49e630b1",
+   "class": "B4",
+   "msg": "[SCP0007 결함 유형] Insert 행 To Site 콤보·City",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-62f12bb7",
+   "class": "B4",
+   "msg": "[DMF0053 결함 일반화] 조회조건 Filter 콤보 6종(FilterMyDivision·FilterTeambyDivision·FilterEndCustomerByDivision·FilterBizType·FilterSiteByEndCustomer·FilterFromSiteByDivision) — 전량 1회 조회 후 상위 값으로 좁힘 · Active 무관 ",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-112f3c4a",
+   "class": "G5",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7af0ebe9",
+   "class": "A5",
+   "msg": "[결함 유형 묶음 A5-G04 · 1건] 개인화 없을 때 컬럼셋팅 팝업·그리드 Default",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기준 정리(대표 V-64521c1a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9d123473",
+   "class": "B4",
+   "msg": "[결함 유형 묶음 B4-G01 · 3건] 저장 · Sales Site 조회조건 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b8077b5d",
+   "class": "B4",
+   "msg": "[결함 유형 묶음 B4-G02 · 1건] Active 관리 마스터 기반 조회조건 콤보 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cc1cda2a",
+   "class": "B4",
+   "msg": "[결함 유형 묶음 B4-G03 · 1건] 그리드 셀 콤보 후보(End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e90b073f",
+   "class": "B5",
+   "msg": "[결함 유형 묶음 B5-G01 · 2건] 신규 행 Measure 콤보 후보(입력 가능 Measure)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-253ab5a4",
+   "class": "J2",
+   "msg": "[결함 유형 묶음 J2-G01 · 4건] 공통 버튼(Insert·Save·Delete 등) 노출의 권한 판정",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기준 정리(대표 V-02d642c4)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6c0249cf",
+   "class": "K3",
+   "msg": "[결함 유형 묶음 K3-G02 · 2건] 조회 단축키(F5) 실행",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-230d60d2",
+   "class": "A5",
+   "msg": "컬럼/Measure 셋팅(개인화 Default)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기준 정리(대표 V-64521c1a)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3bbec90d",
+   "class": "B4",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f71d781f",
+   "class": "H6",
+   "msg": "팝업 No. 컬럼(Model/Owner/Project/Version 팝업)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4f88b67f",
+   "class": "B4",
+   "msg": "Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8a235203",
+   "class": "G5",
+   "msg": "검색 팝업(공용 모달) 호출 인자",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-6ed785f8",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-fd92ff76",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-d507cada",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-5642889c",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-44a82704",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-340b33ed",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-bf63af82",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-418db9b8",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-65ce1dee",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-4ff725ea",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-3ed60b5f",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-9c9ba648",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-9c488d23",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-9687b699",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-1583bc04",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-b77aebb6",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-854e1575",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-68b91a7a",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-68305920",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-8e431cd4",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-50d7fe21",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-13a7af36",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-9b4946ab",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-8a20da98",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-e0365fd4",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-7b7bdbc2",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-92f624d9",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-8be6a03d",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-ec296b87",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-51cf1be3",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-ec0e41af",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-7901966d",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-4c397b4d",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-56095af7",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-f16777f1",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-0a3f2d29",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-9e63fcd9",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-21577cf9",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-cc106854",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-4aab327f",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-d583ad20",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-08e8ad26",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "AD-2ba25b2c",
+   "class": "A5",
+   "msg": "DMF0042 DMF0042_GET_SPREAD_TITLE 결과 컬럼 집합(AS-IS 전용  · TO-BE 전용 edityn)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "DB @diff COLSET @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1f95d9a6",
+   "class": "G4",
+   "msg": "cboClosed / Closed",
+   "evidence": [
+    {
+     "kind": "agent-judgment",
+     "ref": "출처 미기록"
+    }
+   ],
+   "grade": "soft"
+  },
+  {
+   "id": "T-79823b13",
+   "class": "F5",
+   "msg": "DMF0042 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3363600c",
+   "class": "H6",
+   "msg": "21 · InsertButton → InsertRow (L1150~1417)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-93a3a995",
+   "class": "G5",
+   "msg": "21 · InsertButton → InsertRow (L1150~1417)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d176c953",
+   "class": "H6",
+   "msg": "6#6 · Exchange Rate 모달 = 표준 CustomDialog+DataGrid 재구성 (AS-IS 677줄 WinForms 팝",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f089a010",
+   "class": "G5",
+   "msg": "6#6 · Exchange Rate 모달 = 표준 CustomDialog+DataGrid 재구성 (AS-IS 677줄 WinForms 팝",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d937601d",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan..ctor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ac65d2c2",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ae817bea",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.DefineProperty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-be213482",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.DeleteButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ccfb23da",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.Dispose",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2e2ac93b",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.EditButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-739ce30c",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-12722e6d",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-430d62a0",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.Form_Load",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-73c7cfab",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetBizTypebyDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9ff2b159",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetCellColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b7819e41",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetCellIndexBySpanRowCells",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-45d1212f",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetCellNumbersByRow",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-13cbddf1",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetCellProdSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9ab38ee2",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetDayRange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a128611f",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetFuturePriceInfo",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bf5c6cec",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetLookupData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a34faf7f",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetSpdTitle",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f7665703",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.GetThisWeekMonday",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7c7cbbfa",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-aaa58216",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.InitSaveDataTable",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-af274188",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-da349bea",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.InsertButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2cbcca49",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.InsertRow",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2deb2d76",
+   "class": "D5",
+   "msg": "CELL_PROD_SITE / Cell Prod Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e82cd81f",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.MinColumnChk",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7cb12780",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.OnShown",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-96d95295",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.ParameterString",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-18ace293",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.SaveButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3b47af77",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1115bd5d",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ab18b973",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7286563e",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d33e1775",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.SetCellColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0d9a83dd",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.SetSpreadColumn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5b5ca573",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.SetSpreadHeaderSpan",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-31aa9cf7",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.ValidationCheck",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2398bde2",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnColumn_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d20b3346",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnCutOff_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9ede7bcb",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnExchangeRate_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8be94e69",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnItemId_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2dc229d4",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnMeasure_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5b1cfb97",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnOwner_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ff6e738f",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnProject_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-486943f6",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnReplace_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-064aa6ac",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.btnSetPrice_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-67f6a91e",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.cboBucketType_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9a44a31d",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.cboBucketType_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2a949e61",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.cboDivision_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bf40a19b",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.chkSum_CheckedChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7576d722",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.clbCustomer_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f296a778",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.clbTeam_SelectedIndexChanged",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fccdd277",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.fnValidation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-29f3656b",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.spdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-939ddd09",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.spdMain_Changed",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-07460da5",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.spdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3bd4def9",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.spdMain_EditChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5c9a76d4",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_BizPlan.spdMain_TopChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b7160d94",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_RTF.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3a814a02",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_RTF.FindDataMain",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f94a2f93",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_RTF.SaveButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-308a7a54",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_RTF.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fa77b1e1",
+   "class": "X-ROW",
+   "msg": "DMF0042_1_RTF.btnButtonList_UsrButtonList_Click_Detected",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f626fd73",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7523da8a",
+   "class": "D5",
+   "msg": "DMF0042_2_BizPlan.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a3bb14d3",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.DeleteButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-27717979",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-463194f4",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c8047470",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.GetBizTypebyDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-28795515",
+   "class": "B4",
+   "msg": "DMF0042_2_BizPlan.GetBizTypebyDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1bd2d6bf",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.GetCellColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-10a7c413",
+   "class": "B4",
+   "msg": "DMF0042_2_BizPlan.GetCellColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7bdc60d4",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.GetCellIndexBySpanRowCells",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4aa91bae",
+   "class": "B4",
+   "msg": "DMF0042_2_BizPlan.GetCellIndexBySpanRowCells",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fd89a75e",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.GetCellNumbersByRow",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d8aa6be2",
+   "class": "B4",
+   "msg": "DMF0042_2_BizPlan.GetCellNumbersByRow",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ba46ab62",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.GetCellProdSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8df5634e",
+   "class": "B4",
+   "msg": "DMF0042_2_BizPlan.GetCellProdSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4410427c",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.GetDayRange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e73a34a6",
+   "class": "B4",
+   "msg": "DMF0042_2_BizPlan.GetDayRange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c574db70",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.GetLookupData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-59e2cdab",
+   "class": "B4",
+   "msg": "DMF0042_2_BizPlan.GetLookupData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1793cdfa",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5c0369a9",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e96fe73c",
+   "class": "E4",
+   "msg": "MSG00310",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-27 00:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-521cf169",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d268c01e",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.ValidationCheck",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3bf95965",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnColumn_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-42ed66b3",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnCutOff_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-adcaa8fe",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnExchangeRate_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-eb5cf9bf",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnItemId_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-38800fb8",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnMeasure_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3c700b01",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnOwner_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-088c74bf",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnProject_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-84a66e14",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnReplace_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fccafcd0",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.btnSetPrice_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-92ff4066",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.spdMain_CellDoubleClick",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2f9ac831",
+   "class": "X-ROW",
+   "msg": "DMF0042_2_BizPlan.spdMain_TopChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ef07a211",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan..ctor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f83a9fae",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4a43fcb7",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.DefineProperty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6fffab92",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.DeleteButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3fe0b471",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.Dispose",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-85410454",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.EditButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b6aadab3",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8fe03ee4",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-80ab9523",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.Form_Load",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-07365a34",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetBizTypebyDivision",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-98383449",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetCellColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5ec27bfd",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetCellIndexBySpanRowCells",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5993070b",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetCellNumbersByRow",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-30d8ea1e",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetCellProdSite",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-291eac58",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetComboData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8dbbcc2b",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetDayRange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-418143b6",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetFuturePriceInfo",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1517a9f4",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetLookupData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8454be85",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetSpdTitle",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a8d97468",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.GetThisWeekMonday",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2056df74",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3610911d",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.InitSaveDataTable",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d68d3b1d",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-85e0a1fe",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.InsertButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0d3d8d8c",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.InsertRow",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-129d56fe",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.MinColumnChk",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-065f582b",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.OnShown",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d9b455a2",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.ParameterString",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2732a63c",
+   "class": "X-ROW",
+   "msg": "DMF0042_3_BizPlan.SaveButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "warnings": [
+  "커버리지 게이트 SUSPECT_NA100 F2 — Doc/verify/DMF0042/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
+ ],
+ "summary": {
+  "rows": 5198,
+  "PASS": 1217,
+  "FAIL": 465,
+  "판정필요": 82,
+  "미검증": 1559,
+  "해당없음": 1875,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 2579,
+   "없음(미검증)": 1559,
+   "사람": 150,
+   "없음(판정 대기)": 82,
+   "기계(상속·집계)": 812,
+   "출처 미기록": 16
+  },
+  "fail_listed": 300,
+  "coverage": {
+   "rules": 95,
+   "measured": 1051,
+   "not_run_error": 1419,
+   "na": 1464,
+   "suspect_na100": [
+    "F2"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/UI_CHECKLIST/DMF0042_BusinessPlan_CheckList_v1.xlsx",
+  "ActionItemList": "Doc/UI_CHECKLIST/DMF0042_BusinessPlan_ActionItemList_v1.xlsx"
+ },
  "evidence": [
   {
    "kind": "exec",
    "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/DMF0042/e2e_results.json"
   }
  ],
- "issues": []
+ "note": "⚠ 경고(오류 아님): 커버리지 게이트 SUSPECT_NA100 F2 — Doc/verify/DMF0042/coverage.csv: AS-IS 에 기능이 있는데 측정 0(해당 행은 CheckList 에 미검증으로 표시됨)"
 }

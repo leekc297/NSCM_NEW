@@ -139,6 +139,18 @@ W('.vibe/orch/ladder.json', { day: '', dayRuns: 0, bundles: { 'L4|useraxis|vmoCa
     chk('keepStatus = 반영 중인 원장 안 상태 그대로', store['20261124000718_VISION'].status === 'applying');
     chk('단계 3 하위 안 대상 = orch-worklist.js, orch-selfcheck.js, t_orch_worklist.js', (() => { L.planProgress(now); const s3 = L.readPlans().plans['20261124000718_VISION'].steps[2]; const t = (store[s3.proposal] || {}).targets || []; return t.includes('tools/VibeManager/orch-worklist.js') && t.includes('tools/VibeManager/orch-selfcheck.js') && t.includes('tools/VibeManager/test/t_orch_worklist.js'); })()); }
 
+  // 개선안 20261126190700_SELF: 원장(plans.json) 쓰기 실패 = 개선안 상태 그대로 · { writeFailed } · 원장 없는 planned 안은 tick 이 원장을 다시 만듦(실례 20261126001528_VISION 11-26 17:21 plans.json UNKNOWN)
+  { const PF = path.join(od, 'vision', 'plans.json'); const keep = fs.existsSync(PF) ? fs.readFileSync(PF, 'utf8') : null;
+    put({ id: '20261126001528_VISION', source: 'vision', status: 'pending', level: 'L4', impact: 'core', title: '개념 재정립: 쓰기 실패 시험 축', targets: ['tools/VibeManager/zz_write_fail.js'], evidence: '진단 사다리 묶음 L4|useraxis|zzWriteFail · 문서 .vibe/orch/vision/concept_20261120_L4_useraxis_vmoCadence.md', history: [] });
+    fs.rmSync(PF, { force: true }); fs.mkdirSync(PF, { recursive: true }); // 파일 자리에 폴더 = 쓰기 실패
+    const wf = L.planFromProposal('20261126001528_VISION', { by: '시험' }); const s1 = store['20261126001528_VISION'];
+    chk('쓰기 실패 = { writeFailed } 반환 · 개선안 status planned 로 바뀌지 않음 · plan 필드 없음', !!wf && wf.writeFailed === true && s1.status === 'pending' && !s1.plan, JSON.stringify([wf, s1.status]));
+    fs.rmSync(PF, { recursive: true, force: true }); if (keep != null) fs.writeFileSync(PF, keep);
+    store['20261126001528_VISION'].status = 'planned'; store['20261126001528_VISION'].plan = '20261126001528_VISION';
+    const before = !!(L.readPlans().plans || {})['20261126001528_VISION']; const tr = await L.tick();
+    const after = L.readPlans().plans['20261126001528_VISION'];
+    chk('원장 없는 planned 안 = tick 뒤 plans.json 에 원장 생김 · 상태 그대로', !before && !!after && after.steps.length > 0 && store['20261126001528_VISION'].status === 'planned' && (tr.replanned || []).includes('20261126001528_VISION'), JSON.stringify({ before, steps: after && after.steps.length, rp: tr.replanned }));
+    delete store['20261126001528_VISION']; }
   try { A.dispose(); } catch { } try { fs.rmSync(root, { recursive: true, force: true }); } catch { }
   console.log(ok ? 'ALL PASS' : 'SOME FAIL'); process.exit(ok ? 0 : 1);
 })().catch(e => { console.log('FAIL 예외', e.stack); process.exit(1); });

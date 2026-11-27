@@ -8,7 +8,7 @@
 | file | role | lines |
 |---|---|---|
 | features/master/src/components/itemByDivisionModal/item-by-division-modal.constants.ts | constants | 94 |
-| features/master/src/components/itemByDivisionModal/ItemByDivisionModal.module.scss | style | 19 |
+| features/master/src/components/itemByDivisionModal/ItemByDivisionModal.module.scss | style | 20 |
 | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | page | 671 |
 | features/master/src/components/itemByDivisionModal/itemByDivisionModalStore.ts | store | 51 |
 
@@ -29,8 +29,8 @@
 | InputField | onChange | <arrow> setItemId | jsx | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | 592 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | 593 |
 | CustomDropdown | onChange | <arrow> setSelectedItemType | jsx | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | 610 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | 656 |
-| Button | onClick | modalClose | jsx | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | 663 |
+| Button | onClick | modalClose | jsx | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | 654 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/itemByDivisionModal/ItemByDivisionModal.tsx | 663 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

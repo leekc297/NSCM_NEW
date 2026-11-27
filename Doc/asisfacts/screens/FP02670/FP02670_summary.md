@@ -55,8 +55,6 @@
 | event:this.btnRecieveGplm.Click | btnRecieveGplm_Click > Save_Data_Receive > FindData > Find_Data_Execute | 512 | FP_Master.PR_UI_FP02670_SLURRY_BATCH_MASTER | MATCH | SP PR_UI_FP02670_SLURRY_BATCH_MASTER |
 | event:this.btnRecieveGplm.Click | btnRecieveGplm_Click > Save_Data_Receive | 888 | biz:FPCommonDataBLL.GeneralRunProcedure [procedure=execute_receive] | BIZ_MATCH |  |
 | event:this.btnRecieveGplm.Click | btnRecieveGplm_Click > Save_Data_Receive | 888 | FP\Common\FP02670_Slurry_Batch_Master#execute_receive | MATCH_PATTERN | SP PR_XIF_PLM_WO_INSP_SPEC_R |
-| event:this.btnRecieveGplm.Click | btnRecieveGplm_Click > Save_Data_Receive | 888 | biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_receive] | BIZ_MATCH |  |
-| event:this.btnRecieveGplm.Click | btnRecieveGplm_Click > Save_Data_Receive | 888 | FP02670_Slurry_Batch_Master#execute_receive | NOT_IN_FOXQUERY |  |
 | event:this.Load | Form_Load > InitControls | 174 | biz:FPCommonDataBLL.YesNo | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 178 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION] | BIZ_MATCH |  |
 | event:this.Load | Form_Load > InitControls | 181 | biz:FPCommonDataBLL.FPCommonDataList [code=CURRENT_DATE] | BIZ_MATCH |  |
@@ -71,7 +69,6 @@
 ## 3. 엔드포인트 목록
 | 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
 |---|---|---:|---|---|---|
-| biz:AppService.GeneralRunProcedureCustomTable [procedure=execute_receive] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=CURRENT_DATE] | BIZ_MATCH | 1 |  |  |  |
 | biz:FPCommonDataBLL.FPCommonDataList [code=DIVISION] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_MST_DIVISION, UP_FX_GetCommonDataList_SCP:REF:FN_GET_DIVISION |
 | biz:FPCommonDataBLL.FPCommonDataList [code=FACTORY] | BIZ_MATCH | 2 |  |  | 코드분기 UP_FX_GetCommonDataList_FP:SELECT:SCM_FACTORY_M_SN, UP_FX_GetCommonDataList_FP:SELECT:TH_UIS_USER_FACTORY_RELATE_SN, UP_FX_GetCommonDataList_FP:SELECT:TH_UIS_ROLE_FACTORY_RELATE_SN, UP_FX_GetCommonDataList_FP:SELECT:FP_INSTANCE_FACTORY_M_SN, UP_FX_GetCommonDataList_FP:REF:STRING_SPLIT |
@@ -83,7 +80,6 @@
 | FP_Master.PR_UI_FP02670_SAVE | MATCH | 1 | SP PR_UI_FP02670_SAVE | EXEC:PR_UI_FP02670_SAVE | ⚠ DB에 SP 없음 |
 | FP_Master.PR_UI_FP02670_SLURRY_BATCH_MASTER | MATCH | 1 | SP PR_UI_FP02670_SLURRY_BATCH_MASTER | EXEC:PR_UI_FP02670_SLURRY_BATCH_MASTER | ⚠ DB에 SP 없음 |
 | FP\Common\FP02670_Slurry_Batch_Master#execute_receive | MATCH_PATTERN | 1 | SP PR_XIF_PLM_WO_INSP_SPEC_R | EXEC:PR_XIF_PLM_WO_INSP_SPEC_R | ⚠ DB에 SP 없음 |
-| FP02670_Slurry_Batch_Master#execute_receive | NOT_IN_FOXQUERY | 1 |  |  | DB에도 없음 (폐기/오타 가능) |
 
 ## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
 | 메서드 | 대상 | 컬럼 |
@@ -130,11 +126,10 @@
 | FpSpread | 1 | spdMain |
 | SheetView | 1 | spdMain_Sheet1 |
 
-## 7. 확인 필요 (2건)
+## 7. 확인 필요 (1건)
 | 줄 | 메서드 | 값 | 상태 | 비고 |
 |---:|---|---|---|---|
 | 888 | Save_Data_Receive | FP\{?default:part_service}\FP02670_Slurry_Batch_Master#execute_receive | MATCH_PATTERN | 후보 복수 — 패턴 매칭, 실행 시 결정 · matches=1 |
-| 888 | Save_Data_Receive | FP02670_Slurry_Batch_Master#execute_receive | NOT_IN_FOXQUERY | DB에도 없음 (폐기/오타 가능) |
 
 ## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
 | 메타 테이블 | 행 수 | 파일 |

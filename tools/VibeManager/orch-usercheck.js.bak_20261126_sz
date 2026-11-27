@@ -1,0 +1,999 @@
+// 2026-11-20 사용자 지적 점검(자가진단 S13) — 사용자 지시: "제가 VM 을 보완하기 위해서 입력한 프롬프트와 같이 상황을 보고 입력한 내용에 대해서는
+//   모니터링을 통해서 자가진단하고 보완이 이루어 지도록 되어야 합니다"
+//   ① 원장 user_checks.json: 지적 원문(U1~) + 감지기 이름 + 기준값. 감지기는 이 파일의 DETECTORS(코드, Claude 없음)
+//   ② check(): 자가진단 가벼운 주기(selfLightMin)에 S13 으로 실행. fail = R12 사건 → Claude 진단 → 개선안 → 자동 반영(VM 코드, 게이트 통과 조건). warn = 표시만
+//   ③ learn(): 사람이 입력한 프롬프트(세션 기록 entrypoint ≠ sdk-cli, 작업 중 끼운 메시지 queued_command origin human)를 원장 coveredUntil 뒤로만 읽어
+//      Claude(읽기 전용)가 분류. 기존 감지기로 잡히는 지적 = 원장에 인용 추가 · 새 감지기가 필요한 지적 = 개선안(source self, check S13) · 지적 아님 = 제외 기록
+//   기록: .vibe/orch/usercheck/state.json(감지기 상태) · ui.json(VMO 화면 표시 보고) · learn.json(학습 결과, 제외 사유)
+'use strict';
+const dfmt = require('./date-fmt'); // 2026-11-23 사용자: VM 일자 = Windows 일자 형식
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+let errlog = { note() { return null; } }; try { errlog = require('./orch-errlog'); } catch { /* 오류 기록 모듈 없음 */ }
+let orchEv = null; try { orchEv = require('./orch-events'); } catch { orchEv = null; }
+
+let getPaths = null; let opts = {}; let learning = null;
+const P = () => getPaths();
+const vmDir = () => opts.vmDir || path.join(P().root, 'tools', 'VibeManager');
+const ucDir = () => path.join(P().vibeDir, 'orch', 'usercheck');
+const ledgerFile = () => path.join(vmDir(), 'user_checks.json');
+const readJson = (f, d) => { try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch { return d; } };
+const writeJson = (f, v) => { try { fs.mkdirSync(path.dirname(f), { recursive: true }); require('./fs-retry').writeFileSyncRetry(f + '.t', JSON.stringify(v, null, 1), 'utf8'); require('./fs-retry').renameSyncRetry(f + '.t', f); return true; } catch (e) { errlog.note('orch-usercheck', 'writeJson', e); return false; } }; // 2026-11-26 개선안 20261126164445_VISION: 쓰기와 바꾸기 일시 실패 재시도(fs-retry.js)
+const lsDir = d => { try { return fs.readdirSync(d, { withFileTypes: true }); } catch { return []; } };
+const nowLocal = ms => (orchEv ? orchEv.nowLocal(ms) : new Date(ms || Date.now()).toISOString());
+const hm = ms => dfmt.fmtDT(ms);
+const mod = n => { if (opts.mods && opts.mods[n]) return opts.mods[n]; try { return require(`./${n}`); } catch (e) { errlog.note('orch-usercheck', `require ${n}`, e); return null; } };
+function cfg() { const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}); return Object.assign({ userCheckEnabled: true, userLearnGapMin: 60, checklistTargetMin: 30, selfLightMin: 10, selfDiagGapMin: 60, reviewEveryHours: 24 }, (h && h.orch) || {}); }
+const ledger = () => readJson(ledgerFile(), { items: [] });
+const incidents = () => { const w = mod('orch-watch'); try { return w ? w.list(400) : []; } catch { return []; } };
+const proposals = () => { const i = mod('orch-improve'); try { return i ? i.list() : []; } catch { return []; } };
+const events = () => (opts.events ? opts.events() : (orchEv ? orchEv.tail(6 * 1024 * 1024) : []));
+const DAY = 86400000;
+const done = s => s === 'resolved' || s === 'closed';
+const isCL = e => /^checklist/i.test(e.chain || '') || /CheckList/i.test(e.chainLabel || e.label || '');
+/** 개선안 20261125000907_VISION 재개 원장: chain_progress 의 끊긴 기록(interruptedAt) 24시간 안. blank = 화면 ID 빈 기록(쓰기 거부 대상). U13, U16, U23 이 같은 원장으로 대조 */
+function ledgerCuts(now) {
+  const out = []; const pd = path.join(P().vibeDir, 'orch', 'chain_progress');
+  for (const e of lsDir(pd)) {
+    if (!e.isFile() || !e.name.endsWith('.json')) continue; const r = readJson(path.join(pd, e.name), null); if (!r || !r.runId || !r.interruptedAt) continue;
+    const cutMs = Date.parse(r.interruptedAt) || Number(r.updatedMs) || 0; if (!cutMs || now - cutMs > DAY) continue;
+    out.push(Object.assign({}, r, { cutMs, blank: !String(r.screen || '').trim(), screen: String(r.screen || '').toUpperCase() }));
+  }
+  return out;
+}
+
+// ── 감지기(코드) ── 각 함수는 (항목 u, 문맥 x) → [{ level, what, detail, key }]
+const DETECTORS = {
+  // U1 업무 작업 카드 표시가 진행을 따라가지 않음: 스크립트 단계 화면의 로그는 늘었는데 단계, 세부 진행 글이 staleMin 넘게 그대로
+  progressShown(u, x) {
+    const out = []; const staleMs = (u.params.staleMin || 20) * 60000; const st = x.state.progress = x.state.progress || {}; const seen = new Set();
+    for (const e of lsDir(path.join(P().vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const jf = path.join(P().vibeDir, 'jobs', e.name, 'job.json'); let m = 0; try { m = fs.statSync(jf).mtimeMs; } catch { continue; }
+      if (x.now - m > DAY) continue; const j = readJson(jf, null); if (!j || j.status !== 'running') continue;
+      for (const s of j.screens || []) {
+        if (s.status !== 'run' || s.actor !== 'script') continue; const k = `${j.id}:${s.id}`; seen.add(k);
+        let size = 0; try { size = fs.statSync(path.join(P().vibeDir, 'jobs', j.id, `${s.id}.log`)).size; } catch { continue; }
+        const sig = `${s.step || ''}|${s.prog || ''}`; const prev = st[k];
+        if (!prev || prev.sig !== sig) { st[k] = { sig, since: x.now, size }; continue; }
+        if (x.now - prev.since > staleMs && size > prev.size) out.push({ level: 'fail', what: `VMW 표시 멈춤 ${s.id}`, detail: `${j.id} ${s.id} 카드 '${s.step || '-'} · ${s.prog || '세부 없음'}' 이 ${Math.round((x.now - prev.since) / 60000)}분째 같음. 같은 동안 로그 ${Math.round((size - prev.size) / 1024)}KB 늘어남(job-runner parseProg 가 이 단계 로그 형식을 읽지 못함)`, key: `S13|U1|${j.id}|${s.id}|${prev.sig}` });
+      }
+    }
+    for (const k of Object.keys(st)) if (!seen.has(k)) delete st[k];
+    return out;
+  },
+  // U2 CheckList 화면 1개 소요가 목표를 넘음(표시만 · 속도 개선은 정합성이 같은 방법만이라 큰 그림 점검과 사용자 승인으로)
+  // 개선안 20261123000419_VISION(L4): 30분 목표 = 측정 1회와 문서 1판까지. 보완 회차는 1판 뒤 같은 체인에서 이어 돌아 목표 밖이고 체인 전체 소요는 따로 표시한다.
+  //   1판 = 같은 runId 의 첫 step.end 중 stepKey 에 ':--docs' 가 있는 단계(workbench.js stepKey). stepKey 없는 옛 기록 = S8.checklistRun 이면서 이름에 '문서'가 있는 단계
+  //   1판이 없으면(문서 단계 전에 끝남, runId 없는 옛 체인) 체인 전체로 판정한다
+  chainTarget(u, x) {
+    const out = []; const tgt = (u.params.targetMin || x.cfg.checklistTargetMin) * 60000; const byScr = {}; const tm0 = Math.round(tgt / 60000);
+    const isDoc = s => (s.stepKey ? /:--docs(:|$)/.test(s.stepKey) : (s.task === 'S8.checklistRun' && /문서/.test(s.name || '')));
+    const firstDoc = e => { if (!e.runId) return null; const t0 = (e.ms || 0) - (e.ms_run || 0); let best = null; for (const s of x.events) if (s.type === 'step.end' && s.runId === e.runId && /^(OK|WARN)$/.test(s.status || '') && isDoc(s) && (best == null || s.ms < best)) best = s.ms; return best == null ? null : best - t0; };
+    for (const e of x.events) {
+      if (e.type !== 'chain.end' || !isCL(e) || x.now - (e.ms || 0) >= DAY) continue;
+      const fd = firstDoc(e); if (fd != null ? fd > tgt : e.ms_run > tgt) byScr[e.screen] = { e, fd };
+    }
+    // 개선안 20261126083526_SELF: 소요 상위 구간 = 같은 runId 의 step.end, step.sub, claude.end 소요 + run_at 이 체인 구간 안인 run_timing.json 기록 전부(마지막 1건만 보던 것 정정)
+    const T = s => { const v = String(s || '').trim(); return v ? Date.parse(/T/.test(v) ? v : v.replace(' ', 'T')) : NaN; };
+    const mn = ms => Math.round(ms / 6000) / 10;
+    for (const [scr, { e, fd }] of Object.entries(byScr)) {
+      const t0 = (e.ms || 0) - (e.ms_run || 0); const segs = [];
+      if (e.runId) for (const s of x.events) {
+        if (s.runId !== e.runId || !(Number(s.ms_run) > 0)) continue;
+        if (s.type === 'step.end' || s.type === 'step.sub') segs.push({ min: mn(s.ms_run), name: `${s.type === 'step.sub' ? '하위 ' : ''}단계 ${String(s.name || s.task || s.no || '').slice(0, 40)}` });
+        else if (s.type === 'claude.end') segs.push({ min: mn(s.ms_run), name: `AI 세션 ${String(s.label || '').slice(0, 40)}` });
+      }
+      const tm = readJson(path.join(P().root, 'Doc', 'verify', scr, 'run_timing.json'), []); let nTm = 0;
+      for (const r of Array.isArray(tm) ? tm : []) {
+        const at = T(r && r.run_at); if (!Number.isFinite(at) || at < t0 || at > (e.ms || 0)) continue; nTm++;
+        for (const t of Array.isArray(r.top) ? r.top : []) if (Number(t.min) > 0) segs.push({ min: Number(t.min), name: `${t.stage} ${t.tool}${t.start ? ` ${t.start}` : ''}` });
+      }
+      segs.sort((a, b) => b.min - a.min);
+      const top = segs.length ? segs.slice(0, 3).map(t => `${t.name} ${t.min}분`).join(', ') : '미측정';
+      const cm = Math.round(e.ms_run / 60000); const fm = fd != null ? Math.round(fd / 60000) : null;
+      const what = fm != null ? `CheckList ${scr} 1판 ${fm}분(목표 ${tm0}분) · 체인 전체 ${cm}분` : `CheckList ${scr} 1판 없음 · 체인 전체 ${cm}분(목표 ${tm0}분)`;
+      out.push({ level: u.level || 'warn', what, detail: `${hm(e.ms)} 끝 · ${e.chainLabel || ''} · 목표 구간 = 측정 1회와 문서 1판 · 소요 상위 구간(events.jsonl ${e.runId || 'runId 없음'}, Doc/verify/${scr}/run_timing.json 체인 구간 안 ${nTm}건): ${top}`, key: `S13|U2|${scr}`, firstDocMin: fm, chainMin: cm });
+    }
+    return out;
+  },
+  // U3 U5 U7 VMO 진단·반영 공백
+  vmoCadence(u, x) {
+    const out = []; const gap = (x.cfg.selfDiagGapMin || 60) * 2 * 60000;
+    // 개선안 20261122230715_SELF: U3 자신이 올린 R12 사건은 제외(항목과 사건이 서로를 유지하던 순환 끊기)
+    // 개선안 20261126103110_SELF(L4 단계 원장 20261124000718_VISION 단계 4): 진행 = 상태 전이 기록. '에이전트 담당 아님' 기록은 진행으로 세지 않음(종전 기록 1건이면 빠짐)
+    const prog = i => (i.actions || []).filter(a => !/^에이전트 담당 아님/.test(String(a.what || '')));
+    const idle = x.incidents.filter(i => i.status === 'open' && !i.notice && !prog(i).length && x.now - (i.ms || 0) > gap && i.sig !== 'R12|S13|U3|idleInc');
+    if (idle.length) out.push({ level: 'fail', what: `조치 기록 없는 열린 사건 ${idle.length}건`, detail: idle.slice(0, 8).map(i => `${i.id} ${i.rule} ${String(i.title).slice(0, 60)} (${Math.round((x.now - i.ms) / 60000)}분)`).join(' / '), key: 'S13|U3|idleInc' });
+    //   need-user 계약: 사용자 행동 기록이 없거나 원인이 VM, VMO 코드인 need-user 사건(담당 VMO)이 마지막 기록 뒤 gap 넘게 그대로면 fail
+    const wl = mod('orch-worklist');
+    if (wl && typeof wl.needUserContract === 'function' && x.cfg.needUserContract !== false) {
+      const lastMs = i => Math.max(i.ms || 0, ...(i.actions || []).map(a => Date.parse(String(a.at || '')) || 0));
+      // 2026-11-26 개선안 20261126164446_VISION: VMO 창 요약 맨 위 사람 확인 줄에 보인 사건(shownAt) = 사용자에게 알렸음, 실패에서 뺌
+      const nu = x.incidents.filter(i => i.status === 'need-user' && !i.notice && !i.shownAt && i.sig !== 'R12|S13|U3|needUserVmo' && x.now - lastMs(i) > gap).map(i => ({ i, k: wl.needUserContract(i, id => { const im = mod('orch-improve'); return im && im.get ? im.get(id) : null; }) })).filter(r => r.k.owner === 'vmo' && !r.k.wait);
+      if (nu.length) out.push({ level: 'fail', what: `사용자 행동 기록 없이 사용자 확인으로 멈춘 사건 ${nu.length}건(담당 VMO)`, detail: nu.slice(0, 8).map(r => `${r.i.id} ${r.i.rule} ${r.k.why} · 다음 행동 ${r.k.next} (마지막 기록 뒤 ${Math.round((x.now - lastMs(r.i)) / 60000)}분)`).join(' / '), key: 'S13|U3|needUserVmo' });
+    }
+    const sc = mod('orch-selfcheck'); const elig = p => { try { return sc && sc.autoEligible ? sc.autoEligible(p) : { ok: false }; } catch { return { ok: false }; } };
+    // 개선안 20261126110058_VISION: 대기 시간 대신 반영 줄 진행으로 판정. 최근 selfcheck.autoapply, autoskip 기록이 (최근 24시간 간격 중앙값 x 2) 안에 있으면 warn(대기 순번),
+    //   그 시간 안에 시도 기록이 없거나 같은 안이 줄 맨 앞에서 2주기 넘게 남으면 fail. 간격 기록이 2건 미만이면 주기 = selfLightMin x 6
+    //   2026-11-26 묶음 S-D2: Claude Code 세션이 맡은 안(claim_proposal.js claimedBy, autoWaitMs 지금 뒤) = 세션 진행 중, 대상에서 뺌
+    //   claim_proposal.js hold 안(needsApproval '사람 판단 필요', impact core) = 사용자 판단 대기, 대상에서 뺌(coreAutoApply 켜짐이어도)
+    const claimed = p => !!p.claimedBy && Number(p.autoWaitMs) > x.now;
+    const held = p => /^사람 판단 필요/.test(String(p.needsApproval || ''));
+    const pendAll = x.proposals.filter(p => p.status === 'pending' && x.now - (p.ms || 0) > (x.cfg.selfLightMin || 10) * 6 * 60000).filter(p => !held(p)).filter(p => { const e = elig(p); return e.ok && e.kind === 'code'; });
+    const pend = pendAll.filter(p => !claimed(p)); const nClaim = pendAll.length - pend.length;
+    if (!pend.length) delete x.state.u3Head;
+    else {
+      const tries = x.events.filter(e => (e.type === 'selfcheck.autoapply' || e.type === 'selfcheck.autoskip') && x.now - (e.ms || 0) < DAY).map(e => e.ms || 0).sort((a, b) => a - b);
+      const gaps = tries.slice(1).map((v, i) => v - tries[i]).filter(g => g > 0).sort((a, b) => a - b);
+      const med = gaps.length ? (gaps.length % 2 ? gaps[(gaps.length - 1) / 2] : (gaps[gaps.length / 2 - 1] + gaps[gaps.length / 2]) / 2) : 0;
+      const cyc = med || (x.cfg.selfLightMin || 10) * 6 * 60000; const win = cyc * 2; const lastTry = tries.length ? tries[tries.length - 1] : 0;
+      let order = pend.slice().sort((a, b) => (a.ms || 0) - (b.ms || 0)); try { if (sc && typeof sc.applyOrder === 'function') order = sc.applyOrder(pend); } catch (e) { errlog.note('orch-usercheck', 'applyOrder', e); }
+      const head = order[0]; const hs = x.state.u3Head; if (!hs || hs.id !== head.id) x.state.u3Head = { id: head.id, since: x.now }; const headAge = x.now - x.state.u3Head.since;
+      const mm = ms => Math.round(ms / 60000);
+      const base = `최근 시도 ${lastTry ? hm(lastTry) : '없음(24시간)'} · 최근 간격 중앙값 ${med ? `${mm(med)}분(간격 ${gaps.length}개 실측)` : `없음, 주기 ${mm(cyc)}분 기준`} · 줄 맨 앞 ${head.id} ${mm(headAge)}분째${nClaim ? ` · 세션이 맡은 안 ${nClaim}건 제외` : ''}`;
+      const list = order.slice(0, 8).map((p, i) => `${i + 1}. ${p.id} ${String(p.title).slice(0, 50)} (${mm(x.now - (p.ms || 0))}분${p.waitNote ? ` · ${p.waitNote}` : ''})`).join(' / ');
+      const moving = lastTry > 0 && x.now - lastTry <= win;
+      if (moving && headAge <= win) out.push({ level: 'warn', what: `자동 반영 대기 ${pend.length}건(반영 줄 진행 중)`, detail: `${base} · ${list}`, key: 'S13|U3|propQueue' });
+      else out.push({ level: 'fail', what: `자동 반영 대상인데 반영 안 된 개선안 ${pend.length}건`, detail: `${moving ? `같은 안이 줄 맨 앞에서 ${mm(headAge)}분(2주기 ${mm(win)}분 넘음)` : `${mm(win)}분(최근 간격 x 2) 안에 반영 시도 기록 없음`} · ${base} · ${list}`, key: 'S13|U3|stuckProp' });
+    }
+    const imp = mod('orch-improve'); let rm = null; try { rm = imp && imp.meta ? imp.meta() : null; } catch { rm = null; }
+    if (rm && rm.enabled && rm.lastMs && x.now - rm.lastMs > (x.cfg.reviewEveryHours || 24) * 2 * 3600000) out.push({ level: 'fail', what: '상시 분석 멈춤', detail: `마지막 상시 분석 ${hm(rm.lastMs)} · 주기 ${x.cfg.reviewEveryHours}시간의 2배 넘음`, key: 'S13|U3|review' });
+    return out;
+  },
+  // U4 화면 진입 실패(R13) 미해결, 복구 뒤 재발
+  openFail(u, x) {
+    const out = []; const lim = (u.params.openMin || 30) * 60000; const r13 = x.incidents.filter(i => i.rule === 'R13' && !i.notice && x.now - (i.ms || 0) < DAY);
+    for (const i of r13) if (!done(i.status) && x.now - (i.ms || 0) > lim) out.push({ level: 'fail', what: `화면 진입 실패 미해결 ${i.screen}`, detail: `${i.id} ${Math.round((x.now - i.ms) / 60000)}분째 ${i.status} · ${String(i.title).slice(0, 100)}`, key: `S13|U4|open|${i.id}` });
+    const by = {}; for (const i of r13) (by[i.screen] = by[i.screen] || []).push(i);
+    for (const [scr, arr] of Object.entries(by)) { arr.sort((a, b) => a.ms - b.ms); const k = arr.findIndex(i => done(i.status)); if (k >= 0 && arr.slice(k + 1).length) out.push({ level: 'fail', what: `화면 진입 실패 복구 뒤 재발 ${scr}`, detail: arr.map(i => `${i.id} ${i.status}`).join(' / '), key: `S13|U4|again|${scr}` }); }
+    return out;
+  },
+  // U6 중지 뒤 거짓 실패 사건
+  falseIncident(u, x) {
+    const out = []; const win = (u.params.withinSec || 120) * 1000; const stops = x.events.filter(e => e.type === 'user.stop' && e.screen && x.now - (e.ms || 0) < DAY);
+    for (const i of x.incidents) {
+      if (!/^(R1|R2|R5|R11)$/.test(i.rule) || i.notice || i.reload || x.now - (i.ms || 0) > DAY || String(i.sig || '').startsWith('R2|R9')) continue;
+      const s = stops.find(e => String(e.screen).toUpperCase() === String(i.screen || '').toUpperCase() && i.ms >= e.ms && i.ms - e.ms <= win);
+      if (s) out.push({ level: 'fail', what: `중지 뒤 실패 사건 ${i.rule} ${i.screen}`, detail: `${i.id} 생성 ${hm(i.ms)} · 중지 ${hm(s.ms)}(${s.by || '사용자'}) 뒤 ${Math.round((i.ms - s.ms) / 1000)}초 · ${String(i.title).slice(0, 80)}`, key: `S13|U6|${i.id}` });
+    }
+    return out;
+  },
+  // U8 VMO 화면이 받은 목록과 원본 최신 활동 어긋남(웹뷰 보고 = noteUi)
+  uiShown(u, x) {
+    const ui = readJson(path.join(ucDir(), 'ui.json'), { miss: [] }); const gapMs = (u.params.gapMin || 10) * 60000;
+    // 개선안 20261120184003_SELF: 생긴 시각 ms 를 넣고 최신 먼저(같은 key 묶기에서 최신 항목이 남음)
+    return (ui.miss || []).filter(m => x.now - m.ms < DAY && m.gapMs > gapMs).sort((a, b) => (b.ms || 0) - (a.ms || 0)).slice(0, 5).map(m => ({ level: 'fail', what: `VMO ${m.tab} 화면 표시 누락`, detail: `${hm(m.ms)} 화면이 받은 최신 활동 ${m.shownAt || '없음'} · 원본 최신 ${m.srcAt} (${m.srcId}) · 받은 ${m.received}건 / 원본 ${m.total}건`, key: `S13|U8|${m.tab}`, ms: m.ms }));
+  },
+  // U9 중지 뒤 계속 실행(R14) · 업무 작업 기록과 실제 불일치
+  stopLeak(u, x) {
+    const out = [];
+    for (const i of x.incidents) if (i.rule === 'R14' && !done(i.status) && x.now - (i.ms || 0) < DAY) out.push({ level: 'fail', what: `중지 뒤 계속 실행 미해결 ${i.screen}`, detail: `${i.id} ${i.status} · ${String(i.title).slice(0, 100)}`, key: `S13|U9|${i.id}` });
+    const live = new Set((x.snap.chains || []).map(c => c.job).filter(Boolean));
+    for (const e of lsDir(path.join(P().vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const jf = path.join(P().vibeDir, 'jobs', e.name, 'job.json'); let m = 0; try { m = fs.statSync(jf).mtimeMs; } catch { continue; }
+      if (x.now - m > DAY || x.now - m < 120000) continue; const j = readJson(jf, null); if (!j || !/^(stopped|done|interrupted)$/.test(j.status)) continue;
+      const run = (j.screens || []).filter(s => s.status === 'run'); if (!run.length) continue;
+      if (live.has(j.id)) continue; // 살아 있는 체인 = R14 가 맡음
+      out.push({ level: 'fail', what: `VMW 기록 불일치 ${j.id}`, detail: `작업 상태 ${j.status}(${j.note || ''})인데 화면 ${run.map(s => s.id).join(', ')} 이 '실행 중'으로 남음. 실행 중 체인 없음`, key: `S13|U9|rec|${j.id}` });
+    }
+    return out;
+  },
+  // U10 Claude 를 쓰지 않은 CheckList 체인
+  claudeUsed(u, x) {
+    const out = [];
+    for (const i of x.incidents) if (i.rule === 'R11' && i.status === 'open' && !(i.actions || []).length && x.now - (i.ms || 0) > 3600000 && x.now - (i.ms || 0) < DAY) out.push({ level: 'fail', what: `Claude 없이 끝난 체인 사건 미조치 ${i.screen}`, detail: `${i.id} ${String(i.title).slice(0, 100)}`, key: `S13|U10|${i.id}` });
+    // 중지(사용자, VMO, 창 종료)로 끝난 체인은 뺀다(실측 11-20: 11건 중 중지·중단 체인이 섞임). 체인 시작~끝 사이 같은 창 user.stop 또는 aborted
+    // 개선안 20261120131344_SELF: 끝 기록의 중지 표시(stopped)를 먼저 본다. 없는 옛 기록은 같은 업무 작업·화면의 job.item.end cancel(chain.end 뒤 2초 안), 종전 user.stop 창으로 본다
+    const up = v => String(v || '').toUpperCase();
+    const itemCancel = e => x.events.some(s => s.type === 'job.item.end' && s.status === 'cancel' && up(s.screen) === up(e.screen) && (!e.job || !s.job || s.job === e.job) && (s.ms || 0) >= (e.ms || 0) && (s.ms || 0) <= (e.ms || 0) + 2000);
+    // 개선안 20261122000646_SELF: user.stop 에 runId 가 있으면 같은 runId 로 맞춤. runId 없는 옛 중지 기록만 같은 창, 체인 시작~끝 시각으로 추정
+    const stopped = e => e.stopped === true || e.aborted || itemCancel(e) || x.events.some(s => s.type === 'user.stop' && (s.runId ? s.runId === e.runId : (s.wb === e.wb && s.ms >= (e.ms - (e.ms_run || 0)) && s.ms <= e.ms + 1000)));
+    const failText = e => { const rows = e.rows || []; const f = rows.find(r => e.failNo != null && r.no === e.failNo) || rows.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const no = e.failNo != null ? e.failNo : (f ? f.no : '?'); return `${no}단계 ${(f && f.task) || '-'} ${(f && f.status) || 'FAIL'} 로 Claude 단계 ${e.claudeSkipped}개 미실행`; };
+    for (const e of x.events) if (e.type === 'chain.end' && isCL(e) && e.ok === false && e.claudeRan === 0 && e.claudeSkipped > 0 && x.now - (e.ms || 0) < DAY && !stopped(e)) out.push({ level: 'warn', what: `Claude 단계 건너뛰고 끝난 CheckList ${e.screen}`, detail: `${hm(e.ms)} · ${failText(e)}`, key: `S13|U10|${e.screen}|${e.ms}` });
+    return out;
+  },
+  // U11 반영 실패 개선안 방치
+  repairRetry(u, x) {
+    const lim = (u.params.hours || 6) * 3600000; const out = []; const human = [];
+    // 개선안 20261126110058_VISION_2: 실패 시각 = '반영 실패.'(옛 기록 '반영 실패 —', '반영 실패 exit') 줄만. '반영 실패 진단' 줄은 재진단 기록이라 빼고,
+    //   repair.at 이 마지막 실패와 같은 시각이어도 재진단 있음으로 봄. repair.decision stop(사람 판단 필요) 안은 fail 대신 '사람 판단 대기' warn 1줄로 묶음
+    for (const p of x.proposals) {
+      if (p.status !== 'apply-failed') continue; const fails = (p.history || []).filter(h => /^반영 실패(?!\s*진단)/.test(String(h.what || ''))); const last = fails.length ? Date.parse(String(fails[fails.length - 1].at).replace(' ', 'T')) : (p.ms || 0);
+      if (!Number.isFinite(last) || x.now - last < lim) continue; const ra = p.repair && p.repair.at ? Date.parse(String(p.repair.at).replace(' ', 'T')) : 0;
+      if (ra && ra >= last) { if (p.repair.decision === 'stop') human.push(p); continue; }
+      out.push({ level: 'fail', what: `반영 실패 개선안 ${Math.round((x.now - last) / 3600000)}시간 방치`, detail: `${p.id} ${String(p.title).slice(0, 80)} · 재진단 ${p.repair ? `${p.repair.decision || ''} ${p.repair.at || ''}` : '없음'}`, key: `S13|U11|${p.id}` });
+    }
+    if (human.length) out.push({ level: 'warn', what: `반영 실패 사람 판단 대기 ${human.length}건`, detail: human.slice(0, 8).map(p => `${p.id} ${String(p.title).slice(0, 60)} · 재진단 stop ${p.repair.at}`).join(' / '), key: 'S13|U11|human' });
+    return out;
+  },
+  // U13 창 다시 로드 뒤 VMW 작업 재개 누락(개선안 20261120184524_SELF: 원래 중단 사건 기준으로 다시 세움)
+  //   ① 중단 = events.jsonl chain.end(aborted) 또는 user.stop(why vscode.dispose) 의 runId, job, screen, ms. runId 없는 user.stop 은 같은 창(wb)의 5초 안 chain.end(aborted) 와 묶음.
+  //      24시간 창과 경과 시간은 이 ms 로만 셈. job.json 수정 시각, interruptedAt, R5 사건 시각은 판정에 쓰지 않음
+  //   ② 재개 가능 = jobs.js 작업 재개 단추 조건(실행 중 아님, 남은 화면 있음). job-runner 에 canResume 이 있으면 그것을 씀.
+  //      job.json 이 없으면(사용자가 작업을 지움) 판정 안 함. 업무 작업 밖 Workbench 체인은 재개 기록(chain_progress 같은 runId)이 없으면 판정 안 함
+  //   ③ 재실행 = 중단 뒤 같은 화면 chain.start(작업 번호 무관) 또는 같은 작업 job.start. waitMin 넘게 없으면 fail · key S13|U13|<중단 runId>
+  //   ④ 단계 재개 기록(chain_progress)은 fail 조건 아님. 없으면 detail 에 '단계 처음부터' 만 적음
+  //   ⑤ 중단 사건 줄이 없는 중단 작업(재개 기록 기능 이전 옛 기록)은 warn 1건으로 묶음
+  reloadResumeMissing(u, x) {
+    const out = []; const waitMs = (u.params.waitMin || 30) * 60000; const settleMs = 120000; const up = v => String(v || '').toUpperCase();
+    const jr = mod('job-runner');
+    const canResume = j => {
+      if (jr && typeof jr.canResume === 'function') { try { return !!jr.canResume(j); } catch (e) { errlog.note('orch-usercheck', 'canResume', e); } }
+      // jobs.js:247 bResume.disabled = run || !left · job-runner get() 이 읽을 때 interrupted, done 의 run/admit/busy 를 wait 로 되돌림(stopped 는 cancel)
+      if (/^(running|pausing)$/.test(j.status)) return false;
+      const back = /^(interrupted|done)$/.test(j.status);
+      return (j.screens || []).some(s => s.status === 'wait' || s.status === 'busy' || (back && /^(run|admit)$/.test(s.status)));
+    };
+    const prog = new Map(); const pd = path.join(P().vibeDir, 'orch', 'chain_progress');
+    for (const e of lsDir(pd)) { if (!e.isFile() || !e.name.endsWith('.json')) continue; const r = readJson(path.join(pd, e.name), null); if (r && r.runId) prog.set(r.runId, r); }
+    // ① 중단 사건 묶기(chain.end aborted 먼저, 같은 창 5초 안 user.stop 은 같은 중단)
+    const cuts = []; const ends = x.events.filter(e => e.type === 'chain.end' && e.aborted && e.runId);
+    for (const e of ends) cuts.push({ id: e.runId, runId: e.runId, job: e.job || '', screen: up(e.screen), wb: e.wb || '', ms: e.ms || 0, label: e.chainLabel || '' });
+    for (const s of x.events.filter(e => e.type === 'user.stop' && e.why === 'vscode.dispose')) {
+      // 개선안 20261122000646_SELF: runId 가 있으면 시각 차이 없이 runId 로 묶음. runId 없는 옛 기록만 같은 창 5초 안
+      const ms = s.ms || 0; const c = cuts.find(v => (s.runId ? v.runId === s.runId : (v.wb && v.wb === s.wb && Math.abs(v.ms - ms) <= 5000)));
+      if (c) { if (ms < c.ms) c.ms = ms; continue; }
+      cuts.push({ id: s.runId || `${s.wb || s.screen}@${ms}`, runId: s.runId || '', job: s.job || '', screen: up(s.screen), wb: s.wb || '', ms, label: '' });
+    }
+    const cutJobs = new Set(cuts.map(c => c.job).filter(Boolean));
+    const seen = new Set();
+    for (const c of cuts) {
+      if (seen.has(c.id) || !c.screen || x.now - c.ms > DAY || x.now - c.ms < settleMs) continue; seen.add(c.id);
+      let jobTxt = '';
+      if (c.job) {
+        const j = readJson(path.join(P().vibeDir, 'jobs', c.job, 'job.json'), null); if (!j) continue; // 사용자가 작업을 지움
+        if (!canResume(j)) continue;
+        jobTxt = ` · 작업 ${c.job} 상태 ${j.status}, 남은 화면 ${(j.screens || []).filter(s => /^(wait|busy|run|admit)$/.test(s.status)).map(s => s.id).join(', ')}`;
+      } else if (!c.runId || !prog.has(c.runId)) continue; // Workbench 체인: 재개 기록을 지움 또는 없음
+      const again = x.events.some(v => (v.ms || 0) > c.ms && ((v.type === 'chain.start' && up(v.screen) === c.screen) || (c.job && v.type === 'job.start' && v.job === c.job)));
+      if (again || x.now - c.ms <= waitMs) continue;
+      const pr = c.runId ? prog.get(c.runId) : null;
+      const stepTxt = pr && pr.interruptedAt ? `단계 재개 기록 있음(${Number(pr.resumeFrom) || ((Number(pr.cur) || 0) + 1)}/${pr.steps || '?'}단계)` : '단계 재개 기록 없음, 재개하면 단계 처음부터';
+      out.push({ level: 'fail', what: `창 다시 로드 뒤 재실행 없음 ${c.screen}`, detail: `중단 ${hm(c.ms)} ${c.runId || c.wb}${c.label ? ` ${String(c.label).slice(0, 40)}` : ''} 뒤 ${Math.round((x.now - c.ms) / 60000)}분째 같은 화면 chain.start, 같은 작업 job.start 없음${jobTxt} · ${stepTxt}`.slice(0, 600), key: `S13|U13|${c.id}`, ms: c.ms });
+    }
+    // ⑤ 옛 기록: 중단 작업인데 그 작업의 중단 사건 줄이 없음
+    const old = [];
+    for (const e of lsDir(path.join(P().vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const j = readJson(path.join(P().vibeDir, 'jobs', e.name, 'job.json'), null);
+      if (!j || !j.id || j.status !== 'interrupted' || cutJobs.has(j.id) || !canResume(j)) continue; old.push(j.id);
+    }
+    // ⑥ 재개 원장(개선안 20261125000907_VISION): 화면 ID 빈 끊긴 기록 = 어느 창 재개 단추에도 오르지 않음(2026-11-23 18:46 WB1_1795427182442_ai) → fail
+    for (const r of ledgerCuts(x.now)) if (r.blank) out.push({ level: 'fail', what: `재개 원장에 화면 ID 빈 기록 ${r.runId}`, detail: `끊김 ${hm(r.cutMs)} ${String(r.label || '').slice(0, 60)} · .vibe/orch/chain_progress/${r.runId}.json screen '' · VMW, Workbench 재개 단추에 오르지 않음`, key: `S13|U13|blank|${r.runId}`, ms: r.cutMs });
+    if (old.length) out.push({ level: 'warn', what: 'U13 판정 근거 없음(중단 사건 줄 없음)', detail: `중단 작업 ${old.length}건 ${old.sort().slice(0, 10).join(', ')}${old.length > 10 ? ` 외 ${old.length - 10}건` : ''} · events.jsonl 에 chain.end(aborted), user.stop(vscode.dispose) 줄 없음(재개 기록 기능 이전 기록)`, key: 'S13|U13|old' });
+    return out;
+  },
+  // U14 VMW 화면 목록에 화면 명칭 빠짐: VMW 목록에 올리는 화면(flow-panel targets = jobs.js screenList 원본) + 24시간 안 업무 작업 job.json screens[].id
+  //   + 웹뷰 보고(ui.json scr.blank: 목록에 이름 없이 그린 ID) 가운데 TO-BE 메뉴(Doc/tobefacts/db/menu.csv mnu_id → mnu_desc)에 이름이 있는데
+  //   목록 표시 이름이 비었거나 ID 와 같은 항목이 1건 이상이면 fail. 메뉴 파일이 없으면 판정 못 함(warn)
+  screenNameMissing(u, x) {
+    const p = P(); const mf = path.join(p.tobeOutDir || path.join(p.root, 'Doc', 'tobefacts'), 'db', 'menu.csv');
+    let txt = ''; try { txt = fs.readFileSync(mf, 'utf8').replace(/^﻿/, ''); } catch { return [{ level: 'warn', what: 'VMW 화면 명칭 판정 못 함', detail: `메뉴 파일 없음 ${mf}`, key: 'S13|U14|nomenu' }]; }
+    const menu = new Map(); const rows = csvRows(txt); const h = (rows.shift() || []).map(c => String(c).trim().toLowerCase()); const ci = h.indexOf('mnu_id'); const cd = h.indexOf('mnu_desc');
+    if (ci < 0 || cd < 0) return [{ level: 'warn', what: 'VMW 화면 명칭 판정 못 함', detail: `${mf} 에 mnu_id, mnu_desc 열 없음`, key: 'S13|U14|nomenu' }];
+    for (const r of rows) { const id = String(r[ci] || '').trim().toUpperCase(); const nm = String(r[cd] || '').trim(); if (id && nm && !menu.has(id)) menu.set(id, nm); }
+    const shown = new Map(); // ID → 목록 표시 이름
+    const fl = mod('flow-panel'); let tg = []; try { tg = fl && fl.targets ? fl.targets(p) || [] : []; } catch (e) { errlog.note('orch-usercheck', 'screenNameMissing targets', e); }
+    for (const t of tg) if (t && t.id) shown.set(String(t.id).toUpperCase(), String(t.title || '').trim());
+    for (const e of lsDir(path.join(p.vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const jf = path.join(p.vibeDir, 'jobs', e.name, 'job.json'); let m = 0; try { m = fs.statSync(jf).mtimeMs; } catch { continue; }
+      if (x.now - m > DAY) continue; const j = readJson(jf, null); if (!j) continue;
+      for (const s of j.screens || []) { const id = String(s.id || '').toUpperCase(); if (id && !shown.has(id)) shown.set(id, String(s.title || s.name || '').trim()); }
+    }
+    const ui = readJson(path.join(ucDir(), 'ui.json'), {}); const rep = ui.scr && x.now - (ui.scr.ms || 0) < DAY ? ui.scr : null;
+    if (rep) for (const id of rep.blank || []) shown.set(String(id).toUpperCase(), '');
+    const miss = [...shown.entries()].filter(([id, nm]) => menu.has(id) && (!nm || nm.toUpperCase() === id)).map(([id]) => id).sort();
+    if (!miss.length) return [];
+    return [{ level: 'fail', what: `VMW 화면 목록 명칭 빠짐 ${miss.length}건`, detail: `메뉴(${path.relative(p.root, mf)} mnu_desc)에 이름이 있는데 목록 이름이 비었거나 ID 와 같음: ${miss.slice(0, 10).map(id => `${id} '${menu.get(id)}'`).join(', ')}${miss.length > 10 ? ` 외 ${miss.length - 10}건` : ''}${rep ? ` · 웹뷰 보고 ${hm(rep.ms)}` : ''}`, key: 'S13|U14|names' }];
+  },
+  // U15 VMO FE LOG 탭에 FE 서버 로그가 안 보임: FE LOG 켜짐 + 5173 up 동안 서버 로그 파일은 windowSec(60) 넘게 늘었는데 FE 스트림 송출 줄 수 0 = fail
+  //   서버 로그 = server.state 마지막 사건이 VM 기동(owner vm 또는 source start)이면 .vibe/logs/<시각>_<서버 이름>.log, 아니면 Doc/e2e/logs/_server_5173.log
+  //   송출 = events.jsonl log.out(stream fe · lines) · 켜짐 = log.toggle(stream fe · on) 또는 log.out on 필드. 두 기록이 없으면 판정 못 함(warn)
+  logTabShown(u, x) {
+    const port = Number(u.params.port || 5173); const winMs = (u.params.windowSec || 60) * 1000; const st = x.state.logTab = x.state.logTab || {};
+    const ss = x.events.filter(e => e.type === 'server.state' && Number(e.port) === port).sort((a, b) => (a.ms || 0) - (b.ms || 0)); const last = ss[ss.length - 1];
+    const up = !!last && /^(up|ready|listen)$/.test(String(last.state || ''));
+    if (!up) { delete st.fe; return []; }
+    const vmOwned = last.owner === 'vm' || last.source === 'start';
+    let f = path.join(P().root, 'Doc', 'e2e', 'logs', `_server_${port}.log`);
+    if (vmOwned) {
+      const ld = path.join(P().vibeDir, 'logs'); const nm = String(last.name || '').replace(/[^\w.-]/g, '_');
+      const cand = lsDir(ld).filter(e => e.isFile() && (nm ? e.name.endsWith(`_${nm}.log`) : /_[\w.-]*FE\.log$/i.test(e.name))).map(e => e.name).sort();
+      if (cand.length) f = path.join(ld, cand[cand.length - 1]);
+    }
+    let size = 0; try { size = fs.statSync(f).size; } catch { delete st.fe; return []; }
+    const fe = x.events.filter(e => (e.type === 'log.out' || e.type === 'log.toggle') && e.stream === 'fe');
+    const tg = fe.filter(e => typeof e.on === 'boolean').sort((a, b) => (a.ms || 0) - (b.ms || 0)); const on = tg.length ? tg[tg.length - 1].on : null;
+    const rel = path.relative(P().root, f);
+    if (on === false) { delete st.fe; return []; }
+    const prev = st.fe;
+    if (!prev || prev.file !== f || size < prev.size) { st.fe = { file: f, size, ms: x.now }; return []; }
+    if (x.now - prev.ms < winMs) return [];
+    st.fe = { file: f, size, ms: x.now };
+    if (size <= prev.size) return [];
+    const grew = `${Math.round((size - prev.size) / 1024)}KB`; const sec = Math.round((x.now - prev.ms) / 1000);
+    if (on === null) return [{ level: 'warn', what: 'FE LOG 표시 판정 못 함', detail: `${rel} ${sec}초 동안 ${grew} 늘어남 · events.jsonl 에 log.out, log.toggle(stream fe) 기록 없음(server-service.js out('fe') 송출 건수 기록 추가 필요)`, key: `S13|U15|norec` }];
+    const lines = x.events.filter(e => e.type === 'log.out' && e.stream === 'fe' && (e.ms || 0) > prev.ms && (e.ms || 0) <= x.now).reduce((s, e) => s + (Number(e.lines) || 0), 0);
+    if (lines > 0) return [];
+    return [{ level: 'fail', what: `FE LOG 탭 송출 0줄(포트 ${port} up)`, detail: `${rel} ${sec}초 동안 ${grew} 늘어남, 같은 동안 log.out stream fe 0줄, 5173 ${last.state}(${vmOwned ? `VM 기동 ${last.name || ''}` : `owner ${last.owner || '-'}`}) ${hm(last.ms)}, FE LOG 켜짐 ${hm(tg[tg.length - 1].ms)}`, key: `S13|U15|${port}` }];
+  },
+  // U16 창 다시 로드 뒤 재개된 작업이 VMW 목록에 안 보임(개선안 20261120151817_SELF)
+  //   중단 시각 = job.json status interrupted 면 interruptedAt(없으면 job.json 수정 시각), 다시 실행 중이면(begin 이 interruptedAt 을 지움) 같은 작업 user.stop why vscode.dispose 의 마지막 ms
+  //   재개 = 중단 시각 뒤 같은 job 의 job.start 또는 chain.start(Workbench 재개는 chain.start 만 남김). 재개가 없으면 U13 이 맡음
+  //   VMW 목록 = 웹뷰 보고 ui.json jobs { ms, received, jobIds }(noteUi tab 'job'). 재개 뒤 graceMin(2분) 넘어 받은 보고에 job id 가 없으면 fail · 그런 보고가 없으면 판정 못 함(warn)
+  resumedJobShown(u, x) {
+    const out = []; const graceMs = (u.params.graceMin || 2) * 60000;
+    const ui = readJson(path.join(ucDir(), 'ui.json'), {}); const rep = ui.jobs && x.now - (ui.jobs.ms || 0) < DAY ? ui.jobs : null;
+    const shown = new Set(((rep && rep.jobIds) || []).map(v => String(v)));
+    for (const e of lsDir(path.join(P().vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const jf = path.join(P().vibeDir, 'jobs', e.name, 'job.json'); let m = 0; try { m = fs.statSync(jf).mtimeMs; } catch { continue; }
+      if (x.now - m > DAY) continue; const j = readJson(jf, null); if (!j || !j.id) continue;
+      let cutMs = 0;
+      if (j.status === 'interrupted') cutMs = Date.parse(j.interruptedAt || '') || m;
+      else { const ds = x.events.filter(v => v.type === 'user.stop' && v.job === j.id && v.why === 'vscode.dispose' && x.now - (v.ms || 0) < DAY).map(v => v.ms || 0); if (ds.length) cutMs = Math.max(...ds); }
+      if (!cutMs) continue;
+      const rs = x.events.filter(v => (v.type === 'job.start' || v.type === 'chain.start') && v.job === j.id && (v.ms || 0) > cutMs).sort((a, b) => (a.ms || 0) - (b.ms || 0));
+      if (!rs.length) continue; const r0 = rs[0];
+      if (x.now - r0.ms <= graceMs) continue;
+      const how = `${r0.type}${r0.screen ? ` ${r0.screen}` : ''} ${hm(r0.ms)}`;
+      if (!rep || rep.ms < r0.ms + graceMs) { out.push({ level: 'warn', what: `VMW 재개 작업 표시 판정 못 함 ${j.id}`, detail: `중단 ${hm(cutMs)} 뒤 재개(${how}) · 재개 ${Math.round(graceMs / 60000)}분 뒤 받은 VMW 작업 목록 보고 없음(.vibe/orch/usercheck/ui.json jobs${rep ? ` 마지막 ${hm(rep.ms)}` : ' 없음'})`, key: `S13|U16|norep|${j.id}` }); continue; }
+      if (shown.has(j.id)) continue;
+      out.push({ level: 'fail', what: `VMW 목록에 재개 작업 없음 ${j.id}`, detail: `중단 ${hm(cutMs)} 뒤 재개(${how}) · 웹뷰 보고 ${hm(rep.ms)} VMW 목록 ${rep.received || 0}건에 ${j.id} 없음(재개 뒤 ${Math.round((rep.ms - r0.ms) / 60000)}분) · 작업 상태 ${j.status}`, key: `S13|U16|${j.id}` });
+    }
+    // 재개 원장(개선안 20261125000907_VISION): 작업의 끊긴 원장 기록 = 그 작업 카드를 그린 VMW 보고(끊긴 뒤 graceMin 지나 받음)에 같은 runId 가 있어야 함. 보고에 runIds 가 없는 옛 웹뷰는 판정 안 함
+    if (rep && Array.isArray(rep.runIds)) {
+      const drawn = new Set(rep.runIds.map(String));
+      for (const r of ledgerCuts(x.now)) {
+        if (r.blank || !r.job || !shown.has(r.job) || (rep.ms || 0) < r.cutMs + graceMs || drawn.has(r.runId)) continue;
+        out.push({ level: 'fail', what: `VMW 카드에 재개 대기 없음 ${r.screen}`, detail: `원장 ${r.runId} 작업 ${r.job} 끊김 ${hm(r.cutMs)} ${r.resumeFrom || ((Number(r.cur) || 0) + 1)}/${r.steps || '?'}단계 · 웹뷰 보고 ${hm(rep.ms)} 카드 재개 runId ${rep.runIds.length}건에 없음`, key: `S13|U16|cut|${r.runId}`, ms: r.cutMs });
+      }
+    }
+    return out;
+  },
+  // U18 재개가 끊긴 단계를 처음부터 다시 돎(개선안 20261120151817_SELF_2 · UI 생성, UI 보완, CheckList 체인 공통)
+  //   ① 단계 번호: 끊긴 체인 기록(chain_progress interruptedAt · resumeFrom 또는 cur+1)을 상태(state.json resumeRun)에 남김(재개하면 workbench 가 원본 기록을 지움).
+  //      재개 실행 = 새 기록 resumedFrom 연결, 없으면 끊긴 뒤 같은 창(wb)·체인의 첫 chain.start. 그 runId 의 첫 step.start no 가 끊긴 단계보다 작으면 fail
+  //   ② 세부 진행: 업무 작업 로그(.vibe/jobs/<job>/<화면>.log)의 단계 재개 줄 '↻ 작업 재개: n/m단계 … 단계 안 끊긴 지점부터(끊길 때 <세부 진행>)'
+  //      = 그 단계가 재개(VM_RESUME 처리, steps.json resumeArg)를 지원한다고 VM 이 표시한 경우만 판정. 그 줄 뒤 첫 진행 줄이 끊길 때 값보다 slack(1) 넘게 작으면 fail
+  //      ('[단계 n/m]', '[세부 n/m]', 'AI 판정 검토 묶음 n/m' 같은 분모 · 'Running N tests' N 이 끊길 때 시험 분모와 같으면 시험 전체 다시). '이 단계는 처음부터' 표시 단계는 판정 안 함
+  resumeRestartFromStart(u, x) {
+    const out = []; const slack = Number(u.params.slack != null ? u.params.slack : 1); const st = x.state.resumeRun = x.state.resumeRun || {};
+    const pd = path.join(P().vibeDir, 'orch', 'chain_progress'); const links = {};
+    for (const e of lsDir(pd)) {
+      if (!e.isFile() || !e.name.endsWith('.json')) continue; const r = readJson(path.join(pd, e.name), null); if (!r || !r.runId) continue;
+      if (r.interruptedAt) { const atMs = Date.parse(r.interruptedAt) || r.updatedMs || 0; st[r.runId] = Object.assign(st[r.runId] || {}, { screen: r.screen || '', job: r.job || '', wb: r.wb || '', chain: r.chainId || '', label: String(r.label || '').slice(0, 60), from: Number(r.resumeFrom) || ((Number(r.cur) || 0) + 1), steps: r.steps || 0, atMs, prog: String((r.sub || {}).prog || '').slice(0, 200) }); }
+      if (r.resumedFrom) links[r.resumedFrom] = r.runId;
+    }
+    for (const [old, s] of Object.entries(st)) {
+      if (x.now - (s.atMs || 0) > DAY) { delete st[old]; continue; }
+      if (links[old]) s.next = links[old];
+      if (!s.next) { const cs = x.events.filter(v => v.type === 'chain.start' && v.runId && v.runId !== old && (v.ms || 0) > (s.atMs || 0) && (s.wb ? v.wb === s.wb : String(v.screen || '').toUpperCase() === String(s.screen).toUpperCase() && (!s.job || v.job === s.job)) && (!s.chain || !v.chain || v.chain === s.chain)).sort((a, b) => (a.ms || 0) - (b.ms || 0)); if (cs.length) s.next = cs[0].runId; }
+      if (!s.next) continue;
+      const ss = x.events.filter(v => v.type === 'step.start' && v.runId === s.next).sort((a, b) => (a.ms || 0) - (b.ms || 0)); if (!ss.length) continue;
+      const f = ss[0]; if (!(Number(f.no) < s.from)) continue;
+      out.push({ level: 'fail', what: `재개가 앞 단계부터 다시 돎 ${s.screen}`, detail: `${old} 끊김 ${hm(s.atMs)} ${s.from}/${s.steps || '?'}단계${s.prog ? `(${s.prog})` : ''} · 재개 실행 ${s.next} 첫 단계 ${f.no} '${String(f.name || f.task || '').slice(0, 40)}' ${hm(f.ms)} · ${s.label}`, key: `S13|U18|step|${old}` });
+    }
+    // ② 세부 진행
+    const pair = (t, re) => { const m = re.exec(t); return m ? { n: Number(m[1]), d: Number(m[2]) } : null; };
+    for (const e of lsDir(path.join(P().vibeDir, 'jobs'))) {
+      if (!e.isDirectory()) continue; const jd = path.join(P().vibeDir, 'jobs', e.name);
+      for (const lf of lsDir(jd)) {
+        if (!lf.isFile() || !lf.name.endsWith('.log')) continue; const f = path.join(jd, lf.name); let m = 0; try { m = fs.statSync(f).mtimeMs; } catch { continue; }
+        if (x.now - m > DAY) continue; let lines = []; try { lines = fs.readFileSync(f, 'utf8').split(/\r?\n/); } catch { continue; }
+        for (let i = 0; i < lines.length; i++) {
+          const rm = /^↻ 작업 재개: (\d+)\/(\d+|\?)단계.* · 단계 안 끊긴 지점부터\(끊길 때 (.+)\)\s*$/.exec(lines[i]); if (!rm) continue;
+          const cut = rm[3]; const iv = { stage: pair(cut, /단계 (\d+)\/(\d+)/), sub: pair(cut, /세부 (\d+)\/(\d+)/), test: pair(cut, /시험 (\d+)\/(\d+)/), ai: pair(cut, /AI 묶음 (\d+)\/(\d+)/) };
+          const ob = {};
+          for (let k = i + 1; k < lines.length; k++) {
+            const ln = lines[k]; if (/^── \[\d+\/\d+\] |^🚀 체인 시작|^↻ 작업 재개: /.test(ln)) break; let q;
+            if (!ob.stage && (q = /^\[단계 (\d+)\/(\d+)\]/.exec(ln))) ob.stage = { n: Number(q[1]), d: Number(q[2]), ln: k + 1 };
+            else if (!ob.sub && !ob.stage && (q = /^\[세부 (\d+)\/(\d+)\]/.exec(ln))) ob.sub = { n: Number(q[1]), d: Number(q[2]), ln: k + 1 };
+            else if (!ob.test && (q = /^Running (\d+) tests? using/.exec(ln))) ob.test = { N: Number(q[1]), ln: k + 1 };
+            else if (!ob.ai && (q = /AI 판정 검토 묶음 (\d+)\/(\d+)/.exec(ln))) ob.ai = { n: Number(q[1]), d: Number(q[2]), ln: k + 1 };
+          }
+          const back = (a, b) => a && b && a.d === b.d && b.n < a.n - slack;
+          const why = [];
+          if (back(iv.stage, ob.stage)) why.push(`단계 ${iv.stage.n}/${iv.stage.d} → ${ob.stage.n}/${ob.stage.d}(${ob.stage.ln}줄)`);
+          if (back(iv.sub, ob.sub)) why.push(`세부 ${iv.sub.n}/${iv.sub.d} → ${ob.sub.n}/${ob.sub.d}(${ob.sub.ln}줄)`);
+          if (iv.test && ob.test && ob.test.N === iv.test.d && iv.test.n > slack) why.push(`시험 ${iv.test.n}/${iv.test.d} → 전체 ${ob.test.N}건 다시(${ob.test.ln}줄)`);
+          if (back(iv.ai, ob.ai)) why.push(`AI 묶음 ${iv.ai.n}/${iv.ai.d} → ${ob.ai.n}/${ob.ai.d}(${ob.ai.ln}줄)`);
+          if (!why.length) continue;
+          const scr = lf.name.replace(/\.log$/, '');
+          out.push({ level: 'fail', what: `재개 단계를 세부 진행 처음부터 다시 돎 ${scr}`, detail: `${path.relative(P().root, f)} ${i + 1}줄 ${rm[1]}/${rm[2]}단계 재개(단계 안 재개 지원 표시) · ${why.join(', ')}`, key: `S13|U18|sub|${e.name}|${scr}|${i + 1}` });
+        }
+      }
+    }
+    return out;
+  },
+  // U19 단계 실패 뒤 체인이 다음 단계를 계속 띄움(개선안 20261120162317_SELF)
+  //   ① 같은 runId 에서 step.end status FAIL(stopped 아님) 뒤 step.start(다른 단계), 같은 창(wb) proc.start, claude.start(source orch 제외)가 새로 기록되면 fail.
+  //      범위 = 실패 기록 뒤 ~ 같은 창 다음 chain.start 전. 체인 정의상 실패 뒤 실행 단계(chain.start plan 의 onFail, afterFail)와 같은 단계 번호(보완 회차)는 뺀다
+  //      (workbench.js 1068줄: 실패·취소 뒤 남은 단계는 NOT_RUN 으로 끝나야 함)
+  //   ② 그 실패 뒤 VMW job.json 이 실행 중이 아니거나 화면이 목록에 없는데 orch-state 체인 스냅샷에 그 체인(runId 또는 wb)이 살아 있으면 fail
+  //   ③ ①② 실패 건의 R1, R2 사건(evidence.runId 같음 또는 같은 화면·실패 뒤 생성)이 열린 채 selfDiagGapMin 넘게 VMO 조치 기록이 없으면 fail(vmoCadence U7 과 묶어 표시)
+  // U20 VMO 가 정상 실행을 멈춤(2026-11-20 16:06 R14 오판): 개입 장부의 오판 판정, 또는 VMO 가 멈춘 화면을 사용자가 곧 다시 실행한 신호가 최근 24시간에 있으면 올림
+  vmoFalseStop(u, x) {
+    const out = []; let lg = null; try { lg = require('./orch-ledger'); if (!lg.ready()) lg.init({ paths: () => P() }); } catch { return out; }
+    for (const r of lg.readAll()) {
+      if (x.now - (r.ms || 0) > DAY || (r.kind !== 'stop' && r.kind !== 'kill' && r.kind !== 'requeue')) continue; const v = (r.check && r.check.verdict) || '';
+      if (v === 'false') out.push({ level: lg.observing(r.rule) ? 'warn' : 'fail', what: `VMO 가 정상 실행을 잘못 멈춤 ${r.rule} ${r.screen}`, detail: `${dfmt.fmtDT(r.at)} ${r.check.why}${lg.observing(r.rule) ? ' · 그 규칙 관찰 모드' : ' · 관찰 모드 아님'}`, key: `S13|${u.id}|${r.id}` });
+      else if (r.react && v !== 'false') out.push({ level: 'warn', what: `VMO 가 멈춘 화면을 사용자가 곧 다시 실행 ${r.rule} ${r.screen}`, detail: `${dfmt.fmtDT(r.at)} ${r.react.what} · 사후 검증 ${v || '대기'}`, key: `S13|${u.id}|react|${r.id}` });
+    }
+    return out;
+  },
+  chainAfterFail(u, x) {
+    const out = []; const up = v => String(v || '').toUpperCase(); const gapMs = (x.cfg.selfDiagGapMin || 60) * 60000;
+    const fails = x.events.filter(e => e.type === 'step.end' && e.status === 'FAIL' && e.stopped !== true && e.runId && x.now - (e.ms || 0) < DAY);
+    const live = x.snap.chains || [];
+    const jobOf = id => { if (!id) return null; return readJson(path.join(P().vibeDir, 'jobs', id, 'job.json'), null); };
+    for (const f of fails) {
+      const fms = f.ms || 0; const fno = Number(f.no);
+      const cs = x.events.find(e => e.type === 'chain.start' && e.runId === f.runId); const plan = (cs && cs.plan) || [];
+      const allowed = no => Number(no) === fno || plan.some(p => Number(p.no) === Number(no) && (p.onFail === true || p.afterFail === true));
+      const nextRun = x.events.filter(e => e.type === 'chain.start' && e.runId !== f.runId && (e.ms || 0) > fms && (f.wb ? e.wb === f.wb : up(e.screen) === up(f.screen))).map(e => e.ms || 0);
+      const endMs = nextRun.length ? Math.min(...nextRun) : Infinity;
+      const inWin = e => (e.ms || 0) > fms && (e.ms || 0) < endMs;
+      const leaks = x.events.filter(e => inWin(e) && (
+        (e.type === 'step.start' && e.runId === f.runId && !allowed(e.no)) ||
+        ((e.type === 'proc.start' || e.type === 'claude.start') && e.source !== 'orch' && (e.runId ? e.runId === f.runId : (f.wb && e.wb === f.wb)))
+      )).sort((a, b) => (a.ms || 0) - (b.ms || 0));
+      const tag = `${f.runId} ${fno}단계 '${String(f.name || f.task || '').slice(0, 40)}' FAIL ${hm(fms)}`;
+      let hit = false;
+      if (leaks.length) {
+        hit = true;
+        const desc = leaks.slice(0, 5).map(e => `${e.type}${e.no != null ? ` ${e.no}단계` : ''}${e.label || e.name ? ` '${String(e.label || e.name).slice(0, 40)}'` : ''} ${hm(e.ms)}`).join(', ');
+        out.push({ level: 'fail', what: `단계 실패 뒤 체인 계속 실행 ${f.screen || ''}`, detail: `${tag} 뒤 ${leaks.length}건 새로 띄움: ${desc}${leaks.length > 5 ? ` 외 ${leaks.length - 5}건` : ''} · ${f.chainLabel || ''}`.slice(0, 600), key: `S13|U19|leak|${f.runId}|${fno}` });
+      }
+      const c = live.find(ch => ch.runId === f.runId || (f.wb && ch.wb === f.wb && (!ch.runId || ch.runId === f.runId)));
+      if (c && x.now - fms > 60000) {
+        const j = jobOf(f.job || c.job); const s = j ? (j.screens || []).find(v => up(v.id) === up(f.screen)) : null;
+        const jobRun = j && j.status === 'running' && s && s.status === 'run';
+        if (j && !jobRun) { hit = true; out.push({ level: 'fail', what: `VMW 에 없는 체인 살아 있음 ${f.screen || ''}`, detail: `${tag} · 체인 스냅샷 ${c.runId || '-'} ${c.step ? `${c.step.no}단계 진행 중` : '살아 있음'} · 업무 작업 ${j.id} 상태 ${j.status}${s ? `, 화면 ${s.status}` : ', 목록에 화면 없음'}`, key: `S13|U19|live|${f.runId}` }); }
+      }
+      if (!hit) continue;
+      const inc = x.incidents.filter(i => /^(R1|R2)$/.test(i.rule) && !i.notice && !done(i.status) && (((i.evidence || {}).runId === f.runId) || (up(i.screen) === up(f.screen) && (i.ms || 0) >= fms - 5000)));
+      for (const i of inc) {
+        if ((i.actions || []).length || x.now - (i.ms || 0) <= gapMs) continue;
+        out.push({ level: 'fail', what: `단계 실패 사건 VMO 진단·자가 보완 없음 ${i.screen || ''}`, detail: `${i.id} ${i.rule} ${Math.round((x.now - i.ms) / 60000)}분째 ${i.status} · 조치 기록 0건 · ${tag} · U7 vmoCadence 와 같은 공백`, key: `S13|U19|nodiag|${i.id}` });
+      }
+    }
+    return out;
+  },
+  // U21 VMO 자가 보완, 개선안 반영 실패 반복(개선안 20261120172524_SELF)
+  //   ① 최근 24시간 개선안 history[].what 이 '반영 실패'로 시작하는 기록(진단 기록 '반영 실패 진단' 제외)이 countMin(기본 2)건 이상이면 fail
+  //   ② 같은 원인(title)으로 반영 실패가 7일 안 countMin 회 이상이고 마지막 실패가 24시간 안이면 fail
+  //   ③ 반영 실패 뒤 같은 key 사건(events.jsonl incident sig = 개선안 selfKey 또는 원 사건 sig)이 다시 올라오면 fail
+  //   repairRetry(U11)는 apply-failed 로 방치된 개선안만 봄. 이 감지기는 실패 발생 자체의 반복을 봄
+  applyFailRepeat(u, x) {
+    const out = []; const minN = u.params.countMin || 2; const winMs = (u.params.titleDays || 7) * DAY;
+    const isFail = w => /^반영 실패/.test(String(w || '').trim()) && !/^반영 실패 진단/.test(String(w || '').trim());
+    const fails = [];
+    for (const p of x.proposals || []) for (const h of p.history || []) { const ms = Date.parse(h.at || ''); if (isFail(h.what) && ms && x.now - ms < winMs) fails.push({ p, ms, what: String(h.what).slice(0, 80) }); }
+    if (!fails.length) return out;
+    fails.sort((a, b) => a.ms - b.ms);
+    const day = fails.filter(f => x.now - f.ms < DAY);
+    if (day.length >= minN) {
+      const last = day[day.length - 1];
+      out.push({ level: 'fail', what: `VMO 반영 실패 24시간 ${day.length}건`, detail: `개선안 ${new Set(day.map(f => f.p.id)).size}개 · 마지막 ${hm(last.ms)} ${last.p.id} '${last.what}' · ${day.slice(-5).map(f => `${f.p.id} ${hm(f.ms)}`).join(', ')}`.slice(0, 600), key: `S13|${u.id}|count|${last.p.id}|${last.ms}`, ms: last.ms });
+    }
+    const byTitle = {};
+    for (const f of fails) { const t = String(f.p.title || '').trim(); if (t) (byTitle[t] = byTitle[t] || []).push(f); }
+    for (const [t, fs2] of Object.entries(byTitle)) {
+      const last = fs2[fs2.length - 1]; if (fs2.length < minN || x.now - last.ms >= DAY) continue;
+      out.push({ level: 'fail', what: `같은 원인 반영 실패 ${fs2.length}회 ${t.slice(0, 40)}`, detail: `${fs2.map(f => `${f.p.id} ${hm(f.ms)}`).join(', ')} · 마지막 '${last.what}'`.slice(0, 600), key: `S13|${u.id}|title|${t.slice(0, 60)}|${fs2.length}`, ms: last.ms });
+    }
+    const incs = x.events.filter(e => e.type === 'incident' && e.sig);
+    const sigOfInc = id => { const e = id && incs.find(v => v.id === id); return e ? e.sig : ''; };
+    for (const p of x.proposals || []) {
+      const pf = fails.filter(f => f.p === p); if (!pf.length) continue; const lastMs = pf[pf.length - 1].ms;
+      const keys = [p.selfKey, sigOfInc(p.incident)].filter(Boolean).map(String);
+      if (!keys.length) continue;
+      const same = s => keys.some(k => s === k || s.endsWith(`|${k}`));
+      // 반영 실패 뒤 다음 '반영 완료' 기록이 있으면 그 시각 전 사건만 셈. 반영 완료 뒤 재발은 S8 이 봄(개선안 20261120225006_SELF)
+      const doneMs = (p.history || []).map(h => /반영 완료/.test(String(h.what || '')) ? Date.parse(h.at || '') : NaN).filter(ms => Number.isFinite(ms) && ms > lastMs).sort((a, b) => a - b)[0] || Infinity;
+      const again = incs.filter(e => (e.ms || 0) > lastMs && (e.ms || 0) < doneMs && x.now - (e.ms || 0) < DAY && e.id !== p.incident && same(String(e.sig)));
+      for (const e of again) out.push({ level: 'fail', what: `반영 실패 뒤 같은 사건 다시 올라옴 ${e.rule || ''} ${e.screen || ''}`.trim(), detail: `${p.id} 반영 실패 ${hm(lastMs)} 뒤 ${e.id} ${hm(e.ms)} sig '${String(e.sig).slice(0, 120)}'${e.title ? ` · ${String(e.title).slice(0, 80)}` : ''}`.slice(0, 600), key: `S13|${u.id}|recur|${e.id}`, ms: e.ms || lastMs });
+    }
+    return out;
+  },
+  // U22 VM 이 프롬프트를 '[object Object],[object Object]' 로 보냄(개선안 20261120172524_SELF_2)
+  //   읽을 기록 = 세션 기록(~/.claude/projects/<프로젝트 경로 인코딩>/*.jsonl, sessionDirs) 중 최근 24시간 수정 파일의 type user 메시지 content(문자열 또는 text 블록, tool_result 제외)와 timestamp
+  //   판정 = 줄 첫머리(앞 공백 허용)에 '[object Object]' 가 있으면 fail. 같은 시각 VM 이 보낸 첨부(이미지, 붙여넣기) 객체 배열을 문자열로 바꾸지 못한 것으로 봄
+  //   따옴표 안 인용(개선안 제목, 근거, 학습 프롬프트 '1. (시각) …' 줄)은 줄 첫머리가 아니라 판정하지 않음
+  promptSerialize(u, x) {
+    const out = []; const pat = /(^|\n)[ \t]*\[object Object\]/; const sid = new Set();
+    for (const d of sessionDirs()) for (const e of lsDir(d)) {
+      if (!e.isFile() || !e.name.endsWith('.jsonl')) continue; const f = path.join(d, e.name); let m = 0; try { m = fs.statSync(f).mtimeMs; } catch { continue; }
+      if (x.now - m > DAY) continue; let txt = ''; try { txt = fs.readFileSync(f, 'utf8'); } catch { continue; }
+      if (txt.indexOf('[object Object]') < 0) continue;
+      for (const ln of txt.split('\n')) {
+        if (ln.indexOf('[object Object]') < 0 || ln.indexOf('"user"') < 0) continue; let r; try { r = JSON.parse(ln); } catch { continue; }
+        if (r.type !== 'user' || r.isMeta || r.isCompactSummary) continue; const c = (r.message || {}).content;
+        const t = typeof c === 'string' ? c : Array.isArray(c) ? c.filter(b => b && b.type === 'text').map(b => String(b.text || '')).join('\n') : '';
+        if (!pat.test(t)) continue; const ms = Date.parse(r.timestamp || ''); if (!Number.isFinite(ms) || x.now - ms > DAY) continue;
+        const k = `${e.name.slice(0, 8)}|${ms}`; if (sid.has(k)) continue; sid.add(k);
+        out.push({ level: 'fail', what: `VM 프롬프트 직렬화 실패 '[object Object]' ${hm(ms)}`, detail: `${path.relative(d, f)} ${nowLocal(ms)} type user, 입력 경로 ${r.entrypoint || '-'}, 내용 앞 '${t.replace(/\s+/g, ' ').trim().slice(0, 120)}', 객체 배열(첨부 이미지, 붙여넣기)을 문자열로 바꾸지 못함`, key: `S13|${u.id}|${e.name.slice(0, 8)}|${ms}` });
+      }
+    }
+    return out.slice(-10);
+  },
+  // U23 VMW 작업 재개 뒤 WORKBENCH 에 진행 상태가 안 보임(개선안 20261120193704_SELF)
+  //   대상 = .vibe/orch/chain_progress/*.json 중 resumedFrom 이 있고 interruptedAt 이 없는(실행 중) 재개 기록. 시작 = events.jsonl 같은 runId chain.start ms(없으면 기록 t0)
+  //   ① 진행 기록 멈춤: cur, sub.prog, updatedMs 가 staleMin(5분) 넘게 같은데 같은 동안 같은 job 의 .vibe/jobs/<job>/<screen>.log 크기가 늘면 fail(첫 점검은 기준만 · 시작 뒤 staleMin 안은 판정 안 함)
+  //   ② WORKBENCH 표시 보고: 웹뷰 보고 ui.json wb { ms, runIds }(noteUi tab 'wb'). 시작 뒤 graceMin(2분) 지났는데 그 뒤 받은 보고가 없거나 보고 runIds 에 재개 runId 가 없으면 fail
+  workbenchResumeProgress(u, x) {
+    const out = []; const staleMs = (u.params.staleMin || 5) * 60000; const graceMs = (u.params.graceMin || 2) * 60000; const st = x.state.wbResume = x.state.wbResume || {}; const seen = new Set();
+    const ui = readJson(path.join(ucDir(), 'ui.json'), {}); const rep = ui.wb && x.now - (ui.wb.ms || 0) < DAY ? ui.wb : null; const drawn = new Set(((rep && rep.runIds) || []).map(v => String(v)));
+    const pd = path.join(P().vibeDir, 'orch', 'chain_progress');
+    for (const e of lsDir(pd)) {
+      if (!e.isFile() || !e.name.endsWith('.json')) continue; const r = readJson(path.join(pd, e.name), null);
+      if (!r || !r.runId || !r.resumedFrom || r.interruptedAt) continue;
+      const cs = x.events.find(v => v.type === 'chain.start' && v.runId === r.runId); const startMs = (cs && cs.ms) || Number(r.t0) || 0;
+      if (!startMs || x.now - startMs > DAY) continue; seen.add(r.runId);
+      const tag = `${r.runId}(재개 원본 ${r.resumedFrom}) ${r.screen || ''}${r.job ? ` 작업 ${r.job}` : ''} 시작 ${hm(startMs)}`;
+      // ① 진행 기록 멈춤
+      const sig = `${r.cur}|${String((r.sub || {}).prog || '')}|${r.updatedMs || 0}`;
+      let size = -1; if (r.job && r.screen) { try { size = fs.statSync(path.join(P().vibeDir, 'jobs', r.job, `${r.screen}.log`)).size; } catch { size = -1; } }
+      const prev = st[r.runId];
+      if (!prev || prev.sig !== sig || size < 0 || size < prev.size) st[r.runId] = { sig, since: x.now, size };
+      else {
+        // 로그 크기 기준은 점검마다 갱신(지난 점검 뒤 늘어난 경우만 실패) · 진행 기록 기준 시각(since)은 유지
+        const grew = size - prev.size; prev.size = size;
+        if (x.now - startMs > staleMs && x.now - prev.since > staleMs && grew > 0) out.push({ level: 'fail', what: `재개 진행 기록 멈춤 ${r.screen || r.runId}`, detail: `${tag} · 진행 기록(단계 ${(Number(r.cur) || 0) + 1}/${r.steps || '?'}, '${String((r.sub || {}).prog || '세부 없음').slice(0, 80)}', 갱신 ${r.updatedMs ? hm(r.updatedMs) : '-'})이 ${Math.round((x.now - prev.since) / 60000)}분째 같음. 지난 점검 뒤 .vibe/jobs/${r.job}/${r.screen}.log ${Math.round(grew / 1024)}KB 늘어남`, key: `S13|U23|stale|${r.runId}`, ms: prev.since });
+      }
+      // ② WORKBENCH 표시 보고
+      if (x.now - startMs <= graceMs) continue;
+      if (!rep || (rep.ms || 0) < startMs + graceMs) out.push({ level: 'fail', what: `WORKBENCH 재개 진행 표시 보고 없음 ${r.screen || r.runId}`, detail: `${tag} · 재개 ${Math.round(graceMs / 60000)}분 뒤 받은 WORKBENCH 표시 보고 없음(.vibe/orch/usercheck/ui.json wb${rep ? ` 마지막 ${hm(rep.ms)}` : ' 없음'} · 웹뷰 noteUi tab 'wb' 송출 필요)`, key: `S13|U23|wb|${r.runId}`, ms: startMs });
+      else if (!drawn.has(r.runId)) out.push({ level: 'fail', what: `WORKBENCH 에 재개 진행 없음 ${r.screen || r.runId}`, detail: `${tag} · 웹뷰 보고 ${hm(rep.ms)} WORKBENCH 가 그린 체인 ${(rep.runIds || []).length}건에 ${r.runId} 없음(재개 뒤 ${Math.round((rep.ms - startMs) / 60000)}분)`, key: `S13|U23|wb|${r.runId}`, ms: startMs });
+    }
+    for (const k of Object.keys(st)) if (!seen.has(k)) delete st[k];
+    // ③ 재개 원장(개선안 20261125000907_VISION): 끊긴 원장 기록 = 같은 화면 WORKBENCH 창의 재개 띠 보고(ui.json wbResume, 끊긴 뒤 graceMin 지나 받음)에 같은 runId 가 있어야 함. 그 화면 창 보고가 없으면 판정 안 함
+    const wr = (ui.wbResume && ui.wbResume.by) || {};
+    for (const r of ledgerCuts(x.now)) {
+      const b = r.blank ? null : wr[r.screen]; if (!b || (Number(b.ms) || 0) < r.cutMs + graceMs || (b.runIds || []).includes(r.runId)) continue;
+      out.push({ level: 'fail', what: `WORKBENCH 재개 띠에 원장 기록 없음 ${r.screen}`, detail: `원장 ${r.runId}${r.job ? ` 작업 ${r.job}` : ''} 끊김 ${hm(r.cutMs)} · ${r.screen} 창 보고 ${hm(b.ms)} 재개 띠 runId ${(b.runIds || []).length}건에 없음`, key: `S13|U23|cut|${r.runId}`, ms: r.cutMs });
+    }
+    return out;
+  },
+  // U24 CheckList 미검증 해소 단계가 처리 대상 미검증을 남김(개선안 20261121001845_SELF · 2026-11-20 SCP0028 1차 미검증 30 → 해소 뒤 재측정 12, 처리 대상 4)
+  //   대상 = .vibe/history/<ID>/ 최근 24시간 *_chain_checklist 기록. 체인 구간 = 그 start 부터 다음 chain_checklist start 전까지
+  //   해소 단계 = 같은 구간(같은 job) 기록 중 task claude 이고 label, note 에 '미검증' 또는 '검증 보완' 이 있고 end 가 있는 것
+  //   재측정 = Doc/verify/<ID>/run_verify.result.json started 가 해소 단계 end 뒤이고 체인 구간 안. unverified_triage.json at 이 재측정 started 뒤(그 측정의 분류)
+  //   판정 = 재측정 summary.미검증 > 0 이고 triage actionable > 0 이면 fail. 해소 전 건수는 unverified_history.csv 중 해소 시작 전 마지막 줄
+  unverifiedResolveIncomplete(u, x) {
+    const out = []; const T = s => { const v = String(s || '').trim(); if (!v) return NaN; return Date.parse(/[T]/.test(v) ? v : v.replace(' ', 'T')); };
+    const num = v => (Array.isArray(v) ? v.length : Number(v) || 0);
+    const hd = path.join(P().vibeDir, 'history');
+    for (const sd of lsDir(hd)) {
+      if (!sd.isDirectory()) continue; const scr = sd.name; const ents = lsDir(path.join(hd, scr)).filter(e => e.isDirectory()).map(e => e.name).sort();
+      const metas = ents.map(n => ({ n, m: readJson(path.join(hd, scr, n, 'meta.json'), null) })).filter(v => v.m).map(v => Object.assign({ dir: v.n, s: T(v.m.start), e: T(v.m.end) }, v.m));
+      const chains = metas.filter(m => /_chain_checklist$/.test(m.dir) && Number.isFinite(m.s)).sort((a, b) => a.s - b.s); if (!chains.length) continue;
+      const ch = chains[chains.length - 1]; if (x.now - ch.s > DAY) continue;
+      const res = readJson(path.join(P().root, 'Doc', 'verify', scr, 'run_verify.result.json'), null); const rs = res ? T(res.started) : NaN;
+      if (!res || !res.summary || !Number.isFinite(rs) || rs < ch.s) continue;
+      const resolves = metas.filter(m => m.task === 'claude' && /미검증|검증 보완/.test(`${m.label || ''} ${m.note || ''}`) && Number.isFinite(m.s) && Number.isFinite(m.e) && m.s >= ch.s && m.e <= rs && (!ch.job || !m.job || m.job === ch.job)).sort((a, b) => a.e - b.e);
+      const rv = resolves[resolves.length - 1]; if (!rv) continue;
+      const tri = readJson(path.join(P().root, 'Doc', 'verify', scr, 'unverified_triage.json'), null); const ta = tri ? T(tri.at) : NaN;
+      if (!tri || !Number.isFinite(ta) || ta < rs) continue;
+      const left = Number(res.summary['미검증']) || 0; const act = num(tri.actionable); if (left <= 0 || act <= 0) continue;
+      let before = ''; try {
+        const rows = csvRows(fs.readFileSync(path.join(P().root, 'Doc', 'verify', scr, 'unverified_history.csv'), 'utf8').replace(/^﻿/, '')); const h = rows[0] || []; const iAt = h.indexOf('at'), iB = h.indexOf('before'), iA = h.indexOf('actionable');
+        const prev = rows.slice(1).filter(r => Number.isFinite(T(r[iAt])) && T(r[iAt]) <= rv.s + 60000).pop(); if (prev) before = `해소 전 미검증 ${prev[iB]}(처리 대상 ${prev[iA]}, ${dfmt.fmtDT(prev[iAt])})`;
+      } catch { before = ''; }
+      const bc = Object.entries(((tri.after || tri.before || {}).by_class) || {}).map(([k, v]) => `${k} ${v}`).join(', ');
+      const ic = {}; for (const i of res.issues || []) ic[i.class] = (ic[i.class] || 0) + 1;
+      const no = (/\[(\d+\/\d+)\]/.exec(rv.label || rv.note || '') || [])[1];
+      out.push({ level: 'fail', what: `미검증 해소 뒤 처리 대상 남음 ${scr}`, detail: `${before || '해소 전 건수 기록 없음'} → 해소 단계${no ? ` ${no}` : ''} ${hm(rv.s)}~${hm(rv.e)}(${ch.job || ch.dir}) → 재측정 ${hm(rs)} 미검증 ${left} · 처리 대상(unverified_triage.json actionable) ${act}${bc ? ` · 분류 ${bc}` : ''}${Object.keys(ic).length ? ` · issues ${Object.entries(ic).map(([k, v]) => `${k} ${v}`).join(', ')}` : ''}`.slice(0, 600), key: `S13|${u.id}|${scr}|${rv.dir}`, ms: rs });
+    }
+    return out;
+  },
+  // U25 부분 재측정 소요가 1차 전체 측정 소요 이상(개선안 20261121001846_SELF · 2026-11-20 SCP0028 1차 20:46:20~21:52:13 65.9분, 부분 재측정 22:16:55~23:38:22 81.5분)
+  //   대상 = .vibe/history/<ID>/ 최근 24시간 *_chain_checklist 기록. 체인 구간 = 그 start 부터 다음 chain_checklist start 전까지(같은 job)
+  //   1차 = 구간 안 첫 S8.checklistRun(start, end) · 부분 재측정 = 1차 end 뒤 S8.checklistDelta(start, end)
+  //   대상 행 수 = Doc/verify/<ID>/delta_scope.json(at 이 부분 재측정 start-2분~end 안, mode partial 일 때 rows_in / rows_in+rows_keep). 파일은 매 실행 덮어씀이라 시각이 안 맞으면 '기록 없음'
+  //   mode full(기준선 없음, 넓은 변경 = 전체 재측정)은 판정 안 함. 판정 = 부분 재측정 소요 >= 1차 소요 x params.ratio(기본 1)이면 fail
+  //   구간별 사유 = Doc/verify/<ID>/run_timing.json(run_at 이 각 단계 안) stage_min 비교, run_verify.result.json started~ts(재측정 run_verify 구간)
+  partialRemeasureSlow(u, x) {
+    const out = []; const ratio = Number(u.params.ratio) || 1; const T = s => { const v = String(s || '').trim(); if (!v) return NaN; return Date.parse(/[T]/.test(v) ? v : v.replace(' ', 'T')); };
+    const mn = ms => Math.round(ms / 6000) / 10; const hd = path.join(P().vibeDir, 'history');
+    const inStep = (ms, st) => Number.isFinite(ms) && ms >= st.s - 120000 && ms <= st.e;
+    for (const sd of lsDir(hd)) {
+      if (!sd.isDirectory()) continue; const scr = sd.name; const ents = lsDir(path.join(hd, scr)).filter(e => e.isDirectory()).map(e => e.name).sort();
+      const metas = ents.map(n => ({ n, m: readJson(path.join(hd, scr, n, 'meta.json'), null) })).filter(v => v.m).map(v => Object.assign({ dir: v.n, s: T(v.m.start), e: T(v.m.end) }, v.m));
+      const chains = metas.filter(m => /_chain_checklist$/.test(m.dir) && Number.isFinite(m.s)).sort((a, b) => a.s - b.s);
+      const vd = path.join(P().root, 'Doc', 'verify', scr); const tm = readJson(path.join(vd, 'run_timing.json'), []); const timing = Array.isArray(tm) ? tm : [];
+      const sc = readJson(path.join(vd, 'delta_scope.json'), null); const res = readJson(path.join(vd, 'run_verify.result.json'), null);
+      chains.forEach((ch, ci) => {
+        if (x.now - ch.s > DAY) return; const endB = ci + 1 < chains.length ? chains[ci + 1].s : Infinity;
+        const inCh = m => Number.isFinite(m.s) && Number.isFinite(m.e) && m.e > m.s && m.s >= ch.s && m.s < endB && (!ch.job || !m.job || m.job === ch.job);
+        const first = metas.filter(m => m.task === 'S8.checklistRun' && inCh(m)).sort((a, b) => a.s - b.s)[0]; if (!first) return;
+        const fDur = first.e - first.s; const fT = timing.find(t => inStep(T(t.run_at), first));
+        for (const d of metas.filter(m => m.task === 'S8.checklistDelta' && inCh(m) && m.s >= first.e).sort((a, b) => a.s - b.s)) {
+          const dDur = d.e - d.s; const scOk = sc && inStep(T(sc.at), d) ? sc : null;
+          if (scOk && scOk.mode && scOk.mode !== 'partial') continue;
+          if (dDur < fDur * ratio) continue;
+          const rIn = scOk ? Number(scOk.rows_in) || 0 : null; const rAll = scOk ? rIn + (Number(scOk.rows_keep) || 0) : null;
+          const rows = scOk ? `대상 행 ${rIn}/${rAll}(delta_scope.json ${dfmt.fmtDT(scOk.at)}, 규칙 ${(scOk.rules || []).length}개, 추가 단계 ${(scOk.stages || []).join(',') || '없음'})` : '대상 행 수 기록 없음(delta_scope.json 시각 불일치, 다음 실행이 덮어씀)';
+          const narrow = scOk && rIn < rAll ? ' · 행 수는 줄었는데 소요가 같거나 김 = 범위 축소가 측정 시간에 적용 안 됨' : '';
+          const dT = timing.find(t => inStep(T(t.run_at), d));
+          let st = 'run_timing.json 단계 소요 기록 없음';
+          if (dT && dT.stage_min) {
+            const fs1 = (fT && fT.stage_min) || {};
+            const diff = Object.entries(dT.stage_min).map(([k, v]) => [k, Number(v) || 0, Number(fs1[k]) || 0]).filter(([, a, b]) => a > b).sort((p, q) => (q[1] - q[2]) - (p[1] - p[2])).slice(0, 4);
+            st = diff.length ? `더 걸린 구간(run_timing.json 1차 → 재측정): ${diff.map(([k, a, b]) => `${k} ${b}→${a}분`).join(', ')}` : '구간별로 더 걸린 단계 없음';
+            const top = (dT.top || []).slice(0, 2).map(t => `${t.stage} ${t.tool} ${t.min}분`).join(', '); if (top) st += ` · 재측정 상위 ${top}`;
+          }
+          const rs = res ? T(res.started) : NaN; const rv = res && inStep(rs, d) && Number.isFinite(T(res.ts)) ? ` · run_verify ${hm(rs)}~${hm(T(res.ts))} ${mn(T(res.ts) - rs)}분` : '';
+          out.push({ level: 'fail', what: `부분 재측정이 1차보다 오래 걸림 ${scr} ${mn(dDur)}분 ≥ ${mn(fDur)}분`, detail: `1차 ${first.dir} ${hm(first.s)}~${hm(first.e)} ${mn(fDur)}분 · 부분 재측정 ${d.dir} ${hm(d.s)}~${hm(d.e)} ${mn(dDur)}분(${ch.job || ch.dir}) · ${rows}${narrow} · ${st}${rv}`.slice(0, 700), key: `S13|${u.id}|${scr}|${d.dir}`, ms: d.e });
+        }
+      });
+    }
+    return out;
+  },
+  // U30 미검증을 해소하지 않은 채 재측정만 되풀이(개선안 20261125031023_SELF · 사용자 지적 2026-11-25 02:53)
+  //   대상 = .vibe/history/<ID>/ 최근 24시간 *_chain_checklist 기록. 체인 구간 = 그 start 부터 다음 chain_checklist start 전까지(같은 job)
+  //   측정 = 구간 안 S8.checklistRun, S8.checklistRecheck, S8.checklistDelta 단계 start + Doc/verify/<ID>/run_verify.result.json started(단계 기록에 안 걸리는 것만 추가)
+  //   해소 단계 = task claude 이고 label, note 에 '미검증' 또는 '검증 보완' 이 있고 end 가 있는 기록(U24 와 같은 기준)
+  //   처리 행 = meta processed, rows_done, rows 숫자. 없으면 unverified_history.csv 중 해소 단계 안(start+1분~end+1분) 줄의 before-after 합. 둘 다 없으면 처리함으로 봄
+  //   건수 = 측정 start~다음 측정 start 사이 unverified_history.csv 첫 줄 before. run_verify.result.json started 가 그 측정이면 summary.미검증 우선
+  //   판정 = 측정 2회 이상이고 이웃한 두 측정 사이에 해소 단계가 없거나 처리 행 0건, 뒤 측정 미검증 건수 >= 앞 측정 건수면 fail. 건수를 모르면 판정 안 함
+  remeasureWithoutResolve(u, x) {
+    const out = []; const T = s => { const v = String(s || '').trim(); if (!v) return NaN; return Date.parse(/[T]/.test(v) ? v : v.replace(' ', 'T')); };
+    const hd = path.join(P().vibeDir, 'history'); const MT = /^S8\.checklist(Run|Recheck|Delta)$/;
+    for (const sd of lsDir(hd)) {
+      if (!sd.isDirectory()) continue; const scr = sd.name; const ents = lsDir(path.join(hd, scr)).filter(e => e.isDirectory()).map(e => e.name).sort();
+      const metas = ents.map(n => ({ n, m: readJson(path.join(hd, scr, n, 'meta.json'), null) })).filter(v => v.m).map(v => Object.assign({ dir: v.n, s: T(v.m.start), e: T(v.m.end) }, v.m));
+      const chains = metas.filter(m => /_chain_checklist$/.test(m.dir) && Number.isFinite(m.s)).sort((a, b) => a.s - b.s); if (!chains.length) continue;
+      const vd = path.join(P().root, 'Doc', 'verify', scr);
+      const res = readJson(path.join(vd, 'run_verify.result.json'), null); const rs = res ? T(res.started) : NaN;
+      const tri = readJson(path.join(vd, 'unverified_triage.json'), null); const ta = tri ? T(tri.at) : NaN;
+      let hist = []; try {
+        const rows = csvRows(fs.readFileSync(path.join(vd, 'unverified_history.csv'), 'utf8').replace(/^﻿/, '')); const h = (rows[0] || []).map(c => String(c).trim()); const iAt = h.indexOf('at'), iB = h.indexOf('before'), iA = h.indexOf('after');
+        if (iAt >= 0 && iB >= 0) hist = rows.slice(1).map(r => ({ at: T(r[iAt]), b: Number(r[iB]), a: iA >= 0 ? Number(r[iA]) : NaN })).filter(r => Number.isFinite(r.at) && Number.isFinite(r.b)).sort((p, q) => p.at - q.at);
+      } catch { hist = []; }
+      chains.forEach((ch, ci) => {
+        if (x.now - ch.s > DAY) return; const endB = ci + 1 < chains.length ? chains[ci + 1].s : Infinity;
+        const sameJob = m => !ch.job || !m.job || m.job === ch.job;
+        const inCh = ms => Number.isFinite(ms) && ms >= ch.s && ms < endB;
+        const ms = metas.filter(m => MT.test(String(m.task || '')) && inCh(m.s) && sameJob(m)).map(m => ({ dir: m.dir, s: m.s, e: m.e, task: m.task }));
+        if (res && inCh(rs) && !ms.some(m => rs >= m.s - 120000 && (Number.isFinite(m.e) ? rs <= m.e : true))) ms.push({ dir: 'run_verify.result.json', s: rs, e: T(res.ts), task: 'run_verify' });
+        ms.sort((a, b) => a.s - b.s); if (ms.length < 2) return;
+        const resolves = metas.filter(m => m.task === 'claude' && /미검증|검증 보완/.test(`${m.label || ''} ${m.note || ''}`) && Number.isFinite(m.s) && Number.isFinite(m.e) && inCh(m.s) && sameJob(m));
+        const processed = rv => {
+          for (const k of ['processed', 'rows_done', 'rows']) { const v = rv[k]; if (v !== undefined && v !== null && v !== '' && Number.isFinite(Number(v))) return Number(v); }
+          const hr = hist.filter(r => r.at > rv.s + 60000 && r.at <= rv.e + 60000 && Number.isFinite(r.a)); if (!hr.length) return null;
+          return hr.reduce((s, r) => s + Math.max(0, r.b - r.a), 0);
+        };
+        const countAt = (m, nextS) => {
+          if (res && res.summary && Number.isFinite(rs) && rs >= m.s - 120000 && rs < nextS && res.summary['미검증'] !== undefined && Number.isFinite(Number(res.summary['미검증']))) return { n: Number(res.summary['미검증']), src: `run_verify.result.json ${hm(rs)}` };
+          const r = hist.find(v => v.at >= m.s && v.at < nextS); return r ? { n: r.b, src: `unverified_history.csv ${hm(r.at)}` } : null;
+        };
+        for (let i = 0; i + 1 < ms.length; i++) {
+          const m1 = ms[i], m2 = ms[i + 1]; const n3 = i + 2 < ms.length ? ms[i + 2].s : endB;
+          const between = resolves.filter(rv => rv.s >= m1.s && rv.e <= m2.s);
+          const pr = between.map(rv => ({ rv, p: processed(rv) })); const worked = pr.filter(d => d.p === null || d.p > 0);
+          if (worked.length) continue;
+          const c1 = countAt(m1, m2.s), c2 = countAt(m2, n3); if (!c1 || !c2 || c2.n < c1.n) continue;
+          const why = between.length ? `해소 단계 ${between.length}건 처리 행 0건(${pr.map(d => `${d.rv.dir} ${hm(d.rv.s)}~${hm(d.rv.e)}`).join(', ')})` : '두 측정 사이 미검증 해소 단계 기록 없음';
+          const act = tri && Number.isFinite(ta) && ta >= m2.s && ta < n3 ? ` · 처리 대상(unverified_triage.json actionable) ${Array.isArray(tri.actionable) ? tri.actionable.length : Number(tri.actionable) || 0}` : '';
+          out.push({ level: 'fail', what: `미검증 해소 없이 재측정 ${scr} 미검증 ${c1.n} → ${c2.n}`, detail: `${ch.job || ch.dir} 측정 ${i + 1} ${m1.dir} ${hm(m1.s)} 미검증 ${c1.n}(${c1.src}) → 측정 ${i + 2} ${m2.dir} ${hm(m2.s)} 미검증 ${c2.n}(${c2.src}) · ${why}${act} · 체인 구간 측정 ${ms.length}회`.slice(0, 700), key: `S13|${u.id}|${scr}|${m2.dir}`, ms: m2.s });
+        }
+      });
+    }
+    return out;
+  },
+  // U27 AI 주간 한도가 VM 기록 발생 때만 갱신되어 VMO 감시 중 오래된 값이 보임(개선안 20261124230634_SELF)
+  //   읽을 기록 = .vibe/orch/ai_usage_state.json(claude-usage.js noteState: lastTry, lastOk, err, nextMs, pid)
+  //   갱신 주기 = nextMs - lastTry(없거나 0 이하면 10분). 판정 = VMO 가동 중(이 점검이 돎 · 기록한 pid 살아 있음)이고
+  //   ① now - lastOk > min(주기 x 2, 20분) 또는 ② lastTry > lastOk 이고 err 가 비어 있지 않음 → fail. 기록 파일 없음 = 경고(판정 못 함)
+  aiUsageStale(u, x) {
+    const f = path.join(P().vibeDir, 'orch', 'ai_usage_state.json'); const s = readJson(f, null);
+    if (!s) return [{ level: 'warn', what: 'AI 주간 한도 갱신 기록 없음', detail: `${f} 없음 · 판정 못 함`, key: 'S13|U27|aiUsage|nofile' }];
+    if (s.pid && s.pid !== process.pid) { try { process.kill(s.pid, 0); } catch (e) { if (e && e.code === 'ESRCH') return []; } }
+    const lastTry = Number(s.lastTry) || 0, lastOk = Number(s.lastOk) || 0, nextMs = Number(s.nextMs) || 0; const err = String(s.err || '').trim();
+    const per = nextMs > lastTry && lastTry > 0 ? nextMs - lastTry : 600000; const lim = Math.min(per * 2, 20 * 60000);
+    const mm = ms => Math.round(ms / 60000); const tx = v => (v ? hm(v) : '없음'); const out = [];
+    const base = `lastTry ${tx(lastTry)} · lastOk ${tx(lastOk)} · nextMs ${tx(nextMs)} · 갱신 주기 ${mm(per)}분`;
+    if (!lastOk || x.now - lastOk > lim) out.push({ level: 'fail', what: `AI 주간 한도 값 오래됨 ${lastOk ? mm(x.now - lastOk) + '분' : '정상 조회 없음'}`, detail: `${base} · 기준 ${mm(lim)}분(주기 2배, 최대 20분) 넘음${err ? ` · 마지막 오류 ${err.slice(0, 120)}` : ''}`, key: 'S13|U27|aiUsage|stale', ms: lastOk || lastTry || x.now });
+    else if (lastTry > lastOk && err) out.push({ level: 'fail', what: 'AI 주간 한도 마지막 조회 실패', detail: `${base} · 오류 ${err.slice(0, 160)}`, key: 'S13|U27|aiUsage|err', ms: lastTry });
+    return out;
+  },
+  // U29 AS-IS 실측 로그인 계정 오류(개선안 20261124230634_SELF_2 · 2026-11-24 18:45 WJDF = Guest, 메뉴 5개 → DMF0082 실측 대상 0개)
+  //   읽을 기록 = Doc/asislive/<화면ID>/latest.json → run_dir/run.json(asis_live_run.py start_session: user_id, main.user, main.menu_count)
+  //   기준 계정 = tools/Harness/harness.json asisLiveUser(없으면 jaeuk.shin, asis_live_run.live_user 와 같음)
+  //   판정 = 최근 lookbackH(24시간) 안 마지막 실측의 로그인 계정이 기준 계정과 다름, main.user 가 'Login : Guest', 메뉴 수 minMenu(50) 미만 → fail
+  //   로그인 전 실패(user_id 없음) = 판정 안 함
+  asisLiveLogin(u, x) {
+    const out = []; const prm = u.params || {}; const minMenu = Number(prm.minMenu) || 50; const lbMs = (Number(prm.lookbackH) || 24) * 3600000;
+    const h = readJson(path.join(P().root, 'tools', 'Harness', 'harness.json'), {}) || {}; const want = String(h.asisLiveUser || 'jaeuk.shin').trim();
+    const base = path.join(P().root, 'Doc', 'asislive');
+    const tms = s => { const t = Date.parse(String(s || '').trim().replace(' ', 'T')); return Number.isFinite(t) ? t : 0; };
+    for (const e of lsDir(base)) {
+      if (!e.isDirectory()) continue; const lt = readJson(path.join(base, e.name, 'latest.json'), null); if (!lt || !lt.run_dir) continue;
+      const at = tms(lt.at); if (!at || x.now - at > lbMs) continue;
+      const rf = path.join(P().root, lt.run_dir, 'run.json'); const r = readJson(rf, null); if (!r || !r.user_id) continue;
+      const uid = String(r.user_id).trim(); const m = r.main || {}; const who = String(m.user || ''); const n = m.menu_count;
+      const why = [];
+      if (uid.toLowerCase() !== want.toLowerCase()) why.push(`로그인 계정 ${uid} ≠ harness.json asisLiveUser ${want}${r.prev_user_id ? ` · 로그인 창 남은 ID ${r.prev_user_id}` : ''}`);
+      if (/Login\s*:\s*Guest/i.test(who)) why.push(`AS-IS 사용자 표시 '${who.slice(0, 80)}' = Guest`);
+      if (typeof n === 'number' && n < minMenu) why.push(`메뉴 ${n}개(기준 ${minMenu}개 이상)`);
+      if (!why.length) continue;
+      const sid = lt.id || e.name; const rn = path.basename(String(lt.run_dir));
+      out.push({ level: 'fail', what: `AS-IS 실측 로그인 계정 오류 ${sid}`, detail: `${lt.run_dir}/run.json ${lt.at} 상태 ${lt.status || r.status || '-'} · ${why.join(' · ')}${r.why ? ` · 사유 ${String(r.why).slice(0, 120)}` : ''}`, key: `S13|U29|${sid}|${rn}`, ms: at });
+    }
+    return out;
+  },
+  // U31 계획한 구현 항목이 남은 채 측정, 통합 시험 시작(개선안 20261125205714_SELF · 사용자 지적 2026-11-25 20:30 'D2, D3, D4 가 남았는데 SCP0005 를 돌림')
+  //   계획 기록 = tools/Harness/plan_state.json(plan_state.py: plan, at = 등록 시각, items[].name, status todo|done|dropped, at = 등록 또는 done, drop 시각)
+  //   시험 시작 = 최근 lookbackH(24시간) events.jsonl 의 proc.start cmd 가 hook check-plan-before-test.ps1 과 같은 명령(run_verify, checklist_run, row_run, e2e_suite, eg_chain .py · run-e2e.cmd · playwright test)
+  //     + chain.start chain checklist, unverifiedFix, asislive(VMW, Workbench 의 측정 체인) + step.start task S8.checklist*, S8.rowRegress, S8.e2e*(체인 없는 단계 실행)
+  //   그 시각에 남은 항목 = 계획 at <= 시각 이고 status 가 done, dropped 아님 또는 done, drop 시각이 시험 시각 뒤. 1건 이상이면 fail
+  //   plan_state.py clear 로 지운 계획은 항목 기록이 없어 판정 못 함(cleared 시각만 남음)
+  testBeforePlanDone(u, x) {
+    const out = []; const lbMs = (Number((u.params || {}).lookbackH) || 24) * 3600000;
+    const s = readJson(path.join(P().root, 'tools', 'Harness', 'plan_state.json'), null); const items = s && Array.isArray(s.items) ? s.items : []; if (!items.length) return out;
+    const T = v => { const t = Date.parse(String(v || '').trim().replace(' ', 'T')); return Number.isFinite(t) ? t : NaN; };
+    const its = items.map(i => ({ name: String(i.name || ''), status: String(i.status || 'todo'), at: T(i.at) }));
+    const planAt = Number.isFinite(T(s.at)) ? T(s.at) : Math.min(...its.filter(i => i.status !== 'done' && i.status !== 'dropped' && Number.isFinite(i.at)).map(i => i.at).concat([Infinity]));
+    if (!Number.isFinite(planAt)) return out;
+    const CMD = [/(?:^|[\s;&|('"])(?:python3?|py)(?:\.exe)?"?\s+(?:-\S+\s+)*"?\S*?(run_verify|checklist_run|row_run|e2e_suite|eg_chain)\.py/i, /\S*(run-e2e)\.cmd/i, /(@playwright[\\/]+test[\\/]+cli\.js)"?\s+test\b/i, /\b(?:npx|exec)\s+(playwright)\s+test\b/i];
+    const STEP = /^S8\.(checklist|rowRegress|e2e)/; const CHAIN = /^(checklist|unverifiedFix|asislive)$/;
+    const seenRun = new Set();
+    const closed = i => i.status === 'done' || i.status === 'dropped';
+    for (const e of x.events) {
+      const ms = e.ms || 0; if (x.now - ms > lbMs) continue;
+      let what = '';
+      if (e.type === 'proc.start') { const cmd = String(e.cmd || ''); for (const re of CMD) { const m = cmd.match(re); if (m) { what = `명령 ${m[1]}${e.label ? ` (${String(e.label).slice(0, 40)})` : ''}`; break; } } }
+      else if (e.type === 'chain.start' && CHAIN.test(String(e.chain || ''))) what = `체인 ${e.chain} ${String(e.chainLabel || '').slice(0, 40)}`;
+      else if (e.type === 'step.start' && STEP.test(String(e.task || ''))) what = `단계 ${e.task} ${String(e.name || '').slice(0, 40)}`;
+      if (!what) continue;
+      // 같은 체인(runId)은 처음 시작 1번만 셈(체인 단계가 띄운 proc.start 포함). 계획 등록 전에 시작한 체인의 뒤 단계는 새 시험 시작이 아님
+      if (e.runId) { if (seenRun.has(e.runId)) continue; seenRun.add(e.runId); }
+      if (ms < planAt) continue;
+      const left = its.filter(i => !closed(i) || (Number.isFinite(i.at) && i.at > ms)); if (!left.length) continue;
+      const scr = String(e.screen || '').toUpperCase();
+      out.push({ level: 'fail', what: `계획 항목 ${left.length}개 남은 채 시험 시작${scr ? ` ${scr}` : ''}`, detail: `${hm(ms)} ${what} · 계획 '${String(s.plan || '').slice(0, 60)}'(tools/Harness/plan_state.json 등록 ${hm(planAt)}) 남은 항목 ${left.map(i => `${i.name}(${i.status}${closed(i) && Number.isFinite(i.at) ? ` ${hm(i.at)}` : ''})`).join(', ')}`.slice(0, 700), key: `S13|U31|${e.type === 'proc.start' ? `p${e.procId || ''}@${ms}` : (e.runId || ms)}`, ms });
+    }
+    return out;
+  },
+};
+/** CSV 텍스트 → 행 배열(따옴표, 줄바꿈 포함 칸 처리) */
+function csvRows(t) {
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (q) { if (c === '"') { if (t[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; continue; }
+    if (c === '"') q = true; else if (c === ',') { row.push(cur); cur = ''; } else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(cur); rows.push(row); row = []; cur = ''; } else cur += c;
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+
+/** 자가진단 S13: 원장 항목의 감지기를 모두 실행. 반환 { items, info } */
+function check() {
+  const c = cfg(); const L = ledger(); const st = readJson(path.join(ucDir(), 'state.json'), {});
+  const x = { now: Date.now(), cfg: c, state: st, events: [], incidents: [], proposals: [], snap: { chains: [] } };
+  if (c.userCheckEnabled === false) return { items: [], info: { off: true } };
+  try { x.events = events(); } catch (e) { errlog.note('orch-usercheck', 'events', e); }
+  x.incidents = incidents(); x.proposals = proposals(); try { const s = mod('orch-state'); x.snap = s ? s.snapshot() : x.snap; } catch { /* 상태 없음 */ }
+  const items = []; const per = {}; const unknown = [];
+  for (const u of L.items || []) {
+    if (u.status !== 'active') continue; const fn = DETECTORS[u.detector]; if (!fn) { unknown.push({ id: u.id, det: String(u.detector || '') }); continue; }
+    const uu = Object.assign({ params: {} }, u, { params: u.params || {} });
+    let r = []; try { r = fn(uu, x) || []; } catch (e) { errlog.note('orch-usercheck', u.detector, e); r = [{ level: 'warn', what: `감지기 오류 ${u.detector}`, detail: e.message, key: `S13|${u.id}|err` }]; }
+    per[u.id] = r.length; for (const it of r) items.push(Object.assign({ uid: u.id, quote: String(u.quote || '').slice(0, 120) }, it));
+  }
+  // 같은 key 는 1건(여러 지적이 같은 감지기를 씀: U3 U5 U7). 개선안 20261120184003_SELF: 생긴 시각 ms 가장 큰 항목을 남김
+  const best = new Map(); for (const it of items) { const b = best.get(it.key); if (!b || (Number(it.ms) || 0) > (Number(b.ms) || 0)) best.set(it.key, it); }
+  const uniq = items.filter(it => best.get(it.key) === it);
+  // 파일에는 정의가 있고 실행 중 모듈(require 캐시)에만 없음 = 반영 직후 창 다시 로드 전 → 경고
+  let src = ''; if (unknown.length) { try { src = fs.readFileSync(__filename, 'utf8'); } catch (e) { errlog.note('orch-usercheck', 'readSelf', e); } }
+  for (const { id, det } of unknown) {
+    const inFile = !!det && /^[A-Za-z_$][\w$]*$/.test(det) && new RegExp(`^\\s*${det}\\(u, x\\)`, 'm').test(src);
+    if (inFile) uniq.push({ uid: id, level: 'warn', what: `감지기 ${id} 파일 반영됨, 창 다시 로드 뒤 실행`, detail: `원장 detector ${det} 정의가 orch-usercheck.js 파일에 있고 실행 중 DETECTORS 에 없음`, key: `S13|${id}|reload` });
+    else uniq.push({ uid: id, level: 'fail', what: `감지기 없는 지적 ${id}`, detail: '원장 detector 이름이 orch-usercheck.js DETECTORS 에 없음', key: `S13|${id}|nodet` });
+  }
+  // 진단 사다리(orch-ladder L3 사용자 지적 재발)가 읽는 항목별 생긴 시각. 자가진단 결과(result.json S13)에는 ms 가 실리지 않음. 시각 없는 감지기 = 이번 점검 시각(지금 상태 판정)
+  st.itemMs = {}; for (const it of uniq) st.itemMs[it.key] = Number(it.ms) || x.now;
+  writeJson(path.join(ucDir(), 'state.json'), st);
+  const lj = readJson(path.join(ucDir(), 'learn.json'), {});
+  return { items: uniq, info: { ledger: (L.items || []).length, active: (L.items || []).filter(u => u.status === 'active').length, per, coveredUntil: L.coveredUntil || '', lastLearnAt: lj.lastAt || '', lastLearn: lj.lastResult || '', newPrompts: pendingPrompts().length } };
+}
+
+// 개선안 20261121001943_SELF: 웹뷰 보고(noteUi tab)를 판정 자료로 읽는 감지기 → 그 tab 을 보내는 쪽. 시험(t_orch_usercheck.js)이 웹뷰 소스에 송출 줄이 있는지 정적 검사함
+//   job = VMW(jobs.js) 작업 카드 · scr = VMW(jobs.js) 화면 목록 · wb = WORKBENCH(workbench.js) 체인 진행 보드
+const UI_SOURCES = { resumedJobShown: 'job', screenNameMissing: 'scr', workbenchResumeProgress: 'wb' };
+const WB_SEEN_MS = 3 * 60000;
+/** VMO 웹뷰 보고: 받은 목록 수와 최신 활동 시각(ms) → 원본과 비교해 어긋나면 기록 */
+function noteUi(m) {
+  try {
+    const tab = String(m.tab || ''); let src = [];
+    // U14 VMW 화면 목록 보고: 받은 화면 수 + 이름 없이 그린 ID(blank) → ui.json scr 에 덮어씀(screenNameMissing 이 읽음)
+    if (tab === 'scr') { const f = path.join(ucDir(), 'ui.json'); const ui = readJson(f, { miss: [] }); const blank = (Array.isArray(m.blank) ? m.blank : []).map(v => String(v).toUpperCase()).filter(v => /^[A-Z]{2,4}\d{4}[A-Z]?$/.test(v)).slice(0, 500); ui.scr = { ms: Date.now(), received: Number(m.received) || 0, blank }; writeJson(f, ui); return { blank: blank.length }; }
+    // U16 VMW 작업 목록 보고: 받은 작업 수 + 목록에 그린 job id → ui.json jobs 에 덮어씀(resumedJobShown 이 읽음)
+    if (tab === 'job') { const f = path.join(ucDir(), 'ui.json'); const ui = readJson(f, { miss: [] }); const jobIds = (Array.isArray(m.jobIds) ? m.jobIds : []).map(v => String(v)).filter(v => /^J\d{8}_\d{6}\w*$/.test(v)).slice(0, 500); const runIds = (Array.isArray(m.runIds) ? m.runIds : []).map(v => String(v)).filter(v => /^[\w.-]+_\d{10,}/.test(v)).slice(0, 500); ui.jobs = { ms: Date.now(), received: Number(m.received) || jobIds.length, jobIds, runIds }; writeJson(f, ui); return { jobs: jobIds.length }; } // 재개 원장: 카드에 그린 재개 runId
+    // 개선안 20261125000907_VISION 재개 원장: WORKBENCH 재개 띠 보고(창의 화면 ID, 띠에 올린 원장 runId) → ui.json wbResume(화면별 마지막 보고)
+    if (tab === 'wbResume') {
+      const f = path.join(ucDir(), 'ui.json'); const ui = readJson(f, { miss: [] }); const scr = String(m.screen || '').toUpperCase(); if (!scr) return { runs: 0 };
+      const got = (Array.isArray(m.runIds) ? m.runIds : []).map(v => String(v)).filter(v => /^[\w.-]+_\d{10,}/.test(v)).slice(0, 50);
+      const by = (ui.wbResume && ui.wbResume.by && typeof ui.wbResume.by === 'object') ? ui.wbResume.by : {}; by[scr] = { ms: Date.now(), runIds: got };
+      for (const k of Object.keys(by)) if (Date.now() - (Number(by[k].ms) || 0) > DAY) delete by[k];
+      ui.wbResume = { ms: Date.now(), by }; writeJson(f, ui); return { runs: got.length };
+    }
+    // U23 WORKBENCH 체인 표시 보고: 화면에 진행을 그린 runId → ui.json wb(workbenchResumeProgress 가 읽음)
+    //   개선안 20261121001943_SELF: WORKBENCH 창이 여러 개라 창별 덮어쓰기 대신 WB_SEEN_MS(3분) 안 보고의 runId 를 합침(seen = runId → 마지막 보고 ms)
+    if (tab === 'wb') {
+      const f = path.join(ucDir(), 'ui.json'); const ui = readJson(f, { miss: [] }); const t = Date.now();
+      const got = (Array.isArray(m.runIds) ? m.runIds : []).map(v => String(v)).filter(v => /^[\w.-]+_\d{10,}$/.test(v)).slice(0, 500);
+      const seen = {}; const prev = (ui.wb && ui.wb.seen && typeof ui.wb.seen === 'object') ? ui.wb.seen : {};
+      for (const [k, v] of Object.entries(prev)) if (t - (Number(v) || 0) <= WB_SEEN_MS) seen[k] = Number(v);
+      for (const k of got) seen[k] = t;
+      const runIds = Object.keys(seen).slice(-500);
+      ui.wb = { ms: t, received: Number(m.received) || got.length, runIds, seen }; writeJson(f, ui); return { runs: runIds.length };
+    }
+    if (tab === 'prop') src = proposals().map(p => ({ id: p.id, ms: Math.max(p.ms || 0, ...((p.history || []).map(h => Date.parse(String(h.at || '').replace(' ', 'T')) || 0))) }));
+    else if (tab === 'inc') src = incidents().map(i => ({ id: i.id, ms: Math.max(i.ms || 0, i.lastMs || 0, ...((i.actions || []).map(a => Date.parse(String(a.at || '').replace(' ', 'T')) || 0))) }));
+    else return null;
+    const top = src.sort((a, b) => b.ms - a.ms)[0]; if (!top) return null;
+    const shown = Number(m.newestMs) || 0; const gapMs = top.ms - shown;
+    const f = path.join(ucDir(), 'ui.json'); const ui = readJson(f, { miss: [] }); ui.last = ui.last || {}; ui.last[tab] = { ms: Date.now(), received: m.received, total: src.length, gapMs };
+    if (gapMs > 60000) { ui.miss = (ui.miss || []).concat([{ ms: Date.now(), tab, received: Number(m.received) || 0, total: src.length, gapMs, shownAt: shown ? nowLocal(shown) : '', srcAt: nowLocal(top.ms), srcId: top.id }]).slice(-50); }
+    writeJson(f, ui); return { gapMs };
+  } catch (e) { errlog.note('orch-usercheck', 'noteUi', e); return null; }
+}
+
+// ── 학습: 사람이 입력한 프롬프트 ──
+function sessionDirs() {
+  if (opts.sessionDirs) return opts.sessionDirs;
+  const base = path.join(os.homedir(), '.claude', 'projects'); const enc = String(P().root).replace(/[^A-Za-z0-9]/g, '-').toLowerCase();
+  return lsDir(base).filter(e => e.isDirectory() && e.name.toLowerCase().startsWith(enc)).map(e => path.join(base, e.name));
+}
+const SKIP = /^(?:<task-notification>|This session is being continued|\[Request interrupted|Caveat:|\[SYSTEM NOTIFICATION|Base directory for this skill|<command-|<local-command|<system-reminder)/;
+/** 원장 coveredUntil 뒤 사람 입력 프롬프트 [{ at, ms, text, session }] */
+/** 2026-11-24: Claude Code 도구 호출 1개 → 고친 VM 관련 파일(저장소 기준 경로 또는 파일 이름). Edit, MultiEdit, Write, NotebookEdit 의 file_path. 쓰기 명령(orch-undo SHELL_WRITE)과 패치 스크립트 글 안의 VM 파일 이름 */
+const VM_FILE_RE = /(?:tools\/(?:VibeManager|Harness|E2E|Docs|CloudPkg|AsisLive)\/[\w./-]+\.(?:js|py|json|md|ts|ps1|cs)|\b(?:orch-[\w-]+|workbench|jobs|orchestra|job-runner|chain-runner|extension|prompt-panel|flow-panel|menu-view|tabview|history|date-fmt|id-input|prompt-relate|run-rule)\.js\b|\bquick\.json\b|\bsteps\.json\b|\buser_rules\.json\b)/g;
+/** 패치 스크립트, 셸 명령 글 → 쓰는 대상 파일(rep('a.js', open('a.js','w'), p='a.js', cp x a.js, sed -i … a.js). 글 안 문자열 값으로만 나온 경로는 뺌 */
+function writeTargets(txt) { const s = String(txt || ''); const out = []; const add = f => { const r = String(f || '').replace(/\\/g, '/').replace(/^\.\//, ''); const r2 = /(^|\/)(tools|Doc)\//.test(r) ? r.slice(r.search(/(tools|Doc)\//)) : r.split('/').pop(); /* 설치 폴더, 임시 폴더 경로 = 파일 이름 */ VM_FILE_RE.lastIndex = 0; if (VM_FILE_RE.test(r2) && !out.includes(r2)) out.push(r2); VM_FILE_RE.lastIndex = 0; };
+  for (const re of [/\b(?:rep|patch|io\.open|open)\(\s*['"]([^'"]+)['"]/g, /\bp\s*=\s*['"]([^'"]+)['"]/g, /\b(?:cp|mv)\s+(?:-\w+\s+)*\S+\s+([^\s;&|]+)/g, /\bsed\s+-i\S*\s+(?:'[^']*'|"[^"]*"|\S+)\s+([^\s;&|]+)/g]) for (const m of s.matchAll(re)) add(m[1]);
+  return out; }
+function editedFiles(c) {
+  const inp = c.input || {}; const out = new Set(); const rel = f => { const s = String(f || '').replace(/\\/g, '/'); const m = /(tools\/[^\s'"]+|Doc\/[^\s'"]+|\.vibe\/orch\/[^\s'"]+)$/.exec(s); return m ? m[1] : s.split('/').pop(); };
+  if (/^(Edit|MultiEdit|Write|NotebookEdit)$/.test(c.name) && inp.file_path) { const r0 = rel(inp.file_path); if (/^(tools|Doc|\.vibe\/orch)\//.test(r0) || VM_FILE_RE.test(r0)) out.add(r0); VM_FILE_RE.lastIndex = 0; if (/scratchpad|\.py$/.test(String(inp.file_path)) && inp.content) for (const f of writeTargets(inp.content)) out.add(f); }
+  else if (/^(Bash|PowerShell)$/.test(c.name) && inp.command) { let sw = null; try { sw = require('./orch-undo').SHELL_WRITE; } catch { sw = null; } if (sw && sw.test(String(inp.command))) for (const f of writeTargets(inp.command)) out.add(f); }
+  VM_FILE_RE.lastIndex = 0; return [...out].filter(f => !/\.bak_|^test\/|\/test\//.test(f)).slice(0, 20);
+}
+function pendingPrompts(sinceMs) {
+  const L = ledger(); const lj = readJson(path.join(ucDir(), 'learn.json'), {}); const from = sinceMs != null ? sinceMs : Math.max(Date.parse(L.coveredUntil || '') || 0, lj.untilMs || 0);
+  const out = []; const hist = mod('orch-history'); const red = s => (hist && hist.redact ? hist.redact(s) : s);
+  for (const d of sessionDirs()) for (const e of lsDir(d)) {
+    if (!e.isFile() || !e.name.endsWith('.jsonl')) continue; const f = path.join(d, e.name); let st; try { st = fs.statSync(f); } catch { continue; }
+    if (st.mtimeMs <= from) continue; let txt = ''; try { txt = fs.readFileSync(f, 'utf8'); } catch { continue; }
+    // 2026-11-24 사용자 지시('VM 관련 Claude Code 작업 이력도 VMO 사용자 수정사항으로 관리'): 프롬프트 뒤 다음 프롬프트까지 Claude Code 가 고친 VM 파일(편집 도구, 쓰기 명령)을 그 프롬프트의 edits 로 붙임
+    let lastP = null;
+    for (const ln of txt.split('\n')) {
+      if (lastP && ln && ln.indexOf('"tool_use"') >= 0) { let a; try { a = JSON.parse(ln); } catch { a = null; } for (const c of (a && a.type === 'assistant' && a.message && Array.isArray(a.message.content) ? a.message.content : [])) if (c && c.type === 'tool_use') for (const f of editedFiles(c)) if (!lastP.edits.includes(f) && lastP.edits.length < 20) lastP.edits.push(f); }
+      if (!ln || (ln.indexOf('"user"') < 0 && ln.indexOf('queued_command') < 0)) continue; let r; try { r = JSON.parse(ln); } catch { continue; }
+      let t = '', ts = '';
+      // 2026-11-23: 그림을 붙인 프롬프트는 content 가 배열(text + image) → 글 부분만 이어 읽음(종전 문자열만 읽어 캡처 붙인 지시가 빠짐)
+      const ct = (r.message || {}).content; const ctext = typeof ct === 'string' ? ct : Array.isArray(ct) && !ct.some(c => c && c.type === 'tool_result') ? ct.filter(c => c && c.type === 'text').map(c => c.text).join(String.fromCharCode(10)) : '';
+      if (r.type === 'user' && r.entrypoint && r.entrypoint !== 'sdk-cli' && !r.isMeta && !r.isCompactSummary && ctext) { t = ctext; ts = r.timestamp; }
+      else if (r.type === 'attachment' && r.attachment && r.attachment.type === 'queued_command' && (r.attachment.origin || {}).kind === 'human') { const qp = r.attachment.prompt; t = typeof qp === 'string' ? qp : Array.isArray(qp) ? qp.filter(c => c && c.type === 'text').map(c => c.text).join(String.fromCharCode(10)) : (qp && qp.text) || ''; ts = r.attachment.timestamp || r.timestamp; } /* 2026-11-24 작업 중 보낸 프롬프트가 배열이면 '[object Object]' 로 읽히던 것 */
+      else continue;
+      t = String(t || '').trim(); const ms = Date.parse(ts || ''); if (!t || !Number.isFinite(ms) || ms <= from || SKIP.test(t) || t.length < 6) continue;
+      lastP = { at: nowLocal(ms), ms, text: red(t).slice(0, 1200), session: e.name.slice(0, 8), edits: [] }; out.push(lastP);
+    }
+  }
+  return out.sort((a, b) => a.ms - b.ms);
+}
+const LEARN_TOOLS = 'Read,Glob,Grep';
+// 개선안 20261121120359_VISION_3: 목적 키(purpose). 진단 사다리 L4(orch-ladder.js) 가 같은 목적 키 지적을 묶음. 목적 키 없는 항목 = 감지기 이름이 목적 키
+/** 원장 항목의 목적 키: purpose → 없으면 감지기 이름 → 둘 다 없으면 빈 값 */
+const purposeOf = u => String((u && (u.purpose || u.detector)) || '').trim();
+/** 원장에 적힌 목적 키(purpose 필드) → 그 키를 쓰는 항목 [{ id, symptom }] */
+function purposeGroups(L) { const g = {}; for (const u of (L && L.items) || []) { const k = String(u.purpose || '').trim(); if (k) (g[k] || (g[k] = [])).push(u); } return g; }
+/** 새 원장 항목에 넣을 목적 키: 학습 결과의 purpose 가 원장에 있는 키면 그 키 → 같은 감지기 항목의 purpose → 없음(빈 값 = 필드 생략) */
+function purposeFor(L, it, detector) { const g = purposeGroups(L); const want = String((it && it.purpose) || '').trim(); if (want && g[want]) return want; const same = detector ? ((L && L.items) || []).find(u => u.detector === detector && String(u.purpose || '').trim()) : null; return same ? String(same.purpose).trim() : ''; }
+/** 새 프롬프트 분류(Claude, 읽기 전용) → 원장 인용 추가 · 새 감지기 개선안 · 제외 기록. 반환 { ok, mapped, added, excluded } | { skipped } */
+// 2026-11-23 사용자 지시: 프롬프트 패턴에서 보완 지시(fix-request)를 뽑아 규칙(user_rules.json)으로 모으고 자가진단이 같은 문제를 찾게 함(orch-userrule.js)
+//   o.sinceMs = 그 시각 뒤 프롬프트(소급) · o.rulesOnly = 규칙만 뽑음(지적 원장 U, coveredUntil, 제외 기록을 건드리지 않음)
+async function learn(manual, o) {
+  o = o || {}; const c = cfg(); if (!manual && (c.enabled === false || c.userCheckEnabled === false)) return { skipped: '꺼짐' };
+  if (learning) return { skipped: '학습 중' };
+  const ps = pendingPrompts(o.sinceMs); if (!ps.length) return { skipped: '새 프롬프트 없음' };
+  const lf = path.join(ucDir(), 'learn.json'); const lj = readJson(lf, {});
+  if (!manual && !o.rulesOnly && lj.lastMs && Date.now() - lj.lastMs < c.userLearnGapMin * 60000) return { skipped: '학습 간격 전' };
+  const ur = mod('orch-userrule'); if (ur && !ur.ready()) ur.init({ paths: getPaths, vmDir: vmDir() }); const RL = ur ? ur.ledger() : { items: [], categories: [] };
+  const agent = mod('orch-agent'); if (!agent || !agent.runClaude) return { skipped: '에이전트 없음' };
+  learning = (async () => {
+    const L = ledger(); const batch = ps.slice(0, o.limit || 40);
+    const prompt = [
+      '.claude/agents/vm-orchestra.md 의 지킬 것을 따른다. 이번 일은 사용자 지적 학습이다. 파일을 고치지 않는다(읽기만).',
+      '아래 [새 프롬프트] 는 사용자가 VM(Vibe_Manager), VMO, VMW 를 쓰다가, 또는 Claude Code 세션에서 VM 을 고치라고 직접 입력한 글이다. 글마다 판단한다.',
+      '- 글 뒤 [고친 파일] 은 그 지시로 Claude Code 가 고친 파일이다. 고친 파일이 있으면 사용자가 직접 고친 수정사항이다. 같은 문제가 다른 화면, 기능에서 생기면 VMO 가 조치할 수 있게 rule, scope, check 를 적는다(scope 에 고친 파일과 같은 종류의 다른 파일 포함).',
+      '- issue: VM, VMO 의 동작을 보고 잘못을 지적한 글(멈춤, 표시 안 됨, 조치 안 함, 중지 안 됨, 오래 걸림, 오류 등).',
+      '- fix-request: VM, VMO, VMW(사용자가 쓰는 도구) 의 화면이나 동작을 고치거나 바꾸라고 한 지시. 표시, 색, 잘림, 배치, 단추, 입력 조작, 키보드, 대기열, 속도, 누락, 문장 표현, 산출물 형식 포함. 기능 추가 요청도 그 안에 다른 곳에 적용할 원칙이 있으면 fix-request.',
+      '  fix-request 이면 rule = 사용자가 지정하지 않은 다른 화면, 기능에도 적용할 규칙 1줄("~함" 끝), category = [규칙 유형] 키 하나, scope = 적용 범위(파일, 화면), check = 같은 문제를 소스에서 찾는 방법. 이미 [사용자 지시 규칙] 에 같은 규칙이 있으면 rule 에 그 문장을 그대로 씀.',
+      '- not-issue: 화면 개발(NSCM 업무 화면, SP, DB) 작업 지시, 승인, 진행 지시, 질문만 있는 글, 도구 동작과 관계없는 업무 요청.',
+      'issue 이면 [감지기] 중 이 현상을 실행 기록으로 잡을 수 있는 것을 고른다. 맞는 감지기가 없으면 newDetector 에 무엇을 어떤 기록(파일, 사건 기록 type, 필드)으로 판정할지 적는다. 기록으로 판정할 수 없는 지적이면 detector 와 newDetector 를 비우고 why 에 이유를 적는다.',
+      'issue 이고 [목적 키] 중 같은 목적(사용자가 바란 결과가 같음)이 있으면 purpose 에 그 키를 적는다. 없으면 purpose 를 비운다. 새 키를 만들지 않는다.',
+      '필요하면 tools/VibeManager/orch-usercheck.js, orch-watch.js, .vibe/orch/events.jsonl 을 읽어 확인한다.',
+      '마지막 출력은 JSON 코드 블록 1개다.',
+      '```json',
+      '{ "items": [ { "n": 1, "kind": "issue|fix-request|not-issue", "symptom": "현상 한 줄", "detector": "감지기 이름 또는 빈 값", "purpose": "목적 키 또는 빈 값", "newDetector": { "name": "영문 낙타 표기", "judge": "판정 기준", "data": "읽을 기록" }, "category": "규칙 유형 키", "rule": "일반화한 규칙", "scope": "적용 범위", "check": "찾는 방법", "why": "판단 근거" } ] }',
+      'issue 이면서 다른 곳에도 적용할 원칙이 있으면 rule, category, scope, check 도 적는다.',
+      '```',
+      '', '[감지기]', ...Object.keys(DETECTORS).map(k => `- ${k}: ${(L.items || []).filter(u => u.detector === k).map(u => `${u.id} ${u.symptom}`).join(' / ') || '원장 항목 없음'}`),
+      '', '[목적 키]', ...(Object.entries(purposeGroups(L)).map(([k, us]) => `- ${k}: ${us.map(u => `${u.id} ${u.symptom || ''}`).join(' / ')}`).concat(Object.keys(purposeGroups(L)).length ? [] : ['- 없음'])),
+      '', '[규칙 유형]', ...((RL.categories || []).map(k => `- ${k.key}: ${k.name} · 점검 범위 ${k.scope}`)),
+      '', '[사용자 지시 규칙]', ...((RL.items || []).filter(r => r.status === 'active').map(r => `- ${r.id} (${r.category || '-'}) ${r.rule}`)),
+      '', `[새 프롬프트 ${batch.length}건]`, ...batch.map((p, i) => `${i + 1}. (${p.at}) ${p.text.replace(/\s+/g, ' ').slice(0, 800)}${p.edits && p.edits.length ? ` [고친 파일] ${p.edits.slice(0, 12).join(', ')}` : ''}`),
+    ].join('\n');
+    const r = await agent.withLock('usercheck', async () => { agent.say('start', { id: 'usercheck', text: `사용자 지적 학습. 새 프롬프트 ${batch.length}건` }); return agent.runClaude(prompt, { label: '사용자 지적 학습', permissionMode: 'default', allowedTools: LEARN_TOOLS }); });
+    if (r && r.busy) return { skipped: '에이전트 사용 중' };
+    const out = agent.lastJsonBlock(r.text);
+    const meta = Object.assign(lj, { lastMs: Date.now(), lastAt: nowLocal(), log: r.log, sec: Math.round((r.ms || 0) / 1000) });
+    if (!r.ok || !out || !Array.isArray(out.items)) { meta.lastResult = !r.ok ? `학습 실패 exit ${r.code}` : '결과 JSON 없음'; writeJson(lf, meta); agent.say('end', { id: 'usercheck', ok: false, text: meta.lastResult }); return { ok: false, why: meta.lastResult }; }
+    const L2 = ledger(); let mapped = 0, added = 0, excluded = 0, rules = 0, ruleDup = 0; meta.excluded = meta.excluded || [];
+    for (const it of out.items) {
+      const p = batch[(Number(it.n) || 0) - 1]; if (!p) continue;
+      if ((it.kind === 'fix-request' || it.kind === 'issue') && it.rule && ur) { const a = ur.addRule({ at: p.at, quote: p.text, rule: it.rule, category: it.category, scope: it.scope, check: it.check, fixedIn: (p.edits || []).length ? `Claude Code ${p.at.slice(0, 16)} ${p.edits.slice(0, 10).join(', ')}` : '' }); if (a.dup) ruleDup++; else rules++; }
+      if (o.rulesOnly) continue;
+      if (it.kind === 'fix-request') continue;
+      if (it.kind !== 'issue') { excluded++; meta.excluded.push({ at: p.at, text: p.text.slice(0, 200), why: String(it.why || '').slice(0, 200) }); continue; }
+      if (it.detector && DETECTORS[it.detector]) {
+        const ex = (L2.items || []).find(u => u.detector === it.detector && u.status === 'active');
+        if (ex) { ex.also = (ex.also || []).concat([`${p.at.slice(0, 16).replace('T', ' ')} ${p.text.replace(/\s+/g, ' ').slice(0, 200)}`]).slice(-10); }
+        else { const pk = purposeFor(L2, it, it.detector); L2.items.push(Object.assign({ id: `U${(L2.items || []).length + 1}`, at: p.at.slice(0, 16).replace('T', ' '), quote: p.text.slice(0, 400), symptom: String(it.symptom || ''), detector: it.detector }, pk ? { purpose: pk } : {}, { params: {}, status: 'active' })); }
+        mapped++; continue;
+      }
+      const nd = it.newDetector && it.newDetector.name ? it.newDetector : null;
+      const id = `U${(L2.items || []).length + 1}`;
+      const pk = purposeFor(L2, it, nd ? nd.name : '');
+      L2.items.push(Object.assign({ id, at: p.at.slice(0, 16).replace('T', ' '), quote: p.text.slice(0, 400), symptom: String(it.symptom || ''), detector: nd ? nd.name : '' }, pk ? { purpose: pk } : {}, { params: {}, status: nd ? 'pending-detector' : 'no-detector', why: String(it.why || '').slice(0, 300) }));
+      if (nd) {
+        const imp = mod('orch-improve');
+        if (imp) { const a = imp.add({ title: `사용자 지적 감지기 추가 ${id} ${nd.name}: ${String(it.symptom || '').slice(0, 80)}`, evidence: `사용자 지적(${p.at}) "${p.text.replace(/\s+/g, ' ').slice(0, 300)}"`, targets: ['tools/VibeManager/orch-usercheck.js', 'tools/VibeManager/user_checks.json', 'tools/VibeManager/test/t_orch_usercheck.js'], before_after: `DETECTORS 에 ${nd.name} 없음 → 추가. 판정: ${nd.judge || ''} · 읽을 기록: ${nd.data || ''}. user_checks.json ${id} status pending-detector → active`, verify: 'node tools/VibeManager/test/t_orch_usercheck.js tools/VibeManager → ALL PASS(새 감지기 통과/실패 표본 포함)', rollback: '두 파일을 반영 전 스냅샷으로 되돌림', sig: `S13|newdet|${nd.name}`, check: 'S13', selfKey: `S13|${id}` }, 'self'); if (a.id) added++; }
+      }
+    }
+    if (o.rulesOnly) { meta.lastRuleResult = `소급 ${batch.length}건: 새 규칙 ${rules} · 같은 규칙 ${ruleDup}`; writeJson(lf, meta); agent.say('end', { id: 'usercheck', ok: true, text: `사용자 지시 규칙 소급. ${meta.lastRuleResult}` }); return { ok: true, rules, ruleDup, lastMs: batch[batch.length - 1].ms, n: batch.length }; }
+    L2.coveredUntil = nowLocal(batch[batch.length - 1].ms); writeJson(ledgerFile(), L2);
+    meta.untilMs = batch[batch.length - 1].ms; meta.excluded = meta.excluded.slice(-200); meta.lastResult = `새 프롬프트 ${batch.length}건: 기존 감지기 ${mapped} · 새 감지기 개선안 ${added} · 사용자 지시 규칙 ${rules}(같은 규칙 ${ruleDup}) · 지적 아님 ${excluded}`; writeJson(lf, meta);
+    agent.say('end', { id: 'usercheck', ok: true, text: `사용자 지적 학습 완료. ${meta.lastResult}` });
+    return { ok: true, mapped, added, excluded, rules, ruleDup };
+  })();
+  try { return await learning; } catch (e) { errlog.note('orch-usercheck', 'learn', e); return { ok: false, why: e.message }; } finally { learning = null; }
+}
+/** 2026-11-23 소급 학습: 지난 프롬프트 전부(learn.json backfill.untilMs 뒤)에서 규칙만 뽑음. 40건씩, 한 번 끝나면 backfill.done. 반환 진행 정보 */
+async function backfill(manual) {
+  const lf = path.join(ucDir(), 'learn.json'); const lj = readJson(lf, {}); const bf = lj.backfill || { untilMs: 0, done: false, n: 0, rules: 0 };
+  if (bf.done && !manual) return { skipped: '소급 끝남' };
+  const r = await learn(true, { sinceMs: bf.untilMs || 0, rulesOnly: true, limit: 40 });
+  const lj2 = readJson(lf, {}); const b2 = lj2.backfill || bf;
+  if (r && r.skipped === '새 프롬프트 없음') { b2.done = true; b2.at = nowLocal(); }
+  else if (r && r.ok) { b2.untilMs = r.lastMs; b2.n = (b2.n || 0) + r.n; b2.rules = (b2.rules || 0) + r.rules; b2.at = nowLocal(); }
+  lj2.backfill = b2; writeJson(lf, lj2); return Object.assign({}, r, { backfill: b2 });
+}
+/** 가벼운 점검 때 호출: 새 프롬프트가 있고 간격이 지났으면 학습을 띄운다(기다리지 않음) */
+function maybeLearn() { if (learning) return false; const c = cfg(); if (c.enabled === false || c.userCheckEnabled === false) return false; const lj = readJson(path.join(ucDir(), 'learn.json'), {});
+  // 평소 학습(새 프롬프트, 간격 userLearnGapMin)이 먼저. 할 일이 없을 때 지난 프롬프트 소급(규칙만, 40건씩, 앞 학습 뒤 5분 이상)
+  const lastRun = Math.max(lj.lastMs || 0, (lj.backfill && Date.parse(lj.backfill.at || '')) || 0);
+  if (!(lj.lastMs && Date.now() - lj.lastMs < c.userLearnGapMin * 60000) && pendingPrompts().length) { learn(false).catch(e => errlog.note('orch-usercheck', 'maybeLearn', e)); return true; }
+  if (!(lj.backfill && lj.backfill.done) && !(lastRun && Date.now() - lastRun < 5 * 60000)) { backfill(false).catch(e => errlog.note('orch-usercheck', 'backfill', e)); return true; }
+  return false; }
+
+function init(o) { getPaths = o.paths; opts = o || {}; }
+const ready = () => !!getPaths;
+// 개선안 20261123112024_SELF: 진단 사다리(orch-ladder L3 사용자 지적 재발)가 쓰는 판별 2종
+//   ① 감지기 개선안 = sig 가 sn|newdet 이거나 targets 가 감지기 파일(orch-usercheck.js, user_checks.json, test/)뿐. 동작을 고치지 않았으므로 '고친 뒤 재발' 근거가 아님
+const DETECTOR_FILE = t => { const s = String(t || '').replace(/\\/g, '/'); return /(^|\/)orch-usercheck\.js$/.test(s) || /(^|\/)user_checks\.json$/.test(s) || /(^|\/)test\//.test(s); };
+function isDetectorProposal(p) { if (!p) return false; if (/^sn\|newdet(\||$)/.test(String(p.sig || ''))) return true; const t = (p.targets || []).filter(Boolean); return t.length > 0 && t.every(DETECTOR_FILE); }
+//   ② S13 항목 key 의 근거 파일. 업무 작업 로그 key(S13|<uid>|...|J<날짜>_<시각>|<화면>|...) = .vibe/jobs/<job>/<화면>.log · 그 밖 = null(판정 안 함)
+function evidenceFile(key, vibeDir) {
+  const parts = String(key || '').split('|'); const i = parts.findIndex(s => /^J\d{8}_\d{6}\w*$/.test(s)); if (i < 0) return null;
+  const scr = parts[i + 1]; const vd = vibeDir || (getPaths ? P().vibeDir : ''); if (!vd) return null;
+  return scr && /^[A-Za-z]{2,}\d+\w*$/.test(scr) ? path.join(vd, 'jobs', parts[i], `${scr}.log`) : path.join(vd, 'jobs', parts[i]);
+}
+/** 근거 파일이 지워졌는지. 근거 파일을 정할 수 없는 key = false */
+function evidenceGone(key, vibeDir) { const f = evidenceFile(key, vibeDir); return !!f && !fs.existsSync(f); }
+
+module.exports = { ready, init, check, noteUi, learn, backfill, maybeLearn, pendingPrompts, ledger, DETECTORS, UI_SOURCES, purposeOf, purposeFor, purposeGroups, isDetectorProposal, evidenceFile, evidenceGone };
